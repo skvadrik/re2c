@@ -133,6 +133,7 @@ echo:
     "/*!header:re2c:on" {
         out.wraw(tok, ptr);
         out.header_mode(true);
+        out.need_header = true;
         lex_end_of_comment(out);
         goto echo;
     }

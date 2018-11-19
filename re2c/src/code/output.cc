@@ -78,6 +78,7 @@ OutputFile::OutputFile(Warn &w)
     , state_goto(false)
     , cond_goto(false)
     , warn_condition_order(true)
+    , need_header(false)
     , warn(w)
 {}
 
@@ -431,13 +432,26 @@ static void foldexpr(std::vector<OutputFragment*> &frags)
     }
 }
 
-void OutputFile::emit_blocks(const std::string &filename,
-    FILE *file, blocks_t &blocks,
+bool OutputFile::emit_blocks(const std::string &fname, blocks_t &blocks,
     const uniq_vector_t<std::string> &global_types,
     const std::set<std::string> &global_stags,
     const std::set<std::string> &global_mtags,
     size_t max_fill, size_t max_nmatch)
 {
+    FILE *file = NULL;
+    std::string filename = fname;
+    if (filename.empty()) {
+        filename = "<stdout>";
+        file = stdout;
+    }
+    else {
+        file = fopen(filename.c_str(), "w");
+        if (!file) {
+            error("cannot open output file: %s", filename.c_str());
+            return false;
+        }
+    }
+
     fix_first_block_opts(blocks);
 
     unsigned int line_count = 1;
@@ -529,6 +543,9 @@ void OutputFile::emit_blocks(const std::string &filename,
             line_count += f.count_lines();
         }
     }
+
+    fclose(file);
+    return true;
 }
 
 static bool have_cond_frag(const blocks_t &blocks)
@@ -575,47 +592,24 @@ bool OutputFile::emit(size_t maxfill, size_t nmatch)
 
     // global options are last block's options
     const opt_t *opts = block().opts;
+    bool ok = true;
 
     // emit .h file
-    const std::string &header = opts->header_file;
-    if (!header.empty()) {
-        FILE *file = fopen(header.c_str(), "w");
-
-        if (!file) {
-            error("cannot open header file: %s", header.c_str());
-            return false;
-        }
-
-        emit_blocks(header, file, hblocks, conds, stags, mtags, maxfill, nmatch);
-
+    if (!opts->header_file.empty() || need_header) {
+        // old-style -t, --type-headers usage implies condition generation
         if (!conds.empty() && !have_cond_frag(hblocks)) {
-            std::ostringstream os;
+            std::ostream &os = hblocks.back()->fragments.back ()->stream;
             os << std::endl;
             output_types(os, 0, opts, conds);
-            fwrite(os.str().c_str(), 1, os.str().size(), file);
         }
 
-        fclose(file);
+        ok &= emit_blocks(opts->header_file, hblocks, conds, stags, mtags, maxfill, nmatch);
     }
 
     // emit .c file
-    FILE *file = NULL;
-    std::string filename = cblocks.back()->opts->output_file;
-    if (filename.empty()) {
-        filename = "<stdout>";
-        file = stdout;
-    }
-    else {
-        file = fopen(filename.c_str(), "w");
-        if (!file) {
-            error("cannot open output file: %s", filename.c_str());
-            return false;
-        }
-    }
-    emit_blocks(filename, file, cblocks, conds, stags, mtags, maxfill, nmatch);
-    fclose(file);
+    ok &= emit_blocks(opts->output_file, cblocks, conds, stags, mtags, maxfill, nmatch);
 
-    return true;
+    return ok;
 }
 
 Output::Output(Warn &w)

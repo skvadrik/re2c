@@ -122,6 +122,7 @@ public:
     bool state_goto;
     bool cond_goto;
     bool warn_condition_order;
+    bool need_header;
     Warn &warn;
 
     explicit OutputFile(Warn &w);
@@ -167,8 +168,7 @@ public:
 
     bool emit(size_t max_fill, size_t max_nmatch);
 
-    void emit_blocks(const std::string &filename,
-        FILE *file, blocks_t &blocks,
+    bool emit_blocks(const std::string &fname, blocks_t &blocks,
         const uniq_vector_t<std::string> &global_types,
         const std::set<std::string> &global_stags,
         const std::set<std::string> &global_mtags,
