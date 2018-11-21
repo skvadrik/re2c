@@ -1,6 +1,4 @@
 language: cpp
-# faster container-based travis
-sudo: false
 
 compiler:
  - gcc
