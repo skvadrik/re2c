@@ -39,7 +39,6 @@ class Scanner: private ScannerState
     bool lex_namedef_context_re2c();
     bool lex_namedef_context_flex();
     int lex_clist();
-    void lex_cgoto();
     void lex_string(char delim);
     void lex_tags(Output &out, bool mtags);
     void set_sourceline ();

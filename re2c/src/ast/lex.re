@@ -240,8 +240,11 @@ scan:
     "{"  { lex_code_in_braces(); return TOKEN_CODE; }
     ":=" { lex_code_indented(); return TOKEN_CODE; }
 
-    "=>"  { lex_cgoto(); return TOKEN_CNEXT; }
-    ":=>" { lex_cgoto(); return TOKEN_CJUMP; }
+    ":"? "=>" space* @p name {
+        yylval.str = new std::string(p, static_cast<size_t>(cur - p));
+        return tok[0] == ':' ? TOKEN_CJUMP : TOKEN_CNEXT;
+    }
+
     "<"   { return lex_clist(); }
 
     "//" { lex_cpp_comment(); goto scan; }
@@ -403,19 +406,6 @@ end:
 error:
     delete cl;
     fatal_l(get_cline(), "syntax error in condition list");
-}
-
-void Scanner::lex_cgoto()
-{
-/*!re2c
-    space* { goto name; }
-*/
-name:
-    tok = cur;
-/*!re2c
-    name   { yylval.str = new std::string (tok, tok_len ()); return; }
-    *      { fatal_l(get_cline(), "syntax error in condition goto"); }
-*/
 }
 
 void Scanner::lex_code_indented()
