@@ -15,22 +15,6 @@ class Warn;
 
 const uint32_t Scanner::BSIZE = 8192;
 
-ScannerState::ScannerState ()
-    : tok (NULL)
-    , ptr (NULL)
-    , cur (NULL)
-    , mar (NULL)
-    , pos (NULL)
-    , ctx (NULL)
-    , bot (NULL)
-    , lim (NULL)
-    , top (NULL)
-    , eof (NULL)
-    , tchar (0)
-    , cline (1)
-    , lexer_state (LEX_NORMAL)
-{}
-
 Scanner::Scanner(Input &i, Warn &w)
     : ScannerState(), in(i), warn(w) {}
 

@@ -7,6 +7,7 @@
 #include <string>
 
 #include "src/ast/input.h"
+#include "src/ast/lex.h"
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
 #include "src/re/encoding/enc.h"
@@ -22,37 +23,6 @@ struct conopt_t;
 class Output;
 class Range;
 struct AST;
-
-struct ScannerState
-{
-    enum lexer_state_t
-    {
-        LEX_NORMAL,
-        LEX_FLEX_NAME
-    };
-
-    // positioning
-    char * tok;
-    char * ptr;
-    char * cur;
-    char * mar;
-    char * pos;
-    char * ctx;
-
-    // buffer
-    char * bot;
-    char * lim;
-    char * top;
-    char * eof;
-
-    ptrdiff_t tchar;
-    uint32_t cline;
-
-    lexer_state_t lexer_state;
-
-    ScannerState();
-    FORBID_COPY(ScannerState);
-};
 
 class Scanner: private ScannerState
 {

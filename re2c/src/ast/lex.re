@@ -24,16 +24,15 @@ extern YYSTYPE yylval;
 #define    YYCURSOR     cur
 #define    YYLIMIT      lim
 #define    YYMARKER     mar
-#define    YYCTXMARKER  ctx
 #define    YYFILL(n)    { fill (n); }
 
-namespace re2c
-{
+namespace re2c {
 
 /*!re2c
-    // source code is in ASCII: pointers have type 'char *', but re2c makes
-    // assumes that YYCTYPE is unsigned when generating comparisons
+    // source code is in ASCII, but re2c assumes unsigned chars
     re2c:yych:conversion = 1;
+    re2c:flags:type-header = "src/ast/lex.h";
+    re2c:flags:tags = 1;
 
     eof        = "\000";
     dstring    = "\"" ([^\x00\n\\"] | "\\" [^\x00\n])* "\"";
@@ -54,6 +53,31 @@ namespace re2c
     esc_oct    = esc [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
     esc_simple = esc [abfnrtv\\];
 */
+
+/*!header:re2c:on*/
+namespace re2c {
+struct ScannerState
+{
+    enum lexer_state_t {LEX_NORMAL, LEX_FLEX_NAME};
+    lexer_state_t lexer_state;
+
+    char *bot, *lim, *cur, *mar, *ctx, *eof, *tok, *top, *ptr, *pos;
+    /*!stags:re2c format = "char *@@;"; */
+
+    ptrdiff_t tchar;
+    uint32_t cline;
+
+    inline ScannerState()
+        : lexer_state (LEX_NORMAL)
+        , bot(NULL), lim(NULL), cur(NULL), mar(NULL), ctx(NULL)
+        , eof(NULL), tok(NULL), top(NULL), ptr(NULL), pos(NULL)
+        /*!stags:re2c format = ", @@(NULL)"; */
+        , tchar (0), cline (1)
+    {}
+    FORBID_COPY(ScannerState);
+};
+} // namespace re2c
+/*!header:re2c:off*/
 
 Scanner::ParseMode Scanner::echo(Output &out)
 {
@@ -208,6 +232,7 @@ void Scanner::lex_tags(Output &out, bool mtags)
 
 int Scanner::scan(const conopt_t *globopts)
 {
+    const char *p;
 scan:
     tchar = cur - pos;
     tok = cur;
@@ -245,8 +270,7 @@ scan:
         return TOKEN_CLOSESIZE;
     }
 
-    "{" [0-9]+ "," [0-9]+ "}" {
-        const char * p = strchr (tok, ',');
+    "{" [0-9]+ @p "," [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, p, yylval.bounds.min)) {
             fatal_lc(get_cline(), get_column(), "repetition lower bound overflow");
         }

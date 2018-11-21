@@ -265,6 +265,7 @@ $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
 		cp $@ $(top_srcdir)/bootstrap/$@; \
 	else \
 		cp $(top_srcdir)/bootstrap/$@ $@; \
+		cp $(top_srcdir)/bootstrap/$*.h $*.h; \
 	fi
 
 # rebuild all re2c sources using newly built re2c
