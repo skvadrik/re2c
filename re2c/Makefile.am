@@ -156,14 +156,17 @@ AUTOGEN_VERTOVERNUM = src/conf/ver_to_vernum.cc
 AUTOGEN_PARSER = src/ast/parser.cc
 AUTOGEN_PARSER_HDR = src/ast/y.tab.h
 AUTOGEN_HELP = src/conf/help.cc
-AUTOGEN = \
+AUTOGEN_SRC = \
 	$(AUTOGEN_LEX) \
 	$(AUTOGEN_PARSER) \
-	$(AUTOGEN_PARSER_HDR) \
 	$(AUTOGEN_VERTOVERNUM) \
 	$(AUTOGEN_HELP) \
 	src/ast/lex_conf.cc \
 	src/conf/parse_opts.cc
+AUTOGEN_HDR = \
+	src/ast/lex.h \
+	$(AUTOGEN_PARSER_HDR)
+AUTOGEN = $(AUTOGEN_SRC) $(AUTOGEN_HDR)
 nodist_re2c_SOURCES = $(AUTOGEN)
 
 # bootstrap sources
@@ -177,6 +180,7 @@ BOOTSTRAP = \
 	$(BOOTSTRAP_PARSER) \
 	$(BOOTSTRAP_PARSER_HDR) \
 	bootstrap/src/ast/lex.cc \
+	bootstrap/src/ast/lex.h \
 	bootstrap/src/ast/lex_conf.cc \
 	bootstrap/src/conf/parse_opts.cc \
 	bootstrap/src/conf/ver_to_vernum.cc
@@ -262,11 +266,12 @@ $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
 	$(AM_V_GEN) if test -x $(RE2C); \
 	then \
 		$(top_builddir)/$(RE2C) $(RE2CFLAGS) -o $@ $< && \
-		cp $@ $(top_srcdir)/bootstrap/$@; \
+		cp $(@:cc=*) $(top_srcdir)/bootstrap/$(@D); \
 	else \
-		cp $(top_srcdir)/bootstrap/$@ $@; \
-		cp $(top_srcdir)/bootstrap/$*.h $*.h; \
+		cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D); \
 	fi
+
+all: $(AUTOGEN_SRC)
 
 # rebuild all re2c sources using newly built re2c
 .PHONY: bootstrap
