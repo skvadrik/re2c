@@ -1,0 +1,217 @@
+
+\documentclass[tikz,border=10pt]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows, shapes, automata, calc, decorations}
+\usegdlibrary{trees, layered}
+\usepackage{stix}
+
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth, ->, auto]
+
+
+\tikzstyle{every node}=[]
+\tikzstyle{every state}=[circle
+    , minimum size=0.15in
+    , rectangle
+    , rounded corners=4
+    , inner sep = 2pt
+    , outer sep = 0pt
+    , node distance = 0.4in]
+
+\newcommand{\zz}{0.06in}
+
+\begin{scope}[xshift=-0.8in, yshift=-10.5in]
+    \footnotesize
+    %\scriptsize
+
+    % ((epsilon|a*)((a|epsilon){0,3}))
+
+    \node[state] (x0) {$1$};
+    \node[state, above right of = x0] (x1) {$2$};
+
+    \node[state, above right of = x1] (z0) {$3$};
+
+    \node[state, right of = z0] (x15) {$4$};
+    \node[state, above right of = x15] (x16) {$5$};
+    \node[state, fill=lightgray, above right of = x16, xshift = \zz, yshift = -\zz] (x17) {$6$};
+    \node[state, below right of = x17, xshift = \zz, yshift = +\zz] (x21) {$7$};
+    \node[state, below right of = x21] (x22) {$8$};
+
+    \node[state, right of = x1, xshift=0.6in] (z1) {$18$};
+
+    \node[state, right of = x22] (y15) {$9$};
+    \node[state, above right of = y15] (y16) {$10$};
+    \node[state, fill=lightgray, above right of = y16, xshift = \zz, yshift = -\zz] (y17) {$11$};
+    \node[state, below right of = y17, xshift = \zz, yshift = +\zz] (y21) {$12$};
+    \node[state, below right of = y21] (y22) {$13$};
+
+    \node[state, right of = y22] (z15) {$14$};
+    \node[state, above right of = z15] (z16) {$15$};
+    \node[state, fill=lightgray, above right of = z16, xshift = \zz, yshift = -\zz] (z17) {$16$};
+    \node[state, below right of = z17, xshift = \zz, yshift = +\zz] (z21) {$17$};
+    \node[state, below right of = z21] (z22) {$19$};
+
+    \node[state, below right of = z22] (x23) {$20$};
+
+    \node[state, above right of = x23] (x2) {$21$};
+    \node[state, above right of = x2, xshift = \zz, yshift = -\zz] (x4X) {$22$};
+    \node[state, above right of = x4X] (x4) {$23$};
+
+    \node[state, below right of = x2, xshift = \zz+0.1in, yshift = +\zz] (x3) {$28$};
+    \node[state, right of = x3, xshift=0.1in] (x3Z) {$29$};
+    \node[state, above right of = x3Z] (x3X) {$30$};
+    \node[state, below right of = x3X, draw=none, inner sep=0, minimum size=0] (x3W) {};
+
+    \node[state, fill=lightgray, above right of = x4, xshift = \zz, yshift = -\zz] (x5) {$24$};
+    \node[state, right of = x5] (x6) {$25$};
+    \node[state, below right of = x6, xshift = \zz, yshift = \zz] (x7) {$26$};
+    \node[state, below right of = x7] (x7Y) {$27$};
+    \node[state, below right of = x7Y, xshift = \zz, yshift = +\zz] (x12) {$31$};
+    \node[state, below right of = x12] (x14) {$32$};
+
+    \node[state, fill=lightgray, accepting, below right of = x14] (x24) {$33$};
+
+    \path
+        (x0) edge node [above left] {$1/1$} (x1)
+        (x1) edge node [above left] {$1/3$} (z0)
+        (z0) edge node {$1/\epsilon$} (x15)
+
+        (z0) edge [bend right=20] node [above, near end] {$2/\epsilon$} (z1)
+
+        (x15) edge node [above left] {$1/5$} (x16)
+        (x16) edge [bend left]  node [above] {$1/\epsilon$} (x17)
+        (x16) edge [bend right=20] node [above] {$2/\epsilon$} (x21)
+        (x17) edge [bend left]  node [above] {$a/\epsilon$} (x21)
+        (x21) edge node [above right] {$1/6$} (x22)
+
+        (x22) edge node [above] {$2/\epsilon$} (y15)
+
+        (y15) edge node [above left] {$1/5$} (y16)
+        (y16) edge [bend left]  node [above] {$1/\epsilon$} (y17)
+        (y16) edge [bend right=20] node [above] {$2/\epsilon$} (y21)
+        (y17) edge [bend left]  node [above] {$a/\epsilon$} (y21)
+        (y21) edge node [above right] {$1/6$} (y22)
+
+        (y22) edge node [above] {$2/\epsilon$} (z15)
+
+        (z15) edge node [above left] {$1/5$} (z16)
+        (z16) edge [bend left]  node [above] {$1/\epsilon$} (z17)
+        (z16) edge [bend right=20] node [above] {$2/\epsilon$} (z21)
+        (z17) edge [bend left]  node [above] {$a/\epsilon$} (z21)
+        (z21) edge node [above right] {$1/6$} (z22)
+
+        (z22) edge node [above right] {$1/4$} (x23)
+
+        (x23) edge node [below right] {$1/7$} (x2)
+        (x2) edge [bend left] node [above] {$1/\epsilon$} (x4X)
+        (x2) edge [bend right] node [above] {$\quad 2/\epsilon$} (x3)
+        (x3) edge node [above] {$2/\!\!-\!\!9$} (x3Z)
+        (x3Z) edge node [below right] {$1/11$} (x3X)
+        (x4X) edge node {$1/9$} (x4)
+        (x4) edge [bend left] node [above] {$1/\epsilon$} (x5)
+        (x4) edge [bend right=20] node [above] {$2/\epsilon$} (x7)
+        (x5) edge node [above] {$a/\epsilon$} (x6)
+        (x6) edge [bend left] node [above] {$2/\epsilon$} (x7)
+        (x7) edge node {$1/10$} (x7Y)
+        (x7Y) edge [bend left] node {$1/\!\!-\!\!11$} (x12)
+        (x12) edge node [above right] {$1/8$} (x14)
+
+        (x14) edge node [above right] {$1/2$} (x24)
+    ;
+
+    \draw (y22) .. controls ($ (y22) + (0.5, -0.6) $) and ($ (z22) + (-0.5, -0.6) $) .. node [above] {$1/\epsilon$} (z22);
+    \draw (x22) .. controls ($ (x22) + (0.8, -0.8) $) and ($ (z22) + (-0.8, -0.8) $) .. node [above, near start] {$1/\epsilon$} (z22);
+    \draw (z1) .. controls ($ (z1) + (2, 0) $) and ($ (z22) + (-1.0, -1.0) $) .. node [above, very near start] {$1/\!\!-\!\!5$} (z22);
+    \draw (x6) .. controls ($ (x6) + (0.3, 0.8) $) and ($ (x5) + (-0.3, 0.8) $) .. node [above] {$1/\epsilon$} (x5);
+    \path[-] (x3X) edge node {$1/12$} (x3W);
+    \path (x3W) edge [bend right=20] node {} (x12);
+
+\end{scope}
+
+\iffalse
+\tikzstyle{every node}=[draw=none, rectangle, rounded corners, node distance = 0.2in];
+\begin{scope}[xshift=-0.5in, yshift=-9in]
+    %\footnotesize
+    \scriptsize
+
+    \node (n1) {$1$};
+    \node [right of = n1] (n2) {$2$};
+    \node [right of = n2] (n3) {$3$};
+    \node [right of = n3] (n4) {$4$};
+    \node [right of = n4] (n5) {$5$};
+    \node [right of = n5, draw] (n6) {$6$};
+
+    \node [below of = n6] (n8) {$8$};
+    \node [right of = n8] (n9) {$9$};
+    \node [right of = n9] (n10) {$10$};
+    \node [right of = n10] (n11) {$11$};
+    \node [right of = n11] (n27) {$27$};
+    \node [right of = n27] (n29) {$28$};
+    \node [right of = n29] (n30) {$29$};
+    \node [right of = n30] (n31) {$30$};
+    \node [right of = n31, draw] (n32) {$31$};
+
+    \node [below of = n32] (n34) {$33$};
+    \node [right of = n34] (n37) {$36$};
+    \node [right of = n37] (n38) {$37$};
+    \node [right of = n38, draw] (n39) {$38$};
+
+    \node [below of = n31] (n31X) {};
+    \node [below of = n34] (n35X) {$34$};
+    \node [right of = n35X] (n36X) {$35$};
+    \node [right of = n36X, draw, cross out] (n37X) {$36$};
+
+    \node [below of = n30] (n28Y) {};
+    \node [below of = n28Y] (n28YY) {};
+    \node [below of = n28YY] (n12Y) {$12$};
+    \node [right of = n12Y] (n13Y) {$13$};
+    \node [right of = n13Y, draw] (n14Y) {$14$};
+
+    \node [below of = n14Y] (n16Z) {$16$};
+    \node [right of = n16Z] (n17Z) {$17$};
+    \node [right of = n17Z] (n18Z) {$18$};
+    \node [right of = n18Z] (n19Z) {$19$};
+    \node [right of = n19Z, draw, cross out] (n27Z) {$27$};
+
+    \node [below of = n27Z] (n20W) {$20$};
+    \node [right of = n20W] (n21W) {$21$};
+    \node [right of = n21W, draw] (n22W) {$22$};
+
+    \node [below of = n27] (n27U) {};
+    \node [below of = n27U] (n27UU) {};
+    \node [below of = n27UU] (n27UUU) {};
+    \node [below of = n27UUU] (n27UUUU) {};
+    \node [below of = n27UUUU] (n27UUUUU) {};
+    \node [below of = n27UUUUU, draw, cross out] (n27UUUUU) {$27$};
+
+    \draw [-] (n1) -- (n2) -- (n3) -- (n4) -- (n5) -- (n6);
+    \draw [-] (n5) -- (n8) -- (n9) -- (n10) -- (n11) -- (n27) -- (n29) -- (n30) -- (n31) -- (n32);
+    \draw [-] (n31) -- (n34) -- (n37) -- (n38) -- (n39);
+    \draw [-] (n30) -- (n35X) -- (n36X) -- (n37X);
+    \draw [-] (n11) -- (n12Y) -- (n13Y) -- (n14Y);
+    \draw [-] (n13Y) --(n16Z) -- (n17Z) -- (n18Z) -- (n19Z) -- (n27Z);
+    \draw [-] (n19Z) -- (n20W) -- (n21W) -- (n22W);
+    \draw [-] (n3) -- (n27UUUUU);
+
+MATCH a.
+THIS ALLOWS TO SHOW ALL RULES OF COMPARISON (some on the 1st epsilon-closure, some on second).
+
+
+\end{scope}
+\fi
+
+\end{tikzpicture}
+
+
+
+\end{document}
+

@@ -130,3 +130,68 @@ B, while here it does so when
 - the statement: "if  a_k > b_k then l = -1"  and the following, are
   different from the ones in the pseudocode (if nonnegative (a[i]) return LT, etc.)
 
+
+- DFS optimization of GOR1 when the closure forms a tree.
+
+- GOR performance depends on the left-bias or right-bias of bounded repetition: R{0, m} => R{1} | R{2} | ... | R{m} | R{0}
+
+
+
+- CORRECTNESS OF THE IN-DEGREE OPTIMIZATION:
+
+The fact that the node X has in-degree 1 means that it is not a join point.
+Therefore, if we have two different paths to X (old and new), these paths must
+share a common last arc X_1->X (the single incoming arc in the node X).
+Therefore, if we remove the last arc, we again get a pair of ambiguous paths
+that must have been considered on some previous step. Now we can inductively
+strip the common arcs X_{i-1}->X_i until we are left with two ambiguous paths
+that meet at a join point J:
+
+Y---.
+     \
+      J--->X_n-- ... -->X_1--->X
+     /
+Z---'
+
+Now we can argue that because of the prefix-based property,
+Y->J < Z->J <==> Y->J->X < Z->J->X,
+and therefore if at J-node we found the new path Y->J to be shorter than
+the old path Z->J, then can blindly extend Y->J to all nodes X_n ... X_1
+and finally X.
+
+- INDEG OPTIMIZATION FAILS ON SPRAND Rand-len 4 family (gor1a.c).
+- GOR1 MAKES LINEAR NUMBER OF STEPS EVEN IN THE LONG CASE... RIGHT? RIGHT. 2x the number in the short case, but the sum of compared path lengths is much greater.
+- GLOBAL-TOPSORT IN PRINCIPLE MAKES ~2.5x more steps than GOR1.
+- WHY DOES GOR CONSTRUCT LONGER PATHS THAN OTHER ALGS? 0x3fffFFFF
+
+- Note: shortest paths *never* contain loops, not just in our case.
+  We can't remove backedges, as they might be the only way to some of the core states reachable by closure.
+  If we don't remove backedges, we can potentially cancel looping paths, but that would be too late:
+  we would have already explored that path (and all the paths from the backedge).
+
+
+
+- Remember to put a note about predecessor chains. Example (a?a?)*.
+
+
+
+- Angelo: height() is defined on PE, but later used on t-strings in precedence().
+
+- Angelo: I was suggesting to write  ak ≡ 0 mod 2 instead of  ak mod 2 ≡ 0.
+
+- Angelo: a  question on precedence(): it tests if ak mod 2 (or bk) is zero. This should mean that it
+is a closing tag. However, it could be a negative tag, in which case it is both opening and closing.
+P.S. I think that the math formula should be ak ≡ 0 mod 2 meaning that ak and 0 are congruent
+modulo 2. ----- Me: Hmm, looks like for the sake of this comparison the nil-parenthesis
+(negative tag) should behave like opening. That's what we do in TNFA:
+the opening negative tag stands to represent itself, the corresponding
+closing negative tags and all nested negative tags.
+
+
+- Angelo: Referring to step(), line 5: here we record the tag histories. I remember that in the old code
+we handled the case of negative tags recording -1 as their history. I guess that this should
+be done also now. Correct?
+
+
+- Compare with RE2 (in the sense that it cannot do POSIX)
+

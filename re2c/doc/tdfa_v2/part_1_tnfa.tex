@@ -777,17 +777,149 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
 
 TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
 
-\begin{figure}\label{fig_tnfa}
-\includegraphics[width=\linewidth]{img/tnfa.pdf}
+
+\begin{figure*}
+\begin{multicols}{2}
+\fontsize{8}{10}
+    \setstretch{0.85}
+
+    %\fontsize{9.5pt}{11.5pt}\selectfont
+
+    %\newcommand \retonfa {re \Xund to \Xund n\!f\!a}
+    %\newcommand \ntag {neg \Xund tag}
+    \newcommand \retonfa {F}
+    \newcommand \ntag {N}
+
+    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+    \Fn {$\underline{\retonfa(r, y)} \smallskip$} {
+        \If {$r = (0, 0, \epsilon)$} {
+            \Return $(\Sigma, \{y\}, \emptyset, \emptyset, y, y)$ \;
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, \alpha) \mid_{\alpha \in \Sigma}$} {
+            \Return $(\Sigma, \{x,y\}, \emptyset, \{(x, \alpha, \epsilon, y)\}, x, y)$ \;
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, r_1 \cdot r_2)$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, x, y) = \retonfa (r_1, y)$ \;
+            $(\Sigma, Q_2, T_2, \Delta_2, z, x) = \retonfa (r_2, x)$ \;
+            \Return $(\Sigma, Q_1 \cup Q_2, T_1 \cup T_2, \Delta_1 \cup \Delta_2, z, y)$ \;
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, r_1 \mid r_2)$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, x_1, y) = \ntag (r_2, y)$ \;
+            $(\Sigma, Q_2, T_2, \Delta_2, x_2, x_1) = \retonfa (r_1, x_1)$ \;
+            $(\Sigma, Q_3, T_3, \Delta_3, x_3, y) = \retonfa (r_2, y)$ \;
+            $(\Sigma, Q_4, T_4, \Delta_4, x_4, x_3) = \ntag (r_1, x_3)$ \;
+            $Q = Q_1 \cup Q_2 \cup Q_3 \cup Q_4 \cup \{x\}$ \;
+            $T = T_1 \cup T_2 \cup T_3 \cup T_4$ \;
+            $\Delta = \Delta_1 \cup \Delta_2 \cup \Delta_3 \cup \Delta_4 \cup \{(x,1,\epsilon,x_2), (x,2,\epsilon,x_4)\}$ \;
+            \Return $(\Sigma, Q, T, \Delta, x, y)$ \;
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, r_1^{n,m}) \mid_{n > 0}$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, x, y) = \retonfa ((0, 0, r_1^{n-1,m}), y)$ \;
+            $(\Sigma, Q_2, T_2, \Delta_2, z, x) = \retonfa (r_1, x)$ \;
+            \Return $(\Sigma, Q_1 \cup Q_2, T_1 \cup T_2, \Delta_1 \cup \Delta_2, z, y)$ \;
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, r_1^{0,m})$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, x_1, y) = \retonfa ((0, 0, r_1^{1,m}), y)$ \;
+            $(\Sigma, Q_2, T_2, \Delta_2, x_2, y) = \ntag (r_1, y)$ \;
+            $Q = Q_1 \cup Q_2 \cup \{x\}$ \;
+            $\Delta = \Delta_1 \cup \Delta_2 \cup \{(x,1,\epsilon,x_1), (x,2,\epsilon,x_2)\}$ \;
+            \Return $(\Sigma, Q, T_1 \cup T_2, \Delta, x, y)$ \;
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, r_1^{1,\infty})$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, z, x) = \retonfa (r_1, \Xund)$ \;
+            $Q = Q_1 \cup \{y\}$ \;
+            $\Delta = \Delta_1 \cup \{(x,1,\epsilon,z), (x,2,\epsilon,y)\}$ \;
+            \Return $(\Sigma, Q, T_1, \Delta, z, y)$ \;
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, r_1^{1,1})$} {
+            \Return $\retonfa (r_1, y)$ \;
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, r_1^{1,m}) \mid_{1 < m < \infty}$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, x, y) = \retonfa ((0, 0, r_1^{1,m-1}), y)$ \;
+            $(\Sigma, Q_2, T_2, \Delta_2, w, z) = \retonfa (r_1, \Xund)$ \;
+            $\Delta = \Delta_1 \cup \Delta_2 \cup \{(z,1,\epsilon,y), (z,2,\epsilon,x)\}$ \;
+            \Return $(\Sigma, Q_1 \cup Q_2, T_1 \cup T_2, \Delta, w, y)$ \;
+        }
+        \BlankLine
+%        \ElseIf {$r = (0, 0, r_1^{1,m}) \mid_{1 < m < \infty}$} {
+%            $y_m = y$ \;
+%            \For {$i = \overline{1,m}$} {
+%                $(\Sigma, Q_i, T_i, \Delta_i, x_i, y_i) = \retonfa (r_1, y_i)$ \;
+%            }
+%            $Q = \bigcup\nolimits_{i=1}^m Q_i$
+%            $\Delta = \bigcup\nolimits_{i=1}^m \Delta_i \cup \{(y_i,1,\epsilon,y_{i+1}),(y_i,2,\epsilon,x_{i+1})\}_{i=1}^m$
+%            \Return $(\Sigma, Q, T, \Delta, x_1, y)$ \;
+%        }
+        \BlankLine
+        \ElseIf {$r = (i, \Xund, r_1) \mid_{i \neq 0}$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, z, x) = \retonfa (r_1, \Xund)$ \;
+            $Q = Q_1 \cup \{w, y\}$ \;
+            $T = T_1 \cup \{2i\!-\!1, 2i\}$ \;
+            $\Delta = \Delta_1 \cup \{(w,1,2i\!-\!1,z), (x,1,2i,y)\}$ \;
+            \Return $(\Sigma, Q, T, \Delta, w, y)$ \;
+        }
+
+    }
+    \end{algorithm}
+
+
+    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+    \Fn {$\underline{\ntag(r)} \smallskip$} {
+        \If {$r = (0, 0, \Xund)$} {
+            \Return $(\Sigma, \{y\}, \emptyset, \emptyset, y, y)$ \;
+        }
+        \BlankLine
+        \ElseIf {$r = (i, \Xund, \Xund) \mid_{i \neq 0}$} {
+            \Return $(\Sigma, \{x,y\}, \{1\!-\!2i\}, \{(x, 1, 1\!-\!2i, y)\}, x, y)$ \;
+        }
+
+    }
+    \end{algorithm}
+
+
+    \columnbreak
+
+
+    \includegraphics[width=\linewidth]{img/tnfa_construction.pdf}
+
+
+\end{multicols}
+%\vspace{-2em}
+%\includegraphics[width=\linewidth]{img/tnfa_example.pdf}
+\vspace{-2em}
+\begin{center}
+\caption{TNFA construction.}
+\end{center}
+\end{figure*}
+
+
+\begin{figure}\label{fig_tnfa_example}
+\includegraphics[width=\linewidth]{img/tnfa_example.pdf}
 \caption{
-TNFA construction:
-(a) -- operations of concatenation, union, closure on automata, \\
-(b) -- subautomaton for submatch IRE,
-(c) -- subautomaton for negative tags,
-(d) -- (k) -- subautomata for non-submatch IRE, \\
-(l) -- example TNFA for RE $(a|\epsilon)^{0,3}((a^{0,\infty})|(\epsilon))$.
+    Example TNFA for RE $(a|\epsilon)^{0,3}((a^{0,\infty})|(\epsilon))$.
 }
 \end{figure}
+
+
+%\begin{figure}\label{fig_tnfa}
+%\includegraphics[width=\linewidth]{img/tnfa.pdf}
+%\caption{
+%TNFA construction:
+%(a) -- operations of concatenation, union, closure on automata, \\
+%(b) -- subautomaton for submatch IRE,
+%(c) -- subautomaton for negative tags,
+%(d) -- (k) -- subautomata for non-submatch IRE, \\
+%(l) -- example TNFA for RE $(a|\epsilon)^{0,3}((a^{0,\infty})|(\epsilon))$.
+%}
+%\end{figure}
 
 \FloatBarrier
 
@@ -927,23 +1059,33 @@ TNFA construction:
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
     \Fn {$\underline {precedence (x, y, P_1, P_2)} \smallskip$} {
-        $(q, \Xund, a_1 \dots a_n, \Xund) = x$ \;
-        $(p, \Xund, b_1 \dots b_m, \Xund) = y$ \;
-        $k = 1, \; hx = hy = \infty, \; l = 0$ \;
+        $(q, \Xund, \gamma, \Xund) = x$, where $\gamma = a_1 \dots a_n, \; n \geq 0$ \;
+        $(p, \Xund, \delta, \Xund) = y$, where $\delta = b_1 \dots b_m, \; m \geq 0$ \;
         $\ff = (q = p)$ \tcc{fork frame ?}
 
         \BlankLine
+        \If { $\ff \wedge \gamma = \delta$ } {
+            \Return $(\infty, \infty, 0)$ \tcc{identical}
+        }
+
+        \BlankLine
+        $k = 1$ \;
         \If { $\ff$ } {
-            \lWhile {$k < min (n, m) \wedge a_k = b_k$} {
-              $k = k + 1$
+            \While {$k \leq min (n, m) \wedge a_k = b_k$} {
+              $k = k + 1$ \tcc{first mismatch}
             }
         }
 
         \BlankLine
         \tcc {longest-precedence}
-        \lIf { $\ff$ } {
-            $hx = hy = height (a_{k-1})$
-        } \lElse {
+        \If { $\ff$ } {
+            \lIf {$k = 1$} {
+                $hx = hy = \infty$
+            }
+            \lElse {
+                $hx = hy = height (a_{k-1})$
+            }
+        } \Else {
             $hx = P_1 [q] [p], \; hy = P_1 [p] [q]$
         }
         \lFor {$i = \overline{k, n}$} {
@@ -1016,6 +1158,7 @@ TNFA construction:
             $indeg(q)  = | \{ (\Xund, \Xund, \Xund, q) \in \Delta \} |$ \;
             $active(q) = \Xfalse$ \;
             $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
+            $next(q)   = 1$ \;
         }
 
         \BlankLine
@@ -1113,6 +1256,7 @@ TNFA construction:
             $indeg(q)  = | \{ (\Xund, \Xund, \Xund, q) \in \Delta \} |$ \;
             $topord(q) = \text{ topological index of } q \text { in TNFA}$ \;
             $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
+            $next(q)   = 1$ \;
         }
 
         \BlankLine
@@ -1157,7 +1301,6 @@ TNFA construction:
         $\{ a_1, \dots, a_n \} = arcs (q)$ \;
         $i = next (q)$ \;
 
-        %\BlankLine
         \While {$i < n$} {
 
             $(q, \epsilon, \tau, p) = a_i$ \;
@@ -1165,7 +1308,6 @@ TNFA construction:
             $x = (o, u \tau, t)$, where $(o, u, t) = result(q)$ \;
             $y = result(p)$ \;
 
-            %\BlankLine
             \If {$y = \bot
                 \vee indeg(p) < 2
                 \vee precede(x, y, C)$} {
@@ -1174,7 +1316,6 @@ TNFA construction:
             }
         }
 
-        %\BlankLine
         \Return $\bot$
     }
     \end{algorithm}
@@ -1193,8 +1334,8 @@ TNFA construction:
         \Return $q \in F \vee \exists (q, \alpha, \Xund, \Xund) \in \Delta^\Sigma$ \;
     }
     \end{algorithm}
-
 \end{multicols}
+\vspace{-3em}
 \begin{center}
 \caption{GOR1 and GTOP closure algorithms.
 The definitions of $sort \Xund with$, $push$, $pop$, $insert \Xund with \Xund priority$ \\

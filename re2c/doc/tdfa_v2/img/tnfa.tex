@@ -154,7 +154,7 @@ $\begin{aligned}
     \path (a) edge node {$\alpha / \epsilon$} (b);
     \node [label={[label distance=0.1in, below left]270:\large{(e)}}] (a) {};
     \node [label={[label distance=0.1in, below right]270:
-    $F \big( (0, 0, \epsilon) \big) = \big( \Sigma, \{x, y\}, \emptyset, \{ (x, \alpha, \epsilon, y) \}, x, y \big)
+    $F \big( (0, 0, a) \big) = \big( \Sigma, \{x, y\}, \emptyset, \{ (x, \alpha, \epsilon, y) \}, x, y \big)
     $}] (a) {};
 \end{scope}
 
@@ -355,6 +355,7 @@ $\begin{aligned}
     \node[state, right of = x3, xshift=0.1in] (x3Y) {$31$};
     \node[state, right of = x3Y, xshift=0.1in] (x3Z) {$32$};
     \node[state, above right of = x3Z] (x3X) {$33$};
+    \node[state, below right of = x3X, draw=none, inner sep=0, minimum size=0] (x3W) {};
 
     \node[state, fill=lightgray, above right of = x4, xshift = \zz, yshift = -\zz] (x5) {$25$};
     \node[state, right of = x5] (x6) {$26$};
@@ -422,7 +423,9 @@ $\begin{aligned}
     \draw (z2) .. controls ($ (z2) + (2, 0) $) and ($ (z22) + (-1.0, -1.0) $) .. node [above, very near start] {$1/\!\!-\!\!6$} (z22);
     \draw (x6) .. controls ($ (x6) + (0.3, 0.8) $) and ($ (x5) + (-0.3, 0.8) $) .. node [above] {$1/\epsilon$} (x5);
 
-    \draw (x3X) .. controls ($ (x3X) + (0.9, -0.9) $) and ($ (x3X) + (0.5, -0.9) $) .. node [above right, near start] {$1/12$} (x12);
+%    \draw (x3X) .. controls ($ (x3X) + (0.9, -0.9) $) and ($ (x3X) + (0.5, -0.9) $) .. node [above right, near start] {$1/12$} (x12);
+    \path[-] (x3X) edge node {$1/12$} (x3W);
+    \path (x3W) edge [bend right=20] node {} (x12);
 
     \path (x0) edge [draw=none] node [below=0.1in, midway] {\large{(l)}} (x24);
 
