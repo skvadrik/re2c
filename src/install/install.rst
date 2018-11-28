@@ -96,10 +96,12 @@ If you intend to use re2c on Windows, you can either
 use `cygwin <https://cygwin.com/>`_
 or build re2c with `mingw <http://mingw.org/>`_
 (mingw builds are supported and tested regularly).
+For some mingw versions you might have to use ``-std=gnu++11`` compiler option to avoid spurious build errors
+(re2c uses ``-std=c++98`` by default).
 
 .. code-block:: bash
 
-    $ ./configure --host i686-w64-mingw32
+    $ ./configure --host i686-w64-mingw32 CXXFLAGS="-std=gnu++11"
     $ make
     $ make install
 
