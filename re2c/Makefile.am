@@ -1,7 +1,7 @@
 # flags
 # do *not* add CXXFLAGS here, add them in configure.ac
 AM_CXXFLAGS = $(CXXFLAGSDEFAULT)
-RE2CFLAGS = -b
+RE2CFLAGS = -b -W
 
 # binary
 bin_PROGRAMS = re2c
