@@ -256,6 +256,8 @@ int32_t Scanner::lex_conf_number ()
     lex_conf_assign ();
     tok = cur;
 /*!re2c
+    * { fatal_lc(get_cline(), get_column(),
+        "bad configuration value (expected number)"); }
     number {
         int32_t n = 0;
         if (!s_to_i32_unsafe (tok, cur, n)) {
