@@ -108,11 +108,12 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
     // transitions (other states)
     else {
         if (!isnew) {
+            const dfa_state_t *o = dfa.states[origin];
             fprintf(stderr,
                 "  i%u [style=dotted]\n"
                 "  i%u:s -> %u:s [style=dotted label=\"",
-                state, state, origin);
-            dump_tcmd(dfa.states[origin]->tcmd[symbol]);
+                state, state, static_cast<uint32_t>(o->arcs[symbol]));
+            dump_tcmd(o->tcmd[symbol]);
             fprintf(stderr, "\"]\n");
         }
 
