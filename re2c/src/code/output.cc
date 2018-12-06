@@ -304,14 +304,14 @@ Output & Output::wdelay_types ()
 
 Output & Output::wdelay_yyaccept_init (uint32_t ind)
 {
-    block().fragments.push_back (new OutputFragment (OutputFragment::YYACCEPT_INIT, ind));
+    block().fragments.push_back (new OutputFragment (OutputFragment::ACCEPT_INIT, ind));
     return *this;
 }
 
 Output & Output::wdelay_yymaxfill ()
 {
     if (block().opts->target == TARGET_CODE) {
-        block().fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
+        block().fragments.push_back (new OutputFragment (OutputFragment::MAXFILL, 0));
     }
     return *this;
 }
@@ -320,7 +320,7 @@ Output& Output::wdelay_yymaxnmatch()
 {
     if (block().opts->target == TARGET_CODE
         && block().opts->posix_captures) {
-        block().fragments.push_back (new OutputFragment (OutputFragment::YYMAXNMATCH, 0));
+        block().fragments.push_back (new OutputFragment (OutputFragment::MAXNMATCH, 0));
     }
     return *this;
 }
@@ -499,13 +499,13 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             case OutputFragment::TYPES:
                 output_types(o, ind, block().opts, global_types);
                 break;
-            case OutputFragment::YYACCEPT_INIT:
+            case OutputFragment::ACCEPT_INIT:
                 output_yyaccept_init(o, ind, b.used_yyaccept, bopt);
                 break;
-            case OutputFragment::YYMAXFILL:
+            case OutputFragment::MAXFILL:
                 output_yymaxfill(o, ind, max_fill, bopt);
                 break;
-            case OutputFragment::YYMAXNMATCH:
+            case OutputFragment::MAXNMATCH:
                 output_yymaxnmatch(o, ind, max_nmatch, bopt);
                 break;
             case OutputFragment::SKIP:

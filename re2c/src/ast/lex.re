@@ -20,13 +20,13 @@
 
 extern YYSTYPE yylval;
 
-#define    YYCTYPE      unsigned char
-#define    YYCURSOR     cur
-#define    YYLIMIT      lim
-#define    YYMARKER     mar
-#define    YYFILL(n)    { fill (n); }
-
 namespace re2c {
+
+#define YYCTYPE   unsigned char
+#define YYCURSOR  cur
+#define YYLIMIT   lim
+#define YYMARKER  mar
+#define YYFILL(n) { if (!fill (n)) fatal("unexpected end of input"); }
 
 /*!re2c
     // source code is in ASCII, but re2c assumes unsigned chars
@@ -55,13 +55,19 @@ namespace re2c {
 */
 
 /*!header:re2c:on*/
+#include <string.h>
+
 namespace re2c {
+
+/*!max:re2c*/
+
 struct ScannerState
 {
     enum lexer_state_t {LEX_NORMAL, LEX_FLEX_NAME};
     lexer_state_t lexer_state;
 
-    char *bot, *lim, *cur, *mar, *ctx, *eof, *tok, *top, *ptr, *pos;
+    size_t BSIZE;
+    char *bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
     /*!stags:re2c format = "char *@@;"; */
 
     ptrdiff_t tchar;
@@ -69,11 +75,37 @@ struct ScannerState
 
     inline ScannerState()
         : lexer_state (LEX_NORMAL)
-        , bot(NULL), lim(NULL), cur(NULL), mar(NULL), ctx(NULL)
-        , eof(NULL), tok(NULL), top(NULL), ptr(NULL), pos(NULL)
-        /*!stags:re2c format = ", @@(NULL)"; */
-        , tchar (0), cline (1)
-    {}
+        , BSIZE(8192)
+        , bot(new char[BSIZE + YYMAXFILL])
+        , lim(bot + BSIZE)
+        , cur(lim)
+        , mar(lim)
+        , ctx(lim)
+        , tok(lim)
+        , ptr(lim)
+        , pos(lim)
+        , eof(NULL)
+        /*!stags:re2c format = ", @@(lim)"; */
+        , tchar(0)
+        , cline(1)
+    {
+        memset(lim, 0, YYMAXFILL);
+    }
+
+    inline ~ScannerState() { delete[] bot; }
+
+    inline void shift_ptrs(ptrdiff_t offs)
+    {
+        lim += offs;
+        cur += offs;
+        mar += offs;
+        ctx += offs;
+        tok += offs;
+        ptr += offs;
+        pos += offs;
+        /*!stags:re2c format = "@@ += offs;"; */
+    }
+
     FORBID_COPY(ScannerState);
 };
 } // namespace re2c
@@ -81,10 +113,7 @@ struct ScannerState
 
 Scanner::ParseMode Scanner::echo(Output &out)
 {
-    if (eof && cur == eof) // Catch EOF
-    {
-        return Stop;
-    }
+    if (is_eof()) return Stop;
 
     tok = cur;
 echo:
@@ -171,7 +200,7 @@ echo:
     }
 
     eof {
-        if (cur != eof) goto echo;
+        if (!is_eof()) goto echo;
         out.wraw(tok, ptr);
         return Stop;
     }
@@ -600,7 +629,7 @@ void Scanner::set_sourceline ()
 {
 sourceline:
     tok = cur;
-/*!re2c    
+/*!re2c
     lineno {
         if (!s_to_u32_unsafe (tok, cur, cline)) {
             fatal_lc(get_cline(), get_column(), "line number overflow");
@@ -614,27 +643,24 @@ sourceline:
         goto sourceline;
     }
 
-    eol {
-        tok = cur;
-        return;
-    }
-
-    eof {
-        --cur;
-        tok = cur;
-        return;
-    }
-
-    * { goto sourceline; }
+    eol { tok = cur; return; }
+    eof { --cur; return; }
+    *   { goto sourceline; }
 */
 }
 
 void Scanner::fail_if_eof() const
 {
-    if (cur == eof) {
+    if (is_eof()) {
         const uint32_t col = static_cast<uint32_t>(cur - pos) - 1;
         fatal_lc(get_cline(), col, "unexpected end of input");
     }
 }
+
+#undef YYCTYPE
+#undef YYCURSOR
+#undef YYLIMIT
+#undef YYMARKER
+#undef YYFILL
 
 } // end namespace re2c

@@ -10,6 +10,8 @@
 namespace re2c
 {
 
+#define YYFILL(n) { if (!fill (n)) fatal("unexpected end of input"); }
+
 // global re2c config (affects the whole file)
 /*!re2c
     re2c:define:YYCTYPE     = "unsigned char";
@@ -17,7 +19,6 @@ namespace re2c
     re2c:define:YYLIMIT     = lim;
     re2c:define:YYMARKER    = mar;
     re2c:define:YYCTXMARKER = ctx;
-    re2c:define:YYFILL      = fill;
 
     // source code is in ASCII: pointers have type 'char *'
     // but re2c makes an implicit assumption that YYCTYPE is unsigned
@@ -300,5 +301,7 @@ end:
     lex_conf_semicolon ();
     return s;
 }
+
+#undef YYFILL
 
 } // end namespace re2c

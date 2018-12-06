@@ -64,9 +64,9 @@ struct OutputFragment
         , STAGS
         , MTAGS
         , TYPES
-        , YYACCEPT_INIT
-        , YYMAXFILL
-        , YYMAXNMATCH
+        , ACCEPT_INIT
+        , MAXFILL
+        , MAXNMATCH
         , SKIP
         , PEEK
         , BACKUP

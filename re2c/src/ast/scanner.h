@@ -26,11 +26,10 @@ struct AST;
 
 class Scanner: private ScannerState
 {
-    static const uint32_t BSIZE;
     Input & in;
     Warn &warn;
 
-    void fill(uint32_t need);
+    bool fill(size_t need);
     void lex_end_of_comment(Output &out);
     void lex_code_indented();
     void lex_code_in_braces();
@@ -57,13 +56,13 @@ class Scanner: private ScannerState
     bool lex_conf_bool();
     std::string lex_conf_string();
     size_t tok_len() const;
+    bool is_eof() const;
     void fail_if_eof() const;
 
 public:
     enum ParseMode {Stop, Parse, Reuse, Rules};
 
     Scanner(Input&, Warn &w);
-    ~Scanner();
     ParseMode echo(Output &out);
     int scan(const conopt_t *globopts);
     void lex_conf(Opt &opts);
@@ -92,6 +91,11 @@ inline uint32_t Scanner::get_cline() const
 inline uint32_t Scanner::get_column() const
 {
     return static_cast<uint32_t>(tok - pos);
+}
+
+inline bool Scanner::is_eof() const
+{
+    return eof && cur > eof;
 }
 
 } // end namespace re2c

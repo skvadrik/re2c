@@ -1,82 +1,49 @@
-#include <stdio.h>
+#include <assert.h>
 #include <string.h>
 
 #include "src/ast/scanner.h"
 #include "src/conf/msg.h"
 
-// used by Scanner::fatal_at and Scanner::fatalf
-#if defined(_MSC_VER) && !defined(vsnprintf)
-#    define vsnprintf _vsnprintf
-#endif
 
 namespace re2c {
 
 class Warn;
 
-const uint32_t Scanner::BSIZE = 8192;
+Scanner::Scanner(Input &i, Warn &w): ScannerState(), in(i), warn(w) {}
 
-Scanner::Scanner(Input &i, Warn &w)
-    : ScannerState(), in(i), warn(w) {}
-
-void Scanner::fill (uint32_t need)
+bool Scanner::fill(size_t need)
 {
-    if(!eof)
-    {
-        /* Get rid of everything that was already parsed. */
-        const ptrdiff_t diff = tok - bot;
-        if (diff > 0)
-        {
-            const size_t move = static_cast<size_t> (top - tok);
-            memmove (bot, tok, move);
-            tok -= diff;
-            mar -= diff;
-            ptr -= diff;
-            cur -= diff;
-            pos -= diff;
-            lim -= diff;
-            ctx -= diff;
-        }
-        /* Increase buffer size. */
-        if (BSIZE > need)
-        {
-            need = BSIZE;
-        }
-        if (static_cast<uint32_t> (top - lim) < need)
-        {
-            const size_t copy = static_cast<size_t> (lim - bot);
-            char * buf = new char[copy + need];
-            if (!buf)
-            {
-                fatal("Out of memory");
-            }
-            if (copy > 0) {
-                memcpy (buf, bot, copy);
-            }
-            tok = &buf[tok - bot];
-            mar = &buf[mar - bot];
-            ptr = &buf[ptr - bot];
-            cur = &buf[cur - bot];
-            pos = &buf[pos - bot];
-            lim = &buf[lim - bot];
-            top = &lim[need];
-            ctx = &buf[ctx - bot];
-            delete [] bot;
-            bot = buf;
-        }
-        /* Append to buffer. */
-        const size_t have = fread (lim, 1, need, in.file);
-        if (have != need)
-        {
-            eof = &lim[have];
-            *eof++ = '\0';
-        }
-        lim += have;
+    if (eof) return false;
+
+    assert(bot <= tok && tok <= lim);
+    size_t free = static_cast<size_t>(tok - bot);
+    size_t copy = static_cast<size_t>(lim - tok);
+
+    if (free >= need) {
+        memmove(bot, tok, copy);
+        shift_ptrs(-static_cast<ptrdiff_t>(free));
     }
-}
+    else {
+        BSIZE += std::max(BSIZE, need);
+        char * buf = new char[BSIZE + YYMAXFILL];
+        if (!buf) fatal("out of memory");
 
-Scanner::~Scanner()
-{
-    delete [] bot;
+        memmove(buf, tok, copy);
+        shift_ptrs(buf - bot);
+        delete [] bot;
+        bot = buf;
+
+        free = BSIZE - copy;
+    }
+
+    lim += fread(lim, 1, free, in.file);
+    if (lim < bot + BSIZE) {
+        eof = lim;
+        memset(lim, 0, YYMAXFILL);
+        lim += YYMAXFILL;
+    }
+
+    return true;
 }
 
 } // namespace re2c
