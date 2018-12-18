@@ -36,7 +36,7 @@
 \begin{scope}[xshift=0in, yshift=0in]
 
 \begin{scope}[xshift=0in, yshift=0in]
-    \node[draw=none] (a) {$\hphantom{\hspace{2in}}$};
+    \node[draw=none] (a) {$\hphantom{\hspace{1in}}$};
 \end{scope}
 
 \begin{scope}[xshift=0in, yshift=0in]
@@ -55,34 +55,34 @@
     $\retonfa \big( (0, 0, a), y \big) $}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-1.5in]
+\begin{scope}[xshift=0in, yshift=-1.4in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
     \node[state] (a1) {$z$};
-    \node[style1, right of = a1] (a) {$F(r_1)$};
+    \node[style1, right of = a1] (a) {$F(s)$};
     \node[style2, right of = a] (a2) {$x$};
-    \node[style1, right of = a2] (b) {$F(r_2)$};
+    \node[style1, right of = a2] (b) {$F(u)$};
     \node[style2, right of = b] (b2) {$y$};
     \node [label={[label distance=0.2in, below left]270:\large{(c)}}] (a) {};
     \node [label={[label distance=0.2in, below right]270:
-    $\retonfa \big( (0, 0, r_1 \cdot r_2), y \big) $}] (a1) {};
+    $\retonfa \big( (0, 0, s \cdot u), y \big) $}] (a1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-2.8in]
+\begin{scope}[xshift=0in, yshift=-2.6in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
     \node[state] (a) {$x$};
     \node[state, above right of = a, yshift = -0.35in] (b1) {$x_2$};
-    \node[style1, right of = b1] (b) {$F(r_1)$};
+    \node[style1, right of = b1] (b) {$F(s)$};
     \node[style2, right of = b] (b2) {$x_1$};
-    \node[style1, right of = b2, rotate around={-21:(b2)}] (d) {$N(r_2)$};
+    \node[style1, right of = b2, rotate around={-21:(b2)}] (d) {$N(u)$};
 
     \node[state, below right of=a, yshift = 0.35in] (c1) {$x_4$};
-    \node[style1, right of = c1] (c2) {$N(r_1)$};
+    \node[style1, right of = c1] (c2) {$N(s)$};
     \node[style2, right of = c2] (c3) {$x_3$};
-    \node[style1, right of = c3, rotate around={21:(c3)}] (c) {$F(r_2)$};
+    \node[style1, right of = c3, rotate around={21:(c3)}] (c) {$F(u)$};
     \node[style2, right of = c, rotate around={21:(c)}] (d) {$y$};
     \path
         (a)  edge [bend left]  node {$1 / \epsilon$} (b1)
@@ -90,10 +90,10 @@
     ;
     \node [label={[label distance=0.5in, below left]270:\large{(d)}}] (a) {};
     \node [label={[label distance=0.5in, below right]270:
-    $\retonfa \big( (0, 0, r_1 \mid r_2), y \big) $}] (a) {};
+    $\retonfa \big( (0, 0, s \mid u), y \big) $}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-4in]
+\begin{scope}[xshift=0in, yshift=-3.8in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
@@ -107,7 +107,7 @@
     $\retonfa \big( (0, 0, r^{n, m}), y \big) \mid_{n \;>\; 1} $}] (a1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-5.2in]
+\begin{scope}[xshift=0in, yshift=-5in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
@@ -127,7 +127,7 @@
     $\retonfa \big( (0, 0, r^{0, m}), y \big) $}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-6.8in]
+\begin{scope}[xshift=0in, yshift=-6.6in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
@@ -146,7 +146,7 @@
     $\retonfa \big( (0, 0, r^{1, \infty}), y \big) $}] (b1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-7.75in]
+\begin{scope}[xshift=0in, yshift=-7.4in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
@@ -159,7 +159,7 @@
     $\retonfa \big( (0, 0, r^{1, 1}), y \big) $}] (b1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-9in]
+\begin{scope}[xshift=0in, yshift=-8.6in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
@@ -180,7 +180,7 @@
     $\retonfa \big( (0, 0, r^{1, m}), y \big) \mid_{1 < m < \infty} $}] (b1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-10.5in]
+\begin{scope}[xshift=0in, yshift=-10in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
@@ -198,28 +198,27 @@
     $\retonfa \big( (i, \Xund, r) \big) \mid_{i \;\neq\; 0} $}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-11.2in]
+\begin{scope}[xshift=0in, yshift=-10.8in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
-    \node[state, accepting] (a) {$y$};
+    \node[state] (a) {$x_0$};
+    \node[state, right of = a] (a1) {$x_1$};
+    \node[state, right of = a1] (b1) {$x_2$};
+    \node[draw=none, right of = b1, xshift=-0.5in] (b) {\large{$\dots$}};
+    \node[state, accepting, right of = b, xshift=-0.5in] (b2) {$x_{2n}$};
+    \path
+        (a) edge node {$1 / -\!(2i-1) $} (a1)
+        (a1) edge node {$1 / -\! 2i $} (b1)
+        (b1) edge node {} (b)
+        (b) edge node {} (b2)
+    ;
     \node [label={[label distance=0.1in, below left]270:\large{(j)}}] (a) {};
     \node [label={[label distance=0.1in, below right]270:
-    $\ntag \big( (0, \Xund, \Xund) \big) $}] (a) {};
-\end{scope}
-
-\begin{scope}[xshift=0in, yshift=-12in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
-    \node[state] (a) {$x$};
-    \node[state, accepting, right of = a] (a1) {$y$};
-    \path
-        (a) edge node {$1 / 1 -\! 2i $} (a1)
-    ;
-    \node [label={[label distance=0.1in, below left]270:\large{(k)}}] (a) {};
-    \node [label={[label distance=0.1in, below right]270:
-    $\ntag \big( (i, \Xund, r) \big) \mid_{i \;\neq\; 0} $}] (a) {};
+    $\begin{aligned}
+        N \big( (i, \Xund, r) \big)
+    \end{aligned}$
+    }] (a) {};
 \end{scope}
 
 \end{scope}

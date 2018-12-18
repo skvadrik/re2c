@@ -20,9 +20,9 @@
 
 \tikzstyle{every node}=[]
 \tikzstyle{every state}=[circle
-    , minimum size=0.15in
+    , minimum size=0.16in
     , rectangle
-    , rounded corners=4
+    , rounded corners=5
     , inner sep = 2pt
     , outer sep = 0pt
     , node distance = 0.4in]
@@ -30,8 +30,8 @@
 \newcommand{\zz}{0.06in}
 
 \begin{scope}[xshift=-0.8in, yshift=-10.5in]
-    \footnotesize
-    %\scriptsize
+    %\footnotesize
+    \scriptsize
 
     % ((epsilon|a*)((a|epsilon){0,3}))
 
@@ -47,6 +47,7 @@
     \node[state, below right of = x21] (x22) {$8$};
 
     \node[state, right of = x1, xshift=0.6in] (z1) {$18$};
+    \node[state, right of = z1, xshift=0.27in] (z2) {$19$};
 
     \node[state, right of = x22] (y15) {$9$};
     \node[state, above right of = y15] (y16) {$10$};
@@ -58,27 +59,29 @@
     \node[state, above right of = z15] (z16) {$15$};
     \node[state, fill=lightgray, above right of = z16, xshift = \zz, yshift = -\zz] (z17) {$16$};
     \node[state, below right of = z17, xshift = \zz, yshift = +\zz] (z21) {$17$};
-    \node[state, below right of = z21] (z22) {$19$};
+    \node[state, below right of = z21] (z22) {$20$};
 
-    \node[state, below right of = z22] (x23) {$20$};
+    \node[state, below right of = z22] (x23) {$21$};
 
-    \node[state, above right of = x23] (x2) {$21$};
-    \node[state, above right of = x2, xshift = \zz, yshift = -\zz] (x4X) {$22$};
-    \node[state, above right of = x4X] (x4) {$23$};
+    \node[state, above right of = x23] (x2) {$22$};
+    \node[state, above right of = x2, xshift = \zz, yshift = -\zz] (x4X) {$23$};
+    \node[state, above right of = x4X] (x4) {$24$};
 
-    \node[state, below right of = x2, xshift = \zz+0.1in, yshift = +\zz] (x3) {$28$};
-    \node[state, right of = x3, xshift=0.1in] (x3Z) {$29$};
-    \node[state, above right of = x3Z] (x3X) {$30$};
+    \node[state, below right of = x2, xshift = \zz+0.1in, yshift = +\zz] (x3) {$30$};
+    \node[state, right of = x3, xshift=0.1in] (x3Y) {$31$};
+    \node[state, right of = x3Y, xshift=0.1in] (x3Z) {$32$};
+    \node[state, above right of = x3Z] (x3X) {$33$};
     \node[state, below right of = x3X, draw=none, inner sep=0, minimum size=0] (x3W) {};
 
-    \node[state, fill=lightgray, above right of = x4, xshift = \zz, yshift = -\zz] (x5) {$24$};
-    \node[state, right of = x5] (x6) {$25$};
-    \node[state, below right of = x6, xshift = \zz, yshift = \zz] (x7) {$26$};
-    \node[state, below right of = x7] (x7Y) {$27$};
-    \node[state, below right of = x7Y, xshift = \zz, yshift = +\zz] (x12) {$31$};
-    \node[state, below right of = x12] (x14) {$32$};
+    \node[state, fill=lightgray, above right of = x4, xshift = \zz, yshift = -\zz] (x5) {$25$};
+    \node[state, right of = x5] (x6) {$26$};
+    \node[state, below right of = x6, xshift = \zz, yshift = \zz] (x7) {$27$};
+    \node[state, below right of = x7] (x7X) {$28$};
+    \node[state, right of = x7X] (x7Y) {$29$};
+    \node[state, below right of = x7Y, xshift = \zz, yshift = +\zz] (x12) {$34$};
+    \node[state, below right of = x12] (x14) {$35$};
 
-    \node[state, fill=lightgray, accepting, below right of = x14] (x24) {$33$};
+    \node[state, fill=lightgray, accepting, below right of = x14] (x24) {$36$};
 
     \path
         (x0) edge node [above left] {$1/1$} (x1)
@@ -86,6 +89,7 @@
         (z0) edge node {$1/\epsilon$} (x15)
 
         (z0) edge [bend right=20] node [above, near end] {$2/\epsilon$} (z1)
+        (z1) edge node [below] {$1/\!\!-\!\!5$} (z2)
 
         (x15) edge node [above left] {$1/5$} (x16)
         (x16) edge [bend left]  node [above] {$1/\epsilon$} (x17)
@@ -114,15 +118,17 @@
         (x23) edge node [below right] {$1/7$} (x2)
         (x2) edge [bend left] node [above] {$1/\epsilon$} (x4X)
         (x2) edge [bend right] node [above] {$\quad 2/\epsilon$} (x3)
-        (x3) edge node [above] {$2/\!\!-\!\!9$} (x3Z)
-        (x3Z) edge node [below right] {$1/11$} (x3X)
+        (x3) edge node [below] {$2/\!\!-\!\!9$} (x3Y)
+        (x3Y) edge node [below] {$2/\!\!-\!\!10$} (x3Z)
+        (x3Z) edge node [above left] {$1/11$} (x3X)
         (x4X) edge node {$1/9$} (x4)
         (x4) edge [bend left] node [above] {$1/\epsilon$} (x5)
         (x4) edge [bend right=20] node [above] {$2/\epsilon$} (x7)
         (x5) edge node [above] {$a/\epsilon$} (x6)
         (x6) edge [bend left] node [above] {$2/\epsilon$} (x7)
-        (x7) edge node {$1/10$} (x7Y)
-        (x7Y) edge [bend left] node {$1/\!\!-\!\!11$} (x12)
+        (x7) edge node {$1/10$} (x7X)
+        (x7X) edge node {$1/\!\!-\!\!11$} (x7Y)
+        (x7Y) edge [bend left] node {$1/\!\!-\!\!12$} (x12)
         (x12) edge node [above right] {$1/8$} (x14)
 
         (x14) edge node [above right] {$1/2$} (x24)
@@ -130,8 +136,10 @@
 
     \draw (y22) .. controls ($ (y22) + (0.5, -0.6) $) and ($ (z22) + (-0.5, -0.6) $) .. node [above] {$1/\epsilon$} (z22);
     \draw (x22) .. controls ($ (x22) + (0.8, -0.8) $) and ($ (z22) + (-0.8, -0.8) $) .. node [above, near start] {$1/\epsilon$} (z22);
-    \draw (z1) .. controls ($ (z1) + (2, 0) $) and ($ (z22) + (-1.0, -1.0) $) .. node [above, very near start] {$1/\!\!-\!\!5$} (z22);
+    \draw (z2) .. controls ($ (z2) + (2, 0) $) and ($ (z22) + (-1.0, -1.0) $) .. node [below, very near start] {$1/\!\!-\!\!6$} (z22);
     \draw (x6) .. controls ($ (x6) + (0.3, 0.8) $) and ($ (x5) + (-0.3, 0.8) $) .. node [above] {$1/\epsilon$} (x5);
+
+%    \draw (x3X) .. controls ($ (x3X) + (0.9, -0.9) $) and ($ (x3X) + (0.5, -0.9) $) .. node [above right, near start] {$1/12$} (x12);
     \path[-] (x3X) edge node {$1/12$} (x3W);
     \path (x3W) edge [bend right=20] node {} (x12);
 
