@@ -204,14 +204,14 @@
 
     \node[state] (a) {$x_0$};
     \node[state, right of = a] (a1) {$x_1$};
-    \node[state, right of = a1] (b1) {$x_2$};
-    \node[draw=none, right of = b1, xshift=-0.5in] (b) {\large{$\dots$}};
-    \node[state, accepting, right of = b, xshift=-0.5in] (b2) {$x_{2n}$};
+    \node[draw=none, right of = a1, xshift=-0.5in] (b) {\large{$\dots$}};
+    \node[state, right of = b, xshift=-0.5in] (b1) {$x_{2n-1}$};
+    \node[state, accepting, right of = b1] (b2) {$x_{2n}$};
     \path
-        (a) edge node {$1 / -\!(2i-1) $} (a1)
-        (a1) edge node {$1 / -\! 2i $} (b1)
-        (b1) edge node {} (b)
-        (b) edge node {} (b2)
+        (a) edge node {$1 / 1\!-\!2i $} (a1)
+        (a1) edge node {} (b)
+        (b) edge node {} (b1)
+        (b1) edge node {$1 / -\! 2i $} (b2)
     ;
     \node [label={[label distance=0.1in, below left]270:\large{(j)}}] (a) {};
     \node [label={[label distance=0.1in, below right]270:
