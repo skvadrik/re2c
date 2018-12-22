@@ -13,13 +13,15 @@ Me:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x000020E0) {
-		if (yych <= 0x00000487) goto yy2;
-		if (yych <= 0x00000489) goto yy4;
-		if (yych >= 0x000020DD) goto yy4;
+	if (yych <= 0x000020DC) {
+		if (yych <= 0x00000489) {
+			if (yych >= 0x00000488) goto yy4;
+		} else {
+			if (yych == 0x00001ABE) goto yy4;
+		}
 	} else {
 		if (yych <= 0x000020E4) {
-			if (yych >= 0x000020E2) goto yy4;
+			if (yych != 0x000020E1) goto yy4;
 		} else {
 			if (yych <= 0x0000A66F) goto yy2;
 			if (yych <= 0x0000A672) goto yy4;
@@ -29,17 +31,17 @@ yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Me.u--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 33 "encodings/unicode_group_Me.u--encoding-policy(substitute).c"
+#line 35 "encodings/unicode_group_Me.u--encoding-policy(substitute).c"
 yy4:
 	++YYCURSOR;
 #line 12 "encodings/unicode_group_Me.u--encoding-policy(substitute).re"
 	{ goto Me; }
-#line 38 "encodings/unicode_group_Me.u--encoding-policy(substitute).c"
+#line 40 "encodings/unicode_group_Me.u--encoding-policy(substitute).c"
 }
 #line 14 "encodings/unicode_group_Me.u--encoding-policy(substitute).re"
 
 }
-static const unsigned int chars_Me [] = {0x488,0x489,  0x20dd,0x20e0,  0x20e2,0x20e4,  0xa670,0xa672,  0x0,0x0};
+static const unsigned int chars_Me [] = {0x488,0x489,  0x1abe,0x1abe,  0x20dd,0x20e0,  0x20e2,0x20e4,  0xa670,0xa672,  0x0,0x0};
 static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
 	unsigned int * const s_start = s;
@@ -51,9 +53,12 @@ static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	YYCTYPE * buffer_Me = new YYCTYPE [13];
+	unsigned int * buffer_Me = new unsigned int [14];
+	YYCTYPE * s = (YYCTYPE *) buffer_Me;
 	unsigned int buffer_len = encode_utf32 (chars_Me, sizeof (chars_Me) / sizeof (unsigned int), buffer_Me);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Me), reinterpret_cast<const YYCTYPE *> (buffer_Me + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Me[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Me' failed\n");
 	delete [] buffer_Me;
 	return 0;

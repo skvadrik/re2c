@@ -69,9 +69,12 @@ static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	YYCTYPE * buffer_Pf = new YYCTYPE [11];
+	unsigned int * buffer_Pf = new unsigned int [11];
+	YYCTYPE * s = (YYCTYPE *) buffer_Pf;
 	unsigned int buffer_len = encode_utf32 (chars_Pf, sizeof (chars_Pf) / sizeof (unsigned int), buffer_Pf);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Pf), reinterpret_cast<const YYCTYPE *> (buffer_Pf + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Pf[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Pf' failed\n");
 	delete [] buffer_Pf;
 	return 0;

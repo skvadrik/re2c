@@ -90,9 +90,9 @@ yy10:
 
 }
 static const unsigned int chars_Lt [] = {0x1c5,0x1c5,  0x1c8,0x1c8,  0x1cb,0x1cb,  0x1f2,0x1f2,  0x1f88,0x1f8f,  0x1f98,0x1f9f,  0x1fa8,0x1faf,  0x1fbc,0x1fbc,  0x1fcc,0x1fcc,  0x1ffc,0x1ffc,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned char * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 			s += re2c::utf8::rune_to_bytes (s, j);
@@ -102,9 +102,12 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	YYCTYPE * buffer_Lt = new YYCTYPE [128];
+	unsigned int * buffer_Lt = new unsigned int [128];
+	YYCTYPE * s = (YYCTYPE *) buffer_Lt;
 	unsigned int buffer_len = encode_utf8 (chars_Lt, sizeof (chars_Lt) / sizeof (unsigned int), buffer_Lt);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Lt), reinterpret_cast<const YYCTYPE *> (buffer_Lt + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Lt[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Lt' failed\n");
 	delete [] buffer_Lt;
 	return 0;

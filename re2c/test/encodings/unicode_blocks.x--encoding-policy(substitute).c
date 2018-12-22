@@ -2700,9 +2700,9 @@ static const unsigned int chars_Halfwidth_and_Fullwidth_Forms [] = {0xff00,0xffe
 static const unsigned int chars_Specials [] = {0xfff0,0xffff,  0x0,0x0};
 static const unsigned int chars_All [] = {0x0,0x74f,  0x780,0x7bf,  0x900,0x137f,  0x13a0,0x18af,  0x1900,0x197f,  0x19e0,0x19ff,  0x1d00,0x1d7f,  0x1e00,0x2bff,  0x2e80,0x2fdf,  0x2ff0,0x31bf,  0x31f0,0xa4cf,  0xac00,0xd7af,  0xd800,0xfe0f,  0xfe20,0xffff,  0x750,0x750};
 
-static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned short * s)
+static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned short * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 		{
@@ -2719,639 +2719,957 @@ static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int rang
 
 int main()
 {
-	YYCTYPE * buffer_Basic_Latin = new YYCTYPE [258];
+	unsigned int * buffer_Basic_Latin = new unsigned int [258];
+	YYCTYPE * s_Basic_Latin = (YYCTYPE *) buffer_Basic_Latin;
 	unsigned int buffer_Basic_Latin_len = encode_utf16 (chars_Basic_Latin, sizeof (chars_Basic_Latin) / sizeof (unsigned int), buffer_Basic_Latin);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Basic_Latin), reinterpret_cast<const YYCTYPE *> (buffer_Basic_Latin + buffer_Basic_Latin_len), Basic_Latin) != Basic_Latin)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Basic_Latin_len; ++i) s_Basic_Latin[i] = buffer_Basic_Latin[i];
+	if (scan (s_Basic_Latin, s_Basic_Latin + buffer_Basic_Latin_len, Basic_Latin) != Basic_Latin)
 		printf ("test 'Basic_Latin' failed\n");
 	delete [] buffer_Basic_Latin;
 
-	YYCTYPE * buffer_Latin___Supplement = new YYCTYPE [258];
+	unsigned int * buffer_Latin___Supplement = new unsigned int [258];
+	YYCTYPE * s_Latin___Supplement = (YYCTYPE *) buffer_Latin___Supplement;
 	unsigned int buffer_Latin___Supplement_len = encode_utf16 (chars_Latin___Supplement, sizeof (chars_Latin___Supplement) / sizeof (unsigned int), buffer_Latin___Supplement);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Latin___Supplement), reinterpret_cast<const YYCTYPE *> (buffer_Latin___Supplement + buffer_Latin___Supplement_len), Latin___Supplement) != Latin___Supplement)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Latin___Supplement_len; ++i) s_Latin___Supplement[i] = buffer_Latin___Supplement[i];
+	if (scan (s_Latin___Supplement, s_Latin___Supplement + buffer_Latin___Supplement_len, Latin___Supplement) != Latin___Supplement)
 		printf ("test 'Latin___Supplement' failed\n");
 	delete [] buffer_Latin___Supplement;
 
-	YYCTYPE * buffer_Latin_Extended_A = new YYCTYPE [258];
+	unsigned int * buffer_Latin_Extended_A = new unsigned int [258];
+	YYCTYPE * s_Latin_Extended_A = (YYCTYPE *) buffer_Latin_Extended_A;
 	unsigned int buffer_Latin_Extended_A_len = encode_utf16 (chars_Latin_Extended_A, sizeof (chars_Latin_Extended_A) / sizeof (unsigned int), buffer_Latin_Extended_A);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Latin_Extended_A), reinterpret_cast<const YYCTYPE *> (buffer_Latin_Extended_A + buffer_Latin_Extended_A_len), Latin_Extended_A) != Latin_Extended_A)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Latin_Extended_A_len; ++i) s_Latin_Extended_A[i] = buffer_Latin_Extended_A[i];
+	if (scan (s_Latin_Extended_A, s_Latin_Extended_A + buffer_Latin_Extended_A_len, Latin_Extended_A) != Latin_Extended_A)
 		printf ("test 'Latin_Extended_A' failed\n");
 	delete [] buffer_Latin_Extended_A;
 
-	YYCTYPE * buffer_Latin_Extended_B = new YYCTYPE [418];
+	unsigned int * buffer_Latin_Extended_B = new unsigned int [418];
+	YYCTYPE * s_Latin_Extended_B = (YYCTYPE *) buffer_Latin_Extended_B;
 	unsigned int buffer_Latin_Extended_B_len = encode_utf16 (chars_Latin_Extended_B, sizeof (chars_Latin_Extended_B) / sizeof (unsigned int), buffer_Latin_Extended_B);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Latin_Extended_B), reinterpret_cast<const YYCTYPE *> (buffer_Latin_Extended_B + buffer_Latin_Extended_B_len), Latin_Extended_B) != Latin_Extended_B)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Latin_Extended_B_len; ++i) s_Latin_Extended_B[i] = buffer_Latin_Extended_B[i];
+	if (scan (s_Latin_Extended_B, s_Latin_Extended_B + buffer_Latin_Extended_B_len, Latin_Extended_B) != Latin_Extended_B)
 		printf ("test 'Latin_Extended_B' failed\n");
 	delete [] buffer_Latin_Extended_B;
 
-	YYCTYPE * buffer_IPA_Extensions = new YYCTYPE [194];
+	unsigned int * buffer_IPA_Extensions = new unsigned int [194];
+	YYCTYPE * s_IPA_Extensions = (YYCTYPE *) buffer_IPA_Extensions;
 	unsigned int buffer_IPA_Extensions_len = encode_utf16 (chars_IPA_Extensions, sizeof (chars_IPA_Extensions) / sizeof (unsigned int), buffer_IPA_Extensions);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_IPA_Extensions), reinterpret_cast<const YYCTYPE *> (buffer_IPA_Extensions + buffer_IPA_Extensions_len), IPA_Extensions) != IPA_Extensions)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_IPA_Extensions_len; ++i) s_IPA_Extensions[i] = buffer_IPA_Extensions[i];
+	if (scan (s_IPA_Extensions, s_IPA_Extensions + buffer_IPA_Extensions_len, IPA_Extensions) != IPA_Extensions)
 		printf ("test 'IPA_Extensions' failed\n");
 	delete [] buffer_IPA_Extensions;
 
-	YYCTYPE * buffer_Spacing_Modifier_Letters = new YYCTYPE [162];
+	unsigned int * buffer_Spacing_Modifier_Letters = new unsigned int [162];
+	YYCTYPE * s_Spacing_Modifier_Letters = (YYCTYPE *) buffer_Spacing_Modifier_Letters;
 	unsigned int buffer_Spacing_Modifier_Letters_len = encode_utf16 (chars_Spacing_Modifier_Letters, sizeof (chars_Spacing_Modifier_Letters) / sizeof (unsigned int), buffer_Spacing_Modifier_Letters);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Spacing_Modifier_Letters), reinterpret_cast<const YYCTYPE *> (buffer_Spacing_Modifier_Letters + buffer_Spacing_Modifier_Letters_len), Spacing_Modifier_Letters) != Spacing_Modifier_Letters)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Spacing_Modifier_Letters_len; ++i) s_Spacing_Modifier_Letters[i] = buffer_Spacing_Modifier_Letters[i];
+	if (scan (s_Spacing_Modifier_Letters, s_Spacing_Modifier_Letters + buffer_Spacing_Modifier_Letters_len, Spacing_Modifier_Letters) != Spacing_Modifier_Letters)
 		printf ("test 'Spacing_Modifier_Letters' failed\n");
 	delete [] buffer_Spacing_Modifier_Letters;
 
-	YYCTYPE * buffer_Combining_Diacritical_Marks = new YYCTYPE [226];
+	unsigned int * buffer_Combining_Diacritical_Marks = new unsigned int [226];
+	YYCTYPE * s_Combining_Diacritical_Marks = (YYCTYPE *) buffer_Combining_Diacritical_Marks;
 	unsigned int buffer_Combining_Diacritical_Marks_len = encode_utf16 (chars_Combining_Diacritical_Marks, sizeof (chars_Combining_Diacritical_Marks) / sizeof (unsigned int), buffer_Combining_Diacritical_Marks);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Combining_Diacritical_Marks), reinterpret_cast<const YYCTYPE *> (buffer_Combining_Diacritical_Marks + buffer_Combining_Diacritical_Marks_len), Combining_Diacritical_Marks) != Combining_Diacritical_Marks)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Combining_Diacritical_Marks_len; ++i) s_Combining_Diacritical_Marks[i] = buffer_Combining_Diacritical_Marks[i];
+	if (scan (s_Combining_Diacritical_Marks, s_Combining_Diacritical_Marks + buffer_Combining_Diacritical_Marks_len, Combining_Diacritical_Marks) != Combining_Diacritical_Marks)
 		printf ("test 'Combining_Diacritical_Marks' failed\n");
 	delete [] buffer_Combining_Diacritical_Marks;
 
-	YYCTYPE * buffer_Greek_and_Coptic = new YYCTYPE [290];
+	unsigned int * buffer_Greek_and_Coptic = new unsigned int [290];
+	YYCTYPE * s_Greek_and_Coptic = (YYCTYPE *) buffer_Greek_and_Coptic;
 	unsigned int buffer_Greek_and_Coptic_len = encode_utf16 (chars_Greek_and_Coptic, sizeof (chars_Greek_and_Coptic) / sizeof (unsigned int), buffer_Greek_and_Coptic);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Greek_and_Coptic), reinterpret_cast<const YYCTYPE *> (buffer_Greek_and_Coptic + buffer_Greek_and_Coptic_len), Greek_and_Coptic) != Greek_and_Coptic)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Greek_and_Coptic_len; ++i) s_Greek_and_Coptic[i] = buffer_Greek_and_Coptic[i];
+	if (scan (s_Greek_and_Coptic, s_Greek_and_Coptic + buffer_Greek_and_Coptic_len, Greek_and_Coptic) != Greek_and_Coptic)
 		printf ("test 'Greek_and_Coptic' failed\n");
 	delete [] buffer_Greek_and_Coptic;
 
-	YYCTYPE * buffer_Cyrillic = new YYCTYPE [514];
+	unsigned int * buffer_Cyrillic = new unsigned int [514];
+	YYCTYPE * s_Cyrillic = (YYCTYPE *) buffer_Cyrillic;
 	unsigned int buffer_Cyrillic_len = encode_utf16 (chars_Cyrillic, sizeof (chars_Cyrillic) / sizeof (unsigned int), buffer_Cyrillic);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Cyrillic), reinterpret_cast<const YYCTYPE *> (buffer_Cyrillic + buffer_Cyrillic_len), Cyrillic) != Cyrillic)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Cyrillic_len; ++i) s_Cyrillic[i] = buffer_Cyrillic[i];
+	if (scan (s_Cyrillic, s_Cyrillic + buffer_Cyrillic_len, Cyrillic) != Cyrillic)
 		printf ("test 'Cyrillic' failed\n");
 	delete [] buffer_Cyrillic;
 
-	YYCTYPE * buffer_Cyrillic_Supplementary = new YYCTYPE [98];
+	unsigned int * buffer_Cyrillic_Supplementary = new unsigned int [98];
+	YYCTYPE * s_Cyrillic_Supplementary = (YYCTYPE *) buffer_Cyrillic_Supplementary;
 	unsigned int buffer_Cyrillic_Supplementary_len = encode_utf16 (chars_Cyrillic_Supplementary, sizeof (chars_Cyrillic_Supplementary) / sizeof (unsigned int), buffer_Cyrillic_Supplementary);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Cyrillic_Supplementary), reinterpret_cast<const YYCTYPE *> (buffer_Cyrillic_Supplementary + buffer_Cyrillic_Supplementary_len), Cyrillic_Supplementary) != Cyrillic_Supplementary)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Cyrillic_Supplementary_len; ++i) s_Cyrillic_Supplementary[i] = buffer_Cyrillic_Supplementary[i];
+	if (scan (s_Cyrillic_Supplementary, s_Cyrillic_Supplementary + buffer_Cyrillic_Supplementary_len, Cyrillic_Supplementary) != Cyrillic_Supplementary)
 		printf ("test 'Cyrillic_Supplementary' failed\n");
 	delete [] buffer_Cyrillic_Supplementary;
 
-	YYCTYPE * buffer_Armenian = new YYCTYPE [194];
+	unsigned int * buffer_Armenian = new unsigned int [194];
+	YYCTYPE * s_Armenian = (YYCTYPE *) buffer_Armenian;
 	unsigned int buffer_Armenian_len = encode_utf16 (chars_Armenian, sizeof (chars_Armenian) / sizeof (unsigned int), buffer_Armenian);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Armenian), reinterpret_cast<const YYCTYPE *> (buffer_Armenian + buffer_Armenian_len), Armenian) != Armenian)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Armenian_len; ++i) s_Armenian[i] = buffer_Armenian[i];
+	if (scan (s_Armenian, s_Armenian + buffer_Armenian_len, Armenian) != Armenian)
 		printf ("test 'Armenian' failed\n");
 	delete [] buffer_Armenian;
 
-	YYCTYPE * buffer_Hebrew = new YYCTYPE [226];
+	unsigned int * buffer_Hebrew = new unsigned int [226];
+	YYCTYPE * s_Hebrew = (YYCTYPE *) buffer_Hebrew;
 	unsigned int buffer_Hebrew_len = encode_utf16 (chars_Hebrew, sizeof (chars_Hebrew) / sizeof (unsigned int), buffer_Hebrew);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Hebrew), reinterpret_cast<const YYCTYPE *> (buffer_Hebrew + buffer_Hebrew_len), Hebrew) != Hebrew)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Hebrew_len; ++i) s_Hebrew[i] = buffer_Hebrew[i];
+	if (scan (s_Hebrew, s_Hebrew + buffer_Hebrew_len, Hebrew) != Hebrew)
 		printf ("test 'Hebrew' failed\n");
 	delete [] buffer_Hebrew;
 
-	YYCTYPE * buffer_Arabic = new YYCTYPE [514];
+	unsigned int * buffer_Arabic = new unsigned int [514];
+	YYCTYPE * s_Arabic = (YYCTYPE *) buffer_Arabic;
 	unsigned int buffer_Arabic_len = encode_utf16 (chars_Arabic, sizeof (chars_Arabic) / sizeof (unsigned int), buffer_Arabic);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Arabic), reinterpret_cast<const YYCTYPE *> (buffer_Arabic + buffer_Arabic_len), Arabic) != Arabic)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Arabic_len; ++i) s_Arabic[i] = buffer_Arabic[i];
+	if (scan (s_Arabic, s_Arabic + buffer_Arabic_len, Arabic) != Arabic)
 		printf ("test 'Arabic' failed\n");
 	delete [] buffer_Arabic;
 
-	YYCTYPE * buffer_Syriac = new YYCTYPE [162];
+	unsigned int * buffer_Syriac = new unsigned int [162];
+	YYCTYPE * s_Syriac = (YYCTYPE *) buffer_Syriac;
 	unsigned int buffer_Syriac_len = encode_utf16 (chars_Syriac, sizeof (chars_Syriac) / sizeof (unsigned int), buffer_Syriac);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Syriac), reinterpret_cast<const YYCTYPE *> (buffer_Syriac + buffer_Syriac_len), Syriac) != Syriac)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Syriac_len; ++i) s_Syriac[i] = buffer_Syriac[i];
+	if (scan (s_Syriac, s_Syriac + buffer_Syriac_len, Syriac) != Syriac)
 		printf ("test 'Syriac' failed\n");
 	delete [] buffer_Syriac;
 
-	YYCTYPE * buffer_Thaana = new YYCTYPE [130];
+	unsigned int * buffer_Thaana = new unsigned int [130];
+	YYCTYPE * s_Thaana = (YYCTYPE *) buffer_Thaana;
 	unsigned int buffer_Thaana_len = encode_utf16 (chars_Thaana, sizeof (chars_Thaana) / sizeof (unsigned int), buffer_Thaana);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Thaana), reinterpret_cast<const YYCTYPE *> (buffer_Thaana + buffer_Thaana_len), Thaana) != Thaana)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Thaana_len; ++i) s_Thaana[i] = buffer_Thaana[i];
+	if (scan (s_Thaana, s_Thaana + buffer_Thaana_len, Thaana) != Thaana)
 		printf ("test 'Thaana' failed\n");
 	delete [] buffer_Thaana;
 
-	YYCTYPE * buffer_Devanagari = new YYCTYPE [258];
+	unsigned int * buffer_Devanagari = new unsigned int [258];
+	YYCTYPE * s_Devanagari = (YYCTYPE *) buffer_Devanagari;
 	unsigned int buffer_Devanagari_len = encode_utf16 (chars_Devanagari, sizeof (chars_Devanagari) / sizeof (unsigned int), buffer_Devanagari);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Devanagari), reinterpret_cast<const YYCTYPE *> (buffer_Devanagari + buffer_Devanagari_len), Devanagari) != Devanagari)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Devanagari_len; ++i) s_Devanagari[i] = buffer_Devanagari[i];
+	if (scan (s_Devanagari, s_Devanagari + buffer_Devanagari_len, Devanagari) != Devanagari)
 		printf ("test 'Devanagari' failed\n");
 	delete [] buffer_Devanagari;
 
-	YYCTYPE * buffer_Bengali = new YYCTYPE [258];
+	unsigned int * buffer_Bengali = new unsigned int [258];
+	YYCTYPE * s_Bengali = (YYCTYPE *) buffer_Bengali;
 	unsigned int buffer_Bengali_len = encode_utf16 (chars_Bengali, sizeof (chars_Bengali) / sizeof (unsigned int), buffer_Bengali);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Bengali), reinterpret_cast<const YYCTYPE *> (buffer_Bengali + buffer_Bengali_len), Bengali) != Bengali)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Bengali_len; ++i) s_Bengali[i] = buffer_Bengali[i];
+	if (scan (s_Bengali, s_Bengali + buffer_Bengali_len, Bengali) != Bengali)
 		printf ("test 'Bengali' failed\n");
 	delete [] buffer_Bengali;
 
-	YYCTYPE * buffer_Gurmukhi = new YYCTYPE [258];
+	unsigned int * buffer_Gurmukhi = new unsigned int [258];
+	YYCTYPE * s_Gurmukhi = (YYCTYPE *) buffer_Gurmukhi;
 	unsigned int buffer_Gurmukhi_len = encode_utf16 (chars_Gurmukhi, sizeof (chars_Gurmukhi) / sizeof (unsigned int), buffer_Gurmukhi);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Gurmukhi), reinterpret_cast<const YYCTYPE *> (buffer_Gurmukhi + buffer_Gurmukhi_len), Gurmukhi) != Gurmukhi)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Gurmukhi_len; ++i) s_Gurmukhi[i] = buffer_Gurmukhi[i];
+	if (scan (s_Gurmukhi, s_Gurmukhi + buffer_Gurmukhi_len, Gurmukhi) != Gurmukhi)
 		printf ("test 'Gurmukhi' failed\n");
 	delete [] buffer_Gurmukhi;
 
-	YYCTYPE * buffer_Gujarati = new YYCTYPE [258];
+	unsigned int * buffer_Gujarati = new unsigned int [258];
+	YYCTYPE * s_Gujarati = (YYCTYPE *) buffer_Gujarati;
 	unsigned int buffer_Gujarati_len = encode_utf16 (chars_Gujarati, sizeof (chars_Gujarati) / sizeof (unsigned int), buffer_Gujarati);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Gujarati), reinterpret_cast<const YYCTYPE *> (buffer_Gujarati + buffer_Gujarati_len), Gujarati) != Gujarati)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Gujarati_len; ++i) s_Gujarati[i] = buffer_Gujarati[i];
+	if (scan (s_Gujarati, s_Gujarati + buffer_Gujarati_len, Gujarati) != Gujarati)
 		printf ("test 'Gujarati' failed\n");
 	delete [] buffer_Gujarati;
 
-	YYCTYPE * buffer_Oriya = new YYCTYPE [258];
+	unsigned int * buffer_Oriya = new unsigned int [258];
+	YYCTYPE * s_Oriya = (YYCTYPE *) buffer_Oriya;
 	unsigned int buffer_Oriya_len = encode_utf16 (chars_Oriya, sizeof (chars_Oriya) / sizeof (unsigned int), buffer_Oriya);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Oriya), reinterpret_cast<const YYCTYPE *> (buffer_Oriya + buffer_Oriya_len), Oriya) != Oriya)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Oriya_len; ++i) s_Oriya[i] = buffer_Oriya[i];
+	if (scan (s_Oriya, s_Oriya + buffer_Oriya_len, Oriya) != Oriya)
 		printf ("test 'Oriya' failed\n");
 	delete [] buffer_Oriya;
 
-	YYCTYPE * buffer_Tamil = new YYCTYPE [258];
+	unsigned int * buffer_Tamil = new unsigned int [258];
+	YYCTYPE * s_Tamil = (YYCTYPE *) buffer_Tamil;
 	unsigned int buffer_Tamil_len = encode_utf16 (chars_Tamil, sizeof (chars_Tamil) / sizeof (unsigned int), buffer_Tamil);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Tamil), reinterpret_cast<const YYCTYPE *> (buffer_Tamil + buffer_Tamil_len), Tamil) != Tamil)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Tamil_len; ++i) s_Tamil[i] = buffer_Tamil[i];
+	if (scan (s_Tamil, s_Tamil + buffer_Tamil_len, Tamil) != Tamil)
 		printf ("test 'Tamil' failed\n");
 	delete [] buffer_Tamil;
 
-	YYCTYPE * buffer_Telugu = new YYCTYPE [258];
+	unsigned int * buffer_Telugu = new unsigned int [258];
+	YYCTYPE * s_Telugu = (YYCTYPE *) buffer_Telugu;
 	unsigned int buffer_Telugu_len = encode_utf16 (chars_Telugu, sizeof (chars_Telugu) / sizeof (unsigned int), buffer_Telugu);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Telugu), reinterpret_cast<const YYCTYPE *> (buffer_Telugu + buffer_Telugu_len), Telugu) != Telugu)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Telugu_len; ++i) s_Telugu[i] = buffer_Telugu[i];
+	if (scan (s_Telugu, s_Telugu + buffer_Telugu_len, Telugu) != Telugu)
 		printf ("test 'Telugu' failed\n");
 	delete [] buffer_Telugu;
 
-	YYCTYPE * buffer_Kannada = new YYCTYPE [258];
+	unsigned int * buffer_Kannada = new unsigned int [258];
+	YYCTYPE * s_Kannada = (YYCTYPE *) buffer_Kannada;
 	unsigned int buffer_Kannada_len = encode_utf16 (chars_Kannada, sizeof (chars_Kannada) / sizeof (unsigned int), buffer_Kannada);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Kannada), reinterpret_cast<const YYCTYPE *> (buffer_Kannada + buffer_Kannada_len), Kannada) != Kannada)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Kannada_len; ++i) s_Kannada[i] = buffer_Kannada[i];
+	if (scan (s_Kannada, s_Kannada + buffer_Kannada_len, Kannada) != Kannada)
 		printf ("test 'Kannada' failed\n");
 	delete [] buffer_Kannada;
 
-	YYCTYPE * buffer_Malayalam = new YYCTYPE [258];
+	unsigned int * buffer_Malayalam = new unsigned int [258];
+	YYCTYPE * s_Malayalam = (YYCTYPE *) buffer_Malayalam;
 	unsigned int buffer_Malayalam_len = encode_utf16 (chars_Malayalam, sizeof (chars_Malayalam) / sizeof (unsigned int), buffer_Malayalam);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Malayalam), reinterpret_cast<const YYCTYPE *> (buffer_Malayalam + buffer_Malayalam_len), Malayalam) != Malayalam)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Malayalam_len; ++i) s_Malayalam[i] = buffer_Malayalam[i];
+	if (scan (s_Malayalam, s_Malayalam + buffer_Malayalam_len, Malayalam) != Malayalam)
 		printf ("test 'Malayalam' failed\n");
 	delete [] buffer_Malayalam;
 
-	YYCTYPE * buffer_Sinhala = new YYCTYPE [258];
+	unsigned int * buffer_Sinhala = new unsigned int [258];
+	YYCTYPE * s_Sinhala = (YYCTYPE *) buffer_Sinhala;
 	unsigned int buffer_Sinhala_len = encode_utf16 (chars_Sinhala, sizeof (chars_Sinhala) / sizeof (unsigned int), buffer_Sinhala);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Sinhala), reinterpret_cast<const YYCTYPE *> (buffer_Sinhala + buffer_Sinhala_len), Sinhala) != Sinhala)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Sinhala_len; ++i) s_Sinhala[i] = buffer_Sinhala[i];
+	if (scan (s_Sinhala, s_Sinhala + buffer_Sinhala_len, Sinhala) != Sinhala)
 		printf ("test 'Sinhala' failed\n");
 	delete [] buffer_Sinhala;
 
-	YYCTYPE * buffer_Thai = new YYCTYPE [258];
+	unsigned int * buffer_Thai = new unsigned int [258];
+	YYCTYPE * s_Thai = (YYCTYPE *) buffer_Thai;
 	unsigned int buffer_Thai_len = encode_utf16 (chars_Thai, sizeof (chars_Thai) / sizeof (unsigned int), buffer_Thai);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Thai), reinterpret_cast<const YYCTYPE *> (buffer_Thai + buffer_Thai_len), Thai) != Thai)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Thai_len; ++i) s_Thai[i] = buffer_Thai[i];
+	if (scan (s_Thai, s_Thai + buffer_Thai_len, Thai) != Thai)
 		printf ("test 'Thai' failed\n");
 	delete [] buffer_Thai;
 
-	YYCTYPE * buffer_Lao = new YYCTYPE [258];
+	unsigned int * buffer_Lao = new unsigned int [258];
+	YYCTYPE * s_Lao = (YYCTYPE *) buffer_Lao;
 	unsigned int buffer_Lao_len = encode_utf16 (chars_Lao, sizeof (chars_Lao) / sizeof (unsigned int), buffer_Lao);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Lao), reinterpret_cast<const YYCTYPE *> (buffer_Lao + buffer_Lao_len), Lao) != Lao)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Lao_len; ++i) s_Lao[i] = buffer_Lao[i];
+	if (scan (s_Lao, s_Lao + buffer_Lao_len, Lao) != Lao)
 		printf ("test 'Lao' failed\n");
 	delete [] buffer_Lao;
 
-	YYCTYPE * buffer_Tibetan = new YYCTYPE [514];
+	unsigned int * buffer_Tibetan = new unsigned int [514];
+	YYCTYPE * s_Tibetan = (YYCTYPE *) buffer_Tibetan;
 	unsigned int buffer_Tibetan_len = encode_utf16 (chars_Tibetan, sizeof (chars_Tibetan) / sizeof (unsigned int), buffer_Tibetan);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Tibetan), reinterpret_cast<const YYCTYPE *> (buffer_Tibetan + buffer_Tibetan_len), Tibetan) != Tibetan)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Tibetan_len; ++i) s_Tibetan[i] = buffer_Tibetan[i];
+	if (scan (s_Tibetan, s_Tibetan + buffer_Tibetan_len, Tibetan) != Tibetan)
 		printf ("test 'Tibetan' failed\n");
 	delete [] buffer_Tibetan;
 
-	YYCTYPE * buffer_Myanmar = new YYCTYPE [322];
+	unsigned int * buffer_Myanmar = new unsigned int [322];
+	YYCTYPE * s_Myanmar = (YYCTYPE *) buffer_Myanmar;
 	unsigned int buffer_Myanmar_len = encode_utf16 (chars_Myanmar, sizeof (chars_Myanmar) / sizeof (unsigned int), buffer_Myanmar);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Myanmar), reinterpret_cast<const YYCTYPE *> (buffer_Myanmar + buffer_Myanmar_len), Myanmar) != Myanmar)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Myanmar_len; ++i) s_Myanmar[i] = buffer_Myanmar[i];
+	if (scan (s_Myanmar, s_Myanmar + buffer_Myanmar_len, Myanmar) != Myanmar)
 		printf ("test 'Myanmar' failed\n");
 	delete [] buffer_Myanmar;
 
-	YYCTYPE * buffer_Georgian = new YYCTYPE [194];
+	unsigned int * buffer_Georgian = new unsigned int [194];
+	YYCTYPE * s_Georgian = (YYCTYPE *) buffer_Georgian;
 	unsigned int buffer_Georgian_len = encode_utf16 (chars_Georgian, sizeof (chars_Georgian) / sizeof (unsigned int), buffer_Georgian);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Georgian), reinterpret_cast<const YYCTYPE *> (buffer_Georgian + buffer_Georgian_len), Georgian) != Georgian)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Georgian_len; ++i) s_Georgian[i] = buffer_Georgian[i];
+	if (scan (s_Georgian, s_Georgian + buffer_Georgian_len, Georgian) != Georgian)
 		printf ("test 'Georgian' failed\n");
 	delete [] buffer_Georgian;
 
-	YYCTYPE * buffer_Hangul_Jamo = new YYCTYPE [514];
+	unsigned int * buffer_Hangul_Jamo = new unsigned int [514];
+	YYCTYPE * s_Hangul_Jamo = (YYCTYPE *) buffer_Hangul_Jamo;
 	unsigned int buffer_Hangul_Jamo_len = encode_utf16 (chars_Hangul_Jamo, sizeof (chars_Hangul_Jamo) / sizeof (unsigned int), buffer_Hangul_Jamo);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Hangul_Jamo), reinterpret_cast<const YYCTYPE *> (buffer_Hangul_Jamo + buffer_Hangul_Jamo_len), Hangul_Jamo) != Hangul_Jamo)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Hangul_Jamo_len; ++i) s_Hangul_Jamo[i] = buffer_Hangul_Jamo[i];
+	if (scan (s_Hangul_Jamo, s_Hangul_Jamo + buffer_Hangul_Jamo_len, Hangul_Jamo) != Hangul_Jamo)
 		printf ("test 'Hangul_Jamo' failed\n");
 	delete [] buffer_Hangul_Jamo;
 
-	YYCTYPE * buffer_Ethiopic = new YYCTYPE [770];
+	unsigned int * buffer_Ethiopic = new unsigned int [770];
+	YYCTYPE * s_Ethiopic = (YYCTYPE *) buffer_Ethiopic;
 	unsigned int buffer_Ethiopic_len = encode_utf16 (chars_Ethiopic, sizeof (chars_Ethiopic) / sizeof (unsigned int), buffer_Ethiopic);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Ethiopic), reinterpret_cast<const YYCTYPE *> (buffer_Ethiopic + buffer_Ethiopic_len), Ethiopic) != Ethiopic)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Ethiopic_len; ++i) s_Ethiopic[i] = buffer_Ethiopic[i];
+	if (scan (s_Ethiopic, s_Ethiopic + buffer_Ethiopic_len, Ethiopic) != Ethiopic)
 		printf ("test 'Ethiopic' failed\n");
 	delete [] buffer_Ethiopic;
 
-	YYCTYPE * buffer_Cherokee = new YYCTYPE [194];
+	unsigned int * buffer_Cherokee = new unsigned int [194];
+	YYCTYPE * s_Cherokee = (YYCTYPE *) buffer_Cherokee;
 	unsigned int buffer_Cherokee_len = encode_utf16 (chars_Cherokee, sizeof (chars_Cherokee) / sizeof (unsigned int), buffer_Cherokee);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Cherokee), reinterpret_cast<const YYCTYPE *> (buffer_Cherokee + buffer_Cherokee_len), Cherokee) != Cherokee)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Cherokee_len; ++i) s_Cherokee[i] = buffer_Cherokee[i];
+	if (scan (s_Cherokee, s_Cherokee + buffer_Cherokee_len, Cherokee) != Cherokee)
 		printf ("test 'Cherokee' failed\n");
 	delete [] buffer_Cherokee;
 
-	YYCTYPE * buffer_Unified_Canadian_Aboriginal_Syllabics = new YYCTYPE [1282];
+	unsigned int * buffer_Unified_Canadian_Aboriginal_Syllabics = new unsigned int [1282];
+	YYCTYPE * s_Unified_Canadian_Aboriginal_Syllabics = (YYCTYPE *) buffer_Unified_Canadian_Aboriginal_Syllabics;
 	unsigned int buffer_Unified_Canadian_Aboriginal_Syllabics_len = encode_utf16 (chars_Unified_Canadian_Aboriginal_Syllabics, sizeof (chars_Unified_Canadian_Aboriginal_Syllabics) / sizeof (unsigned int), buffer_Unified_Canadian_Aboriginal_Syllabics);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Unified_Canadian_Aboriginal_Syllabics), reinterpret_cast<const YYCTYPE *> (buffer_Unified_Canadian_Aboriginal_Syllabics + buffer_Unified_Canadian_Aboriginal_Syllabics_len), Unified_Canadian_Aboriginal_Syllabics) != Unified_Canadian_Aboriginal_Syllabics)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Unified_Canadian_Aboriginal_Syllabics_len; ++i) s_Unified_Canadian_Aboriginal_Syllabics[i] = buffer_Unified_Canadian_Aboriginal_Syllabics[i];
+	if (scan (s_Unified_Canadian_Aboriginal_Syllabics, s_Unified_Canadian_Aboriginal_Syllabics + buffer_Unified_Canadian_Aboriginal_Syllabics_len, Unified_Canadian_Aboriginal_Syllabics) != Unified_Canadian_Aboriginal_Syllabics)
 		printf ("test 'Unified_Canadian_Aboriginal_Syllabics' failed\n");
 	delete [] buffer_Unified_Canadian_Aboriginal_Syllabics;
 
-	YYCTYPE * buffer_Ogham = new YYCTYPE [66];
+	unsigned int * buffer_Ogham = new unsigned int [66];
+	YYCTYPE * s_Ogham = (YYCTYPE *) buffer_Ogham;
 	unsigned int buffer_Ogham_len = encode_utf16 (chars_Ogham, sizeof (chars_Ogham) / sizeof (unsigned int), buffer_Ogham);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Ogham), reinterpret_cast<const YYCTYPE *> (buffer_Ogham + buffer_Ogham_len), Ogham) != Ogham)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Ogham_len; ++i) s_Ogham[i] = buffer_Ogham[i];
+	if (scan (s_Ogham, s_Ogham + buffer_Ogham_len, Ogham) != Ogham)
 		printf ("test 'Ogham' failed\n");
 	delete [] buffer_Ogham;
 
-	YYCTYPE * buffer_Runic = new YYCTYPE [194];
+	unsigned int * buffer_Runic = new unsigned int [194];
+	YYCTYPE * s_Runic = (YYCTYPE *) buffer_Runic;
 	unsigned int buffer_Runic_len = encode_utf16 (chars_Runic, sizeof (chars_Runic) / sizeof (unsigned int), buffer_Runic);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Runic), reinterpret_cast<const YYCTYPE *> (buffer_Runic + buffer_Runic_len), Runic) != Runic)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Runic_len; ++i) s_Runic[i] = buffer_Runic[i];
+	if (scan (s_Runic, s_Runic + buffer_Runic_len, Runic) != Runic)
 		printf ("test 'Runic' failed\n");
 	delete [] buffer_Runic;
 
-	YYCTYPE * buffer_Tagalog = new YYCTYPE [66];
+	unsigned int * buffer_Tagalog = new unsigned int [66];
+	YYCTYPE * s_Tagalog = (YYCTYPE *) buffer_Tagalog;
 	unsigned int buffer_Tagalog_len = encode_utf16 (chars_Tagalog, sizeof (chars_Tagalog) / sizeof (unsigned int), buffer_Tagalog);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Tagalog), reinterpret_cast<const YYCTYPE *> (buffer_Tagalog + buffer_Tagalog_len), Tagalog) != Tagalog)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Tagalog_len; ++i) s_Tagalog[i] = buffer_Tagalog[i];
+	if (scan (s_Tagalog, s_Tagalog + buffer_Tagalog_len, Tagalog) != Tagalog)
 		printf ("test 'Tagalog' failed\n");
 	delete [] buffer_Tagalog;
 
-	YYCTYPE * buffer_Hanunoo = new YYCTYPE [66];
+	unsigned int * buffer_Hanunoo = new unsigned int [66];
+	YYCTYPE * s_Hanunoo = (YYCTYPE *) buffer_Hanunoo;
 	unsigned int buffer_Hanunoo_len = encode_utf16 (chars_Hanunoo, sizeof (chars_Hanunoo) / sizeof (unsigned int), buffer_Hanunoo);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Hanunoo), reinterpret_cast<const YYCTYPE *> (buffer_Hanunoo + buffer_Hanunoo_len), Hanunoo) != Hanunoo)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Hanunoo_len; ++i) s_Hanunoo[i] = buffer_Hanunoo[i];
+	if (scan (s_Hanunoo, s_Hanunoo + buffer_Hanunoo_len, Hanunoo) != Hanunoo)
 		printf ("test 'Hanunoo' failed\n");
 	delete [] buffer_Hanunoo;
 
-	YYCTYPE * buffer_Buhid = new YYCTYPE [66];
+	unsigned int * buffer_Buhid = new unsigned int [66];
+	YYCTYPE * s_Buhid = (YYCTYPE *) buffer_Buhid;
 	unsigned int buffer_Buhid_len = encode_utf16 (chars_Buhid, sizeof (chars_Buhid) / sizeof (unsigned int), buffer_Buhid);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Buhid), reinterpret_cast<const YYCTYPE *> (buffer_Buhid + buffer_Buhid_len), Buhid) != Buhid)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Buhid_len; ++i) s_Buhid[i] = buffer_Buhid[i];
+	if (scan (s_Buhid, s_Buhid + buffer_Buhid_len, Buhid) != Buhid)
 		printf ("test 'Buhid' failed\n");
 	delete [] buffer_Buhid;
 
-	YYCTYPE * buffer_Tagbanwa = new YYCTYPE [66];
+	unsigned int * buffer_Tagbanwa = new unsigned int [66];
+	YYCTYPE * s_Tagbanwa = (YYCTYPE *) buffer_Tagbanwa;
 	unsigned int buffer_Tagbanwa_len = encode_utf16 (chars_Tagbanwa, sizeof (chars_Tagbanwa) / sizeof (unsigned int), buffer_Tagbanwa);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Tagbanwa), reinterpret_cast<const YYCTYPE *> (buffer_Tagbanwa + buffer_Tagbanwa_len), Tagbanwa) != Tagbanwa)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Tagbanwa_len; ++i) s_Tagbanwa[i] = buffer_Tagbanwa[i];
+	if (scan (s_Tagbanwa, s_Tagbanwa + buffer_Tagbanwa_len, Tagbanwa) != Tagbanwa)
 		printf ("test 'Tagbanwa' failed\n");
 	delete [] buffer_Tagbanwa;
 
-	YYCTYPE * buffer_Khmer = new YYCTYPE [258];
+	unsigned int * buffer_Khmer = new unsigned int [258];
+	YYCTYPE * s_Khmer = (YYCTYPE *) buffer_Khmer;
 	unsigned int buffer_Khmer_len = encode_utf16 (chars_Khmer, sizeof (chars_Khmer) / sizeof (unsigned int), buffer_Khmer);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Khmer), reinterpret_cast<const YYCTYPE *> (buffer_Khmer + buffer_Khmer_len), Khmer) != Khmer)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Khmer_len; ++i) s_Khmer[i] = buffer_Khmer[i];
+	if (scan (s_Khmer, s_Khmer + buffer_Khmer_len, Khmer) != Khmer)
 		printf ("test 'Khmer' failed\n");
 	delete [] buffer_Khmer;
 
-	YYCTYPE * buffer_Mongolian = new YYCTYPE [354];
+	unsigned int * buffer_Mongolian = new unsigned int [354];
+	YYCTYPE * s_Mongolian = (YYCTYPE *) buffer_Mongolian;
 	unsigned int buffer_Mongolian_len = encode_utf16 (chars_Mongolian, sizeof (chars_Mongolian) / sizeof (unsigned int), buffer_Mongolian);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Mongolian), reinterpret_cast<const YYCTYPE *> (buffer_Mongolian + buffer_Mongolian_len), Mongolian) != Mongolian)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Mongolian_len; ++i) s_Mongolian[i] = buffer_Mongolian[i];
+	if (scan (s_Mongolian, s_Mongolian + buffer_Mongolian_len, Mongolian) != Mongolian)
 		printf ("test 'Mongolian' failed\n");
 	delete [] buffer_Mongolian;
 
-	YYCTYPE * buffer_Limbu = new YYCTYPE [162];
+	unsigned int * buffer_Limbu = new unsigned int [162];
+	YYCTYPE * s_Limbu = (YYCTYPE *) buffer_Limbu;
 	unsigned int buffer_Limbu_len = encode_utf16 (chars_Limbu, sizeof (chars_Limbu) / sizeof (unsigned int), buffer_Limbu);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Limbu), reinterpret_cast<const YYCTYPE *> (buffer_Limbu + buffer_Limbu_len), Limbu) != Limbu)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Limbu_len; ++i) s_Limbu[i] = buffer_Limbu[i];
+	if (scan (s_Limbu, s_Limbu + buffer_Limbu_len, Limbu) != Limbu)
 		printf ("test 'Limbu' failed\n");
 	delete [] buffer_Limbu;
 
-	YYCTYPE * buffer_Tai_Le = new YYCTYPE [98];
+	unsigned int * buffer_Tai_Le = new unsigned int [98];
+	YYCTYPE * s_Tai_Le = (YYCTYPE *) buffer_Tai_Le;
 	unsigned int buffer_Tai_Le_len = encode_utf16 (chars_Tai_Le, sizeof (chars_Tai_Le) / sizeof (unsigned int), buffer_Tai_Le);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Tai_Le), reinterpret_cast<const YYCTYPE *> (buffer_Tai_Le + buffer_Tai_Le_len), Tai_Le) != Tai_Le)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Tai_Le_len; ++i) s_Tai_Le[i] = buffer_Tai_Le[i];
+	if (scan (s_Tai_Le, s_Tai_Le + buffer_Tai_Le_len, Tai_Le) != Tai_Le)
 		printf ("test 'Tai_Le' failed\n");
 	delete [] buffer_Tai_Le;
 
-	YYCTYPE * buffer_Khmer_Symbols = new YYCTYPE [66];
+	unsigned int * buffer_Khmer_Symbols = new unsigned int [66];
+	YYCTYPE * s_Khmer_Symbols = (YYCTYPE *) buffer_Khmer_Symbols;
 	unsigned int buffer_Khmer_Symbols_len = encode_utf16 (chars_Khmer_Symbols, sizeof (chars_Khmer_Symbols) / sizeof (unsigned int), buffer_Khmer_Symbols);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Khmer_Symbols), reinterpret_cast<const YYCTYPE *> (buffer_Khmer_Symbols + buffer_Khmer_Symbols_len), Khmer_Symbols) != Khmer_Symbols)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Khmer_Symbols_len; ++i) s_Khmer_Symbols[i] = buffer_Khmer_Symbols[i];
+	if (scan (s_Khmer_Symbols, s_Khmer_Symbols + buffer_Khmer_Symbols_len, Khmer_Symbols) != Khmer_Symbols)
 		printf ("test 'Khmer_Symbols' failed\n");
 	delete [] buffer_Khmer_Symbols;
 
-	YYCTYPE * buffer_Phonetic_Extensions = new YYCTYPE [258];
+	unsigned int * buffer_Phonetic_Extensions = new unsigned int [258];
+	YYCTYPE * s_Phonetic_Extensions = (YYCTYPE *) buffer_Phonetic_Extensions;
 	unsigned int buffer_Phonetic_Extensions_len = encode_utf16 (chars_Phonetic_Extensions, sizeof (chars_Phonetic_Extensions) / sizeof (unsigned int), buffer_Phonetic_Extensions);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Phonetic_Extensions), reinterpret_cast<const YYCTYPE *> (buffer_Phonetic_Extensions + buffer_Phonetic_Extensions_len), Phonetic_Extensions) != Phonetic_Extensions)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Phonetic_Extensions_len; ++i) s_Phonetic_Extensions[i] = buffer_Phonetic_Extensions[i];
+	if (scan (s_Phonetic_Extensions, s_Phonetic_Extensions + buffer_Phonetic_Extensions_len, Phonetic_Extensions) != Phonetic_Extensions)
 		printf ("test 'Phonetic_Extensions' failed\n");
 	delete [] buffer_Phonetic_Extensions;
 
-	YYCTYPE * buffer_Latin_Extended_Additional = new YYCTYPE [514];
+	unsigned int * buffer_Latin_Extended_Additional = new unsigned int [514];
+	YYCTYPE * s_Latin_Extended_Additional = (YYCTYPE *) buffer_Latin_Extended_Additional;
 	unsigned int buffer_Latin_Extended_Additional_len = encode_utf16 (chars_Latin_Extended_Additional, sizeof (chars_Latin_Extended_Additional) / sizeof (unsigned int), buffer_Latin_Extended_Additional);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Latin_Extended_Additional), reinterpret_cast<const YYCTYPE *> (buffer_Latin_Extended_Additional + buffer_Latin_Extended_Additional_len), Latin_Extended_Additional) != Latin_Extended_Additional)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Latin_Extended_Additional_len; ++i) s_Latin_Extended_Additional[i] = buffer_Latin_Extended_Additional[i];
+	if (scan (s_Latin_Extended_Additional, s_Latin_Extended_Additional + buffer_Latin_Extended_Additional_len, Latin_Extended_Additional) != Latin_Extended_Additional)
 		printf ("test 'Latin_Extended_Additional' failed\n");
 	delete [] buffer_Latin_Extended_Additional;
 
-	YYCTYPE * buffer_Greek_Extended = new YYCTYPE [514];
+	unsigned int * buffer_Greek_Extended = new unsigned int [514];
+	YYCTYPE * s_Greek_Extended = (YYCTYPE *) buffer_Greek_Extended;
 	unsigned int buffer_Greek_Extended_len = encode_utf16 (chars_Greek_Extended, sizeof (chars_Greek_Extended) / sizeof (unsigned int), buffer_Greek_Extended);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Greek_Extended), reinterpret_cast<const YYCTYPE *> (buffer_Greek_Extended + buffer_Greek_Extended_len), Greek_Extended) != Greek_Extended)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Greek_Extended_len; ++i) s_Greek_Extended[i] = buffer_Greek_Extended[i];
+	if (scan (s_Greek_Extended, s_Greek_Extended + buffer_Greek_Extended_len, Greek_Extended) != Greek_Extended)
 		printf ("test 'Greek_Extended' failed\n");
 	delete [] buffer_Greek_Extended;
 
-	YYCTYPE * buffer_General_Punctuation = new YYCTYPE [226];
+	unsigned int * buffer_General_Punctuation = new unsigned int [226];
+	YYCTYPE * s_General_Punctuation = (YYCTYPE *) buffer_General_Punctuation;
 	unsigned int buffer_General_Punctuation_len = encode_utf16 (chars_General_Punctuation, sizeof (chars_General_Punctuation) / sizeof (unsigned int), buffer_General_Punctuation);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_General_Punctuation), reinterpret_cast<const YYCTYPE *> (buffer_General_Punctuation + buffer_General_Punctuation_len), General_Punctuation) != General_Punctuation)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_General_Punctuation_len; ++i) s_General_Punctuation[i] = buffer_General_Punctuation[i];
+	if (scan (s_General_Punctuation, s_General_Punctuation + buffer_General_Punctuation_len, General_Punctuation) != General_Punctuation)
 		printf ("test 'General_Punctuation' failed\n");
 	delete [] buffer_General_Punctuation;
 
-	YYCTYPE * buffer_Superscripts_and_Subscripts = new YYCTYPE [98];
+	unsigned int * buffer_Superscripts_and_Subscripts = new unsigned int [98];
+	YYCTYPE * s_Superscripts_and_Subscripts = (YYCTYPE *) buffer_Superscripts_and_Subscripts;
 	unsigned int buffer_Superscripts_and_Subscripts_len = encode_utf16 (chars_Superscripts_and_Subscripts, sizeof (chars_Superscripts_and_Subscripts) / sizeof (unsigned int), buffer_Superscripts_and_Subscripts);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Superscripts_and_Subscripts), reinterpret_cast<const YYCTYPE *> (buffer_Superscripts_and_Subscripts + buffer_Superscripts_and_Subscripts_len), Superscripts_and_Subscripts) != Superscripts_and_Subscripts)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Superscripts_and_Subscripts_len; ++i) s_Superscripts_and_Subscripts[i] = buffer_Superscripts_and_Subscripts[i];
+	if (scan (s_Superscripts_and_Subscripts, s_Superscripts_and_Subscripts + buffer_Superscripts_and_Subscripts_len, Superscripts_and_Subscripts) != Superscripts_and_Subscripts)
 		printf ("test 'Superscripts_and_Subscripts' failed\n");
 	delete [] buffer_Superscripts_and_Subscripts;
 
-	YYCTYPE * buffer_Currency_Symbols = new YYCTYPE [98];
+	unsigned int * buffer_Currency_Symbols = new unsigned int [98];
+	YYCTYPE * s_Currency_Symbols = (YYCTYPE *) buffer_Currency_Symbols;
 	unsigned int buffer_Currency_Symbols_len = encode_utf16 (chars_Currency_Symbols, sizeof (chars_Currency_Symbols) / sizeof (unsigned int), buffer_Currency_Symbols);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Currency_Symbols), reinterpret_cast<const YYCTYPE *> (buffer_Currency_Symbols + buffer_Currency_Symbols_len), Currency_Symbols) != Currency_Symbols)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Currency_Symbols_len; ++i) s_Currency_Symbols[i] = buffer_Currency_Symbols[i];
+	if (scan (s_Currency_Symbols, s_Currency_Symbols + buffer_Currency_Symbols_len, Currency_Symbols) != Currency_Symbols)
 		printf ("test 'Currency_Symbols' failed\n");
 	delete [] buffer_Currency_Symbols;
 
-	YYCTYPE * buffer_Combining_Diacritical_Marks_for_Symbols = new YYCTYPE [98];
+	unsigned int * buffer_Combining_Diacritical_Marks_for_Symbols = new unsigned int [98];
+	YYCTYPE * s_Combining_Diacritical_Marks_for_Symbols = (YYCTYPE *) buffer_Combining_Diacritical_Marks_for_Symbols;
 	unsigned int buffer_Combining_Diacritical_Marks_for_Symbols_len = encode_utf16 (chars_Combining_Diacritical_Marks_for_Symbols, sizeof (chars_Combining_Diacritical_Marks_for_Symbols) / sizeof (unsigned int), buffer_Combining_Diacritical_Marks_for_Symbols);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Combining_Diacritical_Marks_for_Symbols), reinterpret_cast<const YYCTYPE *> (buffer_Combining_Diacritical_Marks_for_Symbols + buffer_Combining_Diacritical_Marks_for_Symbols_len), Combining_Diacritical_Marks_for_Symbols) != Combining_Diacritical_Marks_for_Symbols)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Combining_Diacritical_Marks_for_Symbols_len; ++i) s_Combining_Diacritical_Marks_for_Symbols[i] = buffer_Combining_Diacritical_Marks_for_Symbols[i];
+	if (scan (s_Combining_Diacritical_Marks_for_Symbols, s_Combining_Diacritical_Marks_for_Symbols + buffer_Combining_Diacritical_Marks_for_Symbols_len, Combining_Diacritical_Marks_for_Symbols) != Combining_Diacritical_Marks_for_Symbols)
 		printf ("test 'Combining_Diacritical_Marks_for_Symbols' failed\n");
 	delete [] buffer_Combining_Diacritical_Marks_for_Symbols;
 
-	YYCTYPE * buffer_Letterlike_Symbols = new YYCTYPE [162];
+	unsigned int * buffer_Letterlike_Symbols = new unsigned int [162];
+	YYCTYPE * s_Letterlike_Symbols = (YYCTYPE *) buffer_Letterlike_Symbols;
 	unsigned int buffer_Letterlike_Symbols_len = encode_utf16 (chars_Letterlike_Symbols, sizeof (chars_Letterlike_Symbols) / sizeof (unsigned int), buffer_Letterlike_Symbols);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Letterlike_Symbols), reinterpret_cast<const YYCTYPE *> (buffer_Letterlike_Symbols + buffer_Letterlike_Symbols_len), Letterlike_Symbols) != Letterlike_Symbols)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Letterlike_Symbols_len; ++i) s_Letterlike_Symbols[i] = buffer_Letterlike_Symbols[i];
+	if (scan (s_Letterlike_Symbols, s_Letterlike_Symbols + buffer_Letterlike_Symbols_len, Letterlike_Symbols) != Letterlike_Symbols)
 		printf ("test 'Letterlike_Symbols' failed\n");
 	delete [] buffer_Letterlike_Symbols;
 
-	YYCTYPE * buffer_Number_Forms = new YYCTYPE [130];
+	unsigned int * buffer_Number_Forms = new unsigned int [130];
+	YYCTYPE * s_Number_Forms = (YYCTYPE *) buffer_Number_Forms;
 	unsigned int buffer_Number_Forms_len = encode_utf16 (chars_Number_Forms, sizeof (chars_Number_Forms) / sizeof (unsigned int), buffer_Number_Forms);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Number_Forms), reinterpret_cast<const YYCTYPE *> (buffer_Number_Forms + buffer_Number_Forms_len), Number_Forms) != Number_Forms)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Number_Forms_len; ++i) s_Number_Forms[i] = buffer_Number_Forms[i];
+	if (scan (s_Number_Forms, s_Number_Forms + buffer_Number_Forms_len, Number_Forms) != Number_Forms)
 		printf ("test 'Number_Forms' failed\n");
 	delete [] buffer_Number_Forms;
 
-	YYCTYPE * buffer_Arrows = new YYCTYPE [226];
+	unsigned int * buffer_Arrows = new unsigned int [226];
+	YYCTYPE * s_Arrows = (YYCTYPE *) buffer_Arrows;
 	unsigned int buffer_Arrows_len = encode_utf16 (chars_Arrows, sizeof (chars_Arrows) / sizeof (unsigned int), buffer_Arrows);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Arrows), reinterpret_cast<const YYCTYPE *> (buffer_Arrows + buffer_Arrows_len), Arrows) != Arrows)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Arrows_len; ++i) s_Arrows[i] = buffer_Arrows[i];
+	if (scan (s_Arrows, s_Arrows + buffer_Arrows_len, Arrows) != Arrows)
 		printf ("test 'Arrows' failed\n");
 	delete [] buffer_Arrows;
 
-	YYCTYPE * buffer_Mathematical_Operators = new YYCTYPE [514];
+	unsigned int * buffer_Mathematical_Operators = new unsigned int [514];
+	YYCTYPE * s_Mathematical_Operators = (YYCTYPE *) buffer_Mathematical_Operators;
 	unsigned int buffer_Mathematical_Operators_len = encode_utf16 (chars_Mathematical_Operators, sizeof (chars_Mathematical_Operators) / sizeof (unsigned int), buffer_Mathematical_Operators);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Mathematical_Operators), reinterpret_cast<const YYCTYPE *> (buffer_Mathematical_Operators + buffer_Mathematical_Operators_len), Mathematical_Operators) != Mathematical_Operators)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Mathematical_Operators_len; ++i) s_Mathematical_Operators[i] = buffer_Mathematical_Operators[i];
+	if (scan (s_Mathematical_Operators, s_Mathematical_Operators + buffer_Mathematical_Operators_len, Mathematical_Operators) != Mathematical_Operators)
 		printf ("test 'Mathematical_Operators' failed\n");
 	delete [] buffer_Mathematical_Operators;
 
-	YYCTYPE * buffer_Miscellaneous_Technical = new YYCTYPE [514];
+	unsigned int * buffer_Miscellaneous_Technical = new unsigned int [514];
+	YYCTYPE * s_Miscellaneous_Technical = (YYCTYPE *) buffer_Miscellaneous_Technical;
 	unsigned int buffer_Miscellaneous_Technical_len = encode_utf16 (chars_Miscellaneous_Technical, sizeof (chars_Miscellaneous_Technical) / sizeof (unsigned int), buffer_Miscellaneous_Technical);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Technical), reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Technical + buffer_Miscellaneous_Technical_len), Miscellaneous_Technical) != Miscellaneous_Technical)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Miscellaneous_Technical_len; ++i) s_Miscellaneous_Technical[i] = buffer_Miscellaneous_Technical[i];
+	if (scan (s_Miscellaneous_Technical, s_Miscellaneous_Technical + buffer_Miscellaneous_Technical_len, Miscellaneous_Technical) != Miscellaneous_Technical)
 		printf ("test 'Miscellaneous_Technical' failed\n");
 	delete [] buffer_Miscellaneous_Technical;
 
-	YYCTYPE * buffer_Control_Pictures = new YYCTYPE [130];
+	unsigned int * buffer_Control_Pictures = new unsigned int [130];
+	YYCTYPE * s_Control_Pictures = (YYCTYPE *) buffer_Control_Pictures;
 	unsigned int buffer_Control_Pictures_len = encode_utf16 (chars_Control_Pictures, sizeof (chars_Control_Pictures) / sizeof (unsigned int), buffer_Control_Pictures);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Control_Pictures), reinterpret_cast<const YYCTYPE *> (buffer_Control_Pictures + buffer_Control_Pictures_len), Control_Pictures) != Control_Pictures)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Control_Pictures_len; ++i) s_Control_Pictures[i] = buffer_Control_Pictures[i];
+	if (scan (s_Control_Pictures, s_Control_Pictures + buffer_Control_Pictures_len, Control_Pictures) != Control_Pictures)
 		printf ("test 'Control_Pictures' failed\n");
 	delete [] buffer_Control_Pictures;
 
-	YYCTYPE * buffer_Optical_Character_Recognition = new YYCTYPE [66];
+	unsigned int * buffer_Optical_Character_Recognition = new unsigned int [66];
+	YYCTYPE * s_Optical_Character_Recognition = (YYCTYPE *) buffer_Optical_Character_Recognition;
 	unsigned int buffer_Optical_Character_Recognition_len = encode_utf16 (chars_Optical_Character_Recognition, sizeof (chars_Optical_Character_Recognition) / sizeof (unsigned int), buffer_Optical_Character_Recognition);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Optical_Character_Recognition), reinterpret_cast<const YYCTYPE *> (buffer_Optical_Character_Recognition + buffer_Optical_Character_Recognition_len), Optical_Character_Recognition) != Optical_Character_Recognition)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Optical_Character_Recognition_len; ++i) s_Optical_Character_Recognition[i] = buffer_Optical_Character_Recognition[i];
+	if (scan (s_Optical_Character_Recognition, s_Optical_Character_Recognition + buffer_Optical_Character_Recognition_len, Optical_Character_Recognition) != Optical_Character_Recognition)
 		printf ("test 'Optical_Character_Recognition' failed\n");
 	delete [] buffer_Optical_Character_Recognition;
 
-	YYCTYPE * buffer_Enclosed_Alphanumerics = new YYCTYPE [322];
+	unsigned int * buffer_Enclosed_Alphanumerics = new unsigned int [322];
+	YYCTYPE * s_Enclosed_Alphanumerics = (YYCTYPE *) buffer_Enclosed_Alphanumerics;
 	unsigned int buffer_Enclosed_Alphanumerics_len = encode_utf16 (chars_Enclosed_Alphanumerics, sizeof (chars_Enclosed_Alphanumerics) / sizeof (unsigned int), buffer_Enclosed_Alphanumerics);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Enclosed_Alphanumerics), reinterpret_cast<const YYCTYPE *> (buffer_Enclosed_Alphanumerics + buffer_Enclosed_Alphanumerics_len), Enclosed_Alphanumerics) != Enclosed_Alphanumerics)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Enclosed_Alphanumerics_len; ++i) s_Enclosed_Alphanumerics[i] = buffer_Enclosed_Alphanumerics[i];
+	if (scan (s_Enclosed_Alphanumerics, s_Enclosed_Alphanumerics + buffer_Enclosed_Alphanumerics_len, Enclosed_Alphanumerics) != Enclosed_Alphanumerics)
 		printf ("test 'Enclosed_Alphanumerics' failed\n");
 	delete [] buffer_Enclosed_Alphanumerics;
 
-	YYCTYPE * buffer_Box_Drawing = new YYCTYPE [258];
+	unsigned int * buffer_Box_Drawing = new unsigned int [258];
+	YYCTYPE * s_Box_Drawing = (YYCTYPE *) buffer_Box_Drawing;
 	unsigned int buffer_Box_Drawing_len = encode_utf16 (chars_Box_Drawing, sizeof (chars_Box_Drawing) / sizeof (unsigned int), buffer_Box_Drawing);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Box_Drawing), reinterpret_cast<const YYCTYPE *> (buffer_Box_Drawing + buffer_Box_Drawing_len), Box_Drawing) != Box_Drawing)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Box_Drawing_len; ++i) s_Box_Drawing[i] = buffer_Box_Drawing[i];
+	if (scan (s_Box_Drawing, s_Box_Drawing + buffer_Box_Drawing_len, Box_Drawing) != Box_Drawing)
 		printf ("test 'Box_Drawing' failed\n");
 	delete [] buffer_Box_Drawing;
 
-	YYCTYPE * buffer_Block_Elements = new YYCTYPE [66];
+	unsigned int * buffer_Block_Elements = new unsigned int [66];
+	YYCTYPE * s_Block_Elements = (YYCTYPE *) buffer_Block_Elements;
 	unsigned int buffer_Block_Elements_len = encode_utf16 (chars_Block_Elements, sizeof (chars_Block_Elements) / sizeof (unsigned int), buffer_Block_Elements);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Block_Elements), reinterpret_cast<const YYCTYPE *> (buffer_Block_Elements + buffer_Block_Elements_len), Block_Elements) != Block_Elements)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Block_Elements_len; ++i) s_Block_Elements[i] = buffer_Block_Elements[i];
+	if (scan (s_Block_Elements, s_Block_Elements + buffer_Block_Elements_len, Block_Elements) != Block_Elements)
 		printf ("test 'Block_Elements' failed\n");
 	delete [] buffer_Block_Elements;
 
-	YYCTYPE * buffer_Geometric_Shapes = new YYCTYPE [194];
+	unsigned int * buffer_Geometric_Shapes = new unsigned int [194];
+	YYCTYPE * s_Geometric_Shapes = (YYCTYPE *) buffer_Geometric_Shapes;
 	unsigned int buffer_Geometric_Shapes_len = encode_utf16 (chars_Geometric_Shapes, sizeof (chars_Geometric_Shapes) / sizeof (unsigned int), buffer_Geometric_Shapes);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Geometric_Shapes), reinterpret_cast<const YYCTYPE *> (buffer_Geometric_Shapes + buffer_Geometric_Shapes_len), Geometric_Shapes) != Geometric_Shapes)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Geometric_Shapes_len; ++i) s_Geometric_Shapes[i] = buffer_Geometric_Shapes[i];
+	if (scan (s_Geometric_Shapes, s_Geometric_Shapes + buffer_Geometric_Shapes_len, Geometric_Shapes) != Geometric_Shapes)
 		printf ("test 'Geometric_Shapes' failed\n");
 	delete [] buffer_Geometric_Shapes;
 
-	YYCTYPE * buffer_Miscellaneous_Symbols = new YYCTYPE [514];
+	unsigned int * buffer_Miscellaneous_Symbols = new unsigned int [514];
+	YYCTYPE * s_Miscellaneous_Symbols = (YYCTYPE *) buffer_Miscellaneous_Symbols;
 	unsigned int buffer_Miscellaneous_Symbols_len = encode_utf16 (chars_Miscellaneous_Symbols, sizeof (chars_Miscellaneous_Symbols) / sizeof (unsigned int), buffer_Miscellaneous_Symbols);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Symbols), reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Symbols + buffer_Miscellaneous_Symbols_len), Miscellaneous_Symbols) != Miscellaneous_Symbols)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Miscellaneous_Symbols_len; ++i) s_Miscellaneous_Symbols[i] = buffer_Miscellaneous_Symbols[i];
+	if (scan (s_Miscellaneous_Symbols, s_Miscellaneous_Symbols + buffer_Miscellaneous_Symbols_len, Miscellaneous_Symbols) != Miscellaneous_Symbols)
 		printf ("test 'Miscellaneous_Symbols' failed\n");
 	delete [] buffer_Miscellaneous_Symbols;
 
-	YYCTYPE * buffer_Dingbats = new YYCTYPE [386];
+	unsigned int * buffer_Dingbats = new unsigned int [386];
+	YYCTYPE * s_Dingbats = (YYCTYPE *) buffer_Dingbats;
 	unsigned int buffer_Dingbats_len = encode_utf16 (chars_Dingbats, sizeof (chars_Dingbats) / sizeof (unsigned int), buffer_Dingbats);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Dingbats), reinterpret_cast<const YYCTYPE *> (buffer_Dingbats + buffer_Dingbats_len), Dingbats) != Dingbats)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Dingbats_len; ++i) s_Dingbats[i] = buffer_Dingbats[i];
+	if (scan (s_Dingbats, s_Dingbats + buffer_Dingbats_len, Dingbats) != Dingbats)
 		printf ("test 'Dingbats' failed\n");
 	delete [] buffer_Dingbats;
 
-	YYCTYPE * buffer_Miscellaneous_Mathematical_Symbols_A = new YYCTYPE [98];
+	unsigned int * buffer_Miscellaneous_Mathematical_Symbols_A = new unsigned int [98];
+	YYCTYPE * s_Miscellaneous_Mathematical_Symbols_A = (YYCTYPE *) buffer_Miscellaneous_Mathematical_Symbols_A;
 	unsigned int buffer_Miscellaneous_Mathematical_Symbols_A_len = encode_utf16 (chars_Miscellaneous_Mathematical_Symbols_A, sizeof (chars_Miscellaneous_Mathematical_Symbols_A) / sizeof (unsigned int), buffer_Miscellaneous_Mathematical_Symbols_A);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Mathematical_Symbols_A), reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Mathematical_Symbols_A + buffer_Miscellaneous_Mathematical_Symbols_A_len), Miscellaneous_Mathematical_Symbols_A) != Miscellaneous_Mathematical_Symbols_A)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Miscellaneous_Mathematical_Symbols_A_len; ++i) s_Miscellaneous_Mathematical_Symbols_A[i] = buffer_Miscellaneous_Mathematical_Symbols_A[i];
+	if (scan (s_Miscellaneous_Mathematical_Symbols_A, s_Miscellaneous_Mathematical_Symbols_A + buffer_Miscellaneous_Mathematical_Symbols_A_len, Miscellaneous_Mathematical_Symbols_A) != Miscellaneous_Mathematical_Symbols_A)
 		printf ("test 'Miscellaneous_Mathematical_Symbols_A' failed\n");
 	delete [] buffer_Miscellaneous_Mathematical_Symbols_A;
 
-	YYCTYPE * buffer_Supplemental_Arrows_A = new YYCTYPE [34];
+	unsigned int * buffer_Supplemental_Arrows_A = new unsigned int [34];
+	YYCTYPE * s_Supplemental_Arrows_A = (YYCTYPE *) buffer_Supplemental_Arrows_A;
 	unsigned int buffer_Supplemental_Arrows_A_len = encode_utf16 (chars_Supplemental_Arrows_A, sizeof (chars_Supplemental_Arrows_A) / sizeof (unsigned int), buffer_Supplemental_Arrows_A);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Supplemental_Arrows_A), reinterpret_cast<const YYCTYPE *> (buffer_Supplemental_Arrows_A + buffer_Supplemental_Arrows_A_len), Supplemental_Arrows_A) != Supplemental_Arrows_A)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Supplemental_Arrows_A_len; ++i) s_Supplemental_Arrows_A[i] = buffer_Supplemental_Arrows_A[i];
+	if (scan (s_Supplemental_Arrows_A, s_Supplemental_Arrows_A + buffer_Supplemental_Arrows_A_len, Supplemental_Arrows_A) != Supplemental_Arrows_A)
 		printf ("test 'Supplemental_Arrows_A' failed\n");
 	delete [] buffer_Supplemental_Arrows_A;
 
-	YYCTYPE * buffer_Braille_Patterns = new YYCTYPE [514];
+	unsigned int * buffer_Braille_Patterns = new unsigned int [514];
+	YYCTYPE * s_Braille_Patterns = (YYCTYPE *) buffer_Braille_Patterns;
 	unsigned int buffer_Braille_Patterns_len = encode_utf16 (chars_Braille_Patterns, sizeof (chars_Braille_Patterns) / sizeof (unsigned int), buffer_Braille_Patterns);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Braille_Patterns), reinterpret_cast<const YYCTYPE *> (buffer_Braille_Patterns + buffer_Braille_Patterns_len), Braille_Patterns) != Braille_Patterns)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Braille_Patterns_len; ++i) s_Braille_Patterns[i] = buffer_Braille_Patterns[i];
+	if (scan (s_Braille_Patterns, s_Braille_Patterns + buffer_Braille_Patterns_len, Braille_Patterns) != Braille_Patterns)
 		printf ("test 'Braille_Patterns' failed\n");
 	delete [] buffer_Braille_Patterns;
 
-	YYCTYPE * buffer_Supplemental_Arrows_B = new YYCTYPE [258];
+	unsigned int * buffer_Supplemental_Arrows_B = new unsigned int [258];
+	YYCTYPE * s_Supplemental_Arrows_B = (YYCTYPE *) buffer_Supplemental_Arrows_B;
 	unsigned int buffer_Supplemental_Arrows_B_len = encode_utf16 (chars_Supplemental_Arrows_B, sizeof (chars_Supplemental_Arrows_B) / sizeof (unsigned int), buffer_Supplemental_Arrows_B);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Supplemental_Arrows_B), reinterpret_cast<const YYCTYPE *> (buffer_Supplemental_Arrows_B + buffer_Supplemental_Arrows_B_len), Supplemental_Arrows_B) != Supplemental_Arrows_B)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Supplemental_Arrows_B_len; ++i) s_Supplemental_Arrows_B[i] = buffer_Supplemental_Arrows_B[i];
+	if (scan (s_Supplemental_Arrows_B, s_Supplemental_Arrows_B + buffer_Supplemental_Arrows_B_len, Supplemental_Arrows_B) != Supplemental_Arrows_B)
 		printf ("test 'Supplemental_Arrows_B' failed\n");
 	delete [] buffer_Supplemental_Arrows_B;
 
-	YYCTYPE * buffer_Miscellaneous_Mathematical_Symbols_B = new YYCTYPE [258];
+	unsigned int * buffer_Miscellaneous_Mathematical_Symbols_B = new unsigned int [258];
+	YYCTYPE * s_Miscellaneous_Mathematical_Symbols_B = (YYCTYPE *) buffer_Miscellaneous_Mathematical_Symbols_B;
 	unsigned int buffer_Miscellaneous_Mathematical_Symbols_B_len = encode_utf16 (chars_Miscellaneous_Mathematical_Symbols_B, sizeof (chars_Miscellaneous_Mathematical_Symbols_B) / sizeof (unsigned int), buffer_Miscellaneous_Mathematical_Symbols_B);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Mathematical_Symbols_B), reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Mathematical_Symbols_B + buffer_Miscellaneous_Mathematical_Symbols_B_len), Miscellaneous_Mathematical_Symbols_B) != Miscellaneous_Mathematical_Symbols_B)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Miscellaneous_Mathematical_Symbols_B_len; ++i) s_Miscellaneous_Mathematical_Symbols_B[i] = buffer_Miscellaneous_Mathematical_Symbols_B[i];
+	if (scan (s_Miscellaneous_Mathematical_Symbols_B, s_Miscellaneous_Mathematical_Symbols_B + buffer_Miscellaneous_Mathematical_Symbols_B_len, Miscellaneous_Mathematical_Symbols_B) != Miscellaneous_Mathematical_Symbols_B)
 		printf ("test 'Miscellaneous_Mathematical_Symbols_B' failed\n");
 	delete [] buffer_Miscellaneous_Mathematical_Symbols_B;
 
-	YYCTYPE * buffer_Supplemental_Mathematical_Operators = new YYCTYPE [514];
+	unsigned int * buffer_Supplemental_Mathematical_Operators = new unsigned int [514];
+	YYCTYPE * s_Supplemental_Mathematical_Operators = (YYCTYPE *) buffer_Supplemental_Mathematical_Operators;
 	unsigned int buffer_Supplemental_Mathematical_Operators_len = encode_utf16 (chars_Supplemental_Mathematical_Operators, sizeof (chars_Supplemental_Mathematical_Operators) / sizeof (unsigned int), buffer_Supplemental_Mathematical_Operators);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Supplemental_Mathematical_Operators), reinterpret_cast<const YYCTYPE *> (buffer_Supplemental_Mathematical_Operators + buffer_Supplemental_Mathematical_Operators_len), Supplemental_Mathematical_Operators) != Supplemental_Mathematical_Operators)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Supplemental_Mathematical_Operators_len; ++i) s_Supplemental_Mathematical_Operators[i] = buffer_Supplemental_Mathematical_Operators[i];
+	if (scan (s_Supplemental_Mathematical_Operators, s_Supplemental_Mathematical_Operators + buffer_Supplemental_Mathematical_Operators_len, Supplemental_Mathematical_Operators) != Supplemental_Mathematical_Operators)
 		printf ("test 'Supplemental_Mathematical_Operators' failed\n");
 	delete [] buffer_Supplemental_Mathematical_Operators;
 
-	YYCTYPE * buffer_Miscellaneous_Symbols_and_Arrows = new YYCTYPE [514];
+	unsigned int * buffer_Miscellaneous_Symbols_and_Arrows = new unsigned int [514];
+	YYCTYPE * s_Miscellaneous_Symbols_and_Arrows = (YYCTYPE *) buffer_Miscellaneous_Symbols_and_Arrows;
 	unsigned int buffer_Miscellaneous_Symbols_and_Arrows_len = encode_utf16 (chars_Miscellaneous_Symbols_and_Arrows, sizeof (chars_Miscellaneous_Symbols_and_Arrows) / sizeof (unsigned int), buffer_Miscellaneous_Symbols_and_Arrows);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Symbols_and_Arrows), reinterpret_cast<const YYCTYPE *> (buffer_Miscellaneous_Symbols_and_Arrows + buffer_Miscellaneous_Symbols_and_Arrows_len), Miscellaneous_Symbols_and_Arrows) != Miscellaneous_Symbols_and_Arrows)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Miscellaneous_Symbols_and_Arrows_len; ++i) s_Miscellaneous_Symbols_and_Arrows[i] = buffer_Miscellaneous_Symbols_and_Arrows[i];
+	if (scan (s_Miscellaneous_Symbols_and_Arrows, s_Miscellaneous_Symbols_and_Arrows + buffer_Miscellaneous_Symbols_and_Arrows_len, Miscellaneous_Symbols_and_Arrows) != Miscellaneous_Symbols_and_Arrows)
 		printf ("test 'Miscellaneous_Symbols_and_Arrows' failed\n");
 	delete [] buffer_Miscellaneous_Symbols_and_Arrows;
 
-	YYCTYPE * buffer_CJK_Radicals_Supplement = new YYCTYPE [258];
+	unsigned int * buffer_CJK_Radicals_Supplement = new unsigned int [258];
+	YYCTYPE * s_CJK_Radicals_Supplement = (YYCTYPE *) buffer_CJK_Radicals_Supplement;
 	unsigned int buffer_CJK_Radicals_Supplement_len = encode_utf16 (chars_CJK_Radicals_Supplement, sizeof (chars_CJK_Radicals_Supplement) / sizeof (unsigned int), buffer_CJK_Radicals_Supplement);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_CJK_Radicals_Supplement), reinterpret_cast<const YYCTYPE *> (buffer_CJK_Radicals_Supplement + buffer_CJK_Radicals_Supplement_len), CJK_Radicals_Supplement) != CJK_Radicals_Supplement)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_CJK_Radicals_Supplement_len; ++i) s_CJK_Radicals_Supplement[i] = buffer_CJK_Radicals_Supplement[i];
+	if (scan (s_CJK_Radicals_Supplement, s_CJK_Radicals_Supplement + buffer_CJK_Radicals_Supplement_len, CJK_Radicals_Supplement) != CJK_Radicals_Supplement)
 		printf ("test 'CJK_Radicals_Supplement' failed\n");
 	delete [] buffer_CJK_Radicals_Supplement;
 
-	YYCTYPE * buffer_Kangxi_Radicals = new YYCTYPE [450];
+	unsigned int * buffer_Kangxi_Radicals = new unsigned int [450];
+	YYCTYPE * s_Kangxi_Radicals = (YYCTYPE *) buffer_Kangxi_Radicals;
 	unsigned int buffer_Kangxi_Radicals_len = encode_utf16 (chars_Kangxi_Radicals, sizeof (chars_Kangxi_Radicals) / sizeof (unsigned int), buffer_Kangxi_Radicals);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Kangxi_Radicals), reinterpret_cast<const YYCTYPE *> (buffer_Kangxi_Radicals + buffer_Kangxi_Radicals_len), Kangxi_Radicals) != Kangxi_Radicals)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Kangxi_Radicals_len; ++i) s_Kangxi_Radicals[i] = buffer_Kangxi_Radicals[i];
+	if (scan (s_Kangxi_Radicals, s_Kangxi_Radicals + buffer_Kangxi_Radicals_len, Kangxi_Radicals) != Kangxi_Radicals)
 		printf ("test 'Kangxi_Radicals' failed\n");
 	delete [] buffer_Kangxi_Radicals;
 
-	YYCTYPE * buffer_Ideographic_Description_Characters = new YYCTYPE [34];
+	unsigned int * buffer_Ideographic_Description_Characters = new unsigned int [34];
+	YYCTYPE * s_Ideographic_Description_Characters = (YYCTYPE *) buffer_Ideographic_Description_Characters;
 	unsigned int buffer_Ideographic_Description_Characters_len = encode_utf16 (chars_Ideographic_Description_Characters, sizeof (chars_Ideographic_Description_Characters) / sizeof (unsigned int), buffer_Ideographic_Description_Characters);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Ideographic_Description_Characters), reinterpret_cast<const YYCTYPE *> (buffer_Ideographic_Description_Characters + buffer_Ideographic_Description_Characters_len), Ideographic_Description_Characters) != Ideographic_Description_Characters)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Ideographic_Description_Characters_len; ++i) s_Ideographic_Description_Characters[i] = buffer_Ideographic_Description_Characters[i];
+	if (scan (s_Ideographic_Description_Characters, s_Ideographic_Description_Characters + buffer_Ideographic_Description_Characters_len, Ideographic_Description_Characters) != Ideographic_Description_Characters)
 		printf ("test 'Ideographic_Description_Characters' failed\n");
 	delete [] buffer_Ideographic_Description_Characters;
 
-	YYCTYPE * buffer_CJK_Symbols_and_Punctuation = new YYCTYPE [130];
+	unsigned int * buffer_CJK_Symbols_and_Punctuation = new unsigned int [130];
+	YYCTYPE * s_CJK_Symbols_and_Punctuation = (YYCTYPE *) buffer_CJK_Symbols_and_Punctuation;
 	unsigned int buffer_CJK_Symbols_and_Punctuation_len = encode_utf16 (chars_CJK_Symbols_and_Punctuation, sizeof (chars_CJK_Symbols_and_Punctuation) / sizeof (unsigned int), buffer_CJK_Symbols_and_Punctuation);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_CJK_Symbols_and_Punctuation), reinterpret_cast<const YYCTYPE *> (buffer_CJK_Symbols_and_Punctuation + buffer_CJK_Symbols_and_Punctuation_len), CJK_Symbols_and_Punctuation) != CJK_Symbols_and_Punctuation)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_CJK_Symbols_and_Punctuation_len; ++i) s_CJK_Symbols_and_Punctuation[i] = buffer_CJK_Symbols_and_Punctuation[i];
+	if (scan (s_CJK_Symbols_and_Punctuation, s_CJK_Symbols_and_Punctuation + buffer_CJK_Symbols_and_Punctuation_len, CJK_Symbols_and_Punctuation) != CJK_Symbols_and_Punctuation)
 		printf ("test 'CJK_Symbols_and_Punctuation' failed\n");
 	delete [] buffer_CJK_Symbols_and_Punctuation;
 
-	YYCTYPE * buffer_Hiragana = new YYCTYPE [194];
+	unsigned int * buffer_Hiragana = new unsigned int [194];
+	YYCTYPE * s_Hiragana = (YYCTYPE *) buffer_Hiragana;
 	unsigned int buffer_Hiragana_len = encode_utf16 (chars_Hiragana, sizeof (chars_Hiragana) / sizeof (unsigned int), buffer_Hiragana);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Hiragana), reinterpret_cast<const YYCTYPE *> (buffer_Hiragana + buffer_Hiragana_len), Hiragana) != Hiragana)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Hiragana_len; ++i) s_Hiragana[i] = buffer_Hiragana[i];
+	if (scan (s_Hiragana, s_Hiragana + buffer_Hiragana_len, Hiragana) != Hiragana)
 		printf ("test 'Hiragana' failed\n");
 	delete [] buffer_Hiragana;
 
-	YYCTYPE * buffer_Katakana = new YYCTYPE [194];
+	unsigned int * buffer_Katakana = new unsigned int [194];
+	YYCTYPE * s_Katakana = (YYCTYPE *) buffer_Katakana;
 	unsigned int buffer_Katakana_len = encode_utf16 (chars_Katakana, sizeof (chars_Katakana) / sizeof (unsigned int), buffer_Katakana);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Katakana), reinterpret_cast<const YYCTYPE *> (buffer_Katakana + buffer_Katakana_len), Katakana) != Katakana)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Katakana_len; ++i) s_Katakana[i] = buffer_Katakana[i];
+	if (scan (s_Katakana, s_Katakana + buffer_Katakana_len, Katakana) != Katakana)
 		printf ("test 'Katakana' failed\n");
 	delete [] buffer_Katakana;
 
-	YYCTYPE * buffer_Bopomofo = new YYCTYPE [98];
+	unsigned int * buffer_Bopomofo = new unsigned int [98];
+	YYCTYPE * s_Bopomofo = (YYCTYPE *) buffer_Bopomofo;
 	unsigned int buffer_Bopomofo_len = encode_utf16 (chars_Bopomofo, sizeof (chars_Bopomofo) / sizeof (unsigned int), buffer_Bopomofo);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Bopomofo), reinterpret_cast<const YYCTYPE *> (buffer_Bopomofo + buffer_Bopomofo_len), Bopomofo) != Bopomofo)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Bopomofo_len; ++i) s_Bopomofo[i] = buffer_Bopomofo[i];
+	if (scan (s_Bopomofo, s_Bopomofo + buffer_Bopomofo_len, Bopomofo) != Bopomofo)
 		printf ("test 'Bopomofo' failed\n");
 	delete [] buffer_Bopomofo;
 
-	YYCTYPE * buffer_Hangul_Compatibility_Jamo = new YYCTYPE [194];
+	unsigned int * buffer_Hangul_Compatibility_Jamo = new unsigned int [194];
+	YYCTYPE * s_Hangul_Compatibility_Jamo = (YYCTYPE *) buffer_Hangul_Compatibility_Jamo;
 	unsigned int buffer_Hangul_Compatibility_Jamo_len = encode_utf16 (chars_Hangul_Compatibility_Jamo, sizeof (chars_Hangul_Compatibility_Jamo) / sizeof (unsigned int), buffer_Hangul_Compatibility_Jamo);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Hangul_Compatibility_Jamo), reinterpret_cast<const YYCTYPE *> (buffer_Hangul_Compatibility_Jamo + buffer_Hangul_Compatibility_Jamo_len), Hangul_Compatibility_Jamo) != Hangul_Compatibility_Jamo)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Hangul_Compatibility_Jamo_len; ++i) s_Hangul_Compatibility_Jamo[i] = buffer_Hangul_Compatibility_Jamo[i];
+	if (scan (s_Hangul_Compatibility_Jamo, s_Hangul_Compatibility_Jamo + buffer_Hangul_Compatibility_Jamo_len, Hangul_Compatibility_Jamo) != Hangul_Compatibility_Jamo)
 		printf ("test 'Hangul_Compatibility_Jamo' failed\n");
 	delete [] buffer_Hangul_Compatibility_Jamo;
 
-	YYCTYPE * buffer_Kanbun = new YYCTYPE [34];
+	unsigned int * buffer_Kanbun = new unsigned int [34];
+	YYCTYPE * s_Kanbun = (YYCTYPE *) buffer_Kanbun;
 	unsigned int buffer_Kanbun_len = encode_utf16 (chars_Kanbun, sizeof (chars_Kanbun) / sizeof (unsigned int), buffer_Kanbun);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Kanbun), reinterpret_cast<const YYCTYPE *> (buffer_Kanbun + buffer_Kanbun_len), Kanbun) != Kanbun)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Kanbun_len; ++i) s_Kanbun[i] = buffer_Kanbun[i];
+	if (scan (s_Kanbun, s_Kanbun + buffer_Kanbun_len, Kanbun) != Kanbun)
 		printf ("test 'Kanbun' failed\n");
 	delete [] buffer_Kanbun;
 
-	YYCTYPE * buffer_Bopomofo_Extended = new YYCTYPE [66];
+	unsigned int * buffer_Bopomofo_Extended = new unsigned int [66];
+	YYCTYPE * s_Bopomofo_Extended = (YYCTYPE *) buffer_Bopomofo_Extended;
 	unsigned int buffer_Bopomofo_Extended_len = encode_utf16 (chars_Bopomofo_Extended, sizeof (chars_Bopomofo_Extended) / sizeof (unsigned int), buffer_Bopomofo_Extended);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Bopomofo_Extended), reinterpret_cast<const YYCTYPE *> (buffer_Bopomofo_Extended + buffer_Bopomofo_Extended_len), Bopomofo_Extended) != Bopomofo_Extended)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Bopomofo_Extended_len; ++i) s_Bopomofo_Extended[i] = buffer_Bopomofo_Extended[i];
+	if (scan (s_Bopomofo_Extended, s_Bopomofo_Extended + buffer_Bopomofo_Extended_len, Bopomofo_Extended) != Bopomofo_Extended)
 		printf ("test 'Bopomofo_Extended' failed\n");
 	delete [] buffer_Bopomofo_Extended;
 
-	YYCTYPE * buffer_Katakana_Phonetic_Extensions = new YYCTYPE [34];
+	unsigned int * buffer_Katakana_Phonetic_Extensions = new unsigned int [34];
+	YYCTYPE * s_Katakana_Phonetic_Extensions = (YYCTYPE *) buffer_Katakana_Phonetic_Extensions;
 	unsigned int buffer_Katakana_Phonetic_Extensions_len = encode_utf16 (chars_Katakana_Phonetic_Extensions, sizeof (chars_Katakana_Phonetic_Extensions) / sizeof (unsigned int), buffer_Katakana_Phonetic_Extensions);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Katakana_Phonetic_Extensions), reinterpret_cast<const YYCTYPE *> (buffer_Katakana_Phonetic_Extensions + buffer_Katakana_Phonetic_Extensions_len), Katakana_Phonetic_Extensions) != Katakana_Phonetic_Extensions)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Katakana_Phonetic_Extensions_len; ++i) s_Katakana_Phonetic_Extensions[i] = buffer_Katakana_Phonetic_Extensions[i];
+	if (scan (s_Katakana_Phonetic_Extensions, s_Katakana_Phonetic_Extensions + buffer_Katakana_Phonetic_Extensions_len, Katakana_Phonetic_Extensions) != Katakana_Phonetic_Extensions)
 		printf ("test 'Katakana_Phonetic_Extensions' failed\n");
 	delete [] buffer_Katakana_Phonetic_Extensions;
 
-	YYCTYPE * buffer_Enclosed_CJK_Letters_and_Months = new YYCTYPE [514];
+	unsigned int * buffer_Enclosed_CJK_Letters_and_Months = new unsigned int [514];
+	YYCTYPE * s_Enclosed_CJK_Letters_and_Months = (YYCTYPE *) buffer_Enclosed_CJK_Letters_and_Months;
 	unsigned int buffer_Enclosed_CJK_Letters_and_Months_len = encode_utf16 (chars_Enclosed_CJK_Letters_and_Months, sizeof (chars_Enclosed_CJK_Letters_and_Months) / sizeof (unsigned int), buffer_Enclosed_CJK_Letters_and_Months);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Enclosed_CJK_Letters_and_Months), reinterpret_cast<const YYCTYPE *> (buffer_Enclosed_CJK_Letters_and_Months + buffer_Enclosed_CJK_Letters_and_Months_len), Enclosed_CJK_Letters_and_Months) != Enclosed_CJK_Letters_and_Months)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Enclosed_CJK_Letters_and_Months_len; ++i) s_Enclosed_CJK_Letters_and_Months[i] = buffer_Enclosed_CJK_Letters_and_Months[i];
+	if (scan (s_Enclosed_CJK_Letters_and_Months, s_Enclosed_CJK_Letters_and_Months + buffer_Enclosed_CJK_Letters_and_Months_len, Enclosed_CJK_Letters_and_Months) != Enclosed_CJK_Letters_and_Months)
 		printf ("test 'Enclosed_CJK_Letters_and_Months' failed\n");
 	delete [] buffer_Enclosed_CJK_Letters_and_Months;
 
-	YYCTYPE * buffer_CJK_Compatibility = new YYCTYPE [514];
+	unsigned int * buffer_CJK_Compatibility = new unsigned int [514];
+	YYCTYPE * s_CJK_Compatibility = (YYCTYPE *) buffer_CJK_Compatibility;
 	unsigned int buffer_CJK_Compatibility_len = encode_utf16 (chars_CJK_Compatibility, sizeof (chars_CJK_Compatibility) / sizeof (unsigned int), buffer_CJK_Compatibility);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_CJK_Compatibility), reinterpret_cast<const YYCTYPE *> (buffer_CJK_Compatibility + buffer_CJK_Compatibility_len), CJK_Compatibility) != CJK_Compatibility)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_CJK_Compatibility_len; ++i) s_CJK_Compatibility[i] = buffer_CJK_Compatibility[i];
+	if (scan (s_CJK_Compatibility, s_CJK_Compatibility + buffer_CJK_Compatibility_len, CJK_Compatibility) != CJK_Compatibility)
 		printf ("test 'CJK_Compatibility' failed\n");
 	delete [] buffer_CJK_Compatibility;
 
-	YYCTYPE * buffer_CJK_Unified_Ideographs_Extension_A = new YYCTYPE [13186];
+	unsigned int * buffer_CJK_Unified_Ideographs_Extension_A = new unsigned int [13186];
+	YYCTYPE * s_CJK_Unified_Ideographs_Extension_A = (YYCTYPE *) buffer_CJK_Unified_Ideographs_Extension_A;
 	unsigned int buffer_CJK_Unified_Ideographs_Extension_A_len = encode_utf16 (chars_CJK_Unified_Ideographs_Extension_A, sizeof (chars_CJK_Unified_Ideographs_Extension_A) / sizeof (unsigned int), buffer_CJK_Unified_Ideographs_Extension_A);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_CJK_Unified_Ideographs_Extension_A), reinterpret_cast<const YYCTYPE *> (buffer_CJK_Unified_Ideographs_Extension_A + buffer_CJK_Unified_Ideographs_Extension_A_len), CJK_Unified_Ideographs_Extension_A) != CJK_Unified_Ideographs_Extension_A)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_CJK_Unified_Ideographs_Extension_A_len; ++i) s_CJK_Unified_Ideographs_Extension_A[i] = buffer_CJK_Unified_Ideographs_Extension_A[i];
+	if (scan (s_CJK_Unified_Ideographs_Extension_A, s_CJK_Unified_Ideographs_Extension_A + buffer_CJK_Unified_Ideographs_Extension_A_len, CJK_Unified_Ideographs_Extension_A) != CJK_Unified_Ideographs_Extension_A)
 		printf ("test 'CJK_Unified_Ideographs_Extension_A' failed\n");
 	delete [] buffer_CJK_Unified_Ideographs_Extension_A;
 
-	YYCTYPE * buffer_Yijing_Hexagram_Symbols = new YYCTYPE [130];
+	unsigned int * buffer_Yijing_Hexagram_Symbols = new unsigned int [130];
+	YYCTYPE * s_Yijing_Hexagram_Symbols = (YYCTYPE *) buffer_Yijing_Hexagram_Symbols;
 	unsigned int buffer_Yijing_Hexagram_Symbols_len = encode_utf16 (chars_Yijing_Hexagram_Symbols, sizeof (chars_Yijing_Hexagram_Symbols) / sizeof (unsigned int), buffer_Yijing_Hexagram_Symbols);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Yijing_Hexagram_Symbols), reinterpret_cast<const YYCTYPE *> (buffer_Yijing_Hexagram_Symbols + buffer_Yijing_Hexagram_Symbols_len), Yijing_Hexagram_Symbols) != Yijing_Hexagram_Symbols)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Yijing_Hexagram_Symbols_len; ++i) s_Yijing_Hexagram_Symbols[i] = buffer_Yijing_Hexagram_Symbols[i];
+	if (scan (s_Yijing_Hexagram_Symbols, s_Yijing_Hexagram_Symbols + buffer_Yijing_Hexagram_Symbols_len, Yijing_Hexagram_Symbols) != Yijing_Hexagram_Symbols)
 		printf ("test 'Yijing_Hexagram_Symbols' failed\n");
 	delete [] buffer_Yijing_Hexagram_Symbols;
 
-	YYCTYPE * buffer_CJK_Unified_Ideographs = new YYCTYPE [41986];
+	unsigned int * buffer_CJK_Unified_Ideographs = new unsigned int [41986];
+	YYCTYPE * s_CJK_Unified_Ideographs = (YYCTYPE *) buffer_CJK_Unified_Ideographs;
 	unsigned int buffer_CJK_Unified_Ideographs_len = encode_utf16 (chars_CJK_Unified_Ideographs, sizeof (chars_CJK_Unified_Ideographs) / sizeof (unsigned int), buffer_CJK_Unified_Ideographs);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_CJK_Unified_Ideographs), reinterpret_cast<const YYCTYPE *> (buffer_CJK_Unified_Ideographs + buffer_CJK_Unified_Ideographs_len), CJK_Unified_Ideographs) != CJK_Unified_Ideographs)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_CJK_Unified_Ideographs_len; ++i) s_CJK_Unified_Ideographs[i] = buffer_CJK_Unified_Ideographs[i];
+	if (scan (s_CJK_Unified_Ideographs, s_CJK_Unified_Ideographs + buffer_CJK_Unified_Ideographs_len, CJK_Unified_Ideographs) != CJK_Unified_Ideographs)
 		printf ("test 'CJK_Unified_Ideographs' failed\n");
 	delete [] buffer_CJK_Unified_Ideographs;
 
-	YYCTYPE * buffer_Yi_Syllables = new YYCTYPE [2338];
+	unsigned int * buffer_Yi_Syllables = new unsigned int [2338];
+	YYCTYPE * s_Yi_Syllables = (YYCTYPE *) buffer_Yi_Syllables;
 	unsigned int buffer_Yi_Syllables_len = encode_utf16 (chars_Yi_Syllables, sizeof (chars_Yi_Syllables) / sizeof (unsigned int), buffer_Yi_Syllables);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Yi_Syllables), reinterpret_cast<const YYCTYPE *> (buffer_Yi_Syllables + buffer_Yi_Syllables_len), Yi_Syllables) != Yi_Syllables)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Yi_Syllables_len; ++i) s_Yi_Syllables[i] = buffer_Yi_Syllables[i];
+	if (scan (s_Yi_Syllables, s_Yi_Syllables + buffer_Yi_Syllables_len, Yi_Syllables) != Yi_Syllables)
 		printf ("test 'Yi_Syllables' failed\n");
 	delete [] buffer_Yi_Syllables;
 
-	YYCTYPE * buffer_Yi_Radicals = new YYCTYPE [130];
+	unsigned int * buffer_Yi_Radicals = new unsigned int [130];
+	YYCTYPE * s_Yi_Radicals = (YYCTYPE *) buffer_Yi_Radicals;
 	unsigned int buffer_Yi_Radicals_len = encode_utf16 (chars_Yi_Radicals, sizeof (chars_Yi_Radicals) / sizeof (unsigned int), buffer_Yi_Radicals);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Yi_Radicals), reinterpret_cast<const YYCTYPE *> (buffer_Yi_Radicals + buffer_Yi_Radicals_len), Yi_Radicals) != Yi_Radicals)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Yi_Radicals_len; ++i) s_Yi_Radicals[i] = buffer_Yi_Radicals[i];
+	if (scan (s_Yi_Radicals, s_Yi_Radicals + buffer_Yi_Radicals_len, Yi_Radicals) != Yi_Radicals)
 		printf ("test 'Yi_Radicals' failed\n");
 	delete [] buffer_Yi_Radicals;
 
-	YYCTYPE * buffer_Hangul_Syllables = new YYCTYPE [22370];
+	unsigned int * buffer_Hangul_Syllables = new unsigned int [22370];
+	YYCTYPE * s_Hangul_Syllables = (YYCTYPE *) buffer_Hangul_Syllables;
 	unsigned int buffer_Hangul_Syllables_len = encode_utf16 (chars_Hangul_Syllables, sizeof (chars_Hangul_Syllables) / sizeof (unsigned int), buffer_Hangul_Syllables);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Hangul_Syllables), reinterpret_cast<const YYCTYPE *> (buffer_Hangul_Syllables + buffer_Hangul_Syllables_len), Hangul_Syllables) != Hangul_Syllables)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Hangul_Syllables_len; ++i) s_Hangul_Syllables[i] = buffer_Hangul_Syllables[i];
+	if (scan (s_Hangul_Syllables, s_Hangul_Syllables + buffer_Hangul_Syllables_len, Hangul_Syllables) != Hangul_Syllables)
 		printf ("test 'Hangul_Syllables' failed\n");
 	delete [] buffer_Hangul_Syllables;
 
-	YYCTYPE * buffer_High_Surrogates = new YYCTYPE [1794];
+	unsigned int * buffer_High_Surrogates = new unsigned int [1794];
+	YYCTYPE * s_High_Surrogates = (YYCTYPE *) buffer_High_Surrogates;
 	unsigned int buffer_High_Surrogates_len = encode_utf16 (chars_High_Surrogates, sizeof (chars_High_Surrogates) / sizeof (unsigned int), buffer_High_Surrogates);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_High_Surrogates), reinterpret_cast<const YYCTYPE *> (buffer_High_Surrogates + buffer_High_Surrogates_len), High_Surrogates) != High_Surrogates)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_High_Surrogates_len; ++i) s_High_Surrogates[i] = buffer_High_Surrogates[i];
+	if (scan (s_High_Surrogates, s_High_Surrogates + buffer_High_Surrogates_len, High_Surrogates) != High_Surrogates)
 		printf ("test 'High_Surrogates' failed\n");
 	delete [] buffer_High_Surrogates;
 
-	YYCTYPE * buffer_High_Private_Use_Surrogates = new YYCTYPE [258];
+	unsigned int * buffer_High_Private_Use_Surrogates = new unsigned int [258];
+	YYCTYPE * s_High_Private_Use_Surrogates = (YYCTYPE *) buffer_High_Private_Use_Surrogates;
 	unsigned int buffer_High_Private_Use_Surrogates_len = encode_utf16 (chars_High_Private_Use_Surrogates, sizeof (chars_High_Private_Use_Surrogates) / sizeof (unsigned int), buffer_High_Private_Use_Surrogates);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_High_Private_Use_Surrogates), reinterpret_cast<const YYCTYPE *> (buffer_High_Private_Use_Surrogates + buffer_High_Private_Use_Surrogates_len), High_Private_Use_Surrogates) != High_Private_Use_Surrogates)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_High_Private_Use_Surrogates_len; ++i) s_High_Private_Use_Surrogates[i] = buffer_High_Private_Use_Surrogates[i];
+	if (scan (s_High_Private_Use_Surrogates, s_High_Private_Use_Surrogates + buffer_High_Private_Use_Surrogates_len, High_Private_Use_Surrogates) != High_Private_Use_Surrogates)
 		printf ("test 'High_Private_Use_Surrogates' failed\n");
 	delete [] buffer_High_Private_Use_Surrogates;
 
-	YYCTYPE * buffer_Low_Surrogates = new YYCTYPE [2050];
+	unsigned int * buffer_Low_Surrogates = new unsigned int [2050];
+	YYCTYPE * s_Low_Surrogates = (YYCTYPE *) buffer_Low_Surrogates;
 	unsigned int buffer_Low_Surrogates_len = encode_utf16 (chars_Low_Surrogates, sizeof (chars_Low_Surrogates) / sizeof (unsigned int), buffer_Low_Surrogates);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Low_Surrogates), reinterpret_cast<const YYCTYPE *> (buffer_Low_Surrogates + buffer_Low_Surrogates_len), Low_Surrogates) != Low_Surrogates)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Low_Surrogates_len; ++i) s_Low_Surrogates[i] = buffer_Low_Surrogates[i];
+	if (scan (s_Low_Surrogates, s_Low_Surrogates + buffer_Low_Surrogates_len, Low_Surrogates) != Low_Surrogates)
 		printf ("test 'Low_Surrogates' failed\n");
 	delete [] buffer_Low_Surrogates;
 
-	YYCTYPE * buffer_Private_Use_Area = new YYCTYPE [12802];
+	unsigned int * buffer_Private_Use_Area = new unsigned int [12802];
+	YYCTYPE * s_Private_Use_Area = (YYCTYPE *) buffer_Private_Use_Area;
 	unsigned int buffer_Private_Use_Area_len = encode_utf16 (chars_Private_Use_Area, sizeof (chars_Private_Use_Area) / sizeof (unsigned int), buffer_Private_Use_Area);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Private_Use_Area), reinterpret_cast<const YYCTYPE *> (buffer_Private_Use_Area + buffer_Private_Use_Area_len), Private_Use_Area) != Private_Use_Area)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Private_Use_Area_len; ++i) s_Private_Use_Area[i] = buffer_Private_Use_Area[i];
+	if (scan (s_Private_Use_Area, s_Private_Use_Area + buffer_Private_Use_Area_len, Private_Use_Area) != Private_Use_Area)
 		printf ("test 'Private_Use_Area' failed\n");
 	delete [] buffer_Private_Use_Area;
 
-	YYCTYPE * buffer_CJK_Compatibility_Ideographs = new YYCTYPE [1026];
+	unsigned int * buffer_CJK_Compatibility_Ideographs = new unsigned int [1026];
+	YYCTYPE * s_CJK_Compatibility_Ideographs = (YYCTYPE *) buffer_CJK_Compatibility_Ideographs;
 	unsigned int buffer_CJK_Compatibility_Ideographs_len = encode_utf16 (chars_CJK_Compatibility_Ideographs, sizeof (chars_CJK_Compatibility_Ideographs) / sizeof (unsigned int), buffer_CJK_Compatibility_Ideographs);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_CJK_Compatibility_Ideographs), reinterpret_cast<const YYCTYPE *> (buffer_CJK_Compatibility_Ideographs + buffer_CJK_Compatibility_Ideographs_len), CJK_Compatibility_Ideographs) != CJK_Compatibility_Ideographs)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_CJK_Compatibility_Ideographs_len; ++i) s_CJK_Compatibility_Ideographs[i] = buffer_CJK_Compatibility_Ideographs[i];
+	if (scan (s_CJK_Compatibility_Ideographs, s_CJK_Compatibility_Ideographs + buffer_CJK_Compatibility_Ideographs_len, CJK_Compatibility_Ideographs) != CJK_Compatibility_Ideographs)
 		printf ("test 'CJK_Compatibility_Ideographs' failed\n");
 	delete [] buffer_CJK_Compatibility_Ideographs;
 
-	YYCTYPE * buffer_Alphabetic_Presentation_Forms = new YYCTYPE [162];
+	unsigned int * buffer_Alphabetic_Presentation_Forms = new unsigned int [162];
+	YYCTYPE * s_Alphabetic_Presentation_Forms = (YYCTYPE *) buffer_Alphabetic_Presentation_Forms;
 	unsigned int buffer_Alphabetic_Presentation_Forms_len = encode_utf16 (chars_Alphabetic_Presentation_Forms, sizeof (chars_Alphabetic_Presentation_Forms) / sizeof (unsigned int), buffer_Alphabetic_Presentation_Forms);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Alphabetic_Presentation_Forms), reinterpret_cast<const YYCTYPE *> (buffer_Alphabetic_Presentation_Forms + buffer_Alphabetic_Presentation_Forms_len), Alphabetic_Presentation_Forms) != Alphabetic_Presentation_Forms)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Alphabetic_Presentation_Forms_len; ++i) s_Alphabetic_Presentation_Forms[i] = buffer_Alphabetic_Presentation_Forms[i];
+	if (scan (s_Alphabetic_Presentation_Forms, s_Alphabetic_Presentation_Forms + buffer_Alphabetic_Presentation_Forms_len, Alphabetic_Presentation_Forms) != Alphabetic_Presentation_Forms)
 		printf ("test 'Alphabetic_Presentation_Forms' failed\n");
 	delete [] buffer_Alphabetic_Presentation_Forms;
 
-	YYCTYPE * buffer_Arabic_Presentation_Forms_A = new YYCTYPE [1378];
+	unsigned int * buffer_Arabic_Presentation_Forms_A = new unsigned int [1378];
+	YYCTYPE * s_Arabic_Presentation_Forms_A = (YYCTYPE *) buffer_Arabic_Presentation_Forms_A;
 	unsigned int buffer_Arabic_Presentation_Forms_A_len = encode_utf16 (chars_Arabic_Presentation_Forms_A, sizeof (chars_Arabic_Presentation_Forms_A) / sizeof (unsigned int), buffer_Arabic_Presentation_Forms_A);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Arabic_Presentation_Forms_A), reinterpret_cast<const YYCTYPE *> (buffer_Arabic_Presentation_Forms_A + buffer_Arabic_Presentation_Forms_A_len), Arabic_Presentation_Forms_A) != Arabic_Presentation_Forms_A)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Arabic_Presentation_Forms_A_len; ++i) s_Arabic_Presentation_Forms_A[i] = buffer_Arabic_Presentation_Forms_A[i];
+	if (scan (s_Arabic_Presentation_Forms_A, s_Arabic_Presentation_Forms_A + buffer_Arabic_Presentation_Forms_A_len, Arabic_Presentation_Forms_A) != Arabic_Presentation_Forms_A)
 		printf ("test 'Arabic_Presentation_Forms_A' failed\n");
 	delete [] buffer_Arabic_Presentation_Forms_A;
 
-	YYCTYPE * buffer_Variation_Selectors = new YYCTYPE [34];
+	unsigned int * buffer_Variation_Selectors = new unsigned int [34];
+	YYCTYPE * s_Variation_Selectors = (YYCTYPE *) buffer_Variation_Selectors;
 	unsigned int buffer_Variation_Selectors_len = encode_utf16 (chars_Variation_Selectors, sizeof (chars_Variation_Selectors) / sizeof (unsigned int), buffer_Variation_Selectors);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Variation_Selectors), reinterpret_cast<const YYCTYPE *> (buffer_Variation_Selectors + buffer_Variation_Selectors_len), Variation_Selectors) != Variation_Selectors)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Variation_Selectors_len; ++i) s_Variation_Selectors[i] = buffer_Variation_Selectors[i];
+	if (scan (s_Variation_Selectors, s_Variation_Selectors + buffer_Variation_Selectors_len, Variation_Selectors) != Variation_Selectors)
 		printf ("test 'Variation_Selectors' failed\n");
 	delete [] buffer_Variation_Selectors;
 
-	YYCTYPE * buffer_Combining_Half_Marks = new YYCTYPE [34];
+	unsigned int * buffer_Combining_Half_Marks = new unsigned int [34];
+	YYCTYPE * s_Combining_Half_Marks = (YYCTYPE *) buffer_Combining_Half_Marks;
 	unsigned int buffer_Combining_Half_Marks_len = encode_utf16 (chars_Combining_Half_Marks, sizeof (chars_Combining_Half_Marks) / sizeof (unsigned int), buffer_Combining_Half_Marks);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Combining_Half_Marks), reinterpret_cast<const YYCTYPE *> (buffer_Combining_Half_Marks + buffer_Combining_Half_Marks_len), Combining_Half_Marks) != Combining_Half_Marks)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Combining_Half_Marks_len; ++i) s_Combining_Half_Marks[i] = buffer_Combining_Half_Marks[i];
+	if (scan (s_Combining_Half_Marks, s_Combining_Half_Marks + buffer_Combining_Half_Marks_len, Combining_Half_Marks) != Combining_Half_Marks)
 		printf ("test 'Combining_Half_Marks' failed\n");
 	delete [] buffer_Combining_Half_Marks;
 
-	YYCTYPE * buffer_CJK_Compatibility_Forms = new YYCTYPE [66];
+	unsigned int * buffer_CJK_Compatibility_Forms = new unsigned int [66];
+	YYCTYPE * s_CJK_Compatibility_Forms = (YYCTYPE *) buffer_CJK_Compatibility_Forms;
 	unsigned int buffer_CJK_Compatibility_Forms_len = encode_utf16 (chars_CJK_Compatibility_Forms, sizeof (chars_CJK_Compatibility_Forms) / sizeof (unsigned int), buffer_CJK_Compatibility_Forms);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_CJK_Compatibility_Forms), reinterpret_cast<const YYCTYPE *> (buffer_CJK_Compatibility_Forms + buffer_CJK_Compatibility_Forms_len), CJK_Compatibility_Forms) != CJK_Compatibility_Forms)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_CJK_Compatibility_Forms_len; ++i) s_CJK_Compatibility_Forms[i] = buffer_CJK_Compatibility_Forms[i];
+	if (scan (s_CJK_Compatibility_Forms, s_CJK_Compatibility_Forms + buffer_CJK_Compatibility_Forms_len, CJK_Compatibility_Forms) != CJK_Compatibility_Forms)
 		printf ("test 'CJK_Compatibility_Forms' failed\n");
 	delete [] buffer_CJK_Compatibility_Forms;
 
-	YYCTYPE * buffer_Small_Form_Variants = new YYCTYPE [66];
+	unsigned int * buffer_Small_Form_Variants = new unsigned int [66];
+	YYCTYPE * s_Small_Form_Variants = (YYCTYPE *) buffer_Small_Form_Variants;
 	unsigned int buffer_Small_Form_Variants_len = encode_utf16 (chars_Small_Form_Variants, sizeof (chars_Small_Form_Variants) / sizeof (unsigned int), buffer_Small_Form_Variants);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Small_Form_Variants), reinterpret_cast<const YYCTYPE *> (buffer_Small_Form_Variants + buffer_Small_Form_Variants_len), Small_Form_Variants) != Small_Form_Variants)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Small_Form_Variants_len; ++i) s_Small_Form_Variants[i] = buffer_Small_Form_Variants[i];
+	if (scan (s_Small_Form_Variants, s_Small_Form_Variants + buffer_Small_Form_Variants_len, Small_Form_Variants) != Small_Form_Variants)
 		printf ("test 'Small_Form_Variants' failed\n");
 	delete [] buffer_Small_Form_Variants;
 
-	YYCTYPE * buffer_Arabic_Presentation_Forms_B = new YYCTYPE [290];
+	unsigned int * buffer_Arabic_Presentation_Forms_B = new unsigned int [290];
+	YYCTYPE * s_Arabic_Presentation_Forms_B = (YYCTYPE *) buffer_Arabic_Presentation_Forms_B;
 	unsigned int buffer_Arabic_Presentation_Forms_B_len = encode_utf16 (chars_Arabic_Presentation_Forms_B, sizeof (chars_Arabic_Presentation_Forms_B) / sizeof (unsigned int), buffer_Arabic_Presentation_Forms_B);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Arabic_Presentation_Forms_B), reinterpret_cast<const YYCTYPE *> (buffer_Arabic_Presentation_Forms_B + buffer_Arabic_Presentation_Forms_B_len), Arabic_Presentation_Forms_B) != Arabic_Presentation_Forms_B)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Arabic_Presentation_Forms_B_len; ++i) s_Arabic_Presentation_Forms_B[i] = buffer_Arabic_Presentation_Forms_B[i];
+	if (scan (s_Arabic_Presentation_Forms_B, s_Arabic_Presentation_Forms_B + buffer_Arabic_Presentation_Forms_B_len, Arabic_Presentation_Forms_B) != Arabic_Presentation_Forms_B)
 		printf ("test 'Arabic_Presentation_Forms_B' failed\n");
 	delete [] buffer_Arabic_Presentation_Forms_B;
 
-	YYCTYPE * buffer_Halfwidth_and_Fullwidth_Forms = new YYCTYPE [482];
+	unsigned int * buffer_Halfwidth_and_Fullwidth_Forms = new unsigned int [482];
+	YYCTYPE * s_Halfwidth_and_Fullwidth_Forms = (YYCTYPE *) buffer_Halfwidth_and_Fullwidth_Forms;
 	unsigned int buffer_Halfwidth_and_Fullwidth_Forms_len = encode_utf16 (chars_Halfwidth_and_Fullwidth_Forms, sizeof (chars_Halfwidth_and_Fullwidth_Forms) / sizeof (unsigned int), buffer_Halfwidth_and_Fullwidth_Forms);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Halfwidth_and_Fullwidth_Forms), reinterpret_cast<const YYCTYPE *> (buffer_Halfwidth_and_Fullwidth_Forms + buffer_Halfwidth_and_Fullwidth_Forms_len), Halfwidth_and_Fullwidth_Forms) != Halfwidth_and_Fullwidth_Forms)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Halfwidth_and_Fullwidth_Forms_len; ++i) s_Halfwidth_and_Fullwidth_Forms[i] = buffer_Halfwidth_and_Fullwidth_Forms[i];
+	if (scan (s_Halfwidth_and_Fullwidth_Forms, s_Halfwidth_and_Fullwidth_Forms + buffer_Halfwidth_and_Fullwidth_Forms_len, Halfwidth_and_Fullwidth_Forms) != Halfwidth_and_Fullwidth_Forms)
 		printf ("test 'Halfwidth_and_Fullwidth_Forms' failed\n");
 	delete [] buffer_Halfwidth_and_Fullwidth_Forms;
 
-	YYCTYPE * buffer_Specials = new YYCTYPE [34];
+	unsigned int * buffer_Specials = new unsigned int [34];
+	YYCTYPE * s_Specials = (YYCTYPE *) buffer_Specials;
 	unsigned int buffer_Specials_len = encode_utf16 (chars_Specials, sizeof (chars_Specials) / sizeof (unsigned int), buffer_Specials);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_Specials), reinterpret_cast<const YYCTYPE *> (buffer_Specials + buffer_Specials_len), Specials) != Specials)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_Specials_len; ++i) s_Specials[i] = buffer_Specials[i];
+	if (scan (s_Specials, s_Specials + buffer_Specials_len, Specials) != Specials)
 		printf ("test 'Specials' failed\n");
 	delete [] buffer_Specials;
 
-	YYCTYPE * buffer_All = new YYCTYPE [122850];
+	unsigned int * buffer_All = new unsigned int [122850];
+	YYCTYPE * s_All = (YYCTYPE *) buffer_All;
 	unsigned int buffer_All_len = encode_utf16 (chars_All, sizeof (chars_All) / sizeof (unsigned int), buffer_All);
-	if (scan (reinterpret_cast<const YYCTYPE *> (buffer_All), reinterpret_cast<const YYCTYPE *> (buffer_All + buffer_All_len), All) != All)
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_All_len; ++i) s_All[i] = buffer_All[i];
+	if (scan (s_All, s_All + buffer_All_len, All) != All)
 		printf ("test 'All' failed\n");
 	delete [] buffer_All;
 

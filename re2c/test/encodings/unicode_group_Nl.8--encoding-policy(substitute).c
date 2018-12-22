@@ -353,17 +353,29 @@ yy23:
 	case 0x9F:
 	case 0xA0:
 	case 0xA1:
-	case 0xA2:	goto yy17;
+	case 0xA2:
+	case 0xA3:
+	case 0xA4:
+	case 0xA5:
+	case 0xA6:
+	case 0xA7:
+	case 0xA8:
+	case 0xA9:
+	case 0xAA:
+	case 0xAB:
+	case 0xAC:
+	case 0xAD:
+	case 0xAE:	goto yy17;
 	default:	goto yy10;
 	}
 }
 #line 14 "encodings/unicode_group_Nl.8--encoding-policy(substitute).re"
 
 }
-static const unsigned int chars_Nl [] = {0x16ee,0x16f0,  0x2160,0x2182,  0x2185,0x2188,  0x3007,0x3007,  0x3021,0x3029,  0x3038,0x303a,  0xa6e6,0xa6ef,  0x10140,0x10174,  0x10341,0x10341,  0x1034a,0x1034a,  0x103d1,0x103d5,  0x12400,0x12462,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+static const unsigned int chars_Nl [] = {0x16ee,0x16f0,  0x2160,0x2182,  0x2185,0x2188,  0x3007,0x3007,  0x3021,0x3029,  0x3038,0x303a,  0xa6e6,0xa6ef,  0x10140,0x10174,  0x10341,0x10341,  0x1034a,0x1034a,  0x103d1,0x103d5,  0x12400,0x1246e,  0x0,0x0};
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned char * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 			s += re2c::utf8::rune_to_bytes (s, j);
@@ -373,9 +385,12 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	YYCTYPE * buffer_Nl = new YYCTYPE [900];
+	unsigned int * buffer_Nl = new unsigned int [948];
+	YYCTYPE * s = (YYCTYPE *) buffer_Nl;
 	unsigned int buffer_len = encode_utf8 (chars_Nl, sizeof (chars_Nl) / sizeof (unsigned int), buffer_Nl);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Nl), reinterpret_cast<const YYCTYPE *> (buffer_Nl + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Nl[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Nl' failed\n");
 	delete [] buffer_Nl;
 	return 0;

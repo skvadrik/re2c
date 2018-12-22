@@ -42,9 +42,12 @@ static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	YYCTYPE * buffer_Cc = new YYCTYPE [66];
+	unsigned int * buffer_Cc = new unsigned int [66];
+	YYCTYPE * s = (YYCTYPE *) buffer_Cc;
 	unsigned int buffer_len = encode_utf32 (chars_Cc, sizeof (chars_Cc) / sizeof (unsigned int), buffer_Cc);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Cc), reinterpret_cast<const YYCTYPE *> (buffer_Cc + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Cc[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Cc' failed\n");
 	delete [] buffer_Cc;
 	return 0;

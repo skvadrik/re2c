@@ -52,6 +52,7 @@ yy8:
 	switch (yych) {
 	case 0x80:	goto yy14;
 	case 0xB8:	goto yy15;
+	case 0xB9:	goto yy11;
 	default:	goto yy3;
 	}
 yy9:
@@ -99,7 +100,9 @@ yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x97:
-	case 0x9A:	goto yy4;
+	case 0x9A:
+	case 0xBA:
+	case 0xBB:	goto yy4;
 	default:	goto yy12;
 	}
 yy16:
@@ -139,10 +142,10 @@ yy20:
 #line 14 "encodings/unicode_group_Pd.8--encoding-policy(substitute).re"
 
 }
-static const unsigned int chars_Pd [] = {0x2d,0x2d,  0x58a,0x58a,  0x5be,0x5be,  0x1400,0x1400,  0x1806,0x1806,  0x2010,0x2015,  0x2e17,0x2e17,  0x2e1a,0x2e1a,  0x301c,0x301c,  0x3030,0x3030,  0x30a0,0x30a0,  0xfe31,0xfe32,  0xfe58,0xfe58,  0xfe63,0xfe63,  0xff0d,0xff0d,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+static const unsigned int chars_Pd [] = {0x2d,0x2d,  0x58a,0x58a,  0x5be,0x5be,  0x1400,0x1400,  0x1806,0x1806,  0x2010,0x2015,  0x2e17,0x2e17,  0x2e1a,0x2e1a,  0x2e3a,0x2e3b,  0x2e40,0x2e40,  0x301c,0x301c,  0x3030,0x3030,  0x30a0,0x30a0,  0xfe31,0xfe32,  0xfe58,0xfe58,  0xfe63,0xfe63,  0xff0d,0xff0d,  0x0,0x0};
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned char * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 			s += re2c::utf8::rune_to_bytes (s, j);
@@ -152,9 +155,12 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	YYCTYPE * buffer_Pd = new YYCTYPE [88];
+	unsigned int * buffer_Pd = new unsigned int [100];
+	YYCTYPE * s = (YYCTYPE *) buffer_Pd;
 	unsigned int buffer_len = encode_utf8 (chars_Pd, sizeof (chars_Pd) / sizeof (unsigned int), buffer_Pd);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Pd), reinterpret_cast<const YYCTYPE *> (buffer_Pd + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Pd[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Pd' failed\n");
 	delete [] buffer_Pd;
 	return 0;

@@ -125,16 +125,17 @@ yy12:
 	switch (yych) {
 	case 0x9C:	goto yy18;
 	case 0x9E:	goto yy19;
+	case 0xAD:	goto yy20;
 	default:	goto yy3;
 	}
 yy13:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0xAE:	goto yy20;
-	case 0xAF:	goto yy21;
-	case 0xBC:	goto yy22;
-	case 0xBD:	goto yy23;
-	case 0xBF:	goto yy24;
+	case 0xAE:	goto yy21;
+	case 0xAF:	goto yy22;
+	case 0xBC:	goto yy23;
+	case 0xBD:	goto yy24;
+	case 0xBF:	goto yy25;
 	default:	goto yy3;
 	}
 yy14:
@@ -212,6 +213,12 @@ yy19:
 yy20:
 	yych = *++YYCURSOR;
 	switch (yych) {
+	case 0x9B:	goto yy4;
+	default:	goto yy15;
+	}
+yy21:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 0xB2:
 	case 0xB3:
 	case 0xB4:
@@ -228,26 +235,26 @@ yy20:
 	case 0xBF:	goto yy4;
 	default:	goto yy15;
 	}
-yy21:
+yy22:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x80:
 	case 0x81:	goto yy4;
 	default:	goto yy15;
 	}
-yy22:
+yy23:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0xBE:	goto yy4;
 	default:	goto yy15;
 	}
-yy23:
+yy24:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x80:	goto yy4;
 	default:	goto yy15;
 	}
-yy24:
+yy25:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0xA3:	goto yy4;
@@ -257,10 +264,10 @@ yy24:
 #line 14 "encodings/unicode_group_Sk.8--encoding-policy(fail).re"
 
 }
-static const unsigned int chars_Sk [] = {0x5e,0x5e,  0x60,0x60,  0xa8,0xa8,  0xaf,0xaf,  0xb4,0xb4,  0xb8,0xb8,  0x2c2,0x2c5,  0x2d2,0x2df,  0x2e5,0x2eb,  0x2ed,0x2ed,  0x2ef,0x2ff,  0x375,0x375,  0x384,0x385,  0x1fbd,0x1fbd,  0x1fbf,0x1fc1,  0x1fcd,0x1fcf,  0x1fdd,0x1fdf,  0x1fed,0x1fef,  0x1ffd,0x1ffe,  0x309b,0x309c,  0xa700,0xa716,  0xa720,0xa721,  0xa789,0xa78a,  0xfbb2,0xfbc1,  0xff3e,0xff3e,  0xff40,0xff40,  0xffe3,0xffe3,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+static const unsigned int chars_Sk [] = {0x5e,0x5e,  0x60,0x60,  0xa8,0xa8,  0xaf,0xaf,  0xb4,0xb4,  0xb8,0xb8,  0x2c2,0x2c5,  0x2d2,0x2df,  0x2e5,0x2eb,  0x2ed,0x2ed,  0x2ef,0x2ff,  0x375,0x375,  0x384,0x385,  0x1fbd,0x1fbd,  0x1fbf,0x1fc1,  0x1fcd,0x1fcf,  0x1fdd,0x1fdf,  0x1fed,0x1fef,  0x1ffd,0x1ffe,  0x309b,0x309c,  0xa700,0xa716,  0xa720,0xa721,  0xa789,0xa78a,  0xab5b,0xab5b,  0xfbb2,0xfbc1,  0xff3e,0xff3e,  0xff40,0xff40,  0xffe3,0xffe3,  0x0,0x0};
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned char * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 			s += re2c::utf8::rune_to_bytes (s, j);
@@ -270,9 +277,12 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	YYCTYPE * buffer_Sk = new YYCTYPE [464];
+	unsigned int * buffer_Sk = new unsigned int [468];
+	YYCTYPE * s = (YYCTYPE *) buffer_Sk;
 	unsigned int buffer_len = encode_utf8 (chars_Sk, sizeof (chars_Sk) / sizeof (unsigned int), buffer_Sk);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Sk), reinterpret_cast<const YYCTYPE *> (buffer_Sk + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Sk[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Sk' failed\n");
 	delete [] buffer_Sk;
 	return 0;

@@ -42,14 +42,13 @@ yy7:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0x9A:	goto yy10;
-	case 0xA0:	goto yy12;
 	default:	goto yy3;
 	}
 yy8:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x80:	goto yy13;
-	case 0x81:	goto yy14;
+	case 0x80:	goto yy12;
+	case 0x81:	goto yy13;
 	default:	goto yy3;
 	}
 yy9:
@@ -70,12 +69,6 @@ yy11:
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x8E:	goto yy4;
-	default:	goto yy11;
-	}
-yy13:
-	yych = *++YYCURSOR;
-	switch (yych) {
 	case 0x80:
 	case 0x81:
 	case 0x82:
@@ -90,7 +83,7 @@ yy13:
 	case 0xAF:	goto yy4;
 	default:	goto yy11;
 	}
-yy14:
+yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x9F:	goto yy4;
@@ -100,10 +93,10 @@ yy14:
 #line 14 "encodings/unicode_group_Zs.8--encoding-policy(substitute).re"
 
 }
-static const unsigned int chars_Zs [] = {0x20,0x20,  0xa0,0xa0,  0x1680,0x1680,  0x180e,0x180e,  0x2000,0x200a,  0x202f,0x202f,  0x205f,0x205f,  0x3000,0x3000,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+static const unsigned int chars_Zs [] = {0x20,0x20,  0xa0,0xa0,  0x1680,0x1680,  0x2000,0x200a,  0x202f,0x202f,  0x205f,0x205f,  0x3000,0x3000,  0x0,0x0};
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned char * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 			s += re2c::utf8::rune_to_bytes (s, j);
@@ -113,9 +106,12 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	YYCTYPE * buffer_Zs = new YYCTYPE [76];
+	unsigned int * buffer_Zs = new unsigned int [72];
+	YYCTYPE * s = (YYCTYPE *) buffer_Zs;
 	unsigned int buffer_len = encode_utf8 (chars_Zs, sizeof (chars_Zs) / sizeof (unsigned int), buffer_Zs);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Zs), reinterpret_cast<const YYCTYPE *> (buffer_Zs + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Zs[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Zs' failed\n");
 	delete [] buffer_Zs;
 	return 0;

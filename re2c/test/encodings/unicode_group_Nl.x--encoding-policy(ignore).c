@@ -72,16 +72,16 @@ yy6:
 yy7:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDBFF) goto yy3;
-	if (yych <= 0xDC62) goto yy4;
+	if (yych <= 0xDC6E) goto yy4;
 	goto yy3;
 }
 #line 14 "encodings/unicode_group_Nl.x--encoding-policy(ignore).re"
 
 }
-static const unsigned int chars_Nl [] = {0x16ee,0x16f0,  0x2160,0x2182,  0x2185,0x2188,  0x3007,0x3007,  0x3021,0x3029,  0x3038,0x303a,  0xa6e6,0xa6ef,  0x10140,0x10174,  0x10341,0x10341,  0x1034a,0x1034a,  0x103d1,0x103d5,  0x12400,0x12462,  0x0,0x0};
-static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned short * s)
+static const unsigned int chars_Nl [] = {0x16ee,0x16f0,  0x2160,0x2182,  0x2185,0x2188,  0x3007,0x3007,  0x3021,0x3029,  0x3038,0x303a,  0xa6e6,0xa6ef,  0x10140,0x10174,  0x10341,0x10341,  0x1034a,0x1034a,  0x103d1,0x103d5,  0x12400,0x1246e,  0x0,0x0};
+static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned short * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 		{
@@ -98,9 +98,12 @@ static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	YYCTYPE * buffer_Nl = new YYCTYPE [450];
+	unsigned int * buffer_Nl = new unsigned int [474];
+	YYCTYPE * s = (YYCTYPE *) buffer_Nl;
 	unsigned int buffer_len = encode_utf16 (chars_Nl, sizeof (chars_Nl) / sizeof (unsigned int), buffer_Nl);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Nl), reinterpret_cast<const YYCTYPE *> (buffer_Nl + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Nl[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Nl' failed\n");
 	delete [] buffer_Nl;
 	return 0;

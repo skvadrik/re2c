@@ -13,45 +13,39 @@ Zs:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x180E) {
-		if (yych <= 0x00A0) {
+	if (yych <= 0x1FFF) {
+		if (yych <= 0x009F) {
 			if (yych == ' ') goto yy4;
-			if (yych >= 0x00A0) goto yy4;
 		} else {
+			if (yych <= 0x00A0) goto yy4;
 			if (yych == 0x1680) goto yy4;
-			if (yych >= 0x180E) goto yy4;
 		}
 	} else {
-		if (yych <= 0x202F) {
-			if (yych <= 0x1FFF) goto yy2;
+		if (yych <= 0x205E) {
 			if (yych <= 0x200A) goto yy4;
-			if (yych >= 0x202F) goto yy4;
+			if (yych == 0x202F) goto yy4;
 		} else {
-			if (yych <= 0x205F) {
-				if (yych >= 0x205F) goto yy4;
-			} else {
-				if (yych == 0x3000) goto yy4;
-			}
+			if (yych <= 0x205F) goto yy4;
+			if (yych == 0x3000) goto yy4;
 		}
 	}
-yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Zs.x--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 42 "encodings/unicode_group_Zs.x--encoding-policy(substitute).c"
+#line 36 "encodings/unicode_group_Zs.x--encoding-policy(substitute).c"
 yy4:
 	++YYCURSOR;
 #line 12 "encodings/unicode_group_Zs.x--encoding-policy(substitute).re"
 	{ goto Zs; }
-#line 47 "encodings/unicode_group_Zs.x--encoding-policy(substitute).c"
+#line 41 "encodings/unicode_group_Zs.x--encoding-policy(substitute).c"
 }
 #line 14 "encodings/unicode_group_Zs.x--encoding-policy(substitute).re"
 
 }
-static const unsigned int chars_Zs [] = {0x20,0x20,  0xa0,0xa0,  0x1680,0x1680,  0x180e,0x180e,  0x2000,0x200a,  0x202f,0x202f,  0x205f,0x205f,  0x3000,0x3000,  0x0,0x0};
-static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned short * s)
+static const unsigned int chars_Zs [] = {0x20,0x20,  0xa0,0xa0,  0x1680,0x1680,  0x2000,0x200a,  0x202f,0x202f,  0x205f,0x205f,  0x3000,0x3000,  0x0,0x0};
+static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned short * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 		{
@@ -68,9 +62,12 @@ static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	YYCTYPE * buffer_Zs = new YYCTYPE [38];
+	unsigned int * buffer_Zs = new unsigned int [36];
+	YYCTYPE * s = (YYCTYPE *) buffer_Zs;
 	unsigned int buffer_len = encode_utf16 (chars_Zs, sizeof (chars_Zs) / sizeof (unsigned int), buffer_Zs);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Zs), reinterpret_cast<const YYCTYPE *> (buffer_Zs + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Zs[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Zs' failed\n");
 	delete [] buffer_Zs;
 	return 0;

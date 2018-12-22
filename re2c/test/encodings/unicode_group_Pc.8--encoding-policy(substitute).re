@@ -14,9 +14,9 @@ Pc:
 	*/
 }
 static const unsigned int chars_Pc [] = {0x5f,0x5f,  0x203f,0x2040,  0x2054,0x2054,  0xfe33,0xfe34,  0xfe4d,0xfe4f,  0xff3f,0xff3f,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned char * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 			s += re2c::utf8::rune_to_bytes (s, j);
@@ -26,9 +26,12 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	YYCTYPE * buffer_Pc = new YYCTYPE [44];
+	unsigned int * buffer_Pc = new unsigned int [44];
+	YYCTYPE * s = (YYCTYPE *) buffer_Pc;
 	unsigned int buffer_len = encode_utf8 (chars_Pc, sizeof (chars_Pc) / sizeof (unsigned int), buffer_Pc);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Pc), reinterpret_cast<const YYCTYPE *> (buffer_Pc + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Pc[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Pc' failed\n");
 	delete [] buffer_Pc;
 	return 0;

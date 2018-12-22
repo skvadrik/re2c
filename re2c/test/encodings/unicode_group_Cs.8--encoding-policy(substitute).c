@@ -48,9 +48,9 @@ yy7:
 
 }
 static const unsigned int chars_Cs [] = {0xd800,0xdfff,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned char * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 			s += re2c::utf8::rune_to_bytes (s, j);
@@ -60,9 +60,12 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	YYCTYPE * buffer_Cs = new YYCTYPE [8196];
+	unsigned int * buffer_Cs = new unsigned int [8196];
+	YYCTYPE * s = (YYCTYPE *) buffer_Cs;
 	unsigned int buffer_len = encode_utf8 (chars_Cs, sizeof (chars_Cs) / sizeof (unsigned int), buffer_Cs);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Cs), reinterpret_cast<const YYCTYPE *> (buffer_Cs + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Cs[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Cs' failed\n");
 	delete [] buffer_Cs;
 	return 0;

@@ -43,7 +43,10 @@ yy5:
 	case 0x80:
 	case 0x81:
 	case 0x82:
-	case 0x83:	goto yy13;
+	case 0x83:
+	case 0x84:
+	case 0x85:
+	case 0x9C:	goto yy13;
 	default:	goto yy3;
 	}
 yy6:
@@ -61,7 +64,7 @@ yy7:
 yy8:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x9E:	goto yy15;
+	case 0xA0:	goto yy15;
 	default:	goto yy3;
 	}
 yy9:
@@ -82,25 +85,25 @@ yy11:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0x91:	goto yy21;
-	case 0x9D:	goto yy22;
+	case 0x9B:	goto yy22;
+	case 0x9D:	goto yy23;
 	default:	goto yy3;
 	}
 yy12:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0xA0:	goto yy23;
+	case 0xA0:	goto yy24;
 	default:	goto yy3;
 	}
 yy13:
 	++YYCURSOR;
 #line 12 "encodings/unicode_group_Cf.8--encoding-policy(ignore).re"
 	{ goto Cf; }
-#line 99 "encodings/unicode_group_Cf.8--encoding-policy(ignore).c"
+#line 103 "encodings/unicode_group_Cf.8--encoding-policy(ignore).c"
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xB4:
-	case 0xB5:	goto yy13;
+	case 0x8E:	goto yy13;
 	default:	goto yy16;
 	}
 yy16:
@@ -129,6 +132,10 @@ yy18:
 	case 0xA2:
 	case 0xA3:
 	case 0xA4:
+	case 0xA6:
+	case 0xA7:
+	case 0xA8:
+	case 0xA9:
 	case 0xAA:
 	case 0xAB:
 	case 0xAC:
@@ -154,29 +161,44 @@ yy20:
 yy21:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x82:	goto yy24;
+	case 0x82:	goto yy25;
 	default:	goto yy16;
 	}
 yy22:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x85:	goto yy25;
+	case 0xB2:	goto yy26;
 	default:	goto yy16;
 	}
 yy23:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x80:	goto yy26;
-	case 0x81:	goto yy27;
+	case 0x85:	goto yy27;
 	default:	goto yy16;
 	}
 yy24:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xBD:	goto yy13;
+	case 0x80:	goto yy28;
+	case 0x81:	goto yy29;
 	default:	goto yy16;
 	}
 yy25:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 0xBD:	goto yy13;
+	default:	goto yy16;
+	}
+yy26:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 0xA0:
+	case 0xA1:
+	case 0xA2:
+	case 0xA3:	goto yy13;
+	default:	goto yy16;
+	}
+yy27:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0xB3:
@@ -189,7 +211,7 @@ yy25:
 	case 0xBA:	goto yy13;
 	default:	goto yy16;
 	}
-yy26:
+yy28:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x81:
@@ -227,7 +249,7 @@ yy26:
 	case 0xBF:	goto yy13;
 	default:	goto yy16;
 	}
-yy27:
+yy29:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x80:
@@ -300,10 +322,10 @@ yy27:
 #line 14 "encodings/unicode_group_Cf.8--encoding-policy(ignore).re"
 
 }
-static const unsigned int chars_Cf [] = {0xad,0xad,  0x600,0x603,  0x6dd,0x6dd,  0x70f,0x70f,  0x17b4,0x17b5,  0x200b,0x200f,  0x202a,0x202e,  0x2060,0x2064,  0x206a,0x206f,  0xfeff,0xfeff,  0xfff9,0xfffb,  0x110bd,0x110bd,  0x1d173,0x1d17a,  0xe0001,0xe0001,  0xe0020,0xe007f,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+static const unsigned int chars_Cf [] = {0xad,0xad,  0x600,0x605,  0x61c,0x61c,  0x6dd,0x6dd,  0x70f,0x70f,  0x180e,0x180e,  0x200b,0x200f,  0x202a,0x202e,  0x2060,0x2064,  0x2066,0x206f,  0xfeff,0xfeff,  0xfff9,0xfffb,  0x110bd,0x110bd,  0x1bca0,0x1bca3,  0x1d173,0x1d17a,  0xe0001,0xe0001,  0xe0020,0xe007f,  0x0,0x0};
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned char * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 			s += re2c::utf8::rune_to_bytes (s, j);
@@ -313,9 +335,12 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	YYCTYPE * buffer_Cf = new YYCTYPE [564];
+	unsigned int * buffer_Cf = new unsigned int [604];
+	YYCTYPE * s = (YYCTYPE *) buffer_Cf;
 	unsigned int buffer_len = encode_utf8 (chars_Cf, sizeof (chars_Cf) / sizeof (unsigned int), buffer_Cf);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Cf), reinterpret_cast<const YYCTYPE *> (buffer_Cf + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Cf[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Cf' failed\n");
 	delete [] buffer_Cf;
 	return 0;

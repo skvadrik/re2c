@@ -13,25 +13,19 @@ Z:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x00001FFF) {
+	if (yych <= 0x0000200A) {
 		if (yych <= 0x000000A0) {
 			if (yych == ' ') goto yy4;
 			if (yych >= 0x000000A0) goto yy4;
 		} else {
-			if (yych <= 0x00001680) {
-				if (yych >= 0x00001680) goto yy4;
-			} else {
-				if (yych == 0x0000180E) goto yy4;
-			}
+			if (yych == 0x00001680) goto yy4;
+			if (yych >= 0x00002000) goto yy4;
 		}
 	} else {
 		if (yych <= 0x0000202F) {
-			if (yych <= 0x00002027) {
-				if (yych <= 0x0000200A) goto yy4;
-			} else {
-				if (yych <= 0x00002029) goto yy4;
-				if (yych >= 0x0000202F) goto yy4;
-			}
+			if (yych <= 0x00002027) goto yy2;
+			if (yych <= 0x00002029) goto yy4;
+			if (yych >= 0x0000202F) goto yy4;
 		} else {
 			if (yych <= 0x0000205F) {
 				if (yych >= 0x0000205F) goto yy4;
@@ -40,20 +34,21 @@ Z:
 			}
 		}
 	}
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Z.u--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 47 "encodings/unicode_group_Z.u--encoding-policy(ignore).c"
+#line 42 "encodings/unicode_group_Z.u--encoding-policy(ignore).c"
 yy4:
 	++YYCURSOR;
 #line 12 "encodings/unicode_group_Z.u--encoding-policy(ignore).re"
 	{ goto Z; }
-#line 52 "encodings/unicode_group_Z.u--encoding-policy(ignore).c"
+#line 47 "encodings/unicode_group_Z.u--encoding-policy(ignore).c"
 }
 #line 14 "encodings/unicode_group_Z.u--encoding-policy(ignore).re"
 
 }
-static const unsigned int chars_Z [] = {0x20,0x20,  0xa0,0xa0,  0x1680,0x1680,  0x180e,0x180e,  0x2000,0x200a,  0x2028,0x2029,  0x202f,0x202f,  0x205f,0x205f,  0x3000,0x3000,  0x0,0x0};
+static const unsigned int chars_Z [] = {0x20,0x20,  0xa0,0xa0,  0x1680,0x1680,  0x2000,0x200a,  0x2028,0x2029,  0x202f,0x202f,  0x205f,0x205f,  0x3000,0x3000,  0x0,0x0};
 static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
 	unsigned int * const s_start = s;
@@ -65,9 +60,12 @@ static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	YYCTYPE * buffer_Z = new YYCTYPE [21];
+	unsigned int * buffer_Z = new unsigned int [20];
+	YYCTYPE * s = (YYCTYPE *) buffer_Z;
 	unsigned int buffer_len = encode_utf32 (chars_Z, sizeof (chars_Z) / sizeof (unsigned int), buffer_Z);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Z), reinterpret_cast<const YYCTYPE *> (buffer_Z + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Z[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Z' failed\n");
 	delete [] buffer_Z;
 	return 0;

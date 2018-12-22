@@ -25,9 +25,12 @@ static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	YYCTYPE * buffer_Lt = new YYCTYPE [32];
+	unsigned int * buffer_Lt = new unsigned int [32];
+	YYCTYPE * s = (YYCTYPE *) buffer_Lt;
 	unsigned int buffer_len = encode_utf32 (chars_Lt, sizeof (chars_Lt) / sizeof (unsigned int), buffer_Lt);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Lt), reinterpret_cast<const YYCTYPE *> (buffer_Lt + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Lt[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Lt' failed\n");
 	delete [] buffer_Lt;
 	return 0;

@@ -90,9 +90,9 @@ outer cs = head $ CS.toAscList $ CS.complement cs
 
 encode_function_utf8 :: (String, String)
 encode_function_utf8 = ("encode_utf8", unlines
-    [ "static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)"
+    [ "static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)"
     , "{"
-    , "\tunsigned char * const s_start = s;"
+    , "\tunsigned int * const s_start = s;"
     , "\tfor (unsigned int i = 0; i < ranges_count - 2; i += 2)"
     , "\t\tfor (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)"
     , "\t\t\ts += re2c::utf8::rune_to_bytes (s, j);"
@@ -104,9 +104,9 @@ encode_function_utf8 = ("encode_utf8", unlines
 
 encode_function_utf16 :: (String, String)
 encode_function_utf16 = ("encode_utf16", unlines
-    [ "static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned short * s)"
+    [ "static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)"
     , "{"
-    , "\tunsigned short * const s_start = s;"
+    , "\tunsigned int * const s_start = s;"
     , "\tfor (unsigned int i = 0; i < ranges_count; i += 2)"
     , "\t\tfor (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)"
     , "\t\t{"
@@ -134,6 +134,19 @@ encode_function_utf32 = ("encode_utf32", unlines
     , "\treturn s - s_start;"
     , "}"
     ])
+
+
+gen_categories :: [Category] -> IO ()
+gen_categories cats =
+    let f :: Category -> String
+        f (Category _ name charset _) =
+            let name' = prettify name
+                (charset', _) = show_charset charset
+            in name' ++ " = " ++ charset' ++ ";"
+
+        content = unlines $ ["/*!re2c"] ++ (map f cats) ++ ["*/"]
+
+    in  writeFile "unicode_categories.re.inc" content
 
 
 gen_test_category :: Category -> IO ()
@@ -182,14 +195,15 @@ gen_test_category (Category _ name cs _) =
             , ef_body
             , "int main ()"
             , "{"
-            , "\tYYCTYPE * " ++ buffer ++ " = new YYCTYPE [" ++ sz_charset ++ "];"
-            , let arg1 = charset_c_name
-                  arg2 = "sizeof (" ++ charset_c_name ++ ") / sizeof (unsigned int)"
-                  arg3 = buffer
-              in "\tunsigned int buffer_len = " ++ ef_name ++ " (" ++ arg1 ++ ", " ++ arg2 ++ ", " ++ arg3 ++ ");"
-            , let arg1 = "reinterpret_cast<const YYCTYPE *> (" ++ buffer ++ ")"
-                  arg2 = "reinterpret_cast<const YYCTYPE *> (" ++ buffer ++ " + buffer_len)"
-              in  "\tif (!scan (" ++ arg1 ++ ", " ++ arg2 ++ "))"
+            , "\tunsigned int * " ++ buffer ++ " = new unsigned int [" ++ sz_charset ++ "];"
+            , "\tYYCTYPE * s = (YYCTYPE *) " ++ buffer ++ ";"
+            , "\tunsigned int buffer_len = " ++ ef_name ++ " ("
+                ++ charset_c_name ++ ", "
+                ++ "sizeof (" ++ charset_c_name ++ ") / sizeof (unsigned int)" ++ ", "
+                ++ buffer ++ ");"
+            , "\t/* convert 32-bit code units to YYCTYPE; reuse the same buffer */"
+            , "\tfor (unsigned int i = 0; i < buffer_len; ++i) s[i] = " ++ buffer ++ "[i];"
+            , "\tif (!scan (s, s + buffer_len))"
             , "\t\tprintf(\"test '" ++ catname ++ "' failed\\n\");"
             , "\tdelete [] " ++ buffer ++ ";"
             , "\treturn 0;"
@@ -279,16 +293,18 @@ gen_test_blocks =
                 (\ (s, sz) ->
                     let buffer = "buffer_" ++ s
                         buffer_len = buffer ++ "_len"
+                        str = "s_" ++ s
                         charset_c_name = "chars_" ++ s
                     in  unlines
-                        [ "\tYYCTYPE * " ++ buffer ++ " = new YYCTYPE [" ++ sz ++ "];"
-                        , let arg1 = charset_c_name
-                              arg2 = "sizeof (" ++ charset_c_name ++ ") / sizeof (unsigned int)"
-                              arg3 = buffer
-                          in "\tunsigned int " ++ buffer_len ++ " = " ++ ef_name ++ " (" ++ arg1 ++ ", " ++ arg2 ++ ", " ++ arg3 ++ ");"
-                        , let arg1 = "reinterpret_cast<const YYCTYPE *> (" ++ buffer ++ ")"
-                              arg2 = "reinterpret_cast<const YYCTYPE *> (" ++ buffer ++ " + " ++ buffer_len ++ ")"
-                          in  "\tif (scan (" ++ arg1 ++ ", " ++ arg2 ++ ", " ++ s ++ ") != " ++ s ++ ")"
+                        [ "\tunsigned int * " ++ buffer ++ " = new unsigned int [" ++ sz ++ "];"
+                        , "\tYYCTYPE * " ++ str ++ " = (YYCTYPE *) " ++ buffer ++ ";"
+                        , "\tunsigned int " ++ buffer_len ++ " = " ++ ef_name ++ " ("
+                            ++ charset_c_name ++ ", "
+                            ++ "sizeof (" ++ charset_c_name ++ ") / sizeof (unsigned int)" ++ ", "
+                            ++ buffer ++ ");"
+                        , "\t/* convert 32-bit code units to YYCTYPE; reuse the same buffer */"
+                        , "\tfor (unsigned int i = 0; i < " ++ buffer_len ++ "; ++i) " ++ str ++ "[i] = " ++ buffer ++ "[i];"
+                        , "\tif (scan (" ++ str ++ ", " ++ str ++ " + " ++ buffer_len ++ ", " ++ s ++ ") != " ++ s ++ ")"
                         , "\t\tprintf (\"test '" ++ s ++ "' failed\\n\");"
                         , "\tdelete [] " ++ buffer ++ ";"
                         ]
@@ -315,5 +331,6 @@ gen_test_blocks =
 
 main :: IO ()
 main = do
+    gen_categories categories
     mapM_ gen_test_category categories
     gen_test_blocks

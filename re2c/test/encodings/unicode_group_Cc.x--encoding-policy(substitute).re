@@ -14,9 +14,9 @@ Cc:
 	*/
 }
 static const unsigned int chars_Cc [] = {0x0,0x1f,  0x7f,0x9f,  0x20,0x20};
-static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned short * s)
+static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned short * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 		{
@@ -33,9 +33,12 @@ static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	YYCTYPE * buffer_Cc = new YYCTYPE [132];
+	unsigned int * buffer_Cc = new unsigned int [132];
+	YYCTYPE * s = (YYCTYPE *) buffer_Cc;
 	unsigned int buffer_len = encode_utf16 (chars_Cc, sizeof (chars_Cc) / sizeof (unsigned int), buffer_Cc);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Cc), reinterpret_cast<const YYCTYPE *> (buffer_Cc + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Cc[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Cc' failed\n");
 	delete [] buffer_Cc;
 	return 0;

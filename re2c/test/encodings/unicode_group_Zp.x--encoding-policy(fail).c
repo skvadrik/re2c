@@ -28,9 +28,9 @@ yy4:
 
 }
 static const unsigned int chars_Zp [] = {0x2029,0x2029,  0x0,0x0};
-static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned short * s)
+static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
-	unsigned short * const s_start = s;
+	unsigned int * const s_start = s;
 	for (unsigned int i = 0; i < ranges_count; i += 2)
 		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
 		{
@@ -47,9 +47,12 @@ static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	YYCTYPE * buffer_Zp = new YYCTYPE [4];
+	unsigned int * buffer_Zp = new unsigned int [4];
+	YYCTYPE * s = (YYCTYPE *) buffer_Zp;
 	unsigned int buffer_len = encode_utf16 (chars_Zp, sizeof (chars_Zp) / sizeof (unsigned int), buffer_Zp);
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Zp), reinterpret_cast<const YYCTYPE *> (buffer_Zp + buffer_len)))
+	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
+	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Zp[i];
+	if (!scan (s, s + buffer_len))
 		printf("test 'Zp' failed\n");
 	delete [] buffer_Zp;
 	return 0;
