@@ -108,10 +108,11 @@ struct spec_t
     std::string name;
     std::vector<ASTRule> rules;
     std::vector<const Code*> defs;
+    std::vector<const Code*> eofs;
     std::vector<const Code*> setup;
 
     explicit spec_t(const std::string &n):
-        name(n), rules(), defs(), setup() {}
+        name(n), rules(), defs(), eofs(), setup() {}
 };
 
 typedef std::vector<spec_t> specs_t;
@@ -132,7 +133,7 @@ const AST *ast_ref(const AST *a, const std::string &n);
 bool ast_need_wrap(const AST *a);
 
 void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input);
-void validate_ast(const specs_t &specs, bool cflag);
+void validate_ast(const specs_t &specs, const opt_t *opts);
 void normalize_ast(specs_t &specs);
 
 } // namespace re2c

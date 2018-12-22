@@ -37,25 +37,34 @@ void DFA::split(State *s)
     s->go.span[0].tags = TCID0;
 }
 
-static uint32_t merge(Span *x, State *fg, State *bg)
+static uint32_t merge(Span *x, State *fg, State *bg, const opt_t *opts)
 {
     Span *f = fg->go.span;
     Span *b = bg->go.span;
     Span *const fe = f + fg->go.nSpans;
     Span *const be = b + bg->go.nSpans;
     Span *const x0 = x;
+    const uint32_t eofub = opts->eof + 1;
 
     for (;!(f == fe && b == be);) {
-        if (f->to == b->to && f->tags == b->tags) {
+        if (f->to == b->to
+                && f->tags == b->tags
+                && f->ub != eofub
+                && b->ub != eofub) {
             x->to = bg;
             x->tags = TCID0;
-        } else {
+        }
+        else {
             x->to = f->to;
             x->tags = f->tags;
+            x->ub = f->ub;
         }
         if (x == x0
-            || x[-1].to != x->to
-            || x[-1].tags != x->tags) {
+                || x[-1].to != x->to
+                || x[-1].tags != x->tags
+                || x[-1].ub == eofub
+                || f->ub == eofub
+                || b->ub == eofub) {
             ++x;
         }
         x[-1].ub = std::min(f->ub, b->ub);
@@ -73,7 +82,7 @@ static uint32_t merge(Span *x, State *fg, State *bg)
     return static_cast<uint32_t>(x - x0);
 }
 
-void DFA::findBaseState()
+void DFA::findBaseState(const opt_t *opts)
 {
     Span *span = allocate<Span> (ubChar - lbChar);
 
@@ -88,7 +97,7 @@ void DFA::findBaseState()
                 if (to->isBase)
                 {
                     to = to->go.span[0].to;
-                    uint32_t nSpans = merge(span, s, to);
+                    uint32_t nSpans = merge(span, s, to, opts);
 
                     if (nSpans < s->go.nSpans)
                     {
@@ -142,18 +151,20 @@ void DFA::findBaseState()
 void DFA::prepare(const opt_t *opts)
 {
     // create rule states
-    std::vector<State*> rule2state(rules.size());
     for (State *s = head; s; s = s->next) {
         if (s->rule != Rule::NONE) {
-            if (!rule2state[s->rule]) {
+            if (!finstates[s->rule]) {
                 State *n = new State;
+                if (s->rule == def_rule) {
+                    defstate = n;
+                }
                 n->action.set_rule(s->rule);
-                rule2state[s->rule] = n;
+                finstates[s->rule] = n;
                 addState(n, s);
             }
             for (uint32_t i = 0; i < s->go.nSpans; ++i) {
                 if (!s->go.span[i].to) {
-                    s->go.span[i].to = rule2state[s->rule];
+                    s->go.span[i].to = finstates[s->rule];
                     s->go.span[i].tags = s->rule_tags;
                 }
             }
@@ -171,9 +182,10 @@ void DFA::prepare(const opt_t *opts)
                 if (!default_state)
                 {
                     default_state = new State;
+                    defstate = default_state;
                     addState(default_state, s);
                 }
-                s->go.span[i].to = default_state;
+                s->go.span[i].to = defstate;
             }
         }
     }
@@ -182,18 +194,18 @@ void DFA::prepare(const opt_t *opts)
     if (default_state) {
         for (State *s = head; s; s = s->next) {
             if (s->fallback) {
-                const std::pair<const State*, tcid_t> acc(rule2state[s->rule], s->fall_tags);
+                const std::pair<const State*, tcid_t> acc(finstates[s->rule], s->fall_tags);
                 s->action.set_save(accepts.find_or_add(acc));
             }
         }
-        default_state->action.set_accept(&accepts);
+        defstate->action.set_accept(&accepts);
     }
 
     // tag hoisting should be done after binding default arcs:
     // (which may introduce new tags)
     // see note [tag hoisting, skip hoisting and tunneling]
     if (!opts->eager_skip) {
-        hoist_tags();
+        hoist_tags(opts);
     }
 
     // split ``base'' states into two parts
@@ -221,7 +233,7 @@ void DFA::prepare(const opt_t *opts)
         }
     }
     // find ``base'' state, if possible
-    findBaseState();
+    findBaseState(opts);
 
     // see note [tag hoisting, skip hoisting and tunneling]
     if (opts->eager_skip) {
@@ -274,7 +286,7 @@ void DFA::calc_stats(uint32_t ln, bool explicit_tags)
     }
 }
 
-void DFA::hoist_tags()
+void DFA::hoist_tags(const opt_t *opts)
 {
     for (State * s = head; s; s = s->next) {
         Span *span = s->go.span;
@@ -288,6 +300,12 @@ void DFA::hoist_tags()
                 break;
             }
         }
+
+        if (opts->eof != NOEOF
+                && ts != (s->rule == Rule::NONE ? s->fall_tags : s->rule_tags)) {
+            ts = TCID0;
+        }
+
         if (ts != TCID0) {
             s->go.tags = ts;
             for (uint32_t i = 0; i < nspan; ++i) {
@@ -309,11 +327,16 @@ void DFA::hoist_tags_and_skip(const opt_t *opts)
         bool hoist_tags = true, hoist_skip = true;
 
         // do all spans agree on tags?
+        const tcid_t ts = span[0].tags;
         for (uint32_t i = 1; i < nspan; ++i) {
-            if (span[i].tags != span[0].tags) {
+            if (span[i].tags != ts) {
                 hoist_tags = false;
                 break;
             }
+        }
+        if (opts->eof != NOEOF
+                && ts != (s->rule == Rule::NONE ? s->fall_tags : s->rule_tags)) {
+            hoist_tags = false;
         }
 
         // do all spans agree on skip?

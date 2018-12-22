@@ -48,9 +48,8 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     const opt_t *opts = output.block().opts;
     Warn &warn = output.warn;
     const std::vector<ASTRule> &rules = spec.rules;
-    const size_t defrule = spec.defs.empty()
-        ? Rule::NONE
-        : rules.size() - 1;
+    const size_t defrule = spec.defs.empty() ? Rule::NONE : rules.size() - 1;
+    const Code *eof = spec.eofs.empty() ? NULL : spec.eofs.front();
     const uint32_t line = output.block().line;
     const std::string
         &cond = spec.name,
@@ -90,13 +89,13 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     minimization(dfa, opts->dfa_minimization);
     if (opts->dump_dfa_min) dump_dfa(dfa);
 
-    // find YYFILL states and calculate argument to YYFILL
+    // find strongly connected components and calculate argument to YYFILL
     std::vector<size_t> fill;
     fillpoints(dfa, fill);
 
     // ADFA stands for 'DFA with actions'
     DFA *adfa = new DFA(dfa, fill, defrule, skeleton.sizeof_key,
-        name, cond, line, setup);
+        name, cond, line, setup, eof, opts);
 
     // see note [reordering DFA states]
     adfa->reorder();
@@ -166,7 +165,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             rspecs = specs;
             ropts = output.block().opts;
         } else {
-            validate_ast(specs, globopts->cFlag);
+            validate_ast(specs, output.block().opts);
             normalize_ast(specs);
 
             // compile AST to DFA

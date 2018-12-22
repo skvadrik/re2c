@@ -19,21 +19,21 @@ namespace re2c
 {
 
 static void output_if (Output & o, uint32_t ind, const std::string & compare, uint32_t value);
-static std::string output_hgo (Output & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo);
+static std::string output_hgo (Output & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo, const State *from);
 
 void output_if (Output & o, uint32_t ind, const std::string & compare, uint32_t value)
 {
     o.wind(ind).ws("if (").wstring(o.block().opts->yych).ws(" ").wstring(compare).ws(" ").wc_hex (value).ws(") ");
 }
 
-std::string output_hgo (Output & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo)
+std::string output_hgo (Output & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo, const State *from)
 {
     const opt_t *opts = o.block().opts;
     std::string yych = opts->yych;
     if (hgo != NULL)
     {
         o.wind(ind).ws("if (").wstring(yych).ws(" & ~0xFF) {\n");
-        hgo->emit (o, ind + 1, dfa);
+        hgo->emit (o, ind + 1, dfa, from);
         o.wind(ind).ws("} else ");
         yych = opts->yych;
     }
@@ -67,68 +67,68 @@ void Case::emit (Output & o, uint32_t ind) const
     }
 }
 
-void Cases::emit(Output &o, uint32_t ind, const DFA &dfa) const
+void Cases::emit(Output &o, uint32_t ind, const DFA &dfa, const State *from) const
 {
     o.wind(ind).ws("switch (").wstring(o.block().opts->yych).ws(") {\n");
 
     for (uint32_t i = 1; i < cases_size; ++i) {
         const Case &c = cases[i];
         c.emit(o, ind);
-        gen_goto_case(o, ind, c.to, dfa, c.tags, c.skip);
+        gen_goto_case(o, ind, from, c.to, dfa, c.tags, c.skip, c.eof);
     }
 
     // default case must be the last one
     const Case &c = cases[0];
     o.wind(ind).ws("default:");
-    gen_goto_case(o, ind, c.to, dfa, c.tags, c.skip);
+    gen_goto_case(o, ind, from, c.to, dfa, c.tags, c.skip, c.eof);
 
     o.wind(ind).ws("}\n");
 }
 
-void Binary::emit(Output &o, uint32_t ind, const DFA &dfa) const
+void Binary::emit(Output &o, uint32_t ind, const DFA &dfa, const State *from) const
 {
     output_if(o, ind, cond->compare, cond->value);
     o.ws("{\n");
-    thn->emit(o, ind + 1, dfa);
+    thn->emit(o, ind + 1, dfa, from);
     o.wind(ind).ws("} else {\n");
-    els->emit(o, ind + 1, dfa);
+    els->emit(o, ind + 1, dfa, from);
     o.wind(ind).ws("}\n");
 }
 
-void Linear::emit(Output &o, uint32_t ind, const DFA &dfa) const
+void Linear::emit(Output &o, uint32_t ind, const DFA &dfa, const State *from) const
 {
     for (uint32_t i = 0; i < nbranches; ++i) {
         const Branch &b = branches[i];
         const Cond *cond = b.cond;
         if (cond) {
             output_if(o, ind, cond->compare, cond->value);
-            gen_goto_if(o, ind, b.to, dfa, b.tags, b.skip);
+            gen_goto_if(o, ind, from, b.to, dfa, b.tags, b.skip, b.eof);
         } else {
-            gen_goto_plain(o, ind, b.to, dfa, b.tags, b.skip);
+            gen_goto_plain(o, ind, from, b.to, dfa, b.tags, b.skip, b.eof);
         }
     }
 }
 
-void If::emit(Output &o, uint32_t ind, const DFA &dfa) const
+void If::emit(Output &o, uint32_t ind, const DFA &dfa, const State *from) const
 {
     switch (type) {
-        case BINARY: info.binary->emit(o, ind, dfa); break;
-        case LINEAR: info.linear->emit(o, ind, dfa); break;
+        case BINARY: info.binary->emit(o, ind, dfa, from); break;
+        case LINEAR: info.linear->emit(o, ind, dfa, from); break;
     }
 }
 
-void SwitchIf::emit(Output &o, uint32_t ind, const DFA &dfa) const
+void SwitchIf::emit(Output &o, uint32_t ind, const DFA &dfa, const State *from) const
 {
     switch (type) {
-        case SWITCH: info.cases->emit(o, ind, dfa); break;
-        case IF:     info.ifs->emit(o, ind, dfa); break;
+        case SWITCH: info.cases->emit(o, ind, dfa, from); break;
+        case IF:     info.ifs->emit(o, ind, dfa, from); break;
     }
 }
 
-void GoBitmap::emit (Output & o, uint32_t ind, const DFA &dfa) const
+void GoBitmap::emit (Output & o, uint32_t ind, const DFA &dfa, const State *from) const
 {
     const opt_t *opts = o.block().opts;
-    std::string yych = output_hgo (o, ind, dfa, hgo);
+    std::string yych = output_hgo (o, ind, dfa, hgo, from);
     o.ws("if (").wstring(opts->yybm).ws("[").wu32(bitmap->i).ws("+").wstring(yych).ws("] & ");
     if (opts->yybmHexTable)
     {
@@ -139,11 +139,11 @@ void GoBitmap::emit (Output & o, uint32_t ind, const DFA &dfa) const
         o.wu32(bitmap->m);
     }
     o.ws(") {\n");
-    gen_goto_plain(o, ind + 1, bitmap_state, dfa, TCID0, false);
+    gen_goto_plain(o, ind + 1, from, bitmap_state, dfa, TCID0, false, false);
     o.wind(ind).ws("}\n");
     if (lgo != NULL)
     {
-        lgo->emit (o, ind, dfa);
+        lgo->emit (o, ind, dfa, from);
     }
 }
 
@@ -186,16 +186,16 @@ void CpgotoTable::emit (Output & o, uint32_t ind) const
     o.wind(--ind).ws("};\n");
 }
 
-void Cpgoto::emit (Output & o, uint32_t ind, const DFA &dfa) const
+void Cpgoto::emit (Output & o, uint32_t ind, const DFA &dfa, const State *from) const
 {
-    std::string yych = output_hgo (o, ind, dfa, hgo);
+    std::string yych = output_hgo (o, ind, dfa, hgo, from);
     o.ws("{\n");
     table->emit (o, ++ind);
     o.wind(ind).ws("goto *").wstring(o.block().opts->yytarget).ws("[").wstring(yych).ws("];\n");
     o.wind(--ind).ws("}\n");
 }
 
-void Dot::emit(Output &o, const DFA &dfa) const
+void Dot::emit(Output &o, const DFA &dfa, const State *from) const
 {
     const std::string &prefix = o.block().opts->tags_prefix;
     const uint32_t n = cases->cases_size;
@@ -221,10 +221,10 @@ void Dot::emit(Output &o, const DFA &dfa) const
     }
 }
 
-void Go::emit (Output & o, uint32_t ind, const DFA &dfa) const
+void Go::emit (Output & o, uint32_t ind, const DFA &dfa, const State *from) const
 {
     if (type == DOT) {
-        info.dot->emit (o, dfa);
+        info.dot->emit (o, dfa, from);
         return;
     }
 
@@ -238,11 +238,11 @@ void Go::emit (Output & o, uint32_t ind, const DFA &dfa) const
     o.wdelay_skip(ind, skip && lookahead);
 
     if (type == SWITCH_IF) {
-        info.switchif->emit (o, ind, dfa);
+        info.switchif->emit (o, ind, dfa, from);
     } else if (type == BITMAP) {
-        info.bitmap->emit (o, ind, dfa);
+        info.bitmap->emit (o, ind, dfa, from);
     } else if (type == CPGOTO) {
-        info.cpgoto->emit (o, ind, dfa);
+        info.cpgoto->emit (o, ind, dfa, from);
     }
 }
 

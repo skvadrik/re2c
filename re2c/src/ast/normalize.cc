@@ -21,6 +21,7 @@ void normalize_ast(specs_t &specs)
 
             i->rules.insert(i->rules.end(), star->rules.begin(), star->rules.end());
             i->defs.insert(i->defs.end(), star->defs.begin(), star->defs.end());
+            i->eofs.insert(i->eofs.end(), star->eofs.begin(), star->eofs.end());
             i->setup.insert(i->setup.end(), star->setup.begin(), star->setup.end());
         }
 

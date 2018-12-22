@@ -292,7 +292,7 @@ scan:
         return TOKEN_REGEXP;
     }
 
-    [*+?()|;/\\=] { return *tok; }
+    [*+?()|;/\\=$] { return *tok; }
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min)) {

@@ -109,6 +109,10 @@ rule
         find(context.specs, "").defs.push_back($2);
     }
 
+    | '$' TOKEN_CODE {
+        find(context.specs, "").eofs.push_back($2);
+    }
+
     | TOKEN_CLIST trailexpr ccode {
         for(CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
             find(context.specs, *i).rules.push_back(ASTRule($2, $3));
@@ -119,6 +123,13 @@ rule
     | TOKEN_CLIST '*' ccode {
         for(CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
             find(context.specs, *i).defs.push_back($3);
+        }
+        delete $1;
+    }
+
+    | TOKEN_CLIST '$' ccode {
+        for(CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
+            find(context.specs, *i).eofs.push_back($3);
         }
         delete $1;
     }

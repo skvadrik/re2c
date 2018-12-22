@@ -24,6 +24,8 @@ enum target_t
     TARGET_SKELETON
 };
 
+const uint32_t NOEOF = ~0u - 1;
+
 /* note [constant and mutable options]
  *
  * Some options are immutable (target, output files; global switches like
@@ -104,6 +106,7 @@ enum target_t
     MUTOPT (bool, gFlag, false) \
     MUTOPT (std::string, yytarget, "yytarget") \
     MUTOPT (uint32_t, cGotoThreshold, 9) \
+    MUTOPT (uint32_t, eof, NOEOF) \
     /* formatting */ \
     MUTOPT (uint32_t, topIndent, 0) \
     MUTOPT (std::string, indString, "\t") \

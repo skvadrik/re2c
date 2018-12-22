@@ -3,6 +3,7 @@
 #include <stack>
 #include <vector>
 
+#include "src/conf/msg.h"
 #include "src/conf/opt.h"
 #include "src/re/encoding/enc.h"
 #include "src/re/re.h"
@@ -51,8 +52,14 @@ void split_charset(RESpec &spec)
                 break;
         }
     }
+
+    const opt_t *opts = spec.opts;
     cs.insert(0);
-    cs.insert(spec.opts->encoding.nCodeUnits());
+    cs.insert(opts->encoding.nCodeUnits());
+    if (opts->eof != NOEOF) {
+        cs.insert(opts->eof);
+        cs.insert(opts->eof + 1);
+    }
 
     spec.charset.insert(spec.charset.end(), cs.begin(), cs.end());
 }

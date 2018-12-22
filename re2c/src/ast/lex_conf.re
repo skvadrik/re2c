@@ -66,6 +66,13 @@ void Scanner::lex_conf(Opt &opts)
     "flags:empty-class"      { lex_conf_empty_class(opts);      return; }
     "flags:dfa-minimization" { lex_conf_dfa_minimization(opts); return; }
 
+    "eof" {
+        const int32_t eof = lex_conf_number();
+        if (eof < 0) fatal_lc(l, c, "eof cannot have negative value");
+        opts.set_eof(static_cast<uint32_t>(eof));
+        return;
+    }
+
     "define:YYCONDTYPE"           { opts.set_yycondtype       (lex_conf_string ()); return; }
     "define:YYGETCONDITION"       { opts.set_cond_get         (lex_conf_string ()); return; }
     "define:YYGETCONDITION:naked" { opts.set_cond_get_naked   (lex_conf_bool()); return; }

@@ -30,6 +30,8 @@ void mutopt_t::fix(const conopt_t *globopts)
             header_file = "";
             // default line information
             iFlag = Opt::baseopt.iFlag;
+            // default EOF mode
+            eof = Opt::baseopt.eof;
             // default environment-sensitive formatting
             topIndent = Opt::baseopt.topIndent;
             indString = Opt::baseopt.indString;
@@ -222,6 +224,15 @@ void mutopt_t::fix(const conopt_t *globopts)
     }
     if (!lookahead) {
         eager_skip = true;
+    }
+    if (eof != NOEOF) {
+        if (bFlag || gFlag) {
+            fatal ("configuration 're2c:eof' cannot be used with options "
+                "-b, --bit-vectors and -g, --computed gotos");
+        }
+        if (eof >= encoding.nCodeUnits()) {
+            fatal ("EOF exceeds maximum code unit value for given encoding");
+        }
     }
 }
 

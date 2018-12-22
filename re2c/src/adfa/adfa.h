@@ -29,6 +29,7 @@ struct State
 {
     label_t label;
     State * next;
+    State * prev;
     size_t fill;
     bool fallback;
 
@@ -42,6 +43,7 @@ struct State
     State ()
         : label (label_t::first ())
         , next (0)
+        , prev (0)
         , fill (0)
         , fallback (false)
         , rule (Rule::NONE)
@@ -69,6 +71,8 @@ struct DFA
     uint32_t ubChar;
     uint32_t nStates;
     State * head;
+    State *defstate;
+    std::vector<State*> finstates;
     const tcid_t tags0;
     std::vector<uint32_t> &charset;
     std::valarray<Rule> &rules;
@@ -86,6 +90,7 @@ struct DFA
     const size_t key_size;
     bitmaps_t bitmaps;
     std::string setup;
+    const Code *eof_action;
 
     DFA    ( const dfa_t &dfa
         , const std::vector<size_t> &fill
@@ -95,6 +100,8 @@ struct DFA
         , const std::string &cn
         , uint32_t ln
         , const std::string &su
+        , const Code *eof
+        , const opt_t *opts
         );
     ~DFA ();
     void reorder();
@@ -105,8 +112,8 @@ struct DFA
 private:
     void addState(State*, State *);
     void split (State *);
-    void findBaseState ();
-    void hoist_tags();
+    void findBaseState(const opt_t *opts);
+    void hoist_tags(const opt_t *opts);
     void hoist_tags_and_skip(const opt_t *opts);
     void count_used_labels(std::set<label_t> &used, label_t start, label_t initial, bool force_start, bool fFlag) const;
     void emit_body (Output &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;

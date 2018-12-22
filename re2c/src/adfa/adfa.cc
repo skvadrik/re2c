@@ -16,6 +16,11 @@ namespace re2c
 
 const size_t Initial::NOSAVE = std::numeric_limits<size_t>::max();
 
+static bool is_eof(const opt_t *opts, uint32_t ub)
+{
+    return opts->eof != NOEOF && static_cast<uint32_t>(opts->eof) == ub;
+}
+
 DFA::DFA
     ( const dfa_t &dfa
     , const std::vector<size_t> &fill
@@ -25,6 +30,8 @@ DFA::DFA
     , const std::string &cn
     , uint32_t ln
     , const std::string &su
+    , const Code *eof
+    , const opt_t *opts
     )
     : accepts ()
     , name (nm)
@@ -34,6 +41,8 @@ DFA::DFA
     , ubChar(dfa.charset.back())
     , nStates(0)
     , head(NULL)
+    , defstate(NULL)
+    , finstates(dfa.rules.size(), NULL)
     , tags0(dfa.tcid0)
     , charset(dfa.charset)
     , rules(dfa.rules)
@@ -51,6 +60,7 @@ DFA::DFA
     , key_size (key)
     , bitmaps (std::min(ubChar, 256u))
     , setup(su)
+    , eof_action(eof)
 {
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;
@@ -77,13 +87,22 @@ DFA::DFA
         s->fill = fill[i];
         s->fallback = t->fallback; // see note [fallback states]
 
+        bool end = true;
+        for (uint32_t c = 0; end && c < nchars; ++c) {
+            end &= t->arcs[c] == dfa_t::NIL;
+        }
+
         s->go.span = allocate<Span>(nchars);
         uint32_t j = 0;
-        for (uint32_t c = 0; c < nchars; ++j)
-        {
+        for (uint32_t c = 0; c < nchars; ++j) {
             const size_t to = t->arcs[c];
             const tcid_t tc = t->tcid[c];
-            for (;++c < nchars && t->arcs[c] == to && t->tcid[c] == tc;);
+            const bool ie = is_eof(opts, charset[c]);
+            for (;++c < nchars
+                && t->arcs[c] == to
+                && t->tcid[c] == tc
+                && (end || is_eof(opts, charset[c]) == ie)
+                ;);
             s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
             s->go.span[j].ub = charset[c];
             s->go.span[j].tags = tc;
@@ -170,7 +189,9 @@ void DFA::addState(State *s, State *next)
 {
     ++nStates;
     s->next = next->next;
+    s->prev = next;
     next->next = s;
+    next->prev = s->prev;
 }
 
 } // namespace re2c

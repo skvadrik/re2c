@@ -29,7 +29,7 @@ void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &inp
     }
 }
 
-void validate_ast(const specs_t &specs, bool cflag)
+void validate_ast(const specs_t &specs, const opt_t *opts)
 {
     static const uint32_t NONE = ~0u;
     specs_t::const_iterator i,
@@ -42,9 +42,22 @@ void validate_ast(const specs_t &specs, bool cflag)
                 "code to default rule %sis already defined at line %u",
                 incond(i->name).c_str(), i->defs[0]->fline);
         }
+        if (!i->eofs.empty() && opts->eof == NOEOF) {
+            fatal("%sEOF rule found, but 're2c:eof' configuration is not set",
+                incond(i->name).c_str());
+        }
+        else if (i->eofs.empty() && opts->eof != NOEOF) {
+            fatal("%s're2c:eof' configuration is set, but no EOF rule found",
+                incond(i->name).c_str());
+        }
+        else if (i->eofs.size() > 1) {
+            fatal_l(i->eofs[1]->fline,
+                "EOF rule %sis already defined at line %u",
+                incond(i->name).c_str(), i->eofs[0]->fline);
+        }
     }
 
-    if (!cflag) {
+    if (!opts->cFlag) {
         for (i = b; i != e; ++i) {
             if (i->name != "") {
                 const uint32_t l = !i->rules.empty()

@@ -26,12 +26,15 @@ namespace re2c
 {
 
 static void need               (Output &o, uint32_t ind, size_t some);
+static void gen_rescan_label   (Output &o, const State *s);
 static void emit_accept_binary (Output &o, uint32_t ind, const DFA &dfa, const accept_t &acc, size_t l, size_t r);
 static void emit_accept        (Output &o, uint32_t ind, const DFA &dfa, const accept_t &acc);
 static void emit_rule          (Output &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
 static void gen_fintags        (Output &o, uint32_t ind, const DFA &dfa, const Rule &rule);
-static void gen_goto           (code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip);
+static void gen_goto           (code_lines_t &code, const State *from, const State *to, const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip, bool fill);
+static void gen_on_eof         (code_lines_t &code, const opt_t *opts, const DFA &dfa, const State *from, const State *to);
 static bool endstate           (const State *s);
+static void flushln            (code_lines_t &code, std::ostringstream &o);
 
 void emit_action(Output &o, uint32_t ind, const DFA &dfa,
     const State *s, const std::set<label_t> &used_labels)
@@ -41,6 +44,7 @@ void emit_action(Output &o, uint32_t ind, const DFA &dfa,
     case Action::MATCH:
         o.wdelay_skip(ind, !opts->eager_skip);
         need(o, ind, s->fill);
+        gen_rescan_label(o, s);
         o.wdelay_peek(ind, !endstate(s));
         break;
     case Action::INITIAL: {
@@ -61,6 +65,7 @@ void emit_action(Output &o, uint32_t ind, const DFA &dfa,
         }
         need(o, ind, s->fill);
         o.wdelay_backup(ind, backup);
+        gen_rescan_label(o, s);
         o.wdelay_peek(ind, !endstate(s));
         break;
     }
@@ -71,6 +76,7 @@ void emit_action(Output &o, uint32_t ind, const DFA &dfa,
         o.wdelay_skip(ind, !opts->eager_skip);
         o.wdelay_backup(ind, true);
         need(o, ind, s->fill);
+        gen_rescan_label(o, s);
         o.wdelay_peek(ind, true);
         break;
     case Action::MOVE:
@@ -97,7 +103,7 @@ void emit_accept_binary(Output &o, uint32_t ind, const DFA &dfa,
         emit_accept_binary (o, ++ind, dfa, acc, m + 1, r);
         o.wind(--ind).ws("}\n");
     } else {
-        gen_goto_plain(o, ind, acc[l].first, dfa, acc[l].second, false);
+        gen_goto_plain(o, ind, NULL, acc[l].first, dfa, acc[l].second, false, false);
     }
 }
 
@@ -112,7 +118,7 @@ void emit_accept(Output &o, uint32_t ind, const DFA &dfa, const accept_t &acc)
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
-        gen_goto_plain(o, ind, acc[0].first, dfa, acc[0].second, false);
+        gen_goto_plain(o, ind, NULL, acc[0].first, dfa, acc[0].second, false, false);
         return;
     }
 
@@ -152,10 +158,10 @@ void emit_accept(Output &o, uint32_t ind, const DFA &dfa, const accept_t &acc)
     o.wind(ind).ws("switch (").wstring(opts->yyaccept).ws(") {\n");
     for (uint32_t i = 0; i < nacc - 1; ++i) {
         o.wind(ind).ws("case ").wu32(i).ws(": ");
-        gen_goto_case(o, ind, acc[i].first, dfa, acc[i].second, false);
+        gen_goto_case(o, ind, NULL, acc[i].first, dfa, acc[i].second, false, false);
     }
     o.wind(ind).ws("default:");
-    gen_goto_case(o, ind, acc[nacc - 1].first, dfa, acc[nacc - 1].second, false);
+    gen_goto_case(o, ind, NULL, acc[nacc - 1].first, dfa, acc[nacc - 1].second, false, false);
     o.wind(ind).ws("}\n");
 }
 
@@ -196,10 +202,10 @@ void emit_rule(Output &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 
 void need(Output &o, uint32_t ind, size_t some)
 {
-    if (some == 0) return;
-
     const opt_t *opts = o.block().opts;
     std::string s;
+
+    if (opts->eof != NOEOF || some == 0) return;
 
     if (opts->fFlag) {
         strrreplace(s = opts->state_set, opts->state_set_arg, o.fill_index);
@@ -232,11 +238,20 @@ void need(Output &o, uint32_t ind, size_t some)
     }
 }
 
-void gen_goto_case(Output &o, uint32_t ind, const State *to,
-    const DFA &dfa, tcid_t tcid, bool skip)
+void gen_rescan_label(Output &o, const State *s)
+{
+    const opt_t *opts = o.block().opts;
+
+    if (opts->eof == NOEOF || endstate(s)) return;
+
+    o.wstring(opts->labelPrefix).wlabel(s->label).ws("_:\n");
+}
+
+void gen_goto_case(Output &o, uint32_t ind, const State *from, const State *to,
+    const DFA &dfa, tcid_t tcid, bool skip, bool fill)
 {
     code_lines_t code;
-    gen_goto(code, to, dfa, tcid, o.block().opts, skip);
+    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, fill);
     const size_t lines = code.size();
 
     if (lines == 1) {
@@ -249,11 +264,11 @@ void gen_goto_case(Output &o, uint32_t ind, const State *to,
     }
 }
 
-void gen_goto_if(Output &o, uint32_t ind, const State *to,
-    const DFA &dfa, tcid_t tcid, bool skip)
+void gen_goto_if(Output &o, uint32_t ind, const State *from, const State *to,
+    const DFA &dfa, tcid_t tcid, bool skip, bool eof)
 {
     code_lines_t code;
-    gen_goto(code, to, dfa, tcid, o.block().opts, skip);
+    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, eof);
     const size_t lines = code.size();
 
     if (lines == 1) {
@@ -267,11 +282,11 @@ void gen_goto_if(Output &o, uint32_t ind, const State *to,
     }
 }
 
-void gen_goto_plain(Output &o, uint32_t ind, const State *to,
-    const DFA &dfa, tcid_t tcid, bool skip)
+void gen_goto_plain(Output &o, uint32_t ind, const State *from, const State *to,
+    const DFA &dfa, tcid_t tcid, bool skip, bool eof)
 {
     code_lines_t code;
-    gen_goto(code, to, dfa, tcid, o.block().opts, skip);
+    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, eof);
     const size_t lines = code.size();
 
     for (size_t i = 0; i < lines; ++i) {
@@ -279,23 +294,88 @@ void gen_goto_plain(Output &o, uint32_t ind, const State *to,
     }
 }
 
-void gen_goto(code_lines_t &code, const State *to, const DFA &dfa,
-    tcid_t tcid, const opt_t *opts, bool skip)
+void gen_goto(code_lines_t &code, const State *from, const State *to
+    , const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip, bool fill)
 {
-    std::ostringstream s;
-    output_skip(s, 0, opts);
+    if (fill) {
+        gen_on_eof(code, opts, dfa, from, to);
+    }
 
     if (skip && !opts->lookahead) {
-        code.push_back(s.str());
+        std::ostringstream o;
+        output_skip(o, 0, opts);
+        code.push_back(o.str());
     }
+
     gen_settags(code, dfa, tcid, opts);
+
     if (skip && opts->lookahead) {
-        code.push_back(s.str());
+        std::ostringstream o;
+        output_skip(o, 0, opts);
+        code.push_back(o.str());
     }
+
     if (to) {
         code.push_back("goto " + opts->labelPrefix
             + to_string(to->label) + ";\n");
     }
+}
+
+void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
+  , const State *from, const State *to)
+{
+    const State *retry = from->action.type == Action::MOVE ? from->prev : from;
+    const State *fallback = from->rule == Rule::NONE
+        ? dfa.defstate : dfa.finstates[from->rule];
+    const tcid_t falltags = from->rule == Rule::NONE
+        ? from->fall_tags : from->rule_tags;
+
+    std::ostringstream o;
+    o << "if (";
+    if (opts->input_api == INPUT_CUSTOM) {
+        o << opts->yylessthan << " ()";
+    }
+    else {
+        o << opts->yylimit << " <= " << opts->yycursor;
+    }
+    o << ") {";
+    flushln(code, o);
+
+    o << opts->indString << "if (" << opts->fill << " () == 0) "
+        << "goto " << opts->labelPrefix << retry->label << "_;";
+    flushln(code, o);
+
+    if (from->action.type == Action::INITIAL) {
+        o << opts->indString << "else goto " << opts->labelPrefix << "eof;";
+        flushln(code, o);
+    }
+    else if (fallback != to) {
+        code_lines_t tagcode;
+        gen_settags(tagcode, dfa, falltags, opts);
+
+        if (tagcode.empty()) {
+            o << opts->indString << "else goto " << opts->labelPrefix << fallback->label << ";";
+            flushln(code, o);
+        }
+        else {
+            o << opts->indString << "else {";
+            flushln(code, o);
+
+            for (uint32_t i = 0; i < tagcode.size(); ++i) {
+                code.push_back(opts->indString + opts->indString + tagcode[i]);
+            }
+
+            o << opts->indString << opts->indString
+                << "goto " << opts->labelPrefix << fallback->label << ";";
+            flushln(code, o);
+
+            o << opts->indString << "}";
+            flushln(code, o);
+        }
+    }
+
+    o << "}";
+    flushln(code, o);
 }
 
 void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *opts)
@@ -468,6 +548,14 @@ bool endstate(const State *s)
     const Action::type_t &a = s->go.span[0].to->action.type;
     return s->go.nSpans == 1
         && (a == Action::RULE || a == Action::ACCEPT);
+}
+
+void flushln(code_lines_t &code, std::ostringstream &o)
+{
+    o << "\n";
+    code.push_back(o.str());
+    o.str("");
+    o.clear();
 }
 
 } // namespace re2c

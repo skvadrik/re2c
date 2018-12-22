@@ -26,10 +26,14 @@ namespace re2c
 {
 
 static void emit_state(Output & o, uint32_t ind, const State * s, bool used_label);
+static void emit_eof(Output &, uint32_t, const Code*);
 
 void emit_state (Output & o, uint32_t ind, const State * s, bool used_label)
 {
     const opt_t *opts = o.block().opts;
+    used_label |= opts->eof != NOEOF
+        && (s->action.type == Action::MOVE
+            || s->action.type == Action::INITIAL);
     if (used_label)
     {
         o.wstring(opts->labelPrefix).wlabel(s->label).ws(":\n");
@@ -38,6 +42,18 @@ void emit_state (Output & o, uint32_t ind, const State * s, bool used_label)
     {
         o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(s->label).ws(", ").wstring(output_expr_peek(opts)).ws(");\n");
     }
+}
+
+void emit_eof(Output & o, uint32_t ind, const Code *code)
+{
+    const opt_t *opts = o.block().opts;
+
+    if (opts->eof == NOEOF) return;
+
+    o.wstring(opts->labelPrefix).ws("eof:\n");
+    o.wdelay_line_info_input(code->fline, code->fname);
+    o.wind(ind).wstring(code->text).ws("\n");
+    o.wdelay_line_info_output();
 }
 
 void DFA::count_used_labels (std::set<label_t> & used, label_t start,
@@ -70,8 +86,10 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start,
 void DFA::emit_body(Output &o, uint32_t& ind,
     const std::set<label_t> &used_labels, label_t initial) const
 {
+    const opt_t *opts = o.block().opts;
+
     code_lines_t code;
-    gen_settags(code, *this, tags0, o.block().opts);
+    gen_settags(code, *this, tags0, opts);
     for (size_t i = 0; i < code.size(); ++i) {
         o.wind(ind).wstring(code[i]);
     }
@@ -80,15 +98,17 @@ void DFA::emit_body(Output &o, uint32_t& ind,
     // has a piece of code that advances input position. Wee must
     // skip it when entering DFA.
     if (used_labels.count(head->label)) {
-        o.wind(ind).ws("goto ").wstring(o.block().opts->labelPrefix)
+        o.wind(ind).ws("goto ").wstring(opts->labelPrefix)
             .wlabel(initial).ws(";\n");
     }
 
     for (State * s = head; s; s = s->next) {
         emit_state(o, ind, s, used_labels.count(s->label));
         emit_action(o, ind, *this, s, used_labels);
-        s->go.emit(o, ind, *this);
+        s->go.emit(o, ind, *this, s);
     }
+
+    emit_eof(o, ind, this->eof_action);
 }
 
 void DFA::emit_dot(Output &o, bool last_cond) const
@@ -119,7 +139,7 @@ void DFA::emit_dot(Output &o, bool last_cond) const
                     .ws("\"]").ws("\n");
             }
         }
-        s->go.emit(o, 0, *this);
+        s->go.emit(o, 0, *this, s);
     }
     if (!opts->cFlag || last_cond) {
         o.ws("}\n");
