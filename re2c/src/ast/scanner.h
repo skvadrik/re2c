@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <sys/types.h>
+#include <stack>
 #include <string>
 
 #include "src/ast/input.h"
@@ -26,9 +27,26 @@ struct AST;
 
 class Scanner: private ScannerState
 {
-    Input & in;
+public:
+    enum ParseMode {Stop, Parse, Reuse, Rules};
+
+private:
+    std::stack<Input*> files;
     Warn &warn;
 
+public:
+    explicit Scanner(Warn &w);
+    ~Scanner();
+    bool push_file(const char *filename);
+    ParseMode echo(Output &out);
+    int scan(const conopt_t *globopts);
+    void lex_conf(Opt &opts);
+    uint32_t get_cline() const;
+    uint32_t get_column() const;
+    const std::string & get_fname () const;
+
+private:
+    bool read(size_t want);
     bool fill(size_t need);
     void lex_end_of_comment(Output &out);
     void lex_code_indented();
@@ -59,16 +77,6 @@ class Scanner: private ScannerState
     bool is_eof() const;
     void fail_if_eof() const;
 
-public:
-    enum ParseMode {Stop, Parse, Reuse, Rules};
-
-    Scanner(Input&, Warn &w);
-    ParseMode echo(Output &out);
-    int scan(const conopt_t *globopts);
-    void lex_conf(Opt &opts);
-    uint32_t get_cline() const;
-    uint32_t get_column() const;
-    const std::string & get_fname () const;
     FORBID_COPY (Scanner);
 };
 
@@ -80,7 +88,7 @@ inline size_t Scanner::tok_len () const
 
 inline const std::string & Scanner::get_fname () const
 {
-    return in.escaped_file_name;
+    return files.top()->escaped_name;
 }
 
 inline uint32_t Scanner::get_cline() const

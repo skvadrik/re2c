@@ -56,6 +56,7 @@ namespace re2c {
 
 /*!header:re2c:on*/
 #include <string.h>
+#include "src/util/forbid_copy.h"
 
 namespace re2c {
 
@@ -638,8 +639,9 @@ sourceline:
     }
 
     dstring {
-        in.escaped_file_name = std::string (tok + 1, tok_len () - 2); // strip quotes
-        strrreplace (in.escaped_file_name, "\\", "\\\\");
+        std::string &name = files.top()->escaped_name;
+        name = std::string(tok + 1, tok_len () - 2); // strip quotes
+        strrreplace(name, "\\", "\\\\");
         goto sourceline;
     }
 
