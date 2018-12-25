@@ -1,10 +1,17 @@
 #include "src/ast/input.h"
+#include "src/ast/scanner.h"
 #include "src/conf/msg.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {
 
-Input::Input(): file(NULL), name(), escaped_name() {}
+Input::Input()
+    : file(NULL)
+    , name()
+    , escaped_name()
+    , so(Scanner::ENDPOS)
+    , eo(Scanner::ENDPOS)
+{}
 
 bool Input::open(const char *filename)
 {

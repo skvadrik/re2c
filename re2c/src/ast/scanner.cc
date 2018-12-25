@@ -9,59 +9,103 @@ namespace re2c {
 
 class Warn;
 
-Scanner::Scanner(Warn &w)
-    : ScannerState()
-    , files()
-    , warn(w)
-{}
+const char *const Scanner::ENDPOS = (const char*) ~0LU;
 
 Scanner::~Scanner()
 {
-    for (; !files.empty(); ) {
-        delete files.top();
-        files.pop();
+    for (size_t i = files.size(); i --> 0; ) {
+        delete files[i];
     }
 }
 
-bool Scanner::push_file(const char *filename)
+size_t Scanner::get_input_index() const
 {
-    // push buffer tail back to file - we'll return to it later
-    if (!files.empty()) {
-        int err = fseek(files.top()->file, lim - cur, SEEK_CUR);
-        if (err != 0) return false;
+    size_t i = files.size();
+    assert(i > 0);
+    do --i; while (i > 0 && files[i]->so > cur);
+    return i;
+}
+
+bool Scanner::push_file(const std::string &filename)
+{
+    // unread buffer tail: we'll return to it later
+    for (size_t i = files.size(); i --> 0; ) {
+        Input *in = files[i];
+        if (in->so >= cur) {
+            // unread whole fragment
+            fseek(in->file, in->so - in->eo, SEEK_CUR);
+            in->so = in->eo = ENDPOS;
+        }
+        else if (in->eo >= cur) {
+            // fragment on the boundary, unread partially
+            fseek(in->file, cur - in->eo, SEEK_CUR);
+            in->eo = cur - 1;
+        }
+        else {
+            // the rest has been consumed already
+            break;
+        }
     }
 
     // open new file and place place at the top of stack
-    Input *f = new Input;
-    files.push(f);
-    if (!f->open(filename)) return false;
+    Input *in = new Input;
+    files.push_back(in);
+    if (!in->open(filename.c_str())) return false;
 
-    // refill buffer
+    // refill buffer (discard everything up to cursor, clear EOF)
+    lim = cur = mar = ctx = tok = ptr = pos = bot + BSIZE;
+    eof = NULL;
     return fill(BSIZE);
 }
 
 bool Scanner::read(size_t want)
 {
-    const char *stop = lim + want;
     assert(!files.empty());
-    for (;;) {
-        Input *f = files.top();
-        lim += fread(lim, 1, want, f->file);
+    for (size_t i = files.size(); i --> 0; ) {
+        Input *in = files[i];
+        const size_t have = fread(lim, 1, want, in->file);
+        in->so = lim;
+        lim += have;
+        in->eo = lim;
+        want -= have;
 
         // buffer filled
-        if (lim == stop) return true;
-
-        // the first file must remain at the bottom of the stack
-        if (files.size() == 1) break;
-        delete f;
-        files.pop();
+        if (want == 0) return true;
     }
     return false;
+}
+
+void Scanner::shift_ptrs_and_fpos(ptrdiff_t offs)
+{
+    // shift buffer pointers
+    shift_ptrs(offs);
+
+    // shift file pointers
+    for (size_t i = files.size(); i --> 0; ) {
+        Input *in = files[i];
+        if (in->so == ENDPOS && in->eo == ENDPOS) break;
+        assert(in->so != ENDPOS && in->eo != ENDPOS);
+        in->so += offs;
+        in->eo += offs;
+    }
+}
+
+void Scanner::pop_finished_files()
+{
+    // Pop all files that have been fully processed (file upper bound
+    // in buffer points before the first character of current lexeme),
+    // except for the first (main) file which must always remain at the
+    // bottom of the stack.
+    size_t i = files.size();
+    assert(i > 0);
+    do --i; while (i > 0 && files[i]->eo <= tok);
 }
 
 bool Scanner::fill(size_t need)
 {
     if (eof) return false;
+
+    pop_finished_files();
 
     assert(bot <= tok && tok <= lim);
     size_t free = static_cast<size_t>(tok - bot);
@@ -69,7 +113,7 @@ bool Scanner::fill(size_t need)
 
     if (free >= need) {
         memmove(bot, tok, copy);
-        shift_ptrs(-static_cast<ptrdiff_t>(free));
+        shift_ptrs_and_fpos(-static_cast<ptrdiff_t>(free));
     }
     else {
         BSIZE += std::max(BSIZE, need);
@@ -77,7 +121,7 @@ bool Scanner::fill(size_t need)
         if (!buf) fatal("out of memory");
 
         memmove(buf, tok, copy);
-        shift_ptrs(buf - bot);
+        shift_ptrs_and_fpos(buf - bot);
         delete [] bot;
         bot = buf;
 

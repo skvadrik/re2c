@@ -200,6 +200,12 @@ echo:
         goto echo;
     }
 
+    "/*!include:re2c" {
+        out.wraw(tok, ptr);
+        lex_include();
+        goto echo;
+    }
+
     eof {
         if (!is_eof()) goto echo;
         out.wraw(tok, ptr);
@@ -239,6 +245,22 @@ void Scanner::lex_end_of_comment(Output &out)
             return;
         }
     */}
+}
+
+void Scanner::lex_include()
+{
+    const char *x, *y;
+/*!re2c
+    * {
+        fatal_lc(get_cline(), get_column()
+            , "syntax error in include directive");
+    }
+
+    space+ @x dstring @y space* eoc {
+        push_file(std::string(x + 1, static_cast<size_t>(y - x) - 2));
+        return;
+    }
+*/
 }
 
 void Scanner::lex_tags(Output &out, bool mtags)
@@ -639,7 +661,7 @@ sourceline:
     }
 
     dstring {
-        std::string &name = files.top()->escaped_name;
+        std::string &name = get_input().escaped_name;
         name = std::string(tok + 1, tok_len () - 2); // strip quotes
         strrreplace(name, "\\", "\\\\");
         goto sourceline;

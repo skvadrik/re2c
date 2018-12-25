@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <sys/types.h>
-#include <stack>
 #include <string>
+#include <vector>
 
 #include "src/ast/input.h"
 #include "src/ast/lex.h"
@@ -29,26 +29,35 @@ class Scanner: private ScannerState
 {
 public:
     enum ParseMode {Stop, Parse, Reuse, Rules};
+    static const char *const ENDPOS;
 
 private:
-    std::stack<Input*> files;
+    std::vector<Input*> files;
     Warn &warn;
 
 public:
     explicit Scanner(Warn &w);
     ~Scanner();
-    bool push_file(const char *filename);
+    bool push_file(const std::string &filename);
+    uint32_t get_cline() const;
+    uint32_t get_column() const;
+    const std::string & get_fname() const;
     ParseMode echo(Output &out);
     int scan(const conopt_t *globopts);
     void lex_conf(Opt &opts);
-    uint32_t get_cline() const;
-    uint32_t get_column() const;
-    const std::string & get_fname () const;
 
 private:
     bool read(size_t want);
     bool fill(size_t need);
+    void shift_ptrs_and_fpos(ptrdiff_t offs);
+    void pop_finished_files();
+    size_t get_input_index() const;
+    Input& get_input();
+    const Input& get_cinput() const;
+    size_t tok_len() const;
+    void set_sourceline ();
     void lex_end_of_comment(Output &out);
+    void lex_include();
     void lex_code_indented();
     void lex_code_in_braces();
     void lex_c_comment();
@@ -58,7 +67,6 @@ private:
     int lex_clist();
     void lex_string(char delim);
     void lex_tags(Output &out, bool mtags);
-    void set_sourceline ();
     uint32_t lex_cls_chr();
     uint32_t lex_str_chr(char quote, bool &end);
     const AST *lex_cls(bool neg);
@@ -73,22 +81,26 @@ private:
     int32_t lex_conf_number();
     bool lex_conf_bool();
     std::string lex_conf_string();
-    size_t tok_len() const;
     bool is_eof() const;
     void fail_if_eof() const;
 
     FORBID_COPY (Scanner);
 };
 
-inline size_t Scanner::tok_len () const
+inline Scanner::Scanner(Warn &w)
+    : ScannerState()
+    , files()
+    , warn(w)
+{}
+
+inline size_t Scanner::tok_len() const
 {
-    // lexing and fill procedures must maintain: token pointer <= cursor pointer
-    return static_cast<size_t> (cur - tok);
+    return static_cast<size_t>(cur - tok);
 }
 
-inline const std::string & Scanner::get_fname () const
+inline const std::string & Scanner::get_fname() const
 {
-    return files.top()->escaped_name;
+    return get_cinput().escaped_name;
 }
 
 inline uint32_t Scanner::get_cline() const
@@ -104,6 +116,16 @@ inline uint32_t Scanner::get_column() const
 inline bool Scanner::is_eof() const
 {
     return eof && cur > eof;
+}
+
+inline Input& Scanner::get_input()
+{
+    return *files[get_input_index()];
+}
+
+inline const Input& Scanner::get_cinput() const
+{
+    return *files[get_input_index()];
 }
 
 } // end namespace re2c
