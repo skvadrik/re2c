@@ -56,7 +56,9 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, dump_dfa_det, false) \
     CONSTOPT (bool, dump_dfa_tagopt, false) \
     CONSTOPT (bool, dump_dfa_min, false) \
-    CONSTOPT (bool, dump_adfa, false)
+    CONSTOPT (bool, dump_adfa, false) \
+    /* include paths */ \
+    CONSTOPT (std::vector<std::string>, incpaths, std::vector<std::string>()) \
 
 #define RE2C_MUTOPTS \
     /* output files */ \
@@ -169,7 +171,7 @@ struct conopt_t
 #        undef CONSTOPT1
 #        undef CONSTOPT
     {}
-    void fix();
+    void fix(const char *filename);
     FORBID_COPY(conopt_t);
 };
 

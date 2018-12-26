@@ -26,7 +26,14 @@ size_t Scanner::get_input_index() const
     return i;
 }
 
-bool Scanner::push_file(const std::string &filename)
+bool Scanner::init(const std::string &filename)
+{
+    Input *in = new Input;
+    files.push_back(in);
+    return in->open(filename);
+}
+
+bool Scanner::include(const std::string &filename)
 {
     // unread buffer tail: we'll return to it later
     for (size_t i = files.size(); i --> 0; ) {
@@ -50,7 +57,7 @@ bool Scanner::push_file(const std::string &filename)
     // open new file and place place at the top of stack
     Input *in = new Input;
     files.push_back(in);
-    if (!in->open(filename.c_str())) return false;
+    if (!in->open_in_dirs(filename, globopts->incpaths)) return false;
 
     // refill buffer (discard everything up to cursor, clear EOF)
     lim = cur = mar = ctx = tok = ptr = pos = bot + BSIZE;

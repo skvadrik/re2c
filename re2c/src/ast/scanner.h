@@ -33,17 +33,19 @@ public:
 
 private:
     std::vector<Input*> files;
+    const conopt_t *globopts;
     Warn &warn;
 
 public:
-    explicit Scanner(Warn &w);
+    Scanner(const conopt_t *o, Warn &w);
     ~Scanner();
-    bool push_file(const std::string &filename);
+    bool init(const std::string &filename);
+    bool include(const std::string &filename);
     uint32_t get_cline() const;
     uint32_t get_column() const;
     const std::string & get_fname() const;
     ParseMode echo(Output &out);
-    int scan(const conopt_t *globopts);
+    int scan();
     void lex_conf(Opt &opts);
 
 private:
@@ -87,9 +89,10 @@ private:
     FORBID_COPY (Scanner);
 };
 
-inline Scanner::Scanner(Warn &w)
+inline Scanner::Scanner(const conopt_t *o, Warn &w)
     : ScannerState()
     , files()
+    , globopts(o)
     , warn(w)
 {}
 

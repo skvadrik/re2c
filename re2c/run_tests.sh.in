@@ -24,6 +24,13 @@ lc_run() {
     LANG=C LC_ALL=C "$@"
 }
 
+abspath() {
+    case "$1" in
+        /*) echo "$1";;
+        *) echo "$PWD/$1";;
+    esac
+}
+
 valgrind=""
 skeleton=0
 keep_tmp_files=0
@@ -60,8 +67,13 @@ rm -rf $test_blddir && mkdir $test_blddir
 # preserve directory structure unless given explicit args
 if [ ${#tests[@]} -eq 0 ]; then
     cp -R "@top_srcdir@/test"/* "@top_srcdir@/examples"/* $test_blddir
+    incpaths=`find "@top_srcdir@/test" "@top_srcdir@/examples" -type d -exec echo "-I $(abspath {})" \;`
 else
-    for f in ${tests[@]}; do cp $f ${f%.re}.c $test_blddir; done
+    incpaths=
+    for f in ${tests[@]}; do
+        cp $f ${f%.re}.c $test_blddir
+        incpaths="$incpaths -I $(abspath $(dirname $f))"
+    done
 fi
 chmod -R u+w $test_blddir
 find $test_blddir -type f ! -name '*.re' -a ! -name '*.c' -exec rm {} \;
@@ -129,7 +141,7 @@ run_pack() {
 		# file extensions are case-insensitive on some platforms
 		printf "%s" "$switches" | lc_run grep -q "[A-Z]" \
 			&& { echo "bad file extension: '$outx' (uppercase letters are not allowed)"; exit 1; }
-		local switches="$switches -o $outc --no-version --no-generation-date"
+		local switches="$switches $incpaths -o $outc --no-version --no-generation-date"
 		# enable warnings globally
 		local switches="$switches -W"
 

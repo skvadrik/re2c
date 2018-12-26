@@ -254,7 +254,7 @@ void yyerror(context_t &context, const char* s)
 
 int yylex(context_t &context)
 {
-    return context.input.scan(&context.opts.glob);
+    return context.input.scan();
 }
 
 } // extern "C"

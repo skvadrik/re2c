@@ -19,8 +19,8 @@ int main(int, char *argv[])
         case EXIT_FAIL: return 1;
     }
 
-    Scanner scanner(warn);
-    if (!scanner.push_file(opts.source_file)) return 1;
+    Scanner scanner(&globopts, warn);
+    if (!scanner.init(opts.source_file)) return 1;
 
     Output output(warn);
 

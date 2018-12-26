@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <vector>
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -17,7 +18,8 @@ struct Input
 
     Input();
     ~Input();
-    bool open(const char *filename);
+    bool open(const std::string &);
+    bool open_in_dirs(const std::string &, const std::vector<std::string> &);
 
     FORBID_COPY(Input);
 };

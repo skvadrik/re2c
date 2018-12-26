@@ -13,14 +13,32 @@ Input::Input()
     , eo(Scanner::ENDPOS)
 {}
 
-bool Input::open(const char *filename)
+bool Input::open(const std::string &filename)
 {
     name = escaped_name = filename;
     strrreplace(escaped_name, "\\", "\\\\");
 
     file = name == "<stdin>" ? stdin : fopen(name.c_str(), "rb");
     if (!file) {
-        error("cannot open source file: %s", name.c_str());
+        error("cannot open file: %s", name.c_str());
+        return false;
+    }
+
+    return true;
+}
+
+bool Input::open_in_dirs(const std::string &filename
+    , const std::vector<std::string> &incpaths)
+{
+    name = escaped_name = filename;
+    strrreplace(escaped_name, "\\", "\\\\");
+
+    for (size_t i = 0; !file && i < incpaths.size(); ++i) {
+        const std::string path = incpaths[i] + name;
+        file = fopen(path.c_str(), "rb");
+    }
+    if (!file) {
+        error("cannot open file: %s", name.c_str());
         return false;
     }
 

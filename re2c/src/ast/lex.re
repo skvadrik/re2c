@@ -257,7 +257,7 @@ void Scanner::lex_include()
     }
 
     space+ @x dstring @y space* eoc {
-        push_file(std::string(x + 1, static_cast<size_t>(y - x) - 2));
+        include(std::string(x + 1, static_cast<size_t>(y - x) - 2));
         return;
     }
 */
@@ -282,7 +282,7 @@ void Scanner::lex_tags(Output &out, bool mtags)
     */}
 }
 
-int Scanner::scan(const conopt_t *globopts)
+int Scanner::scan()
 {
     const char *p;
 scan:

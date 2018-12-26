@@ -105,6 +105,9 @@ opt_short:
     "r" { globopts.rFlag = true;             goto opt_short; }
     "S" { globopts.target = TARGET_SKELETON; goto opt_short; }
 
+    "I" end { if (!next (YYCURSOR, argv)) { error_arg ("-I"); return EXIT_FAIL; } goto opt_incpath; }
+    "I" { goto opt_incpath; }
+
     "b" { opts.set_bFlag(true);           goto opt_short; }
     "d" { opts.set_dFlag(true);           goto opt_short; }
     "g" { opts.set_gFlag(true);           goto opt_short; }
@@ -197,6 +200,15 @@ opt_header:
     filename end { opts.set_header_file (*argv); goto opt; }
 */
 
+opt_incpath:
+/*!re2c
+    * {
+        error ("bad argument to option -I: %s", *argv);
+        return EXIT_FAIL;
+    }
+    filename end { globopts.incpaths.push_back(*argv); goto opt; }
+*/
+
 opt_encoding_policy:
     if (!next (YYCURSOR, argv))
     {
@@ -264,12 +276,11 @@ opt_dfa_minimization:
 */
 
 end:
-    if (!opts.source_file)
-    {
+    if (!opts.source_file) {
         error ("no source file");
         return EXIT_FAIL;
     }
-    globopts.fix();
+    globopts.fix(opts.source_file);
 
     return OK;
 
