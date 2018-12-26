@@ -13,6 +13,7 @@ static void get_dir(std::string &path)
         if (c == '/' || c == '\\') break;
     }
     path.resize(i);
+    if (i == 0) path.push_back('.');
 }
 
 void conopt_t::fix(const char *filename)
