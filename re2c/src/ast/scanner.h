@@ -41,7 +41,7 @@ public:
     ~Scanner();
     bool init(const std::string &filename);
     bool include(const std::string &filename);
-    uint32_t get_cline() const;
+    uint32_t get_line() const;
     uint32_t get_column() const;
     const std::string & get_fname() const;
     ParseMode echo(Output &out);
@@ -56,6 +56,8 @@ private:
     size_t get_input_index() const;
     Input& get_input();
     const Input& get_cinput() const;
+    inline void set_line(uint32_t l);
+    inline void next_line();
     size_t tok_len() const;
     void set_sourceline ();
     void lex_end_of_comment(Output &out);
@@ -106,9 +108,20 @@ inline const std::string & Scanner::get_fname() const
     return get_cinput().escaped_name;
 }
 
-inline uint32_t Scanner::get_cline() const
+inline uint32_t Scanner::get_line() const
 {
-    return cline;
+    return get_cinput().line;
+}
+
+inline void Scanner::set_line(uint32_t l)
+{
+    get_input().line = l;
+}
+
+inline void Scanner::next_line()
+{
+    pos = cur;
+    ++get_input().line;
 }
 
 inline uint32_t Scanner::get_column() const

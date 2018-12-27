@@ -11,7 +11,7 @@ namespace re2c {
 
 void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input)
 {
-    const uint32_t l = input.get_cline();
+    const uint32_t l = input.get_line();
     if (mode == Scanner::Rules) {
         if (!rflag) {
             fatal_l(l, "found 'rules:re2c' block without -r flag");

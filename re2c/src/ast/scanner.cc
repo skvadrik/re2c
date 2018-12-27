@@ -22,7 +22,11 @@ size_t Scanner::get_input_index() const
 {
     size_t i = files.size();
     assert(i > 0);
-    do --i; while (i > 0 && files[i]->so > cur);
+    for (;;) {
+        --i;
+        Input *in = files[i];
+        if (i == 0 || (cur >= in->so && cur <= in->eo)) break;
+    }
     return i;
 }
 
@@ -105,7 +109,13 @@ void Scanner::pop_finished_files()
     // bottom of the stack.
     size_t i = files.size();
     assert(i > 0);
-    do --i; while (i > 0 && files[i]->eo <= tok);
+    for (;;) {
+        --i;
+        Input *in = files[i];
+        if (i == 0 || in->eo >= tok) break;
+        files.pop_back();
+        delete in;
+    }
 }
 
 bool Scanner::fill(size_t need)

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -15,6 +16,7 @@ struct Input
     std::string escaped_name;
     const char *so; // start offset in buffer
     const char *eo; // end offset in buffer
+    uint32_t line;
 
     Input();
     ~Input();

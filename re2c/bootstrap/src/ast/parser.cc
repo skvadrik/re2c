@@ -1303,7 +1303,7 @@ yyreduce:
 
     {
         if (!context.symtab.insert(std::make_pair(*(yyvsp[-2].str), (yyvsp[-1].regexp))).second) {
-            fatal_l(context.input.get_cline(), "sym already defined");
+            fatal_l(context.input.get_line(), "sym already defined");
         }
         delete (yyvsp[-2].str);
     }
@@ -1313,7 +1313,7 @@ yyreduce:
   case 8:
 
     {
-        fatal_l(context.input.get_cline(),
+        fatal_l(context.input.get_line(),
             "trailing contexts are not allowed in named definitions");
     }
 
@@ -1406,7 +1406,7 @@ yyreduce:
   case 20:
 
     {
-        const AST *r = ast_nil(context.input.get_cline(), 0);
+        const AST *r = ast_nil(context.input.get_line(), 0);
         find(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].code)));
         delete (yyvsp[-1].clist);
     }
@@ -1426,7 +1426,7 @@ yyreduce:
   case 23:
 
     {
-        (yyval.code) = new Code(context.input.get_fname(), context.input.get_cline());
+        (yyval.code) = new Code(context.input.get_fname(), context.input.get_line());
         (yyval.code)->cond = *(yyvsp[0].str);
         delete (yyvsp[0].str);
     }
@@ -1445,7 +1445,7 @@ yyreduce:
 
     {
         (yyval.regexp) = ast_cat(ast_cap((yyvsp[-2].regexp)),
-            ast_cat(ast_tag(context.input.get_cline(), 0, NULL, false), (yyvsp[0].regexp)));
+            ast_cat(ast_tag(context.input.get_line(), 0, NULL, false), (yyvsp[0].regexp)));
     }
 
     break;
@@ -1547,7 +1547,7 @@ yyreduce:
     {
         symtab_t::iterator i = context.symtab.find(*(yyvsp[0].str));
         if (i == context.symtab.end()) {
-            fatal_l(context.input.get_cline(),
+            fatal_l(context.input.get_line(),
                 "undefined symbol '%s'", (yyvsp[0].str)->c_str());
         }
         (yyval.regexp) = i->second;
@@ -1803,7 +1803,7 @@ extern "C" {
 
 void yyerror(context_t &context, const char* s)
 {
-    fatal_l(context.input.get_cline(), "%s", s);
+    fatal_l(context.input.get_line(), "%s", s);
 }
 
 int yylex(context_t &context)

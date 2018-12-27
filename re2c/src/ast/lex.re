@@ -72,7 +72,6 @@ struct ScannerState
     /*!stags:re2c format = "char *@@;"; */
 
     ptrdiff_t tchar;
-    uint32_t cline;
 
     inline ScannerState()
         : lexer_state (LEX_NORMAL)
@@ -88,7 +87,6 @@ struct ScannerState
         , eof(NULL)
         /*!stags:re2c format = ", @@(lim)"; */
         , tchar(0)
-        , cline(1)
     {
         memset(lim, 0, YYMAXFILL);
     }
@@ -167,7 +165,7 @@ echo:
         out.wraw(tok, ptr);
         out.wdelay_line_info_output();
         out.wdelay_types();
-        out.wdelay_line_info_input(cline, get_fname());
+        out.wdelay_line_info_input(get_line(), get_fname());
         lex_end_of_comment(out);
         goto echo;
     }
@@ -195,7 +193,7 @@ echo:
     "/*!header:re2c:off" {
         out.wraw(tok, ptr);
         out.header_mode(false);
-        out.wdelay_line_info_input(cline, get_fname());
+        out.wdelay_line_info_input(get_line(), get_fname());
         lex_end_of_comment(out);
         goto echo;
     }
@@ -219,8 +217,7 @@ echo:
     }
 
     eol {
-        cline++;
-        pos = cur;
+        next_line();
         goto echo;
     }
 
@@ -230,18 +227,17 @@ echo:
 
 void Scanner::lex_end_of_comment(Output &out)
 {
-    uint32_t ignored = 0;
-    for (;;) {/*!re2c
-        eof { fatal_lc(get_cline(), get_column(), "expected end of block"); }
-
+    bool multiline = false;
+    for (;;) {
+    /*!re2c
+        eof  { fatal_lc(get_line(), get_column(), "expected end of block"); }
         *    { continue; }
-        eol  { ++ignored; continue; }
+        eol  { next_line(); multiline = true; continue; }
         eoc  {
-            if (ignored > 0) {
-                cline += ignored;
-                out.wdelay_line_info_input(cline, get_fname());
+            if (multiline) {
+                out.wdelay_line_info_input(get_line(), get_fname());
             }
-            tok = pos = cur;
+            tok = cur;
             return;
         }
     */}
@@ -252,7 +248,7 @@ void Scanner::lex_include()
     const char *x, *y;
 /*!re2c
     * {
-        fatal_lc(get_cline(), get_column()
+        fatal_lc(get_line(), get_column()
             , "syntax error in include directive");
     }
 
@@ -266,17 +262,18 @@ void Scanner::lex_include()
 void Scanner::lex_tags(Output &out, bool mtags)
 {
     std::string fmt, sep;
-    for (;;) {/*!re2c
-        * { fatal_lc(get_cline(), get_column(), "unrecognized configuration"); }
+    for (;;) {
+    /*!re2c
+        * { fatal_lc(get_line(), get_column(), "unrecognized configuration"); }
 
         "format"    { fmt = lex_conf_string(); continue; }
         "separator" { sep = lex_conf_string(); continue; }
 
         space+ { continue; }
-        eol    { ++cline; continue; }
+        eol    { next_line(); continue; }
         eoc    {
             out.wdelay_tags(new ConfTags(fmt, sep), mtags);
-            tok = pos = cur;
+            tok = cur;
             return;
         }
     */}
@@ -311,7 +308,7 @@ scan:
 
     [@#] name {
         const std::string *name = new std::string(tok + 1, tok_len() - 1);
-        yylval.regexp = ast_tag(cline, get_column(), name, tok[0] == '#');
+        yylval.regexp = ast_tag(get_line(), get_column(), name, tok[0] == '#');
         return TOKEN_REGEXP;
     }
 
@@ -319,7 +316,7 @@ scan:
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min)) {
-            fatal_lc(get_cline(), get_column(), "repetition count overflow");
+            fatal_lc(get_line(), get_column(), "repetition count overflow");
         }
         yylval.bounds.max = yylval.bounds.min;
         return TOKEN_CLOSESIZE;
@@ -327,30 +324,30 @@ scan:
 
     "{" [0-9]+ @p "," [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, p, yylval.bounds.min)) {
-            fatal_lc(get_cline(), get_column(), "repetition lower bound overflow");
+            fatal_lc(get_line(), get_column(), "repetition lower bound overflow");
         }
         if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.bounds.max)) {
-            fatal_lc(get_cline(), get_column(), "repetition upper bound overflow");
+            fatal_lc(get_line(), get_column(), "repetition upper bound overflow");
         }
         return TOKEN_CLOSESIZE;
     }
 
     "{" [0-9]+ ",}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.bounds.min)) {
-            fatal_lc(get_cline(), get_column(), "repetition lower bound overflow");
+            fatal_lc(get_line(), get_column(), "repetition lower bound overflow");
         }
         yylval.bounds.max = std::numeric_limits<uint32_t>::max();
         return TOKEN_CLOSESIZE;
     }
 
     "{" [0-9]* "," {
-        fatal_lc(get_cline(), get_column(),
+        fatal_lc(get_line(), get_column(),
             "illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers");
     }
 
     "{" name "}" {
         if (!globopts->FFlag) {
-            fatal_lc(get_cline(), get_column(),
+            fatal_lc(get_line(), get_column(),
                 "curly braces for names only allowed with -F switch");
         }
         yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
@@ -377,13 +374,13 @@ scan:
                     col = static_cast<uint32_t>(s - tok);
                 str->push_back(ASTChar(chr, col));
             }
-            yylval.regexp = ast_str(cline, get_column(), str, false);
+            yylval.regexp = ast_str(get_line(), get_column(), str, false);
             return TOKEN_REGEXP;
         }
     }
 
     "." {
-        yylval.regexp = ast_dot(cline, get_column());
+        yylval.regexp = ast_dot(get_line(), get_column());
         return TOKEN_REGEXP;
     }
 
@@ -395,8 +392,7 @@ scan:
     }
 
     eol {
-        pos = cur;
-        cline++;
+        next_line();
         if (lexer_state == LEX_FLEX_NAME) {
             lexer_state = LEX_NORMAL;
             return TOKEN_FID_END;
@@ -407,7 +403,7 @@ scan:
     }
 
     * {
-        fatal_lc(get_cline(), get_column(), "unexpected character: '%c'", *tok);
+        fatal_lc(get_line(), get_column(), "unexpected character: '%c'", *tok);
         goto scan;
     }
 */
@@ -457,12 +453,12 @@ end:
     return kind;
 error:
     delete cl;
-    fatal_l(get_cline(), "syntax error in condition list");
+    fatal_l(get_line(), "syntax error in condition list");
 }
 
 void Scanner::lex_code_indented()
 {
-    const uint32_t line = cline;
+    const uint32_t line = get_line();
     tok = cur;
 code:
 /*!re2c
@@ -475,7 +471,7 @@ code:
     }
 
     eof      { fail_if_eof(); goto code; }
-    [{}]     { fatal_l(get_cline(), "Curly braces are not allowed after ':='"); }
+    [{}]     { fatal_l(get_line(), "Curly braces are not allowed after ':='"); }
     "/*"     { lex_c_comment(); goto code; }
     "//"     { lex_cpp_comment(); goto code; }
     ["']     { lex_string(cur[-1]); goto code; }
@@ -485,7 +481,7 @@ code:
 
 void Scanner::lex_code_in_braces()
 {
-    const uint32_t line = cline;
+    const uint32_t line = get_line();
     uint32_t depth = 1;
 code:
 /*!re2c
@@ -499,7 +495,7 @@ code:
 
     "{"               { ++depth; goto code; }
     linedir / lineinf { set_sourceline (); goto code; }
-    eol               { pos = cur; cline++; goto code; }
+    eol               { next_line(); goto code; }
     eof               { fail_if_eof(); goto code; }
     "/*"              { lex_c_comment(); goto code; }
     "//"              { lex_cpp_comment(); goto code; }
@@ -514,7 +510,7 @@ loop:
 /*!re2c
     ["']       { if (cur[-1] == delim) return; else goto loop; }
     esc [\\"'] { goto loop; }
-    eol        { pos = cur; ++cline; goto loop; }
+    eol        { next_line(); goto loop; }
     eof        { fail_if_eof(); goto loop; }
     *          { goto loop; }
 */
@@ -525,7 +521,7 @@ void Scanner::lex_c_comment()
 loop:
 /*!re2c
     eoc { return; }
-    eol { pos = cur; ++cline; goto loop; }
+    eol { next_line(); goto loop; }
     eof { fail_if_eof(); goto loop; }
     *   { goto loop; }
 */
@@ -535,7 +531,7 @@ void Scanner::lex_cpp_comment()
 {
 loop:
 /*!re2c
-    eol { pos = cur; ++cline; return; }
+    eol { next_line(); return; }
     eof { fail_if_eof(); goto loop; }
     *   { goto loop; }
 */
@@ -549,7 +545,7 @@ fst:
     tok = cur;
     c = get_column();
     /*!re2c
-        "]" { return ast_cls(cline, c0, cls, neg); }
+        "]" { return ast_cls(get_line(), c0, cls, neg); }
         ""  { l = lex_cls_chr(); goto snd; }
     */
 snd:
@@ -558,7 +554,7 @@ snd:
         "-" / [^\]] {
             u = lex_cls_chr();
             if (l > u) {
-                warn.swapped_range(cline, l, u);
+                warn.swapped_range(get_line(), l, u);
                 std::swap(l, u);
             }
             goto add;
@@ -572,7 +568,7 @@ add:
 uint32_t Scanner::lex_cls_chr()
 {
     tok = cur;
-    const uint32_t l = get_cline(), c = get_column();
+    const uint32_t l = get_line(), c = get_column();
     /*!re2c
         *          { fatal_lc(l, c, "syntax error"); }
         eof        { fail_if_eof(); return 0; }
@@ -595,7 +591,7 @@ uint32_t Scanner::lex_cls_chr()
         esc "-"    { return static_cast<uint8_t>('-'); }
         esc "]"    { return static_cast<uint8_t>(']'); }
         esc (.\eof){
-            warn.useless_escape(cline, get_column(), tok[1]);
+            warn.useless_escape(l, c, tok[1]);
             return static_cast<uint8_t>(tok[1]);
         }
     */
@@ -605,7 +601,7 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 {
     end = false;
     tok = cur;
-    const uint32_t l = get_cline(), c = get_column();
+    const uint32_t l = get_line(), c = get_column();
     /*!re2c
         *          { fatal_lc(l, c, "syntax error"); }
         eof        { fail_if_eof(); return 0; }
@@ -630,7 +626,7 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
         esc "\\"   { return static_cast<uint8_t>('\\'); }
         esc (.\eof){
             if (tok[1] != quote) {
-                warn.useless_escape(cline, get_column(), tok[1]);
+                warn.useless_escape(l, c, tok[1]);
             }
             return static_cast<uint8_t>(tok[1]);
         }
@@ -639,11 +635,11 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 
 const AST *Scanner::lex_str(char quote)
 {
-    const uint32_t column = get_column();
+    const uint32_t line = get_line(), column = get_column();
     std::vector<ASTChar> *str = new std::vector<ASTChar>;
     for (bool end;;) {
         const uint32_t c = lex_str_chr(quote, end);
-        if (end) return ast_str(cline, column, str, quote == '\'');
+        if (end) return ast_str(line, column, str, quote == '\'');
         str->push_back(ASTChar(c, get_column()));
     }
 }
@@ -654,9 +650,11 @@ sourceline:
     tok = cur;
 /*!re2c
     lineno {
-        if (!s_to_u32_unsafe (tok, cur, cline)) {
-            fatal_lc(get_cline(), get_column(), "line number overflow");
+        uint32_t l;
+        if (!s_to_u32_unsafe (tok, cur, l)) {
+            fatal_lc(get_line(), get_column(), "line number overflow");
         }
+        set_line(l);
         goto sourceline;
     }
 
@@ -677,7 +675,7 @@ void Scanner::fail_if_eof() const
 {
     if (is_eof()) {
         const uint32_t col = static_cast<uint32_t>(cur - pos) - 1;
-        fatal_lc(get_cline(), col, "unexpected end of input");
+        fatal_lc(get_line(), col, "unexpected end of input");
     }
 }
 

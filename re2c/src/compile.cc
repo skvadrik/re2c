@@ -132,7 +132,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     output.header_mode(0);
     output.new_block(opts);
     output.wversion_time();
-    output.wdelay_line_info_input(input.get_cline(), input.get_fname());
+    output.wdelay_line_info_input(input.get_line(), input.get_fname());
 
     if (globopts->target == TARGET_SKELETON) {
         emit_prolog(output);
@@ -169,7 +169,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             normalize_ast(specs);
 
             // compile AST to DFA
-            output.block().line = input.get_cline();
+            output.block().line = input.get_line();
             dfas_t dfas;
             for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
                 dfas.push_back(ast_to_dfa(*i, output));
@@ -183,7 +183,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             }
         }
 
-        output.wdelay_line_info_input(input.get_cline(), input.get_fname());
+        output.wdelay_line_info_input(input.get_line(), input.get_fname());
     }
 
     if (globopts->target == TARGET_SKELETON) {

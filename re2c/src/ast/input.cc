@@ -11,6 +11,7 @@ Input::Input()
     , escaped_name()
     , so(Scanner::ENDPOS)
     , eo(Scanner::ENDPOS)
+    , line(1)
 {}
 
 bool Input::open(const std::string &filename)

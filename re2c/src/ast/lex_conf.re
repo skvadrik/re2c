@@ -38,7 +38,7 @@ namespace re2c
 void Scanner::lex_conf(Opt &opts)
 {
     tok = cur;
-    const uint32_t l = get_cline(), c = get_column();
+    const uint32_t l = get_line(), c = get_column();
 /*!re2c
     "flags:" ("b" | "bit-vectors")    { opts.set_bFlag            (lex_conf_bool());   return; }
     "flags:" ("d" | "debug-output")   { opts.set_dFlag            (lex_conf_bool());   return; }
@@ -179,7 +179,7 @@ void Scanner::lex_conf_encoding_policy(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal_lc(get_cline(), get_column(),
+    * { fatal_lc(get_line(), get_column(),
         "bad configuration value (expected: 'ignore', 'substitute', 'fail')"); }
     "ignore"     { opts.set_encoding_policy(Enc::POLICY_IGNORE);     goto end; }
     "substitute" { opts.set_encoding_policy(Enc::POLICY_SUBSTITUTE); goto end; }
@@ -193,7 +193,7 @@ void Scanner::lex_conf_input(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal_lc(get_cline(), get_column(),
+    * { fatal_lc(get_line(), get_column(),
         "bad configuration value (expected: 'default', 'custom')"); }
     "default" { opts.set_input_api(INPUT_DEFAULT); goto end; }
     "custom"  { opts.set_input_api(INPUT_CUSTOM);  goto end; }
@@ -206,7 +206,7 @@ void Scanner::lex_conf_empty_class(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal_lc(get_cline(), get_column(),
+    * { fatal_lc(get_line(), get_column(),
         "bad configuration value (expected: 'match-empty', 'match-none', 'error')"); }
     "match-empty" { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_EMPTY); goto end; }
     "match-none"  { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_NONE);  goto end; }
@@ -220,7 +220,7 @@ void Scanner::lex_conf_dfa_minimization(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal_lc(get_cline(), get_column(),
+    * { fatal_lc(get_line(), get_column(),
         "bad configuration value (expected: 'table', 'moore')"); }
     "table" { opts.set_dfa_minimization(DFA_MINIMIZATION_TABLE); goto end; }
     "moore" { opts.set_dfa_minimization(DFA_MINIMIZATION_MOORE); goto end; }
@@ -241,7 +241,7 @@ void Scanner::lex_conf_enc(Enc::type_t enc, Opt &opts)
 void Scanner::lex_conf_assign ()
 {
 /*!re2c
-    * { fatal_lc(get_cline(), get_column(), "missing '=' in configuration"); }
+    * { fatal_lc(get_line(), get_column(), "missing '=' in configuration"); }
     conf_assign { return; }
 */
 }
@@ -249,7 +249,7 @@ void Scanner::lex_conf_assign ()
 void Scanner::lex_conf_semicolon ()
 {
 /*!re2c
-    * { fatal_lc(get_cline(), get_column(), "missing ending ';' in configuration"); }
+    * { fatal_lc(get_line(), get_column(), "missing ending ';' in configuration"); }
     space* ";" { return; }
 */
 }
@@ -264,12 +264,12 @@ int32_t Scanner::lex_conf_number ()
     lex_conf_assign ();
     tok = cur;
 /*!re2c
-    * { fatal_lc(get_cline(), get_column(),
+    * { fatal_lc(get_line(), get_column(),
         "bad configuration value (expected number)"); }
     number {
         int32_t n = 0;
         if (!s_to_i32_unsafe (tok, cur, n)) {
-            fatal_lc(get_cline(), get_column(), "configuration value overflow");
+            fatal_lc(get_line(), get_column(), "configuration value overflow");
         }
         lex_conf_semicolon ();
         return n;
@@ -291,7 +291,7 @@ std::string Scanner::lex_conf_string ()
                 goto end;
             }
             if (c > 0xFF) {
-                fatal_lc(get_cline(), get_column(),
+                fatal_lc(get_line(), get_column(),
                     "multibyte character in configuration string: 0x%X", c);
             } else {
                 s += static_cast<char>(c);
