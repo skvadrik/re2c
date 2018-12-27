@@ -71,8 +71,6 @@ struct ScannerState
     char *bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
     /*!stags:re2c format = "char *@@;"; */
 
-    ptrdiff_t tchar;
-
     inline ScannerState()
         : lexer_state (LEX_NORMAL)
         , BSIZE(8192)
@@ -86,7 +84,6 @@ struct ScannerState
         , pos(lim)
         , eof(NULL)
         /*!stags:re2c format = ", @@(lim)"; */
-        , tchar(0)
     {
         memset(lim, 0, YYMAXFILL);
     }
@@ -283,7 +280,6 @@ int Scanner::scan()
 {
     const char *p;
 scan:
-    tchar = cur - pos;
     tok = cur;
 /*!re2c
     "{"  { lex_code_in_braces(); return TOKEN_CODE; }
