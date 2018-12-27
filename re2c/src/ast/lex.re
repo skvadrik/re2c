@@ -111,10 +111,10 @@ Scanner::ParseMode Scanner::echo(Output &out)
 {
     if (is_eof()) return Stop;
 
+next:
     tok = cur;
-echo:
+loop:
     ptr = cur;
-
 /*!re2c
     "%{" | "/*!re2c" {
         out.wraw(tok, ptr);
@@ -134,28 +134,28 @@ echo:
     "/*!ignore:re2c" {
         out.wraw(tok, ptr);
         lex_end_of_comment(out);
-        goto echo;
+        goto next;
     }
 
     "/*!max:re2c" {
         out.wraw(tok, ptr);
         out.wdelay_yymaxfill();
         lex_end_of_comment(out);
-        goto echo;
+        goto next;
     }
 
     "/*!maxnmatch:re2c" {
         out.wraw(tok, ptr);
         out.wdelay_yymaxnmatch();
         lex_end_of_comment(out);
-        goto echo;
+        goto next;
     }
 
     "/*!getstate:re2c" {
         out.wraw(tok, ptr);
         out.wdelay_state_goto(0);
         lex_end_of_comment(out);
-        goto echo;
+        goto next;
     }
 
     "/*!types:re2c" {
@@ -164,19 +164,19 @@ echo:
         out.wdelay_types();
         out.wdelay_line_info_input(get_line(), get_fname());
         lex_end_of_comment(out);
-        goto echo;
+        goto next;
     }
 
     "/*!stags:re2c" {
         out.wraw(tok, ptr);
         lex_tags(out, false);
-        goto echo;
+        goto next;
     }
 
     "/*!mtags:re2c" {
         out.wraw(tok, ptr);
         lex_tags(out, true);
-        goto echo;
+        goto next;
     }
 
     "/*!header:re2c:on" {
@@ -184,7 +184,7 @@ echo:
         out.header_mode(true);
         out.need_header = true;
         lex_end_of_comment(out);
-        goto echo;
+        goto next;
     }
 
     "/*!header:re2c:off" {
@@ -192,52 +192,59 @@ echo:
         out.header_mode(false);
         out.wdelay_line_info_input(get_line(), get_fname());
         lex_end_of_comment(out);
-        goto echo;
+        goto next;
     }
 
     "/*!include:re2c" {
         out.wraw(tok, ptr);
         lex_include();
-        goto echo;
+        goto next;
     }
 
     eof {
-        if (!is_eof()) goto echo;
-        out.wraw(tok, ptr);
-        return Stop;
+        if (is_eof()) {
+            out.wraw(tok, ptr);
+            return Stop;
+        }
+        goto loop;
     }
 
     linedir / lineinf {
         out.wraw(tok, ptr + 1);
         set_sourceline();
-        goto echo;
+        goto next;
     }
 
     eol {
         next_line();
-        goto echo;
+        goto loop;
     }
 
-    * { goto echo; }
+    * { goto loop; }
 */
 }
 
 void Scanner::lex_end_of_comment(Output &out)
 {
     bool multiline = false;
-    for (;;) {
-    /*!re2c
-        eof  { fatal_lc(get_line(), get_column(), "expected end of block"); }
-        *    { continue; }
-        eol  { next_line(); multiline = true; continue; }
-        eoc  {
-            if (multiline) {
-                out.wdelay_line_info_input(get_line(), get_fname());
-            }
-            tok = cur;
-            return;
+loop:
+/*!re2c
+    * { goto loop; }
+    eof {
+        fatal_lc(get_line(), get_column(), "expected end of block");
+    }
+    eol {
+        next_line();
+        multiline = true;
+        goto loop;
+    }
+    eoc {
+        if (multiline) {
+            out.wdelay_line_info_input(get_line(), get_fname());
         }
-    */}
+        return;
+    }
+*/
 }
 
 void Scanner::lex_include()
@@ -245,8 +252,7 @@ void Scanner::lex_include()
     const char *x, *y;
 /*!re2c
     * {
-        fatal_lc(get_line(), get_column()
-            , "syntax error in include directive");
+        fatal_lc(get_line(), get_column(), "syntax error in include directive");
     }
 
     space+ @x dstring @y space* eoc {
@@ -259,21 +265,31 @@ void Scanner::lex_include()
 void Scanner::lex_tags(Output &out, bool mtags)
 {
     std::string fmt, sep;
-    for (;;) {
-    /*!re2c
-        * { fatal_lc(get_line(), get_column(), "unrecognized configuration"); }
-
-        "format"    { fmt = lex_conf_string(); continue; }
-        "separator" { sep = lex_conf_string(); continue; }
-
-        space+ { continue; }
-        eol    { next_line(); continue; }
-        eoc    {
-            out.wdelay_tags(new ConfTags(fmt, sep), mtags);
-            tok = cur;
-            return;
-        }
-    */}
+loop:
+/*!re2c
+    * {
+        fatal_lc(get_line(), get_column(), "unrecognized configuration");
+    }
+    "format" {
+        fmt = lex_conf_string();
+        goto loop;
+    }
+    "separator" {
+        sep = lex_conf_string();
+        goto loop;
+    }
+    space+ {
+        goto loop;
+    }
+    eol {
+        next_line();
+        goto loop;
+    }
+    eoc {
+        out.wdelay_tags(new ConfTags(fmt, sep), mtags);
+        return;
+    }
+*/
 }
 
 int Scanner::scan()
@@ -290,7 +306,7 @@ scan:
         return tok[0] == ':' ? TOKEN_CJUMP : TOKEN_CNEXT;
     }
 
-    "<"   { return lex_clist(); }
+    "<" { return lex_clist(); }
 
     "//" { lex_cpp_comment(); goto scan; }
     "/*" { lex_c_comment(); goto scan; }
@@ -434,9 +450,9 @@ int Scanner::lex_clist()
 cond:
     tok = cur;
 /*!re2c
-    name              { cl->insert(std::string(tok, tok_len())); goto next; }
-    "*"               { if (!cl->empty()) goto error; cl->insert("*"); goto next; }
-    *                 { goto error; }
+    name { cl->insert(std::string(tok, tok_len())); goto next; }
+    "*"  { if (!cl->empty()) goto error; cl->insert("*"); goto next; }
+    *    { goto error; }
 */
 next:
 /*!re2c
@@ -466,12 +482,12 @@ code:
         return;
     }
 
-    eof      { fail_if_eof(); goto code; }
-    [{}]     { fatal_l(get_line(), "Curly braces are not allowed after ':='"); }
-    "/*"     { lex_c_comment(); goto code; }
-    "//"     { lex_cpp_comment(); goto code; }
-    ["']     { lex_string(cur[-1]); goto code; }
-    *        { goto code; }
+    eof  { fail_if_eof(); goto code; }
+    [{}] { fatal_l(get_line(), "Curly braces are not allowed after ':='"); }
+    "/*" { lex_c_comment(); goto code; }
+    "//" { lex_cpp_comment(); goto code; }
+    ["'] { lex_string(cur[-1]); goto code; }
+    *    { goto code; }
 */
 }
 
@@ -540,22 +556,22 @@ const AST *Scanner::lex_cls(bool neg)
 fst:
     tok = cur;
     c = get_column();
-    /*!re2c
-        "]" { return ast_cls(get_line(), c0, cls, neg); }
-        ""  { l = lex_cls_chr(); goto snd; }
-    */
+/*!re2c
+    "]" { return ast_cls(get_line(), c0, cls, neg); }
+    ""  { l = lex_cls_chr(); goto snd; }
+*/
 snd:
-    /*!re2c
-        ""          { u = l; goto add; }
-        "-" / [^\]] {
-            u = lex_cls_chr();
-            if (l > u) {
-                warn.swapped_range(get_line(), l, u);
-                std::swap(l, u);
-            }
-            goto add;
+/*!re2c
+    ""          { u = l; goto add; }
+    "-" / [^\]] {
+        u = lex_cls_chr();
+        if (l > u) {
+            warn.swapped_range(get_line(), l, u);
+            std::swap(l, u);
         }
-    */
+        goto add;
+    }
+*/
 add:
     cls->push_back(ASTRange(l, u, c));
     goto fst;
@@ -565,32 +581,32 @@ uint32_t Scanner::lex_cls_chr()
 {
     tok = cur;
     const uint32_t l = get_line(), c = get_column();
-    /*!re2c
-        *          { fatal_lc(l, c, "syntax error"); }
-        eof        { fail_if_eof(); return 0; }
-        esc? eol   { fatal_lc(l, c, "newline in character class"); }
-        esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
-        esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
-        esc        { fatal_lc(l, c, "syntax error in escape sequence"); }
+/*!re2c
+    *          { fatal_lc(l, c, "syntax error"); }
+    eof        { fail_if_eof(); return 0; }
+    esc? eol   { fatal_lc(l, c, "newline in character class"); }
+    esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
+    esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
+    esc        { fatal_lc(l, c, "syntax error in escape sequence"); }
 
-        . \ esc    { return static_cast<uint8_t>(tok[0]); }
-        esc_hex    { return unesc_hex(tok, cur); }
-        esc_oct    { return unesc_oct(tok, cur); }
-        esc "a"    { return static_cast<uint8_t>('\a'); }
-        esc "b"    { return static_cast<uint8_t>('\b'); }
-        esc "f"    { return static_cast<uint8_t>('\f'); }
-        esc "n"    { return static_cast<uint8_t>('\n'); }
-        esc "r"    { return static_cast<uint8_t>('\r'); }
-        esc "t"    { return static_cast<uint8_t>('\t'); }
-        esc "v"    { return static_cast<uint8_t>('\v'); }
-        esc "\\"   { return static_cast<uint8_t>('\\'); }
-        esc "-"    { return static_cast<uint8_t>('-'); }
-        esc "]"    { return static_cast<uint8_t>(']'); }
-        esc (.\eof){
-            warn.useless_escape(l, c, tok[1]);
-            return static_cast<uint8_t>(tok[1]);
-        }
-    */
+    . \ esc    { return static_cast<uint8_t>(tok[0]); }
+    esc_hex    { return unesc_hex(tok, cur); }
+    esc_oct    { return unesc_oct(tok, cur); }
+    esc "a"    { return static_cast<uint8_t>('\a'); }
+    esc "b"    { return static_cast<uint8_t>('\b'); }
+    esc "f"    { return static_cast<uint8_t>('\f'); }
+    esc "n"    { return static_cast<uint8_t>('\n'); }
+    esc "r"    { return static_cast<uint8_t>('\r'); }
+    esc "t"    { return static_cast<uint8_t>('\t'); }
+    esc "v"    { return static_cast<uint8_t>('\v'); }
+    esc "\\"   { return static_cast<uint8_t>('\\'); }
+    esc "-"    { return static_cast<uint8_t>('-'); }
+    esc "]"    { return static_cast<uint8_t>(']'); }
+    esc (.\eof){
+        warn.useless_escape(l, c, tok[1]);
+        return static_cast<uint8_t>(tok[1]);
+    }
+*/
 }
 
 uint32_t Scanner::lex_str_chr(char quote, bool &end)
@@ -598,35 +614,35 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
     end = false;
     tok = cur;
     const uint32_t l = get_line(), c = get_column();
-    /*!re2c
-        *          { fatal_lc(l, c, "syntax error"); }
-        eof        { fail_if_eof(); return 0; }
-        esc? eol   { fatal_lc(l, c, "newline in character string"); }
-        esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
-        esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
-        esc        { fatal_lc(l, c, "syntax error in escape sequence"); }
+/*!re2c
+    *          { fatal_lc(l, c, "syntax error"); }
+    eof        { fail_if_eof(); return 0; }
+    esc? eol   { fatal_lc(l, c, "newline in character string"); }
+    esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
+    esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
+    esc        { fatal_lc(l, c, "syntax error in escape sequence"); }
 
-        . \ esc    {
-            end = tok[0] == quote;
-            return static_cast<uint8_t>(tok[0]);
+    . \ esc    {
+        end = tok[0] == quote;
+        return static_cast<uint8_t>(tok[0]);
+    }
+    esc_hex    { return unesc_hex(tok, cur); }
+    esc_oct    { return unesc_oct(tok, cur); }
+    esc "a"    { return static_cast<uint8_t>('\a'); }
+    esc "b"    { return static_cast<uint8_t>('\b'); }
+    esc "f"    { return static_cast<uint8_t>('\f'); }
+    esc "n"    { return static_cast<uint8_t>('\n'); }
+    esc "r"    { return static_cast<uint8_t>('\r'); }
+    esc "t"    { return static_cast<uint8_t>('\t'); }
+    esc "v"    { return static_cast<uint8_t>('\v'); }
+    esc "\\"   { return static_cast<uint8_t>('\\'); }
+    esc (.\eof){
+        if (tok[1] != quote) {
+            warn.useless_escape(l, c, tok[1]);
         }
-        esc_hex    { return unesc_hex(tok, cur); }
-        esc_oct    { return unesc_oct(tok, cur); }
-        esc "a"    { return static_cast<uint8_t>('\a'); }
-        esc "b"    { return static_cast<uint8_t>('\b'); }
-        esc "f"    { return static_cast<uint8_t>('\f'); }
-        esc "n"    { return static_cast<uint8_t>('\n'); }
-        esc "r"    { return static_cast<uint8_t>('\r'); }
-        esc "t"    { return static_cast<uint8_t>('\t'); }
-        esc "v"    { return static_cast<uint8_t>('\v'); }
-        esc "\\"   { return static_cast<uint8_t>('\\'); }
-        esc (.\eof){
-            if (tok[1] != quote) {
-                warn.useless_escape(l, c, tok[1]);
-            }
-            return static_cast<uint8_t>(tok[1]);
-        }
-    */
+        return static_cast<uint8_t>(tok[1]);
+    }
+*/
 }
 
 const AST *Scanner::lex_str(char quote)
