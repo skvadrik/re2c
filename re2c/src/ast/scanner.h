@@ -61,7 +61,6 @@ private:
     size_t tok_len() const;
     void set_sourceline ();
     void lex_end_of_comment(Output &out);
-    void lex_include();
     void lex_code_indented();
     void lex_code_in_braces();
     void lex_c_comment();

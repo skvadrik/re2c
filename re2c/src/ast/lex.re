@@ -109,6 +109,7 @@ struct ScannerState
 
 Scanner::ParseMode Scanner::echo(Output &out)
 {
+    const char *x, *y;
     if (is_eof()) return Stop;
 
 next:
@@ -195,9 +196,9 @@ loop:
         goto next;
     }
 
-    "/*!include:re2c" {
+    "/*!include:re2c" space+ @x dstring @y space* eoc {
         out.wraw(tok, ptr);
-        lex_include();
+        include(std::string(x + 1, static_cast<size_t>(y - x) - 2));
         goto next;
     }
 
@@ -242,21 +243,6 @@ loop:
         if (multiline) {
             out.wdelay_line_info_input(get_line(), get_fname());
         }
-        return;
-    }
-*/
-}
-
-void Scanner::lex_include()
-{
-    const char *x, *y;
-/*!re2c
-    * {
-        fatal_lc(get_line(), get_column(), "syntax error in include directive");
-    }
-
-    space+ @x dstring @y space* eoc {
-        include(std::string(x + 1, static_cast<size_t>(y - x) - 2));
         return;
     }
 */
