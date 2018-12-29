@@ -20,6 +20,8 @@ Scanner::~Scanner()
 
 size_t Scanner::get_input_index() const
 {
+    // Find index of the current input file: the one corresponding to
+    // buffer fragment that contains cursor.
     size_t i = files.size();
     assert(i > 0);
     for (;;) {
@@ -40,7 +42,8 @@ bool Scanner::init(const std::string &filename)
 bool Scanner::include(const std::string &filename)
 {
     // unread buffer tail: we'll return to it later
-    for (size_t i = files.size(); i --> 0; ) {
+    // file fragments are laid out left-to-right from nested to outer
+    for (size_t i = 0; i < files.size(); ++i) {
         Input *in = files[i];
         if (in->so >= cur) {
             // unread whole fragment
