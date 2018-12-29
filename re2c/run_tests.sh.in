@@ -58,21 +58,25 @@ test_blddir="test_"`date +%y%m%d%H%M%S`
 rm -rf $test_blddir && mkdir $test_blddir
 
 # preserve directory structure unless given explicit args
-testdirs=
 if [ ${#tests[@]} -eq 0 ]; then
-    for d in "@top_srcdir@/test" "@top_srcdir@/examples" ; do
-        testdirs="$testdirs $(find $d -type d)"
-        cp -R $d/* $test_blddir
-    done
+    cp -R "@top_srcdir@/test/"* "@top_srcdir@/examples/"*  $test_blddir
 else
     for f in ${tests[@]}; do
         cp $f ${f%.re}.c $test_blddir
-        testdirs="$testdirs $(dirname $f)"
     done
 fi
 chmod -R u+w $test_blddir
-find $test_blddir -type f ! -name '*.re' -a ! -name '*.c' -exec rm {} \;
+find $test_blddir -type f \
+    ! -name '*.re' -a \
+    ! -name '*.c' -a \
+    ! -name '*.inc' \
+    -exec rm {} \;
 tests=(`find $test_blddir -name '*.re' | sort`)
+
+# set include paths
+cd $test_blddir \
+    && incpaths=$(find * -type d -exec echo "-I ../{}" \;) \
+    && cd ..
 
 tests_per_thread=$((${#tests[@]} / threads + 1))
 packs=()
@@ -144,8 +148,6 @@ run_pack() {
 		then
 			rm -f "$outc"
 
-			incpaths=; for d in $testdirs; do incpaths="$incpaths -I ../$d"; done
-
 			local switches="$switches --skeleton -Werror-undefined-control-flow"
 
 			${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outc.stderr"
@@ -170,8 +172,6 @@ run_pack() {
 		else
 			local c="${outx%.re}.c.orig"
 			mv "$outc" "$c"
-
-			incpaths=; for d in $testdirs; do incpaths="$incpaths -I ../../$d"; done
 
 			# create sandbox
 			tmpdir="tmp_$log" \
