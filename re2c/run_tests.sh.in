@@ -24,13 +24,6 @@ lc_run() {
     LANG=C LC_ALL=C "$@"
 }
 
-abspath() {
-    case "$1" in
-        /*) echo "$1";;
-        *) echo "$PWD/$1";;
-    esac
-}
-
 valgrind=""
 skeleton=0
 keep_tmp_files=0
@@ -65,14 +58,16 @@ test_blddir="test_"`date +%y%m%d%H%M%S`
 rm -rf $test_blddir && mkdir $test_blddir
 
 # preserve directory structure unless given explicit args
+testdirs=
 if [ ${#tests[@]} -eq 0 ]; then
-    cp -R "@top_srcdir@/test"/* "@top_srcdir@/examples"/* $test_blddir
-    incpaths=`find "@top_srcdir@/test" "@top_srcdir@/examples" -type d -exec echo "-I $(abspath {})" \;`
+    for d in "@top_srcdir@/test" "@top_srcdir@/examples" ; do
+        testdirs="$testdirs $(find $d -type d)"
+        cp -R $d/* $test_blddir
+    done
 else
-    incpaths=
     for f in ${tests[@]}; do
         cp $f ${f%.re}.c $test_blddir
-        incpaths="$incpaths -I $(abspath $(dirname $f))"
+        testdirs="$testdirs $(dirname $f)"
     done
 fi
 chmod -R u+w $test_blddir
@@ -141,7 +136,7 @@ run_pack() {
 		# file extensions are case-insensitive on some platforms
 		printf "%s" "$switches" | lc_run grep -q "[A-Z]" \
 			&& { echo "bad file extension: '$outx' (uppercase letters are not allowed)"; exit 1; }
-		local switches="$switches $incpaths -o $outc --no-version --no-generation-date"
+		local switches="$switches -o $outc --no-version --no-generation-date"
 		# enable warnings globally
 		local switches="$switches -W"
 
@@ -149,9 +144,11 @@ run_pack() {
 		then
 			rm -f "$outc"
 
+			incpaths=; for d in $testdirs; do incpaths="$incpaths -I ../$d"; done
+
 			local switches="$switches --skeleton -Werror-undefined-control-flow"
 
-			${valgrind} ${wine} ../${re2c} $switches "../$x" 2>"$outc.stderr"
+			${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outc.stderr"
 			local status=$(echo $?)
 			[ $status -eq 0 ] && { @CC@ -Wall -Wextra -o "$outc.out" "$outc" 2>>"$outc.stderr" || status=2; }
 			[ $status -eq 0 ] && { ./"$outc.out" 2>>"$outc.stderr" || status=3; }
@@ -174,6 +171,8 @@ run_pack() {
 			local c="${outx%.re}.c.orig"
 			mv "$outc" "$c"
 
+			incpaths=; for d in $testdirs; do incpaths="$incpaths -I ../../$d"; done
+
 			# create sandbox
 			tmpdir="tmp_$log" \
 				&& mkdir "$tmpdir" \
@@ -181,7 +180,7 @@ run_pack() {
 				&& mkdir -p `dirname "$outx"` \
 				&& cp "../../$x" "$outx"
 			# run re2c
-			$valgrind $wine ../../$re2c $switches "$outx" 2>"$outc.stderr" 1>&2
+			$valgrind $wine ../../$re2c $incpaths $switches "$outx" 2>"$outc.stderr" 1>&2
 			# on windows output contains CR LF, cut CR to match test results
 			for f in "$outc" "$outc.stderr"; do
 				[ -f "$f" ] \
