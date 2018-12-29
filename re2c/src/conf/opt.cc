@@ -4,28 +4,12 @@
 namespace re2c
 {
 
-static void get_dir(std::string &path)
-{
-    // scan the path backwards until the first slash (if any) and clip
-    size_t i = path.length();
-    for (; i > 0; --i) {
-        const char c = path[i - 1];
-        if (c == '/' || c == '\\') break;
-    }
-    path.resize(i);
-    if (i == 0) path.push_back('.');
-}
-
-void conopt_t::fix(const char *filename)
+void conopt_t::fix()
 {
     if (target == TARGET_SKELETON) {
         fFlag = false;
     }
 
-    // first include path must be the directory of the source file
-    std::string path(filename);
-    get_dir(path);
-    incpaths.insert(incpaths.begin(), path);
     // append directory separator '/' to all paths that do not have it
     for (size_t i = 0; i < incpaths.size(); ++i) {
         std::string &p = incpaths[i];

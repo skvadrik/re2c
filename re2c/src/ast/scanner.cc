@@ -36,13 +36,20 @@ bool Scanner::init(const std::string &filename)
 {
     Input *in = new Input;
     files.push_back(in);
-    return in->open(filename);
+    return in->open(filename, NULL, globopts->incpaths);
 }
 
 bool Scanner::include(const std::string &filename)
 {
+    // get name of the current file (before unreading)
+    const std::string &parent = get_fname();
+
     // unread buffer tail: we'll return to it later
-    // file fragments are laid out left-to-right from nested to outer
+    // In the buffer nested files go before outer files. In the file stack,
+    // however, outer files go before nested files (nested are at the top).
+    // We want to break from the unreading cycle early, therefore we go in
+    // reverse order of file offsets in buffer and break as soon as the end
+    // offset is less than cursor (current position).
     for (size_t i = 0; i < files.size(); ++i) {
         Input *in = files[i];
         if (in->so >= cur) {
@@ -64,7 +71,7 @@ bool Scanner::include(const std::string &filename)
     // open new file and place place at the top of stack
     Input *in = new Input;
     files.push_back(in);
-    if (!in->open_in_dirs(filename, globopts->incpaths)) return false;
+    if (!in->open(filename, &parent, globopts->incpaths)) return false;
 
     // refill buffer (discard everything up to cursor, clear EOF)
     lim = cur = mar = ctx = tok = ptr = pos = bot + BSIZE;

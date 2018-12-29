@@ -1,6 +1,7 @@
 #include "src/ast/input.h"
 #include "src/ast/scanner.h"
 #include "src/conf/msg.h"
+#include "src/util/get_dir.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {
@@ -14,34 +15,38 @@ Input::Input()
     , line(1)
 {}
 
-bool Input::open(const std::string &filename)
-{
-    name = escaped_name = filename;
-    strrreplace(escaped_name, "\\", "\\\\");
-
-    file = name == "<stdin>" ? stdin : fopen(name.c_str(), "rb");
-    if (!file) {
-        error("cannot open file: %s", name.c_str());
-        return false;
-    }
-
-    return true;
-}
-
-bool Input::open_in_dirs(const std::string &filename
+bool Input::open(const std::string &filename, const std::string *parent
     , const std::vector<std::string> &incpaths)
 {
-    name = escaped_name = filename;
-    strrreplace(escaped_name, "\\", "\\\\");
+    std::string path;
+    name = filename;
 
-    for (size_t i = 0; !file && i < incpaths.size(); ++i) {
-        const std::string path = incpaths[i] + name;
-        file = fopen(path.c_str(), "rb");
+    if (!parent) {
+        path = name;
+        file = name == "<stdin>" ? stdin : fopen(name.c_str(), "rb");
     }
+    else {
+        // first, search relative to the directory of including file
+        path = *parent;
+        get_dir(path);
+        path += name;
+        file = fopen(path.c_str(), "rb");
+
+        // otherwise search in all include paths
+        for (size_t i = 0; !file && i < incpaths.size(); ++i) {
+            path = incpaths[i] + name;
+            file = fopen(path.c_str(), "rb");
+        }
+    }
+
     if (!file) {
-        error("cannot open file: %s", name.c_str());
+        fatal("cannot open file: %s", name.c_str());
         return false;
     }
+
+    // name displayed in #line directives is the resolved name
+    escaped_name = path;
+    strrreplace(escaped_name, "\\", "\\\\");
 
     return true;
 }

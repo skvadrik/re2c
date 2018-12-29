@@ -58,6 +58,7 @@ SRC_HDR = \
 	src/util/counter.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
+	src/util/get_dir.h \
 	src/util/hash32.h \
 	src/util/local_increment.h \
 	src/util/lookup.h \
@@ -144,6 +145,7 @@ SRC = \
 	src/ast/scanner.cc \
 	src/ast/unescape.cc \
 	src/ast/validate.cc \
+	src/util/get_dir.cc \
 	src/util/s_to_n32_unsafe.cc \
 	src/util/range.cc
 re2c_SOURCES = \

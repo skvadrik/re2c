@@ -280,7 +280,7 @@ end:
         error ("no source file");
         return EXIT_FAIL;
     }
-    globopts.fix(opts.source_file);
+    globopts.fix();
 
     return OK;
 

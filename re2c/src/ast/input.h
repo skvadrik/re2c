@@ -20,8 +20,8 @@ struct Input
 
     Input();
     ~Input();
-    bool open(const std::string &);
-    bool open_in_dirs(const std::string &, const std::vector<std::string> &);
+    bool open(const std::string &filename, const std::string *parent
+        , const std::vector<std::string> &incpaths);
 
     FORBID_COPY(Input);
 };

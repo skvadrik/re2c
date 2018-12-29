@@ -171,7 +171,7 @@ struct conopt_t
 #        undef CONSTOPT1
 #        undef CONSTOPT
     {}
-    void fix(const char *filename);
+    void fix();
     FORBID_COPY(conopt_t);
 };
 
