@@ -17,7 +17,17 @@ static inline bool next (char * & arg, char ** & argv)
 parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Warn &warn)
 {
 #define YYCTYPE unsigned char
-    char *YYCURSOR, *YYMARKER, *p;
+
+#define NEXT_ARG(option, label) \
+    do { \
+        if (next (YYCURSOR, argv)) goto label; \
+        else { error_arg(option); return EXIT_FAIL; } \
+    } while(0)
+
+#define ERROR(msg, arg) \
+    do { error(msg, arg); return EXIT_FAIL; } while(0)
+
+    char *YYCURSOR, *YYMARKER;
     Warn::option_t option;
 
 /*!re2c
@@ -29,28 +39,15 @@ parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Warn &warn)
 */
 
 opt:
-    if (!next (YYCURSOR, argv))
-    {
-        goto end;
-    }
+    if (!next (YYCURSOR, argv)) goto end;
 /*!re2c
-    *
-    {
-        error ("bad option: %s", *argv);
-        return EXIT_FAIL;
-    }
+    * { ERROR("bad option: %s", *argv); }
 
-    "--" end
-    {
-        // all remaining arguments are non-options
-        // so they must be input files
+    "--" end {
+        // remaining args are non-options, so they must be input files
         // re2c expects exactly one input file
-        for (char * f; next (f, argv);)
-        {
-            if (!opts.source (f))
-            {
-                return EXIT_FAIL;
-            }
+        for (char * f; next (f, argv);) {
+            if (!opts.source (f)) return EXIT_FAIL;
         }
         goto end;
     }
@@ -71,28 +68,22 @@ opt:
 
 opt_warn:
 /*!re2c
-    *
-    {
-        error ("bad warning: %s", *argv);
-        return EXIT_FAIL;
-    }
-    "condition-order"          end { warn.set (Warn::CONDITION_ORDER,          option); goto opt; }
-    "empty-character-class"    end { warn.set (Warn::EMPTY_CHARACTER_CLASS,    option); goto opt; }
-    "match-empty-string"       end { warn.set (Warn::MATCH_EMPTY_STRING,       option); goto opt; }
-    "nondeterministic-tags"    end { warn.set (Warn::NONDETERMINISTIC_TAGS,    option); goto opt; }
-    "swapped-range"            end { warn.set (Warn::SWAPPED_RANGE,            option); goto opt; }
-    "undefined-control-flow"   end { warn.set (Warn::UNDEFINED_CONTROL_FLOW,   option); goto opt; }
-    "unreachable-rules"        end { warn.set (Warn::UNREACHABLE_RULES,        option); goto opt; }
-    "useless-escape"           end { warn.set (Warn::USELESS_ESCAPE,           option); goto opt; }
+    * { ERROR("bad warning: %s", *argv); }
+
+    "condition-order"          end { warn.set (Warn::CONDITION_ORDER,        option); goto opt; }
+    "empty-character-class"    end { warn.set (Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
+    "match-empty-string"       end { warn.set (Warn::MATCH_EMPTY_STRING,     option); goto opt; }
+    "nondeterministic-tags"    end { warn.set (Warn::NONDETERMINISTIC_TAGS,  option); goto opt; }
+    "swapped-range"            end { warn.set (Warn::SWAPPED_RANGE,          option); goto opt; }
+    "undefined-control-flow"   end { warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
+    "unreachable-rules"        end { warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
+    "useless-escape"           end { warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
 */
 
 opt_short:
 /*!re2c
-    *
-    {
-        error ("bad short option: %s", *argv);
-        return EXIT_FAIL;
-    }
+    * { ERROR("bad short option: %s", *argv); }
+
     end { goto opt; }
     [?h] { usage ();   return EXIT_OK; }
     "v"  { version (); return EXIT_OK; }
@@ -104,9 +95,6 @@ opt_short:
     "F" { globopts.FFlag = true;             goto opt_short; }
     "r" { globopts.rFlag = true;             goto opt_short; }
     "S" { globopts.target = TARGET_SKELETON; goto opt_short; }
-
-    "I" end { if (!next (YYCURSOR, argv)) { error_arg ("-I"); return EXIT_FAIL; } goto opt_incpath; }
-    "I"     { goto opt_incpath; }
 
     "b" { opts.set_bFlag(true);           goto opt_short; }
     "d" { opts.set_dFlag(true);           goto opt_short; }
@@ -120,20 +108,23 @@ opt_short:
     "w" { opts.set_encoding(Enc::UCS2);   goto opt_short; }
     "x" { opts.set_encoding(Enc::UTF16);  goto opt_short; }
     "8" { opts.set_encoding(Enc::UTF8);   goto opt_short; }
-    "o" end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
-    "o"     { *argv = YYCURSOR;                                                             goto opt_output; }
-    "t" end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
-    "t"     { *argv = YYCURSOR;                                                                  goto opt_header; }
+
+    "I" end { NEXT_ARG("-I", opt_incpath); }
+    "I"     { *argv = YYCURSOR; goto opt_incpath; }
+
+    "o" end { NEXT_ARG("-o, --output", opt_output); }
+    "o"     { *argv = YYCURSOR; goto opt_output; }
+
+    "t" end { NEXT_ARG("-t, --type-header", opt_header); }
+    "t"     { *argv = YYCURSOR; goto opt_header; }
+
     "1" { goto opt_short; } // deprecated
 */
 
 opt_long:
 /*!re2c
-    *
-    {
-        error ("bad long option: %s", *argv);
-        return EXIT_FAIL;
-    }
+    * { ERROR("bad long option: %s", *argv); }
+
     "help"                  end { usage ();   return EXIT_OK; }
     "version"               end { version (); return EXIT_OK; }
     "vernum"                end { vernum ();  return EXIT_OK; }
@@ -164,12 +155,14 @@ opt_long:
     "wide-chars"            end { opts.set_encoding(Enc::UCS2);      goto opt; }
     "utf-16"                end { opts.set_encoding(Enc::UTF16);     goto opt; }
     "utf-8"                 end { opts.set_encoding(Enc::UTF8);      goto opt; }
-    "output"                end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
-    "type-header"           end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
-    "encoding-policy"       end { goto opt_encoding_policy; }
-    "input"                 end { goto opt_input; }
-    "empty-class"           end { goto opt_empty_class; }
-    "dfa-minimization"      end { goto opt_dfa_minimization; }
+
+    "output"                end { NEXT_ARG("-o, --output",       opt_output); }
+    "type-header"           end { NEXT_ARG("-t, --type-header",  opt_header); }
+    "encoding-policy"       end { NEXT_ARG("--encoding-policy",  opt_encoding_policy); }
+    "input"                 end { NEXT_ARG("--input",            opt_input); }
+    "empty-class"           end { NEXT_ARG("--empty-class",      opt_empty_class); }
+    "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_dfa_minimization); }
+
     "single-pass"           end { goto opt; } // deprecated
 
     "dump-nfa"              end { globopts.dump_nfa = true;        goto opt; }
@@ -182,48 +175,27 @@ opt_long:
 
 opt_output:
 /*!re2c
-    *
-    {
-        error ("bad argument to option -o, --output: %s", *argv);
-        return EXIT_FAIL;
-    }
+    * { ERROR("bad argument to option -o, --output: %s", *argv); }
     filename end { opts.set_output_file (*argv); goto opt; }
 */
 
 opt_header:
 /*!re2c
-    *
-    {
-        error ("bad argument to option -t, --type-header: %s", *argv);
-        return EXIT_FAIL;
-    }
+    * { ERROR("bad argument to option -t, --type-header: %s", *argv); }
     filename end { opts.set_header_file (*argv); goto opt; }
 */
 
 opt_incpath:
-    p = YYCURSOR;
 /*!re2c
-    * {
-        error ("bad argument to option -I: %s", *argv);
-        return EXIT_FAIL;
-    }
-    filename end {
-        globopts.incpaths.push_back(getstr(p, YYCURSOR - 1));
-        goto opt;
-    }
+    * { ERROR("bad argument to option -I: %s", *argv); }
+    filename end { globopts.incpaths.push_back(*argv); goto opt; }
 */
 
 opt_encoding_policy:
-    if (!next (YYCURSOR, argv))
-    {
-        error_arg ("--encoding-policy");
-        return EXIT_FAIL;
-    }
 /*!re2c
-    *
-    {
-        error ("bad argument to option --encoding-policy (expected: ignore | substitute | fail): %s", *argv);
-        return EXIT_FAIL;
+    * {
+        ERROR("bad argument to option --encoding-policy "
+            "(expected: ignore | substitute | fail): %s", *argv);
     }
     "ignore"     end { opts.set_encoding_policy (Enc::POLICY_IGNORE);     goto opt; }
     "substitute" end { opts.set_encoding_policy (Enc::POLICY_SUBSTITUTE); goto opt; }
@@ -231,32 +203,20 @@ opt_encoding_policy:
 */
 
 opt_input:
-    if (!next (YYCURSOR, argv))
-    {
-        error_arg ("--input");
-        return EXIT_FAIL;
-    }
 /*!re2c
-    *
-    {
-        error ("bad argument to option --input (expected: default | custom): %s", *argv);
-        return EXIT_FAIL;
+    * {
+        ERROR("bad argument to option --input "
+            "(expected: default | custom): %s", *argv);
     }
     "default" end { opts.set_input_api(INPUT_DEFAULT); goto opt; }
     "custom"  end { opts.set_input_api(INPUT_CUSTOM);  goto opt; }
 */
 
 opt_empty_class:
-    if (!next (YYCURSOR, argv))
-    {
-        error_arg ("--empty-class");
-        return EXIT_FAIL;
-    }
 /*!re2c
-    *
-    {
-        error ("bad argument to option --empty-class (expected: match-empty | match-none | error): %s", *argv);
-        return EXIT_FAIL;
+    * {
+        ERROR("bad argument to option --empty-class "
+            "(expected: match-empty | match-none | error): %s", *argv);
     }
     "match-empty" end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_EMPTY); goto opt; }
     "match-none"  end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_NONE);  goto opt; }
@@ -264,16 +224,10 @@ opt_empty_class:
 */
 
 opt_dfa_minimization:
-    if (!next (YYCURSOR, argv))
-    {
-        error_arg ("--minimization");
-        return EXIT_FAIL;
-    }
 /*!re2c
-    *
-    {
-        error ("bad argument to option --dfa-minimization (expected: table | moore): %s", *argv);
-        return EXIT_FAIL;
+    * {
+        ERROR("bad argument to option --dfa-minimization "
+            "(expected: table | moore): %s", *argv);
     }
     "table" end { opts.set_dfa_minimization (DFA_MINIMIZATION_TABLE); goto opt; }
     "moore" end { opts.set_dfa_minimization (DFA_MINIMIZATION_MOORE); goto opt; }
@@ -288,6 +242,8 @@ end:
 
     return OK;
 
+#undef NEXT_ARG
+#undef ERROR
 #undef YYCTYPE
 }
 
