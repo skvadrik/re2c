@@ -16,8 +16,7 @@ static inline bool next (char * & arg, char ** & argv)
 parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Warn &warn)
 {
 #define YYCTYPE unsigned char
-    char * YYCURSOR;
-    char * YYMARKER;
+    char *YYCURSOR, *YYMARKER, *p;
     Warn::option_t option;
 
 /*!re2c
@@ -106,7 +105,7 @@ opt_short:
     "S" { globopts.target = TARGET_SKELETON; goto opt_short; }
 
     "I" end { if (!next (YYCURSOR, argv)) { error_arg ("-I"); return EXIT_FAIL; } goto opt_incpath; }
-    "I" { goto opt_incpath; }
+    "I"     { goto opt_incpath; }
 
     "b" { opts.set_bFlag(true);           goto opt_short; }
     "d" { opts.set_dFlag(true);           goto opt_short; }
@@ -201,12 +200,17 @@ opt_header:
 */
 
 opt_incpath:
+    p = YYCURSOR;
 /*!re2c
     * {
         error ("bad argument to option -I: %s", *argv);
         return EXIT_FAIL;
     }
-    filename end { globopts.incpaths.push_back(*argv); goto opt; }
+    filename end {
+        std::string name(p, static_cast<size_t>(YYCURSOR - p - 1));
+        globopts.incpaths.push_back(name);
+        goto opt;
+    }
 */
 
 opt_encoding_policy:
