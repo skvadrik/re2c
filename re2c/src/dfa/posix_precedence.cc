@@ -9,9 +9,9 @@ namespace re2c
 {
 
 static void reconstruct_history(const tag_history_t &, tag_path_t &, hidx_t);
-static int32_t unpack_longest(int32_t);
-static int32_t unpack_leftmost(int32_t);
 
+// maximum 29-bit (we have 30 bits, but highest must be non-negative)
+static const int32_t MAX_RHO = 0x1fffFFFF;
 
 int32_t precedence(determ_context_t &ctx,
     const clos_t &x, const clos_t &y, int32_t &rhox, int32_t &rhoy)
@@ -20,7 +20,7 @@ int32_t precedence(determ_context_t &ctx,
     const uint32_t xo = x.origin, yo = y.origin;
 
     if (xl == yl && xo == yo) {
-        rhox = rhoy = -1;
+        rhox = rhoy = MAX_RHO;
         return 0;
     }
 
@@ -56,7 +56,7 @@ int32_t precedence(determ_context_t &ctx,
         rhoy = unpack_longest(prectbl[yo * nclos + xo]);
     }
     else {
-        rhox = rhoy = std::numeric_limits<int>::max();
+        rhox = rhoy = MAX_RHO;
         if (j1 > i1) rhox = rhoy = tags[(j1 - 1)->idx].height;
     }
     for (g1 = j1; g1 != e1; ++g1) {
@@ -109,7 +109,6 @@ int32_t precedence(determ_context_t &ctx,
     return 0;
 }
 
-
 void reconstruct_history(const tag_history_t &history,
     tag_path_t &path, hidx_t idx)
 {
@@ -119,18 +118,32 @@ void reconstruct_history(const tag_history_t &history,
     }
 }
 
-
-int32_t unpack_longest(int32_t value)
+int32_t unpack_longest(int32_t packed)
 {
-    // lower 30 bits
-    return value & 0x3fffFFFF;
+    // take lower 30 bits and sign-extend
+    return static_cast<int32_t>(static_cast<uint32_t>(packed) << 2u) >> 2u;
 }
 
-
-int32_t unpack_leftmost(int32_t value)
+int32_t unpack_leftmost(int32_t packed)
 {
-    // higher 2 bits
-    return value >> 30u;
+    // take higher 2 bits and sign-extend
+    return packed >> 30u;
+}
+
+int32_t pack(int32_t longest, int32_t leftmost)
+{
+    // avoid signed overflows by using unsigned arithmetics
+    uint32_t u_longest = static_cast<uint32_t>(longest);
+    uint32_t u_leftmost = static_cast<uint32_t>(leftmost);
+
+    // leftmost: higher 2 bits, longest: lower 30 bits
+    uint32_t u_packed = (u_longest & 0x3fffFFFF) | (u_leftmost << 30u);
+    int32_t packed = static_cast<int32_t>(u_packed);
+
+    assert(unpack_longest(packed) == longest
+        && unpack_leftmost(packed) == leftmost);
+
+    return packed;
 }
 
 } // namespace re2c

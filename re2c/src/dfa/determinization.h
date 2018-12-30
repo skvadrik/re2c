@@ -143,6 +143,9 @@ void closure_leftmost(determ_context_t &);
 void orders(determ_context_t &);
 void find_state(determ_context_t &ctx);
 int32_t precedence(determ_context_t &, const clos_t &, const clos_t &, int32_t &, int32_t &);
+int32_t unpack_longest(int32_t);
+int32_t unpack_leftmost(int32_t);
+int32_t pack(int32_t, int32_t);
 
 } // namespace re2c
 

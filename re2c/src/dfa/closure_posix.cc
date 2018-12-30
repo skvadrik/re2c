@@ -7,8 +7,6 @@ namespace re2c
 
 static nfa_state_t *explore(determ_context_t &, nfa_state_t *);
 static nfa_state_t *relax(determ_context_t &, clos_t);
-static int32_t pack(int32_t, int32_t);
-
 
 void closure_posix(determ_context_t &ctx)
 {
@@ -198,23 +196,6 @@ void orders(determ_context_t &ctx)
     }
 
     ctx.dc_prectbl = prectbl;
-}
-
-
-static uint32_t pack_u32(uint32_t longest, uint32_t leftmost)
-{
-    // leftmost: higher 2 bits, longest: lower 30 bits
-    longest &= ~0u >> 2;
-    return longest | (leftmost << 30);
-}
-
-static int32_t pack(int32_t longest, int32_t leftmost)
-{
-    // avoid signed overflows by using unsigned arithmetics
-    uint32_t u_longest = static_cast<uint32_t>(longest);
-    uint32_t u_leftmost = static_cast<uint32_t>(leftmost);
-    uint32_t u_result = pack_u32(u_longest, u_leftmost);
-    return static_cast<int32_t>(u_result);
 }
 
 } // namespace re2c
