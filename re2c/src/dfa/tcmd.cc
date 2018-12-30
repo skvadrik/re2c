@@ -128,6 +128,7 @@ tcpool_t::tcpool_t()
     , index()
 {
     // empty command must have static number zero
+    insert(NULL);
     DASSERT(TCID0 == insert(NULL));
 }
 

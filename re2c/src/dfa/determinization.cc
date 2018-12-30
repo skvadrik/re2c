@@ -113,10 +113,11 @@ uint32_t init_tag_versions(determ_context_t &ctx)
     const size_t ntags = dfa.tags.size();
 
     // all-zero tag configuration must have static number zero
+    ctx.dc_tagvertbl.insert_const(TAGVER_ZERO);
     DASSERT(ZERO_TAGS == ctx.dc_tagvertbl.insert_const(TAGVER_ZERO));
 
     // initial tag versions: [1 .. N]
-    const uint32_t INITIAL_TAGS = ctx.dc_tagvertbl.insert_succ(1);
+    const tcid_t INITIAL_TAGS = ctx.dc_tagvertbl.insert_succ(1);
 
     // other versions: [ .. -(N + 1)] and [N + 1 .. ]
     dfa.maxtagver = static_cast<tagver_t>(ntags);

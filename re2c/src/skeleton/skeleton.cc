@@ -96,12 +96,14 @@ Skeleton::~Skeleton()
 uint64_t rule2key(size_t rule, size_t key, size_t def)
 {
     switch (key) {
-        default: DASSERT(false); // shouldn't happen
         case 8: return rule2key<uint64_t>(rule, def);
         case 4: return rule2key<uint32_t>(rule, def);
         case 2: return rule2key<uint16_t>(rule, def);
         case 1: return rule2key<uint8_t>(rule, def);
     }
+    // shouldn't happen
+    DASSERT(false);
+    return 0;
 }
 
 } // namespace re2c
