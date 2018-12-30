@@ -33,6 +33,18 @@ static std::string to_string(const T &v)
     return s.str();
 }
 
+// Yet another constructor of std::string, useful when the strings
+// are constructed from fragments in buffer. A separate function is
+// needed mainly to avoid static_cast's everywhere.
+inline std::string getstr(const char *s, const char *e)
+{
+    return std::string(s, static_cast<size_t>(e - s));
+}
+inline std::string *newstr(const char *s, const char *e)
+{
+    return new std::string(s, static_cast<size_t>(e - s));
+}
+
 } // namespace re2c
 
 #endif // _RE2C_UTIL_STRING_UTILS_

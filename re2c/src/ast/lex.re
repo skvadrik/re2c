@@ -198,7 +198,7 @@ loop:
 
     "/*!include:re2c" space+ @x dstring @y space* eoc {
         out.wraw(tok, ptr);
-        include(std::string(x + 1, static_cast<size_t>(y - x) - 2));
+        include(getstr(x + 1, y - 1));
         goto next;
     }
 
@@ -288,7 +288,7 @@ scan:
     ":=" { lex_code_indented(); return TOKEN_CODE; }
 
     ":"? "=>" space* @p name {
-        yylval.str = new std::string(p, static_cast<size_t>(cur - p));
+        yylval.str = newstr(p, cur);
         return tok[0] == ':' ? TOKEN_CJUMP : TOKEN_CNEXT;
     }
 
@@ -305,8 +305,8 @@ scan:
     "[^" { yylval.regexp = lex_cls(true);  return TOKEN_REGEXP; }
 
     [@#] name {
-        const std::string *name = new std::string(tok + 1, tok_len() - 1);
-        yylval.regexp = ast_tag(get_line(), get_column(), name, tok[0] == '#');
+        yylval.regexp = ast_tag(get_line(), get_column()
+            , newstr(tok + 1, cur), tok[0] == '#');
         return TOKEN_REGEXP;
     }
 
@@ -348,7 +348,7 @@ scan:
             fatal_lc(get_line(), get_column(),
                 "curly braces for names only allowed with -F switch");
         }
-        yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
+        yylval.str = newstr(tok + 1, cur - 1);
         return TOKEN_ID;
     }
 
@@ -356,11 +356,11 @@ scan:
 
     name {
         if (!globopts->FFlag || lex_namedef_context_re2c()) {
-            yylval.str = new std::string (tok, tok_len());
+            yylval.str = newstr(tok, cur);
             return TOKEN_ID;
         }
         else if (lex_namedef_context_flex()) {
-            yylval.str = new std::string (tok, tok_len());
+            yylval.str = newstr(tok, cur);
             lexer_state = LEX_FLEX_NAME;
             return TOKEN_FID;
         }
@@ -436,7 +436,7 @@ int Scanner::lex_clist()
 cond:
     tok = cur;
 /*!re2c
-    name { cl->insert(std::string(tok, tok_len())); goto next; }
+    name { cl->insert(getstr(tok, cur)); goto next; }
     "*"  { if (!cl->empty()) goto error; cl->insert("*"); goto next; }
     *    { goto error; }
 */
@@ -464,7 +464,7 @@ code:
     eol {
         while (isspace(tok[0])) ++tok;
         while (cur > tok && isspace(cur[-1])) --cur;
-        yylval.code = new Code(get_fname (), line, tok, tok_len ());
+        yylval.code = new Code(get_fname (), line, getstr(tok, cur));
         return;
     }
 
@@ -485,7 +485,7 @@ code:
 /*!re2c
     "}" {
         if (--depth == 0) {
-            yylval.code = new Code(get_fname (), line, tok, tok_len ());
+            yylval.code = new Code(get_fname (), line, getstr(tok, cur));
             return;
         }
         goto code;
@@ -658,7 +658,7 @@ sourceline:
 
     dstring {
         std::string &name = get_input().escaped_name;
-        name = std::string(tok + 1, tok_len () - 2); // strip quotes
+        name = getstr(tok + 1, cur - 1);
         strrreplace(name, "\\", "\\\\");
         goto sourceline;
     }

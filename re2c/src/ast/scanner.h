@@ -58,7 +58,6 @@ private:
     const Input& get_cinput() const;
     inline void set_line(uint32_t l);
     inline void next_line();
-    size_t tok_len() const;
     void set_sourceline ();
     void lex_end_of_comment(Output &out);
     void lex_code_indented();
@@ -96,11 +95,6 @@ inline Scanner::Scanner(const conopt_t *o, Warn &w)
     , globopts(o)
     , warn(w)
 {}
-
-inline size_t Scanner::tok_len() const
-{
-    return static_cast<size_t>(cur - tok);
-}
 
 inline const std::string & Scanner::get_fname() const
 {

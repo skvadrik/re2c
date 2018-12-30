@@ -3,6 +3,7 @@
 #include "src/conf/opt.h"
 #include "src/re/empty_class_policy.h"
 #include "src/re/encoding/enc.h"
+#include "src/util/string_utils.h"
 
 namespace re2c
 {
@@ -207,8 +208,7 @@ opt_incpath:
         return EXIT_FAIL;
     }
     filename end {
-        std::string name(p, static_cast<size_t>(YYCURSOR - p - 1));
-        globopts.incpaths.push_back(name);
+        globopts.incpaths.push_back(getstr(p, YYCURSOR - 1));
         goto opt;
     }
 */

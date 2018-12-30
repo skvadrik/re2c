@@ -31,11 +31,11 @@ struct Code
     {
         flist.insert(this);
     }
-    Code(const std::string &file, uint32_t line, const char *s, size_t slen)
+    Code(const std::string &file, uint32_t line, const std::string &t)
         : fname(file)
         , fline(line)
         , autogen(false)
-        , text(s, slen)
+        , text(t)
         , cond("")
     {
         flist.insert(this);

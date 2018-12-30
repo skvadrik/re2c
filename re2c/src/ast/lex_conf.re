@@ -6,6 +6,7 @@
 #include "src/re/encoding/enc.h"
 #include "src/ast/scanner.h"
 #include "src/util/s_to_n32_unsafe.h"
+#include "src/util/string_utils.h"
 
 namespace re2c
 {
@@ -299,7 +300,7 @@ std::string Scanner::lex_conf_string ()
         }
     }
     naked {
-        s = std::string(tok, tok_len());
+        s = getstr(tok, cur);
         goto end;
     }
     "" { goto end; }
