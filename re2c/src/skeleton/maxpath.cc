@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <algorithm>
@@ -10,6 +9,7 @@
 
 #include "src/conf/msg.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/debug_assert.h"
 
 namespace re2c
 {
@@ -58,7 +58,7 @@ static uint32_t calc_dist(const Skeleton &skel
             const uint32_t d = calc_dist(skel, loops, dists, arc->first);
 
             // not necessarily true for dists[arc->first]
-            assert (d != DIST_ERROR);
+            DASSERT (d != DIST_ERROR);
 
             dist = (dist == DIST_ERROR) ? d : std::max(dist, d);
         }

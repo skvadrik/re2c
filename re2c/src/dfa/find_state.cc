@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
@@ -8,6 +7,7 @@
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
+#include "src/util/debug_assert.h"
 #include "src/util/hash32.h"
 
 
@@ -339,7 +339,7 @@ void reserve_buffers(determ_context_t &ctx)
 
 bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y, const determ_context_t &ctx)
 {
-    assert(x->size == y->size);
+    DASSERT(x->size == y->size);
 
     if (memcmp(x->tlook, y->tlook, x->size * sizeof(hidx_t)) == 0) {
         return true;
@@ -448,7 +448,7 @@ bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
     for (tagver_t xv = -max; xv < max; ++xv) {
         const tagver_t yv = x2y[xv], axv = abs(xv), ayv = abs(yv);
         if (yv != TAGVER_ZERO && xv != yv && !fixed(tags[x2t[xv]])) {
-            assert(axv != ayv);
+            DASSERT(axv != ayv);
             copy = ctx.dc_dfa.tcpool.make_copy(copy, axv, ayv);
         }
     }

@@ -1,12 +1,12 @@
 #ifndef _RE2C_ADFA_ACTION_
 #define _RE2C_ADFA_ACTION_
 
-#include <assert.h>
 #include <vector>
 
 #include "src/code/label.h"
 #include "src/dfa/tcmd.h"
 #include "src/util/c99_stdint.h"
+#include "src/util/debug_assert.h"
 #include "src/util/uniq_vector.h"
 
 namespace re2c
@@ -75,29 +75,29 @@ public:
             // already marked as initial, probably reuse mode
             info.initial->label = label;
         } else {
-            assert(false);
+            DASSERT(false);
         }
     }
     void set_save (size_t save)
     {
-        assert(type == MATCH);
+        DASSERT(type == MATCH);
         type = SAVE;
         info.save = save;
     }
     void set_move ()
     {
-        assert(type == MATCH);
+        DASSERT(type == MATCH);
         type = MOVE;
     }
     void set_accept (const accept_t * accepts)
     {
-        assert(type == MATCH);
+        DASSERT(type == MATCH);
         type = ACCEPT;
         info.accepts = accepts;
     }
     void set_rule (size_t rule)
     {
-        assert(type == MATCH);
+        DASSERT(type == MATCH);
         type = RULE;
         info.rule = rule;
     }

@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <iosfwd>
@@ -21,6 +20,7 @@
 #include "src/re/tag.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/string_utils.h"
+#include "src/util/debug_assert.h"
 
 namespace re2c
 {
@@ -509,11 +509,11 @@ void gen_fintags(Output &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 
         o.wind(ind);
         if (generic) {
-            assert(dist == 0);
+            DASSERT(dist == 0);
             if (!trailing(tag)) {
                 o.wstring(tagname(tag)).ws(" = ").wstring(expr);
             } else if (!fixed_on_cursor) {
-                assert(!dfa.oldstyle_ctxmarker);
+                DASSERT(!dfa.oldstyle_ctxmarker);
                 o.wstring(opts->yyrestoretag).ws(" (").wstring(expr).ws(")");
             }
         } else {
@@ -533,7 +533,7 @@ void gen_fintags(Output &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 
 std::string tagname(const Tag &tag)
 {
-    assert(!trailing(tag));
+    DASSERT(!trailing(tag));
     return capture(tag)
         ? "yypmatch[" + to_string(tag.ncap) + "]"
         : *tag.name;

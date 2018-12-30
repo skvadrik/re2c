@@ -1,11 +1,11 @@
 #ifndef _RE2C_RE_RE_
 #define _RE2C_RE_RE_
 
-#include "src/util/c99_stdint.h"
-
 #include "src/conf/opt.h"
 #include "src/ast/ast.h"
 #include "src/re/rule.h"
+#include "src/util/c99_stdint.h"
+#include "src/util/debug_assert.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/range.h"
 #include "src/util/slab_allocator.h"
@@ -112,7 +112,7 @@ inline RE *re_tag(RE::alc_t &alc, size_t idx, bool neg)
     RE *x = alc.alloct<RE>(1);
     x->type = RE::TAG;
     x->tag.idx = idx & 0x7FFFffff;
-    assert(idx == x->tag.idx);
+    DASSERT(idx == x->tag.idx);
     x->tag.neg = neg;
     return x;
 }

@@ -1,9 +1,9 @@
-#include <assert.h>
 #include <sstream>
 
 #include "src/code/emit.h"
 #include "src/code/input_api.h"
 #include "src/conf/opt.h"
+#include "src/util/debug_assert.h"
 
 namespace re2c
 {
@@ -78,35 +78,35 @@ void output_backup(std::ostream &o, uint32_t ind, const opt_t *opts)
 
 void output_skip_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
-    assert(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
         << yych_conv(opts) << "*++" << opts->yycursor << ";\n";
 }
 
 void output_peek_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
-    assert(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
         << yych_conv(opts) << "*" << opts->yycursor << "++;\n";
 }
 
 void output_skip_backup(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
-    assert(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yymarker << " = ++"
         << opts->yycursor << ";\n";
 }
 
 void output_backup_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
-    assert(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yymarker << " = "
         << opts->yycursor << "++;\n";
 }
 
 void output_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
-    assert(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
         << yych_conv(opts) << "*(" << opts->yymarker << " = "
         << opts->yycursor << ");\n";
@@ -114,7 +114,7 @@ void output_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
 
 void output_skip_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
-    assert(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
         << yych_conv(opts) << "*(" << opts->yymarker << " = ++"
         << opts->yycursor << ");\n";
@@ -122,7 +122,7 @@ void output_skip_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
 
 void output_backup_peek_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
-    assert(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
         << yych_conv(opts) << "*(" << opts->yymarker << " = "
         << opts->yycursor << "++);\n";

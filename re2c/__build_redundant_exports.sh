@@ -5,6 +5,6 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure CFLAGS="-ffunction-sections -fdata-sections" LDFLAGS="-Wl,--gc-sections -Wl,--print-gc-sections" && \
+../configure --enable-debug CFLAGS="-ffunction-sections -fdata-sections" LDFLAGS="-Wl,--gc-sections -Wl,--print-gc-sections" && \
 make -j5
 cd ..

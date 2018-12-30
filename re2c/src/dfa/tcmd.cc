@@ -1,7 +1,7 @@
-#include <assert.h>
 #include <string.h>
 
 #include "src/dfa/tcmd.h"
+#include "src/util/debug_assert.h"
 #include "src/util/hash32.h"
 
 namespace re2c
@@ -65,7 +65,7 @@ bool tcmd_t::iscopy(const tcmd_t *x)
 bool tcmd_t::isset(const tcmd_t *x)
 {
     if (x->rhs == TAGVER_ZERO) {
-        assert(x->history[0] != TAGVER_ZERO);
+        DASSERT(x->history[0] != TAGVER_ZERO);
         return true;
     }
     return false;
@@ -128,7 +128,7 @@ tcpool_t::tcpool_t()
     , index()
 {
     // empty command must have static number zero
-    assert(TCID0 == insert(NULL));
+    DASSERT(TCID0 == insert(NULL));
 }
 
 

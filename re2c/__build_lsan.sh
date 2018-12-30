@@ -5,6 +5,6 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure CXXFLAGS="-fsanitize=leak" LDFLAGS="-fsanitize=leak" && \
+../configure --enable-debug CXXFLAGS="-fsanitize=leak" LDFLAGS="-fsanitize=leak" && \
 make -j5
 cd ..

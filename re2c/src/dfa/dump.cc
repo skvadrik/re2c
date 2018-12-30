@@ -14,7 +14,7 @@
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
 #include "src/re/tag.h"
-
+#include "src/util/debug_assert.h"
 
 namespace re2c
 {
@@ -135,7 +135,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 
         // see note [at most one final item per closure]
         c = std::find_if(b, e, clos_t::fin);
-        assert(c != e);
+        DASSERT(c != e);
 
         fprintf(stderr, "  r%u [shape=none label=\"(", state);
         for (size_t t = r.ltag; t < r.htag; ++t) {

@@ -2,11 +2,12 @@
 #define _RE2C_UTIL_LOOKUP_
 
 #include "src/util/c99_stdint.h"
-#include <assert.h>
 #include <limits>
 #include <map>
 #include <vector>
 #include <stddef.h>
+
+#include "src/util/debug_assert.h"
 
 namespace re2c
 {
@@ -84,7 +85,7 @@ uint32_t lookup_t<data_t, hash_t>::head(hash_t h) const
 template<typename data_t, typename hash_t>
 uint32_t lookup_t<data_t, hash_t>::push(hash_t hash, const data_t &data)
 {
-    assert(elems.size() < NIL);
+    DASSERT(elems.size() < NIL);
     const uint32_t idx = static_cast<uint32_t>(elems.size());
     elems.push_back(elem_t(head(hash), data));
     lookup[hash] = idx;

@@ -1,4 +1,3 @@
-#include <assert.h>
 #include "src/util/c99_stdint.h"
 #include <string.h>
 #include <algorithm>
@@ -15,6 +14,7 @@
 #include "src/dfa/tcmd.h"
 #include "src/re/rule.h"
 #include "src/util/allocate.h"
+#include "src/util/debug_assert.h"
 
 namespace re2c {
 
@@ -317,7 +317,7 @@ void DFA::hoist_tags(const opt_t *opts)
 
 void DFA::hoist_tags_and_skip(const opt_t *opts)
 {
-    assert(opts->eager_skip);
+    DASSERT(opts->eager_skip);
 
     for (State * s = head; s; s = s->next) {
         Span *span = s->go.span;

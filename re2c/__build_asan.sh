@@ -5,6 +5,6 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure CXXFLAGS="-fsanitize=address" LDFLAGS="-fsanitize=address" && \
+../configure --enable-debug CXXFLAGS="-fsanitize=address" LDFLAGS="-fsanitize=address" && \
 make -j5
 cd ..

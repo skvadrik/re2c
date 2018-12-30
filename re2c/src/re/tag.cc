@@ -1,5 +1,4 @@
 #include "src/re/tag.h"
-#include <assert.h>
 #include <limits>
 
 namespace re2c

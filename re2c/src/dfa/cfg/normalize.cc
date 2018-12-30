@@ -1,4 +1,3 @@
-#include <assert.h>
 #include "src/util/c99_stdint.h"
 #include <string.h>
 #include <algorithm>
@@ -7,6 +6,7 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/re/tag.h"
+#include "src/util/debug_assert.h"
 
 namespace re2c
 {
@@ -61,7 +61,7 @@ void cfg_t::normalization(cfg_t &cfg)
 
 static void swap(tcmd_t &x, tcmd_t &y)
 {
-    assert(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
+    DASSERT(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
     std::swap(x.lhs, y.lhs);
     std::swap(x.rhs, y.rhs);
     std::swap(x.history[0], y.history[0]);
@@ -69,7 +69,7 @@ static void swap(tcmd_t &x, tcmd_t &y)
 
 static bool less(const tcmd_t &x, const tcmd_t &y)
 {
-    assert(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
+    DASSERT(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
     tagver_t u, v;
 
     u = x.lhs; v = y.lhs;

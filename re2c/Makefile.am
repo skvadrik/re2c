@@ -1,6 +1,9 @@
 # flags
 # do *not* add CXXFLAGS here, add them in configure.ac
 AM_CXXFLAGS = $(CXXFLAGSDEFAULT)
+if DEBUG
+    AM_CXXFLAGS += -DRE2C_DEBUG
+endif
 RE2CFLAGS = -b -W
 
 # binary
@@ -56,6 +59,7 @@ SRC_HDR = \
 	src/util/attribute.h \
 	src/util/c99_stdint.h \
 	src/util/counter.h \
+	src/util/debug_assert.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
 	src/util/get_dir.h \

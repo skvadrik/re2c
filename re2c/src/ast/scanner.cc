@@ -1,8 +1,8 @@
-#include <assert.h>
 #include <string.h>
 
 #include "src/ast/scanner.h"
 #include "src/conf/msg.h"
+#include "src/util/debug_assert.h"
 
 
 namespace re2c {
@@ -23,7 +23,7 @@ size_t Scanner::get_input_index() const
     // Find index of the current input file: the one corresponding to
     // buffer fragment that contains cursor.
     size_t i = files.size();
-    assert(i > 0);
+    DASSERT(i > 0);
     for (;;) {
         --i;
         Input *in = files[i];
@@ -81,7 +81,7 @@ bool Scanner::include(const std::string &filename)
 
 bool Scanner::read(size_t want)
 {
-    assert(!files.empty());
+    DASSERT(!files.empty());
     for (size_t i = files.size(); i --> 0; ) {
         Input *in = files[i];
         const size_t have = fread(lim, 1, want, in->file);
@@ -105,7 +105,7 @@ void Scanner::shift_ptrs_and_fpos(ptrdiff_t offs)
     for (size_t i = files.size(); i --> 0; ) {
         Input *in = files[i];
         if (in->so == ENDPOS && in->eo == ENDPOS) break;
-        assert(in->so != ENDPOS && in->eo != ENDPOS);
+        DASSERT(in->so != ENDPOS && in->eo != ENDPOS);
         in->so += offs;
         in->eo += offs;
     }
@@ -118,7 +118,7 @@ void Scanner::pop_finished_files()
     // except for the first (main) file which must always remain at the
     // bottom of the stack.
     size_t i = files.size();
-    assert(i > 0);
+    DASSERT(i > 0);
     for (;;) {
         --i;
         Input *in = files[i];
@@ -134,7 +134,7 @@ bool Scanner::fill(size_t need)
 
     pop_finished_files();
 
-    assert(bot <= tok && tok <= lim);
+    DASSERT(bot <= tok && tok <= lim);
     size_t free = static_cast<size_t>(tok - bot);
     size_t copy = static_cast<size_t>(lim - tok);
 

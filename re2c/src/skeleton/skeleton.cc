@@ -1,8 +1,8 @@
-#include <assert.h>
 #include <algorithm>
 
 #include "src/dfa/dfa.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/debug_assert.h"
 
 namespace re2c
 {
@@ -96,7 +96,7 @@ Skeleton::~Skeleton()
 uint64_t rule2key(size_t rule, size_t key, size_t def)
 {
     switch (key) {
-        default: assert(false); // shouldn't happen
+        default: DASSERT(false); // shouldn't happen
         case 8: return rule2key<uint64_t>(rule, def);
         case 4: return rule2key<uint32_t>(rule, def);
         case 2: return rule2key<uint16_t>(rule, def);

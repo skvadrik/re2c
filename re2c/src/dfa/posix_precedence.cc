@@ -1,8 +1,8 @@
-#include <assert.h>
 #include <stdlib.h>
 
 #include "src/dfa/determinization.h"
 #include "src/dfa/tag_history.h"
+#include "src/util/debug_assert.h"
 
 
 namespace re2c
@@ -84,14 +84,14 @@ int32_t precedence(determ_context_t &ctx,
         const bool neg1 = j1->neg, neg2 = j2->neg;
 
         // can't be both closing
-        assert(!(idx1 % 2 == 1 && idx2 % 2 == 1));
+        DASSERT(!(idx1 % 2 == 1 && idx2 % 2 == 1));
 
         // closing vs opening: closing wins
         if (idx1 % 2 == 1) return -1;
         if (idx2 % 2 == 1) return 1;
 
         // can't be both negative
-        assert(!(neg1 && neg2));
+        DASSERT(!(neg1 && neg2));
 
         // positive vs negative: positive wins
         if (neg1) return 1;
@@ -105,7 +105,7 @@ int32_t precedence(determ_context_t &ctx,
     }
 
     // unreachable
-    assert(false);
+    DASSERT(false);
     return 0;
 }
 
@@ -140,7 +140,7 @@ int32_t pack(int32_t longest, int32_t leftmost)
     uint32_t u_packed = (u_longest & 0x3fffFFFF) | (u_leftmost << 30u);
     int32_t packed = static_cast<int32_t>(u_packed);
 
-    assert(unpack_longest(packed) == longest
+    DASSERT(unpack_longest(packed) == longest
         && unpack_leftmost(packed) == leftmost);
 
     return packed;

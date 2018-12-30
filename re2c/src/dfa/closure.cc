@@ -1,4 +1,3 @@
-#include <assert.h>
 #include "src/util/c99_stdint.h"
 #include <stdlib.h>
 #include <string.h>

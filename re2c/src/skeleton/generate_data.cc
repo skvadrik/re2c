@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <stdio.h>
@@ -17,6 +16,7 @@
 #include "src/re/tag.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/debug_assert.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/u32lim.h"
 #include "src/util/wrap_iter.h"
@@ -205,9 +205,9 @@ static void write_keys(const path_t &path, const Skeleton &skel,
         if (trail == htag) {
             matched = f;
         } else {
-            assert(!fixed(skel.tags[trail])); // no fixed trailing context
+            DASSERT(!fixed(skel.tags[trail])); // no fixed trailing context
             matched = tags[skel.finvers[trail]].back();
-            assert(matched != Skeleton::DEFTAG);
+            DASSERT(matched != Skeleton::DEFTAG);
         }
     }
 

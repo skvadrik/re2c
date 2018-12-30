@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <string>
@@ -12,6 +11,7 @@
 #include "src/conf/opt.h"
 #include "src/dfa/tcmd.h"
 #include "src/util/allocate.h"
+#include "src/util/debug_assert.h"
 
 namespace re2c
 {
@@ -41,7 +41,7 @@ Cases::Cases(const Span *spans, uint32_t nspans, bool skip, uint32_t eof)
     : cases(new Case[nspans])
     , cases_size(0)
 {
-    assert(nspans > 0);
+    DASSERT(nspans > 0);
 
     // first case is default: book the place (ranges will be added later)
     Case &c = cases[cases_size++];

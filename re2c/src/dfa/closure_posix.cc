@@ -1,5 +1,6 @@
 #include "src/dfa/determinization.h"
 #include "src/nfa/nfa.h"
+#include "src/util/debug_assert.h"
 
 
 namespace re2c
@@ -95,7 +96,7 @@ void closure_posix(determ_context_t &ctx)
         q = i->state;
         q->clos = NOCLOS;
         q->arcidx = 0;
-        assert(q->status == GOR_NOPASS && q->active == 0);
+        DASSERT(q->status == GOR_NOPASS && q->active == 0);
     }
 }
 

@@ -1,4 +1,3 @@
-#include <assert.h>
 #include "src/util/c99_stdint.h"
 #include <string.h>
 #include <algorithm>
@@ -17,6 +16,7 @@
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
 #include "src/re/tag.h"
+#include "src/util/debug_assert.h"
 #include "src/util/range.h"
 
 
@@ -113,7 +113,7 @@ uint32_t init_tag_versions(determ_context_t &ctx)
     const size_t ntags = dfa.tags.size();
 
     // all-zero tag configuration must have static number zero
-    assert(ZERO_TAGS == ctx.dc_tagvertbl.insert_const(TAGVER_ZERO));
+    DASSERT(ZERO_TAGS == ctx.dc_tagvertbl.insert_const(TAGVER_ZERO));
 
     // initial tag versions: [1 .. N]
     const uint32_t INITIAL_TAGS = ctx.dc_tagvertbl.insert_succ(1);

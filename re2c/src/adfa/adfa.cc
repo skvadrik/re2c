@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <algorithm>
 #include <limits>
 #include <queue>
@@ -10,6 +9,7 @@
 #include "src/code/go.h"
 #include "src/dfa/dfa.h"
 #include "src/util/allocate.h"
+#include "src/util/debug_assert.h"
 
 namespace re2c
 {
@@ -176,7 +176,7 @@ void DFA::reorder()
         }
     }
 
-    assert(nStates == ord.size());
+    DASSERT(nStates == ord.size());
 
     ord.push_back(NULL);
     for(uint32_t i = 0; i < nStates; ++i)

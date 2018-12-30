@@ -14,6 +14,12 @@ AC_SUBST(PACKAGE_TARNAME)
 AC_SUBST(PACKAGE_RELEASE, ${PACKAGE_RELEASE:-1})
 
 
+# --enable-debug
+AC_ARG_ENABLE([debug], [AS_HELP_STRING([--enable-debug],
+    [enable checks and assertions])])
+AM_CONDITIONAL([DEBUG], [test "x$enable_debug" = "xyes"])
+
+
 # --enable-docs
 AC_ARG_ENABLE([docs], [AS_HELP_STRING([--enable-docs], [regenerate manpage])])
 AM_CONDITIONAL([REBUILD_DOCS], [test "x$enable_docs" = "xyes"])
