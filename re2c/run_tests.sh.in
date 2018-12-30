@@ -33,24 +33,24 @@ threads=`detect_cpu_count; echo $CPUS`
 tests=()
 for arg in $*
 do
-	case $arg in
-		"--valgrind" ) valgrind=`which valgrind` ;;
-		"--skeleton" ) skeleton=1 ;;
-		"--keep-tmp-files" ) keep_tmp_files=1 ;;
-		"--wine" )
-			wine=`which wine`
-			re2c="${re2c}.exe"
-			;;
-		"-j"* )
-			number=${arg#-j}
-			number_pattern='^[0-9]+$'
-			if [[ $number =~ $number_pattern ]]
-			then
-				threads=$number
-			fi
-			;;
-		* ) tests[${#tests[@]}]="$arg" ;; # array is continuous (old bash lacks +=)
-	esac
+    case $arg in
+        "--valgrind" ) valgrind=`which valgrind` ;;
+        "--skeleton" ) skeleton=1 ;;
+        "--keep-tmp-files" ) keep_tmp_files=1 ;;
+        "--wine" )
+            wine=`which wine`
+            re2c="${re2c}.exe"
+            ;;
+        "-j"* )
+            number=${arg#-j}
+            number_pattern='^[0-9]+$'
+            if [[ $number =~ $number_pattern ]]
+            then
+                threads=$number
+            fi
+            ;;
+        * ) tests[${#tests[@]}]="$arg" ;; # array is continuous (old bash lacks +=)
+    esac
 done
 echo "Running in ${threads} thread(s)"
 
@@ -82,145 +82,145 @@ tests_per_thread=$((${#tests[@]} / threads + 1))
 packs=()
 for ((i = 0; i < threads; i++))
 do
-	j=$((i * tests_per_thread))
-	packs[$i]=${tests[@]:j:tests_per_thread}
+    j=$((i * tests_per_thread))
+    packs[$i]=${tests[@]:j:tests_per_thread}
 done
 
 if test ! -x "${re2c}"
 then
-	echo "Cannot find re2c executable (${re2c})."
-	exit 1
+    echo "Cannot find re2c executable (${re2c})."
+    exit 1
 fi
 
 if test -n "${valgrind}"
 then
-	valgrind_options=(
-		"-q"
-		"--track-origins=yes"
-		"--num-callers=50"
-		"--leak-check=full"
-		"--show-reachable=yes"
-		"--malloc-fill=0xa1"
-		"--free-fill=0xa1"
-		)
-	valgrind="${valgrind} ${valgrind_options[@]}"
-	echo $valgrind
+    valgrind_options=(
+        "-q"
+        "--track-origins=yes"
+        "--num-callers=50"
+        "--leak-check=full"
+        "--show-reachable=yes"
+        "--malloc-fill=0xa1"
+        "--free-fill=0xa1"
+        )
+    valgrind="${valgrind} ${valgrind_options[@]}"
+    echo $valgrind
 fi
 
 diff_prog="diff"
 if test -n "${wine}"
 then
-	# ignore whitespace at the end of line
-	diff_prog="${diff_prog} -b"
+    # ignore whitespace at the end of line
+    diff_prog="${diff_prog} -b"
 fi
 
 run_pack() {
-	local log="$1"
-	shift 1
+    local log="$1"
+    shift 1
 
-	local errcnt=0
-	for x in $*
-	do
-		cd $test_blddir
+    local errcnt=0
+    for x in $*
+    do
+        cd $test_blddir
 
-		# remove prefix
-		local outx=${x:$((${#test_blddir} + 1))}
-		local outc="${outx%.re}.c"
+        # remove prefix
+        local outx=${x:$((${#test_blddir} + 1))}
+        local outc="${outx%.re}.c"
 
-		# filename (dot short* (long arg?)*)? ext
-		# must keep to POSIX standard: no syntactic sugar like +,?, etc.
-		# if you change this regexp, try it with 'sed --posix'
-		local switches=`basename "$x" | lc_run sed \
-			-e 's/^[^.]*\.re$//g' \
-			-e 's/^[^.]*\.\(.*\)\.re$/\1/g' \
-			-e 's/^\([^-]\)/-\1/' \
-			-e 's/--\([^ (-]*\)/ --\1/g' \
-			-e 's/(\([^)]*\))/ \1/g'`
-		# check that flags do not contain uppercase letters:
-		# file extensions are case-insensitive on some platforms
-		printf "%s" "$switches" | lc_run grep -q "[A-Z]" \
-			&& { echo "bad file extension: '$outx' (uppercase letters are not allowed)"; exit 1; }
-		local switches="$switches -o $outc --no-version --no-generation-date"
-		# enable warnings globally
-		local switches="$switches -W"
+        # filename (dot short* (long arg?)*)? ext
+        # must keep to POSIX standard: no syntactic sugar like +,?, etc.
+        # if you change this regexp, try it with 'sed --posix'
+        local switches=`basename "$x" | lc_run sed \
+            -e 's/^[^.]*\.re$//g' \
+            -e 's/^[^.]*\.\(.*\)\.re$/\1/g' \
+            -e 's/^\([^-]\)/-\1/' \
+            -e 's/--\([^ (-]*\)/ --\1/g' \
+            -e 's/(\([^)]*\))/ \1/g'`
+        # check that flags do not contain uppercase letters:
+        # file extensions are case-insensitive on some platforms
+        printf "%s" "$switches" | lc_run grep -q "[A-Z]" \
+            && { echo "bad file extension: '$outx' (uppercase letters are not allowed)"; exit 1; }
+        local switches="$switches -o $outc --no-version --no-generation-date"
+        # enable warnings globally
+        local switches="$switches -W"
 
-		if [ $skeleton -eq 1 ]
-		then
-			rm -f "$outc"
+        if [ $skeleton -eq 1 ]
+        then
+            rm -f "$outc"
 
-			local switches="$switches --skeleton -Werror-undefined-control-flow"
+            local switches="$switches --skeleton -Werror-undefined-control-flow"
 
-			${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outc.stderr"
-			local status=$(echo $?)
-			[ $status -eq 0 ] && { @CC@ -Wall -Wextra -o "$outc.out" "$outc" 2>>"$outc.stderr" || status=2; }
-			[ $status -eq 0 ] && { ./"$outc.out" 2>>"$outc.stderr" || status=3; }
+            ${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outc.stderr"
+            local status=$(echo $?)
+            [ $status -eq 0 ] && { @CC@ -Wall -Wextra -o "$outc.out" "$outc" 2>>"$outc.stderr" || status=2; }
+            [ $status -eq 0 ] && { ./"$outc.out" 2>>"$outc.stderr" || status=3; }
 
-			case $status in
-				0 ) local msg="OK" ;;
-				1 ) local msg="OK (expected re2c error)" ;;
-				2 ) local msg="FAIL (compilation error)" ;;
-				3 ) local msg="FAIL (runtime error)" ;;
-				* ) local msg="FAIL (unknown error)" ;;
-			esac
-			printf "%-25s $outx\n" "$msg"
+            case $status in
+                0 ) local msg="OK" ;;
+                1 ) local msg="OK (expected re2c error)" ;;
+                2 ) local msg="FAIL (compilation error)" ;;
+                3 ) local msg="FAIL (runtime error)" ;;
+                * ) local msg="FAIL (unknown error)" ;;
+            esac
+            printf "%-25s $outx\n" "$msg"
 
-			if [ $status -le 1 ]; then
-				[ $keep_tmp_files -eq 0 ] && rm -f "$outx" "$outc"{,.line*.{input,keys},.stderr,.out}
-			else
-				local errcnt=$(($errcnt + 1))
-			fi
-		else
-			local c="${outx%.re}.c.orig"
-			mv "$outc" "$c"
+            if [ $status -le 1 ]; then
+                [ $keep_tmp_files -eq 0 ] && rm -f "$outx" "$outc"{,.line*.{input,keys},.stderr,.out}
+            else
+                local errcnt=$(($errcnt + 1))
+            fi
+        else
+            local c="${outx%.re}.c.orig"
+            mv "$outc" "$c"
 
-			# create sandbox
-			tmpdir="tmp_$log" \
-				&& mkdir "$tmpdir" \
-				&& cd "$tmpdir" \
-				&& mkdir -p `dirname "$outx"` \
-				&& cp "../../$x" "$outx"
-			# run re2c
-			$valgrind $wine ../../$re2c $incpaths $switches "$outx" 2>"$outc.stderr" 1>&2
-			# on windows output contains CR LF, cut CR to match test results
-			for f in "$outc" "$outc.stderr"; do
-				[ -f "$f" ] \
-					&& cat "$f" | lc_run tr -d '\r' > "$f".mod \
-					&& mv "$f".mod "$f"
-			done
-			# paste all files dropped by re2c into output file
-			rm "$outx" && find . -type f \
-				| lc_run sort \
-				| xargs cat \
-				>> "../$outc"
-			# cleanup sandbox
-			cd .. \
-				&& rm -rf "$tmpdir"
+            # create sandbox
+            tmpdir="tmp_$log" \
+                && mkdir "$tmpdir" \
+                && cd "$tmpdir" \
+                && mkdir -p `dirname "$outx"` \
+                && cp "../../$x" "$outx"
+            # run re2c
+            $valgrind $wine ../../$re2c $incpaths $switches "$outx" 2>"$outc.stderr" 1>&2
+            # on windows output contains CR LF, cut CR to match test results
+            for f in "$outc" "$outc.stderr"; do
+                [ -f "$f" ] \
+                    && cat "$f" | lc_run tr -d '\r' > "$f".mod \
+                    && mv "$f".mod "$f"
+            done
+            # paste all files dropped by re2c into output file
+            rm "$outx" && find . -type f \
+                | lc_run sort \
+                | xargs cat \
+                >> "../$outc"
+            # cleanup sandbox
+            cd .. \
+                && rm -rf "$tmpdir"
 
-			# compare results
-			local status=""
-			[ -z $status ] && status=`[ -f "$c" ] || echo "MISSING"`
-			[ -z $status ] && status=`$diff_prog "$c" "$outc" > "$outc.diff" || echo "FAIL"`
-			[ -z $status ] && status="OK"
-			if [ $status = "OK" ]
-			then
-				rm "$outc" "$outc.diff" "$c" "$outx"
-			else
-				local errcnt=$(($errcnt + 1))
-			fi
+            # compare results
+            local status=""
+            [ -z $status ] && status=`[ -f "$c" ] || echo "MISSING"`
+            [ -z $status ] && status=`$diff_prog "$c" "$outc" > "$outc.diff" || echo "FAIL"`
+            [ -z $status ] && status="OK"
+            if [ $status = "OK" ]
+            then
+                rm "$outc" "$outc.diff" "$c" "$outx"
+            else
+                local errcnt=$(($errcnt + 1))
+            fi
 
-			printf "%-10s $outx\n" "$status"
-		fi
-		cd ..
-	done
-	echo $errcnt > $log
+            printf "%-10s $outx\n" "$status"
+        fi
+        cd ..
+    done
+    echo $errcnt > $log
 }
 
 cleanup() {
-	rm -f ${logs[@]}
-	kill ${wait_pids[@]}
-	wait ${wait_pids[@]}
-	printf "\nEh...\n"
-	exit 1
+    rm -f ${logs[@]}
+    kill ${wait_pids[@]}
+    wait ${wait_pids[@]}
+    printf "\nEh...\n"
+    exit 1
 }
 
 logs=()
@@ -228,35 +228,35 @@ wait_pids=()
 trap cleanup INT
 for ((i = 0; i < ${#packs[@]}; i++))
 do
-	logs[$i]=`date +%y%m%d%H%M%S`_$i
-	run_pack ${logs[i]} ${packs[i]} &
-	wait_pids[${#wait_pids[@]}]=$! # array is continuous (old bash lacks +=)
+    logs[$i]=`date +%y%m%d%H%M%S`_$i
+    run_pack ${logs[i]} ${packs[i]} &
+    wait_pids[${#wait_pids[@]}]=$! # array is continuous (old bash lacks +=)
 done
 wait ${wait_pids[@]}
 
 errors=0
 for ((i = 0; i < ${#logs[@]}; i++))
 do
-	error=`cat ${logs[i]}`
-	errors=$((errors + error))
-	rm -f ${logs[i]}
+    error=`cat ${logs[i]}`
+    errors=$((errors + error))
+    rm -f ${logs[i]}
 done
 
 # remove empty directories
 for d in `find $test_blddir -depth -type d`
 do
-	entries=`ls -A "$d"`
-	if [ -z "$entries" ]
-	then
-		rmdir "$d"
-	fi
+    entries=`ls -A "$d"`
+    if [ -z "$entries" ]
+    then
+        rmdir "$d"
+    fi
 done
 
 if [ $errors -eq 0 ]
 then
-	echo "All ${#tests[@]} tests passed successfully."
-	exit 0
+    echo "All ${#tests[@]} tests passed successfully."
+    exit 0
 else
-	echo "Error: $errors out ${#tests[@]} tests failed."
-	exit 1
+    echo "Error: $errors out ${#tests[@]} tests failed."
+    exit 1
 fi
