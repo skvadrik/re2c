@@ -73,7 +73,7 @@ find $test_blddir -type f \
     -exec rm {} \;
 tests=(`find $test_blddir -name '*.re' | sort`)
 
-# set include paths
+# set include paths, relative to build directory
 cd $test_blddir \
     && incpaths=$(find * -type d -exec echo "-I ../{}" \;) \
     && cd ..
@@ -242,14 +242,10 @@ do
     rm -f ${logs[i]}
 done
 
-# remove empty directories
-for d in `find $test_blddir -depth -type d`
+# remove directories that are empty or contain only .inc files
+for d in $(find $test_blddir -depth -type d)
 do
-    entries=`ls -A "$d"`
-    if [ -z "$entries" ]
-    then
-        rmdir "$d"
-    fi
+    [ -z "$(find $d -type f ! -name '*.inc')" ] && rm -rf "$d"
 done
 
 if [ $errors -eq 0 ]
