@@ -49,12 +49,13 @@ struct nfa_state_t
     };
     size_t rule;
 
-    // stuff needed for GOR1
+    // stuff needed for closure algorithms (GOR1 and GTOP)
     uint32_t clos;
     gor_status_t status : 2;  // values 0, 1, 2
     uint32_t arcidx     : 2;  // maximum out-dergee is 2
     uint32_t active     : 1;  // boolean
     uint32_t indeg      : 27; // the rest; we are unlikely to have more than 2^27 states
+    uint32_t topord; // state index in fake topological ordering
 
     void init(size_t r)
     {
@@ -64,6 +65,7 @@ struct nfa_state_t
         arcidx = 0;
         active = 0;
         indeg = 0;
+        topord = 0;
     }
 
     void make_alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)

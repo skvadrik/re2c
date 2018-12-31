@@ -9,6 +9,10 @@
 
 namespace re2c {
 
+static void calc_indegrees(nfa_state_t *);
+static void calc_topord(nfa_state_t *, uint32_t &);
+
+
 /*
  * note [counted repetition and iteration expansion]
  *
@@ -89,29 +93,6 @@ static nfa_state_t *re_to_nfa(nfa_t &nfa, size_t nrule, const RE *re, nfa_state_
     return s;
 }
 
-void calc_indegrees(nfa_state_t *n)
-{
-    ++n->indeg;
-    if (n->indeg > 1) return;
-
-    switch (n->type) {
-        case nfa_state_t::NIL:
-            calc_indegrees(n->nil.out);
-            break;
-        case nfa_state_t::ALT:
-            calc_indegrees(n->alt.out1);
-            calc_indegrees(n->alt.out2);
-            break;
-        case nfa_state_t::TAG:
-            calc_indegrees(n->tag.out);
-            break;
-        case nfa_state_t::RAN:
-            calc_indegrees(n->ran.out);
-        case nfa_state_t::FIN:
-            break;
-    }
-}
-
 nfa_t::nfa_t(const RESpec &spec)
     : max_size(estimate_size(spec.res))
     , size(0)
@@ -139,12 +120,65 @@ nfa_t::nfa_t(const RESpec &spec)
         }
     }
 
-    calc_indegrees(root);
+    if (spec.opts->posix_captures) {
+        // needed for closure algorithms GOR1 and GTOP
+        uint32_t topord = 0;
+        calc_topord(root, topord);
+        calc_indegrees(root);
+    }
 }
 
 nfa_t::~nfa_t()
 {
     delete[] states;
+}
+
+void calc_indegrees(nfa_state_t *n)
+{
+    ++n->indeg;
+    if (n->indeg > 1) return;
+
+    switch (n->type) {
+        case nfa_state_t::NIL:
+            calc_indegrees(n->nil.out);
+            break;
+        case nfa_state_t::ALT:
+            calc_indegrees(n->alt.out1);
+            calc_indegrees(n->alt.out2);
+            break;
+        case nfa_state_t::TAG:
+            calc_indegrees(n->tag.out);
+            break;
+        case nfa_state_t::RAN:
+            calc_indegrees(n->ran.out);
+        case nfa_state_t::FIN:
+            break;
+    }
+}
+
+void calc_topord(nfa_state_t *n, uint32_t &topord)
+{
+    if (n->topord != 0) return;
+    n->topord = ~0u; // temporary "visited" marker
+
+    switch (n->type) {
+        case nfa_state_t::NIL:
+            calc_topord(n->nil.out, topord);
+            break;
+        case nfa_state_t::ALT:
+            calc_topord(n->alt.out1, topord);
+            calc_topord(n->alt.out2, topord);
+            break;
+        case nfa_state_t::TAG:
+            calc_topord(n->tag.out, topord);
+            break;
+        case nfa_state_t::RAN:
+            calc_topord(n->ran.out, topord);
+        case nfa_state_t::FIN:
+            break;
+    }
+
+    n->topord = topord++;
 }
 
 } // namespace re2c
