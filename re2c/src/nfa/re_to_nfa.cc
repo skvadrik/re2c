@@ -33,9 +33,19 @@ static void calc_topord(nfa_state_t *, uint32_t &);
  * confusing regexps and the disambiguation strategy would behave strangely.
  */
 
-static nfa_state_t *re_to_nfa(nfa_t &nfa, size_t nrule, const RE *re, nfa_state_t *t)
+struct rtn_ctx_t
 {
+    const opt_t *opts;
+    nfa_t &nfa;
+    size_t nrule;
+};
+
+static nfa_state_t *re_to_nfa(rtn_ctx_t &ctx, const RE *re, nfa_state_t *t)
+{
+    nfa_t &nfa = ctx.nfa;
+    const size_t nrule = ctx.nrule;
     nfa_state_t *s = NULL;
+
     switch (re->type) {
         case RE::NIL:
             s = t;
@@ -46,15 +56,15 @@ static nfa_state_t *re_to_nfa(nfa_t &nfa, size_t nrule, const RE *re, nfa_state_
             break;
         case RE::ALT: {
             nfa_state_t
-                *s1 = re_to_nfa(nfa, nrule, re->alt.re1, t),
-                *s2 = re_to_nfa(nfa, nrule, re->alt.re2, t);
+                *s1 = re_to_nfa(ctx, re->alt.re1, t),
+                *s2 = re_to_nfa(ctx, re->alt.re2, t);
             s = &nfa.states[nfa.size++];
             s->make_alt(nrule, s1, s2);
             break;
         }
         case RE::CAT:
-            s = re_to_nfa(nfa, nrule, re->cat.re2, t);
-            s = re_to_nfa(nfa, nrule, re->cat.re1, s);
+            s = re_to_nfa(ctx, re->cat.re2, t);
+            s = re_to_nfa(ctx, re->cat.re1, s);
             break;
         case RE::ITER: {
             const uint32_t
@@ -64,18 +74,26 @@ static nfa_state_t *re_to_nfa(nfa_t &nfa, size_t nrule, const RE *re, nfa_state_
             // see note [counted repetition and iteration expansion]
             if (max == AST::MANY) {
                 nfa_state_t *q = &nfa.states[nfa.size++];
-                s = re_to_nfa(nfa, nrule, iter, q);
+                s = re_to_nfa(ctx, iter, q);
                 q->make_alt(nrule, s, t);
             } else {
-                s = re_to_nfa(nfa, nrule, iter, t);
+                s = re_to_nfa(ctx, iter, t);
                 for (uint32_t i = min; i < max; ++i) {
                     nfa_state_t *q = &nfa.states[nfa.size++];
-                    q->make_alt(nrule, s, t);
-                    s = re_to_nfa(nfa, nrule, iter, q);
+                    if (ctx.opts->posix_captures) {
+                        // POSIX: shorter alternative first to speed up GOR1
+                        // by first exploring paths without optional empty repetitions
+                        q->make_alt(nrule, t, s);
+                    }
+                    else {
+                        // leftmost: must be greedy, longer alternative first
+                        q->make_alt(nrule, s, t);
+                    }
+                    s = re_to_nfa(ctx, iter, q);
                 }
             }
             for (uint32_t i = 1; i < min; ++i) {
-                s = re_to_nfa(nfa, nrule, iter, s);
+                s = re_to_nfa(ctx, iter, s);
             }
             break;
         }
@@ -107,9 +125,11 @@ nfa_t::nfa_t(const RESpec &spec)
     if (nre == 0) return;
 
     for (size_t i = 0; i < nre; ++i) {
+        rtn_ctx_t ctx = {spec.opts, *this, i};
+
         nfa_state_t *s = &states[size++];
         s->make_fin(i);
-        s = re_to_nfa(*this, i, spec.res[i], s);
+        s = re_to_nfa(ctx, spec.res[i], s);
 
         if (root) {
             nfa_state_t *t = &states[size++];
