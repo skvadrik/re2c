@@ -7,6 +7,14 @@
 namespace re2c
 {
 
+struct cmp_gor1_t
+{
+    determ_context_t &ctx;
+
+    cmp_gor1_t(determ_context_t &);
+    bool operator()(const clos_t &, const clos_t &) const;
+};
+
 struct cmp_gtop_t
 {
     bool operator() (const nfa_state_t *, const nfa_state_t *) const;
@@ -52,13 +60,21 @@ void closure_posix_gor1(determ_context_t &ctx)
 
     done.clear();
 
-    // enqueue all initial states (there might be duplicates)
+    // Initialization: topsort stack must contain configurations with
+    // unique target state, ordered from the highest POSIX precedence
+    // (on top) to the lowest precedence (at the bottom).
+    std::sort(init.begin(), init.end(), cmp_gor1_t(ctx));
     for (cclositer_t c = init.begin(); c != init.end(); ++c) {
-        q = relax(ctx, *c);
-        if (q) {
-            topsort.push(q);
-            q->status = GOR_TOPSORT;
+        q = c->state;
+        if (q->clos == NOCLOS) {
+            q->clos = static_cast<uint32_t>(done.size());
+            done.push_back(*c);
+            linear.push(q);
         }
+    }
+    for (; !linear.empty(); ) {
+        topsort.push(linear.top());
+        linear.pop();
     }
 
     for (; !topsort.empty(); ) {
@@ -115,6 +131,14 @@ void closure_posix_gor1(determ_context_t &ctx)
     }
 
     cleanup(done);
+}
+
+inline cmp_gor1_t::cmp_gor1_t(determ_context_t &c) : ctx(c) {}
+
+inline bool cmp_gor1_t::operator()(const clos_t &x, const clos_t &y) const
+{
+    int32_t h1, h2;
+    return precedence(ctx, x, y, h1, h2) < 0;
 }
 
 /*
