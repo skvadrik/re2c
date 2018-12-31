@@ -50,9 +50,6 @@ void Scanner::lex_conf(Opt &opts)
     "flags:" ("P" | "posix-captures") { opts.set_posix_captures   (lex_conf_bool());   return; }
     "flags:case-insensitive"          { opts.set_bCaseInsensitive (lex_conf_bool());   return; }
     "flags:case-inverted"             { opts.set_bCaseInverted    (lex_conf_bool());   return; }
-    "flags:lookahead"                 { opts.set_lookahead        (lex_conf_bool());   return; }
-    "flags:optimize-tags"             { opts.set_optimize_tags    (lex_conf_bool());   return; }
-    "flags:eager-skip"                { opts.set_eager_skip       (lex_conf_bool());   return; }
     "flags:" ("o" | "output")         { opts.set_output_file      (lex_conf_string()); return; }
     "flags:" ("t" | "type-header")    { opts.set_header_file      (lex_conf_string()); return; }
 
@@ -65,7 +62,6 @@ void Scanner::lex_conf(Opt &opts)
     "flags:encoding-policy"  { lex_conf_encoding_policy(opts);  return; }
     "flags:input"            { lex_conf_input(opts);            return; }
     "flags:empty-class"      { lex_conf_empty_class(opts);      return; }
-    "flags:dfa-minimization" { lex_conf_dfa_minimization(opts); return; }
 
     "eof" {
         const int32_t eof = lex_conf_number();
@@ -73,6 +69,8 @@ void Scanner::lex_conf(Opt &opts)
         opts.set_eof(static_cast<uint32_t>(eof));
         return;
     }
+
+    // internal options do not have configurations
 
     "define:YYCONDTYPE"           { opts.set_yycondtype       (lex_conf_string ()); return; }
     "define:YYGETCONDITION"       { opts.set_cond_get         (lex_conf_string ()); return; }
@@ -212,19 +210,6 @@ void Scanner::lex_conf_empty_class(Opt &opts)
     "match-empty" { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_EMPTY); goto end; }
     "match-none"  { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_NONE);  goto end; }
     "error"       { opts.set_empty_class_policy(EMPTY_CLASS_ERROR);       goto end; }
-*/
-end:
-    lex_conf_semicolon();
-}
-
-void Scanner::lex_conf_dfa_minimization(Opt &opts)
-{
-    lex_conf_assign ();
-/*!re2c
-    * { fatal_lc(get_line(), get_column(),
-        "bad configuration value (expected: 'table', 'moore')"); }
-    "table" { opts.set_dfa_minimization(DFA_MINIMIZATION_TABLE); goto end; }
-    "moore" { opts.set_dfa_minimization(DFA_MINIMIZATION_MOORE); goto end; }
 */
 end:
     lex_conf_semicolon();

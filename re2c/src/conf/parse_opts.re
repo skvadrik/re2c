@@ -162,6 +162,7 @@ opt_long:
     "input"                 end { NEXT_ARG("--input",            opt_input); }
     "empty-class"           end { NEXT_ARG("--empty-class",      opt_empty_class); }
     "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_dfa_minimization); }
+    "posix-closure"         end { NEXT_ARG("--posix-closure",    opt_posix_closure); }
 
     "single-pass"           end { goto opt; } // deprecated
 
@@ -231,6 +232,16 @@ opt_dfa_minimization:
     }
     "table" end { opts.set_dfa_minimization (DFA_MINIMIZATION_TABLE); goto opt; }
     "moore" end { opts.set_dfa_minimization (DFA_MINIMIZATION_MOORE); goto opt; }
+*/
+
+opt_posix_closure:
+/*!re2c
+    * {
+        ERROR("bad argument to option --posix_closure "
+            "(expected: gor1 | gtop): %s", *argv);
+    }
+    "gor1" end { opts.set_posix_closure (POSIX_CLOSURE_GOR1); goto opt; }
+    "gtop" end { opts.set_posix_closure (POSIX_CLOSURE_GTOP); goto opt; }
 */
 
 end:

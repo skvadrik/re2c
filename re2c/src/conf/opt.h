@@ -99,7 +99,6 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, tags_prefix, "yyt") \
     MUTOPT (std::string, tags_expression, "@@") \
     MUTOPT (bool, posix_captures, false) \
-    MUTOPT (bool, optimize_tags, true) \
     /* code generation */ \
     MUTOPT (bool, sFlag, false) \
     MUTOPT (bool, bFlag, false) \
@@ -154,7 +153,9 @@ const uint32_t NOEOF = ~0u - 1;
     /* internals */ \
     MUTOPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
     MUTOPT (bool, lookahead, true) \
-    MUTOPT (bool, eager_skip, false)
+    MUTOPT (bool, eager_skip, false) \
+    MUTOPT (bool, optimize_tags, true) \
+    MUTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1)
 
 struct conopt_t
 {

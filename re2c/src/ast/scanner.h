@@ -76,7 +76,6 @@ private:
     void lex_conf_encoding_policy(Opt &opts);
     void lex_conf_input(Opt &opts);
     void lex_conf_empty_class(Opt &opts);
-    void lex_conf_dfa_minimization(Opt &opts);
     void lex_conf_enc(Enc::type_t enc, Opt &opts);
     void lex_conf_assign();
     void lex_conf_semicolon();

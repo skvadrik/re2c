@@ -13,9 +13,6 @@
     re2c:flags:tags = 1;
     re2c:flags:case-insensitive = 0;
     re2c:flags:case-inverted = 1;
-    re2c:flags:lookahead = 0;
-    re2c:flags:optimize-tags = 0;
-    re2c:flags:eager-skip = 1;
 
     re2c:flags:e = 1;
     re2c:flags:ecb = 0;
@@ -38,7 +35,4 @@
     re2c:flags:empty-class = match-empty;
     re2c:flags:empty-class = match-none;
     re2c:flags:empty-class = error;
-
-    re2c:flags:dfa-minimization = table;
-    re2c:flags:dfa-minimization = moore;
 */

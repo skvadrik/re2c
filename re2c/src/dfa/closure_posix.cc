@@ -21,7 +21,11 @@ static void cleanup(closure_t &);
 
 void closure_posix(determ_context_t &ctx)
 {
-    closure_posix_gor1(ctx);
+    switch (ctx.dc_opts->posix_closure) {
+        case POSIX_CLOSURE_GOR1: closure_posix_gor1(ctx); break;
+        case POSIX_CLOSURE_GTOP: closure_posix_gtop(ctx); break;
+        default: DASSERT(false); break;
+    }
 }
 
 /*
