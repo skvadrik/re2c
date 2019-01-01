@@ -16,7 +16,7 @@
 #include "src/re/tag.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/u32lim.h"
 #include "src/util/wrap_iter.h"

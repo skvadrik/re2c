@@ -2,7 +2,7 @@
 
 #include "src/ast/scanner.h"
 #include "src/conf/msg.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 
 
 namespace re2c {

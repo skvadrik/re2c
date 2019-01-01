@@ -59,7 +59,7 @@ SRC_HDR = \
 	src/util/attribute.h \
 	src/util/c99_stdint.h \
 	src/util/counter.h \
-	src/util/debug_assert.h \
+	src/util/debug.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
 	src/util/get_dir.h \

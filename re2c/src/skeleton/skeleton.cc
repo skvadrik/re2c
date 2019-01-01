@@ -2,7 +2,7 @@
 
 #include "src/dfa/dfa.h"
 #include "src/skeleton/skeleton.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 
 namespace re2c
 {

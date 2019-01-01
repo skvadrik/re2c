@@ -5,7 +5,7 @@
 #include "src/util/c99_stdint.h"
 
 #include "src/test/range/test.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"
 

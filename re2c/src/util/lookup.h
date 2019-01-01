@@ -7,7 +7,7 @@
 #include <vector>
 #include <stddef.h>
 
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 
 namespace re2c
 {

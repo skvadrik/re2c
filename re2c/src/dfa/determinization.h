@@ -105,13 +105,13 @@ typedef lookup_t<const kernel_t*> kernels_t;
 struct determ_context_t
 {
     // determinization input
-    const opt_t             *dc_opts;       // options
-    Warn                    &dc_warn;       // warnings
-    const std::string       &dc_condname;   // the name of current condition (with -c)
-    const nfa_t             &dc_nfa;        // TNFA
+    const opt_t              *dc_opts;      // options
+    Warn                     &dc_warn;      // warnings
+    const std::string        &dc_condname;  // the name of current condition (with -c)
+    const nfa_t              &dc_nfa;       // TNFA
 
     // determinization output
-    dfa_t                   &dc_dfa;        // resulting TDFA
+    dfa_t                    &dc_dfa;       // resulting TDFA
 
     // temporary structures used by determinization
     allocator_t              dc_allocator;
@@ -130,7 +130,10 @@ struct determ_context_t
     std::stack<nfa_state_t*> dc_stack_topsort;
     std::stack<nfa_state_t*> dc_stack_linear;
     std::stack<clos_t>       dc_stack_dfs;
+
+    // debug
     dump_dfa_t               dc_dump;
+    closure_stats_t          dc_clstats;
 
     determ_context_t(const opt_t *, Warn &, const std::string &, const nfa_t &, dfa_t &);
     FORBID_COPY(determ_context_t);

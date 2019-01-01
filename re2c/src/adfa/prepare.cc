@@ -14,7 +14,7 @@
 #include "src/dfa/tcmd.h"
 #include "src/re/rule.h"
 #include "src/util/allocate.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 
 namespace re2c {
 

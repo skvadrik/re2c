@@ -50,6 +50,8 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, fFlag, false) \
     CONSTOPT (bool, rFlag, false) \
     CONSTOPT (bool, FFlag, false) \
+    /* include paths */ \
+    CONSTOPT (std::vector<std::string>, incpaths, std::vector<std::string>()) \
     /* debug */ \
     CONSTOPT (bool, dump_nfa, false) \
     CONSTOPT (bool, dump_dfa_raw, false) \
@@ -57,8 +59,8 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, dump_dfa_tagopt, false) \
     CONSTOPT (bool, dump_dfa_min, false) \
     CONSTOPT (bool, dump_adfa, false) \
-    /* include paths */ \
-    CONSTOPT (std::vector<std::string>, incpaths, std::vector<std::string>()) \
+    CONSTOPT (bool, dump_closure_stats, false) \
+    /* end */
 
 #define RE2C_MUTOPTS \
     /* output files */ \
@@ -152,10 +154,11 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (bool, startlabel_force, false) \
     /* internals */ \
     MUTOPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
+    MUTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1) \
     MUTOPT (bool, lookahead, true) \
     MUTOPT (bool, eager_skip, false) \
     MUTOPT (bool, optimize_tags, true) \
-    MUTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1)
+    /* end */
 
 struct conopt_t
 {

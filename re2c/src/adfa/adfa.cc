@@ -9,7 +9,7 @@
 #include "src/code/go.h"
 #include "src/dfa/dfa.h"
 #include "src/util/allocate.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 
 namespace re2c
 {

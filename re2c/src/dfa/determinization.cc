@@ -16,7 +16,7 @@
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
 #include "src/re/tag.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 #include "src/util/range.h"
 
 
@@ -222,6 +222,7 @@ determ_context_t::determ_context_t(const opt_t *opts, Warn &warn
     , dc_stack_linear()
     , dc_stack_dfs()
     , dc_dump(opts)
+    , dc_clstats()
 {}
 
 

@@ -29,11 +29,15 @@ static void cleanup(closure_t &);
 
 void closure_posix(determ_context_t &ctx)
 {
+    DRESET_CLSTATS(ctx);
+
     switch (ctx.dc_opts->posix_closure) {
         case POSIX_CLOSURE_GOR1: closure_posix_gor1(ctx); break;
         case POSIX_CLOSURE_GTOP: closure_posix_gtop(ctx); break;
         default: DASSERT(false); break;
     }
+
+    DDUMP_CLSTATS(ctx);
 }
 
 /*
@@ -87,8 +91,9 @@ void closure_posix_gor1(determ_context_t &ctx)
             topsort.pop();
 
             if (q->status != GOR_LINEAR) {
-                q->status = GOR_TOPSORT;
+                DINCCOUNT_CLSCANS(ctx);
 
+                q->status = GOR_TOPSORT;
                 while ((p = next_admissible_arc(ctx, q))
                     && p->status != GOR_NOPASS) {
                     p->active = 1;
@@ -113,6 +118,8 @@ void closure_posix_gor1(determ_context_t &ctx)
             linear.pop();
 
             if (q->active) {
+                DINCCOUNT_CLSCANS(ctx);
+
                 q->arcidx = 0;
                 while ((p = next_admissible_arc(ctx, q))) {
                     if (p->status == GOR_NOPASS) {
@@ -181,6 +188,8 @@ void closure_posix_gtop(determ_context_t &ctx)
     }
 
     for (; !todo.empty(); ) {
+        DINCCOUNT_CLSCANS(ctx);
+
         nfa_state_t *q = todo.top();
         todo.pop();
         q->active = 0;

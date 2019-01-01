@@ -166,12 +166,14 @@ opt_long:
 
     "single-pass"           end { goto opt; } // deprecated
 
-    "dump-nfa"              end { globopts.dump_nfa = true;        goto opt; }
-    "dump-dfa-raw"          end { globopts.dump_dfa_raw = true;    goto opt; }
-    "dump-dfa-det"          end { globopts.dump_dfa_det = true;    goto opt; }
-    "dump-dfa-tagopt"       end { globopts.dump_dfa_tagopt = true; goto opt; }
-    "dump-dfa-min"          end { globopts.dump_dfa_min = true;    goto opt; }
-    "dump-adfa"             end { globopts.dump_adfa = true;       goto opt; }
+    // debug options
+    "dump-nfa"              end { globopts.dump_nfa = true;           goto opt; }
+    "dump-dfa-raw"          end { globopts.dump_dfa_raw = true;       goto opt; }
+    "dump-dfa-det"          end { globopts.dump_dfa_det = true;       goto opt; }
+    "dump-dfa-tagopt"       end { globopts.dump_dfa_tagopt = true;    goto opt; }
+    "dump-dfa-min"          end { globopts.dump_dfa_min = true;       goto opt; }
+    "dump-adfa"             end { globopts.dump_adfa = true;          goto opt; }
+    "dump-closure-stats"    end { globopts.dump_closure_stats = true; goto opt; }
 */
 
 opt_output:

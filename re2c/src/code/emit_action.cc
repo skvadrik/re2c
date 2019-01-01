@@ -20,7 +20,7 @@
 #include "src/re/tag.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/string_utils.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 
 namespace re2c
 {

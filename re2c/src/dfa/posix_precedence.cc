@@ -2,7 +2,7 @@
 
 #include "src/dfa/determinization.h"
 #include "src/dfa/tag_history.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 
 
 namespace re2c
@@ -29,6 +29,9 @@ int32_t precedence(determ_context_t &ctx,
 
     reconstruct_history(thist, p1, xl);
     reconstruct_history(thist, p2, yl);
+
+    DINCCOUNT_CLPREC(ctx);
+    DINCCOUNT_CLLENGTH(ctx, p1.size() + p2.size());
 
     tag_path_t::const_reverse_iterator
         i1 = p1.rbegin(), e1 = p1.rend(), j1 = i1, g1,

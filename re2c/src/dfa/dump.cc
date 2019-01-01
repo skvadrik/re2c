@@ -14,7 +14,7 @@
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
 #include "src/re/tag.h"
-#include "src/util/debug_assert.h"
+#include "src/util/debug.h"
 
 namespace re2c
 {
@@ -302,5 +302,27 @@ void dump_tags(const tagver_table_t &tagvertbl, const tag_history_t &taghistory,
         fprintf(stderr, " ");
     }
 }
+
+
+#ifdef RE2C_DEBUG
+
+void reset_clstats(determ_context_t &ctx)
+{
+    closure_stats_t &cs = ctx.dc_clstats;
+    cs.nscans = 0;
+    cs.nprec = 0;
+    cs.length = 0;
+}
+
+void dump_clstats(const determ_context_t &ctx)
+{
+    const closure_stats_t &cs = ctx.dc_clstats;
+    if (ctx.dc_opts->dump_closure_stats) {
+        fprintf(stderr, "scans: %-10u prec: %-10u length: %-10lu\n"
+            , cs.nscans, cs.nprec, static_cast<uint64_t>(cs.length));
+    }
+}
+
+#endif // RE2C_DEBUG
 
 } // namespace re2c
