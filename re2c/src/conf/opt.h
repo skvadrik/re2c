@@ -52,6 +52,12 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, FFlag, false) \
     /* include paths */ \
     CONSTOPT (std::vector<std::string>, incpaths, std::vector<std::string>()) \
+    /* internals */ \
+    CONSTOPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
+    CONSTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1) \
+    CONSTOPT (bool, lookahead, true) \
+    CONSTOPT (bool, eager_skip, false) \
+    CONSTOPT (bool, optimize_tags, true) \
     /* debug */ \
     CONSTOPT (bool, dump_nfa, false) \
     CONSTOPT (bool, dump_dfa_raw, false) \
@@ -152,12 +158,6 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, labelPrefix, "yy") \
     MUTOPT (std::string, startlabel, "") \
     MUTOPT (bool, startlabel_force, false) \
-    /* internals */ \
-    MUTOPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
-    MUTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1) \
-    MUTOPT (bool, lookahead, true) \
-    MUTOPT (bool, eager_skip, false) \
-    MUTOPT (bool, optimize_tags, true) \
     /* end */
 
 struct conopt_t

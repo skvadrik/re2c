@@ -147,9 +147,6 @@ opt_long:
     "case-inverted"         end { opts.set_bCaseInverted (true);     goto opt; }
     "tags"                  end { opts.set_tags (true);              goto opt; }
     "posix-captures"        end { opts.set_posix_captures(true);     goto opt; }
-    "no-lookahead"          end { opts.set_lookahead(false);         goto opt; }
-    "no-optimize-tags"      end { opts.set_optimize_tags(false);     goto opt; }
-    "eager-skip"            end { opts.set_eager_skip(true);         goto opt; }
     "ecb"                   end { opts.set_encoding(Enc::EBCDIC);    goto opt; }
     "unicode"               end { opts.set_encoding(Enc::UTF32);     goto opt; }
     "wide-chars"            end { opts.set_encoding(Enc::UCS2);      goto opt; }
@@ -161,10 +158,15 @@ opt_long:
     "encoding-policy"       end { NEXT_ARG("--encoding-policy",  opt_encoding_policy); }
     "input"                 end { NEXT_ARG("--input",            opt_input); }
     "empty-class"           end { NEXT_ARG("--empty-class",      opt_empty_class); }
-    "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_dfa_minimization); }
-    "posix-closure"         end { NEXT_ARG("--posix-closure",    opt_posix_closure); }
 
     "single-pass"           end { goto opt; } // deprecated
+
+    // internals
+    "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_dfa_minimization); }
+    "posix-closure"         end { NEXT_ARG("--posix-closure",    opt_posix_closure); }
+    "no-lookahead"          end { globopts.lookahead = false;     goto opt; }
+    "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
+    "eager-skip"            end { globopts.eager_skip = true;     goto opt; }
 
     // debug options
     "dump-nfa"              end { globopts.dump_nfa = true;           goto opt; }
@@ -232,8 +234,8 @@ opt_dfa_minimization:
         ERROR("bad argument to option --dfa-minimization "
             "(expected: table | moore): %s", *argv);
     }
-    "table" end { opts.set_dfa_minimization (DFA_MINIMIZATION_TABLE); goto opt; }
-    "moore" end { opts.set_dfa_minimization (DFA_MINIMIZATION_MOORE); goto opt; }
+    "table" end { globopts.dfa_minimization = DFA_MINIMIZATION_TABLE; goto opt; }
+    "moore" end { globopts.dfa_minimization = DFA_MINIMIZATION_MOORE; goto opt; }
 */
 
 opt_posix_closure:
@@ -242,8 +244,8 @@ opt_posix_closure:
         ERROR("bad argument to option --posix_closure "
             "(expected: gor1 | gtop): %s", *argv);
     }
-    "gor1" end { opts.set_posix_closure (POSIX_CLOSURE_GOR1); goto opt; }
-    "gtop" end { opts.set_posix_closure (POSIX_CLOSURE_GTOP); goto opt; }
+    "gor1" end { globopts.posix_closure = POSIX_CLOSURE_GOR1; goto opt; }
+    "gtop" end { globopts.posix_closure = POSIX_CLOSURE_GTOP; goto opt; }
 */
 
 end:

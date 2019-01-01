@@ -10,6 +10,10 @@ void conopt_t::fix()
         fFlag = false;
     }
 
+    if (!lookahead) {
+        eager_skip = true;
+    }
+
     // append directory separator '/' to all paths that do not have it
     for (size_t i = 0; i < incpaths.size(); ++i) {
         std::string &p = incpaths[i];
@@ -65,7 +69,6 @@ void mutopt_t::fix(const conopt_t *globopts)
             state_set_naked = Opt::baseopt.state_set_naked;
             tags_prefix = Opt::baseopt.tags_prefix;
             tags_expression = Opt::baseopt.tags_expression;
-            optimize_tags = Opt::baseopt.optimize_tags;
             yyfilllabel = Opt::baseopt.yyfilllabel;
             yynext = Opt::baseopt.yynext;
             yyaccept = Opt::baseopt.yyaccept;
@@ -150,8 +153,6 @@ void mutopt_t::fix(const conopt_t *globopts)
     {
         tags_prefix = Opt::baseopt.tags_prefix;
         tags_expression = Opt::baseopt.tags_expression;
-        lookahead = Opt::baseopt.lookahead;
-        optimize_tags = Opt::baseopt.optimize_tags;
     }
     if (!bFlag)
     {
@@ -230,9 +231,6 @@ void mutopt_t::fix(const conopt_t *globopts)
     {
         bFlag = true;
         sFlag = true;
-    }
-    if (!lookahead) {
-        eager_skip = true;
     }
     if (eof != NOEOF) {
         if (bFlag || gFlag) {
