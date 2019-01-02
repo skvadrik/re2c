@@ -26,7 +26,8 @@
 
 % comments in the pseudocode
 % note: on my sistem \texttt is broken with \small font size (too small)
-\newcommand\Xcommentfont[1]{\fontsize{9pt}{0pt}\selectfont\texttt{#1}}
+\newcommand\Xcommentfont[1]{\selectfont\textnormal{#1}}
+%\newcommand\Xcommentfont[1]{\fontsize{9pt}{0pt}\selectfont\texttt{#1}}
 \SetCommentSty{Xcommentfont}
 \SetNoFillComment
 
@@ -74,6 +75,7 @@
 \newcommand{\XT}{\mathcal{T}}
 \newcommand{\XX}{\mathcal{X}}
 \newcommand{\YB}{\mathbb{B}}
+\newcommand{\YC}{\mathbb{C}}
 \newcommand{\YF}{\mathbb{F}}
 \newcommand{\YN}{\mathbb{N}}
 \newcommand{\YT}{\mathbb{T}}
@@ -971,28 +973,22 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
     \Fn {$\underline {precedence (x, y, P_1, P_2)} \smallskip$} {
         $(q, \Xund, \gamma, \Xund) = x$, where $\gamma = a_1 \dots a_n, \; n \geq 0$ \;
         $(p, \Xund, \delta, \Xund) = y$, where $\delta = b_1 \dots b_m, \; m \geq 0$ \;
-        $\ff = (q = p)$ \tcc{fork frame ?}
+        $k = 1, \; hx = hy = \infty$ \;
+        $\ff = (q = p)$ \tcp{is fork frame?}
 
         \BlankLine
-        \If { $\ff \wedge \gamma = \delta$ } {
-            \Return $(\infty, \infty, 0)$ \tcc{identical}
+        \tcp{identical}
+        \lIf { $\ff \wedge \gamma = \delta$ } {
+            \Return $(hx, hy, 0)$
         }
 
         \BlankLine
-        $k = 1$ \;
+        \tcp {longest-precedence}
         \If { $\ff$ } {
-            \While {$k \leq min (n, m) \wedge a_k = b_k$} {
-              $k = k + 1$ \tcc{first mismatch}
+            \lWhile {$k \leq min (n, m) \wedge a_k = b_k$} {
+              $k = k + 1$ %\tcp{first mismatch}
             }
-        }
-
-        \BlankLine
-        \tcc {longest-precedence}
-        \If { $\ff$ } {
-            \lIf {$k = 1$} {
-                $hx = hy = \infty$
-            }
-            \lElse {
+            \lIf {$k > 1$} {
                 $hx = hy = height (a_{k-1})$
             }
         } \Else {
@@ -1008,7 +1004,7 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
         \lIf {$hx < hy$} {\Return $(hx, hy, 1)$}
 
         \BlankLine
-        \tcc {leftmost-precedence}
+        \tcp {leftmost-precedence}
         \If { $\ff$ } {
             \lIf {$k = n = m$} { $l = 0$ }
             \lElseIf {$k = n$} { $l = -1$ }
@@ -1116,37 +1112,33 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{closure \Xund gor1(X, Q, F, \Delta, P_1, P_2)} \smallskip$} {
 
-        $C = (\; Q, F, \Delta, P_1, P_2$ \;
-        \Indp
-        $,\, topsort, linear : \text{stacks of elements } q \in Q$ \;
-        $,\, result  : Q \rightarrow (Q \times Q \times \YZ^* \times \YZ^*) \cup \{ \bot \}$
-        $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
-        $,\, indeg   : Q \rightarrow \YZ$                          \tcc{in-degree}
-        $,\, active  : Q \rightarrow \YB$                          \tcc{true if needs rescan}
-        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcc{ordered set of arcs}
-        $,\, next    : Q \rightarrow \YZ)$                         \tcc{arc index}
         \Indm
+        context: $C = (\; Q, F, \Delta, P_1, P_2$ \;
+        \Indp
+        $,\, topsort, linear : \text{stacks of states } q \in Q$ \;
+        $,\, result  : Q \rightarrow \YC^Q \cup \{ \bot \}$ \;
+        $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
+        $,\, indeg   : Q \rightarrow \YZ$                          \tcp{in-degree of state}
+        $,\, active  : Q \rightarrow \YB$                          \tcp{true if state needs rescan}
+        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcp{ordered set of outgoing transitions}
+        $,\, next    : Q \rightarrow \YZ)$                         \tcp{index of current transition}
+        \Indm
+        \Indp
 
         \BlankLine
         \For {$q \in Q$} {
             $result(q) = \bot$ \;
             $status(q) = \NOPASS$ \;
-            $indeg(q)  = | \{ (\Xund, \Xund, \Xund, q) \in \Delta \} |$ \;
+%            $indeg(q)  = $ in-degree of $q$ in $\Delta$ \;
             $active(q) = \Xfalse$ \;
-            $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
+%            $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
             $next(q)   = 1$ \;
         }
 
         \BlankLine
-        $Y = sort \Xund with (X, less(x, y) = precede(x, y, C))$ \;
-        \For {$x = (\Xund, q, \Xund, \Xund) \in Y$} {
-            \If {$result(q) = \bot$} {
-                $result(q) = x$ \;
-                $push(linear, q)$ \;
-            }
-        }
-        \While {$linear$ is not empty} {
-            $push(topsort, pop(linear))$ \;
+        \For {$x = (\Xund, q, \Xund, \Xund) \in X$ in inverse order of $precede_0$} {
+            $result(q) = x$ \;
+            $push(topsort, q)$
         }
 
         \BlankLine
@@ -1207,6 +1199,13 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
     }
     \end{algorithm}
 
+    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+    \Fn {$\underline{core (q, C)} \smallskip$} {
+        \tcp{is final or has outgoing transitions on symbols}
+        \Return $q \in F \vee \exists (q, \alpha, \Xund, \Xund) \in \Delta^\Sigma$ \;
+    }
+    \end{algorithm}
+
 
     \columnbreak
 
@@ -1214,24 +1213,26 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{closure \Xund gtop(X, Q, F, \Delta, P_1, P_2)} \smallskip$} {
 
-        $C = (\; Q, F, \Delta, P_1, P_2$ \;
-        \Indp
-        $,\, queue : \text{priority queue of elements } q \in Q$ \;
-        $,\, result  : Q \rightarrow (Q \times Q \times \YZ^* \times \YZ^*) \cup \{ \bot \}$
-        $,\, status  : Q \rightarrow \{ \INQUEUE, \OFFQUEUE\}$     \;
-        $,\, indeg   : Q \rightarrow \YZ$                          \tcc{in-degree}
-        $,\, topord  : Q \rightarrow \YZ$                          \tcc{topological index}
-        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcc{ordered set of arcs}
-        $,\, next    : Q \rightarrow \YZ)$                         \tcc{arc index}
         \Indm
+        context: $C = (\; Q, F, \Delta, P_1, P_2$ \;
+        \Indp
+        $,\, queue : \text{priority queue of states } q \in Q$ \;
+        $,\, result  : Q \rightarrow \YC^Q \cup \{ \bot \}$ \;
+        $,\, status  : Q \rightarrow \{ \INQUEUE, \OFFQUEUE\}$     \;
+        $,\, indeg   : Q \rightarrow \YZ$                          \tcp{in-degree of state}
+        $,\, topord  : Q \rightarrow \YZ$                          \tcp{topological index of state}
+        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcp{ordered set of outgoing transitions}
+        $,\, next    : Q \rightarrow \YZ)$                         \tcp{index of current transition}
+        \Indm
+        \Indp
 
         \BlankLine
         \For {$q \in Q$} {
             $result(q) = \bot$ \;
             $status(q) = \OFFQUEUE$ \;
-            $indeg(q)  = | \{ (\Xund, \Xund, \Xund, q) \in \Delta \} |$ \;
-            $topord(q) = \text{ topological index of } q \text { in TNFA}$ \;
-            $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
+%            $indeg(q)  = $ in-degree of $q$ in $\Delta$ \;
+%            $topord(q) = \text{ topological index of } q \text { in TNFA}$ \;
+%            $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
             $next(q)   = 1$ \;
         }
 
@@ -1300,23 +1301,25 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{precede (x, y, C)} \smallskip$} {
         $(\Xund, \Xund, l) = precedence (x, y, P_1, P_2)$ \;
-        \Return $l = -1$ %\tcc{true if x precedes y}
+        \Return $l = -1$ %\tcp{true if x precedes y}
     }
     \end{algorithm}
 
+
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{core (q, C)} \smallskip$} {
-        \tcc{is final or has out-transitions on symbols}
-        \Return $q \in F \vee \exists (q, \alpha, \Xund, \Xund) \in \Delta^\Sigma$ \;
+    \Fn {$\underline{precede_0 (x, y, C)} \smallskip$} {
+        $(p,\Xund,\Xund,\Xund) = x, \; (q,\Xund,\Xund,\Xund) = y$ \;
+        \Return $P_2[p][q] < 0$ \;
     }
     \end{algorithm}
 \end{multicols}
-\vspace{-3em}
+\vspace{-2em}
 \begin{center}
 \caption{GOR1 and GTOP closure algorithms.
-The definitions of $sort \Xund with$, $push$, $pop$, $insert \Xund with \Xund priority$ \\
-and $extract \Xund min$ are omitted;
-topological sorting of TNFA states is also left for the reader.}
+The definitions of $push$, $pop$, $insert \Xund with \Xund priority$, $extract \Xund min$ \\
+$arcs$, $indeg$ and $topord$ are omitted for brevity.
+%topological sorting of TNFA states is also left for the reader.
+$\YC^Q = Q \times Q \times \YZ^* \times \YZ^*$ is the set of all configurations over $Q$.}
 \end{center}
 \end{figure*}
 
