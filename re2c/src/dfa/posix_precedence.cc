@@ -18,6 +18,8 @@ int32_t precedence(determ_context_t &ctx,
 {
     const hidx_t xl = x.tlook, yl = y.tlook;
     const uint32_t xo = x.origin, yo = y.origin;
+    const std::vector<Tag> &tags = ctx.dc_dfa.tags;
+    const kernel_t *k = NULL;
 
     if (xl == yl && xo == yo) {
         rhox = rhoy = MAX_RHO;
@@ -26,41 +28,29 @@ int32_t precedence(determ_context_t &ctx,
 
     tag_history_t &thist = ctx.dc_taghistory;
     tag_path_t &p1 = thist.path1, &p2 = thist.path2;
-
     reconstruct_history(thist, p1, xl);
     reconstruct_history(thist, p2, yl);
-
-    DINCCOUNT_CLPREC(ctx);
-    DINCCOUNT_CLLENGTH(ctx, p1.size() + p2.size());
-
     tag_path_t::const_reverse_iterator
         i1 = p1.rbegin(), e1 = p1.rend(), j1 = i1, g1,
         i2 = p2.rbegin(), e2 = p2.rend(), j2 = i2, g2;
 
-    const std::vector<Tag> &tags = ctx.dc_dfa.tags;
-    size_t nclos = 0;
-    const prectable_t *prectbl = NULL;
+    DINCCOUNT_CLPREC(ctx);
+    DINCCOUNT_CLLENGTH(ctx, p1.size() + p2.size());
+
     const bool fork_frame = xo == yo;
 
+    // longest precedence
     if (fork_frame) {
         // find fork
         for (; j1 != e1 && j2 != e2 && *j1 == *j2; ++j1, ++j2);
+        rhox = rhoy = j1 > i1
+            ? tags[(j1 - 1)->idx].height : MAX_RHO;
     }
     else {
         // get precedence table and size of the origin state
-        const kernel_t *k = ctx.dc_kernels[ctx.dc_origin];
-        nclos = k->size;
-        prectbl = k->prectbl;
-    }
-
-    // longest precedence
-    if (!fork_frame) {
-        rhox = unpack_longest(prectbl[xo * nclos + yo]);
-        rhoy = unpack_longest(prectbl[yo * nclos + xo]);
-    }
-    else {
-        rhox = rhoy = MAX_RHO;
-        if (j1 > i1) rhox = rhoy = tags[(j1 - 1)->idx].height;
+        k = ctx.dc_kernels[ctx.dc_origin];
+        rhox = unpack_longest(k->prectbl[xo * k->size + yo]);
+        rhoy = unpack_longest(k->prectbl[yo * k->size + xo]);
     }
     for (g1 = j1; g1 != e1; ++g1) {
         rhox = std::min(rhox, tags[g1->idx].height);
@@ -72,10 +62,7 @@ int32_t precedence(determ_context_t &ctx,
     if (rhox < rhoy) return 1;
 
     // leftmost precedence
-    if (!fork_frame) {
-        return unpack_leftmost(prectbl[xo * nclos + yo]);
-    }
-    else {
+    if (fork_frame) {
         // equal => not less
         if (j1 == e1 && j2 == e2) return 0;
 
@@ -105,6 +92,9 @@ int32_t precedence(determ_context_t &ctx,
         // top-level RE don't have proper negative tags)
         if (idx1 < idx2) return -1;
         if (idx1 > idx2) return 1;
+    }
+    else {
+        return unpack_leftmost(k->prectbl[xo * k->size + yo]);
     }
 
     // unreachable
