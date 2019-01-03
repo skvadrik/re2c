@@ -1,6 +1,7 @@
 #ifdef RE2C_DEBUG
 
 #include "src/util/c99_stdint.h"
+#include <map>
 #include <stdio.h>
 #include <string>
 #include <utility>
@@ -28,6 +29,12 @@ static void dump_adfa_range(uint32_t lower, uint32_t upper)
 
 void dump_adfa(const DFA &dfa)
 {
+    std::map<const State*, uint32_t> st2idx;
+    uint32_t idx = 0;
+    for (const State *s = dfa.head; s; s = s->next) {
+        st2idx[s] = idx++;
+    }
+
     fprintf(stderr,
         "digraph DFA {\n"
         "  rankdir=LR\n"
@@ -36,7 +43,7 @@ void dump_adfa(const DFA &dfa)
 
     fprintf(stderr,
         "  n [shape=point]"
-        "  n -> n%p [style=dotted label=\"", (void*)dfa.head);
+        "  n -> n%u [style=dotted label=\"", st2idx[dfa.head]);
     dump_tcmd(dfa.tcpool[dfa.tags0]);
     fprintf(stderr, "\"]\n");
 
@@ -51,7 +58,7 @@ void dump_adfa(const DFA &dfa)
         } else {
             attr = "";
         }
-        fprintf(stderr, "  n%p [height=0.2 width=0.2 label=\"", (void*)s);
+        fprintf(stderr, "  n%u [height=0.2 width=0.2 label=\"", st2idx[s]);
         if (s->fill && action != Action::MOVE) {
             fprintf(stderr, "F(%u) ", (uint32_t)s->fill);
         }
@@ -70,8 +77,8 @@ void dump_adfa(const DFA &dfa)
         if (action == Action::ACCEPT) {
             const accept_t &accept = *s->action.info.accepts;
             for (uint32_t i = 0; i < accept.size(); ++i) {
-                fprintf(stderr, "  n%p -> n%p [label=\"",
-                    (void*)s, (void*)accept[i].first);
+                fprintf(stderr, "  n%u -> n%u [label=\"", st2idx[s],
+                    st2idx[accept[i].first]);
                 dump_tcmd(dfa.tcpool[accept[i].second]);
                 fprintf(stderr, "\" style=dotted]\n");
             }
@@ -89,7 +96,7 @@ void dump_adfa(const DFA &dfa)
             } else {
                 attr = "";
             }
-            fprintf(stderr, "  n%p -> n%p [label=\"", (void*)s, (void*)x->to);
+            fprintf(stderr, "  n%u -> n%u [label=\"", st2idx[s], st2idx[x->to]);
             if (eat) dump_adfa_range(lb, x->ub);
             dump_tcmd(dfa.tcpool[x->tags]);
             fprintf(stderr, "\" %s]\n", attr);
