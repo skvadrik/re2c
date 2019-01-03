@@ -11,10 +11,10 @@
 #include "src/code/go.h"
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
+#include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
 #include "src/re/rule.h"
 #include "src/util/allocate.h"
-#include "src/util/debug.h"
 
 namespace re2c {
 

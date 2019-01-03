@@ -1,8 +1,8 @@
 #include <algorithm>
 
+#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/skeleton/skeleton.h"
-#include "src/util/debug.h"
 
 namespace re2c
 {

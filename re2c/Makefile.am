@@ -25,11 +25,9 @@ SRC_HDR = \
 	src/conf/warn.h \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
-	src/adfa/dump.h \
 	src/dfa/cfg/cfg.h \
 	src/dfa/determinization.h \
 	src/dfa/dfa.h \
-	src/dfa/dump.h \
 	src/dfa/tag_history.h \
 	src/dfa/tagver_table.h \
 	src/dfa/tcmd.h \
@@ -55,11 +53,11 @@ SRC_HDR = \
 	src/ast/parser.h \
 	src/ast/scanner.h \
 	src/ast/unescape.h \
+	src/debug/debug.h \
 	src/util/allocate.h \
 	src/util/attribute.h \
 	src/util/c99_stdint.h \
 	src/util/counter.h \
-	src/util/debug.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
 	src/util/get_dir.h \
@@ -90,16 +88,18 @@ SRC = \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
 	src/conf/warn.cc \
-	src/nfa/dump.cc \
 	src/nfa/estimate_size.cc \
 	src/nfa/re_to_nfa.cc \
 	src/adfa/adfa.cc \
-	src/adfa/dump.cc \
 	src/adfa/prepare.cc \
+	src/debug/dump_adfa.cc \
+	src/debug/dump_cfg.cc \
+	src/debug/dump_dfa.cc \
+	src/debug/dump_interf.cc \
+	src/debug/dump_nfa.cc \
 	src/dfa/cfg/cfg.cc \
 	src/dfa/cfg/compact.cc \
 	src/dfa/cfg/dce.cc \
-	src/dfa/cfg/dump.cc \
 	src/dfa/cfg/freeze.cc \
 	src/dfa/cfg/interfere.cc \
 	src/dfa/cfg/liveanal.cc \
@@ -112,7 +112,6 @@ SRC = \
 	src/dfa/closure_posix.cc \
 	src/dfa/dead_rules.cc \
 	src/dfa/determinization.cc \
-	src/dfa/dump.cc \
 	src/dfa/fallback_tags.cc \
 	src/dfa/fillpoints.cc \
 	src/dfa/find_state.cc \

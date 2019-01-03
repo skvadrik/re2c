@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
-#include "src/adfa/dump.h"
 #include "src/ast/ast.h"
 #include "src/ast/parser.h"
 #include "src/ast/scanner.h"
@@ -14,8 +13,8 @@
 #include "src/code/output.h"
 #include "src/compile.h"
 #include "src/conf/opt.h"
+#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
-#include "src/dfa/dump.h"
 #include "src/nfa/nfa.h"
 #include "src/re/encoding/range_suffix.h"
 #include "src/re/re.h"

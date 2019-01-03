@@ -49,9 +49,6 @@ struct cfg_t
     FORBID_COPY(cfg_t);
 };
 
-void dump_cfg(const cfg_t &cfg, const bool *live);
-void dump_interf(const cfg_t &cfg, const bool *interf);
-
 } // namespace re2c
 
 #endif // _RE2C_DFA_CFG_CFG_

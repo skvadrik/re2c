@@ -2,12 +2,12 @@
 #include <string.h>
 #include <algorithm>
 
+#include "src/debug/debug.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
-#include "src/util/debug.h"
 #include "src/util/hash32.h"
 
 
@@ -133,7 +133,7 @@ void find_state(determ_context_t &ctx)
         s->tcmd[ctx.dc_symbol] = ctx.dc_actions;
     }
 
-    ctx.dc_dump.state(ctx, is_new);
+    DDUMP_DFA_RAW(ctx, is_new);
 }
 
 

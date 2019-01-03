@@ -8,8 +8,8 @@
 #include <vector>
 
 #include "src/conf/msg.h"
+#include "src/debug/debug.h"
 #include "src/skeleton/skeleton.h"
-#include "src/util/debug.h"
 
 namespace re2c
 {

@@ -3,7 +3,7 @@
 #include "src/code/emit.h"
 #include "src/code/input_api.h"
 #include "src/conf/opt.h"
-#include "src/util/debug.h"
+#include "src/debug/debug.h"
 
 namespace re2c
 {

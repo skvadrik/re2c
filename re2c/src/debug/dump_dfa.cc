@@ -1,3 +1,5 @@
+#ifdef RE2C_DEBUG
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -5,16 +7,15 @@
 #include <vector>
 
 #include "src/conf/opt.h"
+#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
-#include "src/dfa/dump.h"
 #include "src/dfa/tag_history.h"
 #include "src/dfa/tagver_table.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
 #include "src/re/tag.h"
-#include "src/util/debug.h"
 
 namespace re2c
 {
@@ -304,7 +305,6 @@ void dump_tags(const tagver_table_t &tagvertbl, const tag_history_t &taghistory,
 }
 
 
-#ifdef RE2C_DEBUG
 
 void reset_clstats(determ_context_t &ctx)
 {
@@ -323,6 +323,6 @@ void dump_clstats(const determ_context_t &ctx)
     }
 }
 
-#endif // RE2C_DEBUG
-
 } // namespace re2c
+
+#endif // RE2C_DEBUG

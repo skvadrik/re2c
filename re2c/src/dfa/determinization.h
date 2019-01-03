@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "src/nfa/nfa.h"
-#include "src/dfa/dump.h"
+#include "src/debug/debug.h"
 #include "src/dfa/tagver_table.h"
 #include "src/dfa/tag_history.h"
 #include "src/util/forbid_copy.h"

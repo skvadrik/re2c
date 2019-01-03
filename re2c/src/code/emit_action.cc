@@ -15,12 +15,12 @@
 #include "src/code/label.h"
 #include "src/code/output.h"
 #include "src/conf/opt.h"
+#include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
 #include "src/re/rule.h"
 #include "src/re/tag.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/string_utils.h"
-#include "src/util/debug.h"
 
 namespace re2c
 {

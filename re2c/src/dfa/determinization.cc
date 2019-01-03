@@ -9,14 +9,13 @@
 
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
+#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
-#include "src/dfa/dump.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
 #include "src/re/tag.h"
-#include "src/util/debug.h"
 #include "src/util/range.h"
 
 

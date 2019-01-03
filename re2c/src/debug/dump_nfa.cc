@@ -1,3 +1,5 @@
+#ifdef RE2C_DEBUG
+
 #include "src/util/c99_stdint.h"
 #include <stdio.h>
 #include <string>
@@ -79,3 +81,5 @@ void dump_nfa(const nfa_t &nfa)
 }
 
 } // namespace re2c
+
+#endif // RE2C_DEBUG

@@ -119,7 +119,6 @@ struct nfa_t
 };
 
 size_t estimate_size(const std::vector<RE*> &res);
-void dump_nfa(const nfa_t &nfa);
 
 } // namespace re2c
 

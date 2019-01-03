@@ -2,11 +2,11 @@
 #include <string.h>
 #include <algorithm>
 
+#include "src/debug/debug.h"
 #include "src/dfa/cfg/cfg.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/re/tag.h"
-#include "src/util/debug.h"
 
 namespace re2c
 {
