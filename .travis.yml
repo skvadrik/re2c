@@ -23,7 +23,8 @@ script:
   - |
     $CONFIG_DIR/configure \
         --prefix="$(pwd)"/re2c-install \
-        --enable-docs
+        --enable-docs \
+        --enable-debug
   - make -j$(nproc)
   - make -j$(nproc) check VERBOSE=1
   - make -j$(nproc) install
