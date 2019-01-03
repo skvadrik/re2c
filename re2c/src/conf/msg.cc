@@ -112,7 +112,11 @@ void vernum ()
 
 void version ()
 {
-    printf ("re2c %s\n", PACKAGE_VERSION);
+#ifdef RE2C_DEBUG
+    printf("re2c %s (debug)\n", PACKAGE_VERSION);
+#else
+    printf("re2c %s\n", PACKAGE_VERSION);
+#endif
 }
 
 std::string incond (const std::string & cond)
