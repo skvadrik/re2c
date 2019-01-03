@@ -65,6 +65,8 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, dump_dfa_tagopt, false) \
     CONSTOPT (bool, dump_dfa_min, false) \
     CONSTOPT (bool, dump_adfa, false) \
+    CONSTOPT (bool, dump_cfg, false) \
+    CONSTOPT (bool, dump_interf, false) \
     CONSTOPT (bool, dump_closure_stats, false) \
     /* end */
 

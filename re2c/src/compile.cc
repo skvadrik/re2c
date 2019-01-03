@@ -80,7 +80,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     insert_fallback_tags(dfa);
 
     // try to minimize the number of tag variables
-    compact_and_optimize_tags(dfa, opts->optimize_tags);
+    compact_and_optimize_tags(opts, dfa);
     DDUMP_DFA_TAGOPT(opts, dfa);
 
     freeze_tags(dfa);

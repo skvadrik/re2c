@@ -8,7 +8,7 @@
 namespace re2c
 {
 
-void compact_and_optimize_tags(dfa_t &dfa, bool optimize)
+void compact_and_optimize_tags(const opt_t *opts, dfa_t &dfa)
 {
     tagver_t maxver = dfa.maxtagver;
     if (maxver > 0) {
@@ -20,18 +20,26 @@ void compact_and_optimize_tags(dfa_t &dfa, bool optimize)
         maxver = cfg_t::compact(cfg, ver2new);
         cfg_t::renaming(cfg, ver2new, maxver);
 
-        if (optimize && maxver > 0) {
+        if (opts->optimize_tags && maxver > 0) {
             nver = static_cast<size_t>(maxver) + 1;
             bool *live = new bool[cfg.nbbfin * nver];
             bool *interf = new bool[nver * nver];
 
             static const uint32_t NPASS = 2;
             for (uint32_t n = 0; n < NPASS; ++n) {
+
                 cfg_t::liveness_analysis(cfg, live);
+                DDUMP_CFG(opts, cfg, live);
+
                 cfg_t::dead_code_elimination(cfg, live);
+
                 cfg_t::interference(cfg, live, interf);
+                DDUMP_INTERF(opts, cfg, interf);
+
                 maxver = cfg_t::variable_allocation(cfg, interf, ver2new);
+
                 cfg_t::renaming(cfg, ver2new, maxver);
+
                 cfg_t::normalization(cfg);
             }
 

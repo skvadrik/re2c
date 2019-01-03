@@ -19,6 +19,8 @@ struct dump_dfa_t { dump_dfa_t(const opt_t *) {} };
 #define DDUMP_DFA_MIN(opts, dfa)
 #define DDUMP_ADFA(opts, adfa)
 #define DDUMP_CLSTATS(ctx)
+#define DDUMP_CFG(opts, cfg, live)
+#define DDUMP_INTERF(opts, cfg, itf)
 #define DINCCOUNT_CLSCANS(ctx)
 #define DINCCOUNT_CLPREC(ctx)
 #define DINCCOUNT_CLLENGTH(ctx, len)
@@ -66,6 +68,8 @@ struct dump_dfa_t
 #define DDUMP_DFA_MIN(opts, dfa)     if (opts->dump_dfa_min) dump_dfa(dfa)
 #define DDUMP_ADFA(opts, adfa)       if (opts->dump_adfa) dump_adfa(adfa)
 #define DDUMP_CLSTATS(ctx)           dump_clstats(ctx)
+#define DDUMP_CFG(opts, cfg, live)   if (opts->dump_cfg) dump_cfg(cfg, live)
+#define DDUMP_INTERF(opts, cfg, itf) if (opts->dump_interf) dump_interf(cfg, itf)
 #define DINCCOUNT_CLSCANS(ctx)       ++ctx.dc_clstats.nscans
 #define DINCCOUNT_CLPREC(ctx)        ++ctx.dc_clstats.nprec
 #define DINCCOUNT_CLLENGTH(ctx, len) ctx.dc_clstats.length += len

@@ -3,6 +3,7 @@
 
 #include "src/util/c99_stdint.h"
 
+#include "src/conf/opt.h"
 #include "src/dfa/dfa.h"
 #include "src/re/tag.h"
 #include "src/util/forbid_copy.h"

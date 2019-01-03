@@ -175,6 +175,8 @@ opt_long:
     "dump-dfa-tagopt"       end { globopts.dump_dfa_tagopt = true;    goto opt; }
     "dump-dfa-min"          end { globopts.dump_dfa_min = true;       goto opt; }
     "dump-adfa"             end { globopts.dump_adfa = true;          goto opt; }
+    "dump-cfg"              end { globopts.dump_cfg = true;           goto opt; }
+    "dump-interf"           end { globopts.dump_interf = true;        goto opt; }
     "dump-closure-stats"    end { globopts.dump_closure_stats = true; goto opt; }
 */
 
