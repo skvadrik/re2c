@@ -35,19 +35,31 @@ void dump_tcmd(const tcmd_t *p);
 
 #ifndef RE2C_DEBUG
 
-#define DRESET_CLSTATS(ctx)
+#define DDUMP_NFA(opts, nfa)
+#define DDUMP_DFA_RAW(opts, dfa)
+#define DDUMP_DFA_DET(opts, dfa)
+#define DDUMP_DFA_TAGOPT(opts, dfa)
+#define DDUMP_DFA_MIN(opts, dfa)
+#define DDUMP_ADFA(opts, adfa)
 #define DDUMP_CLSTATS(ctx)
 #define DINCCOUNT_CLSCANS(ctx)
 #define DINCCOUNT_CLPREC(ctx)
 #define DINCCOUNT_CLLENGTH(ctx, len)
+#define DRESET_CLSTATS(ctx)
 
 #else // RE2C_DEBUG
 
-#define DRESET_CLSTATS(ctx)            reset_clstats(ctx)
-#define DDUMP_CLSTATS(ctx)             dump_clstats(ctx)
-#define DINCCOUNT_CLSCANS(ctx)         ++ctx.dc_clstats.nscans
-#define DINCCOUNT_CLPREC(ctx)          ++ctx.dc_clstats.nprec
-#define DINCCOUNT_CLLENGTH(ctx, len)   ctx.dc_clstats.length += len
+#define DDUMP_NFA(opts, nfa)         if (opts->dump_nfa) dump_nfa(nfa)
+#define DDUMP_DFA_RAW(opts, dfa)     if (opts->dump_dfa_raw) dump_dfa(dfa)
+#define DDUMP_DFA_DET(opts, dfa)     if (opts->dump_dfa_det) dump_dfa(dfa)
+#define DDUMP_DFA_TAGOPT(opts, dfa)  if (opts->dump_dfa_tagopt) dump_dfa(dfa)
+#define DDUMP_DFA_MIN(opts, dfa)     if (opts->dump_dfa_min) dump_dfa(dfa)
+#define DDUMP_ADFA(opts, adfa)       if (opts->dump_adfa) dump_adfa(adfa)
+#define DDUMP_CLSTATS(ctx)           dump_clstats(ctx)
+#define DINCCOUNT_CLSCANS(ctx)       ++ctx.dc_clstats.nscans
+#define DINCCOUNT_CLPREC(ctx)        ++ctx.dc_clstats.nprec
+#define DINCCOUNT_CLLENGTH(ctx, len) ctx.dc_clstats.length += len
+#define DRESET_CLSTATS(ctx)          reset_clstats(ctx)
 
 void reset_clstats(determ_context_t &);
 void dump_clstats(const determ_context_t &);

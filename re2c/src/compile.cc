@@ -63,10 +63,10 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     warn_nullable(re, cond);
 
     nfa_t nfa(re);
-    if (opts->dump_nfa) dump_nfa(nfa);
+    DDUMP_NFA(opts, nfa);
 
     dfa_t dfa(nfa, opts, cond, warn);
-    if (opts->dump_dfa_det) dump_dfa(dfa);
+    DDUMP_DFA_DET(opts, dfa);
 
     // skeleton must be constructed after DFA construction
     // but prior to any other DFA transformations
@@ -82,12 +82,12 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 
     // try to minimize the number of tag variables
     compact_and_optimize_tags(dfa, opts->optimize_tags);
-    if (opts->dump_dfa_tagopt) dump_dfa(dfa);
+    DDUMP_DFA_TAGOPT(opts, dfa);
 
     freeze_tags(dfa);
 
     minimization(dfa, opts->dfa_minimization);
-    if (opts->dump_dfa_min) dump_dfa(dfa);
+    DDUMP_DFA_MIN(opts, dfa);
 
     // find strongly connected components and calculate argument to YYFILL
     std::vector<size_t> fill;
@@ -102,7 +102,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 
     // skeleton is constructed, do further DFA transformations
     adfa->prepare(opts);
-    if (opts->dump_adfa) dump_adfa(*adfa);
+    DDUMP_ADFA(opts, *adfa);
 
     // finally gather overall DFA statistics
     adfa->calc_stats(line, opts->tags);
