@@ -24,11 +24,16 @@ lc_run() {
     LANG=C LC_ALL=C "$@"
 }
 
+re2c="./re2c"
+if test ! -x "${re2c}"; then
+    echo "Cannot find re2c executable (${re2c})."
+    exit 1
+fi
+
 valgrind=""
 skeleton=0
 keep_tmp_files=0
 wine=""
-re2c="./re2c"
 threads=`detect_cpu_count; echo $CPUS`
 tests=()
 for arg in $*
@@ -65,12 +70,19 @@ else
         cp $f ${f%.re}.c $test_blddir
     done
 fi
+
 chmod -R u+w $test_blddir
+
 find $test_blddir -type f \
     ! -name '*.re' -a \
     ! -name '*.c' -a \
     ! -name '*.inc' \
     -exec rm {} \;
+
+# if not a debug build, remove all debug subdirs
+$re2c --version | grep -q "debug" \
+    || find "$test_blddir" -type d -name debug | xargs rm -rf
+
 tests=(`find $test_blddir -name '*.re' | sort`)
 
 # set include paths, relative to build directory
@@ -85,12 +97,6 @@ do
     j=$((i * tests_per_thread))
     packs[$i]=${tests[@]:j:tests_per_thread}
 done
-
-if test ! -x "${re2c}"
-then
-    echo "Cannot find re2c executable (${re2c})."
-    exit 1
-fi
 
 if test -n "${valgrind}"
 then
