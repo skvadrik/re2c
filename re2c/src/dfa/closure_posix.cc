@@ -64,21 +64,20 @@ void closure_posix_gor1(determ_context_t &ctx)
 
     done.clear();
 
-    // Initialization: topsort stack must contain configurations with
-    // unique target state, ordered from the highest POSIX precedence
-    // (on top) to the lowest precedence (at the bottom).
+    // initialization: topsort stack must contain configurations
+    // ordered by POSIX precedence (with highest precedence on top)
     std::sort(init.begin(), init.end(), cmp_gor1_t(ctx));
-    for (cclositer_t c = init.begin(); c != init.end(); ++c) {
+    for (rcclositer_t c = init.rbegin(); c != init.rend(); ++c) {
         q = c->state;
         if (q->clos == NOCLOS) {
             q->clos = static_cast<uint32_t>(done.size());
             done.push_back(*c);
-            linear.push(q);
         }
-    }
-    for (; !linear.empty(); ) {
-        topsort.push(linear.top());
-        linear.pop();
+        else {
+            // duplicate state, but higher precedence => overwrite
+            done[q->clos] = *c;
+        }
+        topsort.push(q);
     }
 
     for (; !topsort.empty(); ) {
