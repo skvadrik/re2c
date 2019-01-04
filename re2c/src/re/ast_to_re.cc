@@ -51,6 +51,10 @@ static RE *ast_to_re(RESpec &, const AST *, size_t &, int32_t);
 static RE *re_schar(RE::alc_t &, uint32_t, uint32_t, uint32_t, const opt_t *);
 static RE *re_ichar(RE::alc_t &, uint32_t, uint32_t, uint32_t, const opt_t *);
 static RE *re_class(RE::alc_t &, uint32_t, uint32_t, const Range *, const opt_t *, Warn &);
+static Range *ast_to_range(const AST *ast, const opt_t *opts);
+static Range *diff_to_range(const AST *ast, const opt_t *opts);
+static Range *dot_to_range(const AST *ast, const opt_t *opts);
+static Range *cls_to_range(const AST *ast, const opt_t *opts);
 static void assert_tags_used_once(const Rule &, const std::vector<Tag> &);
 static void init_rule(Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
 
@@ -71,7 +75,6 @@ RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w)
     }
 }
 
-
 bool has_tags(const AST *ast)
 {
     switch (ast->type) {
@@ -90,7 +93,6 @@ bool has_tags(const AST *ast)
     }
     return false; /* unreachable */
 }
-
 
 RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
 {
@@ -119,28 +121,12 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             return x ? x : re_nil(alc);
         }
         case AST::CLS: {
-            Range *r = NULL;
-            std::vector<ASTRange>::const_iterator
-                i = ast->cls.ranges->begin(),
-                e = ast->cls.ranges->end();
-            for (; i != e; ++i) {
-                Range *s = opts->encoding.encodeRange(i->lower, i->upper);
-                if (!s) fatal_lc(ast->line, i->column,
-                    "bad code point range: '0x%X - 0x%X'", i->lower, i->upper);
-                r = Range::add(r, s);
-            }
-            if (ast->cls.negated) {
-                r = Range::sub(opts->encoding.fullRange(), r);
-            }
+            Range *r = cls_to_range(ast, opts);
             return re_class(alc, ast->line, ast->column, r, opts, warn);
         }
         case AST::DOT: {
-            uint32_t c = '\n';
-            if (!opts->encoding.encode(c)) {
-                fatal_lc(ast->line, ast->column, "bad code point: '0x%X'", c);
-            }
-            return re_class(alc, ast->line, ast->column,
-                Range::sub(opts->encoding.fullRange(), Range::sym(c)), opts, warn);
+            Range *r = dot_to_range(ast, opts);
+            return re_class(alc, ast->line, ast->column, r, opts, warn);
         }
         case AST::DEFAULT:
             // see note [default regexp]
@@ -169,12 +155,8 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             return re_alt(alc, x, y);
         }
         case AST::DIFF: {
-            RE *x = ast_to_re(spec, ast->diff.ast1, ncap, height);
-            RE *y = ast_to_re(spec, ast->diff.ast2, ncap, height);
-            if (x->type != RE::SYM || y->type != RE::SYM) {
-                fatal_lc(ast->line, ast->column, "can only difference char sets");
-            }
-            return re_class(alc, ast->line, ast->column, Range::sub(x->sym, y->sym), opts, warn);
+            Range *r = diff_to_range(ast, opts);
+            return re_class(alc, ast->line, ast->column, r, opts, warn);
         }
         case AST::CAT: {
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
@@ -279,6 +261,89 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
     return NULL; /* unreachable */
 }
 
+Range *cls_to_range(const AST *ast, const opt_t *opts)
+{
+    DASSERT(ast->type == AST::CLS);
+
+    Range *r = NULL;
+    std::vector<ASTRange>::const_iterator
+        i = ast->cls.ranges->begin(),
+        e = ast->cls.ranges->end();
+    for (; i != e; ++i) {
+        Range *s = opts->encoding.encodeRange(i->lower, i->upper);
+        if (!s) fatal_lc(ast->line, i->column,
+            "bad code point range: '0x%X - 0x%X'", i->lower, i->upper);
+        r = Range::add(r, s);
+    }
+    if (ast->cls.negated) {
+        r = Range::sub(opts->encoding.fullRange(), r);
+    }
+    return r;
+}
+
+Range *dot_to_range(const AST *ast, const opt_t *opts)
+{
+    DASSERT(ast->type == AST::DOT);
+
+    uint32_t c = '\n';
+    if (!opts->encoding.encode(c)) {
+        fatal_lc(ast->line, ast->column, "bad code point: '0x%X'", c);
+    }
+    return Range::sub(opts->encoding.fullRange(), Range::sym(c));
+}
+
+Range *diff_to_range(const AST *ast, const opt_t *opts)
+{
+    DASSERT(ast->type == AST::DIFF);
+    Range *l = ast_to_range(ast->diff.ast1, opts);
+    Range *r = ast_to_range(ast->diff.ast2, opts);
+    return l && r ? Range::sub(l, r) : NULL;
+}
+
+Range *ast_to_range(const AST *ast, const opt_t *opts)
+{
+    switch (ast->type) {
+        case AST::NIL:
+        case AST::DEFAULT:
+        case AST::TAG:
+        case AST::CAT:
+        case AST::ITER:
+            break;
+        case AST::CAP:
+            if (opts->posix_captures) break;
+            return ast_to_range(ast->cap, opts);
+        case AST::REF:
+            if (opts->posix_captures) {
+                fatal_l(ast->line,
+                    "implicit group '%s' is forbidden with '--posix-captures'",
+                    ast->ref.name->c_str());
+                return NULL;
+            }
+            return ast_to_range(ast->ref.ast, opts);
+        case AST::CLS:
+            return cls_to_range(ast, opts);
+        case AST::DOT:
+            return dot_to_range(ast, opts);
+        case AST::STR: {
+            if (ast->str.chars->size() != 1) break;
+            const uint32_t c = (*ast->str.chars)[0].chr;
+            const bool icase = opts->bCaseInsensitive
+                || (ast->str.icase != opts->bCaseInverted);
+            return icase && is_alpha(c)
+                ? Range::add(Range::sym(to_lower_unsafe(c)), Range::sym(to_upper_unsafe(c)))
+                : Range::sym(c);
+        }
+        case AST::DIFF:
+            return diff_to_range(ast, opts);
+        case AST::ALT: {
+            Range *x = ast_to_range(ast->diff.ast1, opts);
+            Range *y = ast_to_range(ast->diff.ast2, opts);
+            return Range::add(x, y);
+        }
+    }
+    fatal_lc(ast->line, ast->column, "can only difference char sets");
+    return NULL;
+}
 
 RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
 {
@@ -299,7 +364,6 @@ RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const o
     return NULL; /* unreachable */
 }
 
-
 RE *re_ichar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
 {
     if (is_alpha(c)) {
@@ -310,7 +374,6 @@ RE *re_ichar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const o
         return re_schar(alc, line, column, c, opts);
     }
 }
-
 
 RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, const opt_t *opts, Warn &warn)
 {
@@ -340,7 +403,6 @@ RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, con
     return NULL; /* unreachable */
 }
 
-
 void assert_tags_used_once(const Rule &rule, const std::vector<Tag> &tags)
 {
     std::set<std::string> names;
@@ -355,7 +417,6 @@ void assert_tags_used_once(const Rule &rule, const std::vector<Tag> &tags)
         }
     }
 }
-
 
 void init_rule(Rule &rule, const Code *code, const std::vector<Tag> &tags,
     size_t ltag, size_t ncap)
