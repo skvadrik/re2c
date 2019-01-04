@@ -15,7 +15,7 @@ namespace re2c
 
 struct RE
 {
-    typedef slab_allocator_t<~0u, 4096, sizeof(void*)> alc_t;
+    typedef slab_allocator_t<4096, sizeof(void*)> alc_t;
     enum type_t {NIL, SYM, ALT, CAT, ITER, TAG} type;
     union {
         const Range *sym;

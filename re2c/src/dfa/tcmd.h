@@ -33,7 +33,7 @@ static const tcid_t TCID0 = 0;
 
 class tcpool_t
 {
-    typedef slab_allocator_t<~0u, 4096, sizeof(void*)> alc_t;
+    typedef slab_allocator_t<4096, sizeof(void*)> alc_t;
     typedef lookup_t<const tcmd_t*> index_t;
 
     alc_t alc;

@@ -8,15 +8,14 @@
 
 #include "src/util/forbid_copy.h"
 
+
 /*
  * Works nice for tiny POD objects (~30 bytes and lower)
  * WARNING: Does not free memory for distinct objects!
  *
  * Works ~20 times faster, than linux's glibc allocator :]
  */
-template<uint32_t MAXIMUM_INLINE = 4 * 1024,
-    uint32_t SLAB_SIZE = 1024 * 1024,
-    size_t ALIGN = 1>
+template<uint32_t SLAB_SIZE = 1024 * 1024, size_t ALIGN = 1>
 class slab_allocator_t
 {
     typedef std::vector<char*> slabs_t;
@@ -34,26 +33,27 @@ public:
     {
         char *result;
 
-        /* alignment */
-        size += ALIGN - size % ALIGN;
+        // alignment (we assume that malloc aligns depending on size)
+        size += ALIGN - (size % ALIGN);
 
-        /* very large objects */
-        if (size > MAXIMUM_INLINE) {
-            result = static_cast<char*>(malloc(size));
-            slabs_.push_back(result);
-            return result;
+        if (size <= static_cast<size_t>(current_slab_end_ - current_slab_)) {
+            // enough space in slab
+            result = current_slab_;
+            current_slab_ += size;
         }
-
-        /* no space in slab */
-        const size_t yet_in_slab = static_cast<size_t>(current_slab_end_ - current_slab_);
-        if (yet_in_slab < size) {
+        else if (size <= SLAB_SIZE / 4) {
+            // start new slab
             current_slab_ = static_cast<char*>(malloc(SLAB_SIZE));
             current_slab_end_ = current_slab_ + SLAB_SIZE;
             slabs_.push_back(current_slab_);
+            result = current_slab_;
+            current_slab_ += size;
         }
-
-        result = current_slab_;
-        current_slab_ += size;
+        else {
+            // large size; allocate standalone piece of memory
+            result = static_cast<char*>(malloc(size));
+            slabs_.push_back(result);
+        }
 
         return result;
     }
