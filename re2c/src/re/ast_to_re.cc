@@ -326,7 +326,11 @@ Range *ast_to_range(const AST *ast, const opt_t *opts)
             return dot_to_range(ast, opts);
         case AST::STR: {
             if (ast->str.chars->size() != 1) break;
-            const uint32_t c = (*ast->str.chars)[0].chr;
+            const ASTChar &i = ast->str.chars->front();
+            uint32_t c = i.chr;
+            if (!opts->encoding.encode(c)) {
+                fatal_lc(ast->line, i.column, "bad code point: '0x%X'", c);
+            }
             const bool icase = opts->bCaseInsensitive
                 || (ast->str.icase != opts->bCaseInverted);
             return icase && is_alpha(c)
