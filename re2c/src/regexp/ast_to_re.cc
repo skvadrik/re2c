@@ -59,6 +59,7 @@ static Range *cls_to_range(const AST *ast, const opt_t *opts);
 static bool misuse_of_named_def(const AST *, const opt_t *);
 static void assert_tags_used_once(const Rule &, const std::vector<Tag> &);
 static void init_rule(Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
+static bool is_icase(const opt_t *, bool);
 
 
 RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w)
@@ -109,14 +110,12 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
         case AST::NIL:
             return re_nil(alc);
         case AST::STR: {
-            const bool icase = opts->bCaseInsensitive
-                || (ast->str.icase != opts->bCaseInverted);
             RE *x = NULL;
             std::vector<ASTChar>::const_iterator
                 i = ast->str.chars->begin(),
                 e = ast->str.chars->end();
             for (; i != e; ++i) {
-                x = re_cat(alc, x, icase
+                x = re_cat(alc, x, is_icase(opts, ast->str.icase)
                     ? re_ichar(alc, ast->line, i->column, i->chr, opts)
                     : re_schar(alc, ast->line, i->column, i->chr, opts));
             }
@@ -324,9 +323,7 @@ Range *ast_to_range(const AST *ast, const opt_t *opts)
             if (!opts->encoding.validateChar(c)) {
                 fatal_lc(ast->line, i.column, "bad code point: '0x%X'", c);
             }
-            const bool icase = opts->bCaseInsensitive
-                || (ast->str.icase != opts->bCaseInverted);
-            return icase && is_alpha(c)
+            return is_icase(opts, ast->str.icase) && is_alpha(c)
                 ? Range::add(Range::sym(to_lower_unsafe(c)), Range::sym(to_upper_unsafe(c)))
                 : Range::sym(c);
         }
@@ -439,6 +436,12 @@ void init_rule(Rule &rule, const Code *code, const std::vector<Tag> &tags,
     for (rule.ttag = ltag; rule.ttag < rule.htag && !trailing(tags[rule.ttag]); ++rule.ttag);
     rule.ncap = ncap;
     assert_tags_used_once(rule, tags);
+}
+
+bool is_icase(const opt_t *opts, bool icase)
+{
+    return opts->bCaseInsensitive
+        || icase != opts->bCaseInverted;
 }
 
 } // namespace re2c
