@@ -56,8 +56,6 @@ public:
         };
 
 private:
-    static const uint32_t asc2ebc[256];
-    static const uint32_t ebc2asc[256];
     static const uint32_t SURR_MIN;
     static const uint32_t SURR_MAX;
     static const uint32_t UNICODE_ERROR;
@@ -86,9 +84,9 @@ public:
 
     inline void setPolicy(policy_t t);
 
-    bool encode(uint32_t & c) const;
     uint32_t decodeUnsafe(uint32_t c) const;
-    Range * encodeRange(uint32_t l, uint32_t h) const;
+    bool validateChar(uint32_t & c) const;
+    Range * validateRange(uint32_t l, uint32_t h) const;
     Range * fullRange() const;
 };
 

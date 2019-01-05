@@ -14,6 +14,7 @@
 #include "src/re/empty_class_policy.h"
 #include "src/re/encoding/case.h"
 #include "src/re/encoding/enc.h"
+#include "src/re/encoding/ebcdic/ebcdic_regexp.h"
 #include "src/re/encoding/utf16/utf16_regexp.h"
 #include "src/re/encoding/utf8/utf8_regexp.h"
 #include "src/re/re.h"
@@ -265,9 +266,11 @@ Range *cls_to_range(const AST *ast, const opt_t *opts)
         i = ast->cls.ranges->begin(),
         e = ast->cls.ranges->end();
     for (; i != e; ++i) {
-        Range *s = opts->encoding.encodeRange(i->lower, i->upper);
-        if (!s) fatal_lc(ast->line, i->column,
+        Range *s = opts->encoding.validateRange(i->lower, i->upper);
+        if (!s) {
+            fatal_lc(ast->line, i->column,
             "bad code point range: '0x%X - 0x%X'", i->lower, i->upper);
+        }
         r = Range::add(r, s);
     }
     if (ast->cls.negated) {
@@ -281,7 +284,7 @@ Range *dot_to_range(const AST *ast, const opt_t *opts)
     DASSERT(ast->type == AST::DOT);
 
     uint32_t c = '\n';
-    if (!opts->encoding.encode(c)) {
+    if (!opts->encoding.validateChar(c)) {
         fatal_lc(ast->line, ast->column, "bad code point: '0x%X'", c);
     }
     return Range::sub(opts->encoding.fullRange(), Range::sym(c));
@@ -318,7 +321,7 @@ Range *ast_to_range(const AST *ast, const opt_t *opts)
             if (ast->str.chars->size() != 1) break;
             const ASTChar &i = ast->str.chars->front();
             uint32_t c = i.chr;
-            if (!opts->encoding.encode(c)) {
+            if (!opts->encoding.validateChar(c)) {
                 fatal_lc(ast->line, i.column, "bad code point: '0x%X'", c);
             }
             const bool icase = opts->bCaseInsensitive
@@ -341,7 +344,7 @@ Range *ast_to_range(const AST *ast, const opt_t *opts)
 
 RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
 {
-    if (!opts->encoding.encode(c)) {
+    if (!opts->encoding.validateChar(c)) {
         fatal_lc(line, column, "bad code point: '0x%X'", c);
     }
     switch (opts->encoding.type()) {
@@ -349,8 +352,9 @@ RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const o
             return UTF16Symbol(alc, c);
         case Enc::UTF8:
             return UTF8Symbol(alc, c);
-        case Enc::ASCII:
         case Enc::EBCDIC:
+            return EBCDICSymbol(alc, c);
+        case Enc::ASCII:
         case Enc::UTF32:
         case Enc::UCS2:
             return re_sym(alc, Range::sym(c));
@@ -388,8 +392,9 @@ RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, con
             return UTF16Range(alc, r);
         case Enc::UTF8:
             return UTF8Range(alc, r);
-        case Enc::ASCII:
         case Enc::EBCDIC:
+            return EBCDICRange(alc, r);
+        case Enc::ASCII:
         case Enc::UTF32:
         case Enc::UCS2:
             return re_sym(alc, r);

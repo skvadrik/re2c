@@ -33,6 +33,8 @@ SRC_HDR = \
 	src/dfa/tcmd.h \
 	src/nfa/nfa.h \
 	src/re/encoding/case.h \
+	src/re/encoding/ebcdic/ebcdic.h \
+	src/re/encoding/ebcdic/ebcdic_regexp.h \
 	src/re/encoding/enc.h \
 	src/re/encoding/range_suffix.h \
 	src/re/encoding/utf8/utf8.h \
@@ -120,6 +122,7 @@ SRC = \
 	src/dfa/tag_history.cc \
 	src/dfa/tagver_table.cc \
 	src/dfa/tcmd.cc \
+	src/re/encoding/ebcdic/ebcdic_regexp.cc \
 	src/re/encoding/enc.cc \
 	src/re/encoding/range_suffix.cc \
 	src/re/encoding/utf8/utf8_regexp.cc \
