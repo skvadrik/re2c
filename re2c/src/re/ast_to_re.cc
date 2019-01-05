@@ -55,6 +55,7 @@ static Range *ast_to_range(const AST *ast, const opt_t *opts);
 static Range *diff_to_range(const AST *ast, const opt_t *opts);
 static Range *dot_to_range(const AST *ast, const opt_t *opts);
 static Range *cls_to_range(const AST *ast, const opt_t *opts);
+static bool misuse_of_named_def(const AST *, const opt_t *);
 static void assert_tags_used_once(const Rule &, const std::vector<Tag> &);
 static void init_rule(Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
 
@@ -211,14 +212,8 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             return re_cat(alc, t1, re_cat(alc, ast_to_re(spec, x, ncap, height), t2));
         }
         case AST::REF:
-            if (!opts->posix_captures) {
-                return ast_to_re(spec, ast->ref.ast, ncap, height);
-            }
-            fatal_l(ast->line,
-                "implicit grouping is forbidden with '--posix-captures'"
-                " option, please wrap '%s' in capturing parenthesis",
-                ast->ref.name->c_str());
-            return NULL;
+            if (misuse_of_named_def(ast, opts)) return NULL;
+            return ast_to_re(spec, ast->ref.ast, ncap, height);
         case AST::ITER: {
             const uint32_t
                 n = ast->iter.min,
@@ -313,12 +308,7 @@ Range *ast_to_range(const AST *ast, const opt_t *opts)
             if (opts->posix_captures) break;
             return ast_to_range(ast->cap, opts);
         case AST::REF:
-            if (opts->posix_captures) {
-                fatal_l(ast->line,
-                    "implicit group '%s' is forbidden with '--posix-captures'",
-                    ast->ref.name->c_str());
-                return NULL;
-            }
+            if (misuse_of_named_def(ast, opts)) return NULL;
             return ast_to_range(ast->ref.ast, opts);
         case AST::CLS:
             return cls_to_range(ast, opts);
@@ -405,6 +395,19 @@ RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, con
             return re_sym(alc, r);
     }
     return NULL; /* unreachable */
+}
+
+bool misuse_of_named_def(const AST *ast, const opt_t *opts)
+{
+    DASSERT(ast->type == AST::REF);
+
+    if (!opts->posix_captures) return false;
+
+    fatal_l(ast->line,
+        "implicit grouping is forbidden with '--posix-captures'"
+        " option, please wrap '%s' in capturing parenthesis",
+        ast->ref.name->c_str());
+    return true;
 }
 
 void assert_tags_used_once(const Rule &rule, const std::vector<Tag> &tags)
