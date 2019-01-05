@@ -2,11 +2,11 @@
 
 #include <stdio.h>
 
-#include "src/dfa/cfg/cfg.h"
+#include "src/cfg/cfg.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
-#include "src/re/rule.h"
-#include "src/re/tag.h"
+#include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
 
 namespace re2c
 {

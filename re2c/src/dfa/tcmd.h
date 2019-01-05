@@ -5,7 +5,7 @@
 #include "src/util/c99_stdint.h"
 
 #include "src/dfa/tag_history.h"
-#include "src/re/tag.h"
+#include "src/regexp/tag.h"
 #include "src/util/lookup.h"
 #include "src/util/slab_allocator.h"
 

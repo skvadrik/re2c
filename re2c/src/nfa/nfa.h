@@ -6,10 +6,10 @@
 #include <valarray>
 #include <vector>
 
-#include "src/code/input_api.h"
-#include "src/re/re.h"
-#include "src/re/rule.h"
-#include "src/re/tag.h"
+#include "src/codegen/input_api.h"
+#include "src/regexp/re.h"
+#include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

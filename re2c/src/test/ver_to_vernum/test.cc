@@ -1,6 +1,6 @@
 #include <stdio.h> /* fprintf() */
 #include <string>
-#include "src/conf/ver_to_vernum.h" /* re2c::ver_to_vernum() */
+#include "src/options/ver_to_vernum.h" /* re2c::ver_to_vernum() */
 
 namespace re2c_test {
 

@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#include "src/conf/msg.h"
+#include "src/options/msg.h"
 #include "src/debug/debug.h"
 #include "src/skeleton/skeleton.h"
 

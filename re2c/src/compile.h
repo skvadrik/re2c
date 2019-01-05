@@ -1,9 +1,9 @@
 #ifndef _RE2C_COMPILE_
 #define _RE2C_COMPILE_
 
-#include "src/ast/scanner.h"
-#include "src/code/output.h"
-#include "src/conf/opt.h"
+#include "src/parse/scanner.h"
+#include "src/codegen/output.h"
+#include "src/options/opt.h"
 
 namespace re2c
 {

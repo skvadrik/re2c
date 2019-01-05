@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <vector>
 
-#include "src/re/tag.h"
+#include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

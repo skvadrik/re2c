@@ -9,12 +9,12 @@
 #include <vector>
 
 #include "src/adfa/action.h"
-#include "src/code/bitmap.h"
-#include "src/code/go.h"
-#include "src/code/label.h"
+#include "src/codegen/bitmap.h"
+#include "src/codegen/go.h"
+#include "src/codegen/label.h"
 #include "src/dfa/tcmd.h"
-#include "src/re/rule.h"
-#include "src/re/tag.h"
+#include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

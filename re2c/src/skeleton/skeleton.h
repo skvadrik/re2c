@@ -11,11 +11,11 @@
 #include <valarray>
 #include <vector>
 
-#include "src/code/bitmap.h"
-#include "src/conf/opt.h"
+#include "src/codegen/bitmap.h"
+#include "src/options/opt.h"
 #include "src/dfa/tcmd.h"
-#include "src/re/rule.h"
-#include "src/re/tag.h"
+#include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
 #include "src/util/wrap_iter.h"

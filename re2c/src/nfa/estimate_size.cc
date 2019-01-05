@@ -2,8 +2,8 @@
 #include <stddef.h>
 #include <vector>
 
-#include "src/ast/ast.h"
-#include "src/re/re.h"
+#include "src/parse/ast.h"
+#include "src/regexp/re.h"
 
 namespace re2c {
 

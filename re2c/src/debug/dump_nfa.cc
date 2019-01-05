@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "src/nfa/nfa.h"
-#include "src/re/tag.h"
+#include "src/regexp/tag.h"
 #include "src/util/range.h"
 
 namespace re2c

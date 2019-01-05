@@ -5,8 +5,8 @@
 #include <valarray>
 #include <vector>
 
-#include "src/conf/warn.h"
-#include "src/re/rule.h"
+#include "src/options/warn.h"
+#include "src/regexp/rule.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/u32lim.h"

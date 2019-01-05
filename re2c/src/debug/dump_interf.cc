@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include "src/dfa/cfg/cfg.h"
+#include "src/cfg/cfg.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 

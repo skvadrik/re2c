@@ -8,13 +8,13 @@
 #include <valarray>
 #include <vector>
 
-#include "src/conf/msg.h"
-#include "src/conf/opt.h"
+#include "src/options/msg.h"
+#include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
-#include "src/re/encoding/enc.h"
-#include "src/re/rule.h"
-#include "src/re/tag.h"
+#include "src/encoding/enc.h"
+#include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/forbid_copy.h"

@@ -10,11 +10,11 @@
 
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
-#include "src/code/go.h"
+#include "src/codegen/go.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
-#include "src/re/rule.h"
-#include "src/re/tag.h"
+#include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
 
 namespace re2c
 {

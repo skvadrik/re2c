@@ -4,9 +4,9 @@
 #include <valarray>
 #include <vector>
 
-#include "src/conf/warn.h"
+#include "src/options/warn.h"
 #include "src/dfa/dfa.h"
-#include "src/re/rule.h"
+#include "src/regexp/rule.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

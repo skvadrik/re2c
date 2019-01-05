@@ -1,9 +1,9 @@
-#include "src/ast/input.h"
-#include "src/ast/scanner.h"
-#include "src/code/output.h"
+#include "src/parse/input.h"
+#include "src/parse/scanner.h"
+#include "src/codegen/output.h"
 #include "src/compile.h"
-#include "src/conf/opt.h"
-#include "src/conf/warn.h"
+#include "src/options/opt.h"
+#include "src/options/warn.h"
 
 using namespace re2c;
 

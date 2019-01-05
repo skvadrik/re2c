@@ -7,7 +7,7 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
-#include "src/re/rule.h"
+#include "src/regexp/rule.h"
 #include "src/util/hash32.h"
 
 

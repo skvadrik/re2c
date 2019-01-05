@@ -6,13 +6,13 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
-#include "src/code/bitmap.h"
-#include "src/code/emit.h"
-#include "src/code/output.h"
-#include "src/conf/opt.h"
-#include "src/re/encoding/enc.h"
-#include "src/re/rule.h"
-#include "src/re/tag.h"
+#include "src/codegen/bitmap.h"
+#include "src/codegen/emit.h"
+#include "src/codegen/output.h"
+#include "src/options/opt.h"
+#include "src/encoding/enc.h"
+#include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
 #include "src/skeleton/skeleton.h"
 
 namespace re2c

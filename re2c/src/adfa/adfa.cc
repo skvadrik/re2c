@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
-#include "src/code/go.h"
+#include "src/codegen/go.h"
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/util/allocate.h"

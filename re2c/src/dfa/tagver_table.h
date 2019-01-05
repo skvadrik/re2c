@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 
-#include "src/re/tag.h"
+#include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
 
