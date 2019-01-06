@@ -49,13 +49,13 @@ namespace re2c {
 
 static bool has_tags(const AST *);
 static RE *ast_to_re(RESpec &, const AST *, size_t &, int32_t);
-static RE *re_schar(RE::alc_t &, uint32_t, uint32_t, uint32_t, const opt_t *);
-static RE *re_ichar(RE::alc_t &, uint32_t, uint32_t, uint32_t, const opt_t *);
+static RE *re_string(RE::alc_t &, const AST *, const opt_t *, Warn &);
 static RE *re_class(RE::alc_t &, uint32_t, uint32_t, const Range *, const opt_t *, Warn &);
-static Range *ast_to_range(const AST *ast, const opt_t *opts);
-static Range *diff_to_range(const AST *ast, const opt_t *opts);
-static Range *dot_to_range(const AST *ast, const opt_t *opts);
-static Range *cls_to_range(const AST *ast, const opt_t *opts);
+static Range *ast_to_range(const AST *, const opt_t *);
+static Range *char_to_range(uint32_t, const ASTChar &, const opt_t *, bool);
+static Range *diff_to_range(const AST *, const opt_t *);
+static Range *dot_to_range(const AST *, const opt_t *);
+static Range *cls_to_range(const AST *, const opt_t *);
 static bool misuse_of_named_def(const AST *, const opt_t *);
 static void assert_tags_used_once(const Rule &, const std::vector<Tag> &);
 static void init_rule(Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
@@ -109,18 +109,8 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
     switch (ast->type) {
         case AST::NIL:
             return re_nil(alc);
-        case AST::STR: {
-            RE *x = NULL;
-            std::vector<ASTChar>::const_iterator
-                i = ast->str.chars->begin(),
-                e = ast->str.chars->end();
-            for (; i != e; ++i) {
-                x = re_cat(alc, x, is_icase(opts, ast->str.icase)
-                    ? re_ichar(alc, ast->line, i->column, i->chr, opts)
-                    : re_schar(alc, ast->line, i->column, i->chr, opts));
-            }
-            return x ? x : re_nil(alc);
-        }
+        case AST::STR:
+            return re_string(alc, ast, opts, warn);
         case AST::CLS: {
             Range *r = cls_to_range(ast, opts);
             return re_class(alc, ast->line, ast->column, r, opts, warn);
@@ -256,6 +246,20 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
     return NULL; /* unreachable */
 }
 
+Range *char_to_range(uint32_t line, const ASTChar &chr, const opt_t *opts
+    , bool icase)
+{
+    uint32_t c = chr.chr;
+
+    if (!opts->encoding.validateChar(c)) {
+        fatal_lc(line, chr.column, "bad code point: '0x%X'", c);
+    }
+
+    return icase && is_alpha(c)
+        ? Range::add(Range::sym(to_lower_unsafe(c)), Range::sym(to_upper_unsafe(c)))
+        : Range::sym(c);
+}
+
 Range *cls_to_range(const AST *ast, const opt_t *opts)
 {
     DASSERT(ast->type == AST::CLS);
@@ -264,6 +268,7 @@ Range *cls_to_range(const AST *ast, const opt_t *opts)
     std::vector<ASTRange>::const_iterator
         i = ast->cls.ranges->begin(),
         e = ast->cls.ranges->end();
+
     for (; i != e; ++i) {
         Range *s = opts->encoding.validateRange(i->lower, i->upper);
         if (!s) {
@@ -272,9 +277,11 @@ Range *cls_to_range(const AST *ast, const opt_t *opts)
         }
         r = Range::add(r, s);
     }
+
     if (ast->cls.negated) {
         r = Range::sub(opts->encoding.fullRange(), r);
     }
+
     return r;
 }
 
@@ -316,17 +323,10 @@ Range *ast_to_range(const AST *ast, const opt_t *opts)
             return cls_to_range(ast, opts);
         case AST::DOT:
             return dot_to_range(ast, opts);
-        case AST::STR: {
+        case AST::STR:
             if (ast->str.chars->size() != 1) break;
-            const ASTChar &i = ast->str.chars->front();
-            uint32_t c = i.chr;
-            if (!opts->encoding.validateChar(c)) {
-                fatal_lc(ast->line, i.column, "bad code point: '0x%X'", c);
-            }
-            return is_icase(opts, ast->str.icase) && is_alpha(c)
-                ? Range::add(Range::sym(to_lower_unsafe(c)), Range::sym(to_upper_unsafe(c)))
-                : Range::sym(c);
-        }
+            return char_to_range(ast->line, ast->str.chars->front(), opts
+                , is_icase(opts, ast->str.icase));
         case AST::DIFF:
             return diff_to_range(ast, opts);
         case AST::ALT: {
@@ -339,38 +339,27 @@ Range *ast_to_range(const AST *ast, const opt_t *opts)
     return NULL;
 }
 
-RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
+RE *re_string(RE::alc_t &alc, const AST *ast, const opt_t *opts, Warn &warn)
 {
-    if (!opts->encoding.validateChar(c)) {
-        fatal_lc(line, column, "bad code point: '0x%X'", c);
+    DASSERT(ast->type == AST::STR);
+
+    RE *x = NULL;
+    std::vector<ASTChar>::const_iterator
+        i = ast->str.chars->begin(),
+        e = ast->str.chars->end();
+
+    bool icase = is_icase(opts, ast->str.icase);
+    for (; i != e; ++i) {
+        Range *r = char_to_range(ast->line, *i, opts, icase);
+        RE *y = re_class(alc, ast->line, i->column, r, opts, warn);
+        x = re_cat(alc, x, y);
     }
-    switch (opts->encoding.type()) {
-        case Enc::UTF16:
-            return UTF16Symbol(alc, c);
-        case Enc::UTF8:
-            return UTF8Symbol(alc, c);
-        case Enc::EBCDIC:
-            return EBCDICSymbol(alc, c);
-        case Enc::ASCII:
-        case Enc::UTF32:
-        case Enc::UCS2:
-            return re_sym(alc, Range::sym(c));
-    }
-    return NULL; /* unreachable */
+
+    return x ? x : re_nil(alc);
 }
 
-RE *re_ichar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
-{
-    if (is_alpha(c)) {
-        return re_alt(alc,
-            re_schar(alc, line, column, to_lower_unsafe(c), opts),
-            re_schar(alc, line, column, to_upper_unsafe(c), opts));
-    } else {
-        return re_schar(alc, line, column, c, opts);
-    }
-}
-
-RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, const opt_t *opts, Warn &warn)
+RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r
+    , const opt_t *opts, Warn &warn)
 {
     if (!r) {
         switch (opts->empty_class_policy) {
@@ -384,6 +373,7 @@ RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, con
                 fatal_lc(line, column, "empty character class");
         }
     }
+
     switch (opts->encoding.type()) {
         case Enc::UTF16:
             return UTF16Range(alc, r);
@@ -396,6 +386,7 @@ RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, con
         case Enc::UCS2:
             return re_sym(alc, r);
     }
+
     return NULL; /* unreachable */
 }
 

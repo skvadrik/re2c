@@ -39,8 +39,6 @@ SRC_HDR = \
 	src/encoding/range_suffix.h \
 	src/encoding/utf8/utf8.h \
 	src/encoding/utf8/utf8_regexp.h \
-	src/encoding/utf8/utf8_range.h \
-	src/encoding/utf16/utf16_range.h \
 	src/encoding/utf16/utf16_regexp.h \
 	src/encoding/utf16/utf16.h \
 	src/regexp/empty_class_policy.h \
@@ -126,11 +124,9 @@ SRC = \
 	src/encoding/enc.cc \
 	src/encoding/range_suffix.cc \
 	src/encoding/utf8/utf8_regexp.cc \
-	src/encoding/utf8/utf8_range.cc \
 	src/encoding/utf8/utf8.cc \
 	src/encoding/utf16/utf16_regexp.cc \
 	src/encoding/utf16/utf16.cc \
-	src/encoding/utf16/utf16_range.cc \
 	src/regexp/ast_to_re.cc \
 	src/regexp/default_tags.cc \
 	src/regexp/fixed_tags.cc \

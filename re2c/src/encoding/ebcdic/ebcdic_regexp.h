@@ -8,7 +8,6 @@ namespace re2c {
 
 class Range;
 
-RE *EBCDICSymbol(RE::alc_t &alc, uint32_t c);
 RE *EBCDICRange(RE::alc_t &alc, const Range *r);
 
 } // namespace re2c

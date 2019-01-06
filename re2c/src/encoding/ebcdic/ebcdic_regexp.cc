@@ -5,11 +5,6 @@
 
 namespace re2c {
 
-RE *EBCDICSymbol(RE::alc_t &alc, uint32_t c)
-{
-    return re_sym(alc, Range::sym(asc2ebc[c]));
-}
-
 RE *EBCDICRange(RE::alc_t &alc, const Range *r)
 {
     Range *s = NULL;
