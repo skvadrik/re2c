@@ -27,7 +27,6 @@ public:
 
 private:
     friend class RangeMgr;
-    template<uint8_t> friend Range *re2c_test::range(uint32_t n);
 
     // not default- or copy-constructible
     Range();
@@ -51,6 +50,8 @@ private:
     Range *make(Range *n, uint32_t l, uint32_t u);
     void append_overlapping(Range *&head, Range *&tail, const Range *r);
     void append(Range **&ptail, uint32_t l, uint32_t u);
+
+    template<uint8_t> friend Range *re2c_test::range(RangeMgr &rm, uint32_t n);
 };
 
 inline Range *RangeMgr::make(Range *n, uint32_t l, uint32_t u)

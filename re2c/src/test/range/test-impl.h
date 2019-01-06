@@ -5,6 +5,7 @@
 #include "src/util/range.h"
 #include "src/util/static_assert.h"
 
+
 namespace re2c_test {
 
 static inline bool bit_set (uint32_t n, uint32_t bit)
@@ -13,7 +14,7 @@ static inline bool bit_set (uint32_t n, uint32_t bit)
 }
 
 template <uint8_t BITS>
-re2c::Range * range (uint32_t n)
+re2c::Range *range(re2c::RangeMgr &rm, uint32_t n)
 {
     RE2C_STATIC_ASSERT (BITS <= 31);
 
@@ -28,21 +29,21 @@ re2c::Range * range (uint32_t n)
         }
         const uint32_t lb = i;
         for (; i < BITS && bit_set (n, i); ++i);
-        re2c::Range::append (p, lb, i);
+        rm.append(p, lb, i);
     }
     return r;
 }
 
 template <uint8_t BITS>
-re2c::Range * add (uint32_t n1, uint32_t n2)
+re2c::Range * add (re2c::RangeMgr &rm, uint32_t n1, uint32_t n2)
 {
-    return range<BITS> (n1 | n2);
+    return range<BITS> (rm, n1 | n2);
 }
 
 template <uint8_t BITS>
-re2c::Range * sub (uint32_t n1, uint32_t n2)
+re2c::Range * sub (re2c::RangeMgr &rm, uint32_t n1, uint32_t n2)
 {
-    return range<BITS> (n1 & ~n2);
+    return range<BITS> (rm, n1 & ~n2);
 }
 
 } // namespace re2c_test

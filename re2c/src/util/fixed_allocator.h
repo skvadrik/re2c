@@ -16,10 +16,7 @@ class fixed_allocator_t
     size_t index;
 
 public:
-    fixed_allocator_t(): slabs(), index(0)
-    {
-        slabs.push_back(new_slab());
-    }
+    fixed_allocator_t(): slabs(), index(SLAB_SIZE) {}
 
     ~fixed_allocator_t() { clear(); }
 
@@ -31,7 +28,7 @@ public:
             operator delete(*i);
         }
         slabs.clear();
-        index = 0;
+        index = SLAB_SIZE;
     }
 
     T *alloc()

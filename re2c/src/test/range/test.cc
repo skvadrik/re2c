@@ -68,18 +68,17 @@ static int32_t diff
 static int32_t test ()
 {
     int32_t ok = 0;
+    re2c::RangeMgr rm;
 
     static const uint32_t BITS = 8;
     static const uint32_t N = 1u << BITS;
-    for (uint32_t i = 0; i <= N; ++i)
-    {
-        for (uint32_t j = 0; j <= N; ++j)
-        {
-            re2c::Range * r1 = range<BITS> (i);
-            re2c::Range * r2 = range<BITS> (j);
-            ok |= diff (r1, r2, add<BITS> (i, j), re2c::Range::add (r1, r2), "U");
-            ok |= diff (r1, r2, sub<BITS> (i, j), re2c::Range::sub (r1, r2), "D");
-            re2c::Range::vFreeList.clear ();
+    for (uint32_t i = 0; i <= N; ++i) {
+        for (uint32_t j = 0; j <= N; ++j) {
+            re2c::Range * r1 = range<BITS>(rm, i);
+            re2c::Range * r2 = range<BITS>(rm, j);
+            ok |= diff (r1, r2, add<BITS>(rm, i, j), rm.add(r1, r2), "U");
+            ok |= diff (r1, r2, sub<BITS>(rm, i, j), rm.sub(r1, r2), "D");
+            rm.clear();
         }
     }
 

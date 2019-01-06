@@ -3,7 +3,13 @@
 
 #include "src/util/c99_stdint.h"
 
-namespace re2c { class Range; }
+
+namespace re2c {
+
+class Range;
+class RangeMgr;
+
+}
 
 namespace re2c_test {
 
@@ -17,9 +23,9 @@ namespace re2c_test {
  * bitwise OR of two classes, subtraction is bitwise AND of the first
  * class and negated second class.
  */
-template <uint8_t BITS> re2c::Range * range (uint32_t n);
-template <uint8_t BITS> re2c::Range * add (uint32_t n1, uint32_t n2);
-template <uint8_t BITS> re2c::Range * sub (uint32_t n1, uint32_t n2);
+template <uint8_t BITS> re2c::Range *range(re2c::RangeMgr &rm, uint32_t n);
+template <uint8_t BITS> re2c::Range *add(re2c::RangeMgr &rm, uint32_t n1, uint32_t n2);
+template <uint8_t BITS> re2c::Range *sub(re2c::RangeMgr &rm, uint32_t n1, uint32_t n2);
 
 } // namespace re2c_test
 
