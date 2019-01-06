@@ -55,7 +55,9 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
         name = make_name(cond, line),
         &setup = spec.setup.empty() ? "" : spec.setup[0]->text;
 
-    RESpec re(rules, opts, warn);
+    RangeMgr rangemgr;
+
+    RESpec re(rules, opts, warn, rangemgr);
     split_charset(re);
     find_fixed_tags(re);
     insert_default_tags(re);
@@ -66,6 +68,8 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 
     dfa_t dfa(nfa, opts, cond, warn);
     DDUMP_DFA_DET(opts, dfa);
+
+    rangemgr.clear();
 
     // skeleton must be constructed after DFA construction
     // but prior to any other DFA transformations
@@ -191,7 +195,6 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
     AST::flist.clear();
     Code::flist.clear();
-    Range::vFreeList.clear();
     RangeSuffix::freeList.clear();
 }
 

@@ -8,7 +8,7 @@
 
 namespace re2c {
 
-static RE *UTF8Symbol(RE::alc_t &, utf8::rune);
+static RE *UTF8Symbol(RESpec &, utf8::rune);
 static void UTF8addContinuous(RangeSuffix *&, utf8::rune, utf8::rune, uint32_t);
 static void UTF8splitByContinuity(RangeSuffix *&, utf8::rune, utf8::rune, uint32_t);
 static void UTF8splitByRuneLength(RangeSuffix *&, utf8::rune, utf8::rune);
@@ -19,30 +19,32 @@ static void UTF8splitByRuneLength(RangeSuffix *&, utf8::rune, utf8::rune);
  * them. We store partially built range in suffix tree, which
  * allows to eliminate common suffixes while building.
  */
-RE *UTF8Range(RE::alc_t &alc, const Range *r)
+RE *UTF8Range(RESpec &spec, const Range *r)
 {
     // empty range
     if (!r) return NULL;
 
     // one-symbol range
     if (!r->next() && r->lower() == r->upper() - 1) {
-        return UTF8Symbol(alc, r->lower());
+        return UTF8Symbol(spec, r->lower());
     }
 
     RangeSuffix *root = NULL;
     for (; r != NULL; r = r->next()) {
         UTF8splitByRuneLength(root, r->lower(), r->upper() - 1);
     }
-    return to_regexp(alc, root);
+    return to_regexp(spec, root);
 }
 
-RE *UTF8Symbol(RE::alc_t &alc, utf8::rune r)
+RE *UTF8Symbol(RESpec &spec, utf8::rune r)
 {
+    RangeMgr &rm = spec.rangemgr;
+
     uint32_t chars[utf8::MAX_RUNE_LENGTH];
     const uint32_t chars_count = utf8::rune_to_bytes(chars, r);
-    RE *re = re_sym(alc, Range::sym(chars[0]));
+    RE *re = re_sym(spec, rm.sym(chars[0]));
     for (uint32_t i = 1; i < chars_count; ++i) {
-        re = re_cat(alc, re, re_sym(alc, Range::sym(chars[i])));
+        re = re_cat(spec, re, re_sym(spec, rm.sym(chars[i])));
     }
     return re;
 }

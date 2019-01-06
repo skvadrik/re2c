@@ -3,90 +3,71 @@
 namespace re2c
 {
 
-free_list<Range*> Range::vFreeList;
-
-void Range::append_overlapping (Range * & head, Range * & tail, const Range * r)
+void RangeMgr::append_overlapping(Range *&head, Range *&tail, const Range *r)
 {
-    if (!head)
-    {
-        head = Range::ran (r->lb, r->ub);
+    if (!head) {
+        head = ran(r->lb, r->ub);
         tail = head;
     }
-    else if (tail->ub < r->lb)
-    {
-        tail->nx = Range::ran (r->lb, r->ub);
+    else if (tail->ub < r->lb) {
+        tail->nx = ran(r->lb, r->ub);
         tail = tail->nx;
     }
-    else if (tail->ub < r->ub)
-    {
+    else if (tail->ub < r->ub) {
         tail->ub = r->ub;
     }
 }
 
-Range * Range::add (const Range * r1, const Range * r2)
+Range * RangeMgr::add(const Range *r1, const Range *r2)
 {
-    Range * head = NULL;
-    Range * tail = NULL;
-    for (; r1 && r2;)
-    {
-        if (r1->lb < r2->lb)
-        {
-            append_overlapping (head, tail, r1);
+    Range *head = NULL, *tail = NULL;
+    for (; r1 && r2; ) {
+        if (r1->lb < r2->lb) {
+            append_overlapping(head, tail, r1);
             r1 = r1->nx;
         }
-        else
-        {
-            append_overlapping (head, tail, r2);
+        else {
+            append_overlapping(head, tail, r2);
             r2 = r2->nx;
         }
     }
-    for (; r1; r1 = r1->nx)
-    {
-        append_overlapping (head, tail, r1);
+    for (; r1; r1 = r1->nx) {
+        append_overlapping(head, tail, r1);
     }
-    for (; r2; r2 = r2->nx)
-    {
-        append_overlapping (head, tail, r2);
+    for (; r2; r2 = r2->nx) {
+        append_overlapping(head, tail, r2);
     }
     return head;
 }
 
-void Range::append (Range ** & ptail, uint32_t l, uint32_t u)
+void RangeMgr::append(Range **&ptail, uint32_t l, uint32_t u)
 {
-    Range * & tail = * ptail;
-    tail = Range::ran (l, u);
+    Range *&tail = *ptail;
+    tail = ran(l, u);
     ptail = &tail->nx;
 }
 
-Range * Range::sub (const Range * r1, const Range * r2)
+Range * RangeMgr::sub(const Range *r1, const Range *r2)
 {
-    Range * head = NULL;
-    Range ** ptail = &head;
-    while (r1)
-    {
-        if (!r2 || r2->lb >= r1->ub)
-        {
-            append (ptail, r1->lb, r1->ub);
+    Range *head = NULL, ** ptail = &head;
+    while (r1) {
+        if (!r2 || r2->lb >= r1->ub) {
+            append(ptail, r1->lb, r1->ub);
             r1 = r1->nx;
         }
-        else if (r2->ub <= r1->lb)
-        {
+        else if (r2->ub <= r1->lb) {
             r2 = r2->nx;
         }
-        else
-        {
-            if (r1->lb < r2->lb)
-            {
-                append (ptail, r1->lb, r2->lb);
+        else {
+            if (r1->lb < r2->lb) {
+                append(ptail, r1->lb, r2->lb);
             }
-            while (r2 && r2->ub < r1->ub)
-            {
+            while (r2 && r2->ub < r1->ub) {
                 const uint32_t lb = r2->ub;
                 r2 = r2->nx;
                 const uint32_t ub = r2 && r2->lb < r1->ub
-                    ? r2->lb
-                    : r1->ub;
-                append (ptail, lb, ub);
+                    ? r2->lb : r1->ub;
+                append(ptail, lb, ub);
             }
             r1 = r1->nx;
         }

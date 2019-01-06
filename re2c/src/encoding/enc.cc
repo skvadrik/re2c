@@ -76,7 +76,7 @@ uint32_t Enc::decodeUnsafe(uint32_t c) const
  * Returns NULL if range contains code points that exceed maximum or are
  * forbidden by current policy, otherwise returns newly constructed range.
  */
-Range * Enc::validateRange(uint32_t l, uint32_t h) const
+Range * Enc::validateRange(RangeMgr &rm, uint32_t l, uint32_t h) const
 {
     if (l >= nCodePoints () || h >= nCodePoints ()) return NULL;
 
@@ -84,25 +84,23 @@ Range * Enc::validateRange(uint32_t l, uint32_t h) const
     switch (type_) {
         case ASCII:
         case EBCDIC:
-            r = Range::ran (l, h + 1);
+            r = rm.ran(l, h + 1);
             break;
         case UCS2:
         case UTF16:
         case UTF32:
         case UTF8:
-            r = Range::ran (l, h + 1);
+            r = rm.ran(l, h + 1);
             if (l <= SURR_MAX && h >= SURR_MIN) {
                 switch (policy_) {
                     case POLICY_FAIL:
                         r = NULL;
                         break;
-                    case POLICY_SUBSTITUTE: {
-                        Range * surrs = Range::ran (SURR_MIN, SURR_MAX + 1);
-                        Range * error = Range::sym (UNICODE_ERROR);
-                        r = Range::sub (r, surrs);
-                        r = Range::add (r, error);
+                    case POLICY_SUBSTITUTE:
+                        // exclude surrogates, add error code point
+                        r = rm.sub(r, rm.ran(SURR_MIN, SURR_MAX + 1));
+                        r = rm.add(r, rm.sym(UNICODE_ERROR));
                         break;
-                    }
                     case POLICY_IGNORE:
                         break;
                 }
@@ -112,23 +110,12 @@ Range * Enc::validateRange(uint32_t l, uint32_t h) const
     return r;
 }
 
-/*
- * Returns full range representation for current encoding
- * with regard to current policy.
- *
- * Since range is defined declaratively, re2c does
- * all the necessary corrections 'for free'.
- *
- * Always succeeds, returns pointer to newly constructed
- * range.
- */
-Range * Enc::fullRange() const
+Range * Enc::fullRange(RangeMgr &rm) const
 {
-    Range * r = Range::ran (0, nCodePoints());
-    if (policy_ != POLICY_IGNORE)
-    {
-        Range * surrs = Range::ran (SURR_MIN, SURR_MAX + 1);
-        r = Range::sub (r, surrs);
+    Range * r = rm.ran(0, nCodePoints());
+    if (policy_ != POLICY_IGNORE) {
+        // exclude surrogates
+        r = rm.sub(r, rm.ran (SURR_MIN, SURR_MAX + 1));
     }
     return r;
 }

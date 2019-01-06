@@ -9,7 +9,7 @@ namespace re2c {
 
 class Range;
 
-RE *UTF8Range(RE::alc_t &alc, const Range *r);
+RE *UTF8Range(RESpec &spec, const Range *r);
 
 } // namespace re2c
 

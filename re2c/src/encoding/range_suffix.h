@@ -31,7 +31,7 @@ struct RangeSuffix
     FORBID_COPY (RangeSuffix);
 };
 
-RE *to_regexp(RE::alc_t &alc, RangeSuffix *p);
+RE *to_regexp(RESpec &spec, RangeSuffix *p);
 
 } // namespace re2c
 

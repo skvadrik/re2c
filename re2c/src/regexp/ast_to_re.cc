@@ -49,21 +49,22 @@ namespace re2c {
 
 static bool has_tags(const AST *);
 static RE *ast_to_re(RESpec &, const AST *, size_t &, int32_t);
-static RE *re_string(RE::alc_t &, const AST *, const opt_t *, Warn &);
-static RE *re_class(RE::alc_t &, uint32_t, uint32_t, const Range *, const opt_t *, Warn &);
-static Range *ast_to_range(const AST *, const opt_t *);
-static Range *char_to_range(uint32_t, const ASTChar &, const opt_t *, bool);
-static Range *diff_to_range(const AST *, const opt_t *);
-static Range *dot_to_range(const AST *, const opt_t *);
-static Range *cls_to_range(const AST *, const opt_t *);
-static bool misuse_of_named_def(const AST *, const opt_t *);
+static RE *re_string(RESpec &, const AST *);
+static RE *re_class(RESpec &, uint32_t, uint32_t, const Range *);
+static Range *ast_to_range(RESpec &, const AST *);
+static Range *char_to_range(RESpec &, uint32_t, const ASTChar &, bool);
+static Range *diff_to_range(RESpec &, const AST *);
+static Range *dot_to_range(RESpec &, const AST *);
+static Range *cls_to_range(RESpec &, const AST *);
+static bool misuse_of_named_def(RESpec &, const AST *);
 static void assert_tags_used_once(const Rule &, const std::vector<Tag> &);
 static void init_rule(Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
 static bool is_icase(const opt_t *, bool);
 
 
-RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w)
+RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w, RangeMgr &rm)
     : alc()
+    , rangemgr(rm)
     , res()
     , charset(*new std::vector<uint32_t>)
     , tags(*new std::vector<Tag>)
@@ -99,78 +100,78 @@ bool has_tags(const AST *ast)
 
 RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
 {
-    RE::alc_t &alc = spec.alc;
     std::vector<Tag> &tags = spec.tags;
     const opt_t *opts = spec.opts;
-    Warn &warn = spec.warn;
 
     if (ast->type != AST::CAP && ast->type != AST::REF) ++height;
 
     switch (ast->type) {
         case AST::NIL:
-            return re_nil(alc);
+            return re_nil(spec);
         case AST::STR:
-            return re_string(alc, ast, opts, warn);
+            return re_string(spec, ast);
         case AST::CLS: {
-            Range *r = cls_to_range(ast, opts);
-            return re_class(alc, ast->line, ast->column, r, opts, warn);
+            Range *r = cls_to_range(spec, ast);
+            return re_class(spec, ast->line, ast->column, r);
         }
         case AST::DOT: {
-            Range *r = dot_to_range(ast, opts);
-            return re_class(alc, ast->line, ast->column, r, opts, warn);
+            Range *r = dot_to_range(spec, ast);
+            return re_class(spec, ast->line, ast->column, r);
         }
-        case AST::DEFAULT:
+        case AST::DEFAULT: {
             // see note [default regexp]
-            return re_sym(alc, Range::ran(0, opts->encoding.nCodeUnits()));
+            Range *r = spec.rangemgr.ran(0, opts->encoding.nCodeUnits());
+            return re_sym(spec, r);
+        }
+        case AST::DIFF: {
+            Range *r = diff_to_range(spec, ast);
+            return re_class(spec, ast->line, ast->column, r);
+        }
         case AST::ALT: {
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
             if (opts->posix_captures && has_tags(ast)) {
                 // see note [POSIX subexpression hierarchy]
                 if (ast->cat.ast1->type != AST::CAP) {
-                    t1 = re_tag(alc, tags.size(), false);
+                    t1 = re_tag(spec, tags.size(), false);
                     tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
-                    t2 = re_tag(alc, tags.size(), false);
+                    t2 = re_tag(spec, tags.size(), false);
                     tags.push_back(Tag(Tag::FICTIVE, false, height));
                 }
                 if (ast->cat.ast2->type != AST::CAP) {
-                    t3 = re_tag(alc, tags.size(), false);
+                    t3 = re_tag(spec, tags.size(), false);
                     tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
-                    t4 = re_tag(alc, tags.size(), false);
+                    t4 = re_tag(spec, tags.size(), false);
                     tags.push_back(Tag(Tag::FICTIVE, false, height));
                 }
             }
             x = ast_to_re(spec, ast->alt.ast1, ncap, height);
-            x = re_cat(alc, t1, re_cat(alc, x, t2));
+            x = re_cat(spec, t1, re_cat(spec, x, t2));
             y = ast_to_re(spec, ast->alt.ast2, ncap, height);
-            y = re_cat(alc, t3, re_cat(alc, y, t4));
-            return re_alt(alc, x, y);
-        }
-        case AST::DIFF: {
-            Range *r = diff_to_range(ast, opts);
-            return re_class(alc, ast->line, ast->column, r, opts, warn);
+            y = re_cat(spec, t3, re_cat(spec, y, t4));
+            return re_alt(spec, x, y);
         }
         case AST::CAT: {
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
             if (opts->posix_captures && has_tags(ast)) {
                 // see note [POSIX subexpression hierarchy]
                 if (ast->cat.ast1->type != AST::CAP) {
-                    t1 = re_tag(alc, tags.size(), false);
+                    t1 = re_tag(spec, tags.size(), false);
                     tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
-                    t2 = re_tag(alc, tags.size(), false);
+                    t2 = re_tag(spec, tags.size(), false);
                     tags.push_back(Tag(Tag::FICTIVE, false, height));
                 }
                 if (ast->cat.ast2->type != AST::CAP) {
-                    t3 = re_tag(alc, tags.size(), false);
+                    t3 = re_tag(spec, tags.size(), false);
                     tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
-                    t4 = re_tag(alc, tags.size(), false);
+                    t4 = re_tag(spec, tags.size(), false);
                     tags.push_back(Tag(Tag::FICTIVE, false, height));
                 }
             }
             x = ast_to_re(spec, ast->cat.ast1, ncap, height);
-            x = re_cat(alc, t1, re_cat(alc, x, t2));
+            x = re_cat(spec, t1, re_cat(spec, x, t2));
             y = ast_to_re(spec, ast->cat.ast2, ncap, height);
-            y = re_cat(alc, t3, re_cat(alc, y, t4));
-            return re_cat(alc, x, y);
+            y = re_cat(spec, t3, re_cat(spec, y, t4));
+            return re_cat(spec, x, y);
         }
         case AST::TAG: {
             if (ast->tag.name && !opts->tags) {
@@ -181,7 +182,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
                 fatal_lc(ast->line, ast->column,
                     "simple tags are not allowed with '--posix-captures' option");
             }
-            RE *t = re_tag(alc, tags.size(), false);
+            RE *t = re_tag(spec, tags.size(), false);
             tags.push_back(Tag(ast->tag.name, ast->tag.history, height));
             return t;
         }
@@ -192,17 +193,18 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             const AST *x = ast->cap;
             if (x->type == AST::REF) x = x->ref.ast;
 
-            RE *t1 = re_tag(alc, tags.size(), false);
+            RE *t1 = re_tag(spec, tags.size(), false);
             tags.push_back(Tag(2 * ncap, false, height + 1));
 
-            RE *t2 = re_tag(alc, tags.size(), false);
+            RE *t2 = re_tag(spec, tags.size(), false);
             tags.push_back(Tag(2 * ncap + 1, false, height));
 
             ++ncap;
-            return re_cat(alc, t1, re_cat(alc, ast_to_re(spec, x, ncap, height), t2));
+            RE *y = ast_to_re(spec, x, ncap, height);
+            return re_cat(spec, t1, re_cat(spec, y, t2));
         }
         case AST::REF:
-            if (misuse_of_named_def(ast, opts)) return NULL;
+            if (misuse_of_named_def(spec, ast)) return NULL;
             return ast_to_re(spec, ast->ref.ast, ncap, height);
         case AST::ITER: {
             const uint32_t
@@ -216,10 +218,10 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
                 x = x->cap;
                 if (x->type == AST::REF) x = x->ref.ast;
 
-                t1 = re_tag(alc, tags.size(), false);
+                t1 = re_tag(spec, tags.size(), false);
                 tags.push_back(Tag(2 * ncap, m > 1, height + 1));
 
-                t2 = re_tag(alc, tags.size(), false);
+                t2 = re_tag(spec, tags.size(), false);
                 tags.push_back(Tag(2 * ncap + 1, m > 1, height));
 
                 ++ncap;
@@ -227,18 +229,18 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
 
             RE *y = NULL;
             if (m == 0) {
-                y = re_cat(alc, t1, t2);
+                y = re_cat(spec, t1, t2);
             } else if (m == 1) {
                 y = ast_to_re(spec, x, ncap, height);
-                y = re_cat(alc, t1, re_cat(alc, y, t2));
+                y = re_cat(spec, t1, re_cat(spec, y, t2));
             } else  {
                 y = ast_to_re(spec, x, ncap, height);
-                y = re_cat(alc, t1, y);
-                y = re_cat(alc, y, t2);
-                y = re_iter(alc, y, n1, m);
+                y = re_cat(spec, t1, y);
+                y = re_cat(spec, y, t2);
+                y = re_iter(spec, y, n1, m);
             }
             if (n == 0) {
-                y = re_alt(alc, y, re_nil(alc));
+                y = re_alt(spec, y, re_nil(spec));
             }
             return y;
         }
@@ -246,65 +248,67 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
     return NULL; /* unreachable */
 }
 
-Range *char_to_range(uint32_t line, const ASTChar &chr, const opt_t *opts
-    , bool icase)
+Range *char_to_range(RESpec &spec, uint32_t line, const ASTChar &chr, bool icase)
 {
+    RangeMgr &rm = spec.rangemgr;
     uint32_t c = chr.chr;
 
-    if (!opts->encoding.validateChar(c)) {
+    if (!spec.opts->encoding.validateChar(c)) {
         fatal_lc(line, chr.column, "bad code point: '0x%X'", c);
     }
 
     return icase && is_alpha(c)
-        ? Range::add(Range::sym(to_lower_unsafe(c)), Range::sym(to_upper_unsafe(c)))
-        : Range::sym(c);
+        ? rm.add(rm.sym(to_lower_unsafe(c)), rm.sym(to_upper_unsafe(c)))
+        : rm.sym(c);
 }
 
-Range *cls_to_range(const AST *ast, const opt_t *opts)
+Range *cls_to_range(RESpec &spec, const AST *ast)
 {
     DASSERT(ast->type == AST::CLS);
 
-    Range *r = NULL;
+    RangeMgr &rm = spec.rangemgr;
     std::vector<ASTRange>::const_iterator
         i = ast->cls.ranges->begin(),
         e = ast->cls.ranges->end();
+    Range *r = NULL;
 
     for (; i != e; ++i) {
-        Range *s = opts->encoding.validateRange(i->lower, i->upper);
+        Range *s = spec.opts->encoding.validateRange(rm, i->lower, i->upper);
         if (!s) {
             fatal_lc(ast->line, i->column,
             "bad code point range: '0x%X - 0x%X'", i->lower, i->upper);
         }
-        r = Range::add(r, s);
+        r = rm.add(r, s);
     }
 
     if (ast->cls.negated) {
-        r = Range::sub(opts->encoding.fullRange(), r);
+        r = rm.sub(spec.opts->encoding.fullRange(rm), r);
     }
 
     return r;
 }
 
-Range *dot_to_range(const AST *ast, const opt_t *opts)
+Range *dot_to_range(RESpec &spec, const AST *ast)
 {
     DASSERT(ast->type == AST::DOT);
 
+    RangeMgr &rm = spec.rangemgr;
     uint32_t c = '\n';
-    if (!opts->encoding.validateChar(c)) {
+    if (!spec.opts->encoding.validateChar(c)) {
         fatal_lc(ast->line, ast->column, "bad code point: '0x%X'", c);
     }
-    return Range::sub(opts->encoding.fullRange(), Range::sym(c));
+    return rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
 }
 
-Range *diff_to_range(const AST *ast, const opt_t *opts)
+Range *diff_to_range(RESpec &spec, const AST *ast)
 {
     DASSERT(ast->type == AST::DIFF);
-    Range *l = ast_to_range(ast->diff.ast1, opts);
-    Range *r = ast_to_range(ast->diff.ast2, opts);
-    return l && r ? Range::sub(l, r) : NULL;
+    Range *l = ast_to_range(spec, ast->diff.ast1);
+    Range *r = ast_to_range(spec, ast->diff.ast2);
+    return l && r ? spec.rangemgr.sub(l, r) : NULL;
 }
 
-Range *ast_to_range(const AST *ast, const opt_t *opts)
+Range *ast_to_range(RESpec &spec, const AST *ast)
 {
     switch (ast->type) {
         case AST::NIL:
@@ -314,32 +318,32 @@ Range *ast_to_range(const AST *ast, const opt_t *opts)
         case AST::ITER:
             break;
         case AST::CAP:
-            if (opts->posix_captures) break;
-            return ast_to_range(ast->cap, opts);
+            if (spec.opts->posix_captures) break;
+            return ast_to_range(spec, ast->cap);
         case AST::REF:
-            if (misuse_of_named_def(ast, opts)) return NULL;
-            return ast_to_range(ast->ref.ast, opts);
+            if (misuse_of_named_def(spec, ast)) return NULL;
+            return ast_to_range(spec, ast->ref.ast);
         case AST::CLS:
-            return cls_to_range(ast, opts);
+            return cls_to_range(spec, ast);
         case AST::DOT:
-            return dot_to_range(ast, opts);
+            return dot_to_range(spec, ast);
         case AST::STR:
             if (ast->str.chars->size() != 1) break;
-            return char_to_range(ast->line, ast->str.chars->front(), opts
-                , is_icase(opts, ast->str.icase));
+            return char_to_range(spec, ast->line, ast->str.chars->front()
+                , is_icase(spec.opts, ast->str.icase));
         case AST::DIFF:
-            return diff_to_range(ast, opts);
+            return diff_to_range(spec, ast);
         case AST::ALT: {
-            Range *x = ast_to_range(ast->diff.ast1, opts);
-            Range *y = ast_to_range(ast->diff.ast2, opts);
-            return Range::add(x, y);
+            Range *x = ast_to_range(spec, ast->diff.ast1);
+            Range *y = ast_to_range(spec, ast->diff.ast2);
+            return spec.rangemgr.add(x, y);
         }
     }
     fatal_lc(ast->line, ast->column, "can only difference char sets");
     return NULL;
 }
 
-RE *re_string(RE::alc_t &alc, const AST *ast, const opt_t *opts, Warn &warn)
+RE *re_string(RESpec &spec, const AST *ast)
 {
     DASSERT(ast->type == AST::STR);
 
@@ -348,53 +352,53 @@ RE *re_string(RE::alc_t &alc, const AST *ast, const opt_t *opts, Warn &warn)
         i = ast->str.chars->begin(),
         e = ast->str.chars->end();
 
-    bool icase = is_icase(opts, ast->str.icase);
+    bool icase = is_icase(spec.opts, ast->str.icase);
     for (; i != e; ++i) {
-        Range *r = char_to_range(ast->line, *i, opts, icase);
-        RE *y = re_class(alc, ast->line, i->column, r, opts, warn);
-        x = re_cat(alc, x, y);
+        Range *r = char_to_range(spec, ast->line, *i, icase);
+        RE *y = re_class(spec, ast->line, i->column, r);
+        x = re_cat(spec, x, y);
     }
 
-    return x ? x : re_nil(alc);
+    return x ? x : re_nil(spec);
 }
 
-RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r
-    , const opt_t *opts, Warn &warn)
+RE *re_class(RESpec &spec, uint32_t line, uint32_t column, const Range *r)
 {
     if (!r) {
-        switch (opts->empty_class_policy) {
+        Warn &w = spec.warn;
+        switch (spec.opts->empty_class_policy) {
             case EMPTY_CLASS_MATCH_EMPTY:
-                warn.empty_class(line);
-                return re_nil(alc);
+                w.empty_class(line);
+                return re_nil(spec);
             case EMPTY_CLASS_MATCH_NONE:
-                warn.empty_class(line);
+                w.empty_class(line);
                 break;
             case EMPTY_CLASS_ERROR:
                 fatal_lc(line, column, "empty character class");
         }
     }
 
-    switch (opts->encoding.type()) {
+    switch (spec.opts->encoding.type()) {
         case Enc::UTF16:
-            return UTF16Range(alc, r);
+            return UTF16Range(spec, r);
         case Enc::UTF8:
-            return UTF8Range(alc, r);
+            return UTF8Range(spec, r);
         case Enc::EBCDIC:
-            return EBCDICRange(alc, r);
+            return EBCDICRange(spec, r);
         case Enc::ASCII:
         case Enc::UTF32:
         case Enc::UCS2:
-            return re_sym(alc, r);
+            return re_sym(spec, r);
     }
 
     return NULL; /* unreachable */
 }
 
-bool misuse_of_named_def(const AST *ast, const opt_t *opts)
+bool misuse_of_named_def(RESpec &spec, const AST *ast)
 {
     DASSERT(ast->type == AST::REF);
 
-    if (!opts->posix_captures) return false;
+    if (!spec.opts->posix_captures) return false;
 
     fatal_l(ast->line,
         "implicit grouping is forbidden with '--posix-captures'"

@@ -5,16 +5,18 @@
 
 namespace re2c {
 
-RE *EBCDICRange(RE::alc_t &alc, const Range *r)
+RE *EBCDICRange(RESpec &spec, const Range *r)
 {
+    RangeMgr &rm = spec.rangemgr;
+
     Range *s = NULL;
     for (; r; r = r->next()) {
         const uint32_t l = r->lower(), u = r->upper();
         for (uint32_t c = l; c < u; ++c) {
-            s = Range::add(s, Range::sym(asc2ebc[c]));
+            s = rm.add(s, rm.sym(asc2ebc[c]));
         }
     }
-    return re_sym(alc, s);
+    return re_sym(spec, s);
 }
 
 } // namespace re2c

@@ -11,7 +11,6 @@ namespace re2c {
 // in future it might change.
 static void insert_default_tags(RESpec &spec, RE *re, size_t *&tidx)
 {
-    RE::alc_t &alc = spec.alc;
     switch (re->type) {
         case RE::NIL: break;
         case RE::SYM: break;
@@ -20,16 +19,16 @@ static void insert_default_tags(RESpec &spec, RE *re, size_t *&tidx)
             RE *x = NULL, *y = NULL;
             insert_default_tags(spec, re->alt.re1, tidx);
             for (; i < tidx; ++i) {
-                x = re_cat(alc, x, re_tag(alc, *i, true));
+                x = re_cat(spec, x, re_tag(spec, *i, true));
             }
             insert_default_tags(spec, re->alt.re2, tidx);
             for (; i < tidx; ++i) {
-                y = re_cat(alc, y, re_tag(alc, *i, true));
+                y = re_cat(spec, y, re_tag(spec, *i, true));
             }
-            re->alt.re1 = re_cat(alc, re->alt.re1, y);
+            re->alt.re1 = re_cat(spec, re->alt.re1, y);
             re->alt.re2 = spec.opts->posix_captures
-                ? re_cat(alc, x, re->alt.re2)
-                : re_cat(alc, re->alt.re2, x);
+                ? re_cat(spec, x, re->alt.re2)
+                : re_cat(spec, re->alt.re2, x);
             break;
         }
         case RE::CAT:

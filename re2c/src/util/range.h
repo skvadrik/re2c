@@ -6,17 +6,14 @@
 
 #include "src/debug/debug.h"
 #include "src/test/range/test.h"
+#include "src/util/fixed_allocator.h"
 #include "src/util/forbid_copy.h"
-#include "src/util/free_list.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 class Range
 {
-public:
-    static free_list<Range*> vFreeList;
-
 private:
     Range * nx;
     // [lb,ub)
@@ -24,41 +21,56 @@ private:
     uint32_t ub;
 
 public:
-    static Range * sym (uint32_t c)
-    {
-        return new Range (NULL, c, c + 1);
-    }
-    static Range * ran (uint32_t l, uint32_t u)
-    {
-        return new Range (NULL, l, u);
-    }
-    ~Range ()
-    {
-        vFreeList.erase (this);
-    }
-    Range * next () const { return nx; }
-    uint32_t lower () const { return lb; }
-    uint32_t upper () const { return ub; }
-    static Range * add (const Range * r1, const Range * r2);
-    static Range * sub (const Range * r1, const Range * r2);
+    Range * next() const { return nx; }
+    uint32_t lower() const { return lb; }
+    uint32_t upper() const { return ub; }
 
 private:
-    Range (Range * n, uint32_t l, uint32_t u)
-        : nx (n)
-        , lb (l)
-        , ub (u)
-    {
-        DASSERT(lb < ub);
-        vFreeList.insert (this);
-    }
-    static void append_overlapping (Range * & head, Range * & tail, const Range * r);
-    static void append (Range ** & ptail, uint32_t l, uint32_t u);
+    friend class RangeMgr;
+    template<uint8_t> friend Range *re2c_test::range(uint32_t n);
 
-    // test addition and subtraction
-    template <uint8_t> friend Range * re2c_test::range (uint32_t n);
-
-    FORBID_COPY (Range);
+    // not default- or copy-constructible
+    Range();
+    FORBID_COPY(Range);
 };
+
+class RangeMgr
+{
+private:
+    fixed_allocator_t<Range> alc;
+
+public:
+    RangeMgr(): alc() {}
+    void clear() { alc.clear(); }
+    Range *sym(uint32_t c);
+    Range *ran(uint32_t l, uint32_t u);
+    Range *add(const Range *r1, const Range *r2);
+    Range *sub(const Range *r1, const Range *r2);
+
+private:
+    Range *make(Range *n, uint32_t l, uint32_t u);
+    void append_overlapping(Range *&head, Range *&tail, const Range *r);
+    void append(Range **&ptail, uint32_t l, uint32_t u);
+};
+
+inline Range *RangeMgr::make(Range *n, uint32_t l, uint32_t u)
+{
+    Range *r = alc.alloc();
+    r->nx = n;
+    r->lb = l;
+    r->ub = u;
+    return r;
+}
+
+inline Range *RangeMgr::sym(uint32_t c)
+{
+    return make(NULL, c, c + 1);
+}
+
+inline Range *RangeMgr::ran(uint32_t l, uint32_t u)
+{
+    return make(NULL, l, u);
+}
 
 } // namespace re2c
 

@@ -8,7 +8,7 @@ namespace re2c {
 
 class Range;
 
-RE *EBCDICRange(RE::alc_t &alc, const Range *r);
+RE *EBCDICRange(RESpec &spec, const Range *r);
 
 } // namespace re2c
 

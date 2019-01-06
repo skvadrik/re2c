@@ -6,6 +6,7 @@
 namespace re2c {
 
 class Range;
+class RangeMgr;
 
 /*
  * note [encodings]
@@ -86,8 +87,8 @@ public:
 
     uint32_t decodeUnsafe(uint32_t c) const;
     bool validateChar(uint32_t & c) const;
-    Range * validateRange(uint32_t l, uint32_t h) const;
-    Range * fullRange() const;
+    Range * validateRange(RangeMgr &rm, uint32_t l, uint32_t h) const;
+    Range * fullRange(RangeMgr &rm) const;
 };
 
 inline const char * Enc::name (type_t t)
