@@ -26,6 +26,9 @@ struct context_t
 };
 
 void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts);
+void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input);
+void validate_ast(const specs_t &specs, const opt_t *opts);
+void normalize_ast(specs_t &specs);
 
 } // namespace re2c
 

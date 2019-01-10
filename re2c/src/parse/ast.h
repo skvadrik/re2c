@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 
-#include "src/parse/scanner.h"
 #include "src/regexp/rule.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
@@ -131,10 +130,6 @@ const AST *ast_tag(uint32_t l, uint32_t c, const std::string *n, bool h);
 const AST *ast_cap(const AST *a);
 const AST *ast_ref(const AST *a, const std::string &n);
 bool ast_need_wrap(const AST *a);
-
-void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input);
-void validate_ast(const specs_t &specs, const opt_t *opts);
-void normalize_ast(specs_t &specs);
 
 } // namespace re2c
 
