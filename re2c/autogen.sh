@@ -1,4 +1,4 @@
 #!/bin/sh
 
-git clean -fXd
+git clean -fX
 autoreconf -i -W all

@@ -9,7 +9,7 @@ then
 fi
 builddir="$1"
 
-./autogen.sh
+autoreconf -i -W all
 
 # try to be portable on various MAKEs
 for make_prog in make bmake
