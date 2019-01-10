@@ -7,7 +7,7 @@
 
 #include "src/adfa/adfa.h"
 #include "src/parse/ast.h"
-#include "src/parse/parser.h"
+#include "src/parse/parse.h"
 #include "src/parse/scanner.h"
 #include "src/codegen/label.h"
 #include "src/codegen/output.h"

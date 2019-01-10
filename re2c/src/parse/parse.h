@@ -1,5 +1,5 @@
-#ifndef _RE2C_AST_PARSER_
-#define _RE2C_AST_PARSER_
+#ifndef _RE2C_AST_PARSE_
+#define _RE2C_AST_PARSE_
 
 #include <set>
 #include <string>
@@ -32,4 +32,4 @@ void normalize_ast(specs_t &specs);
 
 } // namespace re2c
 
-#endif // _RE2C_AST_PARSER_
+#endif // _RE2C_AST_PARSE_

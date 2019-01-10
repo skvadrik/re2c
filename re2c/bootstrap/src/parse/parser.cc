@@ -65,7 +65,7 @@
 
 
 
-#include "src/parse/parser.h"
+#include "src/parse/parse.h"
 
 using namespace re2c;
 
@@ -105,9 +105,9 @@ static spec_t &find(specs_t &specs, const std::string &name)
 #endif
 
 /* In a future release of Bison, this section will be replaced
-   by #include "y.tab.h".  */
-#ifndef YY_YY_BOOTSTRAP_SRC_PARSE_Y_TAB_H_INCLUDED
-# define YY_YY_BOOTSTRAP_SRC_PARSE_Y_TAB_H_INCLUDED
+   by #include "parser.h".  */
+#ifndef YY_YY_BOOTSTRAP_SRC_PARSE_PARSER_H_INCLUDED
+# define YY_YY_BOOTSTRAP_SRC_PARSE_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -164,7 +164,7 @@ extern YYSTYPE yylval;
 
 int yyparse (re2c::context_t &context);
 
-#endif /* !YY_YY_BOOTSTRAP_SRC_PARSE_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_BOOTSTRAP_SRC_PARSE_PARSER_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 

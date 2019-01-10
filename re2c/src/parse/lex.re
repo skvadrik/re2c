@@ -11,12 +11,12 @@
 #include "src/parse/input.h"
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
-#include "src/parse/parser.h" // needed by "y.tab.h"
+#include "src/parse/parse.h" // needed by "parser.h"
 #include "src/parse/unescape.h"
 #include "src/util/range.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "src/util/string_utils.h"
-#include "y.tab.h"
+#include "parser.h"
 
 extern YYSTYPE yylval;
 
