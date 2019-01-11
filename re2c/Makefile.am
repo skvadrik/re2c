@@ -252,21 +252,16 @@ CLEANFILES = \
 		cp $(top_srcdir)/bootstrap/$(@:cc=[ch]*) $(@D); \
 	fi
 
+# cannot update bootstrap with distcheck (it makes srcdir readonly),
+# so we update bootstrap only on incremental build (if re2c binary exists)
 .ypp.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN) if test $(BISON) = "no"; \
 	then \
 		cp $(top_srcdir)/bootstrap/$(@:cc={cc,h}) $(@D); \
 	else \
-		$(BISON) --output=$@ --defines=$(@:cc=h) $< ; \
-	fi
-
-bootstrap/%.cc: %.ypp
-	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN) if ! test $(BISON) = "no"; \
-	then \
-		$(BISON) --output=$@ --defines=$(@:cc=h) --no-lines $< && \
-		cp $@ $(@:cc=h) $(top_srcdir)/$(@D); \
+		$(BISON) --output=$@ --defines=$(@:cc=h) $< && \
+		if test -x $(RE2C); then cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D); fi; \
 	fi
 
 # lexer depends on bison-generated header
