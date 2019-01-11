@@ -923,7 +923,10 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{match (\XN, \alpha_1 \dots \alpha_n)} \smallskip$} {
         $(\Sigma, Q, F, q_0, T, \Delta) = \XN$ \;
-        $X = closure(\{ (\bot, q_0, \epsilon, t_0) \}, F, \Delta)$ \;
+        $P_1, P_2: Q \times Q \rightarrow \YZ$ \;
+        \BlankLine
+
+        $X = closure(\{ (\bot, q_0, \epsilon, t_0) \}, F, \Delta, P_1, P_2)$ \;
         $(X, B, D) = step(0, X, P_1, P_2)$ \;
 
         \BlankLine
