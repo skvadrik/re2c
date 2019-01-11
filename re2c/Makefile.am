@@ -307,16 +307,16 @@ endif
 all-local: docs $(re2c_BOOT_PARSER)
 
 # tests
-TESTSUITE = run_tests.sh
+re2c_TESTSUITE = run_tests.sh
 .PHONY: tests
-tests: all $(TESTSUITE)
-	$(top_builddir)/$(TESTSUITE)
+tests: all $(re2c_TESTSUITE)
+	$(top_builddir)/$(re2c_TESTSUITE)
 .PHONY: vtests
-vtests: all $(TESTSUITE)
-	$(top_builddir)/$(TESTSUITE) --valgrind
+vtests: all $(re2c_TESTSUITE)
+	$(top_builddir)/$(re2c_TESTSUITE) --valgrind
 .PHONY: wtests
-wtests: all $(TESTSUITE)
-	$(top_builddir)/$(TESTSUITE) --wine -j1
+wtests: all $(re2c_TESTSUITE)
+	$(top_builddir)/$(re2c_TESTSUITE) --wine -j1
 
 re2c_test_range_SOURCES = \
 	src/test/range/test-impl.h \
@@ -339,6 +339,8 @@ check_PROGRAMS = \
 	re2c_test_s_to_n32_unsafe \
 	re2c_test_ver_to_vernum
 
-TESTS = $(re2c_TESTSUITE) $(check_PROGRAMS)
+TESTS = \
+	$(re2c_TESTSUITE) \
+	$(check_PROGRAMS)
 
 #include $(top_srcdir)/Makefile.libre2cposix.am
