@@ -4,13 +4,15 @@
 #include <stddef.h>
 #include <limits.h>
 
+#include "src/util/c99_stdint.h"
+
 // fwd
 namespace re2c {
 struct nfa_t;
 struct dfa_t;
 }
 
-typedef ssize_t regoff_t;
+typedef ptrdiff_t regoff_t;
 
 struct regex_t {
     const re2c::nfa_t *nfa;

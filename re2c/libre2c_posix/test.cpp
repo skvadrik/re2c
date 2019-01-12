@@ -50,7 +50,9 @@ int test(const char *pattern, const char *string, size_t nmatch, ...)
 
 end:
     va_end(vl);
+    regfree(&re);
     delete[] pmatch;
+
     return result;
 }
 

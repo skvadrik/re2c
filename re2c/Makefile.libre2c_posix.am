@@ -72,6 +72,7 @@ libre2c_posix_a_HDR = \
 libre2c_posix_a_SRC = \
 	libre2c_posix/regcomp.cc \
 	libre2c_posix/regexec.cc \
+	libre2c_posix/regfree.cc \
 	libre2c_posix/stubs.cc \
 	src/parse/ast.cc \
 	src/options/msg.cc \

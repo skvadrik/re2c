@@ -52,5 +52,6 @@ int regcomp(regex_t *preg, const char *pattern, int /* cflags */)
     preg->nfa = nfa;
     preg->dfa = dfa;
 
+    delete opt;
     return 0;
 }
