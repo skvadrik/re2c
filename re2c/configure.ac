@@ -32,6 +32,7 @@ AM_COND_IF([REBUILD_DOCS], [
 
 
 # checks for programs
+AC_PROG_RANLIB
 AC_PATH_PROG(BISON, bison, no)
 AC_PROG_CC # used in skeleton tests
 AC_PROG_CXX

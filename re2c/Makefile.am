@@ -261,7 +261,9 @@ CLEANFILES = \
 		cp $(top_srcdir)/bootstrap/$(@:cc={cc,h}) $(@D); \
 	else \
 		$(BISON) --output=$@ --defines=$(@:cc=h) $< && \
-		if test -x $(RE2C); then cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D); fi; \
+		if test -x $(RE2C); then \
+			cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D); \
+		fi; \
 	fi
 
 # lexer depends on bison-generated header
@@ -338,4 +340,4 @@ TESTS = \
 	$(re2c_TESTSUITE) \
 	$(check_PROGRAMS)
 
-#include $(top_srcdir)/Makefile.libre2cposix.am
+include $(top_srcdir)/Makefile.libre2c_posix.am

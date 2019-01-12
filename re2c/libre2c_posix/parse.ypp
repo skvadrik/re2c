@@ -1,0 +1,94 @@
+%{
+
+#include <stdio.h>
+
+#include "src/util/c99_stdint.h"
+#include "src/parse/ast.h"
+#include "libre2c_posix/lex.h"
+
+using namespace re2c;
+
+extern "C" {
+
+int yylex(const char *&pattern);
+void yyerror(const char *pattern, const char*);
+
+} // extern "C"
+
+%}
+
+%lex-param   {const char *&pattern}
+%parse-param {const char *&pattern}
+
+%start regexp
+
+%union {
+    const re2c::AST * regexp;
+    uint32_t number;
+};
+
+%token DIGIT
+%token REGEXP
+
+%type <regexp> REGEXP regexp expr term factor primary
+%type <number> DIGIT number
+
+%%
+
+regexp: expr { regexp = $$; };
+
+expr
+: term
+| expr '|' term { $$ = ast_alt($1, $3); }
+;
+
+term
+: factor
+| factor term { $$ = ast_cat($1, $2); } // in POSIX concatenation is right-associative
+;
+
+factor
+: primary
+| primary '*'                       { $$ = ast_iter($1, 0, AST::MANY); }
+| primary '+'                       { $$ = ast_iter($1, 1, AST::MANY); }
+| primary '?'                       { $$ = ast_iter($1, 0, 1); }
+| primary '{' number '}'            { $$ = ast_iter($1, $3, $3); }
+| primary '{' number ',' '}'        { $$ = ast_iter($1, $3, AST::MANY); }
+| primary '{' number ',' number '}' { $$ = ast_iter($1, $3, $5); }
+;
+
+number
+: DIGIT
+| number DIGIT { $$ = $1 * 10 + $2; }
+;
+
+primary
+: REGEXP
+| '(' expr ')' { $$ = ast_cap($2); }
+;
+
+%%
+
+extern "C" {
+
+void yyerror(const char *pattern, const char *msg)
+{
+    fprintf(stderr, "%s (on RE %s)", msg, pattern);
+}
+
+int yylex(const char *&pattern)
+{
+    return lex(pattern);
+}
+
+} // extern "C"
+
+namespace re2c {
+
+const AST *parse(const char *pattern)
+{
+    yyparse(pattern);
+    return regexp;
+}
+
+} // namespace re2c

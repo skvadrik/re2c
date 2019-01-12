@@ -1,0 +1,172 @@
+# this file is incomplete and should be included from the main Makefile.am
+
+noinst_LIBRARIES = libre2c_posix.a
+
+libre2c_posix_a_CXXFLAGS = $(AM_CXXFLAGS) -fPIC
+
+libre2c_posix_a_HDR = \
+	libre2c_posix/lex.h \
+	libre2c_posix/regex.h \
+	src/codegen/bitmap.h \
+	src/codegen/emit.h \
+	src/codegen/go.h \
+	src/codegen/input_api.h \
+	src/codegen/label.h \
+	src/codegen/output.h \
+	src/codegen/print.h \
+	src/options/msg.h \
+	src/options/opt.h \
+	src/options/ver_to_vernum.h \
+	src/options/warn.h \
+	src/adfa/action.h \
+	src/adfa/adfa.h \
+	src/cfg/cfg.h \
+	src/dfa/determinization.h \
+	src/dfa/dfa.h \
+	src/dfa/tag_history.h \
+	src/dfa/tagver_table.h \
+	src/dfa/tcmd.h \
+	src/nfa/nfa.h \
+	src/encoding/case.h \
+	src/encoding/ebcdic/ebcdic.h \
+	src/encoding/ebcdic/ebcdic_regexp.h \
+	src/encoding/enc.h \
+	src/encoding/range_suffix.h \
+	src/encoding/utf8/utf8.h \
+	src/encoding/utf8/utf8_regexp.h \
+	src/encoding/utf16/utf16_regexp.h \
+	src/encoding/utf16/utf16.h \
+	src/regexp/empty_class_policy.h \
+	src/regexp/re.h \
+	src/regexp/rule.h \
+	src/regexp/tag.h \
+	src/compile.h \
+	src/skeleton/path.h \
+	src/skeleton/skeleton.h \
+	src/parse/ast.h \
+	src/parse/input.h \
+	src/parse/parser.h \
+	src/parse/scanner.h \
+	src/parse/unescape.h \
+	src/debug/debug.h \
+	src/util/allocate.h \
+	src/util/attribute.h \
+	src/util/c99_stdint.h \
+	src/util/counter.h \
+	src/util/forbid_copy.h \
+	src/util/free_list.h \
+	src/util/get_dir.h \
+	src/util/hash32.h \
+	src/util/local_increment.h \
+	src/util/lookup.h \
+	src/util/range.h \
+	src/util/s_to_n32_unsafe.h \
+	src/util/slab_allocator.h \
+	src/util/smart_ptr.h \
+	src/util/static_assert.h \
+	src/util/string_utils.h \
+	src/util/u32lim.h \
+	src/util/uniq_vector.h \
+	src/util/wrap_iter.h
+
+libre2c_posix_a_SRC = \
+	libre2c_posix/regcomp.cc \
+	libre2c_posix/regexec.cc \
+	libre2c_posix/stubs.cc \
+	src/parse/ast.cc \
+	src/options/msg.cc \
+	src/options/opt.cc \
+	src/options/warn.cc \
+	src/cfg/cfg.cc \
+	src/cfg/compact.cc \
+	src/cfg/dce.cc \
+	src/cfg/freeze.cc \
+	src/cfg/interfere.cc \
+	src/cfg/liveanal.cc \
+	src/cfg/normalize.cc \
+	src/cfg/optimize.cc \
+	src/cfg/rename.cc \
+	src/cfg/varalloc.cc \
+	src/dfa/closure.cc \
+	src/dfa/closure_leftmost.cc \
+	src/dfa/closure_posix.cc \
+	src/debug/dump_adfa.cc \
+	src/debug/dump_cfg.cc \
+	src/debug/dump_dfa.cc \
+	src/debug/dump_interf.cc \
+	src/debug/dump_nfa.cc \
+	src/dfa/dead_rules.cc \
+	src/dfa/determinization.cc \
+	src/dfa/fallback_tags.cc \
+	src/dfa/fillpoints.cc \
+	src/dfa/find_state.cc \
+	src/dfa/minimization.cc \
+	src/dfa/posix_precedence.cc \
+	src/dfa/tag_history.cc \
+	src/dfa/tagver_table.cc \
+	src/dfa/tcmd.cc \
+	src/nfa/estimate_size.cc \
+	src/nfa/re_to_nfa.cc \
+	src/encoding/enc.cc \
+	src/encoding/range_suffix.cc \
+	src/encoding/ebcdic/ebcdic_regexp.cc \
+	src/encoding/utf16/utf16.cc \
+	src/encoding/utf16/utf16_regexp.cc \
+	src/encoding/utf8/utf8.cc \
+	src/encoding/utf8/utf8_regexp.cc \
+	src/regexp/ast_to_re.cc \
+	src/regexp/default_tags.cc \
+	src/regexp/fixed_tags.cc \
+	src/regexp/nullable.cc \
+	src/regexp/rule.cc \
+	src/regexp/split_charset.cc \
+	src/regexp/tag.cc \
+	src/skeleton/control_flow.cc \
+	src/skeleton/maxpath.cc \
+	src/skeleton/skeleton.cc \
+	src/util/range.cc \
+	src/util/s_to_n32_unsafe.cc
+
+libre2c_posix_a_SOURCES = \
+	$(libre2c_posix_a_HDR) \
+	$(libre2c_posix_a_SRC)
+
+libre2c_posix_a_CUSTOM = \
+	libre2c_posix/lex.re \
+	libre2c_posix/parse.ypp \
+	src/options/ver_to_vernum.re
+
+libre2c_posix_a_GEN_SRC = \
+	libre2c_posix/lex.cc \
+	libre2c_posix/parse.cc \
+	src/options/ver_to_vernum.cc
+libre2c_posix_a_GEN_HDR = \
+	libre2c_posix/parse.h
+libre2c_posix_a_GEN = \
+	$(libre2c_posix_a_GEN_SRC) \
+	$(libre2c_posix_a_GEN_HDR)
+
+libre2c_posix_a_BOOTSTRAP = \
+	bootstrap/libre2c_posix/parse.cc \
+	bootstrap/libre2c_posix/parse.h \
+	bootstrap/libre2c_posix/lex.cc \
+	bootstrap/src/options/ver_to_vernum.cc
+
+nodist_libre2c_posix_a_SOURCES = $(libre2c_posix_a_GEN)
+
+EXTRA_DIST += \
+	$(libre2c_posix_a_BOOTSTRAP) \
+	$(libre2c_posix_a_CUSTOM)
+
+CLEANFILES += $(libre2c_posix_a_GEN)
+
+# lexer depends on bison-generated header
+libre2c_posix/lex.cc: libre2c_posix/parse.cc
+
+# generate all sources before compiling
+all: $(libre2c_posix_a_GEN_SRC)
+
+libre2c_posix_a_test_SOURCES = libre2c_posix/test.cpp
+libre2c_posix_a_test_LDADD = libre2c_posix.a
+libre2c_posix_a_test_CXXFLAGS = $(libre2c_posix_a_CXXFLAGS)
+check_PROGRAMS += libre2c_posix_a_test
