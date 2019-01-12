@@ -30,20 +30,16 @@ int test(const char *pattern, const char *string, size_t nmatch, ...)
     for (uint32_t i = 0; i < nmatch; ++i) {
         regoff_t so = va_arg(vl, regoff_t);
         regoff_t eo = va_arg(vl, regoff_t);
-        const regmatch_t want = {so, eo}, &have = pmatch[i];
+        const regmatch_t &have = pmatch[i];
 
-        if (want.rm_so != have.rm_so || want.rm_eo != have.rm_eo) {
+        if (so != have.rm_so || eo != have.rm_eo) {
             result = 1;
-            fprintf(stderr, "incorrect submatch for RE %s and string %s,"
-                " group %u:\n", pattern, string, i);
-            for (uint32_t j = 0; j < nmatch; ++j) {
-                fprintf(stderr,
-                    "pmatch[%u].rm_so = %lu, "
-                    "pmatch[%u].rm_eo = %lu\n"
-                    , j, pmatch[j].rm_so
-                    , j, pmatch[j].rm_eo);
-            }
-            fprintf(stderr, "\n");
+            fprintf(stderr, "incorrect submatch for RE %s and string %s:\n"
+                "\tpmatch[%u].rm_so = %ld (expected %ld)\n"
+                "\tpmatch[%u].rm_eo = %ld (expected %ld)\n"
+                , pattern, string
+                , i, have.rm_so, so
+                , i, have.rm_eo, eo);
             goto end;
         }
     }
