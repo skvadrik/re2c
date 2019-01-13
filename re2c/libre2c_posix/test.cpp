@@ -20,12 +20,20 @@ static int test(const char *pattern, const char *string
     }
 
     result = regexec(&re, string, nmatch, pmatch, 0);
-    if (result != 0 && nmatch > 0) {
-        fprintf(stderr, "regexec() failed for RE %s and string %s\n"
-            , pattern, string);
-        goto end;
+    if (result != 0) {
+        if (nmatch == 0) {
+            // failure was expected => it's a success
+            result = 0;
+        }
+        else if (nmatch > 0) {
+            fprintf(stderr, "regexec() failed for RE %s and string %s\n"
+                , pattern, string);
+            goto end;
+        }
     }
-    else if (result == 0 && nmatch == 0) {
+    else if (nmatch == 0) {
+        // regexed must have failed, something is wrong
+        result = REG_NOMATCH;
         fprintf(stderr, "regexec() didn't fail while it should"
             " for RE %s and string %s\n", pattern, string);
         goto end;
