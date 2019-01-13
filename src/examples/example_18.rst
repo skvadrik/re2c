@@ -8,7 +8,7 @@ that stops when it runs out of input and returns control to the outer program.
 Later, when the outer program obtains more input, it resumes lexer and continues lexing from the point where it stopped.
 
 In order to function in this manner lexer must be able to store its inner state before returning to the caller.
-This can be done with re2c ``-f`` ``--storable-state`` option `described here </manual/featires/state/state.html>`_.
+This can be done with re2c ``-f`` ``--storable-state`` option `described here </manual/features/state/state.html>`_.
 The example below reads chunks of input from ``stdin`` and counts the number of words in it.
 Note that the parsing loop is located in the ``main`` function,
 and ``YYFILL`` merely returns instead of refilling buffer.
@@ -28,7 +28,7 @@ Compile:
 
 .. code-block:: bash
 
-    $ re2c --input custom -o push_model.cc push_model.re
+    $ re2c --storable-state -o push_model.cc push_model.re
     $ g++ -o push_model push_model.cc
 
 Run:
