@@ -23,6 +23,11 @@ int lex(const char *&cur)
         "\x00"     { return 0; }
         [{}()|*+?] { return cur[-1]; }
 
+        "." {
+            yylval.regexp = ast_dot(0, 0);
+            return REGEXP;
+        }
+
         [0-9] {
             yylval.number = static_cast<uint32_t>(cur[-1] - '0');
             return DIGIT;

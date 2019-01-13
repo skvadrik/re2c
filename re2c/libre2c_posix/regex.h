@@ -6,21 +6,13 @@
 
 #include "src/util/c99_stdint.h"
 
-// fwd
-namespace re2c {
-struct nfa_t;
-struct dfa_t;
-}
 
 typedef ptrdiff_t regoff_t;
 
-struct regex_t {
-    const re2c::nfa_t *nfa;
-    const re2c::dfa_t *dfa;
-    size_t char2class[256];
-};
+struct regex_t;
 
-struct regmatch_t {
+struct regmatch_t
+{
     regoff_t rm_so;
     regoff_t rm_eo;
 };

@@ -3,6 +3,7 @@
 
 #include "libre2c_posix/lex.h"
 #include "libre2c_posix/regex.h"
+#include "libre2c_posix/regex-impl.h"
 #include "src/options/opt.h"
 #include "src/options/warn.h"
 #include "src/nfa/nfa.h"
@@ -66,24 +67,25 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
 
         apply_regops(regs, s->tcmd[dfa->nchars], mlen);
 
-        const Rule &rule = dfa->rules[0];
-        const size_t last = std::min(nmatch * 2, rule.htag);
-
         pmatch[0].rm_so = 0;
         pmatch[0].rm_eo = mlen;
 
-        for (size_t t = rule.ltag; t < last; ++t) {
+        const Rule &rule = dfa->rules[0];
+        for (size_t t = rule.ltag; t < rule.htag; ++t) {
+
             const Tag &tag = dfa->tags[t];
             if (fictive(tag)) continue;
+            if (tag.ncap >= nmatch * 2) break;
 
             regoff_t off;
             if (!fixed(tag)) {
                 off = regs[dfa->finvers[t]];
             }
             else {
-                off = -static_cast<regoff_t>(tag.dist);
-                off += tag.base == Tag::RIGHTMOST
+                off = tag.base == Tag::RIGHTMOST
                     ? mlen : regs[dfa->finvers[tag.base]];
+                DASSERT (off != -1);
+                off -= static_cast<regoff_t>(tag.dist);
             }
 
             regmatch_t *rm = &pmatch[tag.ncap / 2 + 1];

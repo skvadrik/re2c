@@ -1,5 +1,6 @@
 #include "libre2c_posix/lex.h"
 #include "libre2c_posix/regex.h"
+#include "libre2c_posix/regex-impl.h"
 #include "src/options/opt.h"
 #include "src/options/warn.h"
 #include "src/nfa/nfa.h"
@@ -27,12 +28,12 @@ int regcomp(regex_t *preg, const char *pattern, int /* cflags */)
 
     const AST *a = parse(pattern);
 
-    RangeMgr rangemgr;
+    preg->rmgr = new RangeMgr;
 
     ASTRule ar(a, new Code ("", 0));
     std::vector<ASTRule> arv;
     arv.push_back(ar);
-    RESpec re(arv, opt, warn, rangemgr);
+    RESpec re(arv, opt, warn, *preg->rmgr);
 
     split_charset(re);
     for (uint32_t i = 1, j = 0; i < re.charset.size(); ++i) {
