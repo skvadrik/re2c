@@ -46,7 +46,8 @@ extern int yydebug;
   enum yytokentype
   {
     DIGIT = 258,
-    REGEXP = 259
+    ERROR = 259,
+    REGEXP = 260
   };
 #endif
 
@@ -60,7 +61,7 @@ union YYSTYPE
     const re2c::AST * regexp;
     uint32_t number;
 
-#line 64 "libre2c_posix/parse.h" /* yacc.c:1909  */
+#line 65 "libre2c_posix/parse.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -28,6 +28,7 @@ void yyerror(const char *pattern, const char*);
 };
 
 %token DIGIT
+%token ERROR
 %token REGEXP
 
 %type <regexp> REGEXP regexp expr term factor primary
