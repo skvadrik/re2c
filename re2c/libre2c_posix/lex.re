@@ -6,6 +6,7 @@
 #include "src/parse/ast.h"
 #include "src/options/msg.h"
 #include "src/util/range.h"
+#include "src/util/s_to_n32_unsafe.h"
 #include "parse.h"
 #include "libre2c_posix/lex.h"
 
@@ -17,18 +18,20 @@ namespace re2c {
 static int32_t lex_cls_chr(const char *&, uint32_t &);
 
 /*!re2c
+    re2c:flags:tags = 1;
     re2c:yyfill:enable = 0;
     re2c:define:YYCURSOR = cur;
     re2c:define:YYMARKER = mar;
     re2c:define:YYCTYPE = char;
 
-    eof = "\x00";
-    esc = "\\";
+    nil = "\x00";
+    num = [0-9]+;
 */
 
 int lex(const char *&cur)
 {
-    const char *mar;
+    /*!stags:re2c format = "const char *@@;"; */
+    const char *mar, *x, *y;
     std::vector<ASTRange> cls;
     bool neg = false;
     uint32_t l, u;
@@ -36,24 +39,42 @@ int lex(const char *&cur)
 /*!re2c
     * { goto err; }
 
-    eof { return 0; }
+    nil { return 0; }
 
-    [{}()|*+?] { return cur[-1]; }
+    [()|*+?] { return cur[-1]; }
+
+    [$^] {
+        error("anchors are not supported");
+        return ERROR;
+    }
 
     "[^" { neg = true; goto cls; }
     "["  { goto cls; }
+
+    "{" @x num "}" {
+        if (!s_to_u32_unsafe(x, cur - 1, yylval.bounds.min)) goto err_cnt;
+        yylval.bounds.max = yylval.bounds.min;
+        return COUNT;
+    }
+
+    "{" @x num "," @y num "}" {
+        if (!s_to_u32_unsafe(x, y - 1, yylval.bounds.min)
+            || !s_to_u32_unsafe(y, cur - 1, yylval.bounds.max)) goto err_cnt;
+        return COUNT;
+    }
+
+    "{" @x num ",}" {
+        if (!s_to_u32_unsafe(x, cur - 2, yylval.bounds.min)) goto err_cnt;
+        yylval.bounds.max = AST::MANY;
+        return COUNT;
+    }
 
     "." {
         yylval.regexp = ast_dot(0, 0);
         return REGEXP;
     }
 
-    [0-9] {
-        yylval.number = static_cast<uint32_t>(cur[-1] - '0');
-        return DIGIT;
-    }
-
-    [a-zA-Z] {
+    [^] \ nil {
         ASTChar c(static_cast<uint32_t>(cur[-1]), 0);
         std::vector<ASTChar> *str = new std::vector<ASTChar>;
         str->push_back(c);
@@ -84,6 +105,10 @@ add:
 err:
     error("syntax error: %s\n", cur);
     return ERROR;
+
+err_cnt:
+    error("repetition count overflow");
+    return ERROR;
 }
 
 int32_t lex_cls_chr(const char *&cur, uint32_t &c)
@@ -94,7 +119,7 @@ int32_t lex_cls_chr(const char *&cur, uint32_t &c)
     "[:" { error("character classes not supported"); return 1; }
     "[=" { error("equivalence classes not supported"); return 1; }
 
-    [^] \ eof { c = static_cast<uint8_t>(cur[-1]); return 0; }
+    [^] \ nil { c = static_cast<uint8_t>(cur[-1]); return 0; }
 */
 }
 

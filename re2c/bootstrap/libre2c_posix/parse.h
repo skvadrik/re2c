@@ -45,7 +45,7 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    DIGIT = 258,
+    COUNT = 258,
     ERROR = 259,
     REGEXP = 260
   };
@@ -58,8 +58,8 @@ union YYSTYPE
 {
 #line 25 "../libre2c_posix/parse.ypp" /* yacc.c:1909  */
 
-    const re2c::AST * regexp;
-    uint32_t number;
+    const re2c::AST *regexp;
+    re2c::ASTBounds bounds;
 
 #line 65 "libre2c_posix/parse.h" /* yacc.c:1909  */
 };

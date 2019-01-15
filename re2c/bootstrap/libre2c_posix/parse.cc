@@ -116,7 +116,7 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    DIGIT = 258,
+    COUNT = 258,
     ERROR = 259,
     REGEXP = 260
   };
@@ -129,8 +129,8 @@ union YYSTYPE
 {
 #line 25 "../libre2c_posix/parse.ypp" /* yacc.c:355  */
 
-    const re2c::AST * regexp;
-    uint32_t number;
+    const re2c::AST *regexp;
+    re2c::ASTBounds bounds;
 
 #line 136 "libre2c_posix/parse.cc" /* yacc.c:355  */
 };
@@ -391,16 +391,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  9
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   22
+#define YYLAST   13
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  15
+#define YYNTOKENS  12
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  7
+#define YYNNTS  6
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  17
+#define YYNRULES  13
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  26
+#define YYNSTATES  18
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -418,7 +418,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      13,    14,     7,     8,    12,     2,     2,     2,     2,     2,
+      10,    11,     7,     8,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     9,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -426,7 +426,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    10,     6,    11,     2,     2,     2,     2,
+       2,     2,     2,     2,     6,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -448,7 +448,7 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    39,    39,    42,    43,    47,    48,    52,    53,    54,
-      55,    56,    57,    58,    62,    63,    67,    68
+      55,    56,    60,    61
 };
 #endif
 
@@ -457,9 +457,9 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "DIGIT", "ERROR", "REGEXP", "'|'", "'*'",
-  "'+'", "'?'", "'{'", "'}'", "','", "'('", "')'", "$accept", "regexp",
-  "expr", "term", "factor", "number", "primary", YY_NULLPTR
+  "$end", "error", "$undefined", "COUNT", "ERROR", "REGEXP", "'|'", "'*'",
+  "'+'", "'?'", "'('", "')'", "$accept", "regexp", "expr", "term",
+  "factor", "primary", YY_NULLPTR
 };
 #endif
 
@@ -469,14 +469,14 @@ static const char *const yytname[] =
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   124,    42,    43,    63,
-     123,   125,    44,    40,    41
+      40,    41
 };
 # endif
 
-#define YYPACT_NINF -7
+#define YYPACT_NINF -5
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-7)))
+  (!!((Yystate) == (-5)))
 
 #define YYTABLE_NINF -1
 
@@ -487,9 +487,8 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -2,    -7,    -2,     6,    -5,    -7,    -2,    12,    -4,    -7,
-      -2,    -7,    -7,    -7,    -7,     4,    -7,    -7,    -7,    -3,
-      -7,    -7,     1,    -7,     2,    -7
+      -2,    -5,    -2,     1,     4,    -5,    -2,    -3,    -4,    -5,
+      -2,    -5,    -5,    -5,    -5,    -5,    -5,    -5
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -497,21 +496,20 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,    16,     0,     0,     2,     3,     5,     7,     0,     1,
-       0,     6,     8,     9,    10,     0,    17,     4,    14,     0,
-      15,    11,     0,    12,     0,    13
+       0,    12,     0,     0,     2,     3,     5,     7,     0,     1,
+       0,     6,    11,     8,     9,    10,    13,     4
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -7,    -7,    13,     8,    -7,    -6,    -7
+      -5,    -5,     9,     3,    -5,    -5
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     3,     4,     5,     6,    19,     7
+      -1,     3,     4,     5,     6,     7
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -519,39 +517,36 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      20,    10,    10,     1,    18,    20,     9,    18,    21,    22,
-      16,     2,    23,    25,    11,     8,    24,     0,    17,    12,
-      13,    14,    15
+      12,     9,    10,     1,    13,    14,    15,    16,     2,    11,
+      10,     8,     0,    17
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     6,     6,     5,     3,     3,     0,     3,    11,    12,
-      14,    13,    11,    11,     6,     2,    22,    -1,    10,     7,
-       8,     9,    10
+       3,     0,     6,     5,     7,     8,     9,    11,    10,     6,
+       6,     2,    -1,    10
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     5,    13,    16,    17,    18,    19,    21,    17,     0,
-       6,    18,     7,     8,     9,    10,    14,    18,     3,    20,
-       3,    11,    12,    11,    20,    11
+       0,     5,    10,    13,    14,    15,    16,    17,    14,     0,
+       6,    15,     3,     7,     8,     9,    11,    15
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    15,    16,    17,    17,    18,    18,    19,    19,    19,
-      19,    19,    19,    19,    20,    20,    21,    21
+       0,    12,    13,    14,    14,    15,    15,    16,    16,    16,
+      16,    16,    17,    17
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     1,     1,     3,     1,     2,     1,     2,     2,
-       2,     4,     5,     6,     1,     2,     1,     3
+       2,     2,     1,     3
 };
 
 
@@ -1232,71 +1227,53 @@ yyreduce:
         case 2:
 #line 39 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
     { regexp = (yyval.regexp); }
-#line 1236 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1231 "libre2c_posix/parse.cc" /* yacc.c:1646  */
     break;
 
   case 4:
 #line 43 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1242 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1237 "libre2c_posix/parse.cc" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 48 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
-#line 1248 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1243 "libre2c_posix/parse.cc" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 53 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, AST::MANY); }
-#line 1254 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1249 "libre2c_posix/parse.cc" /* yacc.c:1646  */
     break;
 
   case 9:
 #line 54 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 1, AST::MANY); }
-#line 1260 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1255 "libre2c_posix/parse.cc" /* yacc.c:1646  */
     break;
 
   case 10:
 #line 55 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, 1); }
-#line 1266 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1261 "libre2c_posix/parse.cc" /* yacc.c:1646  */
     break;
 
   case 11:
 #line 56 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
-    { (yyval.regexp) = ast_iter((yyvsp[-3].regexp), (yyvsp[-1].number), (yyvsp[-1].number)); }
-#line 1272 "libre2c_posix/parse.cc" /* yacc.c:1646  */
-    break;
-
-  case 12:
-#line 57 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
-    { (yyval.regexp) = ast_iter((yyvsp[-4].regexp), (yyvsp[-2].number), AST::MANY); }
-#line 1278 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+    { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max); }
+#line 1267 "libre2c_posix/parse.cc" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 58 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
-    { (yyval.regexp) = ast_iter((yyvsp[-5].regexp), (yyvsp[-3].number), (yyvsp[-1].number)); }
-#line 1284 "libre2c_posix/parse.cc" /* yacc.c:1646  */
-    break;
-
-  case 15:
-#line 63 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
-    { (yyval.number) = (yyvsp[-1].number) * 10 + (yyvsp[0].number); }
-#line 1290 "libre2c_posix/parse.cc" /* yacc.c:1646  */
-    break;
-
-  case 17:
-#line 68 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 61 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_cap((yyvsp[-1].regexp)); }
-#line 1296 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1273 "libre2c_posix/parse.cc" /* yacc.c:1646  */
     break;
 
 
-#line 1300 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1277 "libre2c_posix/parse.cc" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1524,7 +1501,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 71 "../libre2c_posix/parse.ypp" /* yacc.c:1906  */
+#line 64 "../libre2c_posix/parse.ypp" /* yacc.c:1906  */
 
 
 extern "C" {

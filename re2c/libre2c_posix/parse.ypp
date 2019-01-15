@@ -23,16 +23,16 @@ void yyerror(const char *pattern, const char*);
 %start regexp
 
 %union {
-    const re2c::AST * regexp;
-    uint32_t number;
+    const re2c::AST *regexp;
+    re2c::ASTBounds bounds;
 };
 
-%token DIGIT
+%token COUNT
 %token ERROR
 %token REGEXP
 
 %type <regexp> REGEXP regexp expr term factor primary
-%type <number> DIGIT number
+%type <bounds> COUNT
 
 %%
 
@@ -50,17 +50,10 @@ term
 
 factor
 : primary
-| primary '*'                       { $$ = ast_iter($1, 0, AST::MANY); }
-| primary '+'                       { $$ = ast_iter($1, 1, AST::MANY); }
-| primary '?'                       { $$ = ast_iter($1, 0, 1); }
-| primary '{' number '}'            { $$ = ast_iter($1, $3, $3); }
-| primary '{' number ',' '}'        { $$ = ast_iter($1, $3, AST::MANY); }
-| primary '{' number ',' number '}' { $$ = ast_iter($1, $3, $5); }
-;
-
-number
-: DIGIT
-| number DIGIT { $$ = $1 * 10 + $2; }
+| primary '*'   { $$ = ast_iter($1, 0, AST::MANY); }
+| primary '+'   { $$ = ast_iter($1, 1, AST::MANY); }
+| primary '?'   { $$ = ast_iter($1, 0, 1); }
+| primary COUNT { $$ = ast_iter($1, $2.min, $2.max); }
 ;
 
 primary
