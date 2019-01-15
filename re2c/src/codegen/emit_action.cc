@@ -31,8 +31,8 @@ static void emit_accept_binary (Output &o, uint32_t ind, const DFA &dfa, const a
 static void emit_accept        (Output &o, uint32_t ind, const DFA &dfa, const accept_t &acc);
 static void emit_rule          (Output &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
 static void gen_fintags        (Output &o, uint32_t ind, const DFA &dfa, const Rule &rule);
-static void gen_goto           (code_lines_t &code, const State *from, const State *to, const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip, bool fill);
-static void gen_on_eof         (code_lines_t &code, const opt_t *opts, const DFA &dfa, const State *from, const State *to);
+static void gen_goto           (code_lines_t &, const State *, const State *, const DFA &, tcid_t, const opt_t *, bool, bool, uint32_t);
+static void gen_on_eof         (code_lines_t &, const opt_t *, const DFA &, const State *, const State *, uint32_t);
 static bool endstate           (const State *s);
 static void flushln            (code_lines_t &code, std::ostringstream &o);
 
@@ -245,13 +245,18 @@ void gen_rescan_label(Output &o, const State *s)
     if (opts->eof == NOEOF || endstate(s)) return;
 
     o.wstring(opts->labelPrefix).wlabel(s->label).ws("_:\n");
+
+    if (opts->fFlag) {
+        o.wstring(opts->yyfilllabel).wu32(o.fill_index).ws(":\n");
+        ++o.fill_index;
+    }
 }
 
 void gen_goto_case(Output &o, uint32_t ind, const State *from, const State *to,
     const DFA &dfa, tcid_t tcid, bool skip, bool fill)
 {
     code_lines_t code;
-    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, fill);
+    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, fill, o.fill_index);
     const size_t lines = code.size();
 
     if (lines == 1) {
@@ -268,7 +273,7 @@ void gen_goto_if(Output &o, uint32_t ind, const State *from, const State *to,
     const DFA &dfa, tcid_t tcid, bool skip, bool eof)
 {
     code_lines_t code;
-    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, eof);
+    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, eof, o.fill_index);
     const size_t lines = code.size();
 
     if (lines == 1) {
@@ -286,7 +291,7 @@ void gen_goto_plain(Output &o, uint32_t ind, const State *from, const State *to,
     const DFA &dfa, tcid_t tcid, bool skip, bool eof)
 {
     code_lines_t code;
-    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, eof);
+    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, eof, o.fill_index);
     const size_t lines = code.size();
 
     for (size_t i = 0; i < lines; ++i) {
@@ -295,10 +300,11 @@ void gen_goto_plain(Output &o, uint32_t ind, const State *from, const State *to,
 }
 
 void gen_goto(code_lines_t &code, const State *from, const State *to
-    , const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip, bool fill)
+    , const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip, bool fill
+    , uint32_t fillidx)
 {
     if (fill) {
-        gen_on_eof(code, opts, dfa, from, to);
+        gen_on_eof(code, opts, dfa, from, to, fillidx);
     }
 
     if (skip && !opts->lookahead) {
@@ -322,7 +328,7 @@ void gen_goto(code_lines_t &code, const State *from, const State *to
 }
 
 void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
-  , const State *from, const State *to)
+  , const State *from, const State *to, uint32_t fillidx)
 {
     const State *retry = from->action.type == Action::MOVE ? from->prev : from;
     const State *fallback = from->rule == Rule::NONE
@@ -341,36 +347,51 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
     o << ") {";
     flushln(code, o);
 
-    o << opts->indString << "if (" << opts->fill << " () == 0) "
-        << "goto " << opts->labelPrefix << retry->label << "_;";
-    flushln(code, o);
+    if (opts->fFlag) {
+        --fillidx;
+        std::string s = opts->state_set;
+        strrreplace(s, opts->state_set_arg, fillidx);
+        o << opts->indString << s;
+        if (!opts->state_set_naked) {
+            o << "(" << fillidx << ");";
+        }
+        flushln(code, o);
 
-    if (from->action.type == Action::INITIAL) {
-        o << opts->indString << "else goto " << opts->labelPrefix << "eof;";
+        o << opts->indString << opts->fill << " ();";
         flushln(code, o);
     }
-    else if (fallback != to) {
-        code_lines_t tagcode;
-        gen_settags(tagcode, dfa, falltags, opts);
+    else {
+        o << opts->indString << "if (" << opts->fill << " () == 0) "
+            << "goto " << opts->labelPrefix << retry->label << "_;";
+        flushln(code, o);
 
-        if (tagcode.empty()) {
-            o << opts->indString << "else goto " << opts->labelPrefix << fallback->label << ";";
+        if (from->action.type == Action::INITIAL) {
+            o << opts->indString << "else goto " << opts->labelPrefix << "eof;";
             flushln(code, o);
         }
-        else {
-            o << opts->indString << "else {";
-            flushln(code, o);
+        else if (fallback != to) {
+            code_lines_t tagcode;
+            gen_settags(tagcode, dfa, falltags, opts);
 
-            for (uint32_t i = 0; i < tagcode.size(); ++i) {
-                code.push_back(opts->indString + opts->indString + tagcode[i]);
+            if (tagcode.empty()) {
+                o << opts->indString << "else goto " << opts->labelPrefix << fallback->label << ";";
+                flushln(code, o);
             }
+            else {
+                o << opts->indString << "else {";
+                flushln(code, o);
 
-            o << opts->indString << opts->indString
-                << "goto " << opts->labelPrefix << fallback->label << ";";
-            flushln(code, o);
+                for (uint32_t i = 0; i < tagcode.size(); ++i) {
+                    code.push_back(opts->indString + opts->indString + tagcode[i]);
+                }
 
-            o << opts->indString << "}";
-            flushln(code, o);
+                o << opts->indString << opts->indString
+                    << "goto " << opts->labelPrefix << fallback->label << ";";
+                flushln(code, o);
+
+                o << opts->indString << "}";
+                flushln(code, o);
+            }
         }
     }
 

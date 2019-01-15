@@ -48,7 +48,7 @@ void emit_eof(Output & o, uint32_t ind, const Code *code)
 {
     const opt_t *opts = o.block().opts;
 
-    if (opts->eof == NOEOF) return;
+    if (opts->eof == NOEOF || opts->fFlag) return;
 
     o.wstring(opts->labelPrefix).ws("eof:\n");
     o.wdelay_line_info_input(code->fline, code->fname);
