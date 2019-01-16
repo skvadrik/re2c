@@ -58,6 +58,7 @@ factor
 
 primary
 : REGEXP
+| '(' ')'      { $$ = ast_cap(ast_nil(0, 0)); }
 | '(' expr ')' { $$ = ast_cap($2); }
 ;
 
