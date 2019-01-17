@@ -365,13 +365,12 @@ scan:
             return TOKEN_FID;
         }
         else {
+            // consume one character, otherwise we risk breaking operator
+            // precedence in cases like ab*: it should be a(b)*, not (ab)*
+            cur = tok + 1;
+
             std::vector<ASTChar> *str = new std::vector<ASTChar>;
-            for (const char *s = tok; s < cur; ++s) {
-                const uint32_t
-                    chr = static_cast<uint8_t>(*s),
-                    col = static_cast<uint32_t>(s - tok);
-                str->push_back(ASTChar(chr, col));
-            }
+            str->push_back(ASTChar(static_cast<uint8_t>(tok[0]), 0));
             yylval.regexp = ast_str(get_line(), get_column(), str, false);
             return TOKEN_REGEXP;
         }

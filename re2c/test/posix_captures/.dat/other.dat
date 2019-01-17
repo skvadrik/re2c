@@ -12,7 +12,7 @@ a*|(a|aa)*	aa	(0,2)(?,?)
 (a|aa)*|a*	aa	(0,2)(0,2)
 
 (aa*|aaa*)*		aaaaaa		(0,6)(0,6)
-(aa*|aaa*)(aa*|aaa*)	aaaaaa		(0,6)(0,6)(6,6)
+(aa*|aaa*)(aa*|aaa*)	aaaaaa		(0,6)(0,5)(5,6)
 (aa)*|(aaa)*		aaaaaa		(0,6)(4,6)(?,?)
 
 (X|Xa|Xab|Xaba|abab|baba|bY|Y)*		XY		(0,2)(1,2)
@@ -67,3 +67,8 @@ SAME		yyy	(0,3)(2,3)
 
 (y|(x?)){1,3}	y	(0,1)(0,1)(?,?)
 (y[y]?){3}	yyyy	(0,4)(3,4)
+
+(aa*|aaa*){2}			aaaaaa		(0,6)(5,6)
+((aa)*|(aaa)*)((aa)*|(aaa)*)	aaaaaa		(0,6)(0,6)(4,6)(?,?)(6,6)(?,?)(?,?)
+((aa)*|(aaa)*){2}		aaaaaa		(0,6)(6,6)(?,?)(?,?)
+
