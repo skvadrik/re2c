@@ -5,6 +5,10 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure --enable-debug CXXFLAGS="-m32" LDFLAGS="-m32" && \
-make -j5
+../configure \
+    --enable-debug \
+    --enable-libs \
+    CXXFLAGS="-m32" \
+    LDFLAGS="-m32" \
+    && make -j5
 cd ..

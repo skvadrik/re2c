@@ -3,6 +3,10 @@ AM_INIT_AUTOMAKE([foreign subdir-objects dist-xz no-dist-gzip])
 AM_SILENT_RULES([yes])
 
 
+LT_INIT([dlopen])
+AC_CONFIG_MACRO_DIRS([m4])
+
+
 AC_CONFIG_SRCDIR([src/main.cc])
 AC_CONFIG_HEADERS([config.h])
 
@@ -31,8 +35,12 @@ AM_COND_IF([REBUILD_DOCS], [
 ])
 
 
+# --enable-libs
+AC_ARG_ENABLE([libs], [AS_HELP_STRING([--enable-libs], [build libraries])])
+AM_CONDITIONAL([WITH_LIBS], [test "x$enable_libs" = "xyes"])
+
+
 # checks for programs
-AC_PROG_RANLIB
 AC_PATH_PROG(BISON, bison, no)
 AC_PROG_CC # used in skeleton tests
 AC_PROG_CXX

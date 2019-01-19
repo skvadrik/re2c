@@ -5,6 +5,10 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure --enable-debug CXXFLAGS="-fsanitize=undefined" LDFLAGS="-fsanitize=undefined" && \
-make -j5
+../configure \
+    --enable-debug \
+    --enable-libs \
+    CXXFLAGS="-fsanitize=undefined" \
+    LDFLAGS="-fsanitize=undefined" \
+    && make -j5
 cd ..

@@ -5,6 +5,10 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure --enable-debug CFLAGS="-ffunction-sections -fdata-sections" LDFLAGS="-Wl,--gc-sections -Wl,--print-gc-sections" && \
-make -j5
+../configure \
+    --enable-debug \
+    --enable-libs \
+    CFLAGS="-ffunction-sections -fdata-sections" \
+    LDFLAGS="-Wl,--gc-sections -Wl,--print-gc-sections" \
+    && make -j5
 cd ..

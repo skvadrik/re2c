@@ -2,7 +2,7 @@
 # do *not* add CXXFLAGS here, add them in configure.ac
 AM_CXXFLAGS = $(CXXFLAGSDEFAULT)
 if DEBUG
-    AM_CXXFLAGS += -DRE2C_DEBUG
+AM_CXXFLAGS += -DRE2C_DEBUG
 endif
 RE2CFLAGS = -b -W
 
@@ -176,6 +176,9 @@ re2c_GEN = \
 	$(re2c_GEN_HDR)
 nodist_re2c_SOURCES = $(re2c_GEN)
 
+# custom rules create headers and must go before normal rules
+BUILT_SOURCES = $(re2c_GEN_SRC)
+
 # bootstrap sources
 re2c_BOOT_PARSER = bootstrap/src/parse/parser.cc
 re2c_BOOT_PARSER_HDR = bootstrap/src/parse/parser.h
@@ -269,9 +272,6 @@ CLEANFILES = \
 # lexer depends on bison-generated header
 $(re2c_GEN_LEX): $(re2c_GEN_PARSER)
 
-# generate all sources before compiling
-all: $(re2c_GEN_SRC)
-
 # rebuild all re2c sources using newly built re2c
 .PHONY: bootstrap
 bootstrap: all
@@ -340,4 +340,10 @@ TESTS = \
 	$(re2c_TESTSUITE) \
 	$(check_PROGRAMS)
 
+# libraries go here (in included .am files)
+if WITH_LIBS
+ACLOCAL_AMFLAGS = -I m4
+lib_LTLIBRARIES =
 include $(top_srcdir)/Makefile.libre2c_posix.am
+endif
+

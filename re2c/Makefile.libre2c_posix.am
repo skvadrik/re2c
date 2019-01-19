@@ -1,10 +1,11 @@
 # this file is incomplete and should be included from the main Makefile.am
 
-noinst_LIBRARIES = libre2c_posix.a
+lib_LTLIBRARIES += libre2c_posix.la
 
-libre2c_posix_a_CXXFLAGS = $(AM_CXXFLAGS) -fPIC
+libre2c_posix_la_CXXFLAGS = $(AM_CXXFLAGS)
+libre2c_posix_la_LDFLAGS = -module
 
-libre2c_posix_a_HDR = \
+libre2c_posix_la_HDR = \
 	libre2c_posix/lex.h \
 	libre2c_posix/regex.h \
 	libre2c_posix/regex-impl.h \
@@ -70,7 +71,7 @@ libre2c_posix_a_HDR = \
 	src/util/uniq_vector.h \
 	src/util/wrap_iter.h
 
-libre2c_posix_a_SRC = \
+libre2c_posix_la_SRC = \
 	libre2c_posix/regcomp.cc \
 	libre2c_posix/regexec.cc \
 	libre2c_posix/regfree.cc \
@@ -129,46 +130,45 @@ libre2c_posix_a_SRC = \
 	src/util/range.cc \
 	src/util/s_to_n32_unsafe.cc
 
-libre2c_posix_a_SOURCES = \
-	$(libre2c_posix_a_HDR) \
-	$(libre2c_posix_a_SRC)
+libre2c_posix_la_SOURCES = \
+	$(libre2c_posix_la_HDR) \
+	$(libre2c_posix_la_SRC)
 
-libre2c_posix_a_CUSTOM = \
+libre2c_posix_la_CUSTOM = \
 	libre2c_posix/lex.re \
 	libre2c_posix/parse.ypp \
 	src/options/ver_to_vernum.re
 
-libre2c_posix_a_GEN_SRC = \
+libre2c_posix_la_GEN_SRC = \
 	libre2c_posix/lex.cc \
 	libre2c_posix/parse.cc \
 	src/options/ver_to_vernum.cc
-libre2c_posix_a_GEN_HDR = \
+libre2c_posix_la_GEN_HDR = \
 	libre2c_posix/parse.h
-libre2c_posix_a_GEN = \
-	$(libre2c_posix_a_GEN_SRC) \
-	$(libre2c_posix_a_GEN_HDR)
+libre2c_posix_la_GEN = \
+	$(libre2c_posix_la_GEN_SRC) \
+	$(libre2c_posix_la_GEN_HDR)
 
-libre2c_posix_a_BOOTSTRAP = \
+# custom rules create headers and must go before normal rules
+BUILT_SOURCES += $(libre2c_posix_la_GEN_SRC)
+
+libre2c_posix_la_BOOTSTRAP = \
 	bootstrap/libre2c_posix/parse.cc \
 	bootstrap/libre2c_posix/parse.h \
 	bootstrap/libre2c_posix/lex.cc \
 	bootstrap/src/options/ver_to_vernum.cc
 
-nodist_libre2c_posix_a_SOURCES = $(libre2c_posix_a_GEN)
+nodist_libre2c_posix_la_SOURCES = $(libre2c_posix_la_GEN)
 
 EXTRA_DIST += \
-	$(libre2c_posix_a_BOOTSTRAP) \
-	$(libre2c_posix_a_CUSTOM)
+	$(libre2c_posix_la_BOOTSTRAP) \
+	$(libre2c_posix_la_CUSTOM)
 
-CLEANFILES += $(libre2c_posix_a_GEN)
+CLEANFILES += $(libre2c_posix_la_GEN)
 
 # lexer depends on bison-generated header
 libre2c_posix/lex.cc: libre2c_posix/parse.cc
 
-# generate all sources before compiling
-all: $(libre2c_posix_a_GEN_SRC)
-
-libre2c_posix_a_test_SOURCES = libre2c_posix/test.cpp
-libre2c_posix_a_test_LDADD = libre2c_posix.a
-libre2c_posix_a_test_CXXFLAGS = $(libre2c_posix_a_CXXFLAGS)
-check_PROGRAMS += libre2c_posix_a_test
+libre2c_posix_la_test_SOURCES = libre2c_posix/test.cpp
+libre2c_posix_la_test_LDADD = libre2c_posix.la
+check_PROGRAMS += libre2c_posix_la_test

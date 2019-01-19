@@ -5,6 +5,8 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure --enable-debug && \
-make -j5
+../configure \
+    --enable-debug \
+    --enable-libs \
+    && make -j5
 cd ..

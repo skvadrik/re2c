@@ -5,6 +5,10 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure --enable-debug CC=clang CXX=clang++ && \
-make -j5
+../configure \
+    --enable-debug \
+    --enable-libs \
+    CC=clang \
+    CXX=clang++ \
+    && make -j5
 cd ..
