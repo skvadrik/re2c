@@ -59,13 +59,15 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
     }
 
     if (s->rule != Rule::NONE) {
+        regmatch_t *m = pmatch;
         result = 0;
         const regoff_t mlen = p - string - 1;
 
         apply_regops(regs, s->tcmd[dfa->nchars], mlen);
 
-        pmatch[0].rm_so = 0;
-        pmatch[0].rm_eo = mlen;
+        m->rm_so = 0;
+        m->rm_eo = mlen;
+        ++m;
 
         const Rule &rule = dfa->rules[0];
         for (size_t t = rule.ltag; t < rule.htag; ++t) {
@@ -85,8 +87,13 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
                 off -= static_cast<regoff_t>(tag.dist);
             }
 
-            regmatch_t *rm = &pmatch[tag.ncap / 2 + 1];
-            *((tag.ncap % 2 == 0) ? &rm->rm_so : &rm->rm_eo) = off;
+            if (tag.ncap % 2 == 0) {
+                m->rm_so = off;
+            }
+            else {
+                m->rm_eo = off;
+                ++m;
+            }
         }
     }
 
