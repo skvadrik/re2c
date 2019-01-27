@@ -3,7 +3,7 @@ AM_INIT_AUTOMAKE([foreign subdir-objects dist-xz no-dist-gzip])
 AM_SILENT_RULES([yes])
 
 
-LT_INIT([dlopen])
+LT_INIT([dlopen win32-dll])
 AC_CONFIG_MACRO_DIRS([m4])
 
 

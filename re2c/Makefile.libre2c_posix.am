@@ -3,7 +3,7 @@
 lib_LTLIBRARIES += libre2c_posix.la
 
 libre2c_posix_la_CXXFLAGS = $(AM_CXXFLAGS)
-libre2c_posix_la_LDFLAGS = -module
+libre2c_posix_la_LDFLAGS = -module -no-undefined
 
 libre2c_posix_la_HDR = \
 	libre2c_posix/lex.h \
