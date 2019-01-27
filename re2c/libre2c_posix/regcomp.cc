@@ -51,7 +51,7 @@ int regcomp(regex_t *preg, const char *pattern, int /* cflags */)
 
     dfa_t *dfa = new dfa_t(*nfa, opt, "", warn);
 
-//    compact_and_optimize_tags(opt, *dfa);
+    compact_and_optimize_tags(opt, *dfa);
 
     DASSERT(dfa->rules.size() == 1);
     preg->re_nsub = dfa->rules[0].ncap + 1;
