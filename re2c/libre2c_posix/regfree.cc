@@ -9,8 +9,10 @@ using namespace re2c;
 void regfree(regex_t *preg)
 {
     delete preg->rmgr;
-
     delete preg->nfa;
+    delete[] preg->pmatch;
+    delete[] preg->regs;
+    delete[] preg->char2class;
 
     const dfa_t *dfa = preg->dfa;
     delete &dfa->charset;

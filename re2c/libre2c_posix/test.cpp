@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -38,6 +39,8 @@ static int test(const char *pattern, const char *string
             " for RE %s and string %s\n", pattern, string);
         goto end;
     }
+
+    assert(nmatch == 0 || nmatch == re.re_nsub);
 
     for (uint32_t i = 0; i < nmatch; ++i) {
         regoff_t so = submatch[2 * i];

@@ -33,7 +33,7 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
 {
     const dfa_t *dfa = preg->dfa;
     int result = REG_NOMATCH;
-    regoff_t *regs = new regoff_t[dfa->maxtagver + 1];
+    regoff_t *regs = preg->regs;
     size_t i = 0;
     const char *p = string, *q = p;
     const dfa_state_t *s, *x = NULL;
@@ -93,6 +93,5 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
         }
     }
 
-    delete[] regs;
     return result;
 }

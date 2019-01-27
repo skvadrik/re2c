@@ -35,6 +35,7 @@ int regcomp(regex_t *preg, const char *pattern, int /* cflags */)
     arv.push_back(ar);
     RESpec re(arv, opt, warn, *preg->rmgr);
 
+    preg->char2class = new size_t[256];
     split_charset(re);
     for (uint32_t i = 1, j = 0; i < re.charset.size(); ++i) {
         for (; j < re.charset[i]; ++j) {
@@ -50,6 +51,12 @@ int regcomp(regex_t *preg, const char *pattern, int /* cflags */)
 
     dfa_t *dfa = new dfa_t(*nfa, opt, "", warn);
 
+//    compact_and_optimize_tags(opt, *dfa);
+
+    DASSERT(dfa->rules.size() == 1);
+    preg->re_nsub = dfa->rules[0].ncap + 1;
+    preg->pmatch = new regmatch_t[preg->re_nsub];
+    preg->regs = new regoff_t[dfa->maxtagver + 1];
     preg->nfa = nfa;
     preg->dfa = dfa;
 

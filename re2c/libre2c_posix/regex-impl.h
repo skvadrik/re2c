@@ -17,10 +17,13 @@ struct RangeMgr;
 
 struct regex_t
 {
+    size_t re_nsub;
     re2c::RangeMgr *rmgr;
     const re2c::nfa_t *nfa;
     const re2c::dfa_t *dfa;
-    size_t char2class[256];
+    regmatch_t *pmatch;
+    regoff_t *regs;
+    size_t *char2class;
 };
 
 #endif // _RE2C_LIB_REGEX_IMPL_
