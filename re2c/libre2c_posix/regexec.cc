@@ -18,11 +18,9 @@ static void apply_regops(regoff_t *regs, const tcmd_t *cmd, regoff_t pos)
         if (tcmd_t::iscopy(p)) {
             regs[p->lhs] = regs[p->rhs];
         }
-        else if (tcmd_t::isset(p)) {
-            regs[p->lhs] = *p->history == TAGVER_BOTTOM ? -1 : pos;
-        }
         else {
-            DASSERT(false);
+            DASSERT (tcmd_t::isset(p));
+            regs[p->lhs] = *p->history == TAGVER_BOTTOM ? -1 : pos;
         }
     }
 }
