@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 #include "libre2c_posix/regex.h"
-#include "libre2c_posix/regex-impl.h"
 #include "src/util/c99_stdint.h"
 
 

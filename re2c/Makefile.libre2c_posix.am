@@ -8,7 +8,6 @@ libre2c_posix_la_LDFLAGS = -module -no-undefined
 libre2c_posix_la_HDR = \
 	libre2c_posix/lex.h \
 	libre2c_posix/regex.h \
-	libre2c_posix/regex-impl.h \
 	src/codegen/bitmap.h \
 	src/codegen/emit.h \
 	src/codegen/go.h \

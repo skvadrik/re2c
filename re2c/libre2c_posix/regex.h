@@ -4,17 +4,33 @@
 #include <stddef.h>
 #include <limits.h>
 
-#include "src/util/c99_stdint.h"
 
+// fwd
+namespace re2c {
+
+struct nfa_t;
+struct dfa_t;
+struct RangeMgr;
+
+} // namespace re2c
 
 typedef ptrdiff_t regoff_t;
-
-struct regex_t;
 
 struct regmatch_t
 {
     regoff_t rm_so;
     regoff_t rm_eo;
+};
+
+struct regex_t
+{
+    size_t re_nsub;
+    re2c::RangeMgr *rmgr;
+    const re2c::nfa_t *nfa;
+    const re2c::dfa_t *dfa;
+    regmatch_t *pmatch;
+    regoff_t *regs;
+    size_t *char2class;
 };
 
 static const int REG_NOMATCH = INT_MAX;
