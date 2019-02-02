@@ -8,6 +8,7 @@ libre2c_posix_la_LDFLAGS = -module -no-undefined
 libre2c_posix_la_HDR = \
 	libre2c_posix/lex.h \
 	libre2c_posix/regex.h \
+	libre2c_posix/regex_impl.h \
 	src/codegen/bitmap.h \
 	src/codegen/emit.h \
 	src/codegen/go.h \
@@ -73,6 +74,8 @@ libre2c_posix_la_HDR = \
 libre2c_posix_la_SRC = \
 	libre2c_posix/regcomp.cc \
 	libre2c_posix/regexec.cc \
+	libre2c_posix/regexec_dfa.cc \
+	libre2c_posix/regexec_nfa.cc \
 	libre2c_posix/regfree.cc \
 	libre2c_posix/stubs.cc \
 	src/parse/ast.cc \
@@ -168,6 +171,6 @@ CLEANFILES += $(libre2c_posix_la_GEN)
 # lexer depends on bison-generated header
 libre2c_posix/lex.cc: libre2c_posix/parse.cc
 
-libre2c_posix_la_test_SOURCES = libre2c_posix/test.cpp
-libre2c_posix_la_test_LDADD = libre2c_posix.la
-check_PROGRAMS += libre2c_posix_la_test
+test_libre2c_posix_SOURCES = libre2c_posix/test.cpp
+test_libre2c_posix_LDADD = libre2c_posix.la
+check_PROGRAMS += test_libre2c_posix

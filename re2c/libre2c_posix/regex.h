@@ -22,6 +22,17 @@ struct regmatch_t
     regoff_t rm_eo;
 };
 
+// standard flags
+static const int REG_EXTENDED = 1u << 0;
+static const int REG_ICASE    = 1u << 1;
+static const int REG_NOSUB    = 1u << 2;
+static const int REG_NEWLINE  = 1u << 3;
+static const int REG_NOTBOL   = 1u << 4;
+static const int REG_NOTEOL   = 1u << 5;
+// extensions
+static const int REG_NFA      = 1u << 6;
+
+
 struct regex_t
 {
     size_t re_nsub;
@@ -31,16 +42,16 @@ struct regex_t
     regmatch_t *pmatch;
     regoff_t *regs;
     size_t *char2class;
+    int *prec_buf1;
+    int *prec_buf2;
+    int flags;
 };
 
 static const int REG_NOMATCH = INT_MAX;
 
 int regcomp(regex_t *preg, const char *pattern, int cflags);
-
 size_t regerror(int errcode, const regex_t *preg, char *errbuf, size_t errbuf_size);
-
 int regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
-
 void regfree(regex_t *preg);
 
 #endif // _RE2C_LIB_REGEX_

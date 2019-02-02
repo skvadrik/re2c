@@ -10,9 +10,6 @@ namespace re2c
 
 static void reconstruct_history(const tag_history_t &, tag_path_t &, hidx_t);
 
-// maximum 29-bit (we have 30 bits, but highest must be non-negative)
-static const int32_t MAX_RHO = 0x1fffFFFF;
-
 int32_t precedence(determ_context_t &ctx,
     const clos_t &x, const clos_t &y, int32_t &rhox, int32_t &rhoy)
 {

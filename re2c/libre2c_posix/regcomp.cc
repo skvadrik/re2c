@@ -15,7 +15,7 @@ const AST *regexp;
 
 using namespace re2c;
 
-int regcomp(regex_t *preg, const char *pattern, int /* cflags */)
+int regcomp(regex_t *preg, const char *pattern, int cflags)
 {
     conopt_t globopts;
     globopts.FFlag = true;
@@ -24,6 +24,8 @@ int regcomp(regex_t *preg, const char *pattern, int /* cflags */)
     const opt_t *opt = opts.snapshot();
 
     Warn warn;
+
+    preg->flags = cflags;
 
     const AST *a = parse(pattern);
 
@@ -34,28 +36,38 @@ int regcomp(regex_t *preg, const char *pattern, int /* cflags */)
     arv.push_back(ar);
     RESpec re(arv, opt, warn, *preg->rmgr);
 
-    preg->char2class = new size_t[256];
-    split_charset(re);
-    for (uint32_t i = 1, j = 0; i < re.charset.size(); ++i) {
-        for (; j < re.charset[i]; ++j) {
-            preg->char2class[j] = i - 1;
-        }
-    }
-
     find_fixed_tags(re);
 
     insert_default_tags(re);
 
     nfa_t *nfa = new nfa_t(re);
 
-    dfa_t *dfa = new dfa_t(*nfa, opt, "", warn);
-
-    compact_and_optimize_tags(opt, *dfa);
-
-    DASSERT(dfa->rules.size() == 1);
-    preg->re_nsub = dfa->rules[0].ncap + 1;
+    DASSERT(nfa->rules.size() == 1);
+    preg->re_nsub = nfa->rules[0].ncap + 1;
     preg->pmatch = new regmatch_t[preg->re_nsub];
-    preg->regs = new regoff_t[dfa->maxtagver + 1];
+
+    dfa_t *dfa = NULL;
+    if (cflags & REG_NFA) {
+        const size_t sz = 2 * nfa->size * nfa->size;
+        preg->prec_buf1 = new int32_t[sz];
+        preg->prec_buf2 = new int32_t[sz];
+    }
+    else {
+        preg->char2class = new size_t[256];
+        split_charset(re);
+        for (uint32_t i = 1, j = 0; i < re.charset.size(); ++i) {
+            for (; j < re.charset[i]; ++j) {
+                preg->char2class[j] = i - 1;
+            }
+        }
+
+        dfa = new dfa_t(*nfa, opt, "", warn);
+
+        compact_and_optimize_tags(opt, *dfa);
+
+        preg->regs = new regoff_t[dfa->maxtagver + 1];
+    }
+
     preg->nfa = nfa;
     preg->dfa = dfa;
 

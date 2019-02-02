@@ -7,35 +7,36 @@
 
 
 static int test(const char *pattern, const char *string
-    , size_t nmatch, const regoff_t *submatch)
+    , size_t nmatch, const regoff_t *submatch, int flags)
 {
     regex_t re;
     regmatch_t *pmatch = new regmatch_t[nmatch];
+    const char *prefix = flags & REG_NFA ? "NFA" : "DFA";
     int result;
 
-    result = regcomp(&re, pattern, 0);
+    result = regcomp(&re, pattern, flags);
     if (result != 0) {
-        fprintf(stderr, "regcomp() failed for RE %s\n", pattern);
+        fprintf(stderr, "%s: regcomp() failed for RE %s\n", prefix, pattern);
         goto end;
     }
 
-    result = regexec(&re, string, nmatch, pmatch, 0);
+    result = regexec(&re, string, nmatch, pmatch, flags);
     if (result != 0) {
         if (nmatch == 0) {
             // failure was expected => it's a success
             result = 0;
         }
         else if (nmatch > 0) {
-            fprintf(stderr, "regexec() failed for RE %s and string %s\n"
-                , pattern, string);
+            fprintf(stderr, "%s: regexec() failed for RE %s and string %s\n"
+                , prefix, pattern, string);
             goto end;
         }
     }
     else if (nmatch == 0) {
         // regexed must have failed, something is wrong
         result = REG_NOMATCH;
-        fprintf(stderr, "regexec() didn't fail while it should"
-            " for RE %s and string %s\n", pattern, string);
+        fprintf(stderr, "%s: regexec() didn't fail while it should"
+            " for RE %s and string %s\n", prefix, pattern, string);
         goto end;
     }
 
@@ -48,10 +49,10 @@ static int test(const char *pattern, const char *string
 
         if (so != have.rm_so || eo != have.rm_eo) {
             result = 1;
-            fprintf(stderr, "incorrect submatch for RE %s and string %s:\n"
+            fprintf(stderr, "%s: incorrect submatch for RE %s and string %s:\n"
                 "\tpmatch[%u].rm_so = %ld (expected %ld)\n"
                 "\tpmatch[%u].rm_eo = %ld (expected %ld)\n"
-                , pattern, string
+                , prefix, pattern, string
                 , i, have.rm_so, so
                 , i, have.rm_eo, eo);
             goto end;
@@ -71,8 +72,8 @@ end:
 // 'long' as vararg requres suffix 'L', which is easy to forget and hard
 // to notice (the problem is platform/toolchain-specific).
 #define  GS                                              static const regoff_t gs[]
-#define  T(R,S,gs)                                       e |= test(R,S,sizeof(gs)/sizeof(gs[0])/2,gs);
-#define  T0(R,S)                                         e |= test(R,S,0,NULL);
+#define  T(R,S,gs)                                       e |= test(R,S,sizeof(gs)/sizeof(gs[0])/2,gs,flags);
+#define  T0(R,S)                                         e |= test(R,S,0,NULL,flags);
 #define  T1(R,S,a,b)                                     { GS = {a,b};                                     T(R,S,gs); }
 #define  T2(R,S,a,b,c,d)                                 { GS = {a,b,c,d};                                 T(R,S,gs); }
 #define  T3(R,S,a,b,c,d,e,f)                             { GS = {a,b,c,d,e,f};                             T(R,S,gs); }
@@ -84,7 +85,7 @@ end:
 #define  T9(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r)     { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r};     T(R,S,gs); }
 #define T10(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t) { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t}; T(R,S,gs); }
 
-int main()
+int test_all(int flags)
 {
     int e = 0;
 
@@ -509,3 +510,14 @@ int main()
 #undef T5
 #undef T6
 #undef T7
+
+int main()
+{
+    int e = 0;
+
+    e |= test_all(0);
+    e |= test_all(REG_NFA);
+
+    return e;
+}
+

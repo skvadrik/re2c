@@ -139,6 +139,8 @@ struct determ_context_t
     FORBID_COPY(determ_context_t);
 };
 
+// maximum 29-bit (we have 30 bits, but highest must be non-negative)
+static const int32_t MAX_RHO = 0x1fffFFFF;
 
 void tagged_epsilon_closure(determ_context_t &ctx);
 void closure_posix(determ_context_t &);
