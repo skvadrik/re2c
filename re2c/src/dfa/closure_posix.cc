@@ -23,7 +23,7 @@ struct cmp_gtop_t
 static void closure_posix_gor1(determ_context_t &);
 static void closure_posix_gtop(determ_context_t &);
 static nfa_state_t *next_admissible_arc(determ_context_t &, nfa_state_t *);
-static nfa_state_t *relax(determ_context_t &, clos_t);
+static nfa_state_t *relax(determ_context_t &, const clos_t &);
 static void cleanup(closure_t &);
 
 
@@ -258,7 +258,7 @@ nfa_state_t *next_admissible_arc(determ_context_t &ctx, nfa_state_t *q)
     return p;
 }
 
-nfa_state_t *relax(determ_context_t &ctx, clos_t x)
+nfa_state_t *relax(determ_context_t &ctx, const clos_t &x)
 {
     closure_t &done = ctx.dc_closure;
     nfa_state_t *q = x.state;
