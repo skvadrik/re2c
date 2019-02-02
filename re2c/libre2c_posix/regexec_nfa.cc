@@ -28,7 +28,8 @@ struct history_t
 
     inline history_t(size_t nstates, size_t ntags);
     inline uint32_t push(uint32_t i, uint32_t step, tag_info_t info);
-    regoff_t last(uint32_t i, size_t t) const;
+    inline regoff_t last(uint32_t i, size_t t) const;
+    inline void reconstruct(tag_path_t &, uint32_t, uint32_t);
     FORBID_COPY(history_t);
 };
 
@@ -37,9 +38,11 @@ struct conf_t
     nfa_state_t *state;
     uint32_t origin;
     uint32_t thist;
+};
 
-    static inline bool fin(const conf_t &c);
-    static inline bool ran(const conf_t &c);
+struct ran_or_fin_t
+{
+    inline bool operator()(const conf_t &c);
 };
 
 struct cmp_gtop_t
@@ -75,8 +78,7 @@ static void reach_on_symbol(simctx_t &, uint32_t);
 static void closure(simctx_t &);
 static void relax(simctx_t &, const conf_t &, worklist_t &);
 static int32_t precedence(simctx_t &, const conf_t &, const conf_t &, int32_t &, int32_t &);
-static inline void reconstruct_history(const history_t &, tag_path_t &, uint32_t, uint32_t);
-static uint32_t index(const nfa_t *, const nfa_state_t *);
+static inline uint32_t index(const nfa_t *, const nfa_state_t *);
 
 int regexec_nfa(const regex_t *preg, const char *string, size_t nmatch,
     regmatch_t pmatch[], int)
@@ -202,16 +204,8 @@ void closure(simctx_t &ctx)
     }
 
     // drop "inner" states (non-final without outgoing non-epsilon transitions)
-    j = std::partition(b, e, conf_t::ran);
-    e = std::partition(j, e, conf_t::fin);
+    e = std::partition(b, e, ran_or_fin_t());
     size_t n = static_cast<size_t>(e - b);
-
-    // we must have exactly one final state
-    if (j != e) {
-        DASSERT(j + 1 == e);
-        n = static_cast<size_t>(j - b) + 1;
-    }
-
     state.resize(n);
 
     int32_t *prec = ctx.prec_next;
@@ -283,8 +277,8 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
 
     history_t &hist = ctx.hist;
     tag_path_t &p1 = hist.path1, &p2 = hist.path2;
-    reconstruct_history(hist, p1, xl, ctx.step);
-    reconstruct_history(hist, p2, yl, ctx.step);
+    hist.reconstruct(p1, xl, ctx.step);
+    hist.reconstruct(p2, yl, ctx.step);
     tag_path_t::const_reverse_iterator
         i1 = p1.rbegin(), e1 = p1.rend(), j1 = i1, g1,
         i2 = p2.rbegin(), e2 = p2.rend(), j2 = i2, g2;
@@ -403,12 +397,11 @@ regoff_t history_t::last(uint32_t i, size_t t) const
     return off;
 }
 
-void reconstruct_history(const history_t &hist,
-    tag_path_t &path, uint32_t idx, uint32_t step)
+void history_t::reconstruct(tag_path_t &path, uint32_t idx, uint32_t step)
 {
     path.clear();
     for (; idx != HROOT; ) {
-        const history_t::node_t &n = hist.nodes[idx];
+        const node_t &n = nodes[idx];
         if (n.step != step) break;
         path.push_back(n.info);
         idx = n.pred;
@@ -420,14 +413,13 @@ uint32_t index(const nfa_t *nfa, const nfa_state_t *state)
     return static_cast<uint32_t>(state - nfa->states);
 }
 
-bool conf_t::fin(const conf_t &c)
+bool ran_or_fin_t::operator()(const conf_t &c)
 {
-    return c.state->type == nfa_state_t::FIN;
-}
-
-bool conf_t::ran(const conf_t &c)
-{
-    return c.state->type == nfa_state_t::RAN;
+    switch (c.state->type) {
+        case nfa_state_t::RAN:
+        case nfa_state_t::FIN: return true;
+        default: return false;
+    }
 }
 
 bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
