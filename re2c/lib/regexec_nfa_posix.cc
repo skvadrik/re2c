@@ -53,6 +53,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
                 if (r->lower() <= sym && sym < r->upper()) {
                     conf_t c = {s->ran.out, index(nfa, s), i->thist};
                     reach.push_back(c);
+                    break;
                 }
             }
         }
