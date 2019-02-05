@@ -517,6 +517,7 @@ int main()
 
     e |= test_all(0);
     e |= test_all(REG_NFA);
+    e |= test_all(REG_NFA | REG_LEFTMOST);
 
     return e;
 }

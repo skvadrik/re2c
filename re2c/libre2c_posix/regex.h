@@ -31,6 +31,7 @@ static const int REG_NOTBOL   = 1u << 4;
 static const int REG_NOTEOL   = 1u << 5;
 // extensions
 static const int REG_NFA      = 1u << 6;
+static const int REG_LEFTMOST = 1u << 7;
 
 
 struct regex_t

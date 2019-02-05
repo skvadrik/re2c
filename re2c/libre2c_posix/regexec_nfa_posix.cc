@@ -12,6 +12,8 @@
 
 namespace re2c {
 
+namespace {
+
 typedef std::vector<tag_info_t> tag_path_t;
 
 struct history_t
@@ -53,6 +55,7 @@ struct cmp_gtop_t
 typedef std::vector<conf_t> confset_t;
 typedef confset_t::iterator confiter_t;
 typedef confset_t::const_iterator cconfiter_t;
+typedef confset_t::const_reverse_iterator rcconfiter_t;
 typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
     , cmp_gtop_t> worklist_t;
 
@@ -74,13 +77,15 @@ struct simctx_t
     FORBID_COPY(simctx_t);
 };
 
+} // anonymous namespace
+
 static void reach_on_symbol(simctx_t &, uint32_t);
-static void closure(simctx_t &);
+static void closure_posix(simctx_t &);
 static void relax(simctx_t &, const conf_t &, worklist_t &);
 static int32_t precedence(simctx_t &, const conf_t &, const conf_t &, int32_t &, int32_t &);
 static inline uint32_t index(const nfa_t *, const nfa_state_t *);
 
-int regexec_nfa(const regex_t *preg, const char *string, size_t nmatch,
+int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch,
     regmatch_t pmatch[], int)
 {
     simctx_t ctx(preg, string);
@@ -89,14 +94,14 @@ int regexec_nfa(const regex_t *preg, const char *string, size_t nmatch,
 
     const conf_t c0 = {nfa->root, index(nfa, nfa->root), HROOT};
     ctx.reach.push_back(c0);
-    closure(ctx);
+    closure_posix(ctx);
 
     for (;;) {
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
         reach_on_symbol(ctx, sym);
         ++ctx.step;
-        closure(ctx);
+        closure_posix(ctx);
     }
 
     ctx.cursor = ctx.marker;
@@ -151,7 +156,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
     }
 }
 
-void closure(simctx_t &ctx)
+void closure_posix(simctx_t &ctx)
 {
     const nfa_t *nfa = ctx.nfa;
     const confset_t &reach = ctx.reach;

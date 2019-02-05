@@ -75,7 +75,8 @@ libre2c_posix_la_SRC = \
 	libre2c_posix/regcomp.cc \
 	libre2c_posix/regexec.cc \
 	libre2c_posix/regexec_dfa.cc \
-	libre2c_posix/regexec_nfa.cc \
+	libre2c_posix/regexec_nfa_leftmost.cc \
+	libre2c_posix/regexec_nfa_posix.cc \
 	libre2c_posix/regfree.cc \
 	libre2c_posix/stubs.cc \
 	src/parse/ast.cc \

@@ -8,7 +8,8 @@
 namespace re2c {
 
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
-int regexec_nfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+int regexec_nfa_leftmost(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 
 } // namespace re2c
 
