@@ -27,7 +27,6 @@ struct history_t
 
     inline history_t(size_t nstates, size_t ntags);
     inline uint32_t push(uint32_t i, uint32_t step, tag_info_t info);
-    inline regoff_t last(uint32_t i, size_t t) const;
     FORBID_COPY(history_t);
 };
 
@@ -223,22 +222,6 @@ uint32_t history_t::push(uint32_t idx, uint32_t step, tag_info_t info)
     const node_t x = {idx, step, info.idx, info.neg};
     nodes.push_back(x);
     return static_cast<uint32_t>(nodes.size() - 1);
-}
-
-regoff_t history_t::last(uint32_t i, size_t t) const
-{
-    regoff_t off = -1;
-    for (; i != HROOT; ) {
-        const node_t &n = nodes[i];
-        if (n.tag == t) {
-            if (!n.neg) {
-                off = static_cast<regoff_t>(n.step);
-            }
-            break;
-        }
-        i = n.pred;
-    }
-    return off;
 }
 
 } // namespace re2c

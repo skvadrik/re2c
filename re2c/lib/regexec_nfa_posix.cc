@@ -30,7 +30,6 @@ struct history_t
 
     inline history_t(size_t nstates, size_t ntags);
     inline uint32_t push(uint32_t i, uint32_t step, tag_info_t info);
-    inline regoff_t last(uint32_t i, size_t t) const;
     inline void reconstruct(tag_path_t &, uint32_t, uint32_t);
     FORBID_COPY(history_t);
 };
@@ -107,29 +106,38 @@ int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch,
     ctx.cursor = ctx.marker;
 
     if (ctx.rule != Rule::NONE) {
-        regmatch_t *m = pmatch;
         result = 0;
 
+        regmatch_t *m = pmatch;
         m->rm_so = 0;
         m->rm_eo = ctx.cursor - string - 1;
-        ++m;
 
-        const Rule &rule = nfa->rules[0];
-        for (size_t t = rule.ltag; t < rule.htag; ++t) {
-            const Tag &tag = nfa->tags[t];
+        size_t todo = nmatch * 2, ntags = nfa->tags.size();
+        bool *done = new bool[ntags];
+        memset(done, 0, ntags * sizeof(bool));
 
-            if (fictive(tag)) continue;
-            if (tag.ncap >= nmatch * 2) break;
-
-            const regoff_t off = ctx.hist.last(ctx.hidx, t);
-            if (tag.ncap % 2 == 0) {
-                m->rm_so = off;
+        for (size_t i = ctx.hidx; todo > 0 && i != HROOT; ) {
+            const history_t::node_t &n = ctx.hist.nodes[i];
+            const size_t t = n.info.idx;
+            if (!done[t]) {
+                done[t] = true;
+                const Tag &tag = nfa->tags[t];
+                if (!fictive(tag) && tag.ncap < nmatch * 2) {
+                    --todo;
+                    const regoff_t off = n.info.neg ? -1 : static_cast<regoff_t>(n.step);
+                    m = &pmatch[tag.ncap / 2 + 1];
+                    if (tag.ncap % 2 == 0) {
+                        m->rm_so = off;
+                    }
+                    else {
+                        m->rm_eo = off;
+                    }
+                }
             }
-            else {
-                m->rm_eo = off;
-                ++m;
-            }
+            i = n.pred;
         }
+
+        delete[] done;
     }
 
     return result;
@@ -384,22 +392,6 @@ uint32_t history_t::push(uint32_t idx, uint32_t step, tag_info_t info)
     const node_t x = {idx, step, info};
     nodes.push_back(x);
     return static_cast<uint32_t>(nodes.size() - 1);
-}
-
-regoff_t history_t::last(uint32_t i, size_t t) const
-{
-    regoff_t off = -1;
-    for (; i != HROOT; ) {
-        const node_t &n = nodes[i];
-        if (n.info.idx == t) {
-            if (!n.info.neg) {
-                off = static_cast<regoff_t>(n.step);
-            }
-            break;
-        }
-        i = n.pred;
-    }
-    return off;
 }
 
 void history_t::reconstruct(tag_path_t &path, uint32_t idx, uint32_t step)
