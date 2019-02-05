@@ -1,4 +1,4 @@
-#include "libre2c_posix/regex.h"
+#include "lib/regex.h"
 #include "src/nfa/nfa.h"
 #include "src/dfa/dfa.h"
 

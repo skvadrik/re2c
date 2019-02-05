@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "libre2c_posix/regex.h"
+#include "lib/regex.h"
 #include "src/util/c99_stdint.h"
 
 

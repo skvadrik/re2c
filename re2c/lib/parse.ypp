@@ -4,7 +4,7 @@
 
 #include "src/util/c99_stdint.h"
 #include "src/parse/ast.h"
-#include "libre2c_posix/lex.h"
+#include "lib/lex.h"
 
 using namespace re2c;
 

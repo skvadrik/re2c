@@ -1,5 +1,5 @@
-#include "libre2c_posix/regex.h"
-#include "libre2c_posix/regex_impl.h"
+#include "lib/regex.h"
+#include "lib/regex_impl.h"
 
 
 using namespace re2c;

@@ -8,7 +8,7 @@
 #include "src/util/range.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "parse.h"
-#include "libre2c_posix/lex.h"
+#include "lib/lex.h"
 
 
 extern YYSTYPE yylval;

@@ -56,12 +56,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "../libre2c_posix/parse.ypp" /* yacc.c:1909  */
+#line 25 "../lib/parse.ypp" /* yacc.c:1909  */
 
     const re2c::AST *regexp;
     re2c::ASTBounds bounds;
 
-#line 65 "libre2c_posix/parse.h" /* yacc.c:1909  */
+#line 65 "lib/parse.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

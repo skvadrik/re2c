@@ -1,14 +1,14 @@
 # this file is incomplete and should be included from the main Makefile.am
 
-lib_LTLIBRARIES += libre2c_posix.la
+lib_LTLIBRARIES += libre2c.la
 
-libre2c_posix_la_CXXFLAGS = $(AM_CXXFLAGS)
-libre2c_posix_la_LDFLAGS = -module -no-undefined
+libre2c_la_CXXFLAGS = $(AM_CXXFLAGS)
+libre2c_la_LDFLAGS = -module -no-undefined
 
-libre2c_posix_la_HDR = \
-	libre2c_posix/lex.h \
-	libre2c_posix/regex.h \
-	libre2c_posix/regex_impl.h \
+libre2c_la_HDR = \
+	lib/lex.h \
+	lib/regex.h \
+	lib/regex_impl.h \
 	src/codegen/bitmap.h \
 	src/codegen/emit.h \
 	src/codegen/go.h \
@@ -71,14 +71,14 @@ libre2c_posix_la_HDR = \
 	src/util/uniq_vector.h \
 	src/util/wrap_iter.h
 
-libre2c_posix_la_SRC = \
-	libre2c_posix/regcomp.cc \
-	libre2c_posix/regexec.cc \
-	libre2c_posix/regexec_dfa.cc \
-	libre2c_posix/regexec_nfa_leftmost.cc \
-	libre2c_posix/regexec_nfa_posix.cc \
-	libre2c_posix/regfree.cc \
-	libre2c_posix/stubs.cc \
+libre2c_la_SRC = \
+	lib/regcomp.cc \
+	lib/regexec.cc \
+	lib/regexec_dfa.cc \
+	lib/regexec_nfa_leftmost.cc \
+	lib/regexec_nfa_posix.cc \
+	lib/regfree.cc \
+	lib/stubs.cc \
 	src/parse/ast.cc \
 	src/options/msg.cc \
 	src/options/opt.cc \
@@ -133,45 +133,46 @@ libre2c_posix_la_SRC = \
 	src/util/range.cc \
 	src/util/s_to_n32_unsafe.cc
 
-libre2c_posix_la_SOURCES = \
-	$(libre2c_posix_la_HDR) \
-	$(libre2c_posix_la_SRC)
+libre2c_la_SOURCES = \
+	$(libre2c_la_HDR) \
+	$(libre2c_la_SRC)
 
-libre2c_posix_la_CUSTOM = \
-	libre2c_posix/lex.re \
-	libre2c_posix/parse.ypp \
+libre2c_la_CUSTOM = \
+	lib/lex.re \
+	lib/parse.ypp \
 	src/options/ver_to_vernum.re
 
-libre2c_posix_la_GEN_SRC = \
-	libre2c_posix/lex.cc \
-	libre2c_posix/parse.cc \
+libre2c_la_GEN_SRC = \
+	lib/lex.cc \
+	lib/parse.cc \
 	src/options/ver_to_vernum.cc
-libre2c_posix_la_GEN_HDR = \
-	libre2c_posix/parse.h
-libre2c_posix_la_GEN = \
-	$(libre2c_posix_la_GEN_SRC) \
-	$(libre2c_posix_la_GEN_HDR)
+libre2c_la_GEN_HDR = \
+	lib/parse.h
+libre2c_la_GEN = \
+	$(libre2c_la_GEN_SRC) \
+	$(libre2c_la_GEN_HDR)
 
 # custom rules create headers and must go before normal rules
-BUILT_SOURCES += $(libre2c_posix_la_GEN_SRC)
+BUILT_SOURCES += $(libre2c_la_GEN_SRC)
 
-libre2c_posix_la_BOOTSTRAP = \
-	bootstrap/libre2c_posix/parse.cc \
-	bootstrap/libre2c_posix/parse.h \
-	bootstrap/libre2c_posix/lex.cc \
+libre2c_la_BOOTSTRAP = \
+	bootstrap/lib/parse.cc \
+	bootstrap/lib/parse.h \
+	bootstrap/lib/lex.cc \
 	bootstrap/src/options/ver_to_vernum.cc
 
-nodist_libre2c_posix_la_SOURCES = $(libre2c_posix_la_GEN)
+nodist_libre2c_la_SOURCES = $(libre2c_la_GEN)
 
 EXTRA_DIST += \
-	$(libre2c_posix_la_BOOTSTRAP) \
-	$(libre2c_posix_la_CUSTOM)
+	$(libre2c_la_BOOTSTRAP) \
+	$(libre2c_la_CUSTOM)
 
-CLEANFILES += $(libre2c_posix_la_GEN)
+CLEANFILES += $(libre2c_la_GEN)
 
 # lexer depends on bison-generated header
-libre2c_posix/lex.cc: libre2c_posix/parse.cc
+lib/lex.cc: lib/parse.cc
 
-test_libre2c_posix_SOURCES = libre2c_posix/test.cpp
-test_libre2c_posix_LDADD = libre2c_posix.la
-check_PROGRAMS += test_libre2c_posix
+test_libre2c_SOURCES = lib/test.cpp
+test_libre2c_LDADD = libre2c.la
+check_PROGRAMS += test_libre2c
+

@@ -62,14 +62,14 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "../libre2c_posix/parse.ypp" /* yacc.c:339  */
+#line 1 "../lib/parse.ypp" /* yacc.c:339  */
 
 
 #include <stdio.h>
 
 #include "src/util/c99_stdint.h"
 #include "src/parse/ast.h"
-#include "libre2c_posix/lex.h"
+#include "lib/lex.h"
 
 using namespace re2c;
 
@@ -81,7 +81,7 @@ void yyerror(const char *pattern, const char*);
 } // extern "C"
 
 
-#line 85 "libre2c_posix/parse.cc" /* yacc.c:339  */
+#line 85 "lib/parse.cc" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -101,8 +101,8 @@ void yyerror(const char *pattern, const char*);
 
 /* In a future release of Bison, this section will be replaced
    by #include "parse.h".  */
-#ifndef YY_YY_LIBRE2C_POSIX_PARSE_H_INCLUDED
-# define YY_YY_LIBRE2C_POSIX_PARSE_H_INCLUDED
+#ifndef YY_YY_lib_PARSE_H_INCLUDED
+# define YY_YY_lib_PARSE_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -127,12 +127,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "../libre2c_posix/parse.ypp" /* yacc.c:355  */
+#line 25 "../lib/parse.ypp" /* yacc.c:355  */
 
     const re2c::AST *regexp;
     re2c::ASTBounds bounds;
 
-#line 136 "libre2c_posix/parse.cc" /* yacc.c:355  */
+#line 136 "lib/parse.cc" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -145,11 +145,11 @@ extern YYSTYPE yylval;
 
 int yyparse (const char *&pattern);
 
-#endif /* !YY_YY_LIBRE2C_POSIX_PARSE_H_INCLUDED  */
+#endif /* !YY_YY_lib_PARSE_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 153 "libre2c_posix/parse.cc" /* yacc.c:358  */
+#line 153 "lib/parse.cc" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1225,61 +1225,61 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 39 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 39 "../lib/parse.ypp" /* yacc.c:1646  */
     { regexp = (yyval.regexp); }
-#line 1231 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1231 "lib/parse.cc" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 43 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 43 "../lib/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1237 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1237 "lib/parse.cc" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 48 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 48 "../lib/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
-#line 1243 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1243 "lib/parse.cc" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 53 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 53 "../lib/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, AST::MANY); }
-#line 1249 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1249 "lib/parse.cc" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 54 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 54 "../lib/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 1, AST::MANY); }
-#line 1255 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1255 "lib/parse.cc" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 55 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 55 "../lib/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, 1); }
-#line 1261 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1261 "lib/parse.cc" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 56 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 56 "../lib/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max); }
-#line 1267 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1267 "lib/parse.cc" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 61 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 61 "../lib/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_cap(ast_nil(0, 0)); }
-#line 1273 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1273 "lib/parse.cc" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 62 "../libre2c_posix/parse.ypp" /* yacc.c:1646  */
+#line 62 "../lib/parse.ypp" /* yacc.c:1646  */
     { (yyval.regexp) = ast_cap((yyvsp[-1].regexp)); }
-#line 1279 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1279 "lib/parse.cc" /* yacc.c:1646  */
     break;
 
 
-#line 1283 "libre2c_posix/parse.cc" /* yacc.c:1646  */
+#line 1283 "lib/parse.cc" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1507,7 +1507,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 65 "../libre2c_posix/parse.ypp" /* yacc.c:1906  */
+#line 65 "../lib/parse.ypp" /* yacc.c:1906  */
 
 
 extern "C" {

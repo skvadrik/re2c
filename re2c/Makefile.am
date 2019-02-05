@@ -344,6 +344,6 @@ TESTS = \
 if WITH_LIBS
 ACLOCAL_AMFLAGS = -I m4
 lib_LTLIBRARIES =
-include $(top_srcdir)/Makefile.libre2c_posix.am
+include $(top_srcdir)/Makefile.lib.am
 endif
 

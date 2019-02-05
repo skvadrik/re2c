@@ -1,5 +1,5 @@
-#include "libre2c_posix/lex.h"
-#include "libre2c_posix/regex.h"
+#include "lib/lex.h"
+#include "lib/regex.h"
 #include "src/options/opt.h"
 #include "src/options/warn.h"
 #include "src/nfa/nfa.h"
