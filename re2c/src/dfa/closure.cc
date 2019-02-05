@@ -86,7 +86,7 @@ void tagged_epsilon_closure(determ_context_t &ctx)
     closure_t &closure = ctx.dc_closure;
 
     // build tagged epsilon-closure of the given set of NFA states
-    if (ctx.dc_opts->posix_captures) {
+    if (ctx.dc_opts->posix_semantics) {
         closure_posix(ctx);
         prune(closure, ctx.dc_nfa.rules);
         std::sort(closure.begin(), closure.end(), cmpby_rule_state);

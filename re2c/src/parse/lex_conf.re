@@ -47,11 +47,17 @@ void Scanner::lex_conf(Opt &opts)
     "flags:" ("i" | "no-debug-info")  { opts.set_iFlag            (lex_conf_bool());   return; }
     "flags:" ("s" | "nested-ifs")     { opts.set_sFlag            (lex_conf_bool());   return; }
     "flags:" ("T" | "tags")           { opts.set_tags             (lex_conf_bool());   return; }
-    "flags:" ("P" | "posix-captures") { opts.set_posix_captures   (lex_conf_bool());   return; }
     "flags:case-insensitive"          { opts.set_bCaseInsensitive (lex_conf_bool());   return; }
     "flags:case-inverted"             { opts.set_bCaseInverted    (lex_conf_bool());   return; }
     "flags:" ("o" | "output")         { opts.set_output_file      (lex_conf_string()); return; }
     "flags:" ("t" | "type-header")    { opts.set_header_file      (lex_conf_string()); return; }
+
+    "flags:" ("P" | "posix-captures") {
+        bool b = lex_conf_bool();
+        opts.set_posix_syntax(b);
+        opts.set_posix_semantics(b);
+        return;
+    }
 
     "flags:" ("e" | "ecb")        { lex_conf_enc(Enc::EBCDIC, opts); return; }
     "flags:" ("u" | "unicode")    { lex_conf_enc(Enc::UTF32, opts);  return; }

@@ -324,7 +324,7 @@ void emit_start(Output &o, size_t maxfill, size_t maxnmatch, const std::string &
     o.ws("\n").wind(1).ws("const YYCTYPE *limit = NULL;");
     o.ws("\n").wind(1).ws("const YYCTYPE *token = NULL;");
     o.ws("\n").wind(1).ws("const YYCTYPE *eof = NULL;");
-    if (opts->posix_captures) {
+    if (opts->posix_syntax) {
         o.ws("\n").wind(1).ws("size_t yynmatch;");
         o.ws("\n").wind(1).ws("const YYCTYPE *yypmatch[").wu64(maxnmatch).ws(" * 2];");
     }

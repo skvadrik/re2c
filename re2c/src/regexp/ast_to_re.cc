@@ -129,7 +129,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
         }
         case AST::ALT: {
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
-            if (opts->posix_captures && has_tags(ast)) {
+            if (opts->posix_syntax && has_tags(ast)) {
                 // see note [POSIX subexpression hierarchy]
                 if (ast->cat.ast1->type != AST::CAP) {
                     t1 = re_tag(spec, tags.size(), false);
@@ -152,7 +152,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
         }
         case AST::CAT: {
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
-            if (opts->posix_captures && has_tags(ast)) {
+            if (opts->posix_syntax && has_tags(ast)) {
                 // see note [POSIX subexpression hierarchy]
                 if (ast->cat.ast1->type != AST::CAP) {
                     t1 = re_tag(spec, tags.size(), false);
@@ -178,7 +178,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
                 fatal_lc(ast->line, ast->column,
                     "tags are only allowed with '-T, --tags' option");
             }
-            if (opts->posix_captures) {
+            if (opts->posix_syntax) {
                 fatal_lc(ast->line, ast->column,
                     "simple tags are not allowed with '--posix-captures' option");
             }
@@ -187,7 +187,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             return t;
         }
         case AST::CAP: {
-            if (!opts->posix_captures) {
+            if (!opts->posix_syntax) {
                 return ast_to_re(spec, ast->cap, ncap, height);
             }
             const AST *x = ast->cap;
@@ -214,7 +214,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             const AST *x = ast->iter.ast;
 
             RE *t1 = NULL, *t2 = NULL;
-            if (opts->posix_captures && x->type == AST::CAP) {
+            if (opts->posix_syntax && x->type == AST::CAP) {
                 x = x->cap;
                 if (x->type == AST::REF) x = x->ref.ast;
 
@@ -318,7 +318,7 @@ Range *ast_to_range(RESpec &spec, const AST *ast)
         case AST::ITER:
             break;
         case AST::CAP:
-            if (spec.opts->posix_captures) break;
+            if (spec.opts->posix_syntax) break;
             return ast_to_range(spec, ast->cap);
         case AST::REF:
             if (misuse_of_named_def(spec, ast)) return NULL;
@@ -398,7 +398,7 @@ bool misuse_of_named_def(RESpec &spec, const AST *ast)
 {
     DASSERT(ast->type == AST::REF);
 
-    if (!spec.opts->posix_captures) return false;
+    if (!spec.opts->posix_syntax) return false;
 
     fatal_l(ast->line,
         "implicit grouping is forbidden with '--posix-captures'"

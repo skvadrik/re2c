@@ -102,12 +102,17 @@ opt_short:
     "i" { opts.set_iFlag(true);           goto opt_short; }
     "s" { opts.set_sFlag(true);           goto opt_short; }
     "T" { opts.set_tags(true);            goto opt_short; }
-    "P" { opts.set_posix_captures(true);  goto opt_short; }
     "e" { opts.set_encoding(Enc::EBCDIC); goto opt_short; }
     "u" { opts.set_encoding(Enc::UTF32);  goto opt_short; }
     "w" { opts.set_encoding(Enc::UCS2);   goto opt_short; }
     "x" { opts.set_encoding(Enc::UTF16);  goto opt_short; }
     "8" { opts.set_encoding(Enc::UTF8);   goto opt_short; }
+
+    "P" {
+        opts.set_posix_syntax(true);
+        opts.set_posix_semantics(true);
+        goto opt_short;
+    }
 
     "I" end { NEXT_ARG("-I", opt_incpath); }
     "I"     { *argv = YYCURSOR; goto opt_incpath; }
@@ -146,12 +151,17 @@ opt_long:
     "case-insensitive"      end { opts.set_bCaseInsensitive (true);  goto opt; }
     "case-inverted"         end { opts.set_bCaseInverted (true);     goto opt; }
     "tags"                  end { opts.set_tags (true);              goto opt; }
-    "posix-captures"        end { opts.set_posix_captures(true);     goto opt; }
     "ecb"                   end { opts.set_encoding(Enc::EBCDIC);    goto opt; }
     "unicode"               end { opts.set_encoding(Enc::UTF32);     goto opt; }
     "wide-chars"            end { opts.set_encoding(Enc::UCS2);      goto opt; }
     "utf-16"                end { opts.set_encoding(Enc::UTF16);     goto opt; }
     "utf-8"                 end { opts.set_encoding(Enc::UTF8);      goto opt; }
+
+    "posix-captures" end {
+        opts.set_posix_syntax(true);
+        opts.set_posix_semantics(true);
+        goto opt;
+    }
 
     "output"                end { NEXT_ARG("-o, --output",       opt_output); }
     "type-header"           end { NEXT_ARG("-t, --type-header",  opt_header); }

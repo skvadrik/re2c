@@ -20,7 +20,8 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     conopt_t globopts;
     globopts.FFlag = true;
     Opt opts(globopts);
-    opts.set_posix_captures(true);
+    opts.set_posix_syntax(true);
+    opts.set_posix_semantics((cflags & REG_LEFTMOST) == 0);
     const opt_t *opt = opts.snapshot();
 
     Warn warn;

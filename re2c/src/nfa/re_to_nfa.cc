@@ -80,7 +80,7 @@ static nfa_state_t *re_to_nfa(rtn_ctx_t &ctx, const RE *re, nfa_state_t *t)
                 s = re_to_nfa(ctx, iter, t);
                 for (uint32_t i = min; i < max; ++i) {
                     nfa_state_t *q = &nfa.states[nfa.size++];
-                    if (ctx.opts->posix_captures) {
+                    if (ctx.opts->posix_semantics) {
                         // POSIX: shorter alternative first to speed up GOR1
                         // by first exploring paths without optional empty repetitions
                         q->make_alt(nrule, t, s);
@@ -140,7 +140,7 @@ nfa_t::nfa_t(const RESpec &spec)
         }
     }
 
-    if (spec.opts->posix_captures) {
+    if (spec.opts->posix_semantics) {
         // needed for closure algorithms GOR1 and GTOP
         uint32_t topord = 0;
         calc_topord(root, topord);

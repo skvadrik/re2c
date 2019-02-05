@@ -26,7 +26,11 @@ static void insert_default_tags(RESpec &spec, RE *re, size_t *&tidx)
                 y = re_cat(spec, y, re_tag(spec, *i, true));
             }
             re->alt.re1 = re_cat(spec, re->alt.re1, y);
-            re->alt.re2 = spec.opts->posix_captures
+            // Decision to place negative tags before/after could be based
+            // on POSIX semantics, not syntax. But strangely on some tests
+            // placing before results in better performance. More benchmarks
+            // are needed to understand this (with AOT/JIT, TNFA/TDFA).
+            re->alt.re2 = spec.opts->posix_syntax
                 ? re_cat(spec, x, re->alt.re2)
                 : re_cat(spec, re->alt.re2, x);
             break;

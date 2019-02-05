@@ -146,7 +146,10 @@ void mutopt_t::fix(const conopt_t *globopts)
         bUseStateAbort = Opt::baseopt.bUseStateAbort;
         bUseStateNext = Opt::baseopt.bUseStateNext;
     }
-    if (posix_captures) {
+    if (posix_semantics) {
+        posix_syntax = true;
+    }
+    if (posix_syntax) {
         tags = true;
     }
     if (!tags)

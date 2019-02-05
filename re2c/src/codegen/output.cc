@@ -319,7 +319,7 @@ Output & Output::wdelay_yymaxfill ()
 Output& Output::wdelay_yymaxnmatch()
 {
     if (block().opts->target == TARGET_CODE
-        && block().opts->posix_captures) {
+        && block().opts->posix_syntax) {
         block().fragments.push_back (new OutputFragment (OutputFragment::MAXNMATCH, 0));
     }
     return *this;

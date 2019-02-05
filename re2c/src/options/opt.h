@@ -108,7 +108,8 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (bool, tags, false) \
     MUTOPT (std::string, tags_prefix, "yyt") \
     MUTOPT (std::string, tags_expression, "@@") \
-    MUTOPT (bool, posix_captures, false) \
+    MUTOPT (bool, posix_syntax, false) \
+    MUTOPT (bool, posix_semantics, false) \
     /* code generation */ \
     MUTOPT (bool, sFlag, false) \
     MUTOPT (bool, bFlag, false) \

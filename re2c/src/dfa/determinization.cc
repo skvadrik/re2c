@@ -148,7 +148,7 @@ uint32_t init_tag_versions(determ_context_t &ctx)
 // WARNING: this function assumes that kernel items are grouped by rule
 void warn_nondeterministic_tags(const determ_context_t &ctx)
 {
-    if (ctx.dc_opts->posix_captures) return;
+    if (ctx.dc_opts->posix_syntax) return;
 
     Warn &warn = ctx.dc_warn;
     const kernels_t &kernels = ctx.dc_kernels;
