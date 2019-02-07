@@ -11,6 +11,7 @@
 
 
 namespace re2c {
+namespace libre2c {
 
 static void reach_on_symbol(simctx_t &, uint32_t);
 static void closure_leftmost(simctx_t &);
@@ -96,7 +97,7 @@ void closure_leftmost(simctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 x.state = n->tag.out;
-                x.thist = ctx.hist.push(x.thist, ctx.step, n->tag.info);
+                x.thist = ctx.hist.push(x.thist, ctx.step, n->tag.info, x.origin);
                 wl.push_back(x);
                 break;
             case nfa_state_t::RAN:
@@ -110,5 +111,6 @@ void closure_leftmost(simctx_t &ctx)
     }
 }
 
+} // namespace libre2
 } // namespace re2c
 

@@ -1,4 +1,5 @@
 #include <queue>
+#include <stdio.h>
 
 #include "lib/lex.h"
 #include "lib/regex.h"
@@ -11,17 +12,23 @@
 
 
 namespace re2c {
+namespace libre2c {
 
 static void reach_on_symbol(simctx_t &, uint32_t);
 static void closure_posix(simctx_t &);
 static void relax(simctx_t &, const conf_t &, worklist_t &);
-static int32_t precedence(simctx_t &, const conf_t &, const conf_t &, int32_t &, int32_t &);
+static int32_t precedence(simctx_t &ctx, uint32_t xl, uint32_t yl, int32_t &rhox, int32_t &rhoy);
+static int32_t precedence_(simctx_t &ctx, uint32_t xl, uint32_t yl, int32_t &rhox, int32_t &rhoy);
+static uint32_t unwind(history_t &hist, tag_path_t &path, uint32_t hidx, uint32_t step);
+static inline uint32_t get_step(const history_t &hist, uint32_t idx);
+static inline uint32_t get_orig(const history_t &hist, uint32_t idx);
 
 int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch,
     regmatch_t pmatch[], int)
 {
     simctx_t ctx(preg, string);
     const nfa_t *nfa = ctx.nfa;
+    confset_t &state = ctx.state;
 
     const conf_t c0 = {nfa->root, index(nfa, nfa->root), HROOT};
     ctx.reach.push_back(c0);
@@ -33,6 +40,12 @@ int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch,
         reach_on_symbol(ctx, sym);
         ++ctx.step;
         closure_posix(ctx);
+    }
+
+    confiter_t b = state.begin(), e = state.end(), i, j;
+    for (i = b; i != e; ++i) {
+        i->state->clos = NOCLOS;
+        DASSERT(i->state->active == 0);
     }
 
     return finalize(ctx, string, nmatch, pmatch);
@@ -48,6 +61,10 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
     reach.clear();
     for (i = b; i != e; ++i) {
         nfa_state_t *s = i->state;
+
+        s->clos = NOCLOS;
+        DASSERT(s->active == 0);
+
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
@@ -62,7 +79,6 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
 
 void closure_posix(simctx_t &ctx)
 {
-    const nfa_t *nfa = ctx.nfa;
     const confset_t &reach = ctx.reach;
     confset_t &state = ctx.state;
 
@@ -92,7 +108,7 @@ void closure_posix(simctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 x.state = q->tag.out;
-                x.thist = ctx.hist.push(x.thist, ctx.step, q->tag.info);
+                x.thist = ctx.hist.push(x.thist, ctx.step, q->tag.info, x.origin);
                 relax(ctx, x, wl);
                 break;
             case nfa_state_t::FIN:
@@ -104,33 +120,6 @@ void closure_posix(simctx_t &ctx)
                 break;
         }
     }
-
-    confiter_t b = state.begin(), e = state.end(), i, j;
-
-    for (i = b; i != e; ++i) {
-        i->state->clos = NOCLOS;
-        DASSERT(i->state->active == 0);
-    }
-
-    // drop "inner" states (non-final without outgoing non-epsilon transitions)
-    e = std::partition(b, e, ran_or_fin_t());
-    size_t n = static_cast<size_t>(e - b);
-    state.resize(n);
-
-    int32_t *prec = ctx.prec_next;
-    const size_t nstates = nfa->size;
-    for (i = b; i != e; ++i) {
-        uint32_t ix = index(nfa, i->state);
-        for (j = i + 1; j != e; ++j) {
-            uint32_t jx = index(nfa, j->state);
-            int32_t rho1, rho2, l;
-            l = precedence(ctx, *i, *j, rho1, rho2);
-            prec[ix * nstates + jx] = pack(rho1, l);
-            prec[jx * nstates + ix] = pack(rho2, -l);
-        }
-        prec[ix * nstates + ix] = 0;
-    }
-    std::swap(ctx.prec, ctx.prec_next);
 }
 
 void relax(simctx_t &ctx, const conf_t &c, worklist_t &wl)
@@ -156,7 +145,7 @@ void relax(simctx_t &ctx, const conf_t &c, worklist_t &wl)
     }
 
     // join point; compare the new path and the old path
-    else if (precedence(ctx, c, state[idx], h1, h2) < 0) {
+    else if (precedence(ctx, c.thist, state[idx].thist, h1, h2) < 0) {
         state[idx] = c;
     }
 
@@ -171,90 +160,161 @@ void relax(simctx_t &ctx, const conf_t &c, worklist_t &wl)
     }
 }
 
-int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
-    , int32_t &rhox, int32_t &rhoy)
+int32_t precedence(simctx_t &ctx, uint32_t idx1, uint32_t idx2
+    , int32_t &prec1, int32_t &prec2)
 {
-    const size_t nstates = ctx.nfa->size;
-    const std::vector<Tag> &tags = ctx.nfa->tags;
-    const uint32_t xl = x.thist, yl = y.thist;
-    const uint32_t xo = x.origin, yo = y.origin;
+    int32_t prec = 0;
 
-    if (xl == yl && xo == yo) {
-        rhox = rhoy = MAX_RHO;
+    // use the same cache entry for (x, y) and (y, x)
+    uint32_t k1 = idx1, k2 = idx2;
+    bool invert = k2 < k1;
+    if (invert) std::swap(k1, k2);
+    const uint64_t key = (static_cast<uint64_t>(k1) << 32) | k2;
+
+    cache_t::const_iterator i = ctx.cache.find(key);
+    if (i != ctx.cache.end()) {
+        // use previously computed precedence values from cache
+        const cache_entry_t &val = i->second;
+        prec1 = val.prec1;
+        prec2 = val.prec2;
+        prec = val.prec;
+        if (invert) {
+            std::swap(prec1, prec2);
+            prec = -prec;
+        }
+    }
+    else {
+        // compute precedence values and put them into cache
+        prec = precedence_(ctx, idx1, idx2, prec1, prec2);
+        cache_entry_t val = {prec1, prec2, prec};
+        if (invert) {
+            std::swap(val.prec1, val.prec2);
+            val.prec = -val.prec;
+        }
+        ctx.cache.insert(std::make_pair(key, val));
+    }
+
+    return prec;
+}
+
+int32_t precedence_(simctx_t &ctx, uint32_t idx1, uint32_t idx2
+    , int32_t &prec1, int32_t &prec2)
+{
+    if (idx1 == idx2) {
+        prec1 = prec2 = MAX_RHO;
         return 0;
     }
 
+    const std::vector<Tag> &tags = ctx.nfa->tags;
     history_t &hist = ctx.hist;
-    tag_path_t &p1 = hist.path1, &p2 = hist.path2;
-    hist.reconstruct(p1, xl, ctx.step);
-    hist.reconstruct(p2, yl, ctx.step);
-    tag_path_t::const_reverse_iterator
-        i1 = p1.rbegin(), e1 = p1.rend(), j1 = i1, g1,
-        i2 = p2.rbegin(), e2 = p2.rend(), j2 = i2, g2;
+    tag_path_t &path1 = hist.path1, &path2 = hist.path2;
 
-    const bool fork_frame = xo == yo;
+    int32_t prec = 0;
+
+    const uint32_t orig1 = get_orig(hist, idx1);
+    const uint32_t orig2 = get_orig(hist, idx2);
+
+    const uint32_t step1 = get_step(hist, idx1);
+    const uint32_t step2 = get_step(hist, idx2);
+    const uint32_t step = std::max(step1, step2);
+
+    const size_t oldsize1 = path1.size();
+    const size_t oldsize2 = path2.size();
+
+    // unwind histories one step back (paths may grow and be reallocated)
+    idx1 = unwind(hist, path1, idx1, step);
+    idx2 = unwind(hist, path2, idx2, step);
+
+    const bool fork_frame = orig1 == orig2 && step1 == step2;
+
+    if (!fork_frame) {
+        // recurse into previous steps (via cache)
+        prec = precedence(ctx, idx1, idx2, prec1, prec2);
+    }
+
+    tag_path_t::const_reverse_iterator
+        s1 = path1.rbegin(),
+        s2 = path2.rbegin(),
+        e1 = path1.rend() - static_cast<ssize_t>(oldsize1),
+        e2 = path2.rend() - static_cast<ssize_t>(oldsize2),
+        i1 = s1, i2 = s2, j1, j2;
 
     // longest precedence
     if (fork_frame) {
         // find fork
-        for (; j1 != e1 && j2 != e2 && *j1 == *j2; ++j1, ++j2);
-        rhox = rhoy = j1 > i1
-            ? tags[(j1 - 1)->idx].height : MAX_RHO;
+        for (; i1 != e1 && i2 != e2 && *i1 == *i2; ++i1, ++i2);
+        prec1 = prec2 = i1 > s1
+            ? tags[(i1 - 1)->idx].height : MAX_RHO;
     }
-    else {
-        // get precedence table and size of the origin state
-        rhox = unpack_longest(ctx.prec[xo * nstates + yo]);
-        rhoy = unpack_longest(ctx.prec[yo * nstates + xo]);
+    for (j1 = i1; j1 != e1; ++j1) {
+        prec1 = std::min(prec1, tags[j1->idx].height);
     }
-    for (g1 = j1; g1 != e1; ++g1) {
-        rhox = std::min(rhox, tags[g1->idx].height);
+    for (j2 = i2; j2 != e2; ++j2) {
+        prec2 = std::min(prec2, tags[j2->idx].height);
     }
-    for (g2 = j2; g2 != e2; ++g2) {
-        rhoy = std::min(rhoy, tags[g2->idx].height);
-    }
-    if (rhox > rhoy) return -1;
-    if (rhox < rhoy) return 1;
+    if (prec1 > prec2) { prec = -1; goto end; }
+    if (prec1 < prec2) { prec =  1; goto end; }
 
     // leftmost precedence
     if (fork_frame) {
         // equal => not less
-        if (j1 == e1 && j2 == e2) return 0;
+        if (i1 == e1 && i2 == e2) { prec = 0; goto end; }
 
         // shorter => less
-        if (j1 == e1) return -1;
-        if (j2 == e2) return 1;
+        if (i1 == e1) { prec = -1; goto end; }
+        if (i2 == e2) { prec =  1; goto end; }
 
-        const uint32_t idx1 = j1->idx, idx2 = j2->idx;
-        const bool neg1 = j1->neg, neg2 = j2->neg;
+        const uint32_t idx1 = i1->idx, idx2 = i2->idx;
+        const bool neg1 = i1->neg, neg2 = i2->neg;
 
         // can't be both closing
         DASSERT(!(idx1 % 2 == 1 && idx2 % 2 == 1));
 
         // closing vs opening: closing wins
-        if (idx1 % 2 == 1) return -1;
-        if (idx2 % 2 == 1) return 1;
+        if (idx1 % 2 == 1) { prec = -1; goto end; }
+        if (idx2 % 2 == 1) { prec =  1; goto end; }
 
         // can't be both negative
         DASSERT(!(neg1 && neg2));
 
         // positive vs negative: positive wins
-        if (neg1) return 1;
-        if (neg2) return -1;
+        if (neg1) { prec =  1; goto end; }
+        if (neg2) { prec = -1; goto end; }
 
-        // positive vs positive: smaller wins
-        // (this case is only possible because multiple
-        // top-level RE don't have proper negative tags)
-        if (idx1 < idx2) return -1;
-        if (idx1 > idx2) return 1;
-    }
-    else {
-        return unpack_leftmost(ctx.prec[xo * nstates + yo]);
+        DASSERT(false);
     }
 
-    // unreachable
-    DASSERT(false);
-    return 0;
+end:
+    path1.resize(oldsize1);
+    path2.resize(oldsize2);
+    return prec;
 }
 
+uint32_t get_step(const history_t &hist, uint32_t idx)
+{
+    return idx == HROOT ? 0 : hist.nodes[idx].step;
+}
+
+uint32_t get_orig(const history_t &hist, uint32_t idx)
+{
+    return idx == HROOT ? 0 : hist.nodes[idx].orig;
+}
+
+uint32_t unwind(history_t &hist, tag_path_t &path, uint32_t idx, uint32_t step)
+{
+    uint32_t new_idx = HROOT;
+    for (uint32_t i = idx; i != HROOT; ) {
+        const history_t::node_t &n = hist.nodes[i];
+        if (n.step < step) {
+            new_idx = i;
+            break;
+        }
+        path.push_back(n.info);
+        i = n.pred;
+    }
+    return new_idx;
+}
+
+} // namespace libre2c
 } // namespace re2c
 

@@ -9,6 +9,7 @@
 
 
 using namespace re2c;
+using namespace re2c::libre2c;
 
 int regexec(const regex_t *preg, const char *string, size_t nmatch,
     regmatch_t pmatch[], int eflags)
@@ -27,6 +28,7 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
 }
 
 namespace re2c {
+namespace libre2c {
 
 int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     regmatch_t pmatch[])
@@ -81,6 +83,7 @@ simctx_t::simctx_t(const regex_t *preg, const char *string)
     , rule(Rule::NONE)
     , cursor(string)
     , marker(string)
+    , cache()
 {
     state.reserve(nfa->size);
     reach.reserve(nfa->size);
@@ -96,4 +99,5 @@ history_t::history_t(size_t nstates, size_t ntags)
     path2.reserve(ntags);
 }
 
+} // namespace libre2c
 } // namespace re2c

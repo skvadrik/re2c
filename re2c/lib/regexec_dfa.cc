@@ -8,6 +8,7 @@
 
 
 namespace re2c {
+namespace libre2c {
 
 static void apply_regops(regoff_t *regs, const tcmd_t *cmd, regoff_t pos)
 {
@@ -97,5 +98,6 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
     return result;
 }
 
+} // namespace libre2c
 } // namespace re2c
 
