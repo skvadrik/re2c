@@ -408,8 +408,8 @@ bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
 
         for (size_t t = 0; t < ntag; ++t) {
             // see note [mapping ignores items with lookahead tags]
-            if (ctx.dc_taghistory.last(xl, t) != TAGVER_ZERO
-                && !history(tags[t])) continue;
+            if (!history(tags[t])
+                && ctx.dc_taghistory.last(xl, t) != TAGVER_ZERO) continue;
 
             const tagver_t xv = xvs[t], yv = yvs[t];
             tagver_t &xv0 = y2x[yv], &yv0 = x2y[xv];

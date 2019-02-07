@@ -180,10 +180,8 @@ void generate_versions(determ_context_t &ctx)
         const tagver_t *vs = tvtbl[c->tvers];
         for (size_t t = 0; t < ntag; ++t) {
             const Tag &tag = tags[t];
-            const tagver_t
-                h0 = thist.last(h, t),
-                l0 = thist.last(l, t);
 
+            const tagver_t h0 = thist.last(h, t);
             if (h0 == TAGVER_ZERO) continue;
 
             const tagver_t v = history(tag) ? vs[t] : TAGVER_ZERO;
@@ -193,7 +191,7 @@ void generate_versions(determ_context_t &ctx)
                 m = newvers.insert(std::make_pair(x, n)).first->second;
             if (n == m) ++maxver;
 
-            if (!fixed(tag) && (l0 == TAGVER_ZERO || history(tag))) {
+            if (!fixed(tag) && (history(tag) || thist.last(l, t) == TAGVER_ZERO)) {
                 newacts.insert(std::make_pair(x, m));
             }
         }
