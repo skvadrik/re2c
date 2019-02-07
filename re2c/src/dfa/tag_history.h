@@ -71,12 +71,14 @@ tagver_t tag_history_t::last(hidx_t i, size_t t) const
 
 int32_t tag_history_t::compare_reversed(hidx_t x, hidx_t y, size_t t) const
 {
+    if (x == y) return 0;
+
     // compare in reverse, from tail to head: direction makes
     // no difference when comparing for exact coincidence
     for (;;) {
         for (; x != HROOT && tag(x) != t; x = pred(x));
         for (; y != HROOT && tag(y) != t; y = pred(y));
-        if (x == HROOT && y == HROOT) return 0;
+        if (x == y) return 0;
         if (x == HROOT) return -1;
         if (y == HROOT) return 1;
         if (elem(x) > elem(y)) return -1;
