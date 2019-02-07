@@ -34,16 +34,57 @@ struct tag_history_t
     tag_path_t path1;
     tag_path_t path2;
 
-    tag_history_t(): nodes(), path1(), path2() {}
-    hidx_t pred(hidx_t i) const { return nodes[i].pred; }
-    tag_info_t info(hidx_t i) const { return nodes[i].info; }
-    tagver_t elem(hidx_t i) const { return nodes[i].info.neg ? TAGVER_BOTTOM : TAGVER_CURSOR; }
-    size_t tag(hidx_t i) const { return nodes[i].info.idx; }
-    hidx_t push(hidx_t i, tag_info_t info);
-    tagver_t last(hidx_t i, size_t t) const;
-    int32_t compare_reversed(hidx_t x, hidx_t y, size_t t) const;
+    inline explicit tag_history_t(size_t ntags);
+    inline hidx_t pred(hidx_t i) const { return nodes[i].pred; }
+    inline tag_info_t info(hidx_t i) const { return nodes[i].info; }
+    inline tagver_t elem(hidx_t i) const { return nodes[i].info.neg ? TAGVER_BOTTOM : TAGVER_CURSOR; }
+    inline size_t tag(hidx_t i) const { return nodes[i].info.idx; }
+    inline hidx_t push(hidx_t i, tag_info_t info);
+    inline tagver_t last(hidx_t i, size_t t) const;
+    inline int32_t compare_reversed(hidx_t x, hidx_t y, size_t t) const;
     FORBID_COPY(tag_history_t);
 };
+
+tag_history_t::tag_history_t(size_t ntags)
+    : nodes()
+    , path1()
+    , path2()
+{
+    path1.reserve(ntags);
+    path1.reserve(ntags);
+}
+
+hidx_t tag_history_t::push(hidx_t idx, tag_info_t info)
+{
+    node_t x = {idx, info};
+    nodes.push_back(x);
+    return static_cast<hidx_t>(nodes.size() - 1);
+}
+
+tagver_t tag_history_t::last(hidx_t i, size_t t) const
+{
+    for (; i != HROOT; i = pred(i)) {
+        if (tag(i) == t) return elem(i);
+    }
+    return TAGVER_ZERO;
+}
+
+int32_t tag_history_t::compare_reversed(hidx_t x, hidx_t y, size_t t) const
+{
+    // compare in reverse, from tail to head: direction makes
+    // no difference when comparing for exact coincidence
+    for (;;) {
+        for (; x != HROOT && tag(x) != t; x = pred(x));
+        for (; y != HROOT && tag(y) != t; y = pred(y));
+        if (x == HROOT && y == HROOT) return 0;
+        if (x == HROOT) return -1;
+        if (y == HROOT) return 1;
+        if (elem(x) > elem(y)) return -1;
+        if (elem(x) < elem(y)) return 1;
+        x = pred(x);
+        y = pred(y);
+    }
+}
 
 } // namespace re2c
 

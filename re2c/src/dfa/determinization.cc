@@ -213,7 +213,7 @@ determ_context_t::determ_context_t(const opt_t *opts, Warn &warn
     , dc_closure()
     , dc_prectbl(NULL)
     , dc_tagvertbl(nfa.tags.size())
-    , dc_taghistory()
+    , dc_taghistory(nfa.tags.size())
     , dc_kernels()
     , dc_buffers(dc_allocator)
     , dc_newvers(newver_cmp_t(dc_taghistory))

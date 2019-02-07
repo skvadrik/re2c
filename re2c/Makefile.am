@@ -118,7 +118,6 @@ re2c_SRC = \
 	src/dfa/find_state.cc \
 	src/dfa/minimization.cc \
 	src/dfa/posix_precedence.cc \
-	src/dfa/tag_history.cc \
 	src/dfa/tagver_table.cc \
 	src/dfa/tcmd.cc \
 	src/encoding/ebcdic/ebcdic_regexp.cc \
