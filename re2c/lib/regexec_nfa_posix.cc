@@ -14,6 +14,33 @@
 namespace re2c {
 namespace libre2c {
 
+/* note [lazy computation and caching of precedence]
+ *
+ * Eagerly computing precedence values on each step for each pair of closure
+ * states is a waste of time: most of these values are not needed, because
+ * RE may be unambigous, or the given input string may be unambigous, or even
+ * if there is ambiguity, it may take only a few comparisons to resolve. All
+ * the rest is wasted effort.
+ *
+ * We can avoid it by delaying precedence computation until necessary, and
+ * then unwinding all the steps backwards, computing precedence for each step
+ * and caching the computed values (so that the same pair of histories is not
+ * compared twice). It is still the same incremental comparison as with
+ * precedence matrices: we compare step by step, going from the fork frame to
+ * the join frame. The result of comparison on each step is folded to a triple
+ * of numbers and recorded in cache. It is important that we do record each
+ * step, not just the final step, because the next pair of ambiguous histories
+ * may unwind to the same pair of prefixes that was compared before.
+ *
+ * For all this to work, it is necessary that we are able to store all history
+ * until the end, because at any step we might need to unwind an arbitrary
+ * number of steps back. We also need to address individual subhistories
+ * efficiently in order to use them as keys in the cache. All this is achieved
+ * by storing history in the form of a trie and addressing individual
+ * histories by indices in that trie. We also use trie to compute the final
+ * tag values (instead of storing tags in registers at each step).
+ */
+
 static void reach_on_symbol(simctx_t &, uint32_t);
 static void closure_posix(simctx_t &);
 static void relax(simctx_t &, const conf_t &, worklist_t &);
