@@ -77,7 +77,7 @@ namespace re2c
 
 struct kernel_eq_t
 {
-    const determ_context_t &ctx;
+    determ_context_t &ctx;
     bool operator()(const kernel_t *, const kernel_t *) const;
 };
 
@@ -94,7 +94,9 @@ static kernel_t *make_kernel_copy(const kernel_t *, allocator_t &);
 static void copy_to_buffer_kernel(const closure_t &, const prectable_t *, kernel_t *);
 static void reserve_buffers(determ_context_t &);
 static uint32_t hash_kernel(const kernel_t *kernel);
-static bool equal_lookahead_tags(const kernel_t *, const kernel_t *, const determ_context_t &);
+static bool equal_lookahead_tags(determ_context_t &, const kernel_t *, const kernel_t *);
+static void group_by_tag(tag_path_t &p);
+static void unwind(const tag_history_t &hist, tag_path_t &path, hidx_t idx);
 static bool do_find_state(determ_context_t &ctx);
 static tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin);
 
@@ -337,7 +339,8 @@ void reserve_buffers(determ_context_t &ctx)
 }
 
 
-bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y, const determ_context_t &ctx)
+bool equal_lookahead_tags(determ_context_t &ctx
+    , const kernel_t *x, const kernel_t *y)
 {
     DASSERT(x->size == y->size);
 
@@ -345,24 +348,55 @@ bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y, const determ_con
         return true;
     }
 
-    const tag_history_t &thist = ctx.dc_taghistory;
-    const tagver_table_t &tvtbl = ctx.dc_tagvertbl;
-    const std::vector<Tag> &tags = ctx.dc_dfa.tags;
+    tag_history_t &thist = ctx.dc_taghistory;
+    tag_path_t &p1 = thist.path1, &p2 = thist.path2;
 
     for (size_t i = 0; i < x->size; ++i) {
         const hidx_t xl = x->tlook[i], yl = y->tlook[i];
-        for (size_t t = 0; t < tvtbl.ntags; ++t) {
-            if (history(tags[t])) {
-                // compare full tag sequences
-                if (thist.compare_reversed(xl, yl, t) != 0) return false;
-            } else {
-                // compare only the last pair of tags
-                if (thist.last(xl, t) != thist.last(yl, t)) return false;
-            }
-        }
+
+        if (xl == yl) continue;
+
+        unwind(thist, p1, xl);
+        unwind(thist, p2, yl);
+
+        if (p1.size() != p2.size()) return false;
+
+        group_by_tag(p1);
+        group_by_tag(p2);
+
+        if (p1 != p2) return false;
     }
 
     return true;
+}
+
+
+void group_by_tag(tag_path_t &p)
+{
+    // a variant of bubble sort
+    for (size_t n = p.size(); n > 1; ) {
+        size_t m = 0;
+        for (size_t i = 1; i < n; ++i) {
+            if (p[i - 1].idx > p[i].idx) {
+                std::swap(p[i - 1], p[i]);
+                m = i;
+            }
+        }
+        n = m;
+    }
+}
+
+
+void unwind(const tag_history_t &hist, tag_path_t &path, hidx_t idx)
+{
+    // Simple tags need only the last value, so in principle we could
+    // increase the chance of mapping by recording only the last value.
+    // But this would complicate unwind procedure quite a bit, and the
+    // cases when it makes any difference are rare.
+    path.clear();
+    for (; idx != HROOT; idx = hist.pred(idx)) {
+        path.push_back(hist.info(idx));
+    }
 }
 
 
@@ -375,7 +409,7 @@ bool kernel_eq_t::operator()(const kernel_t *x, const kernel_t *y) const
         && memcmp(x->state, y->state, n * sizeof(void*)) == 0
         && memcmp(x->tvers, y->tvers, n * sizeof(uint32_t)) == 0
         && (!x->prectbl || memcmp(x->prectbl, y->prectbl, n * n * sizeof(prectable_t)) == 0)
-        && equal_lookahead_tags(x, y, ctx);
+        && equal_lookahead_tags(ctx, x, y);
 }
 
 
@@ -387,7 +421,7 @@ bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
     const bool compatible = n == y->size
         && memcmp(x->state, y->state, n * sizeof(void*)) == 0
         && (!x->prectbl || memcmp(x->prectbl, y->prectbl, n * n * sizeof(prectable_t)) == 0)
-        && equal_lookahead_tags(x, y, ctx);
+        && equal_lookahead_tags(ctx, x, y);
     if (!compatible) return false;
 
     const std::vector<Tag> &tags = ctx.dc_dfa.tags;
