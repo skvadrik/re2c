@@ -373,16 +373,18 @@ bool equal_lookahead_tags(determ_context_t &ctx
 
 void group_by_tag(tag_path_t &p)
 {
-    // a variant of bubble sort
-    for (size_t n = p.size(); n > 1; ) {
-        size_t m = 0;
-        for (size_t i = 1; i < n; ++i) {
-            if (p[i - 1].idx > p[i].idx) {
-                std::swap(p[i - 1], p[i]);
-                m = i;
-            }
+    // insertion sort (must be careful to preserve order of elements
+    // with the same tag, but different negative bit)
+    size_t i, j, n = p.size();
+
+    for (i = 1; i < n; ++i) {
+        const tag_info_t info = p[i];
+        const size_t tag = info.idx;
+
+        for (j = i; j > 0 && p[j - 1].idx > tag; --j) {
+            p[j] = p[j - 1];
         }
-        n = m;
+        p[j] = info;
     }
 }
 
