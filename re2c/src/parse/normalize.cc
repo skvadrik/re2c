@@ -8,29 +8,25 @@ namespace re2c {
 
 void normalize_ast(specs_t &specs)
 {
-    specs_t::iterator i, b = specs.begin(), e = specs.end();
+    specs_t::iterator i, j, b, e;
 
     // merge <*> rules and <!*> setup to all conditions except "0"
     // star rules must have lower priority than normal rules
-    for (i = b; i != e && i->name != "*"; ++i);
+    for (i = specs.begin(), e = specs.end(); i != e && i->name != "*"; ++i);
     if (i != e) {
-        const specs_t::iterator star = i;
+        for (j = specs.begin(); j != e; ++j) {
+            if (j == i || j->name == "0") continue;
 
-        for (i = b; i != e; ++i) {
-            if (i == star || i->name == "0") continue;
-
-            i->rules.insert(i->rules.end(), star->rules.begin(), star->rules.end());
-            i->defs.insert(i->defs.end(), star->defs.begin(), star->defs.end());
-            i->eofs.insert(i->eofs.end(), star->eofs.begin(), star->eofs.end());
-            i->setup.insert(i->setup.end(), star->setup.begin(), star->setup.end());
+            j->rules.insert(j->rules.end(), i->rules.begin(), i->rules.end());
+            j->defs.insert(j->defs.end(), i->defs.begin(), i->defs.end());
+            j->eofs.insert(j->eofs.end(), i->eofs.begin(), i->eofs.end());
+            j->setup.insert(j->setup.end(), i->setup.begin(), i->setup.end());
         }
-
-        specs.erase(star);
-        e = specs.end();
+        specs.erase(i);
     }
 
     // merge default rule with the lowest priority
-    for (i = b; i != e; ++i) {
+    for (i = specs.begin(), e = specs.end(); i != e; ++i) {
         if (!i->defs.empty()) {
             const Code *c = i->defs[0];
             const AST *r = ast_default(c->fline, 0);
@@ -39,8 +35,8 @@ void normalize_ast(specs_t &specs)
     }
 
     // "0" condition must be the first one
-    for (i = b; i != e && i->name != "0"; ++i);
-    if (i != e && i != b) {
+    for (i = specs.begin(), e = specs.end(); i != e && i->name != "0"; ++i);
+    if (i != specs.end() && i != specs.begin()) {
         const spec_t zero = *i;
         specs.erase(i);
         specs.insert(specs.begin(), zero);
