@@ -131,6 +131,11 @@ struct determ_context_t
     std::stack<nfa_state_t*> dc_stack_linear;
     std::stack<clos_t>       dc_stack_dfs;
 
+    tag_path_t               dc_path1;      // buffer 1 for tag history
+    tag_path_t               dc_path2;      // buffer 2 for tag history
+    tag_path_t               dc_path3;      // buffer 3 for tag history
+    std::vector<uint32_t>    dc_tagcount;   // buffer for counting sort on tag history
+
     // debug
     dump_dfa_t               dc_dump;
     closure_stats_t          dc_clstats;

@@ -95,7 +95,7 @@ static void copy_to_buffer_kernel(const closure_t &, const prectable_t *, kernel
 static void reserve_buffers(determ_context_t &);
 static uint32_t hash_kernel(const kernel_t *kernel);
 static bool equal_lookahead_tags(determ_context_t &, const kernel_t *, const kernel_t *);
-static void group_by_tag(tag_path_t &p);
+static void group_by_tag(tag_path_t &path, tag_path_t &buf, std::vector<uint32_t> &count);
 static void unwind(const tag_history_t &hist, tag_path_t &path, hidx_t idx);
 static bool do_find_state(determ_context_t &ctx);
 static tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin);
@@ -349,7 +349,8 @@ bool equal_lookahead_tags(determ_context_t &ctx
     }
 
     tag_history_t &thist = ctx.dc_taghistory;
-    tag_path_t &p1 = thist.path1, &p2 = thist.path2;
+    tag_path_t &p1 = ctx.dc_path1, &p2 = ctx.dc_path2, &p3 = ctx.dc_path3;
+    std::vector<uint32_t> &count = ctx.dc_tagcount;
 
     for (size_t i = 0; i < x->size; ++i) {
         const hidx_t xl = x->tlook[i], yl = y->tlook[i];
@@ -361,8 +362,8 @@ bool equal_lookahead_tags(determ_context_t &ctx
 
         if (p1.size() != p2.size()) return false;
 
-        group_by_tag(p1);
-        group_by_tag(p2);
+        group_by_tag(p1, p3, count);
+        group_by_tag(p2, p3, count);
 
         if (p1 != p2) return false;
     }
@@ -371,21 +372,28 @@ bool equal_lookahead_tags(determ_context_t &ctx
 }
 
 
-void group_by_tag(tag_path_t &p)
+void group_by_tag(tag_path_t &path, tag_path_t &buf, std::vector<uint32_t> &count)
 {
-    // insertion sort (must be careful to preserve order of elements
-    // with the same tag, but different negative bit)
-    size_t i, j, n = p.size();
+    // counting sort with tag index as key
+    // must preserve relative order of elements with the same tag
 
-    for (i = 1; i < n; ++i) {
-        const tag_info_t info = p[i];
-        const size_t tag = info.idx;
+    const size_t clen = count.size(), plen = path.size();
+    std::fill(count.begin(), count.end(), 0);
+    buf.resize(plen);
 
-        for (j = i; j > 0 && p[j - 1].idx > tag; --j) {
-            p[j] = p[j - 1];
-        }
-        p[j] = info;
+    for (size_t i = 0; i < plen; ++i) {
+        ++count[path[i].idx];
     }
+
+    for (size_t i = 1; i < clen; ++i) {
+        count[i] += count[i - 1];
+    }
+
+    for (size_t i = plen; i --> 0; ) {
+        buf[--count[path[i].idx]] = path[i];
+    }
+
+    path.swap(buf);
 }
 
 

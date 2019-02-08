@@ -24,7 +24,7 @@ int32_t precedence(determ_context_t &ctx,
     }
 
     tag_history_t &thist = ctx.dc_taghistory;
-    tag_path_t &p1 = thist.path1, &p2 = thist.path2;
+    tag_path_t &p1 = ctx.dc_path1, &p2 = ctx.dc_path2;
     reconstruct_history(thist, p1, xl);
     reconstruct_history(thist, p2, yl);
     tag_path_t::const_reverse_iterator

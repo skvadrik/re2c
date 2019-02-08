@@ -213,16 +213,26 @@ determ_context_t::determ_context_t(const opt_t *opts, Warn &warn
     , dc_closure()
     , dc_prectbl(NULL)
     , dc_tagvertbl(nfa.tags.size())
-    , dc_taghistory(nfa.tags.size())
+    , dc_taghistory()
     , dc_kernels()
     , dc_buffers(dc_allocator)
     , dc_newvers(newver_cmp_t(dc_taghistory))
     , dc_stack_topsort()
     , dc_stack_linear()
     , dc_stack_dfs()
+    , dc_path1()
+    , dc_path2()
+    , dc_path3()
+    , dc_tagcount()
     , dc_dump(opts)
     , dc_clstats()
-{}
+{
+    const size_t ntags = nfa.tags.size();
+    dc_path1.reserve(ntags);
+    dc_path2.reserve(ntags);
+    dc_path3.reserve(ntags);
+    dc_tagcount.resize(ntags);
+}
 
 
 dfa_t::~dfa_t()

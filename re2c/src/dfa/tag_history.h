@@ -30,11 +30,7 @@ struct tag_history_t
     };
     std::vector<node_t> nodes;
 
-    // reconstruct paths for comparison
-    tag_path_t path1;
-    tag_path_t path2;
-
-    inline explicit tag_history_t(size_t ntags);
+    inline tag_history_t(): nodes() {};
     inline hidx_t pred(hidx_t i) const { return nodes[i].pred; }
     inline tag_info_t info(hidx_t i) const { return nodes[i].info; }
     inline tagver_t elem(hidx_t i) const { return nodes[i].info.neg ? TAGVER_BOTTOM : TAGVER_CURSOR; }
@@ -44,15 +40,6 @@ struct tag_history_t
     inline int32_t compare_reversed(hidx_t x, hidx_t y, size_t t) const;
     FORBID_COPY(tag_history_t);
 };
-
-tag_history_t::tag_history_t(size_t ntags)
-    : nodes()
-    , path1()
-    , path2()
-{
-    path1.reserve(ntags);
-    path2.reserve(ntags);
-}
 
 hidx_t tag_history_t::push(hidx_t idx, tag_info_t info)
 {
