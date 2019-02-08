@@ -51,7 +51,7 @@ tag_history_t::tag_history_t(size_t ntags)
     , path2()
 {
     path1.reserve(ntags);
-    path1.reserve(ntags);
+    path2.reserve(ntags);
 }
 
 hidx_t tag_history_t::push(hidx_t idx, tag_info_t info)
