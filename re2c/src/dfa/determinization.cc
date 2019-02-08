@@ -22,6 +22,7 @@
 namespace re2c
 {
 
+static void clear_caches(determ_context_t &ctx);
 static void reach_on_symbol(determ_context_t &);
 static nfa_state_t *transition(nfa_state_t *, uint32_t);
 static uint32_t init_tag_versions(determ_context_t &);
@@ -58,9 +59,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond, Warn 
     // build tagged epsilon-closure of all reachable NFA states,
     // then find identical or mappable DFA state or add a new one
     for (uint32_t i = 0; i < ctx.dc_kernels.size(); ++i) {
-
         ctx.dc_origin = i;
-        ctx.dc_newvers.clear();
+        clear_caches(ctx);
 
         for (uint32_t c = 0; c < nchars; ++c) {
             ctx.dc_symbol = c;
@@ -72,6 +72,17 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond, Warn 
     }
 
     warn_nondeterministic_tags(ctx);
+}
+
+
+void clear_caches(determ_context_t &ctx)
+{
+    ctx.dc_newvers.clear();
+
+    const size_t ntags = ctx.dc_nfa.tags.size();
+    for (size_t t = 0; t < ntags; ++t) {
+        ctx.dc_hc_caches[t].clear();
+    }
 }
 
 
@@ -216,10 +227,11 @@ determ_context_t::determ_context_t(const opt_t *opts, Warn &warn
     , dc_taghistory()
     , dc_kernels()
     , dc_buffers(dc_allocator)
-    , dc_newvers(newver_cmp_t(dc_taghistory))
     , dc_stack_topsort()
     , dc_stack_linear()
     , dc_stack_dfs()
+    , dc_hc_caches()
+    , dc_newvers(newver_cmp_t(dc_taghistory, dc_hc_caches))
     , dc_path1()
     , dc_path2()
     , dc_path3()
@@ -228,6 +240,7 @@ determ_context_t::determ_context_t(const opt_t *opts, Warn &warn
     , dc_clstats()
 {
     const size_t ntags = nfa.tags.size();
+    dc_hc_caches.resize(ntags);
     dc_path1.reserve(ntags);
     dc_path2.reserve(ntags);
     dc_path3.reserve(ntags);
@@ -247,7 +260,7 @@ dfa_t::~dfa_t()
 }
 
 
-bool newver_cmp_t::operator()(const newver_t &x, const newver_t &y) const
+bool newver_cmp_t::operator()(const newver_t &x, const newver_t &y)
 {
     if (x.tag < y.tag) return true;
     if (x.tag > y.tag) return false;
@@ -255,7 +268,28 @@ bool newver_cmp_t::operator()(const newver_t &x, const newver_t &y) const
     if (x.base < y.base) return true;
     if (x.base > y.base) return false;
 
-    return history.compare_reversed(x.history, y.history, x.tag) < 0;
+    hidx_t xh = x.history, yh = y.history;
+    if (xh == yh) return false;
+
+    hc_cache_t &cache = caches[x.tag];
+    int32_t cmp;
+
+    bool invert = xh > yh;
+    if (invert) std::swap(xh, yh);
+
+    const uint64_t k = (static_cast<uint64_t>(xh) << 32) | yh;
+
+    hc_cache_t::const_iterator i = cache.find(k);
+    if (i != cache.end()) {
+        cmp = i->second;
+    }
+    else {
+        cmp = history.compare_reversed(xh, yh, x.tag);
+        cache.insert(std::make_pair(k, cmp));
+    }
+
+    if (invert) cmp = -cmp;
+    return cmp < 0;
 }
 
 } // namespace re2c

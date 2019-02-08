@@ -165,7 +165,7 @@ void generate_versions(determ_context_t &ctx)
     newvers_t &newvers = ctx.dc_newvers;
 
     clositer_t b = clos.begin(), e = clos.end(), c;
-    newver_cmp_t cmp(thist);
+    newver_cmp_t cmp(thist, ctx.dc_hc_caches);
     newvers_t newacts(cmp);
     tcmd_t *cmd = NULL;
 

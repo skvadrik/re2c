@@ -58,12 +58,15 @@ struct newver_t
 };
 
 
+typedef std::map<uint64_t, int32_t> hc_cache_t; // 'hc' for history comparison
+typedef std::vector<hc_cache_t> hc_caches_t;
 struct newver_cmp_t
 {
     tag_history_t &history;
+    hc_caches_t &caches;
 
-    explicit newver_cmp_t(tag_history_t &h) : history(h) {}
-    bool operator()(const newver_t &, const newver_t &) const;
+    newver_cmp_t(tag_history_t &h, hc_caches_t &c): history(h), caches(c) {}
+    bool operator()(const newver_t &, const newver_t &);
 };
 
 
@@ -126,11 +129,11 @@ struct determ_context_t
     tag_history_t            dc_taghistory; // prefix trie of tag histories
     kernels_t                dc_kernels;    // TDFA states under construction
     kernel_buffers_t         dc_buffers;
-    newvers_t                dc_newvers;
     std::stack<nfa_state_t*> dc_stack_topsort;
     std::stack<nfa_state_t*> dc_stack_linear;
     std::stack<clos_t>       dc_stack_dfs;
-
+    hc_caches_t              dc_hc_caches;  // per-tag cache of history comparisons
+    newvers_t                dc_newvers;    // map of triples (tag, version, history) to new version
     tag_path_t               dc_path1;      // buffer 1 for tag history
     tag_path_t               dc_path2;      // buffer 2 for tag history
     tag_path_t               dc_path3;      // buffer 3 for tag history
