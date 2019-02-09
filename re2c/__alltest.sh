@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # normal tests
-for d in __build{,_asan,_ubsan,_lsan,_clang,_clang_msan,_m32} ; do
+for d in __build{,_asan,_ubsan,_lsan,_clang,_clang_msan,_m32,_glibcxx_debug} ; do
     ./${d}.sh \
         && cd ${d} \
         && make check VERBOSE=1 \
