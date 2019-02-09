@@ -143,12 +143,11 @@ inline cmp_gor1_t::cmp_gor1_t(determ_context_t &c) : ctx(c) {}
 
 inline bool cmp_gor1_t::operator()(const clos_t &x, const clos_t &y) const
 {
-    const kernel_t *k = ctx.dc_kernels[ctx.dc_origin];
     const uint32_t xo = x.origin, yo = y.origin;
-
-    DASSERT(xo != yo && x.tlook == HROOT && y.tlook == HROOT);
+    if (xo == yo) return false;
 
     // if longest components differ, leftmost already incorporates that
+    const kernel_t *k = ctx.dc_kernels[ctx.dc_origin];
     return unpack_leftmost(k->prectbl[xo * k->size + yo]) < 0;
 }
 

@@ -66,12 +66,14 @@ uint32_t lookup_t<data_t, hash_t>::size() const
 template<typename data_t, typename hash_t>
 data_t& lookup_t<data_t, hash_t>::operator[](uint32_t idx)
 {
+    DASSERT(idx < elems.size());
     return elems[idx].data;
 }
 
 template<typename data_t, typename hash_t>
 const data_t& lookup_t<data_t, hash_t>::operator[](uint32_t idx) const
 {
+    DASSERT(idx < elems.size());
     return elems[idx].data;
 }
 
