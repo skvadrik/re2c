@@ -1,1 +1,1 @@
-re2c: error: line 3: trailing contexts are not allowed in named definitions
+error12.re:3: error: trailing contexts are not allowed in named definitions

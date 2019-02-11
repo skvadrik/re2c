@@ -24,4 +24,4 @@ yy4:
 }
 #line 3 "layout/empty_code.c.re"
 
-re2c: warning: line 3: control flow in condition 'a' is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+layout/empty_code.c.re:3: warning: control flow in condition 'a' is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

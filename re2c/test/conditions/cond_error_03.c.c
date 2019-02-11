@@ -1,1 +1,1 @@
-re2c: error: line 3: syntax error
+conditions/cond_error_03.c.re:3: error: syntax error

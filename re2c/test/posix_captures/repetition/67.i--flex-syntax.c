@@ -200,4 +200,4 @@ yy22:
 	goto yy7;
 }
 
-re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
+posix_captures/repetition/67.i--flex-syntax.re:6: warning: rule matches empty string [-Wmatch-empty-string]

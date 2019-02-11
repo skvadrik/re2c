@@ -3285,13 +3285,13 @@ yy254:
 	}
 }
 
-re2c: warning: line 4: column 13: escape has no effect: '\.' [-Wuseless-escape]
-re2c: warning: line 4: column 32: escape has no effect: '\.' [-Wuseless-escape]
-re2c: warning: line 11: column 27: escape has no effect: '\[' [-Wuseless-escape]
-re2c: warning: line 12: column 11: escape has no effect: '\[' [-Wuseless-escape]
-re2c: warning: line 55: unreachable rule in condition 'INITIAL' (shadowed by rules at lines 24, 35, 36, 42, 51, 52, 53) [-Wunreachable-rules]
-re2c: warning: line 50: unreachable rule in condition 'ST_OFFSET' (shadowed by rule at line 46) [-Wunreachable-rules]
-re2c: warning: line 50: unreachable rule in condition 'ST_SECTION_VALUE' (shadowed by rule at line 46) [-Wunreachable-rules]
-re2c: warning: line 55: unreachable rule in condition 'ST_VALUE' (shadowed by rules at lines 39, 40, 41, 43, 44, 45, 47, 50, 54) [-Wunreachable-rules]
-re2c: warning: line 55: unreachable rule in condition 'ST_DOUBLE_QUOTES' (shadowed by rules at lines 48, 49) [-Wunreachable-rules]
-re2c: warning: line 55: unreachable rule in condition 'ST_RAW' (shadowed by rules at lines 37, 39, 54) [-Wunreachable-rules]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:4:13: warning: escape has no effect: '\.' [-Wuseless-escape]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:4:32: warning: escape has no effect: '\.' [-Wuseless-escape]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:11:27: warning: escape has no effect: '\[' [-Wuseless-escape]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:12:11: warning: escape has no effect: '\[' [-Wuseless-escape]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:55: warning: unreachable rule in condition 'INITIAL' (shadowed by rules at lines 24, 35, 36, 42, 51, 52, 53) [-Wunreachable-rules]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:50: warning: unreachable rule in condition 'ST_OFFSET' (shadowed by rule at line 46) [-Wunreachable-rules]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:50: warning: unreachable rule in condition 'ST_SECTION_VALUE' (shadowed by rule at line 46) [-Wunreachable-rules]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:55: warning: unreachable rule in condition 'ST_VALUE' (shadowed by rules at lines 39, 40, 41, 43, 44, 45, 47, 50, 54) [-Wunreachable-rules]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:55: warning: unreachable rule in condition 'ST_DOUBLE_QUOTES' (shadowed by rules at lines 48, 49) [-Wunreachable-rules]
+php/php20150211_zend_ini_scanner_trimmed.ic--flex-syntax.re:55: warning: unreachable rule in condition 'ST_RAW' (shadowed by rules at lines 37, 39, 54) [-Wunreachable-rules]

@@ -57,5 +57,5 @@ yy7:
 	}
 }
 
-re2c: warning: line 8: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 9: rule matches empty string [-Wmatch-empty-string]
+yyaccept_initial.i.re:8: warning: rule matches empty string [-Wmatch-empty-string]
+yyaccept_initial.i.re:9: warning: rule matches empty string [-Wmatch-empty-string]

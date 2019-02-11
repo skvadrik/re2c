@@ -97,9 +97,9 @@ yy19:
 	{ @f }
 }
 
-re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 5: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 8: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 9: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:3: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:5: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:6: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:8: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:9: warning: rule matches empty string [-Wmatch-empty-string]

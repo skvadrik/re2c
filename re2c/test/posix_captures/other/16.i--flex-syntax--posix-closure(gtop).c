@@ -47,4 +47,4 @@ yy7:
 	goto yy6;
 }
 
-re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
+posix_captures/other/16.i--flex-syntax--posix-closure(gtop).re:6: warning: rule matches empty string [-Wmatch-empty-string]

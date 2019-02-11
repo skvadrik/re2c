@@ -34,6 +34,7 @@ DFA::DFA
     , const opt_t *opts
     )
     : accepts ()
+    , fname(dfa.fname)
     , name (nm)
     , cond (cn)
     , line (ln)

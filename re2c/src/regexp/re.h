@@ -38,6 +38,7 @@ struct RE
 
 struct RESpec
 {
+    const std::string &fname;
     RE::alc_t alc;
     RangeMgr &rangemgr;
     std::vector<RE*> res;
@@ -47,8 +48,8 @@ struct RESpec
     const opt_t *opts;
     Warn &warn;
 
-    explicit RESpec(const std::vector<ASTRule> &ast, const opt_t *o
-        , Warn &w, RangeMgr &rm);
+    explicit RESpec(const std::string &f, const std::vector<ASTRule> &ast
+        , const opt_t *o, Warn &w, RangeMgr &rm);
     FORBID_COPY(RESpec);
 };
 

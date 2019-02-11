@@ -8326,7 +8326,7 @@ int main(int argc, char **argv)
     fclose(file);
     return 0;
 }
-re2c: warning: line 150: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 156: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 161: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 344: rule matches empty string [-Wmatch-empty-string]
+07_cxx98.i.re:150: warning: rule matches empty string [-Wmatch-empty-string]
+07_cxx98.i.re:156: warning: rule matches empty string [-Wmatch-empty-string]
+07_cxx98.i.re:161: warning: rule matches empty string [-Wmatch-empty-string]
+07_cxx98.i.re:344: warning: rule matches empty string [-Wmatch-empty-string]

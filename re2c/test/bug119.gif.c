@@ -9,4 +9,4 @@ yy0:
 	{}
 }
 
-re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
+bug119.gif.re:2: warning: rule matches empty string [-Wmatch-empty-string]

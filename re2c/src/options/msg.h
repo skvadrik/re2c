@@ -10,12 +10,14 @@ namespace re2c {
 
 void error(const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 1, 2)));
 void fatal(const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 1, 2), noreturn));
-void fatal_l(uint32_t line, const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 2, 3), noreturn));
-void fatal_lc(uint32_t line, uint32_t column, const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4), noreturn));
+void fatal_l(const std::string &fname, uint32_t line, const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4), noreturn));
+void fatal_lc(const std::string &fname, uint32_t line, uint32_t column, const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 4, 5), noreturn));
 void error_arg(const char *option);
-void warning_start (uint32_t line, bool error);
-void warning_end (const char * type, bool error);
-void warning (const char * type, uint32_t line, bool error, const char * fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 4, 5)));
+void warning_start(const std::string &fname, uint32_t line, bool error);
+void warning_start_lc(const std::string &fname, uint32_t line, uint32_t coln, bool error);
+void warning_end(const char *type, bool error);
+void warning(const char *type, const std::string &fname, uint32_t line, bool error, const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 5, 6)));
+void warning_lc(const char *type, const std::string &fname, uint32_t line, uint32_t col, bool error, const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 6, 7)));
 void usage ();
 void vernum ();
 void version ();

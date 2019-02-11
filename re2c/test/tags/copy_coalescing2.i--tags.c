@@ -83,5 +83,5 @@ yy11:
 	}
 }
 
-re2c: warning: line 7: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 8: rule matches empty string [-Wmatch-empty-string]
+tags/copy_coalescing2.i--tags.re:7: warning: rule matches empty string [-Wmatch-empty-string]
+tags/copy_coalescing2.i--tags.re:8: warning: rule matches empty string [-Wmatch-empty-string]

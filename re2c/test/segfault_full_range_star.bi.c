@@ -47,5 +47,5 @@ yy0:
 	}
 }
 
-re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 2: unreachable rule  [-Wunreachable-rules]
+segfault_full_range_star.bi.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+segfault_full_range_star.bi.re:2: warning: unreachable rule  [-Wunreachable-rules]

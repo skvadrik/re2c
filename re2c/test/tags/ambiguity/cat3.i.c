@@ -144,5 +144,5 @@ yy31:
 	{}
 }
 
-re2c: warning: line 21: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 29: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/ambiguity/cat3.i.re:21: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/ambiguity/cat3.i.re:29: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]

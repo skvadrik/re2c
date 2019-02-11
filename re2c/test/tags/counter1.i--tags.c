@@ -115,4 +115,4 @@ yy16:
 	{}
 }
 
-re2c: warning: line 3: tag 'z' has 11th degree of nondeterminism [-Wnondeterministic-tags]
+tags/counter1.i--tags.re:3: warning: tag 'z' has 11th degree of nondeterminism [-Wnondeterministic-tags]

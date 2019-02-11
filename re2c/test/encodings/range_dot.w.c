@@ -15,4 +15,4 @@ yy3:
 }
 #line 3 "encodings/range_dot.w.re"
 
-re2c: warning: line 3: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+encodings/range_dot.w.re:3: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

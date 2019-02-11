@@ -14,4 +14,4 @@ yy3:
 	;
 	*:=;
 }
-re2c: warning: line 3: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+layout/001_04.i--flex-syntax.re:3: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

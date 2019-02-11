@@ -47,14 +47,11 @@ bool Node::end() const
 
 const size_t Skeleton::DEFTAG = std::numeric_limits<size_t>::max();
 
-Skeleton::Skeleton(
-    const dfa_t &dfa,
-    const opt_t *op,
-    size_t def,
-    const std::string &dfa_name,
-    const std::string &dfa_cond,
-    uint32_t dfa_line)
+Skeleton::Skeleton(const dfa_t &dfa, const opt_t *op, size_t def
+    , const std::string &dfa_name, const std::string &dfa_cond
+    , uint32_t dfa_line)
     : opts(op)
+    , fname(dfa.fname)
     , name(dfa_name)
     , cond(dfa_cond)
     , line(dfa_line)

@@ -1,1 +1,1 @@
-re2c: error: line 3, column 2: unexpected character: '1'
+error15.re:3:2: error: unexpected character: '1'

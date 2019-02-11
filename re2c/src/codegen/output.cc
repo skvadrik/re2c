@@ -51,6 +51,7 @@ OutputBlock::OutputBlock ()
     : fragments ()
     , used_yyaccept (false)
     , have_user_code (false)
+    , fname()
     , line (0)
     , types ()
     , stags ()
@@ -352,10 +353,11 @@ Output& Output::wdelay_backup(uint32_t ind, bool backup)
     return *this;
 }
 
-void Output::new_block(Opt &opts)
+void Output::new_block(Opt &opts, const std::string &fname)
 {
     OutputBlock *b = new OutputBlock;
     b->opts = opts.snapshot();
+    b->fname = fname;
     blocks->push_back(b);
 
     // start label hapens to be the only option
@@ -481,8 +483,8 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
                 output_line_info(o, line_count + 1, filename, bopt->iFlag);
                 break;
             case OutputFragment::COND_GOTO:
-                output_cond_goto(o, ind, b.types,
-                    bopt, warn, warn_condition_order, b.line);
+                output_cond_goto(o, ind, b.types, bopt, warn
+                    , warn_condition_order, b.fname, b.line);
                 break;
             case OutputFragment::COND_TABLE:
                 output_cond_table(o, ind, b.types, bopt);
@@ -762,9 +764,9 @@ static void output_cond_goto_binary(std::ostream &o, uint32_t ind,
     }
 }
 
-void output_cond_goto(std::ostream &o, uint32_t ind,
-    const std::vector<std::string> &conds, const opt_t *opts,
-    Warn &warn, bool warn_cond_order, uint32_t line)
+void output_cond_goto(std::ostream &o, uint32_t ind
+    , const std::vector<std::string> &conds, const opt_t *opts, Warn &warn
+    , bool warn_cond_order, const std::string &fname, uint32_t line)
 {
     const size_t ncond = conds.size();
     const std::string indstr = indent(ind, opts->indString);
@@ -797,7 +799,7 @@ void output_cond_goto(std::ostream &o, uint32_t ind,
     warn_cond_order &= opts->header_file.empty();
 
     // see note [condition order]
-    if (warn_cond_order) warn.condition_order(line);
+    if (warn_cond_order) warn.condition_order(fname, line);
 }
 
 void output_cond_table(std::ostream &o, uint32_t ind,

@@ -1,1 +1,1 @@
-re2c: error: line 3, column 6: unrecognized configuration 'define:YYBACKU'
+config12_error1.re:3:6: error: unrecognized configuration 'define:YYBACKU'

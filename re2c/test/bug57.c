@@ -101,4 +101,4 @@ int main()
     return 0;
 }
 
-re2c: warning: line 15: rule matches empty string [-Wmatch-empty-string]
+bug57.re:15: warning: rule matches empty string [-Wmatch-empty-string]

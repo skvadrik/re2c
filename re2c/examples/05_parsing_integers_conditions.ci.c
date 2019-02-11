@@ -248,4 +248,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-re2c: warning: line 35: rule in condition 'init' matches empty string [-Wmatch-empty-string]
+05_parsing_integers_conditions.ci.re:35: warning: rule in condition 'init' matches empty string [-Wmatch-empty-string]

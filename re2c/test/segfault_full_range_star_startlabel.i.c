@@ -12,5 +12,5 @@ yy0:
 	goto yy1;
 }
 
-re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 3: unreachable rule  [-Wunreachable-rules]
+segfault_full_range_star_startlabel.i.re:3: warning: rule matches empty string [-Wmatch-empty-string]
+segfault_full_range_star_startlabel.i.re:3: warning: unreachable rule  [-Wunreachable-rules]

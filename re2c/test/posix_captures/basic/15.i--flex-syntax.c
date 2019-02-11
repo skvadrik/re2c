@@ -95,4 +95,4 @@ yy11:
 	goto yy11;
 }
 
-re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
+posix_captures/basic/15.i--flex-syntax.re:6: warning: rule matches empty string [-Wmatch-empty-string]

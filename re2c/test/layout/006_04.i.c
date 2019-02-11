@@ -15,4 +15,4 @@ yy3:
 	++YYCURSOR;
 	goto yy2;
 }
-re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
+layout/006_04.i.re:2: warning: rule matches empty string [-Wmatch-empty-string]

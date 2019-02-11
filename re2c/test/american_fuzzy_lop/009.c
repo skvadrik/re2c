@@ -1,1 +1,1 @@
-re2c: error: line 2, column 24: bad configuration value (expected number)
+american_fuzzy_lop/009.re:2:24: error: bad configuration value (expected number)

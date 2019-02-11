@@ -46,7 +46,7 @@ void warn_nullable(const RESpec &spec, const std::string &cond)
     for (size_t i = 0; i < nre; ++i) {
         bool trail = false;
         if (nullable(spec, spec.res[i], trail)) {
-            spec.warn.match_empty_string(spec.rules[i].code->fline, cond);
+            spec.warn.match_empty_string(spec.fname, spec.rules[i].code->fline, cond);
         }
     }
 }

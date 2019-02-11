@@ -21,4 +21,4 @@ yy5:
 }
 
 }
-re2c: warning: line 4: control flow is undefined for strings that match '[\x0-\x40\x43-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
+casing-flags.i--case-insensitive.re:4: warning: control flow is undefined for strings that match '[\x0-\x40\x43-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]

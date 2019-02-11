@@ -103,4 +103,4 @@ yy13:
 	}
 }
 
-re2c: warning: line 4: rule matches empty string [-Wmatch-empty-string]
+tags/fallback6.i--tags.re:4: warning: rule matches empty string [-Wmatch-empty-string]

@@ -6883,10 +6883,10 @@ yy445:
 #line 318 "rexx.--empty-class(match-none).re"
 
 }
-re2c: warning: line 253: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 288: empty character class [-Wempty-character-class]
-re2c: warning: line 290: control flow is undefined for strings that match 
+rexx.--empty-class(match-none).re:253: warning: rule matches empty string [-Wmatch-empty-string]
+rexx.--empty-class(match-none).re:288: warning: empty character class [-Wempty-character-class]
+rexx.--empty-class(match-none).re:290: warning: control flow is undefined for strings that match 
 	'[\x0-\x8\xA-\xC\xE-\x1F\x21-\x2E\x30-\xFF]'
 	'\x2F [\x0-\x29\x2B-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-re2c: warning: line 289: unreachable rule  [-Wunreachable-rules]
+rexx.--empty-class(match-none).re:289: warning: unreachable rule  [-Wunreachable-rules]

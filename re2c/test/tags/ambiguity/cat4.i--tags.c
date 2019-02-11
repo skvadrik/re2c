@@ -41,4 +41,4 @@ yy7:
 	}
 }
 
-re2c: warning: line 4: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/ambiguity/cat4.i--tags.re:4: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

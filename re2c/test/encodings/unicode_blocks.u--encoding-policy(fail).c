@@ -1,1 +1,1 @@
-re2c: error: line 322, column 21: bad code point range: '0xD800 - 0xDB7F'
+encodings/unicode_blocks.u--encoding-policy(fail).re:322:21: error: bad code point range: '0xD800 - 0xDB7F'

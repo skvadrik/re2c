@@ -26,4 +26,4 @@ yy3:
 	{}
 }
 
-re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
+posix_captures/other/04.i--flex-syntax--posix-closure(gtop).re:6: warning: rule matches empty string [-Wmatch-empty-string]

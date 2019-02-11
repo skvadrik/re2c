@@ -11,6 +11,6 @@ yy0:
 	goto yy1;
 }
 
-re2c: warning: line 2: unreachable rule  [-Wunreachable-rules]
-re2c: warning: line 3: unreachable rule  [-Wunreachable-rules]
-re2c: warning: line 4: unreachable rule (shadowed by rule at line 2) [-Wunreachable-rules]
+tags/dedup2.i--input(custom).re:2: warning: unreachable rule  [-Wunreachable-rules]
+tags/dedup2.i--input(custom).re:3: warning: unreachable rule  [-Wunreachable-rules]
+tags/dedup2.i--input(custom).re:4: warning: unreachable rule (shadowed by rule at line 2) [-Wunreachable-rules]

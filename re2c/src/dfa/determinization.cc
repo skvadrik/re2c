@@ -32,7 +32,8 @@ static void warn_nondeterministic_tags(const determ_context_t &);
 const uint32_t dfa_t::NIL = ~0u;
 
 
-dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond, Warn &warn)
+dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
+    , Warn &warn, const std::string &fname)
     : states()
     , nchars(nfa.charset.size() - 1) // (n + 1) bounds for n ranges
     , charset(nfa.charset)
@@ -44,6 +45,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond, Warn 
     , maxtagver(0)
     , tcmd0(NULL)
     , tcid0(TCID0)
+    , fname(fname)
 {
     determ_context_t ctx(opts, warn, cond, nfa, *this);
 
@@ -201,7 +203,8 @@ void warn_nondeterministic_tags(const determ_context_t &ctx)
             const size_t m = maxv[t];
             if (m > 1) {
                 const uint32_t line = rule.code->fline;
-                warn.nondeterministic_tags(line, ctx.dc_condname, tags[t].name, m);
+                warn.nondeterministic_tags(ctx.dc_dfa.fname, line
+                    , ctx.dc_condname, tags[t].name, m);
             }
         }
     }

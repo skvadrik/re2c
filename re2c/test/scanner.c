@@ -1391,4 +1391,4 @@ void Scanner::fatal(uint ofs, const char *msg) const
 
 } // end namespace re2c
 
-re2c: warning: line 300: rule matches empty string [-Wmatch-empty-string]
+scanner.re:300: warning: rule matches empty string [-Wmatch-empty-string]

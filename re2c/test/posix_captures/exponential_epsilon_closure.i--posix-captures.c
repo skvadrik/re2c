@@ -16,4 +16,4 @@
 	{}
 }
 
-re2c: warning: line 5: rule matches empty string [-Wmatch-empty-string]
+posix_captures/exponential_epsilon_closure.i--posix-captures.re:5: warning: rule matches empty string [-Wmatch-empty-string]

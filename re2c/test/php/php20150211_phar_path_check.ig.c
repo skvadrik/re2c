@@ -231,4 +231,4 @@ yy31:
 }
 
 }
-re2c: warning: line 108: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+php/php20150211_phar_path_check.ig.re:108: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

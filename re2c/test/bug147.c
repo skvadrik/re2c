@@ -1,1 +1,1 @@
-re2c: error: line 2: undefined symbol 'name1'
+bug147.re:2: error: undefined symbol 'name1'

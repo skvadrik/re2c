@@ -125,4 +125,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-re2c: warning: line 17: rule matches empty string [-Wmatch-empty-string]
+tags/fix3_trail.i--tags.re:17: warning: rule matches empty string [-Wmatch-empty-string]

@@ -37,4 +37,4 @@ yy8:
 }
 #line 6 "control_flow_yymarker_fail.re"
 
-re2c: warning: line 6: control flow is undefined for strings that match '[\x0-\xFF] \x61 [\x0-\xFF] [\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+control_flow_yymarker_fail.re:6: warning: control flow is undefined for strings that match '[\x0-\xFF] \x61 [\x0-\xFF] [\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

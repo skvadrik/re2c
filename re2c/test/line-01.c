@@ -56,4 +56,4 @@ yy11:
 #line 1 "e"
 
 }
-re2c: warning: line 1: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+e:1: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

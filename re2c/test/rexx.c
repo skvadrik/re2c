@@ -6889,6 +6889,6 @@ yy446:
 #line 318 "rexx.re"
 
 }
-re2c: warning: line 253: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 288: empty character class [-Wempty-character-class]
-re2c: warning: line 289: rule matches empty string [-Wmatch-empty-string]
+rexx.re:253: warning: rule matches empty string [-Wmatch-empty-string]
+rexx.re:288: warning: empty character class [-Wempty-character-class]
+rexx.re:289: warning: rule matches empty string [-Wmatch-empty-string]

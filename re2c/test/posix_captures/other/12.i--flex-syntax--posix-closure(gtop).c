@@ -287,6 +287,6 @@ yy19:
 	}
 }
 
-re2c: warning: line 5: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 6: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
+posix_captures/other/12.i--flex-syntax--posix-closure(gtop).re:5: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/other/12.i--flex-syntax--posix-closure(gtop).re:6: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/other/12.i--flex-syntax--posix-closure(gtop).re:6: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]

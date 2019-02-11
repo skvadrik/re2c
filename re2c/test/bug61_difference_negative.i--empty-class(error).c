@@ -1,1 +1,1 @@
-re2c: error: line 2, column 4: empty character class
+bug61_difference_negative.i--empty-class(error).re:2:4: error: empty character class

@@ -33,13 +33,13 @@
 	{}
 }
 
-re2c: warning: line 2: empty character class [-Wempty-character-class]
-re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 6: empty character class [-Wempty-character-class]
-re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 10: empty character class [-Wempty-character-class]
-re2c: warning: line 10: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 14: empty character class [-Wempty-character-class]
-re2c: warning: line 14: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 18: empty character class [-Wempty-character-class]
-re2c: warning: line 18: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:2: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:2: warning: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:6: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:6: warning: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:10: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:10: warning: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:14: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:14: warning: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:18: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:18: warning: rule matches empty string [-Wmatch-empty-string]

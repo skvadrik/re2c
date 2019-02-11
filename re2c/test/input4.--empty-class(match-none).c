@@ -12,6 +12,6 @@
 }
 #line 7 "input4.--empty-class(match-none).re"
 
-re2c: warning: line 3: empty character class [-Wempty-character-class]
-re2c: warning: line 3: unreachable rule  [-Wunreachable-rules]
-re2c: warning: line 5: unreachable rule (shadowed by rule at line 4) [-Wunreachable-rules]
+input4.--empty-class(match-none).re:3: warning: empty character class [-Wempty-character-class]
+input4.--empty-class(match-none).re:3: warning: unreachable rule  [-Wunreachable-rules]
+input4.--empty-class(match-none).re:5: warning: unreachable rule (shadowed by rule at line 4) [-Wunreachable-rules]

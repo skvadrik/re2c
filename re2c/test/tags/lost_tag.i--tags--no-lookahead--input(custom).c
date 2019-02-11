@@ -21,4 +21,4 @@ yy2:
 	{}
 }
 
-re2c: warning: line 3: tag 'a' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/lost_tag.i--tags--no-lookahead--input(custom).re:3: warning: tag 'a' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

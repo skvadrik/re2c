@@ -2601,6 +2601,6 @@ static int parse_key_value_pair(mjson_parser_t* context, int stop_token)
 
     return 1;
 }
-re2c: warning: line 490: column 26: escape has no effect: '\/' [-Wuseless-escape]
-re2c: warning: line 490: column 50: escape has no effect: '\/' [-Wuseless-escape]
-re2c: warning: line 490: column 77: escape has no effect: '\/' [-Wuseless-escape]
+input_custom_mjson.--input(custom).re:490:26: warning: escape has no effect: '\/' [-Wuseless-escape]
+input_custom_mjson.--input(custom).re:490:50: warning: escape has no effect: '\/' [-Wuseless-escape]
+input_custom_mjson.--input(custom).re:490:77: warning: escape has no effect: '\/' [-Wuseless-escape]

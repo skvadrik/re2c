@@ -71,7 +71,7 @@ void warn_undefined_control_flow(const Skeleton &skel, Warn &warn)
     if (!ucf.paths.empty()) {
         warn.undefined_control_flow(skel, ucf.paths, ucf.size.overflow());
     } else if (ucf.size.overflow()) {
-        warn.fail(Warn::UNDEFINED_CONTROL_FLOW, skel.line,
+        warn.fail(Warn::UNDEFINED_CONTROL_FLOW, skel.fname, skel.line,
             "DFA is too large to check undefined control flow");
     }
 }

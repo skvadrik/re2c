@@ -2576,4 +2576,4 @@ yy380:
 }
 
 } // end namespace re2c
-re2c: warning: line 610: rule matches empty string [-Wmatch-empty-string]
+scanner_re2c_default.bi.re:610: warning: rule matches empty string [-Wmatch-empty-string]

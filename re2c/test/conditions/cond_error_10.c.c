@@ -1,1 +1,1 @@
-re2c: error: line 6: setup for non existing condition 'c' found
+conditions/cond_error_10.c.re:6: error: setup for non existing condition 'c' found

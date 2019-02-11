@@ -1,1 +1,1 @@
-re2c: error: line 1, column 8: syntax error in escape sequence
+american_fuzzy_lop/005.re:1:8: error: syntax error in escape sequence

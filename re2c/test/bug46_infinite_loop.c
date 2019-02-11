@@ -51,5 +51,5 @@ yy7:
     printf("exit 1\n");
     return 0;
 }
-re2c: warning: line 13: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 18: rule matches empty string [-Wmatch-empty-string]
+bug46_infinite_loop.re:13: warning: rule matches empty string [-Wmatch-empty-string]
+bug46_infinite_loop.re:18: warning: rule matches empty string [-Wmatch-empty-string]

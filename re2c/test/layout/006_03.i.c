@@ -16,4 +16,4 @@ yy4:
 	++YYCURSOR;
 	{}
 }
-re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
+layout/006_03.i.re:3: warning: rule matches empty string [-Wmatch-empty-string]

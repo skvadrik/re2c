@@ -10,5 +10,5 @@
 }
 #line 3 "encodings/range_empty.re"
 
-re2c: warning: line 2: empty character class [-Wempty-character-class]
-re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
+encodings/range_empty.re:2: warning: empty character class [-Wempty-character-class]
+encodings/range_empty.re:2: warning: rule matches empty string [-Wmatch-empty-string]

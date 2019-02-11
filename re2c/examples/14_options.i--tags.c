@@ -1631,6 +1631,6 @@ int main(int argc, char **argv)
     for (int i = 1; i < argc; ++i) lex(argv[i]);
     return 0;
 }
-re2c: warning: line 68: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 80: tag 'k' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 80: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+14_options.i--tags.re:68: warning: rule matches empty string [-Wmatch-empty-string]
+14_options.i--tags.re:80: warning: tag 'k' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+14_options.i--tags.re:80: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

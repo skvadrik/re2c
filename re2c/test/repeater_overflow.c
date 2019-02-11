@@ -1,1 +1,1 @@
-re2c: error: line 2, column 4: repetition count overflow
+repeater_overflow.re:2:4: error: repetition count overflow

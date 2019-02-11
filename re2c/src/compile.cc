@@ -42,7 +42,8 @@ static std::string make_name(const std::string &cond, uint32_t line)
     return name;
 }
 
-static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
+static smart_ptr<DFA> ast_to_dfa(const std::string &fname
+    , const spec_t &spec, Output &output)
 {
     const opt_t *opts = output.block().opts;
     Warn &warn = output.warn;
@@ -57,7 +58,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 
     RangeMgr rangemgr;
 
-    RESpec re(rules, opts, warn, rangemgr);
+    RESpec re(fname, rules, opts, warn, rangemgr);
     split_charset(re);
     find_fixed_tags(re);
     insert_default_tags(re);
@@ -66,7 +67,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     nfa_t nfa(re);
     DDUMP_NFA(opts, nfa);
 
-    dfa_t dfa(nfa, opts, cond, warn);
+    dfa_t dfa(nfa, opts, cond, warn, fname);
     DDUMP_DFA_DET(opts, dfa);
 
     rangemgr.clear();
@@ -129,11 +130,11 @@ void compile(Scanner &input, Output &output, Opt &opts)
     typedef std::vector<smart_ptr<DFA> > dfas_t;
 
     output.header_mode(1);
-    output.new_block(opts);
+    output.new_block(opts, input.get_fname());
     output.wversion_time();
 
     output.header_mode(0);
-    output.new_block(opts);
+    output.new_block(opts, input.get_fname());
     output.wversion_time();
     output.wdelay_line_info_input(input.get_line(), input.get_fname());
 
@@ -161,21 +162,21 @@ void compile(Scanner &input, Output &output, Opt &opts)
         parse(input, specs, symtab, opts);
 
         // start new output block with accumulated options
-        output.new_block(opts);
+        output.new_block(opts, input.get_fname());
 
         if (mode == Scanner::Rules) {
             // save AST and options for future use
             rspecs = specs;
             ropts = output.block().opts;
         } else {
-            validate_ast(specs, output.block().opts);
+            validate_ast(input.get_fname(), specs, output.block().opts);
             normalize_ast(specs);
 
             // compile AST to DFA
             output.block().line = input.get_line();
             dfas_t dfas;
             for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
-                dfas.push_back(ast_to_dfa(*i, output));
+                dfas.push_back(ast_to_dfa(input.get_fname(), *i, output));
             }
 
             // compile DFA to code

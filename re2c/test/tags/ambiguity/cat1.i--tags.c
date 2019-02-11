@@ -35,4 +35,4 @@ yy7:
 	{ @p }
 }
 
-re2c: warning: line 2: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/ambiguity/cat1.i--tags.re:2: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

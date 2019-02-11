@@ -70,14 +70,15 @@ spec
 def
 : name expr enddef {
     if (!context.symtab.insert(std::make_pair(*$1, $2)).second) {
-        fatal_l(context.input.get_line(), "sym already defined");
+        fatal_l(context.input.get_fname(), context.input.get_line()
+            , "sym already defined");
     }
     delete $1;
 }
 /* errors */
 | name expr '/' {
-    fatal_l(context.input.get_line(),
-        "trailing contexts are not allowed in named definitions");
+    fatal_l(context.input.get_fname(), context.input.get_line()
+        , "trailing contexts are not allowed in named definitions");
 };
 
 name
@@ -193,8 +194,8 @@ primary
 | TOKEN_ID {
     symtab_t::iterator i = context.symtab.find(*$1);
     if (i == context.symtab.end()) {
-        fatal_l(context.input.get_line(),
-            "undefined symbol '%s'", $1->c_str());
+        fatal_l(context.input.get_fname(), context.input.get_line()
+            , "undefined symbol '%s'", $1->c_str());
     }
     $$ = i->second;
     if (ast_need_wrap($$)) {
@@ -211,7 +212,7 @@ extern "C" {
 
 void yyerror(context_t &context, const char* s)
 {
-    fatal_l(context.input.get_line(), "%s", s);
+    fatal_l(context.input.get_fname(), context.input.get_line(), "%s", s);
 }
 
 int yylex(context_t &context)

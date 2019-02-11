@@ -73,4 +73,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-re2c: warning: line 22: rule matches empty string [-Wmatch-empty-string]
+posix_captures/offsets.i--posix-captures--input(custom).re:22: warning: rule matches empty string [-Wmatch-empty-string]

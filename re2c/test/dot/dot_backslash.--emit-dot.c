@@ -5,4 +5,4 @@ digraph re2c {
 3 -> 4
 4 [label="dot/dot_backslash.--emit-dot.re:3"]
 }
-re2c: warning: line 5: control flow is undefined for strings that match '[\x0-\x5B\x5D-\xFF]', use default rule '*' [-Wundefined-control-flow]
+dot/dot_backslash.--emit-dot.re:5: warning: control flow is undefined for strings that match '[\x0-\x5B\x5D-\xFF]', use default rule '*' [-Wundefined-control-flow]

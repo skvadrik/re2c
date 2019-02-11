@@ -111,24 +111,24 @@
 	{}
 }
 
-re2c: warning: line 1: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gor1)--dump-closure-stats.re:1: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 47         prec: 3          length: 36        
 scans: 0          prec: 0          length: 0         
-re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gor1)--dump-closure-stats.re:2: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 133        prec: 14         length: 282       
 scans: 0          prec: 0          length: 0         
-re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gor1)--dump-closure-stats.re:3: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 617        prec: 84         length: 3420      
 scans: 0          prec: 0          length: 0         
-re2c: warning: line 4: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gor1)--dump-closure-stats.re:4: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 3841       prec: 584        length: 49176     
 scans: 0          prec: 0          length: 0         
-re2c: warning: line 5: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gor1)--dump-closure-stats.re:5: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 27377      prec: 4368       length: 751536    
 scans: 0          prec: 0          length: 0         
-re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gor1)--dump-closure-stats.re:6: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 207313     prec: 33824      length: 11771232  
 scans: 0          prec: 0          length: 0         
-re2c: warning: line 7: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gor1)--dump-closure-stats.re:7: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 1614737    prec: 266304     length: 186413760 
 scans: 0          prec: 0          length: 0         

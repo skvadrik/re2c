@@ -7923,13 +7923,13 @@ int main(int argc, char **argv)
     free_input(&in);
     return 0;
 }
-re2c: warning: line 135: tag 'u1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 135: tag 'u2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 135: tag 'h1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 135: tag 'h2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 135: tag 'h3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 135: tag 'h4' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 135: tag 'h5' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 135: tag 'h6' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 135: tag 'r1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-re2c: warning: line 135: tag 'p3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'u1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'u2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'h1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'h2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'h3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'h4' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'h5' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'h6' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'r1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+10_uri_rfc3986.i--tags.re:135: warning: tag 'p3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

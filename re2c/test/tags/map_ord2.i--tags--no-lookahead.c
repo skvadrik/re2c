@@ -94,5 +94,5 @@ yy11:
 	}
 }
 
-re2c: warning: line 4: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 4: tag 't' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/map_ord2.i--tags--no-lookahead.re:4: warning: rule matches empty string [-Wmatch-empty-string]
+tags/map_ord2.i--tags--no-lookahead.re:4: warning: tag 't' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

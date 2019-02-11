@@ -8,4 +8,4 @@
 yy0:
 	{}
 
-re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
+bug119_abort.if.re:3: warning: rule matches empty string [-Wmatch-empty-string]

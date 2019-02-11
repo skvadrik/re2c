@@ -64,6 +64,7 @@ struct State
 struct DFA
 {
     accept_t accepts;
+    const std::string fname;
     const std::string name;
     const std::string cond;
     const uint32_t line;
@@ -92,7 +93,7 @@ struct DFA
     std::string setup;
     const Code *eof_action;
 
-    DFA    ( const dfa_t &dfa
+    DFA ( const dfa_t &dfa
         , const std::vector<size_t> &fill
         , size_t def
         , size_t key

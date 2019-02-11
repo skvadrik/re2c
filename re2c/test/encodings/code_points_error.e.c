@@ -1,1 +1,1 @@
-re2c: error: line 2, column 5: bad code point: '0xFFFF'
+encodings/code_points_error.e.re:2:5: error: bad code point: '0xFFFF'

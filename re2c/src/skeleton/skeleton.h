@@ -69,6 +69,7 @@ struct Skeleton
     static const size_t DEFTAG;
 
     const opt_t *opts;
+    const std::string fname;
     const std::string name;
     const std::string cond;
     const uint32_t line;
@@ -85,9 +86,9 @@ struct Skeleton
     const std::vector<Tag> &tags;
     const tagver_t *finvers;
 
-    Skeleton(const dfa_t &dfa, const opt_t *op, size_t def,
-        const std::string &dfa_name, const std::string &dfa_cond,
-        uint32_t dfa_line);
+    Skeleton(const dfa_t &dfa, const opt_t *op, size_t def
+        , const std::string &dfa_name, const std::string &dfa_cond
+        , uint32_t dfa_line);
     ~Skeleton ();
     FORBID_COPY(Skeleton);
 };

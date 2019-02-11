@@ -34,7 +34,7 @@ yy3:
 	}
 }
 
-re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
+debug/cfg.i--posix-captures--dump-cfg.re:2: warning: rule matches empty string [-Wmatch-empty-string]
 digraph CFG {
   rankdir=LR
   node[shape=Mrecord fontname=Terminus height=0.2 width=0.2]

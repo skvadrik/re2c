@@ -72,4 +72,4 @@ yy10:
 	{ 1 }
 }
 
-re2c: warning: line 17: rule matches empty string [-Wmatch-empty-string]
+tags/fallback1.i--tags.re:17: warning: rule matches empty string [-Wmatch-empty-string]

@@ -4,6 +4,6 @@
 	YYCTYPE yych;
 }
 
-re2c: warning: line 2: empty character class [-Wempty-character-class]
-re2c: warning: line 3: control flow is undefined for strings that match '', use default rule '*' [-Wundefined-control-flow]
-re2c: warning: line 2: unreachable rule  [-Wunreachable-rules]
+bug61_negative.i--empty-class(match-none).re:2: warning: empty character class [-Wempty-character-class]
+bug61_negative.i--empty-class(match-none).re:3: warning: control flow is undefined for strings that match '', use default rule '*' [-Wundefined-control-flow]
+bug61_negative.i--empty-class(match-none).re:2: warning: unreachable rule  [-Wunreachable-rules]

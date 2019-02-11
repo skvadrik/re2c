@@ -26,4 +26,4 @@ yyc_y:
 	yych = *YYCURSOR++;
 	;
 }
-re2c: warning: line 2: rule in condition 'x' matches empty string [-Wmatch-empty-string]
+layout/006_08.ci.re:2: warning: rule in condition 'x' matches empty string [-Wmatch-empty-string]

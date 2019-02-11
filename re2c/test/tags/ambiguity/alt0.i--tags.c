@@ -10,4 +10,4 @@
 	{}
 }
 
-re2c: warning: line 4: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/alt0.i--tags.re:4: warning: rule matches empty string [-Wmatch-empty-string]

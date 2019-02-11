@@ -26,5 +26,5 @@ yy3:
 	goto yy1;
 }
 
-re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 3: tag 'a' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/skip_tags_disorder1.i--tags--no-lookahead.re:3: warning: rule matches empty string [-Wmatch-empty-string]
+tags/skip_tags_disorder1.i--tags--no-lookahead.re:3: warning: tag 'a' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

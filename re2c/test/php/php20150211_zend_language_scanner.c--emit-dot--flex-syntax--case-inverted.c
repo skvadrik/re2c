@@ -1519,6 +1519,6 @@ ST_NOWDOC -> 808
 809 -> 810
 810 [label="php/php20150211_zend_language_scanner.c--emit-dot--flex-syntax--case-inverted.re:2292"]
 }
-re2c: warning: line 1095: column 12: escape has no effect: '\[' [-Wuseless-escape]
-re2c: warning: line 1476: column 19: escape has no effect: '\*' [-Wuseless-escape]
-re2c: warning: line 1480: column 19: escape has no effect: '\*' [-Wuseless-escape]
+php/php20150211_zend_language_scanner.c--emit-dot--flex-syntax--case-inverted.re:1095:12: warning: escape has no effect: '\[' [-Wuseless-escape]
+php/php20150211_zend_language_scanner.c--emit-dot--flex-syntax--case-inverted.re:1476:19: warning: escape has no effect: '\*' [-Wuseless-escape]
+php/php20150211_zend_language_scanner.c--emit-dot--flex-syntax--case-inverted.re:1480:19: warning: escape has no effect: '\*' [-Wuseless-escape]

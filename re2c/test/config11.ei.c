@@ -22,4 +22,4 @@ yy5:
 }
 
 }
-re2c: warning: line 16: control flow is undefined for strings that match '[\x0-\x80\x83-\xFF]', use default rule '*' [-Wundefined-control-flow]
+config11.ei.re:16: warning: control flow is undefined for strings that match '[\x0-\x80\x83-\xFF]', use default rule '*' [-Wundefined-control-flow]
