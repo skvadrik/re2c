@@ -20,23 +20,20 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     conopt_t globopts;
     globopts.FFlag = true;
     Opt opts(globopts);
+    Msg msg;
     opts.set_posix_syntax(true);
     opts.set_posix_semantics((cflags & REG_LEFTMOST) == 0);
     const opt_t *opt = opts.snapshot();
-    const loc_t loc(0, 0, "void");
-
-    Warn warn;
-
     preg->flags = cflags;
 
     const AST *a = parse(pattern);
 
     preg->rmgr = new RangeMgr;
 
-    ASTRule ar(a, new Code(loc));
+    ASTRule ar(a, new Code(NOWHERE));
     std::vector<ASTRule> arv;
     arv.push_back(ar);
-    RESpec re(arv, opt, warn, *preg->rmgr);
+    RESpec re(arv, opt, msg, *preg->rmgr);
 
     find_fixed_tags(re);
 
@@ -63,7 +60,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
             }
         }
 
-        dfa = new dfa_t(*nfa, opt, "", warn);
+        dfa = new dfa_t(*nfa, opt, "", msg);
 
         compact_and_optimize_tags(opt, *dfa);
 

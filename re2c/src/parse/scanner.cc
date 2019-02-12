@@ -1,13 +1,10 @@
 #include <string.h>
 
 #include "src/parse/scanner.h"
-#include "src/options/msg.h"
 #include "src/debug/debug.h"
 
 
 namespace re2c {
-
-class Warn;
 
 const char *const Scanner::ENDPOS = (const char*) ~0LU;
 
@@ -32,11 +29,15 @@ size_t Scanner::get_input_index() const
     return i;
 }
 
-bool Scanner::init(const std::string &filename)
+bool Scanner::open(const std::string &filename, const std::string *parent)
 {
-    Input *in = new Input;
+    Input *in = new Input(msg.filenames.size());
     files.push_back(in);
-    return in->open(filename, NULL, globopts->incpaths);
+    if (!in->open(filename, parent, globopts->incpaths)) {
+        return false;
+    }
+    msg.filenames.push_back(in->escaped_name);
+    return true;
 }
 
 bool Scanner::include(const std::string &filename)
@@ -70,9 +71,9 @@ bool Scanner::include(const std::string &filename)
     }
 
     // open new file and place place at the top of stack
-    Input *in = new Input;
-    files.push_back(in);
-    if (!in->open(filename, &parent, globopts->incpaths)) return false;
+    if (!open(filename, &parent)) {
+        return false;
+    }
 
     // refill buffer (discard everything up to cursor, clear EOF)
     lim = cur = mar = ctx = tok = ptr = pos = bot + BSIZE;

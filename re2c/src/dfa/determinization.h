@@ -22,7 +22,7 @@ namespace re2c
 
 // fwd
 struct opt_t;
-struct Warn;
+struct Msg;
 struct dfa_t;
 struct tcmd_t;
 
@@ -109,7 +109,7 @@ struct determ_context_t
 {
     // determinization input
     const opt_t              *dc_opts;      // options
-    Warn                     &dc_warn;      // warnings
+    Msg                      &dc_msg;       // error messages and warnings
     const std::string        &dc_condname;  // the name of current condition (with -c)
     const nfa_t              &dc_nfa;       // TNFA
 
@@ -143,7 +143,7 @@ struct determ_context_t
     dump_dfa_t               dc_dump;
     closure_stats_t          dc_clstats;
 
-    determ_context_t(const opt_t *, Warn &, const std::string &, const nfa_t &, dfa_t &);
+    determ_context_t(const opt_t *, Msg &, const std::string &, const nfa_t &, dfa_t &);
     FORBID_COPY(determ_context_t);
 };
 

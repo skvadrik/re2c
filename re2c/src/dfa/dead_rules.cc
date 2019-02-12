@@ -4,7 +4,7 @@
 #include <valarray>
 #include <vector>
 
-#include "src/options/warn.h"
+#include "src/msg/msg.h"
 #include "src/dfa/dfa.h"
 #include "src/regexp/rule.h"
 #include "src/util/forbid_copy.h"
@@ -160,7 +160,7 @@ static void liveness_analyses(const rdfa_t &rdfa, bool *live)
 
 
 static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
-    const std::string &cond, const bool *live, Warn &warn)
+    const std::string &cond, const bool *live, Msg &msg)
 {
     const size_t nstates = dfa.states.size();
     const size_t nrules = dfa.rules.size();
@@ -180,7 +180,7 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
     for (size_t i = 0; i < nrules; ++i) {
         // default rule '*' should not be reported
         if (i != defrule && !live[i * nstates]) {
-            warn.unreachable_rule(cond, dfa.rules[i]);
+            msg.warn.unreachable_rule(cond, dfa.rules[i]);
         }
     }
 }
@@ -239,7 +239,8 @@ static void find_fallback_states(dfa_t &dfa, const bool *fallthru)
 }
 
 
-void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond, Warn &warn)
+void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond
+    , Msg &msg)
 {
     const rdfa_t rdfa(dfa);
     const size_t
@@ -250,7 +251,7 @@ void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond, Warn
     memset(live, 0, nl * sizeof(bool));
 
     liveness_analyses(rdfa, live);
-    warn_dead_rules(dfa, defrule, cond, live, warn);
+    warn_dead_rules(dfa, defrule, cond, live, msg);
     remove_dead_final_states(dfa, fallthru);
     find_fallback_states(dfa, fallthru);
 

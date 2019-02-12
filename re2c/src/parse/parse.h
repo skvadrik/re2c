@@ -6,7 +6,6 @@
 
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
-#include "src/options/msg.h"
 #include "src/options/opt.h"
 
 namespace re2c
@@ -27,7 +26,7 @@ struct context_t
 
 void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts);
 void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input);
-void validate_ast(const specs_t &specs, const opt_t *opts);
+void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg);
 void normalize_ast(specs_t &specs);
 
 } // namespace re2c

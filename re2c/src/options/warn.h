@@ -11,6 +11,7 @@
 
 namespace re2c {
 
+class Msg;
 class path_t;
 struct Rule;
 struct Skeleton;
@@ -50,9 +51,10 @@ private:
     static const char * names [TYPES];
     uint32_t mask[TYPES];
     bool error_accuml;
+    Msg &msg;
 
 public:
-    Warn ();
+    explicit Warn (Msg &msg);
     bool error () const;
     void set (type_t t, option_t o);
     void set_all ();

@@ -8,15 +8,14 @@
 #include <vector>
 
 #include "src/parse/ast.h"
-#include "src/options/msg.h"
 #include "src/options/opt.h"
-#include "src/options/warn.h"
-#include "src/regexp/empty_class_policy.h"
 #include "src/encoding/case.h"
 #include "src/encoding/enc.h"
 #include "src/encoding/ebcdic/ebcdic_regexp.h"
 #include "src/encoding/utf16/utf16_regexp.h"
 #include "src/encoding/utf8/utf8_regexp.h"
+#include "src/msg/msg.h"
+#include "src/regexp/empty_class_policy.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
@@ -57,12 +56,12 @@ static Range *diff_to_range(RESpec &, const AST *);
 static Range *dot_to_range(RESpec &, const AST *);
 static Range *cls_to_range(RESpec &, const AST *);
 static bool misuse_of_named_def(RESpec &, const AST *);
-static void assert_tags_used_once(const Rule &, const std::vector<Tag> &);
-static void init_rule(Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
+static void assert_tags_used_once(RESpec &, const Rule &, const std::vector<Tag> &);
+static void init_rule(RESpec &, Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
 static bool is_icase(const opt_t *, bool);
 
 
-RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w
+RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Msg &msg
     , RangeMgr &rm)
     : alc()
     , rangemgr(rm)
@@ -71,12 +70,12 @@ RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w
     , tags(*new std::vector<Tag>)
     , rules(*new std::valarray<Rule>(ast.size()))
     , opts(o)
-    , warn(w)
+    , msg(msg)
 {
     for (size_t i = 0; i < ast.size(); ++i) {
         size_t ltag = tags.size(), ncap = 0;
         res.push_back(ast_to_re(*this, ast[i].ast, ncap, 0));
-        init_rule(rules[i], ast[i].code, tags, ltag, ncap);
+        init_rule(*this, rules[i], ast[i].code, tags, ltag, ncap);
     }
 }
 
@@ -176,10 +175,12 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
         }
         case AST::TAG: {
             if (ast->tag.name && !opts->tags) {
-                fatal(ast->loc, "tags are only allowed with '-T, --tags' option");
+                spec.msg.fatal(ast->loc
+                    , "tags are only allowed with '-T, --tags' option");
             }
             if (opts->posix_syntax) {
-                fatal(ast->loc, "simple tags are not allowed with '--posix-captures' option");
+                spec.msg.fatal(ast->loc
+                    , "simple tags are not allowed with '--posix-captures' option");
             }
             RE *t = re_tag(spec, tags.size(), false);
             tags.push_back(Tag(ast->tag.name, ast->tag.history, height));
@@ -253,7 +254,7 @@ Range *char_to_range(RESpec &spec, const ASTChar &chr, bool icase)
     uint32_t c = chr.chr;
 
     if (!spec.opts->encoding.validateChar(c)) {
-        fatal(chr.loc, "bad code point: '0x%X'", c);
+        spec.msg.fatal(chr.loc, "bad code point: '0x%X'", c);
     }
 
     return icase && is_alpha(c)
@@ -274,7 +275,7 @@ Range *cls_to_range(RESpec &spec, const AST *ast)
     for (; i != e; ++i) {
         Range *s = spec.opts->encoding.validateRange(rm, i->lower, i->upper);
         if (!s) {
-            fatal(i->loc, "bad code point range: '0x%X - 0x%X'"
+            spec.msg.fatal(i->loc, "bad code point range: '0x%X - 0x%X'"
                 , i->lower, i->upper);
         }
         r = rm.add(r, s);
@@ -294,7 +295,7 @@ Range *dot_to_range(RESpec &spec, const AST *ast)
     RangeMgr &rm = spec.rangemgr;
     uint32_t c = '\n';
     if (!spec.opts->encoding.validateChar(c)) {
-        fatal(ast->loc, "bad code point: '0x%X'", c);
+        spec.msg.fatal(ast->loc, "bad code point: '0x%X'", c);
     }
     return rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
 }
@@ -338,7 +339,7 @@ Range *ast_to_range(RESpec &spec, const AST *ast)
             return spec.rangemgr.add(x, y);
         }
     }
-    fatal(ast->loc, "can only difference char sets");
+    spec.msg.fatal(ast->loc, "can only difference char sets");
     return NULL;
 }
 
@@ -364,16 +365,15 @@ RE *re_string(RESpec &spec, const AST *ast)
 RE *re_class(RESpec &spec, const loc_t &loc, const Range *r)
 {
     if (!r) {
-        Warn &w = spec.warn;
         switch (spec.opts->empty_class_policy) {
             case EMPTY_CLASS_MATCH_EMPTY:
-                w.empty_class(loc);
+                spec.msg.warn.empty_class(loc);
                 return re_nil(spec);
             case EMPTY_CLASS_MATCH_NONE:
-                w.empty_class(loc);
+                spec.msg.warn.empty_class(loc);
                 break;
             case EMPTY_CLASS_ERROR:
-                fatal(loc, "empty character class");
+                spec.msg.fatal(loc, "empty character class");
         }
     }
 
@@ -399,14 +399,15 @@ bool misuse_of_named_def(RESpec &spec, const AST *ast)
 
     if (!spec.opts->posix_syntax) return false;
 
-    fatal(ast->loc
+    spec.msg.fatal(ast->loc
         , "implicit grouping is forbidden with '--posix-captures'"
             " option, please wrap '%s' in capturing parenthesis"
         , ast->ref.name->c_str());
     return true;
 }
 
-void assert_tags_used_once(const Rule &rule, const std::vector<Tag> &tags)
+void assert_tags_used_once(RESpec &spec, const Rule &rule
+    , const std::vector<Tag> &tags)
 {
     std::set<std::string> names;
     const std::string *name = NULL;
@@ -414,22 +415,22 @@ void assert_tags_used_once(const Rule &rule, const std::vector<Tag> &tags)
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         name = tags[t].name;
         if (name && !names.insert(*name).second) {
-            fatal(rule.code->loc
+            spec.msg.fatal(rule.code->loc
                 , "tag '%s' is used multiple times in the same rule"
                 , name->c_str());
         }
     }
 }
 
-void init_rule(Rule &rule, const Code *code, const std::vector<Tag> &tags
-    , size_t ltag, size_t ncap)
+void init_rule(RESpec &spec, Rule &rule, const Code *code
+    , const std::vector<Tag> &tags, size_t ltag, size_t ncap)
 {
     rule.code = code;
     rule.ltag = ltag;
     rule.htag = tags.size();
     for (rule.ttag = ltag; rule.ttag < rule.htag && !trailing(tags[rule.ttag]); ++rule.ttag);
     rule.ncap = ncap;
-    assert_tags_used_once(rule, tags);
+    assert_tags_used_once(spec, rule, tags);
 }
 
 bool is_icase(const opt_t *opts, bool icase)

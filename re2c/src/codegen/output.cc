@@ -7,9 +7,8 @@
 #include "src/codegen/input_api.h"
 #include "src/codegen/output.h"
 #include "src/codegen/print.h"
-#include "src/options/msg.h"
+#include "src/msg/msg.h"
 #include "src/options/opt.h"
-#include "src/options/warn.h"
 #include "src/encoding/enc.h"
 #include "src/util/string_utils.h"
 #include "src/util/uniq_vector.h"
@@ -69,7 +68,7 @@ OutputBlock::~OutputBlock ()
     delete opts;
 }
 
-Output::Output(Warn &w)
+Output::Output(Msg &msg)
     : cblocks()
     , hblocks()
     , blocks(&cblocks)
@@ -79,7 +78,7 @@ Output::Output(Warn &w)
     , cond_goto(false)
     , warn_condition_order(true)
     , need_header(false)
-    , warn(w)
+    , msg(msg)
     , skeletons()
     , max_fill(1)
     , max_nmatch(1)
@@ -475,13 +474,14 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             case OutputFragment::EMPTY:
             case OutputFragment::CODE: break;
             case OutputFragment::LINE_INFO_INPUT:
-                output_line_info(o, f.loc->line, f.loc->fname, bopt->iFlag);
+                output_line_info(o, f.loc->line, msg.filenames[f.loc->file]
+                    , bopt->iFlag);
                 break;
             case OutputFragment::LINE_INFO_OUTPUT:
                 output_line_info(o, line_count + 1, filename, bopt->iFlag);
                 break;
             case OutputFragment::COND_GOTO:
-                output_cond_goto(o, ind, b.types, bopt, warn
+                output_cond_goto(o, ind, b.types, bopt, msg
                     , warn_condition_order, b.loc);
                 break;
             case OutputFragment::COND_TABLE:
@@ -580,7 +580,7 @@ static void add_symbols(const OutputBlock &block,
 
 bool Output::emit()
 {
-    if (warn.error()) return false;
+    if (msg.warn.error()) return false;
 
     // gather global lists of conditions and tags
     uniq_vector_t<std::string> conds;
@@ -763,7 +763,7 @@ static void output_cond_goto_binary(std::ostream &o, uint32_t ind,
 }
 
 void output_cond_goto(std::ostream &o, uint32_t ind
-    , const std::vector<std::string> &conds, const opt_t *opts, Warn &warn
+    , const std::vector<std::string> &conds, const opt_t *opts, Msg &msg
     , bool warn_cond_order, const loc_t &loc)
 {
     const size_t ncond = conds.size();
@@ -797,7 +797,7 @@ void output_cond_goto(std::ostream &o, uint32_t ind
     warn_cond_order &= opts->header_file.empty();
 
     // see note [condition order]
-    if (warn_cond_order) warn.condition_order(loc);
+    if (warn_cond_order) msg.warn.condition_order(loc);
 }
 
 void output_cond_table(std::ostream &o, uint32_t ind,

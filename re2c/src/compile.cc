@@ -27,7 +27,7 @@
 
 namespace re2c {
 
-class Warn;
+class Msg;
 
 static std::string make_name(const std::string &cond, uint32_t line)
 {
@@ -46,7 +46,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 {
     const opt_t *opts = output.block().opts;
     const loc_t &loc = output.block().loc;
-    Warn &warn = output.warn;
+    Msg &msg = output.msg;
     const std::vector<ASTRule> &rules = spec.rules;
     const size_t defrule = spec.defs.empty() ? Rule::NONE : rules.size() - 1;
     const Code *eof = spec.eofs.empty() ? NULL : spec.eofs.front();
@@ -57,7 +57,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 
     RangeMgr rangemgr;
 
-    RESpec re(rules, opts, warn, rangemgr);
+    RESpec re(rules, opts, msg, rangemgr);
     split_charset(re);
     find_fixed_tags(re);
     insert_default_tags(re);
@@ -66,20 +66,20 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     nfa_t nfa(re);
     DDUMP_NFA(opts, nfa);
 
-    dfa_t dfa(nfa, opts, cond, warn);
+    dfa_t dfa(nfa, opts, cond, msg);
     DDUMP_DFA_DET(opts, dfa);
 
     rangemgr.clear();
 
     // skeleton must be constructed after DFA construction
     // but prior to any other DFA transformations
-    Skeleton skeleton(dfa, opts, defrule, name, cond, loc);
-    warn_undefined_control_flow(skeleton, warn);
+    Skeleton skeleton(dfa, opts, defrule, name, cond, loc, msg);
+    warn_undefined_control_flow(skeleton);
     if (opts->target == TARGET_SKELETON) {
         emit_data(skeleton);
     }
 
-    cutoff_dead_rules(dfa, defrule, cond, warn);
+    cutoff_dead_rules(dfa, defrule, cond, msg);
 
     insert_fallback_tags(dfa);
 
@@ -98,7 +98,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 
     // ADFA stands for 'DFA with actions'
     DFA *adfa = new DFA(dfa, fill, defrule, skeleton.sizeof_key,
-        loc, name, cond, setup, eof, opts);
+        loc, name, cond, setup, eof, opts, msg);
 
     // see note [reordering DFA states]
     adfa->reorder();
@@ -171,7 +171,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             rspecs = specs;
             ropts = output.block().opts;
         } else {
-            validate_ast(specs, output.block().opts);
+            validate_ast(specs, output.block().opts, output.msg);
             normalize_ast(specs);
 
             // compile AST to DFA

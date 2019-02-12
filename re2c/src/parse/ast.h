@@ -21,9 +21,6 @@ struct ASTChar
 {
     uint32_t chr;
     loc_t loc;
-
-    ASTChar(): chr(0), loc(0, 0, "") {}
-    ASTChar(uint32_t c, const loc_t &l): chr(c), loc(l) {}
 };
 
 struct ASTRange

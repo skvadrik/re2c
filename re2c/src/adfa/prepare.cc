@@ -9,7 +9,6 @@
 #include "src/adfa/adfa.h"
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
-#include "src/options/msg.h"
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
@@ -280,7 +279,7 @@ void DFA::calc_stats(bool explicit_tags)
 
     // error if tags are not enabled, but we need them
     if (!explicit_tags && maxtagver > 1) {
-        fatal(loc, "overlapping trailing contexts need "
+        msg.fatal(loc, "overlapping trailing contexts need "
             "multiple context markers, use '-t, --tags' "
             "option and '/*!stags:re2c ... */' directive");
     }

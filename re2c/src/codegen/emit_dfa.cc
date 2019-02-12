@@ -134,7 +134,7 @@ void DFA::emit_dot(Output &o, bool last_cond) const
             const Code *code = rules[s->action.info.rule].code;
             if (!code->autogen) {
                 o.wlabel(s->label).ws(" [label=\"")
-                    .wstring(code->loc.fname)
+                    .wstring(msg.filenames[code->loc.file])
                     .ws(":").wu32(code->loc.line)
                     .ws("\"]").ws("\n");
             }

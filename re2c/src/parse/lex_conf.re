@@ -2,7 +2,6 @@
 #include <string>
 
 #include "src/codegen/output.h"
-#include "src/options/msg.h"
 #include "src/encoding/enc.h"
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
@@ -72,7 +71,7 @@ void Scanner::lex_conf(Opt &opts)
     "eof" {
         const int32_t eof = lex_conf_number();
         if (eof < 0) {
-            fatal(cur_loc(), "eof cannot have negative value");
+            msg.fatal(cur_loc(), "eof cannot have negative value");
         }
         opts.set_eof(static_cast<uint32_t>(eof));
         return;
@@ -110,7 +109,7 @@ void Scanner::lex_conf(Opt &opts)
     "cgoto:threshold" {
         const int32_t n = lex_conf_number ();
         if (n < 0) {
-            fatal(cur_loc(), "configuration 'cgoto:threshold' must be nonnegative");
+            msg.fatal(cur_loc(), "configuration 'cgoto:threshold' must be nonnegative");
         }
         opts.set_cGotoThreshold (static_cast<uint32_t> (n));
         return;
@@ -142,7 +141,7 @@ void Scanner::lex_conf(Opt &opts)
     "indent:top" {
         const int32_t n = lex_conf_number ();
         if (n < 0) {
-            fatal(cur_loc(), "configuration 'indent:top' must be nonnegative");
+            msg.fatal(cur_loc(), "configuration 'indent:top' must be nonnegative");
         }
         opts.set_topIndent (static_cast<uint32_t> (n));
         return;
@@ -172,7 +171,7 @@ void Scanner::lex_conf(Opt &opts)
     "variable:yystable" { lex_conf_string (); return; }
 
     [a-zA-Z0-9_:-]* {
-        fatal(tok_loc(), "unrecognized configuration '%.*s'",
+        msg.fatal(tok_loc(), "unrecognized configuration '%.*s'",
             static_cast<int>(cur - tok), tok);
     }
 */
@@ -182,7 +181,7 @@ void Scanner::lex_conf_encoding_policy(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal(cur_loc(),
+    * { msg.fatal(cur_loc(),
         "bad configuration value (expected: 'ignore', 'substitute', 'fail')"); }
     "ignore"     { opts.set_encoding_policy(Enc::POLICY_IGNORE);     goto end; }
     "substitute" { opts.set_encoding_policy(Enc::POLICY_SUBSTITUTE); goto end; }
@@ -196,7 +195,7 @@ void Scanner::lex_conf_input(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal(cur_loc(), "bad configuration value (expected: 'default', 'custom')"); }
+    * { msg.fatal(cur_loc(), "bad configuration value (expected: 'default', 'custom')"); }
     "default" { opts.set_input_api(INPUT_DEFAULT); goto end; }
     "custom"  { opts.set_input_api(INPUT_CUSTOM);  goto end; }
 */
@@ -208,7 +207,7 @@ void Scanner::lex_conf_empty_class(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal(cur_loc(),
+    * { msg.fatal(cur_loc(),
         "bad configuration value (expected: 'match-empty', 'match-none', 'error')"); }
     "match-empty" { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_EMPTY); goto end; }
     "match-none"  { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_NONE);  goto end; }
@@ -230,7 +229,7 @@ void Scanner::lex_conf_enc(Enc::type_t enc, Opt &opts)
 void Scanner::lex_conf_assign ()
 {
 /*!re2c
-    * { fatal(cur_loc(), "missing '=' in configuration"); }
+    * { msg.fatal(cur_loc(), "missing '=' in configuration"); }
     conf_assign { return; }
 */
 }
@@ -238,7 +237,7 @@ void Scanner::lex_conf_assign ()
 void Scanner::lex_conf_semicolon ()
 {
 /*!re2c
-    * { fatal(cur_loc(), "missing ending ';' in configuration"); }
+    * { msg.fatal(cur_loc(), "missing ending ';' in configuration"); }
     space* ";" { return; }
 */
 }
@@ -253,11 +252,11 @@ int32_t Scanner::lex_conf_number ()
     lex_conf_assign ();
     tok = cur;
 /*!re2c
-    * { fatal(cur_loc(), "bad configuration value (expected number)"); }
+    * { msg.fatal(cur_loc(), "bad configuration value (expected number)"); }
     number {
         int32_t n = 0;
         if (!s_to_i32_unsafe (tok, cur, n)) {
-            fatal(cur_loc(), "configuration value overflow");
+            msg.fatal(cur_loc(), "configuration value overflow");
         }
         lex_conf_semicolon ();
         return n;
@@ -279,7 +278,9 @@ std::string Scanner::lex_conf_string ()
                 goto end;
             }
             if (c.chr > 0xFF) {
-                fatal(c.loc, "multibyte character in configuration string: 0x%X", c.chr);
+                msg.fatal(c.loc
+                    , "multibyte character in configuration string: 0x%X"
+                    , c.chr);
             } else {
                 s += static_cast<char>(c.chr);
             }

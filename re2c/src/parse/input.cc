@@ -1,18 +1,18 @@
 #include "src/parse/input.h"
 #include "src/parse/scanner.h"
-#include "src/options/msg.h"
 #include "src/util/get_dir.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {
 
-Input::Input()
+Input::Input(size_t fidx)
     : file(NULL)
     , name()
     , escaped_name()
     , so(Scanner::ENDPOS)
     , eo(Scanner::ENDPOS)
     , line(1)
+    , fidx(static_cast<uint32_t>(fidx))
 {}
 
 bool Input::open(const std::string &filename, const std::string *parent

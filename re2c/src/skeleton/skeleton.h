@@ -28,7 +28,7 @@ class path_t;
 struct DFA;
 struct dfa_state_t;
 struct dfa_t;
-class Warn;
+class Msg;
 class bitmaps_t;
 struct opt_t;
 struct tcmd_t;
@@ -72,6 +72,7 @@ struct Skeleton
     const std::string name;
     const std::string cond;
     const loc_t loc;
+    Msg &msg;
 
     const size_t nodes_count;
     Node *nodes;
@@ -87,7 +88,7 @@ struct Skeleton
 
     Skeleton(const dfa_t &dfa, const opt_t *op, size_t def
         , const std::string &dfa_name, const std::string &dfa_cond
-        , const loc_t &loc);
+        , const loc_t &loc, Msg &msg);
     ~Skeleton ();
     FORBID_COPY(Skeleton);
 };
@@ -106,7 +107,7 @@ template<typename key_t> key_t rule2key(size_t r, size_t def)
 
 uint64_t rule2key(size_t rule, size_t key, size_t def);
 uint32_t maxpath(const Skeleton &skel);
-void warn_undefined_control_flow(const Skeleton &skel, Warn &warn);
+void warn_undefined_control_flow(const Skeleton &skel);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
 void emit_data(const Skeleton &skel);
 void emit_prolog(Output & o);

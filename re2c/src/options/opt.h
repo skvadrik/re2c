@@ -15,7 +15,7 @@
 namespace re2c
 {
 
-class Warn;
+class Msg;
 
 enum target_t
 {
@@ -311,7 +311,7 @@ enum parse_opts_t
     EXIT_FAIL
 };
 
-parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Warn &warn);
+parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg);
 
 } // namespace re2c
 

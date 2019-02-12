@@ -1,6 +1,7 @@
 #ifndef _RE2C_LIB_LEX_
 #define _RE2C_LIB_LEX_
 
+#include "src/msg/location.h"
 #include "src/regexp/re.h"
 #include "src/parse/ast.h"
 

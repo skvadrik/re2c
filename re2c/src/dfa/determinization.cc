@@ -8,11 +8,11 @@
 #include <vector>
 
 #include "src/options/opt.h"
-#include "src/options/warn.h"
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/tcmd.h"
+#include "src/msg/msg.h"
 #include "src/nfa/nfa.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
@@ -33,7 +33,7 @@ const uint32_t dfa_t::NIL = ~0u;
 
 
 dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
-    , Warn &warn)
+    , Msg &msg)
     : states()
     , nchars(nfa.charset.size() - 1) // (n + 1) bounds for n ranges
     , charset(nfa.charset)
@@ -46,7 +46,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
     , tcmd0(NULL)
     , tcid0(TCID0)
 {
-    determ_context_t ctx(opts, warn, cond, nfa, *this);
+    determ_context_t ctx(opts, msg, cond, nfa, *this);
 
     const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
 
@@ -162,7 +162,7 @@ void warn_nondeterministic_tags(const determ_context_t &ctx)
 {
     if (ctx.dc_opts->posix_syntax) return;
 
-    Warn &warn = ctx.dc_warn;
+    Warn &warn = ctx.dc_msg.warn;
     const kernels_t &kernels = ctx.dc_kernels;
     const std::vector<Tag> &tags = ctx.dc_dfa.tags;
     const std::valarray<Rule> &rules = ctx.dc_dfa.rules;
@@ -209,10 +209,10 @@ void warn_nondeterministic_tags(const determ_context_t &ctx)
 }
 
 
-determ_context_t::determ_context_t(const opt_t *opts, Warn &warn
+determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     , const std::string &condname, const nfa_t &nfa, dfa_t &dfa)
     : dc_opts(opts)
-    , dc_warn(warn)
+    , dc_msg(msg)
     , dc_condname(condname)
     , dc_nfa(nfa)
     , dc_dfa(dfa)

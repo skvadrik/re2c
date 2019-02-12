@@ -4,7 +4,6 @@
 
 #include "src/encoding/enc.h"
 #include "src/parse/ast.h"
-#include "src/options/msg.h"
 #include "src/util/range.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "parse.h"
@@ -35,7 +34,6 @@ int lex(const char *&cur)
     std::vector<ASTRange> cls;
     bool neg = false;
     uint32_t l, u;
-    const loc_t nowhere(0, 0, "void");
 
 /*!re2c
     * { goto err; }
@@ -71,15 +69,15 @@ int lex(const char *&cur)
     }
 
     "." {
-        yylval.regexp = ast_dot(nowhere);
+        yylval.regexp = ast_dot(NOWHERE);
         return REGEXP;
     }
 
     [^] \ nil {
-        ASTChar c(static_cast<uint32_t>(cur[-1]), nowhere);
+        ASTChar c = {static_cast<uint32_t>(cur[-1]), NOWHERE};
         std::vector<ASTChar> *str = new std::vector<ASTChar>;
         str->push_back(c);
-        yylval.regexp = ast_str(nowhere, str, false);
+        yylval.regexp = ast_str(NOWHERE, str, false);
         return REGEXP;
     }
 */
@@ -92,13 +90,13 @@ cls:
 */
 add:
     if (l > u) goto err;
-    cls.push_back(ASTRange(l, u, nowhere));
+    cls.push_back(ASTRange(l, u, NOWHERE));
 /*!re2c
     ""  { goto cls; }
     "]" {
         std::vector<ASTRange> *p = new std::vector<ASTRange>;
         p->swap(cls);
-        yylval.regexp = ast_cls(nowhere, p, neg);
+        yylval.regexp = ast_cls(NOWHERE, p, neg);
         return REGEXP;
     }
 */

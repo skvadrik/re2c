@@ -1,4 +1,3 @@
-#include "src/options/msg.h"
 #include "src/options/opt.h"
 
 namespace re2c

@@ -3,7 +3,7 @@
 #include <valarray>
 #include <vector>
 
-#include "src/options/warn.h"
+#include "src/msg/msg.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
@@ -46,7 +46,7 @@ void warn_nullable(const RESpec &spec, const std::string &cond)
     for (size_t i = 0; i < nre; ++i) {
         bool trail = false;
         if (nullable(spec, spec.res[i], trail)) {
-            spec.warn.match_empty_string(spec.rules[i].code->loc, cond);
+            spec.msg.warn.match_empty_string(spec.rules[i].code->loc, cond);
         }
     }
 }

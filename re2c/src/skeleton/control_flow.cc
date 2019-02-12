@@ -5,7 +5,7 @@
 #include <valarray>
 #include <vector>
 
-#include "src/options/warn.h"
+#include "src/msg/msg.h"
 #include "src/regexp/rule.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
@@ -64,14 +64,14 @@ static void naked_paths(
     }
 }
 
-void warn_undefined_control_flow(const Skeleton &skel, Warn &warn)
+void warn_undefined_control_flow(const Skeleton &skel)
 {
     ucf_t ucf(skel.nodes_count);
     naked_paths(skel, ucf, 0);
     if (!ucf.paths.empty()) {
-        warn.undefined_control_flow(skel, ucf.paths, ucf.size.overflow());
+        skel.msg.warn.undefined_control_flow(skel, ucf.paths, ucf.size.overflow());
     } else if (ucf.size.overflow()) {
-        warn.fail(Warn::UNDEFINED_CONTROL_FLOW, skel.loc,
+        skel.msg.warn.fail(Warn::UNDEFINED_CONTROL_FLOW, skel.loc,
             "DFA is too large to check undefined control flow");
     }
 }

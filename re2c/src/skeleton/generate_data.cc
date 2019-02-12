@@ -8,7 +8,6 @@
 #include <valarray>
 #include <vector>
 
-#include "src/options/msg.h"
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
@@ -372,7 +371,7 @@ template<typename cunit_t, typename key_t>
 {
     gencover<cunit_t, key_t>(skel, cover, 0);
     if (cover.size.overflow()) {
-        warning(NULL, skel.loc, false,
+        skel.msg.warning(NULL, skel.loc, false,
             "DFA %sis too large: can only generate partial path cover",
             incond(skel.cond).c_str());
     }

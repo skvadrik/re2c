@@ -19,7 +19,6 @@ re2c_HDR = \
 	src/codegen/label.h \
 	src/codegen/output.h \
 	src/codegen/print.h \
-	src/options/msg.h \
 	src/options/opt.h \
 	src/options/ver_to_vernum.h \
 	src/options/warn.h \
@@ -42,6 +41,7 @@ re2c_HDR = \
 	src/encoding/utf16/utf16_regexp.h \
 	src/encoding/utf16/utf16.h \
 	src/msg/location.h \
+	src/msg/msg.h \
 	src/regexp/empty_class_policy.h \
 	src/regexp/re.h \
 	src/regexp/rule.h \
@@ -87,7 +87,6 @@ re2c_SRC = \
 	src/codegen/input_api.cc \
 	src/codegen/output.cc \
 	src/codegen/print.cc \
-	src/options/msg.cc \
 	src/options/opt.cc \
 	src/options/warn.cc \
 	src/nfa/estimate_size.cc \
@@ -128,6 +127,7 @@ re2c_SRC = \
 	src/encoding/utf8/utf8.cc \
 	src/encoding/utf16/utf16_regexp.cc \
 	src/encoding/utf16/utf16.cc \
+	src/msg/msg.cc \
 	src/regexp/ast_to_re.cc \
 	src/regexp/default_tags.cc \
 	src/regexp/fixed_tags.cc \

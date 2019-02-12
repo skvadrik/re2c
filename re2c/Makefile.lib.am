@@ -16,7 +16,6 @@ libre2c_la_HDR = \
 	src/codegen/label.h \
 	src/codegen/output.h \
 	src/codegen/print.h \
-	src/options/msg.h \
 	src/options/opt.h \
 	src/options/ver_to_vernum.h \
 	src/options/warn.h \
@@ -39,6 +38,7 @@ libre2c_la_HDR = \
 	src/encoding/utf16/utf16_regexp.h \
 	src/encoding/utf16/utf16.h \
 	src/msg/location.h \
+	src/msg/msg.h \
 	src/regexp/empty_class_policy.h \
 	src/regexp/re.h \
 	src/regexp/rule.h \
@@ -81,7 +81,6 @@ libre2c_la_SRC = \
 	lib/regfree.cc \
 	lib/stubs.cc \
 	src/parse/ast.cc \
-	src/options/msg.cc \
 	src/options/opt.cc \
 	src/options/warn.cc \
 	src/cfg/cfg.cc \
@@ -120,6 +119,7 @@ libre2c_la_SRC = \
 	src/encoding/utf16/utf16_regexp.cc \
 	src/encoding/utf8/utf8.cc \
 	src/encoding/utf8/utf8_regexp.cc \
+	src/msg/msg.cc \
 	src/regexp/ast_to_re.cc \
 	src/regexp/default_tags.cc \
 	src/regexp/fixed_tags.cc \

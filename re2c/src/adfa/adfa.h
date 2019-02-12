@@ -91,6 +91,7 @@ struct DFA
     bitmaps_t bitmaps;
     std::string setup;
     const Code *eof_action;
+    Msg &msg;
 
     DFA ( const dfa_t &dfa
         , const std::vector<size_t> &fill
@@ -102,6 +103,7 @@ struct DFA
         , const std::string &su
         , const Code *eof
         , const opt_t *opts
+        , Msg &msg
         );
     ~DFA ();
     void reorder();

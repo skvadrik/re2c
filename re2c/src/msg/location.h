@@ -2,7 +2,6 @@
 #define _RE2C_MSG_LOCATION_
 
 #include "src/util/c99_stdint.h"
-#include <string.h>
 
 
 namespace re2c {
@@ -11,11 +10,11 @@ struct loc_t
 {
     uint32_t line;
     uint32_t coln;
-    std::string fname;
-
-    loc_t(uint32_t l, uint32_t c, const std::string &f)
-        : line(l), coln(c), fname(f) {}
+    uint32_t file;
 };
+
+static const loc_t ATSTART = {1, 0, 0};
+static const loc_t NOWHERE = {~0u, ~0u, ~0u};
 
 } // namespace re2c
 

@@ -17,8 +17,9 @@ struct Input
     const char *so; // start offset in buffer
     const char *eo; // end offset in buffer
     uint32_t line;
+    uint32_t fidx;
 
-    Input();
+    explicit Input(size_t fidx);
     ~Input();
     bool open(const std::string &filename, const std::string *parent
         , const std::vector<std::string> &incpaths);

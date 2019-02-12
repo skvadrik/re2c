@@ -45,9 +45,9 @@ struct RESpec
     std::vector<Tag> &tags;
     std::valarray<Rule> &rules;
     const opt_t *opts;
-    Warn &warn;
+    Msg &msg;
 
-    RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w
+    RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Msg &msg
         , RangeMgr &rm);
     FORBID_COPY(RESpec);
 };

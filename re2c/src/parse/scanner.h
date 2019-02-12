@@ -8,10 +8,10 @@
 #include <vector>
 
 #include "src/msg/location.h"
+#include "src/msg/msg.h"
 #include "src/parse/input.h"
 #include "src/parse/lex.h"
 #include "src/options/opt.h"
-#include "src/options/warn.h"
 #include "src/encoding/enc.h"
 #include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
@@ -19,7 +19,7 @@
 namespace re2c
 {
 
-class Warn;
+class Msg;
 struct Opt;
 struct conopt_t;
 class Output;
@@ -33,16 +33,17 @@ public:
     enum ParseMode {Stop, Parse, Reuse, Rules};
     static const char *const ENDPOS;
 
+    Msg &msg;
+
 private:
     std::vector<Input*> files;
     const conopt_t *globopts;
-    Warn &warn;
     loc_t loc;
 
 public:
-    Scanner(const conopt_t *o, Warn &w, const char *f);
+    Scanner(const conopt_t *o, Msg &m);
     ~Scanner();
-    bool init(const std::string &filename);
+    bool open(const std::string &filename, const std::string *parent);
     bool include(const std::string &filename);
     const loc_t &tok_loc() const;
     loc_t cur_loc() const;
@@ -90,24 +91,24 @@ private:
     FORBID_COPY (Scanner);
 };
 
-inline Scanner::Scanner(const conopt_t *o, Warn &w, const char *f)
+inline Scanner::Scanner(const conopt_t *o, Msg &m)
     : ScannerState()
+    , msg(m)
     , files()
     , globopts(o)
-    , warn(w)
-    , loc(1, 0, f)
+    , loc(ATSTART)
 {}
 
 inline loc_t Scanner::cur_loc() const
 {
-    const std::string &f = get_cinput().escaped_name;
-    const uint32_t l = get_cinput().line;
+    const Input &in = get_cinput();
     uint32_t c = static_cast<uint32_t>(cur - pos);
     if (is_eof()) {
          DASSERT(c > 0);
          --c;
     }
-    return loc_t(l, c, f);
+    const loc_t loc = {in.line, c, in.fidx};
+    return loc;
 }
 
 inline const loc_t &Scanner::tok_loc() const

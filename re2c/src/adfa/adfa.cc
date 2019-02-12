@@ -32,6 +32,7 @@ DFA::DFA
     , const std::string &su
     , const Code *eof
     , const opt_t *opts
+    , Msg &msg
     )
     : accepts ()
     , loc (loc)
@@ -61,6 +62,7 @@ DFA::DFA
     , bitmaps (std::min(ubChar, 256u))
     , setup(su)
     , eof_action(eof)
+    , msg(msg)
 {
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;

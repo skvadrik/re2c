@@ -3,7 +3,6 @@
 #include <stack>
 #include <vector>
 
-#include "src/options/msg.h"
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
 #include "src/regexp/re.h"

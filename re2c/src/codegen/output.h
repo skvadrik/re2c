@@ -12,7 +12,6 @@
 
 #include "src/codegen/label.h"
 #include "src/options/opt.h"
-#include "src/options/warn.h"
 #include "src/util/counter.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/uniq_vector.h"
@@ -20,7 +19,7 @@
 namespace re2c
 {
 
-class Warn;
+class Msg;
 struct Opt;
 struct opt_t;
 template <typename value_t> class uniq_vector_t;
@@ -114,12 +113,12 @@ public:
     bool cond_goto;
     bool warn_condition_order;
     bool need_header;
-    Warn &warn;
+    Msg &msg;
     std::set<std::string> skeletons;
     size_t max_fill;
     size_t max_nmatch;
 
-    explicit Output(Warn &w);
+    explicit Output(Msg &msg);
     ~Output();
 
     std::ostream & stream ();
@@ -171,7 +170,7 @@ public:
 
 void output_tags          (std::ostream &o, uint32_t ind, const ConfTags &conf, const std::set<std::string> &tags, const opt_t *opts);
 void output_line_info     (std::ostream &o, uint32_t line, const std::string &fname, bool iflag);
-void output_cond_goto     (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts, Warn &warn, bool warn_cond_order, const loc_t &loc);
+void output_cond_goto     (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts, Msg &msg, bool warn_cond_order, const loc_t &loc);
 void output_cond_table    (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts);
 void output_state_goto    (std::ostream &o, uint32_t ind, uint32_t start_label, uint32_t fill_index, const opt_t *opts);
 void output_types         (std::ostream &o, uint32_t ind, const opt_t *opts, const uniq_vector_t<std::string> &types);

@@ -1268,7 +1268,7 @@ yyreduce:
 
   case 13:
 #line 61 "../lib/parse.ypp" /* yacc.c:1646  */
-    { (yyval.regexp) = ast_cap(ast_nil(loc_t(0, 0, "void"))); }
+    { (yyval.regexp) = ast_cap(ast_nil(NOWHERE)); }
 #line 1273 "lib/parse.cc" /* yacc.c:1646  */
     break;
 

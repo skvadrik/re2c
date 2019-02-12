@@ -1,5 +1,4 @@
 #include "src/codegen/input_api.h"
-#include "src/options/msg.h"
 #include "src/options/opt.h"
 #include "src/regexp/empty_class_policy.h"
 #include "src/encoding/enc.h"
@@ -14,7 +13,7 @@ static inline bool next (char * & arg, char ** & argv)
     return arg != NULL;
 }
 
-parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Warn &warn)
+parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
 {
 #define YYCTYPE unsigned char
 
@@ -58,8 +57,8 @@ opt:
     "-"  { goto opt_short; }
     "--" { goto opt_long; }
 
-    "-W"      end { warn.set_all ();       goto opt; }
-    "-Werror" end { warn.set_all_error (); goto opt; }
+    "-W"      end { msg.warn.set_all ();       goto opt; }
+    "-Werror" end { msg.warn.set_all_error (); goto opt; }
     "-W"          { option = Warn::W;        goto opt_warn; }
     "-Wno-"       { option = Warn::WNO;      goto opt_warn; }
     "-Werror-"    { option = Warn::WERROR;   goto opt_warn; }
@@ -70,14 +69,14 @@ opt_warn:
 /*!re2c
     * { ERROR("bad warning: %s", *argv); }
 
-    "condition-order"          end { warn.set (Warn::CONDITION_ORDER,        option); goto opt; }
-    "empty-character-class"    end { warn.set (Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
-    "match-empty-string"       end { warn.set (Warn::MATCH_EMPTY_STRING,     option); goto opt; }
-    "nondeterministic-tags"    end { warn.set (Warn::NONDETERMINISTIC_TAGS,  option); goto opt; }
-    "swapped-range"            end { warn.set (Warn::SWAPPED_RANGE,          option); goto opt; }
-    "undefined-control-flow"   end { warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
-    "unreachable-rules"        end { warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
-    "useless-escape"           end { warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
+    "condition-order"          end { msg.warn.set (Warn::CONDITION_ORDER,        option); goto opt; }
+    "empty-character-class"    end { msg.warn.set (Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
+    "match-empty-string"       end { msg.warn.set (Warn::MATCH_EMPTY_STRING,     option); goto opt; }
+    "nondeterministic-tags"    end { msg.warn.set (Warn::NONDETERMINISTIC_TAGS,  option); goto opt; }
+    "swapped-range"            end { msg.warn.set (Warn::SWAPPED_RANGE,          option); goto opt; }
+    "undefined-control-flow"   end { msg.warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
+    "unreachable-rules"        end { msg.warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
+    "useless-escape"           end { msg.warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
 */
 
 opt_short:
