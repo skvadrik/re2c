@@ -47,5 +47,5 @@ yy5:
 	}
 }
 
-tags/map_ord1.i--tags--no-lookahead.re:4: warning: rule matches empty string [-Wmatch-empty-string]
-tags/map_ord1.i--tags--no-lookahead.re:4: warning: tag 't' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/map_ord1.i--tags--no-lookahead.re:4:22: warning: rule matches empty string [-Wmatch-empty-string]
+tags/map_ord1.i--tags--no-lookahead.re:4:22: warning: tag 't' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

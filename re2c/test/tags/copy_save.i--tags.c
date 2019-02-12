@@ -52,5 +52,5 @@ yy7:
 	goto yy2;
 }
 
-tags/copy_save.i--tags.re:3: warning: rule matches empty string [-Wmatch-empty-string]
-tags/copy_save.i--tags.re:3: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/copy_save.i--tags.re:3:16: warning: rule matches empty string [-Wmatch-empty-string]
+tags/copy_save.i--tags.re:3:16: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

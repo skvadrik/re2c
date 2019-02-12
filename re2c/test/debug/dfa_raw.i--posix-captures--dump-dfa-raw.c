@@ -34,7 +34,7 @@ yy3:
 	}
 }
 
-debug/dfa_raw.i--posix-captures--dump-dfa-raw.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+debug/dfa_raw.i--posix-captures--dump-dfa-raw.re:2:11: warning: rule matches empty string [-Wmatch-empty-string]
 digraph DFA {
   rankdir=LR
   node[shape=plaintext fontname=Courier]

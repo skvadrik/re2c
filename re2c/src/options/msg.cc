@@ -36,23 +36,9 @@ void fatal(const char *fmt, ...)
     exit(1);
 }
 
-void fatal_l(const std::string &fname, uint32_t line, const char *fmt, ...)
+void fatal(const loc_t &loc, const char *fmt, ...)
 {
-    fprintf(stderr, "%s:%u: error: ", fname.c_str(), line);
-
-    va_list args;
-    va_start(args, fmt);
-    vfprintf(stderr, fmt, args);
-    va_end(args);
-
-    fprintf(stderr, "\n");
-    exit(1);
-}
-
-void fatal_lc(const std::string &fname, uint32_t line, uint32_t column
-    , const char *fmt, ...)
-{
-    fprintf(stderr, "%s:%u:%u: error: ", fname.c_str(), line, column);
+    fprintf(stderr, "%s:%u:%u: error: ", loc.fname.c_str(), loc.line, loc.coln);
 
     va_list args;
     va_start(args, fmt);
@@ -68,17 +54,10 @@ void error_arg(const char *option)
     error("expected argument to option %s", option);
 }
 
-void warning_start(const std::string &fname, uint32_t line, bool error)
+void warning_start(const loc_t &loc, bool error)
 {
     const char *msg = error ? "error" : "warning";
-    fprintf(stderr, "%s:%u: %s: ", fname.c_str(), line, msg);
-}
-
-void warning_start_lc(const std::string &fname, uint32_t line, uint32_t coln
-    , bool error)
-{
-    const char *msg = error ? "error" : "warning";
-    fprintf(stderr, "%s:%u:%u: %s: ", fname.c_str(), line, coln, msg);
+    fprintf(stderr, "%s:%u:%u: %s: ", loc.fname.c_str(), loc.line, loc.coln, msg);
 }
 
 void warning_end(const char *type, bool error)
@@ -90,23 +69,10 @@ void warning_end(const char *type, bool error)
     fprintf(stderr, "\n");
 }
 
-void warning(const char *type, const std::string &fname, uint32_t line
-    , bool error, const char *fmt, ...)
+void warning(const char *type, const loc_t &loc, bool error
+    , const char *fmt, ...)
 {
-    warning_start(fname, line, error);
-
-    va_list args;
-    va_start(args, fmt);
-    vfprintf(stderr, fmt, args);
-    va_end(args);
-
-    warning_end(type, error);
-}
-
-void warning_lc(const char *type, const std::string &fname, uint32_t line
-    , uint32_t coln, bool error, const char *fmt, ...)
-{
-    warning_start_lc(fname, line, coln, error);
+    warning_start(loc, error);
 
     va_list args;
     va_start(args, fmt);

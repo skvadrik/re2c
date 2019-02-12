@@ -146,4 +146,4 @@ yy12:
 	}
 }
 
-posix_captures/gor3.i--posix-captures.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/gor3.i--posix-captures.re:2:33: warning: rule matches empty string [-Wmatch-empty-string]

@@ -17,4 +17,4 @@ yy4:
 	;
  ;
 }
-layout/006_06.i.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+layout/006_06.i.re:2:5: warning: rule matches empty string [-Wmatch-empty-string]

@@ -127,4 +127,4 @@ main()
 	do_scan("?1?123?45??", 11, "2220");
 	do_scan("?1?123?45?!", 12, "22210");
 }
-bug1454253b.s.re:38: warning: control flow is undefined for strings that match '\x3F [\x0-\x20\x22-\x2F\x3A-\x40\x5B-\x60\x7B-\xFF]', use default rule '*' [-Wundefined-control-flow]
+bug1454253b.s.re:38:2: warning: control flow is undefined for strings that match '\x3F [\x0-\x20\x22-\x2F\x3A-\x40\x5B-\x60\x7B-\xFF]', use default rule '*' [-Wundefined-control-flow]

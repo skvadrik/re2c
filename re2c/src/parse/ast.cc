@@ -10,8 +10,8 @@ free_list<AST*> AST::flist;
 
 const uint32_t AST::MANY = std::numeric_limits<uint32_t>::max();
 
-AST::AST(uint32_t l, uint32_t c, type_t t)
-    : type(t), line(l), column(c)
+AST::AST(const loc_t &l, type_t t)
+    : type(t), loc(l)
 {
     flist.insert(this);
 }
@@ -30,42 +30,42 @@ AST::~AST()
     }
 }
 
-const AST *ast_nil(uint32_t l, uint32_t c)
+const AST *ast_nil(const loc_t &loc)
 {
-    return new AST(l, c, AST::NIL);
+    return new AST(loc, AST::NIL);
 }
 
-const AST *ast_str(uint32_t l, uint32_t c, std::vector<ASTChar> *chars, bool icase)
+const AST *ast_str(const loc_t &loc, std::vector<ASTChar> *chars, bool icase)
 {
-    AST *ast = new AST(l, c, AST::STR);
+    AST *ast = new AST(loc, AST::STR);
     ast->str.chars = chars;
     ast->str.icase = icase;
     return ast;
 }
 
-const AST *ast_cls(uint32_t l, uint32_t c, std::vector<ASTRange> *ranges, bool negated)
+const AST *ast_cls(const loc_t &loc, std::vector<ASTRange> *ranges, bool negated)
 {
-    AST *ast = new AST(l, c, AST::CLS);
+    AST *ast = new AST(loc, AST::CLS);
     ast->cls.ranges = ranges;
     ast->cls.negated = negated;
     return ast;
 }
 
-const AST *ast_dot(uint32_t l, uint32_t c)
+const AST *ast_dot(const loc_t &loc)
 {
-    return new AST(l, c, AST::DOT);
+    return new AST(loc, AST::DOT);
 }
 
-const AST *ast_default(uint32_t l, uint32_t c)
+const AST *ast_default(const loc_t &loc)
 {
-    return new AST(l, c, AST::DEFAULT);
+    return new AST(loc, AST::DEFAULT);
 }
 
 const AST *ast_alt(const AST *a1, const AST *a2)
 {
     if (!a1) return a2;
     if (!a2) return a1;
-    AST *ast = new AST(a1->line, a1->column, AST::ALT);
+    AST *ast = new AST(a1->loc, AST::ALT);
     ast->alt.ast1 = a1;
     ast->alt.ast2 = a2;
     return ast;
@@ -75,7 +75,7 @@ const AST *ast_cat(const AST *a1, const AST *a2)
 {
     if (!a1) return a2;
     if (!a2) return a1;
-    AST *ast = new AST(a1->line, a1->column, AST::CAT);
+    AST *ast = new AST(a1->loc, AST::CAT);
     ast->cat.ast1 = a1;
     ast->cat.ast2 = a2;
     return ast;
@@ -83,7 +83,7 @@ const AST *ast_cat(const AST *a1, const AST *a2)
 
 const AST *ast_iter(const AST *a, uint32_t n, uint32_t m)
 {
-    AST *ast = new AST(a->line, a->column, AST::ITER);
+    AST *ast = new AST(a->loc, AST::ITER);
     ast->iter.ast = a;
     ast->iter.min = n;
     ast->iter.max = m;
@@ -92,15 +92,15 @@ const AST *ast_iter(const AST *a, uint32_t n, uint32_t m)
 
 const AST *ast_diff(const AST *a1, const AST *a2)
 {
-    AST *ast = new AST(a1->line, a1->column, AST::DIFF);
+    AST *ast = new AST(a1->loc, AST::DIFF);
     ast->cat.ast1 = a1;
     ast->cat.ast2 = a2;
     return ast;
 }
 
-const AST *ast_tag(uint32_t l, uint32_t c, const std::string *n, bool h)
+const AST *ast_tag(const loc_t &loc, const std::string *n, bool h)
 {
-    AST *ast = new AST(l, c, AST::TAG);
+    AST *ast = new AST(loc, AST::TAG);
     ast->tag.name = n;
     ast->tag.history = h;
     return ast;
@@ -108,14 +108,14 @@ const AST *ast_tag(uint32_t l, uint32_t c, const std::string *n, bool h)
 
 const AST *ast_cap(const AST *a)
 {
-    AST *ast = new AST(a->line, a->column, AST::CAP);
+    AST *ast = new AST(a->loc, AST::CAP);
     ast->cap = a;
     return ast;
 }
 
 const AST *ast_ref(const AST *a, const std::string &n)
 {
-    AST *ast = new AST(a->line, a->column, AST::REF);
+    AST *ast = new AST(a->loc, AST::REF);
     ast->ref.ast = a;
     ast->ref.name = new std::string(n);
     return ast;

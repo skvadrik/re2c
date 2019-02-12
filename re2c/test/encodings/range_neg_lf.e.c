@@ -19,4 +19,4 @@ yy3:
 }
 #line 3 "encodings/range_neg_lf.e.re"
 
-encodings/range_neg_lf.e.re:3: warning: control flow is undefined for strings that match '\x25', use default rule '*' [-Wundefined-control-flow]
+encodings/range_neg_lf.e.re:3:2: warning: control flow is undefined for strings that match '\x25', use default rule '*' [-Wundefined-control-flow]

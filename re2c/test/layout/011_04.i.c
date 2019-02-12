@@ -22,4 +22,4 @@ yy5:
 	++YYCURSOR;
 	goto yy4;
 }
-layout/011_04.i.re:3: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+layout/011_04.i.re:4:2: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

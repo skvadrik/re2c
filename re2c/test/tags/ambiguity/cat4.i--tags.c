@@ -41,4 +41,4 @@ yy7:
 	}
 }
 
-tags/ambiguity/cat4.i--tags.re:4: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/ambiguity/cat4.i--tags.re:4:22: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

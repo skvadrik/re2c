@@ -101,8 +101,8 @@ void yyerror(const char *pattern, const char*);
 
 /* In a future release of Bison, this section will be replaced
    by #include "parse.h".  */
-#ifndef YY_YY_lib_PARSE_H_INCLUDED
-# define YY_YY_lib_PARSE_H_INCLUDED
+#ifndef YY_YY_LIB_PARSE_H_INCLUDED
+# define YY_YY_LIB_PARSE_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -145,7 +145,7 @@ extern YYSTYPE yylval;
 
 int yyparse (const char *&pattern);
 
-#endif /* !YY_YY_lib_PARSE_H_INCLUDED  */
+#endif /* !YY_YY_LIB_PARSE_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
@@ -1268,7 +1268,7 @@ yyreduce:
 
   case 13:
 #line 61 "../lib/parse.ypp" /* yacc.c:1646  */
-    { (yyval.regexp) = ast_cap(ast_nil(0, 0)); }
+    { (yyval.regexp) = ast_cap(ast_nil(loc_t(0, 0, "void"))); }
 #line 1273 "lib/parse.cc" /* yacc.c:1646  */
     break;
 

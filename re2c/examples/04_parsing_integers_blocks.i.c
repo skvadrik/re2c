@@ -248,4 +248,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-04_parsing_integers_blocks.i.re:32: warning: rule matches empty string [-Wmatch-empty-string]
+04_parsing_integers_blocks.i.re:32:27: warning: rule matches empty string [-Wmatch-empty-string]

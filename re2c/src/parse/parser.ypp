@@ -70,14 +70,13 @@ spec
 def
 : name expr enddef {
     if (!context.symtab.insert(std::make_pair(*$1, $2)).second) {
-        fatal_l(context.input.get_fname(), context.input.get_line()
-            , "sym already defined");
+        fatal(context.input.tok_loc(), "sym already defined");
     }
     delete $1;
 }
 /* errors */
 | name expr '/' {
-    fatal_l(context.input.get_fname(), context.input.get_line()
+    fatal(context.input.tok_loc()
         , "trailing contexts are not allowed in named definitions");
 };
 
@@ -123,7 +122,7 @@ rule
     delete $1;
 }
 | TOKEN_CZERO ccode {
-    const AST *r = ast_nil(context.input.get_line(), 0);
+    const AST *r = ast_nil(context.input.tok_loc());
     find(context.specs, "0").rules.push_back(ASTRule(r, $2));
     delete $1;
 };
@@ -136,7 +135,7 @@ ccode
     delete $1;
 }
 | TOKEN_CJUMP {
-    $$ = new Code(context.input.get_fname(), context.input.get_line());
+    $$ = new Code(context.input.tok_loc());
     $$->cond = *$1;
     delete $1;
 };
@@ -145,7 +144,7 @@ trailexpr
 : expr { $$ = ast_cap($1); }
 | expr '/' expr {
     $$ = ast_cat(ast_cap($1),
-        ast_cat(ast_tag(context.input.get_line(), 0, NULL, false), $3));
+        ast_cat(ast_tag(context.input.tok_loc(), NULL, false), $3));
 };
 
 expr
@@ -194,8 +193,7 @@ primary
 | TOKEN_ID {
     symtab_t::iterator i = context.symtab.find(*$1);
     if (i == context.symtab.end()) {
-        fatal_l(context.input.get_fname(), context.input.get_line()
-            , "undefined symbol '%s'", $1->c_str());
+        fatal(context.input.tok_loc(), "undefined symbol '%s'", $1->c_str());
     }
     $$ = i->second;
     if (ast_need_wrap($$)) {
@@ -212,7 +210,7 @@ extern "C" {
 
 void yyerror(context_t &context, const char* s)
 {
-    fatal_l(context.input.get_fname(), context.input.get_line(), "%s", s);
+    fatal(context.input.tok_loc(), "%s", s);
 }
 
 int yylex(context_t &context)

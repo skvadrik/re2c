@@ -12,7 +12,7 @@
 }
 #line 6 "input6.re"
 
-input6.re:3: warning: empty character class [-Wempty-character-class]
-input6.re:3: warning: empty character class [-Wempty-character-class]
-input6.re:3: warning: rule matches empty string [-Wmatch-empty-string]
-input6.re:3: warning: unreachable rule (shadowed by rule at line 4) [-Wunreachable-rules]
+input6.re:3:0: warning: empty character class [-Wempty-character-class]
+input6.re:3:3: warning: empty character class [-Wempty-character-class]
+input6.re:3:12: warning: rule matches empty string [-Wmatch-empty-string]
+input6.re:3:12: warning: unreachable rule (shadowed by rule at line 4) [-Wunreachable-rules]

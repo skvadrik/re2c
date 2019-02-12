@@ -47,4 +47,4 @@ yy6:
 	}
 }
 
-tags/tags_in_trail.i--tags.re:3: warning: rule matches empty string [-Wmatch-empty-string]
+tags/tags_in_trail.i--tags.re:3:20: warning: rule matches empty string [-Wmatch-empty-string]

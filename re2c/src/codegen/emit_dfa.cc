@@ -51,7 +51,7 @@ void emit_eof(Output & o, uint32_t ind, const Code *code)
     if (opts->eof == NOEOF || opts->fFlag) return;
 
     o.wstring(opts->labelPrefix).ws("eof:\n");
-    o.wdelay_line_info_input(code->fline, code->fname);
+    o.wdelay_line_info_input(code->loc);
     o.wind(ind).wstring(code->text).ws("\n");
     o.wdelay_line_info_output();
 }
@@ -134,8 +134,8 @@ void DFA::emit_dot(Output &o, bool last_cond) const
             const Code *code = rules[s->action.info.rule].code;
             if (!code->autogen) {
                 o.wlabel(s->label).ws(" [label=\"")
-                    .wstring(code->fname)
-                    .ws(":").wu32(code->fline)
+                    .wstring(code->loc.fname)
+                    .ws(":").wu32(code->loc.line)
                     .ws("\"]").ws("\n");
             }
         }

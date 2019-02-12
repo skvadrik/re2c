@@ -5,5 +5,5 @@
 	{}
 }
 
-bug61_positive.i--empty-class(match-empty).re:2: warning: empty character class [-Wempty-character-class]
-bug61_positive.i--empty-class(match-empty).re:2: warning: rule matches empty string [-Wmatch-empty-string]
+bug61_positive.i--empty-class(match-empty).re:2:4: warning: empty character class [-Wempty-character-class]
+bug61_positive.i--empty-class(match-empty).re:2:7: warning: rule matches empty string [-Wmatch-empty-string]

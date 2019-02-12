@@ -103,8 +103,8 @@ yy23:
 	{ 0 }
 }
 
-wunreachable_rules.i.re:3: warning: unreachable rule (shadowed by rule at line 2) [-Wunreachable-rules]
-wunreachable_rules.i.re:8: warning: unreachable rule (shadowed by rule at line 7) [-Wunreachable-rules]
-wunreachable_rules.i.re:12: warning: rule matches empty string [-Wmatch-empty-string]
-wunreachable_rules.i.re:13: warning: unreachable rule (shadowed by rule at line 12) [-Wunreachable-rules]
-wunreachable_rules.i.re:18: warning: unreachable rule (shadowed by rule at line 17) [-Wunreachable-rules]
+wunreachable_rules.i.re:3:21: warning: unreachable rule (shadowed by rule at line 2) [-Wunreachable-rules]
+wunreachable_rules.i.re:8:19: warning: unreachable rule (shadowed by rule at line 7) [-Wunreachable-rules]
+wunreachable_rules.i.re:12:15: warning: rule matches empty string [-Wmatch-empty-string]
+wunreachable_rules.i.re:13:15: warning: unreachable rule (shadowed by rule at line 12) [-Wunreachable-rules]
+wunreachable_rules.i.re:18:15: warning: unreachable rule (shadowed by rule at line 17) [-Wunreachable-rules]

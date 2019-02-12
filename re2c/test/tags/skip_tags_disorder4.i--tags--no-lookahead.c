@@ -62,5 +62,5 @@ yy12:
 	{}
 }
 
-tags/skip_tags_disorder4.i--tags--no-lookahead.re:3: warning: rule matches empty string [-Wmatch-empty-string]
-tags/skip_tags_disorder4.i--tags--no-lookahead.re:3: warning: tag 't' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/skip_tags_disorder4.i--tags--no-lookahead.re:3:17: warning: rule matches empty string [-Wmatch-empty-string]
+tags/skip_tags_disorder4.i--tags--no-lookahead.re:3:17: warning: tag 't' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

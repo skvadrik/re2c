@@ -38,6 +38,7 @@ libre2c_la_HDR = \
 	src/encoding/utf8/utf8_regexp.h \
 	src/encoding/utf16/utf16_regexp.h \
 	src/encoding/utf16/utf16.h \
+	src/msg/location.h \
 	src/regexp/empty_class_policy.h \
 	src/regexp/re.h \
 	src/regexp/rule.h \

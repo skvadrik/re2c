@@ -28,7 +28,7 @@ OutputFragment::~OutputFragment()
     if (type == STAGS || type == MTAGS) {
         delete tags;
     } else if (type == LINE_INFO_INPUT) {
-        delete line_info;
+        delete loc;
     }
 }
 
@@ -47,12 +47,11 @@ uint32_t OutputFragment::count_lines () const
     return lines;
 }
 
-OutputBlock::OutputBlock ()
-    : fragments ()
+OutputBlock::OutputBlock(const loc_t &loc)
+    : loc(loc)
+    , fragments ()
     , used_yyaccept (false)
     , have_user_code (false)
-    , fname()
-    , line (0)
     , types ()
     , stags ()
     , mtags ()
@@ -253,10 +252,10 @@ Output &Output::wdelay_tags(const ConfTags *cf, bool mtags)
     return *this;
 }
 
-Output & Output::wdelay_line_info_input (uint32_t l, const std::string &fn)
+Output & Output::wdelay_line_info_input (const loc_t &loc)
 {
     OutputFragment *frag = new OutputFragment(OutputFragment::LINE_INFO_INPUT, 0);
-    frag->line_info = new LineInfo(l, fn);
+    frag->loc = new loc_t(loc);
     blocks->back()->fragments.push_back(frag);
     return *this;
 }
@@ -353,11 +352,10 @@ Output& Output::wdelay_backup(uint32_t ind, bool backup)
     return *this;
 }
 
-void Output::new_block(Opt &opts, const std::string &fname)
+void Output::new_block(Opt &opts, const loc_t &loc)
 {
-    OutputBlock *b = new OutputBlock;
+    OutputBlock *b = new OutputBlock(loc);
     b->opts = opts.snapshot();
-    b->fname = fname;
     blocks->push_back(b);
 
     // start label hapens to be the only option
@@ -477,14 +475,14 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             case OutputFragment::EMPTY:
             case OutputFragment::CODE: break;
             case OutputFragment::LINE_INFO_INPUT:
-                output_line_info(o, f.line_info->line, f.line_info->filename, bopt->iFlag);
+                output_line_info(o, f.loc->line, f.loc->fname, bopt->iFlag);
                 break;
             case OutputFragment::LINE_INFO_OUTPUT:
                 output_line_info(o, line_count + 1, filename, bopt->iFlag);
                 break;
             case OutputFragment::COND_GOTO:
                 output_cond_goto(o, ind, b.types, bopt, warn
-                    , warn_condition_order, b.fname, b.line);
+                    , warn_condition_order, b.loc);
                 break;
             case OutputFragment::COND_TABLE:
                 output_cond_table(o, ind, b.types, bopt);
@@ -766,7 +764,7 @@ static void output_cond_goto_binary(std::ostream &o, uint32_t ind,
 
 void output_cond_goto(std::ostream &o, uint32_t ind
     , const std::vector<std::string> &conds, const opt_t *opts, Warn &warn
-    , bool warn_cond_order, const std::string &fname, uint32_t line)
+    , bool warn_cond_order, const loc_t &loc)
 {
     const size_t ncond = conds.size();
     const std::string indstr = indent(ind, opts->indString);
@@ -799,7 +797,7 @@ void output_cond_goto(std::ostream &o, uint32_t ind
     warn_cond_order &= opts->header_file.empty();
 
     // see note [condition order]
-    if (warn_cond_order) warn.condition_order(fname, line);
+    if (warn_cond_order) warn.condition_order(loc);
 }
 
 void output_cond_table(std::ostream &o, uint32_t ind,

@@ -163,4 +163,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-tags/fix3_trail.i--tags--input(custom).re:24: warning: rule matches empty string [-Wmatch-empty-string]
+tags/fix3_trail.i--tags--input(custom).re:24:15: warning: rule matches empty string [-Wmatch-empty-string]

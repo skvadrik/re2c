@@ -205,6 +205,6 @@ yy13:
 	}
 
 }
-reuse/repeat-07.gir.re:27: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-reuse/repeat-07.gir.re:45: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-reuse/repeat-07.gir.re:63: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/repeat-07.gir.re:27:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/repeat-07.gir.re:45:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/repeat-07.gir.re:63:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

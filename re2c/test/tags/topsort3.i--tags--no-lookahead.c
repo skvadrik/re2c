@@ -67,5 +67,5 @@ yy10:
 	}
 }
 
-tags/topsort3.i--tags--no-lookahead.re:4: warning: rule matches empty string [-Wmatch-empty-string]
-tags/topsort3.i--tags--no-lookahead.re:3: warning: tag 'c' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/topsort3.i--tags--no-lookahead.re:4:3: warning: rule matches empty string [-Wmatch-empty-string]
+tags/topsort3.i--tags--no-lookahead.re:3:29: warning: tag 'c' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

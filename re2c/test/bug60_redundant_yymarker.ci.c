@@ -45,6 +45,6 @@ yy10:
 	{}
 }
 
-bug60_redundant_yymarker.ci.re:3: warning: unreachable rule in condition 'c1'  [-Wunreachable-rules]
-bug60_redundant_yymarker.ci.re:4: warning: unreachable rule in condition 'c1'  [-Wunreachable-rules]
-bug60_redundant_yymarker.ci.re:9: warning: control flow in condition 'c2' is undefined for strings that match '[\x0-\x63\x65-\xFF]', use default rule '*' [-Wundefined-control-flow]
+bug60_redundant_yymarker.ci.re:3:14: warning: unreachable rule in condition 'c1'  [-Wunreachable-rules]
+bug60_redundant_yymarker.ci.re:4:9: warning: unreachable rule in condition 'c1'  [-Wunreachable-rules]
+bug60_redundant_yymarker.ci.re:9:2: warning: control flow in condition 'c2' is undefined for strings that match '[\x0-\x63\x65-\xFF]', use default rule '*' [-Wundefined-control-flow]

@@ -15,4 +15,4 @@ yy3:
 }
 #line 3 "encodings/utf8-range_0x00_0x7f.8.re"
 
-encodings/utf8-range_0x00_0x7f.8.re:3: warning: control flow is undefined for strings that match '[\x80-\xFF]', use default rule '*' [-Wundefined-control-flow]
+encodings/utf8-range_0x00_0x7f.8.re:3:2: warning: control flow is undefined for strings that match '[\x80-\xFF]', use default rule '*' [-Wundefined-control-flow]

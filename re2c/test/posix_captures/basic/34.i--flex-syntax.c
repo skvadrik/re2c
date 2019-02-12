@@ -40,4 +40,4 @@ yy6:
 	{}
 }
 
-posix_captures/basic/34.i--flex-syntax.re:6: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/basic/34.i--flex-syntax.re:6:7: warning: rule matches empty string [-Wmatch-empty-string]

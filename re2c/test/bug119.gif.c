@@ -9,4 +9,4 @@ yy0:
 	{}
 }
 
-bug119.gif.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+bug119.gif.re:2:7: warning: rule matches empty string [-Wmatch-empty-string]

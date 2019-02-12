@@ -297,4 +297,4 @@ yy31:
 	}
 }
 
-posix_captures/repetition/72.i--flex-syntax.re:6: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/repetition/72.i--flex-syntax.re:6:7: warning: rule matches empty string [-Wmatch-empty-string]

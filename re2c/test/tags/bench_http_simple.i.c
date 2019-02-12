@@ -2432,6 +2432,6 @@ int main(int argc, char **argv)
     free_input(&in);
     return 0;
 }
-tags/bench_http_simple.i.re:190: warning: tag 'm1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/bench_http_simple.i.re:190: warning: tag 'v1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/bench_http_simple.i.re:190: warning: tag 'h3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_http_simple.i.re:190:17: warning: tag 'm1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_http_simple.i.re:190:17: warning: tag 'v1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_http_simple.i.re:190:17: warning: tag 'h3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

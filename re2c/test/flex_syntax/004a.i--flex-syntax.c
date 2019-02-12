@@ -22,4 +22,4 @@ yy4:
 yy6:
 	{}
 }
-flex_syntax/004a.i--flex-syntax.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+flex_syntax/004a.i--flex-syntax.re:2:3: warning: rule matches empty string [-Wmatch-empty-string]

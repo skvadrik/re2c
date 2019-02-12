@@ -6889,6 +6889,6 @@ yy446:
 #line 318 "rexx.--empty-class(match-empty).re"
 
 }
-rexx.--empty-class(match-empty).re:253: warning: rule matches empty string [-Wmatch-empty-string]
-rexx.--empty-class(match-empty).re:288: warning: empty character class [-Wempty-character-class]
-rexx.--empty-class(match-empty).re:289: warning: rule matches empty string [-Wmatch-empty-string]
+rexx.--empty-class(match-empty).re:253:5: warning: rule matches empty string [-Wmatch-empty-string]
+rexx.--empty-class(match-empty).re:288:0: warning: empty character class [-Wempty-character-class]
+rexx.--empty-class(match-empty).re:289:5: warning: rule matches empty string [-Wmatch-empty-string]

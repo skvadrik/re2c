@@ -4,6 +4,7 @@
 #include "src/codegen/output.h"
 #include "src/options/msg.h"
 #include "src/encoding/enc.h"
+#include "src/parse/ast.h"
 #include "src/parse/scanner.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "src/util/string_utils.h"
@@ -39,8 +40,6 @@ namespace re2c
 void Scanner::lex_conf(Opt &opts)
 {
     tok = cur;
-    const uint32_t l = get_line(), c = get_column();
-    const std::string &f = get_fname();
 /*!re2c
     "flags:" ("b" | "bit-vectors")    { opts.set_bFlag            (lex_conf_bool());   return; }
     "flags:" ("d" | "debug-output")   { opts.set_dFlag            (lex_conf_bool());   return; }
@@ -72,7 +71,9 @@ void Scanner::lex_conf(Opt &opts)
 
     "eof" {
         const int32_t eof = lex_conf_number();
-        if (eof < 0) fatal_lc(f, l, c, "eof cannot have negative value");
+        if (eof < 0) {
+            fatal(cur_loc(), "eof cannot have negative value");
+        }
         opts.set_eof(static_cast<uint32_t>(eof));
         return;
     }
@@ -109,7 +110,7 @@ void Scanner::lex_conf(Opt &opts)
     "cgoto:threshold" {
         const int32_t n = lex_conf_number ();
         if (n < 0) {
-            fatal_lc(f, l, c, "configuration 'cgoto:threshold' must be nonnegative");
+            fatal(cur_loc(), "configuration 'cgoto:threshold' must be nonnegative");
         }
         opts.set_cGotoThreshold (static_cast<uint32_t> (n));
         return;
@@ -141,7 +142,7 @@ void Scanner::lex_conf(Opt &opts)
     "indent:top" {
         const int32_t n = lex_conf_number ();
         if (n < 0) {
-            fatal_lc(f, l, c, "configuration 'indent:top' must be nonnegative");
+            fatal(cur_loc(), "configuration 'indent:top' must be nonnegative");
         }
         opts.set_topIndent (static_cast<uint32_t> (n));
         return;
@@ -171,7 +172,7 @@ void Scanner::lex_conf(Opt &opts)
     "variable:yystable" { lex_conf_string (); return; }
 
     [a-zA-Z0-9_:-]* {
-        fatal_lc(f, l, c, "unrecognized configuration '%.*s'",
+        fatal(tok_loc(), "unrecognized configuration '%.*s'",
             static_cast<int>(cur - tok), tok);
     }
 */
@@ -181,7 +182,7 @@ void Scanner::lex_conf_encoding_policy(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal_lc(get_fname(), get_line(), get_column(),
+    * { fatal(cur_loc(),
         "bad configuration value (expected: 'ignore', 'substitute', 'fail')"); }
     "ignore"     { opts.set_encoding_policy(Enc::POLICY_IGNORE);     goto end; }
     "substitute" { opts.set_encoding_policy(Enc::POLICY_SUBSTITUTE); goto end; }
@@ -195,8 +196,7 @@ void Scanner::lex_conf_input(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal_lc(get_fname(), get_line(), get_column(),
-        "bad configuration value (expected: 'default', 'custom')"); }
+    * { fatal(cur_loc(), "bad configuration value (expected: 'default', 'custom')"); }
     "default" { opts.set_input_api(INPUT_DEFAULT); goto end; }
     "custom"  { opts.set_input_api(INPUT_CUSTOM);  goto end; }
 */
@@ -208,7 +208,7 @@ void Scanner::lex_conf_empty_class(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { fatal_lc(get_fname(), get_line(), get_column(),
+    * { fatal(cur_loc(),
         "bad configuration value (expected: 'match-empty', 'match-none', 'error')"); }
     "match-empty" { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_EMPTY); goto end; }
     "match-none"  { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_NONE);  goto end; }
@@ -230,8 +230,7 @@ void Scanner::lex_conf_enc(Enc::type_t enc, Opt &opts)
 void Scanner::lex_conf_assign ()
 {
 /*!re2c
-    * { fatal_lc(get_fname(), get_line(), get_column()
-        , "missing '=' in configuration"); }
+    * { fatal(cur_loc(), "missing '=' in configuration"); }
     conf_assign { return; }
 */
 }
@@ -239,8 +238,7 @@ void Scanner::lex_conf_assign ()
 void Scanner::lex_conf_semicolon ()
 {
 /*!re2c
-    * { fatal_lc(get_fname(), get_line(), get_column()
-        , "missing ending ';' in configuration"); }
+    * { fatal(cur_loc(), "missing ending ';' in configuration"); }
     space* ";" { return; }
 */
 }
@@ -255,13 +253,11 @@ int32_t Scanner::lex_conf_number ()
     lex_conf_assign ();
     tok = cur;
 /*!re2c
-    * { fatal_lc(get_fname(), get_line(), get_column(),
-        "bad configuration value (expected number)"); }
+    * { fatal(cur_loc(), "bad configuration value (expected number)"); }
     number {
         int32_t n = 0;
         if (!s_to_i32_unsafe (tok, cur, n)) {
-            fatal_lc(get_fname(), get_line(), get_column()
-                , "configuration value overflow");
+            fatal(cur_loc(), "configuration value overflow");
         }
         lex_conf_semicolon ();
         return n;
@@ -277,16 +273,15 @@ std::string Scanner::lex_conf_string ()
 /*!re2c
     ['"] {
         const char quote = tok[0];
-        for (bool end;;) {
-            const uint32_t c = lex_str_chr(quote, end);
-            if (end) {
+        for (;;) {
+            ASTChar c;
+            if (!lex_str_chr(quote, c)) {
                 goto end;
             }
-            if (c > 0xFF) {
-                fatal_lc(get_fname(), get_line(), get_column(),
-                    "multibyte character in configuration string: 0x%X", c);
+            if (c.chr > 0xFF) {
+                fatal(c.loc, "multibyte character in configuration string: 0x%X", c.chr);
             } else {
-                s += static_cast<char>(c);
+                s += static_cast<char>(c.chr);
             }
         }
     }

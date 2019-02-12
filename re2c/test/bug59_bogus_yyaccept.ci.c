@@ -85,5 +85,5 @@ yy18:
 	{}
 }
 
-bug59_bogus_yyaccept.ci.re:10: warning: control flow in condition 'c1' is undefined for strings that match '[\x0-\x61\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
-bug59_bogus_yyaccept.ci.re:10: warning: control flow in condition 'c2' is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+bug59_bogus_yyaccept.ci.re:10:2: warning: control flow in condition 'c1' is undefined for strings that match '[\x0-\x61\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
+bug59_bogus_yyaccept.ci.re:10:2: warning: control flow in condition 'c2' is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

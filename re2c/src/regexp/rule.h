@@ -6,6 +6,7 @@
 #include <set>
 #include <string>
 
+#include "src/msg/location.h"
 #include "src/regexp/tag.h"
 #include "src/util/free_list.h"
 
@@ -16,24 +17,21 @@ struct Code
 {
     static free_list<Code*> flist;
 
-    std::string fname;
-    uint32_t fline;
+    const loc_t loc;
     bool autogen;
     const std::string text;
     std::string cond;
 
-    Code(const std::string &file, uint32_t line)
-        : fname(file)
-        , fline(line)
+    explicit Code(const loc_t &loc)
+        : loc(loc)
         , autogen(true)
         , text("")
         , cond("")
     {
         flist.insert(this);
     }
-    Code(const std::string &file, uint32_t line, const std::string &t)
-        : fname(file)
-        , fline(line)
+    Code(const loc_t &loc, const std::string &t)
+        : loc(loc)
         , autogen(false)
         , text(t)
         , cond("")

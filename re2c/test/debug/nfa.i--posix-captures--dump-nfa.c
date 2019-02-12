@@ -34,7 +34,7 @@ yy3:
 	}
 }
 
-debug/nfa.i--posix-captures--dump-nfa.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+debug/nfa.i--posix-captures--dump-nfa.re:2:11: warning: rule matches empty string [-Wmatch-empty-string]
 digraph NFA {
   rankdir=LR
   node[shape=Mrecord fontname=Courier height=0.2 width=0.2]

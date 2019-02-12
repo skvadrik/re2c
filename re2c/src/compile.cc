@@ -42,23 +42,22 @@ static std::string make_name(const std::string &cond, uint32_t line)
     return name;
 }
 
-static smart_ptr<DFA> ast_to_dfa(const std::string &fname
-    , const spec_t &spec, Output &output)
+static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 {
     const opt_t *opts = output.block().opts;
+    const loc_t &loc = output.block().loc;
     Warn &warn = output.warn;
     const std::vector<ASTRule> &rules = spec.rules;
     const size_t defrule = spec.defs.empty() ? Rule::NONE : rules.size() - 1;
     const Code *eof = spec.eofs.empty() ? NULL : spec.eofs.front();
-    const uint32_t line = output.block().line;
     const std::string
         &cond = spec.name,
-        name = make_name(cond, line),
+        name = make_name(cond, loc.line),
         &setup = spec.setup.empty() ? "" : spec.setup[0]->text;
 
     RangeMgr rangemgr;
 
-    RESpec re(fname, rules, opts, warn, rangemgr);
+    RESpec re(rules, opts, warn, rangemgr);
     split_charset(re);
     find_fixed_tags(re);
     insert_default_tags(re);
@@ -67,14 +66,14 @@ static smart_ptr<DFA> ast_to_dfa(const std::string &fname
     nfa_t nfa(re);
     DDUMP_NFA(opts, nfa);
 
-    dfa_t dfa(nfa, opts, cond, warn, fname);
+    dfa_t dfa(nfa, opts, cond, warn);
     DDUMP_DFA_DET(opts, dfa);
 
     rangemgr.clear();
 
     // skeleton must be constructed after DFA construction
     // but prior to any other DFA transformations
-    Skeleton skeleton(dfa, opts, defrule, name, cond, line);
+    Skeleton skeleton(dfa, opts, defrule, name, cond, loc);
     warn_undefined_control_flow(skeleton, warn);
     if (opts->target == TARGET_SKELETON) {
         emit_data(skeleton);
@@ -99,7 +98,7 @@ static smart_ptr<DFA> ast_to_dfa(const std::string &fname
 
     // ADFA stands for 'DFA with actions'
     DFA *adfa = new DFA(dfa, fill, defrule, skeleton.sizeof_key,
-        name, cond, line, setup, eof, opts);
+        loc, name, cond, setup, eof, opts);
 
     // see note [reordering DFA states]
     adfa->reorder();
@@ -109,7 +108,7 @@ static smart_ptr<DFA> ast_to_dfa(const std::string &fname
     DDUMP_ADFA(opts, *adfa);
 
     // finally gather overall DFA statistics
-    adfa->calc_stats(line, opts->tags);
+    adfa->calc_stats(opts->tags);
 
     // accumulate global statistics from this particular DFA
     output.max_fill = std::max(output.max_fill, adfa->max_fill);
@@ -129,14 +128,16 @@ void compile(Scanner &input, Output &output, Opt &opts)
     const opt_t *ropts = NULL;
     typedef std::vector<smart_ptr<DFA> > dfas_t;
 
+    const loc_t &loc0 = input.tok_loc();
+
     output.header_mode(1);
-    output.new_block(opts, input.get_fname());
+    output.new_block(opts, loc0);
     output.wversion_time();
 
     output.header_mode(0);
-    output.new_block(opts, input.get_fname());
+    output.new_block(opts, loc0);
     output.wversion_time();
-    output.wdelay_line_info_input(input.get_line(), input.get_fname());
+    output.wdelay_line_info_input(loc0);
 
     if (globopts->target == TARGET_SKELETON) {
         emit_prolog(output);
@@ -162,21 +163,21 @@ void compile(Scanner &input, Output &output, Opt &opts)
         parse(input, specs, symtab, opts);
 
         // start new output block with accumulated options
-        output.new_block(opts, input.get_fname());
+        const loc_t &loc = input.cur_loc();
+        output.new_block(opts, loc);
 
         if (mode == Scanner::Rules) {
             // save AST and options for future use
             rspecs = specs;
             ropts = output.block().opts;
         } else {
-            validate_ast(input.get_fname(), specs, output.block().opts);
+            validate_ast(specs, output.block().opts);
             normalize_ast(specs);
 
             // compile AST to DFA
-            output.block().line = input.get_line();
             dfas_t dfas;
             for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
-                dfas.push_back(ast_to_dfa(input.get_fname(), *i, output));
+                dfas.push_back(ast_to_dfa(*i, output));
             }
 
             // compile DFA to code
@@ -187,7 +188,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             }
         }
 
-        output.wdelay_line_info_input(input.get_line(), input.get_fname());
+        output.wdelay_line_info_input(loc);
     }
 
     if (globopts->target == TARGET_SKELETON) {

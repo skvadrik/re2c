@@ -50,22 +50,21 @@ namespace re2c {
 static bool has_tags(const AST *);
 static RE *ast_to_re(RESpec &, const AST *, size_t &, int32_t);
 static RE *re_string(RESpec &, const AST *);
-static RE *re_class(RESpec &, uint32_t, uint32_t, const Range *);
+static RE *re_class(RESpec &, const loc_t &, const Range *);
 static Range *ast_to_range(RESpec &, const AST *);
-static Range *char_to_range(RESpec &, uint32_t, const ASTChar &, bool);
+static Range *char_to_range(RESpec &, const ASTChar &, bool);
 static Range *diff_to_range(RESpec &, const AST *);
 static Range *dot_to_range(RESpec &, const AST *);
 static Range *cls_to_range(RESpec &, const AST *);
 static bool misuse_of_named_def(RESpec &, const AST *);
-static void assert_tags_used_once(const RESpec &, const Rule &, const std::vector<Tag> &);
-static void init_rule(const RESpec &, Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
+static void assert_tags_used_once(const Rule &, const std::vector<Tag> &);
+static void init_rule(Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
 static bool is_icase(const opt_t *, bool);
 
 
-RESpec::RESpec(const std::string &f, const std::vector<ASTRule> &ast
-    , const opt_t *o, Warn &w, RangeMgr &rm)
-    : fname(f)
-    , alc()
+RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w
+    , RangeMgr &rm)
+    : alc()
     , rangemgr(rm)
     , res()
     , charset(*new std::vector<uint32_t>)
@@ -77,7 +76,7 @@ RESpec::RESpec(const std::string &f, const std::vector<ASTRule> &ast
     for (size_t i = 0; i < ast.size(); ++i) {
         size_t ltag = tags.size(), ncap = 0;
         res.push_back(ast_to_re(*this, ast[i].ast, ncap, 0));
-        init_rule(*this, rules[i], ast[i].code, tags, ltag, ncap);
+        init_rule(rules[i], ast[i].code, tags, ltag, ncap);
     }
 }
 
@@ -114,11 +113,11 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             return re_string(spec, ast);
         case AST::CLS: {
             Range *r = cls_to_range(spec, ast);
-            return re_class(spec, ast->line, ast->column, r);
+            return re_class(spec, ast->loc, r);
         }
         case AST::DOT: {
             Range *r = dot_to_range(spec, ast);
-            return re_class(spec, ast->line, ast->column, r);
+            return re_class(spec, ast->loc, r);
         }
         case AST::DEFAULT: {
             // see note [default regexp]
@@ -127,7 +126,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
         }
         case AST::DIFF: {
             Range *r = diff_to_range(spec, ast);
-            return re_class(spec, ast->line, ast->column, r);
+            return re_class(spec, ast->loc, r);
         }
         case AST::ALT: {
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
@@ -177,12 +176,10 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
         }
         case AST::TAG: {
             if (ast->tag.name && !opts->tags) {
-                fatal_lc(spec.fname, ast->line, ast->column,
-                    "tags are only allowed with '-T, --tags' option");
+                fatal(ast->loc, "tags are only allowed with '-T, --tags' option");
             }
             if (opts->posix_syntax) {
-                fatal_lc(spec.fname, ast->line, ast->column,
-                    "simple tags are not allowed with '--posix-captures' option");
+                fatal(ast->loc, "simple tags are not allowed with '--posix-captures' option");
             }
             RE *t = re_tag(spec, tags.size(), false);
             tags.push_back(Tag(ast->tag.name, ast->tag.history, height));
@@ -250,13 +247,13 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
     return NULL; /* unreachable */
 }
 
-Range *char_to_range(RESpec &spec, uint32_t line, const ASTChar &chr, bool icase)
+Range *char_to_range(RESpec &spec, const ASTChar &chr, bool icase)
 {
     RangeMgr &rm = spec.rangemgr;
     uint32_t c = chr.chr;
 
     if (!spec.opts->encoding.validateChar(c)) {
-        fatal_lc(spec.fname, line, chr.column, "bad code point: '0x%X'", c);
+        fatal(chr.loc, "bad code point: '0x%X'", c);
     }
 
     return icase && is_alpha(c)
@@ -277,8 +274,8 @@ Range *cls_to_range(RESpec &spec, const AST *ast)
     for (; i != e; ++i) {
         Range *s = spec.opts->encoding.validateRange(rm, i->lower, i->upper);
         if (!s) {
-            fatal_lc(spec.fname, ast->line, i->column,
-            "bad code point range: '0x%X - 0x%X'", i->lower, i->upper);
+            fatal(i->loc, "bad code point range: '0x%X - 0x%X'"
+                , i->lower, i->upper);
         }
         r = rm.add(r, s);
     }
@@ -297,7 +294,7 @@ Range *dot_to_range(RESpec &spec, const AST *ast)
     RangeMgr &rm = spec.rangemgr;
     uint32_t c = '\n';
     if (!spec.opts->encoding.validateChar(c)) {
-        fatal_lc(spec.fname, ast->line, ast->column, "bad code point: '0x%X'", c);
+        fatal(ast->loc, "bad code point: '0x%X'", c);
     }
     return rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
 }
@@ -331,7 +328,7 @@ Range *ast_to_range(RESpec &spec, const AST *ast)
             return dot_to_range(spec, ast);
         case AST::STR:
             if (ast->str.chars->size() != 1) break;
-            return char_to_range(spec, ast->line, ast->str.chars->front()
+            return char_to_range(spec, ast->str.chars->front()
                 , is_icase(spec.opts, ast->str.icase));
         case AST::DIFF:
             return diff_to_range(spec, ast);
@@ -341,7 +338,7 @@ Range *ast_to_range(RESpec &spec, const AST *ast)
             return spec.rangemgr.add(x, y);
         }
     }
-    fatal_lc(spec.fname, ast->line, ast->column, "can only difference char sets");
+    fatal(ast->loc, "can only difference char sets");
     return NULL;
 }
 
@@ -356,27 +353,27 @@ RE *re_string(RESpec &spec, const AST *ast)
 
     bool icase = is_icase(spec.opts, ast->str.icase);
     for (; i != e; ++i) {
-        Range *r = char_to_range(spec, ast->line, *i, icase);
-        RE *y = re_class(spec, ast->line, i->column, r);
+        Range *r = char_to_range(spec, *i, icase);
+        RE *y = re_class(spec, ast->loc, r);
         x = re_cat(spec, x, y);
     }
 
     return x ? x : re_nil(spec);
 }
 
-RE *re_class(RESpec &spec, uint32_t line, uint32_t column, const Range *r)
+RE *re_class(RESpec &spec, const loc_t &loc, const Range *r)
 {
     if (!r) {
         Warn &w = spec.warn;
         switch (spec.opts->empty_class_policy) {
             case EMPTY_CLASS_MATCH_EMPTY:
-                w.empty_class(spec.fname, line);
+                w.empty_class(loc);
                 return re_nil(spec);
             case EMPTY_CLASS_MATCH_NONE:
-                w.empty_class(spec.fname, line);
+                w.empty_class(loc);
                 break;
             case EMPTY_CLASS_ERROR:
-                fatal_lc(spec.fname, line, column, "empty character class");
+                fatal(loc, "empty character class");
         }
     }
 
@@ -402,15 +399,14 @@ bool misuse_of_named_def(RESpec &spec, const AST *ast)
 
     if (!spec.opts->posix_syntax) return false;
 
-    fatal_l(spec.fname, ast->line,
-        "implicit grouping is forbidden with '--posix-captures'"
-        " option, please wrap '%s' in capturing parenthesis",
-        ast->ref.name->c_str());
+    fatal(ast->loc
+        , "implicit grouping is forbidden with '--posix-captures'"
+            " option, please wrap '%s' in capturing parenthesis"
+        , ast->ref.name->c_str());
     return true;
 }
 
-void assert_tags_used_once(const RESpec &spec, const Rule &rule
-    , const std::vector<Tag> &tags)
+void assert_tags_used_once(const Rule &rule, const std::vector<Tag> &tags)
 {
     std::set<std::string> names;
     const std::string *name = NULL;
@@ -418,22 +414,22 @@ void assert_tags_used_once(const RESpec &spec, const Rule &rule
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         name = tags[t].name;
         if (name && !names.insert(*name).second) {
-            fatal_l(spec.fname, rule.code->fline,
-                "tag '%s' is used multiple times in the same rule",
-                name->c_str());
+            fatal(rule.code->loc
+                , "tag '%s' is used multiple times in the same rule"
+                , name->c_str());
         }
     }
 }
 
-void init_rule(const RESpec &spec, Rule &rule, const Code *code
-    , const std::vector<Tag> &tags, size_t ltag, size_t ncap)
+void init_rule(Rule &rule, const Code *code, const std::vector<Tag> &tags
+    , size_t ltag, size_t ncap)
 {
     rule.code = code;
     rule.ltag = ltag;
     rule.htag = tags.size();
     for (rule.ttag = ltag; rule.ttag < rule.htag && !trailing(tags[rule.ttag]); ++rule.ttag);
     rule.ncap = ncap;
-    assert_tags_used_once(spec, rule, tags);
+    assert_tags_used_once(rule, tags);
 }
 
 bool is_icase(const opt_t *opts, bool icase)

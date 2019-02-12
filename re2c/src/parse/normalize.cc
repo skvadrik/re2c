@@ -29,7 +29,7 @@ void normalize_ast(specs_t &specs)
     for (i = specs.begin(), e = specs.end(); i != e; ++i) {
         if (!i->defs.empty()) {
             const Code *c = i->defs[0];
-            const AST *r = ast_default(c->fline, 0);
+            const AST *r = ast_default(c->loc);
             i->rules.push_back(ASTRule(r, c));
         }
     }

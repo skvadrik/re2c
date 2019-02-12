@@ -33,4 +33,4 @@ yy5:
 }
 #line 6 "include/include001.re"
 
-include/include001.re:6: warning: control flow is undefined for strings that match '[\x0-\x61\x64-\xFF]', use default rule '*' [-Wundefined-control-flow]
+include/include001.re:6:2: warning: control flow is undefined for strings that match '[\x0-\x61\x64-\xFF]', use default rule '*' [-Wundefined-control-flow]

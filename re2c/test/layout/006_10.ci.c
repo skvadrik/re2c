@@ -28,4 +28,4 @@ yyc_y:
 	YYSETCONDITION(yycx);
 	;
 }
-layout/006_10.ci.re:2: warning: rule in condition 'x' matches empty string [-Wmatch-empty-string]
+layout/006_10.ci.re:2:15: warning: rule in condition 'x' matches empty string [-Wmatch-empty-string]

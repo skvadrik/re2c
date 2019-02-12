@@ -25,7 +25,7 @@ yy4:
 }
 #line 3 "encodings/utf8-range_single_symbol.8.re"
 
-encodings/utf8-range_single_symbol.8.re:3: warning: control flow is undefined for strings that match 
+encodings/utf8-range_single_symbol.8.re:3:2: warning: control flow is undefined for strings that match 
 	'[\x0-\xCF\xD1-\xFF]'
 	'\xD0 [\x0-\xAF\xB1-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]

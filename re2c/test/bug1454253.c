@@ -320,4 +320,4 @@ main()
 	do_scan("?1?123?45??",  9, "2220");
 	do_scan("?1?123?45?!", 12, "22213");
 }
-bug1454253.re:40: warning: rule matches empty string [-Wmatch-empty-string]
+bug1454253.re:40:6: warning: rule matches empty string [-Wmatch-empty-string]

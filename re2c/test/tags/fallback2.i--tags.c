@@ -58,4 +58,4 @@ yy5:
 	}
 }
 
-tags/fallback2.i--tags.re:17: warning: rule matches empty string [-Wmatch-empty-string]
+tags/fallback2.i--tags.re:17:15: warning: rule matches empty string [-Wmatch-empty-string]

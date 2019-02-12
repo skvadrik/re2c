@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "src/msg/location.h"
 #include "src/regexp/rule.h"
 
 namespace re2c {
@@ -56,16 +57,16 @@ public:
     void set (type_t t, option_t o);
     void set_all ();
     void set_all_error ();
-    void fail(type_t t, const std::string &fname, uint32_t line, const char * s) const;
+    void fail(type_t t, const loc_t &loc, const char *s) const;
 
-    void condition_order(const std::string &fname, uint32_t line);
-    void empty_class(const std::string &fname, uint32_t line);
-    void match_empty_string(const std::string &fname, uint32_t line, const std::string &cond);
-    void nondeterministic_tags(const std::string &fname, uint32_t line, const std::string &cond, const std::string *tagname, size_t nver);
-    void swapped_range(const std::string &fname, uint32_t line, uint32_t l, uint32_t u);
+    void condition_order(const loc_t &loc);
+    void empty_class(const loc_t &loc);
+    void match_empty_string(const loc_t &loc, const std::string &cond);
+    void nondeterministic_tags(const loc_t &loc, const std::string &cond, const std::string *tagname, size_t nver);
+    void swapped_range(const loc_t &loc, uint32_t l, uint32_t u);
     void undefined_control_flow(const Skeleton &skel, std::vector<path_t> & paths, bool overflow);
-    void unreachable_rule(const std::string &fname, const std::string & cond, const Rule &rule);
-    void useless_escape(const std::string &fname, uint32_t line, uint32_t col, char c);
+    void unreachable_rule(const std::string & cond, const Rule &rule);
+    void useless_escape(const loc_t &loc, char c);
 };
 
 } // namespace re2c

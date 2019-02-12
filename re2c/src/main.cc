@@ -19,7 +19,7 @@ int main(int, char *argv[])
         case EXIT_FAIL: return 1;
     }
 
-    Scanner scanner(&globopts, warn);
+    Scanner scanner(&globopts, warn, opts.source_file);
     if (!scanner.init(opts.source_file)) return 1;
 
     Output output(warn);

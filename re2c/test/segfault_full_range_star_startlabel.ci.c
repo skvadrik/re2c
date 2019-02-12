@@ -17,5 +17,5 @@ yy1:
 	goto yy2;
 }
 
-segfault_full_range_star_startlabel.ci.re:3: warning: rule in condition 'c1' matches empty string [-Wmatch-empty-string]
-segfault_full_range_star_startlabel.ci.re:3: warning: unreachable rule in condition 'c1'  [-Wunreachable-rules]
+segfault_full_range_star_startlabel.ci.re:3:11: warning: rule in condition 'c1' matches empty string [-Wmatch-empty-string]
+segfault_full_range_star_startlabel.ci.re:3:11: warning: unreachable rule in condition 'c1'  [-Wunreachable-rules]

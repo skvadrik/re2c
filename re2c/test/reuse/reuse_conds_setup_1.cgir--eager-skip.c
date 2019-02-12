@@ -189,7 +189,7 @@ yy21:
 }
 
 }
-reuse/reuse_conds_setup_1.cgir--eager-skip.re:19: warning: control flow in condition 'r1' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-reuse/reuse_conds_setup_1.cgir--eager-skip.re:19: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-reuse/reuse_conds_setup_1.cgir--eager-skip.re:29: warning: control flow in condition 'r1' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-reuse/reuse_conds_setup_1.cgir--eager-skip.re:29: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/reuse_conds_setup_1.cgir--eager-skip.re:19:2: warning: control flow in condition 'r1' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/reuse_conds_setup_1.cgir--eager-skip.re:19:2: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/reuse_conds_setup_1.cgir--eager-skip.re:29:2: warning: control flow in condition 'r1' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/reuse_conds_setup_1.cgir--eager-skip.re:29:2: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

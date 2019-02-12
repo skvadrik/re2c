@@ -1247,4 +1247,4 @@
 }
 #line 4 "american_fuzzy_lop/010.re"
 
-american_fuzzy_lop/010.re:3: warning: rule matches empty string [-Wmatch-empty-string]
+american_fuzzy_lop/010.re:3:21: warning: rule matches empty string [-Wmatch-empty-string]

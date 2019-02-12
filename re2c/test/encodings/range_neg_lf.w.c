@@ -15,4 +15,4 @@ yy3:
 }
 #line 3 "encodings/range_neg_lf.w.re"
 
-encodings/range_neg_lf.w.re:3: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+encodings/range_neg_lf.w.re:3:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

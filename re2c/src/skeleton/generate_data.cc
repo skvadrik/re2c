@@ -372,7 +372,7 @@ template<typename cunit_t, typename key_t>
 {
     gencover<cunit_t, key_t>(skel, cover, 0);
     if (cover.size.overflow()) {
-        warning(NULL, skel.fname, skel.line, false,
+        warning(NULL, skel.loc, false,
             "DFA %sis too large: can only generate partial path cover",
             incond(skel.cond).c_str());
     }

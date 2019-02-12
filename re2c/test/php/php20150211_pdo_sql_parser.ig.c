@@ -828,4 +828,4 @@ int old_pdo_parse_params(pdo_stmt_t *stmt, char *inquery, int inquery_len, char 
  * vim600: noet sw=4 ts=4 fdm=marker ft=c
  * vim<600: noet sw=4 ts=4
  */
-php/php20150211_pdo_sql_parser.ig.re:66: warning: control flow is undefined for strings that match '\x0', use default rule '*' [-Wundefined-control-flow]
+php/php20150211_pdo_sql_parser.ig.re:66:3: warning: control flow is undefined for strings that match '\x0', use default rule '*' [-Wundefined-control-flow]

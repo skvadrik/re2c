@@ -7,4 +7,4 @@
 yy0:
 	{}
 
-bug119.if.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+bug119.if.re:2:7: warning: rule matches empty string [-Wmatch-empty-string]

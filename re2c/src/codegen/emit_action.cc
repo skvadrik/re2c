@@ -190,7 +190,7 @@ void emit_rule(Output &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
             if (!dfa.setup.empty()) {
                 o.wind(ind).wstring(dfa.setup).ws("\n");
             }
-            o.wdelay_line_info_input(code->fline, code->fname)
+            o.wdelay_line_info_input(code->loc)
                 .wind(ind).wstring(code->text).ws("\n")
                 .wdelay_line_info_output();
         } else if (!cond.empty()) {

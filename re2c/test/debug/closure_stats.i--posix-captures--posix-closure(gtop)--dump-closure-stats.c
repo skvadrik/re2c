@@ -111,24 +111,24 @@
 	{}
 }
 
-debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:1: warning: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:1:32: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 24         prec: 3          length: 36        
 scans: 0          prec: 0          length: 0         
-debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:2:32: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 67         prec: 14         length: 282       
 scans: 0          prec: 0          length: 0         
-debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:3: warning: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:3:32: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 309        prec: 84         length: 3420      
 scans: 0          prec: 0          length: 0         
-debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:4: warning: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:4:32: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 1921       prec: 584        length: 49176     
 scans: 0          prec: 0          length: 0         
-debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:5: warning: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:5:35: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 13689      prec: 4368       length: 751536    
 scans: 0          prec: 0          length: 0         
-debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:6: warning: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:6:35: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 103657     prec: 33824      length: 11771232  
 scans: 0          prec: 0          length: 0         
-debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:7: warning: rule matches empty string [-Wmatch-empty-string]
+debug/closure_stats.i--posix-captures--posix-closure(gtop)--dump-closure-stats.re:7:35: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 807369     prec: 266304     length: 186413760 
 scans: 0          prec: 0          length: 0         

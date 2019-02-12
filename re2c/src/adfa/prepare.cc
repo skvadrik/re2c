@@ -245,7 +245,7 @@ void DFA::prepare(const opt_t *opts)
     }
 }
 
-void DFA::calc_stats(uint32_t ln, bool explicit_tags)
+void DFA::calc_stats(bool explicit_tags)
 {
     // calculate 'YYMAXFILL'
     max_fill = 0;
@@ -280,7 +280,7 @@ void DFA::calc_stats(uint32_t ln, bool explicit_tags)
 
     // error if tags are not enabled, but we need them
     if (!explicit_tags && maxtagver > 1) {
-        fatal_l(fname, ln, "overlapping trailing contexts need "
+        fatal(loc, "overlapping trailing contexts need "
             "multiple context markers, use '-t, --tags' "
             "option and '/*!stags:re2c ... */' directive");
     }

@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "src/msg/location.h"
 #include "src/parse/input.h"
 #include "src/parse/lex.h"
 #include "src/options/opt.h"
@@ -24,6 +25,7 @@ struct conopt_t;
 class Output;
 class Range;
 struct AST;
+struct ASTChar;
 
 class Scanner: private ScannerState
 {
@@ -35,15 +37,15 @@ private:
     std::vector<Input*> files;
     const conopt_t *globopts;
     Warn &warn;
+    loc_t loc;
 
 public:
-    Scanner(const conopt_t *o, Warn &w);
+    Scanner(const conopt_t *o, Warn &w, const char *f);
     ~Scanner();
     bool init(const std::string &filename);
     bool include(const std::string &filename);
-    uint32_t get_line() const;
-    uint32_t get_column() const;
-    const std::string & get_fname() const;
+    const loc_t &tok_loc() const;
+    loc_t cur_loc() const;
     ParseMode echo(Output &out);
     int scan();
     void lex_conf(Opt &opts);
@@ -70,7 +72,7 @@ private:
     void lex_string(char delim);
     void lex_tags(Output &out, bool mtags);
     uint32_t lex_cls_chr();
-    uint32_t lex_str_chr(char quote, bool &end);
+    bool lex_str_chr(char quote, ASTChar &ast);
     const AST *lex_cls(bool neg);
     const AST *lex_str(char quote);
     void lex_conf_encoding_policy(Opt &opts);
@@ -88,21 +90,29 @@ private:
     FORBID_COPY (Scanner);
 };
 
-inline Scanner::Scanner(const conopt_t *o, Warn &w)
+inline Scanner::Scanner(const conopt_t *o, Warn &w, const char *f)
     : ScannerState()
     , files()
     , globopts(o)
     , warn(w)
+    , loc(1, 0, f)
 {}
 
-inline const std::string & Scanner::get_fname() const
+inline loc_t Scanner::cur_loc() const
 {
-    return get_cinput().escaped_name;
+    const std::string &f = get_cinput().escaped_name;
+    const uint32_t l = get_cinput().line;
+    uint32_t c = static_cast<uint32_t>(cur - pos);
+    if (is_eof()) {
+         DASSERT(c > 0);
+         --c;
+    }
+    return loc_t(l, c, f);
 }
 
-inline uint32_t Scanner::get_line() const
+inline const loc_t &Scanner::tok_loc() const
 {
-    return get_cinput().line;
+    return loc;
 }
 
 inline void Scanner::set_line(uint32_t l)
@@ -114,11 +124,6 @@ inline void Scanner::next_line()
 {
     pos = cur;
     ++get_input().line;
-}
-
-inline uint32_t Scanner::get_column() const
-{
-    return static_cast<uint32_t>(tok - pos);
 }
 
 inline bool Scanner::is_eof() const

@@ -21,4 +21,4 @@ yy4:
 	{x;}
 }
 
-bug2462777.ci.re:2: warning: rule in condition 'X' matches empty string [-Wmatch-empty-string]
+bug2462777.ci.re:2:9: warning: rule in condition 'X' matches empty string [-Wmatch-empty-string]

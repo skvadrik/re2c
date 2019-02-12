@@ -15,4 +15,4 @@ yy4:
 	++YYCURSOR;
 	;
 }
-layout/006_05.i.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+layout/006_05.i.re:2:6: warning: rule matches empty string [-Wmatch-empty-string]

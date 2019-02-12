@@ -202,9 +202,9 @@ yy21:
 	}
 }
 
-tags/twopass.i--tags.re:7: warning: rule matches empty string [-Wmatch-empty-string]
-tags/twopass.i--tags.re:6: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/twopass.i--tags.re:6: warning: tag 'q' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/twopass.i--tags.re:6: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/twopass.i--tags.re:7: warning: tag 'r' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/twopass.i--tags.re:7: warning: tag 's' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass.i--tags.re:7:29: warning: rule matches empty string [-Wmatch-empty-string]
+tags/twopass.i--tags.re:6:42: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass.i--tags.re:6:42: warning: tag 'q' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass.i--tags.re:6:42: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass.i--tags.re:7:29: warning: tag 'r' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass.i--tags.re:7:29: warning: tag 's' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

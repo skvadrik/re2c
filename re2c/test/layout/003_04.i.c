@@ -14,4 +14,4 @@ yy3:
 	;
 	*:=;
 }
-layout/003_04.i.re:3: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+layout/003_04.i.re:4:2: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

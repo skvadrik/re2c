@@ -28,14 +28,14 @@ state2 -> 13
 17 -> 18
 18 [label="dot/dot_conditions.c--emit-dot.re:7"]
 }
-dot/dot_conditions.c--emit-dot.re:10: warning: control flow in condition 'state1' is undefined for strings that match 
+dot/dot_conditions.c--emit-dot.re:10:2: warning: control flow in condition 'state1' is undefined for strings that match 
 	'[\x0-\x60\x62-\x65\x67-\xFF]'
 	'\x61 [\x0-\x61\x63-\xFF]'
 	'\x66 [\x0-\x6E\x70-\xFF]'
 	'\x61 \x62 [\x0-\x62\x64-\xFF]'
 	'\x66 \x6F [\x0-\x6E\x70-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-dot/dot_conditions.c--emit-dot.re:10: warning: control flow in condition 'state2' is undefined for strings that match 
+dot/dot_conditions.c--emit-dot.re:10:2: warning: control flow in condition 'state2' is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x61\x63-\xFF]'
 	'\x61 \x62 [\x0-\x62\x64-\xFF]'

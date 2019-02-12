@@ -34,7 +34,7 @@ yy3:
 	}
 }
 
-debug/adfa.i--posix-captures--dump-adfa.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+debug/adfa.i--posix-captures--dump-adfa.re:2:11: warning: rule matches empty string [-Wmatch-empty-string]
 digraph DFA {
   rankdir=LR
   node[shape=Mrecord fontname=fixed]

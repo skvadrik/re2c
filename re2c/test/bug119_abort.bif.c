@@ -8,4 +8,4 @@
 yy0:
 	{}
 
-bug119_abort.bif.re:3: warning: rule matches empty string [-Wmatch-empty-string]
+bug119_abort.bif.re:3:7: warning: rule matches empty string [-Wmatch-empty-string]

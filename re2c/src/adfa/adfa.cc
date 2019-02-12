@@ -26,18 +26,17 @@ DFA::DFA
     , const std::vector<size_t> &fill
     , size_t def
     , size_t key
+    , const loc_t &loc
     , const std::string &nm
     , const std::string &cn
-    , uint32_t ln
     , const std::string &su
     , const Code *eof
     , const opt_t *opts
     )
     : accepts ()
-    , fname(dfa.fname)
+    , loc (loc)
     , name (nm)
     , cond (cn)
-    , line (ln)
     , lbChar(0)
     , ubChar(dfa.charset.back())
     , nStates(0)

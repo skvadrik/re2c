@@ -39,4 +39,4 @@ yy3:
 	}
 }
 
-posix_captures/leftmost1.i--posix-captures.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/leftmost1.i--posix-captures.re:2:23: warning: rule matches empty string [-Wmatch-empty-string]

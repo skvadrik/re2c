@@ -115,6 +115,7 @@ Scanner::ParseMode Scanner::echo(Output &out)
 next:
     tok = cur;
 loop:
+    loc = cur_loc();
     ptr = cur;
 /*!re2c
     "%{" | "/*!re2c" {
@@ -163,7 +164,7 @@ loop:
         out.wraw(tok, ptr);
         out.wdelay_line_info_output();
         out.wdelay_types();
-        out.wdelay_line_info_input(get_line(), get_fname());
+        out.wdelay_line_info_input(cur_loc());
         lex_end_of_comment(out);
         goto next;
     }
@@ -191,7 +192,7 @@ loop:
     "/*!header:re2c:off" {
         out.wraw(tok, ptr);
         out.header_mode(false);
-        out.wdelay_line_info_input(get_line(), get_fname());
+        out.wdelay_line_info_input(cur_loc());
         lex_end_of_comment(out);
         goto next;
     }
@@ -232,8 +233,7 @@ loop:
 /*!re2c
     * { goto loop; }
     eof {
-        fatal_lc(get_fname(), get_line(), get_column()
-            , "expected end of block");
+        fatal(cur_loc(), "expected end of block");
     }
     eol {
         next_line();
@@ -242,7 +242,7 @@ loop:
     }
     eoc {
         if (multiline) {
-            out.wdelay_line_info_input(get_line(), get_fname());
+            out.wdelay_line_info_input(cur_loc());
         }
         return;
     }
@@ -255,8 +255,7 @@ void Scanner::lex_tags(Output &out, bool mtags)
 loop:
 /*!re2c
     * {
-        fatal_lc(get_fname(), get_line(), get_column()
-            , "unrecognized configuration");
+        fatal(cur_loc(), "unrecognized configuration");
     }
     "format" {
         fmt = lex_conf_string();
@@ -285,6 +284,7 @@ int Scanner::scan()
     const char *p;
 scan:
     tok = cur;
+    loc = cur_loc();
 /*!re2c
     "{"  { lex_code_in_braces(); return TOKEN_CODE; }
     ":=" { lex_code_indented(); return TOKEN_CODE; }
@@ -307,8 +307,7 @@ scan:
     "[^" { yylval.regexp = lex_cls(true);  return TOKEN_REGEXP; }
 
     [@#] name {
-        yylval.regexp = ast_tag(get_line(), get_column()
-            , newstr(tok + 1, cur), tok[0] == '#');
+        yylval.regexp = ast_tag(tok_loc(), newstr(tok + 1, cur), tok[0] == '#');
         return TOKEN_REGEXP;
     }
 
@@ -316,8 +315,7 @@ scan:
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min)) {
-            fatal_lc(get_fname(), get_line(), get_column()
-                , "repetition count overflow");
+            fatal(tok_loc(), "repetition count overflow");
         }
         yylval.bounds.max = yylval.bounds.min;
         return TOKEN_CLOSESIZE;
@@ -325,34 +323,30 @@ scan:
 
     "{" [0-9]+ @p "," [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, p, yylval.bounds.min)) {
-            fatal_lc(get_fname(), get_line(), get_column()
-                , "repetition lower bound overflow");
+            fatal(tok_loc(), "repetition lower bound overflow");
         }
         if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.bounds.max)) {
-            fatal_lc(get_fname(), get_line(), get_column()
-                , "repetition upper bound overflow");
+            fatal(tok_loc(), "repetition upper bound overflow");
         }
         return TOKEN_CLOSESIZE;
     }
 
     "{" [0-9]+ ",}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.bounds.min)) {
-            fatal_lc(get_fname(), get_line(), get_column()
-                , "repetition lower bound overflow");
+            fatal(tok_loc(), "repetition lower bound overflow");
         }
         yylval.bounds.max = std::numeric_limits<uint32_t>::max();
         return TOKEN_CLOSESIZE;
     }
 
     "{" [0-9]* "," {
-        fatal_lc(get_fname(), get_line(), get_column(),
-            "illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers");
+        fatal(tok_loc(), "illegal closure form, use '{n}', '{n,}', '{n,m}' "
+            "where n and m are numbers");
     }
 
     "{" name "}" {
         if (!globopts->FFlag) {
-            fatal_lc(get_fname(), get_line(), get_column(),
-                "curly braces for names only allowed with -F switch");
+            fatal(tok_loc(), "curly braces for names only allowed with -F switch");
         }
         yylval.str = newstr(tok + 1, cur - 1);
         return TOKEN_ID;
@@ -375,15 +369,16 @@ scan:
             // precedence in cases like ab*: it should be a(b)*, not (ab)*
             cur = tok + 1;
 
+            ASTChar c(static_cast<uint8_t>(tok[0]), tok_loc());
             std::vector<ASTChar> *str = new std::vector<ASTChar>;
-            str->push_back(ASTChar(static_cast<uint8_t>(tok[0]), 0));
-            yylval.regexp = ast_str(get_line(), get_column(), str, false);
+            str->push_back(c);
+            yylval.regexp = ast_str(tok_loc(), str, false);
             return TOKEN_REGEXP;
         }
     }
 
     "." {
-        yylval.regexp = ast_dot(get_line(), get_column());
+        yylval.regexp = ast_dot(tok_loc());
         return TOKEN_REGEXP;
     }
 
@@ -406,8 +401,7 @@ scan:
     }
 
     * {
-        fatal_lc(get_fname(), get_line(), get_column()
-            , "unexpected character: '%c'", *tok);
+        fatal(tok_loc(), "unexpected character: '%c'", *tok);
         goto scan;
     }
 */
@@ -457,25 +451,27 @@ end:
     return kind;
 error:
     delete cl;
-    fatal_l(get_fname(), get_line(), "syntax error in condition list");
+    fatal(cur_loc(), "syntax error in condition list");
 }
 
 void Scanner::lex_code_indented()
 {
-    const uint32_t line = get_line();
+    const loc_t &loc = tok_loc();
     tok = cur;
 code:
 /*!re2c
-    eol / ws { goto code; }
+    eol / ws { next_line(); goto code; }
     eol {
+        next_line();
         while (isspace(tok[0])) ++tok;
-        while (cur > tok && isspace(cur[-1])) --cur;
-        yylval.code = new Code(get_fname (), line, getstr(tok, cur));
+        char *p = cur;
+        while (p > tok && isspace(p[-1])) --p;
+        yylval.code = new Code(loc, getstr(tok, p));
         return;
     }
 
     eof  { fail_if_eof(); goto code; }
-    [{}] { fatal_l(get_fname(), get_line(), "Curly braces are not allowed after ':='"); }
+    [{}] { fatal(cur_loc(), "Curly braces are not allowed after ':='"); }
     "/*" { lex_c_comment(); goto code; }
     "//" { lex_cpp_comment(); goto code; }
     ["'] { lex_string(cur[-1]); goto code; }
@@ -485,13 +481,13 @@ code:
 
 void Scanner::lex_code_in_braces()
 {
-    const uint32_t line = get_line();
+    const loc_t &loc = tok_loc();
     uint32_t depth = 1;
 code:
 /*!re2c
     "}" {
         if (--depth == 0) {
-            yylval.code = new Code(get_fname (), line, getstr(tok, cur));
+            yylval.code = new Code(loc, getstr(tok, cur));
             return;
         }
         goto code;
@@ -544,12 +540,13 @@ loop:
 const AST *Scanner::lex_cls(bool neg)
 {
     std::vector<ASTRange> *cls = new std::vector<ASTRange>;
-    uint32_t u, l, c, c0 = get_column();
+    uint32_t u, l;
+    const loc_t &loc0 = tok_loc();
+    loc_t loc = cur_loc();
 fst:
     tok = cur;
-    c = get_column();
 /*!re2c
-    "]" { return ast_cls(get_line(), c0, cls, neg); }
+    "]" { return ast_cls(loc0, cls, neg); }
     ""  { l = lex_cls_chr(); goto snd; }
 */
 snd:
@@ -558,29 +555,29 @@ snd:
     "-" / [^\]] {
         u = lex_cls_chr();
         if (l > u) {
-            warn.swapped_range(get_fname(), get_line(), l, u);
+            warn.swapped_range(loc, l, u);
             std::swap(l, u);
         }
         goto add;
     }
 */
 add:
-    cls->push_back(ASTRange(l, u, c));
+    cls->push_back(ASTRange(l, u, loc));
+    loc = cur_loc();
     goto fst;
 }
 
 uint32_t Scanner::lex_cls_chr()
 {
     tok = cur;
-    const uint32_t l = get_line(), c = get_column();
-    const std::string &f = get_fname();
+    const loc_t &loc = cur_loc();
 /*!re2c
-    *          { fatal_lc(f, l, c, "syntax error"); }
+    *          { fatal(loc, "syntax error"); }
     eof        { fail_if_eof(); return 0; }
-    esc? eol   { fatal_lc(f, l, c, "newline in character class"); }
-    esc [xXuU] { fatal_lc(f, l, c, "syntax error in hexadecimal escape sequence"); }
-    esc [0-7]  { fatal_lc(f, l, c, "syntax error in octal escape sequence"); }
-    esc        { fatal_lc(f, l, c, "syntax error in escape sequence"); }
+    esc? eol   { fatal(loc, "newline in character class"); }
+    esc [xXuU] { fatal(loc, "syntax error in hexadecimal escape sequence"); }
+    esc [0-7]  { fatal(loc, "syntax error in octal escape sequence"); }
+    esc        { fatal(loc, "syntax error in escape sequence"); }
 
     . \ esc    { return static_cast<uint8_t>(tok[0]); }
     esc_hex    { return unesc_hex(tok, cur); }
@@ -596,57 +593,61 @@ uint32_t Scanner::lex_cls_chr()
     esc "-"    { return static_cast<uint8_t>('-'); }
     esc "]"    { return static_cast<uint8_t>(']'); }
     esc (.\eof){
-        warn.useless_escape(f, l, c, tok[1]);
+        warn.useless_escape(loc, tok[1]);
         return static_cast<uint8_t>(tok[1]);
     }
 */
 }
 
-uint32_t Scanner::lex_str_chr(char quote, bool &end)
+bool Scanner::lex_str_chr(char quote, ASTChar &ast)
 {
-    end = false;
     tok = cur;
-    const uint32_t l = get_line(), c = get_column();
-    const std::string &f = get_fname();
+    ast.loc = cur_loc();
+    const loc_t &loc = ast.loc;
+    bool ok = true;
 /*!re2c
-    *          { fatal_lc(f, l, c, "syntax error"); }
-    eof        { fail_if_eof(); return 0; }
-    esc? eol   { fatal_lc(f, l, c, "newline in character string"); }
-    esc [xXuU] { fatal_lc(f, l, c, "syntax error in hexadecimal escape sequence"); }
-    esc [0-7]  { fatal_lc(f, l, c, "syntax error in octal escape sequence"); }
-    esc        { fatal_lc(f, l, c, "syntax error in escape sequence"); }
+    *          { fatal(loc, "syntax error"); }
+    esc? eol   { fatal(loc, "newline in character string"); }
+    esc [xXuU] { fatal(loc, "syntax error in hexadecimal escape sequence"); }
+    esc [0-7]  { fatal(loc, "syntax error in octal escape sequence"); }
+    esc        { fatal(loc, "syntax error in escape sequence"); }
 
-    . \ esc    {
-        end = tok[0] == quote;
-        return static_cast<uint8_t>(tok[0]);
-    }
-    esc_hex    { return unesc_hex(tok, cur); }
-    esc_oct    { return unesc_oct(tok, cur); }
-    esc "a"    { return static_cast<uint8_t>('\a'); }
-    esc "b"    { return static_cast<uint8_t>('\b'); }
-    esc "f"    { return static_cast<uint8_t>('\f'); }
-    esc "n"    { return static_cast<uint8_t>('\n'); }
-    esc "r"    { return static_cast<uint8_t>('\r'); }
-    esc "t"    { return static_cast<uint8_t>('\t'); }
-    esc "v"    { return static_cast<uint8_t>('\v'); }
-    esc "\\"   { return static_cast<uint8_t>('\\'); }
+    eof        { fail_if_eof(); ast.chr = 0; goto end; }
+
+    . \ esc    { ok = tok[0] != quote; ast.chr = static_cast<uint8_t>(tok[0]); goto end; }
+    esc_hex    { ast.chr = unesc_hex(tok, cur); goto end; }
+    esc_oct    { ast.chr = unesc_oct(tok, cur); goto end; }
+    esc "a"    { ast.chr = static_cast<uint8_t>('\a'); goto end; }
+    esc "b"    { ast.chr = static_cast<uint8_t>('\b'); goto end; }
+    esc "f"    { ast.chr = static_cast<uint8_t>('\f'); goto end; }
+    esc "n"    { ast.chr = static_cast<uint8_t>('\n'); goto end; }
+    esc "r"    { ast.chr = static_cast<uint8_t>('\r'); goto end; }
+    esc "t"    { ast.chr = static_cast<uint8_t>('\t'); goto end; }
+    esc "v"    { ast.chr = static_cast<uint8_t>('\v'); goto end; }
+    esc "\\"   { ast.chr = static_cast<uint8_t>('\\'); goto end; }
     esc (.\eof){
+        const char c = tok[1];
+        ast.chr = static_cast<uint8_t>(c);
         if (tok[1] != quote) {
-            warn.useless_escape(f, l, c, tok[1]);
+            warn.useless_escape(loc, c);
         }
-        return static_cast<uint8_t>(tok[1]);
+        goto end;
     }
 */
+end:
+    return ok;
 }
 
 const AST *Scanner::lex_str(char quote)
 {
-    const uint32_t line = get_line(), column = get_column();
+    const loc_t &loc = tok_loc();
     std::vector<ASTChar> *str = new std::vector<ASTChar>;
-    for (bool end;;) {
-        const uint32_t c = lex_str_chr(quote, end);
-        if (end) return ast_str(line, column, str, quote == '\'');
-        str->push_back(ASTChar(c, get_column()));
+    ASTChar c;
+    for (;;) {
+        if (!lex_str_chr(quote, c)) {
+            return ast_str(loc, str, quote == '\'');
+        }
+        str->push_back(c);
     }
 }
 
@@ -657,9 +658,8 @@ sourceline:
 /*!re2c
     lineno {
         uint32_t l;
-        if (!s_to_u32_unsafe (tok, cur, l)) {
-            fatal_lc(get_fname(), get_line(), get_column()
-                , "line number overflow");
+        if (!s_to_u32_unsafe(tok, cur, l)) {
+            fatal(tok_loc(), "line number overflow");
         }
         set_line(l);
         goto sourceline;
@@ -672,7 +672,7 @@ sourceline:
         goto sourceline;
     }
 
-    eol { tok = cur; return; }
+    eol { pos = tok = cur; return; }
     eof { --cur; return; }
     *   { goto sourceline; }
 */
@@ -681,8 +681,7 @@ sourceline:
 void Scanner::fail_if_eof() const
 {
     if (is_eof()) {
-        const uint32_t col = static_cast<uint32_t>(cur - pos) - 1;
-        fatal_lc(get_fname(), get_line(), col, "unexpected end of input");
+        fatal(cur_loc(), "unexpected end of input");
     }
 }
 

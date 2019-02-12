@@ -132,7 +132,7 @@ void prune(closure_t &closure, std::valarray<Rule> &rules)
     // see note [at most one final item per closure]
     if (j != e) {
         std::sort(j, e, cmpby_rule_state);
-        const uint32_t l = rules[j->state->rule].code->fline;
+        const uint32_t l = rules[j->state->rule].code->loc.line;
         for (i = j; ++i < e;) {
             rules[i->state->rule].shadow.insert(l);
         }

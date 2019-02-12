@@ -33,13 +33,13 @@
 	{}
 }
 
-bug61.i--empty-class(match-empty).re:2: warning: empty character class [-Wempty-character-class]
-bug61.i--empty-class(match-empty).re:2: warning: rule matches empty string [-Wmatch-empty-string]
-bug61.i--empty-class(match-empty).re:6: warning: empty character class [-Wempty-character-class]
-bug61.i--empty-class(match-empty).re:6: warning: rule matches empty string [-Wmatch-empty-string]
-bug61.i--empty-class(match-empty).re:10: warning: empty character class [-Wempty-character-class]
-bug61.i--empty-class(match-empty).re:10: warning: rule matches empty string [-Wmatch-empty-string]
-bug61.i--empty-class(match-empty).re:14: warning: empty character class [-Wempty-character-class]
-bug61.i--empty-class(match-empty).re:14: warning: rule matches empty string [-Wmatch-empty-string]
-bug61.i--empty-class(match-empty).re:18: warning: empty character class [-Wempty-character-class]
-bug61.i--empty-class(match-empty).re:18: warning: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:2:4: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:2:7: warning: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:6:4: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:6:17: warning: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:10:4: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:10:28: warning: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:14:4: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:14:10: warning: rule matches empty string [-Wmatch-empty-string]
+bug61.i--empty-class(match-empty).re:18:4: warning: empty character class [-Wempty-character-class]
+bug61.i--empty-class(match-empty).re:18:30: warning: rule matches empty string [-Wmatch-empty-string]

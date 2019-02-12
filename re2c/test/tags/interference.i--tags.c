@@ -69,4 +69,4 @@ yy6:
 	}
 }
 
-tags/interference.i--tags.re:5: warning: rule matches empty string [-Wmatch-empty-string]
+tags/interference.i--tags.re:5:22: warning: rule matches empty string [-Wmatch-empty-string]

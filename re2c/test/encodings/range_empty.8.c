@@ -10,5 +10,5 @@
 }
 #line 3 "encodings/range_empty.8.re"
 
-encodings/range_empty.8.re:2: warning: empty character class [-Wempty-character-class]
-encodings/range_empty.8.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+encodings/range_empty.8.re:2:1: warning: empty character class [-Wempty-character-class]
+encodings/range_empty.8.re:2:4: warning: rule matches empty string [-Wmatch-empty-string]

@@ -42,7 +42,8 @@ bool Scanner::init(const std::string &filename)
 bool Scanner::include(const std::string &filename)
 {
     // get name of the current file (before unreading)
-    const std::string &parent = get_fname();
+    DASSERT(!files.empty());
+    const std::string &parent = files.back()->escaped_name;
 
     // unread buffer tail: we'll return to it later
     // In the buffer nested files go before outer files. In the file stack,

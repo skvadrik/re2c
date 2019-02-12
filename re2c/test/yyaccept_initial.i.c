@@ -57,5 +57,5 @@ yy7:
 	}
 }
 
-yyaccept_initial.i.re:8: warning: rule matches empty string [-Wmatch-empty-string]
-yyaccept_initial.i.re:9: warning: rule matches empty string [-Wmatch-empty-string]
+yyaccept_initial.i.re:8:12: warning: rule matches empty string [-Wmatch-empty-string]
+yyaccept_initial.i.re:9:12: warning: rule matches empty string [-Wmatch-empty-string]

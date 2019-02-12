@@ -163,6 +163,6 @@ yy13:
 	}
 }
 
-posix_captures/repetition/68.i--flex-syntax.re:5: warning: rule matches empty string [-Wmatch-empty-string]
-posix_captures/repetition/68.i--flex-syntax.re:6: warning: rule matches empty string [-Wmatch-empty-string]
-posix_captures/repetition/68.i--flex-syntax.re:6: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
+posix_captures/repetition/68.i--flex-syntax.re:5:4: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/repetition/68.i--flex-syntax.re:6:7: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/repetition/68.i--flex-syntax.re:6:7: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]

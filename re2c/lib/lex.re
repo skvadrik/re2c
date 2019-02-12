@@ -35,6 +35,7 @@ int lex(const char *&cur)
     std::vector<ASTRange> cls;
     bool neg = false;
     uint32_t l, u;
+    const loc_t nowhere(0, 0, "void");
 
 /*!re2c
     * { goto err; }
@@ -70,15 +71,15 @@ int lex(const char *&cur)
     }
 
     "." {
-        yylval.regexp = ast_dot(0, 0);
+        yylval.regexp = ast_dot(nowhere);
         return REGEXP;
     }
 
     [^] \ nil {
-        ASTChar c(static_cast<uint32_t>(cur[-1]), 0);
+        ASTChar c(static_cast<uint32_t>(cur[-1]), nowhere);
         std::vector<ASTChar> *str = new std::vector<ASTChar>;
         str->push_back(c);
-        yylval.regexp = ast_str(0, 0, str, false);
+        yylval.regexp = ast_str(nowhere, str, false);
         return REGEXP;
     }
 */
@@ -91,13 +92,13 @@ cls:
 */
 add:
     if (l > u) goto err;
-    cls.push_back(ASTRange(l, u, 0));
+    cls.push_back(ASTRange(l, u, nowhere));
 /*!re2c
     ""  { goto cls; }
     "]" {
         std::vector<ASTRange> *p = new std::vector<ASTRange>;
         p->swap(cls);
-        yylval.regexp = ast_cls(0, 0, p, neg);
+        yylval.regexp = ast_cls(nowhere, p, neg);
         return REGEXP;
     }
 */

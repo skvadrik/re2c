@@ -192,4 +192,4 @@ yy22:
 }
 
 }
-reuse/reuse_conds_default_1.cgir.re:28: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/reuse_conds_default_1.cgir.re:28:2: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

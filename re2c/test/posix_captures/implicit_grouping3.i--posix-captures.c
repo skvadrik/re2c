@@ -44,4 +44,4 @@ yy4:
 	}
 }
 
-posix_captures/implicit_grouping3.i--posix-captures.re:3: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/implicit_grouping3.i--posix-captures.re:3:7: warning: rule matches empty string [-Wmatch-empty-string]

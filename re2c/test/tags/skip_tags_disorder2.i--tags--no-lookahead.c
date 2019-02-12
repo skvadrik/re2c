@@ -49,7 +49,7 @@ yy8:
 	{}
 }
 
-tags/skip_tags_disorder2.i--tags--no-lookahead.re:3: warning: rule matches empty string [-Wmatch-empty-string]
-tags/skip_tags_disorder2.i--tags--no-lookahead.re:4: warning: rule matches empty string [-Wmatch-empty-string]
-tags/skip_tags_disorder2.i--tags--no-lookahead.re:3: warning: tag 'a' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/skip_tags_disorder2.i--tags--no-lookahead.re:4: warning: tag 'b' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/skip_tags_disorder2.i--tags--no-lookahead.re:3:11: warning: rule matches empty string [-Wmatch-empty-string]
+tags/skip_tags_disorder2.i--tags--no-lookahead.re:4:11: warning: rule matches empty string [-Wmatch-empty-string]
+tags/skip_tags_disorder2.i--tags--no-lookahead.re:3:11: warning: tag 'a' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/skip_tags_disorder2.i--tags--no-lookahead.re:4:11: warning: tag 'b' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

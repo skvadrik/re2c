@@ -64,10 +64,9 @@ struct State
 struct DFA
 {
     accept_t accepts;
-    const std::string fname;
+    const loc_t loc;
     const std::string name;
     const std::string cond;
-    const uint32_t line;
     uint32_t lbChar;
     uint32_t ubChar;
     uint32_t nStates;
@@ -97,9 +96,9 @@ struct DFA
         , const std::vector<size_t> &fill
         , size_t def
         , size_t key
+        , const loc_t &loc
         , const std::string &nm
         , const std::string &cn
-        , uint32_t ln
         , const std::string &su
         , const Code *eof
         , const opt_t *opts
@@ -107,7 +106,7 @@ struct DFA
     ~DFA ();
     void reorder();
     void prepare(const opt_t *opts);
-    void calc_stats(uint32_t ln, bool explicit_tags);
+    void calc_stats(bool explicit_tags);
     void emit (Output &, uint32_t &, bool, bool &);
 
 private:

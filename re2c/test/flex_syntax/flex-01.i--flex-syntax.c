@@ -18,4 +18,4 @@ yy5:
 	{ return "b"; }
 }
 
-flex_syntax/flex-01.i--flex-syntax.re:9: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
+flex_syntax/flex-01.i--flex-syntax.re:9:2: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]

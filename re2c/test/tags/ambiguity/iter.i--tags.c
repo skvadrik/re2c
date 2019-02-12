@@ -97,9 +97,9 @@ yy19:
 	{ @f }
 }
 
-tags/ambiguity/iter.i--tags.re:2: warning: rule matches empty string [-Wmatch-empty-string]
-tags/ambiguity/iter.i--tags.re:3: warning: rule matches empty string [-Wmatch-empty-string]
-tags/ambiguity/iter.i--tags.re:5: warning: rule matches empty string [-Wmatch-empty-string]
-tags/ambiguity/iter.i--tags.re:6: warning: rule matches empty string [-Wmatch-empty-string]
-tags/ambiguity/iter.i--tags.re:8: warning: rule matches empty string [-Wmatch-empty-string]
-tags/ambiguity/iter.i--tags.re:9: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:2:17: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:3:17: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:5:15: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:6:15: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:8:15: warning: rule matches empty string [-Wmatch-empty-string]
+tags/ambiguity/iter.i--tags.re:9:15: warning: rule matches empty string [-Wmatch-empty-string]

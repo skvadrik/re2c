@@ -97,5 +97,5 @@ yy11:
 	}
 }
 
-tags/copy_coalescing1.i--tags.re:12: warning: rule matches empty string [-Wmatch-empty-string]
-tags/copy_coalescing1.i--tags.re:13: warning: rule matches empty string [-Wmatch-empty-string]
+tags/copy_coalescing1.i--tags.re:12:21: warning: rule matches empty string [-Wmatch-empty-string]
+tags/copy_coalescing1.i--tags.re:13:21: warning: rule matches empty string [-Wmatch-empty-string]

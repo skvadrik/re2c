@@ -171,7 +171,7 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
             // skip last rule (it's the NONE-rule)
             for (size_t j = 0; j < nrules; ++j) {
                 if (live[j * nstates + i]) {
-                    dfa.rules[r].shadow.insert(dfa.rules[j].code->fline);
+                    dfa.rules[r].shadow.insert(dfa.rules[j].code->loc.line);
                 }
             }
         }
@@ -180,7 +180,7 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
     for (size_t i = 0; i < nrules; ++i) {
         // default rule '*' should not be reported
         if (i != defrule && !live[i * nstates]) {
-            warn.unreachable_rule(dfa.fname, cond, dfa.rules[i]);
+            warn.unreachable_rule(cond, dfa.rules[i]);
         }
     }
 }

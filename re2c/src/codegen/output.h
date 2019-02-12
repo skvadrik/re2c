@@ -42,15 +42,6 @@ struct ConfTags
         : format(f), separator(s) {}
 };
 
-struct LineInfo
-{
-    uint32_t line;
-    std::string filename;
-
-    LineInfo(uint32_t l, const std::string &fn)
-        : line(l), filename(fn) {}
-};
-
 struct OutputFragment
 {
     enum type_t
@@ -86,7 +77,7 @@ struct OutputFragment
     union
     {
         const ConfTags *tags;
-        const LineInfo *line_info;
+        const loc_t *loc;
     };
 
     OutputFragment (type_t t, uint32_t i);
@@ -96,18 +87,17 @@ struct OutputFragment
 
 struct OutputBlock
 {
+    const loc_t loc;
     frags_t fragments;
     bool used_yyaccept;
     bool have_user_code;
-    std::string fname;
-    uint32_t line;
     std::vector<std::string> types;
     std::set<std::string> stags;
     std::set<std::string> mtags;
     const opt_t *opts;
 
-    OutputBlock ();
-    ~OutputBlock ();
+    explicit OutputBlock(const loc_t &loc);
+    ~OutputBlock();
     FORBID_COPY(OutputBlock);
 };
 
@@ -136,7 +126,7 @@ public:
     OutputBlock &block();
     void insert_code ();
     bool open ();
-    void new_block(Opt &opts, const std::string &fname);
+    void new_block(Opt &opts, const loc_t &loc);
     void header_mode(bool on);
 
     // immediate output
@@ -157,7 +147,7 @@ public:
 
     // delayed output
     Output & wdelay_tags(const ConfTags *cf, bool mtags);
-    Output & wdelay_line_info_input (uint32_t l, const std::string &fn);
+    Output & wdelay_line_info_input (const loc_t &loc);
     Output & wdelay_line_info_output ();
     Output & wdelay_cond_goto(uint32_t ind);
     Output & wdelay_cond_table(uint32_t ind);
@@ -181,7 +171,7 @@ public:
 
 void output_tags          (std::ostream &o, uint32_t ind, const ConfTags &conf, const std::set<std::string> &tags, const opt_t *opts);
 void output_line_info     (std::ostream &o, uint32_t line, const std::string &fname, bool iflag);
-void output_cond_goto     (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts, Warn &warn, bool warn_cond_order, const std::string &fname, uint32_t line);
+void output_cond_goto     (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts, Warn &warn, bool warn_cond_order, const loc_t &loc);
 void output_cond_table    (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts);
 void output_state_goto    (std::ostream &o, uint32_t ind, uint32_t start_label, uint32_t fill_index, const opt_t *opts);
 void output_types         (std::ostream &o, uint32_t ind, const opt_t *opts, const uniq_vector_t<std::string> &types);

@@ -72,4 +72,4 @@ yy10:
 	{ 1 }
 }
 
-tags/fallback1.i--tags.re:17: warning: rule matches empty string [-Wmatch-empty-string]
+tags/fallback1.i--tags.re:17:21: warning: rule matches empty string [-Wmatch-empty-string]

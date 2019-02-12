@@ -47,10 +47,10 @@ yy6:
 	goto yy4;
 }
 
-tags/uniq.i--tags.re:6: warning: rule matches empty string [-Wmatch-empty-string]
-tags/uniq.i--tags.re:5: warning: tag 'u' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/uniq.i--tags.re:5: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/uniq.i--tags.re:5: warning: tag 'w' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/uniq.i--tags.re:5: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/uniq.i--tags.re:5: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/uniq.i--tags.re:5: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/uniq.i--tags.re:6:3: warning: rule matches empty string [-Wmatch-empty-string]
+tags/uniq.i--tags.re:5:33: warning: tag 'u' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/uniq.i--tags.re:5:33: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/uniq.i--tags.re:5:33: warning: tag 'w' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/uniq.i--tags.re:5:33: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/uniq.i--tags.re:5:33: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/uniq.i--tags.re:5:33: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

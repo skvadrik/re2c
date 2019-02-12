@@ -5206,7 +5206,7 @@ yy282:
 	}
 }
 
-posix_captures/skeleton_01.i--posix-captures.re:5: warning: rule matches empty string [-Wmatch-empty-string]
-posix_captures/skeleton_01.i--posix-captures.re:7: warning: rule matches empty string [-Wmatch-empty-string]
-posix_captures/skeleton_01.i--posix-captures.re:6: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
-posix_captures/skeleton_01.i--posix-captures.re:7: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
+posix_captures/skeleton_01.i--posix-captures.re:5:37: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/skeleton_01.i--posix-captures.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/skeleton_01.i--posix-captures.re:6:12: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
+posix_captures/skeleton_01.i--posix-captures.re:7:7: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]

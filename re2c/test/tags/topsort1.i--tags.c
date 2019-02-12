@@ -59,5 +59,5 @@ yy9:
 	{}
 }
 
-tags/topsort1.i--tags.re:4: warning: rule matches empty string [-Wmatch-empty-string]
-tags/topsort1.i--tags.re:3: warning: tag 'p' has 5th degree of nondeterminism [-Wnondeterministic-tags]
+tags/topsort1.i--tags.re:4:7: warning: rule matches empty string [-Wmatch-empty-string]
+tags/topsort1.i--tags.re:3:21: warning: tag 'p' has 5th degree of nondeterminism [-Wnondeterministic-tags]

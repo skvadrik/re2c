@@ -24,5 +24,5 @@ yyc_c3:
 	{ return DEFAULT-*; }
 }
 
-encodings/default_dup_star_1.ic.re:4: warning: rule in condition 'c3' matches empty string [-Wmatch-empty-string]
-encodings/default_dup_star_1.ic.re:4: warning: unreachable rule in condition 'c3' (shadowed by rule at line 5) [-Wunreachable-rules]
+encodings/default_dup_star_1.ic.re:4:9: warning: rule in condition 'c3' matches empty string [-Wmatch-empty-string]
+encodings/default_dup_star_1.ic.re:4:9: warning: unreachable rule in condition 'c3' (shadowed by rule at line 5) [-Wunreachable-rules]

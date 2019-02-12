@@ -156,4 +156,4 @@ yy33:
 	{}
 }
 
-tags/cond_star2.ci.re:11: warning: unreachable rule in condition 'c2' (shadowed by rules at lines 5, 6) [-Wunreachable-rules]
+tags/cond_star2.ci.re:11:20: warning: unreachable rule in condition 'c2' (shadowed by rules at lines 5, 6) [-Wunreachable-rules]

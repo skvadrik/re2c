@@ -732,4 +732,4 @@ digraph re2c {
 380 -> 375 [label="[0x00-0x09][0x0B-0xFF]"]
 380 -> 377 [label="[0x0A]"]
 }
-scanner_re2c_default.--emit-dot.re:614: warning: rule matches empty string [-Wmatch-empty-string]
+scanner_re2c_default.--emit-dot.re:614:8: warning: rule matches empty string [-Wmatch-empty-string]

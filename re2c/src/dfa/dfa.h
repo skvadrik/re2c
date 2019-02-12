@@ -64,10 +64,9 @@ struct dfa_t
     tagver_t maxtagver;
     tcmd_t *tcmd0;
     tcid_t tcid0;
-    const std::string fname;
 
     dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
-        , Warn &warn, const std::string &fname);
+        , Warn &warn);
     ~dfa_t();
 
     FORBID_COPY(dfa_t);

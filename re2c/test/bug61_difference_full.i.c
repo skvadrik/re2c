@@ -5,5 +5,5 @@
 	{}
 }
 
-bug61_difference_full.i.re:2: warning: empty character class [-Wempty-character-class]
-bug61_difference_full.i.re:2: warning: rule matches empty string [-Wmatch-empty-string]
+bug61_difference_full.i.re:2:4: warning: empty character class [-Wempty-character-class]
+bug61_difference_full.i.re:2:28: warning: rule matches empty string [-Wmatch-empty-string]

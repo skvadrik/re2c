@@ -1220,7 +1220,7 @@ int main(int argc, char **argv)
 
     return status;
 }
-13_records.i--tags.re:57: warning: rule matches empty string [-Wmatch-empty-string]
-13_records.i--tags.re:63: warning: tag 'a2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-13_records.i--tags.re:63: warning: tag 'c1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-13_records.i--tags.re:63: warning: tag 'c2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+13_records.i--tags.re:57:18: warning: rule matches empty string [-Wmatch-empty-string]
+13_records.i--tags.re:63:16: warning: tag 'a2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+13_records.i--tags.re:63:16: warning: tag 'c1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+13_records.i--tags.re:63:16: warning: tag 'c2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

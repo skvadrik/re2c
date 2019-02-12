@@ -356,36 +356,36 @@ yy75:
 }
 #line 51 "repeater2.re"
 
-repeater2.re:2: warning: rule matches empty string [-Wmatch-empty-string]
-repeater2.re:7: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
-repeater2.re:11: warning: control flow is undefined for strings that match 
+repeater2.re:2:8: warning: rule matches empty string [-Wmatch-empty-string]
+repeater2.re:7:2: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+repeater2.re:11:2: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x60\x62-\xFF]'
 	'\x61 \x61 [\x0-\x60\x62-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-repeater2.re:14: warning: rule matches empty string [-Wmatch-empty-string]
-repeater2.re:19: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
-repeater2.re:23: warning: control flow is undefined for strings that match 
+repeater2.re:14:9: warning: rule matches empty string [-Wmatch-empty-string]
+repeater2.re:19:2: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+repeater2.re:23:2: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x60\x62-\xFF]'
 	'\x61 \x61 [\x0-\x60\x62-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-repeater2.re:26: warning: rule matches empty string [-Wmatch-empty-string]
-repeater2.re:30: warning: rule matches empty string [-Wmatch-empty-string]
-repeater2.re:35: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
-repeater2.re:39: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
-repeater2.re:43: warning: control flow is undefined for strings that match 
+repeater2.re:26:10: warning: rule matches empty string [-Wmatch-empty-string]
+repeater2.re:30:10: warning: rule matches empty string [-Wmatch-empty-string]
+repeater2.re:35:2: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+repeater2.re:39:2: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+repeater2.re:43:2: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x60\x62-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-repeater2.re:47: warning: control flow is undefined for strings that match 
+repeater2.re:47:2: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x60\x62-\xFF]'
 	'\x61 \x61 [\x0-\x60\x62-\xFF]'
 	'\x61 \x61 \x61 [\x0-\x60\x62-\xFF]'
 	'\x61 \x61 \x61 \x61 [\x0-\x60\x62-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-repeater2.re:51: warning: control flow is undefined for strings that match 
+repeater2.re:51:2: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x60\x62-\xFF]'
 	'\x61 \x61 [\x0-\x60\x62-\xFF]'

@@ -165,4 +165,4 @@ int main(int argc, char **argv)
 		return 1;
 	}
 }
-yyaccept_missing.bci.re:44: warning: rule in condition 'ST_VALUE' matches empty string [-Wmatch-empty-string]
+yyaccept_missing.bci.re:44:27: warning: rule in condition 'ST_VALUE' matches empty string [-Wmatch-empty-string]
