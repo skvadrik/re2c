@@ -17,14 +17,20 @@ parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
 {
 #define YYCTYPE unsigned char
 
-#define NEXT_ARG(option, label) \
-    do { \
-        if (next (YYCURSOR, argv)) goto label; \
-        else { error_arg(option); return EXIT_FAIL; } \
-    } while(0)
+#define NEXT_ARG(option, label) do { \
+    if (next (YYCURSOR, argv)) goto label; \
+    else { error_arg(option); return EXIT_FAIL; } \
+} while(0)
 
-#define ERROR(msg, arg) \
-    do { error(msg, arg); return EXIT_FAIL; } while(0)
+#define ERROR(msg, arg) do { \
+    error(msg, arg); \
+    return EXIT_FAIL; \
+} while(0)
+
+#define ERRARG(opt, exp, arg) do { \
+    error("bad argument '%s' to option %s <%s>", arg, opt, exp); \
+    return EXIT_FAIL; \
+} while(0)
 
     char *YYCURSOR, *YYMARKER;
     Warn::option_t option;
@@ -192,28 +198,25 @@ opt_long:
 
 opt_output:
 /*!re2c
-    * { ERROR("bad argument to option -o, --output: %s", *argv); }
+    * { ERRARG("-o, --output", "filename", *argv); }
     filename end { opts.set_output_file (*argv); goto opt; }
 */
 
 opt_header:
 /*!re2c
-    * { ERROR("bad argument to option -t, --type-header: %s", *argv); }
+    * { ERRARG("-t, --type-header", "filename", *argv); }
     filename end { opts.set_header_file (*argv); goto opt; }
 */
 
 opt_incpath:
 /*!re2c
-    * { ERROR("bad argument to option -I: %s", *argv); }
+    * { ERRARG("-I", "filename", *argv); }
     filename end { globopts.incpaths.push_back(*argv); goto opt; }
 */
 
 opt_encoding_policy:
 /*!re2c
-    * {
-        ERROR("bad argument to option --encoding-policy "
-            "(expected: ignore | substitute | fail): %s", *argv);
-    }
+    * { ERRARG("--encoding-policy", "ignore | substitute | fail", *argv); }
     "ignore"     end { opts.set_encoding_policy (Enc::POLICY_IGNORE);     goto opt; }
     "substitute" end { opts.set_encoding_policy (Enc::POLICY_SUBSTITUTE); goto opt; }
     "fail"       end { opts.set_encoding_policy (Enc::POLICY_FAIL);       goto opt; }
@@ -221,20 +224,14 @@ opt_encoding_policy:
 
 opt_input:
 /*!re2c
-    * {
-        ERROR("bad argument to option --input "
-            "(expected: default | custom): %s", *argv);
-    }
+    * { ERRARG("--input", "default | custom", *argv); }
     "default" end { opts.set_input_api(INPUT_DEFAULT); goto opt; }
     "custom"  end { opts.set_input_api(INPUT_CUSTOM);  goto opt; }
 */
 
 opt_empty_class:
 /*!re2c
-    * {
-        ERROR("bad argument to option --empty-class "
-            "(expected: match-empty | match-none | error): %s", *argv);
-    }
+    * { ERRARG("--empty-class", "match-empty | match-none | error", *argv); }
     "match-empty" end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_EMPTY); goto opt; }
     "match-none"  end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_NONE);  goto opt; }
     "error"       end { opts.set_empty_class_policy (EMPTY_CLASS_ERROR);       goto opt; }
@@ -242,29 +239,21 @@ opt_empty_class:
 
 opt_location_format:
 /*!re2c
-    * {
-        ERROR("bad argument to option --location-format (expected: gnu | msvc): %s", *argv);
-    }
+    * { ERRARG("--location-format", "gnu | msvc", *argv); }
     "gnu"  end { msg.locfmt = LOCFMT_GNU;  goto opt; }
     "msvc" end { msg.locfmt = LOCFMT_MSVC; goto opt; }
 */
 
 opt_dfa_minimization:
 /*!re2c
-    * {
-        ERROR("bad argument to option --dfa-minimization "
-            "(expected: table | moore): %s", *argv);
-    }
+    * { ERRARG("--dfa-minimization", "table | moore", *argv); }
     "table" end { globopts.dfa_minimization = DFA_MINIMIZATION_TABLE; goto opt; }
     "moore" end { globopts.dfa_minimization = DFA_MINIMIZATION_MOORE; goto opt; }
 */
 
 opt_posix_closure:
 /*!re2c
-    * {
-        ERROR("bad argument to option --posix_closure "
-            "(expected: gor1 | gtop): %s", *argv);
-    }
+    * { ERRARG("--posix-closure", "gor1 | gtop", *argv); }
     "gor1" end { globopts.posix_closure = POSIX_CLOSURE_GOR1; goto opt; }
     "gtop" end { globopts.posix_closure = POSIX_CLOSURE_GTOP; goto opt; }
 */
@@ -280,6 +269,7 @@ end:
 
 #undef NEXT_ARG
 #undef ERROR
+#undef ERRARG
 #undef YYCTYPE
 }
 
