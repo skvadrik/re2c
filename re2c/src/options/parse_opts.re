@@ -167,6 +167,7 @@ opt_long:
     "encoding-policy"       end { NEXT_ARG("--encoding-policy",  opt_encoding_policy); }
     "input"                 end { NEXT_ARG("--input",            opt_input); }
     "empty-class"           end { NEXT_ARG("--empty-class",      opt_empty_class); }
+    "location-format"       end { NEXT_ARG("--location-format",  opt_location_format); }
 
     "single-pass"           end { goto opt; } // deprecated
 
@@ -237,6 +238,15 @@ opt_empty_class:
     "match-empty" end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_EMPTY); goto opt; }
     "match-none"  end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_NONE);  goto opt; }
     "error"       end { opts.set_empty_class_policy (EMPTY_CLASS_ERROR);       goto opt; }
+*/
+
+opt_location_format:
+/*!re2c
+    * {
+        ERROR("bad argument to option --location-format (expected: gnu | msvc): %s", *argv);
+    }
+    "gnu"  end { msg.locfmt = LOCFMT_GNU;  goto opt; }
+    "msvc" end { msg.locfmt = LOCFMT_MSVC; goto opt; }
 */
 
 opt_dfa_minimization:

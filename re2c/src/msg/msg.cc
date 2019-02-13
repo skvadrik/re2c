@@ -36,10 +36,23 @@ void fatal(const char *fmt, ...)
     exit(1);
 }
 
+void Msg::print_location(const loc_t &loc) const
+{
+    const char *f = filenames[loc.file].c_str();
+    switch (locfmt) {
+        case LOCFMT_GNU:
+            fprintf(stderr, "%s:%u:%u: ", f, loc.line, loc.coln);
+            break;
+        case LOCFMT_MSVC:
+            fprintf(stderr, "%s(%u,%u): ", f, loc.line, loc.coln);
+            break;
+    }
+}
+
 void Msg::fatal(const loc_t &loc, const char *fmt, ...)
 {
-    fprintf(stderr, "%s:%u:%u: error: "
-        , filenames[loc.file].c_str(), loc.line, loc.coln);
+    print_location(loc);
+    fprintf(stderr, "error: ");
 
     va_list args;
     va_start(args, fmt);
@@ -57,9 +70,9 @@ void error_arg(const char *option)
 
 void Msg::warning_start(const loc_t &loc, bool error)
 {
+    print_location(loc);
     const char *msg = error ? "error" : "warning";
-    fprintf(stderr, "%s:%u:%u: %s: "
-        , filenames[loc.file].c_str(), loc.line, loc.coln, msg);
+    fprintf(stderr, "%s: ", msg);
 }
 
 void Msg::warning_end(const char *type, bool error)

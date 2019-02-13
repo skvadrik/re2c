@@ -17,9 +17,10 @@ class Msg
 public:
     std::vector<std::string> filenames;
     Warn warn;
+    locfmt_t locfmt;
 
 public:
-    inline Msg(): filenames(), warn(*this) {}
+    inline Msg(): filenames(), warn(*this), locfmt(LOCFMT_GNU) {}
 
     size_t register_filename(const std::string &filename);
     void fatal(const loc_t &loc, const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4), noreturn));
@@ -28,6 +29,7 @@ public:
     friend class Warn;
 
 private:
+    void print_location(const loc_t &loc) const;
     void warning_start(const loc_t &loc, bool error);
     void warning_end(const char *type, bool error);
 };
