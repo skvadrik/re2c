@@ -1,5 +1,5 @@
-#ifndef _RE2C_CONF_VER_
-#define _RE2C_CONF_VER_
+#ifndef _RE2C_MSG_VER_
+#define _RE2C_MSG_VER_
 
 #include <string>
 
@@ -9,4 +9,4 @@ std::string ver_to_vernum(const char *ver);
 
 } // namespace re2c
 
-#endif // _RE2C_CONF_VER_
+#endif // _RE2C_MSG_VER_

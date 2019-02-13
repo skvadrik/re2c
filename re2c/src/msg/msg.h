@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "src/msg/location.h"
-#include "src/options/warn.h"
+#include "src/msg/warn.h"
 #include "src/util/attribute.h"
 
 

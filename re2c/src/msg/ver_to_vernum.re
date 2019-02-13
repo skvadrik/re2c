@@ -2,7 +2,7 @@
 #include <string>
 
 #include "config.h"
-#include "src/options/ver_to_vernum.h"
+#include "src/msg/ver_to_vernum.h"
 
 namespace re2c {
 

@@ -17,8 +17,6 @@ libre2c_la_HDR = \
 	src/codegen/output.h \
 	src/codegen/print.h \
 	src/options/opt.h \
-	src/options/ver_to_vernum.h \
-	src/options/warn.h \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
 	src/cfg/cfg.h \
@@ -39,6 +37,8 @@ libre2c_la_HDR = \
 	src/encoding/utf16/utf16.h \
 	src/msg/location.h \
 	src/msg/msg.h \
+	src/msg/ver_to_vernum.h \
+	src/msg/warn.h \
 	src/regexp/empty_class_policy.h \
 	src/regexp/re.h \
 	src/regexp/rule.h \
@@ -82,7 +82,6 @@ libre2c_la_SRC = \
 	lib/stubs.cc \
 	src/parse/ast.cc \
 	src/options/opt.cc \
-	src/options/warn.cc \
 	src/cfg/cfg.cc \
 	src/cfg/compact.cc \
 	src/cfg/dce.cc \
@@ -120,6 +119,7 @@ libre2c_la_SRC = \
 	src/encoding/utf8/utf8.cc \
 	src/encoding/utf8/utf8_regexp.cc \
 	src/msg/msg.cc \
+	src/msg/warn.cc \
 	src/regexp/ast_to_re.cc \
 	src/regexp/default_tags.cc \
 	src/regexp/fixed_tags.cc \
@@ -140,12 +140,12 @@ libre2c_la_SOURCES = \
 libre2c_la_CUSTOM = \
 	lib/lex.re \
 	lib/parse.ypp \
-	src/options/ver_to_vernum.re
+	src/msg/ver_to_vernum.re
 
 libre2c_la_GEN_SRC = \
 	lib/lex.cc \
 	lib/parse.cc \
-	src/options/ver_to_vernum.cc
+	src/msg/ver_to_vernum.cc
 libre2c_la_GEN_HDR = \
 	lib/parse.h
 libre2c_la_GEN = \
@@ -159,7 +159,7 @@ libre2c_la_BOOTSTRAP = \
 	bootstrap/lib/parse.cc \
 	bootstrap/lib/parse.h \
 	bootstrap/lib/lex.cc \
-	bootstrap/src/options/ver_to_vernum.cc
+	bootstrap/src/msg/ver_to_vernum.cc
 
 nodist_libre2c_la_SOURCES = $(libre2c_la_GEN)
 

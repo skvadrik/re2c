@@ -4,7 +4,6 @@
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
 #include "src/options/opt.h"
-#include "src/options/warn.h"
 #include "src/debug/debug.h"
 #include "src/dfa/determinization.h"
 #include "src/nfa/nfa.h"

@@ -1,5 +1,5 @@
-#ifndef _RE2C_CONF_WARN_
-#define _RE2C_CONF_WARN_
+#ifndef _RE2C_MSG_WARN_
+#define _RE2C_MSG_WARN_
 
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
@@ -73,4 +73,4 @@ public:
 
 } // namespace re2c
 
-#endif // _RE2C_CONF_WARN_
+#endif // _RE2C_MSG_WARN_

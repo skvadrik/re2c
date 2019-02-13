@@ -6,7 +6,6 @@
 #include <string>
 
 #include "src/codegen/input_api.h"
-#include "src/options/warn.h"
 #include "src/dfa/dfa.h"
 #include "src/regexp/empty_class_policy.h"
 #include "src/encoding/enc.h"

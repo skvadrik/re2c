@@ -3,9 +3,9 @@
 #include <algorithm>
 #include <set>
 
-#include "src/options/warn.h"
-#include "src/skeleton/path.h"
+#include "src/msg/warn.h"
 #include "src/regexp/rule.h"
+#include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
 
 namespace re2c {

@@ -1,7 +1,6 @@
 #include "lib/lex.h"
 #include "lib/regex.h"
 #include "src/options/opt.h"
-#include "src/options/warn.h"
 #include "src/nfa/nfa.h"
 #include "src/dfa/dfa.h"
 
