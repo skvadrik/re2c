@@ -32,5 +32,12 @@ int main(int, char *argv[])
         return 1;
     }
 
-    return msg.warn.error() ? 1 : 0;
+    if (msg.warn.error()) {
+        return 1;
+    }
+
+    if (globopts.verbose) {
+        fprintf(stderr, "re2c: success\n");
+    }
+    return 0;
 }

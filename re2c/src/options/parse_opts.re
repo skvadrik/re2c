@@ -144,6 +144,7 @@ opt_long:
     "storable-state"        end { globopts.fFlag = true;             goto opt; }
     "flex-syntax"           end { globopts.FFlag = true;             goto opt; }
     "reusable"              end { globopts.rFlag = true;             goto opt; }
+    "verbose"               end { globopts.verbose = true;           goto opt; }
     "no-generation-date"    end { globopts.bNoGenerationDate = true; goto opt; }
     "no-version"            end { globopts.version = false;          goto opt; }
     "skeleton"              end { globopts.target = TARGET_SKELETON; goto opt; }

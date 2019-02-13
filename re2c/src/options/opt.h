@@ -49,6 +49,7 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, fFlag, false) \
     CONSTOPT (bool, rFlag, false) \
     CONSTOPT (bool, FFlag, false) \
+    CONSTOPT (bool, verbose, false) \
     /* include paths */ \
     CONSTOPT (std::vector<std::string>, incpaths, std::vector<std::string>()) \
     /* internals */ \
