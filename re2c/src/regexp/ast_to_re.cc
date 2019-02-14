@@ -129,7 +129,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
         }
         case AST::ALT: {
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
-            if (opts->posix_syntax && has_tags(ast)) {
+            if (opts->posix_semantics && has_tags(ast)) {
                 // see note [POSIX subexpression hierarchy]
                 if (ast->cat.ast1->type != AST::CAP) {
                     t1 = re_tag(spec, tags.size(), false);
@@ -152,7 +152,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
         }
         case AST::CAT: {
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
-            if (opts->posix_syntax && has_tags(ast)) {
+            if (opts->posix_semantics && has_tags(ast)) {
                 // see note [POSIX subexpression hierarchy]
                 if (ast->cat.ast1->type != AST::CAP) {
                     t1 = re_tag(spec, tags.size(), false);
@@ -214,7 +214,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             const AST *x = ast->iter.ast;
 
             RE *t1 = NULL, *t2 = NULL;
-            if (opts->posix_syntax && x->type == AST::CAP) {
+            if (opts->posix_semantics && x->type == AST::CAP) {
                 x = x->cap;
                 if (x->type == AST::REF) x = x->ref.ast;
 
