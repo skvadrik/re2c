@@ -11,6 +11,7 @@ namespace re2c {
 
 static void calc_indegrees(nfa_state_t *);
 static void calc_topord(nfa_state_t *, uint32_t &);
+static void calc_coreid(nfa_state_t *, uint32_t &);
 
 
 /*
@@ -119,6 +120,7 @@ nfa_t::nfa_t(const RESpec &spec)
     , rules(spec.rules)
     , tags(spec.tags)
     , root(NULL)
+    , ncores(0)
 {
     const size_t nre = spec.res.size();
 
@@ -146,6 +148,7 @@ nfa_t::nfa_t(const RESpec &spec)
         calc_topord(root, topord);
         calc_indegrees(root);
     }
+    calc_coreid(root, ncores);
 }
 
 nfa_t::~nfa_t()
@@ -194,11 +197,38 @@ void calc_topord(nfa_state_t *n, uint32_t &topord)
             break;
         case nfa_state_t::RAN:
             calc_topord(n->ran.out, topord);
+            break;
         case nfa_state_t::FIN:
             break;
     }
 
     n->topord = topord++;
+}
+
+void calc_coreid(nfa_state_t *n, uint32_t &coreid)
+{
+    if (n->coreid != 0) return;
+    n->coreid = NONCORE;
+
+    switch (n->type) {
+        case nfa_state_t::NIL:
+            calc_coreid(n->nil.out, coreid);
+            break;
+        case nfa_state_t::ALT:
+            calc_coreid(n->alt.out1, coreid);
+            calc_coreid(n->alt.out2, coreid);
+            break;
+        case nfa_state_t::TAG:
+            calc_coreid(n->tag.out, coreid);
+            break;
+        case nfa_state_t::RAN:
+            n->coreid = coreid++;
+            calc_coreid(n->ran.out, coreid);
+            break;
+        case nfa_state_t::FIN:
+            n->coreid = coreid++;
+            break;
+    }
 }
 
 } // namespace re2c
