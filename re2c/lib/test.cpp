@@ -932,6 +932,7 @@ int main()
 
     e |= test_all_posix(0);
     e |= test_all_posix(REG_NFA);
+    e |= test_all_posix(REG_NFA | REG_TRIE);
     e |= test_all_leftmost(REG_NFA | REG_LEFTMOST);
     e |= test_all_leftmost(REG_NFA | REG_LEFTMOST | REG_TRIE);
 

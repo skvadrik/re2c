@@ -14,14 +14,15 @@ void regfree(regex_t *preg)
     delete preg->nfa;
     delete[] preg->pmatch;
 
-    if (preg->flags & REG_NFA) {
+    const int f = preg->flags;
+    if (f & REG_NFA) {
         delete[] preg->done;
-        if (!(preg->flags & REG_TRIE)) {
+        if (!(f & REG_TRIE)) {
             delete[] preg->offsets1;
             delete[] preg->offsets2;
             delete[] preg->offsets3;
         }
-        if (!(preg->flags & REG_LEFTMOST)) {
+        if (!(f & REG_LEFTMOST) && !(f & REG_TRIE)) {
             delete[] preg->prec_buf1;
             delete[] preg->prec_buf2;
         }

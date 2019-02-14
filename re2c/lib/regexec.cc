@@ -12,14 +12,17 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
     if (!(preg->flags & REG_NFA)) {
         return regexec_dfa(preg, string, nmatch, pmatch, eflags);
     }
-    else if (!(preg->flags & REG_LEFTMOST)) {
-        return regexec_nfa_posix(preg, string, nmatch, pmatch, eflags);
-    }
-    else if (preg->flags & REG_TRIE) {
+    else if ((preg->flags & REG_LEFTMOST) && (preg->flags & REG_TRIE)) {
         return regexec_nfa_leftmost_trie(preg, string, nmatch, pmatch, eflags);
     }
-    else {
+    else if (preg->flags & REG_LEFTMOST) {
         return regexec_nfa_leftmost(preg, string, nmatch, pmatch, eflags);
+    }
+    else if (preg->flags & REG_TRIE) {
+        return regexec_nfa_posix_trie(preg, string, nmatch, pmatch, eflags);
+    }
+    else {
+        return regexec_nfa_posix(preg, string, nmatch, pmatch, eflags);
     }
 }
 
