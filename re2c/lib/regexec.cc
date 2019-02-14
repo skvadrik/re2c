@@ -38,32 +38,29 @@ int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     m->rm_eo = ctx.marker - string - 1;
 
     const std::vector<Tag> &tags = ctx.nfa->tags;
-    size_t todo = nmatch * 2, ntags = tags.size();
-    bool *done = new bool[ntags];
-    memset(done, 0, ntags * sizeof(bool));
+    size_t todo = nmatch * 2;
+    bool *done = ctx.done;
+    memset(done, 0, ctx.nsub * sizeof(bool));
 
     for (size_t i = ctx.hidx; todo > 0 && i != HROOT; ) {
         const history_t::node_t &n = ctx.hist.nodes[i];
-        const size_t t = n.info.idx;
-        if (!done[t]) {
+        const Tag &tag = tags[n.info.idx];
+        const size_t t = tag.ncap;
+        if (!fictive(tag) && t < nmatch * 2 && !done[t]) {
             done[t] = true;
-            const Tag &tag = tags[t];
-            if (!fictive(tag) && tag.ncap < nmatch * 2) {
-                --todo;
-                const regoff_t off = n.info.neg ? -1 : static_cast<regoff_t>(n.step);
-                m = &pmatch[tag.ncap / 2 + 1];
-                if (tag.ncap % 2 == 0) {
-                    m->rm_so = off;
-                }
-                else {
-                    m->rm_eo = off;
-                }
+            --todo;
+            const regoff_t off = n.info.neg ? -1 : static_cast<regoff_t>(n.step);
+            m = &pmatch[t / 2 + 1];
+            if (t % 2 == 0) {
+                m->rm_so = off;
+            }
+            else {
+                m->rm_eo = off;
             }
         }
         i = n.pred;
     }
 
-    delete[] done;
     return 0;
 }
 
