@@ -81,6 +81,13 @@ struct simctx_t
     const char *marker;
     cache_t cache;
 
+    regoff_t *offsets1;
+    regoff_t *offsets2;
+    regoff_t *offsets3;
+    bool *done;
+
+    const size_t nsub;
+
     simctx_t(const regex_t *preg, const char *string);
     FORBID_COPY(simctx_t);
 };
@@ -90,6 +97,7 @@ inline uint32_t index(const nfa_t *, const nfa_state_t *);
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_leftmost(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 
 uint32_t history_t::push(uint32_t idx, uint32_t step, tag_info_t info, uint32_t orig)
 {

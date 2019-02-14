@@ -32,6 +32,7 @@ static const int REG_NOTEOL   = 1u << 5;
 // extensions
 static const int REG_NFA      = 1u << 6;
 static const int REG_LEFTMOST = 1u << 7;
+static const int REG_TRIE     = 1u << 8;
 
 
 struct regex_t
@@ -45,6 +46,10 @@ struct regex_t
     size_t *char2class;
     int *prec_buf1;
     int *prec_buf2;
+    regoff_t *offsets1;
+    regoff_t *offsets2;
+    regoff_t *offsets3;
+    bool *done;
     int flags;
 };
 

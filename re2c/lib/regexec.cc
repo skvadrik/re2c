@@ -9,16 +9,17 @@ using namespace re2c::libre2c;
 int regexec(const regex_t *preg, const char *string, size_t nmatch,
     regmatch_t pmatch[], int eflags)
 {
-    if (preg->flags & REG_NFA) {
-        if (preg->flags & REG_LEFTMOST) {
-            return regexec_nfa_leftmost(preg, string, nmatch, pmatch, eflags);
-        }
-        else {
-            return regexec_nfa_posix(preg, string, nmatch, pmatch, eflags);
-        }
+    if (!(preg->flags & REG_NFA)) {
+        return regexec_dfa(preg, string, nmatch, pmatch, eflags);
+    }
+    else if (!(preg->flags & REG_LEFTMOST)) {
+        return regexec_nfa_posix(preg, string, nmatch, pmatch, eflags);
+    }
+    else if (preg->flags & REG_TRIE) {
+        return regexec_nfa_leftmost_trie(preg, string, nmatch, pmatch, eflags);
     }
     else {
-        return regexec_dfa(preg, string, nmatch, pmatch, eflags);
+        return regexec_nfa_leftmost(preg, string, nmatch, pmatch, eflags);
     }
 }
 
@@ -79,6 +80,11 @@ simctx_t::simctx_t(const regex_t *preg, const char *string)
     , cursor(string)
     , marker(string)
     , cache()
+    , offsets1(preg->offsets1)
+    , offsets2(preg->offsets2)
+    , offsets3(preg->offsets3)
+    , done(preg->done)
+    , nsub(2 * (preg->re_nsub - 1))
 {
     state.reserve(nfa->size);
     reach.reserve(nfa->size);
@@ -89,7 +95,7 @@ history_t::history_t(size_t nstates, size_t ntags)
     , path1()
     , path2()
 {
-    nodes.reserve(ntags * nstates);
+    nodes.reserve(nstates);
     path1.reserve(ntags);
     path2.reserve(ntags);
 }

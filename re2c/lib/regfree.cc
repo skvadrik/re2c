@@ -15,8 +15,16 @@ void regfree(regex_t *preg)
     delete[] preg->pmatch;
 
     if (preg->flags & REG_NFA) {
-        delete[] preg->prec_buf1;
-        delete[] preg->prec_buf2;
+        delete[] preg->done;
+        if (!(preg->flags & REG_TRIE)) {
+            delete[] preg->offsets1;
+            delete[] preg->offsets2;
+            delete[] preg->offsets3;
+        }
+        if (!(preg->flags & REG_LEFTMOST)) {
+            delete[] preg->prec_buf1;
+            delete[] preg->prec_buf2;
+        }
     }
     else {
         delete[] preg->regs;

@@ -77,6 +77,7 @@ libre2c_la_SRC = \
 	lib/regexec.cc \
 	lib/regexec_dfa.cc \
 	lib/regexec_nfa_leftmost.cc \
+	lib/regexec_nfa_leftmost_trie.cc \
 	lib/regexec_nfa_posix.cc \
 	lib/regfree.cc \
 	lib/stubs.cc \

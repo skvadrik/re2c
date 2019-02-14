@@ -46,9 +46,19 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 
     dfa_t *dfa = NULL;
     if (cflags & REG_NFA) {
-        const size_t sz = 2 * nfa->size * nfa->size;
-        preg->prec_buf1 = new int32_t[sz];
-        preg->prec_buf2 = new int32_t[sz];
+        const size_t ntags = 2 * (preg->re_nsub - 1);
+        preg->done = new bool[ntags];
+        if (!(cflags & REG_TRIE)) {
+            const size_t sz = ntags * nfa->size;
+            preg->offsets1 = new regoff_t[sz];
+            preg->offsets2 = new regoff_t[sz];
+            preg->offsets3 = new regoff_t[ntags];
+        }
+        if (!(cflags & REG_LEFTMOST)) {
+            const size_t sz = nfa->size * nfa->size;
+            preg->prec_buf1 = new int32_t[sz];
+            preg->prec_buf2 = new int32_t[sz];
+        }
     }
     else {
         preg->char2class = new size_t[256];
