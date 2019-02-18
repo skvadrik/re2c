@@ -56,8 +56,8 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
         }
         if (!(cflags & REG_LEFTMOST) && !(cflags & REG_TRIE)) {
             const size_t sz = nfa->ncores * nfa->ncores;
-            preg->prec_buf1 = new int32_t[sz];
-            preg->prec_buf2 = new int32_t[sz];
+            preg->prectbl1 = new int32_t[sz];
+            preg->prectbl2 = new int32_t[sz];
         }
     }
     else {

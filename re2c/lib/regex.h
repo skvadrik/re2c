@@ -44,8 +44,8 @@ struct regex_t
     regmatch_t *pmatch;
     regoff_t *regs;
     size_t *char2class;
-    int *prec_buf1;
-    int *prec_buf2;
+    int *prectbl1;
+    int *prectbl2;
     regoff_t *offsets1;
     regoff_t *offsets2;
     regoff_t *offsets3;

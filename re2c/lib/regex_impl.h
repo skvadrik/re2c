@@ -71,20 +71,22 @@ struct simctx_t
     const nfa_t *nfa;
     confset_t reach;
     confset_t state;
-    int32_t *prec;
-    int32_t *prec_next;
     history_t hist;
     uint32_t hidx;
     uint32_t step;
     size_t rule;
     const char *cursor;
     const char *marker;
-    cache_t cache;
 
     regoff_t *offsets1;
     regoff_t *offsets2;
     regoff_t *offsets3;
+
     bool *done;
+
+    int32_t *prectbl1;
+    int32_t *prectbl2;
+    cache_t cache;
 
     const size_t nsub;
 

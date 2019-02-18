@@ -23,8 +23,8 @@ void regfree(regex_t *preg)
             delete[] preg->offsets3;
         }
         if (!(f & REG_LEFTMOST) && !(f & REG_TRIE)) {
-            delete[] preg->prec_buf1;
-            delete[] preg->prec_buf2;
+            delete[] preg->prectbl1;
+            delete[] preg->prectbl2;
         }
     }
     else {
