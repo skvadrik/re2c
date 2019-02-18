@@ -18,7 +18,6 @@ static void closure_posix(simctx_t &);
 static void update_offsets(simctx_t &ctx, const conf_t &c);
 static void update_offsets_and_prectbl(simctx_t &);
 static int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y, int32_t &prec1, int32_t &prec2);
-static void unwind(history_t &hist, tag_path_t &path, int32_t idx);
 
 // we *do* want this to be inlined
 static inline void relax(simctx_t &, const conf_t &, worklist_t &);
@@ -261,55 +260,61 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
 
     const std::vector<Tag> &tags = ctx.nfa->tags;
     history_t &hist = ctx.hist;
-    tag_path_t &path1 = hist.path1, &path2 = hist.path2;
-
-    // unwind histories one step back
-    unwind(hist, path1, idx1);
-    unwind(hist, path2, idx2);
 
     const bool fork_frame = orig1 == orig2;
-    tag_path_t::const_reverse_iterator
-        s1 = path1.rbegin(), e1 = path1.rend(), i1 = s1, j1,
-        s2 = path2.rbegin(), e2 = path2.rend(), i2 = s2, j2;
-
-    // longest precedence
     if (fork_frame) {
-        // find fork
-        for (; i1 != e1 && i2 != e2 && *i1 == *i2; ++i1, ++i2);
-        prec1 = prec2 = i1 > s1
-            ? tags[(i1 - 1)->idx].height : MAX_RHO;
+        prec1 = prec2 = MAX_RHO;
     }
     else {
         prec1 = unpack_longest(ctx.prectbl1[orig1 * ctx.nfa->ncores + orig2]);
         prec2 = unpack_longest(ctx.prectbl1[orig2 * ctx.nfa->ncores + orig1]);
     }
-    for (j1 = i1; j1 != e1; ++j1) {
-        prec1 = std::min(prec1, tags[j1->idx].height);
+
+    tag_info_t info1, info2;
+    int32_t i1 = idx1, i2 = idx2;
+    for (; i1 != i2; ) {
+        if (i1 > i2) {
+            const history_t::node_t &n = hist.at(i1);
+            info1 = n.info;
+            prec1 = std::min(prec1, tags[info1.idx].height);
+            i1 = n.pred;
+        }
+        else {
+            const history_t::node_t &n = hist.at(i2);
+            info2 = n.info;
+            prec2 = std::min(prec2, tags[info2.idx].height);
+            i2 = n.pred;
+        }
     }
-    for (j2 = i2; j2 != e2; ++j2) {
-        prec2 = std::min(prec2, tags[j2->idx].height);
+    if (i1 != history_t::ROOT) {
+        DASSERT(fork_frame);
+        const int32_t h = tags[hist.at(i1).info.idx].height;
+        prec1 = std::min(prec1, h);
+        prec2 = std::min(prec2, h);
     }
+
+    // longest precedence
     if (prec1 > prec2) return -1;
     if (prec1 < prec2) return  1;
 
     // leftmost precedence
     if (fork_frame) {
         // equal => not less
-        if (i1 == e1 && i2 == e2) return 0;
+        if (i1 == idx1 && i2 == idx2) return 0;
 
         // shorter => less
-        if (i1 == e1) return -1;
-        if (i2 == e2) return  1;
+        if (i1 == idx1) return -1;
+        if (i2 == idx2) return  1;
 
-        const uint32_t idx1 = i1->idx, idx2 = i2->idx;
-        const bool neg1 = i1->neg, neg2 = i2->neg;
+        const uint32_t tag1 = info1.idx, tag2 = info2.idx;
+        const bool neg1 = info1.neg, neg2 = info2.neg;
 
         // can't be both closing
-        DASSERT(!(idx1 % 2 == 1 && idx2 % 2 == 1));
+        DASSERT(!(tag1 % 2 == 1 && tag2 % 2 == 1));
 
         // closing vs opening: closing wins
-        if (idx1 % 2 == 1) return -1;
-        if (idx2 % 2 == 1) return  1;
+        if (tag1 % 2 == 1) return -1;
+        if (tag2 % 2 == 1) return  1;
 
         // can't be both negative
         DASSERT(!(neg1 && neg2));
@@ -322,16 +327,6 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
     }
     else {
         return unpack_leftmost(ctx.prectbl1[orig1 * ctx.nfa->ncores + orig2]);
-    }
-}
-
-void unwind(history_t &hist, tag_path_t &path, int32_t idx)
-{
-    path.clear();
-    for (int32_t i = idx; i != history_t::ROOT; ) {
-        const history_t::node_t &n = hist.at(i);
-        path.push_back(n.info);
-        i = n.pred;
     }
 }
 
