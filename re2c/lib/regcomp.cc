@@ -1,5 +1,6 @@
 #include "lib/lex.h"
 #include "lib/regex.h"
+#include "lib/regex_impl.h"
 #include "src/options/opt.h"
 #include "src/nfa/nfa.h"
 #include "src/dfa/dfa.h"
@@ -46,19 +47,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 
     dfa_t *dfa = NULL;
     if (cflags & REG_NFA) {
-        const size_t ntags = 2 * (preg->re_nsub - 1);
-        preg->done = new bool[ntags];
-        if (!(cflags & REG_TRIE)) {
-            const size_t sz = ntags * nfa->ncores;
-            preg->offsets1 = new regoff_t[sz];
-            preg->offsets2 = new regoff_t[sz];
-            preg->offsets3 = new regoff_t[ntags];
-        }
-        if (!(cflags & REG_LEFTMOST) && !(cflags & REG_TRIE)) {
-            const size_t sz = nfa->ncores * nfa->ncores;
-            preg->prectbl1 = new int32_t[sz];
-            preg->prectbl2 = new int32_t[sz];
-        }
+        preg->simctx = new libre2c::simctx_t(nfa, preg->re_nsub, cflags);
     }
     else {
         preg->char2class = new size_t[256];

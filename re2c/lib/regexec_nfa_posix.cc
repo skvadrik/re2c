@@ -37,7 +37,8 @@ static inline void relax_gtop(simctx_t &, const conf_t &);
 int regexec_nfa_posix(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
-    simctx_t ctx(preg, string);
+    simctx_t &ctx = *preg->simctx;
+    ctx.cursor = ctx.marker = string;
     const nfa_t *nfa = ctx.nfa;
 
     const conf_t c0(nfa->root, 0, history_t::ROOT);
@@ -118,7 +119,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
 
 void closure_posix(simctx_t &ctx)
 {
-    if (ctx.use_gtop) {
+    if (ctx.flags & REG_GTOP) {
         closure_posix_gtop(ctx);
     }
     else {

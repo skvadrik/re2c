@@ -7,11 +7,15 @@
 
 // fwd
 namespace re2c {
-
 struct nfa_t;
 struct dfa_t;
 struct RangeMgr;
+} // namespace re2c
 
+namespace re2c {
+namespace libre2c {
+struct simctx_t;
+} // namespace libre2c
 } // namespace re2c
 
 typedef ptrdiff_t regoff_t;
@@ -44,13 +48,8 @@ struct regex_t
     regmatch_t *pmatch;
     regoff_t *regs;
     size_t *char2class;
-    int *prectbl1;
-    int *prectbl2;
-    regoff_t *offsets1;
-    regoff_t *offsets2;
-    regoff_t *offsets3;
-    bool *done;
     int flags;
+    re2c::libre2c::simctx_t *simctx;
 };
 
 static const int REG_NOMATCH = INT_MAX;

@@ -17,7 +17,8 @@ static void update_offsets(simctx_t &ctx, const conf_t &c);
 int regexec_nfa_leftmost(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
-    simctx_t ctx(preg, string);
+    simctx_t &ctx = *preg->simctx;
+    ctx.cursor = ctx.marker = string;
 
     const conf_t c0(ctx.nfa->root, 0, history_t::ROOT);
     ctx.reach.push_back(c0);

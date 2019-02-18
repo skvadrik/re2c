@@ -1,4 +1,5 @@
 #include "lib/regex.h"
+#include "lib/regex_impl.h"
 #include "src/nfa/nfa.h"
 #include "src/dfa/dfa.h"
 
@@ -14,18 +15,8 @@ void regfree(regex_t *preg)
     delete preg->nfa;
     delete[] preg->pmatch;
 
-    const int f = preg->flags;
-    if (f & REG_NFA) {
-        delete[] preg->done;
-        if (!(f & REG_TRIE)) {
-            delete[] preg->offsets1;
-            delete[] preg->offsets2;
-            delete[] preg->offsets3;
-        }
-        if (!(f & REG_LEFTMOST) && !(f & REG_TRIE)) {
-            delete[] preg->prectbl1;
-            delete[] preg->prectbl2;
-        }
+    if (preg->flags & REG_NFA) {
+        delete preg->simctx;
     }
     else {
         delete[] preg->regs;

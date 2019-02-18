@@ -76,12 +76,19 @@ typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
 struct simctx_t
 {
     const nfa_t *nfa;
+    const size_t nsub;
+    const int flags;
+
     confset_t reach;
     confset_t state;
+
     history_t hist;
     int32_t hidx;
+
     uint32_t step;
+
     size_t rule;
+
     const char *cursor;
     const char *marker;
 
@@ -95,16 +102,14 @@ struct simctx_t
     int32_t *prectbl2;
     cache_t cache;
 
-    const bool use_gtop;
     std::vector<nfa_state_t*> gor1_topsort;
     std::vector<nfa_state_t*> gor1_linear;
     std::vector<nfa_state_t*> gtop_heap_storage;
     cmp_gtop_t gtop_cmp;
     gtop_heap_t gtop_heap;
 
-    const size_t nsub;
-
-    simctx_t(const regex_t *preg, const char *string);
+    simctx_t(const nfa_t *nfa, size_t re_nsub, int flags);
+    ~simctx_t();
     FORBID_COPY(simctx_t);
 };
 

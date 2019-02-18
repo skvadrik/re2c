@@ -69,40 +69,70 @@ int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     return 0;
 }
 
-simctx_t::simctx_t(const regex_t *preg, const char *string)
-    : nfa(preg->nfa)
+simctx_t::simctx_t(const nfa_t *nfa, size_t re_nsub, int flags)
+    : nfa(nfa)
+    , nsub(2 * (re_nsub - 1))
+    , flags(flags)
     , reach()
     , state()
     , hist(nfa->size, nfa->tags.size())
     , hidx(history_t::ROOT)
     , step(0)
     , rule(Rule::NONE)
-    , cursor(string)
-    , marker(string)
-    , offsets1(preg->offsets1)
-    , offsets2(preg->offsets2)
-    , offsets3(preg->offsets3)
-    , done(preg->done)
-    , prectbl1(preg->prectbl1)
-    , prectbl2(preg->prectbl2)
+    , cursor(NULL)
+    , marker(NULL)
+    , offsets1(NULL)
+    , offsets2(NULL)
+    , offsets3(NULL)
+    , done(NULL)
+    , prectbl1(NULL)
+    , prectbl2(NULL)
     , cache()
-    , use_gtop(preg->flags & REG_GTOP)
     , gor1_topsort()
     , gor1_linear()
     , gtop_heap_storage()
     , gtop_cmp()
     , gtop_heap(gtop_cmp, gtop_heap_storage)
-    , nsub(2 * (preg->re_nsub - 1))
 {
-    state.reserve(nfa->size);
-    reach.reserve(nfa->size);
+    const size_t
+        nstates = nfa->size,
+        ncores = nfa->ncores;
 
-    if (use_gtop) {
-        gtop_heap_storage.reserve(nfa->size);
+    state.reserve(nstates);
+    reach.reserve(nstates);
+
+    done = new bool[nsub];
+
+    if (!(flags & REG_TRIE)) {
+        offsets1 = new regoff_t[nsub * ncores];
+        offsets2 = new regoff_t[nsub * ncores];
+        offsets3 = new regoff_t[nsub];
+    }
+    if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
+        prectbl1 = new int32_t[ncores * ncores];
+        prectbl2 = new int32_t[ncores * ncores];
+    }
+
+    if (flags & REG_GTOP) {
+        gtop_heap_storage.reserve(nstates);
     }
     else {
-        gor1_topsort.reserve(nfa->size);
-        gor1_linear.reserve(nfa->size);
+        gor1_topsort.reserve(nstates);
+        gor1_linear.reserve(nstates);
+    }
+}
+
+simctx_t::~simctx_t()
+{
+    delete[] done;
+    if (!(flags & REG_TRIE)) {
+        delete[] offsets1;
+        delete[] offsets2;
+        delete[] offsets3;
+    }
+    if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
+        delete[] prectbl1;
+        delete[] prectbl2;
     }
 }
 
