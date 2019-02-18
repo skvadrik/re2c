@@ -15,6 +15,8 @@ namespace libre2c {
 
 static void reach_on_symbol(simctx_t &, uint32_t);
 static void closure_posix(simctx_t &);
+static void update_offsets(simctx_t &ctx, const conf_t &c);
+static void update_offsets_and_prectbl(simctx_t &);
 static void relax(simctx_t &, const conf_t &, worklist_t &);
 static int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y, int32_t &prec1, int32_t &prec2);
 static void unwind(history_t &hist, tag_path_t &path, uint32_t idx);
@@ -33,8 +35,20 @@ int regexec_nfa_posix(const regex_t *preg, const char *string
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
         reach_on_symbol(ctx, sym);
+        update_offsets_and_prectbl(ctx);
         ++ctx.step;
         closure_posix(ctx);
+    }
+
+    for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
+        nfa_state_t *s = i->state;
+
+        s->clos = NOCLOS;
+        DASSERT(s->active == 0);
+
+        if (s->type == nfa_state_t::FIN) {
+            update_offsets(ctx, *i);
+        }
     }
 
     if (ctx.rule == Rule::NONE) {
@@ -61,22 +75,31 @@ int regexec_nfa_posix(const regex_t *preg, const char *string
 
 void reach_on_symbol(simctx_t &ctx, uint32_t sym)
 {
-    const confset_t &state = ctx.state;
-    confset_t &reach = ctx.reach;
+    confset_t &state = ctx.state, &reach = ctx.reach;
 
     reach.clear();
+    size_t j = 0;
     for (cconfiter_t i = state.begin(), e = state.end(); i != e; ++i) {
         nfa_state_t *s = i->state;
+
+        s->clos = NOCLOS;
+        DASSERT(s->active == 0);
+
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     conf_t c = {s->ran.out, s->coreid, HROOT};
                     reach.push_back(c);
+                    state[j++] = *i;
                     break;
                 }
             }
         }
+        else if (s->type == nfa_state_t::FIN) {
+            state[j++] = *i;
+        }
     }
+    state.resize(j);
 }
 
 void closure_posix(simctx_t &ctx)
@@ -122,64 +145,6 @@ void closure_posix(simctx_t &ctx)
                 break;
         }
     }
-
-    std::vector<history_t::node_t> &hist = ctx.hist.nodes;
-    const size_t nsub = ctx.nsub, ncores = ctx.nfa->ncores;
-    bool *done = ctx.done;
-    int32_t *ptbl = ctx.prectbl2;
-    regoff_t *o1 = ctx.offsets1, *o2 = ctx.offsets2, *o3 = ctx.offsets3, *o;
-
-    cconfiter_t b = state.begin(), e = state.end(), c, d;
-    static const int32_t P0 = pack(MAX_RHO, 0);
-
-    // precedence matrix
-    for (c = b; c != e; ++c) {
-        nfa_state_t *s = c->state;
-
-        s->clos = NOCLOS;
-        DASSERT(s->active == 0);
-
-        if (s->type != nfa_state_t::RAN) continue;
-        ptbl[s->coreid * ncores + s->coreid] = P0;
-        for (d = c + 1; d != e; ++d) {
-
-            nfa_state_t *q = d->state;
-            if (q->type != nfa_state_t::RAN) continue;
-
-            int32_t prec1, prec2;
-            int32_t prec = precedence(ctx, *c, *d, prec1, prec2);
-            ptbl[s->coreid * ncores + q->coreid] = pack(prec1, prec);
-            ptbl[q->coreid * ncores + s->coreid] = pack(prec2, -prec);
-        }
-    }
-    std::swap(ctx.prectbl1, ctx.prectbl2);
-
-    // offsets
-    const std::vector<Tag> &tags = ctx.nfa->tags;
-    for (c = b; c != e; ++c) {
-        nfa_state_t *s = c->state;
-        s->clos = NOCLOS;
-        DASSERT(s->active == 0);
-        if (s->coreid == NONCORE) continue;
-
-        o = s->type == nfa_state_t::FIN ? o3 : o1 + s->coreid * nsub;
-
-        memcpy(o, o2 + c->origin * nsub, nsub * sizeof(regoff_t));
-        memset(done, 0, nsub * sizeof(bool));
-
-        for (uint32_t i = c->thist; i != HROOT; ) {
-            const history_t::node_t &n = hist[i];
-            const Tag &tag = tags[n.info.idx];
-            const size_t t = tag.ncap;
-            if (!fictive(tag) && !done[t]) {
-                done[t] = true;
-                o[t] = n.info.neg ? -1 : static_cast<regoff_t>(ctx.step);
-            }
-            i = n.pred;
-        }
-    }
-    std::swap(ctx.offsets1, ctx.offsets2);
-    hist.clear();
 }
 
 void relax(simctx_t &ctx, const conf_t &c, worklist_t &wl)
@@ -218,6 +183,72 @@ void relax(simctx_t &ctx, const conf_t &c, worklist_t &wl)
         q->active = 1;
         wl.push(q);
     }
+}
+
+void update_offsets(simctx_t &ctx, const conf_t &c)
+{
+    const size_t nsub = ctx.nsub;
+    bool *done = ctx.done;
+    regoff_t *o;
+    const std::vector<Tag> &tags = ctx.nfa->tags;
+    nfa_state_t *s = c.state;
+
+    if (s->type == nfa_state_t::FIN) {
+        ctx.marker = ctx.cursor;
+        ctx.rule = 0;
+        o = ctx.offsets3;
+    }
+    else {
+        o = ctx.offsets1 + s->coreid * nsub;
+    }
+
+    memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
+    memset(done, 0, nsub * sizeof(bool));
+
+    for (uint32_t i = c.thist; i != HROOT; ) {
+        const history_t::node_t &n = ctx.hist.nodes[i];
+        const Tag &tag = tags[n.info.idx];
+        const size_t t = tag.ncap;
+        if (!fictive(tag) && !done[t]) {
+            done[t] = true;
+            o[t] = n.info.neg ? -1 : static_cast<regoff_t>(ctx.step);
+        }
+        i = n.pred;
+    }
+}
+
+void update_offsets_and_prectbl(simctx_t &ctx)
+{
+    cconfiter_t b = ctx.state.begin(), e = ctx.state.end(), c, d;
+    const size_t ncores = ctx.nfa->ncores;
+    int32_t *ptbl = ctx.prectbl2;
+    const int32_t p0 = pack(MAX_RHO, 0);
+
+    for (c = b; c != e; ++c) {
+        update_offsets(ctx, *c);
+    }
+    std::swap(ctx.offsets1, ctx.offsets2);
+
+    // precedence matrix
+    for (c = b; c != e; ++c) {
+        nfa_state_t *s = c->state;
+        if (s->type != nfa_state_t::RAN) continue;
+
+        ptbl[s->coreid * ncores + s->coreid] = p0;
+
+        for (d = c + 1; d != e; ++d) {
+            nfa_state_t *q = d->state;
+            if (q->type != nfa_state_t::RAN) continue;
+
+            int32_t prec1, prec2;
+            int32_t prec = precedence(ctx, *c, *d, prec1, prec2);
+            ptbl[s->coreid * ncores + q->coreid] = pack(prec1, prec);
+            ptbl[q->coreid * ncores + s->coreid] = pack(prec2, -prec);
+        }
+    }
+    std::swap(ctx.prectbl1, ctx.prectbl2);
+
+    ctx.hist.nodes.clear();
 }
 
 int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
