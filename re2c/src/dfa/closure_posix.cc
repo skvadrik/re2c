@@ -308,6 +308,7 @@ void orders(determ_context_t &ctx)
     const size_t nclos = closure.size();
 
     prectable_t *prectbl = ctx.dc_allocator.alloct<prectable_t>(nclos * nclos);
+    static const int32_t P0 = pack(MAX_RHO, 0);
 
     for (size_t i = 0; i < nclos; ++i) {
         for (size_t j = i + 1; j < nclos; ++j) {
@@ -316,7 +317,7 @@ void orders(determ_context_t &ctx)
             prectbl[i * nclos + j] = pack(rho1, l);
             prectbl[j * nclos + i] = pack(rho2, -l);
         }
-        prectbl[i * nclos + i] = 0;
+        prectbl[i * nclos + i] = P0;
     }
 
     ctx.dc_prectbl = prectbl;
