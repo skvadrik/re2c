@@ -17,9 +17,11 @@ static void reach_on_symbol(simctx_t &, uint32_t);
 static void closure_posix(simctx_t &);
 static void update_offsets(simctx_t &ctx, const conf_t &c);
 static void update_offsets_and_prectbl(simctx_t &);
-static void relax(simctx_t &, const conf_t &, worklist_t &);
 static int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y, int32_t &prec1, int32_t &prec2);
 static void unwind(history_t &hist, tag_path_t &path, uint32_t idx);
+
+// we *do* want this to be inlined
+static inline void relax(simctx_t &, const conf_t &, worklist_t &);
 
 int regexec_nfa_posix(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
