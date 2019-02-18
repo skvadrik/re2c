@@ -86,10 +86,24 @@ simctx_t::simctx_t(const regex_t *preg, const char *string)
     , prectbl1(preg->prectbl1)
     , prectbl2(preg->prectbl2)
     , cache()
+    , use_gtop(preg->flags & REG_GTOP)
+    , gor1_topsort()
+    , gor1_linear()
+    , gtop_heap_storage()
+    , gtop_cmp()
+    , gtop_heap(gtop_cmp, gtop_heap_storage)
     , nsub(2 * (preg->re_nsub - 1))
 {
     state.reserve(nfa->size);
     reach.reserve(nfa->size);
+
+    if (use_gtop) {
+        gtop_heap_storage.reserve(nfa->size);
+    }
+    else {
+        gor1_topsort.reserve(nfa->size);
+        gor1_linear.reserve(nfa->size);
+    }
 }
 
 history_t::history_t(size_t nstates, size_t ntags)

@@ -42,7 +42,7 @@ namespace libre2c {
 
 static void reach_on_symbol(simctx_t &, uint32_t);
 static void closure_posix(simctx_t &);
-static void relax(simctx_t &, const conf_t &, worklist_t &);
+static void relax(simctx_t &, const conf_t &);
 static int32_t precedence(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
 static int32_t precedence_(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
 static int32_t unwind(history_t &hist, tag_path_t &path, int32_t hidx, uint32_t step);
@@ -107,35 +107,35 @@ void closure_posix(simctx_t &ctx)
 {
     const confset_t &reach = ctx.reach;
     confset_t &state = ctx.state;
+    gtop_heap_t &heap = ctx.gtop_heap;
 
-    worklist_t wl;
     state.clear();
 
     for (cconfiter_t c = reach.begin(); c != reach.end(); ++c) {
-        relax(ctx, *c, wl);
+        relax(ctx, *c);
     }
 
-    for (; !wl.empty(); ) {
-        nfa_state_t *q = wl.top();
-        wl.pop();
+    for (; !heap.empty(); ) {
+        nfa_state_t *q = heap.top();
+        heap.pop();
         q->active = 0;
         conf_t x = state[q->clos];
 
         switch (q->type) {
             case nfa_state_t::NIL:
                 x.state = q->nil.out;
-                relax(ctx, x, wl);
+                relax(ctx, x);
                 break;
             case nfa_state_t::ALT:
                 x.state = q->alt.out1;
-                relax(ctx, x, wl);
+                relax(ctx, x);
                 x.state = q->alt.out2;
-                relax(ctx, x, wl);
+                relax(ctx, x);
                 break;
             case nfa_state_t::TAG:
                 x.state = q->tag.out;
                 x.thist = ctx.hist.push(x.thist, ctx.step, q->tag.info, x.origin);
-                relax(ctx, x, wl);
+                relax(ctx, x);
                 break;
             case nfa_state_t::FIN:
                 ctx.marker = ctx.cursor + 1;
@@ -148,7 +148,7 @@ void closure_posix(simctx_t &ctx)
     }
 }
 
-void relax(simctx_t &ctx, const conf_t &c, worklist_t &wl)
+void relax(simctx_t &ctx, const conf_t &c)
 {
     confset_t &state = ctx.state;
     nfa_state_t *q = c.state;
@@ -182,7 +182,7 @@ void relax(simctx_t &ctx, const conf_t &c, worklist_t &wl)
 
     if (q != NULL && !q->active) {
         q->active = 1;
-        wl.push(q);
+        ctx.gtop_heap.push(q);
     }
 }
 

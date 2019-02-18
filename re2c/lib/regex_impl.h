@@ -67,7 +67,7 @@ typedef confset_t::iterator confiter_t;
 typedef confset_t::const_iterator cconfiter_t;
 typedef confset_t::const_reverse_iterator rcconfiter_t;
 typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
-    , cmp_gtop_t> worklist_t;
+    , cmp_gtop_t> gtop_heap_t;
 
 struct simctx_t
 {
@@ -90,6 +90,13 @@ struct simctx_t
     int32_t *prectbl1;
     int32_t *prectbl2;
     cache_t cache;
+
+    const bool use_gtop;
+    std::vector<nfa_state_t*> gor1_topsort;
+    std::vector<nfa_state_t*> gor1_linear;
+    std::vector<nfa_state_t*> gtop_heap_storage;
+    cmp_gtop_t gtop_cmp;
+    gtop_heap_t gtop_heap;
 
     const size_t nsub;
 

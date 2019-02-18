@@ -13,14 +13,26 @@
 namespace re2c {
 namespace libre2c {
 
+struct cmp_gor1_t
+{
+    simctx_t &ctx;
+    inline cmp_gor1_t(simctx_t &c) : ctx(c) {}
+
+    bool operator()(const conf_t &x, const conf_t &y) const;
+};
+
 static void reach_on_symbol(simctx_t &, uint32_t);
-static void closure_posix(simctx_t &);
+static inline void closure_posix(simctx_t &);
+static void closure_posix_gor1(simctx_t &ctx);
+static void closure_posix_gtop(simctx_t &ctx);
 static void update_offsets(simctx_t &ctx, const conf_t &c);
 static void update_offsets_and_prectbl(simctx_t &);
 static int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y, int32_t &prec1, int32_t &prec2);
 
-// we *do* want this to be inlined
-static inline void relax(simctx_t &, const conf_t &, worklist_t &);
+// we *do* want these to be inlined
+static inline bool scan(simctx_t &ctx, nfa_state_t *q, bool all);
+static inline bool relax_gor1(simctx_t &, const conf_t &);
+static inline void relax_gtop(simctx_t &, const conf_t &);
 
 int regexec_nfa_posix(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
@@ -83,8 +95,9 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
     for (cconfiter_t i = state.begin(), e = state.end(); i != e; ++i) {
         nfa_state_t *s = i->state;
 
+        s->arcidx = 0;
         s->clos = NOCLOS;
-        DASSERT(s->active == 0);
+        DASSERT(s->status == GOR_NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
@@ -105,37 +118,175 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
 
 void closure_posix(simctx_t &ctx)
 {
-    const confset_t &reach = ctx.reach;
-    confset_t &state = ctx.state;
+    if (ctx.use_gtop) {
+        closure_posix_gtop(ctx);
+    }
+    else {
+        closure_posix_gor1(ctx);
+    };
+}
 
-    worklist_t wl;
+void closure_posix_gor1(simctx_t &ctx)
+{
+    confset_t &state = ctx.state, &reach = ctx.reach;
+    std::vector<nfa_state_t*>
+        &topsort = ctx.gor1_topsort,
+        &linear = ctx.gor1_linear;
+
+    // init: push configurations ordered by POSIX precedence (highest on top)
     state.clear();
-
-    for (cconfiter_t c = reach.begin(); c != reach.end(); ++c) {
-        relax(ctx, *c, wl);
+    std::sort(reach.begin(), reach.end(), cmp_gor1_t(ctx));
+    for (rcconfiter_t c = reach.rbegin(); c != reach.rend(); ++c) {
+        nfa_state_t *q = c->state;
+        if (q->clos == NOCLOS) {
+            q->clos = static_cast<uint32_t>(state.size());
+            state.push_back(*c);
+        }
+        else {
+            state[q->clos] = *c;
+        }
+        topsort.push_back(q);
     }
 
-    for (; !wl.empty(); ) {
-        nfa_state_t *q = wl.top();
-        wl.pop();
+    for (; !topsort.empty(); ) {
+
+        // 1st pass: depth-first postorder traversal of admissible subgraph
+        for (; !topsort.empty(); ) {
+            nfa_state_t *q = topsort.back();
+            if (q->status == GOR_LINEAR) {
+                topsort.pop_back();
+            }
+            else {
+                q->status = GOR_TOPSORT;
+                if (!scan(ctx, q, false)) {
+                    q->status = GOR_LINEAR;
+                    topsort.pop_back();
+                    linear.push_back(q);
+                }
+            }
+        }
+
+        // 2nd pass: linear scan of topologically ordered states
+        for (; !linear.empty(); ) {
+            nfa_state_t *q = linear.back();
+            linear.pop_back();
+            if (q->active) {
+                q->active = 0;
+                q->arcidx = 0;
+                scan(ctx, q, true);
+            }
+            q->status = GOR_NOPASS;
+        }
+    }
+}
+
+inline bool cmp_gor1_t::operator()(const conf_t &x, const conf_t &y) const
+{
+    const uint32_t xo = x.origin, yo = y.origin;
+    return xo != yo
+        && unpack_leftmost(ctx.prectbl1[xo * ctx.nfa->ncores + yo]) < 0;
+}
+
+bool scan(simctx_t &ctx, nfa_state_t *q, bool all)
+{
+    bool any = false;
+    conf_t x = ctx.state[q->clos];
+    switch (q->type) {
+        case nfa_state_t::NIL:
+            if (q->arcidx == 0) {
+                x.state = q->nil.out;
+                any |= relax_gor1(ctx, x);
+                ++q->arcidx;
+            }
+            break;
+        case nfa_state_t::ALT:
+            if (q->arcidx == 0) {
+                x.state = q->alt.out1;
+                any |= relax_gor1(ctx, x);
+                ++q->arcidx;
+            }
+            if (q->arcidx == 1 && (!any || all)) {
+                x.state = q->alt.out2;
+                any |= relax_gor1(ctx, x);
+                ++q->arcidx;
+            }
+            break;
+        case nfa_state_t::TAG:
+            if (q->arcidx == 0) {
+                x.state = q->tag.out;
+                x.thist = ctx.hist.push(x.thist, ctx.step, q->tag.info, x.origin);
+                any |= relax_gor1(ctx, x);
+                ++q->arcidx;
+            }
+            break;
+        default:
+            break;
+    }
+    return any;
+}
+
+bool relax_gor1(simctx_t &ctx, const conf_t &x)
+{
+    confset_t &state = ctx.state;
+    nfa_state_t *q = x.state;
+    const uint32_t idx = q->clos;
+    int32_t p1, p2;
+
+    if (idx == NOCLOS) {
+        q->clos = static_cast<uint32_t>(state.size());
+        state.push_back(x);
+    }
+    else if (q->indeg < 2
+        || precedence(ctx, x, state[idx], p1, p2) < 0) {
+        state[idx] = x;
+    }
+    else {
+        return false;
+    }
+
+    if (q->status == GOR_NOPASS) {
+        ctx.gor1_topsort.push_back(q);
+        q->arcidx = 0;
+        return true;
+    }
+    else {
+        q->active = 1;
+        return false;
+    }
+}
+
+void closure_posix_gtop(simctx_t &ctx)
+{
+    const confset_t &reach = ctx.reach;
+    confset_t &state = ctx.state;
+    gtop_heap_t &heap = ctx.gtop_heap;
+
+    state.clear();
+    for (cconfiter_t c = reach.begin(); c != reach.end(); ++c) {
+        relax_gtop(ctx, *c);
+    }
+
+    for (; !heap.empty(); ) {
+        nfa_state_t *q = heap.top();
+        heap.pop();
         q->active = 0;
         conf_t x = state[q->clos];
 
         switch (q->type) {
             case nfa_state_t::NIL:
                 x.state = q->nil.out;
-                relax(ctx, x, wl);
+                relax_gtop(ctx, x);
                 break;
             case nfa_state_t::ALT:
                 x.state = q->alt.out1;
-                relax(ctx, x, wl);
+                relax_gtop(ctx, x);
                 x.state = q->alt.out2;
-                relax(ctx, x, wl);
+                relax_gtop(ctx, x);
                 break;
             case nfa_state_t::TAG:
                 x.state = q->tag.out;
                 x.thist = ctx.hist.push(x.thist, ctx.step, q->tag.info, x.origin);
-                relax(ctx, x, wl);
+                relax_gtop(ctx, x);
                 break;
             default:
                 break;
@@ -143,41 +294,28 @@ void closure_posix(simctx_t &ctx)
     }
 }
 
-void relax(simctx_t &ctx, const conf_t &c, worklist_t &wl)
+void relax_gtop(simctx_t &ctx, const conf_t &c)
 {
     confset_t &state = ctx.state;
     nfa_state_t *q = c.state;
     const uint32_t idx = q->clos;
-    int32_t h1, h2;
+    int32_t p1, p2;
 
-    // first time we see this state
     if (idx == NOCLOS) {
         q->clos = static_cast<uint32_t>(state.size());
         state.push_back(c);
     }
-
-    // States of in-degree less than 2 are not joint points;
-    // the fact that we are re-scanning this state means that we found
-    // a better path to some previous state. Due to the right distributivity
-    // of path comparison over path concatenation (X < Y => XZ < YZ) we
-    // can just propagate the new path up to the next join point.
-    else if (q->indeg < 2) {
+    else if (q->indeg < 2
+        || precedence(ctx, c, state[idx], p1, p2) < 0) {
         state[idx] = c;
     }
-
-    // join point; compare the new path and the old path
-    else if (precedence(ctx, c, state[idx], h1, h2) < 0) {
-        state[idx] = c;
-    }
-
-    // the previous path was better, discard the new one
     else {
         q = NULL;
     }
 
     if (q != NULL && !q->active) {
         q->active = 1;
-        wl.push(q);
+        ctx.gtop_heap.push(q);
     }
 }
 

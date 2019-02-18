@@ -33,7 +33,7 @@ static const int REG_NOTEOL   = 1u << 5;
 static const int REG_NFA      = 1u << 6;
 static const int REG_LEFTMOST = 1u << 7;
 static const int REG_TRIE     = 1u << 8;
-
+static const int REG_GTOP     = 1u << 9;
 
 struct regex_t
 {
