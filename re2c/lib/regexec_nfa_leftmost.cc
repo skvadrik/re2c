@@ -12,6 +12,7 @@ namespace libre2c {
 
 static void reach_on_symbol(simctx_t &, uint32_t);
 static void closure_leftmost(simctx_t &);
+static void update_offsets(simctx_t &ctx, const conf_t &c);
 
 int regexec_nfa_leftmost(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
@@ -28,6 +29,14 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
         reach_on_symbol(ctx, sym);
         ++ctx.step;
         closure_leftmost(ctx);
+    }
+
+    for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
+        nfa_state_t *s = i->state;
+        s->clos = NOCLOS;
+        if (s->type == nfa_state_t::FIN) {
+            update_offsets(ctx, *i);
+        }
     }
 
     if (ctx.rule == Rule::NONE) {
@@ -61,16 +70,25 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
     // in reverse, so that future closure DFS has states in stack order
     for (rcconfiter_t i = state.rbegin(), e = state.rend(); i != e; ++i) {
         nfa_state_t *s = i->state;
+        s->clos = NOCLOS;
+
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     conf_t c = {s->ran.out, s->coreid, HROOT};
                     reach.push_back(c);
+                    update_offsets(ctx, *i);
                     break;
                 }
             }
         }
+        else if (s->type == nfa_state_t::FIN) {
+            update_offsets(ctx, *i);
+        }
     }
+
+    std::swap(ctx.offsets1, ctx.offsets2);
+    ctx.hist.nodes.clear();
 }
 
 void closure_leftmost(simctx_t &ctx)
@@ -113,36 +131,29 @@ void closure_leftmost(simctx_t &ctx)
                 break;
         }
     }
+}
 
-    std::vector<history_t::node_t> &hist = ctx.hist.nodes;
+void update_offsets(simctx_t &ctx, const conf_t &c)
+{
     const size_t nsub = ctx.nsub;
     bool *done = ctx.done;
-    regoff_t *o1 = ctx.offsets1, *o2 = ctx.offsets2, *o3 = ctx.offsets3, *o;
+    nfa_state_t *s = c.state;
 
-    for (cconfiter_t c = state.begin(), e = state.end(); c != e; ++c) {
-        nfa_state_t *s = c->state;
-        s->clos = NOCLOS;
+    regoff_t *o = s->type == nfa_state_t::FIN
+        ? ctx.offsets3 : ctx.offsets1 + s->coreid * nsub;
 
-        const uint32_t j = s->coreid;
-        if (j == NONCORE) continue;
+    memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
+    memset(done, 0, nsub * sizeof(bool));
 
-        o = s->type == nfa_state_t::FIN ? o3 : o1 + j * nsub;
-
-        memcpy(o, o2 + c->origin * nsub, nsub * sizeof(regoff_t));
-        memset(done, 0, nsub * sizeof(bool));
-
-        for (uint32_t i = c->thist; i != HROOT; ) {
-            const history_t::node_t &n = hist[i];
-            const size_t t = n.info.idx;
-            if (!done[t]) {
-                done[t] = true;
-                o[t] = n.info.neg ? -1 : static_cast<regoff_t>(ctx.step);
-            }
-            i = n.pred;
+    for (uint32_t i = c.thist; i != HROOT; ) {
+        const history_t::node_t &n = ctx.hist.nodes[i];
+        const size_t t = n.info.idx;
+        if (!done[t]) {
+            done[t] = true;
+            o[t] = n.info.neg ? -1 : static_cast<regoff_t>(ctx.step);
         }
+        i = n.pred;
     }
-    std::swap(ctx.offsets1, ctx.offsets2);
-    hist.clear();
 }
 
 } // namespace libre2
