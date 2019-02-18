@@ -19,7 +19,7 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
 {
     simctx_t ctx(preg, string);
 
-    const conf_t c0 = {ctx.nfa->root, 0, HROOT};
+    const conf_t c0 = {ctx.nfa->root, 0, history_t::ROOT};
     ctx.reach.push_back(c0);
     closure_leftmost(ctx);
 
@@ -75,7 +75,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    conf_t c = {s->ran.out, s->coreid, HROOT};
+                    conf_t c = {s->ran.out, s->coreid, history_t::ROOT};
                     reach.push_back(c);
                     update_offsets(ctx, *i);
                     break;
@@ -147,8 +147,8 @@ void update_offsets(simctx_t &ctx, const conf_t &c)
     memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
     memset(done, 0, nsub * sizeof(bool));
 
-    for (uint32_t i = c.thist; i != HROOT; ) {
-        const history_t::node_t &n = ctx.hist.nodes[i];
+    for (int32_t i = c.thist; i != history_t::ROOT; ) {
+        const history_t::node_t &n = ctx.hist.at(i);
         const size_t t = n.info.idx;
         if (!done[t]) {
             done[t] = true;

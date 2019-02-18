@@ -29,6 +29,8 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
 namespace re2c {
 namespace libre2c {
 
+const int32_t history_t::ROOT = -1;
+
 int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     regmatch_t pmatch[])
 {
@@ -45,8 +47,8 @@ int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     bool *done = ctx.done;
     memset(done, 0, ctx.nsub * sizeof(bool));
 
-    for (size_t i = ctx.hidx; todo > 0 && i != HROOT; ) {
-        const history_t::node_t &n = ctx.hist.nodes[i];
+    for (int32_t i = ctx.hidx; todo > 0 && i != history_t::ROOT; ) {
+        const history_t::node_t &n = ctx.hist.at(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
         if (!fictive(tag) && t < nmatch * 2 && !done[t]) {
@@ -72,7 +74,7 @@ simctx_t::simctx_t(const regex_t *preg, const char *string)
     , reach()
     , state()
     , hist(nfa->size, nfa->tags.size())
-    , hidx(HROOT)
+    , hidx(history_t::ROOT)
     , step(0)
     , rule(Rule::NONE)
     , cursor(string)

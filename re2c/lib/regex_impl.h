@@ -18,18 +18,21 @@ typedef std::vector<tag_info_t> tag_path_t;
 struct history_t
 {
     struct node_t {
-        uint32_t pred;
+        int32_t pred;
         uint32_t step;
         tag_info_t info;
         uint32_t orig;
     };
+
+    static const int32_t ROOT;
 
     std::vector<node_t> nodes;
     tag_path_t path1;
     tag_path_t path2;
 
     history_t(size_t nstates, size_t ntags);
-    inline uint32_t push(uint32_t i, uint32_t step, tag_info_t info, uint32_t orig);
+    inline const node_t &at(int32_t i) const { return nodes[static_cast<uint32_t>(i)]; }
+    inline int32_t push(int32_t i, uint32_t step, tag_info_t info, uint32_t orig);
     FORBID_COPY(history_t);
 };
 
@@ -37,7 +40,7 @@ struct conf_t
 {
     nfa_state_t *state;
     uint32_t origin;
-    uint32_t thist;
+    int32_t thist;
 };
 
 struct ran_or_fin_t
@@ -72,7 +75,7 @@ struct simctx_t
     confset_t reach;
     confset_t state;
     history_t hist;
-    uint32_t hidx;
+    int32_t hidx;
     uint32_t step;
     size_t rule;
     const char *cursor;
@@ -102,11 +105,11 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string, size_t nmatc
 int regexec_nfa_leftmost(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 
-uint32_t history_t::push(uint32_t idx, uint32_t step, tag_info_t info, uint32_t orig)
+int32_t history_t::push(int32_t idx, uint32_t step, tag_info_t info, uint32_t orig)
 {
     const node_t x = {idx, step, info, orig};
     nodes.push_back(x);
-    return static_cast<uint32_t>(nodes.size() - 1);
+    return static_cast<int32_t>(nodes.size() - 1);
 }
 
 uint32_t index(const nfa_t *nfa, const nfa_state_t *state)

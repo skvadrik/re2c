@@ -43,11 +43,11 @@ namespace libre2c {
 static void reach_on_symbol(simctx_t &, uint32_t);
 static void closure_posix(simctx_t &);
 static void relax(simctx_t &, const conf_t &, worklist_t &);
-static int32_t precedence(simctx_t &ctx, uint32_t xl, uint32_t yl, int32_t &rhox, int32_t &rhoy);
-static int32_t precedence_(simctx_t &ctx, uint32_t xl, uint32_t yl, int32_t &rhox, int32_t &rhoy);
-static uint32_t unwind(history_t &hist, tag_path_t &path, uint32_t hidx, uint32_t step);
-static inline uint32_t get_step(const history_t &hist, uint32_t idx);
-static inline uint32_t get_orig(const history_t &hist, uint32_t idx);
+static int32_t precedence(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
+static int32_t precedence_(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
+static int32_t unwind(history_t &hist, tag_path_t &path, int32_t hidx, uint32_t step);
+static inline uint32_t get_step(const history_t &hist, int32_t idx);
+static inline uint32_t get_orig(const history_t &hist, int32_t idx);
 
 int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
@@ -56,7 +56,7 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     const nfa_t *nfa = ctx.nfa;
     confset_t &state = ctx.state;
 
-    const conf_t c0 = {nfa->root, index(nfa, nfa->root), HROOT};
+    const conf_t c0 = {nfa->root, index(nfa, nfa->root), history_t::ROOT};
     ctx.reach.push_back(c0);
     closure_posix(ctx);
 
@@ -186,13 +186,13 @@ void relax(simctx_t &ctx, const conf_t &c, worklist_t &wl)
     }
 }
 
-int32_t precedence(simctx_t &ctx, uint32_t idx1, uint32_t idx2
+int32_t precedence(simctx_t &ctx, int32_t idx1, int32_t idx2
     , int32_t &prec1, int32_t &prec2)
 {
     int32_t prec = 0;
 
     // use the same cache entry for (x, y) and (y, x)
-    uint32_t k1 = idx1, k2 = idx2;
+    uint32_t k1 = static_cast<uint32_t>(idx1), k2 = static_cast<uint32_t>(idx2);
     bool invert = k2 < k1;
     if (invert) std::swap(k1, k2);
     const uint64_t key = (static_cast<uint64_t>(k1) << 32) | k2;
@@ -223,7 +223,7 @@ int32_t precedence(simctx_t &ctx, uint32_t idx1, uint32_t idx2
     return prec;
 }
 
-int32_t precedence_(simctx_t &ctx, uint32_t idx1, uint32_t idx2
+int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
     , int32_t &prec1, int32_t &prec2)
 {
     if (idx1 == idx2) {
@@ -316,21 +316,21 @@ end:
     return prec;
 }
 
-uint32_t get_step(const history_t &hist, uint32_t idx)
+uint32_t get_step(const history_t &hist, int32_t idx)
 {
-    return idx == HROOT ? 0 : hist.nodes[idx].step;
+    return idx == history_t::ROOT ? 0 : hist.at(idx).step;
 }
 
-uint32_t get_orig(const history_t &hist, uint32_t idx)
+uint32_t get_orig(const history_t &hist, int32_t idx)
 {
-    return idx == HROOT ? 0 : hist.nodes[idx].orig;
+    return idx == history_t::ROOT ? 0 : hist.at(idx).orig;
 }
 
-uint32_t unwind(history_t &hist, tag_path_t &path, uint32_t idx, uint32_t step)
+int32_t unwind(history_t &hist, tag_path_t &path, int32_t idx, uint32_t step)
 {
-    uint32_t new_idx = HROOT;
-    for (uint32_t i = idx; i != HROOT; ) {
-        const history_t::node_t &n = hist.nodes[i];
+    int32_t new_idx = history_t::ROOT;
+    for (int32_t i = idx; i != history_t::ROOT; ) {
+        const history_t::node_t &n = hist.at(i);
         if (n.step < step) {
             new_idx = i;
             break;

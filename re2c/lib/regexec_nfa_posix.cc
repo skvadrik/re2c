@@ -18,7 +18,7 @@ static void closure_posix(simctx_t &);
 static void update_offsets(simctx_t &ctx, const conf_t &c);
 static void update_offsets_and_prectbl(simctx_t &);
 static int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y, int32_t &prec1, int32_t &prec2);
-static void unwind(history_t &hist, tag_path_t &path, uint32_t idx);
+static void unwind(history_t &hist, tag_path_t &path, int32_t idx);
 
 // we *do* want this to be inlined
 static inline void relax(simctx_t &, const conf_t &, worklist_t &);
@@ -29,7 +29,7 @@ int regexec_nfa_posix(const regex_t *preg, const char *string
     simctx_t ctx(preg, string);
     const nfa_t *nfa = ctx.nfa;
 
-    const conf_t c0 = {nfa->root, 0, HROOT};
+    const conf_t c0 = {nfa->root, 0, history_t::ROOT};
     ctx.reach.push_back(c0);
     closure_posix(ctx);
 
@@ -90,7 +90,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    conf_t c = {s->ran.out, s->coreid, HROOT};
+                    conf_t c = {s->ran.out, s->coreid, history_t::ROOT};
                     reach.push_back(c);
                     state[j++] = *i;
                     break;
@@ -202,8 +202,8 @@ void update_offsets(simctx_t &ctx, const conf_t &c)
     memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
     memset(done, 0, nsub * sizeof(bool));
 
-    for (uint32_t i = c.thist; i != HROOT; ) {
-        const history_t::node_t &n = ctx.hist.nodes[i];
+    for (int32_t i = c.thist; i != history_t::ROOT; ) {
+        const history_t::node_t &n = ctx.hist.at(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
         if (!fictive(tag) && !done[t]) {
@@ -251,9 +251,8 @@ void update_offsets_and_prectbl(simctx_t &ctx)
 int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
     , int32_t &prec1, int32_t &prec2)
 {
-    const uint32_t
-        idx1 = x.thist, orig1 = x.origin,
-        idx2 = y.thist, orig2 = y.origin;
+    const int32_t idx1 = x.thist, idx2 = y.thist;
+    const uint32_t orig1 = x.origin, orig2 = y.origin;
 
     if (idx1 == idx2 && orig1 == orig2) {
         prec1 = prec2 = MAX_RHO;
@@ -326,11 +325,11 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
     }
 }
 
-void unwind(history_t &hist, tag_path_t &path, uint32_t idx)
+void unwind(history_t &hist, tag_path_t &path, int32_t idx)
 {
     path.clear();
-    for (uint32_t i = idx; i != HROOT; ) {
-        const history_t::node_t &n = hist.nodes[i];
+    for (int32_t i = idx; i != history_t::ROOT; ) {
+        const history_t::node_t &n = hist.at(i);
         path.push_back(n.info);
         i = n.pred;
     }
