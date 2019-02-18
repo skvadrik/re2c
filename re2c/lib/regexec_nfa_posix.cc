@@ -40,7 +40,7 @@ int regexec_nfa_posix(const regex_t *preg, const char *string
     simctx_t ctx(preg, string);
     const nfa_t *nfa = ctx.nfa;
 
-    const conf_t c0 = {nfa->root, 0, history_t::ROOT};
+    const conf_t c0(nfa->root, 0, history_t::ROOT);
     ctx.reach.push_back(c0);
     closure_posix(ctx);
 
@@ -102,7 +102,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    conf_t c = {s->ran.out, s->coreid, history_t::ROOT};
+                    const conf_t c(s->ran.out, s->coreid, history_t::ROOT);
                     reach.push_back(c);
                     state[j++] = *i;
                     break;
@@ -190,38 +190,39 @@ inline bool cmp_gor1_t::operator()(const conf_t &x, const conf_t &y) const
 bool scan(simctx_t &ctx, nfa_state_t *q, bool all)
 {
     bool any = false;
-    conf_t x = ctx.state[q->clos];
+
+    const conf_t &x = ctx.state[q->clos];
+    const uint32_t o = x.origin;
+    const int32_t h = x.thist;
+
     switch (q->type) {
         case nfa_state_t::NIL:
             if (q->arcidx == 0) {
-                x.state = q->nil.out;
-                any |= relax_gor1(ctx, x);
+                any |= relax_gor1(ctx, conf_t(q->nil.out, o, h));
                 ++q->arcidx;
             }
             break;
         case nfa_state_t::ALT:
             if (q->arcidx == 0) {
-                x.state = q->alt.out1;
-                any |= relax_gor1(ctx, x);
+                any |= relax_gor1(ctx, conf_t(q->alt.out1, o, h));
                 ++q->arcidx;
             }
             if (q->arcidx == 1 && (!any || all)) {
-                x.state = q->alt.out2;
-                any |= relax_gor1(ctx, x);
+                any |= relax_gor1(ctx, conf_t(q->alt.out2, o, h));
                 ++q->arcidx;
             }
             break;
         case nfa_state_t::TAG:
             if (q->arcidx == 0) {
-                x.state = q->tag.out;
-                x.thist = ctx.hist.push(x.thist, ctx.step, q->tag.info, x.origin);
-                any |= relax_gor1(ctx, x);
+                any |= relax_gor1(ctx, conf_t(q->tag.out, o
+                    , ctx.hist.push(h, ctx.step, q->tag.info, o)));
                 ++q->arcidx;
             }
             break;
         default:
             break;
     }
+
     return any;
 }
 
@@ -270,23 +271,22 @@ void closure_posix_gtop(simctx_t &ctx)
         nfa_state_t *q = heap.top();
         heap.pop();
         q->active = 0;
-        conf_t x = state[q->clos];
+
+        const conf_t &x = state[q->clos];
+        const uint32_t o = x.origin;
+        const int32_t h = x.thist;
 
         switch (q->type) {
             case nfa_state_t::NIL:
-                x.state = q->nil.out;
-                relax_gtop(ctx, x);
+                relax_gtop(ctx, conf_t(q->nil.out, o, h));
                 break;
             case nfa_state_t::ALT:
-                x.state = q->alt.out1;
-                relax_gtop(ctx, x);
-                x.state = q->alt.out2;
-                relax_gtop(ctx, x);
+                relax_gtop(ctx, conf_t(q->alt.out1, o, h));
+                relax_gtop(ctx, conf_t(q->alt.out2, o, h));
                 break;
             case nfa_state_t::TAG:
-                x.state = q->tag.out;
-                x.thist = ctx.hist.push(x.thist, ctx.step, q->tag.info, x.origin);
-                relax_gtop(ctx, x);
+                relax_gtop(ctx, conf_t(q->tag.out, o
+                    , ctx.hist.push(h, ctx.step, q->tag.info, o)));
                 break;
             default:
                 break;

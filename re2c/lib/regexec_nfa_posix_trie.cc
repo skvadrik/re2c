@@ -56,7 +56,7 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     const nfa_t *nfa = ctx.nfa;
     confset_t &state = ctx.state;
 
-    const conf_t c0 = {nfa->root, index(nfa, nfa->root), history_t::ROOT};
+    const conf_t c0(nfa->root, index(nfa, nfa->root), history_t::ROOT);
     ctx.reach.push_back(c0);
     closure_posix(ctx);
 
@@ -94,7 +94,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    conf_t c = {s->ran.out, index(nfa, s), i->thist};
+                    const conf_t c(s->ran.out, index(nfa, s), i->thist);
                     reach.push_back(c);
                     break;
                 }
@@ -119,23 +119,22 @@ void closure_posix(simctx_t &ctx)
         nfa_state_t *q = heap.top();
         heap.pop();
         q->active = 0;
-        conf_t x = state[q->clos];
+
+        const conf_t &x = state[q->clos];
+        const uint32_t o = x.origin;
+        const int32_t h = x.thist;
 
         switch (q->type) {
             case nfa_state_t::NIL:
-                x.state = q->nil.out;
-                relax(ctx, x);
+                relax(ctx, conf_t(q->nil.out, o, h));
                 break;
             case nfa_state_t::ALT:
-                x.state = q->alt.out1;
-                relax(ctx, x);
-                x.state = q->alt.out2;
-                relax(ctx, x);
+                relax(ctx, conf_t(q->alt.out1, o, h));
+                relax(ctx, conf_t(q->alt.out2, o, h));
                 break;
             case nfa_state_t::TAG:
-                x.state = q->tag.out;
-                x.thist = ctx.hist.push(x.thist, ctx.step, q->tag.info, x.origin);
-                relax(ctx, x);
+                relax(ctx, conf_t(q->tag.out, o
+                    , ctx.hist.push(h, ctx.step, q->tag.info, o)));
                 break;
             case nfa_state_t::FIN:
                 ctx.marker = ctx.cursor + 1;

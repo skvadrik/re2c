@@ -19,7 +19,7 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
 {
     simctx_t ctx(preg, string);
 
-    const conf_t c0 = {ctx.nfa->root, 0, history_t::ROOT};
+    const conf_t c0(ctx.nfa->root, 0, history_t::ROOT);
     ctx.reach.push_back(c0);
     closure_leftmost(ctx);
 
@@ -75,7 +75,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    conf_t c = {s->ran.out, s->coreid, history_t::ROOT};
+                    conf_t c(s->ran.out, s->coreid, history_t::ROOT);
                     reach.push_back(c);
                     update_offsets(ctx, *i);
                     break;
@@ -97,9 +97,11 @@ void closure_leftmost(simctx_t &ctx)
     state.clear();
     for (; !wl.empty(); ) {
 
-        conf_t x = wl.back();
-        wl.pop_back();
+        const conf_t &x = wl.back();
         nfa_state_t *n = x.state;
+        const uint32_t o = x.origin;
+        const int32_t h = x.thist;
+        wl.pop_back();
 
         if (n->clos != NOCLOS) continue;
 
@@ -108,19 +110,15 @@ void closure_leftmost(simctx_t &ctx)
 
         switch (n->type) {
             case nfa_state_t::NIL:
-                x.state = n->nil.out;
-                wl.push_back(x);
+                wl.push_back(conf_t(n->nil.out, o, h));
                 break;
             case nfa_state_t::ALT:
-                x.state = n->alt.out2;
-                wl.push_back(x);
-                x.state = n->alt.out1;
-                wl.push_back(x);
+                wl.push_back(conf_t(n->alt.out2, o, h));
+                wl.push_back(conf_t(n->alt.out1, o, h));
                 break;
             case nfa_state_t::TAG:
-                x.state = n->tag.out;
-                x.thist = ctx.hist.push(x.thist, ctx.step, n->tag.info, x.origin);
-                wl.push_back(x);
+                wl.push_back(conf_t(n->tag.out, o
+                    , ctx.hist.push(h, ctx.step, n->tag.info, o)));
                 break;
             default:
                 break;

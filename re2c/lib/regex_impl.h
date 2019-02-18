@@ -41,6 +41,10 @@ struct conf_t
     nfa_state_t *state;
     uint32_t origin;
     int32_t thist;
+
+    inline conf_t(): state(NULL), origin(0), thist(history_t::ROOT) {}
+    inline conf_t(nfa_state_t *s, uint32_t o, int32_t h)
+        : state(s), origin(o), thist(h) {}
 };
 
 struct ran_or_fin_t
