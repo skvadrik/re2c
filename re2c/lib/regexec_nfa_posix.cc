@@ -136,12 +136,7 @@ void closure_posix(simctx_t &ctx)
                 x.thist = ctx.hist.push(x.thist, ctx.step, q->tag.info, x.origin);
                 relax(ctx, x, wl);
                 break;
-            case nfa_state_t::FIN:
-                ctx.marker = ctx.cursor + 1;
-                ctx.hidx = x.thist;
-                ctx.rule = 0;
-                break;
-            case nfa_state_t::RAN:
+            default:
                 break;
         }
     }

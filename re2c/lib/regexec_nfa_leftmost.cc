@@ -122,12 +122,7 @@ void closure_leftmost(simctx_t &ctx)
                 x.thist = ctx.hist.push(x.thist, ctx.step, n->tag.info, x.origin);
                 wl.push_back(x);
                 break;
-            case nfa_state_t::RAN:
-                break;
-            case nfa_state_t::FIN:
-                ctx.marker = ctx.cursor + 1;
-                ctx.hidx = x.thist;
-                ctx.rule = 0;
+            default:
                 break;
         }
     }
@@ -138,9 +133,16 @@ void update_offsets(simctx_t &ctx, const conf_t &c)
     const size_t nsub = ctx.nsub;
     bool *done = ctx.done;
     nfa_state_t *s = c.state;
+    regoff_t *o;
 
-    regoff_t *o = s->type == nfa_state_t::FIN
-        ? ctx.offsets3 : ctx.offsets1 + s->coreid * nsub;
+    if (s->type == nfa_state_t::FIN) {
+        ctx.marker = ctx.cursor;
+        ctx.rule = 0;
+        o = ctx.offsets3;
+    }
+    else {
+        o = ctx.offsets1 + s->coreid * nsub;
+    }
 
     memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
     memset(done, 0, nsub * sizeof(bool));
