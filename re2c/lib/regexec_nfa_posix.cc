@@ -463,12 +463,13 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
         // positive vs negative: positive wins
         if (neg1) return  1;
         if (neg2) return -1;
-
-        DASSERT(false);
     }
     else {
         return unpack_leftmost(ctx.prectbl1[orig1 * ctx.nfa->ncores + orig2]);
     }
+
+    DASSERT(false); // unreachable
+    return 0;
 }
 
 } // namespace libre2c

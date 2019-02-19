@@ -316,12 +316,13 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
         // positive vs negative: positive wins
         if (neg1) return  1;
         if (neg2) return -1;
-
-        DASSERT(false);
     }
     else {
         return prec;
     }
+
+    DASSERT(false); // unreachable
+    return 0;
 }
 
 uint32_t get_step(const history_t &hist, int32_t idx)
