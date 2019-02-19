@@ -20,6 +20,7 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
     simctx_t &ctx = *preg->simctx;
     init(ctx, string);
 
+    // root state can be non-core, so we pass zero as origin to avoid checks
     const conf_t c0(ctx.nfa->root, 0, history_t::ROOT);
     ctx.reach.push_back(c0);
     closure_leftmost(ctx);

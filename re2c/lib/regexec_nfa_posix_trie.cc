@@ -57,9 +57,8 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     simctx_t &ctx = *preg->simctx;
     init(ctx, string);
 
-    const nfa_t *nfa = ctx.nfa;
-
-    const conf_t c0(nfa->root, index(nfa, nfa->root), history_t::ROOT);
+    nfa_state_t *s0 = ctx.nfa->root;
+    const conf_t c0(s0, s0->coreid, history_t::ROOT);
     ctx.reach.push_back(c0);
     closure_posix(ctx);
     for (;;) {
@@ -75,7 +74,6 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
 
 void make_step(simctx_t &ctx, uint32_t sym)
 {
-    const nfa_t *nfa = ctx.nfa;
     const confset_t &state = ctx.state;
     confset_t &reach = ctx.reach;
     cconfiter_t b = state.begin(), e = state.end(), i;
@@ -90,7 +88,7 @@ void make_step(simctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    const conf_t c(s->ran.out, index(nfa, s), i->thist);
+                    const conf_t c(s->ran.out, s->coreid, i->thist);
                     reach.push_back(c);
                     break;
                 }

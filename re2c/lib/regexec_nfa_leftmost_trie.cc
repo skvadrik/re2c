@@ -19,7 +19,8 @@ int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string
     simctx_t &ctx = *preg->simctx;
     init(ctx, string);
 
-    const conf_t c0(ctx.nfa->root, 0, history_t::ROOT);
+    nfa_state_t *s0 = ctx.nfa->root;
+    const conf_t c0(s0, s0->coreid, history_t::ROOT);
     ctx.reach.push_back(c0);
     closure_leftmost(ctx);
 

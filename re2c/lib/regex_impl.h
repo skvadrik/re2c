@@ -115,7 +115,6 @@ struct simctx_t
 
 void init(simctx_t &ctx, const char *string);
 int finalize(const simctx_t &ctx, const char *string, size_t nmatch, regmatch_t pmatch[]);
-inline uint32_t index(const nfa_t *, const nfa_state_t *);
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
@@ -127,11 +126,6 @@ int32_t history_t::push(int32_t idx, uint32_t step, tag_info_t info, uint32_t or
     const node_t x = {idx, step, info, orig};
     nodes.push_back(x);
     return static_cast<int32_t>(nodes.size() - 1);
-}
-
-uint32_t index(const nfa_t *nfa, const nfa_state_t *state)
-{
-    return static_cast<uint32_t>(state - nfa->states);
 }
 
 bool ran_or_fin_t::operator()(const conf_t &c)
