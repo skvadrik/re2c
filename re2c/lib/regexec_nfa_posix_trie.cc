@@ -45,7 +45,6 @@ static void closure_posix(simctx_t &);
 static void relax(simctx_t &, const conf_t &);
 static int32_t precedence(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
 static int32_t precedence_(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
-static int32_t unwind(history_t &hist, tag_path_t &path, int32_t hidx, uint32_t step);
 static inline uint32_t get_step(const history_t &hist, int32_t idx);
 static inline uint32_t get_orig(const history_t &hist, int32_t idx);
 
@@ -234,87 +233,84 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
 
     const std::vector<Tag> &tags = ctx.nfa->tags;
     history_t &hist = ctx.hist;
-    tag_path_t &path1 = hist.path1, &path2 = hist.path2;
 
     int32_t prec = 0;
+    prec1 = prec2 = MAX_RHO;
 
-    const uint32_t orig1 = get_orig(hist, idx1);
-    const uint32_t orig2 = get_orig(hist, idx2);
+    int32_t i1 = idx1, i2 = idx2;
 
-    const uint32_t step1 = get_step(hist, idx1);
-    const uint32_t step2 = get_step(hist, idx2);
-    const uint32_t step = std::max(step1, step2);
+    const uint32_t o1 = get_orig(hist, idx1), o2 = get_orig(hist, idx2);
 
-    const size_t oldsize1 = path1.size();
-    const size_t oldsize2 = path2.size();
+    uint32_t s1 = get_step(hist, i1), s2 = get_step(hist, i2);
+    const uint32_t s = std::max(s1, s2);
 
-    // unwind histories one step back (paths may grow and be reallocated)
-    idx1 = unwind(hist, path1, idx1, step);
-    idx2 = unwind(hist, path2, idx2, step);
+    const bool fork_frame = o1 == o2 && s1 == s2;
 
-    const bool fork_frame = orig1 == orig2 && step1 == step2;
-
+    tag_info_t info1, info2;
+    for (; i1 != i2 && (s1 >= s || s2 >= s);) {
+        if (s1 >= s && (i1 > i2 || s2 < s)) {
+            const history_t::node_t &n = hist.at(i1);
+            info1 = n.info;
+            prec1 = std::min(prec1, tags[info1.idx].height);
+            i1 = n.pred;
+            s1 = get_step(hist, i1);
+        }
+        else {
+            const history_t::node_t &n = hist.at(i2);
+            info2 = n.info;
+            prec2 = std::min(prec2, tags[info2.idx].height);
+            i2 = n.pred;
+            s2 = get_step(hist, i2);
+        }
+    }
     if (!fork_frame) {
         // recurse into previous steps (via cache)
-        prec = precedence(ctx, idx1, idx2, prec1, prec2);
+        int32_t p1, p2;
+        prec = precedence(ctx, i1, i2, p1, p2);
+        prec1 = std::min(prec1, p1);
+        prec2 = std::min(prec2, p2);
     }
-
-    tag_path_t::const_reverse_iterator
-        s1 = path1.rbegin(),
-        s2 = path2.rbegin(),
-        e1 = path1.rend() - static_cast<ssize_t>(oldsize1),
-        e2 = path2.rend() - static_cast<ssize_t>(oldsize2),
-        i1 = s1, i2 = s2, j1, j2;
+    else if (i1 != history_t::ROOT) {
+        const int32_t h = tags[hist.at(i1).info.idx].height;
+        prec1 = std::min(prec1, h);
+        prec2 = std::min(prec2, h);
+    }
 
     // longest precedence
-    if (fork_frame) {
-        // find fork
-        for (; i1 != e1 && i2 != e2 && *i1 == *i2; ++i1, ++i2);
-        prec1 = prec2 = i1 > s1
-            ? tags[(i1 - 1)->idx].height : MAX_RHO;
-    }
-    for (j1 = i1; j1 != e1; ++j1) {
-        prec1 = std::min(prec1, tags[j1->idx].height);
-    }
-    for (j2 = i2; j2 != e2; ++j2) {
-        prec2 = std::min(prec2, tags[j2->idx].height);
-    }
-    if (prec1 > prec2) { prec = -1; goto end; }
-    if (prec1 < prec2) { prec =  1; goto end; }
+    if (prec1 > prec2) return -1;
+    if (prec1 < prec2) return  1;
 
     // leftmost precedence
     if (fork_frame) {
         // equal => not less
-        if (i1 == e1 && i2 == e2) { prec = 0; goto end; }
+        if (i1 == idx1 && i2 == idx2) return 0;
 
         // shorter => less
-        if (i1 == e1) { prec = -1; goto end; }
-        if (i2 == e2) { prec =  1; goto end; }
+        if (i1 == idx1) return -1;
+        if (i2 == idx2) return  1;
 
-        const uint32_t idx1 = i1->idx, idx2 = i2->idx;
-        const bool neg1 = i1->neg, neg2 = i2->neg;
+        const uint32_t tag1 = info1.idx, tag2 = info2.idx;
+        const bool neg1 = info1.neg, neg2 = info2.neg;
 
         // can't be both closing
-        DASSERT(!(idx1 % 2 == 1 && idx2 % 2 == 1));
+        DASSERT(!(tag1 % 2 == 1 && tag2 % 2 == 1));
 
         // closing vs opening: closing wins
-        if (idx1 % 2 == 1) { prec = -1; goto end; }
-        if (idx2 % 2 == 1) { prec =  1; goto end; }
+        if (tag1 % 2 == 1) return -1;
+        if (tag2 % 2 == 1) return  1;
 
         // can't be both negative
         DASSERT(!(neg1 && neg2));
 
         // positive vs negative: positive wins
-        if (neg1) { prec =  1; goto end; }
-        if (neg2) { prec = -1; goto end; }
+        if (neg1) return  1;
+        if (neg2) return -1;
 
         DASSERT(false);
     }
-
-end:
-    path1.resize(oldsize1);
-    path2.resize(oldsize2);
-    return prec;
+    else {
+        return prec;
+    }
 }
 
 uint32_t get_step(const history_t &hist, int32_t idx)
@@ -325,21 +321,6 @@ uint32_t get_step(const history_t &hist, int32_t idx)
 uint32_t get_orig(const history_t &hist, int32_t idx)
 {
     return idx == history_t::ROOT ? 0 : hist.at(idx).orig;
-}
-
-int32_t unwind(history_t &hist, tag_path_t &path, int32_t idx, uint32_t step)
-{
-    int32_t new_idx = history_t::ROOT;
-    for (int32_t i = idx; i != history_t::ROOT; ) {
-        const history_t::node_t &n = hist.at(i);
-        if (n.step < step) {
-            new_idx = i;
-            break;
-        }
-        path.push_back(n.info);
-        i = n.pred;
-    }
-    return new_idx;
 }
 
 } // namespace libre2c
