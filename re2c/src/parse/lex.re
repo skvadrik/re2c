@@ -211,7 +211,7 @@ loop:
     }
 
     linedir / lineinf {
-        out.wraw(tok, ptr + 1);
+        out.wraw(tok, ptr).ws("\n");
         set_sourceline();
         goto next;
     }
