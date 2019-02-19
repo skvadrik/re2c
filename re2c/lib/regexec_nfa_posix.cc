@@ -25,9 +25,10 @@ enum sssp_alg_t {GOR1, GTOP};
 
 template<sssp_alg_t ALG> static int do_regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int);
 template<sssp_alg_t ALG> static void closure_posix(simctx_t &ctx);
-static void reach_on_symbol(simctx_t &, uint32_t);
+static void make_one_step(simctx_t &, uint32_t);
+static void make_final_step(simctx_t &);
 static void update_offsets(simctx_t &ctx, const conf_t &c);
-static void update_offsets_and_prectbl(simctx_t &);
+static void update_prectbl(simctx_t &);
 static int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y, int32_t &prec1, int32_t &prec2);
 
 // we *do* want these to be inlined
@@ -53,27 +54,13 @@ int do_regexec(const regex_t *preg, const char *string
     const conf_t c0(ctx.nfa->root, 0, history_t::ROOT);
     ctx.reach.push_back(c0);
     closure_posix<ALG>(ctx);
-
     for (;;) {
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
-        reach_on_symbol(ctx, sym);
-        update_offsets_and_prectbl(ctx);
-        ++ctx.step;
+        make_one_step(ctx, sym);
         closure_posix<ALG>(ctx);
     }
-
-    for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
-        nfa_state_t *s = i->state;
-
-        s->clos = NOCLOS;
-        s->arcidx = 0;
-        DASSERT(s->status == GOR_NOPASS && s->active == 0);
-
-        if (s->type == nfa_state_t::FIN) {
-            update_offsets(ctx, *i);
-        }
-    }
+    make_final_step(ctx);
 
     if (ctx.rule == Rule::NONE) {
         return REG_NOMATCH;
@@ -93,21 +80,20 @@ int do_regexec(const regex_t *preg, const char *string
             m->rm_eo = off;
         }
     }
-
     return 0;
 }
 
-void reach_on_symbol(simctx_t &ctx, uint32_t sym)
+void make_one_step(simctx_t &ctx, uint32_t sym)
 {
     confset_t &state = ctx.state, &reach = ctx.reach;
-
-    reach.clear();
     size_t j = 0;
+    reach.clear();
+
     for (cconfiter_t i = state.begin(), e = state.end(); i != e; ++i) {
         nfa_state_t *s = i->state;
 
-        s->arcidx = 0;
         s->clos = NOCLOS;
+        s->arcidx = 0;
         DASSERT(s->status == GOR_NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::RAN) {
@@ -116,15 +102,39 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
                     const conf_t c(s->ran.out, s->coreid, history_t::ROOT);
                     reach.push_back(c);
                     state[j++] = *i;
+                    update_offsets(ctx, *i);
                     break;
                 }
             }
         }
         else if (s->type == nfa_state_t::FIN) {
-            state[j++] = *i;
+            update_offsets(ctx, *i);
         }
     }
+
     state.resize(j);
+    std::swap(ctx.offsets1, ctx.offsets2);
+
+    update_prectbl(ctx);
+
+    ctx.hist.nodes.clear();
+
+    ++ctx.step;
+}
+
+void make_final_step(simctx_t &ctx)
+{
+    for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
+        nfa_state_t *s = i->state;
+
+        s->clos = NOCLOS;
+        s->arcidx = 0;
+        DASSERT(s->status == GOR_NOPASS && s->active == 0);
+
+        if (s->type == nfa_state_t::FIN) {
+            update_offsets(ctx, *i);
+        }
+    }
 }
 
 template<>
@@ -354,7 +364,7 @@ void update_offsets(simctx_t &ctx, const conf_t &c)
     }
 }
 
-void update_offsets_and_prectbl(simctx_t &ctx)
+void update_prectbl(simctx_t &ctx)
 {
     cconfiter_t b = ctx.state.begin(), e = ctx.state.end(), c, d;
     const size_t ncores = ctx.nfa->ncores;
@@ -362,21 +372,12 @@ void update_offsets_and_prectbl(simctx_t &ctx)
     const int32_t p0 = pack(MAX_RHO, 0);
 
     for (c = b; c != e; ++c) {
-        update_offsets(ctx, *c);
-    }
-    std::swap(ctx.offsets1, ctx.offsets2);
-
-    // precedence matrix
-    for (c = b; c != e; ++c) {
         nfa_state_t *s = c->state;
-        if (s->type != nfa_state_t::RAN) continue;
-
+        DASSERT (s->type == nfa_state_t::RAN);
         ptbl[s->coreid * ncores + s->coreid] = p0;
 
         for (d = c + 1; d != e; ++d) {
             nfa_state_t *q = d->state;
-            if (q->type != nfa_state_t::RAN) continue;
-
             int32_t prec1, prec2;
             int32_t prec = precedence(ctx, *c, *d, prec1, prec2);
             ptbl[s->coreid * ncores + q->coreid] = pack(prec1, prec);
@@ -384,8 +385,6 @@ void update_offsets_and_prectbl(simctx_t &ctx)
         }
     }
     std::swap(ctx.prectbl1, ctx.prectbl2);
-
-    ctx.hist.nodes.clear();
 }
 
 int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
