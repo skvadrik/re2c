@@ -43,9 +43,11 @@ namespace libre2c {
 static void make_step(simctx_t &, uint32_t);
 static void make_final_step(simctx_t &);
 static void closure_posix(simctx_t &);
-static void relax(simctx_t &, const conf_t &);
 static int32_t precedence(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
 static int32_t precedence_(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
+
+// we *do* want this to be inlined
+static inline void relax(simctx_t &, const conf_t &);
 static inline uint32_t get_step(const history_t &hist, int32_t idx);
 static inline uint32_t get_orig(const history_t &hist, int32_t idx);
 
