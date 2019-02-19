@@ -7,6 +7,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <queue>
 
 #include "src/nfa/nfa.h"
 #include "src/debug/debug.h"
@@ -102,42 +103,53 @@ struct kernel_buffers_t
 };
 
 
+struct cmp_gtop_t
+{
+    inline bool operator() (const nfa_state_t *x, const nfa_state_t *y) const;
+};
+
+
 typedef lookup_t<const kernel_t*> kernels_t;
+typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
+    , cmp_gtop_t> gtop_heap_t;
 
 
 struct determ_context_t
 {
     // determinization input
-    const opt_t              *dc_opts;      // options
-    Msg                      &dc_msg;       // error messages and warnings
-    const std::string        &dc_condname;  // the name of current condition (with -c)
-    const nfa_t              &dc_nfa;       // TNFA
+    const opt_t               *dc_opts;        // options
+    Msg                       &dc_msg;         // error messages and warnings
+    const std::string         &dc_condname;    // the name of current condition (with -c)
+    const nfa_t               &dc_nfa;         // TNFA
 
     // determinization output
-    dfa_t                    &dc_dfa;       // resulting TDFA
+    dfa_t                     &dc_dfa;         // resulting TDFA
 
     // temporary structures used by determinization
-    allocator_t              dc_allocator;
-    uint32_t                 dc_origin;     // from-state of the current transition
-    uint32_t                 dc_target;     // to-state of the current transition
-    uint32_t                 dc_symbol;     // alphabet symbol of the current transition
-    tcmd_t                  *dc_actions;    // tag actions of the current transition
-    closure_t                dc_reached;
-    closure_t                dc_closure;
-    prectable_t             *dc_prectbl;    // precedence table for Okui POSIX disambiguation
-    tagver_table_t           dc_tagvertbl;
-    tag_history_t            dc_taghistory; // prefix trie of tag histories
-    kernels_t                dc_kernels;    // TDFA states under construction
-    kernel_buffers_t         dc_buffers;
-    std::stack<nfa_state_t*> dc_stack_topsort;
-    std::stack<nfa_state_t*> dc_stack_linear;
-    std::stack<clos_t>       dc_stack_dfs;
-    hc_caches_t              dc_hc_caches;  // per-tag cache of history comparisons
-    newvers_t                dc_newvers;    // map of triples (tag, version, history) to new version
-    tag_path_t               dc_path1;      // buffer 1 for tag history
-    tag_path_t               dc_path2;      // buffer 2 for tag history
-    tag_path_t               dc_path3;      // buffer 3 for tag history
-    std::vector<uint32_t>    dc_tagcount;   // buffer for counting sort on tag history
+    allocator_t               dc_allocator;
+    uint32_t                  dc_origin;       // from-state of the current transition
+    uint32_t                  dc_target;       // to-state of the current transition
+    uint32_t                  dc_symbol;       // alphabet symbol of the current transition
+    tcmd_t                   *dc_actions;      // tag actions of the current transition
+    closure_t                 dc_reached;
+    closure_t                 dc_closure;
+    prectable_t              *dc_prectbl;      // precedence table for Okui POSIX disambiguation
+    tagver_table_t            dc_tagvertbl;
+    tag_history_t             dc_taghistory;   // prefix trie of tag histories
+    kernels_t                 dc_kernels;      // TDFA states under construction
+    kernel_buffers_t          dc_buffers;
+    std::stack<clos_t>        dc_stack_dfs;    // stack used for DFS in leftmost greedy closure
+    std::vector<nfa_state_t*> dc_gor1_topsort; // stack used in GOR1 (POSIX closure)
+    std::vector<nfa_state_t*> dc_gor1_linear;  // stack used in GOR1 (POSIX closure)
+    std::vector<nfa_state_t*> dc_gtop_buffer;  // buffer used for heap in GTOP (POSIX closure)
+    cmp_gtop_t                dc_gtop_cmp;     // heap comparator used in GTOP (POSIX closure)
+    gtop_heap_t               dc_gtop_heap;    // heap used in GTOP (POSIX closure)
+    hc_caches_t               dc_hc_caches;    // per-tag cache of history comparisons
+    newvers_t                 dc_newvers;      // map of triples (tag, version, history) to new version
+    tag_path_t                dc_path1;        // buffer 1 for tag history
+    tag_path_t                dc_path2;        // buffer 2 for tag history
+    tag_path_t                dc_path3;        // buffer 3 for tag history
+    std::vector<uint32_t>     dc_tagcount;     // buffer for counting sort on tag history
 
     // debug
     dump_dfa_t               dc_dump;
@@ -159,6 +171,11 @@ int32_t precedence(determ_context_t &, const clos_t &, const clos_t &, int32_t &
 int32_t unpack_longest(int32_t);
 int32_t unpack_leftmost(int32_t);
 int32_t pack(int32_t, int32_t);
+
+bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
+{
+    return x->topord < y->topord;
+}
 
 } // namespace re2c
 

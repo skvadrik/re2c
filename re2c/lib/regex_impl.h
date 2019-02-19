@@ -7,6 +7,7 @@
 #include <vector>
 #include <queue>
 
+#include "src/dfa/determinization.h"
 #include "src/nfa/nfa.h"
 
 
@@ -50,11 +51,6 @@ struct ran_or_fin_t
     inline bool operator()(const conf_t &c);
 };
 
-struct cmp_gtop_t
-{
-    inline bool operator() (const nfa_state_t *x, const nfa_state_t *y) const;
-};
-
 struct cache_entry_t
 {
     int32_t prec1;
@@ -68,8 +64,6 @@ typedef std::vector<conf_t> confset_t;
 typedef confset_t::iterator confiter_t;
 typedef confset_t::const_iterator cconfiter_t;
 typedef confset_t::const_reverse_iterator rcconfiter_t;
-typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
-    , cmp_gtop_t> gtop_heap_t;
 
 struct simctx_t
 {
@@ -133,11 +127,6 @@ bool ran_or_fin_t::operator()(const conf_t &c)
         case nfa_state_t::FIN: return true;
         default: return false;
     }
-}
-
-bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
-{
-    return x->topord < y->topord;
 }
 
 } // namespace libre2c

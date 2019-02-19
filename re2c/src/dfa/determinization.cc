@@ -228,9 +228,12 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     , dc_taghistory()
     , dc_kernels()
     , dc_buffers(dc_allocator)
-    , dc_stack_topsort()
-    , dc_stack_linear()
     , dc_stack_dfs()
+    , dc_gor1_topsort()
+    , dc_gor1_linear()
+    , dc_gtop_buffer()
+    , dc_gtop_cmp()
+    , dc_gtop_heap(dc_gtop_cmp, dc_gtop_buffer)
     , dc_hc_caches()
     , dc_newvers(newver_cmp_t(dc_taghistory, dc_hc_caches))
     , dc_path1()
@@ -240,12 +243,21 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     , dc_dump(opts)
     , dc_clstats()
 {
-    const size_t ntags = nfa.tags.size();
+    const size_t nstates = nfa.size, ntags = nfa.tags.size();
+
     dc_hc_caches.resize(ntags);
     dc_path1.reserve(ntags);
     dc_path2.reserve(ntags);
     dc_path3.reserve(ntags);
     dc_tagcount.resize(ntags);
+
+    if (opts->posix_closure) {
+        dc_gtop_buffer.reserve(nstates);
+    }
+    else {
+        dc_gor1_topsort.reserve(nstates);
+        dc_gor1_linear.reserve(nstates);
+    }
 }
 
 

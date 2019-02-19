@@ -7,6 +7,14 @@
 namespace re2c
 {
 
+/*
+ * States of in-degree less than 2 are not joint points;
+ * the fact that we are re-scanning this state means that we found
+ * a better path to some previous state. Due to the right distributivity
+ * of path comparison over path concatenation (X < Y => XZ < YZ) we
+ * can just propagate the new path up to the next join point.
+ */
+
 struct cmp_gor1_t
 {
     determ_context_t &ctx;
@@ -15,16 +23,13 @@ struct cmp_gor1_t
     bool operator()(const clos_t &, const clos_t &) const;
 };
 
-struct cmp_gtop_t
-{
-    bool operator() (const nfa_state_t *, const nfa_state_t *) const;
-};
-
 static void closure_posix_gor1(determ_context_t &);
 static void closure_posix_gtop(determ_context_t &);
-static nfa_state_t *next_admissible_arc(determ_context_t &, nfa_state_t *);
-static nfa_state_t *relax(determ_context_t &, const clos_t &);
-static void cleanup(closure_t &);
+
+// we *do* want these to be inlined
+static inline bool scan(determ_context_t &ctx, nfa_state_t *q, bool all);
+static inline bool relax_gor1(determ_context_t &, const clos_t &);
+static inline void relax_gtop(determ_context_t &, const clos_t &);
 
 
 void closure_posix(determ_context_t &ctx)
@@ -38,6 +43,15 @@ void closure_posix(determ_context_t &ctx)
     }
 
     DDUMP_CLSTATS(ctx);
+
+    // cleanup
+    closure_t &cl = ctx.dc_closure;
+    for (clositer_t i = cl.begin(); i != cl.end(); ++i) {
+        nfa_state_t *q = i->state;
+        q->clos = NOCLOS;
+        q->arcidx = 0;
+        DASSERT(q->status == GOR_NOPASS && q->active == 0);
+    }
 }
 
 /*
@@ -55,91 +69,61 @@ void closure_posix(determ_context_t &ctx)
  */
 void closure_posix_gor1(determ_context_t &ctx)
 {
-    closure_t &init = ctx.dc_reached;
-    closure_t &done = ctx.dc_closure;
-    std::stack<nfa_state_t*>
-        &topsort = ctx.dc_stack_topsort,
-        &linear = ctx.dc_stack_linear;
-    nfa_state_t *q, *p;
+    closure_t &state = ctx.dc_closure, &reach = ctx.dc_reached;
+    std::vector<nfa_state_t*>
+        &topsort = ctx.dc_gor1_topsort,
+        &linear = ctx.dc_gor1_linear;
 
-    done.clear();
-
-    // initialization: topsort stack must contain configurations
-    // ordered by POSIX precedence (with highest precedence on top)
-    std::sort(init.begin(), init.end(), cmp_gor1_t(ctx));
-    for (rcclositer_t c = init.rbegin(); c != init.rend(); ++c) {
-        q = c->state;
+    // init: push configurations ordered by POSIX precedence (highest on top)
+    state.clear();
+    std::sort(reach.begin(), reach.end(), cmp_gor1_t(ctx));
+    for (rcclositer_t c = reach.rbegin(); c != reach.rend(); ++c) {
+        nfa_state_t *q = c->state;
         if (q->clos == NOCLOS) {
-            q->clos = static_cast<uint32_t>(done.size());
-            done.push_back(*c);
+            q->clos = static_cast<uint32_t>(state.size());
+            state.push_back(*c);
         }
         else {
-            // duplicate state, but higher precedence => overwrite
-            done[q->clos] = *c;
+            state[q->clos] = *c;
         }
-        topsort.push(q);
+        topsort.push_back(q);
     }
 
     for (; !topsort.empty(); ) {
 
-        // 1st pass: scan admissible subgraph reachable from B-stack
-        // and topologically sort it (this can be done by a single
-        // depth-first postorder traversal)
+        // 1st pass: depth-first postorder traversal of admissible subgraph
         for (; !topsort.empty(); ) {
-            q = topsort.top();
-            topsort.pop();
-
-            if (q->status != GOR_LINEAR) {
-                DINCCOUNT_CLSCANS(ctx);
-
+            nfa_state_t *q = topsort.back();
+            if (q->status == GOR_LINEAR) {
+                topsort.pop_back();
+            }
+            else {
                 q->status = GOR_TOPSORT;
-                while ((p = next_admissible_arc(ctx, q))
-                    && p->status != GOR_NOPASS) {
-                    p->active = 1;
-                }
-
-                if (p) {
-                    topsort.push(q);
-                    topsort.push(p);
-                    p->arcidx = 0;
-                }
-                else {
+                DINCCOUNT_CLSCANS(ctx);
+                if (!scan(ctx, q, false)) {
                     q->status = GOR_LINEAR;
-                    linear.push(q);
+                    topsort.pop_back();
+                    linear.push_back(q);
                 }
             }
         }
 
-        // 2nd pass: scan topologically ordered states from A-stack
-        // and push head states of relaxed transitions to B-stack
+        // 2nd pass: linear scan of topologically ordered states
         for (; !linear.empty(); ) {
-            q = linear.top();
-            linear.pop();
-
+            nfa_state_t *q = linear.back();
+            linear.pop_back();
             if (q->active) {
-                DINCCOUNT_CLSCANS(ctx);
-
+                q->active = 0;
                 q->arcidx = 0;
-                while ((p = next_admissible_arc(ctx, q))) {
-                    if (p->status == GOR_NOPASS) {
-                        topsort.push(p);
-                        p->arcidx = 0;
-                    }
-                    else if (p->status == GOR_LINEAR) {
-                        p->active = 1;
-                    }
-                }
+                DINCCOUNT_CLSCANS(ctx);
+                scan(ctx, q, true);
             }
-
             q->status = GOR_NOPASS;
-            q->active = 0;
         }
     }
-
-    cleanup(done);
 }
 
-inline cmp_gor1_t::cmp_gor1_t(determ_context_t &c) : ctx(c) {}
+inline cmp_gor1_t::cmp_gor1_t(determ_context_t &ctx) : ctx(ctx) {}
 
 inline bool cmp_gor1_t::operator()(const clos_t &x, const clos_t &y) const
 {
@@ -149,6 +133,74 @@ inline bool cmp_gor1_t::operator()(const clos_t &x, const clos_t &y) const
     // if longest components differ, leftmost already incorporates that
     const kernel_t *k = ctx.dc_kernels[ctx.dc_origin];
     return unpack_leftmost(k->prectbl[xo * k->size + yo]) < 0;
+}
+
+bool scan(determ_context_t &ctx, nfa_state_t *q, bool all)
+{
+    bool any = false;
+    clos_t x = ctx.dc_closure[q->clos];
+    switch (q->type) {
+        case nfa_state_t::NIL:
+            if (q->arcidx == 0) {
+                x.state = q->nil.out;
+                any |= relax_gor1(ctx, x);
+                ++q->arcidx;
+            }
+            break;
+        case nfa_state_t::ALT:
+            if (q->arcidx == 0) {
+                x.state = q->alt.out1;
+                any |= relax_gor1(ctx, x);
+                ++q->arcidx;
+            }
+            if (q->arcidx == 1 && (!any || all)) {
+                x.state = q->alt.out2;
+                any |= relax_gor1(ctx, x);
+                ++q->arcidx;
+            }
+            break;
+        case nfa_state_t::TAG:
+            if (q->arcidx == 0) {
+                x.state = q->tag.out;
+                x.tlook = ctx.dc_taghistory.push(x.tlook, q->tag.info);
+                any |= relax_gor1(ctx, x);
+                ++q->arcidx;
+            }
+            break;
+        default:
+            break;
+    }
+    return any;
+}
+
+bool relax_gor1(determ_context_t &ctx, const clos_t &x)
+{
+    closure_t &state = ctx.dc_closure;
+    nfa_state_t *q = x.state;
+    const uint32_t idx = q->clos;
+    int32_t p1, p2;
+
+    if (idx == NOCLOS) {
+        q->clos = static_cast<uint32_t>(state.size());
+        state.push_back(x);
+    }
+    else if (q->indeg < 2
+        || precedence(ctx, x, state[idx], p1, p2) < 0) {
+        state[idx] = x;
+    }
+    else {
+        return false;
+    }
+
+    if (q->status == GOR_NOPASS) {
+        ctx.dc_gor1_topsort.push_back(q);
+        q->arcidx = 0;
+        return true;
+    }
+    else {
+        q->active = 1;
+        return false;
+    }
 }
 
 /*
@@ -172,133 +224,69 @@ inline bool cmp_gor1_t::operator()(const clos_t &x, const clos_t &y) const
  *
  * However the algorithm is simple and optimal for DAGs, therefore we keep it.
  */
+
 void closure_posix_gtop(determ_context_t &ctx)
 {
-    const closure_t &init = ctx.dc_reached;
-    closure_t &done = ctx.dc_closure;
+    const closure_t &reach = ctx.dc_reached;
+    closure_t &state = ctx.dc_closure;
+    gtop_heap_t &heap = ctx.dc_gtop_heap;
 
-    std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
-        , cmp_gtop_t> todo;
-
-    done.clear();
-
-    for (cclositer_t c = init.begin(); c != init.end(); ++c) {
-        nfa_state_t *q = relax(ctx, *c);
-        if (q && q->active == 0) {
-            todo.push(q);
-            q->active = 1;
-        }
+    state.clear();
+    for (cclositer_t c = reach.begin(); c != reach.end(); ++c) {
+        relax_gtop(ctx, *c);
     }
 
-    for (; !todo.empty(); ) {
+    for (; !heap.empty(); ) {
+        nfa_state_t *q = heap.top();
+        heap.pop();
+        q->active = 0;
         DINCCOUNT_CLSCANS(ctx);
 
-        nfa_state_t *q = todo.top();
-        todo.pop();
-        q->active = 0;
-        q->arcidx = 0;
-
-        while (true) {
-            nfa_state_t *p = next_admissible_arc(ctx, q);
-            if (!p) break;
-            if (!p->active) {
-                todo.push(p);
-                p->active = 1;
-            }
-        }
-    }
-
-    cleanup(done);
-}
-
-inline bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
-{
-    return x->topord < y->topord;
-}
-
-nfa_state_t *next_admissible_arc(determ_context_t &ctx, nfa_state_t *q)
-{
-    // find the next admissible transition, adjust the index
-    // of the next transition and return the to-state
-    nfa_state_t *p = NULL;
-    clos_t x = ctx.dc_closure[q->clos];
-    switch (q->type) {
-        case nfa_state_t::NIL:
-            if (q->arcidx == 0) {
+        clos_t x = ctx.dc_closure[q->clos];
+        switch (q->type) {
+            case nfa_state_t::NIL:
                 x.state = q->nil.out;
-                p = relax(ctx, x);
-                ++q->arcidx;
-            }
-            break;
-        case nfa_state_t::ALT:
-            if (q->arcidx == 0) {
+                relax_gtop(ctx, x);
+                break;
+            case nfa_state_t::ALT:
                 x.state = q->alt.out1;
-                p = relax(ctx, x);
-                ++q->arcidx;
-            }
-            if (q->arcidx == 1 && !p) {
+                relax_gtop(ctx, x);
                 x.state = q->alt.out2;
-                p = relax(ctx, x);
-                ++q->arcidx;
-            }
-            break;
-        case nfa_state_t::TAG:
-            if (q->arcidx == 0) {
+                relax_gtop(ctx, x);
+                break;
+            case nfa_state_t::TAG:
                 x.state = q->tag.out;
                 x.tlook = ctx.dc_taghistory.push(x.tlook, q->tag.info);
-                p = relax(ctx, x);
-                ++q->arcidx;
-            }
-            break;
-        case nfa_state_t::RAN:
-        case nfa_state_t::FIN:
-            break;
+                relax_gtop(ctx, x);
+                break;
+            default:
+                break;
+        }
     }
-    return p;
 }
 
-nfa_state_t *relax(determ_context_t &ctx, const clos_t &x)
+void relax_gtop(determ_context_t &ctx, const clos_t &c)
 {
-    closure_t &done = ctx.dc_closure;
-    nfa_state_t *q = x.state;
+    closure_t &state = ctx.dc_closure;
+    nfa_state_t *q = c.state;
     const uint32_t idx = q->clos;
-    int32_t h1, h2;
+    int32_t p1, p2;
 
-    // first time we see this state
     if (idx == NOCLOS) {
-        q->clos = static_cast<uint32_t>(done.size());
-        done.push_back(x);
+        q->clos = static_cast<uint32_t>(state.size());
+        state.push_back(c);
     }
-
-    // States of in-degree less than 2 are not joint points;
-    // the fact that we are re-scanning this state means that we found
-    // a better path to some previous state. Due to the right distributivity
-    // of path comparison over path concatenation (X < Y => XZ < YZ) we
-    // can just propagate the new path up to the next join point.
-    else if (q->indeg < 2) {
-        done[idx] = x;
+    else if (q->indeg < 2
+        || precedence(ctx, c, state[idx], p1, p2) < 0) {
+        state[idx] = c;
     }
-
-    // join point; compare the new path and the old path
-    else if (precedence(ctx, x, done[idx], h1, h2) < 0) {
-        done[idx] = x;
-    }
-
-    // the previous path was better, discard the new one
     else {
-        q = NULL;
+        return;
     }
 
-    return q;
-}
-
-void cleanup(closure_t &closure)
-{
-    for (clositer_t i = closure.begin(); i != closure.end(); ++i) {
-        nfa_state_t *q = i->state;
-        q->clos = NOCLOS;
-        q->arcidx = 0;
-        DASSERT(q->status == GOR_NOPASS && q->active == 0);
+    if (!q->active) {
+        q->active = 1;
+        ctx.dc_gtop_heap.push(q);
     }
 }
 
