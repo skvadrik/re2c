@@ -66,7 +66,7 @@ struct newver_cmp_t
     hc_caches_t &caches;
 
     newver_cmp_t(tag_history_t &h, hc_caches_t &c): history(h), caches(c) {}
-    bool operator()(const newver_t &, const newver_t &);
+    bool operator()(const newver_t &, const newver_t &) const;
 };
 
 

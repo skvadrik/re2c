@@ -261,7 +261,7 @@ dfa_t::~dfa_t()
 }
 
 
-bool newver_cmp_t::operator()(const newver_t &x, const newver_t &y)
+bool newver_cmp_t::operator()(const newver_t &x, const newver_t &y) const
 {
     if (x.tag < y.tag) return true;
     if (x.tag > y.tag) return false;
