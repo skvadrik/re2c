@@ -114,7 +114,7 @@ then
 fi
 
 diff_prog="diff"
-if test -n "${wine}"
+if [[ @CC@ =~ "mingw" || -n "${wine}" ]]
 then
     # ignore whitespace at the end of line
     diff_prog="${diff_prog} -b"
