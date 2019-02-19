@@ -8,104 +8,94 @@
 namespace re2c
 {
 
-static void reconstruct_history(const tag_history_t &, tag_path_t &, hidx_t);
-
-int32_t precedence(determ_context_t &ctx,
-    const clos_t &x, const clos_t &y, int32_t &rhox, int32_t &rhoy)
+int32_t precedence(determ_context_t &ctx, const clos_t &x, const clos_t &y
+    , int32_t &prec1, int32_t &prec2)
 {
-    const hidx_t xl = x.tlook, yl = y.tlook;
-    const uint32_t xo = x.origin, yo = y.origin;
-    const std::vector<Tag> &tags = ctx.dc_dfa.tags;
-    const kernel_t *k = NULL;
+    const int32_t idx1 = x.tlook, idx2 = y.tlook;
+    const uint32_t orig1 = x.origin, orig2 = y.origin;
+    int prec = 0;
 
-    if (xl == yl && xo == yo) {
-        rhox = rhoy = MAX_RHO;
-        return 0;
+    if (idx1 == idx2 && orig1 == orig2) {
+        prec1 = prec2 = MAX_RHO;
+        return prec;
     }
 
-    tag_history_t &thist = ctx.dc_taghistory;
-    tag_path_t &p1 = ctx.dc_path1, &p2 = ctx.dc_path2;
-    reconstruct_history(thist, p1, xl);
-    reconstruct_history(thist, p2, yl);
-    tag_path_t::const_reverse_iterator
-        i1 = p1.rbegin(), e1 = p1.rend(), j1 = i1, g1,
-        i2 = p2.rbegin(), e2 = p2.rend(), j2 = i2, g2;
+    const std::vector<Tag> &tags = ctx.dc_dfa.tags;
+    tag_history_t &hist = ctx.dc_taghistory;
 
-    DINCCOUNT_CLPREC(ctx);
-    DINCCOUNT_CLLENGTH(ctx, p1.size() + p2.size());
-
-    const bool fork_frame = xo == yo;
-
-    // longest precedence
+    const bool fork_frame = orig1 == orig2;
     if (fork_frame) {
-        // find fork
-        for (; j1 != e1 && j2 != e2 && *j1 == *j2; ++j1, ++j2);
-        rhox = rhoy = j1 > i1
-            ? tags[(j1 - 1)->idx].height : MAX_RHO;
+        prec1 = prec2 = MAX_RHO;
     }
     else {
-        // get precedence table and size of the origin state
-        k = ctx.dc_kernels[ctx.dc_origin];
-        rhox = unpack_longest(k->prectbl[xo * k->size + yo]);
-        rhoy = unpack_longest(k->prectbl[yo * k->size + xo]);
+        const kernel_t *k = ctx.dc_kernels[ctx.dc_origin];
+        prec = unpack_leftmost(k->prectbl[orig1 * k->size + orig2]);
+        prec1 = unpack_longest(k->prectbl[orig1 * k->size + orig2]);
+        prec2 = unpack_longest(k->prectbl[orig2 * k->size + orig1]);
     }
-    for (g1 = j1; g1 != e1; ++g1) {
-        rhox = std::min(rhox, tags[g1->idx].height);
+
+    tag_info_t info1, info2;
+    int32_t i1 = idx1, i2 = idx2;
+    for (; i1 != i2; ) {
+        if (i1 > i2) {
+            info1 = hist.info(i1);
+            prec1 = std::min(prec1, tags[info1.idx].height);
+            i1 = hist.pred(i1);
+        }
+        else {
+            info2 = hist.info(i2);
+            prec2 = std::min(prec2, tags[info2.idx].height);
+            i2 = hist.pred(i2);
+        }
+        DINCCOUNT_CLLENGTH(ctx, 1);
     }
-    for (g2 = j2; g2 != e2; ++g2) {
-        rhoy = std::min(rhoy, tags[g2->idx].height);
+    if (i1 != HROOT) {
+        DASSERT(fork_frame);
+        const int32_t h = tags[hist.info(i1).idx].height;
+        prec1 = std::min(prec1, h);
+        prec2 = std::min(prec2, h);
     }
-    if (rhox > rhoy) return -1;
-    if (rhox < rhoy) return 1;
+    DINCCOUNT_CLPREC(ctx);
+
+    // longest precedence
+    if (prec1 > prec2) return -1;
+    if (prec1 < prec2) return  1;
 
     // leftmost precedence
     if (fork_frame) {
         // equal => not less
-        if (j1 == e1 && j2 == e2) return 0;
+        if (i1 == idx1 && i2 == idx2) return 0;
 
         // shorter => less
-        if (j1 == e1) return -1;
-        if (j2 == e2) return 1;
+        if (i1 == idx1) return -1;
+        if (i2 == idx2) return  1;
 
-        const uint32_t idx1 = j1->idx, idx2 = j2->idx;
-        const bool neg1 = j1->neg, neg2 = j2->neg;
+        const uint32_t tag1 = info1.idx, tag2 = info2.idx;
+        const bool neg1 = info1.neg, neg2 = info2.neg;
 
         // can't be both closing
-        DASSERT(!(idx1 % 2 == 1 && idx2 % 2 == 1));
+        DASSERT(!(tag1 % 2 == 1 && tag2 % 2 == 1));
 
         // closing vs opening: closing wins
-        if (idx1 % 2 == 1) return -1;
-        if (idx2 % 2 == 1) return 1;
+        if (tag1 % 2 == 1) return -1;
+        if (tag2 % 2 == 1) return  1;
 
         // can't be both negative
         DASSERT(!(neg1 && neg2));
 
         // positive vs negative: positive wins
-        if (neg1) return 1;
+        if (neg1) return  1;
         if (neg2) return -1;
 
         // positive vs positive: smaller wins
         // (this case is only possible because multiple
         // top-level RE don't have proper negative tags)
-        if (idx1 < idx2) return -1;
-        if (idx1 > idx2) return 1;
-    }
-    else {
-        return unpack_leftmost(k->prectbl[xo * k->size + yo]);
-    }
+        if (tag1 < tag2) return -1;
+        if (tag1 > tag2) return  1;
 
-    // unreachable
-    DASSERT(false);
-    return 0;
-}
-
-void reconstruct_history(const tag_history_t &history,
-    tag_path_t &path, hidx_t idx)
-{
-    path.clear();
-    for (; idx != HROOT; idx = history.pred(idx)) {
-        path.push_back(history.info(idx));
+        DASSERT(false); // unreachable
     }
+    return prec;
 }
 
 int32_t unpack_longest(int32_t packed)
