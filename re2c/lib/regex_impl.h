@@ -27,10 +27,8 @@ struct history_t
     static const int32_t ROOT;
 
     std::vector<node_t> nodes;
-    tag_path_t path1;
-    tag_path_t path2;
 
-    history_t(size_t nstates, size_t ntags);
+    explicit history_t(size_t nstates);
     inline const node_t &at(int32_t i) const { return nodes[static_cast<uint32_t>(i)]; }
     inline int32_t push(int32_t i, uint32_t step, tag_info_t info, uint32_t orig);
     FORBID_COPY(history_t);

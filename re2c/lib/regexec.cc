@@ -75,7 +75,7 @@ simctx_t::simctx_t(const nfa_t *nfa, size_t re_nsub, int flags)
     , flags(flags)
     , reach()
     , state()
-    , hist(nfa->size, nfa->tags.size())
+    , hist(nfa->size)
     , hidx(history_t::ROOT)
     , step(0)
     , rule(Rule::NONE)
@@ -151,14 +151,10 @@ void init(simctx_t &ctx, const char *string)
     DASSERT(ctx.gtop_heap.empty());
 }
 
-history_t::history_t(size_t nstates, size_t ntags)
+history_t::history_t(size_t nstates)
     : nodes()
-    , path1()
-    , path2()
 {
     nodes.reserve(nstates);
-    path1.reserve(ntags);
-    path2.reserve(ntags);
 }
 
 } // namespace libre2c
