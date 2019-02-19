@@ -40,7 +40,8 @@ namespace libre2c {
  * tag values (instead of storing tags in registers at each step).
  */
 
-static void reach_on_symbol(simctx_t &, uint32_t);
+static void make_step(simctx_t &, uint32_t);
+static void make_final_step(simctx_t &);
 static void closure_posix(simctx_t &);
 static void relax(simctx_t &, const conf_t &);
 static int32_t precedence(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
@@ -55,30 +56,22 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     init(ctx, string);
 
     const nfa_t *nfa = ctx.nfa;
-    confset_t &state = ctx.state;
 
     const conf_t c0(nfa->root, index(nfa, nfa->root), history_t::ROOT);
     ctx.reach.push_back(c0);
     closure_posix(ctx);
-
     for (;;) {
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
-        reach_on_symbol(ctx, sym);
-        ++ctx.step;
+        make_step(ctx, sym);
         closure_posix(ctx);
     }
-
-    confiter_t b = state.begin(), e = state.end(), i, j;
-    for (i = b; i != e; ++i) {
-        i->state->clos = NOCLOS;
-        DASSERT(i->state->active == 0);
-    }
+    make_final_step(ctx);
 
     return finalize(ctx, string, nmatch, pmatch);
 }
 
-void reach_on_symbol(simctx_t &ctx, uint32_t sym)
+void make_step(simctx_t &ctx, uint32_t sym)
 {
     const nfa_t *nfa = ctx.nfa;
     const confset_t &state = ctx.state;
@@ -100,6 +93,29 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
                     break;
                 }
             }
+        }
+        else if (s->type == nfa_state_t::FIN) {
+            ctx.marker = ctx.cursor;
+            ctx.hidx = i->thist;
+            ctx.rule = 0;
+        }
+    }
+
+    ++ctx.step;
+}
+
+void make_final_step(simctx_t &ctx)
+{
+    for (confiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
+        nfa_state_t *s = i->state;
+
+        s->clos = NOCLOS;
+        DASSERT(s->active == 0);
+
+        if (s->type == nfa_state_t::FIN) {
+            ctx.marker = ctx.cursor;
+            ctx.hidx = i->thist;
+            ctx.rule = 0;
         }
     }
 }
@@ -137,12 +153,7 @@ void closure_posix(simctx_t &ctx)
                 relax(ctx, conf_t(q->tag.out, o
                     , ctx.hist.push(h, ctx.step, q->tag.info, o)));
                 break;
-            case nfa_state_t::FIN:
-                ctx.marker = ctx.cursor + 1;
-                ctx.hidx = x.thist;
-                ctx.rule = 0;
-                break;
-            case nfa_state_t::RAN:
+            default:
                 break;
         }
     }
