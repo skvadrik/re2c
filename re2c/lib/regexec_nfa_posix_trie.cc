@@ -53,7 +53,8 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
     simctx_t &ctx = *preg->simctx;
-    ctx.cursor = ctx.marker = string;
+    init(ctx, string);
+
     const nfa_t *nfa = ctx.nfa;
     confset_t &state = ctx.state;
 

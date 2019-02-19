@@ -20,24 +20,28 @@ static int test(const char *pattern, const char *string
         goto end;
     }
 
-    result = regexec(&re, string, nmatch, pmatch, flags);
-    if (result != 0) {
-        if (nmatch == 0) {
-            // failure was expected => it's a success
-            result = 0;
+    // run multiple times to ensure everything gets cleaned up properly
+    static const uint32_t NRUNS = 2;
+    for (uint32_t i = 0; i < NRUNS; ++i) {
+        result = regexec(&re, string, nmatch, pmatch, flags);
+        if (result != 0) {
+            if (nmatch == 0) {
+                // failure was expected => it's a success
+                result = 0;
+            }
+            else if (nmatch > 0) {
+                fprintf(stderr, "%s: regexec() failed for RE %s and string %s\n"
+                    , prefix, pattern, string);
+                goto end;
+            }
         }
-        else if (nmatch > 0) {
-            fprintf(stderr, "%s: regexec() failed for RE %s and string %s\n"
-                , prefix, pattern, string);
+        else if (nmatch == 0) {
+            // regexed must have failed, something is wrong
+            result = REG_NOMATCH;
+            fprintf(stderr, "%s: regexec() didn't fail while it should"
+                " for RE %s and string %s\n", prefix, pattern, string);
             goto end;
         }
-    }
-    else if (nmatch == 0) {
-        // regexed must have failed, something is wrong
-        result = REG_NOMATCH;
-        fprintf(stderr, "%s: regexec() didn't fail while it should"
-            " for RE %s and string %s\n", prefix, pattern, string);
-        goto end;
     }
 
     assert(nmatch == 0 || nmatch == re.re_nsub);

@@ -48,10 +48,9 @@ int do_regexec(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
     simctx_t &ctx = *preg->simctx;
-    ctx.cursor = ctx.marker = string;
-    const nfa_t *nfa = ctx.nfa;
+    init(ctx, string);
 
-    const conf_t c0(nfa->root, 0, history_t::ROOT);
+    const conf_t c0(ctx.nfa->root, 0, history_t::ROOT);
     ctx.reach.push_back(c0);
     closure_posix<ALG>(ctx);
 
@@ -68,6 +67,7 @@ int do_regexec(const regex_t *preg, const char *string
         nfa_state_t *s = i->state;
 
         s->clos = NOCLOS;
+        s->arcidx = 0;
         DASSERT(s->status == GOR_NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::FIN) {

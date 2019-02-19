@@ -18,7 +18,7 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
     simctx_t &ctx = *preg->simctx;
-    ctx.cursor = ctx.marker = string;
+    init(ctx, string);
 
     const conf_t c0(ctx.nfa->root, 0, history_t::ROOT);
     ctx.reach.push_back(c0);

@@ -136,6 +136,21 @@ simctx_t::~simctx_t()
     }
 }
 
+void init(simctx_t &ctx, const char *string)
+{
+    ctx.reach.clear();
+    ctx.state.clear();
+    ctx.hist.nodes.clear();
+    ctx.hidx = history_t::ROOT;
+    ctx.step = 0;
+    ctx.rule = Rule::NONE;
+    ctx.cursor = ctx.marker = string;
+    ctx.cache.clear();
+    DASSERT(ctx.gor1_topsort.empty());
+    DASSERT(ctx.gor1_linear.empty());
+    DASSERT(ctx.gtop_heap.empty());
+}
+
 history_t::history_t(size_t nstates, size_t ntags)
     : nodes()
     , path1()

@@ -113,6 +113,7 @@ struct simctx_t
     FORBID_COPY(simctx_t);
 };
 
+void init(simctx_t &ctx, const char *string);
 int finalize(const simctx_t &ctx, const char *string, size_t nmatch, regmatch_t pmatch[]);
 inline uint32_t index(const nfa_t *, const nfa_state_t *);
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
