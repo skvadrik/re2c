@@ -278,7 +278,8 @@ bool newver_cmp_t::operator()(const newver_t &x, const newver_t &y) const
     bool invert = xh > yh;
     if (invert) std::swap(xh, yh);
 
-    const uint64_t k = (static_cast<uint64_t>(xh) << 32) | yh;
+    uint64_t k = static_cast<uint32_t>(xh);
+    k = (k << 32) | static_cast<uint32_t>(yh);
 
     hc_cache_t::const_iterator i = cache.find(k);
     if (i != cache.end()) {

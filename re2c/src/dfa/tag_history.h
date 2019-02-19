@@ -12,11 +12,11 @@
 namespace re2c
 {
 
-typedef uint32_t hidx_t;
+typedef int32_t hidx_t;
 typedef int32_t prectable_t;
 struct clos_t;
 
-static const hidx_t HROOT = ~0u;
+static const hidx_t HROOT = -1;
 
 typedef std::vector<tag_info_t> tag_path_t;
 
@@ -31,10 +31,11 @@ struct tag_history_t
     std::vector<node_t> nodes;
 
     inline tag_history_t(): nodes() {};
-    inline hidx_t pred(hidx_t i) const { return nodes[i].pred; }
-    inline tag_info_t info(hidx_t i) const { return nodes[i].info; }
-    inline tagver_t elem(hidx_t i) const { return nodes[i].info.neg ? TAGVER_BOTTOM : TAGVER_CURSOR; }
-    inline size_t tag(hidx_t i) const { return nodes[i].info.idx; }
+    inline const node_t &at(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
+    inline tag_info_t info(hidx_t i) const { return at(i).info; }
+    inline hidx_t pred(hidx_t i) const { return at(i).pred; }
+    inline tagver_t elem(hidx_t i) const { return at(i).info.neg ? TAGVER_BOTTOM : TAGVER_CURSOR; }
+    inline size_t tag(hidx_t i) const { return at(i).info.idx; }
     inline hidx_t push(hidx_t i, tag_info_t info);
     inline tagver_t last(hidx_t i, size_t t) const;
     inline int32_t compare_reversed(hidx_t x, hidx_t y, size_t t) const;
