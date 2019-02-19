@@ -21,10 +21,11 @@ struct cmp_gor1_t
     bool operator()(const conf_t &x, const conf_t &y) const;
 };
 
+enum sssp_alg_t {GOR1, GTOP};
+
+template<sssp_alg_t ALG> static int do_regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int);
+template<sssp_alg_t ALG> static void closure_posix(simctx_t &ctx);
 static void reach_on_symbol(simctx_t &, uint32_t);
-static inline void closure_posix(simctx_t &);
-static void closure_posix_gor1(simctx_t &ctx);
-static void closure_posix_gtop(simctx_t &ctx);
 static void update_offsets(simctx_t &ctx, const conf_t &c);
 static void update_offsets_and_prectbl(simctx_t &);
 static int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y, int32_t &prec1, int32_t &prec2);
@@ -35,6 +36,15 @@ static inline bool relax_gor1(simctx_t &, const conf_t &);
 static inline void relax_gtop(simctx_t &, const conf_t &);
 
 int regexec_nfa_posix(const regex_t *preg, const char *string
+    , size_t nmatch, regmatch_t pmatch[], int eflags)
+{
+    return preg->flags & REG_GTOP
+        ? do_regexec<GTOP>(preg, string, nmatch, pmatch, eflags)
+        : do_regexec<GOR1>(preg, string, nmatch, pmatch, eflags);
+}
+
+template<sssp_alg_t ALG>
+int do_regexec(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
     simctx_t &ctx = *preg->simctx;
@@ -43,7 +53,7 @@ int regexec_nfa_posix(const regex_t *preg, const char *string
 
     const conf_t c0(nfa->root, 0, history_t::ROOT);
     ctx.reach.push_back(c0);
-    closure_posix(ctx);
+    closure_posix<ALG>(ctx);
 
     for (;;) {
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
@@ -51,14 +61,14 @@ int regexec_nfa_posix(const regex_t *preg, const char *string
         reach_on_symbol(ctx, sym);
         update_offsets_and_prectbl(ctx);
         ++ctx.step;
-        closure_posix(ctx);
+        closure_posix<ALG>(ctx);
     }
 
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
         nfa_state_t *s = i->state;
 
         s->clos = NOCLOS;
-        DASSERT(s->active == 0);
+        DASSERT(s->status == GOR_NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::FIN) {
             update_offsets(ctx, *i);
@@ -117,17 +127,8 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
     state.resize(j);
 }
 
-void closure_posix(simctx_t &ctx)
-{
-    if (ctx.flags & REG_GTOP) {
-        closure_posix_gtop(ctx);
-    }
-    else {
-        closure_posix_gor1(ctx);
-    };
-}
-
-void closure_posix_gor1(simctx_t &ctx)
+template<>
+void closure_posix<GOR1>(simctx_t &ctx)
 {
     confset_t &state = ctx.state, &reach = ctx.reach;
     std::vector<nfa_state_t*>
@@ -257,7 +258,8 @@ bool relax_gor1(simctx_t &ctx, const conf_t &x)
     }
 }
 
-void closure_posix_gtop(simctx_t &ctx)
+template<>
+void closure_posix<GTOP>(simctx_t &ctx)
 {
     const confset_t &reach = ctx.reach;
     confset_t &state = ctx.state;
@@ -311,10 +313,10 @@ void relax_gtop(simctx_t &ctx, const conf_t &c)
         state[idx] = c;
     }
     else {
-        q = NULL;
+        return;
     }
 
-    if (q != NULL && !q->active) {
+    if (!q->active) {
         q->active = 1;
         ctx.gtop_heap.push(q);
     }
