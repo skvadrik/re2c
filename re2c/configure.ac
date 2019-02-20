@@ -3,10 +3,6 @@ AM_INIT_AUTOMAKE([foreign subdir-objects dist-xz no-dist-gzip])
 AM_SILENT_RULES([yes])
 
 
-LT_INIT([dlopen win32-dll])
-AC_CONFIG_MACRO_DIRS([m4])
-
-
 AC_CONFIG_SRCDIR([src/main.cc])
 AC_CONFIG_HEADERS([config.h])
 
@@ -38,6 +34,11 @@ AM_COND_IF([REBUILD_DOCS], [
 # --enable-libs
 AC_ARG_ENABLE([libs], [AS_HELP_STRING([--enable-libs], [build libraries])])
 AM_CONDITIONAL([WITH_LIBS], [test "x$enable_libs" = "xyes"])
+AM_COND_IF([WITH_LIBS], [
+    AC_LANG_PUSH([C++])
+    AC_CHECK_HEADERS([re2/re2.h], [], [], [[]])
+    AC_LANG_POP([C++])
+])
 
 
 # checks for programs
@@ -117,6 +118,10 @@ AC_CONFIG_FILES([\
     doc/help.rst \
 ])
 AC_CONFIG_FILES([run_tests.sh], [chmod +x run_tests.sh])
+
+
+LT_INIT([dlopen win32-dll])
+AC_CONFIG_MACRO_DIRS([m4])
 
 
 AC_OUTPUT
