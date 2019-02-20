@@ -124,10 +124,6 @@ int main()
     longstring[VERY_LONG - 1] = 0;
     bench(regexp, longstring, 1, true);
 
-    regexp = "((a?){1,10}(a)?)*";
-    memset(longstring, 'a', VERY_LONG);
-    bench(regexp, longstring, 1, true);
-
     regexp = "((((a)*))*|(((((a)))*))+)*";
     memset(longstring, 'a', VERY_LONG);
     bench(regexp, longstring, 1, true);
@@ -150,6 +146,16 @@ int main()
     regexp = "(((){0,10}){0,10}){0,10}";
     string = "";
     bench(regexp, string, 1, false);
+
+    // Pathological case for constant-memory POSIX algorithms (includes TDFA).
+    // Takes quibic time in the size of counter. This is caused by quadratic-
+    // time computation of precedence matrix on each step (the number of TNFA
+    // states in the closure approaches TNFA size), multiplied by the length
+    // of compared histores (which also approaches TNFA size). Trie-based
+    // algorithms are not affected, but they consume memory proportional to
+    // the length of the input string, and so are also not practical.
+    regexp = "((a?){1,200})*";
+    bench(regexp, "a", 1, false);
 
     delete[] longstring;
     return 0;
