@@ -35,8 +35,9 @@ AM_COND_IF([REBUILD_DOCS], [
 AC_ARG_ENABLE([libs], [AS_HELP_STRING([--enable-libs], [build libraries])])
 AM_CONDITIONAL([WITH_LIBS], [test "x$enable_libs" = "xyes"])
 AM_COND_IF([WITH_LIBS], [
+    AC_SUBST(LDFLAGS_RE2, [])
     AC_LANG_PUSH([C++])
-    AC_CHECK_HEADERS([re2/re2.h], [], [], [[]])
+    AC_CHECK_HEADERS([re2/re2.h], [AS_VAR_SET([LDFLAGS_RE2], ["-lre2"])], [], [[]])
     AC_LANG_POP([C++])
 ])
 
