@@ -177,6 +177,34 @@ bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
     return x->topord < y->topord;
 }
 
+inline int32_t unpack_longest(int32_t packed)
+{
+    // take lower 30 bits and sign-extend
+    return static_cast<int32_t>(static_cast<uint32_t>(packed) << 2u) >> 2u;
+}
+
+inline int32_t unpack_leftmost(int32_t packed)
+{
+    // take higher 2 bits and sign-extend
+    return packed >> 30u;
+}
+
+inline int32_t pack(int32_t longest, int32_t leftmost)
+{
+    // avoid signed overflows by using unsigned arithmetics
+    uint32_t u_longest = static_cast<uint32_t>(longest);
+    uint32_t u_leftmost = static_cast<uint32_t>(leftmost);
+
+    // leftmost: higher 2 bits, longest: lower 30 bits
+    uint32_t u_packed = (u_longest & 0x3fffFFFF) | (u_leftmost << 30u);
+    int32_t packed = static_cast<int32_t>(u_packed);
+
+    DASSERT(unpack_longest(packed) == longest
+        && unpack_leftmost(packed) == leftmost);
+
+    return packed;
+}
+
 } // namespace re2c
 
 #endif // _RE2C_DFA_DETERMINIZATION_
