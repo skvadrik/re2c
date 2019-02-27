@@ -9,6 +9,9 @@
 static int test(const char *pattern, const char *string
     , size_t nmatch, const regoff_t *submatch, int flags)
 {
+    static uint32_t total = 0;
+    static uint32_t failed = 0;
+
     regex_t re;
     regmatch_t *pmatch = new regmatch_t[nmatch];
     const char *prefix = flags & REG_NFA ? "NFA" : "DFA";
@@ -66,6 +69,12 @@ static int test(const char *pattern, const char *string
 end:
     regfree(&re);
     delete[] pmatch;
+
+    ++total;
+    if (result != 0) {
+        ++failed;
+        fprintf(stderr, "failed %u of %u\n", failed, total);
+    }
 
     return result;
 }
@@ -501,6 +510,10 @@ static int test_all_posix(int flags)
     T4("(ab|a)(c|bcd)(d|.*)",                "abcd",        0,4, 0,2, 2,3, 3,4);
     T4("(ab|a)(bcd|c)(d|.*)",                "abcd",        0,4, 0,2, 2,3, 3,4);
 
+    if (!(flags & REG_SLOWPREC)) {
+        T3("((a?){1,1000})*", "aaaa", 0,4, 0,4, 3,4);
+    }
+
     return e;
 }
 
@@ -916,6 +929,9 @@ static int test_all_leftmost(int flags)
     T4("(ab|a)(c|bcd)(d|.*)",                "abcd",        0,4, 0,2, 2,3, 3,4);
     T4("(ab|a)(bcd|c)(d|.*)",                "abcd",        0,4, 0,2, 2,3, 3,4);
 
+    // other
+    T3("((a?){1,1000})*", "aaaa", 0,4, 0,4, 4,4);
+
     return e;
 }
 
@@ -934,10 +950,11 @@ int main()
 {
     int e = 0;
 
-    e |= test_all_posix(0);
+//    e |= test_all_posix(0);
     e |= test_all_posix(REG_NFA);
     e |= test_all_posix(REG_NFA | REG_GTOP);
     e |= test_all_posix(REG_NFA | REG_TRIE);
+    e |= test_all_posix(REG_NFA | REG_SLOWPREC);
     e |= test_all_leftmost(REG_NFA | REG_LEFTMOST);
     e |= test_all_leftmost(REG_NFA | REG_LEFTMOST | REG_TRIE);
 

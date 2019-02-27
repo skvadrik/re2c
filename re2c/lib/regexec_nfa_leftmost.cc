@@ -90,7 +90,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
     }
 
     std::swap(ctx.offsets1, ctx.offsets2);
-    ctx.hist.nodes.clear();
+    ctx.hist.init();
 }
 
 void closure_leftmost(simctx_t &ctx)
@@ -148,7 +148,7 @@ void update_offsets(simctx_t &ctx, const conf_t &c)
     memset(done, 0, nsub * sizeof(bool));
 
     for (int32_t i = c.thist; i != history_t::ROOT; ) {
-        const history_t::node_t &n = ctx.hist.at(i);
+        const history_t::node_t &n = ctx.hist.node(i);
         const size_t t = n.info.idx;
         if (!done[t]) {
             done[t] = true;

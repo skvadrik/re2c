@@ -260,14 +260,14 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
     tag_info_t info1, info2;
     for (; i1 != i2 && (s1 >= s || s2 >= s);) {
         if (s1 >= s && (i1 > i2 || s2 < s)) {
-            const history_t::node_t &n = hist.at(i1);
+            const history_t::node_t &n = hist.node(i1);
             info1 = n.info;
             prec1 = std::min(prec1, tags[info1.idx].height);
             i1 = n.pred;
             s1 = get_step(hist, i1);
         }
         else {
-            const history_t::node_t &n = hist.at(i2);
+            const history_t::node_t &n = hist.node(i2);
             info2 = n.info;
             prec2 = std::min(prec2, tags[info2.idx].height);
             i2 = n.pred;
@@ -282,7 +282,7 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
         prec2 = std::min(prec2, p2);
     }
     else if (i1 != history_t::ROOT) {
-        const int32_t h = tags[hist.at(i1).info.idx].height;
+        const int32_t h = tags[hist.node(i1).info.idx].height;
         prec1 = std::min(prec1, h);
         prec2 = std::min(prec2, h);
     }
@@ -327,12 +327,12 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
 
 uint32_t get_step(const history_t &hist, int32_t idx)
 {
-    return idx == history_t::ROOT ? 0 : hist.at(idx).step;
+    return idx == history_t::ROOT ? 0 : hist.node(idx).step;
 }
 
 uint32_t get_orig(const history_t &hist, int32_t idx)
 {
-    return idx == history_t::ROOT ? 0 : hist.at(idx).orig;
+    return idx == history_t::ROOT ? 0 : hist.node(idx).orig;
 }
 
 } // namespace libre2c

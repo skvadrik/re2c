@@ -29,12 +29,14 @@ static void make_one_step(simctx_t &, uint32_t);
 static void make_final_step(simctx_t &);
 static void update_offsets(simctx_t &ctx, const conf_t &c);
 static void update_prectbl(simctx_t &);
+static void update_prectbl_naive(simctx_t &ctx);
 static int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y, int32_t &prec1, int32_t &prec2);
 
 // we *do* want these to be inlined
 static inline bool scan(simctx_t &ctx, nfa_state_t *q, bool all);
 static inline bool relax_gor1(simctx_t &, const conf_t &);
 static inline void relax_gtop(simctx_t &, const conf_t &);
+static inline int32_t leftprec(simctx_t &, tag_info_t info1, tag_info_t info2, bool last1, bool last2);
 
 int regexec_nfa_posix(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int eflags)
@@ -116,10 +118,14 @@ void make_one_step(simctx_t &ctx, uint32_t sym)
     state.resize(j);
     std::swap(ctx.offsets1, ctx.offsets2);
 
-    update_prectbl(ctx);
+    if (!(ctx.flags & REG_SLOWPREC)) {
+        update_prectbl(ctx);
+    }
+    else {
+        update_prectbl_naive(ctx);
+    }
 
-    ctx.hist.nodes.clear();
-
+    ctx.hist.init();
     ++ctx.step;
 }
 
@@ -228,7 +234,7 @@ bool scan(simctx_t &ctx, nfa_state_t *q, bool all)
         case nfa_state_t::TAG:
             if (q->arcidx == 0) {
                 any |= relax_gor1(ctx, conf_t(q->tag.out, o
-                    , ctx.hist.push(h, ctx.step, q->tag.info, o)));
+                    , ctx.hist.push(q->tag.info, h)));
                 ++q->arcidx;
             }
             break;
@@ -300,7 +306,7 @@ void closure_posix<GTOP>(simctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 relax_gtop(ctx, conf_t(q->tag.out, o
-                    , ctx.hist.push(h, ctx.step, q->tag.info, o)));
+                    , ctx.hist.push(q->tag.info, h)));
                 break;
             default:
                 break;
@@ -333,61 +339,6 @@ void relax_gtop(simctx_t &ctx, const conf_t &c)
     }
 }
 
-void update_offsets(simctx_t &ctx, const conf_t &c)
-{
-    const size_t nsub = ctx.nsub;
-    bool *done = ctx.done;
-    regoff_t *o;
-    const std::vector<Tag> &tags = ctx.nfa->tags;
-    nfa_state_t *s = c.state;
-
-    if (s->type == nfa_state_t::FIN) {
-        ctx.marker = ctx.cursor;
-        ctx.rule = 0;
-        o = ctx.offsets3;
-    }
-    else {
-        o = ctx.offsets1 + s->coreid * nsub;
-    }
-
-    memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
-    memset(done, 0, nsub * sizeof(bool));
-
-    for (int32_t i = c.thist; i != history_t::ROOT; ) {
-        const history_t::node_t &n = ctx.hist.at(i);
-        const Tag &tag = tags[n.info.idx];
-        const size_t t = tag.ncap;
-        if (!fictive(tag) && !done[t]) {
-            done[t] = true;
-            o[t] = n.info.neg ? -1 : static_cast<regoff_t>(ctx.step);
-        }
-        i = n.pred;
-    }
-}
-
-void update_prectbl(simctx_t &ctx)
-{
-    cconfiter_t b = ctx.state.begin(), e = ctx.state.end(), c, d;
-    const size_t ncores = ctx.nfa->ncores;
-    int32_t *ptbl = ctx.prectbl2;
-    const int32_t p0 = pack(MAX_RHO, 0);
-
-    for (c = b; c != e; ++c) {
-        nfa_state_t *s = c->state;
-        DASSERT (s->type == nfa_state_t::RAN);
-        ptbl[s->coreid * ncores + s->coreid] = p0;
-
-        for (d = c + 1; d != e; ++d) {
-            nfa_state_t *q = d->state;
-            int32_t prec1, prec2;
-            int32_t prec = precedence(ctx, *c, *d, prec1, prec2);
-            ptbl[s->coreid * ncores + q->coreid] = pack(prec1, prec);
-            ptbl[q->coreid * ncores + s->coreid] = pack(prec2, -prec);
-        }
-    }
-    std::swap(ctx.prectbl1, ctx.prectbl2);
-}
-
 int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
     , int32_t &prec1, int32_t &prec2)
 {
@@ -415,13 +366,13 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
     int32_t i1 = idx1, i2 = idx2;
     for (; i1 != i2; ) {
         if (i1 > i2) {
-            const history_t::node_t &n = hist.at(i1);
+            const history_t::node_t &n = hist.node(i1);
             info1 = n.info;
             prec1 = std::min(prec1, tags[info1.idx].height);
             i1 = n.pred;
         }
         else {
-            const history_t::node_t &n = hist.at(i2);
+            const history_t::node_t &n = hist.node(i2);
             info2 = n.info;
             prec2 = std::min(prec2, tags[info2.idx].height);
             i2 = n.pred;
@@ -429,7 +380,7 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
     }
     if (i1 != history_t::ROOT) {
         DASSERT(fork_frame);
-        const int32_t h = tags[hist.at(i1).info.idx].height;
+        const int32_t h = tags[hist.node(i1).info.idx].height;
         prec1 = std::min(prec1, h);
         prec2 = std::min(prec2, h);
     }
@@ -439,37 +390,269 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
     if (prec1 < prec2) return  1;
 
     // leftmost precedence
-    if (fork_frame) {
-        // equal => not less
-        if (i1 == idx1 && i2 == idx2) return 0;
+    return fork_frame
+        ? leftprec(ctx, info1, info2, i1 == idx1, i2 == idx2)
+        : unpack_leftmost(ctx.prectbl1[orig1 * ctx.nfa->ncores + orig2]);
+}
 
-        // shorter => less
-        if (i1 == idx1) return -1;
-        if (i2 == idx2) return  1;
+int32_t leftprec(simctx_t &, tag_info_t info1, tag_info_t info2, bool last1, bool last2)
+{
+    // equal => not less
+    if (last1 && last2) return 0;
 
-        const uint32_t tag1 = info1.idx, tag2 = info2.idx;
-        const bool neg1 = info1.neg, neg2 = info2.neg;
+    // shorter => less
+    if (last1) return -1;
+    if (last2) return  1;
 
-        // can't be both closing
-        DASSERT(!(tag1 % 2 == 1 && tag2 % 2 == 1));
+    const uint32_t tag1 = info1.idx, tag2 = info2.idx;
+    const bool neg1 = info1.neg, neg2 = info2.neg;
 
-        // closing vs opening: closing wins
-        if (tag1 % 2 == 1) return -1;
-        if (tag2 % 2 == 1) return  1;
+    // can't be both closing
+    DASSERT(!(tag1 % 2 == 1 && tag2 % 2 == 1));
 
-        // can't be both negative
-        DASSERT(!(neg1 && neg2));
+    // closing vs opening: closing wins
+    if (tag1 % 2 == 1) return -1;
+    if (tag2 % 2 == 1) return  1;
 
-        // positive vs negative: positive wins
-        if (neg1) return  1;
-        if (neg2) return -1;
+    // can't be both negative
+    DASSERT(!(neg1 && neg2));
+
+    // positive vs negative: positive wins
+    if (neg1) return  1;
+    if (neg2) return -1;
+
+    DASSERT(false);
+    return 0;
+}
+
+void update_offsets(simctx_t &ctx, const conf_t &c)
+{
+    const size_t nsub = ctx.nsub;
+    regoff_t *o;
+    const std::vector<Tag> &tags = ctx.nfa->tags;
+    nfa_state_t *s = c.state;
+    bool *done = ctx.done;
+
+    if (s->type == nfa_state_t::FIN) {
+        ctx.marker = ctx.cursor;
+        ctx.rule = 0;
+        o = ctx.offsets3;
     }
     else {
-        return unpack_leftmost(ctx.prectbl1[orig1 * ctx.nfa->ncores + orig2]);
+        o = ctx.offsets1 + s->coreid * nsub;
     }
 
-    DASSERT(false); // unreachable
-    return 0;
+    memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
+    memset(done, 0, nsub * sizeof(bool));
+
+    for (int32_t i = c.thist; i != history_t::ROOT; ) {
+        const history_t::node_t &n = ctx.hist.node(i);
+        const Tag &tag = tags[n.info.idx];
+        const size_t t = tag.ncap;
+        regoff_t *off = o + t;
+        if (!fictive(tag) && !done[t]) {
+            done[t] = true;
+            *off = n.info.neg ? -1 : static_cast<regoff_t>(ctx.step);
+        }
+        i = n.pred;
+    }
+}
+
+void update_prectbl(simctx_t &ctx)
+{
+    const confset_t &state = ctx.state;
+    const std::vector<Tag> &tags = ctx.nfa->tags;
+    std::vector<const conf_t*> &sortcores = ctx.sortcores;
+    std::vector<uint32_t> &fcount = ctx.fincount;
+    std::vector<int32_t> stack = ctx.worklist;
+    std::vector<histleaf_t> &level = ctx.histlevel;
+    std::vector<histleaf_t>::reverse_iterator li, lj, lk, le;
+    history_t &hist = ctx.hist;
+    const size_t ncores = ctx.nfa->ncores;
+    int32_t *oldtbl = ctx.prectbl1, *newtbl = ctx.prectbl2;
+
+    // Group core configurations by their history tree index, so that later
+    // while traversing the tree we will know at once which configurations
+    // (if any) are bound to the given tree node. We use counting sort, which
+    // requires additional memory, but is fast and conveniently creates an
+    // array of boundaries in the sorted configuration array.
+    uint32_t maxfin = 0;
+    for (cconfiter_t c = state.begin(), e = state.end(); c != e; ++c) {
+        history_t::node_t &n = hist.node(c->thist);
+        if (n.finidx >= USED) {
+            n.finidx = maxfin++;
+            fcount[n.finidx] = 0;
+
+            // mark all nodes down to root as used (unless marked already)
+            for (int32_t i = n.pred; i >= history_t::ROOT; ) {
+                history_t::node_t &m = hist.node(i);
+                if (m.finidx <= USED) break;
+                m.finidx = USED;
+                i = m.pred;
+            }
+        }
+        ++fcount[n.finidx];
+    }
+    fcount[maxfin] = 0;
+    for (size_t i = 1; i <= maxfin; ++i) {
+        fcount[i] += fcount[i - 1];
+    }
+    sortcores.resize(state.size());
+    for (rcconfiter_t c = state.rbegin(), e = state.rend(); c != e; ++c) {
+        sortcores[--fcount[hist.node(c->thist).finidx]] = &*c;
+    }
+
+    // Depth-first traversal of the history tree. During traversal we grow
+    // an array of items (one item per core configuration). Items are added
+    // in tree nodes that have core configurations associated with them.
+    // Each item represents one history. Items have immutable part (core ID,
+    // origin) and mutable part (current minimal height, current tree index)
+    // that changes as we return down the tree.
+    level.clear();
+    stack.push_back(0);
+    while (!stack.empty()) {
+        const int32_t n = stack.back();
+        history_t::node_t &node = hist.node(n);
+        const uint32_t fidx = node.finidx;
+
+        if (fidx == NONFIN) {
+            // aborted branch of search tree, don't waste time
+            stack.pop_back();
+            continue;
+        }
+
+        if (node.next != -1) {
+            // start or continue visiting subtrees rooted at this node
+            const history_t::arc_t &arc = hist.arc(node.next);
+            stack.push_back(arc.node);
+            node.next = arc.next;
+            continue;
+        }
+
+        // all subtrees visited, it's time to process this node
+        const int32_t h = n == 0 ? MAX_RHO : tags[node.info.idx].height;
+        li = level.rbegin();
+        le = level.rend();
+
+        if (fidx < USED) {
+            // this node has leaf configurations, add them to level
+            for (uint32_t k = fcount[fidx], e = fcount[fidx + 1]; k < e; ++k) {
+                const conf_t *c = sortcores[k];
+                const histleaf_t l = {c->state->coreid, c->origin, history_t::ROOT, h};
+                level.push_back(l);
+            }
+
+            // compute precedence for newly added configurations
+            const int32_t p0 = pack(h, 0);
+            for (lj = level.rbegin(); lj != li; ++lj) {
+                for (lk = lj; lk != li; ++lk) {
+                    const uint32_t cj = lj->coreid, ck = lk->coreid;
+                    const uint32_t oj = lj->origin, ok = lk->origin;
+                    const bool fork = n != 0 || oj == ok;
+                    if (fork) {
+                        newtbl[cj * ncores + ck] = p0;
+                        newtbl[ck * ncores + cj] = p0;
+                    }
+                    else {
+                        newtbl[cj * ncores + ck] = oldtbl[oj * ncores + ok];
+                        newtbl[ck * ncores + cj] = oldtbl[ok * ncores + oj];
+                    }
+                }
+            }
+        }
+
+        // Each subtree appended a sequence of items to level. We can find
+        // sequence boundaries by looking at tree index of each item: it is
+        // equal to tree index of the corresponding subtree (except for the
+        // leaf items added at this node; but we know where they start).
+
+        // We must compute precedence for each pair of items from different
+        // sequences (including leaf items added at this node), but not within
+        // sequence boundaries: those histories fork higher up the subtree;
+        // their precedence has already been computed and must not be touched.
+
+        for (int32_t a = node.last; a != -1; ) {
+            const history_t::arc_t &arc = hist.arc(a);
+            a = arc.prev;
+
+            // for all the items of this subtree
+            for (lk = li; li != le && li->hidx == arc.node; ++li) {
+
+                // update height of each item coming from subtree
+                li->height = std::min(li->height, h);
+
+                // for all the level items to the right of this subtree
+                for (lj = level.rbegin(); lj != lk; ++lj) {
+
+                    const uint32_t ci = li->coreid, cj = lj->coreid;
+                    const uint32_t oi = li->origin, oj = lj->origin;
+                    const bool fork = n != 0 || oi == oj;
+                    int32_t p1 = li->height, p2 = lj->height, p;
+
+                    if (!fork) {
+                        p1 = std::min(p1, unpack_longest(oldtbl[oi * ncores + oj]));
+                        p2 = std::min(p2, unpack_longest(oldtbl[oj * ncores + oi]));
+                    }
+
+                    if (p1 > p2) {
+                        p = -1;
+                    }
+                    else if (p1 < p2) {
+                        p = 1;
+                    }
+                    else if (fork) {
+                        const tag_info_t t1 = hist.node(li->hidx).info;
+                        const tag_info_t t2 = hist.node(lj->hidx).info;
+                        p = leftprec(ctx, t1, t2, t1 == NOINFO, t2 == NOINFO);
+                    }
+                    else {
+                        p = unpack_leftmost(oldtbl[oi * ncores + oj]);
+                    }
+
+                    newtbl[ci * ncores + cj] = pack(p1, p);
+                    newtbl[cj * ncores + ci] = pack(p2, -p);
+                }
+            }
+        }
+
+        // finally, downgrade tree index of all subtree items, making their
+        // origins indistinguishable from each other for the previous level
+        for (lj = level.rbegin(); lj != li; ++lj) {
+            lj->hidx = n;
+        }
+
+        stack.pop_back();
+    }
+
+    std::swap(ctx.prectbl1, ctx.prectbl2);
+}
+
+// Old naive algorithm that has cubic complexity in the size of TNFA.
+// Example that exhibits cubic behaviour is ((a?){1,N})*. In this example
+// closure has O(N) states, and the compared histories have O(N) length.
+void update_prectbl_naive(simctx_t &ctx)
+{
+    const confset_t &state = ctx.state;
+    const size_t ncores = ctx.nfa->ncores;
+    int32_t *newtbl = ctx.prectbl2;
+
+    const int32_t p0 = pack(MAX_RHO, 0);
+
+    for (cconfiter_t c = state.begin(), e = state.end(); c != e; ++c) {
+        nfa_state_t *s = c->state;
+        DASSERT (s->type == nfa_state_t::RAN);
+        newtbl[s->coreid * ncores + s->coreid] = p0;
+
+        for (cconfiter_t d = c + 1; d != e; ++d) {
+            nfa_state_t *q = d->state;
+            int32_t prec1, prec2;
+            int32_t prec = precedence(ctx, *c, *d, prec1, prec2);
+            newtbl[s->coreid * ncores + q->coreid] = pack(prec1, prec);
+            newtbl[q->coreid * ncores + s->coreid] = pack(prec2, -prec);
+        }
+    }
+
+    std::swap(ctx.prectbl1, ctx.prectbl2);
 }
 
 } // namespace libre2c

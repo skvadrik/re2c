@@ -29,7 +29,7 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
 namespace re2c {
 namespace libre2c {
 
-const int32_t history_t::ROOT = -1;
+const int32_t history_t::ROOT = 0;
 
 int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     regmatch_t pmatch[])
@@ -48,7 +48,7 @@ int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     memset(done, 0, ctx.nsub * sizeof(bool));
 
     for (int32_t i = ctx.hidx; todo > 0 && i != history_t::ROOT; ) {
-        const history_t::node_t &n = ctx.hist.at(i);
+        const history_t::node_t &n = ctx.hist.node(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
         if (!fictive(tag) && t < nmatch * 2 && !done[t]) {
@@ -88,6 +88,10 @@ simctx_t::simctx_t(const nfa_t *nfa, size_t re_nsub, int flags)
     , prectbl1(NULL)
     , prectbl2(NULL)
     , cache()
+    , histlevel()
+    , sortcores()
+    , fincount()
+    , worklist()
     , gor1_topsort()
     , gor1_linear()
     , gtop_heap_storage()
@@ -111,6 +115,10 @@ simctx_t::simctx_t(const nfa_t *nfa, size_t re_nsub, int flags)
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
         prectbl1 = new int32_t[ncores * ncores];
         prectbl2 = new int32_t[ncores * ncores];
+        histlevel.reserve(ncores);
+        sortcores.reserve(ncores);
+        fincount.resize(ncores + 1);
+        worklist.reserve(nstates);
     }
 
     if (flags & REG_GTOP) {
@@ -140,21 +148,27 @@ void init(simctx_t &ctx, const char *string)
 {
     ctx.reach.clear();
     ctx.state.clear();
-    ctx.hist.nodes.clear();
+    ctx.hist.init();
     ctx.hidx = history_t::ROOT;
     ctx.step = 0;
     ctx.rule = Rule::NONE;
     ctx.cursor = ctx.marker = string;
     ctx.cache.clear();
+    ctx.histlevel.clear();
+    ctx.sortcores.clear();
+    DASSERT(ctx.worklist.empty());
     DASSERT(ctx.gor1_topsort.empty());
     DASSERT(ctx.gor1_linear.empty());
     DASSERT(ctx.gtop_heap.empty());
 }
 
-history_t::history_t(size_t nstates)
+history_t::history_t(size_t /* nstates */)
     : nodes()
+    , arcs()
 {
-    nodes.reserve(nstates);
+    // nodes.reserve(nstates);
+    // arcs.reserve(nstates);
+    init();
 }
 
 } // namespace libre2c
