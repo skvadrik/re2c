@@ -252,6 +252,10 @@ bool relax_gor1(simctx_t &ctx, const conf_t &x)
     const uint32_t idx = q->clos;
     int32_t p1, p2;
 
+    if (q->status == GOR_TOPSORT) {
+        return false;
+    }
+
     if (idx == NOCLOS) {
         q->clos = static_cast<uint32_t>(state.size());
         state.push_back(x);
