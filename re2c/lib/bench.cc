@@ -16,6 +16,9 @@
 #include "re2/re2.h"
 #endif
 
+
+static const int NO_RE2 = 1 << 31;
+
 static inline void show(const char *prefix1, const char *prefix2
     , clock_t t1, clock_t t2, bool ok)
 {
@@ -29,8 +32,12 @@ static inline void show(const char *prefix1, const char *prefix2
 }
 
 static void bench_re2c(const char *regexp, const char *string, size_t ntimes
-    , int flags, const char *prefix)
+    , int flags, int mask, const char *prefix)
 {
+    if (flags & mask) {
+        return;
+    }
+
     regex_t re;
     int result;
     clock_t t1, t2;
@@ -56,8 +63,12 @@ static void bench_re2c(const char *regexp, const char *string, size_t ntimes
 
 #ifdef HAVE_RE2_RE2_H
 static void bench_re2(const char *regexp, const char *string, size_t ntimes
-    , const char *prefix)
+    , int mask, const char *prefix)
 {
+    if (mask & NO_RE2) {
+        return;
+    }
+
     RE2 *re2;
     clock_t t1, t2;
     bool err;
@@ -90,21 +101,20 @@ static void bench_re2(const char *regexp, const char *string, size_t ntimes
 }
 #endif
 
-static void bench(const char *r, const char *s, size_t n, bool notrie)
+static void bench(const char *r, const char *s, size_t n, int mask)
 {
     fprintf(stderr, "\nr: %.*s..., s: %.*s..., n: %lu\n", 30, r, 30, s, n);
 
-    bench_re2c(r, s, n, 0,                      "re2c-tdfa");
-    bench_re2c(r, s, n, REG_NFA,                "re2c-tnfa-posix-gor1");
-    bench_re2c(r, s, n, REG_NFA | REG_GTOP,     "re2c-tnfa-posix-gtop");
-    bench_re2c(r, s, n, REG_NFA | REG_LEFTMOST, "re2c-tnfa-leftmost");
-    if (!notrie) {
-        bench_re2c(r, s, n, REG_NFA | REG_TRIE,                "re2c-tnfa-posix-gtop-trie");
-        bench_re2c(r, s, n, REG_NFA | REG_LEFTMOST | REG_TRIE, "re2c-tnfa-leftmost-trie");
-    }
+//    bench_re2c(r, s, n, 0, mask, "re2c-tdfa");
+    bench_re2c(r, s, n, REG_NFA, mask, "re2c-tnfa-posix-gor1");
+    bench_re2c(r, s, n, REG_NFA | REG_GTOP, mask, "re2c-tnfa-posix-gtop");
+    bench_re2c(r, s, n, REG_NFA | REG_SLOWPREC, mask, "re2c-tnfa-posix-gor1-slow");
+    bench_re2c(r, s, n, REG_NFA | REG_LEFTMOST, mask, "re2c-tnfa-leftmost");
+    bench_re2c(r, s, n, REG_NFA | REG_TRIE, mask, "re2c-tnfa-posix-gtop-trie");
+    bench_re2c(r, s, n, REG_NFA | REG_TRIE | REG_LEFTMOST, mask, "re2c-tnfa-leftmost-trie");
 
 #ifdef HAVE_RE2_RE2_H
-    bench_re2(r, s, n, "re2");
+    bench_re2(r, s, n, mask, "re2");
 #endif
 }
 
@@ -117,16 +127,16 @@ int main()
 
     regexp = "([a-zA-Z]([a-zA-Z0-9+.-])*)[:]([/][/](((([a-zA-Z0-9._~-]|[%][0-9a-fA-F]{2}|[!$&'()*+,;=:])*)[@])?(([[]((([0-9a-fA-F]{1,4}[:]){6}([0-9a-fA-F]{1,4}[:][0-9a-fA-F]{1,4}|(([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])))|[:][:]([0-9a-fA-F]{1,4}[:]){5}([0-9a-fA-F]{1,4}[:][0-9a-fA-F]{1,4}|(([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])))|([0-9a-fA-F]{1,4})?[:][:]([0-9a-fA-F]{1,4}[:]){4}([0-9a-fA-F]{1,4}[:][0-9a-fA-F]{1,4}|(([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])))|(([0-9a-fA-F]{1,4}[:]){0,1} [0-9a-fA-F]{1,4})?[:][:]([0-9a-fA-F]{1,4}[:]){3}([0-9a-fA-F]{1,4}[:][0-9a-fA-F]{1,4}|(([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])))|(([0-9a-fA-F]{1,4}[:]){0,2} [0-9a-fA-F]{1,4})?[:][:]([0-9a-fA-F]{1,4}[:]){2}([0-9a-fA-F]{1,4}[:][0-9a-fA-F]{1,4}|(([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])))|(([0-9a-fA-F]{1,4}[:]){0,3} [0-9a-fA-F]{1,4})?[:][:][0-9a-fA-F]{1,4}[:]([0-9a-fA-F]{1,4}[:][0-9a-fA-F]{1,4}|(([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])))|(([0-9a-fA-F]{1,4}[:]){0,4} [0-9a-fA-F]{1,4})?[:][:]([0-9a-fA-F]{1,4}[:][0-9a-fA-F]{1,4}|(([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])))|(([0-9a-fA-F]{1,4}[:]){0,5} [0-9a-fA-F]{1,4})?[:][:][0-9a-fA-F]{1,4}|(([0-9a-fA-F]{1,4}[:]){0,6} [0-9a-fA-F]{1,4})?[:][:])|([v][0-9a-fA-F]+[.]([a-zA-Z0-9._~-]|[!$&'()*+,;=]|[:])+))[\\]])|(([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35])[.]([0-9]|[\x31-\x39][0-9]|[1][0-9]{2}|[2][\x30-\x34][0-9]|[2][5][\x30-\x35]))|(([a-zA-Z0-9._~-]|[%][0-9a-fA-F]{2}|[!$&'()*+,;=])*))([:][0-9]*)?)(([/]([a-zA-Z0-9._~-]|[%][0-9a-fA-F]{2}|[!$&'()*+,;=:@])*)*)|([/](([a-zA-Z0-9._~-]|[%][0-9a-fA-F]{2}|[!$&'()*+,;=:@])+([/]([a-zA-Z0-9._~-]|[%][0-9a-fA-F]{2}|[!$&'()*+,;=:@])*)*)?)|(([a-zA-Z0-9._~-]|[%][0-9a-fA-F]{2}|[!$&'()*+,;=:@])+([/]([a-zA-Z0-9._~-]|[%][0-9a-fA-F]{2}|[!$&'()*+,;=:@])*)*)|([/]?))([?](([a-zA-Z0-9._~-]|[%][0-9a-fA-F]{2}|[!$&'()*+,;=:@])|[/?])*)?([#](([a-zA-Z0-9._~-]|[%][0-9a-fA-F]{2}|[!$&'()*+,;=:@])|[/?])*)?";
     string = "http://240.147.163.34:2124/z/dibws/hkwfcdsvlghmmyd/ltiyxrfuam?fshxiix3zNzrBJNnuLDXnOruEmp4fX";
-    bench(regexp, string, 1000, false);
+    bench(regexp, string, 1000, 0);
 
     regexp = "(a|aa)*";
     memset(longstring, 'a', VERY_LONG);
     longstring[VERY_LONG - 1] = 0;
-    bench(regexp, longstring, 1, true);
+    bench(regexp, longstring, 1, REG_TRIE);
 
     regexp = "((((a)*))*|(((((a)))*))+)*";
     memset(longstring, 'a', VERY_LONG);
-    bench(regexp, longstring, 1, true);
+    bench(regexp, longstring, 1, REG_TRIE);
 
     regexp = "(X|Xa|Xab|Xaba|abab|baba|bY|Y)*";
     longstring[0] = 'X';
@@ -135,27 +145,31 @@ int main()
         longstring[i++] = 'b';
     }
     longstring[VERY_LONG - 1] = 'Y';
-    bench(regexp, longstring, 1, true);
+    bench(regexp, longstring, 1, REG_TRIE);
 
     regexp = "(((..)|(.))((..)|(.))((..)|(.)))*";
     memset(longstring, 'a', VERY_LONG);
-    bench(regexp, longstring, 1, true);
+    bench(regexp, longstring, 1, REG_TRIE);
 
-    // regexp = "(((){0,100}){0,100}){0,100}";
+    regexp = "(((){0,100}){0,100}){0,100}";
     // regexp = "(){0,10000}";
-    regexp = "(((){0,10}){0,10}){0,10}";
+    //regexp = "(((){0,10}){0,10}){0,10}";
     string = "";
-    bench(regexp, string, 1, false);
+    bench(regexp, string, 1, REG_LEFTMOST | NO_RE2);
 
-    // Pathological case for constant-memory POSIX algorithms (includes TDFA).
-    // Takes quibic time in the size of counter. This is caused by quadratic-
-    // time computation of precedence matrix on each step (the number of TNFA
-    // states in the closure approaches TNFA size), multiplied by the length
-    // of compared histores (which also approaches TNFA size). Trie-based
-    // algorithms are not affected, but they consume memory proportional to
-    // the length of the input string, and so are also not practical.
-    regexp = "((a?){1,200})*";
-    bench(regexp, "a", 1, false);
+    // Pathological case for constant-memory POSIX algorithms that use naive
+    // (worst-case cubic in the size of TNFA) algorithm for precedence matrix
+    // computation. Cubic behaviour is caused by quadratic-time computation
+    // of precedence matrix on each step (the number of core items in closure
+    // approaches TNFA size), multiplied by the length of compared histores
+    // (which also approaches TNFA size). Trie-based algorithms are not
+    // affected, but they consume memory proportional to the length of input,
+    // and so are also not practical.
+    regexp = "((a?){1,1000})*";
+    bench(regexp, "aaaa", 1, 0);
+
+    regexp = "((((a?){1,10}){1,10}){1,10})*";
+    bench(regexp, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 1, 0);
 
     delete[] longstring;
     return 0;
