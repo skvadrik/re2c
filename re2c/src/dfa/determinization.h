@@ -156,6 +156,7 @@ struct determ_context_t
     closure_stats_t          dc_clstats;
 
     determ_context_t(const opt_t *, Msg &, const std::string &, const nfa_t &, dfa_t &);
+    ~determ_context_t();
     FORBID_COPY(determ_context_t);
 };
 

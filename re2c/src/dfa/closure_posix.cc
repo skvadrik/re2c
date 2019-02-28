@@ -299,7 +299,7 @@ void orders(determ_context_t &ctx)
     closure_t &closure = ctx.dc_closure;
     const size_t nclos = closure.size();
 
-    prectable_t *prectbl = ctx.dc_allocator.alloct<prectable_t>(nclos * nclos);
+    prectable_t *prectbl = ctx.dc_prectbl;
     static const int32_t P0 = pack(MAX_RHO, 0);
 
     for (size_t i = 0; i < nclos; ++i) {
@@ -311,8 +311,6 @@ void orders(determ_context_t &ctx)
         }
         prectbl[i * nclos + i] = P0;
     }
-
-    ctx.dc_prectbl = prectbl;
 }
 
 } // namespace re2c

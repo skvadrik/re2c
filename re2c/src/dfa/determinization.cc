@@ -223,7 +223,7 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     , dc_actions(NULL)
     , dc_reached()
     , dc_closure()
-    , dc_prectbl(NULL)
+    , dc_prectbl()
     , dc_tagvertbl(nfa.tags.size())
     , dc_taghistory()
     , dc_kernels()
@@ -243,7 +243,9 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     , dc_dump(opts)
     , dc_clstats()
 {
-    const size_t nstates = nfa.size, ntags = nfa.tags.size();
+    const size_t nstates = nfa.size;
+    const size_t ncores = nfa.ncores;
+    const size_t ntags = nfa.tags.size();
 
     dc_hc_caches.resize(ntags);
     dc_path1.reserve(ntags);
@@ -251,13 +253,23 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     dc_path3.reserve(ntags);
     dc_tagcount.resize(ntags);
 
-    if (opts->posix_closure) {
+    if (opts->posix_semantics) {
+        dc_prectbl = new prectable_t[ncores * ncores];
+    }
+
+    if (opts->posix_closure == POSIX_CLOSURE_GTOP) {
         dc_gtop_buffer.reserve(nstates);
     }
     else {
         dc_gor1_topsort.reserve(nstates);
         dc_gor1_linear.reserve(nstates);
     }
+}
+
+
+determ_context_t::~determ_context_t()
+{
+    delete[] dc_prectbl;
 }
 
 
