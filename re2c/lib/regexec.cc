@@ -29,8 +29,6 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
 namespace re2c {
 namespace libre2c {
 
-const int32_t history_t::ROOT = 0;
-
 int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     regmatch_t pmatch[])
 {
@@ -47,14 +45,14 @@ int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     bool *done = ctx.done;
     memset(done, 0, ctx.nsub * sizeof(bool));
 
-    for (int32_t i = ctx.hidx; todo > 0 && i != history_t::ROOT; ) {
-        const history_t::node_t &n = ctx.hist.node(i);
+    for (int32_t i = ctx.hidx; todo > 0 && i != HROOT; ) {
+        const tag_history_t::node_t &n = ctx.hist.node(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
         if (!fictive(tag) && t < nmatch * 2 && !done[t]) {
             done[t] = true;
             --todo;
-            const regoff_t off = n.info.neg ? -1 : static_cast<regoff_t>(n.step);
+            const regoff_t off = n.info.neg ? -1 : static_cast<regoff_t>(ctx.hist.node2(i).step);
             m = &pmatch[t / 2 + 1];
             if (t % 2 == 0) {
                 m->rm_so = off;
@@ -75,8 +73,8 @@ simctx_t::simctx_t(const nfa_t *nfa, size_t re_nsub, int flags)
     , flags(flags)
     , reach()
     , state()
-    , hist(nfa->size)
-    , hidx(history_t::ROOT)
+    , hist()
+    , hidx(HROOT)
     , step(0)
     , rule(Rule::NONE)
     , cursor(NULL)
@@ -149,7 +147,7 @@ void init(simctx_t &ctx, const char *string)
     ctx.reach.clear();
     ctx.state.clear();
     ctx.hist.init();
-    ctx.hidx = history_t::ROOT;
+    ctx.hidx = HROOT;
     ctx.step = 0;
     ctx.rule = Rule::NONE;
     ctx.cursor = ctx.marker = string;
@@ -160,15 +158,6 @@ void init(simctx_t &ctx, const char *string)
     DASSERT(ctx.gor1_topsort.empty());
     DASSERT(ctx.gor1_linear.empty());
     DASSERT(ctx.gtop_heap.empty());
-}
-
-history_t::history_t(size_t /* nstates */)
-    : nodes()
-    , arcs()
-{
-    // nodes.reserve(nstates);
-    // arcs.reserve(nstates);
-    init();
 }
 
 } // namespace libre2c

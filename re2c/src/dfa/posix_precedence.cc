@@ -38,20 +38,22 @@ int32_t precedence(determ_context_t &ctx, const clos_t &x, const clos_t &y
     int32_t i1 = idx1, i2 = idx2;
     for (; i1 != i2; ) {
         if (i1 > i2) {
-            info1 = hist.info(i1);
+            const tag_history_t::node_t &n = hist.node(i1);
+            info1 = n.info;
             prec1 = std::min(prec1, tags[info1.idx].height);
-            i1 = hist.pred(i1);
+            i1 = n.pred;
         }
         else {
-            info2 = hist.info(i2);
+            const tag_history_t::node_t &n = hist.node(i2);
+            info2 = n.info;
             prec2 = std::min(prec2, tags[info2.idx].height);
-            i2 = hist.pred(i2);
+            i2 = n.pred;
         }
         DINCCOUNT_CLLENGTH(ctx, 1);
     }
     if (i1 != HROOT) {
         DASSERT(fork_frame);
-        const int32_t h = tags[hist.info(i1).idx].height;
+        const int32_t h = tags[hist.node(i1).info.idx].height;
         prec1 = std::min(prec1, h);
         prec2 = std::min(prec2, h);
     }

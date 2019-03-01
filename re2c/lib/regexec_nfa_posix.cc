@@ -54,7 +54,7 @@ int do_regexec(const regex_t *preg, const char *string
     init(ctx, string);
 
     // root state can be non-core, so we pass zero as origin to avoid checks
-    const conf_t c0(ctx.nfa->root, 0, history_t::ROOT);
+    const conf_t c0(ctx.nfa->root, 0, HROOT);
     ctx.reach.push_back(c0);
     closure_posix<ALG>(ctx);
     for (;;) {
@@ -102,7 +102,7 @@ void make_one_step(simctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    const conf_t c(s->ran.out, s->coreid, history_t::ROOT);
+                    const conf_t c(s->ran.out, s->coreid, HROOT);
                     reach.push_back(c);
                     state[j++] = *i;
                     update_offsets(ctx, *i);
@@ -234,7 +234,7 @@ bool scan(simctx_t &ctx, nfa_state_t *q, bool all)
         case nfa_state_t::TAG:
             if (q->arcidx == 0) {
                 any |= relax_gor1(ctx, conf_t(q->tag.out, o
-                    , ctx.hist.push(q->tag.info, h)));
+                    , ctx.hist.push1(h, q->tag.info)));
                 ++q->arcidx;
             }
             break;
@@ -310,7 +310,7 @@ void closure_posix<GTOP>(simctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 relax_gtop(ctx, conf_t(q->tag.out, o
-                    , ctx.hist.push(q->tag.info, h)));
+                    , ctx.hist.push1(h, q->tag.info)));
                 break;
             default:
                 break;
@@ -355,7 +355,7 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
     }
 
     const std::vector<Tag> &tags = ctx.nfa->tags;
-    history_t &hist = ctx.hist;
+    tag_history_t &hist = ctx.hist;
 
     const bool fork_frame = orig1 == orig2;
     if (fork_frame) {
@@ -370,19 +370,19 @@ int32_t precedence(simctx_t &ctx, const conf_t &x, const conf_t &y
     int32_t i1 = idx1, i2 = idx2;
     for (; i1 != i2; ) {
         if (i1 > i2) {
-            const history_t::node_t &n = hist.node(i1);
+            const tag_history_t::node_t &n = hist.node(i1);
             info1 = n.info;
             prec1 = std::min(prec1, tags[info1.idx].height);
             i1 = n.pred;
         }
         else {
-            const history_t::node_t &n = hist.node(i2);
+            const tag_history_t::node_t &n = hist.node(i2);
             info2 = n.info;
             prec2 = std::min(prec2, tags[info2.idx].height);
             i2 = n.pred;
         }
     }
-    if (i1 != history_t::ROOT) {
+    if (i1 != HROOT) {
         DASSERT(fork_frame);
         const int32_t h = tags[hist.node(i1).info.idx].height;
         prec1 = std::min(prec1, h);
@@ -449,8 +449,8 @@ void update_offsets(simctx_t &ctx, const conf_t &c)
     memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
     memset(done, 0, nsub * sizeof(bool));
 
-    for (int32_t i = c.thist; i != history_t::ROOT; ) {
-        const history_t::node_t &n = ctx.hist.node(i);
+    for (int32_t i = c.thist; i != HROOT; ) {
+        const tag_history_t::node_t &n = ctx.hist.node(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
         regoff_t *off = o + t;
@@ -471,7 +471,7 @@ void update_prectbl(simctx_t &ctx)
     std::vector<int32_t> stack = ctx.worklist;
     std::vector<histleaf_t> &level = ctx.histlevel;
     std::vector<histleaf_t>::reverse_iterator li, lj, lk, le;
-    history_t &hist = ctx.hist;
+    tag_history_t &hist = ctx.hist;
     const size_t ncores = ctx.nfa->ncores;
     int32_t *oldtbl = ctx.prectbl1, *newtbl = ctx.prectbl2;
 
@@ -482,20 +482,20 @@ void update_prectbl(simctx_t &ctx)
     // array of boundaries in the sorted configuration array.
     uint32_t maxfin = 0;
     for (cconfiter_t c = state.begin(), e = state.end(); c != e; ++c) {
-        history_t::node_t &n = hist.node(c->thist);
-        if (n.finidx >= USED) {
-            n.finidx = maxfin++;
-            fcount[n.finidx] = 0;
+        uint32_t &x = hist.node1(c->thist).finidx;
+        if (x >= USED) {
+            x = maxfin++;
+            fcount[x] = 0;
 
             // mark all nodes down to root as used (unless marked already)
-            for (int32_t i = n.pred; i >= history_t::ROOT; ) {
-                history_t::node_t &m = hist.node(i);
-                if (m.finidx <= USED) break;
-                m.finidx = USED;
-                i = m.pred;
+            for (int32_t i = hist.node(c->thist).pred; i >= HROOT; ) {
+                uint32_t &y = hist.node1(i).finidx;
+                if (y <= USED) break;
+                y = USED;
+                i = hist.node(i).pred;
             }
         }
-        ++fcount[n.finidx];
+        ++fcount[x];
     }
     fcount[maxfin] = 0;
     for (size_t i = 1; i <= maxfin; ++i) {
@@ -503,7 +503,7 @@ void update_prectbl(simctx_t &ctx)
     }
     sortcores.resize(state.size());
     for (rcconfiter_t c = state.rbegin(), e = state.rend(); c != e; ++c) {
-        sortcores[--fcount[hist.node(c->thist).finidx]] = &*c;
+        sortcores[--fcount[hist.node1(c->thist).finidx]] = &*c;
     }
 
     // Depth-first traversal of the history tree. During traversal we grow
@@ -516,7 +516,7 @@ void update_prectbl(simctx_t &ctx)
     stack.push_back(0);
     while (!stack.empty()) {
         const int32_t n = stack.back();
-        history_t::node_t &node = hist.node(n);
+        tag_history_t::node1_t &node = hist.node1(n);
         const uint32_t fidx = node.finidx;
 
         if (fidx == NONFIN) {
@@ -527,14 +527,14 @@ void update_prectbl(simctx_t &ctx)
 
         if (node.next != -1) {
             // start or continue visiting subtrees rooted at this node
-            const history_t::arc_t &arc = hist.arc(node.next);
+            const tag_history_t::arc_t &arc = hist.arc(node.next);
             stack.push_back(arc.node);
             node.next = arc.next;
             continue;
         }
 
         // all subtrees visited, it's time to process this node
-        const int32_t h = n == 0 ? MAX_RHO : tags[node.info.idx].height;
+        const int32_t h = n == 0 ? MAX_RHO : tags[hist.node(n).info.idx].height;
         li = level.rbegin();
         le = level.rend();
 
@@ -542,7 +542,7 @@ void update_prectbl(simctx_t &ctx)
             // this node has leaf configurations, add them to level
             for (uint32_t k = fcount[fidx], e = fcount[fidx + 1]; k < e; ++k) {
                 const conf_t *c = sortcores[k];
-                const histleaf_t l = {c->state->coreid, c->origin, history_t::ROOT, h};
+                const histleaf_t l = {c->state->coreid, c->origin, HROOT, h};
                 level.push_back(l);
             }
 
@@ -576,7 +576,7 @@ void update_prectbl(simctx_t &ctx)
         // their precedence has already been computed and must not be touched.
 
         for (int32_t a = node.last; a != -1; ) {
-            const history_t::arc_t &arc = hist.arc(a);
+            const tag_history_t::arc_t &arc = hist.arc(a);
             a = arc.prev;
 
             // for all the items of this subtree

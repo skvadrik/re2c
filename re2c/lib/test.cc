@@ -510,7 +510,10 @@ static int test_all_posix(int flags)
     T4("(ab|a)(c|bcd)(d|.*)",                "abcd",        0,4, 0,2, 2,3, 3,4);
     T4("(ab|a)(bcd|c)(d|.*)",                "abcd",        0,4, 0,2, 2,3, 3,4);
 
-    if (!(flags & REG_SLOWPREC)) {
+    if (!(flags & REG_NFA)) {
+        T3("((a?){1,100})*", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0,50, 0,50, 49,50);
+    }
+    else if (!(flags & REG_SLOWPREC)) {
         T3("((a?){1,1000})*", "aaaa", 0,4, 0,4, 3,4);
     }
 
@@ -950,7 +953,7 @@ int main()
 {
     int e = 0;
 
-//    e |= test_all_posix(0);
+    e |= test_all_posix(0);
     e |= test_all_posix(REG_NFA);
     e |= test_all_posix(REG_NFA | REG_GTOP);
     e |= test_all_posix(REG_NFA | REG_TRIE);

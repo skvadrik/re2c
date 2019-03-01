@@ -36,6 +36,8 @@ void closure_posix(determ_context_t &ctx)
 {
     DRESET_CLSTATS(ctx);
 
+    ctx.dc_taghistory.detach();
+
     switch (ctx.dc_opts->posix_closure) {
         case POSIX_CLOSURE_GOR1: closure_posix_gor1(ctx); break;
         case POSIX_CLOSURE_GTOP: closure_posix_gtop(ctx); break;
@@ -162,7 +164,7 @@ bool scan(determ_context_t &ctx, nfa_state_t *q, bool all)
         case nfa_state_t::TAG:
             if (q->arcidx == 0) {
                 x.state = q->tag.out;
-                x.tlook = ctx.dc_taghistory.push(x.tlook, q->tag.info);
+                x.tlook = ctx.dc_taghistory.push1(x.tlook, q->tag.info);
                 any |= relax_gor1(ctx, x);
                 ++q->arcidx;
             }
@@ -260,7 +262,7 @@ void closure_posix_gtop(determ_context_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 x.state = q->tag.out;
-                x.tlook = ctx.dc_taghistory.push(x.tlook, q->tag.info);
+                x.tlook = ctx.dc_taghistory.push1(x.tlook, q->tag.info);
                 relax_gtop(ctx, x);
                 break;
             default:

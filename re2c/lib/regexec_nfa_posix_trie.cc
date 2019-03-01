@@ -48,8 +48,8 @@ static int32_t precedence_(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox,
 
 // we *do* want this to be inlined
 static inline void relax(simctx_t &, const conf_t &);
-static inline uint32_t get_step(const history_t &hist, int32_t idx);
-static inline uint32_t get_orig(const history_t &hist, int32_t idx);
+static inline uint32_t get_step(const tag_history_t &hist, int32_t idx);
+static inline uint32_t get_orig(const tag_history_t &hist, int32_t idx);
 
 int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
@@ -58,7 +58,7 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     init(ctx, string);
 
     nfa_state_t *s0 = ctx.nfa->root;
-    const conf_t c0(s0, s0->coreid, history_t::ROOT);
+    const conf_t c0(s0, s0->coreid, HROOT);
     ctx.reach.push_back(c0);
     closure_posix(ctx);
     for (;;) {
@@ -151,7 +151,7 @@ void closure_posix(simctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 relax(ctx, conf_t(q->tag.out, o
-                    , ctx.hist.push(h, ctx.step, q->tag.info, o)));
+                    , ctx.hist.push2(h, ctx.step, q->tag.info, o)));
                 break;
             default:
                 break;
@@ -243,7 +243,7 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
     }
 
     const std::vector<Tag> &tags = ctx.nfa->tags;
-    history_t &hist = ctx.hist;
+    tag_history_t &hist = ctx.hist;
 
     int32_t prec = 0;
     prec1 = prec2 = MAX_RHO;
@@ -260,14 +260,14 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
     tag_info_t info1, info2;
     for (; i1 != i2 && (s1 >= s || s2 >= s);) {
         if (s1 >= s && (i1 > i2 || s2 < s)) {
-            const history_t::node_t &n = hist.node(i1);
+            const tag_history_t::node_t &n = hist.node(i1);
             info1 = n.info;
             prec1 = std::min(prec1, tags[info1.idx].height);
             i1 = n.pred;
             s1 = get_step(hist, i1);
         }
         else {
-            const history_t::node_t &n = hist.node(i2);
+            const tag_history_t::node_t &n = hist.node(i2);
             info2 = n.info;
             prec2 = std::min(prec2, tags[info2.idx].height);
             i2 = n.pred;
@@ -281,7 +281,7 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
         prec1 = std::min(prec1, p1);
         prec2 = std::min(prec2, p2);
     }
-    else if (i1 != history_t::ROOT) {
+    else if (i1 != HROOT) {
         const int32_t h = tags[hist.node(i1).info.idx].height;
         prec1 = std::min(prec1, h);
         prec2 = std::min(prec2, h);
@@ -325,14 +325,14 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
     return 0;
 }
 
-uint32_t get_step(const history_t &hist, int32_t idx)
+uint32_t get_step(const tag_history_t &hist, int32_t idx)
 {
-    return idx == history_t::ROOT ? 0 : hist.node(idx).step;
+    return idx == HROOT ? 0 : hist.node2(idx).step;
 }
 
-uint32_t get_orig(const history_t &hist, int32_t idx)
+uint32_t get_orig(const tag_history_t &hist, int32_t idx)
 {
-    return idx == history_t::ROOT ? 0 : hist.node(idx).orig;
+    return idx == HROOT ? 0 : hist.node2(idx).orig;
 }
 
 } // namespace libre2c

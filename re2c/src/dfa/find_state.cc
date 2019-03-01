@@ -404,8 +404,10 @@ void unwind(const tag_history_t &hist, tag_path_t &path, hidx_t idx)
     // But this would complicate unwind procedure quite a bit, and the
     // cases when it makes any difference are rare.
     path.clear();
-    for (; idx != HROOT; idx = hist.pred(idx)) {
-        path.push_back(hist.info(idx));
+    for (; idx != HROOT; ) {
+        const tag_history_t::node_t &n = hist.node(idx);
+        path.push_back(n.info);
+        idx = n.pred;
     }
 }
 

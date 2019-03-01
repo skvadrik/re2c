@@ -160,16 +160,17 @@ void dump_history(const dfa_t &dfa, const tag_history_t &h, hidx_t i)
         return;
     }
 
-    dump_history(dfa, h, h.pred(i));
+    const tag_history_t::node_t &n = h.node(i);
 
-    const Tag &t = dfa.tags[h.tag(i)];
-    const tagver_t v = h.elem(i);
+    dump_history(dfa, h, n.pred);
+
+    const Tag &t = dfa.tags[n.info.idx];
     if (capture(t)) {
         fprintf(stderr, "%u", (uint32_t)t.ncap);
     } else if (!trailing(t)) {
         fprintf(stderr, "%s", t.name->c_str());
     }
-    fprintf(stderr, v == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
+    fprintf(stderr, n.info.neg ? "&darr;" : "&uarr;");
     fprintf(stderr, " ");
 }
 
@@ -282,23 +283,19 @@ void dump_tags(const tagver_table_t &tagvertbl, const tag_history_t &taghistory,
 
     fprintf(stderr, "/");
     const tagver_t *vers = tagvertbl[tvers];
-    for (size_t i = 0; i < tagvertbl.ntags; ++i) {
+    for (size_t t = 0; t < tagvertbl.ntags; ++t) {
 
-        if (taghistory.last(ttran, i) == TAGVER_ZERO) {
+        if (taghistory.last(ttran, t) == TAGVER_ZERO) {
             continue;
         }
 
-        fprintf(stderr, "%d", abs(vers[i]));
-        for (hidx_t t = ttran; t != HROOT; t = taghistory.pred(t)) {
-            if (taghistory.tag(t) != i) {
-                continue;
+        fprintf(stderr, "%d", abs(vers[t]));
+        for (hidx_t i = ttran; i != HROOT; ) {
+            const tag_history_t::node_t &n = taghistory.node(i);
+            if (n.info.idx == t) {
+                fprintf(stderr, n.info.neg ? "&darr;" : "&uarr;");
             }
-            else if (taghistory.elem(t) < TAGVER_ZERO) {
-                fprintf(stderr, "&darr;");
-            }
-            else if (t > TAGVER_ZERO) {
-                fprintf(stderr, "&uarr;");
-            }
+            i = n.pred;
         }
         fprintf(stderr, " ");
     }

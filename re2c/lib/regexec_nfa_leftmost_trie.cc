@@ -20,7 +20,7 @@ int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string
     init(ctx, string);
 
     nfa_state_t *s0 = ctx.nfa->root;
-    const conf_t c0(s0, s0->coreid, history_t::ROOT);
+    const conf_t c0(s0, s0->coreid, HROOT);
     ctx.reach.push_back(c0);
     closure_leftmost(ctx);
 
@@ -95,7 +95,7 @@ void closure_leftmost(simctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 wl.push_back(conf_t(n->tag.out, o
-                    , ctx.hist.push(h, ctx.step, n->tag.info, o)));
+                    , ctx.hist.push2(h, ctx.step, n->tag.info, o)));
                 break;
             case nfa_state_t::RAN:
                 break;
