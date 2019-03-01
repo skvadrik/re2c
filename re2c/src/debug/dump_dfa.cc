@@ -51,14 +51,14 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 {
     if (!debug) return;
 
-    const closure_t &closure = ctx.dc_closure;
+    const closure_t &closure = ctx.state;
     cclositer_t b = closure.begin(), e = closure.end(), c;
     const uint32_t origin = ctx.dc_origin;
     const uint32_t target = ctx.dc_target;
     const uint32_t symbol = ctx.dc_symbol;
-    const dfa_t &dfa = ctx.dc_dfa;
+    const dfa_t &dfa = ctx.dfa;
     const tagver_table_t &tvtbl = ctx.dc_tagvertbl;
-    const tag_history_t &thist = ctx.dc_taghistory;
+    const tag_history_t &thist = ctx.history;
     uint32_t i;
 
     if (target == dfa_t::NIL) return;
@@ -75,7 +75,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
     i = 0;
     for (c = b; c != e; ++c, ++i) {
         fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u",
-            i, style, static_cast<uint32_t>(c->state - ctx.dc_nfa.states));
+            i, style, static_cast<uint32_t>(c->state - ctx.nfa.states));
 
         if (c->tvers != ZERO_TAGS) {
             const tagver_t *vers = tvtbl[c->tvers];
@@ -85,8 +85,8 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
                 fprintf(stderr, " %s%d", tagname(dfa.tags[t]), abs(vers[t]));
             }
 
-            if (c->tlook != HROOT) {
-                dump_history(dfa, thist, c->tlook);
+            if (c->thist != HROOT) {
+                dump_history(dfa, thist, c->thist);
             }
         }
 

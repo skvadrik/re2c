@@ -103,7 +103,7 @@ static tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin);
 
 void find_state(determ_context_t &ctx)
 {
-    dfa_t &dfa = ctx.dc_dfa;
+    dfa_t &dfa = ctx.dfa;
 
     // find or add the new state in the existing set of states
     const bool is_new = do_find_state(ctx);
@@ -116,8 +116,8 @@ void find_state(determ_context_t &ctx)
         // check if the new state is final
         // see note [at most one final item per closure]
         cclositer_t
-            b = ctx.dc_closure.begin(),
-            e = ctx.dc_closure.end(),
+            b = ctx.state.begin(),
+            e = ctx.state.end(),
             f = std::find_if(b, e, clos_t::fin);
         if (f != e) {
             t->tcmd[dfa.nchars] = final_actions(ctx, *f);
@@ -142,7 +142,7 @@ void find_state(determ_context_t &ctx)
 bool do_find_state(determ_context_t &ctx)
 {
     kernels_t &kernels = ctx.dc_kernels;
-    const closure_t &closure = ctx.dc_closure;
+    const closure_t &closure = ctx.state;
 
     // empty closure corresponds to default state
     if (closure.size() == 0) {
@@ -156,7 +156,7 @@ bool do_find_state(determ_context_t &ctx)
     kernel_t *k = ctx.dc_buffers.kernel;
 
     // copy closure to buffer kernel
-    copy_to_buffer_kernel(closure, ctx.dc_prectbl, k);
+    copy_to_buffer_kernel(closure, ctx.newprectbl, k);
 
     // hash "static" part of the kernel
     const uint32_t hash = hash_kernel(k);
@@ -181,11 +181,11 @@ bool do_find_state(determ_context_t &ctx)
 
 tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin)
 {
-    dfa_t &dfa = ctx.dc_dfa;
+    dfa_t &dfa = ctx.dfa;
     const Rule &rule = dfa.rules[fin.state->rule];
     const tagver_t *vers = ctx.dc_tagvertbl[fin.tvers];
-    const hidx_t look = fin.tlook;
-    const tag_history_t &thist = ctx.dc_taghistory;
+    const hidx_t look = fin.thist;
+    const tag_history_t &thist = ctx.history;
     tcpool_t &tcpool = dfa.tcpool;
     tcmd_t *copy = NULL, *save = NULL, **p;
 
@@ -234,7 +234,7 @@ kernel_t *make_new_kernel(size_t size, allocator_t &alc)
     k->prectbl = NULL;
     k->state = alc.alloct<nfa_state_t*>(size);
     k->tvers = alc.alloct<uint32_t>(size);
-    k->tlook = alc.alloct<hidx_t>(size);
+    k->thist = alc.alloct<hidx_t>(size);
     return k;
 }
 
@@ -247,7 +247,7 @@ kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
 
     memcpy(k->state, kernel->state, n * sizeof(void*));
     memcpy(k->tvers, kernel->tvers, n * sizeof(uint32_t));
-    memcpy(k->tlook, kernel->tlook, n * sizeof(hidx_t));
+    memcpy(k->thist, kernel->thist, n * sizeof(hidx_t));
 
     prectable_t *ptbl = NULL;
     if (kernel->prectbl) {
@@ -292,7 +292,7 @@ void copy_to_buffer_kernel(const closure_t &closure,
         const clos_t &c = closure[i];
         buffer->state[i] = c.state;
         buffer->tvers[i] = c.tvers;
-        buffer->tlook[i] = c.tlook;
+        buffer->thist[i] = c.thist;
     }
 }
 
@@ -301,8 +301,8 @@ void reserve_buffers(determ_context_t &ctx)
 {
     kernel_buffers_t &kbufs = ctx.dc_buffers;
     allocator_t &alc = ctx.dc_allocator;
-    const tagver_t maxver = ctx.dc_dfa.maxtagver;
-    const size_t nkern = ctx.dc_closure.size();
+    const tagver_t maxver = ctx.dfa.maxtagver;
+    const size_t nkern = ctx.state.size();
 
     if (kbufs.maxsize < nkern) {
         kbufs.maxsize = nkern * 2; // in advance
@@ -344,16 +344,16 @@ bool equal_lookahead_tags(determ_context_t &ctx
 {
     DASSERT(x->size == y->size);
 
-    if (memcmp(x->tlook, y->tlook, x->size * sizeof(hidx_t)) == 0) {
+    if (memcmp(x->thist, y->thist, x->size * sizeof(hidx_t)) == 0) {
         return true;
     }
 
-    tag_history_t &thist = ctx.dc_taghistory;
+    tag_history_t &thist = ctx.history;
     tag_path_t &p1 = ctx.dc_path1, &p2 = ctx.dc_path2, &p3 = ctx.dc_path3;
     std::vector<uint32_t> &count = ctx.dc_tagcount;
 
     for (size_t i = 0; i < x->size; ++i) {
-        const hidx_t xl = x->tlook[i], yl = y->tlook[i];
+        const hidx_t xl = x->thist[i], yl = y->thist[i];
 
         if (xl == yl) continue;
 
@@ -436,7 +436,7 @@ bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
         && equal_lookahead_tags(ctx, x, y);
     if (!compatible) return false;
 
-    const std::vector<Tag> &tags = ctx.dc_dfa.tags;
+    const std::vector<Tag> &tags = ctx.dfa.tags;
     const size_t ntag = tags.size();
     kernel_buffers_t &bufs = ctx.dc_buffers;
     tagver_t *x2y = bufs.x2y, *y2x = bufs.y2x, max = bufs.max;
@@ -450,12 +450,12 @@ bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
         const tagver_t
             *xvs = ctx.dc_tagvertbl[x->tvers[i]],
             *yvs = ctx.dc_tagvertbl[y->tvers[i]];
-        const hidx_t xl = x->tlook[i];
+        const hidx_t xl = x->thist[i];
 
         for (size_t t = 0; t < ntag; ++t) {
             // see note [mapping ignores items with lookahead tags]
             if (!history(tags[t])
-                && ctx.dc_taghistory.last(xl, t) != TAGVER_ZERO) continue;
+                && ctx.history.last(xl, t) != TAGVER_ZERO) continue;
 
             const tagver_t xv = xvs[t], yv = yvs[t];
             tagver_t &xv0 = y2x[yv], &yv0 = x2y[xv];
@@ -495,7 +495,7 @@ bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
         const tagver_t yv = x2y[xv], axv = abs(xv), ayv = abs(yv);
         if (yv != TAGVER_ZERO && xv != yv && !fixed(tags[x2t[xv]])) {
             DASSERT(axv != ayv);
-            copy = ctx.dc_dfa.tcpool.make_copy(copy, axv, ayv);
+            copy = ctx.dfa.tcpool.make_copy(copy, axv, ayv);
         }
     }
 

@@ -40,19 +40,19 @@ int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     m->rm_so = 0;
     m->rm_eo = ctx.marker - string - 1;
 
-    const std::vector<Tag> &tags = ctx.nfa->tags;
+    const std::vector<Tag> &tags = ctx.nfa.tags;
     size_t todo = nmatch * 2;
     bool *done = ctx.done;
     memset(done, 0, ctx.nsub * sizeof(bool));
 
     for (int32_t i = ctx.hidx; todo > 0 && i != HROOT; ) {
-        const tag_history_t::node_t &n = ctx.hist.node(i);
+        const tag_history_t::node_t &n = ctx.history.node(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
         if (!fictive(tag) && t < nmatch * 2 && !done[t]) {
             done[t] = true;
             --todo;
-            const regoff_t off = n.info.neg ? -1 : static_cast<regoff_t>(ctx.hist.node2(i).step);
+            const regoff_t off = n.info.neg ? -1 : static_cast<regoff_t>(ctx.history.node2(i).step);
             m = &pmatch[t / 2 + 1];
             if (t % 2 == 0) {
                 m->rm_so = off;
@@ -67,13 +67,13 @@ int finalize(const simctx_t &ctx, const char *string, size_t nmatch,
     return 0;
 }
 
-simctx_t::simctx_t(const nfa_t *nfa, size_t re_nsub, int flags)
+simctx_t::simctx_t(const nfa_t &nfa, size_t re_nsub, int flags)
     : nfa(nfa)
     , nsub(2 * (re_nsub - 1))
     , flags(flags)
     , reach()
     , state()
-    , hist()
+    , history()
     , hidx(HROOT)
     , step(0)
     , rule(Rule::NONE)
@@ -83,22 +83,24 @@ simctx_t::simctx_t(const nfa_t *nfa, size_t re_nsub, int flags)
     , offsets2(NULL)
     , offsets3(NULL)
     , done(NULL)
-    , prectbl1(NULL)
-    , prectbl2(NULL)
-    , cache()
+    , newprectbl(NULL)
+    , oldprectbl(NULL)
+    , oldprecdim(0)
     , histlevel()
     , sortcores()
     , fincount()
     , worklist()
+    , cache()
     , gor1_topsort()
     , gor1_linear()
     , gtop_heap_storage()
     , gtop_cmp()
     , gtop_heap(gtop_cmp, gtop_heap_storage)
+    , dc_clstats()
 {
     const size_t
-        nstates = nfa->size,
-        ncores = nfa->ncores;
+        nstates = nfa.size,
+        ncores = nfa.ncores;
 
     state.reserve(nstates);
     reach.reserve(nstates);
@@ -111,8 +113,8 @@ simctx_t::simctx_t(const nfa_t *nfa, size_t re_nsub, int flags)
         offsets3 = new regoff_t[nsub];
     }
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
-        prectbl1 = new int32_t[ncores * ncores];
-        prectbl2 = new int32_t[ncores * ncores];
+        newprectbl = new int32_t[ncores * ncores];
+        oldprectbl = new int32_t[ncores * ncores];
         histlevel.reserve(ncores);
         sortcores.reserve(ncores);
         fincount.resize(ncores + 1);
@@ -137,8 +139,8 @@ simctx_t::~simctx_t()
         delete[] offsets3;
     }
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
-        delete[] prectbl1;
-        delete[] prectbl2;
+        delete[] newprectbl;
+        delete[] oldprectbl;
     }
 }
 
@@ -146,7 +148,7 @@ void init(simctx_t &ctx, const char *string)
 {
     ctx.reach.clear();
     ctx.state.clear();
-    ctx.hist.init();
+    ctx.history.init();
     ctx.hidx = HROOT;
     ctx.step = 0;
     ctx.rule = Rule::NONE;

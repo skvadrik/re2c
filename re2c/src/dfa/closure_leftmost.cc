@@ -8,7 +8,7 @@ namespace re2c
 void closure_leftmost(determ_context_t &ctx)
 {
     const closure_t &init = ctx.dc_reached;
-    closure_t &done = ctx.dc_closure;
+    closure_t &done = ctx.state;
     std::stack<clos_t> &todo = ctx.dc_stack_dfs;
 
     // enqueue all initial states
@@ -40,7 +40,7 @@ void closure_leftmost(determ_context_t &ctx)
                     break;
                 case nfa_state_t::TAG:
                     x.state = n->tag.out;
-                    x.tlook = ctx.dc_taghistory.push(x.tlook, n->tag.info);
+                    x.thist = ctx.history.push(x.thist, n->tag.info);
                     todo.push(x);
                     break;
                 case nfa_state_t::RAN:

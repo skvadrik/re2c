@@ -13,7 +13,6 @@ namespace re2c
 {
 
 typedef int32_t hidx_t;
-typedef int32_t prectable_t;
 typedef std::vector<tag_info_t> tag_path_t;
 
 static const hidx_t HROOT = 0;

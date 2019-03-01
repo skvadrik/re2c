@@ -25,6 +25,7 @@ re2c_HDR = \
 	src/cfg/cfg.h \
 	src/dfa/determinization.h \
 	src/dfa/dfa.h \
+	src/dfa/posix_precedence.h \
 	src/dfa/tag_history.h \
 	src/dfa/tagver_table.h \
 	src/dfa/tcmd.h \
@@ -116,7 +117,6 @@ re2c_SRC = \
 	src/dfa/fillpoints.cc \
 	src/dfa/find_state.cc \
 	src/dfa/minimization.cc \
-	src/dfa/posix_precedence.cc \
 	src/dfa/tagver_table.cc \
 	src/dfa/tcmd.cc \
 	src/encoding/ebcdic/ebcdic_regexp.cc \

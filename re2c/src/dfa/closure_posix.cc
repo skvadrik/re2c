@@ -1,6 +1,7 @@
 #include <queue>
 
 #include "src/dfa/determinization.h"
+#include "src/dfa/posix_precedence.h"
 #include "src/nfa/nfa.h"
 
 
@@ -36,7 +37,7 @@ void closure_posix(determ_context_t &ctx)
 {
     DRESET_CLSTATS(ctx);
 
-    ctx.dc_taghistory.detach();
+    ctx.history.detach();
 
     switch (ctx.dc_opts->posix_closure) {
         case POSIX_CLOSURE_GOR1: closure_posix_gor1(ctx); break;
@@ -47,7 +48,7 @@ void closure_posix(determ_context_t &ctx)
     DDUMP_CLSTATS(ctx);
 
     // cleanup
-    closure_t &cl = ctx.dc_closure;
+    closure_t &cl = ctx.state;
     for (clositer_t i = cl.begin(); i != cl.end(); ++i) {
         nfa_state_t *q = i->state;
         q->clos = NOCLOS;
@@ -71,7 +72,7 @@ void closure_posix(determ_context_t &ctx)
  */
 void closure_posix_gor1(determ_context_t &ctx)
 {
-    closure_t &state = ctx.dc_closure, &reach = ctx.dc_reached;
+    closure_t &state = ctx.state, &reach = ctx.dc_reached;
     std::vector<nfa_state_t*>
         &topsort = ctx.dc_gor1_topsort,
         &linear = ctx.dc_gor1_linear;
@@ -129,18 +130,16 @@ inline cmp_gor1_t::cmp_gor1_t(determ_context_t &ctx) : ctx(ctx) {}
 
 inline bool cmp_gor1_t::operator()(const clos_t &x, const clos_t &y) const
 {
-    const uint32_t xo = x.origin, yo = y.origin;
-    if (xo == yo) return false;
-
     // if longest components differ, leftmost already incorporates that
-    const kernel_t *k = ctx.dc_kernels[ctx.dc_origin];
-    return unpack_leftmost(k->prectbl[xo * k->size + yo]) < 0;
+    const uint32_t xo = x.origin, yo = y.origin;
+    return xo != yo
+        && unpack_leftmost(ctx.oldprectbl[xo * ctx.oldprecdim + yo]) < 0;
 }
 
 bool scan(determ_context_t &ctx, nfa_state_t *q, bool all)
 {
     bool any = false;
-    clos_t x = ctx.dc_closure[q->clos];
+    clos_t x = ctx.state[q->clos];
     switch (q->type) {
         case nfa_state_t::NIL:
             if (q->arcidx == 0) {
@@ -164,7 +163,7 @@ bool scan(determ_context_t &ctx, nfa_state_t *q, bool all)
         case nfa_state_t::TAG:
             if (q->arcidx == 0) {
                 x.state = q->tag.out;
-                x.tlook = ctx.dc_taghistory.push1(x.tlook, q->tag.info);
+                x.thist = ctx.history.push1(x.thist, q->tag.info);
                 any |= relax_gor1(ctx, x);
                 ++q->arcidx;
             }
@@ -177,7 +176,7 @@ bool scan(determ_context_t &ctx, nfa_state_t *q, bool all)
 
 bool relax_gor1(determ_context_t &ctx, const clos_t &x)
 {
-    closure_t &state = ctx.dc_closure;
+    closure_t &state = ctx.state;
     nfa_state_t *q = x.state;
     const uint32_t idx = q->clos;
     int32_t p1, p2;
@@ -234,7 +233,7 @@ bool relax_gor1(determ_context_t &ctx, const clos_t &x)
 void closure_posix_gtop(determ_context_t &ctx)
 {
     const closure_t &reach = ctx.dc_reached;
-    closure_t &state = ctx.dc_closure;
+    closure_t &state = ctx.state;
     gtop_heap_t &heap = ctx.dc_gtop_heap;
 
     state.clear();
@@ -248,7 +247,7 @@ void closure_posix_gtop(determ_context_t &ctx)
         q->active = 0;
         DINCCOUNT_CLSCANS(ctx);
 
-        clos_t x = ctx.dc_closure[q->clos];
+        clos_t x = ctx.state[q->clos];
         switch (q->type) {
             case nfa_state_t::NIL:
                 x.state = q->nil.out;
@@ -262,7 +261,7 @@ void closure_posix_gtop(determ_context_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 x.state = q->tag.out;
-                x.tlook = ctx.dc_taghistory.push1(x.tlook, q->tag.info);
+                x.thist = ctx.history.push1(x.thist, q->tag.info);
                 relax_gtop(ctx, x);
                 break;
             default:
@@ -273,7 +272,7 @@ void closure_posix_gtop(determ_context_t &ctx)
 
 void relax_gtop(determ_context_t &ctx, const clos_t &c)
 {
-    closure_t &state = ctx.dc_closure;
+    closure_t &state = ctx.state;
     nfa_state_t *q = c.state;
     const uint32_t idx = q->clos;
     int32_t p1, p2;
@@ -293,25 +292,6 @@ void relax_gtop(determ_context_t &ctx, const clos_t &c)
     if (!q->active) {
         q->active = 1;
         ctx.dc_gtop_heap.push(q);
-    }
-}
-
-void orders(determ_context_t &ctx)
-{
-    closure_t &closure = ctx.dc_closure;
-    const size_t nclos = closure.size();
-
-    prectable_t *prectbl = ctx.dc_prectbl;
-    static const int32_t P0 = pack(MAX_RHO, 0);
-
-    for (size_t i = 0; i < nclos; ++i) {
-        for (size_t j = i + 1; j < nclos; ++j) {
-            int32_t rho1, rho2, l;
-            l = precedence (ctx, closure[i], closure[j], rho1, rho2);
-            prectbl[i * nclos + j] = pack(rho1, l);
-            prectbl[j * nclos + i] = pack(rho2, -l);
-        }
-        prectbl[i * nclos + i] = P0;
     }
 }
 

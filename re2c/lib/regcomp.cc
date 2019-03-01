@@ -47,7 +47,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 
     dfa_t *dfa = NULL;
     if (cflags & REG_NFA) {
-        preg->simctx = new libre2c::simctx_t(nfa, preg->re_nsub, cflags);
+        preg->simctx = new libre2c::simctx_t(*nfa, preg->re_nsub, cflags);
     }
     else {
         preg->char2class = new size_t[256];

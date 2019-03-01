@@ -511,7 +511,7 @@ static int test_all_posix(int flags)
     T4("(ab|a)(bcd|c)(d|.*)",                "abcd",        0,4, 0,2, 2,3, 3,4);
 
     if (!(flags & REG_NFA)) {
-        T3("((a?){1,100})*", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0,50, 0,50, 49,50);
+        T3("((a?){1,300})*", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0,50, 0,50, 49,50);
     }
     else if (!(flags & REG_SLOWPREC)) {
         T3("((a?){1,1000})*", "aaaa", 0,4, 0,4, 3,4);

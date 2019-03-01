@@ -23,7 +23,7 @@ namespace re2c
 {
 
 static void clear_caches(determ_context_t &ctx);
-static void reach_on_symbol(determ_context_t &);
+static void reach_on_symbol(determ_context_t &ctx, uint32_t sym);
 static nfa_state_t *transition(nfa_state_t *, uint32_t);
 static uint32_t init_tag_versions(determ_context_t &);
 static void warn_nondeterministic_tags(const determ_context_t &);
@@ -64,9 +64,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
         clear_caches(ctx);
 
         for (uint32_t c = 0; c < nchars; ++c) {
-            ctx.dc_symbol = c;
-
-            reach_on_symbol(ctx);
+            reach_on_symbol(ctx, c);
             tagged_epsilon_closure(ctx);
             find_state(ctx);
         }
@@ -80,24 +78,29 @@ void clear_caches(determ_context_t &ctx)
 {
     ctx.dc_newvers.clear();
 
-    const size_t ntags = ctx.dc_nfa.tags.size();
+    const size_t ntags = ctx.nfa.tags.size();
     for (size_t t = 0; t < ntags; ++t) {
         ctx.dc_hc_caches[t].clear();
     }
 }
 
 
-void reach_on_symbol(determ_context_t &ctx)
+void reach_on_symbol(determ_context_t &ctx, uint32_t sym)
 {
-    const kernel_t *kernel = ctx.dc_kernels[ctx.dc_origin];
-    closure_t &reached = ctx.dc_reached;
-    const uint32_t symbol = ctx.dc_dfa.charset[ctx.dc_symbol];
+    ctx.dc_symbol = sym;
+    const uint32_t symbol = ctx.dfa.charset[ctx.dc_symbol];
 
+    const kernel_t *kernel = ctx.dc_kernels[ctx.dc_origin];
+    ctx.oldprectbl = kernel->prectbl;
+    ctx.oldprecdim = kernel->size;
+
+    closure_t &reached = ctx.dc_reached;
     reached.clear();
+
     for (uint32_t i = 0; i < kernel->size; ++i) {
         nfa_state_t *s = transition(kernel->state[i], symbol);
         if (s) {
-            clos_t c = {s, i, kernel->tvers[i], kernel->tlook[i], HROOT};
+            clos_t c = {s, i, kernel->tvers[i], kernel->thist[i], HROOT};
             reached.push_back(c);
         }
     }
@@ -120,7 +123,7 @@ nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
 
 uint32_t init_tag_versions(determ_context_t &ctx)
 {
-    dfa_t &dfa = ctx.dc_dfa;
+    dfa_t &dfa = ctx.dfa;
     const size_t ntags = dfa.tags.size();
 
     // all-zero tag configuration must have static number zero
@@ -164,8 +167,8 @@ void warn_nondeterministic_tags(const determ_context_t &ctx)
 
     Warn &warn = ctx.dc_msg.warn;
     const kernels_t &kernels = ctx.dc_kernels;
-    const std::vector<Tag> &tags = ctx.dc_dfa.tags;
-    const std::valarray<Rule> &rules = ctx.dc_dfa.rules;
+    const std::vector<Tag> &tags = ctx.dfa.tags;
+    const std::valarray<Rule> &rules = ctx.dfa.rules;
 
     const size_t
         ntag = tags.size(),
@@ -214,18 +217,17 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     : dc_opts(opts)
     , dc_msg(msg)
     , dc_condname(condname)
-    , dc_nfa(nfa)
-    , dc_dfa(dfa)
+    , nfa(nfa)
+    , dfa(dfa)
     , dc_allocator()
     , dc_origin(dfa_t::NIL)
     , dc_target(dfa_t::NIL)
     , dc_symbol(0)
     , dc_actions(NULL)
     , dc_reached()
-    , dc_closure()
-    , dc_prectbl()
+    , state()
     , dc_tagvertbl(nfa.tags.size())
-    , dc_taghistory()
+    , history()
     , dc_kernels()
     , dc_buffers(dc_allocator)
     , dc_stack_dfs()
@@ -235,11 +237,18 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     , dc_gtop_cmp()
     , dc_gtop_heap(dc_gtop_cmp, dc_gtop_buffer)
     , dc_hc_caches()
-    , dc_newvers(newver_cmp_t(dc_taghistory, dc_hc_caches))
+    , dc_newvers(newver_cmp_t(history, dc_hc_caches))
     , dc_path1()
     , dc_path2()
     , dc_path3()
     , dc_tagcount()
+    , newprectbl(NULL)
+    , oldprectbl(NULL)
+    , oldprecdim(0)
+    , histlevel()
+    , sortcores()
+    , fincount()
+    , worklist()
     , dc_dump(opts)
     , dc_clstats()
 {
@@ -254,7 +263,11 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     dc_tagcount.resize(ntags);
 
     if (opts->posix_semantics) {
-        dc_prectbl = new prectable_t[ncores * ncores];
+        newprectbl = new prectable_t[ncores * ncores];
+        histlevel.reserve(ncores);
+        sortcores.reserve(ncores);
+        fincount.resize(ncores + 1);
+        worklist.reserve(nstates);
     }
 
     if (opts->posix_closure == POSIX_CLOSURE_GTOP) {
@@ -269,7 +282,7 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
 
 determ_context_t::~determ_context_t()
 {
-    delete[] dc_prectbl;
+    delete[] newprectbl;
 }
 
 

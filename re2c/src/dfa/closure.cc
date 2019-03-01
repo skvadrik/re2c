@@ -10,6 +10,7 @@
 #include "src/options/opt.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
+#include "src/dfa/posix_precedence.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/regexp/rule.h"
@@ -83,17 +84,17 @@ static bool cmpby_rule_state(const clos_t &, const clos_t &);
 
 void tagged_epsilon_closure(determ_context_t &ctx)
 {
-    closure_t &closure = ctx.dc_closure;
+    closure_t &closure = ctx.state;
 
     // build tagged epsilon-closure of the given set of NFA states
     if (ctx.dc_opts->posix_semantics) {
         closure_posix(ctx);
-        prune(closure, ctx.dc_nfa.rules);
+        prune(closure, ctx.nfa.rules);
         std::sort(closure.begin(), closure.end(), cmpby_rule_state);
-        orders(ctx);
+        compute_prectable(ctx);
     } else {
         closure_leftmost(ctx);
-        prune(closure, ctx.dc_nfa.rules);
+        prune(closure, ctx.nfa.rules);
     }
 
     // see note [the difference between TDFA(0) and TDFA(1)]
@@ -146,22 +147,22 @@ void prune(closure_t &closure, std::valarray<Rule> &rules)
 void lower_lookahead_to_transition(closure_t &closure)
 {
     for (clositer_t c = closure.begin(); c != closure.end(); ++c) {
-        c->ttran = c->tlook;
-        c->tlook = HROOT;
+        c->ttran = c->thist;
+        c->thist = HROOT;
     }
 }
 
 
 void generate_versions(determ_context_t &ctx)
 {
-    dfa_t &dfa = ctx.dc_dfa;
+    dfa_t &dfa = ctx.dfa;
     const std::vector<Tag> &tags = dfa.tags;
     const size_t ntag = tags.size();
     tagver_t &maxver = dfa.maxtagver;
     tagver_table_t &tvtbl = ctx.dc_tagvertbl;
     tagver_t *vers = tvtbl.buffer;
-    closure_t &clos = ctx.dc_closure;
-    tag_history_t &thist = ctx.dc_taghistory;
+    closure_t &clos = ctx.state;
+    tag_history_t &thist = ctx.history;
     newvers_t &newvers = ctx.dc_newvers;
 
     clositer_t b = clos.begin(), e = clos.end(), c;
@@ -173,7 +174,7 @@ void generate_versions(determ_context_t &ctx)
     // normal transition, however absolute value should be unique
     // among all versions of all tags)
     for (c = b; c != e; ++c) {
-        const hidx_t l = c->tlook, h = c->ttran;
+        const hidx_t l = c->thist, h = c->ttran;
         if (h == HROOT) continue;
 
         const tagver_t *vs = tvtbl[c->tvers];

@@ -57,7 +57,7 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     simctx_t &ctx = *preg->simctx;
     init(ctx, string);
 
-    nfa_state_t *s0 = ctx.nfa->root;
+    nfa_state_t *s0 = ctx.nfa.root;
     const conf_t c0(s0, s0->coreid, HROOT);
     ctx.reach.push_back(c0);
     closure_posix(ctx);
@@ -151,7 +151,7 @@ void closure_posix(simctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 relax(ctx, conf_t(q->tag.out, o
-                    , ctx.hist.push2(h, ctx.step, q->tag.info, o)));
+                    , ctx.history.push2(h, ctx.step, q->tag.info, o)));
                 break;
             default:
                 break;
@@ -242,8 +242,8 @@ int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
         return 0;
     }
 
-    const std::vector<Tag> &tags = ctx.nfa->tags;
-    tag_history_t &hist = ctx.hist;
+    const std::vector<Tag> &tags = ctx.nfa.tags;
+    tag_history_t &hist = ctx.history;
 
     int32_t prec = 0;
     prec1 = prec2 = MAX_RHO;

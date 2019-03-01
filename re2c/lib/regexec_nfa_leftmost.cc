@@ -21,7 +21,7 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
     init(ctx, string);
 
     // root state can be non-core, so we pass zero as origin to avoid checks
-    const conf_t c0(ctx.nfa->root, 0, HROOT);
+    const conf_t c0(ctx.nfa.root, 0, HROOT);
     ctx.reach.push_back(c0);
     closure_leftmost(ctx);
 
@@ -90,7 +90,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
     }
 
     std::swap(ctx.offsets1, ctx.offsets2);
-    ctx.hist.init();
+    ctx.history.init();
 }
 
 void closure_leftmost(simctx_t &ctx)
@@ -120,7 +120,7 @@ void closure_leftmost(simctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 wl.push_back(conf_t(n->tag.out, o
-                    , ctx.hist.push(h, n->tag.info)));
+                    , ctx.history.push(h, n->tag.info)));
                 break;
             default:
                 break;
@@ -148,7 +148,7 @@ void update_offsets(simctx_t &ctx, const conf_t &c)
     memset(done, 0, nsub * sizeof(bool));
 
     for (int32_t i = c.thist; i != HROOT; ) {
-        const tag_history_t::node_t &n = ctx.hist.node(i);
+        const tag_history_t::node_t &n = ctx.history.node(i);
         const size_t t = n.info.idx;
         if (!done[t]) {
             done[t] = true;

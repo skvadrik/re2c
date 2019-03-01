@@ -27,14 +27,6 @@ struct conf_t
         : state(s), origin(o), thist(h) {}
 };
 
-struct histleaf_t
-{
-    uint32_t coreid;
-    uint32_t origin;
-    int32_t hidx;
-    int32_t height;
-};
-
 struct ran_or_fin_t
 {
     inline bool operator()(const conf_t &c);
@@ -56,14 +48,20 @@ typedef confset_t::const_reverse_iterator rcconfiter_t;
 
 struct simctx_t
 {
-    const nfa_t *nfa;
+    typedef std::vector<conf_t> confset_t;
+    typedef confset_t::iterator confiter_t;
+    typedef confset_t::const_iterator cconfiter_t;
+    typedef confset_t::reverse_iterator rconfiter_t;
+    typedef confset_t::const_reverse_iterator rcconfiter_t;
+
+    const nfa_t &nfa;
     const size_t nsub;
     const int flags;
 
     confset_t reach;
     confset_t state;
 
-    tag_history_t hist;
+    tag_history_t history;
     int32_t hidx;
 
     uint32_t step;
@@ -76,24 +74,25 @@ struct simctx_t
     regoff_t *offsets1;
     regoff_t *offsets2;
     regoff_t *offsets3;
-
     bool *done;
 
-    int32_t *prectbl1;
-    int32_t *prectbl2;
-    cache_t cache;
+    int32_t *newprectbl;
+    int32_t *oldprectbl;
+    size_t oldprecdim;
     std::vector<histleaf_t> histlevel;
-    std::vector<const conf_t*> sortcores;
+    std::vector<uint32_t> sortcores;
     std::vector<uint32_t> fincount;
     std::vector<int32_t> worklist;
+    cache_t cache;
 
     std::vector<nfa_state_t*> gor1_topsort;
     std::vector<nfa_state_t*> gor1_linear;
     std::vector<nfa_state_t*> gtop_heap_storage;
     cmp_gtop_t gtop_cmp;
     gtop_heap_t gtop_heap;
+    closure_stats_t dc_clstats;
 
-    simctx_t(const nfa_t *nfa, size_t re_nsub, int flags);
+    simctx_t(const nfa_t &nfa, size_t re_nsub, int flags);
     ~simctx_t();
     FORBID_COPY(simctx_t);
 };

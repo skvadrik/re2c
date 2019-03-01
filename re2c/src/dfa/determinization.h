@@ -29,6 +29,7 @@ struct tcmd_t;
 
 
 typedef slab_allocator_t<1024 * 1024, sizeof(void*)> allocator_t;
+typedef int32_t prectable_t;
 
 
 struct clos_t
@@ -37,7 +38,7 @@ struct clos_t
     uint32_t origin;
     uint32_t tvers; // vector of tag versions (including lookahead tags)
     hidx_t ttran; // history of transition tags
-    hidx_t tlook; // history of lookahead tags
+    hidx_t thist; // history of lookahead tags
 
     static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
     static inline bool ran(const clos_t &c) { return c.state->type == nfa_state_t::RAN; }
@@ -80,7 +81,7 @@ struct kernel_t
     const prectable_t *prectbl;
     nfa_state_t **state;
     uint32_t *tvers; // tag versions
-    hidx_t *tlook; // lookahead tags
+    hidx_t *thist; // lookahead tags
 
     FORBID_COPY(kernel_t);
 };
@@ -109,6 +110,15 @@ struct cmp_gtop_t
 };
 
 
+struct histleaf_t
+{
+    uint32_t coreid;
+    uint32_t origin;
+    int32_t hidx;
+    int32_t height;
+};
+
+
 typedef lookup_t<const kernel_t*> kernels_t;
 typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
     , cmp_gtop_t> gtop_heap_t;
@@ -116,14 +126,20 @@ typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
 
 struct determ_context_t
 {
+    typedef std::vector<clos_t> confset_t;
+    typedef confset_t::iterator confiter_t;
+    typedef confset_t::const_iterator cconfiter_t;
+    typedef confset_t::reverse_iterator rconfiter_t;
+    typedef confset_t::const_reverse_iterator rcconfiter_t;
+
     // determinization input
     const opt_t               *dc_opts;        // options
     Msg                       &dc_msg;         // error messages and warnings
     const std::string         &dc_condname;    // the name of current condition (with -c)
-    const nfa_t               &dc_nfa;         // TNFA
+    const nfa_t               &nfa;            // TNFA
 
     // determinization output
-    dfa_t                     &dc_dfa;         // resulting TDFA
+    dfa_t                     &dfa;            // resulting TDFA
 
     // temporary structures used by determinization
     allocator_t               dc_allocator;
@@ -132,10 +148,9 @@ struct determ_context_t
     uint32_t                  dc_symbol;       // alphabet symbol of the current transition
     tcmd_t                   *dc_actions;      // tag actions of the current transition
     closure_t                 dc_reached;
-    closure_t                 dc_closure;
-    prectable_t              *dc_prectbl;      // precedence table for Okui POSIX disambiguation
+    closure_t                 state;
     tagver_table_t            dc_tagvertbl;
-    tag_history_t             dc_taghistory;   // prefix trie of tag histories
+    tag_history_t             history;         // prefix trie of tag histories
     kernels_t                 dc_kernels;      // TDFA states under construction
     kernel_buffers_t          dc_buffers;
     std::stack<clos_t>        dc_stack_dfs;    // stack used for DFS in leftmost greedy closure
@@ -150,6 +165,15 @@ struct determ_context_t
     tag_path_t                dc_path2;        // buffer 2 for tag history
     tag_path_t                dc_path3;        // buffer 3 for tag history
     std::vector<uint32_t>     dc_tagcount;     // buffer for counting sort on tag history
+
+    // precedence table and auxilary data for POSIX disambiguation
+    int32_t *newprectbl;
+    const int32_t *oldprectbl;
+    size_t oldprecdim;
+    std::vector<histleaf_t> histlevel;
+    std::vector<uint32_t> sortcores;
+    std::vector<uint32_t> fincount;
+    std::vector<int32_t> worklist;
 
     // debug
     dump_dfa_t               dc_dump;
@@ -166,44 +190,11 @@ static const int32_t MAX_RHO = 0x1fffFFFF;
 void tagged_epsilon_closure(determ_context_t &ctx);
 void closure_posix(determ_context_t &);
 void closure_leftmost(determ_context_t &);
-void orders(determ_context_t &);
 void find_state(determ_context_t &ctx);
-int32_t precedence(determ_context_t &, const clos_t &, const clos_t &, int32_t &, int32_t &);
-int32_t unpack_longest(int32_t);
-int32_t unpack_leftmost(int32_t);
-int32_t pack(int32_t, int32_t);
 
 bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
 {
     return x->topord < y->topord;
-}
-
-inline int32_t unpack_longest(int32_t packed)
-{
-    // take lower 30 bits and sign-extend
-    return static_cast<int32_t>(static_cast<uint32_t>(packed) << 2u) >> 2u;
-}
-
-inline int32_t unpack_leftmost(int32_t packed)
-{
-    // take higher 2 bits and sign-extend
-    return packed >> 30u;
-}
-
-inline int32_t pack(int32_t longest, int32_t leftmost)
-{
-    // avoid signed overflows by using unsigned arithmetics
-    uint32_t u_longest = static_cast<uint32_t>(longest);
-    uint32_t u_leftmost = static_cast<uint32_t>(leftmost);
-
-    // leftmost: higher 2 bits, longest: lower 30 bits
-    uint32_t u_packed = (u_longest & 0x3fffFFFF) | (u_leftmost << 30u);
-    int32_t packed = static_cast<int32_t>(u_packed);
-
-    DASSERT(unpack_longest(packed) == longest
-        && unpack_leftmost(packed) == leftmost);
-
-    return packed;
 }
 
 } // namespace re2c
