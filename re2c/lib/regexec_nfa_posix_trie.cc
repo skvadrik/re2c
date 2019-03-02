@@ -40,21 +40,21 @@ namespace libre2c {
  * tag values (instead of storing tags in registers at each step).
  */
 
-static void make_step(simctx_t &, uint32_t);
-static void make_final_step(simctx_t &);
-static void closure_posix(simctx_t &);
-static int32_t precedence(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
-static int32_t precedence_(simctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
+static void make_step(pzctx_t &, uint32_t);
+static void make_final_step(pzctx_t &);
+static void closure_posix(pzctx_t &);
+static int32_t precedence(pzctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
+static int32_t precedence_(pzctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, int32_t &rhoy);
 
 // we *do* want this to be inlined
-static inline void relax(simctx_t &, const conf_t &);
+static inline void relax(pzctx_t &, const conf_t &);
 static inline uint32_t get_step(const tag_history_t &hist, int32_t idx);
 static inline uint32_t get_orig(const tag_history_t &hist, int32_t idx);
 
 int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
-    simctx_t &ctx = *preg->simctx;
+    pzctx_t &ctx = *static_cast<pzctx_t*>(preg->simctx);
     init(ctx, string);
 
     nfa_state_t *s0 = ctx.nfa.root;
@@ -72,7 +72,7 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     return finalize(ctx, string, nmatch, pmatch);
 }
 
-void make_step(simctx_t &ctx, uint32_t sym)
+void make_step(pzctx_t &ctx, uint32_t sym)
 {
     const confset_t &state = ctx.state;
     confset_t &reach = ctx.reach;
@@ -104,7 +104,7 @@ void make_step(simctx_t &ctx, uint32_t sym)
     ++ctx.step;
 }
 
-void make_final_step(simctx_t &ctx)
+void make_final_step(pzctx_t &ctx)
 {
     for (confiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
         nfa_state_t *s = i->state;
@@ -120,7 +120,7 @@ void make_final_step(simctx_t &ctx)
     }
 }
 
-void closure_posix(simctx_t &ctx)
+void closure_posix(pzctx_t &ctx)
 {
     const confset_t &reach = ctx.reach;
     confset_t &state = ctx.state;
@@ -159,7 +159,7 @@ void closure_posix(simctx_t &ctx)
     }
 }
 
-void relax(simctx_t &ctx, const conf_t &c)
+void relax(pzctx_t &ctx, const conf_t &c)
 {
     confset_t &state = ctx.state;
     nfa_state_t *q = c.state;
@@ -197,7 +197,7 @@ void relax(simctx_t &ctx, const conf_t &c)
     }
 }
 
-int32_t precedence(simctx_t &ctx, int32_t idx1, int32_t idx2
+int32_t precedence(pzctx_t &ctx, int32_t idx1, int32_t idx2
     , int32_t &prec1, int32_t &prec2)
 {
     int32_t prec = 0;
@@ -234,7 +234,7 @@ int32_t precedence(simctx_t &ctx, int32_t idx1, int32_t idx2
     return prec;
 }
 
-int32_t precedence_(simctx_t &ctx, int32_t idx1, int32_t idx2
+int32_t precedence_(pzctx_t &ctx, int32_t idx1, int32_t idx2
     , int32_t &prec1, int32_t &prec2)
 {
     if (idx1 == idx2) {

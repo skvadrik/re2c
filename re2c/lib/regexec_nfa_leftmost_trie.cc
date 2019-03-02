@@ -10,13 +10,13 @@
 namespace re2c {
 namespace libre2c {
 
-static void reach_on_symbol(simctx_t &, uint32_t);
-static void closure_leftmost(simctx_t &);
+static void reach_on_symbol(lzctx_t &, uint32_t);
+static void closure_leftmost(lzctx_t &);
 
 int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
-    simctx_t &ctx = *preg->simctx;
+    lzctx_t &ctx = *static_cast<lzctx_t*>(preg->simctx);
     init(ctx, string);
 
     nfa_state_t *s0 = ctx.nfa.root;
@@ -41,7 +41,7 @@ int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string
     return finalize(ctx, string, nmatch, pmatch);
 }
 
-void reach_on_symbol(simctx_t &ctx, uint32_t sym)
+void reach_on_symbol(lzctx_t &ctx, uint32_t sym)
 {
     const confset_t &state = ctx.state;
     confset_t &reach = ctx.reach;
@@ -68,7 +68,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
     }
 }
 
-void closure_leftmost(simctx_t &ctx)
+void closure_leftmost(lzctx_t &ctx)
 {
     confset_t &state = ctx.state, &wl = ctx.reach;
     state.clear();

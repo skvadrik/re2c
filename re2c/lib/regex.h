@@ -12,12 +12,6 @@ struct dfa_t;
 struct RangeMgr;
 } // namespace re2c
 
-namespace re2c {
-namespace libre2c {
-struct simctx_t;
-} // namespace libre2c
-} // namespace re2c
-
 typedef ptrdiff_t regoff_t;
 
 struct regmatch_t
@@ -50,7 +44,7 @@ struct regex_t
     regoff_t *regs;
     size_t *char2class;
     int flags;
-    re2c::libre2c::simctx_t *simctx;
+    void *simctx;
 };
 
 static const int REG_NOMATCH = INT_MAX;

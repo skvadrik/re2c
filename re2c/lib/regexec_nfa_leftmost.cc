@@ -10,14 +10,14 @@
 namespace re2c {
 namespace libre2c {
 
-static void reach_on_symbol(simctx_t &, uint32_t);
-static void closure_leftmost(simctx_t &);
-static void update_offsets(simctx_t &ctx, const conf_t &c);
+static void reach_on_symbol(lctx_t &, uint32_t);
+static void closure_leftmost(lctx_t &);
+static void update_offsets(lctx_t &ctx, const conf_t &c);
 
 int regexec_nfa_leftmost(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
-    simctx_t &ctx = *preg->simctx;
+    lctx_t &ctx = *static_cast<lctx_t*>(preg->simctx);
     init(ctx, string);
 
     // root state can be non-core, so we pass zero as origin to avoid checks
@@ -63,7 +63,7 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
     return 0;
 }
 
-void reach_on_symbol(simctx_t &ctx, uint32_t sym)
+void reach_on_symbol(lctx_t &ctx, uint32_t sym)
 {
     const confset_t &state = ctx.state;
     confset_t &reach = ctx.reach;
@@ -93,7 +93,7 @@ void reach_on_symbol(simctx_t &ctx, uint32_t sym)
     ctx.history.init();
 }
 
-void closure_leftmost(simctx_t &ctx)
+void closure_leftmost(lctx_t &ctx)
 {
     confset_t &state = ctx.state, &wl = ctx.reach;
     state.clear();
@@ -128,7 +128,7 @@ void closure_leftmost(simctx_t &ctx)
     }
 }
 
-void update_offsets(simctx_t &ctx, const conf_t &c)
+void update_offsets(lctx_t &ctx, const conf_t &c)
 {
     const size_t nsub = ctx.nsub;
     bool *done = ctx.done;

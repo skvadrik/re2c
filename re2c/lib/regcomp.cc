@@ -47,7 +47,18 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 
     dfa_t *dfa = NULL;
     if (cflags & REG_NFA) {
-        preg->simctx = new libre2c::simctx_t(*nfa, preg->re_nsub, cflags);
+        if ((cflags & REG_TRIE) && (cflags & REG_LEFTMOST)) {
+            preg->simctx = new libre2c::lzctx_t(*nfa, preg->re_nsub, cflags);
+        }
+        else if (cflags & REG_TRIE) {
+            preg->simctx = new libre2c::pzctx_t(*nfa, preg->re_nsub, cflags);
+        }
+        else if (cflags & REG_LEFTMOST) {
+            preg->simctx = new libre2c::lctx_t(*nfa, preg->re_nsub, cflags);
+        }
+        else {
+            preg->simctx = new libre2c::pctx_t(*nfa, preg->re_nsub, cflags);
+        }
     }
     else {
         preg->char2class = new size_t[256];

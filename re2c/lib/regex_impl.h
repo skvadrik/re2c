@@ -50,6 +50,15 @@ typedef confset_t::iterator confiter_t;
 typedef confset_t::const_iterator cconfiter_t;
 typedef confset_t::const_reverse_iterator rcconfiter_t;
 
+enum sema_t {POSIX, LEFTMOST};
+enum eval_t {STRICT, LAZY};
+
+template<sema_t SEMA, eval_t EVAL> struct history_type_t;
+template<> struct history_type_t<POSIX, STRICT> {typedef tag_history_t type;};
+template<> struct history_type_t<LEFTMOST, STRICT> {typedef tag_history_t type;};
+template<sema_t SEMA> struct history_type_t<SEMA, LAZY> {typedef tag_history_t type;};
+
+template<sema_t SEMA, eval_t EVAL>
 struct simctx_t
 {
     typedef libre2c::conf_t conf_t;
@@ -58,12 +67,13 @@ struct simctx_t
     typedef confset_t::const_iterator cconfiter_t;
     typedef confset_t::reverse_iterator rconfiter_t;
     typedef confset_t::const_reverse_iterator rcconfiter_t;
+    typedef typename history_type_t<SEMA, EVAL>::type history_t;
 
     const nfa_t &nfa;
     const size_t nsub;
     const int flags;
 
-    tag_history_t history;
+    history_t history;
     int32_t hidx;
 
     uint32_t step;
@@ -101,13 +111,154 @@ struct simctx_t
     FORBID_COPY(simctx_t);
 };
 
-void init(simctx_t &ctx, const char *string);
-int finalize(const simctx_t &ctx, const char *string, size_t nmatch, regmatch_t pmatch[]);
+typedef simctx_t<POSIX, STRICT> pctx_t;
+typedef simctx_t<LEFTMOST, STRICT> lctx_t;
+typedef simctx_t<POSIX, LAZY> pzctx_t;
+typedef simctx_t<LEFTMOST, LAZY> lzctx_t;
+
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_leftmost(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+
+template<sema_t SEMA, eval_t EVAL>
+simctx_t<SEMA, EVAL>::simctx_t(const nfa_t &nfa, size_t re_nsub, int flags)
+    : nfa(nfa)
+    , nsub(2 * (re_nsub - 1))
+    , flags(flags)
+    , history()
+    , hidx(HROOT)
+    , step(0)
+    , rule(Rule::NONE)
+    , cursor(NULL)
+    , marker(NULL)
+    , offsets1(NULL)
+    , offsets2(NULL)
+    , offsets3(NULL)
+    , done(NULL)
+    , newprectbl(NULL)
+    , oldprectbl(NULL)
+    , oldprecdim(0)
+    , histlevel()
+    , sortcores()
+    , fincount()
+    , worklist()
+    , cache()
+    , reach()
+    , state()
+    , gor1_topsort()
+    , gor1_linear()
+    , gtop_heap_storage()
+    , gtop_cmp()
+    , gtop_heap(gtop_cmp, gtop_heap_storage)
+    , dc_clstats()
+{
+    const size_t
+        nstates = nfa.size,
+        ncores = nfa.ncores;
+
+    state.reserve(nstates);
+    reach.reserve(nstates);
+
+    done = new bool[nsub];
+
+    if (!(flags & REG_TRIE)) {
+        offsets1 = new regoff_t[nsub * ncores];
+        offsets2 = new regoff_t[nsub * ncores];
+        offsets3 = new regoff_t[nsub];
+    }
+    if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
+        newprectbl = new int32_t[ncores * ncores];
+        oldprectbl = new int32_t[ncores * ncores];
+        histlevel.reserve(ncores);
+        sortcores.reserve(ncores);
+        fincount.resize(ncores + 1);
+        worklist.reserve(nstates);
+    }
+
+    if (flags & REG_GTOP) {
+        gtop_heap_storage.reserve(nstates);
+    }
+    else {
+        gor1_topsort.reserve(nstates);
+        gor1_linear.reserve(nstates);
+    }
+}
+
+template<sema_t SEMA, eval_t EVAL>
+simctx_t<SEMA, EVAL>::~simctx_t()
+{
+    delete[] done;
+    if (!(flags & REG_TRIE)) {
+        delete[] offsets1;
+        delete[] offsets2;
+        delete[] offsets3;
+    }
+    if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
+        delete[] newprectbl;
+        delete[] oldprectbl;
+    }
+}
+
+template<sema_t SEMA, eval_t EVAL>
+void init(simctx_t<SEMA, EVAL> &ctx, const char *string)
+{
+    ctx.reach.clear();
+    ctx.state.clear();
+    ctx.history.init();
+    ctx.hidx = HROOT;
+    ctx.step = 0;
+    ctx.rule = Rule::NONE;
+    ctx.cursor = ctx.marker = string;
+    ctx.cache.clear();
+    ctx.histlevel.clear();
+    ctx.sortcores.clear();
+    DASSERT(ctx.worklist.empty());
+    DASSERT(ctx.gor1_topsort.empty());
+    DASSERT(ctx.gor1_linear.empty());
+    DASSERT(ctx.gtop_heap.empty());
+}
+
+template<sema_t SEMA>
+int finalize(const simctx_t<SEMA, LAZY> &ctx, const char *string, size_t nmatch,
+    regmatch_t pmatch[])
+{
+    if (ctx.rule == Rule::NONE) {
+        return REG_NOMATCH;
+    }
+
+    regmatch_t *m = pmatch;
+    m->rm_so = 0;
+    m->rm_eo = ctx.marker - string - 1;
+
+    const std::vector<Tag> &tags = ctx.nfa.tags;
+    size_t todo = nmatch * 2;
+    bool *done = ctx.done;
+    memset(done, 0, ctx.nsub * sizeof(bool));
+
+    for (int32_t i = ctx.hidx; todo > 0 && i != HROOT; ) {
+        const tag_history_t::node_t &n = ctx.history.node(i);
+        const Tag &tag = tags[n.info.idx];
+        const size_t t = tag.ncap;
+        if (!fictive(tag) && t < nmatch * 2 && !done[t]) {
+            done[t] = true;
+            --todo;
+            const regoff_t off = n.info.neg ? -1
+                : static_cast<regoff_t>(ctx.history.node2(i).step);
+            m = &pmatch[t / 2 + 1];
+            if (t % 2 == 0) {
+                m->rm_so = off;
+            }
+            else {
+                m->rm_eo = off;
+            }
+        }
+        i = n.pred;
+    }
+
+    return 0;
+}
 
 bool ran_or_fin_t::operator()(const conf_t &c)
 {
