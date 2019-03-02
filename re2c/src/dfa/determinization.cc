@@ -51,8 +51,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
     const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
 
     // initial state
-    const clos_t c0 = {nfa.root, 0, INITIAL_TAGS, HROOT, HROOT};
-    ctx.dc_reached.push_back(c0);
+    const clos_t c0(nfa.root, 0, INITIAL_TAGS, HROOT, HROOT);
+    ctx.reach.push_back(c0);
     tagged_epsilon_closure(ctx);
     find_state(ctx);
 
@@ -94,14 +94,14 @@ void reach_on_symbol(determ_context_t &ctx, uint32_t sym)
     ctx.oldprectbl = kernel->prectbl;
     ctx.oldprecdim = kernel->size;
 
-    closure_t &reached = ctx.dc_reached;
-    reached.clear();
+    closure_t &reach = ctx.reach;
+    reach.clear();
 
     for (uint32_t i = 0; i < kernel->size; ++i) {
         nfa_state_t *s = transition(kernel->state[i], symbol);
         if (s) {
-            clos_t c = {s, i, kernel->tvers[i], kernel->thist[i], HROOT};
-            reached.push_back(c);
+            const clos_t c(s, i, kernel->tvers[i], kernel->thist[i], HROOT);
+            reach.push_back(c);
         }
     }
 }
@@ -224,24 +224,24 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     , dc_target(dfa_t::NIL)
     , dc_symbol(0)
     , dc_actions(NULL)
-    , dc_reached()
-    , state()
     , dc_tagvertbl(nfa.tags.size())
     , history()
     , dc_kernels()
     , dc_buffers(dc_allocator)
-    , dc_stack_dfs()
-    , dc_gor1_topsort()
-    , dc_gor1_linear()
-    , dc_gtop_buffer()
-    , dc_gtop_cmp()
-    , dc_gtop_heap(dc_gtop_cmp, dc_gtop_buffer)
     , dc_hc_caches()
     , dc_newvers(newver_cmp_t(history, dc_hc_caches))
     , dc_path1()
     , dc_path2()
     , dc_path3()
     , dc_tagcount()
+    , reach()
+    , state()
+    , stack_dfs()
+    , gor1_topsort()
+    , gor1_linear()
+    , gtop_buffer()
+    , gtop_cmp()
+    , gtop_heap(gtop_cmp, gtop_buffer)
     , newprectbl(NULL)
     , oldprectbl(NULL)
     , oldprecdim(0)
@@ -271,11 +271,11 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     }
 
     if (opts->posix_closure == POSIX_CLOSURE_GTOP) {
-        dc_gtop_buffer.reserve(nstates);
+        gtop_buffer.reserve(nstates);
     }
     else {
-        dc_gor1_topsort.reserve(nstates);
-        dc_gor1_linear.reserve(nstates);
+        gor1_topsort.reserve(nstates);
+        gor1_linear.reserve(nstates);
     }
 }
 

@@ -1,3 +1,6 @@
+#ifndef _RE2C_DFA_CLOSURE_POSIX_
+#define _RE2C_DFA_CLOSURE_POSIX_
+
 #include <queue>
 
 #include "src/dfa/determinization.h"
@@ -16,24 +19,15 @@ namespace re2c
  * can just propagate the new path up to the next join point.
  */
 
-struct cmp_gor1_t
-{
-    determ_context_t &ctx;
-
-    cmp_gor1_t(determ_context_t &);
-    bool operator()(const clos_t &, const clos_t &) const;
-};
-
-static void closure_posix_gor1(determ_context_t &);
-static void closure_posix_gtop(determ_context_t &);
+template<typename ctx_t> static void closure_posix_gor1(ctx_t &);
+template<typename ctx_t> static void closure_posix_gtop(ctx_t &);
 
 // we *do* want these to be inlined
-static inline bool scan(determ_context_t &ctx, nfa_state_t *q, bool all);
-static inline bool relax_gor1(determ_context_t &, const clos_t &);
-static inline void relax_gtop(determ_context_t &, const clos_t &);
+template<typename ctx_t> static inline bool scan(ctx_t &ctx, nfa_state_t *q, bool all);
+template<typename ctx_t> static inline bool relax_gor1(ctx_t &, const typename ctx_t::conf_t &);
+template<typename ctx_t> static inline void relax_gtop(ctx_t &, const typename ctx_t::conf_t &);
 
-
-void closure_posix(determ_context_t &ctx)
+inline void closure_posix(determ_context_t &ctx)
 {
     DRESET_CLSTATS(ctx);
 
@@ -57,6 +51,24 @@ void closure_posix(determ_context_t &ctx)
     }
 }
 
+template<typename ctx_t>
+struct cmp_gor1_t
+{
+    ctx_t &ctx;
+
+    cmp_gor1_t(ctx_t &ctx) : ctx(ctx) {}
+
+    bool operator()
+        ( const typename ctx_t::conf_t &x
+        , const typename ctx_t::conf_t &y) const
+    {
+        // if longest components differ, leftmost already incorporates that
+        const uint32_t xo = x.origin, yo = y.origin;
+        return xo != yo
+            && unpack_leftmost(ctx.oldprectbl[xo * ctx.oldprecdim + yo]) < 0;
+    }
+};
+
 /*
  * note [GOR1 SSSP algorithm]
  * Cherkassky-Goldberg-Radzik Single Source Shortest Path algorithm.
@@ -70,17 +82,18 @@ void closure_posix(determ_context_t &ctx)
  * Complexity for digraph G = (V, E) is O(|V| * |E|), and O(|V| + |E|)
  * in case of acyclic graph.
  */
-void closure_posix_gor1(determ_context_t &ctx)
+template<typename ctx_t>
+void closure_posix_gor1(ctx_t &ctx)
 {
-    closure_t &state = ctx.state, &reach = ctx.dc_reached;
+    typename ctx_t::confset_t &state = ctx.state, &reach = ctx.reach;
     std::vector<nfa_state_t*>
-        &topsort = ctx.dc_gor1_topsort,
-        &linear = ctx.dc_gor1_linear;
+        &topsort = ctx.gor1_topsort,
+        &linear = ctx.gor1_linear;
 
     // init: push configurations ordered by POSIX precedence (highest on top)
     state.clear();
-    std::sort(reach.begin(), reach.end(), cmp_gor1_t(ctx));
-    for (rcclositer_t c = reach.rbegin(); c != reach.rend(); ++c) {
+    std::sort(reach.begin(), reach.end(), cmp_gor1_t<ctx_t>(ctx));
+    for (typename ctx_t::rcconfiter_t c = reach.rbegin(); c != reach.rend(); ++c) {
         nfa_state_t *q = c->state;
         if (q->clos == NOCLOS) {
             q->clos = static_cast<uint32_t>(state.size());
@@ -126,57 +139,49 @@ void closure_posix_gor1(determ_context_t &ctx)
     }
 }
 
-inline cmp_gor1_t::cmp_gor1_t(determ_context_t &ctx) : ctx(ctx) {}
-
-inline bool cmp_gor1_t::operator()(const clos_t &x, const clos_t &y) const
-{
-    // if longest components differ, leftmost already incorporates that
-    const uint32_t xo = x.origin, yo = y.origin;
-    return xo != yo
-        && unpack_leftmost(ctx.oldprectbl[xo * ctx.oldprecdim + yo]) < 0;
-}
-
-bool scan(determ_context_t &ctx, nfa_state_t *q, bool all)
+template<typename ctx_t>
+bool scan(ctx_t &ctx, nfa_state_t *q, bool all)
 {
     bool any = false;
-    clos_t x = ctx.state[q->clos];
+
+    typedef typename ctx_t::conf_t conf_t;
+    const conf_t &x = ctx.state[q->clos];
+
     switch (q->type) {
         case nfa_state_t::NIL:
             if (q->arcidx == 0) {
-                x.state = q->nil.out;
-                any |= relax_gor1(ctx, x);
+                any |= relax_gor1(ctx, conf_t(x, q->nil.out));
                 ++q->arcidx;
             }
             break;
         case nfa_state_t::ALT:
             if (q->arcidx == 0) {
-                x.state = q->alt.out1;
-                any |= relax_gor1(ctx, x);
+                any |= relax_gor1(ctx, conf_t(x, q->alt.out1));
                 ++q->arcidx;
             }
             if (q->arcidx == 1 && (!any || all)) {
-                x.state = q->alt.out2;
-                any |= relax_gor1(ctx, x);
+                any |= relax_gor1(ctx, conf_t(x, q->alt.out2));
                 ++q->arcidx;
             }
             break;
         case nfa_state_t::TAG:
             if (q->arcidx == 0) {
-                x.state = q->tag.out;
-                x.thist = ctx.history.push1(x.thist, q->tag.info);
-                any |= relax_gor1(ctx, x);
+                any |= relax_gor1(ctx, conf_t(x, q->tag.out
+                    , ctx.history.push1(x.thist, q->tag.info)));
                 ++q->arcidx;
             }
             break;
         default:
             break;
     }
+
     return any;
 }
 
-bool relax_gor1(determ_context_t &ctx, const clos_t &x)
+template<typename ctx_t>
+bool relax_gor1(ctx_t &ctx, const typename ctx_t::conf_t &x)
 {
-    closure_t &state = ctx.state;
+    typename ctx_t::confset_t &state = ctx.state;
     nfa_state_t *q = x.state;
     const uint32_t idx = q->clos;
     int32_t p1, p2;
@@ -198,7 +203,7 @@ bool relax_gor1(determ_context_t &ctx, const clos_t &x)
     }
 
     if (q->status == GOR_NOPASS) {
-        ctx.dc_gor1_topsort.push_back(q);
+        ctx.gor1_topsort.push_back(q);
         q->arcidx = 0;
         return true;
     }
@@ -230,14 +235,15 @@ bool relax_gor1(determ_context_t &ctx, const clos_t &x)
  * However the algorithm is simple and optimal for DAGs, therefore we keep it.
  */
 
-void closure_posix_gtop(determ_context_t &ctx)
+template<typename ctx_t>
+void closure_posix_gtop(ctx_t &ctx)
 {
-    const closure_t &reach = ctx.dc_reached;
-    closure_t &state = ctx.state;
-    gtop_heap_t &heap = ctx.dc_gtop_heap;
+    const typename ctx_t::confset_t &reach = ctx.reach;
+    typename ctx_t::confset_t &state = ctx.state;
+    gtop_heap_t &heap = ctx.gtop_heap;
 
     state.clear();
-    for (cclositer_t c = reach.begin(); c != reach.end(); ++c) {
+    for (typename ctx_t::cconfiter_t c = reach.begin(); c != reach.end(); ++c) {
         relax_gtop(ctx, *c);
     }
 
@@ -247,22 +253,20 @@ void closure_posix_gtop(determ_context_t &ctx)
         q->active = 0;
         DINCCOUNT_CLSCANS(ctx);
 
-        clos_t x = ctx.state[q->clos];
+        typedef typename ctx_t::conf_t conf_t;
+        const conf_t &x = ctx.state[q->clos];
+
         switch (q->type) {
             case nfa_state_t::NIL:
-                x.state = q->nil.out;
-                relax_gtop(ctx, x);
+                relax_gtop(ctx, conf_t(x, q->nil.out));
                 break;
             case nfa_state_t::ALT:
-                x.state = q->alt.out1;
-                relax_gtop(ctx, x);
-                x.state = q->alt.out2;
-                relax_gtop(ctx, x);
+                relax_gtop(ctx, conf_t(x, q->alt.out1));
+                relax_gtop(ctx, conf_t(x, q->alt.out2));
                 break;
             case nfa_state_t::TAG:
-                x.state = q->tag.out;
-                x.thist = ctx.history.push1(x.thist, q->tag.info);
-                relax_gtop(ctx, x);
+                relax_gtop(ctx, conf_t(x, q->tag.out
+                    , ctx.history.push1(x.thist, q->tag.info)));
                 break;
             default:
                 break;
@@ -270,9 +274,10 @@ void closure_posix_gtop(determ_context_t &ctx)
     }
 }
 
-void relax_gtop(determ_context_t &ctx, const clos_t &c)
+template<typename ctx_t>
+void relax_gtop(ctx_t &ctx, const typename ctx_t::conf_t &c)
 {
-    closure_t &state = ctx.state;
+    typename ctx_t::confset_t &state = ctx.state;
     nfa_state_t *q = c.state;
     const uint32_t idx = q->clos;
     int32_t p1, p2;
@@ -291,8 +296,11 @@ void relax_gtop(determ_context_t &ctx, const clos_t &c)
 
     if (!q->active) {
         q->active = 1;
-        ctx.dc_gtop_heap.push(q);
+        ctx.gtop_heap.push(q);
     }
 }
 
 } // namespace re2c
+
+#endif // _RE2C_DFA_CLOSURE_POSIX_
+

@@ -7,9 +7,9 @@ namespace re2c
 
 void closure_leftmost(determ_context_t &ctx)
 {
-    const closure_t &init = ctx.dc_reached;
+    const closure_t &init = ctx.reach;
     closure_t &done = ctx.state;
-    std::stack<clos_t> &todo = ctx.dc_stack_dfs;
+    std::stack<clos_t> &todo = ctx.stack_dfs;
 
     // enqueue all initial states
     done.clear();

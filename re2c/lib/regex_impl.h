@@ -25,6 +25,10 @@ struct conf_t
     inline conf_t(): state(NULL), origin(0), thist(HROOT) {}
     inline conf_t(nfa_state_t *s, uint32_t o, int32_t h)
         : state(s), origin(o), thist(h) {}
+    inline conf_t(const conf_t &c, nfa_state_t *s)
+        : state(s), origin(c.origin), thist(c.thist) {}
+    inline conf_t(const conf_t &c, nfa_state_t *s, int32_t h)
+        : state(s), origin(c.origin), thist(h) {}
 };
 
 struct ran_or_fin_t
@@ -48,6 +52,7 @@ typedef confset_t::const_reverse_iterator rcconfiter_t;
 
 struct simctx_t
 {
+    typedef libre2c::conf_t conf_t;
     typedef std::vector<conf_t> confset_t;
     typedef confset_t::iterator confiter_t;
     typedef confset_t::const_iterator cconfiter_t;
@@ -57,9 +62,6 @@ struct simctx_t
     const nfa_t &nfa;
     const size_t nsub;
     const int flags;
-
-    confset_t reach;
-    confset_t state;
 
     tag_history_t history;
     int32_t hidx;
@@ -85,6 +87,8 @@ struct simctx_t
     std::vector<int32_t> worklist;
     cache_t cache;
 
+    confset_t reach;
+    confset_t state;
     std::vector<nfa_state_t*> gor1_topsort;
     std::vector<nfa_state_t*> gor1_linear;
     std::vector<nfa_state_t*> gtop_heap_storage;

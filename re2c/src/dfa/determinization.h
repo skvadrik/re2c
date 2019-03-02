@@ -40,6 +40,14 @@ struct clos_t
     hidx_t ttran; // history of transition tags
     hidx_t thist; // history of lookahead tags
 
+    inline clos_t()
+        : state(NULL), origin(0), tvers(0), ttran(0), thist(HROOT) {}
+    inline clos_t(nfa_state_t *s, uint32_t o, uint32_t v, hidx_t t, hidx_t h)
+        : state(s), origin(o), tvers(v), ttran(t), thist(h) {}
+    inline clos_t(const clos_t &c, nfa_state_t *s)
+        : state(s), origin(c.origin), tvers(c.tvers), ttran(c.ttran), thist(c.thist) {}
+    inline clos_t(const clos_t &c, nfa_state_t *s, hidx_t h)
+        : state(s), origin(c.origin), tvers(c.tvers), ttran(c.ttran), thist(h) {}
     static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
     static inline bool ran(const clos_t &c) { return c.state->type == nfa_state_t::RAN; }
 };
@@ -126,7 +134,8 @@ typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
 
 struct determ_context_t
 {
-    typedef std::vector<clos_t> confset_t;
+    typedef clos_t conf_t;
+    typedef std::vector<conf_t> confset_t;
     typedef confset_t::iterator confiter_t;
     typedef confset_t::const_iterator cconfiter_t;
     typedef confset_t::reverse_iterator rconfiter_t;
@@ -147,24 +156,26 @@ struct determ_context_t
     uint32_t                  dc_target;       // to-state of the current transition
     uint32_t                  dc_symbol;       // alphabet symbol of the current transition
     tcmd_t                   *dc_actions;      // tag actions of the current transition
-    closure_t                 dc_reached;
-    closure_t                 state;
     tagver_table_t            dc_tagvertbl;
     tag_history_t             history;         // prefix trie of tag histories
     kernels_t                 dc_kernels;      // TDFA states under construction
     kernel_buffers_t          dc_buffers;
-    std::stack<clos_t>        dc_stack_dfs;    // stack used for DFS in leftmost greedy closure
-    std::vector<nfa_state_t*> dc_gor1_topsort; // stack used in GOR1 (POSIX closure)
-    std::vector<nfa_state_t*> dc_gor1_linear;  // stack used in GOR1 (POSIX closure)
-    std::vector<nfa_state_t*> dc_gtop_buffer;  // buffer used for heap in GTOP (POSIX closure)
-    cmp_gtop_t                dc_gtop_cmp;     // heap comparator used in GTOP (POSIX closure)
-    gtop_heap_t               dc_gtop_heap;    // heap used in GTOP (POSIX closure)
     hc_caches_t               dc_hc_caches;    // per-tag cache of history comparisons
     newvers_t                 dc_newvers;      // map of triples (tag, version, history) to new version
     tag_path_t                dc_path1;        // buffer 1 for tag history
     tag_path_t                dc_path2;        // buffer 2 for tag history
     tag_path_t                dc_path3;        // buffer 3 for tag history
     std::vector<uint32_t>     dc_tagcount;     // buffer for counting sort on tag history
+
+    // tagged epsilon-closure
+    confset_t reach;
+    confset_t state;
+    std::stack<clos_t> stack_dfs;           // stack used for DFS in leftmost greedy closure
+    std::vector<nfa_state_t*> gor1_topsort; // stack used in GOR1 (POSIX closure)
+    std::vector<nfa_state_t*> gor1_linear;  // stack used in GOR1 (POSIX closure)
+    std::vector<nfa_state_t*> gtop_buffer;  // buffer used for heap in GTOP (POSIX closure)
+    cmp_gtop_t gtop_cmp;                    // heap comparator used in GTOP (POSIX closure)
+    gtop_heap_t gtop_heap;                  // heap used in GTOP (POSIX closure)
 
     // precedence table and auxilary data for POSIX disambiguation
     int32_t *newprectbl;
@@ -176,8 +187,8 @@ struct determ_context_t
     std::vector<int32_t> worklist;
 
     // debug
-    dump_dfa_t               dc_dump;
-    closure_stats_t          dc_clstats;
+    dump_dfa_t dc_dump;
+    closure_stats_t dc_clstats;
 
     determ_context_t(const opt_t *, Msg &, const std::string &, const nfa_t &, dfa_t &);
     ~determ_context_t();

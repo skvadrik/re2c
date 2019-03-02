@@ -20,6 +20,7 @@ libre2c_la_HDR = \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
 	src/cfg/cfg.h \
+	src/dfa/closure_posix.h \
 	src/dfa/determinization.h \
 	src/dfa/dfa.h \
 	src/dfa/posix_precedence.h \
@@ -97,7 +98,6 @@ libre2c_la_SRC = \
 	src/cfg/varalloc.cc \
 	src/dfa/closure.cc \
 	src/dfa/closure_leftmost.cc \
-	src/dfa/closure_posix.cc \
 	src/debug/dump_adfa.cc \
 	src/debug/dump_cfg.cc \
 	src/debug/dump_dfa.cc \
