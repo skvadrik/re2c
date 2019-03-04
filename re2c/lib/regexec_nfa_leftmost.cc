@@ -10,14 +10,14 @@
 namespace re2c {
 namespace libre2c {
 
-static void reach_on_symbol(lctx_t &, uint32_t);
-static void closure_leftmost(lctx_t &);
-static void update_offsets(lctx_t &ctx, const conf_t &c);
+static void reach_on_symbol(lsimctx_t &, uint32_t);
+static void closure_leftmost(lsimctx_t &);
+static void update_offsets(lsimctx_t &ctx, const conf_t &c);
 
 int regexec_nfa_leftmost(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
 {
-    lctx_t &ctx = *static_cast<lctx_t*>(preg->simctx);
+    lsimctx_t &ctx = *static_cast<lsimctx_t*>(preg->simctx);
     init(ctx, string);
 
     // root state can be non-core, so we pass zero as origin to avoid checks
@@ -63,7 +63,7 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
     return 0;
 }
 
-void reach_on_symbol(lctx_t &ctx, uint32_t sym)
+void reach_on_symbol(lsimctx_t &ctx, uint32_t sym)
 {
     const confset_t &state = ctx.state;
     confset_t &reach = ctx.reach;
@@ -93,7 +93,7 @@ void reach_on_symbol(lctx_t &ctx, uint32_t sym)
     ctx.history.init();
 }
 
-void closure_leftmost(lctx_t &ctx)
+void closure_leftmost(lsimctx_t &ctx)
 {
     confset_t &state = ctx.state, &wl = ctx.reach;
     state.clear();
@@ -119,8 +119,7 @@ void closure_leftmost(lctx_t &ctx)
                 wl.push_back(conf_t(n->alt.out1, o, h));
                 break;
             case nfa_state_t::TAG:
-                wl.push_back(conf_t(n->tag.out, o
-                    , ctx.history.push(h, n->tag.info)));
+                wl.push_back(conf_t(n->tag.out, o, ctx.history.link(ctx, x)));
                 break;
             default:
                 break;
@@ -128,7 +127,7 @@ void closure_leftmost(lctx_t &ctx)
     }
 }
 
-void update_offsets(lctx_t &ctx, const conf_t &c)
+void update_offsets(lsimctx_t &ctx, const conf_t &c)
 {
     const size_t nsub = ctx.nsub;
     bool *done = ctx.done;
@@ -148,7 +147,7 @@ void update_offsets(lctx_t &ctx, const conf_t &c)
     memset(done, 0, nsub * sizeof(bool));
 
     for (int32_t i = c.thist; i != HROOT; ) {
-        const lctx_t::history_t::node_t &n = ctx.history.node(i);
+        const lsimctx_t::history_t::node_t &n = ctx.history.node(i);
         const size_t t = n.info.idx;
         if (!done[t]) {
             done[t] = true;

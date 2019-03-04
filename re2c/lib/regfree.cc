@@ -17,16 +17,16 @@ void regfree(regex_t *preg)
 
     if (preg->flags & REG_NFA) {
         if ((preg->flags & REG_TRIE) && (preg->flags & REG_LEFTMOST)) {
-            delete static_cast<libre2c::lzctx_t*>(preg->simctx);
+            delete static_cast<libre2c::lzsimctx_t*>(preg->simctx);
         }
         else if (preg->flags & REG_TRIE) {
-            delete static_cast<libre2c::pzctx_t*>(preg->simctx);
+            delete static_cast<libre2c::pzsimctx_t*>(preg->simctx);
         }
         else if (preg->flags & REG_LEFTMOST) {
-            delete static_cast<libre2c::lctx_t*>(preg->simctx);
+            delete static_cast<libre2c::lsimctx_t*>(preg->simctx);
         }
         else {
-            delete static_cast<libre2c::pctx_t*>(preg->simctx);
+            delete static_cast<libre2c::psimctx_t*>(preg->simctx);
         }
     }
     else {

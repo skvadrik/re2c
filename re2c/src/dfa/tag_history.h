@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <sys/types.h>
+#include <map>
 #include <vector>
 
 #include "src/regexp/tag.h"
@@ -56,7 +57,11 @@ struct phistory_t
     inline const node_t &node(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
     inline arc_t &arc(hidx_t i) { return arcs[static_cast<uint32_t>(i)]; }
     inline const arc_t &arc(hidx_t i) const { return arcs[static_cast<uint32_t>(i)]; }
-    inline hidx_t push(hidx_t idx, tag_info_t info);
+    template<typename ctx_t> inline hidx_t link(ctx_t &ctx
+        , const typename ctx_t::conf_t &conf);
+    template<typename ctx_t> static int32_t precedence(ctx_t &ctx
+        , const typename ctx_t::conf_t &x, const typename ctx_t::conf_t &y
+        , int32_t &prec1, int32_t &prec2);
     FORBID_COPY(phistory_t);
 };
 
@@ -77,7 +82,8 @@ struct lhistory_t
     inline void init();
     inline node_t &node(hidx_t i) { return nodes[static_cast<uint32_t>(i)]; }
     inline const node_t &node(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
-    inline hidx_t push(hidx_t idx, tag_info_t info);
+    template<typename ctx_t> inline hidx_t link(ctx_t &ctx
+        , const typename ctx_t::conf_t &conf);
     FORBID_COPY(lhistory_t);
 };
 
@@ -87,20 +93,33 @@ struct zhistory_t
     struct node_t {
         tag_info_t info;
         hidx_t pred;
-        uint32_t step;
         uint32_t orig;
+        uint32_t step;
 
-        inline node_t(tag_info_t info, hidx_t pred, uint32_t step, uint32_t orig)
-            : info(info), pred(pred), step(step), orig(orig) {}
+        inline node_t(tag_info_t info, hidx_t pred, uint32_t orig, uint32_t step)
+            : info(info), pred(pred), orig(orig), step(step) {}
     };
 
-    std::vector<node_t> nodes;
+    struct cache_entry_t
+    {
+        int32_t prec1;
+        int32_t prec2;
+        int32_t prec;
+    };
+    typedef std::map<uint64_t, cache_entry_t> cache_t;
 
-    inline zhistory_t(): nodes() { init(); }
+    std::vector<node_t> nodes;
+    cache_t cache;
+
+    inline zhistory_t(): nodes(), cache() { init(); }
     inline void init();
     inline node_t &node(hidx_t i) { return nodes[static_cast<uint32_t>(i)]; }
     inline const node_t &node(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
-    inline hidx_t push(hidx_t idx, uint32_t step, tag_info_t info, uint32_t orig);
+    template<typename ctx_t> inline hidx_t link(ctx_t &ctx
+        , const typename ctx_t::conf_t &conf);
+    template<typename ctx_t> static int32_t precedence(ctx_t &ctx
+        , const typename ctx_t::conf_t &x, const typename ctx_t::conf_t &y
+        , int32_t &prec1, int32_t &prec2);
     FORBID_COPY(zhistory_t);
 };
 
@@ -121,6 +140,7 @@ void zhistory_t::init()
 {
     nodes.clear();
     nodes.push_back(node_t(NOINFO, -1, 0, 0));
+    cache.clear();
 }
 
 void phistory_t::detach()
@@ -132,8 +152,10 @@ void phistory_t::detach()
     n.finidx = NONFIN;
 }
 
-int32_t phistory_t::push(int32_t idx, tag_info_t info)
+template<typename ctx_t>
+hidx_t phistory_t::link(ctx_t &/* ctx */, const typename ctx_t::conf_t &conf)
 {
+    const hidx_t idx = conf.thist;
     const int32_t i = static_cast<int32_t>(nodes.size());
     if (idx != -1) {
         node_t &n = node(idx);
@@ -147,21 +169,23 @@ int32_t phistory_t::push(int32_t idx, tag_info_t info)
         }
         n.last = a;
     }
-    nodes.push_back(node_t(info, idx, -1, -1));
+    nodes.push_back(node_t(conf.state->tag.info, idx, -1, -1));
     return i;
 }
 
-int32_t lhistory_t::push(int32_t idx, tag_info_t info)
+template<typename ctx_t>
+hidx_t lhistory_t::link(ctx_t &/* ctx */, const typename ctx_t::conf_t &conf)
 {
     const int32_t i = static_cast<int32_t>(nodes.size());
-    nodes.push_back(node_t(info, idx));
+    nodes.push_back(node_t(conf.state->tag.info, conf.thist));
     return i;
 }
 
-int32_t zhistory_t::push(int32_t idx, uint32_t step, tag_info_t info, uint32_t orig)
+template<typename ctx_t>
+hidx_t zhistory_t::link(ctx_t &ctx, const typename ctx_t::conf_t &conf)
 {
     const int32_t i = static_cast<int32_t>(nodes.size());
-    nodes.push_back(node_t(info, idx, step, orig));
+    nodes.push_back(node_t(conf.state->tag.info, conf.thist, conf.origin, ctx.step));
     return i;
 }
 

@@ -36,15 +36,6 @@ struct ran_or_fin_t
     inline bool operator()(const conf_t &c);
 };
 
-struct cache_entry_t
-{
-    int32_t prec1;
-    int32_t prec2;
-    int32_t prec;
-};
-
-typedef std::map<uint64_t, cache_entry_t> cache_t;
-
 typedef std::vector<conf_t> confset_t;
 typedef confset_t::iterator confiter_t;
 typedef confset_t::const_iterator cconfiter_t;
@@ -87,7 +78,6 @@ struct simctx_t
     std::vector<uint32_t> sortcores;
     std::vector<uint32_t> fincount;
     std::vector<int32_t> worklist;
-    cache_t cache;
 
     confset_t reach;
     confset_t state;
@@ -103,10 +93,10 @@ struct simctx_t
     FORBID_COPY(simctx_t);
 };
 
-typedef simctx_t<POSIX, STRICT> pctx_t;
-typedef simctx_t<LEFTMOST, STRICT> lctx_t;
-typedef simctx_t<POSIX, LAZY> pzctx_t;
-typedef simctx_t<LEFTMOST, LAZY> lzctx_t;
+typedef simctx_t<POSIX, STRICT> psimctx_t;
+typedef simctx_t<LEFTMOST, STRICT> lsimctx_t;
+typedef simctx_t<POSIX, LAZY> pzsimctx_t;
+typedef simctx_t<LEFTMOST, LAZY> lzsimctx_t;
 
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
@@ -136,7 +126,6 @@ simctx_t<SEMA, EVAL>::simctx_t(const nfa_t &nfa, size_t re_nsub, int flags)
     , sortcores()
     , fincount()
     , worklist()
-    , cache()
     , reach()
     , state()
     , gor1_topsort()
@@ -203,7 +192,6 @@ void init(simctx_t<SEMA, EVAL> &ctx, const char *string)
     ctx.step = 0;
     ctx.rule = Rule::NONE;
     ctx.cursor = ctx.marker = string;
-    ctx.cache.clear();
     ctx.histlevel.clear();
     ctx.sortcores.clear();
     DASSERT(ctx.worklist.empty());

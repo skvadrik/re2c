@@ -166,8 +166,7 @@ bool scan(ctx_t &ctx, nfa_state_t *q, bool all)
             break;
         case nfa_state_t::TAG:
             if (q->arcidx == 0) {
-                any |= relax_gor1(ctx, conf_t(x, q->tag.out
-                    , ctx.history.push(x.thist, q->tag.info)));
+                any |= relax_gor1(ctx, conf_t(x, q->tag.out, ctx.history.link(ctx, x)));
                 ++q->arcidx;
             }
             break;
@@ -195,7 +194,7 @@ bool relax_gor1(ctx_t &ctx, const typename ctx_t::conf_t &x)
         state.push_back(x);
     }
     else if (q->indeg < 2
-        || precedence(ctx, x, state[idx], p1, p2) < 0) {
+        || ctx_t::history_t::precedence(ctx, x, state[idx], p1, p2) < 0) {
         state[idx] = x;
     }
     else {
@@ -265,8 +264,7 @@ void closure_posix_gtop(ctx_t &ctx)
                 relax_gtop(ctx, conf_t(x, q->alt.out2));
                 break;
             case nfa_state_t::TAG:
-                relax_gtop(ctx, conf_t(x, q->tag.out
-                    , ctx.history.push(x.thist, q->tag.info)));
+                relax_gtop(ctx, conf_t(x, q->tag.out, ctx.history.link(ctx, x)));
                 break;
             default:
                 break;
@@ -287,7 +285,7 @@ void relax_gtop(ctx_t &ctx, const typename ctx_t::conf_t &c)
         state.push_back(c);
     }
     else if (q->indeg < 2
-        || precedence(ctx, c, state[idx], p1, p2) < 0) {
+        || ctx_t::history_t::precedence(ctx, c, state[idx], p1, p2) < 0) {
         state[idx] = c;
     }
     else {

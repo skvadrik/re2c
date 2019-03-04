@@ -19,34 +19,28 @@ void closure_leftmost(ldetctx_t &ctx)
 
     // DFS; linear complexity
     for (; !todo.empty(); ) {
-        clos_t x = todo.top();
-        todo.pop();
+        const clos_t &x = todo.top();
         nfa_state_t *n = x.state;
+        todo.pop();
 
-        if (n->clos == NOCLOS) {
-            n->clos = static_cast<uint32_t>(done.size());
-            done.push_back(x);
+        if (n->clos != NOCLOS) continue;
 
-            switch (n->type) {
-                case nfa_state_t::NIL:
-                    x.state = n->nil.out;
-                    todo.push(x);
-                    break;
-                case nfa_state_t::ALT:
-                    x.state = n->alt.out2;
-                    todo.push(x);
-                    x.state = n->alt.out1;
-                    todo.push(x);
-                    break;
-                case nfa_state_t::TAG:
-                    x.state = n->tag.out;
-                    x.thist = ctx.history.push(x.thist, n->tag.info);
-                    todo.push(x);
-                    break;
-                case nfa_state_t::RAN:
-                case nfa_state_t::FIN:
-                    break;
-            }
+        n->clos = static_cast<uint32_t>(done.size());
+        done.push_back(x);
+
+        switch (n->type) {
+            case nfa_state_t::NIL:
+                todo.push(clos_t(x, n->nil.out));
+                break;
+            case nfa_state_t::ALT:
+                todo.push(clos_t(x, n->alt.out2));
+                todo.push(clos_t(x, n->alt.out1));
+                break;
+            case nfa_state_t::TAG:
+                todo.push(clos_t(x, n->tag.out, ctx.history.link(ctx, x)));
+                break;
+            default:
+                break;
         }
     }
 

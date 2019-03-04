@@ -15,18 +15,18 @@
 namespace re2c {
 namespace libre2c {
 
-static void make_one_step(pctx_t &, uint32_t);
-static void make_final_step(pctx_t &);
-static void update_offsets(pctx_t &ctx, const conf_t &c, uint32_t id);
-static void compute_prectbl_naive(pctx_t &ctx);
+static void make_one_step(psimctx_t &, uint32_t);
+static void make_final_step(psimctx_t &);
+static void update_offsets(psimctx_t &ctx, const conf_t &c, uint32_t id);
+static void compute_prectbl_naive(psimctx_t &ctx);
 
 // we *do* want these to be inlined
-static inline void closure_posix(pctx_t &ctx);
+static inline void closure_posix(psimctx_t &ctx);
 
 int regexec_nfa_posix(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int /* eflags */)
 {
-    pctx_t &ctx = *static_cast<pctx_t*>(preg->simctx);
+    psimctx_t &ctx = *static_cast<psimctx_t*>(preg->simctx);
     init(ctx, string);
 
     // root state can be non-core, so we pass zero as origin to avoid checks
@@ -62,7 +62,7 @@ int regexec_nfa_posix(const regex_t *preg, const char *string
     return 0;
 }
 
-void closure_posix(pctx_t &ctx)
+void closure_posix(psimctx_t &ctx)
 {
     ctx.history.detach();
 
@@ -74,7 +74,7 @@ void closure_posix(pctx_t &ctx)
     }
 }
 
-void make_one_step(pctx_t &ctx, uint32_t sym)
+void make_one_step(psimctx_t &ctx, uint32_t sym)
 {
     confset_t &state = ctx.state, &reach = ctx.reach;
     uint32_t j = 0;
@@ -120,7 +120,7 @@ void make_one_step(pctx_t &ctx, uint32_t sym)
     ++ctx.step;
 }
 
-void make_final_step(pctx_t &ctx)
+void make_final_step(psimctx_t &ctx)
 {
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
         nfa_state_t *s = i->state;
@@ -135,7 +135,7 @@ void make_final_step(pctx_t &ctx)
     }
 }
 
-void update_offsets(pctx_t &ctx, const conf_t &c, uint32_t id)
+void update_offsets(psimctx_t &ctx, const conf_t &c, uint32_t id)
 {
     const size_t nsub = ctx.nsub;
     regoff_t *o;
@@ -171,7 +171,7 @@ void update_offsets(pctx_t &ctx, const conf_t &c, uint32_t id)
 // Old naive algorithm that has cubic complexity in the size of TNFA.
 // Example that exhibits cubic behaviour is ((a?){1,N})*. In this example
 // closure has O(N) states, and the compared histories have O(N) length.
-void compute_prectbl_naive(pctx_t &ctx)
+void compute_prectbl_naive(psimctx_t &ctx)
 {
     const confset_t &state = ctx.state;
     int32_t *newtbl = ctx.newprectbl;
@@ -183,7 +183,7 @@ void compute_prectbl_naive(pctx_t &ctx)
         newtbl[i * newdim + i] = p0;
         for (uint32_t j = i + 1; j < newdim; ++j) {
             int32_t prec1, prec2;
-            int32_t prec = precedence(ctx, state[i], state[j], prec1, prec2);
+            int32_t prec = psimctx_t::history_t::precedence(ctx, state[i], state[j], prec1, prec2);
             newtbl[i * newdim + j] = pack(prec1, prec);
             newtbl[j * newdim + i] = pack(prec2, -prec);
         }
