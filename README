@@ -1,9 +1,6 @@
-re2c
---------------------------------------------------------------------------------
-
-
 DESCRIPTION
---------------------------------------------------------------------------------
+-----------
+
 re2c is a free and open-source lexer generator for C and C++.
 
 Its main goal is generating fast lexers: at least as fast as their reasonably
@@ -17,115 +14,63 @@ up and compress the generated code.
 Another distinctive feature is its flexible interface: instead of assuming a
 fixed program template, re2c lets the programmer write most of the interface
 code and adapt the generated lexer to any particular environment.
---------------------------------------------------------------------------------
 
 
 DOCUMENTATION
---------------------------------------------------------------------------------
-Man page:
-    $ man re2c
+-------------
 
-Official website:
-    re2c.org
-
-Examples can also be found in 'examples' directory.
---------------------------------------------------------------------------------
+Official re2c website is [re2c.org](http://re2c.org).
 
 
 DOWNLOAD
---------------------------------------------------------------------------------
-Tarballs:
-    https://github.com/skvadrik/re2c/releases
+--------
 
-Source code (github is the primary repo, sf can be a bit outdated):
-    $ git clone https://github.com/skvadrik/re2c.git
-    $ git clone https://git.code.sf.net/p/re2c/code-git
---------------------------------------------------------------------------------
+Release tarballs: https://github.com/skvadrik/re2c/releases
+
+Source code:
+
+```
+$ git clone https://github.com/skvadrik/re2c.git
+$ git clone https://git.code.sf.net/p/re2c/code-git
+```
+
+Github is the main repo, sourceforge is a mirror and can be slightly outdated.
 
 
 BUILD
---------------------------------------------------------------------------------
-Contents:
-    1. simple build
-    2. bootstrap
-    3. out-of-source build
-    4. testing
-    5. rebuild documentation
-    6. build for windows with mingw
-    7. build from git
+-----
 
-1. Simplest possible build:
-    $ ./configure [--prefix=<prefix>]
-    $ make
-    $ make install
-This will build re2c and install it (binary and man page) to <prefix> (defaults
-to /usr/local).
+The simplest possible way to build re2c is this:
 
-2. Bootstrap and rebuild:
-    $ ./configure [--prefix=<prefix>]
-    $ make bootstrap
-    $ make install
-Usual bootstrap procedure: re2c uses re2c to compile its lexer.
-1. build lexer (if make finds re2c binary in build directory, it will build lexer
-   from source, otherwize it will use prebuilt lexer)
-2. build re2c
-3. build lexer from source using re2c binary in build directory
-4. rebuild re2c
+```
+$ ./configure [--prefix=<prefix>]
+$ make
+$ make install
+```
+See the [official documantation](http://re2c.org/install/install.html) for full details on more sophisticated build types.
+If you want to build from git, you will first need to generate autotools files:
 
-3. Out-of-source build:
-    $ mkdir <build-directory>
-    $ cd <build-directory>
-    $ <path-to-configure>/configure [--prefix=<prefix>]
-    $ make
-    $ make install
-
-4. Testing:
-    $ make check
-This will redirect test script output to file. If you want to see progress:
-    $ make tests
-Testing under valgrind (takes a long time):
-    $ make vtests
-
-5. Rebuild documentation (requires rst2man.py):
-    $ ./configure --enable-docs [--prefix=<prefix>]
-    $ make docs
-    $ make install
-
-6. Build for windows using mingw:
-    $ ../configure --host i686-w64-mingw32  [--prefix=<prefix>]
-    $ make
-This will result into an executable re2c.exe, which can be tested with wine:
-    $ make wtests
-
-7. If you want to build from git, you'll first need to generate autotools files:
-    $ ./autogen.sh
---------------------------------------------------------------------------------
+```
+$ ./autogen.sh
+```
 
 
 MAILING LISTS
---------------------------------------------------------------------------------
-re2c-general:
-    re2c-general@lists.sourceforge.net
-re2c-devel:
-    re2c-devel@lists.sourceforge.net
+-------------
 
-You are welcome to ask for help or share your thoughts and ideas about re2c :)
---------------------------------------------------------------------------------
+- re2c-general@lists.sourceforge.net
+- re2c-devel@lists.sourceforge.net
+
+You are welcome to ask for help or share your thoughts and ideas.
 
 
 BUGS
---------------------------------------------------------------------------------
-Please report any bugs and send feature requests to:
-    https://github.com/skvadrik/re2c/issues
---------------------------------------------------------------------------------
+----
+Please report any bugs and send feature requests to https://github.com/skvadrik/re2c/issues.
 
 
 AUTHORS
---------------------------------------------------------------------------------
-Originally written by Peter Bumbulis (peter@csg.uwaterloo.ca)
-Currently maintained by:
-    Ulya Trofimovich <skvadrik@gmail.com>
-    Dan Nuffer <nuffer@users.sourceforge.net>
-    Marcus Boerger <helly@users.sourceforge.net>
-    Hartmut Kaiser <hkaiser@users.sourceforge.net>
---------------------------------------------------------------------------------
+-------
+Re2c was originally written by Peter Bumbulis <peter@csg.uwaterloo.ca>.
+Since then many people contributed to the project.
+Current maintainers are Ulya Trofimovich <skvadrik@gmail.com> and Dan Nuffer <nuffer@users.sourceforge.net>.
