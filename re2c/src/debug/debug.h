@@ -37,7 +37,6 @@ namespace re2c {
 
 struct DFA;
 struct cfg_t;
-struct determ_context_t;
 struct dfa_t;
 struct nfa_t;
 struct opt_t;
@@ -57,7 +56,7 @@ struct dump_dfa_t
 
     explicit dump_dfa_t(const opt_t *);
     ~dump_dfa_t();
-    void state(const determ_context_t &, bool);
+    template<typename ctx_t> void state(const ctx_t &, bool);
 };
 
 #define DASSERT(x) assert(x)
@@ -80,9 +79,9 @@ void dump_dfa(const dfa_t &);
 void dump_adfa(const DFA &);
 void dump_cfg(const cfg_t &, const bool *);
 void dump_interf(const cfg_t &, const bool *);
-void dump_clstats(const determ_context_t &);
 void dump_tcmd(const tcmd_t *);
-void reset_clstats(determ_context_t &);
+template<typename ctx_t> void dump_clstats(const ctx_t &);
+template<typename ctx_t> void reset_clstats(ctx_t &);
 
 } // namespace re2c
 

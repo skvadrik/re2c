@@ -95,7 +95,7 @@ void closure_leftmost(lzctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 wl.push_back(conf_t(n->tag.out, o
-                    , ctx.history.push2(h, ctx.step, n->tag.info, o)));
+                    , ctx.history.push(h, ctx.step, n->tag.info, o)));
                 break;
             case nfa_state_t::RAN:
                 break;

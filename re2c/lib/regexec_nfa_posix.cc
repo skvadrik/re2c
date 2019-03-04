@@ -156,7 +156,7 @@ void update_offsets(pctx_t &ctx, const conf_t &c, uint32_t id)
     memset(done, 0, nsub * sizeof(bool));
 
     for (int32_t i = c.thist; i != HROOT; ) {
-        const tag_history_t::node_t &n = ctx.history.node(i);
+        const phistory_t::node_t &n = ctx.history.node(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
         regoff_t *off = o + t;

@@ -37,7 +37,6 @@ namespace re2c
  * Both disambiguation policies forbid epsilon-cycles with negative weight.
  */
 
-
 /* note [at most one final item per closure]
  *
  * By construction NFA has exactly one final state per rule. Thus closure
@@ -55,7 +54,6 @@ namespace re2c
  * Note that the first final item reached by the epsilon-closure it the one
  * with the highest priority (see note [closure items are sorted by rule]).
  */
-
 
 /* note [the difference between TDFA(0) and TDFA(1)]
  *
@@ -76,37 +74,46 @@ namespace re2c
  * Thus in general TDFA(1) raises less conflicts than TDFA(0).
  */
 
-
+template<typename ctx_t> static inline void closure(ctx_t &ctx);
+template<typename ctx_t> static void generate_versions(ctx_t &);
 static void prune(closure_t &, std::valarray<Rule> &);
 static void lower_lookahead_to_transition(closure_t &);
-static void generate_versions(determ_context_t &);
 static bool cmpby_rule_state(const clos_t &, const clos_t &);
 
+// explicit specialization for context types
+template void tagged_epsilon_closure<pdetctx_t>(pdetctx_t &ctx);
+template void tagged_epsilon_closure<ldetctx_t>(ldetctx_t &ctx);
 
-void tagged_epsilon_closure(determ_context_t &ctx)
+template<typename ctx_t>
+void tagged_epsilon_closure(ctx_t &ctx)
 {
-    closure_t &closure = ctx.state;
-
     // build tagged epsilon-closure of the given set of NFA states
-    if (ctx.dc_opts->posix_semantics) {
-        closure_posix(ctx);
-        prune(closure, ctx.nfa.rules);
-        std::sort(closure.begin(), closure.end(), cmpby_rule_state);
-        compute_prectable(ctx);
-    } else {
-        closure_leftmost(ctx);
-        prune(closure, ctx.nfa.rules);
-    }
+    closure(ctx);
 
     // see note [the difference between TDFA(0) and TDFA(1)]
     if (!ctx.dc_opts->lookahead) {
-        lower_lookahead_to_transition(closure);
+        lower_lookahead_to_transition(ctx.state);
     }
 
     // merge tags from different rules, find nondeterministic tags
     generate_versions(ctx);
 }
 
+template<>
+inline void closure<pdetctx_t>(pdetctx_t &ctx)
+{
+    closure_posix(ctx);
+    prune(ctx.state, ctx.nfa.rules);
+    std::sort(ctx.state.begin(), ctx.state.end(), cmpby_rule_state);
+    compute_prectable(ctx);
+}
+
+template<>
+inline void closure<ldetctx_t>(ldetctx_t &ctx)
+{
+    closure_leftmost(ctx);
+    prune(ctx.state, ctx.nfa.rules);
+}
 
 bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 {
@@ -119,7 +126,6 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
     // all items in closute have different states
     return false;
 }
-
 
 void prune(closure_t &closure, std::valarray<Rule> &rules)
 {
@@ -144,7 +150,6 @@ void prune(closure_t &closure, std::valarray<Rule> &rules)
     closure.resize(n);
 }
 
-
 void lower_lookahead_to_transition(closure_t &closure)
 {
     for (clositer_t c = closure.begin(); c != closure.end(); ++c) {
@@ -153,8 +158,8 @@ void lower_lookahead_to_transition(closure_t &closure)
     }
 }
 
-
-void generate_versions(determ_context_t &ctx)
+template<typename ctx_t>
+void generate_versions(ctx_t &ctx)
 {
     dfa_t &dfa = ctx.dfa;
     const std::vector<Tag> &tags = dfa.tags;
@@ -163,11 +168,11 @@ void generate_versions(determ_context_t &ctx)
     tagver_table_t &tvtbl = ctx.dc_tagvertbl;
     tagver_t *vers = tvtbl.buffer;
     closure_t &clos = ctx.state;
-    tag_history_t &thist = ctx.history;
-    newvers_t &newvers = ctx.dc_newvers;
+    typename ctx_t::history_t &thist = ctx.history;
+    typename ctx_t::newvers_t &newvers = ctx.dc_newvers;
 
     clositer_t b = clos.begin(), e = clos.end(), c;
-    newvers_t newacts(newver_cmp_t(thist, ctx.dc_hc_caches));
+    typename ctx_t::newvers_t newacts(newver_cmp_t<typename ctx_t::history_t>(thist, ctx.dc_hc_caches));
     tcmd_t *cmd = NULL;
 
     // for each tag, if there is at least one tagged transition,
@@ -182,7 +187,7 @@ void generate_versions(determ_context_t &ctx)
         for (size_t t = 0; t < ntag; ++t) {
             const Tag &tag = tags[t];
 
-            const tagver_t h0 = thist.last(h, t);
+            const tagver_t h0 = last(thist, h, t);
             if (h0 == TAGVER_ZERO) continue;
 
             const tagver_t v = history(tag) ? vs[t] : TAGVER_ZERO;
@@ -192,26 +197,26 @@ void generate_versions(determ_context_t &ctx)
                 m = newvers.insert(std::make_pair(x, n)).first->second;
             if (n == m) ++maxver;
 
-            if (!fixed(tag) && (history(tag) || thist.last(l, t) == TAGVER_ZERO)) {
+            if (!fixed(tag) && (history(tag) || last(thist, l, t) == TAGVER_ZERO)) {
                 newacts.insert(std::make_pair(x, m));
             }
         }
     }
 
     // actions
-    for (newvers_t::iterator i = newacts.begin(); i != newacts.end(); ++i) {
+    for (typename ctx_t::newvers_t::iterator i = newacts.begin(); i != newacts.end(); ++i) {
         const tagver_t m = i->second, v = i->first.base;
         const hidx_t h = i->first.history;
         const size_t t = i->first.tag;
         if (history(tags[t])) {
             cmd = dfa.tcpool.make_add(cmd, abs(m), abs(v), thist, h, t);
         } else {
-            cmd = dfa.tcpool.make_set(cmd, abs(m), thist.last(h, t));
+            cmd = dfa.tcpool.make_set(cmd, abs(m), last(thist, h, t));
         }
     }
 
     // mark tags with history
-    for (newvers_t::iterator j = newvers.begin(); j != newvers.end(); ++j) {
+    for (typename ctx_t::newvers_t::iterator j = newvers.begin(); j != newvers.end(); ++j) {
         if (history(tags[j->first.tag])) {
             dfa.mtagvers.insert(abs(j->second));
         }
@@ -226,7 +231,7 @@ void generate_versions(determ_context_t &ctx)
         for (size_t t = 0; t < ntag; ++t) {
             const tagver_t
                 v0 = vs[t],
-                h0 = thist.last(h, t),
+                h0 = last(thist, h, t),
                 v = history(tags[t]) ? v0 : TAGVER_ZERO;
             if (h0 == TAGVER_ZERO) {
                 vers[t] = v0;
@@ -239,6 +244,40 @@ void generate_versions(determ_context_t &ctx)
     }
 
     ctx.dc_actions = cmd;
+}
+
+template<typename history_t>
+bool newver_cmp_t<history_t>::operator()(const newver_t &x, const newver_t &y) const
+{
+    if (x.tag < y.tag) return true;
+    if (x.tag > y.tag) return false;
+
+    if (x.base < y.base) return true;
+    if (x.base > y.base) return false;
+
+    hidx_t xh = x.history, yh = y.history;
+    if (xh == yh) return false;
+
+    hc_cache_t &cache = caches[x.tag];
+    int32_t cmp;
+
+    bool invert = xh > yh;
+    if (invert) std::swap(xh, yh);
+
+    uint64_t k = static_cast<uint32_t>(xh);
+    k = (k << 32) | static_cast<uint32_t>(yh);
+
+    hc_cache_t::const_iterator i = cache.find(k);
+    if (i != cache.end()) {
+        cmp = i->second;
+    }
+    else {
+        cmp = compare_reversed(history, xh, yh, x.tag);
+        cache.insert(std::make_pair(k, cmp));
+    }
+
+    if (invert) cmp = -cmp;
+    return cmp < 0;
 }
 
 } // namespace re2c

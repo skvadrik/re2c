@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-#include <valarray>
-#include <vector>
 
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
@@ -20,11 +18,18 @@
 namespace re2c
 {
 
-static void dump_history(const dfa_t &, const tag_history_t &, hidx_t);
+template<typename ctx_t> void dump_history(const dfa_t &, const typename ctx_t::history_t &, hidx_t);
+template<typename ctx_t> void dump_tags(const tagver_table_t &, const typename ctx_t::history_t &, hidx_t, uint32_t);
 static void dump_tcmd_or_tcid(tcmd_t *const *, const tcid_t *, size_t, const tcpool_t &);
 static const char *tagname(const Tag &);
-static void dump_tags(const tagver_table_t &, const tag_history_t &, hidx_t, uint32_t);
 
+// explicit specialization for context types
+template void dump_dfa_t::state<pdetctx_t>(const pdetctx_t &ctx, bool isnew);
+template void dump_dfa_t::state<ldetctx_t>(const ldetctx_t &ctx, bool isnew);
+template void dump_clstats<pdetctx_t>(const pdetctx_t &);
+template void dump_clstats<ldetctx_t>(const ldetctx_t &);
+template void reset_clstats<pdetctx_t>(pdetctx_t &);
+template void reset_clstats<ldetctx_t>(ldetctx_t &);
 
 dump_dfa_t::dump_dfa_t(const opt_t *opts)
     : debug(opts->dump_dfa_raw)
@@ -38,7 +43,6 @@ dump_dfa_t::dump_dfa_t(const opt_t *opts)
         "  edge[arrowhead=vee fontname=Courier]\n\n");
 }
 
-
 dump_dfa_t::~dump_dfa_t()
 {
     if (!debug) return;
@@ -46,8 +50,8 @@ dump_dfa_t::~dump_dfa_t()
     fprintf(stderr, "}\n");
 }
 
-
-void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
+template<typename ctx_t>
+void dump_dfa_t::state(const ctx_t &ctx, bool isnew)
 {
     if (!debug) return;
 
@@ -58,7 +62,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
     const uint32_t symbol = ctx.dc_symbol;
     const dfa_t &dfa = ctx.dfa;
     const tagver_table_t &tvtbl = ctx.dc_tagvertbl;
-    const tag_history_t &thist = ctx.history;
+    const typename ctx_t::history_t &thist = ctx.history;
     uint32_t i;
 
     if (target == dfa_t::NIL) return;
@@ -86,7 +90,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
             }
 
             if (c->thist != HROOT) {
-                dump_history(dfa, thist, c->thist);
+                dump_history<ctx_t>(dfa, thist, c->thist);
             }
         }
 
@@ -101,7 +105,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
         uint32_t i = 0;
         for (c = b; c != e; ++c, ++i) {
             fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", i);
-            dump_tags(tvtbl, thist, c->ttran, c->tvers);
+            dump_tags<ctx_t>(tvtbl, thist, c->ttran, c->tvers);
             fprintf(stderr, "\"]\n");
         }
     }
@@ -123,7 +127,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
             fprintf(stderr,
                 "  %u:%u:e -> %s%u:%u:w [label=\"%u",
                 origin, c->origin, prefix, state, i, symbol);
-            dump_tags(tvtbl, thist, c->ttran, c->tvers);
+            dump_tags<ctx_t>(tvtbl, thist, c->ttran, c->tvers);
             fprintf(stderr, "\"]\n");
         }
     }
@@ -152,17 +156,18 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
     }
 }
 
-
-void dump_history(const dfa_t &dfa, const tag_history_t &h, hidx_t i)
+template<typename ctx_t>
+void dump_history(const dfa_t &dfa
+    , const typename ctx_t::history_t &h, hidx_t i)
 {
     if (i == HROOT) {
         fprintf(stderr, " /");
         return;
     }
 
-    const tag_history_t::node_t &n = h.node(i);
+    const typename ctx_t::history_t::node_t &n = h.node(i);
 
-    dump_history(dfa, h, n.pred);
+    dump_history<ctx_t>(dfa, h, n.pred);
 
     const Tag &t = dfa.tags[n.info.idx];
     if (capture(t)) {
@@ -173,7 +178,6 @@ void dump_history(const dfa_t &dfa, const tag_history_t &h, hidx_t i)
     fprintf(stderr, n.info.neg ? "&darr;" : "&uarr;");
     fprintf(stderr, " ");
 }
-
 
 void dump_dfa(const dfa_t &dfa)
 {
@@ -238,14 +242,12 @@ void dump_dfa(const dfa_t &dfa)
     fprintf(stderr, "}\n");
 }
 
-
 void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid,
     size_t sym, const tcpool_t &tcpool)
 {
     const tcmd_t *cmd = tcmd ? tcmd[sym] : tcpool[tcid[sym]];
     dump_tcmd(cmd);
 }
-
 
 void dump_tcmd(const tcmd_t *p)
 {
@@ -269,15 +271,15 @@ void dump_tcmd(const tcmd_t *p)
     }
 }
 
-
 const char *tagname(const Tag &t)
 {
     return t.name ? t.name->c_str() : "";
 }
 
-
-void dump_tags(const tagver_table_t &tagvertbl, const tag_history_t &taghistory,
-    hidx_t ttran, uint32_t tvers)
+template<typename ctx_t>
+void dump_tags(const tagver_table_t &tagvertbl
+    , const typename ctx_t::history_t &taghistory
+    , hidx_t ttran, uint32_t tvers)
 {
     if (ttran == HROOT) return;
 
@@ -285,13 +287,13 @@ void dump_tags(const tagver_table_t &tagvertbl, const tag_history_t &taghistory,
     const tagver_t *vers = tagvertbl[tvers];
     for (size_t t = 0; t < tagvertbl.ntags; ++t) {
 
-        if (taghistory.last(ttran, t) == TAGVER_ZERO) {
+        if (last(taghistory, ttran, t) == TAGVER_ZERO) {
             continue;
         }
 
         fprintf(stderr, "%d", abs(vers[t]));
         for (hidx_t i = ttran; i != HROOT; ) {
-            const tag_history_t::node_t &n = taghistory.node(i);
+            const typename ctx_t::history_t::node_t &n = taghistory.node(i);
             if (n.info.idx == t) {
                 fprintf(stderr, n.info.neg ? "&darr;" : "&uarr;");
             }
@@ -301,9 +303,8 @@ void dump_tags(const tagver_table_t &tagvertbl, const tag_history_t &taghistory,
     }
 }
 
-
-
-void reset_clstats(determ_context_t &ctx)
+template<typename ctx_t>
+void reset_clstats(ctx_t &ctx)
 {
     closure_stats_t &cs = ctx.dc_clstats;
     cs.nscans = 0;
@@ -311,7 +312,8 @@ void reset_clstats(determ_context_t &ctx)
     cs.length = 0;
 }
 
-void dump_clstats(const determ_context_t &ctx)
+template<typename ctx_t>
+void dump_clstats(const ctx_t &ctx)
 {
     const closure_stats_t &cs = ctx.dc_clstats;
     if (ctx.dc_opts->dump_closure_stats) {

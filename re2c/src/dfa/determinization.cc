@@ -22,15 +22,14 @@
 namespace re2c
 {
 
-static void clear_caches(determ_context_t &ctx);
-static void reach_on_symbol(determ_context_t &ctx, uint32_t sym);
+template<typename ctx_t> static void determinization(ctx_t &ctx);
+template<typename ctx_t> static void clear_caches(ctx_t &ctx);
+template<typename ctx_t> static void reach_on_symbol(ctx_t &ctx, uint32_t sym);
+template<typename ctx_t> static uint32_t init_tag_versions(ctx_t &ctx);
+template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t &ctx);
 static nfa_state_t *transition(nfa_state_t *, uint32_t);
-static uint32_t init_tag_versions(determ_context_t &);
-static void warn_nondeterministic_tags(const determ_context_t &);
-
 
 const uint32_t dfa_t::NIL = ~0u;
-
 
 dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
     , Msg &msg)
@@ -46,12 +45,34 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
     , tcmd0(NULL)
     , tcid0(TCID0)
 {
-    determ_context_t ctx(opts, msg, cond, nfa, *this);
+    if (opts->posix_semantics) {
+        pdetctx_t ctx(opts, msg, cond, nfa, *this);
+        determinization(ctx);
+    }
+    else {
+        ldetctx_t ctx(opts, msg, cond, nfa, *this);
+        determinization(ctx);
+    }
+}
 
+dfa_t::~dfa_t()
+{
+    std::vector<dfa_state_t*>::iterator
+        i = states.begin(),
+        e = states.end();
+    for (; i != e; ++i)
+    {
+        delete *i;
+    }
+}
+
+template<typename ctx_t>
+void determinization(ctx_t &ctx)
+{
     const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
 
     // initial state
-    const clos_t c0(nfa.root, 0, INITIAL_TAGS, HROOT, HROOT);
+    const clos_t c0(ctx.nfa.root, 0, INITIAL_TAGS, HROOT, HROOT);
     ctx.reach.push_back(c0);
     tagged_epsilon_closure(ctx);
     find_state(ctx);
@@ -63,7 +84,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
         ctx.dc_origin = i;
         clear_caches(ctx);
 
-        for (uint32_t c = 0; c < nchars; ++c) {
+        for (uint32_t c = 0; c < ctx.dfa.nchars; ++c) {
             reach_on_symbol(ctx, c);
             tagged_epsilon_closure(ctx);
             find_state(ctx);
@@ -73,8 +94,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
     warn_nondeterministic_tags(ctx);
 }
 
-
-void clear_caches(determ_context_t &ctx)
+template<typename ctx_t>
+void clear_caches(ctx_t &ctx)
 {
     ctx.dc_newvers.clear();
 
@@ -84,8 +105,8 @@ void clear_caches(determ_context_t &ctx)
     }
 }
 
-
-void reach_on_symbol(determ_context_t &ctx, uint32_t sym)
+template<typename ctx_t>
+void reach_on_symbol(ctx_t &ctx, uint32_t sym)
 {
     ctx.dc_symbol = sym;
     const uint32_t symbol = ctx.dfa.charset[ctx.dc_symbol];
@@ -106,7 +127,6 @@ void reach_on_symbol(determ_context_t &ctx, uint32_t sym)
     }
 }
 
-
 nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
 {
     if (state->type != nfa_state_t::RAN) {
@@ -120,8 +140,8 @@ nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
     return NULL;
 }
 
-
-uint32_t init_tag_versions(determ_context_t &ctx)
+template<typename ctx_t>
+uint32_t init_tag_versions(ctx_t &ctx)
 {
     dfa_t &dfa = ctx.dfa;
     const size_t ntags = dfa.tags.size();
@@ -156,12 +176,12 @@ uint32_t init_tag_versions(determ_context_t &ctx)
     return INITIAL_TAGS;
 }
 
-
 // For each tag, find maximal number of parallel versions of this tag
 // used in each kernel (degree of non-determinism) and warn about tags with
 // maximum degree two or more.
 // WARNING: this function assumes that kernel items are grouped by rule
-void warn_nondeterministic_tags(const determ_context_t &ctx)
+template<typename ctx_t>
+void warn_nondeterministic_tags(const ctx_t &ctx)
 {
     if (ctx.dc_opts->posix_syntax) return;
 
@@ -211,8 +231,8 @@ void warn_nondeterministic_tags(const determ_context_t &ctx)
     }
 }
 
-
-determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
+template<sema_t SEMA>
+determ_context_t<SEMA>::determ_context_t(const opt_t *opts, Msg &msg
     , const std::string &condname, const nfa_t &nfa, dfa_t &dfa)
     : dc_opts(opts)
     , dc_msg(msg)
@@ -229,7 +249,7 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     , dc_kernels()
     , dc_buffers(dc_allocator)
     , dc_hc_caches()
-    , dc_newvers(newver_cmp_t(history, dc_hc_caches))
+    , dc_newvers(newver_cmp_t<typename determ_context_t<SEMA>::history_t>(history, dc_hc_caches))
     , dc_path1()
     , dc_path2()
     , dc_path3()
@@ -262,7 +282,7 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     dc_path3.reserve(ntags);
     dc_tagcount.resize(ntags);
 
-    if (opts->posix_semantics) {
+    if (SEMA == POSIX) {
         newprectbl = new prectable_t[ncores * ncores];
         histlevel.reserve(ncores);
         sortcores.reserve(ncores);
@@ -279,56 +299,12 @@ determ_context_t::determ_context_t(const opt_t *opts, Msg &msg
     }
 }
 
-
-determ_context_t::~determ_context_t()
+template<sema_t SEMA>
+determ_context_t<SEMA>::~determ_context_t()
 {
-    delete[] newprectbl;
-}
-
-
-dfa_t::~dfa_t()
-{
-    std::vector<dfa_state_t*>::iterator
-        i = states.begin(),
-        e = states.end();
-    for (; i != e; ++i)
-    {
-        delete *i;
+    if (SEMA == POSIX) {
+        delete[] newprectbl;
     }
-}
-
-
-bool newver_cmp_t::operator()(const newver_t &x, const newver_t &y) const
-{
-    if (x.tag < y.tag) return true;
-    if (x.tag > y.tag) return false;
-
-    if (x.base < y.base) return true;
-    if (x.base > y.base) return false;
-
-    hidx_t xh = x.history, yh = y.history;
-    if (xh == yh) return false;
-
-    hc_cache_t &cache = caches[x.tag];
-    int32_t cmp;
-
-    bool invert = xh > yh;
-    if (invert) std::swap(xh, yh);
-
-    uint64_t k = static_cast<uint32_t>(xh);
-    k = (k << 32) | static_cast<uint32_t>(yh);
-
-    hc_cache_t::const_iterator i = cache.find(k);
-    if (i != cache.end()) {
-        cmp = i->second;
-    }
-    else {
-        cmp = history.compare_reversed(xh, yh, x.tag);
-        cache.insert(std::make_pair(k, cmp));
-    }
-
-    if (invert) cmp = -cmp;
-    return cmp < 0;
 }
 
 } // namespace re2c

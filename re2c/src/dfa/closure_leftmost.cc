@@ -5,7 +5,7 @@
 namespace re2c
 {
 
-void closure_leftmost(determ_context_t &ctx)
+void closure_leftmost(ldetctx_t &ctx)
 {
     const closure_t &init = ctx.reach;
     closure_t &done = ctx.state;

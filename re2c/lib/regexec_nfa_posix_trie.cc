@@ -7,6 +7,7 @@
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/determinization.h"
+#include "src/dfa/posix_precedence.h"
 #include "src/nfa/nfa.h"
 
 
@@ -48,8 +49,8 @@ static int32_t precedence_(pzctx_t &ctx, int32_t xl, int32_t yl, int32_t &rhox, 
 
 // we *do* want this to be inlined
 static inline void relax(pzctx_t &, const conf_t &);
-static inline uint32_t get_step(const tag_history_t &hist, int32_t idx);
-static inline uint32_t get_orig(const tag_history_t &hist, int32_t idx);
+static inline uint32_t get_step(const zhistory_t &hist, int32_t idx);
+static inline uint32_t get_orig(const zhistory_t &hist, int32_t idx);
 
 int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
@@ -151,7 +152,7 @@ void closure_posix(pzctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 relax(ctx, conf_t(q->tag.out, o
-                    , ctx.history.push2(h, ctx.step, q->tag.info, o)));
+                    , ctx.history.push(h, ctx.step, q->tag.info, o)));
                 break;
             default:
                 break;
@@ -243,7 +244,7 @@ int32_t precedence_(pzctx_t &ctx, int32_t idx1, int32_t idx2
     }
 
     const std::vector<Tag> &tags = ctx.nfa.tags;
-    tag_history_t &hist = ctx.history;
+    zhistory_t &hist = ctx.history;
 
     int32_t prec = 0;
     prec1 = prec2 = MAX_RHO;
@@ -260,14 +261,14 @@ int32_t precedence_(pzctx_t &ctx, int32_t idx1, int32_t idx2
     tag_info_t info1, info2;
     for (; i1 != i2 && (s1 >= s || s2 >= s);) {
         if (s1 >= s && (i1 > i2 || s2 < s)) {
-            const tag_history_t::node_t &n = hist.node(i1);
+            const zhistory_t::node_t &n = hist.node(i1);
             info1 = n.info;
             prec1 = std::min(prec1, tags[info1.idx].height);
             i1 = n.pred;
             s1 = get_step(hist, i1);
         }
         else {
-            const tag_history_t::node_t &n = hist.node(i2);
+            const zhistory_t::node_t &n = hist.node(i2);
             info2 = n.info;
             prec2 = std::min(prec2, tags[info2.idx].height);
             i2 = n.pred;
@@ -325,14 +326,14 @@ int32_t precedence_(pzctx_t &ctx, int32_t idx1, int32_t idx2
     return 0;
 }
 
-uint32_t get_step(const tag_history_t &hist, int32_t idx)
+uint32_t get_step(const zhistory_t &hist, int32_t idx)
 {
-    return idx == HROOT ? 0 : hist.node2(idx).step;
+    return idx == HROOT ? 0 : hist.node(idx).step;
 }
 
-uint32_t get_orig(const tag_history_t &hist, int32_t idx)
+uint32_t get_orig(const zhistory_t &hist, int32_t idx)
 {
-    return idx == HROOT ? 0 : hist.node2(idx).orig;
+    return idx == HROOT ? 0 : hist.node(idx).orig;
 }
 
 } // namespace libre2c

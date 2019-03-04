@@ -7,6 +7,9 @@
 
 namespace re2c {
 
+// maximum 29-bit (we have 30 bits, but highest must be non-negative)
+static const int32_t MAX_RHO = 0x1fffFFFF;
+
 inline int32_t unpack_longest(int32_t packed)
 {
     // take lower 30 bits and sign-extend
@@ -86,7 +89,7 @@ int32_t precedence(ctx_t &ctx, const conf_t &x, const conf_t &y
     }
 
     const std::vector<Tag> &tags = ctx.nfa.tags;
-    tag_history_t &hist = ctx.history;
+    typename ctx_t::history_t &hist = ctx.history;
 
     const bool fork_frame = orig1 == orig2;
     if (!fork_frame) {
@@ -99,13 +102,13 @@ int32_t precedence(ctx_t &ctx, const conf_t &x, const conf_t &y
     int32_t i1 = idx1, i2 = idx2;
     for (; i1 != i2; ) {
         if (i1 > i2) {
-            const tag_history_t::node_t &n = hist.node(i1);
+            const typename ctx_t::history_t::node_t &n = hist.node(i1);
             info1 = n.info;
             prec1 = std::min(prec1, tags[info1.idx].height);
             i1 = n.pred;
         }
         else {
-            const tag_history_t::node_t &n = hist.node(i2);
+            const typename ctx_t::history_t::node_t &n = hist.node(i2);
             info2 = n.info;
             prec2 = std::min(prec2, tags[info2.idx].height);
             i2 = n.pred;
@@ -134,7 +137,7 @@ void compute_prectable(ctx_t &ctx)
 {
     const typename ctx_t::confset_t &state = ctx.state;
     const std::vector<Tag> &tags = ctx.nfa.tags;
-    tag_history_t &history = ctx.history;
+    typename ctx_t::history_t &history = ctx.history;
 
     const prectable_t *oldtbl = ctx.oldprectbl;
     prectable_t *newtbl = ctx.newprectbl;
@@ -157,20 +160,20 @@ void compute_prectable(ctx_t &ctx)
     // array of boundaries in the sorted configuration array.
     uint32_t maxfin = 0;
     for (typename ctx_t::cconfiter_t c = state.begin(), e = state.end(); c != e; ++c) {
-        uint32_t &x = history.node1(c->thist).finidx;
-        if (x >= USED) {
-            x = maxfin++;
-            fcount[x] = 0;
+        typename ctx_t::history_t::node_t &n = history.node(c->thist);
+        if (n.finidx >= USED) {
+            n.finidx = maxfin++;
+            fcount[n.finidx] = 0;
 
             // mark all nodes down to root as used (unless marked already)
-            for (int32_t i = history.node(c->thist).pred; i >= HROOT; ) {
-                uint32_t &y = history.node1(i).finidx;
-                if (y <= USED) break;
-                y = USED;
-                i = history.node(i).pred;
+            for (int32_t i = n.pred; i >= HROOT; ) {
+                typename ctx_t::history_t::node_t &m = history.node(i);
+                if (m.finidx <= USED) break;
+                m.finidx = USED;
+                i = m.pred;
             }
         }
-        ++fcount[x];
+        ++fcount[n.finidx];
     }
     fcount[maxfin] = 0;
     for (size_t i = 1; i <= maxfin; ++i) {
@@ -178,7 +181,7 @@ void compute_prectable(ctx_t &ctx)
     }
     sortcores.resize(state.size());
     for (uint32_t i = static_cast<uint32_t>(newdim); i --> 0; ) {
-        sortcores[--fcount[history.node1(state[i].thist).finidx]] = i;
+        sortcores[--fcount[history.node(state[i].thist).finidx]] = i;
     }
 
     // Depth-first traversal of the history tree. During traversal we grow
@@ -190,7 +193,7 @@ void compute_prectable(ctx_t &ctx)
     stack.push_back(0);
     while (!stack.empty()) {
         const int32_t n = stack.back();
-        tag_history_t::node1_t &node = history.node1(n);
+        typename ctx_t::history_t::node_t &node = history.node(n);
         const uint32_t fidx = node.finidx;
 
         if (fidx == NONFIN) {
@@ -201,14 +204,14 @@ void compute_prectable(ctx_t &ctx)
 
         if (node.next != -1) {
             // start or continue visiting subtrees rooted at this node
-            const tag_history_t::arc_t &arc = history.arc(node.next);
+            const typename ctx_t::history_t::arc_t &arc = history.arc(node.next);
             stack.push_back(arc.node);
             node.next = arc.next;
             continue;
         }
 
         // all subtrees visited, it's time to process this node
-        const int32_t h = n == 0 ? MAX_RHO : tags[history.node(n).info.idx].height;
+        const int32_t h = n == 0 ? MAX_RHO : tags[node.info.idx].height;
         li = level.rbegin();
         le = level.rend();
 
@@ -250,7 +253,7 @@ void compute_prectable(ctx_t &ctx)
         // their precedence has already been computed and must not be touched.
 
         for (int32_t a = node.last; a != -1; ) {
-            const tag_history_t::arc_t &arc = history.arc(a);
+            const typename ctx_t::history_t::arc_t &arc = history.arc(a);
             a = arc.prev;
 
             // for all the items of this subtree

@@ -74,34 +74,37 @@ namespace re2c
  * more complex analysis (and are not so useful after all), so we drop them.
  */
 
-
+template<typename ctx_t>
 struct kernel_eq_t
 {
-    determ_context_t &ctx;
-    bool operator()(const kernel_t *, const kernel_t *) const;
+    ctx_t &ctx;
+    bool operator()(const kernel_t *x, const kernel_t *y) const;
 };
 
-
+template<typename ctx_t>
 struct kernel_map_t
 {
-    determ_context_t &ctx;
-    bool operator()(const kernel_t *, const kernel_t *);
+    ctx_t &ctx;
+    bool operator()(const kernel_t *x, const kernel_t *y);
 };
 
-
-static kernel_t *make_new_kernel(size_t, allocator_t &);
-static kernel_t *make_kernel_copy(const kernel_t *, allocator_t &);
-static void copy_to_buffer_kernel(const closure_t &, const prectable_t *, kernel_t *);
-static void reserve_buffers(determ_context_t &);
-static uint32_t hash_kernel(const kernel_t *kernel);
-static bool equal_lookahead_tags(determ_context_t &, const kernel_t *, const kernel_t *);
+template<typename ctx_t> static bool do_find_state(ctx_t &ctx);
+template<typename ctx_t> static tcmd_t *final_actions(ctx_t &ctx, const clos_t &fin);
+template<typename ctx_t> static void reserve_buffers(ctx_t &ctx);
+template<typename ctx_t> static bool equal_lookahead_tags(ctx_t &ctx, const kernel_t *x, const kernel_t *y);
+template<typename ctx_t> static void unwind(const typename ctx_t::history_t &hist, tag_path_t &path, hidx_t idx);
 static void group_by_tag(tag_path_t &path, tag_path_t &buf, std::vector<uint32_t> &count);
-static void unwind(const tag_history_t &hist, tag_path_t &path, hidx_t idx);
-static bool do_find_state(determ_context_t &ctx);
-static tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin);
+static kernel_t *make_new_kernel(size_t size, allocator_t &alc);
+static kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc);
+static uint32_t hash_kernel(const kernel_t *kernel);
+static void copy_to_buffer_kernel(const closure_t &closure, const prectable_t *prectbl, kernel_t *buffer);
 
+// explicit specialization for context types
+template void find_state<pdetctx_t>(pdetctx_t &ctx);
+template void find_state<ldetctx_t>(ldetctx_t &ctx);
 
-void find_state(determ_context_t &ctx)
+template<typename ctx_t>
+void find_state(ctx_t &ctx)
 {
     dfa_t &dfa = ctx.dfa;
 
@@ -138,8 +141,8 @@ void find_state(determ_context_t &ctx)
     DDUMP_DFA_RAW(ctx, is_new);
 }
 
-
-bool do_find_state(determ_context_t &ctx)
+template<typename ctx_t>
+bool do_find_state(ctx_t &ctx)
 {
     kernels_t &kernels = ctx.dc_kernels;
     const closure_t &closure = ctx.state;
@@ -162,13 +165,13 @@ bool do_find_state(determ_context_t &ctx)
     const uint32_t hash = hash_kernel(k);
 
     // try to find identical kernel
-    kernel_eq_t cmp_eq = {ctx};
+    kernel_eq_t<ctx_t> cmp_eq = {ctx};
     ctx.dc_target = kernels.find_with(hash, k, cmp_eq);
     if (ctx.dc_target != kernels_t::NIL) return false;
 
     // else try to find mappable kernel
     // see note [bijective mappings]
-    kernel_map_t cmp_map = {ctx};
+    kernel_map_t<ctx_t> cmp_map = {ctx};
     ctx.dc_target = kernels.find_with(hash, k, cmp_map);
     if (ctx.dc_target != kernels_t::NIL) return false;
 
@@ -178,14 +181,14 @@ bool do_find_state(determ_context_t &ctx)
     return true;
 }
 
-
-tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin)
+template<typename ctx_t>
+tcmd_t *final_actions(ctx_t &ctx, const clos_t &fin)
 {
     dfa_t &dfa = ctx.dfa;
     const Rule &rule = dfa.rules[fin.state->rule];
     const tagver_t *vers = ctx.dc_tagvertbl[fin.tvers];
     const hidx_t look = fin.thist;
-    const tag_history_t &thist = ctx.history;
+    const typename ctx_t::history_t &thist = ctx.history;
     tcpool_t &tcpool = dfa.tcpool;
     tcmd_t *copy = NULL, *save = NULL, **p;
 
@@ -194,7 +197,7 @@ tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin)
         const Tag &tag = dfa.tags[t];
         if (fixed(tag)) continue;
 
-        const tagver_t v = abs(vers[t]), l = thist.last(look, t);
+        const tagver_t v = abs(vers[t]), l = last(thist, look, t);
         tagver_t &f = dfa.finvers[t];
         if (l == TAGVER_ZERO) {
             copy = tcpool.make_copy(copy, f, v);
@@ -212,7 +215,6 @@ tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin)
     return copy;
 }
 
-
 kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
     : maxsize(0) // usually ranges from one to some twenty
     , kernel(make_new_kernel(maxsize, alc))
@@ -226,7 +228,6 @@ kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
     , backup_actions(NULL)
 {}
 
-
 kernel_t *make_new_kernel(size_t size, allocator_t &alc)
 {
     kernel_t *k = alc.alloct<kernel_t>(1);
@@ -237,7 +238,6 @@ kernel_t *make_new_kernel(size_t size, allocator_t &alc)
     k->thist = alc.alloct<hidx_t>(size);
     return k;
 }
-
 
 kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
 {
@@ -259,7 +259,6 @@ kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
     return k;
 }
 
-
 uint32_t hash_kernel(const kernel_t *kernel)
 {
     const size_t n = kernel->size;
@@ -278,7 +277,6 @@ uint32_t hash_kernel(const kernel_t *kernel)
     return h;
 }
 
-
 void copy_to_buffer_kernel(const closure_t &closure,
     const prectable_t *prectbl, kernel_t *buffer)
 {
@@ -296,8 +294,8 @@ void copy_to_buffer_kernel(const closure_t &closure,
     }
 }
 
-
-void reserve_buffers(determ_context_t &ctx)
+template<typename ctx_t>
+void reserve_buffers(ctx_t &ctx)
 {
     kernel_buffers_t &kbufs = ctx.dc_buffers;
     allocator_t &alc = ctx.dc_allocator;
@@ -338,9 +336,8 @@ void reserve_buffers(determ_context_t &ctx)
     }
 }
 
-
-bool equal_lookahead_tags(determ_context_t &ctx
-    , const kernel_t *x, const kernel_t *y)
+template<typename ctx_t>
+bool equal_lookahead_tags(ctx_t &ctx, const kernel_t *x, const kernel_t *y)
 {
     DASSERT(x->size == y->size);
 
@@ -348,7 +345,7 @@ bool equal_lookahead_tags(determ_context_t &ctx
         return true;
     }
 
-    tag_history_t &thist = ctx.history;
+    typename ctx_t::history_t &thist = ctx.history;
     tag_path_t &p1 = ctx.dc_path1, &p2 = ctx.dc_path2, &p3 = ctx.dc_path3;
     std::vector<uint32_t> &count = ctx.dc_tagcount;
 
@@ -357,8 +354,8 @@ bool equal_lookahead_tags(determ_context_t &ctx
 
         if (xl == yl) continue;
 
-        unwind(thist, p1, xl);
-        unwind(thist, p2, yl);
+        unwind<ctx_t>(thist, p1, xl);
+        unwind<ctx_t>(thist, p2, yl);
 
         if (p1.size() != p2.size()) return false;
 
@@ -370,7 +367,6 @@ bool equal_lookahead_tags(determ_context_t &ctx
 
     return true;
 }
-
 
 void group_by_tag(tag_path_t &path, tag_path_t &buf, std::vector<uint32_t> &count)
 {
@@ -396,8 +392,8 @@ void group_by_tag(tag_path_t &path, tag_path_t &buf, std::vector<uint32_t> &coun
     path.swap(buf);
 }
 
-
-void unwind(const tag_history_t &hist, tag_path_t &path, hidx_t idx)
+template<typename ctx_t>
+void unwind(const typename ctx_t::history_t &hist, tag_path_t &path, hidx_t idx)
 {
     // Simple tags need only the last value, so in principle we could
     // increase the chance of mapping by recording only the last value.
@@ -405,14 +401,14 @@ void unwind(const tag_history_t &hist, tag_path_t &path, hidx_t idx)
     // cases when it makes any difference are rare.
     path.clear();
     for (; idx != HROOT; ) {
-        const tag_history_t::node_t &n = hist.node(idx);
+        const typename ctx_t::history_t::node_t &n = hist.node(idx);
         path.push_back(n.info);
         idx = n.pred;
     }
 }
 
-
-bool kernel_eq_t::operator()(const kernel_t *x, const kernel_t *y) const
+template<typename ctx_t>
+bool kernel_eq_t<ctx_t>::operator()(const kernel_t *x, const kernel_t *y) const
 {
     // check that kernel sizes, NFA states, tags versions,
     // lookahead tags and precedence table coincide
@@ -424,8 +420,8 @@ bool kernel_eq_t::operator()(const kernel_t *x, const kernel_t *y) const
         && equal_lookahead_tags(ctx, x, y);
 }
 
-
-bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
+template<typename ctx_t>
+bool kernel_map_t<ctx_t>::operator()(const kernel_t *x, const kernel_t *y)
 {
     // check that kernel sizes, NFA states lookahead tags
     // and precedence table coincide (versions might differ)
@@ -455,7 +451,7 @@ bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
         for (size_t t = 0; t < ntag; ++t) {
             // see note [mapping ignores items with lookahead tags]
             if (!history(tags[t])
-                && ctx.history.last(xl, t) != TAGVER_ZERO) continue;
+                && last(ctx.history, xl, t) != TAGVER_ZERO) continue;
 
             const tagver_t xv = xvs[t], yv = yvs[t];
             tagver_t &xv0 = y2x[yv], &yv0 = x2y[xv];

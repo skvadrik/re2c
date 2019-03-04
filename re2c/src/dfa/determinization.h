@@ -27,10 +27,8 @@ struct Msg;
 struct dfa_t;
 struct tcmd_t;
 
-
 typedef slab_allocator_t<1024 * 1024, sizeof(void*)> allocator_t;
 typedef int32_t prectable_t;
-
 
 struct clos_t
 {
@@ -52,13 +50,11 @@ struct clos_t
     static inline bool ran(const clos_t &c) { return c.state->type == nfa_state_t::RAN; }
 };
 
-
 typedef std::vector<clos_t> closure_t;
 typedef closure_t::iterator clositer_t;
 typedef closure_t::const_iterator cclositer_t;
 typedef closure_t::reverse_iterator rclositer_t;
 typedef closure_t::const_reverse_iterator rcclositer_t;
-
 
 struct newver_t
 {
@@ -67,21 +63,18 @@ struct newver_t
     hidx_t history;
 };
 
-
 typedef std::map<uint64_t, int32_t> hc_cache_t; // 'hc' for history comparison
 typedef std::vector<hc_cache_t> hc_caches_t;
+
+template<typename history_t>
 struct newver_cmp_t
 {
-    tag_history_t &history;
+    history_t &history;
     hc_caches_t &caches;
 
-    newver_cmp_t(tag_history_t &h, hc_caches_t &c): history(h), caches(c) {}
+    newver_cmp_t(history_t &h, hc_caches_t &c): history(h), caches(c) {}
     bool operator()(const newver_t &, const newver_t &) const;
 };
-
-
-typedef std::map<newver_t, tagver_t, newver_cmp_t> newvers_t;
-
 
 struct kernel_t
 {
@@ -93,7 +86,6 @@ struct kernel_t
 
     FORBID_COPY(kernel_t);
 };
-
 
 struct kernel_buffers_t
 {
@@ -111,12 +103,10 @@ struct kernel_buffers_t
     explicit kernel_buffers_t(allocator_t &alc);
 };
 
-
 struct cmp_gtop_t
 {
     inline bool operator() (const nfa_state_t *x, const nfa_state_t *y) const;
 };
-
 
 struct histleaf_t
 {
@@ -126,12 +116,11 @@ struct histleaf_t
     int32_t height;
 };
 
-
 typedef lookup_t<const kernel_t*> kernels_t;
 typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
     , cmp_gtop_t> gtop_heap_t;
 
-
+template<sema_t SEMA>
 struct determ_context_t
 {
     typedef clos_t conf_t;
@@ -140,6 +129,8 @@ struct determ_context_t
     typedef confset_t::const_iterator cconfiter_t;
     typedef confset_t::reverse_iterator rconfiter_t;
     typedef confset_t::const_reverse_iterator rcconfiter_t;
+    typedef typename history_type_t<SEMA, STRICT>::type history_t;
+    typedef std::map<newver_t, tagver_t, newver_cmp_t<history_t> > newvers_t;
 
     // determinization input
     const opt_t               *dc_opts;        // options
@@ -157,7 +148,7 @@ struct determ_context_t
     uint32_t                  dc_symbol;       // alphabet symbol of the current transition
     tcmd_t                   *dc_actions;      // tag actions of the current transition
     tagver_table_t            dc_tagvertbl;
-    tag_history_t             history;         // prefix trie of tag histories
+    history_t                 history;         // prefix trie of tag histories
     kernels_t                 dc_kernels;      // TDFA states under construction
     kernel_buffers_t          dc_buffers;
     hc_caches_t               dc_hc_caches;    // per-tag cache of history comparisons
@@ -195,15 +186,14 @@ struct determ_context_t
     FORBID_COPY(determ_context_t);
 };
 
-// maximum 29-bit (we have 30 bits, but highest must be non-negative)
-static const int32_t MAX_RHO = 0x1fffFFFF;
+typedef determ_context_t<POSIX> pdetctx_t;
+typedef determ_context_t<LEFTMOST> ldetctx_t;
 
-void tagged_epsilon_closure(determ_context_t &ctx);
-void closure_posix(determ_context_t &);
-void closure_leftmost(determ_context_t &);
-void find_state(determ_context_t &ctx);
+template<typename ctx_t> void tagged_epsilon_closure(ctx_t &ctx);
+template<typename ctx_t> void find_state(ctx_t &ctx);
+void closure_leftmost(ldetctx_t &);
 
-bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
+inline bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
 {
     return x->topord < y->topord;
 }

@@ -27,7 +27,7 @@ template<typename ctx_t> static inline bool scan(ctx_t &ctx, nfa_state_t *q, boo
 template<typename ctx_t> static inline bool relax_gor1(ctx_t &, const typename ctx_t::conf_t &);
 template<typename ctx_t> static inline void relax_gtop(ctx_t &, const typename ctx_t::conf_t &);
 
-inline void closure_posix(determ_context_t &ctx)
+inline void closure_posix(pdetctx_t &ctx)
 {
     DRESET_CLSTATS(ctx);
 
@@ -167,7 +167,7 @@ bool scan(ctx_t &ctx, nfa_state_t *q, bool all)
         case nfa_state_t::TAG:
             if (q->arcidx == 0) {
                 any |= relax_gor1(ctx, conf_t(x, q->tag.out
-                    , ctx.history.push1(x.thist, q->tag.info)));
+                    , ctx.history.push(x.thist, q->tag.info)));
                 ++q->arcidx;
             }
             break;
@@ -266,7 +266,7 @@ void closure_posix_gtop(ctx_t &ctx)
                 break;
             case nfa_state_t::TAG:
                 relax_gtop(ctx, conf_t(x, q->tag.out
-                    , ctx.history.push1(x.thist, q->tag.info)));
+                    , ctx.history.push(x.thist, q->tag.info)));
                 break;
             default:
                 break;

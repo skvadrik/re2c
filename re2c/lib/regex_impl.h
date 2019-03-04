@@ -50,14 +50,6 @@ typedef confset_t::iterator confiter_t;
 typedef confset_t::const_iterator cconfiter_t;
 typedef confset_t::const_reverse_iterator rcconfiter_t;
 
-enum sema_t {POSIX, LEFTMOST};
-enum eval_t {STRICT, LAZY};
-
-template<sema_t SEMA, eval_t EVAL> struct history_type_t;
-template<> struct history_type_t<POSIX, STRICT> {typedef tag_history_t type;};
-template<> struct history_type_t<LEFTMOST, STRICT> {typedef tag_history_t type;};
-template<sema_t SEMA> struct history_type_t<SEMA, LAZY> {typedef tag_history_t type;};
-
 template<sema_t SEMA, eval_t EVAL>
 struct simctx_t
 {
@@ -238,14 +230,14 @@ int finalize(const simctx_t<SEMA, LAZY> &ctx, const char *string, size_t nmatch,
     memset(done, 0, ctx.nsub * sizeof(bool));
 
     for (int32_t i = ctx.hidx; todo > 0 && i != HROOT; ) {
-        const tag_history_t::node_t &n = ctx.history.node(i);
+        const typename simctx_t<SEMA, LAZY>::history_t::node_t &n = ctx.history.node(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
         if (!fictive(tag) && t < nmatch * 2 && !done[t]) {
             done[t] = true;
             --todo;
             const regoff_t off = n.info.neg ? -1
-                : static_cast<regoff_t>(ctx.history.node2(i).step);
+                : static_cast<regoff_t>(n.step);
             m = &pmatch[t / 2 + 1];
             if (t % 2 == 0) {
                 m->rm_so = off;

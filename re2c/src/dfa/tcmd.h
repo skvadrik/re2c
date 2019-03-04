@@ -43,7 +43,7 @@ public:
     tcpool_t();
     tcmd_t *make_copy(tcmd_t *next, tagver_t lhs, tagver_t rhs);
     tcmd_t *make_set(tcmd_t *next, tagver_t lhs, tagver_t set);
-    tcmd_t *make_add(tcmd_t *next, tagver_t lhs, tagver_t rhs, const tag_history_t &history, hidx_t hidx, size_t tag);
+    template<typename history_t> tcmd_t *make_add(tcmd_t *next, tagver_t lhs, tagver_t rhs, const history_t &history, hidx_t hidx, size_t tag);
     tcmd_t *copy_add(tcmd_t *next, tagver_t lhs, tagver_t rhs, const tagver_t *history);
     tcid_t insert(const tcmd_t *tcmd);
     const tcmd_t *operator[](tcid_t id) const;
