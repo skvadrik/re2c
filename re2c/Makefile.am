@@ -23,6 +23,7 @@ re2c_HDR = \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
 	src/cfg/cfg.h \
+	src/dfa/closure_leftmost.h \
 	src/dfa/closure_posix.h \
 	src/dfa/determinization.h \
 	src/dfa/dfa.h \
@@ -110,7 +111,6 @@ re2c_SRC = \
 	src/cfg/rename.cc \
 	src/cfg/varalloc.cc \
 	src/dfa/closure.cc \
-	src/dfa/closure_leftmost.cc \
 	src/dfa/dead_rules.cc \
 	src/dfa/determinization.cc \
 	src/dfa/fallback_tags.cc \

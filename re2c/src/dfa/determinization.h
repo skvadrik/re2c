@@ -18,8 +18,7 @@
 #include "src/util/slab_allocator.h"
 
 
-namespace re2c
-{
+namespace re2c {
 
 // fwd
 struct opt_t;
@@ -190,7 +189,6 @@ typedef determ_context_t<LEFTMOST> ldetctx_t;
 
 template<typename ctx_t> void tagged_epsilon_closure(ctx_t &ctx);
 template<typename ctx_t> void find_state(ctx_t &ctx);
-void closure_leftmost(ldetctx_t &);
 
 inline bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
 {

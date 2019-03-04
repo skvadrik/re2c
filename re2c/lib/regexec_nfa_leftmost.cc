@@ -3,6 +3,7 @@
 #include "lib/regex_impl.h"
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
+#include "src/dfa/closure_leftmost.h"
 #include "src/dfa/determinization.h"
 #include "src/nfa/nfa.h"
 
@@ -11,7 +12,6 @@ namespace re2c {
 namespace libre2c {
 
 static void reach_on_symbol(lsimctx_t &, uint32_t);
-static void closure_leftmost(lsimctx_t &);
 static void update_offsets(lsimctx_t &ctx, const conf_t &c);
 
 int regexec_nfa_leftmost(const regex_t *preg, const char *string
@@ -23,14 +23,14 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
     // root state can be non-core, so we pass zero as origin to avoid checks
     const conf_t c0(ctx.nfa.root, 0, HROOT);
     ctx.reach.push_back(c0);
-    closure_leftmost(ctx);
+    closure_leftmost_dfs(ctx);
 
     for (;;) {
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
         reach_on_symbol(ctx, sym);
         ++ctx.step;
-        closure_leftmost(ctx);
+        closure_leftmost_dfs(ctx);
     }
 
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
@@ -91,40 +91,6 @@ void reach_on_symbol(lsimctx_t &ctx, uint32_t sym)
 
     std::swap(ctx.offsets1, ctx.offsets2);
     ctx.history.init();
-}
-
-void closure_leftmost(lsimctx_t &ctx)
-{
-    confset_t &state = ctx.state, &wl = ctx.reach;
-    state.clear();
-    for (; !wl.empty(); ) {
-
-        const conf_t &x = wl.back();
-        nfa_state_t *n = x.state;
-        const uint32_t o = x.origin;
-        const int32_t h = x.thist;
-        wl.pop_back();
-
-        if (n->clos != NOCLOS) continue;
-
-        n->clos = 0;
-        state.push_back(x);
-
-        switch (n->type) {
-            case nfa_state_t::NIL:
-                wl.push_back(conf_t(n->nil.out, o, h));
-                break;
-            case nfa_state_t::ALT:
-                wl.push_back(conf_t(n->alt.out2, o, h));
-                wl.push_back(conf_t(n->alt.out1, o, h));
-                break;
-            case nfa_state_t::TAG:
-                wl.push_back(conf_t(n->tag.out, o, ctx.history.link(ctx, x)));
-                break;
-            default:
-                break;
-        }
-    }
 }
 
 void update_offsets(lsimctx_t &ctx, const conf_t &c)

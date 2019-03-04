@@ -10,6 +10,7 @@
 #include "src/options/opt.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
+#include "src/dfa/closure_leftmost.h"
 #include "src/dfa/closure_posix.h"
 #include "src/dfa/posix_precedence.h"
 #include "src/dfa/tcmd.h"

@@ -1,6 +1,3 @@
-#include <queue>
-#include <stdio.h>
-
 #include "lib/lex.h"
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
