@@ -109,7 +109,7 @@ template<typename ctx_t>
 void reach_on_symbol(ctx_t &ctx, uint32_t sym)
 {
     ctx.dc_symbol = sym;
-    const uint32_t symbol = ctx.dfa.charset[ctx.dc_symbol];
+    const uint32_t symbol = ctx.dfa.charset[sym];
 
     const kernel_t *kernel = ctx.dc_kernels[ctx.dc_origin];
     ctx.oldprectbl = kernel->prectbl;
@@ -118,7 +118,10 @@ void reach_on_symbol(ctx_t &ctx, uint32_t sym)
     closure_t &reach = ctx.reach;
     reach.clear();
 
-    for (uint32_t i = 0; i < kernel->size; ++i) {
+    // Add configurations in reverse order: leftmost greedy closure uses
+    // the resulting array as stack, and POSIX closure doesn't care (GOR1
+    // pre-sorts configurations, and GTOP uses priority queue).
+    for (uint32_t i = static_cast<uint32_t>(kernel->size); i --> 0; ) {
         nfa_state_t *s = transition(kernel->state[i], symbol);
         if (s) {
             const clos_t c(s, i, kernel->tvers[i], kernel->thist[i], HROOT);
@@ -256,7 +259,6 @@ determ_context_t<SEMA>::determ_context_t(const opt_t *opts, Msg &msg
     , dc_tagcount()
     , reach()
     , state()
-    , stack_dfs()
     , gor1_topsort()
     , gor1_linear()
     , gtop_buffer()

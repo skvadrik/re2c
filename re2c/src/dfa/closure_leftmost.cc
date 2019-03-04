@@ -7,21 +7,14 @@ namespace re2c
 
 void closure_leftmost(ldetctx_t &ctx)
 {
-    const closure_t &init = ctx.reach;
-    closure_t &done = ctx.state;
-    std::stack<clos_t> &todo = ctx.stack_dfs;
-
-    // enqueue all initial states
+    closure_t &done = ctx.state, &todo = ctx.reach;
     done.clear();
-    for (rcclositer_t c = init.rbegin(); c != init.rend(); ++c) {
-        todo.push(*c);
-    }
 
     // DFS; linear complexity
     for (; !todo.empty(); ) {
-        const clos_t &x = todo.top();
+        const clos_t &x = todo.back();
         nfa_state_t *n = x.state;
-        todo.pop();
+        todo.pop_back();
 
         if (n->clos != NOCLOS) continue;
 
@@ -30,14 +23,14 @@ void closure_leftmost(ldetctx_t &ctx)
 
         switch (n->type) {
             case nfa_state_t::NIL:
-                todo.push(clos_t(x, n->nil.out));
+                todo.push_back(clos_t(x, n->nil.out));
                 break;
             case nfa_state_t::ALT:
-                todo.push(clos_t(x, n->alt.out2));
-                todo.push(clos_t(x, n->alt.out1));
+                todo.push_back(clos_t(x, n->alt.out2));
+                todo.push_back(clos_t(x, n->alt.out1));
                 break;
             case nfa_state_t::TAG:
-                todo.push(clos_t(x, n->tag.out, ctx.history.link(ctx, x)));
+                todo.push_back(clos_t(x, n->tag.out, ctx.history.link(ctx, x)));
                 break;
             default:
                 break;

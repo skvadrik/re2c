@@ -161,7 +161,6 @@ struct determ_context_t
     // tagged epsilon-closure
     confset_t reach;
     confset_t state;
-    std::stack<clos_t> stack_dfs;           // stack used for DFS in leftmost greedy closure
     std::vector<nfa_state_t*> gor1_topsort; // stack used in GOR1 (POSIX closure)
     std::vector<nfa_state_t*> gor1_linear;  // stack used in GOR1 (POSIX closure)
     std::vector<nfa_state_t*> gtop_buffer;  // buffer used for heap in GTOP (POSIX closure)
