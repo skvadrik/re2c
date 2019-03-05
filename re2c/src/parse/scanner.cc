@@ -6,7 +6,7 @@
 
 namespace re2c {
 
-const char *const Scanner::ENDPOS = (const char*) ~0LU;
+const char *const Scanner::ENDPOS = (const char*) UINTMAX_MAX;
 
 Scanner::~Scanner()
 {
