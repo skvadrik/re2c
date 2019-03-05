@@ -1,3 +1,4 @@
+#include <limits.h>
 #include <string.h>
 
 #include "src/parse/scanner.h"
@@ -6,7 +7,7 @@
 
 namespace re2c {
 
-const char *const Scanner::ENDPOS = (const char*) UINTMAX_MAX;
+const char *const Scanner::ENDPOS = (const char*) ULLONG_MAX;
 
 Scanner::~Scanner()
 {
