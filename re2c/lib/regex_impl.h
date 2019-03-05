@@ -74,7 +74,7 @@ struct simctx_t
     int32_t *newprectbl;
     int32_t *oldprectbl;
     size_t oldprecdim;
-    std::vector<histleaf_t> histlevel;
+    histleaf_t *histlevel;
     std::vector<uint32_t> sortcores;
     std::vector<uint32_t> fincount;
     std::vector<int32_t> worklist;
@@ -122,7 +122,7 @@ simctx_t<SEMA, EVAL>::simctx_t(const nfa_t &nfa, size_t re_nsub, int flags)
     , newprectbl(NULL)
     , oldprectbl(NULL)
     , oldprecdim(0)
-    , histlevel()
+    , histlevel(NULL)
     , sortcores()
     , fincount()
     , worklist()
@@ -152,7 +152,7 @@ simctx_t<SEMA, EVAL>::simctx_t(const nfa_t &nfa, size_t re_nsub, int flags)
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
         newprectbl = new int32_t[ncores * ncores];
         oldprectbl = new int32_t[ncores * ncores];
-        histlevel.reserve(ncores);
+        histlevel = new histleaf_t[ncores];
         sortcores.reserve(ncores);
         fincount.resize(ncores + 1);
         worklist.reserve(nstates);
@@ -179,6 +179,7 @@ simctx_t<SEMA, EVAL>::~simctx_t()
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
         delete[] newprectbl;
         delete[] oldprectbl;
+        delete[] histlevel;
     }
 }
 
@@ -192,7 +193,6 @@ void init(simctx_t<SEMA, EVAL> &ctx, const char *string)
     ctx.step = 0;
     ctx.rule = Rule::NONE;
     ctx.cursor = ctx.marker = string;
-    ctx.histlevel.clear();
     ctx.sortcores.clear();
     DASSERT(ctx.worklist.empty());
     DASSERT(ctx.gor1_topsort.empty());

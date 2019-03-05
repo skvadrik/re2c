@@ -159,12 +159,7 @@ void compute_prectable(ctx_t &ctx)
     std::vector<uint32_t> &sortcores = ctx.sortcores;
     std::vector<uint32_t> &fcount = ctx.fincount;
     std::vector<int32_t> &stack = ctx.worklist;
-    std::vector<histleaf_t> &level = ctx.histlevel;
-    std::vector<histleaf_t>::reverse_iterator li, lj, lk, le;
-
-    level.clear();
-    level.reserve(newdim);
-    sortcores.resize(newdim);
+    histleaf_t *level = ctx.histlevel, *li, *lj, *lk, *le = level;
 
     // Group core configurations by their history tree index, so that later
     // while traversing the tree we will know at once which configurations
@@ -172,6 +167,7 @@ void compute_prectable(ctx_t &ctx)
     // requires additional memory, but is fast and conveniently creates an
     // array of boundaries in the sorted configuration array.
     uint32_t maxfin = 0;
+    sortcores.resize(newdim);
     for (typename ctx_t::cconfiter_t c = state.begin(), e = state.end(); c != e; ++c) {
         typename ctx_t::history_t::node_t &n = history.node(c->thist);
         if (n.finidx >= USED) {
@@ -225,21 +221,20 @@ void compute_prectable(ctx_t &ctx)
 
         // all subtrees visited, it's time to process this node
         const int32_t h = n == 0 ? MAX_RHO : tags[node.info.idx].height;
-        li = level.rbegin();
-        le = level.rend();
+        li = level - 1;
 
         if (fidx < USED) {
             // this node has leaf configurations, add them to level
             for (uint32_t k = fcount[fidx], e = fcount[fidx + 1]; k < e; ++k) {
                 const uint32_t j = sortcores[k];
                 const histleaf_t l = {j, state[j].origin, HROOT, h};
-                level.push_back(l);
+                *level++ = l;
             }
 
             // compute precedence for newly added configurations
             const int32_t p0 = pack(h, 0);
-            for (lj = level.rbegin(); lj != li; ++lj) {
-                for (lk = lj; lk != li; ++lk) {
+            for (lj = level - 1; lj > li; --lj) {
+                for (lk = lj; lk > li; --lk) {
                     const uint32_t cj = lj->coreid, ck = lk->coreid;
                     const uint32_t oj = lj->origin, ok = lk->origin;
                     const bool fork = n != 0 || oj == ok;
@@ -270,13 +265,13 @@ void compute_prectable(ctx_t &ctx)
             a = arc.prev;
 
             // for all the items of this subtree
-            for (lk = li; li != le && li->hidx == arc.node; ++li) {
+            for (lk = li; li >= le && li->hidx == arc.node; --li) {
 
                 // update height of each item coming from subtree
                 li->height = std::min(li->height, h);
 
                 // for all the level items to the right of this subtree
-                for (lj = level.rbegin(); lj != lk; ++lj) {
+                for (lj = level - 1; lj > lk; --lj) {
 
                     const uint32_t ci = li->coreid, cj = lj->coreid;
                     const uint32_t oi = li->origin, oj = lj->origin;
@@ -311,7 +306,7 @@ void compute_prectable(ctx_t &ctx)
 
         // finally, downgrade tree index of all subtree items, making their
         // origins indistinguishable from each other for the previous level
-        for (lj = level.rbegin(); lj != li; ++lj) {
+        for (lj = level - 1; lj > li; --lj) {
             lj->hidx = n;
         }
 

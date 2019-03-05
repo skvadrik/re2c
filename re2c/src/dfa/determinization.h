@@ -170,7 +170,7 @@ struct determ_context_t
     int32_t *newprectbl;
     const int32_t *oldprectbl;
     size_t oldprecdim;
-    std::vector<histleaf_t> histlevel;
+    histleaf_t *histlevel;
     std::vector<uint32_t> sortcores;
     std::vector<uint32_t> fincount;
     std::vector<int32_t> worklist;

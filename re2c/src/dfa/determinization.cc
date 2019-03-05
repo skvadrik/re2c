@@ -267,7 +267,7 @@ determ_context_t<SEMA>::determ_context_t(const opt_t *opts, Msg &msg
     , newprectbl(NULL)
     , oldprectbl(NULL)
     , oldprecdim(0)
-    , histlevel()
+    , histlevel(NULL)
     , sortcores()
     , fincount()
     , worklist()
@@ -286,7 +286,7 @@ determ_context_t<SEMA>::determ_context_t(const opt_t *opts, Msg &msg
 
     if (SEMA == POSIX) {
         newprectbl = new prectable_t[ncores * ncores];
-        histlevel.reserve(ncores);
+        histlevel = new histleaf_t[ncores];
         sortcores.reserve(ncores);
         fincount.resize(ncores + 1);
         worklist.reserve(nstates);
@@ -306,6 +306,7 @@ determ_context_t<SEMA>::~determ_context_t()
 {
     if (SEMA == POSIX) {
         delete[] newprectbl;
+        delete[] histlevel;
     }
 }
 
