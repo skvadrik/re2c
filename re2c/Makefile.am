@@ -75,6 +75,7 @@ re2c_HDR = \
 	src/util/smart_ptr.h \
 	src/util/static_assert.h \
 	src/util/string_utils.h \
+	src/util/temp_file.h \
 	src/util/u32lim.h \
 	src/util/uniq_vector.h \
 	src/util/wrap_iter.h
@@ -149,6 +150,7 @@ re2c_SRC = \
 	src/parse/validate.cc \
 	src/util/get_dir.cc \
 	src/util/s_to_n32_unsafe.cc \
+	src/util/temp_file.cc \
 	src/util/range.cc
 re2c_SOURCES = \
 	src/main.cc \

@@ -11,6 +11,7 @@
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
 #include "src/util/string_utils.h"
+#include "src/util/temp_file.h"
 #include "src/util/uniq_vector.h"
 
 namespace re2c
@@ -440,17 +441,19 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     const std::set<std::string> &global_mtags)
 {
     FILE *file = NULL;
-    std::string filename = fname;
+    bool temp = false;
+    std::string filename = fname, tempname = fname;
+
     if (filename.empty()) {
         filename = "<stdout>";
         file = stdout;
     }
-    else {
-        file = fopen(filename.c_str(), "w");
-        if (!file) {
-            error("cannot open output file: %s", filename.c_str());
-            return false;
-        }
+    else if ((file = temp_file(tempname))) {
+        temp = true;
+    }
+    else if (!(file = fopen(filename.c_str(), "w"))) {
+        error("cannot open output file %s", filename.c_str());
+        return false;
     }
 
     fix_first_block_opts(blocks);
@@ -547,6 +550,12 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     }
 
     fclose(file);
+    if (temp && rename(tempname.c_str(), fname.c_str()) != 0) {
+        error("cannot rename temporary file %s to output file %s"
+            , tempname.c_str(), fname.c_str());
+        return false;
+    }
+
     return true;
 }
 
