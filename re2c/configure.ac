@@ -97,7 +97,13 @@ TRY_CXXFLAG([-Weverything], m4_join([ ],
 
 # needed by src/c99_stdint.h
 # avoid AC_INCLUDES_DEFAULT
-AC_CHECK_HEADERS([stdint.h], [], [], [[]])
+AC_CHECK_HEADERS([stdint.h],    [], [], [[]])
+# needed for POSIX file API
+AC_CHECK_HEADERS([sys/types.h], [], [], [[]])
+AC_CHECK_HEADERS([sys/stat.h],  [], [], [[]])
+AC_CHECK_HEADERS([fcntl.h],     [], [], [[]])
+AC_CHECK_HEADERS([unistd.h],    [], [], [[]])
+AC_CHECK_HEADERS([io.h],        [], [], [[]]) # windows POSIX-like API
 # list of possible types to use in typedefs
 AC_CHECK_SIZEOF([char],      [], [[]])
 AC_CHECK_SIZEOF([short],     [], [[]])
