@@ -145,7 +145,7 @@ bool scan(ctx_t &ctx, nfa_state_t *q, bool all)
     bool any = false;
 
     typedef typename ctx_t::conf_t conf_t;
-    const conf_t &x = ctx.state[q->clos];
+    const conf_t x = ctx.state[q->clos];
 
     switch (q->type) {
         case nfa_state_t::NIL:
@@ -253,7 +253,7 @@ void closure_posix_gtop(ctx_t &ctx)
         DINCCOUNT_CLSCANS(ctx);
 
         typedef typename ctx_t::conf_t conf_t;
-        const conf_t &x = ctx.state[q->clos];
+        const conf_t x = ctx.state[q->clos];
 
         switch (q->type) {
             case nfa_state_t::NIL:

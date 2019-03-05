@@ -278,6 +278,9 @@ determ_context_t<SEMA>::determ_context_t(const opt_t *opts, Msg &msg
     const size_t ncores = nfa.ncores;
     const size_t ntags = nfa.tags.size();
 
+    reach.reserve(nstates);
+    state.reserve(nstates);
+
     dc_hc_caches.resize(ntags);
     dc_path1.reserve(ntags);
     dc_path2.reserve(ntags);
