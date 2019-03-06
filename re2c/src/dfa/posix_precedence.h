@@ -75,7 +75,7 @@ int32_t phistory_t::precedence(ctx_t &ctx
         prec2 = unpack_longest(ctx.oldprectbl[orig2 * ctx.oldprecdim + orig1]);
     }
 
-    tag_info_t info1, info2;
+    tag_info_t info1 = NOINFO, info2 = NOINFO;
     int32_t i1 = idx1, i2 = idx2;
     for (; i1 != i2; ) {
         if (i1 > i2) {
@@ -387,7 +387,7 @@ int32_t zprecedence2(ctx_t &ctx, hidx_t idx1, hidx_t idx2
 
     const bool fork_frame = o1 == o2 && s1 == s2;
 
-    tag_info_t info1, info2;
+    tag_info_t info1 = NOINFO, info2 = NOINFO;
     for (; i1 != i2 && (s1 >= s || s2 >= s);) {
         if (s1 >= s && (i1 > i2 || s2 < s)) {
             const zhistory_t::node_t &n = hist.node(i1);
