@@ -4,7 +4,7 @@
 #include "src/util/temp_file.h"
 
 
-#if !defined(_MSVC) \
+#if !defined(_MSC_VER) \
     && defined(HAVE_FCNTL_H) \
     && defined(HAVE_SYS_STAT_H) \
     && defined(HAVE_SYS_TYPES_H) \
@@ -19,8 +19,9 @@
 #define FDOPEN(fd) fdopen(fd, "w")
 #define CLOSE(fd)  close(fd)
 
-#elif defined(_MSVC) \
-    && defined(HAVE_IO_H)
+#elif defined(_MSC_VER) \
+    && defined(HAVE_IO_H) \
+    && defined(HAVE_FCNTL_H)
 
 // MSVC
 #include <io.h>
