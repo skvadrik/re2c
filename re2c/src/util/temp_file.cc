@@ -24,6 +24,7 @@
     && defined(HAVE_FCNTL_H)
 
 // MSVC
+#include <fcntl.h>
 #include <io.h>
 #define OPEN(fn)   _open(fn, _O_CREAT | _O_EXCL | _O_RDWR, _S_IREAD | _S_IWRITE)
 #define FDOPEN(fd) _fdopen(fd, "w")
