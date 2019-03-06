@@ -111,6 +111,7 @@ Linear::Linear(const Span *s, uint32_t n, const State *next
     , bool skip, uint32_t eof)
     : nbranches(0)
     , branches(new Branch[n])
+    , def(eof == NOEOF ? NULL : next)
 {
     for (;;) {
         if (n == 1 && s[0].to == next) {

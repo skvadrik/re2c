@@ -31,9 +31,6 @@ static void emit_eof(Output &, uint32_t, const Code*);
 void emit_state (Output & o, uint32_t ind, const State * s, bool used_label)
 {
     const opt_t *opts = o.block().opts;
-    used_label |= opts->eof != NOEOF
-        && (s->action.type == Action::MOVE
-            || s->action.type == Action::INITIAL);
     if (used_label)
     {
         o.wstring(opts->labelPrefix).wlabel(s->label).ws(":\n");

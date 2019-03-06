@@ -54,7 +54,6 @@ static bool lex(input_t & in, unsigned int &count)
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
-yy1:
 yy1_:
 	yych = *in.cur;
 	switch (yych) {
@@ -249,7 +248,6 @@ yy2:
 	in.mar = ++in.cur;
 yy2_:
 	yych = *in.cur;
-yy3:
 	switch (yych) {
 	case 0x00:
 	case 0x01:
@@ -441,7 +439,6 @@ yy5:
 	++in.cur;
 yy5_:
 	yych = *in.cur;
-yy6:
 	switch (yych) {
 	case '\n':	goto yy5;
 	default:

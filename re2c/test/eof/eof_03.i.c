@@ -49,7 +49,6 @@ static bool lex(input_t & in, unsigned int &count)
         
 {
 	char yych;
-yy1:
 yy1_:
 	yych = *in.cur;
 	switch (yych) {
@@ -78,7 +77,6 @@ yy4:
 	++in.cur;
 yy4_:
 	yych = *in.cur;
-yy5:
 	switch (yych) {
 	case '\n':	goto yy4;
 	default:
@@ -93,7 +91,6 @@ yy7:
 	++in.cur;
 yy7_:
 	yych = *in.cur;
-yy8:
 	switch (yych) {
 	case '0':
 	case '1':

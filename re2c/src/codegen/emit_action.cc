@@ -241,14 +241,15 @@ void need(Output &o, uint32_t ind, size_t some)
 void gen_rescan_label(Output &o, const State *s)
 {
     const opt_t *opts = o.block().opts;
-
-    if (opts->eof == NOEOF || endstate(s)) return;
-
-    o.wstring(opts->labelPrefix).wlabel(s->label).ws("_:\n");
-
-    if (opts->fFlag) {
+    if (opts->eof == NOEOF || endstate(s)) {
+        ; // no rescan label
+    }
+    else if (opts->fFlag) {
         o.wstring(opts->yyfilllabel).wu32(o.fill_index).ws(":\n");
         ++o.fill_index;
+    }
+    else {
+        o.wstring(opts->labelPrefix).wlabel(s->label).ws("_:\n");
     }
 }
 
@@ -566,6 +567,7 @@ bool endstate(const State *s)
     // usually 'end' states are final states (not all final states are 'end'
     // states), but sometimes 'end' state happens to be initial non-accepting
     // state, e.g. in case of rule '[]'
+    DASSERT(s->go.nSpans > 0);
     const Action::type_t &a = s->go.span[0].to->action.type;
     return s->go.nSpans == 1
         && (a == Action::RULE || a == Action::ACCEPT);

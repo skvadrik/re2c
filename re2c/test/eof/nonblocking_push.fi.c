@@ -118,9 +118,7 @@ case 20: goto yyFillLabel20;
 
 
 
-yy1:
 yy0:
-yy1_:
 yyFillLabel0:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -194,10 +192,8 @@ yy4:
 	{ printf("< Unexpected character >%c<\n", in.yych); return FAIL; }
 yy6:
 	++in.cur;
-yy6_:
 yyFillLabel1:
 	in.yych = *in.cur;
-yy7:
 	switch (in.yych) {
 	case '\n':
 	case ' ':	goto yy6;
@@ -212,7 +208,6 @@ yy8:
 	{ printf("< whitespace\n");                         return WHITESPACE; }
 yy9:
 	++in.cur;
-yy9_:
 yyFillLabel2:
 	in.yych = *in.cur;
 yy10:
@@ -280,7 +275,6 @@ yy11:
 	{ printf("< word\n");                               return WORD; }
 yy12:
 	++in.cur;
-yy12_:
 yyFillLabel3:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -295,7 +289,6 @@ yyFillLabel3:
 	}
 yy13:
 	++in.cur;
-yy13_:
 yyFillLabel4:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -310,7 +303,6 @@ yyFillLabel4:
 	}
 yy14:
 	++in.cur;
-yy14_:
 yyFillLabel5:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -325,7 +317,6 @@ yyFillLabel5:
 	}
 yy15:
 	++in.cur;
-yy15_:
 yyFillLabel6:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -340,7 +331,6 @@ yyFillLabel6:
 	}
 yy16:
 	in.mark = ++in.cur;
-yy16_:
 yyFillLabel7:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -355,7 +345,6 @@ yyFillLabel7:
 	}
 yy17:
 	++in.cur;
-yy17_:
 yyFillLabel8:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -372,7 +361,6 @@ yy18:
 	goto yy11;
 yy19:
 	++in.cur;
-yy19_:
 yyFillLabel9:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -386,7 +374,6 @@ yyFillLabel9:
 	}
 yy20:
 	++in.cur;
-yy20_:
 yyFillLabel10:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -400,7 +387,6 @@ yyFillLabel10:
 	}
 yy21:
 	++in.cur;
-yy21_:
 yyFillLabel11:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -414,7 +400,6 @@ yyFillLabel11:
 	}
 yy22:
 	++in.cur;
-yy22_:
 yyFillLabel12:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -428,7 +413,6 @@ yyFillLabel12:
 	}
 yy23:
 	++in.cur;
-yy23_:
 yyFillLabel13:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -442,7 +426,6 @@ yyFillLabel13:
 	}
 yy24:
 	++in.cur;
-yy24_:
 yyFillLabel14:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -456,7 +439,6 @@ yyFillLabel14:
 	}
 yy25:
 	++in.cur;
-yy25_:
 yyFillLabel15:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -470,7 +452,6 @@ yyFillLabel15:
 	}
 yy26:
 	++in.cur;
-yy26_:
 yyFillLabel16:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -484,7 +465,6 @@ yyFillLabel16:
 	}
 yy27:
 	++in.cur;
-yy27_:
 yyFillLabel17:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -498,7 +478,6 @@ yyFillLabel17:
 	}
 yy28:
 	++in.cur;
-yy28_:
 yyFillLabel18:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -512,7 +491,6 @@ yyFillLabel18:
 	}
 yy29:
 	++in.cur;
-yy29_:
 yyFillLabel19:
 	in.yych = *in.cur;
 	switch (in.yych) {
@@ -526,7 +504,6 @@ yyFillLabel19:
 	}
 yy30:
 	++in.cur;
-yy30_:
 yyFillLabel20:
 	in.yych = *in.cur;
 	switch (in.yych) {

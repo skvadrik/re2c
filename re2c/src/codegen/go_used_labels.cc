@@ -32,6 +32,9 @@ void Linear::used_labels (std::set<label_t> & used) const
             used.insert(to->label);
         }
     }
+    if (def) {
+        used.insert(def->label);
+    }
 }
 
 void If::used_labels (std::set<label_t> & used) const

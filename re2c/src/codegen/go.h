@@ -85,6 +85,7 @@ struct Linear
 
     size_t nbranches;
     Branch *branches;
+    const State *def;
 
     Linear(const Span *s, uint32_t n, const State *next, bool skip, uint32_t eof);
     ~Linear();

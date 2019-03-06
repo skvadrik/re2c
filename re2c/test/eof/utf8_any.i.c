@@ -1395,7 +1395,6 @@ static Result lex1_simple(uint8_t *cur, uint8_t* end, uint8_t* /* unused */)
     
 {
 	uint8_t yych;
-yy31:
 yy31_:
 	yych = *cur;
 	switch (yych) {
