@@ -30,6 +30,7 @@ if test ! -x "${re2c}"; then
     exit 1
 fi
 
+diff_prog="diff"
 valgrind=""
 skeleton=0
 keep_tmp_files=0
@@ -45,6 +46,7 @@ do
         "--wine" )
             wine=`which wine`
             re2c="${re2c}.exe"
+            diff_prog="${diff_prog} -b" # ignore whitespace at the end of line
             ;;
         "-j"* )
             number=${arg#-j}
@@ -111,13 +113,6 @@ then
         )
     valgrind="${valgrind} ${valgrind_options[@]}"
     echo $valgrind
-fi
-
-diff_prog="diff"
-if [[ @CC@ =~ "mingw" || -n "${wine}" ]]
-then
-    # ignore whitespace at the end of line
-    diff_prog="${diff_prog} -b"
 fi
 
 run_pack() {
