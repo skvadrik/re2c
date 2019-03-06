@@ -271,24 +271,28 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
         }
     }
 
+    // only do EOF check in states that dispatch on symbol
+    const uint32_t eof = from->go.nSpans == 1 && !consume(from->go.span[0].to)
+        ? NOEOF : opts->eof;
+
     const uint32_t dSpans = nSpans - hSpans - nBitmaps;
     const bool part_skip = opts->eager_skip && !skip;
     if (opts->target == TARGET_DOT) {
         type = DOT;
-        info.dot = new Dot (span, nSpans, from, opts->eof);
+        info.dot = new Dot (span, nSpans, from, eof);
     }
     else if (opts->gFlag && !part_skip && (dSpans >= opts->cGotoThreshold) && !low_spans_have_tags) {
         type = CPGOTO;
-        info.cpgoto = new Cpgoto (span, nSpans, hspan, hSpans, from->next, opts->sFlag, opts->eof);
+        info.cpgoto = new Cpgoto (span, nSpans, hspan, hSpans, from->next, opts->sFlag, eof);
     }
     else if (opts->bFlag && !part_skip && (nBitmaps > 0)) {
         type = BITMAP;
-        info.bitmap = new GoBitmap (span, nSpans, hspan, hSpans, bm, bms, from->next, opts->sFlag, opts->eof);
+        info.bitmap = new GoBitmap (span, nSpans, hspan, hSpans, bm, bms, from->next, opts->sFlag, eof);
         bitmaps.used = true;
     }
     else {
         type = SWITCH_IF;
-        info.switchif = new SwitchIf (span, nSpans, from->next, opts->sFlag, part_skip, opts->eof);
+        info.switchif = new SwitchIf (span, nSpans, from->next, opts->sFlag, part_skip, eof);
     }
 }
 
