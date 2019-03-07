@@ -71,7 +71,7 @@ void Scanner::lex_conf(Opt &opts)
     "eof" {
         const int32_t eof = lex_conf_number();
         if (eof < 0) {
-            msg.fatal(cur_loc(), "eof cannot have negative value");
+            msg.fatal(cur_loc(), "EOF symbol cannot have negative value");
         }
         opts.set_eof(static_cast<uint32_t>(eof));
         return;
