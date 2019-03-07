@@ -1,13 +1,13 @@
-#include <limits.h>
+#include "src/util/c99_stdint.h"
+#include <limits>
 #include <string.h>
-
 #include "src/parse/scanner.h"
 #include "src/debug/debug.h"
 
 
 namespace re2c {
 
-const char *const Scanner::ENDPOS = (const char*) ULLONG_MAX;
+const char *const Scanner::ENDPOS = (const char*) std::numeric_limits<uint64_t>::max();
 
 Scanner::~Scanner()
 {
