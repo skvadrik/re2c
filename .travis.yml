@@ -13,12 +13,11 @@ addons:
 
 # in-tree and out-of-tree builds
 env:
- - BUILD_DIR=re2c       CONFIG_DIR=.
- - BUILD_DIR=re2c-build CONFIG_DIR=../re2c/
+ - BUILD_DIR=.      CONFIG_DIR=.
+ - BUILD_DIR=.build CONFIG_DIR=..
 
 script:
-  - cd re2c && ./autogen.sh
-  - cd ..
+  - ./autogen.sh
   - mkdir -p $BUILD_DIR && cd $BUILD_DIR
   - |
     $CONFIG_DIR/configure \
