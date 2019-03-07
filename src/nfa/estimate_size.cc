@@ -36,6 +36,7 @@ static size_t estimate(const RE *re)
 size_t estimate_size(const std::vector<RE*> &res)
 {
     const size_t nre = res.size();
+    DASSERT(nre > 0);
     size_t size = nre - 1;
     for (size_t i = 0; i < nre; ++i) {
         size += estimate(res[i]) + 1;

@@ -64,6 +64,11 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
                 "EOF rule %sis already defined at line %u",
                 incond(i->name).c_str(), i->eofs[0]->loc.line);
         }
+        else if (i->rules.empty() && i->defs.empty() && !i->eofs.empty()) {
+            msg.fatal(i->eofs[0]->loc,
+                "EOF rule %swithout other rules doesn't make sense",
+                incond(i->name).c_str());
+        }
     }
 
     if (!opts->cFlag) {
