@@ -254,7 +254,7 @@ CLEANFILES = \
 		$(top_builddir)/$(RE2C) $(RE2CFLAGS) -o $@ $< && \
 		cp $(@:cc=[ch]*) $(top_srcdir)/bootstrap/$(@D); \
 	else \
-		cp $(top_srcdir)/bootstrap/$(@:cc=[ch]*) $(@D); \
+		cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D); \
 	fi
 
 # cannot update bootstrap with distcheck (it makes srcdir readonly),
@@ -263,7 +263,7 @@ CLEANFILES = \
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN) if test $(BISON) = "no"; \
 	then \
-		cp $(top_srcdir)/bootstrap/$(@:cc={cc,h}) $(@D); \
+		cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D); \
 	else \
 		$(BISON) --output=$@ --defines=$(@:cc=h) $< && \
 		if test -x $(RE2C); then \
