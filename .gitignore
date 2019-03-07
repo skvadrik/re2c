@@ -4,7 +4,11 @@ aclocal.m4
 configure
 compile
 config.h.in
+config.guess
+config.sub
 depcomp
 install-sh
+ltmain.sh
+m4/
 missing
 test-driver
