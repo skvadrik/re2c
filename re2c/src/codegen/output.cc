@@ -438,16 +438,15 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     const std::set<std::string> &global_stags,
     const std::set<std::string> &global_mtags)
 {
-    FILE *file = NULL;
-    bool temp = false;
+    FILE *file = NULL, *temp = NULL;
     std::string filename = fname, tempname = fname;
 
     if (filename.empty()) {
         filename = "<stdout>";
         file = stdout;
     }
-    else if ((file = temp_file(tempname))) {
-        temp = true;
+    else if ((temp = temp_file(tempname))) {
+        file = temp;
     }
     else if (!(file = fopen(filename.c_str(), "w"))) {
         error("cannot open output file %s", filename.c_str());
@@ -546,12 +545,12 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     }
 
     fclose(file);
-    if (temp && rename(tempname.c_str(), fname.c_str()) != 0) {
-        error("cannot rename temporary file %s to output file %s"
+    if (temp && !overwrite_file(tempname.c_str(), fname.c_str())) {
+        error("cannot rename or write temporary file %s to output file %s"
             , tempname.c_str(), fname.c_str());
+        remove(tempname.c_str());
         return false;
     }
-
     return true;
 }
 

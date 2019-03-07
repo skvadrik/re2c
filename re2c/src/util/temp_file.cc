@@ -1,6 +1,5 @@
 #include "config.h"
 #include <time.h>
-#include "src/msg/msg.h"
 #include "src/util/temp_file.h"
 
 
@@ -18,6 +17,7 @@
 #define OPEN(fn)   open(fn, O_CREAT | O_EXCL | O_RDWR, S_IRUSR | S_IWUSR)
 #define FDOPEN(fd) fdopen(fd, "w")
 #define CLOSE(fd)  close(fd)
+#define UNLINK(f)  unlink(f)
 
 #elif defined(_MSC_VER) \
     && defined(HAVE_IO_H) \
@@ -29,6 +29,7 @@
 #define OPEN(fn)   _open(fn, _O_CREAT | _O_EXCL | _O_RDWR, _S_IREAD | _S_IWRITE)
 #define FDOPEN(fd) _fdopen(fd, "w")
 #define CLOSE(fd)  _close(fd)
+#define UNLINK(f)  _unlink(f)
 
 #else
 
@@ -36,6 +37,7 @@
 #define OPEN(fn)   -1
 #define FDOPEN(fd) NULL
 #define CLOSE      -1
+#define UNLINK(f)  -1
 
 #endif
 
@@ -61,10 +63,42 @@ FILE *temp_file(std::string &fname)
     }
 
     // we don't try too hard
-    if (!f) {
-        error("cannot open temporary file %s", fname.c_str());
-    }
     return f;
+}
+
+bool overwrite_file(const char *srcname, const char *dstname)
+{
+    // remove destination file no matter what
+    UNLINK(dstname);
+
+    // try the easy way: rename
+    if (rename(srcname, dstname) == 0) return true;
+
+    // rename failed: try write
+    FILE *src = NULL, *dst = NULL;
+    bool ok = false;
+
+    src = fopen(srcname, "r");
+    if (!src) goto end;
+
+    dst = fopen(dstname, "w");
+    if (!dst) goto end;
+
+    static const size_t BLK = 4096;
+    char buf[BLK];
+    for (;;) {
+        const size_t n = fread(buf, 1, BLK, src);
+        fwrite(buf, 1, n, dst);
+        if (n < BLK) break;
+    }
+    ok = true;
+
+end:
+    if (src) fclose(src);
+    if (dst) fclose(dst);
+    UNLINK(ok ? srcname : dstname);
+
+    return ok;
 }
 
 } // namespace re2c
@@ -72,3 +106,4 @@ FILE *temp_file(std::string &fname)
 #undef OPEN
 #undef FDOPEN
 #undef CLOSE
+#undef UNLINK
