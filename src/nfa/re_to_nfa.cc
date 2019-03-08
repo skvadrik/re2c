@@ -9,11 +9,6 @@
 
 namespace re2c {
 
-static void calc_indegrees(nfa_state_t *);
-static void calc_topord(nfa_state_t *, uint32_t &);
-static void calc_coreid(nfa_state_t *, uint32_t &);
-
-
 /*
  * note [counted repetition and iteration expansion]
  *
@@ -40,6 +35,8 @@ struct rtn_ctx_t
     nfa_t &nfa;
     size_t nrule;
 };
+
+static void stats(nfa_state_t *n, uint32_t &topord, uint32_t &ncores);
 
 static nfa_state_t *re_to_nfa(rtn_ctx_t &ctx, const RE *re, nfa_state_t *t)
 {
@@ -142,13 +139,10 @@ nfa_t::nfa_t(const RESpec &spec)
         }
     }
 
-    if (spec.opts->posix_semantics) {
-        // needed for closure algorithms GOR1 and GTOP
-        uint32_t topord = 0;
-        calc_topord(root, topord);
-        calc_indegrees(root);
-    }
-    calc_coreid(root, ncores);
+    // in-degree and topological index are used by POSIX disambiguation;
+    // the number of core states is used for both POSIX and leftmost
+    uint32_t topord = 0;
+    stats(root, topord, ncores);
 }
 
 nfa_t::~nfa_t()
@@ -156,79 +150,32 @@ nfa_t::~nfa_t()
     delete[] states;
 }
 
-void calc_indegrees(nfa_state_t *n)
+void stats(nfa_state_t *n, uint32_t &topord, uint32_t &ncores)
 {
     ++n->indeg;
     if (n->indeg > 1) return;
 
     switch (n->type) {
         case nfa_state_t::NIL:
-            calc_indegrees(n->nil.out);
+            stats(n->nil.out, topord, ncores);
             break;
         case nfa_state_t::ALT:
-            calc_indegrees(n->alt.out1);
-            calc_indegrees(n->alt.out2);
+            stats(n->alt.out1, topord, ncores);
+            stats(n->alt.out2, topord, ncores);
             break;
         case nfa_state_t::TAG:
-            calc_indegrees(n->tag.out);
+            stats(n->tag.out, topord, ncores);
             break;
         case nfa_state_t::RAN:
-            calc_indegrees(n->ran.out);
-        case nfa_state_t::FIN:
-            break;
-    }
-}
-
-void calc_topord(nfa_state_t *n, uint32_t &topord)
-{
-    if (n->topord != 0) return;
-    n->topord = ~0u; // temporary "visited" marker
-
-    switch (n->type) {
-        case nfa_state_t::NIL:
-            calc_topord(n->nil.out, topord);
-            break;
-        case nfa_state_t::ALT:
-            calc_topord(n->alt.out1, topord);
-            calc_topord(n->alt.out2, topord);
-            break;
-        case nfa_state_t::TAG:
-            calc_topord(n->tag.out, topord);
-            break;
-        case nfa_state_t::RAN:
-            calc_topord(n->ran.out, topord);
+            ncores++;
+            stats(n->ran.out, topord, ncores);
             break;
         case nfa_state_t::FIN:
+            ncores++;
             break;
     }
 
     n->topord = topord++;
-}
-
-void calc_coreid(nfa_state_t *n, uint32_t &coreid)
-{
-    if (n->coreid != 0) return;
-    n->coreid = NONCORE;
-
-    switch (n->type) {
-        case nfa_state_t::NIL:
-            calc_coreid(n->nil.out, coreid);
-            break;
-        case nfa_state_t::ALT:
-            calc_coreid(n->alt.out1, coreid);
-            calc_coreid(n->alt.out2, coreid);
-            break;
-        case nfa_state_t::TAG:
-            calc_coreid(n->tag.out, coreid);
-            break;
-        case nfa_state_t::RAN:
-            n->coreid = coreid++;
-            calc_coreid(n->ran.out, coreid);
-            break;
-        case nfa_state_t::FIN:
-            n->coreid = coreid++;
-            break;
-    }
 }
 
 } // namespace re2c

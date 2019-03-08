@@ -56,7 +56,6 @@ struct nfa_state_t
     uint32_t active     : 1;  // boolean
     uint32_t indeg      : 27; // the rest; we are unlikely to have more than 2^27 states
     uint32_t topord; // state index in fake topological ordering
-    uint32_t coreid; // core state index
 
     void init(size_t r)
     {
@@ -67,7 +66,6 @@ struct nfa_state_t
         active = 0;
         indeg = 0;
         topord = 0;
-        coreid = 0;
     }
 
     void make_alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)

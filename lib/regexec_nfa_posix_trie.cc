@@ -21,8 +21,7 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     pzsimctx_t &ctx = *static_cast<pzsimctx_t*>(preg->simctx);
     init(ctx, string);
 
-    nfa_state_t *s0 = ctx.nfa.root;
-    const conf_t c0(s0, s0->coreid, HROOT);
+    const conf_t c0(ctx.nfa.root, 0, HROOT);
     ctx.reach.push_back(c0);
     closure_posix_gtop(ctx);
     for (;;) {
@@ -43,6 +42,7 @@ void make_step(pzsimctx_t &ctx, uint32_t sym)
     cconfiter_t b = state.begin(), e = state.end(), i;
 
     reach.clear();
+    uint32_t j = 0;
     for (i = b; i != e; ++i) {
         nfa_state_t *s = i->state;
 
@@ -52,7 +52,7 @@ void make_step(pzsimctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    const conf_t c(s->ran.out, s->coreid, i->thist);
+                    const conf_t c(s->ran.out, j++, i->thist);
                     reach.push_back(c);
                     break;
                 }

@@ -12,7 +12,7 @@ namespace re2c {
 namespace libre2c {
 
 static void reach_on_symbol(lsimctx_t &, uint32_t);
-static void update_offsets(lsimctx_t &ctx, const conf_t &c);
+static void update_offsets(lsimctx_t &ctx, const conf_t &c, uint32_t id);
 
 int regexec_nfa_leftmost(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
@@ -29,7 +29,6 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
         reach_on_symbol(ctx, sym);
-        ++ctx.step;
         closure_leftmost_dfs(ctx);
     }
 
@@ -37,7 +36,7 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
         nfa_state_t *s = i->state;
         s->clos = NOCLOS;
         if (s->type == nfa_state_t::FIN) {
-            update_offsets(ctx, *i);
+            update_offsets(ctx, *i, NONCORE);
         }
     }
 
@@ -70,6 +69,7 @@ void reach_on_symbol(lsimctx_t &ctx, uint32_t sym)
     DASSERT(reach.empty());
 
     // in reverse, so that future closure DFS has states in stack order
+    uint32_t j = 0;
     for (rcconfiter_t i = state.rbegin(), e = state.rend(); i != e; ++i) {
         nfa_state_t *s = i->state;
         s->clos = NOCLOS;
@@ -77,23 +77,25 @@ void reach_on_symbol(lsimctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    conf_t c(s->ran.out, s->coreid, HROOT);
+                    conf_t c(s->ran.out, j, HROOT);
                     reach.push_back(c);
-                    update_offsets(ctx, *i);
+                    update_offsets(ctx, *i, j);
+                    ++j;
                     break;
                 }
             }
         }
         else if (s->type == nfa_state_t::FIN) {
-            update_offsets(ctx, *i);
+            update_offsets(ctx, *i, NONCORE);
         }
     }
 
     std::swap(ctx.offsets1, ctx.offsets2);
     ctx.history.init();
+    ++ctx.step;
 }
 
-void update_offsets(lsimctx_t &ctx, const conf_t &c)
+void update_offsets(lsimctx_t &ctx, const conf_t &c, uint32_t id)
 {
     const size_t nsub = ctx.nsub;
     bool *done = ctx.done;
@@ -106,7 +108,7 @@ void update_offsets(lsimctx_t &ctx, const conf_t &c)
         o = ctx.offsets3;
     }
     else {
-        o = ctx.offsets1 + s->coreid * nsub;
+        o = ctx.offsets1 + id * nsub;
     }
 
     memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));

@@ -20,8 +20,7 @@ int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string
     lzsimctx_t &ctx = *static_cast<lzsimctx_t*>(preg->simctx);
     init(ctx, string);
 
-    nfa_state_t *s0 = ctx.nfa.root;
-    const conf_t c0(s0, s0->coreid, HROOT);
+    const conf_t c0(ctx.nfa.root, 0/* unused */, HROOT);
     ctx.reach.push_back(c0);
     closure_leftmost_dfs(ctx);
     for (;;) {
@@ -53,7 +52,7 @@ void make_step(lzsimctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    const conf_t c(s->ran.out, 0, i->thist);
+                    const conf_t c(s->ran.out, 0/* unused */, i->thist);
                     reach.push_back(c);
                     break;
                 }
