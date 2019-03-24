@@ -28,7 +28,7 @@ void dump_nfa(const nfa_t &nfa)
     for (uint32_t i = static_cast<uint32_t>(nfa.size); i --> 0;) {
         const nfa_state_t *n = &nfa.states[i];
 
-        fprintf(stderr, "  n%u [label=\"%u(%d)\"]", i, i, n->indeg);
+        fprintf(stderr, "  n%u [label=\"%u\"]", i, i);
         if (n->type == nfa_state_t::FIN) {
             fprintf(stderr, " [fillcolor=gray]");
         }
