@@ -19,6 +19,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 {
     conopt_t globopts;
     globopts.FFlag = true;
+    globopts.backward = cflags & REG_BACKWARD;
     Opt opts(globopts);
     Msg msg;
     opts.set_posix_syntax(true);
@@ -41,6 +42,17 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 
     nfa_t *nfa = new nfa_t(re);
 
+    nfa_t *nfa0 = NULL;
+    if (cflags & REG_BACKWARD) {
+        conopt_t globopts0;
+        globopts0.FFlag = true;
+        Opt opts0(globopts0);
+        const opt_t *opt0 = opts0.snapshot();
+        RESpec re0(arv, opt0, msg, *preg->rmgr);
+        nfa0 = new nfa_t(re0);
+        delete opt0;
+    }
+
     DASSERT(nfa->rules.size() == 1);
     preg->re_nsub = nfa->rules[0].ncap + 1;
     preg->pmatch = new regmatch_t[preg->re_nsub];
@@ -48,16 +60,16 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     dfa_t *dfa = NULL;
     if (cflags & REG_NFA) {
         if ((cflags & REG_TRIE) && (cflags & REG_LEFTMOST)) {
-            preg->simctx = new libre2c::lzsimctx_t(*nfa, preg->re_nsub, cflags);
+            preg->simctx = new libre2c::lzsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         }
         else if (cflags & REG_TRIE) {
-            preg->simctx = new libre2c::pzsimctx_t(*nfa, preg->re_nsub, cflags);
+            preg->simctx = new libre2c::pzsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         }
         else if (cflags & REG_LEFTMOST) {
-            preg->simctx = new libre2c::lsimctx_t(*nfa, preg->re_nsub, cflags);
+            preg->simctx = new libre2c::lsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         }
         else {
-            preg->simctx = new libre2c::psimctx_t(*nfa, preg->re_nsub, cflags);
+            preg->simctx = new libre2c::psimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         }
     }
     else {

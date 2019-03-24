@@ -53,6 +53,7 @@ struct simctx_t
     typedef typename history_type_t<SEMA, EVAL>::type history_t;
 
     const nfa_t &nfa;
+    const nfa_t *nfa0;
     const size_t nsub;
     const int flags;
 
@@ -88,7 +89,7 @@ struct simctx_t
     gtop_heap_t gtop_heap;
     closure_stats_t dc_clstats;
 
-    simctx_t(const nfa_t &nfa, size_t re_nsub, int flags);
+    simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsub, int flags);
     ~simctx_t();
     FORBID_COPY(simctx_t);
 };
@@ -101,12 +102,14 @@ typedef simctx_t<LEFTMOST, LAZY> lzsimctx_t;
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+int regexec_nfa_posix_backward(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_leftmost(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 
 template<sema_t SEMA, eval_t EVAL>
-simctx_t<SEMA, EVAL>::simctx_t(const nfa_t &nfa, size_t re_nsub, int flags)
+simctx_t<SEMA, EVAL>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsub, int flags)
     : nfa(nfa)
+    , nfa0(nfa0)
     , nsub(2 * (re_nsub - 1))
     , flags(flags)
     , history()
@@ -180,6 +183,12 @@ simctx_t<SEMA, EVAL>::~simctx_t()
         delete[] newprectbl;
         delete[] oldprectbl;
         delete[] histlevel;
+    }
+    if (flags & REG_BACKWARD) {
+        delete &nfa0->charset;
+        delete &nfa0->rules;
+        delete &nfa0->tags;
+        delete nfa0;
     }
 }
 

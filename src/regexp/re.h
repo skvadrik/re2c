@@ -92,6 +92,8 @@ inline RE *re_cat(RESpec &spec, RE *x, RE *y)
     if (!x) return y;
     if (!y) return x;
 
+    if (spec.opts->backward) std::swap(x, y);
+
     RE *z = spec.alc.alloct<RE>(1);
     z->type = RE::CAT;
     z->cat.re1 = x;

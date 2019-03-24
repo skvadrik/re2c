@@ -18,6 +18,9 @@ int regexec(const regex_t *preg, const char *string, size_t nmatch,
     else if (preg->flags & REG_LEFTMOST) {
         return regexec_nfa_leftmost(preg, string, nmatch, pmatch, eflags);
     }
+    else if (preg->flags & REG_BACKWARD) {
+        return regexec_nfa_posix_backward(preg, string, nmatch, pmatch, eflags);
+    }
     else if (preg->flags & REG_TRIE) {
         return regexec_nfa_posix_trie(preg, string, nmatch, pmatch, eflags);
     }

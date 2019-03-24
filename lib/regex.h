@@ -33,6 +33,7 @@ static const int REG_LEFTMOST = 1u << 7;
 static const int REG_TRIE     = 1u << 8;
 static const int REG_GTOP     = 1u << 9;
 static const int REG_SLOWPREC = 1u << 10;
+static const int REG_BACKWARD = 1u << 11;
 
 struct regex_t
 {

@@ -58,6 +58,7 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, lookahead, true) \
     CONSTOPT (bool, eager_skip, false) \
     CONSTOPT (bool, optimize_tags, true) \
+    CONSTOPT (bool, backward, false) \
     /* debug */ \
     CONSTOPT (bool, dump_nfa, false) \
     CONSTOPT (bool, dump_dfa_raw, false) \
