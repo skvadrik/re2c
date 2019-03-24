@@ -41,9 +41,8 @@ namespace re2c {
  * therefore we have to insert missing captures in subexpressions
  * that influence disambiguation of existing captures. Such cases are:
  * left alternative in union (unless it is already a capture) and first
- * operand in concatenation (unless it is a capture or the length of
- * strings accepted by it is fixed). Of course, this insertion only
- * applies to subexpressions that have nested captures.
+ * operand in concatenation (unless it is a capture). Of course, this
+ * insertion only applies to subexpressions that have nested captures.
  */
 
 static bool has_tags(const AST *);
@@ -128,49 +127,55 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             return re_class(spec, ast->loc, r);
         }
         case AST::ALT: {
+            // see note [POSIX subexpression hierarchy]
+            const bool need_tags = opts->posix_semantics && has_tags(ast);
+
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
-            if (opts->posix_semantics && has_tags(ast)) {
-                // see note [POSIX subexpression hierarchy]
-                if (ast->cat.ast1->type != AST::CAP) {
-                    t1 = re_tag(spec, tags.size(), false);
-                    tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
-                    t2 = re_tag(spec, tags.size(), false);
-                    tags.push_back(Tag(Tag::FICTIVE, false, height));
-                }
-                if (ast->cat.ast2->type != AST::CAP) {
-                    t3 = re_tag(spec, tags.size(), false);
-                    tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
-                    t4 = re_tag(spec, tags.size(), false);
-                    tags.push_back(Tag(Tag::FICTIVE, false, height));
-                }
+
+            if (need_tags && ast->alt.ast1->type != AST::CAP) {
+                t1 = re_tag(spec, tags.size(), false);
+                tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
+                t2 = re_tag(spec, tags.size(), false);
+                tags.push_back(Tag(Tag::FICTIVE, false, height));
             }
             x = ast_to_re(spec, ast->alt.ast1, ncap, height);
             x = re_cat(spec, t1, re_cat(spec, x, t2));
+
+            if (need_tags && ast->alt.ast2->type != AST::CAP) {
+                t3 = re_tag(spec, tags.size(), false);
+                tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
+                t4 = re_tag(spec, tags.size(), false);
+                tags.push_back(Tag(Tag::FICTIVE, false, height));
+            }
             y = ast_to_re(spec, ast->alt.ast2, ncap, height);
             y = re_cat(spec, t3, re_cat(spec, y, t4));
+
             return re_alt(spec, x, y);
         }
         case AST::CAT: {
+            // see note [POSIX subexpression hierarchy]
+            const bool need_tags = opts->posix_semantics && has_tags(ast);
+
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
-            if (opts->posix_semantics && has_tags(ast)) {
-                // see note [POSIX subexpression hierarchy]
-                if (ast->cat.ast1->type != AST::CAP) {
-                    t1 = re_tag(spec, tags.size(), false);
-                    tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
-                    t2 = re_tag(spec, tags.size(), false);
-                    tags.push_back(Tag(Tag::FICTIVE, false, height));
-                }
-                if (ast->cat.ast2->type != AST::CAP) {
-                    t3 = re_tag(spec, tags.size(), false);
-                    tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
-                    t4 = re_tag(spec, tags.size(), false);
-                    tags.push_back(Tag(Tag::FICTIVE, false, height));
-                }
+
+            if (need_tags && ast->cat.ast1->type != AST::CAP) {
+                t1 = re_tag(spec, tags.size(), false);
+                tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
+                t2 = re_tag(spec, tags.size(), false);
+                tags.push_back(Tag(Tag::FICTIVE, false, height));
             }
             x = ast_to_re(spec, ast->cat.ast1, ncap, height);
             x = re_cat(spec, t1, re_cat(spec, x, t2));
+
+            if (need_tags && ast->cat.ast2->type != AST::CAP) {
+                t3 = re_tag(spec, tags.size(), false);
+                tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
+                t4 = re_tag(spec, tags.size(), false);
+                tags.push_back(Tag(Tag::FICTIVE, false, height));
+            }
             y = ast_to_re(spec, ast->cat.ast2, ncap, height);
             y = re_cat(spec, t3, re_cat(spec, y, t4));
+
             return re_cat(spec, x, y);
         }
         case AST::TAG: {
