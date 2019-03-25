@@ -64,7 +64,7 @@ int regexec_nfa_posix(const regex_t *preg, const char *string
 
 void closure_posix(psimctx_t &ctx)
 {
-    ctx.history.detach();
+    ctx.history.init();
 
     if (ctx.flags & REG_GTOP) {
         closure_posix_gtop(ctx);
