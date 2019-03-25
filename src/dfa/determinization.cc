@@ -234,8 +234,8 @@ void warn_nondeterministic_tags(const ctx_t &ctx)
     }
 }
 
-template<sema_t SEMA>
-determ_context_t<SEMA>::determ_context_t(const opt_t *opts, Msg &msg
+template<typename history_t>
+determ_context_t<history_t>::determ_context_t(const opt_t *opts, Msg &msg
     , const std::string &condname, const nfa_t &nfa, dfa_t &dfa)
     : dc_opts(opts)
     , dc_msg(msg)
@@ -252,7 +252,7 @@ determ_context_t<SEMA>::determ_context_t(const opt_t *opts, Msg &msg
     , dc_kernels()
     , dc_buffers(dc_allocator)
     , dc_hc_caches()
-    , dc_newvers(newver_cmp_t<typename determ_context_t<SEMA>::history_t>(history, dc_hc_caches))
+    , dc_newvers(newver_cmp_t<history_t>(history, dc_hc_caches))
     , dc_path1()
     , dc_path2()
     , dc_path3()
@@ -287,7 +287,7 @@ determ_context_t<SEMA>::determ_context_t(const opt_t *opts, Msg &msg
     dc_path3.reserve(ntags);
     dc_tagcount.resize(ntags);
 
-    if (SEMA == POSIX) {
+    if (opts->posix_semantics) {
         newprectbl = new prectable_t[ncores * ncores];
         histlevel = new histleaf_t[ncores];
         sortcores.reserve(ncores);
@@ -304,13 +304,11 @@ determ_context_t<SEMA>::determ_context_t(const opt_t *opts, Msg &msg
     }
 }
 
-template<sema_t SEMA>
-determ_context_t<SEMA>::~determ_context_t()
+template<typename history_t>
+determ_context_t<history_t>::~determ_context_t()
 {
-    if (SEMA == POSIX) {
-        delete[] newprectbl;
-        delete[] histlevel;
-    }
+    delete[] newprectbl;
+    delete[] histlevel;
 }
 
 } // namespace re2c

@@ -41,7 +41,7 @@ typedef confset_t::iterator confiter_t;
 typedef confset_t::const_iterator cconfiter_t;
 typedef confset_t::const_reverse_iterator rcconfiter_t;
 
-template<sema_t SEMA, eval_t EVAL>
+template<typename history_type_t>
 struct simctx_t
 {
     typedef libre2c::conf_t conf_t;
@@ -50,7 +50,7 @@ struct simctx_t
     typedef confset_t::const_iterator cconfiter_t;
     typedef confset_t::reverse_iterator rconfiter_t;
     typedef confset_t::const_reverse_iterator rcconfiter_t;
-    typedef typename history_type_t<SEMA, EVAL>::type history_t;
+    typedef history_type_t history_t;
 
     const nfa_t &nfa;
     const nfa_t *nfa0;
@@ -94,10 +94,10 @@ struct simctx_t
     FORBID_COPY(simctx_t);
 };
 
-typedef simctx_t<POSIX, STRICT> psimctx_t;
-typedef simctx_t<LEFTMOST, STRICT> lsimctx_t;
-typedef simctx_t<POSIX, LAZY> pzsimctx_t;
-typedef simctx_t<LEFTMOST, LAZY> lzsimctx_t;
+typedef simctx_t<phistory_t> psimctx_t;
+typedef simctx_t<lhistory_t> lsimctx_t;
+typedef simctx_t<zhistory_t> pzsimctx_t;
+typedef simctx_t<zhistory_t> lzsimctx_t;
 
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
@@ -106,8 +106,8 @@ int regexec_nfa_posix_backward(const regex_t *preg, const char *string, size_t n
 int regexec_nfa_leftmost(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 
-template<sema_t SEMA, eval_t EVAL>
-simctx_t<SEMA, EVAL>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsub, int flags)
+template<typename history_t>
+simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsub, int flags)
     : nfa(nfa)
     , nfa0(nfa0)
     , nsub(2 * (re_nsub - 1))
@@ -170,8 +170,8 @@ simctx_t<SEMA, EVAL>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_ns
     }
 }
 
-template<sema_t SEMA, eval_t EVAL>
-simctx_t<SEMA, EVAL>::~simctx_t()
+template<typename history_t>
+simctx_t<history_t>::~simctx_t()
 {
     delete[] done;
     if (!(flags & REG_TRIE)) {
@@ -192,8 +192,8 @@ simctx_t<SEMA, EVAL>::~simctx_t()
     }
 }
 
-template<sema_t SEMA, eval_t EVAL>
-void init(simctx_t<SEMA, EVAL> &ctx, const char *string)
+template<typename history_t>
+void init(simctx_t<history_t> &ctx, const char *string)
 {
     ctx.reach.clear();
     ctx.state.clear();
@@ -209,8 +209,8 @@ void init(simctx_t<SEMA, EVAL> &ctx, const char *string)
     DASSERT(ctx.gtop_heap.empty());
 }
 
-template<sema_t SEMA>
-int finalize(const simctx_t<SEMA, LAZY> &ctx, const char *string, size_t nmatch,
+template<typename history_t>
+int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
     regmatch_t pmatch[])
 {
     if (ctx.rule == Rule::NONE) {
@@ -227,7 +227,7 @@ int finalize(const simctx_t<SEMA, LAZY> &ctx, const char *string, size_t nmatch,
     memset(done, 0, ctx.nsub * sizeof(bool));
 
     for (int32_t i = ctx.hidx; todo > 0 && i != HROOT; ) {
-        const typename simctx_t<SEMA, LAZY>::history_t::node_t &n = ctx.history.node(i);
+        const typename history_t::node_t &n = ctx.history.node(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
         if (!fictive(tag) && t < nmatch * 2 && !done[t]) {

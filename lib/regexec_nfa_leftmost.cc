@@ -115,7 +115,7 @@ void update_offsets(lsimctx_t &ctx, const conf_t &c, uint32_t id)
     memset(done, 0, nsub * sizeof(bool));
 
     for (int32_t i = c.thist; i != HROOT; ) {
-        const lsimctx_t::history_t::node_t &n = ctx.history.node(i);
+        const lhistory_t::node_t &n = ctx.history.node(i);
         const size_t t = n.info.idx;
         if (!done[t]) {
             done[t] = true;

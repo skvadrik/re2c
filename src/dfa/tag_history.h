@@ -21,9 +21,6 @@ const tag_info_t NOINFO = {0x3fffFFFF, 0};
 static const uint32_t NONFIN = ~0u;
 static const uint32_t USED = NONFIN - 1;
 
-enum sema_t {POSIX, LEFTMOST};
-enum eval_t {STRICT, LAZY};
-
 // tag history for POSIX semantics
 struct phistory_t
 {
@@ -188,12 +185,6 @@ hidx_t zhistory_t::link(ctx_t &ctx, const typename ctx_t::conf_t &conf)
     nodes.push_back(node_t(conf.state->tag.info, conf.thist, conf.origin, ctx.step));
     return i;
 }
-
-// history type selector
-template<sema_t SEMA, eval_t EVAL> struct history_type_t;
-template<> struct history_type_t<POSIX, STRICT> {typedef phistory_t type;};
-template<> struct history_type_t<LEFTMOST, STRICT> {typedef lhistory_t type;};
-template<sema_t SEMA> struct history_type_t<SEMA, LAZY> {typedef zhistory_t type;};
 
 template<typename history_t>
 tagver_t last(const history_t &h, hidx_t i, size_t t)

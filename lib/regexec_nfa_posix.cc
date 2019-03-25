@@ -183,7 +183,7 @@ void compute_prectbl_naive(psimctx_t &ctx)
         newtbl[i * newdim + i] = p0;
         for (uint32_t j = i + 1; j < newdim; ++j) {
             int32_t prec1, prec2;
-            int32_t prec = psimctx_t::history_t::precedence(ctx, state[i], state[j], prec1, prec2);
+            int32_t prec = phistory_t::precedence(ctx, state[i], state[j], prec1, prec2);
             newtbl[i * newdim + j] = pack(prec1, prec);
             newtbl[j * newdim + i] = pack(prec2, -prec);
         }

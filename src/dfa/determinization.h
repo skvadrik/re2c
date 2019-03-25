@@ -119,7 +119,7 @@ typedef lookup_t<const kernel_t*> kernels_t;
 typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
     , cmp_gtop_t> gtop_heap_t;
 
-template<sema_t SEMA>
+template<typename history_type_t>
 struct determ_context_t
 {
     typedef clos_t conf_t;
@@ -128,7 +128,7 @@ struct determ_context_t
     typedef confset_t::const_iterator cconfiter_t;
     typedef confset_t::reverse_iterator rconfiter_t;
     typedef confset_t::const_reverse_iterator rcconfiter_t;
-    typedef typename history_type_t<SEMA, STRICT>::type history_t;
+    typedef history_type_t history_t;
     typedef std::map<newver_t, tagver_t, newver_cmp_t<history_t> > newvers_t;
 
     // determinization input
@@ -184,8 +184,8 @@ struct determ_context_t
     FORBID_COPY(determ_context_t);
 };
 
-typedef determ_context_t<POSIX> pdetctx_t;
-typedef determ_context_t<LEFTMOST> ldetctx_t;
+typedef determ_context_t<phistory_t> pdetctx_t;
+typedef determ_context_t<lhistory_t> ldetctx_t;
 
 template<typename ctx_t> void tagged_epsilon_closure(ctx_t &ctx);
 template<typename ctx_t> void find_state(ctx_t &ctx);
