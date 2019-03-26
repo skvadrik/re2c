@@ -25,6 +25,9 @@ void regfree(regex_t *preg)
         else if (preg->flags & REG_LEFTMOST) {
             delete static_cast<libre2c::lsimctx_t*>(preg->simctx);
         }
+        else if (preg->flags & REG_KUKLEWICZ) {
+            delete static_cast<libre2c::ksimctx_t*>(preg->simctx);
+        }
         else {
             delete static_cast<libre2c::psimctx_t*>(preg->simctx);
         }

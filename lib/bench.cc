@@ -106,15 +106,17 @@ static void bench(const char *r, const char *s, size_t n, int mask, int need)
 {
     fprintf(stderr, "\nr: %.*s..., s: %.*s..., n: %lu\n", 30, r, 30, s, n);
 
-    bench_re2c(r, s, n, 0, mask, need, "re2c-tdfa");
-    bench_re2c(r, s, n, REG_NFA, mask, need, "re2c-tnfa-posix-gor1");
-    bench_re2c(r, s, n, REG_NFA | REG_GTOP, mask, need, "re2c-tnfa-posix-gtop");
-    bench_re2c(r, s, n, REG_NFA | REG_SLOWPREC, mask, need, "re2c-tnfa-posix-gor1-slow");
-    bench_re2c(r, s, n, REG_NFA | REG_LEFTMOST, mask, need, "re2c-tnfa-leftmost");
-    bench_re2c(r, s, n, REG_NFA | REG_TRIE, mask, need, "re2c-tnfa-posix-gtop-trie");
-    bench_re2c(r, s, n, REG_NFA | REG_TRIE | REG_LEFTMOST, mask, need, "re2c-tnfa-leftmost-trie");
-    bench_re2c(r, s, n, REG_NFA | REG_BACKWARD, mask, need, "re2c-tnfa-posix-back-gor1");
-    bench_re2c(r, s, n, REG_NFA | REG_BACKWARD | REG_GTOP, mask, need, "re2c-tnfa-posix-back-gtop");
+    bench_re2c(r, s, n, 0,                                  mask, need, "re2c-tdfa");
+    bench_re2c(r, s, n, REG_NFA,                            mask, need, "re2c-tnfa-posix-gor1");
+    bench_re2c(r, s, n, REG_NFA | REG_GTOP,                 mask, need, "re2c-tnfa-posix-gtop");
+    bench_re2c(r, s, n, REG_NFA | REG_KUKLEWICZ,            mask, need, "re2c-tnfa-posix-kukl-gor1");
+    bench_re2c(r, s, n, REG_NFA | REG_KUKLEWICZ | REG_GTOP, mask, need, "re2c-tnfa-posix-kukl-gtop");
+    bench_re2c(r, s, n, REG_NFA | REG_SLOWPREC,             mask, need, "re2c-tnfa-posix-gor1-slow");
+    bench_re2c(r, s, n, REG_NFA | REG_LEFTMOST,             mask, need, "re2c-tnfa-leftmost");
+    bench_re2c(r, s, n, REG_NFA | REG_TRIE,                 mask, need, "re2c-tnfa-posix-gtop-trie");
+    bench_re2c(r, s, n, REG_NFA | REG_TRIE | REG_LEFTMOST,  mask, need, "re2c-tnfa-leftmost-trie");
+    bench_re2c(r, s, n, REG_NFA | REG_BACKWARD,             mask, need, "re2c-tnfa-posix-back-gor1");
+    bench_re2c(r, s, n, REG_NFA | REG_BACKWARD | REG_GTOP,  mask, need, "re2c-tnfa-posix-back-gtop");
 
 #ifdef HAVE_RE2_RE2_H
     bench_re2(r, s, n, mask, "re2");

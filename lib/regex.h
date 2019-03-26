@@ -21,19 +21,20 @@ struct regmatch_t
 };
 
 // standard flags
-static const int REG_EXTENDED = 1u << 0;
-static const int REG_ICASE    = 1u << 1;
-static const int REG_NOSUB    = 1u << 2;
-static const int REG_NEWLINE  = 1u << 3;
-static const int REG_NOTBOL   = 1u << 4;
-static const int REG_NOTEOL   = 1u << 5;
+static const int REG_EXTENDED  = 1u << 0;
+static const int REG_ICASE     = 1u << 1;
+static const int REG_NOSUB     = 1u << 2;
+static const int REG_NEWLINE   = 1u << 3;
+static const int REG_NOTBOL    = 1u << 4;
+static const int REG_NOTEOL    = 1u << 5;
 // extensions
-static const int REG_NFA      = 1u << 6;
-static const int REG_LEFTMOST = 1u << 7;
-static const int REG_TRIE     = 1u << 8;
-static const int REG_GTOP     = 1u << 9;
-static const int REG_SLOWPREC = 1u << 10;
-static const int REG_BACKWARD = 1u << 11;
+static const int REG_NFA       = 1u << 6;
+static const int REG_LEFTMOST  = 1u << 7;
+static const int REG_TRIE      = 1u << 8;
+static const int REG_GTOP      = 1u << 9;
+static const int REG_SLOWPREC  = 1u << 10;
+static const int REG_BACKWARD  = 1u << 11;
+static const int REG_KUKLEWICZ = 1u << 12;
 
 struct regex_t
 {

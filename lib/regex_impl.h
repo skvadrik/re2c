@@ -79,6 +79,7 @@ struct simctx_t
     std::vector<uint32_t> sortcores;
     std::vector<uint32_t> fincount;
     std::vector<int32_t> worklist;
+    std::vector<cconfiter_t> stateiters;
 
     confset_t reach;
     confset_t state;
@@ -94,15 +95,44 @@ struct simctx_t
     FORBID_COPY(simctx_t);
 };
 
+// tag history for Kuklewicz disambiguation (POSIX semantics)
+struct khistory_t
+{
+    struct node_t {
+        tag_info_t info;
+        hidx_t pred;
+
+        inline node_t(tag_info_t info, hidx_t pred)
+            : info(info), pred(pred) {}
+    };
+
+    std::vector<node_t> nodes;
+    std::vector<int32_t> path1;
+    std::vector<int32_t> path2;
+
+    inline khistory_t(): nodes(), path1(), path2() { init(); }
+    inline void init();
+    inline node_t &node(hidx_t i) { return nodes[static_cast<uint32_t>(i)]; }
+    inline const node_t &node(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
+    template<typename ctx_t> inline hidx_t link(ctx_t &ctx
+        , const typename ctx_t::conf_t &conf);
+    template<typename ctx_t> static int32_t precedence(ctx_t &ctx
+        , const typename ctx_t::conf_t &x, const typename ctx_t::conf_t &y
+        , int32_t &prec1, int32_t &prec2);
+    FORBID_COPY(khistory_t);
+};
+
 typedef simctx_t<phistory_t> psimctx_t;
 typedef simctx_t<lhistory_t> lsimctx_t;
 typedef simctx_t<zhistory_t> pzsimctx_t;
 typedef simctx_t<zhistory_t> lzsimctx_t;
+typedef simctx_t<khistory_t> ksimctx_t;
 
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_posix_backward(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+int regexec_nfa_posix_kuklewicz(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_leftmost(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
 
@@ -129,6 +159,7 @@ simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsu
     , sortcores()
     , fincount()
     , worklist()
+    , stateiters()
     , reach()
     , state()
     , gor1_topsort()
@@ -139,6 +170,7 @@ simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsu
     , dc_clstats()
 {
     const size_t
+        ntags = nfa.tags.size(),
         nstates = nfa.size,
         ncores = nfa.ncores;
 
@@ -153,12 +185,16 @@ simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsu
         offsets3 = new regoff_t[nsub];
     }
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
-        newprectbl = new int32_t[ncores * ncores];
-        oldprectbl = new int32_t[ncores * ncores];
+        const size_t dim = (flags & REG_KUKLEWICZ) ? ntags : ncores;
+        newprectbl = new int32_t[ncores * dim];
+        oldprectbl = new int32_t[ncores * dim];
         histlevel = new histleaf_t[ncores];
         sortcores.reserve(ncores);
         fincount.resize(ncores + 1);
         worklist.reserve(nstates);
+    }
+    if (flags & REG_KUKLEWICZ) {
+        stateiters.reserve(ncores);
     }
 
     if (flags & REG_GTOP) {
@@ -256,6 +292,20 @@ bool ran_or_fin_t::operator()(const conf_t &c)
         case nfa_state_t::FIN: return true;
         default: return false;
     }
+}
+
+void khistory_t::init()
+{
+    nodes.clear();
+    nodes.push_back(node_t(NOINFO, -1));
+}
+
+template<typename ctx_t>
+hidx_t khistory_t::link(ctx_t &/* ctx */, const typename ctx_t::conf_t &conf)
+{
+    const int32_t i = static_cast<int32_t>(nodes.size());
+    nodes.push_back(node_t(conf.state->tag.info, conf.thist));
+    return i;
 }
 
 } // namespace libre2c

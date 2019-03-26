@@ -601,7 +601,7 @@ static int test_all_posix(int flags)
     if (!(flags & REG_NFA)) {
         T3("((a?){1,300})*", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0,50, 0,50, 49,50);
     }
-    else if (!(flags & REG_SLOWPREC)) {
+    else if (!(flags & (REG_SLOWPREC | REG_KUKLEWICZ))) {
         T3("((a?){1,1000})*", "aaaa", 0,4, 0,4, 3,4);
 
         T8("(((((aa)|((a?)*))*){0,10}){0,10}){0,10}", "",       0,0, 0,0, 0,0, 0,0, 0,0, -1,-1, 0,0, 0,0);
@@ -1060,10 +1060,17 @@ int main(int argc, char **argv)
     int e = 0;
 
     e |= test_all_posix(0);
+
     e |= test_all_posix(REG_NFA);
     e |= test_all_posix(REG_NFA | REG_GTOP);
+
+    e |= test_all_posix(REG_NFA | REG_KUKLEWICZ);
+    e |= test_all_posix(REG_NFA | REG_KUKLEWICZ | REG_GTOP);
+
     e |= test_all_posix(REG_NFA | REG_TRIE);
+
     e |= test_all_posix(REG_NFA | REG_SLOWPREC);
+
     e |= test_all_leftmost(REG_NFA | REG_LEFTMOST);
     e |= test_all_leftmost(REG_NFA | REG_LEFTMOST | REG_TRIE);
 

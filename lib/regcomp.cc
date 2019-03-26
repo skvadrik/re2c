@@ -68,6 +68,9 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
         else if (cflags & REG_LEFTMOST) {
             preg->simctx = new libre2c::lsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         }
+        else if (cflags & REG_KUKLEWICZ) {
+            preg->simctx = new libre2c::ksimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+        }
         else {
             preg->simctx = new libre2c::psimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         }

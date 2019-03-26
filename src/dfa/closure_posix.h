@@ -23,6 +23,7 @@ template<typename ctx_t> static void closure_posix_gor1(ctx_t &);
 template<typename ctx_t> static void closure_posix_gtop(ctx_t &);
 
 // we *do* want these to be inlined
+template<typename ctx_t> static inline void init_gor1(ctx_t &ctx);
 template<typename ctx_t> static inline bool scan(ctx_t &ctx, nfa_state_t *q, bool all);
 template<typename ctx_t> static inline bool relax_gor1(ctx_t &, const typename ctx_t::conf_t &);
 template<typename ctx_t> static inline void relax_gtop(ctx_t &, const typename ctx_t::conf_t &);
@@ -85,25 +86,11 @@ struct cmp_gor1_t
 template<typename ctx_t>
 void closure_posix_gor1(ctx_t &ctx)
 {
-    typename ctx_t::confset_t &state = ctx.state, &reach = ctx.reach;
     std::vector<nfa_state_t*>
         &topsort = ctx.gor1_topsort,
         &linear = ctx.gor1_linear;
 
-    // init: push configurations ordered by POSIX precedence (highest on top)
-    state.clear();
-    std::sort(reach.begin(), reach.end(), cmp_gor1_t<ctx_t>(ctx));
-    for (typename ctx_t::rcconfiter_t c = reach.rbegin(); c != reach.rend(); ++c) {
-        nfa_state_t *q = c->state;
-        if (q->clos == NOCLOS) {
-            q->clos = static_cast<uint32_t>(state.size());
-            state.push_back(*c);
-        }
-        else {
-            state[q->clos] = *c;
-        }
-        topsort.push_back(q);
-    }
+    init_gor1(ctx);
 
     for (; !topsort.empty(); ) {
 
@@ -136,6 +123,28 @@ void closure_posix_gor1(ctx_t &ctx)
             }
             q->status = GOR_NOPASS;
         }
+    }
+}
+
+template<typename ctx_t>
+void init_gor1(ctx_t &ctx)
+{
+    typename ctx_t::confset_t &state = ctx.state, &reach = ctx.reach;
+    std::vector<nfa_state_t*> &topsort = ctx.gor1_topsort;
+
+    // init: push configurations ordered by POSIX precedence (highest on top)
+    state.clear();
+    std::sort(reach.begin(), reach.end(), cmp_gor1_t<ctx_t>(ctx));
+    for (typename ctx_t::rcconfiter_t c = reach.rbegin(); c != reach.rend(); ++c) {
+        nfa_state_t *q = c->state;
+        if (q->clos == NOCLOS) {
+            q->clos = static_cast<uint32_t>(state.size());
+            state.push_back(*c);
+        }
+        else {
+            state[q->clos] = *c;
+        }
+        topsort.push_back(q);
     }
 }
 
