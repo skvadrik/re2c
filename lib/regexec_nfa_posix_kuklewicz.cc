@@ -364,7 +364,7 @@ size_t boundary_tag(size_t tag)
 
 } // namespace libre2c
 
-template<> void re2c::init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t &ctx)
+template<> void init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t &ctx)
 {
     ctx.state.clear();
     libre2c::ksimctx_t::cconfiter_t c = ctx.reach.begin(), e = ctx.reach.end();
