@@ -41,7 +41,7 @@
 namespace re2c {
 
 // specialization that doesn't sort initial closure like Okui-Suzuki
-template<> void re2c::init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t &ctx);
+template<> void init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t &ctx);
 
 namespace libre2c {
 
