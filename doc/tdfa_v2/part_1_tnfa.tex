@@ -110,7 +110,7 @@
 
 \begin{document}
 
-\title{POSIX Disambiguation on Tagged NFA}
+\title{Practical POSIX Submatch Extraction on NFA}
 
 \author[1]{Angelo Borsotti}
 \author[2]{Ulya Trofimovich}
@@ -119,21 +119,20 @@
 \address[2]{\email{skvadrik@gmail.com}}
 
 \abstract[Summary]{
-We give an algorithm for POSIX submatch extraction in regular expressions.
-Our work is based on the prior work of Okui and Suzuki, with a number of improvements.
-First, the new algorithm can handle bounded repetition.
-Second, it explores only a part of the regular expression structure
-necessary to disambiguate submatch extraction,
-which reduces the overhead for expressions with few submatch groups.
-Third, we use Thompson automata instead of position automata
-and give an efficient algorithm for $\epsilon$-closure construction,
-which allows us to skip the pre-processing step of Okui-Suzuki algorithm.
-%based on the Goldberg-Radzik shortest path finding algorithm.
-The complexity of our algorithm is $O(nv^2e)$ in general and $O(nve)$ for regular expression without $\epsilon$-loops,
-where $n$ is the input length, $v$ is the number of states and $e$ is the number of transitions in the automaton.
+We give an algorithm for regular expression parsing and submatch extraction with POSIX longest-match semantics.
+Our algorithm is based on Okui-Suzuki disambiguation procedure
+with a number of non-trivial improvements.
+Worst-case time complexity is $O(n \, m^2 \, t)$
+and memory requirement is $O(m^2)$,
+where $n$ is the length of input, $m$ is the size of regular expression
+and $t$ is the number of capturing groups plus enclosing subexpressions.
+We perform comparative study of other algorithms
+and show that our algorithm outperforms other POSIX matching algorithms,
+and stays reasonably close to leftmost greedy matching (a couple of times slower on average).
+We also show that backward matching algorithm proposed by Cox is incorrect.
 }
 
-\keywords{Lexical Analysis, Regular Expressions, Submatch Extraction, POSIX}
+\keywords{Regular Expressions, Parsing, Submatch Extraction, Finite-State Automata, POSIX}
 
 %\jnlcitation{\cname{
 %\author{U. Trofimovich},
@@ -145,6 +144,187 @@ where $n$ is the input length, $v$ is the number of states and $e$ is the number
 \maketitle
 
 \section*{Introduction}
+
+The difficulty of POSIX longest-match semantics is caused by the fact
+that we cannot predict correct match results in advance, at the point where they diverge.
+To see this, consider regular expression \texttt{(a\{2\}|a\{3\}|a\{5\})*} and string \texttt{a...a}.
+Submatch on the last iteration varies with the length of input:
+it equals \texttt{aaaaa} for $5n$-character string,
+\texttt{aa} for strings of length $5n - 3$ and $5n - 1$,
+and \texttt{aaa} for strings of length $5n - 2$ and $5n + 1$ ($n \in \YN$).
+Variation continues infinitely with a period of five characters.
+The period is a property of regular expression;
+in our example we can change it by choosing different counter values.
+POSIX matching algorithms deal with this difficulty in different ways.
+On one side we have generic, but inefficient approaches like exhaustive backtracking and dynamic programming.
+On the other side we have algorithms based on deterministic automata [SL13] [Bor15] [Tro17]
+that are very efficient at run-time, because all disambiguation is done in advance and built into DFA.
+However, DFA construction is not always viable due to its exponential worst-case complexity,
+and if viable, it needs to be efficient.
+Therefore in this work we concentrate on practical NFA-based algorithms
+that can be used directly for matching or serve as a basis for DFA construction.
+We give an overview of existing algorithms, including some that are incorrect, but interesting.
+
+\subparagraph{Laurikari, 2001 (incorrect).}
+
+Laurikari based his algorithm on TNFA ---
+$\epsilon$-NFA with tagged transitions [Lau01].
+Each submatch group is represented with a pair of \emph{tags} (opening and closing).
+Disambiguation is based on minimizing the value of opening tags and maximizing tha value of closing tags, where
+different tags have priority according to POSIX subexpression hierarchy.
+Notably, Laurikari used the idea of topological order to avoid worst-case exponential time of $\epsilon$-closure construction.
+His algorithm doesn't track history of iteration subexpressions and gives incorrect result in cases like \texttt{(a|aa)*} and string \texttt{aa}.
+Reported computational complexity is $O(n \, m \, c \, t \, log(t))$, where
+$n$ is input length,
+$m$ is TNFA size,
+$c$ is the time for comparing tag values
+and $t$ is the number of tags.
+Memory requirement is $O(m \, t)$.
+
+\subparagraph{Kuklewicz, 2007.}
+
+Kuklewicz fixed Laurikari algorithm by introducing \emph{orbit} tags for iteration subexpressions.
+He gave only an informal description [Kuk07], but the algorithm was later formalized in [Tro17].
+It works in the same way as Lauirikari algorithm,
+except that comparison of orbit tags is based on their previous history, not just the most recent value.
+The clever idea is to avoid recording full history
+by compressing histories in a matrix of size $t \times m$, where $m$ is TNFA size and $t$ is the number of tags.
+$t$-Th row of the matrix represents ordering of closure states with respect to $t$-th tag
+(with possible ties --- different states may have the same order).
+Matrix is updated at each step using continuations of tag histories.
+The algorithm requires $O(m \, t)$ memory and $O(n \, m \, t \, (m + t \, log(m))$ time, where $n$ is the input length:
+$\epsilon$-closure takes $O(m^2 \, t)$ assuming worst-case optimal algorithm,
+and matrix update takes $O(m \, log(m) \, t^2)$ because for $t$ tags we need to sort $m$ states with $O(t)$ comparison function.
+%Kuklewicz disambiguation is combined with Laurikari determinization [Lau00] in [Tro17].
+
+\subparagraph{Cox, 2009 (incorrect).}
+
+Cox came up with the idea of backward matching,
+which is based on the observation that it is easier to maximize submatch on the last iteration than on the first one.
+For each submatch group the algorithm tracks two pairs of offsets:
+the \emph{active} pair with the most recent offsets (used in disambiguation),
+and the \emph{final} pair with offsets on the backwards-first iteration.
+The algorithm gives incorrect results under two conditions:
+(1) ambiguous matches have equal offsets on some iteration,
+and (2) comparison happens too late, when active offsets have already been updated and the difference is erased.
+We found that such situations may occur for two reasons.
+First, $\epsilon$-closure algorithm may compare ambiguous paths \emph{after} their join point,
+when both paths have a common suffix with tagged transitions.
+This is the case with Cox prototype implementation [Cox09]; for example, it gives incorrect results for \texttt{(aa|a)*} and string \texttt{aaaaa}.
+Most of such failures can be repaired by exploring states in topological order,
+but topological order does not exist in the presence of $\epsilon$-loops.
+The second reason is bounded repetition: ambiguous paths may not have an intermedite join point at all.
+For example, in case of \texttt{(aaaa|aaa|a)\{3,4\}} and string \texttt{aaaaaaaaaa}
+we have matches \texttt{(aaaa)(aaaa)(a)(a)} and \texttt{(aaaa)(aaa)(aaa)}
+with different number of iterations.
+If bounded repetion is modelled by duplicating sub-automata and making the last repetition optional,
+then by the time ambiguous paths meet both have active offsets \texttt{(0,4)}.
+Despite the flaw, Cox algorithm is interesting: if somehow delayed comparison problem was fixed, it would work.
+The algorithm requires $O(m \, t)$ memory and $O(n \, m^2 \, t)$ time
+(assuming worst-case optimal closure algorithm),
+where $n$ is the input length,
+$m$ it the size of regular expression
+and $t$ is the number of submatch groups plus enclosing subexpressions.
+
+\subparagraph{Okui and Suzuki, 2013.}
+
+Okui and Suzuki view disambiguation problem from the point of comparison of parse trees [OS13].
+Ambiguous trees have the same sequence of leaf symbols, but their branching structure is different.
+Each subtree corresponds to a subexpression.
+The \emph{norm} of a subtree (the number of leaf symbols in it) equals to submatch length.
+Longest match corresponds to a tree in which the norm of each subtree in leftmost pre-order traversal is maximized.
+The clever idea of Okui and Suzuki is to relate the norm of subtrees to their \emph{height} (distance from the root).
+Namely, if we walk through the leaves of two ambiguous trees, tracking the height of each complete subtree,
+then at some step heights will diverge:
+subtree with a smaller norm will already be complete, but the one with a greater norm will not.
+Height of subtrees is easy to track by attibuting it to parentheses and encoding in automaton transitions.
+Okui and Suzuki use PAT --- $\epsilon$-free position automaton with transitions labelled by sequences of parentheses.
+Disambiguation is based on comparing parentheses along ambiguous PAT paths.
+Similar to Kuklewicz, Okui and Suzuki avoid recording full-length paths
+by pre-comparing them at each step and storing comparison results in a pair of matrices indexed by PAT states.
+The authors report complexity $O(n(m^2 + c))$, where
+$n$ is the input length,
+$m$ is the number of occurrences of the most frequent symbol in regular expression
+and $c$ is the number of submatch groups and repetition operators.
+However, this estimate leaves out the constuction of PAT and precomputation of precedence relation.
+Memory requirement is $O(m^2)$.
+Okui-Suzuki disambiguation is combined with Berry-Sethi construction in [Bor15] in construction of parsing DFA.
+
+\subparagraph{Sulzmann and Lu, 2013.}
+
+Sulzmann and Lu based their algorithm on Brzozowski derivatives [??]
+(correctness proof is given by Ausaf, Dyckhoff and Urban [??]).
+The algorithm unfolds a regular expression into a sequence of derivatives
+(each derivative is obtained from the previous one by consuming the next input symbol),
+and then folds it back into a parse tree
+(the tree for the previous derivative is built from the tree for the next derivative by ``injecting'' the corresponding input symbol).
+In practice, Sulzmann and Lu fuse backward and forward passes,
+which allows to avoid potentially unbounded memory usage on keeping all intermediate derivatives.
+The algorithm is unique in that it does not require explicit disambiguation: longest match is obtained by construction.
+Time and space complexity is not entirely clear.
+In [??] Sulzmann and Lu consider the size of the regular expression as a constant.
+In [??] they give more precise estimates: $O(2^m \, t)$ space and $O(n \, log(2^m) \, 2^m \, t^2)$ time,
+where $m$ is the size of the regular expression,
+$n$ is the length of input
+and $t$ the number of submatch groups (the authors do not differentiate between $m$ and $t$).
+However, this estimate assumes worst-case $O(2^m)$ derivative size and on-the-fly DFA construction.
+The authors also mention a better $O(m^2)$ theoretical bound for derivative size.
+If we adopt it and exclude DFA consturuction, we get $O(m^2 \, t)$ memory requirement and $O(n \, m^2 \, t^2)$ time,
+which seems reasonably close to other approaches.
+\\
+
+Undoubtedly other approaches exist,
+but many of them produce incorrect results or require memory proportional to the length of input
+(see Glibc implementation for example [??]).
+We choose automata-based approach over derivatives for two reasons:
+first, we feel that both approaches deserve to be studied and formalized;
+and second, in our experience derivative-based implementation was too slow.
+Of the two automata-based approaches, Kuklewicz and Okui-Suzuki, the latter appears to be somewhat faster in practice.
+However, computationally they are very similar:
+both compare partial matches incrementally at each step,
+only Kuklewicz considers histories of each tag separately.
+Our contributions are as follows:
+\\
+
+\begin{itemize}[itemsep=0.5em]
+
+    \item We extend Okui-Suzuki algorithm on the case of partially ordered parse trees.
+        The original algorithm considers all subexpressions as submatch groups,
+        which means a lot of overhead if only a few groups are needed.
+
+    \item We extend Okui-Suzuki algorithm on the case of bounded repetition.
+        This is not trivial and presents some unique challenges (like the one discussed with regard to Cox algorithm).
+
+    \item We combine Okui-Suzuki algorithm with Laurikari TNFA
+        and omit the preprocessing step of the original algorithm.
+        We do not argue that TNFA is generally faster than PAT,
+        but it may be preferable due to its simple construction.
+
+    \item We introduce \emph{negative tags} that allow us to handle
+        no-match in the same way as match.
+        In particular, this removes the need to fix obsolete offsets that remain from earlier iterations,
+        in cases like \texttt{(a(b)?)*} and string \texttt{aba}.
+
+    \item We consider $\epsilon$-closure construction as a shortest-path problem
+        and show that TNFA paths together with operations of path comparison and concatenation form a right-distributive semiring.
+        This allows us to apply the well-known algorithm by Goldberg-Radzik based on the idea of topological order.
+        It has worst-case optimal quadratic complexity in the size of closure,
+        and guaranteed linear complexity if the closure has no loops.
+        This is an improvement over naive exhaustive depth-first search with backtracking,
+        and also an improvement over Laurikari algorithm as shown in [Tro17].
+
+    \item We give a faster algorithm for updating precedence matrix.
+        The straightforward algorithm described by Okui-Suzuki involves pairwise comparison of all states in closure
+        and takes $O(m^2 \, t)$ time, assuming $m$ states and $O(t)$ comparison function.
+        We found a pathological case \texttt{((a?)\{0,1000\})*} where $t \approx m$ and naive algortihm takes cubic time.
+        Our algorithm takes $O(m^2)$ time (which is still slow, but a considerable improvement).
+
+    \item We provide an implementation of different algorithms in C++ (except for the one by Sulzmann and Lu)
+        and benchmark them against each other and against leftmost greedy matching implemented in RE2.
+    \\
+\end{itemize}
+
+The rest of this paper is arranged as follows.
 
 \iffalse
 
@@ -170,15 +350,6 @@ a difference (apart perhaps a level in the pictures of trees, and some tweaks in
 
 \fi
 
-Description of Okui algorithm.
-\\ \\
-Contributions.
-%\begin{itemize}
-%    \item
-%    \item
-%\end{itemize}
-\\ \\
-The rest of this paper is arranged as follows.
 
 \section{Regular Expressions and Ordered Parse Trees}
 
@@ -948,7 +1119,7 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{reach (X, \alpha)} \smallskip$} {
-        \Return $\{ (q, p, \epsilon, t \cdot u) \mid $ \\
+        \Return $\{ (q, p, \epsilon, t) \mid $ \\
             $\hspace{4em} (\Xund, q, u, t) \in X \wedge (q, \alpha, \epsilon, p) \in \Delta^\Sigma \}$
     }
     \end{algorithm}
@@ -1285,7 +1456,7 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
 
             $(q, \epsilon, \tau, p) = a_i$ \;
             $next(q) = i = i + 1$ \;
-            $x = (o, u \tau, t)$, where $(o, u, t) = result(q)$ \;
+            $x = (o, p, u \tau, t \tau)$, where $(o, q, u, t) = result(q)$ \;
             $y = result(p)$ \;
 
             \If {$y = \bot

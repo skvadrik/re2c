@@ -195,3 +195,12 @@ be done also now. Correct?
 
 - Compare with RE2 (in the sense that it cannot do POSIX)
 
+
+
+
+--------------------------
+
+- Cox, storing offsets in configurations: inconvenient because cannot use stack update/restore order due to SSSP,
+  and therefore requires a lot of copying.
+
+- Trie is not described in Okui or Kuklewicz, and it is not widely known
