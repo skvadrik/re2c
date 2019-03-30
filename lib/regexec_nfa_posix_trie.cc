@@ -23,12 +23,11 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
 
     const conf_t c0(ctx.nfa.root, 0, HROOT);
     ctx.reach.push_back(c0);
-    closure_posix_gtop(ctx);
     for (;;) {
+        closure_posix_gtop(ctx);
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
         make_step(ctx, sym);
-        closure_posix_gtop(ctx);
     }
     make_final_step(ctx);
 

@@ -23,13 +23,12 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
     // root state can be non-core, so we pass zero as origin to avoid checks
     const conf_t c0(ctx.nfa.root, 0, HROOT);
     ctx.reach.push_back(c0);
-    closure_leftmost_dfs(ctx);
 
     for (;;) {
+        closure_leftmost_dfs(ctx);
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
         reach_on_symbol(ctx, sym);
-        closure_leftmost_dfs(ctx);
     }
 
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {

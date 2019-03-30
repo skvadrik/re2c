@@ -110,12 +110,11 @@ int regexec_nfa_posix_backward(const regex_t *preg, const char *string
     // 1st pass, forward: find longest match on a simple NFA
 
     ctx.reach.push_back(conf_t(ctx.nfa0->root, 0, 0));
-    closure_simple(ctx);
     for (;;) {
+        closure_simple(ctx);
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
         make_one_step_simple(ctx, sym);
-        closure_simple(ctx);
     }
 
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
@@ -147,13 +146,12 @@ int regexec_nfa_posix_backward(const regex_t *preg, const char *string
     std::fill(offsets5, offsets5 + sz, -2);
 
     ctx.reach.push_back(conf_t(ctx.nfa.root, 0, 0));
-    closure_posix(ctx);
     for (;;) {
+        closure_posix(ctx);
         if (ctx.state.empty() || ctx.cursor == string) break;
         const uint32_t sym = static_cast<uint8_t>(*--ctx.cursor);
         make_one_step(ctx, sym);
         --ctx.step;
-        closure_posix(ctx);
     }
     make_final_step(ctx);
 

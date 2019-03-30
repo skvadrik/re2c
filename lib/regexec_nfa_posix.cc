@@ -32,12 +32,11 @@ int regexec_nfa_posix(const regex_t *preg, const char *string
     // root state can be non-core, so we pass zero as origin to avoid checks
     const conf_t c0(ctx.nfa.root, 0, HROOT);
     ctx.reach.push_back(c0);
-    closure_posix(ctx);
     for (;;) {
+        closure_posix(ctx);
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
         make_one_step(ctx, sym);
-        closure_posix(ctx);
     }
     make_final_step(ctx);
 
