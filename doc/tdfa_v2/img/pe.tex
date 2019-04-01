@@ -161,7 +161,7 @@
         &\rho_1 > \rho'_1 \;\wedge\; \rho_2 = \rho'_2
             \;\Rightarrow\; \alpha \sqsubset \beta
             \;\Rightarrow\; \alpha < \beta
-        \\[-0.3em]
+        \\
         \|s\|^{Sub}_1 = 2 &> 1 = \|t\|^{Sub}_1 \wedge \|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 1
             \;\Rightarrow\; s <_1 t
         \end{aligned}$
@@ -266,7 +266,7 @@
             \;\wedge\; first(\alpha \backslash \beta) = \Xl < \Xm = first(\beta \backslash \alpha)
             \;\Rightarrow\; \alpha \sim \beta \;\wedge\; \alpha \subset \beta
             \;\Rightarrow\; \alpha < \beta
-        \\[-0.3em]
+        \\
         &\|s\|^{Sub}_1 = 1 > -1 = \|t\|^{Sub}_1 \wedge \|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 1
             \;\Rightarrow\; s <_1 t
         \end{aligned}$
@@ -393,7 +393,7 @@
             &\;\wedge\; first(\alpha \backslash \beta) = \Xr < \Xl = first(\beta \backslash \alpha)
             \;\Rightarrow\; \alpha \sim \beta \;\wedge\; \alpha \subset \beta
             \;\Rightarrow\; \alpha < \beta
-        \\[-0.3em]
+        \\
         &\|s\|^{Sub}_2 = \infty > 0 = \|t\|^{Sub}_2 \wedge \|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 2
             \;\Rightarrow\; s <_2 t
         \end{aligned}$
@@ -491,7 +491,7 @@
             &\;\wedge\; first(\alpha \backslash \beta) = \Xm > \Xl = first(\beta \backslash \alpha)
             \;\Rightarrow\; \alpha \sim \beta \;\wedge\; \beta \subset \alpha
             \;\Rightarrow\; \beta < \alpha
-        \\[-0.3em]
+        \\
         &\|s\|^{Sub}_2 = 0 > -1 = \|s\|^{Sub}_2 \wedge \|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 2
             \;\Rightarrow\; t <_2 s
         \end{aligned}$
@@ -604,106 +604,7 @@
     , dash pattern = on 1pt off 2.5pt
     ]
 
-
-\begin{scope}[xshift=0in, yshift=-2.2in]
-    \tikzstyle{every node}=[draw = none, shape = circle, inner sep = 0]
-    \node[xshift=-0.4in, draw=none] {$t_3:$};
-    \graph [tree layout, grow=down, fresh nodes, sibling distance = 0.45in, level distance = 0.3in] {
-        t31/"$T^1$" -- {
-            t311/"$T^2$" -- {
-                t3111/"$T^3$" -- { t31111/"$a^4$" },
-                t3112/"$T^5$" -- { t31121/"$a^6$", t31122/"$a^7$" }
-            }
-        }
-    };
-    \node at (t31)    [styleA] {$\Xl_1 \w \Xr_0$};
-    \node at (t311)   [styleA] {$\Xl_2 \w \Xr_1$};
-    \node at (t3111)  [styleA] {$\Xl_3 \w \Xr_2$};
-    \node at (t3112)  [styleA] {$\Xl_3 \w \Xr_2$};
-    \node at (t31111) [styleA] {$\Xl_4 \w \Xr_3$};
-    \node at (t31121) [styleA] {$\Xl_4 \w \Xr_3$};
-    \node at (t31122) [styleA] {$\Xl_4 \w \Xr_3$};
-    %
-    \node at (t31)    [styleA] (tt31)    {};
-    \node at (t311)   [styleA] (tt311)   {};
-    \node at (t3111)  [styleA] (tt3111)  {};
-    \node at (t3112)  [styleA] (tt3112)  {};
-    \node at (t31111) [styleA] (tt31111) {};
-    \node at (t31121) [styleA] (tt31121) {};
-    \node at (t31122) [styleA] (tt31122) {};
-    %
-    \draw [->, styleB] ($(tt31.west)$)
-        -- ($(tt311.west)$)
-        -- ($(tt3111.west)$)
-        -- ($(tt31111.west)$);
-    \draw [->, styleB] ($(tt31111.east)$)
-        -- ($(tt3111.east)$)
-        -- ($(tt311.south)$)
-        -- ($(tt3112.west)$)
-        -- ($(tt31121.west)$);
-    \draw [->, styleB] ($(tt31121.east)$)
-        -- ($(tt3112.south)$)
-        -- ($(tt31122.west)$);
-    \draw [->, styleB] ($(tt31122.east)$)
-        -- ($(tt3112.east)$)
-        -- ($(tt311.east)$)
-        -- ($(tt31.east)$);
-\end{scope}
-
-
-\begin{scope}[xshift=1.6in, yshift=-2.2in]
-    \tikzstyle{every node}=[draw = none, shape = circle, inner sep = 0]
-    \node[xshift=-0.4in, draw=none] {$t_5:$};
-    \graph [tree layout, grow=down, fresh nodes, sibling distance = 0.45in, level distance = 0.3in] {
-        t51/"$T^1$" -- {
-            t511/"$T^2$" -- {
-                t5111/"$T^3$" -- { t51111/"$a^4$", t51112/"$a^5$" }
-            },
-            t512/"$T^6$" -- {
-                t5121/"$T^7$" -- { t51211/"$a^8$" }
-            }
-        }
-    };
-    \node at (t51)    [styleA] {$\Xl_1 \w \Xr_0$};
-    \node at (t511)   [styleA] {$\Xl_2 \w \Xr_1$};
-    \node at (t5111)  [styleA] {$\Xl_3 \w \Xr_2$};
-    \node at (t51111) [styleA] {$\Xl_4 \w \Xr_3$};
-    \node at (t51112) [styleA] {$\Xl_4 \w \Xr_3$};
-    \node at (t512)   [styleA] {$\Xl_2 \w \Xr_1$};
-    \node at (t5121)  [styleA] {$\Xl_3 \w \Xr_2$};
-    \node at (t51211) [styleA] {$\Xl_4 \w \Xr_3$};
-    %
-    \node at (t51)    [styleA] (tt51)    {};
-    \node at (t511)   [styleA] (tt511)   {};
-    \node at (t5111)  [styleA] (tt5111)  {};
-    \node at (t51111) [styleA] (tt51111) {};
-    \node at (t51112) [styleA] (tt51112) {};
-    \node at (t512)   [styleA] (tt512)   {};
-    \node at (t5121)  [styleA] (tt5121)  {};
-    \node at (t51211) [styleA] (tt51211) {};
-    %
-    \draw [->, styleB] ($(tt51.west)$)
-        -- ($(tt511.west)$)
-        -- ($(tt5111.west)$)
-        -- ($(tt51111.west)$);
-    \draw [->, styleB] ($(tt51111.east)$)
-        -- ($(tt5111.south)$)
-        -- ($(tt51112.west)$);
-    \draw [->, styleB] ($(tt51112.east)$)
-        -- ($(tt5111.east)$)
-        -- ($(tt511.east)$)
-        -- ($(tt51.south)$)
-        -- ($(tt512.west)$)
-        -- ($(tt5121.west)$)
-        -- ($(tt51211.west)$);
-    \draw [->, styleB] ($(tt51211.east)$)
-        -- ($(tt5121.east)$)
-        -- ($(tt512.east)$)
-        -- ($(tt51.east)$);
-\end{scope}
-
-
-\begin{scope}[xshift=5.6in, yshift=-2in]
+\begin{scope}[xshift=5.4in, yshift=-2.0in]
     \node [shape=rectangle, draw = none] (a) {
     $\begin{aligned}
         &\begin{aligned}
@@ -724,10 +625,10 @@
 \end{scope}
 
 
-\begin{scope}[xshift=2.0in, yshift=-1.9in]
+\begin{scope}[xshift=1.7in, yshift=-1.9in]
     \node [shape=rectangle, draw = none] (a) {
     \setlength\tabcolsep{1.5pt}
-    \renewcommand{\arraystretch}{0.5}
+    \renewcommand{\arraystretch}{0.6}
     $\begin{aligned}
         &\begin{tabular}{cccccccc|c}
               $t_2$ & $t_3$ & $t_4$ & $t_5$ & $t_6$ & $t_7$ & $t_8$ & $t_9$ \\
@@ -820,15 +721,12 @@
                 -1 & \!-1 & 3 & 0 \\
                 -1 & \!-1 & 2 & 0 \\
                 \end{tabular}
-            &\bf{
+            &
                 \begin{tabular}{cccc}
-%                \begin{tabular}{|cccc|}
-%                \hline
                 -1 & 2 & 2 & 0 \\
                 -1 & 3 & 1 & 0 \\
-%                \hline
                 \end{tabular}
-            }&
+            &
                 \begin{tabular}{cccc}
                 -1 & 2 & 2 & 0 \\
                 -1 & 1 & 1 & 0 \\
@@ -945,22 +843,13 @@
 \end{scope}
 \normalsize{
 \node (w1)
-    [ xshift=3.3in
+    [ xshift=3.0in
     , yshift=-3.4in
     , draw=none
     , shape=rectangle
     ] {(e) --
         Pairwise comparison of all PEs for RE $(((a)^{1,3})^{1,3})^{1,3}$ and string $aaa$.
-        The table contains $traces(\Phi_0(t_i), \Phi_0(t_j))$
-    };
-\node (w2)
-    [ below of = w1
-    , yshift=0.225in
-    , draw=none
-    , shape=rectangle
-    ] {
-        for PEs at row $t_i$, column $t_j$.
-        IPTs $t_3$ and $t_5$ are shown in more detail (table entry in bold).
+        Table entry $(t_i, t_j)$ contains $traces(\Phi_0(t_i), \Phi_0(t_j))$.
     };
 }
 

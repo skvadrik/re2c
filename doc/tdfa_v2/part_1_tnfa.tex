@@ -82,6 +82,8 @@
 \newcommand{\YT}{\mathbb{T}}
 \newcommand{\YQ}{\mathbb{Q}}
 \newcommand{\YZ}{\mathbb{Z}}
+\newcommand{\PT}{PT}
+\newcommand{\PE}{P\!E}
 \newcommand{\IPT}{I\!PT}
 \newcommand{\IRE}{I\!RE}
 
@@ -487,18 +489,371 @@ The $update \Xund ptables ()$ function
 performs pairwise comparison of all configurations in the new set,
 recording results in $B$ and $D$ matrices.
 On the next step $q$-components become $o$-components.
-If a pair of paths originating from current configurations meet in the next $closure ()$,
-it will use origin states to lookup comparison results in $B$ and $D$ matrices.
+If paths originating from current configurations meet on some future step,
+$closure ()$ will use origin states to lookup comparison results in $B$ and $D$ matrices.
 On the other hand, if the paths do not meet, then comparison performed by $update \Xund ptables ()$ is redundant.
 Unfortunately we cannot get rid of redundant comparisons:
 we do not know in advance which configurations will spawn ambiguous paths.
-An alternative approach is to disambiguate lazily, only if paths meet ---
-but that requires tracking paths which grow with the length of input.
-Eager pre-comparison is a tradeoff that
-allows the algorithm work in bounded memory at the expense of some time overhead.
+It is possible to delay disambiguation until the paths meet,
+but that would require keeping arbitrary long paths in memory.
+Eager comparison is a tradeoff that allows the algorithm work in bounded memory at the expense of some time overhead.
 \\
 
 %\vfill\null
+
+\section{Formalization}
+
+According to the POSIX standard,
+submatch extraction applies only to parenthesized subexpressions,
+but the longest-match rule applies to all subexpressions regardless of parentheses.
+Therefore first of all we rewrite REs in a form that makes submatch information explicit.
+Namely, we equip every subexpression with an \emph{implicit} and \emph{explicit} submatch index.
+Explicit indices enumerate submatch groups; for all other subexpressions they are zero.
+Implicit indices enumerate submatch groups and subexpressions that are not submatch groups,
+but contain nested or sibling groups and need to be considered by disambiguation.
+%If both indices are zero, then the subexpression is completely ignored from disambiguation perspective.
+%Indices are convenient because they allow us to consider individual sub-REs
+%without loosing the submatch context of the whole RE.
+
+    \begin{Xdef}
+    \emph{Indexed regular expressions (IRE)} over finite alphabet $\Sigma$, denoted $\XIR_\Sigma$:
+    \begin{enumerate}
+        \item
+          Empty IRE $(i, j, \epsilon)$ and
+          unit IRE $(i, j, \alpha)$, where $\alpha \in \Sigma$ and $i, j \in \YZ$,
+          are in $\XIR_\Sigma$.
+
+        \item If $r_1, r_2 \in \XIR_\Sigma$ and $i, j \in \YZ$, then
+          union $(i, j, r_1 \mid r_2)$,
+          product $(i, j, r_1 \cdot r_2)$ and
+          repetition $(i, j, r_1^{n, m})$, where $0 \leq n \leq m \leq \infty$,
+          are in $\XIR_\Sigma$.
+    \end{enumerate}
+    \end{Xdef}
+
+Function $\IRE$ transforms RE into IRE.
+It is defined via a composition of two functions,
+$mark()$ that transforms RE into IRE with submatch indices in the boolean range $\{0, 1\}$,
+and $enum()$ that substitutes boolean indices with consecutive numbers.
+%$\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
+%Note that we consider $(e)$ as a special case of repetition $(e)^{1,1}$:
+%this allows us to handle all parenthesized sub-RE uniformly.
+An example of constructing an IRE from a RE is given on figure \ref{fig_mark_enum}.
+%The reverse transformation is also possible by erasing all indices
+%and adding parentheses around subexpressions with nonzero explicit submatch index.
+%Therefore RE and IRE are equivalent representations.
+
+    \begin{align*}
+    &\begin{aligned}
+        mark &: \XR_\Sigma \longrightarrow \XIR_\Sigma \\
+        mark &(x) \mid_{x \in \{\epsilon, \alpha\}} = (0, 0, x) \\[-0.2em]
+        %
+        mark &(e_1 \circ e_2) \mid_{\circ \in \{|,\cdot\}} = (i, 0,
+            (i, j_1, r_1) \circ
+            (i, j_2, r_2)
+            ) \\[-0.2em]
+            &\text{where }            (i_1, j_1, r_1) = mark(e_1) \\[-0.2em]
+            &\space{\hphantom{where }}(i_2, j_2, r_2) = mark(e_2) \\[-0.2em]
+            &\space{\hphantom{where }}i = i_1 \vee i_2 \\[-0.2em]
+        %
+        mark &(e^{n, m}) \mid_{e = (e_1)} = (1, 0, (1, 1, r)) \\[-0.2em]
+            &\text{where } (\Xund, \Xund, r) = mark(e_1) \\[-0.2em]
+        %
+        mark &(e^{n, m}) \mid_{e \neq (e_1)} = (i, 0, (i, j, r)) \\[-0.2em]
+            &\text{where } (i, j, r) = mark(e) \\[-0.2em]
+        %
+        mark &((e)) = mark((e)^{1, 1})
+    \end{aligned}
+    %
+    &&\begin{aligned}
+        enum &: \YZ \times \YZ \times \XIR_\Sigma \longrightarrow \YZ \times \YZ \times \XIR_\Sigma \\
+        enum &(\bar{i}, \bar{j}, (i, j, x)) \mid_{x \in \{\epsilon, \alpha\}}
+            = (\bar{i} + i, \bar{j} + j, (\bar{i} \times i, \bar{j} \times j, x))
+        \\[-0.2em]
+        enum &(\bar{i}, \bar{j}, (i, j, r_1 \circ r_2)) \mid_{\circ \in \{|,\cdot\}}
+            = (i_2, j_2, (\bar{i} \times i, \bar{j} \times j, \bar{r}_1 \circ \bar{r}_2)) \\[-0.2em]
+            &\text{where }            (i_1, j_1, \bar{r}_1) = enum(\bar{i} + i, \bar{j} + j, r_1) \\[-0.2em]
+            &\space{\hphantom{where }}(i_2, j_2, \bar{r}_2) = enum(i_1, j_1, r_2)
+        \\[-0.2em]
+        enum &(\bar{i}, \bar{j}, (i, j, r^{n,m})) = (i_1, j_1, (\bar{i} \times i, \bar{j} \times j, \bar{r}^{n,m})) \\[-0.2em]
+            &\text{where }
+                (i_1, j_1, \bar{r}) = enum(\bar{i} + i, \bar{j} + j, r)
+        \\[-0.2em]
+        \\[-0.2em]
+        \IRE &: \XR_\Sigma \rightarrow \XIR_\Sigma \\[-0.2em]
+        \IRE&(e) = r \\[-0.2em]
+            &\text{where }(\Xund, \Xund, r) = enum(1, 1, mark(e))
+        \\[-0.2em]
+    \end{aligned}
+    \end{align*}
+    \medskip
+
+The relation between regular expressions and parse trees is given by the operator $\PT$.
+Each IRE denotes a set of PTs:
+
+    \begin{align*}
+        \PT &: \XIR_\Sigma \rightarrow 2^{\XT_\Sigma}
+        \\
+        \PT\big((i, \Xund, \epsilon)\big) &= \{ {\epsilon}^{i} \}
+        \\[-0.2em]
+        \PT\big((i, \Xund, \alpha)\big) &= \{ {\alpha}^{i} \}
+        \\[-0.2em]
+        \PT\big((i, \Xund, (i_1, j_1, r_1) \mid (i_2, j_2, r_2))\big) &=
+            \big\{ {T}^{i}(t, \varnothing^{i_2}) \mid t \in \PT\big((i_1, j_1, r_1)\big) \big\} \cup
+            \big\{ {T}^{i}(\varnothing^{i_1}, t) \mid t \in \PT\big((i_2, j_2, r_2)\big) \big\}
+        \\[-0.2em]
+        \PT\big((i, \Xund, (i_1, j_1, r_1) \cdot (i_2, j_2, r_2))\big) &=
+            \big\{ {T}^{i}(t_1, t_2) \mid
+                t_1 \in \PT\big((i_1, j_1, r_1)\big),
+                t_2 \in \PT\big((i_2, j_2, r_2)\big)
+            \big\} \\[-0.2em]
+        \PT\big((i, \Xund, (i_1, j_1, r_1)^{n, m})\big) &=
+            \begin{cases}
+                \big\{ {T}^{i}(t_1, \dots, t_m) \mid t_k \in \PT\big((i_1, j_1, r_1)\big) \;
+                    \forall k = \overline{1, m} \big\} \cup \{ {T}^{i}(\varnothing^{i_1}) \} &\text{if } n = 0 \\[-0.2em]
+                \big\{ {T}^{i}(t_n, \dots, t_m) \mid t_k \in \PT\big((i_1, j_1, r_1)\big) \;
+                    \forall k = \overline{n, m} \big\} &\text{if } n > 0
+            \end{cases}
+    \end{align*}
+    \medskip
+
+We write $str(t)$ to denote the string formed by concatenation of all alphabet symbols in the left-to-right traversal of $t$,
+and $\PT(r, w)$ denotes the set $\big\{ t \in \PT(\IRE(r)) \mid str(t) = w \big\}$ of all PTs for a RE $r$ and a string $w$.
+
+    \begin{Xdef}\label{ambiguity_of_parse_trees}
+    PTs $s$ and $t$ are \emph{ambiguous} iff $s \neq t$ and $s, t \in PT(r, w)$ for some RE $r$ and string $w$.
+    $\square$
+    \end{Xdef}
+
+Following \ref{OS13}, we assign \emph{positions} to the nodes of RE and PT.
+The root position is $\Lambda$, and position of the $i$-th subtree of a tree with position $p$ is $p.i$
+(we shorten $\|t\|_\Lambda$ as $\|t\|$).
+The \emph{length} of position $p$, denoted $|p|$, is defined as $0$ for $\Lambda$ and $|p| + 1$ for $p.i$.
+%The set of all positions is denoted $\XP$.
+The subtree of a tree $t$ at position $p$ is denoted $t|_p$.
+Position $p$ is a \emph{prefix} of position $q$ iff $q = p.p'$ for some $p'$,
+and a \emph{proper prefix} if additionaly $p \neq q$.
+Position $p$ is a \emph{sibling} of position $q$ iff $q = q'.i, p = q'.j$ for some $q'$ and $i,j \in \YN$.
+Positions are ordered lexicographically.
+The set of all positions of a tree $t$ is denoted $Pos(t)$.
+Additionally, we define a set of \emph{submatch positions} as
+$Sub(t) = \big\{ p \mid \exists t|_p = s^i : i \neq 0 \big\}$ ---
+a subset of $Pos(t)$ that contains positions of subtrees with nonzero implicit submatch index.
+Intuitively, this is the set of positions important from disambiguation perspective:
+in the case of ambiguity we do not need to consider the full trees,
+just the relevant parts of them.
+%
+PTs have two definitions of norm, one for $Pos$ and one for $Sub$,
+which we call \emph{p-norm} and \emph{s-norm} respectively:
+
+\begin{figure}\label{fig_mark_enum}
+\includegraphics[width=\linewidth]{img/mark_enum.pdf}
+\vspace{-2em}
+\caption{
+IRE for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,3}$
+and examples of PTs for string $a$.
+S-norm is marked with $\#$.
+}
+\end{figure}
+
+%\FloatBarrier
+
+    \begin{Xdef}\label{tnorm_of_PTs}
+    The \emph{p-norm} and \emph{s-norm} of a PT $t$ at position $p$ are:
+    \begin{align*}
+        \pnorm{t}{p} =
+            \begin{cases}
+                -1          &\text{if } p \in Pos(t) \text{ and } t|_p = \varnothing^i  \\[-0.2em]
+                |str(t|_p)| &\text{if } p \in Pos(t) \text{ and } t|_p \neq \varnothing^i \\[-0.2em]
+                \infty      &\text{if } p \not\in Pos(t)
+            \end{cases}
+    \quad\quad\quad
+        \snorm{t}{p} =
+            \begin{cases}
+                -1          &\text{if } p \in Sub(t) \text{ and } t|_p = \varnothing^i  \\[-0.2em]
+                |str(t|_p)| &\text{if } p \in Sub(t) \text{ and } t|_p \neq \varnothing^i \\[-0.2em]
+                \infty      &\text{if } p \not\in Sub(t)
+            \end{cases}
+    \end{align*}
+    \end{Xdef}
+
+Generally the norm of a subtree means the number of alphabet symbols in its leaves, with two exceptions.
+First, for nil subtrees the norm is $-1$: intuitively, they have the lowest ``ranking'' among all possible subtrees.
+Second, for inexistent subtrees (those with positions not in $Pos(t)$) the norm is infinite.
+This may seem counterintuitive at first, but it makes sense in the presense of REs with empty repetition.
+According to the POSIX, optional empty repetitions are not allowed, and our definition reflects this:
+if a tree $s$ has a subtree $s|_p$ corresponding to an empty repetition,
+and another tree $t$ has no subtree at position $p$,
+then the infinite norm $\|t\|_p$ ``outranks'' $\|s\|_p$.
+We define two orders on PTs:
+
+    \begin{Xdef}\label{total_order_on_PTs}
+    \emph{P-order on PTs.}
+    Given parse trees $t, s \in PT(e, w)$, we say that $t <_p s$ w.r.t. \emph{desision position} $p$
+    iff $\pnorm{t}{p} > \pnorm{s}{p}$ and $\pnorm{t}{q} = \pnorm{s}{q} \; \forall q < p$.
+    We say that $t < s$ iff $t <_p s$ for some $p$.
+    \end{Xdef}
+
+    \begin{Xdef}\label{partial_order_on_PTs}
+    \emph{S-order on PTs.}
+    Given parse trees $t, s \in PT(e, w)$, we say that $t \prec_p s$ w.r.t. \emph{desision position} $p$ % $p \in Sub(t) \cup Sub(s)$
+    iff $\snorm{t}{p} > \snorm{s}{p}$ and $\snorm{t}{q} = \snorm{s}{q} \; \forall q < p$.
+    We say that $t \prec s$ iff $t \prec_p s$ for some $p$.
+    \end{Xdef}
+
+    \begin{Xdef}\label{incomparable_IPTs}
+    IPTs $t$ and $s$ are \emph{incomparable}, denoted $t \sim s$,
+    iff neither $t \prec s$, nor $s \prec t$.
+    \end{Xdef}
+
+    \begin{XThe}\label{theorem_porder_on_PTs}
+    P-order $<$ is a strict total order on IPTs.
+    (Proof given in appendix [??].)
+    \end{XThe}
+
+    \begin{XThe}\label{theorem_sorder_on_PTs}
+    S-order $\prec$ is a strict weak order on IPTs.
+    (Proof given in appendix [??].)
+    \end{XThe}
+
+P-order is total --- the $<$-minimal tree is unique.
+S-order is partial:
+there might be two distinct PTs that coincide in all submatch positions, yet differ in some non-submatch positions.
+Such trees are called \emph{incomparable},
+and from disambiguation perspective they are indistinguishable.
+%
+Incomparability is an equivalence relation: it is
+reflexive (obviously $s \sim s$),
+symmetric (obviously $s \sim t$ implies $t \sim s$) and
+transitive (see lemma \ref{lemma_ptorder_transitivity_of_incomparability} in appendix).
+Consequently there is a whole class of $\prec$-minimal trees.
+%$\PT_{min}(r,w) = \{ t \in \PT(r,w) \mid \forall u \in \PT(r,w) : t \sim u \vee t < u \}$.
+%
+One might ask, what is the relation between p-order $<$ and s-order $\prec$?
+We show by the means of a counterexample that p-order is not an extension of s-order.
+Consider trees $t$ and $u$ on figure \ref{fig_mark_enum}:
+on one hand $t \prec_{2.2} u$, because $\snorm{t}{2.2} = \infty > 0 = \snorm{u}{2.2}$ and s-norms at all preceding submatch positions agree;
+on the other hand $u <_{1.1} t$, because $\pnorm{t}{1.1} = -1 < 0 = \pnorm{u}{1.1}$
+and p-norms at all preceding positions agree.
+So the two orders may disagree.
+However, as theorem \ref{theorem_order_compat} shows,
+the two orders agree on the notion of minimal tree.
+%
+This is important, as it means that adding a few parentheses in RE will not drastically change submatch results:
+we will continuously narrow down the class of $\prec$-minimal trees
+until we are left with a unique $<$-minimal tree.
+In the rest of the paper the words ``order'' and ``norm`` refer to s-order and s-norm.
+
+    \begin{XThe}\label{theorem_order_compat}
+    For an IRE $r$ and string $w$,
+    let $t_{min}$ be the $<$-minimal tree in $\PT(r,w)$
+    and let $T_{min} = \PT_{min}(r,w)$ be the class of the $\prec$-minimal trees in $\PT(r,w)$.
+    Then $t_{min} \in T_{min}$.
+    (Proof given in appendix [??].)
+    \end{XThe}
+
+Following the idea of Okui and Suzuki,
+we go from comparison of parse trees to comparison of their linearized representation --- parenthesized expressions.
+Parenthesis $\Xl$ is opening, and
+parenthesis $\Xr$ is closing;
+the \emph{nil}-parenthesis $\Xm$ is both opening and closing.
+For convenience we sometimes annotate parentheses with \emph{height},
+which we define as the number of preceding opening parentheses (including this one)
+minus the number of preceding closing parentheses (including this one).
+Explicit height annotations allow us to consider PE fragments in isolation
+without losing the context of the whole expression.
+However, height is not a part of parenthesis itself,
+and it is not taken into account when comparing the elements of PEs.
+Function $\Phi$ transforms PT at the given height into PE:
+
+    \begin{align*}
+    \Phi &: \YZ \times \XT_\Sigma \rightarrow \XP_\Sigma
+    \\
+    \Phi_{h}(t^{i}) &= \begin{cases}
+        str(t^{i})                                            &\text{if } i = 0 \\[-0.2em]
+        \Xm_h                                                 &\text{if } i \neq 0 \wedge t = \varnothing \\[-0.2em]
+        \Xl_{h+1} \Xr_h                                       &\text{if } i \neq 0 \wedge t = \epsilon \\[-0.2em]
+        \Xl_{h+1} a \Xr_h                                     &\text{if } i \neq 0 \wedge t = a \in \Sigma \\[-0.2em]
+        \Xl_{h+1} \Phi_{h+1}(t_1) \dots \Phi_{h+1}(t_n) \Xr_h &\text{if } i \neq 0 \wedge t = T(t_1, \dots, t_n)
+    \end{cases}
+    \end{align*}
+    \medskip
+
+For a given RE $r$ and string $w$, the set $\big\{ \Phi_{0}(t) \mid t \in PT(r, w) \big\}$ is denoted $\PE(r, w)$.
+If $\alpha, \beta \in \PE(r, w)$ for some $r$ and $w$, we say that $\alpha$ and $\beta$ are \emph{comparable}.
+%
+For PE $\alpha$ and $\beta$,
+$\alpha \sqcap \beta$ denotes the longest common prefix of $\alpha$ and $\beta$,
+$\alpha \backslash \beta$ denotes the suffix of $\alpha$ after removing $\alpha \sqcap \beta$,
+$lasth(\alpha)$ denotes the height of the last parenthesis in $\alpha$ (or $\infty$ if $\alpha$ is empty or begins with a letter),
+$minh(\alpha)$ denotes the minimal height of parenthesis in $\alpha$ (or $\infty$ if $\alpha$ is empty or begins with a letter),
+$first(\alpha)$ denotes the first parenthesis in $\alpha$ (or $\bot$ if $\alpha$ is empty or begins with a letter).
+Each PE $\alpha$ can be represented as $\alpha_0 a_1 \alpha_1 \dots a_n \alpha_n$,
+where $\alpha_i$ is the $i$-th \emph{frame} --- a possibly empty sequence of parentheses between
+subsequent alphabet symbols $a_i$ and $a_{i+1}$ (or the beginning or end of $\alpha$).
+For comparable PE $\alpha$ and $\beta$ the index of the first distinct pair of frames is called \emph{fork}
+(note that comparable PE have the same number of frames).
+
+\begin{figure}\label{fig_pe}
+\includegraphics[width=\linewidth]{img/pe.pdf}
+\vspace{-2em}
+\caption{
+Examples: (a) -- (d): four main rules of POSIX comparison,
+(e) -- pairwise comparison of PEs.
+}
+\end{figure}
+
+%\FloatBarrier
+
+    \begin{Xdef}
+    Let $\alpha$, $\beta$ be distinct comparable PE, such that
+    $\alpha = \alpha_0 a_1 \alpha_1 \dots a_n \alpha_n$,
+    $\beta = \beta_0 a_1 \beta_1 \dots a_n \beta_n$ and $k$ is the fork.
+    We define $trace (\alpha, \beta)$ as the sequence $(\rho_0, \dots, \rho_n)$, where:
+    $$
+    \rho_i = \begin{cases}
+        -1 &\text{if } i < k \\[-0.2em]
+        min (lasth (\alpha_i \sqcap \beta_i), minh(\alpha_i \backslash \beta_i)) &\text{if } i = k \\[-0.2em]
+        min (\rho_{i-1}, minh(\alpha_i)) &\text{if } i > k
+    \end{cases}
+    $$
+    We write $traces(\alpha, \beta)$ to denote $\big( trace (\alpha, \beta), trace (\beta, \alpha) \big)$.
+    \end{Xdef}
+
+    \begin{Xdef}\label{prec1}
+    Let $\alpha$, $\beta$ be comparable PE and
+    $traces(\alpha, \beta) = \big( (\rho_0, \dots, \rho_n), (\rho'_0, \dots, \rho'_n) \big)$.
+    The \emph{longest-precedence} relation $\sqsubset$ is defined as
+    $\alpha \sqsubset \beta \Leftrightarrow \exists i \leq n:
+        \big( \rho_i > \rho'_i \big) \wedge
+        \big( \rho_j = \rho'_j \; \forall j > i \big)$.
+    If neither $\alpha \sqsubset \beta$, nor $\beta \sqsubset \alpha$,
+    then $\alpha$, $\beta$ are \emph{longest-equivalent}: $\alpha \sim \beta$
+    (note that in this case $\rho_i = \rho'_i \; \forall i = \overline {1, n}$).
+    \end{Xdef}
+
+    \begin{Xdef}\label{prec2}
+    Let $\alpha$, $\beta$ be comparable PE, and let
+    $x = first (\alpha \backslash \beta)$,
+    $y = first (\beta \backslash \alpha)$.
+    The \emph{leftmost-precedence} relation $\subset$ is defined as
+    $\alpha \subset \beta \Leftrightarrow x < y$, where
+    the set of possible values of $x$ and $y$ is ordered as follows:
+    $\bot < \Xr < \Xl < \Xm$.
+    \end{Xdef}
+
+    \begin{Xdef}\label{pe_order}
+    The \emph{longest-leftmost-precedence} relation $<$ on comparable PE is defined as
+    $\alpha < \beta \Leftrightarrow
+        \big( \alpha \sqsubset \beta \big) \vee
+        \big( \alpha \sim \beta \wedge \alpha \subset \beta \big)$.
+    \end{Xdef}
+
+    \begin{XThe}\label{theorem_order_on_pe_same_as_on_pt}
+    Let $s, t \in PT(r, w)$, then
+    $s <_p t \Leftrightarrow \Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
+    \end{XThe}
+
 
 \section{Representation of match results}
 
@@ -569,13 +924,13 @@ allows the algorithm work in bounded memory at the expense of some time overhead
 
     \Fn {$\underline{parse \Xund tree (u, i)} \smallskip$} {
         \If {$u = (2i \!-\! 1) \cdot (2i)$} {
-            \Return $T(\epsilon)$
+            \Return $T^i(\epsilon)$
         }
         \If {$u = (1 \!-\! 2i) \cdot \hdots $} {
-            \Return $T(\varnothing)$
+            \Return $T^i(\varnothing)$
         }
         \If {$u = (2i \!-\! 1) \cdot \alpha_1 \hdots \alpha_n \cdot (2i) \wedge \alpha_1, \hdots, \alpha_n \in \Sigma $} {
-            \Return $T(a_1, \hdots, a_n)$
+            \Return $T^i(a_1, \hdots, a_n)$
         }
         \If {$u = (2i \!-\! 1) \cdot \beta_1 \hdots \beta_m \cdot (2i) \wedge \beta_1 = 2j \!-\! 1 \in T$} {
             $n = 0, k = 1$ \;
@@ -587,7 +942,7 @@ allows the algorithm work in bounded memory at the expense of some time overhead
                 $n = n + 1$ \;
                 $t_n = parse \Xund tree (\beta_l \dots \beta_k, j)$
             }
-            \Return $T(t_1, \dots, t_n)$
+            \Return $T^i(t_1, \dots, t_n)$
         }
         \Return $\varnothing$ \tcp{ill-formed PE}
     }
@@ -598,580 +953,6 @@ allows the algorithm work in bounded memory at the expense of some time overhead
 \caption{Construction of match results: POSIX offsets (on the left) and parse tree (on the right).}
 \end{algorithm}
 \medskip
-
-\section{Regular Expressions and Ordered Parse Trees}
-
-In this section we revise the basic definitions of
-regular expressions,
-parse trees,
-ambiguity
-and the order on parse trees.
-
-    \begin{Xdef}
-    \emph{Regular expressions (REs)} over finite alphabet $\Sigma$, denoted $\XR_\Sigma$, are:
-    \begin{enumerate}
-        \item Atomic REs:
-%          \emph{empty set} $\emptyset \in \XE_\Sigma$,
-          \emph{empty word} $\epsilon \in \XR_\Sigma$ and
-          \emph{unit word} $\alpha \in \XR_\Sigma$, where $\alpha \in \Sigma$.
-        \item Compound REs: if $e_1, e_2 \in \XR_\Sigma$, then
-          \emph{union} $e_1 | e_2 \in \XR_\Sigma$,
-          \emph{product} $e_1 e_2 \in \XR_\Sigma$,
-          \emph{repetition} $e_1^{n, m} \in \XR_\Sigma$ (where $0 \leq n \leq m \leq \infty$), and
-          \emph{submatch group} $(e_1) \in \XR_\Sigma$.
-    \end{enumerate}
-    \end{Xdef}
-
-REs originate in the work of Kleene\cite{Kle51}.
-A mathematically rigorous definition of REs is given in terms of the Kleene algebra\cite{Koz94}.
-Our definition is close to the one widely used in literature\cite{HU90}\cite{SS88},
-with a couple of minor adaptations to the POSIX standard.
-First, we consider parentheses as a distinct construct: in POSIX $(e)$ is semantically different from $e$.
-Second, we use generalized repetition $e^{n, m}$ instead of iteration $e^*$:
-expressing repetition in terms of iteration and product requires duplication of the subexpression,
-which may change semantics: e.g. in POSIX $(e)(e)$ is not the same as $(e)^{2,2}$.
-As usual, we assume that repetition has precedence over product and product over union,
-and parentheses may be used to override it (all parentheses are capturing).
-%Additionally, we use the following shortcut notation:
-%$e^*$ for $e^{0,\infty}$,
-%$e^+$ for $e^{1,\infty}$,
-%$e^?$ for $e^{0,1}$,
-%and $e^n$ for $e^{n,n}$.
-% %\\
-% %
-% %One possible interpretation of RE is the \emph{tree} interpretation,
-% %in which every RE denotes a set of \emph{parse trees}.
-
-    \begin{Xdef}
-    \emph{Parse trees (PT)} over finite alphabet $\Sigma$, denoted $\XT_\Sigma$, are:
-    \begin{enumerate}
-        \item Atomic PT:
-          \emph{nil tree} ${\varnothing} \in \XT_\Sigma$,
-          \emph{empty tree} ${\epsilon} \in \XT_\Sigma$ and
-          \emph{unit tree} ${\alpha} \in \XT_\Sigma$, where $\alpha \in \Sigma$.
-        \item Compound PT: if $t_1, \dots, t_n \in \XT_\Sigma$, where $n \geq 1$, then
-          ${T}(t_1, \dots, t_n) \in \XT_\Sigma$.
-    \end{enumerate}
-    \end{Xdef}
-
-Note that our PTs are different from \ref{OS13}:
-we have a \emph{nil} tree (a placeholder for absent alternative and zero repetitions)
-and do not differentiate between various kinds of compound trees.
-Each RE denotes a set of PTs given by the operator $PT: \XR_\Sigma \rightarrow 2^{\XT_\Sigma}$:
-    \begin{align*}
-        PT(\epsilon) &= \{ {\epsilon} \}
-        \\
-        PT(\alpha) &= \{ {\alpha} \}
-        \\
-        PT(r_1 \mid r_2) &=
-            \big\{ {T}(t, \varnothing) \mid t \in PT(r_1) \big\} \cup
-            \big\{ {T}(\varnothing, t) \mid t \in PT(r_2) \big\}
-        \\
-        PT(r_1 \cdot r_2) &=
-            \big\{ {T}(t_1, t_2) \mid
-                t_1 \in PT(r_1),
-                t_2 \in PT(r_2)
-            \big\} \\
-        PT(r^{n, m}) &=
-            \begin{cases}
-                \big\{ {T}(t_1, \dots, t_m) \mid t_i \in PT(r) \;
-                    \forall i = \overline{1, m} \big\} \cup \{ {T}(\varnothing) \} &\text{if } n = 0 \\
-                \big\{ {T}(t_n, \dots, t_m) \mid t_i \in PT(r) \;
-                    \forall i = \overline{n, m} \big\} &\text{if } n > 0
-            \end{cases}
-        \\
-        PT( (r) ) &= PT(r)
-    \end{align*}
-
-The \emph{string} induced by a PT $t$, denoted $str(t)$, is the concatenation of all alphabet symbols in the left-to-right traversal of $t$.
-For a RE $r$ and a string $w$, we write $PT(r, w)$ to denote the set $\{ t \in PT(r) \mid str(t) = w \}$
-(note that this set is potentially infinite).
-
-    \begin{Xdef}\label{ambiguity_of_parse_trees}
-    PTs $s$ and $t$ are \emph{ambiguous} iff $s \neq t$ and $s, t \in PT(r, w)$ for some RE $r$ and string $w$.
-    $\square$
-    \end{Xdef}
-
-Following \ref{OS13}, we assign \emph{positions} to the nodes of RE and PT.
-The root position is $\Lambda$, and position of the $i$-th subtree of a tree with position $p$ is $p.i$.
-The \emph{length} of position $p$, denoted $|p|$, is defined as $0$ for $\Lambda$ and $|p| + 1$ for $p.i$.
-%The set of all positions is denoted $\XP$.
-The subtree of a tree $t$ at position $p$ is denoted $t|_p$.
-Position $p$ is a \emph{prefix} of position $q$ iff $q = p.p'$ for some $p'$,
-and a \emph{proper prefix} if additionaly $p \neq q$.
-Position $p$ is a \emph{sibling} of position $q$ iff $q = q'.i, p = q'.j$ for some $q'$ and $i,j \in \YN$.
-Positions are ordered lexicographically, as in \ref{OS13}.
-The set of all positions of a tree $t$ is denoted $Pos(t)$.
-
-    \begin{Xdef}\label{norm_of_parse_tree}
-    The \emph{norm} of PT $t$ at position $p$ is:
-    \begin{align*}
-    \|t\|_p &=
-        \begin{cases}
-            -1          &\text{if } p \in Pos(t) \text{ and } t|_p = \varnothing  \\
-            |str(t|_p)| &\text{if } p \in Pos(t) \text{ and } t|_p \neq \varnothing \\
-            \infty      &\text{if } p \not\in Pos(t)
-        \end{cases}
-    \end{align*}
-    \end{Xdef}
-
-We shorten $\|t\|_\Lambda$ as $\|t\|$.
-Generally the norm of a subtree means the number of alphabet symbols in the leaves of this subtree, with two exceptions.
-First, for nil subtrees the norm is $-1$: intuitively, they have the lowest ``ranking'' among all possible subtrees.
-Second, for inexistent subtrees (those with positions out of $Pos(t)$) the norm is infinite.
-This may seem counterintuitive at first, but it makes sense in the presense of REs with empty repetition.
-According to the POSIX standard, optional empty repetitions are not allowed,
-and our definition of the norm reflects this:
-if a tree $s$ has a subtree $s|_p$ corresponding to an empty repetition,
-and another tree $t$ has no subtree at position $p$ ($p \not\in Pos(t)$),
-then the infinite norm $\|t\|_p$ ``outranks'' $\|s\|_p$.
-
-    \begin{Xdef}\label{order_on_PTs}
-    \emph{Order on PTs.}
-    Given parse trees $t, s \in PT(e, w)$, we say that $t <_p s$ w.r.t. \emph{desision position} $p$ % $p \in Sub(t) \cup Sub(s)$
-    iff $\|t\|_p > \|s\|_p$ and $\|t\|_q = \|s\|_q \; \forall q < p$.
-    We say that $t < s$ iff $t <_p s$ for some $p$.
-    \end{Xdef}
-
-Note that in the definition \ref{order_on_PTs}
-we do not explicitly demand that $p, q \in Pos(t) \cup Pos(s)$:
-if this is not the case, the norms of both subtrees are $\infty$ and thus equal.
-Also note that our definition of order differs from the one given by Okui and Suzuki \ref{OS13}:
-we define order on the whole set of PTs,
-while they defined it on a finite subset of PTs called \emph{canonical parse trees (CPTs)} ---
-a subset of PTs that do not contain subtrees corresponding to optional empty repetitions.
-We extend their definition to non-canonical PTs.
-
-    \begin{XThe}
-    Relation $<$ is a strict total order on PTs.
-    \end{XThe}
-
-
-
-\section{Partially Ordered Parse Trees}
-
-The POSIX standard uses the terms \emph{subexpression} and \emph{subpattern}
-when speaking about parenthesized and non-parenthesized sub-REs respectively.
-The difference between them is that
-subexpressions (also called \emph{submatch groups}) are subject to submatch extraction:
-if a RE matches some string, we need to know what part of the string matches each subexpression.
-For subpatterns we don't need this information.
-According to the POSIX standard, both subexpressions and subpatterns
-obey the same hierarchical rules,
-where the outer sub-REs are prior to the inner sub-REs and the left sub-REs are prior to the right sub-REs.
-Disambiguation starts with the topmost sub-RE and proceeds down to each most nested subexpression,
-considering all prior sub-RE on its way (both subexpressions and subpatterns),
-and stopping at the first difference.
-%
-In order to reflect these disambiguation rules, we introduce the notion of explicit and implicit submatch groups:
-\emph{explicit submatch group} is a subexpression
-and \emph{implicit submatch group} is either a subexpression, or a subpattern which contains nested or sibling subexpressions.
-In this section we rewrite REs in a form
-where every sub-RE is equipped with a pair of numbers called
-\emph{implicit submatch index} and \emph{explicit submatch index}.
-As the reader might guess, these numbers indicate if the given sub-RE is an implicit or explicit submatch group.
-%
-For a given sub-RE,
-if both indices are zero, it means that this sub-RE is ignored from submatch extraction perspective.
-If only the second index is zero, it means that the sub-RE itself is not subject to submatch extraction,
-but it may be involved in disambiguation.
-If both indices are non-zero, then the sub-RE is a submatch group.
-%
-Indices are convenient because they allow us to consider individual sub-REs
-without loosing the submatch context of the whole RE.
-We call this representation \emph{indexed regular expressions (IREs)}.
-%An example of IRE can be seen on figure \ref{fig_parse_trees}.
-
-    \begin{Xdef}
-    \emph{Indexed regular expressions (IREs)} over finite alphabet $\Sigma$, denoted $\XIR_\Sigma$, are:
-    \begin{enumerate}
-        \item Atomic IREs:
-          \emph{empty tree} $(i, j, \epsilon) \in \XIR_\Sigma$ and
-          \emph{unit tree} $(i, j, \alpha) \in \XIR_\Sigma$, where $\alpha \in \Sigma$ and $i, j \in \YZ$.
-
-        \item Compound IREs: if $r_1, r_2 \in \XIR_\Sigma$ and $i, j \in \YZ$, then
-          \emph{union} $(i, j, r_1 \mid r_2) \in \XIR_\Sigma$,
-          \emph{product} $(i, j, r_1 \cdot r_2) \in \XIR_\Sigma$ and
-          \emph{repetition} $(i, j, r_1^{n, m}) \in \XIR_\Sigma$ (where $0 \leq n \leq m \leq \infty$).
-    \end{enumerate}
-    \end{Xdef}
-
-The function $\IRE : \XR_\Sigma \rightarrow \XIR_\Sigma$ transforms REs into IREs.
-It is defined via a composition of two functions,
-$mark$ that transforms REs into IREs with submatch indices in the boolean range $\{0, 1\}$,
-and $enum$ that substitutes boolean indices with consecutive numbers:
-$\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
-Note that we consider $(e)$ as a special case of repetition $(e)^{1,1}$:
-this allows us to handle all parenthesized sub-RE uniformly.
-An example of constructing an IRE from a RE is given on figure \ref{fig_mark_enum}.
-The reverse transformation is also possible by erasing all indices
-and adding parentheses around subexpressions with nonzero explicit submatch index.
-Therefore RE and IRE are equivalent representations.
-    \begin{align*}
-    &\begin{aligned}
-        mark &: \XR_\Sigma \longrightarrow \XIR_\Sigma \\
-        mark &(x) \mid_{x \in \{\epsilon, \alpha\}} = (0, 0, x) \\
-        %
-        mark &(e_1 \circ e_2) \mid_{\circ \in \{|,\cdot\}} = (i, 0,
-            (i, j_1, r_1) \circ
-            (i, j_2, r_2)
-            ) \\
-            &\text{where }            (i_1, j_1, r_1) = mark(e_1) \\
-            &\space{\hphantom{where }}(i_2, j_2, r_2) = mark(e_2) \\
-            &\space{\hphantom{where }}i = i_1 \vee i_2 \\
-        %
-        mark &(e^{n, m}) \mid_{e = (e_1)} = (1, 0, (1, 1, r)) \\
-            &\text{where } (\Xund, \Xund, r) = mark(e_1) \\
-        %
-        mark &(e^{n, m}) \mid_{e \neq (e_1)} = (i, 0, (i, j, r)) \\
-            &\text{where } (i, j, r) = mark(e) \\
-        %
-        mark &((e)) = mark((e)^{1, 1})
-    \end{aligned}
-    %
-    &&\begin{aligned}
-        enum &: \YZ \times \YZ \times \XIR_\Sigma \longrightarrow \YZ \times \YZ \times \XIR_\Sigma \\
-        enum &(\bar{i}, \bar{j}, (i, j, x)) \mid_{x \in \{\epsilon, \alpha\}}
-            = (\bar{i} + i, \bar{j} + j, (\bar{i} \times i, \bar{j} \times j, x))
-        \\
-        enum &(\bar{i}, \bar{j}, (i, j, r_1 \circ r_2)) \mid_{\circ \in \{|,\cdot\}}
-            = (i_2, j_2, (\bar{i} \times i, \bar{j} \times j, \bar{r}_1 \circ \bar{r}_2)) \\
-            &\text{where }            (i_1, j_1, \bar{r}_1) = enum(\bar{i} + i, \bar{j} + j, r_1) \\
-            &\space{\hphantom{where }}(i_2, j_2, \bar{r}_2) = enum(i_1, j_1, r_2)
-        \\
-        enum &(\bar{i}, \bar{j}, (i, j, r^{n,m})) = (i_1, j_1, (\bar{i} \times i, \bar{j} \times j, \bar{r}^{n,m})) \\
-            &\text{where }
-                (i_1, j_1, \bar{r}) = enum(\bar{i} + i, \bar{j} + j, r)
-    \end{aligned}
-    \end{align*}
-
-Just like REs denote sets of PTs, IREs denote sets of \emph{IPTs} --- \emph{indexed parse trees}.
-The only difference between PTs and IPTs is that each node of an IPT has an associated number ---
-the implicit submatch index inherited from the corresponding IRE node (denoted with a superscript).
-Explicit submatch index is not used in IPTs.
-%
-As for PTs, $str(t)$ denotes the string formed by concatenation of all alphabet symbols in the left-to-right traversal of $t$,
-and $\IPT(r, w) = \{ t \in \IPT(r) \mid str(t) = w \}$ is the set of all IPTs for an IRE $r$ and a string $w$.
-%
-Examples of IPTs can be seen on figure \ref{fig_mark_enum}.
-
-    \begin{Xdef}
-    \emph{Indexed parse trees (IPT)} over finite alphabet $\Sigma$, denoted $\XIT_\Sigma$, are:
-    \begin{enumerate}
-        \item Atomic IPTs:
-          \emph{nil tree} ${\varnothing}^i \in \XIT_\Sigma$,
-          \emph{empty tree} ${\epsilon}^i \in \XIT_\Sigma$ and
-          \emph{unit tree} ${\alpha}^i \in \XIT_\Sigma$, where $\alpha \in \Sigma$ and $i \in \YZ$.
-        \item Compound IPTs: if $t_1, \dots, t_n \in \XIT_\Sigma$, where $n \geq 1$, and $i \in \YZ$, then
-          ${T}^i(t_1, \dots, t_n) \in \XIT_\Sigma$.
-    \end{enumerate}
-    \end{Xdef}
-
-The operator $\IPT: \XIR_\Sigma \rightarrow 2^{\XIT_\Sigma}$ gives the set of all IPTs denoted by the given IRE:
-%(its definition is very similar to the one of operator $PT$):
-    \begin{align*}
-        \IPT\big((i, \Xund, \epsilon)\big) &= \{ {\epsilon}^{i} \}
-        \\
-        \IPT\big((i, \Xund, \alpha)\big) &= \{ {\alpha}^{i} \}
-        \\
-        \IPT\big((i, \Xund, (i_1, j_1, r_1) \mid (i_2, j_2, r_2))\big) &=
-            \big\{ {T}^{i}(t, \varnothing^{i_2}) \mid t \in \IPT\big((i_1, j_1, r_1)\big) \big\} \cup
-            \big\{ {T}^{i}(\varnothing^{i_1}, t) \mid t \in \IPT\big((i_2, j_2, r_2)\big) \big\}
-        \\
-        \IPT\big((i, \Xund, (i_1, j_1, r_1) \cdot (i_2, j_2, r_2))\big) &=
-            \big\{ {T}^{i}(t_1, t_2) \mid
-                t_1 \in \IPT\big((i_1, j_1, r_1)\big),
-                t_2 \in \IPT\big((i_2, j_2, r_2)\big)
-            \big\} \\
-        \IPT\big((i, \Xund, (i_1, j_1, r_1)^{n, m})\big) &=
-            \begin{cases}
-                \big\{ {T}^{i}(t_1, \dots, t_m) \mid t_k \in \IPT\big((i_1, j_1, r_1)\big) \;
-                    \forall k = \overline{1, m} \big\} \cup \{ {T}^{i}(\varnothing^{i_1}) \} &\text{if } n = 0 \\
-                \big\{ {T}^{i}(t_n, \dots, t_m) \mid t_k \in \IPT\big((i_1, j_1, r_1)\big) \;
-                    \forall k = \overline{n, m} \big\} &\text{if } n > 0
-            \end{cases}
-    \end{align*}
-
-\emph{Positions} for IPTs are defined in the same way as for PTs, and
-$Pos(t)$ denotes the set of all positions of an IPT $t$.
-Additionally, we define a set of \emph{submatch positions} as
-$Sub(t) = \{ p \mid \exists t|_p = s^i : i \neq 0 \}$.
-In other words, $Sub(t)$ is a subset of $Pos(t)$ that contains positions of subtrees with nonzero implicit submatch index.
-Intuitively, this is the set of positions that are important for submatch extraction:
-in the case of ambiguity we do not need to consider the full trees,
-just the relevant parts of them.
-%
-IPTs have two definitions of norm, one for $Pos$ and one for $Sub$,
-which we call \emph{p-norm} and \emph{s-norm} respectively:
-
-\FloatBarrier
-
-    \begin{Xdef}\label{tnorm_of_IPTs}
-    The \emph{p-norm} and \emph{s-norm} of an IPT $t$ at position $p$ are:
-    \begin{align*}
-        \pnorm{t}{p} =
-            \begin{cases}
-                -1          &\text{if } p \in Pos(t) \text{ and } t|_p = \varnothing^i  \\
-                |str(t|_p)| &\text{if } p \in Pos(t) \text{ and } t|_p \neq \varnothing^i \\
-                \infty      &\text{if } p \not\in Pos(t)
-            \end{cases}
-    \quad\quad\quad
-        \snorm{t}{p} =
-            \begin{cases}
-                -1          &\text{if } p \in Sub(t) \text{ and } t|_p = \varnothing^i  \\
-                |str(t|_p)| &\text{if } p \in Sub(t) \text{ and } t|_p \neq \varnothing^i \\
-                \infty      &\text{if } p \not\in Sub(t)
-            \end{cases}
-    \end{align*}
-    \end{Xdef}
-
-%In other words, the norm is infinite for all positions not in $Sub(t)$,
-%and for positions in $Sub(t)$ it depends on the form of subtree:
-%for nil subtrees it equals $-1$,
-%and for other subtrees it equals the number of symbols.
-%We shorten $\|t\|_\Lambda$ as $\|t\|$.
-
-Accordingly, IPTs have two definitions of order:
-\emph{p-order} based on p-norm
-and \emph{s-order} based on s-norm.
-
-    \begin{Xdef}\label{total_order_on_IPTs}
-    \emph{P-order on IPTs.}
-    Given parse trees $t, s \in PT(e, w)$, we say that $t <_p s$ w.r.t. \emph{desision position} $p$
-    iff $\pnorm{t}{p} > \pnorm{s}{p}$ and $\pnorm{t}{q} = \pnorm{s}{q} \; \forall q < p$.
-    We say that $t < s$ iff $t <_p s$ for some $p$.
-    \end{Xdef}
-
-    \begin{Xdef}\label{partial_order_on_IPTs}
-    \emph{S-order on IPTs.}
-    Given parse trees $t, s \in PT(e, w)$, we say that $t \prec_p s$ w.r.t. \emph{desision position} $p$ % $p \in Sub(t) \cup Sub(s)$
-    iff $\snorm{t}{p} > \snorm{s}{p}$ and $\snorm{t}{q} = \snorm{s}{q} \; \forall q < p$.
-    We say that $t \prec s$ iff $t \prec_p s$ for some $p$.
-    \end{Xdef}
-
-P-order is defined in exactly the same way as the order on PTs.
-S-order, however, has an important difference: is not total, as
-there might be two distinct IPTs that coincide in all submatch positions, yet differ in some non-submatch positions.
-For such trees s-order is not defined: none of them is less than the other one,
-and therefore they are called \emph{incomparable}.
-From submatch extraction perspective, incomparable IPTs are indistinguishable.
-
-    \begin{Xdef}\label{incomparable_IPTs}
-    IPTs $t$ and $s$ are \emph{incomparable}, denoted $t \sim s$,
-    iff neither $t \prec s$, nor $s \prec t$.
-    \end{Xdef}
-
-Incomparability relation is an equivalence relation: it is
-reflexive (obviously $s \sim s$),
-symmetric (obviously $s \sim t$ implies $t \sim s$) and
-transitive (lemma \ref{lemma_ptorder_transitivity_of_incomparability} in appendix shows that $s \sim t \wedge t \sim u$ implies $s \sim u$).
-Therefore all IPTs of a given RE can be partitioned into \emph{incomparability classes}.
-%
-Unlike the case of PTs, where the minimal PT is unique,
-in case of IPTs there is a whole class of minimal trees:
-$\IPT_{min}(r,w) = \{ t \in \IPT(r,w) \mid \forall u \in \IPT(r,w) : t \sim u \vee t < u \}$.
-
-%as theorem \ref{theorem_porder_on_IPTs} states, p-order is a strict total order.
-%As the theorem \ref{theorem_sorder_on_IPTs} states, s-order is a strict weak order.
-
-    \begin{XThe}\label{theorem_porder_on_IPTs}
-    P-order $<$ is a strict total order on IPTs.
-    \end{XThe}
-
-    \begin{XThe}\label{theorem_sorder_on_IPTs}
-    S-order $\prec$ is a strict weak order on IPTs.
-    \end{XThe}
-
-\begin{figure}\label{fig_mark_enum}
-\includegraphics[width=\linewidth]{img/mark_enum.pdf}
-\caption{
-An example of constructing IRE for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,3}$ using $mark$ and $enum$\\
-and some examples of IPT for the resulting IRE and string ``$a$''.
-S-norm of each subtree is marked with $\#$.
-}
-\end{figure}
-
-What is the relation between the total p-order $<$ and the partial s-order $\prec$ on IPTs?
-Can we say that p-order is an extension of s-order on non-comparable IPTs?
-We show by the means of a counterexample that the answer to the above question is negative.
-Consider the IPTs $t$ and $u$ on figure \ref{fig_mark_enum}.
-On one hand, we have $t \prec_{2.2} u$, because $\snorm{t}{2.2} = \infty > 0 = \snorm{u}{2.2}$ and s-norms at all preceding submatch positions agree.
-On the other hand, we have $u <_{1.1} t$, because $\pnorm{t}{1.1} = -1 < 0 = \pnorm{u}{1.1}$
-and p-norms at all preceding positions agree.
-So, p-order is not necessarily an extension of s-order.
-%
-However, the two orders are ``compatible'' in the following sense:
-they agree on the notion of the minimal tree (the exact meaning of this is formalized by theorem \ref{theorem_order_compat}).
-%
-This is an important result becuse it means that
-if we keep refining submatch granularity by tunrning more and more sub-RE into submatch groups,
-we will continuously narrow down the class of $\prec$-minimal trees,
-until we are left with a unique $<$-minimal tree.
-In practice this means that adding a few parentheses in RE will not drastically change the previous results of submatch extraction;
-it will only add more details.
-
-    \begin{XThe}\label{theorem_order_compat}
-    For an IRE $r$ and string $w$,
-    let $t_{min}$ be the $<$-minimal tree in $\IPT(r,w)$
-    and let $T_{min} = \IPT_{min}(r,w)$ be the class of the $\prec$-minimal trees in $\IPT(r,w)$.
-    Then $t_{min} \in T_{min}$.
-    \end{XThe}
-
-In the rest of the paper the words ``order'' and ``norm`` refer to s-order and s-norm.
-
-\FloatBarrier
-
-\section{Parenthesized expressions}
-
-In this section we introduce linearised representation of parse trees: \emph{parenthesized expressions}.
-%The structure of the section follows \cite{OS13},
-%however there are subtle, but important differences in some of the definitions and proofs.
-
-    \begin{Xdef}
-    \emph{Parenthesized expressions (PEs)} over finite alphabet $\Sigma$, denoted $\XP_\Sigma$, are:
-    \begin{enumerate}
-        \item Atomic PE:
-          \emph{nil expression} $\Xm \in \XP_\Sigma$,
-          \emph{empty expression} $\epsilon \in \XP_\Sigma$ and
-          \emph{unit expression} $a \in \XP_\Sigma$, where $\alpha \in \Sigma$.
-        \item Compound PE: if $e_1, e_2 \in \XP_\Sigma$, then
-            $e_1 e_2 \in \XP_\Sigma$ and
-            $\Xl e_1 \Xr \in \XP_\Sigma$.
-    \end{enumerate}
-    \end{Xdef}
-
-Parenthesis $\Xl$ is called \emph{opening} and
-parenthesis $\Xr$ is called \emph{closing};
-the \emph{nil}-parenthesis $\Xm$ is both opening and closing.
-The \emph{height} of parenthesis in a PE is the number of preceding opening parentheses (including this one)
-minus the number of preceding closing parentheses (including this one).
-For convenience we sometimes explicitly denote height with subscript:
-this allows us to consider (not necessarily correctly nested) fragments of the given PE in isolation,
-without losing the context of the whole PE.
-However, height is not a part of parenthesis itself
-and is not taken into account when comparing the elements of PEs.
-Function $\Phi : \YZ \times \XT_\Sigma \rightarrow \XP_\Sigma$ transforms PTs into PEs:
-    $$
-    \Phi_{h}(t^{i}) = \begin{cases}
-        str(t^{i})                                            &\text{if } i = 0 \\
-        \Xm_h                                                 &\text{if } i \neq 0 \wedge t = \varnothing \\
-        \Xl_{h+1} \Xr_h                                       &\text{if } i \neq 0 \wedge t = \epsilon \\
-        \Xl_{h+1} a \Xr_h                                     &\text{if } i \neq 0 \wedge t = a \in \Sigma \\
-        \Xl_{h+1} \Phi_{h+1}(t_1) \dots \Phi_{h+1}(t_n) \Xr_h &\text{if } i \neq 0 \wedge t = T(t_1, \dots, t_n)
-    \end{cases}
-    $$
-
-For a given RT $r$ and string $w$, the set $\big\{ \Phi_{0}(t) \mid t \in PT(r, w) \big\}$ is denoted $PE(r, w)$.
-If $\alpha, \beta \in PE(r, w)$ for some $r$ and $w$, we say that $\alpha$ and $\beta$ are \emph{comparable}.
-%
-For PE $\alpha$, $\beta$,
-$\alpha \sqcap \beta$ denotes the longest common prefix of $\alpha$ and $\beta$,
-$\alpha \backslash \beta$ denotes the suffix of $\alpha$ after removing $\alpha \sqcap \beta$,
-$lasth(\alpha)$ denotes the height of the last parenthesis in $\alpha$ or $\infty$ if $\alpha$ is empty or begins with a letter,
-$minh(\alpha)$ denotes the minimal height of parenthesis in $\alpha$ or $\infty$ if $\alpha$ is empty or begins with a letter,
-$first(\alpha)$ denotes the first parenthesis in $\alpha$ or $\bot$ if $\alpha$ is empty or begins with a letter.
-Each PE $\alpha$ can be represented as $\alpha_0 a_1 \alpha_1 \dots a_n \alpha_n$,
-where $\alpha_i$ is the $i$-th \emph{frame} --- the possibly empty sequence of parentheses between
-subsequent alphabet symbols $a_i$ and $a_{i+1}$ or the beginning or end of $\alpha$.
-Note that comparable PE have the same number of frames.
-For distinct comparable PE $\alpha$, $\beta$
-the index of the first distinct pair of frames is called \emph{fork}.
-
-    \begin{Xdef}
-    Let $\alpha$, $\beta$ be distinct comparable PE, such that
-    $\alpha = \alpha_0 a_1 \alpha_1 \dots a_n \alpha_n$,
-    $\beta = \beta_0 a_1 \beta_1 \dots a_n \beta_n$ and $k$ is the fork.
-    We define $trace (\alpha, \beta)$ as the sequence $(\rho_0, \dots, \rho_n)$, where:
-    $$
-    \rho_i = \begin{cases}
-        -1 &\text{if } i < k \\
-        min (lasth (\alpha_i \sqcap \beta_i), minh(\alpha_i \backslash \beta_i)) &\text{if } i = k \\
-        min (\rho_{i-1}, minh(\alpha_i)) &\text{if } i > k
-    \end{cases}
-    $$
-    We write $traces(\alpha, \beta)$ to denote $\big( trace (\alpha, \beta), trace (\beta, \alpha) \big)$.
-    \end{Xdef}
-
-\begin{figure}\label{fig_pe}
-\includegraphics[width=\linewidth]{img/pe.pdf}
-\caption{
-Examples: (a) -- (d): four main rules of POSIX comparison,
-(e) -- pairwise comparison of PEs.
-}
-\end{figure}
-
-    \begin{Xdef}\label{prec1}
-    Let $\alpha$, $\beta$ be comparable PE and
-    $traces(\alpha, \beta) = \big( (\rho_0, \dots, \rho_n), (\rho'_0, \dots, \rho'_n) \big)$.
-    The \emph{longest-precedence} relation $\sqsubset$ is defined as
-    $\alpha \sqsubset \beta \Leftrightarrow \exists i \leq n:
-        \big( \rho_i > \rho'_i \big) \wedge
-        \big( \rho_j = \rho'_j \; \forall j > i \big)$.
-%    $$
-%        \alpha \sqsubset \beta \quad \Leftrightarrow \quad \exists i \leq n:
-%        \prescript{}{\wedge}{\left[
-%            \begin{aligned}
-%                &\rho_i > \rho'_i \\
-%                &\forall j > i: \rho_j = \rho'_j
-%            \end{aligned}
-%        \right.}
-%    $$
-    If neither $\alpha \sqsubset \beta$, nor $\beta \sqsubset \alpha$,
-    then $\alpha$, $\beta$ are \emph{longest-equivalent}: $\alpha \sim \beta$
-    (note that in this case $\rho_i = \rho'_i \; \forall i = \overline {1, n}$).
-    \end{Xdef}
-
-    \begin{Xdef}\label{prec2}
-    Let $\alpha$, $\beta$ be comparable PE, and let
-    $x = first (\alpha \backslash \beta)$,
-    $y = first (\beta \backslash \alpha)$.
-    The \emph{leftmost-precedence} relation $\subset$ is defined as
-    $\alpha \subset \beta \Leftrightarrow x < y$, where
-    the set of possible values of $x$ and $y$ is ordered as follows:
-    $\bot < \Xr < \Xl < \Xm$.
-%    Let $\alpha$, $\beta$ be comparable PE, and let
-%    $x = first (\alpha \backslash \beta)$,
-%    $y = first (\beta \backslash \alpha)$.
-%    The \emph{leftmost-precedence} relation $\subset$ is defined as follows:
-%    $\alpha \subset \beta \Leftrightarrow
-%    \big(x = \bot \wedge y \not= \bot \big) \vee
-%    \big(x = \Xr \wedge y \not= \bot \big) \vee
-%    \big(x = \Xl \wedge y = \bar{\Xl} \big)$.
-%
-%    $$
-%        \alpha \subset \beta \quad \Leftrightarrow \quad
-%        \prescript{}{\vee \;}{\left[
-%            \begin{aligned}
-%                &x = \bot   &&\wedge && y \not= \bot \\
-%                &x = \Xr    &&\wedge && y \not= \bot \\
-%                &x = \Xl    &&\wedge && y = \bar{\Xl}
-%            \end{aligned}
-%        \right.}
-%    $$
-    \end{Xdef}
-
-    \begin{Xdef}\label{pe_order}
-    The \emph{longest-leftmost-precedence} relation $<$ on comparable PE is defined as
-    $\alpha < \beta \Leftrightarrow
-        \big( \alpha \sqsubset \beta \big) \vee
-        \big( \alpha \sim \beta \wedge \alpha \subset \beta \big)$.
-%    \begin{align*}
-%        \alpha < \beta \quad \Leftrightarrow \quad
-%        \prescript{}{\vee}{\left[
-%            \begin{aligned}
-%                &\alpha \sqsubset \beta \\
-%                &\alpha \sim \beta \wedge \alpha \subset \beta
-%            \end{aligned}
-%        \right.}
-%    \end{align*}
-    \end{Xdef}
-
-    \begin{XThe}\label{theorem_order_on_pe_same_as_on_pt}
-    Let $s, t \in PT(r, w)$, then
-    $s <_p t \Leftrightarrow \Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
-    \end{XThe}
-
-\FloatBarrier
 
 
 \section{Tagged NFA}
