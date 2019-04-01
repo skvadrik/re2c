@@ -6,7 +6,7 @@
 \revised{6 June 2016}
 \accepted{6 June 2016}
 
-%\raggedbottom
+\raggedbottom
 
 %\usepackage{booktabs}
 
@@ -25,7 +25,7 @@
 \SetArgSty{textnormal}
 
 % comments in the pseudocode
-% note: on my sistem \texttt is broken with \small font size (too small)
+% note: on my system \texttt is broken with \small font size (too small)
 \newcommand\Xcommentfont[1]{\selectfont\textnormal{#1}}
 %\newcommand\Xcommentfont[1]{\fontsize{9pt}{0pt}\selectfont\texttt{#1}}
 \SetCommentSty{Xcommentfont}
@@ -38,7 +38,7 @@
 %\SetAlCapFnt{\small}
 %\SetAlCapNameFnt{\small}
 %\SetAlCapHSkip{0pt}
-\IncMargin{-\parindent}
+%\IncMargin{-\parindent}
 
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsfonts}
@@ -63,6 +63,7 @@
 \newcommand{\XE}{\mathcal{E}}
 \newcommand{\XF}{\mathcal{F}}
 \newcommand{\XI}{\mathcal{I}}
+\newcommand{\XPT}{\XP\!\XT}
 \newcommand{\XIT}{\XI\!\XT}
 \newcommand{\XIR}{\XI\!\XR}
 \newcommand{\XL}{\mathcal{L}}
@@ -89,6 +90,9 @@
 \newcommand{\pnorm}[2]{\|{#1}\|^{Pos}_{#2}}
 \newcommand{\snorm}[2]{\|{#1}\|^{Sub}_{#2}}
 
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
 \setlist{nosep}
 %\setlength{\parskip}{0.5em}
 
@@ -99,7 +103,8 @@
     {\par\medskip\noindent\minipage{\linewidth}\begin{center}}
     {\end{center}\endminipage\par\medskip}
 
-%\setlength{\parindent}{0pt}
+\setlength{\parindent}{0pt}
+\setlength{\belowcaptionskip}{-1em}
 
 %\theoremstyle{definition}
 \newtheorem{Xdef}{Definition}
@@ -143,7 +148,7 @@ We also show that backward matching algorithm proposed by Cox is incorrect.
 
 \maketitle
 
-\section*{Introduction}
+\section{Introduction}
 
 The difficulty of POSIX longest-match semantics is caused by the fact
 that we cannot predict correct match results in advance, at the point where they diverge.
@@ -293,7 +298,7 @@ Our contributions are as follows:
         which means a lot of overhead if only a few groups are needed.
 
     \item We extend Okui-Suzuki algorithm on the case of bounded repetition.
-        This is not trivial and presents some unique challenges (like the one discussed with regard to Cox algorithm).
+        This presents some unique challenges (like the one discussed with regard to Cox algorithm).
 
     \item We combine Okui-Suzuki algorithm with Laurikari TNFA
         and omit the preprocessing step of the original algorithm.
@@ -321,35 +326,278 @@ Our contributions are as follows:
 
     \item We provide an implementation of different algorithms in C++ (except for the one by Sulzmann and Lu)
         and benchmark them against each other and against leftmost greedy matching implemented in RE2.
+
+    \item We give detailed proof of correctness of the extended algorithm.
     \\
 \end{itemize}
 
 The rest of this paper is arranged as follows.
+In the next section we describe the main idea and the skeleton of the algorithm.
+In the following sections we fill in the gaps:
+in section [??] we consider different possible outputs of the algorithm,
+in section [??] we build $\epsilon$-closure,
+in section [??] we construct TNFA.
+Finally, section [??] contains benchmarks
+and section [??] concludes.
 
-\iffalse
+\section{The main idea}\label{secion_main}
 
-     Yes, I know --- you've always been after building full parse trees,
+Our algorithm is based on four cornerstone concepts:
+regular expressions, parse trees, parenthesized expressions and tagged NFA.
+The first two are needed to formulate submatch extraction problem
+and define POSIX disambiguation semantics in terms of comparison of parse trees.
+Parenthesized expressions are linearized representation of parse trees
+that allow us to give an equivalent, but more practical definition of comparison.
+Finally, automata with tagged transitions are used to encode parentheses
+and construct an efficient matching algorithm.
+In this section we give the four basic definitions, followed by a sketch of the algorithm.
+In later sections we fill in all the details and provide connection between different representations.
+
+    \begin{Xdef}
+    \emph{Regular expressions (RE)} over finite alphabet $\Sigma$, denoted $\XR_\Sigma$:
+    \begin{enumerate}
+        \item
+          Empty RE $\epsilon$ and
+          unit RE $\alpha$ (where $\alpha \in \Sigma$) are in $\XR_\Sigma$.
+        \item If $e_1, e_2 \in \XR_\Sigma$, then
+          union $e_1 | e_2$,
+          product $e_1 e_2$,
+          repetition $e_1^{n, m}$ (where $0 \leq n \leq m \leq \infty$), and
+          submatch group $(e_1)$
+          are in $\XR_\Sigma$.
+    \end{enumerate}
+    \end{Xdef}
 
 
-This is true, but the issue here is different. It is a matter of RE syntax and its interpretation.
-As you know, there are two views of REs: the one of Kleene (the theoretical computer science one), and the
-one of RE libraries. The first  (see Kleene, Stephen C. (1951). Shannon, Claude E.; McCarthy, John, eds.
-Representation of Events in Nerve Nets and Finite Automata (PDF). Automata Studies. Princeton University
-Press. pp. 3–42) has no notion of submatches and capturing parentheses. Indeed, parentheses in it
-are seen as in math, i.e. having no other significance than a means of changing the precedence of
-operators. In it then, r* and (r)* are the same.
-In the RE libraries view, this could be different. E.g. in the POSIX standard (the first, Chapter 9) the definition
-of "matching" (9.4.6) refers always to "ERE matching a single character or an ERE enclosed in parentheses"
-making thus no distiction between r* and (r)*. What makes the distinction is the POSIX standard for regex().
-Actually, tagged automata depart from regex() since they allow to get the match of any part of a string be it
-derived from a capturing group or not.
-I think that we can do what we want since we are not presenting a paper that describes an implementation of
-regex(). I have no problems in making the distinction; it is a valid choice much the same as the other one.
-After all, since we are not describing an implementation of regex(), this distinction does not make much
-a difference (apart perhaps a level in the pictures of trees, and some tweaks in the proofs).
+    \begin{Xdef}
+    \emph{Parse trees (PT)} over finite alphabet $\Sigma$, denoted $\XT_\Sigma$:
+    \begin{enumerate}
+        \item
+          Nil tree ${\varnothing}^i$,
+          empty tree ${\epsilon}^i$ and
+          unit tree ${\alpha}^i$ (where $\alpha \in \Sigma$ and $i \in \YZ$)
+          are in $\XT_\Sigma$.
+        \item If $t_1, \dots, t_n \in \XT_\Sigma$ (where $n \geq 1$, and $i \in \YZ$), then
+          ${T}^i(t_1, \dots, t_n)$
+          is in $\XT_\Sigma$.
+    \end{enumerate}
+    \end{Xdef}
 
-\fi
 
+    \begin{Xdef}
+    \emph{Parenthesized expressions (PE)} over finite alphabet $\Sigma$, denoted $\XP_\Sigma$:
+    \begin{enumerate}
+        \item
+            Nil expression $\Xm$,
+            empty expression $\epsilon$ and
+            unit expression $\alpha$ (where $\alpha \in \Sigma$)
+            are in $\XP_\Sigma$.
+        \item If $e_1, e_2 \in \XP_\Sigma$, then
+            $e_1 e_2$ and
+            $\Xl e_1 \Xr$
+            are in $\XP_\Sigma$.
+    \end{enumerate}
+    \end{Xdef}
+
+
+    \begin{Xdef}
+    \emph{Tagged Nondeterministic Finite Automaton (TNFA)}
+    is a structure $(\Sigma, Q, T, \Delta, q_0, q_f)$, where:
+    \begin{itemize}
+        \item[] $\Sigma$ is a finite set of symbols (\emph{alphabet})
+        \item[] $Q$ is a finite set of \emph{states}
+        \item[] $T\subset\YN$ is a finite set of \emph{tags}
+        \item[] $\Delta = \Delta^\Sigma \sqcup \Delta^\epsilon$ is the \emph{transition} relation,
+            consisting of two parts:
+        \begin{itemize}
+            \item[] $\Delta^\Sigma \subseteq Q \times \Sigma \times \{\epsilon\} \times Q$ (transitions on symbols)
+            \item[] $\Delta^\epsilon \subseteq Q \times \YN \times \big( \YZ \cup \{\epsilon\} \big) \times Q$
+                ($\epsilon$-transitions, where $\forall (q, n, \Xund, \Xund), (q, m, \Xund, \Xund) \in \Delta^\epsilon: n \neq m$)
+        \end{itemize}
+        \item[] $q_0 \in Q$ is the \emph{initial} state
+        \item[] $q_f \in Q$ is the \emph{final} state
+    \end{itemize}
+    \end{Xdef}
+
+As the reader might notice, our definitions are subtly different from the usual ones in literature.
+Regular expressions are extended with submatch operator
+and generalized repetition (note that it is not just syntactic sugar: in POSIX \texttt{(a)(a)} is semantically different from \texttt{(a)\{2\}},
+and \texttt{(a)} in not the same as \texttt{a}).
+Parse trees have a special \emph{nil-tree} constructor
+and an upper index, which allows us to distinguish between submatch and non-submatch subtrees.
+Mirroring parse trees, parenthesized expressions also have a special \emph{nil-parenthesis}.
+TNFA is in essence a nondeterministic finite-state transducer
+in which some of the $\epsilon$-transitions are marked with \emph{tags}.
+Tags are integer numbers that denote opening and closing parentheses of submatch groups:
+for $i$-th group, opening tag is $2i - 1$ and closing tag is $2i$ (where $i \in \YN$).
+Tags can be negative, which represents the absence of match and corresponds to nil-parenthesis $\Xm$ and nil-tree $\varnothing$.
+Additionally, all $\epsilon$-transitions are marked with \emph{priority}
+which allows us to impose specific order of TNFA traversal
+(all $\epsilon$-transitions from the same state have different priority).
+\\
+
+\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+\setstretch{0.8}
+\Fn {$\underline{match \big( N \!\!=\! (\Sigma, Q, T, \Delta, q_0, q_f), \; \alpha_1 \!\hdots\! \alpha_n \big)} \smallskip$} {
+
+    $B, D : \YZ^{|Q| \times |Q|}$ \;
+    $r_0 = initial \Xund result(T)$ \;
+    $X = \big\{ (q_0, \varnothing, \epsilon, r_0) \big\}, \; i = 1$ \;
+
+    \BlankLine
+    \While {$i \leq n \wedge X \neq \emptyset$} {
+        $X = closure(N, X, B, D)$ \;
+        $X = update \Xund result(X, i, \alpha_i)$ \;
+        $(B, D) = update \Xund ptables(X, B, D, i)$ \;
+        $X = \big\{ (q, o, \epsilon, t) \mid (o, \Xund, \Xund, t) \in X \wedge (o, \alpha_i, \epsilon, q) \in \Delta^\Sigma \big\}$ \;
+        $i = i + 1$ \;
+    }
+
+    \BlankLine
+    $X = closure(N, X, B, D)$ \;
+    \If {$(q_f, \Xund, u, r) \in X$} {
+        \Return $f\!inal \Xund result (u, r, n)$
+    } \lElse {
+        \Return $\varnothing$
+    }
+}
+%\caption{Skeleton of the matching algorithm.}
+\caption{TNFA simulation on a string.}
+\end{algorithm}
+\medskip
+
+The algorithm takes automaton $N$ and string $\alpha_1 \!\hdots\! \alpha_n$ as input,
+and outputs match result is some form: it can be a parse tree or a POSIX array of offsets,
+but for now we leave it unspecified and hide behind functions
+$initial \Xund result ()$, $update \Xund result ()$ and $f\!inal \Xund result ()$.
+The algorithm works by consuming input symbols,
+tracking a set of active \emph{configurations}
+and updating \emph{precedence tables} $B$ and $D$.
+Configuration is a tuple $(q, o, u, r)$.
+The first component $q$ is a TNFA state that is unique for each configuration in the current set.
+Components $o$ and $u$ keep information about the path by which $q$ was reached:
+$o$ is the \emph{origin} state used as index in precedence tables,
+and $u$ is the sequence of tags on path fragment constructed by $closure()$.
+Finally, $r$-component is a partial match result associated with state $q$.
+Most of the real work happens inside of $closure()$ and $update \Xund ptables ()$, both of which remain undefined for now.
+The $closure()$ function builds $\epsilon$-closure of the current configuration set:
+it explores all states reachable by $\epsilon$-transitions from the $q$-components
+and tracks the best path to each reachable state.
+The $update \Xund ptables ()$ function
+performs pairwise comparison of all configurations in the new set,
+recording results in $B$ and $D$ matrices.
+On the next step $q$-components become $o$-components.
+If a pair of paths originating from current configurations meet in the next $closure ()$,
+it will use origin states to lookup comparison results in $B$ and $D$ matrices.
+On the other hand, if the paths do not meet, then comparison performed by $update \Xund ptables ()$ is redundant.
+Unfortunately we cannot get rid of redundant comparisons:
+we do not know in advance which configurations will spawn ambiguous paths.
+An alternative approach is to disambiguate lazily, only if paths meet ---
+but that requires tracking paths which grow with the length of input.
+Eager pre-comparison is a tradeoff that
+allows the algorithm work in bounded memory at the expense of some time overhead.
+\\
+
+%\vfill\null
+
+\section{Representation of match results}
+
+\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
+\begin{multicols}{2}
+    \setstretch{0.8}
+
+    \Fn {$\underline{initial \Xund result (T)} \smallskip$} {
+        \For {$i = \overline {0, |T| / 2}$} {
+            $pmatch[i].rm \Xund so = -1$ \;
+            $pmatch[i].rm \Xund eo = -1$ \;
+        }
+        \Return $pmatch$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline{update \Xund result (X, k, \Xund)} \smallskip$} {
+        \Return $\big\{ (q, o, u, apply \Xund tags (u, r, k)) \mid (q, o, u, r) \in X \big\}$ \;
+        %\For {$(q, o, t_1 \hdots t_n, pmatch) \in X$} {
+        %    \For {$i = \overline {1, n}$} {
+        %        \lIf {$t_i < 0$} {$l = -1$}
+        %        \lElse {$l = k$}
+        %        \lIf {$t_i mod \, 2 \equiv 0$} {$pmatch[|t_i|/2].rm \Xund so = l$}
+        %        \lElse {$pmatch[(|t_i| - 1)/2].rm \Xund eo = l$}
+        %    }
+        %}
+        %\Return $X$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline{f\!inal \Xund result (u, r, k)} \smallskip$} {
+        $pmatch = apply \Xund tags (u, r, k)$ \;
+        $pmatch[0].rm \Xund so = 0$ \;
+        $pmatch[0].rm \Xund eo = k$ \;
+        \Return $pmatch$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline{apply \Xund tags (t_1 \hdots t_n, pmatch, k)} \smallskip$} {
+        \For {$i = \overline {1, n}$} {
+            \lIf {$t_i < 0$} {$l = -1$}
+            \lElse {$l = k$}
+            \lIf {$t_i mod \, 2 \equiv 0$} {$pmatch[|t_i|/2].rm \Xund eo = l$}
+            \lElse {$pmatch[(|t_i| \!+\! 1)/2].rm \Xund so = l$}
+        }
+        \Return $pmatch$ \;
+    }
+    \BlankLine
+
+    \vfill
+
+\columnbreak
+
+    \Fn {$\underline{initial \Xund result (\Xund)} \smallskip$} {
+        \Return $\epsilon$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline{update \Xund result (X, \Xund, \alpha)} \smallskip$} {
+        \Return $\big\{ (q, o, u, r \cdot u \cdot \alpha) \mid (q, o, u, r) \in X \big\}$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline{f\!inal \Xund result (u, r, \Xund)} \smallskip$} {
+        \Return $parse \Xund tree (r \cdot u, 1)$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline{parse \Xund tree (u, i)} \smallskip$} {
+        \If {$u = (2i \!-\! 1) \cdot (2i)$} {
+            \Return $T(\epsilon)$
+        }
+        \If {$u = (1 \!-\! 2i) \cdot \hdots $} {
+            \Return $T(\varnothing)$
+        }
+        \If {$u = (2i \!-\! 1) \cdot \alpha_1 \hdots \alpha_n \cdot (2i) \wedge \alpha_1, \hdots, \alpha_n \in \Sigma $} {
+            \Return $T(a_1, \hdots, a_n)$
+        }
+        \If {$u = (2i \!-\! 1) \cdot \beta_1 \hdots \beta_m \cdot (2i) \wedge \beta_1 = 2j \!-\! 1 \in T$} {
+            $n = 0, k = 1$ \;
+            \While {$k \leq m$} {
+                $l = k$ \;
+                \lWhile {$|\beta_{k+1}| > 2j$} {
+                    $k = k + 1$
+                }
+                $n = n + 1$ \;
+                $t_n = parse \Xund tree (\beta_l \dots \beta_k, j)$
+            }
+            \Return $T(t_1, \dots, t_n)$
+        }
+        \Return $\varnothing$ \tcp{ill-formed PE}
+    }
+    \BlankLine
+
+\end{multicols}
+\vspace{1.5em}
+\caption{Construction of match results: POSIX offsets (on the left) and parse tree (on the right).}
+\end{algorithm}
+\medskip
 
 \section{Regular Expressions and Ordered Parse Trees}
 
