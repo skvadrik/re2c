@@ -855,6 +855,190 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
     \end{XThe}
 
 
+\section{Comparison of tag histories}
+
+\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+\begin{multicols}{2}
+    \setstretch{0.8}
+    \newcommand \ff {f\!\!f}
+
+    \Fn {$\underline {compare ((\Xund, o_1, n_1, \Xund), (\Xund, o_2, n_2, \Xund), B, D)} \smallskip$} {
+        \If { $o_1 = o_2 \wedge n_1 = n_2$ } {
+            \Return $(\infty, \infty, 0)$
+        }
+
+        \BlankLine
+        \lIf {$o_1 = o_2$ } {
+            $h_1 = h_2 = \infty$
+        }
+        \lElse {
+            $h_1 = B[o_1][o_2], \; h_2 = B[o_2][o_1]$
+        }
+
+        \BlankLine
+        $m_1 = m_2 = \bot$ \;
+        \While {$n_1 \neq n_2$} {
+            \If {$n_1 > n_2$} {
+                $h_1 = min(h_1, height(H, n_1))$ \;
+                $m_1 = n_1, n_1 = pred(H, n_1)$ \;
+            }
+            \Else {
+                $h_2 = min(h_2, height(H, n_2))$ \;
+                $m_2 = n_2, n_2 = pred(H, n_2)$ \;
+            }
+        }
+        \If {$n_1 \neq \bot$} {
+            $h_1 = min(h_1, height(H, n_1))$ \;
+            $h_2 = min(h_2, height(H, n_1))$ \;
+        }
+
+        \BlankLine
+        $l = prec (h_1, h_2, o_1, o_2, m_1, m_2, H, D)$ \;
+        \Return $(h_1, h_2, l)$ \;
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline {prec (h_1, h_2, o_1, o_2, n_1, n_2, H, D)} \smallskip$} {
+        \lIf {$h_1 > h_2$} { \Return $-1$ }
+        \lIf {$h_1 < h_2$} { \Return $1$ }
+
+        \BlankLine
+        \lIf {$o_1 \neq o_2$} { \Return $D[o_1][o_2]$ }
+
+        \BlankLine
+        \lIf {$n_1 = n_2$} { \Return $0$ }
+        \lIf {$n_1 = \bot$} { \Return $-1$ }
+        \lIf {$n_2 = \bot$} { \Return $1$ }
+
+        \BlankLine
+        $t_1 = tag(H, n_1), \; t_2 = tag(H, n_2)$ \;
+
+        \BlankLine
+        \lIf {$t_1 mod \, 2 \equiv 0$} { \Return $-1$ }
+        \lIf {$t_2 mod \, 2 \equiv 0$} { \Return $1$ }
+
+        \BlankLine
+        \lIf {$t_1 < 0$} { \Return $1$ }
+        \lIf {$t_2 < 0$} { \Return $-1$ }
+
+        \BlankLine
+        \Return $0$
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline {update \Xund ptables (X, B, D)} \smallskip$} {
+        \For {$x_1 = (q_1, \Xund, \Xund, \Xund) \in X$} {
+            \For {$x_2 = (q_2, \Xund, \Xund, \Xund) \in X$} {
+                $(h_1, h_2, l) = compare (x_1, x_2, B, D)$ \;
+                $B' [q_1] [q_2] = h_1, \; D' [q_1] [q_2] = l$ \;
+                $B' [q_2] [q_1] = h_2, \; D' [q_2] [q_1] = -l$
+            }
+        }
+        \BlankLine
+        \Return $(B', D')$ \;
+    }
+
+    \vfill
+    \columnbreak
+
+    \Fn {$\underline {update \Xund ptables (X, B, D)} \smallskip$} {
+        $n_0 = root(H), \; i = 0, \; next(n) = 1 \; \forall n$ \;
+        $push(S, n_0)$ \;
+
+        \BlankLine
+        \While {$S$ is not empty} {
+            $n = pop(S)$ \;
+            $\{m_1, \hdots, m_k \} = succ(H, n)$ \;
+
+            \BlankLine
+            \If {$next(n) < k$} {
+                $push(S, n)$ \;
+                $push(S, m_{next(n)})$ \;
+                $next(n) = next(n) + 1$ \;
+                $continue$ \;
+            }
+
+            \BlankLine
+            $h = height(H, n), \; i_1 = i$ \;
+
+            \BlankLine
+            \For {$(q, o, n_1, \Xund) \in X \mid n_1 = n$} {
+                $i = i + 1, \; L[i] = (q, o, \bot, h)$ \;
+            }
+            \For {$j_1 = \overline{i_1 + 1, i}$} {
+                \For {$j_2 = \overline{j_1, i}$} {
+                    $(q_1, o_1, \Xund, \Xund) = L[j_1]$ \;
+                    $(q_2, o_2, \Xund, \Xund) = L[j_2]$ \;
+
+                    \BlankLine
+                    \If {$n = n_0 \wedge o_1 \neq o_2$} {
+                        $h_1 = B[o_1][o_2]$ \;
+                        $h_2 = B[o_2][o_1]$ \;
+                        $l = D[o_1][o_2]$ \;
+                    }
+                    \lElse {
+                        $h_1 = h_2 = h, \; l = 0$
+                    }
+
+                    \BlankLine
+                    $B'[q_1][q_2] = h_1, \; D'[q_1][q_2] = l$ \;
+                    $B'[q_2][q_1] = h_2, \; D'[q_2][q_1] = -l$ \;
+                }
+            }
+
+            \BlankLine
+            \For {$m \in \{m_k, \dots, m_1 \}$} {
+                $i_2 = i_1$ \;
+                \lWhile {$i_2 > 0 \wedge L[i_2].n = m$} {
+                    $i_2 = i_2 - 1$
+                }
+
+                \BlankLine
+                \For {$j_1 = \overline{i_2, i_1}$} {
+                    $L[j_1].h = min(L[j_1].h, h)$; \;
+
+                    \BlankLine
+                    \For {$j_2 = \overline{i_1, i}$} {
+                        $(q_1, o_1, n_1, h_1) = L[j_1]$ \;
+                        $(q_2, o_2, n_2, h_2) = L[j_2]$ \;
+
+                        \BlankLine
+                        \If {$n = n_0 \wedge o_1 \neq o_2$} {
+                            $h_1 = min(h_1, B[o_1][o_2])$ \;
+                            $h_2 = min(h_2, B[o_2][o_1])$ \;
+                        }
+
+                        \BlankLine
+                        $l = prec (h_1, h_2, o_1, o_2, n_1, n_2, H, D)$ \;
+                    }
+
+                    \BlankLine
+                    $B'[q_1][q_2] = h_1, \; D'[q_1][q_2] = l$ \;
+                    $B'[q_2][q_1] = h_2, \; D'[q_2][q_1] = -l$ \;
+                }
+
+                $i_1 = i_2$ \;
+            }
+
+            \BlankLine
+            \lFor {$j = \overline{i_1, i}$} {
+                $L[j].n = n$
+            }
+        }
+
+        \BlankLine
+        \Return $(B', D')$ \;
+    }
+
+\end{multicols}
+\vspace{1em}
+\caption{Comparison of tag histories.}
+\end{algorithm}
+\medskip
+
+
 \section{Representation of match results}
 
 \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
@@ -956,26 +1140,6 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
 
 
 \section{Tagged NFA}
-
-    \begin{Xdef}
-    \emph{Tagged Nondeterministic Finite Automaton (TNFA)}
-    is a structure $(\Sigma, Q, T, \Delta, q_0, q_f)$, where:
-    \begin{itemize}
-        \item[] $\Sigma$ is a finite set of symbols (\emph{alphabet})
-        \item[] $Q$ is a finite set of \emph{states}
-        \item[] $T\subset\YN$ is a finite set of \emph{tags}
-        \item[] $\Delta = \Delta^\Sigma \sqcup \Delta^\epsilon$ is the \emph{transition} relation, where:
-        \begin{itemize}
-            \item[] $\Delta^\Sigma \subseteq Q \times \Sigma \times \{\epsilon\} \times Q$ (transitions on symbols)
-            \item[] $\Delta^\epsilon \subseteq Q \times \YN \times \big( \YN \cup \{\epsilon\} \big) \times Q$ ($\epsilon$-transitions)
-            \item[]
-                and all $\epsilon$-transitions from the same state have different priority:
-                $\forall (q, n, \Xund, \Xund), (q, m, \Xund, \Xund) \in \Delta^\epsilon: n \neq m$.
-        \end{itemize}
-        \item[] $q_0 \in Q$ is the \emph{initial} state
-        \item[] $q_f \in Q$ is the \emph{final} state
-    \end{itemize}
-    \end{Xdef}
 
 TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
 
@@ -1110,191 +1274,6 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
     Example TNFA for RE $(a|\epsilon)^{0,3}((a^{0,\infty})|(\epsilon))$.
 }
 \end{figure}
-
-
-\FloatBarrier
-
-
-\begin{figure*}
-\begin{multicols}{2}
-    \setstretch{0.8}
-    \newcommand \ff {f\!\!f}
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{match (\XN, \alpha_1 \dots \alpha_n)} \smallskip$} {
-        $(\Sigma, Q, F, q_0, T, \Delta) = \XN$ \;
-        $P_1, P_2: Q \times Q \rightarrow \YZ$ \;
-        \BlankLine
-
-        $X = closure(\{ (\bot, q_0, \epsilon, t_0) \}, F, \Delta, P_1, P_2)$ \;
-        $(X, B, D) = step(0, X, P_1, P_2)$ \;
-
-        \BlankLine
-        \For {$i = \overline{1,n}$} {
-            $X = reach(X, \Delta, \alpha_i)$ \;
-            $X = closure(X, Q, F, \Delta, P_1, P_2)$ \;
-            $(X, P_1, P_2) = step(i, X, P_1, P_2)$ \;
-        }
-
-        \BlankLine
-        \If {$\exists (\Xund, p, \Xund, t) \in X \mid p \in F$} {
-            \Return $output(t)$
-        } \lElse {
-            \Return $\bot$
-        }
-    }
-    \end{algorithm}
-
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{reach (X, \alpha)} \smallskip$} {
-        \Return $\{ (q, p, \epsilon, t) \mid $ \\
-            $\hspace{4em} (\Xund, q, u, t) \in X \wedge (q, \alpha, \epsilon, p) \in \Delta^\Sigma \}$
-    }
-    \end{algorithm}
-
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{step(k, X, P_1, P_2)} \smallskip$} {
-        $\{ x_i \}_{i=1}^{n} = \{(q_i, p_i, u_i, t_i) \}_{i=1}^{n} = X$ \;
-
-        \For {$i = \overline {1, n}$} {
-            \For {$j = \overline {1, n}$} {
-                $(h_1, h_2, l) = precedence (x_i, x_j, P_1, P_2)$ \;
-                $P_1' [p_i] [p_j] = h_1, \; P_2' [p_i] [p_j] = l$ \;
-                $P_1' [p_j] [p_i] = h_2, \; P_2' [p_j] [p_i] = -l$
-            }
-        }
-        \BlankLine
-        \Return $(X, P_1', P_2')$ \;
-    }
-    \end{algorithm}
-
-    \columnbreak
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline {precedence (x, y, P_1, P_2)} \smallskip$} {
-        $(q, \Xund, \gamma, \Xund) = x$, where $\gamma = a_1 \dots a_n, \; n \geq 0$ \;
-        $(p, \Xund, \delta, \Xund) = y$, where $\delta = b_1 \dots b_m, \; m \geq 0$ \;
-        $k = 1, \; hx = hy = \infty$ \;
-        $\ff = (q = p)$ \tcp{is fork frame?}
-
-        \BlankLine
-        \tcp{identical}
-        \lIf { $\ff \wedge \gamma = \delta$ } {
-            \Return $(hx, hy, 0)$
-        }
-
-        \BlankLine
-        \tcp {longest-precedence}
-        \If { $\ff$ } {
-            \lWhile {$k \leq min (n, m) \wedge a_k = b_k$} {
-              $k = k + 1$ %\tcp{first mismatch}
-            }
-            \lIf {$k > 1$} {
-                $hx = hy = height (a_{k-1})$
-            }
-        } \Else {
-            $hx = P_1 [q] [p], \; hy = P_1 [p] [q]$
-        }
-        \lFor {$i = \overline{k, n}$} {
-            $hx = min (hx, height (a_i))$
-        }
-        \lFor {$i = \overline{k, m}$} {
-            $hy = min (hy, height (b_i))$
-        }
-        \lIf {$hx > hy$} {\Return $(hx, hy, -1)$}
-        \lIf {$hx < hy$} {\Return $(hx, hy, 1)$}
-
-        \BlankLine
-        \tcp {leftmost-precedence}
-        \If { $\ff$ } {
-            \lIf {$k = n = m$} { $l = 0$ }
-            \lElseIf {$k = n$} { $l = -1$ }
-            \lElseIf {$k = m$} { $l = 1$ }
-            \lElseIf {$a_k mod 2 \equiv 0$} { $l = -1$ }
-            \lElseIf {$b_k mod 2 \equiv 0$} { $l = 1$ }
-            \lElseIf {$a_k > b_k$} { $l = -1$ }
-            \lElseIf {$a_k < b_k$} { $l = 1$ }
-        } \lElse {
-            $l = P_2 [q] [p]$
-        }
-        \Return $(hx, hy, l)$
-    }
-    \end{algorithm}
-\end{multicols}
-\vspace{-2em}
-\begin{center}
-\caption{Matching algorithm.}
-\end{center}
-\end{figure*}
-
-
-\begin{figure*}
-\begin{multicols}{2}
-    \setstretch{0.8}
-    \newcommand \outputoffsets {out\!put \Xund o\!f\!\!f\!sets}
-    \newcommand \outputparsetree {out\!put \Xund parse \Xund tree}
-    \newcommand \parsetree {parse \Xund tree}
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
-    \Fn {$\underline{\outputparsetree(s)} \smallskip$} {
-        \Return $\parsetree(s,1)$
-    }
-    \end{algorithm}
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
-    \Fn {$\underline{\parsetree(s, i)} \smallskip$} {
-        \lIf {$s = \epsilon$} {
-            \Return $\epsilon^i$
-        }
-        \lIf {$s = \alpha \in \Sigma$} {
-            \Return $\alpha^i$
-        }
-        $a_0 \dots a_n = s$ where $n \geq 1$ \;
-        $j = k = 0$ \;
-        \While {$k < n$} {
-            $k' = k$ \;
-            $i' = (|a_{k'}| + 1) / 2$ \;
-            \lWhile {$|a_{k+1}| \geq 2i'$} {
-                $k = k + 1$
-            }
-            $j = j + 1$ \;
-            \lIf {$a_{k'} < 0$} {$t_j = \varnothing^{i'}$}
-            \lElse {$t_j = \parsetree (a_{k'+1} \dots a_{k-1}, i')$ }
-        }
-        \Return $T^i(t_1, \dots, t_j)$
-    }
-    \end{algorithm}
-
-    \columnbreak
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
-    \Fn {$\underline{\outputoffsets(s)} \smallskip$} {
-        $a_1 \dots a_n = s$ \;
-        $pos = 0$ \;
-        \For {$i = \overline {1, n}$} {
-            \lIf {$a_i \in \Sigma$} {
-                $pos = pos + 1$
-            }
-            \Else {
-                $p = pos$ \;
-                \lIf {$a_i < 0$} {$p = -1$}
-                \lIf {$a_i mod 2 \equiv 0$} {$pmatch[|a_i|/2].rm \Xund so = p$}
-                \lElse {$pmatch[(|a_i| - 1)/2].rm \Xund eo = p$}
-            }
-        }
-        \Return $pmatch$ \;
-    }
-    \end{algorithm}
-\end{multicols}
-\vspace{-2em}
-\begin{center}
-\caption{Two possible $output()$ functions.}
-\end{center}
-\end{figure*}
-
-
 
 \clearpage
 \pagebreak
