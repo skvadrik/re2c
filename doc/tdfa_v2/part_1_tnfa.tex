@@ -77,18 +77,21 @@
 \newcommand{\XX}{\mathcal{X}}
 \newcommand{\YB}{\mathbb{B}}
 \newcommand{\YC}{\mathbb{C}}
+\newcommand{\YK}{\mathbb{K}}
 \newcommand{\YF}{\mathbb{F}}
 \newcommand{\YN}{\mathbb{N}}
 \newcommand{\YT}{\mathbb{T}}
 \newcommand{\YQ}{\mathbb{Q}}
+\newcommand{\YP}{\mathbb{P}}
 \newcommand{\YZ}{\mathbb{Z}}
 \newcommand{\PT}{PT}
 \newcommand{\PE}{P\!E}
+\newcommand{\PR}{P\!R}
 \newcommand{\IPT}{I\!PT}
 \newcommand{\IRE}{I\!RE}
 
 \newcommand{\Xstirling}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
-\newcommand*{\Xbar}[1]{\overline{#1\vphantom{\bar{#1}}}}
+\newcommand*{\Xbar}[1]{\overline{#1}}
 \newcommand{\pnorm}[2]{\|{#1}\|^{Pos}_{#2}}
 \newcommand{\snorm}[2]{\|{#1}\|^{Sub}_{#2}}
 
@@ -117,7 +120,7 @@
 
 \begin{document}
 
-\title{Practical POSIX Submatch Extraction on NFA}
+\title{Efficient POSIX Submatch Extraction on NFA}
 
 \author[1]{Angelo Borsotti}
 \author[2]{Ulya Trofimovich}
@@ -135,7 +138,7 @@ where $n$ is the length of input, $m$ is the size of regular expression
 and $t$ is the number of capturing groups plus enclosing subexpressions.
 We perform comparative study of other algorithms
 and show that our algorithm outperforms other POSIX matching algorithms,
-and stays reasonably close to leftmost greedy matching (a couple of times slower on average).
+and stays reasonably close to leftmost greedy matching. % (a couple of times slower on average).
 We also show that backward matching algorithm proposed by Cox is incorrect.
 }
 
@@ -313,10 +316,11 @@ Our contributions are as follows:
         in cases like \texttt{(a(b)?)*} and string \texttt{aba}.
 
     \item We consider $\epsilon$-closure construction as a shortest-path problem
-        and show that TNFA paths together with operations of path comparison and concatenation form a right-distributive semiring.
-        This allows us to apply the well-known algorithm by Goldberg-Radzik based on the idea of topological order.
-        It has worst-case optimal quadratic complexity in the size of closure,
-        and guaranteed linear complexity if the closure has no loops.
+        and show that path concatenation is right-distributive over path comparison
+        for the subset of paths considered by closure algorithm.
+        This justifies the use of Goldberg-Radzik algorithm based on the idea of topological order,
+        which has worst-case optimal quadratic complexity in the size of closure
+        and guaranteed linear complexity if the closure has no $\epsilon$-loops.
         This is an improvement over naive exhaustive depth-first search with backtracking,
         and also an improvement over Laurikari algorithm as shown in [Tro17].
 
@@ -334,23 +338,28 @@ Our contributions are as follows:
 \end{itemize}
 
 The rest of this paper is arranged as follows.
-In the next section we describe the main idea and the skeleton of the algorithm.
-In the following sections we fill in the gaps:
-in section [??] we consider different possible outputs of the algorithm,
-in section [??] we build $\epsilon$-closure,
-in section [??] we construct TNFA.
-Finally, section [??] contains benchmarks
-and section [??] concludes.
+In section \ref{section_main} we give the skeleton of the algorithm.
+In section \ref{section_formalization} we give formal definitions and theorems
+that allow us to establish correctness of our algorithm
+(the more practical reader may choose to skip it on the first reading).
+After that, we go into specific details:
+in section \ref{section_closure} we give algorithms for $\epsilon$-closure construction,
+in section \ref{section_pathtree} we discuss efficient representation of TNFA paths,
+in section \ref{section_comparison} we give the core disambiguation algorithms,
+in section \ref{section_results} we discuss different possible outputs of the algorithm
+and in section \ref{section_tnfa} we give specific TNFA construction.
+The remaining sections \ref{section_benchmarks} and \ref{section_conclusion}
+contain benchmarks, conclusions and directions for future work.
 
-\section{The main idea}\label{secion_main}
+\section{The main idea}\label{section_main}
 
 Our algorithm is based on four cornerstone concepts:
 regular expressions, parse trees, parenthesized expressions and tagged NFA.
-The first two are needed to formulate submatch extraction problem
-and define POSIX disambiguation semantics in terms of comparison of parse trees.
-Parenthesized expressions are linearized representation of parse trees
-that allow us to give an equivalent, but more practical definition of comparison.
-Finally, automata with tagged transitions are used to encode parentheses
+The first two concepts are needed to formulate submatch extraction problem
+and define POSIX disambiguation semantics in terms of order on parse trees.
+From that we go to parenthesized expressions --- a linearized representation of parse trees
+that have an equivalent, but more practical definition of order.
+Finally, we encode parenthesized expressions in automata paths
 and construct an efficient matching algorithm.
 In this section we give the four basic definitions, followed by a sketch of the algorithm.
 In later sections we fill in all the details and provide connection between different representations.
@@ -442,23 +451,24 @@ which allows us to impose specific order of TNFA traversal
 \setstretch{0.8}
 \Fn {$\underline{match \big( N \!\!=\! (\Sigma, Q, T, \Delta, q_0, q_f), \; \alpha_1 \!\hdots\! \alpha_n \big)} \smallskip$} {
 
-    $B, D : \YZ^{|Q| \times |Q|}$ \;
+    $B, D : \text{square matrices in } \YZ^{|Q| \times |Q|}, \; U: \text{path context}$ \;
     $r_0 = initial \Xund result(T)$ \;
-    $X = \big\{ (q_0, \varnothing, \epsilon, r_0) \big\}, \; i = 1$ \;
+    $u_0 = empty \Xund path(\,)$ \;
+    $X = \big\{ (q_0, \varnothing, u_0, r_0) \big\}, \; i = 1$ \;
 
     \BlankLine
     \While {$i \leq n \wedge X \neq \emptyset$} {
-        $X = closure(N, X, B, D)$ \;
+        $X = closure(N, X, U, B, D)$ \;
         $X = update \Xund result(X, i, \alpha_i)$ \;
-        $(B, D) = update \Xund ptables(X, B, D, i)$ \;
-        $X = \big\{ (q, o, \epsilon, t) \mid (o, \Xund, \Xund, t) \in X \wedge (o, \alpha_i, \epsilon, q) \in \Delta^\Sigma \big\}$ \;
+        $(B, D) = update \Xund ptables(X, U, B, D)$ \;
+        $X = \big\{ (q, o, u_0, r) \mid (o, \Xund, \Xund, r) \in X \wedge (o, \alpha_i, \epsilon, q) \in \Delta^\Sigma \big\}$ \;
         $i = i + 1$ \;
     }
 
     \BlankLine
-    $X = closure(N, X, B, D)$ \;
+    $X = closure(N, X, U, B, D)$ \;
     \If {$(q_f, \Xund, u, r) \in X$} {
-        \Return $f\!inal \Xund result (u, r, n)$
+        \Return $f\!inal \Xund result (U, u, r, n)$
     } \lElse {
         \Return $\varnothing$
     }
@@ -479,7 +489,8 @@ Configuration is a tuple $(q, o, u, r)$.
 The first component $q$ is a TNFA state that is unique for each configuration in the current set.
 Components $o$ and $u$ keep information about the path by which $q$ was reached:
 $o$ is the \emph{origin} state used as index in precedence tables,
-and $u$ is the sequence of tags on path fragment constructed by $closure()$.
+and $u$ is a path fragment constructed by $closure()$.
+Specific representation of path fragments is hidden behind path context $U$ and function stub $empty \Xund path ()$.
 Finally, $r$-component is a partial match result associated with state $q$.
 Most of the real work happens inside of $closure()$ and $update \Xund ptables ()$, both of which remain undefined for now.
 The $closure()$ function builds $\epsilon$-closure of the current configuration set:
@@ -494,26 +505,24 @@ $closure ()$ will use origin states to lookup comparison results in $B$ and $D$ 
 On the other hand, if the paths do not meet, then comparison performed by $update \Xund ptables ()$ is redundant.
 Unfortunately we cannot get rid of redundant comparisons:
 we do not know in advance which configurations will spawn ambiguous paths.
-It is possible to delay disambiguation until the paths meet,
+It is possible to delay disambiguation until ambiguous paths meet,
 but that would require keeping arbitrary long paths in memory.
 Eager comparison is a tradeoff that allows the algorithm work in bounded memory at the expense of some time overhead.
 \\
 
 %\vfill\null
 
-\section{Formalization}
+\section{Formalization}\label{section_formalization}
 
-According to the POSIX standard,
+In this section we establish the connection between all intermediate representations.
+First of all, we rewrite REs in a form that makes submatch information explicit:
+to each subexpression we assign an \emph{implicit} and \emph{explicit} submatch index, where
+explicit indices enumerate submatch groups (for all other subexpressions they are zero),
+and implicit indices enumerate submatch groups and subexpressions that are not submatch groups,
+but contain nested or sibling groups and need to be considered by disambiguation.
+This form reflects POSIX standard, which states that
 submatch extraction applies only to parenthesized subexpressions,
 but the longest-match rule applies to all subexpressions regardless of parentheses.
-Therefore first of all we rewrite REs in a form that makes submatch information explicit.
-Namely, we equip every subexpression with an \emph{implicit} and \emph{explicit} submatch index.
-Explicit indices enumerate submatch groups; for all other subexpressions they are zero.
-Implicit indices enumerate submatch groups and subexpressions that are not submatch groups,
-but contain nested or sibling groups and need to be considered by disambiguation.
-%If both indices are zero, then the subexpression is completely ignored from disambiguation perspective.
-%Indices are convenient because they allow us to consider individual sub-REs
-%without loosing the submatch context of the whole RE.
 
     \begin{Xdef}
     \emph{Indexed regular expressions (IRE)} over finite alphabet $\Sigma$, denoted $\XIR_\Sigma$:
@@ -621,8 +630,8 @@ We write $str(t)$ to denote the string formed by concatenation of all alphabet s
 and $\PT(r, w)$ denotes the set $\big\{ t \in \PT(\IRE(r)) \mid str(t) = w \big\}$ of all PTs for a RE $r$ and a string $w$.
 
     \begin{Xdef}\label{ambiguity_of_parse_trees}
+    \emph{Ambiguity of parse trees.}
     PTs $s$ and $t$ are \emph{ambiguous} iff $s \neq t$ and $s, t \in PT(r, w)$ for some RE $r$ and string $w$.
-    $\square$
     \end{Xdef}
 
 Following \ref{OS13}, we assign \emph{positions} to the nodes of RE and PT.
@@ -779,20 +788,21 @@ Function $\Phi$ transforms PT at the given height into PE:
     \end{align*}
     \medskip
 
-For a given RE $r$ and string $w$, the set $\big\{ \Phi_{0}(t) \mid t \in PT(r, w) \big\}$ is denoted $\PE(r, w)$.
-If $\alpha, \beta \in \PE(r, w)$ for some $r$ and $w$, we say that $\alpha$ and $\beta$ are \emph{comparable}.
+For a given RE $r$ and string $w$ the set of all PEs $\big\{ \Phi_{0}(t) \mid t \in PT(r, w) \big\}$ is denoted $\PE(r, w)$,
+and the set of all prefixes in $\PE(r, w)$ is denoted $\PR(r, w)$.
+Each PE $\alpha$ can be represented as $\alpha_0 a_1 \alpha_1 \dots a_n \alpha_n$,
+where $\alpha_i$ is the $i$-th \emph{frame} --- a possibly empty sequence of parentheses between
+subsequent alphabet symbols $a_i$ and $a_{i+1}$ (or the beginning and end of $\alpha$).
+We say that PE prefixes $\alpha$ and $\beta$ are \emph{comparable}
+if they contain the same number of frames and $\alpha, \beta \in \PR(r, w)$ for some $r$ and $w$.
 %
-For PE $\alpha$ and $\beta$,
+For PE fragments $\alpha$ and $\beta$,
 $\alpha \sqcap \beta$ denotes the longest common prefix of $\alpha$ and $\beta$,
 $\alpha \backslash \beta$ denotes the suffix of $\alpha$ after removing $\alpha \sqcap \beta$,
 $lasth(\alpha)$ denotes the height of the last parenthesis in $\alpha$ (or $\infty$ if $\alpha$ is empty or begins with a letter),
 $minh(\alpha)$ denotes the minimal height of parenthesis in $\alpha$ (or $\infty$ if $\alpha$ is empty or begins with a letter),
 $first(\alpha)$ denotes the first parenthesis in $\alpha$ (or $\bot$ if $\alpha$ is empty or begins with a letter).
-Each PE $\alpha$ can be represented as $\alpha_0 a_1 \alpha_1 \dots a_n \alpha_n$,
-where $\alpha_i$ is the $i$-th \emph{frame} --- a possibly empty sequence of parentheses between
-subsequent alphabet symbols $a_i$ and $a_{i+1}$ (or the beginning or end of $\alpha$).
-For comparable PE $\alpha$ and $\beta$ the index of the first distinct pair of frames is called \emph{fork}
-(note that comparable PE have the same number of frames).
+For comparable PE fragments $\alpha$ and $\beta$ the index of the first distinct pair of frames is called \emph{fork}.
 
 \begin{figure}\label{fig_pe}
 \includegraphics[width=\linewidth]{img/pe.pdf}
@@ -806,7 +816,7 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
 %\FloatBarrier
 
     \begin{Xdef}
-    Let $\alpha$, $\beta$ be distinct comparable PE, such that
+    Let $\alpha$, $\beta$ be comparable PE prefixes, such that
     $\alpha = \alpha_0 a_1 \alpha_1 \dots a_n \alpha_n$,
     $\beta = \beta_0 a_1 \beta_1 \dots a_n \beta_n$ and $k$ is the fork.
     We define $trace (\alpha, \beta)$ as the sequence $(\rho_0, \dots, \rho_n)$, where:
@@ -821,7 +831,7 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
     \end{Xdef}
 
     \begin{Xdef}\label{prec1}
-    Let $\alpha$, $\beta$ be comparable PE and
+    Let $\alpha$, $\beta$ be comparable PE prefixes and
     $traces(\alpha, \beta) = \big( (\rho_0, \dots, \rho_n), (\rho'_0, \dots, \rho'_n) \big)$.
     The \emph{longest-precedence} relation $\sqsubset$ is defined as
     $\alpha \sqsubset \beta \Leftrightarrow \exists i \leq n:
@@ -833,7 +843,7 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
     \end{Xdef}
 
     \begin{Xdef}\label{prec2}
-    Let $\alpha$, $\beta$ be comparable PE, and let
+    Let $\alpha$, $\beta$ be comparable PE prefixes, and let
     $x = first (\alpha \backslash \beta)$,
     $y = first (\beta \backslash \alpha)$.
     The \emph{leftmost-precedence} relation $\subset$ is defined as
@@ -843,7 +853,7 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
     \end{Xdef}
 
     \begin{Xdef}\label{pe_order}
-    The \emph{longest-leftmost-precedence} relation $<$ on comparable PE is defined as
+    The \emph{longest-leftmost-precedence} relation $<$ on comparable PE prefixes is defined as
     $\alpha < \beta \Leftrightarrow
         \big( \alpha \sqsubset \beta \big) \vee
         \big( \alpha \sim \beta \wedge \alpha \subset \beta \big)$.
@@ -852,12 +862,409 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
     \begin{XThe}\label{theorem_order_on_pe_same_as_on_pt}
     Let $s, t \in PT(r, w)$, then
     $s <_p t \Leftrightarrow \Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
+    (Proof in apendix [??].)
     \end{XThe}
 
+Now we have a convenient definition of comparison on parenthesized expressions,
+and theorem \ref{theorem_order_on_pe_same_as_on_pt} states that it is equivalent to comparison of parse trees.
+What remains is to show that PEs can be compared \emph{incrementally}.
+This is necessary for an efficient matching algorithm,
+because otherwise we would need to accumulate full-length PEs before comparing them,
+which means unbounded memory consumption --- PEs grow with the length of input.
+Justification of incremental comparison consists of two parts.
+First, lemma \ref{lemma_incr_cmp_frames} states that PEs can be compared frame by frame ---
+this justifies the use of precedence tables.
 
-\section{Comparison of tag histories}
+    \begin{XLem}\label{lemma_incr_cmp_frames}
+    \emph{Frame-by-frame comparison of PEs.}
+    Let $\alpha = \alpha_0 a_1 \dots a_n \alpha_n$ and
+    $\beta = \beta_0 a_1 \dots a_n \beta_n$ be comparable PE prefixes, where $n \geq 1$.
+    If $\alpha_0 \dots \alpha_{n-1} < \beta_0 \dots \beta_{n-1}$,
+    then $\alpha < \beta$.
+    (Proof in apendix [??].)
+    \end{XLem}
 
-\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+Second, in order to construct efficient $\epsilon$-closure algorithm
+we need to show that PEs can be compared incrementally inside of each frame,
+if the corresponding TNFA paths meet at an intermediate state.
+This is necessary to avoid exploring potentially exponential number of paths in closure.
+%
+A \emph{path} in TNFA $(\Sigma, Q, T, \Delta, q_0, q_f)$
+is a sequence of states $\{q_1, \hdots, q_n\} \subseteq Q$
+connected by transitions $\{(q_i, a_i, b_i, q_{i + 1})\}_{i=1}^{n-1} \subseteq \Delta$, where $n \in \YN$.
+%
+Every path induces a string of alphabet symbols
+and a mixed string of symbols and tags which corresponds to a fragment of PE
+(positive opening tags map to $\Xl$, positive closing tags map to $\Xr$,
+and every contiguous sequence of negative tags maps to $\Xm$).
+We write $q_1 \overset {s|\alpha} {\rightsquigarrow} q_2$
+to denote the fact that a path from $q_1$ to $q_2$ induces alphabet string $s$ and PE fragment $\alpha$.
+%
+We extend the notion of order from PEs to paths: given paths
+$\pi_1 = q_1 \overset {s|\alpha} {\rightsquigarrow} q_2$ and
+$\pi_2 = q_1 \overset {s|\beta} {\rightsquigarrow} q_3$
+we say that $\pi_1 < \pi_2$ if $\alpha < \beta$.
+%
+For a given RE $r$ we say that a path is \emph{minimal} if it induces
+$\alpha = \PE(t)$ for some minimal tree $t \in \PT(r)$.
+%
+Two paths are \emph{ambiguous} if their start and end states coincide and they induce the same alphabet string.
+Two paths have a \emph{join point} if they have ambiguous prefixes.
+%
+%We state two facts that are later used to show that closure algorithm finds a minimal path.
+%First, we show that minimal paths do not contain tagged $\epsilon$-loops (lemma \ref{lemma_closure_minpaths}).
+%Second, we show that for paths without tagged $\epsilon$-loops
+%comparison of path prefixes at the join point gives the same result as comparison of extended paths (lemma \ref{lemma_closure_rightdist}).
+%In section \ref{section_closure} we give a specific closure algorithm and show that it discards paths with tagged $\epsilon$-loops.
+
+\newcommand \lemmaclosureminpaths {
+\emph{Paths with tagged $\epsilon$-loops are not minimal.}
+    For any path $\pi_1 \pi_2 \pi_3$ where $\pi_2$ is a tagged $\epsilon$-loop
+    there is path $\pi_1 \pi_3$
+    such that $\pi_1 \pi_3 < \pi_1 \pi_2 \pi_3$.
+}
+\begin{XLem}\label{lemma_closure_minpaths}
+\lemmaclosureminpaths
+(Proof in apendix [??].)
+\end{XLem}
+
+\newcommand \lemmaclosurerightdist {
+    \emph{Right distributivity of path comparison over path concatenation for paths with at most one tagged $\epsilon$-loop.}
+    Let
+    $\pi_\alpha = q_0 \overset {u | \alpha} {\rightsquigarrow} q_1$ and
+    $\pi_\beta  = q_0 \overset {u | \beta}  {\rightsquigarrow} q_1$
+    be ambiguous paths
+    and $\pi_\gamma = q_1 \overset {\epsilon | \gamma} {\rightsquigarrow} q_2$
+    their common $\epsilon$-suffix,
+    such that paths $\pi_\alpha$ and $\pi_\beta$ are loop-free,
+    at most one of $\pi_\alpha \pi_\gamma$ and $\pi_\beta \pi_\gamma$ contains a tagged $\epsilon$-loop.
+    Then $\alpha < \beta \implies \alpha \gamma < \beta \gamma$.
+}
+\begin{XLem}\label{lemma_closure_rightdist}
+\lemmaclosurerightdist
+(Proof in apendix [??].)
+\end{XLem}
+
+%\vfill
+
+\section{$\epsilon$-closure}\label{section_closure}
+
+The problem of constructing $\epsilon$-closure with POSIX disambiguation
+can be formulated as a shortest path problem on directed graph with weighted arcs.
+In our case \emph{weight} corresponds to PE fragment induced by the path.
+%
+We give two algorithms: GOR1 (named after the well-known Goldberg-Radzik algorithm [GRC??])
+and GTOP (named after ``global topological order'').
+Both algorithms have the usual structure of shortest-path finding algorithms.
+%
+The algorithm starts with a queue (of some sort) that contains initial configurations, and loops until the queue becomes empty.
+At each step of the loop it dequeues some configuration and scans $\epsilon$-transitions from its $q$-state.
+For each scanned transition the algorithm constructs a new configuration that combines transition and the old configuration.
+If transition goes to a state that has not been explored yet,
+the new configuration is added to the resulting set.
+Otherwise the algorithm compares the new configuration with the one in resulting set
+and choses one that is better from POSIX perspective.
+If the resulting set was changed, the new configuration is enqueued for further scanning.
+Eventually all states in $\epsilon$-closure are explored, no improvements can be made, and the algorithm terminates.
+\\
+
+%The $\epsilon$-closure algorithm has the usual structure of shortest-path finding algorithms.
+%It starts with initial set of configurations, empty queue of some sort and an empty set of resulting configurations $R$.
+%All initial configurations are enqueued and the algorithm loops until the queue becomes empty.
+%At each iteration of the loop it dequeues some configuration $(q, o, u, r)$ and scans $\epsilon$-transitions from state $q$.
+%For each transition $(q, \Xund, \gamma, p)$ it constructs a new configuration $(p, o, v, r)$, where $v$ combines $u$ and $\gamma$.
+%If $R$ already has another configuration for state $p$,
+%then the algorithm compares configurations and choses one that is better from POSIX perspective.
+%Otherwise it just adds the new configuration to $R$.
+%If $R$ was changed, the new configuration is enqueued for further scanning.
+%Eventually all states in $\epsilon$-closure are explored, no improvements can be made, and the algorithm terminates.
+%\\
+
+\begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+\begin{multicols}{2}
+
+    \newcommand \NOPASS {O\!F\!F}
+    \newcommand \TOPSORT {T\!O\!P}
+    \newcommand \LINEAR {L\!I\!N}
+    \newcommand \INQUEUE {I\!N}
+    \newcommand \OFFQUEUE {OUT}
+    \newcommand \Xfalse {f\!al\!se}
+
+    \setstretch{0.85}
+
+    \Fn {$\underline{closure \Xund gor1(N\!=\!(\Sigma, Q, T, \Delta, q_0, q_f), X, U, B, D)} \smallskip$} {
+
+        \Indm
+        context: $C = (N, U, B, D$ \;
+        \Indp
+        $,\, topsort, linear : \text{stacks of states } q \in Q$ \;
+        $,\, result  : Q \rightarrow \YC \cup \{ \varnothing \}$   \;
+        $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
+        $,\, indeg   : Q \rightarrow \YZ$                          \tcp{in-degree of state}
+        $,\, active  : Q \rightarrow \YB$                          \tcp{true if state needs rescan}
+        $,\, etrans  : Q \rightarrow 2^{\Delta^\epsilon}$          \tcp{$\epsilon$-transitions ordered by priority}
+        $,\, next    : Q \rightarrow \YZ)$                         \tcp{index of current transition}
+        \Indm
+        \Indp
+
+        \BlankLine
+        $result(q) \equiv \varnothing$ \;
+        $status(q) \equiv \NOPASS$ \;
+        $active(q) \equiv \Xfalse$ \;
+        $next(q)   \equiv 1$ \;
+
+        \BlankLine
+        \For {$x = (\Xund, q, \Xund, \Xund) \in X$ sorted by inverted $prec(\,)$} {
+            $result(q) = x$ \;
+            $push(topsort, q)$
+        }
+
+        \BlankLine
+        \While {$topsort$ is not empty} {
+
+            \BlankLine
+            \While {$topsort$ is not empty} {
+                $q = pop(topsort)$ \;
+
+                \If {$status(q) \neq \LINEAR$} {
+
+                    $status(q) = \TOPSORT$ \;
+                    $push(topsort, q)$ \;
+
+                    \BlankLine
+                    \If {$\neg scan(q, C, \Xfalse)$} {
+                        $status(q) = \LINEAR$ \;
+                        $pop(topsort)$ \;
+                        $push(linear, q)$
+                    }
+                }
+            }
+
+            \BlankLine
+            \While {$linear$ is not empty} {
+                $q = pop(linear)$ \;
+
+                \If {$active(q)$} {
+                    $next(q) = 1$ \;
+                    $active(q) = \Xfalse$ \;
+                    $scan(q, C, true)$ \;
+                }
+
+                $status(q) = \NOPASS$ \;
+            }
+        }
+
+        \BlankLine
+        \Return $prune(result, N)$
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline{scan (q, C, all)} \smallskip$} {
+        $any = \Xfalse$ \;
+
+        \While {$next(q) < n$} {
+            $(q, \epsilon, \tau, p) = etrans (q)_{next(q)}$ \;
+            $next(q) = next(q) + 1$ \;
+            $x = result(p), \; (o, q, u, r) = result(q)$ \;
+            $y = (o, p, extend \Xund path (H, u, \tau), r)$ \;
+
+            \BlankLine
+            \If {$x \!=\! \varnothing \vee indeg(p) \!<\! 2 \vee less(y, x, C)$} {
+                $result(p) = y$ \;
+                \If {$status(q) = \NOPASS$} {
+                    $any = true$ \;
+                    $next(p) = 1$ \;
+                    $push(topsort, p)$ \;
+                    \lIf {$\neg all$} {$break$}
+                }
+                \lElse {
+                    $active(p) = 1$
+                }
+            }
+        }
+
+        \Return $any$ \;
+    }
+    \BlankLine
+    \BlankLine
+
+\columnbreak
+
+    \Fn {$\underline{closure \Xund gtop(N\!=\!(\Sigma, Q, T, \Delta, q_0, q_f), X, U, B, D)} \smallskip$} {
+
+        \Indm
+        context: $C = (N, U, B, D$ \;
+        \Indp
+        $,\, queue : \text{priority queue of states } q \in Q$ \;
+        $,\, result  : Q \rightarrow \YC \cup \{ \varnothing \}$   \;
+        $,\, status  : Q \rightarrow \{ \INQUEUE, \OFFQUEUE\}$     \;
+        $,\, indeg   : Q \rightarrow \YZ$                          \tcp{in-degree of state}
+        $,\, topord  : Q \rightarrow \YZ$                          \tcp{topological index of state}
+        $,\, etrans  : Q \rightarrow 2^{\Delta^\epsilon}$          \tcp{$\epsilon$-transitions}
+        \Indm
+        \Indp
+
+        \BlankLine
+        $result(q) \equiv \varnothing$ \;
+        $status(q) \equiv \OFFQUEUE$ \;
+
+        \BlankLine
+        \For {$x = (\Xund, q, \Xund, \Xund) \in X$} {
+            $y = result(q)$ \;
+            \If {$y \!=\! \bot \vee less(x, y, C)$} {
+                $result(q) = x$ \;
+                \If {$status(q) \neq \INQUEUE$} {
+                    $insert \Xund with \Xund priority(queue, q, topord(q))$ \;
+                    $status(q) = \INQUEUE$ \;
+                }
+            }
+        }
+
+        \BlankLine
+        \While {$queue$ is not empty} {
+
+            $q = extract \Xund min(queue)$ \;
+            $status(q) = \OFFQUEUE$ \;
+
+            \BlankLine
+            \For {$(q, \epsilon, \tau, p) \in etrans (q)$} {
+                $x = result(p), \; (o, q, u, r) = result(q)$ \;
+                $y = (o, p, extend \Xund path (H, u, \tau), r)$ \;
+
+                \BlankLine
+                \If {$x \!=\! \varnothing \vee indeg(p) \!<\! 2 \vee less(y, x, C)$} {
+                    $result(p) = y$ \;
+                    \If {$status(p) \neq \INQUEUE$} {
+                        $insert \Xund with \Xund priority(queue, p, topord(p))$ \;
+                        $status(p) = \INQUEUE$ \;
+                    }
+                }
+            }
+        }
+
+        \BlankLine
+        \Return $prune(result, N)$
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline{prune (X, N)} \smallskip$} {
+        \Return $\big\{ (\Xund, q, \Xund, \Xund) \in X \mid
+            q \in F \vee \exists (q, \alpha, \Xund, \Xund) \in \Delta^\Sigma \}$
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline{less (x, y, C)} \smallskip$} {
+        $(\Xund, \Xund, l) = compare (x, y, H, B, D)$ \;
+        \Return $l < 0$
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline{prec (x, y, D)} \smallskip$} {
+        $(q, \Xund, \Xund, \Xund) = x, \; (p, \Xund, \Xund, \Xund) = y$ \;
+        \Return $D[q][p] < 0$
+    }
+    \BlankLine
+    \BlankLine
+
+\end{multicols}
+\vspace{1em}
+\caption{
+Closure algorithms GOR1 (on the left) and GTOP (on the right).
+Definition of functions of $push()$, $pop()$, $insert \Xund with \Xund priority()$, $extract \Xund min()$,
+$indeg()$ and $topord()$ is omitted for brevity.
+Definitions of $compare ()$ and $extend \Xund path ()$ will be given in section \ref{section_comparison}.
+$\YC$ is the set of all configurations.}
+\end{algorithm}
+
+
+An important property of the algorithm is that it finds non-looping paths before looping ones (as many graph traversal algorithms do).
+Given that, and using lemma \ref{lemma_closure_minpaths},
+we can show by induction on path length that the paths constructed at each step of the algorithm do not contain $\epsilon$-loops.
+This means that for any two paths explored by the algorithm,
+at most one path may contain tagged $\epsilon$-loop (and only one loop),
+which justifies the application of lemma \ref{lemma_closure_rightdist}.
+%
+Note that for paths with multiple $\epsilon$-loops right distributivity may not hold:
+it is possible to have paths
+$\pi_\alpha = q_0 \overset {u | \alpha} {\rightsquigarrow} q_1$,
+$\pi_\beta = q_1 \overset {\epsilon | \beta}  {\rightsquigarrow} q_1$ and
+$\pi_\gamma = q_1 \overset {\epsilon | \gamma}  {\rightsquigarrow} q_1$,
+where $\pi_\beta$ and $\pi_\gamma$ are two different $\epsilon$-loops through the same subautomaton
+and $\pi_\alpha \pi_\beta < \pi_\alpha \pi_\gamma$.
+In this case, on one hand $\pi_\alpha < \pi_\alpha \pi_\beta$ because the first is a proper prefix of the second,
+but on the other hand $\pi_\alpha \pi_\gamma < \pi_\alpha \pi_\beta \pi_\gamma$ by assumption that $\pi_\beta < \pi_\gamma$.
+\\
+
+
+Cormen [Cor??] and later Mohri [Moh02] give a framework for shortest-path algorithms based on \emph{closed semirings}.
+%
+A \emph{semiring} is a structure $(\YK, \oplus, \otimes, \Xbar{0}, \Xbar{1})$, where
+$\YK$ is a set,
+$\oplus \!\!:\!\! \YK \times \YK \rightarrow \YK$ is an associative and commutative operation with identity element $\Xbar{0}$,
+$\otimes \!\!:\!\! \YK \times \YK \rightarrow \YK$ is an associative operation with identity element $\Xbar{1}$,
+$\otimes$ distributes over $\oplus$
+and $\Xbar{0}$ is annihilator for $\otimes$.
+%
+Additionally, \emph{closed} semiring requires that
+$\oplus$ is idempotent,
+any countable $\oplus$-sum of $\YK$ elements is in $\YK$,
+and associativity, commutativity, distributivity and idempotence apply to countable $\oplus$-sums.
+(Mohri gives a more general definition and notes that either left or right distributivity is sufficient.)
+%
+In our case the semiring is $(\YP, min, \cdot, \varnothing, \epsilon)$, where
+$\YP$ is the set of closure paths with at most one loop,
+$min$ is POSIX comparison of ambiguous paths,
+$\cdot$ is concatenation of paths,
+$\varnothing$ is an artificial concept of a very long (or absent) path,
+and $\epsilon$ is the empty path.
+%
+It is not exactly a semiring, since the operations of concatenation and comparison are partial,
+but it satisfies the necessary properties:
+$min$ is commutative and associative (theorem \ref{theorem_order_on_pe_same_as_on_pt} and \ref{theorem_sorder_on_PTs}),
+$min(\pi, \varnothing) = min(\varnothing, \pi) = \pi$,
+$\cdot$ is associative, $\pi \cdot \epsilon = \epsilon \cdot \pi = \pi$,
+$\pi \cdot \varnothing = \varnothing \cdot \pi = \varnothing$,
+and right distributivity of $\cdot$ over $min$ for paths with at most one $\epsilon$-loop is given by lemma \ref{lemma_closure_rightdist}.
+%
+Idempotence holds because $min(\pi, \pi) = \pi$.
+%
+Since $\YP$ is limited to paths with at most one $\epsilon$-loop,
+countable subsets of $\YP$ are finite
+and the properties for $\oplus$-sums over countable subsets are satisfied.
+\\
+
+\section{Tree representation of paths}\label{section_pathtree}
+
+Now that we have defined comparison of TNFA paths as comparison of their induced PE fragments
+(see definition \ref{pe_order}),
+we can give comparison functions $compare ()$ and $update \Xund ptables ()$.
+But before we do that, let's consider the data structure used to represent path fragments.
+An obvious representation of path is a sequence of tags, such as a list or an array:
+in that case $empty \Xund path ()$ can be implemented as an empty sequence,
+and $extend \Xund path ()$ is just an append operation.
+However, a more efficient representation is possible.
+The structure of paths in $\epsilon$-closure forms a \emph{prefix tree}, where edges are labeled by tags.
+(Some care is necessary with TNFA construction in order to ensure prefixness,
+but that is easy to accommodate and we give the details in section \ref{section_tnfa}.)
+Storing paths in a prefix tree achieves two purposes:
+first, we save on the duplicated prefixes,
+and second, copying paths becomes as simple as copying a pointer to a tree leaf --- no need to copy the full sequence.
+This technique was used by many researches, e.g. Laurikari mentions a \emph{functional data structure} in [Lau01]
+and Karper describes it as the \emph{flyweight pattern} [Kar15].
+Prefix tree is not always faster than sequences
+(if the tags are few, overhead on traversing linked structure in memory
+may be more pronounced than overhead on copying small arrays)
+but it is more efficient in the general case
+(confirmed by our experiments with Cox algorithm that operates on arrays of offsets).
+\\
+
+\section{Disambiguation procedures}\label{section_comparison}
+
+\begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
 \begin{multicols}{2}
     \setstretch{0.8}
     \newcommand \ff {f\!\!f}
@@ -1039,7 +1446,7 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
 \medskip
 
 
-\section{Representation of match results}
+\section{Match results}\label{section_results}
 
 \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
 \begin{multicols}{2}
@@ -1139,10 +1546,9 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
 \medskip
 
 
-\section{Tagged NFA}
+\section{TNFA construction}\label{section_tnfa}
 
 TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
-
 
 \begin{figure*}
 \begin{multicols}{2}
@@ -1266,7 +1672,7 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
 \end{figure*}
 
 
-
+\iffalse
 \begin{figure}\label{fig_tnfa_example}
 \includegraphics[width=\linewidth]{img/tnfa_example.pdf}
 \vspace{-2em}
@@ -1274,242 +1680,12 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
     Example TNFA for RE $(a|\epsilon)^{0,3}((a^{0,\infty})|(\epsilon))$.
 }
 \end{figure}
+\fi
 
-\clearpage
-\pagebreak
+\section*{Appendix}
 
-
-\begin{figure*}
-\begin{multicols}{2}
-
-    \newcommand \NOPASS {O\!F\!F}
-    \newcommand \TOPSORT {T\!O\!P}
-    \newcommand \LINEAR {L\!I\!N}
-    \newcommand \INQUEUE {I\!N}
-    \newcommand \OFFQUEUE {OUT}
-    \newcommand \Xfalse {f\!al\!se}
-
-    \setstretch{0.85}
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{closure \Xund gor1(X, Q, F, \Delta, P_1, P_2)} \smallskip$} {
-
-        \Indm
-        context: $C = (\; Q, F, \Delta, P_1, P_2$ \;
-        \Indp
-        $,\, topsort, linear : \text{stacks of states } q \in Q$ \;
-        $,\, result  : Q \rightarrow \YC^Q \cup \{ \bot \}$ \;
-        $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
-        $,\, indeg   : Q \rightarrow \YZ$                          \tcp{in-degree of state}
-        $,\, active  : Q \rightarrow \YB$                          \tcp{true if state needs rescan}
-        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcp{ordered set of outgoing transitions}
-        $,\, next    : Q \rightarrow \YZ)$                         \tcp{index of current transition}
-        \Indm
-        \Indp
-
-        \BlankLine
-        \For {$q \in Q$} {
-            $result(q) = \bot$ \;
-            $status(q) = \NOPASS$ \;
-%            $indeg(q)  = $ in-degree of $q$ in $\Delta$ \;
-            $active(q) = \Xfalse$ \;
-%            $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
-            $next(q)   = 1$ \;
-        }
-
-        \BlankLine
-        \For {$x = (\Xund, q, \Xund, \Xund) \in X$ in inverse order of $precede_0$} {
-            $result(q) = x$ \;
-            $push(topsort, q)$
-        }
-
-        \BlankLine
-        \While {$topsort$ is not empty} {
-
-            \BlankLine
-            \While {$topsort$ is not empty} {
-                $q = pop(topsort)$ \;
-
-                \If {$status(q) \neq \LINEAR$} {
-                    $status(q) = \TOPSORT$ \;
-
-                    \While {$true$} {
-                        $p = next \Xund admissible \Xund arc(q, C)$ \;
-                        \If {$p = \bot$} {
-                            $status(q) = \LINEAR$ \;
-                            $push(linear, q)$ \;
-                            $break$
-                        }
-                        \ElseIf {$status(p) = \NOPASS$} {
-                            $push(topsort, q)$ \;
-                            $push(topsort, p)$ \;
-                            $next(p) = 1$ \;
-                            $break$
-                        }
-                        \lElse {$active(p) = true$}
-                    }
-                }
-            }
-
-            \BlankLine
-            \While {$linear$ is not empty} {
-                $q = pop(linear)$ \;
-
-                \If {$active(q)$} {
-                    $next(q) = 1$ \;
-                    \While {$true$} {
-                        $p = next \Xund admissible \Xund arc(q, C)$ \;
-                        \lIf {$p = \bot$} {$break$}
-                        \ElseIf {$status(p) = \NOPASS$} {
-                            $push(topsort, p)$ \;
-                            $next(p) = 1$ \;
-                        }
-                        \ElseIf {$status(p) = \LINEAR$} {
-                            $active(p) = true$ \;
-                        }
-                    }
-                }
-
-                $status(q) = \NOPASS$ \;
-                $active(q) = \Xfalse$ \;
-            }
-        }
-
-%TRIE!!!!!!!
-        \BlankLine
-        \Return $\big\{ (\Xund, q, \Xund, \Xund) = result(q) \mid core(q, C) \}$
-    }
-    \end{algorithm}
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{core (q, C)} \smallskip$} {
-        \tcp{is final or has outgoing transitions on symbols}
-        \Return $q \in F \vee \exists (q, \alpha, \Xund, \Xund) \in \Delta^\Sigma$ \;
-    }
-    \end{algorithm}
-
-
-    \columnbreak
-
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{closure \Xund gtop(X, Q, F, \Delta, P_1, P_2)} \smallskip$} {
-
-        \Indm
-        context: $C = (\; Q, F, \Delta, P_1, P_2$ \;
-        \Indp
-        $,\, queue : \text{priority queue of states } q \in Q$ \;
-        $,\, result  : Q \rightarrow \YC^Q \cup \{ \bot \}$ \;
-        $,\, status  : Q \rightarrow \{ \INQUEUE, \OFFQUEUE\}$     \;
-        $,\, indeg   : Q \rightarrow \YZ$                          \tcp{in-degree of state}
-        $,\, topord  : Q \rightarrow \YZ$                          \tcp{topological index of state}
-        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcp{ordered set of outgoing transitions}
-        $,\, next    : Q \rightarrow \YZ)$                         \tcp{index of current transition}
-        \Indm
-        \Indp
-
-        \BlankLine
-        \For {$q \in Q$} {
-            $result(q) = \bot$ \;
-            $status(q) = \OFFQUEUE$ \;
-%            $indeg(q)  = $ in-degree of $q$ in $\Delta$ \;
-%            $topord(q) = \text{ topological index of } q \text { in TNFA}$ \;
-%            $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
-            $next(q)   = 1$ \;
-        }
-
-        \BlankLine
-        \For {$x = (\Xund, q, \Xund, \Xund) \in X$} {
-            $y = result(q)$ \;
-            \If {$y = \bot \vee precede(x, y, C)$} {
-                $result(q) = x$ \;
-                \If {$status(q) \neq \INQUEUE$} {
-                    $insert \Xund with \Xund priority(queue, q, topord(q))$ \;
-                    $status(q) = \INQUEUE$ \;
-                }
-            }
-        }
-
-        \BlankLine
-        \While {$queue$ is not empty} {
-
-            $q = extract \Xund min(queue)$ \;
-            $status(q) = \OFFQUEUE$ \;
-            $next(q) = 1$ \;
-
-            \While {$true$} {
-                $p = next \Xund admissible \Xund arc(q, C)$ \;
-                \lIf {$p = \bot$} {$break$}
-                \ElseIf {$status(p) \neq \INQUEUE$} {
-                    $insert \Xund with \Xund priority(queue, p, topord(p))$ \;
-                    $status(p) = \INQUEUE$ \;
-                }
-            }
-        }
-
-%TRIE!!!!!!!
-        \BlankLine
-        \Return $\big\{ (\Xund, q, \Xund, \Xund) = result(q) \mid core(q, C) \}$
-    }
-    \end{algorithm}
-
-
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{next \Xund admissible \Xund arc (q, C)} \smallskip$} {
-        $\{ a_1, \dots, a_n \} = arcs (q)$ \;
-        $i = next (q)$ \;
-
-        \While {$i < n$} {
-
-            $(q, \epsilon, \tau, p) = a_i$ \;
-            $next(q) = i = i + 1$ \;
-            $x = (o, p, u \tau, t \tau)$, where $(o, q, u, t) = result(q)$ \;
-            $y = result(p)$ \;
-
-            \If {$y = \bot
-                \vee indeg(p) < 2
-                \vee precede(x, y, C)$} {
-                $result(p) = x$ \;
-                \Return $p$
-            }
-        }
-
-        \Return $\bot$
-    }
-    \end{algorithm}
-
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{precede (x, y, C)} \smallskip$} {
-        $(\Xund, \Xund, l) = precedence (x, y, P_1, P_2)$ \;
-        \Return $l = -1$ %\tcp{true if x precedes y}
-    }
-    \end{algorithm}
-
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{precede_0 (x, y, C)} \smallskip$} {
-        $(p,\Xund,\Xund,\Xund) = x, \; (q,\Xund,\Xund,\Xund) = y$ \;
-        \Return $P_2[p][q] < 0$ \;
-    }
-    \end{algorithm}
-\end{multicols}
-\vspace{-2em}
-\begin{center}
-\caption{GOR1 and GTOP closure algorithms.
-The definitions of $push$, $pop$, $insert \Xund with \Xund priority$, $extract \Xund min$ \\
-$arcs$, $indeg$ and $topord$ are omitted for brevity.
-%topological sorting of TNFA states is also left for the reader.
-$\YC^Q = Q \times Q \times \YZ^* \times \YZ^*$ is the set of all configurations over $Q$.}
-\end{center}
-\end{figure*}
-
-
-\clearpage
-\pagebreak
-
-\section{GOR1 correcness proof}
+\subsection{Correctness of $\epsilon$-closure construction}
+\setcounter{XLem}{0}
 
 For a given RT $r$,
 we say that PE $\alpha$ is \emph{minimal} if $\alpha = PE(t)$ for some minimal $t \in PT(r)$,
@@ -1525,7 +1701,7 @@ and the fact that each sub-TNFA is has a unique entry and exit states.
 TNFA construct for all possible types of RT are shown on the fugure below.
 
 
-
+\iffalse
 \begin{figure}\label{fig_gor1}
 \includegraphics[width=\linewidth]{img/gor1.pdf}
 \caption{
@@ -1533,6 +1709,7 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
 (a) -- union, (b) -- product, (c), (d) -- bounded repetition, (e), (f) -- unbounded repetition.
 }
 \end{figure}
+\fi
 
     \begin{XLem}\label{gor1_path_containment}
     Let $r$ be a RE, $\pi = q_1 \overset {\alpha} {\rightsquigarrow} q_2$ a tagged path in TNFA $F(r)$,
@@ -1552,13 +1729,13 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     \end{XLem}
 
 
-
-
-    \begin{XLem}\label{gor1_minpaths}
-    Minimal paths do not contain tagged $\epsilon$-loops.
-    \\
+\begin{XLem}\label{gor1_minpaths}
+\lemmaclosureminpaths
+\\[0.5em]
+    % Proof in terms of REs and correspondence between subexpression and loop
+    % is a bit hard because of unrolling of repetition in TNFA construction
+    % (there is no direct correspondence between sub-RE and sub-TNFA).
     Proof.
-
     Suppose, on the contrary, that $\pi$ is a minimal path in TNFA $F(r)$, and that $\pi$ contains at least one $\epsilon$-loop.
     Consider the \emph{last} $\epsilon$-loop in $\pi$:
     it can only come from sub-TNFA of the form $F\big( (i, \Xund, (i_1, \Xund, r_1)^{n,\infty}) \big)$ where $n \geq 0$,
@@ -1575,8 +1752,11 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     therefore PE transduced by $\pi$ and $\pi'$ are comparable: $\alpha \beta \gamma, \alpha \gamma \in PE(r, uv)$.
     Let $j$ be the total number of repetitions through $F\big( (i_1, \Xund, r_1) \big)$,
     and let $i$ be the index of the $\epsilon$-loop repetition.
+    Consider two cases:
 
-    First case: $i = j$.
+    \begin{enumerate}[itemsep=0.5em]
+    \item[(1)]
+    $i = j$.
     In this case fork of $\alpha \beta \gamma$ and $\alpha \gamma$ happens immediately after $(i-1)$-th repetition:
     %
     \begin{alignat*}{10}
@@ -1584,14 +1764,14 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
         \alpha \gamma       &= x_0 \Xl_{h-1} \;&&\; \Xl_h x_1 \Xr_h \hdots \Xl_h x_{i-1} \Xr_h \;&&\big|\;                   \;&&\; \Xr_{h-1} x_{j+1}
     \end{alignat*}
     %
-    It must be $\alpha \beta \gamma \sim \alpha \gamma$,
-    because $minh (\beta) = h > h - 1 = minh (first (\gamma))$,
-    so at the fork frame $k$ we have $\rho_k = \rho'_k \leq h - 1$.
-    %
-    Furthermore, it must be $\alpha \gamma \subset \alpha \beta \gamma$,
-    because $first (\gamma) = \Xr < \Xl = first (\beta)$.
+    Since $x_i$ is an $\epsilon$-loop, it is contained in the fork frame of $\alpha \beta \gamma$.
+    We have $minh (\beta) = h$ and $minh (\gamma) \leq h - 1$, therefore $\rho_k = \rho'_k \leq h - 1$.
+    Subsequent frames $l > k$ (if any) are identical and thus $\rho_l = \rho'_l$.
+    Furthermore, $first (\gamma) = \Xr < \Xl = first (\beta)$.
+    Therefore $\alpha \beta \gamma \sim \alpha \gamma$ and $\alpha \gamma \subset \alpha \beta \gamma$.
 
-    Second case: $i < j$.
+    \item[(2)]
+    $i < j$.
     In this case $(i + 1)$-th repetition cannot be an $\epsilon$-loop
     (because we assumed that $i$-th repetition is the \emph{last} $\epsilon$-loop),
     therefore
@@ -1600,26 +1780,37 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     and $(i + 1)$-th repetition of $\alpha \gamma$:
     %
     \begin{alignat*}{10}
-        \alpha \beta \gamma &= x_0 \Xl_{h-1} \;&&\; \Xl_h x_1 \Xr_h \hdots \Xl_h x_{i-1} \Xr_h \Xl_h y_1 \;&&\big|\; y_2 \Xr_h \Xl_h x_{i+1} \Xr_h && \Xl_h x_{i+2} \Xr_h \hdots \Xl_h x_j \Xr_h \;&&\; \Xr_{h-1} x_{j+1} \\[-0.5em]
-        \alpha \gamma       &= x_0 \Xl_{h-1} \;&&\; \Xl_h x_1 \Xr_h \hdots \Xl_h x_{i-1} \Xr_h \Xl_h y_1 \;&&\big|\; y_3 \Xr_h                     && \Xl_h x_{i+2} \Xr_h \hdots \Xl_h x_j \Xr_h \;&&\; \Xr_{h-1} x_{j+1}
+        \alpha \beta \gamma &= x_0 \Xl_{h-1} \;&&\; \Xl_h x_1 \Xr_h \hdots \Xl_h x_{i-1} \Xr_h \Xl_h y_1 \;&&\big|\; y_2 \Xr_h \Xl_h x_{i+1} && \Xr_h \Xl_h x_{i+2} \Xr_h \hdots \Xl_h x_j \Xr_h \;&&\; \Xr_{h-1} x_{j+1} \\[-0.5em]
+        \alpha \gamma       &= x_0 \Xl_{h-1} \;&&\; \Xl_h x_1 \Xr_h \hdots \Xl_h x_{i-1} \Xr_h \Xl_h y_1 \;&&\big|\; y_3                     && \Xr_h \Xl_h x_{i+2} \Xr_h \hdots \Xl_h x_j \Xr_h \;&&\; \Xr_{h-1} x_{j+1}
     \end{alignat*}
     %
-    In this case
-    fork frame of $\alpha \beta \gamma$ contains $y_2 \Xr_h \Xl_h$ fragment, because $y_2$ is part of the $\epsilon$-loop.
-    But the fork frame of $\alpha \gamma$ ends inside of $y_3$, because $(i+1)$-th repetiton is not an $\epsilon$-loop and must contain alphabet symbols.
-    Therefore at the fork frame $k$ we have $\rho_k = h$ and $\rho'_k > h$.
-    All subsequent frames $l > k$ are identical,
-    so either $\rho_l = \rho'_l = h'$ (if $l$-th frame contains parentheses of height $h' \leq h$),
-    or else $\rho_l = \rho_k$ and $\rho'_l = \rho'_k$.
-    Consequently $\alpha \gamma \sqsubset \alpha \beta \gamma$.
+    Here $y_1 y_2 = x_i$ and $y_1 y_3 = x_{i+1}$ ($i$-th iteration is missing from $\alpha \gamma$).
+    Fragment $y_2$ is part of the $\epsilon$-loop,
+    therefore fork frame of $\alpha \beta \gamma$ contains parenthesis $\Xr_h$ and we have $\rho_k = h$.
+    On the other hand, $y_3$ contains alphabet symbols,
+    because $x_{i+1}$ is not an $\epsilon$-loop and $y_1$ is a part of the $\epsilon$-loop.
+    Therefore fork frame of $\alpha \gamma$ ends in $y_3$ and we have $\rho'_k > h$.
+    %
+    %In this case
+    %fork frame of $\alpha \beta \gamma$ contains $y_2 \Xr_h \Xl_h$ fragment, because $y_2$ is part of the $\epsilon$-loop.
+    %But the fork frame of $\alpha \gamma$ ends inside of $y_3$, because $(i+1)$-th repetiton is not an $\epsilon$-loop and must contain alphabet symbols.
+    %Therefore at the fork frame $k$ we have $\rho_k = h$ and $\rho'_k > h$.
+    %
+    All subsequent frames $l > k$ are identical:
+    if they contain parentheses of height less than $h$, then $\rho_l = \rho'_l < h$;
+    otherwise $\rho_l \leq h$ and $\rho'_l > h$.
+    Therefore $\alpha \gamma \sqsubset \alpha \beta \gamma$.
+
+    \end{enumerate}
 
     In both cases $\alpha \gamma < \alpha \beta \gamma$,
     which contradicts the fact that $\pi$ is a minimal path.
     $\square$
-    \end{XLem}
+
+\end{XLem}
 
 
-
+\iffalse
     \begin{XLem}\label{gor1_loops}
     GOR1 discards paths with tagged $\epsilon$-loops.
     \\
@@ -1680,25 +1871,15 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     Thus $\alpha' < \alpha \gamma$.
     $\square$
     \end{XLem}
+\fi
 
 
 
 
-
-    \begin{XLem} \emph{(Right distributivity of path comparison over path concatenation for $\epsilon$-loop free paths.)}
-    Let
-    $\pi_\alpha = q_0 \overset {u | \alpha} {\rightsquigarrow} q_1$ and
-    $\pi_\beta  = q_0 \overset {u | \beta}  {\rightsquigarrow} q_1$
-    be ambiguous paths in TNFA $F(r)$
-    and $\pi_\gamma = q_1 \overset {\epsilon | \gamma} {\rightsquigarrow} q_2$
-    their common $\epsilon$-suffix,
-    such that paths $\pi_\alpha$, $\pi_\beta$
-    and the extended paths $\pi_\alpha \pi_\gamma$, $\pi_\beta \pi_\gamma$
-    are all free from $\epsilon$-loops.
-    Then $\alpha < \beta \implies \alpha \gamma < \beta \gamma$.
-    \\
+    \begin{XLem}
+    \lemmaclosurerightdist
+    \\[0.5em]
     Proof.
-
     Let $k = |u|$ be the number of frames in $\alpha$ and $\beta$.
     Let
     $\big( (\rho_1, \hdots, \rho_k),$ $(\rho'_1, \hdots, \rho'_k) \big) = traces (\alpha, \beta)$ and
@@ -1786,20 +1967,6 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     %
     $\square$
     \end{XLem}
-
-
-
-
-\section{Matching algorithm}
-
-The final algorithm, complexity estimates.
-
-\section{Conclusions}
-
-\FloatBarrier
-\pagebreak
-
-\section*{Appendix}
 
 \subsection*{Proof of Theorem \ref{theorem_order_on_IPTs}}
 
