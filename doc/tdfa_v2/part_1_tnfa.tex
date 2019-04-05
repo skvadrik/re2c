@@ -285,16 +285,17 @@ which seems reasonably close to other approaches.
 
 Undoubtedly other approaches exist,
 but many of them produce incorrect results or require memory proportional to the length of input
-(see Glibc implementation for example [??]).
+(e.g. Glibc [??]).
 We choose automata-based approach over derivatives for two reasons:
 first, we feel that both approaches deserve to be studied and formalized;
-and second, in our experience derivative-based implementation was too slow.
+and second, in our experience derivative-based approach was too slow (possibly due to an imperfect implementation).
 Of the two automata-based approaches, Kuklewicz and Okui-Suzuki, the latter appears to be somewhat faster in practice.
-However, computationally they are very similar:
+However, computationally Kuklewicz and Okui-Suzuki approaches are similar:
 both compare partial matches incrementally at each step,
 only Kuklewicz considers histories of each tag separately.
-Our contributions are as follows:
 \\
+
+Our contributions are the following:
 
 \begin{itemize}[itemsep=0.5em]
 
@@ -1237,39 +1238,251 @@ countable subsets of $\YP$ are finite
 and the properties for $\oplus$-sums over countable subsets are satisfied.
 \\
 
+Both GOR1 and GTOP algorithms are based on the idea of topologcal ordering.
+Unlike other shortest-path algorithms, their queuing discipline is based on graph structure, not on the distance estimates.
+This is crucial, because we do not have any distance estimates:
+paths can be compared, but there is no absolute ``POSIX-ness'' value that we can attribute to each path.
+%
+GOR1 is described in [CGR93].
+It uses two stacks and makes a number of passes;
+each pass consists of a depth-first search on admissible subgraph
+followed by a linear scan of states that are topologically ordered by depth-first search.
+The algorithm is one of the most efficient shortest-path algorithms [CGR96] [CGR99].
+$n$-Pass structure guarantees worst-case complexity $O(n \, m)$ of the Bellman-Ford algorithm,
+where $n$ is the number of states and $m$ is the number of transitions in $\epsilon$-closure
+(both can be approximated by TNFA size).
+%
+GTOP is a simple algorithm that maintains one global priority queue (e.g. a binary heap)
+ordered by the topological index of states (for graphs with cycles, we assume reverse depth-first post-order).
+Since GTOP does not have $n$-pass structure, its worst-case complexity is not clear.
+However, it is much simpler to implement
+and in practice performs almost identically to GOR1 on graphs induced by TNFA $\epsilon$-closures.
+%
+On acyclic graphs, both GOR1 and GTOP have linear $O(n + m)$ complexity.
+
+
 \section{Tree representation of paths}\label{section_pathtree}
 
-Now that we have defined comparison of TNFA paths as comparison of their induced PE fragments
-(see definition \ref{pe_order}),
-we can give comparison functions $compare ()$ and $update \Xund ptables ()$.
-But before we do that, let's consider the data structure used to represent path fragments.
-An obvious representation of path is a sequence of tags, such as a list or an array:
+In this section we specify the representation of path fragments in configurations
+and define path context $U$ and functions $empty \Xund path ()$ and $extend \Xund path ()$
+used in previous sections.
+%
+An obvious way to represent tagged path is to use a sequence of tags, such as a list or an array:
 in that case $empty \Xund path ()$ can be implemented as an empty sequence,
 and $extend \Xund path ()$ is just an append operation.
-However, a more efficient representation is possible.
-The structure of paths in $\epsilon$-closure forms a \emph{prefix tree}, where edges are labeled by tags.
-(Some care is necessary with TNFA construction in order to ensure prefixness,
-but that is easy to accommodate and we give the details in section \ref{section_tnfa}.)
+%
+However, a more efficient representation is possible
+if we consider the structure formed by paths in $\epsilon$-closure.
+This structure is a \emph{prefix tree} of tags.
+Some care is necessary with TNFA construction in order to ensure prefixness,
+but that is easy to accommodate and we give the details in section \ref{section_tnfa}.
 Storing paths in a prefix tree achieves two purposes:
 first, we save on the duplicated prefixes,
 and second, copying paths becomes as simple as copying a pointer to a tree leaf --- no need to copy the full sequence.
 This technique was used by many researches, e.g. Laurikari mentions a \emph{functional data structure} in [Lau01]
 and Karper describes it as the \emph{flyweight pattern} [Kar15].
-Prefix tree is not always faster than sequences
-(if the tags are few, overhead on traversing linked structure in memory
-may be more pronounced than overhead on copying small arrays)
-but it is more efficient in the general case
-(confirmed by our experiments with Cox algorithm that operates on arrays of offsets).
 \\
+
+A convenient represention of tag tree is an indexed sequence of nodes.
+Each node is a triple $(p, s, t)$ where
+$p$ is the index of predecessor node,
+$s$ is a set of indices of successor nodes
+and $t$ is a tag (positive or negative).
+%
+Forward links are only necessary if the advanced algorithm for $update \Xund ptables ()$ is used
+(section \ref{section_comparison}), otherwise successor component can be omitted.
+%
+Now we can represent $u$-components of configurations with indices in the $U$-tree:
+root index is $0$ (which corresponds to the empty path),
+and each $u$-component is a tree index from which we can trace predecessors to the root
+(function $unroll \Xund path ()$ demonstrates this).
+%
+In the implementation, it is important to use numeric indices rather than pointers
+because it allows to use the ``two-fingers'' algorithm to find fork of two paths (section \ref{section_comparison}).
+%
+We assume the existence of functions
+$pred(U, n)$ that returns $p$-component of $n$-th node,
+$succ(U, n)$ that returns $s$-component of $n$-th node and
+$tag(U, n)$ that returns $t$-component of $n$-th node.
+\\
+
+\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+\begin{multicols}{2}
+    \setstretch{0.8}
+
+    \Fn {$\underline {empty \Xund path (\,)} \smallskip$} {
+        \Return $0$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline {extend \Xund path (U, n, \tau)} \smallskip$} {
+        \If {$\tau \neq \epsilon$} {
+            $m = |U| + 1$ \;
+            append $m$ to $succ(U, n)$ \;
+            append $(n, \emptyset, \tau)$ to $U$ \;
+            \Return $m$ \;
+        }
+        \lElse {
+            \Return $n$
+        }
+    }
+    \BlankLine
+
+    \vfill
+
+\columnbreak
+
+    \Fn {$\underline {unroll \Xund path (U, n)} \smallskip$} {
+        $u = \epsilon$ \;
+        \While { $n \neq 0$ } {
+            $u = u \cdot tag(U, n)$ \;
+            $n = pred(U, n)$ \;
+        }
+        \Return $reverse(u)$ \;
+    }
+    \BlankLine
+
+    \vfill
+
+\end{multicols}
+\vspace{1em}
+\caption{Operations on tag tree.}
+\end{algorithm}
+\medskip
+
+
+\section{Representation of match results}\label{section_results}
+
+In this section we show two ways to construct match results: POSIX offsets and a parse tree.
+%
+In the first case, $r$-component of configurations is an array of offset pairs $pmatch$.
+Offsets are updated incrementally at each step by scanning the corresponding path fragment
+and setting negative tags to $-1$ and positive tags to the current step number.
+We need the the most recent value of each tag, therefore we take care to update each tag at most once.
+%
+In the second case, $r$-component of configurations is a tagged string that is accumulated at each step,
+and eventually converted to a parse tree at the end of match.
+The resulting parse tree is only partially structured:
+leaves that correspond to subexpressions with zero implicit submatch index contain ``flattened'' substring alphabet symbols.
+It is possible to construct parse trees incrementally as well,
+but this is more complex and the partial trees may require even more space than tagged strings.
+%
+\\
+
+\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
+\begin{multicols}{2}
+    \setstretch{0.8}
+
+    \Fn {$\underline{initial \Xund result (T)} \smallskip$} {
+        \For {$i = \overline {0, |T| / 2}$} {
+            $pmatch[i].rm \Xund so = -1$ \;
+            $pmatch[i].rm \Xund eo = -1$ \;
+        }
+        \Return $pmatch$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline{update \Xund result (X, U, k, \Xund)} \smallskip$} {
+        \Return $\big\{ (q, o, u, set \Xund tags (U, u, r, k)) \mid (q, o, u, r) \in X \big\}$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline{f\!inal \Xund result (u, r, k)} \smallskip$} {
+        $pmatch = set \Xund tags (U, u, r, k)$ \;
+        $pmatch[0].rm \Xund so = 0$ \;
+        $pmatch[0].rm \Xund eo = k$ \;
+        \Return $pmatch$ \;
+    }
+    \BlankLine
+
+    \Fn {$\underline{set \Xund tags (U, n, pmatch, k)} \smallskip$} {
+        $done(t) \equiv f\!alse$ \;
+        \While {$n \neq 0$} {
+            $t = tag(U, n)$ \;
+            \If {$\neg done(|t|)$} {
+                $done(|t|) = true$ \;
+                \lIf {$t_i < 0$} {$l = -1$}
+                \lElse {$l = k$}
+                \lIf {$t_i mod \, 2 \equiv 0$} {$pmatch[|t_i|/2].rm \Xund eo = l$}
+                \lElse {$pmatch[(|t_i| \!+\! 1)/2].rm \Xund so = l$}
+            }
+            $n = pred(U, n)$ \;
+        }
+        \Return $pmatch$ \;
+    }
+    \BlankLine
+
+    \vfill
+
+\columnbreak
+
+    \Fn {$\underline{initial \Xund result (\Xund)} \smallskip$} {
+        \Return $\epsilon$ \;
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline{update \Xund result (X, U, \Xund, \alpha)} \smallskip$} {
+        \Return $\big\{ (q, o, u, r \cdot unroll \Xund path (U, u) \cdot \alpha) \mid (q, o, u, r) \in X \big\}$ \;
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline{f\!inal \Xund result (U, u, r, \Xund)} \smallskip$} {
+        \Return $parse \Xund tree (r \cdot unroll \Xund path (U, u), 1)$ \;
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline{parse \Xund tree (u, i)} \smallskip$} {
+        \If {$u = (2i \!-\! 1) \cdot (2i)$} {
+            \Return $T^i(\epsilon)$
+        }
+        \If {$u = (1 \!-\! 2i) \cdot \hdots $} {
+            \Return $T^i(\varnothing)$
+        }
+        \If {$u = (2i \!-\! 1) \cdot \alpha_1 \hdots \alpha_n \cdot (2i) \wedge \alpha_1, \hdots, \alpha_n \in \Sigma $} {
+            \Return $T^i(a_1, \hdots, a_n)$
+        }
+        \If {$u = (2i \!-\! 1) \cdot \beta_1 \hdots \beta_m \cdot (2i) \wedge \beta_1 = 2j \!-\! 1 \in T$} {
+            $n = 0, k = 1$ \;
+            \While {$k \leq m$} {
+                $l = k$ \;
+                \lWhile {$|\beta_{k+1}| > 2j$} {
+                    $k = k + 1$
+                }
+                $n = n + 1$ \;
+                $t_n = parse \Xund tree (\beta_l \dots \beta_k, j)$
+            }
+            \Return $T^i(t_1, \dots, t_n)$
+        }
+        \Return $\varnothing$ \tcp{ill-formed PE}
+    }
+    \BlankLine
+
+    \vfill
+
+\end{multicols}
+\vspace{1.5em}
+\caption{Construction of match results: POSIX offsets (on the left) and parse tree (on the right).}
+\end{algorithm}
+\medskip
+
 
 \section{Disambiguation procedures}\label{section_comparison}
 
-\begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+Now that we have defined comparison of TNFA paths through comparison of their induced PE fragments
+(definition \ref{pe_order})
+and specified path representation (section \ref{section_pathtree}),
+we can finally give disambiguation procedures $compare ()$ and $update \Xund ptables ()$.
+%
+\\
+
+\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
 \begin{multicols}{2}
     \setstretch{0.8}
-    \newcommand \ff {f\!\!f}
 
-    \Fn {$\underline {compare ((\Xund, o_1, n_1, \Xund), (\Xund, o_2, n_2, \Xund), B, D)} \smallskip$} {
+    \Fn {$\underline {compare ((\Xund, o_1, n_1, \Xund), (\Xund, o_2, n_2, \Xund), U, B, D)} \smallskip$} {
         \If { $o_1 = o_2 \wedge n_1 = n_2$ } {
             \Return $(\infty, \infty, 0)$
         }
@@ -1286,27 +1499,27 @@ but it is more efficient in the general case
         $m_1 = m_2 = \bot$ \;
         \While {$n_1 \neq n_2$} {
             \If {$n_1 > n_2$} {
-                $h_1 = min(h_1, height(H, n_1))$ \;
-                $m_1 = n_1, n_1 = pred(H, n_1)$ \;
+                $h_1 = min(h_1, height(U, n_1))$ \;
+                $m_1 = n_1, n_1 = pred(U, n_1)$ \;
             }
             \Else {
-                $h_2 = min(h_2, height(H, n_2))$ \;
-                $m_2 = n_2, n_2 = pred(H, n_2)$ \;
+                $h_2 = min(h_2, height(U, n_2))$ \;
+                $m_2 = n_2, n_2 = pred(U, n_2)$ \;
             }
         }
         \If {$n_1 \neq \bot$} {
-            $h_1 = min(h_1, height(H, n_1))$ \;
-            $h_2 = min(h_2, height(H, n_1))$ \;
+            $h_1 = min(h_1, height(U, n_1))$ \;
+            $h_2 = min(h_2, height(U, n_1))$ \;
         }
 
         \BlankLine
-        $l = prec (h_1, h_2, o_1, o_2, m_1, m_2, H, D)$ \;
+        $l = prec (h_1, h_2, o_1, o_2, m_1, m_2, U, D)$ \;
         \Return $(h_1, h_2, l)$ \;
     }
     \BlankLine
     \BlankLine
 
-    \Fn {$\underline {prec (h_1, h_2, o_1, o_2, n_1, n_2, H, D)} \smallskip$} {
+    \Fn {$\underline {prec (h_1, h_2, o_1, o_2, n_1, n_2, U, D)} \smallskip$} {
         \lIf {$h_1 > h_2$} { \Return $-1$ }
         \lIf {$h_1 < h_2$} { \Return $1$ }
 
@@ -1319,7 +1532,7 @@ but it is more efficient in the general case
         \lIf {$n_2 = \bot$} { \Return $1$ }
 
         \BlankLine
-        $t_1 = tag(H, n_1), \; t_2 = tag(H, n_2)$ \;
+        $t_1 = tag(U, n_1), \; t_2 = tag(U, n_2)$ \;
 
         \BlankLine
         \lIf {$t_1 mod \, 2 \equiv 0$} { \Return $-1$ }
@@ -1335,10 +1548,10 @@ but it is more efficient in the general case
     \BlankLine
     \BlankLine
 
-    \Fn {$\underline {update \Xund ptables (X, B, D)} \smallskip$} {
+    \Fn {$\underline {update \Xund ptables (X, U, B, D)} \smallskip$} {
         \For {$x_1 = (q_1, \Xund, \Xund, \Xund) \in X$} {
             \For {$x_2 = (q_2, \Xund, \Xund, \Xund) \in X$} {
-                $(h_1, h_2, l) = compare (x_1, x_2, B, D)$ \;
+                $(h_1, h_2, l) = compare (x_1, x_2, U, B, D)$ \;
                 $B' [q_1] [q_2] = h_1, \; D' [q_1] [q_2] = l$ \;
                 $B' [q_2] [q_1] = h_2, \; D' [q_2] [q_1] = -l$
             }
@@ -1350,7 +1563,7 @@ but it is more efficient in the general case
     \vfill
     \columnbreak
 
-    \Fn {$\underline {update \Xund ptables (X, B, D)} \smallskip$} {
+    \Fn {$\underline {update \Xund ptables (X, U, B, D)} \smallskip$} {
         $n_0 = root(H), \; i = 0, \; next(n) = 1 \; \forall n$ \;
         $push(S, n_0)$ \;
 
@@ -1368,7 +1581,7 @@ but it is more efficient in the general case
             }
 
             \BlankLine
-            $h = height(H, n), \; i_1 = i$ \;
+            $h = height(U, n), \; i_1 = i$ \;
 
             \BlankLine
             \For {$(q, o, n_1, \Xund) \in X \mid n_1 = n$} {
@@ -1418,7 +1631,7 @@ but it is more efficient in the general case
                         }
 
                         \BlankLine
-                        $l = prec (h_1, h_2, o_1, o_2, n_1, n_2, H, D)$ \;
+                        $l = prec (h_1, h_2, o_1, o_2, n_1, n_2, U, D)$ \;
                     }
 
                     \BlankLine
@@ -1445,105 +1658,24 @@ but it is more efficient in the general case
 \end{algorithm}
 \medskip
 
-
-\section{Match results}\label{section_results}
-
-\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
-\begin{multicols}{2}
-    \setstretch{0.8}
-
-    \Fn {$\underline{initial \Xund result (T)} \smallskip$} {
-        \For {$i = \overline {0, |T| / 2}$} {
-            $pmatch[i].rm \Xund so = -1$ \;
-            $pmatch[i].rm \Xund eo = -1$ \;
-        }
-        \Return $pmatch$ \;
-    }
-    \BlankLine
-
-    \Fn {$\underline{update \Xund result (X, k, \Xund)} \smallskip$} {
-        \Return $\big\{ (q, o, u, apply \Xund tags (u, r, k)) \mid (q, o, u, r) \in X \big\}$ \;
-        %\For {$(q, o, t_1 \hdots t_n, pmatch) \in X$} {
-        %    \For {$i = \overline {1, n}$} {
-        %        \lIf {$t_i < 0$} {$l = -1$}
-        %        \lElse {$l = k$}
-        %        \lIf {$t_i mod \, 2 \equiv 0$} {$pmatch[|t_i|/2].rm \Xund so = l$}
-        %        \lElse {$pmatch[(|t_i| - 1)/2].rm \Xund eo = l$}
-        %    }
-        %}
-        %\Return $X$ \;
-    }
-    \BlankLine
-
-    \Fn {$\underline{f\!inal \Xund result (u, r, k)} \smallskip$} {
-        $pmatch = apply \Xund tags (u, r, k)$ \;
-        $pmatch[0].rm \Xund so = 0$ \;
-        $pmatch[0].rm \Xund eo = k$ \;
-        \Return $pmatch$ \;
-    }
-    \BlankLine
-
-    \Fn {$\underline{apply \Xund tags (t_1 \hdots t_n, pmatch, k)} \smallskip$} {
-        \For {$i = \overline {1, n}$} {
-            \lIf {$t_i < 0$} {$l = -1$}
-            \lElse {$l = k$}
-            \lIf {$t_i mod \, 2 \equiv 0$} {$pmatch[|t_i|/2].rm \Xund eo = l$}
-            \lElse {$pmatch[(|t_i| \!+\! 1)/2].rm \Xund so = l$}
-        }
-        \Return $pmatch$ \;
-    }
-    \BlankLine
-
-    \vfill
-
-\columnbreak
-
-    \Fn {$\underline{initial \Xund result (\Xund)} \smallskip$} {
-        \Return $\epsilon$ \;
-    }
-    \BlankLine
-
-    \Fn {$\underline{update \Xund result (X, \Xund, \alpha)} \smallskip$} {
-        \Return $\big\{ (q, o, u, r \cdot u \cdot \alpha) \mid (q, o, u, r) \in X \big\}$ \;
-    }
-    \BlankLine
-
-    \Fn {$\underline{f\!inal \Xund result (u, r, \Xund)} \smallskip$} {
-        \Return $parse \Xund tree (r \cdot u, 1)$ \;
-    }
-    \BlankLine
-
-    \Fn {$\underline{parse \Xund tree (u, i)} \smallskip$} {
-        \If {$u = (2i \!-\! 1) \cdot (2i)$} {
-            \Return $T^i(\epsilon)$
-        }
-        \If {$u = (1 \!-\! 2i) \cdot \hdots $} {
-            \Return $T^i(\varnothing)$
-        }
-        \If {$u = (2i \!-\! 1) \cdot \alpha_1 \hdots \alpha_n \cdot (2i) \wedge \alpha_1, \hdots, \alpha_n \in \Sigma $} {
-            \Return $T^i(a_1, \hdots, a_n)$
-        }
-        \If {$u = (2i \!-\! 1) \cdot \beta_1 \hdots \beta_m \cdot (2i) \wedge \beta_1 = 2j \!-\! 1 \in T$} {
-            $n = 0, k = 1$ \;
-            \While {$k \leq m$} {
-                $l = k$ \;
-                \lWhile {$|\beta_{k+1}| > 2j$} {
-                    $k = k + 1$
-                }
-                $n = n + 1$ \;
-                $t_n = parse \Xund tree (\beta_l \dots \beta_k, j)$
-            }
-            \Return $T^i(t_1, \dots, t_n)$
-        }
-        \Return $\varnothing$ \tcp{ill-formed PE}
-    }
-    \BlankLine
-
-\end{multicols}
-\vspace{1.5em}
-\caption{Construction of match results: POSIX offsets (on the left) and parse tree (on the right).}
-\end{algorithm}
-\medskip
+We give two alternative algorithms for $update \Xund ptables ()$:
+a simple one with $O(m^2 \, t)$ complexity and a complex one with $O(m^2)$ complexity.
+Worst case is demonstrated by RE $((a|\epsilon)^{0,n})^{0,\infty}$ where $n \in \YN$,
+for which simple algorithms takes $O(n^3)$ time and complex algorithms takes $O(n^2)$ time.
+%
+The idea of complex algorithm is to avoid repeated rescanning of path prefixes in the $U$-tree.
+It makes one pass over the tree,
+constructing an array $L$ of \emph{level items} $(q, o, n, h)$, where
+$q$ and $o$ are state and origin as in configurations,
+$n$ is the current tree index and $h$ is the current minimal height.
+One item is added per each closure configuration $(q, o, u, r)$ when traversal reaches tree node with index $u$.
+After a subtree has been traversed,
+the algorithm scans level items corresponding to this subtree,
+sets their $h$-component to the minimum of $h$ and the height of current node,
+and updates $B$ and $D$ matrices for each pair of $q$-states in items from different branches.
+After that, $n$-component of all scanned items is downgraded to tree index of current node
+(erasing the difference between items from different branches).
+\\
 
 
 \section{TNFA construction}\label{section_tnfa}
