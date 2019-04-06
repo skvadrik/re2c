@@ -234,7 +234,7 @@ EXTRA_DIST = \
 	$(re2c_SRC_DOC_EXT) \
 	CHANGELOG \
 	NO_WARRANTY \
-	README \
+	README.md \
 	autogen.sh \
 	genhelp.sh \
 	doc/loplas.ps \
