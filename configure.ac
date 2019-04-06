@@ -14,6 +14,10 @@ AC_SUBST(PACKAGE_TARNAME)
 AC_SUBST(PACKAGE_RELEASE, ${PACKAGE_RELEASE:-1})
 
 
+# without this, --std=c++98 disables POSIX functions on Cygwin
+AC_USE_SYSTEM_EXTENSIONS
+
+
 # --enable-debug
 AC_ARG_ENABLE([debug], [AS_HELP_STRING([--enable-debug],
     [enable checks and assertions])])
