@@ -31,6 +31,9 @@
 \SetCommentSty{Xcommentfont}
 \SetNoFillComment
 
+\let\oldnl\nl % Store \nl in \oldnl
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}} % Remove line number for one line
+
 \SetNlSty{textnormal}{}{}
 
 \renewcommand{\algorithmcfname}{ALGORITHM}
@@ -48,6 +51,7 @@
 \usepackage{enumitem}
 \usepackage[justification=centering]{caption}
 \usepackage{url}
+\usepackage{vwcol}
 \usepackage[section]{placeins}
 
 \newcommand{\Xl}{\langle}
@@ -296,6 +300,7 @@ only Kuklewicz considers histories of each tag separately.
 \\
 
 Our contributions are the following:
+\\[-0.5em]
 
 \begin{itemize}[itemsep=0.5em]
 
@@ -418,7 +423,7 @@ In later sections we fill in all the details and provide connection between diff
     \begin{itemize}
         \item[] $\Sigma$ is a finite set of symbols (\emph{alphabet})
         \item[] $Q$ is a finite set of \emph{states}
-        \item[] $T\subset\YN$ is a finite set of \emph{tags}
+        \item[] $T \subset \YN \times \YZ$ is a mapping of \emph{tags} to their submatch groups
         \item[] $\Delta = \Delta^\Sigma \sqcup \Delta^\epsilon$ is the \emph{transition} relation,
             consisting of two parts:
         \begin{itemize}
@@ -460,8 +465,8 @@ which allows us to impose specific order of TNFA traversal
     \BlankLine
     \While {$i \leq n \wedge X \neq \emptyset$} {
         $X = closure(N, X, U, B, D)$ \;
-        $X = update \Xund result(X, i, \alpha_i)$ \;
-        $(B, D) = update \Xund ptables(X, U, B, D)$ \;
+        $X = update \Xund result(T, X, U, i, \alpha_i)$ \;
+        $(B, D) = update \Xund ptables(N, X, U, B, D)$ \;
         $X = \big\{ (q, o, u_0, r) \mid (o, \Xund, \Xund, r) \in X \wedge (o, \alpha_i, \epsilon, q) \in \Delta^\Sigma \big\}$ \;
         $i = i + 1$ \;
     }
@@ -469,7 +474,7 @@ which allows us to impose specific order of TNFA traversal
     \BlankLine
     $X = closure(N, X, U, B, D)$ \;
     \If {$(q_f, \Xund, u, r) \in X$} {
-        \Return $f\!inal \Xund result (U, u, r, n)$
+        \Return $f\!inal \Xund result (T, U, u, r, n)$
     } \lElse {
         \Return $\varnothing$
     }
@@ -954,32 +959,21 @@ The problem of constructing $\epsilon$-closure with POSIX disambiguation
 can be formulated as a shortest path problem on directed graph with weighted arcs.
 In our case \emph{weight} corresponds to PE fragment induced by the path.
 %
-We give two algorithms: GOR1 (named after the well-known Goldberg-Radzik algorithm [GRC??])
-and GTOP (named after ``global topological order'').
-Both algorithms have the usual structure of shortest-path finding algorithms.
+We give two algorithms: GOR1, named after the well-known Goldberg-Radzik algorithm [GRC??],
+and GTOP, named after ``global topological order''.
 %
-The algorithm starts with a queue (of some sort) that contains initial configurations, and loops until the queue becomes empty.
-At each step of the loop it dequeues some configuration and scans $\epsilon$-transitions from its $q$-state.
-For each scanned transition the algorithm constructs a new configuration that combines transition and the old configuration.
-If transition goes to a state that has not been explored yet,
-the new configuration is added to the resulting set.
-Otherwise the algorithm compares the new configuration with the one in resulting set
-and choses one that is better from POSIX perspective.
+Both have the usual structure of shortest-path finding algorithms.
+The algorithm starts with initial set of configurations, empty queue of some sort and an empty set of resulting configurations.
+Initial configurations are enqueued and the algorithm loops until the queue becomes empty.
+At each iteration it dequeues configuration $(q, o, u, r)$ and scans $\epsilon$-transitions from state $q$.
+For transition $(q, \Xund, \gamma, p)$ it constructs a new configuration $(p, o, v, r)$
+that combines $u$ and $\gamma$ in an extended path $v$.
+If the resulting set contains another configuration for state $p$,
+then the algorithm choses configuration which has a better path from POSIX perspective.
+Otherwise it adds the new configuration to the resulting set.
 If the resulting set was changed, the new configuration is enqueued for further scanning.
 Eventually all states in $\epsilon$-closure are explored, no improvements can be made, and the algorithm terminates.
 \\
-
-%The $\epsilon$-closure algorithm has the usual structure of shortest-path finding algorithms.
-%It starts with initial set of configurations, empty queue of some sort and an empty set of resulting configurations $R$.
-%All initial configurations are enqueued and the algorithm loops until the queue becomes empty.
-%At each iteration of the loop it dequeues some configuration $(q, o, u, r)$ and scans $\epsilon$-transitions from state $q$.
-%For each transition $(q, \Xund, \gamma, p)$ it constructs a new configuration $(p, o, v, r)$, where $v$ combines $u$ and $\gamma$.
-%If $R$ already has another configuration for state $p$,
-%then the algorithm compares configurations and choses one that is better from POSIX perspective.
-%Otherwise it just adds the new configuration to $R$.
-%If $R$ was changed, the new configuration is enqueued for further scanning.
-%Eventually all states in $\epsilon$-closure are explored, no improvements can be made, and the algorithm terminates.
-%\\
 
 \begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
 \begin{multicols}{2}
@@ -1158,7 +1152,7 @@ Eventually all states in $\epsilon$-closure are explored, no improvements can be
     \BlankLine
 
     \Fn {$\underline{less (x, y, C)} \smallskip$} {
-        $(\Xund, \Xund, l) = compare (x, y, H, B, D)$ \;
+        $(\Xund, \Xund, l) = compare (x, y, N, U, B, D)$ \;
         \Return $l < 0$
     }
     \BlankLine
@@ -1182,22 +1176,25 @@ $\YC$ is the set of all configurations.}
 \end{algorithm}
 
 
-An important property of the algorithm is that it finds non-looping paths before looping ones (as many graph traversal algorithms do).
+Importantly, the algorithm finds non-looping paths before looping ones.
 Given that, and using lemma \ref{lemma_closure_minpaths},
 we can show by induction on path length that the paths constructed at each step of the algorithm do not contain $\epsilon$-loops.
 This means that for any two paths explored by the algorithm,
 at most one path may contain tagged $\epsilon$-loop (and only one loop),
 which justifies the application of lemma \ref{lemma_closure_rightdist}.
 %
-Note that for paths with multiple $\epsilon$-loops right distributivity may not hold:
-it is possible to have paths
+(Note that for paths with multiple $\epsilon$-loops right distributivity may not hold:
+we may have paths
 $\pi_\alpha = q_0 \overset {u | \alpha} {\rightsquigarrow} q_1$,
 $\pi_\beta = q_1 \overset {\epsilon | \beta}  {\rightsquigarrow} q_1$ and
 $\pi_\gamma = q_1 \overset {\epsilon | \gamma}  {\rightsquigarrow} q_1$,
-where $\pi_\beta$ and $\pi_\gamma$ are two different $\epsilon$-loops through the same subautomaton
-and $\pi_\alpha \pi_\beta < \pi_\alpha \pi_\gamma$.
-In this case, on one hand $\pi_\alpha < \pi_\alpha \pi_\beta$ because the first is a proper prefix of the second,
-but on the other hand $\pi_\alpha \pi_\gamma < \pi_\alpha \pi_\beta \pi_\gamma$ by assumption that $\pi_\beta < \pi_\gamma$.
+such that $\pi_\beta$ and $\pi_\gamma$ are two different $\epsilon$-loops through the same subautomaton
+and $\pi_\alpha \pi_\beta < \pi_\alpha \pi_\gamma$:
+in this case $\pi_\alpha \pi_\beta \pi_\gamma < \pi_\alpha \pi_\gamma$,
+but $\pi_\alpha \pi_\beta > \pi_\alpha$, because the first is a proper prefix of the second.)
+%
+Lemma \ref{lemma_closure_rightdist} allows us to skip comparison in non-join states (with in-degree 1), because
+any path to such state is formed by concatenation of the unique transition and the shortest known path to the previous state.
 \\
 
 
@@ -1358,7 +1355,10 @@ In this section we show two ways to construct match results: POSIX offsets and a
 In the first case, $r$-component of configurations is an array of offset pairs $pmatch$.
 Offsets are updated incrementally at each step by scanning the corresponding path fragment
 and setting negative tags to $-1$ and positive tags to the current step number.
-We need the the most recent value of each tag, therefore we take care to update each tag at most once.
+We need the most recent value of each tag, therefore we take care to update tags at most once.
+Negative tags allow us to skip initialization of offsets.
+Helper function $sub(T, t)$ maps each tag to the corresponding submatch group
+(it returns the second component $k$ for $(t, k) \in T$).
 %
 In the second case, $r$-component of configurations is a tagged string that is accumulated at each step,
 and eventually converted to a parse tree at the end of match.
@@ -1374,37 +1374,38 @@ but this is more complex and the partial trees may require even more space than 
     \setstretch{0.8}
 
     \Fn {$\underline{initial \Xund result (T)} \smallskip$} {
-        \For {$i = \overline {0, |T| / 2}$} {
-            $pmatch[i].rm \Xund so = -1$ \;
-            $pmatch[i].rm \Xund eo = -1$ \;
-        }
-        \Return $pmatch$ \;
+        $n = max \{ sub(T, t) \mid t \in \YN \}$ \;
+        \Return uninitialized $n$-array of pairs $(rm \Xund so, rm \Xund eo)$\;
     }
     \BlankLine
-
-    \Fn {$\underline{update \Xund result (X, U, k, \Xund)} \smallskip$} {
-        \Return $\big\{ (q, o, u, set \Xund tags (U, u, r, k)) \mid (q, o, u, r) \in X \big\}$ \;
-    }
     \BlankLine
 
-    \Fn {$\underline{f\!inal \Xund result (u, r, k)} \smallskip$} {
-        $pmatch = set \Xund tags (U, u, r, k)$ \;
+    \Fn {$\underline{update \Xund result (T, X, U, k, \Xund)} \smallskip$} {
+        \Return $\big\{ (q, o, u, set \Xund tags (T, U, u, r, k))$ \;
+        \Indp\Indp\Indp\Indp\Indp\Indp\Indp\Indp $\mid (q, o, u, r) \in X \big\}$ \; \Indm\Indm\Indm\Indm\Indm\Indm\Indm\Indm
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline{f\!inal \Xund result (T, U, u, r, k)} \smallskip$} {
+        $pmatch = set \Xund tags (T, U, u, r, k)$ \;
         $pmatch[0].rm \Xund so = 0$ \;
         $pmatch[0].rm \Xund eo = k$ \;
         \Return $pmatch$ \;
     }
     \BlankLine
+    \BlankLine
 
-    \Fn {$\underline{set \Xund tags (U, n, pmatch, k)} \smallskip$} {
-        $done(t) \equiv f\!alse$ \;
+    \Fn {$\underline{set \Xund tags (T, U, n, pmatch, k)} \smallskip$} {
+        $done(\Xund) \equiv f\!alse$ \;
         \While {$n \neq 0$} {
-            $t = tag(U, n)$ \;
-            \If {$\neg done(|t|)$} {
-                $done(|t|) = true$ \;
-                \lIf {$t_i < 0$} {$l = -1$}
+            $t = tag(U, n), \; s = sub(T, |t|)$ \;
+            \If {$s \neq 0 \wedge \neg done(s)$} {
+                $done(s) = true$ \;
+                \lIf {$t < 0$} {$l = -1$}
                 \lElse {$l = k$}
-                \lIf {$t_i mod \, 2 \equiv 0$} {$pmatch[|t_i|/2].rm \Xund eo = l$}
-                \lElse {$pmatch[(|t_i| \!+\! 1)/2].rm \Xund so = l$}
+                \lIf {$t \, mod \, 2 \equiv 1$} {$pmatch[s].rm \Xund so = l$}
+                \lElse {$pmatch[s].rm \Xund eo = l$}
             }
             $n = pred(U, n)$ \;
         }
@@ -1422,13 +1423,14 @@ but this is more complex and the partial trees may require even more space than 
     \BlankLine
     \BlankLine
 
-    \Fn {$\underline{update \Xund result (X, U, \Xund, \alpha)} \smallskip$} {
-        \Return $\big\{ (q, o, u, r \cdot unroll \Xund path (U, u) \cdot \alpha) \mid (q, o, u, r) \in X \big\}$ \;
+    \Fn {$\underline{update \Xund result (\Xund, X, U, \Xund, \alpha)} \smallskip$} {
+        \Return $\big\{ (q, o, u, r \cdot unroll \Xund path (U, u) \cdot \alpha)$ \;
+        \Indp\Indp\Indp\Indp\Indp\Indp\Indp\Indp $\mid (q, o, u, r) \in X \big\}$ \; \Indm\Indm\Indm\Indm\Indm\Indm\Indm\Indm
     }
     \BlankLine
     \BlankLine
 
-    \Fn {$\underline{f\!inal \Xund result (U, u, r, \Xund)} \smallskip$} {
+    \Fn {$\underline{f\!inal \Xund result (\Xund, U, u, r, \Xund)} \smallskip$} {
         \Return $parse \Xund tree (r \cdot unroll \Xund path (U, u), 1)$ \;
     }
     \BlankLine
@@ -1471,18 +1473,25 @@ but this is more complex and the partial trees may require even more space than 
 
 \section{Disambiguation procedures}\label{section_comparison}
 
-Now that we have defined comparison of TNFA paths through comparison of their induced PE fragments
-(definition \ref{pe_order})
-and specified path representation (section \ref{section_pathtree}),
-we can finally give disambiguation procedures $compare ()$ and $update \Xund ptables ()$.
+In this section we define disambiguation procedures $compare ()$ and $update \Xund ptables ()$.
+The pseudocode follows definition \ref{pe_order} closely
+and relies on the prefix tree representation of paths given in section \ref{section_results}.
 %
+In order to find fork of two paths in $compare ()$ we use so-called ``two-fingers'' algorithm,
+which is based on the observation that parent index is always less than child index.
+Given two indices $n_1$ and $n_2$, we continuously set the greater index to its parent until the indices become equal,
+at which point we have either found fork or the root of $U$-tree.
+We track minimal height of each path along the way
+and memorize the pair of indices right after the fork --- they are used to determine the leftmost path in case of equal heights.
+%
+We assume the existence of helper function $height(T, t)$ that maps each tag to its height.
 \\
 
 \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
 \begin{multicols}{2}
     \setstretch{0.8}
 
-    \Fn {$\underline {compare ((\Xund, o_1, n_1, \Xund), (\Xund, o_2, n_2, \Xund), U, B, D)} \smallskip$} {
+    \Fn {$\underline {compare (N, (\Xund, o_1, n_1, \Xund), (\Xund, o_2, n_2, \Xund), U, B, D)} \smallskip$} {
         \If { $o_1 = o_2 \wedge n_1 = n_2$ } {
             \Return $(\infty, \infty, 0)$
         }
@@ -1499,17 +1508,17 @@ we can finally give disambiguation procedures $compare ()$ and $update \Xund pta
         $m_1 = m_2 = \bot$ \;
         \While {$n_1 \neq n_2$} {
             \If {$n_1 > n_2$} {
-                $h_1 = min(h_1, height(U, n_1))$ \;
+                $h_1 = min(h_1, height(T, tag(U, n_1)))$ \;
                 $m_1 = n_1, n_1 = pred(U, n_1)$ \;
             }
             \Else {
-                $h_2 = min(h_2, height(U, n_2))$ \;
+                $h_2 = min(h_2, height(T, tag(U, n_2)))$ \;
                 $m_2 = n_2, n_2 = pred(U, n_2)$ \;
             }
         }
         \If {$n_1 \neq \bot$} {
-            $h_1 = min(h_1, height(U, n_1))$ \;
-            $h_2 = min(h_2, height(U, n_1))$ \;
+            $h = height(T, tag(U, n_1))$ \;
+            $h_1 = min(h_1, h), \; h_2 = min(h_2, h)$ \;
         }
 
         \BlankLine
@@ -1548,10 +1557,10 @@ we can finally give disambiguation procedures $compare ()$ and $update \Xund pta
     \BlankLine
     \BlankLine
 
-    \Fn {$\underline {update \Xund ptables (X, U, B, D)} \smallskip$} {
+    \Fn {$\underline {update \Xund ptables (N, X, U, B, D)} \smallskip$} {
         \For {$x_1 = (q_1, \Xund, \Xund, \Xund) \in X$} {
             \For {$x_2 = (q_2, \Xund, \Xund, \Xund) \in X$} {
-                $(h_1, h_2, l) = compare (x_1, x_2, U, B, D)$ \;
+                $(h_1, h_2, l) = compare (x_1, x_2, N, U, B, D)$ \;
                 $B' [q_1] [q_2] = h_1, \; D' [q_1] [q_2] = l$ \;
                 $B' [q_2] [q_1] = h_2, \; D' [q_2] [q_1] = -l$
             }
@@ -1563,25 +1572,24 @@ we can finally give disambiguation procedures $compare ()$ and $update \Xund pta
     \vfill
     \columnbreak
 
-    \Fn {$\underline {update \Xund ptables (X, U, B, D)} \smallskip$} {
-        $n_0 = root(H), \; i = 0, \; next(n) = 1 \; \forall n$ \;
-        $push(S, n_0)$ \;
+    \Fn {$\underline {update \Xund ptables (N, X, U, B, D)} \smallskip$} {
+        $i = 0, \; next(n) \equiv 1, \; \text{empty stack } S, \; \text{empty array } L$ \;
+        $push(S, 0)$ \;
 
         \BlankLine
         \While {$S$ is not empty} {
             $n = pop(S)$ \;
-            $\{m_1, \hdots, m_k \} = succ(H, n)$ \;
 
             \BlankLine
             \If {$next(n) < k$} {
                 $push(S, n)$ \;
-                $push(S, m_{next(n)})$ \;
+                $push(S, succ(U, n)_{next(n)})$ \;
                 $next(n) = next(n) + 1$ \;
                 $continue$ \;
             }
 
             \BlankLine
-            $h = height(U, n), \; i_1 = i$ \;
+            $h = height(T, tag(U, n)), \; i_1 = i$ \;
 
             \BlankLine
             \For {$(q, o, n_1, \Xund) \in X \mid n_1 = n$} {
@@ -1593,7 +1601,7 @@ we can finally give disambiguation procedures $compare ()$ and $update \Xund pta
                     $(q_2, o_2, \Xund, \Xund) = L[j_2]$ \;
 
                     \BlankLine
-                    \If {$n = n_0 \wedge o_1 \neq o_2$} {
+                    \If {$n = 0 \wedge o_1 \neq o_2$} {
                         $h_1 = B[o_1][o_2]$ \;
                         $h_2 = B[o_2][o_1]$ \;
                         $l = D[o_1][o_2]$ \;
@@ -1609,7 +1617,7 @@ we can finally give disambiguation procedures $compare ()$ and $update \Xund pta
             }
 
             \BlankLine
-            \For {$m \in \{m_k, \dots, m_1 \}$} {
+            \For {$m \in succ(U, n)$ in reverse} {
                 $i_2 = i_1$ \;
                 \lWhile {$i_2 > 0 \wedge L[i_2].n = m$} {
                     $i_2 = i_2 - 1$
@@ -1625,7 +1633,7 @@ we can finally give disambiguation procedures $compare ()$ and $update \Xund pta
                         $(q_2, o_2, n_2, h_2) = L[j_2]$ \;
 
                         \BlankLine
-                        \If {$n = n_0 \wedge o_1 \neq o_2$} {
+                        \If {$n = 0 \wedge o_1 \neq o_2$} {
                             $h_1 = min(h_1, B[o_1][o_2])$ \;
                             $h_2 = min(h_2, B[o_2][o_1])$ \;
                         }
@@ -1654,47 +1662,77 @@ we can finally give disambiguation procedures $compare ()$ and $update \Xund pta
 
 \end{multicols}
 \vspace{1em}
-\caption{Comparison of tag histories.}
+\caption{Disambiguation procedures.}
 \end{algorithm}
 \medskip
 
 We give two alternative algorithms for $update \Xund ptables ()$:
-a simple one with $O(m^2 \, t)$ complexity and a complex one with $O(m^2)$ complexity.
-Worst case is demonstrated by RE $((a|\epsilon)^{0,n})^{0,\infty}$ where $n \in \YN$,
-for which simple algorithms takes $O(n^3)$ time and complex algorithms takes $O(n^2)$ time.
+a simple one with $O(m^2 \, t)$ complexity (on the left) and a complex one with $O(m^2)$ complexity (on the right).
+Worst case is demonstrated by RE $((a|\epsilon)^{0,k})^{0,\infty}$ where $n \in \YN$,
+for which the simple algorithm takes $O(k^3)$ time and the complex algorithm takes $O(k^2)$ time.
 %
 The idea of complex algorithm is to avoid repeated rescanning of path prefixes in the $U$-tree.
 It makes one pass over the tree,
-constructing an array $L$ of \emph{level items} $(q, o, n, h)$, where
+constructing an array $L$ of \emph{level items} $(q, o, u, h)$, where
 $q$ and $o$ are state and origin as in configurations,
-$n$ is the current tree index and $h$ is the current minimal height.
+$u$ is the current tree index and $h$ is the current minimal height.
 One item is added per each closure configuration $(q, o, u, r)$ when traversal reaches tree node with index $u$.
 After a subtree has been traversed,
-the algorithm scans level items corresponding to this subtree,
-sets their $h$-component to the minimum of $h$ and the height of current node,
-and updates $B$ and $D$ matrices for each pair of $q$-states in items from different branches.
-After that, $n$-component of all scanned items is downgraded to tree index of current node
+the algorithm scans level items added during traversal of this subtree (such items are distinguished by their $u$-component),
+sets their $h$-component to the minimum of $h$ and the height of tag at the current node,
+and computes the new value of $B$ and $D$ matrices for each pair of $q$-states in items from different branches.
+After that, $u$-component of all scanned items is downgraded to the tree index of current node
 (erasing the difference between items from different branches).
 \\
 
 
 \section{TNFA construction}\label{section_tnfa}
 
-TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
+TNFA construction is given by the function $tn\!f\!a()$
+that accepts IRE $r$ and state $y$, and returns TNFA for $r$ with final state $y$
+(algorithm \ref{alg_tnfa}).
+%
+This precise construction is not necessary for the algorithms to work,
+but it has a number of important properties.
+\\[-0.5em]
 
-\begin{figure*}
+\begin{itemize}[itemsep=0.5em]
+    \item Non-essential $\epsilon$-transitions are reduced, as they make closure algorithms slower.
+
+    \item Bounded repetition $r^{n,m}$ is unrolled in a way
+        that duplicates $r$ exactly $m$ times %(fewer is not possible, unless automata with counters are used)
+        and factors out common path prefixes:
+        subautomaton for $(k+1)$-th iteration is only reachable from subautomaton for $k$-th iteration.
+        For example, $a^{2,5}$ is unrolled as $aa(\epsilon | a (\epsilon | a (\epsilon | a)))$, not as $aa(\epsilon|a|aa|aaa)$.
+        This ensures that the tag tree build by $\epsilon$-closure is a prefix tree.
+
+    \item Priorities are assigned so as to make it more likely
+        that depth-first traversal of the $\epsilon$-closure will find short paths before long paths.
+        POSIX has four main rules: (1) longest, (2) leftmost, (3) no optional empty repetitions, and (4) empty match is better than no match.
+        We cannot accommodate (1) with priorities, but we can accommodate (2), (4) and to some extent (3).
+        This makes a great difference for GOR1 in pathological cases
+        like $(((\epsilon)^{0,100})^{0,100})^{0,100})$,
+        where there are many ambiguous paths with equal height.
+        If GOR1 finds the shortest path early, then all other paths are just cancelled at the nearest join point,
+        but in the opposite case GOR1 has to schedule configurations for re-scan after every improvement.
+        Arguably this bias is a weakness of GOR1, and GTOP is more robust in this respect.
+
+    \item Negative tags include tags for all nested subexpressions, in no particular order.
+        Such tags are not needed for disambiguation (only the topmost pair is used),
+        but they are necessary to reset submatch values that remain from previous iterations.
+
+    \item Passing the final state $y$ in $tn\!f\!a()$ function
+        allows to link subautomata in a simple way.
+    \\
+\end{itemize}
+
+\begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \label{alg_tnfa}
 \begin{multicols}{2}
-\fontsize{8}{10}
-    \setstretch{0.8}
+\setstretch{0.9}
 
-    %\fontsize{9.5pt}{11.5pt}\selectfont
+    \newcommand \retonfa {tn\!f\!a}
+    \newcommand \ntag {ntags}
 
-    %\newcommand \retonfa {re \Xund to \Xund n\!f\!a}
-    %\newcommand \ntag {neg \Xund tag}
-    \newcommand \retonfa {F}
-    \newcommand \ntag {N}
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
     \Fn {$\underline{\retonfa(r, y)} \smallskip$} {
         \If {$r = (0, 0, \epsilon)$} {
             \Return $(\Sigma, \{y\}, \emptyset, \emptyset, y, y)$
@@ -1704,115 +1742,83 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
             \Return $(\Sigma, \{x,y\}, \emptyset, \{(x, \alpha, \epsilon, y)\}, x, y)$
         }
         \BlankLine
-        \ElseIf {$r = (0, 0, s \cdot u)$} {
-            $(\Sigma, Q_s, T_s, \Delta_1, x, y) = \retonfa (s, y)$ \;
-            $(\Sigma, Q_u, T_u, \Delta_2, z, x) = \retonfa (u, x)$ \;
-            \Return $(\Sigma, Q_s \cup Q_u, T_s \cup T_u, \Delta_s \cup \Delta_u, z, y)$
-        }
-        \BlankLine
-        \ElseIf {$r = (0, 0, s \mid u)$} {
-            $(\Sigma, Q_1, T_1, \Delta_1, x_1, y) = \ntag (u, y)$ \;
-            $(\Sigma, Q_2, T_2, \Delta_2, x_2, x_1) = \retonfa (s, x_1)$ \;
-            $(\Sigma, Q_3, T_3, \Delta_3, x_3, y) = \retonfa (u, y)$ \;
-            $(\Sigma, Q_4, T_4, \Delta_4, x_4, x_3) = \ntag (s, x_3)$ \;
-            $Q = Q_1 \cup Q_2 \cup Q_3 \cup Q_4 \cup \{x\}$ \;
-            $T = T_1 \cup T_2 \cup T_3 \cup T_4$ \;
-            $\Delta = \Delta_1 \cup \Delta_2 \cup \Delta_3 \cup \Delta_4 \cup \{(x,1,\epsilon,x_2), (x,2,\epsilon,x_4)\}$ \;
-            \Return $(\Sigma, Q, T, \Delta, x, y)$
-        }
-        \BlankLine
-        \ElseIf {$r = (0, 0, s^{n,m}) \mid_{n > 0}$} {
-            $(\Sigma, Q_1, T_1, \Delta_1, x, y) = \retonfa ((0, 0, s^{n-1,m}), y)$ \;
-            $(\Sigma, Q_2, T_2, \Delta_2, z, x) = \retonfa (s, x)$ \;
+        \ElseIf {$r = (0, 0, r_1 \cdot r_2)$} {
+            $(\Sigma, Q_2, T_2, \Delta_2, x, y) = \retonfa (r_2, y)$ \;
+            $(\Sigma, Q_u, T_u, \Delta_2, z, x) = \retonfa (r_1, x)$ \;
             \Return $(\Sigma, Q_1 \cup Q_2, T_1 \cup T_2, \Delta_1 \cup \Delta_2, z, y)$
         }
         \BlankLine
-        \ElseIf {$r = (0, 0, s^{0,m})$} {
-            $(\Sigma, Q_1, T_1, \Delta_1, x_1, y) = \retonfa ((0, 0, s^{1,m}), y)$ \;
-            $(\Sigma, Q_2, T_2, \Delta_2, x_2, y) = \ntag (s, y)$ \;
-            $Q = Q_1 \cup Q_2 \cup \{x\}$ \;
-            $\Delta = \Delta_1 \cup \Delta_2 \cup \{(x,1,\epsilon,x_1), (x,2,\epsilon,x_2)\}$ \;
+        \ElseIf {$r = (0, 0, r_1 \mid r_2)$} {
+            $(\Sigma, Q_2, T_2, \Delta_2, x_2, y) = \retonfa (r_2, y)$ \;
+            $(\Sigma, Q'_2, T_2, \Delta'_2, x'_2, y) = \ntag (T_2, y)$ \;
+            $(\Sigma, Q_1, T_1, \Delta_1, x_1, x'_2) = \retonfa (r_2, x'_2)$ \;
+            $(\Sigma, Q'_1, T_1, \Delta'_1, x'_1, x_2) = \ntag (T_1, x_2)$ \;
+            $Q = Q_1 \cup Q'_1 \cup Q_2 \cup Q'_2 \cup \{x\}$ \;
+            $\Delta = \Delta_1 \cup \Delta'_1 \cup \Delta_2 \cup \Delta'_2 \cup \big\{ (x,1,\epsilon,x_1), (x,2,\epsilon,x'_1) \big\}$ \;
             \Return $(\Sigma, Q, T_1 \cup T_2, \Delta, x, y)$
         }
         \BlankLine
-        \ElseIf {$r = (0, 0, s^{1,\infty})$} {
-            $(\Sigma, Q_1, T_1, \Delta_1, z, x) = \retonfa (s, \Xund)$ \;
+        \ElseIf {$r = (0, 0, r_1^{n,m}) \mid_{1 < n \leq m \leq \infty}$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, x, y) = \retonfa ((0, 0, r_1^{n-1,m-1}), y)$ \;
+            $(\Sigma, Q_2, T_2, \Delta_2, z, x) = \retonfa (r_1, x)$ \;
+            \Return $(\Sigma, Q_1 \cup Q_2, T_1 \cup T_2, \Delta_1 \cup \Delta_2, z, y)$
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, r_1^{0,m})$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, x_1, y) = \retonfa ((0, 0, r_1^{1,m}), y)$ \;
+            $(\Sigma, Q'_1, T_1, \Delta'_1, x'_1, y) = \ntag (T_1, y)$ \;
+            $Q = Q_1 \cup Q'_1 \cup \{x\}$ \;
+            $\Delta = \Delta_1 \cup \Delta'_1 \cup \big\{ (x, 1, \epsilon, x_1), (x, 2, \epsilon, x'_1) \big\}$ \;
+            \Return $(\Sigma, Q, T_1, \Delta, x, y)$
+        }
+        \BlankLine
+        \ElseIf {$r = (0, 0, r_1^{1,\infty})$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, z, x) = \retonfa (r_1, \Xund)$ \;
             $Q = Q_1 \cup \{y\}$ \;
-            $\Delta = \Delta_1 \cup \{(x,1,\epsilon,z), (x,2,\epsilon,y)\}$ \;
+            $\Delta = \Delta_1 \cup \big\{ (x, 1, \epsilon, z), (x, 2, \epsilon, y) \big\}$ \;
             \Return $(\Sigma, Q, T_1, \Delta, z, y)$
         }
         \BlankLine
-        \ElseIf {$r = (0, 0, s^{1,1})$} {
-            \Return $\retonfa (s, y)$
+        \ElseIf {$r = (0, 0, r_1^{1,1})$} {
+            \Return $\retonfa (r_1, y)$
         }
         \BlankLine
-        \ElseIf {$r = (0, 0, s^{1,m}) \mid_{1 < m < \infty}$} {
-            $(\Sigma, Q_1, T_1, \Delta_1, x, y) = \retonfa ((0, 0, s^{1,m-1}), y)$ \;
-            $(\Sigma, Q_2, T_2, \Delta_2, w, z) = \retonfa (r_1, \Xund)$ \;
-            $\Delta = \Delta_1 \cup \Delta_2 \cup \{(z,1,\epsilon,y), (z,2,\epsilon,x)\}$ \;
+        \ElseIf {$r = (0, 0, r_1^{1,m}) \mid_{1 < m < \infty}$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, x, y) = \retonfa ((0, 0, r_1^{1,m-1}), y)$ \;
+            $(\Sigma, Q_2, T_2, \Delta_2, w, z) = \retonfa (r_1, z)$ \;
+            $\Delta = \Delta_1 \cup \Delta_2 \cup \big\{ (z, 1, \epsilon, y), (z, 2, \epsilon, x) \big\}$ \;
             \Return $(\Sigma, Q_1 \cup Q_2, T_1 \cup T_2, \Delta, w, y)$
         }
         \BlankLine
-        \ElseIf {$r = (i, \Xund, s) \mid_{i \neq 0}$} {
-            $(\Sigma, Q_1, T_1, \Delta_1, z, x) = \retonfa (s, \Xund)$ \;
+        \ElseIf {$r = (i, j, r_1) \mid_{i \neq 0}$} {
+            $(\Sigma, Q_1, T_1, \Delta_1, z, x) = \retonfa ((0, 0, r_1), x)$ \;
             $Q = Q_1 \cup \{w, y\}$ \;
-            $T = T_1 \cup \{2i\!-\!1, 2i\}$ \;
-            $\Delta = \Delta_1 \cup \{(w,1,2i\!-\!1,z), (x,1,2i,y)\}$ \;
+            $T = T_1 \cup \big\{ (2i\!-\!1, j), (2i, j) \big\}$ \;
+            $\Delta = \Delta_1 \cup \big\{ (w, 1, 2i\!-\!1, z), (x, 1, 2i, y) \big\}$ \;
             \Return $(\Sigma, Q, T, \Delta, w, y)$
         }
     }
-    \end{algorithm}
+    \BlankLine
+    \BlankLine
 
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
-    \Fn {$\underline{\ntag(r)} \smallskip$} {
-        $T = \{ t_1, \dots, t_n \} = T(r), n \geq 0$ \;
-        $Q = \{x_0, \dots, x_{2n}\}$ \;
-        $\Delta = \{(x_{2i-2},1,1\!-\!2t_i, x_{2i-1}), (x_{2(n-i)-1}, 1, -\!2t_i, x_{2(n - i)})\}_{i=1}^{n}$ \;
-        \Return $(\Sigma, Q, T, \Delta, x_0, x_{2n})$ \;
+    \Fn {$\underline{\ntag(T, y)} \smallskip$} {
+        $\big\{ (t_1, \Xund), \hdots, (t_n, \Xund) \big\} = T$ \;
+        $Q = \{x_0, \dots, x_n, y\}$ \;
+        $\Delta = \big\{ (x_{i-1},1,-t_i, x_{i}) \big\}_{i=1}^{n}$ \;
+        \Return $(\Sigma, Q, T, \Delta, x_0, y)$ \;
     }
-    \end{algorithm}
 
+    \vfill
 
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
-    \Fn {$\underline{T((i, \Xund, r))} \smallskip$} {
-        \lIf {$i = 0$} {
-            \Return $\emptyset$
-        }
-        \lElseIf {$r = s \mid u \vee r = s \cdot u$} {
-            \Return $\{i\} \cup T(s) \cup T(u)$
-        }
-        \lElseIf {$r = s^{n,m}$} {
-            \Return $\{i\} \cup T(s)$
-        }
-        \lElse {
-            \Return $\{i\}$
-        }
-    }
-    \end{algorithm}
+\columnbreak
 
-
-    \columnbreak
-
-
-    \includegraphics[width=\linewidth]{img/tnfa_construction.pdf}
-
+    \nonl \includegraphics[width=\linewidth]{img/tnfa_construction.pdf}
 
 \end{multicols}
-\vspace{-2em}
+\vspace{0em}
 \caption{TNFA construction.}
-\end{figure*}
+\end{algorithm}
 
-
-\iffalse
-\begin{figure}\label{fig_tnfa_example}
-\includegraphics[width=\linewidth]{img/tnfa_example.pdf}
-\vspace{-2em}
-\caption{
-    Example TNFA for RE $(a|\epsilon)^{0,3}((a^{0,\infty})|(\epsilon))$.
-}
-\end{figure}
-\fi
 
 \section*{Appendix}
 

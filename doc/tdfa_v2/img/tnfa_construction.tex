@@ -15,124 +15,101 @@
 
 \begin{document}
 
-\def\offs{-0.65in}
-\def\widd{1in}
-\def\dist{1in}
+\def\offs{-0.5in}
+\def\widd{1.6in}
+\def\dist{1.15in}
 
 \begin{tikzpicture}[>=stealth, ->, auto, node distance=\dist]
 
 \tikzstyle{every node}=[draw=none]
-\tikzstyle{every state}=[rectangle, rounded corners = 6, minimum size=0.18in, inner sep = 3pt]
+\tikzstyle{every state}=[rectangle, rounded corners = 6, minimum size=0.2in, inner sep = 2pt]
 
 \tikzset{style1/.style={draw, rectangle, rounded corners = 11, minimum width = \widd, minimum height = 0.3in, xshift = \offs}}
 \tikzset{style2/.style={state, accepting, xshift = \offs}}
 
-%\newcommand \retonfa {re \Xund to \Xund n\!f\!a}
-%\newcommand \ntag {neg \Xund tag}
-\newcommand \retonfa {F}
-\newcommand \ntag {N}
+\newcommand \tnfa {tn\!f\!a}
+\newcommand \ntags {ntags}
 
 
 \begin{scope}[xshift=0in, yshift=0in]
 
-\begin{scope}[xshift=0in, yshift=0in]
-    \node[draw=none] (a) {$\hphantom{\hspace{1in}}$};
-\end{scope}
+%\begin{scope}[xshift=0in, yshift=0in]
+%    \node[draw=none] (a) {$\hphantom{\hspace{1in}}$};
+%\end{scope}
 
 \begin{scope}[xshift=0in, yshift=0in]
     \node[state, accepting] (a) {$y$};
-    \node [label={[label distance=0.1in, below left]270:\large{(a)}}] (a) {};
-    \node [label={[label distance=0.1in, below right]270:
-    $\retonfa \big( (0, 0, \epsilon), y \big) $}] (a) {};
+    \node [label={[label distance=0.1in, below right]270:\large{(a) \;}
+    $\tnfa \big( (0, 0, \epsilon), y \big) $}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-0.7in]
+\begin{scope}[xshift=0in, yshift=-0.8in]
     \node[state] (a) {$x$};
     \node[state, accepting, right of=a] (b) {$y$};
     \path (a) edge node {$\alpha / \epsilon$} (b);
-    \node [label={[label distance=0.1in, below left]270:\large{(b)}}] (a) {};
-    \node [label={[label distance=0.1in, below right]270:
-    $\retonfa \big( (0, 0, a), y \big) $}] (a) {};
+    \node [label={[label distance=0.1in, below right]270:\large{(b) \;}
+    $\tnfa \big( (0, 0, a), y \big) $}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-1.4in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
+\begin{scope}[xshift=0in, yshift=-1.6in]
     \node[state] (a1) {$z$};
-    \node[style1, right of = a1] (a) {$F(s)$};
+    \node[style1, right of = a1] (a) {$\tnfa(r_1, x)$};
     \node[style2, right of = a] (a2) {$x$};
-    \node[style1, right of = a2] (b) {$F(u)$};
+    \node[style1, right of = a2] (b) {$\tnfa(r_2, y)$};
     \node[style2, right of = b] (b2) {$y$};
-    \node [label={[label distance=0.2in, below left]270:\large{(c)}}] (a) {};
-    \node [label={[label distance=0.2in, below right]270:
-    $\retonfa \big( (0, 0, s \cdot u), y \big) $}] (a1) {};
+    \node [label={[label distance=0.2in, below right]270:\large{(c) \;}
+    $\tnfa \big( (0, 0, r_1 \cdot r_2), y \big) $}] (a1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-2.6in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
+\begin{scope}[xshift=0in, yshift=-2.9in]
     \node[state] (a) {$x$};
-    \node[state, above right of = a, yshift = -0.35in] (b1) {$x_2$};
-    \node[style1, right of = b1] (b) {$F(s)$};
-    \node[style2, right of = b] (b2) {$x_1$};
-    \node[style1, right of = b2, rotate around={-21:(b2)}] (d) {$N(u)$};
+    \node[state, above right of = a, yshift = -0.45in] (b1) {$x_1$};
+    \node[style1, right of = b1] (b) {$\tnfa(r_1, x'_2)$};
+    \node[style2, right of = b] (b2) {$x'_2$};
+    \node[style1, right of = b2, rotate around={-16:(b2)}] (d) {$\ntags(T_2, y)$};
 
-    \node[state, below right of=a, yshift = 0.35in] (c1) {$x_4$};
-    \node[style1, right of = c1] (c2) {$N(s)$};
-    \node[style2, right of = c2] (c3) {$x_3$};
-    \node[style1, right of = c3, rotate around={21:(c3)}] (c) {$F(u)$};
-    \node[style2, right of = c, rotate around={21:(c)}] (d) {$y$};
+    \node[state, below right of=a, yshift = 0.45in] (c1) {$x'_1$};
+    \node[style1, right of = c1] (c2) {$\ntags(T_1, x_2)$};
+    \node[style2, right of = c2] (c3) {$x_2$};
+    \node[style1, right of = c3, rotate around={16:(c3)}] (c) {$\tnfa(r_2, y)$};
+    \node[style2, right of = c, rotate around={16:(c)}] (d) {$y$};
     \path
         (a)  edge [bend left]  node {$1 / \epsilon$} (b1)
         (a)  edge [bend right] node [below left] {$2 / \epsilon $} (c1)
     ;
-    \node [label={[label distance=0.5in, below left]270:\large{(d)}}] (a) {};
-    \node [label={[label distance=0.5in, below right]270:
-    $\retonfa \big( (0, 0, s \mid u), y \big) $}] (a) {};
+    \node [label={[label distance=0.5in, below right]270:\large{(d) \;}
+    $\tnfa \big( (0, 0, r_1 \mid r_2), y \big) $}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-3.8in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
+\begin{scope}[xshift=0in, yshift=-4.2in]
     \node[state] (a1) {$z$};
-    \node[style1, right of = a1] (a) {$F(r)$};
+    \node[style1, right of = a1] (a) {$\tnfa(r_1, x)$};
     \node[style2, right of = a] (a2) {$x$};
-    \node[style1, right of = a2, minimum width = 1.9in, xshift = 0.3in] (b) {$F( (0, 0, r^{n-1, m-1}))$};
-    \node[style2, right of = b, xshift = 0.3in] (b2) {$y$};
-    \node [label={[label distance=0.2in, below left]270:\large{(e)}}] (a1) {};
-    \node [label={[label distance=0.2in, below right]270:
-    $\retonfa \big( (0, 0, r^{n, m}), y \big) \mid_{n \;>\; 1} $}] (a1) {};
+    \node[style1, right of = a2, minimum width = 2in, xshift = 0.2in] (b) {$\tnfa( (0, 0, r_1^{n-1, m-1}), y)$};
+    \node[style2, right of = b, xshift = 0.2in] (b2) {$y$};
+    \node [label={[label distance=0.2in, below right]270:\large{(e) \;}
+    $\tnfa \big( (0, 0, r_1^{n, m}), y \big) \mid_{1 \,<\, n \,\leq\, m \,\leq\, \infty} $}] (a1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-5in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
+\begin{scope}[xshift=0in, yshift=-5.5in]
     \node[state] (a) {$x$};
-    \node[state, above right of = a, yshift = -0.35in] (b1) {$x_1$};
-    \node[style1, right of = b1, rotate around={-21:(b1)}] (d) {$F( (0, 0, r^{1,m}))$};
+    \node[state, above right of = a, yshift = -0.45in] (b1) {$x_1$};
+    \node[style1, right of = b1, rotate around={-16:(b1)}] (d) {$\tnfa( (0, 0, r_1^{1,m}), y)$};
 
-    \node[state, below right of=a, yshift = 0.35in] (c1) {$x_2$};
-    \node[style1, right of = c1, rotate around={21:(c1)}] (c) {$N(r)$};
-    \node[style2, right of = c, rotate around={21:(c)}] (d) {$y$};
+    \node[state, below right of=a, yshift = 0.45in] (c1) {$x'_1$};
+    \node[style1, right of = c1, rotate around={16:(c1)}] (c) {$\ntags(T_1, y)$};
+    \node[style2, right of = c, rotate around={16:(c)}] (d) {$y$};
     \path
         (a)  edge [bend left]  node {$1 / \epsilon$} (b1)
         (a)  edge [bend right] node [below left] {$2 / \epsilon $} (c1)
     ;
-    \node [label={[label distance=0.5in, below left]270:\large{(f)}}] (a) {};
-    \node [label={[label distance=0.5in, below right]270:
-    $\retonfa \big( (0, 0, r^{0, m}), y \big) $}] (a) {};
+    \node [label={[label distance=0.5in, below right]270:\large{(f) \;}
+    $\tnfa \big( (0, 0, r_1^{0, m}), y \big) $}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-6.6in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
+\begin{scope}[xshift=0in, yshift=-7.2in]
     \node[state] (b1) {$z$};
-    \node[style1, right of = b1] (b) {$F(r)$};
+    \node[style1, right of = b1] (b) {$\tnfa(r_1, x)$};
     \node[style2, right of = b] (b2) {$x$};
 
     \node[state, accepting, right of = b2] (c) {$y$};
@@ -141,83 +118,56 @@
         (b2) edge node {$2 / \epsilon$} (c)
     ;
     \draw (b2) .. controls ($ (b2) + (0.7, 1.5) $) and ($ (b1) + (-0.7, 1.5) $) .. node [above] {$1 / \epsilon$} (b1);
-    \node [label={[label distance=0.2in, below left]270:\large{(g)}}] (b1) {};
-    \node [label={[label distance=0.2in, below right]270:
-    $\retonfa \big( (0, 0, r^{1, \infty}), y \big) $}] (b1) {};
+    \node [label={[label distance=0.2in, below right]270:\large{(g) \;}
+    $\tnfa \big( (0, 0, r_1^{1, \infty}), y \big) $}] (b1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-7.4in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
-    \node[state] (b1) {$x$};
-    \node[style1, right of = b1] (b) {$F(r)$};
-    \node[style2, right of = b] (b2) {$y$};
-
-    \node [label={[label distance=0.2in, below left]270:\large{(h)}}] (b1) {};
-    \node [label={[label distance=0.2in, below right]270:
-    $\retonfa \big( (0, 0, r^{1, 1}), y \big) $}] (b1) {};
-\end{scope}
-
-\begin{scope}[xshift=0in, yshift=-8.6in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
+\begin{scope}[xshift=0in, yshift=-8.5in]
     \node[state] (b1) {$w$};
-    \node[style1, right of = b1] (b) {$F(r)$};
+    \node[style1, right of = b1] (b) {$\tnfa(r_1, z)$};
     \node[style2, right of = b] (b2) {$z$};
 
-    \node[state, right of = b2] (c1) {$x$};
-    \node[style1, right of = c1, minimum width = 1.7in, xshift = 0.2in] (c) {$F((0, 0, r^{1, m-1}))$};
-    \node[style2, right of = c, xshift = 0.2in] (c2) {$y$};
+    \node[state, right of = b2, xshift = -0.2in] (c1) {$x$};
+    \node[style1, right of = c1, xshift = 0.1in, minimum width = 1.8in] (c) {$\tnfa((0, 0, r_1^{1, m-1}), y)$};
+    \node[style2, right of = c, xshift = 0.1in] (c2) {$y$};
 
     \path
         (b2) edge node {$2 / \epsilon$} (c1)
     ;
     \draw (b2) .. controls ($ (b2) + (0, 2) $) and ($ (c2) + (0, 2) $) .. node [very near start] {$1 / \epsilon$} (c2);
-    \node [label={[label distance=0.2in, below left]270:\large{(h)}}] (b1) {};
-    \node [label={[label distance=0.2in, below right]270:
-    $\retonfa \big( (0, 0, r^{1, m}), y \big) \mid_{1 < m < \infty} $}] (b1) {};
+    \node [label={[label distance=0.2in, below right]270:\large{(h) \;}
+    $\tnfa \big( (0, 0, r_1^{1, m}), y \big) \mid_{1 \,<\, m \,<\, \infty} $}] (b1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-10in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
+\begin{scope}[xshift=0in, yshift=-9.8in]
     \node[state] (a) {$w$};
-    \node[state, above right of=a, xshift=-0.2in, yshift=-0.2in] (b1) {$z$};
-    \node[style1, right of = b1] (b) {$F ( (0, 0, r) )$};
+    \node[state, right of=a] (b1) {$z$};
+    \node[style1, right of = b1] (b) {$\tnfa ( (0, 0, r_1), x )$};
     \node[style2, right of = b] (b2) {$x$};
-    \node[state, accepting, below right of=b2, xshift=-0.2in, yshift=0.2in] (d) {$y$};
+    \node[state, accepting, right of=b2] (d) {$y$};
     \path
         (a) edge node {$1 / 2i \!-\! 1 $} (b1)
         (b2) edge node {$1 / 2i $} (d)
     ;
-    \node [label={[label distance=0.1in, below left]270:\large{(i)}}] (a) {};
-    \node [label={[label distance=0.1in, below right]270:
-    $\retonfa \big( (i, \Xund, r) \big) \mid_{i \;\neq\; 0} $}] (a) {};
+    \node [label={[label distance=0.1in, below right]270:\large{(i) \;}
+        $\tnfa \big( (i, j, r_1), y \big) \mid_{i \,\neq\, 0} $
+    }] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-10.8in]
-    \def\offs{-0.5in}
-    \def\widd{1.3in}
-
+\begin{scope}[xshift=0in, yshift=-10.9in]
     \node[state] (a) {$x_0$};
     \node[state, right of = a] (a1) {$x_1$};
     \node[draw=none, right of = a1, xshift=-0.5in] (b) {\large{$\dots$}};
-    \node[state, right of = b, xshift=-0.5in] (b1) {$x_{2n-1}$};
-    \node[state, accepting, right of = b1] (b2) {$x_{2n}$};
+    \node[state, right of = b, xshift=-0.5in] (b1) {$x_{n}$};
+    \node[state, accepting, right of = b1] (b2) {$y$};
     \path
-        (a) edge node {$1 / 1\!-\!2i $} (a1)
+        (a) edge node {$1 / -t_1 $} (a1)
         (a1) edge node {} (b)
         (b) edge node {} (b1)
-        (b1) edge node {$1 / -\! 2i $} (b2)
+        (b1) edge node {$1 / -t_n $} (b2)
     ;
-    \node [label={[label distance=0.1in, below left]270:\large{(j)}}] (a) {};
-    \node [label={[label distance=0.1in, below right]270:
-    $\begin{aligned}
-        N \big( (i, \Xund, r) \big)
-    \end{aligned}$
+    \node [label={[label distance=0.1in, below right]270:\large{(j) \;}
+        $\ntags \big( T, y \big)$
     }] (a) {};
 \end{scope}
 
