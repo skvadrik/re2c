@@ -4,6 +4,7 @@
 
 #include "src/encoding/enc.h"
 #include "src/parse/ast.h"
+#include "src/parse/unescape.h"
 #include "src/util/range.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "parse.h"
@@ -112,11 +113,25 @@ err_cnt:
 
 int32_t lex_cls_chr(const char *&cur, uint32_t &c)
 {
+    const char *mar, *p = cur;
 /*!re2c
     *    { return 1; }
     "[." { error("collating characters not supported"); return 1; }
-    "[:" { error("character classes not supported"); return 1; }
-    "[=" { error("equivalence classes not supported"); return 1; }
+    "[:" { error("character classes not supported");    return 1; }
+    "[=" { error("equivalence classes not supported");  return 1; }
+
+    "\\x"[0-9a-fA-F]{2} { c = unesc_hex(p, cur); return 0; }
+
+    "\\"      { c = static_cast<uint8_t>('\\');    return 0; }
+    "\\a"     { c = static_cast<uint8_t>('\a');    return 0; }
+    "\\b"     { c = static_cast<uint8_t>('\b');    return 0; }
+    "\\f"     { c = static_cast<uint8_t>('\f');    return 0; }
+    "\\n"     { c = static_cast<uint8_t>('\n');    return 0; }
+    "\\r"     { c = static_cast<uint8_t>('\r');    return 0; }
+    "\\t"     { c = static_cast<uint8_t>('\t');    return 0; }
+    "\\v"     { c = static_cast<uint8_t>('\v');    return 0; }
+    "\\\\"    { c = static_cast<uint8_t>('\\');    return 0; }
+    "\\]"     { c = static_cast<uint8_t>(']');     return 0; }
 
     [^] \ nil { c = static_cast<uint8_t>(cur[-1]); return 0; }
 */

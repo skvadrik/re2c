@@ -50,6 +50,7 @@ libre2c_la_HDR = \
 	src/skeleton/path.h \
 	src/skeleton/skeleton.h \
 	src/parse/ast.h \
+	src/parse/unescape.h \
 	src/parse/input.h \
 	src/parse/parser.h \
 	src/parse/scanner.h \
@@ -88,6 +89,7 @@ libre2c_la_SRC = \
 	lib/regfree.cc \
 	lib/stubs.cc \
 	src/parse/ast.cc \
+	src/parse/unescape.cc \
 	src/options/opt.cc \
 	src/cfg/cfg.cc \
 	src/cfg/compact.cc \
