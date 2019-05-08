@@ -75,6 +75,11 @@ void Warn::set_all_error ()
     }
 }
 
+bool Warn::is_set(type_t t) const
+{
+    return mask[t] > 0;
+}
+
 void Warn::fail(type_t t, const loc_t &loc, const char *s) const
 {
     if (mask[t] & WARNING) {

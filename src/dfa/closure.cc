@@ -132,8 +132,8 @@ template<typename ctx_t>
 void prune(ctx_t &ctx)
 {
     // Filter out configurations which states have transitions on symbols.
-    // If any configurations with final state, pick one with the lowest rule.
-    // See note [at most one final item per closure].
+    // If we have any configurations with final state, pick the one with
+    // the lowest rule. See note [at most one final item per closure].
 
     closure_t &closure = ctx.state, &buffer = ctx.reach;
     clositer_t b = closure.begin(), e = closure.end(), i, f = e;
@@ -154,11 +154,13 @@ void prune(ctx_t &ctx)
         buffer.push_back(*f);
 
         // mark dropped rules as shadowed
-        std::valarray<Rule> &rules = ctx.nfa.rules;
-        const uint32_t l = rules[f->state->rule].code->loc.line;
-        for (i = b; i != e; ++i) {
-            if (i != f && i->state->type == nfa_state_t::FIN) {
-                rules[i->state->rule].shadow.insert(l);
+        if (ctx.dc_msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
+            std::valarray<Rule> &rules = ctx.nfa.rules;
+            const uint32_t l = rules[f->state->rule].code->loc.line;
+            for (i = b; i != e; ++i) {
+                if (i != f && i->state->type == nfa_state_t::FIN) {
+                    rules[i->state->rule].shadow.insert(l);
+                }
             }
         }
     }

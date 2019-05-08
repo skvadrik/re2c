@@ -59,6 +59,7 @@ public:
     void set (type_t t, option_t o);
     void set_all ();
     void set_all_error ();
+    bool is_set(type_t t) const;
     void fail(type_t t, const loc_t &loc, const char *s) const;
 
     void condition_order(const loc_t &loc);
