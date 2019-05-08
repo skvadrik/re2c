@@ -33,8 +33,8 @@ public:
     {
         char *result;
 
-        // alignment (we assume that malloc aligns depending on size)
-        size += ALIGN - (size % ALIGN);
+        // next aligned address (we assume that malloc aligns depending on size)
+        size = (size + ALIGN - 1) & ~(ALIGN - 1);
 
         if (size <= static_cast<size_t>(current_slab_end_ - current_slab_)) {
             // enough space in slab
