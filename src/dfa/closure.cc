@@ -77,7 +77,7 @@ namespace re2c
 
 template<typename ctx_t> static inline void closure(ctx_t &ctx);
 template<typename ctx_t> static void generate_versions(ctx_t &);
-static void prune(closure_t &, std::valarray<Rule> &);
+template<typename ctx_t> void prune(ctx_t &ctx);
 static void lower_lookahead_to_transition(closure_t &);
 static bool cmpby_rule_state(const clos_t &, const clos_t &);
 
@@ -104,7 +104,7 @@ template<>
 inline void closure<pdetctx_t>(pdetctx_t &ctx)
 {
     closure_posix(ctx);
-    prune(ctx.state, ctx.nfa.rules);
+    prune(ctx);
     std::sort(ctx.state.begin(), ctx.state.end(), cmpby_rule_state);
     compute_prectable(ctx);
 }
@@ -113,7 +113,7 @@ template<>
 inline void closure<ldetctx_t>(ldetctx_t &ctx)
 {
     closure_leftmost(ctx);
-    prune(ctx.state, ctx.nfa.rules);
+    prune(ctx);
 }
 
 bool cmpby_rule_state(const clos_t &x, const clos_t &y)
@@ -128,27 +128,42 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
     return false;
 }
 
-void prune(closure_t &closure, std::valarray<Rule> &rules)
+template<typename ctx_t>
+void prune(ctx_t &ctx)
 {
-    clositer_t b = closure.begin(), e = closure.end(), i, j;
+    // Filter out configurations which states have transitions on symbols.
+    // If any configurations with final state, pick one with the lowest rule.
+    // See note [at most one final item per closure].
 
-    // drop "inner" states (non-final without outgoing non-epsilon transitions)
-    j = std::stable_partition(b, e, clos_t::ran);
-    e = std::stable_partition(j, e, clos_t::fin);
-    size_t n = static_cast<size_t>(e - b);
+    closure_t &closure = ctx.state, &buffer = ctx.reach;
+    clositer_t b = closure.begin(), e = closure.end(), i, f = e;
+    buffer.clear();
 
-    // drop all final states except one; mark dropped rules as shadowed
-    // see note [at most one final item per closure]
-    if (j != e) {
-        std::sort(j, e, cmpby_rule_state);
-        const uint32_t l = rules[j->state->rule].code->loc.line;
-        for (i = j; ++i < e;) {
-            rules[i->state->rule].shadow.insert(l);
+    for (i = b; i != e; ++i) {
+        nfa_state_t *s = i->state;
+        if (s->type == nfa_state_t::RAN) {
+            buffer.push_back(*i);
         }
-        n = static_cast<size_t>(j - b) + 1;
+        else if (s->type == nfa_state_t::FIN
+            && (f == e || s->rule < f->state->rule)) {
+            f = i;
+        }
     }
 
-    closure.resize(n);
+    if (f != e) {
+        buffer.push_back(*f);
+
+        // mark dropped rules as shadowed
+        std::valarray<Rule> &rules = ctx.nfa.rules;
+        const uint32_t l = rules[f->state->rule].code->loc.line;
+        for (i = b; i != e; ++i) {
+            if (i != f && i->state->type == nfa_state_t::FIN) {
+                rules[i->state->rule].shadow.insert(l);
+            }
+        }
+    }
+
+    closure.swap(buffer);
 }
 
 void lower_lookahead_to_transition(closure_t &closure)
