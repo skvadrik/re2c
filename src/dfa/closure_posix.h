@@ -19,6 +19,7 @@ namespace re2c
  * can just propagate the new path up to the next join point.
  */
 
+template<typename ctx_t> void closure_cleanup(nfa_state_t *q);
 template<typename ctx_t> static void closure_posix_gor1(ctx_t &);
 template<typename ctx_t> static void closure_posix_gtop(ctx_t &);
 
@@ -41,15 +42,6 @@ inline void closure_posix(pdetctx_t &ctx)
     }
 
     DDUMP_CLSTATS(ctx);
-
-    // cleanup
-    closure_t &cl = ctx.state;
-    for (clositer_t i = cl.begin(); i != cl.end(); ++i) {
-        nfa_state_t *q = i->state;
-        q->clos = NOCLOS;
-        q->arcidx = 0;
-        DASSERT(q->status == GOR_NOPASS && q->active == 0);
-    }
 }
 
 template<typename ctx_t>
@@ -305,6 +297,14 @@ void relax_gtop(ctx_t &ctx, const typename ctx_t::conf_t &c)
         q->active = 1;
         ctx.gtop_heap.push(q);
     }
+}
+
+template<>
+inline void closure_cleanup<pdetctx_t>(nfa_state_t *q)
+{
+    q->clos = NOCLOS;
+    q->arcidx = 0;
+    DASSERT(q->status == GOR_NOPASS && q->active == 0);
 }
 
 } // namespace re2c

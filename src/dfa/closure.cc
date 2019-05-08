@@ -141,6 +141,9 @@ void prune(ctx_t &ctx)
 
     for (i = b; i != e; ++i) {
         nfa_state_t *s = i->state;
+
+        closure_cleanup<ctx_t>(s);
+
         if (s->type == nfa_state_t::RAN) {
             buffer.push_back(*i);
         }

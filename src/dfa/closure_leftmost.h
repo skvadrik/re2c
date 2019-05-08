@@ -7,16 +7,12 @@
 
 namespace re2c {
 
+template<typename ctx_t> void closure_cleanup(nfa_state_t *q);
 template<typename ctx_t> static void closure_leftmost_dfs(ctx_t &ctx);
 
 inline void closure_leftmost(ldetctx_t &ctx)
 {
     closure_leftmost_dfs(ctx);
-
-    // cleanup
-    for (clositer_t i = ctx.state.begin(); i != ctx.state.end(); ++i) {
-        i->state->clos = NOCLOS;
-    }
 }
 
 template<typename ctx_t>
@@ -52,6 +48,12 @@ void closure_leftmost_dfs(ctx_t &ctx)
                 break;
         }
     }
+}
+
+template<>
+inline void closure_cleanup<ldetctx_t>(nfa_state_t *q)
+{
+    q->clos = NOCLOS;
 }
 
 } // namespace re2c
