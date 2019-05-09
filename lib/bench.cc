@@ -14,6 +14,7 @@
 #include <string.h>
 #include <time.h>
 #include <vector>
+#include <string>
 
 #ifdef HAVE_RE2_RE2_H
 #include "re2/re2.h"
