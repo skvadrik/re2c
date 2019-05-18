@@ -1068,6 +1068,7 @@ int main(int argc, char **argv)
     e |= test_all_posix(REG_NFA | REG_KUKLEWICZ | REG_GTOP);
 
     e |= test_all_posix(REG_NFA | REG_TRIE);
+    e |= test_all_posix(REG_NFA | REG_TRIE | REG_GTOP);
 
     e |= test_all_posix(REG_NFA | REG_SLOWPREC);
 

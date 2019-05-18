@@ -10,8 +10,14 @@
 
 
 namespace re2c {
+
+// specialization that doesn't sort initial closure like Okui-Suzuki
+// (there is no cheap way to sort it in the lazy-disambiguation algorithm)
+template<> void init_gor1<libre2c::pzsimctx_t>(libre2c::pzsimctx_t &ctx);
+
 namespace libre2c {
 
+static inline void closure_posix(pzsimctx_t &ctx);
 static void make_step(pzsimctx_t &, uint32_t);
 static void make_final_step(pzsimctx_t &);
 
@@ -24,7 +30,7 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     const conf_t c0(ctx.nfa.root, 0, HROOT);
     ctx.reach.push_back(c0);
     for (;;) {
-        closure_posix_gtop(ctx);
+        closure_posix(ctx);
         const uint32_t sym = static_cast<uint8_t>(*ctx.cursor++);
         if (ctx.state.empty() || sym == 0) break;
         make_step(ctx, sym);
@@ -32,6 +38,16 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     make_final_step(ctx);
 
     return finalize(ctx, string, nmatch, pmatch);
+}
+
+void closure_posix(pzsimctx_t &ctx)
+{
+    if (ctx.flags & REG_GTOP) {
+        closure_posix_gtop(ctx);
+    }
+    else {
+        closure_posix_gor1(ctx);
+    }
 }
 
 void make_step(pzsimctx_t &ctx, uint32_t sym)
@@ -46,7 +62,8 @@ void make_step(pzsimctx_t &ctx, uint32_t sym)
         nfa_state_t *s = i->state;
 
         s->clos = NOCLOS;
-        DASSERT(s->active == 0);
+        s->arcidx = 0;
+        DASSERT(s->status == GOR_NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
@@ -73,7 +90,8 @@ void make_final_step(pzsimctx_t &ctx)
         nfa_state_t *s = i->state;
 
         s->clos = NOCLOS;
-        DASSERT(s->active == 0);
+        s->arcidx = 0;
+        DASSERT(s->status == GOR_NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::FIN) {
             ctx.marker = ctx.cursor;
@@ -84,5 +102,15 @@ void make_final_step(pzsimctx_t &ctx)
 }
 
 } // namespace libre2c
+
+template<> void init_gor1<libre2c::pzsimctx_t>(libre2c::pzsimctx_t &ctx)
+{
+    ctx.state.clear();
+    libre2c::pzsimctx_t::cconfiter_t c = ctx.reach.begin(), e = ctx.reach.end();
+    for (; c != e; ++c) {
+        relax_gor1(ctx, *c);
+    }
+}
+
 } // namespace re2c
 
