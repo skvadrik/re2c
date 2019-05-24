@@ -208,13 +208,13 @@ void Warn::unreachable_rule(const std::string &cond, const Rule &rule)
     }
 }
 
-void Warn::useless_escape(const loc_t &loc, char c)
+void Warn::useless_escape(const loc_t &loc, const char *str, const char *end)
 {
     if (mask[USELESS_ESCAPE] & WARNING) {
         const bool e = mask[USELESS_ESCAPE] & ERROR;
         error_accuml |= e;
         msg.warning(names[USELESS_ESCAPE], loc, e
-            , "escape has no effect: '\\%c'", c);
+            , "escape has no effect: '%.*s'", (int)(end - str), str);
     }
 }
 

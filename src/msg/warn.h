@@ -69,7 +69,7 @@ public:
     void swapped_range(const loc_t &loc, uint32_t l, uint32_t u);
     void undefined_control_flow(const Skeleton &skel, std::vector<path_t> & paths, bool overflow);
     void unreachable_rule(const std::string & cond, const Rule &rule);
-    void useless_escape(const loc_t &loc, char c);
+    void useless_escape(const loc_t &loc, const char *str, const char *end);
 };
 
 } // namespace re2c

@@ -4,7 +4,7 @@ AM_CXXFLAGS = $(CXXFLAGSDEFAULT)
 if DEBUG
 AM_CXXFLAGS += -DRE2C_DEBUG
 endif
-RE2CFLAGS = -b -W
+RE2CFLAGS = -br -W
 
 # binary
 bin_PROGRAMS = re2c

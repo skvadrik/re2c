@@ -15,6 +15,7 @@ const uint32_t utf8::INFIX        = 0x80u; // 1000 0000
 const uint32_t utf8::PREFIX_2BYTE = 0xC0u; // 1100 0000
 const uint32_t utf8::PREFIX_3BYTE = 0xE0u; // 1110 0000
 const uint32_t utf8::PREFIX_4BYTE = 0xF0u; // 1111 0000
+const uint32_t utf8::PREFIX_5BYTE = 0xF8u; // 1111 1000
 
 const uint32_t utf8::SHIFT = 6u;
 const uint32_t utf8::MASK = 0x3Fu; // 0011 1111
@@ -59,6 +60,32 @@ uint32_t utf8::rune_to_bytes(uint32_t *str, rune c)
     str[2] = INFIX        | ((c >> 1*SHIFT) & MASK);
     str[3] = INFIX        | (c & MASK);
     return 4;
+}
+
+// this function assumes that the input has been validated
+uint32_t utf8::decode_unsafe(const char *str)
+{
+    // 1-unit sequence: 0-0x7F => 0xxxxxxx
+    const uint32_t c = (uint8_t)str[0];
+    if (c < INFIX)
+        return c;
+
+    // 2-unit sequence: 0x80-0x7FF => 110xxxxx 10xxxxxx
+    const uint32_t c1 = (uint8_t)str[1] ^ INFIX;
+    if (c < PREFIX_3BYTE)
+        return ((c << SHIFT) | c1) & MAX_2BYTE_RUNE;
+
+    // 3-unit sequence: 0x800 - 0xFFFF => 1110xxxx 10xxxxxx 10xxxxxx
+    const uint32_t c2 = (uint8_t)str[2] ^ INFIX;
+    if (c < PREFIX_4BYTE)
+        return ((((c << SHIFT) | c1) << SHIFT) | c2) & MAX_3BYTE_RUNE;
+
+    // 4-unit sequence (21-bit value): 0x10000 - 0x1FFFFF => 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+    const uint32_t c3 = (uint8_t)str[3] ^ INFIX;
+    if (c < PREFIX_5BYTE)
+        return ((((((c << SHIFT) | c1) << SHIFT) | c2) << SHIFT) | c3) & MAX_4BYTE_RUNE;
+
+    return ERROR;
 }
 
 uint32_t utf8::rune_length(rune r)

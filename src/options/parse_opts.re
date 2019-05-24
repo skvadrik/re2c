@@ -175,6 +175,7 @@ opt_long:
     "input"                 end { NEXT_ARG("--input",            opt_input); }
     "empty-class"           end { NEXT_ARG("--empty-class",      opt_empty_class); }
     "location-format"       end { NEXT_ARG("--location-format",  opt_location_format); }
+    "input-encoding"        end { NEXT_ARG("--input-encoding",   opt_input_encoding); }
 
     "single-pass"           end { goto opt; } // deprecated
 
@@ -243,6 +244,13 @@ opt_location_format:
     * { ERRARG("--location-format", "gnu | msvc", *argv); }
     "gnu"  end { msg.locfmt = LOCFMT_GNU;  goto opt; }
     "msvc" end { msg.locfmt = LOCFMT_MSVC; goto opt; }
+*/
+
+opt_input_encoding:
+/*!re2c
+    * { ERRARG("--input-encoding", "ascii | utf8", *argv); }
+    "ascii" end { globopts.input_encoding = Enc::ASCII; goto opt; }
+    "utf8"  end { globopts.input_encoding = Enc::UTF8;  goto opt; }
 */
 
 opt_dfa_minimization:

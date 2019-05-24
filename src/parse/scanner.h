@@ -13,6 +13,7 @@
 #include "src/parse/lex.h"
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
+#include "src/encoding/utf8/utf8.h"
 #include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
@@ -87,6 +88,7 @@ private:
     std::string lex_conf_string();
     bool is_eof() const;
     void fail_if_eof() const;
+    uint32_t decode(const char *str) const;
 
     FORBID_COPY (Scanner);
 };
@@ -140,6 +142,13 @@ inline Input& Scanner::get_input()
 inline const Input& Scanner::get_cinput() const
 {
     return *files[get_input_index()];
+}
+
+inline uint32_t Scanner::decode(const char *str) const
+{
+    return globopts->input_encoding == Enc::ASCII
+        ? static_cast<uint8_t>(str[0])
+        : utf8::decode_unsafe(str);
 }
 
 } // end namespace re2c

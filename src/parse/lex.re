@@ -570,15 +570,16 @@ uint32_t Scanner::lex_cls_chr()
 {
     tok = cur;
     const loc_t &loc = cur_loc();
-/*!re2c
-    *          { msg.fatal(loc, "syntax error"); }
-    eof        { fail_if_eof(); return 0; }
+    /*!rules:re2c
     esc? eol   { msg.fatal(loc, "newline in character class"); }
     esc [xXuU] { msg.fatal(loc, "syntax error in hexadecimal escape sequence"); }
     esc [0-7]  { msg.fatal(loc, "syntax error in octal escape sequence"); }
     esc        { msg.fatal(loc, "syntax error in escape sequence"); }
+    *          { msg.fatal(loc, "syntax error"); }
 
-    . \ esc    { return static_cast<uint8_t>(tok[0]); }
+    eof        { fail_if_eof(); return 0; }
+
+    . \ esc    { return decode(tok); }
     esc_hex    { return unesc_hex(tok, cur); }
     esc_oct    { return unesc_oct(tok, cur); }
     esc "a"    { return static_cast<uint8_t>('\a'); }
@@ -592,49 +593,55 @@ uint32_t Scanner::lex_cls_chr()
     esc "-"    { return static_cast<uint8_t>('-'); }
     esc "]"    { return static_cast<uint8_t>(']'); }
     esc (.\eof){
-        msg.warn.useless_escape(loc, tok[1]);
-        return static_cast<uint8_t>(tok[1]);
+        msg.warn.useless_escape(loc, tok, cur);
+        return decode(tok + 1);
     }
-*/
+    */
+    if (globopts->input_encoding == Enc::ASCII) {
+        /*!use:re2c*/
+    }
+    else {
+        /*!use:re2c re2c:flags:8 = 1; */ /*!re2c re2c:flags:8 = 0; */
+    }
 }
 
 bool Scanner::lex_str_chr(char quote, ASTChar &ast)
 {
     tok = cur;
     ast.loc = cur_loc();
-    const loc_t &loc = ast.loc;
-    bool ok = true;
-/*!re2c
-    *          { msg.fatal(loc, "syntax error"); }
-    esc? eol   { msg.fatal(loc, "newline in character string"); }
-    esc [xXuU] { msg.fatal(loc, "syntax error in hexadecimal escape sequence"); }
-    esc [0-7]  { msg.fatal(loc, "syntax error in octal escape sequence"); }
-    esc        { msg.fatal(loc, "syntax error in escape sequence"); }
 
-    eof        { fail_if_eof(); ast.chr = 0; goto end; }
+    /*!rules:re2c
+    esc? eol   { msg.fatal(ast.loc, "newline in character string"); }
+    esc [xXuU] { msg.fatal(ast.loc, "syntax error in hexadecimal escape sequence"); }
+    esc [0-7]  { msg.fatal(ast.loc, "syntax error in octal escape sequence"); }
+    esc        { msg.fatal(ast.loc, "syntax error in escape sequence"); }
+    *          { msg.fatal(ast.loc, "syntax error"); }
 
-    . \ esc    { ok = tok[0] != quote; ast.chr = static_cast<uint8_t>(tok[0]); goto end; }
-    esc_hex    { ast.chr = unesc_hex(tok, cur); goto end; }
-    esc_oct    { ast.chr = unesc_oct(tok, cur); goto end; }
-    esc "a"    { ast.chr = static_cast<uint8_t>('\a'); goto end; }
-    esc "b"    { ast.chr = static_cast<uint8_t>('\b'); goto end; }
-    esc "f"    { ast.chr = static_cast<uint8_t>('\f'); goto end; }
-    esc "n"    { ast.chr = static_cast<uint8_t>('\n'); goto end; }
-    esc "r"    { ast.chr = static_cast<uint8_t>('\r'); goto end; }
-    esc "t"    { ast.chr = static_cast<uint8_t>('\t'); goto end; }
-    esc "v"    { ast.chr = static_cast<uint8_t>('\v'); goto end; }
-    esc "\\"   { ast.chr = static_cast<uint8_t>('\\'); goto end; }
+    eof        { fail_if_eof(); ast.chr = 0; return true; }
+
+    . \ esc    { ast.chr = decode(tok); return tok[0] != quote; }
+    esc_hex    { ast.chr = unesc_hex(tok, cur); return true; }
+    esc_oct    { ast.chr = unesc_oct(tok, cur); return true; }
+    esc "a"    { ast.chr = static_cast<uint8_t>('\a'); return true; }
+    esc "b"    { ast.chr = static_cast<uint8_t>('\b'); return true; }
+    esc "f"    { ast.chr = static_cast<uint8_t>('\f'); return true; }
+    esc "n"    { ast.chr = static_cast<uint8_t>('\n'); return true; }
+    esc "r"    { ast.chr = static_cast<uint8_t>('\r'); return true; }
+    esc "t"    { ast.chr = static_cast<uint8_t>('\t'); return true; }
+    esc "v"    { ast.chr = static_cast<uint8_t>('\v'); return true; }
+    esc "\\"   { ast.chr = static_cast<uint8_t>('\\'); return true; }
     esc (.\eof){
-        const char c = tok[1];
-        ast.chr = static_cast<uint8_t>(c);
-        if (tok[1] != quote) {
-            msg.warn.useless_escape(loc, c);
-        }
-        goto end;
+        ast.chr = decode(tok + 1);
+        if (tok[1] != quote) msg.warn.useless_escape(ast.loc, tok, cur);
+        return true;
     }
-*/
-end:
-    return ok;
+    */
+    if (globopts->input_encoding == Enc::ASCII) {
+        /*!use:re2c*/
+    }
+    else {
+        /*!use:re2c re2c:flags:8 = 1; */ /*!re2c re2c:flags:8 = 0; */
+    }
 }
 
 const AST *Scanner::lex_str(char quote)
