@@ -155,7 +155,6 @@ void compile(Scanner &input, Output &output, Opt &opts)
             specs = rspecs;
             opts.restore(ropts);
             opts.reset_mapCodeName();
-            output.label_counter.reset();
             output.fill_index = 0;
             output.state_goto = false;
             output.cond_goto = false;

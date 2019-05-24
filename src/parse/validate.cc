@@ -17,9 +17,6 @@ void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules
         if (!rflag) {
             msg.fatal(l, "found 'rules:re2c' block without -r flag");
         }
-        else if (rules) {
-            msg.fatal(l, "cannot have a second 'rules:re2c' block");
-        }
     }
     else if (mode == Scanner::Reuse) {
         if (!rflag) {
@@ -28,9 +25,6 @@ void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules
         else if (!rules) {
             msg.fatal(l, "got 'use:re2c' without 'rules:re2c'");
         }
-    }
-    else if (rflag) {
-        msg.fatal(l, "found standard 're2c' block while using -r flag");
     }
 }
 

@@ -83,25 +83,25 @@ yyc_r1:
 	if (limit2 <= cursor2) fill2(1);
 	yych = *cursor2;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy3;
-		if (yych <= '1') goto yy4;
-		goto yy6;
+		if (yych <= '0') goto yy24;
+		if (yych <= '1') goto yy25;
+		goto yy27;
 	} else {
-		if (yych <= '`') goto yy3;
-		if (yych <= 'a') goto yy8;
-		if (yych <= 'b') goto yy10;
+		if (yych <= '`') goto yy24;
+		if (yych <= 'a') goto yy29;
+		if (yych <= 'b') goto yy31;
 	}
-yy3:
-yy4:
+yy24:
+yy25:
 	++cursor2;
 	{ return "1"; }
-yy6:
+yy27:
 	++cursor2;
 	{ return "2"; }
-yy8:
+yy29:
 	++cursor2;
 	{ return "a"; }
-yy10:
+yy31:
 	++cursor2;
 	{ return "b"; }
 /* *********************************** */
@@ -109,20 +109,20 @@ yyc_r2:
 	if (limit2 <= cursor2) fill2(1);
 	yych = *cursor2;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy14;
-		if (yych <= '1') goto yy15;
-		goto yy17;
+		if (yych <= '0') goto yy35;
+		if (yych <= '1') goto yy36;
+		goto yy38;
 	} else {
-		if (yych == 'b') goto yy19;
+		if (yych == 'b') goto yy40;
 	}
-yy14:
-yy15:
+yy35:
+yy36:
 	++cursor2;
 	{ return "1"; }
-yy17:
+yy38:
 	++cursor2;
 	{ return "2"; }
-yy19:
+yy40:
 	++cursor2;
 	{ return "b"; }
 }
@@ -144,25 +144,25 @@ yyc_r1:
 	if (limit3 <= cursor3) fill3(1);
 	yych = *cursor3;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy3;
-		if (yych <= '1') goto yy4;
-		goto yy6;
+		if (yych <= '0') goto yy45;
+		if (yych <= '1') goto yy46;
+		goto yy48;
 	} else {
-		if (yych <= '`') goto yy3;
-		if (yych <= 'a') goto yy8;
-		if (yych <= 'b') goto yy10;
+		if (yych <= '`') goto yy45;
+		if (yych <= 'a') goto yy50;
+		if (yych <= 'b') goto yy52;
 	}
-yy3:
-yy4:
+yy45:
+yy46:
 	++cursor3;
 	{ return "1"; }
-yy6:
+yy48:
 	++cursor3;
 	{ return "2"; }
-yy8:
+yy50:
 	++cursor3;
 	{ return "a"; }
-yy10:
+yy52:
 	++cursor3;
 	{ return "b"; }
 /* *********************************** */
@@ -170,20 +170,20 @@ yyc_r2:
 	if (limit3 <= cursor3) fill3(1);
 	yych = *cursor3;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy14;
-		if (yych <= '1') goto yy15;
-		goto yy17;
+		if (yych <= '0') goto yy56;
+		if (yych <= '1') goto yy57;
+		goto yy59;
 	} else {
-		if (yych == 'b') goto yy19;
+		if (yych == 'b') goto yy61;
 	}
-yy14:
-yy15:
+yy56:
+yy57:
 	++cursor3;
 	{ return "1"; }
-yy17:
+yy59:
 	++cursor3;
 	{ return "2"; }
-yy19:
+yy61:
 	++cursor3;
 	{ return "b"; }
 }

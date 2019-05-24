@@ -4,7 +4,8 @@
 
 void scan(unsigned char* in)
 {
-/*!re2c re2c not allowed
+/*!re2c
+    <c1> * {}
 */
 }
  
