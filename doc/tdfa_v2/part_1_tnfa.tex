@@ -134,16 +134,18 @@
 
 \abstract[Summary]{
 We give an algorithm for regular expression parsing and submatch extraction with POSIX longest-match semantics.
-Our algorithm is based on Okui-Suzuki disambiguation procedure
-with a number of non-trivial improvements.
-Worst-case time complexity is $O(n \, m^2 \, t)$
-and memory requirement is $O(m^2)$,
+The algorithm is based on Okui-Suzuki disambiguation procedure with a number of non-trivial extensions and improvements.
+We study other NFA-based algorithms
+and show that the algorithm by Kuklewicz is slower in practice,
+and the backward matching algorithm by Cox is incorrect.
+%
+Our algorithm works in worst-case $O(n \, m^2 \, t)$ time and $O(m^2)$ space,
 where $n$ is the length of input, $m$ is the size of regular expression
 and $t$ is the number of capturing groups plus enclosing subexpressions.
-We perform comparative study of other algorithms
-and show that our algorithm outperforms other POSIX matching algorithms,
-and stays reasonably close to leftmost greedy matching. % (a couple of times slower on average).
-We also show that backward matching algorithm proposed by Cox is incorrect.
+%
+Benchmarks show that in practice our algorithm is 2-10x slower than leftmost greedy matching.
+%
+We discuss a lazy variation that is much faster, but requires memory proportional to the size of input.
 }
 
 \keywords{Regular Expressions, Parsing, Submatch Extraction, Finite-State Automata, POSIX}
@@ -159,9 +161,32 @@ We also show that backward matching algorithm proposed by Cox is incorrect.
 
 \section{Introduction}
 
-The difficulty of POSIX longest-match semantics is caused by the fact
-that we cannot predict correct match results in advance, at the point where they diverge.
-To see this, consider regular expression \texttt{(a\{2\}|a\{3\}|a\{5\})*} and string \texttt{a...a}.
+In this paper we study NFA-based approaches to the problem of POSIX regular expression parsing and submatch extraction.
+A number of algorithms have been proposed in recent years,
+but not all of them were thoroughly studied and formalized,
+and some support only a subset of POSIX regular expressions.
+Our goal is to compare different approaches,
+pick the most efficient one,
+extend it on the full range of POSIX regular expressions
+and provide a practical matching algorithm.
+%
+It should be noted that there exists a totally different approach based on Brzozowski derivatives.
+We choose to focus on NFA-based approach for the following reasons:
+first, we feel that both approaches deserve to be studied and formalized;
+and second, in our experience derivative-based approach is much slower in practice
+(possibly due to an imperfect implementation, but we also discuss theoretical bounds below).
+%
+Both NFAs and derivatives can be used to construct DFAs with POSIX longest-match semantics [SL13] [Bor15] [Tro17].
+The resulting DFA-based algorithms are very fast, because there is no run-time overhead on disambiguation.
+However, DFA construction is not always viable due to its exponential worst-case complexity,
+and if viable, it needs to be efficient.
+Therefore we concentrate on NFA-based algorithms
+that can be used directly for matching, or serve as a basis for DFA construction.
+We give an overview of existing algorithms, including some that are incorrect but interesting.
+%
+\iffalse
+The difficulty of POSIX longest-match semantics is caused by our inability to predict correct match results at the point where they diverge.
+Consider regular expression \texttt{(a\{2\}|a\{3\}|a\{5\})*} and string \texttt{a...a}.
 Submatch on the last iteration varies with the length of input:
 it equals \texttt{aaaaa} for $5n$-character string,
 \texttt{aa} for strings of length $5n - 3$ and $5n - 1$,
@@ -178,11 +203,11 @@ and if viable, it needs to be efficient.
 Therefore in this work we concentrate on practical NFA-based algorithms
 that can be used directly for matching or serve as a basis for DFA construction.
 We give an overview of existing algorithms, including some that are incorrect, but interesting.
+\fi
 
 \subparagraph{Laurikari, 2001 (incorrect).}
 
-Laurikari based his algorithm on TNFA ---
-$\epsilon$-NFA with tagged transitions [Lau01].
+Laurikari algorithm is based on TNFA, which is an $\epsilon$-NFA with tagged transitions [Lau01].
 Each submatch group is represented with a pair of \emph{tags} (opening and closing).
 Disambiguation is based on minimizing the value of opening tags and maximizing tha value of closing tags, where
 different tags have priority according to POSIX subexpression hierarchy.
@@ -206,18 +231,20 @@ by compressing histories in a matrix of size $t \times m$, where $m$ is TNFA siz
 $t$-Th row of the matrix represents ordering of closure states with respect to $t$-th tag
 (with possible ties --- different states may have the same order).
 Matrix is updated at each step using continuations of tag histories.
-The algorithm requires $O(m \, t)$ memory and $O(n \, m \, t \, (m + t \, log(m))$ time, where $n$ is the input length:
-$\epsilon$-closure takes $O(m^2 \, t)$ assuming worst-case optimal algorithm,
-and matrix update takes $O(m \, log(m) \, t^2)$ because for $t$ tags we need to sort $m$ states with $O(t)$ comparison function.
+The algorithm requires $O(m \, t)$ memory and $O(n \, m \, t \, (m + t \, log(m))$ time, where $n$ is the input length
+($\epsilon$-closure takes $O(m^2 \, t)$ assuming worst-case optimal algorithm,
+and matrix update takes $O(m \, log(m) \, t^2)$ because for $t$ tags we need to sort $m$ states with $O(t)$ comparison function).
 %Kuklewicz disambiguation is combined with Laurikari determinization [Lau00] in [Tro17].
 
 \subparagraph{Cox, 2009 (incorrect).}
 
-Cox came up with the idea of backward matching,
-which is based on the observation that it is easier to maximize submatch on the last iteration than on the first one.
-For each submatch group the algorithm tracks two pairs of offsets:
-the \emph{active} pair with the most recent offsets (used in disambiguation),
-and the \emph{final} pair with offsets on the backwards-first iteration.
+Cox came up with the idea of backward POSIX matching,
+which is based on the observation that it is easier to maximize submatch on the last (or most recent) iteration than on the first one,
+because we do not need to track the full history of previous iterations.
+The algorithm consumes the input string from right to left
+and tracks two pairs of offsets for each submatch group:
+the \emph{active} pair of most recent offsets (used in disambiguation),
+and the \emph{final} pair of offsets on the backwards-first (i.e. the last) iteration.
 The algorithm gives incorrect results under two conditions:
 (1) ambiguous matches have equal offsets on some iteration,
 and (2) comparison happens too late, when active offsets have already been updated and the difference is erased.
@@ -246,7 +273,7 @@ Okui and Suzuki view disambiguation problem from the point of comparison of pars
 Ambiguous trees have the same sequence of leaf symbols, but their branching structure is different.
 Each subtree corresponds to a subexpression.
 The \emph{norm} of a subtree (the number of leaf symbols in it) equals to submatch length.
-Longest match corresponds to a tree in which the norm of each subtree in leftmost pre-order traversal is maximized.
+Longest match corresponds to a tree in which the norm of each subtree in leftmost in-order traversal is maximized.
 The clever idea of Okui and Suzuki is to relate the norm of subtrees to their \emph{height} (distance from the root).
 Namely, if we walk through the leaves of two ambiguous trees, tracking the height of each complete subtree,
 then at some step heights will diverge:
@@ -284,21 +311,17 @@ and $t$ the number of submatch groups (the authors do not differentiate between 
 However, this estimate assumes worst-case $O(2^m)$ derivative size and on-the-fly DFA construction.
 The authors also mention a better $O(m^2)$ theoretical bound for derivative size.
 If we adopt it and exclude DFA consturuction, we get $O(m^2 \, t)$ memory requirement and $O(n \, m^2 \, t^2)$ time,
-which seems reasonably close to other approaches.
+which seems reasonably close to NFA-based approaches.
 \\
 
-Undoubtedly other approaches exist,
+Undoubtedly there are other approaches,
 but many of them produce incorrect results or require memory proportional to the length of input
-(e.g. Glibc [??]).
-We choose automata-based approach over derivatives for two reasons:
-first, we feel that both approaches deserve to be studied and formalized;
-and second, in our experience derivative-based approach was too slow (possibly due to an imperfect implementation).
-Of the two automata-based approaches, Kuklewicz and Okui-Suzuki, the latter appears to be somewhat faster in practice.
-However, computationally Kuklewicz and Okui-Suzuki approaches are similar:
+(e.g. Glibc implementation [??]).
+Of the two correct NFA-based approaches, Okui-Suzuki appears to be faster in practice.
+However, it should be noted that the two approaches have much in common:
 both compare partial matches incrementally at each step,
-only Kuklewicz considers histories of each tag separately.
-\\
-
+only Kuklewicz considers histories of different tags separately.
+%
 Our contributions are the following:
 \\[-0.5em]
 
@@ -309,15 +332,14 @@ Our contributions are the following:
         which means a lot of overhead if only a few groups are needed.
 
     \item We extend Okui-Suzuki algorithm on the case of bounded repetition.
-        This presents some unique challenges (like the one discussed with regard to Cox algorithm).
 
-    \item We combine Okui-Suzuki algorithm with Laurikari TNFA
-        and omit the preprocessing step of the original algorithm.
-        We do not argue that TNFA is generally faster than PAT,
-        but it may be preferable due to its simple construction.
+    \item We combine Okui-Suzuki algorithm with Laurikari TNFA.
+        It allows us to omit the preprocessing step
+        at the cost of $\epsilon$-closure construction,
+        which may be preferable in cases when preprocessing time is included in match time.
 
     \item We introduce \emph{negative tags} that allow us to handle
-        no-match in the same way as match.
+        no-match situation in the same way as match.
         In particular, this removes the need to fix obsolete offsets that remain from earlier iterations,
         in cases like \texttt{(a(b)?)*} and string \texttt{aba}.
 
@@ -331,29 +353,31 @@ Our contributions are the following:
         and also an improvement over Laurikari algorithm as shown in [Tro17].
 
     \item We give a faster algorithm for updating precedence matrix.
-        The straightforward algorithm described by Okui-Suzuki involves pairwise comparison of all states in closure
+        The straightforward algorithm described by Okui and Suzuki involves pairwise comparison of all states in closure
         and takes $O(m^2 \, t)$ time, assuming $m$ states and $O(t)$ comparison function.
-        We found a pathological case \texttt{((a?)\{0,1000\})*} where $t \approx m$ and naive algortihm takes cubic time.
-        Our algorithm takes $O(m^2)$ time (which is still slow, but a considerable improvement).
+        We show a pathological example \texttt{((a?)\{0,1000\})*} where $t \approx m$.
+        Our algorithm takes $O(m^2)$ time.
 
-    \item We provide an implementation of different algorithms in C++ (except for the one by Sulzmann and Lu)
-        and benchmark them against each other and against leftmost greedy matching implemented in RE2.
+    \item We discuss a \emph{lazy} variation of our algorithm
+        that reduces the overhead on disambiguation
+        at the cost of memory usage that grows with the length of input.
+        The lazy algorithm is simpler than the original and may used for not-too-long inputs.
 
-    \item We give detailed proof of correctness of the extended algorithm.
-    \\
+    \item We provide a C++ implementation of different NFA-based algorithms
+        and benchmark them against each other and against a ``baseline'' leftmost greedy implementation.
+    \\[-0.5em]
 \end{itemize}
 
 The rest of this paper is arranged as follows.
-In section \ref{section_main} we give the skeleton of the algorithm.
-In section \ref{section_formalization} we give formal definitions and theorems
-that allow us to establish correctness of our algorithm
-(the more practical reader may choose to skip it on the first reading).
+In section \ref{section_main} we present the main idea and the skeleton of our algorithm.
+In section \ref{section_formalization} we provide theoretical foundations for the rest of the paper.
 After that, we go into specific details:
-in section \ref{section_closure} we give algorithms for $\epsilon$-closure construction,
-in section \ref{section_pathtree} we discuss efficient representation of TNFA paths,
-in section \ref{section_comparison} we give the core disambiguation algorithms,
-in section \ref{section_results} we discuss different possible outputs of the algorithm
-and in section \ref{section_tnfa} we give specific TNFA construction.
+section \ref{section_closure} is concerned with $\epsilon$-closure construction,
+section \ref{section_pathtree} discusses data structures used to represent TNFA paths,
+section \ref{section_results} discusses possible output formats (parse trees or POSIX-style offsets),
+section \ref{section_comparison} gives the core disambiguation algorithms,
+section \ref{section_lazy} concerns lazy disambiguation
+and section \ref{section_tnfa} gives specific TNFA construction.
 The remaining sections \ref{section_benchmarks} and \ref{section_conclusion}
 contain benchmarks, conclusions and directions for future work.
 
@@ -361,14 +385,23 @@ contain benchmarks, conclusions and directions for future work.
 
 Our algorithm is based on four cornerstone concepts:
 regular expressions, parse trees, parenthesized expressions and tagged NFA.
-The first two concepts are needed to formulate submatch extraction problem
-and define POSIX disambiguation semantics in terms of order on parse trees.
-From that we go to parenthesized expressions --- a linearized representation of parse trees
-that have an equivalent, but more practical definition of order.
-Finally, we encode parenthesized expressions in automata paths
-and construct an efficient matching algorithm.
-In this section we give the four basic definitions, followed by a sketch of the algorithm.
-In later sections we fill in all the details and provide connection between different representations.
+%
+First, we formalize the matching problem
+by giving the usual interpretation of regular expressions as sets of parse trees.
+%
+Next, we define POSIX disambiguation semantics in terms of order on parse trees.
+This definition reflects POSIX standard,
+but it is too high-level to be used in a practical matching algorithm.
+%
+Therefore we go from parse trees to their linearized representation --- parenthesized expressions.
+We define order on parenthesized expressions and show its equivalence to the order on parse trees.
+The latter definition is more low-level and can be easily converted to an efficient comparison procedure.
+%
+Finally, we construct TNFA and map parenthesized expressions to its paths,
+which allows us to compare ambiguous paths using the definition of order on parenthesized expressions.
+%
+Below are the four basic definitions and the skeleton of the algorithm.
+In later sections we formalize relations between different representations and fill in all the details.
 
     \begin{Xdef}
     \emph{Regular expressions (RE)} over finite alphabet $\Sigma$, denoted $\XR_\Sigma$:
@@ -444,9 +477,9 @@ Parse trees have a special \emph{nil-tree} constructor
 and an upper index, which allows us to distinguish between submatch and non-submatch subtrees.
 Mirroring parse trees, parenthesized expressions also have a special \emph{nil-parenthesis}.
 TNFA is in essence a nondeterministic finite-state transducer
-in which some of the $\epsilon$-transitions are marked with \emph{tags}.
-Tags are integer numbers that denote opening and closing parentheses of submatch groups:
-for $i$-th group, opening tag is $2i - 1$ and closing tag is $2i$ (where $i \in \YN$).
+in which some of the $\epsilon$-transitions are marked with \emph{tags} ---
+integer numbers that denote opening and closing parentheses of submatch groups.
+For $i$-th group, opening tag is $2i - 1$ and closing tag is $2i$ (where $i \in \YN$).
 Tags can be negative, which represents the absence of match and corresponds to nil-parenthesis $\Xm$ and nil-tree $\varnothing$.
 Additionally, all $\epsilon$-transitions are marked with \emph{priority}
 which allows us to impose specific order of TNFA traversal
@@ -478,6 +511,8 @@ which allows us to impose specific order of TNFA traversal
     } \lElse {
         \Return $\varnothing$
     }
+
+    \BlankLine
 }
 %\caption{Skeleton of the matching algorithm.}
 \caption{TNFA simulation on a string.}
@@ -508,19 +543,15 @@ recording results in $B$ and $D$ matrices.
 On the next step $q$-components become $o$-components.
 If paths originating from current configurations meet on some future step,
 $closure ()$ will use origin states to lookup comparison results in $B$ and $D$ matrices.
-On the other hand, if the paths do not meet, then comparison performed by $update \Xund ptables ()$ is redundant.
-Unfortunately we cannot get rid of redundant comparisons:
-we do not know in advance which configurations will spawn ambiguous paths.
-It is possible to delay disambiguation until ambiguous paths meet,
-but that would require keeping arbitrary long paths in memory.
-Eager comparison is a tradeoff that allows the algorithm work in bounded memory at the expense of some time overhead.
+If the paths do not meet, then comparison performed by $update \Xund ptables ()$ is redundant ---
+unfortunately we do not know in advance which configurations will spawn ambiguous paths.
 \\
 
 %\vfill\null
 
 \section{Formalization}\label{section_formalization}
 
-In this section we establish the connection between all intermediate representations.
+In this section we establish the relation between all intermediate representations.
 First of all, we rewrite REs in a form that makes submatch information explicit:
 to each subexpression we assign an \emph{implicit} and \emph{explicit} submatch index, where
 explicit indices enumerate submatch groups (for all other subexpressions they are zero),
@@ -957,22 +988,42 @@ Two paths have a \emph{join point} if they have ambiguous prefixes.
 
 The problem of constructing $\epsilon$-closure with POSIX disambiguation
 can be formulated as a shortest path problem on directed graph with weighted arcs.
-In our case \emph{weight} corresponds to PE fragment induced by the path.
+%In our case \emph{weight} corresponds to PE fragment induced by the path.
 %
-We give two algorithms: GOR1, named after the well-known Goldberg-Radzik algorithm [GRC??],
-and GTOP, named after ``global topological order''.
+Cormen [Cor??] gives a framework for shortest-path algorithms based on \emph{closed semirings}.
 %
-Both have the usual structure of shortest-path finding algorithms.
-The algorithm starts with initial set of configurations, empty queue of some sort and an empty set of resulting configurations.
-Initial configurations are enqueued and the algorithm loops until the queue becomes empty.
-At each iteration it dequeues configuration $(q, o, u, r)$ and scans $\epsilon$-transitions from state $q$.
-For transition $(q, \Xund, \gamma, p)$ it constructs a new configuration $(p, o, v, r)$
-that combines $u$ and $\gamma$ in an extended path $v$.
-If the resulting set contains another configuration for state $p$,
-then the algorithm choses configuration which has a better path from POSIX perspective.
-Otherwise it adds the new configuration to the resulting set.
-If the resulting set was changed, the new configuration is enqueued for further scanning.
-Eventually all states in $\epsilon$-closure are explored, no improvements can be made, and the algorithm terminates.
+A \emph{semiring} is a structure $(\YK, \oplus, \otimes, \Xbar{0}, \Xbar{1})$, where
+$\YK$ is a set,
+$\oplus \!\!:\!\! \YK \times \YK \rightarrow \YK$ is an associative and commutative operation with identity element $\Xbar{0}$,
+$\otimes \!\!:\!\! \YK \times \YK \rightarrow \YK$ is an associative operation with identity element $\Xbar{1}$,
+$\otimes$ distributes over $\oplus$
+and $\Xbar{0}$ is annihilator for $\otimes$.
+%
+Additionally, \emph{closed} semiring requires that
+$\oplus$ is idempotent,
+any countable $\oplus$-sum of $\YK$ elements is in $\YK$,
+and associativity, commutativity, distributivity and idempotence apply to countable $\oplus$-sums.
+Mohri [Moh02] generalizes this definition and notes that either left or right distributivity is sufficient.
+%
+In our case we have semiring $(\YP, min, \cdot, \varnothing, \epsilon)$, where
+$\YP$ is the set of closure paths with at most one loop,
+$min$ is POSIX comparison of ambiguous paths,
+$\cdot$ is concatenation of paths (within TNFA bounds),
+$\varnothing$ corresponds to an infinitely long path,
+and $\epsilon$ is the empty path.
+%
+It is easy to show that
+$min$ is commutative and associative (theorem \ref{theorem_order_on_pe_same_as_on_pt} and \ref{theorem_sorder_on_PTs}),
+$min(\pi, \varnothing) = min(\varnothing, \pi) = \pi$,
+$\cdot$ is associative, $\pi \cdot \epsilon = \epsilon \cdot \pi = \pi$,
+$\pi \cdot \varnothing = \varnothing \cdot \pi = \varnothing$,
+and right distributivity of $\cdot$ over $min$ for paths with at most one $\epsilon$-loop is given by lemma \ref{lemma_closure_rightdist}.
+%
+Idempotence holds because $min(\pi, \pi) = \pi$.
+%
+Since $\YP$ is limited to paths with at most one $\epsilon$-loop,
+countable subsets of $\YP$ are finite
+and the properties for $\oplus$-sums over countable subsets are satisfied.
 \\
 
 \begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
@@ -1152,7 +1203,7 @@ Eventually all states in $\epsilon$-closure are explored, no improvements can be
     \BlankLine
 
     \Fn {$\underline{less (x, y, C)} \smallskip$} {
-        $(\Xund, \Xund, l) = compare (x, y, N, U, B, D)$ \;
+        $(\Xund, \Xund, l) = compare (x, y, U, B, D)$ \;
         \Return $l < 0$
     }
     \BlankLine
@@ -1171,10 +1222,25 @@ Eventually all states in $\epsilon$-closure are explored, no improvements can be
 Closure algorithms GOR1 (on the left) and GTOP (on the right).
 Definition of functions of $push()$, $pop()$, $insert \Xund with \Xund priority()$, $extract \Xund min()$,
 $indeg()$ and $topord()$ is omitted for brevity.
-Definitions of $compare ()$ and $extend \Xund path ()$ will be given in section \ref{section_comparison}.
+Definitions of $compare ()$ and $extend \Xund path ()$ are given in sections \ref{section_comparison} and \ref{section_pathtree}.
 $\YC$ is the set of all configurations.}
 \end{algorithm}
 
+We give two algorithms for closure construction: GOR1, named after the well-known Goldberg-Radzik algorithm [GRC??],
+and GTOP, named after ``global topological order''.
+%
+Both have the usual structure of shortest-path finding algorithms.
+The algorithm starts with a set of initial configurations, empty queue and empty set of resulting configurations.
+Initial configurations are enqueued and the algorithm loops until the queue becomes empty.
+At each iteration it dequeues configuration $(q, o, u, r)$ and scans $\epsilon$-transitions from state $q$.
+For transition $(q, \Xund, \gamma, p)$ it constructs a new configuration $(p, o, v, r)$
+that combines $u$ and $\gamma$ in an extended path $v$.
+If the resulting set contains another configuration for state $p$,
+then the algorithm choses configuration which has a better path from POSIX perspective.
+Otherwise it adds the new configuration to the resulting set.
+If the resulting set was changed, the new configuration is enqueued for further scanning.
+Eventually all states in $\epsilon$-closure are explored, no improvements can be made, and the algorithm terminates.
+\\
 
 Importantly, the algorithm finds non-looping paths before looping ones.
 Given that, and using lemma \ref{lemma_closure_minpaths},
@@ -1197,45 +1263,9 @@ Lemma \ref{lemma_closure_rightdist} allows us to skip comparison in non-join sta
 any path to such state is formed by concatenation of the unique transition and the shortest known path to the previous state.
 \\
 
-
-Cormen [Cor??] and later Mohri [Moh02] give a framework for shortest-path algorithms based on \emph{closed semirings}.
+The difference between GOR1 and GTOP is in the order they inspect configurations.
 %
-A \emph{semiring} is a structure $(\YK, \oplus, \otimes, \Xbar{0}, \Xbar{1})$, where
-$\YK$ is a set,
-$\oplus \!\!:\!\! \YK \times \YK \rightarrow \YK$ is an associative and commutative operation with identity element $\Xbar{0}$,
-$\otimes \!\!:\!\! \YK \times \YK \rightarrow \YK$ is an associative operation with identity element $\Xbar{1}$,
-$\otimes$ distributes over $\oplus$
-and $\Xbar{0}$ is annihilator for $\otimes$.
-%
-Additionally, \emph{closed} semiring requires that
-$\oplus$ is idempotent,
-any countable $\oplus$-sum of $\YK$ elements is in $\YK$,
-and associativity, commutativity, distributivity and idempotence apply to countable $\oplus$-sums.
-(Mohri gives a more general definition and notes that either left or right distributivity is sufficient.)
-%
-In our case the semiring is $(\YP, min, \cdot, \varnothing, \epsilon)$, where
-$\YP$ is the set of closure paths with at most one loop,
-$min$ is POSIX comparison of ambiguous paths,
-$\cdot$ is concatenation of paths,
-$\varnothing$ is an artificial concept of a very long (or absent) path,
-and $\epsilon$ is the empty path.
-%
-It is not exactly a semiring, since the operations of concatenation and comparison are partial,
-but it satisfies the necessary properties:
-$min$ is commutative and associative (theorem \ref{theorem_order_on_pe_same_as_on_pt} and \ref{theorem_sorder_on_PTs}),
-$min(\pi, \varnothing) = min(\varnothing, \pi) = \pi$,
-$\cdot$ is associative, $\pi \cdot \epsilon = \epsilon \cdot \pi = \pi$,
-$\pi \cdot \varnothing = \varnothing \cdot \pi = \varnothing$,
-and right distributivity of $\cdot$ over $min$ for paths with at most one $\epsilon$-loop is given by lemma \ref{lemma_closure_rightdist}.
-%
-Idempotence holds because $min(\pi, \pi) = \pi$.
-%
-Since $\YP$ is limited to paths with at most one $\epsilon$-loop,
-countable subsets of $\YP$ are finite
-and the properties for $\oplus$-sums over countable subsets are satisfied.
-\\
-
-Both GOR1 and GTOP algorithms are based on the idea of topologcal ordering.
+Both algorithms are based on the idea of topologcal ordering.
 Unlike other shortest-path algorithms, their queuing discipline is based on graph structure, not on the distance estimates.
 This is crucial, because we do not have any distance estimates:
 paths can be compared, but there is no absolute ``POSIX-ness'' value that we can attribute to each path.
@@ -1253,7 +1283,7 @@ GTOP is a simple algorithm that maintains one global priority queue (e.g. a bina
 ordered by the topological index of states (for graphs with cycles, we assume reverse depth-first post-order).
 Since GTOP does not have $n$-pass structure, its worst-case complexity is not clear.
 However, it is much simpler to implement
-and in practice performs almost identically to GOR1 on graphs induced by TNFA $\epsilon$-closures.
+and in practice it performs almost identically to GOR1 on graphs induced by TNFA $\epsilon$-closures.
 %
 On acyclic graphs, both GOR1 and GTOP have linear $O(n + m)$ complexity.
 
@@ -1363,7 +1393,7 @@ Helper function $sub(T, t)$ maps each tag to the corresponding submatch group
 In the second case, $r$-component of configurations is a tagged string that is accumulated at each step,
 and eventually converted to a parse tree at the end of match.
 The resulting parse tree is only partially structured:
-leaves that correspond to subexpressions with zero implicit submatch index contain ``flattened'' substring alphabet symbols.
+leaves that correspond to subexpressions with zero implicit submatch index contain ``flattened'' substring of alphabet symbols.
 It is possible to construct parse trees incrementally as well,
 but this is more complex and the partial trees may require even more space than tagged strings.
 %
@@ -1491,13 +1521,16 @@ We assume the existence of helper function $height(T, t)$ that maps each tag to 
 \begin{multicols}{2}
     \setstretch{0.8}
 
-    \Fn {$\underline {compare (N, (\Xund, o_1, n_1, \Xund), (\Xund, o_2, n_2, \Xund), U, B, D)} \smallskip$} {
-        \If { $o_1 = o_2 \wedge n_1 = n_2$ } {
+    \Fn {$\underline {compare (c_1, c_2, U, B, D)} \smallskip$} {
+        $(\Xund, o_1, n_1, \Xund) = c_1, \; (\Xund, o_2, n_2, \Xund) = c_2$ \;
+
+        \lIf { $o_1 = o_2 \wedge n_1 = n_2$ } {
             \Return $(\infty, \infty, 0)$
         }
 
         \BlankLine
-        \lIf {$o_1 = o_2$ } {
+        $f\!ork = o_1 = o_2$ \;
+        \lIf {$f\!ork$ } {
             $h_1 = h_2 = \infty$
         }
         \lElse {
@@ -1509,11 +1542,11 @@ We assume the existence of helper function $height(T, t)$ that maps each tag to 
         \While {$n_1 \neq n_2$} {
             \If {$n_1 > n_2$} {
                 $h_1 = min(h_1, height(T, tag(U, n_1)))$ \;
-                $m_1 = n_1, n_1 = pred(U, n_1)$ \;
+                $m_1 = n_1, \; n_1 = pred(U, n_1)$ \;
             }
             \Else {
                 $h_2 = min(h_2, height(T, tag(U, n_2)))$ \;
-                $m_2 = n_2, n_2 = pred(U, n_2)$ \;
+                $m_2 = n_2, \; n_2 = pred(U, n_2)$ \;
             }
         }
         \If {$n_1 \neq \bot$} {
@@ -1522,20 +1555,19 @@ We assume the existence of helper function $height(T, t)$ that maps each tag to 
         }
 
         \BlankLine
-        $l = prec (h_1, h_2, o_1, o_2, m_1, m_2, U, D)$ \;
+        \lIf     {$h_1 > h_2$}    {$l = -1$}
+        \lElseIf {$h_1 < h_2$}    {$l = 1$ }
+        \lElseIf {$\neg f\!ork$}  {$l = D[o_1][o_2]$}
+        \lElse                    {$l = le\!f\!tprec(m_1, m_2, U)$}
+
+        \BlankLine
         \Return $(h_1, h_2, l)$ \;
     }
     \BlankLine
     \BlankLine
 
-    \Fn {$\underline {prec (h_1, h_2, o_1, o_2, n_1, n_2, U, D)} \smallskip$} {
-        \lIf {$h_1 > h_2$} { \Return $-1$ }
-        \lIf {$h_1 < h_2$} { \Return $1$ }
+    \Fn {$\underline {le\!f\!tprec (n_1, n_2, U)} \smallskip$} {
 
-        \BlankLine
-        \lIf {$o_1 \neq o_2$} { \Return $D[o_1][o_2]$ }
-
-        \BlankLine
         \lIf {$n_1 = n_2$} { \Return $0$ }
         \lIf {$n_1 = \bot$} { \Return $-1$ }
         \lIf {$n_2 = \bot$} { \Return $1$ }
@@ -1560,7 +1592,7 @@ We assume the existence of helper function $height(T, t)$ that maps each tag to 
     \Fn {$\underline {update \Xund ptables (N, X, U, B, D)} \smallskip$} {
         \For {$x_1 = (q_1, \Xund, \Xund, \Xund) \in X$} {
             \For {$x_2 = (q_2, \Xund, \Xund, \Xund) \in X$} {
-                $(h_1, h_2, l) = compare (x_1, x_2, N, U, B, D)$ \;
+                $(h_1, h_2, l) = compare (x_1, x_2, U, B, D)$ \;
                 $B' [q_1] [q_2] = h_1, \; D' [q_1] [q_2] = l$ \;
                 $B' [q_2] [q_1] = h_2, \; D' [q_2] [q_1] = -l$
             }
@@ -1602,8 +1634,7 @@ We assume the existence of helper function $height(T, t)$ that maps each tag to 
 
                     \BlankLine
                     \If {$n = 0 \wedge o_1 \neq o_2$} {
-                        $h_1 = B[o_1][o_2]$ \;
-                        $h_2 = B[o_2][o_1]$ \;
+                        $h_1 = B[o_1][o_2], \; h_2 = B[o_2][o_1]$ \;
                         $l = D[o_1][o_2]$ \;
                     }
                     \lElse {
@@ -1639,7 +1670,10 @@ We assume the existence of helper function $height(T, t)$ that maps each tag to 
                         }
 
                         \BlankLine
-                        $l = prec (h_1, h_2, o_1, o_2, n_1, n_2, U, D)$ \;
+                        \lIf     {$h_1 > h_2$}    {$l = -1$}
+                        \lElseIf {$h_1 < h_2$}    {$l = 1$ }
+                        \lElseIf {$o_1 \neq o_2$} {$l = D[o_1][o_2]$}
+                        \lElse                    {$l = le\!f\!tprec(n_1, n_2, U)$}
                     }
 
                     \BlankLine
@@ -1661,7 +1695,7 @@ We assume the existence of helper function $height(T, t)$ that maps each tag to 
     }
 
 \end{multicols}
-\vspace{1em}
+%\vspace{1em}
 \caption{Disambiguation procedures.}
 \end{algorithm}
 \medskip
@@ -1683,7 +1717,149 @@ sets their $h$-component to the minimum of $h$ and the height of tag at the curr
 and computes the new value of $B$ and $D$ matrices for each pair of $q$-states in items from different branches.
 After that, $u$-component of all scanned items is downgraded to the tree index of current node
 (erasing the difference between items from different branches).
+
+
+\section{Lazy disambiguation}\label{section_lazy}
+
+Most of the overhead in our algorithm comes from updating $B$ and $D$ matrices at each step.
+It is all the more unfortunate since many comparisons performed by $update \Xund ptables ()$ are useless ---
+the compared paths may never meet.
+In fact, if the input is unambiguous, all comparisons are useless.
+%
+A natural idea, therefore, is to compare paths only in case of real ambiguity (when they meet in closure)
+and avoid computation of precedence matrices altogether.
+%
+We can do it with a few modifications to our original algorithm.
+%
+First, we no longer need $B$ and $D$ matrices and $update \Xund ptables ()$ function.
+Instead, we introduce cache $C$ that maps a pair of tree indices $(n_1, n_2)$ to a triple of precedence values $(h_1, h_2, l)$.
+Cache stores the ``useful'' part of $B$ and $D$ matrices on multiple preceding steps.
+It is populated lazily during disambiguation
+and allows us to avoid re-computing the same values multiple times.
+%
+Second, we need to modify tree representation of paths in the following way:
+forward links are no longer needed (parent links are sufficient),
+and tree nodes must be augmented with information about current step and origin state (we assume the existence of helper functions $step()$ and $origin()$).
+%
+Third, instead of using $empty \Xund path ()$ to initialize path fragments in configurations
+we need to set them to path fragments of their parent configurations,
+so that paths are accumulated rather than reset at each step.
+%
+Fourth, we no longer need to call $update \Xund result ()$ at each step --- this can be done once at the end of match.
+%
+Below is the modified lazy version of $compare()$, the only part of the algorithm that requires non-trivial change.
 \\
+
+\iffalse
+\begin{itemize}[itemsep=0.5em]
+    \item Remove $B$ and $D$ matrices and $update \Xund ptables ()$.
+
+    \item Modify tree representation of paths in the following way:
+        remove forward links (only parent links are needed)
+        and extend tree nodes with information about current step and origin state.
+
+    \item Instead of initializing path fragments in configurations with $empty \Xund path ()$,
+        initialize them with path fragments of the parent configuration
+        (so that paths are accumulated rather than reset at each step).
+
+    \item Add a cache that maps a pair of tree indices $(n_1, n_2)$ to a triple of already computed precedence values $(h_1, h_2, l)$.
+
+    \item Modify $compare ()$ in the following way:
+
+    \item Instead of calling $update \Xund result ()$ at each step, do it once at the end of match.
+    \\
+\end{itemize}
+\fi
+
+\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+\begin{multicols}{2}
+    \setstretch{0.8}
+
+    \Fn {$\underline {compare (c_1, c_2, U, C)} \smallskip$} {
+        $(\Xund, \Xund, n_1, \Xund) = c_1, \; (\Xund, \Xund, n_2, \Xund) = c_2$ \;
+
+        \BlankLine
+        \Return $compare1 (n_1, n_2, U, C)$ \;
+    }
+    \BlankLine
+    \BlankLine
+
+    \Fn {$\underline {compare1 (n_1, n_2, U, C)} \smallskip$} {
+        \If {$C(n_1, n_2) = \varnothing $} {
+            $C(n_1, n_2) = compare2 (n_1, n_2, U, C)$ \;
+        }
+
+        \BlankLine
+        \Return $C(n_1, n_2)$ \;
+    }
+    \BlankLine
+    \BlankLine
+
+    \vfill
+    \columnbreak
+
+    \Fn {$\underline {compare2 (n_1, n_2, U, C)} \smallskip$} {
+        \lIf { $n_1 = n_2$ } {
+            \Return $(\infty, \infty, 0)$
+        }
+
+        \BlankLine
+        $h_1 = h_2 = \infty$ \;
+        $o_1 = origin(U, n_1), \; o_2 = origin(U, n_2)$ \;
+        $s_1 = step(U, n_1), \; s_2 = step(U, n_2), \; s = max (s_1, s_2)$ \;
+        $f\!ork = o_1 = o_2 \wedge s_1 = s_2$ \;
+
+        \BlankLine
+        $m_1 = m_2 = \bot$ \;
+        \While {$n_1 \neq n_2 \wedge (s_1 \geq s \vee s_2 \geq s)$} {
+            \If {$s_1 \geq s \wedge (n_1 > n_2 \vee s_2 < s)$} {
+                $h_1 = min(h_1, height(T, tag(U, n_1)))$ \;
+                $m_1 = n_1, \; n_1 = pred(U, n_1), \; s_1 = step(U, n_1)$ \;
+            }
+            \Else {
+                $h_2 = min(h_2, height(T, tag(U, n_2)))$ \;
+                $m_2 = n_2, \; n_2 = pred(U, n_2), \; s_2 = step(U, n_2)$ \;
+            }
+        }
+
+        \BlankLine
+        \If {$\neg f\!ork$ } {
+            $(h'_1, h'_2, l) = compare1(n_1, n_2, U, C)$ \;
+            $h_1 = min(h_1, h'_1), \; h_2 = min(h_2, h'_2)$ \;
+        }
+        \ElseIf {$n_1 \neq \bot$} {
+            $h = height(T, tag(U, n_1))$ \;
+            $h_1 = min(h_1, h), \; h_2 = min(h_2, h)$ \;
+        }
+
+        \BlankLine
+        \lIf     {$h_1 > h_2$} {$l = -1$}
+        \lElseIf {$h_1 < h_2$} {$l = 1$ }
+        \lElseIf {$f\!ork$}    {$l = le\!f\!tprec(m_1, m_2, U)$}
+
+        \BlankLine
+        \Return $(h_1, h_2, l)$ \;
+    }
+    \BlankLine
+    \BlankLine
+
+\end{multicols}
+\vspace{1em}
+\caption{Lazy disambiguation procedures (we assume that cache $C$ is modified in-place).}
+\end{algorithm}
+\medskip
+
+
+The problem with this approach is that we need to keep full-length history of each active path:
+at the point of ambiguity we may need to look an arbitrary number of steps back
+in order to find the fork of ambiguous paths.
+%
+This may be acceptable for small inputs (and memory footprint may even be smaller due to reduction of precedence matrices),
+but it is definitely infeasible for very long or streaming inputs.
+%
+A possible solution may be a hybrid approach that uses lazy disambiguation,
+but every $k$ steps fully calculates precedence matrices and ``forgets'' path prefixes.
+Another possible solution is to keep both algorithms and choose between them depending on the lenght of input.
 
 
 \section{TNFA construction}\label{section_tnfa}
