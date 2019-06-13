@@ -186,4 +186,5 @@ bench_libre2c_SOURCES = lib/bench.cc
 bench_libre2c_CXXFLAGS = $(AM_CXXFLAGS) -std=c++11
 bench_libre2c_LDFLAGS = $(LDFLAGS_RE2)
 bench_libre2c_LDADD = libre2c.la
+noinst_PROGRAMS += bench_libre2c
 

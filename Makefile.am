@@ -8,6 +8,7 @@ RE2CFLAGS = -br -W
 
 # binary
 bin_PROGRAMS = re2c
+noinst_PROGRAMS =
 RE2C = re2c$(EXEEXT)
 
 # sources
