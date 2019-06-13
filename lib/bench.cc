@@ -288,7 +288,7 @@ static void load_strings(const char *fname, const char *delim
 int main()
 {
     static const size_t VERY_LONG = 1 << 16;
-    const char *regexp, *string;
+    const char *regexp;
     std::vector<std::string> strings;
     char *longstring = new char[VERY_LONG + 1];
     longstring[VERY_LONG] = 0;
