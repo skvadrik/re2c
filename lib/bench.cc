@@ -152,13 +152,23 @@ static Result bench_re2(const char *regexp, std::vector<std::string> &strings
 }
 #endif
 
+static uint32_t groupcnt(const char *r)
+{
+    uint32_t cnt = 0;
+    for (; *r; ++r) {
+        if (*r == '(') ++cnt;
+    }
+    return cnt;
+}
+
 static void bench(const char *r, std::vector<std::string> &ss, size_t n
     , int mask, int need)
 {
     assert(!ss.empty());
     const char *s0 = ss[0].c_str();
 
-    fprintf(stderr, "\nr: %.*s..., s: %.*s..., n: %lu\n", 30, r, 30, s0, n);
+    fprintf(stderr, "\nr: %.*s..., s: %.*s..., n: %lu, %lu chars, %u groups\n"
+        , 30, r, 30, s0, n, strlen(r), groupcnt(r));
 
     std::vector<Result> rs;
 
