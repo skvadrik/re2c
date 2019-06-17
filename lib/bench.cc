@@ -77,14 +77,17 @@ static Result bench_re2c(const char *regexp, std::vector<std::string> &strings
     const size_t nmatch = re.re_nsub;
     regmatch_t *pmatch = new regmatch_t[nmatch];
 
-    t3 = clock();
-    err = 0;
-    for (size_t i = 0; i < ntimes; ++i) {
-        for (size_t j = 0; j < strings.size(); ++j) {
-            err |= regexec(&re, strings[j].c_str(), nmatch, pmatch, 0);
+    // first time is warmup
+    for (size_t j = 0; j < 2; ++j) {
+        t3 = clock();
+        err = 0;
+        for (size_t i = 0; i < ntimes; ++i) {
+            for (size_t j = 0; j < strings.size(); ++j) {
+                err |= regexec(&re, strings[j].c_str(), nmatch, pmatch, 0);
+            }
         }
+        t4 = clock();
     }
-    t4 = clock();
     if (err) {
         fprintf(stderr, "*** %s run failed\n", prefix);
         exit(1);
@@ -130,13 +133,16 @@ static Result bench_re2(const char *regexp, std::vector<std::string> &strings
         argps[i] = &args[i];
     }
 
-    t3 = clock();
-    for (size_t i = 0; i < ntimes; ++i) {
-        for (size_t j = 0; j < strings.size(); ++j) {
-            ok = ok && RE2::FullMatchN(strings[j].c_str(), *re2, argps, argc);
+    // first time is warmup
+    for (size_t j = 0; j < 2; ++j) {
+        t3 = clock();
+        for (size_t i = 0; i < ntimes; ++i) {
+            for (size_t j = 0; j < strings.size(); ++j) {
+                ok = ok && RE2::FullMatchN(strings[j].c_str(), *re2, argps, argc);
+            }
         }
+        t4 = clock();
     }
-    t4 = clock();
     if (!ok) {
         fprintf(stderr, "*** %s run failed\n", prefix);
         exit(1);
@@ -306,16 +312,16 @@ int main()
     // http
     load_strings("../lib/bench.data_http", "\n\n", strings);
     regexp = MESSAGE_HEAD;
-    bench(regexp, strings, 1, REG_BACKWARD, 0);
+    bench(regexp, strings, 100, REG_BACKWARD, 0);
     regexp = MESSAGE_HEAD2;
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, 100, REG_BACKWARD, 0);
 
     // uri
     load_strings("../lib/bench.data_uri", "\n", strings);
     regexp = URI;
-    bench(regexp, strings, 1, REG_BACKWARD, 0);
+    bench(regexp, strings, 100, REG_BACKWARD, 0);
     regexp = URI2;
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, 100, 0, 0);
 
     // ipv6
     strings.clear();
