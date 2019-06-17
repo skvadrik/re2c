@@ -143,9 +143,9 @@ Our algorithm works in worst-case $O(n \, m^2 \, t)$ time and $O(m^2)$ space,
 where $n$ is the length of input, $m$ is the size of regular expression
 and $t$ is the number of capturing groups plus enclosing subexpressions.
 %
-Benchmarks show that in practice our algorithm is 2-10x slower than leftmost greedy matching.
+Benchmarks show that in practice our algorithm is 2x-10x slower than leftmost greedy matching.
 %
-We discuss a lazy variation that is much faster, but requires memory proportional to the size of input.
+We present a lazy variation that is much faster, but requires memory proportional to the size of input.
 }
 
 \keywords{Regular Expressions, Parsing, Submatch Extraction, Finite-State Automata, POSIX}
@@ -170,13 +170,13 @@ pick the most efficient one,
 extend it on the full range of POSIX regular expressions
 and provide a practical matching algorithm.
 %
-It should be noted that there exists a totally different approach based on Brzozowski derivatives.
-We choose to focus on NFA-based approach for the following reasons:
+It should be noted that there exists a totally different approach to the problem based on Brzozowski derivatives.
+We choose to focus on NFA for the following reasons:
 first, we feel that both approaches deserve to be studied and formalized;
-and second, in our experience derivative-based approach is much slower in practice
+and second, in our experience derivative-based approach is slow in practice
 (possibly due to an imperfect implementation, but we also discuss theoretical bounds below).
 %
-Both NFAs and derivatives can be used to construct DFAs with POSIX longest-match semantics [SL13] [Bor15] [Tro17].
+Both NFA and derivatives can be used to construct DFA with POSIX longest-match semantics [SL13] [Bor15] [Tro17].
 The resulting DFA-based algorithms are very fast, because there is no run-time overhead on disambiguation.
 However, DFA construction is not always viable due to its exponential worst-case complexity,
 and if viable, it needs to be efficient.
@@ -239,17 +239,17 @@ and matrix update takes $O(m \, log(m) \, t^2)$ because for $t$ tags we need to 
 \subparagraph{Cox, 2009 (incorrect).}
 
 Cox came up with the idea of backward POSIX matching,
-which is based on the observation that it is easier to maximize submatch on the last (or most recent) iteration than on the first one,
+which is based on the observation that it is easier to maximize submatch on the last iteration than on the first one,
 because we do not need to track the full history of previous iterations.
-The algorithm consumes the input string from right to left
+The algorithm consumes input from right to left
 and tracks two pairs of offsets for each submatch group:
-the \emph{active} pair of most recent offsets (used in disambiguation),
+the \emph{active} pair of the most recent offsets used in disambiguation,
 and the \emph{final} pair of offsets on the backwards-first (i.e. the last) iteration.
 The algorithm gives incorrect results under two conditions:
 (1) ambiguous matches have equal offsets on some iteration,
-and (2) comparison happens too late, when active offsets have already been updated and the difference is erased.
+and (2) disambiguation happens too late, when active offsets have already been updated and the difference between ambiguous matches is erased.
 We found that such situations may occur for two reasons.
-First, $\epsilon$-closure algorithm may compare ambiguous paths \emph{after} their join point,
+First, $\epsilon$-closure algorithm sometimes compares ambiguous paths \emph{after} their join point,
 when both paths have a common suffix with tagged transitions.
 This is the case with Cox prototype implementation [Cox09]; for example, it gives incorrect results for \texttt{(aa|a)*} and string \texttt{aaaaa}.
 Most of such failures can be repaired by exploring states in topological order,
@@ -258,8 +258,8 @@ The second reason is bounded repetition: ambiguous paths may not have an interme
 For example, in case of \texttt{(aaaa|aaa|a)\{3,4\}} and string \texttt{aaaaaaaaaa}
 we have matches \texttt{(aaaa)(aaaa)(a)(a)} and \texttt{(aaaa)(aaa)(aaa)}
 with different number of iterations.
-If bounded repetion is modelled by duplicating sub-automata and making the last repetition optional,
-then by the time ambiguous paths meet both have active offsets \texttt{(0,4)}.
+Assuming that bounded repetion is modelled by chaining three non-optional sub-automata for \texttt{(aaaa|aaa|a)} and the optional fourth one,
+by the time ambiguous paths meet both have active offsets \texttt{(0,4)}.
 Despite the flaw, Cox algorithm is interesting: if somehow delayed comparison problem was fixed, it would work.
 The algorithm requires $O(m \, t)$ memory and $O(n \, m^2 \, t)$ time
 (assuming worst-case optimal closure algorithm),
@@ -318,9 +318,9 @@ Undoubtedly there are other approaches,
 but many of them produce incorrect results or require memory proportional to the length of input
 (e.g. Glibc implementation [??]).
 Of the two correct NFA-based approaches, Okui-Suzuki appears to be faster in practice.
-However, it should be noted that the two approaches have much in common:
+It should be noted that Okui-Suzuki and Kuklewicz approaches have much in common:
 both compare partial matches incrementally at each step,
-only Kuklewicz considers histories of different tags separately.
+only Kuklewicz considers history of each tag separately.
 %
 Our contributions are the following:
 \\[-0.5em]
@@ -328,8 +328,8 @@ Our contributions are the following:
 \begin{itemize}[itemsep=0.5em]
 
     \item We extend Okui-Suzuki algorithm on the case of partially ordered parse trees.
-        The original algorithm considers all subexpressions as submatch groups,
-        which means a lot of overhead if only a few groups are needed.
+        This results in significant reduction of the overhead on disambiguation
+        for regular expressions with only a few submatch groups (a common case in practice).
 
     \item We extend Okui-Suzuki algorithm on the case of bounded repetition.
 
@@ -346,22 +346,24 @@ Our contributions are the following:
     \item We consider $\epsilon$-closure construction as a shortest-path problem
         and show that path concatenation is right-distributive over path comparison
         for the subset of paths considered by closure algorithm.
-        This justifies the use of Goldberg-Radzik algorithm based on the idea of topological order,
+        This justifies the use of well-known Goldberg-Radzik algorithm based on the idea of topological order,
         which has worst-case optimal quadratic complexity in the size of closure
         and guaranteed linear complexity if the closure has no $\epsilon$-loops.
         This is an improvement over naive exhaustive depth-first search with backtracking,
         and also an improvement over Laurikari algorithm as shown in [Tro17].
 
-    \item We give a faster algorithm for updating precedence matrix.
+    \item We give a faster algorithm for updating precedence matrices.
         The straightforward algorithm described by Okui and Suzuki involves pairwise comparison of all states in closure
         and takes $O(m^2 \, t)$ time, assuming $m$ states and $O(t)$ comparison function.
         We show a pathological example \texttt{((a?)\{0,1000\})*} where $t \approx m$.
         Our algorithm takes $O(m^2)$ time.
 
-    \item We discuss a \emph{lazy} variation of our algorithm
+    \item We show how to use our algorithm in order to build either parse trees or POSIX-style offsets.
+
+    \item We present a simple \emph{lazy} variation of our algorithm
         that reduces the overhead on disambiguation
         at the cost of memory usage that grows with the length of input.
-        The lazy algorithm is simpler than the original and may used for not-too-long inputs.
+        The lazy algorithm is well-suited for small inputs.
 
     \item We provide a C++ implementation of different NFA-based algorithms
         and benchmark them against each other and against a ``baseline'' leftmost greedy implementation.
@@ -581,14 +583,8 @@ Function $\IRE$ transforms RE into IRE.
 It is defined via a composition of two functions,
 $mark()$ that transforms RE into IRE with submatch indices in the boolean range $\{0, 1\}$,
 and $enum()$ that substitutes boolean indices with consecutive numbers.
-%$\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
-%Note that we consider $(e)$ as a special case of repetition $(e)^{1,1}$:
-%this allows us to handle all parenthesized sub-RE uniformly.
 An example of constructing an IRE from a RE is given on figure \ref{fig_mark_enum}.
-%The reverse transformation is also possible by erasing all indices
-%and adding parentheses around subexpressions with nonzero explicit submatch index.
-%Therefore RE and IRE are equivalent representations.
-
+%
     \begin{align*}
     &\begin{aligned}
         mark &: \XR_\Sigma \longrightarrow \XIR_\Sigma \\
@@ -632,11 +628,13 @@ An example of constructing an IRE from a RE is given on figure \ref{fig_mark_enu
         \\[-0.2em]
     \end{aligned}
     \end{align*}
-    \medskip
 
 The relation between regular expressions and parse trees is given by the operator $\PT$.
-Each IRE denotes a set of PTs:
-
+Each IRE denotes a set of PTs.
+%
+We write $str(t)$ to denote the string formed by concatenation of all alphabet symbols in the left-to-right traversal of $t$,
+and $\PT(r, w)$ denotes the set $\big\{ t \in \PT(\IRE(r)) \mid str(t) = w \big\}$ of all PTs for a RE $r$ and a string $w$.
+%
     \begin{align*}
         \PT &: \XIR_\Sigma \rightarrow 2^{\XT_\Sigma}
         \\
@@ -662,9 +660,6 @@ Each IRE denotes a set of PTs:
             \end{cases}
     \end{align*}
     \medskip
-
-We write $str(t)$ to denote the string formed by concatenation of all alphabet symbols in the left-to-right traversal of $t$,
-and $\PT(r, w)$ denotes the set $\big\{ t \in \PT(\IRE(r)) \mid str(t) = w \big\}$ of all PTs for a RE $r$ and a string $w$.
 
     \begin{Xdef}\label{ambiguity_of_parse_trees}
     \emph{Ambiguity of parse trees.}
@@ -811,7 +806,7 @@ without losing the context of the whole expression.
 However, height is not a part of parenthesis itself,
 and it is not taken into account when comparing the elements of PEs.
 Function $\Phi$ transforms PT at the given height into PE:
-
+%
     \begin{align*}
     \Phi &: \YZ \times \XT_\Sigma \rightarrow \XP_\Sigma
     \\
@@ -823,7 +818,6 @@ Function $\Phi$ transforms PT at the given height into PE:
         \Xl_{h+1} \Phi_{h+1}(t_1) \dots \Phi_{h+1}(t_n) \Xr_h &\text{if } i \neq 0 \wedge t = T(t_1, \dots, t_n)
     \end{cases}
     \end{align*}
-    \medskip
 
 For a given RE $r$ and string $w$ the set of all PEs $\big\{ \Phi_{0}(t) \mid t \in PT(r, w) \big\}$ is denoted $\PE(r, w)$,
 and the set of all prefixes in $\PE(r, w)$ is denoted $\PR(r, w)$.
@@ -1333,7 +1327,7 @@ $succ(U, n)$ that returns $s$-component of $n$-th node and
 $tag(U, n)$ that returns $t$-component of $n$-th node.
 \\
 
-\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+\begin{algorithm} \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
 \begin{multicols}{2}
     \setstretch{0.8}
 
@@ -1865,7 +1859,7 @@ Another possible solution is to keep both algorithms and choose between them dep
 \section{TNFA construction}\label{section_tnfa}
 
 TNFA construction is given by the function $tn\!f\!a()$
-that accepts IRE $r$ and state $y$, and returns TNFA for $r$ with final state $y$
+that accepts IRE $r$ and state $y$ and returns TNFA for $r$ with final state $y$
 (algorithm \ref{alg_tnfa}).
 %
 This precise construction is not necessary for the algorithms to work,
@@ -1873,7 +1867,7 @@ but it has a number of important properties.
 \\[-0.5em]
 
 \begin{itemize}[itemsep=0.5em]
-    \item Non-essential $\epsilon$-transitions are reduced, as they make closure algorithms slower.
+    \item Non-essential $\epsilon$-transitions are removed, as they make closure algorithms slower.
 
     \item Bounded repetition $r^{n,m}$ is unrolled in a way
         that duplicates $r$ exactly $m$ times %(fewer is not possible, unless automata with counters are used)
@@ -1883,24 +1877,59 @@ but it has a number of important properties.
         This ensures that the tag tree build by $\epsilon$-closure is a prefix tree.
 
     \item Priorities are assigned so as to make it more likely
-        that depth-first traversal of the $\epsilon$-closure will find short paths before long paths.
-        POSIX has four main rules: (1) longest, (2) leftmost, (3) no optional empty repetitions, and (4) empty match is better than no match.
-        We cannot accommodate (1) with priorities, but we can accommodate (2), (4) and to some extent (3).
-        This makes a great difference for GOR1 in pathological cases
-        like $(((\epsilon)^{0,100})^{0,100})^{0,100})$,
-        where there are many ambiguous paths with equal height.
-        If GOR1 finds the shortest path early, then all other paths are just cancelled at the nearest join point,
-        but in the opposite case GOR1 has to schedule configurations for re-scan after every improvement.
-        Arguably this bias is a weakness of GOR1, and GTOP is more robust in this respect.
+        that depth-first traversal of the $\epsilon$-closure finds short paths before long paths.
+        %
+        This is an optimization that makes GOR1 much faster in specific cases
+        with many ambiguous paths that are longest-equivalent and must be compared by the leftmost criterion.
+        An example of such case is $(((\epsilon)^{0,k})^{0,k})^{0,k})$ for some large $k$.
+        %
+        Because GOR1 has a depth-first component, it is sensitive to the order of transitions in TNFA.
+        If it finds the shortest path early, then all other paths are just cancelled at the first join point with the shortest path
+        (because there is no improvement and further scanning is pointless).
+        In the opposite case GOR1 finds long paths before short ones,
+        and whenever it finds an improved (shorter) path, it has to schedule configurations for re-scan on the next pass.
+        This causes GOR1 to make more passes and scan more configurations on each pass,
+        which makes it significantly slower.
+        Arguably this bias is a weakness of GOR1 --- GTOP is more robust in this respect.
+        %
+        %POSIX has four main rules: (1) longest, (2) leftmost, (3) no optional empty repetitions, and (4) empty match is better than no match.
+        %We cannot accommodate (1) with priorities, but we can accommodate (2), (4) and to some extent (3).
 
     \item Negative tags include tags for all nested subexpressions, in no particular order.
         Such tags are not needed for disambiguation (only the topmost pair is used),
         but they are necessary to reset submatch values that remain from previous iterations.
 
-    \item Passing the final state $y$ in $tn\!f\!a()$ function
-        allows to link subautomata in a simple way.
+    \item Passing the final state $y$ in $tn\!f\!a()$ function allows to link subautomata in a simple and efficient way.
+        It allows to avoid tracking and patching of subautomaton transitions that go to the final state
+        (when this final state needs to be changed).
     \\
 \end{itemize}
+
+
+\section{Benchmarks}\label{section_benchmarks}
+
+Our set of benchmarks consists of three subsets:
+\\[-0.5em]
+
+\begin{enumerate}[itemsep=0.5em]
+    \item Real-world benchmarks.
+        These include very large REs containing thousands of characters and order of a hundred of capturing groups
+        (parser for HTTP message headers conforming to RFC-7230,
+        URI parser conforming to RFC-3986,
+        IPv6 address parser);
+        medium-sized REs containing hundreds of characters and order of a dozen capturing groups
+        (simplified parsers for HTTP headers and URI, IPv4 address parser, simple date parser);
+        and small REs with under a hundred characters and about five capturing groups
+        (simplified parsers for IPv4 and date).
+
+    \item Artificial benchmarks with high level of ambiguity.
+        All these REs are restricted to a single alphabet letter
+        used with various combinations of RE operators (union, product, iteration and bounded repetition).
+
+    \item Pathological example that demonstrates worst-case behaviour of naive $update \Xund ptables ()$ algorithm.
+    \\[-0.5em]
+\end{enumerate}
+
 
 \begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \label{alg_tnfa}
 \begin{multicols}{2}
@@ -1994,6 +2023,82 @@ but it has a number of important properties.
 \vspace{0em}
 \caption{TNFA construction.}
 \end{algorithm}
+
+
+\begin{figure}\label{fig_mark_enum}
+\includegraphics[width=\linewidth]{img/bench/plot.png}
+\vspace{-2em}
+\caption{
+Benchmarks.
+%: real-world RE (upper left),
+%pathological RE for naive precedence table algorithm (upper right),
+%artifical highly ambiguous RE on very long inputs (lower).
+}
+\end{figure}
+
+
+We benchmark four variations of our algorithm.
+The main variation, denoted ``Okui-Suzuki'', uses GOR1 and advanced $update \Xund ptables ()$ algorithm.
+The variation denoted ``GTOP Okui-Suzuki'' differs from the main one in that it uses GTOP instead of GOR1.
+The variation denoted ``naive Okui-Suzuki'' is like the main one, except that it uses naive $update \Xund ptables ()$ algorithm.
+The lazy variation, denoted ``lazy Okui-Suzuki'', differs from the main variation as described in section \ref{section_lazy}.
+%
+Besides our algorithm, we also benchmark Kuklewicz and Cox algorithms (we do not pay attention to correctness issues of the latter here).
+Kuklewicz algorithm is described in detail in [Tro17].
+As for the Cox algorithm, the only description we are aware of is the prototype implementation [??].
+We spent some time experimenting with it and found a number of shortcomings, as described in the introduction section.
+Our implementation, therefore, differs from the original:
+we add support for bounded repetition,
+we use GOR1/GTOP to construct $\epsilon$-closure,
+and we use a fast forward pre-processing phase to find the matching string prefix before running the backward phase
+(forward phase ignores submatch and merely performs recognition).
+%
+Performance of all algorithms is measured relative to a ``baseline'' performance of a leftmost greedy implementation,
+which has no overhead on disambiguation and thus represents the best-case matching time.
+Finally, in order to relate our implementation to the real world,
+we include the Google RE2 library (it also uses leftmost greedy disambiguation).
+%
+All algorithm implementations and benchmarks can be found in RE2C source code [??].
+%
+Benchmark results show the following:
+\\[-0.5em]
+
+\begin{itemize}[itemsep=0.5em]
+    \item Cox and Kuklewicz algorithms degrade quickly as the number of tags increases.
+        This is especially evident on real-world RE:
+        Kuklewicz is much slower than all Okui-Suzuki variations, and Cox is so slow that it hardly fits into the plot space.
+        This is not surprizing, as both algorithms have per-tag inner loops in their core.
+
+    \item Okui-Suzuki algorithm degrades with increased closure size.
+        This is also understandable, as the algorithm performs pairwise comparison of closure states.
+        Naive $update \Xund ptables ()$ algorithm degrades extremely fast,
+        and the advanced algorithm degrades much slower.
+
+    \item GTOP is somewhat faster than GOR1 on real-world RE, but can be slower on artificial RE.
+
+    \item Lazy variation of Okui-Suzuki is much faster than the main variation on real-world tests and not very long inputs.
+
+    \item RE2 performance is close to our leftmost greedy implementation (sometimes better, sometimes worse).
+    \\[-0.5em]
+\end{itemize}
+
+One interesting tough case for Okui-Suzuki algorithm is RE of the form $(a^{k_1}|\hdots|a^{k_n})^{0,\infty}$,
+e.g. \texttt{(a\{2\}|a\{3\}|a\{5\})*}.
+Given input string \texttt{a...a},
+submatch on the last iteration varies with the length of input:
+it equals \texttt{aaaaa} for $5n$-character string,
+\texttt{aa} for strings of length $5n - 3$ and $5n - 1$,
+and \texttt{aaa} for strings of length $5n - 2$ and $5n + 1$ ($n \in \YN$).
+Variation continues infinitely with a period of five characters.
+%
+We can increase variation period and the range of possible submatch results by choosing different counter values.
+%
+Large period and wide range correspond to a higher level of ambiguity and many parallel competing paths,
+which means increased closure size and consequently more work for Okui-Suzuki algorithm.
+
+\FloatBarrier
+\vfill\null
+\clearpage
 
 
 \section*{Appendix}
