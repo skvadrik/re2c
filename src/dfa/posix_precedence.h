@@ -121,19 +121,19 @@ int32_t leftprec(tag_info_t info1, tag_info_t info2, bool last1, bool last2)
     const uint32_t tag1 = info1.idx, tag2 = info2.idx;
     const bool neg1 = info1.neg, neg2 = info2.neg;
 
-    // can't be both closing
-    DASSERT(!(tag1 % 2 == 1 && tag2 % 2 == 1));
-
-    // closing vs opening: closing wins
-    if (tag1 % 2 == 1) return -1;
-    if (tag2 % 2 == 1) return  1;
-
     // can't be both negative
     DASSERT(!(neg1 && neg2));
 
     // positive vs negative: positive wins
     if (neg1) return  1;
     if (neg2) return -1;
+
+    // can't be both closing
+    DASSERT(!(tag1 % 2 == 1 && tag2 % 2 == 1));
+
+    // closing vs opening: closing wins
+    if (tag1 % 2 == 1) return -1;
+    if (tag2 % 2 == 1) return  1;
 
     // positive vs positive: smaller wins
     // (this case is only possible because multiple

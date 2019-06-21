@@ -17,7 +17,6 @@ namespace libre2c {
 
 static void make_one_step(psimctx_t &, uint32_t);
 static void make_final_step(psimctx_t &);
-static void update_offsets(psimctx_t &ctx, const conf_t &c, uint32_t id);
 static void compute_prectbl_naive(psimctx_t &ctx);
 
 // we *do* want these to be inlined
@@ -131,39 +130,6 @@ void make_final_step(psimctx_t &ctx)
         if (s->type == nfa_state_t::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
-    }
-}
-
-void update_offsets(psimctx_t &ctx, const conf_t &c, uint32_t id)
-{
-    const size_t nsub = ctx.nsub;
-    regoff_t *o;
-    const std::vector<Tag> &tags = ctx.nfa.tags;
-    nfa_state_t *s = c.state;
-    bool *done = ctx.done;
-
-    if (s->type == nfa_state_t::FIN) {
-        ctx.marker = ctx.cursor;
-        ctx.rule = 0;
-        o = ctx.offsets3;
-    }
-    else {
-        o = ctx.offsets1 + id * nsub;
-    }
-
-    memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
-    memset(done, 0, nsub * sizeof(bool));
-
-    for (int32_t i = c.thist; i != HROOT; ) {
-        const phistory_t::node_t &n = ctx.history.node(i);
-        const Tag &tag = tags[n.info.idx];
-        const size_t t = tag.ncap;
-        regoff_t *off = o + t;
-        if (!fictive(tag) && !done[t]) {
-            done[t] = true;
-            *off = n.info.neg ? -1 : static_cast<regoff_t>(ctx.step);
-        }
-        i = n.pred;
     }
 }
 

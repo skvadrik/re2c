@@ -574,8 +574,9 @@ void update_final_offsets(psimctx_t &ctx, const conf_t &c)
 static void copy_offs(psimctx_t &ctx, const nfa_state_t *y, const nfa_state_t *x
     , tag_info_t info)
 {
+    const std::vector<Tag> &tags = ctx.nfa.tags;
     const size_t
-        ntags = ctx.nfa.tags.size(),
+        ntags = tags.size(),
         xidx = index(x, ctx.nfa),
         yidx = index(y, ctx.nfa);
 
@@ -587,12 +588,27 @@ static void copy_offs(psimctx_t &ctx, const nfa_state_t *y, const nfa_state_t *x
     memcpy(ox, oy, ntags * sizeof(regoff_t) * 2);
 
     if (!(info == NOINFO)) {
-        ox[2 * info.idx] = info.neg ? -1 : static_cast<regoff_t>(ctx.step);
-        if (ox[2 * info.idx + 1] == -2) {
-            ox[2 * info.idx + 1] = ox[2 * info.idx];
+        const uint32_t t = info.idx;
+
+        // update active tag, and set final tag if it's not set already
+        ox[2 * t] = info.neg ? -1 : static_cast<regoff_t>(ctx.step);
+        if (ox[2 * t + 1] == -2) {
+            ox[2 * t + 1] = ox[2 * t];
         }
+
+        // update nested negative tags (if any)
+        if (info.neg) {
+            const Tag &tag = tags[t];
+            for (size_t l = tag.lnest; l < tag.hnest; ++l) {
+                ox[2 * l] = -1;
+                if (ox[2 * l + 1] == -2) {
+                    ox[2 * l + 1] = -1;
+                }
+            }
+        }
+
         if (D) fprintf(stderr, "setting offset %lu[%u] to %lu\n"
-            , xidx, info.idx, ox[2 * info.idx]);
+            , xidx, t, ox[2 * t]);
     }
 }
 

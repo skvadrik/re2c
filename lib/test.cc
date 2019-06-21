@@ -103,6 +103,8 @@ static int test_all_posix(int flags)
 {
     int e = 0;
 
+    T5("(a+(c+))|(b+(d+))",             "ac",              0,2, 0,2, 1,2, -1,-1, -1,-1);
+
     T2("(aaaa|aaa|a)+",                 "aaaaaaaaaa",      0,10, 9,10);
     T2("(aaaa|aaa|a){3,}",              "aaaaaaaaaa",      0,10, 9,10);
     T2("(aaaa|aaa|a){3,4}",             "aaaaaaaaaa",      0,10, 9,10);

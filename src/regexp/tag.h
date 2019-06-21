@@ -32,6 +32,8 @@ struct Tag
     size_t ncap;
     size_t base;
     size_t dist;
+    size_t lnest;
+    size_t hnest;
     bool history;
     bool orbit;
     int32_t height;

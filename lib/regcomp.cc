@@ -18,6 +18,7 @@ using namespace re2c;
 int regcomp(regex_t *preg, const char *pattern, int cflags)
 {
     conopt_t globopts;
+    globopts.dfa = !(cflags & REG_NFA);
     globopts.FFlag = true;
     globopts.backward = cflags & REG_BACKWARD;
     Opt opts(globopts);

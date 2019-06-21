@@ -245,6 +245,12 @@ void init(simctx_t<history_t> &ctx, const char *string)
     DASSERT(ctx.gtop_heap.empty());
 }
 
+static inline regoff_t *offs_addr(regmatch_t pmatch[], size_t t)
+{
+    regmatch_t *m = &pmatch[t / 2 + 1];
+    return t % 2 == 0 ? &m->rm_so : &m->rm_eo;
+}
+
 template<typename history_t>
 int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
     regmatch_t pmatch[])
@@ -266,23 +272,81 @@ int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
         const typename history_t::node_t &n = ctx.history.node(i);
         const Tag &tag = tags[n.info.idx];
         const size_t t = tag.ncap;
-        if (!fictive(tag) && t < nmatch * 2 && !done[t]) {
-            done[t] = true;
-            --todo;
-            const regoff_t off = n.info.neg ? -1
-                : static_cast<regoff_t>(n.step);
-            m = &pmatch[t / 2 + 1];
-            if (t % 2 == 0) {
-                m->rm_so = off;
-            }
-            else {
-                m->rm_eo = off;
+
+        // Set negative tag, together with its sibling and nested tags (if any),
+        // unless already set. Fictive tags may have nested non-fictive tags.
+        if (n.info.neg && (fictive(tag) || !done[t])) {
+            for (size_t l = tag.lnest; l < tag.hnest; ++l) {
+                const Tag &ntag = tags[l];
+                const size_t nt = ntag.ncap;
+                if (!fictive(ntag) && !done[nt] && nt < nmatch * 2) {
+                    done[nt] = true;
+                    --todo;
+                    *offs_addr(pmatch, nt) = -1;
+                }
             }
         }
+
+        // Set positive tag (unless already set).
+        else if (!fictive(tag) && !done[t] && t < nmatch * 2) {
+            done[t] = true;
+            --todo;
+            *offs_addr(pmatch, t) = static_cast<regoff_t>(n.step);
+        }
+
         i = n.pred;
     }
 
     return 0;
+}
+
+template<typename history_t>
+void update_offsets(simctx_t<history_t> &ctx, const conf_t &c, uint32_t id)
+{
+    const size_t nsub = ctx.nsub;
+    regoff_t *o;
+    const std::vector<Tag> &tags = ctx.nfa.tags;
+    nfa_state_t *s = c.state;
+    bool *done = ctx.done;
+
+    if (s->type == nfa_state_t::FIN) {
+        ctx.marker = ctx.cursor;
+        ctx.rule = 0;
+        o = ctx.offsets3;
+    }
+    else {
+        o = ctx.offsets1 + id * nsub;
+    }
+
+    memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
+    memset(done, 0, nsub * sizeof(bool));
+
+    for (int32_t i = c.thist; i != HROOT; ) {
+        const typename history_t::node_t &n = ctx.history.node(i);
+        const Tag &tag = tags[n.info.idx];
+        const size_t t = tag.ncap;
+
+        // Update negative tag, together with its sibling and nested tags (if any),
+        // unless already updated. Fictive tags may have nested non-fictive tags.
+        if (n.info.neg && (fictive(tag) || !done[t])) {
+            for (size_t l = tag.lnest; l < tag.hnest; ++l) {
+                const Tag &ntag = tags[l];
+                const size_t nt = ntag.ncap;
+                if (!fictive(ntag) && !done[nt]) {
+                    done[nt] = true;
+                    o[nt] = -1;
+                }
+            }
+        }
+
+        // Update positive tag (unless already updated).
+        else if (!fictive(tag) && !done[t]) {
+            done[t] = true;
+            o[t] = static_cast<regoff_t>(ctx.step);
+        }
+
+        i = n.pred;
+    }
 }
 
 bool ran_or_fin_t::operator()(const conf_t &c)

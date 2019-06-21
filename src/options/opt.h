@@ -55,6 +55,7 @@ const uint32_t NOEOF = ~0u - 1;
     /* input encoding */ \
     CONSTOPT (Enc::type_t, input_encoding, Enc::ASCII) \
     /* internals */ \
+    CONSTOPT (bool, dfa, true) \
     CONSTOPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
     CONSTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1) \
     CONSTOPT (bool, lookahead, true) \

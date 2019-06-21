@@ -12,7 +12,6 @@ namespace re2c {
 namespace libre2c {
 
 static void reach_on_symbol(lsimctx_t &, uint32_t);
-static void update_offsets(lsimctx_t &ctx, const conf_t &c, uint32_t id);
 
 int regexec_nfa_leftmost(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int)
@@ -92,36 +91,6 @@ void reach_on_symbol(lsimctx_t &ctx, uint32_t sym)
     std::swap(ctx.offsets1, ctx.offsets2);
     ctx.history.init();
     ++ctx.step;
-}
-
-void update_offsets(lsimctx_t &ctx, const conf_t &c, uint32_t id)
-{
-    const size_t nsub = ctx.nsub;
-    bool *done = ctx.done;
-    nfa_state_t *s = c.state;
-    regoff_t *o;
-
-    if (s->type == nfa_state_t::FIN) {
-        ctx.marker = ctx.cursor;
-        ctx.rule = 0;
-        o = ctx.offsets3;
-    }
-    else {
-        o = ctx.offsets1 + id * nsub;
-    }
-
-    memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
-    memset(done, 0, nsub * sizeof(bool));
-
-    for (int32_t i = c.thist; i != HROOT; ) {
-        const lhistory_t::node_t &n = ctx.history.node(i);
-        const size_t t = n.info.idx;
-        if (!done[t]) {
-            done[t] = true;
-            o[t] = n.info.neg ? -1 : static_cast<regoff_t>(ctx.step);
-        }
-        i = n.pred;
-    }
 }
 
 } // namespace libre2
