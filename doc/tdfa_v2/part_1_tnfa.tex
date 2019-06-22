@@ -134,16 +134,17 @@
 
 \abstract[Summary]{
 We give an algorithm for regular expression parsing and submatch extraction with POSIX longest-match semantics.
-The algorithm is based on Okui-Suzuki disambiguation procedure with a number of non-trivial extensions and improvements.
+The algorithm is based on Okui-Suzuki disambiguation procedure with a few important extensions and improvements.
 We study other NFA-based algorithms
-and show that the algorithm by Kuklewicz is slower in practice,
+and show that Kuklewicz algorithm is slower in practice,
 and the backward matching algorithm by Cox is incorrect.
 %
 Our algorithm works in worst-case $O(n \, m^2 \, t)$ time and $O(m^2)$ space,
-where $n$ is the length of input, $m$ is the size of regular expression
-and $t$ is the number of capturing groups plus enclosing subexpressions.
+where $n$ is the length of input, $m$ is the size of the regular expression with counted repetition subexpressions ``unrolled'',
+and $t$ is the number of capturing groups and subexpressions that contain them.
 %
-Benchmarks show that in practice our algorithm is 2x-10x slower than leftmost greedy matching.
+Benchmarks show that in practice our algorithm is 2x-10x slower than leftmost greedy matching
+(which has no overhead on disambiguation).
 %
 We present a lazy variation that is much faster, but requires memory proportional to the size of input.
 }
@@ -171,7 +172,7 @@ extend it on the full range of POSIX regular expressions
 and provide a practical matching algorithm.
 %
 It should be noted that there exists a totally different approach to the problem based on Brzozowski derivatives.
-We choose to focus on NFA for the following reasons:
+We choose to focus on NFA-based approach for the following reasons:
 first, we feel that both approaches deserve to be studied and formalized;
 and second, in our experience derivative-based approach is slow in practice
 (possibly due to an imperfect implementation, but we also discuss theoretical bounds below).
@@ -314,13 +315,13 @@ If we adopt it and exclude DFA consturuction, we get $O(m^2 \, t)$ memory requir
 which seems reasonably close to NFA-based approaches.
 \\
 
-Undoubtedly there are other approaches,
+Undoubtedly, other approaches exist,
 but many of them produce incorrect results or require memory proportional to the length of input
 (e.g. Glibc implementation [??]).
-Of the two correct NFA-based approaches, Okui-Suzuki appears to be faster in practice.
-It should be noted that Okui-Suzuki and Kuklewicz approaches have much in common:
-both compare partial matches incrementally at each step,
-only Kuklewicz considers history of each tag separately.
+%Of the two correct NFA-based approaches, Okui-Suzuki appears to be faster in practice.
+%It should be noted that Okui-Suzuki and Kuklewicz approaches have much in common:
+%both compare partial matches incrementally at each step,
+%only Kuklewicz considers history of each tag separately.
 %
 Our contributions are the following:
 \\[-0.5em]
@@ -340,7 +341,7 @@ Our contributions are the following:
 
     \item We introduce \emph{negative tags} that allow us to handle
         no-match situation in the same way as match.
-        In particular, this removes the need to fix obsolete offsets that remain from earlier iterations,
+        Negative tags provide a simple way to reset obsolete offsets from earlier iterations,
         in cases like \texttt{(a(b)?)*} and string \texttt{aba}.
 
     \item We consider $\epsilon$-closure construction as a shortest-path problem
@@ -378,10 +379,10 @@ section \ref{section_closure} is concerned with $\epsilon$-closure construction,
 section \ref{section_pathtree} discusses data structures used to represent TNFA paths,
 section \ref{section_results} discusses possible output formats (parse trees or POSIX-style offsets),
 section \ref{section_comparison} gives the core disambiguation algorithms,
-section \ref{section_lazy} concerns lazy disambiguation
+section \ref{section_lazy} presents lazy variation of our algorithm,
 and section \ref{section_tnfa} gives specific TNFA construction.
-The remaining sections \ref{section_benchmarks} and \ref{section_conclusion}
-contain benchmarks, conclusions and directions for future work.
+The remaining sections \ref{section_complexity}, \ref{section_benchmarks} and \ref{section_conclusion}
+contain complexity analysis, benchmarks, conclusions and directions for future work.
 
 \section{The main idea}\label{section_main}
 
@@ -389,7 +390,7 @@ Our algorithm is based on four cornerstone concepts:
 regular expressions, parse trees, parenthesized expressions and tagged NFA.
 %
 First, we formalize the matching problem
-by giving the usual interpretation of regular expressions as sets of parse trees.
+by giving the usual interpretation of a regular expression as a set of parse trees.
 %
 Next, we define POSIX disambiguation semantics in terms of order on parse trees.
 This definition reflects POSIX standard,
@@ -397,13 +398,13 @@ but it is too high-level to be used in a practical matching algorithm.
 %
 Therefore we go from parse trees to their linearized representation --- parenthesized expressions.
 We define order on parenthesized expressions and show its equivalence to the order on parse trees.
-The latter definition is more low-level and can be easily converted to an efficient comparison procedure.
+The latter definition of order is more low-level and can be easily converted to an efficient comparison procedure.
 %
 Finally, we construct TNFA and map parenthesized expressions to its paths,
 which allows us to compare ambiguous paths using the definition of order on parenthesized expressions.
 %
 Below are the four basic definitions and the skeleton of the algorithm.
-In later sections we formalize relations between different representations and fill in all the details.
+In the following sections we formalize the relation between different representations and fill in all the details.
 
     \begin{Xdef}
     \emph{Regular expressions (RE)} over finite alphabet $\Sigma$, denoted $\XR_\Sigma$:
@@ -458,7 +459,7 @@ In later sections we formalize relations between different representations and f
     \begin{itemize}
         \item[] $\Sigma$ is a finite set of symbols (\emph{alphabet})
         \item[] $Q$ is a finite set of \emph{states}
-        \item[] $T \subset \YN \times \YZ$ is a mapping of \emph{tags} to their submatch groups
+        \item[] $T \subset \YN \times \YZ \times \YN \times \YN$ is a mapping of \emph{tags} to their submatch group, lower nested tag and upper nested tag
         \item[] $\Delta = \Delta^\Sigma \sqcup \Delta^\epsilon$ is the \emph{transition} relation,
             consisting of two parts:
         \begin{itemize}
@@ -488,11 +489,11 @@ which allows us to impose specific order of TNFA traversal
 (all $\epsilon$-transitions from the same state have different priority).
 \\
 
-\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}\label{alg_match}
 \setstretch{0.8}
 \Fn {$\underline{match \big( N \!\!=\! (\Sigma, Q, T, \Delta, q_0, q_f), \; \alpha_1 \!\hdots\! \alpha_n \big)} \smallskip$} {
 
-    $B, D : \text{square matrices in } \YZ^{|Q| \times |Q|}, \; U: \text{path context}$ \;
+    $B, D : \text{uninitialized matrices in } \YZ^{|Q| \times |Q|}, \; U: \text{path context}$ \;
     $r_0 = initial \Xund result(T)$ \;
     $u_0 = empty \Xund path(\,)$ \;
     $X = \big\{ (q_0, \varnothing, u_0, r_0) \big\}, \; i = 1$ \;
@@ -1347,7 +1348,6 @@ $tag(U, n)$ that returns $t$-component of $n$-th node.
             \Return $n$
         }
     }
-    \BlankLine
 
     \vfill
 
@@ -1366,7 +1366,6 @@ $tag(U, n)$ that returns $t$-component of $n$-th node.
     \vfill
 
 \end{multicols}
-\vspace{1em}
 \caption{Operations on tag tree.}
 \end{algorithm}
 \medskip
@@ -1380,17 +1379,19 @@ In the first case, $r$-component of configurations is an array of offset pairs $
 Offsets are updated incrementally at each step by scanning the corresponding path fragment
 and setting negative tags to $-1$ and positive tags to the current step number.
 We need the most recent value of each tag, therefore we take care to update tags at most once.
-Negative tags allow us to skip initialization of offsets.
-Helper function $sub(T, t)$ maps each tag to the corresponding submatch group
-(it returns the second component $k$ for $(t, k) \in T$).
-%
+Negative tags are updated using helper functions $low()$ and $upp()$ that map each tag to the range of tags covered by it
+(which includes itself, its pair tag and all nested tags).
+Helper function $sub()$ maps each tag to the corresponding submatch group.
+For a given tag $t$, functions $sub()$, $low()$ and $upp()$ are defined as the 2nd, 3rd and 4th components of $(t, s, l, u) \in T$.
+Section \ref{section_tnfa} shows how this mapping is constructed.
+\\
+
 In the second case, $r$-component of configurations is a tagged string that is accumulated at each step,
 and eventually converted to a parse tree at the end of match.
 The resulting parse tree is only partially structured:
 leaves that correspond to subexpressions with zero implicit submatch index contain ``flattened'' substring of alphabet symbols.
 It is possible to construct parse trees incrementally as well,
 but this is more complex and the partial trees may require even more space than tagged strings.
-%
 \\
 
 \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
@@ -1398,44 +1399,49 @@ but this is more complex and the partial trees may require even more space than 
     \setstretch{0.8}
 
     \Fn {$\underline{initial \Xund result (T)} \smallskip$} {
-        $n = max \{ sub(T, t) \mid t \in \YN \}$ \;
-        \Return uninitialized $n$-array of pairs $(rm \Xund so, rm \Xund eo)$\;
+%        $n = max \{ sub(T, t) \mid t \in \YN \}$ \;
+        \Return uninitialized array of pairs $(rm \Xund so, rm \Xund eo)$\;
     }
-    \BlankLine
     \BlankLine
 
     \Fn {$\underline{update \Xund result (T, X, U, k, \Xund)} \smallskip$} {
-        \Return $\big\{ (q, o, u, set \Xund tags (T, U, u, r, k))$ \;
-        \Indp\Indp\Indp\Indp\Indp\Indp\Indp\Indp $\mid (q, o, u, r) \in X \big\}$ \; \Indm\Indm\Indm\Indm\Indm\Indm\Indm\Indm
+        \Return $\big\{ (q, o, u, apply (T, U, u, r, k)) \mid (q, o, u, r) \in X \big\}$ \;
     }
-    \BlankLine
     \BlankLine
 
     \Fn {$\underline{f\!inal \Xund result (T, U, u, r, k)} \smallskip$} {
-        $pmatch = set \Xund tags (T, U, u, r, k)$ \;
-        $pmatch[0].rm \Xund so = 0$ \;
-        $pmatch[0].rm \Xund eo = k$ \;
+        $pmatch = apply (T, U, u, r, k)$ \;
+        $pmatch[0].rm \Xund so = 0, \; pmatch[0].rm \Xund eo = k$ \;
         \Return $pmatch$ \;
     }
     \BlankLine
-    \BlankLine
 
-    \Fn {$\underline{set \Xund tags (T, U, n, pmatch, k)} \smallskip$} {
+    \Fn {$\underline{apply (T, U, n, pmatch, k)} \smallskip$} {
         $done(\Xund) \equiv f\!alse$ \;
         \While {$n \neq 0$} {
-            $t = tag(U, n), \; s = sub(T, |t|)$ \;
-            \If {$s \neq 0 \wedge \neg done(s)$} {
-                $done(s) = true$ \;
-                \lIf {$t < 0$} {$l = -1$}
-                \lElse {$l = k$}
-                \lIf {$t \, mod \, 2 \equiv 1$} {$pmatch[s].rm \Xund so = l$}
-                \lElse {$pmatch[s].rm \Xund eo = l$}
+            $t = tag(U, n), \; s = sub(T, |t|), \; n = pred(U, n)$ \;
+            \If {$t < 0 \wedge \big( s = 0 \vee \neg done(s) \big)$} {
+                \For {$t' = \overline{low(T, |t|), upp(T, |t|)}$} {
+                    $s' = sub(T, t')$ \;
+                    \If {$s' \neq 0 \wedge \neg done(s')$} {
+                        $done(s') = true$ \;
+                        $set \Xund tag (pmatch, t', s', -1)$ \;
+                    }
+                }
             }
-            $n = pred(U, n)$ \;
+            \ElseIf {$s \neq 0 \wedge \neg done(s)$} {
+                $done(s) = true$ \;
+                $set \Xund tag (pmatch, t, s, k)$ \;
+            }
         }
         \Return $pmatch$ \;
     }
     \BlankLine
+
+    \Fn {$\underline{set \Xund tag (pmatch, t, s, pos)} \smallskip$} {
+        \lIf {$t \, mod \, 2 \equiv 1$} {$pmatch[s].rm \Xund so = pos$}
+        \lElse {$pmatch[s].rm \Xund eo = pos$}
+    }
 
     \vfill
 
@@ -1445,19 +1451,16 @@ but this is more complex and the partial trees may require even more space than 
         \Return $\epsilon$ \;
     }
     \BlankLine
-    \BlankLine
 
     \Fn {$\underline{update \Xund result (\Xund, X, U, \Xund, \alpha)} \smallskip$} {
         \Return $\big\{ (q, o, u, r \cdot unroll \Xund path (U, u) \cdot \alpha)$ \;
         \Indp\Indp\Indp\Indp\Indp\Indp\Indp\Indp $\mid (q, o, u, r) \in X \big\}$ \; \Indm\Indm\Indm\Indm\Indm\Indm\Indm\Indm
     }
     \BlankLine
-    \BlankLine
 
     \Fn {$\underline{f\!inal \Xund result (\Xund, U, u, r, \Xund)} \smallskip$} {
         \Return $parse \Xund tree (r \cdot unroll \Xund path (U, u), 1)$ \;
     }
-    \BlankLine
     \BlankLine
 
     \Fn {$\underline{parse \Xund tree (u, i)} \smallskip$} {
@@ -1895,9 +1898,15 @@ but it has a number of important properties.
         %POSIX has four main rules: (1) longest, (2) leftmost, (3) no optional empty repetitions, and (4) empty match is better than no match.
         %We cannot accommodate (1) with priorities, but we can accommodate (2), (4) and to some extent (3).
 
-    \item Negative tags include tags for all nested subexpressions, in no particular order.
-        Such tags are not needed for disambiguation (only the topmost pair is used),
-        but they are necessary to reset submatch values that remain from previous iterations.
+    \item When adding negative tags, we add a single transition for the topmost closing tag
+        (it corresponds to the nil-parenthesis, which has the height of a closing parenthesis).
+        Then we map this tag to the full range of its nested tags, including itself and the pair opening tag.
+        An alternative approach is to add all nested negative tags as TNFA transitions and get rid of the mapping,
+        but this may result in significant increase of TNFA size and major slowdown
+        (we observed 2x slowdown on large tests with hundreds of submatch groups).
+
+    \item Compact representation of nested tags as ranges in $T$
+        is possible because nested tags occupy consequtive numbers.
 
     \item Passing the final state $y$ in $tn\!f\!a()$ function allows to link subautomata in a simple and efficient way.
         It allows to avoid tracking and patching of subautomaton transitions that go to the final state
@@ -1906,34 +1915,22 @@ but it has a number of important properties.
 \end{itemize}
 
 
-\section{Benchmarks}\label{section_benchmarks}
+\section{Complexity analysis}\label{section_complexity}
 
-Our set of benchmarks consists of three subsets:
-\\[-0.5em]
-
-\begin{enumerate}[itemsep=0.5em]
-    \item Real-world benchmarks.
-        These include very large REs containing thousands of characters and order of a hundred of capturing groups
-        (parser for HTTP message headers conforming to RFC-7230,
-        URI parser conforming to RFC-3986,
-        IPv6 address parser);
-        medium-sized REs containing hundreds of characters and order of a dozen capturing groups
-        (simplified parsers for HTTP headers and URI, IPv4 address parser, simple date parser);
-        and small REs with under a hundred characters and about five capturing groups
-        (simplified parsers for IPv4 and date).
-
-    \item Artificial benchmarks with high level of ambiguity.
-        All these REs are restricted to a single alphabet letter
-        used with various combinations of RE operators (union, product, iteration and bounded repetition).
-
-    \item Pathological example that demonstrates worst-case behaviour of naive $update \Xund ptables ()$ algorithm.
-    \\[-0.5em]
-\end{enumerate}
-
+Our algorithm consists of three steps: conversion of RE to IRE,
+construction of TNFA from IRE
+and simulation of TNFA on the input string.
+We discuss time and space complexity of each step
+in term of the following parameters:
+$n$ --- the length of input,
+$m$ --- the size of RE with counted repetition subexpressions ``unrolled''
+(each subexpression duplicated the number of times equal to the repetition counter),
+and $t$ --- the number of capturing groups and subexpressions that contain them.
+\\
 
 \begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \label{alg_tnfa}
 \begin{multicols}{2}
-\setstretch{0.9}
+\setstretch{0.85}
 
     \newcommand \retonfa {tn\!f\!a}
     \newcommand \ntag {ntags}
@@ -1998,7 +1995,7 @@ Our set of benchmarks consists of three subsets:
         \ElseIf {$r = (i, j, r_1) \mid_{i \neq 0}$} {
             $(\Sigma, Q_1, T_1, \Delta_1, z, x) = \retonfa ((0, 0, r_1), x)$ \;
             $Q = Q_1 \cup \{w, y\}$ \;
-            $T = T_1 \cup \big\{ (2i\!-\!1, j), (2i, j) \big\}$ \;
+            $T = T_1 \cup \big\{ (2i\!-\!1, j, 0, -1), (2i, j, 0, -1) \big\}$ \;
             $\Delta = \Delta_1 \cup \big\{ (w, 1, 2i\!-\!1, z), (x, 1, 2i, y) \big\}$ \;
             \Return $(\Sigma, Q, T, \Delta, w, y)$
         }
@@ -2007,10 +2004,11 @@ Our set of benchmarks consists of three subsets:
     \BlankLine
 
     \Fn {$\underline{\ntag(T, y)} \smallskip$} {
-        $\big\{ (t_1, \Xund), \hdots, (t_n, \Xund) \big\} = T$ \;
-        $Q = \{x_0, \dots, x_n, y\}$ \;
-        $\Delta = \big\{ (x_{i-1},1,-t_i, x_{i}) \big\}_{i=1}^{n}$ \;
-        \Return $(\Sigma, Q, T, \Delta, x_0, y)$ \;
+        $(t_{open}, t_{last}) = min \Xund max \big\{ t \mid (t, \Xund, \Xund, \Xund) \in T \big\}$ \;
+        $(t_{clos}, s, \Xund, \Xund) = (t, \Xund, \Xund, \Xund) \in T \mid t = t_{open} + 1$ \;
+        $T' = \big\{ (t, \Xund, \Xund, \Xund) \in T \mid t \neq t_{clos} \big\} \cup \big\{ (t_{clos}, s, t_{open}, t_{last}) \big\}$ \;
+        $\Delta = \big\{ (x, 1, -t_{clos}, y) \big\}$ \;
+        \Return $(\Sigma, \{x, y\}, T', \Delta, x, y)$ \;
     }
 
     \vfill
@@ -2020,10 +2018,135 @@ Our set of benchmarks consists of three subsets:
     \nonl \includegraphics[width=\linewidth]{img/tnfa_construction.pdf}
 
 \end{multicols}
-\vspace{0em}
+\vspace{0.5em}
 \caption{TNFA construction.}
 \end{algorithm}
 
+The first step, conversion of RE to IRE, is given by the functions $mark()$ and $enum()$ from section \ref{section_formalization}.
+%
+For each sub-RE, $mark()$ constructs a corresponding sub-IRE,
+and $enum()$ doesn't change IRE structure,
+therefore IRE size is $O(m)$.
+%
+Each subexpression is processed twice (once by $mark()$ and once by $enum()$)
+and processing takes $O(1)$ time, therefore total time is $O(m)$.
+\\
+
+The second step, TNFA construction, is given by $tn\!f\!a()$ function (algorithm \ref{alg_tnfa}).
+At this step counted repetition is unrolled, so TNFA may be much larger than IRE.
+For each subexpressions of the form $(i, j, r^{n,m})$ automaton for $r$ is duplicated exactly $m$ times if $m \neq \infty$, or $max(1, n)$ times otherwise
+(at each step of recursion counter is decremented and one copy of automaton is constructed).
+Other $tn\!f\!a()$ clauses are in one-to-one correspondence with sub-IRE.
+Each clause adds only a constant number of states and transitions (including calls to $ntags()$ and excluding recursive calls).
+Therefore TNFA contains $O(m)$ states and transitions. % (by our definition of $m$).
+The size of mapping $T$ is $O(t)$, which is $O(m)$.
+Therefore total TNFA size is $O(m)$.
+Time complexity is $O(m)$, because each clause takes $O(1)$ time (excluding recursive calls), and total $O(m)$ clauses are executed.
+\\
+
+The third step, TNFA simulation, is given by algorithm \ref{alg_match}.
+Initialization at lines 2-5 takes $O(1)$ time.
+Main loop at lines 6-11 is executed at most $n$ times.
+The size of closure is bounded by TNFA size, which is $O(m)$ (typically closure is much smaller than that).
+Each iteration of the loop includes the following steps.
+%
+At line 7 the call to $closure()$ takes $O(m^2 \, t)$ time if GOR1 from section \ref{section_closure} is used,
+because GOR1 makes $O(m^2)$ scans (closure contains $O(m)$ states and $O(m)$ transitions),
+and at each scan we may need to compare tag sequences using $compare()$ from section \ref{section_comparison},
+which takes $O(t)$ time
+(there is $O(t)$ unique tags and we consider paths with at most one $\epsilon$-loop,
+so the number of occurences of each tag is bounded by the repetition counters,
+which amounts to a constant factor).
+%
+At line 8 the call to $update \Xund result()$ takes $O(m \, t)$ time,
+because closure size is $O(m)$,
+and the length of tag sequence is $O(t)$ as argued above.
+%
+At line 9 the call to $update \Xund ptables ()$ takes $O(m^2)$ time
+if the advanced algorithm from section \ref{section_comparison} is used.
+%
+At line 10 scanning closure for reachable states takes $O(m)$ time,
+because closure size is $O(m)$.
+%
+The sum of the above steps is $O(m^2 \, t)$, so the total time of loop at lines 6-11 is $O(n \, m^2 \, t)$.
+The final call to $closure()$ at line 12 takes $O(m^2 \, t)$,
+and $f\!inal \Xund result ()$ at line 14 takes $O(m \, t)$.
+The total time taken by $match()$ is therefore $O(n \, m^2 \, t)$.
+\\
+
+Space complexity of $match()$ is as follows.
+%
+The size of closure is $O(m)$.
+%
+Precedence matrices $B$ and $D$ take $O(m^2)$ space.
+%
+Match results take $O(m \, t)$ space in case of POSIX-style offsets,
+because the number of parallel results is bounded by closure size,
+and each result takes $O(t)$ space.
+In case of parse trees match results take $O(m \, n)$ space, because each result accumulates all loop iterations.
+%
+The size of path context $U$ is $O(m^2)$
+because GOR1 makes $O(m^2)$ scans and thus adds no more than $O(m^2)$ tags in the tree.
+The total space taken by $match()$ is therefore $O(m^2)$
+for POSIX-style offsets and $O(m (m + n))$ for parse trees.
+
+
+\section{Benchmarks}\label{section_benchmarks}
+
+In order to present benchmark results in a meaningful way,
+we show the time of each algorithm relative to the ``baseline'' leftmost greedy algorithm,
+which has no overhead on disambiguation and thus represents best-case matching time.
+%
+We measure the speed of each algorithm in characters per second
+and divide it by the speed of leftmost greedy algorithm.
+%
+This allows us to show the net overhead on POSIX disambiguation.
+%
+To relate our implementations to the real world,
+we include Google RE2 library (it uses leftmost greedy disambiguation and serves as a reference, not as a competing implementation).
+%
+All implementations can be found in RE2C source code [??].
+%
+Our set of benchmarks consists of three subsets:
+\\[-0.5em]
+
+\begin{enumerate}[itemsep=0.5em]
+    \item Real-world benchmarks.
+        These include very large REs containing thousands of characters and order of a hundred of capturing groups
+        (parser for HTTP message headers conforming to RFC-7230,
+        URI parser conforming to RFC-3986,
+        IPv6 address parser);
+        medium-sized REs containing hundreds of characters and order of a dozen capturing groups
+        (simplified parsers for HTTP headers and URI, IPv4 address parser, simple date parser);
+        and small REs with under a hundred characters and about five capturing groups
+        (simplified parsers for IPv4 and date).
+
+    \item Artificial benchmarks with high level of ambiguity.
+        All these REs are restricted to a single alphabet letter
+        used with various combinations of RE operators (union, product, iteration and bounded repetition).
+
+    \item A series of pathological examples that demonstrates worst-case behaviour of naive $update \Xund ptables ()$ algorithm.
+    \\[-0.5em]
+\end{enumerate}
+
+We benchmark four variations of our algorithm:
+``Okui-Suzuki'' is the main variation (it uses advanced $update \Xund ptables ()$ algorithm and GOR1),
+``GTOP Okui-Suzuki'' uses GTOP,
+``naive Okui-Suzuki'' uses naive $update \Xund ptables ()$ algorithm,
+and ``lazy Okui-Suzuki'' differs from the main variation as described in section \ref{section_lazy}.
+%
+Besides our algorithm, we also benchmark Kuklewicz and Cox algorithms. % (we do not pay attention to correctness issues of the latter here).
+Kuklewicz algorithm is described in detail in [Tro17].
+As for the Cox algorithm, the only description we are aware of is the prototype implementation [??].
+We found a number of flaws in it, as described in the introduction.
+Our implementation, therefore, differs from the original:
+we add support for bounded repetition,
+we use GOR1 for closure construction,
+and we use a fast forward pre-processing phase to find the matching string prefix before running the backward phase
+(forward phase ignores submatch and merely performs recognition).
+%
+Benchmark results show the following:
+\\[-0.5em]
 
 \begin{figure}\label{fig_mark_enum}
 \includegraphics[width=\linewidth]{img/bench/plot.png}
@@ -2036,53 +2159,32 @@ Benchmarks.
 }
 \end{figure}
 
-
-We benchmark four variations of our algorithm.
-The main variation, denoted ``Okui-Suzuki'', uses GOR1 and advanced $update \Xund ptables ()$ algorithm.
-The variation denoted ``GTOP Okui-Suzuki'' differs from the main one in that it uses GTOP instead of GOR1.
-The variation denoted ``naive Okui-Suzuki'' is like the main one, except that it uses naive $update \Xund ptables ()$ algorithm.
-The lazy variation, denoted ``lazy Okui-Suzuki'', differs from the main variation as described in section \ref{section_lazy}.
-%
-Besides our algorithm, we also benchmark Kuklewicz and Cox algorithms (we do not pay attention to correctness issues of the latter here).
-Kuklewicz algorithm is described in detail in [Tro17].
-As for the Cox algorithm, the only description we are aware of is the prototype implementation [??].
-We spent some time experimenting with it and found a number of shortcomings, as described in the introduction section.
-Our implementation, therefore, differs from the original:
-we add support for bounded repetition,
-we use GOR1/GTOP to construct $\epsilon$-closure,
-and we use a fast forward pre-processing phase to find the matching string prefix before running the backward phase
-(forward phase ignores submatch and merely performs recognition).
-%
-Performance of all algorithms is measured relative to a ``baseline'' performance of a leftmost greedy implementation,
-which has no overhead on disambiguation and thus represents the best-case matching time.
-Finally, in order to relate our implementation to the real world,
-we include the Google RE2 library (it also uses leftmost greedy disambiguation).
-%
-All algorithm implementations and benchmarks can be found in RE2C source code [??].
-%
-Benchmark results show the following:
-\\[-0.5em]
-
 \begin{itemize}[itemsep=0.5em]
-    \item Cox and Kuklewicz algorithms degrade quickly as the number of tags increases.
-        This is especially evident on real-world RE:
-        Kuklewicz is much slower than all Okui-Suzuki variations, and Cox is so slow that it hardly fits into the plot space.
-        This is not surprizing, as both algorithms have per-tag inner loops in their core.
-
     \item Okui-Suzuki algorithm degrades with increased closure size.
-        This is also understandable, as the algorithm performs pairwise comparison of closure states.
+        This is understandable, as the algorithm performs pairwise comparison of closure states.
         Naive $update \Xund ptables ()$ algorithm degrades extremely fast,
-        and the advanced algorithm degrades much slower.
+        and the advanced algorithm behaves much better (but it may incur slight overhead in simple cases).
 
-    \item GTOP is somewhat faster than GOR1 on real-world RE, but can be slower on artificial RE.
+    \item Cox and Kuklewicz algorithms degrade as the number of tags increases.
+        This is not surprizing, as both algorithms have per-tag inner loops in their core.
+        On large real-world RE Kuklewicz algorithm is much slower than all Okui-Suzuki variations,
+        and Cox algorithm is so slow that it did not fit into the plot space.
+
+    \item The bottleneck of Cox algorithm is copying of offset arrays.
+        Using GOR1 instead of naive depth-first search, though asymptotically faster,
+        increases the amount of copying because depth-dirst scan order allows to use a single buffer array that is updated and restored in-place.
+        However, copying offset arrays is also required in other parts of the algorithm,
+        and in general Cox algorithm is not suited for RE with many submatch groups.
 
     \item Lazy variation of Okui-Suzuki is much faster than the main variation on real-world tests and not very long inputs.
 
-    \item RE2 performance is close to our leftmost greedy implementation (sometimes better, sometimes worse).
+    \item GTOP is somewhat faster than GOR1 on real-world RE, but can be slower on artificial RE.
+
+    \item RE2 performs close to our implementations (sometimes better, sometimes worse).
     \\[-0.5em]
 \end{itemize}
 
-One interesting tough case for Okui-Suzuki algorithm is RE of the form $(a^{k_1}|\hdots|a^{k_n})^{0,\infty}$,
+One interesting test is RE of the form $(a^{k_1}|\hdots|a^{k_n})^{0,\infty}$,
 e.g. \texttt{(a\{2\}|a\{3\}|a\{5\})*}.
 Given input string \texttt{a...a},
 submatch on the last iteration varies with the length of input:
@@ -2094,9 +2196,22 @@ Variation continues infinitely with a period of five characters.
 We can increase variation period and the range of possible submatch results by choosing different counter values.
 %
 Large period and wide range correspond to a higher level of ambiguity and many parallel competing paths,
-which means increased closure size and consequently more work for Okui-Suzuki algorithm.
+which means increased closure size (hence the slowdown of Okui-Suzuki algorithm, especially the ``naive Okui-Suzuki'' variation).
+Adding more capturing groups increases the number of tags (hence the slowdown of Kuklewicz and Cox algorithms).
+\\
+
+In closing, we would like to point out that correctness
+of all benchmarked implementations has been tested on a subset of Glenn Fowler test suite [??]
+(we removed tests for backreferences and start/end anchors),
+extended by Kuklewicz and further extended by ourselves to some 500 tests.
+All algorithms except Cox algorithm have passed the tests
+(Cox algorithm fails in about 10 cases for the reasons discussed in the introduction).
 
 \FloatBarrier
+
+\section{Conclusions and future work}
+
+
 \vfill\null
 \clearpage
 

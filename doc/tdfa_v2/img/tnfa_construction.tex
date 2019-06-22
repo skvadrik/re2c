@@ -6,7 +6,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb, amsfonts, accents}
 \usetikzlibrary{graphdrawing, graphs, arrows, shapes, automata, calc, decorations}
-\usegdlibrary{trees, layered}
 \usepackage{stix}
 
 
@@ -155,16 +154,10 @@
 \end{scope}
 
 \begin{scope}[xshift=0in, yshift=-10.9in]
-    \node[state] (a) {$x_0$};
-    \node[state, right of = a] (a1) {$x_1$};
-    \node[draw=none, right of = a1, xshift=-0.5in] (b) {\large{$\dots$}};
-    \node[state, right of = b, xshift=-0.5in] (b1) {$x_{n}$};
-    \node[state, accepting, right of = b1] (b2) {$y$};
+    \node[state] (a) {$x$};
+    \node[state, accepting, right of = a] (b) {$y$};
     \path
-        (a) edge node {$1 / -t_1 $} (a1)
-        (a1) edge node {} (b)
-        (b) edge node {} (b1)
-        (b1) edge node {$1 / -t_n $} (b2)
+        (a) edge node {$1 / -t_{clos} $} (b)
     ;
     \node [label={[label distance=0.1in, below right]270:\large{(j) \;}
         $\ntags \big( T, y \big)$
