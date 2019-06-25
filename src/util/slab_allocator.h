@@ -27,7 +27,14 @@ class slab_allocator_t
 public:
     slab_allocator_t(): slabs_(), current_slab_(0), current_slab_end_(0) {}
 
-    ~slab_allocator_t() { std::for_each(slabs_.rbegin(), slabs_.rend(), free); }
+    ~slab_allocator_t() { clear(); }
+
+    void clear()
+    {
+        std::for_each(slabs_.rbegin(), slabs_.rend(), free);
+        slabs_.clear();
+        current_slab_ = current_slab_end_ = 0;
+    }
 
     void *alloc(size_t size)
     {
