@@ -1,7 +1,8 @@
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/nfa/nfa.h"
 #include "src/dfa/dfa.h"
+#include "src/encoding/range_suffix.h"
+#include "src/nfa/nfa.h"
 
 
 using namespace re2c;
@@ -40,4 +41,7 @@ void regfree(regex_t *preg)
         delete &preg->dfa->tcpool;
         delete preg->dfa;
     }
+
+    AST::flist.clear();
+    RangeSuffix::freeList.clear();
 }
