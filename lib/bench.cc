@@ -78,11 +78,11 @@ static Result bench_re2c(const char *regexp, std::vector<std::string> &strings
     regmatch_t *pmatch = new regmatch_t[nmatch];
 
     // first time is warmup
-    for (size_t j = 0; j < 2; ++j) {
+    for (size_t k = 0; k < 2; ++k) {
         t3 = clock();
         err = 0;
-        for (size_t i = 0; i < ntimes; ++i) {
-            for (size_t j = 0; j < strings.size(); ++j) {
+        for (size_t j = 0; j < strings.size(); ++j) {
+            for (size_t i = 0; i < ntimes; ++i) {
                 err |= regexec(&re, strings[j].c_str(), nmatch, pmatch, 0);
             }
         }
@@ -134,10 +134,10 @@ static Result bench_re2(const char *regexp, std::vector<std::string> &strings
     }
 
     // first time is warmup
-    for (size_t j = 0; j < 2; ++j) {
+    for (size_t k = 0; k < 2; ++k) {
         t3 = clock();
-        for (size_t i = 0; i < ntimes; ++i) {
-            for (size_t j = 0; j < strings.size(); ++j) {
+        for (size_t j = 0; j < strings.size(); ++j) {
+            for (size_t i = 0; i < ntimes; ++i) {
                 ok = ok && RE2::FullMatchN(strings[j].c_str(), *re2, argps, argc);
             }
         }
@@ -186,10 +186,10 @@ static void bench(const char *r, std::vector<std::string> &ss, size_t n
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_GTOP,                 mask, need, "re2c-tnfa-posix-gtop"));
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_KUKLEWICZ,            mask, need, "re2c-tnfa-posix-kukl-gor1"));
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_SLOWPREC,             mask, need, "re2c-tnfa-posix-gor1-slow"));
-    rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE | REG_GTOP,      mask, need, "re2c-tnfa-posix-gtop-trie"));
+    rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE,                 mask, need, "re2c-tnfa-posix-gor1-trie"));
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_BACKWARD,             mask, need, "re2c-tnfa-posix-back-gor1"));
     //rs.push_back(bench_re2c(r, ss, n, 0,                                  mask, need, "re2c-tdfa"));
-    //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE,                 mask, need, "re2c-tnfa-posix-gor1-trie"));
+    //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE | REG_GTOP,      mask, need, "re2c-tnfa-posix-gtop-trie"));
     //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE | REG_LEFTMOST,  mask, need, "re2c-tnfa-leftmost-trie"));
     //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_KUKLEWICZ | REG_GTOP, mask, need, "re2c-tnfa-posix-kukl-gtop"));
     //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_BACKWARD | REG_GTOP,  mask, need, "re2c-tnfa-posix-back-gtop"));
@@ -303,11 +303,8 @@ static void load_strings(const char *fname, const char *delim
 
 int main()
 {
-    static const size_t VERY_LONG = 1 << 16;
     const char *regexp;
     std::vector<std::string> strings;
-    char *longstring = new char[VERY_LONG + 1];
-    longstring[VERY_LONG] = 0;
 
     // http
     load_strings("../lib/bench.data_http", "\n\n", strings);
@@ -398,54 +395,58 @@ int main()
     regexp = "([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+)";
     bench(regexp, strings, 10000, 0, 0);
 
+    static const size_t VERY_LONG = (1 << 14) + 1;
+    static const size_t TIMES = 10;
+    char *longstring = new char[VERY_LONG + 1];
+    longstring[VERY_LONG] = 0;
     memset(longstring, 'a', VERY_LONG);
     longstring[VERY_LONG] = 0;
     strings.clear();
     strings.push_back(longstring);
 
     regexp = "(a{2}|a{3}|a{5})*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(a{7}|a{11}|a{13})*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(a{17}|a{19}|a{23})*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(a{29}|a{31}|a{37})*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(((a){2})|((a){3})|((a){5}))*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(((a){7})|((a){11})|((a){13}))*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(((a){17})|((a){19})|((a){23}))*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(((a){29})|((a){31})|((a){37}))*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
 
     regexp = "((((((((((a*)*)*)*)*)*)*)*)*)*)*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(a*)(a*)(a*)(a*)(a*)(a*)(a*)(a*)";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(((a*)(a*)(a*))*((a*)(a*)(a*))*)*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(((((a*)*)*((a*)*)*((a*)*)*)*)*)*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(((((a*)*(a*))*(a*))*(a*))*(a*))*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "((a*)((a*)((a*)((a*)(a*)*)*)*)*)*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(a*)|(a*)|(a*)|(a*)|(a*)|(a*)|(a*)";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "((a*)|(a*)|(a*))((a*)|(a*)|(a*))";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "((a*)|(a*))((a*)|(a*))((a*)|(a*))";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "((a*)|(a*)|(a*))*|((a*)|(a*)|(a*))*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(((((a*)*)*|((a*)*)*|((a*)*)*)*)*)*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "((a*)|((a*)(a*))|((a*)(a*)(a*)))*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
     regexp = "(((a*)(a*)(a*))|((a*)(a*))|(a*))*";
-    bench(regexp, strings, 1, 0, 0);
+    bench(regexp, strings, TIMES, 0, 0);
 
     // Pathological case for constant-memory POSIX algorithms that use naive
     // (worst-case cubic in the size of TNFA) algorithm for precedence matrix
@@ -458,13 +459,13 @@ int main()
     strings.clear();
     strings.push_back("aaaaaaaaaa");
     regexp = "((a?){0,125})*";
-    bench(regexp, strings, 1, 0, REG_NFA);
+    bench(regexp, strings, 256, 0, REG_NFA);
     regexp = "((a?){0,250})*";
-    bench(regexp, strings, 1, 0, REG_NFA);
+    bench(regexp, strings, 16, 0, REG_NFA);
     regexp = "((a?){0,500})*";
-    bench(regexp, strings, 1, 0, REG_NFA);
+    bench(regexp, strings, 4, 0, REG_NFA);
     regexp = "((a?){0,1000})*";
-    bench(regexp, strings, 1, 0, REG_NFA);
+    bench(regexp, strings, 2, 0, REG_NFA);
     regexp = "((a?){0,2000})*";
     bench(regexp, strings, 1, XREG_RE2, REG_NFA);
 

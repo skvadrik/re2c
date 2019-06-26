@@ -31,6 +31,7 @@ int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string
     make_final_step(ctx);
 
     return finalize(ctx, string, nmatch, pmatch);
+    ctx.history.cache.clear();
 }
 
 void make_step(lzsimctx_t &ctx, uint32_t sym)
