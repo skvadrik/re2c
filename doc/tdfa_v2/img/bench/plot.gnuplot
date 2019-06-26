@@ -4,15 +4,15 @@ set ylabel "slowdown vs leftmost greedy (times)"
 
 set style line 1 lc rgb '#000000' lw 1
 set style line 2 lc rgb '#000000' lw 1 dt ' -'
-set style line 3 lc rgb '#000000' lw 1 dt (40.00, 10.00)
-set style line 4 lc rgb '#000000' lw 1 dt (20.00, 15.00)
-set style line 5 lc rgb '#000000' lw 1 dt (4.00, 20.00, 40, 20)
-set style line 6 lc rgb '#000000' lw 1 dt '  -  '
-set style line 7 lc rgb '#000000' lw 1 dt (60.00, 15.00)
-set style line 8 lc rgb '#000000' lw 1 dt (4, 16)
+set style line 3 lc rgb '#000000' lw 1 dt (70.00, 15.00)
+set style line 4 lc rgb '#000000' lw 1 dt (40.00, 15.00)
+set style line 5 lc rgb '#000000' lw 1 dt (4, 20, 40, 20)
+set style line 6 lc rgb '#000000' lw 1 dt (20.00, 15.00)
+set style line 7 lc rgb '#000000' lw 1 dt (10.00, 30.00)
+set style line 8 lc rgb '#000000' lw 1 dt (40, 20, 5, 20, 5, 20, 5, 20)
 
 set output 'plot_realworld.png'
-set terminal pngcairo dashed font "Courier,mono" size 800,600
+set terminal pngcairo dashed font "Courier,mono" size 750,550
 set title "real-world RE"
 set xtics (\
     "HTTP 6204-198" 1, \
@@ -31,7 +31,7 @@ set bmargin 6
 set tmargin 2
 set lmargin 12
 set rmargin 1
-set yrange [-1:30]
+set yrange [-1:25]
 plot \
      "data_realworld" using 1:2 ls 1 with lines title "leftmost greedy", \
      "data_realworld" using 1:3 ls 2 with lines title "RE2", \
@@ -44,8 +44,8 @@ plot \
 
 
 set output 'plot_artificial.png'
-set terminal pngcairo dashed font "Courier" size 1300,700
-set title "artificial highly ambiguous RE on long (64K) input strings"
+set terminal pngcairo dashed font "Courier" size 1150,650
+set title "artificial highly ambiguous RE on long (16K) input strings"
 set xtics (\
     '(a\{2\}|a\{3\}|a\{5\})*' 1, \
     '(a\{7\}|a\{11\}|a\{13\})*' 2, \
@@ -73,7 +73,7 @@ set bmargin 11
 set tmargin 2
 set lmargin 15
 set rmargin 1
-set yrange [-1:30]
+set yrange [-1:25]
 plot \
      "data_artificial" using 1:2 ls 1 with lines title "leftmost greedy", \
      "data_artificial" using 1:3 ls 2 with lines title "RE2", \
@@ -86,7 +86,7 @@ plot \
 
 
 set output 'plot_pathological.png'
-set terminal pngcairo dashed font "Courier" size 500,600
+set terminal pngcairo dashed font "Courier" size 400,550
 set title "pathological RE"
 set xtics (\
     '((a?)\{0,125\})*' 1, \
@@ -99,7 +99,7 @@ set bmargin 6
 set tmargin 2
 set lmargin 12
 set rmargin 1
-set yrange [-50:32<*]
+set yrange [-50:1000]
 plot \
      "data_pathological" using 1:2 ls 1 with lines title "leftmost greedy", \
      "data_pathological" using 1:3 ls 2 with lines title "RE2", \

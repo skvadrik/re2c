@@ -143,7 +143,7 @@ Our algorithm works in worst-case $O(n \, m^2 \, t)$ time and $O(m^2)$ space,
 where $n$ is the length of input, $m$ is the size of the regular expression with counted repetition subexpressions ``unrolled'',
 and $t$ is the number of capturing groups and subexpressions that contain them.
 %
-Benchmarks show that in practice our algorithm is 2x-10x slower than leftmost greedy matching
+Benchmarks show that in practice our algorithm is about 5x slower than leftmost greedy matching
 (which has no overhead on disambiguation).
 %
 We present a lazy variation that is much faster, but requires memory proportional to the size of input.
@@ -1573,12 +1573,12 @@ We assume the existence of helper function $height(T, t)$ that maps each tag to 
         $t_1 = tag(U, n_1), \; t_2 = tag(U, n_2)$ \;
 
         \BlankLine
-        \lIf {$t_1 mod \, 2 \equiv 0$} { \Return $-1$ }
-        \lIf {$t_2 mod \, 2 \equiv 0$} { \Return $1$ }
-
-        \BlankLine
         \lIf {$t_1 < 0$} { \Return $1$ }
         \lIf {$t_2 < 0$} { \Return $-1$ }
+
+        \BlankLine
+        \lIf {$t_1 mod \, 2 \equiv 0$} { \Return $-1$ }
+        \lIf {$t_2 mod \, 2 \equiv 0$} { \Return $1$ }
 
         \BlankLine
         \Return $0$
@@ -2152,7 +2152,8 @@ Benchmark results show the following:
 \includegraphics[width=\linewidth]{img/bench/plot.png}
 \vspace{-2em}
 \caption{
-Benchmarks.
+Benchmarks.\\
+Real-world tests have labels of the form ``title $m$-$k$'', where $m$ is RE size and $k$ is the number of capturing groups.
 %: real-world RE (upper left),
 %pathological RE for naive precedence table algorithm (upper right),
 %artifical highly ambiguous RE on very long inputs (lower).
@@ -2161,31 +2162,41 @@ Benchmarks.
 
 \begin{itemize}[itemsep=0.5em]
     \item Okui-Suzuki algorithm degrades with increased closure size.
-        This is understandable, as the algorithm performs pairwise comparison of closure states.
+        This is understandable, as the algorithm performs pairwise comparison of closure states to compute precedence matrices.
         Naive $update \Xund ptables ()$ algorithm degrades extremely fast,
-        and the advanced algorithm behaves much better (but it may incur slight overhead in simple cases).
+        and the advanced algorithm behaves much better (though it may incur slight overhead in simple cases).
 
-    \item Cox and Kuklewicz algorithms degrade as the number of tags increases.
-        This is not surprizing, as both algorithms have per-tag inner loops in their core.
-        On large real-world RE Kuklewicz algorithm is much slower than all Okui-Suzuki variations,
-        and Cox algorithm is so slow that it did not fit into the plot space.
+    \item Kuklewicz algorithms degrades with increased closure size and increased number of tags.
+        This is not surprizing, as the algorithm has per-state and per-tag loop used to compute precedence matrix.
+        On real-world tests with many capturing groups Kuklewicz algorithm is much slower than Okui-Suzuki algorithm.
 
-    \item The bottleneck of Cox algorithm is copying of offset arrays.
-        Using GOR1 instead of naive depth-first search, though asymptotically faster,
-        increases the amount of copying because depth-dirst scan order allows to use a single buffer array that is updated and restored in-place.
-        However, copying offset arrays is also required in other parts of the algorithm,
-        and in general Cox algorithm is not suited for RE with many submatch groups.
+    \item Cox algorithm degrades with increased number of tags.
+        The bottleneck of the algorithm is copying of offset arrays
+        (each array contains a pair of offsets per tag).
+        Using GOR1 instead of naive depth-first search increases the amount of copying (though asymptotically faster),
+        because depth-dirst scan order allows to use a single buffer array that is updated and restored in-place.
+        However, copying is required elsewhere in the algorithm,
+        and in general it is not suited for RE with many submatch groups.
+        On real-world tests Cox algorithm is so slow that it did not fit into the plot space.
 
-    \item Lazy variation of Okui-Suzuki is much faster than the main variation on real-world tests and not very long inputs.
+    \item Lazy variation of Okui-Suzuki degrades with increased cache size and the size of path context.
+        This may happen because of long input strings and because of high level of ambiguity in RE
+        (in such cases lazy algorithm does all the work of non-lazy algorithm,
+        but with the additional overhead on cache lookups/insertions and accumulation of data from the previous steps).
+        On real-world tests lazy variation of Okui-Suzuki is fast.
 
-    \item GTOP is somewhat faster than GOR1 on real-world RE, but can be slower on artificial RE.
+    \item GOR1 and GTOP performance is similar.
 
-    \item RE2 performs close to our implementations (sometimes better, sometimes worse).
+    \item RE2 performance is close to our leftmost greedy implementation.
     \\[-0.5em]
 \end{itemize}
 
-One interesting test is RE of the form $(a^{k_1}|\hdots|a^{k_n})^{0,\infty}$,
-e.g. \texttt{(a\{2\}|a\{3\}|a\{5\})*}.
+One particularly interesting group of tests that show the above points
+are RE of the form $(a^{k_1}|\hdots|a^{k_n})^{0,\infty}$
+(artificial tests 1-4)
+and their variations with more capturing groups
+(artificial tests 5-8).
+For example, consider \texttt{(a\{2\}|a\{3\}|a\{5\})*} and \texttt{(((a)\{2\})|((a)\{3\})|((a)\{5\}))*}.
 Given input string \texttt{a...a},
 submatch on the last iteration varies with the length of input:
 it equals \texttt{aaaaa} for $5n$-character string,
@@ -2193,11 +2204,16 @@ it equals \texttt{aaaaa} for $5n$-character string,
 and \texttt{aaa} for strings of length $5n - 2$ and $5n + 1$ ($n \in \YN$).
 Variation continues infinitely with a period of five characters.
 %
-We can increase variation period and the range of possible submatch results by choosing different counter values.
+We can increase variation period and the range of possible submatch results by choosing larger counter values.
 %
-Large period and wide range correspond to a higher level of ambiguity and many parallel competing paths,
-which means increased closure size (hence the slowdown of Okui-Suzuki algorithm, especially the ``naive Okui-Suzuki'' variation).
-Adding more capturing groups increases the number of tags (hence the slowdown of Kuklewicz and Cox algorithms).
+This causes increased closure size ---
+hence the slowdown of Okui-Suzuki algorithm on tests 1 to 4 and 5 to 8 (especially pronounced for the ``naive Okui-Suzuki'' variation),
+and the more gentle slowdown of Kuklewicz algorithm on the same ranges.
+%
+Adding more capturing groups increases the number of tags ---
+hence the slowdown of Kuklewicz and Cox algorithms on 5-8 group compared to 1-4 group.
+%
+%Note that Cox algorithm performs very well on this test and slows down at the same pace as leftmost greedy.
 \\
 
 In closing, we would like to point out that correctness
@@ -2209,7 +2225,37 @@ All algorithms except Cox algorithm have passed the tests
 
 \FloatBarrier
 
+
 \section{Conclusions and future work}
+
+The main result of our work is a practical POSIX matching algorithm
+that can be used on real-world regular expressions,
+does not require complex preprocessing
+and incurs relatively modest disambiguation overhead compared to other algorithms.
+%
+We tried to present the algorithm in full, with a few useful variations,
+in order to make implementation easy for the reader.
+\\
+
+We see a certain tradeoff between speed and memory usage:
+bounded-memory version of the algorithm performs a lot of redundant work,
+and the lazy version avoids redundant work at the expense of potentially unbounded memory usage.
+Both approaches seem not ideal;
+perhaps in practice a hybrid approach can be used.
+\\
+
+It is still an open question to us
+whether it is possible to combine the elegance of derivative-based approach to POSIX disambiguation
+with the practical efficiency of NFA-based methods.
+%
+Derivative-based approach constructs match results in such order that longest-leftmost result is always first.
+%
+We experimented with recursive descent parsers that embrace the same ordering idea,
+but the resulting algorithm was rather complex and slow in practice.
+\\
+
+It would be interesting to apply our approach to automata with counters
+instead of unrolling bounded repetition.
 
 
 \vfill\null
