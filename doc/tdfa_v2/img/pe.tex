@@ -6,7 +6,45 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb, amsfonts, accents}
 \usetikzlibrary{graphdrawing, graphs, arrows, shapes, automata, calc}
+
+% workaround for https://github.com/u-fischer/luaotfload/issues/6
+\usepackage{luacode}
+\begin{luacode}
+  function pgf_lookup_and_require(name)
+    local sep = '/'
+    if string.find(os.getenv('PATH'),';') then
+      sep = '\string\\'
+    end
+    local function lookup(name)
+      local sub = name:gsub('%.',sep)
+      local find_func = function (name, suffix)
+        if resolvers then
+          local n = resolvers.findfile (name.."."..suffix, suffix) -- changed
+          return (not (n == '')) and n or nil
+        else
+          return kpse.find_file(name,suffix)
+        end
+      end
+      if find_func(sub, 'lua') then
+        require(name)
+      elseif find_func(sub, 'clua') then
+        collectgarbage('stop')
+        require(name)
+        collectgarbage('restart')
+      else
+        return false
+      end
+      return true
+    end
+    return
+      lookup('pgf.gd.' .. name .. '.library') or
+      lookup('pgf.gd.' .. name) or
+      lookup(name .. '.library') or
+      lookup(name)
+  end
+\end{luacode}
 \usegdlibrary{trees, layered}
+
 \usepackage{stix}
 
 
@@ -162,8 +200,8 @@
             \;\Rightarrow\; \alpha \sqsubset \beta
             \;\Rightarrow\; \alpha < \beta
         \\
-        \|s\|^{Sub}_1 = 2 &> 1 = \|t\|^{Sub}_1 \wedge \|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 1
-            \;\Rightarrow\; s <_1 t
+        \|s\|^{sub}_1 = 2 &> 1 = \|t\|^{sub}_1 \wedge \|s\|^{sub}_p = \|t\|^{sub}_p \;\forall p < 1
+            \;\Rightarrow\; s \prec_1 t
         \end{aligned}$
         };
     \end{scope}
@@ -267,8 +305,8 @@
             \;\Rightarrow\; \alpha \sim \beta \;\wedge\; \alpha \subset \beta
             \;\Rightarrow\; \alpha < \beta
         \\
-        &\|s\|^{Sub}_1 = 1 > -1 = \|t\|^{Sub}_1 \wedge \|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 1
-            \;\Rightarrow\; s <_1 t
+        &\|s\|^{sub}_1 = 1 > -1 = \|t\|^{sub}_1 \wedge \|s\|^{sub}_p = \|t\|^{sub}_p \;\forall p < 1
+            \;\Rightarrow\; s \prec_1 t
         \end{aligned}$
         };
     \end{scope}
@@ -394,8 +432,8 @@
             \;\Rightarrow\; \alpha \sim \beta \;\wedge\; \alpha \subset \beta
             \;\Rightarrow\; \alpha < \beta
         \\
-        &\|s\|^{Sub}_2 = \infty > 0 = \|t\|^{Sub}_2 \wedge \|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 2
-            \;\Rightarrow\; s <_2 t
+        &\|s\|^{sub}_2 = \infty > 0 = \|t\|^{sub}_2 \wedge \|s\|^{sub}_p = \|t\|^{sub}_p \;\forall p < 2
+            \;\Rightarrow\; s \prec_2 t
         \end{aligned}$
         };
     \end{scope}
@@ -492,8 +530,8 @@
             \;\Rightarrow\; \alpha \sim \beta \;\wedge\; \beta \subset \alpha
             \;\Rightarrow\; \beta < \alpha
         \\
-        &\|s\|^{Sub}_2 = 0 > -1 = \|s\|^{Sub}_2 \wedge \|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 2
-            \;\Rightarrow\; t <_2 s
+        &\|s\|^{sub}_2 = 0 > -1 = \|s\|^{sub}_2 \wedge \|s\|^{sub}_p = \|t\|^{sub}_p \;\forall p < 2
+            \;\Rightarrow\; t \prec_2 s
         \end{aligned}$
         };
     \end{scope}
@@ -619,7 +657,7 @@
             &\Phi_0(t_9) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0}
         \end{aligned}
     \\
-        & \quad\quad t_1 < t_2 < t_3 < t_4 < t_5 < t_7 < t_6 < t_8 < t_9
+        & \quad\quad t_1 \prec t_2 \prec t_3 \prec t_4 \prec t_5 \prec t_7 \prec t_6 \prec t_8 \prec t_9
     \end{aligned}$
     };
 \end{scope}
