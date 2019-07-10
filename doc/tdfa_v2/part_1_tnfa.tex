@@ -437,7 +437,7 @@ which allows us to impose specific order of TNFA traversal
 (all $\epsilon$-transitions from the same state have different priority).
 \\
 
-\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}\label{alg_match}
+\begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
 \setstretch{0.8}
 \Fn {$\underline{match \big( N \!\!=\! (\Sigma, Q, T, \Delta, q_0, q_f), \; \alpha_1 \!\hdots\! \alpha_n \big)} \smallskip$} {
 
@@ -465,7 +465,7 @@ which allows us to impose specific order of TNFA traversal
 
     \BlankLine
 }
-\caption{TNFA simulation on a string.}
+\caption{TNFA simulation on a string.}\label{alg_match}
 \end{algorithm}
 \medskip
 
@@ -532,7 +532,7 @@ Function $\IRE$ transforms RE into IRE.
 It is defined via a composition of two functions,
 $mark()$ that transforms RE into IRE with submatch indices in the boolean range $\{0, 1\}$,
 and $enum()$ that substitutes boolean indices with consecutive numbers.
-An example of constructing an IRE from a RE is given on figure \ref{fig_mark_enum}.
+An example of constructing an IRE from a RE is given on figure \ref{fig:mark_enum}.
 %
     \begin{align*}
     &\begin{aligned}
@@ -636,14 +636,14 @@ just the relevant parts of them.
 PTs have two definitions of norm, one for $Pos$ and one for $Sub$,
 which we call \emph{p-norm} and \emph{s-norm} respectively:
 
-\begin{figure}\label{fig_mark_enum}
+\begin{figure}
 \includegraphics[width=\linewidth]{img/mark_enum.pdf}
 \vspace{-2em}
 \caption{
 IRE for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,3}$
 and examples of PTs for string $a$.
 S-norm is marked with $\#$.
-}
+}\label{fig:mark_enum}
 \end{figure}
 
     \begin{definition}\label{tnorm_of_PTs}
@@ -826,7 +826,7 @@ In practice, this means that adding more parentheses in RE does not drastically 
 %
 Note that this doesn't mean that P-order is an extension of S-order:
 the two orders may disagree.
-For example, consider trees $t$ and $u$ on figure \ref{fig_mark_enum}:
+For example, consider trees $t$ and $u$ on figure \ref{fig:mark_enum}:
 on one hand $t \prec_{2.2} u$, because $\snorm{t}{2.2} = \infty > 0 = \snorm{u}{2.2}$ and s-norms at all preceding submatch positions agree;
 on the other hand $u <_{1.1} t$, because $\pnorm{t}{1.1} = -1 < 0 = \pnorm{u}{1.1}$
 and p-norms at all preceding positions agree.
@@ -913,13 +913,13 @@ $minh(\alpha)$ denotes the minimal height of parenthesis in $\alpha$ (or $\infty
 $f\!irst(\alpha)$ denotes the first parenthesis in $\alpha$ (or $\bot$ if $\alpha$ is empty or begins with an alphabet symbol).
 For comparable PE fragments $\alpha$ and $\beta$ the index of the first distinct pair of frames is called \emph{fork}.
 
-\begin{figure}\label{fig_pe}
+\begin{figure}
 \includegraphics[width=\linewidth]{img/pe.pdf}
 \vspace{-2em}
 \caption{
 Examples: (a) -- (d): four main rules of POSIX comparison,
 (e) -- pairwise comparison of PEs.
-}
+}\label{fig_pe}
 \end{figure}
 
     \begin{definition}
@@ -2269,7 +2269,6 @@ and $t$ --- the number of capturing groups and subexpressions that contain them.
 \\
 
 \begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
-\label{alg_tnfa}
 \begin{multicols}{2}
 \setstretch{0.85}
 
@@ -2360,7 +2359,7 @@ and $t$ --- the number of capturing groups and subexpressions that contain them.
 
 \end{multicols}
 \vspace{0.5em}
-\caption{TNFA construction.}
+\caption{TNFA construction.}\label{alg_tnfa}
 \end{algorithm}
 
 The first step, conversion of RE to IRE, is given by the functions $mark()$ and $enum()$ from section \ref{section_formalization}.
@@ -2486,13 +2485,13 @@ and we use a fast forward pre-processing phase to find the matching string prefi
 Benchmark results show the following:
 \\[-0.5em]
 
-\begin{figure}\label{fig_mark_enum}
+\begin{figure}
 \includegraphics[width=\linewidth]{img/bench/plot.png}
 \vspace{-2em}
 \caption{
 Benchmarks.\\
 Real-world tests have labels of the form ``title $m$-$k$'', where $m$ is RE size and $k$ is the number of capturing groups.
-}
+}\label{fig:bench}
 \end{figure}
 
 \begin{itemize}[itemsep=0.5em]
