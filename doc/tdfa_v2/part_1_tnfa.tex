@@ -2,46 +2,14 @@
 
 \articletype{Research Article}
 
-\received{26 April 2016}
-\revised{6 June 2016}
-\accepted{6 June 2016}
+\received{xx July 2019}
+\revised{xx July 2019}
+\accepted{xx July 2019}
 
 \raggedbottom
 
-%\usepackage{booktabs}
-
 \let\procedure\relax
 \let\endprocedure\relax
-
-%\usepackage[ruled]{algorithm2e} % For algorithms
-
-\usepackage[noline, noend, nofillcomment, linesnumbered]{algorithm2e}
-%\usepackage[noline, noend, nofillcomment]{algorithm2e}
-%\usepackage[noline, noend, nofillcomment, linesnumbered]{algorithm2e}
-%    \setlength{\algomargin}{0em}
-
-\usepackage{setspace}
-
-\SetArgSty{textnormal}
-
-% comments in the pseudocode
-% note: on my system \texttt is broken with \small font size (too small)
-\newcommand\Xcommentfont[1]{\selectfont\textnormal{#1}}
-%\newcommand\Xcommentfont[1]{\fontsize{9pt}{0pt}\selectfont\texttt{#1}}
-\SetCommentSty{Xcommentfont}
-\SetNoFillComment
-
-\let\oldnl\nl % Store \nl in \oldnl
-\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}} % Remove line number for one line
-
-\SetNlSty{textnormal}{}{}
-
-\renewcommand{\algorithmcfname}{ALGORITHM}
-%\SetAlFnt{\small}
-%\SetAlCapFnt{\small}
-%\SetAlCapNameFnt{\small}
-%\SetAlCapHSkip{0pt}
-%\IncMargin{-\parindent}
 
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb, amsthm, amsfonts}
@@ -51,9 +19,21 @@
 \usepackage{enumitem}
 \usepackage[justification=centering]{caption}
 \usepackage{url}
-\usepackage{vwcol}
 \usepackage[section]{placeins}
 \usepackage{proof-at-the-end}
+\usepackage{setspace}
+
+\usepackage[noline, noend, nofillcomment, linesnumbered]{algorithm2e}
+\SetArgSty{textnormal}
+\newcommand\Xcommentfont[1]{\selectfont\textnormal{#1}}
+\SetCommentSty{Xcommentfont}
+\SetNoFillComment
+\SetNlSty{textnormal}{}{}
+\renewcommand{\algorithmcfname}{ALGORITHM}
+
+
+\let\oldnl\nl
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}} % Remove line number for one line
 
 \newcommand{\Xl}{\langle}
 \newcommand{\Xr}{\rangle}
@@ -104,7 +84,6 @@
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
 \setlist{nosep}
-%\setlength{\parskip}{0.5em}
 
 \newenvironment{Xfig}
     {\par\medskip\noindent\minipage{\linewidth}\begin{center}}
@@ -128,84 +107,58 @@
 \address[2]{\email{skvadrik@gmail.com}}
 
 \abstract[Summary]{
-We give an algorithm for regular expression parsing and submatch extraction with POSIX longest-match semantics.
-The algorithm is based on Okui-Suzuki disambiguation procedure with a few important extensions and improvements.
+In this paper we further develop POSIX disambiguation algorithm by Okui and Suzuki.
+We extend its theoretical foundations on a few important practical cases
+and introduce numerous performance improvements.
+%
+Our algorithm works in worst-case $O(n \, m^2 \, t)$ time and $O(m^2)$ space,
+where $n$ is the length of input, $m$ is the size of the regular expression with counted repetition expanded
+and $t$ is the number of capturing groups and subexpressions that contain groups.
+%
+Benchmarks show that in practice our algorithm is \textasciitilde{}5x slower than leftmost-greedy matching.
+%
+We present a lazy version of the algorithm that is much faster, but requires memory proportional to the size of input.
+%
 We study other NFA-based algorithms
 and show that Kuklewicz algorithm is slower in practice,
 and the backward matching algorithm by Cox is incorrect.
-%
-Our algorithm works in worst-case $O(n \, m^2 \, t)$ time and $O(m^2)$ space,
-where $n$ is the length of input, $m$ is the size of the regular expression with counted repetition subexpressions ``unrolled'',
-and $t$ is the number of capturing groups and subexpressions that contain them.
-%
-Benchmarks show that in practice our algorithm is about 5x slower than leftmost greedy matching
-(which has no overhead on disambiguation).
-%
-We present a lazy variation that is much faster, but requires memory proportional to the size of input.
 }
 
 \keywords{Regular Expressions, Parsing, Submatch Extraction, Finite-State Automata, POSIX}
 
-%\jnlcitation{\cname{
-%\author{U. Trofimovich},
-%(\cyear{2017}),
-%\ctitle{Fast Submatch Extraction in Lexer Generators},
-%\cjournal{Q.J.R. Meteorol. Soc.},
-%\cvol{2017;00:1--6}.}
-
 \maketitle
+
 
 \section{Introduction}
 
 In this paper we study NFA-based approaches to the problem of POSIX regular expression parsing and submatch extraction.
 A number of algorithms have been proposed in recent years,
-but not all of them were thoroughly studied and formalized,
-and some support only a subset of POSIX regular expressions.
-Our goal is to compare different approaches,
-pick the most efficient one,
-extend it on the full range of POSIX regular expressions
-and provide a practical matching algorithm.
+but not all of them were properly studied and formalized.
+We experimented with different approaches and found that in practice the algorithm by Okui and Suzuki \cite{OS13} is the most efficient one.
+In the process we discovered a number of improvements
+that require careful reconstruction of the underlying theory and introduction of new algorithms and proofs.
+In our experience Okui and Suzuki approach is not easy to understand,
+therefore we include illustrative examples and detailed pseudocode of the extended algorithm.
 %
-It should be noted that there exists a totally different approach to the problem based on Brzozowski derivatives.
-We choose to focus on NFA-based approach for the following reasons:
-first, we feel that both approaches deserve to be studied and formalized;
-and second, in our experience derivative-based approach is slow in practice
-(possibly due to an imperfect implementation, but we also discuss theoretical bounds below).
+It should be noted that there is a totally different (and very elegant) approach to the problem
+based on Brzozowski derivatives \cite{SL14}.
+We choose to focus on NFA-based approach because
+in our experience derivative-based approach is slow in practice
+(we also discuss theoretical bounds below).
 %
-Both NFA and derivatives can be used to construct DFA with POSIX longest-match semantics [SL13] [Bor15] [Tro17].
+Both NFA and derivatives can be used to construct DFA with POSIX longest-match semantics \cite{SL13} \cite{Bor15} \cite{Tro17}.
 The resulting DFA-based algorithms are very fast, because there is no run-time overhead on disambiguation.
 However, DFA construction is not always viable due to its exponential worst-case complexity,
 and if viable, it needs to be efficient.
 Therefore we concentrate on NFA-based algorithms
-that can be used directly for matching, or serve as a basis for DFA construction.
-We give an overview of existing algorithms, including some that are incorrect but interesting.
-%
-\iffalse
-The difficulty of POSIX longest-match semantics is caused by our inability to predict correct match results at the point where they diverge.
-Consider regular expression \texttt{(a\{2\}|a\{3\}|a\{5\})*} and string \texttt{a...a}.
-Submatch on the last iteration varies with the length of input:
-it equals \texttt{aaaaa} for $5n$-character string,
-\texttt{aa} for strings of length $5n - 3$ and $5n - 1$,
-and \texttt{aaa} for strings of length $5n - 2$ and $5n + 1$ ($n \in \YN$).
-Variation continues infinitely with a period of five characters.
-The period is a property of regular expression;
-in our example we can change it by choosing different counter values.
-POSIX matching algorithms deal with this difficulty in different ways.
-On one side we have generic, but inefficient approaches like exhaustive backtracking and dynamic programming.
-On the other side we have algorithms based on deterministic automata [SL13] [Bor15] [Tro17]
-that are very efficient at run-time, because all disambiguation is done in advance and built into DFA.
-However, DFA construction is not always viable due to its exponential worst-case complexity,
-and if viable, it needs to be efficient.
-Therefore in this work we concentrate on practical NFA-based algorithms
 that can be used directly for matching or serve as a basis for DFA construction.
-We give an overview of existing algorithms, including some that are incorrect, but interesting.
-\fi
+We give an overview of existing algorithms, including some that are incorrect but interesting.
 
 \subparagraph{Laurikari, 2001 (incorrect).}
 
-Laurikari algorithm is based on TNFA, which is an $\epsilon$-NFA with tagged transitions [Lau01].
-Each submatch group is represented with a pair of \emph{tags} (opening and closing).
-Disambiguation is based on minimizing the value of opening tags and maximizing tha value of closing tags, where
+Laurikari described an algorithm based on TNFA, which is an $\epsilon$-NFA with tagged transitions \cite{Lau01}.
+In his algorithm each submatch group is represented with a pair of \emph{tags} (opening and closing).
+Disambiguation is based on minimizing the value of opening tags and maximizing the value of closing tags, where
 different tags have priority according to POSIX subexpression hierarchy.
 Notably, Laurikari used the idea of topological order to avoid worst-case exponential time of $\epsilon$-closure construction.
 His algorithm doesn't track history of iteration subexpressions and gives incorrect result in cases like \texttt{(a|aa)*} and string \texttt{aa}.
@@ -219,8 +172,8 @@ Memory requirement is $O(m \, t)$.
 \subparagraph{Kuklewicz, 2007.}
 
 Kuklewicz fixed Laurikari algorithm by introducing \emph{orbit} tags for iteration subexpressions.
-He gave only an informal description [Kuk07], but the algorithm was later formalized in [Tro17].
-It works in the same way as Lauirikari algorithm,
+He gave only an informal description \cite{Kuk07}, but the algorithm was later formalized in \cite{Tro17}.
+It works in the same way as Laurikari algorithm,
 except that comparison of orbit tags is based on their previous history, not just the most recent value.
 The clever idea is to avoid recording full history
 by compressing histories in a matrix of size $t \times m$, where $m$ is TNFA size and $t$ is the number of tags.
@@ -228,18 +181,18 @@ $t$-Th row of the matrix represents ordering of closure states with respect to $
 (with possible ties --- different states may have the same order).
 Matrix is updated at each step using continuations of tag histories.
 The algorithm requires $O(m \, t)$ memory and $O(n \, m \, t \, (m + t \, log(m))$ time, where $n$ is the input length
-($\epsilon$-closure takes $O(m^2 \, t)$ assuming worst-case optimal algorithm,
+(we assume that worst-case optimal $O(m^2 \, t)$ algorithm for $\epsilon$-closure is used,
 and matrix update takes $O(m \, log(m) \, t^2)$ because for $t$ tags we need to sort $m$ states with $O(t)$ comparison function).
 %Kuklewicz disambiguation is combined with Laurikari determinization [Lau00] in [Tro17].
 
 \subparagraph{Cox, 2009 (incorrect).}
 
-Cox came up with the idea of backward POSIX matching,
-which is based on the observation that it is easier to maximize submatch on the last iteration than on the first one,
-because we do not need to track the full history of previous iterations.
+Cox came up with the idea of backward POSIX matching \cite{Cox09},
+which is based on the observation that it is easier to maximize submatch on the last iteration than on the first one
+because we do not need to remember the history of previous iterations.
 The algorithm consumes input from right to left
 and tracks two pairs of offsets for each submatch group:
-the \emph{active} pair of the most recent offsets used in disambiguation,
+the \emph{active} pair of the most recent offsets (used in disambiguation)
 and the \emph{final} pair of offsets on the backwards-first (i.e. the last) iteration.
 The algorithm gives incorrect results under two conditions:
 (1) ambiguous matches have equal offsets on some iteration,
@@ -247,35 +200,35 @@ and (2) disambiguation happens too late, when active offsets have already been u
 We found that such situations may occur for two reasons.
 First, $\epsilon$-closure algorithm sometimes compares ambiguous paths \emph{after} their join point,
 when both paths have a common suffix with tagged transitions.
-This is the case with Cox prototype implementation [Cox09]; for example, it gives incorrect results for \texttt{(aa|a)*} and string \texttt{aaaaa}.
+This is the case with Cox prototype implementation \cite{Cox09}; for example, it gives incorrect results for \texttt{(aa|a)*} and string \texttt{aaaaa}.
 Most of such failures can be repaired by exploring states in topological order,
 but topological order does not exist in the presence of $\epsilon$-loops.
-The second reason is bounded repetition: ambiguous paths may not have an intermedite join point at all.
+The second reason is bounded repetition: ambiguous paths may not have an intermediate join point at all.
 For example, in case of \texttt{(aaaa|aaa|a)\{3,4\}} and string \texttt{aaaaaaaaaa}
 we have matches \texttt{(aaaa)(aaaa)(a)(a)} and \texttt{(aaaa)(aaa)(aaa)}
 with different number of iterations.
-Assuming that bounded repetion is modelled by chaining three non-optional sub-automata for \texttt{(aaaa|aaa|a)} and the optional fourth one,
+Assuming that bounded repetition is modeled by chaining three non-optional sub-automata for \texttt{(aaaa|aaa|a)} and the optional fourth one,
 by the time ambiguous paths meet both have active offsets \texttt{(0,4)}.
 Despite the flaw, Cox algorithm is interesting: if somehow delayed comparison problem was fixed, it would work.
 The algorithm requires $O(m \, t)$ memory and $O(n \, m^2 \, t)$ time
 (assuming worst-case optimal closure algorithm),
-where $n$ is the input length,
-$m$ it the size of regular expression
+where $n$ is the length of input,
+$m$ it the size of the regular expression
 and $t$ is the number of submatch groups plus enclosing subexpressions.
 
 \subparagraph{Okui and Suzuki, 2013.}
 
-Okui and Suzuki view disambiguation problem from the point of comparison of parse trees [OS13].
+Okui and Suzuki view disambiguation problem from the point of comparison of parse trees \cite{OS13}.
 Ambiguous trees have the same sequence of leaf symbols, but their branching structure is different.
 Each subtree corresponds to a subexpression.
-The \emph{norm} of a subtree (the number of leaf symbols in it) equals to submatch length.
+The \emph{norm} of a subtree is the number of alphabet symbols in it (a.k.a. submatch length).
 Longest match corresponds to a tree in which the norm of each subtree in leftmost in-order traversal is maximized.
 The clever idea of Okui and Suzuki is to relate the norm of subtrees to their \emph{height} (distance from the root).
 Namely, if we walk through the leaves of two ambiguous trees, tracking the height of each complete subtree,
 then at some step heights will diverge:
 subtree with a smaller norm will already be complete, but the one with a greater norm will not.
-Height of subtrees is easy to track by attibuting it to parentheses and encoding in automaton transitions.
-Okui and Suzuki use PAT --- $\epsilon$-free position automaton with transitions labelled by sequences of parentheses.
+Height of subtrees is easy to track by attributing it to parentheses and encoding in automaton transitions.
+Okui and Suzuki use PAT --- $\epsilon$-free position automaton with transitions labeled by sequences of parentheses.
 Disambiguation is based on comparing parentheses along ambiguous PAT paths.
 Similar to Kuklewicz, Okui and Suzuki avoid recording full-length paths
 by pre-comparing them at each step and storing comparison results in a pair of matrices indexed by PAT states.
@@ -283,49 +236,46 @@ The authors report complexity $O(n(m^2 + c))$, where
 $n$ is the input length,
 $m$ is the number of occurrences of the most frequent symbol in regular expression
 and $c$ is the number of submatch groups and repetition operators.
-However, this estimate leaves out the constuction of PAT and precomputation of precedence relation.
+However, this estimate leaves out the construction of PAT and precomputation of precedence relation.
 Memory requirement is $O(m^2)$.
-Okui-Suzuki disambiguation is combined with Berry-Sethi construction in [Bor15] in construction of parsing DFA.
+Okui-Suzuki disambiguation is combined with Berry-Sethi construction in \cite{Bor15} in construction of parsing DFA.
 
 \subparagraph{Sulzmann and Lu, 2013.}
 
-Sulzmann and Lu based their algorithm on Brzozowski derivatives [??]
-(correctness proof is given by Ausaf, Dyckhoff and Urban [??]).
+Sulzmann and Lu based their algorithm on Brzozowski derivatives \cite{SL14}
+(correctness proof is given in \cite{ADU16}).
 The algorithm unfolds a regular expression into a sequence of derivatives
-(each derivative is obtained from the previous one by consuming the next input symbol),
-and then folds it back into a parse tree
-(the tree for the previous derivative is built from the tree for the next derivative by ``injecting'' the corresponding input symbol).
+and then folds it back into a parse tree.
+Each derivative is obtained from the previous one by consuming input symbols in left-to-right order,
+and each tree is built from the next tree by injecting symbols in reversed right-to-left order.
 In practice, Sulzmann and Lu fuse backward and forward passes,
 which allows to avoid potentially unbounded memory usage on keeping all intermediate derivatives.
-The algorithm is unique in that it does not require explicit disambiguation: longest match is obtained by construction.
+The algorithm is elegant in that it does not require explicit disambiguation:
+parse trees are naturally ordered by the longest criterion.
 Time and space complexity is not entirely clear.
-In [??] Sulzmann and Lu consider the size of the regular expression as a constant.
-In [??] they give more precise estimates: $O(2^m \, t)$ space and $O(n \, log(2^m) \, 2^m \, t^2)$ time,
+In \cite{SL14} Sulzmann and Lu consider the size of the regular expression as a constant.
+In \cite{SL13} they give more precise estimates: $O(2^m \, t)$ space and $O(n \, log(2^m) \, 2^m \, t^2)$ time,
 where $m$ is the size of the regular expression,
 $n$ is the length of input
 and $t$ the number of submatch groups (the authors do not differentiate between $m$ and $t$).
 However, this estimate assumes worst-case $O(2^m)$ derivative size and on-the-fly DFA construction.
 The authors also mention a better $O(m^2)$ theoretical bound for derivative size.
-If we adopt it and exclude DFA consturuction, we get $O(m^2 \, t)$ memory requirement and $O(n \, m^2 \, t^2)$ time,
-which seems reasonably close to NFA-based approaches.
+If we adopt this bound and exclude DFA construction, we get $O(m^2 \, t)$ memory requirement and $O(n \, m^2 \, t^2)$ time,
+which seems reasonably close to (but worse than) NFA-based approaches.
 \\
 
 Undoubtedly, other approaches exist,
 but many of them produce incorrect results or require memory proportional to the length of input
-(e.g. Glibc implementation [??]).
-%Of the two correct NFA-based approaches, Okui-Suzuki appears to be faster in practice.
-%It should be noted that Okui-Suzuki and Kuklewicz approaches have much in common:
-%both compare partial matches incrementally at each step,
-%only Kuklewicz considers history of each tag separately.
+(e.g. Glibc implementation \cite{Glibc}).
 %
 Our contributions are the following:
-\\[-0.5em]
+\begin{itemize}[itemsep=0.5em, topsep=0.5em]
 
-\begin{itemize}[itemsep=0.5em]
-
-    \item We extend Okui-Suzuki algorithm on the case of partially ordered parse trees.
-        This results in significant reduction of the overhead on disambiguation
-        for regular expressions with only a few submatch groups (a common case in practice).
+    \item We extend Okui-Suzuki algorithm on the case of partially ordered parse trees
+        and introduce the notion of \emph{explicit} and \emph{implicit} submatch groups.
+        This greatly reduces the overhead on disambiguation
+        for regular expressions with only a few submatch groups,
+        which is a common case in practice.
 
     \item We extend Okui-Suzuki algorithm on the case of bounded repetition.
 
@@ -346,7 +296,7 @@ Our contributions are the following:
         which has worst-case optimal quadratic complexity in the size of closure
         and guaranteed linear complexity if the closure has no $\epsilon$-loops.
         This is an improvement over naive exhaustive depth-first search with backtracking,
-        and also an improvement over Laurikari algorithm as shown in [Tro17].
+        and also an improvement over Laurikari algorithm \cite{Tro17}.
 
     \item We give a faster algorithm for updating precedence matrices.
         The straightforward algorithm described by Okui and Suzuki involves pairwise comparison of all states in closure
@@ -356,14 +306,16 @@ Our contributions are the following:
 
     \item We show how to use our algorithm in order to build either parse trees or POSIX-style offsets.
 
-    \item We present a simple \emph{lazy} variation of our algorithm
+    \item We present a lazy version of our algorithm
         that reduces the overhead on disambiguation
         at the cost of memory usage that grows with the length of input.
         The lazy algorithm is well-suited for small inputs.
 
-    \item We provide a C++ implementation of different NFA-based algorithms
-        and benchmark them against each other and against a ``baseline'' leftmost greedy implementation.
-    \\[-0.5em]
+    \item We provide a C++ implementation of different NFA-based algorithms \cite{RE2C}
+        and benchmark them against each other and against leftmost greedy implementation
+        that has no overhead on disambiguation and serves as a baseline.
+        We also provide a completely independent Java implementation
+        and a web-page for interactive experiments with our algorithms.
 \end{itemize}
 
 The rest of this paper is arranged as follows.
@@ -376,18 +328,19 @@ section \ref{section_results} discusses possible output formats (parse trees or 
 section \ref{section_comparison} gives the core disambiguation algorithms,
 section \ref{section_lazy} presents lazy variation of our algorithm,
 and section \ref{section_tnfa} gives specific TNFA construction.
-The remaining sections \ref{section_complexity}, \ref{section_benchmarks} and \ref{section_conclusion}
+The remaining sections \ref{section_complexity}, \ref{section_benchmarks} and \ref{section_conclusions}
 contain complexity analysis, benchmarks, conclusions and directions for future work.
 
-\section{The main idea}\label{section_main}
+
+\section{Skeleton of the algorithm}\label{section_main}
 
 Our algorithm is based on four cornerstone concepts:
 regular expressions, parse trees, parenthesized expressions and tagged NFA.
 %
-First, we formalize the matching problem
-by giving the usual interpretation of a regular expression as a set of parse trees.
+As usual, we formalize matching problem
+by giving the interpretation of regular expressions as sets of parse trees.
 %
-Next, we define POSIX disambiguation semantics in terms of order on parse trees.
+Then we define POSIX disambiguation semantics in terms of order on parse trees.
 This definition reflects POSIX standard,
 but it is too high-level to be used in a practical matching algorithm.
 %
@@ -398,7 +351,7 @@ The latter definition of order is more low-level and can be easily converted to 
 Finally, we construct TNFA and map parenthesized expressions to its paths,
 which allows us to compare ambiguous paths using the definition of order on parenthesized expressions.
 %
-Below are the four basic definitions and the skeleton of the algorithm.
+In this section we give the four basic definitions and the skeleton of the algorithm.
 In the following sections we formalize the relation between different representations and fill in all the details.
 
     \begin{definition}
@@ -512,7 +465,6 @@ which allows us to impose specific order of TNFA traversal
 
     \BlankLine
 }
-%\caption{Skeleton of the matching algorithm.}
 \caption{TNFA simulation on a string.}
 \end{algorithm}
 \medskip
@@ -545,7 +497,6 @@ If the paths do not meet, then comparison performed by $update \Xund ptables ()$
 unfortunately we do not know in advance which configurations will spawn ambiguous paths.
 \\
 
-%\vfill\null
 
 \section{Formalization}\label{section_formalization}
 
@@ -631,7 +582,7 @@ The relation between regular expressions and parse trees is given by the operato
 Each IRE denotes a set of PTs.
 %
 We write $str(t)$ to denote the string formed by concatenation of all alphabet symbols in the left-to-right traversal of $t$,
-and $\PT(r, w)$ denotes the set $\big\{ t \in \PT(\IRE(r)) \mid str(t) = w \big\}$ of all PTs for a RE $r$ and a string $w$.
+and $\PT(r, w)$ denotes the set $\big\{ t \in \PT(r) \mid str(t) = w \big\}$ of all PTs for IRE $r$ and a string $w$.
 %
     \begin{align*}
         \PT &: \XIR_\Sigma \rightarrow 2^{\XT_\Sigma}
@@ -661,17 +612,17 @@ and $\PT(r, w)$ denotes the set $\big\{ t \in \PT(\IRE(r)) \mid str(t) = w \big\
 
     \begin{definition}\label{ambiguity_of_parse_trees}
     \emph{Ambiguity of parse trees.}
-    PTs $s$ and $t$ are \emph{ambiguous} iff $s \neq t$ and $s, t \in PT(r, w)$ for some RE $r$ and string $w$.
+    PTs $s$ and $t$ are \emph{ambiguous} iff $s \neq t$ and $s, t \in \PT(r, w)$ for some IRE $r$ and string $w$.
     \end{definition}
 
-Following \ref{OS13}, we assign \emph{positions} to the nodes of RE and PT.
+Following Okui and Suzuki, we assign \emph{positions} to the nodes of IRE and PT.
 The root position is $\Lambda$, and position of the $i$-th subtree of a tree with position $p$ is $p.i$
 (we shorten $\|t\|_\Lambda$ as $\|t\|$).
 The \emph{length} of position $p$, denoted $|p|$, is defined as $0$ for $\Lambda$ and $|p| + 1$ for $p.i$.
 %The set of all positions is denoted $\XP$.
 The subtree of a tree $t$ at position $p$ is denoted $t|_p$.
 Position $p$ is a \emph{prefix} of position $q$ iff $q = p.p'$ for some $p'$,
-and a \emph{proper prefix} if additionaly $p \neq q$.
+and a \emph{proper prefix} if additionally $p \neq q$.
 Position $p$ is a \emph{sibling} of position $q$ iff $q = q'.i, p = q'.j$ for some $q'$ and $i,j \in \YN$.
 Positions are ordered lexicographically.
 The set of all positions of a tree $t$ is denoted $Pos(t)$.
@@ -695,8 +646,6 @@ S-norm is marked with $\#$.
 }
 \end{figure}
 
-%\FloatBarrier
-
     \begin{definition}\label{tnorm_of_PTs}
     The \emph{p-norm} and \emph{s-norm} of a PT $t$ at position $p$ are:
     \begin{align*}
@@ -718,8 +667,8 @@ S-norm is marked with $\#$.
 
 Generally the norm of a subtree means the number of alphabet symbols in its leaves, with two exceptions.
 First, for nil subtrees the norm is $-1$: intuitively, they have the lowest ``ranking'' among all possible subtrees.
-Second, for inexistent subtrees (those with positions not in $Pos(t)$) the norm is infinite.
-This may seem counterintuitive at first, but it makes sense in the presense of REs with empty repetition.
+Second, for nonexistent subtrees (those with positions not in $Pos(t)$) the norm is infinite.
+This may seem counter-intuitive at first, but it makes sense in the presence of REs with empty repetition.
 According to the POSIX, optional empty repetitions are not allowed, and our definition reflects this:
 if a tree $s$ has a subtree $s|_p$ corresponding to an empty repetition,
 and another tree $t$ has no subtree at position $p$,
@@ -728,14 +677,14 @@ We define two orders on PTs:
 
     \begin{definition}[P-order on PTs]
     \label{total_order_on_PTs}
-    Given parse trees $t, s \in PT(r, w)$, we say that $t <_p s$ w.r.t. \emph{desision position} $p$
+    Given parse trees $t, s \in PT(r, w)$ for some IRE $r$ and string $w$, we say that $t <_p s$ w.r.t. \emph{decision position} $p$
     iff $\pnorm{t}{p} > \pnorm{s}{p}$ and $\pnorm{t}{q} = \pnorm{s}{q} \; \forall q < p$.
     We say that $t < s$ iff $t <_p s$ for some $p$.
     \end{definition}
 
     \begin{definition}[S-order on PTs]
     \label{partial_order_on_PTs}
-    Given parse trees $t, s \in PT(r, w)$, we say that $t \prec_p s$ w.r.t. \emph{desision position} $p$ % $p \in Sub(t) \cup Sub(s)$
+    Given parse trees $t, s \in PT(r, w)$ for some IRE $r$ and string $w$, we say that $t \prec_p s$ w.r.t. \emph{decision position} $p$ % $p \in Sub(t) \cup Sub(s)$
     iff $\snorm{t}{p} > \snorm{s}{p}$ and $\snorm{t}{q} = \snorm{s}{q} \; \forall q < p$.
     We say that $t \prec s$ iff $t \prec_p s$ for some $p$.
     \end{definition}
@@ -747,14 +696,13 @@ We define two orders on PTs:
 
 \begin{theoremEnd}[restate, no link to proof, no link to theorem, category=theorem_porder_on_PTs]{theorem}
     \label{theorem_porder_on_PTs}
-    P-order $<$ is a strict total order on $PT(e, w)$ for any RE $r$ and string $w$.
+    P-order $<$ is a strict total order on $\PT(e, w)$ for any IRE $e$ and string $w$.
 \end{theoremEnd}
 \begin{proofEnd}
     We need to show that $<$ is transitive and trichotomous.
-
-    \begin{itemize}[itemsep=0.5em]
+    \begin{itemize}[itemsep=0.5em, topsep=0.5em]
         \item[(1)]
-            Transitivity: we need to show that $\forall t, s, u \in PT(e,w): (t < s \wedge s < u) \implies t < u$.
+            Transitivity: we need to show that $\forall t, s, u \in \PT(e,w): (t < s \wedge s < u) \implies t < u$.
             \\[0.5em]
             Let $t <_p s$ and $s <_q u$ for some positions $p$, $q$, and let $r = min (p, q)$.
             \\[0.5em]
@@ -772,11 +720,11 @@ We define two orders on PTs:
             therefore $\pnorm{t}{r'} = \pnorm{u}{r'}$.
 
         \item[(2)]
-            Trichotomy: we need to show that $\forall t, s \in PT(e,w)$
+            Trichotomy: we need to show that $\forall t, s \in \PT(e,w)$
             exactly one of $t < s$, $s < t$ or $t = s$ holds.
             Consider the set of positions where norms of $t$ and $s$ disagree
             $P = \{p \in Pos(t) \cup Pos(s) : \pnorm{t}{p} \neq \pnorm{s}{p}\}$.
-
+            %
             \begin{itemize}[itemsep=0.5em]
                 \item[(2.1)] First case: $P \neq \emptyset$.
                     We show that in this case exactly one of $t < s$ or $s < t$ is true
@@ -792,7 +740,7 @@ We define two orders on PTs:
                     Since $\pnorm{t}{p} \neq \pnorm{s}{p}$, we have either $t <_p s$ or $t <_p s$.
                     \\[0.5em]
                     Second, we show that at most one of $t < s$ or $s < t$ is true,
-                    i.e. $<$ is asymmetric: $\forall t, s \in PT(e,w) : t < s \implies s \not< t$.
+                    i.e. $<$ is asymmetric: $\forall t, s \in \PT(e,w) : t < s \implies s \not< t$.
                     %
                     Suppose, on the contrary, that $t <_p s$ and $s <_q t$ for some $p$, $q$.
                     Without loss of generality let $p \leq q$.
@@ -806,9 +754,9 @@ We define two orders on PTs:
                     We have $Pos(t) = Pos(s)$ --- otherwise there is a position with norm $\infty$ in only one of the trees.
                     Therefore $t$ and $s$ have identical node structure.
                     %
-                    By lemma \ref{lemma_positions} any position in $t$ and $s$ corresponds to the same position in $\IRE(e)$.
+                    By lemma \ref{lemma_positions} any position in $t$ and $s$ corresponds to the same position in $e$.
                     %
-                    Since any position in $\IRE(e)$ coresponds to a unique explicit submatch index,
+                    Since any position in $e$ corresponds to a unique explicit submatch index,
                     it must be that submatch indices of all nodes in $t$ and $s$ coincide.
                     %
                     Consider some position $p \in Pos(t)$.
@@ -823,14 +771,13 @@ We define two orders on PTs:
 
 \begin{theoremEnd}[restate, no link to proof, no link to theorem, category=theorem_sorder_on_PTs]{theorem}
     \label{theorem_sorder_on_PTs}
-    S-order $\prec$ is a strict weak order on $PT(e, w)$ for any RE $r$ and string $w$.
+    S-order $\prec$ is a strict weak order on $\PT(e, w)$ for any IRE $e$ and string $w$.
 \end{theoremEnd}
 \begin{proofEnd}
     We need to show that $\prec$ is asymmetric and transitive, and incomparability relation $\sim$ is transitive.
-
-    \begin{itemize}[itemsep=0.5em]
+    \begin{itemize}[itemsep=0.5em, topsep=0.5em]
         \item[(1)]
-            Asymmetry: we need to show that $\forall t, s \in PT(e,w): t \prec s \implies s \not\prec t$.
+            Asymmetry: we need to show that $\forall t, s \in \PT(e,w): t \prec s \implies s \not\prec t$.
             \\[0.5em]
             Suppose, on the contrary, that $t \prec_p s$ and $s \prec_q t$ for some $p$, $q$.
             Without loss of generality let $p \leq q$.
@@ -839,7 +786,7 @@ We define two orders on PTs:
             Contradiction.
 
         \item[(2)]
-            Transitivity: we need to show that $\forall t, s, u \in PT(e,w): (t \prec s \wedge s \prec u) \implies t \prec u$.
+            Transitivity: we need to show that $\forall t, s, u \in \PT(e,w): (t \prec s \wedge s \prec u) \implies t \prec u$.
             \\[0.5em]
             Let $t \prec_p s$ and $s \prec_q u$ for some positions $p$, $q$, and let $r = min (p, q)$.
             \\[0.5em]
@@ -857,7 +804,7 @@ We define two orders on PTs:
             therefore $\snorm{t}{r'} = \snorm{u}{r'}$.
 
         \item[(3)]
-            Transitivity of incomparability: we need to show that $\forall t, s \in PT(e,w): (t \sim s \wedge s \sim u) \implies t \sim u$.
+            Transitivity of incomparability: we need to show that $\forall t, s \in \PT(e,w): (t \sim s \wedge s \sim u) \implies t \sim u$.
             \\[0.5em]
             By forward implication of lemma \ref{lemma_incomparability_equivdef}
             $t \sim s \Rightarrow \forall p : \snorm{t}{p} = \snorm{s}{p}$ and
@@ -886,8 +833,7 @@ and p-norms at all preceding positions agree.
 
 \begin{theoremEnd}[restate, no link to proof, no link to theorem, category=theorem_order_compat]{theorem}
     \label{theorem_order_compat}
-    For a RE $e$ and string $w$,
-    let $t_{min}$ be the $<$-minimal tree in $\PT(e,w)$
+    Let $t_{min}$ be the $<$-minimal tree in $\PT(e,w)$ for some IRE $e$ and string $w$,
     and let $T_{min}$ be the class of the $\prec$-minimal trees in $\PT(e,w)$.
     Then $t_{min} \in T_{min}$.
 \end{theoremEnd}
@@ -951,7 +897,7 @@ Function $\Phi$ transforms PT at the given height into PE:
     \end{cases}
     \end{align*}
 
-For a given RE $r$ and string $w$ the set of all PEs $\big\{ \Phi_{0}(t) \mid t \in PT(r, w) \big\}$ is denoted $\PE(r, w)$,
+For a given IRE $r$ and string $w$ the set of all PEs $\big\{ \Phi_{0}(t) \mid t \in \PT(r, w) \big\}$ is denoted $\PE(r, w)$,
 and the set of all prefixes in $\PE(r, w)$ is denoted $\PR(r, w)$.
 Each PE $\alpha$ can be represented as $\alpha_0 a_1 \alpha_1 \dots a_n \alpha_n$,
 where $\alpha_i$ is the $i$-th \emph{frame} --- a possibly empty sequence of parentheses between
@@ -975,8 +921,6 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
 (e) -- pairwise comparison of PEs.
 }
 \end{figure}
-
-%\FloatBarrier
 
     \begin{definition}
     \label{def_traces}
@@ -1028,8 +972,7 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
 
 \begin{theoremEnd}[restate, no link to proof, no link to theorem, category=theorem_order_on_pe_same_as_on_pt]{theorem}
     \label{theorem_order_on_pe_same_as_on_pt}
-    For a given RE $e$ and string $w$,
-    if $s, t \in PT(e, w)$ then
+    If $s, t \in \PT(e, w)$ for some IRE $e$ and string $w$, then
     $s \prec t \Leftrightarrow \Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
 \end{theoremEnd}
 \begin{proofEnd}
@@ -1064,7 +1007,7 @@ $\pi_1 = q_1 \overset {s|\alpha} {\rightsquigarrow} q_2$ and
 $\pi_2 = q_1 \overset {s|\beta} {\rightsquigarrow} q_3$
 we say that $\pi_1 < \pi_2$ if $\alpha < \beta$.
 %
-For a given RE $e$ we say that a path in TNFA for $e$ is \emph{minimal} if it induces
+For a given IRE $e$ we say that a path in TNFA for $e$ is \emph{minimal} if it induces
 $\alpha = \PE(t)$ for some minimal tree $t \in \PT(e)$.
 %
 Two paths are \emph{ambiguous} if their start and end states coincide and they induce the same alphabet string.
@@ -1072,10 +1015,10 @@ Two paths have a \emph{join point} if they have ambiguous prefixes.
 %
 In order to justify our TNFA simulation algorithm,
 we need to show that PEs induced by TNFA paths can be compared incrementally
-(otherwise we would have to keep full-length PEs, which requires the amount of memory proportional to the lenght of input).
+(otherwise we would have to keep full-length PEs, which requires the amount of memory proportional to the length of input).
 Justification of incremental comparison consists of two parts:
 the following lemma \ref{lemma_incr_cmp_frames} justifies comparison between frames,
-and lemmata \ref{lemma_closure_minpaths}, \ref{lemma_closure_noloop}, \ref{lemma_closure_rightdist}
+and lemmas \ref{lemma_closure_minpaths}, \ref{lemma_closure_noloop}, \ref{lemma_closure_rightdist}
 in section \ref{section_closure} justify comparison at join points inside of one frame
 (this is necessary as the number of paths in closure may be exponential in the number of states).
 
@@ -1093,7 +1036,6 @@ in section \ref{section_closure} justify comparison at join points inside of one
     and the first $n$ frames are identical to frames of $\alpha$, $\beta$,
     we can represent $traces(\alpha c \gamma, \beta c \gamma)$
     as $\big((\rho_1, \dots, \rho_n, \rho_{n+1}), (\rho'_1, \dots, \rho'_n, \rho'_{n+1})\big)$.
-    %Consider two possible cases:
     %
     \begin{itemize}[itemsep=0.5em, topsep=0.5em]
     \item[(1)]
@@ -1142,7 +1084,7 @@ The problem of constructing $\epsilon$-closure with POSIX disambiguation
 can be formulated as a shortest path problem on directed graph with weighted arcs.
 In our case weight is not a number --- it is the PE fragment induced by the path.
 %
-We give two algorithms for closure construction: GOR1, named after the well-known Goldberg-Radzik algorithm [GRC??],
+We give two algorithms for closure construction: GOR1, named after the well-known Goldberg-Radzik algorithm \cite{GR93},
 and GTOP, named after ``global topological order''.
 %
 Both have the usual structure of shortest-path finding algorithms.
@@ -1152,7 +1094,7 @@ At each iteration it dequeues configuration $(q, o, u, r)$ and scans $\epsilon$-
 For transition $(q, \Xund, \gamma, p)$ it constructs a new configuration $(p, o, v, r)$
 that combines $u$ and $\gamma$ in an extended path $v$.
 If the resulting set contains another configuration for state $p$,
-then the algorithm choses configuration which has a better path from POSIX perspective.
+then the algorithm chooses configuration which has a better path from POSIX perspective.
 Otherwise it adds the new configuration to the resulting set.
 If the resulting set was changed, the new configuration is enqueued for further scanning.
 Eventually all states in $\epsilon$-closure are explored, no improvements can be made, and the algorithm terminates.
@@ -1163,19 +1105,19 @@ Eventually all states in $\epsilon$-closure are explored, no improvements can be
 
 The difference between GOR1 and GTOP is in the order they inspect configurations.
 %
-Both algorithms are based on the idea of topologcal ordering.
+Both algorithms are based on the idea of topological ordering.
 Unlike other shortest-path algorithms, their queuing discipline is based on graph structure, not on the distance estimates.
 This is crucial, because we do not have any distance estimates:
 paths can be compared, but there is no absolute ``POSIX-ness'' value that we can attribute to each path.
 %
-GOR1 is described in [CGR93].
+GOR1 is described in \cite{GR93}.
 It uses two stacks and makes a number of passes;
 each pass consists of a depth-first search on admissible subgraph
 followed by a linear scan of states that are topologically ordered by depth-first search.
-The algorithm is one of the most efficient shortest-path algorithms [CGR96] [CGR99].
+The algorithm is one of the most efficient shortest-path algorithms \cite{CGR96}.
 $n$-Pass structure guarantees worst-case complexity $O(n \, m)$ of the Bellman-Ford algorithm,
 where $n$ is the number of states and $m$ is the number of transitions in $\epsilon$-closure
-(both can be approximated by TNFA size).
+(both can be approximated by TNFA size) \cite{CGGTW09}.
 %
 GTOP is a simple algorithm that maintains one global priority queue (e.g. a binary heap)
 ordered by the topological index of states (for graphs with cycles, we assume reverse depth-first post-order).
@@ -1390,7 +1332,7 @@ The general proof of correctness of shortest-path algorithms is out of the scope
 However, we need to justify the application of these algorithms to our setting.
 %
 In order to do that, we recall the framework for solving shortest-path algorithms based on \emph{closed semirings}
-described in [Cor??] (section 26.4)
+described in \cite{CLR} (section 26.4)
 and show that our problem fits into this framework.
 %
 A \emph{semiring} is a structure $(\YK, \oplus, \otimes, \Xbar{0}, \Xbar{1})$, where
@@ -1404,7 +1346,7 @@ Additionally, \emph{closed} semiring requires that
 $\oplus$ is idempotent,
 any countable $\oplus$-sum of $\YK$ elements is in $\YK$,
 and associativity, commutativity, distributivity and idempotence apply to countable $\oplus$-sums.
-Mohri generalizes this definition and notes that either left or right distributivity is sufficient [Moh02].
+Mohri generalizes this definition and notes that either left or right distributivity is sufficient \cite{Moh02}.
 %
 In our case $\YK$ is the set of closure paths without tagged $\epsilon$-loops:
 the following lemma \ref{lemma_closure_minpaths} and \ref{lemma_closure_noloop}
@@ -1460,7 +1402,6 @@ Since $\YK$ is finite, the properties for $\oplus$-sums over countable subsets a
     By construction of TNFA the loop $\pi_2$ must be contained in a sub-TNFA $f$
     for sub-IRE of the form $e = (\Xund, \Xund, e_1^{1,\infty})$,
     as this is the only looping TNFA construct --- see algorithm \ref{alg_tnfa}.
-    %Since the $\pi_2$ is tagged, $\Phi_h(e_1)$ is of the form $\Xl_h \dots \Xr_h$.
     Let $f_1$ be the sub-TNFA for $e_1$.
     Path $\pi$ enters $f$ and iterates through $f_1$ at least twice before leaving $f$
     (single iteration is not enough to create a loop by TNFA construction).
@@ -1590,9 +1531,6 @@ Since $\YK$ is finite, the properties for $\oplus$-sums over countable subsets a
     $\big( (\sigma_1, \hdots, \sigma_k),$ $(\sigma'_1, \hdots, \sigma'_k) \big) = traces (\alpha \gamma, \beta \gamma)$.
     Appending $\gamma$ to $\alpha$ and $\beta$ changes only the last frame, therefore
     for frames $i < k$ we have $\rho_i = \sigma_i$ and $\rho'_i = \sigma'_i$.
-    %For the last $k$-th frame we have
-    %$\sigma_k = min (\rho_k, minh (\gamma))$ and
-    %$\sigma'_k = min (\rho'_k, minh (\gamma))$.
     Consider two possible cases.
     %
     \begin{itemize}[itemsep=0.5em, topsep=0.5em]
@@ -1649,42 +1587,29 @@ Since $\YK$ is finite, the properties for $\oplus$-sums over countable subsets a
         \item[(2c)]
             Case $j = k$ and $minh (\gamma) \leq \rho'_k$
             and $\exists l < k$ such that $\rho_l > \rho'_l$ and $\rho_i = \rho'_i$ for $l < i < k$.
-            %and $k > 1 \wedge \rho_{k-1} > \rho'_{k-1}$.
             In this case $\gamma$ contains parentheses of low height
             and appending it makes height on the last frame equal:
             $\sigma_k = \sigma'_k = minh (\gamma)$.
             However, the relation on the last preceding differing frame is the same:
             $\sigma_l = \rho_l > \rho'_l = \sigma'_l$.
-            %However, this doesn't change comparison result because
-            %the relation on preceding frame is the same: $\sigma_{k-1} = \rho_{k-1} > \rho'_{k-1} = \sigma'_{k-1}$.
             Therefore $\alpha \gamma \sqsubset \beta \gamma$.
 
         \item[(2d)]
-            Case $j = k$ %is $\rho_k > \rho'_k$
-            and $minh (\gamma) \leq \rho'_k$
+            Case $j = k$ and $minh (\gamma) \leq \rho'_k$
             and $\nexists l < k$ such that $\rho_l > \rho'_l$ and $\rho_i = \rho'_i$ for $l < i < k$.
-            %and $k = 1 \vee \rho_{k-1} \leq \rho'_{k-1}$.
             In this case $\gamma$ contains parentheses of low height,
             appending it makes height on the last frame equal:
             $\sigma_k = \sigma'_k = minh (\gamma)$,
             and this may change comparison result
             as the relation on the last preceding differing frame may be different.
             %
-%            In other words, the only possible case when $\gamma$ can change comparison result is
-%            when at the last frame we have $\rho_k > \rho'_k$,
-%            the appended suffix $\gamma$ contains parentheses with low height $minh (\gamma) \leq \rho'_k$
-%            (so that $\sigma_k = \sigma'_k$),
-%            and the previous frame doesn't exist
-%            or compares differently from the last frame: $k = 1$ or $\rho_{k-1} \leq \rho'_{k-1}$.
             We show that in this case the extended path $\pi_\beta \pi_\gamma$ contains a tagged $\epsilon$-loop.
             %
             Consider the fragments of paths $\pi_\alpha$ and $\pi_\beta$ from fork to join,
             including (if it exists) the common $\epsilon$-transition to the fork state:
             $\pi_\alpha'$ and $\pi_\beta'$.
-            %$\pi_\alpha' = q_2 \overset {u | \alpha'} {\rightsquigarrow} q_1$ and
-            %$\pi_\beta' = q_2 \overset {u | \beta'} {\rightsquigarrow} q_1$.
             %
-            Minimal parenthesis height on $\pi_\alpha'$ is $\rho_k$. % $minh (\alpha') = \rho_k$.
+            Minimal parenthesis height on $\pi_\alpha'$ is $\rho_k$.
             By TNFA construction this means that $\pi_\alpha'$ is contained
             in a sub-TNFA $f'$ for $e|_p$ at some position $p$ with length $|p| = \rho_k$.
             %
@@ -1739,8 +1664,8 @@ but that is easy to accommodate and we give the details in section \ref{section_
 Storing paths in a prefix tree achieves two purposes:
 first, we save on the duplicated prefixes,
 and second, copying paths becomes as simple as copying a pointer to a tree leaf --- no need to copy the full sequence.
-This technique was used by many researches, e.g. Laurikari mentions a \emph{functional data structure} in [Lau01]
-and Karper describes it as the \emph{flyweight pattern} [Kar15].
+This technique was used by many researches, e.g. Laurikari mentions a \emph{functional data structure} \cite{Lau01}
+and Karper describes it as the \emph{flyweight pattern} \cite{Kar14}.
 \\
 
 \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
@@ -1784,7 +1709,7 @@ and Karper describes it as the \emph{flyweight pattern} [Kar15].
 \end{algorithm}
 \medskip
 
-A convenient represention of tag tree is an indexed sequence of nodes.
+A convenient representation of tag tree is an indexed sequence of nodes.
 Each node is a triple $(p, s, t)$ where
 $p$ is the index of predecessor node,
 $s$ is a set of indices of successor nodes
@@ -1805,7 +1730,6 @@ We assume the existence of functions
 $pred(U, n)$ that returns $p$-component of $n$-th node,
 $succ(U, n)$ that returns $s$-component of $n$-th node and
 $tag(U, n)$ that returns $t$-component of $n$-th node.
-\\
 
 
 \section{Representation of match results}\label{section_results}
@@ -1836,7 +1760,6 @@ but this is more complex and the partial trees may require even more space than 
     \setstretch{0.8}
 
     \Fn {$\underline{initial \Xund result (T)} \smallskip$} {
-%        $n = max \{ sub(T, t) \mid t \in \YN \}$ \;
         \Return uninitialized array of pairs $(rm \Xund so, rm \Xund eo)$\;
     }
     \BlankLine
@@ -2138,7 +2061,6 @@ We assume the existence of helper function $height(T, t)$ that maps each tag to 
     }
 
 \end{multicols}
-%\vspace{1em}
 \caption{Disambiguation procedures.}
 \end{algorithm}
 \medskip
@@ -2148,7 +2070,7 @@ a simple one with $O(m^2 \, t)$ complexity (on the left) and a complex one with 
 Worst case is demonstrated by RE $((a|\epsilon)^{0,k})^{0,\infty}$ where $n \in \YN$,
 for which the simple algorithm takes $O(k^3)$ time and the complex algorithm takes $O(k^2)$ time.
 %
-The idea of complex algorithm is to avoid repeated rescanning of path prefixes in the $U$-tree.
+The idea of complex algorithm is to avoid repeated re-scanning of path prefixes in the $U$-tree.
 It makes one pass over the tree,
 constructing an array $L$ of \emph{level items} $(q, o, u, h)$, where
 $q$ and $o$ are state and origin as in configurations,
@@ -2192,27 +2114,6 @@ Fourth, we no longer need to call $update \Xund result ()$ at each step --- this
 %
 Below is the modified lazy version of $compare()$, the only part of the algorithm that requires non-trivial change.
 \\
-
-\iffalse
-\begin{itemize}[itemsep=0.5em]
-    \item Remove $B$ and $D$ matrices and $update \Xund ptables ()$.
-
-    \item Modify tree representation of paths in the following way:
-        remove forward links (only parent links are needed)
-        and extend tree nodes with information about current step and origin state.
-
-    \item Instead of initializing path fragments in configurations with $empty \Xund path ()$,
-        initialize them with path fragments of the parent configuration
-        (so that paths are accumulated rather than reset at each step).
-
-    \item Add a cache that maps a pair of tree indices $(n_1, n_2)$ to a triple of already computed precedence values $(h_1, h_2, l)$.
-
-    \item Modify $compare ()$ in the following way:
-
-    \item Instead of calling $update \Xund result ()$ at each step, do it once at the end of match.
-    \\
-\end{itemize}
-\fi
 
 \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
 \begin{multicols}{2}
@@ -2301,7 +2202,7 @@ but it is definitely infeasible for very long or streaming inputs.
 %
 A possible solution may be a hybrid approach that uses lazy disambiguation,
 but every $k$ steps fully calculates precedence matrices and ``forgets'' path prefixes.
-Another possible solution is to keep both algorithms and choose between them depending on the lenght of input.
+Another possible solution is to keep both algorithms and choose between them depending on the length of input.
 
 
 \section{TNFA construction}\label{section_tnfa}
@@ -2312,13 +2213,11 @@ that accepts IRE $r$ and state $y$ and returns TNFA for $r$ with final state $y$
 %
 This precise construction is not necessary for the algorithms to work,
 but it has a number of important properties.
-\\[-0.5em]
-
-\begin{itemize}[itemsep=0.5em]
+\begin{itemize}[itemsep=0.5em, topsep=0.5em]
     \item Non-essential $\epsilon$-transitions are removed, as they make closure algorithms slower.
 
     \item Bounded repetition $r^{n,m}$ is unrolled in a way
-        that duplicates $r$ exactly $m$ times %(fewer is not possible, unless automata with counters are used)
+        that duplicates $r$ exactly $m$ times
         and factors out common path prefixes:
         subautomaton for $(k+1)$-th iteration is only reachable from subautomaton for $k$-th iteration.
         For example, $a^{2,5}$ is unrolled as $aa(\epsilon | a (\epsilon | a (\epsilon | a)))$, not as $aa(\epsilon|a|aa|aaa)$.
@@ -2332,16 +2231,13 @@ but it has a number of important properties.
         An example of such case is $(((\epsilon)^{0,k})^{0,k})^{0,k})$ for some large $k$.
         %
         Because GOR1 has a depth-first component, it is sensitive to the order of transitions in TNFA.
-        If it finds the shortest path early, then all other paths are just cancelled at the first join point with the shortest path
+        If it finds the shortest path early, then all other paths are just canceled at the first join point with the shortest path
         (because there is no improvement and further scanning is pointless).
         In the opposite case GOR1 finds long paths before short ones,
         and whenever it finds an improved (shorter) path, it has to schedule configurations for re-scan on the next pass.
         This causes GOR1 to make more passes and scan more configurations on each pass,
         which makes it significantly slower.
         Arguably this bias is a weakness of GOR1 --- GTOP is more robust in this respect.
-        %
-        %POSIX has four main rules: (1) longest, (2) leftmost, (3) no optional empty repetitions, and (4) empty match is better than no match.
-        %We cannot accommodate (1) with priorities, but we can accommodate (2), (4) and to some extent (3).
 
     \item When adding negative tags, we add a single transition for the topmost closing tag
         (it corresponds to the nil-parenthesis, which has the height of a closing parenthesis).
@@ -2351,12 +2247,11 @@ but it has a number of important properties.
         (we observed 2x slowdown on large tests with hundreds of submatch groups).
 
     \item Compact representation of nested tags as ranges in $T$
-        is possible because nested tags occupy consequtive numbers.
+        is possible because nested tags occupy consecutive numbers.
 
     \item Passing the final state $y$ in $tn\!f\!a()$ function allows to link subautomata in a simple and efficient way.
         It allows to avoid tracking and patching of subautomaton transitions that go to the final state
         (when this final state needs to be changed).
-    \\
 \end{itemize}
 
 
@@ -2368,12 +2263,13 @@ and simulation of TNFA on the input string.
 We discuss time and space complexity of each step
 in term of the following parameters:
 $n$ --- the length of input,
-$m$ --- the size of RE with counted repetition subexpressions ``unrolled''
+$m$ --- the size of RE with counted repetition subexpressions expanded
 (each subexpression duplicated the number of times equal to the repetition counter),
 and $t$ --- the number of capturing groups and subexpressions that contain them.
 \\
 
-\begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \label{alg_tnfa}
+\begin{algorithm}[] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
+\label{alg_tnfa}
 \begin{multicols}{2}
 \setstretch{0.85}
 
@@ -2483,7 +2379,7 @@ For each subexpressions of the form $(i, j, r^{n,m})$ automaton for $r$ is dupli
 (at each step of recursion counter is decremented and one copy of automaton is constructed).
 Other $tn\!f\!a()$ clauses are in one-to-one correspondence with sub-IRE.
 Each clause adds only a constant number of states and transitions (including calls to $ntags()$ and excluding recursive calls).
-Therefore TNFA contains $O(m)$ states and transitions. % (by our definition of $m$).
+Therefore TNFA contains $O(m)$ states and transitions.
 The size of mapping $T$ is $O(t)$, which is $O(m)$.
 Therefore total TNFA size is $O(m)$.
 Time complexity is $O(m)$, because each clause takes $O(1)$ time (excluding recursive calls), and total $O(m)$ clauses are executed.
@@ -2500,7 +2396,7 @@ because GOR1 makes $O(m^2)$ scans (closure contains $O(m)$ states and $O(m)$ tra
 and at each scan we may need to compare tag sequences using $compare()$ from section \ref{section_comparison},
 which takes $O(t)$ time
 (there is $O(t)$ unique tags and we consider paths with at most one $\epsilon$-loop,
-so the number of occurences of each tag is bounded by the repetition counters,
+so the number of occurrences of each tag is bounded by the repetition counters,
 which amounts to a constant factor).
 %
 At line 8 the call to $update \Xund result()$ takes $O(m \, t)$ time,
@@ -2550,12 +2446,10 @@ This allows us to show the net overhead on POSIX disambiguation.
 To relate our implementations to the real world,
 we include Google RE2 library (it uses leftmost greedy disambiguation and serves as a reference, not as a competing implementation).
 %
-All implementations can be found in RE2C source code [??].
+All implementations can be found in RE2C source code \cite{RE2C}.
 %
 Our set of benchmarks consists of three subsets:
-\\[-0.5em]
-
-\begin{enumerate}[itemsep=0.5em]
+\begin{enumerate}[itemsep=0.5em, topsep=0.5em]
     \item Real-world benchmarks.
         These include very large REs containing thousands of characters and order of a hundred of capturing groups
         (parser for HTTP message headers conforming to RFC-7230,
@@ -2570,8 +2464,7 @@ Our set of benchmarks consists of three subsets:
         All these REs are restricted to a single alphabet symbol
         used with various combinations of RE operators (union, product, iteration and bounded repetition).
 
-    \item A series of pathological examples that demonstrates worst-case behaviour of naive $update \Xund ptables ()$ algorithm.
-    \\[-0.5em]
+    \item A series of pathological examples that demonstrates worst-case behavior of naive $update \Xund ptables ()$ algorithm.
 \end{enumerate}
 
 We benchmark four variations of our algorithm:
@@ -2580,9 +2473,9 @@ We benchmark four variations of our algorithm:
 ``naive Okui-Suzuki'' uses naive $update \Xund ptables ()$ algorithm,
 and ``lazy Okui-Suzuki'' differs from the main variation as described in section \ref{section_lazy}.
 %
-Besides our algorithm, we also benchmark Kuklewicz and Cox algorithms. % (we do not pay attention to correctness issues of the latter here).
-Kuklewicz algorithm is described in detail in [Tro17].
-As for the Cox algorithm, the only description we are aware of is the prototype implementation [??].
+Besides our algorithm, we also benchmark Kuklewicz and Cox algorithms.
+Kuklewicz algorithm is described in detail in \cite{Tro17}.
+As for the Cox algorithm, the only description we are aware of is the prototype implementation \cite{Cox09}.
 We found a number of flaws in it, as described in the introduction.
 Our implementation, therefore, differs from the original:
 we add support for bounded repetition,
@@ -2599,9 +2492,6 @@ Benchmark results show the following:
 \caption{
 Benchmarks.\\
 Real-world tests have labels of the form ``title $m$-$k$'', where $m$ is RE size and $k$ is the number of capturing groups.
-%: real-world RE (upper left),
-%pathological RE for naive precedence table algorithm (upper right),
-%artifical highly ambiguous RE on very long inputs (lower).
 }
 \end{figure}
 
@@ -2612,14 +2502,14 @@ Real-world tests have labels of the form ``title $m$-$k$'', where $m$ is RE size
         and the advanced algorithm behaves much better (though it may incur slight overhead in simple cases).
 
     \item Kuklewicz algorithms degrades with increased closure size and increased number of tags.
-        This is not surprizing, as the algorithm has per-state and per-tag loop used to compute precedence matrix.
+        This is not surprising, as the algorithm has per-state and per-tag loop used to compute precedence matrix.
         On real-world tests with many capturing groups Kuklewicz algorithm is much slower than Okui-Suzuki algorithm.
 
     \item Cox algorithm degrades with increased number of tags.
         The bottleneck of the algorithm is copying of offset arrays
         (each array contains a pair of offsets per tag).
         Using GOR1 instead of naive depth-first search increases the amount of copying (though asymptotically faster),
-        because depth-dirst scan order allows to use a single buffer array that is updated and restored in-place.
+        because depth-first scan order allows to use a single buffer array that is updated and restored in-place.
         However, copying is required elsewhere in the algorithm,
         and in general it is not suited for RE with many submatch groups.
         On real-world tests Cox algorithm is so slow that it did not fit into the plot space.
@@ -2657,12 +2547,10 @@ and the more gentle slowdown of Kuklewicz algorithm on the same ranges.
 %
 Adding more capturing groups increases the number of tags ---
 hence the slowdown of Kuklewicz and Cox algorithms on 5-8 group compared to 1-4 group.
-%
-%Note that Cox algorithm performs very well on this test and slows down at the same pace as leftmost greedy.
 \\
 
 In closing, we would like to point out that correctness
-of all benchmarked implementations has been tested on a subset of Glenn Fowler test suite [??]
+of all benchmarked implementations has been tested on a subset of Glenn Fowler test suite \cite{Fow03}
 (we removed tests for backreferences and start/end anchors),
 extended by Kuklewicz and further extended by ourselves to some 500 tests.
 All algorithms except Cox algorithm have passed the tests
@@ -2671,7 +2559,7 @@ All algorithms except Cox algorithm have passed the tests
 \FloatBarrier
 
 
-\section{Conclusions and future work}
+\section{Conclusions and future work}\label{section_conclusions}
 
 The main result of our work is a practical POSIX matching algorithm
 that can be used on real-world regular expressions,
@@ -2703,6 +2591,134 @@ It would be interesting to apply our approach to automata with counters
 instead of unrolling bounded repetition.
 
 
+\begin{thebibliography}{99}
+
+\bibitem{OS13}
+    Satoshi Okui and Taro Suzuki,
+    \textit{Disambiguation in Regular Expression Matching via Position Automata with Augmented Transitions},
+    International Conference on Implementation and Application of Automata, pp. 231-240, Springer, Berlin, Heidelberg,
+    2013.
+
+\bibitem{Lau01}
+    Ville Laurikari,
+    \textit{Efficient submatch addressing for regular expressions},
+    Helsinki University of Technology,
+    2001.
+
+\bibitem{Kuk07}
+    Chris Kuklewicz,
+    \textit{Regular expressions/bounded space proposal},
+    \url{http://wiki.haskell.org/index.php?title=Regular_expressions/Bounded_space_proposal&oldid=11475}
+    2007.
+
+\bibitem{Cox09}
+    Russ Cox,
+    backward POSIX matching algorithm (source code),
+    \url{https://swtch.com/~rsc/regexp/nfa-posix.y.txt}
+    2009.
+
+\bibitem{SL14}
+    Martin Sulzmann, Kenny Zhuo Ming Lu,
+    \textit{POSIX Regular Expression Parsing with Derivatives},
+    International Symposium on Functional and Logic Programming, pp. 203-220, Springer, Cham,
+    2014.
+
+\bibitem{SL13}
+    Martin Sulzmann, Kenny Zhuo Ming Lu,
+    \textit{Correct and Efficient POSIX Submatch Extraction with Regular Expression Derivatives},
+    \url{https://www.home.hs-karlsruhe.de/~suma0002/publications/posix-derivatives.pdf},
+    2013.
+
+\bibitem{Bor15}
+    Angelo Borsotti1, Luca Breveglieri, Stefano Crespi Reghizzi, Angelo Morzenti,
+    \textit{From Ambiguous Regular Expressions to Deterministic Parsing Automata},
+    International Conference on Implementation and Application of Automata. Springer, Cham, pp.35-48,
+    2015.
+
+\bibitem{ADU16}
+    Fahad Ausaf, Roy Dyckhoff, Christian Urban,
+    \textit{POSIX Lexing with Derivatives of Regular Expressions},
+    International Conference on Interactive Theorem Proving. Springer, Cham, pp. 69-86,
+    2016.
+
+\bibitem{Tro17}
+    Ulya Trofimovich,
+    \textit{Tagged Deterministic Finite Automata with Lookahead},
+    \url{http://re2c.org/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf},
+    2017.
+
+\bibitem{CLR}
+    Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest,
+    \textit{Introduction to algorithms},
+    1st edition,
+    MIT Press and McGraw-Hill,
+    ISBN 0-262-03141-8.
+
+\bibitem{Moh02}
+    Mehryar Mohri,
+    \textit{Semiring frameworks and algorithms for shortest-distance problems},
+    Journal of Automata, Languages and Combinatorics 7 (2002) 3, 321–350, Otto-von-Guericke-Universitat, Magdeburg,
+    2002.
+
+\bibitem{Kar14}
+    Aaron Karper,
+    \textit{Efficient regular expressions that produce parse trees},
+    Master's thesis,
+    University of Bern,
+    2014.
+
+\bibitem{GR93}
+    Andrew V. Goldberg, Tomasz Radzik,
+    \textit{A heuristic improvement of the Bellman-Ford algorithm},
+    Elsevier, Applied Mathematics Letters, vol. 6, no. 3, pp. 3-6,
+    1993.
+
+\bibitem{CGR96}
+    Boris V. Cherkassky, Andrew V. Goldberg, Tomasz Radzik,
+    \textit{Shortest paths algorithms: Theory and experimental evaluation},
+    Springer, Mathematical programming, vol. 73, no. 2, pp. 129-174,
+    1996.
+
+\bibitem{CGGTW09}
+    Boris V. Cherkassky, Loukas Georgiadis, Andrew V. Goldberg, Robert E. Tarjan, and Renato F. Werneck.
+    \textit{Shortest Path Feasibility Algorithms: An Experimental Evaluation},
+    Journal of Experimental Algorithmics (JEA), 14, 7,
+    2009.
+
+\bibitem{Cox09}
+    Aaron Karper,
+    \textit{Efficient regular expressions that produce parse trees},
+    epubli GmbH,
+    2014
+
+\bibitem{POSIX}
+    POSIX standard: \textit{POSIX-1.2008}
+    a.k.a. \textit{IEEE Std 1003.1-2008}
+    The IEEE and The Open Group,
+    2008.
+
+\bibitem{Fow03}
+    Glenn Fowler,
+    \textit{An Interpretation of the POSIX Regex Standard},
+    \url{https://web.archive.org/web/20050408073627/http://www.research.att.com/~gsf/testregex/re-interpretation.html},
+    2003.
+
+\bibitem{RE2C}
+    \textit{RE2C}, lexer generator for C/C++.
+    Website: \url{http://re2c.org},
+    source code: \url{http://github.com/skvadrik/re2c}.
+
+\bibitem{RE2}
+    \textit{RE2}, regular expression library.
+    Source code: \url{http://github.com/google/re2}.
+
+\bibitem{Glibc}
+    \textit{The GNU C library},
+    \url{https://www.gnu.org/software/libc/}.
+
+\end{thebibliography}
+
+
 \vfill\null
 \clearpage
 
@@ -2714,13 +2730,12 @@ instead of unrolling bounded repetition.
 \begin{theoremEnd}[normal, no link to proof, no link to theorem]{lemma}
 [Unique position mapping from all PTs to IRE]
     \label{lemma_positions}
-    If $t, s \in PT(e)$ for some RE $e$
+    If $t, s \in PT(r)$ for some IRE $r$
     and there is a common position $p \in Pos(t) \cap Pos(s)$,
-    then $p$ corresponds to the same position $p' \in Pos(\IRE(e))$ for both $t$ and $s$.
+    then $p$ corresponds to the same position $p' \in Pos(r)$ for both $t$ and $s$.
 \end{theoremEnd}
 \begin{proofEnd}
     The proof is by induction on the length of $p$.
-    Let $r = \IRE(e)$.
     Induction basis: $p = p' = \Lambda$ (the roots of $t$ and $s$ correspond to the root of $e$).
     Induction step: suppose that for any position $p$ of length $|p| < h$ the lemma is true.
     We will show that if exists $k \in \YN$ such that $p.k \in Pos(t) \cap Pos(s)$,
@@ -2744,7 +2759,7 @@ instead of unrolling bounded repetition.
 
 \begin{theoremEnd}[normal, no link to proof, no link to theorem]{lemma}
     \label{lemma_incomparability_equivdef}
-    If $t, s \in PT(e, w)$ for some RE $e$ and string $w$,
+    If $t, s \in \PT(e, w)$ for some IRE $e$ and string $w$,
     then $t \sim s \Leftrightarrow \; \forall p : \snorm{t}{p} = \snorm{s}{p}$.
 \end{theoremEnd}
 \begin{proofEnd}
@@ -2755,7 +2770,6 @@ instead of unrolling bounded repetition.
     Backward implication: $\forall p : \snorm{t}{p} = \snorm{s}{p}$
     implies $\nexists p : t \prec_p s$ and $\nexists q : s \prec_q t$,
     which implies $t \sim s$.
-    \\[0.5em]
 \end{proofEnd}
 
 \printProofs[theorem_sorder_on_PTs]
@@ -2766,7 +2780,7 @@ instead of unrolling bounded repetition.
 \begin{theoremEnd}[normal, no link to proof, no link to theorem]{lemma}
 [Comparability of subtrees]
     \label{lemma_subtrees}
-    For a giver RE $e$, string $w$ and position $p$,
+    For a given IRE $e$, string $w$ and position $p$,
     if $t, s \in \PT(e, w)$, $p \in Sub(t) \cup Sub(s)$ and $\snorm{t}{q} = \snorm{s}{q} \; \forall q \leq p$,
     then $\exists e', w' : t|_p, s|_p \in \PT(e', w')$.
 \end{theoremEnd}
@@ -2791,7 +2805,7 @@ instead of unrolling bounded repetition.
     %
     We show that $str(t_k) = str(s_k)$.
     Consider positions $p.j$ for $j \leq k$.
-    By defintion the set of submatch positions contains siblings,
+    By definition the set of submatch positions contains siblings,
     therefore $p.j \in Sub(t) \cap Sub(s)$.
     By lemma conditions $\snorm{t}{p.j} = \snorm{s}{p.j}$ (because $p.j \leq p.k$),
     therefore $|str(t_1) \dots str(t_{k-1})|$
@@ -2801,7 +2815,7 @@ instead of unrolling bounded repetition.
     $|str(t_k)| = |str(s_k)|$.
     Consequently, $str(t_k)$ and $str(s_k)$ start and end at the same character in $w'$ and therefore are equal.
     %
-    Finally, have $t|_{p.k}, s|_{p.k} \in PT(r|_{p.k}, str(t_k))$ and induction step is complete.
+    Finally, have $t|_{p.k}, s|_{p.k} \in \PT(r|_{p.k}, str(t_k))$ and induction step is complete.
 \end{proofEnd}
 
 \printProofs[theorem_order_compat]
@@ -2809,39 +2823,16 @@ instead of unrolling bounded repetition.
 
 \subsection*{Proof of Theorem \ref{theorem_order_on_pe_same_as_on_pt}}
 
-%\begin{theoremEnd}[normal, no link to proof, no link to theorem]{lemma}
-%    \label{lemma_pe_order_antisymm}
-%    The longest-leftmost-precedence relation $<$ is antisymmetric:
-%    if $\alpha < \beta$, then $\beta \not< \alpha$.
-%\end{theoremEnd}
-%\begin{proofEnd}
-%    Suppose, on the contrary, that $\alpha < \beta$ and $\beta < \alpha$.
-%    Let $\big( (\rho_0, \dots, \rho_n), (\rho'_0, \dots, \rho'_n) \big) = traces(\alpha, \beta)$.
-%    %
-%    If $\exists i = max \{j \mid \rho_j \neq \rho'_j \}$, then
-%    $\alpha < \beta \implies \alpha \sqsubset \beta \implies \rho_i > \rho'_i$, but
-%    $\beta < \alpha \implies \beta \sqsubset \alpha \implies \rho'_i > \rho_i$. Contradiction.
-%    %
-%    Otherwise $\rho_i = \rho'_i \; \forall i$, then
-%    $\alpha < \beta \implies \alpha \sim \beta \wedge \alpha \subset \beta$ and
-%    $\beta < \alpha \implies \beta \sim \alpha \wedge \beta \subset \alpha$.
-%    Let
-%    $x = first (\alpha \backslash \beta)$,
-%    $y = first (\beta \backslash \alpha)$, then
-%    $\alpha \subset \beta \implies x < y$, but
-%    $\beta \subset \alpha \implies y < x$. Contradiction.
-%\end{proofEnd}
-
 \begin{theoremEnd}[normal, no link to proof, no link to theorem]{lemma}
     \label{lemma_pe_equiv}
-    Let $s, t \in PT(e, w)$ for some RE $e$ and string $w$.
+    Let $s, t \in \PT(e, w)$ for some IRE $e$ and string $w$.
     If $s \sim t$, then $\Phi_{h}(s) = \Phi_{h}(t) \; \forall h$.
 \end{theoremEnd}
 \begin{proofEnd}
     By induction on the height of $e$.
     %
     Induction basis: or height $1$ we have
-    $| PT(e, w) | \leq 1 \; \forall w$,
+    $| \PT(e, w) | \leq 1 \; \forall w$,
     therefore $s = t$ and $\Phi_{h}(s) = \Phi_{h}(t)$.
     %
     Induction step:
@@ -2858,20 +2849,20 @@ instead of unrolling bounded repetition.
     It suffices to show that $\forall i \leq n: \Phi_{h+1}(s_i) = \Phi_{h+1}(t_i)$.
     We have $\snorm{s_i}{p} = \snorm{t_i}{p} \;\forall p$ (implied by $\snorm{s}{p} = \snorm{t}{p} \;\forall p$),
     therefore by lemma \ref{lemma_incomparability_equivdef} $s_i \sim t_i$,
-    and by lemma \ref{lemma_subtrees} $\exists e', w': s_i, t_i \in PT(e', w')$,
+    and by lemma \ref{lemma_subtrees} $\exists e', w': s_i, t_i \in \PT(e', w')$,
     where the height of $e'$ is less than the height of $e$.
     By induction hypothesis $\Phi_{h+1}(s_i) = \Phi_{h+1}(t_i)$.
 \end{proofEnd}
 
 \begin{theoremEnd}[normal, no link to proof, no link to theorem]{lemma}
     \label{lemma_pe_less_1}
-    Let $s, t \in PT(e, w)$.
+    Let $s, t \in \PT(e, w)$ for some IRE $e$ and string $w$.
     If $s \prec_p t$ and $|p| = 1$, then $\Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
 \end{theoremEnd}
 \begin{proofEnd}
     By lemma conditions $|p| = 1$, therefore $p \in \YN$.
     At least one of $s|_p$ and $t|_p$ must exist (otherwise $\snorm{s}{p} = \infty = \snorm{t}{p}$ which contradicts $s \prec_p t$),
-    therefore $e$ is a compound RE and $s$, $t$ can be represented as
+    therefore $e$ is a compound IRE and $s$, $t$ can be represented as
     $s = T^{d} (s_1, \dots, s_n)$ and
     $t = T^{d} (t_1, \dots, t_m)$
     where $d \neq 0$ because $\Lambda$ is a prefix of decision position $p$.
@@ -2990,7 +2981,7 @@ instead of unrolling bounded repetition.
 
 \begin{theoremEnd}[normal, no link to proof, no link to theorem]{lemma}
     \label{lemma_pe_less}
-    Let $s, t \in PT(r, w)$.
+    Let $s, t \in \PT(r, w)$ for some IRE $r$ and string $w$.
     If $s \prec_p t$, then $\Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
 \end{theoremEnd}
 \begin{proofEnd}
@@ -3003,7 +2994,7 @@ instead of unrolling bounded repetition.
     Let $p = p'.p''$ where $p' \in \YN$.
     %
     At least one of $s|_p$ and $t|_p$ must exist (otherwise $\snorm{s}{p} = \infty = \snorm{t}{p}$ which contradicts $s \prec_p t$),
-    therefore both $e$ and $e|_{p'}$ are compound RE and $s$, $t$ can be represented as
+    therefore both $e$ and $e|_{p'}$ are compound IREs and $s$, $t$ can be represented as
     $s = T^{d} (s_1, \dots, s_n)$ and
     $t = T^{d} (t_1, \dots, t_m)$ where
     $s' = s_{p'} = T^{d'} (s'_1, \dots, s'_{n'})$ and
@@ -3032,7 +3023,7 @@ instead of unrolling bounded repetition.
     therefore by lemma \ref{lemma_pe_equiv} $\Phi_{h+1}(s_i) = \Phi_{h+1}(t_i)$.
     %
     Since $p' < p$ we have $\snorm{s}{q} = \snorm{t}{q} \;\forall q \leq p'$ and
-    by lemma \ref{lemma_subtrees} $\exists e', w' : s', t' \in PT(e', w')$.
+    by lemma \ref{lemma_subtrees} $\exists e', w' : s', t' \in \PT(e', w')$.
     Since $\snorm{s'}{q} = \snorm{s}{p'.q} \;\forall q$
     and $\snorm{t'}{q} = \snorm{t}{p'.q} \;\forall q$,
     we have $s' \prec_{p''} t'$.
@@ -3117,14 +3108,6 @@ instead of unrolling bounded repetition.
 
 \printProofs[lemma_frames]
 \printProofs[lemmata_closure]
-
-\iffalse
-\begin{figure}\label{fig_gor1}
-\includegraphics[width=\linewidth]{img/gor1.pdf}
-\caption{Sub-TNFA for individual sub-RT with submatch groups: \\
-(a) -- union, (b) -- product, (c), (d) -- bounded repetition, (e), (f) -- unbounded repetition.}
-\end{figure}
-\fi
 
 
 \end{document}
