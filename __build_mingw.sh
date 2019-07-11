@@ -9,5 +9,5 @@ cd $builddir
     --enable-debug \
     --enable-libs \
     --host i686-w64-mingw32 \
-    && make -j5 LIBTOOL="dlibtool"
+    && make -j$(nproc) LIBTOOL="dlibtool"
 cd ..

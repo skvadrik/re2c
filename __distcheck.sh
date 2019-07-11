@@ -20,7 +20,7 @@ do
         # 'make' implies 'make docs'; running both in parallel may cause data races
         # configure without --enable-debug, this is the release binary
         ../configure --enable-docs --enable-libs \
-        && $make_prog bootstrap -j5 \
-        && $make_prog distcheck -j5
+        && $make_prog bootstrap -j$(nproc) \
+        && $make_prog distcheck -j$(nproc)
     cd ..
 done

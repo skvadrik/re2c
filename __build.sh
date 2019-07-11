@@ -8,5 +8,5 @@ cd $builddir
 ../configure \
     --enable-debug \
     --enable-libs \
-    && make -j5
+    && make -j$(nproc)
 cd ..

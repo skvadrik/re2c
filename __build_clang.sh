@@ -10,5 +10,5 @@ cd $builddir
     --enable-libs \
     CC=clang \
     CXX=clang++ \
-    && make -j5
+    && make -j$(nproc)
 cd ..

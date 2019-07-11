@@ -10,5 +10,5 @@ cd $builddir
     --enable-libs \
     CXXFLAGS="-fsanitize=address" \
     LDFLAGS="-fsanitize=address" \
-    && make -j5
+    && make -j$(nproc)
 cd ..

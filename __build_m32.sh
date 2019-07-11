@@ -10,5 +10,5 @@ cd $builddir
     --enable-libs \
     CXXFLAGS="-m32" \
     LDFLAGS="-m32" \
-    && make -j5
+    && make -j$(nproc)
 cd ..

@@ -9,5 +9,5 @@ cd $builddir
     --enable-debug \
     --enable-libs \
     CXXFLAGS="-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" \
-    && make -j5
+    && make -j$(nproc)
 cd ..

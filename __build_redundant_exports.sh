@@ -10,5 +10,5 @@ cd $builddir
     --enable-libs \
     CFLAGS="-ffunction-sections -fdata-sections" \
     LDFLAGS="-Wl,--gc-sections -Wl,--print-gc-sections" \
-    && make -j5
+    && make -j$(nproc)
 cd ..

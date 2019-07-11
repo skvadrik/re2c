@@ -10,8 +10,8 @@ cd $builddir
     --enable-libs \
     CC=clang \
     CXX=clang++ \
-    CFLAGS="-fsanitize=memory" \
-    CXXFLAGS="-fsanitize=memory" \
-    LDFLAGS="-fsanitize=memory" \
-    && make -j5
+    CFLAGS="-fsanitize=memory -fsanitize-memory-track-origins=2" \
+    CXXFLAGS="-fsanitize=memory -fsanitize-memory-track-origins=2" \
+    LDFLAGS="-fsanitize=memory -fsanitize-memory-track-origins=2" \
+    && make -j$(nproc)
 cd ..

@@ -10,5 +10,5 @@ cd $builddir
     --enable-libs \
     CXXFLAGS="-fsanitize=leak" \
     LDFLAGS="-fsanitize=leak" \
-    && make -j5
+    && make -j$(nproc)
 cd ..

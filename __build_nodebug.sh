@@ -7,5 +7,5 @@ mkdir $builddir
 cd $builddir
 ../configure \
     --enable-libs \
-    && make -j5
+    && make -j$(nproc)
 cd ..
