@@ -5,9 +5,12 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure LDFLAGS="-static-libstdc++ -static-libgcc" \
+# '-static' tells libtool not to build shared libraries (DLLs)
+# (they would be of no use anyway because libtool ignores '-static-libstdc++
+# -static-libgcc' options and produces non-portable DLLs)
+../configure LDFLAGS="-static -static-libstdc++ -static-libgcc" \
     --enable-debug \
     --enable-libs \
     --host i686-w64-mingw32 \
-    && make -j$(nproc) LIBTOOL="dlibtool"
+    && make -j$(nproc)
 cd ..

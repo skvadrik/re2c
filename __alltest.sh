@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # normal tests
-for d in __build{,_asan,_ubsan,_lsan,_clang,_clang_msan,_m32,_glibcxx_debug} ; do
+# - exclude _clang_msan as it requires libc++ built with MSan
+for d in __build{,_asan,_ubsan,_lsan,_clang,_m32,_glibcxx_debug} ; do
     ./${d}.sh \
         && cd ${d} \
         && make check VERBOSE=1 \
@@ -17,6 +18,7 @@ done
     || { cd .. ; echo "*** skeleton failed ***"; exit 1; }
 
 # mingw
+# - exclude _mingw_slibtool, as it fails to link EXEs due to symbol collisions
 ./__build_mingw.sh \
     && cd __build_mingw \
     && make wtests \
