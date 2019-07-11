@@ -25,11 +25,6 @@ lc_run() {
 }
 
 re2c="./re2c"
-if test ! -x "${re2c}"; then
-    echo "Cannot find re2c executable (${re2c})."
-    exit 1
-fi
-
 diff_prog="diff"
 valgrind=""
 skeleton=0
@@ -60,6 +55,11 @@ do
     esac
 done
 echo "Running in ${threads} thread(s)"
+
+if test ! -x "${re2c}"; then
+    echo "Cannot find re2c executable (${re2c})."
+    exit 1
+fi
 
 test_blddir="test_"`date +%y%m%d%H%M%S`
 rm -rf $test_blddir && mkdir $test_blddir
