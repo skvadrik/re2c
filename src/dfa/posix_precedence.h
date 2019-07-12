@@ -1,6 +1,7 @@
 #ifndef _RE2C_DFA_POSIX_PRECEDENCE_
 #define _RE2C_DFA_POSIX_PRECEDENCE_
 
+#include "src/dfa/determinization.h"
 #include "src/dfa/tag_history.h"
 #include "src/debug/debug.h"
 

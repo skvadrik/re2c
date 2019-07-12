@@ -2,7 +2,7 @@
 
 # normal tests
 # - exclude _clang_msan as it requires libc++ built with MSan
-for d in __build{,_asan,_ubsan,_lsan,_clang,_m32,_glibcxx_debug} ; do
+for d in __build{,_check_headers,_asan,_ubsan,_lsan,_clang,_m32,_glibcxx_debug} ; do
     ./${d}.sh \
         && cd ${d} \
         && make check VERBOSE=1 \
