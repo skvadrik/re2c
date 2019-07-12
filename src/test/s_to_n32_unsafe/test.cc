@@ -31,7 +31,7 @@ static int32_t test_u (uint64_t i)
     char * const s_end = s + DIGITS;
     char * const s_start = u64_to_s_fastest_ever (i, s_end);
     uint32_t u = i == 0; // not equal to i
-    if (s_to_u32_unsafe (s_start, s_end, u) && u != i)
+    if (re2c::s_to_u32_unsafe (s_start, s_end, u) && u != i)
     {
         fprintf (stderr, "unsigned: expected: %lu, got: %u\n", i, u);
         return 1;
@@ -52,7 +52,7 @@ static int32_t test_i (int64_t i)
         *--s_start = '-';
     }
     int32_t j = i == 0; // not equal to i
-    if (s_to_i32_unsafe (s_start, s_end, j) && j != i)
+    if (re2c::s_to_i32_unsafe (s_start, s_end, j) && j != i)
     {
         fprintf (stderr, "signed: expected: %ld, got: %d\n", i, j);
         return 1;
