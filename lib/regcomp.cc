@@ -1,9 +1,22 @@
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
+#include <algorithm>
+#include <valarray>
+#include <vector>
+
 #include "lib/lex.h"
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/options/opt.h"
-#include "src/nfa/nfa.h"
+#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
+#include "src/msg/location.h"
+#include "src/msg/msg.h"
+#include "src/nfa/nfa.h"
+#include "src/options/opt.h"
+#include "src/parse/ast.h"
+#include "src/regexp/re.h"
+#include "src/regexp/rule.h"
+#include "src/util/range.h"
 
 
 namespace re2c {

@@ -5,8 +5,8 @@
 
 #include "src/dfa/dfa.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 /*
  * node [finding strongly connected components of DFA]

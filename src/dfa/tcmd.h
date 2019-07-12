@@ -9,8 +9,8 @@
 #include "src/util/lookup.h"
 #include "src/util/slab_allocator.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct tcmd_t
 {

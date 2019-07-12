@@ -1,7 +1,8 @@
+#include "src/msg/msg.h"
 #include "src/options/opt.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 void conopt_t::fix()
 {

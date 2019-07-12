@@ -12,6 +12,7 @@
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
 #include "src/encoding/enc.h"
+#include "src/msg/msg.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/path.h"
@@ -20,8 +21,8 @@
 #include "src/util/u32lim.h"
 #include "src/util/wrap_iter.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 /*
  * note [counting skeleton edges]

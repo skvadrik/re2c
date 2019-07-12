@@ -3,6 +3,9 @@
 
 #include "src/util/c99_stdint.h"
 
+
+namespace re2c {
+
 // uint32_t truncated to LIMIT
 // any overflow (either result of a binary operation
 // or conversion from another type) results in LIMIT
@@ -68,5 +71,7 @@ public:
         return x.value < y.value;
     }
 };
+
+} // namespace re2c
 
 #endif // _RE2C_UTIL_U32LIM_

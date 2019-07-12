@@ -2,6 +2,7 @@
 #include <string>
 #include "src/msg/ver_to_vernum.h" /* re2c::ver_to_vernum() */
 
+
 namespace re2c_test {
 
 struct examples_t {

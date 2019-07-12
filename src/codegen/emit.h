@@ -4,6 +4,7 @@
 #include "src/codegen/output.h"
 #include "src/adfa/adfa.h"
 
+
 namespace re2c {
 
 typedef std::vector<std::string> code_lines_t;

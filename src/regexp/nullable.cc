@@ -4,9 +4,11 @@
 #include <vector>
 
 #include "src/msg/msg.h"
+#include "src/msg/warn.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+
 
 namespace re2c {
 

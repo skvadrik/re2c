@@ -6,6 +6,7 @@
 #include "src/regexp/re.h"
 #include "src/regexp/tag.h"
 
+
 namespace re2c {
 
 /* note [fixed and variable tags]

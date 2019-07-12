@@ -4,8 +4,10 @@
 
 #include "src/parse/ast.h"
 #include "src/nfa/nfa.h"
+#include "src/options/opt.h"
 #include "src/regexp/re.h"
 #include "src/regexp/tag.h"
+
 
 namespace re2c {
 

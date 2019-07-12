@@ -1,18 +1,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
+#include <memory>
+#include <valarray>
+#include <vector>
 
 #include "src/debug/debug.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
+#include "src/dfa/tag_history.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
+#include "src/regexp/tag.h"
 #include "src/regexp/rule.h"
 #include "src/util/hash32.h"
 
 
-namespace re2c
-{
+namespace re2c {
 
 /* note [mapping ignores items with lookahead tags]
  *

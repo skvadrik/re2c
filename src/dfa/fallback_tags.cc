@@ -6,8 +6,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 /* note [fallback tags]
  *

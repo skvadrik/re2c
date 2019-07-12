@@ -4,6 +4,7 @@
 #include "src/parse/ast.h"
 #include "src/regexp/rule.h"
 
+
 namespace re2c {
 
 void normalize_ast(specs_t &specs)

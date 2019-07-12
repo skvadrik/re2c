@@ -1,6 +1,7 @@
 #ifndef _RE2C_RE_EMPTY_CLASS_POLICY_
 #define _RE2C_RE_EMPTY_CLASS_POLICY_
 
+
 namespace re2c {
 
 enum empty_class_policy_t

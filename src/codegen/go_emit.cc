@@ -15,8 +15,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/encoding/enc.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static void output_if (Output & o, uint32_t ind, const std::string & compare, uint32_t value);
 static std::string output_hgo (Output & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo, const State *from);

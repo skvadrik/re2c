@@ -1,11 +1,19 @@
+#include <stddef.h>
+#include <algorithm>
+#include <string>
+#include <vector>
+
 #include "src/codegen/input_api.h"
+#include "src/dfa/dfa.h"
+#include "src/encoding/enc.h"
+#include "src/msg/location.h"
+#include "src/msg/msg.h"
+#include "src/msg/warn.h"
 #include "src/options/opt.h"
 #include "src/regexp/empty_class_policy.h"
-#include "src/encoding/enc.h"
-#include "src/util/string_utils.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static inline bool next (char * & arg, char ** & argv)
 {

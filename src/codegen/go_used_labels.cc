@@ -4,11 +4,10 @@
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/go.h"
+#include "src/codegen/label.h"
 
-namespace re2c
-{
 
-class label_t;
+namespace re2c {
 
 void Cases::used_labels (std::set<label_t> & used) const
 {

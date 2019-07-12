@@ -7,8 +7,8 @@
 #include <limits>
 #include <string>
 
-namespace re2c
-{
+
+namespace re2c {
 
 typedef int32_t tagver_t;
 

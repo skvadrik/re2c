@@ -3,8 +3,8 @@
 
 #include <set>
 
-namespace re2c
-{
+
+namespace re2c {
 
 template<class _Ty>
 class free_list: protected std::set<_Ty>

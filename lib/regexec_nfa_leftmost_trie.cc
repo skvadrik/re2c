@@ -1,11 +1,14 @@
-#include "lib/lex.h"
+#include <stddef.h>
+#include <algorithm>
+#include <vector>
+
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/closure_leftmost.h"
-#include "src/dfa/determinization.h"
+#include "src/dfa/tag_history.h"
 #include "src/nfa/nfa.h"
+#include "src/util/range.h"
 
 
 namespace re2c {

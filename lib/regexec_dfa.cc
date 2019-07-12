@@ -1,9 +1,14 @@
-#include "lib/lex.h"
+#include <stddef.h>
+#include <valarray>
+#include <vector>
+
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
+#include "src/dfa/tcmd.h"
+#include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
 
 
 namespace re2c {

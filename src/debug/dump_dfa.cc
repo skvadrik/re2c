@@ -2,7 +2,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <algorithm>
 #include <string>
+#include <valarray>
+#include <vector>
 
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
@@ -15,8 +18,8 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 template<typename ctx_t> void dump_history(const dfa_t &, const typename ctx_t::history_t &, hidx_t);
 template<typename ctx_t> void dump_tags(const tagver_table_t &, const typename ctx_t::history_t &, hidx_t, uint32_t);

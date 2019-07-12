@@ -3,6 +3,7 @@
 
 #include "src/util/s_to_n32_unsafe.h"
 
+
 namespace re2c_test {
 
 static const uint32_t DIGITS = 256;

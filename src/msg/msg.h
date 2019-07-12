@@ -1,6 +1,7 @@
 #ifndef _RE2C_MSG_MSG_
 #define _RE2C_MSG_MSG_
 
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <string>
 #include <vector>

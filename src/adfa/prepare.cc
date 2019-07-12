@@ -9,11 +9,13 @@
 #include "src/adfa/adfa.h"
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
-#include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
+#include "src/msg/msg.h"
+#include "src/options/opt.h"
 #include "src/regexp/rule.h"
 #include "src/util/allocate.h"
+
 
 namespace re2c {
 

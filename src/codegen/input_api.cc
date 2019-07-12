@@ -5,8 +5,8 @@
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 std::string output_expr_peek(const opt_t *opts)
 {

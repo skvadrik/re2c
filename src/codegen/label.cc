@@ -2,6 +2,7 @@
 
 #include "src/codegen/label.h"
 
+
 namespace re2c {
 
 const uint32_t label_t::FIRST = 0;

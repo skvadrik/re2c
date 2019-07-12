@@ -1,8 +1,19 @@
+#include <stddef.h>
+#include <set>
+#include <valarray>
+#include <vector>
+
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
 #include "src/dfa/dfa.h"
+#include "src/dfa/tcmd.h"
 #include "src/encoding/range_suffix.h"
 #include "src/nfa/nfa.h"
+#include "src/parse/ast.h"
+#include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
+#include "src/util/free_list.h"
+#include "src/util/range.h"
 
 
 using namespace re2c;

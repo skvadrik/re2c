@@ -6,8 +6,8 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 /*
  * note [DFA minimization: table filling algorithm]

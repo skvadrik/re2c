@@ -2,7 +2,9 @@
 #include "src/util/c99_stdint.h"
 
 #include "src/encoding/range_suffix.h"
+#include "src/encoding/utf16/utf16.h"
 #include "src/encoding/utf16/utf16_regexp.h"
+#include "src/regexp/re.h"
 #include "src/util/range.h"
 
 

@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <time.h>
 #include <iomanip>
@@ -8,14 +9,15 @@
 #include "src/codegen/output.h"
 #include "src/codegen/print.h"
 #include "src/msg/msg.h"
+#include "src/msg/warn.h"
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
 #include "src/util/string_utils.h"
 #include "src/util/temp_file.h"
 #include "src/util/uniq_vector.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 OutputFragment::OutputFragment (type_t t, uint32_t i)
     : type (t)

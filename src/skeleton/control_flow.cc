@@ -1,18 +1,21 @@
 #include "src/util/c99_stdint.h"
 #include <stdio.h>
+#include <algorithm>
 #include <map>
+#include <memory>
 #include <utility>
 #include <valarray>
 #include <vector>
 
 #include "src/msg/msg.h"
+#include "src/msg/warn.h"
 #include "src/regexp/rule.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/u32lim.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 // See note [counting skeleton edges].
 // Type for counting arcs in paths that cause undefined behaviour.

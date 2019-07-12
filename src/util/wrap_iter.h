@@ -1,8 +1,8 @@
 #ifndef _RE2C_UTIL_WRAP_ITER_
 #define _RE2C_UTIL_WRAP_ITER_
 
-namespace re2c
-{
+
+namespace re2c {
 
 // immutable containter
 template<typename container_t>

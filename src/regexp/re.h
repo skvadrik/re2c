@@ -10,8 +10,8 @@
 #include "src/util/range.h"
 #include "src/util/slab_allocator.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct RE
 {

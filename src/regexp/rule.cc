@@ -2,8 +2,8 @@
 
 #include "src/regexp/rule.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 free_list<Code*> Code::flist;
 

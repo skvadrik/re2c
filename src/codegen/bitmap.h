@@ -2,15 +2,16 @@
 #define _RE2C_CODE_BITMAP_
 
 #include "src/util/c99_stdint.h"
+#include <algorithm>
 #include <vector>
 
 #include "src/util/forbid_copy.h"
+
 
 namespace re2c {
 
 class Output;
 struct Go;
-struct Span;
 struct State;
 
 struct bitmap_t

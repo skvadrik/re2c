@@ -9,6 +9,8 @@
 #include "src/util/forbid_copy.h"
 
 
+namespace re2c {
+
 /*
  * Works nice for tiny POD objects (~30 bytes and lower)
  * WARNING: Does not free memory for distinct objects!
@@ -73,5 +75,7 @@ public:
 
     FORBID_COPY(slab_allocator_t);
 };
+
+} // namespace re2c
 
 #endif // _RE2C_UTIL_SLAB_ALLOCATOR_

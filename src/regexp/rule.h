@@ -7,11 +7,10 @@
 #include <string>
 
 #include "src/msg/location.h"
-#include "src/regexp/tag.h"
 #include "src/util/free_list.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct Code
 {

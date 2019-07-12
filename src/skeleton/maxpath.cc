@@ -8,10 +8,11 @@
 #include <vector>
 
 #include "src/debug/debug.h"
+#include "src/msg/msg.h"
 #include "src/skeleton/skeleton.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 // 0 < DIST_MAX < DIST_ERROR <= std::numeric_limits<uint32_t>::max()
 static const uint32_t DIST_ERROR = std::numeric_limits<uint32_t>::max();

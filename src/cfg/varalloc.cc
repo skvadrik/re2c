@@ -6,8 +6,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 /* We have a binary relation on the set of all tags
  * and must construct set decomposition into subsets such that

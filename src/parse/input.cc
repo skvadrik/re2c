@@ -1,7 +1,9 @@
+#include "src/msg/msg.h"
 #include "src/parse/input.h"
 #include "src/parse/scanner.h"
 #include "src/util/get_dir.h"
 #include "src/util/string_utils.h"
+
 
 namespace re2c {
 

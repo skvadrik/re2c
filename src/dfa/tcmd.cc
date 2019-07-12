@@ -4,8 +4,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/util/hash32.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 /* note [topological ordering of copy commands]
  *

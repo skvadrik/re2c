@@ -9,10 +9,13 @@
 #include "src/codegen/go.h"
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
+#include "src/options/opt.h"
 #include "src/util/allocate.h"
 
-namespace re2c
-{
+
+namespace re2c {
+
+class Msg;
 
 const size_t Initial::NOSAVE = std::numeric_limits<size_t>::max();
 

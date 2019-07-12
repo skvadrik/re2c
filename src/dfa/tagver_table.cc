@@ -5,8 +5,8 @@
 #include "src/dfa/tagver_table.h"
 #include "src/util/hash32.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct eqtag_t
 {

@@ -1,9 +1,13 @@
-#include "src/parse/input.h"
-#include "src/parse/scanner.h"
+#include <stdio.h>
+
 #include "src/codegen/output.h"
 #include "src/compile.h"
 #include "src/msg/msg.h"
+#include "src/msg/warn.h"
 #include "src/options/opt.h"
+#include "src/parse/input.h"
+#include "src/parse/scanner.h"
+
 
 using namespace re2c;
 

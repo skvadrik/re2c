@@ -3,10 +3,9 @@
 
 #include "src/util/c99_stdint.h"
 
-#include "src/options/opt.h"
-#include "src/dfa/dfa.h"
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
+
 
 namespace re2c {
 

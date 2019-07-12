@@ -6,24 +6,24 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
+#include "src/codegen/output.h"
+#include "src/compile.h"
+#include "src/debug/debug.h"
+#include "src/dfa/dfa.h"
+#include "src/encoding/range_suffix.h"
+#include "src/msg/location.h"
+#include "src/nfa/nfa.h"
+#include "src/options/opt.h"
 #include "src/parse/ast.h"
 #include "src/parse/parse.h"
 #include "src/parse/scanner.h"
-#include "src/codegen/label.h"
-#include "src/codegen/output.h"
-#include "src/compile.h"
-#include "src/options/opt.h"
-#include "src/debug/debug.h"
-#include "src/dfa/dfa.h"
-#include "src/nfa/nfa.h"
-#include "src/encoding/range_suffix.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/skeleton/skeleton.h"
-#include "src/util/counter.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
 #include "src/util/smart_ptr.h"
+
 
 namespace re2c {
 

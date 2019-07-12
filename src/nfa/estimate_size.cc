@@ -1,9 +1,10 @@
-
 #include <stddef.h>
 #include <vector>
 
+#include "src/debug/debug.h"
 #include "src/parse/ast.h"
 #include "src/regexp/re.h"
+
 
 namespace re2c {
 

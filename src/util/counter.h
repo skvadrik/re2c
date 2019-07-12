@@ -1,6 +1,7 @@
 #ifndef _RE2C_UTIL_COUNTER_
 #define _RE2C_UTIL_COUNTER_
 
+
 namespace re2c {
 
 template <typename num_t>

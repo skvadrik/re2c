@@ -3,6 +3,7 @@
 
 #include <string>
 
+
 namespace re2c {
 
 std::string ver_to_vernum(const char *ver);

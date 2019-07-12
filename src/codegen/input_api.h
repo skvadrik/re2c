@@ -6,8 +6,8 @@
 #include <iosfwd>
 #include <string>
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct opt_t;
 

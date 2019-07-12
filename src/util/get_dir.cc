@@ -1,4 +1,7 @@
+#include <stddef.h>
+
 #include "src/util/get_dir.h"
+
 
 namespace re2c {
 

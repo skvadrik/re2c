@@ -3,6 +3,7 @@
 
 #include "src/util/c99_stdint.h"
 
+
 namespace re2c {
 
 uint32_t unesc_hex (const char * s, const char * s_end);

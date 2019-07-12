@@ -1,5 +1,6 @@
 #include "src/encoding/utf16/utf16.h"
 
+
 namespace re2c {
 
 const uint32_t utf16::MAX_1WORD_RUNE    = 0xFFFFu;

@@ -4,8 +4,8 @@
 #include <sstream>
 #include <string>
 
-namespace re2c
-{
+
+namespace re2c {
 
 template<typename type_t> void strrreplace(
     std::string &s,

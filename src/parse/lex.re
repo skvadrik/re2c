@@ -1,21 +1,28 @@
+#include <ctype.h>
 #include "src/util/c99_stdint.h"
-#include <stddef.h>
-#include <string.h>
 #include <algorithm>
 #include <limits>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "src/codegen/output.h"
 #include "src/encoding/enc.h"
-#include "src/parse/input.h"
+#include "src/msg/location.h"
+#include "src/msg/msg.h"
+#include "src/msg/warn.h"
+#include "src/options/opt.h"
 #include "src/parse/ast.h"
+#include "src/parse/input.h"
+#include "src/parse/lex.h"
 #include "src/parse/scanner.h"
 #include "src/parse/parse.h" // needed by "parser.h"
 #include "src/parse/unescape.h"
-#include "src/util/range.h"
+#include "src/regexp/rule.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "src/util/string_utils.h"
 #include "parser.h"
+
 
 extern YYSTYPE yylval;
 
@@ -54,6 +61,7 @@ namespace re2c {
 */
 
 /*!header:re2c:on*/
+#include <stddef.h>
 #include <string.h>
 #include "src/util/forbid_copy.h"
 

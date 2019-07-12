@@ -3,21 +3,20 @@
 
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
-#include <stdio.h>
 #include <fstream>
 #include <set>
-#include <sstream>
 #include <string>
+#include <sstream>
 #include <vector>
 
 #include "src/codegen/label.h"
-#include "src/options/opt.h"
+#include "src/msg/location.h"
 #include "src/util/counter.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/uniq_vector.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 class Msg;
 struct Opt;

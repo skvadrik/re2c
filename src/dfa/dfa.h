@@ -13,8 +13,8 @@
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct nfa_t;
 struct opt_t;

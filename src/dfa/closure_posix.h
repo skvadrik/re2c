@@ -8,8 +8,7 @@
 #include "src/nfa/nfa.h"
 
 
-namespace re2c
-{
+namespace re2c {
 
 /*
  * States of in-degree less than 2 are not joint points;

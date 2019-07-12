@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
+#include <algorithm>
 #include <ostream>
 #include <set>
 #include <string>
@@ -15,6 +16,8 @@
 #include "src/codegen/input_api.h"
 #include "src/codegen/label.h"
 #include "src/codegen/output.h"
+#include "src/msg/location.h"
+#include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
@@ -22,8 +25,8 @@
 #include "src/util/counter.h"
 #include "src/util/string_utils.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static void emit_state(Output & o, uint32_t ind, const State * s, bool used_label);
 static void emit_eof(Output &, uint32_t, const Code*);

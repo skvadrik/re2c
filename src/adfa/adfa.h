@@ -13,16 +13,17 @@
 #include "src/codegen/go.h"
 #include "src/codegen/label.h"
 #include "src/dfa/tcmd.h"
+#include "src/msg/location.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 
-namespace re2c
-{
 
+namespace re2c {
+
+class Msg;
 struct opt_t;
 class Output;
-struct Output;
 struct dfa_t;
 
 struct State

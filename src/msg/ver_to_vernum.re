@@ -1,8 +1,10 @@
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <string>
 
 #include "config.h"
 #include "src/msg/ver_to_vernum.h"
+
 
 namespace re2c {
 

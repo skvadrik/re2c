@@ -1,7 +1,6 @@
 #include "src/util/c99_stdint.h"
-#include <string.h>
 #include <algorithm>
-#include <limits>
+#include <memory>
 #include <set>
 #include <string>
 #include <valarray>
@@ -12,15 +11,14 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/tcmd.h"
-#include "src/msg/msg.h"
+#include "src/msg/warn.h"
 #include "src/nfa/nfa.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/range.h"
 
 
-namespace re2c
-{
+namespace re2c {
 
 template<typename ctx_t> static void determinization(ctx_t &ctx);
 template<typename ctx_t> static void clear_caches(ctx_t &ctx);

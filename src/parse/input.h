@@ -7,6 +7,7 @@
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 
+
 namespace re2c {
 
 struct Input

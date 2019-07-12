@@ -1,27 +1,33 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <algorithm>
+#include <memory>
 #include <set>
 #include <string>
 #include <utility>
 #include <valarray>
 #include <vector>
 
-#include "src/parse/ast.h"
-#include "src/options/opt.h"
+#include "src/debug/debug.h"
 #include "src/encoding/case.h"
 #include "src/encoding/enc.h"
 #include "src/encoding/ebcdic/ebcdic_regexp.h"
 #include "src/encoding/utf16/utf16_regexp.h"
 #include "src/encoding/utf8/utf8_regexp.h"
 #include "src/msg/msg.h"
+#include "src/msg/warn.h"
+#include "src/options/opt.h"
+#include "src/parse/ast.h"
 #include "src/regexp/empty_class_policy.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/range.h"
 
+
 namespace re2c {
+
+struct loc_t;
 
 /* note [default regexp]
  *

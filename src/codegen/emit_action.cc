@@ -1,6 +1,8 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
+#include <algorithm>
 #include <iosfwd>
+#include <ostream>
 #include <set>
 #include <string>
 #include <utility>
@@ -22,8 +24,8 @@
 #include "src/skeleton/skeleton.h"
 #include "src/util/string_utils.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static void need               (Output &o, uint32_t ind, size_t some);
 static void gen_rescan_label   (Output &o, const State *s);

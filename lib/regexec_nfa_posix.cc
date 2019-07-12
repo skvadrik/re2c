@@ -1,15 +1,17 @@
-#include <queue>
 #include <stdio.h>
+#include <algorithm>
+#include <utility>
+#include <vector>
 
-#include "lib/lex.h"
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/closure_posix.h"
-#include "src/dfa/determinization.h"
 #include "src/dfa/posix_precedence.h"
+#include "src/dfa/tag_history.h"
 #include "src/nfa/nfa.h"
+#include "src/regexp/rule.h"
+#include "src/util/range.h"
 
 
 namespace re2c {

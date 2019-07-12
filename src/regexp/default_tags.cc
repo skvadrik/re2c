@@ -1,7 +1,13 @@
 #include <stddef.h>
+#include <algorithm>
+#include <memory>
 #include <vector>
 
+#include "src/debug/debug.h"
+#include "src/options/opt.h"
 #include "src/regexp/re.h"
+#include "src/regexp/tag.h"
+
 
 namespace re2c {
 

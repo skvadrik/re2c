@@ -1,5 +1,9 @@
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
+
 #include "src/encoding/ebcdic/ebcdic.h"
 #include "src/encoding/ebcdic/ebcdic_regexp.h"
+#include "src/regexp/re.h"
 #include "src/util/range.h"
 
 

@@ -4,6 +4,7 @@
 #include "src/encoding/enc.h"
 #include "src/util/range.h"
 
+
 namespace re2c {
 
 const uint32_t Enc::SURR_MIN = 0xD800;

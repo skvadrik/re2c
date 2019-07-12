@@ -3,6 +3,7 @@
 
 #include "src/util/c99_stdint.h"
 
+
 namespace re2c {
 
 class Range;

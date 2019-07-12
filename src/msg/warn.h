@@ -6,11 +6,10 @@
 #include <string>
 #include <vector>
 
-#include "src/msg/location.h"
-#include "src/regexp/rule.h"
 
 namespace re2c {
 
+struct loc_t;
 class Msg;
 class path_t;
 struct Rule;

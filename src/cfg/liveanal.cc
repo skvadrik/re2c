@@ -8,8 +8,8 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 // calculates deep-first search postorder of transition nodes,
 // skips final and fallback nodes (they have no successors anyway)

@@ -1,6 +1,6 @@
 #include "src/util/c99_stdint.h"
 #include <string.h>
-#include <algorithm>
+#include <utility>
 
 #include "src/debug/debug.h"
 #include "src/cfg/cfg.h"
@@ -8,8 +8,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 template<typename cmd_t> void normalize(cmd_t *cmd);
 

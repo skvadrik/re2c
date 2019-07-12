@@ -3,12 +3,16 @@
 #include <algorithm>
 #include <set>
 
+#include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/regexp/rule.h"
-#include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
+#include "src/skeleton/path.h"
+
 
 namespace re2c {
+
+struct loc_t;
 
 const uint32_t Warn::SILENT  = 0;
 const uint32_t Warn::WARNING = 1u << 0;

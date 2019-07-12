@@ -6,8 +6,8 @@
 
 #include "src/skeleton/skeleton.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct suffix_t
 {

@@ -3,6 +3,7 @@
 
 #include <stddef.h> // size_t
 
+
 namespace re2c {
 
 // useful fof allocation of arrays of POD objects

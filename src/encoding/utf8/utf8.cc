@@ -1,5 +1,6 @@
 #include "src/encoding/utf8/utf8.h"
 
+
 namespace re2c {
 
 const uint32_t utf8::ERROR = 0xFFFDu;

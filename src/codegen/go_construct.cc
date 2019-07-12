@@ -13,8 +13,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/util/allocate.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static uint32_t unmap(Span*, const Span*, uint32_t, const State*);
 static bool is_eof(uint32_t, uint32_t);

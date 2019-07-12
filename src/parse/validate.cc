@@ -1,10 +1,15 @@
 #include "src/util/c99_stdint.h"
+#include <memory>
 #include <string>
 #include <vector>
 
+#include "src/msg/location.h"
+#include "src/msg/msg.h"
+#include "src/options/opt.h"
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
 #include "src/regexp/rule.h"
+
 
 namespace re2c {
 

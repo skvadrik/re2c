@@ -4,8 +4,8 @@
 #include "src/dfa/dfa.h"
 #include "src/skeleton/skeleton.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct opt_t;
 struct tcmd_t;

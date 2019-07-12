@@ -3,6 +3,7 @@
 #include "src/test/range/test.h"
 #include "src/test/range/test-impl.h"
 
+
 namespace re2c_test {
 
 static bool equal (const re2c::Range * r1, const re2c::Range * r2)

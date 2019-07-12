@@ -2,15 +2,17 @@
 
 #include "src/util/c99_stdint.h"
 #include <stdio.h>
+#include <memory>
 #include <string>
 #include <vector>
 
+#include "src/debug/debug.h"
 #include "src/nfa/nfa.h"
 #include "src/regexp/tag.h"
 #include "src/util/range.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static uint32_t index(const nfa_t &nfa, const nfa_state_t *s)
 {

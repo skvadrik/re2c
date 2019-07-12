@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <string>
+#include <vector>
 
 #include "src/codegen/input_api.h"
 #include "src/dfa/dfa.h"
@@ -11,8 +12,8 @@
 #include "src/encoding/enc.h"
 #include "src/util/forbid_copy.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 class Msg;
 

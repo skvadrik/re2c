@@ -3,10 +3,12 @@
 
 #include "src/cfg/cfg.h"
 #include "src/dfa/dfa.h"
+#include "src/debug/debug.h"
+#include "src/options/opt.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 void compact_and_optimize_tags(const opt_t *opts, dfa_t &dfa)
 {

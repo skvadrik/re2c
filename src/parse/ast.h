@@ -7,12 +7,9 @@
 #include <vector>
 
 #include "src/msg/location.h"
-#include "src/regexp/rule.h"
-#include "src/util/free_list.h"
-#include "src/util/range.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct Code;
 template <class _Ty> class free_list;

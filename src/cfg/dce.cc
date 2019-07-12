@@ -3,8 +3,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 void cfg_t::dead_code_elimination(cfg_t &cfg, const bool *live)
 {

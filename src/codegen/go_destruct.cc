@@ -2,8 +2,8 @@
 
 #include "src/codegen/go.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 Cases::~Cases ()
 {

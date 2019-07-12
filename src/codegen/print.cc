@@ -2,8 +2,8 @@
 
 #include "src/codegen/print.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static bool is_space(uint32_t c)
 {

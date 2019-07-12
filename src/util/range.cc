@@ -1,7 +1,7 @@
 #include "src/util/range.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 void RangeMgr::append_overlapping(Range *&head, Range *&tail, const Range *r)
 {

@@ -1,6 +1,8 @@
-#include "lib/lex.h"
+#include <stddef.h>
+
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
+#include "src/msg/location.h"
 
 
 using namespace re2c;

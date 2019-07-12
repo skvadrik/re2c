@@ -1,16 +1,19 @@
+#include "src/util/c99_stdint.h"
 #include <string.h>
 #include <set>
 #include <string>
 #include <valarray>
 #include <vector>
 
-#include "src/msg/msg.h"
 #include "src/dfa/dfa.h"
+#include "src/msg/msg.h"
+#include "src/msg/location.h"
+#include "src/msg/warn.h"
 #include "src/regexp/rule.h"
 #include "src/util/forbid_copy.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct tcmd_t;
 

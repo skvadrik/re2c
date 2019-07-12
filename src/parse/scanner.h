@@ -3,28 +3,23 @@
 
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
-#include <sys/types.h>
 #include <string>
 #include <vector>
 
+#include "src/debug/debug.h"
 #include "src/msg/location.h"
-#include "src/msg/msg.h"
 #include "src/parse/input.h"
 #include "src/parse/lex.h"
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
 #include "src/encoding/utf8/utf8.h"
-#include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 class Msg;
-struct Opt;
-struct conopt_t;
 class Output;
-class Range;
 struct AST;
 struct ASTChar;
 

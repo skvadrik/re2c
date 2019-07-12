@@ -12,8 +12,8 @@
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 struct clos_t;
 

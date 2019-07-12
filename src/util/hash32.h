@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static inline uint32_t hash4(uint32_t h, uint32_t k)
 {

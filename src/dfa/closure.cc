@@ -1,25 +1,28 @@
 #include "src/util/c99_stdint.h"
 #include <stdlib.h>
-#include <string.h>
 #include <algorithm>
+#include <map>
 #include <set>
-#include <stack>
 #include <utility>
 #include <valarray>
+#include <vector>
 
-#include "src/options/opt.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/closure_leftmost.h"
 #include "src/dfa/closure_posix.h"
 #include "src/dfa/posix_precedence.h"
+#include "src/dfa/tag_history.h"
+#include "src/dfa/tagver_table.h"
 #include "src/dfa/tcmd.h"
+#include "src/msg/location.h"
+#include "src/msg/warn.h"
 #include "src/nfa/nfa.h"
 #include "src/regexp/rule.h"
+#include "src/regexp/tag.h"
 
 
-namespace re2c
-{
+namespace re2c {
 
 /* note [epsilon-closures in tagged NFA]
  *

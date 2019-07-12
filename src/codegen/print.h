@@ -4,8 +4,8 @@
 #include "src/util/c99_stdint.h"
 #include <iosfwd>
 
-namespace re2c
-{
+
+namespace re2c {
 
 bool is_print   (uint32_t c);
 void prtHex     (std::ostream &o, uint32_t c, uint32_t szcunit);

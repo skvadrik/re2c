@@ -2,6 +2,7 @@
 #define _RE2C_LIB_REGEX_
 
 #include <stddef.h>
+#include "src/util/c99_stdint.h"
 #include <limits.h>
 
 

@@ -7,8 +7,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 void cfg_t::renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 {

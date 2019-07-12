@@ -8,6 +8,7 @@
 #include "src/regexp/re.h"
 #include "src/util/range.h"
 
+
 namespace re2c {
 
 /* The original set of code units (charset) might be very large.

@@ -3,13 +3,14 @@
 #include <stdio.h>
 
 #include "src/cfg/cfg.h"
+#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 void dump_cfg(const cfg_t &cfg, const bool *live)
 {

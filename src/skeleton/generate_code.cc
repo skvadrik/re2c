@@ -15,8 +15,8 @@
 #include "src/regexp/tag.h"
 #include "src/skeleton/skeleton.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static void exact_uint(Output &o, size_t width)
 {

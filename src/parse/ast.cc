@@ -3,8 +3,8 @@
 #include "src/parse/ast.h"
 #include "src/util/free_list.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 free_list<AST*> AST::flist;
 

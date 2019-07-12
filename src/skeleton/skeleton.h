@@ -3,25 +3,23 @@
 
 #include "src/util/c99_stdint.h"
 #include <stdio.h>
+#include <algorithm>
 #include <limits>
 #include <map>
 #include <set>
 #include <string>
-#include <utility>
 #include <valarray>
 #include <vector>
 
-#include "src/codegen/bitmap.h"
-#include "src/options/opt.h"
-#include "src/dfa/tcmd.h"
+#include "src/msg/location.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
 #include "src/util/wrap_iter.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 class Output;
 class path_t;

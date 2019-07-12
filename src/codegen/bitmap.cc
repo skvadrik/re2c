@@ -7,8 +7,8 @@
 #include "src/options/opt.h"
 #include "src/dfa/tcmd.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static bool matches(const Go *go1, const State *s1, const Go *go2, const State *s2);
 static void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m);

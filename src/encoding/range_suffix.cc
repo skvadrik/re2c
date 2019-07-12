@@ -1,4 +1,5 @@
 #include "src/encoding/range_suffix.h"
+#include "src/regexp/re.h"
 #include "src/util/range.h"
 
 

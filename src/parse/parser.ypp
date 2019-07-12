@@ -222,8 +222,7 @@ int yylex(context_t &context)
 
 } // extern "C"
 
-namespace re2c
-{
+namespace re2c {
 
 void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts)
 {

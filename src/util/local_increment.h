@@ -1,8 +1,8 @@
 #ifndef _RE2C_UTIL_LOCAL_INCREMENT_
 #define _RE2C_UTIL_LOCAL_INCREMENT_
 
-namespace re2c
-{
+
+namespace re2c {
 
 template <typename counter_t>
 struct local_increment_t

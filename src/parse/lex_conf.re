@@ -1,15 +1,18 @@
 #include "src/util/c99_stdint.h"
 #include <string>
 
-#include "src/codegen/output.h"
+#include "src/codegen/input_api.h"
 #include "src/encoding/enc.h"
+#include "src/msg/msg.h"
+#include "src/options/opt.h"
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
+#include "src/regexp/empty_class_policy.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "src/util/string_utils.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 #define YYFILL(n) { if (!fill (n)) fatal("unexpected end of input"); }
 

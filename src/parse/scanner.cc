@@ -1,6 +1,10 @@
+#include <stdio.h>
+#include <algorithm>
 #include "src/util/c99_stdint.h"
 #include <limits>
 #include <string.h>
+
+#include "src/msg/msg.h"
 #include "src/parse/scanner.h"
 #include "src/debug/debug.h"
 

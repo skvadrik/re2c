@@ -7,8 +7,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 typedef std::vector<tagver_t> vals_t;
 static void interfere(const tcmd_t *cmd, const bool *live, bool *interf, bool *buf, vals_t *vals, size_t nver);

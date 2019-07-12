@@ -3,8 +3,8 @@
 
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
+#include <algorithm>
 #include <map>
-#include <stack>
 #include <string>
 #include <vector>
 #include <queue>
@@ -13,6 +13,7 @@
 #include "src/debug/debug.h"
 #include "src/dfa/tagver_table.h"
 #include "src/dfa/tag_history.h"
+#include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
 #include "src/util/slab_allocator.h"

@@ -9,8 +9,8 @@
 
 #include "src/debug/debug.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 /*
  * O(1) random access

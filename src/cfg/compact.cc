@@ -7,8 +7,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 tagver_t cfg_t::compact(const cfg_t &cfg, tagver_t *ver2new)
 {

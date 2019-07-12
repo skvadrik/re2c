@@ -16,8 +16,8 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 
-namespace re2c
-{
+
+namespace re2c {
 
 static void dump_adfa_range(uint32_t lower, uint32_t upper)
 {
