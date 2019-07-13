@@ -287,21 +287,21 @@ docs: $(DOC) $(re2c_GEN_HELP)
 $(DOC): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(RST2MAN) $(top_builddir)/$(re2c_SRC_DOC) > $@
-	cp $@ $(top_srcdir)/$(re2c_BOOT_DOC)
+	$(AM_V_GEN)cp $@ $(top_srcdir)/$(re2c_BOOT_DOC)
 $(re2c_GEN_HELP): $(re2c_CUSTOM_HELP)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(RST2MAN) $(top_builddir)/$(re2c_CUSTOM_HELP) > $@.1
 	$(top_srcdir)/genhelp.sh $@.1 $@
-	cp $@ $(top_srcdir)/$(re2c_BOOT_HELP)
+	$(AM_V_GEN)cp $@ $(top_srcdir)/$(re2c_BOOT_HELP)
 else
 docs: $(DOC) $(re2c_GEN_HELP)
-	@echo "Reconfigure to rebuild docs: ./configure --enable-docs"
+	$(AM_V_at)echo "Reconfigure to rebuild docs: ./configure --enable-docs"
 $(DOC): $(re2c_BOOT_DOC)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	cp $(top_srcdir)/$(re2c_BOOT_DOC) $@
+	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC) $@
 $(re2c_GEN_HELP): $(re2c_BOOT_HELP)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	cp $(top_srcdir)/$(re2c_BOOT_HELP) $@
+	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_HELP) $@
 endif
 
 all-local: docs $(re2c_BOOT_PARSER)
