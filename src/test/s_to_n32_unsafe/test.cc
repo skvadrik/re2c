@@ -33,7 +33,7 @@ static int32_t test_u (uint64_t i)
     uint32_t u = i == 0; // not equal to i
     if (re2c::s_to_u32_unsafe (s_start, s_end, u) && u != i)
     {
-        fprintf (stderr, "unsigned: expected: %lu, got: %u\n", i, u);
+        fprintf (stderr, "unsigned: expected: %lu, got: %u\n", (unsigned long)i, u);
         return 1;
     }
     return 0;
@@ -54,7 +54,7 @@ static int32_t test_i (int64_t i)
     int32_t j = i == 0; // not equal to i
     if (re2c::s_to_i32_unsafe (s_start, s_end, j) && j != i)
     {
-        fprintf (stderr, "signed: expected: %ld, got: %d\n", i, j);
+        fprintf (stderr, "signed: expected: %ld, got: %d\n", (long)i, j);
         return 1;
     }
     return 0;

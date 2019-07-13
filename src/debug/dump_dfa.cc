@@ -321,7 +321,7 @@ void dump_clstats(const ctx_t &ctx)
     const closure_stats_t &cs = ctx.dc_clstats;
     if (ctx.dc_opts->dump_closure_stats) {
         fprintf(stderr, "scans: %-10u prec: %-10u length: %-10lu\n"
-            , cs.nscans, cs.nprec, static_cast<uint64_t>(cs.length));
+            , cs.nscans, cs.nprec, (unsigned long)cs.length);
     }
 }
 

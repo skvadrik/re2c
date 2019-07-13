@@ -88,15 +88,15 @@ static bool scan(psimctx_t &ctx, nfa_state_t *q, bool all);
 static bool relax_gor1(psimctx_t &ctx, const psimctx_t::conf_t &c);
 static void closure_posix_gor1(psimctx_t &ctx);
 static inline void closure_posix(psimctx_t &ctx);
-static inline size_t index(const nfa_state_t *s, const nfa_t &nfa);
+static inline uint32_t index(const nfa_state_t *s, const nfa_t &nfa);
 static void copy_offs(psimctx_t &ctx, const nfa_state_t *y, const nfa_state_t *x, tag_info_t info);
 static inline void accept_offsets(psimctx_t &ctx, const nfa_state_t *s);
 
 // debug
 static int D = 0;
-static void prtoff(psimctx_t &ctx, size_t x, bool newer);
-static inline void prtoff4(psimctx_t &ctx, size_t x);
-static inline void prtoff5(psimctx_t &ctx, size_t x);
+static void prtoff(psimctx_t &ctx, uint32_t x, bool newer);
+static inline void prtoff4(psimctx_t &ctx, uint32_t x);
+static inline void prtoff5(psimctx_t &ctx, uint32_t x);
 
 static regoff_t *offsets4 = NULL;
 static regoff_t *offsets5 = NULL;
@@ -181,9 +181,9 @@ int regexec_nfa_posix_backward(const regex_t *preg, const char *string
     return 0;
 }
 
-static size_t index(const nfa_state_t *s, const nfa_t &nfa)
+static uint32_t index(const nfa_state_t *s, const nfa_t &nfa)
 {
-    return static_cast<size_t>(s - nfa.states);
+    return static_cast<uint32_t>(s - nfa.states);
 }
 
 void closure_simple(psimctx_t &ctx)
@@ -261,7 +261,7 @@ static int32_t precedence(psimctx_t &ctx, const conf_t &x
     , const conf_t &y RE2C_ATTR((unused)))
 {
     DASSERT(x.state == y.state);
-    const size_t idx = index(x.state, ctx.nfa);
+    const uint32_t idx = index(x.state, ctx.nfa);
 
     const size_t ntags = ctx.nfa.tags.size();
     const regoff_t *ox = offsets5 + ntags * idx * 2;
@@ -269,7 +269,7 @@ static int32_t precedence(psimctx_t &ctx, const conf_t &x
 
     prtoff5(ctx, idx);
     prtoff4(ctx, idx);
-    if (D) fprintf(stderr, "prec %lu: ", idx);
+    if (D) fprintf(stderr, "prec %u: ", idx);
 
     for (size_t t = 0; t < ctx.nfa.tags.size(); t += 2) {
         const regoff_t offx = ox[2 * (t + 1)];
@@ -312,7 +312,7 @@ void closure_posix_gor1(psimctx_t &ctx)
         const regoff_t *oy = offsets6 + ntags * c->origin * 2;
         memcpy(ox, oy, ntags * sizeof(regoff_t) * 2);
 
-        if (D) fprintf(stderr, "restoring offsets %u to %ld\n"
+        if (D) fprintf(stderr, "restoring offsets %u to %u\n"
             , c->origin, index(c->state, ctx.nfa));
 
         relax_gor1(ctx, *c);
@@ -440,7 +440,7 @@ void closure_posix_gtop(psimctx_t &ctx)
         const regoff_t *oy = offsets6 + ntags * c->origin * 2;
         memcpy(ox, oy, ntags * sizeof(regoff_t) * 2);
 
-        if (D) fprintf(stderr, "restoring offsets %u to %lu\n"
+        if (D) fprintf(stderr, "restoring offsets %u to %u\n"
             , c->origin, index(c->state, ctx.nfa));
 
         relax_gtop(ctx, *c);
@@ -452,7 +452,7 @@ void closure_posix_gtop(psimctx_t &ctx)
         heap.pop();
         q->active = 0;
 
-        if (D) fprintf(stderr, "> %lu ", index(q, ctx.nfa));
+        if (D) fprintf(stderr, "> %u ", index(q, ctx.nfa));
         prtoff4(ctx, index(q, ctx.nfa));
 
         typedef psimctx_t::conf_t conf_t;
@@ -522,8 +522,7 @@ void make_one_step(psimctx_t &ctx, uint32_t sym)
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    const conf_t c(s->ran.out
-                        , static_cast<uint32_t>(index(s, ctx.nfa)), HROOT);
+                    const conf_t c(s->ran.out, index(s, ctx.nfa), HROOT);
                     reach.push_back(c);
                     break;
                 }
@@ -579,12 +578,12 @@ static void copy_offs(psimctx_t &ctx, const nfa_state_t *y, const nfa_state_t *x
     , tag_info_t info)
 {
     const std::vector<Tag> &tags = ctx.nfa.tags;
-    const size_t
-        ntags = tags.size(),
+    const size_t ntags = tags.size();
+    const uint32_t
         xidx = index(x, ctx.nfa),
         yidx = index(y, ctx.nfa);
 
-    if (D) fprintf(stderr, "copying offsets %lu to %lu ", yidx, xidx);
+    if (D) fprintf(stderr, "copying offsets %u to %u ", yidx, xidx);
     prtoff4(ctx, yidx);
 
     regoff_t       *ox = offsets5 + ntags * xidx * 2;
@@ -611,25 +610,25 @@ static void copy_offs(psimctx_t &ctx, const nfa_state_t *y, const nfa_state_t *x
             }
         }
 
-        if (D) fprintf(stderr, "setting offset %lu[%u] to %lu\n"
-            , xidx, t, ox[2 * t]);
+        if (D) fprintf(stderr, "setting offset %u[%u] to %ld\n"
+            , xidx, t, (long)ox[2 * t]);
     }
 }
 
 void accept_offsets(psimctx_t &ctx, const nfa_state_t *s)
 {
-    const size_t idx = index(s, ctx.nfa);
+    const uint32_t idx = index(s, ctx.nfa);
     const size_t ntags = ctx.nfa.tags.size();
 
     const regoff_t *ox = offsets5 + ntags * idx * 2;
     regoff_t       *oy = offsets4 + ntags * idx * 2;
     memcpy(oy, ox, ntags * sizeof(regoff_t) * 2);
 
-    if (D) fprintf(stderr, "setting offsets %lu to ", idx);
+    if (D) fprintf(stderr, "setting offsets %u to ", idx);
     prtoff4(ctx, idx);
 }
 
-static void prtoff(psimctx_t &ctx, size_t x, bool newer)
+static void prtoff(psimctx_t &ctx, uint32_t x, bool newer)
 {
     if (!D) return;
 
@@ -637,19 +636,19 @@ static void prtoff(psimctx_t &ctx, size_t x, bool newer)
     const regoff_t *ox = (newer ? offsets5 : offsets4) + ntags * x * 2;
     for (size_t t = 0; t < ntags; t += 2) {
         fprintf(stderr, "(%ld,%ld)(%ld,%ld)"
-            , ox[2 * t],     ox[2 * (t + 1)]
-            , ox[2 * t + 1], ox[2 * (t + 1) + 1]);
+            , (long)ox[2 * t],     (long)ox[2 * (t + 1)]
+            , (long)ox[2 * t + 1], (long)ox[2 * (t + 1) + 1]);
     }
     fprintf(stderr, "\n");
 }
 
-static void prtoff4(psimctx_t &ctx, size_t x)
+static void prtoff4(psimctx_t &ctx, uint32_t x)
 {
     if (D) fprintf(stderr, "off4: ");
     prtoff(ctx, x, false);
 }
 
-static void prtoff5(psimctx_t &ctx, size_t x)
+static void prtoff5(psimctx_t &ctx, uint32_t x)
 {
     if (D) fprintf(stderr, "off5: ");
     prtoff(ctx, x, true);

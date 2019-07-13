@@ -60,8 +60,8 @@ static int test(const char *pattern, const char *string
                 "\tpmatch[%u].rm_so = %ld (expected %ld)\n"
                 "\tpmatch[%u].rm_eo = %ld (expected %ld)\n"
                 , prefix, pattern, string
-                , i, have.rm_so, so
-                , i, have.rm_eo, eo);
+                , i, (long)have.rm_so, (long)so
+                , i, (long)have.rm_eo, (long)eo);
             goto end;
         }
     }

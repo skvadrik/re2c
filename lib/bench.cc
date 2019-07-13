@@ -166,14 +166,14 @@ static uint32_t groupcnt(const char *r)
     return cnt;
 }
 
-static void bench(const char *r, std::vector<std::string> &ss, size_t n
+static void bench(const char *r, std::vector<std::string> &ss, uint32_t n
     , int mask, int need)
 {
     assert(!ss.empty());
     const char *s0 = ss[0].c_str();
 
-    fprintf(stderr, "\nr: %.*s..., s: %.*s..., n: %lu, %lu chars, %u groups\n"
-        , 30, r, 30, s0, n, strlen(r), groupcnt(r));
+    fprintf(stderr, "\nr: %.*s..., s: %.*s..., n: %u, %lu chars, %u groups\n"
+        , 30, r, 30, s0, n, (unsigned long)strlen(r), groupcnt(r));
 
     std::vector<Result> rs;
 
