@@ -19,7 +19,7 @@ using namespace re2c;
 extern "C" {
 
 int yylex(context_t &context);
-void yyerror(context_t &context, const char*) RE2C_GXX_ATTRIBUTE((noreturn));
+void yyerror(context_t &context, const char*) RE2C_ATTR((noreturn));
 
 } // extern "C"
 

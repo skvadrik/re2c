@@ -88,7 +88,7 @@ using namespace re2c;
 extern "C" {
 
 int yylex(const char *&pattern);
-void yyerror(const char *pattern, const char*) RE2C_GXX_ATTRIBUTE((noreturn));
+void yyerror(const char *pattern, const char*) RE2C_ATTR((noreturn));
 
 } // extern "C"
 
