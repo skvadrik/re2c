@@ -351,11 +351,8 @@ void update_offsets(simctx_t<history_t> &ctx, const conf_t &c, uint32_t id)
 
 bool ran_or_fin_t::operator()(const conf_t &c)
 {
-    switch (c.state->type) {
-        case nfa_state_t::RAN:
-        case nfa_state_t::FIN: return true;
-        default: return false;
-    }
+    return c.state->type == nfa_state_t::RAN
+        || c.state->type == nfa_state_t::FIN;
 }
 
 void khistory_t::init()

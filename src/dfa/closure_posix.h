@@ -37,7 +37,6 @@ inline void closure_posix(pdetctx_t &ctx)
     switch (ctx.dc_opts->posix_closure) {
         case POSIX_CLOSURE_GOR1: closure_posix_gor1(ctx); break;
         case POSIX_CLOSURE_GTOP: closure_posix_gtop(ctx); break;
-        default: DASSERT(false); break;
     }
 
     DDUMP_CLSTATS(ctx);
@@ -170,7 +169,8 @@ bool scan(ctx_t &ctx, nfa_state_t *q, bool all)
                 ++q->arcidx;
             }
             break;
-        default:
+        case nfa_state_t::RAN:
+        case nfa_state_t::FIN:
             break;
     }
 
@@ -266,7 +266,8 @@ void closure_posix_gtop(ctx_t &ctx)
             case nfa_state_t::TAG:
                 relax_gtop(ctx, conf_t(x, q->tag.out, ctx.history.link(ctx, x)));
                 break;
-            default:
+            case nfa_state_t::RAN:
+            case nfa_state_t::FIN:
                 break;
         }
     }

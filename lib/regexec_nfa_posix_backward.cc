@@ -213,7 +213,8 @@ void closure_simple(psimctx_t &ctx)
             case nfa_state_t::TAG:
                 stack.push_back(conf_t(x, n->tag.out, 0));
                 break;
-            default:
+            case nfa_state_t::RAN:
+            case nfa_state_t::FIN:
                 break;
         }
     }
@@ -383,7 +384,8 @@ bool scan(psimctx_t &ctx, nfa_state_t *q, bool all)
                 ++q->arcidx;
             }
             break;
-        default:
+        case nfa_state_t::RAN:
+        case nfa_state_t::FIN:
             break;
     }
 
@@ -471,7 +473,8 @@ void closure_posix_gtop(psimctx_t &ctx)
                 copy_offs(ctx, q, q->tag.out, q->tag.info);
                 relax_gtop(ctx, conf_t(x, q->tag.out, 0));
                 break;
-            default:
+            case nfa_state_t::RAN:
+            case nfa_state_t::FIN:
                 break;
         }
     }

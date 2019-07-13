@@ -44,7 +44,8 @@ void closure_leftmost_dfs(ctx_t &ctx)
             case nfa_state_t::TAG:
                 stack.push_back(conf_t(x, n->tag.out, ctx.history.link(ctx, x)));
                 break;
-            default:
+            case nfa_state_t::RAN:
+            case nfa_state_t::FIN:
                 break;
         }
     }
