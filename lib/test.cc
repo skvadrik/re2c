@@ -1,7 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "lib/regex.h"
 #include "src/util/c99_stdint.h"
@@ -103,31 +102,35 @@ static int test_all_posix(int flags)
 {
     int e = 0;
 
-    T5("(a+(c+))|(b+(d+))",             "ac",              0,2, 0,2, 1,2, -1,-1, -1,-1);
+    T5("(a+(c+))|(b+(d+))", "ac", 0,2, 0,2, 1,2, -1,-1, -1,-1);
 
-    T2("(aaaa|aaa|a)+",                 "aaaaaaaaaa",      0,10, 9,10);
-    T2("(aaaa|aaa|a){3,}",              "aaaaaaaaaa",      0,10, 9,10);
-    T2("(aaaa|aaa|a){3,4}",             "aaaaaaaaaa",      0,10, 9,10);
-    T2("(aaaaaa|aaaaa|aaaa|aa|a){3,4}", "aaaaaaaaaaaaaaa", 0,15, 14,15);
-
-    T2("(aaaaa?a?|aa?){1,4}",           "aaaaaaaaaaaaaaa", 0,15, 14,15);
-    T5("(((a){3,4}a?)()a|aa?){1,4}",    "aaaaaaaaaaaaaaa", 0,15, 14,15, -1,-1, -1,-1, -1,-1);
-
-    T4("(((aaaa?|a?)){1,4})+",          "aaaaaaaaaa", 0,10, 0,10, 9,10, 9,10);
-    T6("(((((a){3,3}a?|a?)){0,4})?)*",  "aaaaaaaaaa", 0,10, 0,10, 0,10, 9,10, 9,10, -1,-1);
-
-    T9("((((a){2,3}(()|a)(()|a?)a|a?)){2,5})*", "aaaaaaaaaaaaaa", 0,14, 0,14, 13,14, 13,14, -1,-1, -1,-1, -1,-1, -1,-1, -1,-1);
-
-    T10("(((((a){3,4}|a?)){1,4}|((a)+(a|())){1,2}))*", "aaaaaaaaaa", 0,10, 0,10, 0,10, 9,10, 9,10, -1,-1, -1,-1, -1,-1, -1,-1, -1,-1);
+    T2("(aaaa|aaa|a)+", "aaaaaaaaaa", 0,10, 9,10);
+    T2("(aaaa|aaa|a){3,}", "aaaaaaaaaa", 0,10, 9,10);
+    if (!(flags & REG_BACKWARD)) {
+        // expected failures for Cox algorithm
+        T2("(aaaa|aaa|a){3,4}", "aaaaaaaaaa", 0,10, 9,10);
+        T2("(aaaaaa|aaaaa|aaaa|aa|a){3,4}", "aaaaaaaaaaaaaaa", 0,15, 14,15);
+        T2("(aaaaa?a?|aa?){1,4}", "aaaaaaaaaaaaaaa", 0,15, 14,15);
+        T5("(((a){3,4}a?)()a|aa?){1,4}", "aaaaaaaaaaaaaaa", 0,15, 14,15, -1,-1, -1,-1, -1,-1);
+        T4("(((aaaa?|a?)){1,4})+", "aaaaaaaaaa", 0,10, 0,10, 9,10, 9,10);
+        T9("((((a){2,3}(()|a)(()|a?)a|a?)){2,5})*", "aaaaaaaaaaaaaa", 0,14, 0,14, 13,14, 13,14, -1,-1, -1,-1, -1,-1, -1,-1, -1,-1);
+    }
+    if (!((flags & REG_BACKWARD) && (flags & REG_GTOP))) {
+        // expected failures for Cox algorithm
+        T6("(((((a){3,3}a?|a?)){0,4})?)*", "aaaaaaaaaa", 0,10, 0,10, 0,10, 9,10, 9,10, -1,-1);
+        T10("(((((a){3,4}|a?)){1,4}|((a)+(a|())){1,2}))*", "aaaaaaaaaa", 0,10, 0,10, 0,10, 9,10, 9,10, -1,-1, -1,-1, -1,-1, -1,-1, -1,-1);
+    }
+    if (!((flags & REG_BACKWARD) && !(flags & REG_GTOP))) {
+        // expected failures for Cox algorithm
+        T7("((a?|a?(a?a?)((())+)+))*", "aaaaaa", 0,6, 3,6, 3,6, 4,6, 6,6, 6,6, 6,6);
+    }
+    T4("(((a?a)){2,3})*", "aaaa", 0,4, 0,4, 2,4, 2,4);
 
     T6("(((aa?a)((aaa)+))+)+",              "aaaaaaaaaa", 0,10, 0,10, 5,10, 5,7, 7,10, 7,10);
     T6("(((aaa?)((aaa)+))+)+",              "aaaaaaaaaa", 0,10, 0,10, 5,10, 5,7, 7,10, 7,10);
     T6("(((aaa?)((aaa){1,3})){1,2})*",      "aaaaaaaaaa", 0,10, 0,10, 5,10, 5,7, 7,10, 7,10);
     T6("((((aaa?)(aaa){1,3})){1,2})*",      "aaaaaaaaaa", 0,10, 0,10, 5,10, 5,10, 5,7, 7,10);
     T7("((((aaa?)((a){3,3}){1,3})){1,2})*", "aaaaaaaaaa", 0,10, 0,10, 5,10, 5,10, 5,7, 7,10, 9,10);
-
-    T4("(((a?a)){2,3})*",          "aaaa",   0,4, 0,4, 2,4, 2,4);
-    T7("((a?|a?(a?a?)((())+)+))*", "aaaaaa", 0,6, 3,6, 3,6, 4,6, 6,6, 6,6, 6,6);
 
     T2("(a|aa)*", "",           0,0,  -1,-1);
     T2("(a|aa)*", "a",          0,1,  0,1);
@@ -173,7 +176,9 @@ static int test_all_posix(int flags)
     T4("((a)|(b))*",                         "ab",          0,2, 1,2, -1,-1, 1,2);
     T4("((a?)|(b?))*",                       "ab",          0,2, 1,2, -1,-1, 1,2);
     T4("((a?)|(b?))*",                       "ba",          0,2, 1,2, 1,2, -1,-1);
-    T4("((a?)|(b?)){2,3}",                   "ab",          0,2, 1,2, -1,-1, 1,2);
+    if (!((flags & REG_BACKWARD) && !(flags & REG_GTOP))) {
+        T4("((a?)|(b?)){2,3}",               "ab",          0,2, 1,2, -1,-1, 1,2);
+    }
     T4("((a?)|(b?)){3}",                     "ab",          0,2, 2,2, 2,2, -1,-1);
     T1("y{3}",                               "yyy",         0,3);
     T1("y{0,2}",                             "",            0,0);
@@ -606,9 +611,12 @@ static int test_all_posix(int flags)
     else if (!(flags & (REG_SLOWPREC | REG_KUKLEWICZ))) {
         T3("((a?){1,1000})*", "aaaa", 0,4, 0,4, 3,4);
 
-        T8("(((((aa)|((a?)*))*){0,10}){0,10}){0,10}", "",       0,0, 0,0, 0,0, 0,0, 0,0, -1,-1, 0,0, 0,0);
-        T8("(((((aa)|((a?)*))*){0,10}){0,10}){0,10}", "aaa",    0,3, 0,3, 0,3, 0,3, 0,3, -1,-1, 0,3, 2,3);
-        T8("(((((aa)|((a?)*))*){0,10}){0,10}){0,10}", "aaaaa",  0,5, 0,5, 0,5, 0,5, 0,5, -1,-1, 0,5, 4,5);
+        T8("(((((aa)|((a?)*))*){0,10}){0,10}){0,10}", "", 0,0, 0,0, 0,0, 0,0, 0,0, -1,-1, 0,0, 0,0);
+        if (!((flags & REG_BACKWARD) && !(flags & REG_GTOP))) {
+            // expected failures for Cox algorithm
+            T8("(((((aa)|((a?)*))*){0,10}){0,10}){0,10}", "aaa", 0,3, 0,3, 0,3, 0,3, 0,3, -1,-1, 0,3, 2,3);
+            T8("(((((aa)|((a?)*))*){0,10}){0,10}){0,10}", "aaaaa", 0,5, 0,5, 0,5, 0,5, 0,5, -1,-1, 0,5, 4,5);
+        }
     }
 
     T6("((((a?)+)|(aa))+)", "aaa", 0,3, 0,3, 0,3, 0,3, 2,3, -1,-1);
@@ -1055,10 +1063,8 @@ static int test_all_leftmost(int flags)
 #undef T9
 #undef T10
 
-int main(int argc, char **argv)
+int main()
 {
-    const bool backwards = argc > 1 && strcmp(argv[1], "--backwards") == 0;
-
     int e = 0;
 
     e |= test_all_posix(0);
@@ -1077,10 +1083,8 @@ int main(int argc, char **argv)
     e |= test_all_leftmost(REG_NFA | REG_LEFTMOST);
     e |= test_all_leftmost(REG_NFA | REG_LEFTMOST | REG_TRIE);
 
-    if (backwards) {
-        e |= test_all_posix(REG_NFA | REG_BACKWARD);
-        e |= test_all_posix(REG_NFA | REG_BACKWARD | REG_GTOP);
-    }
+    e |= test_all_posix(REG_NFA | REG_BACKWARD);
+    e |= test_all_posix(REG_NFA | REG_BACKWARD | REG_GTOP);
 
     return e;
 }
