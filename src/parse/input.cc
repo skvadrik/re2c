@@ -43,7 +43,6 @@ bool Input::open(const std::string &filename, const std::string *parent
 
     if (!file) {
         fatal("cannot open file: %s", name.c_str());
-        return false;
     }
 
     // name displayed in #line directives is the resolved name

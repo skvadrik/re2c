@@ -408,13 +408,13 @@ bool misuse_of_named_def(RESpec &spec, const AST *ast)
 {
     DASSERT(ast->type == AST::REF);
 
-    if (!spec.opts->posix_syntax) return false;
-
-    spec.msg.fatal(ast->loc
-        , "implicit grouping is forbidden with '--posix-captures'"
-            " option, please wrap '%s' in capturing parenthesis"
-        , ast->ref.name->c_str());
-    return true;
+    if (spec.opts->posix_syntax) {
+        spec.msg.fatal(ast->loc
+            , "implicit grouping is forbidden with '--posix-captures'"
+                " option, please wrap '%s' in capturing parenthesis"
+            , ast->ref.name->c_str());
+    }
+    return false;
 }
 
 void assert_tags_used_once(RESpec &spec, const Rule &rule
