@@ -10,7 +10,7 @@
 namespace re2c {
 struct nfa_t;
 struct dfa_t;
-struct RangeMgr;
+class RangeMgr;
 } // namespace re2c
 
 typedef ptrdiff_t regoff_t;

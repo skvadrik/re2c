@@ -23,7 +23,7 @@ namespace re2c {
 
 // fwd
 struct opt_t;
-struct Msg;
+class Msg;
 struct dfa_t;
 struct tcmd_t;
 
