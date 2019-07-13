@@ -257,10 +257,9 @@ void closure_posix(psimctx_t &ctx)
     }
 }
 
-static int32_t precedence(psimctx_t &ctx, const conf_t &x
-    , const conf_t &y RE2C_ATTR((unused)))
+static int32_t precedence(psimctx_t &ctx, const conf_t &x, const conf_t &y)
 {
-    DASSERT(x.state == y.state);
+    DASSERT(x.state == y.state); (void)y;
     const uint32_t idx = index(x.state, ctx.nfa);
 
     const size_t ntags = ctx.nfa.tags.size();

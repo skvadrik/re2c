@@ -274,9 +274,9 @@ int32_t khistory_t::precedence(ctx_t &ctx
         if (x.thist == y.thist) continue;
 
         std::vector<int32_t> &p1 = ctx.history.path1, &p2 = ctx.history.path2;
-        const int32_t
-            n1 RE2C_ATTR((unused)) = subhistory_list(ctx.history, p1, x.thist, t),
-            n2 RE2C_ATTR((unused)) = subhistory_list(ctx.history, p2, y.thist, t);
+        int32_t n1, n2;
+        (void)(n1 = subhistory_list(ctx.history, p1, x.thist, t));
+        (void)(n2 = subhistory_list(ctx.history, p2, y.thist, t));
         DASSERT(n1 == n2);
 
         std::vector<int32_t>::const_reverse_iterator
