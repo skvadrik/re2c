@@ -1,13 +1,14 @@
-#include <stdio.h> /* fprintf() */
-#include <string>
-#include "src/msg/ver_to_vernum.h" /* re2c::ver_to_vernum() */
+#include <stdio.h>
+#include <string.h>
+
+#include "src/msg/ver_to_vernum.h"
 
 
 namespace re2c_test {
 
 struct examples_t {
-    std::string in;
-    std::string expected;
+    const char *in;
+    const char *expected;
 };
 
 static const examples_t EXAMPLES[] =
@@ -111,22 +112,25 @@ static int test()
 {
     int failures = 0;
 
-    for (size_t i = 0; i < sizeof (EXAMPLES) / sizeof (EXAMPLES[0]); ++i) {
+    for (size_t i = 0; i < sizeof(EXAMPLES) / sizeof(EXAMPLES[0]); ++i) {
         const examples_t & e = EXAMPLES[i];
 
-        const std::string got = re2c::ver_to_vernum(e.in.c_str());
+        const std::string got = re2c::ver_to_vernum(e.in);
         if (got == e.expected) {
-            fprintf (stderr, "PASS: re2c::ver_to_vernum('%s') = '%s'\n", e.in.c_str(), got.c_str());
+            fprintf(stderr, "PASS: re2c::ver_to_vernum('%s') = '%s'\n"
+                , e.in, got.c_str());
         }
         else {
             ++failures;
             if (got.empty()) {
-                fprintf (stderr, "FAIL: re2c::ver_to_vernum('%s') returned error\n",
-                    e.in.c_str());
+                fprintf(stderr
+                    , "FAIL: re2c::ver_to_vernum('%s') returned error\n"
+                    , e.in);
             }
             else {
-                fprintf (stderr, "FAIL: re2c::ver_to_vernum('%s') = '%s', expected '%s'\n",
-                    e.in.c_str(), got.c_str(), e.expected.c_str());
+                fprintf(stderr
+                    , "FAIL: re2c::ver_to_vernum('%s') = '%s', expected '%s'\n"
+                    , e.in, got.c_str(), e.expected);
             }
         }
     }
@@ -136,7 +140,7 @@ static int test()
 
 } // namespace re2c_test
 
-int main ()
+int main()
 {
-    return re2c_test::test ();
+    return re2c_test::test();
 }
