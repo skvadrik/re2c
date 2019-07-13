@@ -93,14 +93,14 @@ static void copy_offs(psimctx_t &ctx, const nfa_state_t *y, const nfa_state_t *x
 static inline void accept_offsets(psimctx_t &ctx, const nfa_state_t *s);
 
 // debug
-int D = 0;
+static int D = 0;
 static void prtoff(psimctx_t &ctx, size_t x, bool newer);
 static inline void prtoff4(psimctx_t &ctx, size_t x);
 static inline void prtoff5(psimctx_t &ctx, size_t x);
 
-regoff_t *offsets4 = NULL;
-regoff_t *offsets5 = NULL;
-regoff_t *offsets6 = NULL;
+static regoff_t *offsets4 = NULL;
+static regoff_t *offsets5 = NULL;
+static regoff_t *offsets6 = NULL;
 
 int regexec_nfa_posix_backward(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int /* eflags */)
