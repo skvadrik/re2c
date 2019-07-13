@@ -91,12 +91,14 @@ TRY_CXXFLAG([-Wsign-conversion])
 TRY_CXXFLAG([-Werror=return-type])
 TRY_CXXFLAG([-O2])
 TRY_CXXFLAG([-Weverything], m4_join([ ],
-    [-Wno-unknown-warning-option],  dnl CLANG eats some GCC options only to warn they are unknown
-    [-Wno-reserved-id-macro],       dnl to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
+    [-Wno-unknown-warning-option], dnl CLANG eats some GCC options only to warn they are unknown
+    [-Wno-reserved-id-macro], dnl to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
     [-Wno-padded],
-    [-Wno-old-style-cast],          dnl RE2C-generated lexer has lots of C-syle casts because of 're2c:yych:conversion = 1;'
+    [-Wno-old-style-cast], dnl RE2C-generated lexer has lots of C-syle casts because of 're2c:yych:conversion = 1;'
     [-Wno-nested-anon-types],
-    [-Wno-global-constructors]))    dnl initialization of global constants with std::numeric_limits<...> (mostly for size_t)
+    [-Wno-global-constructors] dnl initialization of global constants with std::numeric_limits<...> (mostly for size_t)
+    [-Wno-shadow-field-in-constructor] dnl using same names in ctor seems more like a feature
+    [-Wno-undefined-func-template])) dnl explicit specialization to reduce build dependencies
 
 
 # needed by src/c99_stdint.h
