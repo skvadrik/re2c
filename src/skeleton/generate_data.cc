@@ -338,7 +338,7 @@ template <typename cunit_t, typename key_t> static void gencover(
             arc = node.arcs.begin(),
             end = node.arcs.end();
         const suffix_t *min_sfx = NULL;
-        size_t min_idx;
+        size_t min_idx = 0;
 
         // pick the shortest suffix to minimize cover size
         // handle all child states before setting this state's suffix

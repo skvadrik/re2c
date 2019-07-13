@@ -63,7 +63,7 @@ static Result bench_re2c(const char *regexp, std::vector<std::string> &strings
 
     regex_t re;
     int err;
-    clock_t /*t1, t2,*/ t3, t4;
+    clock_t /*t1 = 0, t2 = 0,*/ t3 = 0, t4 = 0;
 
     //t1 = clock();
     err = regcomp(&re, regexp, flags);
@@ -112,7 +112,7 @@ static Result bench_re2(const char *regexp, std::vector<std::string> &strings
     }
 
     RE2 *re2;
-    clock_t /*t1, t2,*/ t3, t4;
+    clock_t /*t1 = 0, t2 = 0,*/ t3 = 0, t4 = 0;
     bool ok = true;
 
     //t1 = clock();
