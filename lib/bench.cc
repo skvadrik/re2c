@@ -27,7 +27,7 @@ struct Result
 };
 
 static const uint64_t UNAVAIL = 0xFFFFffffFFFFffff;
-static const int XREG_RE2 = 1 << 31;
+static const int XREG_RE2 = 1 << 30;
 
 static inline void show(const std::vector<Result> &results)
 {
