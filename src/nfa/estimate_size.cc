@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "src/debug/debug.h"
+#include "src/nfa/nfa.h"
 #include "src/parse/ast.h"
 #include "src/regexp/re.h"
 

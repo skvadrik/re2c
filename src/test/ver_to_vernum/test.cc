@@ -107,7 +107,7 @@ static const examples_t EXAMPLES[] =
     { "0.9.1",    "000901" }
 };
 
-int test ()
+static int test()
 {
     int failures = 0;
 

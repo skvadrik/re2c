@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "src/parse/ast.h"
+#include "src/parse/parse.h"
 #include "src/regexp/rule.h"
 
 
