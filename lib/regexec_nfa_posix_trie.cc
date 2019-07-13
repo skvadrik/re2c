@@ -39,8 +39,8 @@ int regexec_nfa_posix_trie(const regex_t *preg, const char *string
     }
     make_final_step(ctx);
 
-    return finalize(ctx, string, nmatch, pmatch);
     ctx.history.cache.clear();
+    return finalize(ctx, string, nmatch, pmatch);
 }
 
 void closure_posix(pzsimctx_t &ctx)
