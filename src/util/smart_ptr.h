@@ -42,7 +42,7 @@ private:
             delete count;
             delete ptr;
         }
-    };
+    }
 };
 
 template <typename T>

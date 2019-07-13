@@ -32,7 +32,7 @@ namespace re2c {
 #define YYCURSOR  cur
 #define YYLIMIT   lim
 #define YYMARKER  mar
-#define YYFILL(n) { if (!fill (n)) fatal("unexpected end of input"); }
+#define YYFILL(n) do { if (!fill(n)) fatal("unexpected end of input"); } while(0)
 
 /*!re2c
     // source code is in ASCII, but re2c assumes unsigned chars
@@ -61,6 +61,9 @@ namespace re2c {
 */
 
 /*!header:re2c:on*/
+#ifndef _RE2C_PARSE_LEX_
+#define _RE2C_PARSE_LEX_
+
 #include <stddef.h>
 #include <string.h>
 #include "src/util/forbid_copy.h"
@@ -112,6 +115,8 @@ struct ScannerState
     FORBID_COPY(ScannerState);
 };
 } // namespace re2c
+
+#endif // _RE2C_PARSE_LEX_
 /*!header:re2c:off*/
 
 Scanner::ParseMode Scanner::echo(Output &out)

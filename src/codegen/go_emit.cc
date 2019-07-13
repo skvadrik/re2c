@@ -155,7 +155,7 @@ label_t CpgotoTable::max_label () const
         if (max < table[i]->label)
         {
             max = table[i]->label;
-        };
+        }
     }
     return max;
 }

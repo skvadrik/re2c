@@ -14,7 +14,7 @@
 
 namespace re2c {
 
-#define YYFILL(n) { if (!fill (n)) fatal("unexpected end of input"); }
+#define YYFILL(n) do { if (!fill(n)) fatal("unexpected end of input"); } while(0)
 
 // global re2c config (affects the whole file)
 /*!re2c

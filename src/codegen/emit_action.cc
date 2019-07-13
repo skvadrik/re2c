@@ -244,7 +244,7 @@ void gen_rescan_label(Output &o, const State *s)
 {
     const opt_t *opts = o.block().opts;
     if (opts->eof == NOEOF || endstate(s)) {
-        ; // no rescan label
+        // no rescan label
     }
     else if (opts->fFlag) {
         o.wstring(opts->yyfilllabel).wu32(o.fill_index).ws(":\n");

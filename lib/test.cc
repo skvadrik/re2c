@@ -86,18 +86,18 @@ end:
 // 'long' as vararg requres suffix 'L', which is easy to forget and hard
 // to notice (the problem is platform/toolchain-specific).
 #define  GS                                              static const regoff_t gs[]
-#define  T(R,S,gs)                                       e |= test(R,S,sizeof(gs)/sizeof(gs[0])/2,gs,flags);
-#define  T0(R,S)                                         e |= test(R,S,0,NULL,flags);
-#define  T1(R,S,a,b)                                     { GS = {a,b};                                     T(R,S,gs); }
-#define  T2(R,S,a,b,c,d)                                 { GS = {a,b,c,d};                                 T(R,S,gs); }
-#define  T3(R,S,a,b,c,d,e,f)                             { GS = {a,b,c,d,e,f};                             T(R,S,gs); }
-#define  T4(R,S,a,b,c,d,e,f,g,h)                         { GS = {a,b,c,d,e,f,g,h};                         T(R,S,gs); }
-#define  T5(R,S,a,b,c,d,e,f,g,h,i,j)                     { GS = {a,b,c,d,e,f,g,h,i,j};                     T(R,S,gs); }
-#define  T6(R,S,a,b,c,d,e,f,g,h,i,j,k,l)                 { GS = {a,b,c,d,e,f,g,h,i,j,k,l};                 T(R,S,gs); }
-#define  T7(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n)             { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n};             T(R,S,gs); }
-#define  T8(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)         { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p};         T(R,S,gs); }
-#define  T9(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r)     { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r};     T(R,S,gs); }
-#define T10(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t) { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t}; T(R,S,gs); }
+#define  T(R,S,gs)                                       do { e |= test(R,S,sizeof(gs)/sizeof(gs[0])/2,gs,flags); } while(0)
+#define  T0(R,S)                                         do { e |= test(R,S,0,NULL,flags); } while(0)
+#define  T1(R,S,a,b)                                     do { GS = {a,b};                                     T(R,S,gs); } while(0)
+#define  T2(R,S,a,b,c,d)                                 do { GS = {a,b,c,d};                                 T(R,S,gs); } while(0)
+#define  T3(R,S,a,b,c,d,e,f)                             do { GS = {a,b,c,d,e,f};                             T(R,S,gs); } while(0)
+#define  T4(R,S,a,b,c,d,e,f,g,h)                         do { GS = {a,b,c,d,e,f,g,h};                         T(R,S,gs); } while(0)
+#define  T5(R,S,a,b,c,d,e,f,g,h,i,j)                     do { GS = {a,b,c,d,e,f,g,h,i,j};                     T(R,S,gs); } while(0)
+#define  T6(R,S,a,b,c,d,e,f,g,h,i,j,k,l)                 do { GS = {a,b,c,d,e,f,g,h,i,j,k,l};                 T(R,S,gs); } while(0)
+#define  T7(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n)             do { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n};             T(R,S,gs); } while(0)
+#define  T8(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)         do { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p};         T(R,S,gs); } while(0)
+#define  T9(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r)     do { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r};     T(R,S,gs); } while(0)
+#define T10(R,S,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t) do { GS = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t}; T(R,S,gs); } while(0)
 
 static int test_all_posix(int flags)
 {

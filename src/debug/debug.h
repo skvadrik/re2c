@@ -59,9 +59,9 @@ struct dump_dfa_t
     template<typename ctx_t> void state(const ctx_t &, bool);
 };
 
-#define DASSERT(x) assert(x)
+#define DASSERT(x)                   assert(x)
 #define DDUMP_NFA(opts, nfa)         if (opts->dump_nfa) dump_nfa(nfa)
-#define DDUMP_DFA_RAW(ctx, isnew)    ctx.dc_dump.state(ctx, is_new);
+#define DDUMP_DFA_RAW(ctx, isnew)    do { ctx.dc_dump.state(ctx, is_new); } while(0)
 #define DDUMP_DFA_DET(opts, dfa)     if (opts->dump_dfa_det) dump_dfa(dfa)
 #define DDUMP_DFA_TAGOPT(opts, dfa)  if (opts->dump_dfa_tagopt) dump_dfa(dfa)
 #define DDUMP_DFA_MIN(opts, dfa)     if (opts->dump_dfa_min) dump_dfa(dfa)
