@@ -82,10 +82,10 @@ static void make_one_step(psimctx_t &, uint32_t);
 static void make_final_step(psimctx_t &);
 static void update_final_offsets(psimctx_t &ctx, const conf_t &c);
 static void closure_simple(psimctx_t &ctx);
-static void relax_gtop(psimctx_t &ctx, const typename psimctx_t::conf_t &c);
+static void relax_gtop(psimctx_t &ctx, const psimctx_t::conf_t &c);
 static void closure_posix_gtop(psimctx_t &ctx);
 static bool scan(psimctx_t &ctx, nfa_state_t *q, bool all);
-static bool relax_gor1(psimctx_t &ctx, const typename psimctx_t::conf_t &c);
+static bool relax_gor1(psimctx_t &ctx, const psimctx_t::conf_t &c);
 static void closure_posix_gor1(psimctx_t &ctx);
 static inline void closure_posix(psimctx_t &ctx);
 static inline size_t index(const nfa_state_t *s, const nfa_t &nfa);
@@ -188,12 +188,11 @@ static size_t index(const nfa_state_t *s, const nfa_t &nfa)
 
 void closure_simple(psimctx_t &ctx)
 {
-    typename psimctx_t::confset_t &state = ctx.state, &stack = ctx.reach;
+    psimctx_t::confset_t &state = ctx.state, &stack = ctx.reach;
     state.clear();
 
     for (; !stack.empty(); ) {
-        typedef typename psimctx_t::conf_t conf_t;
-        const conf_t x = stack.back();
+        const psimctx_t::conf_t x = stack.back();
         stack.pop_back();
         nfa_state_t *n = x.state;
 
@@ -204,14 +203,14 @@ void closure_simple(psimctx_t &ctx)
 
         switch (n->type) {
             case nfa_state_t::NIL:
-                stack.push_back(conf_t(x, n->nil.out));
+                stack.push_back(psimctx_t::conf_t(x, n->nil.out));
                 break;
             case nfa_state_t::ALT:
-                stack.push_back(conf_t(x, n->alt.out2));
-                stack.push_back(conf_t(x, n->alt.out1));
+                stack.push_back(psimctx_t::conf_t(x, n->alt.out2));
+                stack.push_back(psimctx_t::conf_t(x, n->alt.out1));
                 break;
             case nfa_state_t::TAG:
-                stack.push_back(conf_t(x, n->tag.out, 0));
+                stack.push_back(psimctx_t::conf_t(x, n->tag.out, 0));
                 break;
             case nfa_state_t::RAN:
             case nfa_state_t::FIN:
@@ -295,7 +294,7 @@ static int32_t precedence(psimctx_t &ctx, const conf_t &x, const conf_t &y)
 
 void closure_posix_gor1(psimctx_t &ctx)
 {
-    typename psimctx_t::confset_t &state = ctx.state, &reach = ctx.reach;
+    psimctx_t::confset_t &state = ctx.state, &reach = ctx.reach;
     std::vector<nfa_state_t*>
         &topsort = ctx.gor1_topsort,
         &linear = ctx.gor1_linear;
@@ -307,7 +306,7 @@ void closure_posix_gor1(psimctx_t &ctx)
     // Reverse order happens to result in less test errors, but both orders
     // do not yield a correct algorithm (paths are still compared after
     // their join point sometimes).
-    for (typename psimctx_t::rcconfiter_t c = reach.rbegin(); c != reach.rend(); ++c) {
+    for (psimctx_t::rcconfiter_t c = reach.rbegin(); c != reach.rend(); ++c) {
         regoff_t       *ox = offsets5 + ntags * index(c->state, ctx.nfa) * 2;
         const regoff_t *oy = offsets6 + ntags * c->origin * 2;
         memcpy(ox, oy, ntags * sizeof(regoff_t) * 2);
@@ -354,7 +353,7 @@ bool scan(psimctx_t &ctx, nfa_state_t *q, bool all)
 {
     bool any = false;
 
-    typedef typename psimctx_t::conf_t conf_t;
+    typedef psimctx_t::conf_t conf_t;
     const conf_t x = ctx.state[q->clos];
 
     switch (q->type) {
@@ -392,9 +391,9 @@ bool scan(psimctx_t &ctx, nfa_state_t *q, bool all)
     return any;
 }
 
-bool relax_gor1(psimctx_t &ctx, const typename psimctx_t::conf_t &x)
+bool relax_gor1(psimctx_t &ctx, const psimctx_t::conf_t &x)
 {
-    typename psimctx_t::confset_t &state = ctx.state;
+    psimctx_t::confset_t &state = ctx.state;
     nfa_state_t *q = x.state;
     const uint32_t idx = q->clos;
 
@@ -428,14 +427,14 @@ bool relax_gor1(psimctx_t &ctx, const typename psimctx_t::conf_t &x)
 
 void closure_posix_gtop(psimctx_t &ctx)
 {
-    const typename psimctx_t::confset_t &reach = ctx.reach;
-    typename psimctx_t::confset_t &state = ctx.state;
+    const psimctx_t::confset_t &reach = ctx.reach;
+    psimctx_t::confset_t &state = ctx.state;
     gtop_heap_t &heap = ctx.gtop_heap;
     const size_t ntags = ctx.nfa.tags.size();
 
     state.clear();
     memcpy(offsets6, offsets4, ctx.nfa.size * ntags * sizeof(regoff_t) * 2);
-    for (typename psimctx_t::cconfiter_t c = reach.begin(); c != reach.end(); ++c) {
+    for (psimctx_t::cconfiter_t c = reach.begin(); c != reach.end(); ++c) {
         regoff_t       *ox = offsets5 + ntags * index(c->state, ctx.nfa) * 2;
         const regoff_t *oy = offsets6 + ntags * c->origin * 2;
         memcpy(ox, oy, ntags * sizeof(regoff_t) * 2);
@@ -455,7 +454,7 @@ void closure_posix_gtop(psimctx_t &ctx)
         if (D) fprintf(stderr, "> %lu ", index(q, ctx.nfa));
         prtoff4(ctx, index(q, ctx.nfa));
 
-        typedef typename psimctx_t::conf_t conf_t;
+        typedef psimctx_t::conf_t conf_t;
         const conf_t x = ctx.state[q->clos];
 
         switch (q->type) {
@@ -480,9 +479,9 @@ void closure_posix_gtop(psimctx_t &ctx)
     }
 }
 
-void relax_gtop(psimctx_t &ctx, const typename psimctx_t::conf_t &c)
+void relax_gtop(psimctx_t &ctx, const psimctx_t::conf_t &c)
 {
-    typename psimctx_t::confset_t &state = ctx.state;
+    psimctx_t::confset_t &state = ctx.state;
     nfa_state_t *q = c.state;
     const uint32_t idx = q->clos;
 
