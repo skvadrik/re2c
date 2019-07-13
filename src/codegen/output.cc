@@ -84,7 +84,7 @@ OutputBlock::~OutputBlock ()
 Output::Output(Msg &msg)
     : cblocks()
     , hblocks()
-    , blocks(&cblocks)
+    , pblocks(&cblocks)
     , label_counter()
     , fill_index(0)
     , state_goto(false)
@@ -105,12 +105,12 @@ Output::~Output ()
 
 void Output::header_mode(bool on)
 {
-    blocks = on ? &hblocks : &cblocks;
+    pblocks = on ? &hblocks : &cblocks;
 }
 
 OutputBlock& Output::block()
 {
-    return *blocks->back();
+    return *pblocks->back();
 }
 
 std::ostream & Output::stream ()
@@ -247,7 +247,7 @@ Output &Output::wdelay_tags(const ConfTags *cf, bool mtags)
         OutputFragment *frag = new OutputFragment(
             mtags ? OutputFragment::MTAGS : OutputFragment::STAGS, 0);
         frag->tags = cf;
-        blocks->back()->fragments.push_back(frag);
+        pblocks->back()->fragments.push_back(frag);
     }
     return *this;
 }
@@ -256,7 +256,7 @@ Output & Output::wdelay_line_info_input (const loc_t &loc)
 {
     OutputFragment *frag = new OutputFragment(OutputFragment::LINE_INFO_INPUT, 0);
     frag->loc = new loc_t(loc);
-    blocks->back()->fragments.push_back(frag);
+    pblocks->back()->fragments.push_back(frag);
     return *this;
 }
 
@@ -356,7 +356,7 @@ void Output::new_block(Opt &opts, const loc_t &loc)
 {
     OutputBlock *b = new OutputBlock(loc);
     b->opts = opts.snapshot();
-    blocks->push_back(b);
+    pblocks->push_back(b);
 
     // start label hapens to be the only option
     // that must be reset for each new block

@@ -180,9 +180,8 @@ struct Cpgoto
 
 struct Dot
 {
-    const State * from;
     Cases * cases;
-    Dot(const Span *sp, uint32_t nsp, const State *s, uint32_t eof);
+    Dot(const Span *sp, uint32_t nsp, uint32_t eof);
     ~Dot ();
     void emit (Output & o, const DFA &dfa, const State *from) const;
 

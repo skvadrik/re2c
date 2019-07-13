@@ -105,9 +105,9 @@ void dump_dfa_t::state(const ctx_t &ctx, bool isnew)
     if (origin == dfa_t::NIL) {
         fprintf(stderr, "  void [shape=point]\n");
 
-        uint32_t i = 0;
-        for (c = b; c != e; ++c, ++i) {
-            fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", i);
+        uint32_t j = 0;
+        for (c = b; c != e; ++c, ++j) {
+            fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", j);
             dump_tags<ctx_t>(tvtbl, thist, c->ttran, c->tvers);
             fprintf(stderr, "\"]\n");
         }
@@ -125,11 +125,11 @@ void dump_dfa_t::state(const ctx_t &ctx, bool isnew)
             fprintf(stderr, "\"]\n");
         }
 
-        uint32_t i = 0;
-        for (c = b; c != e; ++c, ++i) {
+        uint32_t j = 0;
+        for (c = b; c != e; ++c, ++j) {
             fprintf(stderr,
                 "  %u:%u:e -> %s%u:%u:w [label=\"%u",
-                origin, c->origin, prefix, state, i, symbol);
+                origin, c->origin, prefix, state, j, symbol);
             dump_tags<ctx_t>(tvtbl, thist, c->ttran, c->tvers);
             fprintf(stderr, "\"]\n");
         }
@@ -146,9 +146,9 @@ void dump_dfa_t::state(const ctx_t &ctx, bool isnew)
         DASSERT(c != e);
 
         fprintf(stderr, "  r%u [shape=none label=\"(", state);
-        for (size_t t = r.ltag; t < r.htag; ++t) {
-            if (t > r.ltag) fprintf(stderr, " ");
-            fprintf(stderr, "%s%d", tagname(dfa.tags[t]), abs(dfa.finvers[t]));
+        for (size_t j = r.ltag; j < r.htag; ++j) {
+            if (j > r.ltag) fprintf(stderr, " ");
+            fprintf(stderr, "%s%d", tagname(dfa.tags[j]), abs(dfa.finvers[j]));
         }
         fprintf(stderr, ")\"]\n");
 

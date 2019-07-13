@@ -127,7 +127,7 @@ Scanner::ParseMode Scanner::echo(Output &out)
 next:
     tok = cur;
 loop:
-    loc = cur_loc();
+    location = cur_loc();
     ptr = cur;
 /*!re2c
     "%{" | "/*!re2c" {
@@ -296,7 +296,7 @@ int Scanner::scan()
     const char *p;
 scan:
     tok = cur;
-    loc = cur_loc();
+    location = cur_loc();
 /*!re2c
     "{"  { lex_code_in_braces(); return TOKEN_CODE; }
     ":=" { lex_code_indented(); return TOKEN_CODE; }

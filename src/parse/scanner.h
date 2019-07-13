@@ -34,7 +34,7 @@ public:
 private:
     std::vector<Input*> files;
     const conopt_t *globopts;
-    loc_t loc;
+    loc_t location;
 
 public:
     Scanner(const conopt_t *o, Msg &m);
@@ -93,7 +93,7 @@ inline Scanner::Scanner(const conopt_t *o, Msg &m)
     , msg(m)
     , files()
     , globopts(o)
-    , loc(ATSTART)
+    , location(ATSTART)
 {}
 
 inline loc_t Scanner::cur_loc() const
@@ -110,7 +110,7 @@ inline loc_t Scanner::cur_loc() const
 
 inline const loc_t &Scanner::tok_loc() const
 {
-    return loc;
+    return location;
 }
 
 inline void Scanner::set_line(uint32_t l)

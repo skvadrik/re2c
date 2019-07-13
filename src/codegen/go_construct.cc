@@ -216,9 +216,8 @@ Cpgoto::Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan
     , table (new CpgotoTable (span, nSpans))
 {}
 
-Dot::Dot (const Span * sp, uint32_t nsp, const State * s, uint32_t eof)
-    : from (s)
-    , cases (new Cases (sp, nsp, false, eof))
+Dot::Dot (const Span * sp, uint32_t nsp, uint32_t eof)
+    : cases (new Cases (sp, nsp, false, eof))
 {}
 
 Go::Go ()
@@ -280,7 +279,7 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
     const bool part_skip = opts->eager_skip && !skip;
     if (opts->target == TARGET_DOT) {
         type = DOT;
-        info.dot = new Dot (span, nSpans, from, eof);
+        info.dot = new Dot (span, nSpans, eof);
     }
     else if (opts->gFlag && !part_skip && (dSpans >= opts->cGotoThreshold) && !low_spans_have_tags) {
         type = CPGOTO;

@@ -103,7 +103,7 @@ class Output
 {
     blocks_t cblocks; /* .c file */
     blocks_t hblocks; /* .h file */
-    blocks_t *blocks; /* selector */
+    blocks_t *pblocks; /* selector */
 
 public:
     counter_t<label_t> label_counter;
