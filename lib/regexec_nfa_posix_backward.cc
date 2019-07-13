@@ -257,7 +257,8 @@ void closure_posix(psimctx_t &ctx)
     }
 }
 
-static int32_t precedence(psimctx_t &ctx, const conf_t &x, const conf_t &y)
+static int32_t precedence(psimctx_t &ctx, const conf_t &x
+    , const conf_t &y RE2C_GXX_ATTRIBUTE((unused)))
 {
     DASSERT(x.state == y.state);
     const size_t idx = index(x.state, ctx.nfa);
