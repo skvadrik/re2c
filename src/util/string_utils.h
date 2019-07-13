@@ -7,10 +7,8 @@
 
 namespace re2c {
 
-template<typename type_t> void strrreplace(
-    std::string &s,
-    const std::string &s1,
-    const type_t &v)
+template<typename type_t>
+void strrreplace(std::string &s, const std::string &s1, const type_t &v)
 {
     std::ostringstream sv;
     sv << v;
@@ -26,7 +24,7 @@ template<typename type_t> void strrreplace(
 }
 
 template<typename T>
-static std::string to_string(const T &v)
+std::string to_string(const T &v)
 {
     std::ostringstream s;
     s << v;
