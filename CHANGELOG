@@ -1,3 +1,51 @@
+Version 1.2 (2019-07-??)
+--------------------------
+- Added EOF rule '$' and configuration 're2c:eof'.
+- Added '/*!include:re2c ... */' directive and -I option.
+- Added '/*!header:re2c:on*/' and '/*!header:re2c:off*/' directives.
+- Added '--input-encoding <ascii | utf8>' option (#237, #250).
+- Added include file with a list of definitions for Unicode character classes
+  (#235).
+- Added '--location-format <gnu | msvc>' option, default is 'gnu' (#195).
+- Added '--verbose' option.
+- Added configurations for options:
+    '-o --output'
+    '-t --type-header'
+- Removed configurations for internal/debug options.
+- Extended '-r' option: allow to mix multiple /*!rules:re2c*/, /*!use:re2c*/
+  and /*!re2c*/ blocks (#55).
+- Fixed '-F --flex-support' option: parsing and operator precedence (#229,
+  #242).
+- Changed difference operator '/' to apply before encoding expansion of
+  operands (#236).
+- Changed output generation of output file to be atomic (#245).
+- Co-authored research paper "Efficient POSIX Submatch Extraction on NFA".
+- Added experimental libre2c library ('--enable-libs' configure option)
+  with the following algorithms:
+    TDFA with leftmost-greedy disambiguation
+    TDFA with POSIX disambiguation (Okui-Suzuki algorithm)
+    TNFA with leftmost-greedy disambiguation
+    TNFA with POSIX disambiguation (Okui-Suzuki algorithm)
+    TNFA with lazy POSIX disambiguation (Okui-Suzuki algorithm)
+    TNFA with POSIX disambiguation (Kuklewicz algorithm)
+    TNFA with POSIX disambiguation (Cox algorithm)
+- Added debug subsystem ('--enable-debug' configure option) and new debug
+  options:
+    '-dump-cfg'
+    '-dump-interf'
+    '-dump-closure-stats'
+- Added internal options:
+    '--posix-closure <gor1 | gtop>'
+- Fixed a number of crashes found by American Fuzzy Lop fuzzer (#226, #227,
+    #228, #231, #232, #233, #234, #238).
+- Fixed handling of newlines: correctly parse multi-character newlines CR LF
+    in '#line' directives; consistently convert all newlines in the generated
+    file to Unix-style LF.
+- Changed default tarball format from .gz to .xz (#221).
+- Fixed a number of other bugs and issues (#2, #6, #10, #44, #49, #98, #104,
+    #105, #114, #120, #167, #168, #180, #182, #196, #198, #210, #215, #220,
+    #223, #224, #225, #230, #239, #241, #243, #246, #247, #248, #251).
+
 Version 1.1.1 (2018-08-30)
 --------------------------
 - Fixed bug #211 re2c '-V' throws 'std::out_of_range' (version to vernum conversion).
