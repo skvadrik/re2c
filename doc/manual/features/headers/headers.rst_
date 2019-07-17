@@ -1,0 +1,50 @@
+Re2c allows to generate header file from the input ``.re`` file using option
+``-t --type-header`` (or the corresponding configurations) and directives
+``/*!header:re2c:on*/`` and ``/*!header:re2c:off*/``. The first directive
+marks the beginning of header file, and the second directive marks the end of
+it. This may be needed in cases when re2c is used to generate definitions of
+constants, variables and structs that must be visible from other translation
+units.
+Below is an example of generating header file that contains definitions of
+``YYMAXFILL`` and lexer state with tag variables. Note that ``YYMAXFILL`` and
+tag variables depend on the grammar rules in the input ``.re`` file and cannot
+be hard-coded.
+
+.. code-block:: cpp
+
+    /*!header:re2c:on*/
+    /*!max:re2c*/
+    struct State {
+        char buffer[4096 + YYMAXFILL], *cursor, *marker, *limit;
+        /*!stags:re2c format = "char *@@; "; */
+    };
+    /*!header:re2c:off*/
+
+    #include "lex.h"
+    #define YYCTYPE   char
+    #define YYCURSOR  state->cursor
+    #define YYMARKER  state->marker
+    #define YYLIMIT   state->limit
+    #define YYFILL(n) return 2
+    int lex(State *state)
+    {
+        char *x, *y;
+        /*!re2c
+            re2c:tags:expression = state->@@;
+            re2c:flags:t         = lex.h;
+
+            "a"* @x "b"* @y "c"* { return 0; }
+            *                    { return 1; }
+        */
+    }
+
+The generated header will look like this:
+
+.. code-block:: cpp
+
+    #define YYMAXFILL 1
+
+    struct State {
+        char buffer[4096 + YYMAXFILL], *cursor, *marker, *limit;
+        char *yyt1; char *yyt2; 
+    };

@@ -160,12 +160,6 @@
 ``re2c:flags:d`` or ``re2c:flags:debug-output``
     Same as ``-d --debug-output`` command-line option.
 
-``re2c:flags:dfa-minimization = 'moore';``
-    Same as ``--dfa-minimization`` command-line option.
-
-``re2c:flags:eager-skip = 0;``
-    Same as ``--eager-skip`` command-line option.
-
 ``re2c:flags:e`` or ``re2c:flags:ecb``
     Same as ``-e --ecb`` command-line option.
 
@@ -184,17 +178,17 @@
 ``re2c:flags:input = 'default';``
     Same as ``--input`` command-line option.
 
-``re2c:flags:lookahead = 1;``
-    Same as inverted ``--no-lookahead`` command-line option.
-
-``re2c:flags:optimize-tags = 1;``
-    Same as inverted ``--no-optimize-tags`` command-line option.
-
 ``re2c:flags:P`` or ``re2c:flags:posix-captures``
     Same as ``-P --posix-captures`` command-line option.
 
 ``re2c:flags:s`` or ``re2c:flags:nested-ifs``
     Same as ``-s --nested-ifs`` command-line option.
+
+``re2c:flags:o`` or ``re2c:flags:output``
+    Same as ``-o --output`` command-line option.
+
+``re2c:flags:t`` or ``re2c:flags:type-header``
+    Same as ``-t --type-header`` command-line option.
 
 ``re2c:flags:T`` or ``re2c:flags:tags``
     Same as ``-T --tags`` command-line option.

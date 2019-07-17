@@ -45,148 +45,79 @@ control and customize the generated DFA.
 .B \fB\-? \-h \-\-help\fP
 Show help message.
 .TP
+.B \fB\-1 \-\-single\-pass\fP
+Deprecated. Does nothing (single pass is the default now).
+.TP
+.B \fB\-8 \-\-utf\-8\fP
+Generate a lexer that reads input in UTF\-8 encoding.
+re2c assumes that character range is 0 \-\- 0x10FFFF and character size is
+1 byte.
+.TP
 .B \fB\-b \-\-bit\-vectors\fP
 Optimize conditional jumps using bit masks. Implies \fB\-s\fP\&.
 .TP
 .B \fB\-c \-\-conditions \-\-start\-conditions\fP
-Enable support of Flex\-like "conditions": multiple interrelated lexers within one block.
-Option \fB\-\-start\-conditions\fP is a legacy alias; use \fB\-\-conditions\fP instead.
-.TP
-.B \fB\-d \-\-debug\-output\fP
-Emit \fBYYDEBUG\fP in the generated code.
-\fBYYDEBUG\fP should be defined by the user in the form of a void function with two parameters:
-\fBstate\fP (lexer state or \-1) and \fBsymbol\fP (current input symbol of type \fBYYCTYPE\fP).
-.TP
-.B \fB\-D \-\-emit\-dot\fP
-Instead of normal output generate lexer graph in DOT format.
-The output can be converted to PNG with the help of Graphviz (something like \fBdot \-Tpng \-odfa.png dfa.dot\fP).
-Note that large graphs may crash Graphviz.
-.TP
-.B \fB\-e \-\-ecb\fP
-Generate a lexer that reads input in EBCDIC encoding.
-\fBre2c\fP assumes that character range is 0 \-\- 0xFF an character size is 1 byte.
-.TP
-.B \fB\-f \-\-storable\-state\fP
-Generate a lexer which can store its inner state.
-This is useful in push\-model lexers which are stopped by an outer program when there is not enough input,
-and then resumed when more input becomes available.
-In this mode users should additionally define
-\fBYYGETSTATE ()\fP and \fBYYSETSTATE (state)\fP macros
-and variables \fByych\fP, \fByyaccept\fP and the \fBstate\fP as part of the lexer state.
-.TP
-.B \fB\-F \-\-flex\-syntax\fP
-Partial support for Flex syntax:
-in this mode named definitions don\(aqt need the equal sign and the terminating semicolon,
-and when used they must be surrounded by curly braces.
-Names without curly braces are treated as double\-quoted strings.
-.TP
-.B \fB\-g \-\-computed\-gotos\fP
-Optimize conditional jumps using non\-standard "computed goto" extension (must be supported by C/C++ compiler).
-\fBre2c\fP generates jump tables only in complex cases with a lot of conditional branches.
-Complexity threshold can be configured with \fBcgoto:threshold\fP configuration.
-This option implies \fB\-b\fP\&.
-.TP
-.B \fB\-i \-\-no\-debug\-info\fP
-Do not output \fB#line\fP information.
-This is useful when the generated code is tracked by some version control system.
-.TP
-.B \fB\-o OUTPUT \-\-output=OUTPUT\fP
-Specify the \fBOUTPUT\fP file.
-.TP
-.B \fB\-r \-\-reusable\fP
-Allows reuse of \fBre2c\fP rules with \fB/*!rules:re2c */\fP and \fB/*!use:re2c */\fP blocks.
-In this mode simple \fB/*!re2c */\fP blocks are not allowed
-and exactly one \fB/*!rules:re2c */\fP block must be present.
-The rules are saved and used by every \fB/*!use:re2c */\fP block that follows (which may add rules of their own).
-This option allows to reuse the same set of rules with different configurations.
-.TP
-.B \fB\-s \-\-nested\-ifs\fP
-Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional jumps.
-This usually results in more efficient code with non\-optimizing C/C++ compilers.
-.TP
-.B \fB\-t HEADER \-\-type\-header=HEADER\fP
-Generate a \fBHEADER\fP file that contains enum with condition names.
-Requires \fB\-c\fP option.
-.TP
-.B \fB\-T \-\-tags\fP
-Enable submatch extraction with tags.
-.TP
-.B \fB\-P \-\-posix\-captures\fP
-Enable submatch extraction with POSIX\-style capturing groups.
-.TP
-.B \fB\-u \-\-unicode\fP
-Generate a lexer that reads input in UTF\-32 encoding.
-\fBre2c\fP assumes that character range is 0 \-\- 0x10FFFF and character size is 4 bytes.
-Implies \fB\-s\fP\&.
-.TP
-.B \fB\-v \-\-version\fP
-Show version information.
-.TP
-.B \fB\-V \-\-vernum\fP
-Show version information in \fBMMmmpp\fP format (major, minor, patch).
-.TP
-.B \fB\-w \-\-wide\-chars\fP
-Generate a lexer that reads input in UCS\-2 encoding.
-\fBre2c\fP assumes that character range is 0 \-\- 0xFFFF and character size is 2 bytes.
-Implies \fB\-s\fP\&.
-.TP
-.B \fB\-x \-\-utf\-16\fP
-Generate a lexer that reads input in UTF\-16 encoding.
-\fBre2c\fP assumes that character range is 0 \-\- 0x10FFFF and character size is 2 bytes.
-Implies \fB\-s\fP\&.
-.TP
-.B \fB\-8 \-\-utf\-8\fP
-Generate a lexer that reads input in UTF\-8 encoding.
-\fBre2c\fP assumes that character range is 0 \-\- 0x10FFFF and character size is 1 byte.
+Enable support of Flex\-like "conditions": multiple interrelated lexers
+within one block. Option \fB\-\-start\-conditions\fP is a legacy alias; use
+\fB\-\-conditions\fP instead.
 .TP
 .B \fB\-\-case\-insensitive\fP
 Treat single\-quoted and double\-quoted strings as case\-insensitive.
 .TP
 .B \fB\-\-case\-inverted\fP
 Invert the meaning of single\-quoted and double\-quoted strings:
-treat single\-quoted strings as case\-sensitive and double\-quoted strings as case\-insensitive.
+treat single\-quoted strings as case\-sensitive and double\-quoted strings
+as case\-insensitive.
 .TP
-.B \fB\-\-no\-generation\-date\fP
-Suppress date output in the generated file.
+.B \fB\-D \-\-emit\-dot\fP
+Instead of normal output generate lexer graph in .dot format.
+The output can be converted to an image with the help of Graphviz
+(e.g. something like \fBdot \-Tpng \-odfa.png dfa.dot\fP).
 .TP
-.B \fB\-\-no\-lookahead\fP
-Use TDFA(0) instead of TDFA(1).
-This option only has effect with \fB\-\-tags\fP or \fB\-\-posix\-captures\fP options.
+.B \fB\-d \-\-debug\-output\fP
+Emit \fBYYDEBUG\fP in the generated code.
+\fBYYDEBUG\fP should be defined by the user in the form of a void function
+with two parameters: \fBstate\fP (lexer state or \-1) and \fBsymbol\fP (current
+input symbol of type \fBYYCTYPE\fP).
 .TP
-.B \fB\-\-no\-optimize\-tags\fP
-Suppress optimization of tag variables (useful for debugging or benchmarking).
+.B \fB\-\-dfa\-minimization <moore | table>\fP
+The internal algorithm used by re2c to minimize the DFA: \fBmoore\fP (the
+default) is Moore algorithm, and \fBtable\fP is the "table filling" algorithm.
+Both algorithms should produce the same DFA up to states relabeling; table
+filling is simpler and much slower and serves as a reference implementation.
 .TP
-.B \fB\-\-no\-version\fP
-Suppress version output in the generated file.
+.B \fB\-\-dump\-adfa\fP
+Debug option: output DFA after tunneling (in .dot format).
 .TP
-.B \fB\-\-encoding\-policy POLICY\fP
-Define the way \fBre2c\fP treats Unicode surrogates.
-\fBPOLICY\fP can be one of the following: \fBfail\fP (abort with an error when a surrogate is encountered),
-\fBsubstitute\fP (silently replace surrogates with the error code point 0xFFFD),
-\fBignore\fP (default, treat surrogates as normal code points).
-The Unicode standard says that standalone surrogates are invalid,
-but real\-world libraries and programs behave in different ways.
+.B \fB\-\-dump\-cfg\fP
+Debug option: output control flow graph of tag variables (in .dot format).
 .TP
-.B \fB\-\-input INPUT\fP
-Specify \fBre2c\fP input API. \fBINPUT\fP can be either \fBdefault\fP or \fBcustom\fP (enables the use of generic API).
+.B \fB\-\-dump\-closure\-stats\fP
+Debug option: output statistics on the number of states in closure.
 .TP
-.B \fB\-S \-\-skeleton\fP
-Ignore user\-defined interface code and generate a self\-contained "skeleton" program.
-Additionally, generate input files with strings derived from the regular grammar
-and compressed match results that are used to verify "skeleton" behavior on all inputs.
-This option is useful for finding bugs in optimizations and code generation.
+.B \fB\-\-dump\-dfa\-det\fP
+Debug option: output DFA immediately after determinization (in .dot format).
 .TP
-.B \fB\-\-empty\-class POLICY\fP
-Define the way \fBre2c\fP treats empty character classes.
-\fBPOLICY\fP can be one of the following: \fBmatch\-empty\fP (match empty input: illogical, but default behavior for backwards compatibility reasons),
-\fBmatch\-none\fP (fail to match on any input),
-\fBerror\fP (compilation error).
+.B \fB\-\-dump\-dfa\-min\fP
+Debug option: output DFA after minimization (in .dot format).
 .TP
-.B \fB\-\-dfa\-minimization ALGORITHM\fP
-The internal algorithm used by re2c to minimize the DFA.
-\fBALGORITHM\fP can be either \fBmoore\fP (Moore algorithm, the default) or \fBtable\fP (table filling algorithm).
-Both algorithms should produce the same DFA up to states relabeling;
-table filling is much slower and serves as a reference implementation.
+.B \fB\-\-dump\-dfa\-tagopt\fP
+Debug option: output DFA after tag optimizations (in .dot format).
+.TP
+.B \fB\-\-dump\-dfa\-raw\fP
+Debug option: output DFA under construction with expanded state\-sets
+(in .dot format).
+.TP
+.B \fB\-\-dump\-interf\fP
+Debug option: output interference table produced by liveness analysis of tag
+variables.
+.TP
+.B \fB\-\-dump\-nfa\fP
+Debug option: output NFA (in .dot format).
+.TP
+.B \fB\-e \-\-ecb\fP
+Generate a lexer that reads input in EBCDIC encoding.
+re2c assumes that character range is 0 \-\- 0xFF an character size is 1 byte.
 .TP
 .B \fB\-\-eager\-skip\fP
 Make the generated lexer advance the input position "eagerly":
@@ -194,26 +125,145 @@ immediately after reading input symbol.
 By default this happens after transition to the next state.
 Implied by \fB\-\-no\-lookahead\fP\&.
 .TP
-.B \fB\-\-dump\-nfa\fP
-Generate representation of NFA in DOT format and dump it on stderr.
+.B \fB\-\-empty\-class <match\-empty | match\-none | error>\fP
+Define the way re2c treats empty character classes. With \fBmatch\-empty\fP
+(the default) empty class matches empty input (which is illogical, but
+backwards\-compatible). With\(ga\(gamatch\-none\(ga\(ga empty class always fails to match.
+With \fBerror\fP empty class raises a compilation error.
 .TP
-.B \fB\-\-dump\-dfa\-raw\fP
-Generate representation of DFA in DOT format under construction and dump it on stderr.
+.B \fB\-\-encoding\-policy <fail | substitute | ignore>\fP
+Define the way re2c treats Unicode surrogates.
+With \fBfail\fP re2c aborts with an error when a surrogate is encountered.
+With \fBsubstitute\fP re2c silently replaces surrogates with the error code
+point 0xFFFD. With \fBignore\fP (the default) re2c treats surrogates as
+normal code points. The Unicode standard says that standalone surrogates
+are invalid, but real\-world libraries and programs behave in different ways.
 .TP
-.B \fB\-\-dump\-dfa\-det\fP
-Generate representation of DFA in DOT format immediately after determinization and dump it on stderr.
+.B \fB\-f \-\-storable\-state\fP
+Generate a lexer which can store its inner state.
+This is useful in push\-model lexers which are stopped by an outer program
+when there is not enough input, and then resumed when more input becomes
+available. In this mode users should additionally define \fBYYGETSTATE()\fP
+and \fBYYSETSTATE(state)\fP macros and variables \fByych\fP, \fByyaccept\fP
+and \fBstate\fP as part of the lexer state.
 .TP
-.B \fB\-\-dump\-dfa\-tagopt\fP
-Generate representation of DFA in DOT format after tag optimizations and dump it on stderr.
+.B \fB\-F \-\-flex\-syntax\fP
+Partial support for Flex syntax: in this mode named definitions don\(aqt need
+the equal sign and the terminating semicolon, and when used they must be
+surrounded by curly braces. Names without curly braces are treated as
+double\-quoted strings.
 .TP
-.B \fB\-\-dump\-dfa\-min\fP
-Generate representation of DFA in DOT format after minimization and dump it on stderr.
+.B \fB\-g \-\-computed\-gotos\fP
+Optimize conditional jumps using non\-standard "computed goto" extension
+(which must be supported by the C/C++ compiler). re2c generates jump tables
+only in complex cases with a lot of conditional branches. Complexity
+threshold can be configured with \fBcgoto:threshold\fP configuration. This
+option implies \fB\-b\fP\&.
 .TP
-.B \fB\-\-dump\-adfa\fP
-Generate representation of DFA in DOT format after tunneling and dump it on stderr.
+.B \fB\-I PATH\fP
+Add \fBPATH\fP to the list of locations which are used when searching for
+include files. This option is useful in combination with
+\fB/*!include:re2c ... */\fP directive. Re2c looks for \fBFILE\fP in the
+directory of including file and in the list of include paths specified by
+\fB\-I\fP option.
 .TP
-.B \fB\-1 \-\-single\-pass\fP
-Deprecated. Does nothing (single pass is the default now).
+.B \fB\-i \-\-no\-debug\-info\fP
+Do not output \fB#line\fP information. This is useful when the generated code
+is tracked by some version control system or IDE.
+.TP
+.B \fB\-\-input <default | custom>\fP
+Specify re2c input API.
+Option \fBdefault\fP is the default API composed of pointer\-like primitives
+\fBYYCURSOR\fP, \fBYYMARKER\fP, \fBYYLIMIT\fP etc.
+Option \fBcustom\fP is the generic API composed of function\-like primitives
+\fBYYPEEK()\fP, \fBYYSKIP()\fP, \fBYYBACKUP()\fP, \fBYYRESTORE()\fP etc.
+.TP
+.B \fB\-\-input\-encoding <ascii | utf8>\fP
+Specify the way re2c parses regular expressions.
+With \fBascii\fP (the default) re2c handles input as ASCII\-encoded: any
+sequence of code units is a sequence of standalone 1\-byte characters.
+With \fButf8\fP re2c handles input as UTF8\-encoded and recognizes multibyte
+characters.
+.TP
+.B \fB\-\-location\-format <gnu | msvc>\fP
+Specify location format in messages.
+With \fBgnu\fP locations are printed as \(aqfilename:line:column: ...\(aq.
+With \fBmsvc\fP locations are printed as \(aqfilename(line,column) ...\(aq.
+Default is \fBgnu\fP\&.
+.TP
+.B \fB\-\-no\-generation\-date\fP
+Suppress date output in the generated file.
+.TP
+.B \fB\-\-no\-lookahead\fP
+Use TDFA(0) instead of TDFA(1).
+This option has effect only with \fB\-\-tags\fP or \fB\-\-posix\-captures\fP options.
+.TP
+.B \fB\-\-no\-optimize\-tags\fP
+Suppress optimization of tag variables (useful for debugging).
+.TP
+.B \fB\-\-no\-version\fP
+Suppress version output in the generated file.
+.TP
+.B \fB\-o OUTPUT \-\-output=OUTPUT\fP
+Specify the \fBOUTPUT\fP file.
+.TP
+.B \fB\-P \-\-posix\-captures\fP
+Enable submatch extraction with POSIX\-style capturing groups.
+.TP
+.B \fB\-\-posix\-closure <gor1 | gtop>\fP
+Specify shortest\-path algorithm used for construction of epsilon\-closure
+with POSIX disambiguation semantics: \fBgor1\fP (the default) stands for
+Goldberg\-Radzik algorithm, and \fBgtop\fP stands for "global topological
+order" algorithm.
+.TP
+.B \fB\-r \-\-reusable\fP
+Allows reuse of re2c rules with \fB/*!rules:re2c */\fP and \fB/*!use:re2c */\fP
+blocks. Exactly one rules\-block must be present. The rules are saved and
+used by every use\-block that follows, which may add its own rules and
+configurations.
+.TP
+.B \fB\-S \-\-skeleton\fP
+Ignore user\-defined interface code and generate a self\-contained "skeleton"
+program. Additionally, generate input files with strings derived from the
+regular grammar and compressed match results that are used to verify
+"skeleton" behavior on all inputs. This option is useful for finding bugs
+in optimizations and code generation.
+.TP
+.B \fB\-s \-\-nested\-ifs\fP
+Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional
+jumps. This usually results in more efficient code with non\-optimizing C/C++
+compilers.
+.TP
+.B \fB\-T \-\-tags\fP
+Enable submatch extraction with tags.
+.TP
+.B \fB\-t HEADER \-\-type\-header=HEADER\fP
+Generate a \fBHEADER\fP file that contains enum with condition names.
+Requires \fB\-c\fP option.
+.TP
+.B \fB\-u \-\-unicode\fP
+Generate a lexer that reads UTF32\-encoded input. Re2c assumes that character
+range is 0 \-\- 0x10FFFF and character size is 4 bytes. This option implies
+\fB\-s\fP\&.
+.TP
+.B \fB\-V \-\-vernum\fP
+Show version information in \fBMMmmpp\fP format (major, minor, patch).
+.TP
+.B \fB\-\-verbose\fP
+Output a short message in case of success.
+.TP
+.B \fB\-v \-\-version\fP
+Show version information.
+.TP
+.B \fB\-w \-\-wide\-chars\fP
+Generate a lexer that reads UCS2\-encoded input. Re2c assumes that character
+range is 0 \-\- 0xFFFF and character size is 2 bytes. This option implies
+\fB\-s\fP\&.
+.TP
+.B \fB\-x \-\-utf\-16\fP
+Generate a lexer that reads UTF16\-encoded input. Re2c assumes that character
+range is 0 \-\- 0x10FFFF and character size is 2 bytes. This option implies
+\fB\-s\fP\&.
 .UNINDENT
 .INDENT 0.0
 .TP
@@ -596,12 +646,6 @@ Same as \fB\-\-case\-inverted\fP command\-line option.
 .B \fBre2c:flags:d\fP or \fBre2c:flags:debug\-output\fP
 Same as \fB\-d \-\-debug\-output\fP command\-line option.
 .TP
-.B \fBre2c:flags:dfa\-minimization = \(aqmoore\(aq;\fP
-Same as \fB\-\-dfa\-minimization\fP command\-line option.
-.TP
-.B \fBre2c:flags:eager\-skip = 0;\fP
-Same as \fB\-\-eager\-skip\fP command\-line option.
-.TP
 .B \fBre2c:flags:e\fP or \fBre2c:flags:ecb\fP
 Same as \fB\-e \-\-ecb\fP command\-line option.
 .TP
@@ -620,17 +664,17 @@ Same as \fB\-i \-\-no\-debug\-info\fP command\-line option.
 .B \fBre2c:flags:input = \(aqdefault\(aq;\fP
 Same as \fB\-\-input\fP command\-line option.
 .TP
-.B \fBre2c:flags:lookahead = 1;\fP
-Same as inverted \fB\-\-no\-lookahead\fP command\-line option.
-.TP
-.B \fBre2c:flags:optimize\-tags = 1;\fP
-Same as inverted \fB\-\-no\-optimize\-tags\fP command\-line option.
-.TP
 .B \fBre2c:flags:P\fP or \fBre2c:flags:posix\-captures\fP
 Same as \fB\-P \-\-posix\-captures\fP command\-line option.
 .TP
 .B \fBre2c:flags:s\fP or \fBre2c:flags:nested\-ifs\fP
 Same as \fB\-s \-\-nested\-ifs\fP command\-line option.
+.TP
+.B \fBre2c:flags:o\fP or \fBre2c:flags:output\fP
+Same as \fB\-o \-\-output\fP command\-line option.
+.TP
+.B \fBre2c:flags:t\fP or \fBre2c:flags:type\-header\fP
+Same as \fB\-t \-\-type\-header\fP command\-line option.
 .TP
 .B \fBre2c:flags:T\fP or \fBre2c:flags:tags\fP
 Same as \fB\-T \-\-tags\fP command\-line option.
@@ -861,6 +905,110 @@ represented as array of nodes \fB(v, p)\fP, where \fBv\fP is tag value and \fBp\
 .sp
 For further details see \fBhttp://re2c.org/examples/examples.html\fP page on the website
 or \fBre2c/examples/\fP subdirectory of \fBre2c\fP distribution.
+.SH INCLUDES
+.sp
+Re2c allows to include other files using directive \fB/*!include:re2c FILE */\fP,
+where \fBFILE\fP is the name of file to be included. Re2c looks for included
+files in the directory of the including file and in include locations, which
+can be specified with \fB\-I\fP option.
+Re2c include directive works in the same way as C/C++ \fB#include\fP: the contents
+of \fBFILE\fP are copy\-pasted verbatim in place of the directive. Include files
+may have further includes of their own.
+Re2c provides some predefined include files that can be found in the
+\fBinclude/\fP subdirectory of the project. These files contain definitions that
+can be useful to other projects (such as Unicode categories) and form something
+like a standard library for re2c.
+Here is an example of using include files:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+// definitions.re
+/*!re2c
+    alpha = [a\-zA\-Z];
+    digit = [0\-9];
+*/
+
+// main.re
+/*!include:re2c "definitions.re" */
+int lex(const char *YYCURSOR)
+{
+    const char *YYMARKER;
+    /*!re2c
+        alpha { return 1; }
+        digit { return 2; }
+        *     { return 0; }
+    */
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH HEADERS
+.sp
+Re2c allows to generate header file from the input \fB\&.re\fP file using option
+\fB\-t \-\-type\-header\fP (or the corresponding configurations) and directives
+\fB/*!header:re2c:on*/\fP and \fB/*!header:re2c:off*/\fP\&. The first directive
+marks the beginning of header file, and the second directive marks the end of
+it. This may be needed in cases when re2c is used to generate definitions of
+constants, variables and structs that must be visible from other translation
+units.
+Below is an example of generating header file that contains definitions of
+\fBYYMAXFILL\fP and lexer state with tag variables. Note that \fBYYMAXFILL\fP and
+tag variables depend on the grammar rules in the input \fB\&.re\fP file and cannot
+be hard\-coded.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+/*!header:re2c:on*/
+/*!max:re2c*/
+struct State {
+    char buffer[4096 + YYMAXFILL], *cursor, *marker, *limit;
+    /*!stags:re2c format = "char *@@; "; */
+};
+/*!header:re2c:off*/
+
+#include "lex.h"
+#define YYCTYPE   char
+#define YYCURSOR  state\->cursor
+#define YYMARKER  state\->marker
+#define YYLIMIT   state\->limit
+#define YYFILL(n) return 2
+int lex(State *state)
+{
+    char *x, *y;
+    /*!re2c
+        re2c:tags:expression = state\->@@;
+        re2c:flags:t         = lex.h;
+
+        "a"* @x "b"* @y "c"* { return 0; }
+        *                    { return 1; }
+    */
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The generated header will look like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+#define YYMAXFILL 1
+
+struct State {
+    char buffer[4096 + YYMAXFILL], *cursor, *marker, *limit;
+    char *yyt1; char *yyt2;
+};
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
 .SH STORABLE STATE
 .sp
 With \fB\-f\fP \fB\-\-storable\-state\fP option re2c generates a lexer that can
@@ -1123,6 +1271,7 @@ Durimar,
 Eldar Zakirov,
 Emmanuel Mogenet,
 Hartmut Kaiser,
+Henri Salo (fgeek),
 jcfp,
 Jean\-Claude Wippler,
 Jeff Trull,
@@ -1143,11 +1292,12 @@ Rui Maciel,
 Ryan Mast,
 Samuel006,
 Sergei Trofimovich,
+Serghei Iakovlev,
 sirzooro,
 Tim Kelly,
 Ulya Trofimovich
 .SH VERSION INFORMATION
 .sp
-This manpage describes \fBre2c\fP version 1.1.1, package date 10 Jan 2019.
+This manpage describes \fBre2c\fP version 1.1.1, package date 15 Jul 2019.
 .\" Generated by docutils manpage writer.
 .
