@@ -243,7 +243,7 @@ void need(Output &o, uint32_t ind, size_t some)
 void gen_rescan_label(Output &o, const State *s)
 {
     const opt_t *opts = o.block().opts;
-    if (opts->eof == NOEOF || endstate(s)) {
+    if (opts->eof == NOEOF || !opts->fill_use || endstate(s)) {
         // no rescan label
     }
     else if (opts->fFlag) {
@@ -364,9 +364,11 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
         flushln(code, o);
     }
     else {
-        o << opts->indString << "if (" << opts->fill << " () == 0) "
-            << "goto " << opts->labelPrefix << retry->label << "_;";
-        flushln(code, o);
+        if (opts->fill_use) {
+            o << opts->indString << "if (" << opts->fill << " () == 0) "
+                << "goto " << opts->labelPrefix << retry->label << "_;";
+            flushln(code, o);
+        }
 
         if (from->action.type == Action::INITIAL) {
             o << opts->indString << "goto " << opts->labelPrefix << "eof;";
