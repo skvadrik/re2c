@@ -59,7 +59,7 @@ yy1_:
 	if (yych >= 0xFFFF) {
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy1_;
-			else goto yyeof;
+			goto yyeof;
 		}
 		goto yy2;
 	}
@@ -71,7 +71,7 @@ yy2_:
 	if (yych <= 0xFFFE) goto yy2;
 	if (in.lim <= in.cur) {
 		if (in.fill () == 0) goto yy2_;
-		else goto yy4;
+		goto yy4;
 	}
 	goto yy2;
 yy4:

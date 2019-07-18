@@ -60,7 +60,7 @@ yy1_:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy1_;
-			else goto yyeof;
+			goto yyeof;
 		}
 		goto yy2;
 	}
@@ -73,7 +73,7 @@ yy2_:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy2_;
-			else goto yy4;
+			goto yy4;
 		}
 		goto yy2;
 	}

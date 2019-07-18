@@ -369,7 +369,7 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
         flushln(code, o);
 
         if (from->action.type == Action::INITIAL) {
-            o << opts->indString << "else goto " << opts->labelPrefix << "eof;";
+            o << opts->indString << "goto " << opts->labelPrefix << "eof;";
             flushln(code, o);
         }
         else if (fallback != to) {
@@ -377,22 +377,16 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
             gen_settags(tagcode, dfa, falltags, opts);
 
             if (tagcode.empty()) {
-                o << opts->indString << "else goto " << opts->labelPrefix << fallback->label << ";";
+                o << opts->indString
+                    << "goto " << opts->labelPrefix << fallback->label << ";";
                 flushln(code, o);
             }
             else {
-                o << opts->indString << "else {";
-                flushln(code, o);
-
                 for (uint32_t i = 0; i < tagcode.size(); ++i) {
-                    code.push_back(opts->indString + opts->indString + tagcode[i]);
+                    code.push_back(opts->indString + tagcode[i]);
                 }
-
-                o << opts->indString << opts->indString
+                o << opts->indString
                     << "goto " << opts->labelPrefix << fallback->label << ";";
-                flushln(code, o);
-
-                o << opts->indString << "}";
                 flushln(code, o);
             }
         }

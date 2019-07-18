@@ -1527,7 +1527,7 @@ yy31_:
 	case 0x7F:
 		if (end <= cur) {
 			if (fill () == 0) goto yy31_;
-			else goto yyeof;
+			goto yyeof;
 		}
 		goto yy32;
 	case 0xC2:

@@ -123,7 +123,7 @@ yy1_:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy1_;
-			else goto yyeof;
+			goto yyeof;
 		}
 		goto yy2;
 	}
@@ -155,7 +155,7 @@ yy7_:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy7_;
-			else goto yy3;
+			goto yy3;
 		}
 		goto yy7;
 	}
@@ -169,7 +169,7 @@ yy9_:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy9_;
-			else goto yy3;
+			goto yy3;
 		}
 		goto yy9;
 	}
@@ -404,7 +404,7 @@ yy28_:
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy28_;
-			else goto yy3;
+			goto yy3;
 		}
 		goto yy7;
 	}
@@ -419,7 +419,7 @@ yy31_:
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy31_;
-			else goto yy3;
+			goto yy3;
 		}
 		goto yy9;
 	}
