@@ -118,7 +118,7 @@ private:
     void findBaseState(const opt_t *opts);
     void hoist_tags(const opt_t *opts);
     void hoist_tags_and_skip(const opt_t *opts);
-    void count_used_labels(std::set<label_t> &used, label_t start, label_t initial, bool force_start, bool fFlag) const;
+    void count_used_labels(std::set<label_t> &used, label_t start, label_t initial, const opt_t *opts) const;
     void emit_body (Output &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
     void emit_dot(Output &o, bool last_cond) const;
 

@@ -72,6 +72,7 @@ yy1_:
 	}
 yy2:
 	++in.cur;
+yy3:
 	{ return false; }
 yy4:
 	++in.cur;

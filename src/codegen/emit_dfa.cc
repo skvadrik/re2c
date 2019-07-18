@@ -56,30 +56,30 @@ void emit_eof(Output & o, uint32_t ind, const Code *code)
     o.wdelay_line_info_output();
 }
 
-void DFA::count_used_labels (std::set<label_t> & used, label_t start,
-    label_t initial, bool force_start, bool fFlag) const
+void DFA::count_used_labels(std::set<label_t> &used, label_t start
+    , label_t initial, const opt_t *opts) const
 {
     // In '-f' mode, default state is always state 0
-    if (fFlag)
-    {
-        used.insert (label_t::first ());
+    if (opts->fFlag) {
+        used.insert(label_t::first());
     }
-    if (force_start)
-    {
-        used.insert (start);
+    if (opts->startlabel_force && opts->startlabel.empty()) {
+        used.insert(start);
     }
-    for (State * s = head; s; s = s->next)
-    {
-        s->go.used_labels (used);
+    // FIXME: default label may be used by EOF checks, but they are generated
+    // later and at this point we do not know if default label is really used
+    if (defstate && opts->eof != NOEOF) {
+        used.insert(defstate->label);
     }
-    for (uint32_t i = 0; i < accepts.size (); ++i)
-    {
-        used.insert (accepts[i].first->label);
+    for (State * s = head; s; s = s->next) {
+        s->go.used_labels(used);
+    }
+    for (uint32_t i = 0; i < accepts.size(); ++i) {
+        used.insert(accepts[i].first->label);
     }
     // must go last: it needs the set of used labels
-    if (used.count (head->label))
-    {
-        used.insert (initial);
+    if (used.count(head->label)) {
+        used.insert(initial);
     }
 }
 
@@ -190,8 +190,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
         s->label = output.label_counter.next ();
     }
     std::set<label_t> used_labels;
-    count_used_labels (used_labels, start_label, initial_label,
-        opts->startlabel_force && opts->startlabel.empty(), opts->fFlag);
+    count_used_labels (used_labels, start_label, initial_label, opts);
 
     head->action.set_initial(initial_label);
 
