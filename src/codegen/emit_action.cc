@@ -256,10 +256,10 @@ void gen_rescan_label(Output &o, const State *s)
 }
 
 void gen_goto_case(Output &o, uint32_t ind, const State *from, const State *to,
-    const DFA &dfa, tcid_t tcid, bool skip, bool fill)
+    const DFA &dfa, tcid_t tcid, bool skip, bool eof)
 {
     code_lines_t code;
-    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, fill, o.fill_index);
+    gen_goto(code, from, to, dfa, tcid, o.block().opts, skip, eof, o.fill_index);
     const size_t lines = code.size();
 
     if (lines == 1) {
@@ -303,10 +303,10 @@ void gen_goto_plain(Output &o, uint32_t ind, const State *from, const State *to,
 }
 
 void gen_goto(code_lines_t &code, const State *from, const State *to
-    , const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip, bool fill
+    , const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip, bool eof
     , uint32_t fillidx)
 {
-    if (fill) {
+    if (eof) {
         gen_on_eof(code, opts, dfa, from, to, fillidx);
     }
 
