@@ -22,6 +22,7 @@
 \usepackage[section]{placeins}
 \usepackage{proof-at-the-end}
 \usepackage{setspace}
+\usepackage{tikz, pgfplots}
 
 \usepackage[noline, noend, nofillcomment, linesnumbered]{algorithm2e}
 \SetArgSty{textnormal}
@@ -2480,11 +2481,114 @@ Benchmark results show the following:
 \\[-0.5em]
 
 \begin{figure}
-\includegraphics[width=\linewidth]{img/bench/plot.png}
-\vspace{-2em}
+\pgfplotstableread[col sep = semicolon, trim cells]{img/bench/data_realworld} \datatable
+\begin{tikzpicture}
+    \begin{axis}[
+        width=330,
+        height=250,
+        ylabel=slowdown vs leftmost greedy (times),
+        xmin=1, xmax=11, ymin=0, ymax=30,
+        xticklabels from table={\datatable}{Alg},
+        xtick=data,
+        xticklabel style={xshift=10pt, yshift=-5pt, font=\footnotesize},
+        ylabel style={yshift=-10pt},
+        legend cell align={left},
+        legend style={fill=none},
+        grid=major,
+        grid style={dashed, gray!20},
+        x tick label style={rotate=30, anchor=east}
+    ]
+        \addplot[color=black, mark=] table[y = LG] from \datatable ;
+        \addlegendentry{leftmost greedy} ;
+        \addplot[color=black, mark=, dash pattern=on 1pt off 1pt] table[y = RE2] from \datatable ;
+        \addlegendentry{RE2} ;
+        \addplot[color=black, mark=, dash pattern=on 8pt off 1.5pt] table[y = OS] from \datatable ;
+        \addlegendentry{Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 5pt off 1.5pt] table[y = OS_GTOP] from \datatable ;
+        \addlegendentry{GTOP Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 3pt off 1pt] table[y = OS_naive] from \datatable ;
+        \addlegendentry{naive Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 2.5pt off 2.5pt] table[y = OS_lazy] from \datatable ;
+        \addlegendentry{lazy Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 1pt off 1pt on 1pt off 1pt on 1pt off 2pt on 4pt off 2pt] table[y = Kuklewicz] from \datatable ;
+        \addlegendentry{Kuklewicz} ;
+        \addplot[color=black, mark=, dash pattern=on 1pt off 2pt on 4pt off 2pt] table[y = Cox] from \datatable ;
+        \addlegendentry{Cox} ;
+    \end{axis}
+\end{tikzpicture}
+\pgfplotstableread[col sep = semicolon, trim cells]{img/bench/data_pathological} \datatable
+\begin{tikzpicture}
+    \begin{axis}[
+        height=250,
+        width=170,
+        ylabel=slowdown vs leftmost greedy (times),
+        xmin=33, xmax=37, ymin=-50,
+        xticklabels from table={\datatable}{Alg},
+        xtick=data,
+        xticklabel style={xshift=10pt, yshift=-5pt, font=\footnotesize},
+        ylabel style={yshift=-5pt},
+        legend cell align={left},
+        legend style={fill=none},
+        grid=major,
+        grid style={dashed, gray!20},
+        x tick label style={rotate=30, anchor=east}
+    ]
+        \addplot[color=black, mark=] table[y = LG] from \datatable ;
+        \addlegendentry{leftmost greedy} ;
+        \addplot[color=black, mark=, dash pattern=on 1pt off 1pt] table[y = RE2] from \datatable ;
+        \addlegendentry{RE2} ;
+        \addplot[color=black, mark=, dash pattern=on 8pt off 1.5pt] table[y = OS] from \datatable ;
+        \addlegendentry{Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 5pt off 1.5pt] table[y = OS_GTOP] from \datatable ;
+        \addlegendentry{GTOP Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 3pt off 1pt] table[y = OS_naive] from \datatable ;
+        \addlegendentry{naive Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 2.5pt off 2.5pt] table[y = OS_lazy] from \datatable ;
+        \addlegendentry{lazy Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 1pt off 1pt on 1pt off 1pt on 1pt off 2pt on 4pt off 2pt] table[y = Kuklewicz] from \datatable ;
+        \addlegendentry{Kuklewicz} ;
+        \addplot[color=black, mark=, dash pattern=on 1pt off 2pt on 4pt off 2pt] table[y = Cox] from \datatable ;
+        \addlegendentry{Cox} ;
+    \end{axis}
+\end{tikzpicture}
+\pgfplotstableread[col sep = semicolon, trim cells]{img/bench/data_artificial} \datatable
+\begin{tikzpicture}
+    \begin{axis}[
+        height=250,
+        width=500,
+        ylabel=slowdown vs leftmost greedy (times),
+        xmin=12, xmax=32, ymin=0, ymax=30,
+        xticklabels from table={\datatable}{Alg},
+        xtick=data,
+        xticklabel style={xshift=10pt, yshift=-5pt, font=\footnotesize},
+        ylabel style={yshift=-10pt},
+        legend cell align={left},
+        legend style={fill=none},
+        grid=major,
+        grid style={dashed, gray!20},
+        x tick label style={rotate=30, anchor=east}
+    ]
+        \addplot[color=black, mark=] table[y = LG] from \datatable ;
+        \addlegendentry{leftmost greedy} ;
+        \addplot[color=black, mark=, dash pattern=on 1pt off 1pt] table[y = RE2] from \datatable ;
+        \addlegendentry{RE2} ;
+        \addplot[color=black, mark=, dash pattern=on 8pt off 1.5pt] table[y = OS] from \datatable ;
+        \addlegendentry{Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 5pt off 1.5pt] table[y = OS_GTOP] from \datatable ;
+        \addlegendentry{GTOP Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 3pt off 1pt] table[y = OS_naive] from \datatable ;
+        \addlegendentry{naive Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 2.5pt off 2.5pt] table[y = OS_lazy] from \datatable ;
+        \addlegendentry{lazy Okui-Suzuki} ;
+        \addplot[color=black, mark=, dash pattern=on 1pt off 1pt on 1pt off 1pt on 1pt off 2pt on 4pt off 2pt] table[y = Kuklewicz] from \datatable ;
+        \addlegendentry{Kuklewicz} ;
+        \addplot[color=black, mark=, dash pattern=on 1pt off 2pt on 4pt off 2pt] table[y = Cox] from \datatable ;
+        \addlegendentry{Cox} ;
+    \end{axis}
+\end{tikzpicture}
 \caption{
 Benchmarks.\\
-Real-world tests have labels of the form ``title $m$-$k$'', where $m$ is RE size and $k$ is the number of capturing groups.
+Real-world tests have labels of the form ``title $m$,$k$'', where $m$ is RE size and $k$ is the number of capturing groups.
 }\label{fig:bench}
 \end{figure}
 
