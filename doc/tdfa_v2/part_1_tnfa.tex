@@ -505,9 +505,9 @@ In this section we establish the relation between all intermediate representatio
 For brevity all proofs are moved to the appendix.
 %
 First of all, we rewrite REs in a form that makes submatch information explicit:
-to each subexpression we assign an \emph{implicit} and \emph{explicit} submatch index, where
-explicit indices enumerate submatch groups (for all other subexpressions they are zero),
-and implicit indices enumerate submatch groups and subexpressions that are not submatch groups,
+to each subexpression we assign an \emph{implicit} and \emph{explicit} submatch index.
+Explicit indices enumerate submatch groups (for all other subexpressions they are zero).
+Implicit indices enumerate submatch groups and subexpressions that are not submatch groups,
 but contain nested or sibling groups and need to be considered by disambiguation.
 This form reflects the POSIX standard, which states that
 submatch extraction applies only to parenthesized subexpressions,
@@ -1073,7 +1073,7 @@ in section \ref{section_closure} justify comparison at join points inside of one
 \end{proofEnd}
 
 
-\section{$\epsilon$-closure}\label{section_closure}
+\section{closure construction}\label{section_closure}
 
 The problem of constructing $\epsilon$-closure with POSIX disambiguation
 can be formulated as a shortest path problem on directed graph with weighted arcs.
@@ -2686,6 +2686,17 @@ and construsted a prototype implementation.
 
 It would be interesting to apply our approach to automata with counters
 instead of unrolling bounded repetition.
+
+
+\section*{Acknowledgements}
+
+I want to thank my parents Vladimir and Elina,
+my teachers Tatyana Leonidovna and Demian Vladimirovich
+and the Belarusian State University
+for the love of mathematics.
+This work would not be possible without the help of my husband and dearest friend Sergei Trofimovich.
+Finally, many thanks to the RE2C users!
+\null\hfill\textit{Ulya Trofimovich}
 
 
 \begin{thebibliography}{99}
