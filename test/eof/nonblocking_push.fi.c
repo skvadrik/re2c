@@ -50,9 +50,6 @@ struct input_t {
     lim += bytes_read;
     lim[0] = 0;
 
-    // simulate the END packet (can as well send a normal packet)
-    if (feof(file)) ++lim;
-
     // quick make a copy of buffer with newlines replaced w/ _
     char b[40];
     snprintf(b, 40, "%s", buf);
@@ -93,27 +90,27 @@ static status_t lex(input_t &in)
 {
 switch (YYGETSTATE()) {
 default: goto yy0;
-case 0: goto yyFillLabel0;
-case 1: goto yyFillLabel1;
-case 2: goto yyFillLabel2;
-case 3: goto yyFillLabel3;
-case 4: goto yyFillLabel4;
-case 5: goto yyFillLabel5;
-case 6: goto yyFillLabel6;
-case 7: goto yyFillLabel7;
-case 8: goto yyFillLabel8;
-case 9: goto yyFillLabel9;
-case 10: goto yyFillLabel10;
-case 11: goto yyFillLabel11;
-case 12: goto yyFillLabel12;
-case 13: goto yyFillLabel13;
-case 14: goto yyFillLabel14;
-case 15: goto yyFillLabel15;
-case 16: goto yyFillLabel16;
-case 17: goto yyFillLabel17;
-case 18: goto yyFillLabel18;
-case 19: goto yyFillLabel19;
-case 20: goto yyFillLabel20;
+case 0: if (in.lim <= in.cur) goto yyeof0; goto yyFillLabel0;
+case 1: if (in.lim <= in.cur) goto yyeof1; goto yyFillLabel1;
+case 2: if (in.lim <= in.cur) goto yyeof2; goto yyFillLabel2;
+case 3: if (in.lim <= in.cur) goto yyeof3; goto yyFillLabel3;
+case 4: if (in.lim <= in.cur) goto yyeof4; goto yyFillLabel4;
+case 5: if (in.lim <= in.cur) goto yyeof5; goto yyFillLabel5;
+case 6: if (in.lim <= in.cur) goto yyeof6; goto yyFillLabel6;
+case 7: if (in.lim <= in.cur) goto yyeof7; goto yyFillLabel7;
+case 8: if (in.lim <= in.cur) goto yyeof8; goto yyFillLabel8;
+case 9: if (in.lim <= in.cur) goto yyeof9; goto yyFillLabel9;
+case 10: if (in.lim <= in.cur) goto yyeof10; goto yyFillLabel10;
+case 11: if (in.lim <= in.cur) goto yyeof11; goto yyFillLabel11;
+case 12: if (in.lim <= in.cur) goto yyeof12; goto yyFillLabel12;
+case 13: if (in.lim <= in.cur) goto yyeof13; goto yyFillLabel13;
+case 14: if (in.lim <= in.cur) goto yyeof14; goto yyFillLabel14;
+case 15: if (in.lim <= in.cur) goto yyeof15; goto yyFillLabel15;
+case 16: if (in.lim <= in.cur) goto yyeof16; goto yyFillLabel16;
+case 17: if (in.lim <= in.cur) goto yyeof17; goto yyFillLabel17;
+case 18: if (in.lim <= in.cur) goto yyeof18; goto yyFillLabel18;
+case 19: if (in.lim <= in.cur) goto yyeof19; goto yyFillLabel19;
+case 20: if (in.lim <= in.cur) goto yyeof20; goto yyFillLabel20;
 }
 
 
@@ -122,14 +119,8 @@ yy0:
 yyFillLabel0:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 0x00:
-		if (in.lim <= in.cur) {
-			YYSETSTATE(0);
-			YYFILL ();
-		}
-		goto yy2;
 	case '\n':
-	case ' ':	goto yy6;
+	case ' ':	goto yy4;
 	case 'A':
 	case 'B':
 	case 'C':
@@ -180,37 +171,42 @@ yyFillLabel0:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case 'T':	goto yy12;
-	default:	goto yy4;
+	case 'z':	goto yy7;
+	case 'T':	goto yy10;
+	default:
+		if (in.lim <= in.cur) {
+			YYSETSTATE(0);
+			YYFILL();
+			yyeof0:;
+			goto yyeof;
+		}
+		goto yy2;
 	}
 yy2:
 	++in.cur;
-	{ printf("< EOF\n");                                return OK; }
-yy4:
-	++in.cur;
 	{ printf("< Unexpected character >%c<\n", in.yych); return FAIL; }
-yy6:
+yy4:
 	++in.cur;
 yyFillLabel1:
 	in.yych = *in.cur;
 	switch (in.yych) {
 	case '\n':
-	case ' ':	goto yy6;
+	case ' ':	goto yy4;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(1);
-			YYFILL ();
+			YYFILL();
+			yyeof1:;
 		}
-		goto yy8;
+		goto yy6;
 	}
-yy8:
+yy6:
 	{ printf("< whitespace\n");                         return WHITESPACE; }
-yy9:
+yy7:
 	++in.cur;
 yyFillLabel2:
 	in.yych = *in.cur;
-yy10:
+yy8:
 	switch (in.yych) {
 	case 'A':
 	case 'B':
@@ -263,17 +259,18 @@ yy10:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
+	case 'z':	goto yy7;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(2);
-			YYFILL ();
+			YYFILL();
+			yyeof2:;
 		}
-		goto yy11;
+		goto yy9;
 	}
-yy11:
+yy9:
 	{ printf("< word\n");                               return WORD; }
-yy12:
+yy10:
 	++in.cur;
 yyFillLabel3:
 	in.yych = *in.cur;
@@ -281,13 +278,14 @@ yyFillLabel3:
 	case 0x00:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(3);
-			YYFILL ();
+			YYFILL();
+			yyeof3:;
 		}
-		goto yy11;
-	case 'H':	goto yy13;
-	default:	goto yy10;
+		goto yy9;
+	case 'H':	goto yy11;
+	default:	goto yy8;
 	}
-yy13:
+yy11:
 	++in.cur;
 yyFillLabel4:
 	in.yych = *in.cur;
@@ -295,13 +293,14 @@ yyFillLabel4:
 	case 0x00:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(4);
-			YYFILL ();
+			YYFILL();
+			yyeof4:;
 		}
-		goto yy11;
-	case 'I':	goto yy14;
-	default:	goto yy10;
+		goto yy9;
+	case 'I':	goto yy12;
+	default:	goto yy8;
 	}
-yy14:
+yy12:
 	++in.cur;
 yyFillLabel5:
 	in.yych = *in.cur;
@@ -309,13 +308,14 @@ yyFillLabel5:
 	case 0x00:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(5);
-			YYFILL ();
+			YYFILL();
+			yyeof5:;
 		}
-		goto yy11;
-	case 'N':	goto yy15;
-	default:	goto yy10;
+		goto yy9;
+	case 'N':	goto yy13;
+	default:	goto yy8;
 	}
-yy15:
+yy13:
 	++in.cur;
 yyFillLabel6:
 	in.yych = *in.cur;
@@ -323,13 +323,14 @@ yyFillLabel6:
 	case 0x00:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(6);
-			YYFILL ();
+			YYFILL();
+			yyeof6:;
 		}
-		goto yy11;
-	case 'G':	goto yy16;
-	default:	goto yy10;
+		goto yy9;
+	case 'G':	goto yy14;
+	default:	goto yy8;
 	}
-yy16:
+yy14:
 	in.mark = ++in.cur;
 yyFillLabel7:
 	in.yych = *in.cur;
@@ -337,187 +338,203 @@ yyFillLabel7:
 	case 0x00:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(7);
-			YYFILL ();
+			YYFILL();
+			yyeof7:;
 		}
-		goto yy11;
-	case '\n':	goto yy17;
-	default:	goto yy10;
+		goto yy9;
+	case '\n':	goto yy15;
+	default:	goto yy8;
 	}
-yy17:
+yy15:
 	++in.cur;
 yyFillLabel8:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'W':	goto yy19;
+	case 'W':	goto yy17;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(8);
-			YYFILL ();
+			YYFILL();
+			yyeof8:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy18:
+yy16:
 	in.cur = in.mark;
-	goto yy11;
-yy19:
+	goto yy9;
+yy17:
 	++in.cur;
 yyFillLabel9:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'I':	goto yy20;
+	case 'I':	goto yy18;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(9);
-			YYFILL ();
+			YYFILL();
+			yyeof9:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy20:
+yy18:
 	++in.cur;
 yyFillLabel10:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'T':	goto yy21;
+	case 'T':	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(10);
-			YYFILL ();
+			YYFILL();
+			yyeof10:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy21:
+yy19:
 	++in.cur;
 yyFillLabel11:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'H':	goto yy22;
+	case 'H':	goto yy20;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(11);
-			YYFILL ();
+			YYFILL();
+			yyeof11:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy22:
+yy20:
 	++in.cur;
 yyFillLabel12:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case '\n':	goto yy23;
+	case '\n':	goto yy21;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(12);
-			YYFILL ();
+			YYFILL();
+			yyeof12:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy23:
+yy21:
 	++in.cur;
 yyFillLabel13:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'N':	goto yy24;
+	case 'N':	goto yy22;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(13);
-			YYFILL ();
+			YYFILL();
+			yyeof13:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy24:
+yy22:
 	++in.cur;
 yyFillLabel14:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'E':	goto yy25;
+	case 'E':	goto yy23;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(14);
-			YYFILL ();
+			YYFILL();
+			yyeof14:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy25:
+yy23:
 	++in.cur;
 yyFillLabel15:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'W':	goto yy26;
+	case 'W':	goto yy24;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(15);
-			YYFILL ();
+			YYFILL();
+			yyeof15:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy26:
+yy24:
 	++in.cur;
 yyFillLabel16:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'L':	goto yy27;
+	case 'L':	goto yy25;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(16);
-			YYFILL ();
+			YYFILL();
+			yyeof16:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy27:
+yy25:
 	++in.cur;
 yyFillLabel17:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'I':	goto yy28;
+	case 'I':	goto yy26;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(17);
-			YYFILL ();
+			YYFILL();
+			yyeof17:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy28:
+yy26:
 	++in.cur;
 yyFillLabel18:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'N':	goto yy29;
+	case 'N':	goto yy27;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(18);
-			YYFILL ();
+			YYFILL();
+			yyeof18:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy29:
+yy27:
 	++in.cur;
 yyFillLabel19:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'E':	goto yy30;
+	case 'E':	goto yy28;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(19);
-			YYFILL ();
+			YYFILL();
+			yyeof19:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy30:
+yy28:
 	++in.cur;
 yyFillLabel20:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 'S':	goto yy31;
+	case 'S':	goto yy29;
 	default:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(20);
-			YYFILL ();
+			YYFILL();
+			yyeof20:;
 		}
-		goto yy18;
+		goto yy16;
 	}
-yy31:
+yy29:
 	++in.cur;
 	{ printf("< Thing w/ newlines\n");                  return THING; }
+yyeof:
+	{ printf("< EOF\n");                                return OK; }
 
 }
 

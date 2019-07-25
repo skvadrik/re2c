@@ -48,9 +48,6 @@ struct input_t {
     lim += bytes_read;
     lim[0] = 0;
 
-    // simulate the END packet (can as well send a normal packet)
-    if (feof(file)) ++lim;
-
     // quick make a copy of buffer with newlines replaced w/ _
     char b[40];
     snprintf(b, 40, "%s", buf);
@@ -99,7 +96,7 @@ static status_t lex(input_t &in)
     re2c:eof             = 0;
 
     *                       { printf("< Unexpected character >%c<\n", in.yych); return FAIL; }
-    [\x00]                  { printf("< EOF\n");                                return OK; }
+    $                       { printf("< EOF\n");                                return OK; }
     [\n ]+                  { printf("< whitespace\n");                         return WHITESPACE; }
     [a-zA-Z]+               { printf("< word\n");                               return WORD; }
     "THING\nWITH\nNEWLINES" { printf("< Thing w/ newlines\n");                  return THING; }

@@ -457,6 +457,9 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
 
     fix_first_block_opts(blocks);
 
+    // global options are last block's options
+    const opt_t *globopt = block().opts;
+
     unsigned int line_count = 1;
     for (unsigned int j = 0; j < blocks.size(); ++j) {
         OutputBlock & b = *blocks[j];
@@ -490,7 +493,7 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
                 output_cond_table(o, ind, b.types, bopt);
                 break;
             case OutputFragment::STATE_GOTO:
-                output_state_goto(o, ind, 0, fill_index, bopt);
+                output_state_goto(o, ind, 0, fill_index, globopt);
                 break;
             case OutputFragment::STAGS:
                 output_tags(o, ind, *f.tags, global_stags, bopt);
@@ -648,22 +651,24 @@ void output_state_goto(std::ostream & o, uint32_t ind,
             : opts->state_get + "()";
 
     o << indstr << "switch (" << getstate << ") {\n";
-    if (opts->bUseStateAbort)
-    {
+    if (opts->bUseStateAbort) {
         o << indstr << "default: abort();\n";
         o << indstr << "case -1: goto " << opts->labelPrefix << start_label << ";\n";
     }
-    else
-    {
+    else {
         o << indstr << "default: goto " << opts->labelPrefix << start_label << ";\n";
     }
-    for (uint32_t i = 0; i < fill_index; ++i)
-    {
-        o << indstr << "case " << i << ": goto " << opts->yyfilllabel << i << ";\n";
+    for (uint32_t i = 0; i < fill_index; ++i) {
+        o << indstr << "case " << i << ":";
+        if (opts->eof != NOEOF) {
+            o << " if (" << output_expr_lessthan(1, opts) << ")"
+                << " goto " << opts->labelPrefix << "eof" << i << ";";
+        }
+        o << " goto " << opts->yyfilllabel << i << ";\n";
     }
     o << indstr << "}\n";
-    if (opts->bUseStateNext)
-    {
+
+    if (opts->bUseStateNext) {
         o << opts->yynext << ":\n";
     }
 }

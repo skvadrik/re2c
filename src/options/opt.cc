@@ -35,6 +35,7 @@ void mutopt_t::fix(const conopt_t *globopts)
             bFlag = Opt::baseopt.bFlag;
             gFlag = Opt::baseopt.gFlag;
             cGotoThreshold = Opt::baseopt.cGotoThreshold;
+            eof = Opt::baseopt.eof;
             // default environment-insensitive formatting
             yybmHexTable = Opt::baseopt.yybmHexTable;
             // fallthrough

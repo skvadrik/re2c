@@ -50,13 +50,8 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
                 "%sEOF rule found, but 're2c:eof' configuration is not set",
                 incond(i->name).c_str());
         }
-        else if (i->eofs.empty() && opts->eof != NOEOF && !opts->fFlag) {
+        else if (i->eofs.empty() && opts->eof != NOEOF) {
             fatal("%s're2c:eof' configuration is set, but no EOF rule found",
-                incond(i->name).c_str());
-        }
-        else if (!i->eofs.empty() && opts->fFlag) {
-            msg.fatal(i->eofs[0]->loc,
-                "%sEOF rule is unreachable in push-model lexers",
                 incond(i->name).c_str());
         }
         else if (i->eofs.size() > 1) {

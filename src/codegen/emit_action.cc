@@ -35,6 +35,7 @@ static void emit_rule          (Output &o, uint32_t ind, const DFA &dfa, size_t 
 static void gen_fintags        (Output &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 static void gen_goto           (code_lines_t &, const State *, const State *, const DFA &, tcid_t, const opt_t *, bool, bool, uint32_t);
 static void gen_on_eof         (code_lines_t &, const opt_t *, const DFA &, const State *, const State *, uint32_t);
+static void gen_on_eof_fail    (code_lines_t &, const opt_t *, const DFA &, const State *, const State *, std::ostringstream &);
 static bool endstate           (const State *s);
 static void flushln            (code_lines_t &code, std::ostringstream &o);
 
@@ -330,24 +331,45 @@ void gen_goto(code_lines_t &code, const State *from, const State *to
     }
 }
 
-void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
-  , const State *from, const State *to, uint32_t fillidx)
+void gen_on_eof_fail(code_lines_t &code, const opt_t *opts, const DFA &dfa
+    , const State *from, const State *to, std::ostringstream &o)
 {
-    const State *retry = from->action.type == Action::MOVE ? from->prev : from;
     const State *fallback = from->rule == Rule::NONE
         ? dfa.defstate : dfa.finstates[from->rule];
     const tcid_t falltags = from->rule == Rule::NONE
         ? from->fall_tags : from->rule_tags;
 
+    if (from->action.type == Action::INITIAL) {
+        o << opts->indString << "goto " << opts->labelPrefix << "eof;";
+        flushln(code, o);
+    }
+    else if (fallback != to) {
+        code_lines_t tagcode;
+        gen_settags(tagcode, dfa, falltags, opts);
+
+        if (tagcode.empty()) {
+            o << opts->indString
+                << "goto " << opts->labelPrefix << fallback->label << ";";
+            flushln(code, o);
+        }
+        else {
+            for (uint32_t i = 0; i < tagcode.size(); ++i) {
+                code.push_back(opts->indString + tagcode[i]);
+            }
+            o << opts->indString
+                << "goto " << opts->labelPrefix << fallback->label << ";";
+            flushln(code, o);
+        }
+    }
+}
+
+void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
+    , const State *from, const State *to, uint32_t fillidx)
+{
+    const State *retry = from->action.type == Action::MOVE ? from->prev : from;
     std::ostringstream o;
-    o << "if (";
-    if (opts->input_api == INPUT_CUSTOM) {
-        o << opts->yylessthan << " ()";
-    }
-    else {
-        o << opts->yylimit << " <= " << opts->yycursor;
-    }
-    o << ") {";
+
+    o << "if (" << output_expr_lessthan(1, opts) << ") {";
     flushln(code, o);
 
     if (opts->fFlag) {
@@ -360,8 +382,13 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
         }
         flushln(code, o);
 
-        o << opts->indString << opts->fill << " ();";
+        o << opts->indString << opts->fill << "();";
         flushln(code, o);
+
+        o << opts->indString << opts->labelPrefix << "eof" << fillidx << ":;";
+        flushln(code, o);
+
+        gen_on_eof_fail(code, opts, dfa, from, to, o);
     }
     else {
         if (opts->fill_use) {
@@ -369,29 +396,7 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
                 << "goto " << opts->labelPrefix << retry->label << "_;";
             flushln(code, o);
         }
-
-        if (from->action.type == Action::INITIAL) {
-            o << opts->indString << "goto " << opts->labelPrefix << "eof;";
-            flushln(code, o);
-        }
-        else if (fallback != to) {
-            code_lines_t tagcode;
-            gen_settags(tagcode, dfa, falltags, opts);
-
-            if (tagcode.empty()) {
-                o << opts->indString
-                    << "goto " << opts->labelPrefix << fallback->label << ";";
-                flushln(code, o);
-            }
-            else {
-                for (uint32_t i = 0; i < tagcode.size(); ++i) {
-                    code.push_back(opts->indString + tagcode[i]);
-                }
-                o << opts->indString
-                    << "goto " << opts->labelPrefix << fallback->label << ";";
-                flushln(code, o);
-            }
-        }
+        gen_on_eof_fail(code, opts, dfa, from, to, o);
     }
 
     o << "}";
