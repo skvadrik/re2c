@@ -238,9 +238,6 @@ EXTRA_DIST = \
 	README.md \
 	autogen.sh \
 	genhelp.sh \
-	doc/loplas.ps \
-	doc/sample.bib \
-	doc/tdfa/tdfa.pdf \
 	examples \
 	test
 
