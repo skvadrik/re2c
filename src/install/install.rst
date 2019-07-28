@@ -1,6 +1,6 @@
-=======
-Install
-=======
+================
+Download & build
+================
 
 .. toctree::
     :hidden:

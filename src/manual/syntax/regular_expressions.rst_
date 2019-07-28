@@ -1,0 +1,44 @@
+
+re2c uses the following syntax for regular expressions:
+
+*    ``"foo"`` case-sensitive string literal
+
+*    ``'foo'`` case-insensitive string literal
+
+*    ``[a-xyz]``, ``[^a-xyz]`` character class (possibly negated)
+
+*    ``.`` any character except newline
+
+*    ``R \ S`` difference of character classes ``R`` and ``S``
+
+*    ``R*`` zero or more occurrences of ``R``
+
+*    ``R+`` one or more occurrences of ``R``
+
+*    ``R?`` optional ``R``
+
+*    ``R{n}`` repetition of ``R`` exactly ``n`` times
+
+*    ``R{n,}`` repetition of ``R`` at least ``n`` times
+
+*    ``R{n,m}`` repetition of ``R`` from ``n`` to ``m`` times
+
+*    ``(R)`` just ``R``; parentheses are used to override precedence or for POSIX-style submatch
+
+*    ``R S`` concatenation: ``R`` followed by ``S``
+
+*    ``R | S`` alternative: ``R or S``
+
+*    ``R / S`` lookahead: ``R`` followed by ``S``, but ``S`` is not consumed
+
+*    ``name`` the regular expression defined as ``name`` (or literal string ``"name"`` in Flex compatibility mode)
+
+*    ``{name}`` the regular expression defined as ``name`` in Flex compatibility mode
+
+*    ``@stag`` an *s-tag*: saves the last input position at which ``@stag`` matches in a variable named ``stag``
+
+*    ``#mtag`` an *m-tag*: saves all input positions at which ``#mtag`` matches in a variable named ``mtag``
+
+Character classes and string literals may contain the following escape sequences:
+``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``, ``\\``, octal escapes ``\ooo`` and hexadecimal escapes ``\xhh``, ``\uhhhh`` and ``\Uhhhhhhhh``.
+

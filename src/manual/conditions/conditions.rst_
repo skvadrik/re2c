@@ -1,0 +1,52 @@
+*Conditions* are enabled with ``-c`` ``--conditions``.
+This option allows to encode multiple interrelated lexers within the same re2c block.
+
+Each lexer corresponds to a single *condition*.
+It starts with a label of the form ``yyc_name``,
+where ``name`` is *condition* name
+and ``yyc`` prefix can be adjusted with configuration ``re2c:condprefix``.
+Different lexers are separated with a comment ``/* *********************************** */``
+which can be adjusted with configuration ``re2c:cond:divider``.
+
+Furthermore, each *condition* has a unique identifier of the form ``yycname``,
+where ``name`` is condition name
+and ``yyc`` prefix can be adjusted with configuration ``re2c:condenumprefix``.
+Identifiers have the type ``YYCONDTYPE`` and should be generated with ``/*!types:re2c*/`` directive or ``-t`` ``--type-header`` option.
+Users shouldn't define these identifiers manually, as the order of *conditions* is not specified.
+
+Before all *conditions* re2c generates entry code that checks the current *condition* identifier
+and transfers control flow to the start label of the active *condition*.
+After matching some rule of this *condition*,
+lexer may either transfer control flow back to the entry code (after executing the associated action and optionally setting another *condition* with ``=>``),
+or use ``:=>`` shortcut and transition directly to the start label of another *condition* (skipping the action and the entry code).
+Configuration ``re2c:cond:goto`` allows to change the default behavior.
+
+Syntactically each rule must be preceded with a list of comma-separated *condition* names or a wildcard ``*``
+enclosed in angle brackets ``<`` and ``>``.
+Wildcard means "any condition" and is semantically equivalent to listing all condition names.
+Here ``regexp`` is a regular expression, ``default`` refers to the *default rule* ``*``,
+and ``action`` is a block of C/C++ code.
+
+*    ``<conditions-or-wildcard>  regexp-or-default                 action``
+
+*    ``<conditions-or-wildcard>  regexp-or-default  =>  condition  action``
+
+*    ``<conditions-or-wildcard>  regexp-or-default  :=> condition``
+
+Rules with an exclamation mark ``!`` in front of condition list have a special meaning:
+they have no regular expression,
+and the associated action is merged as an entry code to actions of normal rules.
+This might be a convenient place to peform a routine task that is common to all rules.
+
+*    ``<!conditions-or-wildcard>  action``
+
+Another special form of rules with an empty condition list ``<>`` and no regular expression
+allows to specify an "entry condition" that can be used to execute code before entering the lexer.
+It is semantically equivalent to a condition with number zero, name ``0`` and an empty regular expression.
+
+*    ``<>                 action``
+
+*    ``<>  =>  condition  action``
+
+*    ``<>  :=> condition``
+

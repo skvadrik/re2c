@@ -1,0 +1,33 @@
+Re2c allows to include other files using directive ``/*!include:re2c FILE */``,
+where ``FILE`` is the name of file to be included. Re2c looks for included
+files in the directory of the including file and in include locations, which
+can be specified with ``-I`` option.
+Re2c include directive works in the same way as C/C++ ``#include``: the contents
+of ``FILE`` are copy-pasted verbatim in place of the directive. Include files
+may have further includes of their own.
+Re2c provides some predefined include files that can be found in the
+``include/`` subdirectory of the project. These files contain definitions that
+can be useful to other projects (such as Unicode categories) and form something
+like a standard library for re2c.
+Here is an example of using include files:
+
+.. code-block:: cpp
+
+    // definitions.re
+    /*!re2c
+        alpha = [a-zA-Z];
+        digit = [0-9];
+    */
+
+    // main.re
+    /*!include:re2c "definitions.re" */
+    int lex(const char *YYCURSOR)
+    {
+        const char *YYMARKER;
+        /*!re2c
+            alpha { return 1; }
+            digit { return 2; }
+            *     { return 0; }
+        */
+    }
+

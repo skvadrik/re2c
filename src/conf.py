@@ -186,8 +186,9 @@ html_extra_path = [
     'CNAME',
     '.nojekyll',
     'feed/',
-    'about/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf',
-    'about/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf'
+    'papers/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps',
+    'papers/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf',
+    'papers/2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf'
 ]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,

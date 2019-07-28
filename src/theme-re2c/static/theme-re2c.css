@@ -56,7 +56,7 @@ div.document div.math img {
 div.document code {
     font-size: 14px;
     padding: 1px;
-    border: 1px solid gainsboro;
+    border: 1px solid lightgrey;
     background-color: aliceblue;
 }
 /* :download: role; should look like a normal link rather than inline code block */
@@ -108,7 +108,7 @@ div.sphinxsidebarwrapper h6 {
 }
 div.sphinxsidebarwrapper div.re2c-logo {
     background-color: silver;
-    font-family: Courier;
+    font-family: Courier, monospace;
     font-size: 1.5em;
     text-align: center;
     border: 1px solid darkgray;

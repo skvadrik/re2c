@@ -1,0 +1,66 @@
+
+.. toctree::
+    :hidden:
+
+.. include:: /manual/syntax/interface.rst_
+
+Default API
+-----------
+
+By default ``re2c`` operates on input using pointer-like primitives
+``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER``, and ``YYLIMIT``.
+Normally pointer-like primitives are defined as variables of type ``YYCTYPE*``,
+but it is possible to use STL iterators or any other abstraction as long as it syntactically fits into the following use cases:
+
+*    ``++YYCURSOR;``
+*    ``yych = *YYCURSOR;``
+*    ``yych = *++YYCURSOR;``
+*    ``yych = *(YYMARKER = YYCURSOR);``
+*    ``yych = *(YYMARKER = ++YCURSOR);``
+*    ``YYMARKER = YYCURSOR;``
+*    ``YYMARKER = ++YYCURSOR;``
+*    ``YYCURSOR = YYMARKER;``
+*    ``YYCTXMARKER = YYCURSOR + 1;``
+*    ``YYCURSOR = YYCTXMARKER;``
+*    ``if (YYLIMIT <= YYCURSOR) ...``
+*    ``if ((YYLIMIT - YYCURSOR) < n) ...``
+*    ``YYDEBUG (label, *YYCURSOR);``
+
+Generic API
+-----------
+
+If the default input model is too restrictive, then it is possible to use generic input API enabled with ``--input custom`` option.
+In this mode all input operations are expressed in terms of the primitives below.
+These primitives can be defined in any suitable way; one doesn't have to stick to the pointer semantics.
+For example, it is possible to read input directly from file without any buffering,
+or to disable ``YYFILL`` mechanism and perform end-of-input checking on each input character from inside of ``YYPEEK`` or ``YYSKIP``.
+
+* ``YYPEEK ()``
+* ``YYSKIP ()``
+* ``YYBACKUP ()``
+* ``YYBACKUPCTX ()``
+* ``YYSTAGP (t)``
+* ``YYSTAGN (t)``
+* ``YYMTAGP (t)``
+* ``YYMTAGN (t)``
+* ``YYRESTORE ()``
+* ``YYRESTORECTX ()``
+* ``YYRESTORETAG (t)``
+* ``YYLESSTHAN (n)``
+
+Default input model can be expressed in terms of generic API as follows
+(except for ``YMTAGP`` and ``YYMTAGN``, which have no default implementation):
+
+.. code-block:: cpp
+
+    #define  YYPEEK ()         *YYCURSOR
+    #define  YYSKIP ()         ++YYCURSOR
+    #define  YYBACKUP ()       YYMARKER = YYCURSOR
+    #define  YYBACKUPCTX ()    YYCTXMARKER = YYCURSOR
+    #define  YYRESTORE ()      YYCURSOR = YYMARKER
+    #define  YYRESTORECTX ()   YYCURSOR = YYCTXMARKER
+    #define  YYRESTORERAG (t)  YYCURSOR = t
+    #define  YYLESSTHAN (n)    YYLIMIT - YYCURSOR < n
+    #define  YYSTAGP (t)       t = YYCURSOR
+    #define  YYSTAGN (t)       t = NULL
+

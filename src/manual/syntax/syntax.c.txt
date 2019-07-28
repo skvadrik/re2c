@@ -1,0 +1,60 @@
+                                     // re2c block with configuration that turns off #line directives
+                                     //
+#include <stdio.h>                   //    C/C++ code
+                                     //
+#define YYMAXFILL 1                  // directive that defines YYMAXFILL (unused)
+                                     // end of re2c block
+                                     //
+static int lex(const char *YYCURSOR) // YYCURSOR is defined as a function parameter
+{                                    //
+    const char *YYMARKER;            // YYMARKER is defined as a local variable
+    
+{
+    char yych;
+    yych = *YYCURSOR;
+    switch (yych) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':   goto yy4;
+    default:    goto yy2;
+    }
+yy2:
+    ++YYCURSOR;
+    { return 1; }
+yy4:
+    yych = *++YYCURSOR;
+    switch (yych) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':   goto yy4;
+    default:    goto yy6;
+    }
+yy6:
+    {                                //   a normal rule with its semantic action
+        printf("number\n");          //     ... semantic action (continued)
+        return 0;                    //     ... semantic action (continued)
+    }
+}
+                                     // end of re2c block
+}                                    //
+                                     //
+int main()                           //
+{                                    //
+    lex("1024");                     //    C/C++ code
+    lex(";]");                       //
+    return 0;                        //
+}                                    //
