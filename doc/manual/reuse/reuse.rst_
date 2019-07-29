@@ -1,0 +1,16 @@
+Reuse mode is enabled with the ``-r --reusable`` option. In this mode re2c
+allows to reuse definitions, configurations and rules specified by a
+``/*!rules:re2c*/`` block in subsequent ``/*!use:re2c*/`` blocks. As of
+re2c-1.2 it is possible to mix such blocks with normal ``/*!re2c*/`` blocks;
+prior to that re2c expects a single rules-block followed by use-blocks (normal
+blocks are disallowed). Use-blocks can have additional definitions,
+configurations and rules: they are merged to those specified by the rules-block.
+A very common use case for ``-r --reusable`` option is a lexer that supports
+multiple input encodings: lexer rules are defined once and reused multiple times
+with encoding-specific configurations, such as ``re2c:flags:utf-8``.
+
+Below is an example of a multi-encoding lexer: it reads a phrase with Unicode
+math symbols and accepts input either in UTF8 or in UT32. Note that the
+``--input-encoding utf8`` option allows us to write UTF8-encoded symbols in the
+regular expressions; without this option re2c would parse them as a plain ASCII
+byte sequnce (and we would have to use hexadecimal escape sequences).

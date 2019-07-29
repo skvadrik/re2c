@@ -1,5 +1,3 @@
-.. include:: @top_srcdir@/doc/manual/options/options_list.rst 
-
-.. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst 
-
-.. include:: @top_srcdir@/doc/manual/warnings/warnings_list.rst 
+.. include:: @top_srcdir@/doc/manual/options/options_list.rst_
+.. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst_
+.. include:: @top_srcdir@/doc/manual/warnings/warnings_list.rst_

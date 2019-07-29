@@ -1,0 +1,22 @@
+EOF rule
+--------
+
+EOF rule ``$`` was introduced in version 1.2. It is a hybrid approach that tries
+to take the best of both worlds: simplicity and efficiency of the sentinel
+method combined with the generality of bounds-checking method. The idea is to
+appoint an arbitrary symbol to be the sentinel, and only perform further bounds
+checking if the sentinel symbol matches (more precisely, if the symbol class that
+contains it matches). The check is of the form ``YYLIMIT <= YYCURSOR``.
+If this condition is not satisfied, then the sentinel is just an ordinary input
+character and the lexer continues. Otherwise this is a real sentinel, and the
+lexer calls ``YYFILL()``. If ``YYFILL`` returns zero, the lexer assumes that it
+has more input and tries to re-match. Otherwise ``YYFILL`` returns non-zero and
+the lexer knows that it has reached the end of input. At this point there are
+three possibilities. First, it might have already matched a shorter lexeme ---
+in this case it just rolls back to the last accepting state. Second, it might
+have consumed some characters, but failed to match --- in this case it falls
+back to default rule ``*``. Finally, it might be in the initial state --- in
+this (and only this!) case it matches EOF rule ``$``.
+
+Below is an example of using EOF rule. Configuration ``re2c:yyfill:enable = 0;``
+suppresses generation of ``YYFILL`` calls (but not the bounds checks).

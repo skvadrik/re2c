@@ -9,6 +9,7 @@ Re2c provides some predefined include files that can be found in the
 ``include/`` subdirectory of the project. These files contain definitions that
 can be useful to other projects (such as Unicode categories) and form something
 like a standard library for re2c.
+
 Here is an example of using include files:
 
 .. code-block:: cpp

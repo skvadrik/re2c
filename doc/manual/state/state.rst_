@@ -1,0 +1,49 @@
+With ``-f`` ``--storable-state`` option re2c generates a lexer that can store
+its current state, return to the caller, and later resume operations exactly
+where it left off. The default mode of operation in re2c is a "pull" model,
+in which the lexer "pulls" more input whenever it needs it. This may be
+unacceptable in cases when the input becomes available piece by piece (for
+example, if the lexer is invoked by the parser, or if the lexer program
+communicates via a socket protocol with some other program that must wait for a
+reply from the lexer before it transmits the next message). Storable state
+feature is intended exactly for such cases: it allows to generate lexers that
+work in a "push" model. When the lexer needs more input, it stores its state and
+returns to the caller. Later, when more input becomes available, the caller
+resumes the lexer exactly where it stopped. There are a few changes necessary
+compared to the "pull" model:
+
+* Define ``YYSETSTATE()`` and ``YYGETSTATE(state)`` promitives.
+
+* Define ``yych``, ``yyaccept`` and ``state`` variables as a part of persistent
+  lexer state. The ``state`` variable should be initialized to ``-1``.
+
+* ``YYFILL`` should return to the outer program instead of trying to supply more
+  input. Return code should indicate that lexer needs more input.
+
+* The outer program should recognize situations when lexer needs more input and
+  respond appropriately.
+
+* Use ``/*!getstate:re2c*/`` directive if it is necessary to execute any code
+  before entering the lexer.
+
+* Use configurations ``state:abort`` and ``state:nextlabel`` to further tweak
+  the generated code.
+
+Here is an example of a "push"-model lexer that reads input from ``stdin`` and
+expects a sequence of words separated by spaces and newlines. The lexer loops
+forever, waiting for more input. It can be terminated by sending a special EOF
+token --- a word "stop", in which case the lexer terminates successfully and
+prints the number of words it has seen. Abnormal termination happens in case of
+a syntax error, premature end of input (without the "stop" word) or in case the
+buffer is too small to hold a lexeme (for example, if one of the words exceeds
+buffer size). Premature end of input happens in case the lexer fails to read any
+input while being in the initial state --- this is the only case when EOF rule
+matches. Note that the lexer may call ``YYFILL`` twice before terminating (and
+thus require hitting ``Ctrl+D`` a few times). First time ``YYFILL`` is called
+when the lexer expects continuation of the current greedy lexeme (either a word
+or a whitespace sequence). If ``YYFILL`` fails, the lexer knows that it has
+reached the end of the current lexeme and executes the corresponding semantic
+action. The action jumps to the beginning of the loop, the lexer enters the
+initial state and calls ``YYFILL`` once more. If it fails, the lexer matches EOF
+rule. (Alternatively EOF rule can be used for termination instead of a special
+EOF lexeme.)

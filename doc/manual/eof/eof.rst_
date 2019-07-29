@@ -1,0 +1,15 @@
+Re2c provides a number of ways to handle end-of-input situation. Which way to
+use depends on the complexity of regular expressions, performance
+considerations, the need for input buffering and various other factors. EOF
+handling is probably the most complex part of re2c user interface --- it
+definitely requires a bit of understanding of how the generated lexer works.
+But in return is allows the user to customize lexer for a particular environment
+and avoid the unnecessary overhead of generic methods when a simpler method is
+sufficient. Roughly speaking, there are four main methods:
+
+- using sentinel symbol (simple and efficient, but limited)
+- bounds checking with padding (generic, but complex)
+- EOF rule: a combination of sentinel symbol and bounds checking (generic and
+  simple, can be more or less efficient than bounds checking with padding
+  depending on the grammar)
+- using generic API (user-defined, so may be incorrect ;])

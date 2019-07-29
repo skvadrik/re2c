@@ -1,0 +1,10 @@
+In order keep manpage, help and online documentation in sync, we generate
+everything from the same RST sources. The more brief and succinct manpage docs
+are located on the 'master' branch and serve as the primary source of
+documentation. The more expanded and Sphinx-enhanced online docs are located on
+the 'gh-pages-gen' branch; the files with '.rst_' extension (which constitute
+the manpage) are pulled from the 'master' branch to 'gh-pages-gen' branch and
+used together with other docs in the generation of https://re2c.org website.
+
+Normally the general descriptio of each feature is in an '.rst_' file on
+'master' branch, and examples are in '.rst' files on 'gh-pages-gen' branch.
