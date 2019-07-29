@@ -1,21 +1,22 @@
 #include <stdio.h>
 #include <string.h>
 
+/*!max:re2c*/
 #define SIZE 4096
 
 typedef struct {
     FILE *file;
-    char buf[SIZE + 1], *lim, *cur, *tok;
+    char buf[SIZE + YYMAXFILL], *lim, *cur, *tok;
     int eof;
 } Input;
 
-static int fill(Input *in)
+static int fill(Input *in, size_t need)
 {
     if (in->eof) {
         return 1;
     }
     const size_t free = in->tok - in->buf;
-    if (free < 1) {
+    if (free < need) {
         return 2;
     }
     memmove(in->buf, in->tok, in->lim - in->tok);
@@ -23,8 +24,11 @@ static int fill(Input *in)
     in->cur -= free;
     in->tok -= free;
     in->lim += fread(in->lim, 1, free, in->file);
-    in->lim[0] = 0;
-    in->eof |= in->lim < in->buf + SIZE;
+    if (in->lim < in->buf + SIZE) {
+        in->eof = 1;
+        memset(in->lim, 0, YYMAXFILL);
+        in->lim += YYMAXFILL;
+    }
     return 0;
 }
 
@@ -33,10 +37,10 @@ static void init(Input *in, FILE *file)
     in->file = file;
     in->cur = in->tok = in->lim = in->buf + SIZE;
     in->eof = 0;
-    fill(in);
+    fill(in, 1);
 }
 
-#define YYFILL() fill(in)
+#define YYFILL(n) if (fill(in, n) != 0) return -1
 static int lex(Input *in)
 {
     int count = 0;
@@ -46,10 +50,9 @@ loop:
     re2c:define:YYCTYPE = char;
     re2c:define:YYCURSOR = in->cur;
     re2c:define:YYLIMIT = in->lim;
-    re2c:eof = 0;
 
     *                         { return -1; }
-    $                         { return count; }
+    [\x00]                    { return (YYMAXFILL == in->lim - in->tok) ? count : -1; }
     [a-z]+                    { ++count; goto loop; }
     ['] ([^'] | [\\]['])* ['] { ++count; goto loop; }
     [ ]+                      { goto loop; }

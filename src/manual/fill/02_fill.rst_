@@ -1,0 +1,38 @@
+YYFILL with padding
+-------------------
+
+In the default case (when EOF rule is not used) ``YYFILL`` is a function-like
+primitive that accepts a single argument and does not return any value.
+``YYFILL`` invocation is triggered by condition ``(YYLIMIT - YYCURSOR) < n`` in
+default API and ``YYLESSTHAN(n)`` in generic API. The argument passed to
+``YYFILL`` is the minimal number of characters that must be supplied. If it
+fails to do so, ``YYFILL`` must not return to the lexer (for that reason it is
+best implemented as a macro that returns from the calling function on failure).
+In case of a successfull ``YYFILL`` invocation the limit position must be set
+either to one after the last input position in buffer, or to the end of
+``YYMAXFILL`` padding (in case ``YYFILL`` has successfully read at least ``n``
+characters, but not enough to fill the entire buffer). The pictures below show
+the relative locations of input positions in buffer before and after ``YYFILL``
+invocation (``YYMAXFILL`` padding on the second picture is marked with ``#``
+symbols).
+
+.. code-block:: text
+
+                   <-- shift -->                 <-- need -->
+                 >-A------------B---------C-----D-------E---F--------G->
+                 buffer       token    marker cursor  limit
+                                                         
+    >-A------------B---------C-----D-------E---F--------G->
+                 buffer,  marker cursor               limit
+                 token
+
+                   <-- shift -->                 <-- need -->
+                 >-A------------B---------C-----D-------E-F        (EOF)
+                 buffer       token    marker cursor  limit
+                                                         
+    >-A------------B---------C-----D-------E-F###############
+                 buffer,  marker cursor                   limit
+                 token                        <- YYMAXFILL ->
+
+Here is an example of a program that reads input file ``input.txt`` in chunks of
+4096 bytes and uses bounds-checking with padding.

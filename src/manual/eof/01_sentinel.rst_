@@ -1,0 +1,16 @@
+Using sentinel symbol
+---------------------
+This is the simplest and the most efficient method. It is applicable in cases
+when the input is small enough to fit into a continuous memory buffer and there
+is a natural "sentinel" symbol --- a code unit that is not allowed by any of the
+regular expressions in grammar (except possibly as a terminating character).
+Sentinel symbol never appears in well-formed input, therefore it can be appended
+at the end of input and used as a stop signal by the lexer. A good example of
+such input is a null-terminated C-string, provided that the grammar does not
+allow ``NULL`` in the middle of lexemes. Sentinel method is very efficient,
+because the lexer does not need to perform any additional checks for the end of
+input --- it comes naturally as a part of processing the next character.
+
+Below is an example of using sentinel method. Configuration
+``re2c:yyfill:enable = 0;`` suppresses generation of end-of-input checks and
+``YYFILL`` calls.

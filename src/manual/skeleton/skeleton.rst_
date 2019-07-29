@@ -32,5 +32,3 @@ generates sufficiently many paths to cover all skeleton transitions, and thus
 trigger the corresponding conditional jumps in the lexer.
 The algorithm implementation is limited by ~1Gb of transitions and consumes
 constant amount of memory (re2c writes data to file as soon as it is generated).
-
-.. include:: /manual/skeleton/example.rst

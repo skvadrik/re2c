@@ -1,0 +1,35 @@
+YYFILL with EOF rule
+--------------------
+
+If EOF rule is used, ``YYFILL`` is a function-like primitive that accepts
+no arguments and returns a value which is checked against zero. ``YYFILL``
+invocation is triggered by condition ``YYLIMIT <= YYCURSOR`` in default API and
+``YYLESSTHAN()`` in generic API. A non-zero return value means that ``YYFILL``
+has failed. A successful ``YYFILL`` call must supply at least one character and
+adjust input positions accordingly. Limit must always be set to one after the
+last input position in buffer, and the character at the limit position must be
+the sentinel symbol specified by ``re2c:eof`` configuration. The pictures below
+show the relative locations of input positions in buffer before and after
+``YYFILL`` call (sentinel symbol is marked with ``#``, and the second picture
+shows the case when there is not enough input to fill the whole buffer).
+
+.. code-block:: text
+
+                   <-- shift -->
+                 >-A------------B---------C-------------D#-----------E->
+                 buffer       token    marker         limit,
+                                                      cursor
+    >-A------------B---------C-------------D------------E#->
+                 buffer,  marker        cursor        limit
+                 token
+
+                   <-- shift -->
+                 >-A------------B---------C-------------D#--E (EOF)
+                 buffer       token    marker         limit,
+                                                      cursor
+    >-A------------B---------C-------------D---E#........
+                 buffer,  marker       cursor limit
+                 token
+
+Here is an example of a program that reads input file ``input.txt`` in chunks of
+4096 bytes and uses EOF rule.

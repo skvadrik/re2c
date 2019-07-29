@@ -8,7 +8,7 @@
     Parsing options and arguments with tags             </examples/example_14>
     Parsing records and structs with tags               </examples/example_13>
     C++98 lexer                                         </examples/example_07>
-    Parsin URI (RFC-3986)                               </examples/example_10>
+    Parsing URI (RFC-3986)                               </examples/example_10>
     Parsing HTTP message headers (RFC-7230)             </examples/example_11>
     Parsing Braille patterns with multiple encodings    </examples/example_06>
     Finding strings in binaries with generic API        </examples/example_15>

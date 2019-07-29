@@ -47,6 +47,3 @@ action. The action jumps to the beginning of the loop, the lexer enters the
 initial state and calls ``YYFILL`` once more. If it fails, the lexer matches EOF
 rule. (Alternatively EOF rule can be used for termination instead of a special
 EOF lexeme.)
-
-.. literalinclude:: /manual/state/push.re
-    :language: c

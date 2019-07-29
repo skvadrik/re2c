@@ -1,0 +1,22 @@
+Using generic API
+-----------------
+
+Generic API can be used with any of the above methods. It also allows to use a
+user-defined method by placing EOF checks in one of the basic primitives.
+Usually this is either ``YYSKIP`` (the check is performed when advancing to the
+next input character), or ``YYPEEK`` (the check is performed when reading the
+next input character). The resulting methods are inefficient, as they check on
+each input character. However, they can be useful in cases when the input cannot
+be buffered or padded and does not contain a sentinel character at the end. One
+should be cautious when using such ad-hoc methods, as it is easy to overlook
+some corner cases and come up with a method that only partially works. Also it
+should be noted that not everything can be expressed via generic API: for
+example, it is impossible to reimplement the way EOF rule works (in particular,
+it is impossible to re-match the character after successfull ``YYFILL``).
+
+Below is an example of using ``YYSKIP`` to perform bounds checking without
+padding. ``YYFILL`` generation is suppressed using ``re2c:yyfill:enable = 0;``
+configuration. Note that if the grammar was more complex, this method might not
+work in case when two rules overlap and EOF check fails after a shorter lexeme
+has already been matched (as it happens in our example, there are no overlapping
+rules).
