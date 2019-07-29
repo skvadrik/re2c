@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 # sync with master (pull manpage files)
 remote=`git config branch.master.remote` \
