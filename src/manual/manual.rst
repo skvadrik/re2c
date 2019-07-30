@@ -2,9 +2,6 @@
 User manual
 +++++++++++
 
-.. contents::
-    :local:
-
 Syntax
 ======
 .. include:: /manual/syntax/syntax.rst_

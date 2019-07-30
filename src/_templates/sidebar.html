@@ -3,7 +3,9 @@
 </div>
 
 <h3><a href="{{ pathto(master_doc) }}">Home</a></h3>
-{{ toctree(includehidden=True, maxdepth=1) }}
+<div class="re2c-toc-global">
+    {{ toctree(includehidden=True, maxdepth=1) }}
+</div>
 
 {%- if display_toc %}
     <h3>{{ title }}</h3>

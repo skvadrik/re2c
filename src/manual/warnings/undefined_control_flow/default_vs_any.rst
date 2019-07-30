@@ -1,5 +1,5 @@
-The difference between ``*`` and ``[^]``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The old default rule
+~~~~~~~~~~~~~~~~~~~~
 
 When the world was young and re2c didn't have the default ``*`` rule (that is,
 before re2c-0.13.7) everyone used ``[^]`` as the default rule, as in this

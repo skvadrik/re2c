@@ -3,7 +3,7 @@
 
 .linenos {
     color: darkgray;
-    font-size: 14px; /* must be in sync with .highlight */
+    font-size: 85%; /* must be in sync with .highlight */
 }
 
 .highlight {
@@ -13,7 +13,7 @@
     background-color: aliceblue;
     display: block;
     overflow: auto;
-    font-size: 14px; /* must be in sync with .linenos */
+    font-size: 85%; /* must be in sync with .linenos */
     color: darkslategray;
 }
 

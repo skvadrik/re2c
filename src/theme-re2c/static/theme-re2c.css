@@ -1,16 +1,12 @@
-
-
-
 body {
     background-color: white;
     font-family: sans-serif;
     margin: 0;
+    font-size: 16px;
 }
 
-
-
 div.document {
-    margin: 0 0 0 20%;
+    margin: 0 0 0 360px;
     padding: 1em;
     text-align: justify;
     color: darkslategray;
@@ -27,14 +23,14 @@ div.document h6 {
 }
 div.document h1 { text-align: center; }
 div.document h2 { border-bottom: 1px solid; }
-div.document h3 { border-bottom: 1px dotted; }
+div.document h3 { border-bottom: 1px solid lightgray; }
 div.document table, tr, td, th {
     border: none;
     padding: 0em 0.2em 0em 0.2em;
 }
 div.document img {
     display: block;
-/*    border: 1px dotted; */
+    /* border: 1px dotted; */
     margin: auto;
 }
 div.document img.feed {
@@ -54,7 +50,7 @@ div.document div.math img {
     margin: auto;
 }
 div.document code {
-    font-size: 14px;
+    font-size: 85%;
     padding: 1px;
     border: 1px solid lightgrey;
     background-color: aliceblue;
@@ -62,26 +58,23 @@ div.document code {
 /* :download: role; should look like a normal link rather than inline code block */
 div.document a code.download {
     font-family: sans;
-    font-size: 1em;
+    font-size: 100%;
     padding: none;
     border: none;
     background-color: transparent;
 }
 
-
 div.footer {
-    margin: 0 0 0 20%;
+    margin: 0 0 0 360px;
     padding: 1em;
     float: right;
     font-style: italic;
     color: gainsboro;
 }
 
-
-
 div.sphinxsidebar {
     border-right: 1px solid darkgray;
-    width: 20%;
+    min-width: 360px;
     text-align: left;
     position: fixed;
     background-color: gainsboro;
@@ -90,11 +83,13 @@ div.sphinxsidebar {
     color: midnightblue;
 }
 div.sphinxsidebar a { color: midnightblue; }
-div.sphinxsidebarwrapper { padding: 1em; }
+div.sphinxsidebarwrapper {
+    padding: 1em;
+}
 div.sphinxsidebarwrapper ul {
     list-style-type: disc;
     padding: 0 0 0 1em;
-    font-size: 0.95em;
+    font-size: 90%;
     color: darkgray;
 }
 div.sphinxsidebarwrapper h1,
@@ -109,20 +104,64 @@ div.sphinxsidebarwrapper h6 {
 div.sphinxsidebarwrapper div.re2c-logo {
     background-color: silver;
     font-family: Courier, monospace;
-    font-size: 1.5em;
+    font-size: 150%;
     text-align: center;
     border: 1px solid darkgray;
     overflow: hidden;
+}
+div.re2c-toc-global {
+    font-size: 110%;
 }
 div.re2c-toc-local {
     padding: 0.5em;
     background-color: linen;
     border: 1px solid darkgray;
     overflow: auto;
+    font-size: 110%;
 }
 
-
+/* searchbox */
+input[type="text"] {
+    font-size: 100%;
+    padding: 0px 5px 0px 5px;
+    margin: 0px;
+    height: 2em;
+    width: 80%;
+    border: 1px solid darkgray;
+    border-radius: 7px;
+    background-color: white;
+}
+input[type="submit"] {
+    font-size: 100%;
+    padding: 0px 5px 0px 5px;
+    margin: 0px;
+    height: 2em;
+    width: auto;
+    border: 1px solid darkgray;
+    border-radius: 7px;
+    font-weight: bold;
+    color: steelblue;
+    background-color: whitesmoke;
+}
 
 .headerlink { display: none; }
 
 a:focus { outline: none; }
+
+/* move sidebar on mobile phones */
+@media (max-width: 1000px) {
+    div.sphinxsidebar {
+        position: static;
+        width: auto;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid darkgray;
+        text-align: left;
+    }
+    div.document {
+        margin: 0;
+    }
+    body {
+        font-size: 20px;
+    }
+}
