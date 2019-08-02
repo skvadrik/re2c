@@ -1,140 +1,118 @@
-================
-Download & build
-================
+==================
+Build instructions
+==================
 
 .. toctree::
     :hidden:
 
-Download
+Dependencies
+============
+
+Re2c users need only a C++ compiler to build re2c from a release tarball, and
+optionally Bash if they want to run the tests.
+
+Re2c developers also need Autotools, Bison (if they change parser code), rst2man
+(if they change documentation), Sphinx (if they change this website), Mingw and
+Wine (if they test builds for Windows) and Libtool (if they change the
+experimental libre2c library). A few occasional helper scripts are written in
+Haskell (but they are not necessary for re2c development).
+Re2c is a bootstrapping project with all the consequences.
+
+Building
 ========
 
-Below is the list of the latest (stable) tarballs for each branch.
-You can find other releases `here <https://sourceforge.net/projects/re2c/files/old/>`_
-(but be aware that they are hidden for a good reason:
-most of them contain bugs that have been fixed in the next minor release).
-
-* `re2c-1.1.1.tar.gz <https://github.com/skvadrik/re2c/releases/download/1.1.1/re2c-1.1.1.tar.gz>`_
-* `re2c-1.0.3.tar.gz <https://github.com/skvadrik/re2c/releases/download/1.0.3/re2c-1.0.3.tar.gz>`_
-* `re2c-0.16.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.16/re2c-0.16.tar.gz>`_
-* `re2c-0.15.3.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.15.3/re2c-0.15.3.tar.gz>`_
-* `re2c-0.14.3.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.14.3/re2c-0.14.3.tar.gz>`_
-* `re2c-0.13.7.5.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.7.5/re2c-0.13.7.5.tar.gz>`_
-* `re2c-0.13.6.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.6/re2c-0.13.6.tar.gz>`_
-* `re2c-0.13.5.tar.gz <http://sourceforge.net/projects/re2c/files/re2c/0.13.5/re2c-0.13.5.tar.gz/download>`_
-
-Source files are `on github <https://github.com/skvadrik/re2c>`_:
+If you are building re2c from repository, *not* from a release tarball, first of
+all you should run Autotools:
 
 .. code-block:: bash
 
-    $ git clone https://github.com/skvadrik/re2c.git re2c
+    $ autoreconf -i -W all
 
-There's also a mirror on `sourceforge <https://sourceforge.net/p/re2c/code-git/ci/master/tree/>`_
-(should be in sync with github):
-
-.. code-block:: bash
-
-    $ git clone https://git.code.sf.net/p/re2c/code-git re2c
-
-Many distributions and systems provide their own packages:
-`Alt <http://www.sisyphus.ru/ru/srpm/Sisyphus/re2c>`_,
-`Apple Mac OS X <http://macappstore.org/re2c/>`_,
-`Arch <https://www.archlinux.org/packages/extra/x86_64/re2c>`_,
-`Debian <https://packages.debian.org/search?keywords=re2c>`_,
-`Gentoo <https://packages.gentoo.org/packages/dev-util/re2c>`_,
-`Fedora <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=fedora>`_,
-`FreeBSD <http://www.freebsd.org/cgi/ports.cgi?query=re2c>`_,
-`Mageia <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=mageia>`_,
-`Mandriva <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=mandriva>`_,
-`NetBSD <ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/re2c/README.html>`_,
-`OpenSuSE <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=opensuse>`_,
-`RedHat <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=dag>`_,
-`Slackware <http://slackbuilds.org/repository/14.1/development/re2c/?search=re2c>`_,
-`Ubuntu <http://packages.ubuntu.com/search?keywords=re2c>`_.
-
-Build
-=====
-
-The only required build-time dependency for re2c is a C++98 compiler.
-Optional build-time dependencies are the following:
-autotools (to build re2c from source, not from distribution tarball),
-bison (to rebuild re2c parser)
-and rst2man (to rebuild documentation).
-
-If you are building re2c from source, first of all you should run autoconf and automake:
+The simplest possible build is an in-tree build (will install re2c to
+``$RE2C_PATH`` location):
 
 .. code-block:: bash
 
-    $ ./autogen.sh
-
-The simplest possible build is an in-tree build.
-The following instructions will install re2c (binary and manpage) to ``_p_r_e_f_i_x_`` (by default ``/usr/local``):
-
-.. code-block:: bash
-
-    $ ./configure --prefix=_p_r_e_f_i_x_
+    $ ./configure --prefix=$RE2C_PATH
     $ make
     $ make install
 
-Since re2c is a self-hosting lexer generator (some parts of re2c are written in re2c), it needs to be bootstrapped.
-Bootstrapping files are packaged into the re2c distribution, so that re2c can be built on a system without re2c.
-The following instructions bootstrap re2c from scratch and update precompiled files:
+Out-of-tree build (puts build artifacts in a separate directory):
+
+.. code-block:: bash
+
+    $ mkdir $BUILD_DIR
+    $ cd $BUILD_DIR
+    $ ../configure --prefix=$RE2C_PATH
+    $ make
+    $ make install
+
+Bootstrapping build (rebuilds re2c with the freshly built re2c and updates
+precompiled bootstrap files):
 
 .. code-block:: bash
 
     $ make bootstrap
 
-re2c supports out-of-tree builds:
+Building on Windows is more tricky. The best option is to use
+`Cygwin <https://cygwin.com/>`_, or build re2c with `Mingw <http://mingw.org/>`_
+(Mingw builds are supported and tested regularly).
+For some Mingw versions you might have to use ``-std=gnu++11`` compiler option
+to avoid spurious build errors (re2c uses ``-std=c++98`` by default).
 
 .. code-block:: bash
 
-    $ mkdir builddir && cd builddir
-    $ ../configure
-    $ make
-    $ make install
+    $ ./configure --host i686-w64-ming 32 CXXFLAGS="-std=gnu++11"
 
-If you intend to use re2c on Windows, you can either
-use `cygwin <https://cygwin.com/>`_
-or build re2c with `mingw <http://mingw.org/>`_
-(mingw builds are supported and tested regularly).
-For some mingw versions you might have to use ``-std=gnu++11`` compiler option to avoid spurious build errors
-(re2c uses ``-std=c++98`` by default).
-
-.. code-block:: bash
-
-    $ ./configure --host i686-w64-mingw32 CXXFLAGS="-std=gnu++11"
-    $ make
-    $ make install
-
-To rebuild re2c documentation:
+To build documentation:
 
 .. code-block:: bash
 
     $ ./configure --enable-docs
-    $ make docs
 
+To enable debug:
 
-Test
-====
+.. code-block:: bash
 
-re2c has a main test suite and a couple of small tests. Run them all:
+    $ ./configure --enable-debug
+
+To build the experimental libre2c library:
+
+.. code-block:: bash
+
+    $ ./configure --enable-libs
+
+Re2c provides a bunch of build scripts ``__build_*.sh`` that can be used
+for specialized builds with ``GLIBCXX_DEBUG``, AddressSanitizer, etc.
+
+Testing
+=======
+
+Re2c has a main test suite and a couple of small unit tests. Run them all:
 
 .. code-block:: bash
 
     $ make check
 
-Or run only the main test suite (and watch progress dumped to ``stdout``):
+Run only the main test suite and watch the progress dumped on ``stdout``:
 
 .. code-block:: bash
 
-    $ make tests
+    $ ./run_tests.sh -j<N>
 
-Run the test suite under `valgrind <http://valgrind.org/>`_ (takes a long time):
+Run the main test suite with ``--skeleton`` re2c option:
+
+.. code-block:: bash
+
+    $ ./run_tests.sh --skeleton
+
+Run the test suite under Valgrind (takes some time and memory):
 
 .. code-block:: bash
 
     $ make vtests
 
-Test mingw builds with `wine <https://www.winehq.org/>`_:
+Test mingw builds with Wine:
 
 .. code-block:: bash
 
@@ -146,4 +124,10 @@ Check the distribution:
 
     $ make distcheck
 
+Re2c provides a helper script ``__alltest.sh`` that builds and tests various
+re2c build flavours with ``GLIBCXX_DEBUG``, AddressSanitizer, etc.
+There is a couple of fuzz-testing Haskell scripts in the ``fuzz`` subdirectory;
+they are based on the QuickCheck library and can be easily modified to fuzz-test
+various aspects of re2c by comparing current re2c version against older versions
+or against other regular expression libraries.
 

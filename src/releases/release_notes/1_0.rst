@@ -1,13 +1,10 @@
-===========
 Release 1.0
 ===========
-
-*by Ulya Trofimovich*
 
 This release is an important milestone in the history of re2c: it adds *submatch extraction*.
 It is a long-awaited feature; even as Peter Bumbulis released the first version of re2c back in 1993,
 he mentioned submatch extraction in his paper together with Donald D. Cowan
-`"RE2C: a more versatile scanner generator" <../../1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf>`_
+`"RE2C: a more versatile scanner generator" <../../1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps>`_
 as a useful feature that soon should be added to re2c.
 It seemed back then that submatch extraction is relatively easy to implement;
 like many other useful extensions, it was deemed to be no more than syntactic sugar on top of canonical regular expressions.
@@ -30,25 +27,26 @@ works in linear time and the required space does not depend on the input length.
 But what is most important, the added complexity depends on submatch detalization:
 on submatch-free regular expressions Laurikari automaton reduces to a simple DFA.
 
-As I started working on the implementation of submatch extraction in re2c (in early 2016),
-at first I didn't appreciate the elegance of Laurikari approach; it still seemed overly complicated for re2c.
-I studied many papers and tried to invent an algorithm that would support only *partial* submatch extraction,
+When the work on submatch extraction feature started in early 2016,
+at first it seemed that Laurikari algorithm was still overly complicated.
+Re2c needed an algorithm that would support only *partial* submatch extraction,
 but the supported cases would be handled very efficiently.
-As I developed the algorithm, I came to realize that it was in fact but a special case of Laurikari algorithm.
-Naturally, I turned back to the original paper and started to adapt my implementation.
-To my surprise, I discovered a strange deficiency in Laurikari algorithm compared to my early implementation:
-when recording submatches, Laurikari automata totally ignore the lookahead symbol
+A lot of effort was spent on studying papers,
+and finally this lead to the development of a new algorithm.
+It soon became clear that the self-invented algorithm was in fact a special case of Laurikari algorithm,
+with one significant performance improvement: the use of lookahead symbol.
+Surprisingly, the original Laurikari algorithm has a strange deficiency:
+when recording submatches, the automata totally ignore the lookahead symbol
 and perform a lot of redundant operations that could be easily avoided.
-It was only logical to fix Laurikari algorithm;
-but as I worked on it, a couple of other issues showed up,
-and so it happened that I ended up writing a whole paper on the subject:
+It was only logical to fix Laurikari algorithm.
+The new improved algorithm is described in the paper
 `"Tagged Deterministic Finite Automata with Lookahead" <../../2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_
 
 Submatch extraction in re2c comes in two flavors:
 POSIX-compliant capturing groups (with true POSIX semantics)
 and standalone *tags* that use leftmost greedy disambiguation.
 Both features require a number of new API primitives and configurations;
-and they are barely documented yet (though I managed to add a `section <../../manual/features/submatch/submatch.html>`_ in the manual).
+and they are barely documented yet (though I managed to add a section in the manual).
 The paper cited above has some interesting benchmark results;
 articles and examples will follow in the nearest future.
 As usually, you may expect a number of small bug-fix releases in the 1.0.x series.
@@ -90,8 +88,6 @@ The following people contributed to this release:
 
 * Many thanks to the early user of the new features João Paredes for his patience and encouraging comments on the subject.
 
-Below is a coarse list of all changes (a raw excerpt from `changelog <../changelog/changelog.html>`_):
-
-.. include:: ../changelog/1_0_list.rst
+See the changelog :ref:`releases/changelog/changelog:1.0 (2017-08-11)` for details.
 
 

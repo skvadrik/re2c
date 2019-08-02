@@ -1,8 +1,0 @@
-==============
-Release 0.15.2
-==============
-
-This release fixes a bug in the build system (`reported <https://bugs.gentoo.org/show_bug.cgi?id=566620>`_ on Gentoo bugtracker).
-The fix adds a missing dependency (the lexer depends on a bison-generated header).
-It seems that the dependency has always been missing, and the build order just happened to be correct.
-

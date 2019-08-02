@@ -1,8 +1,5 @@
-=============
 Release 1.1
 =============
-
-*by Ulya Trofimovich*
 
 This release doesn't bring in any serious user-visible changes;
 most of the work concentrated on the internal POSIX disambiguation algorithm
@@ -15,8 +12,7 @@ Kuklewicz algorithm was replaced with a totally different algorithm
 based on the work of Satoshi Okui and Taro Suzuki (described in the paper
 "Disambiguation in Regular Expression Matching via Position Automata with Augmented Transitions", year 2013).
 The main effort in this release was in developing proper theoretical foundations for the new algorithm.
+As usual, there has been a couple of bug fixes.
 
-As usual, there has been a couple of bug fixes. The list of changes:
-
-.. include:: ../changelog/1_1_list.rst
+See the changelog :ref:`releases/changelog/changelog:1.1 (2018-08-27)` for details.
 

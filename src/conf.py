@@ -32,9 +32,11 @@ sys.path.insert(0, os.path.abspath('./src/manual/fill/'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.imgmath'
+    'sphinx.ext.imgmath',
+    'sphinx.ext.autosectionlabel'
 ]
 imgmath_use_preview = True # to find the baseline of surrounding text
+autosectionlabel_prefix_document = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

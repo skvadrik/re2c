@@ -52,7 +52,7 @@ div.document div.math img {
 div.document code {
     font-size: 85%;
     padding: 1px;
-    border: 1px solid lightgrey;
+    border: 1px solid darkgray;
     background-color: aliceblue;
 }
 /* :download: role; should look like a normal link rather than inline code block */
@@ -110,14 +110,14 @@ div.sphinxsidebarwrapper div.re2c-logo {
     overflow: hidden;
 }
 div.re2c-toc-global {
-    font-size: 110%;
+    font-size: 115%;
 }
 div.re2c-toc-local {
     padding: 0.5em;
     background-color: linen;
     border: 1px solid darkgray;
     overflow: auto;
-    font-size: 110%;
+    font-size: 115%;
 }
 
 /* searchbox */
@@ -162,6 +162,10 @@ a:focus { outline: none; }
         margin: 0;
     }
     body {
-        font-size: 20px;
+        font-size: 150%;
     }
+}
+
+::selection {
+  background: lightsteelblue;
 }

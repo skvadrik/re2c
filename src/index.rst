@@ -5,9 +5,10 @@ re2c
 .. toctree::
     :hidden:
 
-    User manual <manual/manual>
-    Download & build <install/install>
-    Releases <news/news>
+    User manual        </manual/manual>
+    Build instructions </install/install>
+    Release notes      </releases/release_notes>
+    Changelog          </releases/changelog/changelog>
 
 Re2c is a free and open-source lexer generator for C and C++.
 The main goal of the project is to generate *very fast* lexers that match or
@@ -25,11 +26,12 @@ Re2c supports *fast and lightweight submatch extraction*
 which does not requre the overhead on full parsing --- a feature that is rarely found in the wild.
 Re2c is used by many other projects
 (such as
-`PHP <http://php.net/>`_,
+`php <http://php.net/>`_,
 `ninja <https://ninja-build.org/>`_,
 `yasm <http://yasm.tortall.net/>`_,
-`spamassassin <https://spamassassin.apache.org/>`_ and
-`BRL-CAD <http://brlcad.org/>`_)
+`spamassassin <https://spamassassin.apache.org/>`_,
+`BRL-CAD <http://brlcad.org/>`_
+and `wake <https://github.com/sifive/wake>`_)
 and aims at being fully backward compatible.
 On the other hand, it is a research project and a playground for the development of new algorithms in the field of formal grammars and automata.
 
@@ -43,21 +45,34 @@ On the other hand, it is a research project and a playground for the development
 See the `user manual <manual/manual.html>`_ for a complete overview with
 examples.
 
+Download
+--------
+
+You can get the
+`latest release <https://github.com/skvadrik/re2c/releases/latest>`_ on Github,
+as well as the `older releases <https://github.com/skvadrik/re2c/releases>`_
+(make sure you download the latest minor version in each series).
+Many Linux distributions and other systems provide their own packages.
+Re2c source code is hosted on both Github
+(`<https://github.com/skvadrik/re2c>`_) and SourceForge
+(`<https://sourceforge.net/p/re2c>`_).
+Github serves as the main repository, bugtracker and tarball hosting.
+SourceForge is used as a backup repository and email hosting.
+
 Bugs & patches
 --------------
 
-The best place to report a bug is `on github <https://github.com/skvadrik/re2c>`_
-or in `re2c-devel <re2c-devel@lists.sourceforge.net>`_ and `re2c-general <re2c-general@lists.sourceforge.net>`_ mailing lists.
-Note that re2c is hosted on both `github <https://github.com/skvadrik/re2c>`_
-and `sourceforge <https://sourceforge.net/p/re2c>`_:
-github serves as the main repository, bugtracker, and tarball hosting;
-sourceforge is used as a backup repository and for mail.
-All contributions are welcome!
+Please send bugs reports, patches and other feedback to `github issue tracker
+<https://github.com/skvadrik/re2c>`_ or email them to
+`re2c-devel@lists.sourceforge.net <re2c-devel@lists.sourceforge.net>`_ and
+`re2c-general@lists.sourceforge.net <re2c-general@lists.sourceforge.net>`_
+mailing lists.
+Re2c has an IRC channel ``#re2c`` on `freenode <https://freenode.net>`_.
+Re2c developers are happy to answer questions and provide help.
+Contributions are always welcome!
 
 Papers
 ------
-
-Re2c is a research project. It is described in the following papers:
 
 - `"RE2C: a more versatile scanner generator"
   <1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps>`_
@@ -74,30 +89,24 @@ Re2c is a research project. It is described in the following papers:
 - `"Efficient POSIX submatch extraction on NFA"
   <2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf>`_
   by Angelo Borsotti and Ulya Trofimovich,
-  2017
+  2019
 
 Authors
 -------
 
-Re2c was originally written by Peter Bumbulis (peter@csg.uwaterloo.ca)
-and described in research article `"RE2C: a more versatile scanner generator"
-<1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps>`_
-by Peter Bumbulis and Donald Cowan, 1994.
-Since then re2c has been maintained and developed by multiple volunteers,
+Re2c was originally written by Peter Bumbulis (peter@csg.uwaterloo.ca) in 1993.
+Since then it has been maintained and developed by multiple volunteers,
 most notably,
 Brian Young (bayoung@acm.org),
 Markus Boerger (helly@users.sourceforge.net),
 Dan Nuffer (nuffer@users.sourceforge.net)
 and Ulya Trofimovich (skvadrik@gmail.com).
-Here is a list of re2c contributors (sorry if anyone is missing):
-Brian Young,
-Dan Nuffer,
+Other re2c contributors are
 Derick Rethans,
 Emmanuel Mogenet,
 Hartmut Kaiser,
 jcfp,
 joscherl,
-Markus Boerger,
 Mike Gilbert,
 Nerd,
 nuno-lopes,
@@ -108,9 +117,9 @@ Paulo Custodio,
 Ross Burton,
 Ryan Mast,
 Serghei Iakovlev,
-Sergei Trofimovich,
-Tim Kelly,
-Ulya Trofimovich.
+Sergei Trofimovich
+and Tim Kelly
+(apologies if someone is missing).
 
 License
 -------
