@@ -21,12 +21,12 @@ then
     exit 1
 fi
 
-# edit version in re2c/configure.in
+# edit version in configure.in
 lcontext="AC_INIT\(\[re2c\],\["
 rcontext="\],\[re2c-general@lists\.sourceforge\.net\]\)"
 old="[0-9]+(\.[0-9]+)*(\.dev)?"
 new=$version
-sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" re2c/configure.ac
+sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" configure.ac
 
 # distcheck
 builddir=.build
