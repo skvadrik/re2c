@@ -5,7 +5,7 @@ Changelog
 1.2x
 ----
 
-1.2 (2019-08-01)
+1.2 (2019-08-02)
 ~~~~~~~~~~~~~~~~
 
 - Added EOF rule ``$`` and configuration ``re2c:eof``.

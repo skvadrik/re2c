@@ -123,4 +123,4 @@ Wesley Terpstra used re2c in the open-source
 Many thanks to them and all the others who contributed to this release!
 
 A lot of bugs have been fixed.
-See the changelog :ref:`releases/changelog/changelog:1.2 (2019-08-01)` for details.
+See the changelog :ref:`releases/changelog/changelog:1.2 (2019-08-02)` for details.
