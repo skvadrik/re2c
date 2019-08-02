@@ -267,6 +267,7 @@ EXTRA_DIST = \
 	autogen.sh \
 	genhelp.sh \
 	examples \
+	include \
 	test
 
 CLEANFILES = \
