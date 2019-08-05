@@ -145,6 +145,12 @@
 ``re2c:define:YYSTAGP = 'YYSTAGP';``
     Replaces ``YYSTAGP`` identifier with the specified string.
 
+``re2c:eof = -1;``
+    Specifies the sentinel symbol used with EOF rule ``$`` to check for the end
+    of input in the generated lexer. Default value is ``-1`` (EOF rule is not
+    used). Other possible values include all valid code points. Only decimal
+    numbers are recognized.
+
 ``re2c:flags:8`` or ``re2c:flags:utf-8``
     Same as ``-8 --utf-8`` command-line option.
 
