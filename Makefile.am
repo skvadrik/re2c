@@ -1,9 +1,14 @@
-# flags
-# do *not* add CXXFLAGS here, add them in configure.ac
+
+# stdlib directory
+stdlibdir = $(datadir)/re2c/stdlib
+
+# do not add compiler options/warnings here, add them in configure.ac
 AM_CXXFLAGS = $(CXXFLAGSDEFAULT)
+AM_CXXFLAGS += -DRE2C_STDLIB_DIR='"$(stdlibdir)/"'
 if DEBUG
 AM_CXXFLAGS += -DRE2C_DEBUG
 endif
+
 RE2CFLAGS = -br -W
 
 # binary
@@ -257,6 +262,9 @@ re2c_SRC_DOC_EXT = \
 DOC = doc/re2c.1
 man_MANS = $(DOC)
 
+# include files (stdlib)
+dist_stdlib_DATA = include/unicode_categories.re
+
 EXTRA_DIST = \
 	$(re2c_BOOT) \
 	$(re2c_CUSTOM) \
@@ -267,7 +275,6 @@ EXTRA_DIST = \
 	autogen.sh \
 	genhelp.sh \
 	examples \
-	include \
 	test
 
 CLEANFILES = \

@@ -39,6 +39,12 @@ bool Input::open(const std::string &filename, const std::string *parent
             path = incpaths[i] + name;
             file = fopen(path.c_str(), "rb");
         }
+
+        // if user-defined include paths failed, try stdlib path
+        if (!file) {
+            path = RE2C_STDLIB_DIR + name;
+            file = fopen(path.c_str(), "rb");
+        }
     }
 
     if (!file) {
