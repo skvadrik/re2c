@@ -1,0 +1,13 @@
+Release 1.2.1
+=============
+
+This is a minor release that improves some of the features introduced in 1.2.
+First, it is now possible to reset ``re2c:eof`` configuration to the
+default value by setting it to ``-1``. Second, re2c now installs standard
+include files to ``$(datadir)/re2c/stdlib``, where ``$(datadir)`` is
+``/usr/share`` by default (but can be configured otherwise). When looking for
+include files, re2c automatically tries this directory --- there is no need
+to add it manually with ``-I``.
+Both issues have been reported by Wesley W. Terpstra. Thank you!
+
+See the changelog :ref:`releases/changelog/changelog:1.2.1 (2019-08-11)` for details.
