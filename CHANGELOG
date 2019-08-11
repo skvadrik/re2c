@@ -5,6 +5,15 @@ Changelog
 1.2x
 ----
 
+1.2.1 (2019-08-11)
+~~~~~~~~~~~~~~~~~~
+
+- Fixed bug `#253 <https://github.com/skvadrik/re2c/issues/253>`_:
+  re2c should install unicode_categories.re somewhere.
+
+- Fixed bug `#254 <https://github.com/skvadrik/re2c/issues/254>`_:
+  Turn off re2c:eof = 0.
+
 1.2 (2019-08-02)
 ~~~~~~~~~~~~~~~~
 
