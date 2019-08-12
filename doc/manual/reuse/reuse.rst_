@@ -1,5 +1,5 @@
 Reuse mode is enabled with the ``-r --reusable`` option. In this mode re2c
-allows to reuse definitions, configurations and rules specified by a
+allows one to reuse definitions, configurations and rules specified by a
 ``/*!rules:re2c*/`` block in subsequent ``/*!use:re2c*/`` blocks. As of
 re2c-1.2 it is possible to mix such blocks with normal ``/*!re2c*/`` blocks;
 prior to that re2c expects a single rules-block followed by use-blocks (normal

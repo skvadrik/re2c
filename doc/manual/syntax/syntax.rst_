@@ -4,7 +4,7 @@ definitions, configurations and rules that contain regular expressions. The
 generated lexer communicates with the outer world by the means of user
 interface.
 Rules consist of a regular expression followed by a user-defined action
-(semantic action): a block of C/C++ code that is executed in case of sucessful
+(semantic action): a block of C/C++ code that is executed in case of successful
 match. Semantic action can be either an arbitrary block of code enclosed in
 curly braces ``{`` and ``}``, or a block of code without curly braces preceded
 with ``:=`` and ended with a newline that is not followed by a whitespace.
