@@ -6,8 +6,12 @@ AM_SILENT_RULES([yes])
 AC_CONFIG_SRCDIR([src/main.cc])
 AC_CONFIG_HEADERS([config.h])
 
-
-AC_SUBST(PACKAGE_DATE, `date +'%d %b %Y'`)
+if test -n "$SOURCE_DATE_EPOCH"; then
+	PACKAGE_DATE=`LC_ALL=C date --utc --date="@$SOURCE_DATE_EPOCH" +'%b %d %Y'`
+else
+	PACKAGE_DATE=`date +'%d %b %Y'`
+fi
+AC_SUBST(PACKAGE_DATE, $PACKAGE_DATE)
 AC_SUBST(PACKAGE_VERSION)
 AC_SUBST(PACKAGE_NAME)
 AC_SUBST(PACKAGE_TARNAME)
