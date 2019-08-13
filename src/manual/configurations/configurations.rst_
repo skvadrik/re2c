@@ -4,7 +4,7 @@
     than nested ``if`` statements and bit masks.
 
 ``re2c:cond:divider = '/* *********************************** */';``
-    Allows to customize the divider for condition blocks. One can use ``@@`` to insert condition name.
+    Allows one to customize the divider for condition blocks. One can use ``@@`` to insert condition name.
 
 ``re2c:cond:divider@cond = @@;``
     Specifies the placeholder that will be replaced with condition name in ``re2c:cond:divider``.
@@ -16,7 +16,7 @@
     Specifies the placeholder that will be replaced with condition label in ``re2c:cond:goto``.
 
 ``re2c:cond:goto = 'goto @@;';``
-    Allows to customize ``goto`` statements used with ``:=>`` style rules.
+    Allows one to customize ``goto`` statements used with ``:=>`` style rules.
     One can use ``@@`` to insert the condition name.
 
 ``re2c:condprefix = yyc;``
@@ -225,7 +225,7 @@
     use. Requires a numeric value greater than or equal to zero.
 
 ``re2c:labelprefix = 'yy';``
-    Allows to change the prefix of numbered
+    Allows one to change the prefix of numbered
     labels. The default is ``yy``. Can be set any string that is valid in
     a label name.
 
@@ -258,14 +258,14 @@
     ``/*!getstate:re2c*/`` comment.
 
 ``re2c:tags:expression = '@@';``
-    Allows to customize the way re2c addresses tag variables:
+    Allows one to customize the way re2c addresses tag variables:
     by default it emits expressions of the form ``yyt<N>``,
     but this might be inconvenient if tag variables are defined as fields in a struct,
     or for any other reason require special accessors.
     For example, setting ``re2c:tags:expression = p->@@`` will result in ``p->yyt<N>``.
 
 ``re2c:tags:prefix = 'yyt';``
-    Allows to override prefix of tag variables.
+    Allows one to override prefix of tag variables.
 
 ``re2c:variable:yyaccept = yyaccept;``
     Overrides the name of the ``yyaccept`` variable.

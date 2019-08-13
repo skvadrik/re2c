@@ -1,4 +1,4 @@
-Re2c allows to include other files using directive ``/*!include:re2c FILE */``,
+Re2c allows one to include other files using directive ``/*!include:re2c FILE */``,
 where ``FILE`` is the name of file to be included. Re2c looks for included
 files in the directory of the including file and in include locations, which
 can be specified with ``-I`` option.

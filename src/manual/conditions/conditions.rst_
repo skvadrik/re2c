@@ -1,5 +1,5 @@
 *Conditions* are enabled with ``-c`` ``--conditions``.
-This option allows to encode multiple interrelated lexers within the same re2c block.
+This option allows one to encode multiple interrelated lexers within the same re2c block.
 
 Each lexer corresponds to a single *condition*.
 It starts with a label of the form ``yyc_name``,
@@ -19,7 +19,7 @@ and transfers control flow to the start label of the active *condition*.
 After matching some rule of this *condition*,
 lexer may either transfer control flow back to the entry code (after executing the associated action and optionally setting another *condition* with ``=>``),
 or use ``:=>`` shortcut and transition directly to the start label of another *condition* (skipping the action and the entry code).
-Configuration ``re2c:cond:goto`` allows to change the default behavior.
+Configuration ``re2c:cond:goto`` allows one to change the default behavior.
 
 Syntactically each rule must be preceded with a list of comma-separated *condition* names or a wildcard ``*``
 enclosed in angle brackets ``<`` and ``>``.
@@ -41,7 +41,7 @@ This might be a convenient place to peform a routine task that is common to all 
 *    ``<!conditions-or-wildcard>  action``
 
 Another special form of rules with an empty condition list ``<>`` and no regular expression
-allows to specify an "entry condition" that can be used to execute code before entering the lexer.
+allows one to specify an "entry condition" that can be used to execute code before entering the lexer.
 It is semantically equivalent to a condition with number zero, name ``0`` and an empty regular expression.
 
 *    ``<>                 action``
