@@ -270,6 +270,7 @@ EXTRA_DIST = \
 	$(re2c_CUSTOM) \
 	$(re2c_SRC_DOC_EXT) \
 	CHANGELOG \
+	LICENSE \
 	NO_WARRANTY \
 	README.md \
 	autogen.sh \
