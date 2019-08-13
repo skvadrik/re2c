@@ -27,7 +27,7 @@ Various re2c features are described in sections `include files`_,
 `encoding support`_, `start conditions`_, `skeleton programs`_ and
 `visualization and debug`_.
 Re2c provides a lot of `options`_, `configurations`_ and `directives`_ that
-allow to customize the generated code.
+allow one to customize the generated code.
 
 Options
 =======
@@ -153,7 +153,7 @@ Similar programs are flex(1), lex(1), quex(http://quex.sourceforge.net).
 AUTHORS
 =======
 Re2c was originaly written by Peter Bumbulis in 1993.
-Since then it has been developed and maintained by mutiple volunteers;
+Since then it has been developed and maintained by multiple volunteers;
 mots notably, Brain Young, Marcus Boerger, Dan Nuffer and Ulya Trofimovich.
 
 VERSION INFORMATION

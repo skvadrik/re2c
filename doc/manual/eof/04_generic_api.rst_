@@ -1,7 +1,7 @@
 Using generic API
 -----------------
 
-Generic API can be used with any of the above methods. It also allows to use a
+Generic API can be used with any of the above methods. It also allows one to use a
 user-defined method by placing EOF checks in one of the basic primitives.
 Usually this is either ``YYSKIP`` (the check is performed when advancing to the
 next input character), or ``YYPEEK`` (the check is performed when reading the
@@ -12,7 +12,7 @@ should be cautious when using such ad-hoc methods, as it is easy to overlook
 some corner cases and come up with a method that only partially works. Also it
 should be noted that not everything can be expressed via generic API: for
 example, it is impossible to reimplement the way EOF rule works (in particular,
-it is impossible to re-match the character after successfull ``YYFILL``).
+it is impossible to re-match the character after successful ``YYFILL``).
 
 Below is an example of using ``YYSKIP`` to perform bounds checking without
 padding. ``YYFILL`` generation is suppressed using ``re2c:yyfill:enable = 0;``

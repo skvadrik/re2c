@@ -14,7 +14,7 @@ Skeleton programs are very useful for a number of reasons:
 - Generating a set of input data with good coverage may be useful for both
   testing and benchmarking.
 
-- Generating self-contained executable programs allows to get minimized test
+- Generating self-contained executable programs allows one to get minimized test
   cases (the original code may be large or have a lot of dependencies).
 
 The difficulty with generating input data is that for all but the most trivial

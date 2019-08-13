@@ -6,7 +6,7 @@ unacceptable in cases when the input becomes available piece by piece (for
 example, if the lexer is invoked by the parser, or if the lexer program
 communicates via a socket protocol with some other program that must wait for a
 reply from the lexer before it transmits the next message). Storable state
-feature is intended exactly for such cases: it allows to generate lexers that
+feature is intended exactly for such cases: it allows one to generate lexers that
 work in a "push" model. When the lexer needs more input, it stores its state and
 returns to the caller. Later, when more input becomes available, the caller
 resumes the lexer exactly where it stopped. There are a few changes necessary
