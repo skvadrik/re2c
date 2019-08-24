@@ -71,11 +71,8 @@ void Scanner::lex_conf(Opt &opts)
     "flags:input"            { lex_conf_input(opts);            return; }
     "flags:empty-class"      { lex_conf_empty_class(opts);      return; }
 
-    "eof" {
-        const int32_t eof = lex_conf_number();
-        opts.set_eof(eof < 0 ? NOEOF : static_cast<uint32_t>(eof));
-        return;
-    }
+    "eof"      { opts.set_eof     (lex_conf_eof()); return; }
+    "sentinel" { opts.set_sentinel(lex_conf_eof()); return; }
 
     // internal options do not have configurations
 
@@ -262,6 +259,12 @@ int32_t Scanner::lex_conf_number ()
         return n;
     }
 */
+}
+
+uint32_t Scanner::lex_conf_eof()
+{
+    const int32_t n = lex_conf_number();
+    return n < 0 ? NOEOF : static_cast<uint32_t>(n);
 }
 
 std::string Scanner::lex_conf_string ()

@@ -86,7 +86,7 @@ enum posix_closure_t
 
 void minimization(dfa_t &dfa, dfa_minimization_t type);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
-void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond, Msg &msg);
+void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, size_t defrule, const std::string &cond, Msg &msg);
 void insert_fallback_tags(dfa_t &dfa);
 void compact_and_optimize_tags(const opt_t *opts, dfa_t &dfa);
 void freeze_tags(dfa_t &dfa);

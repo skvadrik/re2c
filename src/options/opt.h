@@ -124,6 +124,7 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, yytarget, "yytarget") \
     MUTOPT (uint32_t, cGotoThreshold, 9) \
     MUTOPT (uint32_t, eof, NOEOF) \
+    MUTOPT (uint32_t, sentinel, NOEOF) \
     /* formatting */ \
     MUTOPT (uint32_t, topIndent, 0) \
     MUTOPT (std::string, indString, "\t") \

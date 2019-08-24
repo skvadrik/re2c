@@ -80,6 +80,7 @@ private:
     void lex_conf_semicolon();
     int32_t lex_conf_number();
     bool lex_conf_bool();
+    uint32_t lex_conf_eof();
     std::string lex_conf_string();
     bool is_eof() const;
     void fail_if_eof() const;

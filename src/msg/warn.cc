@@ -5,6 +5,7 @@
 
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
+#include "src/options/opt.h"
 #include "src/regexp/rule.h"
 #include "src/skeleton/skeleton.h"
 #include "src/skeleton/path.h"
@@ -219,6 +220,23 @@ void Warn::useless_escape(const loc_t &loc, const char *str, const char *end)
         error_accuml |= e;
         msg.warning(names[USELESS_ESCAPE], loc, e
             , "escape has no effect: '%.*s'", (int)(end - str), str);
+    }
+}
+
+void Warn::sentinel_in_midrule(const loc_t &loc, const std::string &cond
+    , uint32_t sentinel)
+{
+    if (mask[SENTINEL_IN_MIDRULE] & WARNING) {
+        const bool defined = sentinel != NOEOF;
+        const bool e = defined || (mask[SENTINEL_IN_MIDRULE] & ERROR);
+        error_accuml |= e;
+        msg.warning(names[SENTINEL_IN_MIDRULE], loc, e
+            , "%ssentinel symbol %u occurs in the middle of the rule%s"
+            , incond(cond).c_str()
+            , defined ? sentinel : 0
+            , defined ? "" :
+                " (note: if a different sentinel symbol is used,"
+                " specify it with 're2c:sentinel' configuration)");
     }
 }
 

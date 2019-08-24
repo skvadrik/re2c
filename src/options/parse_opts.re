@@ -91,6 +91,7 @@ opt_warn:
     "undefined-control-flow"   end { msg.warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
     "unreachable-rules"        end { msg.warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
     "useless-escape"           end { msg.warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
+    "sentinel-in-midrule"      end { msg.warn.set (Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
 */
 
 opt_short:

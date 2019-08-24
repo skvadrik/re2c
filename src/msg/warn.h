@@ -23,7 +23,8 @@ struct Skeleton;
     W (SWAPPED_RANGE,            "swapped-range"), \
     W (UNDEFINED_CONTROL_FLOW,   "undefined-control-flow"), \
     W (UNREACHABLE_RULES,        "unreachable-rules"), \
-    W (USELESS_ESCAPE,           "useless-escape"),
+    W (USELESS_ESCAPE,           "useless-escape"), \
+    W (SENTINEL_IN_MIDRULE,      "sentinel-in-midrule"),
 
 class Warn
 {
@@ -69,6 +70,7 @@ public:
     void undefined_control_flow(const Skeleton &skel, std::vector<path_t> & paths, bool overflow);
     void unreachable_rule(const std::string & cond, const Rule &rule);
     void useless_escape(const loc_t &loc, const char *str, const char *end);
+    void sentinel_in_midrule(const loc_t &loc, const std::string &cond, uint32_t sentinel);
 };
 
 } // namespace re2c

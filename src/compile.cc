@@ -79,7 +79,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
         emit_data(skeleton);
     }
 
-    cutoff_dead_rules(dfa, defrule, cond, msg);
+    cutoff_dead_rules(dfa, opts, defrule, cond, msg);
 
     insert_fallback_tags(dfa);
 

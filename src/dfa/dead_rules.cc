@@ -10,6 +10,7 @@
 #include "src/msg/location.h"
 #include "src/msg/warn.h"
 #include "src/regexp/rule.h"
+#include "src/options/opt.h"
 #include "src/util/forbid_copy.h"
 
 
@@ -189,6 +190,54 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 }
 
 
+static void warn_sentinel_in_midrule(const dfa_t &dfa, const opt_t *opts
+    , const std::string &cond, const bool *live, Msg &msg)
+{
+    // perform check only in case sentinel method is used
+    if (opts->fill_use || opts->eof != NOEOF) return;
+
+    const size_t nstates = dfa.states.size();
+    const size_t nsym = dfa.nchars;
+    const size_t nrules = dfa.rules.size();
+    bool *bad = new bool[nrules];
+    memset(bad, 0, nrules);
+
+    // find character class that contains sentinel symbol
+    const uint32_t sentsym = opts->sentinel == NOEOF ? 0 : opts->sentinel;
+    uint32_t sentcls = 0;
+    DASSERT(dfa.charset.size() == nsym + 1);
+    for (; sentcls < nsym && sentsym >= dfa.charset[sentcls + 1]; ++sentcls);
+    DASSERT(sentcls < nsym);
+
+    // check that every transition on sentinel symbol goes to an end state
+    // that has no further transitions; otherwise, give a warning or, if
+    // 're2c:sentinel' configuration is used, an error
+    for (size_t i = 0; i < nstates; ++i) {
+        const size_t j = dfa.states[i]->arcs[sentcls];
+        if (j == dfa_t::NIL) continue;
+
+        const size_t *arcs = dfa.states[j]->arcs;
+        for (size_t c = 0; c < nsym; ++c) {
+            const size_t k = arcs[c];
+            if (k == dfa_t::NIL) continue;
+
+            for (size_t r = 0; r < nrules; ++r) {
+                bad[r] |= live[r * nstates + k];
+            }
+        }
+    }
+
+    for (size_t r = 0; r < nrules; ++r) {
+        if (bad[r]) {
+            msg.warn.sentinel_in_midrule(dfa.rules[r].code->loc
+                , cond, opts->sentinel);
+        }
+    }
+
+    delete[] bad;
+}
+
+
 static void remove_dead_final_states(dfa_t &dfa, const bool *fallthru)
 {
     const size_t
@@ -242,8 +291,8 @@ static void find_fallback_states(dfa_t &dfa, const bool *fallthru)
 }
 
 
-void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond
-    , Msg &msg)
+void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, size_t defrule
+    , const std::string &cond, Msg &msg)
 {
     const rdfa_t rdfa(dfa);
     const size_t
@@ -255,6 +304,7 @@ void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond
 
     liveness_analyses(rdfa, live);
     warn_dead_rules(dfa, defrule, cond, live, msg);
+    warn_sentinel_in_midrule(dfa, opts, cond, live, msg);
     remove_dead_final_states(dfa, fallthru);
     find_fallback_states(dfa, fallthru);
 

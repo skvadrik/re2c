@@ -36,6 +36,7 @@ void mutopt_t::fix(const conopt_t *globopts)
             gFlag = Opt::baseopt.gFlag;
             cGotoThreshold = Opt::baseopt.cGotoThreshold;
             eof = Opt::baseopt.eof;
+            sentinel = Opt::baseopt.sentinel;
             // default environment-insensitive formatting
             yybmHexTable = Opt::baseopt.yybmHexTable;
             // fallthrough
@@ -46,6 +47,7 @@ void mutopt_t::fix(const conopt_t *globopts)
             iFlag = Opt::baseopt.iFlag;
             // default EOF mode
             eof = Opt::baseopt.eof;
+            sentinel = Opt::baseopt.sentinel;
             // default environment-sensitive formatting
             topIndent = Opt::baseopt.topIndent;
             indString = Opt::baseopt.indString;
@@ -243,6 +245,15 @@ void mutopt_t::fix(const conopt_t *globopts)
         }
         if (eof >= encoding.nCodeUnits()) {
             fatal ("EOF exceeds maximum code unit value for given encoding");
+        }
+    }
+    if (sentinel != NOEOF) {
+        if (sentinel >= encoding.nCodeUnits()) {
+            fatal("sentinel exceeds maximum code unit value for given encoding");
+        }
+        if (fill_use || eof != NOEOF) {
+            fatal("re2c:sentinel configuration is not needed"
+                " in the presence of bounds checking or EOF rule");
         }
     }
 }
