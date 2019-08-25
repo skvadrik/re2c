@@ -338,6 +338,13 @@ typo or an error in the escape sequence.
 .TP
 .B \fB\-Wnondeterministic\-tags\fP
 Warn if a tag has \fBn\fP\-th degree of nondeterminism, where \fBn\fP is greater than 1.
+.TP
+.B \fB\-Wsentinel\-in\-midrule\fP
+Warn if the sentinel symbol occurs in the middle of a rule \-\-\- this may
+cause reads past the end of buffer, crashes or memory corruption in the
+generated lexer. This warning is only applicable if the sentinel method of
+checking for the end of input is used.
+It is set to an error if \fBre2c:sentinel\fP configuration is used.
 .UNINDENT
 .SH SYNTAX
 .sp
@@ -837,8 +844,20 @@ Replaces \fBYYSTAGP\fP identifier with the specified string.
 .B \fBre2c:eof = \-1;\fP
 Specifies the sentinel symbol used with EOF rule \fB$\fP to check for the end
 of input in the generated lexer. Default value is \fB\-1\fP (EOF rule is not
-used). Other possible values include all valid code points. Only decimal
+used). Other possible values include all valid code units. Only decimal
 numbers are recognized.
+.TP
+.B \fBre2c:sentinel = \-1;\fP
+Specifies the sentinel symbol used with the sentinel method of checking for
+the end of input in the generated lexer (the case when when bounds checking
+is disabled with \fBre2c:yyfill:enable = 0;\fP and EOF rule \fB$\fP is not
+used). This configuration does not affect code generation. It is used by
+re2c to verify that the sentinel symbol is not allowed in the middle of the
+rule, and thus prevent possible reads past the end of buffer and crashes in
+the generated lexer. Default value is \fB\-1\fP: in this case re2c assumes that
+the sentinel symbol is \fB0\fP (which is by far the most common case). Other
+possible values include all valid code units. Only decimal numbers are
+recognized.
 .TP
 .B \fBre2c:flags:8\fP or \fBre2c:flags:utf\-8\fP
 Same as \fB\-8 \-\-utf\-8\fP command\-line option.
@@ -1035,6 +1054,10 @@ such input is a null\-terminated C\-string, provided that the grammar does not
 allow \fBNULL\fP in the middle of lexemes. Sentinel method is very efficient,
 because the lexer does not need to perform any additional checks for the end of
 input \-\-\- it comes naturally as a part of processing the next character.
+It is very important that the sentinel symbol is not allowed in the middle of
+the rule \-\-\- otherwise on some inputs the lexer may read past the end of buffer
+and crash or cause memory corruption. Re2c verifies this automatically.
+Use \fBre2c:sentinel\fP configuration to specify which sentinel symbol is used.
 .sp
 Below is an example of using sentinel method. Configuration
 \fBre2c:yyfill:enable = 0;\fP suppresses generation of end\-of\-input checks and

@@ -38,3 +38,10 @@
 ``-Wnondeterministic-tags``
     Warn if a tag has ``n``-th degree of nondeterminism, where ``n`` is greater than 1.
 
+``-Wsentinel-in-midrule``
+    Warn if the sentinel symbol occurs in the middle of a rule --- this may
+    cause reads past the end of buffer, crashes or memory corruption in the
+    generated lexer. This warning is only applicable if the sentinel method of
+    checking for the end of input is used.
+    It is set to an error if ``re2c:sentinel`` configuration is used.
+

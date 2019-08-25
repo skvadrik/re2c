@@ -10,6 +10,10 @@ such input is a null-terminated C-string, provided that the grammar does not
 allow ``NULL`` in the middle of lexemes. Sentinel method is very efficient,
 because the lexer does not need to perform any additional checks for the end of
 input --- it comes naturally as a part of processing the next character.
+It is very important that the sentinel symbol is not allowed in the middle of
+the rule --- otherwise on some inputs the lexer may read past the end of buffer
+and crash or cause memory corruption. Re2c verifies this automatically.
+Use ``re2c:sentinel`` configuration to specify which sentinel symbol is used.
 
 Below is an example of using sentinel method. Configuration
 ``re2c:yyfill:enable = 0;`` suppresses generation of end-of-input checks and
