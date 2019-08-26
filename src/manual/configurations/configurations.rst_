@@ -148,8 +148,20 @@
 ``re2c:eof = -1;``
     Specifies the sentinel symbol used with EOF rule ``$`` to check for the end
     of input in the generated lexer. Default value is ``-1`` (EOF rule is not
-    used). Other possible values include all valid code points. Only decimal
+    used). Other possible values include all valid code units. Only decimal
     numbers are recognized.
+
+``re2c:sentinel = -1;``
+    Specifies the sentinel symbol used with the sentinel method of checking for
+    the end of input in the generated lexer (the case when when bounds checking
+    is disabled with ``re2c:yyfill:enable = 0;`` and EOF rule ``$`` is not
+    used). This configuration does not affect code generation. It is used by
+    re2c to verify that the sentinel symbol is not allowed in the middle of the
+    rule, and thus prevent possible reads past the end of buffer and crashes in
+    the generated lexer. Default value is ``-1``: in this case re2c assumes that
+    the sentinel symbol is ``0`` (which is by far the most common case). Other
+    possible values include all valid code units. Only decimal numbers are
+    recognized.
 
 ``re2c:flags:8`` or ``re2c:flags:utf-8``
     Same as ``-8 --utf-8`` command-line option.
