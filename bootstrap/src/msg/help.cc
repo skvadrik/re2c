@@ -200,4 +200,8 @@ const char *help =
 "              Warn if a symbol is escaped when it shouldn't be.  By default, re2c silently ignores such escapes, but this may as well indicate a typo or an error in the escape sequence.\n"
 "\n"
 "       -Wnondeterministic-tags\n"
+"              Warn if a tag has n-th degree of nondeterminism, where n is greater than 1.\n"
+"\n"
+"       -Wsentinel-in-midrule\n"
+"              Warn if the sentinel symbol occurs in the middle of a rule --- this may cause reads past the end of buffer, crashes or memory corruption in the generated lexer. This warning is only applicable if the sentinel method  of\n"
 ;

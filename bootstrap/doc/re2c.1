@@ -743,10 +743,12 @@ Replaces the \fBYYDEBUG\fP placeholder with the specified identifier.
 Any occurrence of this text inside of a \fBYYFILL\fP will be replaced with the actual argument.
 .TP
 .B \fBre2c:define:YYFILL:naked = 0;\fP
-Controls the argument in the parentheses after \fBYYFILL\fP and the following semicolon.
-If zero, both the argument and the semicolon are omitted.
-If non\-zero, the argument is generated unless \fBre2c:yyfill:parameter\fP is set to zero;
-the semicolon is generated unconditionally.
+Allows to customize \fBYYFILL\fP invocation.
+If the value is non\-zero, re2c outputs the value of \fBre2c:define:YYFILL\fP
+configuration (\fBYYFILL\fP by default) without any decoration: no parentheses
+and no semicolon (or comparison against zero in the case of EOF rule).
+Otherwise the semicolon (or the comparison) is generated, and parentheses
+are controlled by the \fBre2c:yyfill:parameter\fP configuration.
 .TP
 .B \fBre2c:define:YYFILL = \(aqYYFILL\(aq;\fP
 Define a substitution for \fBYYFILL\fP\&.
@@ -756,7 +758,7 @@ set \fBre2c:define:YYFILL:naked\fP to a non\-zero value.
 .TP
 .B \fBre2c:define:YYGETCONDITION:naked = 0;\fP
 Controls the parentheses after \fBYYGETCONDITION\fP\&.
-If zero, the parentheses are omitted. If non\-zero, the parentheses are generated.
+If non\-zero, the parentheses are omitted. If zero, they are generated.
 .TP
 .B \fBre2c:define:YYGETCONDITION = \(aqYYGETCONDITION\(aq;\fP
 Substitution for \fBYYGETCONDITION\fP\&.
@@ -765,7 +767,7 @@ Set \fBre2c:define:YYGETCONDITION:naked\fP to non\-zero in order to omit the par
 .TP
 .B \fBre2c:define:YYGETSTATE:naked = 0;\fP
 Controls the parentheses that follow \fBYYGETSTATE\fP\&.
-If zero, the parentheses are omitted. If non\-zero, they are generated.
+If non\-zero, the parentheses are omitted. If zero, they are generated.
 .TP
 .B \fBre2c:define:YYGETSTATE = \(aqYYGETSTATE\(aq;\fP
 Substitution for \fBYYGETSTATE\fP\&.
@@ -805,8 +807,8 @@ text inside of \fBYYSETCONDITION\fP will be replaced with the actual argument.
 .TP
 .B \fBre2c:define:YYSETCONDITION:naked = 0;\fP
 Controls the argument in parentheses
-and the semicolon after \fBYYSETCONDITION\fP\&. If zero, both the argument and
-the semicolon are omitted. If non\-zero, both the argument and the semicolon are
+and the semicolon after \fBYYSETCONDITION\fP\&. If non\-zero, both the argument and
+the semicolon are omitted. If zero, both the argument and the semicolon are
 generated.
 .TP
 .B \fBre2c:define:YYSETCONDITION = \(aqYYSETCONDITION\(aq;\fP
@@ -818,8 +820,8 @@ parentheses followed by semicolon after \fBYYSETCONDITION\fP\&. If you need to m
 .TP
 .B \fBre2c:define:YYSETSTATE:naked = 0;\fP
 Controls the argument in parentheses and the
-semicolon after \fBYYSETSTATE\fP\&. If zero, both argument and the semicolon are
-omitted. If non\-zero, both the argument and the semicolon are generated.
+semicolon after \fBYYSETSTATE\fP\&. If non\-zero, both argument and the semicolon are
+omitted. If zero, both the argument and the semicolon are generated.
 .TP
 .B \fBre2c:define:YYSETSTATE@state = \(aq@@\(aq;\fP
 Any occurrence of this text
