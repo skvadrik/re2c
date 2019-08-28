@@ -104,6 +104,7 @@ static Result lex1_simple(uint8_t *cur, uint8_t* end, uint8_t* /* unused */)
     uint8_t *YYMARKER, *tok = cur;
     /*!re2c
         re2c:yyfill:enable = 1;
+        re2c:define:YYFILL:naked = 0;
         re2c:define:YYFILL = fill;
         re2c:eof = 0;
 

@@ -382,7 +382,8 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
         }
         flushln(code, o);
 
-        o << opts->indString << opts->fill << "();";
+        o << opts->indString << opts->fill
+            << (opts->fill_naked ? "" : opts->fill_arg_use ? "();" : ";");
         flushln(code, o);
 
         o << opts->indString << opts->labelPrefix << "eof" << fillidx << ":;";
@@ -392,8 +393,10 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
     }
     else {
         if (opts->fill_use) {
-            o << opts->indString << "if (" << opts->fill << " () == 0) "
-                << "goto " << opts->labelPrefix << retry->label << "_;";
+            o << opts->indString << "if (" << opts->fill
+                << (opts->fill_naked ? ""
+                    : opts->fill_arg_use ? " () == 0" : " == 0")
+                << ") goto " << opts->labelPrefix << retry->label << "_;";
             flushln(code, o);
         }
         gen_on_eof_fail(code, opts, dfa, from, to, o);
