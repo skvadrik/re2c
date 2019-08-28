@@ -47,10 +47,12 @@
     Any occurrence of this text inside of a ``YYFILL`` will be replaced with the actual argument.
 
 ``re2c:define:YYFILL:naked = 0;``
-    Controls the argument in the parentheses after ``YYFILL`` and the following semicolon.
-    If zero, both the argument and the semicolon are omitted.
-    If non-zero, the argument is generated unless ``re2c:yyfill:parameter`` is set to zero;
-    the semicolon is generated unconditionally.
+    Allows to customize ``YYFILL`` invocation.
+    If the value is non-zero, re2c outputs the value of ``re2c:define:YYFILL``
+    configuration (``YYFILL`` by default) without any decoration: no parentheses
+    and no semicolon (or comparison against zero in the case of EOF rule).
+    Otherwise the semicolon (or the comparison) is generated, and parentheses
+    are controlled by the ``re2c:yyfill:parameter`` configuration.
 
 ``re2c:define:YYFILL = 'YYFILL';``
     Define a substitution for ``YYFILL``.
@@ -60,7 +62,7 @@
 
 ``re2c:define:YYGETCONDITION:naked = 0;``
     Controls the parentheses after ``YYGETCONDITION``.
-    If zero, the parentheses are omitted. If non-zero, the parentheses are generated.
+    If non-zero, the parentheses are omitted. If zero, they are generated.
 
 ``re2c:define:YYGETCONDITION = 'YYGETCONDITION';``
     Substitution for ``YYGETCONDITION``.
@@ -69,7 +71,7 @@
 
 ``re2c:define:YYGETSTATE:naked = 0;``
     Controls the parentheses that follow ``YYGETSTATE``.
-    If zero, the parentheses are omitted. If non-zero, they are generated.
+    If non-zero, the parentheses are omitted. If zero, they are generated.
 
 ``re2c:define:YYGETSTATE = 'YYGETSTATE';``
     Substitution for ``YYGETSTATE``.
@@ -109,8 +111,8 @@
 
 ``re2c:define:YYSETCONDITION:naked = 0;``
     Controls the argument in parentheses
-    and the semicolon after ``YYSETCONDITION``. If zero, both the argument and
-    the semicolon are omitted. If non-zero, both the argument and the semicolon are
+    and the semicolon after ``YYSETCONDITION``. If non-zero, both the argument and
+    the semicolon are omitted. If zero, both the argument and the semicolon are
     generated.
 
 ``re2c:define:YYSETCONDITION = 'YYSETCONDITION';``
@@ -122,8 +124,8 @@
 
 ``re2c:define:YYSETSTATE:naked = 0;``
     Controls the argument in parentheses and the
-    semicolon after ``YYSETSTATE``. If zero, both argument and the semicolon are
-    omitted. If non-zero, both the argument and the semicolon are generated.
+    semicolon after ``YYSETSTATE``. If non-zero, both argument and the semicolon are
+    omitted. If zero, both the argument and the semicolon are generated.
 
 ``re2c:define:YYSETSTATE@state = '@@';``
     Any occurrence of this text
