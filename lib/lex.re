@@ -45,7 +45,7 @@ int lex(const char *&cur)
 
     [$^] {
         error("anchors are not supported");
-        return ERROR;
+        return TOKEN_ERROR;
     }
 
     "[^" { neg = true; goto cls; }
@@ -54,24 +54,24 @@ int lex(const char *&cur)
     "{" @x num "}" {
         if (!s_to_u32_unsafe(x, cur - 1, yylval.bounds.min)) goto err_cnt;
         yylval.bounds.max = yylval.bounds.min;
-        return COUNT;
+        return TOKEN_COUNT;
     }
 
     "{" @x num "," @y num "}" {
         if (!s_to_u32_unsafe(x, y - 1, yylval.bounds.min)
             || !s_to_u32_unsafe(y, cur - 1, yylval.bounds.max)) goto err_cnt;
-        return COUNT;
+        return TOKEN_COUNT;
     }
 
     "{" @x num ",}" {
         if (!s_to_u32_unsafe(x, cur - 2, yylval.bounds.min)) goto err_cnt;
         yylval.bounds.max = AST::MANY;
-        return COUNT;
+        return TOKEN_COUNT;
     }
 
     "." {
         yylval.regexp = ast_dot(NOWHERE);
-        return REGEXP;
+        return TOKEN_REGEXP;
     }
 
     [^] \ nil {
@@ -79,7 +79,7 @@ int lex(const char *&cur)
         std::vector<ASTChar> *str = new std::vector<ASTChar>;
         str->push_back(c);
         yylval.regexp = ast_str(NOWHERE, str, false);
-        return REGEXP;
+        return TOKEN_REGEXP;
     }
 */
 
@@ -98,17 +98,17 @@ add:
         std::vector<ASTRange> *p = new std::vector<ASTRange>;
         p->swap(cls);
         yylval.regexp = ast_cls(NOWHERE, p, neg);
-        return REGEXP;
+        return TOKEN_REGEXP;
     }
 */
 
 err:
     error("syntax error: %s\n", cur);
-    return ERROR;
+    return TOKEN_ERROR;
 
 err_cnt:
     error("repetition count overflow");
-    return ERROR;
+    return TOKEN_ERROR;
 }
 
 int32_t lex_cls_chr(const char *&cur, uint32_t &c)

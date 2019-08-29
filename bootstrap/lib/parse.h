@@ -45,9 +45,9 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    COUNT = 258,
-    ERROR = 259,
-    REGEXP = 260
+    TOKEN_COUNT = 258,
+    TOKEN_ERROR = 259,
+    TOKEN_REGEXP = 260
   };
 #endif
 

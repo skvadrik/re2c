@@ -128,9 +128,9 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    COUNT = 258,
-    ERROR = 259,
-    REGEXP = 260
+    TOKEN_COUNT = 258,
+    TOKEN_ERROR = 259,
+    TOKEN_REGEXP = 260
   };
 #endif
 
@@ -469,9 +469,9 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "COUNT", "ERROR", "REGEXP", "'|'", "'*'",
-  "'+'", "'?'", "'('", "')'", "$accept", "regexp", "expr", "term",
-  "factor", "primary", YY_NULLPTR
+  "$end", "error", "$undefined", "TOKEN_COUNT", "TOKEN_ERROR",
+  "TOKEN_REGEXP", "'|'", "'*'", "'+'", "'?'", "'('", "')'", "$accept",
+  "regexp", "expr", "term", "factor", "primary", YY_NULLPTR
 };
 #endif
 

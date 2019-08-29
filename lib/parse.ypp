@@ -39,12 +39,12 @@ void yyerror(const char *pattern, const char*) RE2C_ATTR((noreturn));
     re2c::ASTBounds bounds;
 };
 
-%token COUNT
-%token ERROR
-%token REGEXP
+%token TOKEN_COUNT
+%token TOKEN_ERROR
+%token TOKEN_REGEXP
 
-%type <regexp> REGEXP regexp expr term factor primary
-%type <bounds> COUNT
+%type <regexp> TOKEN_REGEXP regexp expr term factor primary
+%type <bounds> TOKEN_COUNT
 
 %%
 
@@ -62,14 +62,14 @@ term
 
 factor
 : primary
-| primary '*'   { $$ = ast_iter($1, 0, AST::MANY); }
-| primary '+'   { $$ = ast_iter($1, 1, AST::MANY); }
-| primary '?'   { $$ = ast_iter($1, 0, 1); }
-| primary COUNT { $$ = ast_iter($1, $2.min, $2.max); }
+| primary '*'         { $$ = ast_iter($1, 0, AST::MANY); }
+| primary '+'         { $$ = ast_iter($1, 1, AST::MANY); }
+| primary '?'         { $$ = ast_iter($1, 0, 1); }
+| primary TOKEN_COUNT { $$ = ast_iter($1, $2.min, $2.max); }
 ;
 
 primary
-: REGEXP
+: TOKEN_REGEXP
 | '(' ')'      { $$ = ast_cap(ast_nil(NOWHERE)); }
 | '(' expr ')' { $$ = ast_cap($2); }
 ;
