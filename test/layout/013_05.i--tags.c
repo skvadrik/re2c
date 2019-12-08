@@ -6,7 +6,7 @@
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
-		YYMTAGP (yyt3);
+		YYMTAGP (yyt2);
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -15,8 +15,8 @@ yy2:
 	;
 yy4:
 	++YYCURSOR;
-	YYMTAGP (yyt2);
-	x = yyt3;
-	y = yyt2;
+	YYMTAGP (yyt1);
+	x = yyt2;
+	y = yyt1;
 	;
 }

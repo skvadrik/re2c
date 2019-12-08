@@ -126,7 +126,12 @@ tagver_t cfg_t::variable_allocation(const cfg_t &cfg, const bool *interf,
     }
 
     tagver_t maxver = 0;
-    for (rx = 0; rx < nver; ++rx) {
+    rx = 0;
+
+    // zero-th variable is artificial, skip if it's the only one in its class
+    if (next[rx] == END) ++rx;
+
+    for (; rx < nver; ++rx) {
         if (repr[rx] != rx) continue;
 
         ++maxver;

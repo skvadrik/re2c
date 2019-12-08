@@ -12,7 +12,7 @@ yyc_x:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
-		YYMTAGP (yyt3);
+		YYMTAGP (yyt2);
 		goto yy5;
 	default:	goto yy3;
 	}
@@ -21,9 +21,9 @@ yy3:
 	{}
 yy5:
 	++YYCURSOR;
-	YYMTAGP (yyt2);
-	x = yyt3;
-	y = yyt2;
+	YYMTAGP (yyt1);
+	x = yyt2;
+	y = yyt1;
 	YYSETCONDITION(yycz);
 	{}
 /* *********************************** */
