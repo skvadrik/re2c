@@ -69,6 +69,7 @@ struct cfg_t
     static tagver_t compact(const cfg_t &cfg, tagver_t *ver2new);
     static void liveness_analysis(const cfg_t &cfg, bool *live);
     static void live_through_bblock(const tcmd_t *cmd, bool *live);
+    static tcmd_t *dce_for_bblock(tcmd_t *cmd, bool *live);
     static void dead_code_elimination(cfg_t &cfg, const bool *live);
     static void interference(const cfg_t &cfg, const bool *live, bool *interf);
     static tagver_t variable_allocation(const cfg_t &cfg, const bool *interf, tagver_t *ver2new);
