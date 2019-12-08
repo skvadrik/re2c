@@ -191,7 +191,7 @@ void dump_dfa(const dfa_t &dfa)
     fprintf(stderr,
         "digraph DFA {\n"
         "  rankdir=LR\n"
-        "  node[shape=Mrecord fontname=Courier]\n"
+        "  node[fontname=Courier]\n"
         "  edge[arrowhead=vee fontname=Courier]\n\n");
 
     // initializer

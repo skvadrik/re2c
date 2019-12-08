@@ -37,7 +37,7 @@ yy3:
 debug/dfa_det.i--posix-captures--dump-dfa-det.re:2:11: warning: rule matches empty string [-Wmatch-empty-string]
 digraph DFA {
   rankdir=LR
-  node[shape=Mrecord fontname=Courier]
+  node[fontname=Courier]
   edge[arrowhead=vee fontname=Courier]
 
   n [shape=point]  n -> n0 [style=dotted label=""]
