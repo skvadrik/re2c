@@ -28,7 +28,8 @@ struct tcmd_t;
  *
  *   - infinite rules that greedily eat all input characters
  *     and never stop (they either fail on YYFILL or crash),
- *     e.g. [^]*
+ *     e.g. [^]*. This does not occur when EOF rule is used,
+ *     because in that case YYFILL returns on failure.
  *
  *   - rules that contain never-matching link, e.g. '[]'
  *     with option '--empty-class match-none'
@@ -303,9 +304,15 @@ void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, size_t defrule
     memset(live, 0, nl * sizeof(bool));
 
     liveness_analyses(rdfa, live);
-    warn_dead_rules(dfa, defrule, cond, live, msg);
+    if (opts->eof == NOEOF) {
+        // With EOF rule, there is always a possibility that EOF occurs before
+        // the next matching rule. In essence, sentinel is a special symbol
+        // which is not matched by any of the rules, so none of the rules can
+        // be completely shadowed by other rules.
+        warn_dead_rules(dfa, defrule, cond, live, msg);
+        remove_dead_final_states(dfa, fallthru);
+    }
     warn_sentinel_in_midrule(dfa, opts, cond, live, msg);
-    remove_dead_final_states(dfa, fallthru);
     find_fallback_states(dfa, fallthru);
 
     delete[] live;
