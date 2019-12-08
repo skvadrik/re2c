@@ -287,6 +287,32 @@ void DFA::calc_stats(bool explicit_tags)
     }
 }
 
+static bool can_hoist_tags(const State *s, const opt_t *opts)
+{
+    Span *span = s->go.span;
+    const size_t nspan = s->go.nSpans;
+    DASSERT(nspan != 0);
+
+    if (nspan == 1 && s->rule != Rule::NONE) return false;
+
+    // check that all transitions agree on tags
+    tcid_t tags = span[0].tags;
+    for (uint32_t i = 1; i < nspan; ++i) {
+        if (span[i].tags != tags) {
+            return false;
+        }
+    }
+
+    // if EOF rule is used, also check final/fallback tags, as it can be that
+    // EOF is reached and the final/fallback transition should be taken.
+    if (opts->eof != NOEOF
+            && tags != (s->rule == Rule::NONE ? s->fall_tags : s->rule_tags)) {
+        return false;
+    }
+
+    return true;
+}
+
 void DFA::hoist_tags(const opt_t *opts)
 {
     for (State * s = head; s; s = s->next) {
@@ -294,21 +320,8 @@ void DFA::hoist_tags(const opt_t *opts)
         const size_t nspan = s->go.nSpans;
         if (nspan == 0) continue;
 
-        tcid_t ts = span[0].tags;
-        for (uint32_t i = 1; i < nspan; ++i) {
-            if (span[i].tags != ts) {
-                ts = TCID0;
-                break;
-            }
-        }
-
-        if (opts->eof != NOEOF
-                && ts != (s->rule == Rule::NONE ? s->fall_tags : s->rule_tags)) {
-            ts = TCID0;
-        }
-
-        if (ts != TCID0) {
-            s->go.tags = ts;
+        if (can_hoist_tags(s, opts)) {
+            s->go.tags = span[0].tags;
             for (uint32_t i = 0; i < nspan; ++i) {
                 span[i].tags = TCID0;
             }
@@ -325,22 +338,11 @@ void DFA::hoist_tags_and_skip(const opt_t *opts)
         const size_t nspan = s->go.nSpans;
         if (nspan == 0) continue;
 
-        bool hoist_tags = true, hoist_skip = true;
-
         // do all spans agree on tags?
-        const tcid_t ts = span[0].tags;
-        for (uint32_t i = 1; i < nspan; ++i) {
-            if (span[i].tags != ts) {
-                hoist_tags = false;
-                break;
-            }
-        }
-        if (opts->eof != NOEOF
-                && ts != (s->rule == Rule::NONE ? s->fall_tags : s->rule_tags)) {
-            hoist_tags = false;
-        }
+        bool hoist_tags = can_hoist_tags(s, opts);
 
         // do all spans agree on skip?
+        bool hoist_skip = true;
         for (uint32_t i = 0; i < nspan; ++i) {
             if (consume(span[i].to) != consume(span[0].to)) {
                 hoist_skip = false;
