@@ -334,13 +334,19 @@ void gen_goto(code_lines_t &code, const State *from, const State *to
 void gen_on_eof_fail(code_lines_t &code, const opt_t *opts, const DFA &dfa
     , const State *from, const State *to, std::ostringstream &o)
 {
-    const State *fallback = from->rule == Rule::NONE
-        ? dfa.defstate : dfa.finstates[from->rule];
-    const tcid_t falltags = from->rule == Rule::NONE
-        ? from->fall_tags : from->rule_tags;
+    const bool final = from->rule != Rule::NONE;
+    const State *fallback = final ? dfa.finstates[from->rule] : dfa.defstate;
+    const tcid_t falltags = final ? from->rule_tags : from->fall_tags;
 
     if (from->action.type == Action::INITIAL) {
-        o << opts->indString << "goto " << opts->labelPrefix << "eof;";
+        o << opts->indString << "goto " << opts->labelPrefix;
+        if (final) {
+            o << fallback->label;
+        }
+        else {
+            o << "eof";
+        }
+        o << ";";
         flushln(code, o);
     }
     else if (fallback != to) {
