@@ -153,7 +153,7 @@ void dump_dfa_t::state(const ctx_t &ctx, bool isnew)
         fprintf(stderr, ")\"]\n");
 
         fprintf(stderr, "  %u:%u:e -> r%u [style=dotted label=\"",
-            state, c->origin, state);
+            state, static_cast<uint32_t>(c - b), state);
         dump_tcmd(cmd);
         fprintf(stderr, "\"]\n");
     }
