@@ -243,6 +243,17 @@ static void write_keys(const path_t &path, const Skeleton &skel,
             const std::vector<size_t> &h = tags[w * nver + bver];
             if (history(tag)) {
                 const size_t hlen = h.size();
+
+                // Abort if history length exceeds maximum value of key type.
+                // This is not always true, but it is difficult to estimate
+                // history length in advance, and explicit assertion failure
+                // is better than an obscure skeleton match failure.
+                //
+                // TODO: Ideally we should use different encoding for the keys
+                // (structs with 2 or 4 byte fields for history length and
+                // proper serialization/deserialization instead of flat arrays).
+                DASSERT(hlen < std::numeric_limits<key_t>::max());
+
                 *k++ = to_le(static_cast<key_t>(hlen));
                 for (size_t i = 0; i < hlen; ++i) {
                     *k++ = to_le(static_cast<key_t>(h[i]));
