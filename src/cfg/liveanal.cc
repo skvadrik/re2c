@@ -50,7 +50,8 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
     const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
     const cfg_ix_t
         narc = cfg.nbbarc,
-        nfin = cfg.nbbfin;
+        nfin = cfg.nbbfin,
+        nfall = cfg.nbbfall;
     const tagver_t *fins = cfg.dfa.finvers;
     bool *buf1 = new bool[nver];
     bool *buf2 = new bool[nver];
@@ -70,7 +71,8 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
      * new versions.
      */
 
-    memset(live, 0, nfin * nver * sizeof(bool));
+    memset(live, 0, nfall * nver * sizeof(bool));
+
     for (cfg_ix_t i = narc; i < nfin; ++i) {
         const cfg_bb_t *b = cfg.bblocks + i;
         const Rule *r = b->rule;
@@ -131,20 +133,21 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
      * but still we should prevent it from merging with other tags
      * (otherwise it may become overwritten).
      */
-    for (cfg_ix_t i = nfin; i < cfg.nbbfall; ++i) {
+    for (cfg_ix_t i = nfin; i < nfall; ++i) {
         const cfg_bb_t *b = cfg.bblocks + i;
         const Rule *r = b->rule;
+        bool *l = &live[i * nver];
 
         // all fallback bblocks have USE tags
         DASSERT(r);
 
-        memset(buf1, 0, nver * sizeof(bool));
         for (size_t t = r->ltag; t < r->htag; ++t) {
-            buf1[fins[t]] = !fixed(tags[t]);
+            l[fins[t]] = !fixed(tags[t]);
         }
 
         // need two passes: same version may occur as both LHS and RHS
         // not the same as backward propagation of liveness through bblock
+        memcpy(buf1, l, nver * sizeof(bool));
         for (const tcmd_t *p = b->cmd; p; p = p->next) {
             buf1[p->lhs] = false;
         }

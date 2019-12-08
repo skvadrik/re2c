@@ -19,7 +19,7 @@ void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
     const size_t nver = static_cast<size_t>(maxver);
     bool *buf = new bool[nver];
     vals_t *vals = new vals_t[nver]();
-    const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfin;
+    const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
 
     memset(interf, 0, nver * nver * sizeof(bool));
     for (; b < e; ++b, live += nver) {

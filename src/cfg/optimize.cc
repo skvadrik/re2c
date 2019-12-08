@@ -24,7 +24,7 @@ void compact_and_optimize_tags(const opt_t *opts, dfa_t &dfa)
 
         if (opts->optimize_tags && maxver > 0) {
             nver = static_cast<size_t>(maxver) + 1;
-            bool *live = new bool[cfg.nbbfin * nver];
+            bool *live = new bool[cfg.nbbfall * nver];
             bool *interf = new bool[nver * nver];
 
             static const uint32_t NPASS = 2;
