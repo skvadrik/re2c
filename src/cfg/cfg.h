@@ -2,6 +2,7 @@
 #define _RE2C_DFA_CFG_CFG_
 
 #include "src/util/c99_stdint.h"
+#include <vector>
 
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
@@ -27,6 +28,33 @@ struct cfg_bb_t
     FORBID_COPY(cfg_bb_t);
 };
 
+// helper structure used in control flow graph construction
+struct cfg_context_t {
+    static const uint32_t MAX_MARK;
+
+    dfa_t &dfa;
+    const size_t nstate;
+    const size_t nsym;
+
+    cfg_ix_t *state2bb, *trans2bb;
+    cfg_ix_t *final2bb;
+    cfg_ix_t *fback2bb;
+
+    uint32_t *state_mark;
+    uint32_t *trans_mark;
+    uint32_t *final_mark;
+    uint32_t mark;
+
+    cfg_ix_t *succb;
+    cfg_ix_t *succe;
+
+    std::vector<size_t> worklist;
+
+    explicit cfg_context_t(dfa_t &dfa);
+    ~cfg_context_t();
+    FORBID_COPY(cfg_context_t);
+};
+
 // control flow graph
 struct cfg_t
 {
@@ -46,6 +74,10 @@ struct cfg_t
     static tagver_t variable_allocation(const cfg_t &cfg, const bool *interf, tagver_t *ver2new);
     static void renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver);
     static void normalization(cfg_t &cfg);
+
+private:
+    void map_actions_to_bblocks(cfg_context_t &ctx);
+    void create_bblocks(cfg_context_t &ctx);
     FORBID_COPY(cfg_t);
 };
 
