@@ -15,14 +15,25 @@ template<typename cmd_t> void normalize(cmd_t *cmd);
 
 /* note [tag normalization]
  *
- * After optimizations different commands may become equal
- * up to reordering and removing duplicates. Such commands
- * should be recognized as equal by further optimizations
- * like minimization, hoisting, tunnelling, etc.
- * For that reason all commands are normalized.
+ * After optimizations different commands may become equal up to reordering
+ * and removing duplicates. Such commands should be deduplicated (duplicate
+ * "set" and "copy" commands are redundant and may prohibit further
+ * optimizations like minimization and tunneling, and duplicate "add" commands
+ * are incorrect altogether.
+ *
+ * Consequently, tag commands are "normalized": the sequence of commands is
+ * split into continuous subsequnces of "set", "copy" and "add" commands, and
+ * within each subsequence duplicate commands are removed. Additionally, "set"
+ * subsequences are sorted lexicographically (the relative order of "set"
+ * commands doesn't matter), and "copy" subsequences are first sorted
+ * lexicographically and then topologically (except for the case of staDFA,
+ * which allows loops in "copy" commands that cannot be topsorted and are
+ * resolved by using local temporary variables).
  */
 
-static tcmd_t **normalize(tcmd_t **ps, tcmd_t *e);
+static void sort(tcmd_t *head, tcmd_t *end);
+static void uniq(tcmd_t *head, tcmd_t *end);
+static void dedup(tcmd_t *head, tcmd_t *end);
 
 void cfg_t::normalization(cfg_t &cfg)
 {
@@ -31,27 +42,30 @@ void cfg_t::normalization(cfg_t &cfg)
 
     cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
     for (; b < e; ++b) {
+        for (tcmd_t **px = &b->cmd, *x; (x = *px);) {
 
-        // We cannot normalize the list of commands as a whole: the
-        // relative order of some commands might be significant.
-        // Therefore we split the list in continuous sublists of
-        // 'copy', 'save without history' and 'save with history'
-        // commands and normalize each sublist in a proper way.
-        tcmd_t **px, *x;
-        for (px = &b->cmd; (x = *px);) {
             if (tcmd_t::iscopy(x)) {
-                for (x = *px; x && tcmd_t::iscopy(x); x = x->next);
-                *normalize(px, x) = NULL; // topsort expects NULL terminator
-                tcmd_t::topsort(px, NULL, indeg);
-                for (; *px; px = &(*px)->next); // find tail
-                *px = x; // restore tail
-            } else if (tcmd_t::isset(x)) {
-                for (x = *px; x && tcmd_t::isset(x); x = x->next);
-                px = normalize(px, x);
-            } else {
-                for (; (x = *px) && tcmd_t::isadd(x); px = &x->next);
-                // don't normalize, histories may have complex dependencies
+                for (; x && tcmd_t::iscopy(x); x = x->next);
+                // sort, remove adjacent duplicates, topsort
+                sort(*px, x);
+                uniq(*px, x);
+                tcmd_t::topsort(px, x, indeg);
             }
+            else if (tcmd_t::isset(x)) {
+                // sort, remove adjacent duplicates
+                for (; x && tcmd_t::isset(x); x = x->next);
+                sort(*px, x);
+                uniq(*px, x);
+            }
+            else {
+                // remove duplicates
+                for (; x && tcmd_t::isadd(x); x = x->next);
+                dedup(*px, x);
+            }
+
+            // Find tail of the current copy/set/add subsequence (need to
+            // reiterate it as the former tail might have been removed).
+            for (; *px != x; px = &(*px)->next);
         }
     }
 
@@ -86,29 +100,45 @@ static bool less(const tcmd_t &x, const tcmd_t &y)
     return false;
 }
 
-tcmd_t **normalize(tcmd_t **ps, tcmd_t *e)
+void sort(tcmd_t *head, tcmd_t *end)
 {
-    // sort lexicographically
-    for (tcmd_t *p = *ps; p != e; p = p->next) {
-        for (tcmd_t *q = p->next; q != e; q = q->next) {
+    // sort: O(n^2)
+    for (tcmd_t *p = head; p != end; p = p->next) {
+        for (tcmd_t *q = p->next; q != end; q = q->next) {
             if (less(*q, *p)) {
                 swap(*p, *q);
             }
         }
     }
+}
 
-    // delete duplicates
-    for (tcmd_t *p = *ps; p != e;) {
+void uniq(tcmd_t *head, tcmd_t *end)
+{
+    // remove adjacent duplicates: O(n)
+    for (tcmd_t *p = head; p != end;) {
         tcmd_t *q = p->next;
-        if (q != e && tcmd_t::equal(*p, *q)) {
+        if (q != end && tcmd_t::equal(*p, *q)) {
             p->next = q->next;
-        } else {
+        }
+        else {
             p = q;
         }
     }
+}
 
-    for (; *ps != e; ps = &(*ps)->next);
-    return ps;
+void dedup(tcmd_t *head, tcmd_t *end)
+{
+    // remove duplicates: O(n^2)
+    for (tcmd_t *p = head; p != end; p = p->next) {
+        for (tcmd_t **qq = &p->next; *qq != end; ) {
+            if (tcmd_t::equal(*p, **qq)) {
+                *qq = (*qq)->next;
+            }
+            else {
+                qq = &(*qq)->next;
+            }
+        }
+    }
 }
 
 } // namespace re2c
