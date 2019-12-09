@@ -31,7 +31,9 @@ void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
     for (std::set<tagver_t>::iterator i = mt.begin(); i != mt.end(); ++i) {
         for (tagver_t u = *i, v = 0; v < maxver; ++v) {
             if (mt.find(v) == mt.end()) {
-                interf[v * maxver + u] = interf[u * maxver + v] = true;
+                const size_t uidx = static_cast<size_t>(u);
+                const size_t vidx = static_cast<size_t>(v);
+                interf[vidx * nver + uidx] = interf[uidx * nver + vidx] = true;
             }
         }
     }

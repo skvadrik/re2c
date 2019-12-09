@@ -23,12 +23,12 @@ namespace re2c {
 tagver_t cfg_t::variable_allocation(const cfg_t &cfg, const bool *interf,
     tagver_t *ver2new)
 {
-    const tagver_t
-        END = std::numeric_limits<tagver_t>::max(),
-        nver = cfg.dfa.maxtagver + 1;
-    tagver_t *next = new tagver_t[nver]; // list of class members
-    tagver_t *repr = new tagver_t[nver]; // maps tag to class representative
-    tagver_t rx, ry, x, y, z;
+    const size_t END = static_cast<size_t>(std::numeric_limits<tagver_t>::max());
+    const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
+
+    size_t *next = new size_t[nver]; // list of class members
+    size_t *repr = new size_t[nver]; // maps tag to class representative
+    size_t rx, ry, x, y, z;
 
     std::fill(next, next + nver, END);
     std::fill(repr, repr + nver, END);
@@ -37,8 +37,11 @@ tagver_t cfg_t::variable_allocation(const cfg_t &cfg, const bool *interf,
     const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
     for (; b < e; ++b) {
         for (const tcmd_t *p = b->cmd; p; p = p->next) {
-            x = p->lhs;
-            y = p->rhs;
+
+            DASSERT(p->lhs >= 0 && p->rhs >= 0);
+            x = static_cast<size_t>(p->lhs);
+            y = static_cast<size_t>(p->rhs);
+
             if (y == TAGVER_ZERO || y == x) continue;
 
             rx = repr[x];
