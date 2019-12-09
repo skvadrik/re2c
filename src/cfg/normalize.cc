@@ -28,7 +28,6 @@ void cfg_t::normalization(cfg_t &cfg)
 {
     const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
     uint32_t *indeg = new uint32_t[nver];
-    memset(indeg, 0, nver * sizeof(uint32_t));
 
     cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
     for (; b < e; ++b) {
@@ -43,7 +42,7 @@ void cfg_t::normalization(cfg_t &cfg)
             if (tcmd_t::iscopy(x)) {
                 for (x = *px; x && tcmd_t::iscopy(x); x = x->next);
                 *normalize(px, x) = NULL; // topsort expects NULL terminator
-                tcmd_t::topsort(px, indeg);
+                tcmd_t::topsort(px, NULL, indeg);
                 for (; *px; px = &(*px)->next); // find tail
                 *px = x; // restore tail
             } else if (tcmd_t::isset(x)) {

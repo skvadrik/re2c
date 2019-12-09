@@ -505,7 +505,7 @@ bool kernel_map_t<ctx_t>::operator()(const kernel_t *x, const kernel_t *y)
     *pacts = copy;
 
     // see note [topological ordering of copy commands]
-    const bool nontrivial_cycles = tcmd_t::topsort(pacts, bufs.indegree);
+    const bool nontrivial_cycles = tcmd_t::topsort(pacts, NULL, bufs.indegree);
 
     // in case of cycles restore 'save' commands and fail
     if (nontrivial_cycles) {

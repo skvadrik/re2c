@@ -9,29 +9,27 @@ namespace re2c {
 
 /* note [topological ordering of copy commands]
  *
- * The order in which copy commands are executed is important:
- * 'x = y; y = z;' is not the same as 'y = z; x = y;' (the latter
- * overwrites 'y' before its precious value is copied to 'x').
+ * The order in which copy commands are executed is important: 'x = y; y = z;'
+ * is not the same as 'y = z; x = y;' (the latter overwrites 'y' before its
+ * value is copied to 'x').
  *
- * To avoid overwrites, commands should be topologically sorted.
- * The algorithm detects cycles and terminates; non-trivial cycles
- * (induced by 2 or more nodes) are reported. We don't care about
- * trivial cycles (loopbacks), because they can be implemented without
- * temporary variable. Non-trivial cycles need a new temporary variable
- * local to the given basic block, which makes liveness analysis more
- * complex (so we simply forbid such mappings).
+ * To avoid overwrites, commands should be topologically sorted. The algorithm
+ * automatically moves all cycles to the end of the list and returns a pointer
+ * to the first non-trivial cycle (induced by 2 or more nodes). Trivial cycles
+ * may occur in "add" commands (if the current position or nil is appended to
+ * the history of some tag); such cases are not problematic because they do not
+ * require a temporary variable. Non-trivial cycles need a temporary variable
+ * (local to the basic block), which complicates liveness analysis. TDFA simply
+ * rejects mappings with cycles, however, they may occur in staDFA.
  *
- * For the purpose of topsort, we treat commands as arcs of directed
- * acyclic graph: command 'x = y' yields arc X -> Y. Topsort works
- * by iteratively removing arcs X -> Y such that X has zero in-degree
- * (they correspond to commands with no dependencies).
- * Commands in the order of removal are topologically sorted.
- *
- * The algorithm iterates graph and removes arcs with zero in-degree
- * until either the graph is empty or all remaining arcs belong to
- * cycles.
- *
- * The algorithm starts and ends with all-zero in-degree buffer.
+ * For the purpose of topsort, we treat commands as arcs of directed acyclic
+ * graph: command 'x = y' yields arc X -> Y. Topsort works by iteratively
+ * removing an arc X -> Y that X has zero in-degree (such arcs correspond to
+ * commands with no dependencies) and decrementing Y's in-degree. Commands in
+ * the order of removal are added to the new (topologically sorted) list. This
+ * continues until either the list is empty, or none of the remainig commands
+ * has a zero in-degree. In this case all remaining commands are cycles; they
+ * cannot be topsorted and are appended at the end of the list.
  */
 
 // explicit specialization for history types
@@ -77,25 +75,25 @@ bool tcmd_t::isadd(const tcmd_t *x)
     return x->rhs != TAGVER_ZERO && x->history[0] != TAGVER_ZERO;
 }
 
-bool tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
+tcmd_t **tcmd_t::topsort(tcmd_t **phead, tcmd_t *end, uint32_t *indeg)
 {
     tcmd_t *x0 = *phead, *x, *y0 = NULL, **py;
-    bool nontrivial_cycles = false;
 
     // initialize in-degree
-    for (x = x0; x; x = x->next) {
+    for (x = x0; x != end; x = x->next) {
         indeg[x->lhs] = indeg[x->rhs] = 0;
     }
-    for (x = x0; x; x = x->next) {
+    for (x = x0; x != end; x = x->next) {
         ++indeg[x->rhs];
     }
 
     for (py = &y0;;) {
-        // reached end of list
-        if (!x0) break;
+        // reached end of list, stop
+        if (x0 == end) break;
 
+        // topsorted commands are pushed on y-list, the rest on x-list
         tcmd_t **px = &x0, **py1 = py;
-        for (x = x0; x; x = x->next) {
+        for (x = x0; x != end; x = x->next) {
             if (indeg[x->lhs] == 0) {
                 --indeg[x->rhs];
                 *py = x;
@@ -105,20 +103,21 @@ bool tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
                 px = &x->next;
             }
         }
-        *px = NULL;
+        *px = end;
 
-        // only cycles left
-        if (py == py1) {
-            // look for cycles of length 2 or more
-            for (x = x0; x && x->lhs == x->rhs; x = x->next);
-            nontrivial_cycles = x != NULL;
-            break;
-        }
+        // only cycles left, stop
+        if (py == py1) break;
     }
+
+    // append cycles at the end, or just set last 'next' pointer to end
     *py = x0;
 
+    // overwrite the old head with the head of topsorted y-list
     *phead = y0;
-    return nontrivial_cycles;
+
+    // return the first non-trivial cycle on x-list (if any), or nil
+    for (; (x = *py) != end && x->lhs == x->rhs; py = &x->next);
+    return *py == end ? NULL : py;
 }
 
 tcpool_t::tcpool_t()

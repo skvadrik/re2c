@@ -21,10 +21,10 @@ struct tcmd_t
 
     static bool equal(const tcmd_t &x, const tcmd_t &y);
     static bool equal_history(const tagver_t *h, const tagver_t *g);
-    static bool topsort(tcmd_t **phead, uint32_t *indeg);
     static bool iscopy(const tcmd_t *x);
     static bool isset(const tcmd_t *x);
     static bool isadd(const tcmd_t *x);
+    static tcmd_t **topsort(tcmd_t **phead, tcmd_t *end, uint32_t *indeg);
 };
 
 typedef uint32_t tcid_t;
