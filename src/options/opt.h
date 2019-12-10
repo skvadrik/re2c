@@ -145,8 +145,10 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, yylessthan, "YYLESSTHAN") \
     MUTOPT (std::string, yystagn, "YYSTAGN") \
     MUTOPT (std::string, yystagp, "YYSTAGP") \
+    MUTOPT (std::string, yystagpd, "YYSTAGPD") \
     MUTOPT (std::string, yymtagn, "YYMTAGN") \
     MUTOPT (std::string, yymtagp, "YYMTAGP") \
+    MUTOPT (std::string, yymtagpd, "YYMTAGPD") \
     /* #line directives */ \
     MUTOPT (bool, iFlag, false) \
     /* debug */ \

@@ -93,8 +93,10 @@ void mutopt_t::fix(const conopt_t *globopts)
             yyrestoretag = Opt::baseopt.yyrestoretag;
             yystagn = Opt::baseopt.yystagn;
             yystagp = Opt::baseopt.yystagp;
+            yystagpd = Opt::baseopt.yystagpd;
             yymtagn = Opt::baseopt.yymtagn;
             yymtagp = Opt::baseopt.yymtagp;
+            yymtagpd = Opt::baseopt.yymtagpd;
             yylessthan = Opt::baseopt.yylessthan;
             dFlag = Opt::baseopt.dFlag;
             yydebug = Opt::baseopt.yydebug;
@@ -188,8 +190,10 @@ void mutopt_t::fix(const conopt_t *globopts)
         yyrestoretag = Opt::baseopt.yyrestoretag;
         yystagn = Opt::baseopt.yystagn;
         yystagp = Opt::baseopt.yystagp;
+        yystagpd = Opt::baseopt.yystagpd;
         yymtagn = Opt::baseopt.yymtagn;
         yymtagp = Opt::baseopt.yymtagp;
+        yymtagpd = Opt::baseopt.yymtagpd;
     }
     if (!dFlag)
     {
@@ -308,8 +312,10 @@ void Opt::reset_mapCodeName ()
     set_yyrestoretag(Opt::baseopt.yyrestoretag);
     set_yystagn(Opt::baseopt.yystagn);
     set_yystagp(Opt::baseopt.yystagp);
+    set_yystagpd(Opt::baseopt.yystagpd);
     set_yymtagn(Opt::baseopt.yymtagn);
     set_yymtagp(Opt::baseopt.yymtagp);
+    set_yymtagpd(Opt::baseopt.yymtagpd);
     set_yyskip(Opt::baseopt.yyskip);
     set_yyfilllabel(Opt::baseopt.yyfilllabel);
     set_yynext(Opt::baseopt.yynext);
