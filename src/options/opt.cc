@@ -256,6 +256,9 @@ void mutopt_t::fix(const conopt_t *globopts)
                 " in the presence of bounds checking or EOF rule");
         }
     }
+    if (!globopts->lookahead && globopts->stadfa) {
+        fatal("cannot combine TDFA(0) and staDFA");
+    }
 }
 
 const mutopt_t Opt::baseopt;

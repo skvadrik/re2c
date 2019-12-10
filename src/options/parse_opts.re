@@ -194,6 +194,7 @@ opt_long:
     "no-lookahead"          end { globopts.lookahead = false;     goto opt; }
     "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
     "eager-skip"            end { globopts.eager_skip = true;     goto opt; }
+    "stadfa"                end { globopts.stadfa = true;         goto opt; }
 
     // debug options
     "dump-nfa"              end { globopts.dump_nfa = true;           goto opt; }
