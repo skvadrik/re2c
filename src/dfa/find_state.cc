@@ -63,7 +63,7 @@ namespace re2c {
  * Suppose we have just constructed a new DFA state Y and want to map it
  * to an existing DFA state X. States must have identical sets of NFA
  * substates and identical sets of lookahead tags for each substate.
- * Furtermore, there must be bijective mapping between versions of X and Y
+ * Furthermore, there must be bijective mapping between versions of X and Y
  * and this mapping must preserve version order (respect priorities).
  *
  * Bijective mappings have a nice property: there is only one possible state
@@ -78,7 +78,7 @@ namespace re2c {
  * more complex analysis (and are not so useful after all), so we drop them.
  */
 
-template<typename ctx_t>
+template<typename ctx_t, bool stadfa>
 struct kernel_eq_t
 {
     ctx_t &ctx;
@@ -92,16 +92,36 @@ struct kernel_map_t
     bool operator()(const kernel_t *x, const kernel_t *y);
 };
 
-template<typename ctx_t> static bool do_find_state(ctx_t &ctx);
-template<typename ctx_t> static tcmd_t *final_actions(ctx_t &ctx, const clos_t &fin);
-template<typename ctx_t> static void reserve_buffers(ctx_t &ctx);
-template<typename ctx_t> static bool equal_lookahead_tags(ctx_t &ctx, const kernel_t *x, const kernel_t *y);
-template<typename ctx_t> static void unwind(const typename ctx_t::history_t &hist, tag_path_t &path, hidx_t idx);
-static void group_by_tag(tag_path_t &path, tag_path_t &buf, std::vector<uint32_t> &count);
-static kernel_t *make_new_kernel(size_t size, allocator_t &alc);
-static kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc);
-static uint32_t hash_kernel(const kernel_t *kernel);
-static void copy_to_buffer_kernel(const closure_t &closure, const prectable_t *prectbl, kernel_t *buffer);
+template<typename ctx_t, bool stadfa>
+    static void find_state_specialized(ctx_t &);
+template<typename ctx_t, bool stadfa>
+    static bool do_find_state(ctx_t &);
+template<typename ctx_t>
+    static tcmd_t *final_actions(ctx_t &, const clos_t &);
+template<typename ctx_t>
+    static void stadfa_to_tdfa_actions(ctx_t &, tcmd_t **, tcmd_t **);
+template<typename ctx_t>
+    static tagver_t map_stadfa_ver(ctx_t &, size_t, int32_t);
+template<typename ctx_t, bool stadfa>
+    static void reserve_buffers(ctx_t &);
+template<typename ctx_t>
+    static bool equal_lookahead_tags(ctx_t &, const kernel_t *, const kernel_t *);
+template<typename ctx_t>
+    static bool equal_stacmd(ctx_t &, const kernel_t *, const kernel_t *);
+template<typename ctx_t>
+    static void unwind(const typename ctx_t::history_t &, tag_path_t &, hidx_t);
+template<typename ctx_t>
+    static void unwind_tag(const typename ctx_t::history_t &, tag_path_t &,
+        hidx_t, size_t);
+template<bool stadfa>
+    static kernel_t *make_new_kernel(size_t, allocator_t &);
+template<bool stadfa>
+    static kernel_t *make_kernel_copy(const kernel_t *, allocator_t &);
+template<bool stadfa>
+    static void copy_to_buffer(const closure_t &, const prectable_t *,
+        stacmd_t *, kernel_t *);
+static void group_by_tag(tag_path_t &, tag_path_t &, std::vector<uint32_t> &);
+static uint32_t hash_kernel(const kernel_t *);
 
 // explicit specialization for context types
 template void find_state<pdetctx_t>(pdetctx_t &ctx);
@@ -110,10 +130,18 @@ template void find_state<ldetctx_t>(ldetctx_t &ctx);
 template<typename ctx_t>
 void find_state(ctx_t &ctx)
 {
+    return ctx.dc_opts->stadfa
+        ? find_state_specialized<ctx_t, true>(ctx)
+        : find_state_specialized<ctx_t, false>(ctx);
+}
+
+template<typename ctx_t, bool stadfa>
+void find_state_specialized(ctx_t &ctx)
+{
     dfa_t &dfa = ctx.dfa;
 
     // find or add the new state in the existing set of states
-    const bool is_new = do_find_state(ctx);
+    const bool is_new = do_find_state<ctx_t, stadfa>(ctx);
 
     if (is_new) {
         // create new DFA state
@@ -127,8 +155,14 @@ void find_state(ctx_t &ctx)
             e = ctx.state.end(),
             f = std::find_if(b, e, clos_t::fin);
         if (f != e) {
-            t->tcmd[dfa.nchars] = final_actions(ctx, *f);
             t->rule = f->state->rule;
+        }
+
+        if (stadfa) {
+            stadfa_to_tdfa_actions(ctx, &t->stacmd, &t->tcmd[dfa.nchars]);
+        }
+        else if (f != e) {
+            t->tcmd[dfa.nchars] = final_actions(ctx, *f);
         }
     }
 
@@ -145,7 +179,7 @@ void find_state(ctx_t &ctx)
     DDUMP_DFA_RAW(ctx, is_new);
 }
 
-template<typename ctx_t>
+template<typename ctx_t, bool stadfa>
 bool do_find_state(ctx_t &ctx)
 {
     kernels_t &kernels = ctx.dc_kernels;
@@ -159,28 +193,30 @@ bool do_find_state(ctx_t &ctx)
     }
 
     // resize buffer if closure is too large
-    reserve_buffers(ctx);
+    reserve_buffers<ctx_t, stadfa>(ctx);
     kernel_t *k = ctx.dc_buffers.kernel;
 
     // copy closure to buffer kernel
-    copy_to_buffer_kernel(closure, ctx.newprectbl, k);
+    copy_to_buffer<stadfa>(closure, ctx.newprectbl, ctx.stadfa_actions, k);
 
     // hash "static" part of the kernel
     const uint32_t hash = hash_kernel(k);
 
     // try to find identical kernel
-    kernel_eq_t<ctx_t> cmp_eq = {ctx};
+    kernel_eq_t<ctx_t, stadfa> cmp_eq = {ctx};
     ctx.dc_target = kernels.find_with(hash, k, cmp_eq);
     if (ctx.dc_target != kernels_t::NIL) return false;
 
-    // else try to find mappable kernel
+    // else if not staDFA try to find mappable kernel
     // see note [bijective mappings]
-    kernel_map_t<ctx_t> cmp_map = {ctx};
-    ctx.dc_target = kernels.find_with(hash, k, cmp_map);
-    if (ctx.dc_target != kernels_t::NIL) return false;
+    if (!stadfa) {
+        kernel_map_t<ctx_t> cmp_map = {ctx};
+        ctx.dc_target = kernels.find_with(hash, k, cmp_map);
+        if (ctx.dc_target != kernels_t::NIL) return false;
+    }
 
     // otherwise add new kernel
-    kernel_t *kcopy = make_kernel_copy(k, ctx.dc_allocator);
+    kernel_t *kcopy = make_kernel_copy<stadfa>(k, ctx.dc_allocator);
     ctx.dc_target = kernels.push(hash, kcopy);
     return true;
 }
@@ -219,9 +255,113 @@ tcmd_t *final_actions(ctx_t &ctx, const clos_t &fin)
     return copy;
 }
 
-kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
-    : maxsize(0) // usually ranges from one to some twenty
-    , kernel(make_new_kernel(maxsize, alc))
+template<typename ctx_t>
+void stadfa_to_tdfa_actions(ctx_t &ctx, tcmd_t **state_cmd, tcmd_t **final_cmd)
+{
+    tcpool_t &pool = ctx.dfa.tcpool;
+
+    // Convert staDFA store/transfer/accept actions to tag commands:
+    // map each (tag, index) pair to a unique tag version.
+    tcmd_t *s = NULL, *f = NULL;
+    tagver_t l, r;
+    for (const stacmd_t *p = ctx.stadfa_actions; p; p = p->next) {
+        switch (p->kind) {
+        case stacmd_t::STORE:
+            l = map_stadfa_ver(ctx, p->tag, p->lhs);
+            if (history(ctx.dfa.tags[p->tag])) {
+                r = map_stadfa_ver(ctx, p->tag, p->rhs);
+                s = pool.make_add(s, l, r, ctx.history, p->hist, p->tag);
+            }
+            else {
+                r = last(ctx.history, p->hist, p->tag);
+                s = pool.make_set(s, l, r);
+            }
+            break;
+        case stacmd_t::TRANSFER:
+            if (p->lhs != p->rhs) {
+                l = map_stadfa_ver(ctx, p->tag, p->lhs);
+                r = map_stadfa_ver(ctx, p->tag, p->rhs);
+                s = pool.make_copy(s, l, r);
+            }
+            break;
+        case stacmd_t::ACCEPT:
+            const tagver_t l = ctx.dfa.finvers[p->tag];
+            if (p->hist == HROOT) {
+                r = map_stadfa_ver(ctx, p->tag, p->rhs);
+                f = pool.make_copy(f, l, r);
+            }
+            else if (history(ctx.dfa.tags[p->tag])) {
+                r = map_stadfa_ver(ctx, p->tag, p->rhs);
+                f = pool.make_add(f, l, r, ctx.history, p->hist, p->tag);
+            }
+            else {
+                r = last(ctx.history, p->hist, p->tag);
+                f = pool.make_set(f, l, r);
+            }
+            break;
+        }
+    }
+    *state_cmd = s;
+    *final_cmd = f;
+
+    // Topologically sort tag commands. This may not be possible due to cycles
+    // (in staDFA they are unavoidable because indices are determined by TNFA
+    // substates, which may be flipped in the origin and target staDFA states).
+    // Break each cycle by introducing a temporary tag version: e.g. 'x=y; y=x;'
+    // is rewritten as 'z=x; x=y; y=z;'. Topsort gathers cycles at the end of
+    // command list and returns a pointer to the first command of the cycle.
+    // There can be multiple cycles, therefore the process is repeated until
+    // topsort finds no more cycles.
+    reserve_buffers<ctx_t, true>(ctx);
+    tcmd_t **cycle = tcmd_t::topsort(state_cmd, NULL, ctx.dc_buffers.indegree);
+    for (; cycle; ) {
+        tcmd_t *c0 = *cycle;
+        DASSERT(c0);
+
+        const tagver_t tmp = ++ctx.dfa.maxtagver, lhs = c0->lhs;
+        if (ctx.dfa.mtagvers.find(lhs) != ctx.dfa.mtagvers.end()) {
+            ctx.dfa.mtagvers.insert(tmp);
+        }
+
+        *cycle = pool.make_copy(c0, tmp, lhs);
+
+        for (tcmd_t *c = c0->next; c; c = c->next) {
+            DASSERT(tcmd_t::iscopy(c) || tcmd_t::isadd(c));
+            if (lhs == c->rhs) {
+                c->rhs = tmp;
+            }
+        }
+
+        reserve_buffers<ctx_t, true>(ctx);
+        cycle = tcmd_t::topsort(&c0->next, NULL, ctx.dc_buffers.indegree);
+    }
+}
+
+template<typename ctx_t>
+tagver_t map_stadfa_ver(ctx_t &ctx, size_t tag, int32_t ver)
+{
+    const stadfa_tagvers_t::key_type k(tag, ver);
+    stadfa_tagvers_t::iterator i = ctx.stadfa_tagvers.find(k);
+
+    tagver_t m;
+    if (i == ctx.stadfa_tagvers.end()) {
+        m = ++ctx.dfa.maxtagver;
+
+        ctx.stadfa_tagvers.insert(std::make_pair(k, m));
+
+        if (history(ctx.dfa.tags[tag])) {
+            ctx.dfa.mtagvers.insert(m);
+        }
+    }
+    else {
+        m = i->second;
+    }
+    return m;
+}
+
+kernel_buffers_t::kernel_buffers_t()
+    : maxsize(0)
+    , kernel(NULL)
     , cap(0)
     , max(0)
     , memory(NULL)
@@ -232,25 +372,31 @@ kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
     , backup_actions(NULL)
 {}
 
+template<bool stadfa>
 kernel_t *make_new_kernel(size_t size, allocator_t &alc)
 {
     kernel_t *k = alc.alloct<kernel_t>(1);
     k->size = size;
-    k->prectbl = NULL;
     k->state = alc.alloct<nfa_state_t*>(size);
-    k->tvers = alc.alloct<uint32_t>(size);
     k->thist = alc.alloct<hidx_t>(size);
+    k->prectbl = NULL;
+    if (!stadfa) {
+        k->tvers = alc.alloct<uint32_t>(size);
+    }
+    else {
+        k->stacmd = NULL;
+    }
     return k;
 }
 
+template<bool stadfa>
 kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
 {
     const size_t n = kernel->size;
 
-    kernel_t *k = make_new_kernel(n, alc);
+    kernel_t *k = make_new_kernel<stadfa>(n, alc);
 
     memcpy(k->state, kernel->state, n * sizeof(void*));
-    memcpy(k->tvers, kernel->tvers, n * sizeof(uint32_t));
     memcpy(k->thist, kernel->thist, n * sizeof(hidx_t));
 
     prectable_t *ptbl = NULL;
@@ -259,6 +405,14 @@ kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
         memcpy(ptbl, kernel->prectbl, n * n * sizeof(prectable_t));
     }
     k->prectbl = ptbl;
+
+    if (!stadfa) {
+        memcpy(k->tvers, kernel->tvers, n * sizeof(uint32_t));
+    }
+    else {
+        // new staDFA commands are allocated for every closure, don't copy
+        k->stacmd = kernel->stacmd;
+    }
 
     return k;
 }
@@ -281,24 +435,32 @@ uint32_t hash_kernel(const kernel_t *kernel)
     return h;
 }
 
-void copy_to_buffer_kernel(const closure_t &closure,
-    const prectable_t *prectbl, kernel_t *buffer)
+template <bool stadfa>
+void copy_to_buffer(const closure_t &closure, const prectable_t *prectbl,
+    stacmd_t *stacmd, kernel_t *buffer)
 {
     const size_t n = closure.size();
-
     buffer->size = n;
-
     buffer->prectbl = prectbl;
-
-    for (size_t i = 0; i < n; ++i) {
-        const clos_t &c = closure[i];
-        buffer->state[i] = c.state;
-        buffer->tvers[i] = c.tvers;
-        buffer->thist[i] = c.thist;
+    if (!stadfa) {
+        for (size_t i = 0; i < n; ++i) {
+            const clos_t &c = closure[i];
+            buffer->state[i] = c.state;
+            buffer->tvers[i] = c.tvers;
+            buffer->thist[i] = c.thist;
+        }
+    }
+    else {
+        for (size_t i = 0; i < n; ++i) {
+            const clos_t &c = closure[i];
+            buffer->state[i] = c.state;
+            buffer->thist[i] = c.thist;
+        }
+        buffer->stacmd = stacmd;
     }
 }
 
-template<typename ctx_t>
+template<typename ctx_t, bool stadfa>
 void reserve_buffers(ctx_t &ctx)
 {
     kernel_buffers_t &kbufs = ctx.dc_buffers;
@@ -308,7 +470,7 @@ void reserve_buffers(ctx_t &ctx)
 
     if (kbufs.maxsize < nkern) {
         kbufs.maxsize = nkern * 2; // in advance
-        kbufs.kernel = make_new_kernel(kbufs.maxsize, alc);
+        kbufs.kernel = make_new_kernel<stadfa>(kbufs.maxsize, alc);
     }
 
     // +1 to ensure max tag version is not forgotten in loops
@@ -316,27 +478,20 @@ void reserve_buffers(ctx_t &ctx)
     if (kbufs.cap < kbufs.max) {
         kbufs.cap = kbufs.max * 2; // in advance
 
-        const size_t
-            n = static_cast<size_t>(kbufs.cap),
-            m = 2 * n + 1,
-            sz_x2y = 2 * m * sizeof(tagver_t),
-            sz_x2t = m * sizeof(size_t),
-            sz_idg = n * sizeof(uint32_t),
-            sz_act = n * sizeof(tcmd_t);
+        const size_t n = static_cast<size_t>(kbufs.cap);
+        kbufs.indegree = alc.alloct<uint32_t>(n);
 
-        char *p = alc.alloct<char>(sz_x2y + sz_x2t + sz_idg + sz_act);
-        kbufs.memory = p;
+        if (!stadfa) {
+            const size_t m = 2 * n + 1;
 
-        // point to the center (zero index) of each buffer
-        // indexes in range [-N .. N] must be valid, where N is capacity
-        kbufs.x2y = reinterpret_cast<tagver_t*>(p) + n;
-        kbufs.y2x = kbufs.x2y + m;
-        p += sz_x2y;
-        kbufs.x2t = reinterpret_cast<size_t*>(p) + n;
-        p += sz_x2t;
-        kbufs.indegree = reinterpret_cast<uint32_t*>(p);
-        p += sz_idg;
-        kbufs.backup_actions = reinterpret_cast<tcmd_t*>(p);
+            // point to the center (zero index) of each buffer
+            // indexes in range [-N .. N] must be valid, where N is capacity
+            kbufs.x2y = alc.alloct<tagver_t>(m) + n;
+            kbufs.y2x = alc.alloct<tagver_t>(m) + n;
+            kbufs.x2t = alc.alloct<size_t>(m) + n;
+
+            kbufs.backup_actions = alc.alloct<tcmd_t>(n);
+        }
     }
 }
 
@@ -412,15 +567,62 @@ void unwind(const typename ctx_t::history_t &hist, tag_path_t &path, hidx_t idx)
 }
 
 template<typename ctx_t>
-bool kernel_eq_t<ctx_t>::operator()(const kernel_t *x, const kernel_t *y) const
+void unwind_tag(const typename ctx_t::history_t &hist, tag_path_t &path,
+    hidx_t idx, size_t tag)
+{
+    path.clear();
+    for (; idx != HROOT; ) {
+        const typename ctx_t::history_t::node_t &n = hist.node(idx);
+        if (n.info.idx == tag) {
+            path.push_back(n.info);
+        }
+        idx = n.pred;
+    }
+}
+
+template<typename ctx_t>
+bool equal_stacmd(ctx_t &ctx, const kernel_t *x, const kernel_t *y)
+{
+    DASSERT(x->size == y->size);
+
+    const stacmd_t *p = x->stacmd, *q = y->stacmd;
+    for (; p && q; p = p->next, q = q->next) {
+        const size_t t = p->tag;
+
+        if (t != q->tag
+            || p->kind != q->kind
+            || p->lhs != q->lhs
+            || p->rhs != q->rhs) return false;
+
+        hidx_t i = p->hist, j = q->hist;
+        if (i != j) {
+            if (history(ctx.dfa.tags[t])) {
+                tag_path_t &p1 = ctx.dc_path1, &p2 = ctx.dc_path2;
+                unwind_tag<ctx_t>(ctx.history, p1, i, t);
+                unwind_tag<ctx_t>(ctx.history, p2, j, t);
+                if (p1 != p2) return false;
+            }
+            else if (last(ctx.history, i, t) != last(ctx.history, j, t)) {
+                return false;
+            }
+        }
+    }
+    return !p && !q;
+}
+
+template<typename ctx_t, bool stadfa>
+bool kernel_eq_t<ctx_t, stadfa>::operator()(const kernel_t *x, const kernel_t *y) const
 {
     // check that kernel sizes, NFA states, tags versions,
     // lookahead tags and precedence table coincide
     const size_t n = x->size;
     return n == y->size
         && memcmp(x->state, y->state, n * sizeof(void*)) == 0
-        && memcmp(x->tvers, y->tvers, n * sizeof(uint32_t)) == 0
-        && (!x->prectbl || memcmp(x->prectbl, y->prectbl, n * n * sizeof(prectable_t)) == 0)
+        && (!x->prectbl
+            || memcmp(x->prectbl, y->prectbl, n * n * sizeof(prectable_t)) == 0)
+        && (stadfa
+            ? equal_stacmd(ctx, x, y)
+            : memcmp(x->tvers, y->tvers, n * sizeof(uint32_t)) == 0)
         && equal_lookahead_tags(ctx, x, y);
 }
 
@@ -505,16 +707,16 @@ bool kernel_map_t<ctx_t>::operator()(const kernel_t *x, const kernel_t *y)
     *pacts = copy;
 
     // see note [topological ordering of copy commands]
-    const bool nontrivial_cycles = tcmd_t::topsort(pacts, NULL, bufs.indegree);
+    tcmd_t **cycle = tcmd_t::topsort(pacts, NULL, bufs.indegree);
 
     // in case of cycles restore 'save' commands and fail
-    if (nontrivial_cycles) {
+    if (cycle) {
         for (*pacts = a = b1->next; a; a = a->next) {
             *a = *++b1;
         }
     }
 
-    return !nontrivial_cycles;
+    return cycle == NULL;
 }
 
 } // namespace re2c

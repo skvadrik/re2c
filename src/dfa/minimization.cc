@@ -65,7 +65,8 @@ static void minimization_table(size_t *part,
         for (size_t j = 0; j < i; ++j) {
             dfa_state_t *s2 = states[j];
             tbl[i][j] = s1->rule != s2->rule
-                || s1->tcid[nchars] != s2->tcid[nchars];
+                || s1->tcid[nchars] != s2->tcid[nchars]
+                || s1->stacid != s2->stacid;
         }
     }
 
@@ -122,27 +123,41 @@ static void minimization_table(size_t *part,
     delete[] tbl;
 }
 
+struct moore_key_t {
+    size_t rule;
+    tcid_t fincmd;
+    tcid_t stacmd;
+};
 
-static void minimization_moore(
-    size_t *part,
-    const std::vector<dfa_state_t*> &states,
-    size_t nchars)
+bool operator <(const moore_key_t &x, const moore_key_t &y)
+{
+    if (x.rule < y.rule) return true;
+    if (x.rule > y.rule) return false;
+    if (x.fincmd < y.fincmd) return true;
+    if (x.fincmd > y.fincmd) return false;
+    return x.stacmd < y.stacmd;
+}
+
+typedef std::map<moore_key_t, size_t> moore_init_t;
+
+static void minimization_moore(size_t *part,
+    const std::vector<dfa_state_t*> &states, size_t nchars)
 {
     const size_t count = states.size();
-
     size_t *next = new size_t[count];
 
     // see note [distinguish states by tags]
-    std::map<std::pair<size_t, tcid_t>, size_t> init;
+    moore_init_t init;
     for (size_t i = 0; i < count; ++i) {
         dfa_state_t *s = states[i];
-        std::pair<size_t, tcid_t> key(s->rule, s->tcid[nchars]);
-        if (init.insert(std::make_pair(key, i)).second) {
+        const moore_key_t k = {s->rule, s->tcid[nchars], s->stacid};
+        std::pair<moore_init_t::iterator, bool> p = init.insert(std::make_pair(k, i));
+        if (p.second) {
             part[i] = i;
             next[i] = dfa_t::NIL;
         }
         else {
-            const size_t j = init[key];
+            const size_t j = p.first->second;
             part[i] = j;
             next[i] = next[j];
             next[j] = i;

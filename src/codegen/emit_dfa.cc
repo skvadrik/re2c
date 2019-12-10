@@ -89,7 +89,7 @@ void DFA::emit_body(Output &o, uint32_t& ind,
     const opt_t *opts = o.block().opts;
 
     code_lines_t code;
-    gen_settags(code, *this, tags0, opts);
+    gen_settags(code, *this, tags0, opts, false /* delayed */);
     for (size_t i = 0; i < code.size(); ++i) {
         o.wind(ind).wstring(code[i]);
     }

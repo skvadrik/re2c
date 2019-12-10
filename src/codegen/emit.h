@@ -13,7 +13,7 @@ void emit_action(Output &o, uint32_t ind, const DFA &dfa, const State *s, const 
 void gen_goto_plain(Output &o, uint32_t ind, const State *from, const State *to, const DFA &dfa, tcid_t tcid, bool skip, bool eof);
 void gen_goto_case(Output &o, uint32_t ind, const State *from, const State *to, const DFA &dfa, tcid_t tcid, bool skip, bool eof);
 void gen_goto_if(Output &o, uint32_t ind, const State *from, const State *to, const DFA &dfa, tcid_t tcid, bool skip, bool eof);
-void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *opts);
+void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *opts, bool delayed);
 std::string vartag_name(tagver_t ver, const std::string &prefix);
 std::string vartag_expr(tagver_t ver, const std::string &prefix, const std::string &expression);
 std::string tagname(const Tag &tag);

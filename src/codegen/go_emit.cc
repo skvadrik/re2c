@@ -228,14 +228,14 @@ void Go::emit (Output & o, uint32_t ind, const DFA &dfa, const State *from) cons
         return;
     }
 
-    const bool lookahead = o.block().opts->lookahead;
-    o.wdelay_skip(ind, skip && !lookahead);
+    const opt_t *opts = o.block().opts;
+    o.wdelay_skip(ind, skip && !opts->lookahead);
     code_lines_t code;
-    gen_settags(code, dfa, tags, o.block().opts);
+    gen_settags(code, dfa, tags, opts, opts->stadfa /* delayed */);
     for (size_t i = 0; i < code.size(); ++i) {
         o.wind(ind).wstring(code[i]);
     }
-    o.wdelay_skip(ind, skip && lookahead);
+    o.wdelay_skip(ind, skip && opts->lookahead);
 
     if (type == SWITCH_IF) {
         info.switchif->emit (o, ind, dfa, from);

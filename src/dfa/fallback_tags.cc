@@ -4,6 +4,7 @@
 
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
+#include "src/options/opt.h"
 #include "src/regexp/tag.h"
 
 
@@ -52,6 +53,9 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 
         size_t dest = s->arcs[c];
         if (dest != dfa_t::NIL && dfa.states[dest]->fallthru) {
+            for (const tcmd_t *p = dfa.states[dest]->stacmd; p; p = p->next) {
+                owrt[p->lhs] = true;
+            }
             find_overwritten_tags(dfa, dest, been, owrt);
         }
     }
@@ -60,13 +64,20 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 
 // overwritten tags need 'copy' on all outgoing non-accepting paths
 // ('copy' commands must go first, before potential overwrites)
-static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r)
+static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r, bool stadfa)
 {
-    for (size_t c = 0; c < dfa.nchars; ++c) {
-        size_t i = s->arcs[c];
-        if (i != dfa_t::NIL && dfa.states[i]->fallthru) {
-            tcmd_t *&p = s->tcmd[c];
-            p = dfa.tcpool.make_copy(p, l, r);
+    if (stadfa) {
+        tcmd_t **p = &s->stacmd;
+        for (; *p; p = &(*p)->next);
+        *p = dfa.tcpool.make_copy(NULL, l, r);
+    }
+    else {
+        for (size_t c = 0; c < dfa.nchars; ++c) {
+            size_t i = s->arcs[c];
+            if (i != dfa_t::NIL && dfa.states[i]->fallthru) {
+                tcmd_t *&p = s->tcmd[c];
+                p = dfa.tcpool.make_copy(p, l, r);
+            }
         }
     }
 }
@@ -75,7 +86,7 @@ static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r)
 // WARNING: this function assumes that falthrough and fallback
 // attributes of DFA states have already been calculated, see
 // note [fallback states]
-void insert_fallback_tags(dfa_t &dfa)
+void insert_fallback_tags(const opt_t *opts, dfa_t &dfa)
 {
     tcpool_t &pool = dfa.tcpool;
     const size_t
@@ -105,7 +116,7 @@ void insert_fallback_tags(dfa_t &dfa)
                     *pc = pool.make_copy(NULL, l, r);
                     pc = &(*pc)->next;
                 } else {
-                    backup(dfa, s, l, r);
+                    backup(dfa, s, l, r, opts->stadfa);
                 }
 
             // 'save without history' commands
@@ -119,7 +130,7 @@ void insert_fallback_tags(dfa_t &dfa)
                     *ps = pool.copy_add(NULL, l, r, h);
                 } else {
                     *ps = pool.copy_add(NULL, l, l, h);
-                    backup(dfa, s, l, r);
+                    backup(dfa, s, l, r, opts->stadfa);
                 }
                 ps = &(*ps)->next;
             }

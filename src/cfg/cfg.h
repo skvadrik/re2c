@@ -13,6 +13,7 @@ namespace re2c {
 struct Rule;
 struct dfa_t;
 struct tcmd_t;
+struct opt_t;
 
 typedef uint32_t cfg_ix_t;
 
@@ -74,7 +75,7 @@ struct cfg_t
     static void interference(const cfg_t &cfg, const bool *live, bool *interf);
     static tagver_t variable_allocation(const cfg_t &cfg, const bool *interf, tagver_t *ver2new);
     static void renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver);
-    static void normalization(cfg_t &cfg);
+    static void normalization(cfg_t &cfg, const opt_t *opts);
 
 private:
     void map_actions_to_bblocks(cfg_context_t &ctx);

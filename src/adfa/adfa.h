@@ -35,6 +35,7 @@ struct State
     bool fallback;
 
     size_t rule;
+    tcid_t stadfa_tags;
     tcid_t rule_tags;
     tcid_t fall_tags;
     bool isBase;
@@ -48,6 +49,7 @@ struct State
         , fill (0)
         , fallback (false)
         , rule (Rule::NONE)
+        , stadfa_tags (TCID0)
         , rule_tags (TCID0)
         , fall_tags (TCID0)
         , isBase (false)
@@ -109,7 +111,7 @@ struct DFA
     ~DFA ();
     void reorder();
     void prepare(const opt_t *opts);
-    void calc_stats(bool explicit_tags);
+    void calc_stats(const opt_t *opts);
     void emit (Output &, uint32_t &, bool, bool &);
 
 private:

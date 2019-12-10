@@ -65,7 +65,7 @@ void cfg_t::map_actions_to_bblocks(cfg_context_t &ctx)
 
     // bblocks for tagged states
     for (size_t i = 0; i < ctx.nstate; ++i) {
-        ctx.state2bb[i] = 0;
+        ctx.state2bb[i] = dfa.states[i]->stacmd == NULL ? 0 : nbb++;
     }
 
     // bblocks for tagged transitions
@@ -106,7 +106,11 @@ void cfg_t::create_bblocks(cfg_context_t &ctx)
 
     // state bblocks
     for (size_t i = 0; i < ctx.nstate; ++i) {
-        DASSERT(ctx.state2bb[i] == 0);
+        dfa_state_t *s = dfa.states[i];
+        if (ctx.state2bb[i]) {
+            successors(ctx, i, false /*self*/);
+            new(b++) cfg_bb_t(ctx.succb, ctx.succe, s->stacmd, NULL);
+        }
     }
 
     // transition bblocks

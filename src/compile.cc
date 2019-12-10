@@ -81,7 +81,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 
     cutoff_dead_rules(dfa, opts, defrule, cond, msg);
 
-    insert_fallback_tags(dfa);
+    insert_fallback_tags(opts, dfa);
 
     // try to minimize the number of tag variables
     compact_and_optimize_tags(opts, dfa);
@@ -108,7 +108,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     DDUMP_ADFA(opts, *adfa);
 
     // finally gather overall DFA statistics
-    adfa->calc_stats(opts->tags);
+    adfa->calc_stats(opts);
 
     // accumulate global statistics from this particular DFA
     output.max_fill = std::max(output.max_fill, adfa->max_fill);

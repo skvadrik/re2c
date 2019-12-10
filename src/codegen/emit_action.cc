@@ -317,7 +317,7 @@ void gen_goto(code_lines_t &code, const State *from, const State *to
         code.push_back(o.str());
     }
 
-    gen_settags(code, dfa, tcid, opts);
+    gen_settags(code, dfa, tcid, opts, false /* delayed */);
 
     if (skip && opts->lookahead) {
         std::ostringstream o;
@@ -351,7 +351,7 @@ void gen_on_eof_fail(code_lines_t &code, const opt_t *opts, const DFA &dfa
     }
     else if (fallback != to) {
         code_lines_t tagcode;
-        gen_settags(tagcode, dfa, falltags, opts);
+        gen_settags(tagcode, dfa, falltags, opts, false /* delayed */);
 
         if (tagcode.empty()) {
             o << opts->indString
@@ -412,7 +412,8 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
     flushln(code, o);
 }
 
-void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *opts)
+void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid,
+    const opt_t *opts, bool delayed)
 {
     const bool generic = opts->input_api == INPUT_CUSTOM;
     const std::string
@@ -422,6 +423,8 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 
     // single tag YYCTXMARKER, backwards compatibility
     if (cmd && dfa.oldstyle_ctxmarker) {
+        DASSERT(!opts->stadfa);
+
         const std::string s = generic
             ? opts->yybackupctx + " ();\n"
             : opts->yyctxmarker + " = " + opts->yycursor + ";\n";
@@ -453,7 +456,8 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
             for (; *h != TAGVER_ZERO; ++h) {
                 const std::string s = *h == TAGVER_BOTTOM
                     ? opts->yymtagn + " (" + le + ");\n"
-                    : opts->yymtagp + " (" + le + ");\n";
+                    : (delayed ? opts->yymtagpd : opts->yymtagp)
+                        + " (" + le + ");\n";
                 code1.push_back(s);
             }
             code.insert(code.end(), code1.rbegin(), code1.rend());
@@ -464,7 +468,8 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
                 v = vartag_expr(l, prefix, expression),
                 s = *h == TAGVER_BOTTOM
                     ? opts->yystagn + " (" + v + ");\n"
-                    : opts->yystagp + " (" + v + ");\n";
+                    : (delayed ? opts->yystagpd : opts->yystagp)
+                        + " (" + v + ");\n";
             code.push_back(s);
 
         // save command; no history; default API
@@ -479,7 +484,7 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
                 code.push_back(s1);
             }
             if (!s2.empty()) {
-                s2 += opts->yycursor + ";\n";
+                s2 += opts->yycursor + (delayed ? " - 1" : "") + ";\n";
                 code.push_back(s2);
             }
         }

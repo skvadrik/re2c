@@ -87,6 +87,7 @@ DFA::DFA
         p = &s->next;
 
         s->rule = t->rule;
+        s->stadfa_tags = t->stacid;
         s->rule_tags = t->tcid[dfa.nchars];
         s->fall_tags = t->tcid[dfa.nchars + 1];
         s->fill = fill[i];

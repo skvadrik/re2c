@@ -6,6 +6,7 @@
 #include "src/cfg/cfg.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
+#include "src/options/opt.h"
 #include "src/regexp/tag.h"
 
 
@@ -35,7 +36,7 @@ static void sort(tcmd_t *head, tcmd_t *end);
 static void uniq(tcmd_t *head, tcmd_t *end);
 static void dedup(tcmd_t *head, tcmd_t *end);
 
-void cfg_t::normalization(cfg_t &cfg)
+void cfg_t::normalization(cfg_t &cfg, const opt_t *opts)
 {
     const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
     uint32_t *indeg = new uint32_t[nver];
@@ -46,10 +47,16 @@ void cfg_t::normalization(cfg_t &cfg)
 
             if (tcmd_t::iscopy(x)) {
                 for (; x && tcmd_t::iscopy(x); x = x->next);
-                // sort, remove adjacent duplicates, topsort
-                sort(*px, x);
-                uniq(*px, x);
-                tcmd_t::topsort(px, x, indeg);
+                if (!opts->stadfa) {
+                    // sort, remove adjacent duplicates, topsort
+                    sort(*px, x);
+                    uniq(*px, x);
+                    tcmd_t::topsort(px, x, indeg);
+                }
+                else {
+                    // remove duplicates
+                    dedup(*px, x);
+                }
             }
             else if (tcmd_t::isset(x)) {
                 // sort, remove adjacent duplicates

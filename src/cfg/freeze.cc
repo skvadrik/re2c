@@ -47,8 +47,11 @@ void freeze_tags(dfa_t &dfa)
         // fallback epsilon-transition command
         *id++ = pool.insert(*fall);
 
+        s->stacid = pool.insert(s->stacmd);
+
         delete[] s->tcmd;
         s->tcmd = NULL;
+        s->stacmd = NULL;
     }
 }
 

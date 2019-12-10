@@ -122,7 +122,8 @@ void reach_on_symbol(ctx_t &ctx, uint32_t sym)
     for (uint32_t i = static_cast<uint32_t>(kernel->size); i --> 0; ) {
         nfa_state_t *s = transition(kernel->state[i], symbol);
         if (s) {
-            const clos_t c(s, i, kernel->tvers[i], kernel->thist[i], HROOT);
+            const uint32_t v = ctx.dc_opts->stadfa ? 0 : kernel->tvers[i];
+            const clos_t c(s, i, v, kernel->thist[i], HROOT);
             reach.push_back(c);
         }
     }
@@ -184,7 +185,8 @@ uint32_t init_tag_versions(ctx_t &ctx)
 template<typename ctx_t>
 void warn_nondeterministic_tags(const ctx_t &ctx)
 {
-    if (ctx.dc_opts->posix_syntax) return;
+    if (ctx.dc_opts->posix_syntax
+        || ctx.dc_opts->stadfa) return;
 
     Warn &warn = ctx.dc_msg.warn;
     const kernels_t &kernels = ctx.dc_kernels;
@@ -248,13 +250,15 @@ determ_context_t<history_t>::determ_context_t(const opt_t *opts, Msg &msg
     , dc_tagvertbl(nfa.tags.size())
     , history()
     , dc_kernels()
-    , dc_buffers(dc_allocator)
+    , dc_buffers()
     , dc_hc_caches()
     , dc_newvers(newver_cmp_t<history_t>(history, dc_hc_caches))
     , dc_path1()
     , dc_path2()
     , dc_path3()
     , dc_tagcount()
+    , stadfa_actions(NULL)
+    , stadfa_tagvers()
     , reach()
     , state()
     , gor1_topsort()

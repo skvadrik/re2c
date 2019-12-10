@@ -13,6 +13,7 @@
 #include "src/debug/debug.h"
 #include "src/dfa/tagver_table.h"
 #include "src/dfa/tag_history.h"
+#include "src/dfa/stacmd.h"
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
@@ -78,11 +79,14 @@ struct newver_cmp_t
 
 struct kernel_t
 {
-    size_t size;
-    const prectable_t *prectbl;
-    nfa_state_t **state;
-    uint32_t *tvers; // tag versions
-    hidx_t *thist; // lookahead tags
+    size_t size;                // the number of items in the kernel
+    nfa_state_t **state;        // TNFA state for each item
+    hidx_t *thist;              // lookahead tag history for each item
+    const prectable_t *prectbl; // POSIX precedence table, if applicable
+    union {
+        uint32_t *tvers;        // TDFA: tag versions for each item
+        stacmd_t *stacmd;       // staDFA: store/transfer/accept actions
+    };
 
     FORBID_COPY(kernel_t);
 };
@@ -100,7 +104,7 @@ struct kernel_buffers_t
     uint32_t *indegree;
     tcmd_t *backup_actions;
 
-    explicit kernel_buffers_t(allocator_t &alc);
+    kernel_buffers_t();
 };
 
 struct cmp_gtop_t
@@ -119,6 +123,8 @@ struct histleaf_t
 typedef lookup_t<const kernel_t*> kernels_t;
 typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
     , cmp_gtop_t> gtop_heap_t;
+
+typedef std::map<std::pair<size_t, int32_t>, int32_t> stadfa_tagvers_t;
 
 template<typename history_type_t>
 struct determ_context_t
@@ -157,6 +163,10 @@ struct determ_context_t
     tag_path_t                dc_path2;        // buffer 2 for tag history
     tag_path_t                dc_path3;        // buffer 3 for tag history
     std::vector<uint32_t>     dc_tagcount;     // buffer for counting sort on tag history
+
+    // staDFA-specific
+    stacmd_t         *stadfa_actions; // staDFA actions for the current transition
+    stadfa_tagvers_t  stadfa_tagvers; // mapping of (tag, index) pairs to tag versions
 
     // tagged epsilon-closure
     confset_t reach;

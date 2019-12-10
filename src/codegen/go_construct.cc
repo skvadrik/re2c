@@ -233,6 +233,11 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
 {
     if (nSpans == 0) return;
 
+    if (opts->stadfa) {
+        DASSERT(this->tags == TCID0);
+        this->tags = from->stadfa_tags;
+    }
+
     // initialize high (wide) spans
     uint32_t hSpans = 0;
     const Span * hspan = NULL;
