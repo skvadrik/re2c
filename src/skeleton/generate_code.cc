@@ -132,6 +132,10 @@ void emit_start(Output &o, size_t maxfill, size_t maxnmatch, const std::string &
         o.ws("\n#define YYMTAGP(t) yymtag(&t, cursor, &yytp)");
         o.ws("\n#define YYMTAGN(t) yymtag(&t, NULL, &yytp)");
         o.ws("\n#define YYRESTORETAG(t) cursor = t");
+        if (opts->stadfa) {
+             o.ws("\n#define YYSTAGPD(t) t = cursor - 1");
+             o.ws("\n#define YYMTAGPD(t) yymtag(&t, cursor - 1, &yytp)");
+        }
     }
     o.ws("\n#define YYLESSTHAN(n) (limit - cursor) < n");
     o.ws("\n#define YYFILL(n) { break; }");

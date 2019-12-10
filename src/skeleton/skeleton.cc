@@ -14,6 +14,7 @@ Node::Node()
     : arcs()
     , rule(Rule::NONE)
     , cmd(NULL)
+    , stacmd(NULL)
 {}
 
 void Node::init(const dfa_state_t *s,
@@ -38,6 +39,7 @@ void Node::init(const dfa_state_t *s,
 
     rule = s->rule;
     cmd = s->tcmd[nc];
+    stacmd = s->stacmd;
 }
 
 bool Node::end() const

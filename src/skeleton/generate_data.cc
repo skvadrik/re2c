@@ -175,11 +175,20 @@ static void write_keys(const path_t &path, const Skeleton &skel,
         ntag = width * nver,
         offby = skel.opts->lookahead ? 0 : 1;
     std::vector<size_t> *tags = new std::vector<size_t>[ntag];
+
+    // initial tags (TDFA(0))
     for (size_t w = 0; w < width; ++w) {
-        apply(&tags[w * nver], skel.cmd0, 0); // absent in LATDFA
+        apply(&tags[w * nver], skel.cmd0, 0);
     }
     for (size_t i = 0; i < f; ++i) {
         Node::wciter_t a(path.arc(skel, i));
+
+        // tags commands in state (staDFA), -1 because of "delayed store"
+        for (size_t w = 0; w < width; ++w) {
+            apply(&tags[w * nver], path.node(skel, i).stacmd, i - 1);
+        }
+
+        // tag commands on transitions (TDFA(0), TDFA(1))
         for (size_t w = 0; w < width; ++a) {
             uint32_t n = nsteps(a->lower, a->upper);
             for (; n --> 0 && w < width; ++w) {
@@ -187,9 +196,15 @@ static void write_keys(const path_t &path, const Skeleton &skel,
             }
         }
     }
+    // tag commands in final states
     const tcmd_t *fcmd = path.node(skel, f).cmd;
     for (size_t w = 0; w < width; ++w) {
-        apply(&tags[w * nver], fcmd, f); // only present in LATDFA
+
+        // staDFA, -1 because of "delayed store"
+        apply(&tags[w * nver], path.node(skel, f).stacmd, f - 1);
+
+        // TDFA(1)
+        apply(&tags[w * nver], fcmd, f);
     }
 
     const size_t rule = path.node(skel, f).rule;
