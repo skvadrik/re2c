@@ -68,6 +68,10 @@ Which primitives are necessary depends on the particular use case.
 ``YYMTAGP (t)``
     Append current input position to the history of *m-tag* ``t`` (used only with ``-T`` ``--tags`` option).
 
+``YYMTAGPD (t)``
+    Same as ``YYMTAGP``, except that instead of the current position it should
+    save the one before it. This is used for staDFA "delayed store" actions.
+
 ``YYMTAGN (t)``
     Append default value to the history of *m-tag* ``t`` (used only with ``-T`` ``--tags`` option).
 
@@ -113,6 +117,10 @@ Which primitives are necessary depends on the particular use case.
 
 ``YYSTAGP (t)``
     Save current input position to *s-tag* ``t`` (used only with ``-T`` ``--tags`` and ``--input custom`` option).
+
+``YYSTAGPD (t)``
+    Same as ``YYSTAGP``, except that instead of the current position it should
+    save the one before it. This is used for staDFA "delayed store" actions.
 
 ``YYSTAGN (t)``
     Save default value to *s-tag* ``t`` (used only with ``-T`` ``--tags`` and ``--input custom`` options).

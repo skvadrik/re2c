@@ -93,6 +93,9 @@
 ``re2c:define:YYMTAGP = 'YYMTAGP';``
     Replaces ``YYMTAGP`` identifier with the specified string.
 
+``re2c:define:YYMTAGPD = 'YYMTAGPD';``
+    Replaces ``YYMTAGPD`` identifier with the specified string.
+
 ``re2c:define:YYPEEK = 'YYPEEK';``
     Replaces ``YYPEEK`` identifier with the specified string.
 
@@ -146,6 +149,9 @@
 
 ``re2c:define:YYSTAGP = 'YYSTAGP';``
     Replaces ``YYSTAGP`` identifier with the specified string.
+
+``re2c:define:YYSTAGPD = 'YYSTAGPD';``
+    Replaces ``YYSTAGPD`` identifier with the specified string.
 
 ``re2c:eof = -1;``
     Specifies the sentinel symbol used with EOF rule ``$`` to check for the end

@@ -34,8 +34,10 @@ or to disable ``YYFILL`` mechanism and perform end-of-input checking on each inp
 * ``YYBACKUP ()``
 * ``YYBACKUPCTX ()``
 * ``YYSTAGP (t)``
+* ``YYSTAGPD (t)``
 * ``YYSTAGN (t)``
 * ``YYMTAGP (t)``
+* ``YYMTAGPD (t)``
 * ``YYMTAGN (t)``
 * ``YYRESTORE ()``
 * ``YYRESTORECTX ()``
@@ -43,7 +45,8 @@ or to disable ``YYFILL`` mechanism and perform end-of-input checking on each inp
 * ``YYLESSTHAN (n)``
 
 Default input model can be expressed in terms of generic API as follows
-(except for ``YMTAGP`` and ``YYMTAGN``, which have no default implementation):
+(except for ``YMTAGP``, ``YYMTAGPD`` and ``YYMTAGN``, which have no default
+implementation):
 
 .. code-block:: cpp
 
@@ -56,5 +59,6 @@ Default input model can be expressed in terms of generic API as follows
     #define  YYRESTORERAG (t)  YYCURSOR = t
     #define  YYLESSTHAN (n)    YYLIMIT - YYCURSOR < n
     #define  YYSTAGP (t)       t = YYCURSOR
+    #define  YYSTAGPD (t)      t = YYCURSOR - 1
     #define  YYSTAGN (t)       t = NULL
 

@@ -499,6 +499,10 @@ This might be necessary if there is an overlapping longer rule that might also m
 .B \fBYYMTAGP (t)\fP
 Append current input position to the history of \fIm\-tag\fP \fBt\fP (used only with \fB\-T\fP \fB\-\-tags\fP option).
 .TP
+.B \fBYYMTAGPD (t)\fP
+Same as \fBYYMTAGP\fP, except that instead of the current position it should
+save the one before it. This is used for staDFA "delayed store" actions.
+.TP
 .B \fBYYMTAGN (t)\fP
 Append default value to the history of \fIm\-tag\fP \fBt\fP (used only with \fB\-T\fP \fB\-\-tags\fP option).
 .TP
@@ -544,6 +548,10 @@ Advance input position to the next character (used only with generic API).
 .TP
 .B \fBYYSTAGP (t)\fP
 Save current input position to \fIs\-tag\fP \fBt\fP (used only with \fB\-T\fP \fB\-\-tags\fP and \fB\-\-input custom\fP option).
+.TP
+.B \fBYYSTAGPD (t)\fP
+Same as \fBYYSTAGP\fP, except that instead of the current position it should
+save the one before it. This is used for staDFA "delayed store" actions.
 .TP
 .B \fBYYSTAGN (t)\fP
 Save default value to \fIs\-tag\fP \fBt\fP (used only with \fB\-T\fP \fB\-\-tags\fP and \fB\-\-input custom\fP options).
@@ -601,9 +609,13 @@ or to disable \fBYYFILL\fP mechanism and perform end\-of\-input checking on each
 .IP \(bu 2
 \fBYYSTAGP (t)\fP
 .IP \(bu 2
+\fBYYSTAGPD (t)\fP
+.IP \(bu 2
 \fBYYSTAGN (t)\fP
 .IP \(bu 2
 \fBYYMTAGP (t)\fP
+.IP \(bu 2
+\fBYYMTAGPD (t)\fP
 .IP \(bu 2
 \fBYYMTAGN (t)\fP
 .IP \(bu 2
@@ -617,7 +629,8 @@ or to disable \fBYYFILL\fP mechanism and perform end\-of\-input checking on each
 .UNINDENT
 .sp
 Default input model can be expressed in terms of generic API as follows
-(except for \fBYMTAGP\fP and \fBYYMTAGN\fP, which have no default implementation):
+(except for \fBYMTAGP\fP, \fBYYMTAGPD\fP and \fBYYMTAGN\fP, which have no default
+implementation):
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -632,6 +645,7 @@ Default input model can be expressed in terms of generic API as follows
 #define  YYRESTORERAG (t)  YYCURSOR = t
 #define  YYLESSTHAN (n)    YYLIMIT \- YYCURSOR < n
 #define  YYSTAGP (t)       t = YYCURSOR
+#define  YYSTAGPD (t)      t = YYCURSOR \- 1
 #define  YYSTAGN (t)       t = NULL
 .ft P
 .fi
@@ -793,6 +807,9 @@ Replaces \fBYYMTAGN\fP identifier with the specified string.
 .B \fBre2c:define:YYMTAGP = \(aqYYMTAGP\(aq;\fP
 Replaces \fBYYMTAGP\fP identifier with the specified string.
 .TP
+.B \fBre2c:define:YYMTAGPD = \(aqYYMTAGPD\(aq;\fP
+Replaces \fBYYMTAGPD\fP identifier with the specified string.
+.TP
 .B \fBre2c:define:YYPEEK = \(aqYYPEEK\(aq;\fP
 Replaces \fBYYPEEK\fP identifier with the specified string.
 .TP
@@ -846,6 +863,9 @@ Replaces \fBYYSTAGN\fP identifier with the specified string.
 .TP
 .B \fBre2c:define:YYSTAGP = \(aqYYSTAGP\(aq;\fP
 Replaces \fBYYSTAGP\fP identifier with the specified string.
+.TP
+.B \fBre2c:define:YYSTAGPD = \(aqYYSTAGPD\(aq;\fP
+Replaces \fBYYSTAGPD\fP identifier with the specified string.
 .TP
 .B \fBre2c:eof = \-1;\fP
 Specifies the sentinel symbol used with EOF rule \fB$\fP to check for the end
