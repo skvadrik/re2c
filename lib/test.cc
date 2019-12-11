@@ -1068,6 +1068,7 @@ int main()
     int e = 0;
 
     e |= test_all_posix(0);
+    e |= test_all_posix(REG_STADFA);
 
     e |= test_all_posix(REG_NFA);
     e |= test_all_posix(REG_NFA | REG_GTOP);

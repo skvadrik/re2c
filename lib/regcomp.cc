@@ -34,6 +34,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     globopts.dfa = !(cflags & REG_NFA);
     globopts.FFlag = true;
     globopts.backward = cflags & REG_BACKWARD;
+    globopts.stadfa = cflags & REG_STADFA;
     Opt opts(globopts);
     Msg msg;
     opts.set_posix_syntax(true);

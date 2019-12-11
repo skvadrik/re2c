@@ -187,7 +187,8 @@ static void bench(const char *r, std::vector<std::string> &ss, uint32_t n
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_SLOWPREC,             mask, need, "re2c-tnfa-posix-gor1-slow"));
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE,                 mask, need, "re2c-tnfa-posix-gor1-trie"));
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_BACKWARD,             mask, need, "re2c-tnfa-posix-back-gor1"));
-    //rs.push_back(bench_re2c(r, ss, n, 0,                                  mask, need, "re2c-tdfa"));
+    rs.push_back(bench_re2c(r, ss, n, REG_STADFA,                         mask, need, "re2c-tdfa-stadfa"));
+    rs.push_back(bench_re2c(r, ss, n, 0,                                  mask, need, "re2c-tdfa"));
     //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE | REG_GTOP,      mask, need, "re2c-tnfa-posix-gtop-trie"));
     //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE | REG_LEFTMOST,  mask, need, "re2c-tnfa-leftmost-trie"));
     //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_KUKLEWICZ | REG_GTOP, mask, need, "re2c-tnfa-posix-kukl-gtop"));
@@ -308,14 +309,14 @@ int main()
     // http
     load_strings("../lib/bench.data_http", "\n\n", strings);
     regexp = MESSAGE_HEAD;
-    bench(regexp, strings, 100, REG_BACKWARD, 0);
+    bench(regexp, strings, 100, REG_BACKWARD | REG_STADFA, 0);
     regexp = MESSAGE_HEAD2;
     bench(regexp, strings, 100, REG_BACKWARD, 0);
 
     // uri
     load_strings("../lib/bench.data_uri", "\n", strings);
     regexp = URI;
-    bench(regexp, strings, 100, REG_BACKWARD, 0);
+    bench(regexp, strings, 100, REG_BACKWARD | REG_STADFA, 0);
     regexp = URI2;
     bench(regexp, strings, 100, 0, 0);
 

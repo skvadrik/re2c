@@ -36,6 +36,7 @@ static const int REG_GTOP      = 1u << 9;
 static const int REG_SLOWPREC  = 1u << 10;
 static const int REG_BACKWARD  = 1u << 11;
 static const int REG_KUKLEWICZ = 1u << 12;
+static const int REG_STADFA    = 1u << 13;
 
 struct regex_t
 {

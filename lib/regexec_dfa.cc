@@ -50,6 +50,8 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
             x = s;
         }
 
+        apply_regops(regs, s->stacmd, p - string - 2);
+
         if (i == dfa_t::NIL || c == 0) break;
 
         apply_regops(regs, s->tcmd[j], p - string - 1);
