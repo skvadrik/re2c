@@ -2,7 +2,7 @@
 for f in ../.dat/*.dat; do
 
     d=../`basename ${f%.dat}`
-    mkdir -p $d
+    mkdir -p "$d"
 
     i=0
     while read l; do
@@ -18,8 +18,9 @@ for f in ../.dat/*.dat; do
             -e 's/\./[^\\\\x00]/g' \
             -e 's/()/("")/g'`
 
-        cat template | sed "s/<<<<REGEXP>>>>/$regexp/" > $d/$x
+        cat template | sed "s/<<<<REGEXP>>>>/$regexp/" > "$d/$x"
+        cp "$d/$x" "$d/${x%.re}--stadfa.re"
 
-    done < $f
+    done < "$f"
 done
 
