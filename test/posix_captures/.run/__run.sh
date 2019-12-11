@@ -40,6 +40,7 @@ for f in ../.dat/*.dat; do
         printf "\r%3d / %-3d" $i $n
         run "$regexp" "$string" "$match"
         run "$regexp" "$string" "$match" "--no-lookahead"
+        run "$regexp" "$string" "$match" "--stadfa"
 
     done < $f
     printf "\n"
