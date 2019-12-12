@@ -317,7 +317,6 @@ void generate_stadfa_actions(ctx_t &ctx)
     clositer_t b = ctx.state.begin(), e = ctx.state.end(), c;
 
     stacmd_t *cmd = NULL;
-    const stacmd_t *p, *q;
 
     // store and transfer actions
     if (ctx.dc_origin == dfa_t::NIL) {
@@ -355,7 +354,8 @@ void generate_stadfa_actions(ctx_t &ctx)
 
                 // if there already exists action for the same tag and index,
                 // it must be a store, and it takes precedence over transfer
-                for (q = cmd; q && !(q->tag == t && q->lhs == i); q = q->next);
+                const stacmd_t *q = cmd;
+                for (; q && !(q->tag == t && q->lhs == i); q = q->next);
                 if (q) {
                     DASSERT(q->kind == stacmd_t::STORE);
                     continue;
@@ -385,13 +385,14 @@ void generate_stadfa_actions(ctx_t &ctx)
         }
 
         // accept actions for store/transfer actions in the current state
-        for (p = st_cmd; p; p = p->next) {
+        for (const stacmd_t *p = st_cmd; p; p = p->next) {
             if (p->lhs != i) continue;
             const size_t t = p->tag;
 
             // if there already exists accept action for the same tag and index,
             // it must come from lookahead tags, and therefore takes precedence
-            for (q = cmd; q != st_cmd && q->tag != t; q = q->next);
+            const stacmd_t *q = cmd;
+            for (; q != st_cmd && q->tag != t; q = q->next);
             if (q != st_cmd) {
                 DASSERT(q->hist != HROOT);
                 continue;

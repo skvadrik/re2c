@@ -285,7 +285,7 @@ void stadfa_to_tdfa_actions(ctx_t &ctx, tcmd_t **state_cmd, tcmd_t **final_cmd)
             }
             break;
         case stacmd_t::ACCEPT:
-            const tagver_t l = ctx.dfa.finvers[p->tag];
+            l = ctx.dfa.finvers[p->tag];
             if (p->hist == HROOT) {
                 r = map_stadfa_ver(ctx, p->tag, p->rhs);
                 f = pool.make_copy(f, l, r);
