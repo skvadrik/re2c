@@ -287,23 +287,25 @@ void dump_stacmd(const ctx_t &ctx, const stacmd_t *p)
 {
     for (; p; p = p->next) {
         const tagver_t v = last(ctx.history, p->hist, p->tag);
+        const uint32_t t = static_cast<uint32_t>(p->tag);
+
         switch (p->kind) {
         case stacmd_t::STORE:
-            fprintf(stderr, "S(%lu,%d,%d,%s)", p->tag, p->lhs, p->rhs,
+            fprintf(stderr, "S(%u,%d,%d,%s)", t, p->lhs, p->rhs,
                 v == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
             break;
         case stacmd_t::TRANSFER:
-            fprintf(stderr, "T(%lu,%d,%d)", p->tag, p->lhs, p->rhs);
+            fprintf(stderr, "T(%u,%d,%d)", t, p->lhs, p->rhs);
             break;
         case stacmd_t::ACCEPT:
             if (v == TAGVER_CURSOR) {
-                fprintf(stderr, "A(%lu,%d,&uarr;)", p->tag, p->rhs);
+                fprintf(stderr, "A(%u,%d,&uarr;)", t, p->rhs);
             }
             else if (v == TAGVER_BOTTOM) {
-                fprintf(stderr, "A(%lu,%d,&darr;)", p->tag, p->rhs);
+                fprintf(stderr, "A(%u,%d,&darr;)", t, p->rhs);
             }
             else {
-                fprintf(stderr, "A(%lu,%d)", p->tag, p->rhs);
+                fprintf(stderr, "A(%u,%d)", t, p->rhs);
             }
             break;
         }
