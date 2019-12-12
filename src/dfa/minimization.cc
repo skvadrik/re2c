@@ -48,8 +48,64 @@ namespace re2c {
  * Tail "c" can be deduplicated in the 1st case, but not in the 2nd.
  */
 
-static void minimization_table(size_t *part,
-    const std::vector<dfa_state_t*> &states, size_t nchars)
+struct moore_key_t {
+    size_t rule;
+    tcid_t fincmd;
+    tcid_t stacmd;
+
+};
+
+typedef std::map<moore_key_t, size_t> moore_init_t;
+
+static bool operator <(const moore_key_t &, const moore_key_t &);
+static void minimization_table(size_t *, const std::vector<dfa_state_t*> &, size_t);
+static void minimization_moore(size_t *, const std::vector<dfa_state_t*> &, size_t);
+
+
+void minimization(dfa_t &dfa, dfa_minimization_t type)
+{
+    const size_t count = dfa.states.size();
+    size_t *part = new size_t[count];
+
+    switch (type) {
+    case DFA_MINIMIZATION_TABLE:
+        minimization_table(part, dfa.states, dfa.nchars); break;
+    case DFA_MINIMIZATION_MOORE:
+        minimization_moore(part, dfa.states, dfa.nchars); break;
+    }
+
+    size_t *compact = new size_t[count];
+    for (size_t i = 0, j = 0; i < count; ++i) {
+        if (i == part[i]) {
+            compact[i] = j++;
+        }
+    }
+
+    size_t new_count = 0;
+    for (size_t i = 0; i < count; ++i) {
+        dfa_state_t *s = dfa.states[i];
+
+        if (i == part[i]) {
+            size_t *arcs = s->arcs;
+            for (size_t c = 0; c < dfa.nchars; ++c) {
+                if (arcs[c] != dfa_t::NIL) {
+                    arcs[c] = compact[part[arcs[c]]];
+                }
+            }
+            dfa.states[new_count++] = s;
+        }
+        else {
+            delete s;
+        }
+    }
+    dfa.states.resize(new_count);
+
+    delete[] compact;
+    delete[] part;
+}
+
+void minimization_table(size_t *part, const std::vector<dfa_state_t*> &states,
+    size_t nchars)
 {
     const size_t count = states.size();
 
@@ -123,25 +179,8 @@ static void minimization_table(size_t *part,
     delete[] tbl;
 }
 
-struct moore_key_t {
-    size_t rule;
-    tcid_t fincmd;
-    tcid_t stacmd;
-};
-
-bool operator <(const moore_key_t &x, const moore_key_t &y)
-{
-    if (x.rule < y.rule) return true;
-    if (x.rule > y.rule) return false;
-    if (x.fincmd < y.fincmd) return true;
-    if (x.fincmd > y.fincmd) return false;
-    return x.stacmd < y.stacmd;
-}
-
-typedef std::map<moore_key_t, size_t> moore_init_t;
-
-static void minimization_moore(size_t *part,
-    const std::vector<dfa_state_t*> &states, size_t nchars)
+void minimization_moore(size_t *part, const std::vector<dfa_state_t*> &states,
+    size_t nchars)
 {
     const size_t count = states.size();
     size_t *next = new size_t[count];
@@ -219,46 +258,13 @@ static void minimization_moore(size_t *part,
     delete[] next;
 }
 
-void minimization(dfa_t &dfa, dfa_minimization_t type)
+bool operator <(const moore_key_t &x, const moore_key_t &y)
 {
-    const size_t count = dfa.states.size();
-    size_t *part = new size_t[count];
-
-    switch (type) {
-    case DFA_MINIMIZATION_TABLE:
-        minimization_table(part, dfa.states, dfa.nchars); break;
-    case DFA_MINIMIZATION_MOORE:
-        minimization_moore(part, dfa.states, dfa.nchars); break;
-    }
-
-    size_t *compact = new size_t[count];
-    for (size_t i = 0, j = 0; i < count; ++i) {
-        if (i == part[i]) {
-            compact[i] = j++;
-        }
-    }
-
-    size_t new_count = 0;
-    for (size_t i = 0; i < count; ++i) {
-        dfa_state_t *s = dfa.states[i];
-
-        if (i == part[i]) {
-            size_t *arcs = s->arcs;
-            for (size_t c = 0; c < dfa.nchars; ++c) {
-                if (arcs[c] != dfa_t::NIL) {
-                    arcs[c] = compact[part[arcs[c]]];
-                }
-            }
-            dfa.states[new_count++] = s;
-        }
-        else {
-            delete s;
-        }
-    }
-    dfa.states.resize(new_count);
-
-    delete[] compact;
-    delete[] part;
+    if (x.rule < y.rule) return true;
+    if (x.rule > y.rule) return false;
+    if (x.fincmd < y.fincmd) return true;
+    if (x.fincmd > y.fincmd) return false;
+    return x.stacmd < y.stacmd;
 }
 
 } // namespace re2c
