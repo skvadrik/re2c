@@ -5,6 +5,19 @@ Changelog
 1.2x
 ----
 
+1.2.2 (2019-12-14)
+~~~~~~~~~~~~~~~~~~
+
+- Added ``--stadfa`` option that enables staDFA submatch extraction algorithm.
+
+- Added ``YYSTAGPD`` and ``YYMTAGPD`` configurations.
+
+- Added ``-Wsentinel-in-midrule`` warning and ``re2c:sentinel`` configuration.
+
+- Reproducible builds
+  (`#258 <https://github.com/skvadrik/re2c/pull/258>`_:
+  Make the build reproducible).
+
 1.2.1 (2019-08-11)
 ~~~~~~~~~~~~~~~~~~
 
