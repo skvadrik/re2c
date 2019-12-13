@@ -11,19 +11,14 @@ re2c
     Changelog          </releases/changelog/changelog>
 
 Re2c is a free and open-source lexer generator for C and C++.
-The main goal of the project is to generate *very fast* lexers that match or
-exceed the speed of carefully optimized hand-written code. Instead of using
-traditional table-driven approach, re2c encodes the underlying finite state
-automata directly in the form of conditional jumps and applies numerous optimizations to the generated code.
-The resulting programs are faster and often smaller than their table-driven counterparts, and they
-are much easier to debug and understand.
-Re2c has an unusual *flexible user interface*:
-instead of assuming a fixed program template, it leaves the definition of
-the interface code to the user and allows to configure almost every aspect of the generated
-code. This gives the users a lot of freedom in the way they bind the
-lexer to their particular environment and allows them to decide on the optimal input model.
-Re2c supports *fast and lightweight submatch extraction*
-which does not requre the overhead on full parsing --- a feature that is rarely found in the wild.
+Its main goal is to generate fast lexers that match or exceed the speed of
+carefully optimized hand-written code. Re2c uses direct encoding of finite-state
+machines instead of the table-driven approach, and optimizes the generated code.
+Another distinctive feature re2c is an unusually flexible user interface:
+instead of assuming a fixed program template, re2c leaves the definition of the
+interface code to the user. This gives the user a lot of freedom in customizing
+the lexer for a particular environment and input model. Re2c supports fast and
+lightweight submatch extraction with either POSIX or leftmost greedy semantics.
 Re2c is used by many other projects
 (such as
 `php <http://php.net/>`_,
@@ -32,8 +27,9 @@ Re2c is used by many other projects
 `spamassassin <https://spamassassin.apache.org/>`_,
 `BRL-CAD <http://brlcad.org/>`_
 and `wake <https://github.com/sifive/wake>`_)
-and aims at being fully backward compatible.
-On the other hand, it is a research project and a playground for the development of new algorithms in the field of formal grammars and automata.
+and aims at being fully backward compatible. On the other hand, it is a research
+project and a playground for the development of new algorithms in the field of
+formal grammars and automata.
 
 
 .. |feed| image:: feed/feed/feed.png
