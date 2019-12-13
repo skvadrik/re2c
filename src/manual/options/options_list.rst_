@@ -190,6 +190,10 @@
     jumps. This usually results in more efficient code with non-optimizing C/C++
     compilers.
 
+``--stadfa``
+    Use staDFA algorithm for submatch extraction. The main difference with TDFA
+    is that tag operations in staDFA are placed in states, not on transitions.
+
 ``-T --tags``
     Enable submatch extraction with tags.
 
