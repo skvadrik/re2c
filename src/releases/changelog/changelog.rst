@@ -2,6 +2,32 @@ Changelog
 =========
 
 ----
+1.3x
+----
+
+1.3 (2019-12-14)
+~~~~~~~~~~~~~~~~
+
+- Added option: ``--stadfa``.
+
+- Added warning: ``-Wsentinel-in-midrule``.
+
+- Added generic API primitives:
+
+  + ``YYSTAGPD``
+  + ``YYMTAGPD``
+
+- Added configurations:
+
+  + ``re2c:sentinel = 0;``
+  + ``re2c:define:YYSTAGPD = "YYSTAGPD";``
+  + ``re2c:define:YYMTAGPD = "YYMTAGPD";``
+
+- Worked on reproducible builds
+  (`#258 <https://github.com/skvadrik/re2c/pull/258>`_:
+  Make the build reproducible).
+
+----
 1.2x
 ----
 
