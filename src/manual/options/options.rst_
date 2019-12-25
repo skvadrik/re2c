@@ -1,3 +1,4 @@
+
 ``-? -h --help``
     Show help message.
 
@@ -25,61 +26,9 @@
     treat single-quoted strings as case-sensitive and double-quoted strings
     as case-insensitive.
 
-``-D --emit-dot``
-    Instead of normal output generate lexer graph in .dot format.
-    The output can be converted to an image with the help of Graphviz
-    (e.g. something like ``dot -Tpng -odfa.png dfa.dot``).
-
-``-d --debug-output``
-    Emit ``YYDEBUG`` in the generated code.
-    ``YYDEBUG`` should be defined by the user in the form of a void function
-    with two parameters: ``state`` (lexer state or -1) and ``symbol`` (current
-    input symbol of type ``YYCTYPE``).
-
-``--dfa-minimization <moore | table>``
-    The internal algorithm used by re2c to minimize the DFA: ``moore`` (the
-    default) is Moore algorithm, and ``table`` is the "table filling" algorithm.
-    Both algorithms should produce the same DFA up to states relabeling; table
-    filling is simpler and much slower and serves as a reference implementation.
-
-``--dump-adfa``
-    Debug option: output DFA after tunneling (in .dot format).
-
-``--dump-cfg``
-    Debug option: output control flow graph of tag variables (in .dot format).
-
-``--dump-closure-stats``
-    Debug option: output statistics on the number of states in closure.
-
-``--dump-dfa-det``
-    Debug option: output DFA immediately after determinization (in .dot format).
-
-``--dump-dfa-min``
-    Debug option: output DFA after minimization (in .dot format).
-
-``--dump-dfa-tagopt``
-    Debug option: output DFA after tag optimizations (in .dot format).
-
-``--dump-dfa-raw``
-    Debug option: output DFA under construction with expanded state-sets
-    (in .dot format).
-
-``--dump-interf``
-    Debug option: output interference table produced by liveness analysis of tag
-    variables.
-
-``--dump-nfa``
-    Debug option: output NFA (in .dot format).
-
 ``-e --ecb``
     Generate a lexer that reads input in EBCDIC encoding.
     re2c assumes that character range is 0 -- 0xFF an character size is 1 byte.
-
-``--eager-skip``
-    Make the generated lexer advance the input position "eagerly":
-    immediately after reading input symbol.
-    By default this happens after transition to the next state.
-    Implied by ``--no-lookahead``.
 
 ``--empty-class <match-empty | match-none | error>``
     Define the way re2c treats empty character classes. With ``match-empty``
@@ -150,13 +99,6 @@
 ``--no-generation-date``
     Suppress date output in the generated file.
 
-``--no-lookahead``
-    Use TDFA(0) instead of TDFA(1).
-    This option has effect only with ``--tags`` or ``--posix-captures`` options.
-
-``--no-optimize-tags``
-    Suppress optimization of tag variables (useful for debugging).
-
 ``--no-version``
     Suppress version output in the generated file.
 
@@ -165,12 +107,6 @@
 
 ``-P --posix-captures``
     Enable submatch extraction with POSIX-style capturing groups.
-
-``--posix-closure <gor1 | gtop>``
-    Specify shortest-path algorithm used for construction of epsilon-closure
-    with POSIX disambiguation semantics: ``gor1`` (the default) stands for
-    Goldberg-Radzik algorithm, and ``gtop`` stands for "global topological
-    order" algorithm.
 
 ``-r --reusable``
     Allows reuse of re2c rules with ``/*!rules:re2c */`` and ``/*!use:re2c */``
@@ -189,10 +125,6 @@
     Use nested ``if`` statements instead of ``switch`` statements in conditional
     jumps. This usually results in more efficient code with non-optimizing C/C++
     compilers.
-
-``--stadfa``
-    Use staDFA algorithm for submatch extraction. The main difference with TDFA
-    is that tag operations in staDFA are placed in states, not on transitions.
 
 ``-T --tags``
     Enable submatch extraction with tags.

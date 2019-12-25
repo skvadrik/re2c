@@ -22,7 +22,9 @@ Directives
 
 Options
 =======
-.. include:: /manual/options/options_list.rst_
+.. include:: /manual/options/options.rst_
+.. include:: /manual/options/debug.rst_
+.. include:: /manual/options/internal.rst_
 
 Configurations
 ==============
