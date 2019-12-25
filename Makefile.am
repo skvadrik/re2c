@@ -243,6 +243,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/fill/input.txt \
 	doc/manual/headers/headers.rst_ \
 	doc/manual/includes/includes.rst_ \
+	doc/manual/options/internal_list.rst_ \
 	doc/manual/options/options_list.rst_ \
 	doc/manual/regexps/regular_expressions.rst_ \
 	doc/manual/reuse/reuse.re \

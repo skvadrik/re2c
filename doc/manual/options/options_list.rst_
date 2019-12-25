@@ -36,12 +36,6 @@
     with two parameters: ``state`` (lexer state or -1) and ``symbol`` (current
     input symbol of type ``YYCTYPE``).
 
-``--dfa-minimization <moore | table>``
-    The internal algorithm used by re2c to minimize the DFA: ``moore`` (the
-    default) is Moore algorithm, and ``table`` is the "table filling" algorithm.
-    Both algorithms should produce the same DFA up to states relabeling; table
-    filling is simpler and much slower and serves as a reference implementation.
-
 ``--dump-adfa``
     Debug option: output DFA after tunneling (in .dot format).
 
@@ -74,12 +68,6 @@
 ``-e --ecb``
     Generate a lexer that reads input in EBCDIC encoding.
     re2c assumes that character range is 0 -- 0xFF an character size is 1 byte.
-
-``--eager-skip``
-    Make the generated lexer advance the input position "eagerly":
-    immediately after reading input symbol.
-    By default this happens after transition to the next state.
-    Implied by ``--no-lookahead``.
 
 ``--empty-class <match-empty | match-none | error>``
     Define the way re2c treats empty character classes. With ``match-empty``
@@ -150,13 +138,6 @@
 ``--no-generation-date``
     Suppress date output in the generated file.
 
-``--no-lookahead``
-    Use TDFA(0) instead of TDFA(1).
-    This option has effect only with ``--tags`` or ``--posix-captures`` options.
-
-``--no-optimize-tags``
-    Suppress optimization of tag variables (useful for debugging).
-
 ``--no-version``
     Suppress version output in the generated file.
 
@@ -165,20 +146,6 @@
 
 ``-P --posix-captures``
     Enable submatch extraction with POSIX-style capturing groups.
-
-``--posix-closure <gor1 | gtop>``
-    Specify shortest-path algorithm used for construction of epsilon-closure
-    with POSIX disambiguation semantics: ``gor1`` (the default) stands for
-    Goldberg-Radzik algorithm, and ``gtop`` stands for "global topological
-    order" algorithm.
-
-``--posix-prectable <complex | naive>``
-    Specify the algorithm used to compute POSIX precedence table. The
-    ``complex`` algorithm computes precedence table in one traversal of tag
-    history tree and has quadratic complexity in the number of TNFA states; it
-    is the default. The ``naive`` algorithm has worst-case cubic complexity in
-    the number of TNFA states, but it is much simpler than ``complex`` and may
-    be slightly faster in non-pathological cases.
 
 ``-r --reusable``
     Allows reuse of re2c rules with ``/*!rules:re2c */`` and ``/*!use:re2c */``
@@ -197,10 +164,6 @@
     Use nested ``if`` statements instead of ``switch`` statements in conditional
     jumps. This usually results in more efficient code with non-optimizing C/C++
     compilers.
-
-``--stadfa``
-    Use staDFA algorithm for submatch extraction. The main difference with TDFA
-    is that tag operations in staDFA are placed in states, not on transitions.
 
 ``-T --tags``
     Enable submatch extraction with tags.

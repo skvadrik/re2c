@@ -88,12 +88,6 @@ Emit \fBYYDEBUG\fP in the generated code.
 with two parameters: \fBstate\fP (lexer state or \-1) and \fBsymbol\fP (current
 input symbol of type \fBYYCTYPE\fP).
 .TP
-.B \fB\-\-dfa\-minimization <moore | table>\fP
-The internal algorithm used by re2c to minimize the DFA: \fBmoore\fP (the
-default) is Moore algorithm, and \fBtable\fP is the "table filling" algorithm.
-Both algorithms should produce the same DFA up to states relabeling; table
-filling is simpler and much slower and serves as a reference implementation.
-.TP
 .B \fB\-\-dump\-adfa\fP
 Debug option: output DFA after tunneling (in .dot format).
 .TP
@@ -126,12 +120,6 @@ Debug option: output NFA (in .dot format).
 .B \fB\-e \-\-ecb\fP
 Generate a lexer that reads input in EBCDIC encoding.
 re2c assumes that character range is 0 \-\- 0xFF an character size is 1 byte.
-.TP
-.B \fB\-\-eager\-skip\fP
-Make the generated lexer advance the input position "eagerly":
-immediately after reading input symbol.
-By default this happens after transition to the next state.
-Implied by \fB\-\-no\-lookahead\fP\&.
 .TP
 .B \fB\-\-empty\-class <match\-empty | match\-none | error>\fP
 Define the way re2c treats empty character classes. With \fBmatch\-empty\fP
@@ -202,13 +190,6 @@ Default is \fBgnu\fP\&.
 .B \fB\-\-no\-generation\-date\fP
 Suppress date output in the generated file.
 .TP
-.B \fB\-\-no\-lookahead\fP
-Use TDFA(0) instead of TDFA(1).
-This option has effect only with \fB\-\-tags\fP or \fB\-\-posix\-captures\fP options.
-.TP
-.B \fB\-\-no\-optimize\-tags\fP
-Suppress optimization of tag variables (useful for debugging).
-.TP
 .B \fB\-\-no\-version\fP
 Suppress version output in the generated file.
 .TP
@@ -217,20 +198,6 @@ Specify the \fBOUTPUT\fP file.
 .TP
 .B \fB\-P \-\-posix\-captures\fP
 Enable submatch extraction with POSIX\-style capturing groups.
-.TP
-.B \fB\-\-posix\-closure <gor1 | gtop>\fP
-Specify shortest\-path algorithm used for construction of epsilon\-closure
-with POSIX disambiguation semantics: \fBgor1\fP (the default) stands for
-Goldberg\-Radzik algorithm, and \fBgtop\fP stands for "global topological
-order" algorithm.
-.TP
-.B \fB\-\-posix\-prectable <complex | naive>\fP
-Specify the algorithm used to compute POSIX precedence table. The
-\fBcomplex\fP algorithm computes precedence table in one traversal of tag
-history tree and has quadratic complexity in the number of TNFA states; it
-is the default. The \fBnaive\fP algorithm has worst\-case cubic complexity in
-the number of TNFA states, but it is much simpler than \fBcomplex\fP and may
-be slightly faster in non\-pathological cases.
 .TP
 .B \fB\-r \-\-reusable\fP
 Allows reuse of re2c rules with \fB/*!rules:re2c */\fP and \fB/*!use:re2c */\fP
@@ -249,10 +216,6 @@ in optimizations and code generation.
 Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional
 jumps. This usually results in more efficient code with non\-optimizing C/C++
 compilers.
-.TP
-.B \fB\-\-stadfa\fP
-Use staDFA algorithm for submatch extraction. The main difference with TDFA
-is that tag operations in staDFA are placed in states, not on transitions.
 .TP
 .B \fB\-T \-\-tags\fP
 Enable submatch extraction with tags.
@@ -284,6 +247,56 @@ range is 0 \-\- 0xFFFF and character size is 2 bytes. This option implies
 Generate a lexer that reads UTF16\-encoded input. Re2c assumes that character
 range is 0 \-\- 0x10FFFF and character size is 2 bytes. This option implies
 \fB\-s\fP\&.
+.UNINDENT
+.SS Internal options
+.sp
+The following options are unstable and intended to be used by re2c developers;
+they control various internal aspects of re2c.
+.INDENT 0.0
+.TP
+.B \fB\-\-dfa\-minimization <moore | table>\fP
+Internal option.
+The internal algorithm used by re2c to minimize the DFA: \fBmoore\fP (the
+default) is Moore algorithm, and \fBtable\fP is the "table filling" algorithm.
+Both algorithms should produce the same DFA up to states relabeling; table
+filling is simpler and much slower and serves as a reference implementation.
+.TP
+.B \fB\-\-eager\-skip\fP
+Internal option.
+Make the generated lexer advance the input position "eagerly":
+immediately after reading input symbol.
+By default this happens after transition to the next state.
+Implied by \fB\-\-no\-lookahead\fP\&.
+.TP
+.B \fB\-\-no\-lookahead\fP
+Internal option.
+Use TDFA(0) instead of TDFA(1).
+This option has effect only with \fB\-\-tags\fP or \fB\-\-posix\-captures\fP options.
+.TP
+.B \fB\-\-no\-optimize\-tags\fP
+Internal option.
+Suppress optimization of tag variables (useful for debugging).
+.TP
+.B \fB\-\-posix\-closure <gor1 | gtop>\fP
+Internal option.
+Specify shortest\-path algorithm used for construction of epsilon\-closure
+with POSIX disambiguation semantics: \fBgor1\fP (the default) stands for
+Goldberg\-Radzik algorithm, and \fBgtop\fP stands for "global topological
+order" algorithm.
+.TP
+.B \fB\-\-posix\-prectable <complex | naive>\fP
+Internal option.
+Specify the algorithm used to compute POSIX precedence table. The
+\fBcomplex\fP algorithm computes precedence table in one traversal of tag
+history tree and has quadratic complexity in the number of TNFA states; it
+is the default. The \fBnaive\fP algorithm has worst\-case cubic complexity in
+the number of TNFA states, but it is much simpler than \fBcomplex\fP and may
+be slightly faster in non\-pathological cases.
+.TP
+.B \fB\-\-stadfa\fP
+Internal option.
+Use staDFA algorithm for submatch extraction. The main difference with TDFA
+is that tag operations in staDFA are placed in states, not on transitions.
 .UNINDENT
 .SH WARNINGS
 .INDENT 0.0

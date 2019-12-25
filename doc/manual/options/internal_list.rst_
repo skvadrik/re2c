@@ -1,0 +1,49 @@
+Internal options
+----------------
+
+The following options are unstable and intended to be used by re2c developers;
+they control various internal aspects of re2c.
+
+``--dfa-minimization <moore | table>``
+    Internal option.
+    The internal algorithm used by re2c to minimize the DFA: ``moore`` (the
+    default) is Moore algorithm, and ``table`` is the "table filling" algorithm.
+    Both algorithms should produce the same DFA up to states relabeling; table
+    filling is simpler and much slower and serves as a reference implementation.
+
+``--eager-skip``
+    Internal option.
+    Make the generated lexer advance the input position "eagerly":
+    immediately after reading input symbol.
+    By default this happens after transition to the next state.
+    Implied by ``--no-lookahead``.
+
+``--no-lookahead``
+    Internal option.
+    Use TDFA(0) instead of TDFA(1).
+    This option has effect only with ``--tags`` or ``--posix-captures`` options.
+
+``--no-optimize-tags``
+    Internal option.
+    Suppress optimization of tag variables (useful for debugging).
+
+``--posix-closure <gor1 | gtop>``
+    Internal option.
+    Specify shortest-path algorithm used for construction of epsilon-closure
+    with POSIX disambiguation semantics: ``gor1`` (the default) stands for
+    Goldberg-Radzik algorithm, and ``gtop`` stands for "global topological
+    order" algorithm.
+
+``--posix-prectable <complex | naive>``
+    Internal option.
+    Specify the algorithm used to compute POSIX precedence table. The
+    ``complex`` algorithm computes precedence table in one traversal of tag
+    history tree and has quadratic complexity in the number of TNFA states; it
+    is the default. The ``naive`` algorithm has worst-case cubic complexity in
+    the number of TNFA states, but it is much simpler than ``complex`` and may
+    be slightly faster in non-pathological cases.
+
+``--stadfa``
+    Internal option.
+    Use staDFA algorithm for submatch extraction. The main difference with TDFA
+    is that tag operations in staDFA are placed in states, not on transitions.
