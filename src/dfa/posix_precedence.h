@@ -11,6 +11,9 @@ namespace re2c {
 // maximum 29-bit (we have 30 bits, but highest must be non-negative)
 static const int32_t MAX_RHO = 0x1fffFFFF;
 
+template<typename ctx_t> static void compute_prectable_naive(ctx_t &ctx);
+template<typename ctx_t> static void compute_prectable_complex(ctx_t &ctx);
+
 // we *do* want this to be inlined
 static inline int32_t leftprec(tag_info_t info1, tag_info_t info2, bool last1, bool last2);
 static inline int32_t unpack_longest(int32_t packed);
@@ -114,6 +117,43 @@ int32_t leftprec(tag_info_t info1, tag_info_t info2, bool last1, bool last2)
 
 template<typename ctx_t>
 void compute_prectable(ctx_t &ctx)
+{
+    switch (ctx.dc_opts->posix_prectable) {
+    case POSIX_PRECTABLE_COMPLEX: compute_prectable_complex(ctx); break;
+    case POSIX_PRECTABLE_NAIVE:   compute_prectable_naive(ctx);   break;
+    }
+}
+
+// Naive O(m^2*t) algorithm for computation of POSIX precedence table, where
+// m is the number of states in TNFA and t is the number of tags. If t ~~ m,
+// the complexity is O(n^3); one example that exhibits cubic behaviour is
+// ((a?){1,N})*. In this example closure has O(m) states, and the compared
+// histories have O(N) length.
+template<typename ctx_t>
+void compute_prectable_naive(ctx_t &ctx)
+{
+    const typename ctx_t::confset_t &state = ctx.state;
+    int32_t *newtbl = ctx.newprectbl;
+    const size_t newdim = state.size();
+
+    const int32_t p0 = pack(MAX_RHO, 0);
+
+    for (uint32_t i = 0; i < newdim; ++i) {
+        newtbl[i * newdim + i] = p0;
+        for (uint32_t j = i + 1; j < newdim; ++j) {
+            int32_t prec1, prec2;
+            int32_t prec = ctx_t::history_t::precedence(ctx, state[i], state[j],
+                prec1, prec2);
+            newtbl[i * newdim + j] = pack(prec1, prec);
+            newtbl[j * newdim + i] = pack(prec2, -prec);
+        }
+    }
+}
+
+// Complex O(m^2) algorithm for computation of POSIX precedence table, where
+// m is the number of states in TNFA.
+template<typename ctx_t>
+void compute_prectable_complex(ctx_t &ctx)
 {
     const typename ctx_t::confset_t &state = ctx.state;
     const std::vector<Tag> &tags = ctx.nfa.tags;

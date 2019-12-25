@@ -224,6 +224,14 @@ with POSIX disambiguation semantics: \fBgor1\fP (the default) stands for
 Goldberg\-Radzik algorithm, and \fBgtop\fP stands for "global topological
 order" algorithm.
 .TP
+.B \fB\-\-posix\-prectable <complex | naive>\fP
+Specify the algorithm used to compute POSIX precedence table. The
+\fBcomplex\fP algorithm computes precedence table in one traversal of tag
+history tree and has quadratic complexity in the number of TNFA states; it
+is the default. The \fBnaive\fP algorithm has worst\-case cubic complexity in
+the number of TNFA states, but it is much simpler than \fBcomplex\fP and may
+be slightly faster in non\-pathological cases.
+.TP
 .B \fB\-r \-\-reusable\fP
 Allows reuse of re2c rules with \fB/*!rules:re2c */\fP and \fB/*!use:re2c */\fP
 blocks. Exactly one rules\-block must be present. The rules are saved and

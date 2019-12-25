@@ -191,6 +191,7 @@ opt_long:
     // internals
     "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_dfa_minimization); }
     "posix-closure"         end { NEXT_ARG("--posix-closure",    opt_posix_closure); }
+    "posix-prectable"       end { NEXT_ARG("--posix-prectable",  opt_posix_prectable); }
     "no-lookahead"          end { globopts.lookahead = false;     goto opt; }
     "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
     "eager-skip"            end { globopts.eager_skip = true;     goto opt; }
@@ -275,6 +276,13 @@ opt_posix_closure:
     * { ERRARG("--posix-closure", "gor1 | gtop", *argv); }
     "gor1" end { globopts.posix_closure = POSIX_CLOSURE_GOR1; goto opt; }
     "gtop" end { globopts.posix_closure = POSIX_CLOSURE_GTOP; goto opt; }
+*/
+
+opt_posix_prectable:
+/*!re2c
+    * { ERRARG("--posix-prectable", "naive | complex", *argv); }
+    "naive"   end { globopts.posix_prectable = POSIX_PRECTABLE_NAIVE;   goto opt; }
+    "complex" end { globopts.posix_prectable = POSIX_PRECTABLE_COMPLEX; goto opt; }
 */
 
 end:

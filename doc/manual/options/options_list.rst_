@@ -172,6 +172,14 @@
     Goldberg-Radzik algorithm, and ``gtop`` stands for "global topological
     order" algorithm.
 
+``--posix-prectable <complex | naive>``
+    Specify the algorithm used to compute POSIX precedence table. The
+    ``complex`` algorithm computes precedence table in one traversal of tag
+    history tree and has quadratic complexity in the number of TNFA states; it
+    is the default. The ``naive`` algorithm has worst-case cubic complexity in
+    the number of TNFA states, but it is much simpler than ``complex`` and may
+    be slightly faster in non-pathological cases.
+
 ``-r --reusable``
     Allows reuse of re2c rules with ``/*!rules:re2c */`` and ``/*!use:re2c */``
     blocks. Exactly one rules-block must be present. The rules are saved and

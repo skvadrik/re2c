@@ -88,6 +88,12 @@ enum posix_closure_t
     POSIX_CLOSURE_GTOP
 };
 
+enum posix_prectable_alg_t
+{
+    POSIX_PRECTABLE_NAIVE,
+    POSIX_PRECTABLE_COMPLEX
+};
+
 void minimization(dfa_t &dfa, dfa_minimization_t type);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, size_t defrule, const std::string &cond, Msg &msg);

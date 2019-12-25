@@ -19,7 +19,6 @@ namespace libre2c {
 
 static void make_one_step(psimctx_t &, uint32_t);
 static void make_final_step(psimctx_t &);
-static void compute_prectbl_naive(psimctx_t &ctx);
 
 // we *do* want these to be inlined
 static inline void closure_posix(psimctx_t &ctx);
@@ -108,10 +107,10 @@ void make_one_step(psimctx_t &ctx, uint32_t sym)
     std::swap(ctx.offsets1, ctx.offsets2);
 
     if (!(ctx.flags & REG_SLOWPREC)) {
-        compute_prectable(ctx);
+        compute_prectable_complex(ctx);
     }
     else {
-        compute_prectbl_naive(ctx);
+        compute_prectable_naive(ctx);
     }
     std::swap(ctx.newprectbl, ctx.oldprectbl);
     ctx.oldprecdim = j;
@@ -131,28 +130,6 @@ void make_final_step(psimctx_t &ctx)
 
         if (s->type == nfa_state_t::FIN) {
             update_offsets(ctx, *i, NONCORE);
-        }
-    }
-}
-
-// Old naive algorithm that has cubic complexity in the size of TNFA.
-// Example that exhibits cubic behaviour is ((a?){1,N})*. In this example
-// closure has O(N) states, and the compared histories have O(N) length.
-void compute_prectbl_naive(psimctx_t &ctx)
-{
-    const confset_t &state = ctx.state;
-    int32_t *newtbl = ctx.newprectbl;
-    const size_t newdim = state.size();
-
-    const int32_t p0 = pack(MAX_RHO, 0);
-
-    for (uint32_t i = 0; i < newdim; ++i) {
-        newtbl[i * newdim + i] = p0;
-        for (uint32_t j = i + 1; j < newdim; ++j) {
-            int32_t prec1, prec2;
-            int32_t prec = phistory_t::precedence(ctx, state[i], state[j], prec1, prec2);
-            newtbl[i * newdim + j] = pack(prec1, prec);
-            newtbl[j * newdim + i] = pack(prec2, -prec);
         }
     }
 }
