@@ -31,8 +31,9 @@ allow one to customize the generated code.
 
 Options
 =======
-.. include:: @top_srcdir@/doc/manual/options/options_list.rst_
-.. include:: @top_srcdir@/doc/manual/options/internal_list.rst_
+.. include:: @top_srcdir@/doc/manual/options/options.rst_
+.. include:: @top_srcdir@/doc/manual/options/debug.rst_
+.. include:: @top_srcdir@/doc/manual/options/internal.rst_
 
 Warnings
 ========

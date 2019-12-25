@@ -1,0 +1,45 @@
+Internal options
+----------------
+
+The following options are primarily intended for re2c developers; they are
+unstable and control re2c internals.
+
+``--dfa-minimization <moore | table>``
+    Internal option: DFA minimization algorithm used by re2c. The ``moore``
+    option is the Moore algorithm (it is the default). The ``table`` option is
+    the "table filling" algorithm. Both algorithms should produce the same DFA
+    up to states relabeling; table filling is simpler and much slower and serves
+    as a reference implementation.
+
+``--eager-skip``
+    Internal option: make the generated lexer advance the input position
+    eagerly -- immediately after reading the input symbol. This changes the
+    default behavior when the input position is advanced lazily -- after
+    transition to the next state. This option is implied by ``--no-lookahead``.
+
+``--no-lookahead``
+    Internal option: use TDFA(0) instead of TDFA(1).
+    This option has effect only with ``--tags`` or ``--posix-captures`` options.
+
+``--no-optimize-tags``
+    Internal optionL: suppress optimization of tag variables (useful for
+    debugging).
+
+``--posix-closure <gor1 | gtop>``
+    Internal option: specify shortest-path algorithm used for the construction of
+    epsilon-closure with POSIX disambiguation semantics: ``gor1`` (the default)
+    stands for Goldberg-Radzik algorithm, and ``gtop`` stands for "global
+    topological order" algorithm.
+
+``--posix-prectable <complex | naive>``
+    Internal option: specify the algorithm used to compute POSIX precedence
+    table. The ``complex`` algorithm computes precedence table in one traversal
+    of tag history tree and has quadratic complexity in the number of TNFA
+    states; it is the default. The ``naive`` algorithm has worst-case cubic
+    complexity in the number of TNFA states, but it is much simpler than
+    ``complex`` and may be slightly faster in non-pathological cases.
+
+``--stadfa``
+    Internal option:
+    use staDFA algorithm for submatch extraction. The main difference with TDFA
+    is that tag operations in staDFA are placed in states, not on transitions.

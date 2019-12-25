@@ -1,3 +1,4 @@
+
 ``-? -h --help``
     Show help message.
 
@@ -24,46 +25,6 @@
     Invert the meaning of single-quoted and double-quoted strings:
     treat single-quoted strings as case-sensitive and double-quoted strings
     as case-insensitive.
-
-``-D --emit-dot``
-    Instead of normal output generate lexer graph in .dot format.
-    The output can be converted to an image with the help of Graphviz
-    (e.g. something like ``dot -Tpng -odfa.png dfa.dot``).
-
-``-d --debug-output``
-    Emit ``YYDEBUG`` in the generated code.
-    ``YYDEBUG`` should be defined by the user in the form of a void function
-    with two parameters: ``state`` (lexer state or -1) and ``symbol`` (current
-    input symbol of type ``YYCTYPE``).
-
-``--dump-adfa``
-    Debug option: output DFA after tunneling (in .dot format).
-
-``--dump-cfg``
-    Debug option: output control flow graph of tag variables (in .dot format).
-
-``--dump-closure-stats``
-    Debug option: output statistics on the number of states in closure.
-
-``--dump-dfa-det``
-    Debug option: output DFA immediately after determinization (in .dot format).
-
-``--dump-dfa-min``
-    Debug option: output DFA after minimization (in .dot format).
-
-``--dump-dfa-tagopt``
-    Debug option: output DFA after tag optimizations (in .dot format).
-
-``--dump-dfa-raw``
-    Debug option: output DFA under construction with expanded state-sets
-    (in .dot format).
-
-``--dump-interf``
-    Debug option: output interference table produced by liveness analysis of tag
-    variables.
-
-``--dump-nfa``
-    Debug option: output NFA (in .dot format).
 
 ``-e --ecb``
     Generate a lexer that reads input in EBCDIC encoding.

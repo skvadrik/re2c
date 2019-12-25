@@ -77,46 +77,6 @@ Invert the meaning of single\-quoted and double\-quoted strings:
 treat single\-quoted strings as case\-sensitive and double\-quoted strings
 as case\-insensitive.
 .TP
-.B \fB\-D \-\-emit\-dot\fP
-Instead of normal output generate lexer graph in .dot format.
-The output can be converted to an image with the help of Graphviz
-(e.g. something like \fBdot \-Tpng \-odfa.png dfa.dot\fP).
-.TP
-.B \fB\-d \-\-debug\-output\fP
-Emit \fBYYDEBUG\fP in the generated code.
-\fBYYDEBUG\fP should be defined by the user in the form of a void function
-with two parameters: \fBstate\fP (lexer state or \-1) and \fBsymbol\fP (current
-input symbol of type \fBYYCTYPE\fP).
-.TP
-.B \fB\-\-dump\-adfa\fP
-Debug option: output DFA after tunneling (in .dot format).
-.TP
-.B \fB\-\-dump\-cfg\fP
-Debug option: output control flow graph of tag variables (in .dot format).
-.TP
-.B \fB\-\-dump\-closure\-stats\fP
-Debug option: output statistics on the number of states in closure.
-.TP
-.B \fB\-\-dump\-dfa\-det\fP
-Debug option: output DFA immediately after determinization (in .dot format).
-.TP
-.B \fB\-\-dump\-dfa\-min\fP
-Debug option: output DFA after minimization (in .dot format).
-.TP
-.B \fB\-\-dump\-dfa\-tagopt\fP
-Debug option: output DFA after tag optimizations (in .dot format).
-.TP
-.B \fB\-\-dump\-dfa\-raw\fP
-Debug option: output DFA under construction with expanded state\-sets
-(in .dot format).
-.TP
-.B \fB\-\-dump\-interf\fP
-Debug option: output interference table produced by liveness analysis of tag
-variables.
-.TP
-.B \fB\-\-dump\-nfa\fP
-Debug option: output NFA (in .dot format).
-.TP
 .B \fB\-e \-\-ecb\fP
 Generate a lexer that reads input in EBCDIC encoding.
 re2c assumes that character range is 0 \-\- 0xFF an character size is 1 byte.
@@ -248,54 +208,96 @@ Generate a lexer that reads UTF16\-encoded input. Re2c assumes that character
 range is 0 \-\- 0x10FFFF and character size is 2 bytes. This option implies
 \fB\-s\fP\&.
 .UNINDENT
+.SS Debug options
+.sp
+The following options allow to visualize and debug the generated programs;
+most of them are enabled only in debug builds.
+.INDENT 0.0
+.TP
+.B \fB\-D \-\-emit\-dot\fP
+Instead of normal output generate lexer graph in .dot format.
+The output can be converted to an image with the help of Graphviz
+(e.g. something like \fBdot \-Tpng \-odfa.png dfa.dot\fP).
+.TP
+.B \fB\-d \-\-debug\-output\fP
+Emit \fBYYDEBUG\fP in the generated code.
+\fBYYDEBUG\fP should be defined by the user in the form of a void function
+with two parameters: \fBstate\fP (lexer state or \-1) and \fBsymbol\fP (current
+input symbol of type \fBYYCTYPE\fP).
+.TP
+.B \fB\-\-dump\-adfa\fP
+Debug option: output DFA after tunneling (in .dot format).
+.TP
+.B \fB\-\-dump\-cfg\fP
+Debug option: output control flow graph of tag variables (in .dot format).
+.TP
+.B \fB\-\-dump\-closure\-stats\fP
+Debug option: output statistics on the number of states in closure.
+.TP
+.B \fB\-\-dump\-dfa\-det\fP
+Debug option: output DFA immediately after determinization (in .dot format).
+.TP
+.B \fB\-\-dump\-dfa\-min\fP
+Debug option: output DFA after minimization (in .dot format).
+.TP
+.B \fB\-\-dump\-dfa\-tagopt\fP
+Debug option: output DFA after tag optimizations (in .dot format).
+.TP
+.B \fB\-\-dump\-dfa\-raw\fP
+Debug option: output DFA under construction with expanded state\-sets
+(in .dot format).
+.TP
+.B \fB\-\-dump\-interf\fP
+Debug option: output interference table produced by liveness analysis of tag
+variables.
+.TP
+.B \fB\-\-dump\-nfa\fP
+Debug option: output NFA (in .dot format).
+.UNINDENT
 .SS Internal options
 .sp
-The following options are unstable and intended to be used by re2c developers;
-they control various internal aspects of re2c.
+The following options are primarily intended for re2c developers; they are
+unstable and control re2c internals.
 .INDENT 0.0
 .TP
 .B \fB\-\-dfa\-minimization <moore | table>\fP
-Internal option.
-The internal algorithm used by re2c to minimize the DFA: \fBmoore\fP (the
-default) is Moore algorithm, and \fBtable\fP is the "table filling" algorithm.
-Both algorithms should produce the same DFA up to states relabeling; table
-filling is simpler and much slower and serves as a reference implementation.
+Internal option: DFA minimization algorithm used by re2c. The \fBmoore\fP
+option is the Moore algorithm (it is the default). The \fBtable\fP option is
+the "table filling" algorithm. Both algorithms should produce the same DFA
+up to states relabeling; table filling is simpler and much slower and serves
+as a reference implementation.
 .TP
 .B \fB\-\-eager\-skip\fP
-Internal option.
-Make the generated lexer advance the input position "eagerly":
-immediately after reading input symbol.
-By default this happens after transition to the next state.
-Implied by \fB\-\-no\-lookahead\fP\&.
+Internal option: make the generated lexer advance the input position
+eagerly \-\- immediately after reading the input symbol. This changes the
+default behavior when the input position is advanced lazily \-\- after
+transition to the next state. This option is implied by \fB\-\-no\-lookahead\fP\&.
 .TP
 .B \fB\-\-no\-lookahead\fP
-Internal option.
-Use TDFA(0) instead of TDFA(1).
+Internal option: use TDFA(0) instead of TDFA(1).
 This option has effect only with \fB\-\-tags\fP or \fB\-\-posix\-captures\fP options.
 .TP
 .B \fB\-\-no\-optimize\-tags\fP
-Internal option.
-Suppress optimization of tag variables (useful for debugging).
+Internal optionL: suppress optimization of tag variables (useful for
+debugging).
 .TP
 .B \fB\-\-posix\-closure <gor1 | gtop>\fP
-Internal option.
-Specify shortest\-path algorithm used for construction of epsilon\-closure
-with POSIX disambiguation semantics: \fBgor1\fP (the default) stands for
-Goldberg\-Radzik algorithm, and \fBgtop\fP stands for "global topological
-order" algorithm.
+Internal option: specify shortest\-path algorithm used for the construction of
+epsilon\-closure with POSIX disambiguation semantics: \fBgor1\fP (the default)
+stands for Goldberg\-Radzik algorithm, and \fBgtop\fP stands for "global
+topological order" algorithm.
 .TP
 .B \fB\-\-posix\-prectable <complex | naive>\fP
-Internal option.
-Specify the algorithm used to compute POSIX precedence table. The
-\fBcomplex\fP algorithm computes precedence table in one traversal of tag
-history tree and has quadratic complexity in the number of TNFA states; it
-is the default. The \fBnaive\fP algorithm has worst\-case cubic complexity in
-the number of TNFA states, but it is much simpler than \fBcomplex\fP and may
-be slightly faster in non\-pathological cases.
+Internal option: specify the algorithm used to compute POSIX precedence
+table. The \fBcomplex\fP algorithm computes precedence table in one traversal
+of tag history tree and has quadratic complexity in the number of TNFA
+states; it is the default. The \fBnaive\fP algorithm has worst\-case cubic
+complexity in the number of TNFA states, but it is much simpler than
+\fBcomplex\fP and may be slightly faster in non\-pathological cases.
 .TP
 .B \fB\-\-stadfa\fP
-Internal option.
-Use staDFA algorithm for submatch extraction. The main difference with TDFA
+Internal option:
+use staDFA algorithm for submatch extraction. The main difference with TDFA
 is that tag operations in staDFA are placed in states, not on transitions.
 .UNINDENT
 .SH WARNINGS
