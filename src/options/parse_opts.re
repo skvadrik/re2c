@@ -199,6 +199,7 @@ opt_long:
 
     // debug options
     "dump-nfa"              end { globopts.dump_nfa = true;           goto opt; }
+    "dump-dfa-tree"         end { globopts.dump_dfa_tree = true;      goto opt; }
     "dump-dfa-raw"          end { globopts.dump_dfa_raw = true;       goto opt; }
     "dump-dfa-det"          end { globopts.dump_dfa_det = true;       goto opt; }
     "dump-dfa-tagopt"       end { globopts.dump_dfa_tagopt = true;    goto opt; }

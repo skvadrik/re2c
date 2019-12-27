@@ -75,6 +75,7 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, dump_cfg, false) \
     CONSTOPT (bool, dump_interf, false) \
     CONSTOPT (bool, dump_closure_stats, false) \
+    CONSTOPT (bool, dump_dfa_tree, false) \
     /* end */
 
 #define RE2C_MUTOPTS \

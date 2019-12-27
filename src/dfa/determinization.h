@@ -187,8 +187,9 @@ struct determ_context_t
     std::vector<int32_t> worklist;
 
     // debug
-    dump_dfa_t dc_dump;
-    closure_stats_t dc_clstats;
+    dump_dfa_tree_t<determ_context_t> dump_dfa_tree;
+    dump_dfa_t                        dc_dump;
+    closure_stats_t                   dc_clstats;
 
     determ_context_t(const opt_t *, Msg &, const std::string &, const nfa_t &, dfa_t &);
     ~determ_context_t();

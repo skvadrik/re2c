@@ -106,6 +106,7 @@ re2c_SRC = \
 	src/debug/dump_adfa.cc \
 	src/debug/dump_cfg.cc \
 	src/debug/dump_dfa.cc \
+	src/debug/dump_dfa_tree.cc \
 	src/debug/dump_interf.cc \
 	src/debug/dump_nfa.cc \
 	src/cfg/cfg.cc \

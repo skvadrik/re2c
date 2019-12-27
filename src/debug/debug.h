@@ -10,6 +10,8 @@ struct opt_t;
 
 struct closure_stats_t {};
 struct dump_dfa_t { dump_dfa_t(const opt_t *) {} };
+template<typename ctx_t>
+  struct dump_dfa_tree_t { dump_dfa_tree_t(const ctx_t&) {} };
 
 #define DASSERT(x)
 #define DDUMP_NFA(opts, nfa)
@@ -32,6 +34,7 @@ struct dump_dfa_t { dump_dfa_t(const opt_t *) {} };
 
 #include <assert.h>
 #include "src/util/c99_stdint.h"
+#include <set>
 
 namespace re2c {
 
@@ -39,6 +42,7 @@ struct DFA;
 struct cfg_t;
 struct dfa_t;
 struct nfa_t;
+struct nfa_state_t;
 struct opt_t;
 struct tcmd_t;
 
@@ -59,8 +63,21 @@ struct dump_dfa_t
     template<typename ctx_t> void state(const ctx_t &, bool);
 };
 
+template<typename ctx_t>
+struct dump_dfa_tree_t
+{
+    const ctx_t &ctx;
+    uint32_t uniqidx;
+    std::set<int32_t> used_nodes;
+
+    explicit dump_dfa_tree_t(const ctx_t &);
+    ~dump_dfa_tree_t();
+    void state(bool);
+};
+
 #define DASSERT(x)                   assert(x)
 #define DDUMP_NFA(opts, nfa)         if (opts->dump_nfa) dump_nfa(nfa)
+#define DDUMP_DFA_TREE(isnew)        do { ctx.dump_dfa_tree.state(is_new); } while(0)
 #define DDUMP_DFA_RAW(ctx, isnew)    do { ctx.dc_dump.state(ctx, is_new); } while(0)
 #define DDUMP_DFA_DET(opts, dfa)     if (opts->dump_dfa_det) dump_dfa(dfa)
 #define DDUMP_DFA_TAGOPT(opts, dfa)  if (opts->dump_dfa_tagopt) dump_dfa(dfa)
@@ -82,6 +99,7 @@ void dump_interf(const cfg_t &, const bool *);
 void dump_tcmd(const tcmd_t *);
 template<typename ctx_t> void dump_clstats(const ctx_t &);
 template<typename ctx_t> void reset_clstats(ctx_t &);
+uint32_t index(const nfa_t &nfa, const nfa_state_t *s);
 
 } // namespace re2c
 

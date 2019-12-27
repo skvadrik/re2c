@@ -21,8 +21,8 @@
 
 namespace re2c {
 
-template<typename ctx_t> void dump_history(const dfa_t &, const typename ctx_t::history_t &, hidx_t);
-template<typename ctx_t> void dump_tags(const tagver_table_t &, const typename ctx_t::history_t &, hidx_t, uint32_t);
+template<typename ctx_t> static void dump_history(const dfa_t &, const typename ctx_t::history_t &, hidx_t);
+template<typename ctx_t> static void dump_tags(const tagver_table_t &, const typename ctx_t::history_t &, hidx_t, uint32_t);
 static void dump_tcmd_or_tcid(tcmd_t *const *, const tcid_t *, size_t, const tcpool_t &);
 static const char *tagname(const Tag &);
 template <typename ctx_t> static void dump_stacmd(const ctx_t &, const stacmd_t *);

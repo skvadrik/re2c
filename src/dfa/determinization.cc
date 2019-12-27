@@ -273,6 +273,7 @@ determ_context_t<history_t>::determ_context_t(const opt_t *opts, Msg &msg
     , sortcores()
     , fincount()
     , worklist()
+    , dump_dfa_tree(*this)
     , dc_dump(opts)
     , dc_clstats()
 {

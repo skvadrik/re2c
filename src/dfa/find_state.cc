@@ -177,6 +177,7 @@ void find_state_specialized(ctx_t &ctx)
     }
 
     DDUMP_DFA_RAW(ctx, is_new);
+    DDUMP_DFA_TREE(is_new);
 }
 
 template<typename ctx_t, bool stadfa>

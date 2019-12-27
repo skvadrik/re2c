@@ -14,7 +14,7 @@
 
 namespace re2c {
 
-static uint32_t index(const nfa_t &nfa, const nfa_state_t *s)
+uint32_t index(const nfa_t &nfa, const nfa_state_t *s)
 {
     return static_cast<uint32_t>(s - nfa.states);
 }
