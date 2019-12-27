@@ -1,5 +1,8 @@
 language: cpp
 
+# speed up incremental builds
+cache: ccache
+
 compiler:
  - gcc
  - clang
