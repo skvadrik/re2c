@@ -33,6 +33,10 @@ most of them are enabled only in debug builds.
 ``--dump-dfa-tagopt``
     Debug option: output DFA after tag optimizations (in .dot format).
 
+``--dump-dfa-tree``
+    Debug option: output DFA under construction with states represented as tag
+    history trees (in .dot format).
+
 ``--dump-dfa-raw``
     Debug option: output DFA under construction with expanded state-sets
     (in .dot format).
