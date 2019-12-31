@@ -31,7 +31,7 @@ script:
         --prefix="$(pwd)"/re2c-install \
         --enable-docs \
         --enable-libs \
-        $(CONFIG_FLAGS) \
+        ${CONFIG_FLAGS} \
         CFLAGS="${BASE_FLAGS} ${COMMON_FLAGS}" \
         CXXFLAGS="${BASE_FLAGS} ${COMMON_FLAGS}" \
         LDFLAGS="${BASE_FLAGS} ${COMMON_FLAGS}" || \
