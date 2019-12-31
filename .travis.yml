@@ -4,8 +4,8 @@ language: cpp
 cache: ccache
 
 compiler:
- - gcc
- - clang
+  - gcc
+  - clang
 
 # preinstalled packages
 addons:
@@ -15,11 +15,12 @@ addons:
     - python3-docutils
 
 # in-tree and out-of-tree builds
+# with or without debug
 env:
- - BUILD_DIR=.      CONFIG_DIR=.
- - BUILD_DIR=.build CONFIG_DIR=..
- - BUILD_DIR=.      CONFIG_DIR=. COMMON_FLAGS=-fsanitize=address
- - BUILD_DIR=.      CONFIG_DIR=. COMMON_FLAGS=-fsanitize=undefined
+  - BUILD_DIR=.      CONFIG_DIR=.
+  - BUILD_DIR=.build CONFIG_DIR=.. CONFIG_FLAGS="--enable-debug"
+  - BUILD_DIR=.      CONFIG_DIR=.  CONFIG_FLAGS="--enable-debug" COMMON_FLAGS=-fsanitize=address
+  - BUILD_DIR=.      CONFIG_DIR=.  CONFIG_FLAGS="--enable-debug" COMMON_FLAGS=-fsanitize=undefined
 
 script:
   - BASE_FLAGS="-O2 -g"
@@ -29,8 +30,8 @@ script:
     $CONFIG_DIR/configure \
         --prefix="$(pwd)"/re2c-install \
         --enable-docs \
-        --enable-debug \
         --enable-libs \
+        $(CONFIG_FLAGS) \
         CFLAGS="${BASE_FLAGS} ${COMMON_FLAGS}" \
         CXXFLAGS="${BASE_FLAGS} ${COMMON_FLAGS}" \
         LDFLAGS="${BASE_FLAGS} ${COMMON_FLAGS}" || \
