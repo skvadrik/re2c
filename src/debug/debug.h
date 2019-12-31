@@ -15,6 +15,7 @@ template<typename ctx_t>
 
 #define DASSERT(x)
 #define DDUMP_NFA(opts, nfa)
+#define DDUMP_DFA_TREE(isnew)
 #define DDUMP_DFA_RAW(ctx, isnew)
 #define DDUMP_DFA_DET(opts, dfa)
 #define DDUMP_DFA_TAGOPT(opts, dfa)
