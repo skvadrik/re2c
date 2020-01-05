@@ -35,7 +35,9 @@ template<typename ctx_t>
 
 #include <assert.h>
 #include "src/util/c99_stdint.h"
+#include <map>
 #include <set>
+#include <vector>
 
 namespace re2c {
 
@@ -68,12 +70,19 @@ template<typename ctx_t>
 struct dump_dfa_tree_t
 {
     const ctx_t &ctx;
+
+    typedef std::vector<const nfa_state_t*> origins_t;
+    typedef std::map<std::pair<uint32_t, uint32_t>, origins_t> origmap_t;
+    origmap_t origmap;
+
     uint32_t uniqidx;
     std::set<int32_t> used_nodes;
 
     explicit dump_dfa_tree_t(const ctx_t &);
     ~dump_dfa_tree_t();
     void state(bool);
+    void path_tree(const std::vector<uint32_t> &, const std::vector<uint32_t> &,
+        bool);
 };
 
 #define DASSERT(x)                   assert(x)
