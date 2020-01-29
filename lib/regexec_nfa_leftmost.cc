@@ -50,8 +50,9 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
     regmatch_t *m = pmatch;
     m->rm_so = 0;
     m->rm_eo = ctx.marker - string - 1;
-    const size_t n = std::min(ctx.nsub, 2 * nmatch);
+    const size_t n = std::min(ctx.nfa.tags.size(), 2 * nmatch);
     for (size_t t = 0; t < n; ++t) {
+        DASSERT(!fictive(ctx.nfa.tags[t]));
         const regoff_t off = ctx.offsets3[t];
         if (t % 2 == 0) {
             ++m;

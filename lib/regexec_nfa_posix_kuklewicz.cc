@@ -84,14 +84,21 @@ int regexec_nfa_posix_kuklewicz(const regex_t *preg, const char *string
         return REG_NOMATCH;
     }
 
-    regmatch_t *m = pmatch;
+    const std::vector<Tag> &tags = ctx.nfa.tags;
+    const size_t ntags = tags.size();
+    regmatch_t *m = pmatch, *e = pmatch + nmatch;
     m->rm_so = 0;
     m->rm_eo = ctx.marker - string - 1;
-    const size_t n = std::min(ctx.nsub, 2 * nmatch);
-    for (size_t t = 0; t < n; ++t) {
+    for (size_t t = 0; t < ntags; ++t) {
+        if (fictive(tags[t])) {
+            ++t;
+            continue;
+        }
+
         const regoff_t off = ctx.offsets3[t];
         if (t % 2 == 0) {
             ++m;
+            if (m >= e) break;
             m->rm_so = off;
         }
         else {

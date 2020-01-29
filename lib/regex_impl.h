@@ -213,12 +213,12 @@ simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsu
     state.reserve(nstates);
     reach.reserve(nstates);
 
-    done = new bool[nsub];
+    done = new bool[ntags];
 
     if (!(flags & REG_TRIE)) {
-        offsets1 = new regoff_t[nsub * ncores];
-        offsets2 = new regoff_t[nsub * ncores];
-        offsets3 = new regoff_t[nsub];
+        offsets1 = new regoff_t[ntags * ncores];
+        offsets2 = new regoff_t[ntags * ncores];
+        offsets3 = new regoff_t[ntags];
     }
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
         const size_t dim = (flags & REG_KUKLEWICZ) ? ntags : ncores;
@@ -339,9 +339,9 @@ int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
 template<typename history_t>
 void update_offsets(simctx_t<history_t> &ctx, const conf_t &c, uint32_t id)
 {
-    const size_t nsub = ctx.nsub;
     regoff_t *o;
     const std::vector<Tag> &tags = ctx.nfa.tags;
+    const size_t ntags = tags.size();
     nfa_state_t *s = c.state;
     bool *done = ctx.done;
 
@@ -351,37 +351,39 @@ void update_offsets(simctx_t<history_t> &ctx, const conf_t &c, uint32_t id)
         o = ctx.offsets3;
     }
     else {
-        o = ctx.offsets1 + id * nsub;
+        o = ctx.offsets1 + id * ntags;
     }
 
-    memcpy(o, ctx.offsets2 + c.origin * nsub, nsub * sizeof(regoff_t));
-    memset(done, 0, nsub * sizeof(bool));
+    memcpy(o, ctx.offsets2 + c.origin * ntags, ntags * sizeof(regoff_t));
+
+    // TODO: replace booleans with step numbers to avoid initialization
+    memset(done, 0, ntags * sizeof(bool));
 
     for (int32_t i = c.thist; i != HROOT; ) {
         const typename history_t::node_t &n = ctx.history.node(i);
-        const Tag &tag = tags[n.info.idx];
-        const size_t t = tag.ncap;
+        i = n.pred;
+        const size_t t = n.info.idx;
 
-        // Update negative tag, together with its sibling and nested tags (if any),
-        // unless already updated. Fictive tags may have nested non-fictive tags.
-        if (n.info.neg && (fictive(tag) || !done[t])) {
-            for (size_t l = tag.lnest; l < tag.hnest; ++l) {
-                const Tag &ntag = tags[l];
-                const size_t nt = ntag.ncap;
-                if (!fictive(ntag) && !done[nt]) {
-                    done[nt] = true;
-                    o[nt] = -1;
-                }
-            }
-        }
+        // If already updated, skip.
+        if (done[t]) continue;
 
-        // Update positive tag (unless already updated).
-        else if (!fictive(tag) && !done[t]) {
+        // Update positive tag.
+        if (!n.info.neg) {
             done[t] = true;
             o[t] = static_cast<regoff_t>(ctx.step);
         }
 
-        i = n.pred;
+        // Update negative tag together with its sibling and nested tags (if any).
+        else {
+            const Tag &tag = tags[t];
+            for (size_t l = tag.lnest; l < tag.hnest; ++l) {
+                if (!done[l]) {
+                    done[l] = true;
+                    o[l] = -1;
+                }
+            }
+        }
+
     }
 }
 
