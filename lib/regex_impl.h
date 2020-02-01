@@ -287,6 +287,61 @@ static inline regoff_t *offs_addr(regmatch_t pmatch[], size_t t)
     return t % 2 == 0 ? &m->rm_so : &m->rm_eo;
 }
 
+struct getoff_nfa_t
+{
+    const regoff_t *offsets;
+    inline regoff_t operator()(size_t idx) const { return offsets[idx]; }
+};
+
+struct getoff_dfa_t
+{
+    const dfa_t *dfa;
+    const regoff_t *regs;
+    const regoff_t len;
+
+    regoff_t operator()(size_t idx) const
+    {
+        const Tag &tag = dfa->tags[idx];
+        regoff_t off;
+        if (!fixed(tag)) {
+            off = regs[dfa->finvers[idx]];
+        }
+        else {
+            off = tag.base == Tag::RIGHTMOST
+                ? len : regs[dfa->finvers[tag.base]];
+            DASSERT (off != -1);
+            off -= static_cast<regoff_t>(tag.dist);
+        }
+        return off;
+    }
+};
+
+template<typename getoff_t>
+void tags_to_submatch(const std::vector<Tag> &tags, size_t nmatch,
+    regmatch_t pmatch[], regoff_t len, const getoff_t &getoff)
+{
+    const size_t ntags = tags.size();
+    regmatch_t *m = pmatch, *e = pmatch + nmatch;
+
+    m->rm_so = 0;
+    m->rm_eo = len;
+    ++m;
+
+    for (size_t t = 0; t < ntags && m < e; t += 2) {
+        const Tag &tag = tags[t];
+        if (!fictive(tag)) {
+            const regoff_t so = getoff(t);
+            const regoff_t eo = getoff(t + 1);
+
+            for (size_t j = tag.lsub; j <= tag.hsub && m < e; j += 2, ++m) {
+                DASSERT(m - 1 == &pmatch[j / 2]);
+                m->rm_so = so;
+                m->rm_eo = eo;
+            }
+        }
+    }
+}
+
 template<typename history_t>
 int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
     regmatch_t pmatch[])
@@ -328,25 +383,8 @@ int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
         }
     }
 
-    regmatch_t *m = pmatch, *e = pmatch + nmatch;
-
-    m->rm_so = 0;
-    m->rm_eo = ctx.marker - string - 1;
-    ++m;
-
-    for (size_t t = 0; t < ntags && m < e; t += 2) {
-        const Tag &tag = tags[t];
-        if (!fictive(tag)) {
-            const regoff_t so = ctx.offsets3[t];
-            const regoff_t eo = ctx.offsets3[t + 1];
-
-            for (size_t j = tag.lsub; j <= tag.hsub && m < e; j += 2, ++m) {
-                DASSERT(m - 1 == &pmatch[j / 2]);
-                m->rm_so = so;
-                m->rm_eo = eo;
-            }
-        }
-    }
+    const getoff_nfa_t fn = { ctx.offsets3 };
+    tags_to_submatch(tags, nmatch, pmatch, ctx.marker - string - 1, fn);
 
     return 0;
 }

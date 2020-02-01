@@ -82,32 +82,11 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
         return REG_NOMATCH;
     }
 
-    int result = 0;
-    regmatch_t *m = pmatch, *e = pmatch + nmatch;
     const regoff_t mlen = p - string - 1;
-    const Rule &rule = dfa->rules[0];
-
+    const getoff_dfa_t fn = { dfa, regs, mlen };
     apply_regops(regs, s->tcmd[dfa->nchars], mlen);
-
-    m->rm_so = 0;
-    m->rm_eo = mlen;
-    ++m;
-
-    for (size_t t = rule.ltag; t < rule.htag && m < e; t += 2) {
-        const Tag &tag = dfa->tags[t];
-        if (!fictive(tag)) {
-            const regoff_t so = get_offset(dfa, t,     regs, mlen);
-            const regoff_t eo = get_offset(dfa, t + 1, regs, mlen);
-
-            for (size_t j = tag.lsub; j <= tag.hsub && m < e; j += 2, ++m) {
-                DASSERT(m - 1 == &pmatch[j / 2]);
-                m->rm_so = so;
-                m->rm_eo = eo;
-            }
-        }
-    }
-
-    return result;
+    tags_to_submatch(dfa->tags, nmatch, pmatch, mlen, fn);
+    return 0;
 }
 
 } // namespace libre2c
