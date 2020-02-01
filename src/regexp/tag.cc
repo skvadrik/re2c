@@ -11,7 +11,8 @@ const size_t Tag::FICTIVE = Tag::RIGHTMOST - 1;
 
 Tag::Tag(const std::string *nm, bool hi, int32_t ht)
     : name(nm)
-    , ncap(Tag::RIGHTMOST)
+    , lsub(Tag::RIGHTMOST)
+    , hsub(Tag::RIGHTMOST)
     , base(Tag::RIGHTMOST)
     , dist(Tag::VARDIST)
     , lnest(Tag::RIGHTMOST)
@@ -22,9 +23,10 @@ Tag::Tag(const std::string *nm, bool hi, int32_t ht)
 {}
 
 
-Tag::Tag(size_t nc, bool ob, int32_t ht)
+Tag::Tag(size_t lsub, size_t hsub, bool ob, int32_t ht)
     : name(NULL)
-    , ncap(nc)
+    , lsub(lsub)
+    , hsub(hsub)
     , base(Tag::RIGHTMOST)
     , dist(Tag::VARDIST)
     , lnest(Tag::RIGHTMOST)

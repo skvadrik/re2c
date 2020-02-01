@@ -29,7 +29,8 @@ struct Tag
     static const size_t FICTIVE;
 
     const std::string *name;
-    size_t ncap;
+    size_t lsub;
+    size_t hsub;
     size_t base;
     size_t dist;
     size_t lnest;
@@ -39,7 +40,7 @@ struct Tag
     int32_t height;
 
     Tag(const std::string *nm, bool hi, int32_t ht);
-    Tag(size_t nc, bool ob, int32_t ht);
+    Tag(size_t lsub, size_t hsub, bool ob, int32_t ht);
 };
 
 inline bool operator == (const tag_info_t &x, const tag_info_t &y)
@@ -57,12 +58,12 @@ inline bool fixed(const Tag &tag)
 
 inline bool fictive(const Tag &tag)
 {
-    return tag.ncap == Tag::FICTIVE;
+    return tag.lsub == Tag::FICTIVE;
 }
 
 inline bool capture(const Tag &tag)
 {
-    return tag.ncap != Tag::RIGHTMOST;
+    return tag.lsub != Tag::RIGHTMOST;
 }
 
 inline bool orbit(const Tag &tag)

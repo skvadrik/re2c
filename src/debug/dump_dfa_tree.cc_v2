@@ -1,0 +1,277 @@
+#ifdef RE2C_DEBUG
+
+#include "src/util/c99_stdint.h"
+#include <stdio.h>
+
+#include "src/debug/debug.h"
+#include "src/dfa/determinization.h"
+#include "src/dfa/tag_history.h"
+
+
+namespace re2c {
+
+// explicit specialization for context types
+template dump_dfa_tree_t<pdetctx_t>::dump_dfa_tree_t(const pdetctx_t &ctx);
+template dump_dfa_tree_t<ldetctx_t>::dump_dfa_tree_t(const ldetctx_t &ctx);
+template dump_dfa_tree_t<pdetctx_t>::~dump_dfa_tree_t();
+template dump_dfa_tree_t<ldetctx_t>::~dump_dfa_tree_t();
+template void dump_dfa_tree_t<pdetctx_t>::state(bool isnew);
+template void dump_dfa_tree_t<ldetctx_t>::state(bool isnew);
+
+template<typename history_t>
+static void dump_history(const history_t &history, std::set<int32_t> &used,
+    hidx_t idx)
+{
+    if (idx == HROOT || !used.insert(idx).second) return;
+    dump_history(history, used, history.node(idx).pred);
+    fprintf(stderr, "->h%d", idx);
+}
+
+template<typename history_t>
+static hidx_t dump_history2(const history_t &history, std::set<int32_t> &used,
+    hidx_t idx, size_t target, bool b)
+{
+    if (idx == HROOT) return HROOT;
+    hidx_t ww = dump_history2(history, used, history.node(idx).pred, target, b);
+    if (used.insert(idx).second) {
+        fprintf(stderr, "%shx%lu_%d", history.node(idx).pred == HROOT ? "" : "->", target, !b ? idx : idx + 200);
+    }
+    return ww == HROOT ? idx : ww;
+}
+
+template<typename ctx_t>
+dump_dfa_tree_t<ctx_t>::dump_dfa_tree_t(const ctx_t &ctx)
+    : ctx(ctx)
+    , uniqidx(0)
+    , used_nodes()
+{
+    if (!ctx.dc_opts->dump_dfa_tree) return;
+
+    fprintf(stderr,
+        "digraph tag_tree {\n"
+        "  rankdir=LR\n"
+        "  graph[style=rounded]\n"
+        "  node[shape=rectangle style=rounded fontname=Courier]\n"
+        "  node[height=0.2 width=0.2 margin=0.025]\n"
+        "  edge[arrowhead=vee arrowsize=0.5 fontname=Courier label=\"\"]\n"
+        "  fontname=Courier\n"
+        "  ranksep=0.25\n"
+        "  compound=true\n\n");
+}
+
+template<typename ctx_t>
+dump_dfa_tree_t<ctx_t>::~dump_dfa_tree_t()
+{
+    if (!ctx.dc_opts->dump_dfa_tree) return;
+
+#if 0
+    for (uint32_t i = 0; i < ctx.history.nodes.size(); ++i) {
+        if (used_nodes.find(static_cast<int32_t>(i)) != used_nodes.end()) {
+            fprintf(stderr, " h%d[label=\"%u\"]\n", i, ctx.history.nodes[i].info.idx);
+        }
+    }
+#endif
+
+    const size_t nkern = ctx.dc_kernels.size();
+    std::vector<size_t> path;
+    std::vector<uint32_t> sym(nkern);
+    std::vector<uint32_t> been(nkern);
+    const nfa_t &nfa = ctx.nfa;
+
+    path.push_back(0);
+    been[0]++;
+    for (; !path.empty(); ) {
+        const size_t i = path.back();
+        uint32_t c = sym[i];
+
+        for (; c < ctx.dfa.nchars && ctx.dfa.states[i]->arcs[c] == dfa_t::NIL; ++c);
+
+        if (c < ctx.dfa.nchars || been[i] > 1) {
+
+
+
+            const size_t targetx = path.back() + (been[i] > 1 ? 1000 : 0);
+
+            fprintf(stderr, "subgraph cluster_path%lu {\n", targetx);
+            fprintf(stderr, "style=invis\n");
+
+            std::map<const nfa_state_t*, std::pair<std::set<const nfa_state_t *>, std::set<hidx_t> > > active;
+
+            const kernel_t *kernel = ctx.dc_kernels[(uint32_t)path.back()];
+            for (uint32_t ki = 0; ki < kernel->size; ++ki) {
+                active[kernel->state[ki]].first.insert(kernel->state[ki]);
+            }
+
+            for (size_t k = path.size(); k --> 0; ) {
+                const size_t target = path[k];
+                const kernel_t *kernel = ctx.dc_kernels[(uint32_t)target];
+
+                const bool b = been[i] > 1 && k == path.size() - 1;
+
+                if (k == 0) {
+                    std::set<int32_t> used_nodes2;
+                    for (uint32_t ki = 0; ki < kernel->size; ++ki) {
+                        if (active.find(kernel->state[ki]) == active.end()) continue;
+
+
+                        const hidx_t ww = dump_history2(ctx.history, used_nodes2, kernel->thist[ki], targetx, b);
+
+
+                        std::set<const nfa_state_t *> &m1 = active.find(kernel->state[ki])->second.first;
+                        std::set<hidx_t> &m2 = active.find(kernel->state[ki])->second.second;
+
+                        for (std::set<const nfa_state_t *>::iterator m1i = m1.begin(); m1i != m1.end(); ++m1i) {
+                            if (kernel->thist[ki] != HROOT) {
+                                fprintf(stderr, " hx%lu_%d->nx%lu_%u\n",
+                                    targetx, kernel->thist[ki], targetx, index(nfa, *m1i));
+                            }
+                            else {
+                                fprintf(stderr, " void%lu->nx%lu_%u\n", targetx, targetx, index(nfa, *m1i));
+                            }
+                        }
+                        for (std::set<hidx_t>::iterator m2i = m2.begin(); m2i != m2.end(); ++m2i) {
+                            if (kernel->thist[ki] != HROOT) {
+                                fprintf(stderr, " hx%lu_%d->hx%lu_%d\n",
+                                    targetx, kernel->thist[ki], targetx, *m2i);
+                            }
+                            else {
+                                fprintf(stderr, " void%lu->hx%lu_%d\n", targetx, targetx, *m2i);
+                            }
+                        }
+
+                        fprintf(stderr, "  void%lu->hx%lu_%d\n", targetx, targetx, ww);
+                    }
+                    break;
+                }
+
+                const size_t origin = path[k - 1];
+
+                std::map<const nfa_state_t*, std::pair<std::set<const nfa_state_t *>, std::set<hidx_t> > > active1;
+
+                std::set<int32_t> used_nodes2;
+                for (uint32_t ki = 0; ki < kernel->size; ++ki) {
+                    if (active.find(kernel->state[ki]) == active.end()) continue;
+
+                    const nfa_state_t *z = ctx.dc_kernels[(uint32_t)origin]->state[kernel->origin[ki]];
+
+                    const hidx_t ww = dump_history2(ctx.history, used_nodes2, kernel->thist[ki], targetx, b);
+
+                    std::set<const nfa_state_t *> &m1 = active.find(kernel->state[ki])->second.first;
+                    std::set<hidx_t> &m2 = active.find(kernel->state[ki])->second.second;
+
+                    for (std::set<const nfa_state_t *>::iterator m1i = m1.begin(); m1i != m1.end(); ++m1i) {
+                        if (kernel->thist[ki] != HROOT) {
+                            fprintf(stderr, " hx%lu_%d->nx%lu_%u\n",
+                                targetx, b ? kernel->thist[ki] + 200 : kernel->thist[ki], targetx, index(nfa, *m1i));
+                        }
+                        else {
+                            active1[z].first.insert(*m1i);
+                        }
+                    }
+                    for (std::set<hidx_t>::iterator m2i = m2.begin(); m2i != m2.end(); ++m2i) {
+                        if (kernel->thist[ki] != HROOT) {
+                            fprintf(stderr, " hx%lu_%d->hx%lu_%d\n",
+                                targetx, b ? kernel->thist[ki] + 200 : kernel->thist[ki], targetx, *m2i);
+                        }
+                        else {
+                            active1[z].second.insert(b ? *m2i + 200 : *m2i);
+                        }
+                    }
+
+                    if (ww != HROOT) {
+                        active1[z].second.insert(b ? ww + 200 : ww);
+                    }
+                }
+                active.swap(active1);
+            }
+
+            fprintf(stderr, "}\n");
+        }
+
+
+        if (been[i] > 1) {
+            path.pop_back();
+            been[i]--;
+        }
+        else if (c == ctx.dfa.nchars) {
+            sym[i] = c;
+            path.pop_back();
+            been[i]--;
+        }
+        else {
+            const size_t j = ctx.dfa.states[i]->arcs[c];
+            DASSERT(j != dfa_t::NIL);
+
+            sym[i] = c + 1;
+            path.push_back(ctx.dfa.states[i]->arcs[c]);
+            been[j]++;
+        }
+    }
+
+    fprintf(stderr, "}\n");
+}
+
+template<typename ctx_t>
+void dump_dfa_tree_t<ctx_t>::state(bool isnew)
+{
+    if (!ctx.dc_opts->dump_dfa_tree) return;
+
+    const nfa_t &nfa = ctx.nfa;
+    cclositer_t b = ctx.state.begin(), e = ctx.state.end(), c;
+    const uint32_t origin = ctx.dc_origin;
+    const uint32_t target = ctx.dc_target;
+    const uint32_t targetx = isnew ? target : ++uniqidx;
+
+    if (target == dfa_t::NIL) return;
+
+    // initial "void" node
+    if (origin == dfa_t::NIL) {
+        fprintf(stderr,
+            " subgraph cluster_void {\n"
+            "  style=invis\n"
+            "  void[label=\" \" style=\"rounded,filled\"  bgcolor=lightgray]\n"
+            " }\n");
+    }
+
+    // start cluster for the current tag history tree
+    fprintf(stderr,
+        " subgraph cluster%u {\n"
+        "  label=\"%sS%u\"\n", targetx, isnew ? "" : "mapped to ", target);
+
+    // align TNFA states vertically by assigning them equal rank
+    fprintf(stderr,
+        "  subgraph {\n"
+        "   rank=same\n");
+    for (c = b; c != e; ++c) {
+        fprintf(stderr,
+            "   n%u_%u [label=\"s%u\" style=\"rounded,filled\" bgcolor=lightgray]\n",
+            targetx, index(nfa, c->state), index(nfa, c->state));
+    }
+    fprintf(stderr, "  }\n");
+
+    // mapped states are marked as dotted
+    if (!isnew) {
+        fprintf(stderr, "  style=\"rounded,dotted\"\n");
+    }
+
+    // transitions constituiting the tag history tree
+    for (c = b; c != e; ++c) {
+        if (origin == dfa_t::NIL) {
+            fprintf(stderr, "  void");
+        }
+        else {
+            fprintf(stderr, "  n%u_%u",
+                origin, index(nfa, ctx.dc_kernels[origin]->state[c->origin]));
+        }
+        dump_history(ctx.history, used_nodes, c->thist);
+        fprintf(stderr, "->n%u_%u%s\n",
+            targetx, index(nfa, c->state), isnew ? "" : " [style=dotted]");
+    }
+
+    // end cluster for the current tag history tree
+    fprintf(stderr, " }\n");
+}
+
+} // namespace re2c
+
+#endif // RE2C_DEBUG

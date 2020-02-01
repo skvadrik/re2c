@@ -512,7 +512,7 @@ void emit_action(Output &o, uint32_t ind, const DFA &dfa, size_t rid)
         const Tag &tag = dfa.tags[t];
         if (t == r.ttag || fictive(tag)) continue;
 
-        const std::string tname = tagname(tag);
+        const std::string tname = tag_expr(tag, false);
         if (history(tag)) {
             o.ws("\n").wind(ind + 1).ws(" || check_mtag_").wstring(name)
                 .ws("(&i, keys, &yytp, ").wstring(tname).ws(", input, token, \"")

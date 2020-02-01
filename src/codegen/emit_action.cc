@@ -517,7 +517,7 @@ void gen_fintags(Output &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 
         o.wind(ind);
         if (!trailing(tag)) {
-            o.wstring(tagname(tag)).ws(" = ").wstring(expr);
+            o.wstring(tag_expr(tag, true)).ws(" = ").wstring(expr);
         } else if (generic) {
             if (dfa.oldstyle_ctxmarker) {
                 o.wstring(opts->yyrestorectx).ws(" ()");
@@ -550,14 +550,14 @@ void gen_fintags(Output &o, uint32_t ind, const DFA &dfa, const Rule &rule)
         if (generic) {
             DASSERT(dist == 0);
             if (!trailing(tag)) {
-                o.wstring(tagname(tag)).ws(" = ").wstring(expr);
+                o.wstring(tag_expr(tag, true)).ws(" = ").wstring(expr);
             } else if (!fixed_on_cursor) {
                 DASSERT(!dfa.oldstyle_ctxmarker);
                 o.wstring(opts->yyrestoretag).ws(" (").wstring(expr).ws(")");
             }
         } else {
             if (!trailing(tag)) {
-                o.wstring(tagname(tag)).ws(" = ").wstring(expr);
+                o.wstring(tag_expr(tag, true)).ws(" = ").wstring(expr);
                 if (dist > 0) o.ws(" - ").wu64(dist);
             } else if (!fixed_on_cursor) {
                 o.wstring(opts->yycursor).ws(" = ").wstring(expr);
@@ -570,12 +570,23 @@ void gen_fintags(Output &o, uint32_t ind, const DFA &dfa, const Rule &rule)
     }
 }
 
-std::string tagname(const Tag &tag)
+std::string tag_expr(const Tag &tag, bool lvalue)
 {
     DASSERT(!trailing(tag));
-    return capture(tag)
-        ? "yypmatch[" + to_string(tag.ncap) + "]"
-        : *tag.name;
+
+    // named tag
+    if (!capture(tag)) {
+        return *tag.name;
+    }
+
+    // capture tag, maps to a range of parentheses
+    std::string s = "yypmatch[" + to_string(tag.lsub) + "]";
+    if (lvalue) {
+        for (size_t i = tag.lsub + 2; i <= tag.hsub; i += 2) {
+            s += " = yypmatch[" + to_string(i) + "]";
+        }
+    }
+    return s;
 }
 
 bool endstate(const State *s)

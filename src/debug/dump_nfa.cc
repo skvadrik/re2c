@@ -57,16 +57,7 @@ void dump_nfa(const nfa_t &nfa)
             case nfa_state_t::TAG: {
                 const Tag &tag = nfa.tags[n->tag.info.idx];
                 fprintf(stderr, "  n%u -> n%u [label=\"/", i, index(nfa, n->tag.out));
-                if (capture(tag)) {
-                    fprintf(stderr, "%u", (uint32_t)tag.ncap);
-                } else if (!trailing(tag)) {
-                    fprintf(stderr, "%s", tag.name->c_str());
-                }
-                if (n->tag.info.neg) {
-                    fprintf(stderr, "&darr;");
-                } else {
-                    fprintf(stderr, "&uarr;");
-                }
+                dump_tag(tag, n->tag.info.neg);
                 fprintf(stderr, "(%d)", tag.height);
                 fprintf(stderr, "\"]\n");
                 break;
@@ -80,6 +71,20 @@ void dump_nfa(const nfa_t &nfa)
     }
 
     fprintf(stderr, "}\n");
+}
+
+void dump_tag(const Tag &tag, bool negative)
+{
+    if (capture(tag)) {
+        for (size_t i = tag.lsub; i < tag.hsub; i += 2) {
+            fprintf(stderr, "%u,", (uint32_t)i);
+        }
+        fprintf(stderr, "%u", (uint32_t)tag.hsub);
+    }
+    else if (!trailing(tag)) {
+        fprintf(stderr, "%s", tag.name->c_str());
+    }
+    fprintf(stderr, "%s", negative ? "&darr;" : "&uarr;");
 }
 
 } // namespace re2c

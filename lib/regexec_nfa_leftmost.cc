@@ -47,19 +47,25 @@ int regexec_nfa_leftmost(const regex_t *preg, const char *string
         return REG_NOMATCH;
     }
 
-    regmatch_t *m = pmatch;
+    const std::vector<Tag> &tags = ctx.nfa.tags;
+    const size_t ntags = tags.size();
+    regmatch_t *m = pmatch, *e = pmatch + nmatch;
+
     m->rm_so = 0;
     m->rm_eo = ctx.marker - string - 1;
-    const size_t n = std::min(ctx.nfa.tags.size(), 2 * nmatch);
-    for (size_t t = 0; t < n; ++t) {
-        DASSERT(!fictive(ctx.nfa.tags[t]));
-        const regoff_t off = ctx.offsets3[t];
-        if (t % 2 == 0) {
-            ++m;
-            m->rm_so = off;
-        }
-        else {
-            m->rm_eo = off;
+    ++m;
+
+    for (size_t t = 0; t < ntags && m < e; t += 2) {
+        const Tag &tag = tags[t];
+        DASSERT(!fictive(tag));
+
+        const regoff_t so = ctx.offsets3[t];
+        const regoff_t eo = ctx.offsets3[t + 1];
+
+        for (size_t j = tag.lsub; j <= tag.hsub && m < e; j += 2, ++m) {
+            DASSERT(m - 1 == &pmatch[j / 2]);
+            m->rm_so = so;
+            m->rm_eo = eo;
         }
     }
 

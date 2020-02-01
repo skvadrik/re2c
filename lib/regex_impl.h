@@ -214,11 +214,11 @@ simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsu
     reach.reserve(nstates);
 
     done = new bool[ntags];
+    offsets3 = new regoff_t[ntags];
 
     if (!(flags & REG_TRIE)) {
         offsets1 = new regoff_t[ntags * ncores];
         offsets2 = new regoff_t[ntags * ncores];
-        offsets3 = new regoff_t[ntags];
     }
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
         const size_t dim = (flags & REG_KUKLEWICZ) ? ntags : ncores;
@@ -246,10 +246,10 @@ template<typename history_t>
 simctx_t<history_t>::~simctx_t()
 {
     delete[] done;
+    delete[] offsets3;
     if (!(flags & REG_TRIE)) {
         delete[] offsets1;
         delete[] offsets2;
-        delete[] offsets3;
     }
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
         delete[] newprectbl;
@@ -295,42 +295,57 @@ int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
         return REG_NOMATCH;
     }
 
-    regmatch_t *m = pmatch;
-    m->rm_so = 0;
-    m->rm_eo = ctx.marker - string - 1;
-
     const std::vector<Tag> &tags = ctx.nfa.tags;
-    size_t todo = nmatch * 2;
+    const size_t ntags = tags.size();
     bool *done = ctx.done;
-    memset(done, 0, ctx.nsub * sizeof(bool));
 
-    for (int32_t i = ctx.hidx; todo > 0 && i != HROOT; ) {
+    // TODO: replace booleans with step numbers to avoid initialization
+    memset(done, 0, ntags * sizeof(bool));
+
+    for (int32_t i = ctx.hidx; i != HROOT; ) {
         const typename history_t::node_t &n = ctx.history.node(i);
-        const Tag &tag = tags[n.info.idx];
-        const size_t t = tag.ncap;
+        i = n.pred;
+        const size_t t = n.info.idx;
 
-        // Set negative tag, together with its sibling and nested tags (if any),
-        // unless already set. Fictive tags may have nested non-fictive tags.
-        if (n.info.neg && (fictive(tag) || !done[t])) {
+        // If already updated, skip.
+        if (done[t]) continue;
+
+        // Update positive tag.
+        if (!n.info.neg) {
+            done[t] = true;
+            ctx.offsets3[t] = static_cast<regoff_t>(n.step);
+        }
+
+        // Update negative tag together with its sibling and nested tags (if any).
+        else {
+            const Tag &tag = tags[t];
             for (size_t l = tag.lnest; l < tag.hnest; ++l) {
-                const Tag &ntag = tags[l];
-                const size_t nt = ntag.ncap;
-                if (!fictive(ntag) && !done[nt] && nt < nmatch * 2) {
-                    done[nt] = true;
-                    --todo;
-                    *offs_addr(pmatch, nt) = -1;
+                if (!done[l]) {
+                    done[l] = true;
+                    ctx.offsets3[l] = -1;
                 }
             }
         }
+    }
 
-        // Set positive tag (unless already set).
-        else if (!fictive(tag) && !done[t] && t < nmatch * 2) {
-            done[t] = true;
-            --todo;
-            *offs_addr(pmatch, t) = static_cast<regoff_t>(n.step);
+    regmatch_t *m = pmatch, *e = pmatch + nmatch;
+
+    m->rm_so = 0;
+    m->rm_eo = ctx.marker - string - 1;
+    ++m;
+
+    for (size_t t = 0; t < ntags && m < e; t += 2) {
+        const Tag &tag = tags[t];
+        if (!fictive(tag)) {
+            const regoff_t so = ctx.offsets3[t];
+            const regoff_t eo = ctx.offsets3[t + 1];
+
+            for (size_t j = tag.lsub; j <= tag.hsub && m < e; j += 2, ++m) {
+                DASSERT(m - 1 == &pmatch[j / 2]);
+                m->rm_so = so;
+                m->rm_eo = eo;
+            }
         }
-
-        i = n.pred;
     }
 
     return 0;
@@ -383,7 +398,6 @@ void update_offsets(simctx_t<history_t> &ctx, const conf_t &c, uint32_t id)
                 }
             }
         }
-
     }
 }
 

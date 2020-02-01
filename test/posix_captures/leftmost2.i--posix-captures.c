@@ -24,10 +24,8 @@ yy3:
 	yyt2 = YYCURSOR;
 yy4:
 	yynmatch = 4;
-	yypmatch[2] = yyt1;
-	yypmatch[3] = yyt2;
-	yypmatch[4] = yyt1;
-	yypmatch[5] = yyt2;
+	yypmatch[2] = yypmatch[4] = yyt1;
+	yypmatch[3] = yypmatch[5] = yyt2;
 	yypmatch[6] = yyt3;
 	yypmatch[7] = yyt3;
 	yypmatch[0] = YYCURSOR - 1;

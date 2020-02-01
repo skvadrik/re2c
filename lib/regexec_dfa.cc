@@ -27,11 +27,27 @@ static void apply_regops(regoff_t *regs, const tcmd_t *cmd, regoff_t pos)
     }
 }
 
+static inline regoff_t get_offset(const dfa_t *dfa, size_t tidx,
+    const regoff_t *regs, regoff_t mlen)
+{
+    const Tag &tag = dfa->tags[tidx];
+    regoff_t off;
+    if (!fixed(tag)) {
+        off = regs[dfa->finvers[tidx]];
+    }
+    else {
+        off = tag.base == Tag::RIGHTMOST
+            ? mlen : regs[dfa->finvers[tag.base]];
+        DASSERT (off != -1);
+        off -= static_cast<regoff_t>(tag.dist);
+    }
+    return off;
+}
+
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
     regmatch_t pmatch[], int /* eflags */)
 {
     const dfa_t *dfa = preg->dfa;
-    int result = REG_NOMATCH;
     regoff_t *regs = preg->regs;
     size_t i = 0;
     const char *p = string, *q = p;
@@ -62,41 +78,31 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
         p = q;
     }
 
-    if (s->rule != Rule::NONE) {
-        regmatch_t *m = pmatch;
-        result = 0;
-        const regoff_t mlen = p - string - 1;
+    if (s->rule == Rule::NONE) {
+        return REG_NOMATCH;
+    }
 
-        apply_regops(regs, s->tcmd[dfa->nchars], mlen);
+    int result = 0;
+    regmatch_t *m = pmatch, *e = pmatch + nmatch;
+    const regoff_t mlen = p - string - 1;
+    const Rule &rule = dfa->rules[0];
 
-        m->rm_so = 0;
-        m->rm_eo = mlen;
-        ++m;
+    apply_regops(regs, s->tcmd[dfa->nchars], mlen);
 
-        const Rule &rule = dfa->rules[0];
-        for (size_t t = rule.ltag; t < rule.htag; ++t) {
+    m->rm_so = 0;
+    m->rm_eo = mlen;
+    ++m;
 
-            const Tag &tag = dfa->tags[t];
-            if (fictive(tag)) continue;
-            if (tag.ncap >= nmatch * 2) break;
+    for (size_t t = rule.ltag; t < rule.htag && m < e; t += 2) {
+        const Tag &tag = dfa->tags[t];
+        if (!fictive(tag)) {
+            const regoff_t so = get_offset(dfa, t,     regs, mlen);
+            const regoff_t eo = get_offset(dfa, t + 1, regs, mlen);
 
-            regoff_t off;
-            if (!fixed(tag)) {
-                off = regs[dfa->finvers[t]];
-            }
-            else {
-                off = tag.base == Tag::RIGHTMOST
-                    ? mlen : regs[dfa->finvers[tag.base]];
-                DASSERT (off != -1);
-                off -= static_cast<regoff_t>(tag.dist);
-            }
-
-            if (tag.ncap % 2 == 0) {
-                m->rm_so = off;
-            }
-            else {
-                m->rm_eo = off;
-                ++m;
+            for (size_t j = tag.lsub; j <= tag.hsub && m < e; j += 2, ++m) {
+                DASSERT(m - 1 == &pmatch[j / 2]);
+                m->rm_so = so;
+                m->rm_eo = eo;
             }
         }
     }

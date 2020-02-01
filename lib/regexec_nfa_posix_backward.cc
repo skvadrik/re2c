@@ -164,20 +164,28 @@ int regexec_nfa_posix_backward(const regex_t *preg, const char *string
         return REG_NOMATCH;
     }
 
-    regmatch_t *m = pmatch;
+    const std::vector<Tag> &tags = ctx.nfa.tags;
+    const size_t ntags = tags.size();
+    regmatch_t *m = pmatch, *e = pmatch + nmatch;
+
     m->rm_so = 0;
     m->rm_eo = static_cast<regoff_t>(len);
-    const size_t n = std::min(ctx.nsub, 2 * nmatch);
-    for (size_t t = 0; t < n; ++t) {
-        const regoff_t off = ctx.offsets3[t];
-        if (t % 2 == 0) {
-            ++m;
-            m->rm_so = off;
-        }
-        else {
-            m->rm_eo = off;
+    ++m;
+
+    for (size_t t = 0; t < ntags && m < e; t += 2) {
+        const Tag &tag = tags[t];
+        if (!fictive(tag)) {
+            const regoff_t so = ctx.offsets3[t];
+            const regoff_t eo = ctx.offsets3[t + 1];
+
+            for (size_t j = tag.lsub; j <= tag.hsub && m < e; j += 2, ++m) {
+                DASSERT(m - 1 == &pmatch[j / 2]);
+                m->rm_so = so;
+                m->rm_eo = eo;
+            }
         }
     }
+
     return 0;
 }
 
@@ -565,11 +573,9 @@ void update_final_offsets(psimctx_t &ctx, const conf_t &c)
     if (D) fprintf(stderr, "finally: ");
     prtoff4(ctx, index(s, ctx.nfa));
 
-    for (size_t t = 0; t < ntags; ++t) {
-        const Tag &tag = tags[t];
-        if (!fictive(tag)) {
-            of[tag.ncap] = ox[2 * t + 1];
-        }
+    for (size_t t = 0; t < ntags; t += 2) {
+        of[t]     = ox[2 * t       + 1];
+        of[t + 1] = ox[2 * (t + 1) + 1];
     }
 }
 

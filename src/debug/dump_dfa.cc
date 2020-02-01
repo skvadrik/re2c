@@ -175,16 +175,8 @@ void dump_history(const dfa_t &dfa
     }
 
     const typename ctx_t::history_t::node_t &n = h.node(i);
-
     dump_history<ctx_t>(dfa, h, n.pred);
-
-    const Tag &t = dfa.tags[n.info.idx];
-    if (capture(t)) {
-        fprintf(stderr, "%u", (uint32_t)t.ncap);
-    } else if (!trailing(t)) {
-        fprintf(stderr, "%s", t.name->c_str());
-    }
-    fprintf(stderr, n.info.neg ? "&darr;" : "&uarr;");
+    dump_tag(dfa.tags[n.info.idx], n.info.neg);
     fprintf(stderr, " ");
 }
 

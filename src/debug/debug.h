@@ -48,6 +48,7 @@ struct nfa_t;
 struct nfa_state_t;
 struct opt_t;
 struct tcmd_t;
+struct Tag;
 
 struct closure_stats_t
 {
@@ -107,6 +108,7 @@ void dump_adfa(const DFA &);
 void dump_cfg(const cfg_t &, const bool *);
 void dump_interf(const cfg_t &, const bool *);
 void dump_tcmd(const tcmd_t *);
+void dump_tag(const Tag &tag, bool negative);
 template<typename ctx_t> void dump_clstats(const ctx_t &);
 template<typename ctx_t> void reset_clstats(ctx_t &);
 uint32_t index(const nfa_t &nfa, const nfa_state_t *s);

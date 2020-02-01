@@ -14,10 +14,8 @@
 yy2:
 	yynmatch = 3;
 	yypmatch[0] = yyt2;
-	yypmatch[2] = yyt3;
-	yypmatch[3] = yyt1;
-	yypmatch[4] = yyt3;
-	yypmatch[5] = yyt1;
+	yypmatch[2] = yypmatch[4] = yyt3;
+	yypmatch[3] = yypmatch[5] = yyt1;
 	yypmatch[1] = YYCURSOR;
 	{}
 yy3:
