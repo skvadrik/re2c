@@ -354,7 +354,6 @@ int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
     const size_t ntags = tags.size();
     bool *done = ctx.done;
 
-    // TODO: replace booleans with step numbers to avoid initialization
     memset(done, 0, ntags * sizeof(bool));
 
     for (int32_t i = ctx.hidx; i != HROOT; ) {
@@ -408,8 +407,6 @@ void update_offsets(simctx_t<history_t> &ctx, const conf_t &c, uint32_t id)
     }
 
     memcpy(o, ctx.offsets2 + c.origin * ntags, ntags * sizeof(regoff_t));
-
-    // TODO: replace booleans with step numbers to avoid initialization
     memset(done, 0, ntags * sizeof(bool));
 
     for (int32_t i = c.thist; i != HROOT; ) {
