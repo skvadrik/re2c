@@ -47,7 +47,7 @@ $ ./configure [--prefix=<prefix>]
 $ make
 $ make install
 ```
-See the [official documantation](http://re2c.org/install/install.html) for full details on more sophisticated build types.
+See the [official documentation](http://re2c.org/install/install.html) for full details on more sophisticated build types.
 If you want to build from git, you will first need to generate autotools files:
 
 ```
