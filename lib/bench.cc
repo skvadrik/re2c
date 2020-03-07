@@ -157,13 +157,17 @@ static Result bench_re2(const char *regexp, std::vector<std::string> &strings
 }
 #endif
 
-static uint32_t groupcnt(const char *r)
+static size_t groupcnt(const char *regexp)
 {
-    uint32_t cnt = 0;
-    for (; *r; ++r) {
-        if (*r == '(') ++cnt;
+    regex_t re;
+    int err = regcomp(&re, regexp, REG_NFA);
+    if (err) {
+        fprintf(stderr,
+            "*** cannot find the number of capturing groups for RE %s\n",
+            regexp);
+        exit(1);
     }
-    return cnt;
+    return re.re_nsub;
 }
 
 static void bench(const char *r, std::vector<std::string> &ss, uint32_t n
@@ -172,25 +176,25 @@ static void bench(const char *r, std::vector<std::string> &ss, uint32_t n
     assert(!ss.empty());
     const char *s0 = ss[0].c_str();
 
-    fprintf(stderr, "\nr: %.*s..., s: %.*s..., n: %u, %lu chars, %u groups\n"
-        , 30, r, 30, s0, n, (unsigned long)strlen(r), groupcnt(r));
+    fprintf(stderr, "\nr: %.*s..., s: %.*s..., n: %u, %u chars, %u groups\n"
+        , 30, r, 30, s0, n, (uint32_t)strlen(r), (uint32_t)groupcnt(r));
 
     std::vector<Result> rs;
 
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_LEFTMOST,             mask, need, "re2c-tnfa-leftmost"));
+    rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE | REG_LEFTMOST,  mask, need, "re2c-tnfa-leftmost-trie"));
 #ifdef HAVE_RE2_RE2_H
     rs.push_back(bench_re2(r, ss, n, mask, "re2"));
 #endif
     rs.push_back(bench_re2c(r, ss, n, REG_NFA,                            mask, need, "re2c-tnfa-posix-gor1"));
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_GTOP,                 mask, need, "re2c-tnfa-posix-gtop"));
-    rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_KUKLEWICZ,            mask, need, "re2c-tnfa-posix-kukl-gor1"));
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_SLOWPREC,             mask, need, "re2c-tnfa-posix-gor1-slow"));
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE,                 mask, need, "re2c-tnfa-posix-gor1-trie"));
+    rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_KUKLEWICZ,            mask, need, "re2c-tnfa-posix-kukl-gor1"));
     rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_BACKWARD,             mask, need, "re2c-tnfa-posix-back-gor1"));
-    rs.push_back(bench_re2c(r, ss, n, REG_STADFA,                         mask, need, "re2c-tdfa-stadfa"));
-    rs.push_back(bench_re2c(r, ss, n, 0,                                  mask, need, "re2c-tdfa"));
+    //rs.push_back(bench_re2c(r, ss, n, REG_STADFA,                         mask, need, "re2c-tdfa-stadfa"));
+    //rs.push_back(bench_re2c(r, ss, n, 0,                                  mask, need, "re2c-tdfa"));
     //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE | REG_GTOP,      mask, need, "re2c-tnfa-posix-gtop-trie"));
-    //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_TRIE | REG_LEFTMOST,  mask, need, "re2c-tnfa-leftmost-trie"));
     //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_KUKLEWICZ | REG_GTOP, mask, need, "re2c-tnfa-posix-kukl-gtop"));
     //rs.push_back(bench_re2c(r, ss, n, REG_NFA | REG_BACKWARD | REG_GTOP,  mask, need, "re2c-tnfa-posix-back-gtop"));
 
@@ -301,10 +305,31 @@ static void load_strings(const char *fname, const char *delim
 #define HEADER_FIELD2   "([-._~%!$&'*+#^`|a-zA-Z0-9]+:[\\x1f-\\x7e\\x80-\\xff \\t\\n]*)"
 #define MESSAGE_HEAD2   "(" REQUEST_LINE2 "|" STATUS_LINE2 ")" "(" HEADER_FIELD2 CRLF ")*"
 
+// simplified IPv6
+#define IPV62 "(((" H16 ":){0,7}" H16 ")?(::)?((" H16 ":){0,7}" H16 ")?)"
+
+// Gentoo package atom
+#define PACKAGE_STR    "([a-zA-Z0-9_+-]+)"
+#define PACKAGE_NUM     "([0-9]+)"
+#define PACKAGE_VER     "(" PACKAGE_NUM "([.]" PACKAGE_NUM ")*)"
+#define PACKAGE_SFX1    "([a-z])?"
+#define PACKAGE_SFX2    "((alpha|beta|pre|rc|p)" PACKAGE_NUM "?)"
+#define PACKAGE_REV     "(-r" PACKAGE_NUM ")?"
+#define PACKAGE_ATOM    PACKAGE_STR "/" PACKAGE_STR "-" PACKAGE_VER PACKAGE_SFX1 "(_" PACKAGE_SFX2 ")*" PACKAGE_REV
+
+// simplified Gentoo package atom
+#define PACKAGE_STR2    "([a-zA-Z0-9_/+-]+)"
+#define PACKAGE_VER2    "([0-9.a-z_]+)"
+#define PACKAGE_REV2    "(-r[0-9]+)?"
+#define PACKAGE_ATOM2   PACKAGE_STR2 "-" PACKAGE_VER2 PACKAGE_REV
+
 int main()
 {
     const char *regexp;
     std::vector<std::string> strings;
+    static const size_t VERY_LONG = (1 << 14) + 1;
+    static const size_t TIMES = 10;
+    char *longstring = new char[VERY_LONG + 1];
 
     // http
     load_strings("../lib/bench.data_http", "\n\n", strings);
@@ -361,6 +386,8 @@ int main()
     strings.push_back("::");
     regexp = IPV6;
     bench(regexp, strings, 100, REG_BACKWARD, 0);
+    regexp = IPV62;
+    bench(regexp, strings, 100, 0, REG_NFA); // DFA is very large
 
     strings.clear();
     strings.push_back("127.0.0.1");
@@ -372,32 +399,32 @@ int main()
     bench(regexp, strings, 10000, 0, 0);
     regexp = "([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})";
     bench(regexp, strings, 10000, 0, 0);
-    regexp = "([^.]+)[.]([^.]+)[.]([^.]+)[.]([^.]+)";
-    bench(regexp, strings, 10000, 0, 0);
 
     strings.clear();
-    strings.push_back("Mon Jan 01 00:24:00 GMT 2019");
-    strings.push_back("Tue Feb 02 01:24:00 GMT 2018");
-    strings.push_back("Wed Mar 03 02:24:00 GMT 2017");
-    strings.push_back("Thu Apr 04 03:24:00 GMT 2016");
-    strings.push_back("Fri May 05 04:24:00 GMT 2015");
-    strings.push_back("Sat Jun 06 05:24:00 GMT 2014");
-    strings.push_back("Sun Jul 07 06:24:00 GMT 2013");
+    strings.push_back("Mon Jan 01 2019 00:24:00 GMT");
+    strings.push_back("Tue Feb 02 2018 01:24:00 GMT");
+    strings.push_back("Wed Mar 03 2017 02:24:00 GMT");
+    strings.push_back("Thu Apr 04 2016 03:24:00 GMT");
+    strings.push_back("Fri May 05 2015 04:24:00 GMT");
+    strings.push_back("Sat Jun 06 2014 05:24:00 GMT");
+    strings.push_back("Sun Jul 07 2013 06:24:00 GMT");
     regexp = "(Mon|Tue|Wed|Thu|Fri|Sat|Sun)"
-        " (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)"
-        " ([0-9]+)"
-        " ([0-9]{2}:[0-9]{2}:[0-9]{2})"
-        " ([A-Z]{3}([+-][0-9]{2})?)"
-        " ([0-9]{4})";
-    bench(regexp, strings, 10000, 0, 0);
-    regexp = "([a-zA-Z]+) ([a-zA-Z]+) ([0-9]+) ([0-9:]+) ([A-Z0-9+-]+) ([0-9]+)";
-    bench(regexp, strings, 10000, 0, 0);
-    regexp = "([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+)";
-    bench(regexp, strings, 10000, 0, 0);
+        "[ ]+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)"
+        "[ ]+([0-9]{2})"
+        "[ ]+([0-9]{4})"
+        "[ ]+([0-9]{2}):([0-5][0-9]):[0-5][0-9](-[0-5][0-9])?(:[0-5][0-9])?"
+        "[ ]+(([A-Z]{3})([+-]([0-5][0-9]):([0-5][0-9]))?)";
+    bench(regexp, strings, 1000, 0, 0);
+    regexp = "([a-zA-Z]+)[ ]+([a-zA-Z]+)[ ]+([0-9]+)[ ]+([0-9]+)[ ]+([0-9:-]+)[ ]+([A-Z0-9+-]+)";
+    bench(regexp, strings, 1000, 0, 0);
 
-    static const size_t VERY_LONG = (1 << 14) + 1;
-    static const size_t TIMES = 10;
-    char *longstring = new char[VERY_LONG + 1];
+    // atom
+    load_strings("../lib/bench.data_atom", "\n", strings);
+    regexp = PACKAGE_ATOM;
+    bench(regexp, strings, 10, 0, 0);
+    regexp = PACKAGE_ATOM2;
+    bench(regexp, strings, 10, 0, 0);
+
     longstring[VERY_LONG] = 0;
     memset(longstring, 'a', VERY_LONG);
     longstring[VERY_LONG] = 0;
@@ -406,47 +433,43 @@ int main()
 
     regexp = "(a{2}|a{3}|a{5})*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(a{7}|a{11}|a{13})*";
+    regexp = "(a{7}|a{13}|a{19})*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(a{17}|a{19}|a{23})*";
+    regexp = "(a{29}|a{41}|a{53})*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(a{29}|a{31}|a{37})*";
+    regexp = "(a{67}|a{83}|a{103})*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(((a){2})|((a){3})|((a){5}))*";
+    regexp = "(a{127}|a{151}|a{179})*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(((a){7})|((a){11})|((a){13}))*";
-    bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(((a){17})|((a){19})|((a){23}))*";
-    bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(((a){29})|((a){31})|((a){37}))*";
+    regexp = "(a{199}|a{239}|a{271})*";
     bench(regexp, strings, TIMES, 0, 0);
 
-    regexp = "((((((((((a*)*)*)*)*)*)*)*)*)*)*";
+    regexp = "(((a){2})|((a){3})|((a){5}))*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(a*)(a*)(a*)(a*)(a*)(a*)(a*)(a*)";
+    regexp = "(((a){7})|((a){13})|((a){19}))*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(((a*)(a*)(a*))*((a*)(a*)(a*))*)*";
+    regexp = "(((a){29})|((a){41})|((a){53}))*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(((((a*)*)*((a*)*)*((a*)*)*)*)*)*";
+    regexp = "(((a){67})|((a){83})|((a){103}))*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(((((a*)*(a*))*(a*))*(a*))*(a*))*";
+    regexp = "(((a){127})|((a){151})|((a){179}))*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "((a*)((a*)((a*)((a*)(a*)*)*)*)*)*";
+    regexp = "(((a){199})|((a){239})|((a){271}))*";
     bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(a*)|(a*)|(a*)|(a*)|(a*)|(a*)|(a*)";
-    bench(regexp, strings, TIMES, 0, 0);
-    regexp = "((a*)|(a*)|(a*))((a*)|(a*)|(a*))";
-    bench(regexp, strings, TIMES, 0, 0);
-    regexp = "((a*)|(a*))((a*)|(a*))((a*)|(a*))";
-    bench(regexp, strings, TIMES, 0, 0);
-    regexp = "((a*)|(a*)|(a*))*|((a*)|(a*)|(a*))*";
-    bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(((((a*)*)*|((a*)*)*|((a*)*)*)*)*)*";
-    bench(regexp, strings, TIMES, 0, 0);
-    regexp = "((a*)|((a*)(a*))|((a*)(a*)(a*)))*";
-    bench(regexp, strings, TIMES, 0, 0);
-    regexp = "(((a*)(a*)(a*))|((a*)(a*))|(a*))*";
-    bench(regexp, strings, TIMES, 0, 0);
+
+    regexp = "(a{0,1})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "(a{0,256})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "(a{0,512})*";
+    bench(regexp, strings, 1, 0, 0);
+
+    regexp = "((a){0,1})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "((a){0,256})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "((a){0,512})*";
+    bench(regexp, strings, 1, 0, 0);
 
     // Pathological case for constant-memory POSIX algorithms that use naive
     // (worst-case cubic in the size of TNFA) algorithm for precedence matrix
@@ -456,18 +479,20 @@ int main()
     // (which also approaches TNFA size). Trie-based algorithms are not
     // affected, but they consume memory proportional to the length of input,
     // and so are also not practical.
-    strings.clear();
-    strings.push_back("aaaaaaaaaa");
-    regexp = "((a?){0,125})*";
-    bench(regexp, strings, 256, 0, REG_NFA);
-    regexp = "((a?){0,250})*";
-    bench(regexp, strings, 16, 0, REG_NFA);
-    regexp = "((a?){0,500})*";
-    bench(regexp, strings, 4, 0, REG_NFA);
-    regexp = "((a?){0,1000})*";
-    bench(regexp, strings, 2, 0, REG_NFA);
-    regexp = "((a?){0,2000})*";
-    bench(regexp, strings, 1, XREG_RE2, REG_NFA);
+
+    regexp = "((a?){0,1})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "((a?){0,256})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "((a?){0,512})*";
+    bench(regexp, strings, 1, 0, 0);
+
+    regexp = "((a*){0,1})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "((a*){0,256})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "((a*){0,512})*";
+    bench(regexp, strings, 1, 0, 0);
 
     delete[] longstring;
     return 0;
