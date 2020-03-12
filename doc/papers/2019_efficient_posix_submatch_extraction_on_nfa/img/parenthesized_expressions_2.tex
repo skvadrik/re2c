@@ -1,0 +1,413 @@
+
+\documentclass[tikz,border=10pt]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows, shapes, automata, calc}
+
+% workaround for https://github.com/u-fischer/luaotfload/issues/6
+\usepackage{luacode}
+\begin{luacode}
+  function pgf_lookup_and_require(name)
+    local sep = '/'
+    if string.find(os.getenv('PATH'),';') then
+      sep = '\string\\'
+    end
+    local function lookup(name)
+      local sub = name:gsub('%.',sep)
+      local find_func = function (name, suffix)
+        if resolvers then
+          local n = resolvers.findfile (name.."."..suffix, suffix) -- changed
+          return (not (n == '')) and n or nil
+        else
+          return kpse.find_file(name,suffix)
+        end
+      end
+      if find_func(sub, 'lua') then
+        require(name)
+      elseif find_func(sub, 'clua') then
+        collectgarbage('stop')
+        require(name)
+        collectgarbage('restart')
+      else
+        return false
+      end
+      return true
+    end
+    return
+      lookup('pgf.gd.' .. name .. '.library') or
+      lookup('pgf.gd.' .. name) or
+      lookup(name .. '.library') or
+      lookup(name)
+  end
+\end{luacode}
+\usegdlibrary{trees, layered}
+
+\usepackage{stix}
+
+
+%\newcommand{\Xund}{\rule{.4em}{.4pt}}
+%\newcommand{\IRE}{I\!RE}
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+\newcommand{\Xl}{\langle}
+\newcommand{\Xr}{\rangle}
+\newcommand{\Xm}{\langle\!\rangle}
+
+
+\begin{document}
+
+
+\begin{tikzpicture}[>=stealth, auto, sibling distance = 0.2in, inner sep = 1pt, outer sep = 0pt]
+
+\tikzstyle{every node}=[draw, shape = circle]
+\begin{scope}[xshift=-0.5in, yshift=-6.0in]
+\small{
+\begin{scope}[xshift=0in, yshift=-0in]
+    \tikzstyle{every node}=[draw, shape = circle]
+    \graph [tree layout, grow=down, fresh nodes, level distance = 0.1in] {
+        "$t_1$" -- {
+            "" -- {
+                "" -- { "$a$", "$a$", "$a$" }
+            }
+        }
+        , "$t_2$" -- {
+            "" -- {
+                "" -- { "$a$", "$a$" },
+                "" -- { "$a$" }
+            }
+        }
+        , t31/"$t_3$" -- {
+            t311/"" -- {
+                t3111/"" -- { t31111/"$a$" },
+                t3112/"" -- { t31121/"$a$", t31122/"$a$" }
+            }
+        }
+        , "$t_4$" -- {
+            "" -- {
+                "" -- { "$a$" },
+                "" -- { "$a$" },
+                "" -- { "$a$" }
+            }
+        }
+        , t51/"$t_5$" -- {
+            t511/"" -- {
+                t5111/"" -- { t51111/"$a$", t51112/"$a$" }
+            },
+            t512/"" -- {
+                t5121/"" -- { t51211/"$a$" }
+            }
+        }
+        , "$t_6$" -- {
+            "" -- {
+                "" -- { "$a$" }
+            },
+            "" -- {
+                "" -- { "$a$", "$a$" }
+            }
+        }
+        , "$t_7$" -- {
+            "" -- {
+                "" -- { "$a$"},
+                "" -- { "$a$"}
+            },
+            "" -- {
+                "" -- { "$a$" }
+            }
+        }
+        , "$t_8$" -- {
+            "" -- {
+                "" -- { "$a$"}
+            },
+            "" -- {
+                "" -- { "$a$"},
+                "" -- { "$a$" }
+            }
+        }
+        , "$t_9$" -- {
+            "" -- {
+                "" -- { "$a$" }
+            },
+            "" -- {
+                "" -- { "$a$" }
+            },
+            "" -- {
+                "" -- { "$a$" }
+            }
+        }
+    };
+\end{scope}
+}
+
+\tikzstyle{styleA}=[draw=none
+    , shape=circle
+    , minimum size = 0.2in
+    , inner sep = 0pt
+    , outer sep = 0pt
+    ]
+
+\tikzstyle{styleB}=[->
+    , rounded corners=3.5
+    %, color = lightgray
+    , dash pattern = on 1pt off 2.5pt
+    ]
+
+\small{
+\begin{scope}[xshift=5.2in, yshift=-1.9in]
+    \node [shape=rectangle, draw = none] (a) {
+    $\begin{aligned}
+        &\begin{aligned}
+            &\Phi_0(t_1) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
+            &\Phi_0(t_2) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
+            &\Phi_0(t_3) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
+            &\Phi_0(t_4) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
+            &\Phi_0(t_5) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
+            &\Phi_0(t_6) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
+            &\Phi_0(t_7) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
+            &\Phi_0(t_8) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
+            &\Phi_0(t_9) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0}
+        \end{aligned}
+    \\
+        & \quad\quad t_1 \prec t_2 \prec t_3 \prec t_4 \prec t_5 \prec t_7 \prec t_6 \prec t_8 \prec t_9
+    \end{aligned}$
+    };
+\end{scope}
+}
+
+\small{
+\begin{scope}[xshift=1.7in, yshift=-1.85in]
+    \node [shape=rectangle, draw = none] (a) {
+    \setlength\tabcolsep{1.3pt}
+    \renewcommand{\arraystretch}{0.5}
+    $\begin{aligned}
+        &\begin{tabular}{cccccccc|c}
+              $t_2$ & $t_3$ & $t_4$ & $t_5$ & $t_6$ & $t_7$ & $t_8$ & $t_9$ \\
+              &&&&&&& \\[-0.4em]
+              \hline
+              &&&&&&& \\[-0.2em]
+            %
+                \begin{tabular}{cccc}
+                -1 & \!-1 & 3 & 0 \\
+                -1 & \!-1 & 2 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 3 & 0 \\
+                -1 & 2 & 2 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 3 & 0 \\
+                -1 & 2 & 2 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & \!-1 & 3 & 0 \\
+                -1 & \!-1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 3 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 3 & 0 \\
+                -1 & 2 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 3 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 3 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            & $\;t_1$
+            \\[1em]
+%
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 2 & 0 \\
+                -1 & 2 & 2 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 2 & 0 \\
+                -1 & 2 & 2 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & \!-1 & 2 & 0 \\
+                -1 & \!-1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 2 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 2 & 0 \\
+                -1 & 2 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 2 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 2 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            & $\;t_2$
+            \\[1em]
+%
+            & &
+                \begin{tabular}{cccc}
+                -1 & \!-1 & 3 & 0 \\
+                -1 & \!-1 & 2 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 2 & 2 & 0 \\
+                -1 & 3 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 2 & 2 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & \!-1 & 3 & 0 \\
+                -1 & \!-1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 2 & 2 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 2 & 2 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            & $\;t_3$
+            \\[1em]
+%
+            & & &
+                \begin{tabular}{cccc}
+                -1 & 2 & 2 & 0 \\
+                -1 & 3 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 2 & 2 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & \!-1 & 2 & 0 \\
+                -1 & \!-1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 2 & 2 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 2 & 2 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            & $\;t_4$
+            \\[1em]
+%
+            & & & &
+                \begin{tabular}{cccc}
+                -1 & 3 & 1 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 1 & 0 \\
+                -1 & 2 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 1 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 3 & 1 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            & $\;t_5$
+            \\[1em]
+%
+            & & & & &
+                \begin{tabular}{cccc}
+                -1 & 1 & 1 & 0 \\
+                -1 & 2 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & \!-1 & 3 & 0 \\
+                -1 & \!-1 & 2 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & \!-1 & 3 & 0 \\
+                -1 & \!-1 & 1 & 0 \\
+                \end{tabular}
+            & $\;t_6$
+            \\[1em]
+%
+            & & & & & &
+                \begin{tabular}{cccc}
+                -1 & 2 & 1 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            &
+                \begin{tabular}{cccc}
+                -1 & 2 & 1 & 0 \\
+                -1 & 1 & 1 & 0 \\
+                \end{tabular}
+            & $\;t_7$
+            \\[1em]
+%
+            & & & & & & &
+                \begin{tabular}{cccc}
+                -1 & \!-1 & 2 & 0 \\
+                -1 & \!-1 & 1 & 0 \\
+                \end{tabular}
+            & $\;t_8$
+        \end{tabular}
+    \end{aligned}$
+    };
+\end{scope}
+}
+%\normalsize{
+%\node (w1)
+%    [ xshift=3.1in
+%    , yshift=-3.25in
+%    , draw=none
+%    , shape=rectangle
+%    ] {
+%        Pairwise comparison of all PEs for RE $(((a)^{1,3})^{1,3})^{1,3}$ and string $aaa$.
+%        Table entry $(t_i, t_j)$ contains $traces(\Phi_0(t_i), \Phi_0(t_j))$.
+%    };
+%}
+\end{scope}
+
+\end{tikzpicture}
+
+\end{document}
+

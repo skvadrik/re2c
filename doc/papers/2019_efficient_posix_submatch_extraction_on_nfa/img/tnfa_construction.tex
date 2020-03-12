@@ -27,7 +27,7 @@
 \tikzset{style2/.style={state, accepting, xshift = \offs}}
 
 \newcommand \tnfa {tn\!f\!a}
-\newcommand \ntags {ntags}
+\newcommand \ntags {ntag}
 
 
 \begin{scope}[xshift=0in, yshift=0in]
@@ -37,130 +37,130 @@
 %\end{scope}
 
 \begin{scope}[xshift=0in, yshift=0in]
-    \node[state, accepting] (a) {$y$};
+    \node[state, accepting] (a) {$q_f$};
     \node [label={[label distance=0.1in, below right]270:\large{(a) \;}
-    $\tnfa \big( (0, 0, \epsilon), y \big) $}] (a) {};
+    $\tnfa \big( (0, \emptyset, \epsilon),\; q_f \big) $}] (a) {};
 \end{scope}
 
 \begin{scope}[xshift=0in, yshift=-0.8in]
-    \node[state] (a) {$x$};
-    \node[state, accepting, right of=a] (b) {$y$};
-    \path (a) edge node {$\alpha / \epsilon$} (b);
+    \node[state] (a) {$q_0$};
+    \node[state, accepting, right of=a] (b) {$q_f$};
+    \path (a) edge node {$a / \epsilon$} (b);
     \node [label={[label distance=0.1in, below right]270:\large{(b) \;}
-    $\tnfa \big( (0, 0, a), y \big) $}] (a) {};
+    $\tnfa \big( (0, \emptyset, a),\; q_f \big) $}] (a) {};
 \end{scope}
 
 \begin{scope}[xshift=0in, yshift=-1.6in]
-    \node[state] (a1) {$z$};
-    \node[style1, right of = a1] (a) {$\tnfa(r_1, x)$};
-    \node[style2, right of = a] (a2) {$x$};
-    \node[style1, right of = a2] (b) {$\tnfa(r_2, y)$};
-    \node[style2, right of = b] (b2) {$y$};
+    \node[state] (a1) {$q_1$};
+    \node[style1, right of = a1] (a) {$\tnfa(e_1, q_2)$};
+    \node[style2, right of = a] (a2) {$q_2$};
+    \node[style1, right of = a2] (b) {$\tnfa(e_2, q_f)$};
+    \node[style2, right of = b] (b2) {$q_f$};
     \node [label={[label distance=0.2in, below right]270:\large{(c) \;}
-    $\tnfa \big( (0, 0, r_1 \cdot r_2), y \big) $}] (a1) {};
+    $\tnfa \big( (0, \emptyset, e_1 \cdot e_2),\; q_f \big) $}] (a1) {};
 \end{scope}
 
 \begin{scope}[xshift=0in, yshift=-2.9in]
-    \node[state] (a) {$x$};
-    \node[state, above right of = a, yshift = -0.45in] (b1) {$x_1$};
-    \node[style1, right of = b1] (b) {$\tnfa(r_1, x'_2)$};
-    \node[style2, right of = b] (b2) {$x'_2$};
-    \node[style1, right of = b2, rotate around={-16:(b2)}] (d) {$\ntags(T_2, y)$};
+    \node[state] (a) {$q_0$};
+    \node[state, above right of = a, yshift = -0.45in] (b1) {$q_1$};
+    \node[style1, right of = b1] (b) {$\tnfa(e_1, q'_2)$};
+    \node[style2, right of = b] (b2) {$q'_2$};
+    \node[style1, right of = b2, rotate around={-16:(b2)}] (d) {$\ntags(M_2, q_f)$};
 
-    \node[state, below right of=a, yshift = 0.45in] (c1) {$x'_1$};
-    \node[style1, right of = c1] (c2) {$\ntags(T_1, x_2)$};
-    \node[style2, right of = c2] (c3) {$x_2$};
-    \node[style1, right of = c3, rotate around={16:(c3)}] (c) {$\tnfa(r_2, y)$};
-    \node[style2, right of = c, rotate around={16:(c)}] (d) {$y$};
+    \node[state, below right of=a, yshift = 0.45in] (c1) {$q'_1$};
+    \node[style1, right of = c1] (c2) {$\ntags(M_1, q_2)$};
+    \node[style2, right of = c2] (c3) {$q_2$};
+    \node[style1, right of = c3, rotate around={16:(c3)}] (c) {$\tnfa(e_2, q_f)$};
+    \node[style2, right of = c, rotate around={16:(c)}] (d) {$q_f$};
     \path
         (a)  edge [bend left]  node {$1 / \epsilon$} (b1)
         (a)  edge [bend right] node [below left] {$2 / \epsilon $} (c1)
     ;
     \node [label={[label distance=0.5in, below right]270:\large{(d) \;}
-    $\tnfa \big( (0, 0, r_1 \mid r_2), y \big) $}] (a) {};
+    $\tnfa \big( (0, \emptyset, e_1 \mid e_2),\; q_f \big) $}] (a) {};
 \end{scope}
 
 \begin{scope}[xshift=0in, yshift=-4.2in]
-    \node[state] (a1) {$z$};
-    \node[style1, right of = a1] (a) {$\tnfa(r_1, x)$};
-    \node[style2, right of = a] (a2) {$x$};
-    \node[style1, right of = a2, minimum width = 2in, xshift = 0.2in] (b) {$\tnfa( (0, 0, r_1^{n-1, m-1}), y)$};
-    \node[style2, right of = b, xshift = 0.2in] (b2) {$y$};
+    \node[state] (a1) {$q_1$};
+    \node[style1, right of = a1] (a) {$\tnfa(e_1, q_2)$};
+    \node[style2, right of = a] (a2) {$q_2$};
+    \node[style1, right of = a2, minimum width = 2in, xshift = 0.2in] (b) {$\tnfa( (0, \emptyset, e_1^{n-1, m-1}), q_f)$};
+    \node[style2, right of = b, xshift = 0.2in] (b2) {$q_f$};
     \node [label={[label distance=0.2in, below right]270:\large{(e) \;}
-    $\tnfa \big( (0, 0, r_1^{n, m}), y \big) \mid_{1 \,<\, n \,\leq\, m \,\leq\, \infty} $}] (a1) {};
+    $\tnfa \big( (0, \emptyset, e_1^{n, m}),\; q_f \big) \mid_{1 \,<\, n \,\leq\, m \,\leq\, \infty} $}] (a1) {};
 \end{scope}
 
 \begin{scope}[xshift=0in, yshift=-5.5in]
-    \node[state] (a) {$x$};
-    \node[state, above right of = a, yshift = -0.45in] (b1) {$x_1$};
-    \node[style1, right of = b1, rotate around={-16:(b1)}] (d) {$\tnfa( (0, 0, r_1^{1,m}), y)$};
+    \node[state] (a) {$q_0$};
+    \node[state, above right of = a, yshift = -0.45in] (b1) {$q_1$};
+    \node[style1, right of = b1, rotate around={-16:(b1)}] (d) {$\tnfa( (0,\! \emptyset,\! e_1^{1,m}),\! q_f)$};
 
-    \node[state, below right of=a, yshift = 0.45in] (c1) {$x'_1$};
-    \node[style1, right of = c1, rotate around={16:(c1)}] (c) {$\ntags(T_1, y)$};
-    \node[style2, right of = c, rotate around={16:(c)}] (d) {$y$};
+    \node[state, below right of=a, yshift = 0.45in] (c1) {$q'_1$};
+    \node[style1, right of = c1, rotate around={16:(c1)}] (c) {$\ntags(M_1, q_f)$};
+    \node[style2, right of = c, rotate around={16:(c)}] (d) {$q_f$};
     \path
         (a)  edge [bend left]  node {$1 / \epsilon$} (b1)
         (a)  edge [bend right] node [below left] {$2 / \epsilon $} (c1)
     ;
     \node [label={[label distance=0.5in, below right]270:\large{(f) \;}
-    $\tnfa \big( (0, 0, r_1^{0, m}), y \big) $}] (a) {};
+    $\tnfa \big( (0, \emptyset, e_1^{0, m}),\; q_f \big) $}] (a) {};
 \end{scope}
 
 \begin{scope}[xshift=0in, yshift=-7.2in]
-    \node[state] (b1) {$z$};
-    \node[style1, right of = b1] (b) {$\tnfa(r_1, x)$};
-    \node[style2, right of = b] (b2) {$x$};
+    \node[state] (b1) {$q_0$};
+    \node[style1, right of = b1] (b) {$\tnfa(e_1, q_1)$};
+    \node[style2, right of = b] (b2) {$q_1$};
 
-    \node[state, accepting, right of = b2] (c) {$y$};
+    \node[state, accepting, right of = b2] (c) {$q_f$};
 
     \path
         (b2) edge node {$2 / \epsilon$} (c)
     ;
     \draw (b2) .. controls ($ (b2) + (0.7, 1.5) $) and ($ (b1) + (-0.7, 1.5) $) .. node [above] {$1 / \epsilon$} (b1);
     \node [label={[label distance=0.2in, below right]270:\large{(g) \;}
-    $\tnfa \big( (0, 0, r_1^{1, \infty}), y \big) $}] (b1) {};
+    $\tnfa \big( (0, \emptyset, e_1^{1, \infty}),\; q_f \big) $}] (b1) {};
 \end{scope}
 
 \begin{scope}[xshift=0in, yshift=-8.5in]
-    \node[state] (b1) {$w$};
-    \node[style1, right of = b1] (b) {$\tnfa(r_1, z)$};
-    \node[style2, right of = b] (b2) {$z$};
+    \node[state] (b1) {$q_0$};
+    \node[style1, right of = b1] (b) {$\tnfa(e_1, q_1)$};
+    \node[style2, right of = b] (b2) {$q_1$};
 
-    \node[state, right of = b2, xshift = -0.2in] (c1) {$x$};
-    \node[style1, right of = c1, xshift = 0.1in, minimum width = 1.8in] (c) {$\tnfa((0, 0, r_1^{1, m-1}), y)$};
-    \node[style2, right of = c, xshift = 0.1in] (c2) {$y$};
+    \node[state, right of = b2, xshift = -0.2in] (c1) {$q_2$};
+    \node[style1, right of = c1, xshift = 0.1in, minimum width = 1.8in] (c) {$\tnfa((0, \emptyset, e_1^{1, m-1}), q_f)$};
+    \node[style2, right of = c, xshift = 0.1in] (c2) {$q_f$};
 
     \path
         (b2) edge node {$2 / \epsilon$} (c1)
     ;
     \draw (b2) .. controls ($ (b2) + (0, 2) $) and ($ (c2) + (0, 2) $) .. node [very near start] {$1 / \epsilon$} (c2);
     \node [label={[label distance=0.2in, below right]270:\large{(h) \;}
-    $\tnfa \big( (0, 0, r_1^{1, m}), y \big) \mid_{1 \,<\, m \,<\, \infty} $}] (b1) {};
+    $\tnfa \big( (0, \emptyset, e_1^{1, m}),\; q_f \big) \mid_{1 \,<\, m \,<\, \infty} $}] (b1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-9.8in]
-    \node[state] (a) {$w$};
-    \node[state, right of=a] (b1) {$z$};
-    \node[style1, right of = b1] (b) {$\tnfa ( (0, 0, r_1), x )$};
-    \node[style2, right of = b] (b2) {$x$};
-    \node[state, accepting, right of=b2] (d) {$y$};
+\begin{scope}[xshift=0in, yshift=-9.5in]
+    \node[state] (a) {$q_0$};
+    \node[state, right of=a] (b1) {$q_1$};
+    \node[style1, right of = b1] (b) {$\tnfa ( (0, \emptyset, e_1), q_2 )$};
+    \node[style2, right of = b] (b2) {$q_2$};
+    \node[state, accepting, right of=b2] (d) {$q_f$};
     \path
         (a) edge node {$1 / 2i \!-\! 1 $} (b1)
         (b2) edge node {$1 / 2i $} (d)
     ;
     \node [label={[label distance=0.1in, below right]270:\large{(i) \;}
-        $\tnfa \big( (i, j, r_1), y \big) \mid_{i \,\neq\, 0} $
+        $\tnfa \big( (i, J, e_1),\; q_f \big) \mid_{i \,\neq\, 0} $
     }] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-10.9in]
-    \node[state] (a) {$x$};
-    \node[state, accepting, right of = a] (b) {$y$};
+\begin{scope}[xshift=0in, yshift=-10.3in]
+    \node[state] (a) {$q_0$};
+    \node[state, accepting, right of = a] (b) {$q_f$};
     \path
-        (a) edge node {$1 / -t_{clos} $} (b)
+        (a) edge node {$1 / -n $} (b)
     ;
     \node [label={[label distance=0.1in, below right]270:\large{(j) \;}
-        $\ntags \big( T, y \big)$
+        $\ntags \big( M,\; q_f \big)$
     }] (a) {};
 \end{scope}
 

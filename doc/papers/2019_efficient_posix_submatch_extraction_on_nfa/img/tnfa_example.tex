@@ -1,0 +1,178 @@
+
+\documentclass[tikz,border=10pt]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows.meta, shapes, automata, calc, decorations}
+\usepackage{stix}
+
+% workaround for https://github.com/u-fischer/luaotfload/issues/6
+\usepackage{luacode}
+\begin{luacode}
+  function pgf_lookup_and_require(name)
+    local sep = '/'
+    if string.find(os.getenv('PATH'),';') then
+      sep = '\string\\'
+    end
+    local function lookup(name)
+      local sub = name:gsub('%.',sep)
+      local find_func = function (name, suffix)
+        if resolvers then
+          local n = resolvers.findfile (name.."."..suffix, suffix) -- changed
+          return (not (n == '')) and n or nil
+        else
+          return kpse.find_file(name,suffix)
+        end
+      end
+      if find_func(sub, 'lua') then
+        require(name)
+      elseif find_func(sub, 'clua') then
+        collectgarbage('stop')
+        require(name)
+        collectgarbage('restart')
+      else
+        return false
+      end
+      return true
+    end
+    return
+      lookup('pgf.gd.' .. name .. '.library') or
+      lookup('pgf.gd.' .. name) or
+      lookup(name .. '.library') or
+      lookup(name)
+  end
+\end{luacode}
+\usegdlibrary{trees, layered}
+
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth, -{to}, auto]
+
+\tikzstyle{every node}=[]
+\tikzstyle{every state}=[circle
+    , minimum size=0.16in
+    , rectangle
+    , rounded corners=5
+    , inner sep = 2pt
+    , outer sep = 0pt
+    , node distance = 0.39in]
+\newcommand{\zz}{0in}
+
+\begin{scope}[xshift=0in, yshift=0in]
+    %\footnotesize
+    \scriptsize
+
+    % ((epsilon|a*)((a|epsilon){0,3}))
+
+    \node[state] (x0) {$1$};
+    \node[state, above right of = x0] (x1) {$2$};
+
+    \node[state, above right of = x1] (z0) {$3$};
+
+    \node[state, right of = z0] (x4) {$4$};
+
+    \node[state, above right of = x4, xshift = \zz, yshift = -\zz] (x5) {$5$};
+    \node[state, right of = x5] (x6) {$6$};
+    \node[state, below right of = x6, xshift = \zz, yshift = \zz] (x12) {$7$};
+    \node[state, below right of = x12] (x14) {$8$};
+
+    \node[state, above right of = x14] (x15) {$9$};
+    \node[state, right of = x15] (x25) {$10$};
+    \node[state, above right of = x25] (x16) {$11$};
+    \node[state, above right of = x16, xshift = \zz, yshift = -\zz] (x17) {$12$};
+    \node[state, below right of = x17, xshift = \zz, yshift = +\zz] (x21) {$13$};
+    \node[state, below right of = x21] (x22) {$14$};
+
+    \node[state, below right of = x15, xshift=0.7in] (z2) {$25$};
+
+    \node[state, right of = x22] (y15) {$15$};
+    \node[state, above right of = y15] (y16) {$16$};
+    \node[state, above right of = y16, xshift = \zz, yshift = -\zz] (y17) {$17$};
+    \node[state, below right of = y17, xshift = \zz, yshift = +\zz] (y21) {$18$};
+    \node[state, below right of = y21] (y22) {$19$};
+
+    \node[state, right of = y22] (z15) {$20$};
+    \node[state, above right of = z15] (z16) {$21$};
+    \node[state, above right of = z16, xshift = \zz, yshift = -\zz] (z17) {$22$};
+    \node[state, below right of = z17, xshift = \zz, yshift = +\zz] (z21) {$23$};
+    \node[state, below right of = z21] (z22) {$24$};
+
+    \node[state, below right of = z22] (x23) {$26$};
+
+    \node[state, accepting, below right of = x23] (x24) {$27$};
+
+    \path
+        (x0) edge node [above left] {$1/1$} (x1)
+        (x1) edge node [above left] {$1/3$} (z0)
+        (x15) edge node {$1/\epsilon$} (x25)
+
+        (x25) edge node [above left] {$1/7$} (x16)
+        (x16) edge [bend left] node {$1/\epsilon$} (x17)
+        (x16) edge [bend right=10] node [above] {$2/\epsilon$} (x21)
+        (x17) edge [bend left, line width=1pt] node {$a/\epsilon$} (x21)
+        (x21) edge node [above right] {$1/8$} (x22)
+
+        (x22) edge node [above] {$2/\epsilon$} (y15)
+
+        (y15) edge node [above left] {$1/7$} (y16)
+        (y16) edge [bend left] node {$1/\epsilon$} (y17)
+        (y16) edge [bend right=10] node [above] {$2/\epsilon$} (y21)
+        (y17) edge [bend left, line width=1pt] node {$a/\epsilon$} (y21)
+        (y21) edge node [above right] {$1/8$} (y22)
+
+        (y22) edge node [above] {$2/\epsilon$} (z15)
+
+        (z15) edge node [above left] {$1/7$} (z16)
+        (z16) edge [bend left] node {$1/\epsilon$} (z17)
+        (z16) edge [bend right=10] node [above] {$2/\epsilon$} (z21)
+        (z17) edge [bend left, line width=1pt] node {$a/\epsilon$} (z21)
+        (z21) edge node [above right] {$1/8$} (z22)
+
+        (z22) edge node [above right] {$1/6$} (x23)
+
+        (x23) edge node [above right] {$1/2$} (x24)
+
+        (z0) edge node [above] {$2/\epsilon$} (x4)
+        (x4) edge [bend left] node {$1/\epsilon$} (x5)
+        (x4) edge [bend right=10] node [above] {$2/\epsilon$} (x12)
+        (x5) edge [line width=1pt] node [above] {$a/\epsilon$} (x6)
+        (x6) edge [bend left] node {$2/\epsilon$} (x12)
+        (x12) edge node [above right] {$1/4$} (x14)
+
+        (x14) edge node [below right] {$1/5$} (x15)
+    ;
+
+    \draw (y22) .. controls ($ (y22) + (0.5, -0.6) $) and ($ (z22) + (-0.5, -0.6) $) .. node [above] {$1/\epsilon$} (z22);
+    \draw (x22) .. controls ($ (x22) + (0.8, -0.8) $) and ($ (z22) + (-0.8, -0.8) $) .. node [above, near start] {$1/\epsilon$} (z22);
+    \draw (z2) .. controls ($ (z2) + (2, 0) $) and ($ (z22) + (-1.0, -1.0) $) .. node [above, very near start] {$1/\!-\!6$} (z22);
+    \draw (x6) .. controls ($ (x6) + (0.1, 0.8) $) and ($ (x5) + (-0.1, 0.8) $) .. node [above] {$1/\epsilon$} (x5);
+    \draw (z0) .. controls ($ (z0) + (1, -0.9) $) and ($ (x14) + (-3, 0) $) .. node [above] {$\quad 1/\epsilon$} (x14);
+    \draw (x15) .. controls ($ (x15) + (1, -0.8) $) and ($ (z2) + (-1, 0) $) .. node [above] {$2/\epsilon$} (z2);
+
+\end{scope}
+
+
+\begin{scope}[xshift=3.8in, yshift=-0.2in]
+    \node (n1) {$
+    \begin{aligned}
+        &M(1) = M(2) = \big( \{1\}, \{1,2,3,4,5,6,7,8\}\big) \\
+        &M(3) = M(4) = \big( \{2,3\}, \{3,4\}\big)
+    \end{aligned}
+    \quad\quad
+    \begin{aligned}
+        &M(5) = M(6) = \big( \emptyset, \{5,6,7,8\}\big) \\
+        &M(7) = M(8) = \big( \{4\}, \{7,8\}\big)
+    \end{aligned}
+    $};
+\end{scope}
+
+\end{tikzpicture}
+
+\end{document}
+

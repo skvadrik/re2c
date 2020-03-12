@@ -1,372 +1,458 @@
 
 r: (([-!#$%&'*+.^_`|~0-9a-zA-Z]+)..., s: HTTP/5.9 430 1wSXfgruktPZfhxm
 ..., n: 100, 6204 chars, 198 groups
-            re2c-tnfa-leftmost:      1.00     0.426s
-                           re2:      3.93     1.674s
-          re2c-tnfa-posix-gor1:      3.65     1.557s
-          re2c-tnfa-posix-gtop:      3.27     1.393s
-     re2c-tnfa-posix-kukl-gor1:     75.03    31.999s
-     re2c-tnfa-posix-gor1-slow:      2.80     1.195s
-     re2c-tnfa-posix-gor1-trie:      2.45     1.045s
+            re2c-tnfa-leftmost:      1.00     0.169s
+       re2c-tnfa-leftmost-trie:      0.77     0.131s
+                           re2:      3.25     0.550s
+          re2c-tnfa-posix-gor1:      4.01     0.678s
+          re2c-tnfa-posix-gtop:      3.62     0.612s
+     re2c-tnfa-posix-gor1-slow:      3.35     0.566s
+     re2c-tnfa-posix-gor1-trie:      1.95     0.329s
+     re2c-tnfa-posix-kukl-gor1:     68.00    11.499s
      re2c-tnfa-posix-back-gor1:         -         -
 
 r: ((([-._~%!$&'*+#^`|a-zA-Z0-9]+..., s: HTTP/5.9 430 1wSXfgruktPZfhxm
 ..., n: 100, 573 chars, 40 groups
-            re2c-tnfa-leftmost:      1.00     0.149s
-                           re2:      0.43     0.064s
-          re2c-tnfa-posix-gor1:      2.92     0.436s
-          re2c-tnfa-posix-gtop:      2.63     0.393s
-     re2c-tnfa-posix-kukl-gor1:     19.84     2.962s
-     re2c-tnfa-posix-gor1-slow:      2.36     0.353s
-     re2c-tnfa-posix-gor1-trie:      1.72     0.257s
+            re2c-tnfa-leftmost:      1.00     0.060s
+       re2c-tnfa-leftmost-trie:      0.74     0.045s
+                           re2:      0.17     0.010s
+          re2c-tnfa-posix-gor1:      2.86     0.171s
+          re2c-tnfa-posix-gtop:      2.52     0.151s
+     re2c-tnfa-posix-gor1-slow:      2.42     0.145s
+     re2c-tnfa-posix-gor1-trie:      1.40     0.084s
+     re2c-tnfa-posix-kukl-gor1:     17.45     1.044s
      re2c-tnfa-posix-back-gor1:         -         -
 
 r: ([a-zA-Z][a-zA-Z0-9+.-]*):(//(..., s: http://240.147.163.34:2124/z/d..., n: 100, 3149 chars, 102 groups
-            re2c-tnfa-leftmost:      1.00     0.795s
-                           re2:      2.55     2.026s
-          re2c-tnfa-posix-gor1:      3.13     2.488s
-          re2c-tnfa-posix-gtop:      2.76     2.195s
-     re2c-tnfa-posix-kukl-gor1:     13.57    10.787s
-     re2c-tnfa-posix-gor1-slow:      2.90     2.304s
-     re2c-tnfa-posix-gor1-trie:      1.95     1.553s
+            re2c-tnfa-leftmost:      1.00     0.313s
+       re2c-tnfa-leftmost-trie:      0.79     0.248s
+                           re2:      1.96     0.614s
+          re2c-tnfa-posix-gor1:      3.13     0.979s
+          re2c-tnfa-posix-gtop:      2.90     0.908s
+     re2c-tnfa-posix-gor1-slow:      2.94     0.922s
+     re2c-tnfa-posix-gor1-trie:      1.64     0.514s
+     re2c-tnfa-posix-kukl-gor1:     11.85     3.713s
      re2c-tnfa-posix-back-gor1:         -         -
 
 r: ([-+.a-zA-Z0-9]+):(//(([-._~%!..., s: http://240.147.163.34:2124/z/d..., n: 100, 234 chars, 18 groups
-            re2c-tnfa-leftmost:      1.00     0.484s
-                           re2:      0.45     0.219s
-          re2c-tnfa-posix-gor1:      3.55     1.716s
-          re2c-tnfa-posix-gtop:      3.21     1.553s
-     re2c-tnfa-posix-kukl-gor1:      6.51     3.150s
-     re2c-tnfa-posix-gor1-slow:      3.09     1.495s
-     re2c-tnfa-posix-gor1-trie:      2.72     1.317s
-     re2c-tnfa-posix-back-gor1:     42.93    20.773s
+            re2c-tnfa-leftmost:      1.00     0.195s
+       re2c-tnfa-leftmost-trie:      0.86     0.169s
+                           re2:      0.17     0.032s
+          re2c-tnfa-posix-gor1:      3.28     0.640s
+          re2c-tnfa-posix-gtop:      3.05     0.594s
+     re2c-tnfa-posix-gor1-slow:      2.96     0.577s
+     re2c-tnfa-posix-gor1-trie:      2.42     0.473s
+     re2c-tnfa-posix-kukl-gor1:      5.35     1.042s
+     re2c-tnfa-posix-back-gor1:     33.90     6.611s
 
 r: (([0-9a-fA-F]{1,4}:){6}([0-9a-..., s: fee2:586:10aa:fd03:37f:76ee:be..., n: 100, 2343 chars, 61 groups
-            re2c-tnfa-leftmost:      1.00     0.116s
-                           re2:      1.34     0.155s
-          re2c-tnfa-posix-gor1:      3.16     0.366s
-          re2c-tnfa-posix-gtop:      3.53     0.409s
-     re2c-tnfa-posix-kukl-gor1:     45.37     5.255s
-     re2c-tnfa-posix-gor1-slow:      3.37     0.391s
-     re2c-tnfa-posix-gor1-trie:      1.25     0.145s
+            re2c-tnfa-leftmost:      1.00     0.037s
+       re2c-tnfa-leftmost-trie:      0.51     0.019s
+                           re2:      1.10     0.041s
+          re2c-tnfa-posix-gor1:      3.87     0.144s
+          re2c-tnfa-posix-gtop:      4.14     0.154s
+     re2c-tnfa-posix-gor1-slow:      4.24     0.158s
+     re2c-tnfa-posix-gor1-trie:      1.21     0.045s
+     re2c-tnfa-posix-kukl-gor1:     48.79     1.813s
      re2c-tnfa-posix-back-gor1:         -         -
 
+r: ((([0-9a-fA-F]{1,4}:){0,7}[0-9..., s: fee2:586:10aa:fd03:37f:76ee:be..., n: 100, 93 chars, 6 groups
+            re2c-tnfa-leftmost:      1.00     0.018s
+       re2c-tnfa-leftmost-trie:      0.76     0.014s
+                           re2:      0.10     0.002s
+          re2c-tnfa-posix-gor1:      3.17     0.056s
+          re2c-tnfa-posix-gtop:      3.42     0.061s
+     re2c-tnfa-posix-gor1-slow:      3.46     0.062s
+     re2c-tnfa-posix-gor1-trie:      2.80     0.050s
+     re2c-tnfa-posix-kukl-gor1:      8.79     0.156s
+     re2c-tnfa-posix-back-gor1:     16.45     0.293s
+
 r: (([0-9]|[1-9][0-9]|[1][0-9]{2}..., s: 127.0.0.1..., n: 10000, 235 chars, 5 groups
-            re2c-tnfa-leftmost:      1.00     0.099s
-                           re2:      0.83     0.082s
-          re2c-tnfa-posix-gor1:      3.53     0.350s
-          re2c-tnfa-posix-gtop:      3.14     0.311s
-     re2c-tnfa-posix-kukl-gor1:      5.55     0.550s
-     re2c-tnfa-posix-gor1-slow:      2.71     0.269s
-     re2c-tnfa-posix-gor1-trie:      1.86     0.185s
-     re2c-tnfa-posix-back-gor1:     30.04     2.980s
+            re2c-tnfa-leftmost:      1.00     0.036s
+       re2c-tnfa-leftmost-trie:      0.77     0.028s
+                           re2:      0.46     0.017s
+          re2c-tnfa-posix-gor1:      3.28     0.119s
+          re2c-tnfa-posix-gtop:      2.88     0.105s
+     re2c-tnfa-posix-gor1-slow:      2.69     0.098s
+     re2c-tnfa-posix-gor1-trie:      1.61     0.059s
+     re2c-tnfa-posix-kukl-gor1:      4.77     0.174s
+     re2c-tnfa-posix-back-gor1:     24.63     0.896s
 
 r: ([0-9]{1,3})[.]([0-9]{1,3})[.]..., s: 127.0.0.1..., n: 10000, 57 chars, 4 groups
-            re2c-tnfa-leftmost:      1.00     0.052s
-                           re2:      0.50     0.026s
-          re2c-tnfa-posix-gor1:      4.89     0.256s
-          re2c-tnfa-posix-gtop:      4.11     0.215s
-     re2c-tnfa-posix-kukl-gor1:      6.10     0.319s
-     re2c-tnfa-posix-gor1-slow:      3.41     0.179s
-     re2c-tnfa-posix-gor1-trie:      2.49     0.130s
-     re2c-tnfa-posix-back-gor1:     27.15     1.422s
+            re2c-tnfa-leftmost:      1.00     0.023s
+       re2c-tnfa-leftmost-trie:      0.82     0.019s
+                           re2:      0.28     0.006s
+          re2c-tnfa-posix-gor1:      3.97     0.089s
+          re2c-tnfa-posix-gtop:      3.30     0.074s
+     re2c-tnfa-posix-gor1-slow:      3.14     0.071s
+     re2c-tnfa-posix-gor1-trie:      1.83     0.041s
+     re2c-tnfa-posix-kukl-gor1:      4.67     0.105s
+     re2c-tnfa-posix-back-gor1:     19.75     0.445s
 
-r: ([^.]+)[.]([^.]+)[.]([^.]+)[.]..., s: 127.0.0.1..., n: 10000, 37 chars, 4 groups
-            re2c-tnfa-leftmost:      1.00     0.054s
-                           re2:      0.50     0.027s
-          re2c-tnfa-posix-gor1:      4.57     0.245s
-          re2c-tnfa-posix-gtop:      4.08     0.219s
-     re2c-tnfa-posix-kukl-gor1:      5.98     0.320s
-     re2c-tnfa-posix-gor1-slow:      3.33     0.178s
-     re2c-tnfa-posix-gor1-trie:      2.46     0.132s
-     re2c-tnfa-posix-back-gor1:     17.55     0.940s
+r: (Mon|Tue|Wed|Thu|Fri|Sat|Sun)[..., s: Mon Jan 01 2019 00:24:00 GMT..., n: 1000, 224 chars, 13 groups
+            re2c-tnfa-leftmost:      1.00     0.008s
+       re2c-tnfa-leftmost-trie:      0.74     0.006s
+                           re2:      0.41     0.003s
+          re2c-tnfa-posix-gor1:      3.85     0.032s
+          re2c-tnfa-posix-gtop:      3.40     0.028s
+     re2c-tnfa-posix-gor1-slow:      3.07     0.025s
+     re2c-tnfa-posix-gor1-trie:      1.74     0.014s
+     re2c-tnfa-posix-kukl-gor1:     11.12     0.092s
+     re2c-tnfa-posix-back-gor1:    250.54     2.069s
 
-r: (Mon|Tue|Wed|Thu|Fri|Sat|Sun) ..., s: Mon Jan 01 00:24:00 GMT 2019..., n: 10000, 154 chars, 7 groups
-            re2c-tnfa-leftmost:      1.00     0.183s
-                           re2:      0.74     0.136s
-          re2c-tnfa-posix-gor1:      3.91     0.717s
-          re2c-tnfa-posix-gtop:      3.21     0.588s
-     re2c-tnfa-posix-kukl-gor1:      8.49     1.555s
-     re2c-tnfa-posix-gor1-slow:      2.80     0.512s
-     re2c-tnfa-posix-gor1-trie:      1.97     0.361s
-     re2c-tnfa-posix-back-gor1:    110.86    20.311s
+r: ([a-zA-Z]+)[ ]+([a-zA-Z]+)[ ]+..., s: Mon Jan 01 2019 00:24:00 GMT..., n: 1000, 81 chars, 6 groups
+            re2c-tnfa-leftmost:      1.00     0.008s
+       re2c-tnfa-leftmost-trie:      0.81     0.007s
+                           re2:      0.45     0.004s
+          re2c-tnfa-posix-gor1:      4.01     0.033s
+          re2c-tnfa-posix-gtop:      3.40     0.028s
+     re2c-tnfa-posix-gor1-slow:      3.41     0.028s
+     re2c-tnfa-posix-gor1-trie:      2.01     0.017s
+     re2c-tnfa-posix-kukl-gor1:      6.13     0.051s
+     re2c-tnfa-posix-back-gor1:     32.10     0.265s
 
-r: ([a-zA-Z]+) ([a-zA-Z]+) ([0-9]..., s: Mon Jan 01 00:24:00 GMT 2019..., n: 10000, 65 chars, 6 groups
-            re2c-tnfa-leftmost:      1.00     0.183s
-                           re2:      0.95     0.173s
-          re2c-tnfa-posix-gor1:      5.00     0.914s
-          re2c-tnfa-posix-gtop:      4.32     0.790s
-     re2c-tnfa-posix-kukl-gor1:      8.01     1.465s
-     re2c-tnfa-posix-gor1-slow:      3.90     0.713s
-     re2c-tnfa-posix-gor1-trie:      2.64     0.482s
-     re2c-tnfa-posix-back-gor1:     43.09     7.881s
+r: ([a-zA-Z0-9_+-]+)/([a-zA-Z0-9_..., s: app-leechcraft/lc-secman-0.6.7..., n: 10, 117 chars, 13 groups
+            re2c-tnfa-leftmost:      1.00     0.021s
+       re2c-tnfa-leftmost-trie:      0.82     0.017s
+                           re2:      0.38     0.008s
+          re2c-tnfa-posix-gor1:      3.33     0.070s
+          re2c-tnfa-posix-gtop:      2.87     0.061s
+     re2c-tnfa-posix-gor1-slow:      2.93     0.062s
+     re2c-tnfa-posix-gor1-trie:      1.80     0.038s
+     re2c-tnfa-posix-kukl-gor1:      5.89     0.124s
+     re2c-tnfa-posix-back-gor1:     69.60     1.470s
 
-r: ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+..., s: Mon Jan 01 00:24:00 GMT 2019..., n: 10000, 47 chars, 6 groups
-            re2c-tnfa-leftmost:      1.00     0.176s
-                           re2:      1.32     0.231s
-          re2c-tnfa-posix-gor1:      5.10     0.896s
-          re2c-tnfa-posix-gtop:      4.41     0.775s
-     re2c-tnfa-posix-kukl-gor1:      8.28     1.455s
-     re2c-tnfa-posix-gor1-slow:      3.98     0.699s
-     re2c-tnfa-posix-gor1-trie:      2.65     0.466s
-     re2c-tnfa-posix-back-gor1:     44.92     7.892s
+r: ([a-zA-Z0-9_/+-]+)-([0-9.a-z_]..., s: app-leechcraft/lc-secman-0.6.7..., n: 10, 45 chars, 4 groups
+            re2c-tnfa-leftmost:      1.00     0.022s
+       re2c-tnfa-leftmost-trie:      0.79     0.018s
+                           re2:      0.28     0.006s
+          re2c-tnfa-posix-gor1:      3.13     0.070s
+          re2c-tnfa-posix-gtop:      2.77     0.062s
+     re2c-tnfa-posix-gor1-slow:      2.78     0.062s
+     re2c-tnfa-posix-gor1-trie:      1.72     0.038s
+     re2c-tnfa-posix-kukl-gor1:      3.65     0.082s
+     re2c-tnfa-posix-back-gor1:      5.32     0.119s
 
 r: (a{2}|a{3}|a{5})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 17 chars, 1 groups
-            re2c-tnfa-leftmost:      1.00     0.082s
-                           re2:      1.27     0.104s
-          re2c-tnfa-posix-gor1:      3.72     0.303s
-          re2c-tnfa-posix-gtop:      3.49     0.285s
-     re2c-tnfa-posix-kukl-gor1:      2.60     0.213s
-     re2c-tnfa-posix-gor1-slow:      4.56     0.372s
-     re2c-tnfa-posix-gor1-trie:      2.98     0.244s
-     re2c-tnfa-posix-back-gor1:      3.21     0.262s
+            re2c-tnfa-leftmost:      1.00     0.029s
+       re2c-tnfa-leftmost-trie:      0.57     0.017s
+                           re2:      0.18     0.005s
+          re2c-tnfa-posix-gor1:      2.87     0.085s
+          re2c-tnfa-posix-gtop:      2.94     0.087s
+     re2c-tnfa-posix-gor1-slow:      3.75     0.111s
+     re2c-tnfa-posix-gor1-trie:      2.47     0.073s
+     re2c-tnfa-posix-kukl-gor1:      2.04     0.060s
+     re2c-tnfa-posix-back-gor1:      2.25     0.066s
 
-r: (a{7}|a{11}|a{13})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 19 chars, 1 groups
-            re2c-tnfa-leftmost:      1.00     0.174s
-                           re2:      1.33     0.230s
-          re2c-tnfa-posix-gor1:      6.34     1.102s
-          re2c-tnfa-posix-gtop:      6.80     1.181s
-     re2c-tnfa-posix-kukl-gor1:      3.44     0.597s
-     re2c-tnfa-posix-gor1-slow:     11.92     2.070s
-     re2c-tnfa-posix-gor1-trie:      2.78     0.483s
-     re2c-tnfa-posix-back-gor1:      3.07     0.533s
+r: (a{7}|a{13}|a{19})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 19 chars, 1 groups
+            re2c-tnfa-leftmost:      1.00     0.077s
+       re2c-tnfa-leftmost-trie:      0.47     0.036s
+                           re2:      0.92     0.071s
+          re2c-tnfa-posix-gor1:      5.61     0.434s
+          re2c-tnfa-posix-gtop:      5.73     0.443s
+     re2c-tnfa-posix-gor1-slow:     13.97     1.081s
+     re2c-tnfa-posix-gor1-trie:      1.72     0.133s
+     re2c-tnfa-posix-kukl-gor1:      2.54     0.197s
+     re2c-tnfa-posix-back-gor1:      2.10     0.163s
 
-r: (a{17}|a{19}|a{23})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 20 chars, 1 groups
-            re2c-tnfa-leftmost:      1.00     0.288s
-                           re2:      1.44     0.415s
-          re2c-tnfa-posix-gor1:     10.19     2.940s
-          re2c-tnfa-posix-gtop:     10.94     3.154s
-     re2c-tnfa-posix-kukl-gor1:      3.87     1.115s
-     re2c-tnfa-posix-gor1-slow:     22.45     6.474s
-     re2c-tnfa-posix-gor1-trie:      2.31     0.665s
-     re2c-tnfa-posix-back-gor1:      3.01     0.868s
+r: (a{29}|a{41}|a{53})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 20 chars, 1 groups
+            re2c-tnfa-leftmost:      1.00     0.213s
+       re2c-tnfa-leftmost-trie:      0.44     0.093s
+                           re2:      0.89     0.190s
+          re2c-tnfa-posix-gor1:     12.70     2.710s
+          re2c-tnfa-posix-gtop:     13.43     2.866s
+     re2c-tnfa-posix-gor1-slow:     41.28     8.809s
+     re2c-tnfa-posix-gor1-trie:      1.30     0.277s
+     re2c-tnfa-posix-kukl-gor1:      4.73     1.010s
+     re2c-tnfa-posix-back-gor1:      2.03     0.434s
 
-r: (a{29}|a{31}|a{37})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 20 chars, 1 groups
-            re2c-tnfa-leftmost:      1.00     0.444s
-                           re2:      1.44     0.639s
-          re2c-tnfa-posix-gor1:     15.15     6.731s
-          re2c-tnfa-posix-gtop:     16.01     7.116s
-     re2c-tnfa-posix-kukl-gor1:      4.17     1.854s
-     re2c-tnfa-posix-gor1-slow:     36.72    16.318s
-     re2c-tnfa-posix-gor1-trie:      2.28     1.015s
-     re2c-tnfa-posix-back-gor1:      2.97     1.321s
+r: (a{67}|a{83}|a{103})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 21 chars, 1 groups
+            re2c-tnfa-leftmost:      1.00     0.422s
+       re2c-tnfa-leftmost-trie:      0.42     0.179s
+                           re2:      0.92     0.390s
+          re2c-tnfa-posix-gor1:     25.52    10.771s
+          re2c-tnfa-posix-gtop:     25.81    10.895s
+     re2c-tnfa-posix-gor1-slow:     85.78    36.206s
+     re2c-tnfa-posix-gor1-trie:      1.32     0.559s
+     re2c-tnfa-posix-kukl-gor1:      5.13     2.167s
+     re2c-tnfa-posix-back-gor1:      2.03     0.857s
+
+r: (a{127}|a{151}|a{179})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 23 chars, 1 groups
+            re2c-tnfa-leftmost:      1.00     0.697s
+       re2c-tnfa-leftmost-trie:      0.46     0.320s
+                           re2:      0.93     0.646s
+          re2c-tnfa-posix-gor1:     49.63    34.599s
+          re2c-tnfa-posix-gtop:     49.05    34.195s
+     re2c-tnfa-posix-gor1-slow:    170.54   118.898s
+     re2c-tnfa-posix-gor1-trie:      1.27     0.885s
+     re2c-tnfa-posix-kukl-gor1:      5.54     3.860s
+     re2c-tnfa-posix-back-gor1:      2.19     1.527s
+
+r: (a{199}|a{239}|a{271})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 23 chars, 1 groups
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+re2/re2.cc:727: DFA out of memory: size 715, bytemap range 2, list count 711
+            re2c-tnfa-leftmost:      1.00     0.926s
+       re2c-tnfa-leftmost-trie:      0.47     0.437s
+                           re2:      1.10     1.015s
+          re2c-tnfa-posix-gor1:     84.31    78.107s
+          re2c-tnfa-posix-gtop:     78.26    72.498s
+     re2c-tnfa-posix-gor1-slow:    260.50   241.332s
+     re2c-tnfa-posix-gor1-trie:      1.16     1.071s
+     re2c-tnfa-posix-kukl-gor1:      5.44     5.043s
+     re2c-tnfa-posix-back-gor1:      2.22     2.056s
 
 r: (((a){2})|((a){3})|((a){5}))*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 29 chars, 7 groups
-            re2c-tnfa-leftmost:      1.00     0.293s
-                           re2:      1.12     0.329s
-          re2c-tnfa-posix-gor1:      2.96     0.867s
-          re2c-tnfa-posix-gtop:      3.28     0.960s
-     re2c-tnfa-posix-kukl-gor1:      5.68     1.664s
-     re2c-tnfa-posix-gor1-slow:      3.22     0.943s
-     re2c-tnfa-posix-gor1-trie:      4.94     1.446s
-     re2c-tnfa-posix-back-gor1:      4.36     1.277s
+            re2c-tnfa-leftmost:      1.00     0.102s
+       re2c-tnfa-leftmost-trie:      0.88     0.090s
+                           re2:      0.71     0.073s
+          re2c-tnfa-posix-gor1:      2.68     0.274s
+          re2c-tnfa-posix-gtop:      2.92     0.298s
+     re2c-tnfa-posix-gor1-slow:      3.10     0.317s
+     re2c-tnfa-posix-gor1-trie:      4.66     0.476s
+     re2c-tnfa-posix-kukl-gor1:      3.42     0.349s
+     re2c-tnfa-posix-back-gor1:      3.77     0.385s
 
-r: (((a){7})|((a){11})|((a){13}))..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 31 chars, 7 groups
-            re2c-tnfa-leftmost:      1.00     0.607s
-                           re2:      1.38     0.839s
-          re2c-tnfa-posix-gor1:      4.47     2.714s
-          re2c-tnfa-posix-gtop:      5.36     3.252s
-     re2c-tnfa-posix-kukl-gor1:      7.86     4.771s
-     re2c-tnfa-posix-gor1-slow:      7.33     4.451s
-     re2c-tnfa-posix-gor1-trie:     10.65     6.462s
-     re2c-tnfa-posix-back-gor1:      4.11     2.495s
-
-r: (((a){17})|((a){19})|((a){23})..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 32 chars, 7 groups
-            re2c-tnfa-leftmost:      1.00     1.049s
-                           re2:      1.46     1.534s
-          re2c-tnfa-posix-gor1:      6.39     6.703s
-          re2c-tnfa-posix-gtop:      7.43     7.793s
-     re2c-tnfa-posix-kukl-gor1:      8.61     9.032s
-     re2c-tnfa-posix-gor1-slow:     13.06    13.693s
-     re2c-tnfa-posix-gor1-trie:     14.67    15.388s
-     re2c-tnfa-posix-back-gor1:      3.99     4.185s
-
-r: (((a){29})|((a){31})|((a){37})..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 32 chars, 7 groups
-            re2c-tnfa-leftmost:      1.00     1.699s
-                           re2:      1.44     2.450s
-          re2c-tnfa-posix-gor1:      8.66    14.703s
-          re2c-tnfa-posix-gtop:      9.80    16.649s
-     re2c-tnfa-posix-kukl-gor1:      8.82    14.986s
-     re2c-tnfa-posix-gor1-slow:     19.78    33.600s
-     re2c-tnfa-posix-gor1-trie:     18.85    32.022s
-     re2c-tnfa-posix-back-gor1:      3.92     6.651s
-
-r: ((((((((((a*)*)*)*)*)*)*)*)*)*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 32 chars, 10 groups
-            re2c-tnfa-leftmost:      1.00     0.208s
-                           re2:      0.78     0.162s
-          re2c-tnfa-posix-gor1:      1.91     0.397s
-          re2c-tnfa-posix-gtop:      1.98     0.410s
-     re2c-tnfa-posix-kukl-gor1:      3.50     0.726s
-     re2c-tnfa-posix-gor1-slow:      1.86     0.386s
-     re2c-tnfa-posix-gor1-trie:      5.96     1.238s
-     re2c-tnfa-posix-back-gor1:      7.22     1.498s
-
-r: (a*)(a*)(a*)(a*)(a*)(a*)(a*)(a..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 32 chars, 8 groups
-            re2c-tnfa-leftmost:      1.00     0.272s
-                           re2:      0.76     0.208s
-          re2c-tnfa-posix-gor1:      3.53     0.961s
-          re2c-tnfa-posix-gtop:      3.95     1.077s
-     re2c-tnfa-posix-kukl-gor1:     13.80     3.759s
-     re2c-tnfa-posix-gor1-slow:      3.85     1.049s
-     re2c-tnfa-posix-gor1-trie:     11.95     3.256s
-     re2c-tnfa-posix-back-gor1:      7.53     2.051s
-
-r: (((a*)(a*)(a*))*((a*)(a*)(a*))..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 33 chars, 9 groups
-            re2c-tnfa-leftmost:      1.00     0.265s
-                           re2:      0.89     0.235s
-          re2c-tnfa-posix-gor1:      3.16     0.837s
-          re2c-tnfa-posix-gtop:      3.76     0.994s
-     re2c-tnfa-posix-kukl-gor1:     15.35     4.061s
-     re2c-tnfa-posix-gor1-slow:      3.16     0.837s
-     re2c-tnfa-posix-gor1-trie:     20.59     5.450s
-     re2c-tnfa-posix-back-gor1:      9.86     2.610s
-
-r: (((((a*)*)*((a*)*)*((a*)*)*)*)..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 33 chars, 9 groups
-            re2c-tnfa-leftmost:      1.00     0.246s
-                           re2:      0.86     0.211s
-          re2c-tnfa-posix-gor1:      2.92     0.718s
-          re2c-tnfa-posix-gtop:      3.49     0.860s
-     re2c-tnfa-posix-kukl-gor1:     17.82     4.390s
-     re2c-tnfa-posix-gor1-slow:      2.57     0.634s
-     re2c-tnfa-posix-gor1-trie:     21.64     5.330s
-     re2c-tnfa-posix-back-gor1:     13.05     3.214s
-
-r: (((((a*)*(a*))*(a*))*(a*))*(a*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 33 chars, 9 groups
-            re2c-tnfa-leftmost:      1.00     0.255s
-                           re2:      0.79     0.203s
-          re2c-tnfa-posix-gor1:      2.87     0.732s
-          re2c-tnfa-posix-gtop:      3.45     0.881s
-     re2c-tnfa-posix-kukl-gor1:     12.61     3.221s
-     re2c-tnfa-posix-gor1-slow:      2.72     0.694s
-     re2c-tnfa-posix-gor1-trie:     24.53     6.267s
-     re2c-tnfa-posix-back-gor1:     11.54     2.949s
-
-r: ((a*)((a*)((a*)((a*)(a*)*)*)*)..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 33 chars, 9 groups
-            re2c-tnfa-leftmost:      1.00     0.270s
-                           re2:      0.81     0.218s
-          re2c-tnfa-posix-gor1:      3.07     0.828s
-          re2c-tnfa-posix-gtop:      3.62     0.977s
-     re2c-tnfa-posix-kukl-gor1:     14.90     4.021s
-     re2c-tnfa-posix-gor1-slow:      2.94     0.793s
-     re2c-tnfa-posix-gor1-trie:     16.27     4.392s
-     re2c-tnfa-posix-back-gor1:      9.92     2.678s
-
-r: (a*)|(a*)|(a*)|(a*)|(a*)|(a*)|..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 34 chars, 7 groups
-            re2c-tnfa-leftmost:      1.00     0.121s
-                           re2:      0.78     0.094s
-          re2c-tnfa-posix-gor1:      3.18     0.383s
-          re2c-tnfa-posix-gtop:      3.92     0.473s
-     re2c-tnfa-posix-kukl-gor1:      5.99     0.722s
-     re2c-tnfa-posix-gor1-slow:      3.33     0.401s
-     re2c-tnfa-posix-gor1-trie:      8.01     0.966s
-     re2c-tnfa-posix-back-gor1:      8.81     1.063s
-
-r: ((a*)|(a*)|(a*))((a*)|(a*)|(a*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 32 chars, 8 groups
-            re2c-tnfa-leftmost:      1.00     0.202s
-                           re2:      0.89     0.179s
-          re2c-tnfa-posix-gor1:      2.99     0.605s
-          re2c-tnfa-posix-gtop:      3.41     0.689s
-     re2c-tnfa-posix-kukl-gor1:      7.17     1.448s
-     re2c-tnfa-posix-gor1-slow:      2.89     0.584s
-     re2c-tnfa-posix-gor1-trie:     11.49     2.319s
-     re2c-tnfa-posix-back-gor1:      6.29     1.269s
-
-r: ((a*)|(a*))((a*)|(a*))((a*)|(a..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 33 chars, 9 groups
-            re2c-tnfa-leftmost:      1.00     0.252s
-                           re2:      0.76     0.190s
-          re2c-tnfa-posix-gor1:      2.75     0.691s
-          re2c-tnfa-posix-gtop:      3.02     0.760s
-     re2c-tnfa-posix-kukl-gor1:      7.95     2.002s
-     re2c-tnfa-posix-gor1-slow:      2.70     0.681s
-     re2c-tnfa-posix-gor1-trie:      9.96     2.507s
-     re2c-tnfa-posix-back-gor1:      5.83     1.468s
-
-r: ((a*)|(a*)|(a*))*|((a*)|(a*)|(..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 35 chars, 8 groups
-            re2c-tnfa-leftmost:      1.00     0.250s
-                           re2:      0.93     0.233s
-          re2c-tnfa-posix-gor1:      2.42     0.605s
-          re2c-tnfa-posix-gtop:      3.00     0.748s
-     re2c-tnfa-posix-kukl-gor1:      8.00     1.996s
-     re2c-tnfa-posix-gor1-slow:      2.44     0.608s
-     re2c-tnfa-posix-gor1-trie:     19.99     4.989s
-     re2c-tnfa-posix-back-gor1:      7.73     1.929s
-
-r: (((((a*)*)*|((a*)*)*|((a*)*)*)..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 35 chars, 9 groups
+r: (((a){7})|((a){13})|((a){19}))..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 31 chars, 7 groups
             re2c-tnfa-leftmost:      1.00     0.280s
-                           re2:      0.87     0.243s
-          re2c-tnfa-posix-gor1:      3.27     0.913s
-          re2c-tnfa-posix-gtop:      2.57     0.719s
-     re2c-tnfa-posix-kukl-gor1:     11.24     3.142s
-     re2c-tnfa-posix-gor1-slow:      3.22     0.901s
-     re2c-tnfa-posix-gor1-trie:     24.15     6.754s
-     re2c-tnfa-posix-back-gor1:     10.08     2.818s
+       re2c-tnfa-leftmost-trie:      0.85     0.238s
+                           re2:      0.75     0.209s
+          re2c-tnfa-posix-gor1:      4.21     1.182s
+          re2c-tnfa-posix-gtop:      4.66     1.307s
+     re2c-tnfa-posix-gor1-slow:      8.16     2.288s
+     re2c-tnfa-posix-gor1-trie:     11.98     3.361s
+     re2c-tnfa-posix-kukl-gor1:      9.60     2.693s
+     re2c-tnfa-posix-back-gor1:      3.57     1.001s
 
-r: ((a*)|((a*)(a*))|((a*)(a*)(a*)..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 33 chars, 9 groups
-            re2c-tnfa-leftmost:      1.00     0.311s
-                           re2:      0.71     0.222s
-          re2c-tnfa-posix-gor1:      2.50     0.779s
-          re2c-tnfa-posix-gtop:      2.19     0.682s
-     re2c-tnfa-posix-kukl-gor1:      6.02     1.874s
-     re2c-tnfa-posix-gor1-slow:      2.46     0.765s
-     re2c-tnfa-posix-gor1-trie:     14.57     4.533s
-     re2c-tnfa-posix-back-gor1:      5.55     1.726s
+r: (((a){29})|((a){41})|((a){53})..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 32 chars, 7 groups
+            re2c-tnfa-leftmost:      1.00     0.851s
+       re2c-tnfa-leftmost-trie:      0.73     0.622s
+                           re2:      0.72     0.615s
+          re2c-tnfa-posix-gor1:      7.73     6.577s
+          re2c-tnfa-posix-gtop:      8.64     7.346s
+     re2c-tnfa-posix-gor1-slow:     19.31    16.424s
+     re2c-tnfa-posix-gor1-trie:     22.50    19.136s
+     re2c-tnfa-posix-kukl-gor1:      9.70     8.251s
+     re2c-tnfa-posix-back-gor1:      3.26     2.770s
 
-r: (((a*)(a*)(a*))|((a*)(a*))|(a*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 33 chars, 9 groups
-            re2c-tnfa-leftmost:      1.00     0.286s
-                           re2:      0.79     0.225s
-          re2c-tnfa-posix-gor1:      2.51     0.716s
-          re2c-tnfa-posix-gtop:      2.52     0.720s
-     re2c-tnfa-posix-kukl-gor1:      6.20     1.771s
-     re2c-tnfa-posix-gor1-slow:      2.47     0.704s
-     re2c-tnfa-posix-gor1-trie:     16.15     4.614s
-     re2c-tnfa-posix-back-gor1:      7.50     2.142s
+r: (((a){67})|((a){83})|((a){103}..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 33 chars, 7 groups
+            re2c-tnfa-leftmost:      1.00     1.632s
+       re2c-tnfa-leftmost-trie:      0.78     1.271s
+                           re2:      0.75     1.230s
+          re2c-tnfa-posix-gor1:     14.55    23.750s
+          re2c-tnfa-posix-gtop:     15.72    25.649s
+     re2c-tnfa-posix-gor1-slow:     40.17    65.549s
+     re2c-tnfa-posix-gor1-trie:     42.22    68.892s
+     re2c-tnfa-posix-kukl-gor1:     10.83    17.668s
+     re2c-tnfa-posix-back-gor1:      3.81     6.210s
 
-r: ((a?){0,125})*..., s: aaaaaaaaaa..., n: 256, 14 chars, 2 groups
-            re2c-tnfa-leftmost:      1.00     0.197s
-                           re2:      0.46     0.091s
-          re2c-tnfa-posix-gor1:      5.11     1.007s
-          re2c-tnfa-posix-gtop:      5.42     1.068s
-     re2c-tnfa-posix-kukl-gor1:     24.85     4.897s
-     re2c-tnfa-posix-gor1-slow:     46.84     9.229s
-     re2c-tnfa-posix-gor1-trie:      5.66     1.116s
-     re2c-tnfa-posix-back-gor1:      1.13     0.222s
+r: (((a){127})|((a){151})|((a){17..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 35 chars, 7 groups
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+re2/re2.cc:727: DFA out of memory: size 1383, bytemap range 2, list count 1379
+            re2c-tnfa-leftmost:      1.00     2.806s
+       re2c-tnfa-leftmost-trie:      0.80     2.240s
+                           re2:      0.84     2.370s
+          re2c-tnfa-posix-gor1:     25.79    72.357s
+          re2c-tnfa-posix-gtop:     27.08    75.989s
+     re2c-tnfa-posix-gor1-slow:     70.86   198.850s
+     re2c-tnfa-posix-gor1-trie:     60.26   169.098s
+     re2c-tnfa-posix-kukl-gor1:     11.03    30.945s
+     re2c-tnfa-posix-back-gor1:      3.74    10.489s
 
-r: ((a?){0,250})*..., s: aaaaaaaaaa..., n: 16, 14 chars, 2 groups
-            re2c-tnfa-leftmost:      1.00     0.042s
-                           re2:      0.27     0.012s
-          re2c-tnfa-posix-gor1:      5.67     0.240s
-          re2c-tnfa-posix-gtop:      5.85     0.248s
-     re2c-tnfa-posix-kukl-gor1:     31.69     1.341s
-     re2c-tnfa-posix-gor1-slow:    101.25     4.285s
-     re2c-tnfa-posix-gor1-trie:      5.25     0.222s
-     re2c-tnfa-posix-back-gor1:      0.67     0.028s
+r: (((a){199})|((a){239})|((a){27..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 10, 35 chars, 7 groups
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+re2/re2.cc:727: DFA out of memory: size 2139, bytemap range 2, list count 2135
+            re2c-tnfa-leftmost:      1.00     3.677s
+       re2c-tnfa-leftmost-trie:      0.78     2.867s
+                           re2:      0.84     3.088s
+          re2c-tnfa-posix-gor1:     40.13   147.552s
+          re2c-tnfa-posix-gtop:     42.13   154.899s
+     re2c-tnfa-posix-gor1-slow:    108.65   399.523s
+     re2c-tnfa-posix-gor1-trie:     72.39   266.167s
+     re2c-tnfa-posix-kukl-gor1:     11.32    41.641s
+     re2c-tnfa-posix-back-gor1:      4.36    16.020s
 
-r: ((a?){0,500})*..., s: aaaaaaaaaa..., n: 4, 14 chars, 2 groups
-            re2c-tnfa-leftmost:      1.00     0.039s
-                           re2:      0.15     0.006s
-          re2c-tnfa-posix-gor1:      6.02     0.234s
-          re2c-tnfa-posix-gtop:      6.15     0.240s
-     re2c-tnfa-posix-kukl-gor1:     40.83     1.590s
-     re2c-tnfa-posix-gor1-slow:    211.30     8.228s
-     re2c-tnfa-posix-gor1-trie:      5.08     0.198s
-     re2c-tnfa-posix-back-gor1:      0.37     0.015s
+r: (a{0,1})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 9 chars, 1 groups
+            re2c-tnfa-leftmost:      1.00     0.001s
+       re2c-tnfa-leftmost-trie:      0.86     0.001s
+                           re2:      0.36     0.000s
+          re2c-tnfa-posix-gor1:      1.98     0.002s
+          re2c-tnfa-posix-gtop:      1.86     0.002s
+     re2c-tnfa-posix-gor1-slow:      1.47     0.002s
+     re2c-tnfa-posix-gor1-trie:      0.90     0.001s
+     re2c-tnfa-posix-kukl-gor1:      1.23     0.001s
+     re2c-tnfa-posix-back-gor1:      2.60     0.003s
 
-r: ((a?){0,1000})*..., s: aaaaaaaaaa..., n: 2, 15 chars, 2 groups
-            re2c-tnfa-leftmost:      1.00     0.075s
-                           re2:      0.08     0.006s
-          re2c-tnfa-posix-gor1:      6.48     0.483s
-          re2c-tnfa-posix-gtop:      6.47     0.482s
-     re2c-tnfa-posix-kukl-gor1:     45.31     3.377s
-     re2c-tnfa-posix-gor1-slow:    431.51    32.162s
-     re2c-tnfa-posix-gor1-trie:      4.92     0.367s
-     re2c-tnfa-posix-back-gor1:      0.19     0.014s
+r: (a{0,256})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 11 chars, 1 groups
+            re2c-tnfa-leftmost:      1.00     0.084s
+       re2c-tnfa-leftmost-trie:      0.68     0.057s
+                           re2:      0.65     0.055s
+          re2c-tnfa-posix-gor1:     41.88     3.500s
+          re2c-tnfa-posix-gtop:     43.34     3.622s
+     re2c-tnfa-posix-gor1-slow:     59.69     4.989s
+     re2c-tnfa-posix-gor1-trie:     15.91     1.330s
+     re2c-tnfa-posix-kukl-gor1:      2.86     0.239s
+     re2c-tnfa-posix-back-gor1:      3.33     0.278s
 
-r: ((a?){0,2000})*..., s: aaaaaaaaaa..., n: 1, 15 chars, 2 groups
-            re2c-tnfa-leftmost:      1.00     0.146s
-                           re2:         -         -
-          re2c-tnfa-posix-gor1:      6.68     0.976s
-          re2c-tnfa-posix-gtop:      6.64     0.971s
-     re2c-tnfa-posix-kukl-gor1:     53.49     7.818s
-     re2c-tnfa-posix-gor1-slow:    880.72   128.736s
-     re2c-tnfa-posix-gor1-trie:      4.83     0.705s
-     re2c-tnfa-posix-back-gor1:      0.11     0.015s
+r: (a{0,512})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 11 chars, 1 groups
+            re2c-tnfa-leftmost:      1.00     0.167s
+       re2c-tnfa-leftmost-trie:      0.72     0.120s
+                           re2:      0.66     0.109s
+          re2c-tnfa-posix-gor1:    114.81    19.141s
+          re2c-tnfa-posix-gtop:    116.42    19.409s
+     re2c-tnfa-posix-gor1-slow:    136.61    22.776s
+     re2c-tnfa-posix-gor1-trie:     20.02     3.338s
+     re2c-tnfa-posix-kukl-gor1:      3.52     0.586s
+     re2c-tnfa-posix-back-gor1:      3.34     0.556s
+
+r: ((a){0,1})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 11 chars, 2 groups
+            re2c-tnfa-leftmost:      1.00     0.002s
+       re2c-tnfa-leftmost-trie:      0.94     0.002s
+                           re2:      0.33     0.001s
+          re2c-tnfa-posix-gor1:      2.15     0.004s
+          re2c-tnfa-posix-gtop:      2.06     0.004s
+     re2c-tnfa-posix-gor1-slow:      1.53     0.003s
+     re2c-tnfa-posix-gor1-trie:      1.03     0.002s
+     re2c-tnfa-posix-kukl-gor1:      1.27     0.002s
+     re2c-tnfa-posix-back-gor1:      2.30     0.004s
+
+r: ((a){0,256})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 13 chars, 2 groups
+            re2c-tnfa-leftmost:      1.00     0.201s
+       re2c-tnfa-leftmost-trie:      0.87     0.175s
+                           re2:      0.61     0.123s
+          re2c-tnfa-posix-gor1:     16.39     3.287s
+          re2c-tnfa-posix-gtop:     17.69     3.547s
+     re2c-tnfa-posix-gor1-slow:     36.86     7.390s
+     re2c-tnfa-posix-gor1-trie:     18.12     3.633s
+     re2c-tnfa-posix-kukl-gor1:      2.03     0.407s
+     re2c-tnfa-posix-back-gor1:      2.68     0.538s
+
+r: ((a){0,512})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 13 chars, 2 groups
+            re2c-tnfa-leftmost:      1.00     0.400s
+       re2c-tnfa-leftmost-trie:      0.86     0.344s
+                           re2:      0.61     0.245s
+          re2c-tnfa-posix-gor1:     48.13    19.272s
+          re2c-tnfa-posix-gtop:     50.45    20.204s
+     re2c-tnfa-posix-gor1-slow:     81.47    32.626s
+     re2c-tnfa-posix-gor1-trie:     19.71     7.893s
+     re2c-tnfa-posix-kukl-gor1:      2.17     0.868s
+     re2c-tnfa-posix-back-gor1:      2.87     1.148s
+
+r: ((a?){0,1})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 12 chars, 2 groups
+            re2c-tnfa-leftmost:      1.00     0.002s
+       re2c-tnfa-leftmost-trie:      0.97     0.002s
+                           re2:      0.33     0.001s
+          re2c-tnfa-posix-gor1:      1.95     0.004s
+          re2c-tnfa-posix-gtop:      2.09     0.004s
+     re2c-tnfa-posix-gor1-slow:      1.49     0.003s
+     re2c-tnfa-posix-gor1-trie:      1.00     0.002s
+     re2c-tnfa-posix-kukl-gor1:      1.24     0.002s
+     re2c-tnfa-posix-back-gor1:      2.43     0.005s
+
+r: ((a?){0,256})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 14 chars, 2 groups
+            re2c-tnfa-leftmost:      1.00     1.993s
+       re2c-tnfa-leftmost-trie:      0.11     0.222s
+                           re2:      0.09     0.173s
+          re2c-tnfa-posix-gor1:      3.50     6.966s
+          re2c-tnfa-posix-gtop:      5.39    10.734s
+     re2c-tnfa-posix-gor1-slow:    108.91   217.005s
+     re2c-tnfa-posix-gor1-trie:      5.43    10.814s
+     re2c-tnfa-posix-kukl-gor1:     27.46    54.711s
+     re2c-tnfa-posix-back-gor1:      0.37     0.738s
+
+r: ((a?){0,512})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 14 chars, 2 groups
+            re2c-tnfa-leftmost:      1.00     7.476s
+       re2c-tnfa-leftmost-trie:      0.06     0.442s
+                           re2:      0.05     0.369s
+          re2c-tnfa-posix-gor1:      4.38    32.749s
+          re2c-tnfa-posix-gtop:      6.32    47.228s
+     re2c-tnfa-posix-gor1-slow:    227.48  1700.635s
+     re2c-tnfa-posix-gor1-trie:      4.82    36.052s
+     re2c-tnfa-posix-kukl-gor1:     32.78   245.040s
+     re2c-tnfa-posix-back-gor1:      0.21     1.588s
+
+r: ((a*){0,1})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 12 chars, 2 groups
+            re2c-tnfa-leftmost:      1.00     0.002s
+       re2c-tnfa-leftmost-trie:      0.95     0.002s
+                           re2:      0.05     0.000s
+          re2c-tnfa-posix-gor1:      1.67     0.003s
+          re2c-tnfa-posix-gtop:      1.72     0.004s
+     re2c-tnfa-posix-gor1-slow:      1.52     0.003s
+     re2c-tnfa-posix-gor1-trie:      2.18     0.004s
+     re2c-tnfa-posix-kukl-gor1:      1.33     0.003s
+     re2c-tnfa-posix-back-gor1:      2.77     0.006s
+
+r: ((a*){0,256})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 14 chars, 2 groups
+            re2c-tnfa-leftmost:      1.00     1.967s
+       re2c-tnfa-leftmost-trie:      0.14     0.270s
+                           re2:      0.08     0.152s
+          re2c-tnfa-posix-gor1:      6.57    12.925s
+          re2c-tnfa-posix-gtop:      6.78    13.333s
+     re2c-tnfa-posix-gor1-slow:    111.69   219.686s
+     re2c-tnfa-posix-gor1-trie:     10.93    21.493s
+     re2c-tnfa-posix-kukl-gor1:     58.81   115.673s
+     re2c-tnfa-posix-back-gor1:      0.67     1.319s
+
+r: ((a*){0,512})*..., s: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..., n: 1, 14 chars, 2 groups
+            re2c-tnfa-leftmost:      1.00     7.213s
+       re2c-tnfa-leftmost-trie:      0.07     0.534s
+                           re2:      0.04     0.324s
+          re2c-tnfa-posix-gor1:      7.60    54.793s
+          re2c-tnfa-posix-gtop:      7.74    55.861s
+     re2c-tnfa-posix-gor1-slow:    237.48  1712.831s
+     re2c-tnfa-posix-gor1-trie:     10.21    73.639s
+     re2c-tnfa-posix-kukl-gor1:     53.00   382.291s
+     re2c-tnfa-posix-back-gor1:      0.39     2.782s

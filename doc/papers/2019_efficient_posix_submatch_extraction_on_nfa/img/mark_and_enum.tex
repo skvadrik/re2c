@@ -59,169 +59,218 @@
 
 \small{
 
-\begin{scope}[xshift=2.4in, yshift=-1.7in]
-    \graph [tree layout, grow=down, fresh nodes, level distance=0.35in] {
-        "${(1, 0, \cdot)}_{\Lambda}$" -- {
-            "${(2, 0, \{1,1\})}_{1}$" -- {
-                "${(3, 1, |)}_{1.1}$" -- {
-                    "${(0, 0, \epsilon)}_{1.1.1}$",
-                    "${(0, 0, \{0,\infty\})}_{1.1.2}$" -- {
-                        "${(0, 0, a)}_{1.1.2.1}$"
-                    }
-                }
-            },
-            "${4, 0, \{0,3\})}_{2}$" -- {
-                "${(5, 2, |)}_{2.1}$" -- {
-                    "${(0, 0, a)}_{2.1.1}$",
-                    "${(0, 0, \epsilon)}_{2.1.2}$"
-                }
-            }
-        }
-    };
-\end{scope}
-
-\begin{scope}[xshift=2.4in, yshift=-3.3in]
-    \node (c) {{
-    $(1,0, (2,0,(3,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))^{1,1})
-        \cdot (4,0,(5,2,(0,0,a) \mid (0,0,\epsilon))^{0,3}))$
+\begin{scope}[xshift=-0in, yshift=0in]
+    \node (a) {{
+    $\begin{aligned}
+        & mark (1,\; (((\epsilon|a^{0,\infty}))(\epsilon|a)^{0,3} )) = \big[ \\[-0.2em]
+        & \quad mark (2,\; ((\epsilon|a^{0,\infty}))(\epsilon|a)^{0,\infty} ) = \big[ \\[-0.2em]
+        %
+        & \quad\quad mark (2,\; ((\epsilon|a^{0,\infty})) ) = \big[ \\[-0.2em]
+        & \quad\quad\quad mark (3,\; (\epsilon|a^{0,\infty}) ) = \big[ \\[-0.2em]
+        & \quad\quad\quad\quad mark (4,\; \epsilon|a^{0,\infty} ) = \big[ \\[-0.2em]
+        & \quad\quad\quad\quad\quad mark (4,\; \epsilon ) = (4,\; (0,\emptyset,\epsilon)) \\[-0.2em]
+        & \quad\quad\quad\quad\quad mark (4,\; a^{0,\infty} ) = \big[ \\[-0.2em]
+        & \quad\quad\quad\quad\quad\quad mark (4,\; a ) = (4,\; (0,\emptyset,a)) \\[-0.2em]
+        & \quad\quad\quad\quad\quad \big] = (4,\; (0,\emptyset,(0,\emptyset,a)^{0,\infty})) \\[-0.2em]
+        & \quad\quad\quad\quad \big] = (4,\; (0,\emptyset,(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty}))) \\[-0.2em]
+        & \quad\quad\quad \big] = (4,\; (1,\{3\},(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty}))) \\[-0.2em]
+        & \quad\quad \big] = (4,\; (1,\{2, 3\},(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty}))) \\[-0.2em]
+        %
+        & \quad\quad mark (4,\; (\epsilon|a)^{0,3} ) = \big[ \\[-0.2em]
+        & \quad\quad\quad mark (4,\; (\epsilon|a) ) = \big[ \\[-0.2em]
+        & \quad\quad\quad\quad mark (5,\; \epsilon|a ) = \big [ \\[-0.2em]
+        & \quad\quad\quad\quad\quad mark (5,\; \epsilon ) = (5,\; (0,\emptyset,\epsilon)) \\[-0.2em]
+        & \quad\quad\quad\quad\quad mark (5,\; a ) = (5,\; (0,\emptyset,a)) \\[-0.2em]
+        & \quad\quad\quad\quad \big] = (5,\; (0,\emptyset,(0,\emptyset,\epsilon) \mid (0,\emptyset,a))) \\[-0.2em]
+        & \quad\quad\quad \big] = (5,\; (1,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a))) \\[-0.2em]
+        & \quad\quad \big] = (5,\; (1,\emptyset,(1,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a))^{0,3})) \\[-0.2em]
+        %
+        & \quad\big] = (5,\; (1,\emptyset,
+           (1,\{2,3\},(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty})) \\[-0.2em]
+           & \quad\quad\quad\quad\quad\enspace \cdot (1,\emptyset,(1,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a))^{0,3})
+           )) \\[-0.2em]
+        & \big] = (5,\; (1,\{1\},
+           (1,\{2,3\},(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty})) \\[-0.2em]
+           & \quad\quad\quad\quad\quad\enspace \cdot (1,\emptyset,(1,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a))^{0,3})
+           ))
+    \end{aligned}$
     }};
 \end{scope}
 
-\newcommand\xsp[1]{\hphantom{\hspace{#1em}\hspace{-0.0em}}}
-
-\begin{scope}[xshift=-0.3in, yshift=-3.6in, sibling distance=0.6in, level distance=0.35in]
-    \node[xshift=-0.2in, draw=none] {$s:$};
-    \graph [tree layout, grow=down, fresh nodes] {
-        a1/"${T}^{1}_{\Lambda}$" -- {
-            a11/"${T}^{2}_{1}$" -- {
-                a111/"${T}^{3}_{1.1}$" -- {
-                    a1111/"${\varnothing}^{0}_{1.1.1}$",
-                    a1112/"${T}^{0}_{1.1.2}$" -- {
-                        a11121/"${a}^{0}_{1.1.2.1}$"
-                    }
-                }
-            },
-            a12/"${T}^{4}_{2}$" -- {
-                a121/"${\varnothing}^{5}_{2.1}$"
-            }
-        }
-    };
-    \node at (a1)     {\xsp{2.5}\footnotesize{$\#1$}};
-    \node at (a11)    {\xsp{2.5}\footnotesize{$\#1$}};
-    \node at (a111)   {\xsp{2.5}\footnotesize{$\#1$}};
-    \node at (a1111)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a1112)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a11121) {\xsp{4.0}\footnotesize{$\#\infty$}};
-    \node at (a12)    {\xsp{2.5}\footnotesize{$\#0$}};
-    \node at (a121)   {\xsp{3.0}\footnotesize{$\#\!-\!\!1$}};
-
-    \node[yshift=-1.65in, draw=none]
-    {${T}^{1} \big(
-        {T}^{2} \big(
-            {T}^{3} (
-                {\varnothing}^{0},
-                {T}^{0}({a}^{0})
-            )
-        \big),
-        {T}^{4}(
-            {\varnothing}^{5}
-        )
-    \big)$};
+\begin{scope}[xshift=0in, yshift=-3.9in]
+    \node (a) {{
+    $\begin{aligned}
+        & enum (1,\; (1,\{1\},
+            (1,\{2,3\},(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty})) \\[-0.2em]
+            & \quad\quad\quad\quad\quad\quad \cdot (1,\emptyset,(1,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a))^{0,\infty}))) = \big[ \\[-0.2em]
+        & \quad enum (2,\; (1,\{2,3\},(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty}))) = \big[ \\[-0.2em]
+        & \quad\quad enum (3,\; (0,\emptyset,\epsilon)) = (3,\; (0,\emptyset,\epsilon)) \\[-0.2em]
+        & \quad\quad enum (3,\; (0,\emptyset,(0,\emptyset,a)^{0,\infty})) = \big[ \\[-0.2em]
+        & \quad\quad\quad enum (3,\; (0,\emptyset,a)) = (3,\; (0,\emptyset,a)) \\[-0.2em]
+        & \quad\quad \big] = (3,\; (0,\emptyset,(0,\emptyset,a)^{0,\infty})) \\[-0.2em]
+        & \quad \big] = (3,\; (2,\{2,3\},(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty}))) \\[-0.2em]
+        %
+        & \quad enum (3,\; (1,\emptyset,(1,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a))^{0,\infty}) ) = \big[ \\[-0.2em]
+        & \quad\quad enum (4,\; (1,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a)) ) = \big[ \\[-0.2em]
+        & \quad\quad\quad enum (5,\; (0,\emptyset,\epsilon) ) = (5,\; (0,\emptyset,\epsilon)) \\[-0.2em]
+        & \quad\quad\quad enum (5,\; (0,\emptyset,a) ) = (5,\; (0,\emptyset,a)) \\[-0.2em]
+        & \quad\quad \big] = (5,\; (4,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a))) \\[-0.2em]
+        & \quad \big] = (5,\; (3,\emptyset,(4,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a))^{0,\infty})) \\[-0.2em]
+        %
+        & \big] = (5,\; (1,\{1\},
+            (2,\{2,3\},(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty})) \\[-0.2em]
+            & \quad\quad\quad\quad\quad\enspace \cdot (3,\emptyset,(4,\{4\},(0,\emptyset,\epsilon) \mid (0,\emptyset,a))^{0,\infty})
+            ))
+    \end{aligned}$
+    }};
 \end{scope}
 
-\begin{scope}[xshift=1.6in, yshift=-3.6in, sibling distance=0.6in, level distance=0.35in]
-    \node[xshift=-0.2in, draw=none] {$t:$};
-    \graph [tree layout, grow=down, fresh nodes] {
-        a1/"${T}^{1}_{\Lambda}$" -- {
-            a11/"${T}^{2}_{1}$" -- {
-                a111/"${T}^{3}_{1.1}$" -- {
-                    a1111/"${\varnothing}^{0}_{1.1.1}$",
-                    a1112/"${T}^{0}_{1.1.2}$" -- {
-                        a11121/"${\varnothing}^{0}_{1.1.2.1}$"
-                    }
+\begin{scope}[xshift=3in, yshift=2.1in]
+    \graph [tree layout, grow=down, fresh nodes, level distance=0.35in] {
+        "${(1, \{1\}, Cat)}_{\Lambda}$" -- {
+            "${(2, \{2,3\}, Alt)}_{1}$" -- {
+                "${(0, \emptyset, \epsilon)}_{1.1}$",
+                "${(0, \emptyset, Rep(0,\infty))}_{1.2}$" -- {
+                    "${(0, \emptyset, a)}_{1.2.1}$"
                 }
             },
-            a12/"${T}^{4}_{2}$" -- {
-                a121/"${T}^{5}_{2.1}$" -- {
-                    a1211/"${a}^{0}_{2.1.1}$",
-                    a1212/"${\varnothing}^{0}_{2.1.2}$"
+            "$({3, \emptyset, Rep(0,3))}_{2}$" -- {
+                "${(4, \{4\}, Alt)}_{2.1}$" -- {
+                    "${(0, \emptyset, a)}_{2.1.1}$",
+                    "${(0, \emptyset, \epsilon)}_{2.1.2}$"
                 }
             }
         }
     };
-    \node at (a1)     {\xsp{2.5}\footnotesize{$\#1$}};
-    \node at (a11)    {\xsp{2.5}\footnotesize{$\#0$}};
-    \node at (a111)   {\xsp{2.5}\footnotesize{$\#0$}};
-    \node at (a1111)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a1112)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a11121) {\xsp{4.0}\footnotesize{$\#\infty$}};
-    \node at (a12)    {\xsp{2.5}\footnotesize{$\#1$}};
-    \node at (a121)   {\xsp{3.0}\footnotesize{$\#1$}};
-    \node at (a1211)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a1212)  {\xsp{3.5}\footnotesize{$\#\infty$}};
+\end{scope}
 
-    \node[xshift=0.2in, yshift=-1.65in, draw=none]
-    {${T}^{1}\big(
-        {T}^{2}(
-            {T}^{3}(
-                {\varnothing}^{0},
-                {T}^{0}({\varnothing}^{0})
-            ),
+\begin{scope}[xshift=3in, yshift=0.5in]
+    \node (c) {{
+    $\begin{aligned}
+        & I\!RE\big( (((\epsilon|a^{0,\infty}))(a|\epsilon)^{0,3}) \big) = \\[-0.2em]
+        & \quad\quad\quad\quad (1,\{1\}, (2,\{2,3\},(0,\emptyset,\epsilon) \mid (0,\emptyset,(0,\emptyset,a)^{0,\infty})) \\[-0.2em]
+        & \quad\quad\quad\quad\quad\quad\enspace \cdot (3,\emptyset,(4,\{4\},(0,\emptyset,a) \mid (0,\emptyset,\epsilon))^{0,3}))
+    \end{aligned}$
+    }};
+\end{scope}
+
+\newcommand\xsp[1]{\hphantom{\hspace{#1em}\hspace{0.2em}}}
+
+\begin{scope}[xshift=3in, yshift=-0.1in, sibling distance=0.6in, level distance=0.35in]
+    \graph [tree layout, grow=down, fresh nodes] {
+        a1/"${T}^{1}_{\Lambda}$" -- {
+            a11/"${T}^{2}_{1}$" -- {
+                a111/"${\bot}^{0}_{1.1}$",
+                a112/"${T}^{0}_{1.2}$" -- {
+                    a1121/"${a}^{0}_{1.2.1}$"
+                }
+            },
+            a12/"${T}^{3}_{2}$" -- {
+                a121/"${\bot}^{4}_{2.1}$"
+            }
+        }
+    };
+    \node at (a1)    {\xsp{2.5}\footnotesize{$(1)$}};
+    \node at (a11)   {\xsp{2.5}\footnotesize{$(1)$}};
+    \node at (a111)  {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a112)  {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a1121) {\xsp{4.0}\footnotesize{$(\infty)$}};
+    \node at (a12)   {\xsp{2.5}\footnotesize{$(0)$}};
+    \node at (a121)  {\xsp{3.0}\footnotesize{$(-1)$}};
+
+    \node[xshift=0in, yshift=-1.35in, draw=none]
+    {$s \;=\; {T}^{1} (
+        {T}^{2} (
+            {\bot}^{0},
+            {T}^{0}({a}^{0})
         ),
-        {T}^{4}\big(
-            {T}^{5}({a}^{0},{\varnothing}^{0})
-        \big)
-    \big)$};
+        {T}^{3}(
+            {\bot}^{4}
+        )
+    )$};
 \end{scope}
 
-\begin{scope}[xshift=4.3in, yshift=-3.6in, sibling distance=0.6in, level distance=0.35in]
-    \node[xshift=-0.2in, draw=none] {$u:$};
+\begin{scope}[xshift=3in, yshift=-1.9in, sibling distance=0.6in, level distance=0.35in]
     \graph [tree layout, grow=down, fresh nodes] {
         a1/"${T}^{1}_{\Lambda}$" -- {
             a11/"${T}^{2}_{1}$" -- {
-                a111/"${T}^{3}_{1.1}$" -- {
-                    a1111/"${\epsilon}^{0}_{1.1.1}$",
-                    a1112/"${\varnothing}^{0}_{1.1.2}$"
-                }
+                a111/"${\epsilon}^{0}_{1.1}$",
+                a112/"${\bot}^{0}_{1.2}$"
             },
-            a12/"${T}^{4}_{2}$" -- {
-                a121/"${T}^{5}_{2.1}$" -- {
+            a12/"${T}^{3}_{2}$" -- {
+                a121/"${T}^{4}_{2.1}$" -- {
                     a1211/"${a}^{0}_{2.1.1}$",
-                    a1212/"${\varnothing}^{0}_{2.1.2}$"
+                    a1212/"${\bot}^{0}_{2.1.2}$"
                 },
-                a122/"${T}^{5}_{2.2}$" -- {
-                    a1221/"${\varnothing}^{0}_{2.2.1}$",
+                a122/"${T}^{4}_{2.2}$" -- {
+                    a1221/"${\bot}^{0}_{2.2.1}$",
                     a1222/"${\epsilon}^{0}_{2.2.2}$"
                 }
             }
         }
     };
-    \node at (a1)     {\xsp{2.5}\footnotesize{$\#1$}};
-    \node at (a11)    {\xsp{2.5}\footnotesize{$\#0$}};
-    \node at (a111)   {\xsp{2.5}\footnotesize{$\#0$}};
-    \node at (a1111)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a1112)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a12)    {\xsp{2.5}\footnotesize{$\#1$}};
-    \node at (a121)   {\xsp{3.0}\footnotesize{$\#1$}};
-    \node at (a1211)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a1212)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a122)   {\xsp{3.0}\footnotesize{$\#0$}};
-    \node at (a1221)  {\xsp{3.5}\footnotesize{$\#\infty$}};
-    \node at (a1222)  {\xsp{3.5}\footnotesize{$\#\infty$}};
+    \node at (a1)    {\xsp{2.5}\footnotesize{$(1)$}};
+    \node at (a11)   {\xsp{2.5}\footnotesize{$(0)$}};
+    \node at (a111)  {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a112)  {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a12)   {\xsp{2.5}\footnotesize{$(1)$}};
+    \node at (a121)  {\xsp{3.0}\footnotesize{$(1)$}};
+    \node at (a1211) {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a1212) {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a122)  {\xsp{3.0}\footnotesize{$(0)$}};
+    \node at (a1221) {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a1222) {\xsp{3.5}\footnotesize{$(\infty)$}};
 
-    \node[xshift=0.2in, yshift=-1.65in, draw=none]
-    {${T}^{1}\big(
+    \node[xshift=0in, yshift=-1.35in, draw=none]
+    {$r \;=\; {T}^{1}(
         {T}^{2}(
-            {T}^{3}(
-                {\epsilon}^{0},
-                {\varnothing}^{0}
-            )
+            {\epsilon}^{0},
+            {\bot}^{0}
         ),
-        {T}^{4}\big(
-            {T}^{5}({a}^{0},{\varnothing}^{0}),
-            {T}^{5}({\varnothing}^{0}, {\epsilon}^{0})
-        \big)
-    \big)$};
+        {T}^{3}(
+            {T}^{4}({a}^{0},{\bot}^{0}),
+            {T}^{4}({\bot}^{0}, {\epsilon}^{0})
+        )
+    )$};
+\end{scope}
+
+\begin{scope}[xshift=3in, yshift=-3.7in, sibling distance=0.6in, level distance=0.35in]
+    \graph [tree layout, grow=down, fresh nodes] {
+        a1/"${T}^{1}_{\Lambda}$" -- {
+            a11/"${T}^{2}_{1}$" -- {
+                a111/"${\bot}^{0}_{1.1}$",
+                a112/"${T}^{0}_{1.2}$" -- {
+                    a1121/"${\bot}^{0}_{1.2.1}$"
+                }
+            },
+            a12/"${T}^{3}_{2}$" -- {
+                a121/"${T}^{4}_{2.1}$" -- {
+                    a1211/"${a}^{0}_{2.1.1}$",
+                    a1212/"${\bot}^{0}_{2.1.2}$"
+                }
+            }
+        }
+    };
+    \node at (a1)    {\xsp{2.5}\footnotesize{$(1)$}};
+    \node at (a11)   {\xsp{2.5}\footnotesize{$(0)$}};
+    \node at (a111)  {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a112)  {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a1121) {\xsp{4.0}\footnotesize{$(\infty)$}};
+    \node at (a12)   {\xsp{2.5}\footnotesize{$(1)$}};
+    \node at (a121)  {\xsp{3.0}\footnotesize{$(1)$}};
+    \node at (a1211) {\xsp{3.5}\footnotesize{$(\infty)$}};
+    \node at (a1212) {\xsp{3.5}\footnotesize{$(\infty)$}};
+
+    \node[xshift=-0in, yshift=-1.35in, draw=none]
+    {$t \;=\; {T}^{1}(
+        {T}^{2}(
+            {\bot}^{0},
+            {T}^{0}({\bot}^{0})
+        ),
+        {T}^{3}(
+            {T}^{4}({a}^{0},{\bot}^{0})
+        )
+    )$};
 \end{scope}
 }
 

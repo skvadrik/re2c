@@ -82,12 +82,12 @@
 \begin{scope}[xshift=0in, yshift=0in]
     \tikzstyle{every node}=[styleA, sibling distance = 0.5in]
 
-    \begin{scope}[xshift=-0.5in, yshift=0in]
-    \node[xshift=0in, yshift=-1.2in, draw=none] {$s = T^1 (T^2 (\varnothing^0, T^0 (a^0, a^0)))$};
+    \begin{scope}[xshift=-1in, yshift=0in]
+    \node[xshift=0.2in, yshift=-1.2in, draw=none] {$s = T^1 (T^2 (\bot^0, T^0 (a^0, a^0)))$};
     \graph [tree layout, grow=down, fresh nodes] {
         s1/"${T}^{1}$" -- {
             s11/"${T}^{2}$" -- {
-                s111/"${\varnothing}^{0}$",
+                s111/"${\bot}^{0}$",
                 s112/"${T}^{0}$" -- {
                     s1121/"${a}^{0}$",
                     s1122/"${a}^{0}$"
@@ -118,16 +118,16 @@
     \end{scope}
 
     \begin{scope}[xshift=1in, yshift=0in]
-    \node[xshift=0in, yshift=-0.9in, draw=none] {$t = T^1 (T^2 (a^0, \varnothing^0), T^2 (a^0, \varnothing^0))$};
+    \node[xshift=0in, yshift=-0.9in, draw=none] {$t = T^1 (T^2 (a^0, \bot^0), T^2 (a^0, \bot^0))$};
     \graph [tree layout, grow=down, fresh nodes] {
         s1/"${T}^{1}$" -- {
             s11/"${T}^{2}$" -- {
                 s111/"${a}^{0}$",
-                s112/"${\varnothing}^{0}$"
+                s112/"${\bot}^{0}$"
             },
             s12/"${T}^{2}$" -- {
                 s121/"${a}^{0}$",
-                s122/"${\varnothing}^{0}$"
+                s122/"${\bot}^{0}$"
             }
         }
     };
@@ -158,50 +158,50 @@
         -- ($(s1.east)$);
     \end{scope}
 
-    \begin{scope}[xshift=2.7in, yshift=-0.2in]
+    \begin{scope}[xshift=3.5in, yshift=-0.6in]
         \node (a) {
         $\begin{aligned}
-            \alpha = \Phi_0(s) &=
+            &\alpha = \Phi_0(s) =
                 \overbracket {\Xl_1 \Xl_2 }
                 a
                 \overbracket {\vphantom{\Xm}}
                 a
                 \overbracket { \Xr_1 \Xr_0 }
                 \\[-0.4em]
-            \beta = \Phi_0(t) &=
+            &\beta = \Phi_0(t) =
                 \overbracket {\Xl_1 \Xl_2 }
                 a
                 \overbracket { \Xr_1 \Xl_2 }
                 a
                 \overbracket { \Xr_1 \Xr_0 }
-        \end{aligned}$
-        };
-    \end{scope}
-
-    \begin{scope}[xshift=5in, yshift=-0.4in]
-        \node (a) {
-        $\begin{aligned}
-        tr&aces (\alpha, \beta) : \\[-0.4em]
-        &\left[\begin{aligned}
-            \rho_0   &= \rho'_0 = -1 \\[-0.4em]
-            \rho_1   &= min (lasth(\Xl_1 \Xl_2), minh (\epsilon))    = min (2, \infty) = 2 \\[-0.4em]
-            \rho'_1  &= min (lasth(\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2)) = min (2, 1)      = 1 \\[-0.4em]
-            \rho_2   &= min (\rho_1,  minh (\Xr_1 \Xr_0)) = min (2, 0) = 0 \\[-0.4em]
-            \rho'_2  &= min (\rho'_1, minh (\Xr_1 \Xr_0)) = min (1, 0) = 0
+            \\
+        &traces (\alpha, \beta) : \\[-0.4em]
+        &\quad\left[\begin{aligned}
+            h_0   &= h'_0 = -1 \\[-0.4em]
+            h_1   &= min (lasth(\Xl_1 \Xl_2), minh (\epsilon))    = min (2, \infty) = 2 \\[-0.4em]
+            h'_1  &= min (lasth(\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2)) = min (2, 1)      = 1 \\[-0.4em]
+            h_2   &= min (h_1,  minh (\Xr_1 \Xr_0)) = min (2, 0) = 0 \\[-0.4em]
+            h'_2  &= min (h'_1, minh (\Xr_1 \Xr_0)) = min (1, 0) = 0
         \end{aligned}\right.
         \end{aligned}$
         };
     \end{scope}
 
-    \begin{scope}[xshift=4in, yshift=-1.05in]
+    \begin{scope}[xshift=0.4in, yshift=-1.5in]
         \node (a) {
         $\begin{aligned}
-        &\rho_1 > \rho'_1 \;\wedge\; \rho_2 = \rho'_2
-            \;\Rightarrow\; \alpha \sqsubset \beta
-            \;\Rightarrow\; \alpha < \beta
-        \\
-        \|s\|^{sub}_1 = 2 &> 1 = \|t\|^{sub}_1 \wedge \|s\|^{sub}_p = \|t\|^{sub}_p \;\forall p < 1
-            \;\Rightarrow\; s \prec_1 t
+        &\|s\|^{sub}_1 = 2 > 1 = \|t\|^{sub}_1 \wedge \|s\|^{sub}_x = \|t\|^{sub}_x \;\forall x < 1
+            \Rightarrow s \prec_1 t
+        \end{aligned}$
+        };
+    \end{scope}
+
+    \begin{scope}[xshift=3.4in, yshift=-1.5in]
+        \node (a) {
+        $\begin{aligned}
+        &h_1 \!>\! h'_1 \wedge h_2 \!=\! h'_2
+            \Rightarrow \alpha \!\sqsubset\! \beta
+            \Rightarrow \alpha \!<\! \beta
         \end{aligned}$
         };
     \end{scope}
@@ -209,24 +209,25 @@
 }
 \normalsize{
 \node (x1)
-    [ xshift=2.7in
-    , yshift=-1.4in
+    [ xshift=2in
+    , yshift=-1.8in
     , draw=none
     ] {(a) -- Rule 1: longest precedence, RE $(a|aa)^{0,\infty}$ and string $aa$.
     };
 }
+\draw (-1.6in, -1.65in) -- (5.2in, -1.65in);
 
 
 \small{
-\begin{scope}[xshift=0in, yshift=-1.9in]
+\begin{scope}[xshift=0in, yshift=-2.2in]
     \tikzstyle{every node}=[styleA, sibling distance = 0.5in]
 
-    \begin{scope}[xshift=-0.5in, yshift=0in]
-    \node[xshift=0in, yshift=-0.6in, draw=none] {$s = T^1 (a^2, \varnothing^3)$};
+    \begin{scope}[xshift=-1in, yshift=0in]
+    \node[xshift=0in, yshift=-0.6in, draw=none] {$s = T^1 (a^2, \bot^3)$};
     \graph [tree layout, grow=down, fresh nodes] {
         r1/"${T}^{1}$" -- {
             r11/"${a}^{2}$",
-            r12/"${\varnothing}^{3}$"
+            r12/"${\bot}^{3}$"
         }
     };
     \node at (r1)  {$\Xl_1 \w \Xr_0$};
@@ -245,10 +246,10 @@
     \end{scope}
 
     \begin{scope}[xshift=1in, yshift=0in]
-    \node[xshift=0in, yshift=-0.6in, draw=none] {$t = T^1 (\varnothing^2, a^3)$};
+    \node[xshift=0in, yshift=-0.6in, draw=none] {$t = T^1 (\bot^2, a^3)$};
     \graph [tree layout, grow=down, fresh nodes] {
         t1/"${T}^{1}$" -- {
-            t11/"${\varnothing}^{2}$",
+            t11/"${\bot}^{2}$",
             t12/"${a}^{3}$"
         }
     };
@@ -267,46 +268,46 @@
         -- ($(t1.east)$);
     \end{scope}
 
-    \begin{scope}[xshift=2.7in, yshift=-0.0in]
+    \begin{scope}[xshift=3.5in, yshift=-0.5in]
         \node (a) {
         $\begin{aligned}
-            \alpha = \Phi_0(s) &=
+            &\alpha = \Phi_0(s) =
                 \overbracket {\Xl_1 \Xl_2 }
                 a
                 \overbracket { \Xr_1 \Xm_1 \Xr_0 }
                 \\[-0.4em]
-            \beta = \Phi_0(t) &=
+            &\beta = \Phi_0(t) =
                 \overbracket {\Xl_1 \Xm_1 \Xl_2 }
                 a
                 \overbracket { \Xr_1 \Xr_0 }
-        \end{aligned}$
-        };
-    \end{scope}
-
-    \begin{scope}[xshift=5in, yshift=-0.1in]
-        \node (a) {
-        $\begin{aligned}
-        tr&aces (\alpha, \beta) : \\[-0.4em]
-        &\left[\begin{aligned}
-            \rho_0   &= min (lasth (\Xl_1), minh (\Xl_2))       = min (1, 2) = 1 \\[-0.4em]
-            \rho'_0  &= min (lasth (\Xl_1), minh (\Xm_1 \Xl_2)) = min (1, 1) = 1 \\[-0.4em]
-            \rho_1   &= min (\rho_0,  minh (\Xr_1 \Xm_1 \Xr_0)) = min (1, 0) = 0 \\[-0.4em]
-            \rho'_1  &= min (\rho'_0, minh (\Xr_1 \Xr_0))       = min (1, 0) = 0
+            \\
+        &traces (\alpha, \beta) : \\[-0.4em]
+        &\quad\left[\begin{aligned}
+            h_0   &= min (lasth (\Xl_1), minh (\Xl_2))       = min (1, 2) = 1 \\[-0.4em]
+            h'_0  &= min (lasth (\Xl_1), minh (\Xm_1 \Xl_2)) = min (1, 1) = 1 \\[-0.4em]
+            h_1   &= min (h_0,  minh (\Xr_1 \Xm_1 \Xr_0)) = min (1, 0) = 0 \\[-0.4em]
+            h'_1  &= min (h'_0, minh (\Xr_1 \Xr_0))       = min (1, 0) = 0
         \end{aligned}\right.
         \end{aligned}$
         };
     \end{scope}
 
-    \begin{scope}[xshift=4in, yshift=-0.7in]
+    \begin{scope}[xshift=-0in, yshift=-1.35in]
         \node (a) {
         $\begin{aligned}
-        \rho_i = \rho'_i &\;\forall i
-            \;\wedge\; first(\alpha \backslash \beta) = \Xl < \Xm = first(\beta \backslash \alpha)
-            \;\Rightarrow\; \alpha \sim \beta \;\wedge\; \alpha \subset \beta
-            \;\Rightarrow\; \alpha < \beta
-        \\
-        &\|s\|^{sub}_1 = 1 > -1 = \|t\|^{sub}_1 \wedge \|s\|^{sub}_p = \|t\|^{sub}_p \;\forall p < 1
-            \;\Rightarrow\; s \prec_1 t
+        &\|s\|^{sub}_1 = 1 > -1 = \|t\|^{sub}_1 \wedge \|s\|^{sub}_x = \|t\|^{sub}_x \;\forall x < 1
+            \Rightarrow s \prec_1 t
+        \end{aligned}$
+        };
+    \end{scope}
+
+    \begin{scope}[xshift=3.5in, yshift=-1.35in]
+        \node (a) {
+        $\begin{aligned}
+        &h_i \!=\! h'_i \forall i
+            \wedge f\!irst(\alpha \backslash \beta) \!=\! \Xl < \!\Xm \!=\! f\!irst(\beta \backslash \alpha)
+            \Rightarrow \alpha \!\sim\! \beta \wedge \alpha \!\subset\! \beta
+            \Rightarrow \alpha \!<\! \beta
         \end{aligned}$
         };
     \end{scope}
@@ -314,25 +315,26 @@
 }
 \normalsize{
 \node (y1)
-    [ xshift=2.7in
-    , yshift=-2.95in
+    [ xshift=2in
+    , yshift=-3.8in
     , draw=none
     ] {(b) -- Rule 2: leftmost precedence, RE $(a)|(a)$ and string $a$.
     };
 }
+\draw (-1.6in, -3.65in) -- (5.2in, -3.65in);
 
 
 \small{
-\begin{scope}[xshift=0in, yshift=-3.3in]
+\begin{scope}[xshift=0in, yshift=-4.2in]
     \tikzstyle{every node}=[styleA, sibling distance = 0.5in]
 
-    \begin{scope}[xshift=-0.5in, yshift=0in]
-    \node[yshift=-0.9in, draw=none] {$s = T^1(T^2(a^0, \varnothing^0))$};
+    \begin{scope}[xshift=-1in, yshift=0in]
+    \node[yshift=-0.9in, draw=none] {$s = T^1(T^2(a^0, \bot^0))$};
     \graph [tree layout, grow=down, fresh nodes] {
         s1/"${T}^{1}$" -- {
             s11/"${T}^{2}$" -- {
                 s111/"${a}^{0}$",
-                s112/"${\varnothing}^{0}$"
+                s112/"${\bot}^{0}$"
             }
         }
     };
@@ -354,15 +356,15 @@
     \end{scope}
 
     \begin{scope}[xshift=1in, yshift=0in]
-    \node[xshift=0in, yshift=-0.9in, draw=none] {$t = T^1 (T^2 (a^0, \varnothing^0), T^2(\varnothing^0, \epsilon^0))$};
+    \node[xshift=0in, yshift=-0.9in, draw=none] {$t = T^1 (T^2 (a^0, \bot^0), T^2(\bot^0, \epsilon^0))$};
     \graph [tree layout, grow=down, fresh nodes] {
         s1/"${T}^{1}$" -- {
             s11/"${T}^{2}$" -- {
                 s111/"${a}^{0}$",
-                s112/"${\varnothing}^{0}$"
+                s112/"${\bot}^{0}$"
             },
             s12/"${T}^{2}$" -- {
-                s121/"${\varnothing}^{0}$",
+                s121/"${\bot}^{0}$",
                 s122/"${\epsilon}^{0}$"
             }
         }
@@ -394,46 +396,45 @@
         -- ($(s1.east)$);
     \end{scope}
 
-    \begin{scope}[xshift=2.7in, yshift=-0.2in]
+    \begin{scope}[xshift=3.5in, yshift=-0.5in]
         \node (a) {
         $\begin{aligned}
-            \alpha = \Phi_0(s) &=
+            &\alpha = \Phi_0(s) =
                 \overbracket {\Xl_1 \Xl_2 }
                 a
                 \overbracket { \Xr_1 \Xr_0 }
                 \\[-0.4em]
-            \beta = \Phi_0(t) &=
+            &\beta = \Phi_0(t) =
                 \overbracket { \Xl_1 \Xl_2 }
                 a
                 \overbracket { \Xr_1 \Xl_2 \Xr_1 \Xr_0 }
-        \end{aligned}$
-        };
-    \end{scope}
-
-    \begin{scope}[xshift=5in, yshift=-0.2in]
-        \node (a) {
-        $\begin{aligned}
-        tr&aces (\alpha, \beta) :
-        \\[-0.4em]
-        &\left[\begin{aligned}
-            \rho_0   &= \rho'_0 = -1 \\[-0.4em]
-            \rho_1   &= min (lasth (\Xr_1), minh (\Xr_0))             = min (1, 0) = 0 \\[-0.4em]
-            \rho'_1  &= min (lasth (\Xr_1), minh (\Xl_2 \Xr_1 \Xr_0)) = min (1, 0) = 0
+            \\
+        &traces (\alpha, \beta) :\\[-0.4em]
+        &\quad\left[\begin{aligned}
+            h_0   &= h'_0 = -1 \\[-0.4em]
+            h_1   &= min (lasth (\Xr_1), minh (\Xr_0))             = min (1, 0) = 0 \\[-0.4em]
+            h'_1  &= min (lasth (\Xr_1), minh (\Xl_2 \Xr_1 \Xr_0)) = min (1, 0) = 0
         \end{aligned}\right.
         \end{aligned}$
         };
     \end{scope}
 
-    \begin{scope}[xshift=4in, yshift=-0.75in]
+    \begin{scope}[xshift=0in, yshift=-1.3in]
         \node (a) {
         $\begin{aligned}
-        \rho_i = \rho'_i \;\forall i
-            &\;\wedge\; first(\alpha \backslash \beta) = \Xr < \Xl = first(\beta \backslash \alpha)
-            \;\Rightarrow\; \alpha \sim \beta \;\wedge\; \alpha \subset \beta
-            \;\Rightarrow\; \alpha < \beta
-        \\
-        &\|s\|^{sub}_2 = \infty > 0 = \|t\|^{sub}_2 \wedge \|s\|^{sub}_p = \|t\|^{sub}_p \;\forall p < 2
-            \;\Rightarrow\; s \prec_2 t
+        &\|s\|^{sub}_2 = \infty > 0 = \|t\|^{sub}_2 \wedge \|s\|^{sub}_x = \|t\|^{sub}_x \;\forall x < 2
+            \Rightarrow s \prec_2 t
+        \end{aligned}$
+        };
+    \end{scope}
+
+    \begin{scope}[xshift=3.5in, yshift=-1.3in]
+        \node (a) {
+        $\begin{aligned}
+        &h_i \!=\! h'_i \forall i
+            \wedge f\!irst(\alpha \backslash \beta) \!= \Xr \!<\! \Xl =\! f\!irst(\beta \backslash \alpha)
+            \Rightarrow \alpha \!\sim\! \beta \wedge \alpha \!\subset\! \beta
+            \Rightarrow \alpha \!<\! \beta
         \end{aligned}$
         };
     \end{scope}
@@ -441,24 +442,25 @@
 }
 \normalsize{
 \node (z1)
-    [ xshift=2.7in
-    , yshift=-4.45in
+    [ xshift=2in
+    , yshift=-5.75in
     , draw=none
     ] {(c) -- Rule 3: no optional empty repetitions,
         RE $(a|\epsilon)^{0,\infty}$ and string $a$.
         };
 }
+\draw (-1.6in, -5.6in) -- (5.2in, -5.6in);
 
 
 \small{
-\begin{scope}[xshift=0in, yshift=-4.85in]
+\begin{scope}[xshift=0in, yshift=-6.1in]
     \tikzstyle{every node}=[styleA, sibling distance = 0.5in]
 
-    \begin{scope}[xshift=-0.5in, yshift=0in]
-    \node[yshift=-0.6in, draw=none] {$s = T^1(\varnothing^2)$};
+    \begin{scope}[xshift=-1in, yshift=0in]
+    \node[yshift=-0.6in, draw=none] {$s = T^1(\bot^2)$};
     \graph [tree layout, grow=down, fresh nodes] {
         s1/"${T}^{1}$" -- {
-            s11/"${\varnothing}^{2}$"
+            s11/"${\bot}^{2}$"
         }
     };
     \node at (s1)   {$\Xl_1 \w \Xr_0$};
@@ -476,7 +478,7 @@
     \graph [tree layout, grow=down, fresh nodes] {
         s1/"${T}^{1}$" -- {
             s11/"${T}^{2}$" -- {
-                s111/"${\varnothing}^{0}$",
+                s111/"${\bot}^{0}$",
                 s112/"${\epsilon}^{0}$"
             }
         }
@@ -497,41 +499,40 @@
         -- ($(s1.east)$);
     \end{scope}
 
-    \begin{scope}[xshift=2.7in, yshift=-0.2in]
+    \begin{scope}[xshift=3.5in, yshift=-0.4in]
         \node (a) {
         $\begin{aligned}
-            \alpha = \Phi_0(s) &=
+            &\alpha = \Phi_0(s) =
                 \overbracket {\Xl_1 \Xm_1 \Xr_0 }
                 \\[-0.4em]
-            \beta = \Phi_0(t) &=
+            &\beta = \Phi_0(t) =
                 \overbracket {\Xl_1 \Xl_2 \Xr_1 \Xr_0 }
-        \end{aligned}$
-        };
-    \end{scope}
-
-    \begin{scope}[xshift=5in, yshift=-0.2in]
-        \node (a) {
-        $\begin{aligned}
-        tr&aces (\alpha, \beta) :
-        \\[-0.4em]
-        &\left[\begin{aligned}
-            \rho_0   &= min (lasth (\Xl_1), minh (\Xm_1 \Xr_0))       = min (1, 0) = 0 \\[-0.4em]
-            \rho'_0  &= min (lasth (\Xl_1), minh (\Xl_2 \Xr_1 \Xr_0)) = min (1, 0) = 0
+            \\
+        &traces (\alpha, \beta) :\\[-0.4em]
+        &\quad\left[\begin{aligned}
+            h_0   &= min (lasth (\Xl_1), minh (\Xm_1 \Xr_0))       = min (1, 0) = 0 \\[-0.4em]
+            h'_0  &= min (lasth (\Xl_1), minh (\Xl_2 \Xr_1 \Xr_0)) = min (1, 0) = 0
         \end{aligned}\right.
         \end{aligned}$
         };
     \end{scope}
 
-    \begin{scope}[xshift=4in, yshift=-0.7in]
+    \begin{scope}[xshift=-0.0in, yshift=-1.2in]
         \node (a) {
         $\begin{aligned}
-        \rho_i = \rho'_i \;\forall i
-            &\;\wedge\; first(\alpha \backslash \beta) = \Xm > \Xl = first(\beta \backslash \alpha)
-            \;\Rightarrow\; \alpha \sim \beta \;\wedge\; \beta \subset \alpha
-            \;\Rightarrow\; \beta < \alpha
-        \\
-        &\|s\|^{sub}_2 = 0 > -1 = \|s\|^{sub}_2 \wedge \|s\|^{sub}_p = \|t\|^{sub}_p \;\forall p < 2
-            \;\Rightarrow\; t \prec_2 s
+        &\|s\|^{sub}_2 = 0 > -1 = \|s\|^{sub}_2 \wedge \|s\|^{sub}_x = \|t\|^{sub}_x \;\forall x < 2
+            \Rightarrow t \prec_2 s
+        \end{aligned}$
+        };
+    \end{scope}
+
+    \begin{scope}[xshift=3.5in, yshift=-1.2in]
+        \node (a) {
+        $\begin{aligned}
+        &h_i \!=\! h'_i \forall i
+            \wedge f\!irst(\alpha \backslash \beta) \!=\! \Xm \!>\! \Xl =\! f\!irst(\beta \backslash \alpha)
+            \Rightarrow \alpha \!\sim\! \beta \wedge \beta \!\subset\! \alpha
+            \Rightarrow \beta \!<\! \alpha
         \end{aligned}$
         };
     \end{scope}
@@ -539,360 +540,14 @@
 }
 \normalsize{
 \node (z1)
-    [ xshift=2.7in
-    , yshift=-6in
+    [ xshift=2in
+    , yshift=-7.55in
     , draw=none
     ] {(d) -- Rule 4: empty match is better than no match,
         RE $(a|\epsilon)^{0,\infty}$ and string $\epsilon$.
         };
 }
-
-
-\tikzstyle{every node}=[draw, shape = circle]
-
-\small{
-\begin{scope}[xshift=-0.5in, yshift=-6.4in]
-
-\begin{scope}[xshift=0in, yshift=-0in]
-    \tikzstyle{every node}=[draw, shape = circle]
-    \graph [tree layout, grow=down, fresh nodes, level distance = 0.1in] {
-        "$t_1$" -- {
-            "" -- {
-                "" -- { "$a$", "$a$", "$a$" }
-            }
-        }
-        , "$t_2$" -- {
-            "" -- {
-                "" -- { "$a$", "$a$" },
-                "" -- { "$a$" }
-            }
-        }
-        , t31/"$t_3$" -- {
-            t311/"" -- {
-                t3111/"" -- { t31111/"$a$" },
-                t3112/"" -- { t31121/"$a$", t31122/"$a$" }
-            }
-        }
-        , "$t_4$" -- {
-            "" -- {
-                "" -- { "$a$" },
-                "" -- { "$a$" },
-                "" -- { "$a$" }
-            }
-        }
-        , t51/"$t_5$" -- {
-            t511/"" -- {
-                t5111/"" -- { t51111/"$a$", t51112/"$a$" }
-            },
-            t512/"" -- {
-                t5121/"" -- { t51211/"$a$" }
-            }
-        }
-        , "$t_6$" -- {
-            "" -- {
-                "" -- { "$a$" }
-            },
-            "" -- {
-                "" -- { "$a$", "$a$" }
-            }
-        }
-        , "$t_7$" -- {
-            "" -- {
-                "" -- { "$a$"},
-                "" -- { "$a$"}
-            },
-            "" -- {
-                "" -- { "$a$" }
-            }
-        }
-        , "$t_8$" -- {
-            "" -- {
-                "" -- { "$a$"}
-            },
-            "" -- {
-                "" -- { "$a$"},
-                "" -- { "$a$" }
-            }
-        }
-        , "$t_9$" -- {
-            "" -- {
-                "" -- { "$a$" }
-            },
-            "" -- {
-                "" -- { "$a$" }
-            },
-            "" -- {
-                "" -- { "$a$" }
-            }
-        }
-    };
-\end{scope}
-
-
-\tikzstyle{styleA}=[draw=none
-    , shape=circle
-    , minimum size = 0.2in
-    , inner sep = 0pt
-    , outer sep = 0pt
-    ]
-
-\tikzstyle{styleB}=[->
-    , rounded corners=3.5
-    %, color = lightgray
-    , dash pattern = on 1pt off 2.5pt
-    ]
-
-\begin{scope}[xshift=5.4in, yshift=-2.0in]
-    \node [shape=rectangle, draw = none] (a) {
-    $\begin{aligned}
-        &\begin{aligned}
-            &\Phi_0(t_1) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
-            &\Phi_0(t_2) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
-            &\Phi_0(t_3) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
-            &\Phi_0(t_4) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
-            &\Phi_0(t_5) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
-            &\Phi_0(t_6) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
-            &\Phi_0(t_7) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
-            &\Phi_0(t_8) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\[-0.4em]
-            &\Phi_0(t_9) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0}
-        \end{aligned}
-    \\
-        & \quad\quad t_1 \prec t_2 \prec t_3 \prec t_4 \prec t_5 \prec t_7 \prec t_6 \prec t_8 \prec t_9
-    \end{aligned}$
-    };
-\end{scope}
-
-
-\begin{scope}[xshift=1.7in, yshift=-1.9in]
-    \node [shape=rectangle, draw = none] (a) {
-    \setlength\tabcolsep{1.5pt}
-    \renewcommand{\arraystretch}{0.6}
-    $\begin{aligned}
-        &\begin{tabular}{cccccccc|c}
-              $t_2$ & $t_3$ & $t_4$ & $t_5$ & $t_6$ & $t_7$ & $t_8$ & $t_9$ \\
-              &&&&&&& \\[-0.4em]
-              \hline
-              &&&&&&& \\[-0.2em]
-            %
-                \begin{tabular}{cccc}
-                -1 & \!-1 & 3 & 0 \\
-                -1 & \!-1 & 2 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 3 & 0 \\
-                -1 & 2 & 2 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 3 & 0 \\
-                -1 & 2 & 2 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & \!-1 & 3 & 0 \\
-                -1 & \!-1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 3 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 3 & 0 \\
-                -1 & 2 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 3 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 3 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            & $\;t_1$
-            \\[1em]
-%
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 2 & 0 \\
-                -1 & 2 & 2 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 2 & 0 \\
-                -1 & 2 & 2 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & \!-1 & 2 & 0 \\
-                -1 & \!-1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 2 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 2 & 0 \\
-                -1 & 2 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 2 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 2 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            & $\;t_2$
-            \\[1em]
-%
-            & &
-                \begin{tabular}{cccc}
-                -1 & \!-1 & 3 & 0 \\
-                -1 & \!-1 & 2 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 2 & 2 & 0 \\
-                -1 & 3 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 2 & 2 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & \!-1 & 3 & 0 \\
-                -1 & \!-1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 2 & 2 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 2 & 2 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            & $\;t_3$
-            \\[1em]
-%
-            & & &
-                \begin{tabular}{cccc}
-                -1 & 2 & 2 & 0 \\
-                -1 & 3 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 2 & 2 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & \!-1 & 2 & 0 \\
-                -1 & \!-1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 2 & 2 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 2 & 2 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            & $\;t_4$
-            \\[1em]
-%
-            & & & &
-                \begin{tabular}{cccc}
-                -1 & 3 & 1 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 1 & 0 \\
-                -1 & 2 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 1 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 3 & 1 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            & $\;t_5$
-            \\[1em]
-%
-            & & & & &
-                \begin{tabular}{cccc}
-                -1 & 1 & 1 & 0 \\
-                -1 & 2 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & \!-1 & 3 & 0 \\
-                -1 & \!-1 & 2 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & \!-1 & 3 & 0 \\
-                -1 & \!-1 & 1 & 0 \\
-                \end{tabular}
-            & $\;t_6$
-            \\[1em]
-%
-            & & & & & &
-                \begin{tabular}{cccc}
-                -1 & 2 & 1 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            &
-                \begin{tabular}{cccc}
-                -1 & 2 & 1 & 0 \\
-                -1 & 1 & 1 & 0 \\
-                \end{tabular}
-            & $\;t_7$
-            \\[1em]
-%
-            & & & & & & &
-                \begin{tabular}{cccc}
-                -1 & \!-1 & 2 & 0 \\
-                -1 & \!-1 & 1 & 0 \\
-                \end{tabular}
-            & $\;t_8$
-        \end{tabular}
-    \end{aligned}$
-    };
-\end{scope}
-\normalsize{
-\node (w1)
-    [ xshift=3.0in
-    , yshift=-3.4in
-    , draw=none
-    , shape=rectangle
-    ] {(e) --
-        Pairwise comparison of all PEs for RE $(((a)^{1,3})^{1,3})^{1,3}$ and string $aaa$.
-        Table entry $(t_i, t_j)$ contains $traces(\Phi_0(t_i), \Phi_0(t_j))$.
-    };
-}
-
-\end{scope}
-}
+\draw (-1.6in, -7.4in) -- (5.2in, -7.4in);
 
 \end{tikzpicture}
 
