@@ -17,9 +17,9 @@ namespace re2c {
 
 class Msg;
 
-enum target_t
-{
-    TARGET_CODE,
+enum target_t {
+    TARGET_C,
+    TARGET_GO,
     TARGET_DOT,
     TARGET_SKELETON
 };
@@ -43,7 +43,7 @@ const uint32_t NOEOF = ~0u - 1;
  */
 
 #define RE2C_CONSTOPTS \
-    CONSTOPT1 (target_t, target, TARGET_CODE) \
+    CONSTOPT1 (target_t, target, TARGET_C) \
     CONSTOPT (bool, bNoGenerationDate, false) \
     CONSTOPT (bool, version, true) \
     CONSTOPT (bool, cFlag, false) \

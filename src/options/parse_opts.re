@@ -157,6 +157,7 @@ opt_long:
     "no-generation-date"    end { globopts.bNoGenerationDate = true; goto opt; }
     "no-version"            end { globopts.version = false;          goto opt; }
     "skeleton"              end { globopts.target = TARGET_SKELETON; goto opt; }
+    "golang"                end { globopts.target = TARGET_GO;       goto opt; }
 
     "bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
     "debug-output"          end { opts.set_dFlag (true);             goto opt; }

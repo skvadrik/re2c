@@ -114,7 +114,8 @@ void mutopt_t::fix(const conopt_t *globopts)
             startlabel = Opt::baseopt.startlabel;
             startlabel_force = Opt::baseopt.startlabel_force;
             break;
-        case TARGET_CODE:
+        case TARGET_C:
+        case TARGET_GO:
             break;
     }
 
@@ -219,7 +220,8 @@ void mutopt_t::fix(const conopt_t *globopts)
             indString = "    ";
             topIndent = 2;
             break;
-        case TARGET_CODE:
+        case TARGET_C:
+        case TARGET_GO:
             break;
     }
     switch (encoding.type()) {
