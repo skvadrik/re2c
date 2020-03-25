@@ -157,7 +157,6 @@ opt_long:
     "no-generation-date"    end { globopts.bNoGenerationDate = true; goto opt; }
     "no-version"            end { globopts.version = false;          goto opt; }
     "skeleton"              end { globopts.target = TARGET_SKELETON; goto opt; }
-    "golang"                end { globopts.target = TARGET_GO;       goto opt; }
 
     "bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
     "debug-output"          end { opts.set_dFlag (true);             goto opt; }
@@ -179,6 +178,7 @@ opt_long:
         goto opt;
     }
 
+    "lang"                  end { NEXT_ARG("--lang",             opt_lang); }
     "output"                end { NEXT_ARG("-o, --output",       opt_output); }
     "type-header"           end { NEXT_ARG("-t, --type-header",  opt_header); }
     "encoding-policy"       end { NEXT_ARG("--encoding-policy",  opt_encoding_policy); }
@@ -209,6 +209,13 @@ opt_long:
     "dump-cfg"              end { globopts.dump_cfg = true;           goto opt; }
     "dump-interf"           end { globopts.dump_interf = true;        goto opt; }
     "dump-closure-stats"    end { globopts.dump_closure_stats = true; goto opt; }
+*/
+
+opt_lang:
+/*!re2c
+    * { ERRARG("--lang", "c | go", *argv); }
+    "c"  end { globopts.lang = LANG_C;  goto opt; }
+    "go" end { globopts.lang = LANG_GO; goto opt; }
 */
 
 opt_output:

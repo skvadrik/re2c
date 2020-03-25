@@ -61,7 +61,7 @@ void Case::emit (Output & o, uint32_t ind) const
             bool last_case = i == ranges.size () - 1 && b == ranges[i].second - 1;
             if (!last_case)
             {
-                if (opts->target == TARGET_GO) {
+                if (opts->lang == LANG_GO) {
                     o.wind(1).ws("fallthrough");
                 }
                 o.ws("\n");

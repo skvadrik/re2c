@@ -90,6 +90,9 @@
     With ``utf8`` re2c handles input as UTF8-encoded and recognizes multibyte
     characters.
 
+``--lang <c | go>``
+    Specify the output language (the default is ``c``).
+
 ``--location-format <gnu | msvc>``
     Specify location format in messages.
     With ``gnu`` locations are printed as 'filename:line:column: ...'.

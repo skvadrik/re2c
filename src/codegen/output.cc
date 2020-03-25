@@ -34,13 +34,6 @@ OutputFragment::~OutputFragment()
     }
 }
 
-static bool target_code(const OutputBlock &block)
-{
-    const target_t target = block.opts->target;
-    return target == TARGET_C
-        || target == TARGET_GO;
-}
-
 static uint32_t write_converting_newlines(const std::string &str, FILE *f)
 {
     const char *s = str.c_str(), *e = s + str.length();
@@ -127,7 +120,7 @@ std::ostream & Output::stream ()
 
 Output &Output::wraw(const char *s, const char *e)
 {
-    if (s != e && target_code(block())) {
+    if (s != e && block().opts->target == TARGET_CODE) {
         insert_code();
 
         // scan for non-whitespace characters
@@ -250,7 +243,7 @@ void Output::insert_code ()
 
 Output &Output::wdelay_tags(const ConfTags *cf, bool mtags)
 {
-    if (target_code(block())) {
+    if (block().opts->target == TARGET_CODE) {
         OutputFragment *frag = new OutputFragment(
             mtags ? OutputFragment::MTAGS : OutputFragment::STAGS, 0);
         frag->tags = cf;
@@ -292,7 +285,7 @@ Output & Output::wdelay_cond_table(uint32_t ind)
 
 Output & Output::wdelay_state_goto (uint32_t ind)
 {
-    if (target_code(block())
+    if (block().opts->target == TARGET_CODE
         && block().opts->fFlag && !state_goto) {
         block().fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
         state_goto = true;
@@ -302,7 +295,7 @@ Output & Output::wdelay_state_goto (uint32_t ind)
 
 Output & Output::wdelay_types ()
 {
-    if (target_code(block())) {
+    if (block().opts->target == TARGET_CODE) {
         warn_condition_order = false; // see note [condition order]
         block().fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
     }
@@ -317,7 +310,7 @@ Output & Output::wdelay_yyaccept_init (uint32_t ind)
 
 Output & Output::wdelay_yymaxfill ()
 {
-    if (target_code(block())) {
+    if (block().opts->target == TARGET_CODE) {
         block().fragments.push_back (new OutputFragment (OutputFragment::MAXFILL, 0));
     }
     return *this;
@@ -325,7 +318,7 @@ Output & Output::wdelay_yymaxfill ()
 
 Output& Output::wdelay_yymaxnmatch()
 {
-    if (target_code(block())
+    if (block().opts->target == TARGET_CODE
         && block().opts->posix_syntax) {
         block().fragments.push_back (new OutputFragment (OutputFragment::MAXNMATCH, 0));
     }
