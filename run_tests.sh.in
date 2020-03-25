@@ -78,6 +78,7 @@ chmod -R u+w $test_blddir
 find $test_blddir -type f \
     ! -name '*.re' -a \
     ! -name '*.c' -a \
+    ! -name '*.go' -a \
     ! -name '*.inc' \
     -exec rm {} \;
 
@@ -124,9 +125,12 @@ run_pack() {
     do
         cd $test_blddir
 
+        # generate file extension (.c for C/C++, .go for Go)
+        local ext=`basename "$x" | lc_run grep -q -- '--lang(go)' && echo go || echo c`
+
         # remove prefix
         local outx=${x:$((${#test_blddir} + 1))}
-        local outc="${outx%.re}.c"
+        local outy="${outx%.re}.$ext"
 
         # filename (dot short* (long arg?)*)? ext
         # must keep to POSIX standard: no syntactic sugar like +,?, etc.
@@ -141,20 +145,20 @@ run_pack() {
         # file extensions are case-insensitive on some platforms
         printf "%s" "$switches" | lc_run grep -q "[A-Z]" \
             && { echo "bad file extension: '$outx' (uppercase letters are not allowed)"; exit 1; }
-        local switches="$switches -o $outc --no-version --no-generation-date"
+        local switches="$switches -o $outy --no-version --no-generation-date"
         # enable warnings globally
         local switches="$switches -W"
 
         if [ $skeleton -eq 1 ]
         then
-            rm -f "$outc"
+            rm -f "$outy"
 
             local switches="$switches --skeleton -Werror-undefined-control-flow"
 
-            ${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outc.stderr"
+            ${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outy.stderr"
             local status=$(echo $?)
-            [ $status -eq 0 ] && { @CC@ -Wall -Wextra -o "$outc.out" "$outc" 2>>"$outc.stderr" || status=2; }
-            [ $status -eq 0 ] && { ./"$outc.out" 2>>"$outc.stderr" || status=3; }
+            [ $status -eq 0 ] && { @CC@ -Wall -Wextra -o "$outy.out" "$outy" 2>>"$outy.stderr" || status=2; }
+            [ $status -eq 0 ] && { ./"$outy.out" 2>>"$outy.stderr" || status=3; }
 
             case $status in
                 0 ) local msg="OK" ;;
@@ -166,13 +170,13 @@ run_pack() {
             printf "%-25s $outx\n" "$msg"
 
             if [ $status -le 1 ]; then
-                [ $keep_tmp_files -eq 0 ] && rm -f "$outx" "$outc"{,.line*.{input,keys},.stderr,.out}
+                [ $keep_tmp_files -eq 0 ] && rm -f "$outx" "$outy"{,.line*.{input,keys},.stderr,.out}
             else
                 local errcnt=$(($errcnt + 1))
             fi
         else
-            local c="${outx%.re}.c.orig"
-            mv "$outc" "$c"
+            local c="${outx%.re}.$ext.orig"
+            mv "$outy" "$c"
 
             # create sandbox
             tmpdir="tmp_$log" \
@@ -181,9 +185,9 @@ run_pack() {
                 && mkdir -p `dirname "$outx"` \
                 && cp "../../$x" "$outx"
             # run re2c
-            $valgrind $wine ../../$re2c $incpaths $switches "$outx" 2>"$outc.stderr" 1>&2
+            $valgrind $wine ../../$re2c $incpaths $switches "$outx" 2>"$outy.stderr" 1>&2
             # on windows output contains CR LF, cut CR to match test results
-            for f in "$outc" "$outc.stderr"; do
+            for f in "$outy" "$outy.stderr"; do
                 [ -f "$f" ] \
                     && cat "$f" | lc_run tr -d '\r' > "$f".mod \
                     && mv "$f".mod "$f"
@@ -192,7 +196,7 @@ run_pack() {
             rm "$outx" && find . -type f \
                 | lc_run sort \
                 | xargs cat \
-                >> "../$outc"
+                >> "../$outy"
             # cleanup sandbox
             cd .. \
                 && rm -rf "$tmpdir"
@@ -200,11 +204,11 @@ run_pack() {
             # compare results
             local status=""
             [ -z $status ] && status=`[ -f "$c" ] || echo "MISSING"`
-            [ -z $status ] && status=`$diff_prog "$c" "$outc" > "$outc.diff" || echo "FAIL"`
+            [ -z $status ] && status=`$diff_prog "$c" "$outy" > "$outy.diff" || echo "FAIL"`
             [ -z $status ] && status="OK"
             if [ $status = "OK" ]
             then
-                rm "$outc" "$outc.diff" "$c" "$outx"
+                rm "$outy" "$outy.diff" "$c" "$outx"
             else
                 local errcnt=$(($errcnt + 1))
             fi

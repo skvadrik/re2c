@@ -34,7 +34,7 @@ func Lex(input *Input) int {
 	var yych YYCTYPE
 
 	
-//line "golang/001_basic.--lang(go).c":38
+//line "golang/001_basic.--lang(go).go":38
 	yych = YYPEEK ();
 	switch (yych) {
 	case 0x00:	goto yy2;
@@ -113,7 +113,7 @@ yy2:
 		fmt.Println("end")
 		return 0
 	}
-//line "golang/001_basic.--lang(go).c":117
+//line "golang/001_basic.--lang(go).go":117
 yy4:
 	YYSKIP ();
 //line "golang/001_basic.--lang(go).re":39
@@ -121,7 +121,7 @@ yy4:
 		fmt.Println("error")
 		return -1
 	}
-//line "golang/001_basic.--lang(go).c":125
+//line "golang/001_basic.--lang(go).go":125
 yy6:
 	YYSKIP ();
 	yych = YYPEEK ();
@@ -136,7 +136,7 @@ yy8:
 		fmt.Println("space")
 		return 3
 	}
-//line "golang/001_basic.--lang(go).c":140
+//line "golang/001_basic.--lang(go).go":140
 yy9:
 	YYSKIP ();
 	yych = YYPEEK ();
@@ -203,7 +203,7 @@ yy11:
 		fmt.Println("string")
 		return 2
 	}
-//line "golang/001_basic.--lang(go).c":207
+//line "golang/001_basic.--lang(go).go":207
 yy12:
 	YYSKIP ();
 	yych = YYPEEK ();
@@ -226,7 +226,7 @@ yy14:
 		fmt.Println("number")
 		return 1
 	}
-//line "golang/001_basic.--lang(go).c":230
+//line "golang/001_basic.--lang(go).go":230
 //line "golang/001_basic.--lang(go).re":63
 
 }
