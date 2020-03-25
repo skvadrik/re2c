@@ -479,11 +479,11 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             case OutputFragment::EMPTY:
             case OutputFragment::CODE: break;
             case OutputFragment::LINE_INFO_INPUT:
-                output_line_info(o, f.loc->line, msg.filenames[f.loc->file]
-                    , bopt->iFlag);
+                output_line_info(o, f.loc->line, msg.filenames[f.loc->file],
+                    bopt);
                 break;
             case OutputFragment::LINE_INFO_OUTPUT:
-                output_line_info(o, line_count + 1, filename, bopt->iFlag);
+                output_line_info(o, line_count + 1, filename, bopt);
                 break;
             case OutputFragment::COND_GOTO:
                 output_cond_goto(o, ind, b.types, bopt, msg
@@ -693,11 +693,20 @@ void output_yymaxnmatch(std::ostream &o, uint32_t ind,
     o << indent(ind, opts->indString) << "#define YYMAXNMATCH " << max_nmatch << "\n";
 }
 
-void output_line_info(std::ostream &o, uint32_t line,
-    const std::string &fname, bool iflag)
+void output_line_info(std::ostream &o, uint32_t line, const std::string &fname,
+    const opt_t *opts)
 {
-    if (!iflag) {
-        o << "#line " << line << " \"" << fname << "\"\n";
+    if (opts->iFlag) return;
+
+    switch (opts->lang) {
+        case LANG_GO:
+            // Go: //line <filename>:<line-number>
+            o << "//line \"" << fname << "\":" << line << "\n";
+            break;
+        case LANG_C:
+            // C/C++: #line <line-number> <filename>
+            o << "#line " << line << " \"" << fname << "\"\n";
+            break;
     }
 }
 

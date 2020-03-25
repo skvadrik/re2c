@@ -1,5 +1,4 @@
 /*!re2c
-	re2c:flags:i = 1;
 	re2c:flags:input = custom;
 */
 
