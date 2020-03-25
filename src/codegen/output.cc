@@ -185,6 +185,27 @@ Output & Output::wuser_start_label ()
     return *this;
 }
 
+Output& Output::wyych_decl(uint32_t ind)
+{
+    const opt_t *opts = block().opts;
+
+    if (!opts->bEmitYYCh) return *this;
+
+    wind(ind);
+    switch (opts->lang) {
+        case LANG_C:
+            // C/C++: YYCTYPE yych;
+            wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";");
+            break;
+        case LANG_GO:
+            // Go: var yych YYCTYPE
+            ws("var ").wstring(opts->yych).ws(" ").wstring(opts->yyctype);
+            break;
+    }
+    ws("\n");
+    return *this;
+}
+
 Output & Output::wc (char c)
 {
     insert_code();

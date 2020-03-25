@@ -30,10 +30,8 @@ func skip(input *Input) func() {
 func Lex(input *Input) int {
 	YYPEEK := peek(input)
 	YYSKIP := skip(input)
-	var yych YYCTYPE
 
 	/*!re2c
-	re2c:yych:emit = 0;
 	re2c:yyfill:enable = 0;
 
 	* {

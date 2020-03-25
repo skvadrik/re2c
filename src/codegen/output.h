@@ -128,31 +128,32 @@ public:
     void header_mode(bool on);
 
     // immediate output
-    Output & wraw (const char *s, const char *e);
-    Output & wc (char c);
-    Output & wc_hex (uint32_t n);
-    Output & wu32 (uint32_t n);
-    Output & wu32_hex (uint32_t n);
-    Output & wu32_width (uint32_t n, int w);
-    Output & wu64 (uint64_t n);
-    Output & wstring (const std::string & s);
-    Output & ws (const char * s);
-    Output & wlabel (label_t l);
-    Output & wrange (uint32_t u, uint32_t l);
-    Output & wversion_time ();
-    Output & wuser_start_label ();
-    Output & wind (uint32_t ind);
+    Output& wraw (const char *s, const char *e);
+    Output& wc (char c);
+    Output& wc_hex (uint32_t n);
+    Output& wu32 (uint32_t n);
+    Output& wu32_hex (uint32_t n);
+    Output& wu32_width (uint32_t n, int w);
+    Output& wu64 (uint64_t n);
+    Output& wstring (const std::string & s);
+    Output& ws (const char * s);
+    Output& wlabel (label_t l);
+    Output& wrange (uint32_t u, uint32_t l);
+    Output& wversion_time ();
+    Output& wuser_start_label ();
+    Output& wind (uint32_t ind);
+    Output& wyych_decl(uint32_t ind);
 
     // delayed output
-    Output & wdelay_tags(const ConfTags *cf, bool mtags);
-    Output & wdelay_line_info_input (const loc_t &loc);
-    Output & wdelay_line_info_output ();
-    Output & wdelay_cond_goto(uint32_t ind);
-    Output & wdelay_cond_table(uint32_t ind);
-    Output & wdelay_state_goto (uint32_t ind);
-    Output & wdelay_types ();
-    Output & wdelay_yyaccept_init (uint32_t ind);
-    Output & wdelay_yymaxfill ();
+    Output& wdelay_tags(const ConfTags *cf, bool mtags);
+    Output& wdelay_line_info_input (const loc_t &loc);
+    Output& wdelay_line_info_output ();
+    Output& wdelay_cond_goto(uint32_t ind);
+    Output& wdelay_cond_table(uint32_t ind);
+    Output& wdelay_state_goto (uint32_t ind);
+    Output& wdelay_types ();
+    Output& wdelay_yyaccept_init (uint32_t ind);
+    Output& wdelay_yymaxfill ();
     Output& wdelay_yymaxnmatch();
     Output& wdelay_skip(uint32_t ind, bool skip);
     Output& wdelay_peek(uint32_t ind, bool peek);

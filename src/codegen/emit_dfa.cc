@@ -227,10 +227,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
             }
             if (!opts->fFlag)
             {
-                if (opts->bEmitYYCh)
-                {
-                    output.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
-                }
+                output.wyych_decl(ind);
                 output.wdelay_yyaccept_init (ind);
             }
             else
