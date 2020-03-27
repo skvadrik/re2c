@@ -399,10 +399,13 @@ void gen_on_eof(code_lines_t &code, const opt_t *opts, const DFA &dfa
     }
     else {
         if (opts->fill_use) {
-            o << opts->indString << "if (" << opts->fill
-                << (opts->fill_naked ? ""
-                    : opts->fill_arg_use ? " () == 0" : " == 0")
-                << ") goto " << opts->labelPrefix << retry->label << "_;";
+            const char *lbrace = opts->lang == LANG_C ? "" : "{ ";
+            const char *rbrace = opts->lang == LANG_C ? "" : " }";
+            const char *decorate = opts->fill_naked ? ""
+                : opts->fill_arg_use ? " () == 0" : " == 0";
+            o << opts->indString << "if (" << opts->fill << decorate << ") "
+                << lbrace << "goto " << opts->labelPrefix << retry->label
+                << "_;" << rbrace;
             flushln(code, o);
         }
         gen_on_eof_fail(code, opts, dfa, from, to, o);

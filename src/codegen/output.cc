@@ -696,10 +696,20 @@ void output_state_goto(std::ostream & o, uint32_t ind,
 
 void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept, const opt_t *opts)
 {
-    if (used_yyaccept)
-    {
-        o << indent(ind, opts->indString) << "unsigned int " << opts->yyaccept << " = 0;\n";
+    if (!used_yyaccept) return;
+
+    o << indent(ind, opts->indString);
+    switch (opts->lang) {
+        case LANG_C:
+            // C/C++: #line <line-number> <filename>
+            o << "unsigned int " << opts->yyaccept << " = 0;";
+            break;
+        case LANG_GO:
+            // Go: //line <filename>:<line-number>
+            o << opts->yyaccept << " := 0";
+            break;
     }
+    o << "\n";
 }
 
 void output_yymaxfill(std::ostream &o, uint32_t ind,
