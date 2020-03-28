@@ -113,7 +113,9 @@ yy1_:
 	case '9':	goto yy7;
 	default:
 		if (YYLESSTHAN (1)) {
-			if (YYFILL () == 0) { goto yy1_; }
+			if (YYFILL () == 0) {
+				goto yy1_;
+			}
 			goto yyeof;
 		}
 		goto yy2;
@@ -125,7 +127,7 @@ yy2:
 		fmt.Println("error")
 		return -1
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":129
+//line "golang/002_fill_eof_rule.--lang(go).go":131
 yy4:
 	YYSKIP ();
 yy4_:
@@ -137,7 +139,9 @@ yy4_:
 	case ' ':	goto yy4;
 	default:
 		if (YYLESSTHAN (1)) {
-			if (YYFILL () == 0) { goto yy4_; }
+			if (YYFILL () == 0) {
+				goto yy4_;
+			}
 		}
 		goto yy6;
 	}
@@ -146,7 +150,7 @@ yy6:
 	{
 		return 3
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":150
+//line "golang/002_fill_eof_rule.--lang(go).go":154
 yy7:
 	YYSKIP ();
 	YYBACKUP ();
@@ -166,7 +170,9 @@ yy7_:
 	case '9':	goto yy7;
 	default:
 		if (YYLESSTHAN (1)) {
-			if (YYFILL () == 0) { goto yy7_; }
+			if (YYFILL () == 0) {
+				goto yy7_;
+			}
 		}
 		goto yy9;
 	}
@@ -176,7 +182,7 @@ yy9:
 		fmt.Printf("number: %v\n", string(input.data[input.token:input.cursor]))
 		return 1
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":180
+//line "golang/002_fill_eof_rule.--lang(go).go":186
 yy10:
 	YYSKIP ();
 yy10_:
@@ -194,7 +200,9 @@ yy10_:
 	case '9':	goto yy12;
 	default:
 		if (YYLESSTHAN (1)) {
-			if (YYFILL () == 0) { goto yy10_; }
+			if (YYFILL () == 0) {
+				goto yy10_;
+			}
 		}
 		goto yy11;
 	}
@@ -218,7 +226,9 @@ yy12_:
 	case '9':	goto yy12;
 	default:
 		if (YYLESSTHAN (1)) {
-			if (YYFILL () == 0) { goto yy12_; }
+			if (YYFILL () == 0) {
+				goto yy12_;
+			}
 		}
 		goto yy14;
 	}
@@ -228,14 +238,14 @@ yy14:
 		fmt.Println("number-2")
 		return 2
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":232
+//line "golang/002_fill_eof_rule.--lang(go).go":242
 yyeof:
 //line "golang/002_fill_eof_rule.--lang(go).re":100
 	{
 		fmt.Println("end")
 		return 0
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":239
+//line "golang/002_fill_eof_rule.--lang(go).go":249
 }
 //line "golang/002_fill_eof_rule.--lang(go).re":118
 

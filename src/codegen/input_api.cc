@@ -15,12 +15,12 @@ std::string output_expr_peek(const opt_t *opts)
         : opts->yypeek + " ()";
 }
 
-std::string output_restore(uint32_t ind, const opt_t *opts)
+std::string output_restore(const opt_t *opts)
 {
     std::string s = opts->input_api == INPUT_DEFAULT
         ? opts->yycursor + " = " + opts->yymarker
         : opts->yyrestore + " ()";
-    return indent(ind, opts->indString) + s + ";\n";
+    return s + ";";
 }
 
 std::string output_expr_lessthan(size_t n, const opt_t *opts)
@@ -62,7 +62,7 @@ void output_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
     } else {
         o << "++" << opts->yycursor;
     }
-    o << ";\n";
+    o << ";";
 }
 
 void output_backup(std::ostream &o, uint32_t ind, const opt_t *opts)

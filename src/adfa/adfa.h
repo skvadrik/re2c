@@ -81,6 +81,10 @@ struct DFA
     std::valarray<Rule> &rules;
     std::vector<Tag> &tags;
     std::set<tagver_t> &mtagvers;
+    std::set<std::string> stagnames;
+    std::set<std::string> stagvars;
+    std::set<std::string> mtagnames;
+    std::set<std::string> mtagvars;
     const tagver_t *finvers;
     tcpool_t &tcpool;
     size_t max_fill;
@@ -95,6 +99,10 @@ struct DFA
     std::string setup;
     const Code *eof_action;
     Msg &msg;
+
+    std::set<label_t> used_labels;
+    label_t start_label;
+    label_t initial_label;
 
     DFA ( const dfa_t &dfa
         , const std::vector<size_t> &fill
@@ -111,8 +119,10 @@ struct DFA
     ~DFA ();
     void reorder();
     void prepare(const opt_t *opts);
-    void calc_stats(const opt_t *opts);
-    void emit (Output &, uint32_t &, bool, bool &);
+    void calc_stats(OutputBlock &out);
+    void count_used_labels(const opt_t *opts);
+    void emit_body(Output &output, uint32_t ind, CodeStmts *program) const;
+    void emit_dot(Output &output, CodeStmts *program) const;
 
 private:
     void addState(State*, State *);
@@ -120,9 +130,6 @@ private:
     void findBaseState(const opt_t *opts);
     void hoist_tags(const opt_t *opts);
     void hoist_tags_and_skip(const opt_t *opts);
-    void count_used_labels(std::set<label_t> &used, label_t start, label_t initial, const opt_t *opts) const;
-    void emit_body (Output &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
-    void emit_dot(Output &o, bool last_cond) const;
 
     FORBID_COPY (DFA);
 };

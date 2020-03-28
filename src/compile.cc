@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
+#include "src/codegen/emit.h"
 #include "src/codegen/output.h"
 #include "src/compile.h"
 #include "src/debug/debug.h"
@@ -22,7 +23,6 @@
 #include "src/skeleton/skeleton.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
-#include "src/util/smart_ptr.h"
 
 
 namespace re2c {
@@ -108,7 +108,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     DDUMP_ADFA(opts, *adfa);
 
     // finally gather overall DFA statistics
-    adfa->calc_stats(opts);
+    adfa->calc_stats(output.block());
 
     // accumulate global statistics from this particular DFA
     output.max_fill = std::max(output.max_fill, adfa->max_fill);
@@ -126,7 +126,8 @@ void compile(Scanner &input, Output &output, Opt &opts)
     symtab_t symtab;
     const conopt_t *globopts = &opts.glob;
     const opt_t *ropts = NULL;
-    typedef std::vector<smart_ptr<DFA> > dfas_t;
+    Scratchbuf &scratchbuf = output.scratchbuf;
+    code_alc_t &alc = output.allocator;
 
     const loc_t &loc0 = input.tok_loc();
 
@@ -137,10 +138,11 @@ void compile(Scanner &input, Output &output, Opt &opts)
     output.header_mode(0);
     output.new_block(opts, loc0);
     output.wversion_time();
-    output.wdelay_line_info_input(loc0);
+    output.wdelay_stmt(0, code_line_info_input(alc, loc0));
 
     if (globopts->target == TARGET_SKELETON) {
-        emit_prolog(output);
+        output.wdelay_stmt(2, code_verbatim(alc,
+            emit_prolog(scratchbuf, output.block().opts)));
     }
 
     for (;;) {
@@ -180,18 +182,15 @@ void compile(Scanner &input, Output &output, Opt &opts)
             }
 
             // compile DFA to code
-            bool prolog = false;
-            uint32_t ind = output.block().opts->topIndent;
-            for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
-                (*i)->emit(output, ind, (i + 1) == dfas.end(), prolog);
-            }
+            gen_code(output, dfas);
         }
 
-        output.wdelay_line_info_input(loc);
+        output.wdelay_stmt(0, code_line_info_input(alc, loc));
     }
 
     if (globopts->target == TARGET_SKELETON) {
-        emit_epilog (output, output.skeletons);
+        output.wdelay_stmt(2, code_verbatim(alc,
+            emit_epilog(scratchbuf, output.block().opts, output.skeletons)));
     }
 
     AST::flist.clear();

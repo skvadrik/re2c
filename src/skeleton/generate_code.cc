@@ -18,482 +18,501 @@
 
 namespace re2c {
 
-static void exact_uint(Output &o, size_t width)
+static void exact_uint(Scratchbuf &o, size_t width)
 {
     if (width == sizeof(char)) {
-        o.ws("unsigned char");
-    } else if (width == sizeof(short)) {
-        o.ws("unsigned short");
-    } else if (width == sizeof(int)) {
-        o.ws("unsigned int");
-    } else if (width == sizeof(long)) {
-        o.ws("unsigned long");
-    } else {
-        o.ws("uint").wu64(width * 8).ws("_t");
+        o.cstr("unsigned char");
+    }
+    else if (width == sizeof(short)) {
+        o.cstr("unsigned short");
+    }
+    else if (width == sizeof(int)) {
+        o.cstr("unsigned int");
+    }
+    else if (width == sizeof(long)) {
+        o.cstr("unsigned long");
+    }
+    else {
+        o.cstr("uint").u64(width * 8).cstr("_t");
     }
 }
 
-static void from_le(Output &o, uint32_t ind, size_t size, const char *expr)
+static void from_le(Scratchbuf &o, const opt_t *opts, uint32_t ind, size_t size, const char *expr)
 {
-    o.ws("\n").wind(ind).ws("/* from little-endian to host-endian */");
-    o.ws("\n").wind(ind).ws("unsigned char *p = (unsigned char*)&").ws(expr).ws(";");
-    o.ws("\n").wind(ind).ws(expr).ws(" = p[0]");
+    o.cstr("\n").str(indent(ind, opts->indString)).cstr("/* from little-endian to host-endian */");
+    o.cstr("\n").str(indent(ind, opts->indString)).cstr("unsigned char *p = (unsigned char*)&").cstr(expr).cstr(";");
+    o.cstr("\n").str(indent(ind, opts->indString)).cstr(expr).cstr(" = p[0]");
     for (uint32_t i = 1; i < size; ++i) {
-        o.ws(" + (p[").wu32(i).ws("] << ").wu32(i * 8).ws("u)");
+        o.cstr(" + (p[").u32(i).cstr("] << ").u32(i * 8).cstr("u)");
     }
-    o.ws(";");
+    o.cstr(";");
 }
 
-void emit_prolog(Output &o)
+const char *emit_prolog(Scratchbuf &o, const opt_t *opts)
 {
-    o.ws("\n#include <stddef.h> /* size_t */");
-    o.ws("\n#include <stdio.h>");
-    o.ws("\n#include <stdlib.h> /* malloc, free */");
-    o.ws("\n#include <string.h> /* memcpy */");
-    o.ws("\n");
-    o.ws("\nstatic void *read_file");
-    o.ws("\n").wind(1).ws("( const char *fname");
-    o.ws("\n").wind(1).ws(", size_t unit");
-    o.ws("\n").wind(1).ws(", size_t padding");
-    o.ws("\n").wind(1).ws(", size_t *pfsize");
-    o.ws("\n").wind(1).ws(")");
-    o.ws("\n{");
-    o.ws("\n").wind(1).ws("void *buffer = NULL;");
-    o.ws("\n").wind(1).ws("size_t fsize = 0;");
-    o.ws("\n");
-    o.ws("\n").wind(1).ws("/* open file */");
-    o.ws("\n").wind(1).ws("FILE *f = fopen(fname, \"rb\");");
-    o.ws("\n").wind(1).ws("if(f == NULL) {");
-    o.ws("\n").wind(2).ws("goto error;");
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n");
-    o.ws("\n").wind(1).ws("/* get file size */");
-    o.ws("\n").wind(1).ws("fseek(f, 0, SEEK_END);");
-    o.ws("\n").wind(1).ws("fsize = (size_t) ftell(f) / unit;");
-    o.ws("\n").wind(1).ws("fseek(f, 0, SEEK_SET);");
-    o.ws("\n");
-    o.ws("\n").wind(1).ws("/* allocate memory for file and padding */");
-    o.ws("\n").wind(1).ws("buffer = malloc(unit * (fsize + padding));");
-    o.ws("\n").wind(1).ws("if (buffer == NULL) {");
-    o.ws("\n").wind(2).ws("goto error;");
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n");
-    o.ws("\n").wind(1).ws("/* read the whole file in memory */");
-    o.ws("\n").wind(1).ws("if (fread(buffer, unit, fsize, f) != fsize) {");
-    o.ws("\n").wind(2).ws("goto error;");
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n");
-    o.ws("\n").wind(1).ws("fclose(f);");
-    o.ws("\n").wind(1).ws("*pfsize = fsize;");
-    o.ws("\n").wind(1).ws("return buffer;");
-    o.ws("\n");
-    o.ws("\nerror:");
-    o.ws("\n").wind(1).ws("fprintf(stderr, \"error: cannot read file '%s'\\n\", fname);");
-    o.ws("\n").wind(1).ws("free(buffer);");
-    o.ws("\n").wind(1).ws("if (f != NULL) {");
-    o.ws("\n").wind(2).ws("fclose(f);");
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n").wind(1).ws("return NULL;");
-    o.ws("\n}");
-    o.ws("\n");
+    o.cstr("\n#include <stddef.h> /* size_t */");
+    o.cstr("\n#include <stdio.h>");
+    o.cstr("\n#include <stdlib.h> /* malloc, free */");
+    o.cstr("\n#include <string.h> /* memcpy */");
+    o.cstr("\n");
+    o.cstr("\nstatic void *read_file");
+    o.cstr("\n").str(opts->indString).cstr("( const char *fname");
+    o.cstr("\n").str(opts->indString).cstr(", size_t unit");
+    o.cstr("\n").str(opts->indString).cstr(", size_t padding");
+    o.cstr("\n").str(opts->indString).cstr(", size_t *pfsize");
+    o.cstr("\n").str(opts->indString).cstr(")");
+    o.cstr("\n{");
+    o.cstr("\n").str(opts->indString).cstr("void *buffer = NULL;");
+    o.cstr("\n").str(opts->indString).cstr("size_t fsize = 0;");
+    o.cstr("\n");
+    o.cstr("\n").str(opts->indString).cstr("/* open file */");
+    o.cstr("\n").str(opts->indString).cstr("FILE *f = fopen(fname, \"rb\");");
+    o.cstr("\n").str(opts->indString).cstr("if(f == NULL) {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("goto error;");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n");
+    o.cstr("\n").str(opts->indString).cstr("/* get file size */");
+    o.cstr("\n").str(opts->indString).cstr("fseek(f, 0, SEEK_END);");
+    o.cstr("\n").str(opts->indString).cstr("fsize = (size_t) ftell(f) / unit;");
+    o.cstr("\n").str(opts->indString).cstr("fseek(f, 0, SEEK_SET);");
+    o.cstr("\n");
+    o.cstr("\n").str(opts->indString).cstr("/* allocate memory for file and padding */");
+    o.cstr("\n").str(opts->indString).cstr("buffer = malloc(unit * (fsize + padding));");
+    o.cstr("\n").str(opts->indString).cstr("if (buffer == NULL) {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("goto error;");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n");
+    o.cstr("\n").str(opts->indString).cstr("/* read the whole file in memory */");
+    o.cstr("\n").str(opts->indString).cstr("if (fread(buffer, unit, fsize, f) != fsize) {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("goto error;");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n");
+    o.cstr("\n").str(opts->indString).cstr("fclose(f);");
+    o.cstr("\n").str(opts->indString).cstr("*pfsize = fsize;");
+    o.cstr("\n").str(opts->indString).cstr("return buffer;");
+    o.cstr("\n");
+    o.cstr("\nerror:");
+    o.cstr("\n").str(opts->indString).cstr("fprintf(stderr, \"error: cannot read file '%s'\\n\", fname);");
+    o.cstr("\n").str(opts->indString).cstr("free(buffer);");
+    o.cstr("\n").str(opts->indString).cstr("if (f != NULL) {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("fclose(f);");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n").str(opts->indString).cstr("return NULL;");
+    o.cstr("\n}");
+    o.cstr("\n");
+    return o.flush();
 }
 
-void emit_start(Output &o, size_t maxfill, size_t maxnmatch, const std::string &name,
-    size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
-    const std::set<std::string> &stagnames, const std::set<std::string> &stagvars,
-    const std::set<std::string> &mtagnames, const std::set<std::string> &mtagvars,
-    bitmaps_t &bitmaps)
+const char *emit_start(Scratchbuf &o, const opt_t *opts, const DFA &dfa, const CodeStmts *bitmaps, Msg &msg)
 {
-    const opt_t *opts = o.block().opts;
     const size_t sizeof_cunit = opts->encoding.szCodeUnit();
-    const uint64_t norule = rule2key(Rule::NONE, sizeof_key, def);
+    const uint64_t norule = rule2key(Rule::NONE, dfa.key_size, dfa.def_rule);
     std::string filename = opts->output_file;
     if (filename.empty()) {
         filename = "<stdout>";
     }
+    uint32_t lines = 0;
+    RenderContext rctx = {o.stream(), opts, msg, 0, filename.c_str(), lines};
 
-    o.ws("\n#define YYCTYPE ");
+    o.cstr("\n#define YYCTYPE ");
     exact_uint (o, sizeof_cunit);
-    o.ws("\n#define YYKEYTYPE ");
-    exact_uint (o, sizeof_key);
-    o.ws("\n#define YYPEEK() *cursor");
-    o.ws("\n#define YYSKIP() ++cursor");
-    if (backup) {
-        o.ws("\n#define YYBACKUP() marker = cursor");
-        o.ws("\n#define YYRESTORE() cursor = marker");
+    o.cstr("\n#define YYKEYTYPE ");
+    exact_uint (o, dfa.key_size);
+    o.cstr("\n#define YYPEEK() *cursor");
+    o.cstr("\n#define YYSKIP() ++cursor");
+    if (dfa.need_backup) {
+        o.cstr("\n#define YYBACKUP() marker = cursor");
+        o.cstr("\n#define YYRESTORE() cursor = marker");
     }
-    if (oldstyle_ctxmarker) {
-        o.ws("\n#define YYBACKUPCTX() ctxmarker = cursor");
-        o.ws("\n#define YYRESTORECTX() cursor = ctxmarker");
+    if (dfa.oldstyle_ctxmarker) {
+        o.cstr("\n#define YYBACKUPCTX() ctxmarker = cursor");
+        o.cstr("\n#define YYRESTORECTX() cursor = ctxmarker");
     }
     if (opts->tags) {
-        o.ws("\n#define YYSTAGP(t) t = cursor");
-        o.ws("\n#define YYSTAGN(t) t = NULL");
-        o.ws("\n#define YYMTAGP(t) yymtag(&t, cursor, &yytp)");
-        o.ws("\n#define YYMTAGN(t) yymtag(&t, NULL, &yytp)");
-        o.ws("\n#define YYRESTORETAG(t) cursor = t");
+        o.cstr("\n#define YYSTAGP(t) t = cursor");
+        o.cstr("\n#define YYSTAGN(t) t = NULL");
+        o.cstr("\n#define YYMTAGP(t) yymtag(&t, cursor, &yytp)");
+        o.cstr("\n#define YYMTAGN(t) yymtag(&t, NULL, &yytp)");
+        o.cstr("\n#define YYRESTORETAG(t) cursor = t");
         if (opts->stadfa) {
-             o.ws("\n#define YYSTAGPD(t) t = cursor - 1");
-             o.ws("\n#define YYMTAGPD(t) yymtag(&t, cursor - 1, &yytp)");
+             o.cstr("\n#define YYSTAGPD(t) t = cursor - 1");
+             o.cstr("\n#define YYMTAGPD(t) yymtag(&t, cursor - 1, &yytp)");
         }
     }
-    o.ws("\n#define YYLESSTHAN(n) (limit - cursor) < n");
-    o.ws("\n#define YYFILL(n) { break; }");
-    o.ws("\n");
+    o.cstr("\n#define YYLESSTHAN(n) (limit - cursor) < n");
+    o.cstr("\n#define YYFILL(n) { break; }");
+    o.cstr("\n");
 
-    o.ws("\nstatic int action_").wstring(name);
-    o.ws("\n").wind(1).ws("( unsigned *pkix");
-    o.ws("\n").wind(1).ws(", const YYKEYTYPE *keys");
-    o.ws("\n").wind(1).ws(", const YYCTYPE *start");
-    o.ws("\n").wind(1).ws(", const YYCTYPE *token");
-    o.ws("\n").wind(1).ws(", const YYCTYPE **cursor");
-    o.ws("\n").wind(1).ws(", YYKEYTYPE rule_act");
-    o.ws("\n").wind(1).ws(")");
-    o.ws("\n{");
-    o.ws("\n").wind(1).ws("const unsigned kix = *pkix;");
-    o.ws("\n").wind(1).ws("const long pos = token - start;");
-    o.ws("\n").wind(1).ws("const long len_act = *cursor - token;");
-    o.ws("\n").wind(1).ws("const long len_exp = (long) keys[kix + 1];");
-    o.ws("\n").wind(1).ws("const YYKEYTYPE rule_exp = keys[kix + 2];");
-    o.ws("\n").wind(1).ws("*pkix = kix + 3;");
-    o.ws("\n").wind(1).ws("if (rule_exp == ").wu64(norule).ws(") {");
-    o.ws("\n").wind(2).ws("fprintf");
-    o.ws("\n").wind(3).ws("( stderr");
-    o.ws("\n").wind(3).ws(", \"warning: lex_").wstring(name).ws(": control flow is undefined for input\"");
-    o.ws("\n").wind(4).ws("\" at position %ld, rerun re2c with '-W'\\n\"");
-    o.ws("\n").wind(3).ws(", pos");
-    o.ws("\n").wind(3).ws(");");
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n").wind(1).ws("if (len_act == len_exp && rule_act == rule_exp) {");
-    o.ws("\n").wind(2).ws("const YYKEYTYPE offset = keys[kix];");
-    o.ws("\n").wind(2).ws("*cursor = token + offset;");
-    o.ws("\n").wind(2).ws("return 0;");
-    o.ws("\n").wind(1).ws("} else {");
-    o.ws("\n").wind(2).ws("fprintf");
-    o.ws("\n").wind(3).ws("( stderr");
-    o.ws("\n").wind(3).ws(", \"error: lex_").wstring(name).ws(": at position %ld (key %u):\\n\"");
-    o.ws("\n").wind(4).ws("\"\\texpected: match length %ld, rule %u\\n\"");
-    o.ws("\n").wind(4).ws("\"\\tactual:   match length %ld, rule %u\\n\"");
-    o.ws("\n").wind(3).ws(", pos");
-    o.ws("\n").wind(3).ws(", kix");
-    o.ws("\n").wind(3).ws(", len_exp");
-    o.ws("\n").wind(3).ws(", rule_exp");
-    o.ws("\n").wind(3).ws(", len_act");
-    o.ws("\n").wind(3).ws(", rule_act");
-    o.ws("\n").wind(3).ws(");");
-    o.ws("\n").wind(2).ws("return 1;");
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n}");
+    o.cstr("\nstatic int action_").str(dfa.name);
+    o.cstr("\n").str(opts->indString).cstr("( unsigned *pkix");
+    o.cstr("\n").str(opts->indString).cstr(", const YYKEYTYPE *keys");
+    o.cstr("\n").str(opts->indString).cstr(", const YYCTYPE *start");
+    o.cstr("\n").str(opts->indString).cstr(", const YYCTYPE *token");
+    o.cstr("\n").str(opts->indString).cstr(", const YYCTYPE **cursor");
+    o.cstr("\n").str(opts->indString).cstr(", YYKEYTYPE rule_act");
+    o.cstr("\n").str(opts->indString).cstr(")");
+    o.cstr("\n{");
+    o.cstr("\n").str(opts->indString).cstr("const unsigned kix = *pkix;");
+    o.cstr("\n").str(opts->indString).cstr("const long pos = token - start;");
+    o.cstr("\n").str(opts->indString).cstr("const long len_act = *cursor - token;");
+    o.cstr("\n").str(opts->indString).cstr("const long len_exp = (long) keys[kix + 1];");
+    o.cstr("\n").str(opts->indString).cstr("const YYKEYTYPE rule_exp = keys[kix + 2];");
+    o.cstr("\n").str(opts->indString).cstr("*pkix = kix + 3;");
+    o.cstr("\n").str(opts->indString).cstr("if (rule_exp == ").u64(norule).cstr(") {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("fprintf");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr("( stderr");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(", \"warning: lex_").str(dfa.name).cstr(": control flow is undefined for input\"");
+    o.cstr("\n").str(indent(4, opts->indString)).cstr("\" at position %ld, rerun re2c with '-W'\\n\"");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(", pos");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(");");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n").str(opts->indString).cstr("if (len_act == len_exp && rule_act == rule_exp) {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("const YYKEYTYPE offset = keys[kix];");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("*cursor = token + offset;");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("return 0;");
+    o.cstr("\n").str(opts->indString).cstr("} else {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("fprintf");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr("( stderr");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(", \"error: lex_").str(dfa.name).cstr(": at position %ld (key %u):\\n\"");
+    o.cstr("\n").str(indent(4, opts->indString)).cstr("\"\\texpected: match length %ld, rule %u\\n\"");
+    o.cstr("\n").str(indent(4, opts->indString)).cstr("\"\\tactual:   match length %ld, rule %u\\n\"");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(", pos");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(", kix");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(", len_exp");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(", rule_exp");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(", len_act");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(", rule_act");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr(");");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("return 1;");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n}");
 
-    if (!stagnames.empty()) {
-        o.ws("\n");
-        o.ws("\nstatic int check_stag_").wstring(name)
-            .ws("(unsigned *pkix, YYKEYTYPE *keys, const YYCTYPE *tag,\n")
-            .wind(1).ws("const YYCTYPE *input, const YYCTYPE *token, const char *name)");
-        o.ws("\n{");
-        o.ws("\n").wind(1).ws("const unsigned kix = *pkix;");
-        o.ws("\n").wind(1).ws("const YYKEYTYPE\n")
-            .wind(2).ws("exp = keys[kix],\n")
-            .wind(2).ws("act = (YYKEYTYPE)(tag - token),\n")
-            .wind(2).ws("NIL = (YYKEYTYPE)~0u;");
-        o.ws("\n").wind(1).ws("*pkix = kix + 1;");
-        o.ws("\n");
-        o.ws("\n").wind(1).ws("if (exp == act || (exp == NIL && tag == NULL)) return 0;");
-        o.ws("\n");
-        o.ws("\n").wind(1).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
-            .ws("\n").wind(2).ws("\"wrong value for tag '%s': expected %u, actual %u\\n\",")
-            .ws("\n").wind(2).ws("token - input, kix, name, exp, act);");
-        o.ws("\n").wind(1).ws("return 1;");
-        o.ws("\n}");
+    if (!dfa.stagnames.empty()) {
+        o.cstr("\n");
+        o.cstr("\nstatic int check_stag_").str(dfa.name)
+            .cstr("(unsigned *pkix, YYKEYTYPE *keys, const YYCTYPE *tag,\n")
+            .str(opts->indString).cstr("const YYCTYPE *input, const YYCTYPE *token, const char *name)");
+        o.cstr("\n{");
+        o.cstr("\n").str(opts->indString).cstr("const unsigned kix = *pkix;");
+        o.cstr("\n").str(opts->indString).cstr("const YYKEYTYPE\n")
+            .str(indent(2, opts->indString)).cstr("exp = keys[kix],\n")
+            .str(indent(2, opts->indString)).cstr("act = (YYKEYTYPE)(tag - token),\n")
+            .str(indent(2, opts->indString)).cstr("NIL = (YYKEYTYPE)~0u;");
+        o.cstr("\n").str(opts->indString).cstr("*pkix = kix + 1;");
+        o.cstr("\n");
+        o.cstr("\n").str(opts->indString).cstr("if (exp == act || (exp == NIL && tag == NULL)) return 0;");
+        o.cstr("\n");
+        o.cstr("\n").str(opts->indString).cstr("fprintf(stderr, \"error: lex_").str(dfa.name).cstr(": at position %ld, key %u: \"")
+            .cstr("\n").str(indent(2, opts->indString)).cstr("\"wrong value for tag '%s': expected %u, actual %u\\n\",")
+            .cstr("\n").str(indent(2, opts->indString)).cstr("token - input, kix, name, exp, act);");
+        o.cstr("\n").str(opts->indString).cstr("return 1;");
+        o.cstr("\n}");
     }
 
-    if (!mtagnames.empty()) {
-        o.ws("\n");
-        o.ws("\ntypedef struct yymtag_t {");
-        o.ws("\n").wind(1).ws("ptrdiff_t pred;");
-        o.ws("\n").wind(1).ws("const YYCTYPE *elem;");
-        o.ws("\n} yymtag_t;");
+    if (!dfa.mtagnames.empty()) {
+        o.cstr("\n");
+        o.cstr("\ntypedfa.def_rule struct yymtag_t {");
+        o.cstr("\n").str(opts->indString).cstr("ptrdiff_t pred;");
+        o.cstr("\n").str(opts->indString).cstr("const YYCTYPE *elem;");
+        o.cstr("\n} yymtag_t;");
 
-        o.ws("\n");
-        o.ws("\ntypedef struct yymtagpool_t {");
-        o.ws("\n").wind(1).ws("yymtag_t *head;");
-        o.ws("\n").wind(1).ws("yymtag_t *next;");
-        o.ws("\n").wind(1).ws("yymtag_t *last;");
-        o.ws("\n} yymtagpool_t;");
+        o.cstr("\n");
+        o.cstr("\ntypedfa.def_rule struct yymtagpool_t {");
+        o.cstr("\n").str(opts->indString).cstr("yymtag_t *head;");
+        o.cstr("\n").str(opts->indString).cstr("yymtag_t *next;");
+        o.cstr("\n").str(opts->indString).cstr("yymtag_t *last;");
+        o.cstr("\n} yymtagpool_t;");
 
-        o.ws("\n");
-        o.ws("\nstatic void yymtagpool_clear(yymtagpool_t *tp)");
-        o.ws("\n{");
-        o.ws("\n").wind(1).ws("tp->next = tp->head;");
-        o.ws("\n}");
+        o.cstr("\n");
+        o.cstr("\nstatic void yymtagpool_clear(yymtagpool_t *tp)");
+        o.cstr("\n{");
+        o.cstr("\n").str(opts->indString).cstr("tp->next = tp->head;");
+        o.cstr("\n}");
 
-        o.ws("\n");
-        o.ws("\nstatic void yymtagpool_init(yymtagpool_t *tp)");
-        o.ws("\n{");
-        o.ws("\n").wind(1).ws("static const unsigned size = 4096;");
-        o.ws("\n").wind(1).ws("tp->head = (yymtag_t*)malloc(size * sizeof(yymtag_t));");
-        o.ws("\n").wind(1).ws("tp->next = tp->head;");
-        o.ws("\n").wind(1).ws("tp->last = tp->head + size;");
-        o.ws("\n}");
+        o.cstr("\n");
+        o.cstr("\nstatic void yymtagpool_init(yymtagpool_t *tp)");
+        o.cstr("\n{");
+        o.cstr("\n").str(opts->indString).cstr("static const unsigned size = 4096;");
+        o.cstr("\n").str(opts->indString).cstr("tp->head = (yymtag_t*)malloc(size * sizeof(yymtag_t));");
+        o.cstr("\n").str(opts->indString).cstr("tp->next = tp->head;");
+        o.cstr("\n").str(opts->indString).cstr("tp->last = tp->head + size;");
+        o.cstr("\n}");
 
-        o.ws("\n");
-        o.ws("\nstatic void yymtagpool_free(yymtagpool_t *tp)");
-        o.ws("\n{");
-        o.ws("\n").wind(1).ws("free(tp->head);");
-        o.ws("\n").wind(1).ws("tp->head = tp->next = tp->last = NULL;");
-        o.ws("\n}");
+        o.cstr("\n");
+        o.cstr("\nstatic void yymtagpool_free(yymtagpool_t *tp)");
+        o.cstr("\n{");
+        o.cstr("\n").str(opts->indString).cstr("free(tp->head);");
+        o.cstr("\n").str(opts->indString).cstr("tp->head = tp->next = tp->last = NULL;");
+        o.cstr("\n}");
 
-        o.ws("\n");
-        o.ws("\nstatic yymtag_t *yymtagpool_next(yymtagpool_t *tp)");
-        o.ws("\n{");
-        o.ws("\n").wind(1).ws("if (tp->next == tp->last) {");
-        o.ws("\n").wind(2).ws("const unsigned size = tp->last - tp->head;");
-        o.ws("\n").wind(2).ws("yymtag_t *head = (yymtag_t*)malloc(2 * size * sizeof(yymtag_t));");
-        o.ws("\n").wind(2).ws("memcpy(head, tp->head, size * sizeof(yymtag_t));");
-        o.ws("\n").wind(2).ws("free(tp->head);");
-        o.ws("\n").wind(2).ws("tp->head = head;");
-        o.ws("\n").wind(2).ws("tp->next = head + size;");
-        o.ws("\n").wind(2).ws("tp->last = head + size * 2;");
-        o.ws("\n").wind(1).ws("}");
-        o.ws("\n").wind(1).ws("return tp->next++;");
-        o.ws("\n}");
+        o.cstr("\n");
+        o.cstr("\nstatic yymtag_t *yymtagpool_next(yymtagpool_t *tp)");
+        o.cstr("\n{");
+        o.cstr("\n").str(opts->indString).cstr("if (tp->next == tp->last) {");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("const unsigned size = tp->last - tp->head;");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("yymtag_t *head = (yymtag_t*)malloc(2 * size * sizeof(yymtag_t));");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("memcpy(head, tp->head, size * sizeof(yymtag_t));");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("free(tp->head);");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("tp->head = head;");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("tp->next = head + size;");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("tp->last = head + size * 2;");
+        o.cstr("\n").str(opts->indString).cstr("}");
+        o.cstr("\n").str(opts->indString).cstr("return tp->next++;");
+        o.cstr("\n}");
 
-        o.ws("\n");
-        o.ws("\nstatic void yymtag(ptrdiff_t *pt, const YYCTYPE *t, yymtagpool_t *tp)");
-        o.ws("\n{");
-        o.ws("\n").wind(1).ws("yymtag_t *n = yymtagpool_next(tp);");
-        o.ws("\n").wind(1).ws("n->pred = *pt;");
-        o.ws("\n").wind(1).ws("n->elem = t;");
-        o.ws("\n").wind(1).ws("*pt = n - tp->head;");
-        o.ws("\n}");
+        o.cstr("\n");
+        o.cstr("\nstatic void yymtag(ptrdiff_t *pt, const YYCTYPE *t, yymtagpool_t *tp)");
+        o.cstr("\n{");
+        o.cstr("\n").str(opts->indString).cstr("yymtag_t *n = yymtagpool_next(tp);");
+        o.cstr("\n").str(opts->indString).cstr("n->pred = *pt;");
+        o.cstr("\n").str(opts->indString).cstr("n->elem = t;");
+        o.cstr("\n").str(opts->indString).cstr("*pt = n - tp->head;");
+        o.cstr("\n}");
 
-        o.ws("\n");
-        o.ws("\nstatic int check_mtag_").wstring(name)
-            .ws("(unsigned *pkix, YYKEYTYPE *keys, const yymtagpool_t *tp, ptrdiff_t mtag,\n")
-            .wind(1).ws("const YYCTYPE *input, const YYCTYPE *token, const char *name)");
-        o.ws("\n{");
-//        o.ws("\n").wind(1).ws("check_key_count_").wstring(name).ws("(1) && return 1;");
-        o.ws("\n").wind(1).ws("const unsigned kix = *pkix;");
-        o.ws("\n").wind(1).ws("YYKEYTYPE n = keys[kix];");
-        o.ws("\n").wind(1).ws("*pkix = kix + n + 1;");
-//        o.ws("\n").wind(1).ws("check_key_count_").wstring(name).ws("(n) && return 1;");
-        o.ws("\n").wind(1).ws("for (; n > 0; --n) {");
-        o.ws("\n").wind(2).ws("if (mtag == -1) {");
-        o.ws("\n").wind(3).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
-            .ws("\n").wind(4).ws("\"history for tag '%s' is too short\\n\",")
-            .ws("\n").wind(4).ws("token - input, kix + n, name);");
-        o.ws("\n").wind(3).ws("return 1;");
-        o.ws("\n").wind(2).ws("}");
-        o.ws("\n").wind(2).ws("const YYCTYPE *tag = (tp->head + mtag)->elem;");
-        o.ws("\n").wind(2).ws("mtag = (tp->head + mtag)->pred;");
-        o.ws("\n").wind(2).ws("const YYKEYTYPE\n")
-            .wind(3).ws("exp = keys[kix + n],\n")
-            .wind(3).ws("act = (YYKEYTYPE)(tag - token),\n")
-            .wind(3).ws("NIL = (YYKEYTYPE)~0u;");
-        o.ws("\n").wind(2).ws("if (!(exp == act || (exp == NIL && tag == NULL))) {");
-        o.ws("\n").wind(3).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
-            .ws("\n").wind(4).ws("\"wrong value for tag '%s': expected %u, actual %u\\n\",")
-            .ws("\n").wind(4).ws("token - input, kix + n, name, exp, act);");
-        o.ws("\n").wind(3).ws("return 1;");
-        o.ws("\n").wind(2).ws("}");
-        o.ws("\n").wind(1).ws("}");
-        o.ws("\n").wind(1).ws("if (mtag != -1) {");
-        o.ws("\n").wind(2).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
-            .ws("\n").wind(3).ws("\"history for tag '%s' is too long\\n\",")
-            .ws("\n").wind(3).ws("token - input, kix, name);");
-        o.ws("\n").wind(2).ws("return 1;");
-        o.ws("\n").wind(1).ws("}");
-        o.ws("\n").wind(1).ws("return 0;");
-        o.ws("\n}");
+        o.cstr("\n");
+        o.cstr("\nstatic int check_mtag_").str(dfa.name)
+            .cstr("(unsigned *pkix, YYKEYTYPE *keys, const yymtagpool_t *tp, ptrdiff_t mtag,\n")
+            .str(opts->indString).cstr("const YYCTYPE *input, const YYCTYPE *token, const char *name)");
+        o.cstr("\n{");
+//        o.cstr("\n").str(opts->indString).cstr("check_key_count_").str(name).cstr("(1) && return 1;");
+        o.cstr("\n").str(opts->indString).cstr("const unsigned kix = *pkix;");
+        o.cstr("\n").str(opts->indString).cstr("YYKEYTYPE n = keys[kix];");
+        o.cstr("\n").str(opts->indString).cstr("*pkix = kix + n + 1;");
+//        o.cstr("\n").str(opts->indString).cstr("check_key_count_").str(name).cstr("(n) && return 1;");
+        o.cstr("\n").str(opts->indString).cstr("for (; n > 0; --n) {");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("if (mtag == -1) {");
+        o.cstr("\n").str(indent(3, opts->indString)).cstr("fprintf(stderr, \"error: lex_").str(dfa.name).cstr(": at position %ld, key %u: \"")
+            .cstr("\n").str(indent(4, opts->indString)).cstr("\"history for tag '%s' is too short\\n\",")
+            .cstr("\n").str(indent(4, opts->indString)).cstr("token - input, kix + n, name);");
+        o.cstr("\n").str(indent(3, opts->indString)).cstr("return 1;");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("}");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("const YYCTYPE *tag = (tp->head + mtag)->elem;");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("mtag = (tp->head + mtag)->pred;");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("const YYKEYTYPE\n")
+            .str(indent(3, opts->indString)).cstr("exp = keys[kix + n],\n")
+            .str(indent(3, opts->indString)).cstr("act = (YYKEYTYPE)(tag - token),\n")
+            .str(indent(3, opts->indString)).cstr("NIL = (YYKEYTYPE)~0u;");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("if (!(exp == act || (exp == NIL && tag == NULL))) {");
+        o.cstr("\n").str(indent(3, opts->indString)).cstr("fprintf(stderr, \"error: lex_").str(dfa.name).cstr(": at position %ld, key %u: \"")
+            .cstr("\n").str(indent(4, opts->indString)).cstr("\"wrong value for tag '%s': expected %u, actual %u\\n\",")
+            .cstr("\n").str(indent(4, opts->indString)).cstr("token - input, kix + n, name, exp, act);");
+        o.cstr("\n").str(indent(3, opts->indString)).cstr("return 1;");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("}");
+        o.cstr("\n").str(opts->indString).cstr("}");
+        o.cstr("\n").str(opts->indString).cstr("if (mtag != -1) {");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("fprintf(stderr, \"error: lex_").str(dfa.name).cstr(": at position %ld, key %u: \"")
+            .cstr("\n").str(indent(3, opts->indString)).cstr("\"history for tag '%s' is too long\\n\",")
+            .cstr("\n").str(indent(3, opts->indString)).cstr("token - input, kix, name);");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("return 1;");
+        o.cstr("\n").str(opts->indString).cstr("}");
+        o.cstr("\n").str(opts->indString).cstr("return 0;");
+        o.cstr("\n}");
     }
 
-    o.ws("\n");
-    o.ws("\nstatic int check_key_count_").wstring(name).ws("(unsigned have, unsigned used, unsigned need)");
-    o.ws("\n{");
-    o.ws("\n").wind(1).ws("if (used + need <= have) return 0;");
-    o.ws("\n").wind(1).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": not enough keys\\n\");");
-    o.ws("\n").wind(1).ws("return 1;");
-    o.ws("\n}");
-    o.ws("\n");
+    o.cstr("\n");
+    o.cstr("\nstatic int check_key_count_").str(dfa.name).cstr("(unsigned have, unsigned used, unsigned need)");
+    o.cstr("\n{");
+    o.cstr("\n").str(opts->indString).cstr("if (used + need <= have) return 0;");
+    o.cstr("\n").str(opts->indString).cstr("fprintf(stderr, \"error: lex_").str(dfa.name).cstr(": not enough keys\\n\");");
+    o.cstr("\n").str(opts->indString).cstr("return 1;");
+    o.cstr("\n}");
+    o.cstr("\n");
 
-    o.ws("\nint lex_").wstring(name).ws("()");
-    o.ws("\n{");
-    o.ws("\n").wind(1).ws("const size_t padding = ").wu64(maxfill).ws("; /* YYMAXFILL */");
-    o.ws("\n").wind(1).ws("int status = 0;");
-    o.ws("\n").wind(1).ws("size_t input_len = 0;");
-    o.ws("\n").wind(1).ws("size_t keys_count = 0;");
-    o.ws("\n").wind(1).ws("YYCTYPE *input = NULL;");
-    o.ws("\n").wind(1).ws("YYKEYTYPE *keys = NULL;");
-    o.ws("\n").wind(1).ws("const YYCTYPE *cursor = NULL;");
-    o.ws("\n").wind(1).ws("const YYCTYPE *limit = NULL;");
-    o.ws("\n").wind(1).ws("const YYCTYPE *token = NULL;");
-    o.ws("\n").wind(1).ws("const YYCTYPE *eof = NULL;");
+    o.cstr("\nint lex_").str(dfa.name).cstr("()");
+    o.cstr("\n{");
+    o.cstr("\n").str(opts->indString).cstr("const size_t padding = ").u64(dfa.max_fill).cstr("; /* YYMAXFILL */");
+    o.cstr("\n").str(opts->indString).cstr("int status = 0;");
+    o.cstr("\n").str(opts->indString).cstr("size_t input_len = 0;");
+    o.cstr("\n").str(opts->indString).cstr("size_t keys_count = 0;");
+    o.cstr("\n").str(opts->indString).cstr("YYCTYPE *input = NULL;");
+    o.cstr("\n").str(opts->indString).cstr("YYKEYTYPE *keys = NULL;");
+    o.cstr("\n").str(opts->indString).cstr("const YYCTYPE *cursor = NULL;");
+    o.cstr("\n").str(opts->indString).cstr("const YYCTYPE *limit = NULL;");
+    o.cstr("\n").str(opts->indString).cstr("const YYCTYPE *token = NULL;");
+    o.cstr("\n").str(opts->indString).cstr("const YYCTYPE *eof = NULL;");
     if (opts->posix_syntax) {
-        o.ws("\n").wind(1).ws("size_t yynmatch;");
-        o.ws("\n").wind(1).ws("const YYCTYPE *yypmatch[").wu64(maxnmatch).ws(" * 2];");
+        o.cstr("\n").str(opts->indString).cstr("size_t yynmatch;");
+        o.cstr("\n").str(opts->indString).cstr("const YYCTYPE *yypmatch[").u64(dfa.max_nmatch).cstr(" * 2];");
     }
-    o.ws("\n").wind(1).ws("unsigned int i = 0;");
-    if (!mtagnames.empty()) {
-        o.ws("\n");
-        o.ws("\n").wind(1).ws("yymtagpool_t yytp;");
-        o.ws("\n").wind(1).ws("yymtagpool_init(&yytp);");
+    o.cstr("\n").str(opts->indString).cstr("unsigned int i = 0;");
+    if (!dfa.mtagnames.empty()) {
+        o.cstr("\n");
+        o.cstr("\n").str(opts->indString).cstr("yymtagpool_t yytp;");
+        o.cstr("\n").str(opts->indString).cstr("yymtagpool_init(&yytp);");
     }
-    o.ws("\n");
-    o.ws("\n").wind(1).ws("input = (YYCTYPE *) read_file");
-    o.ws("\n").wind(2).ws("(\"").wstring(filename).ws(".").wstring(name).ws(".input\"");
-    o.ws("\n").wind(2).ws(", sizeof (YYCTYPE)");
-    o.ws("\n").wind(2).ws(", padding");
-    o.ws("\n").wind(2).ws(", &input_len");
-    o.ws("\n").wind(2).ws(");");
-    o.ws("\n").wind(1).ws("if (input == NULL) {");
-    o.ws("\n").wind(2).ws("status = 1;");
-    o.ws("\n").wind(2).ws("goto end;");
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n");
+    o.cstr("\n");
+    o.cstr("\n").str(opts->indString).cstr("input = (YYCTYPE *) read_file");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("(\"").str(filename).cstr(".").str(dfa.name).cstr(".input\"");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr(", sizeof (YYCTYPE)");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr(", padding");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr(", &input_len");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr(");");
+    o.cstr("\n").str(opts->indString).cstr("if (input == NULL) {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("status = 1;");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("goto end;");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n");
     if (sizeof_cunit > 1) {
-        o.ws("\n").wind(1).ws("for (i = 0; i < input_len; ++i) {");
-        from_le(o, 2, sizeof_cunit, "input[i]");
-        o.ws("\n").wind(1).ws("}");
-        o.ws("\n");
+        o.cstr("\n").str(opts->indString).cstr("for (i = 0; i < input_len; ++i) {");
+        from_le(o, opts, 2, sizeof_cunit, "input[i]");
+        o.cstr("\n").str(opts->indString).cstr("}");
+        o.cstr("\n");
     }
-    o.ws("\n").wind(1).ws("keys = (YYKEYTYPE *) read_file");
-    o.ws("\n").wind(2).ws("(\"").wstring(filename).ws(".").wstring(name).ws(".keys\"");
-    o.ws("\n").wind(2).ws(", sizeof (YYKEYTYPE)");
-    o.ws("\n").wind(2).ws(", 0");
-    o.ws("\n").wind(2).ws(", &keys_count");
-    o.ws("\n").wind(2).ws(");");
-    o.ws("\n").wind(1).ws("if (keys == NULL) {");
-    o.ws("\n").wind(2).ws("status = 1;");
-    o.ws("\n").wind(2).ws("goto end;");
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n");
-    if (sizeof_key > 1)
-    {
-        o.ws("\n").wind(1).ws("for (i = 0; i < keys_count; ++i) {");
-        from_le(o, 2, sizeof_key, "keys[i]");
-        o.ws("\n").wind(1).ws("}");
-        o.ws("\n");
+    o.cstr("\n").str(opts->indString).cstr("keys = (YYKEYTYPE *) read_file");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("(\"").str(filename).cstr(".").str(dfa.name).cstr(".keys\"");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr(", sizeof (YYKEYTYPE)");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr(", 0");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr(", &keys_count");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr(");");
+    o.cstr("\n").str(opts->indString).cstr("if (keys == NULL) {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("status = 1;");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("goto end;");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n");
+    if (dfa.key_size > 1) {
+        o.cstr("\n").str(opts->indString).cstr("for (i = 0; i < keys_count; ++i) {");
+        from_le(o, opts, 2, dfa.key_size, "keys[i]");
+        o.cstr("\n").str(opts->indString).cstr("}");
+        o.cstr("\n");
     }
-    o.ws("\n").wind(1).ws("cursor = input;");
-    o.ws("\n").wind(1).ws("limit = input + input_len + padding;");
-    o.ws("\n").wind(1).ws("eof = input + input_len;");
-    o.ws("\n");
-    o.ws("\n").wind(1).ws("for (i = 0; status == 0 && cursor < eof && i < keys_count;) {");
-    o.ws("\n").wind(2).ws("token = cursor;");
-    if (backup) {
-        o.ws("\n").wind(2).ws("const YYCTYPE *marker = NULL;");
+    o.cstr("\n").str(opts->indString).cstr("cursor = input;");
+    o.cstr("\n").str(opts->indString).cstr("limit = input + input_len + padding;");
+    o.cstr("\n").str(opts->indString).cstr("eof = input + input_len;");
+    o.cstr("\n");
+    o.cstr("\n").str(opts->indString).cstr("for (i = 0; status == 0 && cursor < eof && i < keys_count;) {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("token = cursor;");
+    if (dfa.need_backup) {
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("const YYCTYPE *marker = NULL;");
     }
-    if (oldstyle_ctxmarker) {
-        o.ws("\n").wind(2).ws("const YYCTYPE *ctxmarker = NULL;");
+    if (dfa.oldstyle_ctxmarker) {
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("const YYCTYPE *ctxmarker = NULL;");
     }
-    o.ws("\n").wind(2).ws("YYCTYPE yych;");
-    if (accept) {
-        o.ws("\n").wind(2).ws("unsigned int yyaccept = 0;");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("YYCTYPE yych;");
+    if (dfa.need_accept) {
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("unsigned int yyaccept = 0;");
     }
 
     // autogenerated stag variables
-    ConfTags conf("\n" + indent(2, opts->indString) + "const YYCTYPE *@@ = NULL;", "");
-    output_tags(o.stream(), 0, conf, stagnames, opts);
+    const std::string stags_fmt = "\n" + indent(2, opts->indString) + "const YYCTYPE *@@ = NULL;";
+    CodeStmt stags;
+    stags.kind = CodeStmt::STAGS;
+    stags.tags.fmt = stags_fmt.c_str();
+    stags.tags.sep = "";
+    gen_tags(o, &stags, dfa.stagnames);
+    render_code_stmt(rctx, &stags);
+
     // user-defined stag variables
     std::set<std::string>::const_iterator
-        var1 = stagvars.begin(),
-        var2 = stagvars.end();
+        var1 = dfa.stagvars.begin(),
+        var2 = dfa.stagvars.end();
     if (var1 != var2) {
-        o.ws("\n").wind(2).ws("const YYCTYPE *").wstring(*var1);
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("const YYCTYPE *").str(*var1);
         for (++var1; var1 != var2; ++var1) {
-            o.ws(", *").wstring(*var1);
+            o.cstr(", *").str(*var1);
         }
-        o.ws(";");
+        o.cstr(";");
     }
-    if (!mtagnames.empty()) {
-        o.ws("\n").wind(2).ws("yymtagpool_clear(&yytp);");
+
+    if (!dfa.mtagnames.empty()) {
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("yymtagpool_clear(&yytp);");
+
         // autogenerated mtag variables
-        conf.format = "ptrdiff_t @@ = -1;";
-        output_tags(o.stream(), 0, conf, mtagnames, opts);
+        CodeStmt mtags;
+        mtags.kind = CodeStmt::MTAGS;
+        mtags.tags.fmt = "ptrdiff_t @@ = -1;";
+        mtags.tags.sep = "";
+        gen_tags(o, &mtags, dfa.mtagnames);
+        render_code_stmt(rctx, &mtags);
+
         // user-defined mtag variables
-        var1 = mtagvars.begin();
-        var2 = mtagvars.end();
+        var1 = dfa.mtagvars.begin();
+        var2 = dfa.mtagvars.end();
         if (var1 != var2) {
-            o.ws("\n").wind(2).ws("ptrdiff_t ").wstring(*var1);
+            o.cstr("\n").str(indent(2, opts->indString)).cstr("ptrdiff_t ").str(*var1);
             for (++var1; var1 != var2; ++var1) {
-                o.ws(", ").wstring(*var1);
+                o.cstr(", ").str(*var1);
             }
-            o.ws(";");
+            o.cstr(";");
         }
     }
 
-    o.ws("\n");
-    if (opts->bFlag) {
-        bitmaps.gen(o, 2);
+    o.cstr("\n");
+    if (bitmaps) {
+        rctx.ind = 2;
+        render_code_stmts(rctx, bitmaps);
     }
-    o.ws("\n");
+    o.cstr("\n");
+
+    return o.flush();
 }
 
-void emit_end(Output &o, const std::string &name, bool backup, bool oldstyle_ctxmarker,
-    const std::set<std::string> &mtagnames)
+const char *emit_end(Scratchbuf &o, const opt_t *opts, const DFA &dfa)
 {
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n").wind(1).ws("if (status == 0) {");
-    o.ws("\n").wind(2).ws("if (cursor != eof) {");
-    o.ws("\n").wind(3).ws("status = 1;");
-    o.ws("\n").wind(3).ws("const long pos = token - input;");
-    o.ws("\n").wind(3).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": unused input strings left at position %ld\\n\", pos);");
-    o.ws("\n").wind(2).ws("}");
-    o.ws("\n").wind(2).ws("if (i != keys_count) {");
-    o.ws("\n").wind(3).ws("status = 1;");
-    o.ws("\n").wind(3).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": unused keys left after %u keys\\n\", i);");
-    o.ws("\n").wind(2).ws("}");
-    o.ws("\n").wind(1).ws("}");
-    o.ws("\n");
-    o.ws("\nend:");
-    o.ws("\n").wind(1).ws("free(input);");
-    o.ws("\n").wind(1).ws("free(keys);");
-    if (!mtagnames.empty()) {
-        o.ws("\n").wind(1).ws("yymtagpool_free(&yytp);");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n").str(opts->indString).cstr("if (status == 0) {");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("if (cursor != eof) {");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr("status = 1;");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr("const long pos = token - input;");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr("fprintf(stderr, \"error: lex_").str(dfa.name).cstr(": unused input strings left at position %ld\\n\", pos);");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("}");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("if (i != keys_count) {");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr("status = 1;");
+    o.cstr("\n").str(indent(3, opts->indString)).cstr("fprintf(stderr, \"error: lex_").str(dfa.name).cstr(": unused keys left after %u keys\\n\", i);");
+    o.cstr("\n").str(indent(2, opts->indString)).cstr("}");
+    o.cstr("\n").str(opts->indString).cstr("}");
+    o.cstr("\n");
+    o.cstr("\nend:");
+    o.cstr("\n").str(opts->indString).cstr("free(input);");
+    o.cstr("\n").str(opts->indString).cstr("free(keys);");
+    if (!dfa.mtagnames.empty()) {
+        o.cstr("\n").str(opts->indString).cstr("yymtagpool_free(&yytp);");
     }
-    o.ws("\n");
-    o.ws("\n").wind(1).ws("return status;");
-    o.ws("\n}");
-    o.ws("\n");
-    o.ws("\n#undef YYCTYPE");
-    o.ws("\n#undef YYKEYTYPE");
-    o.ws("\n#undef YYPEEK");
-    o.ws("\n#undef YYSKIP");
-    if (backup) {
-        o.ws("\n#undef YYBACKUP");
-        o.ws("\n#undef YYRESTORE");
+    o.cstr("\n");
+    o.cstr("\n").str(opts->indString).cstr("return status;");
+    o.cstr("\n}");
+    o.cstr("\n");
+    o.cstr("\n#undef YYCTYPE");
+    o.cstr("\n#undef YYKEYTYPE");
+    o.cstr("\n#undef YYPEEK");
+    o.cstr("\n#undef YYSKIP");
+    if (dfa.need_backup) {
+        o.cstr("\n#undef YYBACKUP");
+        o.cstr("\n#undef YYRESTORE");
     }
-    if (oldstyle_ctxmarker) {
-        o.ws("\n#undef YYBACKUPCTX");
-        o.ws("\n#undef YYRESTORECTX");
+    if (dfa.oldstyle_ctxmarker) {
+        o.cstr("\n#undef YYBACKUPCTX");
+        o.cstr("\n#undef YYRESTORECTX");
     }
-    if (o.block().opts->tags) {
-        o.ws("\n#undef YYBACKUPTAG");
-        o.ws("\n#undef YYRESTORETAG");
-        o.ws("\n#undef YYCOPYTAG");
+    if (opts->tags) {
+        o.cstr("\n#undef YYBACKUPTAG");
+        o.cstr("\n#undef YYRESTORETAG");
+        o.cstr("\n#undef YYCOPYTAG");
     }
-    o.ws("\n#undef YYLESSTHAN");
-    o.ws("\n#undef YYFILL");
-    o.ws("\n");
+    o.cstr("\n#undef YYLESSTHAN");
+    o.cstr("\n#undef YYFILL");
+    o.cstr("\n");
+    return o.flush();
 }
 
-void emit_epilog(Output &o, const std::set<std::string> &names)
+const char *emit_epilog(Scratchbuf &o, const opt_t *opts, const std::set<std::string> &names)
 {
-    o.ws("\n").ws("int main()");
-    o.ws("\n").ws("{");
+    o.cstr("\n").cstr("int main()");
+    o.cstr("\n").cstr("{");
 
     for (std::set<std::string>::const_iterator i = names.begin(); i != names.end(); ++i) {
-        o.ws("\n").wind(1).ws("if(lex_").wstring(*i).ws("() != 0) {");
-        o.ws("\n").wind(2).ws("return 1;");
-        o.ws("\n").wind(1).ws("}");
+        o.cstr("\n").str(opts->indString).cstr("if(lex_").str(*i).cstr("() != 0) {");
+        o.cstr("\n").str(indent(2, opts->indString)).cstr("return 1;");
+        o.cstr("\n").str(opts->indString).cstr("}");
     }
 
-    o.ws("\n").wind(1).ws("return 0;");
-    o.ws("\n}");
-    o.ws("\n");
+    o.cstr("\n").str(opts->indString).cstr("return 0;");
+    o.cstr("\n}");
+    o.cstr("\n");
+
+    return o.flush();
 }
 
-void emit_action(Output &o, uint32_t ind, const DFA &dfa, size_t rid)
+void emit_action(Scratchbuf &o, const opt_t *opts, uint32_t ind, const DFA &dfa, size_t rid)
 {
     const std::string &name = dfa.name;
     const Rule &r = dfa.rules[rid];
@@ -504,9 +523,10 @@ void emit_action(Output &o, uint32_t ind, const DFA &dfa, size_t rid)
         if (t != r.ttag && !fictive(tag)) ++ntag;
     }
 
-    o.wind(ind).ws("status = check_key_count_").wstring(name).ws("(keys_count, i, ")
-        .wu64(ntag).ws(")\n").wind(ind + 1).ws(" || action_").wstring(name)
-        .ws("(&i, keys, input, token, &cursor, ").wu64(rkey).ws(")");
+    o.str(indent(ind, opts->indString)).cstr("status = check_key_count_")
+        .str(name).cstr("(keys_count, i, ").u64(ntag).cstr(")\n");
+    o.str(indent(ind + 1, opts->indString)).cstr(" || action_").str(name)
+        .cstr("(&i, keys, input, token, &cursor, ").u64(rkey).cstr(")");
 
     for (size_t t = r.ltag; t < r.htag; ++t) {
         const Tag &tag = dfa.tags[t];
@@ -514,19 +534,18 @@ void emit_action(Output &o, uint32_t ind, const DFA &dfa, size_t rid)
 
         const std::string tname = tag_expr(tag, false);
         if (history(tag)) {
-            o.ws("\n").wind(ind + 1).ws(" || check_mtag_").wstring(name)
-                .ws("(&i, keys, &yytp, ").wstring(tname).ws(", input, token, \"")
-                .wstring(tname).ws("\")");
+            o.cstr("\n").str(indent(ind + 1, opts->indString))
+                .cstr(" || check_mtag_").str(name).cstr("(&i, keys, &yytp, ")
+                .str(tname).cstr(", input, token, \"").str(tname).cstr("\")");
         }
         else {
-            o.ws("\n").wind(ind + 1).ws(" || check_stag_").wstring(name)
-                .ws("(&i, keys, ").wstring(tname).ws(", input, token, \"")
-                .wstring(tname).ws("\")");
+            o.cstr("\n").str(indent(ind + 1, opts->indString))
+                .cstr(" || check_stag_").str(name).cstr("(&i, keys, ")
+                .str(tname).cstr(", input, token, \"").str(tname).cstr("\")");
         }
     }
 
-    o.ws(";\n");
-    o.wind(ind).ws("continue;\n");
+    o.cstr(";\n").str(indent(ind, opts->indString)).cstr("continue;\n");
 }
 
 } // namespace re2c

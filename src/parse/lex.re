@@ -121,6 +121,8 @@ struct ScannerState
 
 Scanner::ParseMode Scanner::echo(Output &out)
 {
+    const opt_t *opts = out.block().opts;
+    code_alc_t &alc = out.allocator;
     const char *x, *y;
     if (is_eof()) return Stop;
 
@@ -153,30 +155,35 @@ loop:
 
     "/*!max:re2c" {
         out.wraw(tok, ptr);
-        out.wdelay_yymaxfill();
+        out.wdelay_stmt(0, code_yymaxfill(alc));
         lex_end_of_comment(out);
         goto next;
     }
 
     "/*!maxnmatch:re2c" {
         out.wraw(tok, ptr);
-        out.wdelay_yymaxnmatch();
+        out.wdelay_stmt(0, code_yymaxnmatch(alc));
         lex_end_of_comment(out);
         goto next;
     }
 
     "/*!getstate:re2c" {
         out.wraw(tok, ptr);
-        out.wdelay_state_goto(0);
+        if (opts->fFlag && opts->target == TARGET_CODE && !out.state_goto) {
+            out.wdelay_stmt(opts->topIndent, code_state_goto(alc));
+            out.state_goto = true;
+        }
         lex_end_of_comment(out);
         goto next;
     }
 
     "/*!types:re2c" {
         out.wraw(tok, ptr);
-        out.wdelay_line_info_output();
-        out.wdelay_types();
-        out.wdelay_line_info_input(cur_loc());
+        out.wdelay_stmt(0, code_line_info_output(alc));
+        out.wdelay_stmt(opts->topIndent, code_cond_enum(alc));
+        out.cond_enum_in_hdr = out.in_header();
+        out.warn_condition_order = false; // see note [condition order]
+        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
         lex_end_of_comment(out);
         goto next;
     }
@@ -204,7 +211,7 @@ loop:
     "/*!header:re2c:off" {
         out.wraw(tok, ptr);
         out.header_mode(false);
-        out.wdelay_line_info_input(cur_loc());
+        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
         lex_end_of_comment(out);
         goto next;
     }
@@ -224,7 +231,8 @@ loop:
     }
 
     linedir / lineinf {
-        out.wraw(tok, ptr).ws("\n");
+        out.wraw(tok, ptr);
+        out.wdelay_stmt(0, code_stmt_textraw(alc, ""));
         set_sourceline();
         goto next;
     }
@@ -254,7 +262,7 @@ loop:
     }
     eoc {
         if (multiline) {
-            out.wdelay_line_info_input(cur_loc());
+            out.wdelay_stmt(0, code_line_info_input(out.allocator, cur_loc()));
         }
         return;
     }
@@ -285,7 +293,8 @@ loop:
         goto loop;
     }
     eoc {
-        out.wdelay_tags(new ConfTags(fmt, sep), mtags);
+        out.wdelay_stmt(out.block().opts->topIndent,
+            code_tags(out.allocator, fmt, sep, mtags));
         return;
     }
 */

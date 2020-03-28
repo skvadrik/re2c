@@ -13,6 +13,7 @@ namespace re2c {
 class Output;
 struct Go;
 struct State;
+struct CodeStmts;
 
 struct bitmap_t
 {
@@ -40,7 +41,7 @@ public:
     void insert(const Go *go, const State *s);
     const bitmap_t *find(const Go *go, const State *s) const;
     bool empty() const;
-    void gen(Output &o, uint32_t ind);
+    CodeStmts *gen(Output &output);
     FORBID_COPY(bitmaps_t);
 };
 

@@ -19,19 +19,14 @@
 
 namespace re2c {
 
-OutputFragment::OutputFragment (type_t t, uint32_t i)
-    : type (t)
-    , stream ()
-    , indent (i)
-{}
-
-OutputFragment::~OutputFragment()
+static uint32_t count_lines_text(const char *text)
 {
-    if (type == STAGS || type == MTAGS) {
-        delete tags;
-    } else if (type == LINE_INFO_INPUT) {
-        delete loc;
+    DASSERT(text);
+    uint32_t lc = 0;
+    for (const char *s = text; *s; ++s) {
+        if (*s == '\n') ++lc;
     }
+    return lc;
 }
 
 static uint32_t write_converting_newlines(const std::string &str, FILE *f)
@@ -68,16 +63,10 @@ OutputBlock::OutputBlock(const loc_t &loc)
     , stags ()
     , mtags ()
     , opts(NULL)
-{
-    fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
-}
+{}
 
 OutputBlock::~OutputBlock ()
 {
-    for (unsigned int i = 0; i < fragments.size (); ++i)
-    {
-        delete fragments[i];
-    }
     delete opts;
 }
 
@@ -88,6 +77,7 @@ Output::Output(Msg &msg)
     , label_counter()
     , fill_index(0)
     , state_goto(false)
+    , cond_enum_in_hdr(false)
     , cond_goto(false)
     , warn_condition_order(true)
     , need_header(false)
@@ -95,6 +85,8 @@ Output::Output(Msg &msg)
     , skeletons()
     , max_fill(1)
     , max_nmatch(1)
+    , allocator()
+    , scratchbuf(allocator)
 {}
 
 Output::~Output ()
@@ -108,269 +100,38 @@ void Output::header_mode(bool on)
     pblocks = on ? &hblocks : &cblocks;
 }
 
+bool Output::in_header() const
+{
+    return pblocks == &hblocks;
+}
+
 OutputBlock& Output::block()
 {
     return *pblocks->back();
 }
 
-std::ostream & Output::stream ()
-{
-    return block().fragments.back ()->stream;
-}
-
-Output &Output::wraw(const char *s, const char *e)
+void Output::wraw(const char *s, const char *e)
 {
     if (s != e && block().opts->target == TARGET_CODE) {
-        insert_code();
-
         // scan for non-whitespace characters
         bool &code = block().have_user_code;
         for (const char *p = s; !code && p < e; ++p) {
             code = !isspace(*p);
         }
-
-        stream().write(s, e - s);
-    }
-    return *this;
-}
-
-Output & Output::wu32_hex (uint32_t n)
-{
-    insert_code();
-    prtHex(stream(), n, block().opts->encoding.szCodeUnit());
-    return *this;
-}
-
-Output & Output::wc_hex (uint32_t n)
-{
-    insert_code();
-    const opt_t *opts = block().opts;
-    const Enc &e = opts->encoding;
-    prtChOrHex(stream(), n, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == TARGET_DOT);
-    return *this;
-}
-
-Output & Output::wrange (uint32_t l, uint32_t u)
-{
-    insert_code();
-    const opt_t *opts = block().opts;
-    const Enc &e = opts->encoding;
-    printSpan(stream(), l, u, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == TARGET_DOT);
-    return *this;
-}
-
-Output & Output::wu32_width (uint32_t n, int w)
-{
-    insert_code();
-    stream () << std::setw (w);
-    stream () << n;
-    return *this;
-}
-
-Output & Output::wversion_time ()
-{
-    insert_code();
-    output_version_time(stream(), block().opts->version, !block().opts->bNoGenerationDate);
-    return *this;
-}
-
-Output & Output::wuser_start_label ()
-{
-    insert_code();
-    const std::string label = block().opts->startlabel;
-    if (!label.empty())
-    {
-        wstring(label).ws(":\n");
-    }
-    return *this;
-}
-
-Output& Output::wyych_decl(uint32_t ind)
-{
-    const opt_t *opts = block().opts;
-
-    if (!opts->bEmitYYCh) return *this;
-
-    wind(ind);
-    switch (opts->lang) {
-        case LANG_C:
-            // C/C++: YYCTYPE yych;
-            wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";");
-            break;
-        case LANG_GO:
-            // Go: var yych YYCTYPE
-            ws("var ").wstring(opts->yych).ws(" ").wstring(opts->yyctype);
-            break;
-    }
-    ws("\n");
-    return *this;
-}
-
-Output & Output::wc (char c)
-{
-    insert_code();
-    stream () << c;
-    return *this;
-}
-
-Output & Output::wu32 (uint32_t n)
-{
-    insert_code();
-    stream () << n;
-    return *this;
-}
-
-Output & Output::wu64 (uint64_t n)
-{
-    insert_code();
-    stream () << n;
-    return *this;
-}
-
-Output & Output::wstring (const std::string & s)
-{
-    insert_code();
-    stream () << s;
-    return *this;
-}
-
-Output & Output::ws (const char * s)
-{
-    insert_code();
-    stream () << s;
-    return *this;
-}
-
-Output & Output::wlabel (label_t l)
-{
-    insert_code();
-    stream () << l;
-    return *this;
-}
-
-Output & Output::wind (uint32_t ind)
-{
-    insert_code();
-    stream () << indent(ind, block().opts->indString);
-    return *this;
-}
-
-void Output::insert_code ()
-{
-    if (block().fragments.back()->type != OutputFragment::CODE) {
-        block().fragments.push_back(new OutputFragment(OutputFragment::CODE, 0));
+        wdelay_stmt(0, code_raw(allocator, s, static_cast<size_t>(e - s)));
     }
 }
 
-Output &Output::wdelay_tags(const ConfTags *cf, bool mtags)
+void Output::wversion_time()
 {
-    if (block().opts->target == TARGET_CODE) {
-        OutputFragment *frag = new OutputFragment(
-            mtags ? OutputFragment::MTAGS : OutputFragment::STAGS, 0);
-        frag->tags = cf;
-        pblocks->back()->fragments.push_back(frag);
-    }
-    return *this;
+    output_version_time(scratchbuf.stream(), block().opts->version, !block().opts->bNoGenerationDate);
+    wdelay_stmt(0, code_stmt_textraw(allocator, scratchbuf.flush()));
 }
 
-Output & Output::wdelay_line_info_input (const loc_t &loc)
+void Output::wdelay_stmt(uint32_t ind, CodeStmt *stmt)
 {
-    OutputFragment *frag = new OutputFragment(OutputFragment::LINE_INFO_INPUT, 0);
-    frag->loc = new loc_t(loc);
-    pblocks->back()->fragments.push_back(frag);
-    return *this;
-}
-
-Output & Output::wdelay_line_info_output ()
-{
-    block().fragments.push_back (new OutputFragment (OutputFragment::LINE_INFO_OUTPUT, 0));
-    return *this;
-}
-
-Output & Output::wdelay_cond_goto(uint32_t ind)
-{
-    if (block().opts->cFlag && !cond_goto) {
-        block().fragments.push_back(new OutputFragment(OutputFragment::COND_GOTO, ind));
-        cond_goto = true;
-    }
-    return *this;
-}
-
-Output & Output::wdelay_cond_table(uint32_t ind)
-{
-    if (block().opts->gFlag && block().opts->cFlag && !cond_goto) {
-        block().fragments.push_back(new OutputFragment(OutputFragment::COND_TABLE, ind));
-    }
-    return *this;
-}
-
-Output & Output::wdelay_state_goto (uint32_t ind)
-{
-    if (block().opts->target == TARGET_CODE
-        && block().opts->fFlag && !state_goto) {
-        block().fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
-        state_goto = true;
-    }
-    return *this;
-}
-
-Output & Output::wdelay_types ()
-{
-    if (block().opts->target == TARGET_CODE) {
-        warn_condition_order = false; // see note [condition order]
-        block().fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
-    }
-    return *this;
-}
-
-Output & Output::wdelay_yyaccept_init (uint32_t ind)
-{
-    block().fragments.push_back (new OutputFragment (OutputFragment::ACCEPT_INIT, ind));
-    return *this;
-}
-
-Output & Output::wdelay_yymaxfill ()
-{
-    if (block().opts->target == TARGET_CODE) {
-        block().fragments.push_back (new OutputFragment (OutputFragment::MAXFILL, 0));
-    }
-    return *this;
-}
-
-Output& Output::wdelay_yymaxnmatch()
-{
-    if (block().opts->target == TARGET_CODE
-        && block().opts->posix_syntax) {
-        block().fragments.push_back (new OutputFragment (OutputFragment::MAXNMATCH, 0));
-    }
-    return *this;
-}
-
-Output& Output::wdelay_skip(uint32_t ind, bool skip)
-{
-    if (skip) {
-        OutputFragment *f = new OutputFragment(OutputFragment::SKIP, ind);
-        block().fragments.push_back(f);
-    }
-    return *this;
-}
-
-Output& Output::wdelay_peek(uint32_t ind, bool peek)
-{
-    if (peek) {
-        OutputFragment *f = new OutputFragment(OutputFragment::PEEK, ind);
-        block().fragments.push_back(f);
-    }
-    return *this;
-}
-
-Output& Output::wdelay_backup(uint32_t ind, bool backup)
-{
-    if (backup) {
-        OutputFragment *f = new OutputFragment(OutputFragment::BACKUP, ind);
-        block().fragments.push_back(f);
-    }
-    return *this;
+    OutputFragment f = {stmt, ind};
+    block().fragments.push_back(f);
 }
 
 void Output::new_block(Opt &opts, const loc_t &loc)
@@ -394,65 +155,6 @@ static void fix_first_block_opts(blocks_t &blocks)
         if (!fst->have_user_code) {
             *const_cast<opt_t *>(fst->opts) = *snd->opts;
         }
-    }
-}
-
-static void foldexpr(std::vector<OutputFragment*> &frags)
-{
-    const size_t n = frags.size();
-    for (size_t i = 0; i < n;) {
-
-        if (i + 2 < n) {
-            OutputFragment::type_t
-                &x = frags[i]->type,
-                &y = frags[i + 1]->type,
-                &z = frags[i + 2]->type;
-            if (x == OutputFragment::BACKUP && y == OutputFragment::PEEK && z == OutputFragment::SKIP) {
-                x = OutputFragment::BACKUP_PEEK_SKIP;
-                y = z = OutputFragment::EMPTY;
-                i += 3;
-                continue;
-            } else if (x == OutputFragment::SKIP && y == OutputFragment::BACKUP && z == OutputFragment::PEEK) {
-                x = OutputFragment::SKIP_BACKUP_PEEK;
-                y = z = OutputFragment::EMPTY;
-                i += 3;
-                continue;
-            }
-        }
-
-        if (i + 1 < n) {
-            OutputFragment::type_t
-                &x = frags[i]->type,
-                &y = frags[i + 1]->type;
-            if (x == OutputFragment::PEEK && y == OutputFragment::SKIP) {
-                x = OutputFragment::PEEK_SKIP;
-                y = OutputFragment::EMPTY;
-                i += 2;
-                continue;
-            } else if (x == OutputFragment::SKIP && y == OutputFragment::PEEK) {
-                x = OutputFragment::SKIP_PEEK;
-                y = OutputFragment::EMPTY;
-                i += 2;
-                continue;
-            } else if (x == OutputFragment::SKIP && y == OutputFragment::BACKUP) {
-                x = OutputFragment::SKIP_BACKUP;
-                y = OutputFragment::EMPTY;
-                i += 2;
-                continue;
-            } else if (x == OutputFragment::BACKUP && y == OutputFragment::PEEK) {
-                x = OutputFragment::BACKUP_PEEK;
-                y = OutputFragment::EMPTY;
-                i += 2;
-                continue;
-            } else if (x == OutputFragment::BACKUP && y == OutputFragment::SKIP) {
-                x = OutputFragment::BACKUP_SKIP;
-                y = OutputFragment::EMPTY;
-                i += 2;
-                continue;
-            }
-        }
-
-        ++i;
     }
 }
 
@@ -486,87 +188,42 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
         OutputBlock & b = *blocks[j];
         const opt_t *bopt = b.opts;
 
-        if (bopt->input_api == INPUT_DEFAULT) {
-            foldexpr(b.fragments);
-        }
+        CodegenContext gctx =
+            { allocator
+            , scratchbuf
+            , globopt
+            , bopt
+            , msg
+            , b.loc
+            , global_types
+            , global_stags
+            , global_mtags
+            , b.types
+            , max_fill
+            , max_nmatch
+            , fill_index
+            , b.used_yyaccept
+            , warn_condition_order
+            };
 
         const size_t n = b.fragments.size();
         for (size_t i = 0; i < n; ++i) {
-            OutputFragment & f = * b.fragments[i];
-            std::ostringstream &o = f.stream;
+            OutputFragment &f = b.fragments[i];
             const uint32_t ind = f.indent ? f.indent : bopt->topIndent;
+            std::ostringstream os;
 
-            switch (f.type) {
-            case OutputFragment::EMPTY:
-            case OutputFragment::CODE: break;
-            case OutputFragment::LINE_INFO_INPUT:
-                output_line_info(o, f.loc->line, msg.filenames[f.loc->file],
-                    bopt);
-                break;
-            case OutputFragment::LINE_INFO_OUTPUT:
-                output_line_info(o, line_count + 1, filename, bopt);
-                break;
-            case OutputFragment::COND_GOTO:
-                output_cond_goto(o, ind, b.types, bopt, msg
-                    , warn_condition_order, b.loc);
-                break;
-            case OutputFragment::COND_TABLE:
-                output_cond_table(o, ind, b.types, bopt);
-                break;
-            case OutputFragment::STATE_GOTO:
-                output_state_goto(o, ind, 0, fill_index, globopt);
-                break;
-            case OutputFragment::STAGS:
-                output_tags(o, ind, *f.tags, global_stags, bopt);
-                break;
-            case OutputFragment::MTAGS:
-                output_tags(o, ind, *f.tags, global_mtags, bopt);
-                break;
-            case OutputFragment::TYPES:
-                output_types(o, ind, block().opts, global_types);
-                break;
-            case OutputFragment::ACCEPT_INIT:
-                output_yyaccept_init(o, ind, b.used_yyaccept, bopt);
-                break;
-            case OutputFragment::MAXFILL:
-                output_yymaxfill(o, ind, max_fill, bopt);
-                break;
-            case OutputFragment::MAXNMATCH:
-                output_yymaxnmatch(o, ind, max_nmatch, bopt);
-                break;
-            case OutputFragment::SKIP:
-                output_skip(o, ind, bopt);
-                break;
-            case OutputFragment::PEEK:
-                output_peek(o, ind, bopt);
-                break;
-            case OutputFragment::BACKUP:
-                output_backup(o, ind, bopt);
-                break;
-            case OutputFragment::PEEK_SKIP:
-                output_peek_skip(o, ind, bopt);
-                break;
-            case OutputFragment::SKIP_PEEK:
-                output_skip_peek(o, ind, bopt);
-                break;
-            case OutputFragment::SKIP_BACKUP:
-                output_skip_backup(o, ind, bopt);
-                break;
-            case OutputFragment::BACKUP_SKIP:
-                output_backup_skip(o, ind, bopt);
-                break;
-            case OutputFragment::BACKUP_PEEK:
-                output_backup_peek(o, ind, bopt);
-                break;
-            case OutputFragment::BACKUP_PEEK_SKIP:
-                output_backup_peek_skip(o, ind, bopt);
-                break;
-            case OutputFragment::SKIP_BACKUP_PEEK:
-                output_skip_backup_peek(o, ind, bopt);
-                break;
-            }
+            RenderContext rctx =
+                { os
+                , bopt
+                , msg
+                , ind
+                , filename.c_str()
+                , line_count
+                };
 
-            line_count += write_converting_newlines(o.str(), file);
+            combine_stmt(gctx, f.stmt);
+            render_code_stmt(rctx, f.stmt);
+            write_converting_newlines(os.str(), file);
         }
     }
 
@@ -580,17 +237,32 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     return true;
 }
 
-static bool have_cond_frag(const blocks_t &blocks)
+static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
+    const opt_t *opts, const uniq_vector_t<std::string> &condnames)
 {
-    for (blocks_citer_t b = blocks.begin(); b != blocks.end(); ++b) {
-        const frags_t &fs = (*b)->fragments;
-        for (frags_citer_t f = fs.begin(); f != fs.end(); ++f) {
-            if ((*f)->type == OutputFragment::TYPES) {
-                return true;
-            }
-        }
+    if (opts->target != TARGET_CODE) {
+        code->kind = CodeStmt::EMPTY;
+        return;
     }
-    return false;
+
+    CodeStmts *stmts = code_stmts(alc);
+
+    o.cstr("enum ").str(opts->yycondtype).cstr(" {");
+    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+
+    CodeStmts *block = code_stmts(alc);
+    for (size_t i = 0; i < condnames.size(); ++i) {
+        o.str(opts->condEnumPrefix).str(condnames[i]).cstr(",");
+        append_stmt(block, code_stmt_text(alc, o.flush()));
+    }
+    append_stmt(stmts, code_block(alc, block, CodeBlock::INDENTED));
+
+    o.cstr("};");
+    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+
+    code->kind = CodeStmt::BLOCK;
+    code->block.stmts = stmts;
+    code->block.fmt = CodeBlock::RAW;
 }
 
 static void add_symbols(const OutputBlock &block,
@@ -629,10 +301,16 @@ bool Output::emit()
     // emit .h file
     if (!opts->header_file.empty() || need_header) {
         // old-style -t, --type-headers usage implies condition generation
-        if (!conds.empty() && !have_cond_frag(hblocks)) {
-            std::ostream &os = hblocks.back()->fragments.back ()->stream;
-            os << std::endl;
-            output_types(os, 0, opts, conds);
+        if (!conds.empty() && !this->cond_enum_in_hdr) {
+            header_mode(true);
+
+            wdelay_stmt(0, code_stmt_textraw(allocator, ""));
+
+            CodeStmt *code = code_stmt(allocator, CodeStmt::EMPTY);
+            gen_cond_enum(scratchbuf, allocator, code, opts, conds);
+            wdelay_stmt(0, code);
+
+            header_mode(false);
         }
 
         ok &= emit_blocks(opts->header_file, hblocks, conds, stags, mtags);
@@ -644,87 +322,129 @@ bool Output::emit()
     return ok;
 }
 
-void output_tags(std::ostream &o, uint32_t ind, const ConfTags &conf,
-    const std::set<std::string> &tags, const opt_t *opts)
+void gen_tags(Scratchbuf &o, CodeStmt *code, const std::set<std::string> &tags)
 {
-    std::set<std::string>::const_iterator
-        tag = tags.begin(),
-        end = tags.end();
-    o << indent(ind, opts->indString);
-    for (;tag != end;) {
-        std::string fmt = conf.format;
-        strrreplace(fmt, "@@", *tag);
-        o << fmt;
-        if (++tag == end) {
-            break;
-        }
-        o << conf.separator;
+    DASSERT(code->kind == CodeStmt::STAGS || code->kind == CodeStmt::MTAGS);
+
+    const char *fmt = code->tags.fmt;
+    const char *sep = code->tags.sep;
+
+    std::set<std::string>::const_iterator tag = tags.begin(), end = tags.end();
+    for (; tag != end; ) {
+        std::string fmtstr = fmt;
+        strrreplace(fmtstr, "@@", *tag);
+        o.str(fmtstr);
+        if (++tag == end) break;
+        o.cstr(sep);
     }
+    code->text = o.flush();
+    code->kind = CodeStmt::VERBATIM;
 }
 
-void output_state_goto(std::ostream & o, uint32_t ind,
+static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
     uint32_t start_label, uint32_t fill_index, const opt_t *opts)
 {
-    const std::string
-        indstr = indent(ind, opts->indString),
-        getstate = opts->state_get_naked
-            ? opts->state_get
-            : opts->state_get + "()";
+    o.str(opts->state_get).cstr(opts->state_get_naked ? "" : "()");
+    CodeText expr = o.flush();
 
-    o << indstr << "switch (" << getstate << ") {\n";
+    CodeStmts *goto_start = code_stmts(alc);
+    o.cstr("goto ").str(opts->labelPrefix).u32(start_label).cstr(";");
+    append_stmt(goto_start, code_stmt_text(alc, o.flush()));
+
+    CodeCases *ccases = code_cases(alc);
     if (opts->bUseStateAbort) {
-        o << indstr << "default: abort();\n";
-        o << indstr << "case -1: goto " << opts->labelPrefix << start_label << ";\n";
+        // default: abort();
+        CodeStmts *abort = code_stmts(alc);
+        append_stmt(abort, code_stmt_text(alc, "abort();"));
+        append_case(ccases, code_case_default(alc, abort));
+
+        // case -1: goto <start label>;
+        append_case(ccases, code_case_number(alc, goto_start, -1));
     }
     else {
-        o << indstr << "default: goto " << opts->labelPrefix << start_label << ";\n";
+        // default: goto <start label>;
+        append_case(ccases, code_case_default(alc, goto_start));
     }
     for (uint32_t i = 0; i < fill_index; ++i) {
-        o << indstr << "case " << i << ":";
+        CodeStmts *stmts = code_stmts(alc);
+
         if (opts->eof != NOEOF) {
-            o << " if (" << output_expr_lessthan(1, opts) << ")"
-                << " goto " << opts->labelPrefix << "eof" << i << ";";
+            // TODO: render this as a separate statement
+            o.cstr("if (").str(output_expr_lessthan(1, opts)).cstr(")")
+                .cstr(" goto ").str(opts->labelPrefix).cstr("eof").u32(i).cstr("; ");
         }
-        o << " goto " << opts->yyfilllabel << i << ";\n";
+        o.cstr("goto ").str(opts->yyfilllabel).u32(i).cstr(";");
+        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+
+        append_case(ccases, code_case_number(alc, stmts, static_cast<int32_t>(i)));
     }
-    o << indstr << "}\n";
+
+    CodeStmts *stmts = code_stmts(alc);
+    append_stmt(stmts, code_switch(alc, expr, ccases, false));
 
     if (opts->bUseStateNext) {
-        o << opts->yynext << ":\n";
+        o.str(opts->yynext).cstr(":");
+        append_stmt(stmts, code_stmt_textraw(alc, o.flush()));
+    }
+
+    code->kind = CodeStmt::BLOCK;
+    code->block.stmts = stmts;
+    code->block.fmt = CodeBlock::RAW;
+}
+
+static void gen_yych_decl(const opt_t *opts, CodeStmt *code)
+{
+    if (opts->bEmitYYCh) {
+        code->kind = CodeStmt::VAR;
+        code->var.type = opts->yyctype.c_str();
+        code->var.name = opts->yych.c_str();
+        code->var.init = NULL;
+    }
+    else {
+        code->kind = CodeStmt::EMPTY;
     }
 }
 
-void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept, const opt_t *opts)
+static void gen_yyaccept_def(const opt_t *opts, CodeStmt *code, bool used_yyaccept)
 {
-    if (!used_yyaccept) return;
-
-    o << indent(ind, opts->indString);
-    switch (opts->lang) {
-        case LANG_C:
-            // C/C++: #line <line-number> <filename>
-            o << "unsigned int " << opts->yyaccept << " = 0;";
-            break;
-        case LANG_GO:
-            // Go: //line <filename>:<line-number>
-            o << opts->yyaccept << " := 0";
-            break;
+    if (used_yyaccept) {
+        code->kind = CodeStmt::VAR;
+        code->var.type = "unsigned int";
+        code->var.name = opts->yyaccept.c_str();
+        code->var.init = "0";
     }
-    o << "\n";
+    else {
+        code->kind = CodeStmt::EMPTY;
+    }
 }
 
-void output_yymaxfill(std::ostream &o, uint32_t ind,
-    size_t max_fill, const opt_t *opts)
+static void gen_yymaxfill(Scratchbuf &o, const opt_t *opts, CodeStmt *code,
+    size_t max_fill)
 {
-    o << indent(ind, opts->indString) << "#define YYMAXFILL " << max_fill << "\n";
+    if (opts->target == TARGET_CODE) {
+        code->kind = CodeStmt::TEXT;
+        o.cstr("#define YYMAXFILL ").u64(max_fill);
+        code->text = o.flush();
+    }
+    else {
+        code->kind = CodeStmt::EMPTY;
+    }
 }
 
-void output_yymaxnmatch(std::ostream &o, uint32_t ind,
-    size_t max_nmatch, const opt_t *opts)
+static void gen_yymaxnmatch(Scratchbuf &o, const opt_t *opts, CodeStmt *code,
+    size_t max_nmatch)
 {
-    o << indent(ind, opts->indString) << "#define YYMAXNMATCH " << max_nmatch << "\n";
+    if (opts->target == TARGET_CODE && opts->posix_syntax) {
+        code->kind = CodeStmt::TEXT;
+        o.cstr("#define YYMAXNMATCH ").u64(max_nmatch);
+        code->text = o.flush();
+    }
+    else {
+        code->kind = CodeStmt::EMPTY;
+    }
 }
 
-void output_line_info(std::ostream &o, uint32_t line, const std::string &fname,
+static void render_line_info(std::ostream &o, uint32_t line, const std::string &fname,
     const opt_t *opts)
 {
     if (opts->iFlag) return;
@@ -741,17 +461,6 @@ void output_line_info(std::ostream &o, uint32_t line, const std::string &fname,
     }
 }
 
-void output_types(std::ostream &o, uint32_t ind, const opt_t *opts,
-    const uniq_vector_t<std::string> &types)
-{
-    const std::string indstr = opts->indString;
-    o << indent(ind++, indstr) << "enum " << opts->yycondtype << " {\n";
-    for (size_t i = 0; i < types.size(); ++i) {
-        o << indent(ind, indstr) << opts->condEnumPrefix << types[i] << ",\n";
-    }
-    o << indent(--ind, indstr) << "};\n";
-}
-
 void output_version_time(std::ostream &o, bool version, bool date)
 {
     o << "/* Generated by re2c";
@@ -763,7 +472,7 @@ void output_version_time(std::ostream &o, bool version, bool date)
         time_t now = time (NULL);
         o.write (ctime (&now), 24);
     }
-    o << " */" << "\n";
+    o << " */";
 }
 
 /*
@@ -795,73 +504,595 @@ static std::string output_cond_get(const opt_t *opts)
     return opts->cond_get + (opts->cond_get_naked ? "" : "()");
 }
 
-static void output_cond_goto_binary(std::ostream &o, uint32_t ind,
+static CodeStmts *gen_cond_goto_binary(Scratchbuf &o, code_alc_t &alc,
     const std::vector<std::string> &conds, const opt_t *opts,
     size_t lower, size_t upper)
 {
-    const std::string indstr = indent(ind, opts->indString);
+    CodeStmts *stmts = code_stmts(alc);
+    CodeStmt *stmt = NULL;
 
     if (lower == upper) {
-        o << indstr << "goto " << opts->condPrefix << conds[lower] << ";\n";
-    } else {
-        const size_t middle = lower + (upper - lower + 1) / 2;
-        o << indstr << "if (" << output_cond_get(opts) << " < " << middle << ") {\n";
-        output_cond_goto_binary(o, ind + 1, conds, opts, lower, middle - 1);
-        o << indstr << "} else {\n";
-        output_cond_goto_binary(o, ind + 1, conds, opts, middle, upper);
-        o << indstr << "}\n";
+        o.cstr("goto ").str(opts->condPrefix).str(conds[lower]).cstr(";");
+        stmt = code_stmt_text(alc, o.flush());
     }
+    else {
+        const size_t middle = lower + (upper - lower + 1) / 2;
+
+        o.str(output_cond_get(opts)).cstr(" < ").u64(middle);
+        CodeText if_cond = o.flush();
+
+        CodeStmts *if_then = gen_cond_goto_binary(o, alc, conds, opts, lower, middle - 1);
+        CodeStmts *if_else = gen_cond_goto_binary(o, alc, conds, opts, middle, upper);
+
+        stmt = code_stmt_if_then_else(alc, if_cond, if_then, if_else);
+    }
+
+    append_stmt(stmts, stmt);
+    return stmts;
 }
 
-void output_cond_goto(std::ostream &o, uint32_t ind
-    , const std::vector<std::string> &conds, const opt_t *opts, Msg &msg
-    , bool warn_cond_order, const loc_t &loc)
+static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
+    const std::vector<std::string> &conds, const opt_t *opts, Msg &msg,
+    bool warn_cond_ord, const loc_t &loc)
 {
     const size_t ncond = conds.size();
-    const std::string indstr = indent(ind, opts->indString);
+    CodeStmts *stmts = code_stmts(alc);
 
     if (opts->target == TARGET_DOT) {
         for (size_t i = 0; i < ncond; ++i) {
             const std::string &cond = conds[i];
-            o << "0 -> " << cond << " [label=\"state=" << cond << "\"]\n";
+            o.cstr("0 -> ").str(cond).cstr(" [label=\"state=").str(cond).cstr("\"]");
+            append_stmt(stmts, code_stmt_text(alc, o.flush()));
         }
-        return;
+    }
+    else {
+        if (opts->gFlag) {
+            o.cstr("goto *").str(opts->yyctable).cstr("[").str(output_cond_get(opts)).cstr("];");
+            append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        }
+        else if (opts->sFlag) {
+            warn_cond_ord &= ncond > 1;
+            append_stmts(stmts, gen_cond_goto_binary(o, alc, conds, opts, 0, ncond - 1));
+        }
+        else {
+            warn_cond_ord = false;
+
+            o.str(output_cond_get(opts));
+            CodeText expr = o.flush();
+
+            CodeCases *ccases = code_cases(alc);
+            for (size_t i = 0; i < ncond; ++i) {
+                const std::string &cond = conds[i];
+
+                o.str(opts->condEnumPrefix).str(cond);
+                const char *caseval = o.flush();
+
+                CodeStmts *body = code_stmts(alc);
+                o.cstr("goto ").str(opts->condPrefix).str(cond).cstr(";");
+                append_stmt(body, code_stmt_text(alc, o.flush()));
+
+                append_case(ccases, code_case_string(alc, body, caseval));
+            }
+
+            append_stmt(stmts, code_switch(alc, expr, ccases, false));
+        }
+
+        // see note [condition order]
+        warn_cond_ord &= opts->header_file.empty();
+        if (warn_cond_ord) {
+            msg.warn.condition_order(loc);
+        }
     }
 
-    if (opts->gFlag) {
-        o << indstr << "goto *" << opts->yyctable
-            << "[" << output_cond_get(opts) << "];\n";
-    } else if (opts->sFlag) {
-        if (ncond == 1) warn_cond_order = false;
-        output_cond_goto_binary(o, ind, conds, opts, 0, ncond - 1);
-    } else {
-        warn_cond_order = false;
-        o << indstr << "switch (" << output_cond_get(opts) << ") {\n";
-        for (size_t i = 0; i < ncond; ++i) {
-            const std::string &cond = conds[i];
-            o << indstr << "case " << opts->condEnumPrefix << cond
-                <<": goto " << opts->condPrefix << cond << ";\n";
-        }
-        o << indstr << "}\n";
-    }
-
-    warn_cond_order &= opts->header_file.empty();
-
-    // see note [condition order]
-    if (warn_cond_order) msg.warn.condition_order(loc);
+    code->kind = CodeStmt::BLOCK;
+    code->block.stmts = stmts;
+    code->block.fmt = CodeBlock::RAW;
 }
 
-void output_cond_table(std::ostream &o, uint32_t ind,
+static void gen_cond_table(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
     const std::vector<std::string> &conds, const opt_t *opts)
 {
     const size_t ncond = conds.size();
-    const std::string indstr = opts->indString;
 
-    o << indent(ind++, indstr) << "static void *" << opts->yyctable << "[" << ncond << "] = {\n";
+    CodeStmts *stmts = code_stmts(alc);
+
+    o.cstr("static void *").str(opts->yyctable).cstr("[").u64(ncond).cstr("] = {");
+    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+
+    CodeStmts *block = code_stmts(alc);
     for (size_t i = 0; i < ncond; ++i) {
-        o << indent(ind, indstr) << "&&" << opts->condPrefix << conds[i] << ",\n";
+        o.cstr("&&").str(opts->condPrefix).str(conds[i]).cstr(",");
+        append_stmt(block, code_stmt_text(alc, o.flush()));
     }
-    o << indent(--ind, indstr) << "};\n";
+    append_stmt(stmts, code_block(alc, block, CodeBlock::INDENTED));
+
+    o.cstr("};");
+    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+
+    code->kind = CodeStmt::BLOCK;
+    code->block.stmts = stmts;
+    code->block.fmt = CodeBlock::RAW;
+}
+
+static bool oneline_if(const CodeIfTE *code, const opt_t *opts)
+{
+    const CodeStmt *first = code->if_code->head;
+    return first
+        && first->next == NULL
+        && first->kind == CodeStmt::TEXT
+        && opts->lang == LANG_C // Go requires braces
+        && code->else_code == NULL
+        && code->oneline;
+}
+
+void render_code_if_then_else(RenderContext &rctx, const CodeIfTE *code)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+    const CodeStmt *first = code->if_code->head;
+
+    os << indent(rctx.ind, opts->indString) << "if (" << code->if_cond << ") ";
+    DASSERT(count_lines_text(code->if_cond) == 0);
+
+    if (oneline_if(code, opts)) {
+        os << first->text << std::endl;
+        DASSERT(count_lines_text(first->text) == 0);
+        ++rctx.line;
+    }
+    else {
+        os << "{" << std::endl;
+        ++rctx.line;
+        for (const CodeStmt *s = first; s; s = s->next) {
+            ++rctx.ind;
+            render_code_stmt(rctx, s);
+            --rctx.ind;
+        }
+        os << indent(rctx.ind, opts->indString) << "}";
+        if (code->else_code) {
+            if (code->else_cond) {
+                os << " else if (" << code->else_cond << ") {" << std::endl;
+                DASSERT(count_lines_text(code->else_cond) == 0);
+            }
+            else {
+                os << " else {" << std::endl;
+            }
+            ++rctx.line;
+            for (const CodeStmt *s = code->else_code->head; s; s = s->next) {
+                ++rctx.ind;
+                render_code_stmt(rctx, s);
+                --rctx.ind;
+            }
+            os << indent(rctx.ind, opts->indString) << "}";
+        }
+        os << std::endl;
+        ++rctx.line;
+    }
+}
+
+void render_code_block(RenderContext &rctx, const CodeBlock *code)
+{
+    switch (code->fmt) {
+        case CodeBlock::WRAPPED:
+            rctx.os << indent(rctx.ind, rctx.opts->indString) << "{" << std::endl;
+            ++rctx.line;
+            ++rctx.ind;
+            render_code_stmts(rctx, code->stmts);
+            --rctx.ind;
+            rctx.os << indent(rctx.ind, rctx.opts->indString) << "}" << std::endl;
+            ++rctx.line;
+            break;
+        case CodeBlock::INDENTED:
+            ++rctx.ind;
+            render_code_stmts(rctx, code->stmts);
+            --rctx.ind;
+            break;
+        case CodeBlock::RAW:
+            render_code_stmts(rctx, code->stmts);
+            break;
+    }
+}
+
+static void render_code_var(RenderContext &rctx, const CodeVar *var)
+{
+    std::ostringstream &os = rctx.os;
+
+    os << indent(rctx.ind, rctx.opts->indString);
+    switch (rctx.opts->lang) {
+        case LANG_C:
+            os << var->type << " " << var->name;
+            if (var->init) {
+                os << " = " << var->init;
+            }
+            os << ";";
+            break;
+        case LANG_GO:
+            if (var->init) {
+                os << var->name << " := " << var->init;
+            }
+            else {
+                os << "var " << var->name << " " << var->type;
+            }
+            break;
+    }
+    os << std::endl;
+    ++rctx.line;
+}
+
+void render_code_stmt(RenderContext &rctx, const CodeStmt *code)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+    const uint32_t ind = rctx.ind;
+    uint32_t &line = rctx.line;
+
+    switch (code->kind) {
+        case CodeStmt::EMPTY:
+            break;
+        case CodeStmt::IF_THEN_ELSE:
+            render_code_if_then_else(rctx, &code->ifte);
+            break;
+        case CodeStmt::SWITCH:
+            render_code_switch(rctx, &code->swch);
+            break;
+        case CodeStmt::BLOCK:
+            render_code_block(rctx, &code->block);
+            break;
+        case CodeStmt::TEXT_RAW:
+            os << code->text << std::endl;
+            line += count_lines_text(code->text) + 1;
+            break;
+        case CodeStmt::TEXT:
+            os << indent(ind, opts->indString) << code->text << std::endl;
+            line += count_lines_text(code->text) + 1;
+            break;
+        case CodeStmt::VERBATIM:
+            os << code->text;
+            line += count_lines_text(code->text);
+            break;
+        case CodeStmt::RAW:
+            os.write(code->raw.data, static_cast<std::streamsize>(code->raw.size));
+            for (const char *s = code->raw.data, *e = s + code->raw.size; s < e; ++s) {
+                if (*s == '\n') ++line;
+            }
+            break;
+        case CodeStmt::SKIP:
+            output_skip(os, ind, opts);
+            os << std::endl;
+            ++line;
+            break;
+        case CodeStmt::PEEK:
+            output_peek(os, ind, opts);
+            ++line;
+            break;
+        case CodeStmt::BACKUP:
+            output_backup(os, ind, opts);
+            ++line;
+            break;
+        case CodeStmt::PEEK_SKIP:
+            output_peek_skip(os, ind, opts);
+            ++line;
+            break;
+        case CodeStmt::SKIP_PEEK:
+            output_skip_peek(os, ind, opts);
+            ++line;
+            break;
+        case CodeStmt::SKIP_BACKUP:
+            output_skip_backup(os, ind, opts);
+            ++line;
+            break;
+        case CodeStmt::BACKUP_SKIP:
+            output_backup_skip(os, ind, opts);
+            ++line;
+            break;
+        case CodeStmt::BACKUP_PEEK:
+            output_backup_peek(os, ind, opts);
+            ++line;
+            break;
+        case CodeStmt::BACKUP_PEEK_SKIP:
+            output_backup_peek_skip(os, ind, opts);
+            ++line;
+            break;
+        case CodeStmt::SKIP_BACKUP_PEEK:
+            output_skip_backup_peek(os, ind, opts);
+            ++line;
+            break;
+        case CodeStmt::LINE_INFO_INPUT:
+            render_line_info(os, code->loc.line,
+                rctx.msg.filenames[code->loc.file], opts);
+            ++line;
+            break;
+        case CodeStmt::LINE_INFO_OUTPUT:
+            render_line_info(os, rctx.line + 1, rctx.file, opts);
+            ++line;
+            break;
+        case CodeStmt::VAR:
+            render_code_var(rctx, &code->var);
+            break;
+        case CodeStmt::STAGS:
+        case CodeStmt::MTAGS:
+        case CodeStmt::YYMAXFILL:
+        case CodeStmt::YYMAXNMATCH:
+        case CodeStmt::YYCH:
+        case CodeStmt::YYACCEPT:
+        case CodeStmt::COND_ENUM:
+        case CodeStmt::COND_GOTO:
+        case CodeStmt::COND_TABLE:
+        case CodeStmt::STATE_GOTO:
+            assert(false); // must have been expanded before
+            break;
+    }
+}
+
+void render_code_stmts(RenderContext &rctx, const CodeStmts *code)
+{
+    for (const CodeStmt *s = code->head; s; s = s->next) {
+        render_code_stmt(rctx, s);
+    }
+}
+
+static bool oneline_case(const CodeCase *code)
+{
+    const CodeStmt *first = code->body->head;
+    return first
+        && first->next == NULL
+        && first->kind == CodeStmt::TEXT;
+}
+
+void render_code_case(RenderContext &rctx, const CodeCase *code, bool defcase, bool noindent)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+    const uint32_t ind = rctx.ind;
+    const CodeStmt *first = code->body->head;
+
+    if (defcase) {
+        os << indent(ind, opts->indString) << "default:";
+    }
+    else if (code->kind == CodeCase::DEFAULT) {
+        // TOOD: deduplicate "default" cases (requires adjusting test formatting)
+        os << indent(ind, opts->indString) << "default: ";
+    }
+    else if (code->kind == CodeCase::NUMBER) {
+        os << indent(ind, opts->indString) << "case " << code->number << ": ";
+    }
+    else if (code->kind == CodeCase::STRING) {
+        os << indent(ind, opts->indString) << "case " << code->string << ": ";
+    }
+    else {
+        const Enc &enc = opts->encoding;
+        const bool ebcdic = enc.type() == Enc::EBCDIC;
+        const size_t nranges = code->chars.nranges;
+        const uint32_t *ranges = code->chars.ranges;
+
+        for (uint32_t i = 0; i < nranges; ++i) {
+            const uint32_t low = ranges[2 * i];
+            const uint32_t upp = ranges[2 * i + 1];
+
+            for (uint32_t c = low; c < upp; ++c) {
+                os << indent(ind, opts->indString) << "case ";
+                prtChOrHex(os, c, enc.szCodeUnit(), ebcdic, opts->target == TARGET_DOT);
+                os << ":";
+                if (opts->dFlag && ebcdic) {
+                    const uint32_t c2 = enc.decodeUnsafe(c);
+                    if (is_print(c2)) {
+                        os << " /* " << static_cast<char>(c2) << " */";
+                    }
+                }
+
+                const bool last_case = i == nranges - 1 && c == upp - 1;
+                if (!last_case) {
+                    if (opts->lang == LANG_GO) {
+                        os << opts->indString << "fallthrough";
+                    }
+                    os << std::endl;
+                    ++rctx.line;
+                }
+            }
+        }
+    }
+
+    if (oneline_case(code)) {
+        os << (noindent ? std::string() : opts->indString) << first->text << std::endl;
+        ++rctx.line;
+    }
+    else {
+        os << std::endl;
+        ++rctx.line;
+        for (const CodeStmt *s = first; s; s = s->next) {
+            ++rctx.ind;
+            render_code_stmt(rctx, s);
+            --rctx.ind;
+        }
+    }
+}
+
+void render_code_switch(RenderContext &rctx, const CodeSwitch *code)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+    const uint32_t ind = rctx.ind;
+
+    os << indent(ind, opts->indString) << "switch (" << code->expr << ") {\n";
+    ++rctx.line;
+
+    CodeCase *first = code->cases->head; // default
+    DASSERT(first);
+
+    // TODO: remove this heuristic (requires fixing formatting in tests)
+    const bool noindent = !code->impdef;
+
+    if (code->impdef) {
+        for (const CodeCase *c = first->next; c; c = c->next) {
+            render_code_case(rctx, c, false, noindent);
+        }
+        render_code_case(rctx, first, true, noindent);
+    }
+    else {
+        for (const CodeCase *c = first; c; c = c->next) {
+            render_code_case(rctx, c, false, noindent);
+        }
+    }
+
+    os << indent(ind, opts->indString) << "}\n";
+    ++rctx.line;
+}
+
+static void fold_exprs(CodeStmts *stmts)
+{
+    CodeStmt *x, *y, *z;
+    for (x = stmts->head; x; ) {
+        // have three statements ahead
+        if ((y = x->next) && (z = y->next)) {
+            CodeStmt::Kind xk = x->kind;
+            CodeStmt::Kind yk = y->kind;
+            CodeStmt::Kind zk = z->kind;
+
+            if (xk == CodeStmt::BACKUP && yk == CodeStmt::PEEK
+                    && zk == CodeStmt::SKIP) {
+                x->kind = CodeStmt::BACKUP_PEEK_SKIP;
+                x->next = z->next;
+                continue;
+            }
+            else if (xk == CodeStmt::SKIP && yk == CodeStmt::BACKUP
+                    && zk == CodeStmt::PEEK) {
+                x->kind = CodeStmt::SKIP_BACKUP_PEEK;
+                x->next = z->next;
+                continue;
+            }
+        }
+
+        // have two statements ahead
+        if ((y = x->next)) {
+            CodeStmt::Kind xk = x->kind;
+            CodeStmt::Kind yk = y->kind;
+
+            if (xk == CodeStmt::PEEK && yk == CodeStmt::SKIP) {
+                x->kind = CodeStmt::PEEK_SKIP;
+                x->next = y->next;
+                continue;
+            }
+            else if (xk == CodeStmt::SKIP && yk == CodeStmt::PEEK) {
+                x->kind = CodeStmt::SKIP_PEEK;
+                x->next = y->next;
+                continue;
+            }
+            else if (xk == CodeStmt::SKIP && yk == CodeStmt::BACKUP) {
+                x->kind = CodeStmt::SKIP_BACKUP;
+                x->next = y->next;
+                continue;
+            }
+            else if (xk == CodeStmt::BACKUP && yk == CodeStmt::PEEK) {
+                x->kind = CodeStmt::BACKUP_PEEK;
+                x->next = y->next;
+                continue;
+            }
+            else if (xk == CodeStmt::BACKUP && yk == CodeStmt::SKIP) {
+                x->kind = CodeStmt::BACKUP_SKIP;
+                x->next = y->next;
+                continue;
+            }
+        }
+
+        x = x->next;
+    }
+}
+
+void combine_stmt(CodegenContext &ctx, CodeStmt *code)
+{
+    switch (code->kind) {
+        case CodeStmt::BLOCK:
+            combine_stmts(ctx, code->block.stmts);
+            break;
+        // don't recurse into these because they have no skip/peek/backup
+        case CodeStmt::EMPTY:
+        case CodeStmt::IF_THEN_ELSE:
+        case CodeStmt::SWITCH:
+        case CodeStmt::TEXT:
+        case CodeStmt::VERBATIM:
+        case CodeStmt::RAW:
+        case CodeStmt::TEXT_RAW:
+        case CodeStmt::SKIP:
+        case CodeStmt::PEEK:
+        case CodeStmt::BACKUP:
+        case CodeStmt::PEEK_SKIP:
+        case CodeStmt::SKIP_PEEK:
+        case CodeStmt::SKIP_BACKUP:
+        case CodeStmt::BACKUP_SKIP:
+        case CodeStmt::BACKUP_PEEK:
+        case CodeStmt::BACKUP_PEEK_SKIP:
+        case CodeStmt::SKIP_BACKUP_PEEK:
+        case CodeStmt::LINE_INFO_INPUT:
+        case CodeStmt::LINE_INFO_OUTPUT:
+        case CodeStmt::VAR:
+            break;
+        case CodeStmt::STAGS:
+            gen_tags(ctx.scratchbuf, code, ctx.allstags);
+            break;
+        case CodeStmt::MTAGS:
+            gen_tags(ctx.scratchbuf, code, ctx.allmtags);
+            break;
+        case CodeStmt::YYMAXFILL:
+            gen_yymaxfill(ctx.scratchbuf, ctx.opts, code, ctx.maxfill);
+            break;
+        case CodeStmt::YYMAXNMATCH:
+            gen_yymaxnmatch(ctx.scratchbuf, ctx.opts, code, ctx.maxnmatch);
+            break;
+        case CodeStmt::YYCH:
+            gen_yych_decl(ctx.opts, code);
+            break;
+        case CodeStmt::YYACCEPT:
+            gen_yyaccept_def(ctx.opts, code, ctx.used_yyaccept);
+            break;
+        case CodeStmt::COND_ENUM:
+            gen_cond_enum(ctx.scratchbuf, ctx.allocator, code, ctx.globopts,
+                ctx.allcondnames);
+            break;
+        case CodeStmt::COND_GOTO:
+            gen_cond_goto(ctx.scratchbuf, ctx.allocator, code, ctx.condnames,
+                ctx.opts, ctx.msg, ctx.warn_cond_ord, ctx.loc);
+            break;
+        case CodeStmt::COND_TABLE:
+            gen_cond_table(ctx.scratchbuf, ctx.allocator, code, ctx.condnames,
+                ctx.opts);
+            break;
+        case CodeStmt::STATE_GOTO:
+            gen_state_goto(ctx.scratchbuf, ctx.allocator, code, 0, ctx.fillidx,
+                ctx.globopts);
+            break;
+    }
+}
+
+void combine_stmts(CodegenContext &ctx, CodeStmts *stmts)
+{
+    if (ctx.opts->input_api == INPUT_DEFAULT) {
+        fold_exprs(stmts);
+    }
+    for (CodeStmt *x = stmts->head; x; x = x->next) {
+        combine_stmt(ctx, x);
+    }
+}
+
+Scratchbuf& Scratchbuf::u32_hex(uint32_t u, const opt_t *opts)
+{
+    prtHex(os, u, opts->encoding.szCodeUnit());
+    return *this;
+}
+
+Scratchbuf& Scratchbuf::u32_width(uint32_t u, int width)
+{
+    os << std::setw(width);
+    os << u;
+    return *this;
+}
+
+inline const char *Scratchbuf::flush()
+{
+    const size_t len = os.str().length();
+    char *e = alc.alloct<char>(len + 1);
+    memcpy(e, os.str().c_str(), len);
+    e[len] = 0;
+    os.str("");
+    return e;
 }
 
 } // namespace re2c

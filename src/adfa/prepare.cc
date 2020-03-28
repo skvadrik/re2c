@@ -9,6 +9,7 @@
 #include "src/adfa/adfa.h"
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
+#include "src/codegen/emit.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
 #include "src/msg/msg.h"
@@ -242,14 +243,14 @@ void DFA::prepare(const opt_t *opts)
     }
 }
 
-void DFA::calc_stats(const opt_t *opts)
+void DFA::calc_stats(OutputBlock &out)
 {
+    const opt_t *opts = out.opts;
+
     // calculate 'YYMAXFILL'
     max_fill = 0;
-    for (State * s = head; s; s = s->next)
-    {
-        if (max_fill < s->fill)
-        {
+    for (State * s = head; s; s = s->next) {
+        if (max_fill < s->fill) {
             max_fill = s->fill;
         }
     }
@@ -283,6 +284,33 @@ void DFA::calc_stats(const opt_t *opts)
         msg.fatal(loc, "overlapping trailing contexts need "
             "multiple context markers, use '-t, --tags' "
             "option and '/*!stags:re2c ... */' directive");
+    }
+
+    if (!oldstyle_ctxmarker) {
+        for (size_t i = 0; i < tags.size(); ++i) {
+            const Tag &tag = tags[i];
+            if (history(tag)) {
+                mtagvars.insert(*tag.name);
+            }
+            else if (tag.name) {
+                stagvars.insert(*tag.name);
+            }
+        }
+        for (tagver_t v = 1; v <= maxtagver; ++v) {
+            const std::string s = vartag_name(v, opts->tags_prefix);
+            if (mtagvers.find(v) != mtagvers.end()) {
+                mtagnames.insert(s);
+            }
+            else {
+                stagnames.insert(s);
+            }
+        }
+        out.stags.insert(stagnames.begin(), stagnames.end());
+        out.mtags.insert(mtagnames.begin(), mtagnames.end());
+    }
+
+    if (!cond.empty()) {
+        out.types.push_back(cond);
     }
 }
 

@@ -47,18 +47,26 @@ const bitmap_t *bitmaps_t::find(const Go *go, const State *s) const
 
 bool bitmaps_t::empty() const { return maps.empty(); }
 
-void bitmaps_t::gen(Output &o, uint32_t ind)
+CodeStmts *bitmaps_t::gen(Output &output)
 {
-    if (empty() || !used) return;
+    if (empty() || !used) return NULL;
 
-    const opt_t *opts = o.block().opts;
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+
+    CodeStmts *stmts = code_stmts(alc);
+
     const uint32_t nmap = static_cast<uint32_t>(maps.size());
     riter_t b = maps.rbegin(), e = maps.rend();
 
-    o.wind(ind).ws("static const unsigned char ")
-        .wstring(opts->yybm).ws("[] = {");
+    o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {");
+    append_stmt(stmts, code_stmt_text(alc, o.flush()));
 
-    for (uint32_t i = 0, t = 1; b != e; i += ncunit, t += 8) {
+    CodeStmts *block = code_stmts(alc);
+    static const uint32_t TABLE_WIDTH = 8;
+
+    for (uint32_t i = 0, t = 1; b != e; i += ncunit, t += TABLE_WIDTH) {
         memset(buffer, 0, ncunit * sizeof(uint32_t));
 
         for (uint32_t m = 0x80; b != e && m; m >>= 1, ++b) {
@@ -67,25 +75,33 @@ void bitmaps_t::gen(Output &o, uint32_t ind)
             doGen(b->go, b->on, buffer, 0, m);
         }
 
-        if (nmap > 8) {
-            o.ws("\n").wind(ind + 1).ws("/* table ").wu32(t).ws(" .. ")
-                .wu32(std::min(nmap, t + 7)).ws(": ").wu32(i).ws(" */");
+        if (nmap > TABLE_WIDTH) {
+            o.cstr("/* table ").u32(t).cstr(" .. ").u32(std::min(nmap, t + 7))
+                .cstr(": ").u32(i).cstr(" */");
+            append_stmt(block, code_stmt_text(alc, o.flush()));
         }
 
-        for (uint32_t c = 0; c < ncunit; ++c) {
-            if (c % 8 == 0) {
-                o.ws("\n").wind(ind + 1);
+        for (uint32_t i = 0; i < ncunit / TABLE_WIDTH; ++i) {
+            for (uint32_t j = 0; j < TABLE_WIDTH; ++j) {
+                const uint32_t c = buffer[i * TABLE_WIDTH + j];
+                if (opts->yybmHexTable) {
+                    o.u32_hex(c, opts);
+                }
+                else {
+                    o.u32_width(c, 3);
+                }
+                o.cstr(", ");
             }
-            if (opts->yybmHexTable) {
-                o.wu32_hex(buffer[c]);
-            } else {
-                o.wu32_width(buffer[c], 3);
-            }
-            o.ws(", ");
+            append_stmt(block, code_stmt_text(alc, o.flush()));
         }
     }
 
-    o.ws("\n").wind(ind).ws("};\n");
+    append_stmt(stmts, code_block(alc, block, CodeBlock::INDENTED));
+
+    o.cstr("};");
+    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+
+    return stmts;
 }
 
 void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m)

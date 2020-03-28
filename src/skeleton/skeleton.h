@@ -30,6 +30,9 @@ class Msg;
 class bitmaps_t;
 struct opt_t;
 struct tcmd_t;
+struct Scratchbuf;
+struct CodeStmts;
+struct Msg;
 
 typedef local_increment_t<uint8_t> local_inc;
 
@@ -109,16 +112,11 @@ uint32_t maxpath(const Skeleton &skel);
 void warn_undefined_control_flow(const Skeleton &skel);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
 void emit_data(const Skeleton &skel);
-void emit_prolog(Output & o);
-void emit_start(Output &o, size_t maxfill, size_t maxnmatch, const std::string &name,
-    size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
-    const std::set<std::string> &stagnames, const std::set<std::string> &stagvars,
-    const std::set<std::string> &mtagnames, const std::set<std::string> &mtagvars,
-    bitmaps_t &bitmaps);
-void emit_end(Output &o, const std::string &name, bool backup, bool oldstyle_ctxmarker,
-    const std::set<std::string> &mtagnames);
-void emit_epilog(Output &o, const std::set<std::string> &names);
-void emit_action(Output &o, uint32_t ind, const DFA &dfa, size_t rid);
+const char *emit_prolog(Scratchbuf &o, const opt_t *opts);
+const char *emit_start(Scratchbuf &o, const opt_t *opts, const DFA &dfa, const CodeStmts *bitmaps, Msg &msg);
+const char *emit_end(Scratchbuf &o, const opt_t *opts, const DFA &dfa);
+const char *emit_epilog(Scratchbuf &o, const opt_t *opts, const std::set<std::string> &names);
+void emit_action(Scratchbuf &o, const opt_t *opts, uint32_t ind, const DFA &dfa, size_t rid);
 
 } // namespace re2c
 

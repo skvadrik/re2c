@@ -52,6 +52,10 @@ DFA::DFA
     , rules(dfa.rules)
     , tags(dfa.tags)
     , mtagvers(dfa.mtagvers)
+    , stagnames()
+    , stagvars()
+    , mtagnames()
+    , mtagvars()
     , finvers(dfa.finvers)
     , tcpool(dfa.tcpool)
     , max_fill (0)
@@ -66,6 +70,9 @@ DFA::DFA
     , setup(su)
     , eof_action(eof)
     , msg(msg)
+    , used_labels()
+    , start_label(label_t::first())
+    , initial_label(label_t::first())
 {
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;
