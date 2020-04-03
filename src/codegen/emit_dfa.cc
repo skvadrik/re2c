@@ -73,6 +73,9 @@ void DFA::count_used_labels(std::set<label_t> &used, label_t start
     }
     for (State * s = head; s; s = s->next) {
         s->go.used_labels(used);
+        if (opts->eof != NOEOF && s->rule != Rule::NONE && !endstate(s)) {
+            used.insert(finstates[s->rule]->label);
+        }
     }
     for (uint32_t i = 0; i < accepts.size(); ++i) {
         used.insert(accepts[i].first->label);

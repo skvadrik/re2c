@@ -36,7 +36,6 @@ static void gen_fintags        (Output &o, uint32_t ind, const DFA &dfa, const R
 static void gen_goto           (code_lines_t &, const State *, const State *, const DFA &, tcid_t, const opt_t *, bool, bool, uint32_t);
 static void gen_on_eof         (code_lines_t &, const opt_t *, const DFA &, const State *, const State *, uint32_t);
 static void gen_on_eof_fail    (code_lines_t &, const opt_t *, const DFA &, const State *, const State *, std::ostringstream &);
-static bool endstate           (const State *s);
 static void flushln            (code_lines_t &code, std::ostringstream &o);
 
 void emit_action(Output &o, uint32_t ind, const DFA &dfa,
