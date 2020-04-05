@@ -92,8 +92,11 @@ ac_config_headers("config.h")
 
 # Makefile.am
 set(RE2C_STDLIB_DIR "${CMAKE_INSTALL_PREFIX}/share/re2c/stdlib")
-add_compile_definitions("RE2C_STDLIB_DIR=\"${RE2C_STDLIB_DIR}\"")
-add_compile_definitions($<$<CONFIG:Debug>:RE2C_DEBUG>)
+add_compile_definitions(
+  "RE2C_STDLIB_DIR=\"${RE2C_STDLIB_DIR}\""
+  $<$<CONFIG:Debug>:RE2C_DEBUG>
+  $<$<CONFIG:RelWithDebInfo>:RE2C_DEBUG>
+)
 include_directories(. "${CMAKE_CURRENT_BINARY_DIR}")
 
 # sources
