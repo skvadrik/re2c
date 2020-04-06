@@ -243,7 +243,6 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         COMMAND "${RE2C_RUN_TESTS}" --wine -j1
     )
     add_dependencies(wtests re2c)
-
     add_executable(re2c_test_range
         src/test/range/test-impl.h
         src/test/range/test.cc
@@ -260,13 +259,17 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         src/test/ver_to_vernum/test.cc
         $<TARGET_OBJECTS:re2c_generated_ver_to_vernum>
     )
-
-    add_custom_target(check
+    add_custom_target(check_re2c
         COMMAND ./re2c_test_range
         COMMAND ./re2c_test_s_to_n32_unsafe
         COMMAND ./re2c_test_ver_to_vernum
     )
-    add_dependencies(check tests re2c_test_range re2c_test_s_to_n32_unsafe re2c_test_ver_to_vernum)
+    add_dependencies(check_re2c
+        tests
+        re2c_test_range
+        re2c_test_s_to_n32_unsafe
+        re2c_test_ver_to_vernum
+    )
 endif()
 
 if (RE2C_BUILD_LIBS)
@@ -372,8 +375,9 @@ if (RE2C_BUILD_LIBS)
 
     add_executable(test_libre2c lib/test.cc)
     target_link_libraries(test_libre2c libre2c)
-
-    # check_PROGRAMS += test_libre2c // TODO
+    add_custom_target(check_libre2c
+        COMMAND ./test_libre2c
+    )
 
     add_executable(bench_libre2c lib/bench.cc)
     set_property(TARGET bench_libre2c PROPERTY CXX_STANDARD 11)
@@ -386,4 +390,13 @@ if (RE2C_BUILD_LIBS)
         target_include_directories(bench_libre2c PRIVATE "${RE2_INCLUDE_DIRECTORY}")
         target_link_libraries(bench_libre2c "${RE2_LIBRARY}")
     endif()
+else()
+    # empty check target
+    add_custom_target(check_libre2c)
 endif()
+
+add_custom_target(check)
+add_dependencies(check
+    check_re2c
+    check_libre2c
+)
