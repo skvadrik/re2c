@@ -83,8 +83,9 @@ configure_file(doc/manpage.rst.in doc/manpage.rst @ONLY)
 configure_file(doc/help.rst.in doc/help.rst @ONLY)
 
 configure_file(run_tests.sh.in run_tests.sh @ONLY)
+set(RE2C_RUN_TESTS "${CMAKE_CURRENT_BINARY_DIR}/run_tests.sh")
 if(CMAKE_HOST_UNIX)
-    execute_process(COMMAND chmod +x "${CMAKE_CURRENT_BINARY_DIR}/run_tests.sh")
+    execute_process(COMMAND chmod +x "${RE2C_RUN_TESTS}")
 endif()
 
 ac_config_headers("config.h")
@@ -225,21 +226,21 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 
     # tests
     add_custom_target(tests
-        DEPENDS run_tests.sh
+        DEPENDS "${RE2C_RUN_TESTS}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMAND "${CMAKE_CURRENT_BINARY_DIR}/run_tests.sh"
+        COMMAND "${RE2C_RUN_TESTS}"
     )
     add_dependencies(tests re2c)
     add_custom_target(vtests
-        DEPENDS run_tests.sh
+        DEPENDS "${RE2C_RUN_TESTS}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMAND "${CMAKE_CURRENT_BINARY_DIR}/run_tests.sh" --valgrind
+        COMMAND "${RE2C_RUN_TESTS}" --valgrind
     )
     add_dependencies(vtests re2c)
     add_custom_target(wtests
-        DEPENDS run_tests.sh
+        DEPENDS "${RE2C_RUN_TESTS}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMAND "${CMAKE_CURRENT_BINARY_DIR}/run_tests.sh" --wine -j1
+        COMMAND "${RE2C_RUN_TESTS}" --wine -j1
     )
     add_dependencies(wtests re2c)
 
@@ -258,7 +259,7 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     add_executable(re2c_test_ver_to_vernum
         src/test/ver_to_vernum/test.cc
         $<TARGET_OBJECTS:re2c_generated_ver_to_vernum>
-       )
+    )
 
     add_custom_target(check
         COMMAND ./re2c_test_range
