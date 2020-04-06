@@ -338,23 +338,24 @@ if (RE2C_BUILD_LIBS)
     )
     set(libre2c_sources $<TARGET_OBJECTS:libre2c_objects> $<TARGET_OBJECTS:re2c_generated_ver_to_vernum>)
 
-    # build shared libraries
-     if ((NOT DEFINED BUILD_SHARED_LIBS) OR BUILD_SHARED_LIBS)
-         add_library(libre2c_shared SHARED ${libre2c_sources})
-         set_target_properties(libre2c_shared PROPERTIES OUTPUT_NAME "re2c")
-         if (UNIX)
-             install(TARGETS libre2c_shared)
-         endif()
-     endif()
+    # on Windows add suffix to static libs to avoid collision of .lib files with shared libs
+    set(RE2C_STATIC_LIB_SFX "$<IF:$<BOOL:${WIN32}>,_static,>")
 
     # build static libraries
     if ((NOT DEFINED BUILD_SHARED_LIBS) OR (NOT BUILD_SHARED_LIBS))
         add_library(libre2c_static STATIC ${libre2c_sources})
+        set_target_properties(libre2c_static PROPERTIES OUTPUT_NAME "re2c${RE2C_STATIC_LIB_SFX}")
         if (UNIX)
-            set_target_properties(libre2c_static PROPERTIES OUTPUT_NAME "re2c")
             install(TARGETS libre2c_static)
-        else()
-            set_target_properties(libre2c_static PROPERTIES OUTPUT_NAME "re2c_static")
+        endif()
+    endif()
+
+    # build shared libraries
+    if ((NOT DEFINED BUILD_SHARED_LIBS) OR BUILD_SHARED_LIBS)
+        add_library(libre2c_shared SHARED ${libre2c_sources})
+        set_target_properties(libre2c_shared PROPERTIES OUTPUT_NAME "re2c")
+        if (UNIX)
+            install(TARGETS libre2c_shared)
         endif()
     endif()
 
