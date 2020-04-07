@@ -343,7 +343,7 @@ if (RE2C_BUILD_LIBS)
     set(libre2c_sources $<TARGET_OBJECTS:libre2c_objects> $<TARGET_OBJECTS:re2c_generated_ver_to_vernum>)
 
     # on Windows add suffix to static libs to avoid collision of .lib files with shared libs
-    set(RE2C_STATIC_LIB_SFX "$<IF:$<BOOL:${WIN32}>,_static,>")
+    set(RE2C_STATIC_LIB_SFX "$<$<PLATFORM_ID:Windows>:_static>")
 
     # build static libraries
     if ((NOT DEFINED BUILD_SHARED_LIBS) OR (NOT BUILD_SHARED_LIBS))
