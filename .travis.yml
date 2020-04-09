@@ -19,10 +19,10 @@ addons:
 env:
   - CMAKE=no  BUILD_DIR=.      CONFIG_DIR=.
   - CMAKE=no  BUILD_DIR=.build CONFIG_DIR=.. CONFIG_FLAGS="--enable-debug"
-  - CMAKE=no  BUILD_DIR=.      CONFIG_DIR=.  CONFIG_FLAGS="--enable-debug" COMMON_FLAGS=-fsanitize=address
-  - CMAKE=no  BUILD_DIR=.      CONFIG_DIR=.  CONFIG_FLAGS="--enable-debug" COMMON_FLAGS=-fsanitize=undefined
-  - CMAKE=yes BUILD_DIR=.      CONFIG_DIR=.
-  - CMAKE=yes BUILD_DIR=.build CONFIG_DIR=..
+  - CMAKE=yes BUILD_DIR=.      CONFIG_DIR=.  BUILD_TYPE=RelWithDebInfo
+  - CMAKE=yes BUILD_DIR=.build CONFIG_DIR=.. BUILD_TYPE=Release
+  - CMAKE=yes BUILD_DIR=.build CONFIG_DIR=.. BUILD_TYPE=RelWithDebInfo COMMON_FLAGS=-fsanitize=address
+  - CMAKE=yes BUILD_DIR=.build CONFIG_DIR=.. BUILD_TYPE=RelWithDebInfo COMMON_FLAGS=-fsanitize=undefined
 
 script:
   - |
@@ -31,8 +31,13 @@ script:
       && cmake \
           -B . -S ${CONFIG_DIR} \
           -DCMAKE_INSTALL_PREFIX="${CONFIG_DIR}/${BUILD_DIR}/install" \
+          -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+          -DCMAKE_C_FLAGS="${COMMON_FLAGS}" \
+          -DCMAKE_CXX_FLAGS="${COMMON_FLAGS}" \
+          -DCMAKE_EXE_LINKER_FLAGS="${COMMON_FLAGS}" \
+          -DCMAKE_SHARED_LINKER_FLAGS="${COMMON_FLAGS}" \
           -DRE2C_BUILD_LIBS=on \
-          -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          -DRE2C_REBUILD_DOCS=on \
         && make -j$(nproc) \
         && make -j$(nproc) check VERBOSE=1 \
         && make -j$(nproc) install
