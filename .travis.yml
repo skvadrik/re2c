@@ -14,8 +14,7 @@ addons:
     - bison
     - python3-docutils
 
-# in-tree and out-of-tree builds
-# with or without debug
+# configurations: cmake/autotools, in-tree/out-of-tree, release/debug, etc.
 env:
   - CMAKE=no  BUILD_DIR=.      CONFIG_DIR=.
   - CMAKE=no  BUILD_DIR=.build CONFIG_DIR=.. CONFIG_FLAGS="--enable-debug"
