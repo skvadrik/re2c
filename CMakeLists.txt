@@ -398,8 +398,10 @@ else()
     add_custom_target(check_libre2c)
 endif()
 
-add_custom_target(check)
-add_dependencies(check
-    check_re2c
-    check_libre2c
-)
+if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    add_custom_target(check)
+    add_dependencies(check
+        check_re2c
+        check_libre2c
+    )
+endif()
