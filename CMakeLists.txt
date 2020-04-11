@@ -22,11 +22,9 @@ endif()
 option(RE2C_BUILD_LIBS "Build libraries" OFF)
 
 # checks for programs
-
 find_package(BISON)
 
 # checks for C++ compiler flags
-
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON) # make sure object libraries work with shared libraries
@@ -55,14 +53,15 @@ try_cxxflag("-Weverything"
     "-Wno-undefined-func-template" # explicit specialization to reduce build dependencies
 )
 
-# needed by src/c99_stdint.h
+# use system stdint.h if present, otherwise fallback to src/c99_stdint.h
 ac_check_headers("stdint.h")
 # needed for POSIX file API
 ac_check_headers("sys/types.h")
 ac_check_headers("sys/stat.h")
 ac_check_headers("fcntl.h")
 ac_check_headers("unistd.h")
-ac_check_headers("io.h") # windows POSIX-like API
+# windows POSIX-like API
+ac_check_headers("io.h")
 
 # list of possible types to use in typedefs
 ac_check_sizeof("char")
@@ -71,7 +70,6 @@ ac_check_sizeof("int")
 ac_check_sizeof("long")
 ac_check_sizeof("long long")
 ac_check_sizeof("__int64")
-# size of pointers
 ac_check_sizeof("void *")
 # 64-bit integer constant suffix
 ac_check_sizeof("0l")
@@ -343,7 +341,10 @@ if (RE2C_BUILD_LIBS)
         "${CMAKE_CURRENT_BINARY_DIR}/lib/lex.cc"
         "${CMAKE_CURRENT_BINARY_DIR}/lib/parse.cc"
     )
-    set(libre2c_sources $<TARGET_OBJECTS:libre2c_objects> $<TARGET_OBJECTS:re2c_generated_ver_to_vernum>)
+    set(libre2c_sources
+        $<TARGET_OBJECTS:libre2c_objects>
+        $<TARGET_OBJECTS:re2c_generated_ver_to_vernum>
+    )
 
     # on Windows add suffix to static libs to avoid collision of .lib files with shared libs
     set(RE2C_STATIC_LIB_SFX "$<$<PLATFORM_ID:Windows>:_static>")
@@ -398,10 +399,8 @@ else()
     add_custom_target(check_libre2c)
 endif()
 
+# only add check target if toplevel project
 if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     add_custom_target(check)
-    add_dependencies(check
-        check_re2c
-        check_libre2c
-    )
+    add_dependencies(check check_re2c check_libre2c)
 endif()
