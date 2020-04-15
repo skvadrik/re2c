@@ -178,6 +178,7 @@ opt_long:
         goto opt;
     }
 
+    "lang"                  end { NEXT_ARG("--lang",             opt_lang); }
     "output"                end { NEXT_ARG("-o, --output",       opt_output); }
     "type-header"           end { NEXT_ARG("-t, --type-header",  opt_header); }
     "encoding-policy"       end { NEXT_ARG("--encoding-policy",  opt_encoding_policy); }
@@ -208,6 +209,13 @@ opt_long:
     "dump-cfg"              end { globopts.dump_cfg = true;           goto opt; }
     "dump-interf"           end { globopts.dump_interf = true;        goto opt; }
     "dump-closure-stats"    end { globopts.dump_closure_stats = true; goto opt; }
+*/
+
+opt_lang:
+/*!re2c
+    * { ERRARG("--lang", "c | go", *argv); }
+    "c"  end { globopts.lang = LANG_C;  goto opt; }
+    "go" end { globopts.lang = LANG_GO; goto opt; }
 */
 
 opt_output:

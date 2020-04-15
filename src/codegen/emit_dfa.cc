@@ -28,264 +28,296 @@
 
 namespace re2c {
 
-static void emit_state(Output & o, uint32_t ind, const State * s, bool used_label);
-static void emit_eof(Output &, uint32_t, const Code*);
-
-void emit_state (Output & o, uint32_t ind, const State * s, bool used_label)
+static void emit_state(Output &output, const State *s, bool used_label, CodeStmts *stmts)
 {
-    const opt_t *opts = o.block().opts;
-    if (used_label)
-    {
-        o.wstring(opts->labelPrefix).wlabel(s->label).ws(":\n");
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+
+    if (used_label) {
+        o.str(opts->labelPrefix).label(s->label).cstr(":");
+        append_stmt(stmts, code_stmt_textraw(alc, o.flush()));
     }
-    if (opts->dFlag && (s->action.type != Action::INITIAL))
-    {
-        o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(s->label).ws(", ").wstring(output_expr_peek(opts)).ws(");\n");
+    if (opts->dFlag && (s->action.type != Action::INITIAL)) {
+        o.str(opts->yydebug).cstr("(").label(s->label).cstr(", ").str(output_expr_peek(opts))
+            .cstr(");");
+        append_stmt(stmts, code_stmt_text(alc, o.flush()));
     }
 }
 
-void emit_eof(Output & o, uint32_t ind, const Code *code)
+static void emit_eof(Output &output, const Code *code, CodeStmts *stmts)
 {
-    const opt_t *opts = o.block().opts;
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
 
     if (opts->eof == NOEOF) return;
 
-    o.wstring(opts->labelPrefix).ws("eof:\n");
-    o.wdelay_line_info_input(code->loc);
-    o.wind(ind).wstring(code->text).ws("\n");
-    o.wdelay_line_info_output();
+    // EOF label
+    o.str(opts->labelPrefix).cstr("eof:");
+    append_stmt(stmts, code_stmt_textraw(alc, o.flush()));
+
+    // source line directive
+    append_stmt(stmts, code_line_info_input(alc, code->loc));
+
+    // user-defined semantic action for EOF rule
+    o.str(code->text);
+    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+
+    // output line directive
+    append_stmt(stmts, code_line_info_output(alc));
 }
 
-void DFA::count_used_labels(std::set<label_t> &used, label_t start
-    , label_t initial, const opt_t *opts) const
+void DFA::count_used_labels(const opt_t *opts)
 {
     // In '-f' mode, default state is always state 0
     if (opts->fFlag) {
-        used.insert(label_t::first());
+        used_labels.insert(label_t::first());
     }
     if (opts->startlabel_force && opts->startlabel.empty()) {
-        used.insert(start);
+        used_labels.insert(start_label);
     }
     // FIXME: default label may be used by EOF checks, but they are generated
     // later and at this point we do not know if default label is really used
     if (defstate && opts->eof != NOEOF) {
-        used.insert(defstate->label);
+        used_labels.insert(defstate->label);
     }
     for (State * s = head; s; s = s->next) {
-        s->go.used_labels(used);
+        s->go.used_labels(used_labels);
         if (opts->eof != NOEOF && s->rule != Rule::NONE && !endstate(s)) {
-            used.insert(finstates[s->rule]->label);
+            used_labels.insert(finstates[s->rule]->label);
         }
     }
     for (uint32_t i = 0; i < accepts.size(); ++i) {
-        used.insert(accepts[i].first->label);
+        used_labels.insert(accepts[i].first->label);
     }
     // must go last: it needs the set of used labels
-    if (used.count(head->label)) {
-        used.insert(initial);
+    if (used_labels.count(head->label)) {
+        used_labels.insert(initial_label);
     }
 }
 
-void DFA::emit_body(Output &o, uint32_t& ind,
-    const std::set<label_t> &used_labels, label_t initial) const
+void DFA::emit_body(Output &output, uint32_t ind, CodeStmts *stmts) const
 {
-    const opt_t *opts = o.block().opts;
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
 
-    code_lines_t code;
-    gen_settags(code, *this, tags0, opts, false /* delayed */);
-    for (size_t i = 0; i < code.size(); ++i) {
-        o.wind(ind).wstring(code[i]);
-    }
+    gen_settags(output, stmts, *this, tags0, false /* delayed */);
 
     // If DFA has transitions to initial state, then initial state
     // has a piece of code that advances input position. Wee must
     // skip it when entering DFA.
     if (used_labels.count(head->label)) {
-        o.wind(ind).ws("goto ").wstring(opts->labelPrefix)
-            .wlabel(initial).ws(";\n");
+        o.cstr("goto ").str(opts->labelPrefix).label(initial_label).cstr(";");
+        append_stmt(stmts, code_stmt_text(alc, o.flush()));
     }
 
     for (State * s = head; s; s = s->next) {
-        emit_state(o, ind, s, used_labels.count(s->label));
-        emit_action(o, ind, *this, s, used_labels);
-        s->go.emit(o, ind, *this, s);
+        emit_state(output, s, used_labels.count(s->label), stmts);
+        emit_action(output, ind, *this, s, stmts);
+        s->go.emit(output, *this, s, stmts);
     }
 
-    emit_eof(o, ind, this->eof_action);
+    emit_eof(output, this->eof_action, stmts);
 }
 
-void DFA::emit_dot(Output &o, bool last_cond) const
+void DFA::emit_dot(Output &output, CodeStmts *program) const
 {
-    const opt_t *opts = o.block().opts;
-    if (!opts->cFlag || !o.cond_goto) {
-        o.ws("digraph re2c {\n");
-    }
-    o.wdelay_cond_goto(0);
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+
     if (opts->cFlag) {
-        o.wstring(cond).ws(" -> ").wlabel(head->label).ws("\n");
+        o.str(cond).cstr(" -> ").label(head->label);
+        append_stmt(program, code_stmt_text(alc, o.flush()));
     }
+
     for (State *s = head; s; s = s->next) {
         if (s->action.type == Action::ACCEPT) {
             const accept_t &accs = *s->action.info.accepts;
             for (uint32_t i = 0; i < accs.size(); ++i) {
-                o.wlabel(s->label).ws(" -> ")
-                    .wlabel(accs[i].first->label)
-                    .ws(" [label=\"yyaccept=")
-                    .wu32(i).ws("\"]").ws("\n");
-            }
-        } else if (s->action.type == Action::RULE) {
-            const Code *code = rules[s->action.info.rule].code;
-            if (!code->autogen) {
-                o.wlabel(s->label).ws(" [label=\"")
-                    .wstring(msg.filenames[code->loc.file])
-                    .ws(":").wu32(code->loc.line)
-                    .ws("\"]").ws("\n");
+                o.label(s->label).cstr(" -> ").label(accs[i].first->label)
+                    .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]");
+                append_stmt(program, code_stmt_text(alc, o.flush()));
             }
         }
-        s->go.emit(o, 0, *this, s);
-    }
-    if (!opts->cFlag || last_cond) {
-        o.ws("}\n");
+        else if (s->action.type == Action::RULE) {
+            const Code *action = rules[s->action.info.rule].code;
+            if (!action->autogen) {
+                o.label(s->label).cstr(" [label=\"")
+                    .str(msg.filenames[action->loc.file]).cstr(":")
+                    .u32(action->loc.line).cstr("\"]");
+                append_stmt(program, code_stmt_text(alc, o.flush()));
+            }
+        }
+        s->go.emit(output, *this, s, program);
     }
 }
 
-void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBrace)
+void gen_code(Output &output, dfas_t &dfas)
 {
     OutputBlock &ob = output.block();
     const opt_t *opts = ob.opts;
 
-    std::set<std::string> stagnames, stagvars, mtagnames, mtagvars;
-    if (!oldstyle_ctxmarker) {
-        for (size_t i = 0; i < tags.size(); ++i) {
-            const Tag &tag = tags[i];
-            if (history(tag)) {
-                mtagvars.insert(*tag.name);
-            } else if (tag.name) {
-                stagvars.insert(*tag.name);
-            }
+    dfas_t::const_iterator i, b = dfas.begin(), e = dfas.end();
+    if (b == e) return;
+
+    for (i = b; i != e; ++i) {
+        const bool first = i == b;
+        DFA &dfa = *(*i);
+
+        // start_label points to the beginning of current re2c block
+        // (prior to condition dispatch in '-c' mode)
+        // it can forced by configuration 're2c:startlabel = <integer>;'
+        dfa.start_label = output.label_counter.next();
+
+        // initial_label points to the beginning of DFA
+        // in '-c' mode this is NOT equal to start_label
+        // TODO: remove special case for skeleton and fix test results.
+        dfa.initial_label = opts->cFlag && (first || opts->target == TARGET_SKELETON)
+            ? output.label_counter.next () : dfa.start_label;
+
+        for (State * s = dfa.head; s; s = s->next) {
+            s->label = output.label_counter.next();
         }
-        for (tagver_t v = 1; v <= maxtagver; ++v) {
-            const std::string s = vartag_name(v, opts->tags_prefix);
-            if (mtagvers.find(v) != mtagvers.end()) {
-                mtagnames.insert(s);
-            } else {
-                stagnames.insert(s);
-            }
-        }
-        ob.stags.insert(stagnames.begin(), stagnames.end());
-        ob.mtags.insert(mtagnames.begin(), mtagnames.end());
+
+        dfa.count_used_labels(opts);
+
+        dfa.head->action.set_initial(dfa.initial_label);
     }
-    if (!cond.empty()) output.block().types.push_back(cond);
 
-    bool bProlog = (!opts->cFlag || !output.cond_goto);
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+    CodeStmts *program = code_stmts(alc);
+    uint32_t ind;
 
-    // start_label points to the beginning of current re2c block
-    // (prior to condition dispatch in '-c' mode)
-    // it can forced by configuration 're2c:startlabel = <integer>;'
-    label_t start_label = output.label_counter.next ();
-    // initial_label points to the beginning of DFA
-    // in '-c' mode this is NOT equal to start_label
-    label_t initial_label = bProlog && opts->cFlag
-        ? output.label_counter.next ()
-        : start_label;
-    for (State * s = head; s; s = s->next)
-    {
-        s->label = output.label_counter.next ();
-    }
-    std::set<label_t> used_labels;
-    count_used_labels (used_labels, start_label, initial_label, opts);
+    if (opts->target == TARGET_DOT) {
+        ind = 0;
 
-    head->action.set_initial(initial_label);
+        o.cstr("digraph re2c {");
+        append_stmt(program, code_stmt_text(alc, o.flush()));
 
-    if (opts->target == TARGET_SKELETON) {
-        if (output.skeletons.insert (name).second)
-        {
-            emit_start(output, max_fill, max_nmatch, name, key_size, def_rule,
-                need_backup, need_accept, oldstyle_ctxmarker,
-                stagnames, stagvars, mtagnames, mtagvars, bitmaps);
-            uint32_t i = 2;
-            emit_body (output, i, used_labels, initial_label);
-            emit_end(output, name, need_backup, oldstyle_ctxmarker, mtagnames);
+        append_stmt(program, code_cond_goto(alc));
+
+        for (i = b; i != e; ++i) {
+            (*i)->emit_dot(output, program);
         }
-    } else if (opts->target == TARGET_DOT) {
-        emit_dot(output, isLastCond);
-    } else {
-        // Generate prolog
-        if (bProlog)
-        {
-            output.ws("\n").wdelay_line_info_output ();
-            if ((!opts->fFlag && ob.used_yyaccept)
-            ||  (!opts->fFlag && opts->bEmitYYCh)
-            ||  (opts->bFlag && !opts->cFlag && !bitmaps.empty())
-            ||  (opts->cFlag && !output.cond_goto && opts->gFlag)
-            ||  (opts->fFlag && !output.state_goto && opts->gFlag)
-            )
-            {
-                bPrologBrace = true;
-                output.wind(ind++).ws("{\n");
+
+        o.cstr("}");
+        append_stmt(program, code_stmt_text(alc, o.flush()));
+    }
+    else if (opts->target == TARGET_SKELETON) {
+        ind = 2;
+        for (i = b; i != e; ++i) {
+            DFA &dfa = *(*i);
+            if (!output.skeletons.insert(dfa.name).second) continue;
+
+            append_stmt(program, code_verbatim(alc,
+                emit_start(o, opts, dfa, dfa.bitmaps.gen(output), output.msg)));
+            dfa.emit_body(output, ind, program);
+            append_stmt(program, code_verbatim(alc, emit_end(o, opts, dfa)));
+        }
+    }
+    else {
+        ind = output.block().opts->topIndent;
+
+        CodeStmts *program1 = code_stmts(alc);
+        for (i = b; i != e; ++i) {
+            const bool first = i == b;
+            DFA &dfa = *(*i);
+
+            CodeStmts *bms = dfa.bitmaps.gen(output);
+
+            if (first && opts->fFlag) {
+                append_stmt(program1, code_stmt_textraw(alc, ""));
             }
-            else if (ind == 0)
-            {
-                ind = 1;
+
+            if (first && !opts->fFlag) {
+                append_stmt(program1, code_yych_decl(alc));
+                append_stmt(program1, code_yyaccept_def(alc));
             }
-            if (!opts->fFlag)
-            {
-                if (opts->bEmitYYCh)
-                {
-                    output.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
+
+            if (!opts->cFlag) {
+                append_stmts(program1, bms);
+            }
+
+            if (first && opts->cFlag && opts->gFlag) {
+                append_stmt(program1, code_cond_table(alc));
+            }
+
+            if (opts->fFlag && !output.state_goto) {
+                append_stmt(program1, code_state_goto(alc));
+                output.state_goto = true;
+            }
+
+            // start label
+            if (first && opts->cFlag && dfa.used_labels.count(dfa.start_label)) {
+                o.str(opts->labelPrefix).label(dfa.start_label).cstr(":");
+                append_stmt(program1, code_stmt_textraw(alc, o.flush()));
+            }
+
+            // user-defined start label
+            if (first && !opts->startlabel.empty()) {
+                o.str(opts->startlabel).cstr(":");
+                append_stmt(program1, code_stmt_textraw(alc, o.flush()));
+            }
+
+            if (opts->cFlag && !output.cond_goto) {
+                append_stmt(program1, code_cond_goto(alc));
+                output.cond_goto = true;
+            }
+
+            if (opts->cFlag && !dfa.cond.empty()) {
+                if (opts->condDivider.length()) {
+                    std::string divider = opts->condDivider;
+                    strrreplace(divider, opts->condDividerParam, dfa.cond);
+                    o.str(divider);
+                    append_stmt(program1, code_stmt_textraw(alc, o.flush()));
                 }
-                output.wdelay_yyaccept_init (ind);
+                o.str(opts->condPrefix).str(dfa.cond).cstr(":");
+                append_stmt(program1, code_stmt_textraw(alc, o.flush()));
             }
-            else
-            {
-                output.ws("\n");
+
+            // generate code for DFA
+            CodeStmts *body = code_stmts(alc);
+            dfa.emit_body(output, ind, body);
+
+            // TODO: instead of rechecking bitmap-related conditions, just check if
+            // the code for bitmaps is NULL (requires trivial changes in tests)
+            if (opts->cFlag && opts->bFlag && !dfa.bitmaps.empty()) {
+                CodeStmts *block = code_stmts(alc);
+                append_stmts(block, bms);
+                append_stmts(block, body);
+                append_stmt(program1, code_block(alc, block, CodeBlock::WRAPPED));
+            }
+            else {
+                append_stmts(program1, body);
             }
         }
-        if (opts->bFlag && !opts->cFlag)
-        {
-            bitmaps.gen(output, ind);
+
+        bool have_bitmaps = false;
+        for (i = b; i != e; ++i) {
+            have_bitmaps |= !(*i)->bitmaps.empty();
         }
-        if (bProlog)
-        {
-            output.wdelay_cond_table(ind);
-            output.wdelay_state_goto (ind);
-            if (opts->cFlag)
-            {
-                if (used_labels.count(start_label))
-                {
-                    output.wstring(opts->labelPrefix).wlabel(start_label).ws(":\n");
-                }
-            }
-            output.wuser_start_label ();
-            output.wdelay_cond_goto(ind);
+        const bool prolog = (opts->fFlag && opts->gFlag)
+            || (!opts->fFlag && (ob.used_yyaccept || opts->bEmitYYCh))
+            || (opts->bFlag && !opts->cFlag && have_bitmaps)
+            || (opts->cFlag && opts->gFlag);
+
+        append_stmt(program, code_stmt_textraw(alc, ""));
+        append_stmt(program, code_line_info_output(alc));
+
+        if (prolog) {
+            append_stmt(program, code_block(alc, program1, CodeBlock::WRAPPED));
         }
-        if (opts->cFlag && !cond.empty())
-        {
-            if (opts->condDivider.length())
-            {
-                std::string divider = opts->condDivider;
-                strrreplace(divider, opts->condDividerParam, cond);
-                output.wstring(divider).ws("\n");
-            }
-            output.wstring(opts->condPrefix).wstring(cond).ws(":\n");
-        }
-        if (opts->cFlag && opts->bFlag && !bitmaps.empty())
-        {
-            output.wind(ind++).ws("{\n");
-            bitmaps.gen(output, ind);
-        }
-        // Generate code
-        emit_body (output, ind, used_labels, initial_label);
-        if (opts->cFlag && opts->bFlag && !bitmaps.empty())
-        {
-            output.wind(--ind).ws("}\n");
-        }
-        // Generate epilog
-        if ((!opts->cFlag || isLastCond) && bPrologBrace)
-        {
-            output.wind(--ind).ws("}\n");
+        else {
+            ind = ind == 0 ? 1 : ind;
+            append_stmts(program, program1);
         }
     }
+
+    output.wdelay_stmt(ind, code_block(alc, program, CodeBlock::RAW));
 }
 
 std::string vartag_name(tagver_t ver, const std::string &prefix)
