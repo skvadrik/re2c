@@ -121,7 +121,7 @@ struct DFA
     void prepare(const opt_t *opts);
     void calc_stats(OutputBlock &out);
     void count_used_labels(const opt_t *opts);
-    void emit_body(Output &output, uint32_t ind, CodeStmts *program) const;
+    void emit_body(Output &output, CodeStmts *program) const;
     void emit_dot(Output &output, CodeStmts *program) const;
 
 private:

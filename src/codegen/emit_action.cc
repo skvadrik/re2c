@@ -30,11 +30,11 @@ namespace re2c {
 static CodeStmts *need(Output &output, size_t some);
 static CodeStmts *gen_rescan_label(Output &output, const State *s);
 static void emit_accept(Output &output, CodeStmts *stmts, const DFA &dfa, const accept_t &acc);
-static void emit_rule(Output &output, CodeStmts *stmts, uint32_t ind, const DFA &dfa, size_t rule_idx);
+static void emit_rule(Output &output, CodeStmts *stmts, const DFA &dfa, size_t rule_idx);
 static void gen_fintags(Output &output, CodeStmts *stmts, const DFA &dfa, const Rule &rule);
 static CodeStmt *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State *to);
 
-void emit_action(Output &output, uint32_t ind, const DFA &dfa, const State *s, CodeStmts *stmts)
+void emit_action(Output &output, const DFA &dfa, const State *s, CodeStmts *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -101,7 +101,7 @@ void emit_action(Output &output, uint32_t ind, const DFA &dfa, const State *s, C
         emit_accept(output, stmts, dfa, *s->action.info.accepts);
         break;
     case Action::RULE:
-        emit_rule(output, stmts, ind, dfa, s->action.info.rule);
+        emit_rule(output, stmts, dfa, s->action.info.rule);
         break;
     }
 }
@@ -210,8 +210,7 @@ void emit_accept(Output &output, CodeStmts *stmts, const DFA &dfa, const accept_
     append_stmt(stmts, cswitch);
 }
 
-void emit_rule(Output &output, CodeStmts *stmts, uint32_t ind, const DFA &dfa,
-    size_t rule_idx)
+void emit_rule(Output &output, CodeStmts *stmts, const DFA &dfa, size_t rule_idx)
 {
     const opt_t *opts = output.block().opts;
     const Rule &rule = dfa.rules[rule_idx];
@@ -225,8 +224,7 @@ void emit_rule(Output &output, CodeStmts *stmts, uint32_t ind, const DFA &dfa,
     gen_fintags(output, stmts, dfa, rule);
 
     if (opts->target == TARGET_SKELETON) {
-        emit_action(o, opts, ind, dfa, rule_idx);
-        append_stmt(stmts, code_verbatim(alc, o.flush()));
+        emit_skeleton_action(output, stmts, dfa, rule_idx);
     }
     else {
         if (!cond.empty() && dfa.cond != cond) {

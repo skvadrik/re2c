@@ -14,8 +14,7 @@ typedef std::vector<smart_ptr<DFA> > dfas_t;
 
 void gen_code(Output &output, dfas_t &dfas);
 
-void emit_action(Output &output, uint32_t ind, const DFA &dfa, const State *s,
-    CodeStmts *stmts);
+void emit_action(Output &output, const DFA &dfa, const State *s, CodeStmts *stmts);
 
 void gen_settags(Output &output, CodeStmts *tag_actions, const DFA &dfa, tcid_t tcid,
     bool delayed);

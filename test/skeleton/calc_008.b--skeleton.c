@@ -17,7 +17,7 @@ static void *read_file
 
     /* open file */
     FILE *f = fopen(fname, "rb");
-    if(f == NULL) {
+    if (f == NULL) {
         goto error;
     }
 
@@ -292,7 +292,7 @@ end:
 
 int main()
 {
-    if(lex_line110() != 0) {
+    if (lex_line110() != 0) {
         return 1;
     }
     return 0;

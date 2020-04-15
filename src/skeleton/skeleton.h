@@ -31,6 +31,7 @@ class bitmaps_t;
 struct opt_t;
 struct tcmd_t;
 struct Scratchbuf;
+struct CodeStmt;
 struct CodeStmts;
 struct Msg;
 
@@ -112,11 +113,10 @@ uint32_t maxpath(const Skeleton &skel);
 void warn_undefined_control_flow(const Skeleton &skel);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
 void emit_data(const Skeleton &skel);
-const char *emit_prolog(Scratchbuf &o, const opt_t *opts);
-const char *emit_start(Scratchbuf &o, const opt_t *opts, const DFA &dfa, const CodeStmts *bitmaps, Msg &msg);
-const char *emit_end(Scratchbuf &o, const opt_t *opts, const DFA &dfa);
-const char *emit_epilog(Scratchbuf &o, const opt_t *opts, const std::set<std::string> &names);
-void emit_action(Scratchbuf &o, const opt_t *opts, uint32_t ind, const DFA &dfa, size_t rid);
+CodeStmt *emit_skeleton_prolog(Output &output);
+CodeStmt *emit_skeleton_epilog(Output &output);
+void emit_skeleton(Output &output, CodeStmts *code, DFA &dfa);
+void emit_skeleton_action(Output &output, CodeStmts *code, const DFA &dfa, size_t rid);
 
 } // namespace re2c
 

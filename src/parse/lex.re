@@ -271,6 +271,7 @@ loop:
 
 void Scanner::lex_tags(Output &out, bool mtags)
 {
+    const opt_t *opts = out.block().opts;
     std::string fmt, sep;
 loop:
 /*!re2c
@@ -293,8 +294,9 @@ loop:
         goto loop;
     }
     eoc {
-        out.wdelay_stmt(out.block().opts->topIndent,
-            code_tags(out.allocator, fmt, sep, mtags));
+        if (opts->target == TARGET_CODE) {
+            out.wdelay_stmt(opts->topIndent, code_tags(out.allocator, fmt, sep, mtags));
+        }
         return;
     }
 */

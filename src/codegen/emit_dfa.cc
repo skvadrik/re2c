@@ -97,7 +97,7 @@ void DFA::count_used_labels(const opt_t *opts)
     }
 }
 
-void DFA::emit_body(Output &output, uint32_t ind, CodeStmts *stmts) const
+void DFA::emit_body(Output &output, CodeStmts *stmts) const
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -115,7 +115,7 @@ void DFA::emit_body(Output &output, uint32_t ind, CodeStmts *stmts) const
 
     for (State * s = head; s; s = s->next) {
         emit_state(output, s, used_labels.count(s->label), stmts);
-        emit_action(output, ind, *this, s, stmts);
+        emit_action(output, *this, s, stmts);
         s->go.emit(output, *this, s, stmts);
     }
 
@@ -190,33 +190,24 @@ void gen_code(Output &output, dfas_t &dfas)
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     CodeStmts *program = code_stmts(alc);
-    uint32_t ind;
+    uint32_t ind = 0;
 
     if (opts->target == TARGET_DOT) {
-        ind = 0;
-
         o.cstr("digraph re2c {");
         append_stmt(program, code_stmt_text(alc, o.flush()));
-
         append_stmt(program, code_cond_goto(alc));
-
         for (i = b; i != e; ++i) {
             (*i)->emit_dot(output, program);
         }
-
         o.cstr("}");
         append_stmt(program, code_stmt_text(alc, o.flush()));
     }
     else if (opts->target == TARGET_SKELETON) {
-        ind = 2;
         for (i = b; i != e; ++i) {
             DFA &dfa = *(*i);
-            if (!output.skeletons.insert(dfa.name).second) continue;
-
-            append_stmt(program, code_verbatim(alc,
-                emit_start(o, opts, dfa, dfa.bitmaps.gen(output), output.msg)));
-            dfa.emit_body(output, ind, program);
-            append_stmt(program, code_verbatim(alc, emit_end(o, opts, dfa)));
+            if (output.skeletons.insert(dfa.name).second) {
+                emit_skeleton(output, program, dfa);
+            }
         }
     }
     else {
@@ -281,7 +272,7 @@ void gen_code(Output &output, dfas_t &dfas)
 
             // generate code for DFA
             CodeStmts *body = code_stmts(alc);
-            dfa.emit_body(output, ind, body);
+            dfa.emit_body(output, body);
 
             // TODO: instead of rechecking bitmap-related conditions, just check if
             // the code for bitmaps is NULL (requires trivial changes in tests)

@@ -126,9 +126,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     symtab_t symtab;
     const conopt_t *globopts = &opts.glob;
     const opt_t *ropts = NULL;
-    Scratchbuf &scratchbuf = output.scratchbuf;
     code_alc_t &alc = output.allocator;
-
     const loc_t &loc0 = input.tok_loc();
 
     output.header_mode(1);
@@ -141,8 +139,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     output.wdelay_stmt(0, code_line_info_input(alc, loc0));
 
     if (globopts->target == TARGET_SKELETON) {
-        output.wdelay_stmt(2, code_verbatim(alc,
-            emit_prolog(scratchbuf, output.block().opts)));
+        output.wdelay_stmt(0, emit_skeleton_prolog(output));
     }
 
     for (;;) {
@@ -189,8 +186,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     }
 
     if (globopts->target == TARGET_SKELETON) {
-        output.wdelay_stmt(2, code_verbatim(alc,
-            emit_epilog(scratchbuf, output.block().opts, output.skeletons)));
+        output.wdelay_stmt(0, emit_skeleton_epilog(output));
     }
 
     AST::flist.clear();

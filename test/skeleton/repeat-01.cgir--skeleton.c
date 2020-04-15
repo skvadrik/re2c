@@ -17,7 +17,7 @@ static void *read_file
 
     /* open file */
     FILE *f = fopen(fname, "rb");
-    if(f == NULL) {
+    if (f == NULL) {
         goto error;
     }
 
@@ -1003,22 +1003,22 @@ end:
 
 int main()
 {
-    if(lex_line22_r1() != 0) {
+    if (lex_line22_r1() != 0) {
         return 1;
     }
-    if(lex_line22_r2() != 0) {
+    if (lex_line22_r2() != 0) {
         return 1;
     }
-    if(lex_line34_r1() != 0) {
+    if (lex_line34_r1() != 0) {
         return 1;
     }
-    if(lex_line34_r2() != 0) {
+    if (lex_line34_r2() != 0) {
         return 1;
     }
-    if(lex_line46_r1() != 0) {
+    if (lex_line46_r1() != 0) {
         return 1;
     }
-    if(lex_line46_r2() != 0) {
+    if (lex_line46_r2() != 0) {
         return 1;
     }
     return 0;

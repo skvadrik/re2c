@@ -210,14 +210,13 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
         const size_t n = b.fragments.size();
         for (size_t i = 0; i < n; ++i) {
             OutputFragment &f = b.fragments[i];
-            const uint32_t ind = f.indent ? f.indent : bopt->topIndent;
             std::ostringstream os;
 
             RenderContext rctx =
                 { os
                 , bopt
                 , msg
-                , ind
+                , f.indent
                 , filename.c_str()
                 , line_count
                 };
