@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <time.h>
