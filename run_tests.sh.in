@@ -157,7 +157,9 @@ run_pack() {
 
             ${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outy.stderr"
             local status=$(echo $?)
-            [ $status -eq 0 ] && { @CC@ -Wall -Wextra -o "$outy.out" "$outy" 2>>"$outy.stderr" || status=2; }
+            # use plain 'cc' instead of @-substition, because CMake and Autoconf
+            # use different variables (CMAKE_C_COMPILER and CC)
+            [ $status -eq 0 ] && { cc -Wall -Wextra -o "$outy.out" "$outy" 2>>"$outy.stderr" || status=2; }
             [ $status -eq 0 ] && { ./"$outy.out" 2>>"$outy.stderr" || status=3; }
 
             case $status in
