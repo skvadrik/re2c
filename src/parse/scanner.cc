@@ -155,13 +155,14 @@ bool Scanner::fill(size_t need)
         if (!buf) fatal("out of memory");
 
         memmove(buf, tok, copy);
-        shift_ptrs_and_fpos(buf - bot);
+        shift_ptrs_and_fpos(buf - tok);
         delete [] bot;
         bot = buf;
 
         free = BSIZE - copy;
     }
 
+    DASSERT(lim + free <= bot + BSIZE);
     if (!read(free)) {
         eof = lim;
         memset(lim, 0, YYMAXFILL);
