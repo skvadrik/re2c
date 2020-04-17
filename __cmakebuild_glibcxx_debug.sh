@@ -6,8 +6,8 @@ mkdir $builddir
 
 cd $builddir
 cmake .. \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Debug \
     -DRE2C_BUILD_LIBS=yes \
-    -DCMAKE_CXX_FLAGS="-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" \
+    -DCMAKE_CXX_FLAGS="-O2 -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" \
     && cmake --build . -j$(nproc)
 cd ..

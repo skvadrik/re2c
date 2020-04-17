@@ -7,7 +7,7 @@ mkdir $builddir
 cd $builddir
 
 cmake .. \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Debug \
     -DRE2C_BUILD_LIBS=yes \
     && cmake --build . -j$(nproc)
 

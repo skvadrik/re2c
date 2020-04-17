@@ -6,10 +6,9 @@ mkdir $builddir
 
 cd $builddir
 cmake .. \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Debug \
     -DRE2C_BUILD_LIBS=yes \
-    -DCMAKE_C_FLAGS="-ffunction-sections -fdata-sections" \
-    -DCMAKE_CXX_FLAGS="-ffunction-sections -fdata-sections" \
+    -DCMAKE_CXX_FLAGS="-O2 -ffunction-sections -fdata-sections" \
     -DCMAKE_EXE_LINKER_FLAGS="-Wl,--gc-sections -Wl,--print-gc-sections" \
     -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--gc-sections -Wl,--print-gc-sections" \
     && cmake --build . -j$(nproc)

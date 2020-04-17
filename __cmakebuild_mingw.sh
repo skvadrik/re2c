@@ -6,7 +6,8 @@ mkdir $builddir
 
 cd $builddir
 cmake .. \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_CXX_FLAGS="-O2" \
     -DRE2C_BUILD_LIBS=yes \
     -DBUILD_SHARED_LIBS=no \
     -DCMAKE_EXE_LINKER_FLAGS="-static -static-libstdc++ -static-libgcc" \
