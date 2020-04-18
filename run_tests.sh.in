@@ -149,34 +149,9 @@ run_pack() {
         # enable warnings globally
         local switches="$switches -W"
 
-        if [ $skeleton -eq 1 ]
-        then
-            rm -f "$outy"
+        if [ $skeleton -ne 1 ]; then
+            # normal tests
 
-            local switches="$switches --skeleton -Werror-undefined-control-flow"
-
-            ${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outy.stderr"
-            local status=$(echo $?)
-            # use plain 'cc' instead of @-substition, because CMake and Autoconf
-            # use different variables (CMAKE_C_COMPILER and CC)
-            [ $status -eq 0 ] && { cc -Wall -Wextra -o "$outy.out" "$outy" 2>>"$outy.stderr" || status=2; }
-            [ $status -eq 0 ] && { ./"$outy.out" 2>>"$outy.stderr" || status=3; }
-
-            case $status in
-                0 ) local msg="OK" ;;
-                1 ) local msg="OK (expected re2c error)" ;;
-                2 ) local msg="FAIL (compilation error)" ;;
-                3 ) local msg="FAIL (runtime error)" ;;
-                * ) local msg="FAIL (unknown error)" ;;
-            esac
-            printf "%-25s $outx\n" "$msg"
-
-            if [ $status -le 1 ]; then
-                [ $keep_tmp_files -eq 0 ] && rm -f "$outx" "$outy"{,.line*.{input,keys},.stderr,.out}
-            else
-                local errcnt=$(($errcnt + 1))
-            fi
-        else
             local c="${outx%.re}.$ext.orig"
             mv "$outy" "$c"
 
@@ -216,6 +191,34 @@ run_pack() {
             fi
 
             printf "%-10s $outx\n" "$status"
+        elif [ ${ext} = "c" ]; then
+            # skeleton tests (only for C files, other languages are not supported)
+
+            rm -f "$outy"
+
+            local switches="$switches --skeleton -Werror-undefined-control-flow"
+
+            ${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outy.stderr"
+            local status=$(echo $?)
+            # use plain 'cc' instead of @-substition, because CMake and Autoconf
+            # use different variables (CMAKE_C_COMPILER and CC)
+            [ $status -eq 0 ] && { cc -Wall -Wextra -o "$outy.out" "$outy" 2>>"$outy.stderr" || status=2; }
+            [ $status -eq 0 ] && { ./"$outy.out" 2>>"$outy.stderr" || status=3; }
+
+            case $status in
+                0 ) local msg="OK" ;;
+                1 ) local msg="OK (expected re2c error)" ;;
+                2 ) local msg="FAIL (compilation error)" ;;
+                3 ) local msg="FAIL (runtime error)" ;;
+                * ) local msg="FAIL (unknown error)" ;;
+            esac
+            printf "%-25s $outx\n" "$msg"
+
+            if [ $status -le 1 ]; then
+                [ $keep_tmp_files -eq 0 ] && rm -f "$outx" "$outy"{,.line*.{input,keys},.stderr,.out}
+            else
+                local errcnt=$(($errcnt + 1))
+            fi
         fi
         cd ..
     done
