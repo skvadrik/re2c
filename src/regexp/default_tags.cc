@@ -10,6 +10,7 @@
 
 
 namespace re2c {
+namespace {
 
 static RE *negative_tags(RESpec &spec, const size_t *stidx, const size_t *etidx)
 {
@@ -59,60 +60,83 @@ static RE *negative_tags(RESpec &spec, const size_t *stidx, const size_t *etidx)
     return x;
 }
 
+struct StackItem {
+    // current RE
+    RE *re;
+
+    // Start of the subsequence of tags for the left/right sub-RE (null if
+    // the sub-RE has not been traversed yet, ot if RE is not an alternative).
+    size_t *ltag, *rtag;
+};
+
+} // anonymous namespace
+
 // Fictive tags do not really need default counterparts:
 // maximization can work without them based on version numbers.
 // For now it does not seem like a useful optimization, but some day
 // in future it might change.
-static void insert_default_tags(RESpec &spec, RE *re, size_t *&tidx)
-{
-    switch (re->type) {
-        case RE::NIL: break;
-        case RE::SYM: break;
-        case RE::ALT: {
-            size_t *i;
-
-            i = tidx;
-            insert_default_tags(spec, re->alt.re1, tidx);
-            RE *x = negative_tags(spec, i, tidx);
-
-            i = tidx;
-            insert_default_tags(spec, re->alt.re2, tidx);
-            RE *y = negative_tags(spec, i, tidx);
-
-            // Decision to place negative tags before/after could be based
-            // on POSIX semantics, not syntax. But strangely on some tests
-            // placing before results in better performance. More benchmarks
-            // are needed to understand this (with AOT/JIT, TNFA/TDFA).
-            re->alt.re1 = re_cat(spec, re->alt.re1, y);
-            re->alt.re2 = spec.opts->posix_syntax
-                ? re_cat(spec, x, re->alt.re2)
-                : re_cat(spec, re->alt.re2, x);
-
-            break;
-        }
-        case RE::CAT:
-            insert_default_tags(spec, re->cat.re1, tidx);
-            insert_default_tags(spec, re->cat.re2, tidx);
-            break;
-        case RE::ITER:
-            insert_default_tags(spec, re->iter.re, tidx);
-            break;
-        case RE::TAG:
-            *tidx++ = re->tag.idx;
-            break;
-    }
-}
-
 void insert_default_tags(RESpec &spec)
 {
-    size_t *tidx0 = new size_t[spec.tags.size()], *tidx = tidx0;
-    std::vector<RE*>::iterator
-        i = spec.res.begin(),
-        e = spec.res.end();
-    for (; i != e; ++i) {
-        insert_default_tags(spec, *i, tidx);
+    size_t *tags = new size_t[spec.tags.size()], *tag = tags;
+    std::vector<StackItem> stack;
+
+    std::vector<RE*>::reverse_iterator i_re;
+    for (i_re = spec.res.rbegin(); i_re != spec.res.rend(); ++i_re) {
+        StackItem i = {*i_re, NULL, NULL};
+        stack.push_back(i);
     }
-    delete[] tidx0;
+
+    while (!stack.empty()) {
+        StackItem i = stack.back();
+        stack.pop_back();
+        RE *re = i.re;
+
+        if (re->type == RE::ALT) {
+            if (i.ltag == NULL) {
+                // collect tags from the left sub-RE and return to this RE
+                StackItem k = {re, tag, NULL};
+                stack.push_back(k);
+                StackItem j = {re->alt.re1, NULL, NULL};
+                stack.push_back(j);
+            }
+            else if (i.rtag == NULL) {
+                // collect tags from the right sub-RE and return to this RE
+                StackItem k = {re, i.ltag, tag};
+                stack.push_back(k);
+                StackItem j = {re->alt.re2, NULL, NULL};
+                stack.push_back(j);
+            }
+            else {
+                // both sub-RE traversed, add negative tags
+                RE *x = negative_tags(spec, i.ltag, i.rtag);
+                RE *y = negative_tags(spec, i.rtag, tag);
+
+                // Decision to place negative tags before/after could be based
+                // on POSIX semantics, not syntax. But strangely on some tests
+                // placing before results in better performance. More benchmarks
+                // are needed to understand this (with AOT/JIT, TNFA/TDFA).
+                re->alt.re1 = re_cat(spec, re->alt.re1, y);
+                re->alt.re2 = spec.opts->posix_syntax
+                    ? re_cat(spec, x, re->alt.re2)
+                    : re_cat(spec, re->alt.re2, x);
+            }
+        }
+        else if (re->type == RE::CAT) {
+            StackItem j2 = {re->cat.re2, NULL, NULL};
+            stack.push_back(j2);
+            StackItem j1 = {re->cat.re1, NULL, NULL};
+            stack.push_back(j1);
+        }
+        else if (re->type == RE::ITER) {
+            StackItem j = {re->iter.re, NULL, NULL};
+            stack.push_back(j);
+        }
+        else if (re->type == RE::TAG) {
+            *tag++ = re->tag.idx;
+        }
+    }
+
+    delete[] tags;
 }
 
 } // namespace re2c
