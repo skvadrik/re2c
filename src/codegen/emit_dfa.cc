@@ -54,7 +54,7 @@ static void emit_eof(Output &output, const Code *code, CodeStmts *stmts)
     if (opts->eof == NOEOF) return;
 
     // EOF label
-    o.str(opts->labelPrefix).cstr("eof:");
+    o.str(opts->labelPrefix).cstr("eofrule").u64(output.blockid()).cstr(":");
     append_stmt(stmts, code_stmt_textraw(alc, o.flush()));
 
     // source line directive

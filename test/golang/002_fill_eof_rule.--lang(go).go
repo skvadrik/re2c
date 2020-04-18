@@ -116,7 +116,7 @@ yy1_:
 			if (YYFILL () == 0) {
 				goto yy1_;
 			}
-			goto yyeof;
+			goto yyeofrule2;
 		}
 		goto yy2;
 	}
@@ -239,7 +239,7 @@ yy14:
 		return 2
 	}
 //line "golang/002_fill_eof_rule.--lang(go).go":242
-yyeof:
+yyeofrule2:
 //line "golang/002_fill_eof_rule.--lang(go).re":100
 	{
 		fmt.Println("end")

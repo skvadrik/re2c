@@ -11,7 +11,7 @@ yy1_:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill() == 0) goto yy1_;
-			goto yyeof;
+			goto yyeofrule2;
 		}
 		goto yy2;
 	}
@@ -22,7 +22,7 @@ yy3:
 yy4:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule2:
 	{ return EOF; }
 }
 
@@ -37,7 +37,7 @@ yy7_:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill() == 0) goto yy7_;
-			goto yyeof;
+			goto yyeofrule3;
 		}
 		goto yy8;
 	}
@@ -48,7 +48,7 @@ yy9:
 yy10:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule3:
 	{ return EOF; }
 }
 
@@ -63,7 +63,7 @@ yy13_:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill () == 0) goto yy13_;
-			goto yyeof;
+			goto yyeofrule4;
 		}
 		goto yy14;
 	}
@@ -74,7 +74,7 @@ yy15:
 yy16:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule4:
 	{ return EOF; }
 }
 
@@ -89,7 +89,7 @@ yy19_:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill() == 0) goto yy19_;
-			goto yyeof;
+			goto yyeofrule5;
 		}
 		goto yy20;
 	}
@@ -100,7 +100,7 @@ yy21:
 yy22:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule5:
 	{ return EOF; }
 }
 

@@ -1527,7 +1527,7 @@ yy31_:
 	case 0x7F:
 		if (end <= cur) {
 			if (fill () == 0) goto yy31_;
-			goto yyeof;
+			goto yyeofrule4;
 		}
 		goto yy32;
 	case 0xC2:
@@ -2097,7 +2097,7 @@ yy44_:
 		}
 		goto yy43;
 	}
-yyeof:
+yyeofrule4:
 	{ return {EEOF, cur}; }
 }
 

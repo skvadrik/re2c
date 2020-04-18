@@ -59,7 +59,7 @@ yy1_:
 	if (yych >= 0xFFFF) {
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy1_;
-			goto yyeof;
+			goto yyeofrule1;
 		}
 		goto yy2;
 	}
@@ -89,7 +89,7 @@ yy5_:
 	}
 yy7:
 	{ continue; }
-yyeof:
+yyeofrule1:
 	{ return true; }
 }
 

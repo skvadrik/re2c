@@ -82,7 +82,7 @@ yy1_:
 	default:
 		if (in->lim <= in->cur) {
 			if (YYFILL () == 0) goto yy1_;
-			goto yyeof;
+			goto yyeofrule1;
 		}
 		goto yy2;
 	}
@@ -210,7 +210,7 @@ yy17_:
 		}
 		goto yy11;
 	}
-yyeof:
+yyeofrule1:
 #line 52 "eof/eof_10_fill.re"
 	{ return count; }
 #line 217 "eof/eof_10_fill.c"

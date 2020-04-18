@@ -20,7 +20,7 @@ yyFillLabel0:
 			YYSETSTATE(0);
 			fill();
 			yyeof0:;
-			goto yyeof;
+			goto yyeofrule2;
 		}
 		goto yy2;
 	}
@@ -31,7 +31,7 @@ yy3:
 yy4:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule2:
 	{ return EOF; }
 
 
@@ -46,7 +46,7 @@ yyFillLabel1:
 			YYSETSTATE(1);
 			fill();
 			yyeof1:;
-			goto yyeof;
+			goto yyeofrule3;
 		}
 		goto yy8;
 	}
@@ -57,7 +57,7 @@ yy9:
 yy10:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule3:
 	{ return EOF; }
 
 
@@ -72,7 +72,7 @@ yyFillLabel2:
 			YYSETSTATE(2);
 			fill();
 			yyeof2:;
-			goto yyeof;
+			goto yyeofrule4;
 		}
 		goto yy14;
 	}
@@ -83,7 +83,7 @@ yy15:
 yy16:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule4:
 	{ return EOF; }
 
 
@@ -98,7 +98,7 @@ yyFillLabel3:
 			YYSETSTATE(3);
 			fill();
 			yyeof3:;
-			goto yyeof;
+			goto yyeofrule5;
 		}
 		goto yy20;
 	}
@@ -109,6 +109,6 @@ yy21:
 yy22:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule5:
 	{ return EOF; }
 

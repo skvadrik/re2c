@@ -513,6 +513,7 @@ public:
     explicit Output(Msg &msg);
     ~Output();
     OutputBlock &block();
+    size_t blockid() const;
     bool open ();
     void new_block(Opt &opts, const loc_t &loc);
     void header_mode(bool on);

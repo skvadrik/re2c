@@ -123,7 +123,7 @@ yy1_:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill () == 0) goto yy1_;
-			goto yyeof;
+			goto yyeofrule1;
 		}
 		goto yy2;
 	}
@@ -919,7 +919,7 @@ yy57_:
 		}
 		goto yy13;
 	}
-yyeof:
+yyeofrule1:
 	{ return true; }
 }
 

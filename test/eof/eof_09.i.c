@@ -9,7 +9,7 @@ yy1_:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (YYFILL () == 0) goto yy1_;
-			goto yyeof;
+			goto yyeofrule1;
 		}
 		goto yy2;
 	}
@@ -20,7 +20,7 @@ yy3:
 yy4:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule1:
 	{ return EOF; }
 }
 
@@ -53,7 +53,7 @@ yy13_:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (YYFILL () == 0) goto yy13_;
-			goto yyeof;
+			goto yyeofrule3;
 		}
 		goto yy14;
 	}
@@ -64,7 +64,7 @@ yy15:
 yy16:
 	++YYCURSOR;
 	{ return OK; }
-yyeof:
+yyeofrule3:
 	{ return EOF; }
 }
 

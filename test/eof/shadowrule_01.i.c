@@ -43,7 +43,7 @@ yy9_:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (YYFILL () == 0) goto yy9_;
-			goto yyeof;
+			goto yyeofrule3;
 		}
 		goto yy10;
 	}
@@ -82,7 +82,7 @@ yy15:
 yy16:
 	++YYCURSOR;
 	{ /* STRING  */ }
-yyeof:
+yyeofrule3:
 	{ /* EOF     */ }
 }
 

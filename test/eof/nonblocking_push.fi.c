@@ -178,7 +178,7 @@ yyFillLabel0:
 			YYSETSTATE(0);
 			YYFILL();
 			yyeof0:;
-			goto yyeof;
+			goto yyeofrule1;
 		}
 		goto yy2;
 	}
@@ -533,7 +533,7 @@ yyFillLabel20:
 yy29:
 	++in.cur;
 	{ printf("< Thing w/ newlines\n");                  return THING; }
-yyeof:
+yyeofrule1:
 	{ printf("< EOF\n");                                return OK; }
 
 }

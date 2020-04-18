@@ -111,6 +111,11 @@ OutputBlock& Output::block()
     return *pblocks->back();
 }
 
+size_t Output::blockid() const
+{
+    return (in_header() ? hblocks.size() : cblocks.size()) - 1;
+}
+
 void Output::wraw(const char *s, const char *e)
 {
     if (s != e && block().opts->target == TARGET_CODE) {

@@ -428,7 +428,7 @@ CodeStmt *gen_on_eof(Output &output, const DFA &dfa, const State *from, const St
             o.label(fallback->label);
         }
         else {
-            o.cstr("eof");
+            o.cstr("eofrule").u64(output.blockid());
         }
         o.cstr(";");
         append_stmt(refill, code_stmt_text(alc, o.flush()));

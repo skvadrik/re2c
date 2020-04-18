@@ -35,7 +35,7 @@ yy6_:
 	}
 	if (YYLIMIT <= YYCURSOR) {
 		if (YYFILL () == 0) goto yy6_;
-		goto yyeof;
+		goto yyeofrule2;
 	}
 	yyt1 = YYCURSOR;
 yy7:
@@ -53,7 +53,7 @@ yy7_:
 yy9:
 	x = yyt1;
 	{ /* R1, x must be set */  }
-yyeof:
+yyeofrule2:
 	{ /* EOF, x must not be set */ }
 }
 

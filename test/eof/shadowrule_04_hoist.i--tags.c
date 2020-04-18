@@ -55,7 +55,7 @@ yy8_:
 yy10:
 	x = yyt1;
 	{ /* R1 - here 'x' must be set */ }
-yyeof:
+yyeofrule2:
 	{ /* EOF - here 'x' must not be set */ }
 }
 
