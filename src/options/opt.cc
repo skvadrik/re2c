@@ -209,18 +209,17 @@ void mutopt_t::fix(const conopt_t *globopts)
     }
 
     // force individual options
-    switch (globopts->target) {
-        case TARGET_DOT:
-            iFlag = true;
-            break;
-        case TARGET_SKELETON:
-            iFlag = true;
-            input_api = INPUT_CUSTOM;
-            indString = "    ";
-            topIndent = 2;
-            break;
-        case TARGET_CODE:
-            break;
+    if (globopts->target == TARGET_DOT) {
+        iFlag = true;
+    }
+    else if (globopts->target == TARGET_SKELETON) {
+        if (globopts->lang != LANG_C) {
+            fatal("skeleton is not supported for non-C language backends");
+        }
+        iFlag = true;
+        input_api = INPUT_CUSTOM;
+        indString = "    ";
+        topIndent = 2;
     }
     switch (encoding.type()) {
         case Enc::UCS2:
