@@ -52,6 +52,7 @@ try_cxxflag("-Weverything"
     "-Wno-shadow-field-in-constructor" # using same names in ctor seems more like a feature
     "-Wno-undefined-func-template" # explicit specialization to reduce build dependencies
 )
+try_cxxflag("-fdiagnostics-color=always")
 
 # use system stdint.h if present, otherwise fallback to src/c99_stdint.h
 ac_check_headers("stdint.h")
