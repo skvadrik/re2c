@@ -7,6 +7,7 @@
 #include <valarray>
 #include <vector>
 
+#include "src/debug/debug.h"
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/regexp/rule.h"
@@ -16,75 +17,25 @@
 
 
 namespace re2c {
+namespace {
 
 // See note [counting skeleton edges].
-// Type for counting arcs in paths that cause undefined behaviour.
-// These paths are stored on heap, so the limit should be low.
-// Most real-world cases have only a few short paths.
-// We don't need all paths anyway, just some examples.
-typedef u32lim_t<1024> ucf_size_t; // ~1Kb
+// A type for counting total size of default paths. Most real-world cases have
+// only a few short paths. We don't need all paths anyway, just some examples.
+typedef u32lim_t<1024> paths_size_t; // ~1Kb
 
-// UCF stands for 'undefined control flow'
-struct ucf_t
-{
-    std::valarray<bool> loops;
-    std::vector<path_t> paths;
-    path_t prefix;
-    ucf_size_t size;
-
-    explicit ucf_t(size_t nnodes): loops(nnodes), paths(),
-        prefix(0), size(ucf_size_t::from32(0u)) {}
+struct StackItem {
+    uint32_t node;
+    Node::arcs_t::const_iterator arc;
 };
-
-// We don't need all patterns that cause undefined behaviour.
-// We only need some examples, the shorter the better.
-static void naked_paths(
-    const Skeleton &skel,
-    ucf_t &ucf,
-    size_t i)
-{
-    const Node &node = skel.nodes[i];
-    bool &loop = ucf.loops[i];
-    path_t &prefix = ucf.prefix;
-    ucf_size_t &size = ucf.size;
-
-    if (node.rule != Rule::NONE) {
-        return;
-    } else if (node.end()) {
-        ucf.paths.push_back(prefix);
-        size = size + ucf_size_t::from64(prefix.len());
-    } else if (!loop) {
-        loop = true;
-        Node::arcs_t::const_iterator
-            arc = node.arcs.begin(),
-            end = node.arcs.end();
-        for (; arc != end && !size.overflow(); ++arc) {
-            const size_t j = arc->first;
-            prefix.push(j);
-            naked_paths(skel, ucf, j);
-            prefix.pop();
-        }
-    }
-}
-
-void warn_undefined_control_flow(const Skeleton &skel)
-{
-    ucf_t ucf(skel.nodes_count);
-    naked_paths(skel, ucf, 0);
-    if (!ucf.paths.empty()) {
-        skel.msg.warn.undefined_control_flow(skel, ucf.paths, ucf.size.overflow());
-    } else if (ucf.size.overflow()) {
-        skel.msg.warn.fail(Warn::UNDEFINED_CONTROL_FLOW, skel.loc,
-            "DFA is too large to check undefined control flow");
-    }
-}
 
 static void fprint_default_arc(FILE *f, const Node::arc_t &arc)
 {
     const size_t ranges = arc.size();
     if (ranges == 1 && arc[0].lower == arc[0].upper) {
         fprintf(f, "\\x%X", arc[0].lower);
-    } else {
+    }
+    else {
         fprintf(f, "[");
         for (size_t i = 0; i < ranges; ++i) {
             const uint32_t
@@ -99,10 +50,89 @@ static void fprint_default_arc(FILE *f, const Node::arc_t &arc)
     }
 }
 
-void fprint_default_path(
-    FILE *f,
-    const Skeleton &skel,
-    const path_t &p)
+static void get_path_on_stack(path_t &path, std::vector<StackItem> &stack, size_t node)
+{
+    path.clear();
+    if (!stack.empty()) {
+        for (size_t i = 1; i < stack.size(); ++i) {
+            path.push(stack[i].node);
+        }
+        path.push(node);
+    }
+}
+
+} // anonymous namespace
+
+void warn_undefined_control_flow(const Skeleton &skel)
+{
+    std::valarray<bool> loops(skel.nodes_count);
+    std::vector<path_t> paths;
+    paths_size_t size(paths_size_t::from32(0u));
+
+    std::vector<StackItem> stack;
+    path_t path(0);
+
+    StackItem i0 = {0, skel.nodes[0].arcs.begin()};
+    stack.push_back(i0);
+
+    while (!stack.empty()) {
+        StackItem i = stack.back();
+        stack.pop_back();
+        const Node &node = skel.nodes[i.node];
+
+        if (i.arc == node.arcs.begin()) {
+            // DFS recursive enter
+            if (node.rule != Rule::NONE) {
+                // accepting path, terminate recursion
+            }
+            else if (node.end()) {
+                // found path to default state
+                get_path_on_stack(path, stack, i.node);
+                paths.push_back(path);
+                size = size + paths_size_t::from64(path.len());
+                if (size.overflow()) break;
+            }
+            else if (!loops[i.node]) {
+                loops[i.node] = true;
+
+                const uint32_t succ = static_cast<uint32_t>(i.arc->first);
+
+                // reschedule this node with the next successor
+                StackItem k = {i.node, ++i.arc};
+                stack.push_back(k);
+
+                // schedule the first successor node
+                StackItem j = {succ, skel.nodes[succ].arcs.begin()};
+                stack.push_back(j);
+            }
+        }
+        else if (i.arc == node.arcs.end()) {
+            // DFS recursive return
+            loops[i.node] = false;
+        }
+        else {
+            const uint32_t succ = static_cast<uint32_t>(i.arc->first);
+
+            // reschedule this node with the next successor and updated distance
+            StackItem k = {i.node, ++i.arc};
+            stack.push_back(k);
+
+            // schedule the current successor node
+            StackItem j = {succ, skel.nodes[succ].arcs.begin()};
+            stack.push_back(j);
+        }
+    }
+
+    if (!paths.empty()) {
+        skel.msg.warn.undefined_control_flow(skel, paths, size.overflow());
+    }
+    else if (size.overflow()) {
+        skel.msg.warn.fail(Warn::UNDEFINED_CONTROL_FLOW, skel.loc,
+            "DFA is too large to check undefined control flow");
+    }
+}
+
+void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p)
 {
     fprintf(f, "'");
     const size_t len = p.len();

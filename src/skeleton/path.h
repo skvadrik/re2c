@@ -4,6 +4,7 @@
 #include "src/util/c99_stdint.h"
 #include <vector>
 
+#include "src/debug/debug.h"
 #include "src/skeleton/skeleton.h"
 
 
@@ -50,6 +51,11 @@ public:
     const Node::arc_t& arc(const Skeleton &skel, size_t i) const
     {
         return skel.nodes[arcs[i]].arcs.find(arcs[i + 1])->second;
+    }
+    void clear()
+    {
+        DASSERT(!arcs.empty());
+        arcs.resize(1);
     }
     void push(size_t n)
     {
