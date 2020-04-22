@@ -25,7 +25,7 @@ struct tag_info_t
 struct Tag
 {
     static const size_t RIGHTMOST;
-    static const size_t VARDIST;
+    static const uint32_t VARDIST;
     static const size_t FICTIVE;
 
     const std::string *name;
