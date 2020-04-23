@@ -342,8 +342,9 @@ void gen_tags(Scratchbuf &o, CodeStmt *code, const std::set<std::string> &tags)
         if (++tag == end) break;
         o.cstr(sep);
     }
-    code->text = o.flush();
-    code->kind = CodeStmt::VERBATIM;
+    code->kind = CodeStmt::RAW;
+    code->raw.size = o.stream().str().length();
+    code->raw.data = o.flush();
 }
 
 static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
@@ -750,14 +751,10 @@ void render_code_stmt(RenderContext &rctx, const CodeStmt *code)
             os << indent(ind, opts->indString) << code->text << std::endl;
             line += count_lines_text(code->text) + 1;
             break;
-        case CodeStmt::VERBATIM:
-            os << code->text;
-            line += count_lines_text(code->text);
-            break;
         case CodeStmt::RAW:
             os.write(code->raw.data, static_cast<std::streamsize>(code->raw.size));
-            for (const char *s = code->raw.data, *e = s + code->raw.size; s < e; ++s) {
-                if (*s == '\n') ++line;
+            for (size_t i = 0; i < code->raw.size; ++i) {
+                if (code->raw.data[i] == '\n') ++line;
             }
             break;
         case CodeStmt::SKIP:
@@ -1013,7 +1010,6 @@ void combine_stmt(CodegenContext &ctx, CodeStmt *code)
         case CodeStmt::IF_THEN_ELSE:
         case CodeStmt::SWITCH:
         case CodeStmt::TEXT:
-        case CodeStmt::VERBATIM:
         case CodeStmt::RAW:
         case CodeStmt::TEXT_RAW:
         case CodeStmt::SKIP:

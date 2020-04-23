@@ -228,7 +228,7 @@ CodeStmts *Cpgoto::emit(Output &output, const DFA &dfa, const State *from) const
     return stmts;
 }
 
-CodeStmt *Dot::emit(Output &output, const DFA &dfa, const State *from) const
+void Dot::emit(Output &output, const DFA &dfa, const State *from, CodeStmts *stmts) const
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -237,7 +237,8 @@ CodeStmt *Dot::emit(Output &output, const DFA &dfa, const State *from) const
     const uint32_t n = cases->cases_size;
 
     if (n == 1) {
-        o.label(from->label).cstr(" -> ").label(cases->cases[0].to->label).cstr("\n");
+        o.label(from->label).cstr(" -> ").label(cases->cases[0].to->label);
+        append_stmt(stmts, code_stmt_text(alc, o.flush()));
     }
     else {
         for (uint32_t i = 0; i < n; ++i) {
@@ -256,10 +257,10 @@ CodeStmt *Dot::emit(Output &output, const DFA &dfa, const State *from) const
                 }
                 o.cstr(">");
             }
-            o.cstr("\"]\n");
+            o.cstr("\"]");
+            append_stmt(stmts, code_stmt_text(alc, o.flush()));
         }
     }
-    return code_verbatim(alc, o.flush());
 }
 
 void Go::emit(Output &output, const DFA &dfa, const State *from, CodeStmts *stmts) const
@@ -268,7 +269,7 @@ void Go::emit(Output &output, const DFA &dfa, const State *from, CodeStmts *stmt
     code_alc_t &alc = output.allocator;
 
     if (type == DOT) {
-        append_stmt(stmts, info.dot->emit(output, dfa, from));
+        info.dot->emit(output, dfa, from, stmts);
         return;
     }
 

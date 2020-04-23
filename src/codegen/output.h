@@ -157,7 +157,6 @@ struct CodeStmt {
         VAR,
         TEXT,
         TEXT_RAW,
-        VERBATIM,
         RAW
     } kind;
 
@@ -186,13 +185,6 @@ inline CodeStmt *code_stmt(code_alc_t &alc, CodeStmt::Kind kind)
 inline CodeStmt *code_stmt_text(code_alc_t &alc, CodeText text)
 {
     CodeStmt *s = code_stmt(alc, CodeStmt::TEXT);
-    s->text = text;
-    return s;
-}
-
-inline CodeStmt *code_verbatim(code_alc_t &alc, CodeText text)
-{
-    CodeStmt *s = code_stmt(alc, CodeStmt::VERBATIM);
     s->text = text;
     return s;
 }

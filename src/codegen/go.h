@@ -183,7 +183,7 @@ struct Dot
     Cases * cases;
     Dot(const Span *sp, uint32_t nsp, uint32_t eof);
     ~Dot ();
-    CodeStmt *emit(Output &output, const DFA &dfa, const State *from) const;
+    void emit(Output &output, const DFA &dfa, const State *from, CodeStmts *stmts) const;
 
     FORBID_COPY (Dot);
 };
