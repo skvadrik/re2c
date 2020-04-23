@@ -11,43 +11,100 @@
 
 
 namespace re2c {
+namespace {
 
-static bool nullable(const RESpec &spec, const RE *re, bool &trail)
+struct StackItem {
+    const RE *re;   // current sub-RE
+    uint8_t   succ; // index of the next sucessor to be visited
+};
+
+static bool nullable(const RESpec &spec, std::vector<StackItem> &stack, const RE *re0)
 {
-    if (trail) return true;
+    // the "nullable" status of the last sub-RE visited by DFS
+    bool null = false;
 
-    switch (re->type) {
-        case RE::NIL: return true;
-        case RE::SYM: return false;
-        case RE::ITER:
-            return nullable(spec, re->iter.re, trail);
-        case RE::TAG:
-            trail |= trailing(spec.tags[re->tag.idx]);
-            return true;
-        case RE::ALT:
-            return nullable(spec, re->alt.re1, trail)
-                || nullable(spec, re->alt.re2, trail);
-        case RE::CAT:
-            return nullable(spec, re->cat.re1, trail)
-                && nullable(spec, re->cat.re2, trail);
+    const StackItem i0 = {re0, 0};
+    stack.push_back(i0);
+
+    while (!stack.empty()) {
+        const StackItem i = stack.back();
+        stack.pop_back();
+
+        const RE *re = i.re;
+        if (re->type == RE::NIL) {
+            null = true;
+        }
+        else if (re->type == RE::SYM) {
+            null = false;
+        }
+        else if (re->type == RE::TAG) {
+            null = true;
+
+            // Trailing context is always in top-level concatenation, and sub-RE
+            // are visited from left to right. Since we are here, sub-RE to the
+            // left of the trailing context is nullable (otherwise we would not
+            // recurse into the right sub-RE), therefore the whole RE is nullable.
+            if (trailing(spec.tags[re->tag.idx])) {
+                DASSERT(stack.size() == 1 && stack.back().re->type == RE::CAT);
+                stack.pop_back();
+                break;
+            }
+        }
+        else if (re->type == RE::ALT) {
+            if (i.succ == 0) {
+                // recurse into the left sub-RE
+                StackItem k = {re, 1};
+                stack.push_back(k);
+                StackItem j = {re->alt.re1, 0};
+                stack.push_back(j);
+            }
+            else if (!null) {
+                // if the left sub-RE is nullable, so is alternative, so stop
+                // recursion; otherwise recurse into the right sub-RE
+                StackItem j = {re->alt.re2, 0};
+                stack.push_back(j);
+            }
+        }
+        else if (re->type == RE::CAT) {
+            if (i.succ == 0) {
+                // recurse into the left sub-RE
+                StackItem k = {re, 1};
+                stack.push_back(k);
+                StackItem j = {re->cat.re1, 0};
+                stack.push_back(j);
+            }
+            else if (null) {
+                // if the left sub-RE is not nullable, neither is concatenation,
+                // so stop recursion; otherwise recurse into the right sub-RE
+                StackItem j = {re->cat.re2, 0};
+                stack.push_back(j);
+            }
+        }
+        else if (re->type == RE::ITER) {
+            // iteration is nullable if the sub-RE is nullable
+            // (zero repetitions is represented with alternative)
+            StackItem j = {re->iter.re, 0};
+            stack.push_back(j);
+        }
     }
-    return false; /* unreachable */
+
+    DASSERT(stack.empty());
+    return null;
 }
 
-/*
- * warn about rules that match empty string
- * (including rules with nonempty trailing context)
- * false positives on partially self-shadowed rules like [^]?
- */
+} // anonymous namespace
+
+// Warn about rules that match empty string (including rules with nonempty
+// trailing context). False positives on partially self-shadowed rules like [^]?
 void warn_nullable(const RESpec &spec, const std::string &cond)
 {
     // rule for <> is special -- it doesn't have a regexp
     if (cond == "0") return;
 
+    std::vector<StackItem> stack;
     const size_t nre = spec.res.size();
     for (size_t i = 0; i < nre; ++i) {
-        bool trail = false;
-        if (nullable(spec, spec.res[i], trail)) {
+        if (nullable(spec, stack, spec.res[i])) {
             spec.msg.warn.match_empty_string(spec.rules[i].code->loc, cond);
         }
     }
