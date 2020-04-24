@@ -77,8 +77,8 @@ static int action_line161_Normal
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line161_Normal: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line161_Normal: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -103,7 +103,11 @@ static int action_line161_Normal
     }
 }
 
-static int check_key_count_line161_Normal(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line161_Normal
+    ( unsigned have
+    , unsigned used
+    , unsigned need
+    )
 {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line161_Normal: not enough keys\n");
@@ -125,7 +129,7 @@ int lex_line161_Normal()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/condition_10.cgif--skeleton.c.line161_Normal.input"
+        ( "skeleton/condition_10.cgif--skeleton.c.line161_Normal.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -136,7 +140,7 @@ int lex_line161_Normal()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/condition_10.cgif--skeleton.c.line161_Normal.keys"
+        ( "skeleton/condition_10.cgif--skeleton.c.line161_Normal.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -391,8 +395,8 @@ static int action_line161_Comment
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line161_Comment: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line161_Comment: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -417,7 +421,11 @@ static int action_line161_Comment
     }
 }
 
-static int check_key_count_line161_Comment(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line161_Comment
+    ( unsigned have
+    , unsigned used
+    , unsigned need
+    )
 {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line161_Comment: not enough keys\n");
@@ -439,7 +447,7 @@ int lex_line161_Comment()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/condition_10.cgif--skeleton.c.line161_Comment.input"
+        ( "skeleton/condition_10.cgif--skeleton.c.line161_Comment.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -450,7 +458,7 @@ int lex_line161_Comment()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/condition_10.cgif--skeleton.c.line161_Comment.keys"
+        ( "skeleton/condition_10.cgif--skeleton.c.line161_Comment.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -539,8 +547,8 @@ static int action_line161_Skiptoeol
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line161_Skiptoeol: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line161_Skiptoeol: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -565,7 +573,11 @@ static int action_line161_Skiptoeol
     }
 }
 
-static int check_key_count_line161_Skiptoeol(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line161_Skiptoeol
+    ( unsigned have
+    , unsigned used
+    , unsigned need
+    )
 {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line161_Skiptoeol: not enough keys\n");
@@ -587,7 +599,7 @@ int lex_line161_Skiptoeol()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/condition_10.cgif--skeleton.c.line161_Skiptoeol.input"
+        ( "skeleton/condition_10.cgif--skeleton.c.line161_Skiptoeol.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -598,7 +610,7 @@ int lex_line161_Skiptoeol()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/condition_10.cgif--skeleton.c.line161_Skiptoeol.keys"
+        ( "skeleton/condition_10.cgif--skeleton.c.line161_Skiptoeol.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -778,8 +790,8 @@ static int action_line161_String
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line161_String: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line161_String: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -804,7 +816,11 @@ static int action_line161_String
     }
 }
 
-static int check_key_count_line161_String(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line161_String
+    ( unsigned have
+    , unsigned used
+    , unsigned need
+    )
 {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line161_String: not enough keys\n");
@@ -826,7 +842,7 @@ int lex_line161_String()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/condition_10.cgif--skeleton.c.line161_String.input"
+        ( "skeleton/condition_10.cgif--skeleton.c.line161_String.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -837,7 +853,7 @@ int lex_line161_String()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/condition_10.cgif--skeleton.c.line161_String.keys"
+        ( "skeleton/condition_10.cgif--skeleton.c.line161_String.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count

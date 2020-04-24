@@ -45,6 +45,7 @@ public:
     Scratchbuf& label(const label_t &l) { os << l; return *this; }
     Scratchbuf& u32_hex(uint32_t u, const opt_t *opts);
     Scratchbuf& u32_width(uint32_t u, int width);
+    Scratchbuf& exact_uint(size_t width);
 };
 
 // forward decls
@@ -126,12 +127,29 @@ struct CodeRaw {
     size_t      size;
 };
 
+struct CodeArg {
+    const char *arg;
+    CodeArg    *next;
+};
+
+struct CodeArgs {
+    CodeArg  *head;
+    CodeArg **ptail;
+};
+
+struct CodeFunc {
+    CodeArgs   *args;
+    const char *name;
+    const char *semi;
+};
+
 struct CodeStmt {
     enum Kind {
         EMPTY,
         IF_THEN_ELSE,
         SWITCH,
         BLOCK,
+        FUNC,
         SKIP,
         PEEK,
         BACKUP,
@@ -164,6 +182,7 @@ struct CodeStmt {
         CodeIfTE   ifte;
         CodeSwitch swch;
         CodeBlock  block;
+        CodeFunc   func;
         CodeText   text;
         CodeRaw    raw;
         CodeVar    var;
@@ -381,6 +400,49 @@ inline void append_case(CodeCases *cases, CodeCase *ccase)
     cases->ptail  = &ccase->next;
 }
 
+inline CodeArg *code_arg(code_alc_t &alc, const char *arg)
+{
+    CodeArg *a = alc.alloct<CodeArg>(1);
+    a->arg = arg;
+    a->next = NULL;
+    return a;
+}
+
+inline CodeArgs *code_args(code_alc_t &alc)
+{
+    CodeArgs *a = alc.alloct<CodeArgs>(1);
+    a->head  = NULL;
+    a->ptail = &a->head;
+    return a;
+}
+
+inline void append_arg(CodeArgs *args, CodeArg *arg)
+{
+    *args->ptail = arg;
+    args->ptail  = &arg->next;
+}
+
+inline CodeStmt *code_func(code_alc_t &alc, const char *name, CodeArgs *args,
+    const char *semi)
+{
+    CodeStmt *s = code_stmt(alc, CodeStmt::FUNC);
+    s->func.args = args;
+    s->func.name = name;
+    s->func.semi = semi;
+    return s;
+}
+
+inline CodeStmt *code_fdecl(code_alc_t &alc, const char *name, CodeArgs *args)
+{
+    return code_func(alc, name, args, "");
+}
+
+inline CodeStmt *code_fcall(code_alc_t &alc, const char *name, CodeArgs *args,
+    const char *semi)
+{
+    return code_func(alc, name, args, semi);
+}
+
 inline CodeStmt *code_switch(code_alc_t &alc, CodeText expr, CodeCases *cases,
     bool impdef)
 {
@@ -458,6 +520,8 @@ void render_code_case(RenderContext &rctx, const CodeCase *code, bool defcase,
     bool noindent);
 void render_code_switch(RenderContext &rctx, const CodeSwitch *code);
 void render_code_block(RenderContext &rctx, const CodeBlock *code);
+void render_code_func(RenderContext &rctx, const CodeFunc *func);
+void render_code_arg(RenderContext &rctx, const CodeArg *arg);
 
 struct OutputFragment {
     CodeStmt *stmt;

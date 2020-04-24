@@ -75,8 +75,8 @@ static int action_line18_r1
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line18_r1: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line18_r1: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -101,7 +101,11 @@ static int action_line18_r1
     }
 }
 
-static int check_key_count_line18_r1(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line18_r1
+    ( unsigned have
+    , unsigned used
+    , unsigned need
+    )
 {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line18_r1: not enough keys\n");
@@ -123,7 +127,7 @@ int lex_line18_r1()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/repeat-03.cgir--skeleton.c.line18_r1.input"
+        ( "skeleton/repeat-03.cgir--skeleton.c.line18_r1.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -134,7 +138,7 @@ int lex_line18_r1()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/repeat-03.cgir--skeleton.c.line18_r1.keys"
+        ( "skeleton/repeat-03.cgir--skeleton.c.line18_r1.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -270,8 +274,8 @@ static int action_line18_r2
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line18_r2: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line18_r2: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -296,7 +300,11 @@ static int action_line18_r2
     }
 }
 
-static int check_key_count_line18_r2(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line18_r2
+    ( unsigned have
+    , unsigned used
+    , unsigned need
+    )
 {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line18_r2: not enough keys\n");
@@ -318,7 +326,7 @@ int lex_line18_r2()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/repeat-03.cgir--skeleton.c.line18_r2.input"
+        ( "skeleton/repeat-03.cgir--skeleton.c.line18_r2.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -329,7 +337,7 @@ int lex_line18_r2()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/repeat-03.cgir--skeleton.c.line18_r2.keys"
+        ( "skeleton/repeat-03.cgir--skeleton.c.line18_r2.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -424,8 +432,8 @@ static int action_line28_r1
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line28_r1: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line28_r1: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -450,7 +458,11 @@ static int action_line28_r1
     }
 }
 
-static int check_key_count_line28_r1(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line28_r1
+    ( unsigned have
+    , unsigned used
+    , unsigned need
+    )
 {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line28_r1: not enough keys\n");
@@ -472,7 +484,7 @@ int lex_line28_r1()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/repeat-03.cgir--skeleton.c.line28_r1.input"
+        ( "skeleton/repeat-03.cgir--skeleton.c.line28_r1.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -483,7 +495,7 @@ int lex_line28_r1()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/repeat-03.cgir--skeleton.c.line28_r1.keys"
+        ( "skeleton/repeat-03.cgir--skeleton.c.line28_r1.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -619,8 +631,8 @@ static int action_line28_r2
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line28_r2: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line28_r2: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -645,7 +657,11 @@ static int action_line28_r2
     }
 }
 
-static int check_key_count_line28_r2(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line28_r2
+    ( unsigned have
+    , unsigned used
+    , unsigned need
+    )
 {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line28_r2: not enough keys\n");
@@ -667,7 +683,7 @@ int lex_line28_r2()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/repeat-03.cgir--skeleton.c.line28_r2.input"
+        ( "skeleton/repeat-03.cgir--skeleton.c.line28_r2.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -678,7 +694,7 @@ int lex_line28_r2()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/repeat-03.cgir--skeleton.c.line28_r2.keys"
+        ( "skeleton/repeat-03.cgir--skeleton.c.line28_r2.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count

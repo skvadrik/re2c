@@ -79,8 +79,8 @@ static int action_line131
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line131: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line131: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -127,7 +127,7 @@ int lex_line131()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/strip_003.b--skeleton.c.line131.input"
+        ( "skeleton/strip_003.b--skeleton.c.line131.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -138,7 +138,7 @@ int lex_line131()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/strip_003.b--skeleton.c.line131.keys"
+        ( "skeleton/strip_003.b--skeleton.c.line131.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -280,8 +280,8 @@ static int action_line137
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line137: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line137: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -328,7 +328,7 @@ int lex_line137()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/strip_003.b--skeleton.c.line137.input"
+        ( "skeleton/strip_003.b--skeleton.c.line137.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -339,7 +339,7 @@ int lex_line137()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/strip_003.b--skeleton.c.line137.keys"
+        ( "skeleton/strip_003.b--skeleton.c.line137.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -428,8 +428,8 @@ static int action_line152
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line152: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line152: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -476,7 +476,7 @@ int lex_line152()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/strip_003.b--skeleton.c.line152.input"
+        ( "skeleton/strip_003.b--skeleton.c.line152.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -487,7 +487,7 @@ int lex_line152()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/strip_003.b--skeleton.c.line152.keys"
+        ( "skeleton/strip_003.b--skeleton.c.line152.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -618,8 +618,8 @@ static int action_line158
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line158: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line158: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -666,7 +666,7 @@ int lex_line158()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/strip_003.b--skeleton.c.line158.input"
+        ( "skeleton/strip_003.b--skeleton.c.line158.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -677,7 +677,7 @@ int lex_line158()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/strip_003.b--skeleton.c.line158.keys"
+        ( "skeleton/strip_003.b--skeleton.c.line158.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count

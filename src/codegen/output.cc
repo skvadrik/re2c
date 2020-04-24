@@ -743,6 +743,9 @@ void render_code_stmt(RenderContext &rctx, const CodeStmt *code)
         case CodeStmt::BLOCK:
             render_code_block(rctx, &code->block);
             break;
+        case CodeStmt::FUNC:
+            render_code_func(rctx, &code->func);
+            break;
         case CodeStmt::TEXT_RAW:
             os << code->text << std::endl;
             line += count_lines_text(code->text) + 1;
@@ -939,6 +942,75 @@ void render_code_switch(RenderContext &rctx, const CodeSwitch *code)
     ++rctx.line;
 }
 
+void render_code_arg(RenderContext &rctx, const CodeArg *arg)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    const char *s = arg->arg, *p = s;
+    for (; *s; ++s) {
+        // remove unescaped newlines and render on a new line
+        if (*s == '\n') {
+            os.write(p, s - p);
+            p = s + 1;
+            os << std::endl << indent(rctx.ind + 1, opts->indString);
+            ++rctx.line;
+        }
+    }
+    os.write(p, s - p);
+}
+
+void render_code_func(RenderContext &rctx, const CodeFunc *func)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+    const CodeArg *first = func->args->head;
+
+    os << indent(rctx.ind, opts->indString) << func->name;
+    ++rctx.line;
+
+    // Estimate total length of function call (in characters).
+    // Arguments are rendered on one line if the total length does not exceed 80
+    // characters (including indentation and the text preceding the list of
+    // arguments) , otherwise each argument and the closing parenthesis are
+    // rendered on a new line.
+    size_t total = rctx.ind * opts->indString.length() + strlen(func->name);
+    for (const CodeArg *a = first; a; a = a->next) {
+        total += strlen(a->arg) + 2; // +2 for ", "
+    }
+
+    if (total < 80) {
+        os << "(";
+        for (const CodeArg *a = first; a; a = a->next) {
+            if (a != first) os << ", ";
+            render_code_arg(rctx, a);
+        }
+        os << ")";
+    }
+    else {
+        ++rctx.ind;
+
+        // An argument may be broken into multiple lines by inserting unescaped
+        // newline characters in the argument string. The text after each
+        // newline is "hanged after" the the argument (that is, rendered on the
+        // next line with one extra level of indentation).
+        os << std::endl;
+        for (const CodeArg *a = first; a; a = a->next) {
+            const char *sep = a == first ? "( " : ", ";
+            os << indent(rctx.ind, opts->indString) << sep;
+            render_code_arg(rctx, a);
+            os << std::endl;
+            ++rctx.line;
+        }
+        os << indent(rctx.ind, opts->indString) << ")";
+
+        --rctx.ind;
+    }
+
+    os << func->semi << std::endl;
+    ++rctx.line;
+}
+
 static void fold_exprs(CodeStmts *stmts)
 {
     CodeStmt *x, *y, *z;
@@ -1009,6 +1081,7 @@ void combine_stmt(CodegenContext &ctx, CodeStmt *code)
         case CodeStmt::EMPTY:
         case CodeStmt::IF_THEN_ELSE:
         case CodeStmt::SWITCH:
+        case CodeStmt::FUNC:
         case CodeStmt::TEXT:
         case CodeStmt::RAW:
         case CodeStmt::TEXT_RAW:
@@ -1083,6 +1156,26 @@ Scratchbuf& Scratchbuf::u32_width(uint32_t u, int width)
 {
     os << std::setw(width);
     os << u;
+    return *this;
+}
+
+Scratchbuf& Scratchbuf::exact_uint(size_t width)
+{
+    if (width == sizeof(char)) {
+        os << "unsigned char";
+    }
+    else if (width == sizeof(short)) {
+        os << "unsigned short";
+    }
+    else if (width == sizeof(int)) {
+        os << "unsigned int";
+    }
+    else if (width == sizeof(long)) {
+        os << "unsigned long";
+    }
+    else {
+        os << "uint" << width * 8 << "_t";
+    }
     return *this;
 }
 

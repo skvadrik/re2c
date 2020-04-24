@@ -77,8 +77,8 @@ static int action_line4
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line4: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line4: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -125,7 +125,7 @@ int lex_line4()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/unicode_any.i8--skeleton.c.line4.input"
+        ( "skeleton/unicode_any.i8--skeleton.c.line4.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -136,7 +136,7 @@ int lex_line4()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/unicode_any.i8--skeleton.c.line4.keys"
+        ( "skeleton/unicode_any.i8--skeleton.c.line4.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count

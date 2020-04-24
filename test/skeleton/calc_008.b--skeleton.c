@@ -75,8 +75,8 @@ static int action_line110
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line110: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line110: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -123,7 +123,7 @@ int lex_line110()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/calc_008.b--skeleton.c.line110.input"
+        ( "skeleton/calc_008.b--skeleton.c.line110.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -134,7 +134,7 @@ int lex_line110()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/calc_008.b--skeleton.c.line110.keys"
+        ( "skeleton/calc_008.b--skeleton.c.line110.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count

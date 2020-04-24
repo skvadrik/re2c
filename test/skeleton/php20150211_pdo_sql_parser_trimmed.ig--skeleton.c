@@ -77,8 +77,8 @@ static int action_line20
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line20: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line20: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -125,7 +125,7 @@ int lex_line20()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/php20150211_pdo_sql_parser_trimmed.ig--skeleton.c.line20.input"
+        ( "skeleton/php20150211_pdo_sql_parser_trimmed.ig--skeleton.c.line20.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -136,7 +136,7 @@ int lex_line20()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/php20150211_pdo_sql_parser_trimmed.ig--skeleton.c.line20.keys"
+        ( "skeleton/php20150211_pdo_sql_parser_trimmed.ig--skeleton.c.line20.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count

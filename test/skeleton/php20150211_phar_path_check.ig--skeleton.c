@@ -77,8 +77,8 @@ static int action_line108
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line108: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line108: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -125,7 +125,7 @@ int lex_line108()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/php20150211_phar_path_check.ig--skeleton.c.line108.input"
+        ( "skeleton/php20150211_phar_path_check.ig--skeleton.c.line108.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -136,7 +136,7 @@ int lex_line108()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/php20150211_phar_path_check.ig--skeleton.c.line108.keys"
+        ( "skeleton/php20150211_phar_path_check.ig--skeleton.c.line108.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count

@@ -75,8 +75,8 @@ static int action_line129
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line129: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line129: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -123,7 +123,7 @@ int lex_line129()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line129.input"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line129.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -134,7 +134,7 @@ int lex_line129()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line129.keys"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line129.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -272,8 +272,8 @@ static int action_line315
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line315: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line315: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -320,7 +320,7 @@ int lex_line315()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line315.input"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line315.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -331,7 +331,7 @@ int lex_line315()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line315.keys"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line315.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -457,8 +457,8 @@ static int action_line322
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line322: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line322: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -505,7 +505,7 @@ int lex_line322()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line322.input"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line322.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -516,7 +516,7 @@ int lex_line322()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line322.keys"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line322.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -640,8 +640,8 @@ static int action_line334
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line334: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line334: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -688,7 +688,7 @@ int lex_line334()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line334.input"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line334.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -699,7 +699,7 @@ int lex_line334()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line334.keys"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line334.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -873,8 +873,8 @@ static int action_line341
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line341: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line341: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -921,7 +921,7 @@ int lex_line341()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line341.input"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line341.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -932,7 +932,7 @@ int lex_line341()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line341.keys"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line341.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1060,8 +1060,8 @@ static int action_line348
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line348: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line348: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -1108,7 +1108,7 @@ int lex_line348()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line348.input"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line348.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1119,7 +1119,7 @@ int lex_line348()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line348.keys"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line348.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1262,8 +1262,8 @@ static int action_line358
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line358: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line358: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -1310,7 +1310,7 @@ int lex_line358()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line358.input"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line358.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1321,7 +1321,7 @@ int lex_line358()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line358.keys"
+        ( "skeleton/php20150211_url_scanner_ex.ig--skeleton.c.line358.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count

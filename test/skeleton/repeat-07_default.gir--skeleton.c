@@ -75,8 +75,8 @@ static int action_line28
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line28: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line28: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -123,7 +123,7 @@ int lex_line28()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/repeat-07_default.gir--skeleton.c.line28.input"
+        ( "skeleton/repeat-07_default.gir--skeleton.c.line28.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -134,7 +134,7 @@ int lex_line28()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/repeat-07_default.gir--skeleton.c.line28.keys"
+        ( "skeleton/repeat-07_default.gir--skeleton.c.line28.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -279,8 +279,8 @@ static int action_line46
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line46: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line46: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -327,7 +327,7 @@ int lex_line46()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/repeat-07_default.gir--skeleton.c.line46.input"
+        ( "skeleton/repeat-07_default.gir--skeleton.c.line46.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -344,7 +344,7 @@ int lex_line46()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/repeat-07_default.gir--skeleton.c.line46.keys"
+        ( "skeleton/repeat-07_default.gir--skeleton.c.line46.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -490,8 +490,8 @@ static int action_line64
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line64: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
+            , "warning: lex_line64: control flow is undefined"
+                " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
     }
@@ -538,7 +538,7 @@ int lex_line64()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("skeleton/repeat-07_default.gir--skeleton.c.line64.input"
+        ( "skeleton/repeat-07_default.gir--skeleton.c.line64.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -555,7 +555,7 @@ int lex_line64()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("skeleton/repeat-07_default.gir--skeleton.c.line64.keys"
+        ( "skeleton/repeat-07_default.gir--skeleton.c.line64.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
