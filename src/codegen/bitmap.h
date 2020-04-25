@@ -5,15 +5,14 @@
 #include <algorithm>
 #include <vector>
 
+#include "src/codegen/output.h"
 #include "src/util/forbid_copy.h"
 
 
 namespace re2c {
 
-class Output;
 struct Go;
 struct State;
-struct CodeStmts;
 
 struct bitmap_t
 {

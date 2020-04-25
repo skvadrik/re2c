@@ -253,17 +253,17 @@ static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
     CodeStmts *stmts = code_stmts(alc);
 
     o.cstr("enum ").str(opts->yycondtype).cstr(" {");
-    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+    append(stmts, code_stmt_text(alc, o.flush()));
 
     CodeStmts *block = code_stmts(alc);
     for (size_t i = 0; i < condnames.size(); ++i) {
         o.str(opts->condEnumPrefix).str(condnames[i]).cstr(",");
-        append_stmt(block, code_stmt_text(alc, o.flush()));
+        append(block, code_stmt_text(alc, o.flush()));
     }
-    append_stmt(stmts, code_block(alc, block, CodeBlock::INDENTED));
+    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
     o.cstr("};");
-    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+    append(stmts, code_stmt_text(alc, o.flush()));
 
     code->kind = CodeStmt::BLOCK;
     code->block.stmts = stmts;
@@ -355,21 +355,21 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
 
     CodeStmts *goto_start = code_stmts(alc);
     o.cstr("goto ").str(opts->labelPrefix).u32(start_label).cstr(";");
-    append_stmt(goto_start, code_stmt_text(alc, o.flush()));
+    append(goto_start, code_stmt_text(alc, o.flush()));
 
     CodeCases *ccases = code_cases(alc);
     if (opts->bUseStateAbort) {
         // default: abort();
         CodeStmts *abort = code_stmts(alc);
-        append_stmt(abort, code_stmt_text(alc, "abort();"));
-        append_case(ccases, code_case_default(alc, abort));
+        append(abort, code_stmt_text(alc, "abort();"));
+        append(ccases, code_case_default(alc, abort));
 
         // case -1: goto <start label>;
-        append_case(ccases, code_case_number(alc, goto_start, -1));
+        append(ccases, code_case_number(alc, goto_start, -1));
     }
     else {
         // default: goto <start label>;
-        append_case(ccases, code_case_default(alc, goto_start));
+        append(ccases, code_case_default(alc, goto_start));
     }
     for (uint32_t i = 0; i < fill_index; ++i) {
         CodeStmts *stmts = code_stmts(alc);
@@ -380,17 +380,17 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
                 .cstr(" goto ").str(opts->labelPrefix).cstr("eof").u32(i).cstr("; ");
         }
         o.cstr("goto ").str(opts->yyfilllabel).u32(i).cstr(";");
-        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        append(stmts, code_stmt_text(alc, o.flush()));
 
-        append_case(ccases, code_case_number(alc, stmts, static_cast<int32_t>(i)));
+        append(ccases, code_case_number(alc, stmts, static_cast<int32_t>(i)));
     }
 
     CodeStmts *stmts = code_stmts(alc);
-    append_stmt(stmts, code_switch(alc, expr, ccases, false));
+    append(stmts, code_switch(alc, expr, ccases, false));
 
     if (opts->bUseStateNext) {
         o.str(opts->yynext).cstr(":");
-        append_stmt(stmts, code_stmt_textraw(alc, o.flush()));
+        append(stmts, code_stmt_textraw(alc, o.flush()));
     }
 
     code->kind = CodeStmt::BLOCK;
@@ -533,7 +533,7 @@ static CodeStmts *gen_cond_goto_binary(Scratchbuf &o, code_alc_t &alc,
         stmt = code_stmt_if_then_else(alc, if_cond, if_then, if_else);
     }
 
-    append_stmt(stmts, stmt);
+    append(stmts, stmt);
     return stmts;
 }
 
@@ -548,17 +548,17 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
         for (size_t i = 0; i < ncond; ++i) {
             const std::string &cond = conds[i];
             o.cstr("0 -> ").str(cond).cstr(" [label=\"state=").str(cond).cstr("\"]");
-            append_stmt(stmts, code_stmt_text(alc, o.flush()));
+            append(stmts, code_stmt_text(alc, o.flush()));
         }
     }
     else {
         if (opts->gFlag) {
             o.cstr("goto *").str(opts->yyctable).cstr("[").str(output_cond_get(opts)).cstr("];");
-            append_stmt(stmts, code_stmt_text(alc, o.flush()));
+            append(stmts, code_stmt_text(alc, o.flush()));
         }
         else if (opts->sFlag) {
             warn_cond_ord &= ncond > 1;
-            append_stmts(stmts, gen_cond_goto_binary(o, alc, conds, opts, 0, ncond - 1));
+            append(stmts, gen_cond_goto_binary(o, alc, conds, opts, 0, ncond - 1));
         }
         else {
             warn_cond_ord = false;
@@ -575,12 +575,12 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
 
                 CodeStmts *body = code_stmts(alc);
                 o.cstr("goto ").str(opts->condPrefix).str(cond).cstr(";");
-                append_stmt(body, code_stmt_text(alc, o.flush()));
+                append(body, code_stmt_text(alc, o.flush()));
 
-                append_case(ccases, code_case_string(alc, body, caseval));
+                append(ccases, code_case_string(alc, body, caseval));
             }
 
-            append_stmt(stmts, code_switch(alc, expr, ccases, false));
+            append(stmts, code_switch(alc, expr, ccases, false));
         }
 
         // see note [condition order]
@@ -603,17 +603,17 @@ static void gen_cond_table(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
     CodeStmts *stmts = code_stmts(alc);
 
     o.cstr("static void *").str(opts->yyctable).cstr("[").u64(ncond).cstr("] = {");
-    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+    append(stmts, code_stmt_text(alc, o.flush()));
 
     CodeStmts *block = code_stmts(alc);
     for (size_t i = 0; i < ncond; ++i) {
         o.cstr("&&").str(opts->condPrefix).str(conds[i]).cstr(",");
-        append_stmt(block, code_stmt_text(alc, o.flush()));
+        append(block, code_stmt_text(alc, o.flush()));
     }
-    append_stmt(stmts, code_block(alc, block, CodeBlock::INDENTED));
+    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
     o.cstr("};");
-    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+    append(stmts, code_stmt_text(alc, o.flush()));
 
     code->kind = CodeStmt::BLOCK;
     code->block.stmts = stmts;

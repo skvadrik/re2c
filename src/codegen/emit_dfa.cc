@@ -37,12 +37,12 @@ static void emit_state(Output &output, const State *s, bool used_label, CodeStmt
 
     if (used_label) {
         text = o.str(opts->labelPrefix).label(s->label).cstr(":").flush();
-        append_stmt(stmts, code_stmt_textraw(alc, text));
+        append(stmts, code_stmt_textraw(alc, text));
     }
     if (opts->dFlag && (s->action.type != Action::INITIAL)) {
         text = o.str(opts->yydebug).cstr("(").label(s->label).cstr(", ")
             .str(output_expr_peek(opts)).cstr(");").flush();
-        append_stmt(stmts, code_stmt_text(alc, text));
+        append(stmts, code_stmt_text(alc, text));
     }
 }
 
@@ -58,17 +58,17 @@ static void emit_eof(Output &output, const Code *code, CodeStmts *stmts)
     // EOF label
     text = o.str(opts->labelPrefix).cstr("eofrule").u64(output.blockid())
         .cstr(":").flush();
-    append_stmt(stmts, code_stmt_textraw(alc, text));
+    append(stmts, code_stmt_textraw(alc, text));
 
     // source line directive
-    append_stmt(stmts, code_line_info_input(alc, code->loc));
+    append(stmts, code_line_info_input(alc, code->loc));
 
     // user-defined semantic action for EOF rule
     text = o.str(code->text).flush();
-    append_stmt(stmts, code_stmt_text(alc, text));
+    append(stmts, code_stmt_text(alc, text));
 
     // output line directive
-    append_stmt(stmts, code_line_info_output(alc));
+    append(stmts, code_line_info_output(alc));
 }
 
 void DFA::count_used_labels(const opt_t *opts)
@@ -115,7 +115,7 @@ void DFA::emit_body(Output &output, CodeStmts *stmts) const
     if (used_labels.count(head->label)) {
         text = o.cstr("goto ").str(opts->labelPrefix).label(initial_label)
             .cstr(";").flush();
-        append_stmt(stmts, code_stmt_text(alc, text));
+        append(stmts, code_stmt_text(alc, text));
     }
 
     for (State * s = head; s; s = s->next) {
@@ -136,7 +136,7 @@ void DFA::emit_dot(Output &output, CodeStmts *program) const
 
     if (opts->cFlag) {
         text = o.str(cond).cstr(" -> ").label(head->label).flush();
-        append_stmt(program, code_stmt_text(alc, text));
+        append(program, code_stmt_text(alc, text));
     }
 
     for (State *s = head; s; s = s->next) {
@@ -145,7 +145,7 @@ void DFA::emit_dot(Output &output, CodeStmts *program) const
             for (uint32_t i = 0; i < accs.size(); ++i) {
                 text = o.label(s->label).cstr(" -> ").label(accs[i].first->label)
                     .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]").flush();
-                append_stmt(program, code_stmt_text(alc, text));
+                append(program, code_stmt_text(alc, text));
             }
         }
         else if (s->action.type == Action::RULE) {
@@ -154,7 +154,7 @@ void DFA::emit_dot(Output &output, CodeStmts *program) const
                 text = o.label(s->label).cstr(" [label=\"")
                     .str(msg.filenames[action->loc.file]).cstr(":")
                     .u32(action->loc.line).cstr("\"]").flush();
-                append_stmt(program, code_stmt_text(alc, text));
+                append(program, code_stmt_text(alc, text));
             }
         }
         s->go.emit(output, *this, s, program);
@@ -199,12 +199,12 @@ void gen_code(Output &output, dfas_t &dfas)
     uint32_t ind = 0;
 
     if (opts->target == TARGET_DOT) {
-        append_stmt(program, code_stmt_text(alc, "digraph re2c {"));
-        append_stmt(program, code_cond_goto(alc));
+        append(program, code_stmt_text(alc, "digraph re2c {"));
+        append(program, code_cond_goto(alc));
         for (i = b; i != e; ++i) {
             (*i)->emit_dot(output, program);
         }
-        append_stmt(program, code_stmt_text(alc, "}"));
+        append(program, code_stmt_text(alc, "}"));
     }
     else if (opts->target == TARGET_SKELETON) {
         for (i = b; i != e; ++i) {
@@ -226,41 +226,41 @@ void gen_code(Output &output, dfas_t &dfas)
             CodeStmts *bms = dfa.bitmaps.gen(output);
 
             if (first && opts->fFlag) {
-                append_stmt(program1, code_stmt_textraw(alc, ""));
+                append(program1, code_stmt_textraw(alc, ""));
             }
 
             if (first && !opts->fFlag) {
-                append_stmt(program1, code_yych_decl(alc));
-                append_stmt(program1, code_yyaccept_def(alc));
+                append(program1, code_yych_decl(alc));
+                append(program1, code_yyaccept_def(alc));
             }
 
             if (!opts->cFlag) {
-                append_stmts(program1, bms);
+                append(program1, bms);
             }
 
             if (first && opts->cFlag && opts->gFlag) {
-                append_stmt(program1, code_cond_table(alc));
+                append(program1, code_cond_table(alc));
             }
 
             if (opts->fFlag && !output.state_goto) {
-                append_stmt(program1, code_state_goto(alc));
+                append(program1, code_state_goto(alc));
                 output.state_goto = true;
             }
 
             // start label
             if (first && opts->cFlag && dfa.used_labels.count(dfa.start_label)) {
                 text = o.str(opts->labelPrefix).label(dfa.start_label).cstr(":").flush();
-                append_stmt(program1, code_stmt_textraw(alc, text));
+                append(program1, code_stmt_textraw(alc, text));
             }
 
             // user-defined start label
             if (first && !opts->startlabel.empty()) {
                 text = o.str(opts->startlabel).cstr(":").flush();
-                append_stmt(program1, code_stmt_textraw(alc, text));
+                append(program1, code_stmt_textraw(alc, text));
             }
 
             if (opts->cFlag && !output.cond_goto) {
-                append_stmt(program1, code_cond_goto(alc));
+                append(program1, code_cond_goto(alc));
                 output.cond_goto = true;
             }
 
@@ -269,10 +269,10 @@ void gen_code(Output &output, dfas_t &dfas)
                     std::string divider = opts->condDivider;
                     strrreplace(divider, opts->condDividerParam, dfa.cond);
                     text = o.str(divider).flush();
-                    append_stmt(program1, code_stmt_textraw(alc, text));
+                    append(program1, code_stmt_textraw(alc, text));
                 }
                 text = o.str(opts->condPrefix).str(dfa.cond).cstr(":").flush();
-                append_stmt(program1, code_stmt_textraw(alc, text));
+                append(program1, code_stmt_textraw(alc, text));
             }
 
             // generate code for DFA
@@ -283,12 +283,12 @@ void gen_code(Output &output, dfas_t &dfas)
             // the code for bitmaps is NULL (requires trivial changes in tests)
             if (opts->cFlag && opts->bFlag && !dfa.bitmaps.empty()) {
                 CodeStmts *block = code_stmts(alc);
-                append_stmts(block, bms);
-                append_stmts(block, body);
-                append_stmt(program1, code_block(alc, block, CodeBlock::WRAPPED));
+                append(block, bms);
+                append(block, body);
+                append(program1, code_block(alc, block, CodeBlock::WRAPPED));
             }
             else {
-                append_stmts(program1, body);
+                append(program1, body);
             }
         }
 
@@ -301,15 +301,15 @@ void gen_code(Output &output, dfas_t &dfas)
             || (opts->bFlag && !opts->cFlag && have_bitmaps)
             || (opts->cFlag && opts->gFlag);
 
-        append_stmt(program, code_stmt_textraw(alc, ""));
-        append_stmt(program, code_line_info_output(alc));
+        append(program, code_stmt_textraw(alc, ""));
+        append(program, code_line_info_output(alc));
 
         if (prolog) {
-            append_stmt(program, code_block(alc, program1, CodeBlock::WRAPPED));
+            append(program, code_block(alc, program1, CodeBlock::WRAPPED));
         }
         else {
             ind = ind == 0 ? 1 : ind;
-            append_stmts(program, program1);
+            append(program, program1);
         }
     }
 

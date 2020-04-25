@@ -62,7 +62,7 @@ CodeStmts *bitmaps_t::gen(Output &output)
     CodeStmts *stmts = code_stmts(alc);
 
     text = o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {").flush();
-    append_stmt(stmts, code_stmt_text(alc, text));
+    append(stmts, code_stmt_text(alc, text));
 
     CodeStmts *block = code_stmts(alc);
     for (uint32_t i = 0, t = 1; b != e; i += ncunit, t += TABLE_WIDTH) {
@@ -77,7 +77,7 @@ CodeStmts *bitmaps_t::gen(Output &output)
         if (nmap > TABLE_WIDTH) {
             text = o.cstr("/* table ").u32(t).cstr(" .. ").u32(std::min(nmap, t + 7))
                 .cstr(": ").u32(i).cstr(" */").flush();
-            append_stmt(block, code_stmt_text(alc, text));
+            append(block, code_stmt_text(alc, text));
         }
 
         for (uint32_t i = 0; i < ncunit / TABLE_WIDTH; ++i) {
@@ -92,13 +92,13 @@ CodeStmts *bitmaps_t::gen(Output &output)
                 o.cstr(", ");
             }
             text = o.flush();
-            append_stmt(block, code_stmt_text(alc, text));
+            append(block, code_stmt_text(alc, text));
         }
     }
-    append_stmt(stmts, code_block(alc, block, CodeBlock::INDENTED));
+    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
     text = o.cstr("};").flush();
-    append_stmt(stmts, code_stmt_text(alc, text));
+    append(stmts, code_stmt_text(alc, text));
 
     return stmts;
 }

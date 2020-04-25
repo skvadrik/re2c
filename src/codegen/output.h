@@ -54,10 +54,13 @@ struct CodeCase;
 
 typedef const char *CodeText;
 
-struct CodeStmts {
-    CodeStmt *head;
-    CodeStmt **ptail;
+template<typename code_t>
+struct CodeList {
+    code_t  *head;
+    code_t **ptail;
 };
+
+typedef CodeList<CodeStmt> CodeStmts;
 
 struct CodeIfTE {
     CodeText   if_cond;
@@ -89,10 +92,7 @@ struct CodeCase {
     CodeCase  *next;
 };
 
-struct CodeCases {
-    CodeCase  *head;
-    CodeCase **ptail;
-};
+typedef CodeList<CodeCase> CodeCases;
 
 struct CodeSwitch {
     CodeText   expr;
@@ -132,10 +132,7 @@ struct CodeArg {
     CodeArg    *next;
 };
 
-struct CodeArgs {
-    CodeArg  *head;
-    CodeArg **ptail;
-};
+typedef CodeList<CodeArg> CodeArgs;
 
 struct CodeFunc {
     CodeArgs   *args;
@@ -192,6 +189,31 @@ struct CodeStmt {
 
     CodeStmt *next;
 };
+
+template<typename T>
+inline void append(CodeList<T> *list, T *elem)
+{
+    DASSERT(elem);
+    *list->ptail = elem;
+    list->ptail  = &elem->next;
+}
+
+template<typename T>
+inline void prepend(CodeList<T> *list, T *elem)
+{
+    DASSERT(elem);
+    elem->next = list->head;
+    list->head = elem;
+}
+
+template<typename T>
+inline void append(CodeList<T> *list1, CodeList<T> *list2)
+{
+    if (list2 && list2->head) {
+        *list1->ptail = list2->head;
+        for (; *(list1->ptail); list1->ptail = &(*list1->ptail)->next);
+    }
+}
 
 inline CodeStmt *code_stmt(code_alc_t &alc, CodeStmt::Kind kind)
 {
@@ -393,13 +415,6 @@ inline CodeCases *code_cases(code_alc_t &alc)
     return c;
 }
 
-inline void append_case(CodeCases *cases, CodeCase *ccase)
-{
-    DASSERT(ccase);
-    *cases->ptail = ccase;
-    cases->ptail  = &ccase->next;
-}
-
 inline CodeArg *code_arg(code_alc_t &alc, const char *arg)
 {
     CodeArg *a = alc.alloct<CodeArg>(1);
@@ -414,12 +429,6 @@ inline CodeArgs *code_args(code_alc_t &alc)
     a->head  = NULL;
     a->ptail = &a->head;
     return a;
-}
-
-inline void append_arg(CodeArgs *args, CodeArg *arg)
-{
-    *args->ptail = arg;
-    args->ptail  = &arg->next;
 }
 
 inline CodeStmt *code_func(code_alc_t &alc, const char *name, CodeArgs *args,
@@ -459,28 +468,6 @@ inline CodeStmts *code_stmts(code_alc_t &alc)
     s->head = NULL;
     s->ptail = &s->head;
     return s;
-}
-
-inline void append_stmt(CodeStmts *stmts, CodeStmt *stmt)
-{
-    DASSERT(stmt);
-    *stmts->ptail = stmt;
-    stmts->ptail = &stmt->next;
-}
-
-inline void prepend_stmt(CodeStmts *stmts, CodeStmt *stmt)
-{
-    DASSERT(stmt);
-    stmt->next = stmts->head;
-    stmts->head = stmt;
-}
-
-inline void append_stmts(CodeStmts *stmts1, CodeStmts *stmts2)
-{
-    if (stmts2 && stmts2->head) {
-        *stmts1->ptail = stmts2->head;
-        for (; *(stmts1->ptail); stmts1->ptail = &(*stmts1->ptail)->next);
-    }
 }
 
 struct CodegenContext {

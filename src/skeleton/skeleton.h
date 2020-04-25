@@ -11,6 +11,7 @@
 #include <valarray>
 #include <vector>
 
+#include "src/codegen/output.h"
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
@@ -21,7 +22,6 @@
 
 namespace re2c {
 
-class Output;
 class path_t;
 struct DFA;
 struct dfa_state_t;
@@ -30,10 +30,6 @@ class Msg;
 class bitmaps_t;
 struct opt_t;
 struct tcmd_t;
-struct Scratchbuf;
-struct CodeStmt;
-struct CodeStmts;
-struct Msg;
 
 typedef local_increment_t<uint8_t> local_inc;
 

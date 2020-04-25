@@ -40,10 +40,10 @@ CodeStmts *Cases::emit(Output &output, const DFA &dfa, const State *from) const
         const Case &c = cases[i];
         CodeStmts *body = code_stmts(alc);
         gen_goto(output, body, from, c.to, dfa, c.tags, c.skip, c.eof);
-        append_case(ccases, code_case_chars(alc, body, c.ranges));
+        append(ccases, code_case_chars(alc, body, c.ranges));
     }
     CodeStmts *stmts = code_stmts(alc);
-    append_stmt(stmts, code_switch(alc, expr, ccases, true));
+    append(stmts, code_switch(alc, expr, ccases, true));
 
     return stmts;
 }
@@ -58,7 +58,7 @@ CodeStmts *Binary::emit(Output &output, const DFA &dfa, const State *from) const
     CodeText if_cond = o.str(gen_if(opts, cond->compare, cond->value)).flush();
     CodeStmts *if_then = thn->emit(output, dfa, from);
     CodeStmts *if_else = els->emit(output, dfa, from);
-    append_stmt(stmts, code_stmt_if_then_else(alc, if_cond, if_then, if_else));
+    append(stmts, code_stmt_if_then_else(alc, if_cond, if_then, if_else));
 
     return stmts;
 }
@@ -77,7 +77,7 @@ CodeStmts *Linear::emit(Output &output, const DFA &dfa, const State *from) const
             CodeText if_cond = o.str(gen_if(opts, cond->compare, cond->value)).flush();
             CodeStmts *if_then = code_stmts(alc);
             gen_goto(output, if_then, from, b.to, dfa, b.tags, b.skip, b.eof);
-            append_stmt(stmts, code_stmt_if_then_else(alc, if_cond, if_then, NULL));
+            append(stmts, code_stmt_if_then_else(alc, if_cond, if_then, NULL));
         }
         else {
             gen_goto(output, stmts, from, b.to, dfa, b.tags, b.skip, b.eof);
@@ -123,15 +123,15 @@ CodeStmts *GoBitmap::emit(Output &output, const DFA &dfa, const State *from) con
     if (hgo != NULL) {
         CodeText if_cond = o.str(opts->yych).cstr(" & ~0xFF").flush();
         CodeStmts *if_then = hgo->emit(output, dfa, from);
-        append_stmt(stmts, code_stmt_if_then_elif(alc, if_cond, if_then, elif_cond,
+        append(stmts, code_stmt_if_then_elif(alc, if_cond, if_then, elif_cond,
             if_else));
     }
     else {
-        append_stmt(stmts, code_stmt_if_then_else(alc, elif_cond, if_else, NULL, false));
+        append(stmts, code_stmt_if_then_else(alc, elif_cond, if_else, NULL, false));
     }
 
     if (lgo != NULL) {
-        append_stmts(stmts, lgo->emit(output, dfa, from));
+        append(stmts, lgo->emit(output, dfa, from));
     }
 
     return stmts;
@@ -160,7 +160,7 @@ CodeStmts *CpgotoTable::emit(Output &output) const
     CodeStmts *stmts = code_stmts(alc);
 
     text = o.cstr("static void *").str(opts->yytarget).cstr("[256] = {").flush();
-    append_stmt(stmts, code_stmt_text(alc, text));
+    append(stmts, code_stmt_text(alc, text));
 
     CodeStmts *block = code_stmts(alc);
     for (uint32_t i = 0; i < TABLE_SIZE / TABLE_WIDTH; ++i) {
@@ -177,11 +177,11 @@ CodeStmts *CpgotoTable::emit(Output &output) const
             }
         }
         text = o.flush();
-        append_stmt(block, code_stmt_text(alc, text));
+        append(block, code_stmt_text(alc, text));
     }
-    append_stmt(stmts, code_block(alc, block, CodeBlock::INDENTED));
+    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
-    append_stmt(stmts, code_stmt_text(alc, "};"));
+    append(stmts, code_stmt_text(alc, "};"));
 
     return stmts;
 }
@@ -198,16 +198,16 @@ CodeStmts *Cpgoto::emit(Output &output, const DFA &dfa, const State *from) const
     CodeStmts *if_else = table->emit(output);
     text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yych).cstr("];")
         .flush();
-    append_stmt(if_else, code_stmt_text(alc, text));
+    append(if_else, code_stmt_text(alc, text));
 
     if (hgo != NULL) {
         CodeText if_cond = o.str(opts->yych).cstr(" & ~0xFF").flush();
         CodeStmts *if_then = hgo->emit(output, dfa, from);
-        append_stmt(stmts, code_stmt_if_then_else(alc, if_cond, if_then, if_else,
+        append(stmts, code_stmt_if_then_else(alc, if_cond, if_then, if_else,
             false));
     }
     else {
-        append_stmt(stmts, code_block(alc, if_else, CodeBlock::WRAPPED));
+        append(stmts, code_block(alc, if_else, CodeBlock::WRAPPED));
     }
 
     return stmts;
@@ -225,7 +225,7 @@ void Dot::emit(Output &output, const DFA &dfa, const State *from, CodeStmts *stm
     if (n == 1) {
         text = o.label(from->label).cstr(" -> ").label(cases->cases[0].to->label)
             .flush();
-        append_stmt(stmts, code_stmt_text(alc, text));
+        append(stmts, code_stmt_text(alc, text));
     }
     else {
         for (uint32_t i = 0; i < n; ++i) {
@@ -245,7 +245,7 @@ void Dot::emit(Output &output, const DFA &dfa, const State *from, CodeStmts *stm
                 o.cstr(">");
             }
             text = o.cstr("\"]").flush();
-            append_stmt(stmts, code_stmt_text(alc, text));
+            append(stmts, code_stmt_text(alc, text));
         }
     }
 }
@@ -261,23 +261,23 @@ void Go::emit(Output &output, const DFA &dfa, const State *from, CodeStmts *stmt
     }
 
     if (skip && !opts->lookahead) {
-        append_stmt(stmts, code_stmt_skip(alc));
+        append(stmts, code_stmt_skip(alc));
     }
 
     gen_settags(output, stmts, dfa, tags, opts->stadfa /* delayed */);
 
     if (skip && opts->lookahead) {
-        append_stmt(stmts, code_stmt_skip(alc));
+        append(stmts, code_stmt_skip(alc));
     }
 
     if (type == SWITCH_IF) {
-        append_stmts(stmts, info.switchif->emit(output, dfa, from));
+        append(stmts, info.switchif->emit(output, dfa, from));
     }
     else if (type == BITMAP) {
-        append_stmts(stmts, info.bitmap->emit(output, dfa, from));
+        append(stmts, info.bitmap->emit(output, dfa, from));
     }
     else if (type == CPGOTO) {
-        append_stmts(stmts, info.cpgoto->emit(output, dfa, from));
+        append(stmts, info.cpgoto->emit(output, dfa, from));
     }
 }
 
