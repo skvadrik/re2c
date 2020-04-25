@@ -51,21 +51,20 @@ CodeStmts *bitmaps_t::gen(Output &output)
 {
     if (empty() || !used) return NULL;
 
+    static const uint32_t TABLE_WIDTH = 8;
+    const uint32_t nmap = static_cast<uint32_t>(maps.size());
+    riter_t b = maps.rbegin(), e = maps.rend();
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    CodeText text;
 
     CodeStmts *stmts = code_stmts(alc);
 
-    const uint32_t nmap = static_cast<uint32_t>(maps.size());
-    riter_t b = maps.rbegin(), e = maps.rend();
-
-    o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {");
-    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+    text = o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {").flush();
+    append_stmt(stmts, code_stmt_text(alc, text));
 
     CodeStmts *block = code_stmts(alc);
-    static const uint32_t TABLE_WIDTH = 8;
-
     for (uint32_t i = 0, t = 1; b != e; i += ncunit, t += TABLE_WIDTH) {
         memset(buffer, 0, ncunit * sizeof(uint32_t));
 
@@ -76,9 +75,9 @@ CodeStmts *bitmaps_t::gen(Output &output)
         }
 
         if (nmap > TABLE_WIDTH) {
-            o.cstr("/* table ").u32(t).cstr(" .. ").u32(std::min(nmap, t + 7))
-                .cstr(": ").u32(i).cstr(" */");
-            append_stmt(block, code_stmt_text(alc, o.flush()));
+            text = o.cstr("/* table ").u32(t).cstr(" .. ").u32(std::min(nmap, t + 7))
+                .cstr(": ").u32(i).cstr(" */").flush();
+            append_stmt(block, code_stmt_text(alc, text));
         }
 
         for (uint32_t i = 0; i < ncunit / TABLE_WIDTH; ++i) {
@@ -92,14 +91,14 @@ CodeStmts *bitmaps_t::gen(Output &output)
                 }
                 o.cstr(", ");
             }
-            append_stmt(block, code_stmt_text(alc, o.flush()));
+            text = o.flush();
+            append_stmt(block, code_stmt_text(alc, text));
         }
     }
-
     append_stmt(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
-    o.cstr("};");
-    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+    text = o.cstr("};").flush();
+    append_stmt(stmts, code_stmt_text(alc, text));
 
     return stmts;
 }

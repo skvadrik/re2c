@@ -39,6 +39,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeStmts *stmt
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    CodeText text;
 
     switch (s->action.type) {
     case Action::MATCH:
@@ -57,20 +58,20 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeStmts *stmt
         const bool ul1 = dfa.used_labels.count(s->label);
 
         if (ul1 && dfa.accepts.size() > 1 && backup) {
-            o.str(opts->yyaccept).cstr(" = ").u64(init.save).cstr(";");
-            append_stmt(stmts, code_stmt_text(alc, o.flush()));
+            text = o.str(opts->yyaccept).cstr(" = ").u64(init.save).cstr(";").flush();
+            append_stmt(stmts, code_stmt_text(alc, text));
         }
         if (ul1 && !opts->eager_skip) {
             append_stmt(stmts, code_stmt_skip(alc));
         }
         if (dfa.used_labels.count(init.label)) {
-            o.str(opts->labelPrefix).label(init.label).cstr(":");
-            append_stmt(stmts, code_stmt_textraw(alc, o.flush()));
+            text = o.str(opts->labelPrefix).label(init.label).cstr(":").flush();
+            append_stmt(stmts, code_stmt_textraw(alc, text));
         }
         if (opts->dFlag) {
-            o.str(opts->yydebug).cstr("(").label(init.label).cstr(", *")
-                .str(opts->yycursor).cstr(");");
-            append_stmt(stmts, code_stmt_text(alc, o.flush()));
+            text = o.str(opts->yydebug).cstr("(").label(init.label).cstr(", *")
+                .str(opts->yycursor).cstr(");").flush();
+            append_stmt(stmts, code_stmt_text(alc, text));
         }
         append_stmts(stmts, need(output, s->fill));
         if (backup) {
@@ -84,8 +85,9 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeStmts *stmt
     }
     case Action::SAVE:
         if (dfa.accepts.size() > 1) {
-            o.str(opts->yyaccept).cstr(" = ").u64(s->action.info.save).cstr(";");
-            append_stmt(stmts, code_stmt_text(alc, o.flush()));
+            text = o.str(opts->yyaccept).cstr(" = ").u64(s->action.info.save)
+                .cstr(";").flush();
+            append_stmt(stmts, code_stmt_text(alc, text));
         }
         if (!opts->eager_skip) {
             append_stmt(stmts, code_stmt_skip(alc));
@@ -117,14 +119,11 @@ static CodeStmts *emit_accept_binary(Output &output, const DFA &dfa, const accep
     if (l < r) {
         const size_t m = (l + r) >> 1;
 
-        o.str(opts->yyaccept).cstr(r == l+1 ? " == " : " <= ").u64(m);
-        CodeText if_cond = o.flush();
-
+        CodeText if_cond = o.str(opts->yyaccept)
+            .cstr(r == l + 1 ? " == " : " <= ").u64(m).flush();
         CodeStmts *if_then = emit_accept_binary(output, dfa, acc, l, m);
         CodeStmts *if_else = emit_accept_binary(output, dfa, acc, m + 1, r);
-
-        CodeStmt *if_then_else = code_stmt_if_then_else(alc, if_cond, if_then, if_else);
-        append_stmt(stmts, if_then_else);
+        append_stmt(stmts, code_stmt_if_then_else(alc, if_cond, if_then, if_else));
     }
     else {
         gen_goto(output, stmts, NULL, acc[l].first, dfa, acc[l].second, false, false);
@@ -138,11 +137,12 @@ void emit_accept(Output &output, CodeStmts *stmts, const DFA &dfa, const accept_
     const size_t nacc = acc.size();
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    CodeText text;
 
     if (nacc == 0) return;
 
-    o.str(output_restore(opts));
-    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+    text = o.str(output_restore(opts)).flush();
+    append_stmt(stmts, code_stmt_text(alc, text));
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
@@ -162,21 +162,23 @@ void emit_accept(Output &output, CodeStmts *stmts, const DFA &dfa, const accept_
     if (opts->gFlag && nacc >= opts->cGotoThreshold && !have_tags) {
         CodeStmts *block = code_stmts(alc);
 
-        o.cstr("static void *").str(opts->yytarget).cstr("[").u64(nacc).cstr("] = {");
-        append_stmt(block, code_stmt_text(alc, o.flush()));
+        text = o.cstr("static void *").str(opts->yytarget).cstr("[")
+            .u64(nacc).cstr("] = {").flush();
+        append_stmt(block, code_stmt_text(alc, text));
 
         CodeStmts *table = code_stmts(alc);
         for (uint32_t i = 0; i < nacc; ++i) {
-            o.cstr("&&").str(opts->labelPrefix).label(acc[i].first->label).cstr(",");
-            append_stmt(table, code_stmt_text(alc, o.flush()));
+            text = o.cstr("&&").str(opts->labelPrefix)
+                .label(acc[i].first->label).cstr(",").flush();
+            append_stmt(table, code_stmt_text(alc, text));
         }
         append_stmt(block, code_block(alc, table, CodeBlock::INDENTED));
 
-        o.cstr("};");
-        append_stmt(block, code_stmt_text(alc, o.flush()));
+        append_stmt(block, code_stmt_text(alc, "};"));
 
-        o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yyaccept).cstr("];");
-        append_stmt(block, code_stmt_text(alc, o.flush()));
+        text = o.cstr("goto *").str(opts->yytarget).cstr("[")
+            .str(opts->yyaccept).cstr("];").flush();
+        append_stmt(block, code_stmt_text(alc, text));
 
         append_stmt(stmts, code_block(alc, block, CodeBlock::WRAPPED));
         return;
@@ -189,15 +191,12 @@ void emit_accept(Output &output, CodeStmts *stmts, const DFA &dfa, const accept_
     }
 
     // switch
-    o.str(opts->yyaccept);
-    CodeText switch_expr = o.flush();
-
+    CodeText switch_expr = o.str(opts->yyaccept).flush();
     CodeCases *switch_cases = code_cases(alc);
     CodeStmts *case_stmts = code_stmts(alc);
-    gen_goto(output, case_stmts, NULL, acc[nacc - 1].first, dfa, acc[nacc - 1].second,
-        false, false);
+    gen_goto(output, case_stmts, NULL, acc[nacc - 1].first, dfa,
+        acc[nacc - 1].second, false, false);
     append_case(switch_cases, code_case_number(alc, case_stmts, 0));
-
     for (uint32_t i = 0; i < nacc - 1; ++i) {
         CodeStmts *case_body = code_stmts(alc);
         gen_goto(output, case_body, NULL, acc[i].first, dfa, acc[i].second,
@@ -205,7 +204,6 @@ void emit_accept(Output &output, CodeStmts *stmts, const DFA &dfa, const accept_
         append_case(switch_cases,
             code_case_number(alc, case_body, static_cast<int32_t>(i)));
     }
-
     CodeStmt *cswitch = code_switch(alc, switch_expr, switch_cases, true);
     append_stmt(stmts, cswitch);
 }
@@ -216,10 +214,10 @@ void emit_rule(Output &output, CodeStmts *stmts, const DFA &dfa, size_t rule_idx
     const Rule &rule = dfa.rules[rule_idx];
     const Code *code = rule.code;
     const std::string &cond = code->cond;
-
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     std::string s;
+    CodeText text;
 
     gen_fintags(output, stmts, dfa, rule);
 
@@ -228,32 +226,30 @@ void emit_rule(Output &output, CodeStmts *stmts, const DFA &dfa, size_t rule_idx
     }
     else {
         if (!cond.empty() && dfa.cond != cond) {
-            strrreplace(s = opts->cond_set, opts->cond_set_arg,
-                opts->condEnumPrefix + cond);
+            s = opts->cond_set;
+            strrreplace(s, opts->cond_set_arg, opts->condEnumPrefix + cond);
             o.str(s);
             if (!opts->cond_set_naked) {
                 o.cstr("(").str(opts->condEnumPrefix).str(cond).cstr(");");
             }
-            append_stmt(stmts, code_stmt_text(alc, o.flush()));
+            text = o.flush();
+            append_stmt(stmts, code_stmt_text(alc, text));
         }
         if (!code->autogen) {
             if (!dfa.setup.empty()) {
-                o.str(dfa.setup);
-                append_stmt(stmts, code_stmt_text(alc, o.flush()));
+                text = o.str(dfa.setup).flush();
+                append_stmt(stmts, code_stmt_text(alc, text));
             }
-
             append_stmt(stmts, code_line_info_input(alc, code->loc));
-
-            o.str(code->text);
-            append_stmt(stmts, code_stmt_text(alc, o.flush()));
-
+            text = o.str(code->text).flush();
+            append_stmt(stmts, code_stmt_text(alc, text));
             append_stmt(stmts, code_line_info_output(alc));
         }
         else if (!cond.empty()) {
-            strrreplace(s = opts->condGoto, opts->condGotoParam,
-                opts->condPrefix + cond);
-            o.str(s);
-            append_stmt(stmts, code_stmt_text(alc, o.flush()));
+            s = opts->condGoto;
+            strrreplace(s, opts->condGotoParam, opts->condPrefix + cond);
+            text = o.str(s).flush();
+            append_stmt(stmts, code_stmt_text(alc, text));
         }
     }
 }
@@ -267,6 +263,7 @@ CodeStmts *need(Output &output, size_t some)
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     std::string s;
+    CodeText text;
 
     CodeStmts *stmts = code_stmts(alc);
 
@@ -276,7 +273,8 @@ CodeStmts *need(Output &output, size_t some)
         if (!opts->state_set_naked) {
             o.cstr("(").u32(output.fill_index).cstr(");");
         }
-        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        text = o.flush();
+        append_stmt(stmts, code_stmt_text(alc, text));
     }
 
     if (opts->fill_use) {
@@ -288,15 +286,13 @@ CodeStmts *need(Output &output, size_t some)
             }
             o.cstr(";");
         }
-        CodeStmt *yyfill = code_stmt_text(alc, o.flush());
+        text = o.flush();
+        CodeStmt *yyfill = code_stmt_text(alc, text);
 
         if (opts->fill_check) {
-            o.str(output_expr_lessthan(some, opts));
-            CodeText if_cond = o.flush();
-
+            CodeText if_cond = o.str(output_expr_lessthan(some, opts)).flush();
             CodeStmts *if_then = code_stmts(alc);
             append_stmt(if_then, yyfill);
-
             append_stmt(stmts, code_stmt_if_then_else(alc, if_cond, if_then, NULL));
         }
         else {
@@ -305,8 +301,8 @@ CodeStmts *need(Output &output, size_t some)
     }
 
     if (opts->fFlag) {
-        o.str(opts->yyfilllabel).u32(output.fill_index).cstr(":");
-        append_stmt(stmts, code_stmt_textraw(alc, o.flush()));
+        text = o.str(opts->yyfilllabel).u32(output.fill_index).cstr(":").flush();
+        append_stmt(stmts, code_stmt_textraw(alc, text));
         ++output.fill_index;
     }
 
@@ -318,6 +314,7 @@ CodeStmts *gen_rescan_label(Output &output, const State *s)
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    CodeText text;
 
     CodeStmts *stmts = code_stmts(alc);
 
@@ -325,14 +322,13 @@ CodeStmts *gen_rescan_label(Output &output, const State *s)
         // no rescan label
     }
     else if (opts->fFlag) {
-        o.str(opts->yyfilllabel).u32(output.fill_index).cstr(":");
-        append_stmt(stmts, code_stmt_textraw(alc, o.flush()));
-
+        text = o.str(opts->yyfilllabel).u32(output.fill_index).cstr(":").flush();
+        append_stmt(stmts, code_stmt_textraw(alc, text));
         ++output.fill_index;
     }
     else {
-        o.str(opts->labelPrefix).label(s->label).cstr("_:");
-        append_stmt(stmts, code_stmt_textraw(alc, o.flush()));
+        text = o.str(opts->labelPrefix).label(s->label).cstr("_:").flush();
+        append_stmt(stmts, code_stmt_textraw(alc, text));
     }
 
     return stmts;
@@ -344,26 +340,32 @@ void gen_goto(Output &output, CodeStmts *stmts, const State *from, const State *
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    CodeText text;
 
     if (eof) {
         append_stmt(stmts, gen_on_eof(output, dfa, from, to));
     }
 
-    if (skip && !opts->lookahead) {
+    CodeStmt *code_skip = NULL;
+    if (skip) {
         output_skip(o.stream(), 0, opts);
-        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        text = o.flush();
+        code_skip = code_stmt_text(alc, text);
+    }
+
+    if (skip && !opts->lookahead) {
+        append_stmt(stmts, code_skip);
     }
 
     gen_settags(output, stmts, dfa, tcid, false /* delayed */);
 
     if (skip && opts->lookahead) {
-        output_skip(o.stream(), 0, opts);
-        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        append_stmt(stmts, code_skip);
     }
 
     if (to) {
-        o.cstr("goto ").str(opts->labelPrefix).label(to->label).cstr(";");
-        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        text = o.cstr("goto ").str(opts->labelPrefix).label(to->label).cstr(";").flush();
+        append_stmt(stmts, code_stmt_text(alc, text));
     }
 }
 
@@ -377,10 +379,10 @@ CodeStmt *gen_on_eof(Output &output, const DFA &dfa, const State *from, const St
     const tcid_t falltags = final ? from->rule_tags : from->fall_tags;
     const State *retry = from->action.type == Action::MOVE ? from->prev : from;
     uint32_t fillidx = output.fill_index;
+    CodeText text;
 
     // check for the end of input
-    o.str(output_expr_lessthan(1, opts));
-    CodeText if_refill = o.flush();
+    CodeText if_refill = o.str(output_expr_lessthan(1, opts)).flush();
 
     CodeStmts *refill = code_stmts(alc);
 
@@ -395,27 +397,30 @@ CodeStmt *gen_on_eof(Output &output, const DFA &dfa, const State *from, const St
         if (!opts->state_set_naked) {
             o.cstr("(").u32(fillidx).cstr(");");
         }
-        append_stmt(refill, code_stmt_text(alc, o.flush()));
+        text = o.flush();
+        append_stmt(refill, code_stmt_text(alc, text));
 
         // YYFILL invocation
-        o.str(opts->fill).cstr(opts->fill_naked ? "" : opts->fill_arg_use ? "();" : ";");
-        append_stmt(refill, code_stmt_text(alc, o.flush()));
+        text = o.str(opts->fill)
+            .cstr(opts->fill_naked ? "" : opts->fill_arg_use ? "();" : ";").flush();
+        append_stmt(refill, code_stmt_text(alc, text));
 
         // yyeof label
-        o.str(opts->labelPrefix).cstr("eof").u32(fillidx).cstr(":;");
-        append_stmt(refill, code_stmt_text(alc, o.flush()));
+        text = o.str(opts->labelPrefix).cstr("eof").u32(fillidx).cstr(":;").flush();
+        append_stmt(refill, code_stmt_text(alc, text));
 
     }
     else if (opts->fill_use) {
         // YYFILL invocation
-        o.str(opts->fill).cstr(opts->fill_naked ? "" : opts->fill_arg_use ? " () == 0"
-            : " == 0");
-        CodeText if_yyfill = o.flush();
+        CodeText if_yyfill = o.str(opts->fill)
+            .cstr(opts->fill_naked ? "" : opts->fill_arg_use ? " () == 0": " == 0")
+            .flush();
 
         // go to retry label (on YYFILL success)
         CodeStmts *rescan = code_stmts(alc);
-        o.cstr("goto ").str(opts->labelPrefix).label(retry->label).cstr("_;");
-        append_stmt(rescan, code_stmt_text(alc, o.flush()));
+        text = o.cstr("goto ").str(opts->labelPrefix).label(retry->label).cstr("_;")
+            .flush();
+        append_stmt(rescan, code_stmt_text(alc, text));
 
         append_stmt(refill, code_stmt_if_then_else(alc, if_yyfill, rescan, NULL));
     }
@@ -430,16 +435,17 @@ CodeStmt *gen_on_eof(Output &output, const DFA &dfa, const State *from, const St
         else {
             o.cstr("eofrule").u64(output.blockid());
         }
-        o.cstr(";");
-        append_stmt(refill, code_stmt_text(alc, o.flush()));
+        text = o.cstr(";").flush();
+        append_stmt(refill, code_stmt_text(alc, text));
     }
     else if (fallback != to) {
         // tag actions on the fallback transition
         gen_settags(output, refill, dfa, falltags, false /* delayed */);
 
         // go to fallback state
-        o.cstr("goto ").str(opts->labelPrefix).label(fallback->label).cstr(";");
-        append_stmt(refill, code_stmt_text(alc, o.flush()));
+        text = o.cstr("goto ").str(opts->labelPrefix).label(fallback->label)
+            .cstr(";").flush();
+        append_stmt(refill, code_stmt_text(alc, text));
     }
 
     return code_stmt_if_then_else(alc, if_refill, refill, NULL);
@@ -455,6 +461,7 @@ void gen_settags(Output &output, CodeStmts *tag_actions, const DFA &dfa, tcid_t 
     const std::string &prefix = opts->tags_prefix;
     const std::string &expression = opts->tags_expression;
     const tcmd_t *cmd = dfa.tcpool[tcid];
+    CodeText text;
 
     // single tag, backwards compatibility, use context marker
     if (cmd && dfa.oldstyle_ctxmarker) {
@@ -465,7 +472,8 @@ void gen_settags(Output &output, CodeStmts *tag_actions, const DFA &dfa, tcid_t 
         else {
             o.str(opts->yyctxmarker).cstr(" = ").str(opts->yycursor).cstr(";");
         }
-        append_stmt(tag_actions, code_stmt_text(alc, o.flush()));
+        text = o.flush();
+        append_stmt(tag_actions, code_stmt_text(alc, text));
         return;
     }
 
@@ -476,22 +484,22 @@ void gen_settags(Output &output, CodeStmts *tag_actions, const DFA &dfa, tcid_t 
 
         if (tcmd_t::iscopy(p)) {
             // copy command
-            o.str(le).cstr(" = ").str(re).cstr(";");
-            append_stmt(tag_actions, code_stmt_text(alc, o.flush()));
+            text = o.str(le).cstr(" = ").str(re).cstr(";").flush();
+            append_stmt(tag_actions, code_stmt_text(alc, text));
         }
         else if (tcmd_t::isadd(p)) {
             // save command with history
             if (l != r) {
-                o.str(le).cstr(" = ").str(re).cstr(";");
-                append_stmt(tag_actions, code_stmt_text(alc, o.flush()));
+                text = o.str(le).cstr(" = ").str(re).cstr(";").flush();
+                append_stmt(tag_actions, code_stmt_text(alc, text));
             }
             // history is reversed, so use a statement sublist and prepend
             CodeStmts *actions = code_stmts(alc);
             for (; *h != TAGVER_ZERO; ++h) {
                 const std::string &action = *h == TAGVER_BOTTOM ? opts->yymtagn
                     : delayed ? opts->yymtagpd : opts->yymtagp;
-                o.str(action).cstr(" (").str(le).cstr(");");
-                prepend_stmt(actions, code_stmt_text(alc, o.flush()));
+                text = o.str(action).cstr(" (").str(le).cstr(");").flush();
+                prepend_stmt(actions, code_stmt_text(alc, text));
             }
             append_stmts(tag_actions, actions);
         }
@@ -499,8 +507,8 @@ void gen_settags(Output &output, CodeStmts *tag_actions, const DFA &dfa, tcid_t 
             // save command without history; generic API
             const std::string &action = *h == TAGVER_BOTTOM ? opts->yystagn
                 : delayed ? opts->yystagpd : opts->yystagp;
-            o.str(action).cstr(" (").str(le).cstr(");");
-            append_stmt(tag_actions, code_stmt_text(alc, o.flush()));
+            text = o.str(action).cstr(" (").str(le).cstr(");").flush();
+            append_stmt(tag_actions, code_stmt_text(alc, text));
         }
         else {
             // save command without history; default API
@@ -510,12 +518,13 @@ void gen_settags(Output &output, CodeStmts *tag_actions, const DFA &dfa, tcid_t 
                 x.str(vartag_expr(q->lhs, prefix, expression)).cstr(" = ");
             }
             if (!o.empty()) {
-                o.cstr("NULL;");
-                append_stmt(tag_actions, code_stmt_text(alc, o.flush()));
+                text = o.cstr("NULL;").flush();
+                append_stmt(tag_actions, code_stmt_text(alc, text));
             }
             if (!o2.empty()) {
-                o2.str(opts->yycursor).cstr(delayed ? " - 1" : "").cstr(";");
-                append_stmt(tag_actions, code_stmt_text(alc, o2.flush()));
+                text = o2.str(opts->yycursor).cstr(delayed ? " - 1" : "")
+                    .cstr(";").flush();
+                append_stmt(tag_actions, code_stmt_text(alc, text));
             }
         }
     }
@@ -527,16 +536,16 @@ void gen_fintags(Output &output, CodeStmts *stmts, const DFA &dfa, const Rule &r
     const bool generic = opts->input_api == INPUT_CUSTOM;
     const std::string &prefix = opts->tags_prefix;
     const std::string &expression = opts->tags_expression;
-    std::string expr;
     const std::vector<Tag> &tags = dfa.tags;
     const tagver_t *fins = dfa.finvers;
-
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    CodeText text;
+    std::string expr;
 
     if (rule.ncap > 0) {
-        o.cstr("yynmatch = ").u64(rule.ncap).cstr(";");
-        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        text = o.cstr("yynmatch = ").u64(rule.ncap).cstr(";").flush();
+        append_stmt(stmts, code_stmt_text(alc, text));
     }
 
     // variable tags
@@ -566,8 +575,8 @@ void gen_fintags(Output &output, CodeStmts *stmts, const DFA &dfa, const Rule &r
                 o.str(opts->yycursor).cstr(" = ").str(expr);
             }
         }
-        o.cstr(";");
-        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        text = o.cstr(";").flush();
+        append_stmt(stmts, code_stmt_text(alc, text));
     }
 
     // fixed tags
@@ -604,8 +613,8 @@ void gen_fintags(Output &output, CodeStmts *stmts, const DFA &dfa, const Rule &r
                 o.str(opts->yycursor).cstr(" -= ").u64(dist);
             }
         }
-        o.cstr(";");
-        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        text = o.cstr(";").flush();
+        append_stmt(stmts, code_stmt_text(alc, text));
     }
 }
 

@@ -34,9 +34,7 @@ CodeStmts *Cases::emit(Output &output, const DFA &dfa, const State *from) const
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
-    o.str(opts->yych);
-    CodeText expr = o.flush();
-
+    CodeText expr = o.str(opts->yych).flush();
     CodeCases *ccases = code_cases(alc);
     for (uint32_t i = 0; i < cases_size; ++i) {
         const Case &c = cases[i];
@@ -44,7 +42,6 @@ CodeStmts *Cases::emit(Output &output, const DFA &dfa, const State *from) const
         gen_goto(output, body, from, c.to, dfa, c.tags, c.skip, c.eof);
         append_case(ccases, code_case_chars(alc, body, c.ranges));
     }
-
     CodeStmts *stmts = code_stmts(alc);
     append_stmt(stmts, code_switch(alc, expr, ccases, true));
 
@@ -58,13 +55,9 @@ CodeStmts *Binary::emit(Output &output, const DFA &dfa, const State *from) const
     Scratchbuf &o = output.scratchbuf;
 
     CodeStmts *stmts = code_stmts(alc);
-
-    o.str(gen_if(opts, cond->compare, cond->value));
-    CodeText if_cond = o.flush();
-
+    CodeText if_cond = o.str(gen_if(opts, cond->compare, cond->value)).flush();
     CodeStmts *if_then = thn->emit(output, dfa, from);
     CodeStmts *if_else = els->emit(output, dfa, from);
-
     append_stmt(stmts, code_stmt_if_then_else(alc, if_cond, if_then, if_else));
 
     return stmts;
@@ -81,12 +74,9 @@ CodeStmts *Linear::emit(Output &output, const DFA &dfa, const State *from) const
         const Branch &b = branches[i];
         const Cond *cond = b.cond;
         if (cond) {
-            o.str(gen_if(opts, cond->compare, cond->value));
-            CodeText if_cond = o.flush();
-
+            CodeText if_cond = o.str(gen_if(opts, cond->compare, cond->value)).flush();
             CodeStmts *if_then = code_stmts(alc);
             gen_goto(output, if_then, from, b.to, dfa, b.tags, b.skip, b.eof);
-
             append_stmt(stmts, code_stmt_if_then_else(alc, if_cond, if_then, NULL));
         }
         else {
@@ -131,13 +121,10 @@ CodeStmts *GoBitmap::emit(Output &output, const DFA &dfa, const State *from) con
     gen_goto(output, if_else, from, bitmap_state, dfa, TCID0, false, false);
 
     if (hgo != NULL) {
-        o.str(opts->yych).cstr(" & ~0xFF");
-        CodeText if_cond = o.flush();
-
+        CodeText if_cond = o.str(opts->yych).cstr(" & ~0xFF").flush();
         CodeStmts *if_then = hgo->emit(output, dfa, from);
-
-        append_stmt(stmts,
-            code_stmt_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
+        append_stmt(stmts, code_stmt_if_then_elif(alc, if_cond, if_then, elif_cond,
+            if_else));
     }
     else {
         append_stmt(stmts, code_stmt_if_then_else(alc, elif_cond, if_else, NULL, false));
@@ -163,19 +150,19 @@ label_t CpgotoTable::max_label () const
 
 CodeStmts *CpgotoTable::emit(Output &output) const
 {
+    const uint32_t max_digits = max_label ().width ();
+    static const size_t TABLE_WIDTH = 8;
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    CodeText text;
 
     CodeStmts *stmts = code_stmts(alc);
 
-    o.cstr("static void *").str(opts->yytarget).cstr("[256] = {");
-    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+    text = o.cstr("static void *").str(opts->yytarget).cstr("[256] = {").flush();
+    append_stmt(stmts, code_stmt_text(alc, text));
 
     CodeStmts *block = code_stmts(alc);
-    const uint32_t max_digits = max_label ().width ();
-    static const size_t TABLE_WIDTH = 8;
-
     for (uint32_t i = 0; i < TABLE_SIZE / TABLE_WIDTH; ++i) {
         for (uint32_t j = 0; j < TABLE_WIDTH; ++j) {
             const label_t &l = table[i * TABLE_WIDTH + j]->label;
@@ -189,13 +176,12 @@ CodeStmts *CpgotoTable::emit(Output &output) const
                 o.cstr(",");
             }
         }
-        append_stmt(block, code_stmt_text(alc, o.flush()));
+        text = o.flush();
+        append_stmt(block, code_stmt_text(alc, text));
     }
-
     append_stmt(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
-    o.cstr("};");
-    append_stmt(stmts, code_stmt_text(alc, o.flush()));
+    append_stmt(stmts, code_stmt_text(alc, "};"));
 
     return stmts;
 }
@@ -205,21 +191,20 @@ CodeStmts *Cpgoto::emit(Output &output, const DFA &dfa, const State *from) const
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    CodeText text;
 
     CodeStmts *stmts = code_stmts(alc);
 
     CodeStmts *if_else = table->emit(output);
-    o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yych).cstr("];");
-    append_stmt(if_else, code_stmt_text(alc, o.flush()));
+    text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yych).cstr("];")
+        .flush();
+    append_stmt(if_else, code_stmt_text(alc, text));
 
     if (hgo != NULL) {
-        o.str(opts->yych).cstr(" & ~0xFF");
-        CodeText if_cond = o.flush();
-
+        CodeText if_cond = o.str(opts->yych).cstr(" & ~0xFF").flush();
         CodeStmts *if_then = hgo->emit(output, dfa, from);
-
-        append_stmt(stmts,
-            code_stmt_if_then_else(alc, if_cond, if_then, if_else, false));
+        append_stmt(stmts, code_stmt_if_then_else(alc, if_cond, if_then, if_else,
+            false));
     }
     else {
         append_stmt(stmts, code_block(alc, if_else, CodeBlock::WRAPPED));
@@ -235,10 +220,12 @@ void Dot::emit(Output &output, const DFA &dfa, const State *from, CodeStmts *stm
     Scratchbuf &o = output.scratchbuf;
     const std::string &prefix = opts->tags_prefix;
     const uint32_t n = cases->cases_size;
+    CodeText text;
 
     if (n == 1) {
-        o.label(from->label).cstr(" -> ").label(cases->cases[0].to->label);
-        append_stmt(stmts, code_stmt_text(alc, o.flush()));
+        text = o.label(from->label).cstr(" -> ").label(cases->cases[0].to->label)
+            .flush();
+        append_stmt(stmts, code_stmt_text(alc, text));
     }
     else {
         for (uint32_t i = 0; i < n; ++i) {
@@ -257,8 +244,8 @@ void Dot::emit(Output &output, const DFA &dfa, const State *from, CodeStmts *stm
                 }
                 o.cstr(">");
             }
-            o.cstr("\"]");
-            append_stmt(stmts, code_stmt_text(alc, o.flush()));
+            text = o.cstr("\"]").flush();
+            append_stmt(stmts, code_stmt_text(alc, text));
         }
     }
 }
