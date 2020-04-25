@@ -167,7 +167,7 @@ void prune(ctx_t &ctx)
         // mark dropped rules as shadowed
         if (ctx.dc_msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
             std::valarray<Rule> &rules = ctx.nfa.rules;
-            const uint32_t l = rules[f->state->rule].code->loc.line;
+            const uint32_t l = rules[f->state->rule].semact->loc.line;
             for (i = b; i != e; ++i) {
                 if (i != f && i->state->type == nfa_state_t::FIN) {
                     rules[i->state->rule].shadow.insert(l);

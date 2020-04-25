@@ -227,8 +227,8 @@ void warn_nondeterministic_tags(const ctx_t &ctx)
         for (size_t t = rule.ltag; t < rule.htag; ++t) {
             const size_t m = maxv[t];
             if (m > 1) {
-                warn.nondeterministic_tags(rule.code->loc
-                    , ctx.dc_condname, tags[t].name, m);
+                warn.nondeterministic_tags(rule.semact->loc, ctx.dc_condname,
+                    tags[t].name, m);
             }
         }
     }

@@ -70,7 +70,7 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
         for (i = b; i != e; ++i) {
             if (!i->name.empty()) {
                 const loc_t &l = !i->rules.empty()
-                    ? i->rules[0].code->loc : !i->defs.empty()
+                    ? i->rules[0].semact->loc : !i->defs.empty()
                         ? i->defs[0]->loc : NOWHERE;
                 if (l.line != NOWHERE.line) {
                     msg.fatal(l, "conditions are only allowed with "
@@ -83,7 +83,7 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
         for (i = b; i != e; ++i) {
             if (i->name.empty()) {
                 const loc_t &l = !i->rules.empty()
-                    ? i->rules[0].code->loc : !i->defs.empty()
+                    ? i->rules[0].semact->loc : !i->defs.empty()
                         ? i->defs[0]->loc : NOWHERE;
                 if (l.line != NOWHERE.line) {
                     msg.fatal(l, "non-conditional rules are not allowed with "
@@ -121,9 +121,9 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
 
         for (i = b; i != e; ++i) {
             if (i->name == "0" && i->rules.size() > 1) {
-                msg.fatal(i->rules[1].code->loc,
+                msg.fatal(i->rules[1].semact->loc,
                     "startup code is already defined at line %u",
-                    i->rules[0].code->loc.line);
+                    i->rules[0].semact->loc.line);
             }
         }
     }

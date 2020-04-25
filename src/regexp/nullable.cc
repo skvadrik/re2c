@@ -105,7 +105,7 @@ void warn_nullable(const RESpec &spec, const std::string &cond)
     const size_t nre = spec.res.size();
     for (size_t i = 0; i < nre; ++i) {
         if (nullable(spec, stack, spec.res[i])) {
-            spec.msg.warn.match_empty_string(spec.rules[i].code->loc, cond);
+            spec.msg.warn.match_empty_string(spec.rules[i].semact->loc, cond);
         }
     }
 }

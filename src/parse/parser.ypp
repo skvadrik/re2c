@@ -34,18 +34,18 @@ static spec_t &find(specs_t &specs, const std::string &name)
 
 %}
 
-%start    spec
+%start spec
 
 %lex-param   {re2c::context_t &context}
 %parse-param {re2c::context_t &context}
 
 %union {
-    const re2c::AST * regexp;
-    re2c::Code * code;
-    char op;
-    re2c::ASTBounds bounds;
-    std::string * str;
-    re2c::CondList * clist;
+    const re2c::AST *regexp;
+    re2c::SemAct    *semact;
+    char             op;
+    re2c::ASTBounds  bounds;
+    std::string     *str;
+    re2c::CondList  *clist;
 };
 
 %token TOKEN_CJUMP
@@ -64,7 +64,7 @@ static spec_t &find(specs_t &specs, const std::string &name)
 
 %type <op>      close closes
 %type <bounds>  TOKEN_CLOSESIZE
-%type <code>    TOKEN_CODE ccode
+%type <semact>  TOKEN_CODE ccode
 %type <regexp>  TOKEN_REGEXP trailexpr rule expr diff term factor primary
 %type <str>     TOKEN_CNEXT TOKEN_CJUMP TOKEN_ID TOKEN_FID name
 %type <clist>   TOKEN_CLIST TOKEN_CSETUP TOKEN_CZERO
@@ -148,7 +148,7 @@ ccode
     delete $1;
 }
 | TOKEN_CJUMP {
-    $$ = new Code(context.input.tok_loc());
+    $$ = new SemAct(context.input.tok_loc());
     $$->cond = *$1;
     delete $1;
 };

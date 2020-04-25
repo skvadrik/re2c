@@ -62,7 +62,7 @@ static Range *dot_to_range(RESpec &, const AST *);
 static Range *cls_to_range(RESpec &, const AST *);
 static bool misuse_of_named_def(RESpec &, const AST *);
 static void assert_tags_used_once(RESpec &, const Rule &, const std::vector<Tag> &);
-static void init_rule(RESpec &, Rule &, const Code *, const std::vector<Tag> &, size_t, size_t);
+static void init_rule(RESpec &, Rule &, const SemAct *, const std::vector<Tag> &, size_t, size_t);
 static bool is_icase(const opt_t *, bool);
 
 
@@ -80,7 +80,7 @@ RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Msg &msg
     for (size_t i = 0; i < ast.size(); ++i) {
         size_t ltag = tags.size(), ncap = 0;
         res.push_back(ast_to_re(*this, ast[i].ast, ncap, 0));
-        init_rule(*this, rules[i], ast[i].code, tags, ltag, ncap);
+        init_rule(*this, rules[i], ast[i].semact, tags, ltag, ncap);
     }
 }
 
@@ -456,17 +456,17 @@ void assert_tags_used_once(RESpec &spec, const Rule &rule
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         name = tags[t].name;
         if (name && !names.insert(*name).second) {
-            spec.msg.fatal(rule.code->loc
+            spec.msg.fatal(rule.semact->loc
                 , "tag '%s' is used multiple times in the same rule"
                 , name->c_str());
         }
     }
 }
 
-void init_rule(RESpec &spec, Rule &rule, const Code *code
+void init_rule(RESpec &spec, Rule &rule, const SemAct *semact
     , const std::vector<Tag> &tags, size_t ltag, size_t ncap)
 {
-    rule.code = code;
+    rule.semact = semact;
     rule.ltag = ltag;
     rule.htag = tags.size();
     for (rule.ttag = ltag; rule.ttag < rule.htag && !trailing(tags[rule.ttag]); ++rule.ttag);

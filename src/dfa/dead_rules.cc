@@ -176,7 +176,7 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
             // skip last rule (it's the NONE-rule)
             for (size_t j = 0; j < nrules; ++j) {
                 if (live[j * nstates + i]) {
-                    dfa.rules[r].shadow.insert(dfa.rules[j].code->loc.line);
+                    dfa.rules[r].shadow.insert(dfa.rules[j].semact->loc.line);
                 }
             }
         }
@@ -230,8 +230,7 @@ static void warn_sentinel_in_midrule(const dfa_t &dfa, const opt_t *opts
 
     for (size_t r = 0; r < nrules; ++r) {
         if (bad[r]) {
-            msg.warn.sentinel_in_midrule(dfa.rules[r].code->loc
-                , cond, opts->sentinel);
+            msg.warn.sentinel_in_midrule(dfa.rules[r].semact->loc, cond, opts->sentinel);
         }
     }
 

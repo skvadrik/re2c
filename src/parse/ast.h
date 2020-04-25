@@ -11,17 +11,15 @@
 
 namespace re2c {
 
-struct Code;
+struct SemAct;
 template <class _Ty> class free_list;
 
-struct ASTChar
-{
+struct ASTChar {
     uint32_t chr;
     loc_t loc;
 };
 
-struct ASTRange
-{
+struct ASTRange {
     uint32_t lower;
     uint32_t upper;
     loc_t loc;
@@ -31,8 +29,7 @@ struct ASTRange
 };
 
 /* AST must be immutable and independent of options */
-struct AST
-{
+struct AST {
     static free_list<AST*> flist;
     static const uint32_t MANY;
 
@@ -81,33 +78,27 @@ struct AST
     ~AST();
 };
 
-struct ASTRule
-{
-    const AST *ast;
-    const Code *code;
+struct ASTRule {
+    const AST    *ast;
+    const SemAct *semact;
 
-    ASTRule(const AST *r, const Code *c)
-        : ast(r)
-        , code(c)
-    {}
+    ASTRule(const AST *r, const SemAct *a): ast(r), semact(a) {}
 };
 
-struct ASTBounds
-{
+struct ASTBounds {
     uint32_t min;
     uint32_t max;
 };
 
-struct spec_t
-{
+struct spec_t {
     std::string name;
     std::vector<ASTRule> rules;
-    std::vector<const Code*> defs;
-    std::vector<const Code*> eofs;
-    std::vector<const Code*> setup;
+    std::vector<const SemAct*> defs;
+    std::vector<const SemAct*> eofs;
+    std::vector<const SemAct*> setup;
 
-    explicit spec_t(const std::string &n):
-        name(n), rules(), defs(), eofs(), setup() {}
+    explicit spec_t(const std::string &n)
+        : name(n), rules(), defs(), eofs(), setup() {}
 };
 
 typedef std::vector<spec_t> specs_t;

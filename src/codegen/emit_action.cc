@@ -210,8 +210,8 @@ void emit_rule(Output &output, CodeStmts *stmts, const DFA &dfa, size_t rule_idx
 {
     const opt_t *opts = output.block().opts;
     const Rule &rule = dfa.rules[rule_idx];
-    const Code *code = rule.code;
-    const std::string &cond = code->cond;
+    const SemAct *semact = rule.semact;
+    const std::string &cond = semact->cond;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     std::string s;
@@ -233,13 +233,13 @@ void emit_rule(Output &output, CodeStmts *stmts, const DFA &dfa, size_t rule_idx
             text = o.flush();
             append(stmts, code_stmt_text(alc, text));
         }
-        if (!code->autogen) {
+        if (!semact->autogen) {
             if (!dfa.setup.empty()) {
                 text = o.str(dfa.setup).flush();
                 append(stmts, code_stmt_text(alc, text));
             }
-            append(stmts, code_line_info_input(alc, code->loc));
-            text = o.str(code->text).flush();
+            append(stmts, code_line_info_input(alc, semact->loc));
+            text = o.str(semact->text).flush();
             append(stmts, code_stmt_text(alc, text));
             append(stmts, code_line_info_output(alc));
         }

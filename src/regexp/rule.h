@@ -12,57 +12,38 @@
 
 namespace re2c {
 
-struct Code
-{
-    static free_list<Code*> flist;
+// semantic action (user-defined code for rule)
+struct SemAct {
+    static free_list<SemAct*> flist;
 
     const loc_t loc;
     bool autogen;
     const std::string text;
     std::string cond;
 
-    explicit Code(const loc_t &loc)
-        : loc(loc)
-        , autogen(true)
-        , text("")
-        , cond("")
-    {
-        flist.insert(this);
-    }
-    Code(const loc_t &loc, const std::string &t)
-        : loc(loc)
-        , autogen(false)
-        , text(t)
-        , cond("")
-    {
-        flist.insert(this);
-    }
-    ~Code()
-    {
-        flist.erase(this);
-    }
+    explicit SemAct(const loc_t &loc)
+        : loc(loc), autogen(true), text(""), cond("") { flist.insert(this); }
+    SemAct(const loc_t &loc, const std::string &t)
+        : loc(loc), autogen(false), text(t), cond("") { flist.insert(this); }
+    ~SemAct() { flist.erase(this); }
 };
 
 struct Rule
 {
     static const size_t NONE;
 
-    const Code *code;
+    const SemAct *semact;
     std::set<uint32_t> shadow;
-
-    // tags
-    size_t ltag; // first
-    size_t htag; // next to last
+    size_t ltag; // first tag
+    size_t htag; // next to last tag
     size_t ttag; // trailing context
-
     size_t ncap; // number of POSIX captures
 
-    Rule(): code(NULL), shadow(),
-        ltag(0), htag(0), ttag(0), ncap(0) {}
+    Rule(): semact(NULL), shadow(), ltag(0), htag(0), ttag(0), ncap(0) {}
 
     // copy ctor and assignment are required for containers on macOS
     Rule(const Rule &r)
-        : code(r.code)
+        : semact(r.semact)
         , shadow(r.shadow)
         , ltag(r.ltag)
         , htag(r.htag)
@@ -71,7 +52,7 @@ struct Rule
     {}
     Rule& operator= (const Rule &r)
     {
-        code = r.code;
+        semact = r.semact;
         shadow = r.shadow;
         ltag = r.ltag;
         htag = r.htag;

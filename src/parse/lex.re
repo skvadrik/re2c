@@ -489,7 +489,7 @@ code:
         while (isspace(tok[0])) ++tok;
         char *p = cur;
         while (p > tok && isspace(p[-1])) --p;
-        yylval.code = new Code(loc, getstr(tok, p));
+        yylval.semact = new SemAct(loc, getstr(tok, p));
         return;
     }
 
@@ -510,7 +510,7 @@ code:
 /*!re2c
     "}" {
         if (--depth == 0) {
-            yylval.code = new Code(loc, getstr(tok, cur));
+            yylval.semact = new SemAct(loc, getstr(tok, cur));
             return;
         }
         goto code;

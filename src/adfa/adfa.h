@@ -97,7 +97,7 @@ struct DFA
     const size_t key_size;
     bitmaps_t bitmaps;
     std::string setup;
-    const Code *eof_action;
+    const SemAct *eof_action;
     Msg &msg;
 
     std::set<label_t> used_labels;
@@ -112,7 +112,7 @@ struct DFA
         , const std::string &nm
         , const std::string &cn
         , const std::string &su
-        , const Code *eof
+        , const SemAct *eof
         , const opt_t *opts
         , Msg &msg
         );

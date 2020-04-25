@@ -46,7 +46,7 @@ static void emit_state(Output &output, const State *s, bool used_label, CodeStmt
     }
 }
 
-static void emit_eof(Output &output, const Code *code, CodeStmts *stmts)
+static void emit_eof(Output &output, const SemAct *semact, CodeStmts *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -61,10 +61,10 @@ static void emit_eof(Output &output, const Code *code, CodeStmts *stmts)
     append(stmts, code_stmt_textraw(alc, text));
 
     // source line directive
-    append(stmts, code_line_info_input(alc, code->loc));
+    append(stmts, code_line_info_input(alc, semact->loc));
 
     // user-defined semantic action for EOF rule
-    text = o.str(code->text).flush();
+    text = o.str(semact->text).flush();
     append(stmts, code_stmt_text(alc, text));
 
     // output line directive
@@ -149,11 +149,11 @@ void DFA::emit_dot(Output &output, CodeStmts *program) const
             }
         }
         else if (s->action.type == Action::RULE) {
-            const Code *action = rules[s->action.info.rule].code;
-            if (!action->autogen) {
+            const SemAct *semact = rules[s->action.info.rule].semact;
+            if (!semact->autogen) {
                 text = o.label(s->label).cstr(" [label=\"")
-                    .str(msg.filenames[action->loc.file]).cstr(":")
-                    .u32(action->loc.line).cstr("\"]").flush();
+                    .str(msg.filenames[semact->loc.file]).cstr(":")
+                    .u32(semact->loc.line).cstr("\"]").flush();
                 append(program, code_stmt_text(alc, text));
             }
         }

@@ -49,7 +49,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     Msg &msg = output.msg;
     const std::vector<ASTRule> &rules = spec.rules;
     const size_t defrule = spec.defs.empty() ? Rule::NONE : rules.size() - 1;
-    const Code *eof = spec.eofs.empty() ? NULL : spec.eofs.front();
+    const SemAct *eof = spec.eofs.empty() ? NULL : spec.eofs.front();
     const std::string
         &cond = spec.name,
         name = make_name(cond, loc.line),
@@ -190,7 +190,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     }
 
     AST::flist.clear();
-    Code::flist.clear();
+    SemAct::flist.clear();
     RangeSuffix::freeList.clear();
 }
 

@@ -33,7 +33,7 @@ DFA::DFA
     , const std::string &nm
     , const std::string &cn
     , const std::string &su
-    , const Code *eof
+    , const SemAct *eof
     , const opt_t *opts
     , Msg &msg
     )

@@ -5,7 +5,7 @@
 
 namespace re2c {
 
-free_list<Code*> Code::flist;
+free_list<SemAct*> SemAct::flist;
 
 const size_t Rule::NONE = std::numeric_limits<size_t>::max();
 

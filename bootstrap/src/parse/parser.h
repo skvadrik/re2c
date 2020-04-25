@@ -68,12 +68,12 @@ union YYSTYPE
 {
 #line 42 "../src/parse/parser.ypp" /* yacc.c:1913  */
 
-    const re2c::AST * regexp;
-    re2c::Code * code;
-    char op;
-    re2c::ASTBounds bounds;
-    std::string * str;
-    re2c::CondList * clist;
+    const re2c::AST *regexp;
+    re2c::SemAct    *semact;
+    char             op;
+    re2c::ASTBounds  bounds;
+    std::string     *str;
+    re2c::CondList  *clist;
 
 #line 79 "src/parse/parser.h" /* yacc.c:1913  */
 };

@@ -156,12 +156,12 @@ union YYSTYPE
 {
 #line 42 "../src/parse/parser.ypp" /* yacc.c:355  */
 
-    const re2c::AST * regexp;
-    re2c::Code * code;
-    char op;
-    re2c::ASTBounds bounds;
-    std::string * str;
-    re2c::CondList * clist;
+    const re2c::AST *regexp;
+    re2c::SemAct    *semact;
+    char             op;
+    re2c::ASTBounds  bounds;
+    std::string     *str;
+    re2c::CondList  *clist;
 
 #line 167 "src/parse/parser.cc" /* yacc.c:355  */
 };
@@ -1332,7 +1332,7 @@ yyreduce:
   case 13:
 #line 104 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
-    find(context.specs, "").rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].code)));
+    find(context.specs, "").rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
 }
 #line 1338 "src/parse/parser.cc" /* yacc.c:1651  */
     break;
@@ -1340,7 +1340,7 @@ yyreduce:
   case 14:
 #line 107 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
-    find(context.specs, "").defs.push_back((yyvsp[0].code));
+    find(context.specs, "").defs.push_back((yyvsp[0].semact));
 }
 #line 1346 "src/parse/parser.cc" /* yacc.c:1651  */
     break;
@@ -1348,7 +1348,7 @@ yyreduce:
   case 15:
 #line 110 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
-    find(context.specs, "").eofs.push_back((yyvsp[0].code));
+    find(context.specs, "").eofs.push_back((yyvsp[0].semact));
 }
 #line 1354 "src/parse/parser.cc" /* yacc.c:1651  */
     break;
@@ -1357,7 +1357,7 @@ yyreduce:
 #line 113 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
     for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-        find(context.specs, *i).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].code)));
+        find(context.specs, *i).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
     }
     delete (yyvsp[-2].clist);
 }
@@ -1368,7 +1368,7 @@ yyreduce:
 #line 119 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
     for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-        find(context.specs, *i).defs.push_back((yyvsp[0].code));
+        find(context.specs, *i).defs.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-2].clist);
 }
@@ -1379,7 +1379,7 @@ yyreduce:
 #line 125 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
     for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-        find(context.specs, *i).eofs.push_back((yyvsp[0].code));
+        find(context.specs, *i).eofs.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-2].clist);
 }
@@ -1390,7 +1390,7 @@ yyreduce:
 #line 131 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
     for (CondList::const_iterator i = (yyvsp[-1].clist)->begin(); i != (yyvsp[-1].clist)->end(); ++i) {
-        find(context.specs, *i).setup.push_back((yyvsp[0].code));
+        find(context.specs, *i).setup.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-1].clist);
 }
@@ -1401,7 +1401,7 @@ yyreduce:
 #line 137 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
     const AST *r = ast_nil(context.input.tok_loc());
-    find(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].code)));
+    find(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].semact)));
     delete (yyvsp[-1].clist);
 }
 #line 1408 "src/parse/parser.cc" /* yacc.c:1651  */
@@ -1410,8 +1410,8 @@ yyreduce:
   case 22:
 #line 145 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
-    (yyval.code) = (yyvsp[0].code);
-    (yyval.code)->cond = *(yyvsp[-1].str);
+    (yyval.semact) = (yyvsp[0].semact);
+    (yyval.semact)->cond = *(yyvsp[-1].str);
     delete (yyvsp[-1].str);
 }
 #line 1418 "src/parse/parser.cc" /* yacc.c:1651  */
@@ -1420,8 +1420,8 @@ yyreduce:
   case 23:
 #line 150 "../src/parse/parser.ypp" /* yacc.c:1651  */
     {
-    (yyval.code) = new Code(context.input.tok_loc());
-    (yyval.code)->cond = *(yyvsp[0].str);
+    (yyval.semact) = new SemAct(context.input.tok_loc());
+    (yyval.semact)->cond = *(yyvsp[0].str);
     delete (yyvsp[0].str);
 }
 #line 1428 "src/parse/parser.cc" /* yacc.c:1651  */

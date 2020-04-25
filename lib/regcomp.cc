@@ -46,7 +46,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 
     preg->rmgr = new RangeMgr;
 
-    ASTRule ar(a, new Code(NOWHERE));
+    ASTRule ar(a, new SemAct(NOWHERE));
     std::vector<ASTRule> arv;
     arv.push_back(ar);
     RESpec re(arv, opt, msg, *preg->rmgr);
