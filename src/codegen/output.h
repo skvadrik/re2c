@@ -52,22 +52,20 @@ public:
 struct CodeStmt;
 struct CodeCase;
 
-typedef const char *CodeText;
-
-template<typename code_t>
+template<typename T>
 struct CodeList {
-    code_t  *head;
-    code_t **ptail;
+    T  *head;
+    T **ptail;
 };
 
 typedef CodeList<CodeStmt> CodeStmts;
 
 struct CodeIfTE {
-    CodeText   if_cond;
-    CodeText   else_cond;
-    CodeStmts *if_code;
-    CodeStmts *else_code;
-    bool       oneline;
+    const char *if_cond;
+    const char *else_cond;
+    CodeStmts  *if_code;
+    CodeStmts  *else_code;
+    bool        oneline;
 };
 
 struct CodeCase {
@@ -95,9 +93,9 @@ struct CodeCase {
 typedef CodeList<CodeCase> CodeCases;
 
 struct CodeSwitch {
-    CodeText   expr;
-    CodeCases *cases;
-    bool       impdef;
+    const char *expr;
+    CodeCases  *cases;
+    bool        impdef;
 };
 
 struct CodeBlock {
@@ -176,15 +174,15 @@ struct CodeStmt {
     } kind;
 
     union {
-        CodeIfTE   ifte;
-        CodeSwitch swch;
-        CodeBlock  block;
-        CodeFunc   func;
-        CodeText   text;
-        CodeRaw    raw;
-        CodeVar    var;
-        CodeTags   tags;
-        loc_t      loc;
+        const char *text;
+        CodeIfTE    ifte;
+        CodeSwitch  swch;
+        CodeBlock   block;
+        CodeFunc    func;
+        CodeRaw     raw;
+        CodeVar     var;
+        CodeTags    tags;
+        loc_t       loc;
     };
 
     CodeStmt *next;
@@ -223,7 +221,7 @@ inline CodeStmt *code_stmt(code_alc_t &alc, CodeStmt::Kind kind)
     return s;
 }
 
-inline CodeStmt *code_stmt_text(code_alc_t &alc, CodeText text)
+inline CodeStmt *code_stmt_text(code_alc_t &alc, const char *text)
 {
     CodeStmt *s = code_stmt(alc, CodeStmt::TEXT);
     s->text = text;
@@ -240,7 +238,7 @@ inline CodeStmt *code_raw(code_alc_t &alc, const char *data, size_t size)
     return s;
 }
 
-inline CodeStmt *code_stmt_textraw(code_alc_t &alc, CodeText text)
+inline CodeStmt *code_stmt_textraw(code_alc_t &alc, const char *text)
 {
     CodeStmt *s = code_stmt(alc, CodeStmt::TEXT_RAW);
     s->text = text;
@@ -338,7 +336,7 @@ inline CodeStmt *code_block(code_alc_t &alc, CodeStmts *stmts, CodeBlock::Fmt fm
     return s;
 }
 
-inline CodeStmt *code_stmt_if_then_else(code_alc_t &alc, CodeText if_cond,
+inline CodeStmt *code_stmt_if_then_else(code_alc_t &alc, const char *if_cond,
     CodeStmts *if_code, CodeStmts *else_code, bool oneline = true)
 {
     CodeStmt *s = code_stmt(alc, CodeStmt::IF_THEN_ELSE);
@@ -350,8 +348,8 @@ inline CodeStmt *code_stmt_if_then_else(code_alc_t &alc, CodeText if_cond,
     return s;
 }
 
-inline CodeStmt *code_stmt_if_then_elif(code_alc_t &alc, CodeText if_cond,
-    CodeStmts *if_code, CodeText else_cond, CodeStmts *else_code)
+inline CodeStmt *code_stmt_if_then_elif(code_alc_t &alc, const char *if_cond,
+    CodeStmts *if_code, const char *else_cond, CodeStmts *else_code)
 {
     CodeStmt *s = code_stmt_if_then_else(alc, if_cond, if_code, else_code, false);
     s->ifte.else_cond = else_cond;
@@ -452,7 +450,7 @@ inline CodeStmt *code_fcall(code_alc_t &alc, const char *name, CodeArgs *args,
     return code_func(alc, name, args, semi);
 }
 
-inline CodeStmt *code_switch(code_alc_t &alc, CodeText expr, CodeCases *cases,
+inline CodeStmt *code_switch(code_alc_t &alc, const char *expr, CodeCases *cases,
     bool impdef)
 {
     CodeStmt *s = code_stmt(alc, CodeStmt::SWITCH);

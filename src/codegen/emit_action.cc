@@ -39,7 +39,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeStmts *stmt
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     switch (s->action.type) {
     case Action::MATCH:
@@ -119,7 +119,7 @@ static CodeStmts *emit_accept_binary(Output &output, const DFA &dfa, const accep
     if (l < r) {
         const size_t m = (l + r) >> 1;
 
-        CodeText if_cond = o.str(opts->yyaccept)
+        const char *if_cond = o.str(opts->yyaccept)
             .cstr(r == l + 1 ? " == " : " <= ").u64(m).flush();
         CodeStmts *if_then = emit_accept_binary(output, dfa, acc, l, m);
         CodeStmts *if_else = emit_accept_binary(output, dfa, acc, m + 1, r);
@@ -137,7 +137,7 @@ void emit_accept(Output &output, CodeStmts *stmts, const DFA &dfa, const accept_
     const size_t nacc = acc.size();
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     if (nacc == 0) return;
 
@@ -191,7 +191,7 @@ void emit_accept(Output &output, CodeStmts *stmts, const DFA &dfa, const accept_
     }
 
     // switch
-    CodeText switch_expr = o.str(opts->yyaccept).flush();
+    const char *switch_expr = o.str(opts->yyaccept).flush();
     CodeCases *switch_cases = code_cases(alc);
     CodeStmts *case_stmts = code_stmts(alc);
     gen_goto(output, case_stmts, NULL, acc[nacc - 1].first, dfa, acc[nacc - 1].second,
@@ -215,7 +215,7 @@ void emit_rule(Output &output, CodeStmts *stmts, const DFA &dfa, size_t rule_idx
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     std::string s;
-    CodeText text;
+    const char *text;
 
     gen_fintags(output, stmts, dfa, rule);
 
@@ -261,7 +261,7 @@ CodeStmts *need(Output &output, size_t some)
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     std::string s;
-    CodeText text;
+    const char *text;
 
     CodeStmts *stmts = code_stmts(alc);
 
@@ -288,7 +288,7 @@ CodeStmts *need(Output &output, size_t some)
         CodeStmt *yyfill = code_stmt_text(alc, text);
 
         if (opts->fill_check) {
-            CodeText if_cond = o.str(output_expr_lessthan(some, opts)).flush();
+            const char *if_cond = o.str(output_expr_lessthan(some, opts)).flush();
             CodeStmts *if_then = code_stmts(alc);
             append(if_then, yyfill);
             append(stmts, code_stmt_if_then_else(alc, if_cond, if_then, NULL));
@@ -312,7 +312,7 @@ CodeStmts *gen_rescan_label(Output &output, const State *s)
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     CodeStmts *stmts = code_stmts(alc);
 
@@ -338,7 +338,7 @@ void gen_goto(Output &output, CodeStmts *stmts, const State *from, const State *
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     if (eof) {
         append(stmts, gen_on_eof(output, dfa, from, to));
@@ -377,10 +377,10 @@ CodeStmt *gen_on_eof(Output &output, const DFA &dfa, const State *from, const St
     const tcid_t falltags = final ? from->rule_tags : from->fall_tags;
     const State *retry = from->action.type == Action::MOVE ? from->prev : from;
     uint32_t fillidx = output.fill_index;
-    CodeText text;
+    const char *text;
 
     // check for the end of input
-    CodeText if_refill = o.str(output_expr_lessthan(1, opts)).flush();
+    const char *if_refill = o.str(output_expr_lessthan(1, opts)).flush();
 
     CodeStmts *refill = code_stmts(alc);
 
@@ -410,7 +410,7 @@ CodeStmt *gen_on_eof(Output &output, const DFA &dfa, const State *from, const St
     }
     else if (opts->fill_use) {
         // YYFILL invocation
-        CodeText if_yyfill = o.str(opts->fill)
+        const char *if_yyfill = o.str(opts->fill)
             .cstr(opts->fill_naked ? "" : opts->fill_arg_use ? " () == 0": " == 0")
             .flush();
 
@@ -459,7 +459,7 @@ void gen_settags(Output &output, CodeStmts *tag_actions, const DFA &dfa, tcid_t 
     const std::string &prefix = opts->tags_prefix;
     const std::string &expression = opts->tags_expression;
     const tcmd_t *cmd = dfa.tcpool[tcid];
-    CodeText text;
+    const char *text;
 
     // single tag, backwards compatibility, use context marker
     if (cmd && dfa.oldstyle_ctxmarker) {
@@ -538,7 +538,7 @@ void gen_fintags(Output &output, CodeStmts *stmts, const DFA &dfa, const Rule &r
     const tagver_t *fins = dfa.finvers;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
     std::string expr;
 
     if (rule.ncap > 0) {

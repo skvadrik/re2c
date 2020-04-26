@@ -250,20 +250,20 @@ static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
         return;
     }
 
+    const char *text;
     CodeStmts *stmts = code_stmts(alc);
 
-    o.cstr("enum ").str(opts->yycondtype).cstr(" {");
-    append(stmts, code_stmt_text(alc, o.flush()));
+    text = o.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
+    append(stmts, code_stmt_text(alc, text));
 
     CodeStmts *block = code_stmts(alc);
     for (size_t i = 0; i < condnames.size(); ++i) {
-        o.str(opts->condEnumPrefix).str(condnames[i]).cstr(",");
-        append(block, code_stmt_text(alc, o.flush()));
+        text = o.str(opts->condEnumPrefix).str(condnames[i]).cstr(",").flush();
+        append(block, code_stmt_text(alc, text));
     }
     append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
-    o.cstr("};");
-    append(stmts, code_stmt_text(alc, o.flush()));
+    append(stmts, code_stmt_text(alc, "};"));
 
     code->kind = CodeStmt::BLOCK;
     code->block.stmts = stmts;
@@ -350,12 +350,11 @@ void gen_tags(Scratchbuf &o, CodeStmt *code, const std::set<std::string> &tags)
 static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
     uint32_t start_label, uint32_t fill_index, const opt_t *opts)
 {
-    o.str(opts->state_get).cstr(opts->state_get_naked ? "" : "()");
-    CodeText expr = o.flush();
+    const char *text;
 
     CodeStmts *goto_start = code_stmts(alc);
-    o.cstr("goto ").str(opts->labelPrefix).u32(start_label).cstr(";");
-    append(goto_start, code_stmt_text(alc, o.flush()));
+    text = o.cstr("goto ").str(opts->labelPrefix).u32(start_label).cstr(";").flush();
+    append(goto_start, code_stmt_text(alc, text));
 
     CodeCases *ccases = code_cases(alc);
     if (opts->bUseStateAbort) {
@@ -379,18 +378,19 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
             o.cstr("if (").str(output_expr_lessthan(1, opts)).cstr(")")
                 .cstr(" goto ").str(opts->labelPrefix).cstr("eof").u32(i).cstr("; ");
         }
-        o.cstr("goto ").str(opts->yyfilllabel).u32(i).cstr(";");
-        append(stmts, code_stmt_text(alc, o.flush()));
+        text = o.cstr("goto ").str(opts->yyfilllabel).u32(i).cstr(";").flush();
+        append(stmts, code_stmt_text(alc, text));
 
         append(ccases, code_case_number(alc, stmts, static_cast<int32_t>(i)));
     }
 
     CodeStmts *stmts = code_stmts(alc);
-    append(stmts, code_switch(alc, expr, ccases, false));
+    text = o.str(opts->state_get).cstr(opts->state_get_naked ? "" : "()").flush();
+    append(stmts, code_switch(alc, text, ccases, false));
 
     if (opts->bUseStateNext) {
-        o.str(opts->yynext).cstr(":");
-        append(stmts, code_stmt_textraw(alc, o.flush()));
+        text = o.str(opts->yynext).cstr(":").flush();
+        append(stmts, code_stmt_textraw(alc, text));
     }
 
     code->kind = CodeStmt::BLOCK;
@@ -429,8 +429,7 @@ static void gen_yymaxfill(Scratchbuf &o, const opt_t *opts, CodeStmt *code,
 {
     if (opts->target == TARGET_CODE) {
         code->kind = CodeStmt::TEXT;
-        o.cstr("#define YYMAXFILL ").u64(max_fill);
-        code->text = o.flush();
+        code->text = o.cstr("#define YYMAXFILL ").u64(max_fill).flush();
     }
     else {
         code->kind = CodeStmt::EMPTY;
@@ -442,8 +441,7 @@ static void gen_yymaxnmatch(Scratchbuf &o, const opt_t *opts, CodeStmt *code,
 {
     if (opts->target == TARGET_CODE && opts->posix_syntax) {
         code->kind = CodeStmt::TEXT;
-        o.cstr("#define YYMAXNMATCH ").u64(max_nmatch);
-        code->text = o.flush();
+        code->text = o.cstr("#define YYMAXNMATCH ").u64(max_nmatch).flush();
     }
     else {
         code->kind = CodeStmt::EMPTY;
@@ -516,21 +514,19 @@ static CodeStmts *gen_cond_goto_binary(Scratchbuf &o, code_alc_t &alc,
 {
     CodeStmts *stmts = code_stmts(alc);
     CodeStmt *stmt = NULL;
+    const char *text;
 
     if (lower == upper) {
-        o.cstr("goto ").str(opts->condPrefix).str(conds[lower]).cstr(";");
-        stmt = code_stmt_text(alc, o.flush());
+        text = o.cstr("goto ").str(opts->condPrefix).str(conds[lower]).cstr(";").flush();
+        stmt = code_stmt_text(alc, text);
     }
     else {
         const size_t middle = lower + (upper - lower + 1) / 2;
 
-        o.str(output_cond_get(opts)).cstr(" < ").u64(middle);
-        CodeText if_cond = o.flush();
-
+        text = o.str(output_cond_get(opts)).cstr(" < ").u64(middle).flush();
         CodeStmts *if_then = gen_cond_goto_binary(o, alc, conds, opts, lower, middle - 1);
         CodeStmts *if_else = gen_cond_goto_binary(o, alc, conds, opts, middle, upper);
-
-        stmt = code_stmt_if_then_else(alc, if_cond, if_then, if_else);
+        stmt = code_stmt_if_then_else(alc, text, if_then, if_else);
     }
 
     append(stmts, stmt);
@@ -543,18 +539,21 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
 {
     const size_t ncond = conds.size();
     CodeStmts *stmts = code_stmts(alc);
+    const char *text;
 
     if (opts->target == TARGET_DOT) {
         for (size_t i = 0; i < ncond; ++i) {
             const std::string &cond = conds[i];
-            o.cstr("0 -> ").str(cond).cstr(" [label=\"state=").str(cond).cstr("\"]");
-            append(stmts, code_stmt_text(alc, o.flush()));
+            text = o.cstr("0 -> ").str(cond).cstr(" [label=\"state=").str(cond)
+                .cstr("\"]").flush();
+            append(stmts, code_stmt_text(alc, text));
         }
     }
     else {
         if (opts->gFlag) {
-            o.cstr("goto *").str(opts->yyctable).cstr("[").str(output_cond_get(opts)).cstr("];");
-            append(stmts, code_stmt_text(alc, o.flush()));
+            text = o.cstr("goto *").str(opts->yyctable).cstr("[")
+                .str(output_cond_get(opts)).cstr("];").flush();
+            append(stmts, code_stmt_text(alc, text));
         }
         else if (opts->sFlag) {
             warn_cond_ord &= ncond > 1;
@@ -563,24 +562,19 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
         else {
             warn_cond_ord = false;
 
-            o.str(output_cond_get(opts));
-            CodeText expr = o.flush();
-
             CodeCases *ccases = code_cases(alc);
             for (size_t i = 0; i < ncond; ++i) {
                 const std::string &cond = conds[i];
 
-                o.str(opts->condEnumPrefix).str(cond);
-                const char *caseval = o.flush();
-
                 CodeStmts *body = code_stmts(alc);
-                o.cstr("goto ").str(opts->condPrefix).str(cond).cstr(";");
-                append(body, code_stmt_text(alc, o.flush()));
+                text = o.cstr("goto ").str(opts->condPrefix).str(cond).cstr(";").flush();
+                append(body, code_stmt_text(alc, text));
 
-                append(ccases, code_case_string(alc, body, caseval));
+                text = o.str(opts->condEnumPrefix).str(cond).flush();
+                append(ccases, code_case_string(alc, body, text));
             }
-
-            append(stmts, code_switch(alc, expr, ccases, false));
+            text = o.str(output_cond_get(opts)).flush();
+            append(stmts, code_switch(alc, text, ccases, false));
         }
 
         // see note [condition order]
@@ -601,19 +595,20 @@ static void gen_cond_table(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
     const size_t ncond = conds.size();
 
     CodeStmts *stmts = code_stmts(alc);
+    const char *text;
 
-    o.cstr("static void *").str(opts->yyctable).cstr("[").u64(ncond).cstr("] = {");
-    append(stmts, code_stmt_text(alc, o.flush()));
+    text = o.cstr("static void *").str(opts->yyctable).cstr("[").u64(ncond)
+        .cstr("] = {").flush();
+    append(stmts, code_stmt_text(alc, text));
 
     CodeStmts *block = code_stmts(alc);
     for (size_t i = 0; i < ncond; ++i) {
-        o.cstr("&&").str(opts->condPrefix).str(conds[i]).cstr(",");
-        append(block, code_stmt_text(alc, o.flush()));
+        text = o.cstr("&&").str(opts->condPrefix).str(conds[i]).cstr(",").flush();
+        append(block, code_stmt_text(alc, text));
     }
     append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
-    o.cstr("};");
-    append(stmts, code_stmt_text(alc, o.flush()));
+    append(stmts, code_stmt_text(alc, "};"));
 
     code->kind = CodeStmt::BLOCK;
     code->block.stmts = stmts;

@@ -22,7 +22,7 @@ static void from_le(Output &output, CodeStmts *code, const char *expr, size_t si
 {
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     append(code, code_stmt_text(alc, "/* from little-endian to host-endian */"));
     text = o.cstr("unsigned char *p = (unsigned char*)&").cstr(expr).cstr(";").flush();
@@ -38,7 +38,7 @@ static void from_le(Output &output, CodeStmts *code, const char *expr, size_t si
 CodeStmt *emit_skeleton_prolog(Output &output)
 {
     code_alc_t &alc = output.allocator;
-    CodeText if_cond;
+    const char *if_cond;
     CodeStmts *code, *block, *if_code;
     CodeArgs *args;
 
@@ -123,7 +123,7 @@ static void emit_skeleton_defines(Output &output, CodeStmts *code, const DFA &df
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const size_t sizeof_cunit = opts->encoding.szCodeUnit();
-    CodeText text;
+    const char *text;
 
     append(code, code_stmt_textraw(alc, ""));
     text = o.cstr("#define YYCTYPE ").exact_uint(sizeof_cunit).flush();
@@ -170,7 +170,7 @@ static void emit_skeleton_function_action(Output &output, CodeStmts *code, const
     const uint64_t norule = rule2key(Rule::NONE, dfa.key_size, dfa.def_rule);
     CodeArgs *args;
     CodeStmts *if_code, *else_code, *body;
-    CodeText if_cond, text;
+    const char *if_cond, *text;
 
     args = code_args(alc);
     append(args, code_arg(alc, "unsigned *pkix"));
@@ -237,7 +237,7 @@ static void emit_skeleton_stags(Output &output, CodeStmts *code, const DFA &dfa)
     Scratchbuf &o = output.scratchbuf;
     CodeArgs *args;
     CodeStmts *if_code, *body;
-    CodeText if_cond, text;
+    const char *if_cond, *text;
 
     append(code, code_stmt_textraw(alc, ""));
 
@@ -294,7 +294,7 @@ static void emit_skeleton_mtags(Output &output, CodeStmts *code, const DFA &dfa)
     Scratchbuf &o = output.scratchbuf;
     CodeArgs *args;
     CodeStmts *if_code, *block, *body;
-    CodeText if_cond, text;
+    const char *if_cond, *text;
 
     append(code, code_stmt_textraw(alc, ""));
 
@@ -473,7 +473,7 @@ static void emit_skeleton_function_check_key_count(Output &output, CodeStmts *co
     Scratchbuf &o = output.scratchbuf;
     CodeArgs *args;
     CodeStmts *block, *if_code;
-    CodeText if_cond, text;
+    const char *if_cond, *text;
 
     append(code, code_stmt_textraw(alc, ""));
 
@@ -506,7 +506,7 @@ static void emit_skeleton_function_lex(Output &output, CodeStmts *code, DFA &dfa
     std::set<std::string>::const_iterator var1, var2;
     CodeArgs *args;
     CodeStmts *block, *block2, *if_code, *if1_code;
-    CodeText if_cond, text;
+    const char *if_cond, *text;
 
     std::string filename = opts->output_file;
     if (filename.empty()) {
@@ -750,7 +750,7 @@ CodeStmt *emit_skeleton_epilog(Output &output)
     CodeStmts *stmts = code_stmts(alc);
     const std::set<std::string> &xs = output.skeletons;
     for (std::set<std::string>::const_iterator i = xs.begin(); i != xs.end(); ++i) {
-        CodeText if_cond = o.cstr("lex_").str(*i).cstr("() != 0").flush();
+        const char *if_cond = o.cstr("lex_").str(*i).cstr("() != 0").flush();
         CodeStmts *if_code = code_stmts(alc);
         append(if_code, code_stmt_text(alc, "return 1;"));
         append(stmts, code_stmt_if_then_else(alc, if_cond, if_code, NULL, false));
@@ -772,7 +772,7 @@ void emit_skeleton_action(Output &output, CodeStmts *code, const DFA &dfa, size_
     const std::string &name = dfa.name;
     const Rule &r = dfa.rules[rid];
     const uint64_t rkey = rule2key(rid, dfa.key_size, dfa.def_rule);
-    CodeText text;
+    const char *text;
 
     size_t ntag = 3;
     for (size_t t = r.ltag; t < r.htag; ++t) {

@@ -57,7 +57,7 @@ CodeStmts *bitmaps_t::gen(Output &output)
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     CodeStmts *stmts = code_stmts(alc);
 

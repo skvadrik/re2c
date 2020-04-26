@@ -33,7 +33,7 @@ static void emit_state(Output &output, const State *s, bool used_label, CodeStmt
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     if (used_label) {
         text = o.str(opts->labelPrefix).label(s->label).cstr(":").flush();
@@ -51,7 +51,7 @@ static void emit_eof(Output &output, const SemAct *semact, CodeStmts *stmts)
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     if (opts->eof == NOEOF) return;
 
@@ -105,7 +105,7 @@ void DFA::emit_body(Output &output, CodeStmts *stmts) const
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     gen_settags(output, stmts, *this, tags0, false /* delayed */);
 
@@ -132,7 +132,7 @@ void DFA::emit_dot(Output &output, CodeStmts *program) const
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeText text;
+    const char *text;
 
     if (opts->cFlag) {
         text = o.str(cond).cstr(" -> ").label(head->label).flush();
@@ -217,7 +217,7 @@ void gen_code(Output &output, dfas_t &dfas)
     else {
         ind = output.block().opts->topIndent;
 
-        CodeText text;
+        const char *text;
         CodeStmts *program1 = code_stmts(alc);
         for (i = b; i != e; ++i) {
             const bool first = i == b;
