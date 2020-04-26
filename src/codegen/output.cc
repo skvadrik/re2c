@@ -131,10 +131,10 @@ void Output::wraw(const char *s, const char *e)
 void Output::wversion_time()
 {
     output_version_time(scratchbuf.stream(), block().opts->version, !block().opts->bNoGenerationDate);
-    wdelay_stmt(0, code_stmt_textraw(allocator, scratchbuf.flush()));
+    wdelay_stmt(0, code_textraw(allocator, scratchbuf.flush()));
 }
 
-void Output::wdelay_stmt(uint32_t ind, CodeStmt *stmt)
+void Output::wdelay_stmt(uint32_t ind, Code *stmt)
 {
     OutputFragment f = {stmt, ind};
     block().fragments.push_back(f);
@@ -226,8 +226,8 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
                 , line_count
                 };
 
-            combine_stmt(gctx, f.stmt);
-            render_code_stmt(rctx, f.stmt);
+            combine(gctx, f.code);
+            render(rctx, f.code);
             write_converting_newlines(os.str(), file);
         }
     }
@@ -242,30 +242,30 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     return true;
 }
 
-static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
+static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, Code *code,
     const opt_t *opts, const uniq_vector_t<std::string> &condnames)
 {
     if (opts->target != TARGET_CODE) {
-        code->kind = CodeStmt::EMPTY;
+        code->kind = Code::EMPTY;
         return;
     }
 
     const char *text;
-    CodeStmts *stmts = code_stmts(alc);
+    CodeList *stmts = code_list(alc);
 
     text = o.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
-    append(stmts, code_stmt_text(alc, text));
+    append(stmts, code_text(alc, text));
 
-    CodeStmts *block = code_stmts(alc);
+    CodeList *block = code_list(alc);
     for (size_t i = 0; i < condnames.size(); ++i) {
         text = o.str(opts->condEnumPrefix).str(condnames[i]).cstr(",").flush();
-        append(block, code_stmt_text(alc, text));
+        append(block, code_text(alc, text));
     }
     append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
-    append(stmts, code_stmt_text(alc, "};"));
+    append(stmts, code_text(alc, "};"));
 
-    code->kind = CodeStmt::BLOCK;
+    code->kind = Code::BLOCK;
     code->block.stmts = stmts;
     code->block.fmt = CodeBlock::RAW;
 }
@@ -309,9 +309,9 @@ bool Output::emit()
         if (!conds.empty() && !this->cond_enum_in_hdr) {
             header_mode(true);
 
-            wdelay_stmt(0, code_stmt_textraw(allocator, ""));
+            wdelay_stmt(0, code_textraw(allocator, ""));
 
-            CodeStmt *code = code_stmt(allocator, CodeStmt::EMPTY);
+            Code *code = new_code(allocator, Code::EMPTY);
             gen_cond_enum(scratchbuf, allocator, code, opts, conds);
             wdelay_stmt(0, code);
 
@@ -327,9 +327,9 @@ bool Output::emit()
     return ok;
 }
 
-void gen_tags(Scratchbuf &o, CodeStmt *code, const std::set<std::string> &tags)
+void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags)
 {
-    DASSERT(code->kind == CodeStmt::STAGS || code->kind == CodeStmt::MTAGS);
+    DASSERT(code->kind == Code::STAGS || code->kind == Code::MTAGS);
 
     const char *fmt = code->tags.fmt;
     const char *sep = code->tags.sep;
@@ -342,25 +342,25 @@ void gen_tags(Scratchbuf &o, CodeStmt *code, const std::set<std::string> &tags)
         if (++tag == end) break;
         o.cstr(sep);
     }
-    code->kind = CodeStmt::RAW;
+    code->kind = Code::RAW;
     code->raw.size = o.stream().str().length();
     code->raw.data = o.flush();
 }
 
-static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
+static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
     uint32_t start_label, uint32_t fill_index, const opt_t *opts)
 {
     const char *text;
 
-    CodeStmts *goto_start = code_stmts(alc);
+    CodeList *goto_start = code_list(alc);
     text = o.cstr("goto ").str(opts->labelPrefix).u32(start_label).cstr(";").flush();
-    append(goto_start, code_stmt_text(alc, text));
+    append(goto_start, code_text(alc, text));
 
     CodeCases *ccases = code_cases(alc);
     if (opts->bUseStateAbort) {
         // default: abort();
-        CodeStmts *abort = code_stmts(alc);
-        append(abort, code_stmt_text(alc, "abort();"));
+        CodeList *abort = code_list(alc);
+        append(abort, code_text(alc, "abort();"));
         append(ccases, code_case_default(alc, abort));
 
         // case -1: goto <start label>;
@@ -371,7 +371,7 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
         append(ccases, code_case_default(alc, goto_start));
     }
     for (uint32_t i = 0; i < fill_index; ++i) {
-        CodeStmts *stmts = code_stmts(alc);
+        CodeList *stmts = code_list(alc);
 
         if (opts->eof != NOEOF) {
             // TODO: render this as a separate statement
@@ -379,72 +379,72 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
                 .cstr(" goto ").str(opts->labelPrefix).cstr("eof").u32(i).cstr("; ");
         }
         text = o.cstr("goto ").str(opts->yyfilllabel).u32(i).cstr(";").flush();
-        append(stmts, code_stmt_text(alc, text));
+        append(stmts, code_text(alc, text));
 
         append(ccases, code_case_number(alc, stmts, static_cast<int32_t>(i)));
     }
 
-    CodeStmts *stmts = code_stmts(alc);
+    CodeList *stmts = code_list(alc);
     text = o.str(opts->state_get).cstr(opts->state_get_naked ? "" : "()").flush();
     append(stmts, code_switch(alc, text, ccases, false));
 
     if (opts->bUseStateNext) {
         text = o.str(opts->yynext).cstr(":").flush();
-        append(stmts, code_stmt_textraw(alc, text));
+        append(stmts, code_textraw(alc, text));
     }
 
-    code->kind = CodeStmt::BLOCK;
+    code->kind = Code::BLOCK;
     code->block.stmts = stmts;
     code->block.fmt = CodeBlock::RAW;
 }
 
-static void gen_yych_decl(const opt_t *opts, CodeStmt *code)
+static void gen_yych_decl(const opt_t *opts, Code *code)
 {
     if (opts->bEmitYYCh) {
-        code->kind = CodeStmt::VAR;
+        code->kind = Code::VAR;
         code->var.type = opts->yyctype.c_str();
         code->var.name = opts->yych.c_str();
         code->var.init = NULL;
     }
     else {
-        code->kind = CodeStmt::EMPTY;
+        code->kind = Code::EMPTY;
     }
 }
 
-static void gen_yyaccept_def(const opt_t *opts, CodeStmt *code, bool used_yyaccept)
+static void gen_yyaccept_def(const opt_t *opts, Code *code, bool used_yyaccept)
 {
     if (used_yyaccept) {
-        code->kind = CodeStmt::VAR;
+        code->kind = Code::VAR;
         code->var.type = "unsigned int";
         code->var.name = opts->yyaccept.c_str();
         code->var.init = "0";
     }
     else {
-        code->kind = CodeStmt::EMPTY;
+        code->kind = Code::EMPTY;
     }
 }
 
-static void gen_yymaxfill(Scratchbuf &o, const opt_t *opts, CodeStmt *code,
+static void gen_yymaxfill(Scratchbuf &o, const opt_t *opts, Code *code,
     size_t max_fill)
 {
     if (opts->target == TARGET_CODE) {
-        code->kind = CodeStmt::TEXT;
+        code->kind = Code::TEXT;
         code->text = o.cstr("#define YYMAXFILL ").u64(max_fill).flush();
     }
     else {
-        code->kind = CodeStmt::EMPTY;
+        code->kind = Code::EMPTY;
     }
 }
 
-static void gen_yymaxnmatch(Scratchbuf &o, const opt_t *opts, CodeStmt *code,
+static void gen_yymaxnmatch(Scratchbuf &o, const opt_t *opts, Code *code,
     size_t max_nmatch)
 {
     if (opts->target == TARGET_CODE && opts->posix_syntax) {
-        code->kind = CodeStmt::TEXT;
+        code->kind = Code::TEXT;
         code->text = o.cstr("#define YYMAXNMATCH ").u64(max_nmatch).flush();
     }
     else {
-        code->kind = CodeStmt::EMPTY;
+        code->kind = Code::EMPTY;
     }
 }
 
@@ -508,37 +508,36 @@ static std::string output_cond_get(const opt_t *opts)
     return opts->cond_get + (opts->cond_get_naked ? "" : "()");
 }
 
-static CodeStmts *gen_cond_goto_binary(Scratchbuf &o, code_alc_t &alc,
+static CodeList *gen_cond_goto_binary(Scratchbuf &o, code_alc_t &alc,
     const std::vector<std::string> &conds, const opt_t *opts,
     size_t lower, size_t upper)
 {
-    CodeStmts *stmts = code_stmts(alc);
-    CodeStmt *stmt = NULL;
+    CodeList *stmts = code_list(alc);
+    Code *stmt = NULL;
     const char *text;
 
     if (lower == upper) {
         text = o.cstr("goto ").str(opts->condPrefix).str(conds[lower]).cstr(";").flush();
-        stmt = code_stmt_text(alc, text);
+        stmt = code_text(alc, text);
     }
     else {
         const size_t middle = lower + (upper - lower + 1) / 2;
-
         text = o.str(output_cond_get(opts)).cstr(" < ").u64(middle).flush();
-        CodeStmts *if_then = gen_cond_goto_binary(o, alc, conds, opts, lower, middle - 1);
-        CodeStmts *if_else = gen_cond_goto_binary(o, alc, conds, opts, middle, upper);
-        stmt = code_stmt_if_then_else(alc, text, if_then, if_else);
+        CodeList *if_then = gen_cond_goto_binary(o, alc, conds, opts, lower, middle - 1);
+        CodeList *if_else = gen_cond_goto_binary(o, alc, conds, opts, middle, upper);
+        stmt = code_if_then_else(alc, text, if_then, if_else);
     }
 
     append(stmts, stmt);
     return stmts;
 }
 
-static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
+static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
     const std::vector<std::string> &conds, const opt_t *opts, Msg &msg,
     bool warn_cond_ord, const loc_t &loc)
 {
     const size_t ncond = conds.size();
-    CodeStmts *stmts = code_stmts(alc);
+    CodeList *stmts = code_list(alc);
     const char *text;
 
     if (opts->target == TARGET_DOT) {
@@ -546,14 +545,14 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
             const std::string &cond = conds[i];
             text = o.cstr("0 -> ").str(cond).cstr(" [label=\"state=").str(cond)
                 .cstr("\"]").flush();
-            append(stmts, code_stmt_text(alc, text));
+            append(stmts, code_text(alc, text));
         }
     }
     else {
         if (opts->gFlag) {
             text = o.cstr("goto *").str(opts->yyctable).cstr("[")
                 .str(output_cond_get(opts)).cstr("];").flush();
-            append(stmts, code_stmt_text(alc, text));
+            append(stmts, code_text(alc, text));
         }
         else if (opts->sFlag) {
             warn_cond_ord &= ncond > 1;
@@ -566,9 +565,9 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
             for (size_t i = 0; i < ncond; ++i) {
                 const std::string &cond = conds[i];
 
-                CodeStmts *body = code_stmts(alc);
+                CodeList *body = code_list(alc);
                 text = o.cstr("goto ").str(opts->condPrefix).str(cond).cstr(";").flush();
-                append(body, code_stmt_text(alc, text));
+                append(body, code_text(alc, text));
 
                 text = o.str(opts->condEnumPrefix).str(cond).flush();
                 append(ccases, code_case_string(alc, body, text));
@@ -584,53 +583,53 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
         }
     }
 
-    code->kind = CodeStmt::BLOCK;
+    code->kind = Code::BLOCK;
     code->block.stmts = stmts;
     code->block.fmt = CodeBlock::RAW;
 }
 
-static void gen_cond_table(Scratchbuf &o, code_alc_t &alc, CodeStmt *code,
+static void gen_cond_table(Scratchbuf &o, code_alc_t &alc, Code *code,
     const std::vector<std::string> &conds, const opt_t *opts)
 {
     const size_t ncond = conds.size();
 
-    CodeStmts *stmts = code_stmts(alc);
+    CodeList *stmts = code_list(alc);
     const char *text;
 
     text = o.cstr("static void *").str(opts->yyctable).cstr("[").u64(ncond)
         .cstr("] = {").flush();
-    append(stmts, code_stmt_text(alc, text));
+    append(stmts, code_text(alc, text));
 
-    CodeStmts *block = code_stmts(alc);
+    CodeList *block = code_list(alc);
     for (size_t i = 0; i < ncond; ++i) {
         text = o.cstr("&&").str(opts->condPrefix).str(conds[i]).cstr(",").flush();
-        append(block, code_stmt_text(alc, text));
+        append(block, code_text(alc, text));
     }
     append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
-    append(stmts, code_stmt_text(alc, "};"));
+    append(stmts, code_text(alc, "};"));
 
-    code->kind = CodeStmt::BLOCK;
+    code->kind = Code::BLOCK;
     code->block.stmts = stmts;
     code->block.fmt = CodeBlock::RAW;
 }
 
 static bool oneline_if(const CodeIfTE *code, const opt_t *opts)
 {
-    const CodeStmt *first = code->if_code->head;
+    const Code *first = code->if_code->head;
     return first
         && first->next == NULL
-        && first->kind == CodeStmt::TEXT
+        && first->kind == Code::TEXT
         && opts->lang == LANG_C // Go requires braces
         && code->else_code == NULL
         && code->oneline;
 }
 
-void render_code_if_then_else(RenderContext &rctx, const CodeIfTE *code)
+void render_if_then_else(RenderContext &rctx, const CodeIfTE *code)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
-    const CodeStmt *first = code->if_code->head;
+    const Code *first = code->if_code->head;
 
     os << indent(rctx.ind, opts->indString) << "if (" << code->if_cond << ") ";
     DASSERT(count_lines_text(code->if_cond) == 0);
@@ -643,9 +642,9 @@ void render_code_if_then_else(RenderContext &rctx, const CodeIfTE *code)
     else {
         os << "{" << std::endl;
         ++rctx.line;
-        for (const CodeStmt *s = first; s; s = s->next) {
+        for (const Code *s = first; s; s = s->next) {
             ++rctx.ind;
-            render_code_stmt(rctx, s);
+            render(rctx, s);
             --rctx.ind;
         }
         os << indent(rctx.ind, opts->indString) << "}";
@@ -658,9 +657,9 @@ void render_code_if_then_else(RenderContext &rctx, const CodeIfTE *code)
                 os << " else {" << std::endl;
             }
             ++rctx.line;
-            for (const CodeStmt *s = code->else_code->head; s; s = s->next) {
+            for (const Code *s = code->else_code->head; s; s = s->next) {
                 ++rctx.ind;
-                render_code_stmt(rctx, s);
+                render(rctx, s);
                 --rctx.ind;
             }
             os << indent(rctx.ind, opts->indString) << "}";
@@ -670,30 +669,30 @@ void render_code_if_then_else(RenderContext &rctx, const CodeIfTE *code)
     }
 }
 
-void render_code_block(RenderContext &rctx, const CodeBlock *code)
+void render_block(RenderContext &rctx, const CodeBlock *code)
 {
     switch (code->fmt) {
         case CodeBlock::WRAPPED:
             rctx.os << indent(rctx.ind, rctx.opts->indString) << "{" << std::endl;
             ++rctx.line;
             ++rctx.ind;
-            render_code_stmts(rctx, code->stmts);
+            render_list(rctx, code->stmts);
             --rctx.ind;
             rctx.os << indent(rctx.ind, rctx.opts->indString) << "}" << std::endl;
             ++rctx.line;
             break;
         case CodeBlock::INDENTED:
             ++rctx.ind;
-            render_code_stmts(rctx, code->stmts);
+            render_list(rctx, code->stmts);
             --rctx.ind;
             break;
         case CodeBlock::RAW:
-            render_code_stmts(rctx, code->stmts);
+            render_list(rctx, code->stmts);
             break;
     }
 }
 
-static void render_code_var(RenderContext &rctx, const CodeVar *var)
+static void render_var(RenderContext &rctx, const CodeVar *var)
 {
     std::ostringstream &os = rctx.os;
 
@@ -719,7 +718,7 @@ static void render_code_var(RenderContext &rctx, const CodeVar *var)
     ++rctx.line;
 }
 
-void render_code_stmt(RenderContext &rctx, const CodeStmt *code)
+void render(RenderContext &rctx, const Code *code)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
@@ -727,123 +726,123 @@ void render_code_stmt(RenderContext &rctx, const CodeStmt *code)
     uint32_t &line = rctx.line;
 
     switch (code->kind) {
-        case CodeStmt::EMPTY:
+        case Code::EMPTY:
             break;
-        case CodeStmt::IF_THEN_ELSE:
-            render_code_if_then_else(rctx, &code->ifte);
+        case Code::IF_THEN_ELSE:
+            render_if_then_else(rctx, &code->ifte);
             break;
-        case CodeStmt::SWITCH:
-            render_code_switch(rctx, &code->swch);
+        case Code::SWITCH:
+            render_switch(rctx, &code->swch);
             break;
-        case CodeStmt::BLOCK:
-            render_code_block(rctx, &code->block);
+        case Code::BLOCK:
+            render_block(rctx, &code->block);
             break;
-        case CodeStmt::FUNC:
-            render_code_func(rctx, &code->func);
+        case Code::FUNC:
+            render_func(rctx, &code->func);
             break;
-        case CodeStmt::TEXT_RAW:
+        case Code::TEXT_RAW:
             os << code->text << std::endl;
             line += count_lines_text(code->text) + 1;
             break;
-        case CodeStmt::TEXT:
+        case Code::TEXT:
             os << indent(ind, opts->indString) << code->text << std::endl;
             line += count_lines_text(code->text) + 1;
             break;
-        case CodeStmt::RAW:
+        case Code::RAW:
             os.write(code->raw.data, static_cast<std::streamsize>(code->raw.size));
             for (size_t i = 0; i < code->raw.size; ++i) {
                 if (code->raw.data[i] == '\n') ++line;
             }
             break;
-        case CodeStmt::SKIP:
+        case Code::SKIP:
             output_skip(os, ind, opts);
             os << std::endl;
             ++line;
             break;
-        case CodeStmt::PEEK:
+        case Code::PEEK:
             output_peek(os, ind, opts);
             ++line;
             break;
-        case CodeStmt::BACKUP:
+        case Code::BACKUP:
             output_backup(os, ind, opts);
             ++line;
             break;
-        case CodeStmt::PEEK_SKIP:
+        case Code::PEEK_SKIP:
             output_peek_skip(os, ind, opts);
             ++line;
             break;
-        case CodeStmt::SKIP_PEEK:
+        case Code::SKIP_PEEK:
             output_skip_peek(os, ind, opts);
             ++line;
             break;
-        case CodeStmt::SKIP_BACKUP:
+        case Code::SKIP_BACKUP:
             output_skip_backup(os, ind, opts);
             ++line;
             break;
-        case CodeStmt::BACKUP_SKIP:
+        case Code::BACKUP_SKIP:
             output_backup_skip(os, ind, opts);
             ++line;
             break;
-        case CodeStmt::BACKUP_PEEK:
+        case Code::BACKUP_PEEK:
             output_backup_peek(os, ind, opts);
             ++line;
             break;
-        case CodeStmt::BACKUP_PEEK_SKIP:
+        case Code::BACKUP_PEEK_SKIP:
             output_backup_peek_skip(os, ind, opts);
             ++line;
             break;
-        case CodeStmt::SKIP_BACKUP_PEEK:
+        case Code::SKIP_BACKUP_PEEK:
             output_skip_backup_peek(os, ind, opts);
             ++line;
             break;
-        case CodeStmt::LINE_INFO_INPUT:
+        case Code::LINE_INFO_INPUT:
             render_line_info(os, code->loc.line,
                 rctx.msg.filenames[code->loc.file], opts);
             ++line;
             break;
-        case CodeStmt::LINE_INFO_OUTPUT:
+        case Code::LINE_INFO_OUTPUT:
             render_line_info(os, rctx.line + 1, rctx.file, opts);
             ++line;
             break;
-        case CodeStmt::VAR:
-            render_code_var(rctx, &code->var);
+        case Code::VAR:
+            render_var(rctx, &code->var);
             break;
-        case CodeStmt::STAGS:
-        case CodeStmt::MTAGS:
-        case CodeStmt::YYMAXFILL:
-        case CodeStmt::YYMAXNMATCH:
-        case CodeStmt::YYCH:
-        case CodeStmt::YYACCEPT:
-        case CodeStmt::COND_ENUM:
-        case CodeStmt::COND_GOTO:
-        case CodeStmt::COND_TABLE:
-        case CodeStmt::STATE_GOTO:
+        case Code::STAGS:
+        case Code::MTAGS:
+        case Code::YYMAXFILL:
+        case Code::YYMAXNMATCH:
+        case Code::YYCH:
+        case Code::YYACCEPT:
+        case Code::COND_ENUM:
+        case Code::COND_GOTO:
+        case Code::COND_TABLE:
+        case Code::STATE_GOTO:
             assert(false); // must have been expanded before
             break;
     }
 }
 
-void render_code_stmts(RenderContext &rctx, const CodeStmts *code)
+void render_list(RenderContext &rctx, const CodeList *code)
 {
-    for (const CodeStmt *s = code->head; s; s = s->next) {
-        render_code_stmt(rctx, s);
+    for (const Code *s = code->head; s; s = s->next) {
+        render(rctx, s);
     }
 }
 
 static bool oneline_case(const CodeCase *code)
 {
-    const CodeStmt *first = code->body->head;
+    const Code *first = code->body->head;
     return first
         && first->next == NULL
-        && first->kind == CodeStmt::TEXT;
+        && first->kind == Code::TEXT;
 }
 
-void render_code_case(RenderContext &rctx, const CodeCase *code, bool defcase, bool noindent)
+void render_case(RenderContext &rctx, const CodeCase *code, bool defcase, bool noindent)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
     const uint32_t ind = rctx.ind;
-    const CodeStmt *first = code->body->head;
+    const Code *first = code->body->head;
 
     if (defcase) {
         os << indent(ind, opts->indString) << "default:";
@@ -898,15 +897,15 @@ void render_code_case(RenderContext &rctx, const CodeCase *code, bool defcase, b
     else {
         os << std::endl;
         ++rctx.line;
-        for (const CodeStmt *s = first; s; s = s->next) {
+        for (const Code *s = first; s; s = s->next) {
             ++rctx.ind;
-            render_code_stmt(rctx, s);
+            render(rctx, s);
             --rctx.ind;
         }
     }
 }
 
-void render_code_switch(RenderContext &rctx, const CodeSwitch *code)
+void render_switch(RenderContext &rctx, const CodeSwitch *code)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
@@ -923,13 +922,13 @@ void render_code_switch(RenderContext &rctx, const CodeSwitch *code)
 
     if (code->impdef) {
         for (const CodeCase *c = first->next; c; c = c->next) {
-            render_code_case(rctx, c, false, noindent);
+            render_case(rctx, c, false, noindent);
         }
-        render_code_case(rctx, first, true, noindent);
+        render_case(rctx, first, true, noindent);
     }
     else {
         for (const CodeCase *c = first; c; c = c->next) {
-            render_code_case(rctx, c, false, noindent);
+            render_case(rctx, c, false, noindent);
         }
     }
 
@@ -937,7 +936,7 @@ void render_code_switch(RenderContext &rctx, const CodeSwitch *code)
     ++rctx.line;
 }
 
-void render_code_arg(RenderContext &rctx, const CodeArg *arg)
+void render_arg(RenderContext &rctx, const CodeArg *arg)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
@@ -955,7 +954,7 @@ void render_code_arg(RenderContext &rctx, const CodeArg *arg)
     os.write(p, s - p);
 }
 
-void render_code_func(RenderContext &rctx, const CodeFunc *func)
+void render_func(RenderContext &rctx, const CodeFunc *func)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
@@ -978,7 +977,7 @@ void render_code_func(RenderContext &rctx, const CodeFunc *func)
         os << "(";
         for (const CodeArg *a = first; a; a = a->next) {
             if (a != first) os << ", ";
-            render_code_arg(rctx, a);
+            render_arg(rctx, a);
         }
         os << ")";
     }
@@ -993,7 +992,7 @@ void render_code_func(RenderContext &rctx, const CodeFunc *func)
         for (const CodeArg *a = first; a; a = a->next) {
             const char *sep = a == first ? "( " : ", ";
             os << indent(rctx.ind, opts->indString) << sep;
-            render_code_arg(rctx, a);
+            render_arg(rctx, a);
             os << std::endl;
             ++rctx.line;
         }
@@ -1006,25 +1005,23 @@ void render_code_func(RenderContext &rctx, const CodeFunc *func)
     ++rctx.line;
 }
 
-static void fold_exprs(CodeStmts *stmts)
+static void fold_exprs(CodeList *stmts)
 {
-    CodeStmt *x, *y, *z;
+    Code *x, *y, *z;
     for (x = stmts->head; x; ) {
         // have three statements ahead
         if ((y = x->next) && (z = y->next)) {
-            CodeStmt::Kind xk = x->kind;
-            CodeStmt::Kind yk = y->kind;
-            CodeStmt::Kind zk = z->kind;
+            Code::Kind xk = x->kind;
+            Code::Kind yk = y->kind;
+            Code::Kind zk = z->kind;
 
-            if (xk == CodeStmt::BACKUP && yk == CodeStmt::PEEK
-                    && zk == CodeStmt::SKIP) {
-                x->kind = CodeStmt::BACKUP_PEEK_SKIP;
+            if (xk == Code::BACKUP && yk == Code::PEEK && zk == Code::SKIP) {
+                x->kind = Code::BACKUP_PEEK_SKIP;
                 x->next = z->next;
                 continue;
             }
-            else if (xk == CodeStmt::SKIP && yk == CodeStmt::BACKUP
-                    && zk == CodeStmt::PEEK) {
-                x->kind = CodeStmt::SKIP_BACKUP_PEEK;
+            else if (xk == Code::SKIP && yk == Code::BACKUP && zk == Code::PEEK) {
+                x->kind = Code::SKIP_BACKUP_PEEK;
                 x->next = z->next;
                 continue;
             }
@@ -1032,31 +1029,31 @@ static void fold_exprs(CodeStmts *stmts)
 
         // have two statements ahead
         if ((y = x->next)) {
-            CodeStmt::Kind xk = x->kind;
-            CodeStmt::Kind yk = y->kind;
+            Code::Kind xk = x->kind;
+            Code::Kind yk = y->kind;
 
-            if (xk == CodeStmt::PEEK && yk == CodeStmt::SKIP) {
-                x->kind = CodeStmt::PEEK_SKIP;
+            if (xk == Code::PEEK && yk == Code::SKIP) {
+                x->kind = Code::PEEK_SKIP;
                 x->next = y->next;
                 continue;
             }
-            else if (xk == CodeStmt::SKIP && yk == CodeStmt::PEEK) {
-                x->kind = CodeStmt::SKIP_PEEK;
+            else if (xk == Code::SKIP && yk == Code::PEEK) {
+                x->kind = Code::SKIP_PEEK;
                 x->next = y->next;
                 continue;
             }
-            else if (xk == CodeStmt::SKIP && yk == CodeStmt::BACKUP) {
-                x->kind = CodeStmt::SKIP_BACKUP;
+            else if (xk == Code::SKIP && yk == Code::BACKUP) {
+                x->kind = Code::SKIP_BACKUP;
                 x->next = y->next;
                 continue;
             }
-            else if (xk == CodeStmt::BACKUP && yk == CodeStmt::PEEK) {
-                x->kind = CodeStmt::BACKUP_PEEK;
+            else if (xk == Code::BACKUP && yk == Code::PEEK) {
+                x->kind = Code::BACKUP_PEEK;
                 x->next = y->next;
                 continue;
             }
-            else if (xk == CodeStmt::BACKUP && yk == CodeStmt::SKIP) {
-                x->kind = CodeStmt::BACKUP_SKIP;
+            else if (xk == Code::BACKUP && yk == Code::SKIP) {
+                x->kind = Code::BACKUP_SKIP;
                 x->next = y->next;
                 continue;
             }
@@ -1066,78 +1063,78 @@ static void fold_exprs(CodeStmts *stmts)
     }
 }
 
-void combine_stmt(CodegenContext &ctx, CodeStmt *code)
+void combine(CodegenContext &ctx, Code *code)
 {
     switch (code->kind) {
-        case CodeStmt::BLOCK:
-            combine_stmts(ctx, code->block.stmts);
+        case Code::BLOCK:
+            combine_list(ctx, code->block.stmts);
             break;
         // don't recurse into these because they have no skip/peek/backup
-        case CodeStmt::EMPTY:
-        case CodeStmt::IF_THEN_ELSE:
-        case CodeStmt::SWITCH:
-        case CodeStmt::FUNC:
-        case CodeStmt::TEXT:
-        case CodeStmt::RAW:
-        case CodeStmt::TEXT_RAW:
-        case CodeStmt::SKIP:
-        case CodeStmt::PEEK:
-        case CodeStmt::BACKUP:
-        case CodeStmt::PEEK_SKIP:
-        case CodeStmt::SKIP_PEEK:
-        case CodeStmt::SKIP_BACKUP:
-        case CodeStmt::BACKUP_SKIP:
-        case CodeStmt::BACKUP_PEEK:
-        case CodeStmt::BACKUP_PEEK_SKIP:
-        case CodeStmt::SKIP_BACKUP_PEEK:
-        case CodeStmt::LINE_INFO_INPUT:
-        case CodeStmt::LINE_INFO_OUTPUT:
-        case CodeStmt::VAR:
+        case Code::EMPTY:
+        case Code::IF_THEN_ELSE:
+        case Code::SWITCH:
+        case Code::FUNC:
+        case Code::TEXT:
+        case Code::RAW:
+        case Code::TEXT_RAW:
+        case Code::SKIP:
+        case Code::PEEK:
+        case Code::BACKUP:
+        case Code::PEEK_SKIP:
+        case Code::SKIP_PEEK:
+        case Code::SKIP_BACKUP:
+        case Code::BACKUP_SKIP:
+        case Code::BACKUP_PEEK:
+        case Code::BACKUP_PEEK_SKIP:
+        case Code::SKIP_BACKUP_PEEK:
+        case Code::LINE_INFO_INPUT:
+        case Code::LINE_INFO_OUTPUT:
+        case Code::VAR:
             break;
-        case CodeStmt::STAGS:
+        case Code::STAGS:
             gen_tags(ctx.scratchbuf, code, ctx.allstags);
             break;
-        case CodeStmt::MTAGS:
+        case Code::MTAGS:
             gen_tags(ctx.scratchbuf, code, ctx.allmtags);
             break;
-        case CodeStmt::YYMAXFILL:
+        case Code::YYMAXFILL:
             gen_yymaxfill(ctx.scratchbuf, ctx.opts, code, ctx.maxfill);
             break;
-        case CodeStmt::YYMAXNMATCH:
+        case Code::YYMAXNMATCH:
             gen_yymaxnmatch(ctx.scratchbuf, ctx.opts, code, ctx.maxnmatch);
             break;
-        case CodeStmt::YYCH:
+        case Code::YYCH:
             gen_yych_decl(ctx.opts, code);
             break;
-        case CodeStmt::YYACCEPT:
+        case Code::YYACCEPT:
             gen_yyaccept_def(ctx.opts, code, ctx.used_yyaccept);
             break;
-        case CodeStmt::COND_ENUM:
+        case Code::COND_ENUM:
             gen_cond_enum(ctx.scratchbuf, ctx.allocator, code, ctx.globopts,
                 ctx.allcondnames);
             break;
-        case CodeStmt::COND_GOTO:
+        case Code::COND_GOTO:
             gen_cond_goto(ctx.scratchbuf, ctx.allocator, code, ctx.condnames,
                 ctx.opts, ctx.msg, ctx.warn_cond_ord, ctx.loc);
             break;
-        case CodeStmt::COND_TABLE:
+        case Code::COND_TABLE:
             gen_cond_table(ctx.scratchbuf, ctx.allocator, code, ctx.condnames,
                 ctx.opts);
             break;
-        case CodeStmt::STATE_GOTO:
+        case Code::STATE_GOTO:
             gen_state_goto(ctx.scratchbuf, ctx.allocator, code, 0, ctx.fillidx,
                 ctx.globopts);
             break;
     }
 }
 
-void combine_stmts(CodegenContext &ctx, CodeStmts *stmts)
+void combine_list(CodegenContext &ctx, CodeList *stmts)
 {
     if (ctx.opts->input_api == INPUT_DEFAULT) {
         fold_exprs(stmts);
     }
-    for (CodeStmt *x = stmts->head; x; x = x->next) {
-        combine_stmt(ctx, x);
+    for (Code *x = stmts->head; x; x = x->next) {
+        combine(ctx, x);
     }
 }
 

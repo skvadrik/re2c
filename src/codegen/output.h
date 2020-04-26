@@ -49,22 +49,22 @@ public:
 };
 
 // forward decls
-struct CodeStmt;
+struct Code;
 struct CodeCase;
 
 template<typename T>
-struct CodeList {
+struct code_list_t {
     T  *head;
     T **ptail;
 };
 
-typedef CodeList<CodeStmt> CodeStmts;
+typedef code_list_t<Code> CodeList;
 
 struct CodeIfTE {
     const char *if_cond;
     const char *else_cond;
-    CodeStmts  *if_code;
-    CodeStmts  *else_code;
+    CodeList   *if_code;
+    CodeList   *else_code;
     bool        oneline;
 };
 
@@ -86,11 +86,11 @@ struct CodeCase {
         int32_t     number;
         const char *string;
     };
-    CodeStmts *body;
-    CodeCase  *next;
+    CodeList *body;
+    CodeCase *next;
 };
 
-typedef CodeList<CodeCase> CodeCases;
+typedef code_list_t<CodeCase> CodeCases;
 
 struct CodeSwitch {
     const char *expr;
@@ -105,8 +105,8 @@ struct CodeBlock {
         RAW
     };
 
-    CodeStmts *stmts;
-    Fmt        fmt;
+    CodeList *stmts;
+    Fmt       fmt;
 };
 
 struct CodeVar {
@@ -130,7 +130,7 @@ struct CodeArg {
     CodeArg    *next;
 };
 
-typedef CodeList<CodeArg> CodeArgs;
+typedef code_list_t<CodeArg> CodeArgs;
 
 struct CodeFunc {
     CodeArgs   *args;
@@ -138,7 +138,7 @@ struct CodeFunc {
     const char *semi;
 };
 
-struct CodeStmt {
+struct Code {
     enum Kind {
         EMPTY,
         IF_THEN_ELSE,
@@ -185,11 +185,11 @@ struct CodeStmt {
         loc_t       loc;
     };
 
-    CodeStmt *next;
+    Code *next;
 };
 
 template<typename T>
-inline void append(CodeList<T> *list, T *elem)
+inline void append(code_list_t<T> *list, T *elem)
 {
     DASSERT(elem);
     *list->ptail = elem;
@@ -197,7 +197,7 @@ inline void append(CodeList<T> *list, T *elem)
 }
 
 template<typename T>
-inline void prepend(CodeList<T> *list, T *elem)
+inline void prepend(code_list_t<T> *list, T *elem)
 {
     DASSERT(elem);
     elem->next = list->head;
@@ -205,7 +205,7 @@ inline void prepend(CodeList<T> *list, T *elem)
 }
 
 template<typename T>
-inline void append(CodeList<T> *list1, CodeList<T> *list2)
+inline void append(code_list_t<T> *list1, code_list_t<T> *list2)
 {
     if (list2 && list2->head) {
         *list1->ptail = list2->head;
@@ -213,183 +213,183 @@ inline void append(CodeList<T> *list1, CodeList<T> *list2)
     }
 }
 
-inline CodeStmt *code_stmt(code_alc_t &alc, CodeStmt::Kind kind)
+inline Code *new_code(code_alc_t &alc, Code::Kind kind)
 {
-    CodeStmt *s = alc.alloct<CodeStmt>(1);
-    s->kind = kind;
-    s->next = NULL;
-    return s;
+    Code *x = alc.alloct<Code>(1);
+    x->kind = kind;
+    x->next = NULL;
+    return x;
 }
 
-inline CodeStmt *code_stmt_text(code_alc_t &alc, const char *text)
+inline Code *code_text(code_alc_t &alc, const char *text)
 {
-    CodeStmt *s = code_stmt(alc, CodeStmt::TEXT);
-    s->text = text;
-    return s;
+    Code *x = new_code(alc, Code::TEXT);
+    x->text = text;
+    return x;
 }
 
-inline CodeStmt *code_raw(code_alc_t &alc, const char *data, size_t size)
+inline Code *code_raw(code_alc_t &alc, const char *data, size_t size)
 {
-    CodeStmt *s = code_stmt(alc, CodeStmt::RAW);
+    Code *x = new_code(alc, Code::RAW);
     char *copy = alc.alloct<char>(size);
     memcpy(copy, data, size);
-    s->raw.size = size;
-    s->raw.data = copy;
-    return s;
+    x->raw.size = size;
+    x->raw.data = copy;
+    return x;
 }
 
-inline CodeStmt *code_stmt_textraw(code_alc_t &alc, const char *text)
+inline Code *code_textraw(code_alc_t &alc, const char *text)
 {
-    CodeStmt *s = code_stmt(alc, CodeStmt::TEXT_RAW);
-    s->text = text;
-    return s;
+    Code *x = new_code(alc, Code::TEXT_RAW);
+    x->text = text;
+    return x;
 }
 
-inline CodeStmt *code_tags(code_alc_t &alc,
-    const std::string &fmt, const std::string &sep, bool mtags)
+inline Code *code_tags(code_alc_t &alc, const std::string &fmt, const std::string &sep,
+    bool mtags)
 {
-    CodeStmt *s = code_stmt(alc, mtags ? CodeStmt::MTAGS : CodeStmt::STAGS);
+    Code *x = new_code(alc, mtags ? Code::MTAGS : Code::STAGS);
 
     char *fmt_copy = alc.alloct<char>(fmt.length() + 1);
     strcpy(fmt_copy, fmt.c_str());
-    s->tags.fmt = fmt_copy;
+    x->tags.fmt = fmt_copy;
 
     char *sep_copy = alc.alloct<char>(sep.length() + 1);
     strcpy(sep_copy, sep.c_str());
-    s->tags.sep = sep_copy;
+    x->tags.sep = sep_copy;
 
-    return s;
+    return x;
 }
 
-inline CodeStmt *code_yymaxfill(code_alc_t &alc)
+inline Code *code_yymaxfill(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::YYMAXFILL);
+    return new_code(alc, Code::YYMAXFILL);
 }
 
-inline CodeStmt *code_yymaxnmatch(code_alc_t &alc)
+inline Code *code_yymaxnmatch(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::YYMAXNMATCH);
+    return new_code(alc, Code::YYMAXNMATCH);
 }
 
-inline CodeStmt *code_cond_enum(code_alc_t &alc)
+inline Code *code_cond_enum(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::COND_ENUM);
+    return new_code(alc, Code::COND_ENUM);
 }
 
-inline CodeStmt *code_cond_table(code_alc_t &alc)
+inline Code *code_cond_table(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::COND_TABLE);
+    return new_code(alc, Code::COND_TABLE);
 }
 
-inline CodeStmt *code_cond_goto(code_alc_t &alc)
+inline Code *code_cond_goto(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::COND_GOTO);
+    return new_code(alc, Code::COND_GOTO);
 }
 
-inline CodeStmt *code_state_goto(code_alc_t &alc)
+inline Code *code_state_goto(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::STATE_GOTO);
+    return new_code(alc, Code::STATE_GOTO);
 }
 
-inline CodeStmt *code_line_info_input(code_alc_t &alc, const loc_t &loc)
+inline Code *code_line_info_input(code_alc_t &alc, const loc_t &loc)
 {
-    CodeStmt *s = code_stmt(alc, CodeStmt::LINE_INFO_INPUT);
-    s->loc = loc;
-    return s;
+    Code *x = new_code(alc, Code::LINE_INFO_INPUT);
+    x->loc = loc;
+    return x;
 }
 
-inline CodeStmt *code_yych_decl(code_alc_t &alc)
+inline Code *code_yych_decl(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::YYCH);
+    return new_code(alc, Code::YYCH);
 }
 
-inline CodeStmt *code_yyaccept_def(code_alc_t &alc)
+inline Code *code_yyaccept_def(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::YYACCEPT);
+    return new_code(alc, Code::YYACCEPT);
 }
 
-inline CodeStmt *code_line_info_output(code_alc_t &alc)
+inline Code *code_line_info_output(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::LINE_INFO_OUTPUT);
+    return new_code(alc, Code::LINE_INFO_OUTPUT);
 }
 
-inline CodeStmt *code_stmt_skip(code_alc_t &alc)
+inline Code *code_skip(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::SKIP);
+    return new_code(alc, Code::SKIP);
 }
 
-inline CodeStmt *code_stmt_peek(code_alc_t &alc)
+inline Code *code_peek(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::PEEK);
+    return new_code(alc, Code::PEEK);
 }
 
-inline CodeStmt *code_stmt_backup(code_alc_t &alc)
+inline Code *code_backup(code_alc_t &alc)
 {
-    return code_stmt(alc, CodeStmt::BACKUP);
+    return new_code(alc, Code::BACKUP);
 }
 
-inline CodeStmt *code_block(code_alc_t &alc, CodeStmts *stmts, CodeBlock::Fmt fmt)
+inline Code *code_block(code_alc_t &alc, CodeList *stmts, CodeBlock::Fmt fmt)
 {
-    CodeStmt *s = code_stmt(alc, CodeStmt::BLOCK);
-    s->block.stmts = stmts;
-    s->block.fmt   = fmt;
-    return s;
+    Code *x = new_code(alc, Code::BLOCK);
+    x->block.stmts = stmts;
+    x->block.fmt   = fmt;
+    return x;
 }
 
-inline CodeStmt *code_stmt_if_then_else(code_alc_t &alc, const char *if_cond,
-    CodeStmts *if_code, CodeStmts *else_code, bool oneline = true)
+inline Code *code_if_then_else(code_alc_t &alc, const char *if_cond, CodeList *if_code,
+    CodeList *else_code, bool oneline = true)
 {
-    CodeStmt *s = code_stmt(alc, CodeStmt::IF_THEN_ELSE);
-    s->ifte.if_cond   = if_cond;
-    s->ifte.else_cond = NULL;
-    s->ifte.if_code   = if_code;
-    s->ifte.else_code = else_code;
-    s->ifte.oneline   = oneline;
-    return s;
+    Code *x = new_code(alc, Code::IF_THEN_ELSE);
+    x->ifte.if_cond   = if_cond;
+    x->ifte.else_cond = NULL;
+    x->ifte.if_code   = if_code;
+    x->ifte.else_code = else_code;
+    x->ifte.oneline   = oneline;
+    return x;
 }
 
-inline CodeStmt *code_stmt_if_then_elif(code_alc_t &alc, const char *if_cond,
-    CodeStmts *if_code, const char *else_cond, CodeStmts *else_code)
+inline Code *code_if_then_elif(code_alc_t &alc, const char *if_cond, CodeList *if_code,
+    const char *else_cond, CodeList *else_code)
 {
-    CodeStmt *s = code_stmt_if_then_else(alc, if_cond, if_code, else_code, false);
-    s->ifte.else_cond = else_cond;
-    return s;
+    Code *x = code_if_then_else(alc, if_cond, if_code, else_code, false);
+    x->ifte.else_cond = else_cond;
+    return x;
 }
 
-inline CodeCase *code_case_default(code_alc_t &alc, CodeStmts *body)
+inline CodeCase *code_case_default(code_alc_t &alc, CodeList *body)
 {
-    CodeCase *s = alc.alloct<CodeCase>(1);
-    s->kind = CodeCase::DEFAULT;
-    s->body = body;
-    s->next = NULL;
-    return s;
+    CodeCase *x = alc.alloct<CodeCase>(1);
+    x->kind = CodeCase::DEFAULT;
+    x->body = body;
+    x->next = NULL;
+    return x;
 }
 
-inline CodeCase *code_case_number(code_alc_t &alc, CodeStmts *body, int32_t number)
+inline CodeCase *code_case_number(code_alc_t &alc, CodeList *body, int32_t number)
 {
-    CodeCase *s = alc.alloct<CodeCase>(1);
-    s->kind = CodeCase::NUMBER;
-    s->number = number;
-    s->body = body;
-    s->next = NULL;
-    return s;
+    CodeCase *x = alc.alloct<CodeCase>(1);
+    x->kind = CodeCase::NUMBER;
+    x->number = number;
+    x->body = body;
+    x->next = NULL;
+    return x;
 }
 
-inline CodeCase *code_case_string(code_alc_t &alc, CodeStmts *body, const char *string)
+inline CodeCase *code_case_string(code_alc_t &alc, CodeList *body, const char *string)
 {
-    CodeCase *s = alc.alloct<CodeCase>(1);
-    s->kind = CodeCase::STRING;
-    s->string = string;
-    s->body = body;
-    s->next = NULL;
-    return s;
+    CodeCase *x = alc.alloct<CodeCase>(1);
+    x->kind = CodeCase::STRING;
+    x->string = string;
+    x->body = body;
+    x->next = NULL;
+    return x;
 }
 
-inline CodeCase *code_case_chars(code_alc_t &alc, CodeStmts *body,
+inline CodeCase *code_case_chars(code_alc_t &alc, CodeList *body,
     const std::vector<std::pair<uint32_t, uint32_t> > &ranges)
 {
-    CodeCase *s = alc.alloct<CodeCase>(1);
-    s->kind = CodeCase::CHARS;
+    CodeCase *x = alc.alloct<CodeCase>(1);
+    x->kind = CodeCase::CHARS;
 
     const size_t n = ranges.size();
     uint32_t *rs = alc.alloct<uint32_t>(2 * n);
@@ -397,75 +397,75 @@ inline CodeCase *code_case_chars(code_alc_t &alc, CodeStmts *body,
         rs[2 * i]     = ranges[i].first;
         rs[2 * i + 1] = ranges[i].second;
     }
-    s->chars.nranges = n;
-    s->chars.ranges  = rs;
+    x->chars.nranges = n;
+    x->chars.ranges  = rs;
 
-    s->body = body;
-    s->next = NULL;
-    return s;
+    x->body = body;
+    x->next = NULL;
+    return x;
 }
 
 inline CodeCases *code_cases(code_alc_t &alc)
 {
-    CodeCases *c = alc.alloct<CodeCases>(1);
-    c->head  = NULL;
-    c->ptail = &c->head;
-    return c;
+    CodeCases *x = alc.alloct<CodeCases>(1);
+    x->head  = NULL;
+    x->ptail = &x->head;
+    return x;
 }
 
 inline CodeArg *code_arg(code_alc_t &alc, const char *arg)
 {
-    CodeArg *a = alc.alloct<CodeArg>(1);
-    a->arg = arg;
-    a->next = NULL;
-    return a;
+    CodeArg *x = alc.alloct<CodeArg>(1);
+    x->arg = arg;
+    x->next = NULL;
+    return x;
 }
 
 inline CodeArgs *code_args(code_alc_t &alc)
 {
-    CodeArgs *a = alc.alloct<CodeArgs>(1);
-    a->head  = NULL;
-    a->ptail = &a->head;
-    return a;
+    CodeArgs *x = alc.alloct<CodeArgs>(1);
+    x->head  = NULL;
+    x->ptail = &x->head;
+    return x;
 }
 
-inline CodeStmt *code_func(code_alc_t &alc, const char *name, CodeArgs *args,
+inline Code *code_func(code_alc_t &alc, const char *name, CodeArgs *args,
     const char *semi)
 {
-    CodeStmt *s = code_stmt(alc, CodeStmt::FUNC);
-    s->func.args = args;
-    s->func.name = name;
-    s->func.semi = semi;
-    return s;
+    Code *x = new_code(alc, Code::FUNC);
+    x->func.args = args;
+    x->func.name = name;
+    x->func.semi = semi;
+    return x;
 }
 
-inline CodeStmt *code_fdecl(code_alc_t &alc, const char *name, CodeArgs *args)
+inline Code *code_fdecl(code_alc_t &alc, const char *name, CodeArgs *args)
 {
     return code_func(alc, name, args, "");
 }
 
-inline CodeStmt *code_fcall(code_alc_t &alc, const char *name, CodeArgs *args,
+inline Code *code_fcall(code_alc_t &alc, const char *name, CodeArgs *args,
     const char *semi)
 {
     return code_func(alc, name, args, semi);
 }
 
-inline CodeStmt *code_switch(code_alc_t &alc, const char *expr, CodeCases *cases,
+inline Code *code_switch(code_alc_t &alc, const char *expr, CodeCases *cases,
     bool impdef)
 {
-    CodeStmt *s = code_stmt(alc, CodeStmt::SWITCH);
-    s->swch.expr   = expr;
-    s->swch.cases  = cases;
-    s->swch.impdef = impdef;
-    return s;
+    Code *x = new_code(alc, Code::SWITCH);
+    x->swch.expr   = expr;
+    x->swch.cases  = cases;
+    x->swch.impdef = impdef;
+    return x;
 }
 
-inline CodeStmts *code_stmts(code_alc_t &alc)
+inline CodeList *code_list(code_alc_t &alc)
 {
-    CodeStmts *s = alc.alloct<CodeStmts>(1);
-    s->head = NULL;
-    s->ptail = &s->head;
-    return s;
+    CodeList *x = alc.alloct<CodeList>(1);
+    x->head = NULL;
+    x->ptail = &x->head;
+    return x;
 }
 
 struct CodegenContext {
@@ -495,21 +495,20 @@ struct RenderContext {
     uint32_t &line;
 };
 
-void gen_tags(Scratchbuf &o, CodeStmt *code, const std::set<std::string> &tags);
-void combine_stmt(CodegenContext &ctx, CodeStmt *code);
-void combine_stmts(CodegenContext &ctx, CodeStmts *stmts);
-void render_code_stmt(RenderContext &rctx, const CodeStmt *code);
-void render_code_stmts(RenderContext &rctx, const CodeStmts *code);
-void render_code_if_then_else(RenderContext &rctx, const CodeIfTE *code);
-void render_code_case(RenderContext &rctx, const CodeCase *code, bool defcase,
-    bool noindent);
-void render_code_switch(RenderContext &rctx, const CodeSwitch *code);
-void render_code_block(RenderContext &rctx, const CodeBlock *code);
-void render_code_func(RenderContext &rctx, const CodeFunc *func);
-void render_code_arg(RenderContext &rctx, const CodeArg *arg);
+void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags);
+void combine(CodegenContext &ctx, Code *code);
+void combine_list(CodegenContext &ctx, CodeList *stmts);
+void render(RenderContext &rctx, const Code *code);
+void render_list(RenderContext &rctx, const CodeList *code);
+void render_if_then_else(RenderContext &rctx, const CodeIfTE *code);
+void render_case(RenderContext &rctx, const CodeCase *code, bool defcase, bool noindent);
+void render_switch(RenderContext &rctx, const CodeSwitch *code);
+void render_block(RenderContext &rctx, const CodeBlock *code);
+void render_func(RenderContext &rctx, const CodeFunc *func);
+void render_arg(RenderContext &rctx, const CodeArg *arg);
 
 struct OutputFragment {
-    CodeStmt *stmt;
+    Code     *code;
     uint32_t  indent;
 };
 
@@ -561,7 +560,7 @@ public:
     bool in_header() const;
     void wraw (const char *s, const char *e);
     void wversion_time ();
-    void wdelay_stmt(uint32_t ind, CodeStmt *stmt);
+    void wdelay_stmt(uint32_t ind, Code *code);
     bool emit();
     bool emit_blocks(const std::string &fname, blocks_t &blocks,
         const uniq_vector_t<std::string> &global_types,

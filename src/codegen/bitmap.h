@@ -40,7 +40,7 @@ public:
     void insert(const Go *go, const State *s);
     const bitmap_t *find(const Go *go, const State *s) const;
     bool empty() const;
-    CodeStmts *gen(Output &output);
+    CodeList *gen(Output &output);
     FORBID_COPY(bitmaps_t);
 };
 

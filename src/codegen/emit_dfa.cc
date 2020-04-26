@@ -28,7 +28,7 @@
 
 namespace re2c {
 
-static void emit_state(Output &output, const State *s, bool used_label, CodeStmts *stmts)
+static void emit_state(Output &output, const State *s, bool used_label, CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -37,16 +37,16 @@ static void emit_state(Output &output, const State *s, bool used_label, CodeStmt
 
     if (used_label) {
         text = o.str(opts->labelPrefix).label(s->label).cstr(":").flush();
-        append(stmts, code_stmt_textraw(alc, text));
+        append(stmts, code_textraw(alc, text));
     }
     if (opts->dFlag && (s->action.type != Action::INITIAL)) {
         text = o.str(opts->yydebug).cstr("(").label(s->label).cstr(", ")
             .str(output_expr_peek(opts)).cstr(");").flush();
-        append(stmts, code_stmt_text(alc, text));
+        append(stmts, code_text(alc, text));
     }
 }
 
-static void emit_eof(Output &output, const SemAct *semact, CodeStmts *stmts)
+static void emit_eof(Output &output, const SemAct *semact, CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -58,14 +58,14 @@ static void emit_eof(Output &output, const SemAct *semact, CodeStmts *stmts)
     // EOF label
     text = o.str(opts->labelPrefix).cstr("eofrule").u64(output.blockid())
         .cstr(":").flush();
-    append(stmts, code_stmt_textraw(alc, text));
+    append(stmts, code_textraw(alc, text));
 
     // source line directive
     append(stmts, code_line_info_input(alc, semact->loc));
 
     // user-defined semantic action for EOF rule
     text = o.str(semact->text).flush();
-    append(stmts, code_stmt_text(alc, text));
+    append(stmts, code_text(alc, text));
 
     // output line directive
     append(stmts, code_line_info_output(alc));
@@ -100,7 +100,7 @@ void DFA::count_used_labels(const opt_t *opts)
     }
 }
 
-void DFA::emit_body(Output &output, CodeStmts *stmts) const
+void DFA::emit_body(Output &output, CodeList *stmts) const
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -115,7 +115,7 @@ void DFA::emit_body(Output &output, CodeStmts *stmts) const
     if (used_labels.count(head->label)) {
         text = o.cstr("goto ").str(opts->labelPrefix).label(initial_label)
             .cstr(";").flush();
-        append(stmts, code_stmt_text(alc, text));
+        append(stmts, code_text(alc, text));
     }
 
     for (State * s = head; s; s = s->next) {
@@ -127,7 +127,7 @@ void DFA::emit_body(Output &output, CodeStmts *stmts) const
     emit_eof(output, this->eof_action, stmts);
 }
 
-void DFA::emit_dot(Output &output, CodeStmts *program) const
+void DFA::emit_dot(Output &output, CodeList *program) const
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -136,7 +136,7 @@ void DFA::emit_dot(Output &output, CodeStmts *program) const
 
     if (opts->cFlag) {
         text = o.str(cond).cstr(" -> ").label(head->label).flush();
-        append(program, code_stmt_text(alc, text));
+        append(program, code_text(alc, text));
     }
 
     for (State *s = head; s; s = s->next) {
@@ -145,7 +145,7 @@ void DFA::emit_dot(Output &output, CodeStmts *program) const
             for (uint32_t i = 0; i < accs.size(); ++i) {
                 text = o.label(s->label).cstr(" -> ").label(accs[i].first->label)
                     .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]").flush();
-                append(program, code_stmt_text(alc, text));
+                append(program, code_text(alc, text));
             }
         }
         else if (s->action.type == Action::RULE) {
@@ -154,7 +154,7 @@ void DFA::emit_dot(Output &output, CodeStmts *program) const
                 text = o.label(s->label).cstr(" [label=\"")
                     .str(msg.filenames[semact->loc.file]).cstr(":")
                     .u32(semact->loc.line).cstr("\"]").flush();
-                append(program, code_stmt_text(alc, text));
+                append(program, code_text(alc, text));
             }
         }
         s->go.emit(output, *this, s, program);
@@ -195,16 +195,16 @@ void gen_code(Output &output, dfas_t &dfas)
 
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    CodeStmts *program = code_stmts(alc);
+    CodeList *program = code_list(alc);
     uint32_t ind = 0;
 
     if (opts->target == TARGET_DOT) {
-        append(program, code_stmt_text(alc, "digraph re2c {"));
+        append(program, code_text(alc, "digraph re2c {"));
         append(program, code_cond_goto(alc));
         for (i = b; i != e; ++i) {
             (*i)->emit_dot(output, program);
         }
-        append(program, code_stmt_text(alc, "}"));
+        append(program, code_text(alc, "}"));
     }
     else if (opts->target == TARGET_SKELETON) {
         for (i = b; i != e; ++i) {
@@ -218,15 +218,15 @@ void gen_code(Output &output, dfas_t &dfas)
         ind = output.block().opts->topIndent;
 
         const char *text;
-        CodeStmts *program1 = code_stmts(alc);
+        CodeList *program1 = code_list(alc);
         for (i = b; i != e; ++i) {
             const bool first = i == b;
             DFA &dfa = *(*i);
 
-            CodeStmts *bms = dfa.bitmaps.gen(output);
+            CodeList *bms = dfa.bitmaps.gen(output);
 
             if (first && opts->fFlag) {
-                append(program1, code_stmt_textraw(alc, ""));
+                append(program1, code_textraw(alc, ""));
             }
 
             if (first && !opts->fFlag) {
@@ -250,13 +250,13 @@ void gen_code(Output &output, dfas_t &dfas)
             // start label
             if (first && opts->cFlag && dfa.used_labels.count(dfa.start_label)) {
                 text = o.str(opts->labelPrefix).label(dfa.start_label).cstr(":").flush();
-                append(program1, code_stmt_textraw(alc, text));
+                append(program1, code_textraw(alc, text));
             }
 
             // user-defined start label
             if (first && !opts->startlabel.empty()) {
                 text = o.str(opts->startlabel).cstr(":").flush();
-                append(program1, code_stmt_textraw(alc, text));
+                append(program1, code_textraw(alc, text));
             }
 
             if (opts->cFlag && !output.cond_goto) {
@@ -269,20 +269,20 @@ void gen_code(Output &output, dfas_t &dfas)
                     std::string divider = opts->condDivider;
                     strrreplace(divider, opts->condDividerParam, dfa.cond);
                     text = o.str(divider).flush();
-                    append(program1, code_stmt_textraw(alc, text));
+                    append(program1, code_textraw(alc, text));
                 }
                 text = o.str(opts->condPrefix).str(dfa.cond).cstr(":").flush();
-                append(program1, code_stmt_textraw(alc, text));
+                append(program1, code_textraw(alc, text));
             }
 
             // generate code for DFA
-            CodeStmts *body = code_stmts(alc);
+            CodeList *body = code_list(alc);
             dfa.emit_body(output, body);
 
             // TODO: instead of rechecking bitmap-related conditions, just check if
             // the code for bitmaps is NULL (requires trivial changes in tests)
             if (opts->cFlag && opts->bFlag && !dfa.bitmaps.empty()) {
-                CodeStmts *block = code_stmts(alc);
+                CodeList *block = code_list(alc);
                 append(block, bms);
                 append(block, body);
                 append(program1, code_block(alc, block, CodeBlock::WRAPPED));
@@ -301,7 +301,7 @@ void gen_code(Output &output, dfas_t &dfas)
             || (opts->bFlag && !opts->cFlag && have_bitmaps)
             || (opts->cFlag && opts->gFlag);
 
-        append(program, code_stmt_textraw(alc, ""));
+        append(program, code_textraw(alc, ""));
         append(program, code_line_info_output(alc));
 
         if (prolog) {

@@ -47,7 +47,7 @@ const bitmap_t *bitmaps_t::find(const Go *go, const State *s) const
 
 bool bitmaps_t::empty() const { return maps.empty(); }
 
-CodeStmts *bitmaps_t::gen(Output &output)
+CodeList *bitmaps_t::gen(Output &output)
 {
     if (empty() || !used) return NULL;
 
@@ -59,12 +59,12 @@ CodeStmts *bitmaps_t::gen(Output &output)
     Scratchbuf &o = output.scratchbuf;
     const char *text;
 
-    CodeStmts *stmts = code_stmts(alc);
+    CodeList *stmts = code_list(alc);
 
     text = o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {").flush();
-    append(stmts, code_stmt_text(alc, text));
+    append(stmts, code_text(alc, text));
 
-    CodeStmts *block = code_stmts(alc);
+    CodeList *block = code_list(alc);
     for (uint32_t i = 0, t = 1; b != e; i += ncunit, t += TABLE_WIDTH) {
         memset(buffer, 0, ncunit * sizeof(uint32_t));
 
@@ -77,7 +77,7 @@ CodeStmts *bitmaps_t::gen(Output &output)
         if (nmap > TABLE_WIDTH) {
             text = o.cstr("/* table ").u32(t).cstr(" .. ").u32(std::min(nmap, t + 7))
                 .cstr(": ").u32(i).cstr(" */").flush();
-            append(block, code_stmt_text(alc, text));
+            append(block, code_text(alc, text));
         }
 
         for (uint32_t i = 0; i < ncunit / TABLE_WIDTH; ++i) {
@@ -92,13 +92,13 @@ CodeStmts *bitmaps_t::gen(Output &output)
                 o.cstr(", ");
             }
             text = o.flush();
-            append(block, code_stmt_text(alc, text));
+            append(block, code_text(alc, text));
         }
     }
     append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
     text = o.cstr("};").flush();
-    append(stmts, code_stmt_text(alc, text));
+    append(stmts, code_text(alc, text));
 
     return stmts;
 }

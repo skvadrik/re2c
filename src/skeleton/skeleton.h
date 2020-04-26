@@ -109,10 +109,10 @@ uint32_t maxpath(const Skeleton &skel);
 void warn_undefined_control_flow(const Skeleton &skel);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
 void emit_data(const Skeleton &skel);
-CodeStmt *emit_skeleton_prolog(Output &output);
-CodeStmt *emit_skeleton_epilog(Output &output);
-void emit_skeleton(Output &output, CodeStmts *code, DFA &dfa);
-void emit_skeleton_action(Output &output, CodeStmts *code, const DFA &dfa, size_t rid);
+Code *emit_skeleton_prolog(Output &output);
+Code *emit_skeleton_epilog(Output &output);
+void emit_skeleton(Output &output, CodeList *code, DFA &dfa);
+void emit_skeleton_action(Output &output, CodeList *code, const DFA &dfa, size_t rid);
 
 } // namespace re2c
 

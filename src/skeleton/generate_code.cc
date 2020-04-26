@@ -18,38 +18,38 @@
 
 namespace re2c {
 
-static void from_le(Output &output, CodeStmts *code, const char *expr, size_t size)
+static void from_le(Output &output, CodeList *code, const char *expr, size_t size)
 {
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const char *text;
 
-    append(code, code_stmt_text(alc, "/* from little-endian to host-endian */"));
+    append(code, code_text(alc, "/* from little-endian to host-endian */"));
     text = o.cstr("unsigned char *p = (unsigned char*)&").cstr(expr).cstr(";").flush();
-    append(code, code_stmt_text(alc, text));
+    append(code, code_text(alc, text));
     o.cstr(expr).cstr(" = p[0]");
     for (uint32_t i = 1; i < size; ++i) {
         o.cstr(" + (p[").u32(i).cstr("] << ").u32(i * 8).cstr("u)");
     }
     text = o.cstr(";").flush();
-    append(code, code_stmt_text(alc, text));
+    append(code, code_text(alc, text));
 }
 
-CodeStmt *emit_skeleton_prolog(Output &output)
+Code *emit_skeleton_prolog(Output &output)
 {
     code_alc_t &alc = output.allocator;
     const char *if_cond;
-    CodeStmts *code, *block, *if_code;
+    CodeList *code, *block, *if_code;
     CodeArgs *args;
 
-    code = code_stmts(alc);
+    code = code_list(alc);
 
-    append(code, code_stmt_textraw(alc, ""));
-    append(code, code_stmt_textraw(alc, "#include <stddef.h> /* size_t */"));
-    append(code, code_stmt_textraw(alc, "#include <stdio.h>"));
-    append(code, code_stmt_textraw(alc, "#include <stdlib.h> /* malloc, free */"));
-    append(code, code_stmt_textraw(alc, "#include <string.h> /* memcpy */"));
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
+    append(code, code_textraw(alc, "#include <stddef.h> /* size_t */"));
+    append(code, code_textraw(alc, "#include <stdio.h>"));
+    append(code, code_textraw(alc, "#include <stdlib.h> /* malloc, free */"));
+    append(code, code_textraw(alc, "#include <string.h> /* memcpy */"));
+    append(code, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "const char *fname"));
@@ -58,66 +58,66 @@ CodeStmt *emit_skeleton_prolog(Output &output)
     append(args, code_arg(alc, "size_t *pfsize"));
     append(code, code_fdecl(alc, "static void *read_file", args));
 
-    block = code_stmts(alc);
+    block = code_list(alc);
 
-    append(block, code_stmt_text(alc, "void *buffer = NULL;"));
-    append(block, code_stmt_text(alc, "size_t fsize = 0;"));
+    append(block, code_text(alc, "void *buffer = NULL;"));
+    append(block, code_text(alc, "size_t fsize = 0;"));
 
-    append(block, code_stmt_textraw(alc, ""));
+    append(block, code_textraw(alc, ""));
 
-    append(block, code_stmt_text(alc, "/* open file */"));
-    append(block, code_stmt_text(alc, "FILE *f = fopen(fname, \"rb\");"));
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc, "goto error;"));
-    append(block, code_stmt_if_then_else(alc, "f == NULL", if_code, NULL, false));
+    append(block, code_text(alc, "/* open file */"));
+    append(block, code_text(alc, "FILE *f = fopen(fname, \"rb\");"));
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "goto error;"));
+    append(block, code_if_then_else(alc, "f == NULL", if_code, NULL, false));
 
-    append(block, code_stmt_textraw(alc, ""));
+    append(block, code_textraw(alc, ""));
 
-    append(block, code_stmt_text(alc, "/* get file size */"));
-    append(block, code_stmt_text(alc, "fseek(f, 0, SEEK_END);"));
-    append(block, code_stmt_text(alc, "fsize = (size_t) ftell(f) / unit;"));
-    append(block, code_stmt_text(alc, "fseek(f, 0, SEEK_SET);"));
+    append(block, code_text(alc, "/* get file size */"));
+    append(block, code_text(alc, "fseek(f, 0, SEEK_END);"));
+    append(block, code_text(alc, "fsize = (size_t) ftell(f) / unit;"));
+    append(block, code_text(alc, "fseek(f, 0, SEEK_SET);"));
 
-    append(block, code_stmt_textraw(alc, ""));
+    append(block, code_textraw(alc, ""));
 
-    append(block, code_stmt_text(alc, "/* allocate memory for file and padding */"));
-    append(block, code_stmt_text(alc, "buffer = malloc(unit * (fsize + padding));"));
+    append(block, code_text(alc, "/* allocate memory for file and padding */"));
+    append(block, code_text(alc, "buffer = malloc(unit * (fsize + padding));"));
     if_cond = "buffer == NULL";
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc, "goto error;"));
-    append(block, code_stmt_if_then_else(alc, if_cond, if_code, NULL, false));
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "goto error;"));
+    append(block, code_if_then_else(alc, if_cond, if_code, NULL, false));
 
-    append(block, code_stmt_textraw(alc, ""));
+    append(block, code_textraw(alc, ""));
 
-    append(block, code_stmt_text(alc, "/* read the whole file in memory */"));
+    append(block, code_text(alc, "/* read the whole file in memory */"));
     if_cond = "fread(buffer, unit, fsize, f) != fsize";
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc, "goto error;"));
-    append(block, code_stmt_if_then_else(alc, if_cond, if_code, NULL, false));
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "goto error;"));
+    append(block, code_if_then_else(alc, if_cond, if_code, NULL, false));
 
-    append(block, code_stmt_textraw(alc, ""));
+    append(block, code_textraw(alc, ""));
 
-    append(block, code_stmt_text(alc, "fclose(f);"));
-    append(block, code_stmt_text(alc, "*pfsize = fsize;"));
-    append(block, code_stmt_text(alc, "return buffer;"));
+    append(block, code_text(alc, "fclose(f);"));
+    append(block, code_text(alc, "*pfsize = fsize;"));
+    append(block, code_text(alc, "return buffer;"));
 
-    append(block, code_stmt_textraw(alc, ""));
-    append(block, code_stmt_textraw(alc, "error:"));
+    append(block, code_textraw(alc, ""));
+    append(block, code_textraw(alc, "error:"));
 
-    append(block, code_stmt_text(alc,
+    append(block, code_text(alc,
         "fprintf(stderr, \"error: cannot read file '%s'\\n\", fname);"));
-    append(block, code_stmt_text(alc, "free(buffer);"));
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc, "fclose(f);"));
-    append(block, code_stmt_if_then_else(alc, "f != NULL", if_code, NULL, false));
-    append(block, code_stmt_text(alc, "return NULL;"));
+    append(block, code_text(alc, "free(buffer);"));
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "fclose(f);"));
+    append(block, code_if_then_else(alc, "f != NULL", if_code, NULL, false));
+    append(block, code_text(alc, "return NULL;"));
 
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
 
     return code_block(alc, code, CodeBlock::RAW);
 }
 
-static void emit_skeleton_defines(Output &output, CodeStmts *code, const DFA &dfa)
+static void emit_skeleton_defines(Output &output, CodeList *code, const DFA &dfa)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -125,51 +125,45 @@ static void emit_skeleton_defines(Output &output, CodeStmts *code, const DFA &df
     const size_t sizeof_cunit = opts->encoding.szCodeUnit();
     const char *text;
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
     text = o.cstr("#define YYCTYPE ").exact_uint(sizeof_cunit).flush();
-    append(code, code_stmt_textraw(alc, text));
+    append(code, code_textraw(alc, text));
     text = o.cstr("#define YYKEYTYPE ").exact_uint(dfa.key_size).flush();
-    append(code, code_stmt_textraw(alc, text));
-    append(code, code_stmt_textraw(alc, "#define YYPEEK() *cursor"));
-    append(code, code_stmt_textraw(alc, "#define YYSKIP() ++cursor"));
+    append(code, code_textraw(alc, text));
+    append(code, code_textraw(alc, "#define YYPEEK() *cursor"));
+    append(code, code_textraw(alc, "#define YYSKIP() ++cursor"));
     if (dfa.need_backup) {
-        append(code, code_stmt_textraw(alc, "#define YYBACKUP() marker = cursor"));
-        append(code, code_stmt_textraw(alc, "#define YYRESTORE() cursor = marker"));
+        append(code, code_textraw(alc, "#define YYBACKUP() marker = cursor"));
+        append(code, code_textraw(alc, "#define YYRESTORE() cursor = marker"));
     }
     if (dfa.oldstyle_ctxmarker) {
-        append(code, code_stmt_textraw(alc,
-            "#define YYBACKUPCTX() ctxmarker = cursor"));
-        append(code, code_stmt_textraw(alc,
-            "#define YYRESTORECTX() cursor = ctxmarker"));
+        append(code, code_textraw(alc, "#define YYBACKUPCTX() ctxmarker = cursor"));
+        append(code, code_textraw(alc, "#define YYRESTORECTX() cursor = ctxmarker"));
     }
     if (opts->tags) {
-        append(code, code_stmt_textraw(alc, "#define YYSTAGP(t) t = cursor"));
-        append(code, code_stmt_textraw(alc, "#define YYSTAGN(t) t = NULL"));
-        append(code, code_stmt_textraw(alc,
-            "#define YYMTAGP(t) yymtag(&t, cursor, &yytp)"));
-        append(code, code_stmt_textraw(alc,
-            "#define YYMTAGN(t) yymtag(&t, NULL, &yytp)"));
-        append(code, code_stmt_textraw(alc, "#define YYRESTORETAG(t) cursor = t"));
+        append(code, code_textraw(alc, "#define YYSTAGP(t) t = cursor"));
+        append(code, code_textraw(alc, "#define YYSTAGN(t) t = NULL"));
+        append(code, code_textraw(alc, "#define YYMTAGP(t) yymtag(&t, cursor, &yytp)"));
+        append(code, code_textraw(alc, "#define YYMTAGN(t) yymtag(&t, NULL, &yytp)"));
+        append(code, code_textraw(alc, "#define YYRESTORETAG(t) cursor = t"));
         if (opts->stadfa) {
-            append(code, code_stmt_textraw(alc,
-                "#define YYSTAGPD(t) t = cursor - 1"));
-            append(code, code_stmt_textraw(alc,
+            append(code, code_textraw(alc, "#define YYSTAGPD(t) t = cursor - 1"));
+            append(code, code_textraw(alc,
                 "#define YYMTAGPD(t) yymtag(&t, cursor - 1, &yytp)"));
         }
     }
-    append(code, code_stmt_textraw(alc,
-        "#define YYLESSTHAN(n) (limit - cursor) < n"));
-    append(code, code_stmt_textraw(alc, "#define YYFILL(n) { break; }"));
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, "#define YYLESSTHAN(n) (limit - cursor) < n"));
+    append(code, code_textraw(alc, "#define YYFILL(n) { break; }"));
+    append(code, code_textraw(alc, ""));
 }
 
-static void emit_skeleton_function_action(Output &output, CodeStmts *code, const DFA &dfa)
+static void emit_skeleton_function_action(Output &output, CodeList *code, const DFA &dfa)
 {
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const uint64_t norule = rule2key(Rule::NONE, dfa.key_size, dfa.def_rule);
     CodeArgs *args;
-    CodeStmts *if_code, *else_code, *body;
+    CodeList *if_code, *else_code, *body;
     const char *if_cond, *text;
 
     args = code_args(alc);
@@ -182,17 +176,17 @@ static void emit_skeleton_function_action(Output &output, CodeStmts *code, const
     text = o.cstr("static int action_").str(dfa.name).flush();
     append(code, code_fdecl(alc, text, args));
 
-    body = code_stmts(alc);
+    body = code_list(alc);
 
-    append(body, code_stmt_text(alc, "const unsigned kix = *pkix;"));
-    append(body, code_stmt_text(alc, "const long pos = token - start;"));
-    append(body, code_stmt_text(alc, "const long len_act = *cursor - token;"));
-    append(body, code_stmt_text(alc, "const long len_exp = (long) keys[kix + 1];"));
-    append(body, code_stmt_text(alc, "const YYKEYTYPE rule_exp = keys[kix + 2];"));
-    append(body, code_stmt_text(alc, "*pkix = kix + 3;"));
+    append(body, code_text(alc, "const unsigned kix = *pkix;"));
+    append(body, code_text(alc, "const long pos = token - start;"));
+    append(body, code_text(alc, "const long len_act = *cursor - token;"));
+    append(body, code_text(alc, "const long len_exp = (long) keys[kix + 1];"));
+    append(body, code_text(alc, "const YYKEYTYPE rule_exp = keys[kix + 2];"));
+    append(body, code_text(alc, "*pkix = kix + 3;"));
 
     if_cond = o.cstr("rule_exp == ").u64(norule).flush();
-    if_code = code_stmts(alc);
+    if_code = code_list(alc);
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"warning: lex_").str(dfa.name)
@@ -201,14 +195,14 @@ static void emit_skeleton_function_action(Output &output, CodeStmts *code, const
     append(args, code_arg(alc, text));
     append(args, code_arg(alc, "pos"));
     append(if_code, code_fcall(alc, "fprintf", args, ";"));
-    append(body, code_stmt_if_then_else(alc, if_cond, if_code, NULL));
+    append(body, code_if_then_else(alc, if_cond, if_code, NULL));
 
     if_cond = "len_act == len_exp && rule_act == rule_exp";
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc, "const YYKEYTYPE offset = keys[kix];"));
-    append(if_code, code_stmt_text(alc, "*cursor = token + offset;"));
-    append(if_code, code_stmt_text(alc, "return 0;"));
-    else_code = code_stmts(alc);
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "const YYKEYTYPE offset = keys[kix];"));
+    append(if_code, code_text(alc, "*cursor = token + offset;"));
+    append(if_code, code_text(alc, "return 0;"));
+    else_code = code_list(alc);
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name)
@@ -223,23 +217,23 @@ static void emit_skeleton_function_action(Output &output, CodeStmts *code, const
     append(args, code_arg(alc, "len_act"));
     append(args, code_arg(alc, "rule_act"));
     append(else_code, code_fcall(alc, "fprintf", args, ";"));
-    append(else_code, code_stmt_text(alc, "return 1;"));
-    append(body, code_stmt_if_then_else(alc, if_cond, if_code, else_code));
+    append(else_code, code_text(alc, "return 1;"));
+    append(body, code_if_then_else(alc, if_cond, if_code, else_code));
 
     append(code, code_block(alc, body, CodeBlock::WRAPPED));
 }
 
-static void emit_skeleton_stags(Output &output, CodeStmts *code, const DFA &dfa)
+static void emit_skeleton_stags(Output &output, CodeList *code, const DFA &dfa)
 {
     if (dfa.stagnames.empty()) return;
 
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     CodeArgs *args;
-    CodeStmts *if_code, *body;
+    CodeList *if_code, *body;
     const char *if_cond, *text;
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "unsigned *pkix"));
@@ -251,23 +245,22 @@ static void emit_skeleton_stags(Output &output, CodeStmts *code, const DFA &dfa)
     text = o.cstr("static int check_stag_").str(dfa.name).flush();
     append(code, code_fdecl(alc, text, args));
 
-    body = code_stmts(alc);
+    body = code_list(alc);
 
-    append(body, code_stmt_text(alc, "const unsigned kix = *pkix;"));
-    append(body, code_stmt_text(alc, "const YYKEYTYPE exp = keys[kix];"));
-    append(body, code_stmt_text(alc,
-        "const YYKEYTYPE act = (YYKEYTYPE)(tag - token);"));
-    append(body, code_stmt_text(alc, "const YYKEYTYPE NIL = (YYKEYTYPE)~0u;"));
-    append(body, code_stmt_text(alc, "*pkix = kix + 1;"));
+    append(body, code_text(alc, "const unsigned kix = *pkix;"));
+    append(body, code_text(alc, "const YYKEYTYPE exp = keys[kix];"));
+    append(body, code_text(alc, "const YYKEYTYPE act = (YYKEYTYPE)(tag - token);"));
+    append(body, code_text(alc, "const YYKEYTYPE NIL = (YYKEYTYPE)~0u;"));
+    append(body, code_text(alc, "*pkix = kix + 1;"));
 
-    append(body, code_stmt_textraw(alc, ""));
+    append(body, code_textraw(alc, ""));
 
     if_cond = "exp == act || (exp == NIL && tag == NULL)";
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc, "return 0;"));
-    append(body, code_stmt_if_then_else(alc, if_cond, if_code, NULL));
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "return 0;"));
+    append(body, code_if_then_else(alc, if_cond, if_code, NULL));
 
-    append(body, code_stmt_textraw(alc, ""));
+    append(body, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
@@ -281,109 +274,107 @@ static void emit_skeleton_stags(Output &output, CodeStmts *code, const DFA &dfa)
     append(args, code_arg(alc, "exp"));
     append(args, code_arg(alc, "act"));
     append(body, code_fcall(alc, "fprintf", args, ";"));
-    append(body, code_stmt_text(alc, "return 1;"));
+    append(body, code_text(alc, "return 1;"));
 
     append(code, code_block(alc, body, CodeBlock::WRAPPED));
 }
 
-static void emit_skeleton_mtags(Output &output, CodeStmts *code, const DFA &dfa)
+static void emit_skeleton_mtags(Output &output, CodeList *code, const DFA &dfa)
 {
     if (dfa.mtagnames.empty()) return;
 
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     CodeArgs *args;
-    CodeStmts *if_code, *block, *body;
+    CodeList *if_code, *block, *body;
     const char *if_cond, *text;
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
-    append(code, code_stmt_text(alc, "typedef struct yymtag_t {"));
-    block = code_stmts(alc);
-    append(block, code_stmt_text(alc, "ptrdiff_t pred;"));
-    append(block, code_stmt_text(alc, "const YYCTYPE *elem;"));
+    append(code, code_text(alc, "typedef struct yymtag_t {"));
+    block = code_list(alc);
+    append(block, code_text(alc, "ptrdiff_t pred;"));
+    append(block, code_text(alc, "const YYCTYPE *elem;"));
     append(code, code_block(alc, block, CodeBlock::INDENTED));
-    append(code, code_stmt_text(alc, "} yymtag_t;"));
+    append(code, code_text(alc, "} yymtag_t;"));
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
-    append(code, code_stmt_text(alc, "typedef struct yymtagpool_t {"));
-    block = code_stmts(alc);
-    append(block, code_stmt_text(alc, "yymtag_t *head;"));
-    append(block, code_stmt_text(alc, "yymtag_t *next;"));
-    append(block, code_stmt_text(alc, "yymtag_t *last;"));
+    append(code, code_text(alc, "typedef struct yymtagpool_t {"));
+    block = code_list(alc);
+    append(block, code_text(alc, "yymtag_t *head;"));
+    append(block, code_text(alc, "yymtag_t *next;"));
+    append(block, code_text(alc, "yymtag_t *last;"));
     append(code, code_block(alc, block, CodeBlock::INDENTED));
-    append(code, code_stmt_text(alc, "} yymtagpool_t;"));
+    append(code, code_text(alc, "} yymtagpool_t;"));
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "yymtagpool_t *tp"));
     append(code, code_fdecl(alc, "static void yymtagpool_clear", args));
-    block = code_stmts(alc);
-    append(block, code_stmt_text(alc, "tp->next = tp->head;"));
+    block = code_list(alc);
+    append(block, code_text(alc, "tp->next = tp->head;"));
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "yymtagpool_t *tp"));
     append(code, code_fdecl(alc, "static void yymtagpool_init", args));
-    block = code_stmts(alc);
-    append(block, code_stmt_text(alc, "static const unsigned size = 4096;"));
-    append(block, code_stmt_text(alc,
+    block = code_list(alc);
+    append(block, code_text(alc, "static const unsigned size = 4096;"));
+    append(block, code_text(alc,
         "tp->head = (yymtag_t*)malloc(size * sizeof(yymtag_t));"));
-    append(block, code_stmt_text(alc, "tp->next = tp->head;"));
-    append(block, code_stmt_text(alc, "tp->last = tp->head + size;"));
+    append(block, code_text(alc, "tp->next = tp->head;"));
+    append(block, code_text(alc, "tp->last = tp->head + size;"));
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "yymtagpool_t *tp"));
     append(code, code_fdecl(alc, "static void yymtagpool_free", args));
-    block = code_stmts(alc);
-    append(block, code_stmt_text(alc, "free(tp->head);"));
-    append(block, code_stmt_text(alc, "tp->head = tp->next = tp->last = NULL;"));
+    block = code_list(alc);
+    append(block, code_text(alc, "free(tp->head);"));
+    append(block, code_text(alc, "tp->head = tp->next = tp->last = NULL;"));
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "yymtagpool_t *tp"));
     append(code, code_fdecl(alc, "static yymtag_t *yymtagpool_next", args));
-    block = code_stmts(alc);
+    block = code_list(alc);
     if_cond = "tp->next == tp->last";
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc,
-        "const unsigned size = tp->last - tp->head;"));
-    append(if_code, code_stmt_text(alc,
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "const unsigned size = tp->last - tp->head;"));
+    append(if_code, code_text(alc,
         "yymtag_t *head = (yymtag_t*)malloc(2 * size * sizeof(yymtag_t));"));
-    append(if_code, code_stmt_text(alc,
-        "memcpy(head, tp->head, size * sizeof(yymtag_t));"));
-    append(if_code, code_stmt_text(alc, "free(tp->head);"));
-    append(if_code, code_stmt_text(alc, "tp->head = head;"));
-    append(if_code, code_stmt_text(alc, "tp->next = head + size;"));
-    append(if_code, code_stmt_text(alc, "tp->last = head + size * 2;"));
-    append(block, code_stmt_if_then_else(alc, if_cond, if_code, NULL));
-    append(block, code_stmt_text(alc, "return tp->next++;"));
+    append(if_code, code_text(alc, "memcpy(head, tp->head, size * sizeof(yymtag_t));"));
+    append(if_code, code_text(alc, "free(tp->head);"));
+    append(if_code, code_text(alc, "tp->head = head;"));
+    append(if_code, code_text(alc, "tp->next = head + size;"));
+    append(if_code, code_text(alc, "tp->last = head + size * 2;"));
+    append(block, code_if_then_else(alc, if_cond, if_code, NULL));
+    append(block, code_text(alc, "return tp->next++;"));
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "ptrdiff_t *pt"));
     append(args, code_arg(alc, "const YYCTYPE *t"));
     append(args, code_arg(alc, "yymtagpool_t *tp"));
     append(code, code_fdecl(alc, "static void yymtag", args));
-    block = code_stmts(alc);
-    append(block, code_stmt_text(alc, "yymtag_t *n = yymtagpool_next(tp);"));
-    append(block, code_stmt_text(alc, "n->pred = *pt;"));
-    append(block, code_stmt_text(alc, "n->elem = t;"));
-    append(block, code_stmt_text(alc, "*pt = n - tp->head;"));
+    block = code_list(alc);
+    append(block, code_text(alc, "yymtag_t *n = yymtagpool_next(tp);"));
+    append(block, code_text(alc, "n->pred = *pt;"));
+    append(block, code_text(alc, "n->elem = t;"));
+    append(block, code_text(alc, "*pt = n - tp->head;"));
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "unsigned *pkix"));
@@ -396,16 +387,16 @@ static void emit_skeleton_mtags(Output &output, CodeStmts *code, const DFA &dfa)
     text = o.cstr("static int check_mtag_").str(dfa.name).flush();
     append(code, code_fdecl(alc, text, args));
 
-    body = code_stmts(alc);
-    append(body, code_stmt_text(alc, "const unsigned kix = *pkix;"));
-    append(body, code_stmt_text(alc, "YYKEYTYPE n = keys[kix];"));
-    append(body, code_stmt_text(alc, "*pkix = kix + n + 1;"));
+    body = code_list(alc);
+    append(body, code_text(alc, "const unsigned kix = *pkix;"));
+    append(body, code_text(alc, "YYKEYTYPE n = keys[kix];"));
+    append(body, code_text(alc, "*pkix = kix + n + 1;"));
 
-    append(body, code_stmt_text(alc, "for (; n > 0; --n) {"));
-    block = code_stmts(alc); // for loop
+    append(body, code_text(alc, "for (; n > 0; --n) {"));
+    block = code_list(alc); // for loop
 
     if_cond = "mtag == -1";
-    if_code = code_stmts(alc);
+    if_code = code_list(alc);
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name)
@@ -416,19 +407,17 @@ static void emit_skeleton_mtags(Output &output, CodeStmts *code, const DFA &dfa)
     append(args, code_arg(alc, "kix + n"));
     append(args, code_arg(alc, "name"));
     append(if_code, code_fcall(alc, "fprintf", args, ";"));
-    append(if_code, code_stmt_text(alc, "return 1;"));
-    append(block, code_stmt_if_then_else(alc, if_cond, if_code, NULL));
+    append(if_code, code_text(alc, "return 1;"));
+    append(block, code_if_then_else(alc, if_cond, if_code, NULL));
 
-    append(block, code_stmt_text(alc,
-        "const YYCTYPE *tag = (tp->head + mtag)->elem;"));
-    append(block, code_stmt_text(alc, "mtag = (tp->head + mtag)->pred;"));
-    append(block, code_stmt_text(alc, "const YYKEYTYPE exp = keys[kix + n];"));
-    append(block, code_stmt_text(alc,
-        "const YYKEYTYPE act = (YYKEYTYPE)(tag - token);"));
-    append(block, code_stmt_text(alc, "const YYKEYTYPE NIL = (YYKEYTYPE)~0u;"));
+    append(block, code_text(alc, "const YYCTYPE *tag = (tp->head + mtag)->elem;"));
+    append(block, code_text(alc, "mtag = (tp->head + mtag)->pred;"));
+    append(block, code_text(alc, "const YYKEYTYPE exp = keys[kix + n];"));
+    append(block, code_text(alc, "const YYKEYTYPE act = (YYKEYTYPE)(tag - token);"));
+    append(block, code_text(alc, "const YYKEYTYPE NIL = (YYKEYTYPE)~0u;"));
 
     if_cond = "!(exp == act || (exp == NIL && tag == NULL))";
-    if_code = code_stmts(alc);
+    if_code = code_list(alc);
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name)
@@ -441,14 +430,14 @@ static void emit_skeleton_mtags(Output &output, CodeStmts *code, const DFA &dfa)
     append(args, code_arg(alc, "exp"));
     append(args, code_arg(alc, "act"));
     append(if_code, code_fcall(alc, "fprintf", args, ";"));
-    append(if_code, code_stmt_text(alc, "return 1;"));
-    append(block, code_stmt_if_then_else(alc, if_cond, if_code, NULL));
+    append(if_code, code_text(alc, "return 1;"));
+    append(block, code_if_then_else(alc, if_cond, if_code, NULL));
 
     append(body, code_block(alc, block, CodeBlock::INDENTED));
-    append(body, code_stmt_text(alc, "}")); // end of for loop
+    append(body, code_text(alc, "}")); // end of for loop
 
     if_cond = "mtag != -1";
-    if_code = code_stmts(alc);
+    if_code = code_list(alc);
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name)
@@ -459,23 +448,23 @@ static void emit_skeleton_mtags(Output &output, CodeStmts *code, const DFA &dfa)
     append(args, code_arg(alc, "kix + n"));
     append(args, code_arg(alc, "name"));
     append(if_code, code_fcall(alc, "fprintf", args, ";"));
-    append(if_code, code_stmt_text(alc, "return 1;"));
-    append(body, code_stmt_if_then_else(alc, if_cond, if_code, NULL));
-    append(body, code_stmt_text(alc, "return 0;"));
+    append(if_code, code_text(alc, "return 1;"));
+    append(body, code_if_then_else(alc, if_cond, if_code, NULL));
+    append(body, code_text(alc, "return 0;"));
 
     append(code, code_block(alc, body, CodeBlock::WRAPPED));
 }
 
-static void emit_skeleton_function_check_key_count(Output &output, CodeStmts *code,
+static void emit_skeleton_function_check_key_count(Output &output, CodeList *code,
     DFA &dfa)
 {
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     CodeArgs *args;
-    CodeStmts *block, *if_code;
+    CodeList *block, *if_code;
     const char *if_cond, *text;
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
     args = code_args(alc);
     append(args, code_arg(alc, "unsigned have"));
@@ -483,21 +472,21 @@ static void emit_skeleton_function_check_key_count(Output &output, CodeStmts *co
     append(args, code_arg(alc, "unsigned need"));
     text = o.cstr("static int check_key_count_").str(dfa.name).flush();
     append(code, code_fdecl(alc, text, args));
-    block = code_stmts(alc);
+    block = code_list(alc);
     if_cond = "used + need <= have";
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc, "return 0;"));
-    append(block, code_stmt_if_then_else(alc, if_cond, if_code, NULL));
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "return 0;"));
+    append(block, code_if_then_else(alc, if_cond, if_code, NULL));
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name).cstr(": not enough keys\\n\"").flush();
     append(args, code_arg(alc, text));
     append(block, code_fcall(alc, "fprintf", args, ";"));
-    append(block, code_stmt_text(alc, "return 1;"));
+    append(block, code_text(alc, "return 1;"));
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
 }
 
-static void emit_skeleton_function_lex(Output &output, CodeStmts *code, DFA &dfa)
+static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -505,7 +494,7 @@ static void emit_skeleton_function_lex(Output &output, CodeStmts *code, DFA &dfa
     const size_t sizeof_cunit = opts->encoding.szCodeUnit();
     std::set<std::string>::const_iterator var1, var2;
     CodeArgs *args;
-    CodeStmts *block, *block2, *if_code, *if1_code;
+    CodeList *block, *block2, *if_code, *if1_code;
     const char *if_cond, *text;
 
     std::string filename = opts->output_file;
@@ -513,37 +502,37 @@ static void emit_skeleton_function_lex(Output &output, CodeStmts *code, DFA &dfa
         filename = "<stdout>";
     }
 
-    append(code, code_stmt_textraw(alc, ""));
+    append(code, code_textraw(alc, ""));
 
     text = o.cstr("int lex_").str(dfa.name).cstr("()").flush();
-    append(code, code_stmt_text(alc, text));
-    block = code_stmts(alc);
+    append(code, code_text(alc, text));
+    block = code_list(alc);
     text = o.cstr("const size_t padding = ").u64(dfa.max_fill)
         .cstr("; /* YYMAXFILL */").flush();
-    append(block, code_stmt_text(alc, text));
-    append(block, code_stmt_text(alc, "int status = 0;"));
-    append(block, code_stmt_text(alc, "size_t input_len = 0;"));
-    append(block, code_stmt_text(alc, "size_t keys_count = 0;"));
-    append(block, code_stmt_text(alc, "YYCTYPE *input = NULL;"));
-    append(block, code_stmt_text(alc, "YYKEYTYPE *keys = NULL;"));
-    append(block, code_stmt_text(alc, "const YYCTYPE *cursor = NULL;"));
-    append(block, code_stmt_text(alc, "const YYCTYPE *limit = NULL;"));
-    append(block, code_stmt_text(alc, "const YYCTYPE *token = NULL;"));
-    append(block, code_stmt_text(alc, "const YYCTYPE *eof = NULL;"));
+    append(block, code_text(alc, text));
+    append(block, code_text(alc, "int status = 0;"));
+    append(block, code_text(alc, "size_t input_len = 0;"));
+    append(block, code_text(alc, "size_t keys_count = 0;"));
+    append(block, code_text(alc, "YYCTYPE *input = NULL;"));
+    append(block, code_text(alc, "YYKEYTYPE *keys = NULL;"));
+    append(block, code_text(alc, "const YYCTYPE *cursor = NULL;"));
+    append(block, code_text(alc, "const YYCTYPE *limit = NULL;"));
+    append(block, code_text(alc, "const YYCTYPE *token = NULL;"));
+    append(block, code_text(alc, "const YYCTYPE *eof = NULL;"));
     if (opts->posix_syntax) {
-        append(block, code_stmt_text(alc, "size_t yynmatch;"));
+        append(block, code_text(alc, "size_t yynmatch;"));
         text = o.cstr("const YYCTYPE *yypmatch[").u64(dfa.max_nmatch)
             .cstr(" * 2];").flush();
-        append(block, code_stmt_text(alc, text));
+        append(block, code_text(alc, text));
     }
-    append(block, code_stmt_text(alc, "unsigned int i = 0;"));
+    append(block, code_text(alc, "unsigned int i = 0;"));
     if (!dfa.mtagnames.empty()) {
-        append(block, code_stmt_textraw(alc, ""));
-        append(block, code_stmt_text(alc, "yymtagpool_t yytp;"));
-        append(block, code_stmt_text(alc, "yymtagpool_init(&yytp);"));
+        append(block, code_textraw(alc, ""));
+        append(block, code_text(alc, "yymtagpool_t yytp;"));
+        append(block, code_text(alc, "yymtagpool_init(&yytp);"));
     }
 
-    append(block, code_stmt_textraw(alc, ""));
+    append(block, code_textraw(alc, ""));
 
     args = code_args(alc);
     text = o.cstr("\"").str(filename).cstr(".").str(dfa.name).cstr(".input\"").flush();
@@ -554,21 +543,21 @@ static void emit_skeleton_function_lex(Output &output, CodeStmts *code, DFA &dfa
     append(block, code_fcall(alc, "input = (YYCTYPE *) read_file", args, ";"));
 
     if_cond = "input == NULL";
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc, "status = 1;"));
-    append(if_code, code_stmt_text(alc, "goto end;"));
-    append(block, code_stmt_if_then_else(alc, if_cond, if_code, NULL));
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "status = 1;"));
+    append(if_code, code_text(alc, "goto end;"));
+    append(block, code_if_then_else(alc, if_cond, if_code, NULL));
 
-    append(block, code_stmt_textraw(alc, ""));
+    append(block, code_textraw(alc, ""));
 
     if (sizeof_cunit > 1) {
         text = o.cstr("for (i = 0; i < input_len; ++i) {").flush();
-        append(block, code_stmt_text(alc, text));
-        block2 = code_stmts(alc);
+        append(block, code_text(alc, text));
+        block2 = code_list(alc);
         from_le(output, block2, "input[i]", opts->encoding.szCodeUnit());
         append(block, code_block(alc, block2, CodeBlock::INDENTED));
-        append(block, code_stmt_text(alc, "}"));
-        append(block, code_stmt_textraw(alc, ""));
+        append(block, code_text(alc, "}"));
+        append(block, code_textraw(alc, ""));
     }
 
     args = code_args(alc);
@@ -579,51 +568,51 @@ static void emit_skeleton_function_lex(Output &output, CodeStmts *code, DFA &dfa
     append(args, code_arg(alc, "&keys_count"));
     append(block, code_fcall(alc, "keys = (YYKEYTYPE *) read_file", args, ";"));
     if_cond = "keys == NULL";
-    if_code = code_stmts(alc);
-    append(if_code, code_stmt_text(alc, "status = 1;"));
-    append(if_code, code_stmt_text(alc, "goto end;"));
-    append(block, code_stmt_if_then_else(alc, if_cond, if_code, NULL));
+    if_code = code_list(alc);
+    append(if_code, code_text(alc, "status = 1;"));
+    append(if_code, code_text(alc, "goto end;"));
+    append(block, code_if_then_else(alc, if_cond, if_code, NULL));
 
-    append(block, code_stmt_textraw(alc, ""));
+    append(block, code_textraw(alc, ""));
 
     if (dfa.key_size > 1) {
         text = o.cstr("for (i = 0; i < keys_count; ++i) {").flush();
-        append(block, code_stmt_text(alc, text));
-        block2 = code_stmts(alc);
+        append(block, code_text(alc, text));
+        block2 = code_list(alc);
         from_le(output, block2, "keys[i]", dfa.key_size);
         append(block, code_block(alc, block2, CodeBlock::INDENTED));
-        append(block, code_stmt_text(alc, "}"));
-        append(block, code_stmt_textraw(alc, ""));
+        append(block, code_text(alc, "}"));
+        append(block, code_textraw(alc, ""));
     }
 
-    append(block, code_stmt_text(alc, "cursor = input;"));
-    append(block, code_stmt_text(alc, "limit = input + input_len + padding;"));
-    append(block, code_stmt_text(alc, "eof = input + input_len;"));
+    append(block, code_text(alc, "cursor = input;"));
+    append(block, code_text(alc, "limit = input + input_len + padding;"));
+    append(block, code_text(alc, "eof = input + input_len;"));
 
-    append(block, code_stmt_textraw(alc, ""));
+    append(block, code_textraw(alc, ""));
 
-    append(block, code_stmt_text(alc,
+    append(block, code_text(alc,
         "for (i = 0; status == 0 && cursor < eof && i < keys_count;) {"));
-    block2 = code_stmts(alc);
-    append(block2, code_stmt_text(alc, "token = cursor;"));
+    block2 = code_list(alc);
+    append(block2, code_text(alc, "token = cursor;"));
     if (dfa.need_backup) {
-        append(block2, code_stmt_text(alc, "const YYCTYPE *marker = NULL;"));
+        append(block2, code_text(alc, "const YYCTYPE *marker = NULL;"));
     }
     if (dfa.oldstyle_ctxmarker) {
-        append(block2, code_stmt_text(alc, "const YYCTYPE *ctxmarker = NULL;"));
+        append(block2, code_text(alc, "const YYCTYPE *ctxmarker = NULL;"));
     }
-    append(block2, code_stmt_text(alc, "YYCTYPE yych;"));
+    append(block2, code_text(alc, "YYCTYPE yych;"));
     if (dfa.need_accept) {
-        append(block2, code_stmt_text(alc, "unsigned int yyaccept = 0;"));
+        append(block2, code_text(alc, "unsigned int yyaccept = 0;"));
     }
     if (!dfa.stagnames.empty()) {
         // autogenerated stag variables
         text = o.cstr("\n").str(indent(2, opts->indString))
             .cstr("const YYCTYPE *@@ = NULL;").flush();
-        CodeStmt *stags = code_tags(alc, text, "", false);
+        Code *stags = code_tags(alc, text, "", false);
         gen_tags(o, stags, dfa.stagnames);
         append(block2, stags);
-        append(block2, code_stmt_textraw(alc, ""));
+        append(block2, code_textraw(alc, ""));
 
         // user-defined stag variables
         var1 = dfa.stagvars.begin();
@@ -634,19 +623,19 @@ static void emit_skeleton_function_lex(Output &output, CodeStmts *code, DFA &dfa
                 o.cstr(", *").str(*var1);
             }
             text = o.cstr(";").flush();
-            append(block2, code_stmt_text(alc, text));
+            append(block2, code_text(alc, text));
         }
     }
     if (!dfa.mtagnames.empty()) {
-        append(block2, code_stmt_text(alc, "yymtagpool_clear(&yytp);"));
+        append(block2, code_text(alc, "yymtagpool_clear(&yytp);"));
 
         // autogenerated mtag variables
         text = o.cstr("\n").str(indent(2, opts->indString))
             .cstr("ptrdiff_t @@ = -1;").flush();
-        CodeStmt *mtags = code_tags(alc, text, "", true);
+        Code *mtags = code_tags(alc, text, "", true);
         gen_tags(o, mtags, dfa.mtagnames);
         append(block2, mtags);
-        append(block2, code_stmt_textraw(alc, ""));
+        append(block2, code_textraw(alc, ""));
 
         // user-defined mtag variables
         var1 = dfa.mtagvars.begin();
@@ -657,81 +646,78 @@ static void emit_skeleton_function_lex(Output &output, CodeStmts *code, DFA &dfa
                 o.cstr(", ").str(*var1);
             }
             text = o.cstr(";").flush();
-            append(block2, code_stmt_text(alc, text));
+            append(block2, code_text(alc, text));
         }
     }
 
     append(block2, dfa.bitmaps.gen(output));
-    append(block2, code_stmt_textraw(alc, ""));
+    append(block2, code_textraw(alc, ""));
     dfa.emit_body(output, block2);
-    append(block2, code_stmt_textraw(alc, ""));
+    append(block2, code_textraw(alc, ""));
 
     append(block, code_block(alc, block2, CodeBlock::INDENTED));
-    append(block, code_stmt_text(alc, "}"));
+    append(block, code_text(alc, "}"));
 
-    if_code = code_stmts(alc);
+    if_code = code_list(alc);
 
-    if1_code = code_stmts(alc);
-    append(if1_code, code_stmt_text(alc, "status = 1;"));
-    append(if1_code, code_stmt_text(alc, "const long pos = token - input;"));
+    if1_code = code_list(alc);
+    append(if1_code, code_text(alc, "status = 1;"));
+    append(if1_code, code_text(alc, "const long pos = token - input;"));
     text = o.cstr("fprintf(stderr, \"error: lex_").str(dfa.name)
         .cstr(": unused input strings left at position %ld\\n\", pos);").flush();
-    append(if1_code, code_stmt_text(alc, text));
-    append(if_code, code_stmt_if_then_else(alc, "cursor != eof", if1_code,
-      NULL, false));
+    append(if1_code, code_text(alc, text));
+    append(if_code, code_if_then_else(alc, "cursor != eof", if1_code, NULL, false));
 
-    if1_code = code_stmts(alc);
-    append(if1_code, code_stmt_text(alc, "status = 1;"));
+    if1_code = code_list(alc);
+    append(if1_code, code_text(alc, "status = 1;"));
     text = o.cstr("fprintf(stderr, \"error: lex_").str(dfa.name)
         .cstr(": unused keys left after %u keys\\n\", i);").flush();
-    append(if1_code, code_stmt_text(alc, text));
-    append(if_code, code_stmt_if_then_else(alc, "i != keys_count",
-        if1_code, NULL, false));
+    append(if1_code, code_text(alc, text));
+    append(if_code, code_if_then_else(alc, "i != keys_count", if1_code, NULL, false));
 
-    append(block, code_stmt_if_then_else(alc, "status == 0", if_code,
-        NULL, false));
+    append(block, code_if_then_else(alc, "status == 0", if_code, NULL, false));
 
-    append(block, code_stmt_textraw(alc, ""));
-    append(block, code_stmt_textraw(alc, "end:"));
-    append(block, code_stmt_text(alc, "free(input);"));
-    append(block, code_stmt_text(alc, "free(keys);"));
+    append(block, code_textraw(alc, ""));
+    append(block, code_textraw(alc, "end:"));
+    append(block, code_text(alc, "free(input);"));
+    append(block, code_text(alc, "free(keys);"));
     if (!dfa.mtagnames.empty()) {
-        append(block, code_stmt_text(alc, "yymtagpool_free(&yytp);"));
+        append(block, code_text(alc, "yymtagpool_free(&yytp);"));
     }
-    append(block, code_stmt_textraw(alc, ""));
-    append(block, code_stmt_text(alc, "return status;"));
+    append(block, code_textraw(alc, ""));
+    append(block, code_text(alc, "return status;"));
 
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
 }
 
-static void emit_skeleton_undefs(Output &output, CodeStmts *code, DFA &dfa)
+static void emit_skeleton_undefs(Output &output, CodeList *code, DFA &dfa)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
 
-    append(code, code_stmt_textraw(alc, ""));
-    append(code, code_stmt_textraw(alc, "#undef YYCTYPE"));
-    append(code, code_stmt_textraw(alc, "#undef YYKEYTYPE"));
-    append(code, code_stmt_textraw(alc, "#undef YYPEEK"));
-    append(code, code_stmt_textraw(alc, "#undef YYSKIP"));
+    append(code, code_textraw(alc, ""));
+    append(code, code_textraw(alc, "#undef YYCTYPE"));
+    append(code, code_textraw(alc, "#undef YYKEYTYPE"));
+    append(code, code_textraw(alc, "#undef YYPEEK"));
+    append(code, code_textraw(alc, "#undef YYSKIP"));
     if (dfa.need_backup) {
-        append(code, code_stmt_textraw(alc, "#undef YYBACKUP"));
-        append(code, code_stmt_textraw(alc, "#undef YYRESTORE"));
+        append(code, code_textraw(alc, "#undef YYBACKUP"));
+        append(code, code_textraw(alc, "#undef YYRESTORE"));
     }
     if (dfa.oldstyle_ctxmarker) {
-        append(code, code_stmt_textraw(alc, "#undef YYBACKUPCTX"));
-        append(code, code_stmt_textraw(alc, "#undef YYRESTORECTX"));
+        append(code, code_textraw(alc, "#undef YYBACKUPCTX"));
+        append(code, code_textraw(alc, "#undef YYRESTORECTX"));
     }
     if (opts->tags) {
-        append(code, code_stmt_textraw(alc, "#undef YYBACKUPTAG"));
-        append(code, code_stmt_textraw(alc, "#undef YYRESTORETAG"));
-        append(code, code_stmt_textraw(alc, "#undef YYCOPYTAG"));
+        append(code, code_textraw(alc, "#undef YYBACKUPTAG"));
+        append(code, code_textraw(alc, "#undef YYRESTORETAG"));
+        append(code, code_textraw(alc, "#undef YYCOPYTAG"));
     }
-    append(code, code_stmt_textraw(alc, "#undef YYLESSTHAN"));
-    append(code, code_stmt_textraw(alc, "#undef YYFILL"));
+    append(code, code_textraw(alc, "#undef YYLESSTHAN"));
+    append(code, code_textraw(alc, "#undef YYFILL"));
 }
 
-void emit_skeleton(Output &output, CodeStmts *code, DFA &dfa)
+void emit_skeleton(Output &output, CodeList *code, DFA &dfa)
 {
     emit_skeleton_defines(output, code, dfa);
     emit_skeleton_function_action(output, code, dfa);
@@ -742,30 +728,30 @@ void emit_skeleton(Output &output, CodeStmts *code, DFA &dfa)
     emit_skeleton_undefs(output, code, dfa);
 }
 
-CodeStmt *emit_skeleton_epilog(Output &output)
+Code *emit_skeleton_epilog(Output &output)
 {
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
-    CodeStmts *stmts = code_stmts(alc);
+    CodeList *stmts = code_list(alc);
     const std::set<std::string> &xs = output.skeletons;
     for (std::set<std::string>::const_iterator i = xs.begin(); i != xs.end(); ++i) {
         const char *if_cond = o.cstr("lex_").str(*i).cstr("() != 0").flush();
-        CodeStmts *if_code = code_stmts(alc);
-        append(if_code, code_stmt_text(alc, "return 1;"));
-        append(stmts, code_stmt_if_then_else(alc, if_cond, if_code, NULL, false));
+        CodeList *if_code = code_list(alc);
+        append(if_code, code_text(alc, "return 1;"));
+        append(stmts, code_if_then_else(alc, if_cond, if_code, NULL, false));
     }
-    append(stmts, code_stmt_text(alc, "return 0;"));
+    append(stmts, code_text(alc, "return 0;"));
 
-    CodeStmts *main = code_stmts(alc);
-    append(main, code_stmt_text(alc, ""));
-    append(main, code_stmt_text(alc, "int main()"));
+    CodeList *main = code_list(alc);
+    append(main, code_text(alc, ""));
+    append(main, code_text(alc, "int main()"));
     append(main, code_block(alc, stmts, CodeBlock::WRAPPED));
 
     return code_block(alc, main, CodeBlock::RAW);
 }
 
-void emit_skeleton_action(Output &output, CodeStmts *code, const DFA &dfa, size_t rid)
+void emit_skeleton_action(Output &output, CodeList *code, const DFA &dfa, size_t rid)
 {
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
@@ -788,7 +774,7 @@ void emit_skeleton_action(Output &output, CodeStmts *code, const DFA &dfa, size_
     text = o.cstr("status = check_key_count_").str(dfa.name).flush();
     append(code, code_fcall(alc, text, args, ""));
 
-    CodeStmts *hangafter = code_stmts(alc);
+    CodeList *hangafter = code_list(alc);
 
     args = code_args(alc);
     append(args, code_arg(alc, "&i"));
@@ -825,7 +811,7 @@ void emit_skeleton_action(Output &output, CodeStmts *code, const DFA &dfa, size_
 
     append(code, code_block(alc, hangafter, CodeBlock::INDENTED));
 
-    append(code, code_stmt_text(alc, "continue;"));
+    append(code, code_text(alc, "continue;"));
 }
 
 } // namespace re2c
