@@ -499,13 +499,6 @@ void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags);
 void combine(CodegenContext &ctx, Code *code);
 void combine_list(CodegenContext &ctx, CodeList *stmts);
 void render(RenderContext &rctx, const Code *code);
-void render_list(RenderContext &rctx, const CodeList *code);
-void render_if_then_else(RenderContext &rctx, const CodeIfTE *code);
-void render_case(RenderContext &rctx, const CodeCase *code, bool defcase, bool noindent);
-void render_switch(RenderContext &rctx, const CodeSwitch *code);
-void render_block(RenderContext &rctx, const CodeBlock *code);
-void render_func(RenderContext &rctx, const CodeFunc *func);
-void render_arg(RenderContext &rctx, const CodeArg *arg);
 
 struct OutputFragment {
     Code     *code;
