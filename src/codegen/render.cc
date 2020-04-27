@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "config.h"
 #include "src/codegen/emit.h"
 #include "src/codegen/output.h"
