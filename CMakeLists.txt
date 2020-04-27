@@ -115,6 +115,7 @@ add_executable(re2c
     src/codegen/output.cc
     src/codegen/print.cc
     src/codegen/render.cc
+    src/codegen/transform.cc
     src/options/opt.cc
     src/nfa/estimate_size.cc
     src/nfa/re_to_nfa.cc

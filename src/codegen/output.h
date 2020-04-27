@@ -496,8 +496,7 @@ struct RenderContext {
 };
 
 void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags);
-void combine(CodegenContext &ctx, Code *code);
-void combine_list(CodegenContext &ctx, CodeList *stmts);
+void transform(CodegenContext &ctx, Code *code);
 void render(RenderContext &rctx, const Code *code);
 
 struct OutputFragment {
