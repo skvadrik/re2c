@@ -13,7 +13,6 @@
 #include "src/codegen/label.h"
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
-#include "src/util/counter.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/slab_allocator.h"
 #include "src/util/uniq_vector.h"
@@ -42,7 +41,7 @@ public:
     Scratchbuf& u64(uint64_t u) { os << u; return *this; }
     Scratchbuf& str(const std::string &s) { os << s; return *this; }
     Scratchbuf& cstr(const char *s) { os << s; return *this; }
-    Scratchbuf& label(const label_t &l) { os << l; return *this; }
+    Scratchbuf& label(const Label &l) { os << l.index; return *this; }
     Scratchbuf& u32_hex(uint32_t u, const opt_t *opts);
     Scratchbuf& u32_width(uint32_t u, int width);
     Scratchbuf& exact_uint(size_t width);
@@ -528,7 +527,7 @@ class Output {
     blocks_t *pblocks; /* selector */
 
 public:
-    counter_t<label_t> label_counter;
+    uint32_t label_counter;
     uint32_t fill_index;
     bool state_goto;
     bool cond_enum_in_hdr;

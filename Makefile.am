@@ -90,7 +90,6 @@ re2c_SRC = \
 	src/codegen/bitmap.cc \
 	src/codegen/emit_action.cc \
 	src/codegen/emit_dfa.cc \
-	src/codegen/label.cc \
 	src/codegen/go_construct.cc \
 	src/codegen/go_destruct.cc \
 	src/codegen/go_emit.cc \

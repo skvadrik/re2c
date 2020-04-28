@@ -196,7 +196,7 @@ void DFA::prepare(const opt_t *opts)
     if (default_state) {
         for (State *s = head; s; s = s->next) {
             if (s->fallback) {
-                const std::pair<const State*, tcid_t> acc(finstates[s->rule], s->fall_tags);
+                const std::pair<State*, tcid_t> acc(finstates[s->rule], s->fall_tags);
                 s->action.set_save(accepts.find_or_add(acc));
             }
         }

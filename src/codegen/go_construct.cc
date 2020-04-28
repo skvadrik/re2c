@@ -83,8 +83,7 @@ Cond::Cond (const std::string & cmp, uint32_t val)
     , value (val)
 {}
 
-Binary::Binary (const Span * s, uint32_t n, const State * next
-    , bool skip, uint32_t eof)
+Binary::Binary (const Span *s, uint32_t n, State *next, bool skip, uint32_t eof)
     : cond (NULL)
     , thn (NULL)
     , els (NULL)
@@ -96,8 +95,8 @@ Binary::Binary (const Span * s, uint32_t n, const State * next
     els = new If (h > 4 ? If::BINARY : If::LINEAR, &s[l], h, next, skip, eof);
 }
 
-void Linear::add_branch(const Cond *cond, const State *to
-    , const Span &sp, bool skip, uint32_t eof)
+void Linear::add_branch(const Cond *cond, State *to, const Span &sp, bool skip,
+    uint32_t eof)
 {
     Branch &b = branches[nbranches++];
     b.cond = cond;
@@ -107,8 +106,7 @@ void Linear::add_branch(const Cond *cond, const State *to
     b.eof = is_eof(eof, sp.ub);
 }
 
-Linear::Linear(const Span *s, uint32_t n, const State *next
-    , bool skip, uint32_t eof)
+Linear::Linear(const Span *s, uint32_t n, State *next, bool skip, uint32_t eof)
     : nbranches(0)
     , branches(new Branch[n])
     , def(eof == NOEOF ? NULL : next)
@@ -147,8 +145,7 @@ Linear::Linear(const Span *s, uint32_t n, const State *next
     }
 }
 
-If::If (type_t t, const Span * sp, uint32_t nsp, const State * next
-    , bool skip, uint32_t eof)
+If::If(type_t t, const Span *sp, uint32_t nsp, State *next, bool skip, uint32_t eof)
     : type (t)
     , info ()
 {
@@ -160,8 +157,8 @@ If::If (type_t t, const Span * sp, uint32_t nsp, const State * next
     }
 }
 
-SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next
-    , bool sflag, bool skip, uint32_t eof)
+SwitchIf::SwitchIf(const Span *sp, uint32_t nsp, State *next, bool sflag, bool skip,
+    uint32_t eof)
     : type (IF)
     , info ()
 {
@@ -178,9 +175,8 @@ SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next
     }
 }
 
-GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan
-    , uint32_t hSpans, const bitmap_t * bm, const State * bm_state
-    , const State * next, bool sflag, uint32_t eof)
+GoBitmap::GoBitmap(const Span *span, uint32_t nSpans, const Span *hspan, uint32_t hSpans,
+    const bitmap_t *bm, State *bm_state, State *next, bool sflag, uint32_t eof)
     : bitmap (bm)
     , bitmap_state (bm_state)
     , hgo (NULL)
@@ -200,7 +196,7 @@ GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan
 const uint32_t CpgotoTable::TABLE_SIZE = 0x100;
 
 CpgotoTable::CpgotoTable (const Span * span, uint32_t nSpans)
-    : table (new const State * [TABLE_SIZE])
+    : table (new State * [TABLE_SIZE])
 {
     uint32_t c = 0;
     for (uint32_t i = 0; i < nSpans; ++i) {
@@ -210,8 +206,8 @@ CpgotoTable::CpgotoTable (const Span * span, uint32_t nSpans)
     }
 }
 
-Cpgoto::Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan
-    , uint32_t hSpans, const State * next, bool sflag, uint32_t eof)
+Cpgoto::Cpgoto (const Span *span, uint32_t nSpans, const Span *hspan, uint32_t hSpans,
+    State *next, bool sflag, uint32_t eof)
     : hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next, sflag, false, eof))
     , table (new CpgotoTable (span, nSpans))
 {}
@@ -260,10 +256,10 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
     // initialize bitmaps
     uint32_t nBitmaps = 0;
     const bitmap_t *bm = NULL;
-    const State *bms = NULL;
+    State *bms = NULL;
 
     for (uint32_t i = 0; i < nSpans; ++i) {
-        const State *s = span[i].to;
+        State *s = span[i].to;
         if (!s->isBase) continue;
 
         const bitmap_t *b = bitmaps.find(this, s);

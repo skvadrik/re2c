@@ -136,20 +136,26 @@ CodeList *GoBitmap::emit(Output &output, const DFA &dfa, const State *from) cons
     return stmts;
 }
 
-label_t CpgotoTable::max_label () const
+uint32_t CpgotoTable::max_label() const
 {
-    label_t max = label_t::first();
+    uint32_t max = 0;
     for (uint32_t i = 0; i < TABLE_SIZE; ++i) {
-        if (max < table[i]->label) {
-            max = table[i]->label;
-        }
+        max = std::max(max, table[i]->label.index);
     }
     return max;
 }
 
+static uint32_t label_width(uint32_t label)
+{
+    uint32_t n = 0;
+    while (label /= 10) ++n;
+    return n;
+}
+
+
 CodeList *CpgotoTable::emit(Output &output) const
 {
-    const uint32_t max_digits = max_label().width();
+    const uint32_t max_digits = label_width(max_label());
     static const size_t TABLE_WIDTH = 8;
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -164,11 +170,11 @@ CodeList *CpgotoTable::emit(Output &output) const
     CodeList *block = code_list(alc);
     for (uint32_t i = 0; i < TABLE_SIZE / TABLE_WIDTH; ++i) {
         for (uint32_t j = 0; j < TABLE_WIDTH; ++j) {
-            const label_t &l = table[i * TABLE_WIDTH + j]->label;
+            const Label &l = table[i * TABLE_WIDTH + j]->label;
 
             o.cstr("&&").str(opts->labelPrefix).label(l);
             if (j < TABLE_WIDTH - 1) {
-                const std::string padding(max_digits - l.width() + 1, ' ');
+                const std::string padding(max_digits - label_width(l.index) + 1, ' ');
                 o.cstr(",").str(padding);
             }
             else if (i < TABLE_SIZE / TABLE_WIDTH - 1) {

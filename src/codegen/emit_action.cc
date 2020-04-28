@@ -55,7 +55,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
     case Action::INITIAL: {
         const Initial &init = *s->action.info.initial;
         const bool backup = init.save != Initial::NOSAVE;
-        const bool ul1 = dfa.used_labels.count(s->label);
+        const bool ul1 = s->label.used;
 
         if (ul1 && dfa.accepts.size() > 1 && backup) {
             text = o.str(opts->yyaccept).cstr(" = ").u64(init.save).cstr(";").flush();
@@ -64,7 +64,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
         if (ul1 && !opts->eager_skip) {
             append(stmts, code_skip(alc));
         }
-        if (dfa.used_labels.count(init.label)) {
+        if (init.label.used) {
             text = o.str(opts->labelPrefix).label(init.label).cstr(":").flush();
             append(stmts, code_textraw(alc, text));
         }

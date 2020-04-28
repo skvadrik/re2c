@@ -70,9 +70,8 @@ DFA::DFA
     , setup(su)
     , eof_action(eof)
     , msg(msg)
-    , used_labels()
-    , start_label(label_t::first())
-    , initial_label(label_t::first())
+    , start_label(NO_LABEL)
+    , initial_label(NO_LABEL)
 {
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;

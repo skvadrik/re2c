@@ -26,9 +26,8 @@ struct opt_t;
 class Output;
 struct dfa_t;
 
-struct State
-{
-    label_t label;
+struct State {
+    Label label;
     State * next;
     State * prev;
     size_t fill;
@@ -42,8 +41,8 @@ struct State
     Go go;
     Action action;
 
-    State ()
-        : label (label_t::first ())
+    State()
+        : label(NO_LABEL)
         , next (0)
         , prev (0)
         , fill (0)
@@ -56,11 +55,10 @@ struct State
         , go ()
         , action ()
     {}
-    ~State ()
+    ~State()
     {
         operator delete (go.span);
     }
-
     FORBID_COPY (State);
 };
 
@@ -100,9 +98,8 @@ struct DFA
     const SemAct *eof_action;
     Msg &msg;
 
-    std::set<label_t> used_labels;
-    label_t start_label;
-    label_t initial_label;
+    Label start_label;
+    Label initial_label;
 
     DFA ( const dfa_t &dfa
         , const std::vector<size_t> &fill

@@ -22,20 +22,19 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/skeleton.h"
-#include "src/util/counter.h"
 #include "src/util/string_utils.h"
 
 
 namespace re2c {
 
-static void emit_state(Output &output, const State *s, bool used_label, CodeList *stmts)
+static void emit_state(Output &output, const State *s, CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const char *text;
 
-    if (used_label) {
+    if (s->label.used) {
         text = o.str(opts->labelPrefix).label(s->label).cstr(":").flush();
         append(stmts, code_textraw(alc, text));
     }
@@ -74,29 +73,32 @@ static void emit_eof(Output &output, const SemAct *semact, CodeList *stmts)
 void DFA::count_used_labels(const opt_t *opts)
 {
     // In '-f' mode, default state is always state 0
-    if (opts->fFlag) {
-        used_labels.insert(label_t::first());
+    if (opts->fFlag && start_label.index == 0) {
+        start_label.used = true;
     }
     if (opts->startlabel_force && opts->startlabel.empty()) {
-        used_labels.insert(start_label);
+        start_label.used = true;
     }
     // FIXME: default label may be used by EOF checks, but they are generated
     // later and at this point we do not know if default label is really used
     if (defstate && opts->eof != NOEOF) {
-        used_labels.insert(defstate->label);
+        defstate->label.used = true;
     }
     for (State * s = head; s; s = s->next) {
-        s->go.used_labels(used_labels);
+        s->go.used_labels();
         if (opts->eof != NOEOF && s->rule != Rule::NONE && !endstate(s)) {
-            used_labels.insert(finstates[s->rule]->label);
+            finstates[s->rule]->label.used = true;
         }
     }
     for (uint32_t i = 0; i < accepts.size(); ++i) {
-        used_labels.insert(accepts[i].first->label);
+        accepts[i].first->label.used = true;
     }
-    // must go last: it needs the set of used labels
-    if (used_labels.count(head->label)) {
-        used_labels.insert(initial_label);
+    if (head->label.used) {
+        initial_label.used = true;
+    }
+    // start label and initial label may alias
+    if (initial_label.index == start_label.index) {
+        initial_label.used = start_label.used = (initial_label.used || start_label.used);
     }
 }
 
@@ -112,14 +114,14 @@ void DFA::emit_body(Output &output, CodeList *stmts) const
     // If DFA has transitions to initial state, then initial state
     // has a piece of code that advances input position. Wee must
     // skip it when entering DFA.
-    if (used_labels.count(head->label)) {
+    if (head->label.used) {
         text = o.cstr("goto ").str(opts->labelPrefix).label(initial_label)
             .cstr(";").flush();
         append(stmts, code_text(alc, text));
     }
 
     for (State * s = head; s; s = s->next) {
-        emit_state(output, s, used_labels.count(s->label), stmts);
+        emit_state(output, s, stmts);
         emit_action(output, *this, s, stmts);
         s->go.emit(output, *this, s, stmts);
     }
@@ -176,16 +178,16 @@ void gen_code(Output &output, dfas_t &dfas)
         // start_label points to the beginning of current re2c block
         // (prior to condition dispatch in '-c' mode)
         // it can forced by configuration 're2c:startlabel = <integer>;'
-        dfa.start_label = output.label_counter.next();
+        dfa.start_label.index = output.label_counter++;
 
         // initial_label points to the beginning of DFA
         // in '-c' mode this is NOT equal to start_label
         // TODO: remove special case for skeleton and fix test results.
-        dfa.initial_label = opts->cFlag && (first || opts->target == TARGET_SKELETON)
-            ? output.label_counter.next () : dfa.start_label;
+        dfa.initial_label.index = opts->cFlag && (first || opts->target == TARGET_SKELETON)
+            ? output.label_counter++ : dfa.start_label.index;
 
         for (State * s = dfa.head; s; s = s->next) {
-            s->label = output.label_counter.next();
+            s->label.index = output.label_counter++;
         }
 
         dfa.count_used_labels(opts);
@@ -248,7 +250,7 @@ void gen_code(Output &output, dfas_t &dfas)
             }
 
             // start label
-            if (first && opts->cFlag && dfa.used_labels.count(dfa.start_label)) {
+            if (first && opts->cFlag && dfa.start_label.used) {
                 text = o.str(opts->labelPrefix).label(dfa.start_label).cstr(":").flush();
                 append(program1, code_textraw(alc, text));
             }
