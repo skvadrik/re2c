@@ -93,7 +93,6 @@ re2c_SRC = \
 	src/codegen/go_construct.cc \
 	src/codegen/go_destruct.cc \
 	src/codegen/go_emit.cc \
-	src/codegen/go_used_labels.cc \
 	src/codegen/input_api.cc \
 	src/codegen/output.cc \
 	src/codegen/print.cc \

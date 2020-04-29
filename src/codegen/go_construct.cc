@@ -47,12 +47,14 @@ Cases::Cases(const Span *spans, uint32_t nspans, bool skip, uint32_t eof)
     Case &c = cases[cases_size++];
     const Span *s = spans + (nspans - 1);
     c.to = s->to;
+    s->to->label->used = true;
     c.tags = s->tags;
     c.skip = skip && consume(s->to);
 
     for (uint32_t i = 0, lb = 0; i < nspans; ++i) {
         s = spans + i;
         add_case(lb, *s, skip && consume(s->to), eof);
+        s->to->label->used = true;
         lb = s->ub;
     }
 }
@@ -101,6 +103,7 @@ void Linear::add_branch(const Cond *cond, State *to, const Span &sp, bool skip,
     Branch &b = branches[nbranches++];
     b.cond = cond;
     b.to = to;
+    if (to) to->label->used = true;
     b.tags = sp.tags;
     b.skip = skip && consume(sp.to);
     b.eof = is_eof(eof, sp.ub);
@@ -190,6 +193,7 @@ GoBitmap::GoBitmap(const Span *span, uint32_t nSpans, const Span *hspan, uint32_
     // must be NULL to trigger explicit goto generation in linear 'if'
     hgo = hSpans == 0
         ? NULL : new SwitchIf (hspan, hSpans, lgo ? NULL : next, sflag, false, eof);
+    bitmap_state->label->used = true;
     operator delete (bspan);
 }
 
@@ -201,7 +205,9 @@ CpgotoTable::CpgotoTable (const Span * span, uint32_t nSpans)
     uint32_t c = 0;
     for (uint32_t i = 0; i < nSpans; ++i) {
         for(; c < span[i].ub && c < TABLE_SIZE; ++c) {
-            table[c] = span[i].to;
+            State *to = span[i].to;
+            table[c] = to;
+            to->label->used = true;
         }
     }
 }

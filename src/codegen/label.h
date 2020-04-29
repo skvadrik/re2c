@@ -11,7 +11,14 @@ struct Label {
     bool     used;
 };
 
-static const Label NO_LABEL = {~0u, false};
+template<typename Allocator>
+Label *new_label(Allocator &alc, uint32_t index)
+{
+    Label *l = alc.template alloct<Label>(1);
+    l->index = index;
+    l->used = false;
+    return l;
+}
 
 } // namespace re2c
 

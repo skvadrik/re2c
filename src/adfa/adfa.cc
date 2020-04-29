@@ -17,8 +17,6 @@ namespace re2c {
 
 class Msg;
 
-const size_t Initial::NOSAVE = std::numeric_limits<size_t>::max();
-
 static bool is_eof(const opt_t *opts, uint32_t ub)
 {
     return opts->eof != NOEOF && static_cast<uint32_t>(opts->eof) == ub;
@@ -70,8 +68,8 @@ DFA::DFA
     , setup(su)
     , eof_action(eof)
     , msg(msg)
-    , start_label(NO_LABEL)
-    , initial_label(NO_LABEL)
+    , start_label(NULL)
+    , initial_label(NULL)
 {
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;

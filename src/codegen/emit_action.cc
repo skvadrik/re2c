@@ -53,24 +53,21 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
         }
         break;
     case Action::INITIAL: {
-        const Initial &init = *s->action.info.initial;
-        const bool backup = init.save != Initial::NOSAVE;
-        const bool ul1 = s->label.used;
+        const size_t save = s->action.info.save;
+        const bool backup = save != NOSAVE;
+        const bool ul1 = s->label->used;
 
         if (ul1 && dfa.accepts.size() > 1 && backup) {
-            text = o.str(opts->yyaccept).cstr(" = ").u64(init.save).cstr(";").flush();
+            text = o.str(opts->yyaccept).cstr(" = ").u64(save).cstr(";").flush();
             append(stmts, code_text(alc, text));
         }
         if (ul1 && !opts->eager_skip) {
             append(stmts, code_skip(alc));
         }
-        if (init.label.used) {
-            text = o.str(opts->labelPrefix).label(init.label).cstr(":").flush();
-            append(stmts, code_textraw(alc, text));
-        }
+        append(stmts, code_nlabel(alc, dfa.initial_label));
         if (opts->dFlag) {
-            text = o.str(opts->yydebug).cstr("(").label(init.label).cstr(", *")
-                .str(opts->yycursor).cstr(");").flush();
+            text = o.str(opts->yydebug).cstr("(").label(*dfa.initial_label)
+                .cstr(", *").str(opts->yycursor).cstr(");").flush();
             append(stmts, code_text(alc, text));
         }
         append(stmts, need(output, s->fill));
@@ -161,18 +158,17 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
     if (opts->gFlag && nacc >= opts->cGotoThreshold && !have_tags) {
         CodeList *block = code_list(alc);
 
+        CodeList *table = code_list(alc);
         text = o.cstr("static void *").str(opts->yytarget).cstr("[").u64(nacc)
             .cstr("] = {").flush();
         append(block, code_text(alc, text));
-
-        CodeList *table = code_list(alc);
         for (uint32_t i = 0; i < nacc; ++i) {
-            text = o.cstr("&&").str(opts->labelPrefix).label(acc[i].first->label)
-                .cstr(",").flush();
+            Label *l = acc[i].first->label;
+            l->used = true;
+            text = o.cstr("&&").str(opts->labelPrefix).label(*l).cstr(",").flush();
             append(table, code_text(alc, text));
         }
         append(block, code_block(alc, table, CodeBlock::INDENTED));
-
         append(block, code_text(alc, "};"));
 
         text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yyaccept)
@@ -298,8 +294,8 @@ CodeList *need(Output &output, size_t some)
     }
 
     if (opts->fFlag) {
-        text = o.str(opts->yyfilllabel).u32(output.fill_index).cstr(":").flush();
-        append(stmts, code_textraw(alc, text));
+        text = o.str(opts->yyfilllabel).u32(output.fill_index).flush();
+        append(stmts, code_slabel(alc, text));
         ++output.fill_index;
     }
 
@@ -318,8 +314,8 @@ CodeList *gen_rescan_label(Output &output, const State *s)
         // no rescan label
     }
     else {
-        text = o.str(opts->yyfilllabel).u32(output.fill_index).cstr(":").flush();
-        append(stmts, code_textraw(alc, text));
+        text = o.str(opts->yyfilllabel).u32(output.fill_index).flush();
+        append(stmts, code_slabel(alc, text));
         ++output.fill_index;
     }
 
@@ -356,7 +352,8 @@ void gen_goto(Output &output, CodeList *stmts, const State *from, const State *t
     }
 
     if (to) {
-        text = o.cstr("goto ").str(opts->labelPrefix).label(to->label).cstr(";").flush();
+        to->label->used = true;
+        text = o.cstr("goto ").str(opts->labelPrefix).label(*to->label).cstr(";").flush();
         append(stmts, code_text(alc, text));
     }
 }
@@ -420,7 +417,8 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         // initial state: if accepting, go to eof state, else go to default state
         o.cstr("goto ").str(opts->labelPrefix);
         if (final) {
-            o.label(fallback->label);
+            fallback->label->used = true;
+            o.label(*fallback->label);
         }
         else {
             o.cstr("eofrule").u64(output.blockid());
@@ -433,7 +431,8 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         gen_settags(output, refill, dfa, falltags, false /* delayed */);
 
         // go to fallback state
-        text = o.cstr("goto ").str(opts->labelPrefix).label(fallback->label).cstr(";")
+        fallback->label->used = true;
+        text = o.cstr("goto ").str(opts->labelPrefix).label(*fallback->label).cstr(";")
             .flush();
         append(refill, code_text(alc, text));
     }

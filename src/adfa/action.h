@@ -15,14 +15,7 @@ namespace re2c {
 class Output;
 struct State;
 
-struct Initial {
-    static const size_t NOSAVE;
-
-    Label label;
-    size_t save;
-
-    inline Initial (const Label &l, size_t s): label(l), save(s) {}
-};
+static const size_t NOSAVE = std::numeric_limits<size_t>::max();
 
 typedef uniq_vector_t<std::pair<State*, tcid_t> > accept_t;
 
@@ -38,7 +31,6 @@ public:
     } type;
 
     union {
-        Initial * initial;
         size_t save;
         const accept_t * accepts;
         size_t rule;
@@ -46,27 +38,19 @@ public:
 
 public:
     inline Action(): type(MATCH), info() {}
-    ~Action()
-    {
-        if (type == INITIAL) {
-            delete info.initial;
-        }
-    }
-    void set_initial(const Label &label)
+    void set_initial()
     {
         if (type == MATCH) {
             // ordinary state with no special action
             type = INITIAL;
-            info.initial = new Initial(label, Initial::NOSAVE);
+            info.save = NOSAVE;
         }
         else if (type == SAVE) {
             // fallback state: do not loose 'yyaccept'
             type = INITIAL;
-            info.initial = new Initial(label, info.save);
         }
         else if (type == INITIAL) {
             // already marked as initial, probably reuse mode
-            info.initial->label = label;
         }
         else {
             DASSERT(false);

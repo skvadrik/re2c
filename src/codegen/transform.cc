@@ -292,6 +292,24 @@ static void gen_cond_table(Scratchbuf &o, code_alc_t &alc, Code *code,
     code->block.fmt = CodeBlock::RAW;
 }
 
+static void gen_label(Scratchbuf &o, const opt_t *opts, Code *code)
+{
+    DASSERT(code->kind == Code::LABEL);
+    CodeLabel *label = &code->label;
+
+    if (label->kind == CodeLabel::SLABEL) {
+        code->kind = Code::TEXT_RAW;
+        code->text = o.cstr(label->slabel).cstr(":").flush();
+    }
+    else if (label->nlabel->used) {
+        code->kind = Code::TEXT_RAW;
+        code->text = o.str(opts->labelPrefix).u32(label->nlabel->index).cstr(":").flush();
+    }
+    else {
+        code->kind = Code::EMPTY;
+    }
+}
+
 static void foldexpr(CodeList *stmts)
 {
     Code *x, *y, *z;
@@ -352,11 +370,23 @@ static void foldexpr(CodeList *stmts)
 
 static void transform_list(CodegenContext &ctx, CodeList *stmts)
 {
-    if (ctx.opts->input_api == INPUT_DEFAULT) {
-        foldexpr(stmts);
-    }
     for (Code *x = stmts->head; x; x = x->next) {
         transform(ctx, x);
+    }
+
+    // remove empty statements
+    for (Code **px = &stmts->head, *x; (x = *px); ) {
+        if (x->kind == Code::EMPTY) {
+            *px = x->next;
+        }
+        else {
+            px = &x->next;
+        }
+    }
+
+    // combine statements
+    if (ctx.opts->input_api == INPUT_DEFAULT) {
+        foldexpr(stmts);
     }
 }
 
@@ -421,6 +451,9 @@ void transform(CodegenContext &ctx, Code *code)
         case Code::STATE_GOTO:
             gen_state_goto(ctx.scratchbuf, ctx.allocator, code, 0, ctx.fillidx,
                 ctx.globopts);
+            break;
+        case Code::LABEL:
+            gen_label(ctx.scratchbuf, ctx.opts, code);
             break;
     }
 }

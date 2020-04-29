@@ -79,7 +79,6 @@ yyFillLabel0:
 	}
 yy2:
 	++YYCURSOR;
-yy3:
 	{ return 1; }
 yy4:
 	++YYCURSOR;

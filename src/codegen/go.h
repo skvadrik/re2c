@@ -2,7 +2,6 @@
 #define _RE2C_CODE_GO_
 
 #include <iostream>
-#include <set>
 #include <vector>
 
 #include "src/codegen/output.h"
@@ -48,7 +47,6 @@ struct Cases
     Cases(const Span *spans, uint32_t nspans, bool skip, uint32_t eof);
     ~Cases();
     CodeList *emit(Output &output, const DFA &dfa, const State *from) const;
-    void used_labels() const;
     FORBID_COPY(Cases);
 };
 
@@ -67,8 +65,6 @@ struct Binary
     Binary(const Span *s, uint32_t n, State *next, bool skip, uint32_t eof);
     ~Binary ();
     CodeList *emit(Output &output, const DFA &dfa, const State *from) const;
-    void used_labels() const;
-
     FORBID_COPY (Binary);
 };
 
@@ -91,7 +87,6 @@ struct Linear
     ~Linear();
     void add_branch(const Cond *cond, State *to, const Span &sp, bool skip, uint32_t eof);
     CodeList *emit(Output &output, const DFA &dfa, const State *from) const;
-    void used_labels() const;
     FORBID_COPY(Linear);
 };
 
@@ -110,7 +105,6 @@ struct If
     If(type_t t, const Span *sp, uint32_t nsp, State *next, bool skip, uint32_t eof);
     ~If ();
     CodeList *emit(Output &output, const DFA &dfa, const State *from) const;
-    void used_labels() const;
 };
 
 struct SwitchIf
@@ -129,7 +123,6 @@ struct SwitchIf
         uint32_t eof);
     ~SwitchIf ();
     CodeList *emit(Output &output, const DFA &dfa, const State *from) const;
-    void used_labels() const;
 };
 
 struct GoBitmap
@@ -142,8 +135,6 @@ struct GoBitmap
         const bitmap_t *bm, State *bm_state, State *next, bool sflag, uint32_t eof);
     ~GoBitmap ();
     CodeList *emit(Output &output, const DFA &dfa, const State *from) const;
-    void used_labels() const;
-
     FORBID_COPY (GoBitmap);
 };
 
@@ -154,11 +145,9 @@ struct CpgotoTable
     CpgotoTable (const Span * span, uint32_t nSpans);
     ~CpgotoTable ();
     CodeList *emit(Output &output) const;
-    void used_labels() const;
 
 private:
     uint32_t max_label() const;
-
     FORBID_COPY (CpgotoTable);
 };
 
@@ -170,8 +159,6 @@ struct Cpgoto
         State *next, bool sflag, uint32_t eof);
     ~Cpgoto ();
     CodeList *emit(Output &output, const DFA &dfa, const State *from) const;
-    void used_labels() const;
-
     FORBID_COPY (Cpgoto);
 };
 
@@ -181,7 +168,6 @@ struct Dot
     Dot(const Span *sp, uint32_t nsp, uint32_t eof);
     ~Dot ();
     void emit(Output &output, const DFA &dfa, const State *from, CodeList *stmts) const;
-
     FORBID_COPY (Dot);
 };
 
@@ -211,7 +197,6 @@ struct Go
     ~Go ();
     void init(const State* from, const opt_t *opts, bitmaps_t &bitmaps);
     void emit (Output &output, const DFA &dfa, const State *from, CodeList *stmts) const;
-    void used_labels() const;
 
     Go (const Go & g)
         : nSpans (g.nSpans)

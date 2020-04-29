@@ -34,12 +34,10 @@ static void emit_state(Output &output, const State *s, CodeList *stmts)
     Scratchbuf &o = output.scratchbuf;
     const char *text;
 
-    if (s->label.used) {
-        text = o.str(opts->labelPrefix).label(s->label).cstr(":").flush();
-        append(stmts, code_textraw(alc, text));
-    }
+    append(stmts, code_nlabel(alc, s->label));
+
     if (opts->dFlag && (s->action.type != Action::INITIAL)) {
-        text = o.str(opts->yydebug).cstr("(").label(s->label).cstr(", ")
+        text = o.str(opts->yydebug).cstr("(").label(*s->label).cstr(", ")
             .str(output_expr_peek(opts)).cstr(");").flush();
         append(stmts, code_text(alc, text));
     }
@@ -55,9 +53,8 @@ static void emit_eof(Output &output, const SemAct *semact, CodeList *stmts)
     if (opts->eof == NOEOF) return;
 
     // EOF label
-    text = o.str(opts->labelPrefix).cstr("eofrule").u64(output.blockid())
-        .cstr(":").flush();
-    append(stmts, code_textraw(alc, text));
+    text = o.str(opts->labelPrefix).cstr("eofrule").u64(output.blockid()).flush();
+    append(stmts, code_slabel(alc, text));
 
     // source line directive
     append(stmts, code_line_info_input(alc, semact->loc));
@@ -68,38 +65,6 @@ static void emit_eof(Output &output, const SemAct *semact, CodeList *stmts)
 
     // output line directive
     append(stmts, code_line_info_output(alc));
-}
-
-void DFA::count_used_labels(const opt_t *opts)
-{
-    // In '-f' mode, default state is always state 0
-    if (opts->fFlag && start_label.index == 0) {
-        start_label.used = true;
-    }
-    if (opts->startlabel_force && opts->startlabel.empty()) {
-        start_label.used = true;
-    }
-    // FIXME: default label may be used by EOF checks, but they are generated
-    // later and at this point we do not know if default label is really used
-    if (defstate && opts->eof != NOEOF) {
-        defstate->label.used = true;
-    }
-    for (State * s = head; s; s = s->next) {
-        s->go.used_labels();
-        if (opts->eof != NOEOF && s->rule != Rule::NONE && !endstate(s)) {
-            finstates[s->rule]->label.used = true;
-        }
-    }
-    for (uint32_t i = 0; i < accepts.size(); ++i) {
-        accepts[i].first->label.used = true;
-    }
-    if (head->label.used) {
-        initial_label.used = true;
-    }
-    // start label and initial label may alias
-    if (initial_label.index == start_label.index) {
-        initial_label.used = start_label.used = (initial_label.used || start_label.used);
-    }
 }
 
 void DFA::emit_body(Output &output, CodeList *stmts) const
@@ -114,8 +79,9 @@ void DFA::emit_body(Output &output, CodeList *stmts) const
     // If DFA has transitions to initial state, then initial state
     // has a piece of code that advances input position. Wee must
     // skip it when entering DFA.
-    if (head->label.used) {
-        text = o.cstr("goto ").str(opts->labelPrefix).label(initial_label)
+    if (head->label->used) {
+        initial_label->used = true;
+        text = o.cstr("goto ").str(opts->labelPrefix).label(*initial_label)
             .cstr(";").flush();
         append(stmts, code_text(alc, text));
     }
@@ -137,7 +103,7 @@ void DFA::emit_dot(Output &output, CodeList *program) const
     const char *text;
 
     if (opts->cFlag) {
-        text = o.str(cond).cstr(" -> ").label(head->label).flush();
+        text = o.str(cond).cstr(" -> ").label(*head->label).flush();
         append(program, code_text(alc, text));
     }
 
@@ -145,7 +111,7 @@ void DFA::emit_dot(Output &output, CodeList *program) const
         if (s->action.type == Action::ACCEPT) {
             const accept_t &accs = *s->action.info.accepts;
             for (uint32_t i = 0; i < accs.size(); ++i) {
-                text = o.label(s->label).cstr(" -> ").label(accs[i].first->label)
+                text = o.label(*s->label).cstr(" -> ").label(*accs[i].first->label)
                     .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]").flush();
                 append(program, code_text(alc, text));
             }
@@ -153,7 +119,7 @@ void DFA::emit_dot(Output &output, CodeList *program) const
         else if (s->action.type == Action::RULE) {
             const SemAct *semact = rules[s->action.info.rule].semact;
             if (!semact->autogen) {
-                text = o.label(s->label).cstr(" [label=\"")
+                text = o.label(*s->label).cstr(" [label=\"")
                     .str(msg.filenames[semact->loc.file]).cstr(":")
                     .u32(semact->loc.line).cstr("\"]").flush();
                 append(program, code_text(alc, text));
@@ -167,6 +133,8 @@ void gen_code(Output &output, dfas_t &dfas)
 {
     OutputBlock &ob = output.block();
     const opt_t *opts = ob.opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
 
     dfas_t::const_iterator i, b = dfas.begin(), e = dfas.end();
     if (b == e) return;
@@ -178,25 +146,27 @@ void gen_code(Output &output, dfas_t &dfas)
         // start_label points to the beginning of current re2c block
         // (prior to condition dispatch in '-c' mode)
         // it can forced by configuration 're2c:startlabel = <integer>;'
-        dfa.start_label.index = output.label_counter++;
+        dfa.start_label = new_label(alc, output.label_counter++);
+        dfa.start_label->used = (opts->startlabel_force && opts->startlabel.empty())
+            // in '-f' mode, default state is always state 0
+            || (opts->fFlag && dfa.start_label->index == 0);
 
         // initial_label points to the beginning of DFA
         // in '-c' mode this is NOT equal to start_label
         // TODO: remove special case for skeleton and fix test results.
-        dfa.initial_label.index = opts->cFlag && (first || opts->target == TARGET_SKELETON)
-            ? output.label_counter++ : dfa.start_label.index;
+        dfa.initial_label = opts->cFlag && (first || opts->target == TARGET_SKELETON)
+            ? new_label(alc, output.label_counter++) : dfa.start_label;
+        dfa.head->action.set_initial();
 
         for (State * s = dfa.head; s; s = s->next) {
-            s->label.index = output.label_counter++;
+            s->label = new_label(alc, output.label_counter++);
         }
 
-        dfa.count_used_labels(opts);
-
-        dfa.head->action.set_initial(dfa.initial_label);
+        for (State *s = dfa.head; s; s = s->next) {
+            s->go.init(s, opts, dfa.bitmaps);
+        }
     }
 
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
     CodeList *program = code_list(alc);
     uint32_t ind = 0;
 
@@ -250,15 +220,14 @@ void gen_code(Output &output, dfas_t &dfas)
             }
 
             // start label
-            if (first && opts->cFlag && dfa.start_label.used) {
-                text = o.str(opts->labelPrefix).label(dfa.start_label).cstr(":").flush();
-                append(program1, code_textraw(alc, text));
+            if (first && opts->cFlag) {
+                append(program1, code_nlabel(alc, dfa.start_label));
             }
 
             // user-defined start label
             if (first && !opts->startlabel.empty()) {
-                text = o.str(opts->startlabel).cstr(":").flush();
-                append(program1, code_textraw(alc, text));
+                text = o.str(opts->startlabel).flush();
+                append(program1, code_slabel(alc, text));
             }
 
             if (opts->cFlag && !output.cond_goto) {
@@ -273,8 +242,8 @@ void gen_code(Output &output, dfas_t &dfas)
                     text = o.str(divider).flush();
                     append(program1, code_textraw(alc, text));
                 }
-                text = o.str(opts->condPrefix).str(dfa.cond).cstr(":").flush();
-                append(program1, code_textraw(alc, text));
+                text = o.str(opts->condPrefix).str(dfa.cond).flush();
+                append(program1, code_slabel(alc, text));
             }
 
             // generate code for DFA

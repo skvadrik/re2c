@@ -11,7 +11,6 @@
 #include "src/adfa/action.h"
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
-#include "src/codegen/label.h"
 #include "src/dfa/tcmd.h"
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
@@ -25,11 +24,12 @@ class Msg;
 struct opt_t;
 class Output;
 struct dfa_t;
+struct Label;
 
 struct State {
-    Label label;
     State * next;
     State * prev;
+    Label *label;
     size_t fill;
     bool fallback;
 
@@ -42,9 +42,9 @@ struct State {
     Action action;
 
     State()
-        : label(NO_LABEL)
-        , next (0)
+        : next (0)
         , prev (0)
+        , label(NULL)
         , fill (0)
         , fallback (false)
         , rule (Rule::NONE)
@@ -98,8 +98,8 @@ struct DFA
     const SemAct *eof_action;
     Msg &msg;
 
-    Label start_label;
-    Label initial_label;
+    Label *start_label;
+    Label *initial_label;
 
     DFA ( const dfa_t &dfa
         , const std::vector<size_t> &fill
@@ -117,7 +117,6 @@ struct DFA
     void reorder();
     void prepare(const opt_t *opts);
     void calc_stats(OutputBlock &out);
-    void count_used_labels(const opt_t *opts);
     void emit_body(Output &output, CodeList *program) const;
     void emit_dot(Output &output, CodeList *program) const;
 

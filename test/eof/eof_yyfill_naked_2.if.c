@@ -26,7 +26,6 @@ yyFillLabel0:
 	}
 yy2:
 	++YYCURSOR;
-yy3:
 	{ return FAIL; }
 yy4:
 	++YYCURSOR;
@@ -52,7 +51,6 @@ yyFillLabel1:
 	}
 yy8:
 	++YYCURSOR;
-yy9:
 	{ return FAIL; }
 yy10:
 	++YYCURSOR;
@@ -78,7 +76,6 @@ yyFillLabel2:
 	}
 yy14:
 	++YYCURSOR;
-yy15:
 	{ return FAIL; }
 yy16:
 	++YYCURSOR;
@@ -104,7 +101,6 @@ yyFillLabel3:
 	}
 yy20:
 	++YYCURSOR;
-yy21:
 	{ return FAIL; }
 yy22:
 	++YYCURSOR;

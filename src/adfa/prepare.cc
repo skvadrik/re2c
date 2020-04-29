@@ -237,10 +237,6 @@ void DFA::prepare(const opt_t *opts)
     if (opts->eager_skip) {
         hoist_tags_and_skip(opts);
     }
-
-    for (State *s = head; s; s = s->next) {
-        s->go.init(s, opts, bitmaps);
-    }
 }
 
 void DFA::calc_stats(OutputBlock &out)

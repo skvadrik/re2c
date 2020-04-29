@@ -423,6 +423,7 @@ void render(RenderContext &rctx, const Code *code)
         case Code::COND_GOTO:
         case Code::COND_TABLE:
         case Code::STATE_GOTO:
+        case Code::LABEL:
             assert(false); // must have been expanded before
             break;
     }

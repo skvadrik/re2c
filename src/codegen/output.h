@@ -137,6 +137,18 @@ struct CodeFunc {
     const char *semi;
 };
 
+struct CodeLabel {
+    enum Kind {
+        NLABEL,
+        SLABEL
+    } kind;
+
+    union {
+        Label      *nlabel;
+        const char *slabel;
+    };
+};
+
 struct Code {
     enum Kind {
         EMPTY,
@@ -169,7 +181,8 @@ struct Code {
         VAR,
         TEXT,
         TEXT_RAW,
-        RAW
+        RAW,
+        LABEL
     } kind;
 
     union {
@@ -181,6 +194,7 @@ struct Code {
         CodeRaw     raw;
         CodeVar     var;
         CodeTags    tags;
+        CodeLabel   label;
         loc_t       loc;
     };
 
@@ -241,6 +255,22 @@ inline Code *code_textraw(code_alc_t &alc, const char *text)
 {
     Code *x = new_code(alc, Code::TEXT_RAW);
     x->text = text;
+    return x;
+}
+
+inline Code *code_nlabel(code_alc_t &alc, Label *label)
+{
+    Code *x = new_code(alc, Code::LABEL);
+    x->label.kind = CodeLabel::NLABEL;
+    x->label.nlabel = label;
+    return x;
+}
+
+inline Code *code_slabel(code_alc_t &alc, const char *label)
+{
+    Code *x = new_code(alc, Code::LABEL);
+    x->label.kind = CodeLabel::SLABEL;
+    x->label.slabel = label;
     return x;
 }
 

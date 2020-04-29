@@ -140,7 +140,7 @@ uint32_t CpgotoTable::max_label() const
 {
     uint32_t max = 0;
     for (uint32_t i = 0; i < TABLE_SIZE; ++i) {
-        max = std::max(max, table[i]->label.index);
+        max = std::max(max, table[i]->label->index);
     }
     return max;
 }
@@ -151,7 +151,6 @@ static uint32_t label_width(uint32_t label)
     while (label /= 10) ++n;
     return n;
 }
-
 
 CodeList *CpgotoTable::emit(Output &output) const
 {
@@ -170,7 +169,7 @@ CodeList *CpgotoTable::emit(Output &output) const
     CodeList *block = code_list(alc);
     for (uint32_t i = 0; i < TABLE_SIZE / TABLE_WIDTH; ++i) {
         for (uint32_t j = 0; j < TABLE_WIDTH; ++j) {
-            const Label &l = table[i * TABLE_WIDTH + j]->label;
+            const Label &l = *table[i * TABLE_WIDTH + j]->label;
 
             o.cstr("&&").str(opts->labelPrefix).label(l);
             if (j < TABLE_WIDTH - 1) {
@@ -227,13 +226,14 @@ void Dot::emit(Output &output, const DFA &dfa, const State *from, CodeList *stmt
     const char *text;
 
     if (n == 1) {
-        text = o.label(from->label).cstr(" -> ").label(cases->cases[0].to->label).flush();
+        text = o.label(*from->label).cstr(" -> ").label(*cases->cases[0].to->label)
+            .flush();
         append(stmts, code_text(alc, text));
     }
     else {
         for (uint32_t i = 0; i < n; ++i) {
             const Case &c = cases->cases[i];
-            o.label(from->label).cstr(" -> ").label(c.to->label).cstr(" [label=\"");
+            o.label(*from->label).cstr(" -> ").label(*c.to->label).cstr(" [label=\"");
             for (uint32_t j = 0; j < c.ranges.size(); ++j) {
                 const Enc &e = opts->encoding;
                 printSpan(o.stream(), c.ranges[j].first, c.ranges[j].second,
