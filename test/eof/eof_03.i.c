@@ -49,7 +49,7 @@ static bool lex(input_t & in, unsigned int &count)
         
 {
 	char yych;
-yy1_:
+yyFillLabel0:
 	yych = *in.cur;
 	switch (yych) {
 	case '\n':	goto yy4;
@@ -65,7 +65,7 @@ yy1_:
 	case '9':	goto yy7;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy1_;
+			if (in.fill () == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy2;
@@ -76,13 +76,13 @@ yy3:
 	{ return false; }
 yy4:
 	++in.cur;
-yy4_:
+yyFillLabel1:
 	yych = *in.cur;
 	switch (yych) {
 	case '\n':	goto yy4;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy4_;
+			if (in.fill () == 0) goto yyFillLabel1;
 		}
 		goto yy6;
 	}
@@ -90,7 +90,7 @@ yy6:
 	{ continue; }
 yy7:
 	++in.cur;
-yy7_:
+yyFillLabel2:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':
@@ -105,7 +105,7 @@ yy7_:
 	case '9':	goto yy7;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy7_;
+			if (in.fill () == 0) goto yyFillLabel2;
 		}
 		goto yy9;
 	}

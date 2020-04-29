@@ -27,26 +27,26 @@ yy4:
 
 {
 	YYCTYPE yych;
-yy6_:
+yyFillLabel0:
 	yych = *YYCURSOR;
 	if (yych >= 0x01) {
 		yyt1 = YYCURSOR;
 		goto yy7;
 	}
 	if (YYLIMIT <= YYCURSOR) {
-		if (YYFILL () == 0) goto yy6_;
+		if (YYFILL () == 0) goto yyFillLabel0;
 		goto yyeofrule2;
 	}
 	yyt1 = YYCURSOR;
 yy7:
 	++YYCURSOR;
-yy7_:
+yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'b':	goto yy7;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yy7_;
+			if (YYFILL () == 0) goto yyFillLabel1;
 		}
 		goto yy9;
 	}

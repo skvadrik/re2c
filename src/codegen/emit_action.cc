@@ -314,18 +314,13 @@ CodeList *gen_rescan_label(Output &output, const State *s)
     const char *text;
 
     CodeList *stmts = code_list(alc);
-
     if (opts->eof == NOEOF || !opts->fill_use || endstate(s)) {
         // no rescan label
     }
-    else if (opts->fFlag) {
+    else {
         text = o.str(opts->yyfilllabel).u32(output.fill_index).cstr(":").flush();
         append(stmts, code_textraw(alc, text));
         ++output.fill_index;
-    }
-    else {
-        text = o.str(opts->labelPrefix).label(s->label).cstr("_:").flush();
-        append(stmts, code_textraw(alc, text));
     }
 
     return stmts;
@@ -374,7 +369,6 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
     const bool final = from->rule != Rule::NONE;
     const State *fallback = final ? dfa.finstates[from->rule] : dfa.defstate;
     const tcid_t falltags = final ? from->rule_tags : from->fall_tags;
-    const State *retry = from->action.type == Action::MOVE ? from->prev : from;
     uint32_t fillidx = output.fill_index;
     const char *text;
 
@@ -415,8 +409,7 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
 
         // go to retry label (on YYFILL success)
         CodeList *rescan = code_list(alc);
-        text = o.cstr("goto ").str(opts->labelPrefix).label(retry->label).cstr("_;")
-            .flush();
+        text = o.cstr("goto ").str(opts->yyfilllabel).u32(fillidx - 1).cstr(";").flush();
         append(rescan, code_text(alc, text));
 
         append(refill, code_if_then_else(alc, if_yyfill, rescan, NULL));

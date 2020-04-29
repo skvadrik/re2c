@@ -53,24 +53,24 @@ static bool lex(input_t & in, unsigned int &count)
         
 {
 	uint32_t yych;
-yy1_:
+yyFillLabel0:
 	yych = *in.cur;
 	if (yych == '\n') goto yy5;
 	if (yych >= 0x0010FFFF) {
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy1_;
+			if (in.fill () == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy2;
 	}
 yy2:
 	++in.cur;
-yy2_:
+yyFillLabel1:
 	yych = *in.cur;
 	if (yych == '\n') goto yy4;
 	if (yych <= 0x0010FFFE) goto yy2;
 	if (in.lim <= in.cur) {
-		if (in.fill () == 0) goto yy2_;
+		if (in.fill () == 0) goto yyFillLabel1;
 		goto yy4;
 	}
 	goto yy2;
@@ -78,12 +78,12 @@ yy4:
 	{ ++count; continue; }
 yy5:
 	++in.cur;
-yy5_:
+yyFillLabel2:
 	yych = *in.cur;
 	if (yych == '\n') goto yy5;
 	if (yych >= 0x0010FFFF) {
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy5_;
+			if (in.fill () == 0) goto yyFillLabel2;
 		}
 		goto yy7;
 	}

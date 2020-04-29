@@ -36,13 +36,13 @@ yy6:
 
 {
 	YYCTYPE yych;
-yy9_:
+yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\'':	goto yy12;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yy9_;
+			if (YYFILL () == 0) goto yyFillLabel0;
 			goto yyeofrule3;
 		}
 		goto yy10;
@@ -53,11 +53,11 @@ yy11:
 	{ /* DEFAULT */ }
 yy12:
 	++YYCURSOR;
-yy12_:
+yyFillLabel1:
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yy12_;
+			if (YYFILL () == 0) goto yyFillLabel1;
 			goto yy13;
 		}
 		goto yy14;
@@ -67,14 +67,14 @@ yy13:
 	{ /* QUOTE   */ }
 yy14:
 	++YYCURSOR;
-yy14_:
+yyFillLabel2:
 	yych = *YYCURSOR;
 yy15:
 	switch (yych) {
 	case '\'':	goto yy16;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yy14_;
+			if (YYFILL () == 0) goto yyFillLabel2;
 			goto yy11;
 		}
 		goto yy14;

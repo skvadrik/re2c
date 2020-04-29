@@ -12,7 +12,7 @@ loop:
     
 {
 	char yych;
-yy1_:
+yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':
@@ -72,7 +72,7 @@ yy1_:
 	case 'z':	goto yy7;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (false) goto yy1_;
+			if (false) goto yyFillLabel0;
 			goto yyeofrule2;
 		}
 		goto yy2;
@@ -83,14 +83,14 @@ yy3:
 	{ return 1; }
 yy4:
 	++YYCURSOR;
-yy4_:
+yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':
 	case ' ':	goto yy4;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (false) goto yy4_;
+			if (false) goto yyFillLabel1;
 		}
 		goto yy6;
 	}
@@ -108,7 +108,7 @@ word:
     
 {
 	char yych;
-yy10_:
+yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'A':
@@ -166,7 +166,7 @@ yy10_:
 	case 'z':	goto yy13;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (false) goto yy10_;
+			if (false) goto yyFillLabel2;
 			goto yyeofrule3;
 		}
 		goto yy11;
@@ -177,7 +177,7 @@ yy12:
 	{ return 2; }
 yy13:
 	++YYCURSOR;
-yy13_:
+yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':
@@ -245,13 +245,13 @@ yy13_:
 	case 'z':	goto yy14;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (false) goto yy13_;
+			if (false) goto yyFillLabel3;
 		}
 		goto yy12;
 	}
 yy14:
 	++YYCURSOR;
-yy14_:
+yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':
@@ -319,7 +319,7 @@ yy14_:
 	case 'z':	goto yy14;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (false) goto yy14_;
+			if (false) goto yyFillLabel4;
 		}
 		goto yy16;
 	}

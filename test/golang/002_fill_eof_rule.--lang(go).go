@@ -94,7 +94,7 @@ func Lex(input *Input) int {
 //line "golang/002_fill_eof_rule.--lang(go).go":95
 {
 	var yych YYCTYPE
-yy1_:
+yyFillLabel0:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '\t':	fallthrough
@@ -114,7 +114,7 @@ yy1_:
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yy1_;
+				goto yyFillLabel0;
 			}
 			goto yyeofrule2;
 		}
@@ -130,7 +130,7 @@ yy2:
 //line "golang/002_fill_eof_rule.--lang(go).go":131
 yy4:
 	YYSKIP ();
-yy4_:
+yyFillLabel1:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '\t':	fallthrough
@@ -140,7 +140,7 @@ yy4_:
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yy4_;
+				goto yyFillLabel1;
 			}
 		}
 		goto yy6;
@@ -154,7 +154,7 @@ yy6:
 yy7:
 	YYSKIP ();
 	YYBACKUP ();
-yy7_:
+yyFillLabel2:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':	goto yy10;
@@ -171,7 +171,7 @@ yy7_:
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yy7_;
+				goto yyFillLabel2;
 			}
 		}
 		goto yy9;
@@ -185,7 +185,7 @@ yy9:
 //line "golang/002_fill_eof_rule.--lang(go).go":186
 yy10:
 	YYSKIP ();
-yy10_:
+yyFillLabel3:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':	fallthrough
@@ -201,7 +201,7 @@ yy10_:
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yy10_;
+				goto yyFillLabel3;
 			}
 		}
 		goto yy11;
@@ -211,7 +211,7 @@ yy11:
 	goto yy9;
 yy12:
 	YYSKIP ();
-yy12_:
+yyFillLabel4:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':	fallthrough
@@ -227,7 +227,7 @@ yy12_:
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yy12_;
+				goto yyFillLabel4;
 			}
 		}
 		goto yy14;

@@ -1395,7 +1395,7 @@ static Result lex1_simple(uint8_t *cur, uint8_t* end, uint8_t* /* unused */)
     
 {
 	uint8_t yych;
-yy31_:
+yyFillLabel0:
 	yych = *cur;
 	switch (yych) {
 	case 0x00:
@@ -1526,7 +1526,7 @@ yy31_:
 	case '~':
 	case 0x7F:
 		if (end <= cur) {
-			if (fill () == 0) goto yy31_;
+			if (fill () == 0) goto yyFillLabel0;
 			goto yyeofrule4;
 		}
 		goto yy32;
@@ -1592,7 +1592,7 @@ yy35:
 	{ return {ENOLEX, tok}; }
 yy36:
 	++cur;
-yy36_:
+yyFillLabel1:
 	yych = *cur;
 	switch (yych) {
 	case 0x80:
@@ -1661,13 +1661,13 @@ yy36_:
 	case 0xBF:	goto yy32;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yy36_;
+			if (fill () == 0) goto yyFillLabel1;
 		}
 		goto yy35;
 	}
 yy37:
 	YYMARKER = ++cur;
-yy37_:
+yyFillLabel2:
 	yych = *cur;
 	switch (yych) {
 	case 0xA0:
@@ -1704,13 +1704,13 @@ yy37_:
 	case 0xBF:	goto yy42;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yy37_;
+			if (fill () == 0) goto yyFillLabel2;
 		}
 		goto yy35;
 	}
 yy38:
 	YYMARKER = ++cur;
-yy38_:
+yyFillLabel3:
 	yych = *cur;
 	switch (yych) {
 	case 0x80:
@@ -1779,13 +1779,13 @@ yy38_:
 	case 0xBF:	goto yy42;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yy38_;
+			if (fill () == 0) goto yyFillLabel3;
 		}
 		goto yy35;
 	}
 yy39:
 	YYMARKER = ++cur;
-yy39_:
+yyFillLabel4:
 	yych = *cur;
 	switch (yych) {
 	case 0x90:
@@ -1838,13 +1838,13 @@ yy39_:
 	case 0xBF:	goto yy44;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yy39_;
+			if (fill () == 0) goto yyFillLabel4;
 		}
 		goto yy35;
 	}
 yy40:
 	YYMARKER = ++cur;
-yy40_:
+yyFillLabel5:
 	yych = *cur;
 	switch (yych) {
 	case 0x80:
@@ -1913,13 +1913,13 @@ yy40_:
 	case 0xBF:	goto yy44;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yy40_;
+			if (fill () == 0) goto yyFillLabel5;
 		}
 		goto yy35;
 	}
 yy41:
 	YYMARKER = ++cur;
-yy41_:
+yyFillLabel6:
 	yych = *cur;
 	switch (yych) {
 	case 0x80:
@@ -1940,13 +1940,13 @@ yy41_:
 	case 0x8F:	goto yy44;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yy41_;
+			if (fill () == 0) goto yyFillLabel6;
 		}
 		goto yy35;
 	}
 yy42:
 	++cur;
-yy42_:
+yyFillLabel7:
 	yych = *cur;
 	switch (yych) {
 	case 0x80:
@@ -2015,7 +2015,7 @@ yy42_:
 	case 0xBF:	goto yy32;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yy42_;
+			if (fill () == 0) goto yyFillLabel7;
 		}
 		goto yy43;
 	}
@@ -2024,7 +2024,7 @@ yy43:
 	goto yy35;
 yy44:
 	++cur;
-yy44_:
+yyFillLabel8:
 	yych = *cur;
 	switch (yych) {
 	case 0x80:
@@ -2093,7 +2093,7 @@ yy44_:
 	case 0xBF:	goto yy42;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yy44_;
+			if (fill () == 0) goto yyFillLabel8;
 		}
 		goto yy43;
 	}

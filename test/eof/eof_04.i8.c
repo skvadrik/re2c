@@ -54,7 +54,7 @@ static bool lex(input_t & in, unsigned int &count)
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
-yy1_:
+yyFillLabel0:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
@@ -238,7 +238,7 @@ yy1_:
 	case 0xF4:	goto yy15;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy1_;
+			if (in.fill () == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy8;
@@ -246,7 +246,7 @@ yy1_:
 yy2:
 	yyaccept = 0;
 	in.mar = ++in.cur;
-yy2_:
+yyFillLabel1:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
@@ -429,7 +429,7 @@ yy2_:
 	case 0xF4:	goto yy22;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy2_;
+			if (in.fill () == 0) goto yyFillLabel1;
 		}
 		goto yy4;
 	}
@@ -437,13 +437,13 @@ yy4:
 	{ ++count; continue; }
 yy5:
 	++in.cur;
-yy5_:
+yyFillLabel2:
 	yych = *in.cur;
 	switch (yych) {
 	case '\n':	goto yy5;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy5_;
+			if (in.fill () == 0) goto yyFillLabel2;
 		}
 		goto yy7;
 	}
@@ -455,7 +455,7 @@ yy9:
 	{ return false; }
 yy10:
 	++in.cur;
-yy10_:
+yyFillLabel3:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x80:
@@ -524,14 +524,14 @@ yy10_:
 	case 0xBF:	goto yy2;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy10_;
+			if (in.fill () == 0) goto yyFillLabel3;
 		}
 		goto yy9;
 	}
 yy11:
 	yyaccept = 1;
 	in.mar = ++in.cur;
-yy11_:
+yyFillLabel4:
 	yych = *in.cur;
 	switch (yych) {
 	case 0xA0:
@@ -568,14 +568,14 @@ yy11_:
 	case 0xBF:	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy11_;
+			if (in.fill () == 0) goto yyFillLabel4;
 		}
 		goto yy9;
 	}
 yy12:
 	yyaccept = 1;
 	in.mar = ++in.cur;
-yy12_:
+yyFillLabel5:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x80:
@@ -644,14 +644,14 @@ yy12_:
 	case 0xBF:	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy12_;
+			if (in.fill () == 0) goto yyFillLabel5;
 		}
 		goto yy9;
 	}
 yy13:
 	yyaccept = 1;
 	in.mar = ++in.cur;
-yy13_:
+yyFillLabel6:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x90:
@@ -704,14 +704,14 @@ yy13_:
 	case 0xBF:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy13_;
+			if (in.fill () == 0) goto yyFillLabel6;
 		}
 		goto yy9;
 	}
 yy14:
 	yyaccept = 1;
 	in.mar = ++in.cur;
-yy14_:
+yyFillLabel7:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x80:
@@ -780,14 +780,14 @@ yy14_:
 	case 0xBF:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy14_;
+			if (in.fill () == 0) goto yyFillLabel7;
 		}
 		goto yy9;
 	}
 yy15:
 	yyaccept = 1;
 	in.mar = ++in.cur;
-yy15_:
+yyFillLabel8:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x80:
@@ -808,13 +808,13 @@ yy15_:
 	case 0x8F:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy15_;
+			if (in.fill () == 0) goto yyFillLabel8;
 		}
 		goto yy9;
 	}
 yy16:
 	++in.cur;
-yy16_:
+yyFillLabel9:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x80:
@@ -883,7 +883,7 @@ yy16_:
 	case 0xBF:	goto yy2;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy16_;
+			if (in.fill () == 0) goto yyFillLabel9;
 		}
 		goto yy17;
 	}
@@ -896,7 +896,7 @@ yy17:
 	}
 yy18:
 	++in.cur;
-yy18_:
+yyFillLabel10:
 	yych = *in.cur;
 	switch (yych) {
 	case 0xA0:
@@ -933,13 +933,13 @@ yy18_:
 	case 0xBF:	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy18_;
+			if (in.fill () == 0) goto yyFillLabel10;
 		}
 		goto yy17;
 	}
 yy19:
 	++in.cur;
-yy19_:
+yyFillLabel11:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x80:
@@ -1008,13 +1008,13 @@ yy19_:
 	case 0xBF:	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy19_;
+			if (in.fill () == 0) goto yyFillLabel11;
 		}
 		goto yy17;
 	}
 yy20:
 	++in.cur;
-yy20_:
+yyFillLabel12:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x90:
@@ -1067,13 +1067,13 @@ yy20_:
 	case 0xBF:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy20_;
+			if (in.fill () == 0) goto yyFillLabel12;
 		}
 		goto yy17;
 	}
 yy21:
 	++in.cur;
-yy21_:
+yyFillLabel13:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x80:
@@ -1142,13 +1142,13 @@ yy21_:
 	case 0xBF:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy21_;
+			if (in.fill () == 0) goto yyFillLabel13;
 		}
 		goto yy17;
 	}
 yy22:
 	++in.cur;
-yy22_:
+yyFillLabel14:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x80:
@@ -1169,7 +1169,7 @@ yy22_:
 	case 0x8F:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy22_;
+			if (in.fill () == 0) goto yyFillLabel14;
 		}
 		goto yy17;
 	}

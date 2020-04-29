@@ -49,7 +49,7 @@ static bool lex(input_t & in, unsigned int &count)
         
 {
 	char yych;
-yy1_:
+yyFillLabel0:
 	yych = *in.cur;
 	switch (yych) {
 	case '\n':	goto yy4;
@@ -122,7 +122,7 @@ yy1_:
 	case 'w':	goto yy23;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy1_;
+			if (in.fill () == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy2;
@@ -133,13 +133,13 @@ yy3:
 	{ return false; }
 yy4:
 	++in.cur;
-yy4_:
+yyFillLabel1:
 	yych = *in.cur;
 	switch (yych) {
 	case '\n':	goto yy4;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy4_;
+			if (in.fill () == 0) goto yyFillLabel1;
 		}
 		goto yy6;
 	}
@@ -147,11 +147,11 @@ yy6:
 	{ continue; }
 yy7:
 	++in.cur;
-yy7_:
+yyFillLabel2:
 	yych = *in.cur;
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy7_;
+			if (in.fill () == 0) goto yyFillLabel2;
 			goto yy3;
 		}
 		goto yy24;
@@ -159,11 +159,11 @@ yy7_:
 	goto yy25;
 yy8:
 	++in.cur;
-yy8_:
+yyFillLabel3:
 	yych = *in.cur;
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy8_;
+			if (in.fill () == 0) goto yyFillLabel3;
 			goto yy3;
 		}
 		goto yy29;
@@ -171,7 +171,7 @@ yy8_:
 	goto yy30;
 yy9:
 	++in.cur;
-yy9_:
+yyFillLabel4:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':	goto yy10;
@@ -186,7 +186,7 @@ yy9_:
 	case '9':	goto yy14;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy9_;
+			if (in.fill () == 0) goto yyFillLabel4;
 		}
 		goto yy3;
 	}
@@ -196,7 +196,7 @@ yy11:
 	{ ++count; continue; }
 yy12:
 	++in.cur;
-yy12_:
+yyFillLabel5:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':
@@ -211,7 +211,7 @@ yy12_:
 	case '2':	goto yy34;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy12_;
+			if (in.fill () == 0) goto yyFillLabel5;
 		}
 		goto yy13;
 	}
@@ -219,7 +219,7 @@ yy13:
 	{ ++count; continue; }
 yy14:
 	++in.cur;
-yy14_:
+yyFillLabel6:
 	yych = *in.cur;
 yy15:
 	switch (yych) {
@@ -235,13 +235,13 @@ yy15:
 	case '9':	goto yy14;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy14_;
+			if (in.fill () == 0) goto yyFillLabel6;
 		}
 		goto yy11;
 	}
 yy16:
 	++in.cur;
-yy16_:
+yyFillLabel7:
 	yych = *in.cur;
 yy17:
 	switch (yych) {
@@ -310,7 +310,7 @@ yy17:
 	case 'z':	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy16_;
+			if (in.fill () == 0) goto yyFillLabel7;
 		}
 		goto yy18;
 	}
@@ -318,12 +318,12 @@ yy18:
 	{ ++count; continue; }
 yy19:
 	++in.cur;
-yy19_:
+yyFillLabel8:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy19_;
+			if (in.fill () == 0) goto yyFillLabel8;
 		}
 		goto yy18;
 	case 'R':
@@ -332,12 +332,12 @@ yy19_:
 	}
 yy20:
 	++in.cur;
-yy20_:
+yyFillLabel9:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy20_;
+			if (in.fill () == 0) goto yyFillLabel9;
 		}
 		goto yy18;
 	case 'O':
@@ -346,12 +346,12 @@ yy20_:
 	}
 yy21:
 	++in.cur;
-yy21_:
+yyFillLabel10:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy21_;
+			if (in.fill () == 0) goto yyFillLabel10;
 		}
 		goto yy18;
 	case 'A':
@@ -362,12 +362,12 @@ yy21_:
 	}
 yy22:
 	++in.cur;
-yy22_:
+yyFillLabel11:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy22_;
+			if (in.fill () == 0) goto yyFillLabel11;
 		}
 		goto yy18;
 	case 'H':
@@ -378,12 +378,12 @@ yy22_:
 	}
 yy23:
 	++in.cur;
-yy23_:
+yyFillLabel12:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy23_;
+			if (in.fill () == 0) goto yyFillLabel12;
 		}
 		goto yy18;
 	case 'E':
@@ -392,7 +392,7 @@ yy23_:
 	}
 yy24:
 	++in.cur;
-yy24_:
+yyFillLabel13:
 	yych = *in.cur;
 yy25:
 	switch (yych) {
@@ -400,7 +400,7 @@ yy25:
 	case '\\':	goto yy28;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy24_;
+			if (in.fill () == 0) goto yyFillLabel13;
 			goto yy3;
 		}
 		goto yy24;
@@ -410,11 +410,11 @@ yy26:
 	{ ++count; continue; }
 yy28:
 	++in.cur;
-yy28_:
+yyFillLabel14:
 	yych = *in.cur;
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy28_;
+			if (in.fill () == 0) goto yyFillLabel14;
 			goto yy3;
 		}
 		goto yy24;
@@ -422,7 +422,7 @@ yy28_:
 	goto yy24;
 yy29:
 	++in.cur;
-yy29_:
+yyFillLabel15:
 	yych = *in.cur;
 yy30:
 	switch (yych) {
@@ -430,7 +430,7 @@ yy30:
 	case '\\':	goto yy33;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy29_;
+			if (in.fill () == 0) goto yyFillLabel15;
 			goto yy3;
 		}
 		goto yy29;
@@ -440,11 +440,11 @@ yy31:
 	{ ++count; continue; }
 yy33:
 	++in.cur;
-yy33_:
+yyFillLabel16:
 	yych = *in.cur;
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy33_;
+			if (in.fill () == 0) goto yyFillLabel16;
 			goto yy3;
 		}
 		goto yy29;
@@ -452,7 +452,7 @@ yy33_:
 	goto yy29;
 yy34:
 	++in.cur;
-yy34_:
+yyFillLabel17:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':
@@ -467,18 +467,18 @@ yy34_:
 	case '3':	goto yy41;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy34_;
+			if (in.fill () == 0) goto yyFillLabel17;
 		}
 		goto yy13;
 	}
 yy35:
 	++in.cur;
-yy35_:
+yyFillLabel18:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy35_;
+			if (in.fill () == 0) goto yyFillLabel18;
 		}
 		goto yy18;
 	case 'I':
@@ -487,12 +487,12 @@ yy35_:
 	}
 yy36:
 	++in.cur;
-yy36_:
+yyFillLabel19:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy36_;
+			if (in.fill () == 0) goto yyFillLabel19;
 		}
 		goto yy18;
 	case 'N':
@@ -501,12 +501,12 @@ yy36_:
 	}
 yy37:
 	++in.cur;
-yy37_:
+yyFillLabel20:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy37_;
+			if (in.fill () == 0) goto yyFillLabel20;
 		}
 		goto yy18;
 	case 'T':
@@ -515,12 +515,12 @@ yy37_:
 	}
 yy38:
 	++in.cur;
-yy38_:
+yyFillLabel21:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy38_;
+			if (in.fill () == 0) goto yyFillLabel21;
 		}
 		goto yy18;
 	case 'U':
@@ -529,12 +529,12 @@ yy38_:
 	}
 yy39:
 	++in.cur;
-yy39_:
+yyFillLabel22:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy39_;
+			if (in.fill () == 0) goto yyFillLabel22;
 		}
 		goto yy18;
 	case 'E':
@@ -543,12 +543,12 @@ yy39_:
 	}
 yy40:
 	++in.cur;
-yy40_:
+yyFillLabel23:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy40_;
+			if (in.fill () == 0) goto yyFillLabel23;
 		}
 		goto yy18;
 	case 'D':
@@ -557,12 +557,12 @@ yy40_:
 	}
 yy41:
 	++in.cur;
-yy41_:
+yyFillLabel24:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy41_;
+			if (in.fill () == 0) goto yyFillLabel24;
 		}
 		goto yy11;
 	case '4':	goto yy47;
@@ -570,12 +570,12 @@ yy41_:
 	}
 yy42:
 	++in.cur;
-yy42_:
+yyFillLabel25:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy42_;
+			if (in.fill () == 0) goto yyFillLabel25;
 		}
 		goto yy18;
 	case 'D':
@@ -584,12 +584,12 @@ yy42_:
 	}
 yy43:
 	++in.cur;
-yy43_:
+yyFillLabel26:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy43_;
+			if (in.fill () == 0) goto yyFillLabel26;
 		}
 		goto yy18;
 	case 'U':
@@ -598,12 +598,12 @@ yy43_:
 	}
 yy44:
 	++in.cur;
-yy44_:
+yyFillLabel27:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy44_;
+			if (in.fill () == 0) goto yyFillLabel27;
 		}
 		goto yy18;
 	case 'R':
@@ -612,12 +612,12 @@ yy44_:
 	}
 yy45:
 	++in.cur;
-yy45_:
+yyFillLabel28:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy45_;
+			if (in.fill () == 0) goto yyFillLabel28;
 		}
 		goto yy18;
 	case 'S':
@@ -626,12 +626,12 @@ yy45_:
 	}
 yy46:
 	++in.cur;
-yy46_:
+yyFillLabel29:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy46_;
+			if (in.fill () == 0) goto yyFillLabel29;
 		}
 		goto yy18;
 	case 'N':
@@ -640,12 +640,12 @@ yy46_:
 	}
 yy47:
 	++in.cur;
-yy47_:
+yyFillLabel30:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy47_;
+			if (in.fill () == 0) goto yyFillLabel30;
 		}
 		goto yy11;
 	case '5':	goto yy50;
@@ -653,12 +653,12 @@ yy47_:
 	}
 yy48:
 	++in.cur;
-yy48_:
+yyFillLabel31:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy48_;
+			if (in.fill () == 0) goto yyFillLabel31;
 		}
 		goto yy18;
 	case 'A':
@@ -667,12 +667,12 @@ yy48_:
 	}
 yy49:
 	++in.cur;
-yy49_:
+yyFillLabel32:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy49_;
+			if (in.fill () == 0) goto yyFillLabel32;
 		}
 		goto yy18;
 	case 'R':
@@ -681,7 +681,7 @@ yy49_:
 	}
 yy50:
 	++in.cur;
-yy50_:
+yyFillLabel33:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':
@@ -696,18 +696,18 @@ yy50_:
 	case '6':	goto yy52;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy50_;
+			if (in.fill () == 0) goto yyFillLabel33;
 		}
 		goto yy13;
 	}
 yy51:
 	++in.cur;
-yy51_:
+yyFillLabel34:
 	yych = *in.cur;
 	switch (yych) {
 	case 0x00:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy51_;
+			if (in.fill () == 0) goto yyFillLabel34;
 		}
 		goto yy18;
 	case 'Y':
@@ -716,7 +716,7 @@ yy51_:
 	}
 yy52:
 	++in.cur;
-yy52_:
+yyFillLabel35:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':
@@ -731,13 +731,13 @@ yy52_:
 	case '7':	goto yy55;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy52_;
+			if (in.fill () == 0) goto yyFillLabel35;
 		}
 		goto yy13;
 	}
 yy53:
 	++in.cur;
-yy53_:
+yyFillLabel36:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':
@@ -805,7 +805,7 @@ yy53_:
 	case 'z':	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy53_;
+			if (in.fill () == 0) goto yyFillLabel36;
 		}
 		goto yy54;
 	}
@@ -813,7 +813,7 @@ yy54:
 	{ ++count; continue; }
 yy55:
 	++in.cur;
-yy55_:
+yyFillLabel37:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':
@@ -828,13 +828,13 @@ yy55_:
 	case '8':	goto yy56;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy55_;
+			if (in.fill () == 0) goto yyFillLabel37;
 		}
 		goto yy13;
 	}
 yy56:
 	++in.cur;
-yy56_:
+yyFillLabel38:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':
@@ -849,13 +849,13 @@ yy56_:
 	case '9':	goto yy57;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy56_;
+			if (in.fill () == 0) goto yyFillLabel38;
 		}
 		goto yy13;
 	}
 yy57:
 	++in.cur;
-yy57_:
+yyFillLabel39:
 	yych = *in.cur;
 	switch (yych) {
 	case '0':
@@ -870,7 +870,7 @@ yy57_:
 	case '9':	goto yy14;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yy57_;
+			if (in.fill () == 0) goto yyFillLabel39;
 		}
 		goto yy13;
 	}

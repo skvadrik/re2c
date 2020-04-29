@@ -2,13 +2,13 @@
 
 {
 	YYCTYPE yych;
-yy1_:
+yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy4;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yy1_;
+			if (YYFILL () == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy2;
@@ -46,13 +46,13 @@ yy10:
 
 {
 	YYCTYPE yych;
-yy13_:
+yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'b':	goto yy16;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yy13_;
+			if (YYFILL () == 0) goto yyFillLabel1;
 			goto yyeofrule3;
 		}
 		goto yy14;

@@ -48,7 +48,7 @@ loop:
 #line 49 "eof/eof_10_fill.c"
 {
 	char yych;
-yy1_:
+yyFillLabel0:
 	yych = *in->cur;
 	switch (yych) {
 	case ' ':	goto yy4;
@@ -81,7 +81,7 @@ yy1_:
 	case 'z':	goto yy8;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yy1_;
+			if (YYFILL () == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy2;
@@ -94,13 +94,13 @@ yy3:
 #line 95 "eof/eof_10_fill.c"
 yy4:
 	++in->cur;
-yy4_:
+yyFillLabel1:
 	yych = *in->cur;
 	switch (yych) {
 	case ' ':	goto yy4;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yy4_;
+			if (YYFILL () == 0) goto yyFillLabel1;
 		}
 		goto yy6;
 	}
@@ -110,11 +110,11 @@ yy6:
 #line 111 "eof/eof_10_fill.c"
 yy7:
 	++in->cur;
-yy7_:
+yyFillLabel2:
 	yych = *in->cur;
 	if (yych <= 0x00) {
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yy7_;
+			if (YYFILL () == 0) goto yyFillLabel2;
 			goto yy3;
 		}
 		goto yy11;
@@ -122,7 +122,7 @@ yy7_:
 	goto yy12;
 yy8:
 	++in->cur;
-yy8_:
+yyFillLabel3:
 	yych = *in->cur;
 	switch (yych) {
 	case 'a':
@@ -153,7 +153,7 @@ yy8_:
 	case 'z':	goto yy8;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yy8_;
+			if (YYFILL () == 0) goto yyFillLabel3;
 		}
 		goto yy10;
 	}
@@ -163,7 +163,7 @@ yy10:
 #line 164 "eof/eof_10_fill.c"
 yy11:
 	++in->cur;
-yy11_:
+yyFillLabel4:
 	yych = *in->cur;
 yy12:
 	switch (yych) {
@@ -171,7 +171,7 @@ yy12:
 	case '\\':	goto yy15;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yy11_;
+			if (YYFILL () == 0) goto yyFillLabel4;
 			goto yy3;
 		}
 		goto yy11;
@@ -184,28 +184,28 @@ yy14:
 #line 185 "eof/eof_10_fill.c"
 yy15:
 	++in->cur;
-yy15_:
+yyFillLabel5:
 	yych = *in->cur;
 	switch (yych) {
 	case '\'':	goto yy17;
 	case '\\':	goto yy15;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yy15_;
+			if (YYFILL () == 0) goto yyFillLabel5;
 			goto yy3;
 		}
 		goto yy11;
 	}
 yy17:
 	++in->cur;
-yy17_:
+yyFillLabel6:
 	yych = *in->cur;
 	switch (yych) {
 	case '\'':	goto yy13;
 	case '\\':	goto yy15;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yy17_;
+			if (YYFILL () == 0) goto yyFillLabel6;
 			goto yy14;
 		}
 		goto yy11;

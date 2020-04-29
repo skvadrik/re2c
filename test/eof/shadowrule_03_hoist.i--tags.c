@@ -29,20 +29,20 @@ yy5:
 
 {
 	YYCTYPE yych;
-yy7_:
+yyFillLabel0:
 	yych = *YYCURSOR;
 	if (yych >= 0x01) goto yy8;
 	if (YYLIMIT <= YYCURSOR) {
-		if (YYFILL () == 0) goto yy7_;
+		if (YYFILL () == 0) goto yyFillLabel0;
 		goto yyeofrule2;
 	}
 yy8:
 	++YYCURSOR;
-yy8_:
+yyFillLabel1:
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yy8_;
+			if (YYFILL () == 0) goto yyFillLabel1;
 			goto yy9;
 		}
 		yyt1 = YYCURSOR;
@@ -54,13 +54,13 @@ yy9:
 	{ /* ANY, x must not be set */ }
 yy10:
 	++YYCURSOR;
-yy10_:
+yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy10;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yy10_;
+			if (YYFILL () == 0) goto yyFillLabel2;
 		}
 		goto yy12;
 	}
