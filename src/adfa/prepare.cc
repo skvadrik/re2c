@@ -174,20 +174,32 @@ void DFA::prepare(const opt_t *opts)
     }
 
     // create default state (if needed)
-    State * default_state = NULL;
-    for (State * s = head; s; s = s->next)
-    {
-        for (uint32_t i = 0; i < s->go.nSpans; ++i)
-        {
-            if (!s->go.span[i].to)
-            {
-                if (!default_state)
-                {
-                    default_state = new State;
-                    defstate = default_state;
+    State *default_state = NULL;
+    for (State *s = head; s; s = s->next) {
+        for (uint32_t i = 0; i < s->go.nSpans; ++i) {
+            if (!s->go.span[i].to) {
+                if (!default_state) {
+                    default_state = defstate = new State;
                     addState(default_state, s);
                 }
                 s->go.span[i].to = defstate;
+            }
+        }
+    }
+
+    // With EOF rule there is a default quasi-transition on YYFILL failure, so
+    // default state is needed if there is at least one final state with at
+    // least one outgoing transition to a non-final state.
+    if (!default_state && opts->eof != NOEOF) {
+        bool have_fallback_states = false;
+
+        for (State *s = head; s; s = s->next) {
+            have_fallback_states |= s->fallback;
+
+            if (!s->next && have_fallback_states) {
+                default_state = defstate = new State;
+                addState(default_state, s);
+                break;
             }
         }
     }

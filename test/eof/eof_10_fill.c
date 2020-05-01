@@ -48,6 +48,7 @@ loop:
 #line 49 "eof/eof_10_fill.c"
 {
 	char yych;
+	unsigned int yyaccept = 0;
 yyFillLabel0:
 	yych = *in->cur;
 	switch (yych) {
@@ -91,7 +92,7 @@ yy2:
 yy3:
 #line 51 "eof/eof_10_fill.re"
 	{ return -1; }
-#line 95 "eof/eof_10_fill.c"
+#line 96 "eof/eof_10_fill.c"
 yy4:
 	++in->cur;
 yyFillLabel1:
@@ -107,9 +108,10 @@ yyFillLabel1:
 yy6:
 #line 55 "eof/eof_10_fill.re"
 	{ goto loop; }
-#line 111 "eof/eof_10_fill.c"
+#line 112 "eof/eof_10_fill.c"
 yy7:
-	++in->cur;
+	yyaccept = 0;
+	YYMARKER = ++in->cur;
 yyFillLabel2:
 	yych = *in->cur;
 	if (yych <= 0x00) {
@@ -160,7 +162,7 @@ yyFillLabel3:
 yy10:
 #line 53 "eof/eof_10_fill.re"
 	{ ++count; goto loop; }
-#line 164 "eof/eof_10_fill.c"
+#line 166 "eof/eof_10_fill.c"
 yy11:
 	++in->cur;
 yyFillLabel4:
@@ -172,7 +174,7 @@ yy12:
 	default:
 		if (in->lim <= in->cur) {
 			if (YYFILL () == 0) goto yyFillLabel4;
-			goto yy3;
+			goto yy18;
 		}
 		goto yy11;
 	}
@@ -181,7 +183,7 @@ yy13:
 yy14:
 #line 54 "eof/eof_10_fill.re"
 	{ ++count; goto loop; }
-#line 185 "eof/eof_10_fill.c"
+#line 187 "eof/eof_10_fill.c"
 yy15:
 	++in->cur;
 yyFillLabel5:
@@ -192,12 +194,13 @@ yyFillLabel5:
 	default:
 		if (in->lim <= in->cur) {
 			if (YYFILL () == 0) goto yyFillLabel5;
-			goto yy3;
+			goto yy18;
 		}
 		goto yy11;
 	}
 yy17:
-	++in->cur;
+	yyaccept = 1;
+	YYMARKER = ++in->cur;
 yyFillLabel6:
 	yych = *in->cur;
 	switch (yych) {
@@ -210,10 +213,17 @@ yyFillLabel6:
 		}
 		goto yy11;
 	}
+yy18:
+	in->cur = YYMARKER;
+	if (yyaccept == 0) {
+		goto yy3;
+	} else {
+		goto yy14;
+	}
 yyeofrule1:
 #line 52 "eof/eof_10_fill.re"
 	{ return count; }
-#line 217 "eof/eof_10_fill.c"
+#line 227 "eof/eof_10_fill.c"
 }
 #line 57 "eof/eof_10_fill.re"
 

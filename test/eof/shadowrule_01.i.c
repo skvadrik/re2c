@@ -49,10 +49,9 @@ yyFillLabel0:
 	}
 yy10:
 	++YYCURSOR;
-yy11:
 	{ /* DEFAULT */ }
 yy12:
-	++YYCURSOR;
+	YYMARKER = ++YYCURSOR;
 yyFillLabel1:
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
@@ -75,13 +74,16 @@ yy15:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (YYFILL () == 0) goto yyFillLabel2;
-			goto yy11;
+			goto yy18;
 		}
 		goto yy14;
 	}
 yy16:
 	++YYCURSOR;
 	{ /* STRING  */ }
+yy18:
+	YYCURSOR = YYMARKER;
+	goto yy13;
 yyeofrule3:
 	{ /* EOF     */ }
 }
