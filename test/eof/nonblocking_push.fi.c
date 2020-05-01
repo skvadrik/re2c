@@ -177,7 +177,7 @@ yyFillLabel0:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(0);
 			YYFILL();
-			yyeof0:;
+yyeof0:
 			goto yyeofrule1;
 		}
 		goto yy2;
@@ -196,7 +196,8 @@ yyFillLabel1:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(1);
 			YYFILL();
-			yyeof1:;
+yyeof1:
+			;
 		}
 		goto yy6;
 	}
@@ -264,7 +265,8 @@ yy8:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(2);
 			YYFILL();
-			yyeof2:;
+yyeof2:
+			;
 		}
 		goto yy9;
 	}
@@ -279,7 +281,8 @@ yyFillLabel3:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(3);
 			YYFILL();
-			yyeof3:;
+yyeof3:
+			;
 		}
 		goto yy9;
 	case 'H':	goto yy11;
@@ -294,7 +297,8 @@ yyFillLabel4:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(4);
 			YYFILL();
-			yyeof4:;
+yyeof4:
+			;
 		}
 		goto yy9;
 	case 'I':	goto yy12;
@@ -309,7 +313,8 @@ yyFillLabel5:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(5);
 			YYFILL();
-			yyeof5:;
+yyeof5:
+			;
 		}
 		goto yy9;
 	case 'N':	goto yy13;
@@ -324,7 +329,8 @@ yyFillLabel6:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(6);
 			YYFILL();
-			yyeof6:;
+yyeof6:
+			;
 		}
 		goto yy9;
 	case 'G':	goto yy14;
@@ -339,7 +345,8 @@ yyFillLabel7:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(7);
 			YYFILL();
-			yyeof7:;
+yyeof7:
+			;
 		}
 		goto yy9;
 	case '\n':	goto yy15;
@@ -355,7 +362,8 @@ yyFillLabel8:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(8);
 			YYFILL();
-			yyeof8:;
+yyeof8:
+			;
 		}
 		goto yy16;
 	}
@@ -372,7 +380,8 @@ yyFillLabel9:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(9);
 			YYFILL();
-			yyeof9:;
+yyeof9:
+			;
 		}
 		goto yy16;
 	}
@@ -386,7 +395,8 @@ yyFillLabel10:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(10);
 			YYFILL();
-			yyeof10:;
+yyeof10:
+			;
 		}
 		goto yy16;
 	}
@@ -400,7 +410,8 @@ yyFillLabel11:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(11);
 			YYFILL();
-			yyeof11:;
+yyeof11:
+			;
 		}
 		goto yy16;
 	}
@@ -414,7 +425,8 @@ yyFillLabel12:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(12);
 			YYFILL();
-			yyeof12:;
+yyeof12:
+			;
 		}
 		goto yy16;
 	}
@@ -428,7 +440,8 @@ yyFillLabel13:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(13);
 			YYFILL();
-			yyeof13:;
+yyeof13:
+			;
 		}
 		goto yy16;
 	}
@@ -442,7 +455,8 @@ yyFillLabel14:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(14);
 			YYFILL();
-			yyeof14:;
+yyeof14:
+			;
 		}
 		goto yy16;
 	}
@@ -456,7 +470,8 @@ yyFillLabel15:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(15);
 			YYFILL();
-			yyeof15:;
+yyeof15:
+			;
 		}
 		goto yy16;
 	}
@@ -470,7 +485,8 @@ yyFillLabel16:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(16);
 			YYFILL();
-			yyeof16:;
+yyeof16:
+			;
 		}
 		goto yy16;
 	}
@@ -484,7 +500,8 @@ yyFillLabel17:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(17);
 			YYFILL();
-			yyeof17:;
+yyeof17:
+			;
 		}
 		goto yy16;
 	}
@@ -498,7 +515,8 @@ yyFillLabel18:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(18);
 			YYFILL();
-			yyeof18:;
+yyeof18:
+			;
 		}
 		goto yy16;
 	}
@@ -512,7 +530,8 @@ yyFillLabel19:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(19);
 			YYFILL();
-			yyeof19:;
+yyeof19:
+			;
 		}
 		goto yy16;
 	}
@@ -526,7 +545,8 @@ yyFillLabel20:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(20);
 			YYFILL();
-			yyeof20:;
+yyeof20:
+			;
 		}
 		goto yy16;
 	}

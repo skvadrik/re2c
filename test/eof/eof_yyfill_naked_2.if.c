@@ -19,7 +19,7 @@ yyFillLabel0:
 		if (YYLIMIT <= YYCURSOR) {
 			YYSETSTATE(0);
 			fill();
-			yyeof0:;
+yyeof0:
 			goto yyeofrule2;
 		}
 		goto yy2;
@@ -44,7 +44,7 @@ yyFillLabel1:
 		if (YYLIMIT <= YYCURSOR) {
 			YYSETSTATE(1);
 			fill();
-			yyeof1:;
+yyeof1:
 			goto yyeofrule3;
 		}
 		goto yy8;
@@ -69,7 +69,7 @@ yyFillLabel2:
 		if (YYLIMIT <= YYCURSOR) {
 			YYSETSTATE(2);
 			fill();
-			yyeof2:;
+yyeof2:
 			goto yyeofrule4;
 		}
 		goto yy14;
@@ -94,7 +94,7 @@ yyFillLabel3:
 		if (YYLIMIT <= YYCURSOR) {
 			YYSETSTATE(3);
 			fill();
-			yyeof3:;
+yyeof3:
 			goto yyeofrule5;
 		}
 		goto yy20;

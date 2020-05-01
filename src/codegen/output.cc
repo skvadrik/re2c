@@ -216,7 +216,8 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
                 , line_count
                 };
 
-            transform(gctx, f.code);
+            expand(gctx, f.code);
+            combine(gctx, f.code);
             render(rctx, f.code);
             write_converting_newlines(os.str(), file);
         }

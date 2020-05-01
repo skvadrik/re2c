@@ -394,8 +394,12 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         append(refill, code_text(alc, text));
 
         // yyeof label
-        text = o.str(opts->labelPrefix).cstr("eof").u32(fillidx).cstr(":;").flush();
-        append(refill, code_text(alc, text));
+        text = o.str(opts->labelPrefix).cstr("eof").u32(fillidx).flush();
+        append(refill, code_slabel(alc, text));
+        if (fallback == to) {
+            // a label must be followed by a statement
+            append(refill, code_text(alc, ";"));
+        }
 
     }
     else if (opts->fill_use) {

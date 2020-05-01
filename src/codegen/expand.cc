@@ -310,113 +310,28 @@ static void gen_label(Scratchbuf &o, const opt_t *opts, Code *code)
     }
 }
 
-static void foldexpr(CodeList *stmts)
+static void expand_list(CodegenContext &ctx, CodeList *stmts)
 {
-    Code *x, *y, *z;
-    for (x = stmts->head; x; ) {
-        // have three statements ahead
-        if ((y = x->next) && (z = y->next)) {
-            Code::Kind xk = x->kind;
-            Code::Kind yk = y->kind;
-            Code::Kind zk = z->kind;
-
-            if (xk == Code::BACKUP && yk == Code::PEEK && zk == Code::SKIP) {
-                x->kind = Code::BACKUP_PEEK_SKIP;
-                x->next = z->next;
-                continue;
-            }
-            else if (xk == Code::SKIP && yk == Code::BACKUP && zk == Code::PEEK) {
-                x->kind = Code::SKIP_BACKUP_PEEK;
-                x->next = z->next;
-                continue;
-            }
-        }
-
-        // have two statements ahead
-        if ((y = x->next)) {
-            Code::Kind xk = x->kind;
-            Code::Kind yk = y->kind;
-
-            if (xk == Code::PEEK && yk == Code::SKIP) {
-                x->kind = Code::PEEK_SKIP;
-                x->next = y->next;
-                continue;
-            }
-            else if (xk == Code::SKIP && yk == Code::PEEK) {
-                x->kind = Code::SKIP_PEEK;
-                x->next = y->next;
-                continue;
-            }
-            else if (xk == Code::SKIP && yk == Code::BACKUP) {
-                x->kind = Code::SKIP_BACKUP;
-                x->next = y->next;
-                continue;
-            }
-            else if (xk == Code::BACKUP && yk == Code::PEEK) {
-                x->kind = Code::BACKUP_PEEK;
-                x->next = y->next;
-                continue;
-            }
-            else if (xk == Code::BACKUP && yk == Code::SKIP) {
-                x->kind = Code::BACKUP_SKIP;
-                x->next = y->next;
-                continue;
-            }
-        }
-
-        x = x->next;
-    }
-}
-
-static void transform_list(CodegenContext &ctx, CodeList *stmts)
-{
+    if (!stmts) return;
     for (Code *x = stmts->head; x; x = x->next) {
-        transform(ctx, x);
-    }
-
-    // remove empty statements
-    for (Code **px = &stmts->head, *x; (x = *px); ) {
-        if (x->kind == Code::EMPTY) {
-            *px = x->next;
-        }
-        else {
-            px = &x->next;
-        }
-    }
-
-    // combine statements
-    if (ctx.opts->input_api == INPUT_DEFAULT) {
-        foldexpr(stmts);
+        expand(ctx, x);
     }
 }
 
-void transform(CodegenContext &ctx, Code *code)
+void expand(CodegenContext &ctx, Code *code)
 {
     switch (code->kind) {
         case Code::BLOCK:
-            transform_list(ctx, code->block.stmts);
+            expand_list(ctx, code->block.stmts);
             break;
-        // don't recurse into these because they have no skip/peek/backup
-        case Code::EMPTY:
         case Code::IF_THEN_ELSE:
+            expand_list(ctx, code->ifte.if_code);
+            expand_list(ctx, code->ifte.else_code);
+            break;
         case Code::SWITCH:
-        case Code::FUNC:
-        case Code::TEXT:
-        case Code::RAW:
-        case Code::TEXT_RAW:
-        case Code::SKIP:
-        case Code::PEEK:
-        case Code::BACKUP:
-        case Code::PEEK_SKIP:
-        case Code::SKIP_PEEK:
-        case Code::SKIP_BACKUP:
-        case Code::BACKUP_SKIP:
-        case Code::BACKUP_PEEK:
-        case Code::BACKUP_PEEK_SKIP:
-        case Code::SKIP_BACKUP_PEEK:
-        case Code::LINE_INFO_INPUT:
-        case Code::LINE_INFO_OUTPUT:
-        case Code::VAR:
+            for (CodeCase *x = code->swch.cases->head; x; x = x->next) {
+                expand_list(ctx, x->body);
+            }
             break;
         case Code::STAGS:
             gen_tags(ctx.scratchbuf, code, ctx.allstags);
@@ -454,6 +369,25 @@ void transform(CodegenContext &ctx, Code *code)
             break;
         case Code::LABEL:
             gen_label(ctx.scratchbuf, ctx.opts, code);
+            break;
+        case Code::EMPTY:
+        case Code::FUNC:
+        case Code::TEXT:
+        case Code::RAW:
+        case Code::TEXT_RAW:
+        case Code::SKIP:
+        case Code::PEEK:
+        case Code::BACKUP:
+        case Code::PEEK_SKIP:
+        case Code::SKIP_PEEK:
+        case Code::SKIP_BACKUP:
+        case Code::BACKUP_SKIP:
+        case Code::BACKUP_PEEK:
+        case Code::BACKUP_PEEK_SKIP:
+        case Code::SKIP_BACKUP_PEEK:
+        case Code::LINE_INFO_INPUT:
+        case Code::LINE_INFO_OUTPUT:
+        case Code::VAR:
             break;
     }
 }
