@@ -11,15 +11,14 @@
 
 namespace re2c {
 
-struct Go;
+struct CodeGo;
 struct State;
 
-struct bitmap_t
-{
-    const Go *go;
-    const State *on;
-    uint32_t i;
-    uint32_t m;
+struct bitmap_t {
+    const CodeGo *go;
+    const State  *on;
+    uint32_t      i;
+    uint32_t      m;
 };
 
 class bitmaps_t
@@ -37,8 +36,8 @@ public:
 
     explicit bitmaps_t(uint32_t n);
     ~bitmaps_t();
-    void insert(const Go *go, const State *s);
-    const bitmap_t *find(const Go *go, const State *s) const;
+    void insert(const CodeGo *go, const State *s);
+    const bitmap_t *find(const CodeGo *go, const State *s) const;
     bool empty() const;
     CodeList *gen(Output &output);
     FORBID_COPY(bitmaps_t);

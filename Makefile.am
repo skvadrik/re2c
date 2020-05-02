@@ -92,7 +92,6 @@ re2c_SRC = \
 	src/codegen/emit_action.cc \
 	src/codegen/emit_dfa.cc \
 	src/codegen/go_construct.cc \
-	src/codegen/go_destruct.cc \
 	src/codegen/go_emit.cc \
 	src/codegen/expand.cc \
 	src/codegen/input_api.cc \

@@ -10,8 +10,9 @@
 
 namespace re2c {
 
-static bool matches(const Go *go1, const State *s1, const Go *go2, const State *s2);
-static void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m);
+static bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2,
+    const State *s2);
+static void doGen(const CodeGo *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m);
 
 bitmaps_t::bitmaps_t(uint32_t n)
     : maps()
@@ -25,7 +26,7 @@ bitmaps_t::~bitmaps_t()
     delete[] buffer;
 }
 
-void bitmaps_t::insert(const Go *go, const State *s)
+void bitmaps_t::insert(const CodeGo *go, const State *s)
 {
     rciter_t i = maps.rbegin(), e = maps.rend();
     for (; i != e; ++i) {
@@ -36,7 +37,7 @@ void bitmaps_t::insert(const Go *go, const State *s)
     maps.push_back(b);
 }
 
-const bitmap_t *bitmaps_t::find(const Go *go, const State *s) const
+const bitmap_t *bitmaps_t::find(const CodeGo *go, const State *s) const
 {
     rciter_t i = maps.rbegin(), e = maps.rend();
     for (; i != e; ++i) {
@@ -103,58 +104,48 @@ CodeList *bitmaps_t::gen(Output &output)
     return stmts;
 }
 
-void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m)
+void doGen(const CodeGo *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m)
 {
     Span *b = g->span, *e = &b[g->nSpans];
     uint32_t lb = 0;
 
-    for (; b < e; ++b)
-    {
-        if (b->to == s)
-        {
-            for (; lb < b->ub && lb < 256; ++lb)
-            {
+    for (; b < e; ++b) {
+        if (b->to == s) {
+            for (; lb < b->ub && lb < 256; ++lb) {
                 bm[lb-f] |= m;
             }
         }
-
         lb = b->ub;
     }
 }
 
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
-bool matches(const Go *go1, const State *s1, const Go *go2, const State *s2)
+bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2, const State *s2)
 {
     const Span
         *b1 = go1->span, *e1 = &b1[go1->nSpans],
         *b2 = go2->span, *e2 = &b2[go2->nSpans];
     uint32_t lb1 = 0, lb2 = 0;
 
-    for (;;)
-    {
-        for (; b1 < e1 && b1->to != s1; ++b1)
-        {
+    for (;;) {
+        for (; b1 < e1 && b1->to != s1; ++b1) {
             lb1 = b1->ub;
         }
-        for (; b2 < e2 && b2->to != s2; ++b2)
-        {
+        for (; b2 < e2 && b2->to != s2; ++b2) {
             lb2 = b2->ub;
         }
-        if (b1 == e1)
-        {
+        if (b1 == e1) {
             return b2 == e2;
         }
-        if (b2 == e2)
-        {
+        if (b2 == e2) {
             return false;
         }
         // tags are forbidden: transitions on different symbols
         // might go to the same state, but have different tag sets
         if (lb1 != lb2
-            || b1->ub != b2->ub
-            || b1->tags != TCID0
-            || b2->tags != TCID0)
-        {
+                || b1->ub != b2->ub
+                || b1->tags != TCID0
+                || b2->tags != TCID0) {
             return false;
         }
         ++b1;

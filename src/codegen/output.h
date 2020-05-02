@@ -76,8 +76,8 @@ struct CodeCase {
     } kind;
 
     struct Chars {
-        size_t     nranges;
-        uint32_t  *ranges;
+        size_t          nranges;
+        const uint32_t *ranges;
     };
 
     union {
@@ -213,6 +213,9 @@ template<typename T>
 inline void prepend(code_list_t<T> *list, T *elem)
 {
     DASSERT(elem);
+    if (!list->head) {
+        list->ptail = &elem->next;
+    }
     elem->next = list->head;
     list->head = elem;
 }
@@ -414,21 +417,13 @@ inline CodeCase *code_case_string(code_alc_t &alc, CodeList *body, const char *s
     return x;
 }
 
-inline CodeCase *code_case_chars(code_alc_t &alc, CodeList *body,
-    const std::vector<std::pair<uint32_t, uint32_t> > &ranges)
+inline CodeCase *code_case_chars(code_alc_t &alc, CodeList *body, uint32_t nranges,
+    const uint32_t *ranges)
 {
     CodeCase *x = alc.alloct<CodeCase>(1);
     x->kind = CodeCase::CHARS;
-
-    const size_t n = ranges.size();
-    uint32_t *rs = alc.alloct<uint32_t>(2 * n);
-    for (uint32_t i = 0; i < n; ++i) {
-        rs[2 * i]     = ranges[i].first;
-        rs[2 * i + 1] = ranges[i].second;
-    }
-    x->chars.nranges = n;
-    x->chars.ranges  = rs;
-
+    x->chars.nranges = nranges;
+    x->chars.ranges  = ranges;
     x->body = body;
     x->next = NULL;
     return x;

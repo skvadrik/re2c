@@ -89,7 +89,7 @@ void DFA::emit_body(Output &output, CodeList *stmts) const
     for (State * s = head; s; s = s->next) {
         emit_state(output, s, stmts);
         emit_action(output, *this, s, stmts);
-        s->go.emit(output, *this, s, stmts);
+        gen_go(output, *this, &s->go, s, stmts);
     }
 
     emit_eof(output, this->eof_action, stmts);
@@ -125,7 +125,7 @@ void DFA::emit_dot(Output &output, CodeList *program) const
                 append(program, code_text(alc, text));
             }
         }
-        s->go.emit(output, *this, s, program);
+        gen_go(output, *this, &s->go, s, program);
     }
 }
 
@@ -163,7 +163,7 @@ void gen_code(Output &output, dfas_t &dfas)
         }
 
         for (State *s = dfa.head; s; s = s->next) {
-            s->go.init(s, opts, dfa.bitmaps);
+            code_go(alc, &s->go, s, opts, dfa.bitmaps);
         }
     }
 

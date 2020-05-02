@@ -38,7 +38,7 @@ struct State {
     tcid_t rule_tags;
     tcid_t fall_tags;
     bool isBase;
-    Go go;
+    CodeGo go;
     Action action;
 
     State()
@@ -52,9 +52,11 @@ struct State {
         , rule_tags (TCID0)
         , fall_tags (TCID0)
         , isBase (false)
-        , go ()
+        , go()
         , action ()
-    {}
+    {
+        init_go(&go);
+    }
     ~State()
     {
         operator delete (go.span);

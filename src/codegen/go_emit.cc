@@ -1,8 +1,6 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <string>
-#include <utility>
-#include <vector>
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/bitmap.h"
@@ -28,53 +26,65 @@ static std::string gen_if(const opt_t *opts, const std::string &compare, uint32_
     return os.str();
 }
 
-CodeList *Cases::emit(Output &output, const DFA &dfa, const State *from) const
+CodeList *gen_gocases(Output &output, const DFA &dfa, const CodeGoCases *go,
+    const State *from)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
     const char *expr = o.str(opts->yych).flush();
-    CodeCases *ccases = code_cases(alc);
-    for (uint32_t i = 0; i < cases_size; ++i) {
-        const Case &c = cases[i];
+
+    CodeCases *cases = code_cases(alc);
+    for (const CodeGoCase *c = go->cases, *e = c + go->ncases; c < e; ++c) {
         CodeList *body = code_list(alc);
-        gen_goto(output, body, from, c.to, dfa, c.tags, c.skip, c.eof);
-        append(ccases, code_case_chars(alc, body, c.ranges));
+        gen_goto(output, body, from, c->to, dfa, c->tags, c->skip, c->eof);
+
+        CodeCase *xcase = code_case_chars(alc, body, c->nranges, c->ranges);
+        if (c == go->defcase) {
+            // by convention default case must be the first
+            prepend(cases, xcase);
+        }
+        else {
+            append(cases, xcase);
+        }
     }
+
     CodeList *stmts = code_list(alc);
-    append(stmts, code_switch(alc, expr, ccases, true));
+    append(stmts, code_switch(alc, expr, cases, true));
 
     return stmts;
 }
 
-CodeList *Binary::emit(Output &output, const DFA &dfa, const State *from) const
+CodeList *gen_goifb(Output &output, const DFA &dfa, const CodeGoIfB *go,
+    const State *from)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
     CodeList *stmts = code_list(alc);
-    const char *if_cond = o.str(gen_if(opts, cond->compare, cond->value)).flush();
-    CodeList *if_then = thn->emit(output, dfa, from);
-    CodeList *if_else = els->emit(output, dfa, from);
+    const char *if_cond = o.str(gen_if(opts, go->cond->cmp, go->cond->val)).flush();
+    CodeList *if_then = gen_goif(output, dfa, go->gothen, from);
+    CodeList *if_else = gen_goif(output, dfa, go->goelse, from);
     append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
 
     return stmts;
 }
 
-CodeList *Linear::emit(Output &output, const DFA &dfa, const State *from) const
+CodeList *gen_goifl(Output &output, const DFA &dfa, const CodeGoIfL *go,
+    const State *from)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
     CodeList *stmts = code_list(alc);
-    for (uint32_t i = 0; i < nbranches; ++i) {
-        const Branch &b = branches[i];
-        const Cond *cond = b.cond;
+    for (uint32_t i = 0; i < go->nbranches; ++i) {
+        const CodeGoIfL::Branch &b = go->branches[i];
+        const CodeCmp *cond = b.cond;
         if (cond) {
-            const char *if_cond = o.str(gen_if(opts, cond->compare, cond->value)).flush();
+            const char *if_cond = o.str(gen_if(opts, cond->cmp, cond->val)).flush();
             CodeList *if_then = code_list(alc);
             gen_goto(output, if_then, from, b.to, dfa, b.tags, b.skip, b.eof);
             append(stmts, code_if_then_else(alc, if_cond, if_then, NULL));
@@ -86,21 +96,22 @@ CodeList *Linear::emit(Output &output, const DFA &dfa, const State *from) const
     return stmts;
 }
 
-CodeList *If::emit(Output &output, const DFA &dfa, const State *from) const
+CodeList *gen_goif(Output &output, const DFA &dfa, const CodeGoIf *go, const State *from)
 {
-    return type == BINARY
-        ? info.binary->emit(output, dfa, from)
-        : info.linear->emit(output, dfa, from);
+    return go->kind == CodeGoIf::BINARY
+        ? gen_goifb(output, dfa, go->goifb, from)
+        : gen_goifl(output, dfa, go->goifl, from);
 }
 
-CodeList *SwitchIf::emit(Output &output, const DFA &dfa, const State *from) const
+CodeList *gen_goswif(Output &output, const DFA &dfa, const CodeGoSwIf *go,
+    const State *from)
 {
-    return type == SWITCH
-        ? info.cases->emit(output, dfa, from)
-        : info.ifs->emit(output, dfa, from);
+    return go->kind == CodeGoSwIf::SWITCH
+        ? gen_gocases(output, dfa, go->gosw, from)
+        : gen_goif(output, dfa, go->goif, from);
 }
 
-CodeList *GoBitmap::emit(Output &output, const DFA &dfa, const State *from) const
+CodeList *gen_gobm(Output &output, const DFA &dfa, const CodeGoBm *go, const State *from)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -108,41 +119,32 @@ CodeList *GoBitmap::emit(Output &output, const DFA &dfa, const State *from) cons
 
     CodeList *stmts = code_list(alc);
 
-    o.str(opts->yybm).cstr("[").u32(bitmap->i).cstr("+").str(opts->yych).cstr("] & ");
+    o.str(opts->yybm).cstr("[").u32(go->bitmap->i).cstr("+").str(opts->yych).cstr("] & ");
     if (opts->yybmHexTable) {
-        o.u32_hex(bitmap->m, opts);
+        o.u32_hex(go->bitmap->m, opts);
     }
     else {
-        o.u32(bitmap->m);
+        o.u32(go->bitmap->m);
     }
     const char *elif_cond = o.flush();
 
     CodeList *if_else = code_list(alc);
-    gen_goto(output, if_else, from, bitmap_state, dfa, TCID0, false, false);
+    gen_goto(output, if_else, from, go->bitmap_state, dfa, TCID0, false, false);
 
-    if (hgo != NULL) {
+    if (go->hgo != NULL) {
         const char *if_cond = o.str(opts->yych).cstr(" & ~0xFF").flush();
-        CodeList *if_then = hgo->emit(output, dfa, from);
+        CodeList *if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
     }
     else {
         append(stmts, code_if_then_else(alc, elif_cond, if_else, NULL, false));
     }
 
-    if (lgo != NULL) {
-        append(stmts, lgo->emit(output, dfa, from));
+    if (go->lgo != NULL) {
+        append(stmts, gen_goswif(output, dfa, go->lgo, from));
     }
 
     return stmts;
-}
-
-uint32_t CpgotoTable::max_label() const
-{
-    uint32_t max = 0;
-    for (uint32_t i = 0; i < TABLE_SIZE; ++i) {
-        max = std::max(max, table[i]->label->index);
-    }
-    return max;
 }
 
 static uint32_t label_width(uint32_t label)
@@ -152,14 +154,19 @@ static uint32_t label_width(uint32_t label)
     return n;
 }
 
-CodeList *CpgotoTable::emit(Output &output) const
+CodeList *gen_gocp_table(Output &output, const CodeGoCpTable *go)
 {
-    const uint32_t max_digits = label_width(max_label());
     static const size_t TABLE_WIDTH = 8;
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const char *text;
+
+    uint32_t maxlabel = 0;
+    for (uint32_t i = 0; i < CodeGoCpTable::TABLE_SIZE; ++i) {
+        maxlabel = std::max(maxlabel, go->table[i]->label->index);
+    }
+    const uint32_t max_digits = label_width(maxlabel);
 
     CodeList *stmts = code_list(alc);
 
@@ -167,16 +174,16 @@ CodeList *CpgotoTable::emit(Output &output) const
     append(stmts, code_text(alc, text));
 
     CodeList *block = code_list(alc);
-    for (uint32_t i = 0; i < TABLE_SIZE / TABLE_WIDTH; ++i) {
+    for (uint32_t i = 0; i < CodeGoCpTable::TABLE_SIZE / TABLE_WIDTH; ++i) {
         for (uint32_t j = 0; j < TABLE_WIDTH; ++j) {
-            const Label &l = *table[i * TABLE_WIDTH + j]->label;
+            const Label &l = *go->table[i * TABLE_WIDTH + j]->label;
 
             o.cstr("&&").str(opts->labelPrefix).label(l);
             if (j < TABLE_WIDTH - 1) {
                 const std::string padding(max_digits - label_width(l.index) + 1, ' ');
                 o.cstr(",").str(padding);
             }
-            else if (i < TABLE_SIZE / TABLE_WIDTH - 1) {
+            else if (i < CodeGoCpTable::TABLE_SIZE / TABLE_WIDTH - 1) {
                 o.cstr(",");
             }
         }
@@ -190,7 +197,7 @@ CodeList *CpgotoTable::emit(Output &output) const
     return stmts;
 }
 
-CodeList *Cpgoto::emit(Output &output, const DFA &dfa, const State *from) const
+CodeList *gen_gocp(Output &output, const DFA &dfa, const CodeGoCp *go, const State *from)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -199,14 +206,14 @@ CodeList *Cpgoto::emit(Output &output, const DFA &dfa, const State *from) const
 
     CodeList *stmts = code_list(alc);
 
-    CodeList *if_else = table->emit(output);
+    CodeList *if_else = gen_gocp_table(output, go->table);
     text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yych).cstr("];")
         .flush();
     append(if_else, code_text(alc, text));
 
-    if (hgo != NULL) {
+    if (go->hgo != NULL) {
         text = o.str(opts->yych).cstr(" & ~0xFF").flush();
-        CodeList *if_then = hgo->emit(output, dfa, from);
+        CodeList *if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_else(alc, text, if_then, if_else, false));
     }
     else {
@@ -216,30 +223,33 @@ CodeList *Cpgoto::emit(Output &output, const DFA &dfa, const State *from) const
     return stmts;
 }
 
-void Dot::emit(Output &output, const DFA &dfa, const State *from, CodeList *stmts) const
+void gen_godot(Output &output, const DFA &dfa, const CodeGoDot *go, const State *from,
+    CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const std::string &prefix = opts->tags_prefix;
-    const uint32_t n = cases->cases_size;
+    const uint32_t n = go->cases->ncases;
     const char *text;
 
     if (n == 1) {
-        text = o.label(*from->label).cstr(" -> ").label(*cases->cases[0].to->label)
-            .flush();
+        text = o.label(*from->label).cstr(" -> ")
+            .label(*go->cases->cases[0].to->label).flush();
         append(stmts, code_text(alc, text));
     }
     else {
-        for (uint32_t i = 0; i < n; ++i) {
-            const Case &c = cases->cases[i];
-            o.label(*from->label).cstr(" -> ").label(*c.to->label).cstr(" [label=\"");
-            for (uint32_t j = 0; j < c.ranges.size(); ++j) {
-                const Enc &e = opts->encoding;
-                printSpan(o.stream(), c.ranges[j].first, c.ranges[j].second,
-                    e.szCodeUnit(), e.type() == Enc::EBCDIC, true);
+        const CodeGoCases *cs = go->cases;
+        for (const CodeGoCase *c = cs->cases, *e = c + cs->ncases; c < e; ++c) {
+            o.label(*from->label).cstr(" -> ").label(*c->to->label).cstr(" [label=\"");
+
+            for (uint32_t i = 0; i < c->nranges; ++i) {
+                const Enc &enc = opts->encoding;
+                printSpan(o.stream(), c->ranges[2 * i], c->ranges[2 * i + 1],
+                    enc.szCodeUnit(), enc.type() == Enc::EBCDIC, true);
             }
-            const tcmd_t *cmd = dfa.tcpool[c.tags];
+
+            const tcmd_t *cmd = dfa.tcpool[c->tags];
             for (const tcmd_t *p = cmd; p; p = p->next) {
                 o.cstr("<").str(vartag_name(p->lhs, prefix));
                 if (tcmd_t::iscopy(p)) {
@@ -247,40 +257,42 @@ void Dot::emit(Output &output, const DFA &dfa, const State *from, CodeList *stmt
                 }
                 o.cstr(">");
             }
+
             text = o.cstr("\"]").flush();
             append(stmts, code_text(alc, text));
         }
     }
 }
 
-void Go::emit(Output &output, const DFA &dfa, const State *from, CodeList *stmts) const
+void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
+    CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
 
-    if (type == DOT) {
-        info.dot->emit(output, dfa, from, stmts);
+    if (go->kind == CodeGo::DOT) {
+        gen_godot(output, dfa, go->godot, from, stmts);
         return;
     }
 
-    if (skip && !opts->lookahead) {
+    if (go->skip && !opts->lookahead) {
         append(stmts, code_skip(alc));
     }
 
-    gen_settags(output, stmts, dfa, tags, opts->stadfa /* delayed */);
+    gen_settags(output, stmts, dfa, go->tags, opts->stadfa /* delayed */);
 
-    if (skip && opts->lookahead) {
+    if (go->skip && opts->lookahead) {
         append(stmts, code_skip(alc));
     }
 
-    if (type == SWITCH_IF) {
-        append(stmts, info.switchif->emit(output, dfa, from));
+    if (go->kind == CodeGo::SWITCH_IF) {
+        append(stmts, gen_goswif(output, dfa, go->goswif, from));
     }
-    else if (type == BITMAP) {
-        append(stmts, info.bitmap->emit(output, dfa, from));
+    else if (go->kind == CodeGo::BITMAP) {
+        append(stmts, gen_gobm(output, dfa, go->gobm, from));
     }
-    else if (type == CPGOTO) {
-        append(stmts, info.cpgoto->emit(output, dfa, from));
+    else if (go->kind == CodeGo::CPGOTO) {
+        append(stmts, gen_gocp(output, dfa, go->gocp, from));
     }
 }
 
