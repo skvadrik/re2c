@@ -10,7 +10,7 @@
 
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
-#include "src/codegen/go.h"
+#include "src/codegen/output.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"

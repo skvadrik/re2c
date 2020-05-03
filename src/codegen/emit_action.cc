@@ -11,8 +11,6 @@
 
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
-#include "src/codegen/emit.h"
-#include "src/codegen/go.h"
 #include "src/codegen/input_api.h"
 #include "src/codegen/label.h"
 #include "src/codegen/output.h"
@@ -33,6 +31,7 @@ static void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const a
 static void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx);
 static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &rule);
 static Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State *to);
+static bool endstate(const State *s);
 
 void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts)
 {

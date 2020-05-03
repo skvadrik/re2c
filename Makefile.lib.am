@@ -10,12 +10,9 @@ libre2c_la_HDR = \
 	lib/regex.h \
 	lib/regex_impl.h \
 	src/codegen/bitmap.h \
-	src/codegen/emit.h \
-	src/codegen/go.h \
 	src/codegen/input_api.h \
 	src/codegen/label.h \
 	src/codegen/output.h \
-	src/codegen/print.h \
 	src/options/opt.h \
 	src/adfa/action.h \
 	src/adfa/adfa.h \

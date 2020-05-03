@@ -4,17 +4,17 @@
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/bitmap.h"
-#include "src/codegen/emit.h"
-#include "src/codegen/go.h"
 #include "src/codegen/label.h"
 #include "src/codegen/output.h"
-#include "src/codegen/print.h"
 #include "src/options/opt.h"
 #include "src/dfa/tcmd.h"
 #include "src/encoding/enc.h"
 
 
 namespace re2c {
+
+static CodeList *gen_goif(Output &output, const DFA &dfa, const CodeGoIf *go,
+    const State *from);
 
 static std::string gen_if(const opt_t *opts, const std::string &compare, uint32_t value)
 {
@@ -26,7 +26,8 @@ static std::string gen_if(const opt_t *opts, const std::string &compare, uint32_
     return os.str();
 }
 
-CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go, const State *from)
+static CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go,
+    const State *from)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -55,7 +56,7 @@ CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go, const Sta
     return stmts;
 }
 
-CodeList *gen_goifb(Output &output, const DFA &dfa, const CodeGoIfB *go,
+static CodeList *gen_goifb(Output &output, const DFA &dfa, const CodeGoIfB *go,
     const State *from)
 {
     const opt_t *opts = output.block().opts;
@@ -71,7 +72,7 @@ CodeList *gen_goifb(Output &output, const DFA &dfa, const CodeGoIfB *go,
     return stmts;
 }
 
-CodeList *gen_goifl(Output &output, const DFA &dfa, const CodeGoIfL *go,
+static CodeList *gen_goifl(Output &output, const DFA &dfa, const CodeGoIfL *go,
     const State *from)
 {
     const opt_t *opts = output.block().opts;
@@ -95,14 +96,15 @@ CodeList *gen_goifl(Output &output, const DFA &dfa, const CodeGoIfL *go,
     return stmts;
 }
 
-CodeList *gen_goif(Output &output, const DFA &dfa, const CodeGoIf *go, const State *from)
+static CodeList *gen_goif(Output &output, const DFA &dfa, const CodeGoIf *go,
+    const State *from)
 {
     return go->kind == CodeGoIf::BINARY
         ? gen_goifb(output, dfa, go->goifb, from)
         : gen_goifl(output, dfa, go->goifl, from);
 }
 
-CodeList *gen_goswif(Output &output, const DFA &dfa, const CodeGoSwIf *go,
+static CodeList *gen_goswif(Output &output, const DFA &dfa, const CodeGoSwIf *go,
     const State *from)
 {
     return go->kind == CodeGoSwIf::SWITCH
@@ -110,7 +112,8 @@ CodeList *gen_goswif(Output &output, const DFA &dfa, const CodeGoSwIf *go,
         : gen_goif(output, dfa, go->goif, from);
 }
 
-CodeList *gen_gobm(Output &output, const DFA &dfa, const CodeGoBm *go, const State *from)
+static CodeList *gen_gobm(Output &output, const DFA &dfa, const CodeGoBm *go,
+    const State *from)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -153,7 +156,7 @@ static uint32_t label_width(uint32_t label)
     return n;
 }
 
-CodeList *gen_gocp_table(Output &output, const CodeGoCpTable *go)
+static CodeList *gen_gocp_table(Output &output, const CodeGoCpTable *go)
 {
     static const size_t TABLE_WIDTH = 8;
     const opt_t *opts = output.block().opts;
@@ -196,7 +199,8 @@ CodeList *gen_gocp_table(Output &output, const CodeGoCpTable *go)
     return stmts;
 }
 
-CodeList *gen_gocp(Output &output, const DFA &dfa, const CodeGoCp *go, const State *from)
+static CodeList *gen_gocp(Output &output, const DFA &dfa, const CodeGoCp *go,
+    const State *from)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -222,8 +226,8 @@ CodeList *gen_gocp(Output &output, const DFA &dfa, const CodeGoCp *go, const Sta
     return stmts;
 }
 
-void gen_godot(Output &output, const DFA &dfa, const CodeGoSw *go, const State *from,
-    CodeList *stmts)
+static void gen_godot(Output &output, const DFA &dfa, const CodeGoSw *go,
+    const State *from, CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;

@@ -11,18 +11,28 @@
 #include <vector>
 
 #include "src/codegen/label.h"
+#include "src/dfa/tcmd.h"
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/slab_allocator.h"
 #include "src/util/uniq_vector.h"
+#include "src/util/smart_ptr.h"
 
 
 namespace re2c {
 
+// forward decls
 class Msg;
 struct Opt;
 struct opt_t;
+struct bitmap_t;
+class bitmaps_t;
+struct Code;
+struct CodeGoIf;
+struct State;
+struct DFA;
+typedef std::vector<smart_ptr<DFA> > dfas_t;
 template <typename value_t> class uniq_vector_t;
 
 // need 8-byte alignment to allocate structs with pointers and 64-bit integers
@@ -47,11 +57,6 @@ public:
     Scratchbuf& exact_uint(size_t width);
 };
 
-// forward decls
-struct Code;
-struct CodeCase;
-struct CodeGoCase;
-
 template<typename T>
 struct code_list_t {
     T  *head;
@@ -59,6 +64,121 @@ struct code_list_t {
 };
 
 typedef code_list_t<Code> CodeList;
+
+struct Span {
+    uint32_t  ub;
+    State    *to;
+    tcid_t    tags;
+};
+
+struct CodeGoCase {
+    uint32_t  nranges;
+    uint32_t *ranges;
+    State    *to;
+    tcid_t    tags;
+    bool      skip;
+    bool      eof;
+};
+
+struct CodeGoSw {
+    CodeGoCase *cases;
+    CodeGoCase *defcase;
+    uint32_t    ncases;
+};
+
+struct CodeCmp {
+    const char *cmp;
+    uint32_t    val;
+};
+
+// binary if
+struct CodeGoIfB
+{
+    const CodeCmp *cond;
+    CodeGoIf      *gothen;
+    CodeGoIf      *goelse;
+};
+
+// linear if
+struct CodeGoIfL {
+    struct Branch {
+        const CodeCmp *cond;
+        State         *to;
+        tcid_t        tags;
+        bool          skip;
+        bool          eof;
+    };
+
+    size_t  nbranches;
+    Branch *branches;
+    State  *def;
+};
+
+struct CodeGoIf {
+    enum Kind {
+        BINARY,
+        LINEAR
+    };
+
+    Kind kind;
+    union {
+        CodeGoIfB *goifb;
+        CodeGoIfL *goifl;
+    };
+};
+
+struct CodeGoSwIf {
+    enum Kind{
+        SWITCH,
+        IF
+    };
+
+    Kind kind;
+    union {
+        CodeGoSw *gosw;
+        CodeGoIf *goif;
+    };
+};
+
+struct CodeGoBm {
+    const bitmap_t *bitmap;
+    State          *bitmap_state;
+    CodeGoSwIf     *hgo;
+    CodeGoSwIf     *lgo;
+};
+
+struct CodeGoCpTable {
+    static const uint32_t TABLE_SIZE;
+
+    State **table;
+};
+
+struct CodeGoCp {
+    CodeGoSwIf    *hgo;
+    CodeGoCpTable *table;
+};
+
+struct CodeGo {
+    enum Kind {
+        EMPTY,
+        SWITCH_IF,
+        BITMAP,
+        CPGOTO,
+        DOT
+    };
+
+    Kind      kind;
+    uint32_t  nspans;
+    Span     *span;
+    tcid_t    tags;
+    bool      skip;
+    union {
+        CodeGoSwIf *goswif;
+        CodeGoBm   *gobm;
+        CodeGoCp   *gocp;
+        CodeGoSw   *godot;
+    };
+};
 
 struct CodeIfTE {
     const char *if_cond;
@@ -510,11 +630,6 @@ struct RenderContext {
     uint32_t &line;
 };
 
-void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags);
-void expand(CodegenContext &ctx, Code *code);
-void combine(CodegenContext &ctx, Code *code);
-void render(RenderContext &rctx, const Code *code);
-
 struct OutputFragment {
     Code     *code;
     uint32_t  indent;
@@ -577,7 +692,40 @@ public:
     FORBID_COPY (Output);
 };
 
+void init_go(CodeGo *go);
+void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
+    bitmaps_t &bitmaps);
+void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
+    CodeList *stmts);
+void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags);
+void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts);
+void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t tcid,
+    bool delayed);
+void gen_goto(Output &output, CodeList *stmts, const State *from, const State *to,
+    const DFA &dfa, tcid_t tcid, bool skip, bool eof);
+void expand(CodegenContext &ctx, Code *code);
+void combine(CodegenContext &ctx, Code *code);
+void render(RenderContext &rctx, const Code *code);
+
 void output_version_time(std::ostream &o, bool version, bool date);
+
+bool consume(const State *s);
+bool is_print(uint32_t c);
+void prtHex(std::ostream &o, uint32_t c, uint32_t szcunit);
+void prtChOrHex(std::ostream &o, uint32_t c, uint32_t szcunit, bool ebcdic, bool dot);
+void printSpan(std::ostream &o, uint32_t l, uint32_t u, uint32_t szcunit, bool ebcdic, bool dot);
+std::string tag_expr(const Tag &tag, bool lvalue);
+std::string vartag_name(tagver_t ver, const std::string &prefix);
+std::string vartag_expr(tagver_t ver, const std::string &prefix, const std::string &expression);
+
+void gen_code(Output &output, dfas_t &dfas);
+
+inline std::string indent(uint32_t n, const std::string &s)
+{
+    std::string ind;
+    for (; n --> 0; ind += s);
+    return ind;
+}
 
 } // namespace re2c
 

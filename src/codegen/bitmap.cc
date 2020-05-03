@@ -2,7 +2,6 @@
 #include <algorithm> // min
 
 #include "src/codegen/bitmap.h"
-#include "src/codegen/go.h"
 #include "src/codegen/output.h"
 #include "src/options/opt.h"
 #include "src/dfa/tcmd.h"

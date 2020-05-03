@@ -4,7 +4,7 @@
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
 #include "src/codegen/bitmap.h"
-#include "src/codegen/go.h"
+#include "src/codegen/output.h"
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
@@ -13,32 +13,16 @@
 
 namespace re2c {
 
-static uint32_t unmap(Span*, const Span*, uint32_t, const State*);
-
-bool consume(const State *s)
-{
-    switch (s->action.type) {
-        case Action::RULE:
-        case Action::MOVE:
-        case Action::ACCEPT:
-            return false;
-        case Action::MATCH:
-        case Action::INITIAL:
-        case Action::SAVE:
-            return true;
-    }
-    // unreachable
-    DASSERT(false);
-    return true;
-}
+static CodeGoIf *code_goif(code_alc_t &alc, CodeGoIf::Kind kind, const Span *sp,
+    uint32_t nsp, State *next, bool skip, uint32_t eof);
 
 static bool is_eof(uint32_t eof, uint32_t ub)
 {
     return eof != NOEOF && eof + 1 == ub;
 }
 
-CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans, bool skip,
-    uint32_t eof)
+static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
+    bool skip, uint32_t eof)
 {
     CodeGoSw *go = alc.alloct<CodeGoSw>(1);
     go->cases = alc.alloct<CodeGoCase>(nspans);
@@ -105,7 +89,7 @@ CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans, bool sk
     return go;
 }
 
-CodeCmp *code_cmp(code_alc_t &alc, const char *cmp, uint32_t val)
+static CodeCmp *code_cmp(code_alc_t &alc, const char *cmp, uint32_t val)
 {
     CodeCmp *x = alc.alloct<CodeCmp>(1);
     x->cmp = cmp;
@@ -113,7 +97,7 @@ CodeCmp *code_cmp(code_alc_t &alc, const char *cmp, uint32_t val)
     return x;
 }
 
-CodeGoIfB *code_goifb(code_alc_t &alc, const Span *s, uint32_t n, State *next,
+static CodeGoIfB *code_goifb(code_alc_t &alc, const Span *s, uint32_t n, State *next,
     bool skip, uint32_t eof)
 {
     const uint32_t l = n / 2;
@@ -140,7 +124,7 @@ static void add_branch(CodeGoIfL *go, const CodeCmp *cond, State *to,
     b.eof = is_eof(eof, sp.ub);
 }
 
-CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *next,
+static CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *next,
     bool skip, uint32_t eof)
 {
     CodeGoIfL *x = alc.alloct<CodeGoIfL>(1);
@@ -193,7 +177,7 @@ CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *next,
     return x;
 }
 
-CodeGoIf *code_goif(code_alc_t &alc, CodeGoIf::Kind kind, const Span *sp,
+static CodeGoIf *code_goif(code_alc_t &alc, CodeGoIf::Kind kind, const Span *sp,
     uint32_t nsp, State *next, bool skip, uint32_t eof)
 {
     CodeGoIf *x = alc.alloct<CodeGoIf>(1);
@@ -207,7 +191,7 @@ CodeGoIf *code_goif(code_alc_t &alc, CodeGoIf::Kind kind, const Span *sp,
     return x;
 }
 
-CodeGoSwIf *code_goswif(code_alc_t &alc, const Span *sp, uint32_t nsp,
+static CodeGoSwIf *code_goswif(code_alc_t &alc, const Span *sp, uint32_t nsp,
     State *next, bool sflag, bool skip, uint32_t eof)
 {
     CodeGoSwIf *x = alc.alloct<CodeGoSwIf>(1);
@@ -227,7 +211,35 @@ CodeGoSwIf *code_goswif(code_alc_t &alc, const Span *sp, uint32_t nsp,
     return x;
 }
 
-CodeGoBm *code_gobm(code_alc_t &alc, const Span *span, uint32_t nSpans,
+// Find all spans that map to the given state. For each of them find upper adjacent span
+// that maps to another state (if any, otherwize try the lower one). If the input contains
+// a single span that maps to the given state, then the output contains zero spans.
+static uint32_t unmap(Span *new_span, const Span *old_span, uint32_t old_nspans,
+    const State *x)
+{
+    uint32_t new_nspans = 0;
+    for (uint32_t i = 0; i < old_nspans; ++i) {
+        if (old_span[i].to != x) {
+            if (new_nspans > 0
+                && new_span[new_nspans - 1].to == old_span[i].to
+                && new_span[new_nspans - 1].tags == old_span[i].tags) {
+                new_span[new_nspans - 1].ub = old_span[i].ub;
+            }
+            else {
+                new_span[new_nspans].to = old_span[i].to;
+                new_span[new_nspans].ub = old_span[i].ub;
+                new_span[new_nspans].tags = old_span[i].tags;
+                ++new_nspans;
+            }
+        }
+    }
+    if (new_nspans > 0) {
+        new_span[new_nspans - 1].ub = old_span[old_nspans - 1].ub;
+    }
+    return new_nspans;
+}
+
+static CodeGoBm *code_gobm(code_alc_t &alc, const Span *span, uint32_t nSpans,
     const Span *hspan, uint32_t hSpans, const bitmap_t *bm, State *bm_state,
     State *next, bool sflag, uint32_t eof)
 {
@@ -253,7 +265,7 @@ CodeGoBm *code_gobm(code_alc_t &alc, const Span *span, uint32_t nSpans,
 
 const uint32_t CodeGoCpTable::TABLE_SIZE = 0x100;
 
-CodeGoCpTable *code_gocp_table(code_alc_t &alc, const Span * span, uint32_t nSpans)
+static CodeGoCpTable *code_gocp_table(code_alc_t &alc, const Span * span, uint32_t nSpans)
 {
     CodeGoCpTable *x = alc.alloct<CodeGoCpTable>(1);
     x->table = alc.alloct<State*>(CodeGoCpTable::TABLE_SIZE);
@@ -270,7 +282,7 @@ CodeGoCpTable *code_gocp_table(code_alc_t &alc, const Span * span, uint32_t nSpa
     return x;
 }
 
-CodeGoCp *code_gocp(code_alc_t &alc, const Span *span, uint32_t nSpans,
+static CodeGoCp *code_gocp(code_alc_t &alc, const Span *span, uint32_t nSpans,
     const Span *hspan, uint32_t hSpans, State *next, bool sflag, uint32_t eof)
 {
     CodeGoCp *x = alc.alloct<CodeGoCp>(1);
@@ -278,15 +290,6 @@ CodeGoCp *code_gocp(code_alc_t &alc, const Span *span, uint32_t nSpans,
         : code_goswif(alc, hspan, hSpans, next, sflag, false, eof);
     x->table = code_gocp_table(alc, span, nSpans);
     return x;
-}
-
-void init_go(CodeGo *go)
-{
-    go->kind   = CodeGo::EMPTY;
-    go->nspans = 0;
-    go->span   = NULL;
-    go->tags   = TCID0;
-    go->skip   = false;
 }
 
 void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
@@ -370,31 +373,30 @@ void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
     }
 }
 
-// Find all spans that map to the given state. For each of them find upper adjacent span
-// that maps to another state (if any, otherwize try the lower one). If the input contains
-// a single span that maps to the given state, then the output contains zero spans.
-uint32_t unmap(Span *new_span, const Span *old_span, uint32_t old_nspans, const State *x)
+void init_go(CodeGo *go)
 {
-    uint32_t new_nspans = 0;
-    for (uint32_t i = 0; i < old_nspans; ++i) {
-        if (old_span[i].to != x) {
-            if (new_nspans > 0
-                && new_span[new_nspans - 1].to == old_span[i].to
-                && new_span[new_nspans - 1].tags == old_span[i].tags) {
-                new_span[new_nspans - 1].ub = old_span[i].ub;
-            }
-            else {
-                new_span[new_nspans].to = old_span[i].to;
-                new_span[new_nspans].ub = old_span[i].ub;
-                new_span[new_nspans].tags = old_span[i].tags;
-                ++new_nspans;
-            }
-        }
+    go->kind   = CodeGo::EMPTY;
+    go->nspans = 0;
+    go->span   = NULL;
+    go->tags   = TCID0;
+    go->skip   = false;
+}
+
+bool consume(const State *s)
+{
+    switch (s->action.type) {
+        case Action::RULE:
+        case Action::MOVE:
+        case Action::ACCEPT:
+            return false;
+        case Action::MATCH:
+        case Action::INITIAL:
+        case Action::SAVE:
+            return true;
     }
-    if (new_nspans > 0) {
-        new_span[new_nspans - 1].ub = old_span[old_nspans - 1].ub;
-    }
-    return new_nspans;
+    // unreachable
+    DASSERT(false);
+    return true;
 }
 
 } // namespace re2c

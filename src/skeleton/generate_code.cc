@@ -7,7 +7,6 @@
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/bitmap.h"
-#include "src/codegen/emit.h"
 #include "src/codegen/output.h"
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
