@@ -105,11 +105,11 @@ add_library(re2c_generated_ver_to_vernum OBJECT
 add_executable(re2c
     src/codegen/bitmap.cc
     src/codegen/combine.cc
-    src/codegen/emit_action.cc
-    src/codegen/emit_dfa.cc
-    src/codegen/go_construct.cc
-    src/codegen/go_emit.cc
     src/codegen/expand.cc
+    src/codegen/expand_goto.cc
+    src/codegen/gen_dfa.cc
+    src/codegen/gen_goto.cc
+    src/codegen/gen_state.cc
     src/codegen/input_api.cc
     src/codegen/output.cc
     src/codegen/print.cc
