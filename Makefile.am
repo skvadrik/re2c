@@ -18,10 +18,8 @@ RE2C = re2c$(EXEEXT)
 
 # sources
 re2c_HDR = \
-	src/codegen/bitmap.h \
+	src/codegen/code.h \
 	src/codegen/input_api.h \
-	src/codegen/label.h \
-	src/codegen/output.h \
 	src/options/opt.h \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
@@ -84,15 +82,15 @@ re2c_HDR = \
 	src/util/uniq_vector.h \
 	src/util/wrap_iter.h
 re2c_SRC = \
-	src/codegen/bitmap.cc \
+	src/codegen/code_goto.cc \
 	src/codegen/combine.cc \
-	src/codegen/expand.cc \
-	src/codegen/expand_goto.cc \
+	src/codegen/gen_bitmaps.cc \
+	src/codegen/gen_delayed.cc \
 	src/codegen/gen_dfa.cc \
 	src/codegen/gen_goto.cc \
+	src/codegen/gen_program.cc \
 	src/codegen/gen_state.cc \
 	src/codegen/input_api.cc \
-	src/codegen/output.cc \
 	src/codegen/print.cc \
 	src/codegen/render.cc \
 	src/options/opt.cc \

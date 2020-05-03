@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
-#include "src/codegen/output.h"
+#include "src/codegen/code.h"
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/options/opt.h"

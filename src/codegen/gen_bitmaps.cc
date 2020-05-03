@@ -1,8 +1,7 @@
 #include <string.h> // memset
 #include <algorithm> // min
 
-#include "src/codegen/bitmap.h"
-#include "src/codegen/output.h"
+#include "src/codegen/code.h"
 #include "src/options/opt.h"
 #include "src/dfa/tcmd.h"
 

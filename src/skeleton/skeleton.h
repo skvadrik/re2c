@@ -11,7 +11,7 @@
 #include <valarray>
 #include <vector>
 
-#include "src/codegen/output.h"
+#include "src/codegen/code.h"
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"

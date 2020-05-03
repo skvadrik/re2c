@@ -1,7 +1,7 @@
 #include <assert.h>
 
 #include "config.h"
-#include "src/codegen/output.h"
+#include "src/codegen/code.h"
 #include "src/options/opt.h"
 
 

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "src/codegen/output.h"
+#include "src/codegen/code.h"
 
 
 namespace re2c {

@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "src/codegen/label.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
 #include "src/util/c99_stdint.h"

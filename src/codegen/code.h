@@ -1,5 +1,5 @@
-#ifndef _RE2C_CODE_OUTPUT_
-#define _RE2C_CODE_OUTPUT_
+#ifndef _RE2C_CODEGEN_CODE_
+#define _RE2C_CODEGEN_CODE_
 
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
@@ -10,7 +10,6 @@
 #include <sstream>
 #include <vector>
 
-#include "src/codegen/label.h"
 #include "src/dfa/tcmd.h"
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
@@ -26,10 +25,10 @@ namespace re2c {
 class Msg;
 struct Opt;
 struct opt_t;
-struct bitmap_t;
-class bitmaps_t;
 struct Code;
+struct CodeGo;
 struct CodeGoIf;
+struct Output;
 struct State;
 struct DFA;
 typedef std::vector<smart_ptr<DFA> > dfas_t;
@@ -37,6 +36,19 @@ template <typename value_t> class uniq_vector_t;
 
 // need 8-byte alignment to allocate structs with pointers and 64-bit integers
 typedef slab_allocator_t<1024 * 1024, 8> code_alc_t;
+
+struct Label {
+    uint32_t index;
+    bool     used;
+};
+
+inline Label *new_label(code_alc_t &alc, uint32_t index)
+{
+    Label *l = alc.alloct<Label>(1);
+    l->index = index;
+    l->used = false;
+    return l;
+}
 
 class Scratchbuf {
     code_alc_t &alc;
@@ -64,6 +76,35 @@ struct code_list_t {
 };
 
 typedef code_list_t<Code> CodeList;
+
+struct bitmap_t {
+    const CodeGo *go;
+    const State  *on;
+    uint32_t      i;
+    uint32_t      m;
+};
+
+class bitmaps_t
+{
+    typedef std::vector<bitmap_t> maps_t;
+    typedef maps_t::reverse_iterator riter_t;
+    typedef maps_t::const_reverse_iterator rciter_t;
+
+    maps_t maps;
+    uint32_t ncunit;
+    uint32_t *buffer;
+
+public:
+    bool used;
+
+    explicit bitmaps_t(uint32_t n);
+    ~bitmaps_t();
+    void insert(const CodeGo *go, const State *s);
+    const bitmap_t *find(const CodeGo *go, const State *s) const;
+    bool empty() const;
+    CodeList *gen(Output &output);
+    FORBID_COPY(bitmaps_t);
+};
 
 struct Span {
     uint32_t  ub;
@@ -729,4 +770,4 @@ inline std::string indent(uint32_t n, const std::string &s)
 
 } // namespace re2c
 
-#endif // _RE2C_CODE_OUTPUT_
+#endif // _RE2C_CODEGEN_CODE_

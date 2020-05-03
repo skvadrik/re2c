@@ -1,7 +1,7 @@
 #include <sstream>
 
+#include "src/codegen/code.h"
 #include "src/codegen/input_api.h"
-#include "src/codegen/output.h"
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 

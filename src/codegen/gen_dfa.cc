@@ -10,10 +10,8 @@
 
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
-#include "src/codegen/bitmap.h"
+#include "src/codegen/code.h"
 #include "src/codegen/input_api.h"
-#include "src/codegen/label.h"
-#include "src/codegen/output.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"

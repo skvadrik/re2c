@@ -5,8 +5,8 @@
 #include <iomanip>
 
 #include "config.h"
+#include "src/codegen/code.h"
 #include "src/codegen/input_api.h"
-#include "src/codegen/output.h"
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/options/opt.h"

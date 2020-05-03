@@ -9,8 +9,7 @@
 #include <vector>
 
 #include "src/adfa/action.h"
-#include "src/codegen/bitmap.h"
-#include "src/codegen/output.h"
+#include "src/codegen/code.h"
 #include "src/dfa/tcmd.h"
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"

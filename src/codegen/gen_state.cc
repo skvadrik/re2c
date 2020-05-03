@@ -11,9 +11,8 @@
 
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
+#include "src/codegen/code.h"
 #include "src/codegen/input_api.h"
-#include "src/codegen/label.h"
-#include "src/codegen/output.h"
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"

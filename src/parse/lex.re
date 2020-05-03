@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-#include "src/codegen/output.h"
+#include "src/codegen/code.h"
 #include "src/encoding/enc.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
