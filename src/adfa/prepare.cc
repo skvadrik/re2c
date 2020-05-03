@@ -33,7 +33,7 @@ void DFA::split(State *s)
     move->rule_tags = s->rule_tags;
     move->fall_tags = s->fall_tags;
     s->rule = Rule::NONE;
-    s->go.nSpans = 1;
+    s->go.nspans = 1;
     s->go.span = allocate<Span> (1);
     s->go.span[0].ub = ubChar;
     s->go.span[0].to = move;
@@ -44,8 +44,8 @@ static uint32_t merge(Span *x, State *fg, State *bg, const opt_t *opts)
 {
     Span *f = fg->go.span;
     Span *b = bg->go.span;
-    Span *const fe = f + fg->go.nSpans;
-    Span *const be = b + bg->go.nSpans;
+    Span *const fe = f + fg->go.nspans;
+    Span *const be = b + bg->go.nspans;
     Span *const x0 = x;
     const uint32_t eofub = opts->eof + 1;
 
@@ -91,7 +91,7 @@ void DFA::findBaseState(const opt_t *opts)
 
     for (State *s = head; s; s = s->next) {
         if (s->fill == 0) {
-            for (uint32_t i = 0; i < s->go.nSpans; ++i) {
+            for (uint32_t i = 0; i < s->go.nspans; ++i) {
                 State *to = s->go.span[i].to;
 
                 if (to->isBase
@@ -100,13 +100,13 @@ void DFA::findBaseState(const opt_t *opts)
                     DASSERT(s->stadfa_tags == TCID0);
 
                     to = to->go.span[0].to;
-                    uint32_t nSpans = merge(span, s, to, opts);
+                    uint32_t nspans = merge(span, s, to, opts);
 
-                    if (nSpans < s->go.nSpans) {
+                    if (nspans < s->go.nspans) {
                         operator delete (s->go.span);
-                        s->go.nSpans = nSpans;
-                        s->go.span = allocate<Span> (nSpans);
-                        memcpy(s->go.span, span, nSpans*sizeof(Span));
+                        s->go.nspans = nspans;
+                        s->go.span = allocate<Span> (nspans);
+                        memcpy(s->go.span, span, nspans*sizeof(Span));
                         break;
                     }
                 }
@@ -164,7 +164,7 @@ void DFA::prepare(const opt_t *opts)
                 finstates[s->rule] = n;
                 addState(n, s);
             }
-            for (uint32_t i = 0; i < s->go.nSpans; ++i) {
+            for (uint32_t i = 0; i < s->go.nspans; ++i) {
                 if (!s->go.span[i].to) {
                     s->go.span[i].to = finstates[s->rule];
                     s->go.span[i].tags = s->rule_tags;
@@ -176,7 +176,7 @@ void DFA::prepare(const opt_t *opts)
     // create default state (if needed)
     State *default_state = NULL;
     for (State *s = head; s; s = s->next) {
-        for (uint32_t i = 0; i < s->go.nSpans; ++i) {
+        for (uint32_t i = 0; i < s->go.nspans; ++i) {
             if (!s->go.span[i].to) {
                 if (!default_state) {
                     default_state = defstate = new State;
@@ -227,7 +227,7 @@ void DFA::prepare(const opt_t *opts)
         s->isBase = false;
 
         if (s->fill != 0) {
-            for (uint32_t i = 0; i < s->go.nSpans; ++i) {
+            for (uint32_t i = 0; i < s->go.nspans; ++i) {
                 if (s->go.span[i].to == s) {
                     s->isBase = true;
                     split(s);
@@ -325,7 +325,7 @@ void DFA::calc_stats(OutputBlock &out)
 static bool can_hoist_tags(const State *s, const opt_t *opts)
 {
     Span *span = s->go.span;
-    const size_t nspan = s->go.nSpans;
+    const size_t nspan = s->go.nspans;
     DASSERT(nspan != 0);
 
     if (nspan == 1 && s->rule != Rule::NONE) return false;
@@ -352,7 +352,7 @@ void DFA::hoist_tags(const opt_t *opts)
 {
     for (State * s = head; s; s = s->next) {
         Span *span = s->go.span;
-        const size_t nspan = s->go.nSpans;
+        const size_t nspan = s->go.nspans;
         if (nspan == 0) continue;
 
         if (can_hoist_tags(s, opts)) {
@@ -370,7 +370,7 @@ void DFA::hoist_tags_and_skip(const opt_t *opts)
 
     for (State * s = head; s; s = s->next) {
         Span *span = s->go.span;
-        const size_t nspan = s->go.nSpans;
+        const size_t nspan = s->go.nspans;
         if (nspan == 0) continue;
 
         // do all spans agree on tags?

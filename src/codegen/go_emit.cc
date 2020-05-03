@@ -26,8 +26,7 @@ static std::string gen_if(const opt_t *opts, const std::string &compare, uint32_
     return os.str();
 }
 
-CodeList *gen_gocases(Output &output, const DFA &dfa, const CodeGoCases *go,
-    const State *from)
+CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go, const State *from)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -40,7 +39,7 @@ CodeList *gen_gocases(Output &output, const DFA &dfa, const CodeGoCases *go,
         CodeList *body = code_list(alc);
         gen_goto(output, body, from, c->to, dfa, c->tags, c->skip, c->eof);
 
-        CodeCase *xcase = code_case_chars(alc, body, c->nranges, c->ranges);
+        CodeCase *xcase = code_case_ranges(alc, body, c);
         if (c == go->defcase) {
             // by convention default case must be the first
             prepend(cases, xcase);
@@ -107,7 +106,7 @@ CodeList *gen_goswif(Output &output, const DFA &dfa, const CodeGoSwIf *go,
     const State *from)
 {
     return go->kind == CodeGoSwIf::SWITCH
-        ? gen_gocases(output, dfa, go->gosw, from)
+        ? gen_gosw(output, dfa, go->gosw, from)
         : gen_goif(output, dfa, go->goif, from);
 }
 
@@ -223,24 +222,22 @@ CodeList *gen_gocp(Output &output, const DFA &dfa, const CodeGoCp *go, const Sta
     return stmts;
 }
 
-void gen_godot(Output &output, const DFA &dfa, const CodeGoDot *go, const State *from,
+void gen_godot(Output &output, const DFA &dfa, const CodeGoSw *go, const State *from,
     CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const std::string &prefix = opts->tags_prefix;
-    const uint32_t n = go->cases->ncases;
+    const uint32_t n = go->ncases;
     const char *text;
 
     if (n == 1) {
-        text = o.label(*from->label).cstr(" -> ")
-            .label(*go->cases->cases[0].to->label).flush();
+        text = o.label(*from->label).cstr(" -> ").label(*go->cases[0].to->label).flush();
         append(stmts, code_text(alc, text));
     }
     else {
-        const CodeGoCases *cs = go->cases;
-        for (const CodeGoCase *c = cs->cases, *e = c + cs->ncases; c < e; ++c) {
+        for (const CodeGoCase *c = go->cases, *e = c + go->ncases; c < e; ++c) {
             o.label(*from->label).cstr(" -> ").label(*c->to->label).cstr(" [label=\"");
 
             for (uint32_t i = 0; i < c->nranges; ++i) {

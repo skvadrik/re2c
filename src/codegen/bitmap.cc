@@ -106,7 +106,7 @@ CodeList *bitmaps_t::gen(Output &output)
 
 void doGen(const CodeGo *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m)
 {
-    Span *b = g->span, *e = &b[g->nSpans];
+    Span *b = g->span, *e = &b[g->nspans];
     uint32_t lb = 0;
 
     for (; b < e; ++b) {
@@ -123,8 +123,8 @@ void doGen(const CodeGo *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m
 bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2, const State *s2)
 {
     const Span
-        *b1 = go1->span, *e1 = &b1[go1->nSpans],
-        *b2 = go2->span, *e2 = &b2[go2->nSpans];
+        *b1 = go1->span, *e1 = &b1[go1->nspans],
+        *b2 = go2->span, *e2 = &b2[go2->nspans];
     uint32_t lb1 = 0, lb2 = 0;
 
     for (;;) {

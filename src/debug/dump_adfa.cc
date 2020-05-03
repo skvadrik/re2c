@@ -84,7 +84,7 @@ void dump_adfa(const DFA &dfa)
             }
         }
 
-        const Span *x = s->go.span, *e = x + s->go.nSpans;
+        const Span *x = s->go.span, *e = x + s->go.nspans;
         for (uint32_t lb = 0; x < e; lb = x->ub, ++x) {
             if (!x->to) continue;
 

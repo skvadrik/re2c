@@ -37,10 +37,10 @@ static bool is_eof(uint32_t eof, uint32_t ub)
     return eof != NOEOF && eof + 1 == ub;
 }
 
-CodeGoCases *code_gocases(code_alc_t &alc, const Span *spans, uint32_t nspans,
-    bool skip, uint32_t eof)
+CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans, bool skip,
+    uint32_t eof)
 {
-    CodeGoCases *go = alc.alloct<CodeGoCases>(1);
+    CodeGoSw *go = alc.alloct<CodeGoSw>(1);
     go->cases = alc.alloct<CodeGoCase>(nspans);
 
     uint32_t *ranges = alc.alloct<uint32_t>(nspans * 2), *range = ranges;
@@ -214,7 +214,7 @@ CodeGoSwIf *code_goswif(code_alc_t &alc, const Span *sp, uint32_t nsp,
     if ((!sflag && nsp > 2)
             || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2)))) {
         x->kind = CodeGoSwIf::SWITCH;
-        x->gosw = code_gocases(alc, sp, nsp, skip, eof);
+        x->gosw = code_gosw(alc, sp, nsp, skip, eof);
     }
     else if (nsp > 5) {
         x->kind = CodeGoSwIf::IF;
@@ -280,26 +280,19 @@ CodeGoCp *code_gocp(code_alc_t &alc, const Span *span, uint32_t nSpans,
     return x;
 }
 
-CodeGoDot *code_godot(code_alc_t &alc, const Span *sp, uint32_t nsp, uint32_t eof)
-{
-    CodeGoDot *x = alc.alloct<CodeGoDot>(1);
-    x->cases = code_gocases(alc, sp, nsp, false, eof);
-    return x;
-}
-
 void init_go(CodeGo *go)
 {
-    go->kind = CodeGo::EMPTY;
-    go->nSpans = 0;
-    go->span = NULL;
-    go->tags = TCID0;
-    go->skip = false;
+    go->kind   = CodeGo::EMPTY;
+    go->nspans = 0;
+    go->span   = NULL;
+    go->tags   = TCID0;
+    go->skip   = false;
 }
 
 void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
     bitmaps_t &bitmaps)
 {
-    if (go->nSpans == 0) return;
+    if (go->nspans == 0) return;
 
     if (opts->stadfa) {
         DASSERT(go->tags == TCID0);
@@ -311,16 +304,16 @@ void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
     // initialize high (wide) spans
     uint32_t hSpans = 0;
     const Span *hspan = NULL;
-    for (uint32_t i = 0; i < go->nSpans; ++i) {
+    for (uint32_t i = 0; i < go->nspans; ++i) {
         if (span[i].ub > 0x100) {
             hspan = &go->span[i];
-            hSpans = go->nSpans - i;
+            hSpans = go->nspans - i;
             break;
         }
     }
 
     bool low_spans_have_tags = false;
-    for (uint32_t i = 0; i < go->nSpans - hSpans; ++i) {
+    for (uint32_t i = 0; i < go->nspans - hSpans; ++i) {
         if (go->span[i].tags != TCID0) {
             low_spans_have_tags = true;
             break;
@@ -332,7 +325,7 @@ void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
     const bitmap_t *bm = NULL;
     State *bms = NULL;
 
-    for (uint32_t i = 0; i < go->nSpans; ++i) {
+    for (uint32_t i = 0; i < go->nspans; ++i) {
         State *s = go->span[i].to;
         if (!s->isBase) continue;
 
@@ -347,32 +340,32 @@ void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
     }
 
     // only do EOF check in states that dispatch on symbol
-    const uint32_t eof = from->go.nSpans == 1 && !consume(from->go.span[0].to)
+    const uint32_t eof = from->go.nspans == 1 && !consume(from->go.span[0].to)
         ? NOEOF : opts->eof;
-    const uint32_t dSpans = go->nSpans - hSpans - nBitmaps;
+    const uint32_t dSpans = go->nspans - hSpans - nBitmaps;
     const bool part_skip = opts->eager_skip && !go->skip;
 
     if (opts->target == TARGET_DOT) {
         go->kind = CodeGo::DOT;
-        go->godot = code_godot(alc, go->span, go->nSpans, eof);
+        go->godot = code_gosw(alc, go->span, go->nspans, false, eof);
     }
     else if (opts->gFlag
             && !part_skip
             && dSpans >= opts->cGotoThreshold
             && !low_spans_have_tags) {
         go->kind = CodeGo::CPGOTO;
-        go->gocp = code_gocp(alc, go->span, go->nSpans, hspan, hSpans, from->next,
+        go->gocp = code_gocp(alc, go->span, go->nspans, hspan, hSpans, from->next,
             opts->sFlag, eof);
     }
     else if (opts->bFlag && !part_skip && nBitmaps > 0) {
         go->kind = CodeGo::BITMAP;
-        go->gobm = code_gobm(alc, go->span, go->nSpans, hspan, hSpans, bm, bms,
+        go->gobm = code_gobm(alc, go->span, go->nspans, hspan, hSpans, bm, bms,
             from->next, opts->sFlag, eof);
         bitmaps.used = true;
     }
     else {
         go->kind = CodeGo::SWITCH_IF;
-        go->goswif = code_goswif(alc, go->span, go->nSpans, from->next, opts->sFlag,
+        go->goswif = code_goswif(alc, go->span, go->nspans, from->next, opts->sFlag,
             part_skip, eof);
     }
 }

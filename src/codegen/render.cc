@@ -179,8 +179,8 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool defcase,
     else {
         const Enc &enc = opts->encoding;
         const bool ebcdic = enc.type() == Enc::EBCDIC;
-        const size_t nranges = code->chars.nranges;
-        const uint32_t *ranges = code->chars.ranges;
+        const size_t nranges = code->gocase->nranges;
+        const uint32_t *ranges = code->gocase->ranges;
 
         for (uint32_t i = 0; i < nranges; ++i) {
             const uint32_t low = ranges[2 * i];

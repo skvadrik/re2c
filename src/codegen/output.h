@@ -50,6 +50,7 @@ public:
 // forward decls
 struct Code;
 struct CodeCase;
+struct CodeGoCase;
 
 template<typename T>
 struct code_list_t {
@@ -69,21 +70,16 @@ struct CodeIfTE {
 
 struct CodeCase {
     enum Kind {
-        CHARS,
+        RANGES,
         NUMBER,
         STRING,
         DEFAULT
     } kind;
 
-    struct Chars {
-        size_t          nranges;
-        const uint32_t *ranges;
-    };
-
     union {
-        Chars       chars;
-        int32_t     number;
-        const char *string;
+        const CodeGoCase *gocase;
+        int32_t           number;
+        const char       *string;
     };
     CodeList *body;
     CodeCase *next;
@@ -388,44 +384,39 @@ inline Code *code_if_then_elif(code_alc_t &alc, const char *if_cond, CodeList *i
     return x;
 }
 
-inline CodeCase *code_case_default(code_alc_t &alc, CodeList *body)
+inline CodeCase *code_case(code_alc_t &alc, CodeList *body, CodeCase::Kind kind)
 {
     CodeCase *x = alc.alloct<CodeCase>(1);
-    x->kind = CodeCase::DEFAULT;
+    x->kind = kind;
     x->body = body;
     x->next = NULL;
     return x;
 }
 
+inline CodeCase *code_case_default(code_alc_t &alc, CodeList *body)
+{
+    return code_case(alc, body, CodeCase::DEFAULT);
+}
+
 inline CodeCase *code_case_number(code_alc_t &alc, CodeList *body, int32_t number)
 {
-    CodeCase *x = alc.alloct<CodeCase>(1);
-    x->kind = CodeCase::NUMBER;
+    CodeCase *x = code_case(alc, body, CodeCase::NUMBER);
     x->number = number;
-    x->body = body;
-    x->next = NULL;
     return x;
 }
 
 inline CodeCase *code_case_string(code_alc_t &alc, CodeList *body, const char *string)
 {
-    CodeCase *x = alc.alloct<CodeCase>(1);
-    x->kind = CodeCase::STRING;
+    CodeCase *x = code_case(alc, body, CodeCase::STRING);
     x->string = string;
-    x->body = body;
-    x->next = NULL;
     return x;
 }
 
-inline CodeCase *code_case_chars(code_alc_t &alc, CodeList *body, uint32_t nranges,
-    const uint32_t *ranges)
+inline CodeCase *code_case_ranges(code_alc_t &alc, CodeList *body,
+    const CodeGoCase *gocase)
 {
-    CodeCase *x = alc.alloct<CodeCase>(1);
-    x->kind = CodeCase::CHARS;
-    x->chars.nranges = nranges;
-    x->chars.ranges  = ranges;
-    x->body = body;
-    x->next = NULL;
+    CodeCase *x = code_case(alc, body, CodeCase::RANGES);
+    x->gocase = gocase;
     return x;
 }
 

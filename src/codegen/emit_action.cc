@@ -636,10 +636,9 @@ bool endstate(const State *s)
     // usually 'end' states are final states (not all final states are 'end'
     // states), but sometimes 'end' state happens to be initial non-accepting
     // state, e.g. in case of rule '[]'
-    DASSERT(s->go.nSpans > 0);
+    DASSERT(s->go.nspans > 0);
     const Action::type_t &a = s->go.span[0].to->action.type;
-    return s->go.nSpans == 1
-        && (a == Action::RULE || a == Action::ACCEPT);
+    return s->go.nspans == 1 && (a == Action::RULE || a == Action::ACCEPT);
 }
 
 } // namespace re2c

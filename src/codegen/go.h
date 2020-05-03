@@ -29,7 +29,7 @@ struct CodeGoCase {
     bool      eof;
 };
 
-struct CodeGoCases {
+struct CodeGoSw {
     CodeGoCase *cases;
     CodeGoCase *defcase;
     uint32_t    ncases;
@@ -84,8 +84,8 @@ struct CodeGoSwIf {
 
     Kind kind;
     union {
-        CodeGoCases *gosw;
-        CodeGoIf    *goif;
+        CodeGoSw *gosw;
+        CodeGoIf *goif;
     };
 };
 
@@ -107,10 +107,6 @@ struct CodeGoCp {
     CodeGoCpTable *table;
 };
 
-struct CodeGoDot {
-    CodeGoCases *cases;
-};
-
 struct CodeGo {
     enum Kind {
         EMPTY,
@@ -121,7 +117,7 @@ struct CodeGo {
     };
 
     Kind      kind;
-    uint32_t  nSpans; // number of spans
+    uint32_t  nspans;
     Span     *span;
     tcid_t    tags;
     bool      skip;
@@ -129,7 +125,7 @@ struct CodeGo {
         CodeGoSwIf *goswif;
         CodeGoBm   *gobm;
         CodeGoCp   *gocp;
-        CodeGoDot  *godot;
+        CodeGoSw   *godot;
     };
 };
 
@@ -138,7 +134,7 @@ void init_go(CodeGo *go);
 // generate goto structures
 void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
     bitmaps_t &bitmaps);
-CodeGoDot *code_godot(code_alc_t &alc, const Span *sp, uint32_t nsp, uint32_t eof);
+CodeGoSw *code_godot(code_alc_t &alc, const Span *sp, uint32_t nsp, uint32_t eof);
 CodeGoCp *code_gocp(code_alc_t &alc, const Span *span, uint32_t nSpans, const Span *hspan,
     uint32_t hSpans, State *next, bool sflag, uint32_t eof);
 CodeGoCpTable *code_gocp_table(code_alc_t &alc, const Span *span, uint32_t nSpans);
@@ -154,13 +150,13 @@ CodeGoIfB *code_goifb(code_alc_t &alc, const Span *s, uint32_t n, State *next, b
 CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *next, bool skip,
     uint32_t eof);
 CodeCmp *code_cmp(code_alc_t &alc, const char *cmp, uint32_t val);
-CodeGoCases *code_gocases(code_alc_t &alc, const Span *spans, uint32_t nspans, bool skip,
+CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans, bool skip,
     uint32_t eof);
 
 // generate code for goto statements
 void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
     CodeList *stmts);
-void gen_godot(Output &output, const DFA &dfa, const CodeGoDot *go, const State *from,
+void gen_godot(Output &output, const DFA &dfa, const CodeGoSw *go, const State *from,
     CodeList *stmts);
 CodeList *gen_gocp(Output &output, const DFA &dfa, const CodeGoCp *go, const State *from);
 CodeList *gen_gocp_table(Output &output, const CodeGoCpTable *go);
@@ -172,8 +168,7 @@ CodeList *gen_goifl(Output &output, const DFA &dfa, const CodeGoIfL *go,
     const State *from);
 CodeList *gen_goifb(Output &output, const DFA &dfa, const CodeGoIfB *go,
     const State *from);
-CodeList *gen_gocases(Output &output, const DFA &dfa, const CodeGoCases *go,
-    const State *from);
+CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go, const State *from);
 
 bool consume(const State *s);
 

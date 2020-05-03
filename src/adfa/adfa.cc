@@ -117,7 +117,7 @@ DFA::DFA
             s->go.span[j].ub = charset[c];
             s->go.span[j].tags = tc;
         }
-        s->go.nSpans = j;
+        s->go.nspans = j;
     }
     *p = NULL;
 
@@ -176,7 +176,7 @@ void DFA::reorder()
         State *s = todo.front();
         todo.pop();
         ord.push_back(s);
-        for(uint32_t i = 0; i < s->go.nSpans; ++i)
+        for(uint32_t i = 0; i < s->go.nspans; ++i)
         {
             State *q = s->go.span[i].to;
             if(q && done.insert(q).second)
