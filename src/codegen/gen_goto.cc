@@ -119,17 +119,12 @@ static CodeList *gen_gobm(Output &output, const DFA &dfa, const CodeGoBm *go,
 
     CodeList *stmts = code_list(alc);
 
-    o.str(opts->yybm).cstr("[").u32(go->bitmap->i).cstr("+").str(opts->yych).cstr("] & ");
-    if (opts->yybmHexTable) {
-        o.u32_hex(go->bitmap->m, opts);
-    }
-    else {
-        o.u32(go->bitmap->m);
-    }
-    const char *elif_cond = o.flush();
+    const char *elif_cond = o.str(opts->yybm)
+        .cstr("[").u32(go->bitmap->offset).cstr("+").str(opts->yych).cstr("]")
+        .cstr(" & ").yybm_char(go->bitmap->mask, opts, 1).flush();
 
     CodeList *if_else = code_list(alc);
-    gen_goto(output, if_else, from, go->bitmap_state, dfa, TCID0, false, false);
+    gen_goto(output, if_else, from, go->bitmap->state, dfa, TCID0, false, false);
 
     if (go->hgo != NULL) {
         const char *if_cond = o.str(opts->yych).cstr(" & ~0xFF").flush();

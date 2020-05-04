@@ -239,24 +239,23 @@ static uint32_t unmap(Span *new_span, const Span *old_span, uint32_t old_nspans,
 }
 
 static CodeGoBm *code_gobm(code_alc_t &alc, const Span *span, uint32_t nSpans,
-    const Span *hspan, uint32_t hSpans, const bitmap_t *bm, State *bm_state,
-    State *next, bool sflag, uint32_t eof)
+    const Span *hspan, uint32_t hSpans, const CodeBmState *bm, State *next,
+    bool sflag, uint32_t eof)
 {
     CodeGoBm *x = alc.alloct<CodeGoBm>(1);
     x->bitmap = bm;
-    x->bitmap_state = bm_state;
     x->hgo = NULL;
     x->lgo = NULL;
 
     Span *bspan = allocate<Span>(nSpans); // temporary
-    uint32_t bSpans = unmap (bspan, span, nSpans, bm_state);
+    uint32_t bSpans = unmap (bspan, span, nSpans, bm->state);
     x->lgo = bSpans == 0 ? NULL
         : code_goswif(alc, bspan, bSpans, next, sflag, false, eof);
     // if there are any low spans, then next state for high spans
     // must be NULL to trigger explicit goto generation in linear 'if'
     x->hgo = hSpans == 0 ? NULL
         : code_goswif(alc, hspan, hSpans, x->lgo ? NULL : next, sflag, false, eof);
-    x->bitmap_state->label->used = true;
+    x->bitmap->state->label->used = true;
     operator delete(bspan);
 
     return x;
@@ -292,7 +291,7 @@ static CodeGoCp *code_gocp(code_alc_t &alc, const Span *span, uint32_t nSpans,
 }
 
 void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
-    bitmaps_t &bitmaps)
+    CodeBitmap *bitmap)
 {
     if (go->nspans == 0) return;
 
@@ -324,20 +323,19 @@ void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
 
     // initialize bitmaps
     uint32_t nBitmaps = 0;
-    const bitmap_t *bm = NULL;
-    State *bms = NULL;
+    const CodeBmState *bm = NULL;
+    if (opts->bFlag) {
+        for (uint32_t i = 0; i < go->nspans; ++i) {
+            State *s = go->span[i].to;
+            if (!s->isBase) continue;
 
-    for (uint32_t i = 0; i < go->nspans; ++i) {
-        State *s = go->span[i].to;
-        if (!s->isBase) continue;
-
-        const bitmap_t *b = bitmaps.find(go, s);
-        if (b) {
-            if (bm == NULL) {
-                bm = b;
-                bms = s;
+            const CodeBmState *b = find_bitmap(bitmap, go, s);
+            if (b) {
+                if (bm == NULL) {
+                    bm = b;
+                }
+                ++nBitmaps;
             }
-            ++nBitmaps;
         }
     }
 
@@ -361,9 +359,9 @@ void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
     }
     else if (opts->bFlag && !part_skip && nBitmaps > 0) {
         go->kind = CodeGo::BITMAP;
-        go->gobm = code_gobm(alc, go->span, go->nspans, hspan, hSpans, bm, bms,
+        go->gobm = code_gobm(alc, go->span, go->nspans, hspan, hSpans, bm,
             from->next, opts->sFlag, eof);
-        bitmaps.used = true;
+        bitmap->used = true;
     }
     else {
         go->kind = CodeGo::SWITCH_IF;

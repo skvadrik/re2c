@@ -64,8 +64,8 @@ public:
     Scratchbuf& str(const std::string &s) { os << s; return *this; }
     Scratchbuf& cstr(const char *s) { os << s; return *this; }
     Scratchbuf& label(const Label &l) { os << l.index; return *this; }
-    Scratchbuf& u32_hex(uint32_t u, const opt_t *opts);
     Scratchbuf& u32_width(uint32_t u, int width);
+    Scratchbuf& yybm_char(uint32_t u, const opt_t *opts, int width);
     Scratchbuf& exact_uint(size_t width);
 };
 
@@ -77,33 +77,20 @@ struct code_list_t {
 
 typedef code_list_t<Code> CodeList;
 
-struct bitmap_t {
+struct CodeBmState {
     const CodeGo *go;
-    const State  *on;
-    uint32_t      i;
-    uint32_t      m;
+    const State  *state;  // destination DFA state
+    uint32_t      offset; // start offset in the 'yybm' buffer
+    uint32_t      mask;   // bit mask
+    CodeBmState  *next;
 };
 
-class bitmaps_t
-{
-    typedef std::vector<bitmap_t> maps_t;
-    typedef maps_t::reverse_iterator riter_t;
-    typedef maps_t::const_reverse_iterator rciter_t;
+typedef code_list_t<CodeBmState> CodeBmStates;
 
-    maps_t maps;
-    uint32_t ncunit;
-    uint32_t *buffer;
-
-public:
-    bool used;
-
-    explicit bitmaps_t(uint32_t n);
-    ~bitmaps_t();
-    void insert(const CodeGo *go, const State *s);
-    const bitmap_t *find(const CodeGo *go, const State *s) const;
-    bool empty() const;
-    CodeList *gen(Output &output);
-    FORBID_COPY(bitmaps_t);
+struct CodeBitmap {
+    CodeBmStates *states;
+    uint32_t      nchars;
+    bool          used;
 };
 
 struct Span {
@@ -182,10 +169,9 @@ struct CodeGoSwIf {
 };
 
 struct CodeGoBm {
-    const bitmap_t *bitmap;
-    State          *bitmap_state;
-    CodeGoSwIf     *hgo;
-    CodeGoSwIf     *lgo;
+    const CodeBmState *bitmap;
+    CodeGoSwIf        *hgo;
+    CodeGoSwIf        *lgo;
 };
 
 struct CodeGoCpTable {
@@ -357,6 +343,15 @@ struct Code {
 
     Code *next;
 };
+
+template<typename T>
+inline code_list_t<T> *new_code_list(code_alc_t &alc)
+{
+    code_list_t<T> *x = alc.alloct<code_list_t<T> >(1);
+    x->head = NULL;
+    x->ptail = &x->head;
+    return x;
+}
 
 template<typename T>
 inline void append(code_list_t<T> *list, T *elem)
@@ -583,10 +578,7 @@ inline CodeCase *code_case_ranges(code_alc_t &alc, CodeList *body,
 
 inline CodeCases *code_cases(code_alc_t &alc)
 {
-    CodeCases *x = alc.alloct<CodeCases>(1);
-    x->head  = NULL;
-    x->ptail = &x->head;
-    return x;
+    return new_code_list<CodeCase>(alc);
 }
 
 inline CodeArg *code_arg(code_alc_t &alc, const char *arg)
@@ -599,10 +591,7 @@ inline CodeArg *code_arg(code_alc_t &alc, const char *arg)
 
 inline CodeArgs *code_args(code_alc_t &alc)
 {
-    CodeArgs *x = alc.alloct<CodeArgs>(1);
-    x->head  = NULL;
-    x->ptail = &x->head;
-    return x;
+    return new_code_list<CodeArg>(alc);
 }
 
 inline Code *code_func(code_alc_t &alc, const char *name, CodeArgs *args,
@@ -638,9 +627,26 @@ inline Code *code_switch(code_alc_t &alc, const char *expr, CodeCases *cases,
 
 inline CodeList *code_list(code_alc_t &alc)
 {
-    CodeList *x = alc.alloct<CodeList>(1);
-    x->head = NULL;
-    x->ptail = &x->head;
+    return new_code_list<Code>(alc);
+}
+
+inline CodeBmState *code_bmstate(code_alc_t &alc, const CodeGo *go, const State *s)
+{
+    CodeBmState *x = alc.alloct<CodeBmState>(1);
+    x->go     = go;
+    x->state  = s;
+    x->offset = 0;
+    x->mask   = 0;
+    x->next   = NULL;
+    return x;
+}
+
+inline CodeBitmap *code_bitmap(code_alc_t &alc, uint32_t nchars)
+{
+    CodeBitmap *x = alc.alloct<CodeBitmap>(1);
+    x->states = new_code_list<CodeBmState>(alc);
+    x->nchars = nchars;
+    x->used   = false;
     return x;
 }
 
@@ -735,7 +741,7 @@ public:
 
 void init_go(CodeGo *go);
 void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
-    bitmaps_t &bitmaps);
+    CodeBitmap *bitmap);
 void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
     CodeList *stmts);
 void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags);
@@ -747,6 +753,10 @@ void gen_goto(Output &output, CodeList *stmts, const State *from, const State *t
 void expand(CodegenContext &ctx, Code *code);
 void combine(CodegenContext &ctx, Code *code);
 void render(RenderContext &rctx, const Code *code);
+
+CodeBmState *find_bitmap(const CodeBitmap *bitmap, const CodeGo *go, const State *s);
+void insert_bitmap(code_alc_t &alc, CodeBitmap *bitmap, const CodeGo *go, const State *s);
+CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap);
 
 void output_version_time(std::ostream &o, bool version, bool date);
 

@@ -648,8 +648,11 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
         }
     }
 
-    append(block2, dfa.bitmaps.gen(output));
+    if (opts->bFlag) {
+        append(block2, gen_bitmap(output, dfa.bitmap));
+    }
     append(block2, code_textraw(alc, ""));
+
     dfa.emit_body(output, block2);
     append(block2, code_textraw(alc, ""));
 

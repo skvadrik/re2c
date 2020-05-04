@@ -68,76 +68,74 @@ yy8:
 	}
 /* *********************************** */
 yyc_ST_VALUE:
-			{
-				if (YYLIMIT <= YYCURSOR) YYFILL(1);
-				yych = *(YYMARKER = YYCURSOR);
-				if (yych <= 0x1F) {
-					if (yych == '\t') {
-						++YYCURSOR;
-						goto yy13;
-					}
-				} else {
-					if (yych <= ' ') {
-						++YYCURSOR;
-						goto yy13;
-					}
-					if (yych == '$') {
-						++YYCURSOR;
-						goto yy15;
-					}
-				}
-yy12:
-				{
-		YYSETCONDITION(STATE(INITIAL));
-		printf("Found spaces\n");
-	}
-yy13:
-				if (YYLIMIT <= YYCURSOR) YYFILL(1);
-				yych = *YYCURSOR;
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
+			yych = *(YYMARKER = YYCURSOR);
+			if (yych <= 0x1F) {
 				if (yych == '\t') {
 					++YYCURSOR;
 					goto yy13;
 				}
-				if (yych == ' ') {
+			} else {
+				if (yych <= ' ') {
 					++YYCURSOR;
 					goto yy13;
 				}
-				goto yy12;
-yy15:
-				if (YYLIMIT <= YYCURSOR) YYFILL(1);
-				yych = *YYCURSOR;
-				if (yych <= '@') goto yy16;
-				if (yych <= 'Z') {
-					++YYCURSOR;
-					goto yy17;
-				}
-				if (yych <= '`') goto yy16;
-				if (yych <= 'z') {
-					++YYCURSOR;
-					goto yy17;
-				}
-yy16:
-				YYCURSOR = YYMARKER;
-				if (yyaccept == 0) {
-					goto yy12;
-				} else {
-					goto yy18;
-				}
-yy17:
-				yyaccept = 1;
-				YYMARKER = YYCURSOR;
-				if (YYLIMIT <= YYCURSOR) YYFILL(1);
-				yych = *YYCURSOR;
 				if (yych == '$') {
 					++YYCURSOR;
 					goto yy15;
 				}
+			}
+yy12:
+			{
+		YYSETCONDITION(STATE(INITIAL));
+		printf("Found spaces\n");
+	}
+yy13:
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
+			yych = *YYCURSOR;
+			if (yych == '\t') {
+				++YYCURSOR;
+				goto yy13;
+			}
+			if (yych == ' ') {
+				++YYCURSOR;
+				goto yy13;
+			}
+			goto yy12;
+yy15:
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
+			yych = *YYCURSOR;
+			if (yych <= '@') goto yy16;
+			if (yych <= 'Z') {
+				++YYCURSOR;
+				goto yy17;
+			}
+			if (yych <= '`') goto yy16;
+			if (yych <= 'z') {
+				++YYCURSOR;
+				goto yy17;
+			}
+yy16:
+			YYCURSOR = YYMARKER;
+			if (yyaccept == 0) {
+				goto yy12;
+			} else {
+				goto yy18;
+			}
+yy17:
+			yyaccept = 1;
+			YYMARKER = YYCURSOR;
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
+			yych = *YYCURSOR;
+			if (yych == '$') {
+				++YYCURSOR;
+				goto yy15;
+			}
 yy18:
-				{
+			{
 		printf("Found $ or $\\<x>\n");
 		continue;
 	}
-			}
 		}
 
 	}

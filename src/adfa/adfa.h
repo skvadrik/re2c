@@ -94,7 +94,7 @@ struct DFA
     tagver_t maxtagver;
     const size_t def_rule;
     const size_t key_size;
-    bitmaps_t bitmaps;
+    CodeBitmap *bitmap;
     std::string setup;
     const SemAct *eof_action;
     Msg &msg;

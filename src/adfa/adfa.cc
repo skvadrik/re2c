@@ -64,7 +64,7 @@ DFA::DFA
     , maxtagver (dfa.maxtagver)
     , def_rule (def)
     , key_size (key)
-    , bitmaps (std::min(ubChar, 256u))
+    , bitmap(NULL)
     , setup(su)
     , eof_action(eof)
     , msg(msg)

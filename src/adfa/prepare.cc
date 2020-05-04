@@ -229,11 +229,6 @@ void DFA::prepare(const opt_t *opts)
                 if (s->go.span[i].to == s) {
                     s->isBase = true;
                     split(s);
-
-                    if (opts->bFlag) {
-                        bitmaps.insert(&s->next->go, s);
-                    }
-
                     s = s->next;
                     break;
                 }

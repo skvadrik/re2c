@@ -297,9 +297,14 @@ void output_version_time(std::ostream &o, bool version, bool date)
     o << " */";
 }
 
-Scratchbuf& Scratchbuf::u32_hex(uint32_t u, const opt_t *opts)
+Scratchbuf& Scratchbuf::yybm_char(uint32_t u, const opt_t *opts, int width)
 {
-    prtHex(os, u, opts->encoding.szCodeUnit());
+    if (opts->yybmHexTable) {
+        prtHex(os, u, opts->encoding.szCodeUnit());
+    }
+    else {
+        u32_width(u, width);
+    }
     return *this;
 }
 

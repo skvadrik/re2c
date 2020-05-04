@@ -154,12 +154,22 @@ void gen_code(Output &output, dfas_t &dfas)
             ? new_label(alc, output.label_counter++) : dfa.start_label;
         dfa.head->action.set_initial();
 
-        for (State * s = dfa.head; s; s = s->next) {
+        for (State *s = dfa.head; s; s = s->next) {
             s->label = new_label(alc, output.label_counter++);
         }
 
+        if (opts->bFlag) {
+            dfa.bitmap = code_bitmap(alc, std::min(dfa.ubChar, 256u));
+            for (State *s = dfa.head; s; s = s->next) {
+                if (s->isBase) {
+                    DASSERT(s->next);
+                    insert_bitmap(alc, dfa.bitmap, &s->next->go, s);
+                }
+            }
+        }
+
         for (State *s = dfa.head; s; s = s->next) {
-            code_go(alc, &s->go, s, opts, dfa.bitmaps);
+            code_go(alc, &s->go, s, opts, dfa.bitmap);
         }
     }
 
@@ -184,6 +194,7 @@ void gen_code(Output &output, dfas_t &dfas)
     }
     else {
         ind = output.block().opts->topIndent;
+        bool have_bitmaps = false;
 
         const char *text;
         CodeList *program1 = code_list(alc);
@@ -191,7 +202,8 @@ void gen_code(Output &output, dfas_t &dfas)
             const bool first = i == b;
             DFA &dfa = *(*i);
 
-            CodeList *bms = dfa.bitmaps.gen(output);
+            CodeList *bms = opts->bFlag ? gen_bitmap(output, dfa.bitmap) : NULL;
+            have_bitmaps |= bms != NULL;
 
             if (first && opts->fFlag) {
                 append(program1, code_textraw(alc, ""));
@@ -202,7 +214,7 @@ void gen_code(Output &output, dfas_t &dfas)
                 append(program1, code_yyaccept_def(alc));
             }
 
-            if (!opts->cFlag) {
+            if (!opts->cFlag && bms) {
                 append(program1, bms);
             }
 
@@ -246,9 +258,7 @@ void gen_code(Output &output, dfas_t &dfas)
             CodeList *body = code_list(alc);
             dfa.emit_body(output, body);
 
-            // TODO: instead of rechecking bitmap-related conditions, just check if
-            // the code for bitmaps is NULL (requires trivial changes in tests)
-            if (opts->cFlag && opts->bFlag && !dfa.bitmaps.empty()) {
+            if (opts->cFlag && bms) {
                 CodeList *block = code_list(alc);
                 append(block, bms);
                 append(block, body);
@@ -259,13 +269,9 @@ void gen_code(Output &output, dfas_t &dfas)
             }
         }
 
-        bool have_bitmaps = false;
-        for (i = b; i != e; ++i) {
-            have_bitmaps |= !(*i)->bitmaps.empty();
-        }
         const bool prolog = (opts->fFlag && opts->gFlag)
             || (!opts->fFlag && (ob.used_yyaccept || opts->bEmitYYCh))
-            || (opts->bFlag && !opts->cFlag && have_bitmaps)
+            || (!opts->cFlag && have_bitmaps)
             || (opts->cFlag && opts->gFlag);
 
         append(program, code_textraw(alc, ""));

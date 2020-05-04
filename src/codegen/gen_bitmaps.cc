@@ -8,117 +8,9 @@
 
 namespace re2c {
 
-static bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2,
-    const State *s2);
-static void doGen(const CodeGo *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m);
-
-bitmaps_t::bitmaps_t(uint32_t n)
-    : maps()
-    , ncunit(n)
-    , buffer(new uint32_t[ncunit])
-    , used(false)
-{}
-
-bitmaps_t::~bitmaps_t()
-{
-    delete[] buffer;
-}
-
-void bitmaps_t::insert(const CodeGo *go, const State *s)
-{
-    rciter_t i = maps.rbegin(), e = maps.rend();
-    for (; i != e; ++i) {
-        if (matches(i->go, i->on, go, s)) return;
-    }
-
-    bitmap_t b = {go, s, 0, 0};
-    maps.push_back(b);
-}
-
-const bitmap_t *bitmaps_t::find(const CodeGo *go, const State *s) const
-{
-    rciter_t i = maps.rbegin(), e = maps.rend();
-    for (; i != e; ++i) {
-        if (i->on == s && matches(i->go, i->on, go, s)) return &(*i);
-    }
-    return NULL;
-}
-
-bool bitmaps_t::empty() const { return maps.empty(); }
-
-CodeList *bitmaps_t::gen(Output &output)
-{
-    if (empty() || !used) return NULL;
-
-    static const uint32_t TABLE_WIDTH = 8;
-    const uint32_t nmap = static_cast<uint32_t>(maps.size());
-    riter_t b = maps.rbegin(), e = maps.rend();
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    const char *text;
-
-    CodeList *stmts = code_list(alc);
-
-    text = o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {").flush();
-    append(stmts, code_text(alc, text));
-
-    CodeList *block = code_list(alc);
-    for (uint32_t i = 0, t = 1; b != e; i += ncunit, t += TABLE_WIDTH) {
-        memset(buffer, 0, ncunit * sizeof(uint32_t));
-
-        for (uint32_t m = 0x80; b != e && m; m >>= 1, ++b) {
-            b->i = i;
-            b->m = m;
-            doGen(b->go, b->on, buffer, 0, m);
-        }
-
-        if (nmap > TABLE_WIDTH) {
-            text = o.cstr("/* table ").u32(t).cstr(" .. ").u32(std::min(nmap, t + 7))
-                .cstr(": ").u32(i).cstr(" */").flush();
-            append(block, code_text(alc, text));
-        }
-
-        for (uint32_t i = 0; i < ncunit / TABLE_WIDTH; ++i) {
-            for (uint32_t j = 0; j < TABLE_WIDTH; ++j) {
-                const uint32_t c = buffer[i * TABLE_WIDTH + j];
-                if (opts->yybmHexTable) {
-                    o.u32_hex(c, opts);
-                }
-                else {
-                    o.u32_width(c, 3);
-                }
-                o.cstr(", ");
-            }
-            text = o.flush();
-            append(block, code_text(alc, text));
-        }
-    }
-    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
-
-    text = o.cstr("};").flush();
-    append(stmts, code_text(alc, text));
-
-    return stmts;
-}
-
-void doGen(const CodeGo *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m)
-{
-    Span *b = g->span, *e = &b[g->nspans];
-    uint32_t lb = 0;
-
-    for (; b < e; ++b) {
-        if (b->to == s) {
-            for (; lb < b->ub && lb < 256; ++lb) {
-                bm[lb-f] |= m;
-            }
-        }
-        lb = b->ub;
-    }
-}
-
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
-bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2, const State *s2)
+static bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2,
+    const State *s2)
 {
     const Span
         *b1 = go1->span, *e1 = &b1[go1->nspans],
@@ -149,6 +41,100 @@ bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2, const State 
         ++b1;
         ++b2;
     }
+}
+
+void insert_bitmap(code_alc_t &alc, CodeBitmap *bitmap, const CodeGo *go, const State *s)
+{
+    for (CodeBmState *b = bitmap->states->head; b; b = b->next) {
+        if (matches(b->go, b->state, go, s)) return;
+    }
+    // bitmap list is constructed in reverse
+    prepend(bitmap->states, code_bmstate(alc, go, s));
+}
+
+CodeBmState *find_bitmap(const CodeBitmap *bitmap, const CodeGo *go, const State *s)
+{
+    for (CodeBmState *b = bitmap->states->head; b; b = b->next) {
+        if (b->state == s && matches(b->go, b->state, go, s)) return b;
+    }
+    return NULL;
+}
+
+CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap)
+{
+    if (!bitmap->states->head || !bitmap->used) return NULL;
+
+    uint32_t nmaps = 0;
+    for (CodeBmState *b = bitmap->states->head; b; b = b->next) ++nmaps;
+
+    static const uint32_t WIDTH = 8;
+    const bool annotate = nmaps > WIDTH;
+    const uint32_t nchars = bitmap->nchars;
+
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+    const char *text;
+
+    CodeList *stmts = code_list(alc);
+
+    text = o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {").flush();
+    append(stmts, code_text(alc, text));
+
+    CodeList *block = code_list(alc);
+
+    uint32_t *buffer = new uint32_t[nchars];
+    uint32_t bmidx = 0;
+
+    // Iterate while there are states that may use bitmaps.
+    for (CodeBmState *b = bitmap->states->head; b; ++bmidx) {
+        const uint32_t offset = bmidx * nchars;
+
+        // For each state generate a table with one bit per character, denoting
+        // if there is a transition on this charater to the destination state.
+        // Tables for up to 8 states are overlayed and compressed in one bitmap.
+        memset(buffer, 0, nchars * sizeof(uint32_t));
+        for (uint32_t mask = 0x80; mask && b; mask >>= 1, b = b->next) {
+            b->offset = offset;
+            b->mask = mask;
+
+            uint32_t c = 0;
+            const Span *span = b->go->span, *last = span + b->go->nspans;
+            for (; span < last; ++span) {
+                if (span->to == b->state) {
+                    for (uint32_t u = std::min(span->ub, nchars); c < u; ++c) {
+                        buffer[c] |= mask;
+                    }
+                }
+                c = span->ub;
+            }
+        }
+
+        // If there are multiple tables, annotate them with comments.
+        if (annotate) {
+            const uint32_t lowidx = bmidx * WIDTH + 1;
+            const uint32_t uppidx = std::min(nmaps, lowidx + 7);
+            text = o.cstr("/* table ").u32(lowidx).cstr(" .. ").u32(uppidx)
+                .cstr(": ").u32(offset).cstr(" */").flush();
+            append(block, code_text(alc, text));
+        }
+
+        // Generate code for the table.
+        for (uint32_t c = 0; c < nchars; ) {
+            for (uint32_t u = c + WIDTH; c < u; ++c) {
+                o.yybm_char(buffer[c], opts, 3).cstr(", ");
+            }
+            text = o.flush();
+            append(block, code_text(alc, text));
+        }
+    }
+
+    delete[] buffer;
+
+    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
+    append(stmts, code_text(alc, "};"));
+
+    return stmts;
 }
 
 } // end namespace re2c
