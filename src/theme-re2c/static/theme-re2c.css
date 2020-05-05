@@ -63,6 +63,14 @@ div.document a code.download {
     border: none;
     background-color: transparent;
 }
+/* remove spaces between list items (bullet lists) */
+div.document li > p {
+    margin: 2px 0 2px 0;
+}
+/* remove spaces between list items (data lists) */
+div.document dl > dd > p {
+    margin: 2px 0 2px 0;
+}
 
 div.footer {
     margin: 0 0 0 360px;
