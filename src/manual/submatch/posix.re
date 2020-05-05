@@ -13,7 +13,7 @@ static uint32_t num(const char *s, const char *e)
 static uint32_t lex(const char *YYCURSOR)
 {
     const char *YYMARKER;
-    const char *yypmatch[YYMAXNMATCH];
+    const char *yypmatch[YYMAXNMATCH * 2];
     uint32_t yynmatch;
     /*!stags:re2c format = 'const char *@@;'; */
 
