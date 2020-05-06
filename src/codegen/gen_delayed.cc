@@ -62,14 +62,14 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
     const char *text;
 
     CodeList *goto_start = code_list(alc);
-    text = o.cstr("goto ").str(opts->labelPrefix).u32(start_label).cstr(";").flush();
-    append(goto_start, code_text(alc, text));
+    text = o.cstr("goto ").str(opts->labelPrefix).u32(start_label).flush();
+    append(goto_start, code_stmt(alc, text));
 
     CodeCases *ccases = code_cases(alc);
     if (opts->bUseStateAbort) {
         // default: abort();
         CodeList *abort = code_list(alc);
-        append(abort, code_text(alc, "abort();"));
+        append(abort, code_stmt(alc, "abort()"));
         append(ccases, code_case_default(alc, abort));
 
         // case -1: goto <start label>;
@@ -87,8 +87,8 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
             o.cstr("if (").str(output_expr_lessthan(1, opts)).cstr(")")
                 .cstr(" goto ").str(opts->labelPrefix).cstr("eof").u32(i).cstr("; ");
         }
-        text = o.cstr("goto ").str(opts->yyfilllabel).u32(i).cstr(";").flush();
-        append(stmts, code_text(alc, text));
+        text = o.cstr("goto ").str(opts->yyfilllabel).u32(i).flush();
+        append(stmts, code_stmt(alc, text));
 
         append(ccases, code_case_number(alc, stmts, static_cast<int32_t>(i)));
     }
@@ -191,22 +191,20 @@ static CodeList *gen_cond_goto_binary(Scratchbuf &o, code_alc_t &alc,
     size_t lower, size_t upper)
 {
     CodeList *stmts = code_list(alc);
-    Code *stmt = NULL;
     const char *text;
 
     if (lower == upper) {
-        text = o.cstr("goto ").str(opts->condPrefix).str(conds[lower]).cstr(";").flush();
-        stmt = code_text(alc, text);
+        text = o.cstr("goto ").str(opts->condPrefix).str(conds[lower]).flush();
+        append(stmts, code_stmt(alc, text));
     }
     else {
         const size_t middle = lower + (upper - lower + 1) / 2;
         text = o.str(output_cond_get(opts)).cstr(" < ").u64(middle).flush();
         CodeList *if_then = gen_cond_goto_binary(o, alc, conds, opts, lower, middle - 1);
         CodeList *if_else = gen_cond_goto_binary(o, alc, conds, opts, middle, upper);
-        stmt = code_if_then_else(alc, text, if_then, if_else);
+        append(stmts, code_if_then_else(alc, text, if_then, if_else));
     }
 
-    append(stmts, stmt);
     return stmts;
 }
 
@@ -229,8 +227,8 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
     else {
         if (opts->gFlag) {
             text = o.cstr("goto *").str(opts->yyctable).cstr("[")
-                .str(output_cond_get(opts)).cstr("];").flush();
-            append(stmts, code_text(alc, text));
+                .str(output_cond_get(opts)).cstr("]").flush();
+            append(stmts, code_stmt(alc, text));
         }
         else if (opts->sFlag) {
             warn_cond_ord &= ncond > 1;
@@ -244,8 +242,8 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
                 const std::string &cond = conds[i];
 
                 CodeList *body = code_list(alc);
-                text = o.cstr("goto ").str(opts->condPrefix).str(cond).cstr(";").flush();
-                append(body, code_text(alc, text));
+                text = o.cstr("goto ").str(opts->condPrefix).str(cond).flush();
+                append(body, code_stmt(alc, text));
 
                 text = o.str(opts->condEnumPrefix).str(cond).flush();
                 append(ccases, code_case_string(alc, body, text));
@@ -372,6 +370,7 @@ void expand(CodegenContext &ctx, Code *code)
             break;
         case Code::EMPTY:
         case Code::FUNC:
+        case Code::STMT:
         case Code::TEXT:
         case Code::RAW:
         case Code::TEXT_RAW:

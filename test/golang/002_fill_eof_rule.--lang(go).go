@@ -95,86 +95,115 @@ func Lex(input *Input) int {
 {
 	var yych YYCTYPE
 yyFillLabel0:
-	yych = YYPEEK ();
+	yych = YYPEEK ()
 	switch (yych) {
-	case '\t':	fallthrough
-	case '\n':	fallthrough
-	case '\r':	fallthrough
-	case ' ':	goto yy4;
-	case '0':	fallthrough
-	case '1':	fallthrough
-	case '2':	fallthrough
-	case '3':	fallthrough
-	case '4':	fallthrough
-	case '5':	fallthrough
-	case '6':	fallthrough
-	case '7':	fallthrough
-	case '8':	fallthrough
-	case '9':	goto yy7;
+	case '\t':
+		fallthrough
+	case '\n':
+		fallthrough
+	case '\r':
+		fallthrough
+	case ' ':
+		goto yy4
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy7
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yyFillLabel0;
+				goto yyFillLabel0
 			}
-			goto yyeofrule2;
+			goto yyeofrule2
 		}
-		goto yy2;
+		goto yy2
 	}
 yy2:
-	YYSKIP ();
+	YYSKIP ()
 //line "golang/002_fill_eof_rule.--lang(go).re":95
 	{
 		fmt.Println("error")
 		return -1
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":131
+//line "golang/002_fill_eof_rule.--lang(go).go":145
 yy4:
-	YYSKIP ();
+	YYSKIP ()
 yyFillLabel1:
-	yych = YYPEEK ();
+	yych = YYPEEK ()
 	switch (yych) {
-	case '\t':	fallthrough
-	case '\n':	fallthrough
-	case '\r':	fallthrough
-	case ' ':	goto yy4;
+	case '\t':
+		fallthrough
+	case '\n':
+		fallthrough
+	case '\r':
+		fallthrough
+	case ' ':
+		goto yy4
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yyFillLabel1;
+				goto yyFillLabel1
 			}
 		}
-		goto yy6;
+		goto yy6
 	}
 yy6:
 //line "golang/002_fill_eof_rule.--lang(go).re":115
 	{
 		return 3
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":154
+//line "golang/002_fill_eof_rule.--lang(go).go":172
 yy7:
-	YYSKIP ();
-	YYBACKUP ();
+	YYSKIP ()
+	YYBACKUP ()
 yyFillLabel2:
-	yych = YYPEEK ();
+	yych = YYPEEK ()
 	switch (yych) {
-	case '.':	goto yy10;
-	case '0':	fallthrough
-	case '1':	fallthrough
-	case '2':	fallthrough
-	case '3':	fallthrough
-	case '4':	fallthrough
-	case '5':	fallthrough
-	case '6':	fallthrough
-	case '7':	fallthrough
-	case '8':	fallthrough
-	case '9':	goto yy7;
+	case '.':
+		goto yy10
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy7
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yyFillLabel2;
+				goto yyFillLabel2
 			}
 		}
-		goto yy9;
+		goto yy9
 	}
 yy9:
 //line "golang/002_fill_eof_rule.--lang(go).re":105
@@ -182,55 +211,75 @@ yy9:
 		fmt.Printf("number: %v\n", string(input.data[input.token:input.cursor]))
 		return 1
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":186
+//line "golang/002_fill_eof_rule.--lang(go).go":215
 yy10:
-	YYSKIP ();
+	YYSKIP ()
 yyFillLabel3:
-	yych = YYPEEK ();
+	yych = YYPEEK ()
 	switch (yych) {
-	case '0':	fallthrough
-	case '1':	fallthrough
-	case '2':	fallthrough
-	case '3':	fallthrough
-	case '4':	fallthrough
-	case '5':	fallthrough
-	case '6':	fallthrough
-	case '7':	fallthrough
-	case '8':	fallthrough
-	case '9':	goto yy12;
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy12
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yyFillLabel3;
+				goto yyFillLabel3
 			}
 		}
-		goto yy11;
+		goto yy11
 	}
 yy11:
-	YYRESTORE ();
-	goto yy9;
+	YYRESTORE ()
+	goto yy9
 yy12:
-	YYSKIP ();
+	YYSKIP ()
 yyFillLabel4:
-	yych = YYPEEK ();
+	yych = YYPEEK ()
 	switch (yych) {
-	case '0':	fallthrough
-	case '1':	fallthrough
-	case '2':	fallthrough
-	case '3':	fallthrough
-	case '4':	fallthrough
-	case '5':	fallthrough
-	case '6':	fallthrough
-	case '7':	fallthrough
-	case '8':	fallthrough
-	case '9':	goto yy12;
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy12
 	default:
 		if (YYLESSTHAN (1)) {
 			if (YYFILL () == 0) {
-				goto yyFillLabel4;
+				goto yyFillLabel4
 			}
 		}
-		goto yy14;
+		goto yy14
 	}
 yy14:
 //line "golang/002_fill_eof_rule.--lang(go).re":110
@@ -238,14 +287,14 @@ yy14:
 		fmt.Println("number-2")
 		return 2
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":242
+//line "golang/002_fill_eof_rule.--lang(go).go":291
 yyeofrule2:
 //line "golang/002_fill_eof_rule.--lang(go).re":100
 	{
 		fmt.Println("end")
 		return 0
 	}
-//line "golang/002_fill_eof_rule.--lang(go).go":249
+//line "golang/002_fill_eof_rule.--lang(go).go":298
 }
 //line "golang/002_fill_eof_rule.--lang(go).re":118
 

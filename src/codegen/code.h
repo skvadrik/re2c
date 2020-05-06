@@ -322,6 +322,7 @@ struct Code {
         YYCH,
         YYACCEPT,
         VAR,
+        STMT,
         TEXT,
         TEXT_RAW,
         RAW,
@@ -386,6 +387,13 @@ inline Code *new_code(code_alc_t &alc, Code::Kind kind)
     Code *x = alc.alloct<Code>(1);
     x->kind = kind;
     x->next = NULL;
+    return x;
+}
+
+inline Code *code_stmt(code_alc_t &alc, const char *text)
+{
+    Code *x = new_code(alc, Code::STMT);
+    x->text = text;
     return x;
 }
 

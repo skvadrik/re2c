@@ -17,10 +17,9 @@ std::string output_expr_peek(const opt_t *opts)
 
 std::string output_restore(const opt_t *opts)
 {
-    std::string s = opts->input_api == INPUT_DEFAULT
+    return opts->input_api == INPUT_DEFAULT
         ? opts->yycursor + " = " + opts->yymarker
         : opts->yyrestore + " ()";
-    return s + ";";
 }
 
 std::string output_expr_lessthan(size_t n, const opt_t *opts)
@@ -51,7 +50,6 @@ void output_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
     } else {
         o << "*" << opts->yycursor;
     }
-    o << ";\n";
 }
 
 void output_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
@@ -62,7 +60,6 @@ void output_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
     } else {
         o << "++" << opts->yycursor;
     }
-    o << ";";
 }
 
 void output_backup(std::ostream &o, uint32_t ind, const opt_t *opts)
@@ -73,35 +70,33 @@ void output_backup(std::ostream &o, uint32_t ind, const opt_t *opts)
     } else {
         o << opts->yymarker << " = " << opts->yycursor;
     }
-    o << ";\n";
 }
 
 void output_skip_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
     DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
-        << yych_conv(opts) << "*++" << opts->yycursor << ";\n";
+        << yych_conv(opts) << "*++" << opts->yycursor;
 }
 
 void output_peek_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
     DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
-        << yych_conv(opts) << "*" << opts->yycursor << "++;\n";
+        << yych_conv(opts) << "*" << opts->yycursor << "++";
 }
 
 void output_skip_backup(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
     DASSERT(opts->input_api == INPUT_DEFAULT);
-    o << indent(ind, opts->indString) << opts->yymarker << " = ++"
-        << opts->yycursor << ";\n";
+    o << indent(ind, opts->indString) << opts->yymarker << " = ++" << opts->yycursor;
 }
 
 void output_backup_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
 {
     DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yymarker << " = "
-        << opts->yycursor << "++;\n";
+        << opts->yycursor << "++";
 }
 
 void output_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
@@ -109,7 +104,7 @@ void output_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
     DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
         << yych_conv(opts) << "*(" << opts->yymarker << " = "
-        << opts->yycursor << ");\n";
+        << opts->yycursor << ")";
 }
 
 void output_skip_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
@@ -117,7 +112,7 @@ void output_skip_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
     DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
         << yych_conv(opts) << "*(" << opts->yymarker << " = ++"
-        << opts->yycursor << ");\n";
+        << opts->yycursor << ")";
 }
 
 void output_backup_peek_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
@@ -125,7 +120,7 @@ void output_backup_peek_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
     DASSERT(opts->input_api == INPUT_DEFAULT);
     o << indent(ind, opts->indString) << opts->yych << " = "
         << yych_conv(opts) << "*(" << opts->yymarker << " = "
-        << opts->yycursor << "++);\n";
+        << opts->yycursor << "++)";
 }
 
 } // end namespace re2c

@@ -56,8 +56,8 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
         const bool ul1 = s->label->used;
 
         if (ul1 && dfa.accepts.size() > 1 && backup) {
-            text = o.str(opts->yyaccept).cstr(" = ").u64(save).cstr(";").flush();
-            append(stmts, code_text(alc, text));
+            text = o.str(opts->yyaccept).cstr(" = ").u64(save).flush();
+            append(stmts, code_stmt(alc, text));
         }
         if (ul1 && !opts->eager_skip) {
             append(stmts, code_skip(alc));
@@ -65,8 +65,8 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
         append(stmts, code_nlabel(alc, dfa.initial_label));
         if (opts->dFlag) {
             text = o.str(opts->yydebug).cstr("(").label(*dfa.initial_label)
-                .cstr(", *").str(opts->yycursor).cstr(");").flush();
-            append(stmts, code_text(alc, text));
+                .cstr(", *").str(opts->yycursor).cstr(")").flush();
+            append(stmts, code_stmt(alc, text));
         }
         append(stmts, need(output, s->fill));
         if (backup) {
@@ -80,9 +80,8 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
     }
     case Action::SAVE:
         if (dfa.accepts.size() > 1) {
-            text = o.str(opts->yyaccept).cstr(" = ").u64(s->action.info.save)
-                .cstr(";").flush();
-            append(stmts, code_text(alc, text));
+            text = o.str(opts->yyaccept).cstr(" = ").u64(s->action.info.save).flush();
+            append(stmts, code_stmt(alc, text));
         }
         if (!opts->eager_skip) {
             append(stmts, code_skip(alc));
@@ -136,7 +135,7 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
     if (nacc == 0) return;
 
     text = o.str(output_restore(opts)).flush();
-    append(stmts, code_text(alc, text));
+    append(stmts, code_stmt(alc, text));
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
@@ -170,8 +169,8 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
         append(block, code_text(alc, "};"));
 
         text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yyaccept)
-            .cstr("];").flush();
-        append(block, code_text(alc, text));
+            .cstr("]").flush();
+        append(block, code_stmt(alc, text));
 
         append(stmts, code_block(alc, block, CodeBlock::WRAPPED));
         return;
@@ -336,7 +335,7 @@ void gen_goto(Output &output, CodeList *stmts, const State *from, const State *t
     if (skip) {
         output_skip(o.stream(), 0, opts);
         text = o.flush();
-        code_skip = code_text(alc, text);
+        code_skip = code_stmt(alc, text);
     }
 
     if (skip && !opts->lookahead) {
@@ -351,8 +350,8 @@ void gen_goto(Output &output, CodeList *stmts, const State *from, const State *t
 
     if (to) {
         to->label->used = true;
-        text = o.cstr("goto ").str(opts->labelPrefix).label(*to->label).cstr(";").flush();
-        append(stmts, code_text(alc, text));
+        text = o.cstr("goto ").str(opts->labelPrefix).label(*to->label).flush();
+        append(stmts, code_stmt(alc, text));
     }
 }
 
@@ -387,8 +386,14 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         append(refill, code_text(alc, text));
 
         // YYFILL invocation
-        text = o.str(opts->fill)
-            .cstr(opts->fill_naked ? "" : opts->fill_arg_use ? "();" : ";").flush();
+        o.str(opts->fill);
+        if (!opts->fill_naked) {
+            if (opts->fill_arg_use) {
+                o.cstr("()");
+            }
+            o.cstr(";");
+        }
+        text = o.flush();
         append(refill, code_text(alc, text));
 
         // yyeof label
@@ -396,20 +401,25 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         append(refill, code_slabel(alc, text));
         if (fallback == to) {
             // a label must be followed by a statement
-            append(refill, code_text(alc, ";"));
+            append(refill, code_stmt(alc, ""));
         }
 
     }
     else if (opts->fill_use) {
         // YYFILL invocation
-        const char *if_yyfill = o.str(opts->fill)
-            .cstr(opts->fill_naked ? "" : opts->fill_arg_use ? " () == 0": " == 0")
-            .flush();
+        o.str(opts->fill);
+        if (!opts->fill_naked) {
+            if (opts->fill_arg_use) {
+                o.cstr(" ()");
+            }
+            o.cstr(" == 0");
+        }
+        const char *if_yyfill = o.flush();
 
         // go to retry label (on YYFILL success)
         CodeList *rescan = code_list(alc);
-        text = o.cstr("goto ").str(opts->yyfilllabel).u32(fillidx - 1).cstr(";").flush();
-        append(rescan, code_text(alc, text));
+        text = o.cstr("goto ").str(opts->yyfilllabel).u32(fillidx - 1).flush();
+        append(rescan, code_stmt(alc, text));
 
         append(refill, code_if_then_else(alc, if_yyfill, rescan, NULL));
     }
@@ -425,8 +435,8 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         else {
             o.cstr("eofrule").u64(output.blockid());
         }
-        text = o.cstr(";").flush();
-        append(refill, code_text(alc, text));
+        text = o.flush();
+        append(refill, code_stmt(alc, text));
     }
     else if (fallback != to) {
         // tag actions on the fallback transition
@@ -434,9 +444,8 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
 
         // go to fallback state
         fallback->label->used = true;
-        text = o.cstr("goto ").str(opts->labelPrefix).label(*fallback->label).cstr(";")
-            .flush();
-        append(refill, code_text(alc, text));
+        text = o.cstr("goto ").str(opts->labelPrefix).label(*fallback->label).flush();
+        append(refill, code_stmt(alc, text));
     }
 
     return code_if_then_else(alc, if_refill, refill, NULL);
@@ -458,13 +467,13 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
     if (cmd && dfa.oldstyle_ctxmarker) {
         DASSERT(!opts->stadfa);
         if (generic) {
-            o.str(opts->yybackupctx).cstr(" ();");
+            o.str(opts->yybackupctx).cstr(" ()");
         }
         else {
-            o.str(opts->yyctxmarker).cstr(" = ").str(opts->yycursor).cstr(";");
+            o.str(opts->yyctxmarker).cstr(" = ").str(opts->yycursor);
         }
         text = o.flush();
-        append(tag_actions, code_text(alc, text));
+        append(tag_actions, code_stmt(alc, text));
         return;
     }
 
@@ -475,22 +484,22 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
 
         if (tcmd_t::iscopy(p)) {
             // copy command
-            text = o.str(le).cstr(" = ").str(re).cstr(";").flush();
-            append(tag_actions, code_text(alc, text));
+            text = o.str(le).cstr(" = ").str(re).flush();
+            append(tag_actions, code_stmt(alc, text));
         }
         else if (tcmd_t::isadd(p)) {
             // save command with history
             if (l != r) {
-                text = o.str(le).cstr(" = ").str(re).cstr(";").flush();
-                append(tag_actions, code_text(alc, text));
+                text = o.str(le).cstr(" = ").str(re).flush();
+                append(tag_actions, code_stmt(alc, text));
             }
             // history is reversed, so use a statement sublist and prepend
             CodeList *actions = code_list(alc);
             for (; *h != TAGVER_ZERO; ++h) {
                 const std::string &action = *h == TAGVER_BOTTOM ? opts->yymtagn
                     : delayed ? opts->yymtagpd : opts->yymtagp;
-                text = o.str(action).cstr(" (").str(le).cstr(");").flush();
-                prepend(actions, code_text(alc, text));
+                text = o.str(action).cstr(" (").str(le).cstr(")").flush();
+                prepend(actions, code_stmt(alc, text));
             }
             append(tag_actions, actions);
         }
@@ -498,8 +507,8 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
             // save command without history; generic API
             const std::string &action = *h == TAGVER_BOTTOM ? opts->yystagn
                 : delayed ? opts->yystagpd : opts->yystagp;
-            text = o.str(action).cstr(" (").str(le).cstr(");").flush();
-            append(tag_actions, code_text(alc, text));
+            text = o.str(action).cstr(" (").str(le).cstr(")").flush();
+            append(tag_actions, code_stmt(alc, text));
         }
         else {
             // save command without history; default API
@@ -509,13 +518,12 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
                 x.str(vartag_expr(q->lhs, prefix, expression)).cstr(" = ");
             }
             if (!o.empty()) {
-                text = o.cstr("NULL;").flush();
-                append(tag_actions, code_text(alc, text));
+                text = o.cstr("NULL").flush();
+                append(tag_actions, code_stmt(alc, text));
             }
             if (!o2.empty()) {
-                text = o2.str(opts->yycursor).cstr(delayed ? " - 1" : "").cstr(";")
-                    .flush();
-                append(tag_actions, code_text(alc, text));
+                text = o2.str(opts->yycursor).cstr(delayed ? " - 1" : "").flush();
+                append(tag_actions, code_stmt(alc, text));
             }
         }
     }
@@ -535,8 +543,8 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
     std::string expr;
 
     if (rule.ncap > 0) {
-        text = o.cstr("yynmatch = ").u64(rule.ncap).cstr(";").flush();
-        append(stmts, code_text(alc, text));
+        text = o.cstr("yynmatch = ").u64(rule.ncap).flush();
+        append(stmts, code_stmt(alc, text));
     }
 
     // variable tags
@@ -566,8 +574,8 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 o.str(opts->yycursor).cstr(" = ").str(expr);
             }
         }
-        text = o.cstr(";").flush();
-        append(stmts, code_text(alc, text));
+        text = o.flush();
+        append(stmts, code_stmt(alc, text));
     }
 
     // fixed tags
@@ -604,8 +612,8 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 o.str(opts->yycursor).cstr(" -= ").u64(dist);
             }
         }
-        text = o.cstr(";").flush();
-        append(stmts, code_text(alc, text));
+        text = o.flush();
+        append(stmts, code_stmt(alc, text));
     }
 }
 

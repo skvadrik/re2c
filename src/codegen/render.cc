@@ -46,8 +46,8 @@ static bool oneline_if(const CodeIfTE *code, const opt_t *opts)
     const Code *first = code->if_code->head;
     return first
         && first->next == NULL
-        && first->kind == Code::TEXT
-        && opts->lang == LANG_C // Go requires braces
+        && (first->kind == Code::STMT || first->kind == Code::TEXT)
+        && opts->lang != LANG_GO // Go requires braces
         && code->else_code == NULL
         && code->oneline;
 }
@@ -62,7 +62,9 @@ static void render_if_then_else(RenderContext &rctx, const CodeIfTE *code)
     DASSERT(count_lines_text(code->if_cond) == 0);
 
     if (oneline_if(code, opts)) {
-        os << first->text << std::endl;
+        os << first->text;
+        if (first->kind == Code::STMT) os << ";";
+        os << std::endl;
         DASSERT(count_lines_text(first->text) == 0);
         ++rctx.line;
     }
@@ -145,12 +147,13 @@ static void render_var(RenderContext &rctx, const CodeVar *var)
     ++rctx.line;
 }
 
-static bool oneline_case(const CodeCase *code)
+static bool oneline_case(const CodeCase *code, const opt_t *opts)
 {
     const Code *first = code->body->head;
     return first
         && first->next == NULL
-        && first->kind == Code::TEXT;
+        && first->kind == Code::STMT
+        && opts->lang != LANG_GO; // gofmt prefers cases on a new line
 }
 
 static void render_case(RenderContext &rctx, const CodeCase *code, bool defcase,
@@ -198,7 +201,9 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool defcase,
                 const bool last_case = i == nranges - 1 && c == upp - 1;
                 if (!last_case) {
                     if (opts->lang == LANG_GO) {
-                        os << opts->indString << "fallthrough";
+                        os << std::endl;
+                        os << indent(ind + 1, opts->indString) << "fallthrough";
+                        ++rctx.line;
                     }
                     os << std::endl;
                     ++rctx.line;
@@ -207,8 +212,9 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool defcase,
         }
     }
 
-    if (oneline_case(code)) {
-        os << (noindent ? std::string() : opts->indString) << first->text << std::endl;
+    if (oneline_case(code, opts)) {
+        if (!noindent) os << opts->indString;
+        os << first->text << ";" << std::endl;
         ++rctx.line;
     }
     else {
@@ -329,6 +335,8 @@ void render(RenderContext &rctx, const Code *code)
     const uint32_t ind = rctx.ind;
     uint32_t &line = rctx.line;
 
+    const char *semi = opts->lang == LANG_GO ? "" : ";";
+
     switch (code->kind) {
         case Code::EMPTY:
             break;
@@ -348,6 +356,11 @@ void render(RenderContext &rctx, const Code *code)
             os << code->text << std::endl;
             line += count_lines_text(code->text) + 1;
             break;
+        case Code::STMT:
+            os << indent(ind, opts->indString) << code->text;
+            os << semi << std::endl;
+            line += count_lines_text(code->text) + 1;
+            break;
         case Code::TEXT:
             os << indent(ind, opts->indString) << code->text << std::endl;
             line += count_lines_text(code->text) + 1;
@@ -360,43 +373,52 @@ void render(RenderContext &rctx, const Code *code)
             break;
         case Code::SKIP:
             output_skip(os, ind, opts);
-            os << std::endl;
+            os << semi << std::endl;
             ++line;
             break;
         case Code::PEEK:
             output_peek(os, ind, opts);
+            os << semi << std::endl;
             ++line;
             break;
         case Code::BACKUP:
             output_backup(os, ind, opts);
+            os << semi << std::endl;
             ++line;
             break;
         case Code::PEEK_SKIP:
             output_peek_skip(os, ind, opts);
+            os << semi << std::endl;
             ++line;
             break;
         case Code::SKIP_PEEK:
             output_skip_peek(os, ind, opts);
+            os << semi << std::endl;
             ++line;
             break;
         case Code::SKIP_BACKUP:
             output_skip_backup(os, ind, opts);
+            os << semi << std::endl;
             ++line;
             break;
         case Code::BACKUP_SKIP:
             output_backup_skip(os, ind, opts);
+            os << semi << std::endl;
             ++line;
             break;
         case Code::BACKUP_PEEK:
             output_backup_peek(os, ind, opts);
+            os << semi << std::endl;
             ++line;
             break;
         case Code::BACKUP_PEEK_SKIP:
             output_backup_peek_skip(os, ind, opts);
+            os << semi << std::endl;
             ++line;
             break;
         case Code::SKIP_BACKUP_PEEK:
             output_skip_backup_peek(os, ind, opts);
+            os << semi << std::endl;
             ++line;
             break;
         case Code::LINE_INFO_INPUT:

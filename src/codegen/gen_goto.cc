@@ -203,9 +203,9 @@ static CodeList *gen_gocp(Output &output, const DFA &dfa, const CodeGoCp *go,
     CodeList *stmts = code_list(alc);
 
     CodeList *if_else = gen_gocp_table(output, go->table);
-    text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yych).cstr("];")
+    text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yych).cstr("]")
         .flush();
-    append(if_else, code_text(alc, text));
+    append(if_else, code_stmt(alc, text));
 
     if (go->hgo != NULL) {
         text = o.str(opts->yych).cstr(" & ~0xFF").flush();

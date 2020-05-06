@@ -34,8 +34,8 @@ static void emit_state(Output &output, const State *s, CodeList *stmts)
 
     if (opts->dFlag && (s->action.type != Action::INITIAL)) {
         text = o.str(opts->yydebug).cstr("(").label(*s->label).cstr(", ")
-            .str(output_expr_peek(opts)).cstr(");").flush();
-        append(stmts, code_text(alc, text));
+            .str(output_expr_peek(opts)).cstr(")").flush();
+        append(stmts, code_stmt(alc, text));
     }
 }
 
@@ -77,9 +77,8 @@ void DFA::emit_body(Output &output, CodeList *stmts) const
     // skip it when entering DFA.
     if (head->label->used) {
         initial_label->used = true;
-        text = o.cstr("goto ").str(opts->labelPrefix).label(*initial_label)
-            .cstr(";").flush();
-        append(stmts, code_text(alc, text));
+        text = o.cstr("goto ").str(opts->labelPrefix).label(*initial_label).flush();
+        append(stmts, code_stmt(alc, text));
     }
 
     for (State * s = head; s; s = s->next) {
