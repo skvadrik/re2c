@@ -76,17 +76,13 @@ yy11:
 yy12:
 	yych = *YYCURSOR;
 	if (yych != 'e') goto yy10;
-	++YYCURSOR;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	if (yych != '2') goto yy10;
-	++YYCURSOR;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	if (yych != 'c') goto yy10;
-	++YYCURSOR;
-	yych = *(YYMARKER = YYCURSOR);
+	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych != ':') goto yy10;
-	++YYCURSOR;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	if (yych <= '^') {
 		if (yych <= '@') goto yy17;
 		if (yych <= 'Z') {
@@ -133,7 +129,7 @@ yy18:
 yy20:
 #line 11 "input11.b--eager-skip.re"
 	{ return 0; }
-#line 137 "input11.b--eager-skip.c"
+#line 133 "input11.b--eager-skip.c"
 }
 #line 17 "input11.b--eager-skip.re"
 

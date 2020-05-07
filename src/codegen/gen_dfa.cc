@@ -11,7 +11,6 @@
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
-#include "src/codegen/input_api.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
@@ -22,6 +21,17 @@
 
 
 namespace re2c {
+
+static const char *gen_peek_expr(Scratchbuf &o, const opt_t *opts)
+{
+    if (opts->input_api == INPUT_DEFAULT) {
+        o.cstr("*").str(opts->yycursor);
+    }
+    else {
+        o.str(opts->yypeek).cstr(" ()");
+    }
+    return o.flush();
+}
 
 static void emit_state(Output &output, const State *s, CodeList *stmts)
 {
@@ -34,7 +44,7 @@ static void emit_state(Output &output, const State *s, CodeList *stmts)
 
     if (opts->dFlag && (s->action.type != Action::INITIAL)) {
         text = o.str(opts->yydebug).cstr("(").label(*s->label).cstr(", ")
-            .str(output_expr_peek(opts)).cstr(")").flush();
+            .cstr(gen_peek_expr(o, opts)).cstr(")").flush();
         append(stmts, code_stmt(alc, text));
     }
 }

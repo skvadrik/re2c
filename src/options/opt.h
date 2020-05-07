@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 
-#include "src/codegen/input_api.h"
 #include "src/dfa/dfa.h"
 #include "src/regexp/empty_class_policy.h"
 #include "src/encoding/enc.h"
@@ -26,6 +25,11 @@ enum target_t {
 enum lang_t {
     LANG_C,
     LANG_GO
+};
+
+enum input_api_t {
+    INPUT_DEFAULT,
+    INPUT_CUSTOM
 };
 
 const uint32_t NOEOF = ~0u - 1;

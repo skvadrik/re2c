@@ -750,6 +750,10 @@ public:
 void init_go(CodeGo *go);
 void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
     CodeBitmap *bitmap);
+CodeBmState *find_bitmap(const CodeBitmap *bitmap, const CodeGo *go, const State *s);
+void insert_bitmap(code_alc_t &alc, CodeBitmap *bitmap, const CodeGo *go, const State *s);
+CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap);
+
 void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
     CodeList *stmts);
 void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags);
@@ -758,15 +762,12 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
     bool delayed);
 void gen_goto(Output &output, CodeList *stmts, const State *from, const State *to,
     const DFA &dfa, tcid_t tcid, bool skip, bool eof);
+const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n);
+void gen_code(Output &output, dfas_t &dfas);
+
 void expand(CodegenContext &ctx, Code *code);
 void combine(CodegenContext &ctx, Code *code);
 void render(RenderContext &rctx, const Code *code);
-
-CodeBmState *find_bitmap(const CodeBitmap *bitmap, const CodeGo *go, const State *s);
-void insert_bitmap(code_alc_t &alc, CodeBitmap *bitmap, const CodeGo *go, const State *s);
-CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap);
-
-void output_version_time(std::ostream &o, bool version, bool date);
 
 bool consume(const State *s);
 bool is_print(uint32_t c);
@@ -776,8 +777,7 @@ void printSpan(std::ostream &o, uint32_t l, uint32_t u, uint32_t szcunit, bool e
 std::string tag_expr(const Tag &tag, bool lvalue);
 std::string vartag_name(tagver_t ver, const std::string &prefix);
 std::string vartag_expr(tagver_t ver, const std::string &prefix, const std::string &expression);
-
-void gen_code(Output &output, dfas_t &dfas);
+void output_version_time(std::ostream &o, bool version, bool date);
 
 inline std::string indent(uint32_t n, const std::string &s)
 {

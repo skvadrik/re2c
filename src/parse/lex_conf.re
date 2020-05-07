@@ -1,7 +1,6 @@
 #include "src/util/c99_stdint.h"
 #include <string>
 
-#include "src/codegen/input_api.h"
 #include "src/encoding/enc.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"

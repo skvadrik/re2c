@@ -19,7 +19,6 @@ RE2C = re2c$(EXEEXT)
 # sources
 re2c_HDR = \
 	src/codegen/code.h \
-	src/codegen/input_api.h \
 	src/options/opt.h \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
@@ -90,7 +89,6 @@ re2c_SRC = \
 	src/codegen/gen_goto.cc \
 	src/codegen/gen_program.cc \
 	src/codegen/gen_state.cc \
-	src/codegen/input_api.cc \
 	src/codegen/print.cc \
 	src/codegen/render.cc \
 	src/options/opt.cc \

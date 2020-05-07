@@ -1,7 +1,6 @@
 #include <stddef.h>
 #include <vector>
 
-#include "src/codegen/input_api.h"
 #include "src/options/opt.h"
 #include "src/regexp/re.h"
 #include "src/regexp/tag.h"

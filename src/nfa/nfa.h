@@ -6,7 +6,6 @@
 #include <valarray>
 #include <vector>
 
-#include "src/codegen/input_api.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"

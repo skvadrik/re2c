@@ -12,7 +12,6 @@
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
-#include "src/codegen/input_api.h"
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
@@ -124,6 +123,17 @@ static CodeList *emit_accept_binary(Output &output, const DFA &dfa, const accept
     return stmts;
 }
 
+static const char *gen_restore(Scratchbuf &o, const opt_t *opts)
+{
+    if (opts->input_api == INPUT_DEFAULT) {
+        o.str(opts->yycursor).cstr(" = ").str(opts->yymarker);
+    }
+    else {
+        o.str(opts->yyrestore).cstr(" ()");
+    }
+    return o.flush();
+}
+
 void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t &acc)
 {
     const opt_t *opts = output.block().opts;
@@ -134,7 +144,7 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
 
     if (nacc == 0) return;
 
-    text = o.str(output_restore(opts)).flush();
+    text = gen_restore(o, opts);
     append(stmts, code_stmt(alc, text));
 
     // only one possible 'yyaccept' value: unconditional jump
@@ -280,10 +290,10 @@ CodeList *need(Output &output, size_t some)
         Code *yyfill = code_text(alc, text);
 
         if (opts->fill_check) {
-            const char *if_cond = o.str(output_expr_lessthan(some, opts)).flush();
+            text = gen_lessthan(o, opts, some);
             CodeList *if_then = code_list(alc);
             append(if_then, yyfill);
-            append(stmts, code_if_then_else(alc, if_cond, if_then, NULL));
+            append(stmts, code_if_then_else(alc, text, if_then, NULL));
         }
         else {
             append(stmts, yyfill);
@@ -331,21 +341,14 @@ void gen_goto(Output &output, CodeList *stmts, const State *from, const State *t
         append(stmts, gen_on_eof(output, dfa, from, to));
     }
 
-    Code *code_skip = NULL;
-    if (skip) {
-        output_skip(o.stream(), 0, opts);
-        text = o.flush();
-        code_skip = code_stmt(alc, text);
-    }
-
     if (skip && !opts->lookahead) {
-        append(stmts, code_skip);
+        append(stmts, code_skip(alc));
     }
 
     gen_settags(output, stmts, dfa, tcid, false /* delayed */);
 
     if (skip && opts->lookahead) {
-        append(stmts, code_skip);
+        append(stmts, code_skip(alc));
     }
 
     if (to) {
@@ -367,7 +370,7 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
     const char *text;
 
     // check for the end of input
-    const char *if_refill = o.str(output_expr_lessthan(1, opts)).flush();
+    const char *if_refill = gen_lessthan(o, opts, 1);
 
     CodeList *refill = code_list(alc);
 
@@ -645,6 +648,21 @@ bool endstate(const State *s)
     DASSERT(s->go.nspans > 0);
     const Action::type_t &a = s->go.span[0].to->action.type;
     return s->go.nspans == 1 && (a == Action::RULE || a == Action::ACCEPT);
+}
+
+const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)
+{
+    if (opts->input_api == INPUT_CUSTOM) {
+        o.str(opts->yylessthan).cstr(" (").u64(n).cstr(")");
+    }
+    else if (n == 1) {
+        o.str(opts->yylimit).cstr(" <= ").str(opts->yycursor);
+    }
+    else {
+        o.cstr("(").str(opts->yylimit).cstr(" - ").str(opts->yycursor)
+            .cstr(") < ").u64(n);
+    }
+    return o.flush();
 }
 
 } // namespace re2c

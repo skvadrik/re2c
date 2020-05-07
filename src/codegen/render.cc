@@ -328,14 +328,152 @@ static void render_func(RenderContext &rctx, const CodeFunc *func)
     ++rctx.line;
 }
 
+static inline void yych_conv(std::ostream &os, const opt_t *opts)
+{
+    if (opts->yychConversion) {
+        os << "(" <<  opts->yyctype << ")";
+    }
+}
+
+static inline void render_stmt_end(RenderContext &rctx)
+{
+    if (rctx.opts->lang != LANG_GO) rctx.os << ";";
+    rctx.os << std::endl;
+    ++rctx.line;
+}
+
+static void render_peek(RenderContext &rctx)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
+    yych_conv(os, opts);
+    if (opts->input_api == INPUT_CUSTOM) {
+        os << opts->yypeek << " ()";
+    }
+    else {
+        os << "*" << opts->yycursor;
+    }
+    render_stmt_end(rctx);
+}
+
+static void render_skip(RenderContext &rctx)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    os << indent(rctx.ind, opts->indString);
+    if (opts->input_api == INPUT_CUSTOM) {
+        os << opts->yyskip << " ()";
+    }
+    else {
+        os << "++" << opts->yycursor;
+    }
+    render_stmt_end(rctx);
+}
+
+static void render_backup(RenderContext &rctx)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    os << indent(rctx.ind, opts->indString);
+    if (opts->input_api == INPUT_CUSTOM) {
+        os << opts->yybackup << " ()";
+    }
+    else {
+        os << opts->yymarker << " = " << opts->yycursor;
+    }
+    render_stmt_end(rctx);
+}
+
+static void render_skip_peek(RenderContext &rctx)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    DASSERT(opts->input_api == INPUT_DEFAULT);
+    os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
+    yych_conv(os, opts);
+    os << "*++" << opts->yycursor;
+    render_stmt_end(rctx);
+}
+
+static void render_peek_skip(RenderContext &rctx)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    DASSERT(opts->input_api == INPUT_DEFAULT);
+    os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
+    yych_conv(os, opts);
+    os << "*" << opts->yycursor << "++";
+    render_stmt_end(rctx);
+}
+
+static void render_skip_backup(RenderContext &rctx)
+{
+    const opt_t *opts = rctx.opts;
+
+    DASSERT(opts->input_api == INPUT_DEFAULT);
+    rctx.os << indent(rctx.ind, opts->indString) << opts->yymarker << " = ++"
+        << opts->yycursor;
+    render_stmt_end(rctx);
+}
+
+static void render_backup_skip(RenderContext &rctx)
+{
+    const opt_t *opts = rctx.opts;
+
+    DASSERT(opts->input_api == INPUT_DEFAULT);
+    rctx.os << indent(rctx.ind, opts->indString) << opts->yymarker << " = "
+        << opts->yycursor << "++";
+    render_stmt_end(rctx);
+}
+
+static void render_backup_peek(RenderContext &rctx)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    DASSERT(opts->input_api == INPUT_DEFAULT);
+    os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
+    yych_conv(os, opts);
+    os << "*(" << opts->yymarker << " = " << opts->yycursor << ")";
+    render_stmt_end(rctx);
+}
+
+static void render_skip_backup_peek(RenderContext &rctx)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    DASSERT(opts->input_api == INPUT_DEFAULT);
+    os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
+    yych_conv(os, opts);
+    os << "*(" << opts->yymarker << " = ++" << opts->yycursor << ")";
+    render_stmt_end(rctx);
+}
+
+static void render_backup_peek_skip(RenderContext &rctx)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    DASSERT(opts->input_api == INPUT_DEFAULT);
+    os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
+    yych_conv(os, opts);
+    os << "*(" << opts->yymarker << " = " << opts->yycursor << "++)";
+    render_stmt_end(rctx);
+}
+
 void render(RenderContext &rctx, const Code *code)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
     const uint32_t ind = rctx.ind;
     uint32_t &line = rctx.line;
-
-    const char *semi = opts->lang == LANG_GO ? "" : ";";
 
     switch (code->kind) {
         case Code::EMPTY:
@@ -358,8 +496,8 @@ void render(RenderContext &rctx, const Code *code)
             break;
         case Code::STMT:
             os << indent(ind, opts->indString) << code->text;
-            os << semi << std::endl;
-            line += count_lines_text(code->text) + 1;
+            line += count_lines_text(code->text);
+            render_stmt_end(rctx);
             break;
         case Code::TEXT:
             os << indent(ind, opts->indString) << code->text << std::endl;
@@ -372,54 +510,34 @@ void render(RenderContext &rctx, const Code *code)
             }
             break;
         case Code::SKIP:
-            output_skip(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_skip(rctx);
             break;
         case Code::PEEK:
-            output_peek(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_peek(rctx);
             break;
         case Code::BACKUP:
-            output_backup(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_backup(rctx);
             break;
         case Code::PEEK_SKIP:
-            output_peek_skip(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_peek_skip(rctx);
             break;
         case Code::SKIP_PEEK:
-            output_skip_peek(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_skip_peek(rctx);
             break;
         case Code::SKIP_BACKUP:
-            output_skip_backup(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_skip_backup(rctx);
             break;
         case Code::BACKUP_SKIP:
-            output_backup_skip(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_backup_skip(rctx);
             break;
         case Code::BACKUP_PEEK:
-            output_backup_peek(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_backup_peek(rctx);
             break;
         case Code::BACKUP_PEEK_SKIP:
-            output_backup_peek_skip(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_backup_peek_skip(rctx);
             break;
         case Code::SKIP_BACKUP_PEEK:
-            output_skip_backup_peek(os, ind, opts);
-            os << semi << std::endl;
-            ++line;
+            render_skip_backup_peek(rctx);
             break;
         case Code::LINE_INFO_INPUT:
             render_line_info(os, code->loc.line,

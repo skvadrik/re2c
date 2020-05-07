@@ -84,8 +84,8 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
 
         if (opts->eof != NOEOF) {
             // TODO: render this as a separate statement
-            o.cstr("if (").str(output_expr_lessthan(1, opts)).cstr(")")
-                .cstr(" goto ").str(opts->labelPrefix).cstr("eof").u32(i).cstr("; ");
+            o.cstr("if (").cstr(gen_lessthan(o, opts, 1)).cstr(")");
+            o.cstr(" goto ").str(opts->labelPrefix).cstr("eof").u32(i).cstr("; ");
         }
         text = o.cstr("goto ").str(opts->yyfilllabel).u32(i).flush();
         append(stmts, code_stmt(alc, text));
