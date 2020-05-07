@@ -133,27 +133,42 @@ static void gen_yyaccept_def(const opt_t *opts, Code *code, bool used_yyaccept)
     }
 }
 
-static void gen_yymaxfill(Scratchbuf &o, const opt_t *opts, Code *code,
-    size_t max_fill)
+static void gen_yymaxfill(Scratchbuf &o, const opt_t *opts, Code *code, size_t maxfill)
 {
-    if (opts->target == TARGET_CODE) {
-        code->kind = Code::TEXT;
-        code->text = o.cstr("#define YYMAXFILL ").u64(max_fill).flush();
-    }
-    else {
+    if (opts->target != TARGET_CODE) {
         code->kind = Code::EMPTY;
+        return;
+    }
+
+    switch (opts->lang) {
+        case LANG_C:
+            code->kind = Code::TEXT;
+            code->text = o.cstr("#define YYMAXFILL ").u64(maxfill).flush();
+            break;
+        case LANG_GO:
+            code->kind = Code::STMT;
+            code->text = o.cstr("var YYMAXFILL int = ").u64(maxfill).flush();
+            break;
     }
 }
 
 static void gen_yymaxnmatch(Scratchbuf &o, const opt_t *opts, Code *code,
-    size_t max_nmatch)
+    size_t maxnmatch)
 {
-    if (opts->target == TARGET_CODE && opts->posix_syntax) {
-        code->kind = Code::TEXT;
-        code->text = o.cstr("#define YYMAXNMATCH ").u64(max_nmatch).flush();
-    }
-    else {
+    if (opts->target != TARGET_CODE) {
         code->kind = Code::EMPTY;
+        return;
+    }
+
+    switch (opts->lang) {
+        case LANG_C:
+            code->kind = Code::TEXT;
+            code->text = o.cstr("#define YYMAXNMATCH ").u64(maxnmatch).flush();
+            break;
+        case LANG_GO:
+            code->kind = Code::STMT;
+            code->text = o.cstr("var YYMAXNMATCH int = ").u64(maxnmatch).flush();
+            break;
     }
 }
 
