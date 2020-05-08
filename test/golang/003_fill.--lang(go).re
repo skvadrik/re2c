@@ -7,6 +7,7 @@ package main
 import "fmt"
 import "os"
 
+/*!max:re2c*/
 var SIZE int = 11
 
 type YYCTYPE byte
@@ -48,18 +49,20 @@ func restore(input *Input) func() {
 	}
 }
 
-func fill(input *Input) func() int {
+func fill(input *Input) func(int) int {
 	in := input
-	return func() int {
-		// If nothing can be read, fail.
+	return func(need int) int {
+		// End of input has already been reached, nothing to do.
 		if in.eof {
+			fmt.Println("fill error: unexpected EOF")
 			return 1
 		}
 
-		// Check if at least some space can be freed.
-		if in.token == 0 {
-			// In real life can reallocate a larger buffer.
-			panic("fill error: lexeme too long")
+		// Check if after moving the current lexeme to the beginning
+		// of buffer there will be enough free space.
+		if SIZE-(in.cursor-in.token) < need {
+			fmt.Println("fill error: lexeme too long")
+			return 2
 		}
 
 		// Discard everything up to the start of the current lexeme,
@@ -73,16 +76,19 @@ func fill(input *Input) func() int {
 		// Read new data (as much as possible to fill the buffer).
 		n, _ := in.file.Read(in.data[in.limit:SIZE])
 		in.limit += n
-		in.data[in.limit] = 0
-		fmt.Printf("fill: %v '%s'\n", in.data[:in.limit+1],
+		fmt.Printf("fill(%d): %v '%s'\n", need, in.data[:in.limit+1],
 			string(in.data[:in.limit]))
 
 		// If read less than expected, this is the end of input.
 		in.eof = in.limit < SIZE
 
-		// If nothing has been read, fail.
-		if n == 0 {
-			return 1
+		// If end of input, add padding so that the lexer can read
+		// the remaining characters at the end of buffer.
+		if in.eof {
+			for i := 0; i < YYMAXFILL; i += 1 {
+				in.data[in.limit+i] = 0
+			}
+			in.limit += YYMAXFILL
 		}
 
 		return 0
@@ -106,14 +112,15 @@ func Lex(in *Input) int {
 	in.token = in.cursor
 
 	/*!re2c
-	re2c:eof = 0;
+	re2c:define:YYFILL = "if YYFILL(@@) != 0 { return -2 }";
+	re2c:define:YYFILL:naked = 1;
 
 	* {
 		fmt.Println("error")
 		return -1
 	}
 
-	$ {
+	"\x00" {
 		fmt.Println("end")
 		return 0
 	}
@@ -139,21 +146,18 @@ func test(data string) (result int) {
 
 	f, _ := os.Create(tmpfile)
 	f.WriteString(data)
+	f.WriteString("\000") // lexer expects NULL-terminator
 	f.Seek(0, 0)
 
 
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println(r)
-			result = -2
-		}
 		f.Close()
 		os.Remove(tmpfile)
 	}()
 
 	in := &Input{
 		file:   f,
-		data:   make([]byte, SIZE+1),
+		data:   make([]byte, SIZE+YYMAXFILL),
 		cursor: SIZE,
 		marker: SIZE,
 		token:  SIZE,
@@ -172,25 +176,27 @@ func test(data string) (result int) {
 func main() {
 	var s string
 
-	// Succeeds, the lexer needs 1 character ahead.
-	s = "     1234567890     "
+	// Succeeds, the lexer has enough characters ahead.
+	s = "     123456789      "
 	if test(s) != 0 {
-		panic("expected 'number: 1234567890'")
+		panic("expected 'number: 123456789'")
 	}
 
-	// Fails, the lexer needs 1 character ahead, but there is no space.
-	s = "     12345678901    "
+	// Fails, there is no space for the needed characters.
+	s = "     1234567890     "
 	if test(s) != -2 {
 		panic("expected 'fill error: lexeme too long'")
 	}
 
-	// Succeeds, the lexer needs 1 character ahead.
+	// Succeeds, the lexer has enough characters ahead
+	// (although the same lexeme length as the previous case,
+	// YYFILL argument is smaller in this state).
 	s = "     12345-6789     "
 	if test(s) != 0 {
 		panic("expected 'number: 12345-6789'")
 	}
 
-	// Fails, the lexer needs 1 character ahead, but there is no space.
+	// Fails, there is no space for any characters.
 	s = "     12345-67890     "
 	if test(s) != -2 {
 		panic("expected 'fill error: lexeme too long'")
