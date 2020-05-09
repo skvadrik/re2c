@@ -16,58 +16,88 @@ type Input struct {
 	eof    bool
 }
 
-func fill(in *Input) int {
-	// If nothing can be read, fail.
-	if in.eof {
-		return 1
+func peek(in *Input) func() YYCTYPE {
+	return func() YYCTYPE {
+		return YYCTYPE(in.data[in.cursor])
 	}
+}
 
-	// Check if at least some space can be freed.
-	if in.token == 0 {
-		// In real life can reallocate a larger buffer.
-		panic("fill error: lexeme too long")
+func skip(in *Input) func() {
+	return func() {
+		in.cursor++
 	}
+}
 
-	// Discard everything up to the start of the current lexeme,
-	// shift buffer contents and adjust offsets.
-	copy(in.data[0:], in.data[in.token:in.limit])
-	in.cursor -= in.token
-	in.marker -= in.token
-	in.limit -= in.token
-	in.token = 0
-
-	// Read new data (as much as possible to fill the buffer).
-	n, _ := in.file.Read(in.data[in.limit:SIZE])
-	in.limit += n
-	in.data[in.limit] = 0
-	fmt.Printf("fill: %v '%s'\n", in.data[:in.limit+1],
-		string(in.data[:in.limit]))
-
-	// If read less than expected, this is the end of input.
-	in.eof = in.limit < SIZE
-
-	// If nothing has been read, fail.
-	if n == 0 {
-		return 1
+func backup(in *Input) func() {
+	return func() {
+		in.marker = in.cursor
 	}
+}
 
-	return 0
+func restore(in *Input) func() {
+	return func() {
+		in.cursor = in.marker
+	}
+}
+
+func fill(in *Input) func() int {
+	return func() int {
+		// If nothing can be read, fail.
+		if in.eof {
+			return 1
+		}
+
+		// Check if at least some space can be freed.
+		if in.token == 0 {
+			// In real life can reallocate a larger buffer.
+			panic("fill error: lexeme too long")
+		}
+
+		// Discard everything up to the start of the current lexeme,
+		// shift buffer contents and adjust offsets.
+		copy(in.data[0:], in.data[in.token:in.limit])
+		in.cursor -= in.token
+		in.marker -= in.token
+		in.limit -= in.token
+		in.token = 0
+
+		// Read new data (as much as possible to fill the buffer).
+		n, _ := in.file.Read(in.data[in.limit:SIZE])
+		in.limit += n
+		in.data[in.limit] = 0
+		fmt.Printf("fill: %v '%s'\n", in.data[:in.limit+1],
+			string(in.data[:in.limit]))
+
+		// If read less than expected, this is the end of input.
+		in.eof = in.limit < SIZE
+
+		// If nothing has been read, fail.
+		if n == 0 {
+			return 1
+		}
+
+		return 0
+	}
+}
+
+func lessthan(in *Input) func(int) bool {
+	return func(n int) bool {
+		return in.limit-in.cursor < n
+	}
 }
 
 func Lex(in *Input) int {
+	YYPEEK := peek(in)
+	YYSKIP := skip(in)
+	YYBACKUP := backup(in)
+	YYRESTORE := restore(in)
+	YYFILL := fill(in)
+	YYLESSTHAN := lessthan(in)
 	in.token = in.cursor
 
 	/*!re2c
 	re2c:flags:input = custom;
 	re2c:eof = 0;
-	re2c:define:YYPEEK = "YYCTYPE(in.data[in.cursor])";
-	re2c:define:YYSKIP = "in.cursor += 1";
-	re2c:define:YYBACKUP  = "in.marker = in.cursor";
-	re2c:define:YYRESTORE = "in.cursor = in.marker";
-	re2c:define:YYLESSTHAN = "in.limit-in.cursor < @@";
-	re2c:define:YYFILL = "fill(in) == 0";
-	re2c:define:YYFILL:naked = 1;
-	re2c:decorate = 0;
 
 	* {
 		fmt.Println("error")

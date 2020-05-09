@@ -350,7 +350,8 @@ static void render_peek(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     if (opts->input_api == INPUT_CUSTOM) {
-        os << opts->yypeek << " ()";
+        os << opts->yypeek;
+        if (opts->decorate) os << " ()";
     }
     else {
         os << "*" << opts->yycursor;
@@ -365,7 +366,8 @@ static void render_skip(RenderContext &rctx)
 
     os << indent(rctx.ind, opts->indString);
     if (opts->input_api == INPUT_CUSTOM) {
-        os << opts->yyskip << " ()";
+        os << opts->yyskip;
+        if (opts->decorate) os << " ()";
     }
     else {
         os << "++" << opts->yycursor;
@@ -380,7 +382,8 @@ static void render_backup(RenderContext &rctx)
 
     os << indent(rctx.ind, opts->indString);
     if (opts->input_api == INPUT_CUSTOM) {
-        os << opts->yybackup << " ()";
+        os << opts->yybackup;
+        if (opts->decorate) os << " ()";
     }
     else {
         os << opts->yymarker << " = " << opts->yycursor;

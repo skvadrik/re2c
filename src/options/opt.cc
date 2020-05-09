@@ -80,6 +80,7 @@ void mutopt_t::fix(const conopt_t *globopts)
             yybm = Opt::baseopt.yybm;
             yytarget = Opt::baseopt.yytarget;
             input_api = Opt::baseopt.input_api;
+            decorate = Opt::baseopt.decorate;
             yycursor = Opt::baseopt.yycursor;
             yymarker = Opt::baseopt.yymarker;
             yyctxmarker = Opt::baseopt.yyctxmarker;
@@ -181,6 +182,7 @@ void mutopt_t::fix(const conopt_t *globopts)
     }
     if (input_api != INPUT_CUSTOM)
     {
+        decorate = Opt::baseopt.decorate;
         yypeek = Opt::baseopt.yypeek;
         yyskip = Opt::baseopt.yyskip;
         yybackup = Opt::baseopt.yybackup;

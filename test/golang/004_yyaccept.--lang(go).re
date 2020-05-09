@@ -1,56 +1,17 @@
-/*!re2c
-	re2c:flags:input = custom;
-*/
-
 package main
 
-type YYCTYPE byte
-type Input struct {
-	data   []YYCTYPE
-	cursor int
-	marker int
-}
-
-func peek(input *Input) func() YYCTYPE {
-	in := input
-	return func() YYCTYPE {
-		return in.data[in.cursor]
-	}
-}
-
-func skip(input *Input) func() {
-	in := input
-	return func() {
-		in.cursor++
-	}
-}
-
-func backup(input *Input) func() {
-	in := input
-	return func() {
-		in.marker = in.cursor
-	}
-}
-
-func restore(input *Input) func() {
-	in := input
-	return func() {
-		in.cursor = in.marker
-	}
-}
-
 func Lex(str string) int {
-	in := &Input{
-		data:   []YYCTYPE(str),
-		cursor: 0,
-	}
-	YYPEEK := peek(in)
-	YYSKIP := skip(in)
-	YYBACKUP := backup(in)
-	YYRESTORE := restore(in)
+	var cursor, marker int
 
 	/*!re2c
+	re2c:flags:input = custom;
 	re2c:yyfill:enable = 0;
+	re2c:define:YYCTYPE = byte;
+	re2c:define:YYPEEK = "str[cursor]";
+	re2c:define:YYSKIP = "cursor += 1";
+	re2c:define:YYBACKUP  = "marker = cursor";
+	re2c:define:YYRESTORE = "cursor = marker";
+	re2c:decorate = 0;
 
 	end = [\x00];
 

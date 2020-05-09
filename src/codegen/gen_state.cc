@@ -129,7 +129,8 @@ static const char *gen_restore(Scratchbuf &o, const opt_t *opts)
         o.str(opts->yycursor).cstr(" = ").str(opts->yymarker);
     }
     else {
-        o.str(opts->yyrestore).cstr(" ()");
+        o.str(opts->yyrestore);
+        if (opts->decorate) o.cstr(" ()");
     }
     return o.flush();
 }
@@ -501,7 +502,14 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
             for (; *h != TAGVER_ZERO; ++h) {
                 const std::string &action = *h == TAGVER_BOTTOM ? opts->yymtagn
                     : delayed ? opts->yymtagpd : opts->yymtagp;
-                text = o.str(action).cstr(" (").str(le).cstr(")").flush();
+                if (opts->decorate) {
+                    text = o.str(action).cstr(" (").str(le).cstr(")").flush();
+                }
+                else {
+                    std::string s = action;
+                    strrreplace(s, "@@", le);
+                    text = o.str(s).flush();
+                }
                 prepend(actions, code_stmt(alc, text));
             }
             append(tag_actions, actions);
@@ -510,7 +518,14 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
             // save command without history; generic API
             const std::string &action = *h == TAGVER_BOTTOM ? opts->yystagn
                 : delayed ? opts->yystagpd : opts->yystagp;
-            text = o.str(action).cstr(" (").str(le).cstr(")").flush();
+            if (opts->decorate) {
+                text = o.str(action).cstr(" (").str(le).cstr(")").flush();
+            }
+            else {
+                std::string s = action;
+                strrreplace(s, "@@", le);
+                text = o.str(s).flush();
+            }
             append(tag_actions, code_stmt(alc, text));
         }
         else {
@@ -653,7 +668,15 @@ bool endstate(const State *s)
 const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)
 {
     if (opts->input_api == INPUT_CUSTOM) {
-        o.str(opts->yylessthan).cstr(" (").u64(n).cstr(")");
+        if (opts->decorate) {
+            o.str(opts->yylessthan).cstr(" (").u64(n).cstr(")");
+        }
+        else {
+            std::string s = opts->yylessthan;
+            const char *arg = o.u64(n).flush();
+            strrreplace(s, "@@", arg);
+            o.str(s);
+        }
     }
     else if (n == 1) {
         o.str(opts->yylimit).cstr(" <= ").str(opts->yycursor);
