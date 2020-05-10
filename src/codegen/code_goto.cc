@@ -72,7 +72,7 @@ static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
         }
     }
 
-    DASSERT(range - ranges == 2 * nspans);
+    DASSERT(static_cast<uint32_t>(range - ranges) == 2 * nspans);
     go->ncases = static_cast<uint32_t>(cases - go->cases);
 
     // find default case
