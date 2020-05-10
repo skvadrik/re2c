@@ -298,8 +298,8 @@ end:
         error ("no source file");
         return EXIT_FAIL;
     }
-    globopts.fix();
-    opts.fix_defaults();
+    opts.fix_conopt();
+    opts.fix_mutopt_defaults();
 
     return OK;
 

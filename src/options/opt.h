@@ -211,7 +211,6 @@ struct conopt_t {
 #undef CONSTOPT1
 #undef CONSTOPT
     {}
-    void fix();
     FORBID_COPY(conopt_t);
 };
 
@@ -230,7 +229,6 @@ struct mutopt_t {
 #undef MUTOPT1
 #undef MUTOPT
     {}
-    void fix(const conopt_t *globopts, const mutopt_t &defaults);
     FORBID_COPY(mutopt_t);
 };
 
@@ -312,7 +310,9 @@ private:
 public:
     explicit Opt(const conopt_t &globopts);
     const opt_t *snapshot();
-    void fix_defaults();
+    void fix_conopt();
+    void fix_mutopt_defaults();
+    void fix_mutopt();
     void restore(const opt_t *opts);
     bool source(const char *s);
 

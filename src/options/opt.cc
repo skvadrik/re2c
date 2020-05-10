@@ -4,262 +4,6 @@
 
 namespace re2c {
 
-void conopt_t::fix()
-{
-    if (target == TARGET_SKELETON) {
-        fFlag = false;
-    }
-
-    if (!lookahead) {
-        eager_skip = true;
-    }
-
-    // append directory separator '/' to all paths that do not have it
-    for (size_t i = 0; i < incpaths.size(); ++i) {
-        std::string &p = incpaths[i];
-        const char c = p.empty() ? 0 : *p.rbegin();
-        if (c != '/' && c != '\\') {
-            p.push_back('/');
-        }
-    }
-}
-
-void mutopt_t::fix(const conopt_t *globopts, const mutopt_t &defaults)
-{
-    // some options either make no sense or must have fixed value
-    // with current target: reset them to default
-    switch (globopts->target) {
-        case TARGET_DOT:
-            // default code generation options
-            sFlag = defaults.sFlag;
-            bFlag = defaults.bFlag;
-            gFlag = defaults.gFlag;
-            cGotoThreshold = defaults.cGotoThreshold;
-            eof = defaults.eof;
-            sentinel = defaults.sentinel;
-            // default environment-insensitive formatting
-            yybmHexTable = defaults.yybmHexTable;
-            // fallthrough
-        case TARGET_SKELETON:
-            // output files
-            header_file = "";
-            // default line information
-            iFlag = defaults.iFlag;
-            // default EOF mode
-            eof = defaults.eof;
-            sentinel = defaults.sentinel;
-            // default environment-sensitive formatting
-            topIndent = defaults.topIndent;
-            indString = defaults.indString;
-            condDivider = defaults.condDivider;
-            condDividerParam = defaults.condDividerParam;
-            // default environment bindings
-            yycondtype = defaults.yycondtype;
-            cond_get = defaults.cond_get;
-            cond_get_naked = defaults.cond_get_naked;
-            cond_set = defaults.cond_set;
-            cond_set_arg = defaults.cond_set_arg;
-            cond_set_naked = defaults.cond_set_naked;
-            yyctable = defaults.yyctable;
-            condPrefix = defaults.condPrefix;
-            condEnumPrefix = defaults.condEnumPrefix;
-            condGoto = defaults.condGoto;
-            condGotoParam = defaults.condGotoParam;
-            state_get = defaults.state_get;
-            state_get_naked = defaults.state_get_naked;
-            state_set = defaults.state_set;
-            state_set_arg = defaults.state_set_arg;
-            state_set_naked = defaults.state_set_naked;
-            tags_prefix = defaults.tags_prefix;
-            tags_expression = defaults.tags_expression;
-            yyfilllabel = defaults.yyfilllabel;
-            yynext = defaults.yynext;
-            yyaccept = defaults.yyaccept;
-            bUseStateAbort = defaults.bUseStateAbort;
-            bUseStateNext = defaults.bUseStateNext;
-            yybm = defaults.yybm;
-            yytarget = defaults.yytarget;
-            input_api = defaults.input_api;
-            decorate = defaults.decorate;
-            yycursor = defaults.yycursor;
-            yymarker = defaults.yymarker;
-            yyctxmarker = defaults.yyctxmarker;
-            yylimit = defaults.yylimit;
-            yypeek = defaults.yypeek;
-            yyskip = defaults.yyskip;
-            yybackup = defaults.yybackup;
-            yybackupctx = defaults.yybackupctx;
-            yyrestore = defaults.yyrestore;
-            yyrestorectx = defaults.yyrestorectx;
-            yyrestoretag = defaults.yyrestoretag;
-            yystagn = defaults.yystagn;
-            yystagp = defaults.yystagp;
-            yystagpd = defaults.yystagpd;
-            yymtagn = defaults.yymtagn;
-            yymtagp = defaults.yymtagp;
-            yymtagpd = defaults.yymtagpd;
-            yylessthan = defaults.yylessthan;
-            dFlag = defaults.dFlag;
-            yydebug = defaults.yydebug;
-            yyctype = defaults.yyctype;
-            yych = defaults.yych;
-            bEmitYYCh = defaults.bEmitYYCh;
-            yychConversion = defaults.yychConversion;
-            fill = defaults.fill;
-            fill_use = defaults.fill_use;
-            fill_check = defaults.fill_check;
-            fill_arg = defaults.fill_arg;
-            fill_arg_use = defaults.fill_arg_use;
-            fill_naked = defaults.fill_naked;
-            labelPrefix = defaults.labelPrefix;
-            startlabel = defaults.startlabel;
-            startlabel_force = defaults.startlabel_force;
-            break;
-        case TARGET_CODE:
-            break;
-    }
-
-    if (bCaseInsensitive) {
-        bCaseInverted = defaults.bCaseInverted;
-    }
-
-    // respect hierarchy
-    if (!globopts->cFlag) {
-        yycondtype = defaults.yycondtype;
-        cond_get = defaults.cond_get;
-        cond_get_naked = defaults.cond_get_naked;
-        cond_set = defaults.cond_set;
-        cond_set_arg = defaults.cond_set_arg;
-        cond_set_naked = defaults.cond_set_naked;
-        yyctable = defaults.yyctable;
-        condPrefix = defaults.condPrefix;
-        condEnumPrefix = defaults.condEnumPrefix;
-        condDivider = defaults.condDivider;
-        condDividerParam = defaults.condDividerParam;
-        condGoto = defaults.condGoto;
-        condGotoParam = defaults.condGotoParam;
-    }
-    if (!globopts->fFlag) {
-        state_get = defaults.state_get;
-        state_get_naked = defaults.state_get_naked;
-        state_set = defaults.state_set;
-        state_set_arg = defaults.state_set_arg;
-        state_set_naked = defaults.state_set_naked;
-        yyfilllabel = defaults.yyfilllabel;
-        yynext = defaults.yynext;
-        yyaccept = defaults.yyaccept;
-        bUseStateAbort = defaults.bUseStateAbort;
-        bUseStateNext = defaults.bUseStateNext;
-    }
-    if (posix_semantics) {
-        posix_syntax = true;
-    }
-    if (posix_syntax) {
-        tags = true;
-    }
-    if (!tags) {
-        tags_prefix = defaults.tags_prefix;
-        tags_expression = defaults.tags_expression;
-    }
-    if (!bFlag) {
-        yybmHexTable = defaults.yybmHexTable;
-        yybm = defaults.yybm;
-    }
-    if (!gFlag) {
-        cGotoThreshold = defaults.cGotoThreshold;
-        yytarget = defaults.yytarget;
-    }
-    if (input_api != INPUT_DEFAULT) {
-        yycursor = defaults.yycursor;
-        yymarker = defaults.yymarker;
-        yyctxmarker = defaults.yyctxmarker;
-        yylimit = defaults.yylimit;
-    }
-    if (input_api != INPUT_CUSTOM) {
-        decorate = defaults.decorate;
-        yypeek = defaults.yypeek;
-        yyskip = defaults.yyskip;
-        yybackup = defaults.yybackup;
-        yybackupctx = defaults.yybackupctx;
-        yyrestore = defaults.yyrestore;
-        yyrestorectx = defaults.yyrestorectx;
-        yyrestoretag = defaults.yyrestoretag;
-        yystagn = defaults.yystagn;
-        yystagp = defaults.yystagp;
-        yystagpd = defaults.yystagpd;
-        yymtagn = defaults.yymtagn;
-        yymtagp = defaults.yymtagp;
-        yymtagpd = defaults.yymtagpd;
-    }
-    if (!dFlag) {
-        yydebug = defaults.yydebug;
-    }
-    if (!fill_use) {
-        fill = defaults.fill;
-        fill_check = defaults.fill_check;
-        fill_arg = defaults.fill_arg;
-        fill_arg_use = defaults.fill_arg_use;
-        fill_naked = defaults.fill_naked;
-    }
-
-    // force individual options
-    if (globopts->target == TARGET_DOT) {
-        iFlag = true;
-    }
-    else if (globopts->target == TARGET_SKELETON) {
-        if (globopts->lang != LANG_C) {
-            fatal("skeleton is not supported for non-C language backends");
-        }
-        iFlag = true;
-        input_api = INPUT_CUSTOM;
-        indString = "    ";
-        topIndent = 2;
-    }
-    switch (encoding.type()) {
-        case Enc::UCS2:
-        case Enc::UTF16:
-        case Enc::UTF32:
-            sFlag = true;
-            break;
-        case Enc::ASCII:
-        case Enc::EBCDIC:
-        case Enc::UTF8:
-            break;
-    }
-    if (bFlag) {
-        sFlag = true;
-    }
-    if (gFlag) {
-        bFlag = true;
-        sFlag = true;
-    }
-    if (globopts->lang == LANG_GO && input_api == INPUT_DEFAULT) {
-        fatal("default C API is not supported for the Go backend,"
-            " as Go has no pointer arithmetics");
-    }
-    if (eof != NOEOF) {
-        if (bFlag || gFlag) {
-            fatal ("configuration 're2c:eof' cannot be used with options "
-                "-b, --bit-vectors and -g, --computed gotos");
-        }
-        if (eof >= encoding.nCodeUnits()) {
-            fatal ("EOF exceeds maximum code unit value for given encoding");
-        }
-    }
-    if (sentinel != NOEOF) {
-        if (sentinel >= encoding.nCodeUnits()) {
-            fatal("sentinel exceeds maximum code unit value for given encoding");
-        }
-        if (fill_use || eof != NOEOF) {
-            fatal("re2c:sentinel configuration is not needed"
-                " in the presence of bounds checking or EOF rule");
-        }
-    }
-    if (!globopts->lookahead && globopts->stadfa) {
-        fatal("cannot combine TDFA(0) and staDFA");
-    }
-}
-
 Opt::Opt(const conopt_t &globopts)
     : source_file(NULL)
     , glob(globopts)
@@ -270,7 +14,7 @@ Opt::Opt(const conopt_t &globopts)
     , diverge(true)
 {}
 
-void Opt::fix_defaults()
+void Opt::fix_mutopt_defaults()
 {
     // Adjust default mutable options based on the global options.
     mutopt_t &def = const_cast<mutopt_t&>(defaults);
@@ -294,17 +38,284 @@ void Opt::fix_defaults()
     diverge = true;
 }
 
+void Opt::fix_conopt()
+{
+    conopt_t &g = const_cast<conopt_t&>(glob);
+
+    if (g.target == TARGET_SKELETON) {
+        g.fFlag = false;
+    }
+
+    if (!g.lookahead) {
+        g.eager_skip = true;
+    }
+
+    // append directory separator '/' to all paths that do not have it
+    for (size_t i = 0; i < g.incpaths.size(); ++i) {
+        std::string &p = g.incpaths[i];
+        const char c = p.empty() ? 0 : *p.rbegin();
+        if (c != '/' && c != '\\') {
+            p.push_back('/');
+        }
+    }
+}
+
+void Opt::fix_mutopt()
+{
+    // some options either make no sense or must have fixed value
+    // with current target: reset them to default
+    switch (glob.target) {
+        case TARGET_DOT:
+            // default code generation options
+            real.sFlag = defaults.sFlag;
+            real.bFlag = defaults.bFlag;
+            real.gFlag = defaults.gFlag;
+            real.cGotoThreshold = defaults.cGotoThreshold;
+            real.eof = defaults.eof;
+            real.sentinel = defaults.sentinel;
+            // default environment-insensitive formatting
+            real.yybmHexTable = defaults.yybmHexTable;
+            // fallthrough
+        case TARGET_SKELETON:
+            // output files
+            real.header_file = "";
+            // default line information
+            real.iFlag = defaults.iFlag;
+            // default EOF mode
+            real.eof = defaults.eof;
+            real.sentinel = defaults.sentinel;
+            // default environment-sensitive formatting
+            real.topIndent = defaults.topIndent;
+            real.indString = defaults.indString;
+            real.condDivider = defaults.condDivider;
+            real.condDividerParam = defaults.condDividerParam;
+            // default environment bindings
+            real.yycondtype = defaults.yycondtype;
+            real.cond_get = defaults.cond_get;
+            real.cond_get_naked = defaults.cond_get_naked;
+            real.cond_set = defaults.cond_set;
+            real.cond_set_arg = defaults.cond_set_arg;
+            real.cond_set_naked = defaults.cond_set_naked;
+            real.yyctable = defaults.yyctable;
+            real.condPrefix = defaults.condPrefix;
+            real.condEnumPrefix = defaults.condEnumPrefix;
+            real.condGoto = defaults.condGoto;
+            real.condGotoParam = defaults.condGotoParam;
+            real.state_get = defaults.state_get;
+            real.state_get_naked = defaults.state_get_naked;
+            real.state_set = defaults.state_set;
+            real.state_set_arg = defaults.state_set_arg;
+            real.state_set_naked = defaults.state_set_naked;
+            real.tags_prefix = defaults.tags_prefix;
+            real.tags_expression = defaults.tags_expression;
+            real.yyfilllabel = defaults.yyfilllabel;
+            real.yynext = defaults.yynext;
+            real.yyaccept = defaults.yyaccept;
+            real.bUseStateAbort = defaults.bUseStateAbort;
+            real.bUseStateNext = defaults.bUseStateNext;
+            real.yybm = defaults.yybm;
+            real.yytarget = defaults.yytarget;
+            real.input_api = defaults.input_api;
+            real.decorate = defaults.decorate;
+            real.yycursor = defaults.yycursor;
+            real.yymarker = defaults.yymarker;
+            real.yyctxmarker = defaults.yyctxmarker;
+            real.yylimit = defaults.yylimit;
+            real.yypeek = defaults.yypeek;
+            real.yyskip = defaults.yyskip;
+            real.yybackup = defaults.yybackup;
+            real.yybackupctx = defaults.yybackupctx;
+            real.yyrestore = defaults.yyrestore;
+            real.yyrestorectx = defaults.yyrestorectx;
+            real.yyrestoretag = defaults.yyrestoretag;
+            real.yystagn = defaults.yystagn;
+            real.yystagp = defaults.yystagp;
+            real.yystagpd = defaults.yystagpd;
+            real.yymtagn = defaults.yymtagn;
+            real.yymtagp = defaults.yymtagp;
+            real.yymtagpd = defaults.yymtagpd;
+            real.yylessthan = defaults.yylessthan;
+            real.dFlag = defaults.dFlag;
+            real.yydebug = defaults.yydebug;
+            real.yyctype = defaults.yyctype;
+            real.yych = defaults.yych;
+            real.bEmitYYCh = defaults.bEmitYYCh;
+            real.yychConversion = defaults.yychConversion;
+            real.fill = defaults.fill;
+            real.fill_use = defaults.fill_use;
+            real.fill_check = defaults.fill_check;
+            real.fill_arg = defaults.fill_arg;
+            real.fill_arg_use = defaults.fill_arg_use;
+            real.fill_naked = defaults.fill_naked;
+            real.labelPrefix = defaults.labelPrefix;
+            real.startlabel = defaults.startlabel;
+            real.startlabel_force = defaults.startlabel_force;
+            break;
+        case TARGET_CODE:
+            break;
+    }
+
+    if (real.bCaseInsensitive) {
+        real.bCaseInverted = defaults.bCaseInverted;
+    }
+
+    // "naked" options, unless explicitly set, inherit "decorate"
+    if (is_default.fill_naked) real.fill_naked = !real.decorate;
+    if (is_default.cond_get_naked) real.cond_get_naked = !real.decorate;
+    if (is_default.cond_set_naked) real.cond_set_naked = !real.decorate;
+    if (is_default.state_get_naked) real.state_get_naked = !real.decorate;
+    if (is_default.state_set_naked) real.state_set_naked = !real.decorate;
+
+    // respect hierarchy
+    if (!glob.cFlag) {
+        real.yycondtype = defaults.yycondtype;
+        real.cond_get = defaults.cond_get;
+        real.cond_get_naked = defaults.cond_get_naked;
+        real.cond_set = defaults.cond_set;
+        real.cond_set_arg = defaults.cond_set_arg;
+        real.cond_set_naked = defaults.cond_set_naked;
+        real.yyctable = defaults.yyctable;
+        real.condPrefix = defaults.condPrefix;
+        real.condEnumPrefix = defaults.condEnumPrefix;
+        real.condDivider = defaults.condDivider;
+        real.condDividerParam = defaults.condDividerParam;
+        real.condGoto = defaults.condGoto;
+        real.condGotoParam = defaults.condGotoParam;
+    }
+    if (!glob.fFlag) {
+        real.state_get = defaults.state_get;
+        real.state_get_naked = defaults.state_get_naked;
+        real.state_set = defaults.state_set;
+        real.state_set_arg = defaults.state_set_arg;
+        real.state_set_naked = defaults.state_set_naked;
+        real.yyfilllabel = defaults.yyfilllabel;
+        real.yynext = defaults.yynext;
+        real.yyaccept = defaults.yyaccept;
+        real.bUseStateAbort = defaults.bUseStateAbort;
+        real.bUseStateNext = defaults.bUseStateNext;
+    }
+    if (real.posix_semantics) {
+        real.posix_syntax = true;
+    }
+    if (real.posix_syntax) {
+        real.tags = true;
+    }
+    if (!real.tags) {
+        real.tags_prefix = defaults.tags_prefix;
+        real.tags_expression = defaults.tags_expression;
+    }
+    if (!real.bFlag) {
+        real.yybmHexTable = defaults.yybmHexTable;
+        real.yybm = defaults.yybm;
+    }
+    if (!real.gFlag) {
+        real.cGotoThreshold = defaults.cGotoThreshold;
+        real.yytarget = defaults.yytarget;
+    }
+    if (real.input_api != INPUT_DEFAULT) {
+        real.yycursor = defaults.yycursor;
+        real.yymarker = defaults.yymarker;
+        real.yyctxmarker = defaults.yyctxmarker;
+        real.yylimit = defaults.yylimit;
+    }
+    if (real.input_api != INPUT_CUSTOM) {
+        real.decorate = defaults.decorate;
+        real.yypeek = defaults.yypeek;
+        real.yyskip = defaults.yyskip;
+        real.yybackup = defaults.yybackup;
+        real.yybackupctx = defaults.yybackupctx;
+        real.yyrestore = defaults.yyrestore;
+        real.yyrestorectx = defaults.yyrestorectx;
+        real.yyrestoretag = defaults.yyrestoretag;
+        real.yystagn = defaults.yystagn;
+        real.yystagp = defaults.yystagp;
+        real.yystagpd = defaults.yystagpd;
+        real.yymtagn = defaults.yymtagn;
+        real.yymtagp = defaults.yymtagp;
+        real.yymtagpd = defaults.yymtagpd;
+    }
+    if (!real.dFlag) {
+        real.yydebug = defaults.yydebug;
+    }
+    if (!real.fill_use) {
+        real.fill = defaults.fill;
+        real.fill_check = defaults.fill_check;
+        real.fill_arg = defaults.fill_arg;
+        real.fill_arg_use = defaults.fill_arg_use;
+        real.fill_naked = defaults.fill_naked;
+    }
+
+    // force individual options
+    if (glob.target == TARGET_DOT) {
+        real.iFlag = true;
+    }
+    else if (glob.target == TARGET_SKELETON) {
+        if (glob.lang != LANG_C) {
+            fatal("skeleton is not supported for non-C language backends");
+        }
+        real.iFlag = true;
+        real.input_api = INPUT_CUSTOM;
+        real.indString = "    ";
+        real.topIndent = 2;
+    }
+    switch (real.encoding.type()) {
+        case Enc::UCS2:
+        case Enc::UTF16:
+        case Enc::UTF32:
+            real.sFlag = true;
+            break;
+        case Enc::ASCII:
+        case Enc::EBCDIC:
+        case Enc::UTF8:
+            break;
+    }
+    if (real.bFlag) {
+        real.sFlag = true;
+    }
+    if (real.gFlag) {
+        real.bFlag = true;
+        real.sFlag = true;
+    }
+
+    if (glob.lang == LANG_GO && real.input_api == INPUT_DEFAULT) {
+        fatal("default C API is not supported for the Go backend,"
+            " as Go has no pointer arithmetics");
+    }
+    if (real.eof != NOEOF) {
+        if (real.bFlag || real.gFlag) {
+            fatal ("configuration 're2c:eof' cannot be used with options "
+                "-b, --bit-vectors and -g, --computed gotos");
+        }
+        if (real.eof >= real.encoding.nCodeUnits()) {
+            fatal ("EOF exceeds maximum code unit value for given encoding");
+        }
+    }
+    if (real.sentinel != NOEOF) {
+        if (real.sentinel >= real.encoding.nCodeUnits()) {
+            fatal("sentinel exceeds maximum code unit value for given encoding");
+        }
+        if (real.fill_use || real.eof != NOEOF) {
+            fatal("re2c:sentinel configuration is not needed"
+                " in the presence of bounds checking or EOF rule");
+        }
+    }
+    if (!glob.lookahead && glob.stadfa) {
+        fatal("cannot combine TDFA(0) and staDFA");
+    }
+}
+
 void Opt::sync()
 {
     if (!diverge) return;
 
+    // copy user-defined options to real options
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) real.name = user.name;
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
 
-    real.fix(&glob, defaults);
+    fix_mutopt();
     diverge = false;
 }
 

@@ -76,7 +76,6 @@ func Lex(in *Input) int {
 	re2c:define:YYRESTORE = "in.cursor = in.marker";
 	re2c:define:YYLESSTHAN = "in.limit-in.cursor < @@";
 	re2c:define:YYFILL = "if fill(in, @@) != 0 { return -2 }";
-	re2c:define:YYFILL:naked = 1;
 
 	* {
 		fmt.Println("error")

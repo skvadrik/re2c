@@ -99,7 +99,7 @@ yyFillLabel0:
 	}
 yy2:
 	in.cursor += 1
-//line "golang/002_fill_eof_rule.--lang(go).re":70
+//line "golang/002_fill_eof_rule.--lang(go).re":69
 	{
 		fmt.Println("error")
 		return -1
@@ -107,7 +107,7 @@ yy2:
 //line "golang/002_fill_eof_rule.--lang(go).go":108
 yy4:
 	in.cursor += 1
-//line "golang/002_fill_eof_rule.--lang(go).re":90
+//line "golang/002_fill_eof_rule.--lang(go).re":89
 	{
 		return 3
 	}
@@ -149,7 +149,7 @@ yyFillLabel1:
 		goto yy8
 	}
 yy8:
-//line "golang/002_fill_eof_rule.--lang(go).re":80
+//line "golang/002_fill_eof_rule.--lang(go).re":79
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return 1
@@ -225,21 +225,21 @@ yyFillLabel3:
 		goto yy13
 	}
 yy13:
-//line "golang/002_fill_eof_rule.--lang(go).re":85
+//line "golang/002_fill_eof_rule.--lang(go).re":84
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return 2
 	}
 //line "golang/002_fill_eof_rule.--lang(go).go":234
 yyeofrule1:
-//line "golang/002_fill_eof_rule.--lang(go).re":75
+//line "golang/002_fill_eof_rule.--lang(go).re":74
 	{
 		fmt.Println("end")
 		return 0
 	}
 //line "golang/002_fill_eof_rule.--lang(go).go":241
 }
-//line "golang/002_fill_eof_rule.--lang(go).re":93
+//line "golang/002_fill_eof_rule.--lang(go).re":92
 
 }
 
