@@ -35,7 +35,7 @@ static void dump_history2(const history_t &history, std::set<int32_t> &used,
     if (idx == HROOT) return;
     used.insert(idx).second;
     dump_history2(history, used, history.node(idx).pred, target, base);
-    fprintf(stderr, "->hx%lu_%d", target, idx + base);
+    fprintf(stderr, "->hx%u_%d", static_cast<uint32_t>(target), idx + base);
 }
 
 static inline uint32_t hash4(uint32_t h, uint32_t k)
