@@ -96,8 +96,8 @@ func Lex(in *Input) int {
 	in.token = in.cursor
 
 	/*!re2c
-	re2c:flags:input = custom;
 	re2c:eof = 0;
+	re2c:decorate = 1;
 
 	* {
 		fmt.Println("error")

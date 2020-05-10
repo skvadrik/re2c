@@ -59,10 +59,10 @@ func Lex(str string) (int, int, int) {
 	var a, b, c *int
 
 	/*!re2c
-	re2c:flags:input = custom;
 	re2c:flags:tags = 1;
 	re2c:yyfill:enable = 0;
 	re2c:tags:expression = "&in.@@";
+	re2c:decorate = 1;
 
 	end = [\x00];
 

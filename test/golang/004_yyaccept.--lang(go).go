@@ -19,7 +19,7 @@ func Lex(str string) int {
 	}
 yy2:
 	cursor += 1
-//line "golang/004_yyaccept.--lang(go).re":18
+//line "golang/004_yyaccept.--lang(go).re":16
 	{
 		return -1
 	}
@@ -36,7 +36,7 @@ yy4:
 		goto yy5
 	}
 yy5:
-//line "golang/004_yyaccept.--lang(go).re":22
+//line "golang/004_yyaccept.--lang(go).re":20
 	{
 		return 1
 	}
@@ -72,7 +72,7 @@ yy8:
 		goto yy9
 	}
 yy9:
-//line "golang/004_yyaccept.--lang(go).re":26
+//line "golang/004_yyaccept.--lang(go).re":24
 	{
 		return 2
 	}
@@ -98,7 +98,7 @@ yy11:
 		goto yy12
 	}
 yy12:
-//line "golang/004_yyaccept.--lang(go).re":30
+//line "golang/004_yyaccept.--lang(go).re":28
 	{
 		return 3
 	}
@@ -114,13 +114,13 @@ yy13:
 	}
 yy14:
 	cursor += 1
-//line "golang/004_yyaccept.--lang(go).re":34
+//line "golang/004_yyaccept.--lang(go).re":32
 	{
 		return 4
 	}
 //line "golang/004_yyaccept.--lang(go).go":122
 }
-//line "golang/004_yyaccept.--lang(go).re":37
+//line "golang/004_yyaccept.--lang(go).re":35
 
 }
 

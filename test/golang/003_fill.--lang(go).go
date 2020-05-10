@@ -110,7 +110,7 @@ func Lex(in *Input) int {
 	}
 yy2:
 	in.cursor += 1
-//line "golang/003_fill.--lang(go).re":88
+//line "golang/003_fill.--lang(go).re":86
 	{
 		fmt.Println("end")
 		return 0
@@ -118,7 +118,7 @@ yy2:
 //line "golang/003_fill.--lang(go).go":119
 yy4:
 	in.cursor += 1
-//line "golang/003_fill.--lang(go).re":83
+//line "golang/003_fill.--lang(go).re":81
 	{
 		fmt.Println("error")
 		return -1
@@ -126,7 +126,7 @@ yy4:
 //line "golang/003_fill.--lang(go).go":127
 yy6:
 	in.cursor += 1
-//line "golang/003_fill.--lang(go).re":103
+//line "golang/003_fill.--lang(go).re":101
 	{
 		return 3
 	}
@@ -165,7 +165,7 @@ yy8:
 		goto yy10
 	}
 yy10:
-//line "golang/003_fill.--lang(go).re":93
+//line "golang/003_fill.--lang(go).re":91
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return 1
@@ -232,14 +232,14 @@ yy13:
 		goto yy15
 	}
 yy15:
-//line "golang/003_fill.--lang(go).re":98
+//line "golang/003_fill.--lang(go).re":96
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return 2
 	}
 //line "golang/003_fill.--lang(go).go":241
 }
-//line "golang/003_fill.--lang(go).re":106
+//line "golang/003_fill.--lang(go).re":104
 
 }
 

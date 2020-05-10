@@ -37,7 +37,7 @@ func Lex(str string) int {
 yy2:
 	cursor += 1
 yy3:
-//line "golang/001_basic.--lang(go).re":18
+//line "golang/001_basic.--lang(go).re":16
 	{
 		return -1
 	}
@@ -74,7 +74,7 @@ yy4:
 	}
 yy5:
 	cursor += 1
-//line "golang/001_basic.--lang(go).re":22
+//line "golang/001_basic.--lang(go).re":20
 	{
 		return 1
 	}
@@ -112,7 +112,7 @@ yy9:
 	cursor = marker
 	goto yy3
 }
-//line "golang/001_basic.--lang(go).re":25
+//line "golang/001_basic.--lang(go).re":23
 
 }
 

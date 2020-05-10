@@ -14,6 +14,28 @@
 
 namespace re2c {
 
+/* note [constant and mutable options]
+ *
+ * Some options are immutable (target, output files; global switches like
+ * conditions, reuse mode, storable states; support of flex syntax, etc.).
+ * These options are passed as command-line arguments and never change.
+ * It is safe to read them from any program point after parsing command-line
+ * arguments.
+ *
+ * Other options are configurable; they have block scope (may be specified
+ * anywhere inside of the block and still affect the whole block).
+ * Reading mutable options of yet unparsed block is not allowed because
+ * they may affect the way RE2C parses current block (RE2C would be tempted
+ * to base decisions on the latest option value, which may not be the final
+ * one).
+ *
+ * RE2C allows to set configurations anywhere inside of a block (in the
+ * beginning, intermixed with rules, in the end): they will affect the whole
+ * block anyway. Therefore it is not allowed to read configurations until the
+ * whole block has been parsed. Immutable options, on the other hand, are
+ * accessible for reading all the time (the parser itself depends on them).
+ */
+
 class Msg;
 
 enum target_t {
@@ -32,23 +54,13 @@ enum input_api_t {
     INPUT_CUSTOM
 };
 
-const uint32_t NOEOF = ~0u - 1;
+enum parse_opts_t {
+    OK,
+    EXIT_OK,
+    EXIT_FAIL
+};
 
-/* note [constant and mutable options]
- *
- * Some options are immutable (target, output files; global switches like
- * conditions, reuse mode, storable states; support of flex syntax, etc.).
- * These options are passed as command-line arguments and never change.
- * It is safe to read them from any program point after parsing command-line
- * arguments.
- *
- * Other options are configurable; they have block scope (may be specified
- * anywhere inside of the block and still affect the whole block).
- * Reading mutable options of yet unparsed block is not allowed because
- * they may affect the way RE2C parses current block (RE2C would be tempted
- * to base decisions on the latest option value, which may not be the final
- * one).
- */
+const uint32_t NOEOF = ~0u - 1;
 
 #define RE2C_CONSTOPTS \
     CONSTOPT1 (target_t, target, TARGET_CODE) \
@@ -184,152 +196,143 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (bool, startlabel_force, false) \
     /* end */
 
-struct conopt_t
-{
-#    define CONSTOPT1 CONSTOPT
-#    define CONSTOPT(type, name, value) type name;
+// Constant options.
+struct conopt_t {
+#define CONSTOPT1 CONSTOPT
+#define CONSTOPT(type, name, value) type name;
     RE2C_CONSTOPTS
-#    undef CONSTOPT1
-#    undef CONSTOPT
+#undef CONSTOPT1
+#undef CONSTOPT
 
     conopt_t()
-#        define CONSTOPT1(type, name, value) : name(value)
-#        define CONSTOPT(type, name, value)  , name(value)
+#define CONSTOPT1(type, name, value) : name(value)
+#define CONSTOPT(type, name, value)  , name(value)
         RE2C_CONSTOPTS
-#        undef CONSTOPT1
-#        undef CONSTOPT
+#undef CONSTOPT1
+#undef CONSTOPT
     {}
     void fix();
     FORBID_COPY(conopt_t);
 };
 
-struct mutopt_t
-{
-#    define MUTOPT1 MUTOPT
-#    define MUTOPT(type, name, value) type name;
-    RE2C_MUTOPTS
-#    undef MUTOPT1
-#    undef MUTOPT
-
-    mutopt_t()
-#        define MUTOPT1(type, name, value) : name(value)
-#        define MUTOPT(type, name, value)  , name(value)
-        RE2C_MUTOPTS
-#        undef MUTOPT1
-#        undef MUTOPT
-    {}
-    void fix(const conopt_t *globopts);
-    FORBID_COPY(mutopt_t);
-};
-
-struct opt_t
-{
-#    define CONSTOPT1 CONSTOPT
-#    define CONSTOPT(type, name, value) type name;
-    RE2C_CONSTOPTS
-#    undef CONSTOPT1
-#    undef CONSTOPT
-
-#    define MUTOPT1 MUTOPT
-#    define MUTOPT(type, name, value) type name;
-    RE2C_MUTOPTS
-#    undef MUTOPT1
-#    undef MUTOPT
-
-    opt_t(const conopt_t &con, const mutopt_t &mut)
-#        define CONSTOPT1(type, name, value) : name(con.name)
-#        define CONSTOPT(type, name, value)  , name(con.name)
-        RE2C_CONSTOPTS
-#        undef CONSTOPT1
-#        undef CONSTOPT
-#        define MUTOPT1 MUTOPT
-#        define MUTOPT(type, name, value) , name(mut.name)
-        RE2C_MUTOPTS
-#        undef MUTOPT1
-#        undef MUTOPT
-    {}
-};
-
-// see note [constant and mutable options]
-struct Opt
-{
-    static const mutopt_t baseopt;
-
-    const char *source_file;
-    const conopt_t &glob;
-
-private:
-    mutopt_t user;
-    mutopt_t real;
-    bool diverge;
-
-    void sync()
-    {
-        if (!diverge) return;
-#        define MUTOPT1 MUTOPT
-#        define MUTOPT(type, name, value) real.name = user.name;
-        RE2C_MUTOPTS
-#        undef MUTOPT1
-#        undef MUTOPT
-        real.fix(&glob);
-        diverge = false;
-    }
-
-public:
-    explicit Opt(const conopt_t &globopts)
-        : source_file(NULL)
-        , glob(globopts)
-        , user()
-        , real()
-        , diverge(true)
-    {}
-
-    const opt_t *snapshot()
-    {
-        sync();
-        return new opt_t(glob, real);
-    }
-
-    void restore(const opt_t *opts)
-    {
-#        define MUTOPT1 MUTOPT
-#        define MUTOPT(type, name, value) user.name = opts->name;
-        RE2C_MUTOPTS
-#        undef MUTOPT1
-#        undef MUTOPT
-        diverge = true;
-        sync();
-    }
-
-    bool source (const char *s);
-
-    // RE2C allows to set configurations anywhere inside of a block
-    // (in the beginning, intermixed with rules, in the end): they will
-    // affect the whole block anyway. Thus one is not allowed to read
-    // configurations until the whole block has been parsed. Immutable
-    // options, on the contrary, are accessible for reading all the time
-    // (the parser itself depends on them).
-    void set_encoding(Enc::type_t t)          { user.encoding.set(t); }
-    void unset_encoding(Enc::type_t t)        { user.encoding.unset(t); }
-    void set_encoding_policy(Enc::policy_t p) { user.encoding.setPolicy(p); }
+// Mutable options.
+struct mutopt_t {
 #define MUTOPT1 MUTOPT
-#define MUTOPT(type, name, value) void set_##name (const type &arg) { user.name = arg; diverge = true; }
+#define MUTOPT(type, name, value) type name;
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
 
-    // bad temporary hacks, should be fixed by proper scoping of config (parts).
+    mutopt_t()
+#define MUTOPT1(type, name, value) : name(value)
+#define MUTOPT(type, name, value)  , name(value)
+        RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+    {}
+    void fix(const conopt_t *globopts, const mutopt_t &defaults);
+    FORBID_COPY(mutopt_t);
+};
+
+// Boolean flags for mutable options.
+struct mutdef_t {
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) bool name;
+    RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+
+    mutdef_t()
+#define MUTOPT1(type, name, value) : name(true)
+#define MUTOPT(type, name, value)  , name(true)
+        RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+    {}
+};
+
+// Union of constant and mutable options.
+struct opt_t {
+#define CONSTOPT1 CONSTOPT
+#define CONSTOPT(type, name, value) type name;
+    RE2C_CONSTOPTS
+#undef CONSTOPT1
+#undef CONSTOPT
+
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) type name;
+    RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+
+    opt_t(const conopt_t &con, const mutopt_t &mut)
+#define CONSTOPT1(type, name, value) : name(con.name)
+#define CONSTOPT(type, name, value)  , name(con.name)
+        RE2C_CONSTOPTS
+#undef CONSTOPT1
+#undef CONSTOPT
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) , name(mut.name)
+        RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+    {}
+};
+
+// Options management.
+struct Opt {
+public:
+    const char *source_file;
+    const conopt_t &glob;
+
+private:
+    // Default mutable options. They depend on the global options, such as the
+    // language backend, and are fixed after parsing the global options.
+    const mutopt_t defaults;
+
+    // Boolean flags indicating if a mutable option has been set by the user.
+    // These are needed to distingush default values from user-set values that
+    // coincide with default ones. Constant and mutable options passed on the
+    // command line may be intermixed (there is no ordering requirement), so
+    // mutable options may be applied before all constant options are known and
+    // default values for mutable options are determined. Such user-set mutable
+    // options should not be altered by fixing default options.
+    mutdef_t is_default;
+
+    // User-set mutable options.
+    mutopt_t user;
+
+    // Real mutable options ("fixed" user-set options with various filters and
+    // implications that make options consistent).
+    mutopt_t real;
+
+    // If user-set options have diverged from the real ones and need syncing.
+    bool diverge;
+
+public:
+    explicit Opt(const conopt_t &globopts);
+    const opt_t *snapshot();
+    void fix_defaults();
+    void restore(const opt_t *opts);
+    bool source(const char *s);
+
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) \
+    void set_##name(const type &arg);
+    RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+    void set_encoding(Enc::type_t t);
+    void unset_encoding(Enc::type_t t);
+    void set_encoding_policy(Enc::policy_t p);
+
+    // Bad temporary hacks, should be fixed by proper scoping of config (parts).
     void reset_startlabel();
     void reset_mapCodeName ();
 
+private:
+    void sync();
     FORBID_COPY (Opt);
-};
-
-enum parse_opts_t
-{
-    OK,
-    EXIT_OK,
-    EXIT_FAIL
 };
 
 parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg);

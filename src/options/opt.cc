@@ -24,133 +24,132 @@ void conopt_t::fix()
     }
 }
 
-void mutopt_t::fix(const conopt_t *globopts)
+void mutopt_t::fix(const conopt_t *globopts, const mutopt_t &defaults)
 {
     // some options either make no sense or must have fixed value
     // with current target: reset them to default
     switch (globopts->target) {
         case TARGET_DOT:
             // default code generation options
-            sFlag = Opt::baseopt.sFlag;
-            bFlag = Opt::baseopt.bFlag;
-            gFlag = Opt::baseopt.gFlag;
-            cGotoThreshold = Opt::baseopt.cGotoThreshold;
-            eof = Opt::baseopt.eof;
-            sentinel = Opt::baseopt.sentinel;
+            sFlag = defaults.sFlag;
+            bFlag = defaults.bFlag;
+            gFlag = defaults.gFlag;
+            cGotoThreshold = defaults.cGotoThreshold;
+            eof = defaults.eof;
+            sentinel = defaults.sentinel;
             // default environment-insensitive formatting
-            yybmHexTable = Opt::baseopt.yybmHexTable;
+            yybmHexTable = defaults.yybmHexTable;
             // fallthrough
         case TARGET_SKELETON:
             // output files
             header_file = "";
             // default line information
-            iFlag = Opt::baseopt.iFlag;
+            iFlag = defaults.iFlag;
             // default EOF mode
-            eof = Opt::baseopt.eof;
-            sentinel = Opt::baseopt.sentinel;
+            eof = defaults.eof;
+            sentinel = defaults.sentinel;
             // default environment-sensitive formatting
-            topIndent = Opt::baseopt.topIndent;
-            indString = Opt::baseopt.indString;
-            condDivider = Opt::baseopt.condDivider;
-            condDividerParam = Opt::baseopt.condDividerParam;
+            topIndent = defaults.topIndent;
+            indString = defaults.indString;
+            condDivider = defaults.condDivider;
+            condDividerParam = defaults.condDividerParam;
             // default environment bindings
-            yycondtype = Opt::baseopt.yycondtype;
-            cond_get = Opt::baseopt.cond_get;
-            cond_get_naked = Opt::baseopt.cond_get_naked;
-            cond_set = Opt::baseopt.cond_set;
-            cond_set_arg = Opt::baseopt.cond_set_arg;
-            cond_set_naked = Opt::baseopt.cond_set_naked;
-            yyctable = Opt::baseopt.yyctable;
-            condPrefix = Opt::baseopt.condPrefix;
-            condEnumPrefix = Opt::baseopt.condEnumPrefix;
-            condGoto = Opt::baseopt.condGoto;
-            condGotoParam = Opt::baseopt.condGotoParam;
-            state_get = Opt::baseopt.state_get;
-            state_get_naked = Opt::baseopt.state_get_naked;
-            state_set = Opt::baseopt.state_set;
-            state_set_arg = Opt::baseopt.state_set_arg;
-            state_set_naked = Opt::baseopt.state_set_naked;
-            tags_prefix = Opt::baseopt.tags_prefix;
-            tags_expression = Opt::baseopt.tags_expression;
-            yyfilllabel = Opt::baseopt.yyfilllabel;
-            yynext = Opt::baseopt.yynext;
-            yyaccept = Opt::baseopt.yyaccept;
-            bUseStateAbort = Opt::baseopt.bUseStateAbort;
-            bUseStateNext = Opt::baseopt.bUseStateNext;
-            yybm = Opt::baseopt.yybm;
-            yytarget = Opt::baseopt.yytarget;
-            input_api = Opt::baseopt.input_api;
-            decorate = Opt::baseopt.decorate;
-            yycursor = Opt::baseopt.yycursor;
-            yymarker = Opt::baseopt.yymarker;
-            yyctxmarker = Opt::baseopt.yyctxmarker;
-            yylimit = Opt::baseopt.yylimit;
-            yypeek = Opt::baseopt.yypeek;
-            yyskip = Opt::baseopt.yyskip;
-            yybackup = Opt::baseopt.yybackup;
-            yybackupctx = Opt::baseopt.yybackupctx;
-            yyrestore = Opt::baseopt.yyrestore;
-            yyrestorectx = Opt::baseopt.yyrestorectx;
-            yyrestoretag = Opt::baseopt.yyrestoretag;
-            yystagn = Opt::baseopt.yystagn;
-            yystagp = Opt::baseopt.yystagp;
-            yystagpd = Opt::baseopt.yystagpd;
-            yymtagn = Opt::baseopt.yymtagn;
-            yymtagp = Opt::baseopt.yymtagp;
-            yymtagpd = Opt::baseopt.yymtagpd;
-            yylessthan = Opt::baseopt.yylessthan;
-            dFlag = Opt::baseopt.dFlag;
-            yydebug = Opt::baseopt.yydebug;
-            yyctype = Opt::baseopt.yyctype;
-            yych = Opt::baseopt.yych;
-            bEmitYYCh = Opt::baseopt.bEmitYYCh;
-            yychConversion = Opt::baseopt.yychConversion;
-            fill = Opt::baseopt.fill;
-            fill_use = Opt::baseopt.fill_use;
-            fill_check = Opt::baseopt.fill_check;
-            fill_arg = Opt::baseopt.fill_arg;
-            fill_arg_use = Opt::baseopt.fill_arg_use;
-            fill_naked = Opt::baseopt.fill_naked;
-            labelPrefix = Opt::baseopt.labelPrefix;
-            startlabel = Opt::baseopt.startlabel;
-            startlabel_force = Opt::baseopt.startlabel_force;
+            yycondtype = defaults.yycondtype;
+            cond_get = defaults.cond_get;
+            cond_get_naked = defaults.cond_get_naked;
+            cond_set = defaults.cond_set;
+            cond_set_arg = defaults.cond_set_arg;
+            cond_set_naked = defaults.cond_set_naked;
+            yyctable = defaults.yyctable;
+            condPrefix = defaults.condPrefix;
+            condEnumPrefix = defaults.condEnumPrefix;
+            condGoto = defaults.condGoto;
+            condGotoParam = defaults.condGotoParam;
+            state_get = defaults.state_get;
+            state_get_naked = defaults.state_get_naked;
+            state_set = defaults.state_set;
+            state_set_arg = defaults.state_set_arg;
+            state_set_naked = defaults.state_set_naked;
+            tags_prefix = defaults.tags_prefix;
+            tags_expression = defaults.tags_expression;
+            yyfilllabel = defaults.yyfilllabel;
+            yynext = defaults.yynext;
+            yyaccept = defaults.yyaccept;
+            bUseStateAbort = defaults.bUseStateAbort;
+            bUseStateNext = defaults.bUseStateNext;
+            yybm = defaults.yybm;
+            yytarget = defaults.yytarget;
+            input_api = defaults.input_api;
+            decorate = defaults.decorate;
+            yycursor = defaults.yycursor;
+            yymarker = defaults.yymarker;
+            yyctxmarker = defaults.yyctxmarker;
+            yylimit = defaults.yylimit;
+            yypeek = defaults.yypeek;
+            yyskip = defaults.yyskip;
+            yybackup = defaults.yybackup;
+            yybackupctx = defaults.yybackupctx;
+            yyrestore = defaults.yyrestore;
+            yyrestorectx = defaults.yyrestorectx;
+            yyrestoretag = defaults.yyrestoretag;
+            yystagn = defaults.yystagn;
+            yystagp = defaults.yystagp;
+            yystagpd = defaults.yystagpd;
+            yymtagn = defaults.yymtagn;
+            yymtagp = defaults.yymtagp;
+            yymtagpd = defaults.yymtagpd;
+            yylessthan = defaults.yylessthan;
+            dFlag = defaults.dFlag;
+            yydebug = defaults.yydebug;
+            yyctype = defaults.yyctype;
+            yych = defaults.yych;
+            bEmitYYCh = defaults.bEmitYYCh;
+            yychConversion = defaults.yychConversion;
+            fill = defaults.fill;
+            fill_use = defaults.fill_use;
+            fill_check = defaults.fill_check;
+            fill_arg = defaults.fill_arg;
+            fill_arg_use = defaults.fill_arg_use;
+            fill_naked = defaults.fill_naked;
+            labelPrefix = defaults.labelPrefix;
+            startlabel = defaults.startlabel;
+            startlabel_force = defaults.startlabel_force;
             break;
         case TARGET_CODE:
             break;
     }
 
-    if (bCaseInsensitive)
-    {
-        bCaseInverted = Opt::baseopt.bCaseInverted;
+    if (bCaseInsensitive) {
+        bCaseInverted = defaults.bCaseInverted;
     }
 
     // respect hierarchy
     if (!globopts->cFlag) {
-        yycondtype = Opt::baseopt.yycondtype;
-        cond_get = Opt::baseopt.cond_get;
-        cond_get_naked = Opt::baseopt.cond_get_naked;
-        cond_set = Opt::baseopt.cond_set;
-        cond_set_arg = Opt::baseopt.cond_set_arg;
-        cond_set_naked = Opt::baseopt.cond_set_naked;
-        yyctable = Opt::baseopt.yyctable;
-        condPrefix = Opt::baseopt.condPrefix;
-        condEnumPrefix = Opt::baseopt.condEnumPrefix;
-        condDivider = Opt::baseopt.condDivider;
-        condDividerParam = Opt::baseopt.condDividerParam;
-        condGoto = Opt::baseopt.condGoto;
-        condGotoParam = Opt::baseopt.condGotoParam;
+        yycondtype = defaults.yycondtype;
+        cond_get = defaults.cond_get;
+        cond_get_naked = defaults.cond_get_naked;
+        cond_set = defaults.cond_set;
+        cond_set_arg = defaults.cond_set_arg;
+        cond_set_naked = defaults.cond_set_naked;
+        yyctable = defaults.yyctable;
+        condPrefix = defaults.condPrefix;
+        condEnumPrefix = defaults.condEnumPrefix;
+        condDivider = defaults.condDivider;
+        condDividerParam = defaults.condDividerParam;
+        condGoto = defaults.condGoto;
+        condGotoParam = defaults.condGotoParam;
     }
     if (!globopts->fFlag) {
-        state_get = Opt::baseopt.state_get;
-        state_get_naked = Opt::baseopt.state_get_naked;
-        state_set = Opt::baseopt.state_set;
-        state_set_arg = Opt::baseopt.state_set_arg;
-        state_set_naked = Opt::baseopt.state_set_naked;
-        yyfilllabel = Opt::baseopt.yyfilllabel;
-        yynext = Opt::baseopt.yynext;
-        yyaccept = Opt::baseopt.yyaccept;
-        bUseStateAbort = Opt::baseopt.bUseStateAbort;
-        bUseStateNext = Opt::baseopt.bUseStateNext;
+        state_get = defaults.state_get;
+        state_get_naked = defaults.state_get_naked;
+        state_set = defaults.state_set;
+        state_set_arg = defaults.state_set_arg;
+        state_set_naked = defaults.state_set_naked;
+        yyfilllabel = defaults.yyfilllabel;
+        yynext = defaults.yynext;
+        yyaccept = defaults.yyaccept;
+        bUseStateAbort = defaults.bUseStateAbort;
+        bUseStateNext = defaults.bUseStateNext;
     }
     if (posix_semantics) {
         posix_syntax = true;
@@ -158,56 +157,49 @@ void mutopt_t::fix(const conopt_t *globopts)
     if (posix_syntax) {
         tags = true;
     }
-    if (!tags)
-    {
-        tags_prefix = Opt::baseopt.tags_prefix;
-        tags_expression = Opt::baseopt.tags_expression;
+    if (!tags) {
+        tags_prefix = defaults.tags_prefix;
+        tags_expression = defaults.tags_expression;
     }
-    if (!bFlag)
-    {
-        yybmHexTable = Opt::baseopt.yybmHexTable;
-        yybm = Opt::baseopt.yybm;
+    if (!bFlag) {
+        yybmHexTable = defaults.yybmHexTable;
+        yybm = defaults.yybm;
     }
-    if (!gFlag)
-    {
-        cGotoThreshold = Opt::baseopt.cGotoThreshold;
-        yytarget = Opt::baseopt.yytarget;
+    if (!gFlag) {
+        cGotoThreshold = defaults.cGotoThreshold;
+        yytarget = defaults.yytarget;
     }
-    if (input_api != INPUT_DEFAULT)
-    {
-        yycursor = Opt::baseopt.yycursor;
-        yymarker = Opt::baseopt.yymarker;
-        yyctxmarker = Opt::baseopt.yyctxmarker;
-        yylimit = Opt::baseopt.yylimit;
+    if (input_api != INPUT_DEFAULT) {
+        yycursor = defaults.yycursor;
+        yymarker = defaults.yymarker;
+        yyctxmarker = defaults.yyctxmarker;
+        yylimit = defaults.yylimit;
     }
-    if (input_api != INPUT_CUSTOM)
-    {
-        decorate = Opt::baseopt.decorate;
-        yypeek = Opt::baseopt.yypeek;
-        yyskip = Opt::baseopt.yyskip;
-        yybackup = Opt::baseopt.yybackup;
-        yybackupctx = Opt::baseopt.yybackupctx;
-        yyrestore = Opt::baseopt.yyrestore;
-        yyrestorectx = Opt::baseopt.yyrestorectx;
-        yyrestoretag = Opt::baseopt.yyrestoretag;
-        yystagn = Opt::baseopt.yystagn;
-        yystagp = Opt::baseopt.yystagp;
-        yystagpd = Opt::baseopt.yystagpd;
-        yymtagn = Opt::baseopt.yymtagn;
-        yymtagp = Opt::baseopt.yymtagp;
-        yymtagpd = Opt::baseopt.yymtagpd;
+    if (input_api != INPUT_CUSTOM) {
+        decorate = defaults.decorate;
+        yypeek = defaults.yypeek;
+        yyskip = defaults.yyskip;
+        yybackup = defaults.yybackup;
+        yybackupctx = defaults.yybackupctx;
+        yyrestore = defaults.yyrestore;
+        yyrestorectx = defaults.yyrestorectx;
+        yyrestoretag = defaults.yyrestoretag;
+        yystagn = defaults.yystagn;
+        yystagp = defaults.yystagp;
+        yystagpd = defaults.yystagpd;
+        yymtagn = defaults.yymtagn;
+        yymtagp = defaults.yymtagp;
+        yymtagpd = defaults.yymtagpd;
     }
-    if (!dFlag)
-    {
-        yydebug = Opt::baseopt.yydebug;
+    if (!dFlag) {
+        yydebug = defaults.yydebug;
     }
-    if (!fill_use)
-    {
-        fill = Opt::baseopt.fill;
-        fill_check = Opt::baseopt.fill_check;
-        fill_arg = Opt::baseopt.fill_arg;
-        fill_arg_use = Opt::baseopt.fill_arg_use;
-        fill_naked = Opt::baseopt.fill_naked;
+    if (!fill_use) {
+        fill = defaults.fill;
+        fill_check = defaults.fill_check;
+        fill_arg = defaults.fill_arg;
+        fill_arg_use = defaults.fill_arg_use;
+        fill_naked = defaults.fill_naked;
     }
 
     // force individual options
@@ -234,14 +226,16 @@ void mutopt_t::fix(const conopt_t *globopts)
         case Enc::UTF8:
             break;
     }
-    if (bFlag)
-    {
+    if (bFlag) {
         sFlag = true;
     }
-    if (gFlag)
-    {
+    if (gFlag) {
         bFlag = true;
         sFlag = true;
+    }
+    if (globopts->lang == LANG_GO && input_api == INPUT_DEFAULT) {
+        fatal("default C API is not supported for the Go backend,"
+            " as Go has no pointer arithmetics");
     }
     if (eof != NOEOF) {
         if (bFlag || gFlag) {
@@ -266,17 +260,109 @@ void mutopt_t::fix(const conopt_t *globopts)
     }
 }
 
-const mutopt_t Opt::baseopt;
+Opt::Opt(const conopt_t &globopts)
+    : source_file(NULL)
+    , glob(globopts)
+    , defaults()
+    , is_default()
+    , user()
+    , real()
+    , diverge(true)
+{}
+
+void Opt::fix_defaults()
+{
+    // Adjust default mutable options based on the global options.
+    mutopt_t &def = const_cast<mutopt_t&>(defaults);
+
+    // For the Go backend, generic API is set by default, because "default" C
+    // API with pointers doesn't work (there is no pointer arithmetics in Go).
+    // To make the default Go API less restrictive, decorations are disabled.
+    if (glob.lang == LANG_GO) {
+        def.input_api = INPUT_CUSTOM;
+        def.decorate = false;
+    }
+
+    // Apply new defaults to all mutable options except those that have been
+    // explicitly set by the user.
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) if (is_default.name) user.name = defaults.name;
+    RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+
+    diverge = true;
+}
+
+void Opt::sync()
+{
+    if (!diverge) return;
+
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) real.name = user.name;
+    RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+
+    real.fix(&glob, defaults);
+    diverge = false;
+}
+
+const opt_t *Opt::snapshot()
+{
+    sync();
+    return new opt_t(glob, real);
+}
+
+void Opt::restore(const opt_t *opts)
+{
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) user.name = opts->name;
+    RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+
+    diverge = true;
+    sync();
+}
+
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) \
+void Opt::set_##name(const type &arg) \
+{ \
+    user.name = arg; \
+    is_default.name = false; \
+    diverge = true; \
+}
+RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+
+void Opt::set_encoding(Enc::type_t t)
+{
+    user.encoding.set(t);
+    is_default.encoding = false;
+}
+
+void Opt::unset_encoding(Enc::type_t t)
+{
+    user.encoding.unset(t);
+    is_default.encoding = false;
+}
+
+void Opt::set_encoding_policy(Enc::policy_t p)
+{
+    user.encoding.setPolicy(p);
+    is_default.encoding = false;
+}
 
 bool Opt::source (const char *s)
 {
-    if (source_file)
-    {
+    if (source_file) {
         error ("multiple source files: %s, %s", source_file, s);
         return false;
     }
-    else
-    {
+    else {
         source_file = s;
         return true;
     }
@@ -284,47 +370,47 @@ bool Opt::source (const char *s)
 
 void Opt::reset_startlabel()
 {
-    set_startlabel(Opt::baseopt.startlabel);
-    set_startlabel_force(Opt::baseopt.startlabel_force);
+    set_startlabel(defaults.startlabel);
+    set_startlabel_force(defaults.startlabel_force);
 }
 
 void Opt::reset_mapCodeName ()
 {
     // historically arranged set of names
     // no actual reason why these particular options should be reset
-    set_cond_get(Opt::baseopt.cond_get);
-    set_cond_set(Opt::baseopt.cond_set);
-    set_fill(Opt::baseopt.fill);
-    set_state_get(Opt::baseopt.state_get);
-    set_state_set(Opt::baseopt.state_set);
-    set_yybackup(Opt::baseopt.yybackup);
-    set_yybackupctx(Opt::baseopt.yybackupctx);
-    set_yycondtype(Opt::baseopt.yycondtype);
-    set_yyctxmarker(Opt::baseopt.yyctxmarker);
-    set_yyctype(Opt::baseopt.yyctype);
-    set_yycursor(Opt::baseopt.yycursor);
-    set_yydebug(Opt::baseopt.yydebug);
-    set_yylessthan(Opt::baseopt.yylessthan);
-    set_yylimit(Opt::baseopt.yylimit);
-    set_yymarker(Opt::baseopt.yymarker);
-    set_yypeek(Opt::baseopt.yypeek);
-    set_yyrestore(Opt::baseopt.yyrestore);
-    set_yyrestorectx(Opt::baseopt.yyrestorectx);
-    set_yyrestoretag(Opt::baseopt.yyrestoretag);
-    set_yystagn(Opt::baseopt.yystagn);
-    set_yystagp(Opt::baseopt.yystagp);
-    set_yystagpd(Opt::baseopt.yystagpd);
-    set_yymtagn(Opt::baseopt.yymtagn);
-    set_yymtagp(Opt::baseopt.yymtagp);
-    set_yymtagpd(Opt::baseopt.yymtagpd);
-    set_yyskip(Opt::baseopt.yyskip);
-    set_yyfilllabel(Opt::baseopt.yyfilllabel);
-    set_yynext(Opt::baseopt.yynext);
-    set_yyaccept(Opt::baseopt.yyaccept);
-    set_yybm(Opt::baseopt.yybm);
-    set_yych(Opt::baseopt.yych);
-    set_yyctable(Opt::baseopt.yyctable);
-    set_yytarget(Opt::baseopt.yytarget);
+    set_cond_get(defaults.cond_get);
+    set_cond_set(defaults.cond_set);
+    set_fill(defaults.fill);
+    set_state_get(defaults.state_get);
+    set_state_set(defaults.state_set);
+    set_yybackup(defaults.yybackup);
+    set_yybackupctx(defaults.yybackupctx);
+    set_yycondtype(defaults.yycondtype);
+    set_yyctxmarker(defaults.yyctxmarker);
+    set_yyctype(defaults.yyctype);
+    set_yycursor(defaults.yycursor);
+    set_yydebug(defaults.yydebug);
+    set_yylessthan(defaults.yylessthan);
+    set_yylimit(defaults.yylimit);
+    set_yymarker(defaults.yymarker);
+    set_yypeek(defaults.yypeek);
+    set_yyrestore(defaults.yyrestore);
+    set_yyrestorectx(defaults.yyrestorectx);
+    set_yyrestoretag(defaults.yyrestoretag);
+    set_yystagn(defaults.yystagn);
+    set_yystagp(defaults.yystagp);
+    set_yystagpd(defaults.yystagpd);
+    set_yymtagn(defaults.yymtagn);
+    set_yymtagp(defaults.yymtagp);
+    set_yymtagpd(defaults.yymtagpd);
+    set_yyskip(defaults.yyskip);
+    set_yyfilllabel(defaults.yyfilllabel);
+    set_yynext(defaults.yynext);
+    set_yyaccept(defaults.yyaccept);
+    set_yybm(defaults.yybm);
+    set_yych(defaults.yych);
+    set_yyctable(defaults.yyctable);
+    set_yytarget(defaults.yytarget);
 }
 
 } // namespace re2c

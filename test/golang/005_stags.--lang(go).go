@@ -36,7 +36,7 @@ yy2:
 	a = yyt1
 	b = yyt2
 	c = yyt3
-//line "golang/005_stags.--lang(go).re":37
+//line "golang/005_stags.--lang(go).re":35
 	{
 		return a, b, c
 	}
@@ -44,7 +44,7 @@ yy2:
 yy4:
 	cursor += 1
 yy5:
-//line "golang/005_stags.--lang(go).re":25
+//line "golang/005_stags.--lang(go).re":23
 	{
 		return -2, -2, -2
 	}
@@ -103,7 +103,7 @@ yy9:
 	a = yyt1
 	b = yyt2
 	c = yyt3
-//line "golang/005_stags.--lang(go).re":33
+//line "golang/005_stags.--lang(go).re":31
 	{
 		return a, b, c
 	}
@@ -226,7 +226,7 @@ yy25:
 	a = yyt1
 	b = yyt2
 	c = yyt3
-//line "golang/005_stags.--lang(go).re":29
+//line "golang/005_stags.--lang(go).re":27
 	{
 		return a, b, c
 	}
@@ -242,7 +242,7 @@ yy27:
 		goto yy13
 	}
 }
-//line "golang/005_stags.--lang(go).re":40
+//line "golang/005_stags.--lang(go).re":38
 
 }
 

@@ -8,7 +8,6 @@ func Lex(str string) (a int, b int, c int) {
 	*/
 
 	/*!re2c
-	re2c:flags:input = custom;
 	re2c:flags:tags = 1;
 	re2c:yyfill:enable = 0;
 	re2c:define:YYCTYPE = byte;
@@ -18,7 +17,6 @@ func Lex(str string) (a int, b int, c int) {
 	re2c:define:YYRESTORE = "cursor = marker";
 	re2c:define:YYSTAGP = "@@ = cursor";
 	re2c:define:YYSTAGN = "@@ = -1";
-	re2c:decorate = 0;
 
 	end = [\x00];
 

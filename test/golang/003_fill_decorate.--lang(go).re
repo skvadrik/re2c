@@ -102,9 +102,9 @@ func Lex(in *Input) int {
 	in.token = in.cursor
 
 	/*!re2c
-	re2c:flags:input = custom;
 	re2c:define:YYFILL = "if YYFILL(@@) != 0 { return -2 }";
 	re2c:define:YYFILL:naked = 1;
+	re2c:decorate = 1;
 
 	* {
 		fmt.Println("error")

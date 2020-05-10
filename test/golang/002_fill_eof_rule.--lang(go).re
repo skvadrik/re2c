@@ -58,7 +58,6 @@ func Lex(in *Input) int {
 	in.token = in.cursor
 
 	/*!re2c
-	re2c:flags:input = custom;
 	re2c:eof = 0;
 	re2c:define:YYPEEK = "YYCTYPE(in.data[in.cursor])";
 	re2c:define:YYSKIP = "in.cursor += 1";
@@ -67,7 +66,6 @@ func Lex(in *Input) int {
 	re2c:define:YYLESSTHAN = "in.limit-in.cursor < @@";
 	re2c:define:YYFILL = "fill(in) == 0";
 	re2c:define:YYFILL:naked = 1;
-	re2c:decorate = 0;
 
 	* {
 		fmt.Println("error")

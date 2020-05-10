@@ -299,6 +299,7 @@ end:
         return EXIT_FAIL;
     }
     globopts.fix();
+    opts.fix_defaults();
 
     return OK;
 

@@ -42,8 +42,8 @@ func Lex(str string) int {
 	YYRESTORE := restore(in)
 
 	/*!re2c
-	re2c:flags:input = custom;
 	re2c:yyfill:enable = 0;
+	re2c:decorate = 1;
 
 	end = [\x00];
 
