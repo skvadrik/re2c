@@ -283,11 +283,14 @@ void Opt::fix_mutopt()
     }
     if (real.eof != NOEOF) {
         if (real.bFlag || real.gFlag) {
-            fatal ("configuration 're2c:eof' cannot be used with options "
+            fatal("configuration 're2c:eof' cannot be used with options "
                 "-b, --bit-vectors and -g, --computed gotos");
         }
         if (real.eof >= real.encoding.nCodeUnits()) {
-            fatal ("EOF exceeds maximum code unit value for given encoding");
+            fatal("EOF exceeds maximum code unit value for given encoding");
+        }
+        if (!real.fill_check) {
+            fatal("YYFILL check is necessary if EOF rule is used");
         }
     }
     if (real.sentinel != NOEOF) {

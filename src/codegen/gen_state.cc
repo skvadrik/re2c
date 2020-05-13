@@ -370,6 +370,9 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
     uint32_t fillidx = output.fill_index;
     const char *text;
 
+    // absence of check doesn't make sense with EOF rule
+    DASSERT(opts->fill_check);
+
     // check for the end of input
     const char *if_refill = gen_lessthan(o, opts, 1);
 
