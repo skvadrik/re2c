@@ -82,11 +82,18 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
     for (uint32_t i = 0; i < fill_index; ++i) {
         CodeList *stmts = code_list(alc);
 
+        // if (YYLESSTHAN(n)) goto yyeof<N>;
         if (opts->eof != NOEOF) {
-            // TODO: render this as a separate statement
-            o.cstr("if (").cstr(gen_lessthan(o, opts, 1)).cstr(")");
-            o.cstr(" goto ").str(opts->labelPrefix).cstr("eof").u32(i).cstr("; ");
+            CodeList *then = code_list(alc);
+            text = o.cstr("goto ").str(opts->labelPrefix).cstr("eof").u32(i).flush();
+            append(then, code_stmt(alc, text));
+
+            text = gen_lessthan(o, opts, 1);
+
+            append(stmts, code_if_then_else(alc, text, then, NULL));
         }
+
+        // goto yyFillLabel<N>;
         text = o.cstr("goto ").str(opts->yyfilllabel).u32(i).flush();
         append(stmts, code_stmt(alc, text));
 
