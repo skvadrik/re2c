@@ -196,21 +196,24 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
     }
 
     // switch
-    const char *switch_expr = o.str(opts->yyaccept).flush();
-    CodeCases *switch_cases = code_cases(alc);
-    CodeList *case_stmts = code_list(alc);
-    const CodeJump jump = {acc[nacc - 1].first, acc[nacc - 1].second,
-        false, false, false};
-    gen_goto(output, dfa, case_stmts, NULL, jump);
-    append(switch_cases, code_case_number(alc, case_stmts, 0));
-    for (uint32_t i = 0; i < nacc - 1; ++i) {
+    CodeCases *cases = code_cases(alc);
+    for (uint32_t i = 0;; ) {
         CodeList *case_body = code_list(alc);
         const CodeJump jump = {acc[i].first, acc[i].second, false, false, false};
         gen_goto(output, dfa, case_body, NULL, jump);
-        append(switch_cases, code_case_number(alc, case_body, static_cast<int32_t>(i)));
+
+        CodeCase *ccase = code_case_number(alc, case_body, static_cast<int32_t>(i));
+        if (++i == nacc) {
+            // last case is the default one, it must go first
+            prepend(cases, ccase);
+            break;
+        }
+        else {
+            append(cases, ccase);
+        }
     }
-    Code *cswitch = code_switch(alc, switch_expr, switch_cases, true);
-    append(stmts, cswitch);
+    text = o.str(opts->yyaccept).flush();
+    append(stmts, code_switch(alc, text, cases, true));
 }
 
 void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
