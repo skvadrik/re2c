@@ -36,7 +36,7 @@ static CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go,
     CodeCases *cases = code_cases(alc);
     for (const CodeGoCase *c = go->cases, *e = c + go->ncases; c < e; ++c) {
         CodeList *body = code_list(alc);
-        gen_goto(output, body, from, c->to, dfa, c->tags, c->skip, c->eof);
+        gen_goto(output, dfa, body, from, c->jump);
 
         CodeCase *xcase = code_case_ranges(alc, body, c);
         if (c == go->defcase) {
@@ -84,11 +84,11 @@ static CodeList *gen_goifl(Output &output, const DFA &dfa, const CodeGoIfL *go,
         if (cond) {
             const char *if_cond = o.str(gen_if(opts, cond->cmp, cond->val)).flush();
             CodeList *if_then = code_list(alc);
-            gen_goto(output, if_then, from, b.to, dfa, b.tags, b.skip, b.eof);
+            gen_goto(output, dfa, if_then, from, b.jump);
             append(stmts, code_if_then_else(alc, if_cond, if_then, NULL));
         }
         else {
-            gen_goto(output, stmts, from, b.to, dfa, b.tags, b.skip, b.eof);
+            gen_goto(output, dfa, stmts, from, b.jump);
         }
     }
     return stmts;
@@ -124,7 +124,9 @@ static CodeList *gen_gobm(Output &output, const DFA &dfa, const CodeGoBm *go,
         .cstr(" & ").yybm_char(go->bitmap->mask, opts, 1).flush();
 
     CodeList *if_else = code_list(alc);
-    gen_goto(output, if_else, from, go->bitmap->state, dfa, TCID0, false, false);
+
+    const CodeJump jump = {go->bitmap->state, TCID0, false, false, false};
+    gen_goto(output, dfa, if_else, from, jump);
 
     if (go->hgo != NULL) {
         const char *if_cond = o.str(opts->yych).cstr(" & ~0xFF").flush();
@@ -230,12 +232,14 @@ static void gen_godot(Output &output, const DFA &dfa, const CodeGoSw *go,
     const char *text;
 
     if (n == 1) {
-        text = o.label(*from->label).cstr(" -> ").label(*go->cases[0].to->label).flush();
+        text = o.label(*from->label).cstr(" -> ")
+            .label(*go->cases[0].jump.to->label).flush();
         append(stmts, code_text(alc, text));
     }
     else {
         for (const CodeGoCase *c = go->cases, *e = c + go->ncases; c < e; ++c) {
-            o.label(*from->label).cstr(" -> ").label(*c->to->label).cstr(" [label=\"");
+            o.label(*from->label).cstr(" -> ").label(*c->jump.to->label)
+                .cstr(" [label=\"");
 
             for (uint32_t i = 0; i < c->nranges; ++i) {
                 const Enc &enc = opts->encoding;
@@ -243,7 +247,7 @@ static void gen_godot(Output &output, const DFA &dfa, const CodeGoSw *go,
                     enc.szCodeUnit(), enc.type() == Enc::EBCDIC, true);
             }
 
-            const tcmd_t *cmd = dfa.tcpool[c->tags];
+            const tcmd_t *cmd = dfa.tcpool[c->jump.tags];
             for (const tcmd_t *p = cmd; p; p = p->next) {
                 o.cstr("<").str(vartag_name(p->lhs, prefix));
                 if (tcmd_t::iscopy(p)) {

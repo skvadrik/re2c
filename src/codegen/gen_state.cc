@@ -118,7 +118,8 @@ static CodeList *emit_accept_binary(Output &output, const DFA &dfa, const accept
         append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
     }
     else {
-        gen_goto(output, stmts, NULL, acc[l].first, dfa, acc[l].second, false, false);
+        const CodeJump jump = {acc[l].first, acc[l].second, false, false, false};
+        gen_goto(output, dfa, stmts, NULL, jump);
     }
     return stmts;
 }
@@ -150,7 +151,8 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
-        gen_goto(output, stmts, NULL, acc[0].first, dfa, acc[0].second, false, false);
+        const CodeJump jump = {acc[0].first, acc[0].second, false, false, false};
+        gen_goto(output, dfa, stmts, NULL, jump);
         return;
     }
 
@@ -197,12 +199,14 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
     const char *switch_expr = o.str(opts->yyaccept).flush();
     CodeCases *switch_cases = code_cases(alc);
     CodeList *case_stmts = code_list(alc);
-    gen_goto(output, case_stmts, NULL, acc[nacc - 1].first, dfa, acc[nacc - 1].second,
-        false, false);
+    const CodeJump jump = {acc[nacc - 1].first, acc[nacc - 1].second,
+        false, false, false};
+    gen_goto(output, dfa, case_stmts, NULL, jump);
     append(switch_cases, code_case_number(alc, case_stmts, 0));
     for (uint32_t i = 0; i < nacc - 1; ++i) {
         CodeList *case_body = code_list(alc);
-        gen_goto(output, case_body, NULL, acc[i].first, dfa, acc[i].second, false, false);
+        const CodeJump jump = {acc[i].first, acc[i].second, false, false, false};
+        gen_goto(output, dfa, case_body, NULL, jump);
         append(switch_cases, code_case_number(alc, case_body, static_cast<int32_t>(i)));
     }
     Code *cswitch = code_switch(alc, switch_expr, switch_cases, true);
@@ -330,32 +334,37 @@ CodeList *gen_rescan_label(Output &output, const State *s)
     return stmts;
 }
 
-void gen_goto(Output &output, CodeList *stmts, const State *from, const State *to,
-    const DFA &dfa, tcid_t tcid, bool skip, bool eof)
+void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from,
+    const CodeJump &jump)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const char *text;
 
-    if (eof) {
-        append(stmts, gen_on_eof(output, dfa, from, to));
+    if (jump.eof) {
+        append(stmts, gen_on_eof(output, dfa, from, jump.to));
     }
 
-    if (skip && !opts->lookahead) {
+    if (jump.skip && !opts->lookahead) {
         append(stmts, code_skip(alc));
     }
 
-    gen_settags(output, stmts, dfa, tcid, false /* delayed */);
+    gen_settags(output, stmts, dfa, jump.tags, false /* delayed */);
 
-    if (skip && opts->lookahead) {
+    if (jump.skip && opts->lookahead) {
         append(stmts, code_skip(alc));
     }
 
-    if (to) {
-        to->label->used = true;
-        text = o.cstr("goto ").str(opts->labelPrefix).label(*to->label).flush();
+    if (!jump.elide) {
+        jump.to->label->used = true;
+        text = o.cstr("goto ").str(opts->labelPrefix).label(*jump.to->label).flush();
         append(stmts, code_stmt(alc, text));
+    }
+    else {
+        // Goto can be elided, because control flow "falls through" to the
+        // correct DFA state. This usually happens for the last statement in a
+        // sequence of "linear if" statements.
     }
 }
 
@@ -367,7 +376,7 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
     const bool final = from->rule != Rule::NONE;
     const State *fallback = final ? dfa.finstates[from->rule] : dfa.defstate;
     const tcid_t falltags = final ? from->rule_tags : from->fall_tags;
-    uint32_t fillidx = output.fill_index;
+    const uint32_t fillidx = output.fill_index - 1;
     const char *text;
 
     // absence of check doesn't make sense with EOF rule
@@ -380,8 +389,6 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
 
     // check if refill is needed and invoke YYFILL()
     if (opts->fFlag) {
-        --fillidx;
-
         // YYSETSTATE
         std::string s = opts->state_set;
         strrreplace(s, opts->state_set_arg, fillidx);
@@ -410,7 +417,6 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
             // a label must be followed by a statement
             append(refill, code_stmt(alc, ""));
         }
-
     }
     else if (opts->fill_use) {
         // YYFILL invocation
@@ -425,7 +431,7 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
 
         // go to retry label (on YYFILL success)
         CodeList *rescan = code_list(alc);
-        text = o.cstr("goto ").str(opts->yyfilllabel).u32(fillidx - 1).flush();
+        text = o.cstr("goto ").str(opts->yyfilllabel).u32(fillidx).flush();
         append(rescan, code_stmt(alc, text));
 
         append(refill, code_if_then_else(alc, if_yyfill, rescan, NULL));
@@ -453,6 +459,11 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         fallback->label->used = true;
         text = o.cstr("goto ").str(opts->labelPrefix).label(*fallback->label).flush();
         append(refill, code_stmt(alc, text));
+    }
+    else {
+        // Transition can be elided, because control flow "falls through" to an
+        // identical transition. Tags and skip (if present) are elided as well,
+        // because the next transition covers them.
     }
 
     return code_if_then_else(alc, if_refill, refill, NULL);

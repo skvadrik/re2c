@@ -37,7 +37,7 @@ static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
 
         // look for an existing case with the same destination state and tags
         for (c = go->cases; c < cases; ++c) {
-            if (c->to == to && c->tags == tags) break;
+            if (c->jump.to == to && c->jump.tags == tags) break;
         }
 
         if (c == cases) {
@@ -45,11 +45,12 @@ static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
             ++cases;
 
             to->label->used = true;
-            c->to     = to;
-            c->tags   = span->tags;
-            c->skip   = skip && consume(to);
-            c->eof    = eofcase;
-            c->ranges = range;
+            c->jump.to    = to;
+            c->jump.tags  = span->tags;
+            c->jump.skip  = skip && consume(to);
+            c->jump.eof   = eofcase;
+            c->jump.elide = false;
+            c->ranges   = range;
 
             // add the current range
             *range++ = span == spans ? 0 : (span - 1)->ub;
@@ -68,7 +69,7 @@ static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
         }
         else {
             // found a case that already contains this range
-            c->eof |= eofcase;
+            c->jump.eof |= eofcase;
         }
     }
 
@@ -79,7 +80,7 @@ static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
     DASSERT(nspans > 0);
     State *defstate = (endspan - 1)->to;
     for (c = go->cases; c < cases; ++c) {
-        if (c->to == defstate) {
+        if (c->jump.to == defstate) {
             go->defcase = c;
             break;
         }
@@ -111,16 +112,17 @@ static CodeGoIfB *code_goifb(code_alc_t &alc, const Span *s, uint32_t n, State *
     return x;
 }
 
-static void add_branch(CodeGoIfL *go, const CodeCmp *cond, State *to,
+static void add_branch(CodeGoIfL *go, const CodeCmp *cond, State *to, State *next,
     const Span &sp, bool skip, uint32_t eof)
 {
     CodeGoIfL::Branch &b = go->branches[go->nbranches++];
     b.cond = cond;
-    b.to = to;
     if (to) to->label->used = true;
-    b.tags = sp.tags;
-    b.skip = skip && consume(sp.to);
-    b.eof = is_eof(eof, sp.ub);
+    b.jump.to    = to ? to : next;
+    b.jump.tags  = sp.tags;
+    b.jump.skip  = skip && consume(sp.to);
+    b.jump.eof   = is_eof(eof, sp.ub);
+    b.jump.elide = !to;
 }
 
 static CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *next,
@@ -133,17 +135,17 @@ static CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *
 
     for (;;) {
         if (n == 1 && s[0].to == next) {
-            add_branch(x, NULL, NULL, s[0], skip, eof);
+            add_branch(x, NULL, NULL, next, s[0], skip, eof);
             break;
         }
         else if (n == 1) {
-            add_branch(x, NULL, s[0].to, s[0], skip, eof);
+            add_branch(x, NULL, s[0].to, next, s[0], skip, eof);
             break;
         }
         else if (n == 2 && s[0].to == next) {
             CodeCmp *cmp = code_cmp(alc, ">=", s[0].ub);
-            add_branch(x, cmp, s[1].to, s[1], skip, eof);
-            add_branch(x, NULL, NULL, s[0], skip, eof);
+            add_branch(x, cmp, s[1].to, next, s[1], skip, eof);
+            add_branch(x, NULL, NULL, next, s[0], skip, eof);
             break;
         }
         else if (n == 3
@@ -152,8 +154,8 @@ static CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *
                 && s[2].to == s[0].to
                 && s[2].tags == s[0].tags) {
             CodeCmp *cmp = code_cmp(alc, "!=", s[0].ub);
-            add_branch(x, cmp, s[0].to, s[0], skip, eof);
-            add_branch(x, NULL, NULL, s[1], skip, eof);
+            add_branch(x, cmp, s[0].to, next, s[0], skip, eof);
+            add_branch(x, NULL, NULL, next, s[1], skip, eof);
             break;
         }
         else if (n >= 3
@@ -161,13 +163,13 @@ static CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *
                 && s[2].to == s[0].to
                 && s[2].tags == s[0].tags) {
             CodeCmp *cmp = code_cmp(alc, "==", s[0].ub);
-            add_branch(x, cmp, s[1].to, s[1], skip, eof);
+            add_branch(x, cmp, s[1].to, next, s[1], skip, eof);
             n -= 2;
             s += 2;
         }
         else {
             CodeCmp *cmp = code_cmp(alc, "<=", s[0].ub - 1);
-            add_branch(x, cmp, s[0].to, s[0], skip, eof);
+            add_branch(x, cmp, s[0].to, next, s[0], skip, eof);
             n -= 1;
             s += 1;
         }

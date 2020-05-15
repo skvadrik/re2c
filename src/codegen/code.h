@@ -77,6 +77,14 @@ struct code_list_t {
 
 typedef code_list_t<Code> CodeList;
 
+struct CodeJump {
+    const State *to;
+    tcid_t       tags;
+    bool         skip;
+    bool         eof;
+    bool         elide;
+};
+
 struct CodeBmState {
     const CodeGo *go;
     const State  *state;  // destination DFA state
@@ -102,10 +110,7 @@ struct Span {
 struct CodeGoCase {
     uint32_t  nranges;
     uint32_t *ranges;
-    State    *to;
-    tcid_t    tags;
-    bool      skip;
-    bool      eof;
+    CodeJump  jump;
 };
 
 struct CodeGoSw {
@@ -131,10 +136,7 @@ struct CodeGoIfB
 struct CodeGoIfL {
     struct Branch {
         const CodeCmp *cond;
-        State         *to;
-        tcid_t        tags;
-        bool          skip;
-        bool          eof;
+        CodeJump       jump;
     };
 
     size_t  nbranches;
@@ -760,8 +762,8 @@ void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags);
 void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts);
 void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t tcid,
     bool delayed);
-void gen_goto(Output &output, CodeList *stmts, const State *from, const State *to,
-    const DFA &dfa, tcid_t tcid, bool skip, bool eof);
+void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from,
+    const CodeJump &jump);
 const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n);
 void gen_code(Output &output, dfas_t &dfas);
 
