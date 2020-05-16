@@ -34,22 +34,21 @@ static CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go,
     const char *expr = o.str(opts->yych).flush();
 
     CodeCases *cases = code_cases(alc);
+    CodeCase *defcase = NULL;
     for (const CodeGoCase *c = go->cases, *e = c + go->ncases; c < e; ++c) {
         CodeList *body = code_list(alc);
         gen_goto(output, dfa, body, from, c->jump);
-
-        CodeCase *xcase = code_case_ranges(alc, body, c);
         if (c == go->defcase) {
-            // by convention default case must be the first
-            prepend(cases, xcase);
+            defcase = code_case_default(alc, body);
         }
         else {
-            append(cases, xcase);
+            append(cases, code_case_ranges(alc, body, c));
         }
     }
+    append(cases, defcase);
 
     CodeList *stmts = code_list(alc);
-    append(stmts, code_switch(alc, expr, cases, true));
+    append(stmts, code_switch(alc, expr, cases));
 
     return stmts;
 }

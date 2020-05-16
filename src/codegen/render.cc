@@ -150,22 +150,20 @@ static void render_var(RenderContext &rctx, const CodeVar *var)
 static bool oneline_case(const CodeCase *code, const opt_t *opts)
 {
     const Code *first = code->body->head;
-    return code->kind == CodeCase::RANGES
-        && first
+    return first
         && first->next == NULL
         && first->kind == Code::STMT
         && opts->lang != LANG_GO; // gofmt prefers cases on a new line
 }
 
-static void render_case(RenderContext &rctx, const CodeCase *code, bool defcase)
+static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
     const uint32_t ind = rctx.ind;
     const Code *first = code->body->head;
 
-    // TOOD: deduplicate "default" cases
-    if (defcase || code->kind == CodeCase::DEFAULT) {
+    if (code->kind == CodeCase::DEFAULT) {
         os << indent(ind, opts->indString) << "default:";
     }
     else if (code->kind == CodeCase::NUMBER) {
@@ -209,7 +207,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool defcase)
         }
     }
 
-    if (oneline_case(code, opts)) {
+    if (oneline && oneline_case(code, opts)) {
         os << opts->indString << first->text << ";" << std::endl;
         ++rctx.line;
     }
@@ -233,19 +231,11 @@ static void render_switch(RenderContext &rctx, const CodeSwitch *code)
     os << indent(ind, opts->indString) << "switch (" << code->expr << ") {\n";
     ++rctx.line;
 
-    CodeCase *first = code->cases->head; // default
-    DASSERT(first);
+    // If this is a switch on input symbol, prefer single-line cases.
+    const bool oneline = code->cases->head->kind == CodeCase::RANGES;
 
-    if (code->impdef) {
-        for (const CodeCase *c = first->next; c; c = c->next) {
-            render_case(rctx, c, false);
-        }
-        render_case(rctx, first, true);
-    }
-    else {
-        for (const CodeCase *c = first; c; c = c->next) {
-            render_case(rctx, c, false);
-        }
+    for (const CodeCase *c = code->cases->head; c; c = c->next) {
+        render_case(rctx, c, oneline);
     }
 
     os << indent(ind, opts->indString) << "}\n";

@@ -102,7 +102,7 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
 
     CodeList *stmts = code_list(alc);
     text = o.str(opts->state_get).cstr(opts->state_get_naked ? "" : "()").flush();
-    append(stmts, code_switch(alc, text, ccases, false));
+    append(stmts, code_switch(alc, text, ccases));
 
     if (opts->bUseStateNext) {
         text = o.str(opts->yynext).cstr(":").flush();
@@ -271,7 +271,7 @@ static void gen_cond_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
                 append(ccases, code_case_string(alc, body, text));
             }
             text = o.str(output_cond_get(opts)).flush();
-            append(stmts, code_switch(alc, text, ccases, false));
+            append(stmts, code_switch(alc, text, ccases));
         }
 
         // see note [condition order]

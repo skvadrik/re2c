@@ -197,23 +197,19 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
 
     // switch
     CodeCases *cases = code_cases(alc);
-    for (uint32_t i = 0;; ) {
+    for (uint32_t i = 0; i < nacc; ++i) {
         CodeList *case_body = code_list(alc);
         const CodeJump jump = {acc[i].first, acc[i].second, false, false, false};
         gen_goto(output, dfa, case_body, NULL, jump);
-
-        CodeCase *ccase = code_case_number(alc, case_body, static_cast<int32_t>(i));
-        if (++i == nacc) {
-            // last case is the default one, it must go first
-            prepend(cases, ccase);
-            break;
+        if (i == nacc - 1) {
+            append(cases, code_case_default(alc, case_body));
         }
         else {
-            append(cases, ccase);
+            append(cases, code_case_number(alc, case_body, static_cast<int32_t>(i)));
         }
     }
     text = o.str(opts->yyaccept).flush();
-    append(stmts, code_switch(alc, text, cases, true));
+    append(stmts, code_switch(alc, text, cases));
 }
 
 void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)

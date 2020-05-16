@@ -239,7 +239,6 @@ typedef code_list_t<CodeCase> CodeCases;
 struct CodeSwitch {
     const char *expr;
     CodeCases  *cases;
-    bool        impdef;
 };
 
 struct CodeBlock {
@@ -625,13 +624,11 @@ inline Code *code_fcall(code_alc_t &alc, const char *name, CodeArgs *args,
     return code_func(alc, name, args, semi);
 }
 
-inline Code *code_switch(code_alc_t &alc, const char *expr, CodeCases *cases,
-    bool impdef)
+inline Code *code_switch(code_alc_t &alc, const char *expr, CodeCases *cases)
 {
     Code *x = new_code(alc, Code::SWITCH);
     x->swch.expr   = expr;
     x->swch.cases  = cases;
-    x->swch.impdef = impdef;
     return x;
 }
 
