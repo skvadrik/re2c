@@ -28,8 +28,10 @@ start:
 #line 29 "bug1472770.f.c"
 
 	switch (YYGETSTATE()) {
-	default: goto yy0;
-	case 0: goto yyFillLabel0;
+	default:
+		goto yy0;
+	case 0:
+		goto yyFillLabel0;
 	}
 	goto yy0;
 yy1:
@@ -50,7 +52,7 @@ yy3:
 	{
 		return n;
 	}
-#line 54 "bug1472770.f.c"
+#line 56 "bug1472770.f.c"
 yy5:
 	++YYCURSOR;
 #line 27 "bug1472770.f.re"
@@ -58,7 +60,7 @@ yy5:
 		++n;
 		goto start;
 	}
-#line 62 "bug1472770.f.c"
+#line 64 "bug1472770.f.c"
 #line 35 "bug1472770.f.re"
 
 }

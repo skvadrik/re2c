@@ -2,8 +2,10 @@
 
 
 	switch (YYGETSTATE()) {
-	default: abort();
-	case -1: goto yy0;
+	default:
+		abort();
+	case -1:
+		goto yy0;
 	}
 yy0:
 	{}

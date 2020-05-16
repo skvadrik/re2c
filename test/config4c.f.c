@@ -14,9 +14,12 @@ char *scan(char *p)
 #line 15 "config4c.f.c"
 
 	switch (YYGETSTATE()) {
-	default: goto yy0;
-	case 0: goto yyFillLabel0;
-	case 1: goto yyFillLabel1;
+	default:
+		goto yy0;
+	case 0:
+		goto yyFillLabel0;
+	case 1:
+		goto yyFillLabel1;
 	}
 start:
 yy0:
@@ -41,7 +44,7 @@ yy2:
 	++YYCURSOR;
 #line 15 "config4c.f.re"
 	{ return NULL; }
-#line 45 "config4c.f.c"
+#line 48 "config4c.f.c"
 yy4:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -64,7 +67,7 @@ yyFillLabel1:
 yy6:
 #line 14 "config4c.f.re"
 	{ return YYCURSOR; }
-#line 68 "config4c.f.c"
+#line 71 "config4c.f.c"
 #line 16 "config4c.f.re"
 
 }

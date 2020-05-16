@@ -150,32 +150,29 @@ static void render_var(RenderContext &rctx, const CodeVar *var)
 static bool oneline_case(const CodeCase *code, const opt_t *opts)
 {
     const Code *first = code->body->head;
-    return first
+    return code->kind == CodeCase::RANGES
+        && first
         && first->next == NULL
         && first->kind == Code::STMT
         && opts->lang != LANG_GO; // gofmt prefers cases on a new line
 }
 
-static void render_case(RenderContext &rctx, const CodeCase *code, bool defcase,
-    bool noindent)
+static void render_case(RenderContext &rctx, const CodeCase *code, bool defcase)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
     const uint32_t ind = rctx.ind;
     const Code *first = code->body->head;
 
-    if (defcase) {
+    // TOOD: deduplicate "default" cases
+    if (defcase || code->kind == CodeCase::DEFAULT) {
         os << indent(ind, opts->indString) << "default:";
     }
-    else if (code->kind == CodeCase::DEFAULT) {
-        // TOOD: deduplicate "default" cases (requires adjusting test formatting)
-        os << indent(ind, opts->indString) << "default: ";
-    }
     else if (code->kind == CodeCase::NUMBER) {
-        os << indent(ind, opts->indString) << "case " << code->number << ": ";
+        os << indent(ind, opts->indString) << "case " << code->number << ":";
     }
     else if (code->kind == CodeCase::STRING) {
-        os << indent(ind, opts->indString) << "case " << code->string << ": ";
+        os << indent(ind, opts->indString) << "case " << code->string << ":";
     }
     else {
         const Enc &enc = opts->encoding;
@@ -213,8 +210,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool defcase,
     }
 
     if (oneline_case(code, opts)) {
-        if (!noindent) os << opts->indString;
-        os << first->text << ";" << std::endl;
+        os << opts->indString << first->text << ";" << std::endl;
         ++rctx.line;
     }
     else {
@@ -240,18 +236,15 @@ static void render_switch(RenderContext &rctx, const CodeSwitch *code)
     CodeCase *first = code->cases->head; // default
     DASSERT(first);
 
-    // TODO: remove this heuristic (requires fixing formatting in tests)
-    const bool noindent = !code->impdef;
-
     if (code->impdef) {
         for (const CodeCase *c = first->next; c; c = c->next) {
-            render_case(rctx, c, false, noindent);
+            render_case(rctx, c, false);
         }
-        render_case(rctx, first, true, noindent);
+        render_case(rctx, first, true);
     }
     else {
         for (const CodeCase *c = first; c; c = c->next) {
-            render_case(rctx, c, false, noindent);
+            render_case(rctx, c, false);
         }
     }
 

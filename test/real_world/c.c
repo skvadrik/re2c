@@ -712,16 +712,20 @@ yy84:
 yy85:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy3;
-	case 1: 	goto yy30;
-	case 2: 	goto yy34;
-	default:	goto yy114;
+	case 0:
+		goto yy3;
+	case 1:
+		goto yy30;
+	case 2:
+		goto yy34;
+	default:
+		goto yy114;
 	}
 yy86:
 	++YYCURSOR;
 #line 181 "real_world/c.re"
 	{ RET(SCON); }
-#line 725 "real_world/c.c"
+#line 729 "real_world/c.c"
 yy88:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -753,17 +757,17 @@ yy89:
 	++YYCURSOR;
 #line 190 "real_world/c.re"
 	{ RET(MODEQ); }
-#line 757 "real_world/c.c"
+#line 761 "real_world/c.c"
 yy91:
 	++YYCURSOR;
 #line 199 "real_world/c.re"
 	{ RET(ANDAND); }
-#line 762 "real_world/c.c"
+#line 766 "real_world/c.c"
 yy93:
 	++YYCURSOR;
 #line 191 "real_world/c.re"
 	{ RET(ANDEQ); }
-#line 767 "real_world/c.c"
+#line 771 "real_world/c.c"
 yy95:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -809,32 +813,32 @@ yy99:
 	++YYCURSOR;
 #line 188 "real_world/c.re"
 	{ RET(MULEQ); }
-#line 813 "real_world/c.c"
+#line 817 "real_world/c.c"
 yy101:
 	++YYCURSOR;
 #line 196 "real_world/c.re"
 	{ RET(INCR); }
-#line 818 "real_world/c.c"
+#line 822 "real_world/c.c"
 yy103:
 	++YYCURSOR;
 #line 186 "real_world/c.re"
 	{ RET(ADDEQ); }
-#line 823 "real_world/c.c"
+#line 827 "real_world/c.c"
 yy105:
 	++YYCURSOR;
 #line 197 "real_world/c.re"
 	{ RET(DECR); }
-#line 828 "real_world/c.c"
+#line 832 "real_world/c.c"
 yy107:
 	++YYCURSOR;
 #line 187 "real_world/c.re"
 	{ RET(SUBEQ); }
-#line 833 "real_world/c.c"
+#line 837 "real_world/c.c"
 yy109:
 	++YYCURSOR;
 #line 198 "real_world/c.re"
 	{ RET(DEREF); }
-#line 838 "real_world/c.c"
+#line 842 "real_world/c.c"
 yy111:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -868,17 +872,17 @@ yy112:
 yy114:
 #line 178 "real_world/c.re"
 	{ RET(FCON); }
-#line 872 "real_world/c.c"
+#line 876 "real_world/c.c"
 yy115:
 	++YYCURSOR;
 #line 136 "real_world/c.re"
 	{ goto comment; }
-#line 877 "real_world/c.c"
+#line 881 "real_world/c.c"
 yy117:
 	++YYCURSOR;
 #line 189 "real_world/c.re"
 	{ RET(DIVEQ); }
-#line 882 "real_world/c.c"
+#line 886 "real_world/c.c"
 yy119:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -943,22 +947,22 @@ yy123:
 yy124:
 #line 195 "real_world/c.re"
 	{ RET(LSHIFT); }
-#line 947 "real_world/c.c"
+#line 951 "real_world/c.c"
 yy125:
 	++YYCURSOR;
 #line 201 "real_world/c.re"
 	{ RET(LEQ); }
-#line 952 "real_world/c.c"
+#line 956 "real_world/c.c"
 yy127:
 	++YYCURSOR;
 #line 203 "real_world/c.re"
 	{ RET(EQL); }
-#line 957 "real_world/c.c"
+#line 961 "real_world/c.c"
 yy129:
 	++YYCURSOR;
 #line 202 "real_world/c.re"
 	{ RET(GEQ); }
-#line 962 "real_world/c.c"
+#line 966 "real_world/c.c"
 yy131:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -968,12 +972,12 @@ yy131:
 yy132:
 #line 194 "real_world/c.re"
 	{ RET(RSHIFT); }
-#line 972 "real_world/c.c"
+#line 976 "real_world/c.c"
 yy133:
 	++YYCURSOR;
 #line 192 "real_world/c.re"
 	{ RET(XOREQ); }
-#line 977 "real_world/c.c"
+#line 981 "real_world/c.c"
 yy135:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1081,7 +1085,7 @@ yy141:
 yy142:
 #line 145 "real_world/c.re"
 	{ RET(DO); }
-#line 1085 "real_world/c.c"
+#line 1089 "real_world/c.c"
 yy143:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1189,7 +1193,7 @@ yy149:
 yy150:
 #line 153 "real_world/c.re"
 	{ RET(IF); }
-#line 1193 "real_world/c.c"
+#line 1197 "real_world/c.c"
 yy151:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1265,12 +1269,12 @@ yy162:
 	++YYCURSOR;
 #line 193 "real_world/c.re"
 	{ RET(OREQ); }
-#line 1269 "real_world/c.c"
+#line 1273 "real_world/c.c"
 yy164:
 	++YYCURSOR;
 #line 200 "real_world/c.re"
 	{ RET(OROR); }
-#line 1274 "real_world/c.c"
+#line 1278 "real_world/c.c"
 yy166:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1333,7 +1337,7 @@ yy168:
 	++YYCURSOR;
 #line 183 "real_world/c.re"
 	{ RET(ELLIPSIS); }
-#line 1337 "real_world/c.c"
+#line 1341 "real_world/c.c"
 yy170:
 	++YYCURSOR;
 	goto yy114;
@@ -1410,12 +1414,12 @@ yy176:
 	++YYCURSOR;
 #line 185 "real_world/c.re"
 	{ RET(LSHIFTEQ); }
-#line 1414 "real_world/c.c"
+#line 1418 "real_world/c.c"
 yy178:
 	++YYCURSOR;
 #line 184 "real_world/c.re"
 	{ RET(RSHIFTEQ); }
-#line 1419 "real_world/c.c"
+#line 1423 "real_world/c.c"
 yy180:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1554,7 +1558,7 @@ yy191:
 yy192:
 #line 151 "real_world/c.re"
 	{ RET(FOR); }
-#line 1558 "real_world/c.c"
+#line 1562 "real_world/c.c"
 yy193:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1632,7 +1636,7 @@ yy194:
 yy195:
 #line 154 "real_world/c.re"
 	{ RET(INT); }
-#line 1636 "real_world/c.c"
+#line 1640 "real_world/c.c"
 yy196:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1794,7 +1798,7 @@ yy211:
 yy212:
 #line 138 "real_world/c.re"
 	{ RET(AUTO); }
-#line 1798 "real_world/c.c"
+#line 1802 "real_world/c.c"
 yy213:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1872,7 +1876,7 @@ yy214:
 yy215:
 #line 140 "real_world/c.re"
 	{ RET(CASE); }
-#line 1876 "real_world/c.c"
+#line 1880 "real_world/c.c"
 yy216:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1944,7 +1948,7 @@ yy216:
 yy217:
 #line 141 "real_world/c.re"
 	{ RET(CHAR); }
-#line 1948 "real_world/c.c"
+#line 1952 "real_world/c.c"
 yy218:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2040,7 +2044,7 @@ yy222:
 yy223:
 #line 147 "real_world/c.re"
 	{ RET(ELSE); }
-#line 2044 "real_world/c.c"
+#line 2048 "real_world/c.c"
 yy224:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2112,7 +2116,7 @@ yy224:
 yy225:
 #line 148 "real_world/c.re"
 	{ RET(ENUM); }
-#line 2116 "real_world/c.c"
+#line 2120 "real_world/c.c"
 yy226:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2196,7 +2200,7 @@ yy228:
 yy229:
 #line 152 "real_world/c.re"
 	{ RET(GOTO); }
-#line 2200 "real_world/c.c"
+#line 2204 "real_world/c.c"
 yy230:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2268,7 +2272,7 @@ yy230:
 yy231:
 #line 155 "real_world/c.re"
 	{ RET(LONG); }
-#line 2272 "real_world/c.c"
+#line 2276 "real_world/c.c"
 yy232:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2406,7 +2410,7 @@ yy243:
 yy244:
 #line 167 "real_world/c.re"
 	{ RET(VOID); }
-#line 2410 "real_world/c.c"
+#line 2414 "real_world/c.c"
 yy245:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2490,7 +2494,7 @@ yy247:
 yy248:
 #line 139 "real_world/c.re"
 	{ RET(BREAK); }
-#line 2494 "real_world/c.c"
+#line 2498 "real_world/c.c"
 yy249:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2562,7 +2566,7 @@ yy249:
 yy250:
 #line 142 "real_world/c.re"
 	{ RET(CONST); }
-#line 2566 "real_world/c.c"
+#line 2570 "real_world/c.c"
 yy251:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2658,7 +2662,7 @@ yy255:
 yy256:
 #line 150 "real_world/c.re"
 	{ RET(FLOAT); }
-#line 2662 "real_world/c.c"
+#line 2666 "real_world/c.c"
 yy257:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2742,7 +2746,7 @@ yy259:
 yy260:
 #line 158 "real_world/c.re"
 	{ RET(SHORT); }
-#line 2746 "real_world/c.c"
+#line 2750 "real_world/c.c"
 yy261:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2850,7 +2854,7 @@ yy267:
 yy268:
 #line 165 "real_world/c.re"
 	{ RET(UNION); }
-#line 2854 "real_world/c.c"
+#line 2858 "real_world/c.c"
 yy269:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2934,7 +2938,7 @@ yy271:
 yy272:
 #line 169 "real_world/c.re"
 	{ RET(WHILE); }
-#line 2938 "real_world/c.c"
+#line 2942 "real_world/c.c"
 yy273:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3018,7 +3022,7 @@ yy275:
 yy276:
 #line 146 "real_world/c.re"
 	{ RET(DOUBLE); }
-#line 3022 "real_world/c.c"
+#line 3026 "real_world/c.c"
 yy277:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3090,7 +3094,7 @@ yy277:
 yy278:
 #line 149 "real_world/c.re"
 	{ RET(EXTERN); }
-#line 3094 "real_world/c.c"
+#line 3098 "real_world/c.c"
 yy279:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3168,7 +3172,7 @@ yy280:
 yy281:
 #line 157 "real_world/c.re"
 	{ RET(RETURN); }
-#line 3172 "real_world/c.c"
+#line 3176 "real_world/c.c"
 yy282:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3240,7 +3244,7 @@ yy282:
 yy283:
 #line 159 "real_world/c.re"
 	{ RET(SIGNED); }
-#line 3244 "real_world/c.c"
+#line 3248 "real_world/c.c"
 yy284:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3312,7 +3316,7 @@ yy284:
 yy285:
 #line 160 "real_world/c.re"
 	{ RET(SIZEOF); }
-#line 3316 "real_world/c.c"
+#line 3320 "real_world/c.c"
 yy286:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3384,7 +3388,7 @@ yy286:
 yy287:
 #line 161 "real_world/c.re"
 	{ RET(STATIC); }
-#line 3388 "real_world/c.c"
+#line 3392 "real_world/c.c"
 yy288:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3456,7 +3460,7 @@ yy288:
 yy289:
 #line 162 "real_world/c.re"
 	{ RET(STRUCT); }
-#line 3460 "real_world/c.c"
+#line 3464 "real_world/c.c"
 yy290:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3528,7 +3532,7 @@ yy290:
 yy291:
 #line 163 "real_world/c.re"
 	{ RET(SWITCH); }
-#line 3532 "real_world/c.c"
+#line 3536 "real_world/c.c"
 yy292:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3624,7 +3628,7 @@ yy296:
 yy297:
 #line 144 "real_world/c.re"
 	{ RET(DEFAULT); }
-#line 3628 "real_world/c.c"
+#line 3632 "real_world/c.c"
 yy298:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3702,7 +3706,7 @@ yy299:
 yy300:
 #line 164 "real_world/c.re"
 	{ RET(TYPEDEF); }
-#line 3706 "real_world/c.c"
+#line 3710 "real_world/c.c"
 yy301:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3786,7 +3790,7 @@ yy303:
 yy304:
 #line 143 "real_world/c.re"
 	{ RET(CONTINUE); }
-#line 3790 "real_world/c.c"
+#line 3794 "real_world/c.c"
 yy305:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3858,7 +3862,7 @@ yy305:
 yy306:
 #line 156 "real_world/c.re"
 	{ RET(REGISTER); }
-#line 3862 "real_world/c.c"
+#line 3866 "real_world/c.c"
 yy307:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3930,7 +3934,7 @@ yy307:
 yy308:
 #line 166 "real_world/c.re"
 	{ RET(UNSIGNED); }
-#line 3934 "real_world/c.c"
+#line 3938 "real_world/c.c"
 yy309:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4002,14 +4006,14 @@ yy309:
 yy310:
 #line 168 "real_world/c.re"
 	{ RET(VOLATILE); }
-#line 4006 "real_world/c.c"
+#line 4010 "real_world/c.c"
 }
 #line 245 "real_world/c.re"
 
 
 comment:
 
-#line 4013 "real_world/c.c"
+#line 4017 "real_world/c.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -4024,7 +4028,7 @@ yy313:
 yy314:
 #line 256 "real_world/c.re"
 	{ goto comment; }
-#line 4028 "real_world/c.c"
+#line 4032 "real_world/c.c"
 yy315:
 	++YYCURSOR;
 #line 251 "real_world/c.re"
@@ -4033,7 +4037,7 @@ yy315:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 4037 "real_world/c.c"
+#line 4041 "real_world/c.c"
 yy317:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4044,7 +4048,7 @@ yy318:
 	++YYCURSOR;
 #line 249 "real_world/c.re"
 	{ goto std; }
-#line 4048 "real_world/c.c"
+#line 4052 "real_world/c.c"
 }
 #line 257 "real_world/c.re"
 

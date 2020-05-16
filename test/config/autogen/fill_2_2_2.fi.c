@@ -5,8 +5,10 @@
 
 
 	switch (YYGETSTATE()) {
-	default: goto yy0;
-	case 0: goto yyFillLabel0;
+	default:
+		goto yy0;
+	case 0:
+		goto yyFillLabel0;
 	}
 yy0:
 	YYSETSTATE(0);

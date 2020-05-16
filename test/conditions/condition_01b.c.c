@@ -5,8 +5,10 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyca: goto yyc_a;
-	case yycb: goto yyc_b;
+	case yyca:
+		goto yyc_a;
+	case yycb:
+		goto yyc_b;
 	}
 yyc_a:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -26,7 +28,7 @@ yy5:
 	++YYCURSOR;
 #line 3 "conditions/condition_01b.c.re"
 	{ }
-#line 30 "conditions/condition_01b.c.c"
+#line 32 "conditions/condition_01b.c.c"
 yyc_b:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -45,7 +47,7 @@ yy11:
 	++YYCURSOR;
 #line 3 "conditions/condition_01b.c.re"
 	{ }
-#line 49 "conditions/condition_01b.c.c"
+#line 51 "conditions/condition_01b.c.c"
 }
 #line 5 "conditions/condition_01b.c.re"
 

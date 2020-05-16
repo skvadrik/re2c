@@ -4,14 +4,22 @@
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
 	switch (YYGETCONDITION()) {
-	case yycINITIAL: goto yyc_INITIAL;
-	case yycST_OFFSET: goto yyc_ST_OFFSET;
-	case yycST_SECTION_VALUE: goto yyc_ST_SECTION_VALUE;
-	case yycST_VALUE: goto yyc_ST_VALUE;
-	case yycST_SECTION_RAW: goto yyc_ST_SECTION_RAW;
-	case yycST_DOUBLE_QUOTES: goto yyc_ST_DOUBLE_QUOTES;
-	case yycST_VARNAME: goto yyc_ST_VARNAME;
-	case yycST_RAW: goto yyc_ST_RAW;
+	case yycINITIAL:
+		goto yyc_INITIAL;
+	case yycST_OFFSET:
+		goto yyc_ST_OFFSET;
+	case yycST_SECTION_VALUE:
+		goto yyc_ST_SECTION_VALUE;
+	case yycST_VALUE:
+		goto yyc_ST_VALUE;
+	case yycST_SECTION_RAW:
+		goto yyc_ST_SECTION_RAW;
+	case yycST_DOUBLE_QUOTES:
+		goto yyc_ST_DOUBLE_QUOTES;
+	case yycST_VARNAME:
+		goto yyc_ST_VARNAME;
+	case yycST_RAW:
+		goto yyc_ST_RAW;
 	}
 /* *********************************** */
 yyc_INITIAL:
@@ -671,9 +679,12 @@ yy82:
 yy83:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy63;
-	case 1: 	goto yy75;
-	default:	goto yy78;
+	case 0:
+		goto yy63;
+	case 1:
+		goto yy75;
+	default:
+		goto yy78;
 	}
 yy84:
 	++YYCURSOR;
@@ -1021,9 +1032,12 @@ yy118:
 yy119:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy98;
-	case 1: 	goto yy110;
-	default:	goto yy113;
+	case 0:
+		goto yy98;
+	case 1:
+		goto yy110;
+	default:
+		goto yy113;
 	}
 yy120:
 	++YYCURSOR;
@@ -1851,12 +1865,18 @@ yy168:
 yy169:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy138;
-	case 1: 	goto yy155;
-	case 2: 	goto yy162;
-	case 3: 	goto yy182;
-	case 4: 	goto yy186;
-	default:	goto yy203;
+	case 0:
+		goto yy138;
+	case 1:
+		goto yy155;
+	case 2:
+		goto yy162;
+	case 3:
+		goto yy182;
+	case 4:
+		goto yy186;
+	default:
+		goto yy203;
 	}
 yy170:
 	++YYCURSOR;

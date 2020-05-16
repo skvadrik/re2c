@@ -740,22 +740,38 @@ yy70:
 yy71:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy5;
-	case 1: 	goto yy15;
-	case 2: 	goto yy22;
-	case 3: 	goto yy33;
-	case 4: 	goto yy39;
-	case 5: 	goto yy41;
-	case 6: 	goto yy43;
-	case 7: 	goto yy64;
-	case 8: 	goto yy66;
-	case 9: 	goto yy73;
-	case 10: 	goto yy31;
-	case 11: 	goto yy94;
-	case 12: 	goto yy108;
-	case 13: 	goto yy106;
-	case 14: 	goto yy98;
-	default:	goto yy96;
+	case 0:
+		goto yy5;
+	case 1:
+		goto yy15;
+	case 2:
+		goto yy22;
+	case 3:
+		goto yy33;
+	case 4:
+		goto yy39;
+	case 5:
+		goto yy41;
+	case 6:
+		goto yy43;
+	case 7:
+		goto yy64;
+	case 8:
+		goto yy66;
+	case 9:
+		goto yy73;
+	case 10:
+		goto yy31;
+	case 11:
+		goto yy94;
+	case 12:
+		goto yy108;
+	case 13:
+		goto yy106;
+	case 14:
+		goto yy98;
+	default:
+		goto yy96;
 	}
 yy72:
 	yyaccept = 9;
@@ -773,7 +789,7 @@ yy72:
 yy73:
 #line 255 "real_world/rexx.re"
 	{ RETURN(SU_LITERAL); }
-#line 777 "real_world/rexx.c"
+#line 793 "real_world/rexx.c"
 yy74:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -788,7 +804,7 @@ yy76:
 	++YYCURSOR;
 #line 118 "real_world/rexx.re"
 	{ RETURN(OP_XOR); }
-#line 792 "real_world/rexx.c"
+#line 808 "real_world/rexx.c"
 yy78:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -827,7 +843,7 @@ yy83:
 	++YYCURSOR;
 #line 88 "real_world/rexx.re"
 	{ RETURN(OP_POWER); }
-#line 831 "real_world/rexx.c"
+#line 847 "real_world/rexx.c"
 yy85:
 	yyaccept = 10;
 	YYMARKER = ++YYCURSOR;
@@ -918,7 +934,7 @@ yy89:
 	++YYCURSOR;
 #line 86 "real_world/rexx.re"
 	{ RETURN(OP_REMAIN); }
-#line 922 "real_world/rexx.c"
+#line 938 "real_world/rexx.c"
 yy91:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -944,19 +960,19 @@ yy93:
 yy94:
 #line 108 "real_world/rexx.re"
 	{ RETURN(OP_LT_STRICT); }
-#line 948 "real_world/rexx.c"
+#line 964 "real_world/rexx.c"
 yy95:
 	++YYCURSOR;
 yy96:
 #line 100 "real_world/rexx.re"
 	{ RETURN(OP_LE); }
-#line 954 "real_world/rexx.c"
+#line 970 "real_world/rexx.c"
 yy97:
 	++YYCURSOR;
 yy98:
 #line 92 "real_world/rexx.re"
 	{ RETURN(OP_EQUAL_N); }
-#line 960 "real_world/rexx.c"
+#line 976 "real_world/rexx.c"
 yy99:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -971,7 +987,7 @@ yy101:
 	++YYCURSOR;
 #line 102 "real_world/rexx.re"
 	{ RETURN(OP_EQUAL_EQ); }
-#line 975 "real_world/rexx.c"
+#line 991 "real_world/rexx.c"
 yy103:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -990,7 +1006,7 @@ yy105:
 yy106:
 #line 98 "real_world/rexx.re"
 	{ RETURN(OP_GE); }
-#line 994 "real_world/rexx.c"
+#line 1010 "real_world/rexx.c"
 yy107:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -1003,7 +1019,7 @@ yy107:
 yy108:
 #line 106 "real_world/rexx.re"
 	{ RETURN(OP_GT_STRICT); }
-#line 1007 "real_world/rexx.c"
+#line 1023 "real_world/rexx.c"
 yy109:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1092,7 +1108,7 @@ yy111:
 yy112:
 #line 194 "real_world/rexx.re"
 	{ RETURN(RXS_BY); }
-#line 1096 "real_world/rexx.c"
+#line 1112 "real_world/rexx.c"
 yy113:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1181,7 +1197,7 @@ yy115:
 yy116:
 #line 140 "real_world/rexx.re"
 	{ RETURN(RX_DO); }
-#line 1185 "real_world/rexx.c"
+#line 1201 "real_world/rexx.c"
 yy117:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1323,7 +1339,7 @@ yy126:
 yy127:
 #line 150 "real_world/rexx.re"
 	{ RETURN(RX_IF); }
-#line 1327 "real_world/rexx.c"
+#line 1343 "real_world/rexx.c"
 yy128:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1458,7 +1474,7 @@ yy136:
 yy137:
 #line 192 "real_world/rexx.re"
 	{ RETURN(RXS_ON); }
-#line 1462 "real_world/rexx.c"
+#line 1478 "real_world/rexx.c"
 yy138:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1633,7 +1649,7 @@ yy152:
 yy153:
 #line 230 "real_world/rexx.re"
 	{ RETURN(RXS_TO); }
-#line 1637 "real_world/rexx.c"
+#line 1653 "real_world/rexx.c"
 yy154:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1741,7 +1757,7 @@ yy168:
 	++YYCURSOR;
 #line 74 "real_world/rexx.re"
 	{ RETURN(OP_CONCAT); }
-#line 1745 "real_world/rexx.c"
+#line 1761 "real_world/rexx.c"
 yy170:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1818,7 +1834,7 @@ yy170:
 yy172:
 #line 253 "real_world/rexx.re"
 	{ RETURN(SU_SYMBOL_COMPOUND); }
-#line 1822 "real_world/rexx.c"
+#line 1838 "real_world/rexx.c"
 yy173:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1990,7 +2006,7 @@ yy178:
 	++YYCURSOR;
 #line 112 "real_world/rexx.re"
 	{ RETURN(OP_LE_STRICT); }
-#line 1994 "real_world/rexx.c"
+#line 2010 "real_world/rexx.c"
 yy180:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -2005,7 +2021,7 @@ yy182:
 	++YYCURSOR;
 #line 110 "real_world/rexx.re"
 	{ RETURN(OP_GE_STRICT); }
-#line 2009 "real_world/rexx.c"
+#line 2025 "real_world/rexx.c"
 yy184:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2087,7 +2103,7 @@ yy185:
 yy186:
 #line 136 "real_world/rexx.re"
 	{ RETURN(RX_ARG); }
-#line 2091 "real_world/rexx.c"
+#line 2107 "real_world/rexx.c"
 yy187:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2190,7 +2206,7 @@ yy191:
 yy192:
 #line 146 "real_world/rexx.re"
 	{ RETURN(RX_END); }
-#line 2194 "real_world/rexx.c"
+#line 2210 "real_world/rexx.c"
 yy193:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2300,7 +2316,7 @@ yy198:
 yy199:
 #line 206 "real_world/rexx.re"
 	{ RETURN(RXS_FOR); }
-#line 2304 "real_world/rexx.c"
+#line 2320 "real_world/rexx.c"
 yy200:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2424,7 +2440,7 @@ yy207:
 yy208:
 #line 158 "real_world/rexx.re"
 	{ RETURN(RX_NOP); }
-#line 2428 "real_world/rexx.c"
+#line 2444 "real_world/rexx.c"
 yy209:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2520,7 +2536,7 @@ yy212:
 yy213:
 #line 190 "real_world/rexx.re"
 	{ RETURN(RXS_OFF); }
-#line 2524 "real_world/rexx.c"
+#line 2540 "real_world/rexx.c"
 yy214:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2651,7 +2667,7 @@ yy222:
 yy223:
 #line 178 "real_world/rexx.re"
 	{ RETURN(RX_SAY); }
-#line 2655 "real_world/rexx.c"
+#line 2671 "real_world/rexx.c"
 yy224:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2796,7 +2812,7 @@ yy234:
 yy235:
 #line 238 "real_world/rexx.re"
 	{ RETURN(RXS_VAR); }
-#line 2800 "real_world/rexx.c"
+#line 2816 "real_world/rexx.c"
 yy236:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2849,7 +2865,7 @@ yy244:
 	++YYCURSOR;
 #line 104 "real_world/rexx.re"
 	{ RETURN(OP_EQUAL_EQ_N); }
-#line 2853 "real_world/rexx.c"
+#line 2869 "real_world/rexx.c"
 yy246:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -2865,13 +2881,13 @@ yy248:
 	YYCURSOR -= 1;
 #line 257 "real_world/rexx.re"
 	{ RETURN(SU_LITERAL_BIN); }
-#line 2869 "real_world/rexx.c"
+#line 2885 "real_world/rexx.c"
 yy250:
 	++YYCURSOR;
 	YYCURSOR -= 1;
 #line 259 "real_world/rexx.re"
 	{ RETURN(SU_LITERAL_HEX); }
-#line 2875 "real_world/rexx.c"
+#line 2891 "real_world/rexx.c"
 yy252:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -2970,7 +2986,7 @@ yy255:
 yy256:
 #line 138 "real_world/rexx.re"
 	{ RETURN(RX_CALL); }
-#line 2974 "real_world/rexx.c"
+#line 2990 "real_world/rexx.c"
 yy257:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3052,7 +3068,7 @@ yy258:
 yy259:
 #line 142 "real_world/rexx.re"
 	{ RETURN(RX_DROP); }
-#line 3056 "real_world/rexx.c"
+#line 3072 "real_world/rexx.c"
 yy260:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3127,7 +3143,7 @@ yy260:
 yy261:
 #line 144 "real_world/rexx.re"
 	{ RETURN(RX_ELSE); }
-#line 3131 "real_world/rexx.c"
+#line 3147 "real_world/rexx.c"
 yy262:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3216,7 +3232,7 @@ yy264:
 yy265:
 #line 148 "real_world/rexx.re"
 	{ RETURN(RX_EXIT); }
-#line 3220 "real_world/rexx.c"
+#line 3236 "real_world/rexx.c"
 yy266:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3312,7 +3328,7 @@ yy269:
 yy270:
 #line 210 "real_world/rexx.re"
 	{ RETURN(RXS_FORM); }
-#line 3316 "real_world/rexx.c"
+#line 3332 "real_world/rexx.c"
 yy271:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3387,7 +3403,7 @@ yy271:
 yy272:
 #line 212 "real_world/rexx.re"
 	{ RETURN(RXS_FUZZ); }
-#line 3391 "real_world/rexx.c"
+#line 3407 "real_world/rexx.c"
 yy273:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3462,7 +3478,7 @@ yy273:
 yy274:
 #line 214 "real_world/rexx.re"
 	{ RETURN(RXS_HALT); }
-#line 3466 "real_world/rexx.c"
+#line 3482 "real_world/rexx.c"
 yy275:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3565,7 +3581,7 @@ yy279:
 yy280:
 #line 218 "real_world/rexx.re"
 	{ RETURN(RXS_NAME); }
-#line 3569 "real_world/rexx.c"
+#line 3585 "real_world/rexx.c"
 yy281:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3689,7 +3705,7 @@ yy288:
 yy289:
 #line 170 "real_world/rexx.re"
 	{ RETURN(RX_PULL); }
-#line 3693 "real_world/rexx.c"
+#line 3709 "real_world/rexx.c"
 yy290:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3764,7 +3780,7 @@ yy290:
 yy291:
 #line 172 "real_world/rexx.re"
 	{ RETURN(RX_PUSH); }
-#line 3768 "real_world/rexx.c"
+#line 3784 "real_world/rexx.c"
 yy292:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3888,7 +3904,7 @@ yy299:
 yy300:
 #line 184 "real_world/rexx.re"
 	{ RETURN(RX_THEN); }
-#line 3892 "real_world/rexx.c"
+#line 3908 "real_world/rexx.c"
 yy301:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3998,7 +4014,7 @@ yy306:
 yy307:
 #line 188 "real_world/rexx.re"
 	{ RETURN(RX_WHEN); }
-#line 4002 "real_world/rexx.c"
+#line 4018 "real_world/rexx.c"
 yy308:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4080,7 +4096,7 @@ yy309:
 yy310:
 #line 244 "real_world/rexx.re"
 	{ RETURN(RXS_WITH); }
-#line 4084 "real_world/rexx.c"
+#line 4100 "real_world/rexx.c"
 yy311:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4176,7 +4192,7 @@ yy314:
 yy315:
 #line 200 "real_world/rexx.re"
 	{ RETURN(RXS_ERROR); }
-#line 4180 "real_world/rexx.c"
+#line 4196 "real_world/rexx.c"
 yy316:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4286,7 +4302,7 @@ yy321:
 yy322:
 #line 156 "real_world/rexx.re"
 	{ RETURN(RX_LEAVE); }
-#line 4290 "real_world/rexx.c"
+#line 4306 "real_world/rexx.c"
 yy323:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4403,7 +4419,7 @@ yy329:
 yy330:
 #line 166 "real_world/rexx.re"
 	{ RETURN(RX_PARSE); }
-#line 4407 "real_world/rexx.c"
+#line 4423 "real_world/rexx.c"
 yy331:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4485,7 +4501,7 @@ yy332:
 yy333:
 #line 174 "real_world/rexx.re"
 	{ RETURN(RX_QUEUE); }
-#line 4489 "real_world/rexx.c"
+#line 4505 "real_world/rexx.c"
 yy334:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4602,7 +4618,7 @@ yy340:
 yy341:
 #line 186 "real_world/rexx.re"
 	{ RETURN(RX_TRACE); }
-#line 4606 "real_world/rexx.c"
+#line 4622 "real_world/rexx.c"
 yy342:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4677,7 +4693,7 @@ yy342:
 yy343:
 #line 232 "real_world/rexx.re"
 	{ RETURN(RXS_UNTIL); }
-#line 4681 "real_world/rexx.c"
+#line 4697 "real_world/rexx.c"
 yy344:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4752,7 +4768,7 @@ yy344:
 yy345:
 #line 234 "real_world/rexx.re"
 	{ RETURN(RXS_UPPER); }
-#line 4756 "real_world/rexx.c"
+#line 4772 "real_world/rexx.c"
 yy346:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4827,7 +4843,7 @@ yy346:
 yy347:
 #line 236 "real_world/rexx.re"
 	{ RETURN(RXS_VALUE); }
-#line 4831 "real_world/rexx.c"
+#line 4847 "real_world/rexx.c"
 yy348:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4909,7 +4925,7 @@ yy349:
 yy350:
 #line 242 "real_world/rexx.re"
 	{ RETURN(RXS_WHILE); }
-#line 4913 "real_world/rexx.c"
+#line 4929 "real_world/rexx.c"
 yy351:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4991,7 +5007,7 @@ yy352:
 yy353:
 #line 196 "real_world/rexx.re"
 	{ RETURN(RXS_DIGITS); }
-#line 4995 "real_world/rexx.c"
+#line 5011 "real_world/rexx.c"
 yy354:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5073,7 +5089,7 @@ yy355:
 yy356:
 #line 202 "real_world/rexx.re"
 	{ RETURN(RXS_EXPOSE); }
-#line 5077 "real_world/rexx.c"
+#line 5093 "real_world/rexx.c"
 yy357:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5176,7 +5192,7 @@ yy361:
 yy362:
 #line 216 "real_world/rexx.re"
 	{ RETURN(RXS_LINEIN); }
-#line 5180 "real_world/rexx.c"
+#line 5196 "real_world/rexx.c"
 yy363:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5293,7 +5309,7 @@ yy369:
 yy370:
 #line 176 "real_world/rexx.re"
 	{ RETURN(RX_RETURN); }
-#line 5297 "real_world/rexx.c"
+#line 5313 "real_world/rexx.c"
 yy371:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5375,7 +5391,7 @@ yy372:
 yy373:
 #line 180 "real_world/rexx.re"
 	{ RETURN(RX_SELECT); }
-#line 5379 "real_world/rexx.c"
+#line 5395 "real_world/rexx.c"
 yy374:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5450,7 +5466,7 @@ yy374:
 yy375:
 #line 182 "real_world/rexx.re"
 	{ RETURN(RX_SIGNAL); }
-#line 5454 "real_world/rexx.c"
+#line 5470 "real_world/rexx.c"
 yy376:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5525,7 +5541,7 @@ yy376:
 yy377:
 #line 226 "real_world/rexx.re"
 	{ RETURN(RXS_SOURCE); }
-#line 5529 "real_world/rexx.c"
+#line 5545 "real_world/rexx.c"
 yy378:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5600,7 +5616,7 @@ yy378:
 yy379:
 #line 228 "real_world/rexx.re"
 	{ RETURN(RXS_SYNTAX); }
-#line 5604 "real_world/rexx.c"
+#line 5620 "real_world/rexx.c"
 yy380:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5682,7 +5698,7 @@ yy381:
 yy382:
 #line 134 "real_world/rexx.re"
 	{ RETURN(RX_ADDRESS); }
-#line 5686 "real_world/rexx.c"
+#line 5702 "real_world/rexx.c"
 yy383:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5764,7 +5780,7 @@ yy384:
 yy385:
 #line 204 "real_world/rexx.re"
 	{ RETURN(RXS_FAILURE); }
-#line 5768 "real_world/rexx.c"
+#line 5784 "real_world/rexx.c"
 yy386:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5839,7 +5855,7 @@ yy386:
 yy387:
 #line 208 "real_world/rexx.re"
 	{ RETURN(RXS_FOREVER); }
-#line 5843 "real_world/rexx.c"
+#line 5859 "real_world/rexx.c"
 yy388:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5921,7 +5937,7 @@ yy389:
 yy390:
 #line 154 "real_world/rexx.re"
 	{ RETURN(RX_ITERATE); }
-#line 5925 "real_world/rexx.c"
+#line 5941 "real_world/rexx.c"
 yy391:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6003,7 +6019,7 @@ yy392:
 yy393:
 #line 222 "real_world/rexx.re"
 	{ RETURN(RXS_NOVALUE); }
-#line 6007 "real_world/rexx.c"
+#line 6023 "real_world/rexx.c"
 yy394:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6078,7 +6094,7 @@ yy394:
 yy395:
 #line 160 "real_world/rexx.re"
 	{ RETURN(RX_NUMERIC); }
-#line 6082 "real_world/rexx.c"
+#line 6098 "real_world/rexx.c"
 yy396:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6153,7 +6169,7 @@ yy396:
 yy397:
 #line 162 "real_world/rexx.re"
 	{ RETURN(RX_OPTIONS); }
-#line 6157 "real_world/rexx.c"
+#line 6173 "real_world/rexx.c"
 yy398:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6249,7 +6265,7 @@ yy401:
 yy402:
 #line 240 "real_world/rexx.re"
 	{ RETURN(RXS_VERSION); }
-#line 6253 "real_world/rexx.c"
+#line 6269 "real_world/rexx.c"
 yy403:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6338,7 +6354,7 @@ yy405:
 yy406:
 #line 220 "real_world/rexx.re"
 	{ RETURN(RXS_NOTREADY); }
-#line 6342 "real_world/rexx.c"
+#line 6358 "real_world/rexx.c"
 yy407:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6441,7 +6457,7 @@ yy411:
 yy412:
 #line 152 "real_world/rexx.re"
 	{ RETURN(RX_INTERPRET); }
-#line 6445 "real_world/rexx.c"
+#line 6461 "real_world/rexx.c"
 yy413:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6516,7 +6532,7 @@ yy413:
 yy414:
 #line 164 "real_world/rexx.re"
 	{ RETURN(RX_OTHERWISE); }
-#line 6520 "real_world/rexx.c"
+#line 6536 "real_world/rexx.c"
 yy415:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6591,7 +6607,7 @@ yy415:
 yy416:
 #line 168 "real_world/rexx.re"
 	{ RETURN(RX_PROCEDURE); }
-#line 6595 "real_world/rexx.c"
+#line 6611 "real_world/rexx.c"
 yy417:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6680,7 +6696,7 @@ yy419:
 yy420:
 #line 224 "real_world/rexx.re"
 	{ RETURN(RXS_SCIENTIFIC); }
-#line 6684 "real_world/rexx.c"
+#line 6700 "real_world/rexx.c"
 yy421:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6755,7 +6771,7 @@ yy421:
 yy422:
 #line 198 "real_world/rexx.re"
 	{ RETURN(RXS_ENGINEERING); }
-#line 6759 "real_world/rexx.c"
+#line 6775 "real_world/rexx.c"
 }
 #line 265 "real_world/rexx.re"
 
@@ -6769,7 +6785,7 @@ bool StripToken(){
 	ScanCB.eot = cursor;
 strip:
 
-#line 6773 "real_world/rexx.c"
+#line 6789 "real_world/rexx.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -6787,7 +6803,7 @@ yy426:
 	YYCURSOR -= 1;
 #line 289 "real_world/rexx.re"
 	{ RETURN(blanks); }
-#line 6791 "real_world/rexx.c"
+#line 6807 "real_world/rexx.c"
 yy427:
 	++YYCURSOR;
 #line 284 "real_world/rexx.re"
@@ -6795,12 +6811,12 @@ yy427:
 		blanks = TRUE;
 		goto strip;
 	    }
-#line 6799 "real_world/rexx.c"
+#line 6815 "real_world/rexx.c"
 yy429:
 	++YYCURSOR;
 #line 282 "real_world/rexx.re"
 	{ goto strip; }
-#line 6804 "real_world/rexx.c"
+#line 6820 "real_world/rexx.c"
 yy431:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6814,14 +6830,14 @@ yy432:
 		depth = 1;
 		goto comment;
 	    }
-#line 6818 "real_world/rexx.c"
+#line 6834 "real_world/rexx.c"
 }
 #line 290 "real_world/rexx.re"
 
 
 comment:
 
-#line 6825 "real_world/rexx.c"
+#line 6841 "real_world/rexx.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -6837,7 +6853,7 @@ yy436:
 	++YYCURSOR;
 #line 313 "real_world/rexx.re"
 	{ RETURN(blanks); }
-#line 6841 "real_world/rexx.c"
+#line 6857 "real_world/rexx.c"
 yy438:
 	++YYCURSOR;
 yy439:
@@ -6845,7 +6861,7 @@ yy439:
 	{
 		goto comment;
 	    }
-#line 6849 "real_world/rexx.c"
+#line 6865 "real_world/rexx.c"
 yy440:
 	++YYCURSOR;
 #line 302 "real_world/rexx.re"
@@ -6854,7 +6870,7 @@ yy440:
 		ScanCB.linePos = ScanCB.pos + (cursor - ScanCB.mrk);
 		goto comment;
 	    }
-#line 6858 "real_world/rexx.c"
+#line 6874 "real_world/rexx.c"
 yy442:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6876,7 +6892,7 @@ yy444:
 		else
 		    goto comment;
 	    }
-#line 6880 "real_world/rexx.c"
+#line 6896 "real_world/rexx.c"
 yy446:
 	++YYCURSOR;
 #line 308 "real_world/rexx.re"
@@ -6884,7 +6900,7 @@ yy446:
 		++depth;
 		goto comment;
 	    }
-#line 6888 "real_world/rexx.c"
+#line 6904 "real_world/rexx.c"
 }
 #line 318 "real_world/rexx.re"
 

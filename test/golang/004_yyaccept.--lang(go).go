@@ -53,9 +53,9 @@ yy6:
 yy7:
 	cursor = marker
 	switch (yyaccept) {
-	case 0: 
+	case 0:
 		goto yy5
-	case 1: 
+	case 1:
 		goto yy9
 	default:
 		goto yy12

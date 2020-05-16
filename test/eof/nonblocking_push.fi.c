@@ -89,68 +89,69 @@ const char * STATUSES[] = {
 static status_t lex(input_t &in)
 {
 switch (YYGETSTATE()) {
-default: goto yy0;
-case 0: 
+default:
+	goto yy0;
+case 0:
 	if (in.lim <= in.cur) goto yyeof0;
 	goto yyFillLabel0;
-case 1: 
+case 1:
 	if (in.lim <= in.cur) goto yyeof1;
 	goto yyFillLabel1;
-case 2: 
+case 2:
 	if (in.lim <= in.cur) goto yyeof2;
 	goto yyFillLabel2;
-case 3: 
+case 3:
 	if (in.lim <= in.cur) goto yyeof3;
 	goto yyFillLabel3;
-case 4: 
+case 4:
 	if (in.lim <= in.cur) goto yyeof4;
 	goto yyFillLabel4;
-case 5: 
+case 5:
 	if (in.lim <= in.cur) goto yyeof5;
 	goto yyFillLabel5;
-case 6: 
+case 6:
 	if (in.lim <= in.cur) goto yyeof6;
 	goto yyFillLabel6;
-case 7: 
+case 7:
 	if (in.lim <= in.cur) goto yyeof7;
 	goto yyFillLabel7;
-case 8: 
+case 8:
 	if (in.lim <= in.cur) goto yyeof8;
 	goto yyFillLabel8;
-case 9: 
+case 9:
 	if (in.lim <= in.cur) goto yyeof9;
 	goto yyFillLabel9;
-case 10: 
+case 10:
 	if (in.lim <= in.cur) goto yyeof10;
 	goto yyFillLabel10;
-case 11: 
+case 11:
 	if (in.lim <= in.cur) goto yyeof11;
 	goto yyFillLabel11;
-case 12: 
+case 12:
 	if (in.lim <= in.cur) goto yyeof12;
 	goto yyFillLabel12;
-case 13: 
+case 13:
 	if (in.lim <= in.cur) goto yyeof13;
 	goto yyFillLabel13;
-case 14: 
+case 14:
 	if (in.lim <= in.cur) goto yyeof14;
 	goto yyFillLabel14;
-case 15: 
+case 15:
 	if (in.lim <= in.cur) goto yyeof15;
 	goto yyFillLabel15;
-case 16: 
+case 16:
 	if (in.lim <= in.cur) goto yyeof16;
 	goto yyFillLabel16;
-case 17: 
+case 17:
 	if (in.lim <= in.cur) goto yyeof17;
 	goto yyFillLabel17;
-case 18: 
+case 18:
 	if (in.lim <= in.cur) goto yyeof18;
 	goto yyFillLabel18;
-case 19: 
+case 19:
 	if (in.lim <= in.cur) goto yyeof19;
 	goto yyFillLabel19;
-case 20: 
+case 20:
 	if (in.lim <= in.cur) goto yyeof20;
 	goto yyFillLabel20;
 }

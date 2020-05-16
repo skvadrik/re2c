@@ -31,11 +31,16 @@ static bool lex(const char *s, unsigned long &u)
 {
 	char yych;
 	switch (c) {
-	case yycinit: goto yyc_init;
-	case yycbin: goto yyc_bin;
-	case yycdec: goto yyc_dec;
-	case yychex: goto yyc_hex;
-	case yycoct: goto yyc_oct;
+	case yycinit:
+		goto yyc_init;
+	case yycbin:
+		goto yyc_bin;
+	case yycdec:
+		goto yyc_dec;
+	case yychex:
+		goto yyc_hex;
+	case yycoct:
+		goto yyc_oct;
 	}
 /* *********************************** */
 yyc_init:

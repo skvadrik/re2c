@@ -2,16 +2,26 @@
 
 
 	switch (YYGETSTATE()) {
-	default: goto yy0;
-	case 0: goto yyFillLabel0;
-	case 1: goto yyFillLabel1;
-	case 2: goto yyFillLabel2;
-	case 3: goto yyFillLabel3;
-	case 4: goto yyFillLabel4;
-	case 5: goto yyFillLabel5;
-	case 6: goto yyFillLabel6;
-	case 7: goto yyFillLabel7;
-	case 8: goto yyFillLabel8;
+	default:
+		goto yy0;
+	case 0:
+		goto yyFillLabel0;
+	case 1:
+		goto yyFillLabel1;
+	case 2:
+		goto yyFillLabel2;
+	case 3:
+		goto yyFillLabel3;
+	case 4:
+		goto yyFillLabel4;
+	case 5:
+		goto yyFillLabel5;
+	case 6:
+		goto yyFillLabel6;
+	case 7:
+		goto yyFillLabel7;
+	case 8:
+		goto yyFillLabel8;
 	}
 yy0:
 	YYSETSTATE(0);

@@ -611,16 +611,20 @@ yy69:
 yy70:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy3;
-	case 1: 	goto yy30;
-	case 2: 	goto yy34;
-	default:	goto yy99;
+	case 0:
+		goto yy3;
+	case 1:
+		goto yy30;
+	case 2:
+		goto yy34;
+	default:
+		goto yy99;
 	}
 yy71:
 	++YYCURSOR;
 #line 148 "real_world/cnokw.re"
 	{ RET(SCON); }
-#line 624 "real_world/cnokw.c"
+#line 628 "real_world/cnokw.c"
 yy73:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -652,17 +656,17 @@ yy74:
 	++YYCURSOR;
 #line 157 "real_world/cnokw.re"
 	{ RET(MODEQ); }
-#line 656 "real_world/cnokw.c"
+#line 660 "real_world/cnokw.c"
 yy76:
 	++YYCURSOR;
 #line 166 "real_world/cnokw.re"
 	{ RET(ANDAND); }
-#line 661 "real_world/cnokw.c"
+#line 665 "real_world/cnokw.c"
 yy78:
 	++YYCURSOR;
 #line 158 "real_world/cnokw.re"
 	{ RET(ANDEQ); }
-#line 666 "real_world/cnokw.c"
+#line 670 "real_world/cnokw.c"
 yy80:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -708,32 +712,32 @@ yy84:
 	++YYCURSOR;
 #line 155 "real_world/cnokw.re"
 	{ RET(MULEQ); }
-#line 712 "real_world/cnokw.c"
+#line 716 "real_world/cnokw.c"
 yy86:
 	++YYCURSOR;
 #line 163 "real_world/cnokw.re"
 	{ RET(INCR); }
-#line 717 "real_world/cnokw.c"
+#line 721 "real_world/cnokw.c"
 yy88:
 	++YYCURSOR;
 #line 153 "real_world/cnokw.re"
 	{ RET(ADDEQ); }
-#line 722 "real_world/cnokw.c"
+#line 726 "real_world/cnokw.c"
 yy90:
 	++YYCURSOR;
 #line 164 "real_world/cnokw.re"
 	{ RET(DECR); }
-#line 727 "real_world/cnokw.c"
+#line 731 "real_world/cnokw.c"
 yy92:
 	++YYCURSOR;
 #line 154 "real_world/cnokw.re"
 	{ RET(SUBEQ); }
-#line 732 "real_world/cnokw.c"
+#line 736 "real_world/cnokw.c"
 yy94:
 	++YYCURSOR;
 #line 165 "real_world/cnokw.re"
 	{ RET(DEREF); }
-#line 737 "real_world/cnokw.c"
+#line 741 "real_world/cnokw.c"
 yy96:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -767,17 +771,17 @@ yy97:
 yy99:
 #line 145 "real_world/cnokw.re"
 	{ RET(FCON); }
-#line 771 "real_world/cnokw.c"
+#line 775 "real_world/cnokw.c"
 yy100:
 	++YYCURSOR;
 #line 136 "real_world/cnokw.re"
 	{ goto comment; }
-#line 776 "real_world/cnokw.c"
+#line 780 "real_world/cnokw.c"
 yy102:
 	++YYCURSOR;
 #line 156 "real_world/cnokw.re"
 	{ RET(DIVEQ); }
-#line 781 "real_world/cnokw.c"
+#line 785 "real_world/cnokw.c"
 yy104:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -842,22 +846,22 @@ yy108:
 yy109:
 #line 162 "real_world/cnokw.re"
 	{ RET(LSHIFT); }
-#line 846 "real_world/cnokw.c"
+#line 850 "real_world/cnokw.c"
 yy110:
 	++YYCURSOR;
 #line 168 "real_world/cnokw.re"
 	{ RET(LEQ); }
-#line 851 "real_world/cnokw.c"
+#line 855 "real_world/cnokw.c"
 yy112:
 	++YYCURSOR;
 #line 170 "real_world/cnokw.re"
 	{ RET(EQL); }
-#line 856 "real_world/cnokw.c"
+#line 860 "real_world/cnokw.c"
 yy114:
 	++YYCURSOR;
 #line 169 "real_world/cnokw.re"
 	{ RET(GEQ); }
-#line 861 "real_world/cnokw.c"
+#line 865 "real_world/cnokw.c"
 yy116:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -867,22 +871,22 @@ yy116:
 yy117:
 #line 161 "real_world/cnokw.re"
 	{ RET(RSHIFT); }
-#line 871 "real_world/cnokw.c"
+#line 875 "real_world/cnokw.c"
 yy118:
 	++YYCURSOR;
 #line 159 "real_world/cnokw.re"
 	{ RET(XOREQ); }
-#line 876 "real_world/cnokw.c"
+#line 880 "real_world/cnokw.c"
 yy120:
 	++YYCURSOR;
 #line 160 "real_world/cnokw.re"
 	{ RET(OREQ); }
-#line 881 "real_world/cnokw.c"
+#line 885 "real_world/cnokw.c"
 yy122:
 	++YYCURSOR;
 #line 167 "real_world/cnokw.re"
 	{ RET(OROR); }
-#line 886 "real_world/cnokw.c"
+#line 890 "real_world/cnokw.c"
 yy124:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -945,7 +949,7 @@ yy126:
 	++YYCURSOR;
 #line 150 "real_world/cnokw.re"
 	{ RET(ELLIPSIS); }
-#line 949 "real_world/cnokw.c"
+#line 953 "real_world/cnokw.c"
 yy128:
 	++YYCURSOR;
 	goto yy99;
@@ -1022,19 +1026,19 @@ yy134:
 	++YYCURSOR;
 #line 152 "real_world/cnokw.re"
 	{ RET(LSHIFTEQ); }
-#line 1026 "real_world/cnokw.c"
+#line 1030 "real_world/cnokw.c"
 yy136:
 	++YYCURSOR;
 #line 151 "real_world/cnokw.re"
 	{ RET(RSHIFTEQ); }
-#line 1031 "real_world/cnokw.c"
+#line 1035 "real_world/cnokw.c"
 }
 #line 212 "real_world/cnokw.re"
 
 
 comment:
 
-#line 1038 "real_world/cnokw.c"
+#line 1042 "real_world/cnokw.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -1049,7 +1053,7 @@ yy140:
 yy141:
 #line 223 "real_world/cnokw.re"
 	{ goto comment; }
-#line 1053 "real_world/cnokw.c"
+#line 1057 "real_world/cnokw.c"
 yy142:
 	++YYCURSOR;
 #line 218 "real_world/cnokw.re"
@@ -1058,7 +1062,7 @@ yy142:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 1062 "real_world/cnokw.c"
+#line 1066 "real_world/cnokw.c"
 yy144:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1069,7 +1073,7 @@ yy145:
 	++YYCURSOR;
 #line 216 "real_world/cnokw.re"
 	{ goto std; }
-#line 1073 "real_world/cnokw.c"
+#line 1077 "real_world/cnokw.c"
 }
 #line 224 "real_world/cnokw.re"
 

@@ -5,15 +5,18 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyc0: goto yyc_0;
-	case yycr1: goto yyc_r1;
-	case yycr2: goto yyc_r2;
+	case yyc0:
+		goto yyc_0;
+	case yycr1:
+		goto yyc_r1;
+	case yycr2:
+		goto yyc_r2;
 	}
 /* *********************************** */
 yyc_0:
 #line 3 "conditions/condition_02.c.re"
 	{ return NULL; }
-#line 17 "conditions/condition_02.c.c"
+#line 20 "conditions/condition_02.c.c"
 /* *********************************** */
 yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -28,12 +31,12 @@ yy7:
 	++YYCURSOR;
 #line 4 "conditions/condition_02.c.re"
 	{ return "a"; }
-#line 32 "conditions/condition_02.c.c"
+#line 35 "conditions/condition_02.c.c"
 yy9:
 	++YYCURSOR;
 #line 5 "conditions/condition_02.c.re"
 	{ return "b"; }
-#line 37 "conditions/condition_02.c.c"
+#line 40 "conditions/condition_02.c.c"
 /* *********************************** */
 yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -47,7 +50,7 @@ yy14:
 	++YYCURSOR;
 #line 5 "conditions/condition_02.c.re"
 	{ return "b"; }
-#line 51 "conditions/condition_02.c.c"
+#line 54 "conditions/condition_02.c.c"
 }
 #line 7 "conditions/condition_02.c.re"
 

@@ -603,17 +603,21 @@ yy47:
 yy49:
 	s = m;
 	switch (yyaccept) {
-	case 0: 
+	case 0:
 		yyt4 = s;
 		goto yy12;
-	case 1: 
+	case 1:
 		yyt3 = yyt1;
 		yyt4 = s;
 		goto yy12;
-	case 2: 	goto yy15;
-	case 3: 	goto yy19;
-	case 4: 	goto yy12;
-	default:	goto yy72;
+	case 2:
+		goto yy15;
+	case 3:
+		goto yy19;
+	case 4:
+		goto yy12;
+	default:
+		goto yy72;
 	}
 yy50:
 	yych = *++s;

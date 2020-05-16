@@ -695,16 +695,20 @@ yy84:
 yy85:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy3;
-	case 1: 	goto yy30;
-	case 2: 	goto yy34;
-	default:	goto yy114;
+	case 0:
+		goto yy3;
+	case 1:
+		goto yy30;
+	case 2:
+		goto yy34;
+	default:
+		goto yy114;
 	}
 yy86:
 	++YYCURSOR;
 #line 164 "real_world/cmmap.re"
 	{ RET(SCON); }
-#line 708 "real_world/cmmap.c"
+#line 712 "real_world/cmmap.c"
 yy88:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -736,17 +740,17 @@ yy89:
 	++YYCURSOR;
 #line 173 "real_world/cmmap.re"
 	{ RET(MODEQ); }
-#line 740 "real_world/cmmap.c"
+#line 744 "real_world/cmmap.c"
 yy91:
 	++YYCURSOR;
 #line 182 "real_world/cmmap.re"
 	{ RET(ANDAND); }
-#line 745 "real_world/cmmap.c"
+#line 749 "real_world/cmmap.c"
 yy93:
 	++YYCURSOR;
 #line 174 "real_world/cmmap.re"
 	{ RET(ANDEQ); }
-#line 750 "real_world/cmmap.c"
+#line 754 "real_world/cmmap.c"
 yy95:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -792,32 +796,32 @@ yy99:
 	++YYCURSOR;
 #line 171 "real_world/cmmap.re"
 	{ RET(MULEQ); }
-#line 796 "real_world/cmmap.c"
+#line 800 "real_world/cmmap.c"
 yy101:
 	++YYCURSOR;
 #line 179 "real_world/cmmap.re"
 	{ RET(INCR); }
-#line 801 "real_world/cmmap.c"
+#line 805 "real_world/cmmap.c"
 yy103:
 	++YYCURSOR;
 #line 169 "real_world/cmmap.re"
 	{ RET(ADDEQ); }
-#line 806 "real_world/cmmap.c"
+#line 810 "real_world/cmmap.c"
 yy105:
 	++YYCURSOR;
 #line 180 "real_world/cmmap.re"
 	{ RET(DECR); }
-#line 811 "real_world/cmmap.c"
+#line 815 "real_world/cmmap.c"
 yy107:
 	++YYCURSOR;
 #line 170 "real_world/cmmap.re"
 	{ RET(SUBEQ); }
-#line 816 "real_world/cmmap.c"
+#line 820 "real_world/cmmap.c"
 yy109:
 	++YYCURSOR;
 #line 181 "real_world/cmmap.re"
 	{ RET(DEREF); }
-#line 821 "real_world/cmmap.c"
+#line 825 "real_world/cmmap.c"
 yy111:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -851,17 +855,17 @@ yy112:
 yy114:
 #line 161 "real_world/cmmap.re"
 	{ RET(FCON); }
-#line 855 "real_world/cmmap.c"
+#line 859 "real_world/cmmap.c"
 yy115:
 	++YYCURSOR;
 #line 119 "real_world/cmmap.re"
 	{ goto comment; }
-#line 860 "real_world/cmmap.c"
+#line 864 "real_world/cmmap.c"
 yy117:
 	++YYCURSOR;
 #line 172 "real_world/cmmap.re"
 	{ RET(DIVEQ); }
-#line 865 "real_world/cmmap.c"
+#line 869 "real_world/cmmap.c"
 yy119:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -926,22 +930,22 @@ yy123:
 yy124:
 #line 178 "real_world/cmmap.re"
 	{ RET(LSHIFT); }
-#line 930 "real_world/cmmap.c"
+#line 934 "real_world/cmmap.c"
 yy125:
 	++YYCURSOR;
 #line 184 "real_world/cmmap.re"
 	{ RET(LEQ); }
-#line 935 "real_world/cmmap.c"
+#line 939 "real_world/cmmap.c"
 yy127:
 	++YYCURSOR;
 #line 186 "real_world/cmmap.re"
 	{ RET(EQL); }
-#line 940 "real_world/cmmap.c"
+#line 944 "real_world/cmmap.c"
 yy129:
 	++YYCURSOR;
 #line 185 "real_world/cmmap.re"
 	{ RET(GEQ); }
-#line 945 "real_world/cmmap.c"
+#line 949 "real_world/cmmap.c"
 yy131:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -951,12 +955,12 @@ yy131:
 yy132:
 #line 177 "real_world/cmmap.re"
 	{ RET(RSHIFT); }
-#line 955 "real_world/cmmap.c"
+#line 959 "real_world/cmmap.c"
 yy133:
 	++YYCURSOR;
 #line 175 "real_world/cmmap.re"
 	{ RET(XOREQ); }
-#line 960 "real_world/cmmap.c"
+#line 964 "real_world/cmmap.c"
 yy135:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1064,7 +1068,7 @@ yy141:
 yy142:
 #line 128 "real_world/cmmap.re"
 	{ RET(DO); }
-#line 1068 "real_world/cmmap.c"
+#line 1072 "real_world/cmmap.c"
 yy143:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1172,7 +1176,7 @@ yy149:
 yy150:
 #line 136 "real_world/cmmap.re"
 	{ RET(IF); }
-#line 1176 "real_world/cmmap.c"
+#line 1180 "real_world/cmmap.c"
 yy151:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1248,12 +1252,12 @@ yy162:
 	++YYCURSOR;
 #line 176 "real_world/cmmap.re"
 	{ RET(OREQ); }
-#line 1252 "real_world/cmmap.c"
+#line 1256 "real_world/cmmap.c"
 yy164:
 	++YYCURSOR;
 #line 183 "real_world/cmmap.re"
 	{ RET(OROR); }
-#line 1257 "real_world/cmmap.c"
+#line 1261 "real_world/cmmap.c"
 yy166:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1316,7 +1320,7 @@ yy168:
 	++YYCURSOR;
 #line 166 "real_world/cmmap.re"
 	{ RET(ELLIPSIS); }
-#line 1320 "real_world/cmmap.c"
+#line 1324 "real_world/cmmap.c"
 yy170:
 	++YYCURSOR;
 	goto yy114;
@@ -1393,12 +1397,12 @@ yy176:
 	++YYCURSOR;
 #line 168 "real_world/cmmap.re"
 	{ RET(LSHIFTEQ); }
-#line 1397 "real_world/cmmap.c"
+#line 1401 "real_world/cmmap.c"
 yy178:
 	++YYCURSOR;
 #line 167 "real_world/cmmap.re"
 	{ RET(RSHIFTEQ); }
-#line 1402 "real_world/cmmap.c"
+#line 1406 "real_world/cmmap.c"
 yy180:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1537,7 +1541,7 @@ yy191:
 yy192:
 #line 134 "real_world/cmmap.re"
 	{ RET(FOR); }
-#line 1541 "real_world/cmmap.c"
+#line 1545 "real_world/cmmap.c"
 yy193:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1615,7 +1619,7 @@ yy194:
 yy195:
 #line 137 "real_world/cmmap.re"
 	{ RET(INT); }
-#line 1619 "real_world/cmmap.c"
+#line 1623 "real_world/cmmap.c"
 yy196:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1777,7 +1781,7 @@ yy211:
 yy212:
 #line 121 "real_world/cmmap.re"
 	{ RET(AUTO); }
-#line 1781 "real_world/cmmap.c"
+#line 1785 "real_world/cmmap.c"
 yy213:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1855,7 +1859,7 @@ yy214:
 yy215:
 #line 123 "real_world/cmmap.re"
 	{ RET(CASE); }
-#line 1859 "real_world/cmmap.c"
+#line 1863 "real_world/cmmap.c"
 yy216:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1927,7 +1931,7 @@ yy216:
 yy217:
 #line 124 "real_world/cmmap.re"
 	{ RET(CHAR); }
-#line 1931 "real_world/cmmap.c"
+#line 1935 "real_world/cmmap.c"
 yy218:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2023,7 +2027,7 @@ yy222:
 yy223:
 #line 130 "real_world/cmmap.re"
 	{ RET(ELSE); }
-#line 2027 "real_world/cmmap.c"
+#line 2031 "real_world/cmmap.c"
 yy224:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2095,7 +2099,7 @@ yy224:
 yy225:
 #line 131 "real_world/cmmap.re"
 	{ RET(ENUM); }
-#line 2099 "real_world/cmmap.c"
+#line 2103 "real_world/cmmap.c"
 yy226:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2179,7 +2183,7 @@ yy228:
 yy229:
 #line 135 "real_world/cmmap.re"
 	{ RET(GOTO); }
-#line 2183 "real_world/cmmap.c"
+#line 2187 "real_world/cmmap.c"
 yy230:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2251,7 +2255,7 @@ yy230:
 yy231:
 #line 138 "real_world/cmmap.re"
 	{ RET(LONG); }
-#line 2255 "real_world/cmmap.c"
+#line 2259 "real_world/cmmap.c"
 yy232:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2389,7 +2393,7 @@ yy243:
 yy244:
 #line 150 "real_world/cmmap.re"
 	{ RET(VOID); }
-#line 2393 "real_world/cmmap.c"
+#line 2397 "real_world/cmmap.c"
 yy245:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2473,7 +2477,7 @@ yy247:
 yy248:
 #line 122 "real_world/cmmap.re"
 	{ RET(BREAK); }
-#line 2477 "real_world/cmmap.c"
+#line 2481 "real_world/cmmap.c"
 yy249:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2545,7 +2549,7 @@ yy249:
 yy250:
 #line 125 "real_world/cmmap.re"
 	{ RET(CONST); }
-#line 2549 "real_world/cmmap.c"
+#line 2553 "real_world/cmmap.c"
 yy251:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2641,7 +2645,7 @@ yy255:
 yy256:
 #line 133 "real_world/cmmap.re"
 	{ RET(FLOAT); }
-#line 2645 "real_world/cmmap.c"
+#line 2649 "real_world/cmmap.c"
 yy257:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2725,7 +2729,7 @@ yy259:
 yy260:
 #line 141 "real_world/cmmap.re"
 	{ RET(SHORT); }
-#line 2729 "real_world/cmmap.c"
+#line 2733 "real_world/cmmap.c"
 yy261:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2833,7 +2837,7 @@ yy267:
 yy268:
 #line 148 "real_world/cmmap.re"
 	{ RET(UNION); }
-#line 2837 "real_world/cmmap.c"
+#line 2841 "real_world/cmmap.c"
 yy269:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2917,7 +2921,7 @@ yy271:
 yy272:
 #line 152 "real_world/cmmap.re"
 	{ RET(WHILE); }
-#line 2921 "real_world/cmmap.c"
+#line 2925 "real_world/cmmap.c"
 yy273:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3001,7 +3005,7 @@ yy275:
 yy276:
 #line 129 "real_world/cmmap.re"
 	{ RET(DOUBLE); }
-#line 3005 "real_world/cmmap.c"
+#line 3009 "real_world/cmmap.c"
 yy277:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3073,7 +3077,7 @@ yy277:
 yy278:
 #line 132 "real_world/cmmap.re"
 	{ RET(EXTERN); }
-#line 3077 "real_world/cmmap.c"
+#line 3081 "real_world/cmmap.c"
 yy279:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3151,7 +3155,7 @@ yy280:
 yy281:
 #line 140 "real_world/cmmap.re"
 	{ RET(RETURN); }
-#line 3155 "real_world/cmmap.c"
+#line 3159 "real_world/cmmap.c"
 yy282:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3223,7 +3227,7 @@ yy282:
 yy283:
 #line 142 "real_world/cmmap.re"
 	{ RET(SIGNED); }
-#line 3227 "real_world/cmmap.c"
+#line 3231 "real_world/cmmap.c"
 yy284:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3295,7 +3299,7 @@ yy284:
 yy285:
 #line 143 "real_world/cmmap.re"
 	{ RET(SIZEOF); }
-#line 3299 "real_world/cmmap.c"
+#line 3303 "real_world/cmmap.c"
 yy286:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3367,7 +3371,7 @@ yy286:
 yy287:
 #line 144 "real_world/cmmap.re"
 	{ RET(STATIC); }
-#line 3371 "real_world/cmmap.c"
+#line 3375 "real_world/cmmap.c"
 yy288:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3439,7 +3443,7 @@ yy288:
 yy289:
 #line 145 "real_world/cmmap.re"
 	{ RET(STRUCT); }
-#line 3443 "real_world/cmmap.c"
+#line 3447 "real_world/cmmap.c"
 yy290:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3511,7 +3515,7 @@ yy290:
 yy291:
 #line 146 "real_world/cmmap.re"
 	{ RET(SWITCH); }
-#line 3515 "real_world/cmmap.c"
+#line 3519 "real_world/cmmap.c"
 yy292:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3607,7 +3611,7 @@ yy296:
 yy297:
 #line 127 "real_world/cmmap.re"
 	{ RET(DEFAULT); }
-#line 3611 "real_world/cmmap.c"
+#line 3615 "real_world/cmmap.c"
 yy298:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3685,7 +3689,7 @@ yy299:
 yy300:
 #line 147 "real_world/cmmap.re"
 	{ RET(TYPEDEF); }
-#line 3689 "real_world/cmmap.c"
+#line 3693 "real_world/cmmap.c"
 yy301:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3769,7 +3773,7 @@ yy303:
 yy304:
 #line 126 "real_world/cmmap.re"
 	{ RET(CONTINUE); }
-#line 3773 "real_world/cmmap.c"
+#line 3777 "real_world/cmmap.c"
 yy305:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3841,7 +3845,7 @@ yy305:
 yy306:
 #line 139 "real_world/cmmap.re"
 	{ RET(REGISTER); }
-#line 3845 "real_world/cmmap.c"
+#line 3849 "real_world/cmmap.c"
 yy307:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3913,7 +3917,7 @@ yy307:
 yy308:
 #line 149 "real_world/cmmap.re"
 	{ RET(UNSIGNED); }
-#line 3917 "real_world/cmmap.c"
+#line 3921 "real_world/cmmap.c"
 yy309:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3985,14 +3989,14 @@ yy309:
 yy310:
 #line 151 "real_world/cmmap.re"
 	{ RET(VOLATILE); }
-#line 3989 "real_world/cmmap.c"
+#line 3993 "real_world/cmmap.c"
 }
 #line 228 "real_world/cmmap.re"
 
 
 comment:
 
-#line 3996 "real_world/cmmap.c"
+#line 4000 "real_world/cmmap.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -4007,7 +4011,7 @@ yy313:
 yy314:
 #line 239 "real_world/cmmap.re"
 	{ goto comment; }
-#line 4011 "real_world/cmmap.c"
+#line 4015 "real_world/cmmap.c"
 yy315:
 	++YYCURSOR;
 #line 234 "real_world/cmmap.re"
@@ -4016,7 +4020,7 @@ yy315:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 4020 "real_world/cmmap.c"
+#line 4024 "real_world/cmmap.c"
 yy317:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4027,7 +4031,7 @@ yy318:
 	++YYCURSOR;
 #line 232 "real_world/cmmap.re"
 	{ goto std; }
-#line 4031 "real_world/cmmap.c"
+#line 4035 "real_world/cmmap.c"
 }
 #line 240 "real_world/cmmap.re"
 

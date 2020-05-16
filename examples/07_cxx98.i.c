@@ -1350,11 +1350,16 @@ yy185:
 yy186:
 	in.cur = in.mar;
 	switch (yyaccept) {
-	case 0: 	goto yy102;
-	case 1: 	goto yy127;
-	case 2: 	goto yy131;
-	case 3: 	goto yy134;
-	default:	goto yy218;
+	case 0:
+		goto yy102;
+	case 1:
+		goto yy127;
+	case 2:
+		goto yy131;
+	case 3:
+		goto yy134;
+	default:
+		goto yy218;
 	}
 yy187:
 	++in.cur;

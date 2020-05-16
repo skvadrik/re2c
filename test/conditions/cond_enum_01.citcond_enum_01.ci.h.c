@@ -10,7 +10,8 @@ enum YYCONDTYPE {
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyca: goto yyc_a;
+	case yyca:
+		goto yyc_a;
 	}
 /* *********************************** */
 yyc_a:

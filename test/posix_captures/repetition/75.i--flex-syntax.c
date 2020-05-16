@@ -39,11 +39,12 @@ yy3:
 yy4:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy2;
-	case 1: 
+	case 0:
+		goto yy2;
+	case 1:
 		yyt2 = yyt3 = YYCURSOR;
 		goto yy8;
-	case 2: 
+	case 2:
 		yyt4 = yyt2;
 		yyt2 = yyt3 = YYCURSOR;
 		goto yy8;

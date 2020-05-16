@@ -18,8 +18,10 @@ int test(const char* str)
 {
 	unsigned char yych;
 	switch (c) {
-	case yycinit: goto yyc_init;
-	case yycC2: goto yyc_C2;
+	case yycinit:
+		goto yyc_init;
+	case yycC2:
+		goto yyc_C2;
 	}
 /* *********************************** */
 yyc_init:

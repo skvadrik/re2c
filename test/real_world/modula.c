@@ -615,17 +615,22 @@ yy83:
 yy84:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy3;
-	case 1: 	goto yy33;
-	case 2: 	goto yy94;
-	case 3: 	goto yy98;
-	default:	goto yy100;
+	case 0:
+		goto yy3;
+	case 1:
+		goto yy33;
+	case 2:
+		goto yy94;
+	case 3:
+		goto yy98;
+	default:
+		goto yy100;
 	}
 yy85:
 	++YYCURSOR;
 #line 76 "real_world/modula.re"
 	{RETURN(6);}
-#line 629 "real_world/modula.c"
+#line 634 "real_world/modula.c"
 yy87:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -640,12 +645,12 @@ yy89:
 	++YYCURSOR;
 #line 68 "real_world/modula.re"
 	{ depth = 1; goto comment; }
-#line 644 "real_world/modula.c"
+#line 649 "real_world/modula.c"
 yy91:
 	++YYCURSOR;
 #line 87 "real_world/modula.re"
 	{RETURN(16);}
-#line 649 "real_world/modula.c"
+#line 654 "real_world/modula.c"
 yy93:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -656,7 +661,7 @@ yy93:
 yy94:
 #line 75 "real_world/modula.re"
 	{RETURN(5);}
-#line 660 "real_world/modula.c"
+#line 665 "real_world/modula.c"
 yy95:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -707,7 +712,7 @@ yy97:
 yy98:
 #line 72 "real_world/modula.re"
 	{RETURN(2);}
-#line 711 "real_world/modula.c"
+#line 716 "real_world/modula.c"
 yy99:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -734,32 +739,32 @@ yy99:
 yy100:
 #line 73 "real_world/modula.re"
 	{RETURN(3);}
-#line 738 "real_world/modula.c"
+#line 743 "real_world/modula.c"
 yy101:
 	++YYCURSOR;
 #line 74 "real_world/modula.re"
 	{RETURN(4);}
-#line 743 "real_world/modula.c"
+#line 748 "real_world/modula.c"
 yy103:
 	++YYCURSOR;
 #line 90 "real_world/modula.re"
 	{RETURN(19);}
-#line 748 "real_world/modula.c"
+#line 753 "real_world/modula.c"
 yy105:
 	++YYCURSOR;
 #line 93 "real_world/modula.re"
 	{RETURN(22);}
-#line 753 "real_world/modula.c"
+#line 758 "real_world/modula.c"
 yy107:
 	++YYCURSOR;
 #line 94 "real_world/modula.re"
 	{RETURN(23);}
-#line 758 "real_world/modula.c"
+#line 763 "real_world/modula.c"
 yy109:
 	++YYCURSOR;
 #line 97 "real_world/modula.re"
 	{RETURN(26);}
-#line 763 "real_world/modula.c"
+#line 768 "real_world/modula.c"
 yy111:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -848,7 +853,7 @@ yy114:
 yy115:
 #line 109 "real_world/modula.re"
 	{RETURN(37);}
-#line 852 "real_world/modula.c"
+#line 857 "real_world/modula.c"
 yy116:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -943,7 +948,7 @@ yy120:
 yy121:
 #line 114 "real_world/modula.re"
 	{RETURN(42);}
-#line 947 "real_world/modula.c"
+#line 952 "real_world/modula.c"
 yy122:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1045,7 +1050,7 @@ yy127:
 yy128:
 #line 122 "real_world/modula.re"
 	{RETURN(50);}
-#line 1049 "real_world/modula.c"
+#line 1054 "real_world/modula.c"
 yy129:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1122,7 +1127,7 @@ yy130:
 yy131:
 #line 125 "real_world/modula.re"
 	{RETURN(53);}
-#line 1126 "real_world/modula.c"
+#line 1131 "real_world/modula.c"
 yy132:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1211,7 +1216,7 @@ yy135:
 yy136:
 #line 130 "real_world/modula.re"
 	{RETURN(58);}
-#line 1215 "real_world/modula.c"
+#line 1220 "real_world/modula.c"
 yy137:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1282,7 +1287,7 @@ yy137:
 yy138:
 #line 131 "real_world/modula.re"
 	{RETURN(59);}
-#line 1286 "real_world/modula.c"
+#line 1291 "real_world/modula.c"
 yy139:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1391,7 +1396,7 @@ yy145:
 yy146:
 #line 140 "real_world/modula.re"
 	{RETURN(68);}
-#line 1395 "real_world/modula.c"
+#line 1400 "real_world/modula.c"
 yy147:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1427,7 +1432,7 @@ yy152:
 	YYCURSOR -= 2;
 #line 71 "real_world/modula.re"
 	{RETURN(1);}
-#line 1431 "real_world/modula.c"
+#line 1436 "real_world/modula.c"
 yy154:
 	yyaccept = 2;
 	YYMARKER = ++YYCURSOR;
@@ -1535,7 +1540,7 @@ yy157:
 yy158:
 #line 106 "real_world/modula.re"
 	{RETURN(34);}
-#line 1539 "real_world/modula.c"
+#line 1544 "real_world/modula.c"
 yy159:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1636,7 +1641,7 @@ yy164:
 yy165:
 #line 113 "real_world/modula.re"
 	{RETURN(41);}
-#line 1640 "real_world/modula.c"
+#line 1645 "real_world/modula.c"
 yy166:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1714,7 +1719,7 @@ yy167:
 yy168:
 #line 117 "real_world/modula.re"
 	{RETURN(45);}
-#line 1718 "real_world/modula.c"
+#line 1723 "real_world/modula.c"
 yy169:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1797,7 +1802,7 @@ yy171:
 yy172:
 #line 120 "real_world/modula.re"
 	{RETURN(48);}
-#line 1801 "real_world/modula.c"
+#line 1806 "real_world/modula.c"
 yy173:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1887,7 +1892,7 @@ yy176:
 yy177:
 #line 127 "real_world/modula.re"
 	{RETURN(55);}
-#line 1891 "real_world/modula.c"
+#line 1896 "real_world/modula.c"
 yy178:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1958,7 +1963,7 @@ yy178:
 yy179:
 #line 129 "real_world/modula.re"
 	{RETURN(57);}
-#line 1962 "real_world/modula.c"
+#line 1967 "real_world/modula.c"
 yy180:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2065,7 +2070,7 @@ yy186:
 yy187:
 #line 138 "real_world/modula.re"
 	{RETURN(66);}
-#line 2069 "real_world/modula.c"
+#line 2074 "real_world/modula.c"
 yy188:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2154,7 +2159,7 @@ yy191:
 yy192:
 #line 143 "real_world/modula.re"
 	{RETURN(71);}
-#line 2158 "real_world/modula.c"
+#line 2163 "real_world/modula.c"
 yy193:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2281,7 +2286,7 @@ yy200:
 yy201:
 #line 110 "real_world/modula.re"
 	{RETURN(38);}
-#line 2285 "real_world/modula.c"
+#line 2290 "real_world/modula.c"
 yy202:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2364,7 +2369,7 @@ yy204:
 yy205:
 #line 115 "real_world/modula.re"
 	{RETURN(43);}
-#line 2368 "real_world/modula.c"
+#line 2373 "real_world/modula.c"
 yy206:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2441,7 +2446,7 @@ yy207:
 yy208:
 #line 118 "real_world/modula.re"
 	{RETURN(46);}
-#line 2445 "real_world/modula.c"
+#line 2450 "real_world/modula.c"
 yy209:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2518,7 +2523,7 @@ yy210:
 yy211:
 #line 121 "real_world/modula.re"
 	{RETURN(49);}
-#line 2522 "real_world/modula.c"
+#line 2527 "real_world/modula.c"
 yy212:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2601,7 +2606,7 @@ yy214:
 yy215:
 #line 126 "real_world/modula.re"
 	{RETURN(54);}
-#line 2605 "real_world/modula.c"
+#line 2610 "real_world/modula.c"
 yy216:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2714,7 +2719,7 @@ yy223:
 yy224:
 #line 139 "real_world/modula.re"
 	{RETURN(67);}
-#line 2718 "real_world/modula.c"
+#line 2723 "real_world/modula.c"
 yy225:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2785,7 +2790,7 @@ yy225:
 yy226:
 #line 141 "real_world/modula.re"
 	{RETURN(69);}
-#line 2789 "real_world/modula.c"
+#line 2794 "real_world/modula.c"
 yy227:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2868,7 +2873,7 @@ yy229:
 yy230:
 #line 145 "real_world/modula.re"
 	{RETURN(73);}
-#line 2872 "real_world/modula.c"
+#line 2877 "real_world/modula.c"
 yy231:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2939,7 +2944,7 @@ yy231:
 yy232:
 #line 107 "real_world/modula.re"
 	{RETURN(35);}
-#line 2943 "real_world/modula.c"
+#line 2948 "real_world/modula.c"
 yy233:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3010,7 +3015,7 @@ yy233:
 yy234:
 #line 108 "real_world/modula.re"
 	{RETURN(36);}
-#line 3014 "real_world/modula.c"
+#line 3019 "real_world/modula.c"
 yy235:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3081,7 +3086,7 @@ yy235:
 yy236:
 #line 111 "real_world/modula.re"
 	{RETURN(39);}
-#line 3085 "real_world/modula.c"
+#line 3090 "real_world/modula.c"
 yy237:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3158,7 +3163,7 @@ yy238:
 yy239:
 #line 116 "real_world/modula.re"
 	{RETURN(44);}
-#line 3162 "real_world/modula.c"
+#line 3167 "real_world/modula.c"
 yy240:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3289,7 +3294,7 @@ yy250:
 yy251:
 #line 142 "real_world/modula.re"
 	{RETURN(70);}
-#line 3293 "real_world/modula.c"
+#line 3298 "real_world/modula.c"
 yy252:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3360,7 +3365,7 @@ yy252:
 yy253:
 #line 144 "real_world/modula.re"
 	{RETURN(72);}
-#line 3364 "real_world/modula.c"
+#line 3369 "real_world/modula.c"
 yy254:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3437,7 +3442,7 @@ yy255:
 yy256:
 #line 119 "real_world/modula.re"
 	{RETURN(47);}
-#line 3441 "real_world/modula.c"
+#line 3446 "real_world/modula.c"
 yy257:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3514,7 +3519,7 @@ yy258:
 yy259:
 #line 124 "real_world/modula.re"
 	{RETURN(52);}
-#line 3518 "real_world/modula.c"
+#line 3523 "real_world/modula.c"
 yy260:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3585,7 +3590,7 @@ yy260:
 yy261:
 #line 128 "real_world/modula.re"
 	{RETURN(56);}
-#line 3589 "real_world/modula.c"
+#line 3594 "real_world/modula.c"
 yy262:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3674,7 +3679,7 @@ yy265:
 yy266:
 #line 135 "real_world/modula.re"
 	{RETURN(63);}
-#line 3678 "real_world/modula.c"
+#line 3683 "real_world/modula.c"
 yy267:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3745,7 +3750,7 @@ yy267:
 yy268:
 #line 136 "real_world/modula.re"
 	{RETURN(64);}
-#line 3749 "real_world/modula.c"
+#line 3754 "real_world/modula.c"
 yy269:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3816,7 +3821,7 @@ yy269:
 yy270:
 #line 137 "real_world/modula.re"
 	{RETURN(65);}
-#line 3820 "real_world/modula.c"
+#line 3825 "real_world/modula.c"
 yy271:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3899,7 +3904,7 @@ yy273:
 yy274:
 #line 132 "real_world/modula.re"
 	{RETURN(60);}
-#line 3903 "real_world/modula.c"
+#line 3908 "real_world/modula.c"
 yy275:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4018,7 +4023,7 @@ yy283:
 yy284:
 #line 133 "real_world/modula.re"
 	{RETURN(61);}
-#line 4022 "real_world/modula.c"
+#line 4027 "real_world/modula.c"
 yy285:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4089,7 +4094,7 @@ yy285:
 yy286:
 #line 134 "real_world/modula.re"
 	{RETURN(62);}
-#line 4093 "real_world/modula.c"
+#line 4098 "real_world/modula.c"
 yy287:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4160,7 +4165,7 @@ yy287:
 yy288:
 #line 112 "real_world/modula.re"
 	{RETURN(40);}
-#line 4164 "real_world/modula.c"
+#line 4169 "real_world/modula.c"
 yy289:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4255,13 +4260,13 @@ yy293:
 yy294:
 #line 123 "real_world/modula.re"
 	{RETURN(51);}
-#line 4259 "real_world/modula.c"
+#line 4264 "real_world/modula.c"
 }
 #line 163 "real_world/modula.re"
 
 comment:
 
-#line 4265 "real_world/modula.c"
+#line 4270 "real_world/modula.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -4277,7 +4282,7 @@ yy297:
 yy298:
 #line 180 "real_world/modula.re"
 	{ goto comment; }
-#line 4281 "real_world/modula.c"
+#line 4286 "real_world/modula.c"
 yy299:
 	++YYCURSOR;
 #line 175 "real_world/modula.re"
@@ -4286,7 +4291,7 @@ yy299:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 4290 "real_world/modula.c"
+#line 4295 "real_world/modula.c"
 yy301:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4303,7 +4308,7 @@ yy303:
 	++YYCURSOR;
 #line 173 "real_world/modula.re"
 	{ ++depth; goto comment; }
-#line 4307 "real_world/modula.c"
+#line 4312 "real_world/modula.c"
 yy305:
 	++YYCURSOR;
 #line 167 "real_world/modula.re"
@@ -4313,7 +4318,7 @@ yy305:
 		else
 		    goto comment;
 	    }
-#line 4317 "real_world/modula.c"
+#line 4322 "real_world/modula.c"
 }
 #line 181 "real_world/modula.re"
 

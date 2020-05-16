@@ -177,11 +177,13 @@ yy32:
 yy33:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 
+	case 0:
 		yyt1 = YYCURSOR;
 		goto yy29;
-	case 1: 	goto yy29;
-	default:	goto yy35;
+	case 1:
+		goto yy29;
+	default:
+		goto yy35;
 	}
 yy34:
 	yyaccept = 2;

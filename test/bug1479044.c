@@ -141,10 +141,14 @@ yy13:
 yy14:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy5;
-	case 1: 	goto yy121;
-	case 2: 	goto yy135;
-	default:	goto yy139;
+	case 0:
+		goto yy5;
+	case 1:
+		goto yy121;
+	case 2:
+		goto yy135;
+	default:
+		goto yy139;
 	}
 yy15:
 	++YYCURSOR;
@@ -967,7 +971,7 @@ yy121:
 	{
 		return "dsl";
 	}
-#line 971 "bug1479044.c"
+#line 975 "bug1479044.c"
 yy122:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1103,7 +1107,7 @@ yy135:
 	{
 		return "resnet";
 	}
-#line 1107 "bug1479044.c"
+#line 1111 "bug1479044.c"
 yy136:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1139,7 +1143,7 @@ yy139:
 	{
 		return "edu";
 	}
-#line 1143 "bug1479044.c"
+#line 1147 "bug1479044.c"
 }
 #line 40 "bug1479044.re"
 

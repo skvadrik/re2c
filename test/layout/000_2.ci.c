@@ -3,11 +3,16 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyc0: goto yyc_0;
-	case yycx: goto yyc_x;
-	case yycy0: goto yyc_y0;
-	case yycz11: goto yyc_z11;
-	case yycy: goto yyc_y;
+	case yyc0:
+		goto yyc_0;
+	case yycx:
+		goto yyc_x;
+	case yycy0:
+		goto yyc_y0;
+	case yycz11:
+		goto yyc_z11;
+	case yycy:
+		goto yyc_y;
 	}
 /* *********************************** */
 yyc_0:

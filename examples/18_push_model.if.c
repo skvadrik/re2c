@@ -53,10 +53,14 @@ static status_t lex(input_t &in, unsigned &words)
 #   define YYSETSTATE(s) in.state = s
 #   define YYFILL(n)     do { in.need = n; return NEED_MORE_INPUT; } while (0)
     switch (YYGETSTATE()) {
-default: goto yy0;
-case 0: goto yyFillLabel0;
-case 1: goto yyFillLabel1;
-case 2: goto yyFillLabel2;
+default:
+	goto yy0;
+case 0:
+	goto yyFillLabel0;
+case 1:
+	goto yyFillLabel1;
+case 2:
+	goto yyFillLabel2;
 }
 
 loop:

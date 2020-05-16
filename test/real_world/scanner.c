@@ -580,13 +580,20 @@ yy60:
 yy61:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy40;
-	case 1: 	goto yy42;
-	case 2: 	goto yy55;
-	case 3: 	goto yy58;
-	case 4: 	goto yy83;
-	case 5: 	goto yy53;
-	default:	goto yy107;
+	case 0:
+		goto yy40;
+	case 1:
+		goto yy42;
+	case 2:
+		goto yy55;
+	case 3:
+		goto yy58;
+	case 4:
+		goto yy83;
+	case 5:
+		goto yy53;
+	default:
+		goto yy107;
 	}
 yy62:
 	++YYCURSOR;
@@ -594,7 +601,7 @@ yy62:
 	{ cur = cursor;
 				  yylval.regexp = strToRE(token());
 				  return STRING; }
-#line 598 "real_world/scanner.c"
+#line 605 "real_world/scanner.c"
 yy64:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -620,7 +627,7 @@ yy67:
 	{ cur = cursor;
 				  yylval.regexp = strToCaseInsensitiveRE(token());
 				  return STRING; }
-#line 624 "real_world/scanner.c"
+#line 631 "real_world/scanner.c"
 yy69:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -634,13 +641,13 @@ yy70:
 #line 172 "real_world/scanner.re"
 	{ tok = cursor;
 				  RETURN(0); }
-#line 638 "real_world/scanner.c"
+#line 645 "real_world/scanner.c"
 yy72:
 	++YYCURSOR;
 #line 169 "real_world/scanner.re"
 	{ depth = 1;
 				  goto comment; }
-#line 644 "real_world/scanner.c"
+#line 651 "real_world/scanner.c"
 yy74:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -666,7 +673,7 @@ yy77:
 	{ cur = cursor;
 				  yylval.regexp = ranToRE(token());
 				  return RANGE; }
-#line 670 "real_world/scanner.c"
+#line 677 "real_world/scanner.c"
 yy79:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -688,7 +695,7 @@ yy82:
 yy83:
 #line 216 "real_world/scanner.re"
 	{ fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"); }
-#line 692 "real_world/scanner.c"
+#line 699 "real_world/scanner.c"
 yy84:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -729,7 +736,7 @@ yy88:
 	{ cur = cursor;
 				  yylval.regexp = invToRE(token());
 				  return RANGE; }
-#line 733 "real_world/scanner.c"
+#line 740 "real_world/scanner.c"
 yy90:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -759,7 +766,7 @@ yy92:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = atoi((char *)tok+1);
 				  RETURN(CLOSESIZE); }
-#line 763 "real_world/scanner.c"
+#line 770 "real_world/scanner.c"
 yy94:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -807,14 +814,14 @@ yy98:
 #line 201 "real_world/scanner.re"
 	{ yylval.op = '*';
 				  RETURN(CLOSE); }
-#line 811 "real_world/scanner.c"
+#line 818 "real_world/scanner.c"
 yy100:
 	++YYCURSOR;
 #line 212 "real_world/scanner.re"
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = -1;
 				  RETURN(CLOSESIZE); }
-#line 818 "real_world/scanner.c"
+#line 825 "real_world/scanner.c"
 yy102:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -880,7 +887,7 @@ yy103:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
 				  RETURN(CLOSESIZE); }
-#line 884 "real_world/scanner.c"
+#line 891 "real_world/scanner.c"
 yy105:
 	yyaccept = 6;
 	YYMARKER = ++YYCURSOR;
@@ -961,14 +968,14 @@ yy107:
 				  yylval.str = new Str(token());
 				  return CONFIG;
 				}
-#line 965 "real_world/scanner.c"
+#line 972 "real_world/scanner.c"
 }
 #line 247 "real_world/scanner.re"
 
 
 code:
 
-#line 972 "real_world/scanner.c"
+#line 979 "real_world/scanner.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -986,7 +993,7 @@ yy110:
 yy111:
 #line 263 "real_world/scanner.re"
 	{ goto code; }
-#line 990 "real_world/scanner.c"
+#line 997 "real_world/scanner.c"
 yy112:
 	++YYCURSOR;
 #line 259 "real_world/scanner.re"
@@ -994,7 +1001,7 @@ yy112:
 				  pos = cursor; cline++;
 				  goto code;
 				}
-#line 998 "real_world/scanner.c"
+#line 1005 "real_world/scanner.c"
 yy114:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -1012,7 +1019,7 @@ yy116:
 #line 257 "real_world/scanner.re"
 	{ ++depth;
 				  goto code; }
-#line 1016 "real_world/scanner.c"
+#line 1023 "real_world/scanner.c"
 yy118:
 	++YYCURSOR;
 #line 251 "real_world/scanner.re"
@@ -1022,7 +1029,7 @@ yy118:
 					return CODE;
 				  }
 				  goto code; }
-#line 1026 "real_world/scanner.c"
+#line 1033 "real_world/scanner.c"
 yy120:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1070,7 +1077,7 @@ yy126:
 
 comment:
 
-#line 1074 "real_world/scanner.c"
+#line 1081 "real_world/scanner.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -1087,7 +1094,7 @@ yy130:
 #line 279 "real_world/scanner.re"
 	{ if(cursor == eof) RETURN(0);
 				  goto comment; }
-#line 1091 "real_world/scanner.c"
+#line 1098 "real_world/scanner.c"
 yy131:
 	++YYCURSOR;
 #line 275 "real_world/scanner.re"
@@ -1095,7 +1102,7 @@ yy131:
 				  tok = pos = cursor; cline++;
 				  goto comment;
 				}
-#line 1099 "real_world/scanner.c"
+#line 1106 "real_world/scanner.c"
 yy133:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1115,21 +1122,21 @@ yy135:
 					goto scan;
 				    else
 					goto comment; }
-#line 1119 "real_world/scanner.c"
+#line 1126 "real_world/scanner.c"
 yy137:
 	++YYCURSOR;
 #line 272 "real_world/scanner.re"
 	{ ++depth;
 				  fatal("ambiguous /* found");
 				  goto comment; }
-#line 1126 "real_world/scanner.c"
+#line 1133 "real_world/scanner.c"
 }
 #line 281 "real_world/scanner.re"
 
 
 config:
 
-#line 1133 "real_world/scanner.c"
+#line 1140 "real_world/scanner.c"
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1144,7 +1151,7 @@ yy141:
 	++YYCURSOR;
 #line 290 "real_world/scanner.re"
 	{ fatal("missing '='"); }
-#line 1148 "real_world/scanner.c"
+#line 1155 "real_world/scanner.c"
 yy143:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1157,7 +1164,7 @@ yy143:
 yy145:
 #line 285 "real_world/scanner.re"
 	{ goto config; }
-#line 1161 "real_world/scanner.c"
+#line 1168 "real_world/scanner.c"
 yy146:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1173,14 +1180,14 @@ yy148:
 				  cur = cursor;
 				  RETURN('='); 
 				}
-#line 1177 "real_world/scanner.c"
+#line 1184 "real_world/scanner.c"
 }
 #line 291 "real_world/scanner.re"
 
 
 value:
 
-#line 1184 "real_world/scanner.c"
+#line 1191 "real_world/scanner.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -1213,7 +1220,7 @@ yy151:
 				  iscfg = 0;
 				  return VALUE;
 				}
-#line 1217 "real_world/scanner.c"
+#line 1224 "real_world/scanner.c"
 yy152:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1286,7 +1293,7 @@ yy160:
 				  iscfg = 0;
 				  return NUMBER;
 				}
-#line 1290 "real_world/scanner.c"
+#line 1297 "real_world/scanner.c"
 yy161:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

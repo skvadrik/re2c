@@ -4,7 +4,8 @@
 	YYCTYPE yych;
 start:
 	switch (YYGETCONDITION()) {
-	case yycc1: goto yyc_c1;
+	case yycc1:
+		goto yyc_c1;
 	}
 /* *********************************** */
 yyc_c1:

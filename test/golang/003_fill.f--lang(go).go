@@ -82,15 +82,15 @@ func Lex(in *Input) (int, int) {
 //line "golang/003_fill.f--lang(go).go":83
 
 	switch (in.state) {
-	default: 
+	default:
 		goto yy0
-	case 0: 
+	case 0:
 		goto yyFillLabel0
-	case 1: 
+	case 1:
 		goto yyFillLabel1
-	case 2: 
+	case 2:
 		goto yyFillLabel2
-	case 3: 
+	case 3:
 		goto yyFillLabel3
 	}
 yy0:

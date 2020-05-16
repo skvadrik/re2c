@@ -78,11 +78,16 @@ void scan(Scanner *s)
 	s->tok = s->cur;
 
 	switch (s->state) {
-	default: goto yy0;
-	case 0: goto yyFillLabel0;
-	case 1: goto yyFillLabel1;
-	case 2: goto yyFillLabel2;
-	case 3: goto yyFillLabel3;
+	default:
+		goto yy0;
+	case 0:
+		goto yyFillLabel0;
+	case 1:
+		goto yyFillLabel1;
+	case 2:
+		goto yyFillLabel2;
+	case 3:
+		goto yyFillLabel3;
 	}
 
 	for(;;)
@@ -92,10 +97,14 @@ void scan(Scanner *s)
 
 yy0:
 		switch (s->cond) {
-		case EStateNormal: goto yyc_Normal;
-		case EStateComment: goto yyc_Comment;
-		case EStateSkiptoeol: goto yyc_Skiptoeol;
-		case EStateString: goto yyc_String;
+		case EStateNormal:
+			goto yyc_Normal;
+		case EStateComment:
+			goto yyc_Comment;
+		case EStateSkiptoeol:
+			goto yyc_Skiptoeol;
+		case EStateString:
+			goto yyc_String;
 		}
 /* *********************************** */
 yyc_Normal:

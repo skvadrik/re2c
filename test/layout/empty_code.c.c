@@ -5,7 +5,8 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyca: goto yyc_a;
+	case yyca:
+		goto yyc_a;
 	}
 /* *********************************** */
 yyc_a:
@@ -20,7 +21,7 @@ yy4:
 	++YYCURSOR;
 #line 3 "layout/empty_code.c.re"
 	
-#line 24 "layout/empty_code.c.c"
+#line 25 "layout/empty_code.c.c"
 }
 #line 5 "layout/empty_code.c.re"
 

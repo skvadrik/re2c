@@ -6,8 +6,9 @@
 
 
 	switch (YYGETSTATE()) {
-	default: goto yy0;
-	case 0: 
+	default:
+		goto yy0;
+	case 0:
 		if (YYLIMIT <= YYCURSOR) goto yyeof0;
 		goto yyFillLabel0;
 	}

@@ -60,8 +60,10 @@ static void lex_utf8(const iutf8_t & in)
 {
 	unsigned char yych;
 	switch (c) {
-	case yycl: goto yyc_l;
-	case yycn: goto yyc_n;
+	case yycl:
+		goto yyc_l;
+	case yycn:
+		goto yyc_n;
 	}
 /* *********************************** */
 yyc_l:

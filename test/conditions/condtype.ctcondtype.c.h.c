@@ -10,8 +10,10 @@ int main ()
 {
 	unsigned char yych;
 	switch (YYGETCONDITION()) {
-	case yyca: goto yyc_a;
-	case yycb: goto yyc_b;
+	case yyca:
+		goto yyc_a;
+	case yycb:
+		goto yyc_b;
 	}
 /* *********************************** */
 yyc_a:
@@ -25,7 +27,7 @@ yy4:
 	++YYCURSOR;
 #line 9 "conditions/condtype.ctcondtype.c.h.re"
 	{}
-#line 29 "conditions/condtype.ctcondtype.c.h.c"
+#line 31 "conditions/condtype.ctcondtype.c.h.c"
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
@@ -38,7 +40,7 @@ yy9:
 	++YYCURSOR;
 #line 10 "conditions/condtype.ctcondtype.c.h.re"
 	{}
-#line 42 "conditions/condtype.ctcondtype.c.h.c"
+#line 44 "conditions/condtype.ctcondtype.c.h.c"
 }
 #line 11 "conditions/condtype.ctcondtype.c.h.re"
 
