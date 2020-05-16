@@ -158,8 +158,7 @@ void gen_code(Output &output, dfas_t &dfas)
 
         // initial_label points to the beginning of DFA
         // in '-c' mode this is NOT equal to start_label
-        // TODO: remove special case for skeleton and fix test results.
-        dfa.initial_label = opts->cFlag && (first || opts->target == TARGET_SKELETON)
+        dfa.initial_label = opts->cFlag && first
             ? new_label(alc, output.label_counter++) : dfa.start_label;
         dfa.head->action.set_initial();
 

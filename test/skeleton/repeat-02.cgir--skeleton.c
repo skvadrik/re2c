@@ -325,24 +325,24 @@ int lex_line20_r2()
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yych <= '2') {
-            if (yych <= '0') goto yy15;
-            if (yych <= '1') goto yy16;
-            goto yy18;
+            if (yych <= '0') goto yy14;
+            if (yych <= '1') goto yy15;
+            goto yy17;
         } else {
-            if (yych == 'b') goto yy20;
+            if (yych == 'b') goto yy19;
         }
+yy14:
 yy15:
-yy16:
         YYSKIP ();
         status = check_key_count_line20_r2(keys_count, i, 3)
              || action_line20_r2(&i, keys, input, token, &cursor, 1);
         continue;
-yy18:
+yy17:
         YYSKIP ();
         status = check_key_count_line20_r2(keys_count, i, 3)
              || action_line20_r2(&i, keys, input, token, &cursor, 2);
         continue;
-yy20:
+yy19:
         YYSKIP ();
         status = check_key_count_line20_r2(keys_count, i, 3)
              || action_line20_r2(&i, keys, input, token, &cursor, 0);
@@ -484,31 +484,31 @@ int lex_line32_r1()
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yych <= '2') {
-            if (yych <= '0') goto yy25;
-            if (yych <= '1') goto yy26;
-            goto yy28;
+            if (yych <= '0') goto yy24;
+            if (yych <= '1') goto yy25;
+            goto yy27;
         } else {
-            if (yych <= '`') goto yy25;
-            if (yych <= 'a') goto yy30;
-            if (yych <= 'b') goto yy32;
+            if (yych <= '`') goto yy24;
+            if (yych <= 'a') goto yy29;
+            if (yych <= 'b') goto yy31;
         }
+yy24:
 yy25:
-yy26:
         YYSKIP ();
         status = check_key_count_line32_r1(keys_count, i, 3)
              || action_line32_r1(&i, keys, input, token, &cursor, 2);
         continue;
-yy28:
+yy27:
         YYSKIP ();
         status = check_key_count_line32_r1(keys_count, i, 3)
              || action_line32_r1(&i, keys, input, token, &cursor, 3);
         continue;
-yy30:
+yy29:
         YYSKIP ();
         status = check_key_count_line32_r1(keys_count, i, 3)
              || action_line32_r1(&i, keys, input, token, &cursor, 0);
         continue;
-yy32:
+yy31:
         YYSKIP ();
         status = check_key_count_line32_r1(keys_count, i, 3)
              || action_line32_r1(&i, keys, input, token, &cursor, 1);
@@ -650,24 +650,24 @@ int lex_line32_r2()
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yych <= '2') {
-            if (yych <= '0') goto yy37;
-            if (yych <= '1') goto yy38;
-            goto yy40;
+            if (yych <= '0') goto yy35;
+            if (yych <= '1') goto yy36;
+            goto yy38;
         } else {
-            if (yych == 'b') goto yy42;
+            if (yych == 'b') goto yy40;
         }
-yy37:
-yy38:
+yy35:
+yy36:
         YYSKIP ();
         status = check_key_count_line32_r2(keys_count, i, 3)
              || action_line32_r2(&i, keys, input, token, &cursor, 1);
         continue;
-yy40:
+yy38:
         YYSKIP ();
         status = check_key_count_line32_r2(keys_count, i, 3)
              || action_line32_r2(&i, keys, input, token, &cursor, 2);
         continue;
-yy42:
+yy40:
         YYSKIP ();
         status = check_key_count_line32_r2(keys_count, i, 3)
              || action_line32_r2(&i, keys, input, token, &cursor, 0);
@@ -809,31 +809,31 @@ int lex_line44_r1()
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yych <= '2') {
-            if (yych <= '0') goto yy47;
-            if (yych <= '1') goto yy48;
-            goto yy50;
+            if (yych <= '0') goto yy45;
+            if (yych <= '1') goto yy46;
+            goto yy48;
         } else {
-            if (yych <= '`') goto yy47;
-            if (yych <= 'a') goto yy52;
-            if (yych <= 'b') goto yy54;
+            if (yych <= '`') goto yy45;
+            if (yych <= 'a') goto yy50;
+            if (yych <= 'b') goto yy52;
         }
-yy47:
-yy48:
+yy45:
+yy46:
         YYSKIP ();
         status = check_key_count_line44_r1(keys_count, i, 3)
              || action_line44_r1(&i, keys, input, token, &cursor, 2);
         continue;
-yy50:
+yy48:
         YYSKIP ();
         status = check_key_count_line44_r1(keys_count, i, 3)
              || action_line44_r1(&i, keys, input, token, &cursor, 3);
         continue;
-yy52:
+yy50:
         YYSKIP ();
         status = check_key_count_line44_r1(keys_count, i, 3)
              || action_line44_r1(&i, keys, input, token, &cursor, 0);
         continue;
-yy54:
+yy52:
         YYSKIP ();
         status = check_key_count_line44_r1(keys_count, i, 3)
              || action_line44_r1(&i, keys, input, token, &cursor, 1);
@@ -975,24 +975,24 @@ int lex_line44_r2()
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yych <= '2') {
-            if (yych <= '0') goto yy59;
-            if (yych <= '1') goto yy60;
-            goto yy62;
+            if (yych <= '0') goto yy56;
+            if (yych <= '1') goto yy57;
+            goto yy59;
         } else {
-            if (yych == 'b') goto yy64;
+            if (yych == 'b') goto yy61;
         }
-yy59:
-yy60:
+yy56:
+yy57:
         YYSKIP ();
         status = check_key_count_line44_r2(keys_count, i, 3)
              || action_line44_r2(&i, keys, input, token, &cursor, 1);
         continue;
-yy62:
+yy59:
         YYSKIP ();
         status = check_key_count_line44_r2(keys_count, i, 3)
              || action_line44_r2(&i, keys, input, token, &cursor, 2);
         continue;
-yy64:
+yy61:
         YYSKIP ();
         status = check_key_count_line44_r2(keys_count, i, 3)
              || action_line44_r2(&i, keys, input, token, &cursor, 0);
