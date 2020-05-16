@@ -670,9 +670,10 @@ struct CodegenContext {
     const std::vector<std::string> &condnames;
     const size_t maxfill;
     const size_t maxnmatch;
-    const uint32_t fillidx;
     const bool used_yyaccept;
     const bool warn_cond_ord;
+    const uint32_t fill_index;
+    const std::vector<CodeList*> &fill_fallback;
 };
 
 struct RenderContext {
@@ -714,7 +715,6 @@ class Output {
 
 public:
     uint32_t label_counter;
-    uint32_t fill_index;
     bool state_goto;
     bool cond_enum_in_hdr;
     bool cond_goto;
@@ -726,6 +726,12 @@ public:
     size_t max_nmatch;
     code_alc_t allocator;
     Scratchbuf scratchbuf;
+
+    // YYFILL label index (for state dispatch)
+    uint32_t fill_index;
+
+    // fallback transitions on YYFILL failure (for state dispatch)
+    std::vector<CodeList*> fill_fallback;
 
     explicit Output(Msg &msg);
     ~Output();

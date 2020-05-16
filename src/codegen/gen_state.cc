@@ -408,14 +408,6 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         }
         text = o.flush();
         append(refill, code_text(alc, text));
-
-        // yyeof label
-        text = o.str(opts->labelPrefix).cstr("eof").u32(fillidx).flush();
-        append(refill, code_slabel(alc, text));
-        if (fallback == to) {
-            // a label must be followed by a statement
-            append(refill, code_stmt(alc, ""));
-        }
     }
     else if (opts->fill_use) {
         // YYFILL invocation
@@ -437,6 +429,7 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
     }
 
     // refill failed
+    CodeList *fallback_trans = code_list(alc);
     if (from->action.type == Action::INITIAL) {
         // initial state: if accepting, go to eof state, else go to default state
         o.cstr("goto ").str(opts->labelPrefix);
@@ -448,21 +441,28 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
             o.cstr("eofrule").u64(output.blockid());
         }
         text = o.flush();
-        append(refill, code_stmt(alc, text));
+        append(fallback_trans, code_stmt(alc, text));
     }
-    else if (fallback != to) {
+    else if (fallback != to || opts->fFlag) {
         // tag actions on the fallback transition
-        gen_settags(output, refill, dfa, falltags, false /* delayed */);
+        gen_settags(output, fallback_trans, dfa, falltags, false /* delayed */);
 
         // go to fallback state
         fallback->label->used = true;
         text = o.cstr("goto ").str(opts->labelPrefix).label(*fallback->label).flush();
-        append(refill, code_stmt(alc, text));
+        append(fallback_trans, code_stmt(alc, text));
     }
     else {
         // Transition can be elided, because control flow "falls through" to an
         // identical transition. Tags and skip (if present) are elided as well,
         // because the next transition covers them.
+    }
+    if (!opts->fFlag) {
+        append(refill, fallback_trans);
+    }
+    else {
+        // Save fallback transition for the initial state dispatch.
+        output.fill_fallback.push_back(fallback_trans);
     }
 
     return code_if_then_else(alc, if_refill, refill, NULL);

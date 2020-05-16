@@ -9,7 +9,7 @@
 	default:
 		goto yy0;
 	case 0:
-		if (YYLIMIT <= YYCURSOR) goto yyeof0;
+		if (YYLIMIT <= YYCURSOR) goto yyeofrule1;
 		goto yyFillLabel0;
 	}
 yy0:
@@ -21,8 +21,6 @@ yyFillLabel0:
 		if (YYLIMIT <= YYCURSOR) {
 			YYSETSTATE(0);
 			fill(need);();
-yyeof0:
-			goto yyeofrule1;
 		}
 		goto yy2;
 	}

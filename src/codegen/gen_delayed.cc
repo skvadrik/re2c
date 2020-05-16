@@ -56,13 +56,15 @@ static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, Code *code,
     code->block.fmt = CodeBlock::RAW;
 }
 
-static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
-    uint32_t start_label, uint32_t fill_index, const opt_t *opts)
+static void gen_state_goto(CodegenContext &ctx, Code *code)
 {
+    const opt_t *opts = ctx.globopts; // whole-program options
+    Scratchbuf &o = ctx.scratchbuf;
+    code_alc_t &alc = ctx.allocator;
     const char *text;
 
     CodeList *goto_start = code_list(alc);
-    text = o.cstr("goto ").str(opts->labelPrefix).u32(start_label).flush();
+    text = o.cstr("goto ").str(opts->labelPrefix).u32(0).flush();
     append(goto_start, code_stmt(alc, text));
 
     CodeCases *ccases = code_cases(alc);
@@ -79,21 +81,22 @@ static void gen_state_goto(Scratchbuf &o, code_alc_t &alc, Code *code,
         // default: goto <start label>;
         append(ccases, code_case_default(alc, goto_start));
     }
-    for (uint32_t i = 0; i < fill_index; ++i) {
+
+    DASSERT(opts->eof == NOEOF || ctx.fill_index == ctx.fill_fallback.size());
+    for (uint32_t i = 0; i < ctx.fill_index; ++i) {
         CodeList *stmts = code_list(alc);
 
-        // if (YYLESSTHAN(n)) goto yyeof<N>;
+        // If EOF rule is used, handle possible YYFILL failure: if there is still
+        // not enough input, follow the default/final transition for i-th state.
+        // Inline the code for transition here rather than jumping to the
+        // corresponding condition branch in DFA, since not all language backends
+        // support jumping in the middle of a nested block (Golang doesn't).
         if (opts->eof != NOEOF) {
-            CodeList *then = code_list(alc);
-            text = o.cstr("goto ").str(opts->labelPrefix).cstr("eof").u32(i).flush();
-            append(then, code_stmt(alc, text));
-
             text = gen_lessthan(o, opts, 1);
-
-            append(stmts, code_if_then_else(alc, text, then, NULL));
+            append(stmts, code_if_then_else(alc, text, ctx.fill_fallback[i], NULL));
         }
 
-        // goto yyFillLabel<N>;
+        // goto yyFillLabel<i>;
         text = o.cstr("goto ").str(opts->yyfilllabel).u32(i).flush();
         append(stmts, code_stmt(alc, text));
 
@@ -384,8 +387,7 @@ void expand(CodegenContext &ctx, Code *code)
                 ctx.opts);
             break;
         case Code::STATE_GOTO:
-            gen_state_goto(ctx.scratchbuf, ctx.allocator, code, 0, ctx.fillidx,
-                ctx.globopts);
+            gen_state_goto(ctx, code);
             break;
         case Code::LABEL:
             gen_label(ctx.scratchbuf, ctx.opts, code);

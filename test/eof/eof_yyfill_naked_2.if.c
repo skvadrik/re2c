@@ -7,16 +7,16 @@
 	default:
 		goto yy0;
 	case 0:
-		if (YYLIMIT <= YYCURSOR) goto yyeof0;
+		if (YYLIMIT <= YYCURSOR) goto yyeofrule2;
 		goto yyFillLabel0;
 	case 1:
-		if (YYLIMIT <= YYCURSOR) goto yyeof1;
+		if (YYLIMIT <= YYCURSOR) goto yyeofrule3;
 		goto yyFillLabel1;
 	case 2:
-		if (YYLIMIT <= YYCURSOR) goto yyeof2;
+		if (YYLIMIT <= YYCURSOR) goto yyeofrule4;
 		goto yyFillLabel2;
 	case 3:
-		if (YYLIMIT <= YYCURSOR) goto yyeof3;
+		if (YYLIMIT <= YYCURSOR) goto yyeofrule5;
 		goto yyFillLabel3;
 	}
 yy0:
@@ -28,8 +28,6 @@ yyFillLabel0:
 		if (YYLIMIT <= YYCURSOR) {
 			YYSETSTATE(0);
 			fill();
-yyeof0:
-			goto yyeofrule2;
 		}
 		goto yy2;
 	}
@@ -53,8 +51,6 @@ yyFillLabel1:
 		if (YYLIMIT <= YYCURSOR) {
 			YYSETSTATE(1);
 			fill();
-yyeof1:
-			goto yyeofrule3;
 		}
 		goto yy8;
 	}
@@ -78,8 +74,6 @@ yyFillLabel2:
 		if (YYLIMIT <= YYCURSOR) {
 			YYSETSTATE(2);
 			fill();
-yyeof2:
-			goto yyeofrule4;
 		}
 		goto yy14;
 	}
@@ -103,8 +97,6 @@ yyFillLabel3:
 		if (YYLIMIT <= YYCURSOR) {
 			YYSETSTATE(3);
 			fill();
-yyeof3:
-			goto yyeofrule5;
 		}
 		goto yy20;
 	}

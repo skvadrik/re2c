@@ -92,67 +92,67 @@ switch (YYGETSTATE()) {
 default:
 	goto yy0;
 case 0:
-	if (in.lim <= in.cur) goto yyeof0;
+	if (in.lim <= in.cur) goto yyeofrule1;
 	goto yyFillLabel0;
 case 1:
-	if (in.lim <= in.cur) goto yyeof1;
+	if (in.lim <= in.cur) goto yy6;
 	goto yyFillLabel1;
 case 2:
-	if (in.lim <= in.cur) goto yyeof2;
+	if (in.lim <= in.cur) goto yy9;
 	goto yyFillLabel2;
 case 3:
-	if (in.lim <= in.cur) goto yyeof3;
+	if (in.lim <= in.cur) goto yy9;
 	goto yyFillLabel3;
 case 4:
-	if (in.lim <= in.cur) goto yyeof4;
+	if (in.lim <= in.cur) goto yy9;
 	goto yyFillLabel4;
 case 5:
-	if (in.lim <= in.cur) goto yyeof5;
+	if (in.lim <= in.cur) goto yy9;
 	goto yyFillLabel5;
 case 6:
-	if (in.lim <= in.cur) goto yyeof6;
+	if (in.lim <= in.cur) goto yy9;
 	goto yyFillLabel6;
 case 7:
-	if (in.lim <= in.cur) goto yyeof7;
+	if (in.lim <= in.cur) goto yy9;
 	goto yyFillLabel7;
 case 8:
-	if (in.lim <= in.cur) goto yyeof8;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel8;
 case 9:
-	if (in.lim <= in.cur) goto yyeof9;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel9;
 case 10:
-	if (in.lim <= in.cur) goto yyeof10;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel10;
 case 11:
-	if (in.lim <= in.cur) goto yyeof11;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel11;
 case 12:
-	if (in.lim <= in.cur) goto yyeof12;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel12;
 case 13:
-	if (in.lim <= in.cur) goto yyeof13;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel13;
 case 14:
-	if (in.lim <= in.cur) goto yyeof14;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel14;
 case 15:
-	if (in.lim <= in.cur) goto yyeof15;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel15;
 case 16:
-	if (in.lim <= in.cur) goto yyeof16;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel16;
 case 17:
-	if (in.lim <= in.cur) goto yyeof17;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel17;
 case 18:
-	if (in.lim <= in.cur) goto yyeof18;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel18;
 case 19:
-	if (in.lim <= in.cur) goto yyeof19;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel19;
 case 20:
-	if (in.lim <= in.cur) goto yyeof20;
+	if (in.lim <= in.cur) goto yy16;
 	goto yyFillLabel20;
 }
 
@@ -220,8 +220,6 @@ yyFillLabel0:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(0);
 			YYFILL();
-yyeof0:
-			goto yyeofrule1;
 		}
 		goto yy2;
 	}
@@ -239,8 +237,6 @@ yyFillLabel1:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(1);
 			YYFILL();
-yyeof1:
-			;
 		}
 		goto yy6;
 	}
@@ -308,8 +304,6 @@ yy8:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(2);
 			YYFILL();
-yyeof2:
-			;
 		}
 		goto yy9;
 	}
@@ -324,8 +318,6 @@ yyFillLabel3:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(3);
 			YYFILL();
-yyeof3:
-			;
 		}
 		goto yy9;
 	case 'H':	goto yy11;
@@ -340,8 +332,6 @@ yyFillLabel4:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(4);
 			YYFILL();
-yyeof4:
-			;
 		}
 		goto yy9;
 	case 'I':	goto yy12;
@@ -356,8 +346,6 @@ yyFillLabel5:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(5);
 			YYFILL();
-yyeof5:
-			;
 		}
 		goto yy9;
 	case 'N':	goto yy13;
@@ -372,8 +360,6 @@ yyFillLabel6:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(6);
 			YYFILL();
-yyeof6:
-			;
 		}
 		goto yy9;
 	case 'G':	goto yy14;
@@ -388,8 +374,6 @@ yyFillLabel7:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(7);
 			YYFILL();
-yyeof7:
-			;
 		}
 		goto yy9;
 	case '\n':	goto yy15;
@@ -405,8 +389,6 @@ yyFillLabel8:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(8);
 			YYFILL();
-yyeof8:
-			;
 		}
 		goto yy16;
 	}
@@ -423,8 +405,6 @@ yyFillLabel9:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(9);
 			YYFILL();
-yyeof9:
-			;
 		}
 		goto yy16;
 	}
@@ -438,8 +418,6 @@ yyFillLabel10:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(10);
 			YYFILL();
-yyeof10:
-			;
 		}
 		goto yy16;
 	}
@@ -453,8 +431,6 @@ yyFillLabel11:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(11);
 			YYFILL();
-yyeof11:
-			;
 		}
 		goto yy16;
 	}
@@ -468,8 +444,6 @@ yyFillLabel12:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(12);
 			YYFILL();
-yyeof12:
-			;
 		}
 		goto yy16;
 	}
@@ -483,8 +457,6 @@ yyFillLabel13:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(13);
 			YYFILL();
-yyeof13:
-			;
 		}
 		goto yy16;
 	}
@@ -498,8 +470,6 @@ yyFillLabel14:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(14);
 			YYFILL();
-yyeof14:
-			;
 		}
 		goto yy16;
 	}
@@ -513,8 +483,6 @@ yyFillLabel15:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(15);
 			YYFILL();
-yyeof15:
-			;
 		}
 		goto yy16;
 	}
@@ -528,8 +496,6 @@ yyFillLabel16:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(16);
 			YYFILL();
-yyeof16:
-			;
 		}
 		goto yy16;
 	}
@@ -543,8 +509,6 @@ yyFillLabel17:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(17);
 			YYFILL();
-yyeof17:
-			;
 		}
 		goto yy16;
 	}
@@ -558,8 +522,6 @@ yyFillLabel18:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(18);
 			YYFILL();
-yyeof18:
-			;
 		}
 		goto yy16;
 	}
@@ -573,8 +535,6 @@ yyFillLabel19:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(19);
 			YYFILL();
-yyeof19:
-			;
 		}
 		goto yy16;
 	}
@@ -588,8 +548,6 @@ yyFillLabel20:
 		if (in.lim <= in.cur) {
 			YYSETSTATE(20);
 			YYFILL();
-yyeof20:
-			;
 		}
 		goto yy16;
 	}

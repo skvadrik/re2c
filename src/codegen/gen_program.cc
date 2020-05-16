@@ -63,7 +63,6 @@ Output::Output(Msg &msg)
     , hblocks()
     , pblocks(&cblocks)
     , label_counter(0)
-    , fill_index(0)
     , state_goto(false)
     , cond_enum_in_hdr(false)
     , cond_goto(false)
@@ -75,6 +74,8 @@ Output::Output(Msg &msg)
     , max_nmatch(1)
     , allocator()
     , scratchbuf(allocator)
+    , fill_index(0)
+    , fill_fallback()
 {}
 
 Output::~Output ()
@@ -194,9 +195,10 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             , b.types
             , max_fill
             , max_nmatch
-            , fill_index
             , b.used_yyaccept
             , warn_condition_order
+            , fill_index
+            , fill_fallback
             };
 
         const size_t n = b.fragments.size();
