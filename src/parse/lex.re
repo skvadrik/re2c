@@ -232,7 +232,7 @@ loop:
 
     linedir / lineinf {
         out.wraw(tok, ptr);
-        out.wdelay_stmt(0, code_textraw(alc, ""));
+        out.wdelay_stmt(0, code_newline(alc));
         set_sourceline();
         goto next;
     }

@@ -270,7 +270,7 @@ bool Output::emit()
         // old-style -t, --type-headers usage implies condition generation
         if (!conds.empty() && !this->cond_enum_in_hdr) {
             header_mode(true);
-            wdelay_stmt(0, code_textraw(allocator, ""));
+            wdelay_stmt(0, code_newline(allocator));
             wdelay_stmt(0, code_cond_enum(allocator));
             header_mode(false);
         }

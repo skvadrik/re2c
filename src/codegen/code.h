@@ -422,6 +422,11 @@ inline Code *code_textraw(code_alc_t &alc, const char *text)
     return x;
 }
 
+inline Code *code_newline(code_alc_t &alc)
+{
+    return code_textraw(alc, "");
+}
+
 inline Code *code_nlabel(code_alc_t &alc, Label *label)
 {
     Code *x = new_code(alc, Code::LABEL);

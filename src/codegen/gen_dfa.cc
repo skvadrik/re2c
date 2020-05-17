@@ -214,7 +214,7 @@ void gen_code(Output &output, dfas_t &dfas)
             have_bitmaps |= bms != NULL;
 
             if (first && opts->fFlag) {
-                append(program1, code_textraw(alc, ""));
+                append(program1, code_newline(alc));
             }
 
             if (first && !opts->fFlag) {
@@ -282,7 +282,7 @@ void gen_code(Output &output, dfas_t &dfas)
             || (!opts->cFlag && have_bitmaps)
             || (opts->cFlag && opts->gFlag);
 
-        append(program, code_textraw(alc, ""));
+        append(program, code_newline(alc));
         append(program, code_line_info_output(alc));
 
         if (prolog) {
