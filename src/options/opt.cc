@@ -277,9 +277,15 @@ void Opt::fix_mutopt()
         real.sFlag = true;
     }
 
-    if (glob.lang == LANG_GO && real.input_api == INPUT_DEFAULT) {
-        fatal("default C API is not supported for the Go backend,"
-            " as Go has no pointer arithmetics");
+    if (glob.lang == LANG_GO) {
+        if (real.input_api == INPUT_DEFAULT) {
+            fatal("default C API is not supported for the Go backend,"
+                " as Go has no pointer arithmetics");
+        }
+        if (real.gFlag) {
+            fatal("-g, --computed-gotos option is not supported for the Go backend,"
+                " as Go does not have computed goto");
+        }
     }
     if (real.eof != NOEOF) {
         if (real.bFlag || real.gFlag) {
