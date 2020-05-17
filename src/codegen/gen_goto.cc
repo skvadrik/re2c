@@ -116,26 +116,25 @@ static CodeList *gen_gobm(Output &output, const DFA &dfa, const CodeGoBm *go,
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
-    CodeList *stmts = code_list(alc);
+    const char *nonzero = opts->lang == LANG_C ? "" : " != 0";
 
     const char *elif_cond = o.str(opts->yybm)
         .cstr("[").u32(go->bitmap->offset).cstr("+").str(opts->yych).cstr("]")
-        .cstr(" & ").yybm_char(go->bitmap->mask, opts, 1).flush();
+        .cstr(" & ").yybm_char(go->bitmap->mask, opts, 1).cstr(nonzero).flush();
 
     CodeList *if_else = code_list(alc);
-
     const CodeJump jump = {go->bitmap->state, TCID0, false, false, false};
     gen_goto(output, dfa, if_else, from, jump);
 
+    CodeList *stmts = code_list(alc);
     if (go->hgo != NULL) {
-        const char *if_cond = o.str(opts->yych).cstr(" & ~0xFF").flush();
+        const char *if_cond = o.str(opts->yych).cstr(" & ~0xFF").cstr(nonzero).flush();
         CodeList *if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
     }
     else {
         append(stmts, code_if_then_else(alc, elif_cond, if_else, NULL, false));
     }
-
     if (go->lgo != NULL) {
         append(stmts, gen_goswif(output, dfa, go->lgo, from));
     }
