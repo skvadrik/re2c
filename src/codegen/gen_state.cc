@@ -372,11 +372,18 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const bool final = from->rule != Rule::NONE;
-    const State *fallback = final ? dfa.finstates[from->rule] : dfa.defstate;
-    const tcid_t falltags = final ? from->rule_tags : from->fall_tags;
     const uint32_t fillidx = output.fill_index - 1;
     const char *text;
+
+    const bool final = from->rule != Rule::NONE;
+    const State *fallback = final ? dfa.finstates[from->rule] : dfa.defstate;
+    tcid_t falltags = final ? from->rule_tags : from->fall_tags;
+
+    // If tags have been hoisted, do not re-add them to fallback transition.
+    if (from->go.tags != TCID0) {
+        DASSERT(from->go.tags == falltags);
+        falltags = TCID0;
+    }
 
     // absence of check doesn't make sense with EOF rule
     DASSERT(opts->fill_check);
