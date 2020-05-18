@@ -787,7 +787,7 @@ void printSpan(std::ostream &o, uint32_t l, uint32_t u, uint32_t szcunit, bool e
 std::string tag_expr(const Tag &tag, bool lvalue);
 std::string vartag_name(tagver_t ver, const std::string &prefix);
 std::string vartag_expr(tagver_t ver, const std::string &prefix, const std::string &expression);
-void output_version_time(std::ostream &o, bool version, bool date);
+void output_version_time(std::ostream &os, const opt_t *opts);
 
 inline std::string indent(uint32_t n, const std::string &s)
 {
