@@ -36,20 +36,31 @@ static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, Code *code,
         return;
     }
 
-    const char *text;
+    const char *text, *start = NULL, *end = NULL;
     CodeList *stmts = code_list(alc);
-
-    text = o.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
-    append(stmts, code_text(alc, text));
-
     CodeList *block = code_list(alc);
-    for (size_t i = 0; i < condnames.size(); ++i) {
-        text = o.str(opts->condEnumPrefix).str(condnames[i]).cstr(",").flush();
-        append(block, code_text(alc, text));
-    }
-    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
-    append(stmts, code_text(alc, "};"));
+    if (opts->lang == LANG_C) {
+        start = o.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
+        end = "};";
+        for (size_t i = 0; i < condnames.size(); ++i) {
+            text = o.str(opts->condEnumPrefix).str(condnames[i]).cstr(",").flush();
+            append(block, code_text(alc, text));
+        }
+    }
+    else if (opts->lang == LANG_GO) {
+        start = o.cstr("const (").flush();
+        end = ")";
+        for (size_t i = 0; i < condnames.size(); ++i) {
+            text = o.str(opts->condEnumPrefix).str(condnames[i])
+                .cstr(i == 0 ? " = iota" : "").flush();
+            append(block, code_text(alc, text));
+        }
+    }
+
+    append(stmts, code_text(alc, start));
+    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
+    append(stmts, code_text(alc, end));
 
     code->kind = Code::BLOCK;
     code->block.stmts = stmts;
