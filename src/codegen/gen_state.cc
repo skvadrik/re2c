@@ -282,7 +282,8 @@ CodeList *need(Output &output, size_t some)
     }
 
     if (opts->fill_use) {
-        strrreplace(s = opts->fill, opts->fill_arg, some);
+        s = opts->fill;
+        strrreplace(s, opts->fill_arg, some);
         o.str(s);
         if (!opts->fill_naked) {
             if (opts->fill_arg_use) {
@@ -406,6 +407,7 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         append(refill, code_text(alc, text));
 
         // YYFILL invocation
+        // With EOF rule there is no placeholder argument to replace.
         o.str(opts->fill);
         if (!opts->fill_naked) {
             if (opts->fill_arg_use) {

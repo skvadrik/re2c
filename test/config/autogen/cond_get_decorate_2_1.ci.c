@@ -24,7 +24,7 @@ yy3:
 yy5:
 	++YYCURSOR;
 	YYSETCONDITION
-	{ a }
+	goto yyc_c2;
 /* *********************************** */
 yyc_c2:
 	if (YYLIMIT <= YYCURSOR) YYFILL
@@ -39,6 +39,6 @@ yy9:
 yy11:
 	++YYCURSOR;
 	YYSETCONDITION
-	{ b }
+	goto yyc_c1;
 }
 

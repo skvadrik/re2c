@@ -231,8 +231,6 @@ void Opt::fix_mutopt()
         real.yylimit = defaults.yylimit;
     }
     if (real.input_api != INPUT_CUSTOM) {
-        real.decorate = defaults.decorate;
-        real.placeholder = defaults.placeholder;
         real.yypeek = defaults.yypeek;
         real.yyskip = defaults.yyskip;
         real.yybackup = defaults.yybackup;

@@ -4,14 +4,11 @@ import System.Directory (getDirectoryContents, removeFile, createDirectoryIfMiss
 import System.FilePath  (takeExtension, addExtension, combine)
 
 
-genconfs2 :: String -> [String]
-genconfs2 conf =
-    [ "re2c:" ++ conf ++ " = 0;"
-    , "re2c:" ++ conf ++ " = 1;"
-    ]
+genconfs2 :: String -> [String] -> [String]
+genconfs2 conf vals = map (\val -> concat ["re2c:", conf, " = ", val, ";"]) vals
 
-genconfs :: String -> [String]
-genconfs conf = "" : genconfs2 conf
+genconfs :: String -> [String] -> [String]
+genconfs conf vals = "" : genconfs2 conf vals
 
 eof_conf :: String
 eof_conf = "re2c:eof = 0;"
@@ -24,9 +21,15 @@ body1 =
 
 body2 :: [String]
 body2 =
-    [ "<c1> [a] => c2 { a }"
-    , "<c2> [b] => c1 { b }"
-    , "<*> *          { x }"
+    [ "<c1> [a] :=> c2"
+    , "<c2> [b] :=> c1"
+    , "<*> * { x }"
+    ]
+
+body3 :: [String]
+body3 =
+    [ "(@p [a])+ { a }"
+    , "*         { x }"
     ]
 
 cond_get_decorate :: (String, String, [[String]], [String])
@@ -34,20 +37,42 @@ cond_get_decorate =
     let name = "cond_get_decorate"
         ext = ".ci"
         confs =
-            [ genconfs2 "define:YYGETCONDITION:naked"
-            , genconfs2 "decorate"
+            [ genconfs2 "define:YYGETCONDITION:naked" ["0", "1"]
+            , genconfs2 "decorate" ["0", "1"]
             ]
     in  (name, ext, confs, body2)
 
-cond_set_param :: (String, String, [[String]], [String])
-cond_set_param =
-    let name = "cond_set_param"
+cond_set_placeholder :: (String, String, [[String]], [String])
+cond_set_placeholder =
+    let name = "cond_set_placeholder"
         ext = ".ci"
         confs =
-            [ [ "re2c:define:YYSETCONDITION = \"cond = @@;\";"
-              , "re2c:define:YYSETCONDITION = \"cond = #;\";"
-              ]
-            , ["", "re2c:define:YYSETCONDITION@cond = #;"]
+            [ genconfs "define:YYSETCONDITION@cond" ["@@", "#"]
+            , genconfs2 "placeholder" ["#", "@@"]
+            , genconfs2 "define:YYSETCONDITION" ["\"cond = @@;\"", "\"cond = #;\""]
+            ]
+    in  (name, ext, confs, body2)
+
+cond_goto_placeholder :: (String, String, [[String]], [String])
+cond_goto_placeholder =
+    let name = "cond_goto_placeholder"
+        ext = ".ci"
+        confs =
+            [ genconfs "cond:goto" ["\"goto #;\"", "\"goto @@;\""]
+            , genconfs "cond:goto@cond" ["#", "@@"]
+            , genconfs2 "placeholder" ["#", "@@"]
+            ]
+    in  (name, ext, confs, body2)
+
+cond_divider_placeholder :: (String, String, [[String]], [String])
+cond_divider_placeholder =
+    let name = "cond_divider_placeholder"
+        ext = ".ci"
+        confs =
+            -- do not test default `cond:divider` as it has no placeholder
+            [ genconfs2 "cond:divider" ["\"~~~ ## ~~~\"", "\"--- @@ --- @@ ---\""]
+            , genconfs "cond:divider@cond" ["#", "@@"]
+            , genconfs2 "placeholder" ["#", "@@"]
             ]
     in  (name, ext, confs, body2)
 
@@ -56,8 +81,8 @@ cond_set_decorate =
     let name = "cond_set_decorate"
         ext = ".ci"
         confs =
-            [ genconfs "define:YYSETCONDITION:naked"
-            , genconfs "decorate"
+            [ genconfs "define:YYSETCONDITION:naked" ["0", "1"]
+            , genconfs "decorate" ["0", "1"]
             ]
     in  (name, ext, confs, body2)
 
@@ -66,60 +91,75 @@ state_get_decorate =
     let name = "state_get_decorate"
         ext = ".fi"
         confs =
-            [ genconfs2 "define:YYGETSTATE:naked"
-            , genconfs2 "decorate"
+            [ genconfs2 "define:YYGETSTATE:naked" ["0", "1"]
+            , genconfs2 "decorate" ["0", "1"]
             ]
     in  (name, ext, confs, body1)
 
-state_set_param :: (String, String, [[String]], [String])
-state_set_param =
-    let name = "state_set_param"
+state_set_placeholder :: (String, String, [[String]], [String])
+state_set_placeholder =
+    let name = "state_set_placeholder"
         ext = ".fi"
         confs =
-            [ [ "re2c:define:YYSETSTATE = \"state = @@;\";"
-              , "re2c:define:YYSETSTATE = \"state = \xFF;\";"]
-            , ["", "re2c:define:YYSETSTATE@state = \"\xFF\";"]
+            [ genconfs "define:YYSETSTATE@state" ["@@", "\"\xFF\""]
+            , genconfs2 "placeholder" ["\"\xFF\"", "@@"]
+            , genconfs2 "define:YYSETSTATE" ["\"state = @@;\"", "\"state = \xFF;\""]
             ]
     in  (name, ext, confs, body1)
+
+tags_expr_placeholder :: (String, String, [[String]], [String])
+tags_expr_placeholder =
+    let name = "tags_expr_placeholder"
+        ext = ".i--tags"
+        confs =
+            [ genconfs "tags:expression" ["\"xyz->#\"", "\"@@\""]
+            , genconfs "placeholder" ["#", "@@"]
+            ]
+    in  (name, ext, confs, body3)
 
 state_set_decorate :: (String, String, [[String]], [String])
 state_set_decorate =
     let name = "state_set_decorate"
         ext = ".fi"
         confs =
-            [ genconfs "define:YYSETSTATE:naked"
-            , genconfs "decorate"
+            [ genconfs "define:YYSETSTATE:naked" ["0", "1"]
+            , genconfs "decorate" ["0", "1"]
             ]
     in  (name, ext, confs, body1)
 
-fill :: (String, String, [[String]], [String])
-fill =
-    let name = "fill"
+fill_placeholder :: (String, String, [[String]], [String])
+fill_placeholder =
+    let name = "fill_placeholder"
         ext = ".i"
         confs =
-            [ [ "re2c:define:YYFILL = \"fill(@@)\";"
-              , "re2c:define:YYFILL = \"fill(need);\";"
-              ]
-            , ["", "re2c:define:YYFILL@len = need;"]
-            , genconfs2 "yyfill:check"
+            [ genconfs "define:YYFILL@len" ["@@", "need"]
+            , genconfs2 "placeholder" ["need", "@@"]
+            , genconfs2 "define:YYFILL" ["\"fill(@@)\"", "\"fill(need);\""]
             ]
     in  (name, ext, confs, body1)
-
-fill_state :: (String, String, [[String]], [String])
-fill_state =
-    let (name, _, confs, body) = fill
-    in  (name, ".fi", confs, body)
 
 fill_decorate :: (String, String, [[String]], [String])
 fill_decorate =
     let name = "fill_decorate"
         ext = ".i"
         confs =
-            [ genconfs "define:YYFILL:naked"
-            , genconfs "yyfill:parameter"
-            , genconfs "decorate"
+            [ genconfs "define:YYFILL:naked" ["0", "1"]
+            , genconfs "yyfill:parameter" ["0", "1"]
+            , genconfs "decorate" ["0", "1"]
             ]
     in  (name, ext, confs, body1)
+
+fill_check :: (String, String, [[String]], [String])
+fill_check =
+    let name = "fill_check"
+        ext = ".i"
+        confs = [ genconfs "yyfill:check" ["0", "1"] ]
+    in  (name, ext, confs, body1)
+
+fill_check_state :: (String, String, [[String]], [String])
+fill_check_state =
+    let (name, _, confs, body) = fill_check
+    in  (name, ".fi", confs, body)
 
 eof_variant :: (String, String, [[String]], [String])
             -> (String, String, [[String]], [String])
@@ -209,16 +249,22 @@ main = do
     cleanup
 
     gen1 cond_get_decorate
-    gen2 cond_set_param
+    gen3 cond_set_placeholder
     gen3 cond_set_decorate
+    gen3 cond_goto_placeholder
+    gen3 cond_divider_placeholder
 
     gen1 state_get_decorate
-    gen2 state_set_param
+    gen3 state_set_placeholder
     gen3 state_set_decorate
 
-    gen2 fill
-    gen2 fill_state
+    gen3 tags_expr_placeholder
+
+    gen3 fill_check
+    gen2 fill_check_state
+    gen3 fill_placeholder
     gen3 fill_decorate
-    gen2 $ eof_variant fill
-    gen2 $ eof_variant fill_state
+    gen3 $ eof_variant fill_check
+    gen2 $ eof_variant fill_check_state
+    gen3 $ eof_variant fill_placeholder
     gen3 $ eof_variant fill_decorate
