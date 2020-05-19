@@ -117,6 +117,7 @@ void Opt::fix_mutopt()
             real.yytarget = defaults.yytarget;
             real.input_api = defaults.input_api;
             real.decorate = defaults.decorate;
+            real.placeholder = defaults.placeholder;
             real.yycursor = defaults.yycursor;
             real.yymarker = defaults.yymarker;
             real.yyctxmarker = defaults.yyctxmarker;
@@ -159,12 +160,23 @@ void Opt::fix_mutopt()
         real.bCaseInverted = defaults.bCaseInverted;
     }
 
-    // "naked" options, unless explicitly set, inherit "decorate"
-    if (is_default.fill_naked) real.fill_naked = !real.decorate;
-    if (is_default.cond_get_naked) real.cond_get_naked = !real.decorate;
-    if (is_default.cond_set_naked) real.cond_set_naked = !real.decorate;
+    // individual "naked" options, unless explicitly set, inherit "decorate"
+    if (is_default.fill_naked)      real.fill_naked      = !real.decorate;
+    if (is_default.cond_get_naked)  real.cond_get_naked  = !real.decorate;
+    if (is_default.cond_set_naked)  real.cond_set_naked  = !real.decorate;
     if (is_default.state_get_naked) real.state_get_naked = !real.decorate;
     if (is_default.state_set_naked) real.state_set_naked = !real.decorate;
+
+    // individual template options, unless explicitly set, inherit "placeholder"
+    if (is_default.fill_arg)         real.fill_arg         = real.placeholder;
+    if (is_default.cond_set_arg)     real.cond_set_arg     = real.placeholder;
+    if (is_default.condDividerParam) real.condDividerParam = real.placeholder;
+    if (is_default.condGotoParam)    real.condGotoParam    = real.placeholder;
+    if (is_default.state_set_arg)    real.state_set_arg    = real.placeholder;
+    if (is_default.tags_expression)  real.tags_expression  = real.placeholder;
+    if (is_default.condGoto) {
+        real.condGoto = "goto " + real.condGotoParam + (glob.lang == LANG_C ? ";" : "");
+    }
 
     // respect hierarchy
     if (!glob.cFlag) {
@@ -220,6 +232,7 @@ void Opt::fix_mutopt()
     }
     if (real.input_api != INPUT_CUSTOM) {
         real.decorate = defaults.decorate;
+        real.placeholder = defaults.placeholder;
         real.yypeek = defaults.yypeek;
         real.yyskip = defaults.yyskip;
         real.yybackup = defaults.yybackup;

@@ -79,21 +79,21 @@ yy5:
 		goto yy6
 	}
 yy6:
-	cond = yycoct;
-	goto yyc_oct;
+	cond = yycoct
+	goto yyc_oct
 yy7:
 	cursor += 1
 	cursor = ctxmarker
-	cond = yycdec;
-	goto yyc_dec;
+	cond = yycdec
+	goto yyc_dec
 yy9:
 	cursor += 1
-	cond = yycbin;
-	goto yyc_bin;
+	cond = yycbin
+	goto yyc_bin
 yy11:
 	cursor += 1
-	cond = yychex;
-	goto yyc_hex;
+	cond = yychex
+	goto yyc_hex
 /* *********************************** */
 yyc_bin:
 	yych = str[cursor]

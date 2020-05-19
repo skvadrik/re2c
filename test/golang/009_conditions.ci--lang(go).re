@@ -17,7 +17,7 @@ func Lex(str string) int {
 	re2c:define:YYBACKUPCTX  = "ctxmarker = cursor";
 	re2c:define:YYRESTORECTX = "cursor = ctxmarker";
 	re2c:define:YYGETCONDITION = "cond";
-	re2c:define:YYSETCONDITION = "cond = @@;";
+	re2c:define:YYSETCONDITION = "cond = @@";
 
 	end = [\x00];
 

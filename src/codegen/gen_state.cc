@@ -482,8 +482,6 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const bool generic = opts->input_api == INPUT_CUSTOM;
-    const std::string &prefix = opts->tags_prefix;
-    const std::string &expression = opts->tags_expression;
     const tcmd_t *cmd = dfa.tcpool[tcid];
     const char *text;
 
@@ -504,8 +502,8 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
 
     for (const tcmd_t *p = cmd; p; p = p->next) {
         const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
-        const std::string le = vartag_expr(l, prefix, expression);
-        const std::string re = vartag_expr(r, prefix, expression);
+        const std::string le = vartag_expr(l, opts);
+        const std::string re = vartag_expr(r, opts);
 
         if (tcmd_t::iscopy(p)) {
             // copy command
@@ -528,7 +526,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
                 }
                 else {
                     std::string s = action;
-                    strrreplace(s, "@@", le);
+                    strrreplace(s, opts->placeholder, le);
                     text = o.str(s).flush();
                 }
                 prepend(actions, code_stmt(alc, text));
@@ -544,7 +542,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
             }
             else {
                 std::string s = action;
-                strrreplace(s, "@@", le);
+                strrreplace(s, opts->placeholder, le);
                 text = o.str(s).flush();
             }
             append(tag_actions, code_stmt(alc, text));
@@ -554,7 +552,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
             Scratchbuf o2(alc);
             for (const tcmd_t *q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
                 Scratchbuf &x = q->history[0] == TAGVER_BOTTOM ? o : o2;
-                x.str(vartag_expr(q->lhs, prefix, expression)).cstr(" = ");
+                x.str(vartag_expr(q->lhs, opts)).cstr(" = ");
             }
             if (!o.empty()) {
                 text = o.cstr("NULL").flush();
@@ -572,8 +570,6 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
 {
     const opt_t *opts = output.block().opts;
     const bool generic = opts->input_api == INPUT_CUSTOM;
-    const std::string &prefix = opts->tags_prefix;
-    const std::string &expression = opts->tags_expression;
     const std::vector<Tag> &tags = dfa.tags;
     const tagver_t *fins = dfa.finvers;
     code_alc_t &alc = output.allocator;
@@ -593,7 +589,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         // see note [fixed and variable tags]
         if (fictive(tag) || fixed(tag)) continue;
 
-        expr = vartag_expr(fins[t], prefix, expression);
+        expr = vartag_expr(fins[t], opts);
         if (!trailing(tag)) {
             o.str(tag_expr(tag, true)).cstr(" = ").str(expr);
         }
@@ -604,7 +600,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             }
             else {
                 s = opts->yyrestoretag;
-                strrreplace(s, "@@", expr);
+                strrreplace(s, opts->placeholder, expr);
                 o.str(s);
                 if (opts->decorate) o.cstr(" (").str(expr).cstr(")");
             }
@@ -630,8 +626,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
 
         const size_t dist = tag.dist;
         const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
-        expr = fixed_on_cursor ? opts->yycursor
-            : vartag_expr(fins[tag.base], prefix, expression);
+        expr = fixed_on_cursor ? opts->yycursor : vartag_expr(fins[tag.base], opts);
         if (generic) {
             DASSERT(dist == 0);
             if (!trailing(tag)) {
@@ -640,7 +635,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             else if (!fixed_on_cursor) {
                 DASSERT(!dfa.oldstyle_ctxmarker);
                 s = opts->yyrestoretag;
-                strrreplace(s, "@@", expr);
+                strrreplace(s, opts->placeholder, expr);
                 o.str(s);
                 if (opts->decorate) o.cstr(" (").str(expr).cstr(")");
             }
@@ -702,7 +697,7 @@ const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)
         else {
             std::string s = opts->yylessthan;
             const char *arg = o.u64(n).flush();
-            strrreplace(s, "@@", arg);
+            strrreplace(s, opts->placeholder, arg);
             o.str(s);
         }
     }

@@ -132,7 +132,8 @@ void Scanner::lex_conf(Opt &opts)
     "define:YYMTAGP"      { opts.set_yymtagp      (lex_conf_string ()); return; }
     "define:YYMTAGPD"     { opts.set_yymtagpd     (lex_conf_string ()); return; }
 
-    "decorate" { opts.set_decorate(lex_conf_bool()); return; }
+    "decorate"    { opts.set_decorate   (lex_conf_bool());   return; }
+    "placeholder" { opts.set_placeholder(lex_conf_string()); return; }
 
     "tags:prefix"     { opts.set_tags_prefix    (lex_conf_string ()); return; }
     "tags:expression" { opts.set_tags_expression(lex_conf_string ()); return; }

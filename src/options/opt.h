@@ -62,6 +62,8 @@ enum parse_opts_t {
 
 const uint32_t NOEOF = ~0u - 1;
 
+#define RE2C_PLACEHOLDER "@@"
+
 #define RE2C_CONSTOPTS \
     CONSTOPT1 (target_t, target, TARGET_CODE) \
     CONSTOPT (lang_t, lang, LANG_C) \
@@ -113,20 +115,20 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, cond_get, "YYGETCONDITION") \
     MUTOPT (bool, cond_get_naked, false) \
     MUTOPT (std::string, cond_set, "YYSETCONDITION" ) \
-    MUTOPT (std::string, cond_set_arg, "@@" ) \
+    MUTOPT (std::string, cond_set_arg, RE2C_PLACEHOLDER ) \
     MUTOPT (bool, cond_set_naked, false ) \
     MUTOPT (std::string, yyctable, "yyctable") \
     MUTOPT (std::string, condPrefix, "yyc_") \
     MUTOPT (std::string, condEnumPrefix, "yyc") \
     MUTOPT (std::string, condDivider, "/* *********************************** */") \
-    MUTOPT (std::string, condDividerParam, "@@") \
-    MUTOPT (std::string, condGoto, "goto @@;") \
-    MUTOPT (std::string, condGotoParam, "@@") \
+    MUTOPT (std::string, condDividerParam, RE2C_PLACEHOLDER) \
+    MUTOPT (std::string, condGoto, "goto " RE2C_PLACEHOLDER ";") \
+    MUTOPT (std::string, condGotoParam, RE2C_PLACEHOLDER) \
     /* states */ \
     MUTOPT (std::string, state_get, "YYGETSTATE") \
     MUTOPT (bool, state_get_naked, false) \
     MUTOPT (std::string, state_set, "YYSETSTATE") \
-    MUTOPT (std::string, state_set_arg, "@@") \
+    MUTOPT (std::string, state_set_arg, RE2C_PLACEHOLDER) \
     MUTOPT (bool, state_set_naked, false) \
     MUTOPT (std::string, yyfilllabel, "yyFillLabel") \
     MUTOPT (std::string, yynext, "yyNext") \
@@ -136,7 +138,7 @@ const uint32_t NOEOF = ~0u - 1;
     /* tags */ \
     MUTOPT (bool, tags, false) \
     MUTOPT (std::string, tags_prefix, "yyt") \
-    MUTOPT (std::string, tags_expression, "@@") \
+    MUTOPT (std::string, tags_expression, RE2C_PLACEHOLDER) \
     MUTOPT (bool, posix_syntax, false) \
     MUTOPT (bool, posix_semantics, false) \
     /* code generation */ \
@@ -173,6 +175,7 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, yymtagp, "YYMTAGP") \
     MUTOPT (std::string, yymtagpd, "YYMTAGPD") \
     MUTOPT (bool, decorate, true) \
+    MUTOPT (std::string, placeholder, RE2C_PLACEHOLDER) \
     /* #line directives */ \
     MUTOPT (bool, iFlag, false) \
     /* debug */ \
@@ -187,7 +190,7 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, fill, "YYFILL") \
     MUTOPT (bool, fill_use, true) \
     MUTOPT (bool, fill_check, true) \
-    MUTOPT (std::string, fill_arg, "@@") \
+    MUTOPT (std::string, fill_arg, RE2C_PLACEHOLDER) \
     MUTOPT (bool, fill_arg_use, true) \
     MUTOPT (bool, fill_naked, false) \
     /* labels */ \

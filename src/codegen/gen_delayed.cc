@@ -8,7 +8,8 @@
 
 namespace re2c {
 
-void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags)
+void gen_tags(Scratchbuf &o, const opt_t *opts, Code *code,
+    const std::set<std::string> &tags)
 {
     DASSERT(code->kind == Code::STAGS || code->kind == Code::MTAGS);
 
@@ -18,7 +19,7 @@ void gen_tags(Scratchbuf &o, Code *code, const std::set<std::string> &tags)
     std::set<std::string>::const_iterator tag = tags.begin(), end = tags.end();
     for (; tag != end; ) {
         std::string fmtstr = fmt;
-        strrreplace(fmtstr, "@@", *tag);
+        strrreplace(fmtstr, opts->placeholder, *tag);
         o.str(fmtstr);
         if (++tag == end) break;
         o.cstr(sep);
@@ -368,10 +369,10 @@ void expand(CodegenContext &ctx, Code *code)
             }
             break;
         case Code::STAGS:
-            gen_tags(ctx.scratchbuf, code, ctx.allstags);
+            gen_tags(ctx.scratchbuf, ctx.opts, code, ctx.allstags);
             break;
         case Code::MTAGS:
-            gen_tags(ctx.scratchbuf, code, ctx.allmtags);
+            gen_tags(ctx.scratchbuf, ctx.opts, code, ctx.allmtags);
             break;
         case Code::YYMAXFILL:
             gen_yymaxfill(ctx.scratchbuf, ctx.opts, code, ctx.maxfill);

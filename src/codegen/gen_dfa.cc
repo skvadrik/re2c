@@ -304,11 +304,11 @@ std::string vartag_name(tagver_t ver, const std::string &prefix)
     return s.str();
 }
 
-std::string vartag_expr(tagver_t ver, const std::string &prefix, const std::string &expression)
+std::string vartag_expr(tagver_t ver, const opt_t *opts)
 {
-    const std::string s = vartag_name(ver, prefix);
-    std::string e = expression;
-    strrreplace(e, "@@", s);
+    const std::string s = vartag_name(ver, opts->tags_prefix);
+    std::string e = opts->tags_expression;
+    strrreplace(e, opts->placeholder, s);
     return e;
 }
 
