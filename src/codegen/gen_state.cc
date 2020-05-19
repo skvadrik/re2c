@@ -491,7 +491,8 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
     if (cmd && dfa.oldstyle_ctxmarker) {
         DASSERT(!opts->stadfa);
         if (generic) {
-            o.str(opts->yybackupctx).cstr(" ()");
+            o.str(opts->yybackupctx);
+            if (opts->decorate) o.cstr(" ()");
         }
         else {
             o.str(opts->yyctxmarker).cstr(" = ").str(opts->yycursor);
@@ -578,7 +579,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const char *text;
-    std::string expr;
+    std::string expr, s;
 
     if (rule.ncap > 0) {
         text = o.cstr("yynmatch = ").u64(rule.ncap).flush();
@@ -598,10 +599,14 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         }
         else if (generic) {
             if (dfa.oldstyle_ctxmarker) {
-                o.str(opts->yyrestorectx).cstr(" ()");
+                o.str(opts->yyrestorectx);
+                if (opts->decorate) o.cstr(" ()");
             }
             else {
-                o.str(opts->yyrestoretag).cstr(" (").str(expr).cstr(")");
+                s = opts->yyrestoretag;
+                strrreplace(s, "@@", expr);
+                o.str(s);
+                if (opts->decorate) o.cstr(" (").str(expr).cstr(")");
             }
         }
         else {
@@ -634,7 +639,10 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             }
             else if (!fixed_on_cursor) {
                 DASSERT(!dfa.oldstyle_ctxmarker);
-                o.str(opts->yyrestoretag).cstr(" (").str(expr).cstr(")");
+                s = opts->yyrestoretag;
+                strrreplace(s, "@@", expr);
+                o.str(s);
+                if (opts->decorate) o.cstr(" (").str(expr).cstr(")");
             }
         }
         else {
