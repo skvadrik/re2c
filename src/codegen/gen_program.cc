@@ -42,14 +42,15 @@ static uint32_t write_converting_newlines(const std::string &str, FILE *f)
     return lines;
 }
 
-OutputBlock::OutputBlock(const loc_t &loc)
+OutputBlock::OutputBlock(const loc_t &loc, bool reuse)
     : loc(loc)
-    , fragments ()
-    , used_yyaccept (false)
-    , have_user_code (false)
-    , types ()
-    , stags ()
-    , mtags ()
+    , fragments()
+    , used_yyaccept(false)
+    , have_user_code(false)
+    , is_reuse_block(reuse)
+    , types()
+    , stags()
+    , mtags()
     , opts(NULL)
 {}
 
@@ -128,9 +129,9 @@ void Output::wdelay_stmt(uint32_t ind, Code *stmt)
     block().fragments.push_back(f);
 }
 
-void Output::new_block(Opt &opts, const loc_t &loc)
+void Output::new_block(Opt &opts, const loc_t &loc, bool reuse)
 {
-    OutputBlock *b = new OutputBlock(loc);
+    OutputBlock *b = new OutputBlock(loc, reuse);
     b->opts = opts.snapshot();
     pblocks->push_back(b);
 
@@ -174,19 +175,18 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
 
     fix_first_block_opts(blocks);
 
-    // global options are last block's options
+    // global options are last block options
     const opt_t *globopt = block().opts;
 
     unsigned int line_count = 1;
     for (unsigned int j = 0; j < blocks.size(); ++j) {
-        OutputBlock & b = *blocks[j];
-        const opt_t *bopt = b.opts;
+        OutputBlock &b = *blocks[j];
 
         CodegenContext gctx =
             { allocator
             , scratchbuf
-            , globopt
-            , bopt
+            , b.is_reuse_block ? b.opts : globopt
+            , b.opts
             , msg
             , b.loc
             , global_types
@@ -208,7 +208,7 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
 
             RenderContext rctx =
                 { os
-                , bopt
+                , b.opts
                 , msg
                 , f.indent
                 , filename.c_str()

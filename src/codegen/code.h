@@ -700,12 +700,13 @@ struct OutputBlock {
     std::vector<OutputFragment> fragments;
     bool used_yyaccept;
     bool have_user_code;
+    bool is_reuse_block;
     std::vector<std::string> types;
     std::set<std::string> stags;
     std::set<std::string> mtags;
     const opt_t *opts;
 
-    explicit OutputBlock(const loc_t &loc);
+    OutputBlock(const loc_t &loc, bool reuse);
     ~OutputBlock();
     FORBID_COPY(OutputBlock);
 };
@@ -743,7 +744,7 @@ public:
     OutputBlock &block();
     size_t blockid() const;
     bool open ();
-    void new_block(Opt &opts, const loc_t &loc);
+    void new_block(Opt &opts, const loc_t &loc, bool reuse);
     void header_mode(bool on);
     bool in_header() const;
     void wraw (const char *s, const char *e);

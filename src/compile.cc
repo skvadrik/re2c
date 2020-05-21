@@ -129,11 +129,11 @@ void compile(Scanner &input, Output &output, Opt &opts)
     const loc_t &loc0 = input.tok_loc();
 
     output.header_mode(1);
-    output.new_block(opts, loc0);
+    output.new_block(opts, loc0, false /* reuse */);
     output.wversion_time();
 
     output.header_mode(0);
-    output.new_block(opts, loc0);
+    output.new_block(opts, loc0, false /* reuse */);
     output.wversion_time();
     output.wdelay_stmt(0, code_line_info_input(alc, loc0));
 
@@ -161,7 +161,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
         // start new output block with accumulated options
         const loc_t &loc = input.cur_loc();
-        output.new_block(opts, loc);
+        output.new_block(opts, loc, mode == Scanner::Reuse);
 
         if (mode == Scanner::Rules) {
             // save AST and options for future use
