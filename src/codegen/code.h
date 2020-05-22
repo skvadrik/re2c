@@ -741,6 +741,9 @@ public:
     uint32_t total_fill_index;                  // maximal YYFILL label
     std::vector<CodeList*> total_fill_fallback; // fallback transitions on YYFILL failure
 
+    // "final" options accumulated for all non-reuse blocks
+    const opt_t *total_opts;
+
     explicit Output(Msg &msg);
     ~Output();
     OutputBlock &block();

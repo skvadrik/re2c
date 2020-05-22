@@ -124,7 +124,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     specs_t rspecs;
     symtab_t symtab;
     const conopt_t *globopts = &opts.glob;
-    const opt_t *ropts = NULL;
+    const opt_t *rules_opts = NULL, *accum_opts = NULL;
     code_alc_t &alc = output.allocator;
     const loc_t &loc0 = input.tok_loc();
 
@@ -145,13 +145,13 @@ void compile(Scanner &input, Output &output, Opt &opts)
         // parse everything up to the next re2c block
         Scanner::ParseMode mode = input.echo(output);
         if (mode == Scanner::Stop) break;
-        validate_mode(mode, globopts->rFlag, ropts, input);
+        validate_mode(mode, globopts->rFlag, rules_opts, input);
 
         // parse the next re2c block
         specs_t specs;
         if (mode == Scanner::Reuse) {
             specs = rspecs;
-            opts.restore(ropts);
+            opts.restore(rules_opts);
             opts.reset_mapCodeName();
             output.state_goto = false;
             output.cond_goto = false;
@@ -165,7 +165,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         if (mode == Scanner::Rules) {
             // save AST and options for future use
             rspecs = specs;
-            ropts = output.block().opts;
+            rules_opts = output.block().opts;
         } else {
             validate_ast(specs, output.block().opts, output.msg);
             normalize_ast(specs);
@@ -179,12 +179,20 @@ void compile(Scanner &input, Output &output, Opt &opts)
             // compile DFA to code
             gen_code(output, dfas);
         }
-
         output.wdelay_stmt(0, code_line_info_input(alc, loc));
 
         // accumulate whole-program information from this block
         output.gather_info_from_block();
+
+        // accumulated whole-program options exclude rules/reuse blocks
+        if (mode == Scanner::Parse) {
+            accum_opts = output.block().opts;
+        } else if (accum_opts) {
+            opts.restore(accum_opts);
+        }
     }
+
+    output.total_opts = accum_opts ? accum_opts : rules_opts;
 
     if (globopts->target == TARGET_SKELETON) {
         output.wdelay_stmt(0, emit_skeleton_epilog(output));

@@ -79,6 +79,7 @@ Output::Output(Msg &msg)
     , scratchbuf(allocator)
     , total_fill_index(0)
     , total_fill_fallback()
+    , total_opts(NULL)
 {}
 
 Output::~Output ()
@@ -190,9 +191,6 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
 
     fix_first_block_opts(blocks);
 
-    // global options are last block options
-    const opt_t *globopt = block().opts;
-
     unsigned int line_count = 1;
     for (unsigned int j = 0; j < blocks.size(); ++j) {
         OutputBlock &b = *blocks[j];
@@ -200,7 +198,7 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
         CodegenContext gctx =
             { allocator
             , scratchbuf
-            , b.is_reuse_block ? b.opts : globopt
+            , b.is_reuse_block ? b.opts : total_opts
             , b.opts
             , msg
             , b.loc
