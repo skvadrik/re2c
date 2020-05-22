@@ -342,13 +342,16 @@ void Opt::sync()
 const opt_t *Opt::snapshot()
 {
     sync();
-    return new opt_t(glob, real);
+    return new opt_t(glob, real, is_default);
 }
 
 void Opt::restore(const opt_t *opts)
 {
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) user.name = opts->name;
+    RE2C_MUTOPTS
+#undef MUTOPT
+#define MUTOPT(type, name, value) is_default.name = opts->is_default_##name;
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT

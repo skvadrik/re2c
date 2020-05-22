@@ -280,7 +280,7 @@ yy76:
 	case yycc2:
 		goto yyc_c2;
 	}
---- c1 --- c1 ---
+--- @@ --- @@ ---
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -295,7 +295,7 @@ yy83:
 	++YYCURSOR;
 	YYSETCONDITION(yycc2);
 	goto yyc_c2;
---- c2 --- c2 ---
+--- @@ --- @@ ---
 yyc_c2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;

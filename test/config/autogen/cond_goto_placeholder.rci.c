@@ -288,7 +288,7 @@ yy81:
 yy83:
 	++YYCURSOR;
 	YYSETCONDITION(yycc2);
-	goto #;
+	goto yyc_c2;
 /* *********************************** */
 yyc_c2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -303,7 +303,7 @@ yy87:
 yy89:
 	++YYCURSOR;
 	YYSETCONDITION(yycc1);
-	goto #;
+	goto yyc_c1;
 }
 
 
@@ -556,7 +556,7 @@ yy159:
 yy161:
 	++YYCURSOR;
 	YYSETCONDITION(yycc2);
-	goto yyc_c2;
+	goto @@;
 /* *********************************** */
 yyc_c2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -571,7 +571,7 @@ yy165:
 yy167:
 	++YYCURSOR;
 	YYSETCONDITION(yycc1);
-	goto yyc_c1;
+	goto @@;
 }
 
 

@@ -252,7 +252,7 @@ struct mutdef_t {
     {}
 };
 
-// Union of constant and mutable options.
+// Union of constant and mutable options and default flags.
 struct opt_t {
 #define CONSTOPT1 CONSTOPT
 #define CONSTOPT(type, name, value) type name;
@@ -263,17 +263,24 @@ struct opt_t {
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) type name;
     RE2C_MUTOPTS
+#undef MUTOPT
+#define MUTOPT(type, name, value) bool is_default_##name;
+    RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
 
-    opt_t(const conopt_t &con, const mutopt_t &mut)
+    opt_t(const conopt_t &con, const mutopt_t &mut, const mutdef_t &def)
 #define CONSTOPT1(type, name, value) : name(con.name)
 #define CONSTOPT(type, name, value)  , name(con.name)
         RE2C_CONSTOPTS
 #undef CONSTOPT1
 #undef CONSTOPT
+
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) , name(mut.name)
+        RE2C_MUTOPTS
+#undef MUTOPT
+#define MUTOPT(type, name, value) , is_default_##name(def.name)
         RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
