@@ -706,6 +706,10 @@ struct OutputBlock {
     std::set<std::string> mtags;
     const opt_t *opts;
 
+    // used in state dispatch
+    uint32_t fill_index;                  // maximal YYFILL label for this block
+    std::vector<CodeList*> fill_fallback; // fallback transitions on YYFILL failure
+
     OutputBlock(const loc_t &loc, bool reuse);
     ~OutputBlock();
     FORBID_COPY(OutputBlock);
@@ -733,11 +737,9 @@ public:
     code_alc_t allocator;
     Scratchbuf scratchbuf;
 
-    // YYFILL label index (for state dispatch)
-    uint32_t fill_index;
-
-    // fallback transitions on YYFILL failure (for state dispatch)
-    std::vector<CodeList*> fill_fallback;
+    // used in state dispatch (accumulated for all non-reuse blocks)
+    uint32_t total_fill_index;                  // maximal YYFILL label
+    std::vector<CodeList*> total_fill_fallback; // fallback transitions on YYFILL failure
 
     explicit Output(Msg &msg);
     ~Output();
@@ -745,6 +747,7 @@ public:
     size_t blockid() const;
     bool open ();
     void new_block(Opt &opts, const loc_t &loc, bool reuse);
+    void gather_info_from_block();
     void header_mode(bool on);
     bool in_header() const;
     void wraw (const char *s, const char *e);

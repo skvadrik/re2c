@@ -23,8 +23,8 @@
 
 namespace re2c {
 
-static CodeList *need(Output &output, size_t some);
-static CodeList *gen_rescan_label(Output &output, const State *s);
+static void gen_fill_noeof(Output &output, CodeList *stmts, size_t some);
+static void gen_rescan_label(Output &output, CodeList *stmts, const State *s);
 static void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t &acc);
 static void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx);
 static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &rule);
@@ -43,8 +43,8 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
         if (!opts->eager_skip) {
             append(stmts, code_skip(alc));
         }
-        append(stmts, need(output, s->fill));
-        append(stmts, gen_rescan_label(output, s));
+        gen_fill_noeof(output, stmts, s->fill);
+        gen_rescan_label(output, stmts, s);
         if (!endstate(s)) {
             append(stmts, code_peek(alc));
         }
@@ -67,11 +67,11 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
                 .cstr(", *").str(opts->yycursor).cstr(")").flush();
             append(stmts, code_stmt(alc, text));
         }
-        append(stmts, need(output, s->fill));
+        gen_fill_noeof(output, stmts, s->fill);
         if (backup) {
             append(stmts, code_backup(alc));
         }
-        append(stmts, gen_rescan_label(output, s));
+        gen_rescan_label(output, stmts, s);
         if (!endstate(s)) {
             append(stmts, code_peek(alc));
         }
@@ -86,8 +86,8 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
             append(stmts, code_skip(alc));
         }
         append(stmts, code_backup(alc));
-        append(stmts, need(output, s->fill));
-        append(stmts, gen_rescan_label(output, s));
+        gen_fill_noeof(output, stmts, s->fill);
+        gen_rescan_label(output, stmts, s);
         append(stmts, code_peek(alc));
         break;
     case Action::MOVE:
@@ -258,24 +258,23 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
     }
 }
 
-CodeList *need(Output &output, size_t some)
+void gen_fill_noeof(Output &output, CodeList *stmts, size_t some)
 {
     const opt_t *opts = output.block().opts;
 
-    if (opts->eof != NOEOF || some == 0) return NULL;
+    if (opts->eof != NOEOF || some == 0) return;
 
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    const uint32_t fill_index = opts->fFlag ? output.block().fill_index++ : 0;
     std::string s;
     const char *text;
 
-    CodeList *stmts = code_list(alc);
-
     if (opts->fFlag) {
-        strrreplace(s = opts->state_set, opts->state_set_arg, output.fill_index);
+        strrreplace(s = opts->state_set, opts->state_set_arg, fill_index);
         o.str(s);
         if (!opts->state_set_naked) {
-            o.cstr("(").u32(output.fill_index).cstr(");");
+            o.cstr("(").u32(fill_index).cstr(");");
         }
         text = o.flush();
         append(stmts, code_text(alc, text));
@@ -306,32 +305,25 @@ CodeList *need(Output &output, size_t some)
     }
 
     if (opts->fFlag) {
-        text = o.str(opts->yyfilllabel).u32(output.fill_index).flush();
+        text = o.str(opts->yyfilllabel).u32(fill_index).flush();
         append(stmts, code_slabel(alc, text));
-        ++output.fill_index;
     }
-
-    return stmts;
 }
 
-CodeList *gen_rescan_label(Output &output, const State *s)
+void gen_rescan_label(Output &output, CodeList *stmts, const State *s)
 {
     const opt_t *opts = output.block().opts;
+
+    if (opts->eof == NOEOF || !opts->fill_use || endstate(s)) {
+        return; // no rescan label
+    }
+
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const char *text;
+    const uint32_t fill_index = output.block().fill_index++;
 
-    CodeList *stmts = code_list(alc);
-    if (opts->eof == NOEOF || !opts->fill_use || endstate(s)) {
-        // no rescan label
-    }
-    else {
-        text = o.str(opts->yyfilllabel).u32(output.fill_index).flush();
-        append(stmts, code_slabel(alc, text));
-        ++output.fill_index;
-    }
-
-    return stmts;
+    const char *text = o.str(opts->yyfilllabel).u32(fill_index).flush();
+    append(stmts, code_slabel(alc, text));
 }
 
 void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from,
@@ -373,7 +365,7 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const uint32_t fillidx = output.fill_index - 1;
+    const uint32_t fillidx = output.block().fill_index - 1;
     const char *text;
 
     const bool final = from->rule != Rule::NONE;
@@ -471,7 +463,7 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
     }
     else {
         // Save fallback transition for the initial state dispatch.
-        output.fill_fallback.push_back(fallback_trans);
+        output.block().fill_fallback.push_back(fallback_trans);
     }
 
     return code_if_then_else(alc, if_refill, refill, NULL);

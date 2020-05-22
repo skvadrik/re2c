@@ -153,7 +153,6 @@ void compile(Scanner &input, Output &output, Opt &opts)
             specs = rspecs;
             opts.restore(ropts);
             opts.reset_mapCodeName();
-            output.fill_index = 0;
             output.state_goto = false;
             output.cond_goto = false;
         }
@@ -182,6 +181,9 @@ void compile(Scanner &input, Output &output, Opt &opts)
         }
 
         output.wdelay_stmt(0, code_line_info_input(alc, loc));
+
+        // accumulate whole-program information from this block
+        output.gather_info_from_block();
     }
 
     if (globopts->target == TARGET_SKELETON) {

@@ -52,6 +52,8 @@ OutputBlock::OutputBlock(const loc_t &loc, bool reuse)
     , stags()
     , mtags()
     , opts(NULL)
+    , fill_index(0)
+    , fill_fallback()
 {}
 
 OutputBlock::~OutputBlock ()
@@ -75,8 +77,8 @@ Output::Output(Msg &msg)
     , max_nmatch(1)
     , allocator()
     , scratchbuf(allocator)
-    , fill_index(0)
-    , fill_fallback()
+    , total_fill_index(0)
+    , total_fill_fallback()
 {}
 
 Output::~Output ()
@@ -133,11 +135,24 @@ void Output::new_block(Opt &opts, const loc_t &loc, bool reuse)
 {
     OutputBlock *b = new OutputBlock(loc, reuse);
     b->opts = opts.snapshot();
+    b->fill_index = reuse ? 0 : total_fill_index;
     pblocks->push_back(b);
 
     // start label hapens to be the only option
     // that must be reset for each new block
     opts.reset_startlabel();
+}
+
+void Output::gather_info_from_block()
+{
+    DASSERT(!pblocks->empty());
+
+    const OutputBlock *b = pblocks->back();
+    if (!b->is_reuse_block) {
+        total_fill_index = b->fill_index;
+        total_fill_fallback.insert(total_fill_fallback.end(),
+            b->fill_fallback.begin(), b->fill_fallback.end());
+    }
 }
 
 static void fix_first_block_opts(blocks_t &blocks)
@@ -197,8 +212,8 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             , max_nmatch
             , b.used_yyaccept
             , warn_condition_order
-            , fill_index
-            , fill_fallback
+            , b.is_reuse_block ? b.fill_index : total_fill_index
+            , b.is_reuse_block ? b.fill_fallback : total_fill_fallback
             };
 
         const size_t n = b.fragments.size();
