@@ -91,8 +91,8 @@ state_get_decorate =
     let name = "state_get_decorate"
         ext = "fi"
         confs =
-            [ genconfs2 "define:YYGETSTATE:naked" ["0", "1"]
-            , genconfs2 "decorate" ["0", "1"]
+            [ genconfs "define:YYGETSTATE:naked" ["0", "1"]
+            , genconfs "decorate" ["0", "1"]
             ]
     in  (name, ext, confs, body1)
 
@@ -230,29 +230,14 @@ cleanup = do
         . filter (\f -> takeExtension f == ".re")
         ) files
 
-gen1 :: (String, String, [[String]], [String]) -> IO ()
-gen1 (name, ext, confs, body) = do
-    forM_ (combine_confs confs) $ \confgroup -> do
-        let (numbers, confs) = unzip confgroup
-        writeFile (gen_fname name ext numbers) $
-           re2c_block body confs
-
-gen2 :: (String, String, [[String]], [String]) -> IO ()
-gen2 (name, ext, confs, body) = do
-    forM_ (combine_confs confs) $ \confgroup -> do
-        let (numbers, confs) = unzip confgroup
-        writeFile (gen_fname name ext numbers) $
-           re2c_block body confs
-
--- use "reuse" mode
-gen3 :: (String, String, [[String]], [String]) -> IO ()
-gen3 (name, ext, confs, body) = do
+gen_reuse :: (String, String, [[String]], [String]) -> IO ()
+gen_reuse (name, ext, confs, body) = do
     writeFile (gen_fname name ("r" ++ ext) []) $
         let confgroups = map (snd . unzip) $ combine_confs confs
         in  unlines $ (re2c_rules_block body) : map re2c_use_block confgroups
 
-gen4 :: (String, String, [[String]], [String]) -> IO ()
-gen4 (name, ext, confs, body) = do
+gen :: (String, String, [[String]], [String]) -> IO ()
+gen (name, ext, confs, body) = do
     writeFile (gen_fname name ext []) $
         let confgroups = map (snd . unzip) $ combine_confs confs
         in  unlines $ map (re2c_block body) confgroups
@@ -261,23 +246,26 @@ main :: IO ()
 main = do
     cleanup
 
-    gen3 cond_get_decorate
-    gen3 cond_set_decorate
-    gen3 cond_set_placeholder
-    gen3 cond_goto_placeholder
-    gen3 cond_divider_placeholder
+    gen_reuse cond_get_decorate
+    gen_reuse cond_set_decorate
+    gen_reuse cond_set_placeholder
+    gen_reuse cond_goto_placeholder
+    gen       cond_goto_placeholder
+    gen_reuse cond_divider_placeholder
+    gen       cond_divider_placeholder
 
-    gen1 state_get_decorate
-    gen4 state_set_decorate
-    gen4 state_set_placeholder
+    gen_reuse state_get_decorate
+    gen       state_get_decorate
+    gen_reuse state_set_decorate
+    gen_reuse state_set_placeholder
 
-    gen3 tags_expr_placeholder
+    gen_reuse tags_expr_placeholder
 
-    gen3 fill_check
-    gen2 fill_check_state
-    gen3 fill_placeholder
-    gen3 fill_decorate
-    gen3 $ eof_variant fill_check
-    gen2 $ eof_variant fill_check_state
-    gen3 $ eof_variant fill_placeholder
-    gen3 $ eof_variant fill_decorate
+    gen_reuse fill_check
+    gen_reuse fill_check_state
+    gen_reuse fill_placeholder
+    gen_reuse fill_decorate
+    gen_reuse $ eof_variant fill_check
+    gen_reuse $ eof_variant fill_check_state
+    gen_reuse $ eof_variant fill_placeholder
+    gen_reuse $ eof_variant fill_decorate
