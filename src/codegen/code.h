@@ -678,7 +678,7 @@ struct CodegenContext {
     const bool used_yyaccept;
     const bool warn_cond_ord;
     const uint32_t fill_index;
-    const std::vector<CodeList*> &fill_fallback;
+    const std::vector<CodeList*> &fill_goto;
 };
 
 struct RenderContext {
@@ -707,8 +707,8 @@ struct OutputBlock {
     const opt_t *opts;
 
     // used in state dispatch
-    uint32_t fill_index;                  // maximal YYFILL label for this block
-    std::vector<CodeList*> fill_fallback; // fallback transitions on YYFILL failure
+    uint32_t fill_index;              // upper bound of YYFILL state index
+    std::vector<CodeList*> fill_goto; // transitions to YYFILL states
 
     OutputBlock(const loc_t &loc, bool reuse);
     ~OutputBlock();
@@ -738,8 +738,8 @@ public:
     Scratchbuf scratchbuf;
 
     // used in state dispatch (accumulated for all non-reuse blocks)
-    uint32_t total_fill_index;                  // maximal YYFILL label
-    std::vector<CodeList*> total_fill_fallback; // fallback transitions on YYFILL failure
+    uint32_t total_fill_index;              // upper bound of YYFILL state index
+    std::vector<CodeList*> total_fill_goto; // transitions to YYFILL states
 
     // "final" options accumulated for all non-reuse blocks
     const opt_t *total_opts;

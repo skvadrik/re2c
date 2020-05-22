@@ -31,6 +31,19 @@ static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const R
 static Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State *to);
 static bool endstate(const State *s);
 
+static const char *gen_yyfill_label(Output &output, uint32_t index)
+{
+    const opt_t *opts = output.block().opts;
+    Scratchbuf &o = output.scratchbuf;
+    DASSERT(o.empty());
+
+    o.str(opts->yyfilllabel);
+    if (output.block().is_reuse_block) o.u64(output.blockid()).cstr("_");
+    o.u32(index);
+
+    return o.flush();
+}
+
 void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
@@ -305,25 +318,26 @@ void gen_fill_noeof(Output &output, CodeList *stmts, size_t some)
     }
 
     if (opts->fFlag) {
-        text = o.str(opts->yyfilllabel).u32(fill_index).flush();
-        append(stmts, code_slabel(alc, text));
+        const char *flabel = gen_yyfill_label(output, fill_index);
+
+        // YYFILL label
+        append(stmts, code_slabel(alc, flabel));
+
+        // Save transition to YYFILL label from the initial state dispatch.
+        CodeList *goto_flabel = code_list(alc);
+        text = o.cstr("goto ").cstr(flabel).flush();
+        append(goto_flabel, code_stmt(alc, text));
+        output.block().fill_goto.push_back(goto_flabel);
     }
 }
 
 void gen_rescan_label(Output &output, CodeList *stmts, const State *s)
 {
     const opt_t *opts = output.block().opts;
-
-    if (opts->eof == NOEOF || !opts->fill_use || endstate(s)) {
-        return; // no rescan label
+    if (opts->eof != NOEOF && opts->fill_use && !endstate(s)) {
+        const uint32_t fillidx = output.block().fill_index++;
+        append(stmts, code_slabel(output.allocator, gen_yyfill_label(output, fillidx)));
     }
-
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    const uint32_t fill_index = output.block().fill_index++;
-
-    const char *text = o.str(opts->yyfilllabel).u32(fill_index).flush();
-    append(stmts, code_slabel(alc, text));
 }
 
 void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from,
@@ -423,7 +437,8 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
 
         // go to retry label (on YYFILL success)
         CodeList *rescan = code_list(alc);
-        text = o.cstr("goto ").str(opts->yyfilllabel).u32(fillidx).flush();
+        const char *flabel = gen_yyfill_label(output, fillidx);
+        text = o.cstr("goto ").cstr(flabel).flush();
         append(rescan, code_stmt(alc, text));
 
         append(refill, code_if_then_else(alc, if_yyfill, rescan, NULL));
@@ -462,8 +477,23 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         append(refill, fallback_trans);
     }
     else {
-        // Save fallback transition for the initial state dispatch.
-        output.block().fill_fallback.push_back(fallback_trans);
+        CodeList *fill_goto = code_list(alc);
+
+        // With storable state and EOF rule the initial state dispatch needs to
+        // handle YYFILL failure: if there is still not enough input, it must
+        // follow the fallback transition for the state that triggered YYFILL.
+        // Fallback transition is inlined in the state dispatch (as opposed to
+        // jumping to the corresponding DFA transition) because Go backend does
+        // not support jumping in the middle of a nested block.
+        text = gen_lessthan(o, opts, 1);
+        append(fill_goto, code_if_then_else(alc, text, fallback_trans, NULL));
+
+        // Transition to YYFILL label from the initial state dispatch.
+        const char *flabel = gen_yyfill_label(output, fillidx);
+        text = o.cstr("goto ").cstr(flabel).flush();
+        append(fill_goto, code_stmt(alc, text));
+
+        output.block().fill_goto.push_back(fill_goto);
     }
 
     return code_if_then_else(alc, if_refill, refill, NULL);

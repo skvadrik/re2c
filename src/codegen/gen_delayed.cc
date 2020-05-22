@@ -79,45 +79,29 @@ static void gen_state_goto(CodegenContext &ctx, Code *code)
     text = o.cstr("goto ").str(opts->labelPrefix).u32(0).flush();
     append(goto_start, code_stmt(alc, text));
 
-    CodeCases *ccases = code_cases(alc);
+    CodeCases *cases = code_cases(alc);
     if (opts->bUseStateAbort) {
         // default: abort();
         CodeList *abort = code_list(alc);
         append(abort, code_stmt(alc, "abort()"));
-        append(ccases, code_case_default(alc, abort));
+        append(cases, code_case_default(alc, abort));
 
         // case -1: goto <start label>;
-        append(ccases, code_case_number(alc, goto_start, -1));
+        append(cases, code_case_number(alc, goto_start, -1));
     }
     else {
         // default: goto <start label>;
-        append(ccases, code_case_default(alc, goto_start));
+        append(cases, code_case_default(alc, goto_start));
     }
 
-    DASSERT(opts->eof == NOEOF || ctx.fill_index == ctx.fill_fallback.size());
+    DASSERT(ctx.fill_index == ctx.fill_goto.size());
     for (uint32_t i = 0; i < ctx.fill_index; ++i) {
-        CodeList *stmts = code_list(alc);
-
-        // If EOF rule is used, handle possible YYFILL failure: if there is still
-        // not enough input, follow the default/final transition for i-th state.
-        // Inline the code for transition here rather than jumping to the
-        // corresponding condition branch in DFA, since not all language backends
-        // support jumping in the middle of a nested block (Golang doesn't).
-        if (opts->eof != NOEOF) {
-            text = gen_lessthan(o, opts, 1);
-            append(stmts, code_if_then_else(alc, text, ctx.fill_fallback[i], NULL));
-        }
-
-        // goto yyFillLabel<i>;
-        text = o.cstr("goto ").str(opts->yyfilllabel).u32(i).flush();
-        append(stmts, code_stmt(alc, text));
-
-        append(ccases, code_case_number(alc, stmts, static_cast<int32_t>(i)));
+        append(cases, code_case_number(alc, ctx.fill_goto[i], static_cast<int32_t>(i)));
     }
 
     CodeList *stmts = code_list(alc);
     text = o.str(opts->state_get).cstr(opts->state_get_naked ? "" : "()").flush();
-    append(stmts, code_switch(alc, text, ccases));
+    append(stmts, code_switch(alc, text, cases));
 
     if (opts->bUseStateNext) {
         text = o.str(opts->yynext).cstr(":").flush();

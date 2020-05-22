@@ -53,7 +53,7 @@ OutputBlock::OutputBlock(const loc_t &loc, bool reuse)
     , mtags()
     , opts(NULL)
     , fill_index(0)
-    , fill_fallback()
+    , fill_goto()
 {}
 
 OutputBlock::~OutputBlock ()
@@ -78,7 +78,7 @@ Output::Output(Msg &msg)
     , allocator()
     , scratchbuf(allocator)
     , total_fill_index(0)
-    , total_fill_fallback()
+    , total_fill_goto()
     , total_opts(NULL)
 {}
 
@@ -151,8 +151,8 @@ void Output::gather_info_from_block()
     const OutputBlock *b = pblocks->back();
     if (!b->is_reuse_block) {
         total_fill_index = b->fill_index;
-        total_fill_fallback.insert(total_fill_fallback.end(),
-            b->fill_fallback.begin(), b->fill_fallback.end());
+        total_fill_goto.insert(total_fill_goto.end(),
+            b->fill_goto.begin(), b->fill_goto.end());
     }
 }
 
@@ -211,7 +211,7 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             , b.used_yyaccept
             , warn_condition_order
             , b.is_reuse_block ? b.fill_index : total_fill_index
-            , b.is_reuse_block ? b.fill_fallback : total_fill_fallback
+            , b.is_reuse_block ? b.fill_goto : total_fill_goto
             };
 
         const size_t n = b.fragments.size();
