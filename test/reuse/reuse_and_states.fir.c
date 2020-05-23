@@ -34,7 +34,7 @@ yy4:
 
 	switch (GETSTATE_REUSE_1()) {
 	default:
-		goto yy0;
+		goto yy6;
 	case 0:
 		goto yyFillLabel3_0;
 	case 1:
@@ -42,6 +42,7 @@ yy4:
 	case 2:
 		goto yyFillLabel3_2;
 	}
+yy6:
 	SETSTATE_REUSE_1(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel3_0:
@@ -109,10 +110,11 @@ yy21:
 
 	switch (GETSTATE_REUSE_2()) {
 	default:
-		goto yy0;
+		goto yy23;
 	case 0:
 		goto yyFillLabel6_0;
 	}
+yy23:
 	SETSTATE_REUSE_2(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel6_0:

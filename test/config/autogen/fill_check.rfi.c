@@ -31,10 +31,11 @@ yy4:
 
 	switch (YYGETSTATE()) {
 	default:
-		goto yy0;
+		goto yy6;
 	case 0:
 		goto yyFillLabel3_0;
 	}
+yy6:
 	YYSETSTATE(0);
 	YYFILL(1);
 yyFillLabel3_0:
@@ -56,10 +57,11 @@ yy10:
 
 	switch (YYGETSTATE()) {
 	default:
-		goto yy0;
+		goto yy12;
 	case 0:
 		goto yyFillLabel4_0;
 	}
+yy12:
 	YYSETSTATE(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel4_0:

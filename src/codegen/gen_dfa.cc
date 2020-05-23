@@ -134,10 +134,23 @@ void DFA::emit_dot(Output &output, CodeList *program) const
     }
 }
 
+static void gen_goto_start_state(Output &output, const Label *lstart)
+{
+    OutputBlock &block = output.block();
+    if (!block.opts->fFlag) return;
+
+    // Save transition to start label from the initial state dispatch.
+    CodeList *goto_start = code_list(output.allocator);
+    const char *text = output.scratchbuf.cstr("goto ")
+        .str(block.opts->labelPrefix).u32(lstart->index).flush();
+    append(goto_start, code_stmt(output.allocator, text));
+    block.fill_goto.push_back(goto_start);
+}
+
 void gen_code(Output &output, dfas_t &dfas)
 {
-    OutputBlock &ob = output.block();
-    const opt_t *opts = ob.opts;
+    OutputBlock &block = output.block();
+    const opt_t *opts = block.opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
@@ -148,16 +161,19 @@ void gen_code(Output &output, dfas_t &dfas)
         const bool first = i == b;
         DFA &dfa = *(*i);
 
-        // start_label points to the beginning of current re2c block
-        // (prior to condition dispatch in '-c' mode)
-        // it can forced by configuration 're2c:startlabel = <integer>;'
+        // Start label points to the beginning of block (before condition
+        // dispatch in `-c` mode). In `-f` mode it points to state 0.
         dfa.start_label = new_label(alc, output.label_counter++);
         dfa.start_label->used = (opts->startlabel_force && opts->startlabel.empty())
-            // in '-f' mode, default state is always state 0
-            || (opts->fFlag && dfa.start_label->index == 0);
+            || (opts->fFlag && first
+                && (dfa.start_label->index == 0 || block.is_reuse_block));
 
-        // initial_label points to the beginning of DFA
-        // in '-c' mode this is NOT equal to start_label
+        // Initial label points to the beginning of DFA (after condition
+        // dispatch in `-c` mode, otherwise an alias to start label).
+        //
+        // TODO: start label is only needed with `-f`, so initial label should
+        // only differ from start label with `-f` (but adding `-f` condition
+        // causes large diffs in the tests due to a shift in label numbers).
         dfa.initial_label = opts->cFlag && first
             ? new_label(alc, output.label_counter++) : dfa.start_label;
         dfa.head->action.set_initial();
@@ -236,8 +252,11 @@ void gen_code(Output &output, dfas_t &dfas)
             }
 
             // start label
-            if (first && opts->cFlag) {
-                append(program1, code_nlabel(alc, dfa.start_label));
+            if (dfa.start_label->used) {
+                if (dfa.start_label != dfa.initial_label) {
+                    append(program1, code_nlabel(alc, dfa.start_label));
+                }
+                gen_goto_start_state(output, dfa.start_label);
             }
 
             // user-defined start label
@@ -278,7 +297,7 @@ void gen_code(Output &output, dfas_t &dfas)
         }
 
         const bool prolog = (opts->fFlag && opts->gFlag)
-            || (!opts->fFlag && (ob.used_yyaccept || opts->bEmitYYCh))
+            || (!opts->fFlag && (block.used_yyaccept || opts->bEmitYYCh))
             || (!opts->cFlag && have_bitmaps)
             || (opts->cFlag && opts->gFlag);
 

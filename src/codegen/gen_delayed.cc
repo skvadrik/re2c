@@ -75,9 +75,8 @@ static void gen_state_goto(CodegenContext &ctx, Code *code)
     code_alc_t &alc = ctx.allocator;
     const char *text;
 
-    CodeList *goto_start = code_list(alc);
-    text = o.cstr("goto ").str(opts->labelPrefix).u32(0).flush();
-    append(goto_start, code_stmt(alc, text));
+    DASSERT(!ctx.fill_goto.empty());
+    CodeList *goto_start = ctx.fill_goto[0];
 
     CodeCases *cases = code_cases(alc);
     if (opts->bUseStateAbort) {
@@ -94,9 +93,10 @@ static void gen_state_goto(CodegenContext &ctx, Code *code)
         append(cases, code_case_default(alc, goto_start));
     }
 
-    DASSERT(ctx.fill_index == ctx.fill_goto.size());
+    DASSERT(ctx.fill_index + 1 == ctx.fill_goto.size());
     for (uint32_t i = 0; i < ctx.fill_index; ++i) {
-        append(cases, code_case_number(alc, ctx.fill_goto[i], static_cast<int32_t>(i)));
+        append(cases, code_case_number(alc, ctx.fill_goto[i + 1],
+            static_cast<int32_t>(i)));
     }
 
     CodeList *stmts = code_list(alc);
