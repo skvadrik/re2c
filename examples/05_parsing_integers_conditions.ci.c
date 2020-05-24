@@ -46,7 +46,7 @@ static bool lex(const char *s, unsigned long &u)
 yyc_init:
 	yych = *s;
 	switch (yych) {
-	case '0':	goto yy5;
+	case '0':	goto yy4;
 	case '1':
 	case '2':
 	case '3':
@@ -55,40 +55,40 @@ yyc_init:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy7;
-	default:	goto yy3;
+	case '9':	goto yy6;
+	default:	goto yy2;
 	}
-yy3:
+yy2:
 	++s;
 	{ return false; }
-yy5:
+yy4:
 	yych = *(YYMARKER = ++s);
 	switch (yych) {
 	case 'B':
-	case 'b':	goto yy9;
+	case 'b':	goto yy8;
 	case 'X':
-	case 'x':	goto yy11;
-	default:	goto yy6;
+	case 'x':	goto yy10;
+	default:	goto yy5;
 	}
-yy6:
+yy5:
 	c = yycoct;
 	goto yyc_oct;
-yy7:
+yy6:
 	++s;
 	s -= 1;
 	c = yycdec;
 	goto yyc_dec;
-yy9:
+yy8:
 	yych = *++s;
 	switch (yych) {
 	case '0':
-	case '1':	goto yy12;
-	default:	goto yy10;
+	case '1':	goto yy11;
+	default:	goto yy9;
 	}
-yy10:
+yy9:
 	s = YYMARKER;
-	goto yy6;
-yy11:
+	goto yy5;
+yy10:
 	yych = *++s;
 	switch (yych) {
 	case '0':
@@ -112,15 +112,15 @@ yy11:
 	case 'c':
 	case 'd':
 	case 'e':
-	case 'f':	goto yy14;
-	default:	goto yy10;
+	case 'f':	goto yy13;
+	default:	goto yy9;
 	}
-yy12:
+yy11:
 	++s;
 	s -= 1;
 	c = yycbin;
 	goto yyc_bin;
-yy14:
+yy13:
 	++s;
 	s -= 1;
 	c = yychex;
@@ -129,25 +129,25 @@ yy14:
 yyc_bin:
 	yych = *s;
 	switch (yych) {
-	case 0x00:	goto yy18;
+	case 0x00:	goto yy17;
 	case '0':
-	case '1':	goto yy22;
-	default:	goto yy20;
+	case '1':	goto yy21;
+	default:	goto yy19;
 	}
-yy18:
+yy17:
 	++s;
 	{ return true; }
-yy20:
+yy19:
 	++s;
 	{ return false; }
-yy22:
+yy21:
 	++s;
 	{ if (!adddgt<2>(u, s[-1] - '0')) return false; goto yyc_bin; }
 /* *********************************** */
 yyc_dec:
 	yych = *s;
 	switch (yych) {
-	case 0x00:	goto yy26;
+	case 0x00:	goto yy25;
 	case '0':
 	case '1':
 	case '2':
@@ -157,23 +157,23 @@ yyc_dec:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy30;
-	default:	goto yy28;
+	case '9':	goto yy29;
+	default:	goto yy27;
 	}
-yy26:
+yy25:
 	++s;
 	{ return true; }
-yy28:
+yy27:
 	++s;
 	{ return false; }
-yy30:
+yy29:
 	++s;
 	{ if (!adddgt<10>(u, s[-1] - '0')) return false; goto yyc_dec; }
 /* *********************************** */
 yyc_hex:
 	yych = *s;
 	switch (yych) {
-	case 0x00:	goto yy34;
+	case 0x00:	goto yy33;
 	case '0':
 	case '1':
 	case '2':
@@ -183,41 +183,41 @@ yyc_hex:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy38;
+	case '9':	goto yy37;
 	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
 	case 'E':
-	case 'F':	goto yy40;
+	case 'F':	goto yy39;
 	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
 	case 'e':
-	case 'f':	goto yy42;
-	default:	goto yy36;
+	case 'f':	goto yy41;
+	default:	goto yy35;
 	}
-yy34:
+yy33:
 	++s;
 	{ return true; }
-yy36:
+yy35:
 	++s;
 	{ return false; }
-yy38:
+yy37:
 	++s;
 	{ if (!adddgt<16>(u, s[-1] - '0'))      return false; goto yyc_hex; }
-yy40:
+yy39:
 	++s;
 	{ if (!adddgt<16>(u, s[-1] - 'A' + 10)) return false; goto yyc_hex; }
-yy42:
+yy41:
 	++s;
 	{ if (!adddgt<16>(u, s[-1] - 'a' + 10)) return false; goto yyc_hex; }
 /* *********************************** */
 yyc_oct:
 	yych = *s;
 	switch (yych) {
-	case 0x00:	goto yy46;
+	case 0x00:	goto yy45;
 	case '0':
 	case '1':
 	case '2':
@@ -225,16 +225,16 @@ yyc_oct:
 	case '4':
 	case '5':
 	case '6':
-	case '7':	goto yy50;
-	default:	goto yy48;
+	case '7':	goto yy49;
+	default:	goto yy47;
 	}
-yy46:
+yy45:
 	++s;
 	{ return true; }
-yy48:
+yy47:
 	++s;
 	{ return false; }
-yy50:
+yy49:
 	++s;
 	{ if (!adddgt<8>(u, s[-1] - '0')) return false; goto yyc_oct; }
 }

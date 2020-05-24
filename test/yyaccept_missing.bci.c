@@ -43,23 +43,23 @@ int scan(char *s, int l)
 yyc_INITIAL:
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if (yych <= 0x00) goto yy3;
-			if (yych == '$') goto yy7;
-			goto yy5;
-yy3:
+			if (yych <= 0x00) goto yy2;
+			if (yych == '$') goto yy6;
+			goto yy4;
+yy2:
 			++YYCURSOR;
 			{ printf("EOF\n");	return 0; }
-yy5:
+yy4:
 			++YYCURSOR;
-yy6:
+yy5:
 			{ printf("ERR\n");	return 1; }
-yy7:
+yy6:
 			yych = *++YYCURSOR;
-			if (yych <= '@') goto yy6;
-			if (yych <= 'Z') goto yy8;
-			if (yych <= '`') goto yy6;
-			if (yych >= '{') goto yy6;
-yy8:
+			if (yych <= '@') goto yy5;
+			if (yych <= 'Z') goto yy7;
+			if (yych <= '`') goto yy5;
+			if (yych >= '{') goto yy5;
+yy7:
 			++YYCURSOR;
 			{
 		printf("FOUND %s\n", t);
@@ -105,44 +105,44 @@ yyc_ST_VALUE:
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *(YYMARKER = YYCURSOR);
 				if (yybm[0+yych] & 128) {
-					goto yy13;
+					goto yy12;
 				}
-				if (yych == '$') goto yy15;
-yy12:
+				if (yych == '$') goto yy14;
+yy11:
 				{
 		YYSETCONDITION(STATE(INITIAL));
 		printf("Found spaces\n");
 	}
-yy13:
+yy12:
 				++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
 				if (yybm[0+yych] & 128) {
-					goto yy13;
+					goto yy12;
 				}
-				goto yy12;
-yy15:
+				goto yy11;
+yy14:
 				++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
-				if (yych <= '@') goto yy16;
-				if (yych <= 'Z') goto yy17;
-				if (yych <= '`') goto yy16;
-				if (yych <= 'z') goto yy17;
-yy16:
+				if (yych <= '@') goto yy15;
+				if (yych <= 'Z') goto yy16;
+				if (yych <= '`') goto yy15;
+				if (yych <= 'z') goto yy16;
+yy15:
 				YYCURSOR = YYMARKER;
 				if (yyaccept == 0) {
-					goto yy12;
+					goto yy11;
 				} else {
-					goto yy18;
+					goto yy17;
 				}
-yy17:
+yy16:
 				yyaccept = 1;
 				YYMARKER = ++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
-				if (yych == '$') goto yy15;
-yy18:
+				if (yych == '$') goto yy14;
+yy17:
 				{
 		printf("Found $ or $\\<x>\n");
 		continue;

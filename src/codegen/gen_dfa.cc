@@ -169,12 +169,6 @@ void gen_code(Output &output, dfas_t &dfas)
             dfa.start_label = new_label(alc, output.label_counter++);
             dfa.start_label->used = true;
         }
-        else if (opts->cFlag && first) {
-            // TODO: remove this artificial counter increment (its only purpose
-            // is to prevent massive diffs in the tests caused by a shift in
-            // label numbers.
-            ++output.label_counter;
-        }
 
         // Initial label points to the beginning of the DFA (after condition
         // dispatch in `-c` mode).

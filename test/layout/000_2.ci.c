@@ -22,61 +22,61 @@ yyc_x:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':	goto yy8;
-	default:	goto yy6;
+	case '0':	goto yy7;
+	default:	goto yy5;
 	}
-yy6:
+yy5:
 	++YYCURSOR;
+yy6:
+	{}
+	{}
 yy7:
-	{}
-	{}
-yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '1':	goto yy9;
-	case '2':	goto yy11;
-	case '3':	goto yy13;
-	case '4':	goto yy15;
-	case '5':	goto yy17;
-	case '6':	goto yy19;
-	case '7':	goto yy21;
-	case '8':	goto yy23;
-	case '9':	goto yy25;
-	default:	goto yy7;
+	case '1':	goto yy8;
+	case '2':	goto yy10;
+	case '3':	goto yy12;
+	case '4':	goto yy14;
+	case '5':	goto yy16;
+	case '6':	goto yy18;
+	case '7':	goto yy20;
+	case '8':	goto yy22;
+	case '9':	goto yy24;
+	default:	goto yy6;
 	}
-yy9:
+yy8:
 	++YYCURSOR;
 	{}
 	{}
-yy11:
+yy10:
 	++YYCURSOR;
 	{}
 	{}
-yy13:
+yy12:
 	++YYCURSOR;
 	{}
 	{}
-yy15:
+yy14:
 	++YYCURSOR;
 	{}
 	{}
-yy17:
+yy16:
 	++YYCURSOR;
 	{}
 	{}
-yy19:
+yy18:
 	++YYCURSOR;
 	{}
 	{}
-yy21:
+yy20:
 	++YYCURSOR;
 	{}
 	{}
-yy23:
+yy22:
 	++YYCURSOR;
 	{}
 	{}
-yy25:
+yy24:
 	++YYCURSOR;
 	{}
 	{}
@@ -85,36 +85,36 @@ yyc_y0:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':	goto yy31;
-	default:	goto yy29;
+	case '0':	goto yy30;
+	default:	goto yy28;
 	}
-yy29:
+yy28:
 	++YYCURSOR;
+yy29:
+	{}
+	{}
 yy30:
-	{}
-	{}
-yy31:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '1':	goto yy32;
-	case '2':	goto yy34;
-	case '4':	goto yy36;
-	case '5':	goto yy38;
-	default:	goto yy30;
+	case '1':	goto yy31;
+	case '2':	goto yy33;
+	case '4':	goto yy35;
+	case '5':	goto yy37;
+	default:	goto yy29;
 	}
-yy32:
+yy31:
 	++YYCURSOR;
 	{}
 	{}
-yy34:
+yy33:
 	++YYCURSOR;
 	{}
 	{}
-yy36:
+yy35:
 	++YYCURSOR;
 	{}
 	{}
-yy38:
+yy37:
 	++YYCURSOR;
 	{}
 	{}
@@ -123,31 +123,31 @@ yyc_z11:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':	goto yy44;
-	default:	goto yy42;
+	case '0':	goto yy43;
+	default:	goto yy41;
 	}
-yy42:
+yy41:
 	++YYCURSOR;
+yy42:
+	{}
+	{}
 yy43:
-	{}
-	{}
-yy44:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '1':	goto yy45;
-	case '2':	goto yy47;
-	case '5':	goto yy49;
-	default:	goto yy43;
+	case '1':	goto yy44;
+	case '2':	goto yy46;
+	case '5':	goto yy48;
+	default:	goto yy42;
 	}
-yy45:
+yy44:
 	++YYCURSOR;
 	{}
 	{}
-yy47:
+yy46:
 	++YYCURSOR;
 	{}
 	{}
-yy49:
+yy48:
 	++YYCURSOR;
 	{}
 	{}
@@ -156,41 +156,41 @@ yyc_y:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':	goto yy55;
-	default:	goto yy53;
+	case '0':	goto yy54;
+	default:	goto yy52;
 	}
-yy53:
+yy52:
 	++YYCURSOR;
+yy53:
+	{}
+	{}
 yy54:
-	{}
-	{}
-yy55:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '1':	goto yy56;
-	case '2':	goto yy58;
-	case '7':	goto yy60;
-	case '8':	goto yy62;
-	case '9':	goto yy64;
-	default:	goto yy54;
+	case '1':	goto yy55;
+	case '2':	goto yy57;
+	case '7':	goto yy59;
+	case '8':	goto yy61;
+	case '9':	goto yy63;
+	default:	goto yy53;
 	}
-yy56:
+yy55:
 	++YYCURSOR;
 	{}
 	{}
-yy58:
+yy57:
 	++YYCURSOR;
 	{}
 	{}
-yy60:
+yy59:
 	++YYCURSOR;
 	{}
 	{}
-yy62:
+yy61:
 	++YYCURSOR;
 	{}
 	{}
-yy64:
+yy63:
 	++YYCURSOR;
 	{}
 	{}

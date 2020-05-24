@@ -21,32 +21,32 @@ yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy6;
-		if (yych <= '1') goto yy7;
-		goto yy9;
+		if (yych <= '0') goto yy5;
+		if (yych <= '1') goto yy6;
+		goto yy8;
 	} else {
-		if (yych <= '`') goto yy6;
-		if (yych <= 'a') goto yy11;
-		if (yych <= 'b') goto yy13;
+		if (yych <= '`') goto yy5;
+		if (yych <= 'a') goto yy10;
+		if (yych <= 'b') goto yy12;
 	}
+yy5:
 yy6:
-yy7:
 	++YYCURSOR;
 #line 4 "conditions/condition_11.cg.re"
 	{ return "1"; }
 #line 38 "conditions/condition_11.cg.c"
-yy9:
+yy8:
 	++YYCURSOR;
 #line 5 "conditions/condition_11.cg.re"
 	{ return "2"; }
 #line 43 "conditions/condition_11.cg.c"
-yy11:
+yy10:
 	++YYCURSOR;
 	YYSETCONDITION(yycr2);
 #line 6 "conditions/condition_11.cg.re"
 	{ return "a"; }
 #line 49 "conditions/condition_11.cg.c"
-yy13:
+yy12:
 	++YYCURSOR;
 	YYSETCONDITION(yycr2);
 #line 7 "conditions/condition_11.cg.re"
@@ -57,26 +57,26 @@ yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy17;
-		if (yych <= '1') goto yy18;
-		goto yy20;
+		if (yych <= '0') goto yy16;
+		if (yych <= '1') goto yy17;
+		goto yy19;
 	} else {
-		if (yych == 'b') goto yy22;
+		if (yych == 'b') goto yy21;
 	}
+yy16:
 yy17:
-yy18:
 	++YYCURSOR;
 	YYSETCONDITION(yycr1);
 #line 4 "conditions/condition_11.cg.re"
 	{ return "1"; }
 #line 73 "conditions/condition_11.cg.c"
-yy20:
+yy19:
 	++YYCURSOR;
 	YYSETCONDITION(yycr1);
 #line 5 "conditions/condition_11.cg.re"
 	{ return "2"; }
 #line 79 "conditions/condition_11.cg.c"
-yy22:
+yy21:
 	++YYCURSOR;
 #line 7 "conditions/condition_11.cg.re"
 	{ return "b"; }

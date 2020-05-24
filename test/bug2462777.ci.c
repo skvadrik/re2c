@@ -8,17 +8,17 @@
 	}
 /* *********************************** */
 yyc_X:
-	goto yy1;
-yy2:
-	++YYCURSOR;
+	goto yy0;
 yy1:
+	++YYCURSOR;
+yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy2;
-	default:	goto yy4;
+	case 'a':	goto yy1;
+	default:	goto yy3;
 	}
-yy4:
+yy3:
 	{x;}
 }
 

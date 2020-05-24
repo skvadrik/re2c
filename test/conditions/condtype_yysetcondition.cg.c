@@ -37,13 +37,13 @@ yyc_b:
 /* *********************************** */
 yyc_a:
 	yych = *YYCURSOR;
-	if (yych == 'a') goto yy9;
+	if (yych == 'a') goto yy8;
 	++YYCURSOR;
 	YYSETCONDITION(yycb);
 #line 27 "conditions/condtype_yysetcondition.cg.re"
 	{ printf ("a => b\n"); continue; }
 #line 46 "conditions/condtype_yysetcondition.cg.c"
-yy9:
+yy8:
 	++YYCURSOR;
 #line 26 "conditions/condtype_yysetcondition.cg.re"
 	{ printf ("a\n");      continue; }

@@ -12,8 +12,8 @@
 yyc_a:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 'a') goto yy4;
-yy4:
+	if (yych == 'a') goto yy3;
+yy3:
 	++YYCURSOR;
 #line 2 "conditions/condtype_single.cg.re"
 	{}

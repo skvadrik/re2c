@@ -27,11 +27,11 @@ int main ()
 yyc_a:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	default:	goto yy3;
+	case 'a':	goto yy3;
+	default:	goto yy2;
 	}
+yy2:
 yy3:
-yy4:
 	++YYCURSOR;
 #line 11 "conditions/condtype_decl.c.re"
 	{}
@@ -40,11 +40,11 @@ yy4:
 yyc_b:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy9;
-	default:	goto yy8;
+	case 'b':	goto yy8;
+	default:	goto yy7;
 	}
+yy7:
 yy8:
-yy9:
 	++YYCURSOR;
 #line 12 "conditions/condtype_decl.c.re"
 	{}

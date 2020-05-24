@@ -71,16 +71,16 @@ char scan(Scanner *s)
 yyc_normal:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych == '/') goto yy5;
+			if (yych == '/') goto yy4;
 			++s->cur;
-yy4:
+yy3:
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
-yy5:
+yy4:
 			yych = *++s->cur;
-			if (yych != '*') goto yy4;
+			if (yych != '*') goto yy3;
 			++s->cur;
 			{
 				goto yyc_comment;
@@ -89,15 +89,15 @@ yy5:
 yyc_comment:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych == '*') goto yy12;
+			if (yych == '*') goto yy11;
 			++s->cur;
-yy11:
+yy10:
 			{
 				goto yyc_comment;
 			}
-yy12:
+yy11:
 			yych = *++s->cur;
-			if (yych != '/') goto yy11;
+			if (yych != '/') goto yy10;
 			++s->cur;
 			{
 				continue;

@@ -73,18 +73,18 @@ char scan(Scanner *s)
 yyc_normal:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych == '/') goto yy5;
+			if (yych == '/') goto yy4;
 			++s->cur;
-yy4:
+yy3:
 #line 74 "conditions/condition_05.cgtcondition_05.cgt.h.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
 #line 79 "conditions/condition_05.cgtcondition_05.cgt.h.c"
-yy5:
+yy4:
 			yych = *++s->cur;
-			if (yych != '*') goto yy4;
+			if (yych != '*') goto yy3;
 			++s->cur;
 #line 70 "conditions/condition_05.cgtcondition_05.cgt.h.re"
 			{
@@ -95,17 +95,17 @@ yy5:
 yyc_comment:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych == '*') goto yy12;
+			if (yych == '*') goto yy11;
 			++s->cur;
-yy11:
+yy10:
 #line 83 "conditions/condition_05.cgtcondition_05.cgt.h.re"
 			{
 				goto yyc_comment;
 			}
 #line 100 "conditions/condition_05.cgtcondition_05.cgt.h.c"
-yy12:
+yy11:
 			yych = *++s->cur;
-			if (yych != '/') goto yy11;
+			if (yych != '/') goto yy10;
 			++s->cur;
 #line 79 "conditions/condition_05.cgtcondition_05.cgt.h.re"
 			{

@@ -13,23 +13,23 @@ yyc_x:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy5;
-	default:	goto yy3;
+	case 'a':	goto yy4;
+	default:	goto yy2;
 	}
-yy3:
+yy2:
 	++YYCURSOR;
 	{}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy7;
-	default:	goto yy6;
+	case 'a':	goto yy6;
+	default:	goto yy5;
 	}
-yy6:
+yy5:
 	{}
-yy7:
+yy6:
 	++YYCURSOR;
-	goto yy6;
+	goto yy5;
 /* *********************************** */
 yyc_y:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

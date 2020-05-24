@@ -15,13 +15,13 @@ yyc_x:
 	switch (yych) {
 	case 'a':
 		YYMTAGP (yyt2);
-		goto yy5;
-	default:	goto yy3;
+		goto yy4;
+	default:	goto yy2;
 	}
-yy3:
+yy2:
 	++YYCURSOR;
 	;
-yy5:
+yy4:
 	++YYCURSOR;
 	YYMTAGP (yyt1);
 	x = yyt2;

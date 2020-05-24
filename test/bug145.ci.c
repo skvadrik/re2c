@@ -27,13 +27,13 @@ int test(const char* str)
 yyc_init:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'A':	goto yy5;
-	default:	goto yy3;
+	case 'A':	goto yy4;
+	default:	goto yy2;
 	}
-yy3:
+yy2:
 	++YYCURSOR;
 	{ return 0; }
-yy5:
+yy4:
 	++YYCURSOR;
 	c = yycC2;
 	goto yyc_C2;
@@ -41,13 +41,13 @@ yy5:
 yyc_C2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'B':	goto yy11;
-	default:	goto yy9;
+	case 'B':	goto yy10;
+	default:	goto yy8;
 	}
-yy9:
+yy8:
 	++YYCURSOR;
 	{ return 0; }
-yy11:
+yy10:
 	++YYCURSOR;
 	{ return 1; }
 }

@@ -9,13 +9,13 @@ start:
 	}
 /* *********************************** */
 yyc_c1:
-	goto yy1;
-yy2:
-	++YYCURSOR;
+	goto yy0;
 yy1:
+	++YYCURSOR;
+yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy2;
+	goto yy1;
 }
 
 segfault_full_range_star_startlabel.ci.re:3:11: warning: rule in condition 'c1' matches empty string [-Wmatch-empty-string]

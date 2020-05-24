@@ -13,92 +13,92 @@ yyc_c1:
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy5;
-	default:	goto yy3;
+	case 'a':	goto yy4;
+	default:	goto yy2;
 	}
-yy3:
+yy2:
 	++YYCURSOR;
 	{}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy7;
-	default:	goto yy6;
+	case 'b':	goto yy6;
+	default:	goto yy5;
 	}
-yy6:
+yy5:
 	YYCURSOR = YYCTXMARKER;
 	{}
-yy7:
+yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy9;
+	case 'b':	goto yy8;
 	case 'c':
 		YYCTXMARKER = YYCURSOR;
-		goto yy11;
+		goto yy10;
 	default:
 		YYCTXMARKER = YYCURSOR;
-		goto yy8;
+		goto yy7;
 	}
-yy8:
+yy7:
 	YYCURSOR = YYCTXMARKER;
 	{}
-yy9:
+yy8:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy9;
-	default:	goto yy6;
+	case 'b':	goto yy8;
+	default:	goto yy5;
 	}
-yy11:
+yy10:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':	goto yy11;
-	default:	goto yy8;
+	case 'c':	goto yy10;
+	default:	goto yy7;
 	}
 /* *********************************** */
 yyc_c2:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy17;
-	default:	goto yy15;
+	case 'a':	goto yy16;
+	default:	goto yy14;
 	}
-yy15:
+yy14:
 	++YYCURSOR;
 	{}
-yy17:
+yy16:
 	yych = *++YYCURSOR;
 	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy19;
-	default:	goto yy23;
+	case 'b':	goto yy18;
+	default:	goto yy22;
 	}
+yy17:
+	YYCURSOR = YYCTXMARKER;
+	{}
 yy18:
-	YYCURSOR = YYCTXMARKER;
-	{}
-yy19:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy19;
-	default:	goto yy21;
+	case 'b':	goto yy18;
+	default:	goto yy20;
 	}
-yy21:
+yy20:
 	YYCURSOR = YYCTXMARKER;
 	{}
-yy22:
+yy21:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy23:
+yy22:
 	switch (yych) {
-	case 'c':	goto yy22;
-	default:	goto yy18;
+	case 'c':	goto yy21;
+	default:	goto yy17;
 	}
 }
 

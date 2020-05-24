@@ -13,13 +13,13 @@ yyc_x:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy5;
-	default:	goto yy3;
+	case 'a':	goto yy4;
+	default:	goto yy2;
 	}
-yy3:
+yy2:
 	++YYCURSOR;
 	;
-yy5:
+yy4:
 	++YYCURSOR;
 	;
 /* *********************************** */

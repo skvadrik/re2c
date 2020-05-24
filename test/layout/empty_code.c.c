@@ -13,11 +13,11 @@ yyc_a:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	default:	goto yy3;
+	case 'a':	goto yy3;
+	default:	goto yy2;
 	}
+yy2:
 yy3:
-yy4:
 	++YYCURSOR;
 #line 3 "layout/empty_code.c.re"
 	

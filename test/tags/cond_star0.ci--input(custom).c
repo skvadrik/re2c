@@ -11,53 +11,53 @@ yyc_c1:
 	if (YYLESSTHAN (3)) YYFILL(3);
 	yych = YYPEEK ();
 	switch (yych) {
-	case 'a':	goto yy5;
-	default:	goto yy3;
+	case 'a':	goto yy4;
+	default:	goto yy2;
 	}
-yy3:
+yy2:
 	YYSKIP ();
 	{}
-yy5:
+yy4:
 	YYSKIP ();
 	yych = YYPEEK ();
 	YYBACKUPCTX ();
 	switch (yych) {
-	case 'b':	goto yy7;
-	default:	goto yy6;
+	case 'b':	goto yy6;
+	default:	goto yy5;
 	}
-yy6:
+yy5:
 	YYRESTORECTX ();
 	{}
-yy7:
+yy6:
 	YYSKIP ();
 	yych = YYPEEK ();
 	switch (yych) {
-	case 'b':	goto yy9;
+	case 'b':	goto yy8;
 	case 'c':
 		YYBACKUPCTX ();
-		goto yy11;
+		goto yy10;
 	default:
 		YYBACKUPCTX ();
-		goto yy8;
+		goto yy7;
 	}
-yy8:
+yy7:
 	YYRESTORECTX ();
 	{}
-yy9:
+yy8:
 	YYSKIP ();
 	if (YYLESSTHAN (1)) YYFILL(1);
 	yych = YYPEEK ();
 	switch (yych) {
-	case 'b':	goto yy9;
-	default:	goto yy6;
+	case 'b':	goto yy8;
+	default:	goto yy5;
 	}
-yy11:
+yy10:
 	YYSKIP ();
 	if (YYLESSTHAN (1)) YYFILL(1);
 	yych = YYPEEK ();
 	switch (yych) {
-	case 'c':	goto yy11;
-	default:	goto yy8;
+	case 'c':	goto yy10;
+	default:	goto yy7;
 	}
 }
 
