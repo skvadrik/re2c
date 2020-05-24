@@ -80,22 +80,22 @@ func Lex(in *Input) int {
 		goto yyFillLabel0
 	case 1:
 		if (in.limit-in.cursor < 1) {
-			goto yy6
+			goto yy7
 		}
 		goto yyFillLabel1
 	case 2:
 		if (in.limit-in.cursor < 1) {
-			goto yy9
+			goto yy10
 		}
 		goto yyFillLabel2
 	case 3:
 		if (in.limit-in.cursor < 1) {
-			goto yy11
+			goto yy12
 		}
 		goto yyFillLabel3
 	case 4:
 		if (in.limit-in.cursor < 1) {
-			goto yy14
+			goto yy15
 		}
 		goto yyFillLabel4
 	}
@@ -104,7 +104,7 @@ yyFillLabel0:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy5
 	case '0':
 		fallthrough
 	case '1':
@@ -124,15 +124,15 @@ yyFillLabel0:
 	case '8':
 		fallthrough
 	case '9':
-		goto yy7
+		goto yy8
 	default:
 		if (in.limit-in.cursor < 1) {
 			in.state = 0
 			return lexNeedMoreInput
 		}
-		goto yy2
+		goto yy3
 	}
-yy2:
+yy3:
 	in.cursor += 1
 //line "golang/002_fill_eof_rule.f--lang(go).re":79
 	{
@@ -140,34 +140,34 @@ yy2:
 		return lexError
 	}
 //line "golang/002_fill_eof_rule.f--lang(go).go":143
-yy4:
+yy5:
 	in.cursor += 1
 yyFillLabel1:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy5
 	default:
 		if (in.limit-in.cursor < 1) {
 			in.state = 1
 			return lexNeedMoreInput
 		}
-		goto yy6
+		goto yy7
 	}
-yy6:
+yy7:
 //line "golang/002_fill_eof_rule.f--lang(go).re":99
 	{
 		return lexSpace
 	}
 //line "golang/002_fill_eof_rule.f--lang(go).go":163
-yy7:
+yy8:
 	in.cursor += 1
 	in.marker = in.cursor
 yyFillLabel2:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case '-':
-		goto yy10
+		goto yy11
 	case '0':
 		fallthrough
 	case '1':
@@ -187,22 +187,22 @@ yyFillLabel2:
 	case '8':
 		fallthrough
 	case '9':
-		goto yy7
+		goto yy8
 	default:
 		if (in.limit-in.cursor < 1) {
 			in.state = 2
 			return lexNeedMoreInput
 		}
-		goto yy9
+		goto yy10
 	}
-yy9:
+yy10:
 //line "golang/002_fill_eof_rule.f--lang(go).re":89
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber1
 	}
 //line "golang/002_fill_eof_rule.f--lang(go).go":205
-yy10:
+yy11:
 	in.cursor += 1
 yyFillLabel3:
 	yych = YYCTYPE(in.data[in.cursor])
@@ -226,18 +226,18 @@ yyFillLabel3:
 	case '8':
 		fallthrough
 	case '9':
-		goto yy12
+		goto yy13
 	default:
 		if (in.limit-in.cursor < 1) {
 			in.state = 3
 			return lexNeedMoreInput
 		}
-		goto yy11
+		goto yy12
 	}
-yy11:
-	in.cursor = in.marker
-	goto yy9
 yy12:
+	in.cursor = in.marker
+	goto yy10
+yy13:
 	in.cursor += 1
 yyFillLabel4:
 	yych = YYCTYPE(in.data[in.cursor])
@@ -261,15 +261,15 @@ yyFillLabel4:
 	case '8':
 		fallthrough
 	case '9':
-		goto yy12
+		goto yy13
 	default:
 		if (in.limit-in.cursor < 1) {
 			in.state = 4
 			return lexNeedMoreInput
 		}
-		goto yy14
+		goto yy15
 	}
-yy14:
+yy15:
 //line "golang/002_fill_eof_rule.f--lang(go).re":94
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))

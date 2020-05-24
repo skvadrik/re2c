@@ -29,13 +29,13 @@ yy0:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	default:	goto yy2;
+	case 'a':	goto yy5;
+	default:	goto yy3;
 	}
-yy2:
+yy3:
 	++YYCURSOR;
 	{ x }
-yy4:
+yy5:
 	++YYCURSOR;
 	{ a }
 
@@ -48,13 +48,13 @@ yy4:
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy10;
-	default:	goto yy8;
+	case 'a':	goto yy11;
+	default:	goto yy9;
 	}
-yy8:
+yy9:
 	++YYCURSOR;
 	{ x }
-yy10:
+yy11:
 	++YYCURSOR;
 	{ a }
 
@@ -67,13 +67,13 @@ yy10:
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy16;
-	default:	goto yy14;
+	case 'a':	goto yy17;
+	default:	goto yy15;
 	}
-yy14:
+yy15:
 	++YYCURSOR;
 	{ x }
-yy16:
+yy17:
 	++YYCURSOR;
 	{ a }
 
@@ -86,13 +86,13 @@ yy16:
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy22;
-	default:	goto yy20;
+	case 'a':	goto yy23;
+	default:	goto yy21;
 	}
-yy20:
+yy21:
 	++YYCURSOR;
 	{ x }
-yy22:
+yy23:
 	++YYCURSOR;
 	{ a }
 
@@ -106,13 +106,13 @@ yy22:
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy28;
-	default:	goto yy26;
+	case 'a':	goto yy29;
+	default:	goto yy27;
 	}
-yy26:
+yy27:
 	++YYCURSOR;
 	{ x }
-yy28:
+yy29:
 	++YYCURSOR;
 	{ a }
 
@@ -126,13 +126,13 @@ yy28:
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy34;
-	default:	goto yy32;
+	case 'a':	goto yy35;
+	default:	goto yy33;
 	}
-yy32:
+yy33:
 	++YYCURSOR;
 	{ x }
-yy34:
+yy35:
 	++YYCURSOR;
 	{ a }
 
@@ -145,13 +145,13 @@ yy34:
 yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy40;
-	default:	goto yy38;
+	case 'a':	goto yy41;
+	default:	goto yy39;
 	}
-yy38:
+yy39:
 	++YYCURSOR;
 	{ x }
-yy40:
+yy41:
 	++YYCURSOR;
 	{ a }
 
@@ -165,13 +165,13 @@ yy40:
 yyFillLabel7:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy46;
-	default:	goto yy44;
+	case 'a':	goto yy47;
+	default:	goto yy45;
 	}
-yy44:
+yy45:
 	++YYCURSOR;
 	{ x }
-yy46:
+yy47:
 	++YYCURSOR;
 	{ a }
 
@@ -185,13 +185,13 @@ yy46:
 yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy52;
-	default:	goto yy50;
+	case 'a':	goto yy53;
+	default:	goto yy51;
 	}
-yy50:
+yy51:
 	++YYCURSOR;
 	{ x }
-yy52:
+yy53:
 	++YYCURSOR;
 	{ a }
 

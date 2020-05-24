@@ -33,34 +33,35 @@ start:
 	case 0:
 		goto yyFillLabel0;
 	}
-	goto yy0;
-yy1:
-	++YYCURSOR;
 yy0:
+	goto yy1;
+yy2:
+	++YYCURSOR;
+yy1:
 	YYSETSTATE(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy3;
-	case '\n':	goto yy5;
-	default:	goto yy1;
+	case 0x00:	goto yy4;
+	case '\n':	goto yy6;
+	default:	goto yy2;
 	}
-yy3:
+yy4:
 	++YYCURSOR;
 #line 32 "bug1472770.f.re"
 	{
 		return n;
 	}
-#line 56 "bug1472770.f.c"
-yy5:
+#line 57 "bug1472770.f.c"
+yy6:
 	++YYCURSOR;
 #line 27 "bug1472770.f.re"
 	{
 		++n;
 		goto start;
 	}
-#line 64 "bug1472770.f.c"
+#line 65 "bug1472770.f.c"
 #line 35 "bug1472770.f.re"
 
 }

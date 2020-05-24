@@ -159,23 +159,26 @@ void gen_code(Output &output, dfas_t &dfas)
 
     for (i = b; i != e; ++i) {
         const bool first = i == b;
+        const bool first_state = output.label_counter == 0
+            || (first && block.is_reuse_block);
         DFA &dfa = *(*i);
 
-        // Start label points to the beginning of block (before condition
-        // dispatch in `-c` mode). In `-f` mode it points to state 0.
-        dfa.start_label = new_label(alc, output.label_counter++);
-        dfa.start_label->used = (opts->startlabel_force && opts->startlabel.empty())
-            || (opts->fFlag && first
-                && (dfa.start_label->index == 0 || block.is_reuse_block));
+        // Start label is needed in `-f` mode: it points to state 0 (the
+        // beginning of block, before condition dispatch in `-c` mode).
+        if (opts->startlabel_force || (opts->fFlag && first_state)) {
+            dfa.start_label = new_label(alc, output.label_counter++);
+            dfa.start_label->used = true;
+        }
+        else if (opts->cFlag && first) {
+            // TODO: remove this artificial counter increment (its only purpose
+            // is to prevent massive diffs in the tests caused by a shift in
+            // label numbers.
+            ++output.label_counter;
+        }
 
-        // Initial label points to the beginning of DFA (after condition
-        // dispatch in `-c` mode, otherwise an alias to start label).
-        //
-        // TODO: start label is only needed with `-f`, so initial label should
-        // only differ from start label with `-f` (but adding `-f` condition
-        // causes large diffs in the tests due to a shift in label numbers).
-        dfa.initial_label = opts->cFlag && first
-            ? new_label(alc, output.label_counter++) : dfa.start_label;
+        // Initial label points to the beginning of the DFA (after condition
+        // dispatch in `-c` mode).
+        dfa.initial_label = new_label(alc, output.label_counter++);
         dfa.head->action.set_initial();
 
         for (State *s = dfa.head; s; s = s->next) {
@@ -252,10 +255,8 @@ void gen_code(Output &output, dfas_t &dfas)
             }
 
             // start label
-            if (dfa.start_label->used) {
-                if (dfa.start_label != dfa.initial_label) {
-                    append(program1, code_nlabel(alc, dfa.start_label));
-                }
+            if (dfa.start_label) {
+                append(program1, code_nlabel(alc, dfa.start_label));
                 gen_goto_start_state(output, dfa.start_label);
             }
 

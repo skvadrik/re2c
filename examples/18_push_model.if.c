@@ -73,9 +73,9 @@ yy0:
 yyFillLabel0:
 	in.yych = *in.cur;
 	switch (in.yych) {
-	case 0x00:	goto yy2;
+	case 0x00:	goto yy3;
 	case '\n':
-	case ' ':	goto yy6;
+	case ' ':	goto yy7;
 	case 'A':
 	case 'B':
 	case 'C':
@@ -127,16 +127,16 @@ yyFillLabel0:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	default:	goto yy4;
+	case 'z':	goto yy10;
+	default:	goto yy5;
 	}
-yy2:
+yy3:
 	++in.cur;
 	{ return OK; }
-yy4:
+yy5:
 	++in.cur;
 	{ return FAIL; }
-yy6:
+yy7:
 	++in.cur;
 	YYSETSTATE(1);
 	if (in.lim <= in.cur) YYFILL(1);
@@ -144,12 +144,12 @@ yyFillLabel1:
 	in.yych = *in.cur;
 	switch (in.yych) {
 	case '\n':
-	case ' ':	goto yy6;
-	default:	goto yy8;
+	case ' ':	goto yy7;
+	default:	goto yy9;
 	}
-yy8:
-	{ goto loop; }
 yy9:
+	{ goto loop; }
+yy10:
 	++in.cur;
 	YYSETSTATE(2);
 	if (in.lim <= in.cur) YYFILL(1);
@@ -207,10 +207,10 @@ yyFillLabel2:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	default:	goto yy11;
+	case 'z':	goto yy10;
+	default:	goto yy12;
 	}
-yy11:
+yy12:
 	{ ++words; goto loop; }
 
 }

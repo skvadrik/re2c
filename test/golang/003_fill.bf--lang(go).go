@@ -136,19 +136,19 @@ yy0:
 yyFillLabel0:
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yybm[0+yych] & 64 != 0) {
-		goto yy6
+		goto yy7
 	}
 	if (yych <= 0x00) {
-		goto yy2
+		goto yy3
 	}
 	if (yych <= '/') {
-		goto yy4
+		goto yy5
 	}
 	if (yych <= '9') {
-		goto yy9
+		goto yy10
 	}
-	goto yy4
-yy2:
+	goto yy5
+yy3:
 	in.cursor += 1
 //line "golang/003_fill.bf--lang(go).re":93
 	{
@@ -156,7 +156,7 @@ yy2:
 		return lexEnd, 0
 	}
 //line "golang/003_fill.bf--lang(go).go":159
-yy4:
+yy5:
 	in.cursor += 1
 //line "golang/003_fill.bf--lang(go).re":88
 	{
@@ -164,7 +164,7 @@ yy4:
 		return lexError, 0
 	}
 //line "golang/003_fill.bf--lang(go).go":167
-yy6:
+yy7:
 	in.cursor += 1
 	in.state = 1
 	if (in.limit-in.cursor < 1) {
@@ -173,14 +173,14 @@ yy6:
 yyFillLabel1:
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yybm[0+yych] & 64 != 0) {
-		goto yy6
+		goto yy7
 	}
 //line "golang/003_fill.bf--lang(go).re":108
 	{
 		return lexSpace, 0
 	}
 //line "golang/003_fill.bf--lang(go).go":183
-yy9:
+yy10:
 	in.cursor += 1
 	in.marker = in.cursor
 	in.state = 2
@@ -190,31 +190,31 @@ yy9:
 yyFillLabel2:
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yybm[0+yych] & 128 != 0) {
-		goto yy9
+		goto yy10
 	}
 	if (yych == '-') {
-		goto yy12
+		goto yy13
 	}
-yy11:
+yy12:
 //line "golang/003_fill.bf--lang(go).re":98
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber1, 0
 	}
 //line "golang/003_fill.bf--lang(go).go":205
-yy12:
+yy13:
 	in.cursor += 1
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yych <= '/') {
-		goto yy13
-	}
-	if (yych <= '9') {
 		goto yy14
 	}
-yy13:
-	in.cursor = in.marker
-	goto yy11
+	if (yych <= '9') {
+		goto yy15
+	}
 yy14:
+	in.cursor = in.marker
+	goto yy12
+yy15:
 	in.cursor += 1
 	in.state = 3
 	if (in.limit-in.cursor < 1) {
@@ -223,12 +223,12 @@ yy14:
 yyFillLabel3:
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yych <= '/') {
-		goto yy16
+		goto yy17
 	}
 	if (yych <= '9') {
-		goto yy14
+		goto yy15
 	}
-yy16:
+yy17:
 //line "golang/003_fill.bf--lang(go).re":103
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))

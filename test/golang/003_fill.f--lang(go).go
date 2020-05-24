@@ -102,9 +102,9 @@ yyFillLabel0:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case 0x00:
-		goto yy2
+		goto yy3
 	case ' ':
-		goto yy6
+		goto yy7
 	case '0':
 		fallthrough
 	case '1':
@@ -124,11 +124,11 @@ yyFillLabel0:
 	case '8':
 		fallthrough
 	case '9':
-		goto yy9
+		goto yy10
 	default:
-		goto yy4
+		goto yy5
 	}
-yy2:
+yy3:
 	in.cursor += 1
 //line "golang/003_fill.f--lang(go).re":93
 	{
@@ -136,7 +136,7 @@ yy2:
 		return lexEnd, 0
 	}
 //line "golang/003_fill.f--lang(go).go":139
-yy4:
+yy5:
 	in.cursor += 1
 //line "golang/003_fill.f--lang(go).re":88
 	{
@@ -144,7 +144,7 @@ yy4:
 		return lexError, 0
 	}
 //line "golang/003_fill.f--lang(go).go":147
-yy6:
+yy7:
 	in.cursor += 1
 	in.state = 1
 	if (in.limit-in.cursor < 1) {
@@ -154,17 +154,17 @@ yyFillLabel1:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case ' ':
-		goto yy6
+		goto yy7
 	default:
-		goto yy8
+		goto yy9
 	}
-yy8:
+yy9:
 //line "golang/003_fill.f--lang(go).re":108
 	{
 		return lexSpace, 0
 	}
 //line "golang/003_fill.f--lang(go).go":167
-yy9:
+yy10:
 	in.cursor += 1
 	in.marker = in.cursor
 	in.state = 2
@@ -175,7 +175,7 @@ yyFillLabel2:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case '-':
-		goto yy12
+		goto yy13
 	case '0':
 		fallthrough
 	case '1':
@@ -195,18 +195,18 @@ yyFillLabel2:
 	case '8':
 		fallthrough
 	case '9':
-		goto yy9
+		goto yy10
 	default:
-		goto yy11
+		goto yy12
 	}
-yy11:
+yy12:
 //line "golang/003_fill.f--lang(go).re":98
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber1, 0
 	}
 //line "golang/003_fill.f--lang(go).go":209
-yy12:
+yy13:
 	in.cursor += 1
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
@@ -229,14 +229,14 @@ yy12:
 	case '8':
 		fallthrough
 	case '9':
-		goto yy14
+		goto yy15
 	default:
-		goto yy13
+		goto yy14
 	}
-yy13:
-	in.cursor = in.marker
-	goto yy11
 yy14:
+	in.cursor = in.marker
+	goto yy12
+yy15:
 	in.cursor += 1
 	in.state = 3
 	if (in.limit-in.cursor < 1) {
@@ -264,11 +264,11 @@ yyFillLabel3:
 	case '8':
 		fallthrough
 	case '9':
-		goto yy14
+		goto yy15
 	default:
-		goto yy16
+		goto yy17
 	}
-yy16:
+yy17:
 //line "golang/003_fill.f--lang(go).re":103
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
