@@ -328,7 +328,8 @@ public:
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
-    void set_##name(const type &arg);
+    void set_##name(const type &arg); \
+    void set_default_##name();
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT

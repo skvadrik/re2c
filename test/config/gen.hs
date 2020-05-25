@@ -32,6 +32,11 @@ body3 =
     , "*         { x }"
     ]
 
+body4 :: [String]
+body4 =
+    [ "[a]* { a }" -- DFA has transitions into initial state
+    ]
+
 cond_get_decorate :: (String, String, [[String]], [String])
 cond_get_decorate =
     let name = "cond_get_decorate"
@@ -177,6 +182,38 @@ combine_confs xss =
             _  -> [x:y | x <- g xs, y <- ys]
     in  f (reverse xss) []
 
+startlabel :: (String, String, [[String]], [String])
+startlabel =
+    let name = "startlabel"
+        ext = "i"
+        confs =
+            [ genconfs "startlabel" ["Lstart"] -- define user start label
+            , genconfs "startlabel" ["0", "1"] -- force start label
+            ]
+    in  (name, ext, confs, body4)
+
+startlabel_with_empty :: (String, String, [[String]], [String])
+startlabel_with_empty =
+    let (name, ext, confs, body) = startlabel
+        confs' = confs ++ [genconfs "startlabel" [""]]
+    in  (name, ext, confs', body)
+
+startlabel_cond :: (String, String, [[String]], [String])
+startlabel_cond =
+    let (name, _, confs, _) = startlabel
+    in  (name, "ci", confs, body2)
+
+startlabel_state :: (String, String, [[String]], [String])
+startlabel_state =
+    let (name, _, confs, body) = startlabel
+        confs' = confs ++ [genconfs2 "state:nextlabel" ["0", "1"]]
+    in  (name, "fi", confs', body)
+
+startlabel_state_cond :: (String, String, [[String]], [String])
+startlabel_state_cond =
+    let (name, _, confs, _) = startlabel_with_empty
+    in  (name, "cfi", confs, body2)
+
 indent :: String -> String
 indent = ("  " ++)
 
@@ -269,3 +306,9 @@ main = do
     gen_reuse $ eof_variant fill_check_state
     gen_reuse $ eof_variant fill_placeholder
     gen_reuse $ eof_variant fill_decorate
+
+    gen_reuse startlabel_with_empty
+    gen       startlabel_with_empty
+    gen_reuse startlabel_cond
+    gen_reuse startlabel_state
+    gen_reuse startlabel_state_cond

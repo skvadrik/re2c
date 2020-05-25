@@ -178,6 +178,8 @@ void Opt::fix_mutopt()
         real.condGoto = "goto " + real.condGotoParam + (glob.lang == LANG_C ? ";" : "");
     }
 
+    if (!is_default.startlabel) real.startlabel_force = defaults.startlabel_force;
+
     // respect hierarchy
     if (!glob.cFlag) {
         real.yycondtype = defaults.yycondtype;
@@ -367,6 +369,12 @@ void Opt::set_##name(const type &arg) \
     user.name = arg; \
     is_default.name = false; \
     diverge = true; \
+} \
+void Opt::set_default_##name() \
+{ \
+    user.name = defaults.name; \
+    is_default.name = true; \
+    diverge = true; \
 }
 RE2C_MUTOPTS
 #undef MUTOPT1
@@ -404,8 +412,8 @@ bool Opt::source (const char *s)
 
 void Opt::reset_startlabel()
 {
-    set_startlabel(defaults.startlabel);
-    set_startlabel_force(defaults.startlabel_force);
+    set_default_startlabel();
+    set_default_startlabel_force();
 }
 
 void Opt::reset_mapCodeName ()

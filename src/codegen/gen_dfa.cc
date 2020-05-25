@@ -165,7 +165,7 @@ void gen_code(Output &output, dfas_t &dfas)
 
         // Start label is needed in `-f` mode: it points to state 0 (the
         // beginning of block, before condition dispatch in `-c` mode).
-        if (opts->startlabel_force || (opts->fFlag && first_state)) {
+        if ((opts->startlabel_force && first) || (opts->fFlag && first_state)) {
             dfa.start_label = new_label(alc, output.label_counter++);
             dfa.start_label->used = true;
         }
