@@ -141,7 +141,7 @@ void Output::new_block(Opt &opts, const loc_t &loc, bool reuse)
 
     // start label hapens to be the only option
     // that must be reset for each new block
-    opts.reset_startlabel();
+    opts.reset_group_startlabel();
 }
 
 void Output::gather_info_from_block()

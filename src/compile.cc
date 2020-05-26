@@ -152,7 +152,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         if (mode == Scanner::Reuse) {
             specs = rspecs;
             opts.restore(rules_opts);
-            opts.reset_mapCodeName();
+            opts.reset_group_api();
             output.state_goto = false;
             output.cond_goto = false;
         }

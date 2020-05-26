@@ -298,8 +298,7 @@ end:
         error ("no source file");
         return EXIT_FAIL;
     }
-    opts.fix_conopt();
-    opts.fix_mutopt_defaults();
+    opts.fix_global_and_defaults();
 
     return OK;
 

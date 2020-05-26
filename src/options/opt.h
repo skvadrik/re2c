@@ -320,16 +320,14 @@ private:
 public:
     explicit Opt(const conopt_t &globopts);
     const opt_t *snapshot();
-    void fix_conopt();
-    void fix_mutopt_defaults();
-    void fix_mutopt();
+    void fix_global_and_defaults();
     void restore(const opt_t *opts);
     bool source(const char *s);
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     void set_##name(const type &arg); \
-    void set_default_##name();
+    void reset_##name();
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
@@ -338,8 +336,8 @@ public:
     void set_encoding_policy(Enc::policy_t p);
 
     // Bad temporary hacks, should be fixed by proper scoping of config (parts).
-    void reset_startlabel();
-    void reset_mapCodeName ();
+    void reset_group_startlabel();
+    void reset_group_api();
 
 private:
     void sync();

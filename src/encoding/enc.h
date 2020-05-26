@@ -79,6 +79,7 @@ public:
     inline uint32_t nCodeUnits() const;
     inline uint32_t szCodePoint() const;
     inline uint32_t szCodeUnit() const;
+    inline bool multibyte_cunit() const;
 
     inline void set(type_t t);
     inline void unset(type_t);
@@ -156,6 +157,21 @@ inline uint32_t Enc::szCodeUnit() const
         case UTF32:  return 4;
     }
     return 0; /* error */
+}
+
+inline bool Enc::multibyte_cunit() const
+{
+    switch (type_) {
+        case Enc::UCS2:
+        case Enc::UTF16:
+        case Enc::UTF32:
+            return true;
+        case Enc::ASCII:
+        case Enc::EBCDIC:
+        case Enc::UTF8:
+            break;
+    }
+    return false;
 }
 
 inline void Enc::set(type_t t)

@@ -4,55 +4,20 @@
 
 namespace re2c {
 
-Opt::Opt(const conopt_t &globopts)
-    : source_file(NULL)
-    , glob(globopts)
-    , defaults()
-    , is_default()
-    , user()
-    , real()
-    , diverge(true)
-{}
-
-void Opt::fix_mutopt_defaults()
+// This function should only change global options.
+static void fix_conopt(conopt_t &glob)
 {
-    // Adjust default mutable options based on the global options.
-    mutopt_t &def = const_cast<mutopt_t&>(defaults);
-
-    // For the Go backend, generic API is set by default, because "default" C
-    // API with pointers doesn't work (there is no pointer arithmetics in Go).
-    // To make the default Go API less restrictive, decorations are disabled.
-    if (glob.lang == LANG_GO) {
-        def.input_api = INPUT_CUSTOM;
-        def.decorate = false;
+    if (glob.target == TARGET_SKELETON) {
+        glob.fFlag = false;
     }
 
-    // Apply new defaults to all mutable options except those that have been
-    // explicitly set by the user.
-#define MUTOPT1 MUTOPT
-#define MUTOPT(type, name, value) if (is_default.name) user.name = defaults.name;
-    RE2C_MUTOPTS
-#undef MUTOPT1
-#undef MUTOPT
-
-    diverge = true;
-}
-
-void Opt::fix_conopt()
-{
-    conopt_t &g = const_cast<conopt_t&>(glob);
-
-    if (g.target == TARGET_SKELETON) {
-        g.fFlag = false;
-    }
-
-    if (!g.lookahead) {
-        g.eager_skip = true;
+    if (!glob.lookahead) {
+        glob.eager_skip = true;
     }
 
     // append directory separator '/' to all paths that do not have it
-    for (size_t i = 0; i < g.incpaths.size(); ++i) {
-        std::string &p = g.incpaths[i];
+    for (size_t i = 0; i < glob.incpaths.size(); ++i) {
+        std::string &p = glob.incpaths[i];
         const char c = p.empty() ? 0 : *p.rbegin();
         if (c != '/' && c != '\\') {
             p.push_back('/');
@@ -60,7 +25,25 @@ void Opt::fix_conopt()
     }
 }
 
-void Opt::fix_mutopt()
+// This function should only change mutable option defaults (based on the global
+// options).
+static void fix_mutopt_defaults(const conopt_t &glob, mutopt_t &defaults)
+{
+    // For the Go backend, generic API is set by default, because "default" C
+    // API with pointers doesn't work (there is no pointer arithmetics in Go).
+    // To make the default Go API less restrictive, decorations are disabled.
+    if (glob.lang == LANG_GO) {
+        defaults.input_api = INPUT_CUSTOM;
+        defaults.decorate = false;
+    }
+}
+
+// This function should only change real mutable options (based on the global
+// options, default mutable options and default flags). User-defined options are
+// intentionally not passed to prevent accidental change, and default flags are
+// passed as read-only.
+static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
+    const mutdef_t &is_default, mutopt_t &real)
 {
     // some options either make no sense or must have fixed value
     // with current target: reset them to default
@@ -156,30 +139,6 @@ void Opt::fix_mutopt()
             break;
     }
 
-    if (real.bCaseInsensitive) {
-        real.bCaseInverted = defaults.bCaseInverted;
-    }
-
-    // individual "naked" options, unless explicitly set, inherit "decorate"
-    if (is_default.fill_naked)      real.fill_naked      = !real.decorate;
-    if (is_default.cond_get_naked)  real.cond_get_naked  = !real.decorate;
-    if (is_default.cond_set_naked)  real.cond_set_naked  = !real.decorate;
-    if (is_default.state_get_naked) real.state_get_naked = !real.decorate;
-    if (is_default.state_set_naked) real.state_set_naked = !real.decorate;
-
-    // individual template options, unless explicitly set, inherit "placeholder"
-    if (is_default.fill_arg)         real.fill_arg         = real.placeholder;
-    if (is_default.cond_set_arg)     real.cond_set_arg     = real.placeholder;
-    if (is_default.condDividerParam) real.condDividerParam = real.placeholder;
-    if (is_default.condGotoParam)    real.condGotoParam    = real.placeholder;
-    if (is_default.state_set_arg)    real.state_set_arg    = real.placeholder;
-    if (is_default.tags_expression)  real.tags_expression  = real.placeholder;
-    if (is_default.condGoto) {
-        real.condGoto = "goto " + real.condGotoParam + (glob.lang == LANG_C ? ";" : "");
-    }
-
-    if (!is_default.startlabel) real.startlabel_force = defaults.startlabel_force;
-
     // respect hierarchy
     if (!glob.cFlag) {
         real.yycondtype = defaults.yycondtype;
@@ -258,38 +217,52 @@ void Opt::fix_mutopt()
         real.fill_naked = defaults.fill_naked;
     }
 
-    // force individual options
+    // set implied options
     if (glob.target == TARGET_DOT) {
         real.iFlag = true;
     }
     else if (glob.target == TARGET_SKELETON) {
-        if (glob.lang != LANG_C) {
-            fatal("skeleton is not supported for non-C language backends");
-        }
         real.iFlag = true;
         real.input_api = INPUT_CUSTOM;
         real.indString = "    ";
         real.topIndent = 2;
     }
-    switch (real.encoding.type()) {
-        case Enc::UCS2:
-        case Enc::UTF16:
-        case Enc::UTF32:
-            real.sFlag = true;
-            break;
-        case Enc::ASCII:
-        case Enc::EBCDIC:
-        case Enc::UTF8:
-            break;
-    }
-    if (real.bFlag) {
+    if (real.bFlag || real.encoding.multibyte_cunit()) {
         real.sFlag = true;
     }
     if (real.gFlag) {
         real.bFlag = true;
         real.sFlag = true;
     }
+    if (real.bCaseInsensitive) {
+        real.bCaseInverted = defaults.bCaseInverted;
+    }
+    // individual "naked" options, unless explicitly set, inherit "decorate"
+    if (is_default.fill_naked)      real.fill_naked      = !real.decorate;
+    if (is_default.cond_get_naked)  real.cond_get_naked  = !real.decorate;
+    if (is_default.cond_set_naked)  real.cond_set_naked  = !real.decorate;
+    if (is_default.state_get_naked) real.state_get_naked = !real.decorate;
+    if (is_default.state_set_naked) real.state_set_naked = !real.decorate;
+    // individual template options, unless explicitly set, inherit "placeholder"
+    if (is_default.fill_arg)         real.fill_arg         = real.placeholder;
+    if (is_default.cond_set_arg)     real.cond_set_arg     = real.placeholder;
+    if (is_default.condDividerParam) real.condDividerParam = real.placeholder;
+    if (is_default.condGotoParam)    real.condGotoParam    = real.placeholder;
+    if (is_default.state_set_arg)    real.state_set_arg    = real.placeholder;
+    if (is_default.tags_expression)  real.tags_expression  = real.placeholder;
+    if (is_default.condGoto) {
+        real.condGoto = "goto " + real.condGotoParam + (glob.lang == LANG_C ? ";" : "");
+    }
+    // "startlabel" configuration exists in two variants: string and boolean,
+    // and the string one overrides the boolean one
+    if (!is_default.startlabel) {
+        real.startlabel_force = defaults.startlabel_force;
+    }
 
+    // errors
+    if (glob.target == TARGET_SKELETON && glob.lang != LANG_C) {
+        fatal("skeleton is not supported for non-C language backends");
+    }
     if (glob.lang == LANG_GO) {
         if (real.input_api == INPUT_DEFAULT) {
             fatal("default C API is not supported for the Go backend,"
@@ -326,18 +299,53 @@ void Opt::fix_mutopt()
     }
 }
 
+Opt::Opt(const conopt_t &globopts)
+    : source_file(NULL)
+    , glob(globopts)
+    , defaults()
+    , is_default()
+    , user()
+    , real()
+    , diverge(true)
+{}
+
+void Opt::fix_global_and_defaults()
+{
+    // Allow to modify only the global options.
+    fix_conopt(const_cast<conopt_t&>(glob));
+
+    // Allow to modify only the mutable option defaults (based on the global
+    // options).
+    fix_mutopt_defaults(glob, const_cast<mutopt_t&>(defaults));
+
+    // Apply new defaults to all mutable options except those that have been
+    // explicitly defined by the user.
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) \
+    if (is_default.name) user.name = defaults.name;
+    RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+    diverge = true;
+}
+
 void Opt::sync()
 {
     if (!diverge) return;
 
-    // copy user-defined options to real options
+    // Copy user-defined options to real options.
 #define MUTOPT1 MUTOPT
-#define MUTOPT(type, name, value) real.name = user.name;
+#define MUTOPT(type, name, value) \
+    real.name = user.name;
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
 
-    fix_mutopt();
+    // Fix the real mutable options (based on the global options, mutable option
+    // defaults and default flags), but do not change user-defined options or
+    // default flags.
+    fix_mutopt(glob, defaults, is_default, real);
+
     diverge = false;
 }
 
@@ -350,10 +358,9 @@ const opt_t *Opt::snapshot()
 void Opt::restore(const opt_t *opts)
 {
 #define MUTOPT1 MUTOPT
-#define MUTOPT(type, name, value) user.name = opts->name;
-    RE2C_MUTOPTS
-#undef MUTOPT
-#define MUTOPT(type, name, value) is_default.name = opts->is_default_##name;
+#define MUTOPT(type, name, value) \
+    user.name = opts->name; \
+    is_default.name = opts->is_default_##name;
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
@@ -370,7 +377,7 @@ void Opt::set_##name(const type &arg) \
     is_default.name = false; \
     diverge = true; \
 } \
-void Opt::set_default_##name() \
+void Opt::reset_##name() \
 { \
     user.name = defaults.name; \
     is_default.name = true; \
@@ -410,49 +417,48 @@ bool Opt::source (const char *s)
     }
 }
 
-void Opt::reset_startlabel()
+void Opt::reset_group_startlabel()
 {
-    set_default_startlabel();
-    set_default_startlabel_force();
+    reset_startlabel();
+    reset_startlabel_force();
 }
 
-void Opt::reset_mapCodeName ()
+void Opt::reset_group_api()
 {
-    // historically arranged set of names
-    // no actual reason why these particular options should be reset
-    set_cond_get(defaults.cond_get);
-    set_cond_set(defaults.cond_set);
-    set_fill(defaults.fill);
-    set_state_get(defaults.state_get);
-    set_state_set(defaults.state_set);
-    set_yybackup(defaults.yybackup);
-    set_yybackupctx(defaults.yybackupctx);
-    set_yycondtype(defaults.yycondtype);
-    set_yyctxmarker(defaults.yyctxmarker);
-    set_yyctype(defaults.yyctype);
-    set_yycursor(defaults.yycursor);
-    set_yydebug(defaults.yydebug);
-    set_yylessthan(defaults.yylessthan);
-    set_yylimit(defaults.yylimit);
-    set_yymarker(defaults.yymarker);
-    set_yypeek(defaults.yypeek);
-    set_yyrestore(defaults.yyrestore);
-    set_yyrestorectx(defaults.yyrestorectx);
-    set_yyrestoretag(defaults.yyrestoretag);
-    set_yystagn(defaults.yystagn);
-    set_yystagp(defaults.yystagp);
-    set_yystagpd(defaults.yystagpd);
-    set_yymtagn(defaults.yymtagn);
-    set_yymtagp(defaults.yymtagp);
-    set_yymtagpd(defaults.yymtagpd);
-    set_yyskip(defaults.yyskip);
-    set_yyfilllabel(defaults.yyfilllabel);
-    set_yynext(defaults.yynext);
-    set_yyaccept(defaults.yyaccept);
-    set_yybm(defaults.yybm);
-    set_yych(defaults.yych);
-    set_yyctable(defaults.yyctable);
-    set_yytarget(defaults.yytarget);
+    // API-related configurations
+    reset_cond_get();
+    reset_cond_set();
+    reset_fill();
+    reset_state_get();
+    reset_state_set();
+    reset_yybackup();
+    reset_yybackupctx();
+    reset_yycondtype();
+    reset_yyctxmarker();
+    reset_yyctype();
+    reset_yycursor();
+    reset_yydebug();
+    reset_yylessthan();
+    reset_yylimit();
+    reset_yymarker();
+    reset_yypeek();
+    reset_yyrestore();
+    reset_yyrestorectx();
+    reset_yyrestoretag();
+    reset_yystagn();
+    reset_yystagp();
+    reset_yystagpd();
+    reset_yymtagn();
+    reset_yymtagp();
+    reset_yymtagpd();
+    reset_yyskip();
+    reset_yyfilllabel();
+    reset_yynext();
+    reset_yyaccept();
+    reset_yybm();
+    reset_yych();
+    reset_yyctable();
+    reset_yytarget();
 }
 
 } // namespace re2c
