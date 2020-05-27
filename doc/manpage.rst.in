@@ -65,19 +65,19 @@ EOF handling
 ============
 .. include:: @top_srcdir@/doc/manual/eof/eof.rst_
 .. include:: @top_srcdir@/doc/manual/eof/01_sentinel.rst_
-.. include:: @top_srcdir@/doc/manual/eof/01_sentinel.re
+.. include:: @top_srcdir@/examples/eof/01_sentinel.re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/eof/02_bounds_checking.rst_
-.. include:: @top_srcdir@/doc/manual/eof/02_bounds_checking.re
+.. include:: @top_srcdir@/examples/eof/02_bounds_checking.re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/eof/03_eof_rule.rst_
-.. include:: @top_srcdir@/doc/manual/eof/03_eof_rule.re
+.. include:: @top_srcdir@/examples/eof/03_eof_rule.re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/eof/04_generic_api.rst_
-.. include:: @top_srcdir@/doc/manual/eof/04_generic_api.re
+.. include:: @top_srcdir@/examples/eof/04_generic_api.re
     :literal:
     :code: c
 
@@ -85,11 +85,11 @@ Buffer refilling
 ================
 .. include:: @top_srcdir@/doc/manual/fill/fill.rst_
 .. include:: @top_srcdir@/doc/manual/fill/01_fill.rst_
-.. include:: @top_srcdir@/doc/manual/fill/01_fill.re
+.. include:: @top_srcdir@/examples/fill/01_fill.re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/fill/02_fill.rst_
-.. include:: @top_srcdir@/doc/manual/fill/02_fill.re
+.. include:: @top_srcdir@/examples/fill/02_fill.re
     :literal:
     :code: c
 
@@ -105,29 +105,29 @@ Submatch extraction
 ===================
 .. include:: @top_srcdir@/doc/manual/submatch/submatch.rst_
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags.rst_
-.. include:: @top_srcdir@/doc/manual/submatch/stags.re
+.. include:: @top_srcdir@/examples/submatch/stags.re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_posix.rst_
-.. include:: @top_srcdir@/doc/manual/submatch/posix.re
+.. include:: @top_srcdir@/examples/submatch/posix.re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_mtags.rst_
-.. include:: @top_srcdir@/doc/manual/submatch/mtags.re
+.. include:: @top_srcdir@/examples/submatch/mtags.re
     :literal:
     :code: c
 
 Storable state
 ==============
 .. include:: @top_srcdir@/doc/manual/state/state.rst_
-.. include:: @top_srcdir@/doc/manual/state/push.re
+.. include:: @top_srcdir@/examples/state/push.f.re
     :literal:
     :code: c
 
 Reusable blocks
 ===============
 .. include:: @top_srcdir@/doc/manual/reuse/reuse.rst_
-.. include:: @top_srcdir@/doc/manual/reuse/reuse.re
+.. include:: @top_srcdir@/examples/reuse/reuse.r--input-encoding(utf8).re
     :literal:
     :code: c
 

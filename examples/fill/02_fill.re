@@ -6,7 +6,7 @@
 
 typedef struct {
     FILE *file;
-    char buf[SIZE + YYMAXFILL], *lim, *cur, *tok;
+    char buf[SIZE + YYMAXFILL], *lim, *cur, *mar, *tok;
     int eof;
 } Input;
 
@@ -22,6 +22,7 @@ static int fill(Input *in, size_t need)
     memmove(in->buf, in->tok, in->lim - in->tok);
     in->lim -= free;
     in->cur -= free;
+    in->mar -= free;
     in->tok -= free;
     in->lim += fread(in->lim, 1, free, in->file);
     if (in->lim < in->buf + SIZE) {
@@ -35,7 +36,7 @@ static int fill(Input *in, size_t need)
 static void init(Input *in, FILE *file)
 {
     in->file = file;
-    in->cur = in->tok = in->lim = in->buf + SIZE;
+    in->cur = in->mar = in->tok = in->lim = in->buf + SIZE;
     in->eof = 0;
     fill(in, 1);
 }
@@ -49,13 +50,14 @@ loop:
     /*!re2c
     re2c:define:YYCTYPE = char;
     re2c:define:YYCURSOR = in->cur;
+    re2c:define:YYMARKER = in->mar;
     re2c:define:YYLIMIT = in->lim;
 
-    *                         { return -1; }
-    [\x00]                    { return (YYMAXFILL == in->lim - in->tok) ? count : -1; }
-    [a-z]+                    { ++count; goto loop; }
-    ['] ([^'] | [\\]['])* ['] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { return -1; }
+    [\x00]                      { return (YYMAXFILL == in->lim - in->tok) ? count : -1; }
+    [a-z]+                      { ++count; goto loop; }
+    ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 }

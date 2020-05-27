@@ -21,11 +21,11 @@ loop:
     re2c:define:YYFILL:naked = 1;
     re2c:define:YYFILL = "goto error;";
 
-    *                         { goto error; }
-    [\x00]                    { if (YYCURSOR == YYLIMIT) goto end; else goto error; }
-    [a-z]+                    { ++count; goto loop; }
-    ['] ([^'] | [\\]['])* ['] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { goto error; }
+    [\x00]                      { if (YYCURSOR == YYLIMIT) goto end; else goto error; }
+    [a-z]+                      { ++count; goto loop; }
+    ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 error:

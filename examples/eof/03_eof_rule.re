@@ -5,6 +5,7 @@ static int lex(const char *str)
 {
     const char *YYCURSOR = str;
     const char *YYLIMIT = str + strlen(str);
+    const char *YYMARKER;
     int count = 0;
 
 loop:
@@ -13,11 +14,11 @@ loop:
     re2c:yyfill:enable = 0;
     re2c:eof = 0;
 
-    *                         { return -1; }
-    $                         { return count; }
-    [a-z]+                    { ++count; goto loop; }
-    ['] ([^'] | [\\]['])* ['] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { return -1; }
+    $                           { return count; }
+    [a-z]+                      { ++count; goto loop; }
+    ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 }

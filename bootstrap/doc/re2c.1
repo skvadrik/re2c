@@ -1220,11 +1220,11 @@ loop:
     re2c:define:YYFILL:naked = 1;
     re2c:define:YYFILL = "goto error;";
 
-    *                         { goto error; }
-    [\ex00]                    { if (YYCURSOR == YYLIMIT) goto end; else goto error; }
-    [a\-z]+                    { ++count; goto loop; }
-    [\(aq] ([^\(aq] | [\e\e][\(aq])* [\(aq] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { goto error; }
+    [\ex00]                      { if (YYCURSOR == YYLIMIT) goto end; else goto error; }
+    [a\-z]+                      { ++count; goto loop; }
+    [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 error:
@@ -1281,6 +1281,7 @@ static int lex(const char *str)
 {
     const char *YYCURSOR = str;
     const char *YYLIMIT = str + strlen(str);
+    const char *YYMARKER;
     int count = 0;
 
 loop:
@@ -1289,11 +1290,11 @@ loop:
     re2c:yyfill:enable = 0;
     re2c:eof = 0;
 
-    *                         { return \-1; }
-    $                         { return count; }
-    [a\-z]+                    { ++count; goto loop; }
-    [\(aq] ([^\(aq] | [\e\e][\(aq])* [\(aq] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { return \-1; }
+    $                           { return count; }
+    [a\-z]+                      { ++count; goto loop; }
+    [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 }
@@ -1355,11 +1356,11 @@ loop:
     re2c:yyfill:enable = 0;
     re2c:flags:input = custom;
 
-    *                         { return \-1; }
-    [\ex00]                    { return cur == lim ? count : \-1; }
-    [a\-z]+                    { ++count; goto loop; }
-    [\(aq] ([^\(aq] | [\e\e][\(aq])* [\(aq] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { return \-1; }
+    [\ex00]                      { return cur == lim ? count : \-1; }
+    [a\-z]+                      { ++count; goto loop; }
+    [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 }
@@ -1474,7 +1475,7 @@ Here is an example of a program that reads input file \fBinput.txt\fP in chunks 
 
 typedef struct {
     FILE *file;
-    char buf[SIZE + 1], *lim, *cur, *tok;
+    char buf[SIZE + 1], *lim, *cur, *mar, *tok;
     int eof;
 } Input;
 
@@ -1490,6 +1491,7 @@ static int fill(Input *in)
     memmove(in\->buf, in\->tok, in\->lim \- in\->tok);
     in\->lim \-= free;
     in\->cur \-= free;
+    in\->mar \-= free;
     in\->tok \-= free;
     in\->lim += fread(in\->lim, 1, free, in\->file);
     in\->lim[0] = 0;
@@ -1500,7 +1502,7 @@ static int fill(Input *in)
 static void init(Input *in, FILE *file)
 {
     in\->file = file;
-    in\->cur = in\->tok = in\->lim = in\->buf + SIZE;
+    in\->cur = in\->mar = in\->tok = in\->lim = in\->buf + SIZE;
     in\->eof = 0;
     fill(in);
 }
@@ -1514,14 +1516,15 @@ loop:
     /*!re2c
     re2c:define:YYCTYPE = char;
     re2c:define:YYCURSOR = in\->cur;
+    re2c:define:YYMARKER = in\->mar;
     re2c:define:YYLIMIT = in\->lim;
     re2c:eof = 0;
 
-    *                         { return \-1; }
-    $                         { return count; }
-    [a\-z]+                    { ++count; goto loop; }
-    [\(aq] ([^\(aq] | [\e\e][\(aq])* [\(aq] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { return \-1; }
+    $                           { return count; }
+    [a\-z]+                      { ++count; goto loop; }
+    [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 }
@@ -1599,7 +1602,7 @@ Here is an example of a program that reads input file \fBinput.txt\fP in chunks 
 
 typedef struct {
     FILE *file;
-    char buf[SIZE + YYMAXFILL], *lim, *cur, *tok;
+    char buf[SIZE + YYMAXFILL], *lim, *cur, *mar, *tok;
     int eof;
 } Input;
 
@@ -1615,6 +1618,7 @@ static int fill(Input *in, size_t need)
     memmove(in\->buf, in\->tok, in\->lim \- in\->tok);
     in\->lim \-= free;
     in\->cur \-= free;
+    in\->mar \-= free;
     in\->tok \-= free;
     in\->lim += fread(in\->lim, 1, free, in\->file);
     if (in\->lim < in\->buf + SIZE) {
@@ -1628,7 +1632,7 @@ static int fill(Input *in, size_t need)
 static void init(Input *in, FILE *file)
 {
     in\->file = file;
-    in\->cur = in\->tok = in\->lim = in\->buf + SIZE;
+    in\->cur = in\->mar = in\->tok = in\->lim = in\->buf + SIZE;
     in\->eof = 0;
     fill(in, 1);
 }
@@ -1642,13 +1646,14 @@ loop:
     /*!re2c
     re2c:define:YYCTYPE = char;
     re2c:define:YYCURSOR = in\->cur;
+    re2c:define:YYMARKER = in\->mar;
     re2c:define:YYLIMIT = in\->lim;
 
-    *                         { return \-1; }
-    [\ex00]                    { return (YYMAXFILL == in\->lim \- in\->tok) ? count : \-1; }
-    [a\-z]+                    { ++count; goto loop; }
-    [\(aq] ([^\(aq] | [\e\e][\(aq])* [\(aq] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { return \-1; }
+    [\ex00]                      { return (YYMAXFILL == in\->lim \- in\->tok) ? count : \-1; }
+    [a\-z]+                      { ++count; goto loop; }
+    [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 }

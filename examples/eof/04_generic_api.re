@@ -15,11 +15,11 @@ loop:
     re2c:yyfill:enable = 0;
     re2c:flags:input = custom;
 
-    *                         { return -1; }
-    [\x00]                    { return cur == lim ? count : -1; }
-    [a-z]+                    { ++count; goto loop; }
-    ['] ([^'] | [\\]['])* ['] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { return -1; }
+    [\x00]                      { return cur == lim ? count : -1; }
+    [a-z]+                      { ++count; goto loop; }
+    ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 }

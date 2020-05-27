@@ -5,7 +5,7 @@
 
 typedef struct {
     FILE *file;
-    char buf[SIZE + 1], *lim, *cur, *tok;
+    char buf[SIZE + 1], *lim, *cur, *mar, *tok;
     int eof;
 } Input;
 
@@ -21,6 +21,7 @@ static int fill(Input *in)
     memmove(in->buf, in->tok, in->lim - in->tok);
     in->lim -= free;
     in->cur -= free;
+    in->mar -= free;
     in->tok -= free;
     in->lim += fread(in->lim, 1, free, in->file);
     in->lim[0] = 0;
@@ -31,7 +32,7 @@ static int fill(Input *in)
 static void init(Input *in, FILE *file)
 {
     in->file = file;
-    in->cur = in->tok = in->lim = in->buf + SIZE;
+    in->cur = in->mar = in->tok = in->lim = in->buf + SIZE;
     in->eof = 0;
     fill(in);
 }
@@ -45,14 +46,15 @@ loop:
     /*!re2c
     re2c:define:YYCTYPE = char;
     re2c:define:YYCURSOR = in->cur;
+    re2c:define:YYMARKER = in->mar;
     re2c:define:YYLIMIT = in->lim;
     re2c:eof = 0;
 
-    *                         { return -1; }
-    $                         { return count; }
-    [a-z]+                    { ++count; goto loop; }
-    ['] ([^'] | [\\]['])* ['] { ++count; goto loop; }
-    [ ]+                      { goto loop; }
+    *                           { return -1; }
+    $                           { return count; }
+    [a-z]+                      { ++count; goto loop; }
+    ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
+    [ ]+                        { goto loop; }
 
     */
 }
