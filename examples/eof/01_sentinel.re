@@ -1,5 +1,6 @@
 #include <assert.h>
 
+// expect a null-terminated string
 static int lex(const char *YYCURSOR)
 {
     int count = 0;
@@ -20,6 +21,6 @@ int main()
 {
     assert(lex("") == 0);
     assert(lex("one two three") == 3);
-    assert(lex("one two 123?") == -1);
+    assert(lex("f0ur") == -1);
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -41,21 +42,21 @@ static void init(Input *in, FILE *file)
     fill(in, 1);
 }
 
-#define YYFILL(n) if (fill(in, n) != 0) return -1
 static int lex(Input *in)
 {
     int count = 0;
 loop:
     in->tok = in->cur;
     /*!re2c
-    re2c:define:YYCTYPE = char;
+    re2c:decorate = 0;
+    re2c:define:YYCTYPE  = char;
     re2c:define:YYCURSOR = in->cur;
     re2c:define:YYMARKER = in->mar;
-    re2c:define:YYLIMIT = in->lim;
+    re2c:define:YYLIMIT  = in->lim;
+    re2c:define:YYFILL   = "if (fill(in, @@) != 0) return -1;";
 
     *                           { return -1; }
     [\x00]                      { return (YYMAXFILL == in->lim - in->tok) ? count : -1; }
-    [a-z]+                      { ++count; goto loop; }
     ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
     [ ]+                        { goto loop; }
 
@@ -64,13 +65,24 @@ loop:
 
 int main()
 {
-    FILE *f = fopen("input.txt", "rb");
-    if (!f) return 1;
-
+    const char *fname = "input";
+    const char str[] = "'qu\0tes' 'are' 'fine: \\'' ";
+    FILE *f;
     Input in;
-    init(&in, f);
-    printf("count: %d\n", lex(&in));
 
+    // prepare input file: a few times the size of the buffer,
+    // containing strings with zeroes and escaped quotes
+    f = fopen(fname, "w");
+    for (int i = 0; i < SIZE; ++i) {
+        fwrite(str, 1, sizeof(str) - 1, f);
+    }
     fclose(f);
+
+    f = fopen(fname, "r");
+    init(&in, f);
+    assert(lex(&in) == SIZE * 3);
+    fclose(f);
+
+    remove(fname);
     return 0;
 }

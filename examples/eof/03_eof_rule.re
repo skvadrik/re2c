@@ -1,11 +1,9 @@
 #include <assert.h>
-#include <string.h>
 
-static int lex(const char *str)
+// expect a null-terminated string
+static int lex(const char *str, unsigned int len)
 {
-    const char *YYCURSOR = str;
-    const char *YYLIMIT = str + strlen(str);
-    const char *YYMARKER;
+    const char *YYCURSOR = str, *YYLIMIT = str + len, *YYMARKER;
     int count = 0;
 
 loop:
@@ -16,19 +14,17 @@ loop:
 
     *                           { return -1; }
     $                           { return count; }
-    [a-z]+                      { ++count; goto loop; }
     ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
     [ ]+                        { goto loop; }
 
     */
 }
 
+#define TEST(s, r) assert(lex(s, sizeof(s) - 1) == r)
 int main()
 {
-    assert(lex("") == 0);
-    assert(lex("one two three") == 3);
-    assert(lex("one two 123?") == -1);
-    assert(lex("one 'two' 'th\\'ree' '123?' ''") == 5);
-    assert(lex("one 'two' 'three") == -1);
+    TEST("", 0);
+    TEST("'qu\0tes' 'are' 'fine: \\'' ", 3);
+    TEST("'unterminated\\'", -1);
     return 0;
 }

@@ -77,7 +77,7 @@ EOF handling
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/eof/04_generic_api.rst_
-.. include:: @top_srcdir@/examples/eof/04_generic_api.re
+.. include:: @top_srcdir@/examples/eof/05_generic_api_eof_rule.re
     :literal:
     :code: c
 
@@ -105,15 +105,15 @@ Submatch extraction
 ===================
 .. include:: @top_srcdir@/doc/manual/submatch/submatch.rst_
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags.rst_
-.. include:: @top_srcdir@/examples/submatch/stags.re
+.. include:: @top_srcdir@/examples/submatch/01_stags.re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_posix.rst_
-.. include:: @top_srcdir@/examples/submatch/posix.re
+.. include:: @top_srcdir@/examples/submatch/03_posix.re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_mtags.rst_
-.. include:: @top_srcdir@/examples/submatch/mtags.re
+.. include:: @top_srcdir@/examples/submatch/02_mtags.re
     :literal:
     :code: c
 

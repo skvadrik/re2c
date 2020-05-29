@@ -7,150 +7,87 @@
 #define YYMAXFILL 1
 
 
-static int lex(const char *str)
+// expect YYMAXFILL-padded string
+static int lex(const char *str, unsigned int len)
 {
-    const size_t len = strlen(str);
-    char *buf = malloc(len + YYMAXFILL);
-    memcpy(buf, str, len);
-    memset(buf + len, 0, YYMAXFILL);
-
-    const char *YYCURSOR = buf;
-    const char *YYLIMIT = buf + len + YYMAXFILL;
+    const char *YYCURSOR = str, *YYLIMIT = str + len + YYMAXFILL;
     int count = 0;
 
 loop:
     
-#line 24 "eof/02_bounds_checking.c"
+#line 19 "eof/02_bounds_checking.c"
 {
 	char yych;
-	if (YYLIMIT <= YYCURSOR) goto error;
+	if (YYLIMIT <= YYCURSOR) return -1;
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:	goto yy2;
 	case ' ':	goto yy6;
 	case '\'':	goto yy9;
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy11;
 	default:	goto yy4;
 	}
 yy2:
 	++YYCURSOR;
-#line 25 "eof/02_bounds_checking.re"
-	{ if (YYCURSOR == YYLIMIT) goto end; else goto error; }
-#line 65 "eof/02_bounds_checking.c"
+#line 20 "eof/02_bounds_checking.re"
+	{ return YYCURSOR == YYLIMIT ? count : -1; }
+#line 34 "eof/02_bounds_checking.c"
 yy4:
 	++YYCURSOR;
-#line 24 "eof/02_bounds_checking.re"
-	{ goto error; }
-#line 70 "eof/02_bounds_checking.c"
+#line 19 "eof/02_bounds_checking.re"
+	{ return -1; }
+#line 39 "eof/02_bounds_checking.c"
 yy6:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) goto error;
+	if (YYLIMIT <= YYCURSOR) return -1;
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':	goto yy6;
 	default:	goto yy8;
 	}
 yy8:
-#line 28 "eof/02_bounds_checking.re"
+#line 22 "eof/02_bounds_checking.re"
 	{ goto loop; }
-#line 82 "eof/02_bounds_checking.c"
+#line 51 "eof/02_bounds_checking.c"
 yy9:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) goto error;
+	if (YYLIMIT <= YYCURSOR) return -1;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\'':	goto yy14;
-	case '\\':	goto yy16;
+	case '\'':	goto yy11;
+	case '\\':	goto yy13;
 	default:	goto yy9;
 	}
 yy11:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) goto error;
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy11;
-	default:	goto yy13;
-	}
+#line 21 "eof/02_bounds_checking.re"
+	{ ++count; goto loop; }
+#line 65 "eof/02_bounds_checking.c"
 yy13:
-#line 26 "eof/02_bounds_checking.re"
-	{ ++count; goto loop; }
-#line 128 "eof/02_bounds_checking.c"
-yy14:
 	++YYCURSOR;
-#line 27 "eof/02_bounds_checking.re"
-	{ ++count; goto loop; }
-#line 133 "eof/02_bounds_checking.c"
-yy16:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) goto error;
+	if (YYLIMIT <= YYCURSOR) return -1;
 	yych = *YYCURSOR;
 	goto yy9;
 }
-#line 30 "eof/02_bounds_checking.re"
+#line 24 "eof/02_bounds_checking.re"
 
-error:
-    count = -1;
-end:
-    free(buf);
-    return count;
 }
 
+// make a copy of the string with YYMAXFILL zeroes at the end
+static void test(const char *str, unsigned int len, int res)
+{
+    char *s = (char*) malloc(len + YYMAXFILL);
+    memcpy(s, str, len);
+    memset(s + len, 0, YYMAXFILL);
+    int r = lex(s, len);
+    free(s);
+    assert(r == res);
+}
+
+#define TEST(s, r) test(s, sizeof(s) - 1, r)
 int main()
 {
-    assert(lex("") == 0);
-    assert(lex("one two three") == 3);
-    assert(lex("one two 123?") == -1);
-    assert(lex("one 'two' 'th\\'ree' '123?' ''") == 5);
-    assert(lex("one 'two' 'three") == -1);
+    TEST("", 0);
+    TEST("'qu\0tes' 'are' 'fine: \\'' ", 3);
+    TEST("'unterminated\\'", -1);
     return 0;
 }
