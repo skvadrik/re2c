@@ -134,7 +134,7 @@ CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap)
     delete[] buffer;
 
     append(stmts, code_block(alc, block, CodeBlock::INDENTED));
-    append(stmts, code_text(alc, "};"));
+    append(stmts, code_stmt(alc, "}"));
 
     return stmts;
 }

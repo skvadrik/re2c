@@ -140,16 +140,25 @@ static CodeList *emit_accept_binary(Output &output, const DFA &dfa, const accept
     return stmts;
 }
 
-static const char *gen_restore(Scratchbuf &o, const opt_t *opts)
+static void gen_restore(Output &output, CodeList *stmts)
 {
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+    const char *text;
+
     if (opts->input_api == INPUT_DEFAULT) {
-        o.str(opts->yycursor).cstr(" = ").str(opts->yymarker);
+        text = o.str(opts->yycursor).cstr(" = ").str(opts->yymarker).flush();
+        append(stmts, code_stmt(alc, text));
+    }
+    else if (opts->decorate) {
+        text = o.str(opts->yyrestore).cstr(" ()").flush();
+        append(stmts, code_stmt(alc, text));
     }
     else {
-        o.str(opts->yyrestore);
-        if (opts->decorate) o.cstr(" ()");
+        text = o.str(opts->yyrestore).flush();
+        append(stmts, code_text(alc, text));
     }
-    return o.flush();
 }
 
 void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t &acc)
@@ -162,8 +171,7 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
 
     if (nacc == 0) return;
 
-    text = gen_restore(o, opts);
-    append(stmts, code_stmt(alc, text));
+    gen_restore(output, stmts);
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
@@ -195,7 +203,7 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
             append(table, code_text(alc, text));
         }
         append(block, code_block(alc, table, CodeBlock::INDENTED));
-        append(block, code_text(alc, "};"));
+        append(block, code_stmt(alc, "}"));
 
         text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yyaccept)
             .cstr("]").flush();
@@ -249,11 +257,14 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
             s = opts->cond_set;
             strrreplace(s, opts->cond_set_arg, opts->condEnumPrefix + cond);
             o.str(s);
-            if (!opts->cond_set_naked) {
-                o.cstr("(").str(opts->condEnumPrefix).str(cond).cstr(");");
+            if (opts->cond_set_naked) {
+                text = o.flush();
+                append(stmts, code_text(alc, text));
             }
-            text = o.flush();
-            append(stmts, code_text(alc, text));
+            else {
+                text = o.cstr("(").str(opts->condEnumPrefix).str(cond).cstr(")").flush();
+                append(stmts, code_stmt(alc, text));
+            }
         }
         if (!semact->autogen) {
             if (!dfa.setup.empty()) {
@@ -289,25 +300,33 @@ void gen_fill_noeof(Output &output, CodeList *stmts, size_t some)
     if (opts->fFlag) {
         strrreplace(s = opts->state_set, opts->state_set_arg, fill_index);
         o.str(s);
-        if (!opts->state_set_naked) {
-            o.cstr("(").u32(fill_index).cstr(");");
+        if (opts->state_set_naked) {
+            text = o.flush();
+            append(stmts, code_text(alc, text));
         }
-        text = o.flush();
-        append(stmts, code_text(alc, text));
+        else {
+            text = o.cstr("(").u32(fill_index).cstr(")").flush();
+            append(stmts, code_stmt(alc, text));
+        }
     }
 
     if (opts->fill_use) {
+        Code *yyfill;
+
         s = opts->fill;
         strrreplace(s, opts->fill_arg, some);
         o.str(s);
-        if (!opts->fill_naked) {
+        if (opts->fill_naked) {
+            text = o.flush();
+            yyfill = code_text(alc, text);
+        }
+        else {
             if (opts->fill_arg_use) {
                 o.cstr("(").u64(some).cstr(")");
             }
-            o.cstr(";");
+            text = o.flush();
+            yyfill = code_stmt(alc, text);
         }
-        text = o.flush();
-        Code *yyfill = code_text(alc, text);
 
         if (opts->fill_check) {
             text = gen_lessthan(o, opts, some);
@@ -410,23 +429,29 @@ void gen_on_eof(Output &output, CodeList *stmts, const DFA &dfa, const State *fr
         std::string s = opts->state_set;
         strrreplace(s, opts->state_set_arg, fillidx);
         o.str(s);
-        if (!opts->state_set_naked) {
-            o.cstr("(").u32(fillidx).cstr(");");
+        if (opts->state_set_naked) {
+            text = o.flush();
+            append(refill, code_text(alc, text));
         }
-        text = o.flush();
-        append(refill, code_text(alc, text));
+        else {
+            text = o.cstr("(").u32(fillidx).cstr(")").flush();
+            append(refill, code_stmt(alc, text));
+        }
 
         // YYFILL invocation
         // With EOF rule there is no placeholder argument to replace.
         o.str(opts->fill);
-        if (!opts->fill_naked) {
+        if (opts->fill_naked) {
+            text = o.flush();
+            append(refill, code_text(alc, text));
+        }
+        else {
             if (opts->fill_arg_use) {
                 o.cstr("()");
             }
-            o.cstr(";");
+            text = o.flush();
+            append(refill, code_stmt(alc, text));
         }
-        text = o.flush();
-        append(refill, code_text(alc, text));
     }
     else if (opts->fill_use) {
         // YYFILL invocation
@@ -644,7 +669,8 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             }
         }
         text = o.flush();
-        append(stmts, code_stmt(alc, text));
+        append(stmts, generic && !opts->decorate
+            ? code_text(alc, text) : code_stmt(alc, text));
     }
 
     // fixed tags
@@ -684,7 +710,8 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             }
         }
         text = o.flush();
-        append(stmts, code_stmt(alc, text));
+        append(stmts, generic && !opts->decorate
+            ? code_text(alc, text) : code_stmt(alc, text));
     }
 }
 

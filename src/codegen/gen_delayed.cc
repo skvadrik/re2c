@@ -304,7 +304,7 @@ static void gen_cond_table(Scratchbuf &o, code_alc_t &alc, Code *code,
     }
     append(stmts, code_block(alc, block, CodeBlock::INDENTED));
 
-    append(stmts, code_text(alc, "};"));
+    append(stmts, code_stmt(alc, "}"));
 
     code->kind = Code::BLOCK;
     code->block.stmts = stmts;

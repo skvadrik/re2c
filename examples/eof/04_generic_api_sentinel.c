@@ -48,17 +48,17 @@ loop:
 	default:	goto yy4;
 	}
 yy2:
-	++cur;;
+	++cur;
 #line 22 "eof/04_generic_api_sentinel.re"
 	{ return count; }
 #line 55 "eof/04_generic_api_sentinel.c"
 yy4:
-	++cur;;
+	++cur;
 #line 21 "eof/04_generic_api_sentinel.re"
 	{ return -1; }
 #line 60 "eof/04_generic_api_sentinel.c"
 yy6:
-	++cur;;
+	++cur;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
 	case ' ':	goto yy6;
@@ -69,7 +69,7 @@ yy8:
 	{ goto loop; }
 #line 71 "eof/04_generic_api_sentinel.c"
 yy9:
-	++cur;;
+	++cur;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
 	case 'a':

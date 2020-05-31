@@ -318,9 +318,9 @@ static inline void yych_conv(std::ostream &os, const opt_t *opts)
     }
 }
 
-static inline void render_stmt_end(RenderContext &rctx)
+static inline void render_stmt_end(RenderContext &rctx, bool semi)
 {
-    if (rctx.opts->lang != LANG_GO) rctx.os << ";";
+    if (semi && rctx.opts->lang != LANG_GO) rctx.os << ";";
     rctx.os << std::endl;
     ++rctx.line;
 }
@@ -339,7 +339,7 @@ static void render_peek(RenderContext &rctx)
     else {
         os << "*" << opts->yycursor;
     }
-    render_stmt_end(rctx);
+    render_stmt_end(rctx, true);
 }
 
 static void render_skip(RenderContext &rctx)
@@ -351,11 +351,12 @@ static void render_skip(RenderContext &rctx)
     if (opts->input_api == INPUT_CUSTOM) {
         os << opts->yyskip;
         if (opts->decorate) os << " ()";
+        render_stmt_end(rctx, opts->decorate);
     }
     else {
         os << "++" << opts->yycursor;
+        render_stmt_end(rctx, true);
     }
-    render_stmt_end(rctx);
 }
 
 static void render_backup(RenderContext &rctx)
@@ -367,11 +368,12 @@ static void render_backup(RenderContext &rctx)
     if (opts->input_api == INPUT_CUSTOM) {
         os << opts->yybackup;
         if (opts->decorate) os << " ()";
+        render_stmt_end(rctx, opts->decorate);
     }
     else {
         os << opts->yymarker << " = " << opts->yycursor;
+        render_stmt_end(rctx, true);
     }
-    render_stmt_end(rctx);
 }
 
 static void render_skip_peek(RenderContext &rctx)
@@ -383,7 +385,7 @@ static void render_skip_peek(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*++" << opts->yycursor;
-    render_stmt_end(rctx);
+    render_stmt_end(rctx, true);
 }
 
 static void render_peek_skip(RenderContext &rctx)
@@ -395,7 +397,7 @@ static void render_peek_skip(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*" << opts->yycursor << "++";
-    render_stmt_end(rctx);
+    render_stmt_end(rctx, true);
 }
 
 static void render_skip_backup(RenderContext &rctx)
@@ -405,7 +407,7 @@ static void render_skip_backup(RenderContext &rctx)
     DASSERT(opts->input_api == INPUT_DEFAULT);
     rctx.os << indent(rctx.ind, opts->indString) << opts->yymarker << " = ++"
         << opts->yycursor;
-    render_stmt_end(rctx);
+    render_stmt_end(rctx, true);
 }
 
 static void render_backup_skip(RenderContext &rctx)
@@ -415,7 +417,7 @@ static void render_backup_skip(RenderContext &rctx)
     DASSERT(opts->input_api == INPUT_DEFAULT);
     rctx.os << indent(rctx.ind, opts->indString) << opts->yymarker << " = "
         << opts->yycursor << "++";
-    render_stmt_end(rctx);
+    render_stmt_end(rctx, true);
 }
 
 static void render_backup_peek(RenderContext &rctx)
@@ -427,7 +429,7 @@ static void render_backup_peek(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*(" << opts->yymarker << " = " << opts->yycursor << ")";
-    render_stmt_end(rctx);
+    render_stmt_end(rctx, true);
 }
 
 static void render_skip_backup_peek(RenderContext &rctx)
@@ -439,7 +441,7 @@ static void render_skip_backup_peek(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*(" << opts->yymarker << " = ++" << opts->yycursor << ")";
-    render_stmt_end(rctx);
+    render_stmt_end(rctx, true);
 }
 
 static void render_backup_peek_skip(RenderContext &rctx)
@@ -451,7 +453,7 @@ static void render_backup_peek_skip(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*(" << opts->yymarker << " = " << opts->yycursor << "++)";
-    render_stmt_end(rctx);
+    render_stmt_end(rctx, true);
 }
 
 void render(RenderContext &rctx, const Code *code)
@@ -483,7 +485,7 @@ void render(RenderContext &rctx, const Code *code)
         case Code::STMT:
             os << indent(ind, opts->indString) << code->text;
             line += count_lines_text(code->text);
-            render_stmt_end(rctx);
+            render_stmt_end(rctx, true);
             break;
         case Code::TEXT:
             os << indent(ind, opts->indString) << code->text << std::endl;

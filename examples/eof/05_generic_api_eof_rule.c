@@ -24,13 +24,13 @@ loop:
 		goto yy2;
 	}
 yy2:
-	++cur;;
+	++cur;
 yy3:
 #line 24 "eof/05_generic_api_eof_rule.re"
 	{ return -1; }
 #line 32 "eof/05_generic_api_eof_rule.c"
 yy4:
-	++cur;;
+	++cur;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
 	case ' ':	goto yy4;
@@ -41,13 +41,13 @@ yy6:
 	{ goto loop; }
 #line 43 "eof/05_generic_api_eof_rule.c"
 yy7:
-	++cur;;
-	mar = cur;;
+	++cur;
+	mar = cur;
 	yych = cur < lim ? *cur : 0;
 	if (yych >= 0x01) goto yy9;
 	if (cur >= lim) goto yy3;
 yy8:
-	++cur;;
+	++cur;
 	yych = cur < lim ? *cur : 0;
 yy9:
 	switch (yych) {
@@ -58,12 +58,12 @@ yy9:
 		goto yy8;
 	}
 yy10:
-	++cur;;
+	++cur;
 #line 26 "eof/05_generic_api_eof_rule.re"
 	{ ++count; goto loop; }
 #line 65 "eof/05_generic_api_eof_rule.c"
 yy12:
-	++cur;;
+	++cur;
 	yych = cur < lim ? *cur : 0;
 	if (yych <= 0x00) {
 		if (cur >= lim) goto yy13;
@@ -71,7 +71,7 @@ yy12:
 	}
 	goto yy8;
 yy13:
-	cur = mar;;
+	cur = mar;
 	goto yy3;
 yyeofrule1:
 #line 25 "eof/05_generic_api_eof_rule.re"

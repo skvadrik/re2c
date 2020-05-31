@@ -15,7 +15,7 @@ loop:
         re2c:define:YYPEEK    = "in.peek()";
         re2c:define:YYSKIP    = "do { in.ignore(); if (in.eof()) return; } while(0);";
         re2c:define:YYBACKUP  = "mar = in.tellg();";
-        re2c:define:YYRESTORE = "in.seekg(mar)";
+        re2c:define:YYRESTORE = "in.seekg(mar);";
 
         *      { out.put(yych); goto loop; }
         "\r\n" { out.put('\n'); goto loop; }

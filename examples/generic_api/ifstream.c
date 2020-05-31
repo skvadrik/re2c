@@ -19,20 +19,20 @@ loop:
 	default:	goto yy2;
 	}
 yy2:
-	do { in.ignore(); if (in.eof()) return; } while(0);;
+	do { in.ignore(); if (in.eof()) return; } while(0);
 yy3:
 #line 20 "generic_api/ifstream.re"
 	{ out.put(yych); goto loop; }
 #line 27 "generic_api/ifstream.c"
 yy4:
-	do { in.ignore(); if (in.eof()) return; } while(0);;
+	do { in.ignore(); if (in.eof()) return; } while(0);
 	yych = in.peek();
 	switch (yych) {
 	case '\n':	goto yy5;
 	default:	goto yy3;
 	}
 yy5:
-	do { in.ignore(); if (in.eof()) return; } while(0);;
+	do { in.ignore(); if (in.eof()) return; } while(0);
 #line 21 "generic_api/ifstream.re"
 	{ out.put('\n'); goto loop; }
 #line 39 "generic_api/ifstream.c"

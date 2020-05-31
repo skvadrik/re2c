@@ -115,7 +115,7 @@ func Lex(in *Input) (int, int) {
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
-	};
+	}
 	switch (in.state) {
 	default:
 		goto yy0

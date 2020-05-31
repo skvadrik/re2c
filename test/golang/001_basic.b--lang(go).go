@@ -42,7 +42,7 @@ func Lex(str string) int {
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
-	};
+	}
 	yych = str[cursor]
 	if (yych <= '/') {
 		goto yy2
