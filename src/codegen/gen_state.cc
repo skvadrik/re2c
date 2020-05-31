@@ -285,6 +285,26 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
     }
 }
 
+static void gen_yysetstate(Output &output, CodeList *stmts, uint32_t fillidx)
+{
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+    const char *text;
+
+    std::string s = opts->state_set;
+    strrreplace(s, opts->state_set_arg, fillidx);
+    o.str(s);
+    if (opts->state_set_naked) {
+        text = o.flush();
+        append(stmts, code_text(alc, text));
+    }
+    else {
+        text = o.cstr("(").u32(fillidx).cstr(")").flush();
+        append(stmts, code_stmt(alc, text));
+    }
+}
+
 void gen_fill_noeof(Output &output, CodeList *stmts, size_t some)
 {
     const opt_t *opts = output.block().opts;
@@ -298,16 +318,7 @@ void gen_fill_noeof(Output &output, CodeList *stmts, size_t some)
     const char *text;
 
     if (opts->fFlag) {
-        strrreplace(s = opts->state_set, opts->state_set_arg, fill_index);
-        o.str(s);
-        if (opts->state_set_naked) {
-            text = o.flush();
-            append(stmts, code_text(alc, text));
-        }
-        else {
-            text = o.cstr("(").u32(fill_index).cstr(")").flush();
-            append(stmts, code_stmt(alc, text));
-        }
+        gen_yysetstate(output, stmts, fill_index);
     }
 
     if (opts->fill_use) {
@@ -425,18 +436,7 @@ void gen_on_eof(Output &output, CodeList *stmts, const DFA &dfa, const State *fr
 
     // check if refill is needed and invoke YYFILL()
     if (opts->fFlag) {
-        // YYSETSTATE
-        std::string s = opts->state_set;
-        strrreplace(s, opts->state_set_arg, fillidx);
-        o.str(s);
-        if (opts->state_set_naked) {
-            text = o.flush();
-            append(refill, code_text(alc, text));
-        }
-        else {
-            text = o.cstr("(").u32(fillidx).cstr(")").flush();
-            append(refill, code_stmt(alc, text));
-        }
+        gen_yysetstate(output, refill, fillidx);
 
         // YYFILL invocation
         // With EOF rule there is no placeholder argument to replace.
