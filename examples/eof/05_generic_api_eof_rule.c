@@ -34,15 +34,12 @@ yy4:
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
 	case ' ':	goto yy4;
-	default:
-		if (cur >= lim) {
-		}
-		goto yy6;
+	default:	goto yy6;
 	}
 yy6:
 #line 27 "eof/05_generic_api_eof_rule.re"
 	{ goto loop; }
-#line 46 "eof/05_generic_api_eof_rule.c"
+#line 43 "eof/05_generic_api_eof_rule.c"
 yy7:
 	++cur;;
 	mar = cur;;
@@ -64,7 +61,7 @@ yy10:
 	++cur;;
 #line 26 "eof/05_generic_api_eof_rule.re"
 	{ ++count; goto loop; }
-#line 68 "eof/05_generic_api_eof_rule.c"
+#line 65 "eof/05_generic_api_eof_rule.c"
 yy12:
 	++cur;;
 	yych = cur < lim ? *cur : 0;
@@ -79,7 +76,7 @@ yy13:
 yyeofrule1:
 #line 25 "eof/05_generic_api_eof_rule.re"
 	{ return count; }
-#line 83 "eof/05_generic_api_eof_rule.c"
+#line 80 "eof/05_generic_api_eof_rule.c"
 }
 #line 29 "eof/05_generic_api_eof_rule.re"
 

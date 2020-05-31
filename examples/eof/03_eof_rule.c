@@ -31,15 +31,12 @@ yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':	goto yy4;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-		}
-		goto yy6;
+	default:	goto yy6;
 	}
 yy6:
 #line 18 "eof/03_eof_rule.re"
 	{ goto loop; }
-#line 43 "eof/03_eof_rule.c"
+#line 40 "eof/03_eof_rule.c"
 yy7:
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych >= 0x01) goto yy9;
@@ -58,7 +55,7 @@ yy10:
 	++YYCURSOR;
 #line 17 "eof/03_eof_rule.re"
 	{ ++count; goto loop; }
-#line 62 "eof/03_eof_rule.c"
+#line 59 "eof/03_eof_rule.c"
 yy12:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
@@ -72,7 +69,7 @@ yy13:
 yyeofrule1:
 #line 16 "eof/03_eof_rule.re"
 	{ return count; }
-#line 76 "eof/03_eof_rule.c"
+#line 73 "eof/03_eof_rule.c"
 }
 #line 20 "eof/03_eof_rule.re"
 

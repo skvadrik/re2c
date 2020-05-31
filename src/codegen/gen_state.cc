@@ -25,10 +25,13 @@ namespace re2c {
 
 static void gen_fill_noeof(Output &output, CodeList *stmts, size_t some);
 static void gen_rescan_label(Output &output, CodeList *stmts, const State *s);
-static void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t &acc);
+static void emit_accept(Output &output, CodeList *stmts, const DFA &dfa,
+    const accept_t &acc);
 static void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx);
-static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &rule);
-static Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State *to);
+static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa,
+    const Rule &rule);
+static void gen_on_eof(Output &output, CodeList *stmts, const DFA &dfa,
+    const State *from, const State *to);
 static bool endstate(const State *s);
 
 static const char *gen_yyfill_label(Output &output, uint32_t index)
@@ -349,7 +352,7 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
     const char *text;
 
     if (jump.eof) {
-        append(stmts, gen_on_eof(output, dfa, from, jump.to));
+        gen_on_eof(output, stmts, dfa, from, jump.to);
     }
 
     if (jump.skip && !opts->lookahead) {
@@ -374,7 +377,8 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
     }
 }
 
-Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State *to)
+void gen_on_eof(Output &output, CodeList *stmts, const DFA &dfa, const State *from,
+    const State *to)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -496,7 +500,9 @@ Code *gen_on_eof(Output &output, const DFA &dfa, const State *from, const State 
         output.block().fill_goto.push_back(fill_goto);
     }
 
-    return code_if_then_else(alc, if_refill, refill, NULL);
+    if (refill->head) {
+        append(stmts, code_if_then_else(alc, if_refill, refill, NULL));
+    }
 }
 
 void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t tcid,
