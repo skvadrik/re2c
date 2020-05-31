@@ -220,42 +220,41 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/directives/directives.rst_ \
 	doc/manual/dot/dot.rst_ \
 	doc/manual/encodings/encodings.rst_ \
-	doc/manual/eof/01_sentinel.re \
 	doc/manual/eof/01_sentinel.rst_ \
-	doc/manual/eof/02_bounds_checking.re \
 	doc/manual/eof/02_bounds_checking.rst_ \
-	doc/manual/eof/03_eof_rule.re \
 	doc/manual/eof/03_eof_rule.rst_ \
-	doc/manual/eof/04_generic_api.re \
 	doc/manual/eof/04_generic_api.rst_ \
 	doc/manual/eof/eof.rst_ \
-	doc/manual/fill/01_fill.re \
 	doc/manual/fill/01_fill.rst_ \
-	doc/manual/fill/02_fill.re \
 	doc/manual/fill/02_fill.rst_ \
 	doc/manual/fill/fill.rst_ \
-	doc/manual/fill/input.txt \
 	doc/manual/headers/headers.rst_ \
 	doc/manual/includes/includes.rst_ \
 	doc/manual/options/debug.rst_ \
 	doc/manual/options/internal.rst_ \
 	doc/manual/options/options.rst_ \
 	doc/manual/regexps/regular_expressions.rst_ \
-	doc/manual/reuse/reuse.re \
 	doc/manual/reuse/reuse.rst_ \
 	doc/manual/skeleton/skeleton.rst_ \
-	doc/manual/state/push.re \
 	doc/manual/state/state.rst_ \
-	doc/manual/submatch/mtags.re \
-	doc/manual/submatch/posix.re \
-	doc/manual/submatch/stags.re \
 	doc/manual/submatch/submatch_example_mtags.rst_ \
 	doc/manual/submatch/submatch_example_posix.rst_ \
 	doc/manual/submatch/submatch_example_stags.rst_ \
 	doc/manual/submatch/submatch.rst_ \
 	doc/manual/syntax/syntax.rst_ \
 	doc/manual/warnings/warnings_general.rst_ \
-	doc/manual/warnings/warnings_list.rst_
+	doc/manual/warnings/warnings_list.rst_ \
+	examples/eof/01_sentinel.re \
+	examples/eof/02_bounds_checking.re \
+	examples/eof/03_eof_rule.re \
+	examples/eof/05_generic_api_eof_rule.re \
+	examples/fill/01_fill.re \
+	examples/fill/02_fill.re \
+	examples/reuse/reuse.r--input-encoding(utf8).re \
+	examples/state/push.f.re \
+	examples/submatch/01_stags.re \
+	examples/submatch/02_mtags.re \
+	examples/submatch/03_posix.re
 
 DOC = doc/re2c.1
 man_MANS = $(DOC)
