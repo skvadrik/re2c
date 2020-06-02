@@ -23,18 +23,16 @@
 
 namespace re2c {
 
-static void gen_fill_noeof(Output &output, CodeList *stmts, size_t some);
-static void gen_rescan_label(Output &output, CodeList *stmts, const State *s);
+static void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa,
+    const State *s);
 static void emit_accept(Output &output, CodeList *stmts, const DFA &dfa,
     const accept_t &acc);
 static void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx);
 static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa,
     const Rule &rule);
-static void gen_on_eof(Output &output, CodeList *stmts, const DFA &dfa,
-    const State *from, const State *to);
 static bool endstate(const State *s);
 
-static const char *gen_yyfill_label(Output &output, uint32_t index)
+static const char *gen_fill_label(Output &output, uint32_t index)
 {
     const opt_t *opts = output.block().opts;
     Scratchbuf &o = output.scratchbuf;
@@ -59,8 +57,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
         if (!opts->eager_skip) {
             append(stmts, code_skip(alc));
         }
-        gen_fill_noeof(output, stmts, s->fill);
-        gen_rescan_label(output, stmts, s);
+        gen_fill_and_label(output, stmts, dfa, s);
         if (!endstate(s)) {
             append(stmts, code_peek(alc));
         }
@@ -83,11 +80,10 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
                 .cstr(", *").str(opts->yycursor).cstr(")").flush();
             append(stmts, code_stmt(alc, text));
         }
-        gen_fill_noeof(output, stmts, s->fill);
+        gen_fill_and_label(output, stmts, dfa, s);
         if (backup) {
             append(stmts, code_backup(alc));
         }
-        gen_rescan_label(output, stmts, s);
         if (!endstate(s)) {
             append(stmts, code_peek(alc));
         }
@@ -102,8 +98,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
             append(stmts, code_skip(alc));
         }
         append(stmts, code_backup(alc));
-        gen_fill_noeof(output, stmts, s->fill);
-        gen_rescan_label(output, stmts, s);
+        gen_fill_and_label(output, stmts, dfa, s);
         append(stmts, code_peek(alc));
         break;
     case Action::MOVE:
@@ -285,7 +280,7 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
     }
 }
 
-static void gen_yysetstate(Output &output, CodeList *stmts, uint32_t fillidx)
+static void gen_setstate(Output &output, CodeList *stmts, uint32_t fillidx)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -305,115 +300,12 @@ static void gen_yysetstate(Output &output, CodeList *stmts, uint32_t fillidx)
     }
 }
 
-void gen_fill_noeof(Output &output, CodeList *stmts, size_t some)
-{
-    const opt_t *opts = output.block().opts;
-
-    if (opts->eof != NOEOF || some == 0) return;
-
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    const uint32_t fill_index = opts->fFlag ? output.block().fill_index++ : 0;
-    std::string s;
-    const char *text;
-
-    if (opts->fFlag) {
-        gen_yysetstate(output, stmts, fill_index);
-    }
-
-    if (opts->fill_use) {
-        Code *yyfill;
-
-        s = opts->fill;
-        strrreplace(s, opts->fill_arg, some);
-        o.str(s);
-        if (opts->fill_naked) {
-            text = o.flush();
-            yyfill = code_text(alc, text);
-        }
-        else {
-            if (opts->fill_arg_use) {
-                o.cstr("(").u64(some).cstr(")");
-            }
-            text = o.flush();
-            yyfill = code_stmt(alc, text);
-        }
-
-        if (opts->fill_check) {
-            text = gen_lessthan(o, opts, some);
-            CodeList *if_then = code_list(alc);
-            append(if_then, yyfill);
-            append(stmts, code_if_then_else(alc, text, if_then, NULL));
-        }
-        else {
-            append(stmts, yyfill);
-        }
-    }
-
-    if (opts->fFlag) {
-        const char *flabel = gen_yyfill_label(output, fill_index);
-
-        // YYFILL label
-        append(stmts, code_slabel(alc, flabel));
-
-        // Save transition to YYFILL label from the initial state dispatch.
-        CodeList *goto_flabel = code_list(alc);
-        text = o.cstr("goto ").cstr(flabel).flush();
-        append(goto_flabel, code_stmt(alc, text));
-        output.block().fill_goto.push_back(goto_flabel);
-    }
-}
-
-void gen_rescan_label(Output &output, CodeList *stmts, const State *s)
-{
-    const opt_t *opts = output.block().opts;
-    if (opts->eof != NOEOF && opts->fill_use && !endstate(s)) {
-        const uint32_t fillidx = output.block().fill_index++;
-        append(stmts, code_slabel(output.allocator, gen_yyfill_label(output, fillidx)));
-    }
-}
-
-void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from,
-    const CodeJump &jump)
+static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
+    const State *from, const State *to)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const char *text;
-
-    if (jump.eof) {
-        gen_on_eof(output, stmts, dfa, from, jump.to);
-    }
-
-    if (jump.skip && !opts->lookahead) {
-        append(stmts, code_skip(alc));
-    }
-
-    gen_settags(output, stmts, dfa, jump.tags, false /* delayed */);
-
-    if (jump.skip && opts->lookahead) {
-        append(stmts, code_skip(alc));
-    }
-
-    if (!jump.elide) {
-        jump.to->label->used = true;
-        text = o.cstr("goto ").str(opts->labelPrefix).label(*jump.to->label).flush();
-        append(stmts, code_stmt(alc, text));
-    }
-    else {
-        // Goto can be elided, because control flow "falls through" to the
-        // correct DFA state. This usually happens for the last statement in a
-        // sequence of "linear if" statements.
-    }
-}
-
-void gen_on_eof(Output &output, CodeList *stmts, const DFA &dfa, const State *from,
-    const State *to)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    const uint32_t fillidx = output.block().fill_index - 1;
     const char *text;
 
     const bool final = from->rule != Rule::NONE;
@@ -426,54 +318,6 @@ void gen_on_eof(Output &output, CodeList *stmts, const DFA &dfa, const State *fr
         falltags = TCID0;
     }
 
-    // absence of check doesn't make sense with EOF rule
-    DASSERT(opts->fill_check);
-
-    // check for the end of input
-    const char *if_refill = gen_lessthan(o, opts, 1);
-
-    CodeList *refill = code_list(alc);
-
-    // check if refill is needed and invoke YYFILL()
-    if (opts->fFlag) {
-        gen_yysetstate(output, refill, fillidx);
-
-        // YYFILL invocation
-        // With EOF rule there is no placeholder argument to replace.
-        o.str(opts->fill);
-        if (opts->fill_naked) {
-            text = o.flush();
-            append(refill, code_text(alc, text));
-        }
-        else {
-            if (opts->fill_arg_use) {
-                o.cstr("()");
-            }
-            text = o.flush();
-            append(refill, code_stmt(alc, text));
-        }
-    }
-    else if (opts->fill_use) {
-        // YYFILL invocation
-        o.str(opts->fill);
-        if (!opts->fill_naked) {
-            if (opts->fill_arg_use) {
-                o.cstr(" ()");
-            }
-            o.cstr(" == 0");
-        }
-        const char *if_yyfill = o.flush();
-
-        // go to retry label (on YYFILL success)
-        CodeList *rescan = code_list(alc);
-        const char *flabel = gen_yyfill_label(output, fillidx);
-        text = o.cstr("goto ").cstr(flabel).flush();
-        append(rescan, code_stmt(alc, text));
-
-        append(refill, code_if_then_else(alc, if_yyfill, rescan, NULL));
-    }
-
-    // refill failed
     CodeList *fallback_trans = code_list(alc);
     if (from->action.type == Action::INITIAL) {
         // initial state: if accepting, go to eof state, else go to default state
@@ -502,31 +346,150 @@ void gen_on_eof(Output &output, CodeList *stmts, const DFA &dfa, const State *fr
         // identical transition. Tags and skip (if present) are elided as well,
         // because the next transition covers them.
     }
-    if (!opts->fFlag) {
-        append(refill, fallback_trans);
+    return fallback_trans;
+}
+
+static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
+    const State *from, const State *to)
+{
+    const opt_t *opts = output.block().opts;
+    const bool eof_rule = opts->eof != NOEOF;
+    const uint32_t fillidx = output.block().fill_index - 1;
+    const size_t need = eof_rule ? 1 : from->fill;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+    const char *text;
+
+    // Transition to YYFILL label from the initial state dispatch.
+    CodeList *goto_fill = code_list(alc);
+    const char *flabel = gen_fill_label(output, fillidx);
+    text = o.cstr("goto ").cstr(flabel).flush();
+    append(goto_fill, code_stmt(alc, text));
+
+    CodeList *fill = code_list(alc);
+
+    if (opts->fFlag) {
+        gen_setstate(output, eof_rule ? fill : stmts, fillidx);
+    }
+
+    if (opts->fill_use) {
+        std::string fillstr = opts->fill;
+        if (!eof_rule) {
+            // With EOF rule there is no YYFILL argument.
+            strrreplace(fillstr, opts->fill_arg, need);
+        }
+        if (!eof_rule || opts->fFlag) {
+            o.str(fillstr);
+            if (opts->fill_naked) {
+                text = o.flush();
+                append(fill, code_text(alc, text));
+            }
+            else {
+                if (opts->fill_arg_use) {
+                    o.cstr("(");
+                    if (!eof_rule) o.u64(need);
+                    o.cstr(")");
+                }
+                text = o.flush();
+                append(fill, code_stmt(alc, text));
+            }
+        }
+        else if (eof_rule) {
+            o.str(fillstr);
+            if (!opts->fill_naked) {
+                if (opts->fill_arg_use) {
+                    o.cstr(" ()");
+                }
+                o.cstr(" == 0");
+            }
+            text = o.flush();
+            append(fill, code_if_then_else(alc, text, goto_fill, NULL));
+        }
+    }
+
+    if (eof_rule) {
+        CodeList *fallback = gen_fill_falllback(output, dfa, from, to);
+        if (opts->fFlag) {
+            // With storable state and EOF rule the initial state dispatch needs to
+            // handle YYFILL failure: if there is still not enough input, it must
+            // follow the fallback transition for the state that triggered YYFILL.
+            // Fallback transition is inlined in the state dispatch (as opposed to
+            // jumping to the corresponding DFA transition) because Go backend does
+            // not support jumping in the middle of a nested block.
+            text = gen_lessthan(o, opts, 1);
+            prepend(goto_fill, code_if_then_else(alc, text, fallback, NULL));
+        }
+        else {
+            append(fill, fallback);
+        }
+    }
+    if (opts->fFlag) {
+        output.block().fill_goto.push_back(goto_fill);
+    }
+
+    if (opts->fill_check && fill->head) {
+        CodeList *check_fill = code_list(alc);
+        text = gen_lessthan(o, opts, need);
+        append(check_fill, code_if_then_else(alc, text, fill, NULL));
+        fill = check_fill;
+    }
+
+    append(stmts, fill);
+}
+
+void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const State *s)
+{
+    const opt_t *opts = output.block().opts;
+    if (!opts->fill_use || endstate(s)) return;
+
+    const bool need_fill = opts->eof == NOEOF && s->fill > 0;
+    const bool need_fill_label = (need_fill && opts->fFlag) || opts->eof != NOEOF;
+
+    if (need_fill_label) {
+        ++output.block().fill_index;
+    }
+
+    if (need_fill) {
+        gen_fill(output, stmts, dfa, s, NULL);
+    }
+
+    if (need_fill_label) {
+        const char *flabel = gen_fill_label(output, output.block().fill_index - 1);
+        append(stmts, code_slabel(output.allocator, flabel));
+    }
+}
+
+void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from,
+    const CodeJump &jump)
+{
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+    const char *text;
+
+    if (jump.eof) {
+        gen_fill(output, stmts, dfa, from, jump.to);
+    }
+
+    if (jump.skip && !opts->lookahead) {
+        append(stmts, code_skip(alc));
+    }
+
+    gen_settags(output, stmts, dfa, jump.tags, false /* delayed */);
+
+    if (jump.skip && opts->lookahead) {
+        append(stmts, code_skip(alc));
+    }
+
+    if (!jump.elide) {
+        jump.to->label->used = true;
+        text = o.cstr("goto ").str(opts->labelPrefix).label(*jump.to->label).flush();
+        append(stmts, code_stmt(alc, text));
     }
     else {
-        CodeList *fill_goto = code_list(alc);
-
-        // With storable state and EOF rule the initial state dispatch needs to
-        // handle YYFILL failure: if there is still not enough input, it must
-        // follow the fallback transition for the state that triggered YYFILL.
-        // Fallback transition is inlined in the state dispatch (as opposed to
-        // jumping to the corresponding DFA transition) because Go backend does
-        // not support jumping in the middle of a nested block.
-        text = gen_lessthan(o, opts, 1);
-        append(fill_goto, code_if_then_else(alc, text, fallback_trans, NULL));
-
-        // Transition to YYFILL label from the initial state dispatch.
-        const char *flabel = gen_yyfill_label(output, fillidx);
-        text = o.cstr("goto ").cstr(flabel).flush();
-        append(fill_goto, code_stmt(alc, text));
-
-        output.block().fill_goto.push_back(fill_goto);
-    }
-
-    if (refill->head) {
-        append(stmts, code_if_then_else(alc, if_refill, refill, NULL));
+        // Goto can be elided, because control flow "falls through" to the
+        // correct DFA state. This usually happens for the last statement in a
+        // sequence of "linear if" statements.
     }
 }
 
