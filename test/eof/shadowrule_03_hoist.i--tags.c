@@ -34,7 +34,7 @@ yyFillLabel0:
 	if (yych >= 0x01) goto yy8;
 	if (YYLIMIT <= YYCURSOR) {
 		if (YYFILL() == 0) goto yyFillLabel0;
-		goto yyeofrule2;
+		goto yyeof2;
 	}
 yy8:
 	++YYCURSOR;

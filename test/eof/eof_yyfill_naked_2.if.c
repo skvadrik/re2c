@@ -7,16 +7,16 @@
 	default:
 		goto yy0;
 	case 0:
-		if (YYLIMIT <= YYCURSOR) goto yyeofrule2;
+		if (YYLIMIT <= YYCURSOR) goto yyeof2;
 		goto yyFillLabel0;
 	case 1:
-		if (YYLIMIT <= YYCURSOR) goto yyeofrule3;
+		if (YYLIMIT <= YYCURSOR) goto yyeof3;
 		goto yyFillLabel1;
 	case 2:
-		if (YYLIMIT <= YYCURSOR) goto yyeofrule4;
+		if (YYLIMIT <= YYCURSOR) goto yyeof4;
 		goto yyFillLabel2;
 	case 3:
-		if (YYLIMIT <= YYCURSOR) goto yyeofrule5;
+		if (YYLIMIT <= YYCURSOR) goto yyeof5;
 		goto yyFillLabel3;
 	}
 yy0:

@@ -5,7 +5,7 @@
 	default:
 		goto yy0;
 	case 0:
-		if (YYLIMIT <= YYCURSOR) goto yyeofrule1;
+		if (YYLIMIT <= YYCURSOR) goto yyeof1;
 		goto yyFillLabel0;
 	case 1:
 		if (YYLIMIT <= YYCURSOR) goto yy4;

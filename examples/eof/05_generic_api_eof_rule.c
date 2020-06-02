@@ -20,7 +20,7 @@ loop:
 	case ' ':	goto yy4;
 	case '\'':	goto yy7;
 	default:
-		if (cur >= lim) goto yyeofrule1;
+		if (cur >= lim) goto yyeof1;
 		goto yy2;
 	}
 yy2:

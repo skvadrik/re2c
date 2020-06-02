@@ -73,7 +73,7 @@ yyFillLabel0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (false) goto yyFillLabel0;
-			goto yyeofrule2;
+			goto yyeof2;
 		}
 		goto yy2;
 	}
@@ -166,7 +166,7 @@ yyFillLabel2:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (false) goto yyFillLabel2;
-			goto yyeofrule3;
+			goto yyeof3;
 		}
 		goto yy11;
 	}

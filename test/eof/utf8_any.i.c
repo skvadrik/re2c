@@ -1527,7 +1527,7 @@ yyFillLabel0:
 	case 0x7F:
 		if (end <= cur) {
 			if (fill() == 0) goto yyFillLabel0;
-			goto yyeofrule4;
+			goto yyeof4;
 		}
 		goto yy32;
 	case 0xC2:

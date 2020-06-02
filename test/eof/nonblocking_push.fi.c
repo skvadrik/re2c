@@ -92,7 +92,7 @@ switch (YYGETSTATE()) {
 default:
 	goto yy0;
 case 0:
-	if (in.lim <= in.cur) goto yyeofrule1;
+	if (in.lim <= in.cur) goto yyeof1;
 	goto yyFillLabel0;
 case 1:
 	if (in.lim <= in.cur) goto yy7;

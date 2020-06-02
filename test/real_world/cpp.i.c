@@ -195,7 +195,7 @@ lex(Position *here) {
 	case 0x1E:
 	case 0x1F:
 	case 0x7F:
-		if (YYLESSTHAN (1)) goto yyeofrule2;
+		if (YYLESSTHAN (1)) goto yyeof2;
 		goto yy2;
 	case '\t':
 	case '\v':

@@ -66,7 +66,7 @@ yyFillLabel0:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel0;
-			goto yyeofrule1;
+			goto yyeof1;
 		}
 		goto yy2;
 	}

@@ -11,7 +11,7 @@ yyFillLabel0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill() == 0) goto yyFillLabel0;
-			goto yyeofrule2;
+			goto yyeof2;
 		}
 		goto yy2;
 	}
@@ -36,7 +36,7 @@ yyFillLabel1:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill() == 0) goto yyFillLabel1;
-			goto yyeofrule3;
+			goto yyeof3;
 		}
 		goto yy8;
 	}
@@ -61,7 +61,7 @@ yyFillLabel2:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill() == 0) goto yyFillLabel2;
-			goto yyeofrule4;
+			goto yyeof4;
 		}
 		goto yy14;
 	}
@@ -86,7 +86,7 @@ yyFillLabel3:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill() == 0) goto yyFillLabel3;
-			goto yyeofrule5;
+			goto yyeof5;
 		}
 		goto yy20;
 	}

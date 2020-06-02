@@ -14,7 +14,7 @@ yyFillLabel2_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(@@)() == 0) goto yyFillLabel2_0;
-			goto yyeofrule2;
+			goto yyeof2;
 		}
 		goto yy2;
 	}
@@ -42,7 +42,7 @@ yyFillLabel3_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(need);() == 0) goto yyFillLabel3_0;
-			goto yyeofrule3;
+			goto yyeof3;
 		}
 		goto yy8;
 	}
@@ -70,7 +70,7 @@ yyFillLabel4_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(@@)() == 0) goto yyFillLabel4_0;
-			goto yyeofrule4;
+			goto yyeof4;
 		}
 		goto yy14;
 	}
@@ -98,7 +98,7 @@ yyFillLabel5_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(need);() == 0) goto yyFillLabel5_0;
-			goto yyeofrule5;
+			goto yyeof5;
 		}
 		goto yy20;
 	}
@@ -127,7 +127,7 @@ yyFillLabel6_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(@@)() == 0) goto yyFillLabel6_0;
-			goto yyeofrule6;
+			goto yyeof6;
 		}
 		goto yy26;
 	}
@@ -156,7 +156,7 @@ yyFillLabel7_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(need);() == 0) goto yyFillLabel7_0;
-			goto yyeofrule7;
+			goto yyeof7;
 		}
 		goto yy32;
 	}
@@ -185,7 +185,7 @@ yyFillLabel8_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(@@)() == 0) goto yyFillLabel8_0;
-			goto yyeofrule8;
+			goto yyeof8;
 		}
 		goto yy38;
 	}
@@ -214,7 +214,7 @@ yyFillLabel9_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(need);() == 0) goto yyFillLabel9_0;
-			goto yyeofrule9;
+			goto yyeof9;
 		}
 		goto yy44;
 	}
@@ -243,7 +243,7 @@ yyFillLabel10_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(@@)() == 0) goto yyFillLabel10_0;
-			goto yyeofrule10;
+			goto yyeof10;
 		}
 		goto yy50;
 	}
@@ -272,7 +272,7 @@ yyFillLabel11_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(need);() == 0) goto yyFillLabel11_0;
-			goto yyeofrule11;
+			goto yyeof11;
 		}
 		goto yy56;
 	}
@@ -301,7 +301,7 @@ yyFillLabel12_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(@@)() == 0) goto yyFillLabel12_0;
-			goto yyeofrule12;
+			goto yyeof12;
 		}
 		goto yy62;
 	}
@@ -330,7 +330,7 @@ yyFillLabel13_0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (fill(need);() == 0) goto yyFillLabel13_0;
-			goto yyeofrule13;
+			goto yyeof13;
 		}
 		goto yy68;
 	}

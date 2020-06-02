@@ -75,7 +75,7 @@ func Lex(in *Input) int {
 		goto yy0
 	case 0:
 		if (in.limit-in.cursor < 1) {
-			goto yyeofrule1
+			goto yyeof1
 		}
 		goto yyFillLabel0
 	case 1:

@@ -18,7 +18,7 @@ loop:
 	case ' ':	goto yy4;
 	case '\'':	goto yy7;
 	default:
-		if (YYLIMIT <= YYCURSOR) goto yyeofrule1;
+		if (YYLIMIT <= YYCURSOR) goto yyeof1;
 		goto yy2;
 	}
 yy2:

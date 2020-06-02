@@ -93,7 +93,7 @@ yyFillLabel0:
 			if (fill(in) == 0) {
 				goto yyFillLabel0
 			}
-			goto yyeofrule1
+			goto yyeof1
 		}
 		goto yy2
 	}

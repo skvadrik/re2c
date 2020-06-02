@@ -327,7 +327,7 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
             o.label(*fallback->label);
         }
         else {
-            o.cstr("eofrule").u64(output.blockid());
+            o.cstr("eof").u64(output.blockid());
         }
         text = o.flush();
         append(fallback_trans, code_stmt(alc, text));
