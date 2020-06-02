@@ -398,7 +398,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
             o.str(fillstr);
             if (!opts->fill_naked) {
                 if (opts->fill_arg_use) {
-                    o.cstr(" ()");
+                    o.cstr("()");
                 }
                 o.cstr(" == 0");
             }

@@ -238,7 +238,7 @@ yyFillLabel0:
 	case 0xF4:	goto yy15;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel0;
+			if (in.fill() == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy8;
@@ -429,7 +429,7 @@ yyFillLabel1:
 	case 0xF4:	goto yy22;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel1;
+			if (in.fill() == 0) goto yyFillLabel1;
 		}
 		goto yy4;
 	}
@@ -443,7 +443,7 @@ yyFillLabel2:
 	case '\n':	goto yy5;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel2;
+			if (in.fill() == 0) goto yyFillLabel2;
 		}
 		goto yy7;
 	}
@@ -524,7 +524,7 @@ yyFillLabel3:
 	case 0xBF:	goto yy2;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel3;
+			if (in.fill() == 0) goto yyFillLabel3;
 		}
 		goto yy9;
 	}
@@ -568,7 +568,7 @@ yyFillLabel4:
 	case 0xBF:	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel4;
+			if (in.fill() == 0) goto yyFillLabel4;
 		}
 		goto yy9;
 	}
@@ -644,7 +644,7 @@ yyFillLabel5:
 	case 0xBF:	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel5;
+			if (in.fill() == 0) goto yyFillLabel5;
 		}
 		goto yy9;
 	}
@@ -704,7 +704,7 @@ yyFillLabel6:
 	case 0xBF:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel6;
+			if (in.fill() == 0) goto yyFillLabel6;
 		}
 		goto yy9;
 	}
@@ -780,7 +780,7 @@ yyFillLabel7:
 	case 0xBF:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel7;
+			if (in.fill() == 0) goto yyFillLabel7;
 		}
 		goto yy9;
 	}
@@ -808,7 +808,7 @@ yyFillLabel8:
 	case 0x8F:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel8;
+			if (in.fill() == 0) goto yyFillLabel8;
 		}
 		goto yy9;
 	}
@@ -883,7 +883,7 @@ yyFillLabel9:
 	case 0xBF:	goto yy2;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel9;
+			if (in.fill() == 0) goto yyFillLabel9;
 		}
 		goto yy17;
 	}
@@ -933,7 +933,7 @@ yyFillLabel10:
 	case 0xBF:	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel10;
+			if (in.fill() == 0) goto yyFillLabel10;
 		}
 		goto yy17;
 	}
@@ -1008,7 +1008,7 @@ yyFillLabel11:
 	case 0xBF:	goto yy16;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel11;
+			if (in.fill() == 0) goto yyFillLabel11;
 		}
 		goto yy17;
 	}
@@ -1067,7 +1067,7 @@ yyFillLabel12:
 	case 0xBF:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel12;
+			if (in.fill() == 0) goto yyFillLabel12;
 		}
 		goto yy17;
 	}
@@ -1142,7 +1142,7 @@ yyFillLabel13:
 	case 0xBF:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel13;
+			if (in.fill() == 0) goto yyFillLabel13;
 		}
 		goto yy17;
 	}
@@ -1169,7 +1169,7 @@ yyFillLabel14:
 	case 0x8F:	goto yy19;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel14;
+			if (in.fill() == 0) goto yyFillLabel14;
 		}
 		goto yy17;
 	}

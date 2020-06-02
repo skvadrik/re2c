@@ -8,7 +8,7 @@ yyFillLabel0:
 	case 'a':	goto yy4;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yyFillLabel0;
+			if (YYFILL() == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy2;
@@ -51,7 +51,7 @@ yyFillLabel1:
 	case 'b':	goto yy16;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yyFillLabel1;
+			if (YYFILL() == 0) goto yyFillLabel1;
 			goto yyeofrule3;
 		}
 		goto yy14;

@@ -128,7 +128,7 @@ yyFillLabel0:
 		goto yy6
 	default:
 		if (YYLESSTHAN (1)) {
-			if (YYFILL () == 0) {
+			if (YYFILL() == 0) {
 				goto yyFillLabel0
 			}
 			goto yyeofrule1
@@ -180,7 +180,7 @@ yyFillLabel1:
 		goto yy6
 	default:
 		if (YYLESSTHAN (1)) {
-			if (YYFILL () == 0) {
+			if (YYFILL() == 0) {
 				goto yyFillLabel1
 			}
 		}
@@ -220,7 +220,7 @@ yyFillLabel2:
 		goto yy11
 	default:
 		if (YYLESSTHAN (1)) {
-			if (YYFILL () == 0) {
+			if (YYFILL() == 0) {
 				goto yyFillLabel2
 			}
 		}
@@ -256,7 +256,7 @@ yyFillLabel3:
 		goto yy11
 	default:
 		if (YYLESSTHAN (1)) {
-			if (YYFILL () == 0) {
+			if (YYFILL() == 0) {
 				goto yyFillLabel3
 			}
 		}

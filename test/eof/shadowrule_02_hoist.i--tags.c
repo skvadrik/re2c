@@ -34,7 +34,7 @@ yyFillLabel0:
 		goto yy7;
 	}
 	if (YYLIMIT <= YYCURSOR) {
-		if (YYFILL () == 0) goto yyFillLabel0;
+		if (YYFILL() == 0) goto yyFillLabel0;
 		goto yyeofrule2;
 	}
 	yyt1 = YYCURSOR;
@@ -46,7 +46,7 @@ yyFillLabel1:
 	case 'b':	goto yy7;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yyFillLabel1;
+			if (YYFILL() == 0) goto yyFillLabel1;
 		}
 		goto yy9;
 	}

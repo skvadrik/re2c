@@ -82,7 +82,7 @@ yyFillLabel0:
 	case 'z':	goto yy8;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yyFillLabel0;
+			if (YYFILL() == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy2;
@@ -101,7 +101,7 @@ yyFillLabel1:
 	case ' ':	goto yy4;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yyFillLabel1;
+			if (YYFILL() == 0) goto yyFillLabel1;
 		}
 		goto yy6;
 	}
@@ -116,7 +116,7 @@ yyFillLabel2:
 	yych = *in->cur;
 	if (yych <= 0x00) {
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yyFillLabel2;
+			if (YYFILL() == 0) goto yyFillLabel2;
 			goto yy3;
 		}
 		goto yy11;
@@ -155,7 +155,7 @@ yyFillLabel3:
 	case 'z':	goto yy8;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yyFillLabel3;
+			if (YYFILL() == 0) goto yyFillLabel3;
 		}
 		goto yy10;
 	}
@@ -173,7 +173,7 @@ yy12:
 	case '\\':	goto yy15;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yyFillLabel4;
+			if (YYFILL() == 0) goto yyFillLabel4;
 			goto yy18;
 		}
 		goto yy11;
@@ -193,7 +193,7 @@ yyFillLabel5:
 	case '\\':	goto yy15;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yyFillLabel5;
+			if (YYFILL() == 0) goto yyFillLabel5;
 			goto yy18;
 		}
 		goto yy11;
@@ -208,7 +208,7 @@ yyFillLabel6:
 	case '\\':	goto yy15;
 	default:
 		if (in->lim <= in->cur) {
-			if (YYFILL () == 0) goto yyFillLabel6;
+			if (YYFILL() == 0) goto yyFillLabel6;
 			goto yy14;
 		}
 		goto yy11;

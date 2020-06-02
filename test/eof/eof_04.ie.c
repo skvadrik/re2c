@@ -59,7 +59,7 @@ yyFillLabel0:
 	case 0x25:	goto yy5;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel0;
+			if (in.fill() == 0) goto yyFillLabel0;
 			goto yyeofrule1;
 		}
 		goto yy2;
@@ -72,7 +72,7 @@ yyFillLabel1:
 	case 0x25:	goto yy4;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel1;
+			if (in.fill() == 0) goto yyFillLabel1;
 			goto yy4;
 		}
 		goto yy2;
@@ -87,7 +87,7 @@ yyFillLabel2:
 	case 0x25:	goto yy5;
 	default:
 		if (in.lim <= in.cur) {
-			if (in.fill () == 0) goto yyFillLabel2;
+			if (in.fill() == 0) goto yyFillLabel2;
 		}
 		goto yy7;
 	}

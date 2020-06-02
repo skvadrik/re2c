@@ -33,7 +33,7 @@ yyFillLabel0:
 	yych = *YYCURSOR;
 	if (yych >= 0x01) goto yy8;
 	if (YYLIMIT <= YYCURSOR) {
-		if (YYFILL () == 0) goto yyFillLabel0;
+		if (YYFILL() == 0) goto yyFillLabel0;
 		goto yyeofrule2;
 	}
 yy8:
@@ -42,7 +42,7 @@ yyFillLabel1:
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yyFillLabel1;
+			if (YYFILL() == 0) goto yyFillLabel1;
 			goto yy9;
 		}
 		yyt1 = YYCURSOR;
@@ -60,7 +60,7 @@ yyFillLabel2:
 	case 'a':	goto yy10;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL () == 0) goto yyFillLabel2;
+			if (YYFILL() == 0) goto yyFillLabel2;
 		}
 		goto yy12;
 	}

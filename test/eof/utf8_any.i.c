@@ -1526,7 +1526,7 @@ yyFillLabel0:
 	case '~':
 	case 0x7F:
 		if (end <= cur) {
-			if (fill () == 0) goto yyFillLabel0;
+			if (fill() == 0) goto yyFillLabel0;
 			goto yyeofrule4;
 		}
 		goto yy32;
@@ -1661,7 +1661,7 @@ yyFillLabel1:
 	case 0xBF:	goto yy32;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yyFillLabel1;
+			if (fill() == 0) goto yyFillLabel1;
 		}
 		goto yy35;
 	}
@@ -1704,7 +1704,7 @@ yyFillLabel2:
 	case 0xBF:	goto yy42;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yyFillLabel2;
+			if (fill() == 0) goto yyFillLabel2;
 		}
 		goto yy35;
 	}
@@ -1779,7 +1779,7 @@ yyFillLabel3:
 	case 0xBF:	goto yy42;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yyFillLabel3;
+			if (fill() == 0) goto yyFillLabel3;
 		}
 		goto yy35;
 	}
@@ -1838,7 +1838,7 @@ yyFillLabel4:
 	case 0xBF:	goto yy44;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yyFillLabel4;
+			if (fill() == 0) goto yyFillLabel4;
 		}
 		goto yy35;
 	}
@@ -1913,7 +1913,7 @@ yyFillLabel5:
 	case 0xBF:	goto yy44;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yyFillLabel5;
+			if (fill() == 0) goto yyFillLabel5;
 		}
 		goto yy35;
 	}
@@ -1940,7 +1940,7 @@ yyFillLabel6:
 	case 0x8F:	goto yy44;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yyFillLabel6;
+			if (fill() == 0) goto yyFillLabel6;
 		}
 		goto yy35;
 	}
@@ -2015,7 +2015,7 @@ yyFillLabel7:
 	case 0xBF:	goto yy32;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yyFillLabel7;
+			if (fill() == 0) goto yyFillLabel7;
 		}
 		goto yy43;
 	}
@@ -2093,7 +2093,7 @@ yyFillLabel8:
 	case 0xBF:	goto yy42;
 	default:
 		if (end <= cur) {
-			if (fill () == 0) goto yyFillLabel8;
+			if (fill() == 0) goto yyFillLabel8;
 		}
 		goto yy43;
 	}
