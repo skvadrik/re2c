@@ -358,13 +358,14 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
     const size_t need = eof_rule ? 1 : from->fill;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const char *text;
+
+    // YYLESSTHAN
+    const char *lessthan = gen_lessthan(o, opts, need);
 
     // Transition to YYFILL label from the initial state dispatch.
     CodeList *goto_fill = code_list(alc);
     const char *flabel = gen_fill_label(output, fillidx);
-    text = o.cstr("goto ").cstr(flabel).flush();
-    append(goto_fill, code_stmt(alc, text));
+    append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
 
     CodeList *fill = code_list(alc);
 
@@ -373,37 +374,29 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
     }
 
     if (opts->fill_use) {
+        // With EOF rule there is no YYFILL argument and no parameter to replace.
         std::string fillstr = opts->fill;
         if (!eof_rule) {
-            // With EOF rule there is no YYFILL argument.
             strrreplace(fillstr, opts->fill_arg, need);
         }
-        if (!eof_rule || opts->fFlag) {
-            o.str(fillstr);
-            if (opts->fill_naked) {
-                text = o.flush();
-                append(fill, code_text(alc, text));
-            }
-            else {
-                if (opts->fill_arg_use) {
-                    o.cstr("(");
-                    if (!eof_rule) o.u64(need);
-                    o.cstr(")");
-                }
-                text = o.flush();
-                append(fill, code_stmt(alc, text));
-            }
+        o.str(fillstr);
+        if (opts->fill_arg_use) {
+            o.cstr("(");
+            if (!eof_rule) o.u64(need);
+            o.cstr(")");
         }
-        else if (eof_rule) {
-            o.str(fillstr);
-            if (!opts->fill_naked) {
-                if (opts->fill_arg_use) {
-                    o.cstr("()");
-                }
-                o.cstr(" == 0");
-            }
-            text = o.flush();
-            append(fill, code_if_then_else(alc, text, goto_fill, NULL));
+        if (eof_rule && !opts->fFlag) {
+            // EOF rule without storable state: check YYFILL return value. If it
+            // succeeds (returns zero) then go to YYFILL label and rematch.
+            if (!opts->fill_naked) o.cstr(" == 0");
+            append(fill, code_if_then_else(alc, o.flush(), goto_fill, NULL));
+        }
+        else {
+            // Otherwise don't check YYFILL return value: assume that it does
+            // not return on failure.
+            append(fill, opts->fill_naked
+                ? code_text(alc, o.flush())
+                : code_stmt(alc, o.flush()));
         }
     }
 
@@ -416,8 +409,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
             // Fallback transition is inlined in the state dispatch (as opposed to
             // jumping to the corresponding DFA transition) because Go backend does
             // not support jumping in the middle of a nested block.
-            text = gen_lessthan(o, opts, 1);
-            prepend(goto_fill, code_if_then_else(alc, text, fallback, NULL));
+            prepend(goto_fill, code_if_then_else(alc, lessthan, fallback, NULL));
         }
         else {
             append(fill, fallback);
@@ -429,8 +421,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
 
     if (opts->fill_check && fill->head) {
         CodeList *check_fill = code_list(alc);
-        text = gen_lessthan(o, opts, need);
-        append(check_fill, code_if_then_else(alc, text, fill, NULL));
+        append(check_fill, code_if_then_else(alc, lessthan, fill, NULL));
         fill = check_fill;
     }
 

@@ -258,6 +258,9 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (!is_default.startlabel) {
         real.startlabel_force = defaults.startlabel_force;
     }
+    if (real.fill_naked) {
+        real.fill_arg_use = false;
+    }
 
     // errors
     if (glob.target == TARGET_SKELETON && glob.lang != LANG_C) {
