@@ -202,9 +202,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         real.yystagn = defaults.yystagn;
         real.yystagp = defaults.yystagp;
         real.yystagpd = defaults.yystagpd;
-        real.yymtagn = defaults.yymtagn;
-        real.yymtagp = defaults.yymtagp;
-        real.yymtagpd = defaults.yymtagpd;
+        // for mtags there are no sensible defaults
     }
     if (!real.dFlag) {
         real.yydebug = defaults.yydebug;
