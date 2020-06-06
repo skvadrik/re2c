@@ -639,12 +639,33 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         }
     }
 
-    // fixed tags
+    // fixed trailing context
+    for (size_t t = rule.ltag; t < rule.htag; ++t) {
+        const Tag &tag = tags[t];
+        if (fictive(tag) || !fixed(tag) || !trailing(tag)) continue;
+
+        // TODO: add generic API for fixed trailing context and use it.
+        DASSERT(!generic);
+
+        const size_t dist = tag.dist;
+        const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
+
+        if (!fixed_on_cursor) {
+            o.str(opts->yycursor).cstr(" = ").str(vartag_expr(fins[tag.base], opts));
+            if (dist > 0) o.cstr(" - ").u64(dist);
+        }
+        else if (dist > 0) {
+            o.str(opts->yycursor).cstr(" -= ").u64(dist);
+        }
+        append(stmts, code_stmt(alc, o.flush()));
+    }
+
+    // fixed tags (except for trailing context)
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         const Tag &tag = tags[t];
 
         // see note [fixed and variable tags]
-        if (fictive(tag) || !fixed(tag)) continue;
+        if (fictive(tag) || !fixed(tag) || trailing(tag)) continue;
 
         const size_t dist = tag.dist;
         const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
@@ -652,34 +673,12 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         if (generic) {
             // TODO: add generic API primitives for fixed tags and use them.
             DASSERT(false);
-            DASSERT(dist == 0);
-            if (!trailing(tag)) {
-                o.str(tag_expr(tag, true)).cstr(" = ").str(expr);
-            }
-            else if (!fixed_on_cursor) {
-                DASSERT(!dfa.oldstyle_ctxmarker);
-                s = opts->yyrestoretag;
-                strrreplace(s, opts->placeholder, expr);
-                o.str(s);
-                if (opts->decorate) o.cstr(" (").str(expr).cstr(")");
-            }
         }
         else {
-            if (!trailing(tag)) {
-                o.str(tag_expr(tag, true)).cstr(" = ").str(expr);
-                if (dist > 0) o.cstr(" - ").u64(dist);
-            }
-            else if (!fixed_on_cursor) {
-                o.str(opts->yycursor).cstr(" = ").str(expr);
-                if (dist > 0) o.cstr(" - ").u64(dist);
-            }
-            else if (dist > 0) {
-                o.str(opts->yycursor).cstr(" -= ").u64(dist);
-            }
+            o.str(tag_expr(tag, true)).cstr(" = ").str(expr);
+            if (dist > 0) o.cstr(" - ").u64(dist);
+            append(stmts, code_stmt(alc, o.flush()));
         }
-        append(stmts, generic && !opts->decorate
-            ? code_text(alc, o.flush())
-            : code_stmt(alc, o.flush()));
     }
 }
 
