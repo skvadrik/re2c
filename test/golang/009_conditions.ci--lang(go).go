@@ -13,7 +13,7 @@ const (
 
 
 func Lex(str string) int {
-	var cursor, ctxmarker int
+	var cursor int
 	cond := yycinit
 	n := 0
 
@@ -55,7 +55,6 @@ yyc_init:
 	case '8':
 		fallthrough
 	case '9':
-		ctxmarker = cursor
 		goto yy6
 	default:
 		goto yy2
@@ -83,7 +82,7 @@ yy5:
 	goto yyc_oct
 yy6:
 	cursor += 1
-	cursor = ctxmarker
+	cursor += -1
 	cond = yycdec
 	goto yyc_dec
 yy8:
@@ -274,4 +273,4 @@ func main() {
 	test("0\000", 0)
 	test("\000", -1)
 }
-golang/009_conditions.ci--lang(go).re:28:19: warning: rule in condition 'init' matches empty string [-Wmatch-empty-string]
+golang/009_conditions.ci--lang(go).re:27:19: warning: rule in condition 'init' matches empty string [-Wmatch-empty-string]

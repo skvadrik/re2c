@@ -59,6 +59,7 @@ public:
     bool empty() const { return os.str().empty(); }
     std::ostringstream &stream() { return os; }
     const char *flush();
+    Scratchbuf& i32(int32_t u) { os << u; return *this; }
     Scratchbuf& u32(uint32_t u) { os << u; return *this; }
     Scratchbuf& u64(uint64_t u) { os << u; return *this; }
     Scratchbuf& str(const std::string &s) { os << s; return *this; }

@@ -56,6 +56,7 @@ error:
 #define YYSKIP() ++cursor
 #define YYBACKUP() marker = cursor
 #define YYRESTORE() cursor = marker
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -374,6 +375,7 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -526,6 +528,7 @@ end:
 #define YYSKIP() ++cursor
 #define YYBACKUP() marker = cursor
 #define YYRESTORE() cursor = marker
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -769,6 +772,7 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 

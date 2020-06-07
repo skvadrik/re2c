@@ -127,10 +127,11 @@ void Scanner::lex_conf(Opt &opts)
     "define:YYLESSTHAN"   { opts.set_yylessthan   (lex_conf_string ()); return; }
     "define:YYSTAGN"      { opts.set_yystagn      (lex_conf_string ()); return; }
     "define:YYSTAGP"      { opts.set_yystagp      (lex_conf_string ()); return; }
-    "define:YYSTAGPD"     { opts.set_yystagpd     (lex_conf_string ()); return; }
     "define:YYMTAGN"      { opts.set_yymtagn      (lex_conf_string ()); return; }
     "define:YYMTAGP"      { opts.set_yymtagp      (lex_conf_string ()); return; }
-    "define:YYMTAGPD"     { opts.set_yymtagpd     (lex_conf_string ()); return; }
+    "define:YYSHIFT"      { opts.set_yyshift      (lex_conf_string ()); return; }
+    "define:YYSHIFTSTAG"  { opts.set_yyshiftstag  (lex_conf_string ()); return; }
+    "define:YYSHIFTMTAG"  { opts.set_yyshiftmtag  (lex_conf_string ()); return; }
 
     "decorate"    { opts.set_decorate   (lex_conf_bool());   return; }
     "placeholder" { opts.set_placeholder(lex_conf_string()); return; }

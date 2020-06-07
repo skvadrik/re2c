@@ -13,6 +13,8 @@ re2c:define:YYSTAGP      = "stagp";
 re2c:define:YYSTAGN      = "stagn";
 re2c:define:YYMTAGP      = "mtagp";
 re2c:define:YYMTAGN      = "mtagn";
+re2c:define:YYSHIFT      = "shift";
+re2c:define:YYSHIFTSTAG  = "shiftstag";
 */
 
 // stags, default API

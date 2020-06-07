@@ -114,10 +114,11 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
             real.yyrestoretag = defaults.yyrestoretag;
             real.yystagn = defaults.yystagn;
             real.yystagp = defaults.yystagp;
-            real.yystagpd = defaults.yystagpd;
             real.yymtagn = defaults.yymtagn;
             real.yymtagp = defaults.yymtagp;
-            real.yymtagpd = defaults.yymtagpd;
+            real.yyshift = defaults.yyshift;
+            real.yyshiftstag = defaults.yyshiftstag;
+            real.yyshiftmtag = defaults.yyshiftmtag;
             real.yylessthan = defaults.yylessthan;
             real.dFlag = defaults.dFlag;
             real.yydebug = defaults.yydebug;
@@ -201,7 +202,8 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         real.yyrestoretag = defaults.yyrestoretag;
         real.yystagn = defaults.yystagn;
         real.yystagp = defaults.yystagp;
-        real.yystagpd = defaults.yystagpd;
+        real.yyshift = defaults.yyshift;
+        real.yyshiftstag = defaults.yyshiftstag;
         // for mtags there are no sensible defaults
     }
     if (!real.dFlag) {
@@ -448,10 +450,11 @@ void Opt::reset_group_api()
     reset_yyrestoretag();
     reset_yystagn();
     reset_yystagp();
-    reset_yystagpd();
     reset_yymtagn();
     reset_yymtagp();
-    reset_yymtagpd();
+    reset_yyshift();
+    reset_yyshiftstag();
+    reset_yyshiftmtag();
     reset_yyskip();
     reset_yyfilllabel();
     reset_yynext();

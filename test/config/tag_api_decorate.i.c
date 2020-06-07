@@ -65,8 +65,10 @@ yy11:
 	}
 yy13:
 	x = yyt1;
-	y = yyt2;
-	z = yyt2;
+	stagp (y);
+	shiftstag (y, -1);
+	stagp (z);
+	shiftstag (z, -1);
 	{ a }
 }
 
@@ -227,12 +229,8 @@ yy40:
 	case 'a':
 		stagp (yyt1);
 		goto yy44;
-	case 'b':
-		stagp (yyt1);
-		goto yy47;
-	case 'c':
-		stagp (yyt1);
-		goto yy50;
+	case 'b':	goto yy47;
+	case 'c':	goto yy50;
 	default:	goto yy43;
 	}
 yy43:
@@ -254,20 +252,18 @@ yy47:
 	if (lessthan (1)) fill(1);
 	yych = peek ();
 	switch (yych) {
-	case 'b':
-		stagp (yyt1);
-		goto yy47;
+	case 'b':	goto yy47;
 	default:	goto yy49;
 	}
 yy49:
-	restoretag (yyt1);
+	shift (-1);
 	{ b }
 yy50:
 	skip ();
 	yych = peek ();
 	switch (yych) {
 	case 'c':
-		stagp (yyt2);
+		stagp (yyt1);
 		goto yy51;
 	default:	goto yy43;
 	}
@@ -277,16 +273,18 @@ yy51:
 	yych = peek ();
 	switch (yych) {
 	case 'c':
-		yyt1 = yyt2;
-		stagp (yyt2);
+		stagp (yyt1);
 		goto yy51;
 	default:	goto yy53;
 	}
 yy53:
+	z = yyt1;
 	restoretag (yyt1);
+	shift (-1);
 	x = yyt1;
+	shiftstag (x, -1);
 	y = yyt1;
-	z = yyt2;
+	shiftstag (y, -1);
 	{ c }
 }
 
@@ -342,9 +340,7 @@ yy62:
 	case 'a':
 		backupctx ();
 		goto yy66;
-	case 'b':
-		backupctx ();
-		goto yy69;
+	case 'b':	goto yy69;
 	default:	goto yy65;
 	}
 yy65:
@@ -366,54 +362,45 @@ yy69:
 	if (lessthan (1)) fill(1);
 	yych = peek ();
 	switch (yych) {
-	case 'b':
-		backupctx ();
-		goto yy69;
+	case 'b':	goto yy69;
 	default:	goto yy71;
 	}
 yy71:
-	restorectx ();
+	shift (-1);
 	{ b }
 }
 
-config/tag_api_decorate.i.re:22:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:30:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:30:20: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:30:20: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:38:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:38:20: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:38:20: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:46:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:46:20: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:46:20: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:54:25: warning: rule matches empty string [-Wmatch-empty-string]
-config/tag_api_decorate.i.re:55:25: warning: rule matches empty string [-Wmatch-empty-string]
+config/tag_api_decorate.i.re:24:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:32:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:40:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:40:20: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:40:20: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:48:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:48:20: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:48:20: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 config/tag_api_decorate.i.re:56:25: warning: rule matches empty string [-Wmatch-empty-string]
-config/tag_api_decorate.i.re:54:25: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:56:25: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:57:2: warning: control flow is undefined for strings that match 
+config/tag_api_decorate.i.re:57:25: warning: rule matches empty string [-Wmatch-empty-string]
+config/tag_api_decorate.i.re:58:25: warning: rule matches empty string [-Wmatch-empty-string]
+config/tag_api_decorate.i.re:56:25: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:58:25: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:59:2: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x64-\xFF]'
 	'\x63 [\x0-\x62\x64-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-config/tag_api_decorate.i.re:63:25: warning: rule matches empty string [-Wmatch-empty-string]
-config/tag_api_decorate.i.re:64:25: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_decorate.i.re:65:25: warning: rule matches empty string [-Wmatch-empty-string]
-config/tag_api_decorate.i.re:63:25: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:64:25: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:65:25: warning: trailing context has 3rd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:65:25: warning: tag 'x' has 3rd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:65:25: warning: tag 'y' has 3rd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:65:25: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:66:2: warning: control flow is undefined for strings that match 
+config/tag_api_decorate.i.re:66:25: warning: rule matches empty string [-Wmatch-empty-string]
+config/tag_api_decorate.i.re:67:25: warning: rule matches empty string [-Wmatch-empty-string]
+config/tag_api_decorate.i.re:65:25: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:67:25: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:68:2: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x64-\xFF]'
 	'\x63 [\x0-\x62\x64-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-config/tag_api_decorate.i.re:72:12: warning: rule matches empty string [-Wmatch-empty-string]
-config/tag_api_decorate.i.re:73:12: warning: rule matches empty string [-Wmatch-empty-string]
-config/tag_api_decorate.i.re:72:12: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:74:2: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
-config/tag_api_decorate.i.re:80:12: warning: rule matches empty string [-Wmatch-empty-string]
-config/tag_api_decorate.i.re:81:12: warning: rule matches empty string [-Wmatch-empty-string]
-config/tag_api_decorate.i.re:80:12: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:81:12: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_decorate.i.re:82:2: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
+config/tag_api_decorate.i.re:74:12: warning: rule matches empty string [-Wmatch-empty-string]
+config/tag_api_decorate.i.re:75:12: warning: rule matches empty string [-Wmatch-empty-string]
+config/tag_api_decorate.i.re:74:12: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:76:2: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
+config/tag_api_decorate.i.re:82:12: warning: rule matches empty string [-Wmatch-empty-string]
+config/tag_api_decorate.i.re:83:12: warning: rule matches empty string [-Wmatch-empty-string]
+config/tag_api_decorate.i.re:82:12: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_decorate.i.re:84:2: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]

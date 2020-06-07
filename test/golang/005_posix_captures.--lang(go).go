@@ -12,7 +12,6 @@ func Lex(str string) (int, []int) {
 	yypmatch := make([]int, YYMAXNMATCH*2)
 
 	var yyt1 int
-	var yyt10 int
 	var yyt2 int
 	var yyt3 int
 	var yyt4 int
@@ -23,7 +22,7 @@ func Lex(str string) (int, []int) {
 	var yyt9 int
 
 	
-//line "golang/005_posix_captures.--lang(go).go":27
+//line "golang/005_posix_captures.--lang(go).go":26
 {
 	var yych byte
 	yych = str[cursor]
@@ -32,89 +31,83 @@ func Lex(str string) (int, []int) {
 		yyt1 = cursor
 		yyt2 = -1
 		yyt3 = -1
+		yyt4 = -1
 		yyt5 = -1
 		yyt6 = -1
 		yyt7 = -1
 		yyt8 = -1
 		yyt9 = -1
-		yyt10 = -1
 		goto yy2
 	case 'a':
 		yyt1 = cursor
-		yyt2 = cursor
+		yyt3 = cursor
+		yyt4 = cursor
 		yyt5 = cursor
-		yyt6 = cursor
 		goto yy6
 	case 'b':
 		yyt1 = cursor
-		yyt2 = cursor
-		yyt6 = -1
-		yyt7 = -1
-		yyt8 = cursor
+		yyt3 = -1
+		yyt4 = -1
+		yyt5 = cursor
 		goto yy7
 	case 'c':
 		yyt1 = cursor
-		yyt2 = cursor
+		yyt3 = -1
+		yyt4 = -1
+		yyt5 = -1
 		yyt6 = -1
-		yyt7 = -1
-		yyt8 = -1
-		yyt9 = -1
-		yyt10 = cursor
+		yyt7 = cursor
 		goto yy8
 	default:
 		goto yy4
 	}
 yy2:
 	cursor += 1
-	yyt4 = cursor
 	yynmatch = 5
 	yypmatch[0] = yyt1
-	yypmatch[1] = yyt4
-	yypmatch[2] = yyt5
+	yypmatch[2] = yyt4
 	yypmatch[3] = yyt2
-	yypmatch[4] = yyt6
-	yypmatch[5] = yyt7
-	yypmatch[6] = yyt8
-	yypmatch[7] = yyt9
-	yypmatch[8] = yyt10
+	yypmatch[4] = yyt5
+	yypmatch[5] = yyt6
+	yypmatch[6] = yyt7
+	yypmatch[7] = yyt8
+	yypmatch[8] = yyt9
 	yypmatch[9] = yyt3
-//line "golang/005_posix_captures.--lang(go).re":41
+	yypmatch[1] = cursor
+//line "golang/005_posix_captures.--lang(go).re":42
 	{
 		return yynmatch, yypmatch
 	}
-//line "golang/005_posix_captures.--lang(go).go":86
+//line "golang/005_posix_captures.--lang(go).go":82
 yy4:
 	cursor += 1
 yy5:
-//line "golang/005_posix_captures.--lang(go).re":29
+//line "golang/005_posix_captures.--lang(go).re":30
 	{
 		return -1, nil
 	}
-//line "golang/005_posix_captures.--lang(go).go":94
+//line "golang/005_posix_captures.--lang(go).go":90
 yy6:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt3 = cursor
+		yyt2 = -1
+		yyt4 = cursor
 		yyt5 = -1
-		yyt7 = cursor
-		yyt8 = -1
-		yyt9 = -1
-		yyt10 = -1
+		yyt6 = -1
+		yyt7 = -1
 		goto yy9
 	case 'a':
 		goto yy11
 	case 'b':
-		yyt5 = cursor
-		yyt6 = cursor
 		goto yy14
 	case 'c':
-		yyt7 = cursor
+		yyt6 = cursor
+		yyt7 = -1
 		yyt8 = -1
-		yyt9 = -1
-		yyt10 = cursor
+		yyt9 = cursor
 		goto yy15
 	default:
 		goto yy5
@@ -125,10 +118,9 @@ yy7:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt3 = cursor
-		yyt5 = -1
-		yyt9 = cursor
-		yyt10 = -1
+		yyt2 = -1
+		yyt6 = cursor
+		yyt7 = -1
 		goto yy9
 	case 'b':
 		goto yy16
@@ -141,8 +133,7 @@ yy8:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt3 = cursor
-		yyt5 = cursor
+		yyt2 = cursor
 		goto yy9
 	case 'c':
 		goto yy18
@@ -151,40 +142,37 @@ yy8:
 	}
 yy9:
 	cursor += 1
-	yyt4 = cursor
 	yynmatch = 5
+	yypmatch[2] = yyt1
+	yypmatch[4] = yyt3
+	yypmatch[5] = yyt4
+	yypmatch[6] = yyt5
+	yypmatch[7] = yyt6
+	yypmatch[8] = yyt7
+	yypmatch[9] = yyt2
 	yypmatch[0] = yyt1
-	yypmatch[1] = yyt4
-	yypmatch[2] = yyt2
-	yypmatch[3] = yyt3
-	yypmatch[4] = yyt6
-	yypmatch[5] = yyt7
-	yypmatch[6] = yyt8
-	yypmatch[7] = yyt9
-	yypmatch[8] = yyt10
-	yypmatch[9] = yyt5
-//line "golang/005_posix_captures.--lang(go).re":37
+	yypmatch[1] = cursor
+	yypmatch[3] = cursor
+	yypmatch[3] += -1
+//line "golang/005_posix_captures.--lang(go).re":38
 	{
 		return yynmatch, yypmatch
 	}
-//line "golang/005_posix_captures.--lang(go).go":171
+//line "golang/005_posix_captures.--lang(go).go":162
 yy11:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt3 = cursor
+		yyt2 = -1
+		yyt4 = cursor
 		yyt5 = -1
-		yyt7 = cursor
-		yyt8 = -1
-		yyt9 = -1
-		yyt10 = -1
+		yyt6 = -1
+		yyt7 = -1
 		goto yy9
 	case 'a':
 		goto yy11
 	case 'b':
-		yyt5 = cursor
-		yyt6 = cursor
 		goto yy20
 	default:
 		goto yy13
@@ -197,8 +185,7 @@ yy14:
 	yych = str[cursor]
 	switch (yych) {
 	case 'c':
-		yyt7 = cursor
-		yyt8 = cursor
+		yyt2 = cursor
 		goto yy21
 	default:
 		goto yy13
@@ -212,8 +199,8 @@ yy15:
 		yyt3 = cursor
 		goto yy2
 	case 'a':
+		yyt4 = cursor
 		yyt5 = cursor
-		yyt6 = cursor
 		goto yy22
 	default:
 		goto yy13
@@ -223,10 +210,9 @@ yy16:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt3 = cursor
-		yyt5 = -1
-		yyt9 = cursor
-		yyt10 = -1
+		yyt2 = -1
+		yyt6 = cursor
+		yyt7 = -1
 		goto yy9
 	case 'b':
 		goto yy16
@@ -238,8 +224,7 @@ yy18:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt3 = cursor
-		yyt5 = cursor
+		yyt2 = cursor
 		goto yy9
 	case 'c':
 		goto yy18
@@ -251,8 +236,7 @@ yy20:
 	yych = str[cursor]
 	switch (yych) {
 	case 'c':
-		yyt7 = cursor
-		yyt8 = cursor
+		yyt2 = cursor
 		goto yy23
 	default:
 		goto yy13
@@ -262,8 +246,8 @@ yy21:
 	yych = str[cursor]
 	switch (yych) {
 	case 'a':
+		yyt4 = cursor
 		yyt5 = cursor
-		yyt6 = cursor
 		goto yy22
 	default:
 		goto yy24
@@ -273,14 +257,14 @@ yy22:
 	yych = str[cursor]
 	switch (yych) {
 	case 'b':
+		yyt6 = cursor
 		yyt7 = cursor
-		yyt8 = cursor
 		goto yy27
 	case 'c':
-		yyt7 = cursor
+		yyt6 = cursor
+		yyt7 = -1
 		yyt8 = -1
-		yyt9 = -1
-		yyt10 = cursor
+		yyt9 = cursor
 		goto yy15
 	default:
 		goto yy13
@@ -291,7 +275,6 @@ yy23:
 yy24:
 	switch (yych) {
 	case 0x00:
-		yyt3 = cursor
 		goto yy25
 	case 'c':
 		goto yy23
@@ -300,34 +283,36 @@ yy24:
 	}
 yy25:
 	cursor += 1
-	yyt9 = cursor
 	yynmatch = 4
+	yypmatch[2] = yyt1
+	yypmatch[6] = yyt2
 	yypmatch[0] = yyt1
-	yypmatch[1] = yyt9
-	yypmatch[2] = yyt2
-	yypmatch[3] = yyt5
-	yypmatch[4] = yyt6
-	yypmatch[5] = yyt7
-	yypmatch[6] = yyt8
-	yypmatch[7] = yyt3
-//line "golang/005_posix_captures.--lang(go).re":33
+	yypmatch[1] = cursor
+	yypmatch[3] = yyt2
+	yypmatch[3] += -1
+	yypmatch[4] = yyt2
+	yypmatch[4] += -1
+	yypmatch[5] = yyt2
+	yypmatch[7] = cursor
+	yypmatch[7] += -1
+//line "golang/005_posix_captures.--lang(go).re":34
 	{
 		return yynmatch, yypmatch
 	}
-//line "golang/005_posix_captures.--lang(go).go":318
+//line "golang/005_posix_captures.--lang(go).go":303
 yy27:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'c':
+		yyt8 = cursor
 		yyt9 = cursor
-		yyt10 = cursor
 		goto yy15
 	default:
 		goto yy13
 	}
 }
-//line "golang/005_posix_captures.--lang(go).re":44
+//line "golang/005_posix_captures.--lang(go).re":45
 
 }
 

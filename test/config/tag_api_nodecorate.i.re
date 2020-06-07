@@ -13,6 +13,8 @@ re2c:define:YYSTAGP      = "@@ = cur;";
 re2c:define:YYSTAGN      = "@@ = NULL;";
 re2c:define:YYMTAGP      = "mtag(&@@, cur);";
 re2c:define:YYMTAGN      = "mtag(&@@, NULL);";
+re2c:define:YYSHIFT      = "cur += @@;";
+re2c:define:YYSHIFTSTAG  = "@@1 += @@2;";
 */
 
 // stags, default API

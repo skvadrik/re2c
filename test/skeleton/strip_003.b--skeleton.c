@@ -56,8 +56,7 @@ error:
 #define YYSKIP() ++cursor
 #define YYBACKUP() marker = cursor
 #define YYRESTORE() cursor = marker
-#define YYBACKUPCTX() ctxmarker = cursor
-#define YYRESTORECTX() cursor = ctxmarker
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -155,7 +154,6 @@ int lex_line131()
     for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
-        const YYCTYPE *ctxmarker = NULL;
         YYCTYPE yych;
 
         if (YYLESSTHAN (4)) YYFILL(4);
@@ -175,10 +173,7 @@ yy4:
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
-        if (yych == '/') {
-            YYBACKUPCTX ();
-            goto yy7;
-        }
+        if (yych == '/') goto yy7;
         goto yy3;
 yy5:
         YYSKIP ();
@@ -202,10 +197,7 @@ yy8:
 yy9:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '/') {
-            YYBACKUPCTX ();
-            goto yy7;
-        }
+        if (yych == '/') goto yy7;
         goto yy8;
 yy10:
         YYSKIP ();
@@ -219,7 +211,7 @@ yy12:
         continue;
 yy14:
         YYSKIP ();
-        YYRESTORECTX ();
+        YYSHIFT (-2);
         status = check_key_count_line131(keys_count, i, 3)
              || action_line131(&i, keys, input, token, &cursor, 1);
         continue;
@@ -250,8 +242,6 @@ end:
 #undef YYSKIP
 #undef YYBACKUP
 #undef YYRESTORE
-#undef YYBACKUPCTX
-#undef YYRESTORECTX
 #undef YYLESSTHAN
 #undef YYFILL
 
@@ -259,6 +249,7 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -407,6 +398,7 @@ end:
 #define YYSKIP() ++cursor
 #define YYBACKUP() marker = cursor
 #define YYRESTORE() cursor = marker
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -597,6 +589,7 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 

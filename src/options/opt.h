@@ -170,10 +170,11 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, yylessthan, "YYLESSTHAN") \
     MUTOPT (std::string, yystagn, "YYSTAGN") \
     MUTOPT (std::string, yystagp, "YYSTAGP") \
-    MUTOPT (std::string, yystagpd, "YYSTAGPD") \
     MUTOPT (std::string, yymtagn, "YYMTAGN") \
     MUTOPT (std::string, yymtagp, "YYMTAGP") \
-    MUTOPT (std::string, yymtagpd, "YYMTAGPD") \
+    MUTOPT (std::string, yyshift, "YYSHIFT") \
+    MUTOPT (std::string, yyshiftstag, "YYSHIFTSTAG") \
+    MUTOPT (std::string, yyshiftmtag, "YYSHIFTMTAG") \
     MUTOPT (bool, decorate, true) \
     MUTOPT (std::string, placeholder, RE2C_PLACEHOLDER) \
     /* #line directives */ \

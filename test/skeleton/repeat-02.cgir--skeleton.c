@@ -54,6 +54,7 @@ error:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -220,6 +221,7 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -379,6 +381,7 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -545,6 +548,7 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -704,6 +708,7 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
@@ -870,6 +875,7 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
+#define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 

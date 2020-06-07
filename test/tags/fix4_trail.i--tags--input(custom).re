@@ -10,6 +10,8 @@ static void lex(const char *s)
 #define YYSTAGP(t)         t = s
 #define YYSTAGN(t)         t = NULL
 #define YYRESTORETAG(t)    s = t
+#define YYSHIFT(o)         s += o
+#define YYSHIFTSTAG(t, o)  t += o
     const char *marker, *p0, *p1, *p2, *p3;
     /*!stags:re2c format = "const char *@@;"; */
     /*!re2c

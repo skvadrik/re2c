@@ -36,7 +36,7 @@ yy2:
 	a = yyt1
 	b = yyt2
 	c = yyt3
-//line "golang/005_stags.--lang(go).re":35
+//line "golang/005_stags.--lang(go).re":36
 	{
 		return a, b, c
 	}
@@ -44,7 +44,7 @@ yy2:
 yy4:
 	cursor += 1
 yy5:
-//line "golang/005_stags.--lang(go).re":23
+//line "golang/005_stags.--lang(go).re":24
 	{
 		return -2, -2, -2
 	}
@@ -61,7 +61,6 @@ yy6:
 	case 'a':
 		goto yy11
 	case 'b':
-		yyt2 = cursor
 		goto yy14
 	case 'c':
 		yyt2 = -1
@@ -103,11 +102,11 @@ yy9:
 	a = yyt1
 	b = yyt2
 	c = yyt3
-//line "golang/005_stags.--lang(go).re":31
+//line "golang/005_stags.--lang(go).re":32
 	{
 		return a, b, c
 	}
-//line "golang/005_stags.--lang(go).go":111
+//line "golang/005_stags.--lang(go).go":110
 yy11:
 	cursor += 1
 	yych = str[cursor]
@@ -119,7 +118,6 @@ yy11:
 	case 'a':
 		goto yy11
 	case 'b':
-		yyt2 = cursor
 		goto yy20
 	default:
 		goto yy13
@@ -132,7 +130,7 @@ yy14:
 	yych = str[cursor]
 	switch (yych) {
 	case 'c':
-		yyt3 = cursor
+		yyt2 = cursor
 		goto yy21
 	default:
 		goto yy13
@@ -180,7 +178,7 @@ yy20:
 	yych = str[cursor]
 	switch (yych) {
 	case 'c':
-		yyt3 = cursor
+		yyt2 = cursor
 		goto yy23
 	default:
 		goto yy13
@@ -224,13 +222,14 @@ yy24:
 yy25:
 	cursor += 1
 	a = yyt1
+	c = yyt2
 	b = yyt2
-	c = yyt3
-//line "golang/005_stags.--lang(go).re":27
+	b += -1
+//line "golang/005_stags.--lang(go).re":28
 	{
 		return a, b, c
 	}
-//line "golang/005_stags.--lang(go).go":234
+//line "golang/005_stags.--lang(go).go":233
 yy27:
 	cursor += 1
 	yych = str[cursor]
@@ -242,7 +241,7 @@ yy27:
 		goto yy13
 	}
 }
-//line "golang/005_stags.--lang(go).re":38
+//line "golang/005_stags.--lang(go).re":39
 
 }
 

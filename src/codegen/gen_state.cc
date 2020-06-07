@@ -515,6 +515,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
         const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
         const std::string le = vartag_expr(l, opts);
         const std::string re = vartag_expr(r, opts);
+        std::string s;
 
         if (tcmd_t::iscopy(p)) {
             // copy command
@@ -530,34 +531,54 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
             // history is reversed, so use a statement sublist and prepend
             CodeList *actions = code_list(alc);
             for (; *h != TAGVER_ZERO; ++h) {
-                const std::string &action = *h == TAGVER_BOTTOM ? opts->yymtagn
-                    : delayed ? opts->yymtagpd : opts->yymtagp;
+                const bool negative = *h == TAGVER_BOTTOM;
+                if (delayed && !negative) {
+                    s = opts->yyshiftmtag;
+                    if (opts->decorate) {
+                        o.str(s).cstr(" (").str(le).cstr(", ").i32(-1).cstr(")");
+                        prepend(actions, code_stmt(alc, o.flush()));
+                    }
+                    else {
+                        strrreplace(s, opts->placeholder + "1", le);
+                        strrreplace(s, opts->placeholder + "2", -1);
+                        prepend(actions, code_text(alc, o.str(s).flush()));
+                    }
+                }
+                s = negative ? opts->yymtagn : opts->yymtagp;
                 if (opts->decorate) {
-                    o.str(action).cstr(" (").str(le).cstr(")");
+                    o.str(s).cstr(" (").str(le).cstr(")");
                     prepend(actions, code_stmt(alc, o.flush()));
                 }
                 else {
-                    std::string s = action;
                     strrreplace(s, opts->placeholder, le);
-                    o.str(s);
-                    prepend(actions, code_text(alc, o.flush()));
+                    prepend(actions, code_text(alc, o.str(s).flush()));
                 }
             }
             append(tag_actions, actions);
         }
         else if (generic) {
             // save command without history; generic API
-            const std::string &action = *h == TAGVER_BOTTOM ? opts->yystagn
-                : delayed ? opts->yystagpd : opts->yystagp;
+            const bool negative = *h == TAGVER_BOTTOM;
+            s = negative ? opts->yystagn : opts->yystagp;
             if (opts->decorate) {
-                o.str(action).cstr(" (").str(le).cstr(")");
+                o.str(s).cstr(" (").str(le).cstr(")");
                 append(tag_actions, code_stmt(alc, o.flush()));
             }
             else {
-                std::string s = action;
                 strrreplace(s, opts->placeholder, le);
-                o.str(s);
-                append(tag_actions, code_text(alc, o.flush()));
+                append(tag_actions, code_text(alc, o.str(s).flush()));
+            }
+            if (delayed && !negative) {
+                s = opts->yyshiftstag;
+                if (opts->decorate) {
+                    o.str(s).cstr(" (").str(le).cstr(", ").i32(-1).cstr(")");
+                    append(tag_actions, code_stmt(alc, o.flush()));
+                }
+                else {
+                    strrreplace(s, opts->placeholder + "1", le);
+                    strrreplace(s, opts->placeholder + "2", -1);
+                    append(tag_actions, code_text(alc, o.str(s).flush()));
+                }
             }
         }
         else {
@@ -607,11 +628,12 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             append(stmts, code_stmt(alc, o.flush()));
         }
         else if (!generic) {
+            o.str(opts->yycursor).cstr(" = ");
             if (dfa.oldstyle_ctxmarker) {
-                o.str(opts->yycursor).cstr(" = ").str(opts->yyctxmarker);
+                o.str(opts->yyctxmarker);
             }
             else {
-                o.str(opts->yycursor).cstr(" = ").str(expr);
+                o.str(expr);
             }
             append(stmts, code_stmt(alc, o.flush()));
         }
@@ -644,20 +666,46 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         const Tag &tag = tags[t];
         if (fictive(tag) || !fixed(tag) || !trailing(tag)) continue;
 
-        // TODO: add generic API for fixed trailing context and use it.
-        DASSERT(!generic);
-
-        const size_t dist = tag.dist;
+        const int32_t dist = static_cast<int32_t>(tag.dist);
         const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
+        const std::string base = fixed_on_cursor
+            ? opts->yycursor : vartag_expr(fins[tag.base], opts);
 
-        if (!fixed_on_cursor) {
-            o.str(opts->yycursor).cstr(" = ").str(vartag_expr(fins[tag.base], opts));
-            if (dist > 0) o.cstr(" - ").u64(dist);
+        if (generic) {
+            DASSERT(!history(tag));
+            if (!fixed_on_cursor) {
+                s = opts->yyrestoretag;
+                if (opts->decorate) {
+                    o.str(s).cstr(" (").str(base).cstr(")");
+                    append(stmts, code_stmt(alc, o.flush()));
+                }
+                else {
+                    strrreplace(s, opts->placeholder, base);
+                    append(stmts, code_text(alc, o.str(s).flush()));
+                }
+            }
+            if (dist > 0) {
+                s = opts->yyshift;
+                if (opts->decorate) {
+                    o.str(s).cstr(" (").i32(-dist).cstr(")");
+                    append(stmts, code_stmt(alc, o.flush()));
+                }
+                else {
+                    strrreplace(s, opts->placeholder, -dist);
+                    append(stmts, code_text(alc, o.str(s).flush()));
+                }
+            }
         }
-        else if (dist > 0) {
-            o.str(opts->yycursor).cstr(" -= ").u64(dist);
+        else {
+            if (!fixed_on_cursor) {
+                o.str(opts->yycursor).cstr(" = ").str(vartag_expr(fins[tag.base], opts));
+                if (dist > 0) o.cstr(" - ").i32(dist);
+            }
+            else if (dist > 0) {
+                o.str(opts->yycursor).cstr(" -= ").i32(dist);
+            }
+            append(stmts, code_stmt(alc, o.flush()));
         }
-        append(stmts, code_stmt(alc, o.flush()));
     }
 
     // fixed tags (except for trailing context)
@@ -667,16 +715,44 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         // see note [fixed and variable tags]
         if (fictive(tag) || !fixed(tag) || trailing(tag)) continue;
 
-        const size_t dist = tag.dist;
+        const int32_t dist = static_cast<int32_t>(tag.dist);
         const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
-        expr = fixed_on_cursor ? opts->yycursor : vartag_expr(fins[tag.base], opts);
+        const std::string fix = tag_expr(tag, true);
+        const std::string base = fixed_on_cursor
+            ? opts->yycursor : vartag_expr(fins[tag.base], opts);
+
         if (generic) {
-            // TODO: add generic API primitives for fixed tags and use them.
-            DASSERT(false);
+            if (fixed_on_cursor) {
+                s = history(tag) ? opts->yymtagp : opts->yystagp;
+                if (opts->decorate) {
+                    o.str(s).cstr(" (").str(fix).cstr(")");
+                    append(stmts, code_stmt(alc, o.flush()));
+                }
+                else {
+                    strrreplace(s, opts->placeholder, fix);
+                    append(stmts, code_text(alc, o.str(s).flush()));
+                }
+            }
+            else {
+                o.str(fix).cstr(" = ").str(base);
+                append(stmts, code_stmt(alc, o.flush()));
+            }
+            if (dist > 0) {
+                s = history(tag) ? opts->yyshiftmtag : opts->yyshiftstag;
+                if (opts->decorate) {
+                    o.str(s).cstr(" (").str(fix).cstr(", ").i32(-dist).cstr(")");
+                    append(stmts, code_stmt(alc, o.flush()));
+                }
+                else {
+                    strrreplace(s, opts->placeholder + "1", fix);
+                    strrreplace(s, opts->placeholder + "2", -dist);
+                    append(stmts, code_text(alc, o.str(s).flush()));
+                }
+            }
         }
         else {
-            o.str(tag_expr(tag, true)).cstr(" = ").str(expr);
-            if (dist > 0) o.cstr(" - ").u64(dist);
+            o.str(fix).cstr(" = ").str(base);
+            if (dist > 0) o.cstr(" - ").i32(dist);
             append(stmts, code_stmt(alc, o.flush()));
         }
     }

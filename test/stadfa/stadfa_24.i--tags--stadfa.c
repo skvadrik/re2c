@@ -15,8 +15,10 @@ yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	yyt2 = yyt1;
-	YYMTAGPD (yyt2);
-	YYMTAGPD (yyt1);
+	YYMTAGP (yyt2);
+	YYSHIFTMTAG (yyt2, -1);
+	YYMTAGP (yyt1);
+	YYSHIFTMTAG (yyt1, -1);
 	switch (yych) {
 	case 'b':	goto yy5;
 	default:	goto yy4;
@@ -29,7 +31,8 @@ yy5:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	yyt1 = yyt2;
-	YYMTAGPD (yyt1);
+	YYMTAGP (yyt1);
+	YYSHIFTMTAG (yyt1, -1);
 	switch (yych) {
 	case 'b':	goto yy3;
 	default:	goto yy4;

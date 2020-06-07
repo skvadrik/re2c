@@ -5,7 +5,7 @@ import "fmt"
 /*!types:re2c*/
 
 func Lex(str string) int {
-	var cursor, ctxmarker int
+	var cursor int
 	cond := yycinit
 	n := 0
 
@@ -14,10 +14,9 @@ func Lex(str string) int {
 	re2c:define:YYCTYPE = byte;
 	re2c:define:YYPEEK = "str[cursor]";
 	re2c:define:YYSKIP = "cursor += 1";
-	re2c:define:YYBACKUPCTX  = "ctxmarker = cursor";
-	re2c:define:YYRESTORECTX = "cursor = ctxmarker";
 	re2c:define:YYGETCONDITION = "cond";
 	re2c:define:YYSETCONDITION = "cond = @@";
+	re2c:define:YYSHIFT = "cursor += @@";
 
 	end = [\x00];
 

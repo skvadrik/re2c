@@ -23,6 +23,7 @@ func Lex(str string) (int, []int) {
 	re2c:define:YYRESTORE = "cursor = marker";
 	re2c:define:YYSTAGP = "@@ = cursor";
 	re2c:define:YYSTAGN = "@@ = -1";
+	re2c:define:YYSHIFTSTAG = "@@1 += @@2";
 
 	end = [\x00];
 

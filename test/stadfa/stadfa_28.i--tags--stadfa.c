@@ -56,7 +56,8 @@ yy7:
 	yych = *(YYMARKER = ++YYCURSOR);
 	yyt4 = yyt1;
 	yyt3 = yyt2;
-	YYMTAGPD (yyt1);
+	YYMTAGP (yyt1);
+	YYSHIFTMTAG (yyt1, -1);
 	switch (yych) {
 	case 'a':	goto yy9;
 	case 'c':	goto yy13;
@@ -76,8 +77,10 @@ yy10:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	yyt3 = yyt2;
-	YYMTAGPD (yyt3);
-	YYMTAGPD (yyt2);
+	YYMTAGP (yyt3);
+	YYSHIFTMTAG (yyt3, -1);
+	YYMTAGP (yyt2);
+	YYSHIFTMTAG (yyt2, -1);
 	switch (yych) {
 	case 'b':	goto yy10;
 	case 'c':	goto yy12;

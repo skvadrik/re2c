@@ -18,8 +18,7 @@ namespace {
  * This optimization is applied only to tags in top-level concatenation,
  * because in other cases the base tag may be NULL, and the calculation of
  * the fixed tag value is not as simple as substracting a fixed offset.
- * Furthermore, fixed tags are fobidden with generic API because it cannot
- * express fixed offsets. M-tags (with history) also cannot be fixed.
+ * There are no fixed m-tags (with history).
  *
  * Another special case is fictive tags (those that exist only to impose
  * hierarchical laws of POSIX disambiguation). We treat them as fixed in order
@@ -36,7 +35,7 @@ struct StackItem {
 static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack, RE *re0)
 {
     static const uint32_t VARDIST = Tag::VARDIST;
-    bool toplevel = spec.opts->input_api != INPUT_CUSTOM;
+    bool toplevel = true;
 
     // base tag, intially the fake "rightmost tag" (the end of RE)
     size_t base = Tag::RIGHTMOST;

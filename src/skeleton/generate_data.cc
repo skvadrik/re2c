@@ -216,14 +216,21 @@ static void write_keys(const path_t &path, const Skeleton &skel,
         htag = r.htag;
         trail = r.ttag;
 
-        // matched length might depend on tag values
+        const Tag &tag = skel.tags[trail];
         if (trail == htag) {
+            // no trailing context
             matched = f;
-        } else {
-            DASSERT(!fixed(skel.tags[trail])); // no fixed trailing context
+        } else if (!fixed(tag)) {
+            // variable-length trailing context
             matched = tags[skel.finvers[trail]].back();
-            DASSERT(matched != Skeleton::DEFTAG);
+        } else if (tag.base != Tag::RIGHTMOST) {
+            // fixed-length trailing context based on tag
+            matched = tags[skel.finvers[tag.base]].back() - tag.dist;
+        } else {
+            // fixed-length trailing context based on cursor
+            matched = f - tag.dist;
         }
+        DASSERT(matched != Skeleton::DEFTAG);
     }
 
     // count keys
@@ -252,11 +259,11 @@ static void write_keys(const path_t &path, const Skeleton &skel,
             const Tag &tag = skel.tags[t];
             if (t == trail || fictive(tag)) continue;
 
-            const size_t
-                base = fixed(tag) ? tag.base : t,
-                bver = static_cast<size_t>(skel.finvers[base]);
-            const std::vector<size_t> &h = tags[w * nver + bver];
             if (history(tag)) {
+                DASSERT(!fixed(tag));
+                // variable-length tag
+                const size_t tver = static_cast<size_t>(skel.finvers[t]);
+                const std::vector<size_t> &h = tags[w * nver + tver];
                 const size_t hlen = h.size();
 
                 // Abort if history length exceeds maximum value of key type.
@@ -274,7 +281,20 @@ static void write_keys(const path_t &path, const Skeleton &skel,
                     *k++ = to_le(static_cast<key_t>(h[i]));
                 }
             } else {
-                *k++ = to_le(static_cast<key_t>(h.back()));
+                size_t tval;
+                if (!fixed(tag)) {
+                    // variable-length tag
+                    const size_t tver = static_cast<size_t>(skel.finvers[t]);
+                    tval = tags[w * nver + tver].back();
+                } else if (tag.base != Tag::RIGHTMOST) {
+                    // fixed-length tag based on another tag
+                    const size_t tver = static_cast<size_t>(skel.finvers[tag.base]);
+                    tval = tags[w * nver + tver].back() - tag.dist;
+                } else {
+                    // fixed-length tag based on cursor
+                    tval = matched - tag.dist;
+                }
+                *k++ = to_le(static_cast<key_t>(tval));
             }
         }
     }
