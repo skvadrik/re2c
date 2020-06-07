@@ -1,4 +1,5 @@
 AC_INIT([re2c],[1.3],[re2c-general@lists.sourceforge.net])
+AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign subdir-objects dist-xz no-dist-gzip])
 AM_SILENT_RULES([yes])
 
