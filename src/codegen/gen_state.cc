@@ -478,8 +478,8 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
     }
 }
 
-static Code *gen_shifttag(Output &output, const std::string &tag, int32_t shift,
-    bool history)
+static void gen_shifttag(Output &output, CodeList *stmts, const std::string &tag,
+    int32_t shift, bool history)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -488,16 +488,16 @@ static Code *gen_shifttag(Output &output, const std::string &tag, int32_t shift,
     o.str(history ? opts->yyshiftmtag : opts->yyshiftstag);
     if (opts->decorate) {
         o.cstr(" (").str(tag).cstr(", ").i32(shift).cstr(")");
-        return code_stmt(alc, o.flush());
+        append(stmts, code_stmt(alc, o.flush()));
     } else {
         argsubst(o.stream(), opts->placeholder, "tag", false, tag);
         argsubst(o.stream(), opts->placeholder, "shift", false, shift);
-        return code_text(alc, o.flush());
+        append(stmts, code_text(alc, o.flush()));
     }
 }
 
-static Code *gen_settag(Output &output, const std::string &tag, bool negative,
-    bool history)
+static void gen_settag(Output &output, CodeList *stmts, const std::string &tag,
+    bool negative, bool history)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -509,10 +509,10 @@ static Code *gen_settag(Output &output, const std::string &tag, bool negative,
     o.str(s);
     if (opts->decorate) {
         o.cstr(" (").str(tag).cstr(")");
-        return code_stmt(alc, o.flush());
+        append(stmts, code_stmt(alc, o.flush()));
     } else {
         argsubst(o.stream(), opts->placeholder, "tag", true, tag);
-        return code_text(alc, o.flush());
+        append(stmts, code_text(alc, o.flush()));
     }
 }
 
@@ -544,7 +544,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
     }
 
     for (const tcmd_t *p = cmd; p; p = p->next) {
-        const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
+        const tagver_t l = p->lhs, r = p->rhs, *h = p->history, *h0;
         const std::string le = vartag_expr(l, opts);
         const std::string re = vartag_expr(r, opts);
         std::string s;
@@ -560,23 +560,22 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
                 o.str(le).cstr(" = ").str(re);
                 append(tag_actions, code_stmt(alc, o.flush()));
             }
-            // history is reversed, so use a statement sublist and prepend
-            CodeList *actions = code_list(alc);
-            for (; *h != TAGVER_ZERO; ++h) {
+            // history is reversed, so find its end and iterate back
+            for (h0 = h; *h != TAGVER_ZERO; ++h);
+            for (; h --> h0; ) {
                 const bool negative = *h == TAGVER_BOTTOM;
+                gen_settag(output, tag_actions, le, negative, true);
                 if (delayed && !negative) {
-                    prepend(actions, gen_shifttag(output, le, -1, true));
+                    gen_shifttag(output, tag_actions, le, -1, true);
                 }
-                prepend(actions, gen_settag(output, le, negative, true));
             }
-            append(tag_actions, actions);
         }
         else if (generic) {
             // save command without history; generic API
             const bool negative = *h == TAGVER_BOTTOM;
-            append(tag_actions, gen_settag(output, le, negative, false));
+            gen_settag(output, tag_actions, le, negative, false);
             if (delayed && !negative) {
-                append(tag_actions, gen_shifttag(output, le, -1, false));
+                gen_shifttag(output, tag_actions, le, -1, false);
             }
         }
         else {
@@ -714,13 +713,13 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
 
         if (generic) {
             if (fixed_on_cursor) {
-                append(stmts, gen_settag(output, fix, false, history(tag)));
+                gen_settag(output, stmts, fix, false, history(tag));
             } else {
                 o.str(fix).cstr(" = ").str(base);
                 append(stmts, code_stmt(alc, o.flush()));
             }
             if (dist > 0) {
-                append(stmts, gen_shifttag(output, fix, -dist, false));
+                gen_shifttag(output, stmts, fix, -dist, false);
             }
         } else {
             o.str(fix).cstr(" = ").str(base);
