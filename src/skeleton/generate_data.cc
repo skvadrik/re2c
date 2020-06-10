@@ -216,19 +216,21 @@ static void write_keys(const path_t &path, const Skeleton &skel,
         htag = r.htag;
         trail = r.ttag;
 
-        const Tag &tag = skel.tags[trail];
         if (trail == htag) {
             // no trailing context
             matched = f;
-        } else if (!fixed(tag)) {
-            // variable-length trailing context
-            matched = tags[skel.finvers[trail]].back();
-        } else if (tag.base != Tag::RIGHTMOST) {
-            // fixed-length trailing context based on tag
-            matched = tags[skel.finvers[tag.base]].back() - tag.dist;
         } else {
-            // fixed-length trailing context based on cursor
-            matched = f - tag.dist;
+            const Tag &tag = skel.tags[trail];
+            if (!fixed(tag)) {
+                // variable-length trailing context
+                matched = tags[skel.finvers[trail]].back();
+            } else if (tag.base != Tag::RIGHTMOST) {
+                // fixed-length trailing context based on tag
+                matched = tags[skel.finvers[tag.base]].back() - tag.dist;
+            } else {
+                // fixed-length trailing context based on cursor
+                matched = f - tag.dist;
+            }
         }
         DASSERT(matched != Skeleton::DEFTAG);
     }
