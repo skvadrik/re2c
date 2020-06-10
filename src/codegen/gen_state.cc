@@ -12,6 +12,7 @@
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
+#include "src/codegen/helpers.h"
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
@@ -249,16 +250,14 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
     }
     else {
         if (!cond.empty() && dfa.cond != cond) {
-            s = opts->cond_set;
-            strrreplace(s, opts->cond_set_arg, opts->condEnumPrefix + cond);
-            o.str(s);
+            o.str(opts->cond_set);
+            argsubst(o.stream(), opts->cond_set_arg, "cond", true,
+                opts->condEnumPrefix + cond);
             if (opts->cond_set_naked) {
-                text = o.flush();
-                append(stmts, code_text(alc, text));
-            }
-            else {
-                text = o.cstr("(").str(opts->condEnumPrefix).str(cond).cstr(")").flush();
-                append(stmts, code_stmt(alc, text));
+                append(stmts, code_text(alc, o.flush()));
+            } else {
+                o.cstr("(").str(opts->condEnumPrefix).str(cond).cstr(")");
+                append(stmts, code_stmt(alc, o.flush()));
             }
         }
         if (!semact->autogen) {
@@ -272,10 +271,10 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
             append(stmts, code_line_info_output(alc));
         }
         else if (!cond.empty()) {
-            s = opts->condGoto;
-            strrreplace(s, opts->condGotoParam, opts->condPrefix + cond);
-            text = o.str(s).flush();
-            append(stmts, code_text(alc, text));
+            o.str(opts->condGoto);
+            argsubst(o.stream(), opts->condGotoParam, "cond", true,
+                opts->condPrefix + cond);
+            append(stmts, code_text(alc, o.flush()));
         }
     }
 }
@@ -285,18 +284,14 @@ static void gen_setstate(Output &output, CodeList *stmts, uint32_t fillidx)
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const char *text;
 
-    std::string s = opts->state_set;
-    strrreplace(s, opts->state_set_arg, fillidx);
-    o.str(s);
+    o.str(opts->state_set);
+    argsubst(o.stream(), opts->state_set_arg, "state", true, fillidx);
     if (opts->state_set_naked) {
-        text = o.flush();
-        append(stmts, code_text(alc, text));
-    }
-    else {
-        text = o.cstr("(").u32(fillidx).cstr(")").flush();
-        append(stmts, code_stmt(alc, text));
+        append(stmts, code_text(alc, o.flush()));
+    } else {
+        o.cstr("(").u32(fillidx).cstr(")");
+        append(stmts, code_stmt(alc, o.flush()));
     }
 }
 
@@ -375,11 +370,10 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
 
     if (opts->fill_use) {
         // With EOF rule there is no YYFILL argument and no parameter to replace.
-        std::string fillstr = opts->fill;
+        o.str(opts->fill);
         if (!eof_rule) {
-            strrreplace(fillstr, opts->fill_arg, need);
+            argsubst(o.stream(), opts->fill_arg, "len", true, need);
         }
-        o.str(fillstr);
         if (opts->fill_arg_use) {
             o.cstr("(");
             if (!eof_rule) o.u64(need);
@@ -533,25 +527,23 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
             for (; *h != TAGVER_ZERO; ++h) {
                 const bool negative = *h == TAGVER_BOTTOM;
                 if (delayed && !negative) {
-                    s = opts->yyshiftmtag;
+                    o.str(opts->yyshiftmtag);
                     if (opts->decorate) {
-                        o.str(s).cstr(" (").str(le).cstr(", ").i32(-1).cstr(")");
+                        o.cstr(" (").str(le).cstr(", ").i32(-1).cstr(")");
                         prepend(actions, code_stmt(alc, o.flush()));
-                    }
-                    else {
-                        strrreplace(s, opts->placeholder + "1", le);
-                        strrreplace(s, opts->placeholder + "2", -1);
-                        prepend(actions, code_text(alc, o.str(s).flush()));
+                    } else {
+                        argsubst(o.stream(), opts->placeholder, "tag", false, le);
+                        argsubst(o.stream(), opts->placeholder, "shift", false, -1);
+                        prepend(actions, code_text(alc, o.flush()));
                     }
                 }
-                s = negative ? opts->yymtagn : opts->yymtagp;
+                o.str(negative ? opts->yymtagn : opts->yymtagp);
                 if (opts->decorate) {
-                    o.str(s).cstr(" (").str(le).cstr(")");
+                    o.cstr(" (").str(le).cstr(")");
                     prepend(actions, code_stmt(alc, o.flush()));
-                }
-                else {
-                    strrreplace(s, opts->placeholder, le);
-                    prepend(actions, code_text(alc, o.str(s).flush()));
+                } else {
+                    argsubst(o.stream(), opts->placeholder, "tag", true, le);
+                    prepend(actions, code_text(alc, o.flush()));
                 }
             }
             append(tag_actions, actions);
@@ -559,25 +551,23 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
         else if (generic) {
             // save command without history; generic API
             const bool negative = *h == TAGVER_BOTTOM;
-            s = negative ? opts->yystagn : opts->yystagp;
+            o.str(negative ? opts->yystagn : opts->yystagp);
             if (opts->decorate) {
-                o.str(s).cstr(" (").str(le).cstr(")");
+                o.cstr(" (").str(le).cstr(")");
                 append(tag_actions, code_stmt(alc, o.flush()));
-            }
-            else {
-                strrreplace(s, opts->placeholder, le);
-                append(tag_actions, code_text(alc, o.str(s).flush()));
+            } else {
+                argsubst(o.stream(), opts->placeholder, "tag", true, le);
+                append(tag_actions, code_text(alc, o.flush()));
             }
             if (delayed && !negative) {
-                s = opts->yyshiftstag;
+                o.str(opts->yyshiftstag);
                 if (opts->decorate) {
-                    o.str(s).cstr(" (").str(le).cstr(", ").i32(-1).cstr(")");
+                    o.cstr(" (").str(le).cstr(", ").i32(-1).cstr(")");
                     append(tag_actions, code_stmt(alc, o.flush()));
-                }
-                else {
-                    strrreplace(s, opts->placeholder + "1", le);
-                    strrreplace(s, opts->placeholder + "2", -1);
-                    append(tag_actions, code_text(alc, o.str(s).flush()));
+                } else {
+                    argsubst(o.stream(), opts->placeholder, "tag", false, le);
+                    argsubst(o.stream(), opts->placeholder, "shift", false, -1);
+                    append(tag_actions, code_text(alc, o.flush()));
                 }
             }
         }
@@ -640,22 +630,19 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         else if (opts->decorate) {
             if (dfa.oldstyle_ctxmarker) {
                 o.str(opts->yyrestorectx).cstr(" ()");
-            }
-            else {
-                s = opts->yyrestoretag;
-                strrreplace(s, opts->placeholder, expr);
-                o.str(s).cstr(" (").str(expr).cstr(")");
+            } else {
+                o.str(opts->yyrestoretag);
+                argsubst(o.stream(), opts->placeholder, "tag", true, expr);
+                o.cstr(" (").str(expr).cstr(")");
             }
             append(stmts, code_stmt(alc, o.flush()));
         }
         else {
             if (dfa.oldstyle_ctxmarker) {
                 o.str(opts->yyrestorectx);
-            }
-            else {
-                s = opts->yyrestoretag;
-                strrreplace(s, opts->placeholder, expr);
-                o.str(s);
+            } else {
+                o.str(opts->yyrestoretag);
+                argsubst(o.stream(), opts->placeholder, "tag", true, expr);
             }
             append(stmts, code_text(alc, o.flush()));
         }
@@ -674,25 +661,23 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         if (generic) {
             DASSERT(!history(tag));
             if (!fixed_on_cursor) {
-                s = opts->yyrestoretag;
+                o.str(opts->yyrestoretag);
                 if (opts->decorate) {
-                    o.str(s).cstr(" (").str(base).cstr(")");
+                    o.cstr(" (").str(base).cstr(")");
                     append(stmts, code_stmt(alc, o.flush()));
-                }
-                else {
-                    strrreplace(s, opts->placeholder, base);
-                    append(stmts, code_text(alc, o.str(s).flush()));
+                } else {
+                    argsubst(o.stream(), opts->placeholder, "tag", true, base);
+                    append(stmts, code_text(alc, o.flush()));
                 }
             }
             if (dist > 0) {
-                s = opts->yyshift;
+                o.str(opts->yyshift);
                 if (opts->decorate) {
-                    o.str(s).cstr(" (").i32(-dist).cstr(")");
+                    o.cstr(" (").i32(-dist).cstr(")");
                     append(stmts, code_stmt(alc, o.flush()));
-                }
-                else {
-                    strrreplace(s, opts->placeholder, -dist);
-                    append(stmts, code_text(alc, o.str(s).flush()));
+                } else {
+                    argsubst(o.stream(), opts->placeholder, "shift", true, -dist);
+                    append(stmts, code_text(alc, o.flush()));
                 }
             }
         }
@@ -723,14 +708,13 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
 
         if (generic) {
             if (fixed_on_cursor) {
-                s = history(tag) ? opts->yymtagp : opts->yystagp;
+                o.str(history(tag) ? opts->yymtagp : opts->yystagp);
                 if (opts->decorate) {
-                    o.str(s).cstr(" (").str(fix).cstr(")");
+                    o.cstr(" (").str(fix).cstr(")");
                     append(stmts, code_stmt(alc, o.flush()));
-                }
-                else {
-                    strrreplace(s, opts->placeholder, fix);
-                    append(stmts, code_text(alc, o.str(s).flush()));
+                } else {
+                    argsubst(o.stream(), opts->placeholder, "tag", true, fix);
+                    append(stmts, code_text(alc, o.flush()));
                 }
             }
             else {
@@ -738,15 +722,14 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 append(stmts, code_stmt(alc, o.flush()));
             }
             if (dist > 0) {
-                s = history(tag) ? opts->yyshiftmtag : opts->yyshiftstag;
+                o.str(history(tag) ? opts->yyshiftmtag : opts->yyshiftstag);
                 if (opts->decorate) {
-                    o.str(s).cstr(" (").str(fix).cstr(", ").i32(-dist).cstr(")");
+                    o.cstr(" (").str(fix).cstr(", ").i32(-dist).cstr(")");
                     append(stmts, code_stmt(alc, o.flush()));
-                }
-                else {
-                    strrreplace(s, opts->placeholder + "1", fix);
-                    strrreplace(s, opts->placeholder + "2", -dist);
-                    append(stmts, code_text(alc, o.str(s).flush()));
+                } else {
+                    argsubst(o.stream(), opts->placeholder, "tag", false, fix);
+                    argsubst(o.stream(), opts->placeholder, "shift", false, -dist);
+                    append(stmts, code_text(alc, o.flush()));
                 }
             }
         }
@@ -791,14 +774,11 @@ bool endstate(const State *s)
 const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)
 {
     if (opts->input_api == INPUT_CUSTOM) {
+        o.str(opts->yylessthan);
         if (opts->decorate) {
-            o.str(opts->yylessthan).cstr(" (").u64(n).cstr(")");
-        }
-        else {
-            std::string s = opts->yylessthan;
-            const char *arg = o.u64(n).flush();
-            strrreplace(s, opts->placeholder, arg);
-            o.str(s);
+            o.cstr(" (").u64(n).cstr(")");
+        } else {
+            argsubst(o.stream(), opts->placeholder, "len", true, n);
         }
     }
     else if (n == 1) {

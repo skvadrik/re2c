@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "src/codegen/code.h"
+#include "src/codegen/helpers.h"
 
 
 namespace re2c {
@@ -92,5 +92,4 @@ void printSpan(std::ostream& o, uint32_t l, uint32_t u, uint32_t szcunit, bool e
     o << "]";
 }
 
-} // end namespace re2c
-
+} // namespace re2c

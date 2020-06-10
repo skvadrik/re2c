@@ -19,6 +19,7 @@ RE2C = re2c$(EXEEXT)
 # sources
 re2c_HDR = \
 	src/codegen/code.h \
+	src/codegen/helpers.h \
 	src/options/opt.h \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
@@ -89,7 +90,7 @@ re2c_SRC = \
 	src/codegen/gen_goto.cc \
 	src/codegen/gen_program.cc \
 	src/codegen/gen_state.cc \
-	src/codegen/print.cc \
+	src/codegen/helpers.cc \
 	src/codegen/render.cc \
 	src/options/opt.cc \
 	src/nfa/estimate_size.cc \
@@ -365,10 +366,14 @@ re2c_test_ver_to_vernum_SOURCES = \
 	src/test/ver_to_vernum/test.cc \
 	$(re2c_GEN_VER_TO_VERNUM)
 
+re2c_test_argsubst_SOURCES = \
+	src/test/argsubst/test.cc
+
 check_PROGRAMS = \
 	re2c_test_range \
 	re2c_test_s_to_n32_unsafe \
-	re2c_test_ver_to_vernum
+	re2c_test_ver_to_vernum \
+	re2c_test_argsubst
 
 TESTS = \
 	$(re2c_TESTSUITE) \

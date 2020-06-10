@@ -1,5 +1,6 @@
 #include "config.h"
 #include "src/codegen/code.h"
+#include "src/codegen/helpers.h"
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
@@ -18,9 +19,9 @@ void gen_tags(Scratchbuf &o, const opt_t *opts, Code *code,
 
     std::set<std::string>::const_iterator tag = tags.begin(), end = tags.end();
     for (; tag != end; ) {
-        std::string fmtstr = fmt;
-        strrreplace(fmtstr, opts->placeholder, *tag);
-        o.str(fmtstr);
+        std::ostringstream s(fmt);
+        argsubst(s, opts->placeholder, "tag", true, *tag);
+        o.str(s.str());
         if (++tag == end) break;
         o.cstr(sep);
     }

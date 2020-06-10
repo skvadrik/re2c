@@ -1,20 +1,20 @@
 /*!re2c
 re2c:decorate = 0;
-re2c:define:YYLESSTHAN   = "lim - cur < @@";
-re2c:define:YYFILL       = "fill(@@);";
+re2c:define:YYLESSTHAN   = "lim - cur < @@{len}";
+re2c:define:YYFILL       = "fill(@@{len});";
 re2c:define:YYPEEK       = "*cur";
 re2c:define:YYSKIP       = "++cur;";
 re2c:define:YYBACKUP     = "mar = cur;";
 re2c:define:YYRESTORE    = "cur = mar;";
 re2c:define:YYBACKUPCTX  = "ctx = cur;";
 re2c:define:YYRESTORECTX = "cur = ctx;";
-re2c:define:YYRESTORETAG = "cur = @@;";
-re2c:define:YYSTAGP      = "@@ = cur;";
-re2c:define:YYSTAGN      = "@@ = NULL;";
-re2c:define:YYMTAGP      = "mtag(&@@, cur);";
-re2c:define:YYMTAGN      = "mtag(&@@, NULL);";
-re2c:define:YYSHIFT      = "cur += @@;";
-re2c:define:YYSHIFTSTAG  = "@@1 += @@2;";
+re2c:define:YYRESTORETAG = "cur = @@{tag};";
+re2c:define:YYSTAGP      = "@@{tag} = cur;";
+re2c:define:YYSTAGN      = "@@{tag} = NULL;";
+re2c:define:YYMTAGP      = "mtag(&@@{tag}, cur);";
+re2c:define:YYMTAGN      = "mtag(&@@{tag}, NULL);";
+re2c:define:YYSHIFT      = "cur += @@{shift};";
+re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift};";
 */
 
 // stags, default API

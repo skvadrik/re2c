@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "src/codegen/code.h"
+#include "src/codegen/helpers.h"
 #include "src/options/opt.h"
 
 

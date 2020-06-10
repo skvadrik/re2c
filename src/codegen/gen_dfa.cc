@@ -11,6 +11,7 @@
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
+#include "src/codegen/helpers.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
@@ -267,10 +268,9 @@ void gen_code(Output &output, dfas_t &dfas)
 
             if (opts->cFlag && !dfa.cond.empty()) {
                 if (opts->condDivider.length()) {
-                    std::string divider = opts->condDivider;
-                    strrreplace(divider, opts->condDividerParam, dfa.cond);
-                    text = o.str(divider).flush();
-                    append(program1, code_textraw(alc, text));
+                    o.str(opts->condDivider);
+                    argsubst(o.stream(), opts->condDividerParam, "cond", true, dfa.cond);
+                    append(program1, code_textraw(alc, o.flush()));
                 }
                 text = o.str(opts->condPrefix).str(dfa.cond).flush();
                 append(program1, code_slabel(alc, text));
@@ -320,10 +320,9 @@ std::string vartag_name(tagver_t ver, const std::string &prefix)
 
 std::string vartag_expr(tagver_t ver, const opt_t *opts)
 {
-    const std::string s = vartag_name(ver, opts->tags_prefix);
-    std::string e = opts->tags_expression;
-    strrreplace(e, opts->placeholder, s);
-    return e;
+    std::ostringstream os(opts->tags_expression);
+    argsubst(os, opts->placeholder, "tag", true, vartag_name(ver, opts->tags_prefix));
+    return os.str();
 }
 
 } // end namespace re2c

@@ -21,9 +21,9 @@ func Lex(str string) (int, []int) {
 	re2c:define:YYSKIP = "cursor += 1";
 	re2c:define:YYBACKUP  = "marker = cursor";
 	re2c:define:YYRESTORE = "cursor = marker";
-	re2c:define:YYSTAGP = "@@ = cursor";
-	re2c:define:YYSTAGN = "@@ = -1";
-	re2c:define:YYSHIFTSTAG = "@@1 += @@2";
+	re2c:define:YYSTAGP = "@@{tag} = cursor";
+	re2c:define:YYSTAGN = "@@{tag} = -1";
+	re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
 
 	end = [\x00];
 

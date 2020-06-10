@@ -7,6 +7,7 @@
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
+#include "src/codegen/helpers.h"
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
 #include "src/regexp/rule.h"
