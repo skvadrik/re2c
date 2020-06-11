@@ -526,6 +526,15 @@ static void gen_settag(Output &output, CodeList *stmts, const std::string &tag,
     }
 }
 
+static void gen_assign(Output &output, CodeList *stmts, const std::string &lhs,
+    const std::string &rhs)
+{
+    Scratchbuf &o = output.scratchbuf;
+
+    o.str(lhs).cstr(" = ").str(rhs);
+    append(stmts, code_stmt(output.allocator, o.flush()));
+}
+
 static void gen_restorectx(Output &output, CodeList *stmts, const std::string &tag)
 {
     const opt_t *opts = output.block().opts;
@@ -557,17 +566,16 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
     // single tag, backwards compatibility, use context marker
     if (cmd && dfa.oldstyle_ctxmarker) {
         DASSERT(!opts->stadfa);
-        if (!generic) {
-            o.str(opts->yyctxmarker).cstr(" = ").str(opts->yycursor);
-            append(tag_actions, code_stmt(alc, o.flush()));
-        }
-        else if (opts->decorate) {
-            o.str(opts->yybackupctx).cstr(" ()");
-            append(tag_actions, code_stmt(alc, o.flush()));
-        }
-        else {
+        if (generic) {
             o.str(opts->yybackupctx);
-            append(tag_actions, code_text(alc, o.flush()));
+            if (opts->decorate) {
+                o.cstr(" ()");
+                append(tag_actions, code_stmt(alc, o.flush()));
+            } else {
+                append(tag_actions, code_text(alc, o.flush()));
+            }
+        } else {
+            gen_assign(output, tag_actions, opts->yyctxmarker, opts->yycursor);
         }
         return;
     }
@@ -579,15 +587,12 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
         std::string s;
 
         if (tcmd_t::iscopy(p)) {
-            // copy command
-            o.str(le).cstr(" = ").str(re);
-            append(tag_actions, code_stmt(alc, o.flush()));
-        }
-        else if (tcmd_t::isadd(p)) {
-            // save command with history
+            // "copy" command
+            gen_assign(output, tag_actions, le, re);
+        } else if (tcmd_t::isadd(p)) {
+            // "save" command with history
             if (l != r) {
-                o.str(le).cstr(" = ").str(re);
-                append(tag_actions, code_stmt(alc, o.flush()));
+                gen_assign(output, tag_actions, le, re);
             }
             // history is reversed, so find its end and iterate back
             for (h0 = h; *h != TAGVER_ZERO; ++h);
@@ -598,29 +603,28 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
                     gen_shift(output, tag_actions, -1, le, true);
                 }
             }
-        }
-        else if (generic) {
-            // save command without history; generic API
-            const bool negative = *h == TAGVER_BOTTOM;
-            gen_settag(output, tag_actions, le, negative, false);
-            if (delayed && !negative) {
-                gen_shift(output, tag_actions, -1, le, false);
-            }
-        }
-        else {
-            // save command without history; default API
-            Scratchbuf o2(alc);
-            for (const tcmd_t *q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
-                Scratchbuf &x = q->history[0] == TAGVER_BOTTOM ? o : o2;
-                x.str(vartag_expr(q->lhs, opts)).cstr(" = ");
-            }
-            if (!o.empty()) {
-                o.cstr("NULL");
-                append(tag_actions, code_stmt(alc, o.flush()));
-            }
-            if (!o2.empty()) {
-                o2.str(opts->yycursor).cstr(delayed ? " - 1" : "");
-                append(tag_actions, code_stmt(alc, o2.flush()));
+        } else {
+            // "save" command
+            if (generic) {
+                const bool negative = *h == TAGVER_BOTTOM;
+                gen_settag(output, tag_actions, le, negative, false);
+                if (delayed && !negative) {
+                    gen_shift(output, tag_actions, -1, le, false);
+                }
+            } else {
+                Scratchbuf o2(alc);
+                for (const tcmd_t *q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
+                    Scratchbuf &x = q->history[0] == TAGVER_BOTTOM ? o : o2;
+                    x.str(vartag_expr(q->lhs, opts)).cstr(" = ");
+                }
+                if (!o.empty()) {
+                    o.cstr("NULL");
+                    append(tag_actions, code_stmt(alc, o.flush()));
+                }
+                if (!o2.empty()) {
+                    o2.str(opts->yycursor).cstr(delayed ? " - 1" : "");
+                    append(tag_actions, code_stmt(alc, o2.flush()));
+                }
             }
         }
     }
@@ -650,15 +654,14 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
 
         expr = vartag_expr(fins[t], opts);
         if (!trailing(tag)) {
-            o.str(tag_expr(tag, true)).cstr(" = ").str(expr);
-            append(stmts, code_stmt(alc, o.flush()));
+            gen_assign(output, stmts, tag_expr(tag, true), expr);
         } else {
             const bool notag = dfa.oldstyle_ctxmarker;
             if (generic) {
                 gen_restorectx(output, stmts, notag ? "" : expr);
             } else {
-                o.str(opts->yycursor).cstr(" = ").str(notag ? opts->yyctxmarker : expr);
-                append(stmts, code_stmt(alc, o.flush()));
+                gen_assign(output, stmts, opts->yycursor,
+                    notag ? opts->yyctxmarker : expr);
             }
         }
     }
@@ -707,8 +710,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             if (fixed_on_cursor) {
                 gen_settag(output, stmts, fix, false, history(tag));
             } else {
-                o.str(fix).cstr(" = ").str(base);
-                append(stmts, code_stmt(alc, o.flush()));
+                gen_assign(output, stmts, fix, base);
             }
             gen_shift(output, stmts, -dist, fix, false);
         } else {
