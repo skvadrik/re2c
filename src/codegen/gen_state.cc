@@ -478,20 +478,30 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
     }
 }
 
-static void gen_shifttag(Output &output, CodeList *stmts, const std::string &tag,
-    int32_t shift, bool history)
+static void gen_shift(Output &output, CodeList *stmts, int32_t shift,
+    const std::string &tag, bool history)
 {
+    if (shift == 0) return;
+
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    const bool notag = tag.empty();
 
-    o.str(history ? opts->yyshiftmtag : opts->yyshiftstag);
+    o.str(notag ? opts->yyshift
+        : history ? opts->yyshiftmtag : opts->yyshiftstag);
     if (opts->decorate) {
-        o.cstr(" (").str(tag).cstr(", ").i32(shift).cstr(")");
+        o.cstr(" (");
+        if (!notag) o.str(tag).cstr(", ");
+        o.i32(shift).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
     } else {
-        argsubst(o.stream(), opts->placeholder, "tag", false, tag);
-        argsubst(o.stream(), opts->placeholder, "shift", false, shift);
+        // Single-argument YYSHIFT allows short-form unnamed substitution,
+        // multi-argument YYSHIFTSTAG / YYSHIFTMTAG require named placeholders.
+        if (!notag) {
+            argsubst(o.stream(), opts->placeholder, "tag", false, tag);
+        }
+        argsubst(o.stream(), opts->placeholder, "shift", notag, shift);
         append(stmts, code_text(alc, o.flush()));
     }
 }
@@ -585,7 +595,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
                 const bool negative = *h == TAGVER_BOTTOM;
                 gen_settag(output, tag_actions, le, negative, true);
                 if (delayed && !negative) {
-                    gen_shifttag(output, tag_actions, le, -1, true);
+                    gen_shift(output, tag_actions, -1, le, true);
                 }
             }
         }
@@ -594,7 +604,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
             const bool negative = *h == TAGVER_BOTTOM;
             gen_settag(output, tag_actions, le, negative, false);
             if (delayed && !negative) {
-                gen_shifttag(output, tag_actions, le, -1, false);
+                gen_shift(output, tag_actions, -1, le, false);
             }
         }
         else {
@@ -668,16 +678,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             if (!fixed_on_cursor) {
                 gen_restorectx(output, stmts, base);
             }
-            if (dist > 0) {
-                o.str(opts->yyshift);
-                if (opts->decorate) {
-                    o.cstr(" (").i32(-dist).cstr(")");
-                    append(stmts, code_stmt(alc, o.flush()));
-                } else {
-                    argsubst(o.stream(), opts->placeholder, "shift", true, -dist);
-                    append(stmts, code_text(alc, o.flush()));
-                }
-            }
+            gen_shift(output, stmts, -dist, "", false /* unused */);
         } else {
             if (!fixed_on_cursor) {
                 o.str(opts->yycursor).cstr(" = ").str(base);
@@ -709,9 +710,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 o.str(fix).cstr(" = ").str(base);
                 append(stmts, code_stmt(alc, o.flush()));
             }
-            if (dist > 0) {
-                gen_shifttag(output, stmts, fix, -dist, false);
-            }
+            gen_shift(output, stmts, -dist, fix, false);
         } else {
             o.str(fix).cstr(" = ").str(base);
             if (dist > 0) o.cstr(" - ").i32(dist);
