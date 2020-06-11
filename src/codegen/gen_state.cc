@@ -516,6 +516,25 @@ static void gen_settag(Output &output, CodeList *stmts, const std::string &tag,
     }
 }
 
+static void gen_restorectx(Output &output, CodeList *stmts, const std::string &tag)
+{
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+    const bool notag = tag.empty();
+
+    o.str(notag ? opts->yyrestorectx : opts->yyrestoretag);
+    if (opts->decorate) {
+        o.cstr(" (").str(tag).cstr(")");
+        append(stmts, code_stmt(alc, o.flush()));
+    } else {
+        if (!notag) {
+            argsubst(o.stream(), opts->placeholder, "tag", true, tag);
+        }
+        append(stmts, code_text(alc, o.flush()));
+    }
+}
+
 void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t tcid,
     bool delayed)
 {
@@ -623,35 +642,14 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         if (!trailing(tag)) {
             o.str(tag_expr(tag, true)).cstr(" = ").str(expr);
             append(stmts, code_stmt(alc, o.flush()));
-        }
-        else if (!generic) {
-            o.str(opts->yycursor).cstr(" = ");
-            if (dfa.oldstyle_ctxmarker) {
-                o.str(opts->yyctxmarker);
-            }
-            else {
-                o.str(expr);
-            }
-            append(stmts, code_stmt(alc, o.flush()));
-        }
-        else if (opts->decorate) {
-            if (dfa.oldstyle_ctxmarker) {
-                o.str(opts->yyrestorectx).cstr(" ()");
+        } else {
+            const bool notag = dfa.oldstyle_ctxmarker;
+            if (generic) {
+                gen_restorectx(output, stmts, notag ? "" : expr);
             } else {
-                o.str(opts->yyrestoretag);
-                argsubst(o.stream(), opts->placeholder, "tag", true, expr);
-                o.cstr(" (").str(expr).cstr(")");
+                o.str(opts->yycursor).cstr(" = ").str(notag ? opts->yyctxmarker : expr);
+                append(stmts, code_stmt(alc, o.flush()));
             }
-            append(stmts, code_stmt(alc, o.flush()));
-        }
-        else {
-            if (dfa.oldstyle_ctxmarker) {
-                o.str(opts->yyrestorectx);
-            } else {
-                o.str(opts->yyrestoretag);
-                argsubst(o.stream(), opts->placeholder, "tag", true, expr);
-            }
-            append(stmts, code_text(alc, o.flush()));
         }
     }
 
@@ -668,14 +666,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         if (generic) {
             DASSERT(!history(tag));
             if (!fixed_on_cursor) {
-                o.str(opts->yyrestoretag);
-                if (opts->decorate) {
-                    o.cstr(" (").str(base).cstr(")");
-                    append(stmts, code_stmt(alc, o.flush()));
-                } else {
-                    argsubst(o.stream(), opts->placeholder, "tag", true, base);
-                    append(stmts, code_text(alc, o.flush()));
-                }
+                gen_restorectx(output, stmts, base);
             }
             if (dist > 0) {
                 o.str(opts->yyshift);
@@ -689,7 +680,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             }
         } else {
             if (!fixed_on_cursor) {
-                o.str(opts->yycursor).cstr(" = ").str(vartag_expr(fins[tag.base], opts));
+                o.str(opts->yycursor).cstr(" = ").str(base);
                 if (dist > 0) o.cstr(" - ").i32(dist);
             } else if (dist > 0) {
                 o.str(opts->yycursor).cstr(" -= ").i32(dist);
