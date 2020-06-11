@@ -638,87 +638,78 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
     const tagver_t *fins = dfa.finvers;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    std::string expr, s;
 
     if (rule.ncap > 0) {
         o.cstr("yynmatch = ").u64(rule.ncap);
         append(stmts, code_stmt(alc, o.flush()));
     }
 
-    // variable tags
+    CodeList *varops = code_list(alc);
+    CodeList *fixops = code_list(alc);
+    CodeList *fixtrailops = code_list(alc);
+
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         const Tag &tag = tags[t];
-
-        // see note [fixed and variable tags]
-        if (fictive(tag) || fixed(tag)) continue;
-
-        expr = vartag_expr(fins[t], opts);
-        if (!trailing(tag)) {
-            gen_assign(output, stmts, tag_expr(tag, true), expr);
-        } else {
-            const bool notag = dfa.oldstyle_ctxmarker;
-            if (generic) {
-                gen_restorectx(output, stmts, notag ? "" : expr);
+        if (fictive(tag)) {
+            // structural tag that is only needed for disambiguation
+        } else if (!fixed(tag)) {
+            // variable tag
+            const std::string expr = vartag_expr(fins[t], opts);
+            if (trailing(tag)) {
+                const bool notag = dfa.oldstyle_ctxmarker;
+                if (generic) {
+                    gen_restorectx(output, varops, notag ? "" : expr);
+                } else {
+                    gen_assign(output, varops, opts->yycursor,
+                        notag ? opts->yyctxmarker : expr);
+                }
             } else {
-                gen_assign(output, stmts, opts->yycursor,
-                    notag ? opts->yyctxmarker : expr);
+                gen_assign(output, varops, tag_expr(tag, true), expr);
             }
-        }
-    }
-
-    // fixed trailing context
-    for (size_t t = rule.ltag; t < rule.htag; ++t) {
-        const Tag &tag = tags[t];
-        if (fictive(tag) || !fixed(tag) || !trailing(tag)) continue;
-
-        const int32_t dist = static_cast<int32_t>(tag.dist);
-        const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
-        const std::string base = fixed_on_cursor
-            ? opts->yycursor : vartag_expr(fins[tag.base], opts);
-
-        if (generic) {
-            DASSERT(!history(tag));
-            if (!fixed_on_cursor) {
-                gen_restorectx(output, stmts, base);
-            }
-            gen_shift(output, stmts, -dist, "", false /* unused */);
         } else {
-            if (!fixed_on_cursor) {
-                o.str(opts->yycursor).cstr(" = ").str(base);
-                if (dist > 0) o.cstr(" - ").i32(dist);
-            } else if (dist > 0) {
-                o.str(opts->yycursor).cstr(" -= ").i32(dist);
-            }
-            append(stmts, code_stmt(alc, o.flush()));
-        }
-    }
+            // fixed tag that is based on either variable tag or cursor
+            const int32_t dist = static_cast<int32_t>(tag.dist);
+            const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
+            const std::string base = fixed_on_cursor
+                ? opts->yycursor : vartag_expr(fins[tag.base], opts);
 
-    // fixed tags (except for trailing context)
-    for (size_t t = rule.ltag; t < rule.htag; ++t) {
-        const Tag &tag = tags[t];
-
-        // see note [fixed and variable tags]
-        if (fictive(tag) || !fixed(tag) || trailing(tag)) continue;
-
-        const int32_t dist = static_cast<int32_t>(tag.dist);
-        const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
-        const std::string fix = tag_expr(tag, true);
-        const std::string base = fixed_on_cursor
-            ? opts->yycursor : vartag_expr(fins[tag.base], opts);
-
-        if (generic) {
-            if (fixed_on_cursor) {
-                gen_settag(output, stmts, fix, false, history(tag));
+            if (trailing(tag)) {
+                if (generic) {
+                    DASSERT(!history(tag));
+                    if (!fixed_on_cursor) {
+                        gen_restorectx(output, fixtrailops, base);
+                    }
+                    gen_shift(output, fixtrailops, -dist, "", false /* unused */);
+                } else {
+                    if (!fixed_on_cursor) {
+                        o.str(opts->yycursor).cstr(" = ").str(base);
+                        if (dist > 0) o.cstr(" - ").i32(dist);
+                    } else if (dist > 0) {
+                        o.str(opts->yycursor).cstr(" -= ").i32(dist);
+                    }
+                    append(fixtrailops, code_stmt(alc, o.flush()));
+                }
             } else {
-                gen_assign(output, stmts, fix, base);
+                const std::string fix = tag_expr(tag, true);
+                if (generic) {
+                    if (fixed_on_cursor) {
+                        gen_settag(output, fixops, fix, false, history(tag));
+                    } else {
+                        gen_assign(output, fixops, fix, base);
+                    }
+                    gen_shift(output, fixops, -dist, fix, false);
+                } else {
+                    o.str(fix).cstr(" = ").str(base);
+                    if (dist > 0) o.cstr(" - ").i32(dist);
+                    append(fixops, code_stmt(alc, o.flush()));
+                }
             }
-            gen_shift(output, stmts, -dist, fix, false);
-        } else {
-            o.str(fix).cstr(" = ").str(base);
-            if (dist > 0) o.cstr(" - ").i32(dist);
-            append(stmts, code_stmt(alc, o.flush()));
         }
     }
+
+    append(stmts, varops);
+    append(stmts, fixtrailops);
+    append(stmts, fixops);
 }
 
 std::string tag_expr(const Tag &tag, bool lvalue)
