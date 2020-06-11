@@ -157,8 +157,8 @@ int lex_line108()
         YYCTYPE yych;
         unsigned int yyaccept = 0;
 
-        if (YYLESSTHAN (4)) YYFILL(4);
-        yych = YYPEEK ();
+        if (YYLESSTHAN(4)) YYFILL(4);
+        yych = YYPEEK();
         {
             static void *yytarget[256] = {
                 &&yy3,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
@@ -197,144 +197,144 @@ int lex_line108()
             goto *yytarget[yych];
         }
 yy2:
-        YYRESTORE ();
+        YYRESTORE();
         if (yyaccept == 0) {
             goto yy8;
         } else {
             goto yy6;
         }
 yy3:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line108(keys_count, i, 3)
              || action_line108(&i, keys, input, token, &cursor, 7);
         continue;
 yy5:
-        YYSKIP ();
+        YYSKIP();
 yy6:
         status = check_key_count_line108(keys_count, i, 3)
              || action_line108(&i, keys, input, token, &cursor, 8);
         continue;
 yy7:
-        YYSKIP ();
+        YYSKIP();
 yy8:
         status = check_key_count_line108(keys_count, i, 3)
              || action_line108(&i, keys, input, token, &cursor, 6);
         continue;
 yy9:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line108(keys_count, i, 3)
              || action_line108(&i, keys, input, token, &cursor, 4);
         continue;
 yy11:
         yyaccept = 0;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
         if (yych <= '-') goto yy8;
         if (yych <= '.') goto yy23;
         if (yych <= '/') goto yy24;
         goto yy8;
 yy12:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line108(keys_count, i, 3)
              || action_line108(&i, keys, input, token, &cursor, 5);
         continue;
 yy14:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line108(keys_count, i, 3)
              || action_line108(&i, keys, input, token, &cursor, 3);
         continue;
 yy16:
-        YYSKIP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        yych = YYPEEK();
         if (yych <= 0x7F) goto yy6;
         if (yych <= 0xBF) goto yy7;
         goto yy6;
 yy17:
         yyaccept = 1;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
         if (yych <= 0x9F) goto yy6;
         if (yych <= 0xBF) goto yy26;
         goto yy6;
 yy18:
         yyaccept = 1;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
         if (yych <= 0x7F) goto yy6;
         if (yych <= 0xBF) goto yy26;
         goto yy6;
 yy19:
         yyaccept = 1;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
         if (yych <= 0x7F) goto yy6;
         if (yych <= 0x9F) goto yy26;
         goto yy6;
 yy20:
         yyaccept = 1;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
         if (yych <= 0x8F) goto yy6;
         if (yych <= 0xBF) goto yy27;
         goto yy6;
 yy21:
         yyaccept = 1;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
         if (yych <= 0x7F) goto yy6;
         if (yych <= 0xBF) goto yy27;
         goto yy6;
 yy22:
         yyaccept = 1;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
         if (yych <= 0x7F) goto yy6;
         if (yych <= 0x8F) goto yy27;
         goto yy6;
 yy23:
-        YYSKIP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        yych = YYPEEK();
         if (yych <= 0x00) goto yy28;
         if (yych <= '-') goto yy2;
         if (yych <= '.') goto yy30;
         if (yych <= '/') goto yy28;
         goto yy2;
 yy24:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line108(keys_count, i, 3)
              || action_line108(&i, keys, input, token, &cursor, 0);
         continue;
 yy26:
-        YYSKIP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        yych = YYPEEK();
         if (yych <= 0x7F) goto yy2;
         if (yych <= 0xBF) goto yy7;
         goto yy2;
 yy27:
-        YYSKIP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        yych = YYPEEK();
         if (yych <= 0x7F) goto yy2;
         if (yych <= 0xBF) goto yy26;
         goto yy2;
 yy28:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line108(keys_count, i, 3)
              || action_line108(&i, keys, input, token, &cursor, 2);
         continue;
 yy30:
-        YYSKIP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        yych = YYPEEK();
         if (yych <= 0x00) goto yy31;
         if (yych != '/') goto yy2;
 yy31:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line108(keys_count, i, 3)
              || action_line108(&i, keys, input, token, &cursor, 1);
         continue;

@@ -7,8 +7,8 @@
 	switch (yych) {
 	case 'b':	goto yy3;
 	default:
-		YYMTAGP (yyt2);
-		YYMTAGP (yyt2);
+		YYMTAGP(yyt2);
+		YYMTAGP(yyt2);
 		goto yy2;
 	}
 yy2:
@@ -17,21 +17,21 @@ yy2:
 yy3:
 	yych = *++YYCURSOR;
 	yyt1 = yyt2;
-	YYMTAGP (yyt1);
-	YYSHIFTMTAG (yyt1, -1);
-	YYMTAGP (yyt2);
-	YYSHIFTMTAG (yyt2, -1);
+	YYMTAGP(yyt1);
+	YYSHIFTMTAG(yyt1, -1);
+	YYMTAGP(yyt2);
+	YYSHIFTMTAG(yyt2, -1);
 	switch (yych) {
 	case 'b':	goto yy4;
 	default:
-		YYMTAGP (yyt2);
+		YYMTAGP(yyt2);
 		goto yy2;
 	}
 yy4:
 	++YYCURSOR;
 	yyt2 = yyt1;
-	YYMTAGP (yyt2);
-	YYSHIFTMTAG (yyt2, -1);
+	YYMTAGP(yyt2);
+	YYSHIFTMTAG(yyt2, -1);
 	goto yy2;
 }
 

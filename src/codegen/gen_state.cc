@@ -148,7 +148,7 @@ static void gen_restore(Output &output, CodeList *stmts)
         append(stmts, code_stmt(alc, text));
     }
     else if (opts->decorate) {
-        text = o.str(opts->yyrestore).cstr(" ()").flush();
+        text = o.str(opts->yyrestore).cstr("()").flush();
         append(stmts, code_stmt(alc, text));
     }
     else {
@@ -491,7 +491,7 @@ static void gen_shift(Output &output, CodeList *stmts, int32_t shift,
     o.str(notag ? opts->yyshift
         : history ? opts->yyshiftmtag : opts->yyshiftstag);
     if (opts->decorate) {
-        o.cstr(" (");
+        o.cstr("(");
         if (!notag) o.str(tag).cstr(", ");
         o.i32(shift).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
@@ -518,7 +518,7 @@ static void gen_settag(Output &output, CodeList *stmts, const std::string &tag,
         : (negative ? opts->yystagn : opts->yystagp);
     o.str(s);
     if (opts->decorate) {
-        o.cstr(" (").str(tag).cstr(")");
+        o.cstr("(").str(tag).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
     } else {
         argsubst(o.stream(), opts->placeholder, "tag", true, tag);
@@ -544,7 +544,7 @@ static void gen_restorectx(Output &output, CodeList *stmts, const std::string &t
 
     o.str(notag ? opts->yyrestorectx : opts->yyrestoretag);
     if (opts->decorate) {
-        o.cstr(" (").str(tag).cstr(")");
+        o.cstr("(").str(tag).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
     } else {
         if (!notag) {
@@ -569,7 +569,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
         if (generic) {
             o.str(opts->yybackupctx);
             if (opts->decorate) {
-                o.cstr(" ()");
+                o.cstr("()");
                 append(tag_actions, code_stmt(alc, o.flush()));
             } else {
                 append(tag_actions, code_text(alc, o.flush()));
@@ -747,7 +747,7 @@ const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)
     if (opts->input_api == INPUT_CUSTOM) {
         o.str(opts->yylessthan);
         if (opts->decorate) {
-            o.cstr(" (").u64(n).cstr(")");
+            o.cstr("(").u64(n).cstr(")");
         } else {
             argsubst(o.stream(), opts->placeholder, "len", true, n);
         }

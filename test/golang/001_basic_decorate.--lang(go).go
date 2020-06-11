@@ -47,7 +47,7 @@ func Lex(str string) int {
 //line "golang/001_basic_decorate.--lang(go).go":48
 {
 	var yych YYCTYPE
-	yych = YYPEEK ()
+	yych = YYPEEK()
 	switch (yych) {
 	case '0':
 		fallthrough
@@ -73,7 +73,7 @@ func Lex(str string) int {
 		goto yy2
 	}
 yy2:
-	YYSKIP ()
+	YYSKIP()
 yy3:
 //line "golang/001_basic_decorate.--lang(go).re":50
 	{
@@ -81,9 +81,9 @@ yy3:
 	}
 //line "golang/001_basic_decorate.--lang(go).go":83
 yy4:
-	YYSKIP ()
-	YYBACKUP ()
-	yych = YYPEEK ()
+	YYSKIP()
+	YYBACKUP()
+	yych = YYPEEK()
 	switch (yych) {
 	case 0x00:
 		goto yy5
@@ -111,15 +111,15 @@ yy4:
 		goto yy3
 	}
 yy5:
-	YYSKIP ()
+	YYSKIP()
 //line "golang/001_basic_decorate.--lang(go).re":54
 	{
 		return 1
 	}
 //line "golang/001_basic_decorate.--lang(go).go":120
 yy7:
-	YYSKIP ()
-	yych = YYPEEK ()
+	YYSKIP()
+	yych = YYPEEK()
 	switch (yych) {
 	case 0x00:
 		goto yy5
@@ -147,7 +147,7 @@ yy7:
 		goto yy9
 	}
 yy9:
-	YYRESTORE ()
+	YYRESTORE()
 	goto yy3
 }
 //line "golang/001_basic_decorate.--lang(go).re":57

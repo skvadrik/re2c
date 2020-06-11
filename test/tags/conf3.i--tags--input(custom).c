@@ -34,7 +34,7 @@ static void lex(const char *s)
     
 {
 	char yych;
-	yych = YYPEEK ();
+	yych = YYPEEK();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -46,21 +46,21 @@ static void lex(const char *s)
 	case '7':
 	case '8':
 	case '9':
-		YYSTAGP (tags.yyt1);
+		YYSTAGP(tags.yyt1);
 		goto yy4;
 	default:	goto yy2;
 	}
 yy2:
-	YYSKIP ();
+	YYSKIP();
 yy3:
 	{ printf("error\n"); return; }
 yy4:
-	YYSKIP ();
-	YYBACKUP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	YYBACKUP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '.':
-		YYSTAGP (tags.yyt2);
+		YYSTAGP(tags.yyt2);
 		goto yy5;
 	case '0':
 	case '1':
@@ -75,8 +75,8 @@ yy4:
 	default:	goto yy3;
 	}
 yy5:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -91,14 +91,14 @@ yy5:
 	default:	goto yy6;
 	}
 yy6:
-	YYRESTORE ();
+	YYRESTORE();
 	goto yy3;
 yy7:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '.':
-		YYSTAGP (tags.yyt2);
+		YYSTAGP(tags.yyt2);
 		goto yy5;
 	case '0':
 	case '1':
@@ -113,11 +113,11 @@ yy7:
 	default:	goto yy6;
 	}
 yy8:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '.':
-		YYSTAGP (tags.yyt3);
+		YYSTAGP(tags.yyt3);
 		goto yy10;
 	case '0':
 	case '1':
@@ -132,17 +132,17 @@ yy8:
 	default:	goto yy6;
 	}
 yy9:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '.':
-		YYSTAGP (tags.yyt2);
+		YYSTAGP(tags.yyt2);
 		goto yy5;
 	default:	goto yy6;
 	}
 yy10:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -157,11 +157,11 @@ yy10:
 	default:	goto yy6;
 	}
 yy11:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '.':
-		YYSTAGP (tags.yyt3);
+		YYSTAGP(tags.yyt3);
 		goto yy10;
 	case '0':
 	case '1':
@@ -176,11 +176,11 @@ yy11:
 	default:	goto yy6;
 	}
 yy12:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '.':
-		YYSTAGP (tags.yyt4);
+		YYSTAGP(tags.yyt4);
 		goto yy14;
 	case '0':
 	case '1':
@@ -195,17 +195,17 @@ yy12:
 	default:	goto yy6;
 	}
 yy13:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '.':
-		YYSTAGP (tags.yyt3);
+		YYSTAGP(tags.yyt3);
 		goto yy10;
 	default:	goto yy6;
 	}
 yy14:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -220,11 +220,11 @@ yy14:
 	default:	goto yy6;
 	}
 yy15:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '.':
-		YYSTAGP (tags.yyt4);
+		YYSTAGP(tags.yyt4);
 		goto yy14;
 	case '0':
 	case '1':
@@ -239,8 +239,8 @@ yy15:
 	default:	goto yy6;
 	}
 yy16:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -268,17 +268,17 @@ yy17:
             return;
         }
 yy18:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '.':
-		YYSTAGP (tags.yyt4);
+		YYSTAGP(tags.yyt4);
 		goto yy14;
 	default:	goto yy6;
 	}
 yy19:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -293,7 +293,7 @@ yy19:
 	default:	goto yy17;
 	}
 yy20:
-	YYSKIP ();
+	YYSKIP();
 	goto yy17;
 }
 

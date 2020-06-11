@@ -108,10 +108,10 @@ func Lex(in *Input) int {
 //line "golang/003_fill_decorate.--lang(go).go":109
 {
 	var yych YYCTYPE
-	if (YYLESSTHAN (1)) {
+	if (YYLESSTHAN(1)) {
 		if YYFILL(1) != 0 { return -2 }
 	}
-	yych = YYPEEK ()
+	yych = YYPEEK()
 	switch (yych) {
 	case 0x00:
 		goto yy2
@@ -141,7 +141,7 @@ func Lex(in *Input) int {
 		goto yy4
 	}
 yy2:
-	YYSKIP ()
+	YYSKIP()
 //line "golang/003_fill_decorate.--lang(go).re":114
 	{
 		fmt.Println("end")
@@ -149,7 +149,7 @@ yy2:
 	}
 //line "golang/003_fill_decorate.--lang(go).go":151
 yy4:
-	YYSKIP ()
+	YYSKIP()
 //line "golang/003_fill_decorate.--lang(go).re":109
 	{
 		fmt.Println("error")
@@ -157,19 +157,19 @@ yy4:
 	}
 //line "golang/003_fill_decorate.--lang(go).go":159
 yy6:
-	YYSKIP ()
+	YYSKIP()
 //line "golang/003_fill_decorate.--lang(go).re":129
 	{
 		return 3
 	}
 //line "golang/003_fill_decorate.--lang(go).go":166
 yy8:
-	YYSKIP ()
-	YYBACKUP ()
-	if (YYLESSTHAN (2)) {
+	YYSKIP()
+	YYBACKUP()
+	if (YYLESSTHAN(2)) {
 		if YYFILL(2) != 0 { return -2 }
 	}
-	yych = YYPEEK ()
+	yych = YYPEEK()
 	switch (yych) {
 	case '-':
 		goto yy11
@@ -204,8 +204,8 @@ yy10:
 	}
 //line "golang/003_fill_decorate.--lang(go).go":206
 yy11:
-	YYSKIP ()
-	yych = YYPEEK ()
+	YYSKIP()
+	yych = YYPEEK()
 	switch (yych) {
 	case '0':
 		fallthrough
@@ -231,14 +231,14 @@ yy11:
 		goto yy12
 	}
 yy12:
-	YYRESTORE ()
+	YYRESTORE()
 	goto yy10
 yy13:
-	YYSKIP ()
-	if (YYLESSTHAN (1)) {
+	YYSKIP()
+	if (YYLESSTHAN(1)) {
 		if YYFILL(1) != 0 { return -2 }
 	}
-	yych = YYPEEK ()
+	yych = YYPEEK()
 	switch (yych) {
 	case '0':
 		fallthrough

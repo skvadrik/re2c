@@ -921,11 +921,11 @@ yy64:
 	case '\t':
 	case ' ':	goto yy64;
 	case '\n':
-		YYMTAGN (yyt8);
-		YYMTAGN (yyt7);
+		YYMTAGN(yyt8);
+		YYMTAGN(yyt7);
 		goto yy66;
 	case '#':
-		YYMTAGP (yyt7);
+		YYMTAGP(yyt7);
 		goto yy68;
 	case '-':
 	case '0':
@@ -964,7 +964,7 @@ yy64:
 	case 'x':
 	case 'y':
 	case 'z':
-		YYMTAGP (yyt7);
+		YYMTAGP(yyt7);
 		goto yy69;
 	default:	goto yy13;
 	}
@@ -1084,7 +1084,7 @@ yy73:
 	switch (yych) {
 	case '\t':
 	case ' ':
-		YYMTAGP (yyt8);
+		YYMTAGP(yyt8);
 		goto yy76;
 	case '-':
 	case '0':
@@ -1124,7 +1124,7 @@ yy73:
 	case 'y':
 	case 'z':	goto yy73;
 	case ';':
-		YYMTAGP (yyt8);
+		YYMTAGP(yyt8);
 		goto yy78;
 	default:	goto yy13;
 	}
@@ -1149,7 +1149,7 @@ yy78:
 	case ' ':	goto yy78;
 	case '\n':	goto yy66;
 	case '#':
-		YYMTAGP (yyt7);
+		YYMTAGP(yyt7);
 		goto yy68;
 	case '-':
 	case '0':
@@ -1188,7 +1188,7 @@ yy78:
 	case 'x':
 	case 'y':
 	case 'z':
-		YYMTAGP (yyt7);
+		YYMTAGP(yyt7);
 		goto yy69;
 	default:	goto yy13;
 	}

@@ -4,10 +4,10 @@
 	YYCTYPE yych;
 	goto yy0;
 yy1:
-	YYSKIP ();
+	YYSKIP();
 yy0:
-	if (YYLESSTHAN (1)) YYFILL(1);
-	yych = YYPEEK ();
+	if (YYLESSTHAN(1)) YYFILL(1);
+	yych = YYPEEK();
 	goto yy1;
 }
 

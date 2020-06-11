@@ -65,12 +65,12 @@ yy12:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	YYMTAGP (yyt3);
-	YYSHIFTMTAG (yyt3, -1);
-	YYMTAGP (yyt3);
-	YYSHIFTMTAG (yyt3, -1);
-	YYMTAGP (yyt3);
-	YYSHIFTMTAG (yyt3, -1);
+	YYMTAGP(yyt3);
+	YYSHIFTMTAG(yyt3, -1);
+	YYMTAGP(yyt3);
+	YYSHIFTMTAG(yyt3, -1);
+	YYMTAGP(yyt3);
+	YYSHIFTMTAG(yyt3, -1);
 	switch (yych) {
 	case 'b':
 	case 'c':	goto yy14;
@@ -80,12 +80,12 @@ yy13:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	YYMTAGP (yyt3);
-	YYSHIFTMTAG (yyt3, -1);
-	YYMTAGP (yyt3);
-	YYSHIFTMTAG (yyt3, -1);
-	YYMTAGP (yyt3);
-	YYSHIFTMTAG (yyt3, -1);
+	YYMTAGP(yyt3);
+	YYSHIFTMTAG(yyt3, -1);
+	YYMTAGP(yyt3);
+	YYSHIFTMTAG(yyt3, -1);
+	YYMTAGP(yyt3);
+	YYSHIFTMTAG(yyt3, -1);
 	switch (yych) {
 	case 'a':	goto yy6;
 	case 'b':	goto yy14;

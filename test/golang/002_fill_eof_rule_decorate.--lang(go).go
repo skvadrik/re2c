@@ -102,7 +102,7 @@ func Lex(in *Input) int {
 {
 	var yych YYCTYPE
 yyFillLabel0:
-	yych = YYPEEK ()
+	yych = YYPEEK()
 	switch (yych) {
 	case ' ':
 		goto yy4
@@ -127,7 +127,7 @@ yyFillLabel0:
 	case '9':
 		goto yy6
 	default:
-		if (YYLESSTHAN (1)) {
+		if (YYLESSTHAN(1)) {
 			if (YYFILL() == 0) {
 				goto yyFillLabel0
 			}
@@ -136,7 +136,7 @@ yyFillLabel0:
 		goto yy2
 	}
 yy2:
-	YYSKIP ()
+	YYSKIP()
 //line "golang/002_fill_eof_rule_decorate.--lang(go).re":102
 	{
 		fmt.Println("error")
@@ -144,17 +144,17 @@ yy2:
 	}
 //line "golang/002_fill_eof_rule_decorate.--lang(go).go":146
 yy4:
-	YYSKIP ()
+	YYSKIP()
 //line "golang/002_fill_eof_rule_decorate.--lang(go).re":122
 	{
 		return 3
 	}
 //line "golang/002_fill_eof_rule_decorate.--lang(go).go":153
 yy6:
-	YYSKIP ()
-	YYBACKUP ()
+	YYSKIP()
+	YYBACKUP()
 yyFillLabel1:
-	yych = YYPEEK ()
+	yych = YYPEEK()
 	switch (yych) {
 	case '-':
 		goto yy9
@@ -179,7 +179,7 @@ yyFillLabel1:
 	case '9':
 		goto yy6
 	default:
-		if (YYLESSTHAN (1)) {
+		if (YYLESSTHAN(1)) {
 			if (YYFILL() == 0) {
 				goto yyFillLabel1
 			}
@@ -194,9 +194,9 @@ yy8:
 	}
 //line "golang/002_fill_eof_rule_decorate.--lang(go).go":196
 yy9:
-	YYSKIP ()
+	YYSKIP()
 yyFillLabel2:
-	yych = YYPEEK ()
+	yych = YYPEEK()
 	switch (yych) {
 	case '0':
 		fallthrough
@@ -219,7 +219,7 @@ yyFillLabel2:
 	case '9':
 		goto yy11
 	default:
-		if (YYLESSTHAN (1)) {
+		if (YYLESSTHAN(1)) {
 			if (YYFILL() == 0) {
 				goto yyFillLabel2
 			}
@@ -227,12 +227,12 @@ yyFillLabel2:
 		goto yy10
 	}
 yy10:
-	YYRESTORE ()
+	YYRESTORE()
 	goto yy8
 yy11:
-	YYSKIP ()
+	YYSKIP()
 yyFillLabel3:
-	yych = YYPEEK ()
+	yych = YYPEEK()
 	switch (yych) {
 	case '0':
 		fallthrough
@@ -255,7 +255,7 @@ yyFillLabel3:
 	case '9':
 		goto yy11
 	default:
-		if (YYLESSTHAN (1)) {
+		if (YYLESSTHAN(1)) {
 			if (YYFILL() == 0) {
 				goto yyFillLabel3
 			}

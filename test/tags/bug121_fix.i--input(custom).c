@@ -4,34 +4,34 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	if (YYLESSTHAN (5)) YYFILL(5);
-	yych = YYPEEK ();
+	if (YYLESSTHAN(5)) YYFILL(5);
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':	goto yy4;
 	default:	goto yy2;
 	}
 yy2:
-	YYSKIP ();
+	YYSKIP();
 yy3:
 	{ * }
 yy4:
 	yyaccept = 0;
-	YYSKIP ();
-	YYBACKUP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	YYBACKUP();
+	yych = YYPEEK();
 	switch (yych) {
 	case 'b':	goto yy5;
 	default:	goto yy3;
 	}
 yy5:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':	goto yy7;
 	default:	goto yy6;
 	}
 yy6:
-	YYRESTORE ();
+	YYRESTORE();
 	if (yyaccept == 0) {
 		goto yy3;
 	} else {
@@ -39,26 +39,26 @@ yy6:
 	}
 yy7:
 	yyaccept = 1;
-	YYSKIP ();
-	YYBACKUP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	YYBACKUP();
+	yych = YYPEEK();
 	switch (yych) {
 	case 'b':	goto yy9;
 	default:	goto yy8;
 	}
 yy8:
-	YYSHIFT (-2);
+	YYSHIFT(-2);
 	{ 1 }
 yy9:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':	goto yy10;
 	default:	goto yy6;
 	}
 yy10:
-	YYSKIP ();
-	YYSHIFT (-2);
+	YYSKIP();
+	YYSHIFT(-2);
 	{ 0 }
 }
 

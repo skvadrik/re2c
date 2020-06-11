@@ -37,33 +37,33 @@ yy7:
 
 {
 	YYCTYPE yych;
-	if (YYLESSTHAN (2)) YYFILL(2);
-	yych = YYPEEK ();
+	if (YYLESSTHAN(2)) YYFILL(2);
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':	goto yy12;
 	default:	goto yy10;
 	}
 yy10:
-	YYSKIP ();
+	YYSKIP();
 yy11:
 	{}
 yy12:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':	goto yy13;
 	default:	goto yy11;
 	}
 yy13:
-	YYSKIP ();
-	if (YYLESSTHAN (1)) YYFILL(1);
-	yych = YYPEEK ();
+	YYSKIP();
+	if (YYLESSTHAN(1)) YYFILL(1);
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':	goto yy13;
 	default:	goto yy15;
 	}
 yy15:
-	YYSHIFT (-1);
+	YYSHIFT(-1);
 	{}
 }
 
@@ -148,37 +148,37 @@ yy31:
 
 {
 	YYCTYPE yych;
-	if (YYLESSTHAN (2)) YYFILL(2);
-	yych = YYPEEK ();
+	if (YYLESSTHAN(2)) YYFILL(2);
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':	goto yy36;
 	default:	goto yy34;
 	}
 yy34:
-	YYSKIP ();
+	YYSKIP();
 yy35:
 	{}
 yy36:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':
-		YYBACKUPCTX ();
+		YYBACKUPCTX();
 		goto yy37;
 	default:	goto yy35;
 	}
 yy37:
-	YYSKIP ();
-	if (YYLESSTHAN (1)) YYFILL(1);
-	yych = YYPEEK ();
+	YYSKIP();
+	if (YYLESSTHAN(1)) YYFILL(1);
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':
-		YYBACKUPCTX ();
+		YYBACKUPCTX();
 		goto yy37;
 	default:	goto yy39;
 	}
 yy39:
-	YYRESTORECTX ();
+	YYRESTORECTX();
 	{}
 }
 
@@ -187,37 +187,37 @@ yy39:
 
 {
 	YYCTYPE yych;
-	if (YYLESSTHAN (2)) YYFILL(2);
-	yych = YYPEEK ();
+	if (YYLESSTHAN(2)) YYFILL(2);
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':	goto yy44;
 	default:	goto yy42;
 	}
 yy42:
-	YYSKIP ();
+	YYSKIP();
 yy43:
 	{}
 yy44:
-	YYSKIP ();
-	yych = YYPEEK ();
+	YYSKIP();
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':
-		YYSTAGP (yyt1);
+		YYSTAGP(yyt1);
 		goto yy45;
 	default:	goto yy43;
 	}
 yy45:
-	YYSKIP ();
-	if (YYLESSTHAN (1)) YYFILL(1);
-	yych = YYPEEK ();
+	YYSKIP();
+	if (YYLESSTHAN(1)) YYFILL(1);
+	yych = YYPEEK();
 	switch (yych) {
 	case 'a':
-		YYSTAGP (yyt1);
+		YYSTAGP(yyt1);
 		goto yy45;
 	default:	goto yy47;
 	}
 yy47:
-	YYRESTORETAG (yyt1);
+	YYRESTORETAG(yyt1);
 	{}
 }
 

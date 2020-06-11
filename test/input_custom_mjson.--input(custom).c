@@ -491,7 +491,7 @@ static void parsectx_next_token(mjson_parser_t* context)
         {
             YYCTYPE yych;
             unsigned int yyaccept = 0;
-            yych = YYPEEK ();
+            yych = YYPEEK();
             switch (yych) {
             case 0x00:    goto yy2;
             case '\t':
@@ -576,7 +576,7 @@ static void parsectx_next_token(mjson_parser_t* context)
             default:    goto yy4;
             }
 yy2:
-            YYSKIP ();
+            YYSKIP();
 #line 612 "input_custom_mjson.--input(custom).re"
             { 
                 context->token = TOK_NONE;
@@ -584,7 +584,7 @@ yy2:
             }
 #line 586 "input_custom_mjson.--input(custom).c"
 yy4:
-            YYSKIP ();
+            YYSKIP();
 yy5:
 #line 622 "input_custom_mjson.--input(custom).re"
             {
@@ -593,8 +593,8 @@ yy5:
             }
 #line 595 "input_custom_mjson.--input(custom).c"
 yy6:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '\t':
             case '\n':
@@ -610,16 +610,16 @@ yy8:
 #line 611 "input_custom_mjson.--input(custom).c"
 yy9:
             yyaccept = 0;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            YYBACKUP();
+            yych = YYPEEK();
             if (yych <= 0x00) goto yy5;
             goto yy38;
 yy10:
             yyaccept = 0;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            YYBACKUP();
+            yych = YYPEEK();
             switch (yych) {
             case '.':    goto yy43;
             case '0':    goto yy44;
@@ -635,7 +635,7 @@ yy10:
             default:    goto yy5;
             }
 yy11:
-            YYSKIP ();
+            YYSKIP();
 #line 557 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_COMMA;
@@ -643,8 +643,8 @@ yy11:
             }
 #line 645 "input_custom_mjson.--input(custom).c"
 yy13:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -660,17 +660,17 @@ yy13:
             }
 yy14:
             yyaccept = 0;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            YYBACKUP();
+            yych = YYPEEK();
             switch (yych) {
             case '*':    goto yy50;
             case '/':    goto yy52;
             default:    goto yy5;
             }
 yy15:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '.':
             case '0':
@@ -746,8 +746,8 @@ yy16:
             }
 #line 748 "input_custom_mjson.--input(custom).c"
 yy17:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '.':    goto yy47;
             case '0':
@@ -816,7 +816,7 @@ yy17:
             default:    goto yy16;
             }
 yy19:
-            YYSKIP ();
+            YYSKIP();
 #line 547 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_COLON;
@@ -824,7 +824,7 @@ yy19:
             }
 #line 826 "input_custom_mjson.--input(custom).c"
 yy21:
-            YYSKIP ();
+            YYSKIP();
 #line 552 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_EQUAL;
@@ -832,8 +832,8 @@ yy21:
             }
 #line 834 "input_custom_mjson.--input(custom).c"
 yy23:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
 yy24:
             switch (yych) {
             case '0':
@@ -909,7 +909,7 @@ yy25:
             }
 #line 911 "input_custom_mjson.--input(custom).c"
 yy26:
-            YYSKIP ();
+            YYSKIP();
 #line 537 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_LEFT_BRACKET;
@@ -917,7 +917,7 @@ yy26:
             }
 #line 919 "input_custom_mjson.--input(custom).c"
 yy28:
-            YYSKIP ();
+            YYSKIP();
 #line 542 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_RIGHT_BRACKET;
@@ -925,28 +925,28 @@ yy28:
             }
 #line 927 "input_custom_mjson.--input(custom).c"
 yy30:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 'a':    goto yy64;
             default:    goto yy24;
             }
 yy31:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 'u':    goto yy65;
             default:    goto yy24;
             }
 yy32:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 'r':    goto yy66;
             default:    goto yy24;
             }
 yy33:
-            YYSKIP ();
+            YYSKIP();
 #line 527 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_LEFT_CURLY_BRACKET;
@@ -954,7 +954,7 @@ yy33:
             }
 #line 956 "input_custom_mjson.--input(custom).c"
 yy35:
-            YYSKIP ();
+            YYSKIP();
 #line 532 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_RIGHT_CURLY_BRACKET;
@@ -962,8 +962,8 @@ yy35:
             }
 #line 964 "input_custom_mjson.--input(custom).c"
 yy37:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
 yy38:
             switch (yych) {
             case 0x00:    goto yy39;
@@ -972,7 +972,7 @@ yy38:
             default:    goto yy37;
             }
 yy39:
-            YYRESTORE ();
+            YYRESTORE();
             switch (yyaccept) {
             case 0:
                 goto yy5;
@@ -986,7 +986,7 @@ yy39:
                 goto yy93;
             }
 yy40:
-            YYSKIP ();
+            YYSKIP();
 #line 602 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_NOESC_STRING;
@@ -994,8 +994,8 @@ yy40:
             }
 #line 996 "input_custom_mjson.--input(custom).c"
 yy42:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '"':
             case '/':
@@ -1009,8 +1009,8 @@ yy42:
             default:    goto yy39;
             }
 yy43:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1026,9 +1026,9 @@ yy43:
             }
 yy44:
             yyaccept = 1;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            YYBACKUP();
+            yych = YYPEEK();
             switch (yych) {
             case '.':    goto yy47;
             case '0':
@@ -1047,9 +1047,9 @@ yy44:
             }
 yy45:
             yyaccept = 1;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            YYBACKUP();
+            yych = YYPEEK();
             switch (yych) {
             case '.':    goto yy47;
             case '0':
@@ -1068,9 +1068,9 @@ yy45:
             }
 yy47:
             yyaccept = 2;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            YYBACKUP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1094,24 +1094,24 @@ yy49:
             }
 #line 1096 "input_custom_mjson.--input(custom).c"
 yy50:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 0x00:    goto yy39;
             case '*':    goto yy73;
             default:    goto yy50;
             }
 yy52:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 0x00:    goto yy39;
             case '\n':    goto yy74;
             default:    goto yy52;
             }
 yy54:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
 yy55:
             switch (yych) {
             case '.':    goto yy47;
@@ -1188,8 +1188,8 @@ yy56:
             }
 #line 1190 "input_custom_mjson.--input(custom).c"
 yy57:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '.':    goto yy47;
             case '0':
@@ -1265,8 +1265,8 @@ yy59:
             }
 #line 1267 "input_custom_mjson.--input(custom).c"
 yy60:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
 yy61:
             switch (yych) {
             case '0':
@@ -1336,9 +1336,9 @@ yy61:
             }
 yy62:
             yyaccept = 3;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            YYBACKUP();
+            yych = YYPEEK();
             switch (yych) {
             case '+':
             case '-':    goto yy76;
@@ -1355,8 +1355,8 @@ yy62:
             default:    goto yy61;
             }
 yy63:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1424,29 +1424,29 @@ yy63:
             default:    goto yy59;
             }
 yy64:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 'l':    goto yy82;
             default:    goto yy24;
             }
 yy65:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 'l':    goto yy83;
             default:    goto yy24;
             }
 yy66:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 'u':    goto yy84;
             default:    goto yy24;
             }
 yy67:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 0x00:    goto yy39;
             case '"':    goto yy85;
@@ -1454,8 +1454,8 @@ yy67:
             default:    goto yy67;
             }
 yy69:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1482,8 +1482,8 @@ yy69:
             default:    goto yy39;
             }
 yy70:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '.':    goto yy47;
             case '0':
@@ -1501,8 +1501,8 @@ yy70:
             default:    goto yy39;
             }
 yy72:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '+':
             case '-':    goto yy76;
@@ -1519,8 +1519,8 @@ yy72:
             default:    goto yy39;
             }
 yy73:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 0x00:    goto yy39;
             case '*':    goto yy90;
@@ -1528,15 +1528,15 @@ yy73:
             default:    goto yy50;
             }
 yy74:
-            YYSKIP ();
+            YYSKIP();
 #line 519 "input_custom_mjson.--input(custom).re"
             {
                 continue; 
             }
 #line 1537 "input_custom_mjson.--input(custom).c"
 yy76:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1551,8 +1551,8 @@ yy76:
             default:    goto yy39;
             }
 yy77:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1620,8 +1620,8 @@ yy77:
             default:    goto yy49;
             }
 yy79:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
 yy80:
             switch (yych) {
             case '0':
@@ -1697,28 +1697,28 @@ yy81:
             }
 #line 1699 "input_custom_mjson.--input(custom).c"
 yy82:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 's':    goto yy94;
             default:    goto yy24;
             }
 yy83:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 'l':    goto yy95;
             default:    goto yy24;
             }
 yy84:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 'e':    goto yy97;
             default:    goto yy24;
             }
 yy85:
-            YYSKIP ();
+            YYSKIP();
 #line 607 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_STRING;
@@ -1726,8 +1726,8 @@ yy85:
             }
 #line 1728 "input_custom_mjson.--input(custom).c"
 yy87:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1754,8 +1754,8 @@ yy87:
             default:    goto yy39;
             }
 yy88:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1770,8 +1770,8 @@ yy88:
             default:    goto yy49;
             }
 yy90:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 0x00:    goto yy39;
             case '*':    goto yy90;
@@ -1779,7 +1779,7 @@ yy90:
             default:    goto yy50;
             }
 yy92:
-            YYSKIP ();
+            YYSKIP();
 yy93:
 #line 523 "input_custom_mjson.--input(custom).re"
             {
@@ -1787,15 +1787,15 @@ yy93:
             }
 #line 1789 "input_custom_mjson.--input(custom).c"
 yy94:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 'e':    goto yy101;
             default:    goto yy24;
             }
 yy95:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1870,8 +1870,8 @@ yy96:
             }
 #line 1872 "input_custom_mjson.--input(custom).c"
 yy97:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1946,8 +1946,8 @@ yy98:
             }
 #line 1948 "input_custom_mjson.--input(custom).c"
 yy99:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -1975,17 +1975,17 @@ yy99:
             }
 yy100:
             yyaccept = 4;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            YYBACKUP();
+            yych = YYPEEK();
             switch (yych) {
             case 0x00:    goto yy93;
             case '*':    goto yy73;
             default:    goto yy50;
             }
 yy101:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -2060,8 +2060,8 @@ yy102:
             }
 #line 2062 "input_custom_mjson.--input(custom).c"
 yy103:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -2211,7 +2211,7 @@ static int parse_string(mjson_parser_t *context, uint32_t id)
 #line 2212 "input_custom_mjson.--input(custom).c"
         {
             YYCTYPE yych;
-            yych = YYPEEK ();
+            yych = YYPEEK();
             switch (yych) {
             case 0x00:    goto yy106;
             case '"':    goto yy111;
@@ -2219,7 +2219,7 @@ static int parse_string(mjson_parser_t *context, uint32_t id)
             default:    goto yy108;
             }
 yy106:
-            YYSKIP ();
+            YYSKIP();
 yy107:
 #line 810 "input_custom_mjson.--input(custom).re"
             { 
@@ -2227,8 +2227,8 @@ yy107:
             }
 #line 2229 "input_custom_mjson.--input(custom).c"
 yy108:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case 0x00:
             case '"':
@@ -2248,7 +2248,7 @@ yy110:
             }
 #line 2250 "input_custom_mjson.--input(custom).c"
 yy111:
-            YYSKIP ();
+            YYSKIP();
 #line 801 "input_custom_mjson.--input(custom).re"
             {
                 bdata->val_u32 = context->bjson - (uint8_t*)(bdata + 1);
@@ -2260,9 +2260,9 @@ yy111:
             }
 #line 2262 "input_custom_mjson.--input(custom).c"
 yy113:
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            YYBACKUP();
+            yych = YYPEEK();
             switch (yych) {
             case '"':
             case '/':
@@ -2276,7 +2276,7 @@ yy113:
             default:    goto yy107;
             }
 yy114:
-            YYSKIP ();
+            YYSKIP();
 #line 756 "input_custom_mjson.--input(custom).re"
             {
                 char decoded = s[1];
@@ -2310,8 +2310,8 @@ yy114:
             }
 #line 2312 "input_custom_mjson.--input(custom).c"
 yy116:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -2338,11 +2338,11 @@ yy116:
             default:    goto yy117;
             }
 yy117:
-            YYRESTORE ();
+            YYRESTORE();
             goto yy107;
 yy118:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -2369,8 +2369,8 @@ yy118:
             default:    goto yy117;
             }
 yy119:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -2397,8 +2397,8 @@ yy119:
             default:    goto yy117;
             }
 yy120:
-            YYSKIP ();
-            yych = YYPEEK ();
+            YYSKIP();
+            yych = YYPEEK();
             switch (yych) {
             case '0':
             case '1':
@@ -2425,7 +2425,7 @@ yy120:
             default:    goto yy117;
             }
 yy121:
-            YYSKIP ();
+            YYSKIP();
 #line 787 "input_custom_mjson.--input(custom).re"
             {
                 str_dst = (uint8_t*)parsectx_reserve_output(context, 6);

@@ -71,7 +71,7 @@ static bool lex(const char *YYCURSOR, Words &words)
 	case 'x':
 	case 'y':
 	case 'z':
-		YYMTAGP (yyt2);
+		YYMTAGP(yyt2);
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -86,7 +86,7 @@ yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case ';':
-		YYMTAGP (yyt3);
+		YYMTAGP(yyt3);
 		goto yy5;
 	case 'a':
 	case 'b':
@@ -147,7 +147,7 @@ yy5:
 	case 'y':
 	case 'z':
 		yyt1 = yyt2;
-		YYMTAGP (yyt2);
+		YYMTAGP(yyt2);
 		goto yy7;
 	default:
 		yyt1 = yyt2;
@@ -167,7 +167,7 @@ yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ';':
-		YYMTAGP (yyt3);
+		YYMTAGP(yyt3);
 		goto yy5;
 	case 'a':
 	case 'b':

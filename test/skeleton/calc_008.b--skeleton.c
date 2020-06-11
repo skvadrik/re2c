@@ -187,8 +187,8 @@ int lex_line110()
               0,   0,   0,   0,   0,   0,   0,   0, 
         };
 
-        if (YYLESSTHAN (2)) YYFILL(2);
-        yych = YYPEEK ();
+        if (YYLESSTHAN(2)) YYFILL(2);
+        yych = YYPEEK();
         if (yybm[0+yych] & 64) {
             goto yy6;
         }
@@ -207,19 +207,19 @@ int lex_line110()
             }
         }
 yy2:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line110(keys_count, i, 3)
              || action_line110(&i, keys, input, token, &cursor, 5);
         continue;
 yy4:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line110(keys_count, i, 3)
              || action_line110(&i, keys, input, token, &cursor, 6);
         continue;
 yy6:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
+        YYSKIP();
+        if (YYLESSTHAN(1)) YYFILL(1);
+        yych = YYPEEK();
         if (yybm[0+yych] & 64) {
             goto yy6;
         }
@@ -227,18 +227,18 @@ yy6:
              || action_line110(&i, keys, input, token, &cursor, 0);
         continue;
 yy9:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line110(keys_count, i, 3)
              || action_line110(&i, keys, input, token, &cursor, 3);
         continue;
 yy11:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line110(keys_count, i, 3)
              || action_line110(&i, keys, input, token, &cursor, 4);
         continue;
 yy13:
-        YYSKIP ();
-        yych = YYPEEK ();
+        YYSKIP();
+        yych = YYPEEK();
         if (yych <= '/') goto yy14;
         if (yych <= '9') goto yy17;
 yy14:
@@ -246,17 +246,17 @@ yy14:
              || action_line110(&i, keys, input, token, &cursor, 2);
         continue;
 yy15:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
+        YYSKIP();
+        if (YYLESSTHAN(1)) YYFILL(1);
+        yych = YYPEEK();
         if (yybm[0+yych] & 128) {
             goto yy15;
         }
         goto yy14;
 yy17:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
+        YYSKIP();
+        if (YYLESSTHAN(1)) YYFILL(1);
+        yych = YYPEEK();
         if (yych <= '/') goto yy19;
         if (yych <= '9') goto yy17;
 yy19:

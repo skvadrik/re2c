@@ -29,7 +29,7 @@ static const char *gen_peek_expr(Scratchbuf &o, const opt_t *opts)
         o.cstr("*").str(opts->yycursor);
     }
     else {
-        o.str(opts->yypeek).cstr(" ()");
+        o.str(opts->yypeek).cstr("()");
     }
     return o.flush();
 }

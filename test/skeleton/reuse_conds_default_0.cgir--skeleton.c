@@ -157,8 +157,8 @@ int lex_line15_r1()
         token = cursor;
         YYCTYPE yych;
 
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
+        if (YYLESSTHAN(1)) YYFILL(1);
+        yych = YYPEEK();
         {
             static void *yytarget[256] = {
                 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
@@ -197,32 +197,32 @@ int lex_line15_r1()
             goto *yytarget[yych];
         }
 yy2:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line15_r1(keys_count, i, 3)
              || action_line15_r1(&i, keys, input, token, &cursor, 4);
         continue;
 yy4:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line15_r1(keys_count, i, 3)
              || action_line15_r1(&i, keys, input, token, &cursor, 254);
         continue;
 yy6:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line15_r1(keys_count, i, 3)
              || action_line15_r1(&i, keys, input, token, &cursor, 2);
         continue;
 yy8:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line15_r1(keys_count, i, 3)
              || action_line15_r1(&i, keys, input, token, &cursor, 3);
         continue;
 yy10:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line15_r1(keys_count, i, 3)
              || action_line15_r1(&i, keys, input, token, &cursor, 0);
         continue;
 yy12:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line15_r1(keys_count, i, 3)
              || action_line15_r1(&i, keys, input, token, &cursor, 1);
         continue;
@@ -361,8 +361,8 @@ int lex_line15_r2()
         token = cursor;
         YYCTYPE yych;
 
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
+        if (YYLESSTHAN(1)) YYFILL(1);
+        yych = YYPEEK();
         if (yych <= '`') {
             if (yych != '\n') goto yy17;
         } else {
@@ -371,17 +371,17 @@ int lex_line15_r2()
             goto yy17;
         }
 yy17:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line15_r2(keys_count, i, 3)
              || action_line15_r2(&i, keys, input, token, &cursor, 2);
         continue;
 yy19:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line15_r2(keys_count, i, 3)
              || action_line15_r2(&i, keys, input, token, &cursor, 1);
         continue;
 yy21:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line15_r2(keys_count, i, 3)
              || action_line15_r2(&i, keys, input, token, &cursor, 0);
         continue;
@@ -520,8 +520,8 @@ int lex_line20_r1()
         token = cursor;
         YYCTYPE yych;
 
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
+        if (YYLESSTHAN(1)) YYFILL(1);
+        yych = YYPEEK();
         {
             static void *yytarget[256] = {
                 &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
@@ -561,27 +561,27 @@ int lex_line20_r1()
         }
 yy25:
 yy26:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line20_r1(keys_count, i, 3)
              || action_line20_r1(&i, keys, input, token, &cursor, 4);
         continue;
 yy28:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line20_r1(keys_count, i, 3)
              || action_line20_r1(&i, keys, input, token, &cursor, 2);
         continue;
 yy30:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line20_r1(keys_count, i, 3)
              || action_line20_r1(&i, keys, input, token, &cursor, 3);
         continue;
 yy32:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line20_r1(keys_count, i, 3)
              || action_line20_r1(&i, keys, input, token, &cursor, 0);
         continue;
 yy34:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line20_r1(keys_count, i, 3)
              || action_line20_r1(&i, keys, input, token, &cursor, 1);
         continue;
@@ -720,30 +720,30 @@ int lex_line20_r2()
         token = cursor;
         YYCTYPE yych;
 
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
+        if (YYLESSTHAN(1)) YYFILL(1);
+        yych = YYPEEK();
         if (yych <= '`') {
             if (yych == '\n') goto yy40;
         } else {
             if (yych <= 'a') goto yy42;
             if (yych == 'c') goto yy44;
         }
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line20_r2(keys_count, i, 3)
              || action_line20_r2(&i, keys, input, token, &cursor, 2);
         continue;
 yy40:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line20_r2(keys_count, i, 3)
              || action_line20_r2(&i, keys, input, token, &cursor, 254);
         continue;
 yy42:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line20_r2(keys_count, i, 3)
              || action_line20_r2(&i, keys, input, token, &cursor, 1);
         continue;
 yy44:
-        YYSKIP ();
+        YYSKIP();
         status = check_key_count_line20_r2(keys_count, i, 3)
              || action_line20_r2(&i, keys, input, token, &cursor, 0);
         continue;
