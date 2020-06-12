@@ -110,7 +110,7 @@ yyFillLabel2:
 	}
 yy9:
 	{ ++count; continue; }
-yyeofrule1:
+yyeof1:
 	{ return true; }
 }
 

@@ -33,6 +33,15 @@ static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa,
     const Rule &rule);
 static bool endstate(const State *s);
 
+const char *gen_eof_label(Output &output)
+{
+    const opt_t *opts = output.block().opts;
+    Scratchbuf &o = output.scratchbuf;
+    DASSERT(o.empty());
+
+    return o.str(opts->labelPrefix).cstr("eof").u64(output.blockid()).flush();
+}
+
 static const char *gen_fill_label(Output &output, uint32_t index)
 {
     const opt_t *opts = output.block().opts;
@@ -316,16 +325,13 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
     CodeList *fallback_trans = code_list(alc);
     if (from->action.type == Action::INITIAL) {
         // initial state: if accepting, go to eof state, else go to default state
-        o.cstr("goto ").str(opts->labelPrefix);
         if (final) {
             fallback->label->used = true;
-            o.label(*fallback->label);
+            text = o.str(opts->labelPrefix).label(*fallback->label).flush();
+        } else {
+            text = gen_eof_label(output);
         }
-        else {
-            o.cstr("eof").u64(output.blockid());
-        }
-        text = o.flush();
-        append(fallback_trans, code_stmt(alc, text));
+        append(fallback_trans, code_stmt(alc, o.cstr("goto ").cstr(text).flush()));
     }
     else if (fallback != to || opts->fFlag) {
         // tag actions on the fallback transition

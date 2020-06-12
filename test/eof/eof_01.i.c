@@ -877,7 +877,7 @@ yyFillLabel39:
 yy58:
 	in.cur = YYMARKER;
 	goto yy3;
-yyeofrule1:
+yyeof1:
 	{ return true; }
 }
 

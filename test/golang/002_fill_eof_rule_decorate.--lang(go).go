@@ -269,7 +269,7 @@ yy13:
 		return 2
 	}
 //line "golang/002_fill_eof_rule_decorate.--lang(go).go":272
-yyeofrule1:
+yyeof1:
 //line "golang/002_fill_eof_rule_decorate.--lang(go).re":107
 	{
 		fmt.Println("end")

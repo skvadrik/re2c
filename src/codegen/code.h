@@ -783,6 +783,7 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
     const CodeJump &jump);
 const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n);
 void gen_code(Output &output, dfas_t &dfas);
+const char *gen_eof_label(Output &output);
 
 void expand(CodegenContext &ctx, Code *code);
 void combine(CodegenContext &ctx, Code *code);

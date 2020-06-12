@@ -99,7 +99,7 @@ yy7:
 	++YYCURSOR;
 	YYCURSOR -= 1;
 	{ goto word; }
-yyeofrule2:
+yyeof2:
 	{ return 0; }
 }
 
@@ -324,7 +324,7 @@ yyFillLabel4:
 	}
 yy16:
 	{ ++count; goto loop; }
-yyeofrule3:
+yyeof3:
 	{ return 0; }
 }
 

@@ -89,7 +89,7 @@ yyFillLabel2:
 	}
 yy7:
 	{ continue; }
-yyeofrule1:
+yyeof1:
 	{ return true; }
 }
 

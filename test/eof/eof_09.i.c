@@ -19,7 +19,7 @@ yy2:
 yy4:
 	++YYCURSOR;
 	{ return OK; }
-yyeofrule1:
+yyeof1:
 	{ return EOF; }
 }
 
@@ -62,7 +62,7 @@ yy14:
 yy16:
 	++YYCURSOR;
 	{ return OK; }
-yyeofrule3:
+yyeof3:
 	{ return EOF; }
 }
 

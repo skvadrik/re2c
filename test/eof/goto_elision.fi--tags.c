@@ -133,6 +133,6 @@ yy14:
 		}
 		goto yy10;
 	}
-yyeofrule1:
+yyeof1:
 	{ eof }
 

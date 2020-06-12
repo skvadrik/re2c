@@ -84,7 +84,7 @@ yy16:
 yy18:
 	YYCURSOR = YYMARKER;
 	goto yy13;
-yyeofrule3:
+yyeof3:
 	{ /* EOF     */ }
 }
 

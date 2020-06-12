@@ -24,7 +24,7 @@ yy2:
 yy4:
 	++YYCURSOR;
 	{ a }
-yyeofrule2:
+yyeof2:
 	{ eof }
 }
 
@@ -52,7 +52,7 @@ yy8:
 yy10:
 	++YYCURSOR;
 	{ a }
-yyeofrule3:
+yyeof3:
 	{ eof }
 }
 
@@ -80,7 +80,7 @@ yy14:
 yy16:
 	++YYCURSOR;
 	{ a }
-yyeofrule4:
+yyeof4:
 	{ eof }
 }
 
@@ -108,7 +108,7 @@ yy20:
 yy22:
 	++YYCURSOR;
 	{ a }
-yyeofrule5:
+yyeof5:
 	{ eof }
 }
 
@@ -137,7 +137,7 @@ yy26:
 yy28:
 	++YYCURSOR;
 	{ a }
-yyeofrule6:
+yyeof6:
 	{ eof }
 }
 
@@ -166,7 +166,7 @@ yy32:
 yy34:
 	++YYCURSOR;
 	{ a }
-yyeofrule7:
+yyeof7:
 	{ eof }
 }
 
@@ -195,7 +195,7 @@ yy38:
 yy40:
 	++YYCURSOR;
 	{ a }
-yyeofrule8:
+yyeof8:
 	{ eof }
 }
 
@@ -224,7 +224,7 @@ yy44:
 yy46:
 	++YYCURSOR;
 	{ a }
-yyeofrule9:
+yyeof9:
 	{ eof }
 }
 
@@ -253,7 +253,7 @@ yy50:
 yy52:
 	++YYCURSOR;
 	{ a }
-yyeofrule10:
+yyeof10:
 	{ eof }
 }
 
@@ -282,7 +282,7 @@ yy56:
 yy58:
 	++YYCURSOR;
 	{ a }
-yyeofrule11:
+yyeof11:
 	{ eof }
 }
 
@@ -311,7 +311,7 @@ yy62:
 yy64:
 	++YYCURSOR;
 	{ a }
-yyeofrule12:
+yyeof12:
 	{ eof }
 }
 
@@ -340,7 +340,7 @@ yy68:
 yy70:
 	++YYCURSOR;
 	{ a }
-yyeofrule13:
+yyeof13:
 	{ eof }
 }
 

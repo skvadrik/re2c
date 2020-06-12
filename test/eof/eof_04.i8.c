@@ -1173,7 +1173,7 @@ yyFillLabel14:
 		}
 		goto yy17;
 	}
-yyeofrule1:
+yyeof1:
 	{ return true; }
 }
 

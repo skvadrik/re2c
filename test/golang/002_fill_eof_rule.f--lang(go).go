@@ -276,7 +276,7 @@ yy15:
 		return lexNumber2
 	}
 //line "golang/002_fill_eof_rule.f--lang(go).go":279
-yyeofrule1:
+yyeof1:
 //line "golang/002_fill_eof_rule.f--lang(go).re":84
 	{
 		fmt.Println("end")

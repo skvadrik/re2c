@@ -66,7 +66,7 @@ yy12:
 yy13:
 	YYCURSOR = YYMARKER;
 	goto yy3;
-yyeofrule1:
+yyeof1:
 #line 16 "eof/03_eof_rule.re"
 	{ return count; }
 #line 73 "eof/03_eof_rule.c"

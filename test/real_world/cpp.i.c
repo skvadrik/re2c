@@ -13091,7 +13091,7 @@ yy545:
 	case '(':	goto yy215;
 	default:	goto yy82;
 	}
-yyeofrule2:
+yyeof2:
 	{ rettok(NOMORE);		}
 }
 

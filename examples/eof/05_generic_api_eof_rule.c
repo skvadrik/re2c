@@ -73,7 +73,7 @@ yy12:
 yy13:
 	cur = mar;
 	goto yy3;
-yyeofrule1:
+yyeof1:
 #line 25 "eof/05_generic_api_eof_rule.re"
 	{ return count; }
 #line 80 "eof/05_generic_api_eof_rule.c"

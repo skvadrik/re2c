@@ -554,7 +554,7 @@ yyFillLabel20:
 yy30:
 	++in.cur;
 	{ printf("< Thing w/ newlines\n");                  return THING; }
-yyeofrule1:
+yyeof1:
 	{ printf("< EOF\n");                                return OK; }
 
 }

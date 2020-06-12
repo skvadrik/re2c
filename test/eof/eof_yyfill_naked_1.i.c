@@ -21,7 +21,7 @@ yy2:
 yy4:
 	++YYCURSOR;
 	{ return OK; }
-yyeofrule2:
+yyeof2:
 	{ return EOF; }
 }
 
@@ -46,7 +46,7 @@ yy8:
 yy10:
 	++YYCURSOR;
 	{ return OK; }
-yyeofrule3:
+yyeof3:
 	{ return EOF; }
 }
 
@@ -71,7 +71,7 @@ yy14:
 yy16:
 	++YYCURSOR;
 	{ return OK; }
-yyeofrule4:
+yyeof4:
 	{ return EOF; }
 }
 
@@ -96,7 +96,7 @@ yy20:
 yy22:
 	++YYCURSOR;
 	{ return OK; }
-yyeofrule5:
+yyeof5:
 	{ return EOF; }
 }
 

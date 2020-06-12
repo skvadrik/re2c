@@ -67,7 +67,7 @@ yyFillLabel2:
 yy12:
 	x = yyt1;
 	{ /* R1, x must be set */ }
-yyeofrule2:
+yyeof2:
 	{ /* EOF, x must not be set */ }
 }
 

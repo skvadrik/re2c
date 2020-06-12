@@ -99,7 +99,7 @@ yy13:
 		}
 		goto yy9;
 	}
-yyeofrule1:
+yyeof1:
 	{ eof }
 }
 

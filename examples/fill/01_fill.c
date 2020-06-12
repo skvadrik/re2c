@@ -127,7 +127,7 @@ yyFillLabel4:
 yy13:
 	in->cur = in->mar;
 	goto yy3;
-yyeofrule1:
+yyeof1:
 #line 56 "fill/01_fill.re"
 	{ return count; }
 #line 134 "fill/01_fill.c"

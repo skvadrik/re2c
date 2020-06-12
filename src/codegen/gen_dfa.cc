@@ -60,8 +60,7 @@ static void emit_eof(Output &output, const SemAct *semact, CodeList *stmts)
     if (opts->eof == NOEOF) return;
 
     // EOF label
-    text = o.str(opts->labelPrefix).cstr("eofrule").u64(output.blockid()).flush();
-    append(stmts, code_slabel(alc, text));
+    append(stmts, code_slabel(alc, gen_eof_label(output)));
 
     // source line directive
     append(stmts, code_line_info_input(alc, semact->loc));

@@ -220,7 +220,7 @@ yy18:
 	} else {
 		goto yy14;
 	}
-yyeofrule1:
+yyeof1:
 #line 52 "eof/eof_10_fill.re"
 	{ return count; }
 #line 227 "eof/eof_10_fill.c"

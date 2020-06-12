@@ -2097,7 +2097,7 @@ yyFillLabel8:
 		}
 		goto yy43;
 	}
-yyeofrule4:
+yyeof4:
 	{ return {EEOF, cur}; }
 }
 

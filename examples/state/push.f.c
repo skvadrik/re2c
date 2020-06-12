@@ -197,7 +197,7 @@ yyFillLabel2:
 yy10:
 	in->cur = in->mar;
 	goto yy4;
-yyeofrule1:
+yyeof1:
 #line 67 "state/push.f.re"
 	{ return END; }
 #line 204 "state/push.f.c"
