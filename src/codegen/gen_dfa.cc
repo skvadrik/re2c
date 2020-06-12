@@ -55,7 +55,6 @@ static void emit_eof(Output &output, const SemAct *semact, CodeList *stmts)
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const char *text;
 
     if (opts->eof == NOEOF) return;
 
@@ -65,9 +64,12 @@ static void emit_eof(Output &output, const SemAct *semact, CodeList *stmts)
     // source line directive
     append(stmts, code_line_info_input(alc, semact->loc));
 
-    // user-defined semantic action for EOF rule
-    text = o.str(semact->text).flush();
-    append(stmts, code_text(alc, text));
+    // semantic action for EOF rule
+    if (opts->target == TARGET_SKELETON) {
+        emit_skeleton_action_eof(output, stmts);
+    } else {
+        append(stmts, code_text(alc, o.str(semact->text).flush()));
+    }
 
     // output line directive
     append(stmts, code_line_info_output(alc));

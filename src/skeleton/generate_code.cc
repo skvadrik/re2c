@@ -149,7 +149,9 @@ static void emit_skeleton_defines(Output &output, CodeList *code, const DFA &dfa
     }
     append(code, code_textraw(alc, "#define YYSHIFT(o) cursor += o"));
     append(code, code_textraw(alc, "#define YYLESSTHAN(n) (limit - cursor) < n"));
-    append(code, code_textraw(alc, "#define YYFILL(n) { break; }"));
+    append(code, code_textraw(alc, opts->eof == NOEOF
+        ? "#define YYFILL(n) { break; }"
+        : "#define YYFILL(n) 1 /* fail */"));
     append(code, code_newline(alc));
 }
 
@@ -810,6 +812,11 @@ void emit_skeleton_action(Output &output, CodeList *code, const DFA &dfa, size_t
     append(code, code_block(alc, hangafter, CodeBlock::INDENTED));
 
     append(code, code_stmt(alc, "continue"));
+}
+
+void emit_skeleton_action_eof(Output &output, CodeList *code)
+{
+    append(code, code_stmt(output.allocator, "break"));
 }
 
 } // namespace re2c

@@ -64,9 +64,6 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
             real.header_file = "";
             // default line information
             real.iFlag = defaults.iFlag;
-            // default EOF mode
-            real.eof = defaults.eof;
-            real.sentinel = defaults.sentinel;
             // default environment-sensitive formatting
             real.topIndent = defaults.topIndent;
             real.indString = defaults.indString;
