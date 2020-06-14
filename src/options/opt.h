@@ -54,6 +54,11 @@ enum input_api_t {
     INPUT_CUSTOM
 };
 
+enum api_style_t {
+    API_FUNCTIONS,
+    API_FREEFORM
+};
+
 enum parse_opts_t {
     OK,
     EXIT_OK,
@@ -62,7 +67,7 @@ enum parse_opts_t {
 
 const uint32_t NOEOF = ~0u - 1;
 
-#define RE2C_PLACEHOLDER "@@"
+#define RE2C_SIGIL "@@"
 
 #define RE2C_CONSTOPTS \
     CONSTOPT1 (target_t, target, TARGET_CODE) \
@@ -115,20 +120,20 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, cond_get, "YYGETCONDITION") \
     MUTOPT (bool, cond_get_naked, false) \
     MUTOPT (std::string, cond_set, "YYSETCONDITION" ) \
-    MUTOPT (std::string, cond_set_arg, RE2C_PLACEHOLDER ) \
+    MUTOPT (std::string, cond_set_arg, RE2C_SIGIL ) \
     MUTOPT (bool, cond_set_naked, false ) \
     MUTOPT (std::string, yyctable, "yyctable") \
     MUTOPT (std::string, condPrefix, "yyc_") \
     MUTOPT (std::string, condEnumPrefix, "yyc") \
     MUTOPT (std::string, condDivider, "/* *********************************** */") \
-    MUTOPT (std::string, condDividerParam, RE2C_PLACEHOLDER) \
-    MUTOPT (std::string, condGoto, "goto " RE2C_PLACEHOLDER ";") \
-    MUTOPT (std::string, condGotoParam, RE2C_PLACEHOLDER) \
+    MUTOPT (std::string, condDividerParam, RE2C_SIGIL) \
+    MUTOPT (std::string, condGoto, "goto " RE2C_SIGIL ";") \
+    MUTOPT (std::string, condGotoParam, RE2C_SIGIL) \
     /* states */ \
     MUTOPT (std::string, state_get, "YYGETSTATE") \
     MUTOPT (bool, state_get_naked, false) \
     MUTOPT (std::string, state_set, "YYSETSTATE") \
-    MUTOPT (std::string, state_set_arg, RE2C_PLACEHOLDER) \
+    MUTOPT (std::string, state_set_arg, RE2C_SIGIL) \
     MUTOPT (bool, state_set_naked, false) \
     MUTOPT (std::string, yyfilllabel, "yyFillLabel") \
     MUTOPT (std::string, yynext, "yyNext") \
@@ -138,7 +143,7 @@ const uint32_t NOEOF = ~0u - 1;
     /* tags */ \
     MUTOPT (bool, tags, false) \
     MUTOPT (std::string, tags_prefix, "yyt") \
-    MUTOPT (std::string, tags_expression, RE2C_PLACEHOLDER) \
+    MUTOPT (std::string, tags_expression, RE2C_SIGIL) \
     MUTOPT (bool, posix_syntax, false) \
     MUTOPT (bool, posix_semantics, false) \
     /* code generation */ \
@@ -175,8 +180,8 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, yyshift, "YYSHIFT") \
     MUTOPT (std::string, yyshiftstag, "YYSHIFTSTAG") \
     MUTOPT (std::string, yyshiftmtag, "YYSHIFTMTAG") \
-    MUTOPT (bool, decorate, true) \
-    MUTOPT (std::string, placeholder, RE2C_PLACEHOLDER) \
+    MUTOPT (api_style_t, api_style, API_FUNCTIONS) \
+    MUTOPT (std::string, api_sigil, RE2C_SIGIL) \
     /* #line directives */ \
     MUTOPT (bool, iFlag, false) \
     /* debug */ \
@@ -191,7 +196,7 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, fill, "YYFILL") \
     MUTOPT (bool, fill_use, true) \
     MUTOPT (bool, fill_check, true) \
-    MUTOPT (std::string, fill_arg, RE2C_PLACEHOLDER) \
+    MUTOPT (std::string, fill_arg, RE2C_SIGIL) \
     MUTOPT (bool, fill_arg_use, true) \
     MUTOPT (bool, fill_naked, false) \
     /* labels */ \

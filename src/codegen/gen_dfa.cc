@@ -322,7 +322,7 @@ std::string vartag_name(tagver_t ver, const std::string &prefix)
 std::string vartag_expr(tagver_t ver, const opt_t *opts)
 {
     std::ostringstream os(opts->tags_expression);
-    argsubst(os, opts->placeholder, "tag", true, vartag_name(ver, opts->tags_prefix));
+    argsubst(os, opts->api_sigil, "tag", true, vartag_name(ver, opts->tags_prefix));
     return os.str();
 }
 

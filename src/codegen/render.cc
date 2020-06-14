@@ -335,7 +335,7 @@ static void render_peek(RenderContext &rctx)
     yych_conv(os, opts);
     if (opts->input_api == INPUT_CUSTOM) {
         os << opts->yypeek;
-        if (opts->decorate) os << "()";
+        if (opts->api_style == API_FUNCTIONS) os << "()";
     }
     else {
         os << "*" << opts->yycursor;
@@ -351,8 +351,12 @@ static void render_skip(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString);
     if (opts->input_api == INPUT_CUSTOM) {
         os << opts->yyskip;
-        if (opts->decorate) os << "()";
-        render_stmt_end(rctx, opts->decorate);
+        if (opts->api_style == API_FUNCTIONS) {
+            os << "()";
+            render_stmt_end(rctx, true);
+        } else {
+            render_stmt_end(rctx, false);
+        }
     }
     else {
         os << "++" << opts->yycursor;
@@ -368,8 +372,12 @@ static void render_backup(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString);
     if (opts->input_api == INPUT_CUSTOM) {
         os << opts->yybackup;
-        if (opts->decorate) os << "()";
-        render_stmt_end(rctx, opts->decorate);
+        if (opts->api_style == API_FUNCTIONS) {
+            os << "()";
+            render_stmt_end(rctx, true);
+        } else {
+            render_stmt_end(rctx, false);
+        }
     }
     else {
         os << opts->yymarker << " = " << opts->yycursor;

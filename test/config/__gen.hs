@@ -37,120 +37,120 @@ body4 =
     [ "[a]* { a }" -- DFA has transitions into initial state
     ]
 
-cond_get_decorate :: (String, String, [[String]], [String])
-cond_get_decorate =
-    let name = "cond_get_decorate"
+cond_get_style :: (String, String, [[String]], [String])
+cond_get_style =
+    let name = "cond_get_style"
         ext = "ci"
         confs =
             [ genconfs "define:YYGETCONDITION:naked" ["0", "1"]
-            , genconfs "decorate" ["0", "1"]
+            , genconfs "api:style" ["free-form", "functions"]
             ]
     in  (name, ext, confs, body2)
 
-cond_set_decorate :: (String, String, [[String]], [String])
-cond_set_decorate =
-    let name = "cond_set_decorate"
+cond_set_style :: (String, String, [[String]], [String])
+cond_set_style =
+    let name = "cond_set_style"
         ext = "ci"
         confs =
             [ genconfs "define:YYSETCONDITION:naked" ["0", "1"]
-            , genconfs "decorate" ["0", "1"]
+            , genconfs "api:style" ["free-form", "functions"]
             ]
     in  (name, ext, confs, body2)
 
-cond_set_placeholder :: (String, String, [[String]], [String])
-cond_set_placeholder =
-    let name = "cond_set_placeholder"
+cond_set_sigil :: (String, String, [[String]], [String])
+cond_set_sigil =
+    let name = "cond_set_sigil"
         ext = "ci"
         confs =
             [ genconfs "define:YYSETCONDITION@cond" ["@@", "#"]
-            , genconfs2 "placeholder" ["#", "@@"]
+            , genconfs2 "api:sigil" ["#", "@@"]
             , genconfs2 "define:YYSETCONDITION" ["\"cond = @@;\"", "\"cond = #;\""]
             ]
     in  (name, ext, confs, body2)
 
-cond_goto_placeholder :: (String, String, [[String]], [String])
-cond_goto_placeholder =
-    let name = "cond_goto_placeholder"
+cond_goto_sigil :: (String, String, [[String]], [String])
+cond_goto_sigil =
+    let name = "cond_goto_sigil"
         ext = "ci"
         confs =
             [ genconfs "cond:goto" ["\"goto #;\"", "\"goto @@;\""]
             , genconfs "cond:goto@cond" ["#", "@@"]
-            , genconfs2 "placeholder" ["#", "@@"]
+            , genconfs2 "api:sigil" ["#", "@@"]
             ]
     in  (name, ext, confs, body2)
 
-cond_divider_placeholder :: (String, String, [[String]], [String])
-cond_divider_placeholder =
-    let name = "cond_divider_placeholder"
+cond_divider_sigil :: (String, String, [[String]], [String])
+cond_divider_sigil =
+    let name = "cond_divider_sigil"
         ext = "ci"
         confs =
-            -- do not test default `cond:divider` as it has no placeholder
+            -- do not test default `cond:divider` as it has no sigil
             [ genconfs2 "cond:divider" ["\"~~~ ## ~~~\"", "\"--- @@ --- @@ ---\""]
             , genconfs "cond:divider@cond" ["#", "@@"]
-            , genconfs2 "placeholder" ["#", "@@"]
+            , genconfs2 "api:sigil" ["#", "@@"]
             ]
     in  (name, ext, confs, body2)
 
-state_get_decorate :: (String, String, [[String]], [String])
-state_get_decorate =
-    let name = "state_get_decorate"
+state_get_style :: (String, String, [[String]], [String])
+state_get_style =
+    let name = "state_get_style"
         ext = "fi"
         confs =
             [ genconfs "define:YYGETSTATE:naked" ["0", "1"]
-            , genconfs "decorate" ["0", "1"]
+            , genconfs "api:style" ["free-form", "functions"]
             ]
     in  (name, ext, confs, body1)
 
-state_set_decorate :: (String, String, [[String]], [String])
-state_set_decorate =
-    let name = "state_set_decorate"
+state_set_style :: (String, String, [[String]], [String])
+state_set_style =
+    let name = "state_set_style"
         ext = "fi"
         confs =
             [ genconfs "define:YYSETSTATE:naked" ["0", "1"]
-            , genconfs "decorate" ["0", "1"]
+            , genconfs "api:style" ["free-form", "functions"]
             ]
     in  (name, ext, confs, body1)
 
-state_set_placeholder :: (String, String, [[String]], [String])
-state_set_placeholder =
-    let name = "state_set_placeholder"
+state_set_sigil :: (String, String, [[String]], [String])
+state_set_sigil =
+    let name = "state_set_sigil"
         ext = "fi"
         confs =
             [ genconfs "define:YYSETSTATE@state" ["@@", "\"\xFF\""]
-            , genconfs2 "placeholder" ["\"\xFF\"", "@@"]
+            , genconfs2 "api:sigil" ["\"\xFF\"", "@@"]
             , genconfs2 "define:YYSETSTATE" ["\"state = @@;\"", "\"state = \xFF;\""]
             ]
     in  (name, ext, confs, body1)
 
-tags_expr_placeholder :: (String, String, [[String]], [String])
-tags_expr_placeholder =
-    let name = "tags_expr_placeholder"
+tags_expr_sigil :: (String, String, [[String]], [String])
+tags_expr_sigil =
+    let name = "tags_expr_sigil"
         ext = "i--tags"
         confs =
             [ genconfs "tags:expression" ["\"xyz->#\"", "\"@@\""]
-            , genconfs "placeholder" ["#", "@@"]
+            , genconfs "api:sigil" ["#", "@@"]
             ]
     in  (name, ext, confs, body3)
 
-fill_placeholder :: (String, String, [[String]], [String])
-fill_placeholder =
-    let name = "fill_placeholder"
+fill_sigil :: (String, String, [[String]], [String])
+fill_sigil =
+    let name = "fill_sigil"
         ext = "i"
         confs =
             [ genconfs "define:YYFILL@len" ["@@", "need"]
-            , genconfs2 "placeholder" ["need", "@@"]
+            , genconfs2 "api:sigil" ["need", "@@"]
             , genconfs2 "define:YYFILL" ["\"fill(@@)\"", "\"fill(need);\""]
             ]
     in  (name, ext, confs, body1)
 
-fill_decorate :: (String, String, [[String]], [String])
-fill_decorate =
-    let name = "fill_decorate"
+fill_style :: (String, String, [[String]], [String])
+fill_style =
+    let name = "fill_style"
         ext = "i"
         confs =
             [ genconfs "define:YYFILL:naked" ["0", "1"]
             , genconfs "yyfill:parameter" ["0", "1"]
-            , genconfs "decorate" ["0", "1"]
+            , genconfs "api:style" ["free-form", "functions"]
             ]
     in  (name, ext, confs, body1)
 
@@ -283,29 +283,29 @@ main :: IO ()
 main = do
     cleanup
 
-    gen_reuse cond_get_decorate
-    gen_reuse cond_set_decorate
-    gen_reuse cond_set_placeholder
-    gen_reuse cond_goto_placeholder
-    gen       cond_goto_placeholder
-    gen_reuse cond_divider_placeholder
-    gen       cond_divider_placeholder
+    gen_reuse cond_get_style
+    gen_reuse cond_set_style
+    gen_reuse cond_set_sigil
+    gen_reuse cond_goto_sigil
+    gen       cond_goto_sigil
+    gen_reuse cond_divider_sigil
+    gen       cond_divider_sigil
 
-    gen_reuse state_get_decorate
-    gen       state_get_decorate
-    gen_reuse state_set_decorate
-    gen_reuse state_set_placeholder
+    gen_reuse state_get_style
+    gen       state_get_style
+    gen_reuse state_set_style
+    gen_reuse state_set_sigil
 
-    gen_reuse tags_expr_placeholder
+    gen_reuse tags_expr_sigil
 
     gen_reuse fill_check
     gen_reuse fill_check_state
-    gen_reuse fill_placeholder
-    gen_reuse fill_decorate
+    gen_reuse fill_sigil
+    gen_reuse fill_style
     gen_reuse $ eof_variant fill_check
     gen_reuse $ eof_variant fill_check_state
-    gen_reuse $ eof_variant fill_placeholder
-    gen_reuse $ eof_variant fill_decorate
+    gen_reuse $ eof_variant fill_sigil
+    gen_reuse $ eof_variant fill_style
 
     gen_reuse startlabel_with_empty
     gen       startlabel_with_empty

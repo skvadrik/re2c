@@ -41,7 +41,7 @@ struct out_t {
 
 /*!rules:re2c
     re2c:yyfill:enable = 0;
-    re2c:decorate = 0;
+    re2c:api:style = free-form;
     re2c:flags:8 = 1;
 
     // letters

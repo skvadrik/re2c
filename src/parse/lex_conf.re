@@ -133,8 +133,8 @@ void Scanner::lex_conf(Opt &opts)
     "define:YYSHIFTSTAG"  { opts.set_yyshiftstag  (lex_conf_string ()); return; }
     "define:YYSHIFTMTAG"  { opts.set_yyshiftmtag  (lex_conf_string ()); return; }
 
-    "decorate"    { opts.set_decorate   (lex_conf_bool());   return; }
-    "placeholder" { opts.set_placeholder(lex_conf_string()); return; }
+    "api:style" { lex_conf_api_style(opts); return; }
+    "api:sigil" { opts.set_api_sigil(lex_conf_string()); return; }
 
     "tags:prefix"     { opts.set_tags_prefix    (lex_conf_string ()); return; }
     "tags:expression" { opts.set_tags_expression(lex_conf_string ()); return; }
@@ -214,6 +214,19 @@ void Scanner::lex_conf_empty_class(Opt &opts)
     "match-empty" { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_EMPTY); goto end; }
     "match-none"  { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_NONE);  goto end; }
     "error"       { opts.set_empty_class_policy(EMPTY_CLASS_ERROR);       goto end; }
+*/
+end:
+    lex_conf_semicolon();
+}
+
+void Scanner::lex_conf_api_style(Opt &opts)
+{
+    lex_conf_assign ();
+/*!re2c
+    * { msg.fatal(cur_loc(),
+        "bad configuration value (expected: 'functions', 'free-form')"); }
+    "functions" { opts.set_api_style(API_FUNCTIONS); goto end; }
+    "free-form" { opts.set_api_style(API_FREEFORM);  goto end; }
 */
 end:
     lex_conf_semicolon();

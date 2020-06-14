@@ -10,7 +10,7 @@ loop:
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:flags:input = custom;
-        re2c:decorate = 0;
+        re2c:api:style = free-form;
         re2c:define:YYCTYPE   = char;
         re2c:define:YYPEEK    = "in.peek()";
         re2c:define:YYSKIP    = "do { in.ignore(); if (in.eof()) return; } while(0);";

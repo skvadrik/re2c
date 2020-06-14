@@ -20,7 +20,7 @@ void gen_tags(Scratchbuf &o, const opt_t *opts, Code *code,
     std::set<std::string>::const_iterator tag = tags.begin(), end = tags.end();
     for (; tag != end; ) {
         std::ostringstream s(fmt);
-        argsubst(s, opts->placeholder, "tag", true, *tag);
+        argsubst(s, opts->api_sigil, "tag", true, *tag);
         o.str(s.str());
         if (++tag == end) break;
         o.cstr(sep);

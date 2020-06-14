@@ -48,7 +48,7 @@ static int lex(Input *in)
 loop:
     in->tok = in->cur;
     /*!re2c
-    re2c:decorate = 0;
+    re2c:api:style = free-form;
     re2c:define:YYCTYPE  = char;
     re2c:define:YYCURSOR = in->cur;
     re2c:define:YYMARKER = in->mar;

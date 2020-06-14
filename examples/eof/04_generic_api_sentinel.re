@@ -12,7 +12,7 @@ loop:
     /*!re2c
     re2c:yyfill:enable = 0;
     re2c:flags:input = custom;
-    re2c:decorate = 0;
+    re2c:api:style = free-form;
     re2c:define:YYCTYPE    = char;
     re2c:define:YYLESSTHAN = "cur >= lim";
     re2c:define:YYPEEK     = "cur < lim ? *cur : 0";  // fake null

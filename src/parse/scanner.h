@@ -76,6 +76,7 @@ private:
     void lex_conf_input(Opt &opts);
     void lex_conf_empty_class(Opt &opts);
     void lex_conf_enc(Enc::type_t enc, Opt &opts);
+    void lex_conf_api_style(Opt &opts);
     void lex_conf_assign();
     void lex_conf_semicolon();
     int32_t lex_conf_number();

@@ -34,7 +34,7 @@ static void fix_mutopt_defaults(const conopt_t &glob, mutopt_t &defaults)
     // To make the default Go API less restrictive, decorations are disabled.
     if (glob.lang == LANG_GO) {
         defaults.input_api = INPUT_CUSTOM;
-        defaults.decorate = false;
+        defaults.api_style = API_FREEFORM;
     }
 }
 
@@ -96,8 +96,8 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
             real.yybm = defaults.yybm;
             real.yytarget = defaults.yytarget;
             real.input_api = defaults.input_api;
-            real.decorate = defaults.decorate;
-            real.placeholder = defaults.placeholder;
+            real.api_style = defaults.api_style;
+            real.api_sigil = defaults.api_sigil;
             real.yycursor = defaults.yycursor;
             real.yymarker = defaults.yymarker;
             real.yyctxmarker = defaults.yyctxmarker;
@@ -234,19 +234,19 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (real.bCaseInsensitive) {
         real.bCaseInverted = defaults.bCaseInverted;
     }
-    // individual "naked" options, unless explicitly set, inherit "decorate"
-    if (is_default.fill_naked)      real.fill_naked      = !real.decorate;
-    if (is_default.cond_get_naked)  real.cond_get_naked  = !real.decorate;
-    if (is_default.cond_set_naked)  real.cond_set_naked  = !real.decorate;
-    if (is_default.state_get_naked) real.state_get_naked = !real.decorate;
-    if (is_default.state_set_naked) real.state_set_naked = !real.decorate;
-    // individual template options, unless explicitly set, inherit "placeholder"
-    if (is_default.fill_arg)         real.fill_arg         = real.placeholder;
-    if (is_default.cond_set_arg)     real.cond_set_arg     = real.placeholder;
-    if (is_default.condDividerParam) real.condDividerParam = real.placeholder;
-    if (is_default.condGotoParam)    real.condGotoParam    = real.placeholder;
-    if (is_default.state_set_arg)    real.state_set_arg    = real.placeholder;
-    if (is_default.tags_expression)  real.tags_expression  = real.placeholder;
+    // individual "naked" options, unless explicitly set, inherit "api:style"
+    if (is_default.fill_naked)      real.fill_naked      = real.api_style == API_FREEFORM;
+    if (is_default.cond_get_naked)  real.cond_get_naked  = real.api_style == API_FREEFORM;
+    if (is_default.cond_set_naked)  real.cond_set_naked  = real.api_style == API_FREEFORM;
+    if (is_default.state_get_naked) real.state_get_naked = real.api_style == API_FREEFORM;
+    if (is_default.state_set_naked) real.state_set_naked = real.api_style == API_FREEFORM;
+    // individual template options, unless explicitly set, inherit "api:sigil"
+    if (is_default.fill_arg)         real.fill_arg         = real.api_sigil;
+    if (is_default.cond_set_arg)     real.cond_set_arg     = real.api_sigil;
+    if (is_default.condDividerParam) real.condDividerParam = real.api_sigil;
+    if (is_default.condGotoParam)    real.condGotoParam    = real.api_sigil;
+    if (is_default.state_set_arg)    real.state_set_arg    = real.api_sigil;
+    if (is_default.tags_expression)  real.tags_expression  = real.api_sigil;
     if (is_default.condGoto) {
         real.condGoto = "goto " + real.condGotoParam + (glob.lang == LANG_C ? ";" : "");
     }
