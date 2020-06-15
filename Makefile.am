@@ -386,3 +386,10 @@ lib_LTLIBRARIES =
 include $(top_srcdir)/Makefile.lib.am
 endif
 
+# re2go
+if WITH_GOLANG
+bin_PROGRAMS += re2go
+re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=LANG_GO
+re2go_SOURCES = $(re2c_SOURCES)
+nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
+endif

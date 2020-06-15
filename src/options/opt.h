@@ -69,9 +69,14 @@ const uint32_t NOEOF = ~0u - 1;
 
 #define RE2C_SIGIL "@@"
 
+// default backend is C
+#ifndef RE2C_LANG
+#define RE2C_LANG LANG_C
+#endif
+
 #define RE2C_CONSTOPTS \
     CONSTOPT1 (target_t, target, TARGET_CODE) \
-    CONSTOPT (lang_t, lang, LANG_C) \
+    CONSTOPT (lang_t, lang, RE2C_LANG) \
     CONSTOPT (bool, bNoGenerationDate, false) \
     CONSTOPT (bool, version, true) \
     CONSTOPT (bool, cFlag, false) \

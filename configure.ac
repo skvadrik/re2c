@@ -46,6 +46,11 @@ AM_COND_IF([WITH_LIBS], [
 ])
 
 
+# --enable-golang
+AC_ARG_ENABLE([golang], [AS_HELP_STRING([--enable-golang], [build re2go])])
+AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" = "xyes"])
+
+
 # checks for programs
 AC_PATH_PROG(BISON, bison, no)
 AC_PROG_CC # used in skeleton tests

@@ -37,6 +37,7 @@ script:
             -DCMAKE_EXE_LINKER_FLAGS="${COMMON_FLAGS}" \
             -DCMAKE_SHARED_LINKER_FLAGS="${COMMON_FLAGS}" \
             -DRE2C_BUILD_LIBS=on \
+            -DRE2C_BUILD_RE2GO=on \
             -DRE2C_REBUILD_DOCS=on
     else
         ./autogen.sh
@@ -45,6 +46,7 @@ script:
             --prefix="$(pwd)"/re2c-install \
             --enable-docs \
             --enable-libs \
+            --enable-golang \
             ${CONFIG_FLAGS} \
             CFLAGS="${COMMON_FLAGS}" \
             CXXFLAGS="${COMMON_FLAGS}" \
