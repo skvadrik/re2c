@@ -4,6 +4,7 @@
 #include "src/dfa/determinization.h"
 #include "src/dfa/tag_history.h"
 #include "src/debug/debug.h"
+#include "src/util/attribute.h"
 
 
 namespace re2c {
@@ -11,8 +12,10 @@ namespace re2c {
 // maximum 29-bit (we have 30 bits, but highest must be non-negative)
 static const int32_t MAX_RHO = 0x1fffFFFF;
 
-template<typename ctx_t> static void compute_prectable_naive(ctx_t &ctx);
-template<typename ctx_t> static void compute_prectable_complex(ctx_t &ctx);
+template<typename ctx_t>
+static void compute_prectable_naive(ctx_t &ctx) RE2C_ATTR((used));
+template<typename ctx_t>
+static void compute_prectable_complex(ctx_t &ctx) RE2C_ATTR((used));
 
 // we *do* want this to be inlined
 static inline int32_t leftprec(tag_info_t info1, tag_info_t info2, bool last1, bool last2);
