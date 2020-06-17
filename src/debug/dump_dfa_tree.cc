@@ -23,7 +23,7 @@ static void dump_history1(const history_t &history, std::set<int32_t> &used,
     hidx_t idx)
 {
     if (idx == HROOT) return;
-    used.insert(idx).second;
+    used.insert(idx);
     dump_history1(history, used, history.node(idx).pred);
     fprintf(stderr, "->h%d", idx);
 }
@@ -33,7 +33,7 @@ static void dump_history2(const history_t &history, std::set<int32_t> &used,
     hidx_t idx, size_t target, hidx_t base)
 {
     if (idx == HROOT) return;
-    used.insert(idx).second;
+    used.insert(idx);
     dump_history2(history, used, history.node(idx).pred, target, base);
     fprintf(stderr, "->hx%u_%d", static_cast<uint32_t>(target), idx + base);
 }
