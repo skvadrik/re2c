@@ -151,8 +151,8 @@ static void gen_goto_start_state(Output &output, const Label *lstart)
 
 void gen_code(Output &output, dfas_t &dfas)
 {
-    OutputBlock &block = output.block();
-    const opt_t *opts = block.opts;
+    OutputBlock &oblock = output.block();
+    const opt_t *opts = oblock.opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
@@ -162,7 +162,7 @@ void gen_code(Output &output, dfas_t &dfas)
     for (i = b; i != e; ++i) {
         const bool first = i == b;
         const bool first_state = output.label_counter == 0
-            || (first && block.is_reuse_block);
+            || (first && oblock.is_reuse_block);
         DFA &dfa = *(*i);
 
         // Start label is needed in `-f` mode: it points to state 0 (the
@@ -293,7 +293,7 @@ void gen_code(Output &output, dfas_t &dfas)
         }
 
         const bool prolog = (opts->fFlag && opts->gFlag)
-            || (!opts->fFlag && (block.used_yyaccept || opts->bEmitYYCh))
+            || (!opts->fFlag && (oblock.used_yyaccept || opts->bEmitYYCh))
             || (!opts->cFlag && have_bitmaps)
             || (opts->cFlag && opts->gFlag);
 
