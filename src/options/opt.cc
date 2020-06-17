@@ -45,96 +45,82 @@ static void fix_mutopt_defaults(const conopt_t &glob, mutopt_t &defaults)
 static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     const mutdef_t &is_default, mutopt_t &real)
 {
-    // some options either make no sense or must have fixed value
-    // with current target: reset them to default
-    switch (glob.target) {
-        case TARGET_DOT:
-            // default code generation options
-            real.sFlag = defaults.sFlag;
-            real.bFlag = defaults.bFlag;
-            real.gFlag = defaults.gFlag;
-            real.cGotoThreshold = defaults.cGotoThreshold;
-            real.eof = defaults.eof;
-            real.sentinel = defaults.sentinel;
-            // default environment-insensitive formatting
-            real.yybmHexTable = defaults.yybmHexTable;
-            // fallthrough
-        case TARGET_SKELETON:
-            // output files
-            real.header_file = "";
-            // default line information
-            real.iFlag = defaults.iFlag;
-            // default environment-sensitive formatting
-            real.topIndent = defaults.topIndent;
-            real.indString = defaults.indString;
-            real.condDivider = defaults.condDivider;
-            real.condDividerParam = defaults.condDividerParam;
-            // default environment bindings
-            real.yycondtype = defaults.yycondtype;
-            real.cond_get = defaults.cond_get;
-            real.cond_get_naked = defaults.cond_get_naked;
-            real.cond_set = defaults.cond_set;
-            real.cond_set_arg = defaults.cond_set_arg;
-            real.cond_set_naked = defaults.cond_set_naked;
-            real.yyctable = defaults.yyctable;
-            real.condPrefix = defaults.condPrefix;
-            real.condEnumPrefix = defaults.condEnumPrefix;
-            real.condGoto = defaults.condGoto;
-            real.condGotoParam = defaults.condGotoParam;
-            real.state_get = defaults.state_get;
-            real.state_get_naked = defaults.state_get_naked;
-            real.state_set = defaults.state_set;
-            real.state_set_arg = defaults.state_set_arg;
-            real.state_set_naked = defaults.state_set_naked;
-            real.tags_prefix = defaults.tags_prefix;
-            real.tags_expression = defaults.tags_expression;
-            real.yyfilllabel = defaults.yyfilllabel;
-            real.yynext = defaults.yynext;
-            real.yyaccept = defaults.yyaccept;
-            real.bUseStateAbort = defaults.bUseStateAbort;
-            real.bUseStateNext = defaults.bUseStateNext;
-            real.yybm = defaults.yybm;
-            real.yytarget = defaults.yytarget;
-            real.input_api = defaults.input_api;
-            real.api_style = defaults.api_style;
-            real.api_sigil = defaults.api_sigil;
-            real.yycursor = defaults.yycursor;
-            real.yymarker = defaults.yymarker;
-            real.yyctxmarker = defaults.yyctxmarker;
-            real.yylimit = defaults.yylimit;
-            real.yypeek = defaults.yypeek;
-            real.yyskip = defaults.yyskip;
-            real.yybackup = defaults.yybackup;
-            real.yybackupctx = defaults.yybackupctx;
-            real.yyrestore = defaults.yyrestore;
-            real.yyrestorectx = defaults.yyrestorectx;
-            real.yyrestoretag = defaults.yyrestoretag;
-            real.yystagn = defaults.yystagn;
-            real.yystagp = defaults.yystagp;
-            real.yymtagn = defaults.yymtagn;
-            real.yymtagp = defaults.yymtagp;
-            real.yyshift = defaults.yyshift;
-            real.yyshiftstag = defaults.yyshiftstag;
-            real.yyshiftmtag = defaults.yyshiftmtag;
-            real.yylessthan = defaults.yylessthan;
-            real.dFlag = defaults.dFlag;
-            real.yydebug = defaults.yydebug;
-            real.yyctype = defaults.yyctype;
-            real.yych = defaults.yych;
-            real.bEmitYYCh = defaults.bEmitYYCh;
-            real.yychConversion = defaults.yychConversion;
-            real.fill = defaults.fill;
-            real.fill_use = defaults.fill_use;
-            real.fill_check = defaults.fill_check;
-            real.fill_arg = defaults.fill_arg;
-            real.fill_arg_use = defaults.fill_arg_use;
-            real.fill_naked = defaults.fill_naked;
-            real.labelPrefix = defaults.labelPrefix;
-            real.startlabel = defaults.startlabel;
-            real.startlabel_force = defaults.startlabel_force;
-            break;
-        case TARGET_CODE:
-            break;
+    // For skeleton target interface options must have default values (because
+    // skeleton programs assume certain interface). For DOT target most of the
+    // options are unused.
+    if (glob.target != TARGET_CODE) {
+        // output files
+        real.header_file = "";
+        // default line information
+        real.iFlag = defaults.iFlag;
+        // default environment-sensitive formatting
+        real.topIndent = defaults.topIndent;
+        real.indString = defaults.indString;
+        real.condDivider = defaults.condDivider;
+        real.condDividerParam = defaults.condDividerParam;
+        // default environment bindings
+        real.yycondtype = defaults.yycondtype;
+        real.cond_get = defaults.cond_get;
+        real.cond_get_naked = defaults.cond_get_naked;
+        real.cond_set = defaults.cond_set;
+        real.cond_set_arg = defaults.cond_set_arg;
+        real.cond_set_naked = defaults.cond_set_naked;
+        real.yyctable = defaults.yyctable;
+        real.condPrefix = defaults.condPrefix;
+        real.condEnumPrefix = defaults.condEnumPrefix;
+        real.condGoto = defaults.condGoto;
+        real.condGotoParam = defaults.condGotoParam;
+        real.state_get = defaults.state_get;
+        real.state_get_naked = defaults.state_get_naked;
+        real.state_set = defaults.state_set;
+        real.state_set_arg = defaults.state_set_arg;
+        real.state_set_naked = defaults.state_set_naked;
+        real.tags_prefix = defaults.tags_prefix;
+        real.tags_expression = defaults.tags_expression;
+        real.yyfilllabel = defaults.yyfilllabel;
+        real.yynext = defaults.yynext;
+        real.yyaccept = defaults.yyaccept;
+        real.bUseStateAbort = defaults.bUseStateAbort;
+        real.bUseStateNext = defaults.bUseStateNext;
+        real.yybm = defaults.yybm;
+        real.yytarget = defaults.yytarget;
+        real.input_api = defaults.input_api;
+        real.api_style = defaults.api_style;
+        real.api_sigil = defaults.api_sigil;
+        real.yycursor = defaults.yycursor;
+        real.yymarker = defaults.yymarker;
+        real.yyctxmarker = defaults.yyctxmarker;
+        real.yylimit = defaults.yylimit;
+        real.yypeek = defaults.yypeek;
+        real.yyskip = defaults.yyskip;
+        real.yybackup = defaults.yybackup;
+        real.yybackupctx = defaults.yybackupctx;
+        real.yyrestore = defaults.yyrestore;
+        real.yyrestorectx = defaults.yyrestorectx;
+        real.yyrestoretag = defaults.yyrestoretag;
+        real.yystagn = defaults.yystagn;
+        real.yystagp = defaults.yystagp;
+        real.yymtagn = defaults.yymtagn;
+        real.yymtagp = defaults.yymtagp;
+        real.yyshift = defaults.yyshift;
+        real.yyshiftstag = defaults.yyshiftstag;
+        real.yyshiftmtag = defaults.yyshiftmtag;
+        real.yylessthan = defaults.yylessthan;
+        real.dFlag = defaults.dFlag;
+        real.yydebug = defaults.yydebug;
+        real.yyctype = defaults.yyctype;
+        real.yych = defaults.yych;
+        real.bEmitYYCh = defaults.bEmitYYCh;
+        real.yychConversion = defaults.yychConversion;
+        real.fill = defaults.fill;
+        real.fill_use = defaults.fill_use;
+        real.fill_check = defaults.fill_check;
+        real.fill_arg = defaults.fill_arg;
+        real.fill_arg_use = defaults.fill_arg_use;
+        real.fill_naked = defaults.fill_naked;
+        real.labelPrefix = defaults.labelPrefix;
+        real.startlabel = defaults.startlabel;
+        real.startlabel_force = defaults.startlabel_force;
     }
 
     // respect hierarchy
