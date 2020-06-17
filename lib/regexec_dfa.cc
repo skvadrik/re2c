@@ -27,23 +27,6 @@ static void apply_regops(regoff_t *regs, const tcmd_t *cmd, regoff_t pos)
     }
 }
 
-static inline regoff_t get_offset(const dfa_t *dfa, size_t tidx,
-    const regoff_t *regs, regoff_t mlen)
-{
-    const Tag &tag = dfa->tags[tidx];
-    regoff_t off;
-    if (!fixed(tag)) {
-        off = regs[dfa->finvers[tidx]];
-    }
-    else {
-        off = tag.base == Tag::RIGHTMOST
-            ? mlen : regs[dfa->finvers[tag.base]];
-        DASSERT (off != -1);
-        off -= static_cast<regoff_t>(tag.dist);
-    }
-    return off;
-}
-
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
     regmatch_t pmatch[], int /* eflags */)
 {
