@@ -320,7 +320,6 @@ static void load_strings(const char *fname, const char *delim
 // simplified Gentoo package atom
 #define PACKAGE_STR2    "([a-zA-Z0-9_/+-]+)"
 #define PACKAGE_VER2    "([0-9.a-z_]+)"
-#define PACKAGE_REV2    "(-r[0-9]+)?"
 #define PACKAGE_ATOM2   PACKAGE_STR2 "-" PACKAGE_VER2 PACKAGE_REV
 
 int main()
