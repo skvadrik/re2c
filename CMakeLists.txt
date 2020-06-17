@@ -402,20 +402,23 @@ if (RE2C_BUILD_LIBS)
         add_library(libre2c ALIAS libre2c_static)
     endif()
 
+    # libre2c test
     add_executable(test_libre2c lib/test.cc)
     target_link_libraries(test_libre2c libre2c)
     add_custom_target(check_libre2c
         COMMAND ./test_libre2c
     )
 
+    # libre2c benchmark
     add_executable(bench_libre2c lib/bench.cc)
     set_property(TARGET bench_libre2c PROPERTY CXX_STANDARD 11)
     target_link_libraries(bench_libre2c libre2c)
 
+    # if have re2, add it to the benchmark
     find_path(RE2_INCLUDE_DIRECTORY "re2/re2.h")
-    find_library(RE2_LIBRARY "re2")
+    find_library(RE2_LIBRARY re2)
     if (RE2_INCLUDE_DIRECTORY AND RE2_LIBRARY)
-        target_compile_definitions(bench_libre2c PRIVATE "HAVE_RE2_RE_H=1")
+        target_compile_definitions(bench_libre2c PRIVATE "HAVE_RE2_RE2_H=1")
         target_include_directories(bench_libre2c PRIVATE "${RE2_INCLUDE_DIRECTORY}")
         target_link_libraries(bench_libre2c "${RE2_LIBRARY}")
     endif()
