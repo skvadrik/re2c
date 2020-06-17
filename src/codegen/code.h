@@ -28,7 +28,7 @@ struct opt_t;
 struct Code;
 struct CodeGo;
 struct CodeGoIf;
-struct Output;
+class Output;
 struct State;
 struct DFA;
 typedef std::vector<smart_ptr<DFA> > dfas_t;
