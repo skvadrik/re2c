@@ -6,11 +6,11 @@
 namespace re2c_test {
 
 static std::string f(const std::string &str, const std::string &stub,
-    const char *arg, size_t val,  bool shortcut)
+    const char *arg, size_t val, bool allow_unnamed)
 {
     std::ostringstream os;
     os << str;
-    re2c::argsubst(os, stub, arg, shortcut, val);
+    re2c::argsubst(os, stub, arg, allow_unnamed, val);
     return os.str();
 }
 

@@ -19,7 +19,7 @@ void printSpan(std::ostream &o, uint32_t l, uint32_t u, uint32_t szcunit, bool e
 
 template<typename T>
 void argsubst(std::ostringstream &os, const std::string &stub, const char *arg,
-    bool shortcut, T val)
+    bool allow_unnamed, T val)
 {
     assert(!stub.empty());
     DASSERT(arg != NULL);
@@ -40,12 +40,13 @@ void argsubst(std::ostringstream &os, const std::string &stub, const char *arg,
             // named substitution of the form @@{arg}
             os << val;
             s = q + 1;
-        } else if (shortcut) {
+        } else if (allow_unnamed) {
             // unnamed substitution of the form @@
             os << val;
             s = p;
         } else {
-            // none of the above, skip one character
+            // none of the above, skip one character (and not the whole
+            // placeholder) to allow cases like @@@{arg} to find @@{arg}
             os.write(s, 1);
             ++s;
         }
