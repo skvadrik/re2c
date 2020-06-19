@@ -159,6 +159,7 @@ opt_long:
 
     "bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
     "debug-output"          end { opts.set_dFlag (true);             goto opt; }
+    "case-ranges"           end { opts.set_case_ranges (true);       goto opt; }
     "computed-gotos"        end { opts.set_gFlag (true);             goto opt; }
     "no-debug-info"         end { opts.set_iFlag (true);             goto opt; }
     "nested-ifs"            end { opts.set_sFlag (true);             goto opt; }

@@ -50,6 +50,7 @@ void Scanner::lex_conf(Opt &opts)
     "flags:" ("T" | "tags")           { opts.set_tags             (lex_conf_bool());   return; }
     "flags:case-insensitive"          { opts.set_bCaseInsensitive (lex_conf_bool());   return; }
     "flags:case-inverted"             { opts.set_bCaseInverted    (lex_conf_bool());   return; }
+    "flags:case-ranges"               { opts.set_case_ranges      (lex_conf_bool());   return; }
     "flags:" ("o" | "output")         { opts.set_output_file      (lex_conf_string()); return; }
     "flags:" ("t" | "type-header")    { opts.set_header_file      (lex_conf_string()); return; }
 

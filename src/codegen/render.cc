@@ -157,6 +157,44 @@ static bool oneline_case(const CodeCase *code, const opt_t *opts)
         && opts->lang != LANG_GO; // gofmt prefers cases on a new line
 }
 
+static void render_case_range(RenderContext &rctx, uint32_t low, uint32_t upp, bool last)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+    const Enc &enc = opts->encoding;
+    const bool ebcdic = enc.type() == Enc::EBCDIC;
+    const uint32_t szcunit = enc.szCodeUnit();
+
+    os << indent(rctx.ind, opts->indString) << "case ";
+    prtChOrHex(os, low, szcunit, ebcdic, false);
+
+    if (low != upp) {
+        // case range of the form `case low ... high:`
+        os << " ... ";
+        prtChOrHex(os, upp, szcunit, ebcdic, false);
+        os << ":";
+    } else {
+        // single case of the form `case low:`
+        os << ":";
+        if (opts->dFlag && ebcdic) {
+            const uint32_t c = enc.decodeUnsafe(low);
+            if (is_print(c)) {
+                os << " /* " << static_cast<char>(c) << " */";
+            }
+        }
+    }
+
+    if (!last) {
+        if (opts->lang == LANG_GO) {
+            os << std::endl;
+            os << indent(rctx.ind + 1, opts->indString) << "fallthrough";
+            ++rctx.line;
+        }
+        os << std::endl;
+        ++rctx.line;
+    }
+}
+
 static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
 {
     std::ostringstream &os = rctx.os;
@@ -166,53 +204,36 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
 
     if (code->kind == CodeCase::DEFAULT) {
         os << indent(ind, opts->indString) << "default:";
-    }
-    else if (code->kind == CodeCase::NUMBER) {
+    } else if (code->kind == CodeCase::NUMBER) {
         os << indent(ind, opts->indString) << "case " << code->number << ":";
-    }
-    else if (code->kind == CodeCase::STRING) {
+    } else if (code->kind == CodeCase::STRING) {
         os << indent(ind, opts->indString) << "case " << code->string << ":";
-    }
-    else {
-        const Enc &enc = opts->encoding;
-        const bool ebcdic = enc.type() == Enc::EBCDIC;
+    } else {
         const size_t nranges = code->gocase->nranges;
         const uint32_t *ranges = code->gocase->ranges;
 
         for (uint32_t i = 0; i < nranges; ++i) {
+            const bool last = i == nranges - 1;
             const uint32_t low = ranges[2 * i];
-            const uint32_t upp = ranges[2 * i + 1];
+            const uint32_t upp = ranges[2 * i + 1] - 1;
+            DASSERT(low <= upp);
 
-            for (uint32_t c = low; c < upp; ++c) {
-                os << indent(ind, opts->indString) << "case ";
-                prtChOrHex(os, c, enc.szCodeUnit(), ebcdic, opts->target == TARGET_DOT);
-                os << ":";
-                if (opts->dFlag && ebcdic) {
-                    const uint32_t c2 = enc.decodeUnsafe(c);
-                    if (is_print(c2)) {
-                        os << " /* " << static_cast<char>(c2) << " */";
-                    }
-                }
-
-                const bool last_case = i == nranges - 1 && c == upp - 1;
-                if (!last_case) {
-                    if (opts->lang == LANG_GO) {
-                        os << std::endl;
-                        os << indent(ind + 1, opts->indString) << "fallthrough";
-                        ++rctx.line;
-                    }
-                    os << std::endl;
-                    ++rctx.line;
+            if (opts->case_ranges) {
+                render_case_range(rctx, low, upp, last);
+            } else {
+                for (uint32_t c = low; c <= upp; ++c) {
+                    render_case_range(rctx, c, c, last && c == upp);
                 }
             }
         }
     }
 
     if (oneline && oneline_case(code, opts)) {
-        os << opts->indString << first->text << ";" << std::endl;
+        // Do not indent-align with case ranges, they are wider then 'default'.
+        // TODO: compute precise alignment instead of relying on tab indentation.
+        os << (opts->case_ranges ? " " : opts->indString) << first->text << ";\n";
         ++rctx.line;
-    }
-    else {
+    } else {
         os << std::endl;
         ++rctx.line;
         for (const Code *s = first; s; s = s->next) {

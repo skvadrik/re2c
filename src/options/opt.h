@@ -157,6 +157,7 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, yybm, "yybm") \
     MUTOPT (bool, yybmHexTable, false) \
     MUTOPT (bool, gFlag, false) \
+    MUTOPT (bool, case_ranges, false) \
     MUTOPT (std::string, yytarget, "yytarget") \
     MUTOPT (uint32_t, cGotoThreshold, 9) \
     MUTOPT (uint32_t, eof, NOEOF) \

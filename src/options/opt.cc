@@ -258,6 +258,10 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
             fatal("-g, --computed-gotos option is not supported for the Go backend,"
                 " as Go does not have computed goto");
         }
+        if (real.case_ranges) {
+            fatal("--case-ranges option is not supported for the Go backend,"
+                " as Go has no case ranges");
+        }
     }
     if (real.eof != NOEOF) {
         if (real.bFlag || real.gFlag) {
