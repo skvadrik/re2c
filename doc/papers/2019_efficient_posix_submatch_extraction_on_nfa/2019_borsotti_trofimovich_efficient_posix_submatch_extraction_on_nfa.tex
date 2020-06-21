@@ -77,6 +77,15 @@
 \newcommand{\PR}{P\!R}
 \newcommand{\IPT}{I\!PT}
 \newcommand{\IRE}{I\!RE}
+\newcommand{\Eps}{E\!ps}
+\newcommand{\Sym}{S\!ym}
+\newcommand{\Alt}{Alt}
+\newcommand{\Cat}{C\!at}
+\newcommand{\Rep}{Rep}
+\newcommand{\Xop}{X\!op}
+\newcommand{\fix}{f\!ix}
+\newcommand{\isub}{\mathit{isub}}
+\newcommand{\esub}{\mathit{esub}}
 
 \newcommand{\Xstirling}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
 \newcommand*{\Xbar}[1]{\overline{#1}}
@@ -185,14 +194,14 @@ different tags have priority according to the POSIX subexpression hierarchy.
 The algorithm gives incorrect results for REs with iteration subexpressions, such as \texttt{(a|aa)*} on a string \texttt{aa}
 (it minimizes the value of the opening tag on the last iteration,
 and fails to take into account the preceding iterations).
-The reported time complexity is $O(n \, m \, c \, t \, log(t))$, where
+The reported time complexity is $O(n \, m \, c \, t \log(t))$, where
 $n$ is the length of input,
 $m$ is TNFA size,
 $c$ is the time for comparing tag values
 and $t$ is the number of tags.
 Space complexity is $O(m \, t)$.
 Notably, Laurikari used the idea of topological order to avoid worst-case exponential time of $\epsilon$-closure construction,
-although his closure algorithm is not optimal \cite{Tro17}.
+although his closure algorithm is not optimal, as shown in \cite{Tro17}.
 
 \subparagraph{Kuklewicz, 2007.}
 
@@ -205,9 +214,9 @@ is to compress orbit tag histories in a matrix of size $t \times m$, where $m$ i
 $t$-Th row of the matrix represents the ordering of closure states with respect to $t$-th tag.
 %(with possible ties --- different states may have the same order).
 The matrix is updated at each step using the continuations of tag histories.
-The algorithm requires $O(m \, t)$ space and $O(n \, m \, t \, (m + t \, log(m))$ time, where $n$ is the length of input
+The algorithm requires $O(m \, t)$ space and $O(n \, m \, t \, (m + t \log(m)))$ time, where $n$ is the length of input
 (we assume a worst-case optimal $O(m^2 \, t)$ algorithm for $\epsilon$-closure construction,
-and an $O(m \, log(m) \, t^2)$ matrix update, because for $t$ tags $m$ states are sorted with an $O(t)$ comparison function).
+and an $O(m \log(m) \, t^2)$ matrix update, because for $t$ tags $m$ states are sorted with an $O(t)$ comparison function).
 Kuklewicz disambiguation is combined with Laurikari determinization in construction of TDFA\cite{Tro17}.
 
 \subparagraph{Cox, 2009 (incorrect).}
@@ -288,7 +297,7 @@ The algorithm is elegant in that it does not require explicit disambiguation:
 by the definition of derivative, parse trees are ordered by the longest-match criterion.
 Time and space complexity is not entirely clear.
 In \cite{SL14} Sulzmann and Lu consider the size of RE as a constant.
-In \cite{SL13} they give more precise estimates: $O(2^m \, t)$ space and $O(n \, log(2^m) \, 2^m \, t^2)$ time,
+In \cite{SL13} they give more precise estimates: $O(2^m \, t)$ space and $O(n \log(2^m) \, 2^m \, t^2)$ time,
 where $m$ is the size of RE,
 $n$ is the length of input
 and $t$ the number of submatch groups (the authors do not differentiate between $m$ and $t$).
@@ -378,9 +387,10 @@ In the following sections we formalize the relation between different representa
         \item
           Nil tree ${\bot}^i$,
           empty tree ${\epsilon}^i$ and
-          unit tree $a^i$ (where $a \in \Sigma$ and $i \in \YZ$)
-          are in $\XT_\Sigma$.
-        \item If $t_1, \dots, t_n \in \XT_\Sigma$ (where $n \geq 1$, and $i \in \YZ$), then
+          unit tree $a^i$
+          are in $\XT_\Sigma$,
+          where $a \in \Sigma$ and $i \in \YZ$.
+        \item If $t_1, \dots, t_n \in \XT_\Sigma$ (where $n \geq 1$) and $i \in \YZ$, then
           ${T}^i(t_1, \dots, t_n)$
           is in $\XT_\Sigma$.
     \end{enumerate}
@@ -453,9 +463,9 @@ We use the following notation in the algorithms throughout the paper
 
     \item Strings over $\Sigma$ are denoted with $w$ and $a_1 \hdots a_n$.
 
-    \item REs are denoted with $e$.
+    \item REs and their variations are denoted with $e$.
 
-    \item PTs are denoted with $t$, $s$, $r$.
+    \item PTs are denoted with $t$, $s$ and $r$.
 
     \item PEs and PE fragments are denoted with $\alpha$, $\beta$, $\gamma$, $\delta$.
 
@@ -554,7 +564,7 @@ after we present the formal foundations of our algorithm in section \ref{section
 
 \begin{itemize}[itemsep=0.2em, topsep=0.5em]
     \item Function $closure$ constructs $\epsilon$-closure of a configuration set $C$ (section \ref{section_closure}).
-        Essentially, it builds a shortest path from the states in the current set,
+        Essentially, it builds shortest paths from the states in the current set,
         following $\epsilon$-transitions in TNFA
         and comparing paths by the POSIX criterion.
 
@@ -582,11 +592,11 @@ after we present the formal foundations of our algorithm in section \ref{section
 \section{Formalization}\label{section_formalization}
 
 In this section we establish the relation between all intermediate representations.
-For brevity all proofs are moved to the appendix.
+For brevity all proofs have been moved to the appendix.
 %
-First of all, we rewrite REs in a form that separates submatch information from RE structure:
+First of all, we rewrite REs in a form that separates submatch information from the RE structure:
 instead of using parentheses to denote submatch groups,
-we store submatch information for each subexpression in the form of an \emph{implicit submatch index} and a set of \emph{explicit submatch indices}.
+it stores submatch information for each subexpression in the form of an \emph{implicit submatch index} and a set of \emph{explicit submatch indices}.
 Explicit indices enumerate submatch groups in RE:
 an empty set $\emptyset$ means that the subexpression is not a submatch group,
 and a set with multiple indices means that the subexpression is enclosed in multiple submatch groups, as in $((e))$.
@@ -596,69 +606,85 @@ The above representation reflects the POSIX standard, which states that
 submatch extraction applies only to parenthesized subexpressions,
 but the disambiguation rules apply to all subexpressions regardless of parentheses.
 
-    \begin{definition}
+    \begin{definition}\label{defire}
     \emph{Indexed regular expressions (IRE)} over finite alphabet $\Sigma$, denoted $\XIR_\Sigma$:
     \begin{enumerate}
         \item
-          Empty IRE $(i, J, \epsilon)$ and unit IRE $(i, J, \alpha)$ are in $\XIR_\Sigma$,
+          $\Eps(i, J)$ and $\Sym(i, J, \alpha)$ are in $\XIR_\Sigma$,
           where $\alpha \in \Sigma$,
-          $i \in \YZ$ is an \emph{implicit submatch index}
-          and $J \subseteq \YZ$ is the set of \emph{explicit submatch indices}.
+          $i \in \YZ$
+          and $J \subseteq \YZ$.
 
-        \item If $e_1, e_2 \in \XIR_\Sigma$, $i \in \YZ$ and $J \subseteq \YZ$, then
-          alternative $(i, J, e_1 \mid e_2)$,
-          concatenation $(i, J, e_1 \cdot e_2)$ and
-          repetition $(i, J, e_1^{n, m})$ are in $\XIR_\Sigma$,
-          where $0 \leq n \leq m \leq \infty$.
+        \item If $e_1, e_2 \in \XIR_\Sigma$ then
+          alternative $\Alt(i, J, e_1, e_2)$,
+          concatenation $\Cat(i, J, e_1, e_2)$ and
+          repetition $\Rep(i, J, e_1, n, m)$
+          are in $\XIR_\Sigma$, where
+          $i \in \YZ$,
+          $J \subseteq \YZ$
+          and $n, m \in \YZ: 0 \leq n \leq m \leq \infty$.
     \end{enumerate}
     \end{definition}
 
+Here $i$ is the implicit submatch index
+and $J$ is the set of explicit submatch indices, denoted $\isub(e)$ and $esub(e)$ respectively.
 Function $\IRE: \XR_\Sigma \rightarrow \XIR_\Sigma$ transforms RE into IRE.
-It is defined via a composition of two functions,
-$mark()$ that transforms RE into IRE with implicit indices in the boolean range $\{0, 1\}$,
-and $enum()$ that substitutes boolean indices with consecutive numbers.
-A step-by-step example of constructing an IRE from a RE is given on figure \ref{fig:mark_and_enum}.
-%
-    \begin{align*}
-    &\begin{aligned}
-        mark &: \YZ \times \XR_\Sigma \longrightarrow \YZ \times \XIR_\Sigma \\
-        mark &(j, e) \mid_{e \in \{\epsilon, \alpha\}} = (j, (0, \emptyset, e)) \\[-0.2em]
-        %
-        mark &(j, e_1 \,\circ\, e_2) \mid_{\circ \in \{|,\cdot\}} = (j_2, (i, \emptyset,
-            (i, J_1, e'_1) \,\circ\,
-            (i, J_2, e'_2)
-            )) \\[-0.2em]
-            &\text{where }            (j_1, (i_1, J_1, e'_1)) = mark(j, e_1) \\[-0.2em]
-            &\space{\hphantom{where }}(j_2, (i_2, J_2, e'_2)) = mark(j_1, e_2) \\[-0.2em]
-            &\space{\hphantom{where }}i = i_1 \vee i_2 \\[-0.2em]
-        %
-        mark &(j, e^{n, m}) = (j_1, (i, 0, (i, J, e')^{n, m})) \\[-0.2em]
-            &\text{where } (j_1, (i, J, e')) = mark(j, e) \\[-0.2em]
-        %
-        mark &(j, (e)) = (j_1, (1, J \cup \{j\}, e')) \\[-0.2em]
-            &\text{where } (j_1, (i, J, e')) = mark(j + 1, e)
-    \end{aligned}
+It is defined via a composition of two functions.
+Function $mark: \YZ \times \XR_\Sigma \longrightarrow \YZ \times \XIR_\Sigma$
+transforms RE into IRE with implicit indices in the boolean range ($1$ if a subexpression affects disambiguation, otherwise $0$)
+and computes explicit index sets. It tracks the maximal used value of the explicit index.
+Function $enum: \YZ \times \XIR_\Sigma \longrightarrow \YZ \times \XIR_\Sigma$
+substitutes boolean implicit indices with consecutive numbers. It tracks the maximal used value of the implicit index.
+Auxiliary function $\fix: \YZ \times 2^{\YZ} \times \XIR_\Sigma \longrightarrow \XIR_\Sigma$
+applies its input submatch indices to the top-level indices of IRE.
+
+\begin{align*}
+&\begin{aligned}
+    mark &(j, \epsilon) = (j, \Eps(0, \emptyset)) \\[-0.2em]
+    mark &(j, \alpha)   = (j, \Sym(0, \emptyset, \alpha)) \\[-0.2em]
     %
-    &&\begin{aligned}
-        enum &: \YZ \times \XIR_\Sigma \longrightarrow \YZ \times \XIR_\Sigma \\
-        enum &(i', (i, J, e)) \mid_{e \in \{\epsilon, \alpha\}}
-            = (i' + i, (i' \times i, J, e))
-        \\[-0.2em]
-        enum &(i', (i, J, e_1 \,\circ\, e_2)) \mid_{\circ \in \{|,\cdot\}}
-            = (i_2, (i' \times i, J, e'_1 \,\circ\, e'_2)) \\[-0.2em]
-            &\text{where }            (i_1, e'_1) = enum(i' + i, e_1) \\[-0.2em]
-            &\space{\hphantom{where }}(i_2, e'_2) = enum(i_1, e_2)
-        \\[-0.2em]
-        enum &(i', (i, J, e^{n,m})) = (i_1, (i' \times i, J, e_1^{n,m})) \\[-0.2em]
-            &\text{where }
-                (i_1, e_1) = enum(i' + i, e)
-        \\[-0.2em]
-        \\[-0.2em]
-        \IRE&(e) = e' \\[-0.2em]
-            &\text{where }(\Xund, e') = enum(1, mark(1, e))
-        \\[-0.2em]
-    \end{aligned}
-    \end{align*}
+    mark &(j, e_1 \mid e_2) = (j'', \Alt(i, \emptyset, \fix(i, \emptyset, e'_1), \fix(i, \emptyset, e'_2) )) \\[-0.2em]
+        &\text{where }            (j',  e'_1) = mark(j,  e_1) \\[-0.2em]
+        &\space{\hphantom{where }}(j'', e'_2) = mark(j', e_2) \\[-0.2em]
+        &\space{\hphantom{where }}i = \isub(e'_1) \vee \isub(e'_2) \\[-0.2em]
+    %
+    mark &(j, e_1 \cdot e_2) = (j'', \Cat(i, \emptyset, \fix(i, \emptyset, e'_1), \fix(i, \emptyset, e'_2) )) \\[-0.2em]
+        &\text{where }            (j',  e'_1) = mark(j,  e_1) \\[-0.2em]
+        &\space{\hphantom{where }}(j'', e'_2) = mark(j', e_2) \\[-0.2em]
+        &\space{\hphantom{where }}i = \isub(e'_1) \vee \isub(e'_2) \\[-0.2em]
+    %
+    mark &(j, e^{n, m}) = (j', \Rep(\isub(e'), \emptyset, e', n, m)) \\[-0.2em]
+        &\text{where } (j', e') = mark(j, e) \\[-0.2em]
+    %
+    mark &(j, (e)) = (j', \fix(1, \{j\}, e')) \\[-0.2em]
+        &\text{where } (j', e') = mark(j + 1, e)
+\end{aligned}
+%
+&&\begin{aligned}
+    enum &(k, \Eps(i, J))         = (k + i, \Eps(k \cdot i, J))         \\[-0.2em]
+    enum &(k, \Sym(i, J, \alpha)) = (k + i, \Sym(k \cdot i, J, \alpha)) \\[-0.2em]
+    %
+    enum &(k, \Xop(i, J, e_1, e_2)) \mid_{\Xop \in \{\Alt, \Cat\}} = (k'', \Xop(k \cdot i, J, e'_1, e'_2)) \\[-0.2em]
+        &\text{where }            (k', e'_1) = enum(k + i, e_1) \\[-0.2em]
+        &\space{\hphantom{where }}(k'', e'_2) = enum(k',   e_2) \\[-0.2em]
+    %
+    enum &(k, \Rep(i, J, e, n, m)) = (k', \Rep(k \cdot i, J, e', n, m)) \\[-0.2em]
+        &\text{where } (k', e') = enum(k + i, e) \\[-0.2em]
+    %
+    \\[-0.2em]
+    \fix (k&, K, \Eps(i, J))         = \Eps(i \!\vee\! k, J \!\cup\! K)         \\[-0.2em]
+    \fix (k&, K, \Sym(i, J, \alpha)) = \Sym(i \!\vee\! k, J \!\cup\! K, \alpha) \\[-0.2em]
+    \fix (k&, K, \Xop(i, J, e_1, e_2)) \mid_{\Xop \in \{\Alt, \Cat\}} = \Xop(i \!\vee\! k, J \!\cup\! K, e_1, e_2) \\[-0.2em]
+    \fix (k&, K, \Rep(i, J, e, n, m)) = \Rep(i \!\vee\! k, J \!\cup\! K, e, n, m) \\[-0.2em]
+    %
+    \\[-0.2em]
+    \IRE&(e) = e'' \text{ where }(\Xund, e') = mark(1, e), \, (\Xund, e'') = enum(1, e')
+\end{aligned}
+\end{align*}
+\medskip
+
+A step-by-step example of constructing an IRE from a RE is given on figure \ref{fig:mark_and_enum}.
+\\
 
 The relation between REs and PTs is given by the operator $\PT : \XIR_\Sigma \rightarrow 2^{\XT_\Sigma}$.
 Each IRE denotes a set of PTs.
@@ -666,28 +692,26 @@ Each IRE denotes a set of PTs.
 We write $str(t)$ to denote the string formed by concatenation of all alphabet symbols in the left-to-right traversal of $t$,
 and $\PT(e, w)$ denotes the set $\big\{ t \in \PT(e) \mid str(t) = w \big\}$ of all PTs for IRE $e$ and a string $w$.
 %
-    \begin{align*}
-        \PT\big((i, \Xund, \epsilon)\big) &= \{ {\epsilon}^{i} \}
-        \\[-0.2em]
-        \PT\big((i, \Xund, \alpha)\big) &= \{ {\alpha}^{i} \}
-        \\[-0.2em]
-        \PT\big((i, \Xund, (i_1, J_1, e_1) \mid (i_2, J_2, e_2))\big) &=
-            \big\{ {T}^{i}(t, \bot^{i_2}) \mid t \in \PT\big((i_1, J_1, e_1)\big) \big\} \cup
-            \big\{ {T}^{i}(\bot^{i_1}, t) \mid t \in \PT\big((i_2, J_2, e_2)\big) \big\}
-        \\[-0.2em]
-        \PT\big((i, \Xund, (i_1, J_1, e_1) \cdot (i_2, J_2, e_2))\big) &=
-            \big\{ {T}^{i}(t_1, t_2) \mid
-                t_1 \in \PT\big((i_1, J_1, e_1)\big),
-                t_2 \in \PT\big((i_2, J_2, e_2)\big)
-            \big\}
-        \\[-0.2em]
-        \PT\big((i, \Xund, (i_1, J_1, e_1)^{n, m})\big) \mid_{n = 0} &=
-            \big\{ {T}^{i}(t_1, \dots, t_m) \mid t_k \in \PT\big((i_1, J_1, e_1)\big), 1 \leq k \leq m \big\}
-                \cup \big\{ {T}^{i}(\bot^{i_1}) \big\}
-        \\[-0.2em]
-        \PT\big((i, \Xund, (i_1, J_1, e_1)^{n, m})\big) \mid_{n > 0} &=
-            \big\{ {T}^{i}(t_n, \dots, t_m) \mid t_k \in \PT\big((i_1, J_1, e_1)\big), n \leq k \leq m \big\}
-    \end{align*}
+\begin{align*}
+    \PT(\Eps(i, \Xund))         &= \{ {\epsilon}^{i} \} \\[-0.2em]
+    \PT(\Sym(i, \Xund, \alpha)) &= \{ {\alpha}^{i} \}   \\[-0.2em]
+    \PT(\Alt(i, \Xund, e_1, e_2)) &=
+        \{ {T}^{i}(t, \bot^{\isub(e_2)}) \mid t \in \PT(e_1) \} \cup
+        \{ {T}^{i}(\bot^{\isub(e_1)}, t) \mid t \in \PT(e_2) \}
+    \\[-0.2em]
+    \PT(\Cat(i, \Xund, e_1, e_2)) &=
+        \{ {T}^{i}(t_1, t_2) \mid
+            t_1 \in \PT(e_1),
+            t_2 \in \PT(e_2)
+        \}
+    \\[-0.2em]
+    \PT(\Rep(i, \Xund, e, n, m)) \mid_{n = 0} &=
+        \{ {T}^{i}(t_1, \dots, t_m) \mid t_k \in \PT(e), 1 \leq k \leq m \}
+            \cup \{ {T}^{i}(\bot^{\isub(e)}) \}
+    \\[-0.2em]
+    \PT(\Rep(i, \Xund, e, n, m)) \mid_{n > 0} &=
+        \{ {T}^{i}(t_n, \dots, t_m) \mid t_k \in \PT(e), n \leq k \leq m \}
+\end{align*}
 
 Following Okui and Suzuki, we assign \emph{positions} to the nodes of IRE and PT.
 The root position is $\Lambda$, and position of the $i$-th subtree of a tree with position $x$ is $x.i$
@@ -711,7 +735,7 @@ which we call \emph{p-norm} and \emph{s-norm} respectively.
 
 \begin{figure}[t!]
 \includegraphics[width=\linewidth]{img/mark_and_enum.pdf}
-\vspace{-2em}
+\vspace{-1em}
 \caption{
 IRE for RE $(((\epsilon|a^{0,\infty}))(a|\epsilon)^{0,3})$
 and examples of PTs for string $a$
@@ -978,7 +1002,7 @@ adding more parentheses in RE does not cardinally change existing submatch resul
 \end{theoremEnd}
 \begin{proofEnd}
     First, note that adding parentheses in RE
-    does not affect the set of its positions: we have $Pos(\bar{e}) = Pos(\bar{e}')$.
+    does not affect the set of IRE positions: we have $Pos(\bar{e}) = Pos(\bar{e}')$.
     Consequently, p-order on $\PT(\bar{e}, w)$ and $\PT(\bar{e}', w)$ is identical,
     and the $<$-minimal tree $t_{min}$ is the same in both cases.
     By theorem \ref{theorem_order_compat} we have $t_{min} \in T_{min}$ and $t_{min} \in T'_{min}$,
@@ -986,7 +1010,7 @@ adding more parentheses in RE does not cardinally change existing submatch resul
     \\[0.5em]
     %
     Second, note that adding parentheses in RE
-    may only increase the set of its submatch positions: we have $Sub(\bar{e}) \subseteq Sub(\bar{e}')$.
+    may only increase the set of IRE submatch positions: we have $Sub(\bar{e}) \subseteq Sub(\bar{e}')$.
     %
     Let $S$, $S'$ denote $Sub(t_{min})$ for $\bar{e}$ and $\bar{e}'$ respectively,
     then we have $S \subseteq S'$.
@@ -1575,7 +1599,7 @@ Since $\YK$ is finite, the properties for $\oplus$-sums over countable subsets a
     and let $k$ be the index of the fork frame.
     %
     By construction of TNFA the loop $\pi_2$ must be contained in a sub-TNFA $f$
-    for sub-IRE of the form $e = (\Xund, \Xund, e_1^{1,\infty})$,
+    for sub-IRE of the form $e = \Rep(\Xund, \Xund, e_1, 1, \infty)$,
     as this is the only looping TNFA construct --- see algorithm \ref{alg_tnfa}.
     Let $f_1$ be the sub-TNFA for $e_1$.
     Path $\pi$ enters $f$ and iterates through $f_1$ at least twice before leaving $f$
@@ -2461,21 +2485,24 @@ and $t$ --- the number of capturing groups and subexpressions that contain them.
     \newcommand \ntag {ntag}
 
     \Fn {$\underline{\retonfa(e, q_f)} \smallskip$} {
-        \If {$e = (0, \emptyset, \epsilon)$} {
+    \Indm
+    $i = \isub(e), \; J = \esub(e)$ \tcp{submatch indices}
+    \If {$i = 0$} {
+        \If {$e = \Eps(0, \emptyset)$} {
             \Return $(\Sigma, \{q_f\}, \emptyset, \emptyset, q_f, q_f)$
         }
         \BlankLine
-        \ElseIf {$e = (0, \emptyset, a) \mid_{a \in \Sigma}$} {
+        \ElseIf {$e = \Sym(0, \emptyset, a) \mid_{a \in \Sigma}$} {
             \Return $(\Sigma, \{q_0,q_f\}, \emptyset, \{(q_0, a, \epsilon, q_f)\}, q_0, q_f)$
         }
         \BlankLine
-        \ElseIf {$e = (0, \emptyset, e_1 \cdot e_2)$} {
+        \ElseIf {$e = \Cat(0, \emptyset, e_1, e_2)$} {
             $(\Sigma, Q_2, M_2, \Delta_2, q_2, q_f) = \retonfa (e_2, q_f)$ \;
             $(\Sigma, Q_1, M_1, \Delta_1, q_1, q_2) = \retonfa (e_1, q_2)$ \;
             \Return $(\Sigma, Q_1 \cup Q_2, M_1 \sqcup M_2, \Delta_1 \cup \Delta_2, q_1, q_f)$
         }
         \BlankLine
-        \ElseIf {$e = (0, \emptyset, e_1 \mid e_2)$} {
+        \ElseIf {$e = \Alt(0, \emptyset, e_1, e_2)$} {
             $(\Sigma, Q_2, M_2, \Delta_2, q_2, q_f) = \retonfa (e_2, q_f)$ \;
             $(\Sigma, Q'_2, M_2, \Delta'_2, q'_2, q_f) = \ntag (M_2, q_f)$ \;
             $(\Sigma, Q_1, M_1, \Delta_1, q_1, q'_2) = \retonfa (e_2, q'_2)$ \;
@@ -2485,49 +2512,50 @@ and $t$ --- the number of capturing groups and subexpressions that contain them.
             \Return $(\Sigma, Q, M_1 \sqcup M_2, \Delta, q_0, q_f)$
         }
         \BlankLine
-        \ElseIf {$e = (0, \emptyset, e_1^{n,m}) \mid_{1 < n \leq m \leq \infty}$} {
-            $(\Sigma, Q_1, M_1, \Delta_1, q_2, q_f) = \retonfa ((0, \emptyset, e_1^{n-1,m-1}), q_f)$ \;
-            $(\Sigma, Q_2, M_2, \Delta_2, q_1, q_2) = \retonfa (e_1, q_2)$ \;
+        \ElseIf {$e = \Rep(0, \emptyset, e_1, n, m) \mid_{1 < n \leq m \leq \infty}$} {
+            $(\Sigma, Q_1, M_1, \Delta_1, q_2, q_f) = \retonfa(\Rep(0,\! \emptyset,\! e_1,\! n\!-\!1,\! m\!-\!1),\! q_f)$ \;
+            $(\Sigma, Q_2, M_2, \Delta_2, q_1, q_2) = \retonfa(e_1, q_2)$ \;
             \Return $(\Sigma, Q_1 \cup Q_2, M_1 \sqcup M_2, \Delta_1 \cup \Delta_2, q_1, q_f)$
         }
         \BlankLine
-        \ElseIf {$e = (0, \emptyset, e_1^{0,m})$} {
-            $(\Sigma, Q_1, M_1, \Delta_1, q_1, q_f) = \retonfa ((0, \emptyset, e_1^{1,m}), q_f)$ \;
+        \ElseIf {$e = \Rep(0, \emptyset, e_1, 0, m)$} {
+            $(\Sigma, Q_1, M_1, \Delta_1, q_1, q_f) = \retonfa (\Rep(0, \emptyset, e_1, 1, m), q_f)$ \;
             $(\Sigma, Q'_1, M_1, \Delta'_1, q'_1, q_f) = \ntag (M_1, q_f)$ \;
             $Q = Q_1 \cup Q'_1 \cup \{q_0\}$ \;
             $\Delta = \Delta_1 \cup \Delta'_1 \cup \{ (q_0, 1, \epsilon, q_1), (q_0, 2, \epsilon, q'_1) \}$ \;
             \Return $(\Sigma, Q, M_1, \Delta, q_0, q_f)$
         }
         \BlankLine
-        \ElseIf {$e = (0, \emptyset, e_1^{1,\infty})$} {
+        \ElseIf {$e = \Rep(0, \emptyset, e_1, 1, \infty)$} {
             $(\Sigma, Q_1, M_1, \Delta_1, q_0, q_1) = \retonfa (e_1, \Xund)$ \;
             $Q = Q_1 \cup \{q_f\}$ \;
             $\Delta = \Delta_1 \cup \{ (q_1, 1, \epsilon, q_0), (q_1, 2, \epsilon, q_f) \}$ \;
             \Return $(\Sigma, Q, M_1, \Delta, q_0, q_f)$
         }
         \BlankLine
-        \lElseIf {$e = (0, \emptyset, e_1^{1,1})$} {
+        \lElseIf {$e = \Rep(0, \emptyset, e_1, 1, 1)$} {
             \Return $\retonfa (e_1, q_f)$
         }
         \BlankLine
-        \ElseIf {$e = (0, \emptyset, e_1^{1,m}) \mid_{1 < m < \infty}$} {
-            $(\Sigma, Q_1, M_1, \Delta_1, q_1, q_f) = \retonfa ((0, \emptyset, e_1^{1,m-1}), q_f)$ \;
+        \ElseIf {$e = \Rep(0, \emptyset, e_1, 1, m) \mid_{1 < m < \infty}$} {
+            $(\Sigma, Q_1, M_1, \Delta_1, q_1, q_f) = \retonfa (\Rep(0, \emptyset, e_1, 1, m\!-\!1), q_f)$ \;
             $(\Sigma, Q_2, M_2, \Delta_2, q_0, q_2) = \retonfa (e_1, q_1)$ \;
             $\Delta = \Delta_1 \cup \Delta_2 \cup \{ (q_1, 1, \epsilon, q_f), (q_1, 2, \epsilon, q_2) \}$ \;
             \Return $(\Sigma, Q_1 \cup Q_2, M_1 \sqcup M_2, \Delta, q_0, q_f)$
         }
-        \BlankLine
-        \ElseIf {$e = (i, J, e_1) \mid_{i \neq 0}$} {
-            $(\Sigma, Q_1, M_1, \Delta_1, q_1, q_2) = \retonfa ((0, \emptyset, e_1), q_2)$ \;
-            $Q = Q_1 \cup \{q_0, q_f\}$ \;
-            $N = dom(M_1) \sqcup \{2i\!-\!1,\! 2i\}$ \tcp{nested tags}
-            $M(m) = \begin{cases}
-                M_1(m) &\text{if } m \in dom(M_1) \\[-0.3em]
-                (J, N) &\text{if } m \in \{2i\!-\!1, 2i\}
-            \end{cases}$ \;
-            $\Delta = \Delta_1 \cup \{ (q_0, 1, 2i\!-\!1, q_1), (q_2, 1, 2i, q_f) \}$ \;
-            \Return $(\Sigma, Q, M, \Delta, q_0, q_f)$
-        }
+    }
+    \Else {
+        $e' = \fix(0, \emptyset, e)$ \tcp{reset submatch indices}
+        $(\Sigma, Q_1, M_1, \Delta_1, q_1, q_2) = \retonfa(e', q_2)$ \;
+        $Q = Q_1 \cup \{q_0, q_f\}$ \;
+        $N = dom(M_1) \sqcup \{2i\!-\!1,\! 2i\}$ \tcp{nested tags}
+        $M(m) = \begin{cases}
+            M_1(m) &\text{if } m \in dom(M_1) \\[-0.2em]
+            (J, N) &\text{if } m \in \{2i\!-\!1, 2i\}
+        \end{cases}$ \;
+        $\Delta = \Delta_1 \cup \{ (q_0, 1, 2i\!-\!1, q_1), (q_2, 1, 2i, q_f) \}$ \;
+        \Return $(\Sigma, Q, M, \Delta, q_0, q_f)$
+    }
     }
     \BlankLine
     \BlankLine
@@ -2550,6 +2578,7 @@ and $t$ --- the number of capturing groups and subexpressions that contain them.
 TNFA construction.
 Notation $M = M_1 \sqcup M_2$ for functions with disjoint domains
 means that $M(m) = M_i(m) \;\forall m \in dom(M_i)$, $1 \leq i \leq 2$.
+Functions $\fix$, $\isub$ and $\esub$ are defined on page \pageref{defire}.
 }\label{alg_tnfa}
 \end{algorithm}
 
@@ -2574,7 +2603,7 @@ and processing takes $O(1)$ time, therefore total time is $O(m)$.
 
 The second step, TNFA construction, is given by the $tn\!f\!a()$ function (algorithm \ref{alg_tnfa}).
 At this step counted repetition is unrolled, so TNFA may be much larger than IRE.
-For each subexpressions of the form $(i, J, e^{k,l})$ automaton for $e$ is duplicated exactly $l$ times if $l \neq \infty$, or $max(1, k)$ times otherwise
+For each subexpressions of the form $\Rep(i, J, e, k, l)$ automaton for $e$ is duplicated exactly $l$ times if $l \neq \infty$, or $max(1, k)$ times otherwise
 (at each step of recursion the counter is decremented and one copy of automaton is constructed).
 Since repetition counters are constants, unrolling increases the size of sub-TNFA by a constant factor.
 Other $tn\!f\!a()$ clauses are in one-to-one correspondence with sub-IRE.
@@ -2727,7 +2756,7 @@ We benchmarked the following algorithms:
 \item Kuklewicz: the implementation of Kuklewicz algorithm \cite{Kuk07} as described in \cite{Tro17}.
     The main difference with OS is that the algorithm splits the common tag history into individual tag histories and considers them separately.
     %Tags that correspond to repetition subexpressions (orbit tags) require more complex handling than other (simple) tags.
-    The algorithm runs in $O(n \, m \, t \, (m + t \, log(m))$ time and $O(m \, t)$ space.
+    The algorithm runs in $O(n \, m \, t \, (m + t \log(m))$ time and $O(m \, t)$ space.
 
 \item Backward: the backward-matching algorithm proposed by Cox \cite{Cox09}.
     We had to modify it substantially in order to support bounded repetition and fix bugs (described in the introduction).
@@ -3038,7 +3067,7 @@ In general, we can observe the following tendencies:
     and with increased number of tags (compare B1 -- B6 with fewer captures to B7 -- B12 with more captures),
     in particular orbit tags (compare C1 -- C3 with an innermost alternative to C4 -- C6 with an innermost repetition).
     On REs with many capturing groups Kuklewicz algorithm can get very slow (A1, A5).
-    This is caused by an $O(m \, log(m) \, t^2)$ precedence matrix update algorithm.
+    This is caused by an $O(m \log(m) \, t^2)$ precedence matrix update algorithm.
 
 \item Backward algorithm degrades with increased number of tags
     (as shown by A1 -- A12, and also observable on B7 -- B12 compared to B1 -- B6).
@@ -3077,26 +3106,23 @@ In general, we can observe the following tendencies:
 
 \section{Conclusions and future work}\label{section_conclusions}
 
-As the benchmarks show,
-none of the POSIX matching algorithms we considered is ideal,
-and for each algorithm there are use cases where it performs better than other algorithms.
-On the whole, though, we can make the following observation:
-lazy-OS is generally the fastest algorithm,
-and OS is generally the most robust one (it has the best worst-case time and space complexity).
-Lazy-OS can only be used for short inputs due to its unbounded memory consumption,
-and OS can be used for long inputs, as it executes in bounded memory.
-It seems that the best algorithm would use a combination of lazy-OS and OS.
-Note that using different algorithms for different use cases is what existing libraries like RE2 already do.
+As the benchmarks show, none of the POSIX matching algorithms we considered is perfect,
+but for each algorithm there are use cases where it performs better than other algorithms.
+On the whole though, we can make the following observations.
+Lazy-OS is generally the fastest algorithm, but it cannot be used for long inputs due to its unbounded memory consumption.
+OS is generally the most robust algorithm: it has the best worst-case time and space complexity,
+it is reasonably fast, and it can be used for long inputs (as it executes in bounded memory).
+Therefore a practical implementation would use a use a combination of lazy-OS and OS.
 \\
 
 It is still an open question to us
 whether it is possible to combine the elegance of the derivative-based approach to POSIX disambiguation
-with the practical efficiency of NFA-based methods.
+with the efficiency of NFA-based algorithms.
 %
-The derivative-based approach constructs the match results in such order that the longest-leftmost result is always first.
-%
-We experimented with recursive descent parsers that embrace the same ordering idea
-and constructed a prototype implementation.
+In the derivative-based approach, match results are constructed in such order that the longest-leftmost result is always first.
+Perhaps a similar idea can be applied to NFA-based algorithms in order to reduce the amount of disambiguation they perform.
+We experimented with recursive descent parsers based on the ordering idea
+and constructed a prototype implementation (but it did not result in a faster algorithm).
 \\
 
 It would be interesting to apply our approach to automata with counters
@@ -3105,10 +3131,9 @@ instead of unrolling bounded repetition.
 
 \section*{Acknowledgments}
 
-Whatever I understand in mathematics I owe to my parents Vladimir and Elina,
-my teachers Tatyana Leonidovna and Demian Vladimirovich, and the Belarusian State University.
-This work would not exist without the inspiration and help of my husband Sergei.
-And finally, cheers to the RE2C users!
+I want to thank my husband and fellow programmer Sergei,
+my parents Vladimir and Elina, my teachers Tatyana Leonidovna and Demian Vladimirovich, and the Belarusian State University.
+And cheers to the RE2C users!
 \null\hfill\textit{Ulya Trofimovich}
 
 
@@ -3275,15 +3300,15 @@ And finally, cheers to the RE2C users!
     Induction step: suppose that for any position $x$ of length $|x| < h$ the lemma is true.
     We will show that if exists a $k \in \YN$ such that $x.k \in Pos(t) \cap Pos(s)$,
     then $x.k$ corresponds to the same position $x'.k'$ in $e$ for both $t$ and $s$ (for some $k' \in \YN$).
-    If $e|_{x'}$ is an elementary IRE of the form $(i, j, \epsilon)$ or $(i, j, a)$,
+    If $e|_{x'}$ is an elementary IRE of the form $\Eps(i, j)$ or $\Sym(i, j, a)$,
     or if at least one of $t|_x$ and $s|_x$ is $\bot$,
     then $k$ doesn't exist.
     Otherwise $e|_{x'}$ is a compound IRE and both $t|_x$ and $s|_x$ are not $\bot$.
-    If $e|_{x'}$ is a union $(i, j, (i_1, j_1, e_1)|(i_2, j_2, e_2))$
-    or a product $(i, j, (i_1, j_1, e_1)\cdot(i_2, j_2, e_2))$,
+    If $e|_{x'}$ is an alternative $\Alt(i, j, e_1, e_2)$
+    or a concatenation $\Cat(i, j, e_1, e_2)$,
     then both $t|_x$ and $s|_x$ have exactly two subtrees,
     and positions $x.1$ and $x.2$ in $t$ and $s$ correspond to positions $x'.1$ and $x'.2$ in $e$.
-    Otherwise, $e|_{x'}$ is a repetition $(i, j, e_1^{n,m})$
+    Otherwise, $e|_{x'}$ is a repetition $\Rep(i, j, e_1, n, m)$
     and for any $k \geq 1$ position $x.k$ in $t$ and $s$ corresponds to position $x'.1$ in $e$.
 \end{proofEnd}
 
