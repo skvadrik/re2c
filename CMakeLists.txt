@@ -5,8 +5,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(Re2cAutotoolsHelpers)
 include(Re2cBootstrapLexer)
 include(Re2cBootstrapParser)
-include(Re2cBootstrapCompiledHelp)
-include(Re2cBootstrapManual)
 include(Re2cTryCXXFlag)
 
 ac_subst(PACKAGE_VERSION "${PROJECT_VERSION}")
@@ -77,6 +75,17 @@ ac_check_sizeof("0l")
 ac_check_sizeof("0ll")
 ac_check_sizeof("0i8")
 
+# manpage
+set(re2c_manpage           "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1")
+set(re2c_manpage_bootstrap "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2c.1")
+set(re2c_manpage_source    "${CMAKE_CURRENT_BINARY_DIR}/doc/manpage.rst")
+
+# help
+set(re2c_help           "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc")
+set(re2c_help_bootstrap "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/src/msg/help.cc")
+set(re2c_help_source    "${CMAKE_CURRENT_BINARY_DIR}/doc/help.rst")
+set(re2c_genhelp        "${CMAKE_CURRENT_SOURCE_DIR}/genhelp.sh")
+
 set(top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 configure_file(doc/manpage.rst.in doc/manpage.rst @ONLY)
 configure_file(doc/help.rst.in doc/help.rst @ONLY)
@@ -104,12 +113,12 @@ include_directories(. "${CMAKE_CURRENT_BINARY_DIR}")
 add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/parser.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/parser.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex_conf.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/options/parse_opts.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1"
+    "${re2c_help}"
+    "${re2c_manpage}"
 )
 add_library(re2c_objects_autogen_ver_to_vernum OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/msg/ver_to_vernum.cc"
@@ -208,8 +217,6 @@ re2c_bootstrap_lexer("src/parse/lex_conf.re" "src/parse/lex_conf.cc")
 re2c_bootstrap_lexer("src/options/parse_opts.re" "src/options/parse_opts.cc")
 re2c_bootstrap_lexer("src/msg/ver_to_vernum.re" "src/msg/ver_to_vernum.cc")
 re2c_bootstrap_parser("src/parse/parser.ypp" "src/parse/parser.cc" "src/parse/parser.h")
-re2c_bootstrap_compiled_help("${CMAKE_CURRENT_BINARY_DIR}/doc/help.rst" "src/msg/help.cc")
-re2c_bootstrap_manual("${CMAKE_CURRENT_BINARY_DIR}/doc/manpage.rst" "doc/re2c.1")
 
 if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     if(UNIX)
@@ -218,15 +225,88 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         install(FILES include/unicode_categories.re DESTINATION "${RE2C_STDLIB_DIR}")
     endif()
 
+    set(re2c_docs_sources
+        "${re2c_manpage_source}"
+        "doc/manual/api/api.rst_"
+        "doc/manual/api/interface.rst_"
+        "doc/manual/conditions/conditions.rst_"
+        "doc/manual/configurations/configurations.rst_"
+        "doc/manual/directives/directives.rst_"
+        "doc/manual/dot/dot.rst_"
+        "doc/manual/encodings/encodings.rst_"
+        "doc/manual/eof/01_sentinel.rst_"
+        "doc/manual/eof/02_bounds_checking.rst_"
+        "doc/manual/eof/03_eof_rule.rst_"
+        "doc/manual/eof/04_generic_api.rst_"
+        "doc/manual/eof/eof.rst_"
+        "doc/manual/fill/01_fill.rst_"
+        "doc/manual/fill/02_fill.rst_"
+        "doc/manual/fill/fill.rst_"
+        "doc/manual/headers/headers.rst_"
+        "doc/manual/includes/includes.rst_"
+        "doc/manual/options/debug.rst_"
+        "doc/manual/options/internal.rst_"
+        "doc/manual/options/options.rst_"
+        "doc/manual/regexps/regular_expressions.rst_"
+        "doc/manual/reuse/reuse.rst_"
+        "doc/manual/skeleton/skeleton.rst_"
+        "doc/manual/state/state.rst_"
+        "doc/manual/submatch/submatch_example_mtags.rst_"
+        "doc/manual/submatch/submatch_example_posix.rst_"
+        "doc/manual/submatch/submatch_example_stags.rst_"
+        "doc/manual/submatch/submatch.rst_"
+        "doc/manual/syntax/syntax.rst_"
+        "doc/manual/warnings/warnings_general.rst_"
+        "doc/manual/warnings/warnings_list.rst_"
+        "examples/eof/01_sentinel.re"
+        "examples/eof/02_bounds_checking.re"
+        "examples/eof/03_eof_rule.re"
+        "examples/eof/05_generic_api_eof_rule.re"
+        "examples/fill/01_fill.re"
+        "examples/fill/02_fill.re"
+        "examples/reuse/reuse.r--input-encoding(utf8).re"
+        "examples/state/push.f.re"
+        "examples/submatch/01_stags.re"
+        "examples/submatch/02_mtags.re"
+        "examples/submatch/03_posix.re"
+    )
+
     if(RE2C_REBUILD_DOCS)
+        # generate manpage and help from sources and update bootstrap files
+        add_custom_command(
+            OUTPUT "${re2c_manpage}"
+            COMMAND "${RST2MAN}" "${re2c_manpage_source}" > "${re2c_manpage}"
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${re2c_manpage}" "${re2c_manpage_bootstrap}"
+            DEPENDS "${re2c_docs_sources}"
+        )
+        add_custom_command(
+            OUTPUT "${re2c_help}"
+            COMMAND "${RST2MAN}" "${re2c_help_source}" > "${re2c_help}.1"
+            COMMAND "${re2c_genhelp}" "${re2c_help}.1" "${re2c_help}"
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${re2c_help}" "${re2c_help_bootstrap}"
+            DEPENDS
+                "${re2c_help_source}"
+                "${re2c_genhelp}"
+                "${re2c_docs_sources}"
+        )
         add_custom_target(docs DEPENDS
-            "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1"
-            "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc"
+            "${re2c_manpage}"
+            "${re2c_help}"
         )
     else()
+        # copy manpage and help from bootstrap files
+        add_custom_command(
+            OUTPUT "${re2c_manpage}"
+            COMMAND "${CMAKE_COMMAND}" -E copy "${re2c_manpage_bootstrap}" "${re2c_manpage}"
+            DEPENDS "${re2c_manpage_bootstrap}"
+        )
+        add_custom_command(
+            OUTPUT "${re2c_help}"
+            COMMAND "${CMAKE_COMMAND}" -E copy "${re2c_help_bootstrap}" "${re2c_help}"
+            MAIN_DEPENDENCY "${re2c_help_bootstrap}"
+        )
         add_custom_target(docs
-            COMMAND cmake -E echo "Reconfigure to rebuild docs: cmake -DRE2C_REBUILD_DOCS=YES"
-            COMMAND cmake -E false
+            COMMAND echo "Reconfigure to rebuild docs: cmake -DRE2C_REBUILD_DOCS=YES" && false
         )
     endif()
 
