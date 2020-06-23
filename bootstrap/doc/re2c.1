@@ -77,6 +77,14 @@ Invert the meaning of single\-quoted and double\-quoted strings:
 treat single\-quoted strings as case\-sensitive and double\-quoted strings
 as case\-insensitive.
 .TP
+.B \fB\-\-case\-ranges\fP
+Collapse consecutive cases in a swithch statemens into a range of the form
+\fBcase low ... high:\fP\&. This syntax is an extension of the C/C++ language,
+supported by compilers like GCC, Clang and Tcc. The main advantage over
+using single cases is smaller generated C code and faster generation time,
+although for some compilers like Tcc it also results in smaller binary size.
+This option doesn\(aqt work for the Go backend.
+.TP
 .B \fB\-e \-\-ecb\fP
 Generate a lexer that reads input in EBCDIC encoding.
 re2c assumes that character range is 0 \-\- 0xFF an character size is 1 byte.
@@ -114,7 +122,7 @@ Optimize conditional jumps using non\-standard "computed goto" extension
 (which must be supported by the C/C++ compiler). re2c generates jump tables
 only in complex cases with a lot of conditional branches. Complexity
 threshold can be configured with \fBcgoto:threshold\fP configuration. This
-option implies \fB\-b\fP\&.
+option implies \fB\-b\fP\&. This option doesn\(aqt work for the Go backend.
 .TP
 .B \fB\-I PATH\fP
 Add \fBPATH\fP to the list of locations which are used when searching for
@@ -142,7 +150,8 @@ With \fButf8\fP re2c handles input as UTF8\-encoded and recognizes multibyte
 characters.
 .TP
 .B \fB\-\-lang <c | go>\fP
-Specify the output language (the default is \fBc\fP).
+Specify the output language. Supported languages are C and Go (the default
+is C).
 .TP
 .B \fB\-\-location\-format <gnu | msvc>\fP
 Specify location format in messages.
@@ -173,7 +182,8 @@ Ignore user\-defined interface code and generate a self\-contained "skeleton"
 program. Additionally, generate input files with strings derived from the
 regular grammar and compressed match results that are used to verify
 "skeleton" behavior on all inputs. This option is useful for finding bugs
-in optimizations and code generation.
+in optimizations and code generation. This option doesn\(aqt work for the Go
+backend.
 .TP
 .B \fB\-s \-\-nested\-ifs\fP
 Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional
@@ -927,6 +937,9 @@ Same as \fB\-\-case\-insensitive\fP command\-line option.
 .B \fBre2c:flags:case\-inverted = 0;\fP
 Same as \fB\-\-case\-inverted\fP command\-line option.
 .TP
+.B \fBre2c:flags:case\-ranges = 0;\fP
+Same as \fB\-\-case\-ranges\fP command\-line option.
+.TP
 .B \fBre2c:flags:d\fP or \fBre2c:flags:debug\-output\fP
 Same as \fB\-d \-\-debug\-output\fP command\-line option.
 .TP
@@ -1212,7 +1225,7 @@ static int lex(const char *str, unsigned int len)
 
 loop:
     /*!re2c
-    re2c:decorate = 0;
+    re2c:api:style = free\-form;
     re2c:define:YYCTYPE = char;
     re2c:define:YYFILL = "return \-1;";
 
@@ -1350,7 +1363,7 @@ loop:
     re2c:yyfill:enable = 0;
     re2c:eof = 0;
     re2c:flags:input = custom;
-    re2c:decorate = 0;
+    re2c:api:style = free\-form;
     re2c:define:YYCTYPE    = char;
     re2c:define:YYLESSTHAN = "cur >= lim";
     re2c:define:YYPEEK     = "cur < lim ? *cur : 0";  // fake null
@@ -1525,7 +1538,7 @@ loop:
     in\->tok = in\->cur;
     /*!re2c
     re2c:eof = 0;
-    re2c:decorate = 0;
+    re2c:api:style = free\-form;
     re2c:define:YYCTYPE  = char;
     re2c:define:YYCURSOR = in\->cur;
     re2c:define:YYMARKER = in\->mar;
@@ -1666,7 +1679,7 @@ static int lex(Input *in)
 loop:
     in\->tok = in\->cur;
     /*!re2c
-    re2c:decorate = 0;
+    re2c:api:style = free\-form;
     re2c:define:YYCTYPE  = char;
     re2c:define:YYCURSOR = in\->cur;
     re2c:define:YYMARKER = in\->mar;
@@ -2199,7 +2212,7 @@ loop:
     in\->tok = in\->cur;
     /*!re2c
         re2c:eof = 0;
-        re2c:decorate = 0;
+        re2c:api:style = free\-form;
         re2c:define:YYCTYPE    = "char";
         re2c:define:YYCURSOR   = "in\->cur";
         re2c:define:YYMARKER   = "in\->mar";

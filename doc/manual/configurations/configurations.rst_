@@ -183,6 +183,9 @@
 ``re2c:flags:case-inverted = 0;``
     Same as ``--case-inverted`` command-line option.
 
+``re2c:flags:case-ranges = 0;``
+    Same as ``--case-ranges`` command-line option.
+
 ``re2c:flags:d`` or ``re2c:flags:debug-output``
     Same as ``-d --debug-output`` command-line option.
 

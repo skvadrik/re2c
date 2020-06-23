@@ -26,6 +26,14 @@
     treat single-quoted strings as case-sensitive and double-quoted strings
     as case-insensitive.
 
+``--case-ranges``
+    Collapse consecutive cases in a swithch statemens into a range of the form
+    ``case low ... high:``. This syntax is an extension of the C/C++ language,
+    supported by compilers like GCC, Clang and Tcc. The main advantage over
+    using single cases is smaller generated C code and faster generation time,
+    although for some compilers like Tcc it also results in smaller binary size.
+    This option doesn't work for the Go backend.
+
 ``-e --ecb``
     Generate a lexer that reads input in EBCDIC encoding.
     re2c assumes that character range is 0 -- 0xFF an character size is 1 byte.
@@ -63,7 +71,7 @@
     (which must be supported by the C/C++ compiler). re2c generates jump tables
     only in complex cases with a lot of conditional branches. Complexity
     threshold can be configured with ``cgoto:threshold`` configuration. This
-    option implies ``-b``.
+    option implies ``-b``. This option doesn't work for the Go backend.
 
 ``-I PATH``
     Add ``PATH`` to the list of locations which are used when searching for
@@ -91,7 +99,8 @@
     characters.
 
 ``--lang <c | go>``
-    Specify the output language (the default is ``c``).
+    Specify the output language. Supported languages are C and Go (the default
+    is C).
 
 ``--location-format <gnu | msvc>``
     Specify location format in messages.
@@ -122,7 +131,8 @@
     program. Additionally, generate input files with strings derived from the
     regular grammar and compressed match results that are used to verify
     "skeleton" behavior on all inputs. This option is useful for finding bugs
-    in optimizations and code generation.
+    in optimizations and code generation. This option doesn't work for the Go
+    backend.
 
 ``-s --nested-ifs``
     Use nested ``if`` statements instead of ``switch`` statements in conditional
