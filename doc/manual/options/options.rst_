@@ -27,7 +27,7 @@
     as case-insensitive.
 
 ``--case-ranges``
-    Collapse consecutive cases in a swithch statemens into a range of the form
+    Collapse consecutive cases in a switch statements into a range of the form
     ``case low ... high:``. This syntax is an extension of the C/C++ language,
     supported by compilers like GCC, Clang and Tcc. The main advantage over
     using single cases is smaller generated C code and faster generation time,
@@ -85,11 +85,10 @@
     is tracked by some version control system or IDE.
 
 ``--input <default | custom>``
-    Specify re2c input API.
-    Option ``default`` is the default API composed of pointer-like primitives
-    ``YYCURSOR``, ``YYMARKER``, ``YYLIMIT`` etc.
-    Option ``custom`` is the generic API composed of function-like primitives
-    ``YYPEEK()``, ``YYSKIP()``, ``YYBACKUP()``, ``YYRESTORE()`` etc.
+    Specify the API used by the generated code to interface with used-defined
+    code. Option ``default`` is the C API based on pointer arithmetic (it is
+    the default for the C backend). Option ``custom`` is the generic API (it is
+    the default for the Go backend).
 
 ``--input-encoding <ascii | utf8>``
     Specify the way re2c parses regular expressions.

@@ -1,64 +1,91 @@
 Default API
 -----------
 
-By default ``re2c`` operates on input using pointer-like primitives
-``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER``, and ``YYLIMIT``.
-Normally pointer-like primitives are defined as variables of type ``YYCTYPE*``,
-but it is possible to use STL iterators or any other abstraction as long as it syntactically fits into the following use cases:
-
-*    ``++YYCURSOR;``
-*    ``yych = *YYCURSOR;``
-*    ``yych = *++YYCURSOR;``
-*    ``yych = *(YYMARKER = YYCURSOR);``
-*    ``yych = *(YYMARKER = ++YCURSOR);``
-*    ``YYMARKER = YYCURSOR;``
-*    ``YYMARKER = ++YYCURSOR;``
-*    ``YYCURSOR = YYMARKER;``
-*    ``YYCTXMARKER = YYCURSOR + 1;``
-*    ``YYCURSOR = YYCTXMARKER;``
-*    ``if (YYLIMIT <= YYCURSOR) ...``
-*    ``if ((YYLIMIT - YYCURSOR) < n) ...``
-*    ``YYDEBUG (label, *YYCURSOR);``
+Default API is the C language API that is based on pointer arithmetic.
+It consists of pointer-like primitives ``YYCURSOR``, ``YYMARKER``,
+``YYCTXMARKER`` and ``YYLIMIT``, which are usually defined as pointers
+of type ``YYCTYPE*``. It is possible to use STL iterators or any other
+abstraction, as long as it syntactically fits in the generated code.
+Default API is the default for the C backend, and it cannot be used with
+other backends.
 
 Generic API
 -----------
 
-If the default input model is too restrictive, then it is possible to use generic input API enabled with ``--input custom`` option.
-In this mode all input operations are expressed in terms of the primitives below.
-These primitives can be defined in any suitable way; one doesn't have to stick to the pointer semantics.
-For example, it is possible to read input directly from file without any buffering,
-or to disable ``YYFILL`` mechanism and perform end-of-input checking on each input character from inside of ``YYPEEK`` or ``YYSKIP``.
+Generic API should be used if the the language backend has no pointer
+arithmetic, or if the default API is too restrictive.
+For the C backend generic API is enabled with ``--input custom`` option or
+``re2c:flags:input = custom;`` configuration. For the Go backend it is the only
+option and is enabled by default. Generic API consists of the following
+primitives:
+``YYPEEK``,
+``YYSKIP``,
+``YYBACKUP``,
+``YYBACKUPCTX``,
+``YYSTAGP``,
+``YYSTAGN``,
+``YYMTAGP``,
+``YYMTAGN``,
+``YYRESTORE``,
+``YYRESTORECTX``,
+``YYRESTORETAG``,
+``YYSHIFT``,
+``YYSHIFTSTAG``,
+``YYSHIFTMTAG`` and
+``YYLESSTHAN``.
+They can be defined in any suitable way and don't need to have pointer
+semantics. For example, it is possible to read input directly
+from file without any buffering, or to disable ``YYFILL`` mechanism and perform
+end-of-input checking on each input character in ``YYPEEK``. The detailed
+meaning of each API primitive is given in the user interface section.
 
-* ``YYPEEK ()``
-* ``YYSKIP ()``
-* ``YYBACKUP ()``
-* ``YYBACKUPCTX ()``
-* ``YYSTAGP (t)``
-* ``YYSTAGPD (t)``
-* ``YYSTAGN (t)``
-* ``YYMTAGP (t)``
-* ``YYMTAGPD (t)``
-* ``YYMTAGN (t)``
-* ``YYRESTORE ()``
-* ``YYRESTORECTX ()``
-* ``YYRESTORETAG (t)``
-* ``YYLESSTHAN (n)``
-
-Default input model can be expressed in terms of generic API as follows
-(except for ``YMTAGP``, ``YYMTAGPD`` and ``YYMTAGN``, which have no default
-implementation):
+Generic API has two styles: function-like and free-form.
+Function-like style is enabled with ``re2c:api:style = functions;`` configuration
+(it is the default for the C backend). In this style API primitives should be
+defined as functions or macros with parentheses, accepting the necessary
+arguments. For example, the default C API can be defined in function-like
+style generic API as follows:
 
 .. code-block:: cpp
 
-    #define  YYPEEK ()         *YYCURSOR
-    #define  YYSKIP ()         ++YYCURSOR
-    #define  YYBACKUP ()       YYMARKER = YYCURSOR
-    #define  YYBACKUPCTX ()    YYCTXMARKER = YYCURSOR
-    #define  YYRESTORE ()      YYCURSOR = YYMARKER
-    #define  YYRESTORECTX ()   YYCURSOR = YYCTXMARKER
-    #define  YYRESTORERAG (t)  YYCURSOR = t
-    #define  YYLESSTHAN (n)    YYLIMIT - YYCURSOR < n
-    #define  YYSTAGP (t)       t = YYCURSOR
-    #define  YYSTAGPD (t)      t = YYCURSOR - 1
-    #define  YYSTAGN (t)       t = NULL
+    re2c:api:style = functions;
+    #define  YYPEEK()                 *YYCURSOR
+    #define  YYSKIP()                 ++YYCURSOR
+    #define  YYBACKUP()               YYMARKER = YYCURSOR
+    #define  YYBACKUPCTX()            YYCTXMARKER = YYCURSOR
+    #define  YYRESTORE()              YYCURSOR = YYMARKER
+    #define  YYRESTORECTX()           YYCURSOR = YYCTXMARKER
+    #define  YYRESTORETAG(tag)        YYCURSOR = tag
+    #define  YYLESSTHAN(len)          YYLIMIT - YYCURSOR < len
+    #define  YYSTAGP(tag)             tag = YYCURSOR
+    #define  YYSTAGN(tag)             tag = NULL
+    #define  YYSHIFT(shift)           YYCURSOR += shift
+    #define  YYSHIFTSTAG(tag, shift)  tag += shift
 
+Free-form style is enabled with ``re2c:api:style = free-form;`` configuration
+(it is the default for the Go backend). In this style API primitives can be defined
+as free-form pieces of code, and instead of arguments they have interpolated
+variables of the form ``@@{name}``, or just ``@@`` if there is only one
+argument. The ``@@`` text is called "sigil". It can be redefined to any other
+text with ``re2c:api:sigil`` configuration. For example, the default C API
+can be defined in free-form style generic API as follows:
+
+.. code-block:: cpp
+
+    re2c:api:style = free-form;
+    re2c:api:sigil = "$";
+    re2c:define:YYPEEK       = "*YYCURSOR";
+    re2c:define:YYSKIP       = "++YYCURSOR";
+    re2c:define:YYBACKUP     = "YYMARKER = YYCURSOR";
+    re2c:define:YYBACKUPCTX  = "YYCTXMARKER = YYCURSOR";
+    re2c:define:YYRESTORE    = "YYCURSOR = YYMARKER";
+    re2c:define:YYRESTORECTX = "YYCURSOR = YYCTXMARKER";
+    re2c:define:YYRESTORETAG = "YYCURSOR = ${tag}";
+    re2c:define:YYLESSTHAN   = "YYLIMIT - YYCURSOR < ${len}";
+    re2c:define:YYSTAGP      = "${tag} = YYCURSOR";
+    re2c:define:YYSTAGN      = "${tag} = NULL";
+    re2c:define:YYSHIFT      = "YYCURSOR += ${shift}";
+    re2c:define:YYSHIFTSTAG  = "${tag} += ${shift}";
+
+In both examples m-tag operations ``YYMTAGP``, ``YYMTAGN`` and ``YYSHIFTMTAG``
+are not defined, as they have no default implementation.
