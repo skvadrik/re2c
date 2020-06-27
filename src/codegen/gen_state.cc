@@ -33,13 +33,16 @@ static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa,
     const Rule &rule);
 static bool endstate(const State *s);
 
-const char *gen_eof_label(Output &output)
+const char *gen_eof_label(Output &output, const DFA &dfa)
 {
     const opt_t *opts = output.block().opts;
     Scratchbuf &o = output.scratchbuf;
     DASSERT(o.empty());
 
-    return o.str(opts->labelPrefix).cstr("eof").u64(output.blockid()).flush();
+    // Include block ID and condition name to avoid duplicate EOF labels.
+    o.str(opts->labelPrefix).cstr("eof").u64(output.blockid());
+    if (!dfa.cond.empty()) o.cstr("_").str(dfa.cond);
+    return o.flush();
 }
 
 static const char *gen_fill_label(Output &output, uint32_t index)
@@ -329,7 +332,7 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
             fallback->label->used = true;
             text = o.str(opts->labelPrefix).label(*fallback->label).flush();
         } else {
-            text = gen_eof_label(output);
+            text = gen_eof_label(output, dfa);
         }
         append(fallback_trans, code_stmt(alc, o.cstr("goto ").cstr(text).flush()));
     }
