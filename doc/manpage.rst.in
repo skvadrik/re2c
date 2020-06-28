@@ -65,19 +65,19 @@ EOF handling
 ============
 .. include:: @top_srcdir@/doc/manual/eof/eof.rst_
 .. include:: @top_srcdir@/doc/manual/eof/01_sentinel.rst_
-.. include:: @top_srcdir@/examples/c/eof/01_sentinel.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/eof/01_sentinel.--lang(RE2C_LANG).re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/eof/02_bounds_checking.rst_
-.. include:: @top_srcdir@/examples/c/eof/02_bounds_checking.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/eof/02_bounds_checking.--lang(RE2C_LANG).re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/eof/03_eof_rule.rst_
-.. include:: @top_srcdir@/examples/c/eof/03_eof_rule.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/eof/03_eof_rule.--lang(RE2C_LANG).re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/eof/04_generic_api.rst_
-.. include:: @top_srcdir@/examples/c/eof/05_generic_api_eof_rule.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/eof/05_generic_api_eof_rule.--lang(RE2C_LANG).re
     :literal:
     :code: c
 
@@ -85,11 +85,11 @@ Buffer refilling
 ================
 .. include:: @top_srcdir@/doc/manual/fill/fill.rst_
 .. include:: @top_srcdir@/doc/manual/fill/01_fill.rst_
-.. include:: @top_srcdir@/examples/c/fill/01_fill.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/fill/01_fill.--lang(RE2C_LANG).re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/fill/02_fill.rst_
-.. include:: @top_srcdir@/examples/c/fill/02_fill.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/fill/02_fill.--lang(RE2C_LANG).re
     :literal:
     :code: c
 
@@ -105,29 +105,29 @@ Submatch extraction
 ===================
 .. include:: @top_srcdir@/doc/manual/submatch/submatch.rst_
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags.rst_
-.. include:: @top_srcdir@/examples/c/submatch/01_stags.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags.--lang(RE2C_LANG).re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_posix.rst_
-.. include:: @top_srcdir@/examples/c/submatch/03_posix.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/03_posix.--lang(RE2C_LANG).re
     :literal:
     :code: c
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_mtags.rst_
-.. include:: @top_srcdir@/examples/c/submatch/02_mtags.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/02_mtags.--lang(RE2C_LANG).re
     :literal:
     :code: c
 
 Storable state
 ==============
 .. include:: @top_srcdir@/doc/manual/state/state.rst_
-.. include:: @top_srcdir@/examples/c/state/push.f.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/state/push.f--lang(RE2C_LANG).re
     :literal:
     :code: c
 
 Reusable blocks
 ===============
 .. include:: @top_srcdir@/doc/manual/reuse/reuse.rst_
-.. include:: @top_srcdir@/examples/c/reuse/reuse.r--input-encoding(utf8).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/reuse/reuse.r--input-encoding(utf8)--lang(RE2C_LANG).re
     :literal:
     :code: c
 

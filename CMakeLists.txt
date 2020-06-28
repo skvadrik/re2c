@@ -5,6 +5,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(Re2cAutotoolsHelpers)
 include(Re2cBootstrapLexer)
 include(Re2cBootstrapParser)
+include(Re2cGenDocs)
 include(Re2cTryCXXFlag)
 
 ac_subst(PACKAGE_VERSION "${PROJECT_VERSION}")
@@ -75,16 +76,22 @@ ac_check_sizeof("0l")
 ac_check_sizeof("0ll")
 ac_check_sizeof("0i8")
 
-# manpage
-set(re2c_manpage           "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1")
-set(re2c_manpage_bootstrap "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2c.1")
-set(re2c_manpage_source    "${CMAKE_CURRENT_BINARY_DIR}/doc/manpage.rst")
-
-# help
-set(re2c_help           "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc")
-set(re2c_help_bootstrap "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/src/msg/help.cc")
-set(re2c_help_source    "${CMAKE_CURRENT_BINARY_DIR}/doc/help.rst")
-set(re2c_genhelp        "${CMAKE_CURRENT_SOURCE_DIR}/genhelp.sh")
+# docs (manpages and help)
+set(re2c_manpage_source       "${CMAKE_CURRENT_BINARY_DIR}/doc/manpage.rst")
+set(re2c_help_source          "${CMAKE_CURRENT_BINARY_DIR}/doc/help.rst")
+set(re2c_manpage_bootstrap_c  "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2c.1")
+set(re2c_manpage_bootstrap_go "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2go.1")
+set(re2c_help_bootstrap       "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/src/msg/help.cc")
+set(re2c_manpage_c            "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1")
+set(re2c_manpage_go           "${CMAKE_CURRENT_BINARY_DIR}/doc/re2go.1")
+set(re2c_help                 "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc")
+set(re2c_genhelp              "${CMAKE_CURRENT_SOURCE_DIR}/build/gen_help.sh")
+set(re2c_splitman             "${CMAKE_CURRENT_SOURCE_DIR}/build/split_man.sh")
+set(re2c_docs
+    "${re2c_help}"
+    "${re2c_manpage_c}"
+    "$<$<BOOL:${RE2C_BUILD_RE2GO}>:${re2c_manpage_go}>"
+)
 
 set(top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 configure_file(doc/manpage.rst.in doc/manpage.rst @ONLY)
@@ -117,8 +124,7 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex_conf.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/options/parse_opts.cc"
-    "${re2c_help}"
-    "${re2c_manpage}"
+    "${re2c_docs}"
 )
 add_library(re2c_objects_autogen_ver_to_vernum OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/msg/ver_to_vernum.cc"
@@ -219,12 +225,6 @@ re2c_bootstrap_lexer("src/msg/ver_to_vernum.re" "src/msg/ver_to_vernum.cc")
 re2c_bootstrap_parser("src/parse/parser.ypp" "src/parse/parser.cc" "src/parse/parser.h")
 
 if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-    if(UNIX)
-        install(TARGETS re2c RUNTIME DESTINATION bin)
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1" DESTINATION "share/man/man1")
-        install(FILES include/unicode_categories.re DESTINATION "${RE2C_STDLIB_DIR}")
-    endif()
-
     set(re2c_docs_sources
         "${re2c_manpage_source}"
         "doc/manual/api/api.rst_"
@@ -258,62 +258,51 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         "doc/manual/syntax/syntax.rst_"
         "doc/manual/warnings/warnings_general.rst_"
         "doc/manual/warnings/warnings_list.rst_"
-        "examples/c/eof/01_sentinel.re"
-        "examples/c/eof/02_bounds_checking.re"
-        "examples/c/eof/03_eof_rule.re"
-        "examples/c/eof/05_generic_api_eof_rule.re"
-        "examples/c/fill/01_fill.re"
-        "examples/c/fill/02_fill.re"
-        "examples/c/reuse/reuse.r--input-encoding(utf8).re"
-        "examples/c/state/push.f.re"
-        "examples/c/submatch/01_stags.re"
-        "examples/c/submatch/02_mtags.re"
-        "examples/c/submatch/03_posix.re"
+        "examples/c/eof/01_sentinel.--lang(c).re"
+        "examples/c/eof/02_bounds_checking.--lang(c).re"
+        "examples/c/eof/03_eof_rule.--lang(c).re"
+        "examples/c/eof/05_generic_api_eof_rule.--lang(c).re"
+        "examples/c/fill/01_fill.--lang(c).re"
+        "examples/c/fill/02_fill.--lang(c).re"
+        "examples/c/reuse/reuse.r--input-encoding(utf8)--lang(c).re"
+        "examples/c/state/push.f--lang(c).re"
+        "examples/c/submatch/01_stags.--lang(c).re"
+        "examples/c/submatch/02_mtags.--lang(c).re"
+        "examples/c/submatch/03_posix.--lang(c).re"
+        "examples/go/eof/01_sentinel.--lang(go).re"
+        "examples/go/eof/02_bounds_checking.--lang(go).re"
+        "examples/go/eof/03_eof_rule.--lang(go).re"
+        "examples/go/eof/05_generic_api_eof_rule.--lang(go).re"
+        "examples/go/fill/01_fill.--lang(go).re"
+        "examples/go/fill/02_fill.--lang(go).re"
+        "examples/go/reuse/reuse.r--input-encoding(utf8)--lang(go).re"
+        "examples/go/state/push.f--lang(go).re"
+        "examples/go/submatch/01_stags.--lang(go).re"
+        "examples/go/submatch/02_mtags.--lang(go).re"
+        "examples/go/submatch/03_posix.--lang(go).re"
     )
 
-    if(RE2C_REBUILD_DOCS)
-        # generate manpage and help from sources and update bootstrap files
-        add_custom_command(
-            OUTPUT "${re2c_manpage}"
-            COMMAND "${RST2MAN}" "${re2c_manpage_source}" > "${re2c_manpage}"
-            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${re2c_manpage}" "${re2c_manpage_bootstrap}"
-            DEPENDS "${re2c_docs_sources}"
-        )
-        add_custom_command(
-            OUTPUT "${re2c_help}"
-            COMMAND "${RST2MAN}" "${re2c_help_source}" > "${re2c_help}.1"
-            COMMAND "${re2c_genhelp}" "${re2c_help}.1" "${re2c_help}"
-            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${re2c_help}" "${re2c_help_bootstrap}"
-            DEPENDS
-                "${re2c_help_source}"
-                "${re2c_genhelp}"
-                "${re2c_docs_sources}"
-        )
-        add_custom_target(docs DEPENDS
-            "${re2c_manpage}"
-            "${re2c_help}"
-        )
-    else()
-        # copy manpage and help from bootstrap files
-        add_custom_command(
-            OUTPUT "${re2c_manpage}"
-            COMMAND "${CMAKE_COMMAND}" -E copy "${re2c_manpage_bootstrap}" "${re2c_manpage}"
-            DEPENDS "${re2c_manpage_bootstrap}"
-        )
-        add_custom_command(
-            OUTPUT "${re2c_help}"
-            COMMAND "${CMAKE_COMMAND}" -E copy "${re2c_help_bootstrap}" "${re2c_help}"
-            MAIN_DEPENDENCY "${re2c_help_bootstrap}"
-        )
-        add_custom_target(docs
-            COMMAND echo "Reconfigure to rebuild docs: cmake -DRE2C_REBUILD_DOCS=YES" && false
-        )
+    # docs
+    re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_c}"  "${re2c_manpage_bootstrap_c}"  "c")
+    re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_go}" "${re2c_manpage_bootstrap_go}" "go")
+    re2c_gen_help("${re2c_help_source}" "${re2c_help}" "${re2c_help_bootstrap}")
+    add_custom_target(docs DEPENDS "${re2c_docs}")
+
+    # install
+    if(UNIX)
+        install(TARGETS re2c RUNTIME DESTINATION bin)
+        install(FILES "${re2c_manpage_c}" DESTINATION "share/man/man1")
+        if(RE2C_BUILD_RE2GO)
+            install(TARGETS re2go RUNTIME DESTINATION bin)
+            install(FILES "${re2c_manpage_go}" DESTINATION "share/man/man1")
+        endif()
+        install(FILES include/unicode_categories.re DESTINATION "${RE2C_STDLIB_DIR}")
     endif()
 
     # rebuild all re2c sources using newly built re2c
     add_custom_target(bootstrap
         COMMAND cmake -E remove_directory "src"
-        COMMAND cmake -E remove_directory "doc/re2c.1"
+        COMMAND cmake -E remove_directory "doc"
         COMMAND cmake --build "${CMAKE_CURRENT_BINARY_DIR}"
     )
 

@@ -187,10 +187,12 @@ BUILT_SOURCES = $(re2c_GEN_SRC)
 # bootstrap sources
 re2c_BOOT_PARSER = bootstrap/src/parse/parser.cc
 re2c_BOOT_PARSER_HDR = bootstrap/src/parse/parser.h
-re2c_BOOT_DOC = bootstrap/doc/re2c.1
+re2c_BOOT_DOC_C = bootstrap/doc/re2c.1
+re2c_BOOT_DOC_GO = bootstrap/doc/re2go.1
 re2c_BOOT_HELP = bootstrap/src/msg/help.cc
 re2c_BOOT = \
-	$(re2c_BOOT_DOC) \
+	$(re2c_BOOT_DOC_C) \
+	$(re2c_BOOT_DOC_GO) \
 	$(re2c_BOOT_HELP) \
 	$(re2c_BOOT_PARSER) \
 	$(re2c_BOOT_PARSER_HDR) \
@@ -245,20 +247,36 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/syntax/syntax.rst_ \
 	doc/manual/warnings/warnings_general.rst_ \
 	doc/manual/warnings/warnings_list.rst_ \
-	examples/c/eof/01_sentinel.re \
-	examples/c/eof/02_bounds_checking.re \
-	examples/c/eof/03_eof_rule.re \
-	examples/c/eof/05_generic_api_eof_rule.re \
-	examples/c/fill/01_fill.re \
-	examples/c/fill/02_fill.re \
-	examples/c/reuse/reuse.r--input-encoding(utf8).re \
-	examples/c/state/push.f.re \
-	examples/c/submatch/01_stags.re \
-	examples/c/submatch/02_mtags.re \
-	examples/c/submatch/03_posix.re
+	examples/c/eof/01_sentinel.--lang(c).re \
+	examples/c/eof/02_bounds_checking.--lang(c).re \
+	examples/c/eof/03_eof_rule.--lang(c).re \
+	examples/c/eof/05_generic_api_eof_rule.--lang(c).re \
+	examples/c/fill/01_fill.--lang(c).re \
+	examples/c/fill/02_fill.--lang(c).re \
+	examples/c/reuse/reuse.r--input-encoding(utf8)--lang(c).re \
+	examples/c/state/push.f--lang(c).re \
+	examples/c/submatch/01_stags.--lang(c).re \
+	examples/c/submatch/02_mtags.--lang(c).re \
+	examples/c/submatch/03_posix.--lang(c).re \
+	examples/go/eof/01_sentinel.--lang(go).re \
+	examples/go/eof/02_bounds_checking.--lang(go).re \
+	examples/go/eof/03_eof_rule.--lang(go).re \
+	examples/go/eof/05_generic_api_eof_rule.--lang(go).re \
+	examples/go/fill/01_fill.--lang(go).re \
+	examples/go/fill/02_fill.--lang(go).re \
+	examples/go/reuse/reuse.r--input-encoding(utf8)--lang(go).re \
+	examples/go/state/push.f--lang(go).re \
+	examples/go/submatch/01_stags.--lang(go).re \
+	examples/go/submatch/02_mtags.--lang(go).re \
+	examples/go/submatch/03_posix.--lang(go).re
 
-DOC = doc/re2c.1
-man_MANS = $(DOC)
+DOC_C = doc/re2c.1
+DOCS = $(DOC_C)
+if WITH_GOLANG
+DOC_GO = doc/re2go.1
+DOCS += $(DOC_GO)
+endif
+man_MANS = $(DOCS)
 
 # include files (stdlib)
 dist_stdlib_DATA = include/unicode_categories.re
@@ -278,7 +296,7 @@ EXTRA_DIST = \
 
 CLEANFILES = \
 	$(re2c_GEN) \
-	$(DOC)
+	$(DOCS)
 
 .re.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
@@ -315,22 +333,41 @@ bootstrap: all
 
 .PHONY: docs
 if REBUILD_DOCS
-docs: $(DOC) $(re2c_GEN_HELP)
-$(DOC): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT)
+docs: $(DOCS) $(re2c_GEN_HELP)
+SPLITMAN = $(top_srcdir)/build/split_man.sh
+# generate manpage for C
+$(DOC_C): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(RST2MAN) $(top_builddir)/$(re2c_SRC_DOC) > $@
-	$(AM_V_GEN)cp $@ $(top_srcdir)/$(re2c_BOOT_DOC)
+	$(AM_V_GEN)$(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).c c \
+		&& $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).c > $@ \
+		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_C) \
+		&& rm $(top_builddir)/$(re2c_SRC_DOC).c
+# generate manpage for Go
+$(DOC_GO): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT)
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)$(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).go go \
+		&& $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).go > $@ \
+		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_GO) \
+		&& rm $(top_builddir)/$(re2c_SRC_DOC).go
+# generate help
 $(re2c_GEN_HELP): $(re2c_CUSTOM_HELP)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(RST2MAN) $(top_builddir)/$(re2c_CUSTOM_HELP) > $@.1
-	$(top_srcdir)/genhelp.sh $@.1 $@
-	$(AM_V_GEN)cp $@ $(top_srcdir)/$(re2c_BOOT_HELP)
+	$(AM_V_GEN)$(RST2MAN) $(top_builddir)/$(re2c_CUSTOM_HELP) > $@.1 \
+		&& $(top_srcdir)/build/gen_help.sh $@.1 $@ \
+		&& cp $@ $(top_srcdir)/$(re2c_BOOT_HELP) \
+		&& rm $@.1
 else
-docs: $(DOC) $(re2c_GEN_HELP)
+docs: $(DOCS) $(re2c_GEN_HELP)
 	$(AM_V_at)echo "Reconfigure to rebuild docs: ./configure --enable-docs"
-$(DOC): $(re2c_BOOT_DOC)
+# copy bootstrap manpage for C
+$(DOC_C): $(re2c_BOOT_DOC_C)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC) $@
+	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC_C) $@
+# copy bootstrap manpage for Go
+$(DOC_GO): $(re2c_BOOT_DOC_GO)
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC_GO) $@
+# copy bootstrap help
 $(re2c_GEN_HELP): $(re2c_BOOT_HELP)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_HELP) $@
