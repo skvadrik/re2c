@@ -1,5 +1,17 @@
+Usage
+=====
+
+``re2c [OPTIONS] INPUT_FILE [-o OUTPUT_FILE]``
+
+Options
+=======
+
 .. include:: @top_srcdir@/doc/manual/options/options.rst_
 .. include:: @top_srcdir@/doc/manual/options/debug.rst_
 .. include:: @top_srcdir@/doc/manual/options/internal.rst_
+
+Warnings
+========
+
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst_
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_list.rst_
