@@ -8348,7 +8348,7 @@ int main()
     remove(fname);
     return 0;
 }
-c/real_world/cxx98.i.re:151:14: warning: rule matches empty string [-Wmatch-empty-string]
-c/real_world/cxx98.i.re:157:14: warning: rule matches empty string [-Wmatch-empty-string]
-c/real_world/cxx98.i.re:162:14: warning: rule matches empty string [-Wmatch-empty-string]
-c/real_world/cxx98.i.re:348:24: warning: rule matches empty string [-Wmatch-empty-string]
+c/real_world/cxx98.i--lang(c).re:151:14: warning: rule matches empty string [-Wmatch-empty-string]
+c/real_world/cxx98.i--lang(c).re:157:14: warning: rule matches empty string [-Wmatch-empty-string]
+c/real_world/cxx98.i--lang(c).re:162:14: warning: rule matches empty string [-Wmatch-empty-string]
+c/real_world/cxx98.i--lang(c).re:348:24: warning: rule matches empty string [-Wmatch-empty-string]

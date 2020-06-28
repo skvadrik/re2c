@@ -241,4 +241,4 @@ int main()
     assert(parse_u32("") == ERROR);
     return 0;
 }
-c/conditions/parse_u32_blocks.i.re:28:23: warning: rule matches empty string [-Wmatch-empty-string]
+c/conditions/parse_u32_blocks.i--lang(c).re:28:23: warning: rule matches empty string [-Wmatch-empty-string]
