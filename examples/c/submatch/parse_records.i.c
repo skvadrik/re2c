@@ -1235,7 +1235,7 @@ int main()
     free(buffer);
     return 0;
 }
-submatch/parse_records.i.re:59:18: warning: rule matches empty string [-Wmatch-empty-string]
-submatch/parse_records.i.re:65:16: warning: tag 'a2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-submatch/parse_records.i.re:65:16: warning: tag 'c1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-submatch/parse_records.i.re:65:16: warning: tag 'c2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_records.i.re:59:18: warning: rule matches empty string [-Wmatch-empty-string]
+c/submatch/parse_records.i.re:65:16: warning: tag 'a2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_records.i.re:65:16: warning: tag 'c1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_records.i.re:65:16: warning: tag 'c2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

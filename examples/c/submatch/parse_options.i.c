@@ -1637,6 +1637,6 @@ int main()
         "--format=\"%s\" --limit -f=3 --verbos --d\"19th May\"") == 0);
     return 0;
 }
-submatch/parse_options.i.re:70:12: warning: rule matches empty string [-Wmatch-empty-string]
-submatch/parse_options.i.re:82:35: warning: tag 'k' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-submatch/parse_options.i.re:82:35: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_options.i.re:70:12: warning: rule matches empty string [-Wmatch-empty-string]
+c/submatch/parse_options.i.re:82:35: warning: tag 'k' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_options.i.re:82:35: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

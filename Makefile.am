@@ -245,17 +245,17 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/syntax/syntax.rst_ \
 	doc/manual/warnings/warnings_general.rst_ \
 	doc/manual/warnings/warnings_list.rst_ \
-	examples/eof/01_sentinel.re \
-	examples/eof/02_bounds_checking.re \
-	examples/eof/03_eof_rule.re \
-	examples/eof/05_generic_api_eof_rule.re \
-	examples/fill/01_fill.re \
-	examples/fill/02_fill.re \
-	examples/reuse/reuse.r--input-encoding(utf8).re \
-	examples/state/push.f.re \
-	examples/submatch/01_stags.re \
-	examples/submatch/02_mtags.re \
-	examples/submatch/03_posix.re
+	examples/c/eof/01_sentinel.re \
+	examples/c/eof/02_bounds_checking.re \
+	examples/c/eof/03_eof_rule.re \
+	examples/c/eof/05_generic_api_eof_rule.re \
+	examples/c/fill/01_fill.re \
+	examples/c/fill/02_fill.re \
+	examples/c/reuse/reuse.r--input-encoding(utf8).re \
+	examples/c/state/push.f.re \
+	examples/c/submatch/01_stags.re \
+	examples/c/submatch/02_mtags.re \
+	examples/c/submatch/03_posix.re
 
 DOC = doc/re2c.1
 man_MANS = $(DOC)
