@@ -1,7 +1,7 @@
 Usage
 =====
 
-``re2c [OPTIONS] INPUT_FILE [-o OUTPUT_FILE]``
+``re2c [OPTIONS] INPUT [-o OUTPUT]``
 
 Options
 =======

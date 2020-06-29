@@ -11,23 +11,34 @@ convert regular expressions to C/C++ code
 SYNOPSIS
 ========
 
-``re2c [OPTIONS] INPUT_FILE [-o OUTPUT_FILE]``
+``re2c [OPTIONS] INPUT [-o OUTPUT]``
 
 DESCRIPTION
 ===========
 
 Re2c is a lexer generator for C/C++. It finds regular expression specifications
 inside of C/C++ comments and compiles them to a deterministic finite state
-machine. The user should write some `interface code`_ in order to bind the
+machine. The user should write some interface code in order to bind the
 generated lexer to the program environment.
-Sections `EOF handling`_ and `buffer refilling`_ explain how the generated lexer
-checks for the end of input and (if necessary) asks for more input.
-Various re2c features are described in sections `include files`_,
-`header files`_, `submatch extraction`_, `storable state`_, `reusable blocks`_,
-`encoding support`_, `start conditions`_, `skeleton programs`_ and
-`visualization and debug`_.
-Re2c provides a lot of `options`_, `configurations`_ and `directives`_ that
+Re2c provides options, configurations and directives that
 allow one to customize the generated code.
+
+EXAMPLE
+=======
+
+Input file
+----------
+
+.. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.i--lang(RE2C_LANG).re
+    :literal:
+    :code: RE2C_LANG
+
+Output file
+-----------
+
+.. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.i--lang(RE2C_LANG).RE2C_LANG
+    :literal:
+    :code: RE2C_LANG
 
 Options
 =======

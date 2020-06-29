@@ -1,7 +1,7 @@
 extern const char *help;
 const char *help =
 "USAGE\n"
-"       re2c [OPTIONS] INPUT_FILE [-o OUTPUT_FILE]\n"
+"       re2c [OPTIONS] INPUT [-o OUTPUT]\n"
 "\n"
 "OPTIONS\n"
 "       -? -h --help\n"
