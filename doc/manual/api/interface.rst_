@@ -1,7 +1,7 @@
 Below is the list of all symbols which may be used by the lexer in order to interact with the outer world.
 These symbols should be defined by the user,
 either in the form of inplace configurations,
-or as C/C++ variables, functions, macros and other language constructs.
+or as variables, functions, macros and other language constructs.
 Which primitives are necessary depends on the particular use case.
 
 ``YYCTYPE``

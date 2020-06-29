@@ -248,6 +248,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/warnings/warnings_general.rst_ \
 	doc/manual/warnings/warnings_list.rst_ \
 	examples/c/01_basic.i--lang(c).re \
+	examples/c/conditions/parse_u32_conditions.ci--lang(c).re \
 	examples/c/eof/01_sentinel.--lang(c).re \
 	examples/c/eof/02_bounds_checking.--lang(c).re \
 	examples/c/eof/03_eof_rule.--lang(c).re \
@@ -260,6 +261,7 @@ re2c_SRC_DOC_EXT = \
 	examples/c/submatch/02_mtags.--lang(c).re \
 	examples/c/submatch/03_posix.--lang(c).re \
 	examples/go/01_basic.i--lang(go).re \
+	examples/go/conditions/parse_u32_conditions.ci--lang(go).re \
 	examples/go/eof/01_sentinel.--lang(go).re \
 	examples/go/eof/02_bounds_checking.--lang(go).re \
 	examples/go/eof/03_eof_rule.--lang(go).re \

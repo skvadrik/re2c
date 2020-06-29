@@ -68,7 +68,7 @@
 
 ``-g --computed-gotos``
     Optimize conditional jumps using non-standard "computed goto" extension
-    (which must be supported by the C/C++ compiler). re2c generates jump tables
+    (which must be supported by the compiler). re2c generates jump tables
     only in complex cases with a lot of conditional branches. Complexity
     threshold can be configured with ``cgoto:threshold`` configuration. This
     option implies ``-b``. This option doesn't work for the Go backend.
@@ -135,7 +135,7 @@
 
 ``-s --nested-ifs``
     Use nested ``if`` statements instead of ``switch`` statements in conditional
-    jumps. This usually results in more efficient code with non-optimizing C/C++
+    jumps. This usually results in more efficient code with non-optimizing
     compilers.
 
 ``-T --tags``

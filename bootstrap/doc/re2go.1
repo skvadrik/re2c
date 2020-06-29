@@ -2,7 +2,7 @@
 .
 .TH RE2C 1 "" "" ""
 .SH NAME
-re2c \- convert regular expressions to C/C++ code
+re2c \- compile regular expressions to code
 .
 .nr rst2man-indent-level 0
 .
@@ -32,15 +32,16 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 ..
 .SH SYNOPSIS
 .sp
-\fBre2c [OPTIONS] INPUT [\-o OUTPUT]\fP
+\fBre2c  [OPTIONS] INPUT [\-o OUTPUT]\fP
+.sp
+\fBre2go [OPTIONS] INPUT [\-o OUTPUT]\fP
 .SH DESCRIPTION
 .sp
-Re2c is a lexer generator for C/C++. It finds regular expression specifications
-inside of C/C++ comments and compiles them to a deterministic finite state
-machine. The user should write some interface code in order to bind the
-generated lexer to the program environment.
-Re2c provides options, configurations and directives that
-allow one to customize the generated code.
+Re2c is a lexer generator for C/C++ and Go. It finds regular expression specifications
+in special\-form comments and compiles them to deterministic finite state automata.
+The user needs to provide interface code to bind the generated lexer to the program environment.
+Re2c has many options, configurations and directives for customization of the generated code.
+This manpage includes examples for re2go.
 .SH EXAMPLE
 .SS Input file
 .INDENT 0.0
@@ -199,7 +200,7 @@ double\-quoted strings.
 .TP
 .B \fB\-g \-\-computed\-gotos\fP
 Optimize conditional jumps using non\-standard "computed goto" extension
-(which must be supported by the C/C++ compiler). re2c generates jump tables
+(which must be supported by the compiler). re2c generates jump tables
 only in complex cases with a lot of conditional branches. Complexity
 threshold can be configured with \fBcgoto:threshold\fP configuration. This
 option implies \fB\-b\fP\&. This option doesn\(aqt work for the Go backend.
@@ -266,7 +267,7 @@ backend.
 .TP
 .B \fB\-s \-\-nested\-ifs\fP
 Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional
-jumps. This usually results in more efficient code with non\-optimizing C/C++
+jumps. This usually results in more efficient code with non\-optimizing
 compilers.
 .TP
 .B \fB\-T \-\-tags\fP
@@ -472,12 +473,12 @@ It is set to an error if \fBre2c:sentinel\fP configuration is used.
 .SH SYNTAX
 .sp
 A re2c program consists of a number of re2c blocks and directives intermixed
-with normal C/C++ code. Each re2c block consists of a sequence of named
+with normal code. Each re2c block consists of a sequence of named
 definitions, configurations and rules that contain regular expressions. The
 generated lexer communicates with the outer world by the means of user
 interface.
 Rules consist of a regular expression followed by a user\-defined action
-(semantic action): a block of C/C++ code that is executed in case of successful
+(semantic action): a block of code that is executed in case of successful
 match. Semantic action can be either an arbitrary block of code enclosed in
 curly braces \fB{\fP and \fB}\fP, or a block of code without curly braces preceded
 with \fB:=\fP and ended with a newline that is not followed by a whitespace.
@@ -495,7 +496,7 @@ EOF rule \fB$\fP which matches the end of input. This rule should be defined if
 the simplified EOF handling method is used.
 .UNINDENT
 .sp
-Named definitions are of the form \fBname = regexp ;\fP where \fBname\fP is an
+Named definitions are of the form \fBname = regexp;\fP where \fBname\fP is an
 identifier that consists of letters, digits and underscores, and \fBregexp\fP is a
 regular expression. With \fB\-F \-\-flex\-syntax\fP option named definitions are also
 of the form \fBname regexp\fP\&. Each name should be defined before it is used.
@@ -550,7 +551,7 @@ Character classes and string literals may contain the following escape sequences
 Below is the list of all symbols which may be used by the lexer in order to interact with the outer world.
 These symbols should be defined by the user,
 either in the form of inplace configurations,
-or as C/C++ variables, functions, macros and other language constructs.
+or as variables, functions, macros and other language constructs.
 Which primitives are necessary depends on the particular use case.
 .INDENT 0.0
 .TP
@@ -2582,6 +2583,7 @@ action. The action jumps to the beginning of the loop, the lexer enters the
 initial state and calls \fBYYFILL\fP once more. If it fails, the lexer matches EOF
 rule. (Alternatively EOF rule can be used for termination instead of a special
 EOF lexeme.)
+.SS Example
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -2759,6 +2761,7 @@ math symbols and accepts input either in UTF8 or in UT32. Note that the
 \fB\-\-input\-encoding utf8\fP option allows us to write UTF8\-encoded symbols in the
 regular expressions; without this option re2c would parse them as a plain ASCII
 byte sequnce (and we would have to use hexadecimal escape sequences).
+.SS Example
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -2832,12 +2835,12 @@ UCS\-2 (\fB\-w\fP), UTF\-16 (\fB\-x\fP), UTF\-32 (\fB\-u\fP) and UTF\-8 (\fB\-8\
 See also inplace configuration \fBre2c:flags\fP\&.
 .sp
 The following concepts should be clarified when talking about encodings.
-A \fIcode point\fP is an abstract number that represents a single symbol.
-A \fIcode unit\fP is the smallest unit of memory, which is used in the
+A code point is an abstract number that represents a single symbol.
+A code unit is the smallest unit of memory, which is used in the
 encoded text (it corresponds to one character in the input stream). One
 or more code units may be needed to represent a single code point,
-depending on the encoding. In a \fIfixed\-length\fP encoding, each code point
-is represented with an equal number of code units. In \fIvariable\-length\fP
+depending on the encoding. In a fixed\-length encoding, each code point
+is represented with an equal number of code units. In variable\-length
 encodings, different code points can be represented with different number
 of code units.
 .INDENT 0.0
@@ -2886,34 +2889,34 @@ rule (\fB*\fP). Note that the full range rule (\fB[^]\fP) won\(aqt catch invalid
 (\fB[^]\fP means "any valid code point", whereas the default rule (\fB*\fP) means "any possible code unit").
 .SH START CONDITIONS
 .sp
-\fIConditions\fP are enabled with \fB\-c\fP \fB\-\-conditions\fP\&.
+Conditions are enabled with \fB\-c\fP \fB\-\-conditions\fP\&.
 This option allows one to encode multiple interrelated lexers within the same re2c block.
 .sp
-Each lexer corresponds to a single \fIcondition\fP\&.
+Each lexer corresponds to a single condition.
 It starts with a label of the form \fByyc_name\fP,
-where \fBname\fP is \fIcondition\fP name
+where \fBname\fP is condition name
 and \fByyc\fP prefix can be adjusted with configuration \fBre2c:condprefix\fP\&.
 Different lexers are separated with a comment \fB/* *********************************** */\fP
 which can be adjusted with configuration \fBre2c:cond:divider\fP\&.
 .sp
-Furthermore, each \fIcondition\fP has a unique identifier of the form \fByycname\fP,
+Furthermore, each condition has a unique identifier of the form \fByycname\fP,
 where \fBname\fP is condition name
 and \fByyc\fP prefix can be adjusted with configuration \fBre2c:condenumprefix\fP\&.
 Identifiers have the type \fBYYCONDTYPE\fP and should be generated with \fB/*!types:re2c*/\fP directive or \fB\-t\fP \fB\-\-type\-header\fP option.
-Users shouldn\(aqt define these identifiers manually, as the order of \fIconditions\fP is not specified.
+Users shouldn\(aqt define these identifiers manually, as the order of conditions is not specified.
 .sp
-Before all \fIconditions\fP re2c generates entry code that checks the current \fIcondition\fP identifier
-and transfers control flow to the start label of the active \fIcondition\fP\&.
-After matching some rule of this \fIcondition\fP,
-lexer may either transfer control flow back to the entry code (after executing the associated action and optionally setting another \fIcondition\fP with \fB=>\fP),
-or use \fB:=>\fP shortcut and transition directly to the start label of another \fIcondition\fP (skipping the action and the entry code).
+Before all conditions re2c generates entry code that checks the current condition identifier
+and transfers control flow to the start label of the active condition.
+After matching some rule of this condition,
+lexer may either transfer control flow back to the entry code (after executing the associated action and optionally setting another condition with \fB=>\fP),
+or use \fB:=>\fP shortcut and transition directly to the start label of another condition (skipping the action and the entry code).
 Configuration \fBre2c:cond:goto\fP allows one to change the default behavior.
 .sp
-Syntactically each rule must be preceded with a list of comma\-separated \fIcondition\fP names or a wildcard \fB*\fP
+Syntactically each rule must be preceded with a list of comma\-separated condition names or a wildcard \fB*\fP
 enclosed in angle brackets \fB<\fP and \fB>\fP\&.
 Wildcard means "any condition" and is semantically equivalent to listing all condition names.
-Here \fBregexp\fP is a regular expression, \fBdefault\fP refers to the \fIdefault rule\fP \fB*\fP,
-and \fBaction\fP is a block of C/C++ code.
+Here \fBregexp\fP is a regular expression, \fBdefault\fP refers to the default rule \fB*\fP,
+and \fBaction\fP is a block of code.
 .INDENT 0.0
 .IP \(bu 2
 \fB<conditions\-or\-wildcard>  regexp\-or\-default                 action\fP
@@ -2942,6 +2945,104 @@ It is semantically equivalent to a condition with number zero, name \fB0\fP and 
 \fB<>  =>  condition  action\fP
 .IP \(bu 2
 \fB<>  :=> condition\fP
+.UNINDENT
+.SS Example
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+//go:generate "${RE2C}" \-\-lang go \-c "${GOFILE}" \-o example_test.go
+package main
+
+import (
+    "errors"
+    "testing"
+)
+
+var (
+    eSyntax   = errors.New("syntax error")
+    eOverflow = errors.New("overflow error")
+)
+
+/*!types:re2c*/
+
+const u32Limit uint64 = 1<<32
+
+func parse_u32(str string) (uint32, error) {
+    var cursor, marker int
+    result := uint64(0)
+    cond := yycinit
+
+    add_digit := func(base uint64, offset byte) {
+        result = result * base + uint64(str[cursor\-1] \- offset)
+        if result >= u32Limit {
+            result = u32Limit
+        }
+    }
+
+    /*!re2c
+    re2c:yyfill:enable = 0;
+    re2c:define:YYCTYPE        = byte;
+    re2c:define:YYPEEK         = "str[cursor]";
+    re2c:define:YYSKIP         = "cursor += 1";
+    re2c:define:YYSHIFT        = "cursor += @@{shift}";
+    re2c:define:YYBACKUP       = "marker = cursor";
+    re2c:define:YYRESTORE      = "cursor = marker";
+    re2c:define:YYGETCONDITION = "cond";
+    re2c:define:YYSETCONDITION = "cond = @@";
+
+    <*> * { return 0, eSyntax }
+
+    <init> \(aq0b\(aq / [01]        :=> bin
+    <init> "0"                :=> oct
+    <init> ""   / [1\-9]       :=> dec
+    <init> \(aq0x\(aq / [0\-9a\-fA\-F] :=> hex
+
+    <bin, oct, dec, hex> "\ex00" {
+        if result < u32Limit {
+            return uint32(result), nil
+        } else {
+            return 0, eOverflow
+        }
+    }
+
+    <bin> [01]  { add_digit(2, \(aq0\(aq);     goto yyc_bin }
+    <oct> [0\-7] { add_digit(8, \(aq0\(aq);     goto yyc_oct }
+    <dec> [0\-9] { add_digit(10, \(aq0\(aq);    goto yyc_dec }
+    <hex> [0\-9] { add_digit(16, \(aq0\(aq);    goto yyc_hex }
+    <hex> [a\-f] { add_digit(16, \(aqa\(aq\-10); goto yyc_hex }
+    <hex> [A\-F] { add_digit(16, \(aqA\(aq\-10); goto yyc_hex }
+    */
+}
+
+func TestLex(t *testing.T) {
+    var tests = []struct {
+        num uint32
+        str string
+        err error
+    }{
+        {1234567890, "1234567890\e000", nil},
+        {13, "0b1101\e000", nil},
+        {0x7fe, "0x007Fe\e000", nil},
+        {0644, "0644\e000", nil},
+        {0, "9999999999\e000", eOverflow},
+        {0, "123??\e000", eSyntax},
+    }
+
+    for _, x := range tests {
+        t.Run(x.str, func(t *testing.T) {
+            num, err := parse_u32(x.str)
+            if !(num == x.num && err == x.err) {
+                t.Errorf("got %d, want %d", num, x.num)
+            }
+        })
+    }
+}
+
+.ft P
+.fi
+.UNINDENT
 .UNINDENT
 .SH SKELETON PROGRAMS
 .sp
@@ -2983,15 +3084,12 @@ The algorithm implementation is limited by ~1Gb of transitions and consumes
 constant amount of memory (re2c writes data to file as soon as it is generated).
 .SH VISUALIZATION AND DEBUG
 .sp
-With the \fB\-D, \-\-emit\-dot\fP option, re2c does not generate C/C++ code. Instead,
-it dumps the generated DFA in the
-\fI\%DOT format\fP\&.
-One can convert this dump to an image of the DFA using
-\fI\%graphviz\fP or another library.
+With the \fB\-D, \-\-emit\-dot\fP option, re2c does not generate code. Instead,
+it dumps the generated DFA in DOT format.
+One can convert this dump to an image of the DFA using Graphviz or another library.
 Note that this option shows the final DFA after it has gone through a number of
 optimizations and transformations. Earlier stages can be dumped with various debug
-options, such as \fB\-\-dump\-nfa\fP, \fB\-\-dump\-dfa\-raw\fP etc. (see the full
-\fI\%list of options\fP).
+options, such as \fB\-\-dump\-nfa\fP, \fB\-\-dump\-dfa\-raw\fP etc. (see the full list of options).
 .SH SEE ALSO
 .sp
 You can find more information about re2c at the official website: \fI\%http://re2c.org\fP\&.
@@ -3001,8 +3099,5 @@ Similar programs are flex(1), lex(1), quex(\fI\%http://quex.sourceforge.net\fP).
 Re2c was originaly written by Peter Bumbulis in 1993.
 Since then it has been developed and maintained by multiple volunteers;
 mots notably, Brain Young, Marcus Boerger, Dan Nuffer and Ulya Trofimovich.
-.SH VERSION INFORMATION
-.sp
-This manpage describes re2c version .
 .\" Generated by docutils manpage writer.
 .

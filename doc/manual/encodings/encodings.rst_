@@ -3,12 +3,12 @@ UCS-2 (``-w``), UTF-16 (``-x``), UTF-32 (``-u``) and UTF-8 (``-8``).
 See also inplace configuration ``re2c:flags``.
 
 The following concepts should be clarified when talking about encodings.
-A *code point* is an abstract number that represents a single symbol. 
-A *code unit* is the smallest unit of memory, which is used in the
+A code point is an abstract number that represents a single symbol. 
+A code unit is the smallest unit of memory, which is used in the
 encoded text (it corresponds to one character in the input stream). One
 or more code units may be needed to represent a single code point,
-depending on the encoding. In a *fixed-length* encoding, each code point
-is represented with an equal number of code units. In *variable-length*
+depending on the encoding. In a fixed-length encoding, each code point
+is represented with an equal number of code units. In variable-length
 encodings, different code points can be represented with different number
 of code units.
 

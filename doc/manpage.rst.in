@@ -2,26 +2,27 @@
 re2c
 ++++
 
-=========================================
-convert regular expressions to C/C++ code
-=========================================
+===================================
+compile regular expressions to code
+===================================
 
 :Manual section: 1
 
 SYNOPSIS
 ========
 
-``re2c [OPTIONS] INPUT [-o OUTPUT]``
+``re2c  [OPTIONS] INPUT [-o OUTPUT]``
+
+``re2go [OPTIONS] INPUT [-o OUTPUT]``
 
 DESCRIPTION
 ===========
 
-Re2c is a lexer generator for C/C++. It finds regular expression specifications
-inside of C/C++ comments and compiles them to a deterministic finite state
-machine. The user should write some interface code in order to bind the
-generated lexer to the program environment.
-Re2c provides options, configurations and directives that
-allow one to customize the generated code.
+Re2c is a lexer generator for C/C++ and Go. It finds regular expression specifications
+in special-form comments and compiles them to deterministic finite state automata.
+The user needs to provide interface code to bind the generated lexer to the program environment.
+Re2c has many options, configurations and directives for customization of the generated code.
+This manpage includes examples for re2RE2C_LANG.
 
 EXAMPLE
 =======
@@ -78,19 +79,19 @@ EOF handling
 .. include:: @top_srcdir@/doc/manual/eof/01_sentinel.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/eof/01_sentinel.--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/eof/02_bounds_checking.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/eof/02_bounds_checking.--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/eof/03_eof_rule.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/eof/03_eof_rule.--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/eof/04_generic_api.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/eof/05_generic_api_eof_rule.--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 
 Buffer refilling
 ================
@@ -98,11 +99,11 @@ Buffer refilling
 .. include:: @top_srcdir@/doc/manual/fill/01_fill.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/fill/01_fill.--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/fill/02_fill.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/fill/02_fill.--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 
 Include files
 =============
@@ -118,29 +119,33 @@ Submatch extraction
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags.--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_posix.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/submatch/03_posix.--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_mtags.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/submatch/02_mtags.--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 
 Storable state
 ==============
 .. include:: @top_srcdir@/doc/manual/state/state.rst_
+Example
+-------
 .. include:: @top_srcdir@/examples/RE2C_LANG/state/push.f--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 
 Reusable blocks
 ===============
 .. include:: @top_srcdir@/doc/manual/reuse/reuse.rst_
+Example
+-------
 .. include:: @top_srcdir@/examples/RE2C_LANG/reuse/reuse.r--input-encoding(utf8)--lang(RE2C_LANG).re
     :literal:
-    :code: c
+    :code: RE2C_LANG
 
 Encoding support
 ================
@@ -149,6 +154,11 @@ Encoding support
 Start conditions
 ================
 .. include:: @top_srcdir@/doc/manual/conditions/conditions.rst_
+Example
+-------
+.. include:: @top_srcdir@/examples/RE2C_LANG/conditions/parse_u32_conditions.ci--lang(RE2C_LANG).re
+    :literal:
+    :code: RE2C_LANG
 
 Skeleton programs
 =================
@@ -168,8 +178,3 @@ AUTHORS
 Re2c was originaly written by Peter Bumbulis in 1993.
 Since then it has been developed and maintained by multiple volunteers;
 mots notably, Brain Young, Marcus Boerger, Dan Nuffer and Ulya Trofimovich.
-
-VERSION INFORMATION
-===================
-This manpage describes re2c version @PACKAGE_VERSION@.
-
