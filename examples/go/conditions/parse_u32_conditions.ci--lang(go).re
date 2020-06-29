@@ -1,4 +1,4 @@
-//go:generate "${RE2C}" --lang go -c "${GOFILE}" -o example_test.go
+//go:generate re2go -c "$GOFILE" -o "$OUTPUT"
 package main
 
 import (
