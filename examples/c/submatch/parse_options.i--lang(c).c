@@ -172,17 +172,9 @@ yy13:
 	}
 yy14:
 	yych = *++s;
+	yyt5 = s;
 	switch (yych) {
-	case 0x00:
-	case '\t':
-	case '\n':
-	case '\r':
-	case ' ':
-		yyt5 = s;
-		goto yy15;
-	case '"':
-		yyt5 = s;
-		goto yy34;
+	case '"':	goto yy34;
 	case '0':
 	case '1':
 	case '2':
@@ -192,15 +184,9 @@ yy14:
 	case '6':
 	case '7':
 	case '8':
-	case '9':
-		yyt1 = yyt5 = s;
-		goto yy36;
-	case '=':
-		yyt5 = s;
-		goto yy37;
-	default:
-		yyt5 = s;
-		goto yy32;
+	case '9':	goto yy36;
+	case '=':	goto yy37;
+	default:	goto yy33;
 	}
 yy15:
 	k = yyt2;
@@ -1178,9 +1164,7 @@ yy94:
 	case '6':
 	case '7':
 	case '8':
-	case '9':
-		yyt1 = s;
-		goto yy100;
+	case '9':	goto yy100;
 	default:	goto yy65;
 	}
 yy95:
@@ -1554,7 +1538,7 @@ yy124:
 	default:	goto yy33;
 	}
 yy125:
-	v = yyt1;
+	v = s - 10;
 	{ o.date   = std::string(v, s); goto loop; }
 yy126:
 	yych = *++s;

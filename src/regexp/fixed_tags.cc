@@ -82,16 +82,24 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack, RE *re0
         }
         else if (re->type == RE::ITER) {
             if (i.succ == 0) {
-                // recurse into the sub-RE
-                StackItem k = {re, VARDIST, 1, i.toplevel};
+                // save the current distance on stack (from the RE end to base)
+                // and recurse into sub-RE
+                StackItem k = {re, dist, 1, i.toplevel};
                 stack.push_back(k);
                 StackItem j = {re->iter.re, VARDIST, 0, false};
                 stack.push_back(j);
             }
             else {
-                // sub-RE visited, assume unknown number of iterations
-                // TODO: find precise distance for fixed repetition counter
-                dist = VARDIST;
+                // sub-RE visited, the current distance is the distance from one
+                // iteration of sub-RE to base, and on stack we have the distance
+                // from zero iterations (RE end) to base. The resulting distance
+                // is fixed if and only if both the current distance and the
+                // repetition count are fixed. In that case it equals the sum of
+                // zero-iteration distance plus the repetition count times the
+                // size of sub-RE (calculated as the delta between zero-iteration
+                // distance on stack and one-iteration current distance).
+                dist = dist == VARDIST || re->iter.max != re->iter.min ? VARDIST
+                    : i.dist + (dist - i.dist) * re->iter.max;
             }
         }
         else if (re->type == RE::CAT) {
