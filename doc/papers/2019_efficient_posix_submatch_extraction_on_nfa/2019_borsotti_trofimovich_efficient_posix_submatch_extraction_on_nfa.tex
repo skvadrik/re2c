@@ -115,8 +115,23 @@
 \author[1]{Angelo Borsotti}
 \author[2]{Ulya Trofimovich}
 
-\address[1]{\email{angelo.borsotti@mail.polimi.it}}
-\address[2]{\email{skvadrik@gmail.com}}
+\address[1]{\orgdiv{Department of Electronics, Information, and Bioengineering},
+    \orgname{Polytechnic University of Milan},
+    \orgaddress{\city{Milan}, \country{Italy}}. \\
+}
+
+\address[2]{\orgdiv{Department of Discrete Mathematics and Algorithmics},
+    \orgname{Belarusian State University},
+    \orgaddress{\city{Minsk}, \country{Belarus}}. \\
+}
+
+\corres{
+    Angelo Borsotti \\
+    \email{angelo.borsotti@mail.polimi.it} \\
+\\
+    Ulya Trofimovich \\
+    \email{skvadrik@gmail.com} \\
+}
 
 \abstract[Summary]{
 In this paper we study the performance of NFA-based POSIX submatch extraction algorithms.
@@ -1147,14 +1162,17 @@ and $minh(\alpha)$ denotes the minimal height of parenthesis in $\alpha$ (or $\i
     therefore assumption $s \not\prec t$ is incorrect.
 \end{proofEnd}
 
+Examples of PE comparison are shown on figures \ref{fig:pe2} and \ref{fig:pe}.
+
 \begin{figure}[b!]
+\vspace{-2em}
 \includegraphics[width=\linewidth]{img/parenthesized_expressions_2.pdf}
 \vspace{-2em}
 \caption{
 Example of pairwise frame-by-frame comparison
 of all PEs for RE $(((a)^{1,3})^{1,3})^{1,3}$ and string $aaa$.\\
 Table entry $(t_i, t_j)$ contains $traces(\Phi_0(t_i), \Phi_0(t_j))$.
-}\label{fig_pe2}
+}\label{fig:pe2}
 \end{figure}
 
 \begin{figure}%[t!]
@@ -1162,7 +1180,7 @@ Table entry $(t_i, t_j)$ contains $traces(\Phi_0(t_i), \Phi_0(t_j))$.
 \vspace{-2em}
 \caption{
 Examples: (a) -- (d): four main rules of POSIX comparison.
-}\label{fig_pe}
+}\label{fig:pe}
 \end{figure}
 
 %\FloatBarrier
@@ -2782,6 +2800,8 @@ Correctness of our implementation has been tested on a subset of Glenn Fowler te
 extended by Kuklewicz and further extended by ourselves to some 500 tests.
 \\
 
+Benchmark results are shown on figures \ref{fig:bencha}, \ref{fig:benchb} and \ref{fig:benchc}.
+
 \pgfplotstableread[col sep = semicolon, trim cells]{bench/data} \datatableX
 \pgfplotstabletranspose{\datatable}{\datatableX}
 
@@ -2875,7 +2895,7 @@ extended by Kuklewicz and further extended by ourselves to some 500 tests.
 
     \caption{
     Real-world benchmarks (A1 -- A12).
-    }\label{fig:bench}
+    }\label{fig:bencha}
 \end{figure}
 
 
@@ -2935,7 +2955,7 @@ extended by Kuklewicz and further extended by ourselves to some 500 tests.
     \caption{
     Artificial benchmarks (B1 --- B12).\\
     Highly ambiguous REs with alternative on 16K string of \texttt{a}s.
-    }\label{fig:bench}
+    }\label{fig:benchb}
 \end{figure}
 
 
@@ -2995,7 +3015,7 @@ extended by Kuklewicz and further extended by ourselves to some 500 tests.
     \caption{
     Artificial benchmarks (C1 --- C12).\\
     Highly ambiguous REs with concatenation on 16K string of \texttt{a}s.
-    }\label{fig:bench}
+    }\label{fig:benchc}
 \end{figure}
 
 In order to present benchmark results in a meaningful way, we show the time of each algorithm relative to LG.
