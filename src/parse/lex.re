@@ -37,7 +37,7 @@ namespace re2c {
 /*!re2c
     // source code is in ASCII, but re2c assumes unsigned chars
     re2c:yych:conversion = 1;
-    re2c:flags:type-header = "src/parse/lex.h";
+    re2c:flags:type-header = "lex.h";
     re2c:flags:tags = 1;
 
     eof        = "\000";
