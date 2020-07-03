@@ -1,3 +1,13 @@
+``re2c:flags:o``, ``re2c:flags:output``
+    Specify the name of the output file relative to the source file directory.
+    (Same as ``-o``, ``--output`` command-line option except that the filename
+    is relative.)
+
+``re2c:flags:t``, ``re2c:flags:type-header``
+    Specify the name of the generated header file relative to the source file
+    directory. (Same as ``-t``, ``--type-header`` command-line option except
+    that the filename is relative.)
+
 ``re2c:flags:input``
     Same as ``--input`` command-line option.
 

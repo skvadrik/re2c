@@ -7,6 +7,7 @@
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
 #include "src/regexp/empty_class_policy.h"
+#include "src/util/get_dir.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "src/util/string_utils.h"
 
@@ -51,8 +52,22 @@ void Scanner::lex_conf(Opt &opts)
     "flags:case-insensitive"          { opts.set_bCaseInsensitive (lex_conf_bool());   return; }
     "flags:case-inverted"             { opts.set_bCaseInverted    (lex_conf_bool());   return; }
     "flags:case-ranges"               { opts.set_case_ranges      (lex_conf_bool());   return; }
-    "flags:" ("o" | "output")         { opts.set_output_file      (lex_conf_string()); return; }
-    "flags:" ("t" | "type-header")    { opts.set_header_file      (lex_conf_string()); return; }
+
+    // in configurations filenames are relative to the source file directory
+    "flags:" ("o" | "output") {
+        std::string name(lex_conf_string());
+        std::string path(opts.source_file);
+        get_dir(path);
+        opts.set_output_file(path + name);
+        return;
+    }
+    "flags:" ("t" | "type-header") {
+        std::string name(lex_conf_string());
+        std::string path(opts.source_file);
+        get_dir(path);
+        opts.set_header_file(path + name);
+        return;
+    }
 
     "flags:" ("P" | "posix-captures") {
         bool b = lex_conf_bool();
