@@ -90,7 +90,7 @@ tests=(`find $test_blddir -name '*.re' | sort`)
 
 # set include paths, relative to build directory
 cd $test_blddir \
-    && incpaths=$(find * -type d -exec echo "-I ../{}" \;) \
+    && incpaths=$(find * -type d -exec echo "-I {}" \;) \
     && cd ..
 
 tests_per_thread=$((${#tests[@]} / threads + 1))
@@ -136,15 +136,24 @@ run_pack() {
         local outx=${x:$((${#test_blddir} + 1))}
         local outy="${outx%.re}.$ext"
 
-        # filename (dot short* (long arg?)*)? ext
-        # must keep to POSIX standard: no syntactic sugar like +,?, etc.
-        # if you change this regexp, try it with 'sed --posix'
+        # Keep to the POSIX standard: no syntactic sugar like +,?, etc. (try it with --posix)
+        # Transformations:
+        #  - filter out tests without options
+        #  - cut off filename and extension
+        #  - change plus sign to slash (header path components)
+        #  - patch header name to be relative to the source file directory
+        #  - prefix split short options with dash
+        #  - prefix long options with dash dash
+        #  - remove parentheses around long option arguments
         local switches=`basename "$x" | lc_run sed \
             -e 's/^[^.]*\.re$//g' \
             -e 's/^[^.]*\.\(.*\)\.re$/\1/g' \
+            -e 's,[+],/,g' \
+            -e 's,\(--type-header\)(\([^)]*\)),\1('"$(dirname $outx)"'/\2),' \
             -e 's/^\([^-]\)/-\1/' \
             -e 's/--\([^ (-]*\)/ --\1/g' \
-            -e 's/(\([^)]*\))/ \1/g'`
+            -e 's/(\([^)]*\))/ \1/g' \
+        `
         # check that flags do not contain uppercase letters:
         # file extensions are case-insensitive on some platforms
         printf "%s" "$switches" | lc_run grep -q "[A-Z]" \
@@ -153,52 +162,47 @@ run_pack() {
         # enable warnings globally
         local switches="$switches -W"
 
+        # normal tests
         if [ $skeleton -ne 1 ]; then
-            # normal tests
+            # copy expected result
+            local orig="${outx%.re}.orig.$ext"
+            mv "$outy" "$orig"
 
-            local c="${outx%.re}.$ext.orig"
-            mv "$outy" "$c"
+            # if options contain a header, create directory structure for it
+            local header=`echo "$switches" \
+                | lc_run grep -e '--type-header' \
+                | lc_run sed -e 's/.*--type-header \([^ ]*\).*/\1/'`
+            [ -n "$header" ] && mkdir -p "$(dirname $header)"
 
-            # create sandbox
-            tmpdir="tmp_$log" \
-                && mkdir "$tmpdir" \
-                && cd "$tmpdir" \
-                && mkdir -p `dirname "$outx"` \
-                && cp "../../$x" "$outx"
             # run re2c
-            $valgrind $wine ../../$re2c $incpaths $switches "$outx" 2>"$outy.stderr" 1>&2
+            $valgrind $wine ../$re2c $incpaths $switches "$outx" 2>"$outy.stderr" 1>&2
+
             # on windows output contains CR LF, cut CR to match test results
-            for f in "$outy" "$outy.stderr"; do
-                [ -f "$f" ] \
-                    && cat "$f" | lc_run tr -d '\r' > "$f".mod \
-                    && mv "$f".mod "$f"
+            for f in "$header" "$outy" "$outy.stderr"; do
+                [ -f "$f" ] && cat "$f" | lc_run tr -d '\r' > "$f".mod && mv "$f".mod "$f"
             done
-            # paste all files dropped by re2c into output file
-            rm "$outx" && find . -type f \
-                | lc_run sort \
-                | xargs cat \
-                >> "../$outy"
-            # cleanup sandbox
-            cd .. \
-                && rm -rf "$tmpdir"
+
+            # paste all files created by re2c into output file
+            # (this includes stderr and optionally header and skeleton files)
+            echo "$header" "$outy".* | lc_run sort | xargs cat >> "$outy"
 
             # compare results
             local status=""
-            [ -z $status ] && status=`[ -f "$c" ] || echo "MISSING"`
-            [ -z $status ] && status=`$diff_prog "$c" "$outy" > "$outy.diff" || echo "FAIL"`
+            [ -z $status ] && status=`[ -f "$orig" ] || echo "MISSING"`
+            [ -z $status ] && status=`$diff_prog "$orig" "$outy" > "$outy.diff" || echo "FAIL"`
             [ -z $status ] && status="OK"
-
+            printf "%-10s $outx\n" "$status"
             ran_tests=$(($ran_tests + 1))
+
+            # cleanup
             if [ $status = "OK" ]; then
-                rm "$outy" "$outy.diff" "$c" "$outx"
+                echo "$header" "$outy" "$outy".* "$orig" "$outx" | xargs rm
             else
                 hard_errors=$(($hard_errors + 1))
             fi
 
-            printf "%-10s $outx\n" "$status"
+        # skeleton tests (only for C files, other languages are not supported)
         elif [ ${ext} = "c" ]; then
-            # skeleton tests (only for C files, other languages are not supported)
-
             rm -f "$outy"
 
             local switches="$switches --skeleton -Werror-undefined-control-flow"
