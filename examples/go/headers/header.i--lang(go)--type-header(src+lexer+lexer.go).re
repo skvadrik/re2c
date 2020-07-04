@@ -11,12 +11,7 @@ package lexer
 
 type State struct {
 	Data string
-	Cur  int
-	Mar  int
-	/*!stags:re2c
-	format    = "@@{tag} int";
-	separator = "\n\t";
-	*/
+	Cur, Mar, /*!stags:re2c format="@@{tag}"; separator=", "; */ int
 }
 /*!header:re2c:off*/
 
@@ -43,7 +38,6 @@ func lex(st *lexer.State) int {
 func TestLex(t *testing.T) {
 	st := &lexer.State{
 		Data: "xxxxxxxx\x00",
-		Cur:  0,
 	}
 	if !(lex(st) == 0 && st.Cur == 4) {
 		t.Error("failed")

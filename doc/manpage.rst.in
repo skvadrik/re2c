@@ -113,6 +113,18 @@ Header files
 ============
 .. include:: @top_srcdir@/doc/manual/headers/headers.rst_
 
+Input file
+----------
+.. include:: @top_srcdir@/examples/RE2C_LANG/headers/header.i--lang(RE2C_LANG)--type-header(src+lexer+lexer.RE2C_HEADER_EXT).re
+    :literal:
+    :code: RE2C_LANG
+
+Header file
+-----------
+.. include:: @top_srcdir@/examples/RE2C_LANG/headers/src/lexer/lexer.RE2C_HEADER_EXT
+    :literal:
+    :code: RE2C_LANG
+
 Submatch extraction
 ===================
 .. include:: @top_srcdir@/doc/manual/submatch/submatch.rst_

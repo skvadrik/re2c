@@ -119,7 +119,6 @@ yy14:
 func TestLex(t *testing.T) {
 	st := &lexer.State{
 		Data: "xxxxxxxx\x00",
-		Cur:  0,
 	}
 	if !(lex(st) == 0 && st.Cur == 4) {
 		t.Error("failed")
@@ -131,10 +130,6 @@ package lexer
 
 type State struct {
 	Data string
-	Cur  int
-	Mar  int
-	Tag1 int
-	Tag2 int
-	Tag3 int
+	Cur, Mar, Tag1, Tag2, Tag3 int
 }
-go/headers/header.i--lang(go)--type-header(src+lexer+lexer.go).re:38:21: warning: trailing context has 4th degree of nondeterminism [-Wnondeterministic-tags]
+go/headers/header.i--lang(go)--type-header(src+lexer+lexer.go).re:33:21: warning: trailing context has 4th degree of nondeterminism [-Wnondeterministic-tags]
