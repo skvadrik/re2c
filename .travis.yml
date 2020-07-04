@@ -53,7 +53,8 @@ script:
             LDFLAGS="${COMMON_FLAGS}" \
             || cat config.log
     fi
-    make -j$(nproc)
+  - make -j$(nproc)
+  - |
     if [ x${SKELETON} = "xyes" ]; then
         ./run_tests.sh --skeleton
     else
