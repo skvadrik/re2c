@@ -924,15 +924,10 @@ This directive marks the end of header file started with
 .SH CONFIGURATIONS
 .INDENT 0.0
 .TP
-.B \fBre2c:flags:o\fP, \fBre2c:flags:output\fP
-Specify the name of the output file relative to the source file directory.
-(Same as \fB\-o\fP, \fB\-\-output\fP command\-line option except that the filename
-is relative.)
-.TP
 .B \fBre2c:flags:t\fP, \fBre2c:flags:type\-header\fP
-Specify the name of the generated header file relative to the source file
-directory. (Same as \fB\-t\fP, \fB\-\-type\-header\fP command\-line option except
-that the filename is relative.)
+Specify the name of the generated header file relative to the directory of
+the output file. (Same as \fB\-t\fP, \fB\-\-type\-header\fP command\-line option
+except that the filepath is relative.)
 .TP
 .B \fBre2c:flags:input\fP
 Same as \fB\-\-input\fP command\-line option.

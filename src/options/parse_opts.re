@@ -20,6 +20,17 @@ static inline bool next (char * & arg, char ** & argv)
     return arg != NULL;
 }
 
+static inline bool set_source_file(conopt_t &globopts, const char *source)
+{
+    if (!globopts.source_file.empty()) {
+        error("multiple source files: %s, %s", globopts.source_file.c_str(), source);
+        return false;
+    } else {
+        globopts.source_file = source;
+        return true;
+    }
+}
+
 parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
 {
 #define YYCTYPE unsigned char
@@ -58,14 +69,14 @@ opt:
     "--" end {
         // remaining args are non-options, so they must be input files
         // re2c expects exactly one input file
-        for (char * f; next (f, argv);) {
-            if (!opts.source (f)) return EXIT_FAIL;
+        for (char *f; next(f, argv); ) {
+            if (!set_source_file(globopts, f)) return EXIT_FAIL;
         }
         goto end;
     }
 
-    "-"      end { if (!opts.source ("<stdin>")) return EXIT_FAIL; goto opt; }
-    filename end { if (!opts.source (*argv))     return EXIT_FAIL; goto opt; }
+    "-"      end { if (!set_source_file(globopts, "<stdin>")) return EXIT_FAIL; goto opt; }
+    filename end { if (!set_source_file(globopts, *argv))     return EXIT_FAIL; goto opt; }
 
     "-"  { goto opt_short; }
     "--" { goto opt_long; }
@@ -221,7 +232,7 @@ opt_lang:
 opt_output:
 /*!re2c
     * { ERRARG("-o, --output", "filename", *argv); }
-    filename end { opts.set_output_file (*argv); goto opt; }
+    filename end { globopts.output_file = *argv; goto opt; }
 */
 
 opt_header:
@@ -295,8 +306,8 @@ opt_posix_prectable:
 */
 
 end:
-    if (!opts.source_file) {
-        error ("no source file");
+    if (globopts.source_file.empty()) {
+        error("no source file");
         return EXIT_FAIL;
     }
     opts.fix_global_and_defaults();

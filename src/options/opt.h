@@ -84,6 +84,9 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, rFlag, false) \
     CONSTOPT (bool, FFlag, false) \
     CONSTOPT (bool, verbose, false) \
+    /* files */ \
+    CONSTOPT (std::string, source_file, "") \
+    CONSTOPT (std::string, output_file, "") \
     /* include paths */ \
     CONSTOPT (std::vector<std::string>, incpaths, std::vector<std::string>()) \
     /* input encoding */ \
@@ -112,9 +115,8 @@ const uint32_t NOEOF = ~0u - 1;
     /* end */
 
 #define RE2C_MUTOPTS \
-    /* output files */ \
-    MUTOPT1 (std::string, output_file, "") \
-    MUTOPT (std::string, header_file, "") \
+    /* header file */ \
+    MUTOPT1 (std::string, header_file, "") \
     /* regular expressions */ \
     MUTOPT (Enc, encoding, Enc ()) \
     MUTOPT (bool, bCaseInsensitive, false) \
@@ -302,7 +304,6 @@ struct opt_t {
 // Options management.
 struct Opt {
 public:
-    const char *source_file;
     const conopt_t &glob;
 
 private:
@@ -334,7 +335,6 @@ public:
     const opt_t *snapshot();
     void fix_global_and_defaults();
     void restore(const opt_t *opts);
-    bool source(const char *s);
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \

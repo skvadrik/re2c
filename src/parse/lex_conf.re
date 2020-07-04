@@ -53,17 +53,10 @@ void Scanner::lex_conf(Opt &opts)
     "flags:case-inverted"             { opts.set_bCaseInverted    (lex_conf_bool());   return; }
     "flags:case-ranges"               { opts.set_case_ranges      (lex_conf_bool());   return; }
 
-    // in configurations filenames are relative to the source file directory
-    "flags:" ("o" | "output") {
-        std::string name(lex_conf_string());
-        std::string path(opts.source_file);
-        get_dir(path);
-        opts.set_output_file(path + name);
-        return;
-    }
+    // header filename in configuration is relative to the output file directory
     "flags:" ("t" | "type-header") {
         std::string name(lex_conf_string());
-        std::string path(opts.source_file);
+        std::string path(opts.glob.output_file);
         get_dir(path);
         opts.set_header_file(path + name);
         return;

@@ -290,8 +290,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
 }
 
 Opt::Opt(const conopt_t &globopts)
-    : source_file(NULL)
-    , glob(globopts)
+    : glob(globopts)
     , defaults()
     , is_default()
     , user()
@@ -393,18 +392,6 @@ void Opt::set_encoding_policy(Enc::policy_t p)
 {
     user.encoding.setPolicy(p);
     is_default.encoding = false;
-}
-
-bool Opt::source (const char *s)
-{
-    if (source_file) {
-        error ("multiple source files: %s, %s", source_file, s);
-        return false;
-    }
-    else {
-        source_file = s;
-        return true;
-    }
 }
 
 void Opt::reset_group_startlabel()

@@ -24,7 +24,7 @@ int main(int, char *argv[])
     }
 
     Scanner scanner(&globopts, msg);
-    if (!scanner.open(opts.source_file, NULL)) {
+    if (!scanner.open(globopts.source_file, NULL)) {
         return 1;
     }
 
