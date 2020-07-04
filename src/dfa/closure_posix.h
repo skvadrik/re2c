@@ -125,7 +125,8 @@ void init_gor1(ctx_t &ctx)
     // init: push configurations ordered by POSIX precedence (highest on top)
     state.clear();
     std::sort(reach.begin(), reach.end(), cmp_gor1_t<ctx_t>(ctx));
-    for (typename ctx_t::rcconfiter_t c = reach.rbegin(); c != reach.rend(); ++c) {
+    typename ctx_t::rcconfiter_t c = reach.rbegin(), e = reach.rend();
+    for (; c != e; ++c) {
         nfa_state_t *q = c->state;
         if (q->clos == NOCLOS) {
             q->clos = static_cast<uint32_t>(state.size());
