@@ -8,7 +8,8 @@ for f in $(find -name '*.re'); do
         | egrep -v 'warning: tag .* degree of nondeterminism \[-Wnondeterministic-tags\]' \
         > "$gotest"
 
-    go test "$gotest" || { echo "*** error ***"; exit 1; }
+    GOPATH=$GOPATH:"$(pwd)/$(dirname $gofile)" \
+        go test "$gotest" || { echo "*** error ***"; exit 1; }
     rm -f "$gotest"
 done
 
