@@ -298,7 +298,7 @@ EXTRA_DIST = \
 	NO_WARRANTY \
 	README.md \
 	autogen.sh \
-	genhelp.sh \
+	build \
 	examples \
 	test
 
@@ -342,26 +342,27 @@ bootstrap: all
 .PHONY: docs
 if REBUILD_DOCS
 docs: $(DOCS) $(re2c_GEN_HELP)
+GENHELP = $(top_srcdir)/build/gen_help.sh
 SPLITMAN = $(top_srcdir)/build/split_man.sh
 # generate manpage for C
-$(DOC_C): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT)
+$(DOC_C): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)$(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).c c \
 		&& $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).c > $@ \
 		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_C) \
 		&& rm $(top_builddir)/$(re2c_SRC_DOC).c
 # generate manpage for Go
-$(DOC_GO): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT)
+$(DOC_GO): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)$(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).go go \
 		&& $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).go > $@ \
 		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_GO) \
 		&& rm $(top_builddir)/$(re2c_SRC_DOC).go
 # generate help
-$(re2c_GEN_HELP): $(re2c_CUSTOM_HELP)
+$(re2c_GEN_HELP): $(re2c_CUSTOM_HELP) $(GENHELP)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)$(RST2MAN) $(top_builddir)/$(re2c_CUSTOM_HELP) > $@.1 \
-		&& $(top_srcdir)/build/gen_help.sh $@.1 $@ \
+		&& $(GENHELP) $@.1 $@ \
 		&& cp $@ $(top_srcdir)/$(re2c_BOOT_HELP) \
 		&& rm $@.1
 else

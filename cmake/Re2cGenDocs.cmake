@@ -6,7 +6,10 @@ function(re2c_gen_manpage source target bootstrap lang)
             COMMAND "${re2c_splitman}" "${source}" "${source_l}" "${lang}"
             COMMAND "${RST2MAN}" --tab-width=4 "${source_l}" > "${target}"
             COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${target}" "${bootstrap}"
-            DEPENDS "${re2c_docs_sources}"
+            DEPENDS
+                "${source}"
+                "${re2c_splitman}"
+                "${re2c_docs_sources}"
             BYPRODUCTS "${source_l}"
         )
     else()
