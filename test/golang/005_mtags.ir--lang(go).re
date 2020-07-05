@@ -23,6 +23,13 @@ const mtagRoot int = -1
 /*!rules:re2c
 	re2c:flags:tags = 1;
 	re2c:yyfill:enable = 0;
+	re2c:define:YYCTYPE = byte;
+	re2c:define:YYPEEK = "str[cursor]";
+	re2c:define:YYSKIP = "cursor += 1";
+	re2c:define:YYBACKUP  = "marker = cursor";
+	re2c:define:YYRESTORE = "cursor = marker";
+	re2c:define:YYSTAGP = "@@ = cursor";
+	re2c:define:YYSTAGN = "@@ = -1";
 
 	end = [\x00];
 
@@ -45,13 +52,6 @@ func LexSlices(str string) (a []int, b []int, c int) {
 	*/
 
 	/*!use:re2c
-	re2c:define:YYCTYPE = byte;
-	re2c:define:YYPEEK = "str[cursor]";
-	re2c:define:YYSKIP = "cursor += 1";
-	re2c:define:YYBACKUP  = "marker = cursor";
-	re2c:define:YYRESTORE = "cursor = marker";
-	re2c:define:YYSTAGP = "@@ = cursor";
-	re2c:define:YYSTAGN = "@@ = -1";
 	re2c:define:YYMTAGP = "@@ = append(@@, cursor)";
 	re2c:define:YYMTAGN = "@@ = append(@@, -1)";
 
@@ -74,13 +74,6 @@ func LexTrie(str string) (mt mtagTrie, a int, b int, c int) {
 	*/
 
 	/*!use:re2c
-	re2c:define:YYCTYPE = byte;
-	re2c:define:YYPEEK = "str[cursor]";
-	re2c:define:YYSKIP = "cursor += 1";
-	re2c:define:YYBACKUP  = "marker = cursor";
-	re2c:define:YYRESTORE = "cursor = marker";
-	re2c:define:YYSTAGP = "@@ = cursor";
-	re2c:define:YYSTAGN = "@@ = -1";
 	re2c:define:YYMTAGP = "@@ = mtag(&mt, @@, cursor)";
 	re2c:define:YYMTAGN = "@@ = mtag(&mt, @@, -1)";
 

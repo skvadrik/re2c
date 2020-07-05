@@ -4,21 +4,21 @@ package main
 import "testing"
 
 /*!rules:re2c
-    re2c:yyfill:enable = 0;
+	re2c:yyfill:enable = 0;
+	re2c:define:YYPEEK    = "str[cursor]";
+	re2c:define:YYSKIP    = "cursor += 1";
+	re2c:define:YYBACKUP  = "marker = cursor";
+	re2c:define:YYRESTORE = "cursor = marker";
 
-    "∀x ∃y: p(x, y)" { return 0; }
-    *                { return 1; }
+	"∀x ∃y: p(x, y)" { return 0; }
+	*                { return 1; }
 */
 
 func lexUTF8(str []uint8) int {
 	var cursor, marker int
 	/*!use:re2c
 	re2c:flags:8 = 1;
-	re2c:define:YYCTYPE   = uint8;
-	re2c:define:YYPEEK    = "str[cursor]";
-	re2c:define:YYSKIP    = "cursor += 1";
-	re2c:define:YYBACKUP  = "marker = cursor";
-	re2c:define:YYRESTORE = "cursor = marker";
+	re2c:define:YYCTYPE = uint8;
 	*/
 }
 
@@ -26,11 +26,7 @@ func lexUTF32(str []uint32) int {
 	var cursor, marker int
 	/*!use:re2c
 	re2c:flags:u = 1;
-	re2c:define:YYCTYPE   = uint32;
-	re2c:define:YYPEEK    = "str[cursor]";
-	re2c:define:YYSKIP    = "cursor += 1";
-	re2c:define:YYBACKUP  = "marker = cursor";
-	re2c:define:YYRESTORE = "cursor = marker";
+	re2c:define:YYCTYPE = uint32;
 	*/
 }
 

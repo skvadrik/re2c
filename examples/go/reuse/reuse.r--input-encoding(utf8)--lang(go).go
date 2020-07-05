@@ -5,7 +5,7 @@ package main
 
 import "testing"
 
-//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":11
+//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":15
 
 
 func lexUTF8(str []uint8) int {
@@ -24,7 +24,7 @@ func lexUTF8(str []uint8) int {
 yy2:
 	cursor += 1
 yy3:
-//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":10
+//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":14
 	{ return 1; }
 //line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).go":30
 yy4:
@@ -186,7 +186,7 @@ yy21:
 	}
 yy22:
 	cursor += 1
-//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":9
+//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":13
 	{ return 0; }
 //line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).go":192
 }
@@ -206,7 +206,7 @@ func lexUTF32(str []uint32) int {
 	}
 	cursor += 1
 yy27:
-//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":10
+//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":14
 	{ return 1; }
 //line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).go":212
 yy28:
@@ -281,11 +281,11 @@ yy31:
 		goto yy30
 	}
 	cursor += 1
-//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":9
+//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":13
 	{ return 0; }
 //line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).go":287
 }
-//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":34
+//line "go/reuse/reuse.r--input-encoding(utf8)--lang(go).re":30
 
 }
 
