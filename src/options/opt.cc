@@ -380,24 +380,28 @@ void Opt::set_encoding(Enc::type_t t)
 {
     user.encoding.set(t);
     is_default.encoding = false;
+    diverge = true;
 }
 
 void Opt::unset_encoding(Enc::type_t t)
 {
     user.encoding.unset(t);
-    is_default.encoding = false;
+    is_default.encoding = false; // explicitly unset by the user => not default
+    diverge = true;
 }
 
 void Opt::set_encoding_policy(Enc::policy_t p)
 {
     user.encoding.setPolicy(p);
     is_default.encoding = false;
+    diverge = true;
 }
 
 void Opt::reset_group_startlabel()
 {
     reset_startlabel();
     reset_startlabel_force();
+    diverge = true;
 }
 
 void Opt::reset_group_api()
