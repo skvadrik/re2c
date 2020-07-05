@@ -257,6 +257,8 @@ re2c_SRC_DOC_EXT = \
 	examples/c/fill/02_fill.--lang(c).re \
 	examples/c/headers/header.i--lang(c)--type-header(src+lexer+lexer.h).re \
 	examples/c/headers/src/lexer/lexer.h \
+	examples/c/includes/include.i--lang(c).re \
+	examples/c/includes/definitions.h \
 	examples/c/reuse/reuse.r--input-encoding(utf8)--lang(c).re \
 	examples/c/state/push.f--lang(c).re \
 	examples/c/submatch/01_stags.--lang(c).re \
@@ -272,6 +274,8 @@ re2c_SRC_DOC_EXT = \
 	examples/go/fill/02_fill.--lang(go).re \
 	examples/go/headers/header.i--lang(go)--type-header(src+lexer+lexer.go).re \
 	examples/go/headers/src/lexer/lexer.go \
+	examples/go/includes/include.i--lang(go).re \
+	examples/go/includes/definitions.go \
 	examples/go/reuse/reuse.r--input-encoding(utf8)--lang(go).re \
 	examples/go/state/push.f--lang(go).re \
 	examples/go/submatch/01_stags.--lang(go).re \

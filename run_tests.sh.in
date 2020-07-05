@@ -78,6 +78,7 @@ chmod -R u+w $test_blddir
 find $test_blddir -type f \
     ! -name '*.re' -a \
     ! -name '*.c' -a \
+    ! -name '*.h' -a \
     ! -name '*.go' -a \
     ! -name '*.inc' \
     -exec rm {} \;

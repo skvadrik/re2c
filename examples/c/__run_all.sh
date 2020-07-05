@@ -1,4 +1,3 @@
-
 root_dir=$(pwd)
 
 for f in $(find -name '*.re'); do

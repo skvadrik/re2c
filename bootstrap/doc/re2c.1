@@ -1939,30 +1939,49 @@ Re2c provides some predefined include files that can be found in the
 \fBinclude/\fP subdirectory of the project. These files contain definitions that
 can be useful to other projects (such as Unicode categories) and form something
 like a standard library for re2c.
-.sp
-Here is an example of using include files:
+Here is an example:
+.SS Include file (definitions.h)
 .INDENT 0.0
 .INDENT 3.5
 .sp
 .nf
 .ft C
-// definitions.re
+typedef enum { OK, FAIL } Result;
+
 /*!re2c
-    alpha = [a\-zA\-Z];
-    digit = [0\-9];
+    number = [1\-9][0\-9]*;
 */
 
-// main.re
-/*!include:re2c "definitions.re" */
-int lex(const char *YYCURSOR)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Input file
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+#include <assert.h>
+/*!include:re2c "definitions.h" */
+
+Result lex(const char *YYCURSOR)
 {
-    const char *YYMARKER;
     /*!re2c
-        alpha { return 1; }
-        digit { return 2; }
-        *     { return 0; }
+    re2c:define:YYCTYPE = char;
+    re2c:yyfill:enable = 0;
+
+    number { return OK; }
+    *      { return FAIL; }
     */
 }
+
+int main()
+{
+    assert(lex("123") == OK);
+    return 0;
+}
+
 .ft P
 .fi
 .UNINDENT
