@@ -404,43 +404,4 @@ void Opt::reset_group_startlabel()
     diverge = true;
 }
 
-void Opt::reset_group_api()
-{
-    // API-related configurations
-    reset_cond_get();
-    reset_cond_set();
-    reset_fill();
-    reset_state_get();
-    reset_state_set();
-    reset_yybackup();
-    reset_yybackupctx();
-    reset_yycondtype();
-    reset_yyctxmarker();
-    reset_yyctype();
-    reset_yycursor();
-    reset_yydebug();
-    reset_yylessthan();
-    reset_yylimit();
-    reset_yymarker();
-    reset_yypeek();
-    reset_yyrestore();
-    reset_yyrestorectx();
-    reset_yyrestoretag();
-    reset_yystagn();
-    reset_yystagp();
-    reset_yymtagn();
-    reset_yymtagp();
-    reset_yyshift();
-    reset_yyshiftstag();
-    reset_yyshiftmtag();
-    reset_yyskip();
-    reset_yyfilllabel();
-    reset_yynext();
-    reset_yyaccept();
-    reset_yybm();
-    reset_yych();
-    reset_yyctable();
-    reset_yytarget();
-}
-
 } // namespace re2c

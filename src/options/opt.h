@@ -347,9 +347,7 @@ public:
     void unset_encoding(Enc::type_t t);
     void set_encoding_policy(Enc::policy_t p);
 
-    // Bad temporary hacks, should be fixed by proper scoping of config (parts).
     void reset_group_startlabel();
-    void reset_group_api();
 
 private:
     void sync();
