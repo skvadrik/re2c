@@ -67,29 +67,23 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
     }
 
     if (!opts->cFlag) {
-        for (i = b; i != e; ++i) {
-            if (!i->name.empty()) {
-                const loc_t &l = !i->rules.empty()
-                    ? i->rules[0].semact->loc : !i->defs.empty()
-                        ? i->defs[0]->loc : NOWHERE;
-                if (l.line != NOWHERE.line) {
-                    msg.fatal(l, "conditions are only allowed with "
-                        "'-c', '--conditions' option");
-                }
-            }
+        // normal mode: there must be no named specs corresponding to conditions
+        for (i = b; i != e && i->name.empty(); ++i);
+        if (i != e) { // found named spec
+            const loc_t &l = !i->rules.empty() ? i->rules[0].semact->loc
+                : !i->defs.empty() ? i->defs[0]->loc : NOWHERE;
+            msg.fatal(l, "conditions are only allowed with '-c', '--conditions' option");
         }
-    }
-    else {
-        for (i = b; i != e; ++i) {
-            if (i->name.empty()) {
-                const loc_t &l = !i->rules.empty()
-                    ? i->rules[0].semact->loc : !i->defs.empty()
-                        ? i->defs[0]->loc : NOWHERE;
-                if (l.line != NOWHERE.line) {
-                    msg.fatal(l, "non-conditional rules are not allowed with "
-                        "'-c', '--conditions' option");
-                }
-            }
+    } else if (e - b == 1 && b->name.empty()) {
+        // condition mode, a single unnamed spec => ok, normal blocks are allowed
+    } else {
+        // condition mode, at least one named spec => this is a block with conditions
+
+        for (i = b; i != e && !i->name.empty(); ++i);
+        if (i != e) { // found unnamed spec
+            const loc_t &l = !i->rules.empty() ? i->rules[0].semact->loc
+                : !i->defs.empty() ? i->defs[0]->loc : NOWHERE;
+            msg.fatal(l, "cannot mix conditions with normal rules");
         }
 
         for (i = b; i != e; ++i) {

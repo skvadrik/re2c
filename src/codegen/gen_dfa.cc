@@ -104,12 +104,11 @@ void DFA::emit_body(Output &output, CodeList *stmts) const
 
 void DFA::emit_dot(Output &output, CodeList *program) const
 {
-    const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
     const char *text;
 
-    if (opts->cFlag) {
+    if (!cond.empty()) {
         text = o.str(cond).cstr(" -> ").label(*head->label).flush();
         append(program, code_text(alc, text));
     }
@@ -158,6 +157,9 @@ void gen_code(Output &output, dfas_t &dfas)
 
     dfas_t::const_iterator i, b = dfas.begin(), e = dfas.end();
     if (b == e) return;
+
+    // All conditions are named, so it suffices to check the first DFA.
+    const bool is_cond_block = !(*b)->cond.empty();
 
     for (i = b; i != e; ++i) {
         const bool first = i == b;
@@ -237,11 +239,11 @@ void gen_code(Output &output, dfas_t &dfas)
                 append(program1, code_yyaccept_def(alc));
             }
 
-            if (!opts->cFlag && bms) {
+            if (!is_cond_block && bms) {
                 append(program1, bms);
             }
 
-            if (first && opts->cFlag && opts->gFlag) {
+            if (first && is_cond_block && opts->gFlag) {
                 append(program1, code_cond_table(alc));
             }
 
@@ -262,12 +264,12 @@ void gen_code(Output &output, dfas_t &dfas)
                 append(program1, code_slabel(alc, text));
             }
 
-            if (opts->cFlag && !output.cond_goto) {
+            if (is_cond_block && !output.cond_goto) {
                 append(program1, code_cond_goto(alc));
                 output.cond_goto = true;
             }
 
-            if (opts->cFlag && !dfa.cond.empty()) {
+            if (is_cond_block && !dfa.cond.empty()) {
                 if (opts->condDivider.length()) {
                     o.str(opts->condDivider);
                     argsubst(o.stream(), opts->condDividerParam, "cond", true, dfa.cond);
@@ -281,7 +283,7 @@ void gen_code(Output &output, dfas_t &dfas)
             CodeList *body = code_list(alc);
             dfa.emit_body(output, body);
 
-            if (opts->cFlag && bms) {
+            if (is_cond_block && bms) {
                 CodeList *block = code_list(alc);
                 append(block, bms);
                 append(block, body);
@@ -294,8 +296,8 @@ void gen_code(Output &output, dfas_t &dfas)
 
         const bool prolog = (opts->fFlag && opts->gFlag)
             || (!opts->fFlag && (oblock.used_yyaccept || opts->bEmitYYCh))
-            || (!opts->cFlag && have_bitmaps)
-            || (opts->cFlag && opts->gFlag);
+            || (!is_cond_block && have_bitmaps)
+            || (is_cond_block && opts->gFlag);
 
         append(program, code_newline(alc));
         append(program, code_line_info_output(alc));
