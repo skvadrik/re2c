@@ -251,6 +251,10 @@ yy57:
 // normal block, 1 state, 1 condition
 
 
+	switch (YYGETCONDITION()) {
+	case yycw:
+		goto yyc_w;
+	}
 /* *********************************** */
 yyc_w:
 	SETSTATE_2(2);

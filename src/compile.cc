@@ -153,8 +153,8 @@ void compile(Scanner &input, Output &output, Opt &opts)
             specs = rspecs;
             opts.restore(rules_opts);
             output.state_goto = false;
-            output.cond_goto = false;
         }
+        output.cond_goto = false;
         parse(input, specs, symtab, opts);
 
         // start new output block with accumulated options

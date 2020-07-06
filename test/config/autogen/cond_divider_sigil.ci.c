@@ -48,6 +48,12 @@ yy10:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 ~~~ ## ~~~
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -87,6 +93,12 @@ yy22:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 ~~~ c1c1 ~~~
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -126,6 +138,12 @@ yy34:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 ~~~ c1c1 ~~~
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -165,6 +183,12 @@ yy46:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 ~~~ ## ~~~
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -204,6 +228,12 @@ yy58:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 ~~~ ## ~~~
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -242,6 +272,12 @@ yy70:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 --- c1 --- c1 ---
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -280,6 +316,12 @@ yy82:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 --- c1 --- c1 ---
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -319,6 +361,12 @@ yy94:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 --- @@ --- @@ ---
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -358,6 +406,12 @@ yy106:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 --- @@ --- @@ ---
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -397,6 +451,12 @@ yy118:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 --- c1 --- c1 ---
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -436,6 +496,12 @@ yy130:
 
 {
 	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+	case yycc1:
+		goto yyc_c1;
+	case yycc2:
+		goto yyc_c2;
+	}
 --- c1 --- c1 ---
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
