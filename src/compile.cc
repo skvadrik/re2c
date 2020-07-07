@@ -124,7 +124,6 @@ void compile(Scanner &input, Output &output, Opt &opts)
     specs_t rspecs;
     symtab_t symtab;
     const conopt_t *globopts = &opts.glob;
-    const opt_t *rules_opts = NULL, *accum_opts = NULL;
     code_alc_t &alc = output.allocator;
     const loc_t &loc0 = input.tok_loc();
 
@@ -140,6 +139,9 @@ void compile(Scanner &input, Output &output, Opt &opts)
     if (globopts->target == TARGET_SKELETON) {
         output.wdelay_stmt(0, emit_skeleton_prolog(output));
     }
+
+    const opt_t *rules_opts = NULL;
+    const opt_t *accum_opts = output.block().opts;
 
     for (;;) {
         // parse everything up to the next re2c block
@@ -186,7 +188,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         // accumulated whole-program options exclude rules/reuse blocks
         if (mode == Scanner::Parse) {
             accum_opts = output.block().opts;
-        } else if (accum_opts) {
+        } else {
             opts.restore(accum_opts);
         }
     }
