@@ -37,11 +37,31 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 \fBre2go [OPTIONS] INPUT [\-o OUTPUT]\fP
 .SH DESCRIPTION
 .sp
-Re2c is a lexer generator for C/C++ and Go. It finds regular expression specifications
-in special\-form comments and compiles them to deterministic finite state automata.
-The user needs to provide interface code to bind the generated lexer to the program environment.
-Re2c has many options, configurations and directives for customization of the generated code.
-This manpage includes examples for re2go.
+re2c is a tool for generating fast lexical analyzers for C, C++ and Go.
+.sp
+Note: This manual includes examples for Go, but it refers to re2c (rather than re2go) as the name of the program in general.
+.SH SYNTAX
+.sp
+A re2c program consists of normal code intermixed with re2c blocks and \fI\%directives\fP\&.
+Each re2c block may contain definitions, configurations and rules.
+Definitions are of the form \fBname = regexp;\fP  where \fBname\fP is an identifier that
+consists of letters, digits and underscores, and \fBregexp\fP is a regular expression.
+\fI\%Regular expressions\fP may contain other definitions, but recursion is not allowed and each name should be defined before used.
+\fI\%Configurations\fP are of the form \fBre2c:config = value;\fP where \fBconfig\fP is the configuration descriptor
+and \fBvalue\fP can be a number, a string or a special word.
+Rules consist of a regular expression followed by a semantic action
+(a block of code enclosed in curly braces \fB{\fP and \fB}\fP,
+or a raw one line of code preceded with \fB:=\fP and ended with a newline that is not followed by a whitespace).
+If the input matches the regular expression, the associated semantic action is executed.
+If multiple rules match, the longest match takes precedence.
+If multiple rules match the same string, the earlier rule takes precedence.
+There are two special rules: default rule \fB*\fP and EOF rule \fB$\fP\&.
+Default rule should always be defined, it has the lowest priority regardless of its place and matches any code unit (not necessarily a valid character, see \fI\%encoding support\fP).
+EOF rule matches the end of input, it should be defined if the corresponding \fI\%EOF handling\fP method is used.
+If \fI\%start conditions\fP are used, rules have more complex syntax.
+All rules of a single block are compiled into a deterministic finite\-state automaton (DFA) and encoded in the form of a program in the target language.
+The generated code interfaces with the outer program by the means of a few user\-defined primitives (see the \fI\%program interface\fP section).
+\fI\%Reusable blocks\fP allow sharing rules, definitions and configurations between different blocks.
 .SH EXAMPLE
 .SS Input file
 .INDENT 0.0
@@ -304,9 +324,6 @@ range is 0 \-\- 0x10FFFF and character size is 2 bytes. This option implies
 \fB\-s\fP\&.
 .UNINDENT
 .SS Debug options
-.sp
-The following options allow to visualize and debug the generated programs;
-most of them are enabled only in debug builds.
 .INDENT 0.0
 .TP
 .B \fB\-D \-\-emit\-dot\fP
@@ -354,9 +371,6 @@ variables.
 Debug option: output NFA (in .dot format).
 .UNINDENT
 .SS Internal options
-.sp
-The following options are primarily intended for re2c developers; they are
-unstable and control re2c internals.
 .INDENT 0.0
 .TP
 .B \fB\-\-dfa\-minimization <moore | table>\fP
@@ -399,7 +413,7 @@ Internal option:
 use staDFA algorithm for submatch extraction. The main difference with TDFA
 is that tag operations in staDFA are placed in states, not on transitions.
 .UNINDENT
-.SH WARNINGS
+.SS Warnings
 .INDENT 0.0
 .TP
 .B \fB\-W\fP
@@ -472,89 +486,126 @@ generated lexer. This warning is only applicable if the sentinel method of
 checking for the end of input is used.
 It is set to an error if \fBre2c:sentinel\fP configuration is used.
 .UNINDENT
-.SH SYNTAX
+.SH PROGRAM INTERFACE
 .sp
-A re2c program consists of a number of re2c blocks and directives intermixed
-with normal code. Each re2c block consists of a sequence of named
-definitions, configurations and rules that contain regular expressions. The
-generated lexer communicates with the outer world by the means of user
-interface.
-Rules consist of a regular expression followed by a user\-defined action
-(semantic action): a block of code that is executed in case of successful
-match. Semantic action can be either an arbitrary block of code enclosed in
-curly braces \fB{\fP and \fB}\fP, or a block of code without curly braces preceded
-with \fB:=\fP and ended with a newline that is not followed by a whitespace.
-If multiple rules match, longest match takes precedence. If multiple rules match
-the same string, the earlier rule takes priority. If \fB\-c \-\-conditions\fP option
-is used, then rules have more complex form described in the section about
-conditions.  There are two special kinds of rules:
+Re2c has a flexible interface that gives the user both the freedom and the responsibility
+to define how the generated code interacts with the outer program.
+There are two major options:
 .INDENT 0.0
 .IP \(bu 2
-Default rule \fB*\fP which has the lowest priority reagrdless of its place in
-the source code, matches any code unit and consumes exactly one code unit.
-This rule should always be defined.
+\fBPointer API\fP\&.
+It is also called "default API", since it was historically the first, and for a long time the only one.
+This is a more restricted API based on C pointer arithmetics.
+It consists of pointer\-like primitives \fBYYCURSOR\fP, \fBYYMARKER\fP,
+\fBYYCTXMARKER\fP and \fBYYLIMIT\fP, which are normally defined as pointers
+of type \fBYYCTYPE*\fP\&.
+Pointer API is enabled by default for the C backend,
+and it cannot be used with other backends that do not have pointer arithmetics.
+.nf
+
+.fi
+.sp
 .IP \(bu 2
-EOF rule \fB$\fP which matches the end of input. This rule should be defined if
-the simplified EOF handling method is used.
+\fBGeneric API\fP\&.
+This is a less restricted API that does not assume pointer semantics.
+It consists of primitives
+\fBYYPEEK\fP,
+\fBYYSKIP\fP,
+\fBYYBACKUP\fP,
+\fBYYBACKUPCTX\fP,
+\fBYYSTAGP\fP,
+\fBYYSTAGN\fP,
+\fBYYMTAGP\fP,
+\fBYYMTAGN\fP,
+\fBYYRESTORE\fP,
+\fBYYRESTORECTX\fP,
+\fBYYRESTORETAG\fP,
+\fBYYSHIFT\fP,
+\fBYYSHIFTSTAG\fP,
+\fBYYSHIFTMTAG\fP and
+\fBYYLESSTHAN\fP\&.
+For the C backend generic API is enabled with \fB\-\-input custom\fP option or
+\fBre2c:flags:input = custom;\fP configuration;
+for the Go backend it is enabled by default.
+Generic API was added in version 0.14.
+It is intentionally designed to give the user as much freedom as possible
+in redefining the input model and the semantics of different actions performed
+by the generated code. As an example, one can override \fBYYPEEK\fP to check for
+the end of input before reading the input character, or do some logging, etc.
 .UNINDENT
 .sp
-Named definitions are of the form \fBname = regexp;\fP where \fBname\fP is an
-identifier that consists of letters, digits and underscores, and \fBregexp\fP is a
-regular expression. With \fB\-F \-\-flex\-syntax\fP option named definitions are also
-of the form \fBname regexp\fP\&. Each name should be defined before it is used.
-.SH REGULAR EXPRESSIONS
-.sp
-re2c uses the following syntax for regular expressions:
+Generic API has two styles:
 .INDENT 0.0
 .IP \(bu 2
-\fB"foo"\fP case\-sensitive string literal
-.IP \(bu 2
-\fB\(aqfoo\(aq\fP case\-insensitive string literal
-.IP \(bu 2
-\fB[a\-xyz]\fP, \fB[^a\-xyz]\fP character class (possibly negated)
-.IP \(bu 2
-\fB\&.\fP any character except newline
-.IP \(bu 2
-\fBR \e S\fP difference of character classes \fBR\fP and \fBS\fP
-.IP \(bu 2
-\fBR*\fP zero or more occurrences of \fBR\fP
-.IP \(bu 2
-\fBR+\fP one or more occurrences of \fBR\fP
-.IP \(bu 2
-\fBR?\fP optional \fBR\fP
-.IP \(bu 2
-\fBR{n}\fP repetition of \fBR\fP exactly \fBn\fP times
-.IP \(bu 2
-\fBR{n,}\fP repetition of \fBR\fP at least \fBn\fP times
-.IP \(bu 2
-\fBR{n,m}\fP repetition of \fBR\fP from \fBn\fP to \fBm\fP times
-.IP \(bu 2
-\fB(R)\fP just \fBR\fP; parentheses are used to override precedence or for POSIX\-style submatch
-.IP \(bu 2
-\fBR S\fP concatenation: \fBR\fP followed by \fBS\fP
-.IP \(bu 2
-\fBR | S\fP alternative: \fBR or S\fP
-.IP \(bu 2
-\fBR / S\fP lookahead: \fBR\fP followed by \fBS\fP, but \fBS\fP is not consumed
-.IP \(bu 2
-\fBname\fP the regular expression defined as \fBname\fP (or literal string \fB"name"\fP in Flex compatibility mode)
-.IP \(bu 2
-\fB{name}\fP the regular expression defined as \fBname\fP in Flex compatibility mode
-.IP \(bu 2
-\fB@stag\fP an \fIs\-tag\fP: saves the last input position at which \fB@stag\fP matches in a variable named \fBstag\fP
-.IP \(bu 2
-\fB#mtag\fP an \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a variable named \fBmtag\fP
+\fBFunction\-like\fP\&.
+This style is enabled with \fBre2c:api:style = functions;\fP configuration,
+and it is the default for C backend. In this style API primitives should be
+defined as functions or macros with parentheses, accepting the necessary
+arguments. For example, in C the default pointer API can be defined in
+function\-like style generic API as follows:
+.INDENT 2.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+#define  YYPEEK()                 *YYCURSOR
+#define  YYSKIP()                 ++YYCURSOR
+#define  YYBACKUP()               YYMARKER = YYCURSOR
+#define  YYBACKUPCTX()            YYCTXMARKER = YYCURSOR
+#define  YYRESTORE()              YYCURSOR = YYMARKER
+#define  YYRESTORECTX()           YYCURSOR = YYCTXMARKER
+#define  YYRESTORETAG(tag)        YYCURSOR = tag
+#define  YYLESSTHAN(len)          YYLIMIT \- YYCURSOR < len
+#define  YYSTAGP(tag)             tag = YYCURSOR
+#define  YYSTAGN(tag)             tag = NULL
+#define  YYSHIFT(shift)           YYCURSOR += shift
+#define  YYSHIFTSTAG(tag, shift)  tag += shift
+.ft P
+.fi
 .UNINDENT
+.UNINDENT
+.nf
+
+.fi
 .sp
-Character classes and string literals may contain the following escape sequences:
-\fB\ea\fP, \fB\eb\fP, \fB\ef\fP, \fB\en\fP, \fB\er\fP, \fB\et\fP, \fB\ev\fP, \fB\e\e\fP, octal escapes \fB\eooo\fP and hexadecimal escapes \fB\exhh\fP, \fB\euhhhh\fP and \fB\eUhhhhhhhh\fP\&.
-.SH INTERFACE CODE
+.IP \(bu 2
+\fBFree\-form\fP\&.
+This style is enabled with \fBre2c:api:style = free\-form;\fP configuration, and
+it is the default for Go backend. In this style API primitives can be defined
+as free\-form pieces of code, and instead of arguments they have interpolated
+variables of the form \fB@@{name}\fP, or optionally just \fB@@\fP if there is only one
+argument. The \fB@@\fP text is called "sigil". It can be redefined to any other
+text with \fBre2c:api:sigil\fP configuration. For example, the default pointer API
+can be defined in free\-form style generic API as follows:
+.INDENT 2.0
+.INDENT 3.5
 .sp
-Below is the list of all symbols which may be used by the lexer in order to interact with the outer world.
-These symbols should be defined by the user,
-either in the form of inplace configurations,
-or as variables, functions, macros and other language constructs.
-Which primitives are necessary depends on the particular use case.
+.nf
+.ft C
+re2c:define:YYPEEK       = "*YYCURSOR";
+re2c:define:YYSKIP       = "++YYCURSOR";
+re2c:define:YYBACKUP     = "YYMARKER = YYCURSOR";
+re2c:define:YYBACKUPCTX  = "YYCTXMARKER = YYCURSOR";
+re2c:define:YYRESTORE    = "YYCURSOR = YYMARKER";
+re2c:define:YYRESTORECTX = "YYCURSOR = YYCTXMARKER";
+re2c:define:YYRESTORETAG = "YYCURSOR = ${tag}";
+re2c:define:YYLESSTHAN   = "YYLIMIT \- YYCURSOR < @@{len}";
+re2c:define:YYSTAGP      = "@@{tag} = YYCURSOR";
+re2c:define:YYSTAGN      = "@@{tag} = NULL";
+re2c:define:YYSHIFT      = "YYCURSOR += @@{shift}";
+re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift}";
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS API primitives
+.sp
+Here is a list of API primitives that may be used by the generated code in order to interface with the outer program.
+Which primitives are needed depends on multiple factors, including
+the complexity of regular expressions, input representation, buffering, the use of various features and so on.
+All the necessary primitives should be defined by the user in the form of macros, functions, variables, free\-form pieces of code or any other suitable form.
+Re2c does not (and cannot) check the definitions, so if anything is missing or defined incorrectly the generated code will not compile.
 .INDENT 0.0
 .TP
 .B \fBYYCTYPE\fP
@@ -769,107 +820,7 @@ to the capturing parentheses in the matching rule. Array length must be
 at least \fByynmatch * 2\fP (usually \fBYYMAXNMATCH * 2\fP is a good choice).
 Used only with \fB\-P\fP \fB\-\-posix\-captures\fP option.
 .UNINDENT
-.SS Default API
-.sp
-Default API is the C language API that is based on pointer arithmetic.
-It consists of pointer\-like primitives \fBYYCURSOR\fP, \fBYYMARKER\fP,
-\fBYYCTXMARKER\fP and \fBYYLIMIT\fP, which are usually defined as pointers
-of type \fBYYCTYPE*\fP\&. It is possible to use STL iterators or any other
-abstraction, as long as it syntactically fits in the generated code.
-Default API is the default for the C backend, and it cannot be used with
-other backends.
-.SS Generic API
-.sp
-Generic API should be used if the the language backend has no pointer
-arithmetic, or if the default API is too restrictive.
-For the C backend generic API is enabled with \fB\-\-input custom\fP option or
-\fBre2c:flags:input = custom;\fP configuration. For the Go backend it is the only
-option and is enabled by default. Generic API consists of the following
-primitives:
-\fBYYPEEK\fP,
-\fBYYSKIP\fP,
-\fBYYBACKUP\fP,
-\fBYYBACKUPCTX\fP,
-\fBYYSTAGP\fP,
-\fBYYSTAGN\fP,
-\fBYYMTAGP\fP,
-\fBYYMTAGN\fP,
-\fBYYRESTORE\fP,
-\fBYYRESTORECTX\fP,
-\fBYYRESTORETAG\fP,
-\fBYYSHIFT\fP,
-\fBYYSHIFTSTAG\fP,
-\fBYYSHIFTMTAG\fP and
-\fBYYLESSTHAN\fP\&.
-They can be defined in any suitable way and don\(aqt need to have pointer
-semantics. For example, it is possible to read input directly
-from file without any buffering, or to disable \fBYYFILL\fP mechanism and perform
-end\-of\-input checking on each input character in \fBYYPEEK\fP\&. The detailed
-meaning of each API primitive is given in the user interface section.
-.sp
-Generic API has two styles: function\-like and free\-form.
-Function\-like style is enabled with \fBre2c:api:style = functions;\fP configuration
-(it is the default for the C backend). In this style API primitives should be
-defined as functions or macros with parentheses, accepting the necessary
-arguments. For example, the default C API can be defined in function\-like
-style generic API as follows:
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-re2c:api:style = functions;
-#define  YYPEEK()                 *YYCURSOR
-#define  YYSKIP()                 ++YYCURSOR
-#define  YYBACKUP()               YYMARKER = YYCURSOR
-#define  YYBACKUPCTX()            YYCTXMARKER = YYCURSOR
-#define  YYRESTORE()              YYCURSOR = YYMARKER
-#define  YYRESTORECTX()           YYCURSOR = YYCTXMARKER
-#define  YYRESTORETAG(tag)        YYCURSOR = tag
-#define  YYLESSTHAN(len)          YYLIMIT \- YYCURSOR < len
-#define  YYSTAGP(tag)             tag = YYCURSOR
-#define  YYSTAGN(tag)             tag = NULL
-#define  YYSHIFT(shift)           YYCURSOR += shift
-#define  YYSHIFTSTAG(tag, shift)  tag += shift
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.sp
-Free\-form style is enabled with \fBre2c:api:style = free\-form;\fP configuration
-(it is the default for the Go backend). In this style API primitives can be defined
-as free\-form pieces of code, and instead of arguments they have interpolated
-variables of the form \fB@@{name}\fP, or just \fB@@\fP if there is only one
-argument. The \fB@@\fP text is called "sigil". It can be redefined to any other
-text with \fBre2c:api:sigil\fP configuration. For example, the default C API
-can be defined in free\-form style generic API as follows:
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-re2c:api:style = free\-form;
-re2c:api:sigil = "$";
-re2c:define:YYPEEK       = "*YYCURSOR";
-re2c:define:YYSKIP       = "++YYCURSOR";
-re2c:define:YYBACKUP     = "YYMARKER = YYCURSOR";
-re2c:define:YYBACKUPCTX  = "YYCTXMARKER = YYCURSOR";
-re2c:define:YYRESTORE    = "YYCURSOR = YYMARKER";
-re2c:define:YYRESTORECTX = "YYCURSOR = YYCTXMARKER";
-re2c:define:YYRESTORETAG = "YYCURSOR = ${tag}";
-re2c:define:YYLESSTHAN   = "YYLIMIT \- YYCURSOR < ${len}";
-re2c:define:YYSTAGP      = "${tag} = YYCURSOR";
-re2c:define:YYSTAGN      = "${tag} = NULL";
-re2c:define:YYSHIFT      = "YYCURSOR += ${shift}";
-re2c:define:YYSHIFTSTAG  = "${tag} += ${shift}";
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.sp
-In both examples m\-tag operations \fBYYMTAGP\fP, \fBYYMTAGN\fP and \fBYYSHIFTMTAG\fP
-are not defined, as they have no default implementation.
-.SH DIRECTIVES
+.SS Directives
 .sp
 Below is the list of all directives provided by re2c (in no particular order).
 More information on each directive can be found in the related sections.
@@ -927,7 +878,7 @@ written to the header file specified with \fB\-t \-\-type\-header\fP option.
 This directive marks the end of header file started with
 \fB/*!header:re2c:on*/\fP\&.
 .UNINDENT
-.SH CONFIGURATIONS
+.SS Configurations
 .INDENT 0.0
 .TP
 .B \fBre2c:flags:t\fP, \fBre2c:flags:type\-header\fP
@@ -1299,6 +1250,52 @@ Same as \fB\-\-dfa\-minimization\fP command\-line option.
 .B \fBre2c:flags:eager\-skip\fP
 Same as \fB\-\-eager\-skip\fP command\-line option.
 .UNINDENT
+.SH REGULAR EXPRESSIONS
+.sp
+re2c uses the following syntax for regular expressions:
+.INDENT 0.0
+.IP \(bu 2
+\fB"foo"\fP case\-sensitive string literal
+.IP \(bu 2
+\fB\(aqfoo\(aq\fP case\-insensitive string literal
+.IP \(bu 2
+\fB[a\-xyz]\fP, \fB[^a\-xyz]\fP character class (possibly negated)
+.IP \(bu 2
+\fB\&.\fP any character except newline
+.IP \(bu 2
+\fBR \e S\fP difference of character classes \fBR\fP and \fBS\fP
+.IP \(bu 2
+\fBR*\fP zero or more occurrences of \fBR\fP
+.IP \(bu 2
+\fBR+\fP one or more occurrences of \fBR\fP
+.IP \(bu 2
+\fBR?\fP optional \fBR\fP
+.IP \(bu 2
+\fBR{n}\fP repetition of \fBR\fP exactly \fBn\fP times
+.IP \(bu 2
+\fBR{n,}\fP repetition of \fBR\fP at least \fBn\fP times
+.IP \(bu 2
+\fBR{n,m}\fP repetition of \fBR\fP from \fBn\fP to \fBm\fP times
+.IP \(bu 2
+\fB(R)\fP just \fBR\fP; parentheses are used to override precedence or for POSIX\-style submatch
+.IP \(bu 2
+\fBR S\fP concatenation: \fBR\fP followed by \fBS\fP
+.IP \(bu 2
+\fBR | S\fP alternative: \fBR or S\fP
+.IP \(bu 2
+\fBR / S\fP lookahead: \fBR\fP followed by \fBS\fP, but \fBS\fP is not consumed
+.IP \(bu 2
+\fBname\fP the regular expression defined as \fBname\fP (or literal string \fB"name"\fP in Flex compatibility mode)
+.IP \(bu 2
+\fB{name}\fP the regular expression defined as \fBname\fP in Flex compatibility mode
+.IP \(bu 2
+\fB@stag\fP an \fIs\-tag\fP: saves the last input position at which \fB@stag\fP matches in a variable named \fBstag\fP
+.IP \(bu 2
+\fB#mtag\fP an \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a variable named \fBmtag\fP
+.UNINDENT
+.sp
+Character classes and string literals may contain the following escape sequences:
+\fB\ea\fP, \fB\eb\fP, \fB\ef\fP, \fB\en\fP, \fB\er\fP, \fB\et\fP, \fB\ev\fP, \fB\e\e\fP, octal escapes \fB\eooo\fP and hexadecimal escapes \fB\exhh\fP, \fB\euhhhh\fP and \fB\eUhhhhhhhh\fP\&.
 .SH EOF HANDLING
 .sp
 Re2c provides a number of ways to handle end\-of\-input situation. Which way to

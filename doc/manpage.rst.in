@@ -18,11 +18,13 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Re2c is a lexer generator for C/C++ and Go. It finds regular expression specifications
-in special-form comments and compiles them to deterministic finite state automata.
-The user needs to provide interface code to bind the generated lexer to the program environment.
-Re2c has many options, configurations and directives for customization of the generated code.
-This manpage includes examples for re2RE2C_LANG.
+re2c is a tool for generating fast lexical analyzers for C, C++ and Go.
+
+RE2C_DISCLAIMER
+
+Syntax
+======
+.. include:: @top_srcdir@/doc/manual/syntax/syntax.rst_
 
 EXAMPLE
 =======
@@ -44,34 +46,39 @@ Output file
 Options
 =======
 .. include:: @top_srcdir@/doc/manual/options/options.rst_
+
+Debug options
+-------------
 .. include:: @top_srcdir@/doc/manual/options/debug.rst_
+
+Internal options
+----------------
 .. include:: @top_srcdir@/doc/manual/options/internal.rst_
 
 Warnings
-========
+--------
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst_
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_list.rst_
 
-Syntax
-======
-.. include:: @top_srcdir@/doc/manual/syntax/syntax.rst_
+Program interface
+=================
+.. include:: @top_srcdir@/doc/manual/api/api.rst_
+
+API primitives
+--------------
+.. include:: @top_srcdir@/doc/manual/api/interface.rst_
+
+Directives
+----------
+.. include:: @top_srcdir@/doc/manual/directives/directives.rst_
+
+Configurations
+--------------
+.. include:: @top_srcdir@/doc/manual/configurations/configurations.rst_
 
 Regular expressions
 ===================
 .. include:: @top_srcdir@/doc/manual/regexps/regular_expressions.rst_
-
-Interface code
-==============
-.. include:: @top_srcdir@/doc/manual/api/interface.rst_
-.. include:: @top_srcdir@/doc/manual/api/api.rst_
-
-Directives
-==============
-.. include:: @top_srcdir@/doc/manual/directives/directives.rst_
-
-Configurations
-==============
-.. include:: @top_srcdir@/doc/manual/configurations/configurations.rst_
 
 EOF handling
 ============
