@@ -52,7 +52,7 @@ div.document div.math img {
 div.document code {
     font-size: 85%;
     padding: 1px;
-    border: 1px solid darkgray;
+    border: 1px solid lightgray;
     background-color: aliceblue;
 }
 /* :download: role; should look like a normal link rather than inline code block */
@@ -175,5 +175,9 @@ a:focus { outline: none; }
 }
 
 ::selection {
-  background: lightsteelblue;
+    background: lightsteelblue;
 }
+
+pre {-moz-tab-size: 4;} /* Firefox */
+pre {tab-size: 4;}
+

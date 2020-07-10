@@ -26,6 +26,14 @@
     treat single-quoted strings as case-sensitive and double-quoted strings
     as case-insensitive.
 
+``--case-ranges``
+    Collapse consecutive cases in a switch statements into a range of the form
+    ``case low ... high:``. This syntax is an extension of the C/C++ language,
+    supported by compilers like GCC, Clang and Tcc. The main advantage over
+    using single cases is smaller generated C code and faster generation time,
+    although for some compilers like Tcc it also results in smaller binary size.
+    This option doesn't work for the Go backend.
+
 ``-e --ecb``
     Generate a lexer that reads input in EBCDIC encoding.
     re2c assumes that character range is 0 -- 0xFF an character size is 1 byte.
@@ -60,10 +68,10 @@
 
 ``-g --computed-gotos``
     Optimize conditional jumps using non-standard "computed goto" extension
-    (which must be supported by the C/C++ compiler). re2c generates jump tables
+    (which must be supported by the compiler). re2c generates jump tables
     only in complex cases with a lot of conditional branches. Complexity
     threshold can be configured with ``cgoto:threshold`` configuration. This
-    option implies ``-b``.
+    option implies ``-b``. This option doesn't work for the Go backend.
 
 ``-I PATH``
     Add ``PATH`` to the list of locations which are used when searching for
@@ -77,11 +85,10 @@
     is tracked by some version control system or IDE.
 
 ``--input <default | custom>``
-    Specify re2c input API.
-    Option ``default`` is the default API composed of pointer-like primitives
-    ``YYCURSOR``, ``YYMARKER``, ``YYLIMIT`` etc.
-    Option ``custom`` is the generic API composed of function-like primitives
-    ``YYPEEK()``, ``YYSKIP()``, ``YYBACKUP()``, ``YYRESTORE()`` etc.
+    Specify the API used by the generated code to interface with used-defined
+    code. Option ``default`` is the C API based on pointer arithmetic (it is
+    the default for the C backend). Option ``custom`` is the generic API (it is
+    the default for the Go backend).
 
 ``--input-encoding <ascii | utf8>``
     Specify the way re2c parses regular expressions.
@@ -91,7 +98,8 @@
     characters.
 
 ``--lang <c | go>``
-    Specify the output language (the default is ``c``).
+    Specify the output language. Supported languages are C and Go (the default
+    is C).
 
 ``--location-format <gnu | msvc>``
     Specify location format in messages.
@@ -122,11 +130,12 @@
     program. Additionally, generate input files with strings derived from the
     regular grammar and compressed match results that are used to verify
     "skeleton" behavior on all inputs. This option is useful for finding bugs
-    in optimizations and code generation.
+    in optimizations and code generation. This option doesn't work for the Go
+    backend.
 
 ``-s --nested-ifs``
     Use nested ``if`` statements instead of ``switch`` statements in conditional
-    jumps. This usually results in more efficient code with non-optimizing C/C++
+    jumps. This usually results in more efficient code with non-optimizing
     compilers.
 
 ``-T --tags``

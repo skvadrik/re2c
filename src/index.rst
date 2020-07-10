@@ -5,31 +5,25 @@ re2c
 .. toctree::
     :hidden:
 
-    User manual        </manual/manual>
+    User manual (C)    </manual/manual_c>
+    User manual (Go)   </manual/manual_go>
     Build instructions </install/install>
     Release notes      </releases/release_notes>
     Changelog          </releases/changelog/changelog>
 
-Re2c is a free and open-source lexer generator for C and C++.
-Its main goal is to generate fast lexers that match or exceed the speed of
-carefully optimized hand-written code. Re2c uses direct encoding of finite-state
-machines instead of the table-driven approach, and optimizes the generated code.
-Another distinctive feature re2c is an unusually flexible user interface:
-instead of assuming a fixed program template, re2c leaves the definition of the
-interface code to the user. This gives the user a lot of freedom in customizing
-the lexer for a particular environment and input model. Re2c supports fast and
-lightweight submatch extraction with either POSIX or leftmost greedy semantics.
-Re2c is used by many other projects
-(such as
+Re2c is a free and open-source lexer generator for C, C++ and Go.
+It compiles regular expressions to determinisitic finite automata
+and encodes the automata in the form of a program in the target language.
+The main advantages of re2c are speed of the generated code and a flexible user interface
+that allows one to adapt the generated lexer to a particular environment and input model.
+Re2c supports fast and lightweight submatch extraction with either POSIX or leftmost greedy semantics.
+Re2c is used in other open-source projects such as
 `php <http://php.net/>`_,
 `ninja <https://ninja-build.org/>`_,
 `yasm <http://yasm.tortall.net/>`_,
 `spamassassin <https://spamassassin.apache.org/>`_,
 `BRL-CAD <http://brlcad.org/>`_
-and `wake <https://github.com/sifive/wake>`_)
-and aims at being fully backward compatible. On the other hand, it is a research
-project and a playground for the development of new algorithms in the field of
-formal grammars and automata.
+and `wake <https://github.com/sifive/wake>`_, etc.
 
 
 .. |feed| image:: feed/feed/feed.png
@@ -38,7 +32,7 @@ formal grammars and automata.
     :width:  2em
 
 |feed| `Subscribe <feed/atom.xml>`_ to receive the latest news and updates.
-See the `user manual <manual/manual.html>`_ for a complete overview with
+See the user manuals (`C <manual/manual_c.html>`_, `Go <manual/manual_go.html>`_) for a complete overview with
 examples.
 
 Download
@@ -46,8 +40,7 @@ Download
 
 You can get the
 `latest release <https://github.com/skvadrik/re2c/releases/latest>`_ on Github,
-as well as the `older releases <https://github.com/skvadrik/re2c/releases>`_
-(make sure you download the latest minor version in each series).
+as well as the `older releases <https://github.com/skvadrik/re2c/releases>`_.
 Many Linux distributions and other systems provide their own packages.
 Re2c source code is hosted on both Github
 (`<https://github.com/skvadrik/re2c>`_) and SourceForge
@@ -58,7 +51,7 @@ SourceForge is used as a backup repository and email hosting.
 Bugs & patches
 --------------
 
-Please send bugs reports, patches and other feedback to `github issue tracker
+Please send bugs reports, patches and other feedback to `Github issue tracker
 <https://github.com/skvadrik/re2c>`_ or email them to
 `re2c-devel@lists.sourceforge.net <re2c-devel@lists.sourceforge.net>`_ and
 `re2c-general@lists.sourceforge.net <re2c-general@lists.sourceforge.net>`_
@@ -70,19 +63,19 @@ Contributions are always welcome!
 Papers
 ------
 
-- `"RE2C: a more versatile scanner generator"
+- `RE2C: a more versatile scanner generator
   <1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps>`_
   by Peter Bumbulis and  Donald D. Cowan,
   ACM Letters on Programming Languages and Systems (LOPLAS),
   1994
 
-- `"Tagged Deterministic Finite Automata with Lookahead"
+- `Tagged Deterministic Finite Automata with Lookahead
   <2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_
   by Ulya Trofimovich,
   arXiv:1907.08837,
   2017
 
-- `"Efficient POSIX submatch extraction on NFA"
+- `Efficient POSIX submatch extraction on NFA
   <2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf>`_
   by Angelo Borsotti and Ulya Trofimovich,
   2019

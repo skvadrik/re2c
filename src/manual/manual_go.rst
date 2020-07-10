@@ -1,0 +1,181 @@
+++++++++++++++++++++++++++
+User manual (re2go)
+++++++++++++++++++++++++++
+
+
+.. toctree::
+    :hidden:
+
+    warnings/warnings
+
+|
+
+.. raw:: html
+
+    <p style="color:gray";><i>Note: This manual includes examples for Go, but it refers to re2c (rather than re2go) as the name of the program in general.</i></p>
+
+.. include:: /manual/syntax/syntax.rst_
+
+Here is an example program that shows various aspects of re2c syntax:
+
+.. literalinclude:: ../examples/go/01_basic.i--lang(go).re
+    :language: go
+
+This is the generated output:
+
+.. literalinclude:: ../examples/go/01_basic.i--lang(go).go
+    :language: go
+
+
+Command-line options
+====================
+.. include:: /manual/options/options.rst_
+
+|
+
+Debug options:
+
+.. include:: /manual/options/debug.rst_
+
+|
+
+Internal options:
+
+.. include:: /manual/options/internal.rst_
+
+|
+
+Warnings:
+
+.. include:: /manual/warnings/warnings_general.rst_
+
+|
+
+Individual warnings (see the `detailed descriptions <warnings/warnings.html>`_):
+
+.. include:: /manual/warnings/warnings_list.rst_
+
+Program interface
+=================
+.. include:: /manual/api/api.rst_
+
+API primitives
+--------------
+
+.. include:: /manual/api/interface.rst_
+
+Directives
+----------
+.. include:: /manual/directives/directives.rst_
+
+Configurations
+--------------
+.. include:: /manual/configurations/configurations.rst_
+
+Regular expressions
+===================
+.. include:: /manual/regexps/regular_expressions.rst_
+
+EOF handling
+============
+.. include:: /manual/eof/eof.rst_
+.. include:: /manual/eof/01_sentinel.rst_
+.. literalinclude:: ../examples/go/eof/01_sentinel.--lang(go).re
+    :language: go
+.. include:: /manual/eof/02_bounds_checking.rst_
+.. literalinclude:: ../examples/go/eof/02_bounds_checking.--lang(go).re
+    :language: go
+.. include:: /manual/eof/03_eof_rule.rst_
+.. literalinclude:: ../examples/go/eof/03_eof_rule.--lang(go).re
+    :language: go
+.. include:: /manual/eof/04_generic_api.rst_
+.. literalinclude:: ../examples/go/eof/05_generic_api_eof_rule.--lang(go).re
+    :language: go
+
+Buffer refilling
+================
+.. include:: /manual/fill/fill.rst_
+.. include:: /manual/fill/01_fill.rst_
+.. literalinclude:: ../examples/go/fill/01_fill.--lang(go).re
+    :language: go
+.. include:: /manual/fill/02_fill.rst_
+.. literalinclude:: ../examples/go/fill/02_fill.--lang(go).re
+    :language: go
+
+Include files
+=============
+.. include:: /manual/includes/includes.rst_
+
+Include file (definitions.go):
+
+.. literalinclude:: ../examples/go/includes/definitions.go
+    :language: go
+
+Input file:
+
+.. literalinclude:: ../examples/go/includes/include.i--lang(go).re
+    :language: go
+
+Header files
+============
+.. include:: /manual/headers/headers.rst_
+
+.. literalinclude:: ../examples/go/headers/header.i--lang(go)--type-header(src+lexer+lexer.go).re
+    :language: go
+
+The generated header file:
+
+.. literalinclude:: ../examples/go/headers/src/lexer/lexer.go
+    :language: go
+
+Submatch extraction
+===================
+.. include:: /manual/submatch/submatch.rst_
+.. include:: /manual/submatch/submatch_example_stags.rst_
+.. literalinclude:: ../examples/go/submatch/01_stags.--lang(go).re
+    :language: go
+.. include:: /manual/submatch/submatch_example_posix.rst_
+.. literalinclude:: ../examples/go/submatch/03_posix.--lang(go).re
+    :language: go
+.. include:: /manual/submatch/submatch_example_mtags.rst_
+.. literalinclude:: ../examples/go/submatch/02_mtags.--lang(go).re
+    :language: go
+
+Storable state
+==============
+.. include:: /manual/state/state.rst_
+.. literalinclude:: ../examples/go/state/push.f--lang(go).re
+    :language: go
+
+Reusable blocks
+===============
+.. include:: /manual/reuse/reuse.rst_
+.. literalinclude:: ../examples/go/reuse/reuse.r--input-encoding(utf8)--lang(go).re
+    :language: go
+
+Encoding support
+================
+.. include:: /manual/encodings/encodings.rst_
+
+Start conditions
+================
+.. include:: /manual/conditions/conditions.rst_
+
+Here is an example program that uses start conditions to parse integer numbers in binary, octal, decimal and hexadecimal format:
+
+.. literalinclude:: ../examples/go/conditions/parse_u32_conditions.ci--lang(go).re
+    :language: go
+
+Skeleton programs
+=================
+.. include:: /manual/skeleton/skeleton.rst_
+.. include:: /manual/skeleton/skeleton_example.rst
+
+Visualization and debug
+=======================
+.. include:: /manual/dot/dot.rst_
+.. include:: /manual/dot/example.rst
+
+More examples
+=============
+.. include:: /examples/examples.rst

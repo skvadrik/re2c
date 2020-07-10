@@ -7,8 +7,8 @@
 }
 
 .highlight {
-    border: 1px solid darkgray;
-    border-left: 4px solid darkgray;
+    border: 1px solid lightgray;
+    border-left: 3px solid lightgray;
     padding: 0 1em 0 1em;
     background-color: aliceblue;
     display: block;

@@ -1,8 +1,3 @@
-Debug options
--------------
-
-The following options allow to visualize and debug the generated programs;
-most of them are enabled only in debug builds.
 
 ``-D --emit-dot``
     Instead of normal output generate lexer graph in .dot format.

@@ -1,8 +1,3 @@
-Internal options
-----------------
-
-The following options are primarily intended for re2c developers; they are
-unstable and control re2c internals.
 
 ``--dfa-minimization <moore | table>``
     Internal option: DFA minimization algorithm used by re2c. The ``moore``

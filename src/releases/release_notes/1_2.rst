@@ -4,17 +4,17 @@ Release 1.2
 This release adds a handful of useful features and finalizes two-year
 research effort on POSIX disambiguation.
 
-First and foremost, :ref:`EOF rule <manual/manual:eof rule>` has been added to
+First and foremost, :ref:`EOF rule <manual/manual_c:eof rule>` has been added to
 re2c. It is a new method of checking for the end of input, which aims at being
 both generic and simple to use. Historically re2c has a
-:ref:`number of ways <manual/manual:eof handling>` to handle EOF situation. The
+:ref:`number of ways <manual/manual_c:eof handling>` to handle EOF situation. The
 simplest and the most efficient method is
-:ref:`using a sentinel symbol <manual/manual:using sentinel symbol>`, but it
+:ref:`using a sentinel symbol <manual/manual_c:using sentinel symbol>`, but it
 has limited applicability. The most widely used and generic method is
-:ref:`bounds checking with padding <manual/manual:bounds checking with padding>`,
+:ref:`bounds checking with padding <manual/manual_c:bounds checking with padding>`,
 but it is rather complex and requires input buffering.
 Finally, it is possible to define custom EOF handling methods
-by :ref:`using the generic API <manual/manual:using generic api>`. However, such
+by :ref:`using the generic API <manual/manual_c:using generic api>`. However, such
 methods are not necessarily correct and are likely to be slower than other
 methods. The new method, EOF rule, tries to combine the simplicity and
 efficiency of the sentinel symbol and the generality of bounds checking.
@@ -32,7 +32,7 @@ EOF rule may be slightly better or worse than bounds checking with padding.
 See the user manual for more details and examples.
 
 Another important new feature is the possibility to :ref:`include other files
-<manual/manual:include files>`. Re2c provides a directive
+<manual/manual_c:include files>`. Re2c provides a directive
 ``/*!include:re2c "file.re" */``, where ``file.re`` is the name of the included
 file.
 Re2c looks for included files in the directory of the including file and in the
@@ -42,7 +42,7 @@ files that can be found in the ``include/`` sub-directory of the project. These
 files contain useful definitions and form something like a standard library
 for re2c. Currently there is one available include, ``unicode_categories.re``.
 
-Re2c now allows to :ref:`generate header file <manual/manual:header files>`
+Re2c now allows to :ref:`generate header file <manual/manual_c:header files>`
 from the input file using option ``-t --type-header`` or
 ``re2c:flags:t`` and ``re2c:flags:type-header`` configurations and the newly
 added directives ``/*!header:re2c:on*/`` and ``/*!header:re2c:off*/``.
@@ -61,7 +61,7 @@ behavior and parse ``"∀x ∃y"`` as a sequence of 4-byte Unicode code points
 ``2200 78 20 2203 79`` (hexadecimal). Note that the new option affects only
 parsing, and not the code generation.
 
-Re2c now allows to mix :ref:`reusable blocks <manual/manual:reusable blocks>`
+Re2c now allows to mix :ref:`reusable blocks <manual/manual_c:reusable blocks>`
 with normal blocks when ``-r --reuse`` option is used. This is very useful in
 cases when the input file contains many re2c blocks, and only some of them need
 to be reused (a good example is re2c own lexer, which has to use certain rules
