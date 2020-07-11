@@ -35,6 +35,17 @@ AM_COND_IF([REBUILD_DOCS], [
 ])
 
 
+# --enable-lexers
+AC_ARG_ENABLE([lexers], [AS_HELP_STRING([--enable-lexers], [regenerate lexers])])
+AM_CONDITIONAL([REBUILD_LEXERS], [test "x$enable_lexers" = "xyes"])
+AM_COND_IF([REBUILD_LEXERS], [
+    AC_ARG_VAR(RE2C_FOR_BUILD, re2c executable used to regenerate lexers)
+    AS_IF([test ! -x "$RE2C_FOR_BUILD"], [
+        AC_MSG_ERROR([RE2C_FOR_BUILD must be set to an executable file with --enable-lexers])
+    ])
+])
+
+
 # --enable-libs
 AC_ARG_ENABLE([libs], [AS_HELP_STRING([--enable-libs], [build libraries])])
 AM_CONDITIONAL([WITH_LIBS], [test "x$enable_libs" = "xyes"])

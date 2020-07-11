@@ -9,12 +9,11 @@ if DEBUG
 AM_CXXFLAGS += -DRE2C_DEBUG
 endif
 
-RE2CFLAGS = -br -W
+RE2CFLAGS = -br -W -Wno-match-empty-string
 
 # binary
 bin_PROGRAMS = re2c
 noinst_PROGRAMS =
-RE2C = re2c$(EXEEXT)
 
 # sources
 re2c_HDR = \
@@ -310,26 +309,35 @@ CLEANFILES = \
 	$(re2c_GEN) \
 	$(DOCS)
 
+if REBUILD_LEXERS
+# generate lexer and update bootstrap files
 .re.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN) if test -x $(RE2C); \
+	$(AM_V_GEN)if test -x $(RE2C_FOR_BUILD); \
 	then \
-		$(top_builddir)/$(RE2C) $(RE2CFLAGS) -o $@ $< && \
+		$(RE2C_FOR_BUILD) $(RE2CFLAGS) -o $@ $< && \
 		cp $(@:cc=[ch]*) $(top_srcdir)/bootstrap/$(@D); \
 	else \
-		cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D); \
+		echo "RE2C is not an executable file" && exit 1 ; \
 	fi
+else
+# copy bootstrap files
+.re.cc:
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D)
+	$(AM_V_at)echo "Reconfigure with --enable-lexers to regenerate $@"
+endif
 
 # cannot update bootstrap with distcheck (it makes srcdir readonly),
 # so we update bootstrap only on incremental build (if re2c binary exists)
 .ypp.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN) if test $(BISON) = "no"; \
+	$(AM_V_GEN)if test $(BISON) = "no"; \
 	then \
 		cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D); \
 	else \
 		$(BISON) --output=$@ --defines=$(@:cc=h) $< && \
-		if test -x $(RE2C); then \
+		if test -x $(top_builddir)/re2c$(EXEEXT); then \
 			cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D); \
 		fi; \
 	fi
@@ -371,7 +379,7 @@ $(re2c_GEN_HELP): $(re2c_CUSTOM_HELP) $(GENHELP)
 		&& rm $@.1
 else
 docs: $(DOCS) $(re2c_GEN_HELP)
-	$(AM_V_at)echo "Reconfigure to rebuild docs: ./configure --enable-docs"
+	$(AM_V_at)echo "Reconfigure with --enable-docs to rebuild docs"
 # copy bootstrap manpage for C
 $(DOC_C): $(re2c_BOOT_DOC_C)
 	$(AM_V_at)$(MKDIR_P) $(@D)
