@@ -3,7 +3,7 @@
 # normal tests
 # - exclude _clang_msan as it requires libc++ built with MSan
 for d in __build{,_check_headers,_asan,_ubsan,_lsan,_clang,_m32,_glibcxx_debug} ; do
-    ./${d}.sh \
+    build/${d}.sh \
         && cd ${d} \
         && make check VERBOSE=1 \
         && cd .. \
@@ -11,7 +11,7 @@ for d in __build{,_check_headers,_asan,_ubsan,_lsan,_clang,_m32,_glibcxx_debug} 
 done
 
 # skeleton
-./__build.sh \
+build/__build.sh \
     && cd __build \
     && ./run_tests.sh --skeleton \
     && cd .. \
@@ -19,7 +19,7 @@ done
 
 # mingw
 # - exclude _mingw_slibtool, as it fails to link EXEs due to symbol collisions
-./__build_mingw.sh \
+build/__build_mingw.sh \
     && cd __build_mingw \
     && make wtests \
     && cd .. \
