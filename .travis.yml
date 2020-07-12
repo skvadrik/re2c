@@ -26,33 +26,52 @@ env:
 
 script:
   - |
-    if [ x${CMAKE} = "xyes" ]; then
-        mkdir -p ${BUILD_DIR} && cd ${BUILD_DIR}
+    function run_cmake() {
         cmake \
             -B . -S ${CONFIG_DIR} \
-            -DCMAKE_INSTALL_PREFIX="${CONFIG_DIR}/${BUILD_DIR}/install" \
             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DCMAKE_C_FLAGS="${COMMON_FLAGS}" \
             -DCMAKE_CXX_FLAGS="${COMMON_FLAGS}" \
             -DCMAKE_EXE_LINKER_FLAGS="${COMMON_FLAGS}" \
             -DCMAKE_SHARED_LINKER_FLAGS="${COMMON_FLAGS}" \
-            -DRE2C_BUILD_LIBS=on \
-            -DRE2C_BUILD_RE2GO=on \
-            -DRE2C_REBUILD_DOCS=on
-    else
-        ./autogen.sh
-        mkdir -p ${BUILD_DIR} && cd ${BUILD_DIR}
+            $@
+    }
+    function run_configure() {
         ${CONFIG_DIR}/configure \
-            --prefix="$(pwd)"/re2c-install \
-            --enable-docs \
-            --enable-libs \
-            --enable-golang \
             ${CONFIG_FLAGS} \
             CFLAGS="${COMMON_FLAGS}" \
             CXXFLAGS="${COMMON_FLAGS}" \
             LDFLAGS="${COMMON_FLAGS}" \
-            || cat config.log
+            $@
+    }
+  - |
+    if [ x${CMAKE} = "xyes" ]; then
+        mkdir -p ${BUILD_DIR} && cd ${BUILD_DIR}
+        run_cmake -DCMAKE_INSTALL_PREFIX="$(pwd)/install"
+    else
+        ./autogen.sh
+        mkdir -p ${BUILD_DIR} && cd ${BUILD_DIR}
+        run_configure --prefix="$(pwd)/install"
     fi
+  - make -j$(nproc)
+  - make install
+  - |
+    if [ x${CMAKE} = "xyes" ]; then
+        run_cmake -DCMAKE_INSTALL_PREFIX="$(pwd)/install-2" \
+            -DRE2C_BUILD_RE2GO=on \
+            -DRE2C_BUILD_LIBS=on \
+            -DRE2C_REBUILD_DOCS=on \
+            -DRE2C_REBUILD_LEXERS=on \
+            -DRE2C_FOR_BUILD="$(pwd)/install/bin/re2c"
+    else
+        run_configure --prefix="$(pwd)/install-2" \
+            --enable-golang \
+            --enable-libs \
+            --enable-docs \
+            --enable-lexers \
+            RE2C_FOR_BUILD="$(pwd)/install/bin/re2c"
+    fi
+  - find ${CONFIG_DIR}/src -name '*.re' | xargs touch
   - make -j$(nproc)
   - |
     if [ x${SKELETON} = "xyes" ]; then
