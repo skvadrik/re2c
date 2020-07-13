@@ -1,7 +1,7 @@
 DESCRIPTION
 -----------
 
-re2c is a free and open-source lexer generator for C and C++.
+re2c is a free and open-source lexer generator for C, C++ and Go.
 
 Its main goal is generating fast lexers: at least as fast as their reasonably
 optimized hand-coded counterparts. Instead of using traditional table-driven
@@ -19,7 +19,7 @@ code and adapt the generated lexer to any particular environment.
 DOCUMENTATION
 -------------
 
-Official re2c website is [re2c.org](http://re2c.org).
+Official re2c website is [re2c.org](http://re2c.org). It has a lot of examples.
 
 
 DOWNLOAD
@@ -40,37 +40,32 @@ Github is the main repo, sourceforge is a mirror and can be slightly outdated.
 BUILD
 -----
 
-The simplest possible way to build re2c is this:
-
-```
-$ ./configure [--prefix=<prefix>]
-$ make
-$ make install
-```
-See the [official documentation](http://re2c.org/install/install.html) for full details on more sophisticated build types.
-If you want to build from git, you will first need to generate autotools files:
-
-```
-$ ./autogen.sh
-```
+re2c has two build systems: Autotools and CMake. Both are maintained and tested
+on Travis CI. See [the documentation](http://re2c.org/install/install.html) for
+instructions how to build re2c.
 
 
-MAILING LISTS
--------------
+FEEDBACK
+--------
+
+Bugtracker:
+
+- https://github.com/skvadrik/re2c/issues
+
+Mailing lists:
 
 - re2c-general@lists.sourceforge.net
 - re2c-devel@lists.sourceforge.net
 
+IRC channel:
+
+- freenode/#re2c
+
 You are welcome to ask for help or share your thoughts and ideas.
-
-
-BUGS
-----
-Please report any bugs and send feature requests to https://github.com/skvadrik/re2c/issues.
 
 
 AUTHORS
 -------
 Re2c was originally written by Peter Bumbulis <peter@csg.uwaterloo.ca>.
-Since then many people contributed to the project.
-Current maintainers are Ulya Trofimovich <skvadrik@gmail.com> and Dan Nuffer <nuffer@users.sourceforge.net>.
+Since then many people contributed to the project. The current maintainer is
+Ulya Trofimovich <skvadrik@gmail.com>.
