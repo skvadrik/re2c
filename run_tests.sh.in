@@ -279,7 +279,7 @@ done
 
 # remove directories that are empty or contain only .inc files
 for d in $(find $test_blddir -depth -type d); do
-    [ -z "$(find $d -type f ! -name '*.inc')" ] && rm -rf "$d"
+    [ -z "$(find $d -type f ! \( -name '*.inc' -o -name '*.h' -o -name '*.go' \) )" ] && rm -rf "$d"
 done
 
 # report results
