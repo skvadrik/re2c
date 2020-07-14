@@ -62,7 +62,6 @@ re2c_HDR = \
 	src/util/allocate.h \
 	src/util/attribute.h \
 	src/util/c99_stdint.h \
-	src/util/counter.h \
 	src/util/fixed_allocator.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
