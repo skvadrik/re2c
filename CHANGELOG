@@ -2,6 +2,92 @@ Changelog
 =========
 
 ----
+2.0x
+----
+
+2.0 (2020-07-20)
+~~~~~~~~~~~~~~~~
+
+- Added new code generation backend for Go and a new ``re2go`` program
+  (`#272 <https://github.com/skvadrik/re2c/issues/272>`_: Go support).
+  Added option ``--lang <c | go>``.
+
+- Added CMake build system as an alternative to Autotools
+  (`#275 <https://github.com/skvadrik/re2c/pull/275>`_:
+  Add a CMake build system (thanks to ligfx),
+  `#244 <https://github.com/skvadrik/re2c/issues/244>`_: Switching to CMake).
+
+- Changes in generic API:
+
+  + Removed primitives ``YYSTAGPD`` and ``YYMTAGPD``.
+  + Added primitives ``YYSHIFT``, ``YYSHIFTSTAG``, ``YYSHIFTMTAG``
+    that allow to express fixed tags in terms of generic API.
+  + Added configurations ``re2c:api:style`` and ``re2c:api:sigil``.
+  + Added named placeholders in interpolated configuration strings.
+
+- Changes in reuse mode (``-r, --reuse`` option):
+
+  + Do not reset API-related configurations in each `use:re2c` block
+    (`#291 <https://github.com/skvadrik/re2c/issues/291>`_:
+    Defines in rules block are not propagated to use blocks).
+  + Use block-local options instead of last block options.
+  + Do not accumulate options from rules/reuse blocks in whole-program options.
+  + Generate non-overlapping YYFILL labels for reuse blocks.
+  + Generate start label for each reuse block in storable state mode.
+
+- Changes in start-conditions mode (``-c, --start-conditions`` option):
+
+  + Allow to use normal (non-conditional) blocks in `-c` mode
+    (`#263 <https://github.com/skvadrik/re2c/issues/263>`_:
+    allow mixing conditional and non-conditional blocks with -c,
+    `#296 <https://github.com/skvadrik/re2c/issues/296>`_:
+    Conditions required for all lexers when using '-c' option).
+  + Generate condition switch in every re2c block
+    (`#295 <https://github.com/skvadrik/re2c/issues/295>`_:
+    Condition switch generated for only one lexer per file).
+
+- Changes in the generated labels:
+
+  + Use ``yyeof`` label prefix instead of ``yyeofrule``.
+  + Use ``yyfill`` label prefix instead of ``yyFillLabel``.
+  + Decouple start label and initial label (affects label numbering).
+
+- Removed undocumented configuration ``re2c:flags:o``, ``re2c:flags:output``.
+
+- Changes in ``re2c:flags:t``, ``re2c:flags:type-header`` configuration:
+  filename is now relative to the output file directory.
+
+- Added option ``--case-ranges`` and configuration ``re2c:flags:case-ranges``.
+
+- Extended fixed tags optimization for the case of fixed-counter repetition.
+
+- Fixed bugs related to EOF rule:
+
+  + `#276 <https://github.com/skvadrik/re2c/issues/276>`_:
+    Example 01_fill.re in docs is broken
+  + `#280 <https://github.com/skvadrik/re2c/issues/280>`_:
+    EOF rules with multiple blocks
+  + `#284 <https://github.com/skvadrik/re2c/issues/284>`_:
+    mismatched YYBACKUP and YYRESTORE
+    (Add missing fallback states with EOF rule)
+
+- Fixed miscellaneous bugs:
+
+  + `#286 <https://github.com/skvadrik/re2c/issues/286>`_:
+    Incorrect submatch values with fixed-length trailing context.
+  + `#297 <https://github.com/skvadrik/re2c/issues/297>`_:
+    configure error on ubuntu 18.04 / cmake 3.10
+
+- Changed bootstrap process (require explicit configuration flags and a path to
+  re2c executable to regenerate the lexers).
+
+- Added internal options ``--posix-prectable <naive | complex>``.
+
+- Added debug option ``--dump-dfa-tree``.
+
+- Major revision of the paper "Efficient POSIX submatch extraction on NFA".
+
+----
 1.3x
 ----
 
