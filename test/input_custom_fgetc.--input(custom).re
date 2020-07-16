@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT  --input custom
 #include <stdio.h>
 
 char peek (FILE * f)

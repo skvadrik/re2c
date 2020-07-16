@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 /*!re2c
     re2c:eof = 0;
 

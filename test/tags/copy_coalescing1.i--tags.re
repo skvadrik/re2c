@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 // This test demonstrates the need for copy coalescing during
 // allocation of tag variables: low interference allows for many
 // ways of partitioning tag versions into equivalence classes.

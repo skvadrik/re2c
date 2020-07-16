@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -8
 /*!re2c
 	[\x00-\x7f]		{ return 0; }
 	[\x80-\u07ff]		{ return 1; }

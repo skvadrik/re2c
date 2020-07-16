@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -c --type-header condtype.h
 int main ()
 {
 	YYCONDTYPE cond;

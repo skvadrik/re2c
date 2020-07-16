@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -x --encoding-policy ignore
 #include <stdio.h>
 #include "utf16.h"
 #define YYCTYPE unsigned short

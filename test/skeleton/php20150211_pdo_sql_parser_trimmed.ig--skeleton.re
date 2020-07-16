@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ig --skeleton
 /*!re2c
     BINDCHR   = [:][a-zA-Z0-9_]+;
     QUESTION  = [?];

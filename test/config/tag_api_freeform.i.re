@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 /*!re2c
 re2c:api:style = free-form;
 re2c:define:YYLESSTHAN   = "lim - cur < @@{len}";

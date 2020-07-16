@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -b
 /*!re2c
 
 re2c:yybm:hex = 1;

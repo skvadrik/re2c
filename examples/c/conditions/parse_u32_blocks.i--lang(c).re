@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 #include <stdint.h>
 #include <limits.h>
 #include <assert.h>

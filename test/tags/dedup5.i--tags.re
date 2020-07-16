@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 // This test revealed a bug in liveness analyses that takes place
 // during tag deduplication: in loops, live tags added by non-looping
 // child paths failed to propagate into looping paths.

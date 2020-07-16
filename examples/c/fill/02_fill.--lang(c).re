@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>

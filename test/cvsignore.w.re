@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -w
 
 #define YYFILL(n) if (cursor >= limit) break;
 #define YYCTYPE unsigned short

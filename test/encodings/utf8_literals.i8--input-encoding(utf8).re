@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i8 --input-encoding utf8
 #include <assert.h>
 
 int lex(const char *YYCURSOR)

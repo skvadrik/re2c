@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 
 #define YYFILL(n) if (cursor >= limit) break;
 #define YYCTYPE char

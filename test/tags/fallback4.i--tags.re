@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 // This example shows that fallback tags should participate
 // in tag optimization: there is a chance that they will be
 // merged with other tags.

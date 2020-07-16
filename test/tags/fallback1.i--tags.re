@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 // This test demonstrates that fallback tags should be forward-propagated
 // from final states, and that merging all possible fallback tags and
 // backward-propagating them from default transitions is too crude,

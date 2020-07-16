@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cg
 /*!re2c
 
 <>			=> r1 { return NULL; }

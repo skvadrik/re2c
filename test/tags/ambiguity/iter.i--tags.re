@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 /*!re2c
     ((@a "a")*)* { @a }
     (("d" @d)*)* { @d }

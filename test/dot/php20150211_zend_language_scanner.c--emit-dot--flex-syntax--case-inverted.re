@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -c --emit-dot --flex-syntax --case-inverted
 /*
    +----------------------------------------------------------------------+
    | Zend Engine                                                          |

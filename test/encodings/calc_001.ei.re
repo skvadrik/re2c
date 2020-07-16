@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ei
 /* re2c lesson 001_upn_calculator, calc_001, (c) M. Boerger 2006 - 2007 */
 /*!ignore:re2c
 

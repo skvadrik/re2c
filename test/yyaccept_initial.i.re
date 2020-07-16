@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 // In this example initial state coincides with fallback state
 // which must update 'yyaccept'. There is a loop through initial
 // state that changes 'yyaccept' value, so if the initial state

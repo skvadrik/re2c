@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -8 --encoding-policy ignore
 #include <stdio.h>
 #include "utf8.h"
 #define YYCTYPE unsigned char

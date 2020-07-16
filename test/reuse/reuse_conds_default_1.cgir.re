@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cgir
 /*!types:re2c */
 
 void scan(unsigned char* in)

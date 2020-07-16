@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 // default API: no warning (fixed tag => no nondeterminism)
 /*!re2c
     re2c:flags:input = default;

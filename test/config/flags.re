@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 /*!re2c
     re2c:flags:b = 0;
     re2c:flags:bit-vectors = 1;

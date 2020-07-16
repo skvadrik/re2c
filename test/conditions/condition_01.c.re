@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -c
 /*!re2c
 
 < a , b >	"ab"	{ }

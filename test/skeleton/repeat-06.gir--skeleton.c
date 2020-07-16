@@ -58,7 +58,7 @@ error:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line24
+static int action_line25
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -76,7 +76,7 @@ static int action_line24
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line24: control flow is undefined"
+            , "warning: lex_line25: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -88,7 +88,7 @@ static int action_line24
     } else {
         fprintf
             ( stderr
-            , "error: lex_line24: at position %ld (key %u):\n"
+            , "error: lex_line25: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -102,14 +102,14 @@ static int action_line24
     }
 }
 
-static int check_key_count_line24(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line25(unsigned have, unsigned used, unsigned need)
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line24: not enough keys\n");
+    fprintf(stderr, "error: lex_line25: not enough keys\n");
     return 1;
 }
 
-int lex_line24()
+int lex_line25()
 {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
@@ -124,7 +124,7 @@ int lex_line24()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/repeat-06.gir--skeleton.c.line24.input"
+        ( "skeleton/repeat-06.gir--skeleton.c.line25.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -135,7 +135,7 @@ int lex_line24()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/repeat-06.gir--skeleton.c.line24.keys"
+        ( "skeleton/repeat-06.gir--skeleton.c.line25.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -195,33 +195,33 @@ int lex_line24()
 yy2:
 yy3:
         YYSKIP();
-        status = check_key_count_line24(keys_count, i, 3)
-             || action_line24(&i, keys, input, token, &cursor, 5);
+        status = check_key_count_line25(keys_count, i, 3)
+             || action_line25(&i, keys, input, token, &cursor, 5);
         continue;
 yy5:
         YYSKIP();
-        status = check_key_count_line24(keys_count, i, 3)
-             || action_line24(&i, keys, input, token, &cursor, 4);
+        status = check_key_count_line25(keys_count, i, 3)
+             || action_line25(&i, keys, input, token, &cursor, 4);
         continue;
 yy7:
         YYSKIP();
-        status = check_key_count_line24(keys_count, i, 3)
-             || action_line24(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line25(keys_count, i, 3)
+             || action_line25(&i, keys, input, token, &cursor, 0);
         continue;
 yy9:
         YYSKIP();
-        status = check_key_count_line24(keys_count, i, 3)
-             || action_line24(&i, keys, input, token, &cursor, 1);
+        status = check_key_count_line25(keys_count, i, 3)
+             || action_line25(&i, keys, input, token, &cursor, 1);
         continue;
 yy11:
         YYSKIP();
-        status = check_key_count_line24(keys_count, i, 3)
-             || action_line24(&i, keys, input, token, &cursor, 2);
+        status = check_key_count_line25(keys_count, i, 3)
+             || action_line25(&i, keys, input, token, &cursor, 2);
         continue;
 yy13:
         YYSKIP();
-        status = check_key_count_line24(keys_count, i, 3)
-             || action_line24(&i, keys, input, token, &cursor, 3);
+        status = check_key_count_line25(keys_count, i, 3)
+             || action_line25(&i, keys, input, token, &cursor, 3);
         continue;
 
     }
@@ -229,11 +229,11 @@ yy13:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line24: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line25: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line24: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line25: unused keys left after %u keys\n", i);
         }
     }
 
@@ -259,7 +259,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line39
+static int action_line40
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -277,7 +277,7 @@ static int action_line39
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line39: control flow is undefined"
+            , "warning: lex_line40: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -289,7 +289,7 @@ static int action_line39
     } else {
         fprintf
             ( stderr
-            , "error: lex_line39: at position %ld (key %u):\n"
+            , "error: lex_line40: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -303,14 +303,14 @@ static int action_line39
     }
 }
 
-static int check_key_count_line39(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line40(unsigned have, unsigned used, unsigned need)
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line39: not enough keys\n");
+    fprintf(stderr, "error: lex_line40: not enough keys\n");
     return 1;
 }
 
-int lex_line39()
+int lex_line40()
 {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
@@ -325,7 +325,7 @@ int lex_line39()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/repeat-06.gir--skeleton.c.line39.input"
+        ( "skeleton/repeat-06.gir--skeleton.c.line40.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -336,7 +336,7 @@ int lex_line39()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/repeat-06.gir--skeleton.c.line39.keys"
+        ( "skeleton/repeat-06.gir--skeleton.c.line40.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -396,33 +396,33 @@ int lex_line39()
 yy17:
 yy18:
         YYSKIP();
-        status = check_key_count_line39(keys_count, i, 3)
-             || action_line39(&i, keys, input, token, &cursor, 5);
+        status = check_key_count_line40(keys_count, i, 3)
+             || action_line40(&i, keys, input, token, &cursor, 5);
         continue;
 yy20:
         YYSKIP();
-        status = check_key_count_line39(keys_count, i, 3)
-             || action_line39(&i, keys, input, token, &cursor, 4);
+        status = check_key_count_line40(keys_count, i, 3)
+             || action_line40(&i, keys, input, token, &cursor, 4);
         continue;
 yy22:
         YYSKIP();
-        status = check_key_count_line39(keys_count, i, 3)
-             || action_line39(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line40(keys_count, i, 3)
+             || action_line40(&i, keys, input, token, &cursor, 0);
         continue;
 yy24:
         YYSKIP();
-        status = check_key_count_line39(keys_count, i, 3)
-             || action_line39(&i, keys, input, token, &cursor, 1);
+        status = check_key_count_line40(keys_count, i, 3)
+             || action_line40(&i, keys, input, token, &cursor, 1);
         continue;
 yy26:
         YYSKIP();
-        status = check_key_count_line39(keys_count, i, 3)
-             || action_line39(&i, keys, input, token, &cursor, 2);
+        status = check_key_count_line40(keys_count, i, 3)
+             || action_line40(&i, keys, input, token, &cursor, 2);
         continue;
 yy28:
         YYSKIP();
-        status = check_key_count_line39(keys_count, i, 3)
-             || action_line39(&i, keys, input, token, &cursor, 3);
+        status = check_key_count_line40(keys_count, i, 3)
+             || action_line40(&i, keys, input, token, &cursor, 3);
         continue;
 
     }
@@ -430,11 +430,11 @@ yy28:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line39: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line40: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line39: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line40: unused keys left after %u keys\n", i);
         }
     }
 
@@ -460,7 +460,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line54
+static int action_line55
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -478,7 +478,7 @@ static int action_line54
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line54: control flow is undefined"
+            , "warning: lex_line55: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -490,7 +490,7 @@ static int action_line54
     } else {
         fprintf
             ( stderr
-            , "error: lex_line54: at position %ld (key %u):\n"
+            , "error: lex_line55: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -504,14 +504,14 @@ static int action_line54
     }
 }
 
-static int check_key_count_line54(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line55(unsigned have, unsigned used, unsigned need)
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line54: not enough keys\n");
+    fprintf(stderr, "error: lex_line55: not enough keys\n");
     return 1;
 }
 
-int lex_line54()
+int lex_line55()
 {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
@@ -526,7 +526,7 @@ int lex_line54()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/repeat-06.gir--skeleton.c.line54.input"
+        ( "skeleton/repeat-06.gir--skeleton.c.line55.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -537,7 +537,7 @@ int lex_line54()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/repeat-06.gir--skeleton.c.line54.keys"
+        ( "skeleton/repeat-06.gir--skeleton.c.line55.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -597,33 +597,33 @@ int lex_line54()
 yy32:
 yy33:
         YYSKIP();
-        status = check_key_count_line54(keys_count, i, 3)
-             || action_line54(&i, keys, input, token, &cursor, 5);
+        status = check_key_count_line55(keys_count, i, 3)
+             || action_line55(&i, keys, input, token, &cursor, 5);
         continue;
 yy35:
         YYSKIP();
-        status = check_key_count_line54(keys_count, i, 3)
-             || action_line54(&i, keys, input, token, &cursor, 4);
+        status = check_key_count_line55(keys_count, i, 3)
+             || action_line55(&i, keys, input, token, &cursor, 4);
         continue;
 yy37:
         YYSKIP();
-        status = check_key_count_line54(keys_count, i, 3)
-             || action_line54(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line55(keys_count, i, 3)
+             || action_line55(&i, keys, input, token, &cursor, 0);
         continue;
 yy39:
         YYSKIP();
-        status = check_key_count_line54(keys_count, i, 3)
-             || action_line54(&i, keys, input, token, &cursor, 1);
+        status = check_key_count_line55(keys_count, i, 3)
+             || action_line55(&i, keys, input, token, &cursor, 1);
         continue;
 yy41:
         YYSKIP();
-        status = check_key_count_line54(keys_count, i, 3)
-             || action_line54(&i, keys, input, token, &cursor, 2);
+        status = check_key_count_line55(keys_count, i, 3)
+             || action_line55(&i, keys, input, token, &cursor, 2);
         continue;
 yy43:
         YYSKIP();
-        status = check_key_count_line54(keys_count, i, 3)
-             || action_line54(&i, keys, input, token, &cursor, 3);
+        status = check_key_count_line55(keys_count, i, 3)
+             || action_line55(&i, keys, input, token, &cursor, 3);
         continue;
 
     }
@@ -631,11 +631,11 @@ yy43:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line54: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line55: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line54: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line55: unused keys left after %u keys\n", i);
         }
     }
 
@@ -655,13 +655,13 @@ end:
 
 int main()
 {
-    if (lex_line24() != 0) {
+    if (lex_line25() != 0) {
         return 1;
     }
-    if (lex_line39() != 0) {
+    if (lex_line40() != 0) {
         return 1;
     }
-    if (lex_line54() != 0) {
+    if (lex_line55() != 0) {
         return 1;
     }
     return 0;
@@ -669,6 +669,6 @@ int main()
  	 !"#$%&'()*+,-./023456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`efghijklmnopqrstuvwxyz{|}~€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ1abcd
   ÿ 	 !"#$%&'()*+,-./013456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`efghijklmnopqrstuvwxyz{|}~€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ2abcd
   ÿ 	 !"#$%&'()*+,-./012456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`efghijklmnopqrstuvwxyz{|}~€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ3abcd
-  ÿskeleton/repeat-06.gir--skeleton.re:24:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-skeleton/repeat-06.gir--skeleton.re:39:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-skeleton/repeat-06.gir--skeleton.re:54:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+  ÿskeleton/repeat-06.gir--skeleton.re:25:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+skeleton/repeat-06.gir--skeleton.re:40:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+skeleton/repeat-06.gir--skeleton.re:55:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

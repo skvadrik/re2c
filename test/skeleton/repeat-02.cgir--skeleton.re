@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cgir --skeleton
 // multiple scanners
 
 /*!types:re2c */

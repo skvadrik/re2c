@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 #include <assert.h>
 
 // expect a null-terminated string

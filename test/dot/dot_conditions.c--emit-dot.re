@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -c --emit-dot
 int main() {
 	printf("some code that will be stripped");
 

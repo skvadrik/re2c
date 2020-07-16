@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ir
 /*!re2c "a" {} * {} */
 
 /*!rules:re2c "b" {} * {} */

@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 // ignored
 /*!ignore:re2c
 

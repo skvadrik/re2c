@@ -12,24 +12,24 @@ digraph re2c {
 1 -> 19 [label="[']"]
 1 -> 21 [label="[\\]"]
 3 -> 4
-4 [label="dot/bug47_dot_escapes.--emit-dot.re:11"]
+4 [label="dot/bug47_dot_escapes.--emit-dot.re:12"]
 5 -> 6
-6 [label="dot/bug47_dot_escapes.--emit-dot.re:8"]
+6 [label="dot/bug47_dot_escapes.--emit-dot.re:9"]
 7 -> 8
-8 [label="dot/bug47_dot_escapes.--emit-dot.re:6"]
+8 [label="dot/bug47_dot_escapes.--emit-dot.re:7"]
 9 -> 10
-10 [label="dot/bug47_dot_escapes.--emit-dot.re:5"]
+10 [label="dot/bug47_dot_escapes.--emit-dot.re:6"]
 11 -> 12
-12 [label="dot/bug47_dot_escapes.--emit-dot.re:7"]
+12 [label="dot/bug47_dot_escapes.--emit-dot.re:8"]
 13 -> 14
-14 [label="dot/bug47_dot_escapes.--emit-dot.re:10"]
+14 [label="dot/bug47_dot_escapes.--emit-dot.re:11"]
 15 -> 16
-16 [label="dot/bug47_dot_escapes.--emit-dot.re:9"]
+16 [label="dot/bug47_dot_escapes.--emit-dot.re:10"]
 17 -> 18
-18 [label="dot/bug47_dot_escapes.--emit-dot.re:4"]
+18 [label="dot/bug47_dot_escapes.--emit-dot.re:5"]
 19 -> 20
-20 [label="dot/bug47_dot_escapes.--emit-dot.re:3"]
+20 [label="dot/bug47_dot_escapes.--emit-dot.re:4"]
 21 -> 22
-22 [label="dot/bug47_dot_escapes.--emit-dot.re:12"]
+22 [label="dot/bug47_dot_escapes.--emit-dot.re:13"]
 }
-dot/bug47_dot_escapes.--emit-dot.re:14:2: warning: control flow is undefined for strings that match '[\x0-\x6\xE-\x21\x23-\x26\x28-\x5B\x5D-\xFF]', use default rule '*' [-Wundefined-control-flow]
+dot/bug47_dot_escapes.--emit-dot.re:15:2: warning: control flow is undefined for strings that match '[\x0-\x6\xE-\x21\x23-\x26\x28-\x5B\x5D-\xFF]', use default rule '*' [-Wundefined-control-flow]

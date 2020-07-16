@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cg
 enum cond_t : int;
 
 int main ()

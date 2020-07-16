@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 #include "scanio.h"
 #include "scanner.h"
 

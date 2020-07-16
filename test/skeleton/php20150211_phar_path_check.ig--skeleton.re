@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ig --skeleton
 /*
   +----------------------------------------------------------------------+
   | phar php single-file executable PHP extension                        |

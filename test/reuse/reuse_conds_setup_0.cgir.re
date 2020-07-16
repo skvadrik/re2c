@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cgir
 
 /*!rules:re2c
 	<*>	"a"	{ return "a"; }

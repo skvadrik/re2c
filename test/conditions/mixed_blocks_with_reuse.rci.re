@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -rci
 /*!types:re2c*/
 
 /*!rules:re2c

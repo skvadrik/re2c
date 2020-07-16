@@ -58,7 +58,7 @@ error:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line110
+static int action_line111
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -76,7 +76,7 @@ static int action_line110
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line110: control flow is undefined"
+            , "warning: lex_line111: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -88,7 +88,7 @@ static int action_line110
     } else {
         fprintf
             ( stderr
-            , "error: lex_line110: at position %ld (key %u):\n"
+            , "error: lex_line111: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -102,14 +102,14 @@ static int action_line110
     }
 }
 
-static int check_key_count_line110(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line111(unsigned have, unsigned used, unsigned need)
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line110: not enough keys\n");
+    fprintf(stderr, "error: lex_line111: not enough keys\n");
     return 1;
 }
 
-int lex_line110()
+int lex_line111()
 {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
@@ -124,7 +124,7 @@ int lex_line110()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/calc_008.b--skeleton.c.line110.input"
+        ( "skeleton/calc_008.b--skeleton.c.line111.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -135,7 +135,7 @@ int lex_line110()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/calc_008.b--skeleton.c.line110.keys"
+        ( "skeleton/calc_008.b--skeleton.c.line111.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -208,13 +208,13 @@ int lex_line110()
         }
 yy2:
         YYSKIP();
-        status = check_key_count_line110(keys_count, i, 3)
-             || action_line110(&i, keys, input, token, &cursor, 5);
+        status = check_key_count_line111(keys_count, i, 3)
+             || action_line111(&i, keys, input, token, &cursor, 5);
         continue;
 yy4:
         YYSKIP();
-        status = check_key_count_line110(keys_count, i, 3)
-             || action_line110(&i, keys, input, token, &cursor, 6);
+        status = check_key_count_line111(keys_count, i, 3)
+             || action_line111(&i, keys, input, token, &cursor, 6);
         continue;
 yy6:
         YYSKIP();
@@ -223,18 +223,18 @@ yy6:
         if (yybm[0+yych] & 64) {
             goto yy6;
         }
-        status = check_key_count_line110(keys_count, i, 3)
-             || action_line110(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line111(keys_count, i, 3)
+             || action_line111(&i, keys, input, token, &cursor, 0);
         continue;
 yy9:
         YYSKIP();
-        status = check_key_count_line110(keys_count, i, 3)
-             || action_line110(&i, keys, input, token, &cursor, 3);
+        status = check_key_count_line111(keys_count, i, 3)
+             || action_line111(&i, keys, input, token, &cursor, 3);
         continue;
 yy11:
         YYSKIP();
-        status = check_key_count_line110(keys_count, i, 3)
-             || action_line110(&i, keys, input, token, &cursor, 4);
+        status = check_key_count_line111(keys_count, i, 3)
+             || action_line111(&i, keys, input, token, &cursor, 4);
         continue;
 yy13:
         YYSKIP();
@@ -242,8 +242,8 @@ yy13:
         if (yych <= '/') goto yy14;
         if (yych <= '9') goto yy17;
 yy14:
-        status = check_key_count_line110(keys_count, i, 3)
-             || action_line110(&i, keys, input, token, &cursor, 2);
+        status = check_key_count_line111(keys_count, i, 3)
+             || action_line111(&i, keys, input, token, &cursor, 2);
         continue;
 yy15:
         YYSKIP();
@@ -260,8 +260,8 @@ yy17:
         if (yych <= '/') goto yy19;
         if (yych <= '9') goto yy17;
 yy19:
-        status = check_key_count_line110(keys_count, i, 3)
-             || action_line110(&i, keys, input, token, &cursor, 1);
+        status = check_key_count_line111(keys_count, i, 3)
+             || action_line111(&i, keys, input, token, &cursor, 1);
         continue;
 
     }
@@ -269,11 +269,11 @@ yy19:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line110: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line111: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line110: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line111: unused keys left after %u keys\n", i);
         }
     }
 
@@ -293,7 +293,7 @@ end:
 
 int main()
 {
-    if (lex_line110() != 0) {
+    if (lex_line111() != 0) {
         return 1;
     }
     return 0;

@@ -69,7 +69,7 @@ if [ ${#tests[@]} -eq 0 ]; then
     cp -R "@top_srcdir@/test/"* "@top_srcdir@/examples/"*  $test_blddir
 else
     for f in ${tests[@]}; do
-        cp $f ${f%.re}.c $test_blddir
+        cp ${f%.re}.* $test_blddir
     done
 fi
 
@@ -130,38 +130,23 @@ run_pack() {
     do
         cd $test_blddir
 
-        # generate file extension (.c for C/C++, .go for Go)
-        local ext=`basename "$x" | lc_run grep -q -- '--lang(go)' && echo go || echo c`
-
         # remove prefix
         local outx=${x:$((${#test_blddir} + 1))}
+
+        # generate file extension (.c for C/C++, .go for Go)
+        local ext=`head -n 1 "$outx" | lc_run grep -q 're2go' && echo go || echo c`
         local outy="${outx%.re}.$ext"
 
         # Keep to the POSIX standard: no syntactic sugar like +,?, etc. (try it with --posix)
-        # Transformations:
-        #  - filter out tests without options
-        #  - cut off filename and extension
-        #  - change plus sign to slash (header path components)
-        #  - patch header name to be relative to the source file directory
-        #  - prefix split short options with dash
-        #  - prefix long options with dash dash
-        #  - remove parentheses around long option arguments
-        local switches=`basename "$x" | lc_run sed \
-            -e 's/^[^.]*\.re$//g' \
-            -e 's/^[^.]*\.\(.*\)\.re$/\1/g' \
-            -e 's,[+],/,g' \
-            -e 's,\(--type-header\)(\([^)]*\)),\1('"$(dirname $outx)"'/\2),' \
-            -e 's/^\([^-]\)/-\1/' \
-            -e 's/--\([^ (-]*\)/ --\1/g' \
-            -e 's/(\([^)]*\))/ \1/g' \
+        local switches=`head -n 1 "$outx" | lc_run sed \
+            -e 's,re2go,re2c --lang go,' \
+            -e 's,.*re2c \(.*\)$,\1,' \
+            -e 's,$INPUT,'"$outx"',' \
+            -e 's,$OUTPUT,'"$outy"',' \
+            -e 's,\(--type-header \)\([^ ]*\),\1'"$(dirname $outx)"'/\2,' \
         `
-        # check that flags do not contain uppercase letters:
-        # file extensions are case-insensitive on some platforms
-        printf "%s" "$switches" | lc_run grep -q "[A-Z]" \
-            && { echo "bad file extension: '$outx' (uppercase letters are not allowed)"; exit 1; }
-        local switches="$switches -o $outy --no-version --no-generation-date"
         # enable warnings globally
-        local switches="$switches -W"
+        local switches="$switches -W --no-version --no-generation-date"
 
         # normal tests
         if [ $skeleton -ne 1 ]; then
@@ -176,7 +161,7 @@ run_pack() {
             [ -n "$header" ] && mkdir -p "$(dirname $header)"
 
             # run re2c
-            $valgrind $wine ../$re2c $incpaths $switches "$outx" 2>"$outy.stderr" 1>&2
+            $valgrind $wine ../$re2c $incpaths $switches 2>"$outy.stderr" 1>&2
 
             # on windows output contains CR LF, cut CR to match test results
             for f in "$header" "$outy" "$outy.stderr"; do
@@ -208,7 +193,7 @@ run_pack() {
 
             local switches="$switches --skeleton -Werror-undefined-control-flow"
 
-            ${valgrind} ${wine} ../${re2c} $incpaths $switches "../$x" 2>"$outy.stderr"
+            ${valgrind} ${wine} ../${re2c} $incpaths $switches 2>"$outy.stderr"
             local status=$(echo $?)
             # use plain 'cc' instead of @-substition, because CMake and Autoconf
             # use different variables (CMAKE_C_COMPILER and CC)

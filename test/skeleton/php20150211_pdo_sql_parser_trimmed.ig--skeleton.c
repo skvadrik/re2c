@@ -60,7 +60,7 @@ error:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line20
+static int action_line21
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -78,7 +78,7 @@ static int action_line20
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line20: control flow is undefined"
+            , "warning: lex_line21: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -90,7 +90,7 @@ static int action_line20
     } else {
         fprintf
             ( stderr
-            , "error: lex_line20: at position %ld (key %u):\n"
+            , "error: lex_line21: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -104,14 +104,14 @@ static int action_line20
     }
 }
 
-static int check_key_count_line20(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line21(unsigned have, unsigned used, unsigned need)
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line20: not enough keys\n");
+    fprintf(stderr, "error: lex_line21: not enough keys\n");
     return 1;
 }
 
-int lex_line20()
+int lex_line21()
 {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
@@ -126,7 +126,7 @@ int lex_line20()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/php20150211_pdo_sql_parser_trimmed.ig--skeleton.c.line20.input"
+        ( "skeleton/php20150211_pdo_sql_parser_trimmed.ig--skeleton.c.line21.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -137,7 +137,7 @@ int lex_line20()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/php20150211_pdo_sql_parser_trimmed.ig--skeleton.c.line20.keys"
+        ( "skeleton/php20150211_pdo_sql_parser_trimmed.ig--skeleton.c.line21.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -265,8 +265,8 @@ int lex_line20()
         }
 yy2:
         YYSKIP();
-        status = check_key_count_line20(keys_count, i, 3)
-             || action_line20(&i, keys, input, token, &cursor, 254);
+        status = check_key_count_line21(keys_count, i, 3)
+             || action_line21(&i, keys, input, token, &cursor, 254);
         continue;
 yy4:
         YYSKIP();
@@ -276,8 +276,8 @@ yy5:
         if (yybm[256+yych] & 32) {
             goto yy4;
         }
-        status = check_key_count_line20(keys_count, i, 3)
-             || action_line20(&i, keys, input, token, &cursor, 7);
+        status = check_key_count_line21(keys_count, i, 3)
+             || action_line21(&i, keys, input, token, &cursor, 7);
         continue;
 yy7:
         YYSKIP();
@@ -285,8 +285,8 @@ yy7:
         yych = YYPEEK();
         if (yych >= 0x01) goto yy16;
 yy8:
-        status = check_key_count_line20(keys_count, i, 3)
-             || action_line20(&i, keys, input, token, &cursor, 5);
+        status = check_key_count_line21(keys_count, i, 3)
+             || action_line21(&i, keys, input, token, &cursor, 5);
         continue;
 yy9:
         YYSKIP();
@@ -319,8 +319,8 @@ yy13:
         if (yybm[0+yych] & 16) {
             goto yy36;
         }
-        status = check_key_count_line20(keys_count, i, 3)
-             || action_line20(&i, keys, input, token, &cursor, 4);
+        status = check_key_count_line21(keys_count, i, 3)
+             || action_line21(&i, keys, input, token, &cursor, 4);
         continue;
 yy15:
         YYSKIP();
@@ -338,8 +338,8 @@ yy17:
         goto yy8;
 yy18:
         YYSKIP();
-        status = check_key_count_line20(keys_count, i, 3)
-             || action_line20(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line21(keys_count, i, 3)
+             || action_line21(&i, keys, input, token, &cursor, 0);
         continue;
 yy20:
         YYSKIP();
@@ -358,8 +358,8 @@ yy22:
         if (yych <= 0x00) goto yy17;
         if (yych >= '(') goto yy25;
         YYSKIP();
-        status = check_key_count_line20(keys_count, i, 3)
-             || action_line20(&i, keys, input, token, &cursor, 1);
+        status = check_key_count_line21(keys_count, i, 3)
+             || action_line21(&i, keys, input, token, &cursor, 1);
         continue;
 yy25:
         YYSKIP();
@@ -394,8 +394,8 @@ yy30:
         if (yybm[0+yych] & 4) {
             goto yy30;
         }
-        status = check_key_count_line20(keys_count, i, 3)
-             || action_line20(&i, keys, input, token, &cursor, 3);
+        status = check_key_count_line21(keys_count, i, 3)
+             || action_line21(&i, keys, input, token, &cursor, 3);
         continue;
 yy33:
         YYSKIP();
@@ -405,8 +405,8 @@ yy33:
             goto yy33;
         }
 yy35:
-        status = check_key_count_line20(keys_count, i, 3)
-             || action_line20(&i, keys, input, token, &cursor, 2);
+        status = check_key_count_line21(keys_count, i, 3)
+             || action_line21(&i, keys, input, token, &cursor, 2);
         continue;
 yy36:
         YYSKIP();
@@ -424,8 +424,8 @@ yy38:
             goto yy38;
         }
 yy40:
-        status = check_key_count_line20(keys_count, i, 3)
-             || action_line20(&i, keys, input, token, &cursor, 6);
+        status = check_key_count_line21(keys_count, i, 3)
+             || action_line21(&i, keys, input, token, &cursor, 6);
         continue;
 yy41:
         YYSKIP();
@@ -499,11 +499,11 @@ yy48:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line20: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line21: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line20: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line21: unused keys left after %u keys\n", i);
         }
     }
 
@@ -525,7 +525,7 @@ end:
 
 int main()
 {
-    if (lex_line20() != 0) {
+    if (lex_line21() != 0) {
         return 1;
     }
     return 0;

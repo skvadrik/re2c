@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -b --skeleton
 /* re2c lesson 002_strip_comments, strip_003.b, (c) M. Boerger 2006 - 2007 */
 /*!ignore:re2c
 

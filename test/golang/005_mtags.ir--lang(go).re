@@ -1,3 +1,4 @@
+//go:generate re2go $INPUT -o $OUTPUT -ir
 package main
 
 import "fmt"

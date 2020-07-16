@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cg
 #include <stdio.h>
 
 // changing this to '#if 1' changes program behaviour

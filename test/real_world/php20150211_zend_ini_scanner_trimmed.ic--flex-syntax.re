@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ic --flex-syntax
 /*!re2c
 re2c:yyfill:check = 0;
 LNUM [0-9]+

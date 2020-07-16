@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 // Normally re2c generates one 'yyaccept' value for each rule
 // that is shadowed by a longer rule.
 // However, if two different accepting states accept the same

@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT  --skeleton --input custom
 bool lex (const char * cursor, const char * const limit)
 {
     const char * marker;

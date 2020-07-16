@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT  --input custom
 #include <sstream>
 
 bool lex (std::istringstream & is, const std::streampos limit)

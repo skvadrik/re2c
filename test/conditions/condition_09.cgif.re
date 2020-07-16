@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cgif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

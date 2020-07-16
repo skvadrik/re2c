@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ci
 // re2c:cond:divider = "~~~ ## ~~~";
 // re2c:api:sigil = #;
 /*!re2c

@@ -1,1 +1,1 @@
-error9.re:2:1: error: syntax error in octal escape sequence
+error9.re:3:1: error: syntax error in octal escape sequence

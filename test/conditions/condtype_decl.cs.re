@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cs
 /*!types:re2c*/
 
 int main ()

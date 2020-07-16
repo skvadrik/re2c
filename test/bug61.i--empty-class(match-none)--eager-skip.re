@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --empty-class match-none --eager-skip
 /*!re2c
     [] {}
 */

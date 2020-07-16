@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -1
 /*!re2c
 	"ABC"		{ return 1; }
 	"ABD"		{ return 2; }

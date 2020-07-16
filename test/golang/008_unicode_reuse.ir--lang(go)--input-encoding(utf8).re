@@ -1,3 +1,4 @@
+//go:generate re2go $INPUT -o $OUTPUT -ir --input-encoding utf8
 package main
 
 /*!rules:re2c

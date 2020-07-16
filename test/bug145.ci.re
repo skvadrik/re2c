@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ci
 #include <stdio.h>
 
 /*!types:re2c*/

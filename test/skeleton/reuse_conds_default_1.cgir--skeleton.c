@@ -58,7 +58,7 @@ error:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line22_r1
+static int action_line23_r1
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -76,7 +76,7 @@ static int action_line22_r1
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line22_r1: control flow is undefined"
+            , "warning: lex_line23_r1: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -88,7 +88,7 @@ static int action_line22_r1
     } else {
         fprintf
             ( stderr
-            , "error: lex_line22_r1: at position %ld (key %u):\n"
+            , "error: lex_line23_r1: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -102,18 +102,18 @@ static int action_line22_r1
     }
 }
 
-static int check_key_count_line22_r1
+static int check_key_count_line23_r1
     ( unsigned have
     , unsigned used
     , unsigned need
     )
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line22_r1: not enough keys\n");
+    fprintf(stderr, "error: lex_line23_r1: not enough keys\n");
     return 1;
 }
 
-int lex_line22_r1()
+int lex_line23_r1()
 {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
@@ -128,7 +128,7 @@ int lex_line22_r1()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line22_r1.input"
+        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line23_r1.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -139,7 +139,7 @@ int lex_line22_r1()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line22_r1.keys"
+        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line23_r1.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -198,33 +198,33 @@ int lex_line22_r1()
         }
 yy2:
         YYSKIP();
-        status = check_key_count_line22_r1(keys_count, i, 3)
-             || action_line22_r1(&i, keys, input, token, &cursor, 4);
+        status = check_key_count_line23_r1(keys_count, i, 3)
+             || action_line23_r1(&i, keys, input, token, &cursor, 4);
         continue;
 yy4:
         YYSKIP();
-        status = check_key_count_line22_r1(keys_count, i, 3)
-             || action_line22_r1(&i, keys, input, token, &cursor, 254);
+        status = check_key_count_line23_r1(keys_count, i, 3)
+             || action_line23_r1(&i, keys, input, token, &cursor, 254);
         continue;
 yy6:
         YYSKIP();
-        status = check_key_count_line22_r1(keys_count, i, 3)
-             || action_line22_r1(&i, keys, input, token, &cursor, 2);
+        status = check_key_count_line23_r1(keys_count, i, 3)
+             || action_line23_r1(&i, keys, input, token, &cursor, 2);
         continue;
 yy8:
         YYSKIP();
-        status = check_key_count_line22_r1(keys_count, i, 3)
-             || action_line22_r1(&i, keys, input, token, &cursor, 3);
+        status = check_key_count_line23_r1(keys_count, i, 3)
+             || action_line23_r1(&i, keys, input, token, &cursor, 3);
         continue;
 yy10:
         YYSKIP();
-        status = check_key_count_line22_r1(keys_count, i, 3)
-             || action_line22_r1(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line23_r1(keys_count, i, 3)
+             || action_line23_r1(&i, keys, input, token, &cursor, 0);
         continue;
 yy12:
         YYSKIP();
-        status = check_key_count_line22_r1(keys_count, i, 3)
-             || action_line22_r1(&i, keys, input, token, &cursor, 1);
+        status = check_key_count_line23_r1(keys_count, i, 3)
+             || action_line23_r1(&i, keys, input, token, &cursor, 1);
         continue;
 
     }
@@ -232,11 +232,11 @@ yy12:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line22_r1: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line23_r1: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line22_r1: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line23_r1: unused keys left after %u keys\n", i);
         }
     }
 
@@ -262,7 +262,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line22_r2
+static int action_line23_r2
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -280,7 +280,7 @@ static int action_line22_r2
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line22_r2: control flow is undefined"
+            , "warning: lex_line23_r2: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -292,7 +292,7 @@ static int action_line22_r2
     } else {
         fprintf
             ( stderr
-            , "error: lex_line22_r2: at position %ld (key %u):\n"
+            , "error: lex_line23_r2: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -306,18 +306,18 @@ static int action_line22_r2
     }
 }
 
-static int check_key_count_line22_r2
+static int check_key_count_line23_r2
     ( unsigned have
     , unsigned used
     , unsigned need
     )
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line22_r2: not enough keys\n");
+    fprintf(stderr, "error: lex_line23_r2: not enough keys\n");
     return 1;
 }
 
-int lex_line22_r2()
+int lex_line23_r2()
 {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
@@ -332,7 +332,7 @@ int lex_line22_r2()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line22_r2.input"
+        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line23_r2.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -343,7 +343,7 @@ int lex_line22_r2()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line22_r2.keys"
+        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line23_r2.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -370,23 +370,23 @@ int lex_line22_r2()
             if (yych == 'c') goto yy22;
         }
         YYSKIP();
-        status = check_key_count_line22_r2(keys_count, i, 3)
-             || action_line22_r2(&i, keys, input, token, &cursor, 2);
+        status = check_key_count_line23_r2(keys_count, i, 3)
+             || action_line23_r2(&i, keys, input, token, &cursor, 2);
         continue;
 yy18:
         YYSKIP();
-        status = check_key_count_line22_r2(keys_count, i, 3)
-             || action_line22_r2(&i, keys, input, token, &cursor, 254);
+        status = check_key_count_line23_r2(keys_count, i, 3)
+             || action_line23_r2(&i, keys, input, token, &cursor, 254);
         continue;
 yy20:
         YYSKIP();
-        status = check_key_count_line22_r2(keys_count, i, 3)
-             || action_line22_r2(&i, keys, input, token, &cursor, 1);
+        status = check_key_count_line23_r2(keys_count, i, 3)
+             || action_line23_r2(&i, keys, input, token, &cursor, 1);
         continue;
 yy22:
         YYSKIP();
-        status = check_key_count_line22_r2(keys_count, i, 3)
-             || action_line22_r2(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line23_r2(keys_count, i, 3)
+             || action_line23_r2(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -394,11 +394,11 @@ yy22:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line22_r2: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line23_r2: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line22_r2: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line23_r2: unused keys left after %u keys\n", i);
         }
     }
 
@@ -424,7 +424,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line32_r1
+static int action_line33_r1
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -442,7 +442,7 @@ static int action_line32_r1
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line32_r1: control flow is undefined"
+            , "warning: lex_line33_r1: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -454,7 +454,7 @@ static int action_line32_r1
     } else {
         fprintf
             ( stderr
-            , "error: lex_line32_r1: at position %ld (key %u):\n"
+            , "error: lex_line33_r1: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -468,18 +468,18 @@ static int action_line32_r1
     }
 }
 
-static int check_key_count_line32_r1
+static int check_key_count_line33_r1
     ( unsigned have
     , unsigned used
     , unsigned need
     )
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line32_r1: not enough keys\n");
+    fprintf(stderr, "error: lex_line33_r1: not enough keys\n");
     return 1;
 }
 
-int lex_line32_r1()
+int lex_line33_r1()
 {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
@@ -494,7 +494,7 @@ int lex_line32_r1()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line32_r1.input"
+        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line33_r1.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -505,7 +505,7 @@ int lex_line32_r1()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line32_r1.keys"
+        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line33_r1.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -564,33 +564,33 @@ int lex_line32_r1()
         }
 yy26:
         YYSKIP();
-        status = check_key_count_line32_r1(keys_count, i, 3)
-             || action_line32_r1(&i, keys, input, token, &cursor, 4);
+        status = check_key_count_line33_r1(keys_count, i, 3)
+             || action_line33_r1(&i, keys, input, token, &cursor, 4);
         continue;
 yy28:
         YYSKIP();
-        status = check_key_count_line32_r1(keys_count, i, 3)
-             || action_line32_r1(&i, keys, input, token, &cursor, 254);
+        status = check_key_count_line33_r1(keys_count, i, 3)
+             || action_line33_r1(&i, keys, input, token, &cursor, 254);
         continue;
 yy30:
         YYSKIP();
-        status = check_key_count_line32_r1(keys_count, i, 3)
-             || action_line32_r1(&i, keys, input, token, &cursor, 2);
+        status = check_key_count_line33_r1(keys_count, i, 3)
+             || action_line33_r1(&i, keys, input, token, &cursor, 2);
         continue;
 yy32:
         YYSKIP();
-        status = check_key_count_line32_r1(keys_count, i, 3)
-             || action_line32_r1(&i, keys, input, token, &cursor, 3);
+        status = check_key_count_line33_r1(keys_count, i, 3)
+             || action_line33_r1(&i, keys, input, token, &cursor, 3);
         continue;
 yy34:
         YYSKIP();
-        status = check_key_count_line32_r1(keys_count, i, 3)
-             || action_line32_r1(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line33_r1(keys_count, i, 3)
+             || action_line33_r1(&i, keys, input, token, &cursor, 0);
         continue;
 yy36:
         YYSKIP();
-        status = check_key_count_line32_r1(keys_count, i, 3)
-             || action_line32_r1(&i, keys, input, token, &cursor, 1);
+        status = check_key_count_line33_r1(keys_count, i, 3)
+             || action_line33_r1(&i, keys, input, token, &cursor, 1);
         continue;
 
     }
@@ -598,11 +598,11 @@ yy36:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line32_r1: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line33_r1: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line32_r1: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line33_r1: unused keys left after %u keys\n", i);
         }
     }
 
@@ -628,7 +628,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line32_r2
+static int action_line33_r2
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -646,7 +646,7 @@ static int action_line32_r2
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line32_r2: control flow is undefined"
+            , "warning: lex_line33_r2: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -658,7 +658,7 @@ static int action_line32_r2
     } else {
         fprintf
             ( stderr
-            , "error: lex_line32_r2: at position %ld (key %u):\n"
+            , "error: lex_line33_r2: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -672,18 +672,18 @@ static int action_line32_r2
     }
 }
 
-static int check_key_count_line32_r2
+static int check_key_count_line33_r2
     ( unsigned have
     , unsigned used
     , unsigned need
     )
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line32_r2: not enough keys\n");
+    fprintf(stderr, "error: lex_line33_r2: not enough keys\n");
     return 1;
 }
 
-int lex_line32_r2()
+int lex_line33_r2()
 {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
@@ -698,7 +698,7 @@ int lex_line32_r2()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line32_r2.input"
+        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line33_r2.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -709,7 +709,7 @@ int lex_line32_r2()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line32_r2.keys"
+        ( "skeleton/reuse_conds_default_1.cgir--skeleton.c.line33_r2.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -738,18 +738,18 @@ int lex_line32_r2()
         }
 yy41:
         YYSKIP();
-        status = check_key_count_line32_r2(keys_count, i, 3)
-             || action_line32_r2(&i, keys, input, token, &cursor, 2);
+        status = check_key_count_line33_r2(keys_count, i, 3)
+             || action_line33_r2(&i, keys, input, token, &cursor, 2);
         continue;
 yy43:
         YYSKIP();
-        status = check_key_count_line32_r2(keys_count, i, 3)
-             || action_line32_r2(&i, keys, input, token, &cursor, 1);
+        status = check_key_count_line33_r2(keys_count, i, 3)
+             || action_line33_r2(&i, keys, input, token, &cursor, 1);
         continue;
 yy45:
         YYSKIP();
-        status = check_key_count_line32_r2(keys_count, i, 3)
-             || action_line32_r2(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line33_r2(keys_count, i, 3)
+             || action_line33_r2(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -757,11 +757,11 @@ yy45:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line32_r2: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line33_r2: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line32_r2: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line33_r2: unused keys left after %u keys\n", i);
         }
     }
 
@@ -781,16 +781,16 @@ end:
 
 int main()
 {
-    if (lex_line22_r1() != 0) {
+    if (lex_line23_r1() != 0) {
         return 1;
     }
-    if (lex_line22_r2() != 0) {
+    if (lex_line23_r2() != 0) {
         return 1;
     }
-    if (lex_line32_r1() != 0) {
+    if (lex_line33_r1() != 0) {
         return 1;
     }
-    if (lex_line32_r2() != 0) {
+    if (lex_line33_r2() != 0) {
         return 1;
     }
     return 0;
@@ -799,4 +799,4 @@ int main()
 1abcş  	 !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`bdefghijklmnopqrstuvwxyz{|}~€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ
 acş  	 !"#$%&'()*+,-./013456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`defghijklmnopqrstuvwxyz{|}~€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ
 2abcş  	 !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`bdefghijklmnopqrstuvwxyz{|}~€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿac
-  ÿskeleton/reuse_conds_default_1.cgir--skeleton.re:32:2: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+  ÿskeleton/reuse_conds_default_1.cgir--skeleton.re:33:2: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

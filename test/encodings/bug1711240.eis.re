@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -eis
 char scan(const unsigned char *s)
 {
 /*!re2c

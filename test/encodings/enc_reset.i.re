@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 /*!re2c
     re2c:flags:x = 1; // set UTF-16
     [^] {}

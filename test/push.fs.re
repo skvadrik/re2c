@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -fs
 uint32_t push()
 {
     // The scanner starts here

@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT  --empty-class error
 #include "scanio.h"
 #include "scanner.h"
 

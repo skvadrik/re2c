@@ -1,1 +1,1 @@
-error4.re:2:1: error: syntax error in hexadecimal escape sequence
+error4.re:3:1: error: syntax error in hexadecimal escape sequence

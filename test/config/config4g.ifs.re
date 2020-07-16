@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ifs
 #define	NULL		((char*) 0)
 
 const unsigned char *scan(const unsigned char *p, unsigned int len, int *state)

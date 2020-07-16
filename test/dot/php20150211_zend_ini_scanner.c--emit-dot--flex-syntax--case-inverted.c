@@ -27,7 +27,7 @@ INITIAL -> 1
 3 -> 2 [label="[0x00-0x08][0x0B-0x0C][0x0E- ][#][%]['][*-:][<][>-Z][\\-0x5D][_-z][0x7F-0xFF]"]
 3 -> 4 [label="[0x09-0x0A][0x0D][!-\"][$][&][(-)][;][=][^][{-~]"]
 3 -> 27 [label="[[]"]
-4 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:481"]
+4 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:482"]
 5 -> 6
 6 -> 7 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-:][<][>-0xFF]"]
 6 -> 5 [label="[0x09][ ]"]
@@ -35,9 +35,9 @@ INITIAL -> 1
 6 -> 10 [label="[0x0D]"]
 6 -> 15 [label="[;]"]
 6 -> 17 [label="[=]"]
-7 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:627"]
+7 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:628"]
 8 -> 9
-9 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:632"]
+9 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:633"]
 10 -> 9 [label="[0x00-0x09][0x0B-0xFF]"]
 10 -> 8 [label="[0x0A]"]
 11 -> 12
@@ -51,7 +51,7 @@ INITIAL -> 1
 12 -> 17 [label="[=]"]
 12 -> 27 [label="[[]"]
 13 -> 14
-14 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:555"]
+14 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:556"]
 15 -> 16
 16 -> 15 [label="[0x00-0x09][0x0B-0x0C][0x0E-0xFF]"]
 16 -> 30 [label="[0x0A]"]
@@ -59,7 +59,7 @@ INITIAL -> 1
 17 -> 18
 18 -> 19 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 18 -> 17 [label="[0x09][ ]"]
-19 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:491"]
+19 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:492"]
 20 -> 3 [label="[0x00-@][B-`][b-0xFF]"]
 20 -> 33 [label="[A][a]"]
 21 -> 3 [label="[0x00-N][P-T][V-n][p-t][v-0xFF]"]
@@ -73,13 +73,13 @@ INITIAL -> 1
 24 -> 3 [label="[0x00-D][F-d][f-0xFF]"]
 24 -> 42 [label="[E][e]"]
 25 -> 26
-26 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:406"]
+26 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:407"]
 27 -> 28
 28 -> 29 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 28 -> 27 [label="[0x09][ ]"]
-29 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:431"]
+29 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:432"]
 30 -> 31
-31 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:637"]
+31 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:638"]
 32 -> 31 [label="[0x00-0x09][0x0B-0xFF]"]
 32 -> 30 [label="[0x0A]"]
 33 -> 3 [label="[0x00-K][M-k][m-0xFF]"]
@@ -89,7 +89,7 @@ INITIAL -> 1
 34 -> 35 [label="[0x0A][0x0D][!-\"][$][&][(-)][;][=][^][{-~]"]
 34 -> 46 [label="[ ]"]
 34 -> 48 [label="[N][n]"]
-35 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:473"]
+35 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:474"]
 36 -> 3 [label="[0x00-K][M-k][m-0xFF]"]
 36 -> 49 [label="[L][l]"]
 37 -> 3 [label="[0x00-E][G-e][g-0xFF]"]
@@ -100,7 +100,7 @@ INITIAL -> 1
 39 -> 40 [label="[0x0A][0x0D][!-\"][$][&][(-)][;][=][^][{-~]"]
 39 -> 38 [label="[ ]"]
 39 -> 27 [label="[[]"]
-40 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:469"]
+40 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:470"]
 41 -> 3 [label="[0x00-T][V-t][v-0xFF]"]
 41 -> 52 [label="[U][u]"]
 42 -> 3 [label="[0x00-R][T-r][t-0xFF]"]
@@ -131,7 +131,7 @@ INITIAL -> 1
 54 -> 55 [label="[0x0A][0x0D][!-\"][$][&][(-)][;][=][^][{-~]"]
 54 -> 53 [label="[ ]"]
 54 -> 27 [label="[[]"]
-55 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:477"]
+55 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:478"]
 56 -> 57
 57 -> 55 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 57 -> 56 [label="[0x09][ ]"]
@@ -152,7 +152,7 @@ ST_OFFSET -> 59
 61 -> 62 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 61 -> 81 [label="[$]"]
 61 -> 78 [label="[\\]"]
-62 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:573"]
+62 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:574"]
 63 -> 64
 64 -> 60 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!][#][%-&][(-:][<-[][^-0xFF]"]
 64 -> 63 [label="[0x09][ ]"]
@@ -162,9 +162,9 @@ ST_OFFSET -> 59
 64 -> 78 [label="[\\]"]
 64 -> 79 [label="[0x5D]"]
 65 -> 66
-66 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:648"]
+66 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:649"]
 67 -> 68
-68 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:577"]
+68 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:578"]
 69 -> 66 [label="[0x00]"]
 69 -> 60 [label="[0x01-[][0x5D-z][|-0xFF]"]
 69 -> 83 [label="[\\]"]
@@ -180,17 +180,17 @@ ST_OFFSET -> 59
 73 -> 89 [label="[.]"]
 73 -> 72 [label="[0-9]"]
 73 -> 78 [label="[\\]"]
-74 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:551"]
+74 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:552"]
 75 -> 76
 76 -> 60 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(-/][:][<-@][[][^][`][{-0xFF]"]
 76 -> 77 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 76 -> 81 [label="[$]"]
 76 -> 75 [label="[0-9][A-Z][_][a-z]"]
 76 -> 78 [label="[\\]"]
-77 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:547"]
+77 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:548"]
 78 -> 60
 79 -> 80
-80 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:444"]
+80 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:445"]
 81 -> 82 [label="[0x00][{]"]
 81 -> 60 [label="[0x01-[][0x5D-z][|-0xFF]"]
 81 -> 83 [label="[\\]"]
@@ -201,7 +201,7 @@ ST_OFFSET -> 59
 84 -> 60 [label="[0x00-#][%-[][0x5D-0xFF]"]
 84 -> 83 [label="[$][\\]"]
 85 -> 86
-86 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:449"]
+86 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:450"]
 87 -> 88
 88 -> 87 [label="[0x00-&][(-0xFF]"]
 88 -> 91 [label="[']"]
@@ -212,7 +212,7 @@ ST_OFFSET -> 59
 90 -> 89 [label="[0-9]"]
 90 -> 78 [label="[\\]"]
 91 -> 92
-92 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:416"]
+92 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:417"]
 ST_SECTION_VALUE -> 94
 94 -> 95 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!][#][%-&][(-,][/][:][<-@][[][^][`][{-0xFF]"]
 94 -> 98 [label="[0x09][ ]"]
@@ -230,7 +230,7 @@ ST_SECTION_VALUE -> 94
 96 -> 97 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 96 -> 117 [label="[$]"]
 96 -> 113 [label="[\\]"]
-97 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:573"]
+97 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:574"]
 98 -> 99
 99 -> 95 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!][#][%-&][(-:][<-[][^-0xFF]"]
 99 -> 98 [label="[0x09][ ]"]
@@ -239,9 +239,9 @@ ST_SECTION_VALUE -> 94
 99 -> 117 [label="[$]"]
 99 -> 113 [label="[\\]"]
 100 -> 101
-101 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:648"]
+101 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:649"]
 102 -> 103
-103 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:577"]
+103 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:578"]
 104 -> 101 [label="[0x00]"]
 104 -> 95 [label="[0x01-[][0x5D-z][|-0xFF]"]
 104 -> 119 [label="[\\]"]
@@ -257,21 +257,21 @@ ST_SECTION_VALUE -> 94
 108 -> 125 [label="[.]"]
 108 -> 107 [label="[0-9]"]
 108 -> 113 [label="[\\]"]
-109 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:551"]
+109 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:552"]
 110 -> 111
 111 -> 95 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(-/][:][<-@][[][^][`][{-0xFF]"]
 111 -> 112 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 111 -> 117 [label="[$]"]
 111 -> 110 [label="[0-9][A-Z][_][a-z]"]
 111 -> 113 [label="[\\]"]
-112 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:547"]
+112 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:548"]
 113 -> 95
 114 -> 115
 115 -> 116 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-0xFF]"]
 115 -> 114 [label="[0x09][ ]"]
 115 -> 127 [label="[0x0A]"]
 115 -> 128 [label="[0x0D]"]
-116 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:425"]
+116 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:426"]
 117 -> 118 [label="[0x00][{]"]
 117 -> 95 [label="[0x01-[][0x5D-z][|-0xFF]"]
 117 -> 119 [label="[\\]"]
@@ -282,7 +282,7 @@ ST_SECTION_VALUE -> 94
 120 -> 95 [label="[0x00-#][%-[][0x5D-0xFF]"]
 120 -> 119 [label="[$][\\]"]
 121 -> 122
-122 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:449"]
+122 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:450"]
 123 -> 124
 124 -> 123 [label="[0x00-&][(-0xFF]"]
 124 -> 129 [label="[']"]
@@ -296,7 +296,7 @@ ST_SECTION_VALUE -> 94
 128 -> 116 [label="[0x00-0x09][0x0B-0xFF]"]
 128 -> 127 [label="[0x0A]"]
 129 -> 130
-130 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:416"]
+130 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:417"]
 ST_VALUE -> 132
 132 -> 133 [label="[0x00]"]
 132 -> 135 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#][%][*-,][/][:][<][>-@][[-0x5D][`][{][}][0x7F-0xFF]"]
@@ -318,12 +318,12 @@ ST_VALUE -> 132
 132 -> 165 [label="[T][t]"]
 132 -> 166 [label="[Y][y]"]
 133 -> 134
-134 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:643"]
+134 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:644"]
 135 -> 136
 136 -> 137 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 136 -> 135 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#][%][*-:][<][>-0x5D][_-{][}][0x7F-0xFF]"]
 136 -> 167 [label="[$]"]
-137 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:569"]
+137 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:570"]
 138 -> 139
 139 -> 140 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!][#-:][<-0xFF]"]
 139 -> 138 [label="[0x09][ ]"]
@@ -331,17 +331,17 @@ ST_VALUE -> 132
 139 -> 143 [label="[0x0D]"]
 139 -> 147 [label="[\"]"]
 139 -> 155 [label="[;]"]
-140 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:623"]
+140 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:624"]
 141 -> 142
-142 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:541"]
+142 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:542"]
 143 -> 142 [label="[0x00-0x09][0x0B-0xFF]"]
 143 -> 141 [label="[0x0A]"]
 144 -> 145
 145 -> 146 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 145 -> 144 [label="[0x09][ ]"]
-146 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:559"]
+146 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:560"]
 147 -> 148
-148 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:577"]
+148 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:578"]
 149 -> 134 [label="[0x00]"]
 149 -> 135 [label="[0x01-[][0x5D-z][|-0xFF]"]
 149 -> 169 [label="[\\]"]
@@ -356,19 +356,19 @@ ST_VALUE -> 132
 153 -> 167 [label="[$]"]
 153 -> 174 [label="[.]"]
 153 -> 152 [label="[0-9]"]
-154 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:551"]
+154 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:552"]
 155 -> 156
 156 -> 155 [label="[0x00-0x09][0x0B-0x0C][0x0E-0xFF]"]
 156 -> 176 [label="[0x0A]"]
 156 -> 178 [label="[0x0D]"]
 157 -> 158
-158 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:563"]
+158 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:564"]
 159 -> 160
 160 -> 161 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 160 -> 135 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#][%][*-/][:][<][>-@][[-0x5D][`][{][}][0x7F-0xFF]"]
 160 -> 167 [label="[$]"]
 160 -> 159 [label="[0-9][A-Z][_][a-z]"]
-161 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:547"]
+161 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:548"]
 162 -> 161 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 162 -> 136 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#-%][*-/][:][<][>-@][[-0x5D][`][{][}][0x7F-0xFF]"]
 162 -> 159 [label="[0-9][B-Z][_][b-z]"]
@@ -403,7 +403,7 @@ ST_VALUE -> 132
 169 -> 135 [label="[0x00-#][%-0xFF]"]
 169 -> 188 [label="[$]"]
 170 -> 171
-171 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:449"]
+171 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:450"]
 172 -> 173
 173 -> 172 [label="[0x00-&][(-0xFF]"]
 173 -> 190 [label="[']"]
@@ -413,7 +413,7 @@ ST_VALUE -> 132
 175 -> 167 [label="[$]"]
 175 -> 174 [label="[0-9]"]
 176 -> 177
-177 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:637"]
+177 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:638"]
 178 -> 177 [label="[0x00-0x09][0x0B-0xFF]"]
 178 -> 176 [label="[0x0A]"]
 179 -> 161 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
@@ -425,7 +425,7 @@ ST_VALUE -> 132
 180 -> 193 [label="[0x09][ ]"]
 180 -> 159 [label="[0-9][A-M][O-Z][_][a-m][o-z]"]
 180 -> 195 [label="[N][n]"]
-181 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:473"]
+181 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:474"]
 182 -> 161 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 182 -> 136 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#-%][*-/][:][<][>-@][[-0x5D][`][{][}][0x7F-0xFF]"]
 182 -> 159 [label="[0-9][A-K][M-Z][_][a-k][m-z]"]
@@ -438,7 +438,7 @@ ST_VALUE -> 132
 184 -> 136 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#-%][*-/][:][<][>-@][[-0x5D][`][{][}][0x7F-0xFF]"]
 184 -> 198 [label="[0x09][ ]"]
 184 -> 159 [label="[0-9][A-Z][_][a-z]"]
-185 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:469"]
+185 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:470"]
 186 -> 161 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 186 -> 136 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#-%][*-/][:][<][>-@][[-0x5D][`][{][}][0x7F-0xFF]"]
 186 -> 159 [label="[0-9][A-T][V-Z][_][a-t][v-z]"]
@@ -453,7 +453,7 @@ ST_VALUE -> 132
 189 -> 188 [label="[$]"]
 189 -> 169 [label="[\\]"]
 190 -> 191
-191 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:416"]
+191 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:417"]
 192 -> 161 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 192 -> 136 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#-%][*-/][:][<][>-@][[-0x5D][`][{][}][0x7F-0xFF]"]
 192 -> 159 [label="[0-9][A-R][T-Z][_][a-r][t-z]"]
@@ -484,7 +484,7 @@ ST_VALUE -> 132
 201 -> 136 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#-%][*-/][:][<][>-@][[-0x5D][`][{][}][0x7F-0xFF]"]
 201 -> 203 [label="[0x09][ ]"]
 201 -> 159 [label="[0-9][A-Z][_][a-z]"]
-202 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:477"]
+202 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:478"]
 203 -> 204
 204 -> 202 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 204 -> 203 [label="[0x09][ ]"]
@@ -495,15 +495,15 @@ ST_SECTION_RAW -> 206
 207 -> 208
 208 -> 207 [label="[0x00-0x09][0x0B-0x0C][0x0E-\\][^-0xFF]"]
 208 -> 209 [label="[0x0A][0x0D][0x5D]"]
-209 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:537"]
+209 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:538"]
 210 -> 211
-211 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:648"]
+211 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:649"]
 212 -> 213
 213 -> 214 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-0xFF]"]
 213 -> 212 [label="[0x09][ ]"]
 213 -> 215 [label="[0x0A]"]
 213 -> 216 [label="[0x0D]"]
-214 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:425"]
+214 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:426"]
 215 -> 214
 216 -> 214 [label="[0x00-0x09][0x0B-0xFF]"]
 216 -> 215 [label="[0x0A]"]
@@ -512,15 +512,15 @@ ST_DOUBLE_QUOTES -> 218
 218 -> 221 [label="[\"]"]
 218 -> 224 [label="[$]"]
 219 -> 220
-220 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:587"]
+220 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:588"]
 221 -> 222
 222 -> 223 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 222 -> 221 [label="[0x09][ ]"]
-223 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:582"]
+223 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:583"]
 224 -> 220 [label="[0x00-z][|-0xFF]"]
 224 -> 225 [label="[{]"]
 225 -> 226
-226 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:449"]
+226 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:450"]
 ST_VARNAME -> 228
 228 -> 229 [label="[0x00-0x08][0x0B-0x0C][0x0E- ][#][%]['][*-:][<][>-Z][\\-0x5D][_-z][0x7F-0xFF]"]
 228 -> 232 [label="[0x09-0x0A][0x0D][!-\"][$][&][(-)][;][=][[][^][{-|][~]"]
@@ -528,11 +528,11 @@ ST_VARNAME -> 228
 229 -> 230
 230 -> 229 [label="[0x00-0x08][0x0B-0x0C][0x0E- ][#][%]['][*-:][<][>-Z][\\-0x5D][_-z][0x7F-0xFF]"]
 230 -> 231 [label="[0x09-0x0A][0x0D][!-\"][$][&][(-)][;][=][[][^][{-~]"]
-231 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:454"]
+231 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:455"]
 232 -> 233
-233 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:648"]
+233 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:649"]
 234 -> 235
-235 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:464"]
+235 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:465"]
 ST_RAW -> 237
 237 -> 238 [label="[0x00]"]
 237 -> 240 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][!-:][<-0xFF]"]
@@ -541,13 +541,13 @@ ST_RAW -> 237
 237 -> 245 [label="[0x0D]"]
 237 -> 246 [label="[;]"]
 238 -> 239
-239 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:643"]
+239 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:644"]
 240 -> 241
-241 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:500"]
+241 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:501"]
 242 -> 241 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-:][<-0xFF]"]
 242 -> 249 [label="[0x09-0x0A][0x0D][ ][;]"]
 243 -> 244
-244 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:541"]
+244 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:542"]
 245 -> 244 [label="[0x00-0x09][0x0B-0xFF]"]
 245 -> 243 [label="[0x0A]"]
 246 -> 247
@@ -560,19 +560,19 @@ ST_RAW -> 237
 249 -> 243 [label="[0x0A]"]
 249 -> 245 [label="[0x0D]"]
 249 -> 246 [label="[;]"]
-250 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:627"]
+250 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:628"]
 251 -> 252
-252 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:637"]
+252 [label="dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:638"]
 253 -> 252 [label="[0x00-0x09][0x0B-0xFF]"]
 253 -> 251 [label="[0x0A]"]
 }
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:384:13: warning: escape has no effect: '\.' [-Wuseless-escape]
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:384:32: warning: escape has no effect: '\.' [-Wuseless-escape]
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:391:27: warning: escape has no effect: '\[' [-Wuseless-escape]
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:392:11: warning: escape has no effect: '\[' [-Wuseless-escape]
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:648:7: warning: unreachable rule in condition 'INITIAL' (shadowed by rules at lines 406, 481, 491, 555, 627, 632, 637) [-Wunreachable-rules]
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:623:50: warning: unreachable rule in condition 'ST_OFFSET' (shadowed by rule at line 573) [-Wunreachable-rules]
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:623:50: warning: unreachable rule in condition 'ST_SECTION_VALUE' (shadowed by rule at line 573) [-Wunreachable-rules]
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:648:7: warning: unreachable rule in condition 'ST_VALUE' (shadowed by rules at lines 541, 547, 551, 559, 563, 569, 577, 623, 643) [-Wunreachable-rules]
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:648:7: warning: unreachable rule in condition 'ST_DOUBLE_QUOTES' (shadowed by rules at lines 582, 587) [-Wunreachable-rules]
-dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:648:7: warning: unreachable rule in condition 'ST_RAW' (shadowed by rules at lines 500, 541, 643) [-Wunreachable-rules]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:385:13: warning: escape has no effect: '\.' [-Wuseless-escape]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:385:32: warning: escape has no effect: '\.' [-Wuseless-escape]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:392:27: warning: escape has no effect: '\[' [-Wuseless-escape]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:393:11: warning: escape has no effect: '\[' [-Wuseless-escape]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:649:7: warning: unreachable rule in condition 'INITIAL' (shadowed by rules at lines 407, 482, 492, 556, 628, 633, 638) [-Wunreachable-rules]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:624:50: warning: unreachable rule in condition 'ST_OFFSET' (shadowed by rule at line 574) [-Wunreachable-rules]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:624:50: warning: unreachable rule in condition 'ST_SECTION_VALUE' (shadowed by rule at line 574) [-Wunreachable-rules]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:649:7: warning: unreachable rule in condition 'ST_VALUE' (shadowed by rules at lines 542, 548, 552, 560, 564, 570, 578, 624, 644) [-Wunreachable-rules]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:649:7: warning: unreachable rule in condition 'ST_DOUBLE_QUOTES' (shadowed by rules at lines 583, 588) [-Wunreachable-rules]
+dot/php20150211_zend_ini_scanner.c--emit-dot--flex-syntax--case-inverted.re:649:7: warning: unreachable rule in condition 'ST_RAW' (shadowed by rules at lines 501, 542, 644) [-Wunreachable-rules]

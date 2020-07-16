@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT  --emit-dot
 /*!re2c
 
 	[a-b\xFE-\xFF]	{ return 1; }

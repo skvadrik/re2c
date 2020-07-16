@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 #include <iostream>
 
 #define YYCTYPE unsigned char

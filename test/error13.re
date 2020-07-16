@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 /*!max:re2c */
 
 /*!re2c

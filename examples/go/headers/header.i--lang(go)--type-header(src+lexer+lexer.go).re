@@ -1,4 +1,4 @@
-//go:generate re2go "$GOFILE" -o "$OUTPUT"
+//go:generate re2go $INPUT -o $OUTPUT -i --type-header src/lexer/lexer.go
 package main
 
 import (

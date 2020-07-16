@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cgir
 // multiple scanners, error
 
 /*!types:re2c */

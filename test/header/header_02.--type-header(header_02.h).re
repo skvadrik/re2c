@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT  --type-header header_02.h
 /*!re2c re2c:flags:tags = 1; */
 
 /*!header:re2c:on*/

@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -bi --case-insensitive
 #include <stdlib.h>
 #include "chunk.h"
 #include "scanners.h"

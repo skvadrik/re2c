@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cg
 int main ()
 {
 	YYCONDTYPE cond;

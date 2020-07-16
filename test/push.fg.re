@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -fg
 /*
  *  A push-model scanner example for re2c -f
  *  Written Mon Apr 11 2005 by mgix@mgix.com

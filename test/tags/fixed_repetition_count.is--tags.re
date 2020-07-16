@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -is --tags
 /*!stags:re2c format = "@@\n"; */
 /*!re2c
     @p "aaaa"                          { a }

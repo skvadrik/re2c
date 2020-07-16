@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 // This test shows the need for merging non-interfering classes
 // of tag versions after copy coalescing during allocation of
 // tag variables.

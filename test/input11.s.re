@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -s
 /*!re2c
 
 letter  = [a-zA-Z];

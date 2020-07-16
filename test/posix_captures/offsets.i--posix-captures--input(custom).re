@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --posix-captures --input custom
 #include <stddef.h>
 #include <stdio.h>
 

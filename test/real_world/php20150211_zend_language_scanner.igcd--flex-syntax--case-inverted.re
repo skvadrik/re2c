@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -igcd --flex-syntax --case-inverted
 /*
    +----------------------------------------------------------------------+
    | Zend Engine                                                          |

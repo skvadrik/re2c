@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --posix-captures
 // test for epsilon closure construction:
 // exponential blowup if paths are not merged
 // as soon as they arrive at the same NFA state

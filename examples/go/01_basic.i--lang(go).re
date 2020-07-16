@@ -1,4 +1,4 @@
-//go:generate re2go "$GOFILE" -o "$OUTPUT"
+//go:generate re2go $INPUT -o $OUTPUT -i
 package main                             //
                                          //
 func lex(str string) int {               // Go code

@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ir
 // 2nd use block must inherit options from rules block, not from the 1st use block
 
 /*!rules:re2c

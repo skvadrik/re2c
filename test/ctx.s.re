@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -s
 #include <cstring>
 #include <iostream>
 

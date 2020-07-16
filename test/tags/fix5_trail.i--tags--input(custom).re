@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags --input custom
 #include <stddef.h>
 #include <stdio.h>
 

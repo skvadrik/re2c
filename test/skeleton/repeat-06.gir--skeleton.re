@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -gir --skeleton
 // multiple scanners, additional rules, no char width change
 
 void scan(unsigned char* in)

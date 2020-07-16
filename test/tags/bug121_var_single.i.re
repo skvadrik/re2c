@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 // overlapping trailing contexts of variable length:
 // in principle, we need multiple tags here, but in this
 // particular case all tags can be implemented using sinle

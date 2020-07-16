@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>

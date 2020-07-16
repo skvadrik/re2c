@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 /*
  * This lexer was written for unifdef, which is a kind of C/C++
  * preprocessor. It supports some recent C and C++ features.

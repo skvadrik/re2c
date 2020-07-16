@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -fi
 /*!re2c
   [a] { a }
   *   { x }

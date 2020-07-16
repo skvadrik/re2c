@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 // This test shows that tag liveness should be attributed to DFA edges,
 // not to DFA states. State granularity is too crude: there might be
 // two different paths to the same state, with some tag alive on one

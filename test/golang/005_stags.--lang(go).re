@@ -1,3 +1,4 @@
+//go:generate re2go $INPUT -o $OUTPUT 
 package main
 
 func Lex(str string) (a int, b int, c int) {

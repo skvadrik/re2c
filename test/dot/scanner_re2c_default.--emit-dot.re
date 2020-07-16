@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT  --emit-dot
 /* $Id$ */
 #include <stdlib.h>
 #include <string.h>

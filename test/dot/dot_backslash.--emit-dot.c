@@ -3,6 +3,6 @@ digraph re2c {
 1 -> 2 [label="[0x00-[][0x5D-0xFF]"]
 1 -> 3 [label="[\\]"]
 3 -> 4
-4 [label="dot/dot_backslash.--emit-dot.re:3"]
+4 [label="dot/dot_backslash.--emit-dot.re:4"]
 }
-dot/dot_backslash.--emit-dot.re:5:2: warning: control flow is undefined for strings that match '[\x0-\x5B\x5D-\xFF]', use default rule '*' [-Wundefined-control-flow]
+dot/dot_backslash.--emit-dot.re:6:2: warning: control flow is undefined for strings that match '[\x0-\x5B\x5D-\xFF]', use default rule '*' [-Wundefined-control-flow]

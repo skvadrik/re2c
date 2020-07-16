@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 /*!re2c
 	"print"		{return PRINT;}
 	[a-z]+		{return ID;}

@@ -1,4 +1,4 @@
-//go:generate re2go "$GOFILE" -o "$OUTPUT"
+//go:generate re2go $INPUT -o $OUTPUT
 package main
 
 import (

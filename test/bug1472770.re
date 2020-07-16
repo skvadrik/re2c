@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 #define NULL ((char*) 0)
 #define YYCTYPE char
 #define YYCURSOR p

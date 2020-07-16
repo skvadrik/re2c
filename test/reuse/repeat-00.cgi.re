@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -cgi
 // multiples scanners
 
 void scan(unsigned char* in)

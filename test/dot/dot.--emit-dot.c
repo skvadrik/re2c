@@ -4,7 +4,7 @@ digraph re2c {
 1 -> 4 [label="[a]"]
 1 -> 5 [label="[e]"]
 2 -> 3
-3 [label="dot/dot.--emit-dot.re:8"]
+3 [label="dot/dot.--emit-dot.re:9"]
 4 -> 3 [label="[0x00-a][c-0xFF]"]
 4 -> 6 [label="[b]"]
 5 -> 3 [label="[0x00-e][g-0xFF]"]
@@ -15,7 +15,7 @@ digraph re2c {
 8 -> 7 [label="[0x00-f][h-0xFF]"]
 8 -> 11 [label="[g]"]
 9 -> 10
-10 [label="dot/dot.--emit-dot.re:6"]
+10 [label="dot/dot.--emit-dot.re:7"]
 11 -> 12
-12 [label="dot/dot.--emit-dot.re:7"]
+12 [label="dot/dot.--emit-dot.re:8"]
 }

@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 char *scan(char *p)
 {
 /*!re2c

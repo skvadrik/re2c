@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 // R1 matches any single character => all transitions from the initial
 // state have the same tags which can be hoisted
 /*!re2c

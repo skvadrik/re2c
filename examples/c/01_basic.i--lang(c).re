@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 #include <assert.h>                 //
                                     // C/C++ code
 int lex(const char *YYCURSOR)       //

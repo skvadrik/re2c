@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -b
 /*!re2c
 
 a = [aA];

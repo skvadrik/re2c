@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags --eager-skip --input custom
 // overlapping trailing contexts of variable length:
 // we need multiple tags and we cannot deduplicate them
 

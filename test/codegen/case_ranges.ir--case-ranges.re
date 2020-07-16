@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ir --case-ranges
 #include <assert.h>
 
 #define YYCTYPE char

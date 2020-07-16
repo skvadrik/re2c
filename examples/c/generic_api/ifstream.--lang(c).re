@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT 
 #include <cassert>
 #include <cstdio>
 #include <fstream>

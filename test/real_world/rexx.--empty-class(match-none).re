@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT  --empty-class match-none
 #include "scanio.h"
 #include "scanner.h"
 

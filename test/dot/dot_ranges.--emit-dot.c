@@ -4,9 +4,9 @@ digraph re2c {
 1 -> 4 [label="[0-8][^]"]
 1 -> 6 [label="[a-b][0xFE-0xFF]"]
 2 -> 3
-3 [label="dot/dot_ranges.--emit-dot.re:5"]
+3 [label="dot/dot_ranges.--emit-dot.re:6"]
 4 -> 5
-5 [label="dot/dot_ranges.--emit-dot.re:4"]
+5 [label="dot/dot_ranges.--emit-dot.re:5"]
 6 -> 7
-7 [label="dot/dot_ranges.--emit-dot.re:3"]
+7 [label="dot/dot_ranges.--emit-dot.re:4"]
 }

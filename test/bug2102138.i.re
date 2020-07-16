@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i
 #include <stdio.h>
 
 int scan(const unsigned char *cr)

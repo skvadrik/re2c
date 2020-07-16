@@ -1,1 +1,1 @@
-american_fuzzy_lop/003.re:1:8: error: unexpected end of input
+american_fuzzy_lop/003.re:2:8: error: unexpected end of input

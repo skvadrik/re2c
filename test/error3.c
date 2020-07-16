@@ -1,1 +1,1 @@
-error3.re:18:4: error: unexpected character: ']'
+error3.re:19:4: error: unexpected character: ']'

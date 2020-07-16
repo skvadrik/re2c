@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -bi
 /* $Id$ */
 #include <stdlib.h>
 #include <string.h>

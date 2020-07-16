@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 // EMPTY rule is shadowed and dead-code-eliminated. Empty string is a no-match.
 // Tags are hoisted.
 /*!re2c

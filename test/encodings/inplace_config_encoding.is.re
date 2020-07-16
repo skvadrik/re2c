@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -is
 EBCDIC:
 /*!re2c
 	re2c:flags:e = 1;

@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -ri --tags
 /*!rules:re2c
   (@p [a])+ { a }
   *         { x }

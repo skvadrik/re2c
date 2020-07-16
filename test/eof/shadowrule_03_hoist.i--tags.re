@@ -1,3 +1,4 @@
+// re2c $INPUT -o $OUTPUT -i --tags
 // R1 matches any string of two characters (or more). Because of greediness
 // ANY rule cannot match on a single-character string (it is shadowed and
 // gets eliminated) => tags are hoisted
