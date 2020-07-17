@@ -37,141 +37,155 @@ body4 =
     [ "[a]* { a }" -- DFA has transitions into initial state
     ]
 
-cond_get_style :: (String, String, [[String]], [String])
+type Pack = (String, String, String, [[String]], [String])
+
+cond_get_style :: Pack
 cond_get_style =
     let name = "cond_get_style"
-        ext = "ci"
+        ext = "c"
+        comment = "ci"
         confs =
             [ genconfs "define:YYGETCONDITION:naked" ["0", "1"]
             , genconfs "api:style" ["free-form", "functions"]
             ]
-    in  (name, ext, confs, body2)
+    in  (name, ext, comment, confs, body2)
 
-cond_set_style :: (String, String, [[String]], [String])
+cond_set_style :: Pack
 cond_set_style =
     let name = "cond_set_style"
-        ext = "ci"
+        ext = "c"
+        comment = "ci"
         confs =
             [ genconfs "define:YYSETCONDITION:naked" ["0", "1"]
             , genconfs "api:style" ["free-form", "functions"]
             ]
-    in  (name, ext, confs, body2)
+    in  (name, ext, comment, confs, body2)
 
-cond_set_sigil :: (String, String, [[String]], [String])
+cond_set_sigil :: Pack
 cond_set_sigil =
     let name = "cond_set_sigil"
-        ext = "ci"
+        ext = "c"
+        comment = "ci"
         confs =
             [ genconfs "define:YYSETCONDITION@cond" ["@@", "#"]
             , genconfs2 "api:sigil" ["#", "@@"]
             , genconfs2 "define:YYSETCONDITION" ["\"cond = @@;\"", "\"cond = #;\""]
             ]
-    in  (name, ext, confs, body2)
+    in  (name, ext, comment, confs, body2)
 
-cond_goto_sigil :: (String, String, [[String]], [String])
+cond_goto_sigil :: Pack
 cond_goto_sigil =
     let name = "cond_goto_sigil"
-        ext = "ci"
+        ext = "c"
+        comment = "ci"
         confs =
             [ genconfs "cond:goto" ["\"goto #;\"", "\"goto @@;\""]
             , genconfs "cond:goto@cond" ["#", "@@"]
             , genconfs2 "api:sigil" ["#", "@@"]
             ]
-    in  (name, ext, confs, body2)
+    in  (name, ext, comment, confs, body2)
 
-cond_divider_sigil :: (String, String, [[String]], [String])
+cond_divider_sigil :: Pack
 cond_divider_sigil =
     let name = "cond_divider_sigil"
-        ext = "ci"
+        ext = "c"
+        comment = "ci"
         confs =
             -- do not test default `cond:divider` as it has no sigil
             [ genconfs2 "cond:divider" ["\"~~~ ## ~~~\"", "\"--- @@ --- @@ ---\""]
             , genconfs "cond:divider@cond" ["#", "@@"]
             , genconfs2 "api:sigil" ["#", "@@"]
             ]
-    in  (name, ext, confs, body2)
+    in  (name, ext, comment, confs, body2)
 
-state_get_style :: (String, String, [[String]], [String])
+state_get_style :: Pack
 state_get_style =
     let name = "state_get_style"
-        ext = "fi"
+        ext = "f"
+        comment = "fi"
         confs =
             [ genconfs "define:YYGETSTATE:naked" ["0", "1"]
             , genconfs "api:style" ["free-form", "functions"]
             ]
-    in  (name, ext, confs, body1)
+    in  (name, ext, comment, confs, body1)
 
-state_set_style :: (String, String, [[String]], [String])
+state_set_style :: Pack
 state_set_style =
     let name = "state_set_style"
-        ext = "fi"
+        ext = "f"
+        comment = "fi"
         confs =
             [ genconfs "define:YYSETSTATE:naked" ["0", "1"]
             , genconfs "api:style" ["free-form", "functions"]
             ]
-    in  (name, ext, confs, body1)
+    in  (name, ext, comment, confs, body1)
 
-state_set_sigil :: (String, String, [[String]], [String])
+state_set_sigil :: Pack
 state_set_sigil =
     let name = "state_set_sigil"
-        ext = "fi"
+        ext = "f"
+        comment = "fi"
         confs =
             [ genconfs "define:YYSETSTATE@state" ["@@", "\"\xFF\""]
             , genconfs2 "api:sigil" ["\"\xFF\"", "@@"]
             , genconfs2 "define:YYSETSTATE" ["\"state = @@;\"", "\"state = \xFF;\""]
             ]
-    in  (name, ext, confs, body1)
+    in  (name, ext, comment, confs, body1)
 
-tags_expr_sigil :: (String, String, [[String]], [String])
+tags_expr_sigil :: Pack
 tags_expr_sigil =
     let name = "tags_expr_sigil"
-        ext = "i--tags"
+        ext = ""
+        comment = "i --tags"
         confs =
             [ genconfs "tags:expression" ["\"xyz->#\"", "\"@@\""]
             , genconfs "api:sigil" ["#", "@@"]
             ]
-    in  (name, ext, confs, body3)
+    in  (name, ext, comment, confs, body3)
 
-fill_sigil :: (String, String, [[String]], [String])
+fill_sigil :: Pack
 fill_sigil =
     let name = "fill_sigil"
-        ext = "i"
+        ext = ""
+        comment = "i"
         confs =
             [ genconfs "define:YYFILL@len" ["@@", "need"]
             , genconfs2 "api:sigil" ["need", "@@"]
             , genconfs2 "define:YYFILL" ["\"fill(@@)\"", "\"fill(need);\""]
             ]
-    in  (name, ext, confs, body1)
+    in  (name, ext, comment, confs, body1)
 
-fill_style :: (String, String, [[String]], [String])
+fill_style :: Pack
 fill_style =
     let name = "fill_style"
-        ext = "i"
+        ext = ""
+        comment = "i"
         confs =
             [ genconfs "define:YYFILL:naked" ["0", "1"]
             , genconfs "yyfill:parameter" ["0", "1"]
             , genconfs "api:style" ["free-form", "functions"]
             ]
-    in  (name, ext, confs, body1)
+    in  (name, ext, comment, confs, body1)
 
-fill_check :: (String, String, [[String]], [String])
+fill_check :: Pack
 fill_check =
     let name = "fill_check"
-        ext = "i"
+        ext = ""
+        comment = "i"
         confs = [ genconfs "yyfill:check" ["0", "1"] ]
-    in  (name, ext, confs, body1)
+    in  (name, ext, comment, confs, body1)
 
-fill_check_state :: (String, String, [[String]], [String])
+fill_check_state :: Pack
 fill_check_state =
-    let (name, _, confs, body) = fill_check
-    in  (name, "fi", confs, body)
+    let (name, _, _, confs, body) = fill_check
+    in  (name, "f", "fi", confs, body)
 
-eof_variant :: (String, String, [[String]], [String])
-            -> (String, String, [[String]], [String])
-eof_variant (name, ext, confs, body) =
+eof_variant :: Pack
+            -> Pack
+eof_variant (name, ext, comment, confs, body) =
     let name'  = name ++ "_eof"
         confs' = [eof_conf] : confs
-    in  (name', ext, confs', body)
+    in  (name', ext, comment, confs', body)
 
 combine_confs :: [[String]] -> [[(Int, String)]]
 combine_confs xss =
@@ -182,37 +196,38 @@ combine_confs xss =
             _  -> [x:y | x <- g xs, y <- ys]
     in  f (reverse xss) []
 
-startlabel :: (String, String, [[String]], [String])
+startlabel :: Pack
 startlabel =
     let name = "startlabel"
-        ext = "i"
+        ext = ""
+        comment = "i"
         confs =
             [ genconfs "startlabel" ["Lstart"] -- define user start label
             , genconfs "startlabel" ["0", "1"] -- force start label
             ]
-    in  (name, ext, confs, body4)
+    in  (name, ext, comment, confs, body4)
 
-startlabel_with_empty :: (String, String, [[String]], [String])
+startlabel_with_empty :: Pack
 startlabel_with_empty =
-    let (name, ext, confs, body) = startlabel
+    let (name, ext, comment, confs, body) = startlabel
         confs' = confs ++ [genconfs "startlabel" [""]]
-    in  (name, ext, confs', body)
+    in  (name, ext, comment, confs', body)
 
-startlabel_cond :: (String, String, [[String]], [String])
+startlabel_cond :: Pack
 startlabel_cond =
-    let (name, _, confs, _) = startlabel
-    in  (name, "ci", confs, body2)
+    let (name, _, _, confs, _) = startlabel
+    in  (name, "c", "ci", confs, body2)
 
-startlabel_state :: (String, String, [[String]], [String])
+startlabel_state :: Pack
 startlabel_state =
-    let (name, _, confs, body) = startlabel
+    let (name, _, _, confs, body) = startlabel
         confs' = confs ++ [genconfs2 "state:nextlabel" ["0", "1"]]
-    in  (name, "fi", confs', body)
+    in  (name, "f", "fi",  confs', body)
 
-startlabel_state_cond :: (String, String, [[String]], [String])
+startlabel_state_cond :: Pack
 startlabel_state_cond =
-    let (name, _, confs, _) = startlabel_with_empty
-    in  (name, "cfi", confs, body2)
+    let (name, _, _, confs, _) = startlabel_with_empty
+    in  (name, "cf", "cfi", confs, body2)
 
 indent :: String -> String
 indent = ("  " ++)
@@ -248,15 +263,9 @@ re2c_use_block confs = re2c_gen_block "use:re2c" [] confs
 gendirname :: String
 gendirname = "autogen"
 
-gen_fname :: String -> String -> [Int] -> String
-gen_fname name ext numbers =
-    ( combine gendirname
-    . (`addExtension` ".re")
-    . (`addExtension` ext)
-    . intercalate "_"
-    . (name:)
-    . map show
-    ) numbers
+gen_fname :: String -> String -> String
+gen_fname name ext = combine gendirname $
+    name ++ (if ext == "" then "" else "_" ++ ext) ++ ".re"
 
 cleanup :: IO ()
 cleanup = do
@@ -267,17 +276,24 @@ cleanup = do
         . filter (\f -> takeExtension f == ".re")
         ) files
 
-gen_reuse :: (String, String, [[String]], [String]) -> IO ()
-gen_reuse (name, ext, confs, body) = do
-    writeFile (gen_fname name ("r" ++ ext) []) $
-        let confgroups = map (snd . unzip) $ combine_confs confs
-        in  unlines $ (re2c_rules_block body) : map re2c_use_block confgroups
+gen_options :: String -> Bool -> String
+gen_options comment reuse = "// re2c $INPUT -o $OUTPUT -"
+    ++ (if reuse then "r" else "") ++ comment
 
-gen :: (String, String, [[String]], [String]) -> IO ()
-gen (name, ext, confs, body) = do
-    writeFile (gen_fname name ext []) $
+gen_reuse :: Pack -> IO ()
+gen_reuse (name, ext, comment, confs, body) = do
+    writeFile (gen_fname name ("r" ++ ext)) $
         let confgroups = map (snd . unzip) $ combine_confs confs
-        in  unlines $ map (re2c_block body) confgroups
+        in  unlines $ (gen_options comment True)
+                : (re2c_rules_block body)
+                : map re2c_use_block confgroups
+
+gen :: Pack -> IO ()
+gen (name, ext, comment, confs, body) = do
+    writeFile (gen_fname name ext) $
+        let confgroups = map (snd . unzip) $ combine_confs confs
+        in  unlines $ (gen_options comment False)
+                : map (re2c_block body) confgroups
 
 main :: IO ()
 main = do
