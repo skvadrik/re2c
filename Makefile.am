@@ -245,40 +245,40 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/syntax/syntax.rst_ \
 	doc/manual/warnings/warnings_general.rst_ \
 	doc/manual/warnings/warnings_list.rst_ \
-	examples/c/01_basic.i--lang(c).re \
-	examples/c/conditions/parse_u32_conditions.ci--lang(c).re \
-	examples/c/eof/01_sentinel.--lang(c).re \
-	examples/c/eof/02_bounds_checking.--lang(c).re \
-	examples/c/eof/03_eof_rule.--lang(c).re \
-	examples/c/eof/05_generic_api_eof_rule.--lang(c).re \
-	examples/c/fill/01_fill.--lang(c).re \
-	examples/c/fill/02_fill.--lang(c).re \
-	examples/c/headers/header.i--lang(c)--type-header(src+lexer+lexer.h).re \
+	examples/c/01_basic.re \
+	examples/c/conditions/parse_u32_conditions.re \
+	examples/c/eof/01_sentinel.re \
+	examples/c/eof/02_bounds_checking.re \
+	examples/c/eof/03_eof_rule.re \
+	examples/c/eof/05_generic_api_eof_rule.re \
+	examples/c/fill/01_fill.re \
+	examples/c/fill/02_fill.re \
+	examples/c/headers/header.re \
 	examples/c/headers/src/lexer/lexer.h \
-	examples/c/includes/include.i--lang(c).re \
+	examples/c/includes/include.re \
 	examples/c/includes/definitions.h \
-	examples/c/reuse/reuse.r--input-encoding(utf8)--lang(c).re \
-	examples/c/state/push.f--lang(c).re \
-	examples/c/submatch/01_stags.--lang(c).re \
-	examples/c/submatch/02_mtags.--lang(c).re \
-	examples/c/submatch/03_posix.--lang(c).re \
-	examples/go/01_basic.i--lang(go).re \
-	examples/go/conditions/parse_u32_conditions.ci--lang(go).re \
-	examples/go/eof/01_sentinel.--lang(go).re \
-	examples/go/eof/02_bounds_checking.--lang(go).re \
-	examples/go/eof/03_eof_rule.--lang(go).re \
-	examples/go/eof/05_generic_api_eof_rule.--lang(go).re \
-	examples/go/fill/01_fill.--lang(go).re \
-	examples/go/fill/02_fill.--lang(go).re \
-	examples/go/headers/header.i--lang(go)--type-header(src+lexer+lexer.go).re \
+	examples/c/reuse/reuse.re \
+	examples/c/state/push.re \
+	examples/c/submatch/01_stags.re \
+	examples/c/submatch/02_mtags.re \
+	examples/c/submatch/03_posix.re \
+	examples/go/01_basic.re \
+	examples/go/conditions/parse_u32_conditions.re \
+	examples/go/eof/01_sentinel.re \
+	examples/go/eof/02_bounds_checking.re \
+	examples/go/eof/03_eof_rule.re \
+	examples/go/eof/05_generic_api_eof_rule.re \
+	examples/go/fill/01_fill.re \
+	examples/go/fill/02_fill.re \
+	examples/go/headers/header.re \
 	examples/go/headers/src/lexer/lexer.go \
-	examples/go/includes/include.i--lang(go).re \
+	examples/go/includes/include.re \
 	examples/go/includes/definitions.go \
-	examples/go/reuse/reuse.r--input-encoding(utf8)--lang(go).re \
-	examples/go/state/push.f--lang(go).re \
-	examples/go/submatch/01_stags.--lang(go).re \
-	examples/go/submatch/02_mtags.--lang(go).re \
-	examples/go/submatch/03_posix.--lang(go).re
+	examples/go/reuse/reuse.re \
+	examples/go/state/push.re \
+	examples/go/submatch/01_stags.re \
+	examples/go/submatch/02_mtags.re \
+	examples/go/submatch/03_posix.re
 
 DOC_C = doc/re2c.1
 DOCS = $(DOC_C)

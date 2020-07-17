@@ -32,14 +32,14 @@ EXAMPLE
 Input file
 ----------
 
-.. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.i--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.re
     :literal:
     :code: RE2C_LANG
 
 Output file
 -----------
 
-.. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.i--lang(RE2C_LANG).RE2C_LANG
+.. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.RE2C_LANG
     :literal:
     :code: RE2C_LANG
 
@@ -84,19 +84,19 @@ EOF handling
 ============
 .. include:: @top_srcdir@/doc/manual/eof/eof.rst_
 .. include:: @top_srcdir@/doc/manual/eof/01_sentinel.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/eof/01_sentinel.--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/eof/01_sentinel.re
     :literal:
     :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/eof/02_bounds_checking.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/eof/02_bounds_checking.--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/eof/02_bounds_checking.re
     :literal:
     :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/eof/03_eof_rule.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/eof/03_eof_rule.--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/eof/03_eof_rule.re
     :literal:
     :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/eof/04_generic_api.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/eof/05_generic_api_eof_rule.--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/eof/05_generic_api_eof_rule.re
     :literal:
     :code: RE2C_LANG
 
@@ -104,11 +104,11 @@ Buffer refilling
 ================
 .. include:: @top_srcdir@/doc/manual/fill/fill.rst_
 .. include:: @top_srcdir@/doc/manual/fill/01_fill.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/fill/01_fill.--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/fill/01_fill.re
     :literal:
     :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/fill/02_fill.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/fill/02_fill.--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/fill/02_fill.re
     :literal:
     :code: RE2C_LANG
 
@@ -124,7 +124,7 @@ Include file (definitions.RE2C_HEADER_EXT)
 
 Input file
 ----------
-.. include:: @top_srcdir@/examples/RE2C_LANG/includes/include.i--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/includes/include.re
     :literal:
     :code: RE2C_LANG
 
@@ -134,7 +134,7 @@ Header files
 
 Input file
 ----------
-.. include:: @top_srcdir@/examples/RE2C_LANG/headers/header.i--lang(RE2C_LANG)--type-header(src+lexer+lexer.RE2C_HEADER_EXT).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/headers/header.re
     :literal:
     :code: RE2C_LANG
 
@@ -148,15 +148,15 @@ Submatch extraction
 ===================
 .. include:: @top_srcdir@/doc/manual/submatch/submatch.rst_
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags.--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags.re
     :literal:
     :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_posix.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/03_posix.--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/03_posix.re
     :literal:
     :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_mtags.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/02_mtags.--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/02_mtags.re
     :literal:
     :code: RE2C_LANG
 
@@ -165,7 +165,7 @@ Storable state
 .. include:: @top_srcdir@/doc/manual/state/state.rst_
 Example
 -------
-.. include:: @top_srcdir@/examples/RE2C_LANG/state/push.f--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/state/push.re
     :literal:
     :code: RE2C_LANG
 
@@ -174,7 +174,7 @@ Reusable blocks
 .. include:: @top_srcdir@/doc/manual/reuse/reuse.rst_
 Example
 -------
-.. include:: @top_srcdir@/examples/RE2C_LANG/reuse/reuse.r--input-encoding(utf8)--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/reuse/reuse.re
     :literal:
     :code: RE2C_LANG
 
@@ -187,7 +187,7 @@ Start conditions
 .. include:: @top_srcdir@/doc/manual/conditions/conditions.rst_
 Example
 -------
-.. include:: @top_srcdir@/examples/RE2C_LANG/conditions/parse_u32_conditions.ci--lang(RE2C_LANG).re
+.. include:: @top_srcdir@/examples/RE2C_LANG/conditions/parse_u32_conditions.re
     :literal:
     :code: RE2C_LANG
 
