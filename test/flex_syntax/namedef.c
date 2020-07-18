@@ -7,20 +7,17 @@
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy4;
+	case 'b':	goto yy6;
 	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-	{}
+	{ * }
 yy4:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 'a':	goto yy4;
-	default:	goto yy6;
-	}
+	{ a }
 yy6:
-	{}
+	++YYCURSOR;
+	{ b }
 }
-flex_syntax/004d.re:3:5: warning: rule matches empty string [-Wmatch-empty-string]
+
