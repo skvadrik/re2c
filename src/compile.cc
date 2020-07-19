@@ -28,16 +28,26 @@ namespace re2c {
 
 class Msg;
 
-static std::string make_name(const std::string &cond, uint32_t line)
+static std::string make_name(Output &output, const std::string &cond, const loc_t &loc)
 {
-    std::ostringstream os;
-    os << "line" << line;
-    std::string name = os.str();
-    if (!cond.empty ())
-    {
+    std::string name;
+
+    // if the block is included from another file, prepend filename for disambiguation
+    if (loc.file > 0) {
+        name += output.msg.filenames[loc.file];
+        for (size_t i = 0; i < name.length(); ++i) {
+            if (!std::isalnum(name[i])) name[i] = '_';
+        }
         name += "_";
-        name += cond;
     }
+
+    std::ostringstream os;
+    os << loc.line;
+    name += "line" + os.str();
+
+    // if the block has multiple conditions, append condition name for disambiguation
+    if (!cond.empty()) name += "_" + cond;
+
     return name;
 }
 
@@ -51,7 +61,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     const SemAct *eof = spec.eofs.empty() ? NULL : spec.eofs.front();
     const std::string
         &cond = spec.name,
-        name = make_name(cond, loc.line),
+        name = make_name(output, cond, loc),
         &setup = spec.setup.empty() ? "" : spec.setup[0]->text;
 
     RangeMgr rangemgr;
