@@ -16,9 +16,9 @@ while ``YYLESSTHAN`` happens only once per each strongly connected component of 
 However, this method allows to avoid padding, which would require buffering input and nullify all advantages of direct-file input.
 
 
-:download:`[ifstream.re] <ifstream.--lang(c).re>`
+:download:`[ifstream.re] <ifstream.re>`
 
-.. literalinclude:: ifstream.--lang(c).re
+.. literalinclude:: ifstream.re
     :language: cpp
     :linenos:
 

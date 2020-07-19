@@ -18,12 +18,12 @@ User manual (re2go)
 
 Here is an example program that shows various aspects of re2c syntax:
 
-.. literalinclude:: ../examples/go/01_basic.i--lang(go).re
+.. literalinclude:: ../examples/go/01_basic.re
     :language: go
 
 This is the generated output:
 
-.. literalinclude:: ../examples/go/01_basic.i--lang(go).go
+.. literalinclude:: ../examples/go/01_basic.go
     :language: go
 
 
@@ -80,26 +80,26 @@ EOF handling
 ============
 .. include:: /manual/eof/eof.rst_
 .. include:: /manual/eof/01_sentinel.rst_
-.. literalinclude:: ../examples/go/eof/01_sentinel.--lang(go).re
+.. literalinclude:: ../examples/go/eof/01_sentinel.re
     :language: go
 .. include:: /manual/eof/02_bounds_checking.rst_
-.. literalinclude:: ../examples/go/eof/02_bounds_checking.--lang(go).re
+.. literalinclude:: ../examples/go/eof/02_bounds_checking.re
     :language: go
 .. include:: /manual/eof/03_eof_rule.rst_
-.. literalinclude:: ../examples/go/eof/03_eof_rule.--lang(go).re
+.. literalinclude:: ../examples/go/eof/03_eof_rule.re
     :language: go
 .. include:: /manual/eof/04_generic_api.rst_
-.. literalinclude:: ../examples/go/eof/05_generic_api_eof_rule.--lang(go).re
+.. literalinclude:: ../examples/go/eof/05_generic_api_eof_rule.re
     :language: go
 
 Buffer refilling
 ================
 .. include:: /manual/fill/fill.rst_
 .. include:: /manual/fill/01_fill.rst_
-.. literalinclude:: ../examples/go/fill/01_fill.--lang(go).re
+.. literalinclude:: ../examples/go/fill/01_fill.re
     :language: go
 .. include:: /manual/fill/02_fill.rst_
-.. literalinclude:: ../examples/go/fill/02_fill.--lang(go).re
+.. literalinclude:: ../examples/go/fill/02_fill.re
     :language: go
 
 Include files
@@ -113,14 +113,14 @@ Include file (definitions.go):
 
 Input file:
 
-.. literalinclude:: ../examples/go/includes/include.i--lang(go).re
+.. literalinclude:: ../examples/go/includes/include.re
     :language: go
 
 Header files
 ============
 .. include:: /manual/headers/headers.rst_
 
-.. literalinclude:: ../examples/go/headers/header.i--lang(go)--type-header(src+lexer+lexer.go).re
+.. literalinclude:: ../examples/go/headers/header.re
     :language: go
 
 The generated header file:
@@ -132,25 +132,25 @@ Submatch extraction
 ===================
 .. include:: /manual/submatch/submatch.rst_
 .. include:: /manual/submatch/submatch_example_stags.rst_
-.. literalinclude:: ../examples/go/submatch/01_stags.--lang(go).re
+.. literalinclude:: ../examples/go/submatch/01_stags.re
     :language: go
 .. include:: /manual/submatch/submatch_example_posix.rst_
-.. literalinclude:: ../examples/go/submatch/03_posix.--lang(go).re
+.. literalinclude:: ../examples/go/submatch/03_posix.re
     :language: go
 .. include:: /manual/submatch/submatch_example_mtags.rst_
-.. literalinclude:: ../examples/go/submatch/02_mtags.--lang(go).re
+.. literalinclude:: ../examples/go/submatch/02_mtags.re
     :language: go
 
 Storable state
 ==============
 .. include:: /manual/state/state.rst_
-.. literalinclude:: ../examples/go/state/push.f--lang(go).re
+.. literalinclude:: ../examples/go/state/push.re
     :language: go
 
 Reusable blocks
 ===============
 .. include:: /manual/reuse/reuse.rst_
-.. literalinclude:: ../examples/go/reuse/reuse.r--input-encoding(utf8)--lang(go).re
+.. literalinclude:: ../examples/go/reuse/reuse.re
     :language: go
 
 Encoding support
@@ -163,7 +163,7 @@ Start conditions
 
 Here is an example program that uses start conditions to parse integer numbers in binary, octal, decimal and hexadecimal format:
 
-.. literalinclude:: ../examples/go/conditions/parse_u32_conditions.ci--lang(go).re
+.. literalinclude:: ../examples/go/conditions/parse_u32_conditions.re
     :language: go
 
 Skeleton programs

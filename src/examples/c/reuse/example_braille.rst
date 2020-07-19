@@ -26,9 +26,9 @@ It means *"All human beings are born free and equal in dignity and rights.
 They are endowed with reason and conscience and should act towards 
 one another in a spirit of brotherhood."*
 
-:download:`[braille.re] <braille.cri--lang(c).re>`
+:download:`[braille.re] <braille.re>`
 
-.. literalinclude:: braille.cri--lang(c).re
+.. literalinclude:: braille.re
     :language: cpp
     :linenos:
 

@@ -18,9 +18,9 @@ Our imaginary options are summarized below:
 
 * ``-f FORMAT``, ``--format=FORMAT``, where ``FORMAT`` is a double-quoted format string
 
-:download:`[options.re] <parse_options.i--lang(c).re>`
+:download:`[options.re] <parse_options.re>`
 
-.. literalinclude:: parse_options.i--lang(c).re
+.. literalinclude:: parse_options.re
     :language: cpp
     :linenos:
 

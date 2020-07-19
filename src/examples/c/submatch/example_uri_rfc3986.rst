@@ -6,9 +6,9 @@ This example was used as a benchmark in
 it is an RFC-3986 compliant URI parser.
 It uses s-tags.
 
-:download:`[uri_rfc3986.re] <uri_rfc3986.i--lang(c).re>`
+:download:`[uri_rfc3986.re] <uri_rfc3986.re>`
 
-.. literalinclude:: uri_rfc3986.i--lang(c).re
+.. literalinclude:: uri_rfc3986.re
     :language: cpp
     :linenos:
 
