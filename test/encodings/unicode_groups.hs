@@ -1,28 +1,25 @@
 {-
- - Compile: ghc -O2 -W -Wall unicode_groups.hs
- -
- - This program is a test generator for re2c's
- - support of Unicode encodings. It generates two
- - kinds of tests:
- - 1) Multiple tests for Unicode categories
- -     (like uppercase letters, space modifiers,
- -     etc.). We cannot test all categories at
- -     once, because they overlap.
- - 2) Single test for Unicode blocks (like
- -     Basic Latin, Hangul, Arabian, etc.).
- -     These blocks do not overlap, so we can
- -     generate common scanner for them.
- -
- - All tests have the same structure: re2c
- - block for Unicode range is tested on
- - encoded bytestring, which contains all
- - Unicode runes from this range and ends
- - with another Unicode rune.
- -
- - In case of success, generated program runs
- - silently, otherwise it outputs error to
- - stdout in form "test 'XXX' failed".
- -}
+
+Compile: ghc -O2 -W -Wall unicode_groups.hs
+
+This program is a test generator for re2c's support of Unicode encodings.
+It generates two kinds of tests:
+
+1) Multiple tests for Unicode categories (like uppercase letters, space
+   modifiers, etc.). We cannot test all categories in one file because they
+   overlap.
+
+2) Single test for Unicode blocks (like Basic Latin, Hangul, Arabian, etc.).
+   These blocks do not overlap, so we can generate one test for all of them.
+
+All tests have the same structure: re2c block for Unicode range is tested on
+encoded bytestring, which contains all Unicode runes from this range and ends
+with another Unicode rune.
+
+In case of success, generated program runs silently, otherwise it outputs error
+to stdout in form "test 'XXX' failed".
+
+-}
 
 import           Data.Char                           (ord, isAlpha)
 import qualified Data.CharSet                  as CS (fromCharSet, toAscList, union, empty, complement)
@@ -153,15 +150,25 @@ gen_test_category :: Category -> IO ()
 gen_test_category (Category _ name cs _) =
     let catname = prettify name
 
-        file8_ignore     = "unicode_group_" ++ catname ++ ".8--encoding-policy(ignore).re"
-        file8_substitute = "unicode_group_" ++ catname ++ ".8--encoding-policy(substitute).re"
-        file8_fail       = "unicode_group_" ++ catname ++ ".8--encoding-policy(fail).re"
-        file16_ignore     = "unicode_group_" ++ catname ++ ".x--encoding-policy(ignore).re"
-        file16_substitute = "unicode_group_" ++ catname ++ ".x--encoding-policy(substitute).re"
-        file16_fail       = "unicode_group_" ++ catname ++ ".x--encoding-policy(fail).re"
-        file32_ignore     = "unicode_group_" ++ catname ++ ".u--encoding-policy(ignore).re"
-        file32_substitute = "unicode_group_" ++ catname ++ ".u--encoding-policy(substitute).re"
-        file32_fail       = "unicode_group_" ++ catname ++ ".u--encoding-policy(fail).re"
+        file8_ignore      = "unicode_group_" ++ catname ++ "_8_encoding_policy_ignore.re"
+        file8_substitute  = "unicode_group_" ++ catname ++ "_8_encoding_policy_substitute.re"
+        file8_fail        = "unicode_group_" ++ catname ++ "_8_encoding_policy_fail.re"
+        file16_ignore     = "unicode_group_" ++ catname ++ "_x_encoding_policy_ignore.re"
+        file16_substitute = "unicode_group_" ++ catname ++ "_x_encoding_policy_substitute.re"
+        file16_fail       = "unicode_group_" ++ catname ++ "_x_encoding_policy_fail.re"
+        file32_ignore     = "unicode_group_" ++ catname ++ "_u_encoding_policy_ignore.re"
+        file32_substitute = "unicode_group_" ++ catname ++ "_u_encoding_policy_substitute.re"
+        file32_fail       = "unicode_group_" ++ catname ++ "_u_encoding_policy_fail.re"
+
+        opt8_ignore      = "// re2c $INPUT -o $OUTPUT -8 --encoding-policy ignore"
+        opt8_substitute  = "// re2c $INPUT -o $OUTPUT -8 --encoding-policy substitute"
+        opt8_fail        = "// re2c $INPUT -o $OUTPUT -8 --encoding-policy fail"
+        opt16_ignore     = "// re2c $INPUT -o $OUTPUT -x --encoding-policy ignore"
+        opt16_substitute = "// re2c $INPUT -o $OUTPUT -x --encoding-policy substitute"
+        opt16_fail       = "// re2c $INPUT -o $OUTPUT -x --encoding-policy fail"
+        opt32_ignore     = "// re2c $INPUT -o $OUTPUT -u --encoding-policy ignore"
+        opt32_substitute = "// re2c $INPUT -o $OUTPUT -u --encoding-policy substitute"
+        opt32_fail       = "// re2c $INPUT -o $OUTPUT -u --encoding-policy fail"
 
         include_utf8  = "#include \"utf8.h\""
         include_utf16 = "#include \"utf16.h\""
@@ -175,8 +182,9 @@ gen_test_category (Category _ name cs _) =
         charset_c_name = "chars_" ++ catname
         buffer = "buffer_" ++ catname
 
-        content ctype include sz_charset (ef_name, ef_body) = unlines
-            [ "#include <stdio.h>"
+        content ctype opt include sz_charset (ef_name, ef_body) = unlines
+            [ opt
+            , "#include <stdio.h>"
             , include
             , "#define YYCTYPE " ++ ctype
             , "bool scan(const YYCTYPE * start, const YYCTYPE * const limit)"
@@ -209,21 +217,18 @@ gen_test_category (Category _ name cs _) =
             , "\treturn 0;"
             , "}"
             ]
-        content8  = content "unsigned char"  include_utf8  charset_size_utf8  encode_function_utf8
-        content16 = content "unsigned short" include_utf16 charset_size_utf16 encode_function_utf16
-        content32 = content "unsigned int"   include_utf32 charset_size_utf32 encode_function_utf32
 
-    in  writeFile file8_ignore     content8 >>
-        writeFile file8_substitute content8 >>
-        writeFile file8_fail       content8 >>
+    in  writeFile file8_ignore      (content "unsigned char"  opt8_ignore      include_utf8  charset_size_utf8  encode_function_utf8) >>
+        writeFile file8_substitute  (content "unsigned char"  opt8_substitute  include_utf8  charset_size_utf8  encode_function_utf8) >>
+        writeFile file8_fail        (content "unsigned char"  opt8_fail        include_utf8  charset_size_utf8  encode_function_utf8) >>
 
-        writeFile file16_ignore     content16 >>
-        writeFile file16_substitute content16 >>
-        writeFile file16_fail       content16 >>
+        writeFile file16_ignore     (content "unsigned short" opt16_ignore     include_utf16 charset_size_utf16 encode_function_utf16) >>
+        writeFile file16_substitute (content "unsigned short" opt16_substitute include_utf16 charset_size_utf16 encode_function_utf16) >>
+        writeFile file16_fail       (content "unsigned short" opt16_fail       include_utf16 charset_size_utf16 encode_function_utf16) >>
 
-        writeFile file32_ignore     content32 >>
-        writeFile file32_substitute content32 >>
-        writeFile file32_fail       content32
+        writeFile file32_ignore     (content "unsigned int"   opt32_ignore     include_utf32 charset_size_utf32 encode_function_utf32) >>
+        writeFile file32_substitute (content "unsigned int"   opt32_substitute include_utf32 charset_size_utf32 encode_function_utf32) >>
+        writeFile file32_fail       (content "unsigned int"   opt32_fail       include_utf32 charset_size_utf32 encode_function_utf32)
 
 
 gen_test_blocks :: IO ()
@@ -241,18 +246,29 @@ gen_test_blocks =
         include_utf16 = "#include \"utf16.h\""
         include_utf32 = ""
 
-        file8_ignore      = "unicode_blocks.8--encoding-policy(ignore).re"
-        file8_substitute  = "unicode_blocks.8--encoding-policy(substitute).re"
-        file8_fail        = "unicode_blocks.8--encoding-policy(fail).re"
-        file16_ignore     = "unicode_blocks.x--encoding-policy(ignore).re"
-        file16_substitute = "unicode_blocks.x--encoding-policy(substitute).re"
-        file16_fail       = "unicode_blocks.x--encoding-policy(fail).re"
-        file32_ignore     = "unicode_blocks.u--encoding-policy(ignore).re"
-        file32_substitute = "unicode_blocks.u--encoding-policy(substitute).re"
-        file32_fail       = "unicode_blocks.u--encoding-policy(fail).re"
+        file8_ignore      = "unicode_blocks_8_encoding_policy_ignore.re"
+        file8_substitute  = "unicode_blocks_8_encoding_policy_substitute.re"
+        file8_fail        = "unicode_blocks_8_encoding_policy_fail.re"
+        file16_ignore     = "unicode_blocks_x_encoding_policy_ignore.re"
+        file16_substitute = "unicode_blocks_x_encoding_policy_substitute.re"
+        file16_fail       = "unicode_blocks_x_encoding_policy_fail.re"
+        file32_ignore     = "unicode_blocks_u_encoding_policy_ignore.re"
+        file32_substitute = "unicode_blocks_u_encoding_policy_substitute.re"
+        file32_fail       = "unicode_blocks_u_encoding_policy_fail.re"
 
-        content ctype include sz_charsets (ef_name, ef_body) = unlines
-            [ "#include <stdio.h>"
+        opt8_ignore      = "// re2c $INPUT -o $OUTPUT -8 --encoding-policy ignore"
+        opt8_substitute  = "// re2c $INPUT -o $OUTPUT -8 --encoding-policy substitute"
+        opt8_fail        = "// re2c $INPUT -o $OUTPUT -8 --encoding-policy fail"
+        opt16_ignore     = "// re2c $INPUT -o $OUTPUT -x --encoding-policy ignore"
+        opt16_substitute = "// re2c $INPUT -o $OUTPUT -x --encoding-policy substitute"
+        opt16_fail       = "// re2c $INPUT -o $OUTPUT -x --encoding-policy fail"
+        opt32_ignore     = "// re2c $INPUT -o $OUTPUT -u --encoding-policy ignore"
+        opt32_substitute = "// re2c $INPUT -o $OUTPUT -u --encoding-policy substitute"
+        opt32_fail       = "// re2c $INPUT -o $OUTPUT -u --encoding-policy fail"
+
+        content ctype opt include sz_charsets (ef_name, ef_body) = unlines
+            [ opt
+            , "#include <stdio.h>"
             , include
             , "#define YYCTYPE " ++ ctype
             , "enum Block"
@@ -312,21 +328,18 @@ gen_test_blocks =
             , "\treturn 0;"
             , "}"
             ]
-        content8  = content "unsigned char"  include_utf8  charsets_sizes_utf8  encode_function_utf8
-        content16 = content "unsigned short" include_utf16 charsets_sizes_utf16 encode_function_utf16
-        content32 = content "unsigned int"   include_utf32 charsets_sizes_utf32 encode_function_utf32
 
-    in  writeFile file8_ignore     content8 >>
-        writeFile file8_substitute content8 >>
-        writeFile file8_fail       content8 >>
+    in  writeFile file8_ignore      (content "unsigned char"  opt8_ignore      include_utf8  charsets_sizes_utf8  encode_function_utf8) >>
+        writeFile file8_substitute  (content "unsigned char"  opt8_substitute  include_utf8  charsets_sizes_utf8  encode_function_utf8) >>
+        writeFile file8_fail        (content "unsigned char"  opt8_fail        include_utf8  charsets_sizes_utf8  encode_function_utf8) >>
 
-        writeFile file16_ignore     content16 >>
-        writeFile file16_substitute content16 >>
-        writeFile file16_fail       content16 >>
+        writeFile file16_ignore     (content "unsigned short" opt16_ignore     include_utf16 charsets_sizes_utf16 encode_function_utf16) >>
+        writeFile file16_substitute (content "unsigned short" opt16_substitute include_utf16 charsets_sizes_utf16 encode_function_utf16) >>
+        writeFile file16_fail       (content "unsigned short" opt16_fail       include_utf16 charsets_sizes_utf16 encode_function_utf16) >>
 
-        writeFile file32_ignore     content32 >>
-        writeFile file32_substitute content32 >>
-        writeFile file32_fail       content32
+        writeFile file32_ignore     (content "unsigned int"   opt32_ignore     include_utf32 charsets_sizes_utf32 encode_function_utf32) >>
+        writeFile file32_substitute (content "unsigned int"   opt32_substitute include_utf32 charsets_sizes_utf32 encode_function_utf32) >>
+        writeFile file32_fail       (content "unsigned int"   opt32_fail       include_utf32 charsets_sizes_utf32 encode_function_utf32)
 
 
 main :: IO ()
