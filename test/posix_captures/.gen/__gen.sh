@@ -12,14 +12,19 @@ for f in ../.dat/*.dat; do
         [ "$1" == SAME ] && continue
 
         i=$((i + 1))
-        x=`printf '%02d' $i`.i--flex-syntax.re
+        x=`printf '%02d' $i`.re
+        y="${x%.re}_stadfa.re"
         regexp=`printf "%s" "$1" | sed \
             -e 's/\[^/[^\\\\x00/g' \
             -e 's/\./[^\\\\x00]/g' \
             -e 's/()/("")/g'`
 
-        cat template | sed "s/<<<<REGEXP>>>>/$regexp/" > "$d/$x"
-        cp "$d/$x" "$d/${x%.re}--stadfa.re"
+        printf '// re2c $INPUT -o $OUTPUT -i --flex-syntax\n'          > "$d/$x"
+        printf '// re2c $INPUT -o $OUTPUT -i --flex-syntax --stadfa\n' > "$d/$y"
+        cat template | sed "s/<<<<REGEXP>>>>/$regexp/" > tmp
+        cat tmp >> "$d/$x"
+        cat tmp >> "$d/$y"
+        rm tmp
 
     done < "$f"
 done
