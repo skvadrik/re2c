@@ -254,7 +254,7 @@ cleanup() {
 }
 
 grep_count() {
-    cat "$1" | lc_run grep "$2" | lc_run grep '[0-9]\+' -o
+    cat "$1" | lc_run grep "$2" | lc_run grep -E '[0-9]+' -o
 }
 
 logs=()
@@ -269,7 +269,7 @@ wait ${wait_pids[@]}
 
 # collect results from all threads
 total=${#tests[@]}
-total_ran_test=0
+total_ran_tests=0
 total_hard_errors=0
 total_soft_errors=0
 for ((i = 0; i < ${#logs[@]}; i++)); do
