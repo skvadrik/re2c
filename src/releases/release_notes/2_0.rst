@@ -1,0 +1,142 @@
+Release 2.0
+===========
+
+This release adds a Go code generation backend,
+an alternative CMake build system,
+free-form generic API,
+improvements in reuse mode and start conditions,
+and bugfixes in EOF rule implementation.
+
+**Go backend.**
+The new Go code generation backend can be used either with a ``--lang go`` re2c
+option, or as a standalone re2go binary (which is identical to re2c with
+``--lang go`` set by default).
+The documentation has been split into separate manpages for
+:ref:`re2c <manual/manual_c:user manual (re2c)>` and
+:ref:`re2go <manual/manual_go:user manual (re2go)>`; they are
+generated from the same text, but have language-specific examples.
+The re2go binary and manpage need to be enabled explicitly with a configuration
+parameter ``--enable-golang`` for Autotools or ``-DRE2C_BUILD_GOLANG=yes`` for
+CMake.
+Unlike C, Go does not have pointer arithmetics, therefore re2go programs use
+integer indices instead of pointers and have
+:ref:`generic API <manual/manual_go:program interface>` enabled by default.
+Almost all re2c features have been ported to re2go, with the exception of code
+generation options like ``--computed-gotos`` and ``--case-ranges`` that
+need unsupported language features.
+Behind the scenes adding a new backend required a
+`full rewrite <https://github.com/skvadrik/re2c/commit/14c5bea6582f417e1cf60d5cb26823567435957c>`_
+of the code generation subsystem and quite a bit of work on documentation
+and testing.
+Thanks to `meme <https://github.com/meme>`_ for
+`discussing <https://github.com/skvadrik/re2c/issues/272>`_ the idea and
+providing an early implementation prototype.
+Feedback from the Go community is welcome!
+
+**CMake build system.**
+Thanks to `ligfx <https://github.com/ligfx>`_ for
+`adding <https://github.com/skvadrik/re2c/commit/a530570e5164ae302f89b79f9e6b04032c697245>`_
+a CMake-based build system. This has been discussed multiple times in the past,
+and a few `attempts <https://github.com/skvadrik/re2c/issues/244>`_ at an
+implementation have been made, but ligfx was the first to contribute a full
+working implementation.
+The existing Autotools-based build system continues to be used and maintained
+for the foreseeable future. In fact, both build systems are continuously tested
+on Travis CI.
+See the :ref:`build instructions <install/install:build instructions>` page for
+more details.
+
+**Free-form generic API.**
+Generic API now supports
+:ref:`two styles <manual/manual_go:program interface>`: function-like style is
+enabled with ``re2c:api:style = functions;``, and free-form style is enabled
+with ``re2c:api:style = free-form;``.
+Previously only the function-like style was supported, and free-form style
+could be enabled for a few selected APIs with configurations like
+``re2c:define:YYFILL:naked``, etc.
+Free-form style allows to define API primitives as arbitrary strings of code
+with interpolated arguments of the form ``@@{name}``, or optionally just ``@@``
+if there is a single argument. The ``@@`` marker can be redefined with
+``re2c:api:sigil`` configuration.
+
+**Improved reuse mode and start conditions.**
+The restriction on not using normal (non-conditional) blocks with
+``-c, --start-conditions`` option has been removed: now it is possible to have
+both conditional and normal blocks. The switch on conditions is now generated
+for every block rather than once per file, which allows to have multiple lexers
+in one file.
+The combination of ``-r, --reuse`` option with ``-c, --start-conditions`` and/or
+``-f, --storable-state`` options
+`now uses correct <https://github.com/skvadrik/re2c/commit/217158707e2bc52d27956470bf1291df63be5530>`_
+block-local options instead of global options in condition and state switch,
+and re2c now generates
+`unique labels <https://github.com/skvadrik/re2c/commit/8f8d71e3104e52ab87940d322492d34bffff2c7a>`_
+in each reuse block.
+
+**Fixes in EOF rule.**
+A bug that caused
+`missing fallback states <https://github.com/skvadrik/re2c/issues/284>`_
+with EOF rule
+`has been fixed <https://github.com/skvadrik/re2c/commit/9bb515e7374e4e96499d562f5e0207f02500fcd2>`_.
+Re2c no longer generates
+`overlapping labels <https://github.com/skvadrik/re2c/issues/280>`_
+when EOF rule is used with multiple blocks.
+
+**Developer changes.**
+The way re2c bootstraps itself
+`has been simplified <https://github.com/skvadrik/re2c/commit/967540566b8677c81f60ae6f14287b9e117125a4>`_:
+instead of always trying to regenerate lexer files if the re2c binary exists in
+the build directory, re2c now does this only when configured explicitly with
+``--enable-lexers`` for Autotools or ``-DRE2C_REBUILD_LEXERS=yes`` for CMake.
+This configuration requires passing an explicit ``RE2C_FOR_BUILD`` variable that
+contains a path to the re2c executable that will be used to regenerate lexers.
+The new bootstrapping scheme allows to avoid build problems caused by
+dynamically changing dependency graph, as well as hard-to-recover errors when a
+bad re2c build was used to rebuild itself in a vicious loop.
+Another developer-visible change is a
+`rework of the testing framework <https://github.com/skvadrik/re2c/commit/303ef4783707fd7616dd0cd984217c881e9dbb39>`_,
+which now uses in-line comments instead of hard-coding options in test filenames.
+
+**Backwards incompatible changes.**
+In a few rare/undocumented cases re2c behavior has been changed in a way that
+may break existing code:
+
+- Generic APIs ``YYSHIFT``/``YYSHIFTSTAG``/``YYSHIFTMTAG``
+  `have been added <https://github.com/skvadrik/re2c/commit/92cbf8fb76133dde062962ecf2856e143714b715>`_.
+  Their meaning is to shift the cursor/tag position by a specified offset.
+  The new APIs enable fixed-tags optimization with generic API, which is
+  becoming more important as the generic API is getting used more often.
+  Programs that use both generic API and tags or POSIX capturing groups may need
+  to define the new APIs.
+
+- Generic APIs ``YYSTAGPD``/``YYMTAGPD`` have been removed. They were used only
+  with the recently added experimental ``--stadfa`` option, and the removal is
+  unlikely to break any existing code.
+
+- In reuse mode configurations like ``re2c:define:YYCTYPE`` are
+  `no longer reset <https://github.com/skvadrik/re2c/issues/291>`_
+  in each use block. The old behavior was kept only for backwards compatibility.
+  It has caused confusion and inconvenience, as the configurations had to be
+  repeatedly defined in each use block.
+
+- The ``re2c:flags:type-header`` option now treats the header filename as
+  `relative to the output <https://github.com/skvadrik/re2c/commit/dc0df494c6ec528094cf59cd17768e08e9af0e6a>`_
+  directory. The undocumented ``re2c:flags:output`` option has been removed.
+
+- Some internal labels have been renamed, in particular the ``yyFillLabel``
+  prefix has been replaced with ``yyfill``. This should not break any well-formed
+  code, as these labels are not part of the user interface. Programs that relied
+  on the old label names may restore them with the ``re2c:label:yyFillLabel``
+  configuration.
+
+As always, a warm thank you to all the people who contributed to this release,
+including
+`ligfx <https://github.com/ligfx>`_,
+`meme <https://github.com/meme>`_,
+`ryandesign <https://github.com/ryandesign>`_,
+`fanf2 <https://github.com/fanf2>`_,
+`samebchase <https://github.com/samebchase>`_
+and `trofi <https://github.com/trofi>`_. :)
+
+See the changelog :ref:`releases/changelog/changelog:2.0 (2020-07-20)` for details.
+
