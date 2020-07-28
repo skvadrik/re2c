@@ -1,0 +1,316 @@
+
+\documentclass[tikz,border=10pt]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows.meta, shapes, automata, calc, decorations}
+\usepackage{arydshln}
+
+% workaround for https://github.com/u-fischer/luaotfload/issues/6
+\usepackage{luacode}
+\begin{luacode}
+  function pgf_lookup_and_require(name)
+    local sep = '/'
+    if string.find(os.getenv('PATH'),';') then
+      sep = '\string\\'
+    end
+    local function lookup(name)
+      local sub = name:gsub('%.',sep)
+      local find_func = function (name, suffix)
+        if resolvers then
+          local n = resolvers.findfile (name.."."..suffix, suffix) -- changed
+          return (not (n == '')) and n or nil
+        else
+          return kpse.find_file(name,suffix)
+        end
+      end
+      if find_func(sub, 'lua') then
+        require(name)
+      elseif find_func(sub, 'clua') then
+        collectgarbage('stop')
+        require(name)
+        collectgarbage('restart')
+      else
+        return false
+      end
+      return true
+    end
+    return
+      lookup('pgf.gd.' .. name .. '.library') or
+      lookup('pgf.gd.' .. name) or
+      lookup(name .. '.library') or
+      lookup(name)
+  end
+\end{luacode}
+\usegdlibrary{trees, layered}
+
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth, -{to}, auto]
+
+\tikzstyle{every loop}=[]
+\tikzstyle{every node}=[]
+\tikzstyle{every state}=[circle
+    , minimum size=0.16in
+    , inner sep = 1pt
+    , outer sep = 0pt
+    , node distance = 0.55in]
+\newcommand{\pos}{p}
+
+
+
+\begin{scope}[xshift=0.5in, yshift=0in]
+    \footnotesize
+    \node[state] (x10) {$0$};
+    \node[state, above right of = x10, yshift = -0.1in] (x9) {$1$};
+    \node[state, right of = x9] (x8) {$2$};
+    \node[state, below right of = x8, yshift = 0.1in] (x7) {$3$};
+    \node[state, right of = x7] (x6) {$4$};
+    \node[state, above right of = x6, yshift = -0.1in] (x5) {$5$};
+    \node[state, above right of = x5, yshift = -0.1in] (x4) {$6$};
+    \node[state, below right of = x4, yshift = 0.1in] (x3) {$7$};
+    \node[state, below right of = x3, yshift = 0.1in] (x2) {$8$};
+    \node[state, accepting, right of = x2] (x0) {$10$};
+    \node[state, below of = x4, yshift = -0.03in] (x1) {$9$};
+    \path
+        (x10) edge node [] {} (x9)
+        (x10) edge node [] {} (x7)
+        (x9) edge [bend left=30] node [] {$a/\epsilon$} (x8)
+        (x8) edge [bend left=30] node [above] {} (x9)
+        (x8) edge node [] {} (x7)
+        (x7) edge node [] {$\epsilon/t_1$} (x6)
+        (x6) edge node [] {} (x5)
+        (x5) edge [bend left=20] node [] {$\epsilon/t_2$} (x4)
+        (x4) edge [bend left=20] node [] {$b/\epsilon$} (x3)
+        (x3) edge [bend left=10] node [above] {} (x5)
+        (x3) edge node [] {} (x2)
+        (x6) edge node [] {} (x1)
+        (x1) edge node [] {$\epsilon/-\!t_2$} (x2)
+        (x2) edge node [] {$c/\epsilon$} (x0)
+    ;
+\end{scope}
+
+
+
+\begin{scope}[xshift=0.5in, yshift=-1.2in]
+    \tikzstyle{every state}=[circle
+    , rectangle
+    , outer sep = 0pt
+    ]
+
+    \footnotesize
+    %\scriptsize
+    \renewcommand{\arraystretch}{1.1}
+    %\setlength{\extrarowheight}{10pt}
+    \setlength\tabcolsep{2pt}
+    \setlength{\dashlinedash}{\pgflinewidth}
+    \setlength{\dashlinegap}{1pt}
+
+    \node[state, draw=none] at (0,-1) (x0) {$
+        \begin{tabular}{ |c|c|c| }
+            \hline
+            \multicolumn{3}{|c|}{TDFA state 0} \\
+            \hline
+            \scriptsize{\textit{state}} & \scriptsize{\textit{registers}} & \scriptsize{\textit{lookahead}} \\
+            \hline
+            1 & $r_1 \;\; r_2$ & \\
+            \hline
+            6 & $r_1 \;\; r_2$ & $t_1$, $t_2$ \\
+            \hline
+            8 & $r_1 \;\; r_2$ & $t_1$, $-t_2$ \\
+            \hline
+        \end{tabular}
+    $};
+
+    \node[state, draw=none] at (5,1.2) (xx0) {$
+        \begin{tabular}{ :c:c:c: }
+            \hdashline
+            \multicolumn{3}{:c:}{mapped to 0} \\
+            \hdashline
+            \scriptsize{\textit{state}} & \scriptsize{\textit{registers}} & \scriptsize{\textit{lookahead}} \\
+            \hdashline
+            1 & $r_1 \;\; r_2$ & \\
+            \hdashline
+            6 & $r_1 \;\; r_2$ & $t_1$, $t_2$ \\
+            \hdashline
+            8 & $r_1 \;\; r_2$ & $t_1$, $-t_2$ \\
+            \hdashline
+        \end{tabular}
+    $};
+
+    \node[state, draw=none] at (6,-1.0) (x1) {$
+        \begin{tabular}{ |c|c|c| }
+            \hline
+            \multicolumn{3}{|c|}{TDFA state 1} \\
+            \hline
+            \scriptsize{\textit{state}} & \scriptsize{\textit{registers}} & \scriptsize{\textit{lookahead}} \\
+            \hline
+            6 & $r_3 \;\; r_4$ & $t_2$ \\
+            \hline
+            8 & $r_3 \;\; r_4$ & \\
+            \hline
+        \end{tabular}
+    $};
+
+    \node[state, draw=none] at (11,-1.0) (xx1) {$
+        \begin{tabular}{ :c:c:c: }
+            \hdashline
+            \multicolumn{3}{:c:}{mapped to 1} \\
+            \hdashline
+            \scriptsize{\textit{state}} & \scriptsize{\textit{registers}} & \scriptsize{\textit{lookahead}} \\
+            \hdashline
+            6 & $r_3 \;\; r_6$ & $t_2$ \\
+            \hdashline
+            8 & $r_3 \;\; r_6$ & \\
+            \hdashline
+        \end{tabular}
+    $};
+
+    \node[state, draw=none] at (5,-3) (x2) {$
+        \begin{tabular}{ |c|c|c| }
+            \hline
+            \multicolumn{3}{|c|}{TDFA state 2} \\
+            \hline
+            \scriptsize{\textit{state}} & \scriptsize{\textit{registers}} & \scriptsize{\textit{lookahead}} \\
+            \hline
+            8 & $r_3 \;\; r_5$ & \\
+            \hline
+        \end{tabular}
+    $};
+
+    \node[state, draw=none] at (10.5,-3) (xx2) {$
+        \begin{tabular}{ :c:c:c: }
+            \hdashline
+            \multicolumn{3}{:c:}{mapped to 2} \\
+            \hdashline
+            \scriptsize{\textit{state}} & \scriptsize{\textit{registers}} & \scriptsize{\textit{lookahead}} \\
+            \hdashline
+            8 & $r_3 \;\; r_4$ & \\
+            \hdashline
+        \end{tabular}
+    $};
+
+    \draw (1.7,-1.) .. controls (2.1,-1) and (1.9,1.2) .. node [above, very near end] {$a$} (3.3,1.2);
+    \draw (1.7,-1.) .. controls (2.1,-1) and (1.9,0.8) .. node [above, very near end] {$a$} (3.3,0.8);
+    \draw (1.7,-1.) .. controls (2.1,-1) and (1.9,0.4) .. node [above, very near end] {$a$} (3.3,0.4);
+
+    \draw (1.7,-1.4) .. controls (2.5,-1.4) and (2.5,-1.2) .. node [above, near end] {$
+        \begin{aligned}
+        b / & r_3 \leftarrow p \\[-0.6em]
+            & r_4 \leftarrow p
+        \end{aligned}
+    $} (4.3,-1.2);
+    \draw (1.7,-1.4) .. controls (2.5,-1.4) and (2.5,-1.6) .. node [below, near end] {$
+        \begin{aligned}
+        b / & r_3 \leftarrow p \\[-0.6em]
+            & r_4 \leftarrow p
+        \end{aligned}
+    $} (4.3,-1.6);
+
+    \draw (1.7,-1.8) .. controls (2.0,-1.8) and (1.8,-3.4) .. node [below left] {$
+        \begin{aligned}
+        c / & r_3 \leftarrow p \\[-0.6em]
+            & r_5 \leftarrow \varnothing
+        \end{aligned}
+    $} (3.3,-3.4);
+
+    \draw (7.7,-1.2) .. controls (8,-1.4) and (8,-1.2) .. node [above, xshift=0.2in, yshift=0.02in] {$b/ r_6 \leftarrow p$} (9.3,-1.2);
+    \draw (7.7,-1.2) .. controls (8,-1.4) and (8,-1.6) .. node [below, xshift=0.2in, yshift=-0.02in] {$b/ r_6 \leftarrow p$} (9.3,-1.6);
+
+    \draw (7.7,-1.6) .. controls (8.2,-1.8) and (8.1,-3.4) .. node [below left] {$c$} (8.8,-3.4);
+
+    \draw[-{Stealth[length=3mm,open]}] (7,-3.4) .. controls (7,-3.4) .. node [right] {$
+        \begin{aligned}
+            & t_1 \leftarrow r_3 \\[-0.6em]
+            & t_2 \leftarrow r_5
+        \end{aligned}
+    $} (7.01,-3.4);
+
+    \draw [densely dotted] (11,-0.2) .. controls (11,0.3) and (6,0.3) .. node [above] {$r_4 \leftarrow p$} (6,-0.2);
+    \draw [densely dotted] (10.5,-2.4) .. controls (10.5,-1.9) and (5,-1.9) .. node [below, xshift=-0.15in] {$r_5 \leftarrow r_4$} (5,-2.4);
+    \draw [densely dotted] (5,2.2) .. controls (5,2.4) and (2,3) .. node [above] {} (0,0);
+
+\end{scope}
+
+
+
+\begin{scope}[xshift=0.5in, yshift=-3.7in]
+    \footnotesize
+    %\scriptsize
+    \node[state] (x0) {$0$};
+    \node[state, above right of = x0, xshift = 0.3in] (x1) {$1$};
+    \node[state, accepting, below right of = x1, xshift = 0.3in] (x2) {$2$};
+    \path
+        (x0) edge [in=140,out=220,loop] node [] {$a$} (x0)
+        (x1) edge [in=50,out=130,loop] node [] {$b/ r_4 \leftarrow \pos$} (x1)
+        (x0) edge [bend left=10] node [] {$
+            \begin{aligned}
+                a / & r_3 \leftarrow \pos \\[-0.6em]
+                    & r_4 \leftarrow \pos
+            \end{aligned}
+        $} (x1)
+        (x1) edge [bend left=10] node [] {$
+            \begin{aligned}
+                c / & r_5 \leftarrow r_4
+            \end{aligned}
+        $} (x2)
+        (x2) edge [bend left=10] node [above] {$
+            \begin{aligned}
+                c / & r_3 \leftarrow \pos \\[-0.6em]
+                    & r_5 \leftarrow \varnothing
+            \end{aligned}
+        $} (x0)
+    ;
+    \node[state, draw=none, right of = x2, xshift=-0.2in] (x3) {$
+        \begin{aligned}
+            & t_1 \leftarrow r_3 \\[-0.6em]
+            & t_2 \leftarrow r_5
+        \end{aligned}
+    $};
+\end{scope}
+
+
+
+\begin{scope}[xshift=3.4in, yshift=-3.7in]
+    \footnotesize
+    %\scriptsize
+    \node[state] (x0) {$0$};
+    \node[state, above right of = x0, xshift = 0.3in] (x1) {$1$};
+    \node[state, accepting, below right of = x1, xshift = 0.3in] (x2) {$2$};
+    \path
+        (x0) edge [in=140,out=220,loop] node [] {$a$} (x0)
+        (x1) edge [in=50,out=130,loop] node [] {$b/ r_2 \leftarrow \pos$} (x1)
+        (x0) edge [bend left=10] node [] {$
+            \begin{aligned}
+                a / & r_1 \leftarrow \pos \\[-0.6em]
+                    & r_2 \leftarrow \pos
+            \end{aligned}
+        $} (x1)
+        (x1) edge [bend left=10] node [] {$c$} (x2)
+        (x2) edge [bend left=10] node [above] {$
+            \begin{aligned}
+                c / & r_1 \leftarrow \pos \\[-0.6em]
+                    & r_2 \leftarrow \varnothing
+            \end{aligned}
+        $} (x0)
+    ;
+    \node[state, draw=none, right of = x2, xshift=-0.2in] (x3) {$
+        \begin{aligned}
+            & t_1 \leftarrow r_1 \\[-0.6em]
+            & t_2 \leftarrow r_2
+        \end{aligned}
+    $};
+\end{scope}
+
+
+
+\end{tikzpicture}
+
+\end{document}
+
