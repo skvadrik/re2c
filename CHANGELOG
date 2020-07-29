@@ -5,6 +5,13 @@ Changelog
 2.0x
 ----
 
+2.0.1 (2020-07-29)
+~~~~~~~~~~~~~~~~~~
+
+- Updated version for CMake build system (forgotten in release 2.0).
+
+- Added a short article about re2c for the Software Impacts journal.
+
 2.0 (2020-07-20)
 ~~~~~~~~~~~~~~~~
 
