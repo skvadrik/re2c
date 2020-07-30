@@ -126,6 +126,7 @@ div.re2c-toc-local {
     border: 1px solid darkgray;
     overflow: auto;
     font-size: 115%;
+    line-height: 100%;
 }
 
 /* searchbox */
