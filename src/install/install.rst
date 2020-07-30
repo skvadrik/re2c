@@ -94,8 +94,8 @@ CMake configuration options that are specific to re2c or have re2c-specific beha
     Enable debug checks in the re2c source code.
     Also enables debug options.
 
-``-DRE2C_BUILD_GOLANG=yes``
-    Build re2go (identical to ``re2c --lang go``).
+``-DRE2C_BUILD_RE2GO=yes``
+    Build re2go executable (an alias to ``re2c --lang go``). Enabled by default.
 
 ``-DRE2C_BUILD_LIBS=yes``
     Build the experimental libre2c library that provides POSIX ``regcomp``/``regexec``/``regfree`` interface to re2c.

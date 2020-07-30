@@ -16,7 +16,7 @@ The documentation has been split into separate manpages for
 :ref:`re2go <manual/manual_go:user manual (re2go)>`; they are
 generated from the same text, but have language-specific examples.
 The re2go binary and manpage need to be enabled explicitly with a configuration
-parameter ``--enable-golang`` for Autotools or ``-DRE2C_BUILD_GOLANG=yes`` for
+parameter ``--enable-golang`` for Autotools or ``-DRE2C_BUILD_RE2GO=yes`` for
 CMake.
 Unlike C, Go does not have pointer arithmetics, therefore re2go programs use
 integer indices instead of pointers and have
