@@ -197,12 +197,41 @@ for example, RE2C supports both the Perl leftmost-greedy policy and the POSIX lo
 Disambiguation happens at the time of determinization (in $\epsilon$-closure construction),
 and the resulting TDFA does not perform any disambiguation at run-time: ambiguity-resolving decisions are embedded into its structure.
 
+\section{Impact}
+
+\noindent
+RE2C is a lexer generator of choice for projects that need \emph{fast} lexical analyzers.
+It has a flexible user interface that allows one to customize the generated code for a particular environment and input model.
+Submatch extraction is yet another feature that makes RE2C a good alternative to other lexer generators.
+Notable projects that use RE2C are the following:
+
+\begin{itemize}
+\item Ninja, a build system with a focus on speed. \cite{Ninja}
+    Ninja is used in a great number of open-source projects,
+    and it is a necessary building block in many operating systems and platforms.
+
+\item PHP, a popular general-purpose scripting language. \cite{PHP}
+
+\item BRL-CAD, a constructive solid geometry solid modeling computer-aided design system. \cite{BRLCAD}
+
+\item STEPCode, an implementation of ISO 10303 standard. \cite{STEPCode}
+
+\item Apache SpamAssassin, a program for e-mail spam filtering. \cite{SpamAssassin}
+
+\item Yasm, the Modular Assembler Project. \cite{Yasm}
+
+\item Wake, the SiFive build tool. \cite{Wake}
+\end{itemize}
+
+\noindent
+RE2C has a permissive license, which allows it to be used in proprietary software as well.
+The project has been ported to many operating systems;
+according to Repology \cite{Repology}, it is packaged in more than 60 distributions.
+Besides being a useful practical tool, RE2C is a research playground for the development of new algorithms in the field of automata and formal languages.
+
 \section{Conclusion and future work}
 
 \noindent
-RE2C is a tool used in open-source projects such as Ninja \cite{Ninja}, PHP \cite{PHP} and others;
-it is often chosen for its fast lexers and flexible user interface.
-%
 Submatch extraction algorithm implemented in RE2C
 is both an important theoretical development and a useful practical improvement.
 It allows one to program lexical analyzers capable of submatch extraction
@@ -220,7 +249,7 @@ and investigate the possibility of using tagged counter automata for counted rep
 \label{}
 \noindent
 I want to thank my parents Vladimir and Elina,
-my fellow researcher and friend Angelo Borsotti,
+my friend and fellow researcher Angelo Borsotti,
 my school math teachers Tatyana Leonidovna and Demian Vladimirovich,
 and, most of all, Sergei.
 
@@ -261,15 +290,38 @@ and, most of all, Sergei.
     URL: \url{https://re2c.org/2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf}.
 
 \bibitem{Ninja}
-    Ninja build system.
-    Website: \url{https://ninja-build.org},
+    Ninja build system,
+    URL: \url{https://ninja-build.org},
     build files that use RE2C: \url{https://ninja-build.org/build.ninja.html}.
 
 \bibitem{PHP}
-    PHP programming language.
-    \textit{Building PHP},
     PHP Internals Book,
-    URL: \url{http://www.phpinternalsbook.com/php5/build_system/building_php.html}.
+    chapter \textit{Building PHP},
+    URL: \url{http://www.phpinternalsbook.com/php7/build_system/building_php.html}.
+
+\bibitem{BRLCAD}
+    BRL-CAD: Tools,
+    URL: \url{http://sourceforge.net/p/brlcad/code/HEAD/tree/brlcad/trunk/misc/tools/re2c}.
+
+\bibitem{STEPCode}
+    STEPCode: Build Process,
+    URL: \url{https://stepcode.github.io/docs/build_process}.
+
+\bibitem{SpamAssassin}
+    SpamAssassin (sa-compile),
+    URL: \url{https://spamassassin.apache.org/full/3.2.x/doc/sa-compile.html}.
+
+\bibitem{Yasm}
+    Yasm,
+    URL: \url{https://yasm.tortall.net}.
+
+\bibitem{Wake}
+    Wake,
+    URL: \url{https://github.com/sifive/wake}.
+
+\bibitem{Repology}
+    Repology: RE2C information
+    URL: \url{https://repology.org/project/re2c/information}.
 
 \bibitem{Gra15}
     Niels Bj{\o}rn Bugge Grathwohl,
@@ -314,17 +366,15 @@ C4 & Legal Code License   & Public domain \\
 \hline
 C5 & Code versioning system used & Git \\
 \hline
-C6 & Software code languages, tools, and services used &
-    Source code is written in C++.
-    Supports code generation into C and Go. \\
+C6 & Software code languages, tools, and services used & C++, Bison, RE2C (self-hosting) \\
 \hline
 C7 & Compilation requirements, operating environments \& dependencies &
-    Supported operating systems: Linux, BSD, Nix/Guix, GNU Hurd, OS X, Windows; ports exist for IBM z/OS and old versions of Minix.
-    Dependencies: C++ compiler supporting C++98, Bash, optionally CMake or Autotools (including Libtool), optional Bison, optional rst2man (for documentation). \\
+    OS: Linux, BSD, Nix/Guix, GNU Hurd, OS X, Windows.
+    Dependencies: C++ compiler, Bash, CMake or Autotools, optional Bison and Docutils. \\
 \hline
 C8 & If available Link to developer documentation/manual & \textit{https://re2c.org} \\
 \hline
-C9 & Support email for questions & \textit{skvadrik@gmail.com} \\
+C9 & Support email for questions & \textit{re2c-general@lists.sourceforge.net} \\
 \hline
 \end{tabular}
 \caption{Code metadata (mandatory)}

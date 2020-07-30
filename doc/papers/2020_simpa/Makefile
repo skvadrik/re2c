@@ -1,4 +1,4 @@
-re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf : re2c_a_lexer_generator_based_on_lookahead_tdfa.tex example.pdf
+2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf : 2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.tex example.pdf
 	pdflatex -shell-escape $< </dev/null > $<.log
 
 example.pdf : example.tex
