@@ -58,8 +58,8 @@ AM_COND_IF([WITH_LIBS], [
 
 
 # --enable-golang
-AC_ARG_ENABLE([golang], [AS_HELP_STRING([--enable-golang], [build re2go])])
-AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" = "xyes"])
+AC_ARG_ENABLE([golang], [AS_HELP_STRING([--enable-golang], [build re2go executable])])
+AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" != "xno"])
 
 
 # checks for programs

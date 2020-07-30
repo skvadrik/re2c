@@ -25,6 +25,8 @@ endif()
 
 option(RE2C_BUILD_LIBS "Build libraries" OFF)
 
+option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
+
 # checks for programs
 find_package(BISON)
 
