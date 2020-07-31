@@ -150,8 +150,9 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t> &path,
         for (uint32_t i = 0; i < histsize; ++i) {
             const hidx_t idx = static_cast<hidx_t>(i);
             if (used.find(idx) != used.end()) {
-                fprintf(stderr, "  hx%u_%d[label=\"%u\"]\n",
-                    targetx, idx + hidxbase, history.nodes[i].info.idx);
+                const tag_info_t info = history.nodes[i].info;
+                fprintf(stderr, "  hx%u_%d[label=\"%s%u\"]\n",
+                    targetx, idx + hidxbase, info.neg ? "-" : "", info.idx);
             }
         }
     }
@@ -168,8 +169,9 @@ dump_dfa_tree_t<ctx_t>::~dump_dfa_tree_t()
 
     for (uint32_t i = 0; i < ctx.history.nodes.size(); ++i) {
         if (used_nodes.find(static_cast<int32_t>(i)) != used_nodes.end()) {
-            fprintf(stderr, " h%d[label=\"%u\"]\n",
-                i, ctx.history.nodes[i].info.idx);
+            const tag_info_t info = ctx.history.nodes[i].info;
+            fprintf(stderr, " h%d[label=\"%s%u\"]\n",
+                i, info.neg ? "-" : "", info.idx);
         }
     }
 
