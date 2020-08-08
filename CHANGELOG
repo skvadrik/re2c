@@ -5,6 +5,13 @@ Changelog
 2.0x
 ----
 
+2.0.2 (2020-08-08)
+~~~~~~~~~~~~~~~~~~
+
+- Enable re2go building by default.
+
+- Package CMake files into release tarball.
+
 2.0.1 (2020-07-29)
 ~~~~~~~~~~~~~~~~~~
 
