@@ -291,7 +291,8 @@ static void write_keys(const path_t &path, const Skeleton &skel,
                 } else if (tag.base != Tag::RIGHTMOST) {
                     // fixed-length tag based on another tag
                     const size_t tver = static_cast<size_t>(skel.finvers[tag.base]);
-                    tval = tags[w * nver + tver].back() - tag.dist;
+                    tval = tags[w * nver + tver].back();
+                    if (tval != Skeleton::DEFTAG) tval -= tag.dist;
                 } else {
                     // fixed-length tag based on cursor
                     tval = matched - tag.dist;

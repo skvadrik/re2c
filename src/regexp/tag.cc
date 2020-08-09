@@ -19,6 +19,7 @@ Tag::Tag(const std::string *nm, bool hi, int32_t ht)
     , hnest(Tag::RIGHTMOST)
     , history(hi)
     , orbit(false)
+    , topmost(false)
     , height(ht)
 {}
 
@@ -33,6 +34,7 @@ Tag::Tag(size_t lsub, size_t hsub, bool ob, int32_t ht)
     , hnest(Tag::RIGHTMOST)
     , history(false)
     , orbit(ob)
+    , topmost(false)
     , height(ht)
 {}
 

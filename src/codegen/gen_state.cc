@@ -656,6 +656,8 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
     CodeList *varops = code_list(alc);
     CodeList *fixops = code_list(alc);
     CodeList *fixtrailops = code_list(alc);
+    CodeList *fixpostops = code_list(alc);
+    std::string negtag;
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         const Tag &tag = tags[t];
@@ -676,6 +678,8 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 gen_assign(output, varops, tag_expr(tag, true), expr);
             }
         } else {
+            DASSERT(!history(tag));
+
             // fixed tag that is based on either variable tag or cursor
             const int32_t dist = static_cast<int32_t>(tag.dist);
             const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
@@ -683,8 +687,8 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 ? opts->yycursor : vartag_expr(fins[tag.base], opts);
 
             if (trailing(tag)) {
+                DASSERT(tag.topmost);
                 if (generic) {
-                    DASSERT(!history(tag));
                     if (!fixed_on_cursor) {
                         gen_restorectx(output, fixtrailops, base);
                     }
@@ -702,15 +706,40 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 const std::string fix = tag_expr(tag, true);
                 if (generic) {
                     if (fixed_on_cursor) {
-                        gen_settag(output, fixops, fix, false, history(tag));
-                    } else {
+                        gen_settag(output, fixops, fix, false, false);
+                        gen_shift(output, fixops, -dist, fix, false);
+                    } else if (dist == 0 || tag.topmost) {
                         gen_assign(output, fixops, fix, base);
+                        gen_shift(output, fixops, -dist, fix, false);
+                    } else {
+                        // Split operations in two parts. First, set all fixed tags to
+                        // their base tag. Second, choose one of the base tags to store
+                        // negative value (with generic API there is no NULL constant)
+                        // and compare fixed tags against it before shifting. This must
+                        // be done after all uses of that base tag.
+                        if (negtag.empty()) negtag = base;
+                        gen_assign(output, fixops, fix, base);
+                        const char *cond = o.str(fix).cstr(" != ").str(negtag).flush();
+                        CodeList *then = code_list(alc);
+                        gen_shift(output, then, -dist, fix, false);
+                        append(fixpostops, code_if_then_else(alc, cond, then, NULL));
                     }
-                    gen_shift(output, fixops, -dist, fix, false);
                 } else {
-                    o.str(fix).cstr(" = ").str(base);
-                    if (dist > 0) o.cstr(" - ").i32(dist);
-                    append(fixops, code_stmt(alc, o.flush()));
+                    if (dist == 0) {
+                        gen_assign(output, fixops, fix, base);
+                    } else if (tag.topmost) {
+                        gen_assign(output, fixops, fix,
+                            o.str(base).cstr(" - ").i32(dist).flush());
+                    } else {
+                        // If base tag is NULL, fixed tag is also NULL, otherwise it
+                        // equals the value of the base tag plus offset.
+                        gen_assign(output, fixops, fix, base);
+                        const char *cond = o.str(base).cstr(" != NULL").flush();
+                        CodeList *then = code_list(alc);
+                        append(then, code_stmt(alc,
+                            o.str(fix).cstr(" -= ").i32(dist).flush()));
+                        append(fixops, code_if_then_else(alc, cond, then, NULL));
+                    }
                 }
             }
         }
@@ -719,6 +748,15 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
     append(stmts, varops);
     append(stmts, fixtrailops);
     append(stmts, fixops);
+
+    if (!negtag.empty()) {
+        // With generic API there is no explicit negative NULL value, so it is
+        // necessary to materialize no-match value in a tag.
+        DASSERT(opts->input_api == INPUT_CUSTOM);
+        append(stmts, code_text(alc, o.cstr("/* materialize no-match value */").flush()));
+        gen_settag(output, stmts, negtag, true, false);
+        append(stmts, fixpostops);
+    }
 }
 
 std::string tag_expr(const Tag &tag, bool lvalue)
