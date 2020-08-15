@@ -790,7 +790,7 @@ void combine(CodegenContext &ctx, Code *code);
 void render(RenderContext &rctx, const Code *code);
 
 bool consume(const State *s);
-std::string tag_expr(const Tag &tag, bool lvalue);
+void expand_fintags(const Tag &tag, std::vector<std::string> &fintags);
 std::string vartag_name(tagver_t ver, const std::string &prefix);
 std::string vartag_expr(tagver_t ver, const opt_t *opts);
 void output_version_time(std::ostream &os, const opt_t *opts);

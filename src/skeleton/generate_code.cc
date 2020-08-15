@@ -759,6 +759,7 @@ void emit_skeleton_action(Output &output, CodeList *code, const DFA &dfa, size_t
     const Rule &r = dfa.rules[rid];
     const uint64_t rkey = rule2key(rid, dfa.key_size, dfa.def_rule);
     const char *text;
+    std::vector<std::string> fintags;
 
     size_t ntag = 3;
     for (size_t t = r.ltag; t < r.htag; ++t) {
@@ -792,7 +793,8 @@ void emit_skeleton_action(Output &output, CodeList *code, const DFA &dfa, size_t
         if (t == r.ttag || fictive(tag)) continue;
 
         const bool mtag = history(tag);
-        const std::string tname = tag_expr(tag, false);
+        expand_fintags(tag, fintags);
+        const std::string tname = fintags[0];
         --ntag;
 
         args = code_args(alc);

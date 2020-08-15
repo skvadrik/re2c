@@ -539,8 +539,31 @@ static void gen_assign(Output &output, CodeList *stmts, const std::string &lhs,
     const std::string &rhs)
 {
     Scratchbuf &o = output.scratchbuf;
-
     o.str(lhs).cstr(" = ").str(rhs);
+    append(stmts, code_stmt(output.allocator, o.flush()));
+}
+
+static void gen_assign_many(Output &output, CodeList *stmts,
+    const std::vector<std::string> &many, const std::string &rhs)
+{
+    Scratchbuf &o = output.scratchbuf;
+    for (size_t i = 0; i < many.size(); ++i) {
+        o.str(many[i]).cstr(" = ");
+    }
+    o.str(rhs);
+    append(stmts, code_stmt(output.allocator, o.flush()));
+}
+
+static void gen_assign_many_to_first(Output &output, CodeList *stmts,
+    const std::vector<std::string> &many)
+{
+    if (many.size() <= 1) return;
+
+    Scratchbuf &o = output.scratchbuf;
+    for (size_t i = 1; i < many.size(); ++i) {
+        o.str(many[i]).cstr(" = ");
+    }
+    o.str(many[0]);
     append(stmts, code_stmt(output.allocator, o.flush()));
 }
 
@@ -647,6 +670,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
     const tagver_t *fins = dfa.finvers;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
+    std::vector<std::string> fintags;
 
     if (rule.ncap > 0) {
         o.cstr("yynmatch = ").u64(rule.ncap);
@@ -661,9 +685,13 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         const Tag &tag = tags[t];
-        if (fictive(tag)) {
-            // structural tag that is only needed for disambiguation
-        } else if (!fixed(tag)) {
+
+        // structural tag that is only needed for disambiguation
+        if (fictive(tag)) continue;
+
+        expand_fintags(tag, fintags);
+
+        if (!fixed(tag)) {
             // variable tag
             const std::string expr = vartag_expr(fins[t], opts);
             if (trailing(tag)) {
@@ -675,7 +703,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                         notag ? opts->yyctxmarker : expr);
                 }
             } else {
-                gen_assign(output, varops, tag_expr(tag, true), expr);
+                gen_assign_many(output, varops, fintags, expr);
             }
         } else {
             DASSERT(!history(tag));
@@ -703,14 +731,20 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                     append(fixtrailops, code_stmt(alc, o.flush()));
                 }
             } else {
-                const std::string fix = tag_expr(tag, true);
+                DASSERT(!fintags.empty());
+                const std::string &first = fintags[0];
+
                 if (generic) {
                     if (fixed_on_cursor) {
-                        gen_settag(output, fixops, fix, false, false);
-                        gen_shift(output, fixops, -dist, fix, false);
-                    } else if (dist == 0 || tag.topmost) {
-                        gen_assign(output, fixops, fix, base);
-                        gen_shift(output, fixops, -dist, fix, false);
+                        gen_settag(output, fixops, first, false, false);
+                        gen_shift(output, fixops, -dist, first, false);
+                        gen_assign_many_to_first(output, fixops, fintags);
+                    } else if (dist == 0) {
+                        gen_assign_many(output, fixops, fintags, base);
+                    } else if (tag.topmost) {
+                        gen_assign(output, fixops, first, base);
+                        gen_shift(output, fixops, -dist, first, false);
+                        gen_assign_many_to_first(output, fixops, fintags);
                     } else {
                         // Split operations in two parts. First, set all fixed tags to
                         // their base tag. Second, choose one of the base tags to store
@@ -718,27 +752,28 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                         // and compare fixed tags against it before shifting. This must
                         // be done after all uses of that base tag.
                         if (negtag.empty()) negtag = base;
-                        gen_assign(output, fixops, fix, base);
-                        const char *cond = o.str(fix).cstr(" != ").str(negtag).flush();
+                        gen_assign(output, fixops, first, base);
+                        const char *cond = o.str(first).cstr(" != ").str(negtag).flush();
                         CodeList *then = code_list(alc);
-                        gen_shift(output, then, -dist, fix, false);
+                        gen_shift(output, then, -dist, first, false);
                         append(fixpostops, code_if_then_else(alc, cond, then, NULL));
                     }
                 } else {
                     if (dist == 0) {
-                        gen_assign(output, fixops, fix, base);
+                        gen_assign_many(output, fixops, fintags, base);
                     } else if (tag.topmost) {
-                        gen_assign(output, fixops, fix,
+                        gen_assign_many(output, fixops, fintags,
                             o.str(base).cstr(" - ").i32(dist).flush());
                     } else {
                         // If base tag is NULL, fixed tag is also NULL, otherwise it
                         // equals the value of the base tag plus offset.
-                        gen_assign(output, fixops, fix, base);
+                        gen_assign(output, fixops, first, base);
                         const char *cond = o.str(base).cstr(" != NULL").flush();
                         CodeList *then = code_list(alc);
                         append(then, code_stmt(alc,
-                            o.str(fix).cstr(" -= ").i32(dist).flush()));
+                            o.str(first).cstr(" -= ").i32(dist).flush()));
                         append(fixops, code_if_then_else(alc, cond, then, NULL));
+                        gen_assign_many_to_first(output, fixops, fintags);
                     }
                 }
             }
@@ -759,23 +794,20 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
     }
 }
 
-std::string tag_expr(const Tag &tag, bool lvalue)
+void expand_fintags(const Tag &tag, std::vector<std::string> &fintags)
 {
-    DASSERT(!trailing(tag));
-
-    // named tag
-    if (!capture(tag)) {
-        return *tag.name;
-    }
-
-    // capture tag, maps to a range of parentheses
-    std::string s = "yypmatch[" + to_string(tag.lsub) + "]";
-    if (lvalue) {
-        for (size_t i = tag.lsub + 2; i <= tag.hsub; i += 2) {
-            s += " = yypmatch[" + to_string(i) + "]";
+    fintags.clear();
+    if (trailing(tag)) {
+        // empty list
+    } else if (!capture(tag)) {
+        // named tag
+        fintags.push_back(*tag.name);
+    } else {
+        // capture tag, maps to a range of parentheses
+        for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
+            fintags.push_back("yypmatch[" + to_string(i) + "]");
         }
     }
-    return s;
 }
 
 bool endstate(const State *s)
