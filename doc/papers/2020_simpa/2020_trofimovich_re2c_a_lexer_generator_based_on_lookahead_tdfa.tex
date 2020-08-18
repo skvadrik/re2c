@@ -96,11 +96,7 @@ Lexical analysis \sep Regular expressions \sep Finite automata
 
 \end{frontmatter}
 
-%\linenumbers
-
 \section{Introduction}
-
-%\item A short description of the high-level functionality and purpose of the software for a diverse, non-specialist audience
 
 \noindent
 Regular expression engines can be divided in two categories: run-time libraries and lexer generators.
@@ -109,16 +105,14 @@ They use a variety of algorithms ranging from recursive backtracking to automata
 Lexer generators, on the other hand, perform ahead-of-time compilation.
 They use algorithms based on deterministic finite automata (DFA) and spend considerable time on compilation and optimization in order to emit better code.
 Consequently, lexer generators usually do not support features that cannot be implemented on vanilla DFA.
-One such feature is submatch extraction --- the ability to find correspondence between parts of the regular expression and parts of the input string.
+One such feature is submatch extraction --- the ability to find the correspondence between parts of the regular expression and parts of the input string.
 Submatch extraction is a special case of the parsing problem:
 in addition to solving the recognition problem it has to find the derivation of the input string in the grammar defined by the regular expression.
-%Submatch extraction differs from simple matching in the same way as parsing differs from recognition:
-%not only one has to decide if the input string belongs to the language defined by the regular expression, but also to find its derivation in the regular grammar.
-Unlike full parsing, submatch extraction needs only a partial derivation. %: it is of no interest how each individual character is derived.
+Unlike full parsing, submatch extraction needs only a partial derivation.
 Therefore it would be wasteful to perform full parsing,
-and a more specialized algorithm is needed that would have overhead proportional to submatch detalization.
+and a more specialized algorithm is needed that has overhead proportional to submatch detalization.
 For an optimizing lexer generator like RE2C \cite{RE2C} \cite{RE2Cx} it is important that the generated code is at least as fast and memory-efficient as hand-written code,
-and there is zero overhead if the submatch feature is not used.
+and there is zero overhead if submatch extraction is not used.
 
 \section{Tagged DFA}
 
@@ -130,25 +124,24 @@ It works as follows.
 First, the regular expression is converted to a nondeterministic finite automaton with tagged transitions (TNFA).
 Tags are submatch markers that can be placed anywhere in the regular expression;
 for example, a capturing group can be represented with a pair of tags for the opening and closing parentheses.
-%It is also possible to use standalone tags anywhere in the regular expression.
 TNFA is in essence a nondeterministic finite state transducer that rewrites symbolic strings into tagged strings.
-The crucial part of Laurikari algorithm is TNFA determinization.
-Its basic principle is the same as the powerset construction that converts NFA to DFA:
+The most important part of Laurikari algorithm is TNFA determinization.
+Its basic principle is the same as in the powerset construction that converts NFA to DFA:
 the NFA is simulated on all possible input strings, maintaining a set of states at each step.
 If the current state-set is new, it becomes a new DFA state, otherwise it is mapped to an existing DFA state.
-In the case of TNFA state-sets are augmented with tag information:
-each substate has an associated vector of registers that hold tag values,
+In the Laurikari algorithm state-sets are augmented with tag information:
+each TNFA substate has an associated vector of registers that store tag values,
 so that the whole state-set is a matrix indexed by TNFA states and tags.
 Registers are needed because different substates are reached by different TNFA paths,
 and the tags along one path may disagree with tags along another path.
-If a tag is updated on TNFA path, its value is stored into a new register.
+If a tag is updated on a TNFA path, its value is stored into a new register.
 The augmented state-sets cannot be mapped in the same way as ordinary DFA states,
-because they may have identical substates, but different registers.
-The key insight is that mapping of such states is still possible if there is a bijection between their registers:
+because a pair of state-sets may have identical TNFA substates, but different registers.
+The key insight is that mapping of such state-sets is still possible if there is a bijection between their registers:
 the bijective transformation can be encoded in the form of register reordering operations on TDFA transitions.
 After determinization all the information in TDFA state-sets is erased,
-and the resulting TDFA is like ordinary DFA extended with a fixed number of registers that hold tag values,
-and transitions that update and reorder register values.
+and the resulting TDFA is like ordinary DFA extended with a fixed number of registers
+and operations on transitions that update and reorder tag values stored in registers.
 Algorithms like minimization are applicable to TDFA,
 but they need to differentiate between transitions with different register operations.
 
@@ -169,7 +162,7 @@ Bottom right: lookahead-TDFA after optimization (the number of registers is mini
 \end{figure}
 
 \noindent
-One improvement that allows to greatly reduce the number of register operations is the use of the lookahead symbol \cite{Tro17}.
+One improvement to Laurikari algorithm that allows to greatly reduce the number of register operations is the use of the lookahead symbol \cite{Tro17}.
 The idea is to delay the application of register operations until the lookahead symbol is known,
 and attach the operations to the outgoing transition on that symbol instead of the preceding incoming transition.
 The insight is that some of TNFA paths that have reached the current TDFA state are canceled after the application of lookahead symbol,
@@ -202,7 +195,7 @@ and the resulting TDFA does not perform any disambiguation at run-time: ambiguit
 \noindent
 RE2C is a lexer generator of choice for projects that need \emph{fast} lexical analyzers.
 It has a flexible user interface that allows one to customize the generated code for a particular environment and input model.
-Submatch extraction is yet another feature that makes RE2C a good alternative to other lexer generators.
+Fast and lightweight submatch extraction is yet another feature that makes RE2C a good alternative to other lexer generators.
 Notable projects that use RE2C are the following:
 
 \begin{itemize}
@@ -374,7 +367,7 @@ C7 & Compilation requirements, operating environments \& dependencies &
     OS: Linux, BSD, Nix/Guix, GNU Hurd, OS X, Windows.
     Dependencies: C++ compiler, Bash, CMake or Autotools, optional Bison and Docutils. \\
 \hline
-C8 & If available Link to developer documentation/manual & \textit{https://re2c.org} \\
+C8 & Link to developer documentation/manual & \textit{https://re2c.org} \\
 \hline
 C9 & Support email for questions & \textit{re2c-general@lists.sourceforge.net} \\
 \hline
