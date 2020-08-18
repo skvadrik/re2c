@@ -37,7 +37,7 @@ struct Tag
     size_t hnest;
     bool history;
     bool orbit;
-    bool topmost;
+    bool toplevel;
     int32_t height;
 
     Tag(const std::string *nm, bool hi, int32_t ht);

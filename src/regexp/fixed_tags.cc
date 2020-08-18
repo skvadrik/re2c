@@ -140,17 +140,21 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
         } else if (re->type == RE::TAG) {
             Tag &tag = spec.tags[re->tag.idx];
             Level &l = levels.back();
+            bool toplevel = levels.size() == 1;
 
             if (fictive(tag)) {
                 // fictive tags are marked as fixed to suppress code generation
                 tag.base = tag.dist = 0;
             } else if (history(tag)) {
                 // fixed tags do not apply to m-tags
-            } else if (levels.size() == 1 && l.tag != NOTAG && l.dist_to_tag != VARDIST) {
+            } else if (spec.opts->fixed_tags == FIXTAG_NONE) {
+                // fixed tag optimization is globally disabled
+            } else if (l.tag != NOTAG && l.dist_to_tag != VARDIST
+                    && (spec.opts->fixed_tags == FIXTAG_ALL || toplevel)) {
                 // this tag can be fixed
                 tag.base = l.tag;
                 tag.dist = l.dist_to_tag;
-                tag.topmost = levels.size() == 1;
+                tag.toplevel = toplevel;
             } else {
                 // this tag cannot be fixed, make it the new base
                 l.tag = re->tag.idx;

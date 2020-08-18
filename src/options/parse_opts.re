@@ -204,6 +204,7 @@ opt_long:
     "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_dfa_minimization); }
     "posix-closure"         end { NEXT_ARG("--posix-closure",    opt_posix_closure); }
     "posix-prectable"       end { NEXT_ARG("--posix-prectable",  opt_posix_prectable); }
+    "fixed-tags"            end { NEXT_ARG("--fixed-tags",       opt_fixed_tags); }
     "no-lookahead"          end { globopts.lookahead = false;     goto opt; }
     "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
     "eager-skip"            end { globopts.eager_skip = true;     goto opt; }
@@ -303,6 +304,14 @@ opt_posix_prectable:
     * { ERRARG("--posix-prectable", "naive | complex", *argv); }
     "naive"   end { globopts.posix_prectable = POSIX_PRECTABLE_NAIVE;   goto opt; }
     "complex" end { globopts.posix_prectable = POSIX_PRECTABLE_COMPLEX; goto opt; }
+*/
+
+opt_fixed_tags:
+/*!re2c
+    * { ERRARG("--fixed-tags", "none | toplevel | all", *argv); }
+    "none"     end { globopts.fixed_tags = FIXTAG_NONE;     goto opt; }
+    "toplevel" end { globopts.fixed_tags = FIXTAG_TOPLEVEL; goto opt; }
+    "all"      end { globopts.fixed_tags = FIXTAG_ALL;      goto opt; }
 */
 
 end:

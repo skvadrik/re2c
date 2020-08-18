@@ -715,7 +715,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 ? opts->yycursor : vartag_expr(fins[tag.base], opts);
 
             if (trailing(tag)) {
-                DASSERT(tag.topmost);
+                DASSERT(tag.toplevel);
                 if (generic) {
                     if (!fixed_on_cursor) {
                         gen_restorectx(output, fixtrailops, base);
@@ -741,7 +741,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                         gen_assign_many_to_first(output, fixops, fintags);
                     } else if (dist == 0) {
                         gen_assign_many(output, fixops, fintags, base);
-                    } else if (tag.topmost) {
+                    } else if (tag.toplevel) {
                         gen_assign(output, fixops, first, base);
                         gen_shift(output, fixops, -dist, first, false);
                         gen_assign_many_to_first(output, fixops, fintags);
@@ -761,7 +761,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 } else {
                     if (dist == 0) {
                         gen_assign_many(output, fixops, fintags, base);
-                    } else if (tag.topmost) {
+                    } else if (tag.toplevel) {
                         gen_assign_many(output, fixops, fintags,
                             o.str(base).cstr(" - ").i32(dist).flush());
                     } else {

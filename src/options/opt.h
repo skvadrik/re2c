@@ -59,6 +59,12 @@ enum api_style_t {
     API_FREEFORM
 };
 
+enum fixed_tags_t {
+    FIXTAG_NONE,
+    FIXTAG_TOPLEVEL,
+    FIXTAG_ALL
+};
+
 enum parse_opts_t {
     OK,
     EXIT_OK,
@@ -96,6 +102,7 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
     CONSTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1) \
     CONSTOPT (posix_prectable_alg_t, posix_prectable, POSIX_PRECTABLE_COMPLEX) \
+    CONSTOPT (fixed_tags_t, fixed_tags, FIXTAG_TOPLEVEL) \
     CONSTOPT (bool, lookahead, true) \
     CONSTOPT (bool, eager_skip, false) \
     CONSTOPT (bool, optimize_tags, true) \
