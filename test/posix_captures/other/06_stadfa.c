@@ -25,16 +25,17 @@ yy4:
 	goto yy2;
 yy5:
 	++YYCURSOR;
-	yyt1 = YYCURSOR - 1;
-	yyt3 = NULL;
-	yyt2 = YYCURSOR;
+	yyt2 = NULL;
+	yyt1 = YYCURSOR;
 	yynmatch = 3;
-	yypmatch[2] = yyt1;
-	yypmatch[3] = yyt2;
-	yypmatch[4] = yyt3;
-	yypmatch[5] = yyt3;
+	yypmatch[3] = yyt1;
+	yypmatch[5] = yyt2;
 	yypmatch[0] = YYCURSOR - 2;
 	yypmatch[1] = YYCURSOR;
+	yypmatch[2] = yyt1;
+	if (yyt1 != NULL) yypmatch[2] -= 1;
+	yypmatch[4] = yyt2;
+	if (yyt2 != NULL) yypmatch[4] -= 1;
 	{}
 }
 

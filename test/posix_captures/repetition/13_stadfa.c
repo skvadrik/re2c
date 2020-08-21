@@ -13,7 +13,7 @@ yy2:
 	{}
 yy3:
 	yych = *++YYCURSOR;
-	yyt7 = YYCURSOR - 1;
+	yyt5 = YYCURSOR - 1;
 	if (yych >= 0x01) goto yy5;
 yy4:
 	YYCURSOR = YYMARKER;
@@ -22,50 +22,51 @@ yy5:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) goto yy4;
 	yych = *++YYCURSOR;
-	yyt2 = yyt7;
-	yyt1 = yyt7;
-	yyt3 = yyt4 = NULL;
-	yyt5 = yyt8 = YYCURSOR - 1;
+	yyt2 = yyt5;
+	yyt1 = yyt5;
+	yyt3 = NULL;
+	yyt6 = YYCURSOR - 1;
 	if (yych >= 0x01) goto yy8;
-	yyt6 = yyt7 = YYCURSOR;
-	yyt2 = yyt8;
+	yyt4 = yyt5 = YYCURSOR;
+	yyt2 = yyt6;
 yy7:
 	yynmatch = 4;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
-	yypmatch[3] = yyt7;
-	yypmatch[4] = yyt3;
-	yypmatch[5] = yyt4;
-	yypmatch[6] = yyt5;
-	yypmatch[7] = yyt6;
+	yypmatch[3] = yyt5;
+	yypmatch[5] = yyt3;
+	yypmatch[7] = yyt4;
 	yypmatch[1] = YYCURSOR;
+	yypmatch[4] = yyt3;
+	if (yyt3 != NULL) yypmatch[4] -= 2;
+	yypmatch[6] = yyt4;
+	if (yyt4 != NULL) yypmatch[6] -= 1;
 	{}
 yy8:
 	yych = *++YYCURSOR;
-	yyt1 = yyt7;
-	yyt3 = yyt4 = NULL;
-	yyt5 = yyt8 = YYCURSOR - 1;
-	yyt7 = yyt2;
+	yyt1 = yyt5;
+	yyt3 = NULL;
+	yyt6 = YYCURSOR - 1;
+	yyt5 = yyt2;
 	if (yych <= 0x00) {
-		yyt6 = yyt7 = YYCURSOR;
-		yyt2 = yyt8;
+		yyt4 = yyt5 = YYCURSOR;
+		yyt2 = yyt6;
 		goto yy7;
 	}
 	yych = *++YYCURSOR;
-	yyt1 = yyt7;
-	yyt3 = yyt4 = NULL;
-	yyt5 = yyt7 = yyt8 = YYCURSOR - 1;
+	yyt1 = yyt5;
+	yyt3 = NULL;
+	yyt6 = YYCURSOR - 1;
 	if (yych <= 0x00) {
-		yyt6 = yyt7 = YYCURSOR;
-		yyt2 = yyt8;
+		yyt4 = yyt5 = YYCURSOR;
+		yyt2 = yyt6;
 		goto yy7;
 	}
 	++YYCURSOR;
-	yyt3 = yyt7;
 	yyt1 = yyt2;
-	yyt5 = yyt6 = NULL;
-	yyt4 = yyt7 = YYCURSOR;
-	yyt2 = yyt8;
+	yyt4 = NULL;
+	yyt3 = yyt5 = YYCURSOR;
+	yyt2 = yyt6;
 	goto yy7;
 }
 

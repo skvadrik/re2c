@@ -19,23 +19,22 @@ yy2:
 yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'b':
-		yyt2 = YYCURSOR;
-		goto yy5;
+	case 'b':	goto yy5;
 	default:
-		yyt2 = yyt3 = NULL;
+		yyt2 = NULL;
 		goto yy4;
 	}
 yy4:
 	yynmatch = 3;
 	yypmatch[0] = yypmatch[2] = yyt1;
-	yypmatch[4] = yyt2;
-	yypmatch[5] = yyt3;
+	yypmatch[5] = yyt2;
 	yypmatch[1] = yypmatch[3] = YYCURSOR;
+	yypmatch[4] = yyt2;
+	if (yyt2 != NULL) yypmatch[4] -= 1;
 	{}
 yy5:
 	++YYCURSOR;
-	yyt3 = YYCURSOR;
+	yyt2 = YYCURSOR;
 	goto yy4;
 }
 

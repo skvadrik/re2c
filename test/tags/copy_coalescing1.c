@@ -10,7 +10,6 @@
 // copy operands, then examine the rest of tags.
 
 yyt1
-yyt2
 
 
 {
@@ -29,12 +28,8 @@ yy3:
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'c':
-		yyt1 = YYCURSOR;
-		goto yy5;
-	case 'd':
-		yyt1 = YYCURSOR;
-		goto yy7;
+	case 'c':	goto yy5;
+	case 'd':	goto yy7;
 	default:	goto yy3;
 	}
 yy5:
@@ -45,12 +40,13 @@ yy5:
 	switch (yych) {
 	case 'a':	goto yy9;
 	default:
-		yyt2 = YYCURSOR;
+		yyt1 = YYCURSOR;
 		goto yy6;
 	}
 yy6:
+	q = yyt1;
 	p = yyt1;
-	q = yyt2;
+	if (yyt1 != NULL) p -= 1;
 	{ p q }
 yy7:
 	yyaccept = 1;
@@ -60,30 +56,29 @@ yy7:
 	switch (yych) {
 	case 'a':	goto yy11;
 	default:
-		yyt2 = YYCURSOR;
+		yyt1 = YYCURSOR;
 		goto yy8;
 	}
 yy8:
+	s = yyt1;
 	r = yyt1;
-	s = yyt2;
+	if (yyt1 != NULL) r -= 1;
 	{ r s }
 yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':
-		yyt1 = YYCURSOR;
-		goto yy5;
+	case 'c':	goto yy5;
 	default:	goto yy10;
 	}
 yy10:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
-		yyt2 = YYCURSOR;
+		yyt1 = YYCURSOR;
 		goto yy6;
 	} else {
-		yyt2 = YYCURSOR;
+		yyt1 = YYCURSOR;
 		goto yy8;
 	}
 yy11:
@@ -91,9 +86,7 @@ yy11:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'd':
-		yyt1 = YYCURSOR;
-		goto yy7;
+	case 'd':	goto yy7;
 	default:	goto yy10;
 	}
 }

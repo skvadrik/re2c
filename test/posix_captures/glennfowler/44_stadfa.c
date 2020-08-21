@@ -6,86 +6,80 @@
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *(YYMARKER = YYCURSOR);
 	if (yych >= 0x01) goto yy3;
-	yyt2 = yyt3 = yyt4 = yyt7 = yyt12 = NULL;
-	yyt1 = yyt10 = YYCURSOR;
+	yyt2 = yyt3 = yyt7 = NULL;
+	yyt1 = yyt6 = YYCURSOR;
 yy2:
 	yynmatch = 7;
 	yypmatch[2] = yyt1;
-	yypmatch[4] = yyt2;
-	yypmatch[5] = yyt3;
-	yypmatch[6] = yyt4;
-	yypmatch[7] = yyt12;
-	yypmatch[8] = yyt10;
-	yypmatch[10] = yyt7;
+	yypmatch[5] = yyt2;
+	yypmatch[7] = yyt3;
+	yypmatch[8] = yyt6;
 	yypmatch[11] = yyt7;
-	yypmatch[12] = yyt7;
 	yypmatch[13] = yyt7;
 	yypmatch[0] = yyt1;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[3] = yyt10;
+	yypmatch[3] = yyt6;
+	yypmatch[4] = yyt2;
+	if (yyt2 != NULL) yypmatch[4] -= 2;
+	yypmatch[6] = yyt3;
+	if (yyt3 != NULL) yypmatch[6] -= 3;
 	yypmatch[9] = YYCURSOR;
+	yypmatch[10] = yyt7;
+	if (yyt7 != NULL) yypmatch[10] -= 2;
+	yypmatch[12] = yyt7;
+	if (yyt7 != NULL) yypmatch[12] -= 3;
 	{}
 yy3:
 	yych = *++YYCURSOR;
-	yyt6 = yyt10 = NULL;
-	yyt5 = yyt7 = yyt12 = YYCURSOR - 1;
+	yyt6 = NULL;
+	yyt3 = yyt4 = YYCURSOR - 1;
 	if (yych >= 0x01) goto yy5;
 	YYCURSOR = YYMARKER;
-	yyt2 = yyt3 = yyt4 = yyt7 = yyt12 = NULL;
-	yyt1 = yyt10 = YYCURSOR;
+	yyt2 = yyt3 = yyt7 = NULL;
+	yyt1 = yyt6 = YYCURSOR;
 	goto yy2;
 yy5:
 	yych = *++YYCURSOR;
-	yyt11 = yyt7;
-	yyt9 = yyt6;
-	yyt2 = yyt7;
-	yyt8 = yyt5;
-	yyt1 = yyt12;
+	yyt7 = yyt3;
+	yyt5 = yyt4;
+	yyt1 = yyt3;
 	if (yych <= 0x00) {
-		yyt4 = yyt7 = yyt12 = NULL;
-		yyt3 = yyt10 = YYCURSOR;
+		yyt3 = yyt7 = NULL;
+		yyt2 = yyt6 = YYCURSOR;
 		goto yy2;
 	}
 	yych = *++YYCURSOR;
+	yyt2 = yyt6;
 	yyt4 = yyt7;
-	yyt3 = yyt10;
-	yyt6 = yyt11;
-	yyt2 = yyt9;
-	yyt5 = yyt12;
-	yyt1 = yyt8;
-	yyt7 = yyt10 = YYCURSOR - 1;
+	yyt1 = yyt5;
+	yyt6 = YYCURSOR - 1;
 	if (yych <= 0x00) {
 		yyt7 = NULL;
-		yyt10 = yyt12 = YYCURSOR;
+		yyt3 = yyt6 = YYCURSOR;
 		goto yy2;
 	}
 yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	yyt9 = yyt6;
-	yyt2 = yyt7;
-	yyt8 = yyt5;
-	yyt1 = yyt12;
-	yyt11 = yyt7;
+	yyt5 = yyt4;
+	yyt1 = yyt3;
+	yyt7 = yyt3;
 	if (yych <= 0x00) {
-		yyt4 = yyt7 = yyt12 = NULL;
-		yyt3 = yyt10 = YYCURSOR;
+		yyt3 = yyt7 = NULL;
+		yyt2 = yyt6 = YYCURSOR;
 		goto yy2;
 	}
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
+	yyt2 = yyt6;
+	yyt1 = yyt5;
+	yyt6 = YYCURSOR - 1;
 	yyt4 = yyt7;
-	yyt3 = yyt10;
-	yyt2 = yyt9;
-	yyt1 = yyt8;
-	yyt7 = yyt10 = YYCURSOR - 1;
-	yyt6 = yyt11;
-	yyt5 = yyt12;
 	if (yych <= 0x00) {
 		yyt7 = NULL;
-		yyt10 = yyt12 = YYCURSOR;
+		yyt3 = yyt6 = YYCURSOR;
 		goto yy2;
 	}
 	goto yy7;

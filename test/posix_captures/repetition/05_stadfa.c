@@ -19,35 +19,36 @@ yy3:
 	goto yy2;
 yy5:
 	yych = *++YYCURSOR;
-	yyt4 = yyt5 = NULL;
-	yyt2 = yyt6 = YYCURSOR - 1;
+	yyt4 = NULL;
+	yyt2 = YYCURSOR - 1;
 	if (yych >= 0x01) goto yy7;
-	yyt3 = yyt7 = YYCURSOR;
+	yyt3 = yyt5 = YYCURSOR;
 yy6:
 	yynmatch = 4;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
 	yypmatch[3] = yyt3;
-	yypmatch[4] = yyt4;
-	yypmatch[5] = yyt5;
-	yypmatch[6] = yyt6;
-	yypmatch[7] = yyt7;
+	yypmatch[5] = yyt4;
+	yypmatch[7] = yyt5;
 	yypmatch[1] = YYCURSOR;
+	yypmatch[4] = yyt4;
+	if (yyt4 != NULL) yypmatch[4] -= 2;
+	yypmatch[6] = yyt5;
+	if (yyt5 != NULL) yypmatch[6] -= 1;
 	{}
 yy7:
 	yych = *++YYCURSOR;
 	yyt3 = yyt1;
-	yyt4 = yyt5 = NULL;
-	yyt2 = yyt6 = YYCURSOR - 1;
+	yyt4 = NULL;
+	yyt2 = YYCURSOR - 1;
 	if (yych <= 0x00) {
-		yyt3 = yyt7 = YYCURSOR;
+		yyt3 = yyt5 = YYCURSOR;
 		goto yy6;
 	}
 	++YYCURSOR;
-	yyt4 = yyt2;
 	yyt1 = yyt3;
-	yyt6 = yyt7 = NULL;
-	yyt3 = yyt5 = YYCURSOR;
+	yyt5 = NULL;
+	yyt3 = yyt4 = YYCURSOR;
 	goto yy6;
 }
 

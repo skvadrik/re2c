@@ -8,22 +8,24 @@
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
 	case 'a':
-		yyt3 = yyt4 = NULL;
-		yyt1 = yyt2 = yyt5 = YYCURSOR;
+		yyt2 = NULL;
+		yyt1 = YYCURSOR;
 		goto yy3;
 	default:
-		yyt2 = yyt3 = yyt4 = yyt5 = NULL;
+		yyt2 = yyt3 = NULL;
 		yyt1 = YYCURSOR;
 		goto yy2;
 	}
 yy2:
 	yynmatch = 3;
 	yypmatch[0] = yyt1;
-	yypmatch[2] = yyt2;
-	yypmatch[3] = yyt3;
-	yypmatch[4] = yyt5;
-	yypmatch[5] = yyt4;
+	yypmatch[3] = yyt2;
+	yypmatch[5] = yyt3;
 	yypmatch[1] = YYCURSOR;
+	yypmatch[2] = yyt2;
+	if (yyt2 != NULL) yypmatch[2] -= 2;
+	yypmatch[4] = yyt3;
+	if (yyt3 != NULL) yypmatch[4] -= 3;
 	{}
 yy3:
 	++YYCURSOR;
@@ -35,19 +37,13 @@ yy3:
 	}
 yy4:
 	YYCURSOR = YYMARKER;
-	switch (yyaccept) {
-	case 0:
-		yyt2 = yyt3 = yyt4 = yyt5 = NULL;
+	if (yyaccept == 0) {
+		yyt2 = yyt3 = NULL;
 		yyt1 = YYCURSOR;
 		goto yy2;
-	case 1:
-		yyt4 = yyt5 = NULL;
-		yyt3 = YYCURSOR;
-		goto yy2;
-	default:
-		yyt2 = yyt6;
-		yyt4 = yyt5 = NULL;
-		yyt3 = YYCURSOR;
+	} else {
+		yyt3 = NULL;
+		yyt2 = YYCURSOR;
 		goto yy2;
 	}
 yy5:
@@ -55,12 +51,10 @@ yy5:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt2 = YYCURSOR;
-		goto yy6;
+	case 'a':	goto yy6;
 	default:
-		yyt4 = yyt5 = NULL;
-		yyt3 = YYCURSOR;
+		yyt3 = NULL;
+		yyt2 = YYCURSOR;
 		goto yy2;
 	}
 yy6:
@@ -70,8 +64,7 @@ yy6:
 	switch (yych) {
 	case 'a':	goto yy7;
 	default:
-		yyt2 = yyt4;
-		yyt4 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	}
 yy7:
@@ -80,12 +73,10 @@ yy7:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt6 = YYCURSOR;
-		goto yy8;
+	case 'a':	goto yy8;
 	default:
-		yyt4 = yyt5 = NULL;
-		yyt3 = YYCURSOR;
+		yyt3 = NULL;
+		yyt2 = YYCURSOR;
 		goto yy2;
 	}
 yy8:
@@ -97,18 +88,15 @@ yy8:
 	default:	goto yy4;
 	}
 yy9:
-	yyaccept = 2;
+	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt2 = yyt5 = YYCURSOR;
-		goto yy3;
+	case 'a':	goto yy3;
 	default:
-		yyt2 = yyt6;
-		yyt4 = yyt5 = NULL;
-		yyt3 = YYCURSOR;
+		yyt3 = NULL;
+		yyt2 = YYCURSOR;
 		goto yy2;
 	}
 }

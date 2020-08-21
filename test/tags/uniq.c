@@ -26,12 +26,12 @@ yy3:
 	default:	goto yy4;
 	}
 yy4:
+	z = yyt1;
 	u = yyt1;
 	v = yyt1;
 	w = yyt1;
 	x = yyt1;
 	y = yyt1;
-	z = yyt1;
 	{}
 yy5:
 	++YYCURSOR;
@@ -49,9 +49,4 @@ yy6:
 }
 
 tags/uniq.re:7:3: warning: rule matches empty string [-Wmatch-empty-string]
-tags/uniq.re:6:33: warning: tag 'u' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/uniq.re:6:33: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/uniq.re:6:33: warning: tag 'w' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/uniq.re:6:33: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/uniq.re:6:33: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 tags/uniq.re:6:33: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
