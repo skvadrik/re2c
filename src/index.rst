@@ -80,6 +80,13 @@ Papers
   by Angelo Borsotti and Ulya Trofimovich,
   2019
 
+- `RE2C: A lexer generator based on lookahead-TDFA
+  <2020_trofimovich_re2c_a_lexer_generator_base_on_lookahead_tdfa.pdf>`_
+  by Ulya Trofimovich,
+  Software Impacts,
+  Volume 6, November 2020, 100027,
+  `DOI:10.1016/j.simpa.2020.100027 <https://doi.org/10.1016/j.simpa.2020.100027>`_.
+
 Authors
 -------
 
