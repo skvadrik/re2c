@@ -289,4 +289,21 @@
         </author>
     </entry>
 
+
+    <entry>
+        <title>Release 2.0.3</title>
+        <link href="https://re2c.org/releases/release_notes.html#release-2-0-3"/>
+        <id>https://re2c.org/releases/release_notes.html#release-2-0-3</id>
+        <updated>2020-08-22T00:00:00Z</updated>
+        <summary type="xhtml">
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                Minor release re2c-2.0.3 (<a href="https://re2c.org/releases/release_notes.html#release-2-0-3">release notes</a>).
+            </div>
+        </summary>
+        <author>
+            <name>Ulya Trofimovich</name>
+            <email>skvadrik@gmail.com</email>
+        </author>
+    </entry>
+
 </feed>

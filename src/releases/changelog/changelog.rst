@@ -5,6 +5,16 @@ Changelog
 2.0x
 ----
 
+2.0.3 (2020-08-22)
+~~~~~~~~~~~~~~~~~~
+
+- Fix issues when building re2c as a CMake subproject
+  (`#302 <https://github.com/skvadrik/re2c/pull/302>`_:
+  Using CMake add_subdirectory fails)
+
+- Final corrections in the SIMPA article "RE2C: A lexer generator based on
+  lookahead-TDFA", https://doi.org/10.1016/j.simpa.2020.100027
+
 2.0.2 (2020-08-08)
 ~~~~~~~~~~~~~~~~~~
 
