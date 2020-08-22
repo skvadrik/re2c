@@ -38,3 +38,17 @@
     Internal option:
     use staDFA algorithm for submatch extraction. The main difference with TDFA
     is that tag operations in staDFA are placed in states, not on transitions.
+
+``--fixed-tags <none | toplevel | all>``
+    Internal option:
+    specify whether the fixed-tag optimization should be applied to all tags
+    (``all``), none of them (``none``), or only those in toplevel concatenation
+    (``toplevel``). The default is ``all``.
+    "Fixed" tags are those that are located within a fixed distance to some
+    other tag (called "base"). In such cases only tha base tag needs to be
+    tracked, and the value of the fixed tag can be computed as the value of the
+    base tag plus a static offset. For tags that are under alternative or
+    repetition it is also necessary to check if the base tag has a no-match
+    value (in that case fixed tag should also be set to no-match, disregarding
+    the offset). For tags in top-level concatenation the check is not needed,
+    because they always match.
