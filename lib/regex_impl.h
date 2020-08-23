@@ -305,12 +305,11 @@ struct getoff_dfa_t
         regoff_t off;
         if (!fixed(tag)) {
             off = regs[dfa->finvers[idx]];
-        }
-        else {
-            off = tag.base == Tag::RIGHTMOST
-                ? len : regs[dfa->finvers[tag.base]];
-            DASSERT (off != -1);
-            off -= static_cast<regoff_t>(tag.dist);
+        } else {
+            off = tag.base == Tag::RIGHTMOST ? len : regs[dfa->finvers[tag.base]];
+            if (off != -1) {
+                off -= static_cast<regoff_t>(tag.dist);
+            }
         }
         return off;
     }
