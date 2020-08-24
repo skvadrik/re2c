@@ -1,3 +1,6 @@
+#!/bin/bash
+
+allre=()
 
 for f in ../.dat/*.dat; do
 
@@ -14,6 +17,19 @@ for f in ../.dat/*.dat; do
         i=$((i + 1))
         x=`printf '%02d' $i`.re
         y="${x%.re}_stadfa.re"
+
+        rm -f "$d/$x" "$d/$y"
+
+        found=0
+        for j in `seq ${#allre[@]}`; do
+            if [ "${allre[j]}" == "$1" ]; then
+                found=1
+                break
+            fi
+        done
+        [ $found == 1 ] && continue
+        allre+=("$1")
+
         regexp=`printf "%s" "$1" | sed \
             -e 's/\[^/[^\\\\x00/g' \
             -e 's/\./[^\\\\x00]/g' \
