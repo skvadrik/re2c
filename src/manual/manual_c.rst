@@ -157,6 +157,11 @@ Encoding support
 ================
 .. include:: /manual/encodings/encodings.rst_
 
+Here is an example of a lexer for Unicode identifiers encoded in UTF8.
+
+.. literalinclude:: ../examples/c/encodings/unicode_identifier.re
+    :language: c
+
 Start conditions
 ================
 .. include:: /manual/conditions/conditions.rst_

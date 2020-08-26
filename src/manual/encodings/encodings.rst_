@@ -1,56 +1,50 @@
-``re2c`` supports the following encodings: ASCII (default), EBCDIC (``-e``),
-UCS-2 (``-w``), UTF-16 (``-x``), UTF-32 (``-u``) and UTF-8 (``-8``).
-See also inplace configuration ``re2c:flags``.
+Speaking of encodings, it is necessary to understand the difference between code points and code units.
+Code point is an abstract symbol.
+Code unit is the smallest atomic unit of storage in the encoded text.
+A single code point may be represented with one or more code units.
+In a fixed-length encoding all code points are represented with the same number of code units.
+In a variable-length encoding code points may be represented with a different number of code units.
+Note that the "any" rule ``[^]`` matches any code point, but not necessarily any code unit.
+The only way to match any code unit regardless of the encoding it the default rule ``*``.
 
-The following concepts should be clarified when talking about encodings.
-A code point is an abstract number that represents a single symbol. 
-A code unit is the smallest unit of memory, which is used in the
-encoded text (it corresponds to one character in the input stream). One
-or more code units may be needed to represent a single code point,
-depending on the encoding. In a fixed-length encoding, each code point
-is represented with an equal number of code units. In variable-length
-encodings, different code points can be represented with different number
-of code units.
+Re2c supports the following encodings: ASCII, EBCDIC, UCS2, UTF8, UTF16 and UTF32.
 
-* ASCII is a fixed-length encoding. Its code space includes 0x100
-  code points, from 0 to 0xFF. A code point is represented with exactly one
-  1-byte code unit, which has the same value as the code point. The size of
-  ``YYCTYPE`` must be 1 byte.
+* ASCII is enabled by default.
+  It is a fixed-length encoding with code space [0-255] and 1-byte code points
+  and code units.
+  ``YYCTYPE`` size should be 1 byte.
 
-* EBCDIC is a fixed-length encoding. Its code space includes 0x100
-  code points, from 0 to 0xFF. A code point is represented with exactly
-  one 1-byte code unit, which has the same value as the code point. The size
-  of ``YYCTYPE`` must be 1 byte.
+* EBCDIC is enabled with ``-e, --ecb`` option.
+  It a fixed-length encoding with code space [0-255] and 1-byte code points
+  and code units.
+  ``YYCTYPE`` size should be 1 byte.
 
-* UCS-2 is a fixed-length encoding. Its code space includes 0x10000
-  code points, from 0 to 0xFFFF. One code point is represented with
-  exactly one 2-byte code unit, which has the same value as the code
-  point. The size of ``YYCTYPE`` must be 2 bytes.
+* UCS2 is enabled with ``-w, --wide-chars`` option.
+  It is a fixed-length encoding with code space [0-0xFFFF] and 2-byte code
+  points and code units.
+  ``YYCTYPE`` size should be 2 bytes.
 
-* UTF-16 is a variable-length encoding. Its code space includes all
-  Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One
-  code point is represented with one or two 2-byte code units. The size of
-  ``YYCTYPE`` must be 2 bytes.
+* UTF8 is enabled with ``-8, --utf-8`` option.
+  It is a variable-length Unicode encoding with code space [0-0x10FFFF].
+  Code points are represented with one, two, three or four 1-byte code units.
+  ``YYCTYPE`` size should be 1 byte.
 
-* UTF-32 is a fixed-length encoding. Its code space includes all
-  Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One
-  code point is represented with exactly one 4-byte code unit. The size of
-  ``YYCTYPE`` must be 4 bytes.
+* UTF16 is enabled with ``-x, --utf-16`` option.
+  It is a variable-length Unicode encoding with code space [0-0x10FFFF].
+  Code points are represented with one or two 2-byte code units.
+  ``YYCTYPE`` size should be 2 bytes.
 
-* UTF-8 is a variable-length encoding. Its code space includes all
-  Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One
-  code point is represented with a sequence of one, two, three, or four
-  1-byte code units. The size of ``YYCTYPE`` must be 1 byte.
+* UTF32 is enabled with ``-u, --unicode`` option.
+  It is a fixed-length Unicode encoding with code space [0-0x10FFFF] and 4-byte
+  code points and code units.
+  ``YYCTYPE`` size should be 4 bytes.
 
-In Unicode, values from range 0xD800 to 0xDFFF (surrogates) are not
-valid Unicode code points. Any encoded sequence of code units that
-would map to Unicode code points in the range 0xD800-0xDFFF, is
-ill-formed. The user can control how ``re2c`` treats such ill-formed
-sequences with the ``--encoding-policy <policy>`` switch.
+Encodings can also be set or unset using ``re2c:flags`` configuration,
+for example ``re2c:flags:8 = 1;`` enables UTF8.
 
-For some encodings, there are code units that never occur in a valid
-encoded stream (e.g., 0xFF byte in UTF-8). If the generated scanner must
-check for invalid input, the only correct way to do so is to use the default
-rule (``*``). Note that the full range rule (``[^]``) won't catch invalid code units when a variable-length encoding is used
-(``[^]`` means "any valid code point", whereas the default rule (``*``) means "any possible code unit").
+Include file ``include/unicode_categories.re`` provides re2c definitions for the standard Unicode categories.
 
+Option ``--input-encoding utf8`` enables Unicode literals in regular expressions.
+
+Option ``--encoding-policy <fail | substitute | ignore>``
+specifies the way re2c handles Unicode surrogates: code points in the range [0xD800-0xDFFF].

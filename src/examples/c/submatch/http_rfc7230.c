@@ -49,11 +49,6 @@ char *yyt28;
 char *yyt29;
 char *yyt3;
 char *yyt30;
-char *yyt31;
-char *yyt32;
-char *yyt33;
-char *yyt34;
-char *yyt35;
 char *yyt4;
 char *yyt5;
 char *yyt6;
@@ -61,13 +56,13 @@ char *yyt7;
 char *yyt8;
 char *yyt9;
 
-    mtag_t *yyt36;
+    mtag_t *yyt31;
+mtag_t *yyt32;
+mtag_t *yyt33;
+mtag_t *yyt34;
+mtag_t *yyt35;
+mtag_t *yyt36;
 mtag_t *yyt37;
-mtag_t *yyt38;
-mtag_t *yyt39;
-mtag_t *yyt40;
-mtag_t *yyt41;
-mtag_t *yyt42;
 
     mtagpool_t mtp;
     int eof;
@@ -76,13 +71,13 @@ mtag_t *yyt42;
 static void mtagpool_clear(mtagpool_t *mtp, input_t *in)
 {
     mtp->next = mtp->head;
-    in->yyt36 = 0;
+    in->yyt31 = 0;
+in->yyt32 = 0;
+in->yyt33 = 0;
+in->yyt34 = 0;
+in->yyt35 = 0;
+in->yyt36 = 0;
 in->yyt37 = 0;
-in->yyt38 = 0;
-in->yyt39 = 0;
-in->yyt40 = 0;
-in->yyt41 = 0;
-in->yyt42 = 0;
 
 }
 
@@ -161,11 +156,6 @@ in->yyt28 = 0;
 in->yyt29 = 0;
 in->yyt3 = 0;
 in->yyt30 = 0;
-in->yyt31 = 0;
-in->yyt32 = 0;
-in->yyt33 = 0;
-in->yyt34 = 0;
-in->yyt35 = 0;
 in->yyt4 = 0;
 in->yyt5 = 0;
 in->yyt6 = 0;
@@ -173,13 +163,13 @@ in->yyt7 = 0;
 in->yyt8 = 0;
 in->yyt9 = 0;
 
-    in->yyt36 = 0;
+    in->yyt31 = 0;
+in->yyt32 = 0;
+in->yyt33 = 0;
+in->yyt34 = 0;
+in->yyt35 = 0;
+in->yyt36 = 0;
 in->yyt37 = 0;
-in->yyt38 = 0;
-in->yyt39 = 0;
-in->yyt40 = 0;
-in->yyt41 = 0;
-in->yyt42 = 0;
 
     mtagpool_init(&in->mtp);
     in->eof = 0;
@@ -229,11 +219,6 @@ if (in->yyt28) in->yyt28 -= free;
 if (in->yyt29) in->yyt29 -= free;
 if (in->yyt3) in->yyt3 -= free;
 if (in->yyt30) in->yyt30 -= free;
-if (in->yyt31) in->yyt31 -= free;
-if (in->yyt32) in->yyt32 -= free;
-if (in->yyt33) in->yyt33 -= free;
-if (in->yyt34) in->yyt34 -= free;
-if (in->yyt35) in->yyt35 -= free;
 if (in->yyt4) in->yyt4 -= free;
 if (in->yyt5) in->yyt5 -= free;
 if (in->yyt6) in->yyt6 -= free;
@@ -377,7 +362,7 @@ loop:
 		in->yyt1 = YYCURSOR;
 		goto yy8;
 	case 'H':
-		in->yyt1 = in->yyt30 = YYCURSOR;
+		in->yyt1 = YYCURSOR;
 		goto yy9;
 	default:	goto yy4;
 	}
@@ -561,8 +546,8 @@ yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt3 = in->yyt11 = in->yyt12 = YYCURSOR;
+		in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt3 = in->yyt10 = in->yyt11 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -589,25 +574,25 @@ yy10:
 	case '=':
 	case '_':
 	case '~':
-		in->yyt4 = in->yyt10 = NULL;
-		in->yyt3 = in->yyt5 = in->yyt11 = YYCURSOR;
+		in->yyt4 = in->yyt9 = NULL;
+		in->yyt3 = in->yyt5 = in->yyt10 = YYCURSOR;
 		goto yy16;
 	case '%':
-		in->yyt4 = in->yyt10 = NULL;
-		in->yyt3 = in->yyt5 = in->yyt11 = YYCURSOR;
+		in->yyt4 = in->yyt9 = NULL;
+		in->yyt3 = in->yyt5 = in->yyt10 = YYCURSOR;
 		goto yy18;
 	case '/':
-		in->yyt27 = YYCURSOR;
+		in->yyt26 = YYCURSOR;
 		goto yy19;
 	case ':':
-		in->yyt4 = in->yyt10 = NULL;
-		in->yyt3 = in->yyt5 = in->yyt11 = in->yyt12 = YYCURSOR;
+		in->yyt4 = in->yyt9 = NULL;
+		in->yyt3 = in->yyt5 = in->yyt10 = in->yyt11 = YYCURSOR;
 		goto yy21;
 	case '?':
-		in->yyt27 = in->yyt28 = YYCURSOR;
+		in->yyt26 = in->yyt27 = YYCURSOR;
 		goto yy22;
 	case '@':
-		in->yyt3 = in->yyt5 = in->yyt10 = YYCURSOR;
+		in->yyt3 = in->yyt5 = in->yyt9 = YYCURSOR;
 		goto yy23;
 	case 'A':
 	case 'B':
@@ -661,12 +646,12 @@ yy10:
 	case 'x':
 	case 'y':
 	case 'z':
-		in->yyt4 = in->yyt10 = NULL;
-		in->yyt3 = in->yyt5 = in->yyt11 = in->yyt14 = YYCURSOR;
+		in->yyt4 = in->yyt9 = NULL;
+		in->yyt3 = in->yyt5 = in->yyt10 = in->yyt13 = YYCURSOR;
 		goto yy24;
 	case '[':
-		in->yyt4 = in->yyt10 = NULL;
-		in->yyt3 = in->yyt11 = YYCURSOR;
+		in->yyt4 = in->yyt9 = NULL;
+		in->yyt3 = in->yyt10 = YYCURSOR;
 		goto yy26;
 	default:	goto yy11;
 	}
@@ -770,9 +755,7 @@ yy14:
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'H':
-		in->yyt8 = YYCURSOR;
-		goto yy28;
+	case 'H':	goto yy28;
 	default:	goto yy11;
 	}
 yy16:
@@ -781,8 +764,8 @@ yy16:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt12 = YYCURSOR;
+		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt11 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -863,10 +846,10 @@ yy16:
 	case '~':	goto yy16;
 	case '%':	goto yy18;
 	case ':':
-		in->yyt12 = YYCURSOR;
+		in->yyt11 = YYCURSOR;
 		goto yy21;
 	case '@':
-		in->yyt10 = YYCURSOR;
+		in->yyt9 = YYCURSOR;
 		goto yy23;
 	default:	goto yy11;
 	}
@@ -905,8 +888,8 @@ yy19:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt29 = NULL;
-		in->yyt28 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt28 = NULL;
+		in->yyt27 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -990,7 +973,7 @@ yy19:
 	case '~':	goto yy19;
 	case '%':	goto yy30;
 	case '?':
-		in->yyt28 = YYCURSOR;
+		in->yyt27 = YYCURSOR;
 		goto yy22;
 	default:	goto yy11;
 	}
@@ -998,8 +981,8 @@ yy21:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt6 = in->yyt7 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt5 = in->yyt13 = YYCURSOR;
+		in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt5 = in->yyt12 = YYCURSOR;
 		goto yy15;
 	case '0':
 	case '1':
@@ -1011,7 +994,7 @@ yy21:
 	case '7':
 	case '8':
 	case '9':
-		in->yyt13 = YYCURSOR;
+		in->yyt12 = YYCURSOR;
 		goto yy34;
 	default:	goto yy32;
 	}
@@ -1019,8 +1002,8 @@ yy22:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = NULL;
-		in->yyt7 = in->yyt29 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = NULL;
+		in->yyt7 = in->yyt28 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -1103,10 +1086,10 @@ yy22:
 	case 'y':
 	case 'z':
 	case '~':
-		in->yyt29 = YYCURSOR;
+		in->yyt28 = YYCURSOR;
 		goto yy36;
 	case '%':
-		in->yyt29 = YYCURSOR;
+		in->yyt28 = YYCURSOR;
 		goto yy38;
 	default:	goto yy11;
 	}
@@ -1115,8 +1098,8 @@ yy23:
 	switch (yych) {
 	case ' ':
 		in->yyt4 = in->yyt5;
-		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt11 = in->yyt12 = YYCURSOR;
+		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt10 = in->yyt11 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -1195,17 +1178,17 @@ yy23:
 	case 'y':
 	case 'z':
 	case '~':
-		in->yyt11 = YYCURSOR;
+		in->yyt10 = YYCURSOR;
 		goto yy39;
 	case '%':
-		in->yyt11 = YYCURSOR;
+		in->yyt10 = YYCURSOR;
 		goto yy41;
 	case ':':
-		in->yyt11 = in->yyt12 = YYCURSOR;
+		in->yyt10 = in->yyt11 = YYCURSOR;
 		goto yy42;
 	case '[':
 		in->yyt4 = in->yyt5;
-		in->yyt11 = YYCURSOR;
+		in->yyt10 = YYCURSOR;
 		goto yy26;
 	default:	goto yy11;
 	}
@@ -1215,8 +1198,8 @@ yy24:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt12 = YYCURSOR;
+		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt11 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -1297,10 +1280,10 @@ yy24:
 	case 'y':
 	case 'z':	goto yy24;
 	case ':':
-		in->yyt12 = in->yyt15 = YYCURSOR;
+		in->yyt11 = in->yyt14 = YYCURSOR;
 		goto yy43;
 	case '@':
-		in->yyt10 = YYCURSOR;
+		in->yyt9 = YYCURSOR;
 		goto yy23;
 	default:	goto yy11;
 	}
@@ -1489,7 +1472,7 @@ yy32:
 	case '~':	goto yy31;
 	case '%':	goto yy33;
 	case '@':
-		in->yyt10 = YYCURSOR;
+		in->yyt9 = YYCURSOR;
 		goto yy23;
 	default:	goto yy11;
 	}
@@ -1528,7 +1511,7 @@ yy34:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt6 = in->yyt7 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
+		in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
 		in->yyt5 = YYCURSOR;
 		goto yy15;
 	case '!':
@@ -1611,7 +1594,7 @@ yy34:
 	case '8':
 	case '9':	goto yy34;
 	case '@':
-		in->yyt10 = YYCURSOR;
+		in->yyt9 = YYCURSOR;
 		goto yy23;
 	default:	goto yy11;
 	}
@@ -1621,7 +1604,7 @@ yy36:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = NULL;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = NULL;
 		in->yyt7 = YYCURSOR;
 		goto yy15;
 	case '!':
@@ -1744,8 +1727,8 @@ yy39:
 	switch (yych) {
 	case ' ':
 		in->yyt4 = in->yyt5;
-		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt12 = YYCURSOR;
+		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt11 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -1826,7 +1809,7 @@ yy39:
 	case '~':	goto yy39;
 	case '%':	goto yy41;
 	case ':':
-		in->yyt12 = YYCURSOR;
+		in->yyt11 = YYCURSOR;
 		goto yy42;
 	default:	goto yy11;
 	}
@@ -1864,8 +1847,8 @@ yy42:
 	switch (yych) {
 	case ' ':
 		in->yyt4 = in->yyt5;
-		in->yyt6 = in->yyt7 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt5 = in->yyt13 = YYCURSOR;
+		in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt5 = in->yyt12 = YYCURSOR;
 		goto yy15;
 	case '0':
 	case '1':
@@ -1877,7 +1860,7 @@ yy42:
 	case '7':
 	case '8':
 	case '9':
-		in->yyt13 = YYCURSOR;
+		in->yyt12 = YYCURSOR;
 		goto yy53;
 	default:	goto yy11;
 	}
@@ -1885,8 +1868,8 @@ yy43:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt6 = in->yyt7 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt5 = in->yyt13 = YYCURSOR;
+		in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt5 = in->yyt12 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -1956,13 +1939,13 @@ yy43:
 	case 'y':
 	case 'z':
 	case '~':
-		in->yyt24 = YYCURSOR;
+		in->yyt23 = YYCURSOR;
 		goto yy55;
 	case '%':
-		in->yyt24 = YYCURSOR;
+		in->yyt23 = YYCURSOR;
 		goto yy57;
 	case '/':
-		in->yyt24 = YYCURSOR;
+		in->yyt23 = YYCURSOR;
 		goto yy58;
 	case '0':
 	case '1':
@@ -1974,14 +1957,14 @@ yy43:
 	case '7':
 	case '8':
 	case '9':
-		in->yyt13 = in->yyt24 = YYCURSOR;
+		in->yyt12 = in->yyt23 = YYCURSOR;
 		goto yy59;
 	case '?':
-		in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = NULL;
-		in->yyt24 = in->yyt25 = YYCURSOR;
+		in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = NULL;
+		in->yyt23 = in->yyt24 = YYCURSOR;
 		goto yy61;
 	case '@':
-		in->yyt10 = in->yyt24 = YYCURSOR;
+		in->yyt9 = in->yyt23 = YYCURSOR;
 		goto yy62;
 	default:	goto yy11;
 	}
@@ -2160,7 +2143,7 @@ yy53:
 	switch (yych) {
 	case ' ':
 		in->yyt4 = in->yyt5;
-		in->yyt6 = in->yyt7 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
+		in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
 		in->yyt5 = YYCURSOR;
 		goto yy15;
 	case '0':
@@ -2181,8 +2164,8 @@ yy55:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt25 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt24 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -2265,11 +2248,11 @@ yy55:
 	case '%':	goto yy57;
 	case '/':	goto yy70;
 	case '?':
-		in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = NULL;
-		in->yyt25 = YYCURSOR;
+		in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = NULL;
+		in->yyt24 = YYCURSOR;
 		goto yy61;
 	case '@':
-		in->yyt10 = YYCURSOR;
+		in->yyt9 = YYCURSOR;
 		goto yy62;
 	default:	goto yy11;
 	}
@@ -2314,7 +2297,7 @@ yy59:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt6 = in->yyt7 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
+		in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
 		in->yyt5 = YYCURSOR;
 		goto yy15;
 	case '!':
@@ -2398,11 +2381,11 @@ yy59:
 	case '8':
 	case '9':	goto yy59;
 	case '?':
-		in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = NULL;
-		in->yyt25 = YYCURSOR;
+		in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = NULL;
+		in->yyt24 = YYCURSOR;
 		goto yy61;
 	case '@':
-		in->yyt10 = YYCURSOR;
+		in->yyt9 = YYCURSOR;
 		goto yy62;
 	default:	goto yy11;
 	}
@@ -2410,8 +2393,8 @@ yy61:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt6 = in->yyt26 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt6 = in->yyt25 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -2494,10 +2477,10 @@ yy61:
 	case 'y':
 	case 'z':
 	case '~':
-		in->yyt26 = YYCURSOR;
+		in->yyt25 = YYCURSOR;
 		goto yy75;
 	case '%':
-		in->yyt26 = YYCURSOR;
+		in->yyt25 = YYCURSOR;
 		goto yy77;
 	default:	goto yy11;
 	}
@@ -2506,8 +2489,8 @@ yy62:
 	switch (yych) {
 	case ' ':
 		in->yyt4 = in->yyt5;
-		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt11 = in->yyt12 = YYCURSOR;
+		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt10 = in->yyt11 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -2586,17 +2569,17 @@ yy62:
 	case 'y':
 	case 'z':
 	case '~':
-		in->yyt11 = YYCURSOR;
+		in->yyt10 = YYCURSOR;
 		goto yy78;
 	case '%':
-		in->yyt11 = YYCURSOR;
+		in->yyt10 = YYCURSOR;
 		goto yy80;
 	case ':':
-		in->yyt11 = in->yyt12 = YYCURSOR;
+		in->yyt10 = in->yyt11 = YYCURSOR;
 		goto yy81;
 	case '[':
 		in->yyt4 = in->yyt5;
-		in->yyt11 = YYCURSOR;
+		in->yyt10 = YYCURSOR;
 		goto yy26;
 	default:	goto yy79;
 	}
@@ -2743,8 +2726,8 @@ yy70:
 yy71:
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt25 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt24 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -2828,8 +2811,8 @@ yy71:
 	case '~':	goto yy70;
 	case '%':	goto yy73;
 	case '?':
-		in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = NULL;
-		in->yyt25 = YYCURSOR;
+		in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = NULL;
+		in->yyt24 = YYCURSOR;
 		goto yy61;
 	default:	goto yy11;
 	}
@@ -2895,8 +2878,8 @@ yy74:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt16 = in->yyt17 = in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt18 = in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt15 = in->yyt16 = in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt17 = in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -2975,31 +2958,31 @@ yy74:
 	case 'y':
 	case 'z':
 	case '~':
-		in->yyt16 = in->yyt17 = NULL;
-		in->yyt3 = in->yyt18 = YYCURSOR;
+		in->yyt15 = in->yyt16 = NULL;
+		in->yyt3 = in->yyt17 = YYCURSOR;
 		goto yy95;
 	case '%':
-		in->yyt16 = in->yyt17 = NULL;
-		in->yyt3 = in->yyt18 = YYCURSOR;
+		in->yyt15 = in->yyt16 = NULL;
+		in->yyt3 = in->yyt17 = YYCURSOR;
 		goto yy97;
 	case '/':
-		in->yyt16 = in->yyt17 = in->yyt20 = in->yyt21 = NULL;
-		in->yyt18 = in->yyt19 = in->yyt22 = YYCURSOR;
+		in->yyt15 = in->yyt16 = in->yyt19 = in->yyt20 = NULL;
+		in->yyt17 = in->yyt18 = in->yyt21 = YYCURSOR;
 		goto yy98;
 	case ':':
-		in->yyt16 = in->yyt17 = NULL;
-		in->yyt3 = in->yyt18 = in->yyt19 = YYCURSOR;
+		in->yyt15 = in->yyt16 = NULL;
+		in->yyt3 = in->yyt17 = in->yyt18 = YYCURSOR;
 		goto yy100;
 	case '?':
-		in->yyt16 = in->yyt17 = in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = NULL;
-		in->yyt18 = in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt15 = in->yyt16 = in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = NULL;
+		in->yyt17 = in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy61;
 	case '@':
-		in->yyt3 = in->yyt17 = YYCURSOR;
+		in->yyt3 = in->yyt16 = YYCURSOR;
 		goto yy101;
 	case '[':
-		in->yyt16 = in->yyt17 = NULL;
-		in->yyt18 = YYCURSOR;
+		in->yyt15 = in->yyt16 = NULL;
+		in->yyt17 = YYCURSOR;
 		goto yy102;
 	default:	goto yy11;
 	}
@@ -3009,7 +2992,7 @@ yy75:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
 		in->yyt6 = YYCURSOR;
 		goto yy15;
 	case '!':
@@ -3133,8 +3116,8 @@ yy79:
 	switch (yych) {
 	case ' ':
 		in->yyt4 = in->yyt5;
-		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt12 = YYCURSOR;
+		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt11 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -3217,11 +3200,11 @@ yy79:
 	case '/':
 	case '@':	goto yy70;
 	case ':':
-		in->yyt12 = YYCURSOR;
+		in->yyt11 = YYCURSOR;
 		goto yy81;
 	case '?':
-		in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = NULL;
-		in->yyt25 = YYCURSOR;
+		in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = NULL;
+		in->yyt24 = YYCURSOR;
 		goto yy61;
 	default:	goto yy11;
 	}
@@ -3259,8 +3242,8 @@ yy81:
 	switch (yych) {
 	case ' ':
 		in->yyt4 = in->yyt5;
-		in->yyt6 = in->yyt7 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt5 = in->yyt13 = YYCURSOR;
+		in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt5 = in->yyt12 = YYCURSOR;
 		goto yy15;
 	case '0':
 	case '1':
@@ -3272,7 +3255,7 @@ yy81:
 	case '7':
 	case '8':
 	case '9':
-		in->yyt13 = YYCURSOR;
+		in->yyt12 = YYCURSOR;
 		goto yy105;
 	default:	goto yy71;
 	}
@@ -3513,12 +3496,12 @@ yy90:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt12 = YYCURSOR;
+		in->yyt5 = in->yyt6 = in->yyt7 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt11 = YYCURSOR;
 		goto yy15;
 	case ':':
 		in->yyt5 = in->yyt4;
-		in->yyt12 = YYCURSOR;
+		in->yyt11 = YYCURSOR;
 		goto yy42;
 	default:	goto yy11;
 	}
@@ -3575,8 +3558,8 @@ yy95:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -3657,18 +3640,18 @@ yy95:
 	case '~':	goto yy95;
 	case '%':	goto yy97;
 	case '/':
-		in->yyt20 = in->yyt21 = NULL;
-		in->yyt19 = in->yyt22 = YYCURSOR;
+		in->yyt19 = in->yyt20 = NULL;
+		in->yyt18 = in->yyt21 = YYCURSOR;
 		goto yy98;
 	case ':':
-		in->yyt19 = YYCURSOR;
+		in->yyt18 = YYCURSOR;
 		goto yy100;
 	case '?':
-		in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = NULL;
-		in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = NULL;
+		in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy61;
 	case '@':
-		in->yyt17 = YYCURSOR;
+		in->yyt16 = YYCURSOR;
 		goto yy101;
 	default:	goto yy11;
 	}
@@ -3707,8 +3690,8 @@ yy98:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt23 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -3792,8 +3775,8 @@ yy98:
 	case '~':	goto yy98;
 	case '%':	goto yy126;
 	case '?':
-		in->yyt24 = in->yyt25 = NULL;
-		in->yyt23 = YYCURSOR;
+		in->yyt23 = in->yyt24 = NULL;
+		in->yyt22 = YYCURSOR;
 		goto yy61;
 	default:	goto yy11;
 	}
@@ -3801,11 +3784,11 @@ yy100:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '/':
-		in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
+		in->yyt19 = in->yyt20 = in->yyt21 = YYCURSOR;
 		goto yy98;
 	case '0':
 	case '1':
@@ -3817,11 +3800,11 @@ yy100:
 	case '7':
 	case '8':
 	case '9':
-		in->yyt20 = YYCURSOR;
+		in->yyt19 = YYCURSOR;
 		goto yy130;
 	case '?':
-		in->yyt24 = in->yyt25 = NULL;
-		in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt23 = in->yyt24 = NULL;
+		in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy61;
 	default:	goto yy128;
 	}
@@ -3829,9 +3812,9 @@ yy101:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt16 = in->yyt3;
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt18 = in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt17 = in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -3910,27 +3893,27 @@ yy101:
 	case 'y':
 	case 'z':
 	case '~':
-		in->yyt18 = YYCURSOR;
+		in->yyt17 = YYCURSOR;
 		goto yy132;
 	case '%':
-		in->yyt18 = YYCURSOR;
+		in->yyt17 = YYCURSOR;
 		goto yy134;
 	case '/':
-		in->yyt16 = in->yyt3;
-		in->yyt20 = in->yyt21 = NULL;
-		in->yyt18 = in->yyt19 = in->yyt22 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt19 = in->yyt20 = NULL;
+		in->yyt17 = in->yyt18 = in->yyt21 = YYCURSOR;
 		goto yy98;
 	case ':':
-		in->yyt18 = in->yyt19 = YYCURSOR;
+		in->yyt17 = in->yyt18 = YYCURSOR;
 		goto yy135;
 	case '?':
-		in->yyt16 = in->yyt3;
-		in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = NULL;
-		in->yyt18 = in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = NULL;
+		in->yyt17 = in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy61;
 	case '[':
-		in->yyt16 = in->yyt3;
-		in->yyt18 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt17 = YYCURSOR;
 		goto yy102;
 	default:	goto yy11;
 	}
@@ -4028,7 +4011,7 @@ yy105:
 	switch (yych) {
 	case ' ':
 		in->yyt4 = in->yyt5;
-		in->yyt6 = in->yyt7 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
+		in->yyt6 = in->yyt7 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
 		in->yyt5 = YYCURSOR;
 		goto yy15;
 	case '!':
@@ -4113,8 +4096,8 @@ yy105:
 	case '8':
 	case '9':	goto yy105;
 	case '?':
-		in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = NULL;
-		in->yyt25 = YYCURSOR;
+		in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = NULL;
+		in->yyt24 = YYCURSOR;
 		goto yy61;
 	default:	goto yy11;
 	}
@@ -4751,7 +4734,7 @@ yy128:
 	case '~':	goto yy127;
 	case '%':	goto yy129;
 	case '@':
-		in->yyt17 = YYCURSOR;
+		in->yyt16 = YYCURSOR;
 		goto yy101;
 	default:	goto yy11;
 	}
@@ -4790,8 +4773,8 @@ yy130:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt21 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -4863,7 +4846,7 @@ yy130:
 	case '~':	goto yy127;
 	case '%':	goto yy129;
 	case '/':
-		in->yyt21 = in->yyt22 = YYCURSOR;
+		in->yyt20 = in->yyt21 = YYCURSOR;
 		goto yy98;
 	case '0':
 	case '1':
@@ -4876,11 +4859,11 @@ yy130:
 	case '8':
 	case '9':	goto yy130;
 	case '?':
-		in->yyt24 = in->yyt25 = NULL;
-		in->yyt21 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt23 = in->yyt24 = NULL;
+		in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy61;
 	case '@':
-		in->yyt17 = YYCURSOR;
+		in->yyt16 = YYCURSOR;
 		goto yy101;
 	default:	goto yy11;
 	}
@@ -4890,9 +4873,9 @@ yy132:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt16 = in->yyt3;
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '!':
 	case '$':
@@ -4973,17 +4956,17 @@ yy132:
 	case '~':	goto yy132;
 	case '%':	goto yy134;
 	case '/':
-		in->yyt16 = in->yyt3;
-		in->yyt20 = in->yyt21 = NULL;
-		in->yyt19 = in->yyt22 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt19 = in->yyt20 = NULL;
+		in->yyt18 = in->yyt21 = YYCURSOR;
 		goto yy98;
 	case ':':
-		in->yyt19 = YYCURSOR;
+		in->yyt18 = YYCURSOR;
 		goto yy135;
 	case '?':
-		in->yyt16 = in->yyt3;
-		in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = NULL;
-		in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = NULL;
+		in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy61;
 	default:	goto yy11;
 	}
@@ -5020,13 +5003,13 @@ yy135:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt16 = in->yyt3;
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '/':
-		in->yyt16 = in->yyt3;
-		in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt19 = in->yyt20 = in->yyt21 = YYCURSOR;
 		goto yy98;
 	case '0':
 	case '1':
@@ -5038,12 +5021,12 @@ yy135:
 	case '7':
 	case '8':
 	case '9':
-		in->yyt20 = YYCURSOR;
+		in->yyt19 = YYCURSOR;
 		goto yy158;
 	case '?':
-		in->yyt16 = in->yyt3;
-		in->yyt24 = in->yyt25 = NULL;
-		in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt23 = in->yyt24 = NULL;
+		in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy61;
 	default:	goto yy11;
 	}
@@ -5433,9 +5416,7 @@ yy152:
 yy153:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case ' ':
-		in->yyt31 = YYCURSOR;
-		goto yy178;
+	case ' ':	goto yy178;
 	default:	goto yy11;
 	}
 yy154:
@@ -5537,13 +5518,13 @@ yy158:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt16 = in->yyt3;
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt21 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '/':
-		in->yyt16 = in->yyt3;
-		in->yyt21 = in->yyt22 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt20 = in->yyt21 = YYCURSOR;
 		goto yy98;
 	case '0':
 	case '1':
@@ -5556,9 +5537,9 @@ yy158:
 	case '8':
 	case '9':	goto yy158;
 	case '?':
-		in->yyt16 = in->yyt3;
-		in->yyt24 = in->yyt25 = NULL;
-		in->yyt21 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt15 = in->yyt3;
+		in->yyt23 = in->yyt24 = NULL;
+		in->yyt20 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy61;
 	default:	goto yy11;
 	}
@@ -5993,9 +5974,7 @@ yy178:
 	case '6':
 	case '7':
 	case '8':
-	case '9':
-		in->yyt32 = YYCURSOR;
-		goto yy203;
+	case '9':	goto yy203;
 	default:	goto yy11;
 	}
 yy179:
@@ -6250,20 +6229,20 @@ yy188:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ' ':
-		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
-		in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
+		in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy15;
 	case '/':
-		in->yyt20 = in->yyt21 = NULL;
-		in->yyt19 = in->yyt22 = YYCURSOR;
+		in->yyt19 = in->yyt20 = NULL;
+		in->yyt18 = in->yyt21 = YYCURSOR;
 		goto yy98;
 	case ':':
-		in->yyt3 = in->yyt16;
-		in->yyt19 = YYCURSOR;
+		in->yyt3 = in->yyt15;
+		in->yyt18 = YYCURSOR;
 		goto yy135;
 	case '?':
-		in->yyt20 = in->yyt21 = in->yyt24 = in->yyt25 = NULL;
-		in->yyt19 = in->yyt22 = in->yyt23 = YYCURSOR;
+		in->yyt19 = in->yyt20 = in->yyt23 = in->yyt24 = NULL;
+		in->yyt18 = in->yyt21 = in->yyt22 = YYCURSOR;
 		goto yy61;
 	default:	goto yy11;
 	}
@@ -6583,7 +6562,7 @@ yy204:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '\n':
-		in->yyt9 = YYCURSOR;
+		in->yyt8 = YYCURSOR;
 		goto yy234;
 	default:	goto yy11;
 	}
@@ -7362,12 +7341,12 @@ yy234:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '\n':
-		YYMTAGN(in->yyt40);
-		YYMTAGN(in->yyt39);
-		YYMTAGN(in->yyt38);
-		YYMTAGN(in->yyt37);
-		YYMTAGN(in->yyt36);
-		in->yyt30 = in->yyt31 = in->yyt32 = in->yyt33 = in->yyt34 = in->yyt35 = NULL;
+		YYMTAGN(in->yyt35);
+		YYMTAGN(in->yyt34);
+		YYMTAGN(in->yyt33);
+		YYMTAGN(in->yyt32);
+		YYMTAGN(in->yyt31);
+		in->yyt29 = in->yyt30 = NULL;
 		goto yy263;
 	case '!':
 	case '#':
@@ -7446,8 +7425,8 @@ yy234:
 	case 'z':
 	case '|':
 	case '~':
-		YYMTAGP(in->yyt36);
-		in->yyt30 = in->yyt31 = in->yyt32 = in->yyt33 = in->yyt34 = in->yyt35 = NULL;
+		YYMTAGP(in->yyt31);
+		in->yyt29 = in->yyt30 = NULL;
 		goto yy265;
 	default:	goto yy11;
 	}
@@ -8088,9 +8067,7 @@ yy261:
 yy262:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case ' ':
-		in->yyt33 = YYCURSOR;
-		goto yy291;
+	case ' ':	goto yy291;
 	default:	goto yy11;
 	}
 yy263:
@@ -8099,44 +8076,49 @@ yy263:
 	m2 = in->yyt2;
 	at = in->yyt3;
 	u3 = in->yyt4;
-	u4 = in->yyt10;
-	hs3 = in->yyt11;
-	hs4 = in->yyt12;
-	r3 = in->yyt13;
+	u4 = in->yyt9;
+	hs3 = in->yyt10;
+	hs4 = in->yyt11;
+	r3 = in->yyt12;
 	r4 = in->yyt5;
-	au = in->yyt14;
-	s1 = in->yyt14;
-	s2 = in->yyt15;
-	u1 = in->yyt16;
-	u2 = in->yyt17;
-	hs1 = in->yyt18;
-	hs2 = in->yyt19;
-	r1 = in->yyt20;
-	r2 = in->yyt21;
-	p1 = in->yyt22;
-	p2 = in->yyt23;
-	p3 = in->yyt24;
-	p4 = in->yyt25;
-	q1 = in->yyt26;
+	s1 = in->yyt13;
+	s2 = in->yyt14;
+	u1 = in->yyt15;
+	u2 = in->yyt16;
+	hs1 = in->yyt17;
+	hs2 = in->yyt18;
+	r1 = in->yyt19;
+	r2 = in->yyt20;
+	p1 = in->yyt21;
+	p2 = in->yyt22;
+	p3 = in->yyt23;
+	p4 = in->yyt24;
+	q1 = in->yyt25;
 	q2 = in->yyt6;
-	of = in->yyt27;
-	p5 = in->yyt27;
-	p6 = in->yyt28;
-	q3 = in->yyt29;
+	p5 = in->yyt26;
+	p6 = in->yyt27;
+	q3 = in->yyt28;
 	q4 = in->yyt7;
+	v4 = in->yyt8;
+	rp1 = in->yyt29;
+	rp2 = in->yyt30;
+	h1 = in->yyt31;
+	h2 = in->yyt32;
+	h3 = in->yyt33;
+	h4 = in->yyt34;
+	h5 = in->yyt35;
+	au = in->yyt13;
+	of = in->yyt26;
 	v3 = in->yyt8;
-	v4 = in->yyt9;
-	v1 = in->yyt30;
-	v2 = in->yyt31;
-	st1 = in->yyt32;
-	st2 = in->yyt33;
-	rp1 = in->yyt34;
-	rp2 = in->yyt35;
-	h1 = in->yyt36;
-	h2 = in->yyt37;
-	h3 = in->yyt38;
-	h4 = in->yyt39;
-	h5 = in->yyt40;
+	if (in->yyt8 != NULL) v3 -= 8;
+	v1 = in->yyt29;
+	if (in->yyt29 != NULL) v1 -= 13;
+	v2 = in->yyt29;
+	if (in->yyt29 != NULL) v2 -= 5;
+	st1 = in->yyt29;
+	if (in->yyt29 != NULL) st1 -= 4;
+	st2 = in->yyt29;
+	if (in->yyt29 != NULL) st2 -= 1;
 	{
         ++c;
         if (st1) {
@@ -8255,7 +8237,7 @@ yy265:
 	case '|':
 	case '~':	goto yy265;
 	case ':':
-		YYMTAGP(in->yyt37);
+		YYMTAGP(in->yyt32);
 		goto yy292;
 	default:	goto yy11;
 	}
@@ -8879,10 +8861,10 @@ yy291:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\n':
-		in->yyt34 = in->yyt35 = YYCURSOR;
+		in->yyt29 = in->yyt30 = YYCURSOR;
 		goto yy318;
 	default:
-		in->yyt34 = YYCURSOR;
+		in->yyt29 = YYCURSOR;
 		goto yy316;
 	}
 yy292:
@@ -8923,14 +8905,14 @@ yy292:
 	case '\t':
 	case ' ':	goto yy292;
 	case '\n':
-		in->yyt41 = in->yyt40;
-		YYMTAGP(in->yyt41);
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt42);
-		YYMTAGP(in->yyt38);
+		in->yyt36 = in->yyt35;
+		YYMTAGP(in->yyt36);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt37);
+		YYMTAGP(in->yyt33);
 		goto yy319;
 	default:
-		YYMTAGP(in->yyt38);
+		YYMTAGP(in->yyt33);
 		goto yy320;
 	}
 yy294:
@@ -9497,7 +9479,7 @@ yy316:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\n':
-		in->yyt35 = YYCURSOR;
+		in->yyt30 = YYCURSOR;
 		goto yy318;
 	default:	goto yy316;
 	}
@@ -9505,12 +9487,12 @@ yy318:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '\n':
-		YYMTAGN(in->yyt40);
-		YYMTAGN(in->yyt39);
-		YYMTAGN(in->yyt38);
-		YYMTAGN(in->yyt37);
-		YYMTAGN(in->yyt36);
-		in->yyt1 = in->yyt2 = in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
+		YYMTAGN(in->yyt35);
+		YYMTAGN(in->yyt34);
+		YYMTAGN(in->yyt33);
+		YYMTAGN(in->yyt32);
+		YYMTAGN(in->yyt31);
+		in->yyt1 = in->yyt2 = in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
 		goto yy263;
 	case '!':
 	case '#':
@@ -9589,8 +9571,8 @@ yy318:
 	case 'z':
 	case '|':
 	case '~':
-		YYMTAGP(in->yyt36);
-		in->yyt1 = in->yyt2 = in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = in->yyt29 = NULL;
+		YYMTAGP(in->yyt31);
+		in->yyt1 = in->yyt2 = in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
 		goto yy265;
 	default:	goto yy11;
 	}
@@ -9602,8 +9584,8 @@ yy319:
 	case '\t':
 	case ' ':	goto yy344;
 	case '\n':
-		in->yyt39 = in->yyt42;
-		in->yyt40 = in->yyt41;
+		in->yyt34 = in->yyt37;
+		in->yyt35 = in->yyt36;
 		goto yy263;
 	case '!':
 	case '#':
@@ -9682,9 +9664,9 @@ yy319:
 	case 'z':
 	case '|':
 	case '~':
-		in->yyt39 = in->yyt42;
-		in->yyt40 = in->yyt41;
-		YYMTAGP(in->yyt36);
+		in->yyt34 = in->yyt37;
+		in->yyt35 = in->yyt36;
+		YYMTAGP(in->yyt31);
 		goto yy265;
 	default:	goto yy11;
 	}
@@ -9724,14 +9706,14 @@ yy320:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\t':
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt42);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt37);
 		goto yy346;
 	case '\n':
-		in->yyt41 = in->yyt40;
-		YYMTAGP(in->yyt41);
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt42);
+		in->yyt36 = in->yyt35;
+		YYMTAGP(in->yyt36);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt37);
 		goto yy319;
 	case ' ':	goto yy348;
 	default:	goto yy320;
@@ -10341,10 +10323,10 @@ yy344:
 	case '\t':
 	case ' ':	goto yy344;
 	case '\n':
-		in->yyt41 = in->yyt40;
-		YYMTAGP(in->yyt41);
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt42);
+		in->yyt36 = in->yyt35;
+		YYMTAGP(in->yyt36);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt37);
 		goto yy319;
 	default:	goto yy320;
 	}
@@ -10385,7 +10367,7 @@ yy346:
 	case 0x7F:	goto yy11;
 	case '\t':	goto yy346;
 	case '\n':
-		YYMTAGP(in->yyt40);
+		YYMTAGP(in->yyt35);
 		goto yy376;
 	case ' ':	goto yy348;
 	default:	goto yy377;
@@ -10426,14 +10408,14 @@ yy348:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\t':
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt42);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt37);
 		goto yy346;
 	case '\n':
-		in->yyt41 = in->yyt40;
-		YYMTAGP(in->yyt41);
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt42);
+		in->yyt36 = in->yyt35;
+		YYMTAGP(in->yyt36);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt37);
 		goto yy319;
 	case ' ':	goto yy348;
 	default:	goto yy378;
@@ -11088,7 +11070,7 @@ yy376:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':
-		in->yyt39 = in->yyt42;
+		in->yyt34 = in->yyt37;
 		goto yy263;
 	case '!':
 	case '#':
@@ -11167,8 +11149,8 @@ yy376:
 	case 'z':
 	case '|':
 	case '~':
-		in->yyt39 = in->yyt42;
-		YYMTAGP(in->yyt36);
+		in->yyt34 = in->yyt37;
+		YYMTAGP(in->yyt31);
 		goto yy265;
 	default:	goto yy11;
 	}
@@ -11208,13 +11190,13 @@ yy377:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\t':
-		YYMTAGP(in->yyt39);
+		YYMTAGP(in->yyt34);
 		goto yy399;
 	case '\n':
-		in->yyt41 = in->yyt40;
-		YYMTAGP(in->yyt41);
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt42);
+		in->yyt36 = in->yyt35;
+		YYMTAGP(in->yyt36);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt37);
 		goto yy319;
 	default:	goto yy320;
 	}
@@ -11254,14 +11236,14 @@ yy378:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\t':
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt42);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt37);
 		goto yy401;
 	case '\n':
-		in->yyt41 = in->yyt40;
-		YYMTAGP(in->yyt41);
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt42);
+		in->yyt36 = in->yyt35;
+		YYMTAGP(in->yyt36);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt37);
 		goto yy319;
 	default:	goto yy320;
 	}
@@ -11791,8 +11773,8 @@ yy399:
 	case '\t':
 	case ' ':	goto yy399;
 	case '\n':
-		in->yyt42 = in->yyt39;
-		YYMTAGP(in->yyt40);
+		in->yyt37 = in->yyt34;
+		YYMTAGP(in->yyt35);
 		goto yy376;
 	default:	goto yy11;
 	}
@@ -11833,7 +11815,7 @@ yy401:
 	case 0x7F:	goto yy11;
 	case '\t':	goto yy401;
 	case '\n':
-		YYMTAGP(in->yyt40);
+		YYMTAGP(in->yyt35);
 		goto yy376;
 	case ' ':	goto yy416;
 	default:	goto yy377;
@@ -12204,8 +12186,8 @@ yy416:
 	case 0x7F:	goto yy11;
 	case '\t':	goto yy401;
 	case '\n':
-		in->yyt41 = in->yyt40;
-		YYMTAGP(in->yyt41);
+		in->yyt36 = in->yyt35;
+		YYMTAGP(in->yyt36);
 		goto yy319;
 	case ' ':	goto yy416;
 	default:	goto yy378;
@@ -13276,7 +13258,6 @@ c/submatch/http_rfc7230.re:247:17: warning: tag 'u4' has 2nd degree of nondeterm
 c/submatch/http_rfc7230.re:247:17: warning: tag 'hs3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 'hs4' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 'r3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:247:17: warning: tag 'au' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 's1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 's2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 'u1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
@@ -13285,7 +13266,6 @@ c/submatch/http_rfc7230.re:247:17: warning: tag 'hs1' has 2nd degree of nondeter
 c/submatch/http_rfc7230.re:247:17: warning: tag 'hs2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 'r1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 'p3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:247:17: warning: tag 'v1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 'h3' has 3rd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 'h4' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 c/submatch/http_rfc7230.re:247:17: warning: tag 'h5' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
