@@ -247,6 +247,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/warnings/warnings_list.rst_ \
 	examples/c/01_basic.re \
 	examples/c/conditions/parse_u32_conditions.re \
+	examples/c/encodings/unicode_identifier.re \
 	examples/c/eof/01_sentinel.re \
 	examples/c/eof/02_bounds_checking.re \
 	examples/c/eof/03_eof_rule.re \
@@ -264,6 +265,7 @@ re2c_SRC_DOC_EXT = \
 	examples/c/submatch/03_posix.re \
 	examples/go/01_basic.re \
 	examples/go/conditions/parse_u32_conditions.re \
+	examples/go/encodings/unicode_identifier.re \
 	examples/go/eof/01_sentinel.re \
 	examples/go/eof/02_bounds_checking.re \
 	examples/go/eof/03_eof_rule.re \
