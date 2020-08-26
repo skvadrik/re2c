@@ -2894,63 +2894,104 @@ func TestLexUTF32(t *testing.T) {
 .UNINDENT
 .SH ENCODING SUPPORT
 .sp
-\fBre2c\fP supports the following encodings: ASCII (default), EBCDIC (\fB\-e\fP),
-UCS\-2 (\fB\-w\fP), UTF\-16 (\fB\-x\fP), UTF\-32 (\fB\-u\fP) and UTF\-8 (\fB\-8\fP).
-See also inplace configuration \fBre2c:flags\fP\&.
+Speaking of encodings, it is necessary to understand the difference between code points and code units.
+Code point is an abstract symbol.
+Code unit is the smallest atomic unit of storage in the encoded text.
+A single code point may be represented with one or more code units.
+In a fixed\-length encoding all code points are represented with the same number of code units.
+In a variable\-length encoding code points may be represented with a different number of code units.
+Note that the "any" rule \fB[^]\fP matches any code point, but not necessarily any code unit.
+The only way to match any code unit regardless of the encoding it the default rule \fB*\fP\&.
 .sp
-The following concepts should be clarified when talking about encodings.
-A code point is an abstract number that represents a single symbol.
-A code unit is the smallest unit of memory, which is used in the
-encoded text (it corresponds to one character in the input stream). One
-or more code units may be needed to represent a single code point,
-depending on the encoding. In a fixed\-length encoding, each code point
-is represented with an equal number of code units. In variable\-length
-encodings, different code points can be represented with different number
-of code units.
+Re2c supports the following encodings: ASCII, EBCDIC, UCS2, UTF8, UTF16 and UTF32.
 .INDENT 0.0
 .IP \(bu 2
-ASCII is a fixed\-length encoding. Its code space includes 0x100
-code points, from 0 to 0xFF. A code point is represented with exactly one
-1\-byte code unit, which has the same value as the code point. The size of
-\fBYYCTYPE\fP must be 1 byte.
+ASCII is enabled by default.
+It is a fixed\-length encoding with code space [0\-255] and 1\-byte code points
+and code units.
+\fBYYCTYPE\fP size should be 1 byte.
 .IP \(bu 2
-EBCDIC is a fixed\-length encoding. Its code space includes 0x100
-code points, from 0 to 0xFF. A code point is represented with exactly
-one 1\-byte code unit, which has the same value as the code point. The size
-of \fBYYCTYPE\fP must be 1 byte.
+EBCDIC is enabled with \fB\-e, \-\-ecb\fP option.
+It a fixed\-length encoding with code space [0\-255] and 1\-byte code points
+and code units.
+\fBYYCTYPE\fP size should be 1 byte.
 .IP \(bu 2
-UCS\-2 is a fixed\-length encoding. Its code space includes 0x10000
-code points, from 0 to 0xFFFF. One code point is represented with
-exactly one 2\-byte code unit, which has the same value as the code
-point. The size of \fBYYCTYPE\fP must be 2 bytes.
+UCS2 is enabled with \fB\-w, \-\-wide\-chars\fP option.
+It is a fixed\-length encoding with code space [0\-0xFFFF] and 2\-byte code
+points and code units.
+\fBYYCTYPE\fP size should be 2 bytes.
 .IP \(bu 2
-UTF\-16 is a variable\-length encoding. Its code space includes all
-Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One
-code point is represented with one or two 2\-byte code units. The size of
-\fBYYCTYPE\fP must be 2 bytes.
+UTF8 is enabled with \fB\-8, \-\-utf\-8\fP option.
+It is a variable\-length Unicode encoding with code space [0\-0x10FFFF].
+Code points are represented with one, two, three or four 1\-byte code units.
+\fBYYCTYPE\fP size should be 1 byte.
 .IP \(bu 2
-UTF\-32 is a fixed\-length encoding. Its code space includes all
-Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One
-code point is represented with exactly one 4\-byte code unit. The size of
-\fBYYCTYPE\fP must be 4 bytes.
+UTF16 is enabled with \fB\-x, \-\-utf\-16\fP option.
+It is a variable\-length Unicode encoding with code space [0\-0x10FFFF].
+Code points are represented with one or two 2\-byte code units.
+\fBYYCTYPE\fP size should be 2 bytes.
 .IP \(bu 2
-UTF\-8 is a variable\-length encoding. Its code space includes all
-Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One
-code point is represented with a sequence of one, two, three, or four
-1\-byte code units. The size of \fBYYCTYPE\fP must be 1 byte.
+UTF32 is enabled with \fB\-u, \-\-unicode\fP option.
+It is a fixed\-length Unicode encoding with code space [0\-0x10FFFF] and 4\-byte
+code points and code units.
+\fBYYCTYPE\fP size should be 4 bytes.
 .UNINDENT
 .sp
-In Unicode, values from range 0xD800 to 0xDFFF (surrogates) are not
-valid Unicode code points. Any encoded sequence of code units that
-would map to Unicode code points in the range 0xD800\-0xDFFF, is
-ill\-formed. The user can control how \fBre2c\fP treats such ill\-formed
-sequences with the \fB\-\-encoding\-policy <policy>\fP switch.
+Encodings can also be set or unset using \fBre2c:flags\fP configuration,
+for example \fBre2c:flags:8 = 1;\fP enables UTF8.
 .sp
-For some encodings, there are code units that never occur in a valid
-encoded stream (e.g., 0xFF byte in UTF\-8). If the generated scanner must
-check for invalid input, the only correct way to do so is to use the default
-rule (\fB*\fP). Note that the full range rule (\fB[^]\fP) won\(aqt catch invalid code units when a variable\-length encoding is used
-(\fB[^]\fP means "any valid code point", whereas the default rule (\fB*\fP) means "any possible code unit").
+Include file \fBinclude/unicode_categories.re\fP provides re2c definitions for the standard Unicode categories.
+.sp
+Option \fB\-\-input\-encoding utf8\fP enables Unicode literals in regular expressions.
+.sp
+Option \fB\-\-encoding\-policy <fail | substitute | ignore>\fP
+specifies the way re2c handles Unicode surrogates: code points in the range [0xD800\-0xDFFF].
+.SS Example
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+//go:generate re2go $INPUT \-o $OUTPUT \-\-utf\-8 \-s \-I ../../include
+//
+// Simplified "Unicode Identifier and Pattern Syntax"
+// (see https://unicode.org/reports/tr31)
+
+package main
+
+import "testing"
+
+/*!include:re2c "unicode_categories.re" */
+
+func lex(str string) int {
+    var cursor, marker int
+    /*!re2c
+    re2c:yyfill:enable    = 0;
+    re2c:define:YYCTYPE   = byte;
+    re2c:define:YYPEEK    = "str[cursor]";
+    re2c:define:YYSKIP    = "cursor += 1";
+    re2c:define:YYBACKUP  = "marker = cursor";
+    re2c:define:YYRESTORE = "cursor = marker";
+
+    id_start    = L | Nl | [$_];
+    id_continue = id_start | Mn | Mc | Nd | Pc | [\eu200D\eu05F3];
+    identifier  = id_start id_continue*;
+
+    identifier { return 0 }
+    *          { return 1 }
+    */
+}
+
+func TestLex(t *testing.T) {
+    if lex("_Ыдентификатор\e000") != 0 {
+        t.Errorf("failed")
+    }
+}
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
 .SH START CONDITIONS
 .sp
 Conditions are enabled with \fB\-c\fP \fB\-\-conditions\fP\&.

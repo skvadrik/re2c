@@ -181,6 +181,11 @@ Example
 Encoding support
 ================
 .. include:: @top_srcdir@/doc/manual/encodings/encodings.rst_
+Example
+-------
+.. include:: @top_srcdir@/examples/RE2C_LANG/encodings/unicode_identifier.re
+    :literal:
+    :code: RE2C_LANG
 
 Start conditions
 ================
