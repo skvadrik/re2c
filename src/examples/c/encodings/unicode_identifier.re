@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT --utf-8 --case-ranges -I ../../include
+// re2c $INPUT -o $OUTPUT -8 --case-ranges -i
 //
 // Simplified "Unicode Identifier and Pattern Syntax"
 // (see https://unicode.org/reports/tr31)
