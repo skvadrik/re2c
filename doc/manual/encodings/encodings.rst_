@@ -6,38 +6,33 @@ In a fixed-length encoding all code points are represented with the same number 
 In a variable-length encoding code points may be represented with a different number of code units.
 Note that the "any" rule ``[^]`` matches any code point, but not necessarily any code unit.
 The only way to match any code unit regardless of the encoding it the default rule ``*``.
+``YYCTYPE`` size should be equal to the size of code unit.
 
 Re2c supports the following encodings: ASCII, EBCDIC, UCS2, UTF8, UTF16 and UTF32.
 
 * ASCII is enabled by default.
   It is a fixed-length encoding with code space [0-255] and 1-byte code points
   and code units.
-  ``YYCTYPE`` size should be 1 byte.
 
 * EBCDIC is enabled with ``-e, --ecb`` option.
   It a fixed-length encoding with code space [0-255] and 1-byte code points
   and code units.
-  ``YYCTYPE`` size should be 1 byte.
 
 * UCS2 is enabled with ``-w, --wide-chars`` option.
   It is a fixed-length encoding with code space [0-0xFFFF] and 2-byte code
   points and code units.
-  ``YYCTYPE`` size should be 2 bytes.
 
 * UTF8 is enabled with ``-8, --utf-8`` option.
   It is a variable-length Unicode encoding with code space [0-0x10FFFF].
   Code points are represented with one, two, three or four 1-byte code units.
-  ``YYCTYPE`` size should be 1 byte.
 
 * UTF16 is enabled with ``-x, --utf-16`` option.
   It is a variable-length Unicode encoding with code space [0-0x10FFFF].
   Code points are represented with one or two 2-byte code units.
-  ``YYCTYPE`` size should be 2 bytes.
 
 * UTF32 is enabled with ``-u, --unicode`` option.
   It is a fixed-length Unicode encoding with code space [0-0x10FFFF] and 4-byte
   code points and code units.
-  ``YYCTYPE`` size should be 4 bytes.
 
 Encodings can also be set or unset using ``re2c:flags`` configuration,
 for example ``re2c:flags:8 = 1;`` enables UTF8.

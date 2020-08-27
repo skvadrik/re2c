@@ -2642,6 +2642,7 @@ In a fixed\-length encoding all code points are represented with the same number
 In a variable\-length encoding code points may be represented with a different number of code units.
 Note that the "any" rule \fB[^]\fP matches any code point, but not necessarily any code unit.
 The only way to match any code unit regardless of the encoding it the default rule \fB*\fP\&.
+\fBYYCTYPE\fP size should be equal to the size of code unit.
 .sp
 Re2c supports the following encodings: ASCII, EBCDIC, UCS2, UTF8, UTF16 and UTF32.
 .INDENT 0.0
@@ -2649,32 +2650,26 @@ Re2c supports the following encodings: ASCII, EBCDIC, UCS2, UTF8, UTF16 and UTF3
 ASCII is enabled by default.
 It is a fixed\-length encoding with code space [0\-255] and 1\-byte code points
 and code units.
-\fBYYCTYPE\fP size should be 1 byte.
 .IP \(bu 2
 EBCDIC is enabled with \fB\-e, \-\-ecb\fP option.
 It a fixed\-length encoding with code space [0\-255] and 1\-byte code points
 and code units.
-\fBYYCTYPE\fP size should be 1 byte.
 .IP \(bu 2
 UCS2 is enabled with \fB\-w, \-\-wide\-chars\fP option.
 It is a fixed\-length encoding with code space [0\-0xFFFF] and 2\-byte code
 points and code units.
-\fBYYCTYPE\fP size should be 2 bytes.
 .IP \(bu 2
 UTF8 is enabled with \fB\-8, \-\-utf\-8\fP option.
 It is a variable\-length Unicode encoding with code space [0\-0x10FFFF].
 Code points are represented with one, two, three or four 1\-byte code units.
-\fBYYCTYPE\fP size should be 1 byte.
 .IP \(bu 2
 UTF16 is enabled with \fB\-x, \-\-utf\-16\fP option.
 It is a variable\-length Unicode encoding with code space [0\-0x10FFFF].
 Code points are represented with one or two 2\-byte code units.
-\fBYYCTYPE\fP size should be 2 bytes.
 .IP \(bu 2
 UTF32 is enabled with \fB\-u, \-\-unicode\fP option.
 It is a fixed\-length Unicode encoding with code space [0\-0x10FFFF] and 4\-byte
 code points and code units.
-\fBYYCTYPE\fP size should be 4 bytes.
 .UNINDENT
 .sp
 Encodings can also be set or unset using \fBre2c:flags\fP configuration,
@@ -2692,7 +2687,7 @@ specifies the way re2c handles Unicode surrogates: code points in the range [0xD
 .sp
 .nf
 .ft C
-// re2c $INPUT \-o $OUTPUT \-\-utf\-8 \-\-case\-ranges \-I ../../include
+// re2c $INPUT \-o $OUTPUT \-8 \-\-case\-ranges \-i
 //
 // Simplified "Unicode Identifier and Pattern Syntax"
 // (see https://unicode.org/reports/tr31)
