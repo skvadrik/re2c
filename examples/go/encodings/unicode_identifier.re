@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT -8 -s -i -I ../include -I ../../include
+//go:generate re2go $INPUT -o $OUTPUT -8 -s -i
 //
 // Simplified "Unicode Identifier and Pattern Syntax"
 // (see https://unicode.org/reports/tr31)

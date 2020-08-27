@@ -108,9 +108,12 @@ $re2c --version | grep -q "debug" \
 tests=(`find $test_blddir -name '*.re' | sort`)
 
 # set include paths, relative to build directory
-cd $test_blddir \
-    && incpaths=$(find * -type d -exec echo "-I {}" \;) \
-    && cd ..
+cd $test_blddir && incpaths=$(find * -type d -exec echo "-I {}" \;) && cd ..
+# add path to include directory (if relative, add "../" to step out of test subdirectory)
+case "@top_srcdir@" in
+    /*) incpaths="$incpaths -I @top_srcdir@/include" ;;
+    *)  incpaths="$incpaths -I ../@top_srcdir@/include" ;;
+esac
 
 tests_per_thread=$((${#tests[@]} / threads + 1))
 packs=()
