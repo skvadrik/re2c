@@ -1,0 +1,142 @@
+From f224fe66476454a34918a247ef9b4a97d028f774 Mon Sep 17 00:00:00 2001
+From: Ulya Trofimovich <skvadrik@gmail.com>
+Date: Wed, 8 Jan 2020 23:44:06 +0000
+Subject: [PATCH 2/5] Updating for new GHC.
+
+---
+ src/KMC/Backtracking.hs           | 4 ++--
+ src/KMC/Kleenex/Actions.hs        | 6 ++++--
+ src/KMC/Kleenex/Desugaring.hs     | 3 ++-
+ src/KMC/Kleenex/WellFormedness.hs | 1 +
+ src/KMC/Program/Backends/C.hs     | 2 ++
+ src/KMC/SymbolicFST.hs            | 1 +
+ src/KMC/SymbolicSST.hs            | 1 +
+ src/KMC/Visualization.hs          | 1 +
+ 8 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/src/KMC/Backtracking.hs b/src/KMC/Backtracking.hs
+index 00662fa..abfdf0d 100644
+--- a/src/KMC/Backtracking.hs
++++ b/src/KMC/Backtracking.hs
+@@ -20,7 +20,7 @@ import           Control.Applicative
+ import           Control.Monad
+ import qualified Data.ByteString as B
+ import qualified Data.ByteString.Lazy as L
+-import qualified Data.IntMap as M
++import qualified Data.IntMap.Strict as M
+ import qualified Data.IntSet as S
+ import           Data.Word (Word8)
+ 
+@@ -52,7 +52,7 @@ type Index = Int
+ type Marks = M.IntMap S.IntSet
+ 
+ mark :: Name -> Index -> Marks -> Marks
+-mark p i = M.insertWith' S.union p (S.singleton i)
++mark p i = M.insertWith S.union p (S.singleton i)
+ 
+ isMarked :: Name -> Index -> Marks -> Bool
+ isMarked p i m = maybe False (S.member i) (M.lookup p m)
+diff --git a/src/KMC/Kleenex/Actions.hs b/src/KMC/Kleenex/Actions.hs
+index b8fba7a..42e5571 100644
+--- a/src/KMC/Kleenex/Actions.hs
++++ b/src/KMC/Kleenex/Actions.hs
+@@ -7,7 +7,6 @@ module KMC.Kleenex.Actions(RegAction(..)
+ import           Data.ByteString.Builder
+ import           Data.Map (Map, (!))
+ import qualified Data.Map as M
+-import           Data.Monoid
+ import           Data.Word (Word8)
+ 
+ import           KMC.Kleenex.Syntax
+@@ -38,9 +37,12 @@ pop r = Action $ \(store, h:stck) -> (M.insert r h store, stck)
+ wr :: RegIdent -> Action
+ wr r = Action $ \(store, h:stck) -> (M.insert r mempty store, (h <> store!r):stck)
+ 
++instance Semigroup Action where
++  (Action is1) <> (Action is2) = Action $ is2 . is1
++
+ instance Monoid Action where
+   mempty = Action id
+-  mappend (Action is1) (Action is2) = Action $ is2 . is1
++  mappend = (<>)
+ 
+ -- | Interprets an action as a state transformation
+ actionSem :: RegAction -> Action
+diff --git a/src/KMC/Kleenex/Desugaring.hs b/src/KMC/Kleenex/Desugaring.hs
+index 6ed2258..f6ab6fb 100644
+--- a/src/KMC/Kleenex/Desugaring.hs
++++ b/src/KMC/Kleenex/Desugaring.hs
+@@ -165,7 +165,8 @@ desugarTerm out t =
+                                                ++ [Right $ Pop r]) >>= decl . RSeq
+   WriteReg r          -> decl $ RConst (Right (Write r))
+   RedirectReg r t1    -> do it <- desugarTerm out t1
+-                            [ipush, ipop] <- mapM (decl . RConst . Right) [Push, Pop r]
++                            ipush <- (decl . RConst . Right) Push
++                            ipop <- (decl . RConst . Right) $ Pop r
+                             decl $ RSeq [ipush,it,ipop]
+   TermInfo _ t1       -> desugarTerm out t1
+   where
+diff --git a/src/KMC/Kleenex/WellFormedness.hs b/src/KMC/Kleenex/WellFormedness.hs
+index 182ef86..84081a4 100644
+--- a/src/KMC/Kleenex/WellFormedness.hs
++++ b/src/KMC/Kleenex/WellFormedness.hs
+@@ -11,6 +11,7 @@ import qualified Data.Map as M
+ import           Data.Set (Set)
+ import qualified Data.Set as S
+ import           Text.PrettyPrint
++import           Prelude hiding ((<>))
+ 
+ --------
+ -- Types
+diff --git a/src/KMC/Program/Backends/C.hs b/src/KMC/Program/Backends/C.hs
+index f3895f9..c40f41a 100644
+--- a/src/KMC/Program/Backends/C.hs
++++ b/src/KMC/Program/Backends/C.hs
+@@ -21,6 +21,8 @@ import           KMC.Util.Coding
+ import           KMC.Program.IL
+ import           KMC.Util.Heredoc
+ 
++import           Prelude hiding ((<>))
++
+ {- Utility functions -}
+ -- | Chunk a list into list of lists of length n, starting from the left. The
+ -- last list in the result may be shorter than n.
+diff --git a/src/KMC/SymbolicFST.hs b/src/KMC/SymbolicFST.hs
+index 07ac753..e8ce17b 100644
+--- a/src/KMC/SymbolicFST.hs
++++ b/src/KMC/SymbolicFST.hs
+@@ -1,6 +1,7 @@
+ {-# LANGUAGE StandaloneDeriving #-}
+ {-# LANGUAGE FlexibleContexts #-}
+ {-# LANGUAGE TypeFamilies #-}
++{-# LANGUAGE UndecidableInstances #-}
+ module KMC.SymbolicFST
+        (FST(..)
+        ,Edge
+diff --git a/src/KMC/SymbolicSST.hs b/src/KMC/SymbolicSST.hs
+index 368b87a..150bd3c 100644
+--- a/src/KMC/SymbolicSST.hs
++++ b/src/KMC/SymbolicSST.hs
+@@ -3,6 +3,7 @@
+ {-# LANGUAGE StandaloneDeriving #-}
+ {-# LANGUAGE DeriveFunctor #-}
+ {-# LANGUAGE FlexibleContexts #-}
++{-# LANGUAGE UndecidableInstances #-}
+ module KMC.SymbolicSST
+        (UpdateString
+        ,UpdateStringFunc
+diff --git a/src/KMC/Visualization.hs b/src/KMC/Visualization.hs
+index 14271ae..9a66b0d 100644
+--- a/src/KMC/Visualization.hs
++++ b/src/KMC/Visualization.hs
+@@ -2,6 +2,7 @@
+ {-# LANGUAGE FlexibleInstances #-}
+ {-# LANGUAGE TypeOperators #-}
+ {-# LANGUAGE TypeSynonymInstances #-}
++{-# LANGUAGE UndecidableInstances #-}
+ module KMC.Visualization where
+ 
+ import qualified Data.GraphViz as GV
+-- 
+2.24.1
+
