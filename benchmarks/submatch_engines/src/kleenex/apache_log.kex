@@ -1,0 +1,34 @@
+/* Performs Apache log parsing */
+start: logfile
+
+logfile := "[" loglines? "]\n"
+
+loglines := (logline "," /\n/)* logline /\n/
+
+logline := "{" host ~sep ~userid ~sep ~authuser sep timestamp sep request sep code sep bytes sep referer sep useragent "}"
+
+host := "\"host\":\"" ip "\""
+
+userid := "\"user\":\"" rfc1413 "\""
+
+authuser := "\"authuser\":\"" /[^ \n]+/ "\""
+
+timestamp := "\"date\":\"" ~/\[/ /[^\n\]]+/ ~/]/ "\""
+
+request := "\"request\":" quotedString
+
+code := "\"status\":\"" integer "\""
+
+bytes := "\"size\":\"" (integer | /-/) "\""
+
+referer := "\"url\":" quotedString
+
+useragent := "\"agent\":" quotedString
+
+ws := /[\t ]+/
+sep := "," ~ws
+
+quotedString := /"([^"\n]|\\")*"/
+integer := /[0-9]+/
+ip := integer (/\./ integer){3}
+rfc1413 := /-/

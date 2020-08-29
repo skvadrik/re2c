@@ -1,0 +1,7 @@
+The following benchmarks have been taken from the Kleenex repository
+(https://github.com/diku-kmc/kleenexlang) and are licensed under the MIT
+license (together with the data generators):
+
+- apache_log
+- datetime_to_json
+- email

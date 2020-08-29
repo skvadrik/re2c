@@ -1,0 +1,9 @@
+// Validate a list of email addresses, one per line.
+// Emits a list of all the valid email addresses.
+start: emailLines
+
+emailLines := ( simpleEmail /\n/ | ~fb ~/\n/ )+
+
+fb := /[^\n]*/
+
+simpleEmail := /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
