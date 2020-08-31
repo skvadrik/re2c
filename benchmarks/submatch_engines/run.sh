@@ -54,8 +54,16 @@ timings=logs/timings
 echo > "$timings"
 for engine in {kleenex,ragel,re2c} ; do
     for log in logs/"$engine"/* ; do
+        # average speed
         avg=$(awk '!/^$/ { total += $3; lines += 1 } END { print total/lines }' "$log")
-        printf "%-30s%-10s%.2lf\n" "$(basename $log)" "$engine" "$avg" >> "$timings"
+
+        # binary size
+        cp bin/"$engine"/"$(basename $log)" tmp
+        strip tmp
+        binsize=$(stat -c%s tmp)
+        rm tmp
+
+        printf "%-40s%-10s%-10.2lf%-10d\n" "$(basename $log)" "$engine" "$avg" "$binsize" >> "$timings"
     done
 done
 

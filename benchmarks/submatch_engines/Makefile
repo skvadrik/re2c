@@ -32,7 +32,11 @@ GEN_KLEENEX = $(patsubst %, $(GEN_DIR)/kleenex/%.c, $(BENCHMARKS))
 BIN_KLEENEX = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_KLEENEX))
 
 GEN = $(GEN_RAGEL) $(GEN_RE2C) $(GEN_KLEENEX)
-BIN = $(BIN_RAGEL) $(BIN_RE2C) $(BIN_KLEENEX)
+
+BIN_ = $(BIN_RAGEL) $(BIN_RE2C) $(BIN_KLEENEX)
+BIN_GCC   = $(patsubst %, %-gcc, $(BIN_))
+BIN_CLANG = $(patsubst %, %-clang, $(BIN_))
+BIN = $(BIN_GCC) $(BIN_CLANG)
 
 DATA = $(patsubst %, $(DATA_DIR)/%/big, $(BENCHMARKS))
 
@@ -53,9 +57,12 @@ $(GEN_RE2C_STADFA): $(GEN_DIR)/%-stadfa.c: $(SRC_DIR)/%.re $(COMMON_SRC)
 $(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex
 	$(KLEENEX) compile $< --srcout $@ --act=false --la=true
 
-$(BIN): $(BIN_DIR)/%: $(GEN_DIR)/%.c
+$(BIN_GCC): $(BIN_DIR)/%-gcc: $(GEN_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -o $@ $<
+	gcc $(CFLAGS) -o $@ $<
+$(BIN_CLANG): $(BIN_DIR)/%-clang: $(GEN_DIR)/%.c
+	@mkdir -p $(dir $@)
+	clang $(CFLAGS) -o $@ $<
 
 data: $(DATA)
 
