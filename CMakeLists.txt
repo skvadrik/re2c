@@ -322,9 +322,9 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 
     # rebuild all re2c sources using newly built re2c
     add_custom_target(bootstrap
-        COMMAND cmake -E remove_directory "src"
-        COMMAND cmake -E remove_directory "doc"
-        COMMAND cmake --build "${CMAKE_CURRENT_BINARY_DIR}"
+        COMMAND "${CMAKE_COMMAND}" -E remove_directory "src"
+        COMMAND "${CMAKE_COMMAND}" -E remove_directory "doc"
+        COMMAND "${CMAKE_COMMAND}" --build "${CMAKE_CURRENT_BINARY_DIR}"
     )
 
     # tests
