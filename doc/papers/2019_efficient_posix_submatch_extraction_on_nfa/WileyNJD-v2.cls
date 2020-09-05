@@ -1775,8 +1775,8 @@ Volume\ \@jvol, Article ID\ \@artid, \thepage~pages\par%
 \def\presentaddress#1{\gdef\@presentaddress{\hsize=\textwidth\corresfont\baselineskip11pt\textbf{Present Address}\par #1}}%
 
 %
-\def\received#1{\gdef\@received{Received #1;}}\gdef\@received{}%
-\def\revised#1{\gdef\@revised{Revised #1;}}\gdef\@revised{}%
+\def\received#1{\gdef\@received{Received #1}}\gdef\@received{}%
+\def\revised#1{\gdef\@revised{Revised #1}}\gdef\@revised{}%
 \def\accepted#1{\gdef\@accepted{Accepted #1}}\gdef\@accepted{}%
 \def\published#1{\gdef\@published{Published #1}}\gdef\@published{}%
    \def\xmlreceived{\gdef\@received{\ifnum\artActypcnt=1\relax Received:\ref{MSSreceiveddate}\ReceivedMONTH\nobreakspace{}\kern.5pt\ReceivedYEAR,\else Received:\ref{MSSreceiveddate}\nobreakspace{}\kern.5pt\ReceivedDATE\nobreakspace{}\kern.5pt\ReceivedMONTH\nobreakspace{}\kern.5pt\ReceivedYEAR\fi}}\gdef\@received{}%
@@ -1811,7 +1811,7 @@ Volume\ \@jvol, Article ID\ \@artid, \thepage~pages\par%
 %  \ifx\@pubdate\@empty\@dummy@pubdate\else\@pubdate\fi%
 }}%
 %
-\def\doiheadtext#1{\gdef\@DOI@text{#1}}\doiheadtext{DOI: xxx/xxxx\nobreakspace{}}%
+\def\doiheadtext#1{\gdef\@DOI@text{#1}}\doiheadtext{DOI: {}}%
 \def\head@titlepage@def#1#2{\vbox{%
   \hbox to \textwidth{#1\dummyalphabet}\par\vspace*{2.5\p@}%
   \@headfootrule\par\vspace*{9\p@}%
@@ -2686,11 +2686,8 @@ Volume\ \@jvol, Article ID\ \@artid, \thepage~pages\par%
 %   \renewcommand{\bibfont}{\reset@font\fontfamily{\rmdefault}\fontsize{8bp}{10}\selectfont\baselineskip=10\p@}%
 \else%
 \if@AMArefstyle%
-   \IfFileExists{NJDnatbib.sty}{\usepackage[numbers,super]{NJDnatbib}}{\usepackage[numbers,super]{natbib}}%
-   \bibliographystyle{WileyNJD-AMA}%
-\renewcommand\@biblabel[1]{#1.} 
-%   \bibpunct{(}{)}{,}{n}{}{}%
-%   \renewcommand{\bibfont}{\reset@font\fontfamily{\rmdefault}\fontsize{8bp}{10}\selectfont\baselineskip=10\p@}%
+   \usepackage[numbers,super,sort&compress]{natbib}%
+   \renewcommand{\bibfont}{\reset@font\fontfamily{\rmdefault}\fontsize{8bp}{10}\selectfont\baselineskip=10\p@}%
 \else%
 \if@Chemistryrefstyle%
    \IfFileExists{NJDnatbib.sty}{\usepackage[numbers,super,sort&compress]{NJDnatbib}}{\usepackage[numbers,super,sort&compress]{natbib}}%

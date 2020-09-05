@@ -2,9 +2,11 @@
 
 \articletype{Research Article}
 
-\received{XX July 2019}
-\revised{XX March 2020}
-\accepted{XX YY 2020}
+\received{24 July 2019}
+\revised{22 June 2020}
+\accepted{30 June 2020}
+
+\doi{10.1002/spe.2881}
 
 \raggedbottom
 
@@ -153,7 +155,7 @@ and the backward matching algorithm proposed by Cox is incorrect.
 \keywords{Regular Expressions, Parsing, Submatch Extraction, Finite-State Automata, POSIX}
 
 \maketitle
-
+\footnotetext{Preprint, the original is \textit{Softw Pract Exper. 2020;1-36. https://doi.org/10.1002/spe.2881}}
 
 \section{Introduction}
 
@@ -995,9 +997,9 @@ and p-norms at all preceding positions agree.
     %and consequently s-norms at all positions $y \leq x'$ coincide with p-norms,
     %therefore $\snorm{t_{min}}{y} = \snorm{t'}{y} \; \forall y \leq x'$.
     %%
-    Then by lemma \ref{lemma_subtrees} subtrees $t'_{x'}$ and $t_{min}|_{x'}$ are comparable:
+    Then by lemma \ref{lemma_subtrees} subtrees $t'|_{x'}$ and $t_{min}|_{x'}$ are comparable:
     $\exists e', w' : t'|_{x'}, t_{min}|_{x'} \in \PT(e', w')$.
-    By construction of $t'$, subtree $t'_{x'}$ is $<$-minimal in $\PT(e', w')$,
+    By construction of $t'$, subtree $t'|_{x'}$ is $<$-minimal in $\PT(e', w')$,
     but at the same time $t_{min} <_{x'.x''} t'$ implies $t_{min}|_{x'} <_{x''} t'|_{x'}$.
     Contradiction.
 \end{proofEnd}
@@ -1074,7 +1076,7 @@ For a given IRE $e$ and string $w$ the set of all PEs $\big\{ \Phi_{0}(t) \mid t
     \label{def_pe_frames}
     A given PE $\beta$ can be represented as $\beta_0 a_1 \beta_1 \dots a_n \beta_n$,
     where $\beta_i$ is the $i$-th \emph{frame} --- a possibly empty sequence of parentheses between
-    subsequent alphabet symbols $a_i$ and $a_{i+1}$, or the beginning and end of $\alpha$.
+    subsequent alphabet symbols $a_i$ and $a_{i+1}$, or the beginning and end of $\beta$.
     \end{definition}
 
     \begin{definition}[Comparable PE fragments]
@@ -2488,7 +2490,7 @@ Our algorithm consists of three steps: conversion of RE to IRE,
 construction of TNFA from IRE
 and simulation of TNFA on the input string.
 We discuss time and space complexity of each step
-in term of the following parameters:
+in terms of the following parameters:
 $n$ --- the length of input,
 $m$ --- the size of RE with counted repetition subexpressions expanded
 (each subexpression duplicated the number of times equal to the repetition counter),
@@ -2746,7 +2748,7 @@ We benchmarked the following algorithms:
     This algorithm reduces the overhead on incremental offset updates,
     but it requires memory proportional to the size of input.
 
-\item Re2-LG: a leftmost-greedy implementation by the Google RE2 library.
+\item Re2-LG: a leftmost-greedy implementation by the Google RE2 library \cite{RE2}.
     This algorithm is used to relate our implementations to the real world:
     both RE2C and RE2 are written in C++, so they are comparable.
     Internally RE2 uses a bunch of different algorithms:
@@ -3189,13 +3191,13 @@ And cheers to the RE2C users!
 \bibitem{Kuk07}
     Chris Kuklewicz,
     \textit{Regular expressions/bounded space proposal},
-    \url{http://wiki.haskell.org/index.php?title=Regular_expressions/Bounded_space_proposal&oldid=11475}
+    \url{http://wiki.haskell.org/index.php?title=Regular_expressions/Bounded_space_proposal&oldid=11475},
     2007.
 
 \bibitem{Cox09}
     Russ Cox,
     backward POSIX matching algorithm (source code),
-    \url{https://swtch.com/~rsc/regexp/nfa-posix.y.txt}
+    \url{https://swtch.com/~rsc/regexp/nfa-posix.y.txt},
     2009.
 
 \bibitem{SL14}
@@ -3267,16 +3269,10 @@ And cheers to the RE2C users!
     Journal of Experimental Algorithmics (JEA), 14, 7,
     2009.
 
-\bibitem{POSIX}
-    POSIX standard: \textit{POSIX-1.2008}
-    a.k.a. \textit{IEEE Std 1003.1-2008}
-    The IEEE and The Open Group,
-    2008.
-
 \bibitem{Fow03}
     Glenn Fowler,
     \textit{An Interpretation of the POSIX Regex Standard},
-    \url{https://web.archive.org/web/20050408073627/http://www.research.att.com/~gsf/testregex/re-interpretation.html},
+    \url{https://archive.org/details/glenn_fowler_an_interpretation_of_the_posix_regex_standard},
     2003.
 
 \bibitem{RE2C}
