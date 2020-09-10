@@ -34,9 +34,6 @@ void closure_leftmost_dfs(ctx_t &ctx)
         state.push_back(x);
 
         switch (n->type) {
-            case nfa_state_t::NIL:
-                stack.push_back(conf_t(x, n->nil.out));
-                break;
             case nfa_state_t::ALT:
                 stack.push_back(conf_t(x, n->alt.out2));
                 stack.push_back(conf_t(x, n->alt.out1));

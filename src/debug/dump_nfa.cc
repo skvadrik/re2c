@@ -64,9 +64,6 @@ void dump_nfa(const nfa_t &nfa)
             }
             case nfa_state_t::FIN:
                 break;
-            case nfa_state_t::NIL:
-                fprintf(stderr, "  n%u -> n%u\n", i, index(nfa, n->nil.out));
-                break;
         }
     }
 

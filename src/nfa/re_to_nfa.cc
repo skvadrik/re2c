@@ -158,9 +158,6 @@ void stats(nfa_state_t *n, uint32_t &topord, uint32_t &ncores)
     if (n->indeg > 1) return;
 
     switch (n->type) {
-        case nfa_state_t::NIL:
-            stats(n->nil.out, topord, ncores);
-            break;
         case nfa_state_t::ALT:
             stats(n->alt.out1, topord, ncores);
             stats(n->alt.out2, topord, ncores);

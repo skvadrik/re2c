@@ -192,9 +192,6 @@ void closure_simple(psimctx_t &ctx)
         state.push_back(x);
 
         switch (n->type) {
-            case nfa_state_t::NIL:
-                stack.push_back(psimctx_t::conf_t(x, n->nil.out));
-                break;
             case nfa_state_t::ALT:
                 stack.push_back(psimctx_t::conf_t(x, n->alt.out2));
                 stack.push_back(psimctx_t::conf_t(x, n->alt.out1));
@@ -347,13 +344,6 @@ bool scan(psimctx_t &ctx, nfa_state_t *q, bool all)
     const conf_t x = ctx.state[q->clos];
 
     switch (q->type) {
-        case nfa_state_t::NIL:
-            if (q->arcidx == 0) {
-                copy_offs(ctx, q, q->nil.out, NOINFO);
-                any |= relax_gor1(ctx, conf_t(x, q->nil.out));
-                ++q->arcidx;
-            }
-            break;
         case nfa_state_t::ALT:
             if (q->arcidx == 0) {
                 copy_offs(ctx, q, q->alt.out1, NOINFO);
@@ -448,10 +438,6 @@ void closure_posix_gtop(psimctx_t &ctx)
         const conf_t x = ctx.state[q->clos];
 
         switch (q->type) {
-            case nfa_state_t::NIL:
-                copy_offs(ctx, q, q->nil.out, NOINFO);
-                relax_gtop(ctx, conf_t(x, q->nil.out));
-                break;
             case nfa_state_t::ALT:
                 copy_offs(ctx, q, q->alt.out1, NOINFO);
                 relax_gtop(ctx, conf_t(x, q->alt.out1));
