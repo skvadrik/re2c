@@ -38,4 +38,3 @@ yy8:
 	goto yy7;
 }
 
-stadfa/stadfa_16.re:4:3: warning: rule matches empty string [-Wmatch-empty-string]

@@ -85,4 +85,3 @@ yy13:
 	}
 }
 
-stadfa/stadfa_19.re:5:3: warning: rule matches empty string [-Wmatch-empty-string]

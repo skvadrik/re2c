@@ -15,5 +15,4 @@
 
 input6.re:4:0: warning: empty character class [-Wempty-character-class]
 input6.re:4:3: warning: empty character class [-Wempty-character-class]
-input6.re:4:12: warning: rule matches empty string [-Wmatch-empty-string]
 input6.re:4:12: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]

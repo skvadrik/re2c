@@ -68,5 +68,4 @@ yy10:
 	}
 }
 
-tags/topsort3.re:5:3: warning: rule matches empty string [-Wmatch-empty-string]
 tags/topsort3.re:4:29: warning: tag 'c' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

@@ -392,4 +392,3 @@ func TestLex(t *testing.T) {
 		})
 	}
 }
-go/conditions/parse_u32_conditions.re:45:27: warning: rule in condition 'init' matches empty string [-Wmatch-empty-string]

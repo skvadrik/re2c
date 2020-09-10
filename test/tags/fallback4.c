@@ -75,4 +75,3 @@ yy11:
 	}
 }
 
-tags/fallback4.re:10:19: warning: rule matches empty string [-Wmatch-empty-string]

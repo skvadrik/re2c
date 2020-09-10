@@ -48,7 +48,6 @@ yy6:
 	goto yy4;
 }
 
-tags/uniq_nofix.re:7:3: warning: rule matches empty string [-Wmatch-empty-string]
 tags/uniq_nofix.re:6:33: warning: tag 'u' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 tags/uniq_nofix.re:6:33: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 tags/uniq_nofix.re:6:33: warning: tag 'w' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

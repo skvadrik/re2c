@@ -12,4 +12,3 @@
 #line 4 "encodings/range_empty.re"
 
 encodings/range_empty.re:3:1: warning: empty character class [-Wempty-character-class]
-encodings/range_empty.re:3:4: warning: rule matches empty string [-Wmatch-empty-string]

@@ -160,4 +160,3 @@ yy17:
 	goto yy6;
 }
 
-stadfa/stadfa_28.re:5:3: warning: rule matches empty string [-Wmatch-empty-string]

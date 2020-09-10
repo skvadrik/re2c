@@ -7,4 +7,3 @@
 }
 
 bug61_negative.re:3:4: warning: empty character class [-Wempty-character-class]
-bug61_negative.re:3:17: warning: rule matches empty string [-Wmatch-empty-string]

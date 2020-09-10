@@ -58,4 +58,3 @@ yy8:
 	}
 }
 
-stadfa/stadfa_21.re:4:3: warning: rule matches empty string [-Wmatch-empty-string]

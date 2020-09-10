@@ -274,4 +274,3 @@ func main() {
 	test("0\000", 0)
 	test("\000", -1)
 }
-golang/009_conditions.re:28:19: warning: rule in condition 'init' matches empty string [-Wmatch-empty-string]

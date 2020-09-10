@@ -48,5 +48,4 @@ yy6:
 	goto yy4;
 }
 
-tags/uniq.re:7:3: warning: rule matches empty string [-Wmatch-empty-string]
 tags/uniq.re:6:33: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

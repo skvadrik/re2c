@@ -364,4 +364,3 @@ func TestLex(t *testing.T) {
 		})
 	}
 }
-go/conditions/parse_u32_blocks.re:40:20: warning: rule matches empty string [-Wmatch-empty-string]

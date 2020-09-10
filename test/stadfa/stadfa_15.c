@@ -48,4 +48,3 @@ yy8:
 	}
 }
 
-stadfa/stadfa_15.re:4:3: warning: rule matches empty string [-Wmatch-empty-string]

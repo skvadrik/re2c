@@ -11,4 +11,3 @@
 yy0:
 	{}
 
-bug119_abort_bif.re:4:7: warning: rule matches empty string [-Wmatch-empty-string]

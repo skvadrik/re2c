@@ -339,4 +339,3 @@ int main()
     assert(lex("aa b cc", count) == 2);
     return 0;
 }
-eof/eof_11_multiblock.re:25:19: warning: rule matches empty string [-Wmatch-empty-string]

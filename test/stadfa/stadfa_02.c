@@ -26,5 +26,4 @@ yy3:
 }
 
 stadfa/stadfa_02.re:3:10: warning: rule matches empty string [-Wmatch-empty-string]
-stadfa/stadfa_02.re:4:3: warning: rule matches empty string [-Wmatch-empty-string]
 stadfa/stadfa_02.re:4:3: warning: unreachable rule (shadowed by rule at line 3) [-Wunreachable-rules]

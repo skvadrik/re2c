@@ -14,6 +14,5 @@
 #line 8 "input4.re"
 
 input4.re:4:0: warning: empty character class [-Wempty-character-class]
-input4.re:4:5: warning: rule matches empty string [-Wmatch-empty-string]
 input4.re:4:5: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
 input4.re:6:12: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]

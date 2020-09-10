@@ -60,6 +60,4 @@ yyeof2:
 	{ /* EOF - here 'x' must not be set */ }
 }
 
-eof/shadowrule_04_hoist.re:6:12: warning: rule matches empty string [-Wmatch-empty-string]
 eof/shadowrule_04_hoist.re:6:12: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
-eof/shadowrule_04_hoist.re:14:12: warning: rule matches empty string [-Wmatch-empty-string]

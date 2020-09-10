@@ -92,6 +92,21 @@ static bool nullable(const RESpec &spec, std::vector<StackItem> &stack, const RE
     return null;
 }
 
+static bool trivially_nullable(const RESpec &spec, const RE *re)
+{
+    // "" { ... }
+    if (re->type == RE::NIL) return true;
+
+    // "" / ... { ... }
+    if (re->type == RE::CAT
+        && re->cat.re1->type == RE::NIL
+        && re->cat.re2->type == RE::CAT
+        && re->cat.re2->cat.re1->type == RE::TAG
+        && trailing(spec.tags[re->cat.re2->cat.re1->tag.idx])) return true;
+
+    return false;
+}
+
 } // anonymous namespace
 
 // Warn about rules that match empty string (including rules with nonempty
@@ -104,7 +119,12 @@ void warn_nullable(const RESpec &spec, const std::string &cond)
     std::vector<StackItem> stack;
     const size_t nre = spec.res.size();
     for (size_t i = 0; i < nre; ++i) {
-        if (nullable(spec, stack, spec.res[i])) {
+        const RE *re = spec.res[i];
+        if (trivially_nullable(spec, re)) {
+            // Exclude trivial obviously nullable cases like "", as they are
+            // often used as a non-consuming default rule. This also captures
+            // empty character classes, but they are covered by another warning.
+        } else if (nullable(spec, stack, re)) {
             spec.msg.warn.match_empty_string(spec.rules[i].semact->loc, cond);
         }
     }

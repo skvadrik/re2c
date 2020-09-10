@@ -7,4 +7,3 @@
 }
 
 bug61_difference_full_i.re:3:4: warning: empty character class [-Wempty-character-class]
-bug61_difference_full_i.re:3:28: warning: rule matches empty string [-Wmatch-empty-string]
