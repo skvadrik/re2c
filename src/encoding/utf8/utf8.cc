@@ -8,8 +8,8 @@ const uint32_t utf8::ERROR = 0xFFFDu;
 const utf8::rune utf8::MAX_1BYTE_RUNE = 0x7Fu;
 const utf8::rune utf8::MAX_2BYTE_RUNE = 0x7FFu;
 const utf8::rune utf8::MAX_3BYTE_RUNE = 0xFFFFu;
-const utf8::rune utf8::MAX_4BYTE_RUNE = 0x10FFFFu;
-const utf8::rune utf8::MAX_RUNE       = utf8::MAX_4BYTE_RUNE;
+const utf8::rune utf8::MAX_4BYTE_RUNE = 0x1FFFFFu;
+const utf8::rune utf8::MAX_RUNE       = 0x10FFFFu;
 
 const uint32_t utf8::PREFIX_1BYTE = 0u;    // 0000 0000
 const uint32_t utf8::INFIX        = 0x80u; // 1000 0000
