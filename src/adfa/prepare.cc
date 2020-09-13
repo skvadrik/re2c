@@ -152,7 +152,7 @@ void DFA::prepare(const opt_t *opts)
 {
     // create rule states
     for (State *s = head; s; s = s->next) {
-        if (s->rule != Rule::NONE) {
+        if (s->rule != Rule::NONE && s->rule != eof_rule) {
             if (!finstates[s->rule]) {
                 State *n = new State;
                 if (s->rule == def_rule) {
@@ -206,6 +206,7 @@ void DFA::prepare(const opt_t *opts)
     if (default_state) {
         for (State *s = head; s; s = s->next) {
             if (s->fallback) {
+                DASSERT(s->rule != eof_rule); // see note [EOF rule handling]
                 const std::pair<State*, tcid_t> acc(finstates[s->rule], s->fall_tags);
                 s->action.set_save(accepts.find_or_add(acc));
             }

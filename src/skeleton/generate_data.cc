@@ -255,7 +255,7 @@ static void write_keys(const path_t &path, const Skeleton &skel,
     for (size_t w = 0; w < width; ++w) {
         *k++ = to_le(static_cast<key_t>(path.len()));
         *k++ = to_le(static_cast<key_t>(matched));
-        *k++ = to_le(rule2key<key_t>(rule, skel.defrule));
+        *k++ = to_le(rule2key<key_t>(rule, skel.def_rule));
 
         for (size_t t = ltag; t < htag; ++t) {
             const Tag &tag = skel.tags[t];

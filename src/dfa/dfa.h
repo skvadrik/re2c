@@ -68,9 +68,11 @@ struct dfa_t
     tagver_t maxtagver;
     tcmd_t *tcmd0;
     tcid_t tcid0;
+    size_t def_rule;
+    size_t eof_rule;
 
-    dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
-        , Msg &msg);
+    dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond, Msg &msg,
+        size_t def_rule, size_t eof_rule);
     ~dfa_t();
 
     FORBID_COPY(dfa_t);
@@ -96,7 +98,7 @@ enum posix_prectable_alg_t
 
 void minimization(dfa_t &dfa, dfa_minimization_t type);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
-void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, size_t defrule, const std::string &cond, Msg &msg);
+void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, const std::string &cond, Msg &msg);
 void insert_fallback_tags(const opt_t *opts, dfa_t &dfa);
 void compact_and_optimize_tags(const opt_t *opts, dfa_t &dfa);
 void freeze_tags(dfa_t &dfa);

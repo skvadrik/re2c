@@ -10,6 +10,7 @@
 #include "src/debug/debug.h"
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
+#include "src/options/opt.h"
 #include "src/regexp/rule.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
@@ -68,6 +69,7 @@ void warn_undefined_control_flow(const Skeleton &skel)
     std::valarray<bool> loops(skel.nodes_count);
     std::vector<path_t> paths;
     paths_size_t size(paths_size_t::from32(0u));
+    bool use_eof_rule = skel.opts->eof != NOEOF;
 
     std::vector<StackItem> stack;
     path_t path(0);
@@ -82,10 +84,10 @@ void warn_undefined_control_flow(const Skeleton &skel)
 
         if (i.arc == node.arcs.begin()) {
             // DFS recursive enter
-            if (node.rule != Rule::NONE) {
+            if (node.rule != Rule::NONE && node.rule != skel.eof_rule) {
                 // accepting path, terminate recursion
             }
-            else if (node.end()) {
+            else if (node.end() || (use_eof_rule && node.rule == Rule::NONE)) {
                 // found path to default state
                 get_path_on_stack(path, stack, i.node);
                 paths.push_back(path);

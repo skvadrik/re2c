@@ -29,8 +29,8 @@ static nfa_state_t *transition(nfa_state_t *, uint32_t);
 
 const uint32_t dfa_t::NIL = ~0u;
 
-dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
-    , Msg &msg)
+dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond,
+        Msg &msg, size_t def_rule, size_t eof_rule)
     : states()
     , nchars(nfa.charset.size() - 1) // (n + 1) bounds for n ranges
     , charset(nfa.charset)
@@ -42,6 +42,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond
     , maxtagver(0)
     , tcmd0(NULL)
     , tcid0(TCID0)
+    , def_rule(def_rule)
+    , eof_rule(eof_rule)
 {
     if (opts->posix_semantics) {
         pdetctx_t ctx(opts, msg, cond, nfa, *this);

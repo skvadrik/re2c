@@ -49,19 +49,19 @@ bool Node::end() const
 
 const size_t Skeleton::DEFTAG = std::numeric_limits<size_t>::max();
 
-Skeleton::Skeleton(const dfa_t &dfa, const opt_t *op, size_t def
-    , const std::string &dfa_name, const std::string &dfa_cond
-    , const loc_t &loc, Msg &msg)
-    : opts(op)
-    , name(dfa_name)
-    , cond(dfa_cond)
+Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
+        const std::string &cond, const loc_t &loc, Msg &msg)
+    : opts(opts)
+    , name(name)
+    , cond(cond)
     , loc(loc)
     , msg(msg)
     , nodes_count(dfa.states.size() + 1) // +1 for default state
     , nodes(new Node[nodes_count])
     , cmd0(dfa.tcmd0)
     , sizeof_key(8)
-    , defrule(def)
+    , def_rule(dfa.def_rule)
+    , eof_rule(dfa.eof_rule)
     , ntagver(static_cast<size_t>(dfa.maxtagver) + 1)
     , charset(dfa.charset)
     , rules(dfa.rules)

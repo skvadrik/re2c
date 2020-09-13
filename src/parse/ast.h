@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "src/msg/location.h"
+#include "src/regexp/rule.h"
 
 
 namespace re2c {
@@ -96,9 +97,12 @@ struct spec_t {
     std::vector<const SemAct*> defs;
     std::vector<const SemAct*> eofs;
     std::vector<const SemAct*> setup;
+    size_t def_rule;
+    size_t eof_rule;
 
     explicit spec_t(const std::string &n)
-        : name(n), rules(), defs(), eofs(), setup() {}
+        : name(n), rules(), defs(), eofs(), setup()
+        , def_rule(Rule::NONE), eof_rule(Rule::NONE) {}
 };
 
 typedef std::vector<spec_t> specs_t;

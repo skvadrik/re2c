@@ -57,7 +57,6 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     const loc_t &loc = output.block().loc;
     Msg &msg = output.msg;
     const std::vector<ASTRule> &rules = spec.rules;
-    const size_t defrule = spec.defs.empty() ? Rule::NONE : rules.size() - 1;
     const SemAct *eof = spec.eofs.empty() ? NULL : spec.eofs.front();
     const std::string
         &cond = spec.name,
@@ -75,20 +74,20 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     nfa_t nfa(re);
     DDUMP_NFA(opts, nfa);
 
-    dfa_t dfa(nfa, opts, cond, msg);
+    dfa_t dfa(nfa, opts, cond, msg, spec.def_rule, spec.eof_rule);
     DDUMP_DFA_DET(opts, dfa);
 
     rangemgr.clear();
 
     // skeleton must be constructed after DFA construction
     // but prior to any other DFA transformations
-    Skeleton skeleton(dfa, opts, defrule, name, cond, loc, msg);
+    Skeleton skeleton(dfa, opts, name, cond, loc, msg);
     warn_undefined_control_flow(skeleton);
     if (opts->target == TARGET_SKELETON) {
         emit_data(skeleton);
     }
 
-    cutoff_dead_rules(dfa, opts, defrule, cond, msg);
+    cutoff_dead_rules(dfa, opts, cond, msg);
 
     insert_fallback_tags(opts, dfa);
 
@@ -106,8 +105,8 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     fillpoints(dfa, fill);
 
     // ADFA stands for 'DFA with actions'
-    DFA *adfa = new DFA(dfa, fill, defrule, skeleton.sizeof_key,
-        loc, name, cond, setup, eof, opts, msg);
+    DFA *adfa = new DFA(dfa, fill, skeleton.sizeof_key, loc, name, cond,
+        setup, eof, opts, msg);
 
     // see note [reordering DFA states]
     adfa->reorder();

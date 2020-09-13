@@ -78,16 +78,16 @@ struct Skeleton
     const tcmd_t *cmd0;
 
     size_t sizeof_key;
-    size_t defrule;
+    size_t def_rule;
+    size_t eof_rule;
     size_t ntagver;
     const std::vector<uint32_t> &charset;
     const std::valarray<Rule> &rules;
     const std::vector<Tag> &tags;
     const tagver_t *finvers;
 
-    Skeleton(const dfa_t &dfa, const opt_t *op, size_t def
-        , const std::string &dfa_name, const std::string &dfa_cond
-        , const loc_t &loc, Msg &msg);
+    Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
+        const std::string &cond, const loc_t &loc, Msg &msg);
     ~Skeleton ();
     FORBID_COPY(Skeleton);
 };

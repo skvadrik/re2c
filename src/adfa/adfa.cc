@@ -25,7 +25,6 @@ static bool is_eof(const opt_t *opts, uint32_t ub)
 DFA::DFA
     ( const dfa_t &dfa
     , const std::vector<size_t> &fill
-    , size_t def
     , size_t key
     , const loc_t &loc
     , const std::string &nm
@@ -62,7 +61,8 @@ DFA::DFA
     , need_accept (false)
     , oldstyle_ctxmarker (false)
     , maxtagver (dfa.maxtagver)
-    , def_rule (def)
+    , def_rule(dfa.def_rule)
+    , eof_rule(dfa.eof_rule)
     , key_size (key)
     , bitmap(NULL)
     , setup(su)

@@ -160,8 +160,8 @@ static void liveness_analyses(const rdfa_t &rdfa, bool *live)
     }
 }
 
-static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
-    const std::string &cond, const bool *live, Msg &msg)
+static void warn_dead_rules(const dfa_t &dfa, const std::string &cond,
+    const bool *live, Msg &msg)
 {
     const size_t nstates = dfa.states.size();
     const size_t nrules = dfa.rules.size();
@@ -180,7 +180,7 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 
     for (size_t i = 0; i < nrules; ++i) {
         // default rule '*' should not be reported
-        if (i != defrule && !live[i * nstates]) {
+        if (i != dfa.def_rule && !live[i * nstates]) {
             msg.warn.unreachable_rule(cond, dfa.rules[i]);
         }
     }
@@ -289,7 +289,7 @@ static void find_fallback_states_with_eof_rule(dfa_t &dfa)
 
     for (size_t i = 0; i < nstate; ++i) {
         dfa_state_t *s = dfa.states[i];
-        if (s->rule == Rule::NONE) continue;
+        if (s->rule == Rule::NONE || s->rule == dfa.eof_rule) continue;
 
         // With EOF rule, a final state is a fallback state if it has outgoing
         // transitions to any non-accepting states (even if all possible paths
@@ -305,17 +305,28 @@ static void find_fallback_states_with_eof_rule(dfa_t &dfa)
     }
 }
 
-void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, size_t defrule
-    , const std::string &cond, Msg &msg)
+static void remove_dead_final_states_with_eof_rule(dfa_t &dfa)
 {
-    // The case of EOF rule is handled differenly, because with EOF rule there
-    // is always a possibility that it occurs before the next matching rule.
-    // In essence, sentinel is a special symbol that is not covered by any of
-    // the rules, so none of them can be completely shadowed by others.
-    if (opts->eof != NOEOF) {
-        find_fallback_states_with_eof_rule(dfa);
+    // EOF is like a special symbol that is not covered by any of the rules.
+    // Therefore rules cannot be completely shadowed by other rules, with one
+    // exception: if a rule matches empty string and the initial state is not a
+    // fallback state (i.e. all outgoing paths are accepting), then this rule
+    // will never match (if it is EOF in the initial state, then EOF rule takes
+    // priority, otherwise one of the longer rules will match).
+    DASSERT(!dfa.states.empty());
+    dfa_state_t *s0 = dfa.states[0];
+    if (s0->rule != Rule::NONE && s0->rule != dfa.eof_rule && !s0->fallback) {
+        s0->rule = dfa.eof_rule;
     }
-    else {
+}
+
+void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, const std::string &cond, Msg &msg)
+{
+    if (opts->eof != NOEOF) {
+        // See note [EOF rule handling].
+        find_fallback_states_with_eof_rule(dfa);
+        remove_dead_final_states_with_eof_rule(dfa);
+    } else {
         const rdfa_t rdfa(dfa);
         const size_t ns = rdfa.nstates;
         const size_t nl = (rdfa.nrules + 1) * ns;
@@ -325,7 +336,7 @@ void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, size_t defrule
 
         liveness_analyses(rdfa, live);
 
-        warn_dead_rules(dfa, defrule, cond, live, msg);
+        warn_dead_rules(dfa, cond, live, msg);
         remove_dead_final_states(dfa, fallthru);
         warn_sentinel_in_midrule(dfa, opts, cond, live, msg);
         find_fallback_states(dfa, fallthru);

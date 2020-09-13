@@ -93,6 +93,7 @@ struct DFA
     bool oldstyle_ctxmarker;
     tagver_t maxtagver;
     const size_t def_rule;
+    const size_t eof_rule;
     const size_t key_size;
     CodeBitmap *bitmap;
     std::string setup;
@@ -104,7 +105,6 @@ struct DFA
 
     DFA ( const dfa_t &dfa
         , const std::vector<size_t> &fill
-        , size_t def
         , size_t key
         , const loc_t &loc
         , const std::string &nm

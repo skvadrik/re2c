@@ -327,13 +327,8 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
 
     CodeList *fallback_trans = code_list(alc);
     if (from->action.type == Action::INITIAL) {
-        // initial state: if accepting, go to eof state, else go to default state
-        if (final) {
-            fallback->label->used = true;
-            text = o.str(opts->labelPrefix).label(*fallback->label).flush();
-        } else {
-            text = gen_eof_label(output, dfa);
-        }
+        // initial state: EOF is reached and YYFILL failed, go to EOF rule
+        text = gen_eof_label(output, dfa);
         append(fallback_trans, code_stmt(alc, o.cstr("goto ").cstr(text).flush()));
     }
     else if (fallback != to || opts->fFlag) {

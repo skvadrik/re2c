@@ -99,7 +99,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
             }
         }
 
-        dfa = new dfa_t(*nfa, opt, "", msg);
+        dfa = new dfa_t(*nfa, opt, "", msg, Rule::NONE, Rule::NONE);
 
         compact_and_optimize_tags(opt, *dfa);
 

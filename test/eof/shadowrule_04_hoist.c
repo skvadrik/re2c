@@ -29,31 +29,28 @@ yy4:
 	YYCTYPE yych;
 yyFillLabel0:
 	yych = *YYCURSOR;
-	if (yych <= 0x00) {
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel0;
-			goto yy7;
-		}
+	if (yych >= 0x01) {
 		yyt1 = YYCURSOR;
-		goto yy8;
+		goto yy7;
+	}
+	if (YYLIMIT <= YYCURSOR) {
+		if (YYFILL() == 0) goto yyFillLabel0;
+		goto yyeof2;
 	}
 	yyt1 = YYCURSOR;
-	goto yy8;
 yy7:
-	{ /* EMPTY - here 'x' must not be set */ }
-yy8:
 	++YYCURSOR;
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy8;
+	case 'a':	goto yy7;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (YYFILL() == 0) goto yyFillLabel1;
 		}
-		goto yy10;
+		goto yy9;
 	}
-yy10:
+yy9:
 	x = yyt1;
 	{ /* R1 - here 'x' must be set */ }
 yyeof2:
