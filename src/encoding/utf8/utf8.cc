@@ -5,11 +5,15 @@ namespace re2c {
 
 const uint32_t utf8::ERROR = 0xFFFDu;
 
-const utf8::rune utf8::MAX_1BYTE_RUNE = 0x7Fu;
-const utf8::rune utf8::MAX_2BYTE_RUNE = 0x7FFu;
-const utf8::rune utf8::MAX_3BYTE_RUNE = 0xFFFFu;
-const utf8::rune utf8::MAX_4BYTE_RUNE = 0x1FFFFFu;
-const utf8::rune utf8::MAX_RUNE       = 0x10FFFFu;
+// Maximum values for UTF8 code points of length 1-4 bytes.
+const utf8::rune utf8::MAX_1BYTE_RUNE = 0x7Fu;     // 0000 0000  0000 0000  0111 1111
+const utf8::rune utf8::MAX_2BYTE_RUNE = 0x7FFu;    // 0000 0000  0000 0111  1111 1111
+const utf8::rune utf8::MAX_3BYTE_RUNE = 0xFFFFu;   // 0000 0000  1111 1111  1111 1111
+const utf8::rune utf8::MAX_4BYTE_RUNE = 0x1FFFFFu; // 0001 1111  1111 1111  1111 1111
+
+// Maximum Unicode code point is U+10FFFF (it is less than the maximum 4-byte
+// UTF8 code point).
+const utf8::rune utf8::MAX_RUNE = 0x10FFFFu;
 
 const uint32_t utf8::PREFIX_1BYTE = 0u;    // 0000 0000
 const uint32_t utf8::INFIX        = 0x80u; // 1000 0000
