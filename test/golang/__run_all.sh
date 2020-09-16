@@ -1,4 +1,3 @@
-
 root_dir=$(pwd)
 
 for f in $(find -name '*.re'); do
@@ -14,8 +13,8 @@ for f in $(find -name '*.re'); do
 
     go run x.go >/dev/null || { echo "*** error ***"; exit 1; }
 
-    rm -f x.go
     cd $root_dir
 done
+rm -f x.go
 
 echo "All good."

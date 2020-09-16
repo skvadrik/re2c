@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT -f
+//go:generate re2go $INPUT -o $OUTPUT
 package main
 
 import "fmt"
@@ -15,31 +15,18 @@ type Input struct {
 	token  int
 	limit  int
 	eof    bool
-	state  int
 }
 
-const (
-	lexError = iota
-	lexNeedMoreSpace
-	lexNeedMoreInput
-	lexResume
-	lexEnd
-	lexNumber1
-	lexNumber2
-	lexSpace
-)
-
 func fill(in *Input) int {
-	// Nothing can be read, resume lexing to match EOF rule or fail.
+	// If nothing can be read, fail.
 	if in.eof {
-		return lexResume
+		return 1
 	}
 
 	// Check if at least some space can be freed.
 	if in.token == 0 {
 		// In real life can reallocate a larger buffer.
-		fmt.Println("fill error: lexeme too long")
-		return lexNeedMoreSpace
+		panic("fill error: lexeme too long")
 	}
 
 	// Discard everything up to the start of the current lexeme,
@@ -60,11 +47,16 @@ func fill(in *Input) int {
 	// If read less than expected, this is the end of input.
 	in.eof = in.limit < SIZE
 
-	return lexResume
+	// If nothing has been read, fail.
+	if n == 0 {
+		return 1
+	}
+
+	return 0
 }
 
 func Lex(in *Input) int {
-	var yych YYCTYPE
+	in.token = in.cursor
 
 	/*!re2c
 	re2c:eof = 0;
@@ -73,37 +65,35 @@ func Lex(in *Input) int {
 	re2c:define:YYBACKUP  = "in.marker = in.cursor";
 	re2c:define:YYRESTORE = "in.cursor = in.marker";
 	re2c:define:YYLESSTHAN = "in.limit-in.cursor < @@";
-	re2c:define:YYFILL = "return lexNeedMoreInput";
-	re2c:define:YYGETSTATE = "in.state";
-	re2c:define:YYSETSTATE = "in.state = @@";
+	re2c:define:YYFILL = "fill(in) == 0";
 
 	* {
 		fmt.Println("error")
-		return lexError
+		return -1
 	}
 
 	$ {
 		fmt.Println("end")
-		return lexEnd
+		return 0
 	}
 
 	[0-9]+ {
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
-		return lexNumber1
+		return 1
 	}
 
 	[0-9]+ [-] [0-9]+ {
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
-		return lexNumber2
+		return 2
 	}
 
-	[ ]+ {
-		return lexSpace
+	[ ] {
+		return 3
 	}
 	*/
 }
 
-func test(data string) int {
+func test(data string) (result int) {
 	tmpfile := "input.txt"
 
 	f, _ := os.Create(tmpfile)
@@ -111,6 +101,10 @@ func test(data string) int {
 	f.Seek(0, 0)
 
 	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println(r)
+			result = -2
+		}
 		f.Close()
 		os.Remove(tmpfile)
 	}()
@@ -125,27 +119,12 @@ func test(data string) int {
 		eof:    false,
 	}
 
-	result := lexNeedMoreInput
-loop:
-	for {
-		switch result {
-		case lexError:
-			break loop
-		case lexEnd:
-			break loop
-		case lexNeedMoreInput:
-			result = fill(in)
-			if result != lexResume {
-				break loop
-			}
-		default:
-			in.token = in.cursor
-			in.state = 0
-		}
+	result = 9999
+	for result > 0 {
 		result = Lex(in)
 	}
 
-	return result
+	return
 }
 
 func main() {
@@ -153,31 +132,31 @@ func main() {
 
 	// Succeeds, the lexer needs 1 character ahead.
 	s = "     1234567890     "
-	if test(s) != lexEnd {
+	if test(s) != 0 {
 		panic("expected 'number: 1234567890'")
 	}
 
 	// Fails, the lexer needs 1 character ahead, but there is no space.
 	s = "     12345678901    "
-	if test(s) != lexNeedMoreSpace {
+	if test(s) != -2 {
 		panic("expected 'fill error: lexeme too long'")
 	}
 
 	// Succeeds, the lexer needs 1 character ahead.
 	s = "     12345-6789     "
-	if test(s) != lexEnd {
+	if test(s) != 0 {
 		panic("expected 'number: 12345-6789'")
 	}
 
 	// Fails, the lexer needs 1 character ahead, but there is no space.
 	s = "     12345-67890     "
-	if test(s) != lexNeedMoreSpace {
+	if test(s) != -2 {
 		panic("expected 'fill error: lexeme too long'")
 	}
 
 	// Fails, invalid input.
 	s = "?#!*"
-	if test(s) != lexError {
+	if test(s) != -1 {
 		panic("expected 'error'")
 	}
 
