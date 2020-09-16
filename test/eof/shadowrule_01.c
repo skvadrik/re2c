@@ -44,7 +44,7 @@ yyFillLabel0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (YYFILL() == 0) goto yyFillLabel0;
-			goto yyeof3;
+			goto yy18;
 		}
 		goto yy10;
 	}
@@ -75,7 +75,7 @@ yy15:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (YYFILL() == 0) goto yyFillLabel2;
-			goto yy18;
+			goto yy19;
 		}
 		goto yy14;
 	}
@@ -83,10 +83,10 @@ yy16:
 	++YYCURSOR;
 	{ /* STRING  */ }
 yy18:
+	{ /* EOF     */ }
+yy19:
 	YYCURSOR = YYMARKER;
 	goto yy13;
-yyeof3:
-	{ /* EOF     */ }
 }
 
 eof/shadowrule_01.re:11:6: warning: unreachable rule (shadowed by rule at line 12) [-Wunreachable-rules]

@@ -74,7 +74,7 @@ yyFillLabel0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (false) goto yyFillLabel0;
-			goto yyeof2;
+			goto yy9;
 		}
 		goto yy2;
 	}
@@ -100,7 +100,7 @@ yy7:
 	++YYCURSOR;
 	YYCURSOR -= 1;
 	{ goto word; }
-yyeof2:
+yy9:
 	{ return 0; }
 }
 
@@ -163,19 +163,19 @@ yyFillLabel2:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy13;
+	case 'z':	goto yy14;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (false) goto yyFillLabel2;
-			goto yyeof3;
+			goto yy18;
 		}
-		goto yy11;
+		goto yy12;
 	}
-yy11:
-	++YYCURSOR;
 yy12:
-	{ return 2; }
+	++YYCURSOR;
 yy13:
+	{ return 2; }
+yy14:
 	++YYCURSOR;
 yyFillLabel3:
 	yych = *YYCURSOR;
@@ -242,14 +242,14 @@ yyFillLabel3:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy14;
+	case 'z':	goto yy15;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (false) goto yyFillLabel3;
 		}
-		goto yy12;
+		goto yy13;
 	}
-yy14:
+yy15:
 	++YYCURSOR;
 yyFillLabel4:
 	yych = *YYCURSOR;
@@ -316,16 +316,16 @@ yyFillLabel4:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy14;
+	case 'z':	goto yy15;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (false) goto yyFillLabel4;
 		}
-		goto yy16;
+		goto yy17;
 	}
-yy16:
+yy17:
 	{ ++count; goto loop; }
-yyeof3:
+yy18:
 	{ return 0; }
 }
 

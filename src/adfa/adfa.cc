@@ -30,7 +30,6 @@ DFA::DFA
     , const std::string &nm
     , const std::string &cn
     , const std::string &su
-    , const SemAct *eof
     , const opt_t *opts
     , Msg &msg
     )
@@ -43,6 +42,7 @@ DFA::DFA
     , nStates(0)
     , head(NULL)
     , defstate(NULL)
+    , eof_state(NULL)
     , finstates(dfa.rules.size(), NULL)
     , tags0(dfa.tcid0)
     , charset(dfa.charset)
@@ -66,7 +66,6 @@ DFA::DFA
     , key_size (key)
     , bitmap(NULL)
     , setup(su)
-    , eof_action(eof)
     , msg(msg)
     , start_label(NULL)
     , initial_label(NULL)

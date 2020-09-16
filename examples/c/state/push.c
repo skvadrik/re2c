@@ -54,7 +54,7 @@ static Status lex(Input *in, unsigned int *recv)
 default:
 	goto yy0;
 case 0:
-	if (in->lim <= in->cur) goto yyeof1;
+	if (in->lim <= in->cur) goto yy11;
 	goto yyFillLabel0;
 case 1:
 	if (in->lim <= in->cur) goto yy4;
@@ -198,7 +198,7 @@ yyFillLabel2:
 yy10:
 	in->cur = in->mar;
 	goto yy4;
-yyeof1:
+yy11:
 #line 68 "c/state/push.re"
 	{ return END; }
 #line 205 "c/state/push.c"

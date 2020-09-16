@@ -124,7 +124,7 @@ yyFillLabel0:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel0;
-			goto yyeof1;
+			goto yy58;
 		}
 		goto yy2;
 	}
@@ -402,7 +402,7 @@ yy25:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel13;
-			goto yy58;
+			goto yy59;
 		}
 		goto yy24;
 	}
@@ -416,7 +416,7 @@ yyFillLabel14:
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel14;
-			goto yy58;
+			goto yy59;
 		}
 		goto yy24;
 	}
@@ -432,7 +432,7 @@ yy30:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel15;
-			goto yy58;
+			goto yy59;
 		}
 		goto yy29;
 	}
@@ -446,7 +446,7 @@ yyFillLabel16:
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel16;
-			goto yy58;
+			goto yy59;
 		}
 		goto yy29;
 	}
@@ -876,10 +876,10 @@ yyFillLabel39:
 		goto yy13;
 	}
 yy58:
+	{ return true; }
+yy59:
 	in.cur = YYMARKER;
 	goto yy3;
-yyeof1:
-	{ return true; }
 }
 
     }

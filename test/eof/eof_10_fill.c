@@ -84,7 +84,7 @@ yyFillLabel0:
 	default:
 		if (in->lim <= in->cur) {
 			if (YYFILL() == 0) goto yyFillLabel0;
-			goto yyeof1;
+			goto yy18;
 		}
 		goto yy2;
 	}
@@ -175,7 +175,7 @@ yy12:
 	default:
 		if (in->lim <= in->cur) {
 			if (YYFILL() == 0) goto yyFillLabel4;
-			goto yy18;
+			goto yy19;
 		}
 		goto yy11;
 	}
@@ -195,7 +195,7 @@ yyFillLabel5:
 	default:
 		if (in->lim <= in->cur) {
 			if (YYFILL() == 0) goto yyFillLabel5;
-			goto yy18;
+			goto yy19;
 		}
 		goto yy11;
 	}
@@ -215,16 +215,16 @@ yyFillLabel6:
 		goto yy11;
 	}
 yy18:
+#line 53 "eof/eof_10_fill.re"
+	{ return count; }
+#line 221 "eof/eof_10_fill.c"
+yy19:
 	in->cur = YYMARKER;
 	if (yyaccept == 0) {
 		goto yy3;
 	} else {
 		goto yy14;
 	}
-yyeof1:
-#line 53 "eof/eof_10_fill.re"
-	{ return count; }
-#line 228 "eof/eof_10_fill.c"
 }
 #line 58 "eof/eof_10_fill.re"
 

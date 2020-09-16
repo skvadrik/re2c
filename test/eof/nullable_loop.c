@@ -19,7 +19,7 @@ yyFillLabel0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel0;
-			goto yyeof2;
+			goto yy7;
 		}
 		goto yy2;
 	}
@@ -32,7 +32,7 @@ yyFillLabel1:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel1;
-			goto yy7;
+			goto yy8;
 		}
 		goto yy2;
 	}
@@ -52,10 +52,10 @@ yyFillLabel2:
 yy6:
 	{ continue; }
 yy7:
+	{ return 0; }
+yy8:
 	YYCURSOR = YYMARKER;
 	goto yy6;
-yyeof2:
-	{ return 0; }
 }
 
     } while (1);
@@ -71,49 +71,49 @@ int lex2(const char *s)
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy10;
-	case 'a':	goto yy13;
+	case '\n':	goto yy11;
+	case 'a':	goto yy14;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel3;
-			goto yyeof3;
+			goto yy17;
 		}
-		goto yy11;
+		goto yy12;
 	}
-yy10:
-	YYCURSOR = YYMARKER;
-	goto yy15;
 yy11:
+	YYCURSOR = YYMARKER;
+	goto yy16;
+yy12:
 	++YYCURSOR;
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy10;
-	case 'a':	goto yy13;
+	case '\n':	goto yy11;
+	case 'a':	goto yy14;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel4;
-			goto yy10;
+			goto yy11;
 		}
-		goto yy11;
+		goto yy12;
 	}
-yy13:
+yy14:
 	YYMARKER = ++YYCURSOR;
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy15;
-	case 'a':	goto yy13;
+	case '\n':	goto yy16;
+	case 'a':	goto yy14;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel5;
-			goto yy15;
+			goto yy16;
 		}
-		goto yy11;
+		goto yy12;
 	}
-yy15:
+yy16:
 	{ continue; }
-yyeof3:
+yy17:
 	{ return 0; }
 }
 
@@ -131,16 +131,16 @@ int lex3(const char *s)
 yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy20;
-	case 'a':	goto yy21;
+	case '\n':	goto yy22;
+	case 'a':	goto yy23;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel6;
-			goto yyeof4;
+			goto yy29;
 		}
-		goto yy18;
+		goto yy20;
 	}
-yy18:
+yy20:
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
 yyFillLabel7:
@@ -149,57 +149,57 @@ yyFillLabel7:
 	case 0x00:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel7;
-			goto yy19;
+			goto yy21;
 		}
-		goto yy24;
-	case '\n':	goto yy19;
-	default:	goto yy25;
+		goto yy26;
+	case '\n':	goto yy21;
+	default:	goto yy27;
 	}
-yy19:
-	{ return 1; }
-yy20:
-	++YYCURSOR;
-	goto yy19;
 yy21:
+	{ return 1; }
+yy22:
+	++YYCURSOR;
+	goto yy21;
+yy23:
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy23;
-	case 'a':	goto yy21;
+	case '\n':	goto yy25;
+	case 'a':	goto yy23;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel8;
-			goto yy23;
+			goto yy25;
 		}
-		goto yy24;
+		goto yy26;
 	}
-yy23:
+yy25:
 	{ continue; }
-yy24:
+yy26:
 	++YYCURSOR;
 yyFillLabel9:
 	yych = *YYCURSOR;
-yy25:
+yy27:
 	switch (yych) {
-	case '\n':	goto yy26;
-	case 'a':	goto yy21;
+	case '\n':	goto yy28;
+	case 'a':	goto yy23;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel9;
-			goto yy26;
+			goto yy28;
 		}
-		goto yy24;
+		goto yy26;
 	}
-yy26:
+yy28:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
-		goto yy19;
+		goto yy21;
 	} else {
-		goto yy23;
+		goto yy25;
 	}
-yyeof4:
+yy29:
 	{ return 0; }
 }
 
@@ -217,56 +217,56 @@ int lex4(const char *s)
 yyFillLabel10:
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy29;
-	case 'a':	goto yy33;
+	case '\n':	goto yy32;
+	case 'a':	goto yy36;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel10;
-			goto yyeof5;
+			goto yy39;
 		}
-		goto yy30;
+		goto yy33;
 	}
-yy29:
+yy32:
 	{ return 1; }
-yy30:
+yy33:
 	++YYCURSOR;
 yyFillLabel11:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy32;
-	case 'a':	goto yy33;
+	case '\n':	goto yy35;
+	case 'a':	goto yy36;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel11;
-			goto yy32;
+			goto yy35;
 		}
-		goto yy30;
+		goto yy33;
 	}
-yy32:
+yy35:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
-		goto yy29;
+		goto yy32;
 	} else {
-		goto yy35;
+		goto yy38;
 	}
-yy33:
+yy36:
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 yyFillLabel12:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy35;
-	case 'a':	goto yy33;
+	case '\n':	goto yy38;
+	case 'a':	goto yy36;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel12;
-			goto yy35;
+			goto yy38;
 		}
-		goto yy30;
+		goto yy33;
 	}
-yy35:
+yy38:
 	{ continue; }
-yyeof5:
+yy39:
 	{ return 0; }
 }
 
@@ -284,16 +284,16 @@ int lex5(const char *s)
 yyFillLabel13:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy40;
-	case 'a':	goto yy41;
+	case '\n':	goto yy44;
+	case 'a':	goto yy45;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel13;
-			goto yyeof6;
+			goto yy51;
 		}
-		goto yy38;
+		goto yy42;
 	}
-yy38:
+yy42:
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
 yyFillLabel14:
@@ -302,57 +302,57 @@ yyFillLabel14:
 	case 0x00:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel14;
-			goto yy39;
+			goto yy43;
 		}
-		goto yy44;
-	case '\n':	goto yy39;
-	default:	goto yy45;
+		goto yy48;
+	case '\n':	goto yy43;
+	default:	goto yy49;
 	}
-yy39:
+yy43:
 	{ return 2; }
-yy40:
+yy44:
 	++YYCURSOR;
-	goto yy39;
-yy41:
+	goto yy43;
+yy45:
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 yyFillLabel15:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy43;
-	case 'a':	goto yy41;
+	case '\n':	goto yy47;
+	case 'a':	goto yy45;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel15;
-			goto yy43;
+			goto yy47;
 		}
-		goto yy44;
+		goto yy48;
 	}
-yy43:
+yy47:
 	{ continue; }
-yy44:
+yy48:
 	++YYCURSOR;
 yyFillLabel16:
 	yych = *YYCURSOR;
-yy45:
+yy49:
 	switch (yych) {
-	case '\n':	goto yy46;
-	case 'a':	goto yy41;
+	case '\n':	goto yy50;
+	case 'a':	goto yy45;
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (0) goto yyFillLabel16;
-			goto yy46;
+			goto yy50;
 		}
-		goto yy44;
+		goto yy48;
 	}
-yy46:
+yy50:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
-		goto yy39;
-	} else {
 		goto yy43;
+	} else {
+		goto yy47;
 	}
-yyeof6:
+yy51:
 	{ return 0; }
 }
 

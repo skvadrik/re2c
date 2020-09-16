@@ -196,7 +196,7 @@ lex(Position *here) {
 	case 0x1E:
 	case 0x1F:
 	case 0x7F:
-		if (YYLESSTHAN(1)) goto yyeof2;
+		if (YYLESSTHAN(1)) goto yy546;
 		goto yy2;
 	case '\t':
 	case '\v':
@@ -13092,7 +13092,7 @@ yy545:
 	case '(':	goto yy215;
 	default:	goto yy82;
 	}
-yyeof2:
+yy546:
 	{ rettok(NOMORE);		}
 }
 

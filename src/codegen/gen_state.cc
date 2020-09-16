@@ -33,18 +33,6 @@ static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa,
     const Rule &rule);
 static bool endstate(const State *s);
 
-const char *gen_eof_label(Output &output, const DFA &dfa)
-{
-    const opt_t *opts = output.block().opts;
-    Scratchbuf &o = output.scratchbuf;
-    DASSERT(o.empty());
-
-    // Include block ID and condition name to avoid duplicate EOF labels.
-    o.str(opts->labelPrefix).cstr("eof").u64(output.blockid());
-    if (!dfa.cond.empty()) o.cstr("_").str(dfa.cond);
-    return o.flush();
-}
-
 static const char *gen_fill_label(Output &output, uint32_t index)
 {
     const opt_t *opts = output.block().opts;
@@ -312,12 +300,23 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    const char *text;
+    const State *fallback;
+    tcid_t falltags;
 
-    const bool final = from->rule != Rule::NONE;
-    const State *fallback = final ? dfa.finstates[from->rule] : dfa.defstate;
-    tcid_t falltags = final ? from->rule_tags : from->fall_tags;
+    DASSERT(opts->eof != NOEOF);
+    if (from->action.type == Action::INITIAL) {
+        // EOF in the initial state: EOF rule takes priority over any other rule.
+        fallback = dfa.eof_state;
+        falltags = TCID0;
+    } else if (from->rule != Rule::NONE) {
+        // EOF in accepting state: match the rule in this state.
+        fallback = dfa.finstates[from->rule];
+        falltags = from->rule_tags;
+    } else {
+        // EOF in a non-accepting state: fallback to default state.
+        fallback = dfa.defstate;
+        falltags = from->fall_tags;
+    }
 
     // If tags have been hoisted, do not re-add them to fallback transition.
     if (from->go.tags != TCID0) {
@@ -326,19 +325,14 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
     }
 
     CodeList *fallback_trans = code_list(alc);
-    if (from->action.type == Action::INITIAL) {
-        // initial state: EOF is reached and YYFILL failed, go to EOF rule
-        text = gen_eof_label(output, dfa);
-        append(fallback_trans, code_stmt(alc, o.cstr("goto ").cstr(text).flush()));
-    }
-    else if (fallback != to || opts->fFlag) {
+    if (fallback != to || opts->fFlag) {
         // tag actions on the fallback transition
         gen_settags(output, fallback_trans, dfa, falltags, false /* delayed */);
 
         // go to fallback state
         fallback->label->used = true;
-        text = o.cstr("goto ").str(opts->labelPrefix).label(*fallback->label).flush();
-        append(fallback_trans, code_stmt(alc, text));
+        append(fallback_trans, code_stmt(alc, output.scratchbuf.cstr("goto ")
+            .str(opts->labelPrefix).label(*fallback->label).flush()));
     }
     else {
         // Transition can be elided, because control flow "falls through" to an

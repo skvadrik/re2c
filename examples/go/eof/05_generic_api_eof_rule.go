@@ -32,7 +32,7 @@ loop:
 		goto yy7
 	default:
 		if (cursor >= limit) {
-			goto yyeof1
+			goto yy13
 		}
 		goto yy2
 	}
@@ -76,7 +76,7 @@ yy9:
 		goto yy12
 	default:
 		if (cursor >= limit) {
-			goto yy13
+			goto yy14
 		}
 		goto yy8
 	}
@@ -90,18 +90,18 @@ yy12:
 	yych = peek(str, cursor, limit)
 	if (yych <= 0x00) {
 		if (cursor >= limit) {
-			goto yy13
+			goto yy14
 		}
 		goto yy8
 	}
 	goto yy8
 yy13:
-	cursor = marker
-	goto yy3
-yyeof1:
 //line "go/eof/05_generic_api_eof_rule.re":32
 	{ return count }
-//line "go/eof/05_generic_api_eof_rule.go":105
+//line "go/eof/05_generic_api_eof_rule.go":102
+yy14:
+	cursor = marker
+	goto yy3
 }
 //line "go/eof/05_generic_api_eof_rule.re":35
 

@@ -57,7 +57,6 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     const loc_t &loc = output.block().loc;
     Msg &msg = output.msg;
     const std::vector<ASTRule> &rules = spec.rules;
-    const SemAct *eof = spec.eofs.empty() ? NULL : spec.eofs.front();
     const std::string
         &cond = spec.name,
         name = make_name(output, cond, loc),
@@ -106,7 +105,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 
     // ADFA stands for 'DFA with actions'
     DFA *adfa = new DFA(dfa, fill, skeleton.sizeof_key, loc, name, cond,
-        setup, eof, opts, msg);
+        setup, opts, msg);
 
     // see note [reordering DFA states]
     adfa->reorder();

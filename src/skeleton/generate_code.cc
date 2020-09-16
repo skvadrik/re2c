@@ -816,9 +816,4 @@ void emit_skeleton_action(Output &output, CodeList *code, const DFA &dfa, size_t
     append(code, code_stmt(alc, "continue"));
 }
 
-void emit_skeleton_action_eof(Output &output, CodeList *code)
-{
-    append(code, code_stmt(output.allocator, "break"));
-}
-
 } // namespace re2c

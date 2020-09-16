@@ -58,7 +58,7 @@ yyFillLabel0:
 	default:
 		if (in->lim <= in->cur) {
 			if (fill(in) == 0) goto yyFillLabel0;
-			goto yyeof1;
+			goto yy13;
 		}
 		goto yy2;
 	}
@@ -104,7 +104,7 @@ yy9:
 	default:
 		if (in->lim <= in->cur) {
 			if (fill(in) == 0) goto yyFillLabel3;
-			goto yy13;
+			goto yy14;
 		}
 		goto yy8;
 	}
@@ -120,18 +120,18 @@ yyFillLabel4:
 	if (yych <= 0x00) {
 		if (in->lim <= in->cur) {
 			if (fill(in) == 0) goto yyFillLabel4;
-			goto yy13;
+			goto yy14;
 		}
 		goto yy8;
 	}
 	goto yy8;
 yy13:
-	in->cur = in->mar;
-	goto yy3;
-yyeof1:
 #line 57 "c/fill/01_fill.re"
 	{ return count; }
-#line 135 "c/fill/01_fill.c"
+#line 132 "c/fill/01_fill.c"
+yy14:
+	in->cur = in->mar;
+	goto yy3;
 }
 #line 61 "c/fill/01_fill.re"
 

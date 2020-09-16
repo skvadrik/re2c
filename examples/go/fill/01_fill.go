@@ -77,7 +77,7 @@ yyFillLabel0:
 			if (fill(in) == 0) {
 				goto yyFillLabel0
 			}
-			goto yyeof1
+			goto yy13
 		}
 		goto yy2
 	}
@@ -135,7 +135,7 @@ yy9:
 			if (fill(in) == 0) {
 				goto yyFillLabel3
 			}
-			goto yy13
+			goto yy14
 		}
 		goto yy8
 	}
@@ -153,18 +153,18 @@ yyFillLabel4:
 			if (fill(in) == 0) {
 				goto yyFillLabel4
 			}
-			goto yy13
+			goto yy14
 		}
 		goto yy8
 	}
 	goto yy8
 yy13:
-	in.cursor = in.marker
-	goto yy3
-yyeof1:
 //line "go/fill/01_fill.re":73
 	{ return count }
-//line "go/fill/01_fill.go":168
+//line "go/fill/01_fill.go":165
+yy14:
+	in.cursor = in.marker
+	goto yy3
 }
 //line "go/fill/01_fill.re":76
 

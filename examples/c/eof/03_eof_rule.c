@@ -19,7 +19,7 @@ loop:
 	case ' ':	goto yy4;
 	case '\'':	goto yy7;
 	default:
-		if (YYLIMIT <= YYCURSOR) goto yyeof1;
+		if (YYLIMIT <= YYCURSOR) goto yy13;
 		goto yy2;
 	}
 yy2:
@@ -49,7 +49,7 @@ yy9:
 	case '\'':	goto yy10;
 	case '\\':	goto yy12;
 	default:
-		if (YYLIMIT <= YYCURSOR) goto yy13;
+		if (YYLIMIT <= YYCURSOR) goto yy14;
 		goto yy8;
 	}
 yy10:
@@ -60,17 +60,17 @@ yy10:
 yy12:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
-		if (YYLIMIT <= YYCURSOR) goto yy13;
+		if (YYLIMIT <= YYCURSOR) goto yy14;
 		goto yy8;
 	}
 	goto yy8;
 yy13:
-	YYCURSOR = YYMARKER;
-	goto yy3;
-yyeof1:
 #line 17 "c/eof/03_eof_rule.re"
 	{ return count; }
-#line 74 "c/eof/03_eof_rule.c"
+#line 71 "c/eof/03_eof_rule.c"
+yy14:
+	YYCURSOR = YYMARKER;
+	goto yy3;
 }
 #line 21 "c/eof/03_eof_rule.re"
 

@@ -132,7 +132,7 @@ yyFillLabel0:
 			if (YYFILL() == 0) {
 				goto yyFillLabel0
 			}
-			goto yyeof1
+			goto yy14
 		}
 		goto yy2
 	}
@@ -270,7 +270,7 @@ yy13:
 		return 2
 	}
 //line "golang/002_fill_eof_rule_functions.go":273
-yyeof1:
+yy14:
 //line "golang/002_fill_eof_rule_functions.re":108
 	{
 		fmt.Println("end")

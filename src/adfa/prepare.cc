@@ -169,6 +169,15 @@ void DFA::prepare(const opt_t *opts)
                 }
             }
         }
+
+        // last state, add EOF rule if needed (see note [EOF rule handling])
+        if (!s->next && opts->eof != NOEOF) {
+            eof_state = new State;
+            eof_state->action.set_rule(eof_rule);
+            finstates[eof_rule] = eof_state;
+            addState(eof_state, s);
+            break;
+        }
     }
 
     // create default state (if needed)

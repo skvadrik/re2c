@@ -11,7 +11,7 @@ yyFillLabel0:
 	default:
 		if (YYLIMIT <= YYCURSOR) {
 			if (YYFILL() == 0) goto yyFillLabel0;
-			goto yyeof1;
+			goto yy14;
 		}
 		goto yy2;
 	}
@@ -100,7 +100,7 @@ yy13:
 		}
 		goto yy9;
 	}
-yyeof1:
+yy14:
 	{ eof }
 }
 

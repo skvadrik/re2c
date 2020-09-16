@@ -1528,7 +1528,7 @@ yyFillLabel0:
 	case 0x7F:
 		if (end <= cur) {
 			if (fill() == 0) goto yyFillLabel0;
-			goto yyeof4;
+			goto yy45;
 		}
 		goto yy32;
 	case 0xC2:
@@ -2098,7 +2098,7 @@ yyFillLabel8:
 		}
 		goto yy43;
 	}
-yyeof4:
+yy45:
 	{ return {EEOF, cur}; }
 }
 

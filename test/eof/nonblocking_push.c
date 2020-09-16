@@ -93,7 +93,7 @@ switch (YYGETSTATE()) {
 default:
 	goto yy0;
 case 0:
-	if (in.lim <= in.cur) goto yyeof1;
+	if (in.lim <= in.cur) goto yy32;
 	goto yyFillLabel0;
 case 1:
 	if (in.lim <= in.cur) goto yy7;
@@ -555,7 +555,7 @@ yyFillLabel20:
 yy30:
 	++in.cur;
 	{ printf("< Thing w/ newlines\n");                  return THING; }
-yyeof1:
+yy32:
 	{ printf("< EOF\n");                                return OK; }
 
 }

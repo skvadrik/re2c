@@ -113,7 +113,6 @@ Code *emit_skeleton_prolog(Output &output);
 Code *emit_skeleton_epilog(Output &output);
 void emit_skeleton(Output &output, CodeList *code, DFA &dfa);
 void emit_skeleton_action(Output &output, CodeList *code, const DFA &dfa, size_t rid);
-void emit_skeleton_action_eof(Output &output, CodeList *code);
 
 } // namespace re2c
 

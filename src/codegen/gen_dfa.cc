@@ -50,31 +50,6 @@ static void emit_state(Output &output, const State *s, CodeList *stmts)
     }
 }
 
-static void emit_eof(Output &output, const DFA &dfa, CodeList *stmts)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-
-    if (opts->eof == NOEOF) return;
-
-    // EOF label
-    append(stmts, code_slabel(alc, gen_eof_label(output, dfa)));
-
-    // source line directive
-    append(stmts, code_line_info_input(alc, dfa.eof_action->loc));
-
-    // semantic action for EOF rule
-    if (opts->target == TARGET_SKELETON) {
-        emit_skeleton_action_eof(output, stmts);
-    } else {
-        append(stmts, code_text(alc, o.str(dfa.eof_action->text).flush()));
-    }
-
-    // output line directive
-    append(stmts, code_line_info_output(alc));
-}
-
 void DFA::emit_body(Output &output, CodeList *stmts) const
 {
     const opt_t *opts = output.block().opts;
@@ -98,8 +73,6 @@ void DFA::emit_body(Output &output, CodeList *stmts) const
         emit_action(output, *this, s, stmts);
         gen_go(output, *this, &s->go, s, stmts);
     }
-
-    emit_eof(output, *this, stmts);
 }
 
 void DFA::emit_dot(Output &output, CodeList *program) const

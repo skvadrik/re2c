@@ -240,7 +240,7 @@ yyFillLabel0:
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel0;
-			goto yyeof1;
+			goto yy23;
 		}
 		goto yy8;
 	}
@@ -1174,7 +1174,7 @@ yyFillLabel14:
 		}
 		goto yy17;
 	}
-yyeof1:
+yy23:
 	{ return true; }
 }
 

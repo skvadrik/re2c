@@ -36,7 +36,7 @@ yyFillLabel0:
 	}
 	if (YYLIMIT <= YYCURSOR) {
 		if (YYFILL() == 0) goto yyFillLabel0;
-		goto yyeof2;
+		goto yy10;
 	}
 	yyt1 = YYCURSOR;
 yy7:
@@ -54,7 +54,7 @@ yyFillLabel1:
 yy9:
 	x = yyt1;
 	{ /* R1, x must be set */  }
-yyeof2:
+yy10:
 	{ /* EOF, x must not be set */ }
 }
 

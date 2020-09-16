@@ -72,8 +72,9 @@ struct DFA
     uint32_t lbChar;
     uint32_t ubChar;
     uint32_t nStates;
-    State * head;
+    State *head;
     State *defstate;
+    State *eof_state;
     std::vector<State*> finstates;
     const tcid_t tags0;
     std::vector<uint32_t> &charset;
@@ -97,7 +98,6 @@ struct DFA
     const size_t key_size;
     CodeBitmap *bitmap;
     std::string setup;
-    const SemAct *eof_action;
     Msg &msg;
 
     Label *start_label;
@@ -110,7 +110,6 @@ struct DFA
         , const std::string &nm
         , const std::string &cn
         , const std::string &su
-        , const SemAct *eof
         , const opt_t *opts
         , Msg &msg
         );

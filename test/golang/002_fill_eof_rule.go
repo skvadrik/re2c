@@ -76,7 +76,7 @@ func Lex(in *Input) int {
 		goto yy0
 	case 0:
 		if (in.limit-in.cursor < 1) {
-			goto yyeof1
+			goto yy16
 		}
 		goto yyFillLabel0
 	case 1:
@@ -277,7 +277,7 @@ yy15:
 		return lexNumber2
 	}
 //line "golang/002_fill_eof_rule.go":280
-yyeof1:
+yy16:
 //line "golang/002_fill_eof_rule.re":85
 	{
 		fmt.Println("end")
