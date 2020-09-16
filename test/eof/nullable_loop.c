@@ -12,41 +12,27 @@ int lex1(const char *s)
     
 {
 	char yych;
-yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy4;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel0;
-			goto yy7;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy7;
 		goto yy2;
 	}
 yy2:
-	++YYCURSOR;
-yyFillLabel1:
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy4;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel1;
-			goto yy8;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy8;
 		goto yy2;
 	}
 yy4:
-	YYMARKER = ++YYCURSOR;
-yyFillLabel2:
-	yych = *YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 'a':	goto yy4;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel2;
-			goto yy6;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy6;
 		goto yy2;
 	}
 yy6:
@@ -68,47 +54,33 @@ int lex2(const char *s)
     
 {
 	char yych;
-yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':	goto yy11;
 	case 'a':	goto yy14;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel3;
-			goto yy17;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy17;
 		goto yy12;
 	}
 yy11:
 	YYCURSOR = YYMARKER;
 	goto yy16;
 yy12:
-	++YYCURSOR;
-yyFillLabel4:
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 	case '\n':	goto yy11;
 	case 'a':	goto yy14;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel4;
-			goto yy11;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy11;
 		goto yy12;
 	}
 yy14:
-	YYMARKER = ++YYCURSOR;
-yyFillLabel5:
-	yych = *YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy16;
 	case 'a':	goto yy14;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel5;
-			goto yy16;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy16;
 		goto yy12;
 	}
 yy16:
@@ -128,29 +100,20 @@ int lex3(const char *s)
 {
 	char yych;
 	unsigned int yyaccept = 0;
-yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':	goto yy22;
 	case 'a':	goto yy23;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel6;
-			goto yy29;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy29;
 		goto yy20;
 	}
 yy20:
 	yyaccept = 0;
-	YYMARKER = ++YYCURSOR;
-yyFillLabel7:
-	yych = *YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0x00:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel7;
-			goto yy21;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy21;
 		goto yy26;
 	case '\n':	goto yy21;
 	default:	goto yy27;
@@ -162,34 +125,24 @@ yy22:
 	goto yy21;
 yy23:
 	yyaccept = 1;
-	YYMARKER = ++YYCURSOR;
-yyFillLabel8:
-	yych = *YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy25;
 	case 'a':	goto yy23;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel8;
-			goto yy25;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy25;
 		goto yy26;
 	}
 yy25:
 	{ continue; }
 yy26:
-	++YYCURSOR;
-yyFillLabel9:
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 yy27:
 	switch (yych) {
 	case '\n':	goto yy28;
 	case 'a':	goto yy23;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel9;
-			goto yy28;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy28;
 		goto yy26;
 	}
 yy28:
@@ -214,32 +167,23 @@ int lex4(const char *s)
 {
 	char yych;
 	unsigned int yyaccept = 0;
-yyFillLabel10:
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy32;
 	case 'a':	goto yy36;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel10;
-			goto yy39;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy39;
 		goto yy33;
 	}
 yy32:
 	{ return 1; }
 yy33:
-	++YYCURSOR;
-yyFillLabel11:
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 	case '\n':	goto yy35;
 	case 'a':	goto yy36;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel11;
-			goto yy35;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy35;
 		goto yy33;
 	}
 yy35:
@@ -251,17 +195,12 @@ yy35:
 	}
 yy36:
 	yyaccept = 1;
-	YYMARKER = ++YYCURSOR;
-yyFillLabel12:
-	yych = *YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy38;
 	case 'a':	goto yy36;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel12;
-			goto yy38;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy38;
 		goto yy33;
 	}
 yy38:
@@ -281,29 +220,20 @@ int lex5(const char *s)
 {
 	char yych;
 	unsigned int yyaccept = 0;
-yyFillLabel13:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':	goto yy44;
 	case 'a':	goto yy45;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel13;
-			goto yy51;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy51;
 		goto yy42;
 	}
 yy42:
 	yyaccept = 0;
-	YYMARKER = ++YYCURSOR;
-yyFillLabel14:
-	yych = *YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0x00:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel14;
-			goto yy43;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy43;
 		goto yy48;
 	case '\n':	goto yy43;
 	default:	goto yy49;
@@ -315,34 +245,24 @@ yy44:
 	goto yy43;
 yy45:
 	yyaccept = 1;
-	YYMARKER = ++YYCURSOR;
-yyFillLabel15:
-	yych = *YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy47;
 	case 'a':	goto yy45;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel15;
-			goto yy47;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy47;
 		goto yy48;
 	}
 yy47:
 	{ continue; }
 yy48:
-	++YYCURSOR;
-yyFillLabel16:
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 yy49:
 	switch (yych) {
 	case '\n':	goto yy50;
 	case 'a':	goto yy45;
 	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (0) goto yyFillLabel16;
-			goto yy50;
-		}
+		if (YYLIMIT <= YYCURSOR) goto yy50;
 		goto yy48;
 	}
 yy50:
@@ -384,8 +304,8 @@ int main()
 
     return 0;
 }
-eof/nullable_loop.re:19:6: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
-eof/nullable_loop.re:30:6: warning: control flow is undefined for strings that match 
+eof/nullable_loop.re:20:6: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+eof/nullable_loop.re:31:6: warning: control flow is undefined for strings that match 
 	'[\x0-\x9\xB-\x60\x62-\xFF]'
 	'\xA'
 , use default rule '*' [-Wundefined-control-flow]

@@ -9,8 +9,8 @@ static int lex(const char *str, unsigned int &count)
     count = 0;
     /*!re2c
         re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL = "false"; // always failed
-        re2c:define:YYFILL:naked = 1;
+        re2c:yyfill:enable  = 0;
+        re2c:yyfill:check   = 1;
         re2c:eof = 0;
 
         wsp   = [ \n]+;
