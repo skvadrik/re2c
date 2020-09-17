@@ -287,6 +287,14 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (!glob.lookahead && glob.stadfa) {
         fatal("cannot combine TDFA(0) and staDFA");
     }
+    if (glob.fFlag && !real.fill_use) {
+        // -f, --storable-state option should not be used if YYFILL is disabled,
+        // because without YYFILL the interrupt points do not necessarily
+        // correspond to storable state labels (with generic API interrupts can
+        // happen on any API invocation). This may cause subtle bugs when the
+        // lexer is resumed from the wrong program point.
+        fatal("storable state requires YYFILL to be enabled");
+    }
 }
 
 Opt::Opt(const conopt_t &globopts)
