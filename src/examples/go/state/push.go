@@ -62,7 +62,7 @@ default:
 	goto yy0
 case 0:
 	if (in.limit <= in.cursor) {
-		goto yyeof1
+		goto yy11
 	}
 	goto yyFillLabel0
 case 1:
@@ -292,7 +292,7 @@ yyFillLabel2:
 yy10:
 	in.cursor = in.marker
 	goto yy4
-yyeof1:
+yy11:
 //line "go/state/push.re":75
 	{ return lexEnd }
 //line "go/state/push.go":299

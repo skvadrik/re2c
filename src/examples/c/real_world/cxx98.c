@@ -8349,7 +8349,4 @@ int main()
     remove(fname);
     return 0;
 }
-c/real_world/cxx98.re:152:14: warning: rule matches empty string [-Wmatch-empty-string]
 c/real_world/cxx98.re:158:14: warning: rule matches empty string [-Wmatch-empty-string]
-c/real_world/cxx98.re:163:14: warning: rule matches empty string [-Wmatch-empty-string]
-c/real_world/cxx98.re:349:24: warning: rule matches empty string [-Wmatch-empty-string]

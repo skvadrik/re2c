@@ -23,7 +23,7 @@ loop:
 		goto yy7
 	default:
 		if (limit <= cursor) {
-			goto yyeof1
+			goto yy13
 		}
 		goto yy2
 	}
@@ -67,7 +67,7 @@ yy9:
 		goto yy12
 	default:
 		if (limit <= cursor) {
-			goto yy13
+			goto yy14
 		}
 		goto yy8
 	}
@@ -81,18 +81,18 @@ yy12:
 	yych = str[cursor]
 	if (yych <= 0x00) {
 		if (limit <= cursor) {
-			goto yy13
+			goto yy14
 		}
 		goto yy8
 	}
 	goto yy8
 yy13:
-	cursor = marker
-	goto yy3
-yyeof1:
 //line "go/eof/03_eof_rule.re":23
 	{ return count }
-//line "go/eof/03_eof_rule.go":96
+//line "go/eof/03_eof_rule.go":93
+yy14:
+	cursor = marker
+	goto yy3
 }
 //line "go/eof/03_eof_rule.re":26
 

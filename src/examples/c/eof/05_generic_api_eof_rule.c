@@ -21,7 +21,7 @@ loop:
 	case ' ':	goto yy4;
 	case '\'':	goto yy7;
 	default:
-		if (cur >= lim) goto yyeof1;
+		if (cur >= lim) goto yy13;
 		goto yy2;
 	}
 yy2:
@@ -55,7 +55,7 @@ yy9:
 	case '\'':	goto yy10;
 	case '\\':	goto yy12;
 	default:
-		if (cur >= lim) goto yy13;
+		if (cur >= lim) goto yy14;
 		goto yy8;
 	}
 yy10:
@@ -67,17 +67,17 @@ yy12:
 	++cur;
 	yych = cur < lim ? *cur : 0;
 	if (yych <= 0x00) {
-		if (cur >= lim) goto yy13;
+		if (cur >= lim) goto yy14;
 		goto yy8;
 	}
 	goto yy8;
 yy13:
-	cur = mar;
-	goto yy3;
-yyeof1:
 #line 26 "c/eof/05_generic_api_eof_rule.re"
 	{ return count; }
-#line 81 "c/eof/05_generic_api_eof_rule.c"
+#line 78 "c/eof/05_generic_api_eof_rule.c"
+yy14:
+	cur = mar;
+	goto yy3;
 }
 #line 30 "c/eof/05_generic_api_eof_rule.re"
 
