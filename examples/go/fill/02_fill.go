@@ -88,14 +88,22 @@ loop:
 	}
 yy2:
 	in.cursor += 1
-//line "go/fill/02_fill.re":78
-	{ return count }
-//line "go/fill/02_fill.go":94
+//line "go/fill/02_fill.re":80
+	{
+		if in.limit - in.cursor == YYMAXFILL - 1 {
+			return count
+		} else {
+			return -1
+		}
+	}
+//line "go/fill/02_fill.go":100
 yy4:
 	in.cursor += 1
 //line "go/fill/02_fill.re":77
-	{ return -1 }
-//line "go/fill/02_fill.go":99
+	{
+		return -1
+	}
+//line "go/fill/02_fill.go":107
 yy6:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
@@ -109,9 +117,11 @@ yy6:
 		goto yy8
 	}
 yy8:
-//line "go/fill/02_fill.re":80
-	{ goto loop }
-//line "go/fill/02_fill.go":115
+//line "go/fill/02_fill.re":91
+	{
+		goto loop
+	}
+//line "go/fill/02_fill.go":125
 yy9:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
@@ -128,9 +138,12 @@ yy9:
 	}
 yy11:
 	in.cursor += 1
-//line "go/fill/02_fill.re":79
-	{ count += 1; goto loop }
-//line "go/fill/02_fill.go":134
+//line "go/fill/02_fill.re":87
+	{
+		count += 1;
+		goto loop
+	}
+//line "go/fill/02_fill.go":147
 yy13:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
@@ -139,7 +152,7 @@ yy13:
 	yych = in.data[in.cursor]
 	goto yy9
 }
-//line "go/fill/02_fill.re":81
+//line "go/fill/02_fill.re":94
 
 }
 

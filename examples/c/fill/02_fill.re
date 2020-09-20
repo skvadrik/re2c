@@ -57,7 +57,7 @@ loop:
     re2c:define:YYFILL   = "if (fill(in, @@) != 0) return -1;";
 
     *                           { return -1; }
-    [\x00]                      { return (YYMAXFILL == in->lim - in->tok) ? count : -1; }
+    [\x00]                      { return (in->lim - in->cur == YYMAXFILL - 1) ? count : -1; }
     ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
     [ ]+                        { goto loop; }
 

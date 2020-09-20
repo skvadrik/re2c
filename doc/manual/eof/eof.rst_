@@ -1,15 +1,71 @@
-Re2c provides a number of ways to handle end-of-input situation. Which way to
-use depends on the complexity of regular expressions, performance
-considerations, the need for input buffering and various other factors. EOF
-handling is probably the most complex part of re2c user interface --- it
-definitely requires a bit of understanding of how the generated lexer works.
-But in return is allows the user to customize lexer for a particular environment
-and avoid the unnecessary overhead of generic methods when a simpler method is
-sufficient. Roughly speaking, there are four main methods:
+One of the main problems for the lexer is to know when to stop.
+There are a few terminating conditions:
 
-- using sentinel symbol (simple and efficient, but limited)
-- bounds checking with padding (generic, but complex)
-- EOF rule: a combination of sentinel symbol and bounds checking (generic and
-  simple, can be more or less efficient than bounds checking with padding
-  depending on the grammar)
-- using generic API (user-defined, so may be incorrect ;])
+- the lexer may match some rule (including default rule ``*``) and come to a final state
+- the lexer may fail to match any rule and come to a default state
+- the lexer may reach the end of input
+
+The first two conditions terminate the lexer in a "natural" way:
+it comes to a state with no outgoing transitions, and the matching automatically stops.
+The third condition, end of input, is different: it may happen in any state, and the lexer should be able to handle it.
+Checking for the end of input interrupts the normal lexer workflow
+and adds conditional branches to the generated program, therefore it is necessary to minimize the number of such checks.
+re2c supports a few different methods for end of input handling.
+Which one to use depends on the complexity of regular expressions, the need for buffering, performance considerations and other factors.
+Here is a list of all methods:
+
+- **Sentinel character.**
+  This method eliminates the need for the end of input checks altogether.
+  It is simple and efficient, but limited to the case when there is a natural "sentinel" character that can never occur in valid input.
+  This character may still occur in invalid input, but it is not allowed by the regular expressions, except perhaps as the last character of a rule.
+  The sentinel character is appended at the end of input and serves as a stop signal:
+  when the lexer reads it, it must be either the end of input, or a syntax error.
+  In both cases the lexer stops.
+  This method is used if ``YYFILL`` is disabled with ``re2c:yyfill:enable = 0;`` and ``re2c:eof`` has the default value -1.
+  
+  |
+
+- **Sentinel character with bounds checks.**
+  This method is generic: it allows to handle any input without restrictions on the regular expressions.
+  The idea is to reduce the number of end of input checks by performing them only on certain characters.
+  Similar to the "sentinel character" method, one of the characters is chosen as a "sentinel" and appended at the end of input.
+  However, there is no restriction on where the sentinel character may occur (in fact, any character can be chosen for a sentinel).
+  When the lexer reads this character, it additionally performs a bounds check.
+  If the current position is within bounds, the lexer will resume matching and handle the sentinel character as a regular one.
+  Otherwise it will try to get more input with ``YYFILL`` (unless ``YYFILL`` is disabled).
+  If more input is available, the lexer will rematch the last character and continue as if the sentinel never occurred.
+  Otherwise it is the real end of input, and the lexer will stop.
+  This method is used if ``re2c:eof`` has non-negative value (it should be set to the ordinal of the sentinel character).
+  ``YYFILL`` must be either defined or disabled with ``re2c:yyfill:enable = 0;``.
+  
+  |
+
+- **Bounds checks with padding.**
+  This method is the default one.
+  It is generic, and it is usually faster than the "sentinel character with bounds checks" method, but also more complex to use.
+  The idea is to partition the underlying finite-state automaton into strongly connected components (SCCs),
+  and generate only one bounds check per SCC, but make it check for multiple characters at once
+  (enough to cover the longest non-looping path in the SCC).
+  This way the checks are less frequent, which makes the lexer run much faster.
+  If a check shows that there is not enough input, the lexer will invoke ``YYFILL``,
+  which may either supply enough input or else it should not return (in the latter case the lexer will stop).
+  This approach has a problem with matching short lexemes at the end of input,
+  because the multi-character check requires enough characters to cover the longest possible lexeme.
+  To fix this problem, it is necessary to append a few fake characters at the end of input.
+  The padding should not form a valid lexeme suffix to avoid fooling the lexer into matching it as part of the input.
+  The minimum sufficient length of padding is ``YYMAXFILL`` and it is autogenerated by re2c with ``/*!max:re2c*/``.
+  This method is used if ``re2c:yyfill:enable`` has the default nonzero value, and ``re2c:eof`` has the default value -1.
+  ``YYFILL`` must be defined.
+  
+  |
+
+- **Custom methods with generic API.**
+  Generic API allows to override basic operations like reading a character,
+  which makes it possible to include the end of input checks as part of them.
+  Such methods are error-prone and should be used with caution, only if other methods cannot be used.
+  These methods are used if generic API is enabled with ``--input custom`` or ``re2c:flags:input = custom;``
+  and default bounds checks are disabled with ``re2c:yyfill:enable = 0;``.
+  Note that the use of generic API does not imply the use of custom methods, it merely allows it.
+
+
+The following subsections contain an example of each method.

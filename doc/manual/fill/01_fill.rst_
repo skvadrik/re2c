@@ -1,5 +1,5 @@
-YYFILL with EOF rule
---------------------
+YYFILL with sentinel character
+------------------------------
 
 If EOF rule is used, ``YYFILL`` is a function-like primitive that accepts
 no arguments and returns a value which is checked against zero. ``YYFILL``

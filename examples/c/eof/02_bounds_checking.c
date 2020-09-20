@@ -30,7 +30,7 @@ loop:
 yy2:
 	++YYCURSOR;
 #line 21 "c/eof/02_bounds_checking.re"
-	{ return YYCURSOR == YYLIMIT ? count : -1; }
+	{ return YYCURSOR + YYMAXFILL - 1 == YYLIMIT ? count : -1; }
 #line 35 "c/eof/02_bounds_checking.c"
 yy4:
 	++YYCURSOR;

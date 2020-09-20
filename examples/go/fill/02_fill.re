@@ -74,10 +74,23 @@ loop:
 	re2c:define:YYLESSTHAN = "in.limit-in.cursor < @@{len}";
 	re2c:define:YYFILL     = "if r := fill(in, @@{len}); r != 0 { return r }";
 
-	*                           { return -1 }
-	[\x00]                      { return count }
-	['] ([^'\\] | [\\][^])* ['] { count += 1; goto loop }
-	[ ]+                        { goto loop }
+	* {
+		return -1
+	}
+	[\x00] {
+		if in.limit - in.cursor == YYMAXFILL - 1 {
+			return count
+		} else {
+			return -1
+		}
+	}
+	['] ([^'\\] | [\\][^])* ['] {
+		count += 1;
+		goto loop
+	}
+	[ ]+ {
+		goto loop
+	}
 	*/
 }
 

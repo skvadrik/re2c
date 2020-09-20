@@ -21,10 +21,23 @@ loop:
 	re2c:define:YYLESSTHAN = "limit - cursor < @@{len}";
 	re2c:define:YYFILL     = "return -1";
 
-	*                           { return -1 }
-	[\x00]                      { return count }
-	['] ([^'\\] | [\\][^])* ['] { count += 1; goto loop }
-	[ ]+                        { goto loop }
+	* {
+		return -1
+	}
+	[\x00] {
+		if limit - cursor == YYMAXFILL - 1 {
+			return count
+		} else {
+			return -1
+		}
+	}
+	['] ([^'\\] | [\\][^])* ['] {
+		count += 1;
+		goto loop
+	}
+	[ ]+ {
+		goto loop
+	}
 	*/
 }
 

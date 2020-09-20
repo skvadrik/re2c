@@ -57,7 +57,7 @@ If multiple rules match, the longest match takes precedence.
 If multiple rules match the same string, the earlier rule takes precedence.
 There are two special rules: default rule \fB*\fP and EOF rule \fB$\fP\&.
 Default rule should always be defined, it has the lowest priority regardless of its place and matches any code unit (not necessarily a valid character, see \fI\%encoding support\fP).
-EOF rule matches the end of input, it should be defined if the corresponding \fI\%EOF handling\fP method is used.
+EOF rule matches the end of input, it should be defined if the corresponding method for \fI\%handling the end of input\fP is used.
 If \fI\%start conditions\fP are used, rules have more complex syntax.
 All rules of a single block are compiled into a deterministic finite\-state automaton (DFA) and encoded in the form of a program in the target language.
 The generated code interfaces with the outer program by the means of a few user\-defined primitives (see the \fI\%program interface\fP section).
@@ -1310,48 +1310,104 @@ re2c uses the following syntax for regular expressions:
 .sp
 Character classes and string literals may contain the following escape sequences:
 \fB\ea\fP, \fB\eb\fP, \fB\ef\fP, \fB\en\fP, \fB\er\fP, \fB\et\fP, \fB\ev\fP, \fB\e\e\fP, octal escapes \fB\eooo\fP and hexadecimal escapes \fB\exhh\fP, \fB\euhhhh\fP and \fB\eUhhhhhhhh\fP\&.
-.SH EOF HANDLING
+.SH HANDLING THE END OF INPUT
 .sp
-Re2c provides a number of ways to handle end\-of\-input situation. Which way to
-use depends on the complexity of regular expressions, performance
-considerations, the need for input buffering and various other factors. EOF
-handling is probably the most complex part of re2c user interface \-\-\- it
-definitely requires a bit of understanding of how the generated lexer works.
-But in return is allows the user to customize lexer for a particular environment
-and avoid the unnecessary overhead of generic methods when a simpler method is
-sufficient. Roughly speaking, there are four main methods:
+One of the main problems for the lexer is to know when to stop.
+There are a few terminating conditions:
 .INDENT 0.0
 .IP \(bu 2
-using sentinel symbol (simple and efficient, but limited)
+the lexer may match some rule (including default rule \fB*\fP) and come to a final state
 .IP \(bu 2
-bounds checking with padding (generic, but complex)
+the lexer may fail to match any rule and come to a default state
 .IP \(bu 2
-EOF rule: a combination of sentinel symbol and bounds checking (generic and
-simple, can be more or less efficient than bounds checking with padding
-depending on the grammar)
-.IP \(bu 2
-using generic API (user\-defined, so may be incorrect ;])
+the lexer may reach the end of input
 .UNINDENT
-.SS Using sentinel symbol
 .sp
-This is the simplest and the most efficient method. It is applicable in cases
-when the input is small enough to fit into a continuous memory buffer and there
-is a natural "sentinel" symbol \-\-\- a code unit that is not allowed by any of the
-regular expressions in grammar (except possibly as a terminating character).
-Sentinel symbol never appears in well\-formed input, therefore it can be appended
-at the end of input and used as a stop signal by the lexer. A good example of
-such input is a null\-terminated C\-string, provided that the grammar does not
-allow \fBNULL\fP in the middle of lexemes. Sentinel method is very efficient,
-because the lexer does not need to perform any additional checks for the end of
-input \-\-\- it comes naturally as a part of processing the next character.
-It is very important that the sentinel symbol is not allowed in the middle of
-the rule \-\-\- otherwise on some inputs the lexer may read past the end of buffer
-and crash or cause memory corruption. Re2c verifies this automatically.
-Use \fBre2c:sentinel\fP configuration to specify which sentinel symbol is used.
+The first two conditions terminate the lexer in a "natural" way:
+it comes to a state with no outgoing transitions, and the matching automatically stops.
+The third condition, end of input, is different: it may happen in any state, and the lexer should be able to handle it.
+Checking for the end of input interrupts the normal lexer workflow
+and adds conditional branches to the generated program, therefore it is necessary to minimize the number of such checks.
+re2c supports a few different methods for end of input handling.
+Which one to use depends on the complexity of regular expressions, the need for buffering, performance considerations and other factors.
+Here is a list of all methods:
+.INDENT 0.0
+.IP \(bu 2
+\fBSentinel character.\fP
+This method eliminates the need for the end of input checks altogether.
+It is simple and efficient, but limited to the case when there is a natural "sentinel" character that can never occur in valid input.
+This character may still occur in invalid input, but it is not allowed by the regular expressions, except perhaps as the last character of a rule.
+The sentinel character is appended at the end of input and serves as a stop signal:
+when the lexer reads it, it must be either the end of input, or a syntax error.
+In both cases the lexer stops.
+This method is used if \fBYYFILL\fP is disabled with \fBre2c:yyfill:enable = 0;\fP and \fBre2c:eof\fP has the default value \-1.
+.nf
+
+.fi
 .sp
-Below is an example of using sentinel method. Configuration
-\fBre2c:yyfill:enable = 0;\fP suppresses generation of end\-of\-input checks and
-\fBYYFILL\fP calls.
+.IP \(bu 2
+\fBSentinel character with bounds checks.\fP
+This method is generic: it allows to handle any input without restrictions on the regular expressions.
+The idea is to reduce the number of end of input checks by performing them only on certain characters.
+Similar to the "sentinel character" method, one of the characters is chosen as a "sentinel" and appended at the end of input.
+However, there is no restriction on where the sentinel character may occur (in fact, any character can be chosen for a sentinel).
+When the lexer reads this character, it additionally performs a bounds check.
+If the current position is within bounds, the lexer will resume matching and handle the sentinel character as a regular one.
+Otherwise it will try to get more input with \fBYYFILL\fP (unless \fBYYFILL\fP is disabled).
+If more input is available, the lexer will rematch the last character and continue as if the sentinel never occurred.
+Otherwise it is the real end of input, and the lexer will stop.
+This method is used if \fBre2c:eof\fP has non\-negative value (it should be set to the ordinal of the sentinel character).
+\fBYYFILL\fP must be either defined or disabled with \fBre2c:yyfill:enable = 0;\fP\&.
+.nf
+
+.fi
+.sp
+.IP \(bu 2
+\fBBounds checks with padding.\fP
+This method is the default one.
+It is generic, and it is usually faster than the "sentinel character with bounds checks" method, but also more complex to use.
+The idea is to partition the underlying finite\-state automaton into strongly connected components (SCCs),
+and generate only one bounds check per SCC, but make it check for multiple characters at once
+(enough to cover the longest non\-looping path in the SCC).
+This way the checks are less frequent, which makes the lexer run much faster.
+If a check shows that there is not enough input, the lexer will invoke \fBYYFILL\fP,
+which may either supply enough input or else it should not return (in the latter case the lexer will stop).
+This approach has a problem with matching short lexemes at the end of input,
+because the multi\-character check requires enough characters to cover the longest possible lexeme.
+To fix this problem, it is necessary to append a few fake characters at the end of input.
+The padding should not form a valid lexeme suffix to avoid fooling the lexer into matching it as part of the input.
+The minimum sufficient length of padding is \fBYYMAXFILL\fP and it is autogenerated by re2c with \fB/*!max:re2c*/\fP\&.
+This method is used if \fBre2c:yyfill:enable\fP has the default nonzero value, and \fBre2c:eof\fP has the default value \-1.
+\fBYYFILL\fP must be defined.
+.nf
+
+.fi
+.sp
+.IP \(bu 2
+\fBCustom methods with generic API.\fP
+Generic API allows to override basic operations like reading a character,
+which makes it possible to include the end of input checks as part of them.
+Such methods are error\-prone and should be used with caution, only if other methods cannot be used.
+These methods are used if generic API is enabled with \fB\-\-input custom\fP or \fBre2c:flags:input = custom;\fP
+and default bounds checks are disabled with \fBre2c:yyfill:enable = 0;\fP\&.
+Note that the use of generic API does not imply the use of custom methods, it merely allows it.
+.UNINDENT
+.sp
+The following subsections contain an example of each method.
+.SS Sentinel character
+.sp
+In this example the lexer uses a sentinel character to handle the end of input.
+The program counts space\-separated words in a null\-terminated string.
+Configuration \fBre2c:yyfill:enable = 0;\fP suppresses the generation of bounds checks and \fBYYFILL\fP invocations.
+The sentinel character is null.
+It is the last character of each input string,
+and it is not allowed in the middle of a lexeme by any of the rules
+(in particular, it is not included in the character ranges, where it is easy to overlook).
+If a null occurs in the middle of a string, it is a syntax error and the lexer will match default rule \fB*\fP, but it won\(aqt read past the end of input or crash.
+\fI\%\-Wsentinel\-in\-midrule\fP
+warning verifies that the rules do not allow sentinel in the middle
+(it is possible to tell re2c which character is used as a sentinel with \fBre2c:sentinel\fP configuration \-\-\-
+the default assumption is null, since this is the most common case).
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -1404,130 +1460,31 @@ func TestLex(t *testing.T) {
 .fi
 .UNINDENT
 .UNINDENT
-.SS Bounds checking with padding
+.SS Sentinel character with bounds checks
 .sp
-Bounds checking is a generic method: it can be used with any input grammar.
-The basic idea is simple: we need to check for the end of input before reading
-the next input character. However, if implemented in a straightforward way, this
-would be quite inefficient: checking on each input character would cause a major
-slowdown. Re2c avoids slowdown by generating checks only in certain key states
-of the lexer, and letting it run without checks in\-between the key states.
-More precisely, re2c computes strongly connected components (SCCs) of
-the underlying DFA (which roughly correspond to loops), and generates only a few
-checks per each SCC (usually just one, but in general enough to make the SCC
-acyclic). The check is of the form \fB(YYLIMIT \- YYCURSOR) < n\fP, where \fBn\fP
-is the maximal length of a simple path in the corresponding SCC. If this
-condiiton is true, the lexer calls \fBYYFILL(n)\fP, which must either supply at
-least \fBn\fP input characters, or do not return. When the lexer continues after
-the check, it is certain that the next \fBn\fP characters can be read safely
-without checks.
-.sp
-This approach reduces the number of checks significantly (and makes the lexer
-much faster as a result), but it has a downside. Since the lexer checks for
-multiple characters at once, it may end up in a situation when there are a few
-remaining input characters (less than \fBn\fP) corresponding to a short path in
-the SCC, but the lexer cannot proceed because of the check, and \fBYYFILL\fP
-cannot supply more character because it is the end of input. To solve this
-problem, re2c requires that additional padding consisting of fake characters is
-appended at the end of input. The length of padding should be \fBYYMAXFILL\fP,
-which equals to the maximum \fBn\fP parameter to \fBYYFILL\fP and must be generated
-by re2c using \fB/*!max:re2c*/\fP directive. The fake characters should not form a
-valid lexeme suffix, otherwise the lexer may be fooled into matching a fake
-lexeme. Usually it\(aqs a good idea to use \fBNULL\fP characters for padding.
-.sp
-Below is an example of using bounds checking with padding. Note that the grammar
-rule for single\-quoted strings allows arbitrary symbols in the middle of lexeme,
-so there is no natural sentinel in the grammar. Strings like \fB"aha\e0ha"\fP are
-perfectly valid, but ill\-formed strings like \fB"aha\e0\fP are also possible and
-shouldn’t crash the lexer. In this example we do not use buffer refilling,
-therefore \fBYYFILL\fP definition simply returns an error. Note that \fBYYFILL\fP
-will only be called after the lexer reaches padding, because only then will the
-check condition be satisfied.
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-//go:generate re2go $INPUT \-o $OUTPUT
-package main
-
-import (
-    "strings"
-    "testing"
-)
-
-/*!max:re2c*/
-
-// Expects YYMAXFILL\-padded string.
-func lex(str string) int {
-    var cursor int
-    limit := len(str)
-    count := 0
-loop:
-    /*!re2c
-    re2c:define:YYCTYPE    = byte;
-    re2c:define:YYPEEK     = "str[cursor]";
-    re2c:define:YYSKIP     = "cursor += 1";
-    re2c:define:YYLESSTHAN = "limit \- cursor < @@{len}";
-    re2c:define:YYFILL     = "return \-1";
-
-    *                           { return \-1 }
-    [\ex00]                      { return count }
-    [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq] { count += 1; goto loop }
-    [ ]+                        { goto loop }
-    */
-}
-
-// Pad string with YYMAXFILL zeroes at the end.
-func pad(str string) string {
-    return str + strings.Repeat("\e000", YYMAXFILL)
-}
-
-func TestLex(t *testing.T) {
-    var tests = []struct {
-        res int
-        str string
-    }{
-        {0, ""},
-        {3, "\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq "},
-        {\-1, "\(aqunterminated\e\e\(aq"},
-    }
-
-    for _, x := range tests {
-        t.Run(x.str, func(t *testing.T) {
-            res := lex(pad(x.str))
-            if res != x.res {
-                t.Errorf("got %d, want %d", res, x.res)
-            }
-        })
-    }
-}
-
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.SS EOF rule
-.sp
-EOF rule \fB$\fP was introduced in version 1.2. It is a hybrid approach that tries
-to take the best of both worlds: simplicity and efficiency of the sentinel
-method combined with the generality of bounds\-checking method. The idea is to
-appoint an arbitrary symbol to be the sentinel, and only perform further bounds
-checking if the sentinel symbol matches (more precisely, if the symbol class that
-contains it matches). The check is of the form \fBYYLIMIT <= YYCURSOR\fP\&.
-If this condition is not satisfied, then the sentinel is just an ordinary input
-character and the lexer continues. Otherwise this is a real sentinel, and the
-lexer calls \fBYYFILL()\fP\&. If \fBYYFILL\fP returns zero, the lexer assumes that it
-has more input and tries to re\-match. Otherwise \fBYYFILL\fP returns non\-zero and
-the lexer knows that it has reached the end of input. At this point there are
-three possibilities. First, it might have already matched a shorter lexeme \-\-\-
-in this case it just rolls back to the last accepting state. Second, it might
-have consumed some characters, but failed to match \-\-\- in this case it falls
-back to default rule \fB*\fP\&. Finally, it might be in the initial state \-\-\- in
-this (and only this!) case it matches EOF rule \fB$\fP\&.
-.sp
-Below is an example of using EOF rule. Configuration \fBre2c:yyfill:enable = 0;\fP
-suppresses generation of \fBYYFILL\fP calls (but not the bounds checks).
+In this example the lexer uses sentinel character with bounds checks to handle the end of input
+(this method was added in version 1.2).
+The program counts single\-quoted strings separated with spaces.
+The sentinel character is null, which is specified with \fBre2c:eof = 0;\fP configuration.
+Null is the last character of each input string \-\-\- this is essential to detect the end of input.
+Null, as well as any other character, is allowed in the middle of a rule
+(for example, \fB\(aqaaa\e0aa\(aq\e0\fP is valid input, but \fB\(aqaaa\e0\fP is a syntax error).
+Bounds checks are generated in each state that has a switch on an input character,
+in the conditional branch that corresponds to null
+(that branch may also cover other characters \-\-\-
+re2c does not split out a separate branch for sentinel,
+because increasing the number of branches degrades performance more than bounds checks do).
+Bounds checks are of the form \fBYYLIMIT <= YYCURSOR\fP or \fBYYLESSTHAN(1)\fP with generic API.
+If a bounds check succeeds, the lexer will continue matching.
+If a bounds check fails, the lexer has reached the end of input, and it should stop.
+In this example \fBYYFILL\fP is disabled with \fBre2c:yyfill:enable = 0;\fP
+and the lexer does not attempt to get more input
+(see another example that uses \fBYYFILL\fP in the \fI\%YYFILL with sentinel character\fP section).
+When the end of input has been reached, there are three possibilities:
+if the lexer is in the initial state, it will match the end of input rule \fB$\fP,
+otherwise it will either fallback to a previously matched rule (including default rule \fB*\fP)
+or go to a default state, causing
+\fI\%\-Wundefined\-control\-flow\fP\&.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -1585,27 +1542,116 @@ func TestLex(t *testing.T) {
 .fi
 .UNINDENT
 .UNINDENT
-.SS Using generic API
+.SS Bounds checks with padding
 .sp
-Generic API can be used with any of the above methods. It also allows one to use a
-user\-defined method by placing EOF checks in one of the basic primitives.
-Usually this is either \fBYYSKIP\fP (the check is performed when advancing to the
-next input character), or \fBYYPEEK\fP (the check is performed when reading the
-next input character). The resulting methods are inefficient, as they check on
-each input character. However, they can be useful in cases when the input cannot
-be buffered or padded and does not contain a sentinel character at the end. One
-should be cautious when using such ad\-hoc methods, as it is easy to overlook
-some corner cases and come up with a method that only partially works. Also it
-should be noted that not everything can be expressed via generic API: for
-example, it is impossible to reimplement the way EOF rule works (in particular,
-it is impossible to re\-match the character after successful \fBYYFILL\fP).
+In this example the lexer uses bounds checking with padding to handle the end of input (it is the default method).
+The program counts single\-quoted strings separated with spaces.
+There is a padding of \fBYYMAXFILL\fP null characters appended at the end of input,
+where \fBYYMAXFILL\fP value is autogenerated with \fB/*!max:re2c*/\fP directive.
+It is not necessary to use null for padding \-\-\- any characters can be used, as long as they do not form a valid lexeme suffix
+(in this example padding should not contain single quotes, as they may be mistaken for a suffix of a single\-quoted string).
+There is a "stop" rule that matches the first padding character (null) and terminates the lexer
+(it returns success only if it has matched at the beginning of padding, otherwise a stray null is syntax error).
+Bounds checks are generated only in some states that depend on the strongly connected components of the underlying automaton.
+They are of the form \fB(YYLIMIT \- YYCURSOR) < n\fP or \fBYYLESSTHAN(n)\fP with generic API,
+where \fBn\fP is the minimum number of characters that are needed for the lexer to proceed
+(it also means that the next bounds check will occur in at most \fBn\fP characters).
+If a bounds check succeeds, the lexer will continue matching.
+If a bounds check fails, the lexer has reached the end of input and will invoke \fBYYFILL(n)\fP,
+which should either supply at least \fBn\fP input characters, or it should not return.
+In this example \fBYYFILL\fP always fails and terminates the lexer with an error.
+This is fine, because in this example \fBYYFILL\fP can only be called when the lexer has advanced into the padding,
+which means that is has encountered an unterminated string and should return a syntax error.
+See the \fI\%YYFILL with padding\fP section for an example that refills the input buffer with \fBYYFILL\fP\&.
+.INDENT 0.0
+.INDENT 3.5
 .sp
-Below is an example of using \fBYYSKIP\fP to perform bounds checking without
-padding. \fBYYFILL\fP generation is suppressed using \fBre2c:yyfill:enable = 0;\fP
-configuration. Note that if the grammar was more complex, this method might not
-work in case when two rules overlap and EOF check fails after a shorter lexeme
-has already been matched (as it happens in our example, there are no overlapping
-rules).
+.nf
+.ft C
+//go:generate re2go $INPUT \-o $OUTPUT
+package main
+
+import (
+    "strings"
+    "testing"
+)
+
+/*!max:re2c*/
+
+// Expects YYMAXFILL\-padded string.
+func lex(str string) int {
+    var cursor int
+    limit := len(str)
+    count := 0
+loop:
+    /*!re2c
+    re2c:define:YYCTYPE    = byte;
+    re2c:define:YYPEEK     = "str[cursor]";
+    re2c:define:YYSKIP     = "cursor += 1";
+    re2c:define:YYLESSTHAN = "limit \- cursor < @@{len}";
+    re2c:define:YYFILL     = "return \-1";
+
+    * {
+        return \-1
+    }
+    [\ex00] {
+        if limit \- cursor == YYMAXFILL \- 1 {
+            return count
+        } else {
+            return \-1
+        }
+    }
+    [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq] {
+        count += 1;
+        goto loop
+    }
+    [ ]+ {
+        goto loop
+    }
+    */
+}
+
+// Pad string with YYMAXFILL zeroes at the end.
+func pad(str string) string {
+    return str + strings.Repeat("\e000", YYMAXFILL)
+}
+
+func TestLex(t *testing.T) {
+    var tests = []struct {
+        res int
+        str string
+    }{
+        {0, ""},
+        {3, "\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq "},
+        {\-1, "\(aqunterminated\e\e\(aq"},
+    }
+
+    for _, x := range tests {
+        t.Run(x.str, func(t *testing.T) {
+            res := lex(pad(x.str))
+            if res != x.res {
+                t.Errorf("got %d, want %d", res, x.res)
+            }
+        })
+    }
+}
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Custom methods with generic API
+.sp
+In this example the lexer uses a custom end of input handling method based on generic API.
+The program counts single\-quoted strings separated with spaces.
+It is the same as the \fI\%sentinel character with bounds checks\fP example,
+except that the input is not null\-terminated
+(so this method can be used if it\(aqs not possible to have any padding at all, not even a single sentinel character).
+To cover up for the absence of sentinel character at the end of input,
+\fBYYPEEK\fP is redefined to perform a bounds check before it reads the next input character.
+This is inefficient, because checks are done very often.
+If the check succeeds, \fBYYPEEK\fP returns the real character,
+otherwise it returns a fake sentinel character.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -1716,7 +1762,7 @@ depending on which EOF handling method is used: the case of EOF rule is somewhat
 simpler than the case of bounds\-checking with padding. Also note that if
 \fB\-f \-\-storable\-state\fP option is used, \fBYYFILL\fP has slightly different
 semantics (desrbed in the section about storable state).
-.SS YYFILL with EOF rule
+.SS YYFILL with sentinel character
 .sp
 If EOF rule is used, \fBYYFILL\fP is a function\-like primitive that accepts
 no arguments and returns a value which is checked against zero. \fBYYFILL\fP
@@ -2018,10 +2064,23 @@ loop:
     re2c:define:YYLESSTHAN = "in.limit\-in.cursor < @@{len}";
     re2c:define:YYFILL     = "if r := fill(in, @@{len}); r != 0 { return r }";
 
-    *                           { return \-1 }
-    [\ex00]                      { return count }
-    [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq] { count += 1; goto loop }
-    [ ]+                        { goto loop }
+    * {
+        return \-1
+    }
+    [\ex00] {
+        if in.limit \- in.cursor == YYMAXFILL \- 1 {
+            return count
+        } else {
+            return \-1
+        }
+    }
+    [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq] {
+        count += 1;
+        goto loop
+    }
+    [ ]+ {
+        goto loop
+    }
     */
 }
 

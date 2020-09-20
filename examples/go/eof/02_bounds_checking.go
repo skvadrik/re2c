@@ -37,14 +37,22 @@ loop:
 	}
 yy2:
 	cursor += 1
-//line "go/eof/02_bounds_checking.re":25
-	{ return count }
-//line "go/eof/02_bounds_checking.go":43
+//line "go/eof/02_bounds_checking.re":27
+	{
+		if limit - cursor == YYMAXFILL - 1 {
+			return count
+		} else {
+			return -1
+		}
+	}
+//line "go/eof/02_bounds_checking.go":49
 yy4:
 	cursor += 1
 //line "go/eof/02_bounds_checking.re":24
-	{ return -1 }
-//line "go/eof/02_bounds_checking.go":48
+	{
+		return -1
+	}
+//line "go/eof/02_bounds_checking.go":56
 yy6:
 	cursor += 1
 	if (limit - cursor < 1) {
@@ -58,9 +66,11 @@ yy6:
 		goto yy8
 	}
 yy8:
-//line "go/eof/02_bounds_checking.re":27
-	{ goto loop }
-//line "go/eof/02_bounds_checking.go":64
+//line "go/eof/02_bounds_checking.re":38
+	{
+		goto loop
+	}
+//line "go/eof/02_bounds_checking.go":74
 yy9:
 	cursor += 1
 	if (limit - cursor < 1) {
@@ -77,9 +87,12 @@ yy9:
 	}
 yy11:
 	cursor += 1
-//line "go/eof/02_bounds_checking.re":26
-	{ count += 1; goto loop }
-//line "go/eof/02_bounds_checking.go":83
+//line "go/eof/02_bounds_checking.re":34
+	{
+		count += 1;
+		goto loop
+	}
+//line "go/eof/02_bounds_checking.go":96
 yy13:
 	cursor += 1
 	if (limit - cursor < 1) {
@@ -88,7 +101,7 @@ yy13:
 	yych = str[cursor]
 	goto yy9
 }
-//line "go/eof/02_bounds_checking.re":28
+//line "go/eof/02_bounds_checking.re":41
 
 }
 
