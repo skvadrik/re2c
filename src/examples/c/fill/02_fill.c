@@ -66,7 +66,7 @@ loop:
 yy2:
 	++in->cur;
 #line 60 "c/fill/02_fill.re"
-	{ return (YYMAXFILL == in->lim - in->tok) ? count : -1; }
+	{ return (in->lim - in->cur == YYMAXFILL - 1) ? count : -1; }
 #line 71 "c/fill/02_fill.c"
 yy4:
 	++in->cur;

@@ -1,20 +1,15 @@
-Using sentinel symbol
----------------------
-This is the simplest and the most efficient method. It is applicable in cases
-when the input is small enough to fit into a continuous memory buffer and there
-is a natural "sentinel" symbol --- a code unit that is not allowed by any of the
-regular expressions in grammar (except possibly as a terminating character).
-Sentinel symbol never appears in well-formed input, therefore it can be appended
-at the end of input and used as a stop signal by the lexer. A good example of
-such input is a null-terminated C-string, provided that the grammar does not
-allow ``NULL`` in the middle of lexemes. Sentinel method is very efficient,
-because the lexer does not need to perform any additional checks for the end of
-input --- it comes naturally as a part of processing the next character.
-It is very important that the sentinel symbol is not allowed in the middle of
-the rule --- otherwise on some inputs the lexer may read past the end of buffer
-and crash or cause memory corruption. Re2c verifies this automatically.
-Use ``re2c:sentinel`` configuration to specify which sentinel symbol is used.
+Sentinel character
+------------------
 
-Below is an example of using sentinel method. Configuration
-``re2c:yyfill:enable = 0;`` suppresses generation of end-of-input checks and
-``YYFILL`` calls.
+In this example the lexer uses a sentinel character to handle the end of input.
+The program counts space-separated words in a null-terminated string.
+Configuration ``re2c:yyfill:enable = 0;`` suppresses the generation of bounds checks and ``YYFILL`` invocations.
+The sentinel character is null.
+It is the last character of each input string,
+and it is not allowed in the middle of a lexeme by any of the rules
+(in particular, it is not included in the character ranges, where it is easy to overlook).
+If a null occurs in the middle of a string, it is a syntax error and the lexer will match default rule ``*``, but it won't read past the end of input or crash.
+`-Wsentinel-in-midrule <https://re2c.org/manual/warnings/warnings.html#wsentinel-in-midrule>`_
+warning verifies that the rules do not allow sentinel in the middle
+(it is possible to tell re2c which character is used as a sentinel with ``re2c:sentinel`` configuration ---
+the default assumption is null, since this is the most common case).

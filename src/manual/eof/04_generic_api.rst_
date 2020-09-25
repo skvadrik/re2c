@@ -1,22 +1,13 @@
-Using generic API
------------------
+Custom methods with generic API
+-------------------------------
 
-Generic API can be used with any of the above methods. It also allows one to use a
-user-defined method by placing EOF checks in one of the basic primitives.
-Usually this is either ``YYSKIP`` (the check is performed when advancing to the
-next input character), or ``YYPEEK`` (the check is performed when reading the
-next input character). The resulting methods are inefficient, as they check on
-each input character. However, they can be useful in cases when the input cannot
-be buffered or padded and does not contain a sentinel character at the end. One
-should be cautious when using such ad-hoc methods, as it is easy to overlook
-some corner cases and come up with a method that only partially works. Also it
-should be noted that not everything can be expressed via generic API: for
-example, it is impossible to reimplement the way EOF rule works (in particular,
-it is impossible to re-match the character after successful ``YYFILL``).
-
-Below is an example of using ``YYSKIP`` to perform bounds checking without
-padding. ``YYFILL`` generation is suppressed using ``re2c:yyfill:enable = 0;``
-configuration. Note that if the grammar was more complex, this method might not
-work in case when two rules overlap and EOF check fails after a shorter lexeme
-has already been matched (as it happens in our example, there are no overlapping
-rules).
+In this example the lexer uses a custom end of input handling method based on generic API.
+The program counts single-quoted strings separated with spaces.
+It is the same as the `sentinel character with bounds checks`_ example,
+except that the input is not null-terminated
+(so this method can be used if it's not possible to have any padding at all, not even a single sentinel character).
+To cover up for the absence of sentinel character at the end of input,
+``YYPEEK`` is redefined to perform a bounds check before it reads the next input character.
+This is inefficient, because checks are done very often.
+If the check succeeds, ``YYPEEK`` returns the real character,
+otherwise it returns a fake sentinel character.

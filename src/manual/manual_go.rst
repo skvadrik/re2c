@@ -76,17 +76,17 @@ Regular expressions
 ===================
 .. include:: /manual/regexps/regular_expressions.rst_
 
-EOF handling
-============
+Handling the end of input
+=========================
 .. include:: /manual/eof/eof.rst_
 .. include:: /manual/eof/01_sentinel.rst_
 .. literalinclude:: ../examples/go/eof/01_sentinel.re
     :language: go
-.. include:: /manual/eof/02_bounds_checking.rst_
-.. literalinclude:: ../examples/go/eof/02_bounds_checking.re
-    :language: go
 .. include:: /manual/eof/03_eof_rule.rst_
 .. literalinclude:: ../examples/go/eof/03_eof_rule.re
+    :language: go
+.. include:: /manual/eof/02_bounds_checking.rst_
+.. literalinclude:: ../examples/go/eof/02_bounds_checking.re
     :language: go
 .. include:: /manual/eof/04_generic_api.rst_
 .. literalinclude:: ../examples/go/eof/05_generic_api_eof_rule.re

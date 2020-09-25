@@ -13,7 +13,7 @@ If multiple rules match, the longest match takes precedence.
 If multiple rules match the same string, the earlier rule takes precedence.
 There are two special rules: default rule ``*`` and EOF rule ``$``.
 Default rule should always be defined, it has the lowest priority regardless of its place and matches any code unit (not necessarily a valid character, see `encoding support`_).
-EOF rule matches the end of input, it should be defined if the corresponding `EOF handling`_ method is used.
+EOF rule matches the end of input, it should be defined if the corresponding method for `handling the end of input`_ is used.
 If `start conditions`_ are used, rules have more complex syntax.
 All rules of a single block are compiled into a deterministic finite-state automaton (DFA) and encoded in the form of a program in the target language.
 The generated code interfaces with the outer program by the means of a few user-defined primitives (see the `program interface`_ section).

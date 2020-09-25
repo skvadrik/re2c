@@ -4,17 +4,17 @@ Release 1.2
 This release adds a handful of useful features and finalizes two-year
 research effort on POSIX disambiguation.
 
-First and foremost, :ref:`EOF rule <manual/manual_c:eof rule>` has been added to
+First and foremost, :ref:`end of input rule <manual/manual_c:sentinel character with bounds checks>` has been added to
 re2c. It is a new method of checking for the end of input, which aims at being
 both generic and simple to use. Historically re2c has a
-:ref:`number of ways <manual/manual_c:eof handling>` to handle EOF situation. The
+:ref:`number of ways <manual/manual_c:handling the end of input>` to handle EOF situation. The
 simplest and the most efficient method is
-:ref:`using a sentinel symbol <manual/manual_c:using sentinel symbol>`, but it
+:ref:`using a sentinel symbol <manual/manual_c:sentinel character>`, but it
 has limited applicability. The most widely used and generic method is
-:ref:`bounds checking with padding <manual/manual_c:bounds checking with padding>`,
+:ref:`bounds checking with padding <manual/manual_c:bounds checks with padding>`,
 but it is rather complex and requires input buffering.
 Finally, it is possible to define custom EOF handling methods
-by :ref:`using the generic API <manual/manual_c:using generic api>`. However, such
+by :ref:`using the generic API <manual/manual_c:custom methods with generic api>`. However, such
 methods are not necessarily correct and are likely to be slower than other
 methods. The new method, EOF rule, tries to combine the simplicity and
 efficiency of the sentinel symbol and the generality of bounds checking.
