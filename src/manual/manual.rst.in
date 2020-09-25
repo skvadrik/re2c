@@ -27,33 +27,34 @@ This is the generated output:
     :language: RE2C_LANG
 
 
-Command-line options
-====================
-.. include:: /manual/options/options.rst_
+Command-line interface
+======================
+Command-line interface consists of options and warnings.
+Some of the options have corresponding `configurations`_,
+others are global and cannot be changed after re2c starts reading the input file.
+Debug options generally require building re2c in debug configuration.
+Internal options are useful for experimenting with the algorithms used in re2c.
+Each warning can be enabled, disabled and turned into an error.
 
-|
+Options
+-------
+.. include:: /manual/options/options.rst_
 
 Debug options:
 
 .. include:: /manual/options/debug.rst_
 
-|
-
 Internal options:
 
 .. include:: /manual/options/internal.rst_
 
-|
-
-Warnings:
+Warnings
+--------
+See `detailed descriptions with examples <warnings/warnings.html>`_ for all warnings.
 
 .. include:: /manual/warnings/warnings_general.rst_
-
-|
-
-Individual warnings (see the `detailed descriptions <warnings/warnings.html>`_):
-
 .. include:: /manual/warnings/warnings_list.rst_
+
 
 Program interface
 =================
