@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <sys/time.h>
@@ -33,3 +34,56 @@ static inline uint64_t getTimeMs()
     gettimeofday(&tv, NULL);
     return tv.tv_usec / 1000 + tv.tv_sec * 1000;
 }
+
+static const size_t SIZE = 4096 * 16;
+
+typedef struct {
+    char *buf;
+    char *pos;
+} Output;
+
+static inline void init_output(Output *out)
+{
+    out->buf = (char*) malloc(SIZE);
+    out->pos = out->buf;
+}
+
+static inline void free_output(Output *out)
+{
+    free(out->buf);
+}
+
+static inline void flush(Output *out)
+{
+    fwrite(out->buf, 1, out->pos - out->buf, stdout);
+    out->pos = out->buf;
+}
+
+static inline void outs(Output *out, const char *s, const char *e)
+{
+    if ((out->pos - out->buf) + (e - s) >= SIZE) {
+        flush(out);
+    }
+    for (; s < e; ) {
+        *out->pos++ = *s++;
+    }
+}
+
+static inline void outstr(Output *out, const char *s)
+{
+    for (; *s; ) {
+        if (out->pos + 1 - out->buf >= SIZE) {
+            flush(out);
+        }
+        *out->pos++ = *s++;
+    }
+}
+
+static inline void outc(Output *out, char c)
+{
+    if (out->pos + 1 - out->buf >= SIZE) {
+        flush(out);
+    }
+    *out->pos++ = c;
+}
+
