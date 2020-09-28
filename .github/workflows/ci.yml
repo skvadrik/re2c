@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Configure
+        run: |
+          cmake -S . -Bcmake-build
+
+      - name: Build
+        run: cmake --build cmake-build
+
+      - name: Test
+        run: cmake --build cmake-build --target check
