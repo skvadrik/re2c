@@ -21,12 +21,14 @@ GEN_RAGEL_F1 = $(patsubst %, $(GEN_DIR)/ragel/%-F1.c, $(BENCHMARKS))
 GEN_RAGEL_G2 = $(patsubst %, $(GEN_DIR)/ragel/%-G2.c, $(BENCHMARKS))
 GEN_RAGEL = $(GEN_RAGEL_T1) $(GEN_RAGEL_F1) $(GEN_RAGEL_G2)
 BIN_RAGEL = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_RAGEL))
+COMMON_RAGEL = $(COMMON_SRC) $(SRC_DIR)/ragel/common.c
 
 GEN_RE2C_           = $(patsubst %, $(GEN_DIR)/re2c/%.c,            $(BENCHMARKS))
 GEN_RE2C_EAGER_SKIP = $(patsubst %, $(GEN_DIR)/re2c/%-eager-skip.c, $(BENCHMARKS))
 GEN_RE2C_STADFA     = $(patsubst %, $(GEN_DIR)/re2c/%-stadfa.c,     $(BENCHMARKS))
 GEN_RE2C = $(GEN_RE2C_) $(GEN_RE2C_EAGER_SKIP) $(GEN_RE2C_STADFA)
 BIN_RE2C = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_RE2C))
+COMMON_RE2C = $(COMMON_SRC) $(SRC_DIR)/re2c/common.re
 
 GEN_KLEENEX = $(patsubst %, $(GEN_DIR)/kleenex/%.c, $(BENCHMARKS))
 BIN_KLEENEX = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_KLEENEX))
@@ -42,17 +44,17 @@ DATA = $(patsubst %, $(DATA_DIR)/%/big, $(BENCHMARKS))
 
 all: $(BIN)
 
-$(GEN_RAGEL_T1): $(GEN_DIR)/%-T1.c: $(SRC_DIR)/%.rl $(COMMON_SRC)
+$(GEN_RAGEL_T1): $(GEN_DIR)/%-T1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL)
 	$(RAGEL) -T1 $< -o $@
-$(GEN_RAGEL_F1): $(GEN_DIR)/%-F1.c: $(SRC_DIR)/%.rl $(COMMON_SRC)
+$(GEN_RAGEL_F1): $(GEN_DIR)/%-F1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL)
 	$(RAGEL) -F1 $< -o $@
-$(GEN_RAGEL_G2): $(GEN_DIR)/%-G2.c: $(SRC_DIR)/%.rl $(COMMON_SRC)
+$(GEN_RAGEL_G2): $(GEN_DIR)/%-G2.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL)
 	$(RAGEL) -G2 $< -o $@
-$(GEN_RE2C_): $(GEN_DIR)/%.c: $(SRC_DIR)/%.re $(COMMON_SRC)
+$(GEN_RE2C_): $(GEN_DIR)/%.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
 	$(RE2C) --tags $< -o $@
-$(GEN_RE2C_EAGER_SKIP): $(GEN_DIR)/%-eager-skip.c: $(SRC_DIR)/%.re $(COMMON_SRC)
+$(GEN_RE2C_EAGER_SKIP): $(GEN_DIR)/%-eager-skip.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
 	$(RE2C) --tags --eager-skip $< -o $@
-$(GEN_RE2C_STADFA): $(GEN_DIR)/%-stadfa.c: $(SRC_DIR)/%.re $(COMMON_SRC)
+$(GEN_RE2C_STADFA): $(GEN_DIR)/%-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
 	$(RE2C) --tags --stadfa $< -o $@
 $(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex
 	$(KLEENEX) compile $< --srcout $@ --act=false --la=true

@@ -1,55 +1,46 @@
-#include "common.h"
-
-#define P(C) fputs(C, stdout);
-
-int echo = 0;
+#include "ragel/common.c"
 
 %%{
-  machine datetime;
+    machine datetime;
 
-    action echo_on  { echo = 1; }
-    action echo_off { echo = 0; }
-    action dump {
-        if (echo) {
-            fputc(fc, stdout);
-        }
-    }
+    action setptr { q = p; }
+    action output { outs(out, q, p); }
 
-    year     = (([1-9] [0-9]*)? [0-9]{4})                              > { P("{'year'='") };
-    month    = ('1' [0-2] | '0' [1-9])                                 > { P("', 'month'='") };
-    day      = ('3' [0-1] | '0' [1-9] | [1-2] [0-9])                   > { P("', 'day'='") };
-    hours    = ('2' [0-3] | [0-1] [0-9])                               > { P("', 'hours'='") };
-    minutes  = ([0-5] [0-9])                                           > { P("', 'minutes'='") };
-    seconds  = ([0-5] [0-9])                                           > { P("', 'seconds'='") };
-    timezone = ('Z' | [+\-] ('2' [0-3] | [0-1] [0-9]) ':' [0-5] [0-9]) > { P("', 'tz'='") };
+    year     = (([1-9][0-9]*)? [0-9]{4})                           > { outstr(out, "{'year'='"); };
+    month    = ([1][0-2] | [0][1-9])                               > { outstr(out, "', 'month'='"); };
+    day      = ([3][0-1] | [0][1-9] | [1-2][0-9])                  > { outstr(out, "', 'day'='"); };
+    hours    = ([2][0-3] | [0-1][0-9])                             > { outstr(out, "', 'hours'='"); };
+    minutes  = ([0-5][0-9])                                        > { outstr(out, "', 'minutes'='"); };
+    seconds  = ([0-5][0-9])                                        > { outstr(out, "', 'seconds'='"); };
+    timezone = ([Z] | [+\-] ([2][0-3] | [0-1][0-9]) [:][0-5][0-9]) > { outstr(out, "', 'tz'='"); };
 
-    dateTime = year     > echo_on % echo_off '-'
-               month    > echo_on % echo_off '-'
-               day      > echo_on % echo_off 'T'
-               hours    > echo_on % echo_off ':'
-               minutes  > echo_on % echo_off ':'
-               seconds  > echo_on
-               timezone % { P("'}") };
+    dateTime = year     > setptr % output '-'
+               month    > setptr % output '-'
+               day      > setptr % output 'T'
+               hours    > setptr % output ':'
+               minutes  > setptr % output ':'
+               seconds  > setptr % output
+               timezone > setptr % output
+               [\n]     > { outstr(out, "'}\n"); };
 
-    main := (dateTime '\n') $ dump;
+    main := dateTime*;
 }%%
 
 %% write data;
 
-int main(int argc, char **argv)
+static void prolog(Output *out) {}
+static void epilog(Output *out) {}
+
+static void lex(Input *in, Output *out)
 {
-    PRE;
+    char *p = in->p;
+    char *pe = in->pe;
+    char *q;
+    int cs;
 
-    while(fgets(buffer, sizeof(buffer), stdin)) {
-        INIT_LINE;
-        %% write init;
-        %% write exec;
+    %% write init;
+    %% write exec;
 
-        if (p != pe) {
-            FAIL;
-        }
-    }
-
-    POST;
-    return 0;
+    in->p = p;
+    in->pe = pe;
 }

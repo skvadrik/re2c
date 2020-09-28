@@ -1,4 +1,4 @@
-#include "common.h"
+#include "ragel/common.c"
 
 /* From the Ragel manual:
     "To guard against this kind of problem one must ensure that the machine
@@ -6,16 +6,8 @@
      ambiguities from one portion of the machine to the next."
 */
 
-char *mark;
-
 %%{
-    machine email_fst;
-    action mark {
-        mark = p;
-    }
-    action print {
-        fputs(mark, stdout);
-    }
+    machine email;
 
     estr = /[a-z0-9!#$%&'*+/=?^_`{|}~\-]/;
     beforeAt = estr+ ('.' estr+)*;
@@ -24,34 +16,31 @@ char *mark;
     part = az09 az09dash? '.';
     afterAt = part+ az09 az09dash?;
 
-    email = beforeAt '@' afterAt;
+    email =
+        (beforeAt '@' afterAt) > { q = p; } % { outs(out, q, p); }
+        [\n]                   > { outc(out, fc); }
+        ;
 
-    fb = /[^\n]*/;
+    fb = /[^\n]*[\n]/;
 
-    main := ((email >mark %print | (fb - email)) '\n')* ;
+    main := (email | (fb - email))* ;
 }%%
-
-/*
-Call "mark" upon entry to the sub-machine "email".
-Call "print" when exiting the sub-maching "email".
-*/
 
 %% write data;
 
-int main(int argc, char **argv)
+static void prolog(Output *out) {}
+static void epilog(Output *out) {}
+
+static void lex(Input *in, Output *out)
 {
-    PRE
+    char *p = in->p;
+    char *pe = in->pe;
+    char *q;
+    int cs;
 
-    while (fgets(buffer, sizeof(buffer), stdin)) {
-        INIT_LINE;
-        %% write init;
-        %% write exec;
+    %% write init;
+    %% write exec;
 
-        if (p != pe) {
-            FAIL;
-        }
-    }
-
-    POST
-    return 0;
+    in->p = p;
+    in->pe = pe;
 }
