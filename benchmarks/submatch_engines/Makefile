@@ -12,7 +12,8 @@ KLEENEX = engines/kleenex/kexc
 BENCHMARKS = \
 	apache_log \
 	datetime_to_json \
-	email
+	email \
+	ipv4
 
 COMMON_SRC = $(SRC_DIR)/common.h
 

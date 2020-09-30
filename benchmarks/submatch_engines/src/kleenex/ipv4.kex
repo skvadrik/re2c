@@ -1,0 +1,11 @@
+start: ipv4_list
+
+ipv4_list := (ipv4)*
+
+oct := /[0-9]{1,3}/
+
+dot := ~/[.]/ ","
+
+nl := /\n/
+
+ipv4 := oct dot oct dot oct dot oct nl
