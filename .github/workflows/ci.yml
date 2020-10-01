@@ -7,15 +7,54 @@ on:
 jobs:
   build-and-test:
 
-    runs-on: ubuntu-latest
+    name: ${{ matrix.toolchain }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        toolchain:
+          - linux-gcc
+          - macos-clang
+
+        configuration:
+          - Debug
+
+        include:
+          - toolchain: linux-gcc
+            os: ubuntu-latest
+            compiler: gcc
+
+          - toolchain: macos-clang
+            os: macos-latest
+            compiler: clang
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Configure
+      - name: Setup Common Prerequisites (Linux)
+        if: startsWith(runner.os, 'Linux')
         run: |
-          cmake -S . -Bcmake-build
+          echo "::set-env name=CC::gcc"
+          echo "::set-env name=CXX::g++"
+
+      - name: Setup Common Prerequisites (macOS)
+        if: startsWith(runner.os, 'macOS')
+        run: |
+          sudo xcode-select -switch /Applications/Xcode.app
+
+          echo "::set-env name=CC::$(xcrun -f clang)"
+          echo "::set-env name=CXX::$(xcrun -f clang++)"
+          echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
+          echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
+
+      - name: Verify Toolchain Version
+        run: |
+          $CC --version
+          cmake --version
+
+      - name: Configure (${{ matrix.configuration }})
+        run: cmake -S . -Bcmake-build -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
 
       - name: Build
         run: cmake --build cmake-build
