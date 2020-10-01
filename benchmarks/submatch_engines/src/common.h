@@ -87,3 +87,7 @@ static inline void outc(Output *out, char c)
     *out->pos++ = c;
 }
 
+#define OUT(s, p1, p2) \
+    outstr(out, s); \
+    outs(out, p1, p2); \
+    outc(out, '\n');
