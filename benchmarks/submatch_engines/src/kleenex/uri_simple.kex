@@ -1,0 +1,17 @@
+start: uri_list
+
+uri_list := uri*
+
+nl       := ~/[\n]/ "\n"
+char     := /[-._~%!$&'()*+,;=a-zA-Z0-9]/
+scheme   := "scheme: " /[-+.a-zA-Z0-9]+/ "\n"
+userinfo := "user: " (char | /[:]/)+ "\n"
+host     := "host: " (char | /\[/ (char | /[:]/)+ /]/)+ "\n"
+port     := "port: " /[0-9]*/ "\n"
+path     := "path: " (char | /[:@/]/)* "\n"
+query    := "query: " (char | /[:@?/]/)* "\n"
+fragment := "fragment: " (char | /[:@?/]/)* "\n"
+
+uri := scheme ~/:/
+    (~/\/\// (userinfo ~/@/)? host (~/:/ port)?)?
+    path (~/\?/ query)? (~/#/ fragment)? nl

@@ -13,7 +13,9 @@ BENCHMARKS = \
 	apache_log \
 	datetime_to_json \
 	email \
-	ipv4
+	ipv4 \
+	uri_simple \
+	uri_rfc3986
 
 COMMON_SRC = $(SRC_DIR)/common.h
 
