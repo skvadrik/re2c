@@ -28,7 +28,20 @@ option(RE2C_BUILD_LIBS "Build libraries" OFF)
 option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
 
 # checks for programs
-find_package(BISON)
+if(UNIX)
+    find_program(
+      BISON_EXECUTABLE
+      NAMES bison
+      PATHS /usr /usr/local
+      PATH_SUFFIXES bin)
+elseif(WIN32)
+    find_program(
+      BISON_EXECUTABLE
+      NAMES bison.exe win_bison.exe
+      PATHS C:/
+      PATH_SUFFIXES "")
+endif()
+mark_as_advanced(BISON_EXECUTABLE)
 
 # checks for C++ compiler flags
 set(CMAKE_CXX_STANDARD 98)
