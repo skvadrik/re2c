@@ -15,6 +15,7 @@ jobs:
         toolchain:
           - linux-gcc
           - macos-clang
+          - windows-msvc
 
         configuration:
           - Debug
@@ -28,6 +29,10 @@ jobs:
             os: macos-latest
             compiler: clang
 
+          - toolchain: windows-msvc
+            os: windows-2019
+            compiler: msvc
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -37,6 +42,16 @@ jobs:
         run: |
           echo "::set-env name=CC::gcc"
           echo "::set-env name=CXX::g++"
+
+      - name: Setup chocolatey Cache (Windows)
+        if: startsWith(runner.os, 'Windows')
+        uses: actions/cache@v2
+        with:
+          path: C:\Users\runneradmin\AppData\Local\Temp\chocolatey
+          key: ${{ runner.os }}-chocolatey-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-chocolatey-${{ matrix.os }}-
+            ${{ runner.os }}-chocolatey-
 
       - name: Setup Common Prerequisites (macOS)
         if: startsWith(runner.os, 'macOS')
@@ -48,16 +63,34 @@ jobs:
           echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
           echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
 
-      - name: Verify Toolchain Version
+      - name: Setup Common Prerequisites (Windows)
+        if: startsWith(runner.os, 'Windows')
         run: |
-          $CC --version
-          cmake --version
+          # Install common tools
+          choco install --no-progress -y winflexbison3
 
-      - name: Configure (${{ matrix.configuration }})
+      - name: Configure (Unix ${{ matrix.configuration }})
+        if: startsWith(runner.os, 'Windows') == false
         run: cmake -S . -Bcmake-build -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+
+      - name: Configure (Windows ${{ matrix.configuration }} x64)
+        if: startsWith(runner.os, 'Windows')
+        run: >-
+          cmake
+          -S .
+          -Bcmake-build
+          -G "Visual Studio 16 2019"
+          -A x64
+          -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
 
       - name: Build
         run: cmake --build cmake-build
 
+      - name: Minimal Load Test (Windows)
+        if: startsWith(runner.os, 'Windows')
+        working-directory: cmake-build\${{ matrix.configuration }}
+        run: .\re2c.exe --version
+
       - name: Test
+        if: startsWith(runner.os, 'Windows') == false
         run: cmake --build cmake-build --target check
