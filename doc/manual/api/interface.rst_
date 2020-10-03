@@ -115,7 +115,7 @@ Re2c does not (and cannot) check the definitions, so if anything is missing or d
 
 ``YYSTAGN``
     A generic API primitive with one argument ``tag``.
-    The meaning of ``YYSTAGP`` is to set ``tag`` value to null (or some default
+    The meaning of ``YYSTAGN`` is to set ``tag`` value to null (or some default
     value). The definition should be either function-like or free-form depending
     on the API style (see ``re2c:api:style``).
 
