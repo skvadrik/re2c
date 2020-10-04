@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build-and-test:
 
@@ -37,12 +41,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Setup Common Prerequisites (Linux)
-        if: startsWith(runner.os, 'Linux')
-        run: |
-          echo "::set-env name=CC::gcc"
-          echo "::set-env name=CXX::g++"
-
       - name: Setup chocolatey Cache (Windows)
         if: startsWith(runner.os, 'Windows')
         uses: actions/cache@v2
@@ -53,35 +51,39 @@ jobs:
             ${{ runner.os }}-chocolatey-${{ matrix.os }}-
             ${{ runner.os }}-chocolatey-
 
-      - name: Setup Common Prerequisites (macOS)
-        if: startsWith(runner.os, 'macOS')
+      - name: Setup Common Prerequisites
         run: |
-          sudo xcode-select -switch /Applications/Xcode.app
+          case ${{ runner.os }} in
+            Linux*)
+              echo "::set-env name=CC::gcc"
+              echo "::set-env name=CXX::g++"
+              ;;
+            macOS*)
+              sudo xcode-select -switch /Applications/Xcode.app
+              echo "::set-env name=CC::$(xcrun -f clang)"
+              echo "::set-env name=CXX::$(xcrun -f clang++)"
+              echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
+              echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
+              ;;
+            Windows*)
+              choco install --no-progress -y winflexbison3
+              ;;
+          esac
 
-          echo "::set-env name=CC::$(xcrun -f clang)"
-          echo "::set-env name=CXX::$(xcrun -f clang++)"
-          echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
-          echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
-
-      - name: Setup Common Prerequisites (Windows)
-        if: startsWith(runner.os, 'Windows')
+      - name: Configure
         run: |
-          # Install common tools
-          choco install --no-progress -y winflexbison3
-
-      - name: Configure (Unix ${{ matrix.configuration }})
-        if: startsWith(runner.os, 'Windows') == false
-        run: cmake -S . -Bcmake-build -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
-
-      - name: Configure (Windows ${{ matrix.configuration }} x64)
-        if: startsWith(runner.os, 'Windows')
-        run: >-
-          cmake
-          -S .
-          -Bcmake-build
-          -G "Visual Studio 16 2019"
-          -A x64
-          -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+          case ${{ runner.os }} in
+            Windows*)
+              cmake -S . -B cmake-build \
+                -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} \
+                -G "Visual Studio 16 2019" \
+                -A x64
+              ;;
+            *)
+              cmake -S . -B cmake-build \
+                -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+              ;;
+          esac
 
       - name: Build
         run: cmake --build cmake-build
@@ -89,7 +91,7 @@ jobs:
       - name: Minimal Load Test (Windows)
         if: startsWith(runner.os, 'Windows')
         working-directory: cmake-build\${{ matrix.configuration }}
-        run: .\re2c.exe --version
+        run: ./re2c.exe --version
 
       - name: Test
         if: startsWith(runner.os, 'Windows') == false
