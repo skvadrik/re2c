@@ -15,7 +15,8 @@ BENCHMARKS = \
 	email \
 	ipv4 \
 	uri_simple \
-	uri_rfc3986
+	uri_rfc3986 \
+	http_simple
 
 COMMON_SRC = $(SRC_DIR)/common.h
 

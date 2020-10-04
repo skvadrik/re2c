@@ -1,0 +1,32 @@
+start: message_head_list
+
+message_head_list := message_head*
+
+eol            := /\n/
+sp             := / /
+htab           := /\t/
+ows            := (sp | htab)*
+char           := /[-._~%!$&'()*+,;=a-zA-Z0-9]/
+tchar          := /[-._~%!$&'*+#^`|a-zA-Z0-9]/
+vchar          := /[\x1f-\x7e\x80-\xff]/
+scheme         := /[-+.a-zA-Z0-9]+/
+userinfo       := (char | /[:]/)+
+host           := (char | /[:[\]]/)+
+port           := /[0-9]*/
+path           := (char | /[:@/]/)*
+query          := (char | /[:@?/]/)*
+obs_fold       := eol (sp | htab)+
+field_content  := vchar ((sp | htab)+ vchar)?
+header_field   := "header: " tchar+ ~/:/ ": " ows (field_content | obs_fold)* ows "\n"
+authority      := (userinfo /@/)? host (/:/ port)?
+absolute_uri   := scheme /:/ (/[/][/]/ (userinfo /@/)? host (/:/ port)?)? path (/[?]/ query)?
+origin_form    := /[/][/]/ path (/[?]/ query)?
+http_version   := /HTTP[/][0-9][.][0-9]/
+request_target := authority | absolute_uri | origin_form | /[*]/
+method         := tchar+
+request_line   := "method: " method "\n" ~sp "request: " request_target "\n" ~sp "version: " http_version "\n" ~eol
+status_code    := /[0-9]{3}/
+reason_phrase  := (htab | sp | vchar)*
+status_line    := "version: " http_version "\n" ~sp "status: " status_code "\n" ~sp "reason: " reason_phrase "\n" ~eol
+start_line     := (request_line | status_line)
+message_head   := start_line (header_field ~eol)* eol
