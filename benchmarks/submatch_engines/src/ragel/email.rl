@@ -1,5 +1,7 @@
 #include "ragel/common.c"
 
+const char *delim = "\n";
+
 /* From the Ragel manual:
     "To guard against this kind of problem one must ensure that the machine
      specification is divided up using boundaries that do not allow 
