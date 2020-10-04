@@ -61,22 +61,19 @@ static inline void flush(Output *out)
 
 static inline void outs(Output *out, const char *s, const char *e)
 {
-    if ((out->pos - out->buf) + (e - s) >= SIZE) {
+    long n = e - s;
+    if ((out->pos - out->buf) + n >= SIZE) {
         flush(out);
     }
-    for (; s < e; ) {
-        *out->pos++ = *s++;
-    }
+    memcpy(out->pos, s, n);
+    out->pos += n;
 }
 
 static inline void outstr(Output *out, const char *s)
 {
-    for (; *s; ) {
-        if (out->pos + 1 - out->buf >= SIZE) {
-            flush(out);
-        }
-        *out->pos++ = *s++;
-    }
+    const char *e = s;
+    for (; *e; ++e);
+    outs(out, s, e);
 }
 
 static inline void outc(Output *out, char c)
