@@ -27,6 +27,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ragel/common.c"
 
+const char *delim = "\n";
+
 %%{
     machine parser;
 

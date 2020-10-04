@@ -1,5 +1,7 @@
 #include "common.h"
 
+const char *delim;
+
 static void prolog(Output *out);
 static void epilog(Output *out);
 
@@ -29,19 +31,27 @@ int main(int argc, char **argv)
     init_input(&in);
     init_output(&out);
     prolog(&out);
+    const size_t ndelim = strlen(delim);
 
     while (1) {
         size_t space = SIZE - (in.end - in.buf);
 
         if (space == 0) {
             fprintf(stderr, "no space in buffer\n");
-            break;
+            goto end;
         }
 
         in.end += fread(in.end, 1, space, stdin);
 
-        /* Find the last newline by searching backwards. */
-        for (in.pe = in.end; in.pe > in.p && in.pe[-1] != '\n'; --in.pe);
+        /* Find the last delimiter string by searching backwards. */
+        for (in.pe = in.end; ; --in.pe) {
+            if (in.pe - in.p < ndelim) {
+                fprintf(stderr, "can't find delimiter\n");
+                goto end;
+            } else if (memcmp(in.pe - ndelim, delim, ndelim) == 0) {
+                break;
+            }
+        }
 
         lex(&in, &out);
 
@@ -59,6 +69,7 @@ int main(int argc, char **argv)
         in.p = in.buf;
         in.pe = in.end = in.buf + left;
     }
+end:
 
     epilog(&out);
     flush(&out);

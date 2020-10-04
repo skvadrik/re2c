@@ -1,5 +1,7 @@
 #include "ragel/common.c"
 
+const char *delim = "\n";
+
 %%{
     machine ipv4;
 
