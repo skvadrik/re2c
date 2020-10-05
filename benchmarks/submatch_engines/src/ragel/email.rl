@@ -2,30 +2,31 @@
 
 const char *delim = "\n";
 
-/* From the Ragel manual:
-    "To guard against this kind of problem one must ensure that the machine
-     specification is divided up using boundaries that do not allow 
-     ambiguities from one portion of the machine to the next."
-*/
-
 %%{
     machine email;
 
-    estr = /[a-z0-9!#$%&'*+/=?^_`{|}~\-]/;
-    beforeAt = estr+ ('.' estr+)*;
-    az09 = /[a-z0-9]/;
-    az09dash = /[a-z0-9\-]*[a-z0-9]/;
-    part = az09 az09dash? '.';
-    afterAt = part+ az09 az09dash?;
+    estr     = [a-z0-9!#$%&'*+/=?^_`{|}~\-];
+    beforeAt = estr+ ([.] estr+)*;
+    az09     = [a-z0-9];
+    az09dash = [a-z0-9\-]* [a-z0-9];
+    part     = az09 az09dash? [.];
+    afterAt  = part+ az09 az09dash?;
+    fb       = [^\n]*[\n];
 
     email =
-        (beforeAt '@' afterAt) > { q = p; } % { outs(out, q, p); }
-        [\n]                   > { outc(out, fc); }
-        ;
+        beforeAt >{ p1 = p; }
+        [@]
+        afterAt  >{ p2 = p; }
+        [\n]
+    >{
+        outc(out, ' ');
+        outs(out, p1, p2 - 1);
+        outc(out, ' ');
+        outs(out, p2, p);
+        outc(out, '\n');
+    };
 
-    fb = /[^\n]*[\n]/;
-
-    main := (email | (fb - email))* ;
+    main := (email | (fb - email))*;
 }%%
 
 %% write data;
@@ -37,7 +38,7 @@ static void lex(Input *in, Output *out)
 {
     char *p = in->p;
     char *pe = in->pe;
-    char *q;
+    char *p1, *p2;
     int cs;
 
     %% write init;
