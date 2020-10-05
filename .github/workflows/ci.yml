@@ -11,7 +11,7 @@ defaults:
 jobs:
   build-and-test:
 
-    name: ${{ matrix.toolchain }}
+    name: "${{ matrix.build-type }}: ${{ matrix.toolchain }}"
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -21,8 +21,9 @@ jobs:
           - macos-clang
           - windows-msvc
 
-        configuration:
+        build-type:
           - Debug
+          - Release
 
         include:
           - toolchain: linux-gcc
@@ -70,27 +71,27 @@ jobs:
               ;;
           esac
 
-      - name: Configure
+      - name: Configure (${{ matrix.build-type }})
         run: |
           case ${{ runner.os }} in
             Windows*)
               cmake -S . -B cmake-build \
-                -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} \
+                -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
                 -G "Visual Studio 16 2019" \
                 -A x64
               ;;
             *)
               cmake -S . -B cmake-build \
-                -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+                -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
               ;;
           esac
 
       - name: Build
-        run: cmake --build cmake-build
+        run: cmake --build cmake-build --config ${{ matrix.build-type }}
 
       - name: Minimal Load Test (Windows)
         if: startsWith(runner.os, 'Windows')
-        working-directory: cmake-build\${{ matrix.configuration }}
+        working-directory: cmake-build\${{ matrix.build-type }}
         run: ./re2c.exe --version
 
       - name: Test
