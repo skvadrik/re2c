@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e
 
 if [ $# -lt 1 ]; then
@@ -12,14 +14,22 @@ repcount="$1"
 shift 1
 filter="$@"
 
-stem() {
+# one benchmark may have different flavours
+# they differ only in the suffix that starts with dash
+stem_bench() {
     egrep -o '^[0-9a-z_]+'
+}
+
+# a few different benchmarks may share the same data
+# everything up to the first underscore is the data stem
+stem_data() {
+    egrep -o '^[0-9a-z]+'
 }
 
 run() {
     engine="$1"
     prog="$2"
-    data="data/$(echo $prog | stem)/big"
+    data="data/$(echo $prog | stem_data)/big"
     log="logs/$engine/$prog"
     mkdir -p "logs/$engine"
     echo > "$log"
@@ -70,7 +80,7 @@ done
 # group by benchmarks, then sort by time
 results=logs/results
 echo > "$results"
-for bench in $(cat $timings | stem | sort | uniq); do
+for bench in $(cat $timings | stem_bench | sort | uniq); do
     egrep -o "^$bench[.-].*" "$timings" | sort -k3n,3 >> "$results"
     echo >> "$results"
 done

@@ -44,7 +44,10 @@ BIN_GCC   = $(patsubst %, %-gcc, $(BIN_))
 BIN_CLANG = $(patsubst %, %-clang, $(BIN_))
 BIN = $(BIN_GCC) $(BIN_CLANG)
 
-DATA = $(patsubst %, $(DATA_DIR)/%/big, $(BENCHMARKS))
+# Some benchmarks share the same data, like `uri_simple` and `uri_rfc3986`
+DATA = $(patsubst %, $(DATA_DIR)/%/big, \
+    $(sort $(foreach bench, $(BENCHMARKS), \
+        $(firstword $(subst _, , $(bench))))))
 
 all: $(BIN)
 
