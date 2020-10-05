@@ -2,6 +2,8 @@
 
 static int lex(input_t *in, Output *out)
 {
+    const char *p;
+
 loop:
     in->tok = in->cur;
 /*!re2c
@@ -14,12 +16,16 @@ loop:
     az09dash = [a-z0-9-]* [a-z0-9];
     part     = az09 az09dash? [.];
     afterAt  = part+ az09 az09dash?;
-    email    = beforeAt [@] afterAt [\n];
+    email    = beforeAt [@] @p afterAt [\n];
     fb       = [^\n]* [\n];
 
-    *     { return 1; }
+    * { return 1; }
     email {
-        fwrite(in->tok, 1, in->cur - in->tok, stdout);
+        outc(out, ' ');
+        outs(out, in->tok, p - 1);
+        outc(out, ' ');
+        outs(out, p, in->cur - 1);
+        outc(out, '\n');
         goto loop;
     }
     fb { goto loop; }
