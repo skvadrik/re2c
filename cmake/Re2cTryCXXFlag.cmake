@@ -1,4 +1,5 @@
 include(CheckCXXCompilerFlag)
+
 # Iff C++ compiler recognizes 'flag', append 'flag' and 'implied-flags' to CXXFLAGSDEFAULT
 # (Second param 'implied-flags' is needed for warning suppressions '-Wno-<warning>':
 # GCC warns about unrecognized suppressions options only in presence of other warnings,
