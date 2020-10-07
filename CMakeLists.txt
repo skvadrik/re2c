@@ -6,7 +6,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(Re2cAutotoolsHelpers)
 include(Re2cBootstrapLexer)
 include(Re2cBootstrapParser)
-include(Re2cBootstrapBuildType)
+include(Re2cBuildType)
 include(Re2cGenDocs)
 include(Re2cTryCXXFlag)
 
@@ -37,7 +37,7 @@ set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON) # make sure object libraries work with shared libraries
 
-include(Re2cBootstrapCompilerFlags)
+include(Re2cCompilerFlags)
 
 # use system stdint.h if present, otherwise fallback to src/c99_stdint.h
 ac_check_headers("stdint.h")
