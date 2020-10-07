@@ -42,6 +42,13 @@ try_cxxflag("-Weverything"
 try_cxxflag("-fdiagnostics-color=always")
 
 # Verify compiler flags
-string(TOUPPER ${CMAKE_BUILD_TYPE} _build_type)
-message(STATUS "Used compiler flags at configure time: ${CMAKE_CXX_FLAGS_${_build_type}}")
-unset(_build_type)
+string(TOUPPER ${CMAKE_BUILD_TYPE} _config)
+get_property(_languages GLOBAL PROPERTY ENABLED_LANGUAGES)
+
+foreach(_lang IN LISTS _languages)
+    message(STATUS "Common compiler flags for ${_lang}: ${CMAKE_${_lang}_FLAGS}")
+    message(STATUS "${CMAKE_BUILD_TYPE} compiler flags for ${_lang}: ${CMAKE_${_lang}_FLAGS_${_config}}")
+endforeach()
+
+unset(_config)
+unset(_languages)
