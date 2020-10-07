@@ -42,8 +42,6 @@ try_cxxflag("-Weverything"
 try_cxxflag("-fdiagnostics-color=always")
 
 # Verify compiler flags
-if(CMAKE_BUILD_TYPE IN_LIST ALLOWABLE_BUILD_TYPES)
-    string(TOUPPER ${CMAKE_BUILD_TYPE} _build_type)
-    message(STATUS "Used compiler flags: ${CMAKE_CXX_FLAGS_${_build_type}}")
-    unset(_build_type)
-endif()
+string(TOUPPER ${CMAKE_BUILD_TYPE} _build_type)
+message(STATUS "Used compiler flags at configure time: ${CMAKE_CXX_FLAGS_${_build_type}}")
+unset(_build_type)
