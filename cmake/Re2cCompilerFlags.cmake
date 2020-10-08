@@ -17,6 +17,12 @@ function(try_cxxflag flag)
     endif()
 endfunction()
 
+# Set default optimization flag if there is no build type provided.
+# For more see discussion at https://github.com/skvadrik/re2c/pull/316
+if(NOT CMAKE_BUILD_TYPE)
+    try_cxxflag("-O2")
+endif()
+
 try_cxxflag("-W")
 try_cxxflag("-Wall")
 try_cxxflag("-Wextra")
@@ -42,13 +48,15 @@ try_cxxflag("-Weverything"
 try_cxxflag("-fdiagnostics-color=always")
 
 # Verify compiler flags
-string(TOUPPER ${CMAKE_BUILD_TYPE} _config)
 get_property(_languages GLOBAL PROPERTY ENABLED_LANGUAGES)
 
 foreach(_lang IN LISTS _languages)
     message(STATUS "Common compiler flags for ${_lang}: ${CMAKE_${_lang}_FLAGS}")
-    message(STATUS "${CMAKE_BUILD_TYPE} compiler flags for ${_lang}: ${CMAKE_${_lang}_FLAGS_${_config}}")
+    if (CMAKE_BUILD_TYPE)
+        string(TOUPPER ${CMAKE_BUILD_TYPE} _config)
+        message(STATUS "${CMAKE_BUILD_TYPE} compiler flags for ${_lang}: ${CMAKE_${_lang}_FLAGS_${_config}}")
+        unset(_config)
+    endif()
 endforeach()
 
-unset(_config)
 unset(_languages)
