@@ -2,11 +2,13 @@ cmake_minimum_required(VERSION 3.12)
 project(re2c VERSION 2.0.3 HOMEPAGE_URL "https://re2c.org/")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 include(Re2cAutotoolsHelpers)
 include(Re2cBootstrapLexer)
 include(Re2cBootstrapParser)
+include(Re2cBuildType)
 include(Re2cGenDocs)
-include(Re2cTryCXXFlag)
+include(Re2cCompilerFlags)
 
 ac_subst(PACKAGE_VERSION "${PROJECT_VERSION}")
 
@@ -34,31 +36,6 @@ find_package(BISON)
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON) # make sure object libraries work with shared libraries
-if(NOT CMAKE_BUILD_TYPE)
-    try_cxxflag("-O2")
-endif()
-try_cxxflag("-W")
-try_cxxflag("-Wall")
-try_cxxflag("-Wextra")
-try_cxxflag("-Weffc++")
-try_cxxflag("-pedantic")
-try_cxxflag("-Wformat=2")
-try_cxxflag("-Wredundant-decls")
-try_cxxflag("-Wsuggest-attribute=format")
-try_cxxflag("-Wconversion")
-try_cxxflag("-Wsign-conversion")
-try_cxxflag("-Werror=return-type")
-try_cxxflag("-Weverything"
-    "-Wno-unknown-warning-option" # CLANG eats some GCC options only to warn they are unknown
-    "-Wno-reserved-id-macro" # to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
-    "-Wno-padded"
-    "-Wno-old-style-cast" # RE2C-generated lexer has lots of C-syle casts because of 're2c:yych:conversion = 1;'
-    "-Wno-nested-anon-types"
-    "-Wno-global-constructors" # initialization of global constants with std::numeric_limits<...> (mostly for size_t)
-    "-Wno-shadow-field-in-constructor" # using same names in ctor seems more like a feature
-    "-Wno-undefined-func-template" # explicit specialization to reduce build dependencies
-)
-try_cxxflag("-fdiagnostics-color=always")
 
 # use system stdint.h if present, otherwise fallback to src/c99_stdint.h
 ac_check_headers("stdint.h")
