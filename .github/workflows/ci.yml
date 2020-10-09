@@ -16,27 +16,101 @@ jobs:
 
     strategy:
       matrix:
-        toolchain:
-          - linux-gcc
-          - macos-clang
-          - windows-msvc
-
-        build-type:
-          - Debug
-          - Release
 
         include:
+          # Linux
           - toolchain: linux-gcc
             os: ubuntu-latest
-            compiler: gcc
+            build-type: Debug
+            build-dir: .build
+            common-flags: '-O2 -fsanitize=undefined'
+            skeleton: ${{ false }}
+
+          - toolchain: linux-gcc
+            os: ubuntu-latest
+            build-type: Debug
+            build-dir: .build
+            common-flags: '-O2 -fsanitize=address'
+            skeleton: ${{ false }}
+
+          - toolchain: linux-gcc
+            os: ubuntu-latest
+            build-type: Debug
+            build-dir: .build
+            common-flags: -O2
+            skeleton: ${{ false }}
+
+          - toolchain: linux-gcc
+            os: ubuntu-latest
+            build-type: Debug
+            build-dir: .
+            common-flags: -O2
+            skeleton: ${{ false }}
+
+          - toolchain: linux-gcc
+            os: ubuntu-latest
+            build-type: Debug
+            build-dir: .build
+            common-flags: -O2
+            skeleton: ${{ true }}
+
+          - toolchain: linux-gcc
+            os: ubuntu-latest
+            build-type: Release
+            build-dir: .build
+            common-flags: ${{ null }}
+            skeleton: ${{ false }}
+
+          # macOS
+          - toolchain: macos-clang
+            os: macos-latest
+            build-type: Debug
+            build-dir: .build
+            common-flags: -O2
+            skeleton: ${{ false }}
 
           - toolchain: macos-clang
             os: macos-latest
-            compiler: clang
+            build-type: Debug
+            build-dir: .build
+            common-flags: -O2
+            skeleton: ${{ true }}
+
+          - toolchain: macos-clang
+            os: macos-latest
+            build-type: Debug
+            build-dir: .
+            common-flags: -O2
+            skeleton: ${{ false }}
+
+          - toolchain: macos-clang
+            os: macos-latest
+            build-type: Release
+            build-dir: .build
+            common-flags: ${{ null }}
+            skeleton: ${{ false }}
+
+          # Windows
+          - toolchain: windows-msvc
+            os: windows-latest
+            build-type: Debug
+            build-dir: .build
+            common-flags: ${{ null }}
+            skeleton: ${{ false }}
 
           - toolchain: windows-msvc
-            os: windows-2019
-            compiler: msvc
+            os: windows-latest
+            build-type: Debug
+            build-dir: .
+            common-flags: ${{ null }}
+            skeleton: ${{ false }}
+
+          - toolchain: windows-msvc
+            os: windows-latest
+            build-type: Release
+            build-dir: .build
+            common-flags: ${{ null }}
+            skeleton: ${{ false }}
 
     steps:
       - name: Checkout Code
@@ -67,36 +141,46 @@ jobs:
               echo "SDKROOT=$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_ENV
 
               echo "$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_PATH
-
               ;;
             Windows*)
               choco install --no-progress -y winflexbison3
               ;;
           esac
 
-      - name: Configure (${{ matrix.build-type }})
+      - name: Configure Using Flags '${{ matrix.common-flags}}'
         run: |
           case ${{ runner.os }} in
             Windows*)
-              cmake -S . -B cmake-build \
+              cmake -S . \
+                -B ${{ matrix.build-dir }} \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
                 -G "Visual Studio 16 2019" \
                 -A x64
               ;;
             *)
-              cmake -S . -B cmake-build \
+              cmake -S . \
+                -B ${{ matrix.build-dir }} \
+                -DCMAKE_C_FLAGS="${{ matrix.common-flags }}" \
+                -DCMAKE_CXX_FLAGS="${{ matrix.common-flags }}" \
+                -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.common-flags }}" \
+                -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.common-flags }}" \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
               ;;
           esac
 
       - name: Build
-        run: cmake --build cmake-build --config ${{ matrix.build-type }}
+        run: cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }}
 
       - name: Minimal Load Test (Windows)
         if: startsWith(runner.os, 'Windows')
-        working-directory: cmake-build\${{ matrix.build-type }}
+        working-directory: ${{ matrix.build-dir }}\${{ matrix.build-type }}
         run: ./re2c.exe --version
 
-      - name: Test
-        if: startsWith(runner.os, 'Windows') == false
-        run: cmake --build cmake-build --target check
+      - name: Standard Tests
+        if: startsWith(runner.os, 'Windows') == false &&  matrix.skeleton == false
+        run: cmake --build ${{ matrix.build-dir }} --target check
+
+      - name: Skeleton Validation
+        if: startsWith(runner.os, 'Windows') == false &&  matrix.skeleton == true
+        working-directory: ${{ matrix.build-dir }}
+        run: ./run_tests.sh --skeleton
