@@ -16,7 +16,8 @@ BENCHMARKS = \
 	ipv4 \
 	uri_simple \
 	uri_rfc3986 \
-	http_simple
+	http_simple \
+	http_rfc7230
 
 COMMON_SRC = $(SRC_DIR)/common.h
 

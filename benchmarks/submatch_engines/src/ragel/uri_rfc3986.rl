@@ -24,10 +24,10 @@ const char *delim = "\n";
 
     dec_octet
         = digit
-        | [\x31-\x39] digit
+        | [1-9] digit
         | "1" digit{2}
-        | "2" [\x30-\x34] digit
-        | "25" [\x30-\x35];
+        | "2" [0-4] digit
+        | "25" [0-5];
     ipv4address = dec_octet "." dec_octet "." dec_octet "." dec_octet;
     h16         = hexdigit{1,4};
     ls32        = h16 ":" h16 | ipv4address;

@@ -70,10 +70,10 @@ const char *delim = "\n\n";
     };
 
     field = header_field eol >{
-        if (h1 && h2 && h3) {
+        if (h3) {
             outstr(out, "header: ");
             outs(out, h1, h2);
-            outstr(out, ": ");
+            outc(out, ' ');
             outs(out, h2 + 1, h3);
             outc(out, '\n');
         }

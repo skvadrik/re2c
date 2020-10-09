@@ -3,11 +3,12 @@
 static void print_headers(Output *out, const char *tok,
     const taglist_t *h1, const taglist_t *h2, const taglist_t *h3)
 {
-    if (!h1 || !h2 || !h3) return;
+    if (!h3) return;
+
     print_headers(out, tok, h1->pred, h2->pred, h3->pred);
     outstr(out, "header: ");
     outs(out, tok + h1->dist, tok + h2->dist - 1);
-    outstr(out, ": ");
+    outc(out, ' ');
     outs(out, tok + h2->dist, tok + h3->dist);
     outc(out, '\n');
 }
