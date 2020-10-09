@@ -56,15 +56,18 @@ jobs:
         run: |
           case ${{ runner.os }} in
             Linux*)
-              echo "::set-env name=CC::gcc"
-              echo "::set-env name=CXX::g++"
+              echo "CC=gcc" >> $GITHUB_ENV
+              echo "CXX=g++" >> $GITHUB_ENV
               ;;
             macOS*)
               sudo xcode-select -switch /Applications/Xcode.app
-              echo "::set-env name=CC::$(xcrun -f clang)"
-              echo "::set-env name=CXX::$(xcrun -f clang++)"
-              echo "::set-env name=SDKROOT::$(xcodebuild -version -sdk macosx Path)"
-              echo "::set-env name=PATH::$(dirname $(xcrun -f clang)):$PATH"
+
+              echo "CC=$(xcrun -f clang)" >> $GITHUB_ENV
+              echo "CXX=$(xcrun -f clang++)" >> $GITHUB_ENV
+              echo "SDKROOT=$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_ENV
+
+              echo "$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_PATH
+
               ;;
             Windows*)
               choco install --no-progress -y winflexbison3
