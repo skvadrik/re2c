@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include "common.h"
 
@@ -61,6 +62,7 @@ static inline void taglistpool_free(taglistpool_t *tlp)
 
 static inline void taglist(taglist_t **ptl, const char *b, const char *t, taglistpool_t *tlp)
 {
+#ifdef GROW_MTAG_LIST
     if (tlp->next >= tlp->last) {
         const unsigned size = tlp->last - tlp->head;
         taglist_t *head = (taglist_t*)malloc(2 * size * sizeof(taglist_t));
@@ -70,7 +72,9 @@ static inline void taglist(taglist_t **ptl, const char *b, const char *t, taglis
         tlp->next = head + size;
         tlp->last = head + size * 2;
     }
-
+#else
+    assert(tlp->next < tlp->last);
+#endif
     taglist_t *tl = tlp->next++;
     tl->pred = *ptl;
     tl->dist = t - b;
