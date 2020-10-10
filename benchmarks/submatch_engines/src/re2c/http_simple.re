@@ -6,7 +6,7 @@ static void print_headers(Output *out, const char *tok,
     if (!h3) return;
 
     print_headers(out, tok, h1->pred, h2->pred, h3->pred);
-    outstr(out, "header: ");
+    OUTS("header: ");
     outs(out, tok + h1->dist, tok + h2->dist - 1);
     outc(out, ' ');
     outs(out, tok + h2->dist, tok + h3->dist);

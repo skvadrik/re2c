@@ -21,21 +21,21 @@ const char *delim = "\n";
         seconds  >{ s1 = p; } %{ s2 = p; }
         timezone >{ z1 = p; } %{ z2 = p; } [\n]
     >{
-        outstr(out, "{'year'='");
+        OUTS("{'year'='");
         outs(out, y1, y2);
-        outstr(out, "', 'month'='");
+        OUTS("', 'month'='");
         outs(out, m1, m2);
-        outstr(out, "', 'day'='");
+        OUTS("', 'day'='");
         outs(out, d1, d2);
-        outstr(out, "', 'hours'='");
+        OUTS("', 'hours'='");
         outs(out, h1, h2);
-        outstr(out, "', 'minutes'='");
+        OUTS("', 'minutes'='");
         outs(out, M1, M2);
-        outstr(out, "', 'seconds'='");
+        OUTS("', 'seconds'='");
         outs(out, s1, s2);
-        outstr(out, "', 'tz'='");
+        OUTS("', 'tz'='");
         outs(out, z1, z2);
-        outstr(out, "'}\n");
+        OUTS("'}\n");
     };
 
     main := dateTime*;

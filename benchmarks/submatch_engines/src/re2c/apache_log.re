@@ -36,25 +36,25 @@ loop:
     * { return 1; }
     end {
         out->pos -= 2;
-        outstr(out, "\n]\n");
+        OUTS("\n]\n");
         return 0;
     }
     line {
-        outstr(out, "{\"host\":\"");
+        OUTS("{\"host\":\"");
         outs(out, in->tok, h2);
-        outstr(out, "\",\"date\":\"");
+        OUTS("\",\"date\":\"");
         outs(out, d1, d2);
-        outstr(out, "\",\"request\":\"");
+        OUTS("\",\"request\":\"");
         outs(out, r1, r2);
-        outstr(out, "\",\"status\":\"");
+        OUTS("\",\"status\":\"");
         outs(out, s1, s2);
-        outstr(out, "\",\"size\":\"");
+        OUTS("\",\"size\":\"");
         outs(out, z1, z2);
-        outstr(out, "\",\"url\":\"");
+        OUTS("\",\"url\":\"");
         outs(out, l1, l2);
-        outstr(out, "\",\"agent\":\"");
+        OUTS("\",\"agent\":\"");
         outs(out, a1, a2);
-        outstr(out, "\"},\n");
+        OUTS("\"},\n");
         goto loop;
     }
 */

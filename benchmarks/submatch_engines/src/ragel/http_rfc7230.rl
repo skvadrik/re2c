@@ -85,8 +85,8 @@ const char *delim = "\n\n";
         ("?" query    >{ q3 = p; } %{ q4 = p; }
         )?;
 
-    http_name      = "HTTP";
-    http_version   = http_name "/" digit "." digit;
+    http_name    = "HTTP";
+    http_version = http_name "/" digit "." digit;
 
     request_target
         = authority     %{ at = p; }
@@ -94,24 +94,20 @@ const char *delim = "\n\n";
         | origin_form   %{ of = p; }
         | "*";
 
-    method         = tchar+;
+    method = tchar+;
 
     request_line =
-        method                >{ m1 = p; } %{ m2 = p; }
-        sp request_target sp
-        http_version          >{ v3 = p; } %{ v4 = p; }
-        crlf;
+        method                >{ m1 = p; } %{ m2 = p; } sp
+        request_target                                  sp
+        http_version          >{ v3 = p; } %{ v4 = p; } crlf;
 
     status_code    = digit{3};
     reason_phrase  = (htab | sp | vchar | obs_text)*;
 
     status_line =
-        http_version   >{ v1 = p; } %{ v2 = p; }
-        sp
-        status_code    >{ st1 = p; } %{ st2 = p; }
-        sp
-        reason_phrase  >{ rp1 = p; } %{ rp2 = p; }
-        crlf;
+        http_version   >{ v1 = p; }  %{ v2 = p; }  sp
+        status_code    >{ st1 = p; } %{ st2 = p; } sp
+        reason_phrase  >{ rp1 = p; } %{ rp2 = p; } crlf;
 
     start_line = (request_line | status_line) >{
         of = au = at =
@@ -129,34 +125,22 @@ const char *delim = "\n\n";
             OUT("method: ", m1, m2);
             if (of) {
                 OUT("path-3: ", p5, p6);
-                if (q3) {
-                    OUT("query-2: ", q3, q4);
-                }
+                if (q3) OUT("query-2: ", q3, q4);
             } else if (au) {
                 if (p2) {
                     OUT("scheme: ", s1, s2);
-                    if (u2) {
-                        OUT("user-1: ", u1, u2);
-                    }
+                    if (u2) OUT("user-1: ", u1, u2);
                     OUT("host-1: ", hs1, hs2);
-                    if (r2) {
-                        OUT("port-1: ", r1, r2);
-                    }
+                    if (r2) OUT("port-1: ", r1, r2);
                     OUT("path-1: ", p1, p2);
                 } else {
                     OUT("path-2: ", p3, p4);
                 }
-                if (q2) {
-                    OUT("query-1: ", q1, q2);
-                }
+                if (q2) OUT("query-1: ", q1, q2);
             } else if (at) {
-                if (u4) {
-                    OUT("user-2: ", u3, u4);
-                }
+                if (u4) OUT("user-2: ", u3, u4);
                 OUT("host-2: ", hs3, hs4);
-                if (r4) {
-                    OUT("port-2: ", r3, r4);
-                }
+                if (r4) OUT("port-2: ", r3, r4);
             } else {
                 outc(out, '*');
             }
@@ -166,9 +150,9 @@ const char *delim = "\n\n";
 
     field = header_field crlf >{
         if (h5) {
-            outstr(out, "header: ");
+            OUTS("header: ");
             outs(out, h1, h2);
-            outstr(out, " ");
+            outc(out, ' ');
             outs(out, h3, h4);
             outc(out, '\n');
         }

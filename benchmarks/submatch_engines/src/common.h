@@ -69,13 +69,6 @@ static inline void outs(Output *out, const char *s, const char *e)
     out->pos += n;
 }
 
-static inline void outstr(Output *out, const char *s)
-{
-    const char *e = s;
-    for (; *e; ++e);
-    outs(out, s, e);
-}
-
 static inline void outc(Output *out, char c)
 {
     if (out->pos + 1 - out->buf >= SIZE) {
@@ -84,7 +77,15 @@ static inline void outc(Output *out, char c)
     *out->pos++ = c;
 }
 
-#define OUT(s, p1, p2) \
-    outstr(out, s); \
-    outs(out, p1, p2); \
-    outc(out, '\n');
+// first argument must be a string literal
+#define OUTS(s) do {                 \
+    const char *p = s;               \
+    outs(out, p, p + sizeof(s) - 1); \
+} while(0)
+
+// first argument must be a string literal
+#define OUT(s, p1, p2) do { \
+    OUTS(s);                \
+    outs(out, p1, p2);      \
+    outc(out, '\n');        \
+} while(0)
