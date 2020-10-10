@@ -21,27 +21,24 @@ jobs:
           # Linux
           - toolchain: linux-gcc
             os: ubuntu-latest
-            build-type: Debug
+            # Undefined Behavior Sanitizer (cmake -DCMAKE_BUILD_TYPE=Ubsan)
+            build-type: Ubsan
             build-dir: .build
-            # Undefined Behavior Sanitizer (ubsan)
-            ld-flags: '-fsanitize=undefined'
-            cxx-flags: '-O2 -fsanitize=undefined'
+            cxx-flags: '-O2'
+            skeleton: ${{ false }}
+
+          - toolchain: linux-gcc
+            os: ubuntu-latest
+            # Address Sanitizer (cmake -DCMAKE_BUILD_TYPE=Asan)
+            build-type: Asan
+            build-dir: .build
+            cxx-flags: '-O2'
             skeleton: ${{ false }}
 
           - toolchain: linux-gcc
             os: ubuntu-latest
             build-type: Debug
             build-dir: .build
-            # Address Sanitizer (asan)
-            ld-flags: '-fsanitize=address'
-            cxx-flags: '-O2 -fsanitize=address'
-            skeleton: ${{ false }}
-
-          - toolchain: linux-gcc
-            os: ubuntu-latest
-            build-type: Debug
-            build-dir: .build
-            ld-flags: ${{ null }}
             cxx-flags: -O2
             skeleton: ${{ false }}
 
@@ -49,7 +46,6 @@ jobs:
             os: ubuntu-latest
             build-type: Debug
             build-dir: .
-            ld-flags: ${{ null }}
             cxx-flags: -O2
             skeleton: ${{ false }}
 
@@ -57,7 +53,6 @@ jobs:
             os: ubuntu-latest
             build-type: Debug
             build-dir: .build
-            ld-flags: ${{ null }}
             cxx-flags: -O2
             skeleton: ${{ true }}
 
@@ -65,7 +60,6 @@ jobs:
             os: ubuntu-latest
             build-type: Release
             build-dir: .build
-            ld-flags: ${{ null }}
             cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
@@ -74,7 +68,6 @@ jobs:
             os: macos-latest
             build-type: Debug
             build-dir: .build
-            ld-flags: ${{ null }}
             cxx-flags: -O2
             skeleton: ${{ false }}
 
@@ -82,7 +75,6 @@ jobs:
             os: macos-latest
             build-type: Debug
             build-dir: .build
-            ld-flags: ${{ null }}
             cxx-flags: -O2
             skeleton: ${{ true }}
 
@@ -90,7 +82,6 @@ jobs:
             os: macos-latest
             build-type: Debug
             build-dir: .
-            ld-flags: ${{ null }}
             cxx-flags: -O2
             skeleton: ${{ false }}
 
@@ -98,7 +89,6 @@ jobs:
             os: macos-latest
             build-type: Release
             build-dir: .build
-            ld-flags: ${{ null }}
             cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
@@ -107,7 +97,6 @@ jobs:
             os: windows-latest
             build-type: Debug
             build-dir: .build
-            ld-flags: ${{ null }}
             cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
@@ -115,7 +104,6 @@ jobs:
             os: windows-latest
             build-type: Debug
             build-dir: .
-            ld-flags: ${{ null }}
             cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
@@ -123,7 +111,6 @@ jobs:
             os: windows-latest
             build-type: Release
             build-dir: .build
-            ld-flags: ${{ null }}
             cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
@@ -179,10 +166,6 @@ jobs:
               # CFLAGS, CXXFLAGS
               [[ ! -z '${{ matrix.cxx-flags }}' ]] && \
                 args+=( -DCMAKE_C_FLAGS="${{ matrix.cxx-flags }}" -DCMAKE_CXX_FLAGS="${{ matrix.cxx-flags }}" )
-
-              # LDFLAGS
-              [[ ! -z '${{ matrix.ld-flags }}' ]] && \
-                args+=( -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.ld-flags }}" -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.ld-flags }}" )
 
               # Debug
               echo "cmake ${args[@]}"

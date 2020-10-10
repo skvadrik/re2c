@@ -47,19 +47,18 @@ try_cxxflag("-Weverything"
 
 try_cxxflag("-fdiagnostics-color=always")
 
-# Verify compiler flags
-get_property(_languages GLOBAL PROPERTY ENABLED_LANGUAGES)
-
-foreach(_lang IN LISTS _languages)
-    message(STATUS "Common compiler flags for ${_lang}: ${CMAKE_${_lang}_FLAGS}")
-    if (CMAKE_BUILD_TYPE)
-        string(TOUPPER ${CMAKE_BUILD_TYPE} _config)
-        message(STATUS "${CMAKE_BUILD_TYPE} compiler flags for ${_lang}: ${CMAKE_${_lang}_FLAGS_${_config}}")
-        unset(_config)
-    endif()
-endforeach()
-
-message(STATUS "Linker flags to be used to create executables: ${CMAKE_EXE_LINKER_FLAGS}")
-message(STATUS "Linker flags to be used to create shared libraries: ${CMAKE_SHARED_LINKER_FLAGS}")
-
-unset(_languages)
+# Print compiler and linker flags
+message(STATUS "C compiler flags: ${CMAKE_C_FLAGS}")
+message(STATUS "C++ compiler flags: ${CMAKE_CXX_FLAGS}")
+message(STATUS "Linker flags for executables: ${CMAKE_EXE_LINKER_FLAGS}")
+message(STATUS "Linker flags for shared libs: ${CMAKE_SHARED_LINKER_FLAGS}")
+message(STATUS "Linker flags for static libs: ${CMAKE_STATIC_LINKER_FLAGS}")
+if (CMAKE_BUILD_TYPE)
+    string(TOUPPER ${CMAKE_BUILD_TYPE} _type)
+    message(STATUS "${CMAKE_BUILD_TYPE} C compiler flags: ${CMAKE_C_FLAGS_${_type}}")
+    message(STATUS "${CMAKE_BUILD_TYPE} C++ compiler flags: ${CMAKE_CXX_FLAGS_${_type}}")
+    message(STATUS "${CMAKE_BUILD_TYPE} linker flags for executables: ${CMAKE_EXE_LINKER_FLAGS_${_type}}")
+    message(STATUS "${CMAKE_BUILD_TYPE} linker flags for shared libs: ${CMAKE_SHARED_LINKER_FLAGS_${_type}}")
+    message(STATUS "${CMAKE_BUILD_TYPE} linker flags for static libs: ${CMAKE_STATIC_LINKER_FLAGS_${_type}}")
+    unset(_type)
+endif()
