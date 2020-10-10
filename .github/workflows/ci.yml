@@ -23,42 +23,50 @@ jobs:
             os: ubuntu-latest
             build-type: Debug
             build-dir: .build
-            common-flags: '-O2 -fsanitize=undefined'
+            # Undefined Behavior Sanitizer (ubsan)
+            ld-flags: '-fsanitize=undefined'
+            cxx-flags: '-O2 -fsanitize=undefined'
             skeleton: ${{ false }}
 
           - toolchain: linux-gcc
             os: ubuntu-latest
             build-type: Debug
             build-dir: .build
-            common-flags: '-O2 -fsanitize=address'
+            # Address Sanitizer (asan)
+            ld-flags: '-fsanitize=address'
+            cxx-flags: '-O2 -fsanitize=address'
             skeleton: ${{ false }}
 
           - toolchain: linux-gcc
             os: ubuntu-latest
             build-type: Debug
             build-dir: .build
-            common-flags: -O2
+            ld-flags: ${{ null }}
+            cxx-flags: -O2
             skeleton: ${{ false }}
 
           - toolchain: linux-gcc
             os: ubuntu-latest
             build-type: Debug
             build-dir: .
-            common-flags: -O2
+            ld-flags: ${{ null }}
+            cxx-flags: -O2
             skeleton: ${{ false }}
 
           - toolchain: linux-gcc
             os: ubuntu-latest
             build-type: Debug
             build-dir: .build
-            common-flags: -O2
+            ld-flags: ${{ null }}
+            cxx-flags: -O2
             skeleton: ${{ true }}
 
           - toolchain: linux-gcc
             os: ubuntu-latest
             build-type: Release
             build-dir: .build
-            common-flags: ${{ null }}
+            ld-flags: ${{ null }}
+            cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
           # macOS
@@ -66,28 +74,32 @@ jobs:
             os: macos-latest
             build-type: Debug
             build-dir: .build
-            common-flags: -O2
+            ld-flags: ${{ null }}
+            cxx-flags: -O2
             skeleton: ${{ false }}
 
           - toolchain: macos-clang
             os: macos-latest
             build-type: Debug
             build-dir: .build
-            common-flags: -O2
+            ld-flags: ${{ null }}
+            cxx-flags: -O2
             skeleton: ${{ true }}
 
           - toolchain: macos-clang
             os: macos-latest
             build-type: Debug
             build-dir: .
-            common-flags: -O2
+            ld-flags: ${{ null }}
+            cxx-flags: -O2
             skeleton: ${{ false }}
 
           - toolchain: macos-clang
             os: macos-latest
             build-type: Release
             build-dir: .build
-            common-flags: ${{ null }}
+            ld-flags: ${{ null }}
+            cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
           # Windows
@@ -95,21 +107,24 @@ jobs:
             os: windows-latest
             build-type: Debug
             build-dir: .build
-            common-flags: ${{ null }}
+            ld-flags: ${{ null }}
+            cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
           - toolchain: windows-msvc
             os: windows-latest
             build-type: Debug
             build-dir: .
-            common-flags: ${{ null }}
+            ld-flags: ${{ null }}
+            cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
           - toolchain: windows-msvc
             os: windows-latest
             build-type: Release
             build-dir: .build
-            common-flags: ${{ null }}
+            ld-flags: ${{ null }}
+            cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
     steps:
@@ -147,7 +162,7 @@ jobs:
               ;;
           esac
 
-      - name: Configure Using Flags '${{ matrix.common-flags}}'
+      - name: Configure
         run: |
           case ${{ runner.os }} in
             Windows*)
@@ -158,13 +173,22 @@ jobs:
                 -A x64
               ;;
             *)
-              cmake -S . \
-                -B ${{ matrix.build-dir }} \
-                -DCMAKE_C_FLAGS="${{ matrix.common-flags }}" \
-                -DCMAKE_CXX_FLAGS="${{ matrix.common-flags }}" \
-                -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.common-flags }}" \
-                -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.common-flags }}" \
-                -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
+              # Common CMake arguments
+              args=( -S . -B ${{ matrix.build-dir }} -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} )
+
+              # CFLAGS, CXXFLAGS
+              [[ ! -z '${{ matrix.cxx-flags }}' ]] && \
+                args+=( -DCMAKE_C_FLAGS="${{ matrix.cxx-flags }}" -DCMAKE_CXX_FLAGS="${{ matrix.cxx-flags }}" )
+
+              # LDFLAGS
+              [[ ! -z '${{ matrix.ld-flags }}' ]] && \
+                args+=( -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.ld-flags }}" -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.ld-flags }}" )
+
+              # Debug
+              echo "cmake ${args[@]}"
+
+              # Run
+              cmake "${args[@]}"
               ;;
           esac
 
