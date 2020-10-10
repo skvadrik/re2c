@@ -32,34 +32,46 @@ const char *delim = "\n";
 %%{
     machine parser;
 
-    action mark { q = p; }
-
-    host    = [0-9\.]+       > mark % { outstr(out, "{\"host\":\"");      outs(out, q, p); };
-    user    = alpha+         > mark % { outstr(out, "\",\"user\":\"");    outs(out, q, p); };
-    date    = [^\]]+         > mark % { outstr(out, "\",\"date\":\"");    outs(out, q, p); };
-    request = [^"]+          > mark % { outstr(out, "\",\"request\":\""); outs(out, q, p); };
-    status  = digit+         > mark % { outstr(out, "\",\"status\":\"");  outs(out, q, p); };
-    size    = (digit+ | '-') > mark % { outstr(out, "\",\"size\":\"");    outs(out, q, p); };
-    url     = [^"]*          > mark % { outstr(out, "\",\"url\":\"");     outs(out, q, p); };
-    agent   = [^"]*          > mark % { outstr(out, "\",\"agent\":\"");   outs(out, q, p); };
-
-    line =
-        host            space
-        '-'             space
-        '-'             space
-        '[' date ']'    space
-        '"' request '"' space
-        status          space
-        size            space
-        '"' url '"'     space
-        '"' agent '"'
-        [\n] > { outstr(out, "\"},\n"); }
-        ;
+    host    = [0-9\.]+;
+    user    = alpha+;
+    date    = [^\]]+;
+    request = [^"]+;
+    status  = digit+;
+    size    = (digit+ | '-');
+    url     = [^"]*;
+    agent   = [^"]*;
+    line    =
+        host        >{ h1 = p; } %{ h2 = p; }     space
+        '-'                                       space
+        '-'                                       space
+        '[' date    >{ d1 = p; } %{ d2 = p; } ']' space
+        '"' request >{ r1 = p; } %{ r2 = p; } '"' space
+        status      >{ s1 = p; } %{ s2 = p; }     space
+        size        >{ z1 = p; } %{ z2 = p; }     space
+        '"' url     >{ l1 = p; } %{ l2 = p; } '"' space
+        '"' agent   >{ a1 = p; } %{ a2 = p; } '"' [\n]
+    >{
+        outstr(out, "{\"host\":\"");
+        outs(out, h1, h2);
+        outstr(out, "\",\"date\":\"");
+        outs(out, d1, d2);
+        outstr(out, "\",\"request\":\"");
+        outs(out, r1, r2);
+        outstr(out, "\",\"status\":\"");
+        outs(out, s1, s2);
+        outstr(out, "\",\"size\":\"");
+        outs(out, z1, z2);
+        outstr(out, "\",\"url\":\"");
+        outs(out, l1, l2);
+        outstr(out, "\",\"agent\":\"");
+        outs(out, a1, a2);
+        outstr(out, "\"},\n");
+    };
 
     main := line*;
-
-    write data;
 }%%
+
+%% write data;
 
 static void prolog(Output *out)
 {
@@ -76,7 +88,9 @@ static void lex(Input *in, Output *out)
 {
     char *p = in->p;
     char *pe = in->pe;
-    char *q;
+    const char *h1, *h2,
+        *d1, *r1, *s1, *z1, *l1, *a1,
+        *d2, *r2, *s2, *z2, *l2, *a2;
     int cs;
 
     %% write init;

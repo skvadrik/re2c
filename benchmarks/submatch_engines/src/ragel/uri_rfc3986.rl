@@ -66,7 +66,8 @@ const char *delim = "\n";
     query    = (pchar | [/?])* >{ q1 = p; } %{ q2 = p; };
     fragment = (pchar | [/?])* >{ f1 = p; } %{ f2 = p; };
 
-    nl = [\n] >{
+    uri = scheme ":" hier_part ("?" query)? ("#" fragment)? [\n]
+    >{
         OUT("scheme: ", s1, s2);
         if (u2 - u1 > 1) {
             OUT("user: ", u1, u2);
@@ -95,8 +96,6 @@ const char *delim = "\n";
         outc(out, '\n');
     };
 
-    uri = scheme ":" hier_part ("?" query)? ("#" fragment)? nl;
-
     main := uri*;
 }%%
 
@@ -109,12 +108,10 @@ static void lex(Input *in, Output *out)
 {
     char *p = in->p;
     char *pe = in->pe;
-    char *q;
-    int cs;
-
     const char
         *s1, *u1, *h1, *h3, *h5, *r1, *p1, *p3, *q1, *f1,
         *s2, *u2, *h2, *h4, *h6, *r2, *p2, *p4, *q2, *f2;
+    int cs;
 
     %% write init;
     %% write exec;
