@@ -7,9 +7,9 @@ static void print_headers(Output *out, const char *tok,
     if (!h5) return;
 
     print_headers(out, tok, h1->pred, h2->pred, h3->pred, h4->pred, h5->pred);
-    outstr(out, "header: ");
+    OUTS("header: ");
     outs(out, tok + h1->dist, tok + h2->dist);
-    outstr(out, " ");
+    outc(out, ' ');
     outs(out, tok + h3->dist, tok + h4->dist);
     outc(out, '\n');
 }
@@ -111,34 +111,22 @@ loop:
             OUT("method: ", m1, m2);
             if (of) {
                 OUT("path-3: ", p5, p6);
-                if (q3) {
-                    OUT("query-2: ", q3, q4);
-                }
+                if (q3) OUT("query-2: ", q3, q4);
             } else if (au) {
                 if (p1) {
                     OUT("scheme: ", s1, s2);
-                    if (u1) {
-                        OUT("user-1: ", u1, u2);
-                    }
+                    if (u1) OUT("user-1: ", u1, u2);
                     OUT("host-1: ", hs1, hs2);
-                    if (r1) {
-                        OUT("port-1: ", r1, r2);
-                    }
+                    if (r1) OUT("port-1: ", r1, r2);
                     OUT("path-1: ", p1, p2);
                 } else {
                     OUT("path-2: ", p3, p4);
                 }
-                if (q1) {
-                    OUT("query-1: ", q1, q2);
-                }
+                if (q1) OUT("query-1: ", q1, q2);
             } else if (at) {
-                if (u3) {
-                    OUT("user-2: ", u3, u4);
-                }
+                if (u3) OUT("user-2: ", u3, u4);
                 OUT("host-2: ", hs3, hs4);
-                if (r3) {
-                    OUT("port-2: ", r3, r4);
-                }
+                if (r3) OUT("port-2: ", r3, r4);
             } else {
                 outc(out, '*');
             }

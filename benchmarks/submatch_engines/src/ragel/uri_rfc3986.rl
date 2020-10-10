@@ -69,30 +69,15 @@ const char *delim = "\n";
     uri = scheme ":" hier_part ("?" query)? ("#" fragment)? [\n]
     >{
         OUT("scheme: ", s1, s2);
-        if (u2 - u1 > 1) {
-            OUT("user: ", u1, u2);
-        }
-        if (h1 && h2) {
-            OUT("host-1: ", h1, h2);
-        } else if (h3 && h4) {
-            OUT("host-2: ", h3, h4);
-        } else if (h5 && h6) {
-            OUT("host-3: ", h5, h6);
-        }
-        if (r2 - r1 > 1) {
-            OUT("port: ", r1, r2);
-        }
-        if (p1) {
-            OUT("path-1: ", p1, p2);
-        } else if (p3) {
-            OUT("path-2: ", p3, p4);
-        }
-        if (q1) {
-            OUT("query: ", q1, q2);
-        }
-        if (f1) {
-            OUT("fragment: ", f1, f2);
-        }
+        if (u2) OUT("user: ", u1, u2);
+        if (h1) OUT("host-1: ", h1, h2);
+        else if (h3) OUT("host-2: ", h3, h4);
+        else if (h5) OUT("host-3: ", h5, h6);
+        if (r2) OUT("port: ", r1, r2);
+        if (p1) OUT("path-1: ", p1, p2);
+        else if (p3) OUT("path-2: ", p3, p4);
+        if (q1) OUT("query: ", q1, q2);
+        if (f1) OUT("fragment: ", f1, f2);
         outc(out, '\n');
     };
 

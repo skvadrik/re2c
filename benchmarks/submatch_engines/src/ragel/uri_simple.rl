@@ -24,22 +24,12 @@ const char *delim = "\n";
         path ("?" query)? ("#" fragment)? [\n]
     >{
         OUT("scheme: ", s1, s2);
-        if (u2) {
-            OUT("user: ", u1, u2);
-        }
-        if (h1) {
-            OUT("host: ", h1, h2);
-        }
-        if (r2 - r1 > 1) {
-            OUT("port: ", r1, r2);
-        }
+        if (u2) OUT("user: ", u1, u2);
+        if (h1) OUT("host: ", h1, h2);
+        if (r2 - r1 > 1) OUT("port: ", r1, r2);
         OUT("path: ", p1, p2);
-        if (q1) {
-            OUT("query: ", q1, q2);
-        }
-        if (f1) {
-            OUT("fragment: ", f1, f2);
-        }
+        if (q1) OUT("query: ", q1, q2);
+        if (f1) OUT("fragment: ", f1, f2);
         outc(out, '\n');
     };
 

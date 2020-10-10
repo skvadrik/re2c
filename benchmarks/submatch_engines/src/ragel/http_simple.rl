@@ -22,8 +22,8 @@ const char *delim = "\n\n";
     field_content  = vchar ((sp | htab)+ vchar)?;
 
     header_field =
-        tchar+ >{ h1 = p; }
-        [:]    >{ h2 = p; }
+        tchar+                              >{ h1 = p; }
+        [:]                                 >{ h2 = p; }
         ows (field_content | obs_fold)* ows >{ h3 = p; };
 
     authority      = (userinfo [@])? host ([:] port)?;
@@ -34,35 +34,29 @@ const char *delim = "\n\n";
     method         = tchar+;
 
     request_line =
-        method         >{ m1 = p; } %{ m2 = p; }
-        sp
-        request_target >{ rt1 = p; } %{ rt2 = p; }
-        sp
-        http_version   >{ v3 = p; } %{ v4 = p; }
-        eol;
+        method         >{ m1 = p; }  %{ m2 = p; }  sp
+        request_target >{ rt1 = p; } %{ rt2 = p; } sp
+        http_version   >{ v3 = p; }  %{ v4 = p; }  eol;
 
     status_code    = [0-9]{3};
     reason_phrase  = (htab | sp | vchar)*;
 
     status_line =
-        http_version  >{ v1 = p; } %{ v2 = p; }
-        sp
-        status_code   >{ s1 = p; } %{ s2 = p; }
-        sp
-        reason_phrase >{ rp1 = p; } %{ rp2 = p; }
-        eol;
+        http_version  >{ v1 = p; }  %{ v2 = p; }  sp
+        status_code   >{ s1 = p; }  %{ s2 = p; }  sp
+        reason_phrase >{ rp1 = p; } %{ rp2 = p; } eol;
 
     start_line = (request_line | status_line) >{
         h1 = h2 = h3 =
             s1 = v1 = v3 = m1 = rp1 = rt1 =
             s2 = v2 = v4 = m2 = rp2 = rt2 = NULL;
     } %{
-        if (s1 && s2) {
+        if (s2) {
             OUT("version: ", v1, v2);
             OUT("status: ", s1, s2);
             OUT("reason: ", rp1, rp2);
         }
-        if (m1 && m2) {
+        if (m2) {
             OUT("method: ", m1, m2);
             OUT("request: ", rt1, rt2);
             OUT("version: ", v3, v4);
@@ -71,7 +65,7 @@ const char *delim = "\n\n";
 
     field = header_field eol >{
         if (h3) {
-            outstr(out, "header: ");
+            OUTS("header: ");
             outs(out, h1, h2);
             outc(out, ' ');
             outs(out, h2 + 1, h3);
