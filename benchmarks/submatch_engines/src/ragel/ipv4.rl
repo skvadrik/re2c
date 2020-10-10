@@ -5,21 +5,24 @@ const char *delim = "\n";
 %%{
     machine ipv4;
 
-    action setptr { q = p; }
-    action output { outs(out, q, p); }
-
     oct  = [0-9]{1,3};
-    dot  = [.]  > { outc(out, ','); };
-    nl   = [\n] > { outc(out, '\n'); };
+    dot  = [.];
+    nl   = [\n];
     ipv4 =
-        oct > setptr % output
-        dot
-        oct > setptr % output
-        dot
-        oct > setptr % output
-        dot
-        oct > setptr % output
-        nl;
+        oct >{ p1 = p; } dot
+        oct >{ p2 = p; } dot
+        oct >{ p3 = p; } dot
+        oct >{ p4 = p; } nl
+    >{
+        outs(out, p1, p2 - 1);
+        outc(out, ',');
+        outs(out, p2, p3 - 1);
+        outc(out, ',');
+        outs(out, p3, p4 - 1);
+        outc(out, ',');
+        outs(out, p4, p);
+        outc(out, '\n');
+    };
 
     main := ipv4*;
 }%%
@@ -33,7 +36,7 @@ static void lex(Input *in, Output *out)
 {
     char *p = in->p;
     char *pe = in->pe;
-    char *q;
+    const char *p1, *p2, *p3, *p4;
     int cs;
 
     %% write init;

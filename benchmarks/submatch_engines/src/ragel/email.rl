@@ -14,10 +14,8 @@ const char *delim = "\n";
     fb       = [^\n]*[\n];
 
     email =
-        beforeAt >{ p1 = p; }
-        [@]
-        afterAt  >{ p2 = p; }
-        [\n]
+        beforeAt >{ p1 = p; } [@]
+        afterAt  >{ p2 = p; } [\n]
     >{
         outc(out, ' ');
         outs(out, p1, p2 - 1);

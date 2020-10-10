@@ -94,12 +94,10 @@ static void lex(Input *in, Output *out)
 {
     char *p = in->p;
     char *pe = in->pe;
-    char *q;
-    int cs;
-
     const char *h1, *h2, *h3,
         *s1, *v1, *v3, *m1, *rp1, *rt1,
         *s2, *v2, *v4, *m2, *rp2, *rt2;
+    int cs;
 
     %% write init;
     %% write exec;

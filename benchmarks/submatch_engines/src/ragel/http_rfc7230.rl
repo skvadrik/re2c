@@ -189,14 +189,13 @@ static void lex(Input *in, Output *out)
 {
     char *p = in->p;
     char *pe = in->pe;
-    int cs;
-
     const char *of, *au, *at,
         *hs1, *hs3, *m1, *p1, *p3, *p5, *q1, *q3,
         *hs2, *hs4, *m2, *p2, *p4, *p6, *q2, *q4,
         *r1, *r3, *rp1, *s1, *st1, *u1, *u3, *v1, *v3,
         *r2, *r4, *rp2, *s2, *st2, *u2, *u4, *v2, *v4,
         *h1, *h2, *h3, *h4, *h5;
+    int cs;
 
     %% write init;
     %% write exec;
