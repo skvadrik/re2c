@@ -59,4 +59,7 @@ foreach(_lang IN LISTS _languages)
     endif()
 endforeach()
 
+message(STATUS "Linker flags to be used to create executables: ${CMAKE_EXE_LINKER_FLAGS}")
+message(STATUS "Linker flags to be used to create shared libraries: ${CMAKE_SHARED_LINKER_FLAGS}")
+
 unset(_languages)
