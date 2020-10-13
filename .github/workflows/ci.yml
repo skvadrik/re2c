@@ -10,8 +10,7 @@ defaults:
 
 jobs:
   build-and-test:
-
-    name: "${{ matrix.build-type }}: ${{ matrix.toolchain }}"
+    name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -19,7 +18,7 @@ jobs:
 
         include:
           # Linux
-          - toolchain: linux-gcc
+          - name: linux-gcc-ubsan-ootree
             os: ubuntu-latest
             # Undefined Behavior Sanitizer (cmake -DCMAKE_BUILD_TYPE=Ubsan)
             build-type: Ubsan
@@ -27,7 +26,7 @@ jobs:
             cxx-flags: '-O2'
             skeleton: ${{ false }}
 
-          - toolchain: linux-gcc
+          - name: linux-gcc-asan-ootree
             os: ubuntu-latest
             # Address Sanitizer (cmake -DCMAKE_BUILD_TYPE=Asan)
             build-type: Asan
@@ -35,28 +34,28 @@ jobs:
             cxx-flags: '-O2'
             skeleton: ${{ false }}
 
-          - toolchain: linux-gcc
+          - name: linux-gcc-debug-ootree
             os: ubuntu-latest
             build-type: Debug
             build-dir: .build
             cxx-flags: -O2
             skeleton: ${{ false }}
 
-          - toolchain: linux-gcc
+          - name: linux-gcc-debug-intree
             os: ubuntu-latest
             build-type: Debug
             build-dir: .
             cxx-flags: -O2
             skeleton: ${{ false }}
 
-          - toolchain: linux-gcc
+          - name: linux-gcc-debug-ootree-skeleton
             os: ubuntu-latest
             build-type: Debug
             build-dir: .build
             cxx-flags: -O2
             skeleton: ${{ true }}
 
-          - toolchain: linux-gcc
+          - name: linux-gcc-release-ootree
             os: ubuntu-latest
             build-type: Release
             build-dir: .build
@@ -64,28 +63,28 @@ jobs:
             skeleton: ${{ false }}
 
           # macOS
-          - toolchain: macos-clang
+          - name: macos-clang-debug-ootree
             os: macos-latest
             build-type: Debug
             build-dir: .build
             cxx-flags: -O2
             skeleton: ${{ false }}
 
-          - toolchain: macos-clang
+          - name: macos-clang-debug-ootree-skeleton
             os: macos-latest
             build-type: Debug
             build-dir: .build
             cxx-flags: -O2
             skeleton: ${{ true }}
 
-          - toolchain: macos-clang
+          - name: macos-clang-debug-intree
             os: macos-latest
             build-type: Debug
             build-dir: .
             cxx-flags: -O2
             skeleton: ${{ false }}
 
-          - toolchain: macos-clang
+          - name: macos-clang-release-ootree
             os: macos-latest
             build-type: Release
             build-dir: .build
@@ -93,21 +92,21 @@ jobs:
             skeleton: ${{ false }}
 
           # Windows
-          - toolchain: windows-msvc
+          - name: windows-msvc-debug-ootree
             os: windows-latest
             build-type: Debug
             build-dir: .build
             cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
-          - toolchain: windows-msvc
+          - name: windows-msvc-debug-intree
             os: windows-latest
             build-type: Debug
             build-dir: .
             cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
-          - toolchain: windows-msvc
+          - name: windows-msvc-release-ootree
             os: windows-latest
             build-type: Release
             build-dir: .build
@@ -151,10 +150,12 @@ jobs:
 
       - name: Configure
         run: |
+          INSTALL_PREFIX="$(pwd)/install"
           case ${{ runner.os }} in
             Windows*)
               cmake -S . \
                 -B ${{ matrix.build-dir }} \
+                -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX" \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
                 -G "Visual Studio 16 2019" \
                 -A x64
@@ -162,6 +163,7 @@ jobs:
             *)
               # Common CMake arguments
               args=( -S . -B ${{ matrix.build-dir }} -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} )
+              args+=( -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX" )
 
               # CFLAGS, CXXFLAGS
               [[ ! -z '${{ matrix.cxx-flags }}' ]] && \
@@ -178,16 +180,22 @@ jobs:
       - name: Build
         run: cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }}
 
-      - name: Minimal Load Test (Windows)
-        if: startsWith(runner.os, 'Windows')
-        working-directory: ${{ matrix.build-dir }}\${{ matrix.build-type }}
-        run: ./re2c.exe --version
-
       - name: Standard Tests
         if: startsWith(runner.os, 'Windows') == false &&  matrix.skeleton == false
         run: cmake --build ${{ matrix.build-dir }} --target check
 
       - name: Skeleton Validation
-        if: startsWith(runner.os, 'Windows') == false &&  matrix.skeleton == true
+        if: startsWith(runner.os, 'Windows') == false && matrix.skeleton == true
         working-directory: ${{ matrix.build-dir }}
         run: ./run_tests.sh --skeleton
+
+      - name: Install
+        run: |
+          cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }} --target install
+          echo -e "Install tree:\n$(find install | sed 's/^/-- /')"
+
+      - name: Minimal Install Test
+        working-directory: ./install/bin
+        run: |
+          ./re2c --version
+          ./re2go --version
