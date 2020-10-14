@@ -287,15 +287,13 @@ add_custom_target(docs DEPENDS "${re2c_docs}")
 # install and test targets are enabled only if re2c is the root project
 if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     # install
-    if(UNIX)
-        install(TARGETS re2c RUNTIME DESTINATION bin)
-        install(FILES "${re2c_manpage_c}" DESTINATION "share/man/man1")
-        if(RE2C_BUILD_RE2GO)
-            install(TARGETS re2go RUNTIME DESTINATION bin)
-            install(FILES "${re2c_manpage_go}" DESTINATION "share/man/man1")
-        endif()
-        install(FILES include/unicode_categories.re DESTINATION "${RE2C_STDLIB_DIR}")
+    install(TARGETS re2c RUNTIME DESTINATION bin)
+    install(FILES "${re2c_manpage_c}" DESTINATION "share/man/man1")
+    if(RE2C_BUILD_RE2GO)
+        install(TARGETS re2go RUNTIME DESTINATION bin)
+        install(FILES "${re2c_manpage_go}" DESTINATION "share/man/man1")
     endif()
+    install(FILES include/unicode_categories.re DESTINATION "${RE2C_STDLIB_DIR}")
 
     # rebuild all re2c sources using newly built re2c
     add_custom_target(bootstrap
