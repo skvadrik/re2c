@@ -59,33 +59,35 @@ static inline void flush(Output *out)
     out->pos = out->buf;
 }
 
-static inline void outs(Output *out, const char *s, const char *e)
-{
-    long n = e - s;
-    if ((out->pos - out->buf) + n >= SIZE) {
-        flush(out);
-    }
-    memcpy(out->pos, s, n);
-    out->pos += n;
-}
+// define as macro to enforce inlining
+#define outs(out, s, e) do {                 \
+    long n = (e) - (s);                      \
+    if ((out->pos - out->buf) + n >= SIZE) { \
+        flush(out);                          \
+    }                                        \
+    memcpy(out->pos, s, n);                  \
+    out->pos += n;                           \
+} while (0)
 
-static inline void outc(Output *out, char c)
-{
-    if (out->pos + 1 - out->buf >= SIZE) {
-        flush(out);
-    }
-    *out->pos++ = c;
-}
+// define as macro to enforce inlining
+#define outc(out, c) do {                  \
+    if (out->pos + 1 - out->buf >= SIZE) { \
+        flush(out);                        \
+    }                                      \
+    *out->pos++ = c;                       \
+} while (0)
 
+// define as macro to enforce inlining
 // first argument must be a string literal
 #define OUTS(s) do {                 \
     const char *p = s;               \
     outs(out, p, p + sizeof(s) - 1); \
-} while(0)
+} while (0)
 
+// define as macro to enforce inlining
 // first argument must be a string literal
 #define OUT(s, p1, p2) do { \
     OUTS(s);                \
     outs(out, p1, p2);      \
     outc(out, '\n');        \
-} while(0)
+} while (0)
