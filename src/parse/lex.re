@@ -425,7 +425,6 @@ scan:
 
     * {
         msg.fatal(tok_loc(), "unexpected character: '%c'", *tok);
-        goto scan;
     }
 */
 }
