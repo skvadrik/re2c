@@ -10,8 +10,7 @@ loop:
     end  = "\x00";
     oct  = [0-9]{1,3};
     dot  = [.];
-    nl   = [\n];
-    ipv4 = @p1 oct dot @p2 oct dot @p3 oct dot @p4 oct nl;
+    ipv4 = @p1 oct dot @p2 oct dot @p3 oct dot @p4 oct [\n];
 
     *    { return 1; }
     end  { return 0; }

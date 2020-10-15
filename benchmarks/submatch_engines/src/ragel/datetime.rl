@@ -12,7 +12,7 @@ const char *delim = "\n";
     minutes  = [0-5][0-9];
     seconds  = [0-5][0-9];
     timezone = [Z] | [+\-] ([2][0-3] | [0-1][0-9]) [:][0-5][0-9];
-    dateTime =
+    datetime =
         year     >{ y1 = p; } %{ y2 = p; } '-'
         month    >{ m1 = p; } %{ m2 = p; } '-'
         day      >{ d1 = p; } %{ d2 = p; } 'T'
@@ -21,30 +21,20 @@ const char *delim = "\n";
         seconds  >{ s1 = p; } %{ s2 = p; }
         timezone >{ z1 = p; } %{ z2 = p; } [\n]
     >{
-        OUTS("{'year'='");
-        outs(out, y1, y2);
-        OUTS("', 'month'='");
-        outs(out, m1, m2);
-        OUTS("', 'day'='");
-        outs(out, d1, d2);
-        OUTS("', 'hours'='");
-        outs(out, h1, h2);
-        OUTS("', 'minutes'='");
-        outs(out, M1, M2);
-        OUTS("', 'seconds'='");
-        outs(out, s1, s2);
-        OUTS("', 'tz'='");
-        outs(out, z1, z2);
-        OUTS("'}\n");
+        OUT("year: ",    y1, y2);
+        OUT("month: ",   m1, m2);
+        OUT("day: ",     d1, d2);
+        OUT("hours: ",   h1, h2);
+        OUT("minutes: ", M1, M2);
+        OUT("seconds: ", s1, s2);
+        OUT("tz: ",      z1, z2);
+        outc(out, '\n');
     };
 
-    main := dateTime*;
+    main := datetime*;
 }%%
 
 %% write data;
-
-static void prolog(Output *out) {}
-static void epilog(Output *out) {}
 
 static void lex(Input *in, Output *out)
 {

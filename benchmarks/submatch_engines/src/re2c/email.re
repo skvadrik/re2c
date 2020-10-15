@@ -10,14 +10,13 @@ loop:
     // don't fail if YYFILL fails (because of the greedy garbage lexeme)
     re2c:define:YYFILL = "if (fill(in, @@) != 0) return 0;";
 
-    estr     = [a-z0-9!#$%&'*+/=?^_`{|}~-];
-    beforeAt = estr+ ([.] estr+)*;
-    az09     = [a-z0-9];
-    az09dash = [a-z0-9-]* [a-z0-9];
-    part     = az09 az09dash? [.];
-    afterAt  = part+ az09 az09dash?;
-    email    = beforeAt [@] @p afterAt [\n];
-    fb       = [^\n]* [\n];
+    char      = [a-z0-9!#$%&'*+/=?^_`{|}~-];
+    before_at = char+ ([.] char+)*;
+    az09      = [a-z0-9];
+    az09dash  = [a-z0-9-]* [a-z0-9];
+    after_at  = (az09 az09dash? [.])+ az09 az09dash?;
+    email     = before_at [@] @p after_at [\n];
+    skip      = [^\n]* [\n];
 
     * { return 1; }
     email {
@@ -28,6 +27,6 @@ loop:
         outc(out, '\n');
         goto loop;
     }
-    fb { goto loop; }
+    skip { goto loop; }
 */
 }

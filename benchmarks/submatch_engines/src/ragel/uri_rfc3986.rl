@@ -86,9 +86,6 @@ const char *delim = "\n";
 
 %% write data;
 
-static void prolog(Output *out) {}
-static void epilog(Output *out) {}
-
 static void lex(Input *in, Output *out)
 {
     char *p = in->p;

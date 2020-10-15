@@ -29,7 +29,7 @@ const char *delim = "\n\n";
         ":"         >{ h2 = p; }
         ows
         field_value >{ h3 = p; }
-        ows         >{ h4 = p; } %{ h5 = p; };
+        ows         >{ h4 = p; };
 
     scheme         = alpha (alpha | digit | [\-+.])*;
     userinfo       = (unreserved | pct_encoded | sub_delims | ":")*;
@@ -115,7 +115,7 @@ const char *delim = "\n\n";
             hs2 = hs4 = m2 = p2 = p4 = p6 = q2 = q4 =
             r1 = r3 = rp1 = s1 = st1 = u1 = u3 = v1 = v3 =
             r2 = r4 = rp2 = s2 = st2 = u2 = u4 = v2 = v4 =
-            h1 = h2 = h3 = h4 = h5 = NULL;
+            h1 = h2 = h3 = h4 = NULL;
     } %{
         if (st2) {
             OUT("version-1: ", v1, v2);
@@ -149,14 +149,11 @@ const char *delim = "\n\n";
     };
 
     field = header_field crlf >{
-        if (h5) {
-            OUTS("header: ");
-            outs(out, h1, h2);
-            outc(out, ' ');
-            outs(out, h3, h4);
-            outc(out, '\n');
+        if (h4) {
+            OUT("header: ", h1, h2);
+            OUT("value: ", h3, h4);
         }
-        h1 = h2 = h3 = h4 = h5 = NULL;
+        h1 = h2 = h3 = h4 = NULL;
     };
 
     message_head = start_line field* crlf >{ outc(out, '\n'); };
@@ -165,9 +162,6 @@ const char *delim = "\n\n";
 }%%
 
 %% write data;
-
-static void prolog(Output *out) {}
-static void epilog(Output *out) {}
 
 static void lex(Input *in, Output *out)
 {
@@ -178,7 +172,7 @@ static void lex(Input *in, Output *out)
         *hs2, *hs4, *m2, *p2, *p4, *p6, *q2, *q4,
         *r1, *r3, *rp1, *s1, *st1, *u1, *u3, *v1, *v3,
         *r2, *r4, *rp2, *s2, *st2, *u2, *u4, *v2, *v4,
-        *h1, *h2, *h3, *h4, *h5;
+        *h1, *h2, *h3, *h4;
     int cs;
 
     %% write init;

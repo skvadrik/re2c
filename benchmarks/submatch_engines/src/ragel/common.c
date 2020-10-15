@@ -2,9 +2,6 @@
 
 const char *delim;
 
-static void prolog(Output *out);
-static void epilog(Output *out);
-
 typedef struct {
     char *buf, *p, *pe, *end;
 } Input;
@@ -30,7 +27,6 @@ int main(int argc, char **argv)
 
     init_input(&in);
     init_output(&out);
-    prolog(&out);
     const size_t ndelim = strlen(delim);
 
     while (1) {
@@ -71,7 +67,6 @@ int main(int argc, char **argv)
     }
 end:
 
-    epilog(&out);
     flush(&out);
     free_output(&out);
     free_input(&in);

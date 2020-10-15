@@ -11,7 +11,7 @@ KLEENEX = engines/kleenex/kexc
 
 BENCHMARKS = \
 	apache_log \
-	datetime_to_json \
+	datetime \
 	email \
 	ipv4 \
 	uri_simple \

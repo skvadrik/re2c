@@ -1,12 +1,11 @@
 start: email_lines
 
-email_lines := (email | ~fb )*
+email_lines := (email | ~skip)*
 
-estr     := /[a-z0-9!#$%&'*+/=?^_`{|}~-]/
-beforeAt := estr+ (/[.]/ estr+)*
-az09     := /[a-z0-9]/
-az09dash := /[a-z0-9-]*[a-z0-9]/
-part     := az09 az09dash? /[.]/
-afterAt  := part+ az09 az09dash?
-email    := " " beforeAt ~/@/ " " afterAt ~/[\n]/ "\n"
-fb       := /[^\n]*[\n]/
+char      := /[a-z0-9!#$%&'*+/=?^_`{|}~-]/
+before_at := char+ (/[.]/ char+)*
+az09      := /[a-z0-9]/
+az09dash  := /[a-z0-9-]*[a-z0-9]/
+after_at  := (az09 az09dash? /[.]/)+ az09 az09dash?
+email     := " " before_at ~/@/ " " after_at ~/[\n]/ "\n"
+skip      := /[^\n]*[\n]/

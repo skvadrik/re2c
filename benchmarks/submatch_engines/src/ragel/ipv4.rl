@@ -7,12 +7,11 @@ const char *delim = "\n";
 
     oct  = [0-9]{1,3};
     dot  = [.];
-    nl   = [\n];
     ipv4 =
         oct >{ p1 = p; } dot
         oct >{ p2 = p; } dot
         oct >{ p3 = p; } dot
-        oct >{ p4 = p; } nl
+        oct >{ p4 = p; } [\n]
     >{
         outs(out, p1, p2 - 1);
         outc(out, ',');
@@ -28,9 +27,6 @@ const char *delim = "\n";
 }%%
 
 %% write data;
-
-static void prolog(Output *out) {}
-static void epilog(Output *out) {}
 
 static void lex(Input *in, Output *out)
 {
