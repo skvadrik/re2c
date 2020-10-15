@@ -2,26 +2,25 @@ start: uri_list
 
 uri_list := uri*
 
-nl          := ~/[\n]/ "\n"
-alpha       := /[a-zA-Z]/
-digit       := /[0-9]/
-hexdigit    := /[0-9a-fA-F]/
-unreserved  := alpha | digit | /[-._~]/
-pct_encoded := /%/ hexdigit{2}
-sub_delims  := /[!$&'()*+,;=]/
-pchar       := unreserved | pct_encoded | sub_delims | /[:@]/
-
-scheme := "scheme: " alpha (alpha | digit | /[-+.]/)* "\n"
-userinfo := "user: " (unreserved | pct_encoded | sub_delims | /:/)* "\n"
+nl            := ~/[\n]/ "\n"
+alpha         := /[a-zA-Z]/
+digit         := /[0-9]/
+hexdigit      := /[0-9a-fA-F]/
+unreserved    := alpha | digit | /[-._~]/
+pct_encoded   := /%/ hexdigit{2}
+sub_delims    := /[!$&'()*+,;=]/
+pchar         := unreserved | pct_encoded | sub_delims | /[:@]/
+scheme        := "scheme: " alpha (alpha | digit | /[-+.]/)* "\n"
+userinfo      := "user: " (unreserved | pct_encoded | sub_delims | /:/)* "\n"
 dec_octet
     := digit
     | /[\x31-\x39]/ digit
     | /1/ digit{2}
     | /2[\x30-\x34]/ digit
     | /25[\x30-\x35]/
-ipv4address := dec_octet /[.]/ dec_octet /[.]/ dec_octet /[.]/ dec_octet
-h16         := hexdigit{1,4}
-ls32        := h16 /:/ h16 | ipv4address
+ipv4address   := dec_octet /[.]/ dec_octet /[.]/ dec_octet /[.]/ dec_octet
+h16           := hexdigit{1,4}
+ls32          := h16 /:/ h16 | ipv4address
 ipv6address
     :=                           (h16 /:/){6} ls32
     |                       /::/ (h16 /:/){5} ls32
@@ -32,15 +31,15 @@ ipv6address
     | ((h16 /:/){0,4} h16)? /::/              ls32
     | ((h16 /:/){0,5} h16)? /::/              h16
     | ((h16 /:/){0,6} h16)? /::/
-ipvfuture   := /v/ hexdigit+ /[.]/ (unreserved | sub_delims | /:/ )+
-ip_literal  := /\[/ ( ipv6address | ipvfuture ) /]/
-reg_name    := (unreserved | pct_encoded | sub_delims)*
+ipvfuture     := /v/ hexdigit+ /[.]/ (unreserved | sub_delims | /:/ )+
+ip_literal    := /\[/ ( ipv6address | ipvfuture ) /]/
+reg_name      := (unreserved | pct_encoded | sub_delims)*
 host
     := "host-1: " ip_literal "\n"
     |  "host-2: " ipv4address "\n"
     |  "host-3: " reg_name "\n"
-port        := "port: " digit* "\n"
-authority   := (userinfo ~/@/)? host (~/:/ port)?
+port          := "port: " digit* "\n"
+authority     := (userinfo ~/@/)? host (~/:/ port)?
 path_abempty  := (/\// pchar*)*
 path_absolute := /\// (pchar+ (/\// pchar*)*)?
 path_rootless := pchar+ (/\// pchar*)*
@@ -48,6 +47,6 @@ path_empty    := 1
 hier_part
     := ~/\/\// authority "path-1: " path_abempty "\n"
     | "path-2: " (path_absolute | path_rootless | path_empty) "\n"
-query    := "query: "    (pchar | /[/?]/)* "\n"
-fragment := "fragment: " (pchar | /[/?]/)* "\n"
-uri := scheme ~/:/ hier_part (~/[?]/ query)? (~/#/ fragment)? nl
+query         := "query: "    (pchar | /[/?]/)* "\n"
+fragment      := "fragment: " (pchar | /[/?]/)* "\n"
+uri           := scheme ~/:/ hier_part (~/[?]/ query)? (~/#/ fragment)? nl

@@ -23,8 +23,8 @@ const char *delim = "\n\n";
 
     header_field =
         tchar+                              >{ h1 = p; }
-        [:]                                 >{ h2 = p; }
-        ows (field_content | obs_fold)* ows >{ h3 = p; };
+        [:] ows (field_content | obs_fold)*
+        ows                                 >{ h2 = p; };
 
     authority      = (userinfo [@])? host ([:] port)?;
     absolute_uri   = scheme [:] ([/][/] (userinfo [@])? host ([:] port)?)? path ([?] query)?;
@@ -47,7 +47,7 @@ const char *delim = "\n\n";
         reason_phrase >{ rp1 = p; } %{ rp2 = p; } eol;
 
     start_line = (request_line | status_line) >{
-        h1 = h2 = h3 =
+        h1 = h2 =
             s1 = v1 = v3 = m1 = rp1 = rt1 =
             s2 = v2 = v4 = m2 = rp2 = rt2 = NULL;
     } %{
@@ -64,14 +64,8 @@ const char *delim = "\n\n";
     };
 
     field = header_field eol >{
-        if (h3) {
-            OUTS("header: ");
-            outs(out, h1, h2);
-            outc(out, ' ');
-            outs(out, h2 + 1, h3);
-            outc(out, '\n');
-        }
-        h1 = h2 = h3 = NULL;
+        if (h2) OUT("header: ", h1, h2);
+        h1 = h2 = NULL;
     };
 
     message_head = start_line field* eol >{ outc(out, '\n'); };
@@ -81,14 +75,11 @@ const char *delim = "\n\n";
 
 %% write data;
 
-static void prolog(Output *out) {}
-static void epilog(Output *out) {}
-
 static void lex(Input *in, Output *out)
 {
     char *p = in->p;
     char *pe = in->pe;
-    const char *h1, *h2, *h3,
+    const char *h1, *h2,
         *s1, *v1, *v3, *m1, *rp1, *rt1,
         *s2, *v2, *v4, *m2, *rp2, *rt2;
     int cs;

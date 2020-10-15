@@ -1,34 +1,24 @@
-/* Performs Apache log parsing */
-start: logfile
+start: loglines
 
-logfile := "[" loglines? "]\n"
+loglines  := logline*
 
-loglines := (logline "," /\n/)* logline /\n/
-
-logline := "{" host ~sep ~userid ~sep ~authuser sep timestamp sep request sep code sep bytes sep referer sep useragent "}"
-
-host := "\"host\":\"" ip "\""
-
-userid := "\"user\":\"" rfc1413 "\""
-
-authuser := "\"authuser\":\"" /[^ \n]+/ "\""
-
-timestamp := "\"date\":\"" ~/\[/ /[^\n\]]+/ ~/]/ "\""
-
-request := "\"request\":" quotedString
-
-code := "\"status\":\"" integer "\""
-
-bytes := "\"size\":\"" (integer | /-/) "\""
-
-referer := "\"url\":" quotedString
-
-useragent := "\"agent\":" quotedString
-
-ws := /[\t ]+/
-sep := "," ~ws
-
-quotedString := /"([^"\n]|\\")*"/
-integer := /[0-9]+/
-ip := integer (/\./ integer){3}
-rfc1413 := /-/
+sp        := /[ \t]+/
+host      := /[0-9.]+/
+userid    := /-/
+authuser  := /-/
+date      := /\[/ /[^\n\]]+/ /]/
+request   := /"[^\n"]+"/
+status    := /[0-9]+/
+size      := /[0-9]+|-/
+url       := /"[^\n"]*"/
+useragent := /"[^\n"]*"/
+logline   :=
+    "host: "     host      ~sp "\n"
+    "userid: "   userid    ~sp "\n"
+    "authuser: " authuser  ~sp "\n"
+    "date: "     date      ~sp "\n"
+    "request: "  request   ~sp "\n"
+    "status: "   status    ~sp "\n"
+    "size: "     size      ~sp "\n"
+    "url: "      url       ~sp "\n"
+    "agent: "    useragent ~/\n/  "\n\n"

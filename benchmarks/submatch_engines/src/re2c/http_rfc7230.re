@@ -1,17 +1,12 @@
 /*!include:re2c "common.re" */
 
 static void print_headers(Output *out, const char *tok,
-    const taglist_t *h1, const taglist_t *h2, const taglist_t *h3,
-    const taglist_t *h4, const taglist_t *h5)
+    const taglist_t *h1, const taglist_t *h2, const taglist_t *h3, const taglist_t *h4)
 {
-    if (!h5) return;
-
-    print_headers(out, tok, h1->pred, h2->pred, h3->pred, h4->pred, h5->pred);
-    OUTS("header: ");
-    outs(out, tok + h1->dist, tok + h2->dist);
-    outc(out, ' ');
-    outs(out, tok + h3->dist, tok + h4->dist);
-    outc(out, '\n');
+    if (!h4) return;
+    print_headers(out, tok, h1->pred, h2->pred, h3->pred, h4->pred);
+    OUT("header: ", tok + h1->dist, tok + h2->dist);
+    OUT("value: ", tok + h3->dist, tok + h4->dist);
 }
 
 static int lex(input_t *in, Output *out)
@@ -21,7 +16,7 @@ static int lex(input_t *in, Output *out)
         *hs2, *hs4, *m2, *p2, *p4, *p6, *q2, *q4,
         *r1, *r3, *rp1, *s1, *st1, *u1, *u3, *v1, *v3,
         *r2, *r4, *rp2, *s2, *st2, *u2, *u4, *v2, *v4;
-    taglist_t *h1, *h2, *h3, *h4, *h5;
+    taglist_t *h1, *h2, *h3, *h4;
 
 loop:
     in->tok = in->cur;
@@ -47,7 +42,7 @@ loop:
     field_vchar    = vchar | obs_text;
     field_content  = field_vchar ((sp | htab)+ field_vchar)?;
     field_value    = (field_content | obs_fold)*;
-    header_field   = #h1 field_name #h2 ":" ows #h3 field_value #h4 ows #h5;
+    header_field   = #h1 field_name #h2 ":" ows #h3 field_value #h4 ows;
     scheme         = alpha (alpha | digit | [-+.])*;
     userinfo       = (unreserved | pct_encoded | sub_delims | ":")*;
     dec_octet
@@ -132,7 +127,7 @@ loop:
             }
             OUT("version-2: ", v3, v4);
         }
-        print_headers(out, in->tok, h1, h2, h3, h4, h5);
+        print_headers(out, in->tok, h1, h2, h3, h4);
         outc(out, '\n');
 
         taglistpool_clear(&in->tlp, in);
