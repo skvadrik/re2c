@@ -32,7 +32,7 @@ namespace re2c {
 #define YYCURSOR  cur
 #define YYLIMIT   lim
 #define YYMARKER  mar
-#define YYFILL(n) do { if (!fill(n)) fatal("unexpected end of input"); } while(0)
+#define YYFILL(n) do { if (!fill(n)) { error("unexpected end of input"); exit(1); }} while(0)
 
 /*!re2c
     // source code is in ASCII, but re2c assumes unsigned chars
@@ -253,7 +253,8 @@ loop:
 /*!re2c
     * { goto loop; }
     eof {
-        msg.fatal(cur_loc(), "expected end of block");
+        msg.error(cur_loc(), "expected end of block");
+        exit(1);
     }
     eol {
         next_line();
@@ -276,7 +277,8 @@ void Scanner::lex_tags(Output &out, bool mtags)
 loop:
 /*!re2c
     * {
-        msg.fatal(cur_loc(), "unrecognized configuration");
+        msg.error(cur_loc(), "unrecognized configuration");
+        exit(1);
     }
     "format" {
         fmt = lex_conf_string();
@@ -338,7 +340,8 @@ scan:
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min)) {
-            msg.fatal(tok_loc(), "repetition count overflow");
+            msg.error(tok_loc(), "repetition count overflow");
+            exit(1);
         }
         yylval.bounds.max = yylval.bounds.min;
         return TOKEN_CLOSESIZE;
@@ -346,30 +349,35 @@ scan:
 
     "{" [0-9]+ @p "," [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, p, yylval.bounds.min)) {
-            msg.fatal(tok_loc(), "repetition lower bound overflow");
+            msg.error(tok_loc(), "repetition lower bound overflow");
+            exit(1);
         }
         if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.bounds.max)) {
-            msg.fatal(tok_loc(), "repetition upper bound overflow");
+            msg.error(tok_loc(), "repetition upper bound overflow");
+            exit(1);
         }
         return TOKEN_CLOSESIZE;
     }
 
     "{" [0-9]+ ",}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.bounds.min)) {
-            msg.fatal(tok_loc(), "repetition lower bound overflow");
+            msg.error(tok_loc(), "repetition lower bound overflow");
+            exit(1);
         }
         yylval.bounds.max = std::numeric_limits<uint32_t>::max();
         return TOKEN_CLOSESIZE;
     }
 
     "{" [0-9]* "," {
-        msg.fatal(tok_loc(), "illegal closure form, use '{n}', '{n,}', '{n,m}' "
+        msg.error(tok_loc(), "illegal closure form, use '{n}', '{n,}', '{n,m}' "
             "where n and m are numbers");
+        exit(1);
     }
 
     "{" name "}" {
         if (!globopts->FFlag) {
-            msg.fatal(tok_loc(), "curly braces for names only allowed with -F switch");
+            msg.error(tok_loc(), "curly braces for names only allowed with -F switch");
+            exit(1);
         }
         yylval.str = newstr(tok + 1, cur - 1);
         return TOKEN_ID;
@@ -424,8 +432,8 @@ scan:
     }
 
     * {
-        msg.fatal(tok_loc(), "unexpected character: '%c'", *tok);
-        goto scan;
+        msg.error(tok_loc(), "unexpected character: '%c'", *tok);
+        exit(1);
     }
 */
 }
@@ -474,7 +482,8 @@ end:
     return kind;
 error:
     delete cl;
-    msg.fatal(cur_loc(), "syntax error in condition list");
+    msg.error(cur_loc(), "syntax error in condition list");
+    exit(1);
 }
 
 void Scanner::lex_code_indented()
@@ -494,7 +503,10 @@ code:
     }
 
     eof  { fail_if_eof(); goto code; }
-    [{}] { msg.fatal(cur_loc(), "Curly braces are not allowed after ':='"); }
+    [{}] {
+        msg.error(cur_loc(), "Curly braces are not allowed after ':='");
+        exit(1);
+    }
     "/*" { lex_c_comment(); goto code; }
     "//" { lex_cpp_comment(); goto code; }
     ["'] { lex_string(cur[-1]); goto code; }
@@ -595,11 +607,11 @@ uint32_t Scanner::lex_cls_chr()
     tok = cur;
     const loc_t &loc = cur_loc();
     /*!rules:re2c
-    esc? eol   { msg.fatal(loc, "newline in character class"); }
-    esc [xXuU] { msg.fatal(loc, "syntax error in hexadecimal escape sequence"); }
-    esc [0-7]  { msg.fatal(loc, "syntax error in octal escape sequence"); }
-    esc        { msg.fatal(loc, "syntax error in escape sequence"); }
-    *          { msg.fatal(loc, "syntax error"); }
+    esc? eol   { msg.error(loc, "newline in character class"); exit(1); }
+    esc [xXuU] { msg.error(loc, "syntax error in hexadecimal escape sequence"); exit(1); }
+    esc [0-7]  { msg.error(loc, "syntax error in octal escape sequence"); exit(1); }
+    esc        { msg.error(loc, "syntax error in escape sequence"); exit(1); }
+    *          { msg.error(loc, "syntax error"); exit(1); }
 
     eof        { fail_if_eof(); return 0; }
 
@@ -635,11 +647,11 @@ bool Scanner::lex_str_chr(char quote, ASTChar &ast)
     ast.loc = cur_loc();
 
     /*!rules:re2c
-    esc? eol   { msg.fatal(ast.loc, "newline in character string"); }
-    esc [xXuU] { msg.fatal(ast.loc, "syntax error in hexadecimal escape sequence"); }
-    esc [0-7]  { msg.fatal(ast.loc, "syntax error in octal escape sequence"); }
-    esc        { msg.fatal(ast.loc, "syntax error in escape sequence"); }
-    *          { msg.fatal(ast.loc, "syntax error"); }
+    esc? eol   { msg.error(ast.loc, "newline in character string"); exit(1); }
+    esc [xXuU] { msg.error(ast.loc, "syntax error in hexadecimal escape sequence"); exit(1); }
+    esc [0-7]  { msg.error(ast.loc, "syntax error in octal escape sequence"); exit(1); }
+    esc        { msg.error(ast.loc, "syntax error in escape sequence"); exit(1); }
+    *          { msg.error(ast.loc, "syntax error"); exit(1); }
 
     eof        { fail_if_eof(); ast.chr = 0; return true; }
 
@@ -689,7 +701,8 @@ sourceline:
     lineno {
         uint32_t l;
         if (!s_to_u32_unsafe(tok, cur, l)) {
-            msg.fatal(tok_loc(), "line number overflow");
+            msg.error(tok_loc(), "line number overflow");
+            exit(1);
         }
         set_line(l);
         goto sourceline;
@@ -714,7 +727,8 @@ sourceline:
 void Scanner::fail_if_eof() const
 {
     if (is_eof()) {
-        msg.fatal(cur_loc(), "unexpected end of input");
+        msg.error(cur_loc(), "unexpected end of input");
+        exit(1);
     }
 }
 

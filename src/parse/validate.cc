@@ -21,15 +21,18 @@ void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules
     const loc_t &l = input.tok_loc();
     if (mode == Scanner::Rules) {
         if (!rflag) {
-            msg.fatal(l, "found 'rules:re2c' block without -r flag");
+            msg.error(l, "found 'rules:re2c' block without -r flag");
+            exit(1);
         }
     }
     else if (mode == Scanner::Reuse) {
         if (!rflag) {
-            msg.fatal(l, "found 'use:re2c' block without -r flag");
+            msg.error(l, "found 'use:re2c' block without -r flag");
+            exit(1);
         }
         else if (!rules) {
-            msg.fatal(l, "got 'use:re2c' without 'rules:re2c'");
+            msg.error(l, "got 'use:re2c' without 'rules:re2c'");
+            exit(1);
         }
     }
 }
@@ -41,28 +44,33 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
 
     for (i = b; i != e; ++i) {
         if (i->defs.size() > 1) {
-            msg.fatal(i->defs[1]->loc,
+            msg.error(i->defs[1]->loc,
                 "code to default rule %sis already defined at line %u",
                 incond(i->name).c_str(), i->defs[0]->loc.line);
+            exit(1);
         }
         if (!i->eofs.empty() && opts->eof == NOEOF) {
-            msg.fatal(i->eofs[0]->loc,
+            msg.error(i->eofs[0]->loc,
                 "%sEOF rule found, but 're2c:eof' configuration is not set",
                 incond(i->name).c_str());
+            exit(1);
         }
         else if (i->eofs.empty() && opts->eof != NOEOF) {
-            fatal("%s're2c:eof' configuration is set, but no EOF rule found",
+            error("%s're2c:eof' configuration is set, but no EOF rule found",
                 incond(i->name).c_str());
+            exit(1);
         }
         else if (i->eofs.size() > 1) {
-            msg.fatal(i->eofs[1]->loc,
+            msg.error(i->eofs[1]->loc,
                 "EOF rule %sis already defined at line %u",
                 incond(i->name).c_str(), i->eofs[0]->loc.line);
+            exit(1);
         }
         else if (i->rules.empty() && i->defs.empty() && !i->eofs.empty()) {
-            msg.fatal(i->eofs[0]->loc,
+            msg.error(i->eofs[0]->loc,
                 "EOF rule %swithout other rules doesn't make sense",
                 incond(i->name).c_str());
+            exit(1);
         }
     }
 
@@ -72,7 +80,8 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
         if (i != e) { // found named spec
             const loc_t &l = !i->rules.empty() ? i->rules[0].semact->loc
                 : !i->defs.empty() ? i->defs[0]->loc : NOWHERE;
-            msg.fatal(l, "conditions are only allowed with '-c', '--conditions' option");
+            msg.error(l, "conditions are only allowed with '-c', '--conditions' option");
+            exit(1);
         }
     } else if (e - b == 1 && b->name.empty()) {
         // condition mode, a single unnamed spec => ok, normal blocks are allowed
@@ -83,22 +92,25 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
         if (i != e) { // found unnamed spec
             const loc_t &l = !i->rules.empty() ? i->rules[0].semact->loc
                 : !i->defs.empty() ? i->defs[0]->loc : NOWHERE;
-            msg.fatal(l, "cannot mix conditions with normal rules");
+            msg.error(l, "cannot mix conditions with normal rules");
+            exit(1);
         }
 
         for (i = b; i != e; ++i) {
             if (i->setup.size() > 1) {
-                msg.fatal(i->setup[1]->loc,
+                msg.error(i->setup[1]->loc,
                     "code to setup rule '%s' is already defined at line %u",
                     i->name.c_str(), i->setup[0]->loc.line);
+                exit(1);
             }
         }
 
         for (i = b; i != e; ++i) {
             if (i->name != "*" && !i->setup.empty() && i->rules.empty()) {
-                msg.fatal(i->setup[0]->loc,
+                msg.error(i->setup[0]->loc,
                     "setup for non existing condition '%s' found",
                     i->name.c_str());
+                exit(1);
             }
         }
 
@@ -106,18 +118,20 @@ void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
         if (i == e) {
             for (i = b; i != e; ++i) {
                 if (i->name == "*") {
-                    msg.fatal(i->setup[0]->loc,
+                    msg.error(i->setup[0]->loc,
                         "setup for all conditions '<!*>' is illegal "
                         "if setup for each condition is defined explicitly");
+                    exit(1);
                 }
             }
         }
 
         for (i = b; i != e; ++i) {
             if (i->name == "0" && i->rules.size() > 1) {
-                msg.fatal(i->rules[1].semact->loc,
+                msg.error(i->rules[1].semact->loc,
                     "startup code is already defined at line %u",
                     i->rules[0].semact->loc.line);
+                exit(1);
             }
         }
     }

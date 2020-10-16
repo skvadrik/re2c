@@ -152,7 +152,10 @@ bool Scanner::fill(size_t need)
     else {
         BSIZE += std::max(BSIZE, need);
         char * buf = new char[BSIZE + YYMAXFILL];
-        if (!buf) fatal("out of memory");
+        if (!buf) {
+            error("out of memory");
+            exit(1);
+        }
 
         memmove(buf, tok, copy);
         shift_ptrs_and_fpos(buf - tok);
