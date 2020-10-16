@@ -70,10 +70,6 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fsanitize=address" CACHE STRING
         "Linker flags to be used to create shared libraries for Asan build type." FORCE)
 
-    set(CMAKE_STATIC_LINKER_FLAGS_ASAN
-        "${CMAKE_STATIC_LINKER_FLAGS_DEBUG} -fsanitize=address" CACHE STRING
-        "Linker flags to be used to create static libraries for Asan build type." FORCE)
-
     # Setup Ubsan flags
     set(CMAKE_C_FLAGS_UBSAN
         "${CMAKE_C_FLAGS_DEBUG} -fsanitize=undefined -fno-omit-frame-pointer" CACHE STRING
@@ -90,9 +86,5 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_SHARED_LINKER_FLAGS_UBSAN
         "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fsanitize=undefined" CACHE STRING
         "Linker flags to be used to create shared libraries for Ubsan build type." FORCE)
-
-    set(CMAKE_STATIC_LINKER_FLAGS_UBSAN
-        "${CMAKE_STATIC_LINKER_FLAGS_DEBUG} -fsanitize=undefined" CACHE STRING
-        "Linker flags to be used to create static libraries for Ubsan build type." FORCE)
 endif()
 
