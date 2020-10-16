@@ -100,13 +100,13 @@ static inline void free_input(input_t *in)
     taglistpool_free(&in->tlp);
 }
 
-static int fill(input_t *in, size_t need)
+static inline int fill(input_t *in, size_t need)
 {
     size_t free;
     if (in->eof) return 1;
 
     free = in->tok - in->buf;
-    if (free < need) return 2;
+    assert(free >= need);
 
     memmove(in->buf, in->tok, in->lim - in->tok);
     in->lim -= free;
