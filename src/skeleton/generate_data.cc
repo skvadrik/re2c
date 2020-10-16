@@ -457,12 +457,14 @@ void emit_data(const Skeleton &skel)
     const std::string input_name = fname + "." + skel.name + ".input";
     FILE *input = fopen(input_name.c_str(), "wb");
     if (!input) {
-        fatal("cannot open file: %s", input_name.c_str());
+        error("cannot open file: %s", input_name.c_str());
+        exit(1);
     }
     const std::string keys_name = std::string(fname) + "." + skel.name + ".keys";
     FILE *keys = fopen (keys_name.c_str(), "wb");
     if (!keys) {
-        fatal("cannot open file: %s", keys_name.c_str());
+        error("cannot open file: %s", keys_name.c_str());
+        exit(1);
     }
 
     cover_t cover(input, keys, skel.nodes_count);

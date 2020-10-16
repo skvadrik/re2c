@@ -292,9 +292,10 @@ void DFA::calc_stats(OutputBlock &out)
 
     // error if tags are not enabled, but we need them
     if (!opts->tags && maxtagver > 1) {
-        msg.fatal(loc, "overlapping trailing contexts need "
+        msg.error(loc, "overlapping trailing contexts need "
             "multiple context markers, use '-t, --tags' "
             "option and '/*!stags:re2c ... */' directive");
+        exit(1);
     }
 
     if (!oldstyle_ctxmarker) {

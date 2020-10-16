@@ -25,19 +25,6 @@ void error(const char *fmt, ...)
     fprintf(stderr, "\n");
 }
 
-void fatal(const char *fmt, ...)
-{
-    fprintf(stderr, "re2c: error: ");
-
-    va_list args;
-    va_start(args, fmt);
-    vfprintf(stderr, fmt, args);
-    va_end(args);
-
-    fprintf(stderr, "\n");
-    exit(1);
-}
-
 void Msg::print_location(const loc_t &loc) const
 {
     const char *f = filenames[loc.file].c_str();
@@ -51,7 +38,7 @@ void Msg::print_location(const loc_t &loc) const
     }
 }
 
-void Msg::fatal(const loc_t &loc, const char *fmt, ...)
+void Msg::error(const loc_t &loc, const char *fmt, ...)
 {
     print_location(loc);
     fprintf(stderr, "error: ");
@@ -62,7 +49,6 @@ void Msg::fatal(const loc_t &loc, const char *fmt, ...)
     va_end(args);
 
     fprintf(stderr, "\n");
-    exit(1);
 }
 
 void error_arg(const char *option)
@@ -108,7 +94,8 @@ void vernum()
 {
     const std::string vn = ver_to_vernum(PACKAGE_VERSION);
     if (vn.empty()) {
-        fatal("failed to convert version to vernum");
+        error("failed to convert version to vernum");
+        exit(1);
     }
     printf ("%s\n", vn.c_str ());
 }

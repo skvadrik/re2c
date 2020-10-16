@@ -247,45 +247,55 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
 
     // errors
     if (glob.target == TARGET_SKELETON && glob.lang != LANG_C) {
-        fatal("skeleton is not supported for non-C language backends");
+        error("skeleton is not supported for non-C language backends");
+        exit(1);
     }
     if (glob.lang == LANG_GO) {
         if (real.input_api == INPUT_DEFAULT) {
-            fatal("default C API is not supported for the Go backend,"
+            error("default C API is not supported for the Go backend,"
                 " as Go has no pointer arithmetics");
+            exit(1);
         }
         if (real.gFlag) {
-            fatal("-g, --computed-gotos option is not supported for the Go backend,"
+            error("-g, --computed-gotos option is not supported for the Go backend,"
                 " as Go does not have computed goto");
+            exit(1);
         }
         if (real.case_ranges) {
-            fatal("--case-ranges option is not supported for the Go backend,"
+            error("--case-ranges option is not supported for the Go backend,"
                 " as Go has no case ranges");
+            exit(1);
         }
     }
     if (real.eof != NOEOF) {
         if (real.bFlag || real.gFlag) {
-            fatal("configuration 're2c:eof' cannot be used with options "
+            error("configuration 're2c:eof' cannot be used with options "
                 "-b, --bit-vectors and -g, --computed gotos");
+            exit(1);
         }
         if (real.eof >= real.encoding.nCodeUnits()) {
-            fatal("EOF exceeds maximum code unit value for given encoding");
+            error("EOF exceeds maximum code unit value for given encoding");
+            exit(1);
         }
         if (!real.fill_check) {
-            fatal("YYFILL check is necessary if EOF rule is used");
+            error("YYFILL check is necessary if EOF rule is used");
+            exit(1);
         }
     }
     if (real.sentinel != NOEOF) {
         if (real.sentinel >= real.encoding.nCodeUnits()) {
-            fatal("sentinel exceeds maximum code unit value for given encoding");
+            error("sentinel exceeds maximum code unit value for given encoding");
+            exit(1);
         }
         if (real.fill_use || real.eof != NOEOF) {
-            fatal("re2c:sentinel configuration is not needed"
+            error("re2c:sentinel configuration is not needed"
                 " in the presence of bounds checking or EOF rule");
+            exit(1);
         }
     }
     if (!glob.lookahead && glob.stadfa) {
-        fatal("cannot combine TDFA(0) and staDFA");
+        error("cannot combine TDFA(0) and staDFA");
+        exit(1);
     }
     if (glob.fFlag && !real.fill_use) {
         // -f, --storable-state option should not be used if YYFILL is disabled,
@@ -293,7 +303,8 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         // correspond to storable state labels (with generic API interrupts can
         // happen on any API invocation). This may cause subtle bugs when the
         // lexer is resumed from the wrong program point.
-        fatal("storable state requires YYFILL to be enabled");
+        error("storable state requires YYFILL to be enabled");
+        exit(1);
     }
 }
 

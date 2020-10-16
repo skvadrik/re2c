@@ -14,7 +14,7 @@
 
 namespace re2c {
 
-#define YYFILL(n) do { if (!fill(n)) fatal("unexpected end of input"); } while(0)
+#define YYFILL(n) do { if (!fill(n)) { error("unexpected end of input"); exit(1); }} while(0)
 
 // global re2c config (affects the whole file)
 /*!re2c
@@ -114,7 +114,8 @@ void Scanner::lex_conf(Opt &opts)
     "cgoto:threshold" {
         const int32_t n = lex_conf_number ();
         if (n < 0) {
-            msg.fatal(cur_loc(), "configuration 'cgoto:threshold' must be nonnegative");
+            msg.error(cur_loc(), "configuration 'cgoto:threshold' must be nonnegative");
+            exit(1);
         }
         opts.set_cGotoThreshold (static_cast<uint32_t> (n));
         return;
@@ -152,7 +153,8 @@ void Scanner::lex_conf(Opt &opts)
     "indent:top" {
         const int32_t n = lex_conf_number ();
         if (n < 0) {
-            msg.fatal(cur_loc(), "configuration 'indent:top' must be nonnegative");
+            msg.error(cur_loc(), "configuration 'indent:top' must be nonnegative");
+            exit(1);
         }
         opts.set_topIndent (static_cast<uint32_t> (n));
         return;
@@ -174,7 +176,7 @@ void Scanner::lex_conf(Opt &opts)
 
     "labelprefix" { opts.set_labelPrefix (lex_conf_string ()); return; }
 
-    // try to lex number first, otherwize it would be lexed as a naked string
+    // try to lex number first, otherwise it would be lexed as a naked string
     "startlabel" / conf_assign number { opts.set_startlabel_force (lex_conf_bool());   return; }
     "startlabel"                      { opts.set_startlabel       (lex_conf_string()); return; }
 
@@ -182,8 +184,9 @@ void Scanner::lex_conf(Opt &opts)
     "variable:yystable" { lex_conf_string (); return; }
 
     [a-zA-Z0-9_:-]* {
-        msg.fatal(tok_loc(), "unrecognized configuration '%.*s'",
+        msg.error(tok_loc(), "unrecognized configuration '%.*s'",
             static_cast<int>(cur - tok), tok);
+        exit(1);
     }
 */
 }
@@ -192,8 +195,11 @@ void Scanner::lex_conf_encoding_policy(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { msg.fatal(cur_loc(),
-        "bad configuration value (expected: 'ignore', 'substitute', 'fail')"); }
+    * {
+        msg.error(cur_loc(),
+            "bad configuration value (expected: 'ignore', 'substitute', 'fail')");
+        exit(1);
+    }
     "ignore"     { opts.set_encoding_policy(Enc::POLICY_IGNORE);     goto end; }
     "substitute" { opts.set_encoding_policy(Enc::POLICY_SUBSTITUTE); goto end; }
     "fail"       { opts.set_encoding_policy(Enc::POLICY_FAIL);       goto end; }
@@ -206,7 +212,11 @@ void Scanner::lex_conf_input(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { msg.fatal(cur_loc(), "bad configuration value (expected: 'default', 'custom')"); }
+    * {
+        msg.error(cur_loc(),
+            "bad configuration value (expected: 'default', 'custom')");
+        exit(1);
+    }
     "default" { opts.set_input_api(INPUT_DEFAULT); goto end; }
     "custom"  { opts.set_input_api(INPUT_CUSTOM);  goto end; }
 */
@@ -218,8 +228,11 @@ void Scanner::lex_conf_empty_class(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { msg.fatal(cur_loc(),
-        "bad configuration value (expected: 'match-empty', 'match-none', 'error')"); }
+    * {
+        msg.error(cur_loc(),
+            "bad configuration value (expected: 'match-empty', 'match-none', 'error')");
+        exit(1);
+    }
     "match-empty" { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_EMPTY); goto end; }
     "match-none"  { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_NONE);  goto end; }
     "error"       { opts.set_empty_class_policy(EMPTY_CLASS_ERROR);       goto end; }
@@ -232,8 +245,11 @@ void Scanner::lex_conf_api_style(Opt &opts)
 {
     lex_conf_assign ();
 /*!re2c
-    * { msg.fatal(cur_loc(),
-        "bad configuration value (expected: 'functions', 'free-form')"); }
+    * {
+        msg.error(cur_loc(),
+            "bad configuration value (expected: 'functions', 'free-form')");
+        exit(1);
+    }
     "functions" { opts.set_api_style(API_FUNCTIONS); goto end; }
     "free-form" { opts.set_api_style(API_FREEFORM);  goto end; }
 */
@@ -253,7 +269,10 @@ void Scanner::lex_conf_enc(Enc::type_t enc, Opt &opts)
 void Scanner::lex_conf_assign ()
 {
 /*!re2c
-    * { msg.fatal(cur_loc(), "missing '=' in configuration"); }
+    * {
+        msg.error(cur_loc(), "missing '=' in configuration");
+        exit(1);
+    }
     conf_assign { return; }
 */
 }
@@ -261,7 +280,10 @@ void Scanner::lex_conf_assign ()
 void Scanner::lex_conf_semicolon ()
 {
 /*!re2c
-    * { msg.fatal(cur_loc(), "missing ending ';' in configuration"); }
+    * {
+        msg.error(cur_loc(), "missing ending ';' in configuration");
+        exit(1);
+    }
     space* ";" { return; }
 */
 }
@@ -276,11 +298,15 @@ int32_t Scanner::lex_conf_number ()
     lex_conf_assign ();
     tok = cur;
 /*!re2c
-    * { msg.fatal(cur_loc(), "bad configuration value (expected number)"); }
+    * {
+        msg.error(cur_loc(), "bad configuration value (expected number)");
+        exit(1);
+    }
     number {
         int32_t n = 0;
         if (!s_to_i32_unsafe (tok, cur, n)) {
-            msg.fatal(cur_loc(), "configuration value overflow");
+            msg.error(cur_loc(), "configuration value overflow");
+            exit(1);
         }
         lex_conf_semicolon ();
         return n;
@@ -308,9 +334,10 @@ std::string Scanner::lex_conf_string ()
                 goto end;
             }
             if (c.chr > 0xFF) {
-                msg.fatal(c.loc
+                msg.error(c.loc
                     , "multibyte character in configuration string: 0x%X"
                     , c.chr);
+                exit(1);
             } else {
                 s += static_cast<char>(c.chr);
             }

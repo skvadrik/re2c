@@ -60,7 +60,7 @@ static Range *char_to_range(RESpec &, const ASTChar &, bool);
 static Range *diff_to_range(RESpec &, const AST *);
 static Range *dot_to_range(RESpec &, const AST *);
 static Range *cls_to_range(RESpec &, const AST *);
-static bool misuse_of_named_def(RESpec &, const AST *);
+static void check_misuse_of_named_def(RESpec &, const AST *);
 static void assert_tags_used_once(RESpec &, const Rule &, const std::vector<Tag> &);
 static void init_rule(RESpec &, Rule &, const SemAct *, const std::vector<Tag> &, size_t, size_t);
 static bool is_icase(const opt_t *, bool);
@@ -226,12 +226,14 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
 
         case AST::TAG: {
             if (ast->tag.name && !opts->tags) {
-                spec.msg.fatal(ast->loc
+                spec.msg.error(ast->loc
                     , "tags are only allowed with '-T, --tags' option");
+                exit(1);
             }
             if (opts->posix_syntax) {
-                spec.msg.fatal(ast->loc
+                spec.msg.error(ast->loc
                     , "simple tags are not allowed with '--posix-captures' option");
+                exit(1);
             }
             RE *t = re_tag(spec, tags.size(), false);
             tags.push_back(Tag(ast->tag.name, ast->tag.history, height));
@@ -250,9 +252,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
             }
 
         case AST::REF:
-            if (misuse_of_named_def(spec, ast)) {
-                return NULL;
-            }
+            check_misuse_of_named_def(spec, ast);
             return ast_to_re(spec, ast->ref.ast, ncap, height);
 
         case AST::ITER: {
@@ -295,7 +295,8 @@ Range *char_to_range(RESpec &spec, const ASTChar &chr, bool icase)
     uint32_t c = chr.chr;
 
     if (!spec.opts->encoding.validateChar(c)) {
-        spec.msg.fatal(chr.loc, "bad code point: '0x%X'", c);
+        spec.msg.error(chr.loc, "bad code point: '0x%X'", c);
+        exit(1);
     }
 
     return icase && is_alpha(c)
@@ -316,8 +317,9 @@ Range *cls_to_range(RESpec &spec, const AST *ast)
     for (; i != e; ++i) {
         Range *s = spec.opts->encoding.validateRange(rm, i->lower, i->upper);
         if (!s) {
-            spec.msg.fatal(i->loc, "bad code point range: '0x%X - 0x%X'"
+            spec.msg.error(i->loc, "bad code point range: '0x%X - 0x%X'"
                 , i->lower, i->upper);
+            exit(1);
         }
         r = rm.add(r, s);
     }
@@ -336,7 +338,8 @@ Range *dot_to_range(RESpec &spec, const AST *ast)
     RangeMgr &rm = spec.rangemgr;
     uint32_t c = '\n';
     if (!spec.opts->encoding.validateChar(c)) {
-        spec.msg.fatal(ast->loc, "bad code point: '0x%X'", c);
+        spec.msg.error(ast->loc, "bad code point: '0x%X'", c);
+        exit(1);
     }
     return rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
 }
@@ -362,7 +365,7 @@ Range *ast_to_range(RESpec &spec, const AST *ast)
             if (spec.opts->posix_syntax) break;
             return ast_to_range(spec, ast->cap);
         case AST::REF:
-            if (misuse_of_named_def(spec, ast)) return NULL;
+            check_misuse_of_named_def(spec, ast);
             return ast_to_range(spec, ast->ref.ast);
         case AST::CLS:
             return cls_to_range(spec, ast);
@@ -380,8 +383,8 @@ Range *ast_to_range(RESpec &spec, const AST *ast)
             return spec.rangemgr.add(x, y);
         }
     }
-    spec.msg.fatal(ast->loc, "can only difference char sets");
-    return NULL;
+    spec.msg.error(ast->loc, "can only difference char sets");
+    exit(1);
 }
 
 RE *re_string(RESpec &spec, const AST *ast)
@@ -414,7 +417,8 @@ RE *re_class(RESpec &spec, const loc_t &loc, const Range *r)
                 spec.msg.warn.empty_class(loc);
                 break;
             case EMPTY_CLASS_ERROR:
-                spec.msg.fatal(loc, "empty character class");
+                spec.msg.error(loc, "empty character class");
+                exit(1);
         }
     }
 
@@ -434,17 +438,17 @@ RE *re_class(RESpec &spec, const loc_t &loc, const Range *r)
     return NULL; /* unreachable */
 }
 
-bool misuse_of_named_def(RESpec &spec, const AST *ast)
+void check_misuse_of_named_def(RESpec &spec, const AST *ast)
 {
     DASSERT(ast->type == AST::REF);
 
     if (spec.opts->posix_syntax) {
-        spec.msg.fatal(ast->loc
+        spec.msg.error(ast->loc
             , "implicit grouping is forbidden with '--posix-captures'"
                 " option, please wrap '%s' in capturing parenthesis"
             , ast->ref.name->c_str());
+        exit(1);
     }
-    return false;
 }
 
 void assert_tags_used_once(RESpec &spec, const Rule &rule
@@ -456,9 +460,10 @@ void assert_tags_used_once(RESpec &spec, const Rule &rule
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         name = tags[t].name;
         if (name && !names.insert(*name).second) {
-            spec.msg.fatal(rule.semact->loc
+            spec.msg.error(rule.semact->loc
                 , "tag '%s' is used multiple times in the same rule"
                 , name->c_str());
+            exit(1);
         }
     }
 }
