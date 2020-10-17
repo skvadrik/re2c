@@ -36,6 +36,13 @@ $ git clone https://git.code.sf.net/p/re2c/code-git
 
 Github is the main repo, sourceforge is a mirror and can be slightly outdated.
 
+CONTRIBUTING
+------------
+
+re2c is an Open Source, community-driven project. See
+[CONTRIBUTING.md](https://github.com/skvadrik/re2c/blob/master/README.md) for
+details about contributions to this repository.
+
 
 BUILD
 -----
