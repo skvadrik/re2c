@@ -16,8 +16,10 @@ function(re2c_bootstrap_lexer input output)
         # recompile the lexer and update bootstrap file(s)
         if("${header}" STREQUAL "")
             # without header
+            get_filename_component(outdir "${output}" DIRECTORY)
             add_custom_command(
                 OUTPUT "${output}"
+                COMMAND "${CMAKE_COMMAND}" -E make_directory ${outdir}
                 COMMAND "${RE2C_FOR_BUILD}" ${re2c_flags} "${relative_source}" -o "${output}"
                 COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${output}" "${boot_output}"
                 DEPENDS "${source}"
@@ -25,8 +27,12 @@ function(re2c_bootstrap_lexer input output)
             )
         else()
             # with header
+            get_filename_component(outdir "${output}" DIRECTORY)
+            get_filename_component(hdrdir "${header}" DIRECTORY)
             add_custom_command(
                 OUTPUT "${output}" "${header}"
+                COMMAND "${CMAKE_COMMAND}" -E make_directory ${outdir}
+                COMMAND "${CMAKE_COMMAND}" -E make_directory ${hdrdir}
                 COMMAND "${RE2C_FOR_BUILD}" ${re2c_flags} "${relative_source}" -o "${output}"
                 COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${output}" "${boot_output}"
                 COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${header}" "${boot_header}"
