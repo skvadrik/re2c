@@ -14,14 +14,14 @@ ac_subst(PACKAGE_VERSION "${PROJECT_VERSION}")
 
 option(RE2C_REBUILD_LEXERS "Regenerate lexers" OFF)
 if(RE2C_REBUILD_LEXERS AND NOT RE2C_FOR_BUILD)
-    message(FATAL_ERROR "need RE2C_FOR_BUILD for RE2C_REBUILD_LEXERS")
+    message(FATAL_ERROR "option RE2C_FOR_BUILD is required for RE2C_REBUILD_LEXERS")
 endif()
 
 option(RE2C_REBUILD_DOCS "Regenerate manpage" OFF)
 if(RE2C_REBUILD_DOCS)
     find_program(RST2MAN NAMES rst2man rst2man.py)
     if(NOT RST2MAN)
-        message(FATAL_ERROR "need rst2man or rst2man.py for RE2C_REBUILD_DOCS")
+        message(FATAL_ERROR "rst2man (or rst2man.py) program is required for RE2C_REBUILD_DOCS")
     endif()
 
     # Windows does not have a native 'man' and 'sed' commands.
