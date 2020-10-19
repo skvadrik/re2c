@@ -23,6 +23,20 @@ if(RE2C_REBUILD_DOCS)
     if(NOT RST2MAN)
         message(FATAL_ERROR "need rst2man or rst2man.py for RE2C_REBUILD_DOCS")
     endif()
+
+    # Windows does not have a native 'man' and 'sed' commands.
+    # Therefore, we are looking for the Cygwin versions of 'man' and 'sed'.
+    if (WIN32)
+        find_program(MAN_EXECUTABLE man)
+        if(NOT MAN_EXECUTABLE)
+            message(FATAL_ERROR "man program is required for RE2C_REBUILD_DOCS")
+        endif()
+
+        find_program(SED_EXECUTABLE sed)
+        if(NOT SED_EXECUTABLE)
+            message(FATAL_ERROR "sed program is required for RE2C_REBUILD_DOCS")
+        endif()
+    endif()
 endif()
 
 option(RE2C_BUILD_LIBS "Build libraries" OFF)
