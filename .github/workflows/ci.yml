@@ -34,22 +34,6 @@ jobs:
             cxx-flags: '-O2'
             skeleton: ${{ false }}
 
-          - name: linux-gcc-debug-ootree
-            os: ubuntu-latest
-            generator: Unix Makefiles
-            build-type: Debug
-            build-dir: .build
-            cxx-flags: -O2
-            skeleton: ${{ false }}
-
-          - name: linux-gcc-debug-intree
-            os: ubuntu-latest
-            generator: Unix Makefiles
-            build-type: Debug
-            build-dir: .
-            cxx-flags: -O2
-            skeleton: ${{ false }}
-
           - name: linux-gcc-debug-ootree-skeleton
             os: ubuntu-latest
             generator: Unix Makefiles
@@ -58,23 +42,23 @@ jobs:
             cxx-flags: -O2
             skeleton: ${{ true }}
 
-          - name: linux-gcc-release-ootree
+          - name: linux-gcc-debug-intree-skeleton
+            os: ubuntu-latest
+            generator: Unix Makefiles
+            build-type: Debug
+            build-dir: .
+            cxx-flags: -O2
+            skeleton: ${{ true }}
+
+          - name: linux-gcc-release-ootree-skeleton
             os: ubuntu-latest
             generator: Unix Makefiles
             build-type: Release
             build-dir: .build
             cxx-flags: ${{ null }}
-            skeleton: ${{ false }}
+            skeleton: ${{ true }}
 
           # macOS
-          - name: macos-clang-debug-ootree
-            os: macos-latest
-            generator: Unix Makefiles
-            build-type: Debug
-            build-dir: .build
-            cxx-flags: -O2
-            skeleton: ${{ false }}
-
           - name: macos-clang-debug-ootree-skeleton
             os: macos-latest
             generator: Unix Makefiles
@@ -83,21 +67,21 @@ jobs:
             cxx-flags: -O2
             skeleton: ${{ true }}
 
-          - name: macos-clang-debug-intree
+          - name: macos-clang-debug-intree-skeleton
             os: macos-latest
             generator: Unix Makefiles
             build-type: Debug
             build-dir: .
             cxx-flags: -O2
-            skeleton: ${{ false }}
+            skeleton: ${{ true }}
 
-          - name: macos-clang-release-ootree
+          - name: macos-clang-release-ootree-skeleton
             os: macos-latest
             generator: Unix Makefiles
             build-type: Release
             build-dir: .build
             cxx-flags: ${{ null }}
-            skeleton: ${{ false }}
+            skeleton: ${{ true }}
 
           # Windows
           - name: windows-msvc-debug-ootree
@@ -275,11 +259,14 @@ jobs:
           find src -name '*.re' | xargs touch
           cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }} --verbose
 
-      - name: Standard Tests
-        if: startsWith(runner.os, 'Windows') == false &&  matrix.skeleton == false
-        run: cmake --build ${{ matrix.build-dir }} --target check
-
-      - name: Skeleton Validation
-        if: startsWith(runner.os, 'Windows') == false && matrix.skeleton == true
+      - name: Test
+        if: startsWith(runner.os, 'Windows') == false
         working-directory: ${{ matrix.build-dir }}
-        run: ./run_tests.sh --skeleton
+        run: |
+          # main test suite
+          cmake --build . --target check
+
+          # skeleton tests (if enabled)
+          if [[ "x${{ matrix.skeleton }}" == "xtrue" ]] ; then
+            ./run_tests.sh --skeleton
+          fi
