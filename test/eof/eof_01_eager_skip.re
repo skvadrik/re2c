@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -i
+// re2c $INPUT -o $OUTPUT -i --eager-skip
 #include <stdio.h>
 #include <string.h>
 
