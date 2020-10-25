@@ -326,34 +326,7 @@ void DFA::calc_stats(OutputBlock &out)
     }
 }
 
-// Check if subsequent appplication of tag operations produces the same results.
-static bool idempotent_tag_operations(const DFA *dfa, tcid_t tcid)
-{
-    // Empty operation sequence has no effect.
-    if (tcid == TCID0) return true;
-
-    // Non-idempotent operations are those that change values of tags used on
-    // the RHS of one of the "copy"/"add" operations.
-    const tcmd_t *cmd = dfa->tcpool[tcid];
-    for (const tcmd_t *p = cmd; p; p = p->next) {
-        if (tcmd_t::isset(p)) {
-            // "save" operations are idempotent, as they have no RHS tag
-        } else if (tcmd_t::isadd(p)) {
-            // "add" operations are non-idempotent, as they have the same LHS
-            // and RHS tags, eg 'x = x + 1;'
-            return false;
-        } else {
-            // "copy" operations may be non-idempotent, eg 'x = y; y = z;'
-            for (const tcmd_t *q = cmd; q; q = q->next) {
-                if (p->rhs == q->lhs) return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-static bool can_hoist_tags(const DFA *dfa, const State *s, const opt_t *opts)
+static bool can_hoist_tags(const State *s, const opt_t *opts)
 {
     Span *span = s->go.span;
     const size_t nspan = s->go.nspans;
@@ -369,19 +342,16 @@ static bool can_hoist_tags(const DFA *dfa, const State *s, const opt_t *opts)
         }
     }
 
-    // If end-of-input rule $ is used, there are additional restrictions.
-    if (opts->eof != NOEOF) {
-        // Check that final/fallback tags agree with other tags: if the end of
-        // input is reached, the lexer may follow the final/fallback transition.
-        if (tags != (s->rule == Rule::NONE ? s->fall_tags : s->rule_tags)) {
-            return false;
-        }
-
-        // Check that tag operations are idempotent, because the lexer may need
-        // to rescan the current input symbol and re-apply hoisted operations.
-        if (!idempotent_tag_operations(dfa, tags)) return false;
+    // If end-of-input rule $ is used, check that final/fallback tags agree with
+    // other tags, as the lexer may follow the final/fallback transition.
+    if (opts->eof != NOEOF
+        && tags != (s->rule == Rule::NONE ? s->fall_tags : s->rule_tags)) {
+        return false;
     }
 
+    // No need to check idempotence of tag operations in case of the end-of-input
+    // rule $, as they are applied before YYFILL label and there is no risk of
+    // re-application if the current input character is re-scanned after YYFILL.
     return true;
 }
 
@@ -410,7 +380,7 @@ void DFA::hoist_tags(const opt_t *opts)
         const size_t nspan = s->go.nspans;
         if (nspan == 0) continue;
 
-        if (can_hoist_tags(this, s, opts)) {
+        if (can_hoist_tags(s, opts)) {
             s->go.tags = span[0].tags;
             for (uint32_t i = 0; i < nspan; ++i) {
                 span[i].tags = TCID0;
@@ -429,7 +399,7 @@ void DFA::hoist_tags_and_skip(const opt_t *opts)
         if (nspan == 0) continue;
 
         // check if it is possible to hoist tags and/or skip
-        bool hoist_tags = can_hoist_tags(this, s, opts);
+        bool hoist_tags = can_hoist_tags(s, opts);
         bool hoist_skip = can_hoist_skip(s, opts);
         if (opts->lookahead) {
             // skip must go after tags

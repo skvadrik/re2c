@@ -94,9 +94,9 @@ yy8:
 	{ one }
 yy9:
 	++YYCURSOR;
+	yyt1 = YYCURSOR;
 yyFillLabel4:
 	yych = *YYCURSOR;
-	yyt1 = YYCURSOR;
 	if (yych >= 0x01) goto yy14;
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(4);

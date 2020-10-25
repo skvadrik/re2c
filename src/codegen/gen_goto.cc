@@ -276,7 +276,14 @@ void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
         append(stmts, code_skip(alc));
     }
 
-    gen_settags(output, stmts, dfa, go->tags, opts->stadfa /* delayed */);
+    DASSERT(consume(from) || go->tags == TCID0);
+    if (opts->eof == NOEOF) {
+        // With the end-of-input rule $ tag operations *must* be generated
+        // before YYFILL label. Without $ rule the are no strict requirements,
+        // but generating them here (after YYFILL label) allows to fuse skip and
+        // peek into one statement.
+        gen_settags(output, stmts, dfa, go->tags, opts->stadfa /* delayed */);
+    }
 
     if (go->skip && opts->lookahead) {
         append(stmts, code_skip(alc));

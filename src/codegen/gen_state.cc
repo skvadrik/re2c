@@ -436,6 +436,15 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
         gen_fill(output, stmts, dfa, s, NULL);
     }
 
+    if (opts->eof != NOEOF) {
+        // If the end-of-input rule $ is used, the lexer may jump to the YYFILL
+        // label to rescan the current input character. Generate tag operations
+        // before the label to avoid applying them multiple times in the above
+        // scenario (re-application may produce incorrect results in case of
+        // non-idempotent operations).
+        gen_settags(output, stmts, dfa, s->go.tags, opts->stadfa /* delayed */);
+    }
+
     if (need_fill_label) {
         const char *flabel = gen_fill_label(output, output.block().fill_index - 1);
         append(stmts, code_slabel(output.allocator, flabel));
