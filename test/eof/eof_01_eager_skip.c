@@ -51,15 +51,27 @@ static bool lex(input_t & in, unsigned int &count)
 {
 	char yych;
 yyFillLabel0:
-	yych = *in.cur++;
+	yych = *in.cur;
 	switch (yych) {
-	case '\n':	goto yy4;
-	case '"':	goto yy7;
-	case '\'':	goto yy8;
+	case '\n':
+		++in.cur;
+		goto yy4;
+	case '"':
+		++in.cur;
+		goto yy7;
+	case '\'':
+		++in.cur;
+		goto yy8;
 	case '+':
-	case '-':	goto yy9;
-	case '0':	goto yy10;
-	case '1':	goto yy12;
+	case '-':
+		++in.cur;
+		goto yy9;
+	case '0':
+		++in.cur;
+		goto yy10;
+	case '1':
+		++in.cur;
+		goto yy12;
 	case '2':
 	case '3':
 	case '4':
@@ -67,7 +79,9 @@ yyFillLabel0:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy14;
+	case '9':
+		++in.cur;
+		goto yy14;
 	case 'A':
 	case 'B':
 	case 'C':
@@ -110,22 +124,35 @@ yyFillLabel0:
 	case 'v':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy16;
+	case 'z':
+		++in.cur;
+		goto yy16;
 	case 'F':
-	case 'f':	goto yy19;
+	case 'f':
+		++in.cur;
+		goto yy19;
 	case 'M':
-	case 'm':	goto yy20;
+	case 'm':
+		++in.cur;
+		goto yy20;
 	case 'S':
-	case 's':	goto yy21;
+	case 's':
+		++in.cur;
+		goto yy21;
 	case 'T':
-	case 't':	goto yy22;
+	case 't':
+		++in.cur;
+		goto yy22;
 	case 'W':
-	case 'w':	goto yy23;
+	case 'w':
+		++in.cur;
+		goto yy23;
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel0;
 			goto yy58;
 		}
+		++in.cur;
 		goto yy2;
 	}
 yy2:
@@ -413,57 +440,69 @@ yy24:
 yyFillLabel13:
 	yych = *in.cur;
 yy25:
-	++in.cur;
 	switch (yych) {
-	case '"':	goto yy26;
-	case '\\':	goto yy28;
+	case '"':
+		++in.cur;
+		goto yy26;
+	case '\\':
+		++in.cur;
+		goto yy28;
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel13;
 			goto yy59;
 		}
+		++in.cur;
 		goto yy24;
 	}
 yy26:
 	{ ++count; continue; }
 yy28:
 yyFillLabel14:
-	yych = *in.cur++;
+	yych = *in.cur;
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel14;
 			goto yy59;
 		}
+		++in.cur;
 		goto yy24;
 	}
+	++in.cur;
 	goto yy24;
 yy29:
 yyFillLabel15:
 	yych = *in.cur;
 yy30:
-	++in.cur;
 	switch (yych) {
-	case '\'':	goto yy31;
-	case '\\':	goto yy33;
+	case '\'':
+		++in.cur;
+		goto yy31;
+	case '\\':
+		++in.cur;
+		goto yy33;
 	default:
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel15;
 			goto yy59;
 		}
+		++in.cur;
 		goto yy29;
 	}
 yy31:
 	{ ++count; continue; }
 yy33:
 yyFillLabel16:
-	yych = *in.cur++;
+	yych = *in.cur;
 	if (yych <= 0x00) {
 		if (in.lim <= in.cur) {
 			if (in.fill() == 0) goto yyFillLabel16;
 			goto yy59;
 		}
+		++in.cur;
 		goto yy29;
 	}
+	++in.cur;
 	goto yy29;
 yy34:
 yyFillLabel17:
