@@ -86,6 +86,8 @@ struct Skeleton
     const std::vector<Tag> &tags;
     const tagver_t *finvers;
 
+    std::vector<size_t> *tagvals;
+
     Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
         const std::string &cond, const loc_t &loc, Msg &msg);
     ~Skeleton ();

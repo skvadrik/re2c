@@ -67,6 +67,7 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     , rules(dfa.rules)
     , tags(dfa.tags)
     , finvers(dfa.finvers)
+    , tagvals(new std::vector<size_t>[ntagver])
 {
     // initialize nodes
     const size_t nil = nodes_count - 1;
@@ -89,6 +90,7 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
 
 Skeleton::~Skeleton()
 {
+    delete[] tagvals;
     delete[] nodes;
 }
 
