@@ -94,23 +94,26 @@ static uint32_t nsteps(uint32_t lower, uint32_t upper)
     return 2 + (upper - lower - 1) / step(lower, upper);
 }
 
-static void apply(std::vector<size_t> *tags, const tcmd_t *cmd, size_t pos)
+static void apply(Skeleton &skel, const tcmd_t *cmd, uint32_t dist)
 {
+    uint32_t *tags = skel.tagvals;
+
     for (const tcmd_t *p = cmd; p; p = p->next) {
         const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
-        std::vector<size_t> &t = tags[l];
         if (tcmd_t::iscopy(p)) {
-            t = tags[r];
+            tags[l] = tags[r];
         } else if (tcmd_t::isset(p)) {
-            t.clear();
-            t.push_back(*h == TAGVER_BOTTOM ? Skeleton::DEFTAG : pos);
+            tags[l] = *h == TAGVER_BOTTOM ? Skeleton::DEFTAG : dist;
         } else {
-            if (l != r) t = tags[r];
-            std::vector<size_t> x;
-            for (; *h != TAGVER_ZERO; ++h) {
-                x.push_back(*h == TAGVER_BOTTOM ? Skeleton::DEFTAG : pos);
+            if (l != r) tags[l] = tags[r];
+
+            uint32_t t = tags[l];
+            const tagver_t *h0 = h;
+            for (; *h != TAGVER_ZERO; ++h);
+            for (; h --> h0; ) {
+                t = mtag(skel.tagtrie, t, *h == TAGVER_BOTTOM ? Skeleton::DEFTAG : dist);
             }
-            t.insert(t.end(), x.rbegin(), x.rend());
+            tags[l] = t;
         }
     }
 }
@@ -162,16 +165,14 @@ static void write_input(const path_t &path, const Skeleton &skel,
 }
 
 template<typename key_t>
-static void write_keys(const path_t &path, const Skeleton &skel,
+static void write_keys(const path_t &path, Skeleton &skel,
     size_t width, FILE *file)
 {
-    const size_t nver = skel.ntagver;
-    const size_t offby = skel.opts->lookahead ? 0 : 1;
+    const uint32_t offby = skel.opts->lookahead ? 0 : 1;
 
     // find last accepting node
     size_t f;
     for (f = path.len(); f > 0 && path.node(skel, f).rule == Rule::NONE; --f);
-
     const size_t rule = path.node(skel, f).rule;
 
     size_t ltag = 0, htag = 0, trail = 0;
@@ -191,27 +192,26 @@ static void write_keys(const path_t &path, const Skeleton &skel,
         chars[i] = nsteps(arcs.back()->lower, arcs.back()->upper);
     }
 
+    uint32_t *tags = skel.tagvals;
+    mtag_trie_t &tagtrie = skel.tagtrie;
+
     // process each subpath of the multipath separately (rather than iterate
     // on all subpaths in lockstep) to reduce the size of storage used for
     // intermediate tag values
     for (size_t w = 0; w < width; ++w) {
-
         // clear buffers for tag values
-        std::vector<size_t> *tags = skel.tagvals;
-        for (size_t i = 0; i < nver; ++i) {
-            tags[i].clear();
-        }
+        std::fill(tags, tags + skel.ntagver, MTAG_TRIE_ROOT);
 
         // initial tags (TDFA(0))
-        apply(tags, skel.cmd0, 0);
+        apply(skel, skel.cmd0, 0);
 
-        for (size_t i = 0; i < f; ++i) {
+        for (uint32_t i = 0; i < f; ++i) {
             // tags commands in state (staDFA), -1 because of "delayed store"
-            apply(tags, path.node(skel, i).stacmd, i - 1);
+            apply(skel, path.node(skel, i).stacmd, i - 1);
 
             // tag commands on transitions (TDFA(0), TDFA(1))
             Node::wciter_t &a = arcs[i];
-            apply(tags, a->cmd, i + offby);
+            apply(skel, a->cmd, i + offby);
 
             // advance character iterator
             // if it's the last one, then switch to the next arc
@@ -225,10 +225,10 @@ static void write_keys(const path_t &path, const Skeleton &skel,
         const tcmd_t *fcmd = path.node(skel, f).cmd;
 
         // staDFA, -1 because of "delayed store"
-        apply(tags, path.node(skel, f).stacmd, f - 1);
+        apply(skel, path.node(skel, f).stacmd, static_cast<uint32_t>(f) - 1);
 
         // TDFA(1)
-        apply(tags, fcmd, f);
+        apply(skel, fcmd, static_cast<uint32_t>(f));
 
         size_t matched = 0;
         if (rule != Rule::NONE) {
@@ -236,13 +236,14 @@ static void write_keys(const path_t &path, const Skeleton &skel,
                 // no trailing context
                 matched = f;
             } else {
+                // trailing context must be an s-tag, not an m-tag
                 const Tag &tag = skel.tags[trail];
                 if (!fixed(tag)) {
                     // variable-length trailing context
-                    matched = tags[skel.finvers[trail]].back();
+                    matched = tags[skel.finvers[trail]];
                 } else if (tag.base != Tag::RIGHTMOST) {
                     // fixed-length trailing context based on tag
-                    matched = tags[skel.finvers[tag.base]].back() - tag.dist;
+                    matched = tags[skel.finvers[tag.base]] - tag.dist;
                 } else {
                     // fixed-length trailing context based on cursor
                     matched = f - tag.dist;
@@ -260,7 +261,9 @@ static void write_keys(const path_t &path, const Skeleton &skel,
             const size_t
                 base = fixed(tag) ? tag.base : t,
                 bver = static_cast<size_t>(skel.finvers[base]);
-            if (history(tag)) nkey += tags[bver].size();
+            if (history(tag)) {
+                nkey += mtag_length(tagtrie, tags[bver]);
+            }
             ++nkey;
         }
 
@@ -279,8 +282,8 @@ static void write_keys(const path_t &path, const Skeleton &skel,
                 DASSERT(!fixed(tag));
                 // variable-length tag
                 const size_t tver = static_cast<size_t>(skel.finvers[t]);
-                const std::vector<size_t> &h = tags[tver];
-                const size_t hlen = h.size();
+                uint32_t tval = tags[tver];
+                const uint32_t len = mtag_length(tagtrie, tval);
 
                 // Abort if history length exceeds maximum value of key type.
                 // This is not always true, but it is difficult to estimate
@@ -290,22 +293,31 @@ static void write_keys(const path_t &path, const Skeleton &skel,
                 // TODO: Ideally we should use different encoding for the keys
                 // (structs with 2 or 4 byte fields for history length and
                 // proper serialization/deserialization instead of flat arrays).
-                DASSERT(hlen < std::numeric_limits<key_t>::max());
+                DASSERT(len < std::numeric_limits<key_t>::max());
 
-                *k++ = to_le(static_cast<key_t>(hlen));
-                for (size_t i = 0; i < hlen; ++i) {
-                    *k++ = to_le(static_cast<key_t>(h[i]));
+                // unfold m-tag history from the tag trie (from tail to head)
+                std::vector<uint32_t> &history = skel.mtagval;
+                history.clear();
+                for (; tval != MTAG_TRIE_ROOT; ) {
+                    const mtag_t &t = tagtrie.head[tval];
+                    history.push_back(t.dist);
+                    tval = t.pred;
+                }
+
+                *k++ = to_le(static_cast<key_t>(len));
+                for (uint32_t i = len; i --> 0; ) {
+                    *k++ = to_le(static_cast<key_t>(history[i]));
                 }
             } else {
                 size_t tval;
                 if (!fixed(tag)) {
                     // variable-length tag
                     const size_t tver = static_cast<size_t>(skel.finvers[t]);
-                    tval = tags[tver].back();
+                    tval = tags[tver];
                 } else if (tag.base != Tag::RIGHTMOST) {
                     // fixed-length tag based on another tag
                     const size_t tver = static_cast<size_t>(skel.finvers[tag.base]);
-                    tval = tags[tver].back();
+                    tval = tags[tver];
                     if (tval != Skeleton::DEFTAG) tval -= tag.dist;
                 } else {
                     // fixed-length tag based on cursor
@@ -318,12 +330,13 @@ static void write_keys(const path_t &path, const Skeleton &skel,
         // dump to file
         fwrite(keys, sizeof(key_t), nkey, file);
 
+        mtag_trie_clear(tagtrie);
         delete[] keys;
     }
 }
 
 template<typename cunit_t, typename key_t>
-static cover_size_t cover_one(const Skeleton &skel, cover_t &cover)
+static cover_size_t cover_one(Skeleton &skel, cover_t &cover)
 {
     const path_t &path = cover.prefix;
 
@@ -370,10 +383,8 @@ static cover_size_t cover_one(const Skeleton &skel, cover_t &cover)
  * See also note [counting skeleton edges].
  *
  */
-template <typename cunit_t, typename key_t> static void gencover(
-    const Skeleton &skel,
-    cover_t &cover,
-    size_t i)
+template <typename cunit_t, typename key_t> static void gencover(Skeleton &skel,
+    cover_t &cover, size_t i)
 {
     const Node &node = skel.nodes[i];
     uint8_t &loop = cover.loops[i];
@@ -430,7 +441,7 @@ template <typename cunit_t, typename key_t> static void gencover(
 }
 
 template<typename cunit_t, typename key_t>
-    static void generate_paths_cunit_key(const Skeleton &skel, cover_t &cover)
+    static void generate_paths_cunit_key(Skeleton &skel, cover_t &cover)
 {
     gencover<cunit_t, key_t>(skel, cover, 0);
     if (cover.size.overflow()) {
@@ -441,7 +452,7 @@ template<typename cunit_t, typename key_t>
 }
 
 template<typename cunit_t>
-    static void generate_paths_cunit(const Skeleton &skel, cover_t &cover)
+    static void generate_paths_cunit(Skeleton &skel, cover_t &cover)
 {
     switch (skel.sizeof_key) {
         case 8: generate_paths_cunit_key<cunit_t, uint64_t>(skel, cover); break;
@@ -451,7 +462,7 @@ template<typename cunit_t>
     }
 }
 
-static void generate_paths(const Skeleton &skel, cover_t &cover)
+static void generate_paths(Skeleton &skel, cover_t &cover)
 {
     switch (skel.opts->encoding.szCodeUnit()) {
         case 4: generate_paths_cunit<uint32_t>(skel, cover); break;
@@ -460,7 +471,7 @@ static void generate_paths(const Skeleton &skel, cover_t &cover)
     }
 }
 
-void emit_data(const Skeleton &skel)
+void emit_data(Skeleton &skel)
 {
     std::string fname = skel.opts->output_file;
     if (fname.empty()) {

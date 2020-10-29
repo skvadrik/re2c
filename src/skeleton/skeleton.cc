@@ -47,7 +47,7 @@ bool Node::end() const
     return arcs.size() == 0;
 }
 
-const size_t Skeleton::DEFTAG = std::numeric_limits<size_t>::max();
+const uint32_t Skeleton::DEFTAG = std::numeric_limits<uint32_t>::max();
 
 Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
         const std::string &cond, const loc_t &loc, Msg &msg)
@@ -67,7 +67,9 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     , rules(dfa.rules)
     , tags(dfa.tags)
     , finvers(dfa.finvers)
-    , tagvals(new std::vector<size_t>[ntagver])
+    , tagvals(new uint32_t[ntagver])
+    , tagtrie()
+    , mtagval()
 {
     // initialize nodes
     const size_t nil = nodes_count - 1;
@@ -86,10 +88,13 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     } else if (max <= std::numeric_limits<uint32_t>::max()) {
         sizeof_key = 4;
     }
+
+    mtag_trie_init(tagtrie);
 }
 
 Skeleton::~Skeleton()
 {
+    mtag_trie_free(tagtrie);
     delete[] tagvals;
     delete[] nodes;
 }

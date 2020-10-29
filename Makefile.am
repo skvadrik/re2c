@@ -51,6 +51,7 @@ re2c_HDR = \
 	src/regexp/rule.h \
 	src/regexp/tag.h \
 	src/compile.h \
+	src/skeleton/mtag_trie.h \
 	src/skeleton/path.h \
 	src/skeleton/skeleton.h \
 	src/parse/ast.h \

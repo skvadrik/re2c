@@ -15,6 +15,7 @@
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/skeleton/mtag_trie.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
 #include "src/util/wrap_iter.h"
@@ -65,7 +66,7 @@ struct Node
 
 struct Skeleton
 {
-    static const size_t DEFTAG;
+    static const uint32_t DEFTAG;
 
     const opt_t *opts;
     const std::string name;
@@ -86,7 +87,9 @@ struct Skeleton
     const std::vector<Tag> &tags;
     const tagver_t *finvers;
 
-    std::vector<size_t> *tagvals;
+    uint32_t *tagvals;
+    mtag_trie_t tagtrie;
+    std::vector<uint32_t> mtagval;
 
     Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
         const std::string &cond, const loc_t &loc, Msg &msg);
@@ -110,7 +113,7 @@ uint64_t rule2key(size_t rule, size_t key, size_t def);
 uint32_t maxpath(const Skeleton &skel);
 void warn_undefined_control_flow(const Skeleton &skel);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
-void emit_data(const Skeleton &skel);
+void emit_data(Skeleton &skel);
 Code *emit_skeleton_prolog(Output &output);
 Code *emit_skeleton_epilog(Output &output);
 void emit_skeleton(Output &output, CodeList *code, DFA &dfa);
