@@ -70,6 +70,9 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     , tagvals(new uint32_t[ntagver])
     , tagtrie()
     , mtagval()
+    , arc_iters()
+    , char_iters()
+    , keys()
 {
     // initialize nodes
     const size_t nil = nodes_count - 1;
@@ -90,11 +93,17 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     }
 
     mtag_trie_init(tagtrie);
+    init_membuf(arc_iters, 256);
+    init_membuf(char_iters, 256);
+    init_membuf(keys, 256);
 }
 
 Skeleton::~Skeleton()
 {
     mtag_trie_free(tagtrie);
+    free_membuf(arc_iters);
+    free_membuf(char_iters);
+    free_membuf(keys);
     delete[] tagvals;
     delete[] nodes;
 }

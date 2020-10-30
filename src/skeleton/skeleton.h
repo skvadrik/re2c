@@ -16,6 +16,7 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/mtag_trie.h"
+#include "src/util/allocate.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
 #include "src/util/wrap_iter.h"
@@ -90,6 +91,9 @@ struct Skeleton
     uint32_t *tagvals;
     mtag_trie_t tagtrie;
     std::vector<uint32_t> mtagval;
+    membuf_t<Node::wciter_t> arc_iters;
+    membuf_t<size_t> char_iters;
+    membuf_t<uint64_t> keys; // assume maxumum possible key size, 8 bytes
 
     Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
         const std::string &cond, const loc_t &loc, Msg &msg);

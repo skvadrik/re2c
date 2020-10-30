@@ -184,12 +184,14 @@ static void write_keys(const path_t &path, Skeleton &skel,
     }
 
     // arc iterators and character iterators within each arc
-    std::vector<Node::wciter_t> arcs;
-    arcs.reserve(f);
-    std::vector<size_t> chars(f);
+    grow_membuf(skel.arc_iters, f);
+    grow_membuf(skel.char_iters, f);
+    Node::wciter_t *arcs = skel.arc_iters.ptr;
+    size_t *chars = skel.char_iters.ptr;
     for (size_t i = 0; i < f; ++i) {
-        arcs.push_back(Node::wciter_t(path.arc(skel, i)));
-        chars[i] = nsteps(arcs.back()->lower, arcs.back()->upper);
+        Node::wciter_t a(path.arc(skel, i));
+        arcs[i] = a;
+        chars[i] = nsteps(a->lower, a->upper);
     }
 
     uint32_t *tags = skel.tagvals;
@@ -267,9 +269,10 @@ static void write_keys(const path_t &path, Skeleton &skel,
             ++nkey;
         }
 
-        // keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
-        key_t *keys = new key_t[nkey], *k = keys;
+        grow_membuf(skel.keys, nkey);
+        key_t *keys = (key_t*)skel.keys.ptr, *k = keys;
 
+        // keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
         *k++ = to_le(static_cast<key_t>(path.len()));
         *k++ = to_le(static_cast<key_t>(matched));
         *k++ = to_le(rule2key<key_t>(rule, skel.def_rule));
@@ -331,7 +334,6 @@ static void write_keys(const path_t &path, Skeleton &skel,
         fwrite(keys, sizeof(key_t), nkey, file);
 
         mtag_trie_clear(tagtrie);
-        delete[] keys;
     }
 }
 
