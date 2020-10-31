@@ -318,8 +318,13 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
         falltags = from->fall_tags;
     }
 
-    // If tags have been hoisted, do not re-add them to fallback transition.
-    if (from->go.tags != TCID0) {
+    if (opts->stadfa) {
+        DASSERT(from->go.tags == from->stadfa_tags);
+
+    } else if (from->go.tags != TCID0) {
+        // Tags have been hoisted out of transitions into state (this means that
+        // tags on all transitions coincide, including the fallback transition).
+        // Do not add duplicate tags to fallback transition.
         DASSERT(from->go.tags == falltags);
         falltags = TCID0;
     }
@@ -423,16 +428,17 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
 void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const State *s)
 {
     const opt_t *opts = output.block().opts;
-    if (!opts->fill_use || endstate(s)) return;
 
-    const bool need_fill = opts->eof == NOEOF && s->fill > 0;
-    const bool need_fill_label = (need_fill && opts->fFlag) || opts->eof != NOEOF;
+    const bool need_fill = opts->fill_use && !endstate(s);
+    const bool need_fill_on_trans = need_fill && opts->eof != NOEOF;
+    const bool need_fill_in_state = need_fill && opts->eof == NOEOF && s->fill > 0;
+    const bool need_fill_label = need_fill_on_trans || (need_fill_in_state && opts->fFlag);
 
     if (need_fill_label) {
         ++output.block().fill_index;
     }
 
-    if (need_fill) {
+    if (need_fill_in_state) {
         gen_fill(output, stmts, dfa, s, NULL);
     }
 

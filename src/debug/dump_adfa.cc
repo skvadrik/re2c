@@ -71,6 +71,7 @@ void dump_adfa(const DFA &dfa)
                     name ? name->c_str() : "/", dfa.finvers[t]);
             }
         }
+        dump_tcmd(dfa.tcpool[s->stadfa_tags]);
         dump_tcmd(dfa.tcpool[s->go.tags]);
         fprintf(stderr, "\" %s]\n", attr);
 
