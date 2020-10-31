@@ -242,10 +242,11 @@ run_pack() {
     done
 
     # log results
-    echo > $log
-    echo "ran tests:   $ran_tests"   >> $log
-    echo "hard errors: $hard_errors" >> $log
-    echo "soft errors: $soft_errors" >> $log
+    {
+        echo "ran tests:   $ran_tests"
+        echo "hard errors: $hard_errors"
+        echo "soft errors: $soft_errors"
+    } > "$log"
 }
 
 cleanup() {
@@ -264,7 +265,7 @@ logs=()
 wait_pids=()
 trap cleanup INT
 for ((i = 0; i < ${#packs[@]}; i++)); do
-    logs[$i]=`date +%y%m%d%H%M%S`_$i
+    logs[$i]=`date +%y%m%d%H%M%S`_$i.log
     run_pack ${logs[i]} ${packs[i]} &
     wait_pids[${#wait_pids[@]}]=$! # array is continuous (old bash lacks +=)
 done
@@ -283,7 +284,7 @@ for ((i = 0; i < ${#logs[@]}; i++)); do
     rm -f "$log"
 done
 
-# remove directories that are empty or contain only .inc files
+# remove directories that are empty or contain only .inc, .h and .go files
 for d in $(find $test_blddir -depth -type d); do
     [ -z "$(find $d -type f ! \( -name '*.inc' -o -name '*.h' -o -name '*.go' \) )" ] && rm -rf "$d"
 done
