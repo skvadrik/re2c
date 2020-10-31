@@ -167,14 +167,21 @@ jobs:
         id: configure-command
         run: |
           # Common CMake arguments
-          args=( -S . -B ${{ matrix.build-dir }} -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} )
+          args=( -S . -B ${{ matrix.build-dir }} )
 
-          # Generator's specific stuff
-          # We don't add generator here to avoid splitting it before
+          # Generator's specific stuff.
+          # We don't add generator here to avoid word split when expanding
+          # array elements, e.g. 'Visual Studio' passed as two arguments.
           case "${{ matrix.generator }}" in
             'Visual Studio'*)
               args+=( -A x64 )
-            ;;
+              ;;
+            *)
+              # CMAKE_BUILD_TYPE is not used by multi-config build
+              # types (e.g Visual Studio) at the configure time
+              # thus we add it only for single-config build types
+              args+=( -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} )
+              ;;
           esac
 
           # CFLAGS, CXXFLAGS
@@ -196,10 +203,10 @@ jobs:
           # they are not necessary in a minimal installation
           args+=( -DRE2C_BUILD_RE2GO=OFF )
 
-          # Generator's specific stuff
-          #
-          # Notice, some generator names contains a space, this is why we add
-          # generator here because we don't want split it in 'args=($astr)' above.
+          # Generator's specific stuff.
+          # Some generator names contains a space e.g. 'Visual Studio'.
+          # So, to avoid word split when expanding array elements in 'args=($astr)'
+          # we add generator here instead of 'Prepare Configure Command' step.
           args+=( -G "${{ matrix.generator }}" )
 
           # Print the resulting command line for debugging purposes
@@ -243,9 +250,9 @@ jobs:
           esac
 
           # Generator's specific stuff
-          #
-          # Notice, some generator names contains a space, this is why we add
-          # generator here because we don't want split it in 'args=($astr)' above.
+          # Some generator names contains a space e.g. 'Visual Studio'.
+          # So, to avoid word split when expanding array elements in 'args=($astr)'
+          # we add generator here instead of 'Prepare Configure Command' step.
           args+=( -G "${{ matrix.generator }}" )
 
           # Print the resulting command line for debugging purposes
