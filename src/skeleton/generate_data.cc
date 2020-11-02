@@ -84,12 +84,12 @@ template<typename uintn_t> static uintn_t to_le(uintn_t n)
 //   - range bounds must be included
 //   - values should be evenly distributed
 //   - values should be deterministic
-static uint32_t step(uint32_t lower, uint32_t upper)
+static inline uint32_t step(uint32_t lower, uint32_t upper)
 {
     return 1 + (upper - lower) / 0x100;
 }
 
-static uint32_t nsteps(uint32_t lower, uint32_t upper)
+static inline uint32_t nsteps(uint32_t lower, uint32_t upper)
 {
     return 2 + (upper - lower - 1) / step(lower, upper);
 }
@@ -183,54 +183,61 @@ static void write_keys(const path_t &path, Skeleton &skel,
         trail = r.ttag;
     }
 
-    // arc iterators and character iterators within each arc
-    grow_membuf(skel.arc_iters, f);
-    grow_membuf(skel.char_iters, f);
-    Node::wciter_t *arcs = skel.arc_iters.ptr;
-    size_t *chars = skel.char_iters.ptr;
-    for (size_t i = 0; i < f; ++i) {
-        Node::wciter_t a(path.arc(skel, i));
-        arcs[i] = a;
-        chars[i] = nsteps(a->lower, a->upper);
-    }
-
+    Node::wciter_t *arcs = NULL;
+    size_t *chars = NULL;
     uint32_t *tags = skel.tagvals;
     mtag_trie_t &tagtrie = skel.tagtrie;
+
+    if (ltag < htag) {
+        // init arc iterators and character iterators within each arc
+        grow_membuf(skel.arc_iters, f);
+        grow_membuf(skel.char_iters, f);
+        arcs = skel.arc_iters.ptr;
+        chars = skel.char_iters.ptr;
+        for (size_t i = 0; i < f; ++i) {
+            Node::wciter_t a(path.arc(skel, i));
+            arcs[i] = a;
+            chars[i] = nsteps(a->lower, a->upper);
+        }
+    }
 
     // process each subpath of the multipath separately (rather than iterate
     // on all subpaths in lockstep) to reduce the size of storage used for
     // intermediate tag values
     for (size_t w = 0; w < width; ++w) {
-        // clear buffers for tag values
-        std::fill(tags, tags + skel.ntagver, MTAG_TRIE_ROOT);
+        if (ltag < htag) {
+            // clear buffers for tag values
+            std::fill(tags, tags + skel.ntagver, MTAG_TRIE_ROOT);
+            mtag_trie_clear(tagtrie);
 
-        // initial tags (TDFA(0))
-        apply(skel, skel.cmd0, 0);
+            // initial tags (TDFA(0))
+            apply(skel, skel.cmd0, 0);
 
-        for (uint32_t i = 0; i < f; ++i) {
-            // tags commands in state (staDFA), -1 because of "delayed store"
-            apply(skel, path.node(skel, i).stacmd, i - 1);
+            for (uint32_t i = 0; i < f; ++i) {
+                // tags commands in state (staDFA), -1 because of "delayed store"
+                apply(skel, path.node(skel, i).stacmd, i - 1);
 
-            // tag commands on transitions (TDFA(0), TDFA(1))
-            Node::wciter_t &a = arcs[i];
-            apply(skel, a->cmd, i + offby);
+                // tag commands on transitions (TDFA(0), TDFA(1))
+                Node::wciter_t &a = arcs[i];
+                apply(skel, a->cmd, i + offby);
 
-            // advance character iterator
-            // if it's the last one, then switch to the next arc
-            if (--chars[i] == 0) {
-                ++a;
-                chars[i] = nsteps(a->lower, a->upper);
+                // advance character iterator
+                // if it's the last one, then switch to the next arc
+                if (--chars[i] == 0) {
+                    ++a;
+                    chars[i] = nsteps(a->lower, a->upper);
+                }
             }
+
+            // tag commands in final states
+            const tcmd_t *fcmd = path.node(skel, f).cmd;
+
+            // staDFA, -1 because of "delayed store"
+            apply(skel, path.node(skel, f).stacmd, static_cast<uint32_t>(f) - 1);
+
+            // TDFA(1)
+            apply(skel, fcmd, static_cast<uint32_t>(f));
         }
-
-        // tag commands in final states
-        const tcmd_t *fcmd = path.node(skel, f).cmd;
-
-        // staDFA, -1 because of "delayed store"
-        apply(skel, path.node(skel, f).stacmd, static_cast<uint32_t>(f) - 1);
-
-        // TDFA(1)
-        apply(skel, fcmd, static_cast<uint32_t>(f));
 
         size_t matched = 0;
         if (rule != Rule::NONE) {
@@ -255,8 +262,7 @@ static void write_keys(const path_t &path, Skeleton &skel,
         }
 
         // count keys
-        size_t nkey = 0;
-        nkey += 3;
+        size_t nkey = 3;
         for (size_t t = ltag; t < htag; ++t) {
             const Tag &tag = skel.tags[t];
             if (t == trail || fictive(tag)) continue;
@@ -332,8 +338,6 @@ static void write_keys(const path_t &path, Skeleton &skel,
 
         // dump to file
         fwrite(keys, sizeof(key_t), nkey, file);
-
-        mtag_trie_clear(tagtrie);
     }
 }
 
