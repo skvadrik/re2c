@@ -137,13 +137,13 @@ static size_t path_width(const path_t &path, const Skeleton &skel)
 }
 
 template<typename cunit_t>
-static void write_input(const path_t &path, const Skeleton &skel,
-    size_t width, FILE *file)
+static void write_input(const path_t &path, Skeleton &skel, size_t width, FILE *file)
 {
-    const size_t
-        len = path.len(),
-        size = len * width;
-    cunit_t *buffer = new cunit_t[size];
+    const size_t len = path.len();
+    const size_t size = len * width;
+
+    grow_membuf(skel.buffer, size);
+    cunit_t *buffer = (cunit_t*)skel.buffer.ptr;
 
     // pick characters from ranges
     for (size_t i = 0; i < len; ++i) {
@@ -160,8 +160,6 @@ static void write_input(const path_t &path, const Skeleton &skel,
     }
 
     fwrite(buffer, sizeof(cunit_t), size, file);
-
-    delete[] buffer;
 }
 
 template<typename key_t>
@@ -275,8 +273,8 @@ static void write_keys(const path_t &path, Skeleton &skel,
             ++nkey;
         }
 
-        grow_membuf(skel.keys, nkey);
-        key_t *keys = (key_t*)skel.keys.ptr, *k = keys;
+        grow_membuf(skel.buffer, nkey);
+        key_t *keys = (key_t*)skel.buffer.ptr, *k = keys;
 
         // keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
         *k++ = to_le(static_cast<key_t>(path.len()));

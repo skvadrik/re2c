@@ -91,9 +91,14 @@ struct Skeleton
     uint32_t *tagvals;
     mtag_trie_t tagtrie;
     std::vector<uint32_t> mtagval;
+
+    // Buffers for arc and character iterators on each subpath of a multipath.
     membuf_t<Node::wciter_t> arc_iters;
     membuf_t<size_t> char_iters;
-    membuf_t<uint64_t> keys; // assume maxumum possible key size, 8 bytes
+
+    // Buffer for the generated data and keys (before they are written to file).
+    // 8 bytes is enough for all data/key sizes and alignment requirements.
+    membuf_t<uint64_t> buffer;
 
     Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
         const std::string &cond, const loc_t &loc, Msg &msg);
