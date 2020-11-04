@@ -483,12 +483,16 @@ void emit_data(Skeleton &skel)
     }
 
     const std::string input_name = fname + "." + skel.name + ".input";
+    const std::string keys_name = std::string(fname) + "." + skel.name + ".keys";
+    // 'remove() / fopen("w")' works faster than 'fopen("w")' at least on ext4.
+    remove(input_name.c_str());
+    remove(keys_name.c_str());
+
     FILE *input = fopen(input_name.c_str(), "wb");
     if (!input) {
         error("cannot open file: %s", input_name.c_str());
         exit(1);
     }
-    const std::string keys_name = std::string(fname) + "." + skel.name + ".keys";
     FILE *keys = fopen (keys_name.c_str(), "wb");
     if (!keys) {
         error("cannot open file: %s", keys_name.c_str());
