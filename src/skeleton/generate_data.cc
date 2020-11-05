@@ -54,17 +54,17 @@ typedef u32lim_t<1024 * 1024 * 1024> cover_size_t; // ~1Gb
 
 struct cover_t
 {
-    FILE *input;
-    FILE *keys;
     std::vector<uint8_t> loops;
     std::vector<suffix_t> suffixes;
     path_t prefix;
     cover_size_t size;
 
-    cover_t(FILE *fi, FILE *fk, size_t nnodes):
-        input(fi), keys(fk), loops(nnodes),
-        suffixes(nnodes), prefix(0),
-        size(cover_size_t::from32(0u)) {}
+    cover_t(size_t nnodes)
+        : loops(nnodes)
+        , suffixes(nnodes)
+        , prefix(0)
+        , size(cover_size_t::from32(0u))
+        {}
 
     FORBID_COPY(cover_t);
 };
@@ -137,7 +137,7 @@ static size_t path_width(const path_t &path, const Skeleton &skel)
 }
 
 template<typename cunit_t>
-static void write_input(const path_t &path, Skeleton &skel, size_t width, FILE *file)
+static void write_input(const path_t &path, Skeleton &skel, size_t width)
 {
     const size_t len = path.len();
     const size_t size = len * width;
@@ -152,8 +152,7 @@ static void write_input(const path_t &path, Skeleton &skel, size_t width, FILE *
         chars[i] = a->lower;
     }
 
-    grow_membuf(skel.buffer, size);
-    cunit_t *buffer = (cunit_t*)skel.buffer.ptr, *p = buffer;
+    cunit_t *p = skel.buf_data.alloc<cunit_t>(size);
 
     for (size_t w = 0; w < width; ++w) {
         for (size_t i = 0; i < len; ++i) {
@@ -178,13 +177,10 @@ static void write_input(const path_t &path, Skeleton &skel, size_t width, FILE *
             *p++ = to_le(static_cast<cunit_t>(c));
         }
     }
-
-    fwrite(buffer, sizeof(cunit_t), size, file);
 }
 
 template<typename key_t>
-static void write_keys(const path_t &path, Skeleton &skel,
-    size_t width, FILE *file)
+static void write_keys(const path_t &path, Skeleton &skel, size_t width)
 {
     const uint32_t offby = skel.opts->lookahead ? 0 : 1;
 
@@ -293,8 +289,7 @@ static void write_keys(const path_t &path, Skeleton &skel,
             ++nkey;
         }
 
-        grow_membuf(skel.buffer, nkey);
-        key_t *keys = (key_t*)skel.buffer.ptr, *k = keys;
+        key_t *k = skel.buf_keys.alloc<key_t>(nkey);
 
         // keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
         *k++ = to_le(static_cast<key_t>(path.len()));
@@ -353,9 +348,6 @@ static void write_keys(const path_t &path, Skeleton &skel,
                 *k++ = to_le(static_cast<key_t>(tval));
             }
         }
-
-        // dump to file
-        fwrite(keys, sizeof(key_t), nkey, file);
     }
 }
 
@@ -371,8 +363,8 @@ static cover_size_t cover_one(Skeleton &skel, cover_t &cover)
         * cover_size_t::from64(width);
 
     if (!size.overflow()) {
-        write_input<cunit_t>(path, skel, width, cover.input);
-        write_keys<key_t>(path, skel, width, cover.keys);
+        write_input<cunit_t>(path, skel, width);
+        write_keys<key_t>(path, skel, width);
     }
 
     return size;
@@ -473,6 +465,8 @@ template<typename cunit_t, typename key_t>
             "DFA %sis too large: can only generate partial path cover",
             incond(skel.cond).c_str());
     }
+    skel.buf_data.flush<cunit_t>();
+    skel.buf_keys.flush<key_t>();
 }
 
 template<typename cunit_t>
@@ -519,7 +513,10 @@ void emit_data(Skeleton &skel)
         exit(1);
     }
 
-    cover_t cover(input, keys, skel.nodes_count);
+    skel.buf_data.file = input;
+    skel.buf_keys.file = keys;
+
+    cover_t cover(skel.nodes_count);
     generate_paths(skel, cover);
 
     fclose(input);

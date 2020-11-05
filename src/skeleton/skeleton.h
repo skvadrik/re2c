@@ -33,6 +33,77 @@ class bitmaps_t;
 struct opt_t;
 struct tcmd_t;
 
+struct OutBuf {
+    FILE *file;
+    size_t size;
+    union {
+        membuf_t<uint8_t>  buf8;
+        membuf_t<uint16_t> buf16;
+        membuf_t<uint32_t> buf32;
+        membuf_t<uint64_t> buf64;
+    };
+
+    void init(size_t selector);
+    void free(size_t selector);
+    template<typename T> membuf_t<T>& select();
+    template<typename T> T* alloc(size_t n);
+    template<typename T> void flush();
+};
+
+template<> inline membuf_t<uint8_t>&  OutBuf::select() { return buf8;  }
+template<> inline membuf_t<uint16_t>& OutBuf::select() { return buf16; }
+template<> inline membuf_t<uint32_t>& OutBuf::select() { return buf32; }
+template<> inline membuf_t<uint64_t>& OutBuf::select() { return buf64; }
+
+inline void OutBuf::init(size_t selector)
+{
+    static const size_t KB = 1024 * 1024;
+    switch (selector) {
+        case 1: init_membuf(buf8, KB);  break;
+        case 2: init_membuf(buf16, KB); break;
+        case 4: init_membuf(buf32, KB); break;
+        case 8: init_membuf(buf64, KB); break;
+        default: DASSERT(false);
+    }
+    size = 0;
+    file = NULL;
+}
+
+inline void OutBuf::free(size_t selector)
+{
+    switch (selector) {
+        case 1: free_membuf(buf8);  break;
+        case 2: free_membuf(buf16); break;
+        case 4: free_membuf(buf32); break;
+        case 8: free_membuf(buf64); break;
+        default: DASSERT(false);
+    }
+    size = 0;
+}
+
+template<typename T> inline void OutBuf::flush()
+{
+    membuf_t<T> &buf = select<T>();
+    fwrite(buf.ptr, sizeof(T), size, file);
+    size = 0;
+}
+
+template<typename T> inline T* OutBuf::alloc(size_t n)
+{
+    membuf_t<T> &buf = select<T>();
+
+    if (size + n >= buf.size) {
+        flush<T>();
+        grow_membuf(buf, n);
+        size = 0;
+    }
+
+    T *ptr = buf.ptr + size;
+    size += n;
+
+    return ptr;
+}
+
 typedef local_increment_t<uint8_t> local_inc;
 
 struct Node
@@ -91,14 +162,10 @@ struct Skeleton
     uint32_t *tagvals;
     mtag_trie_t tagtrie;
     std::vector<uint32_t> mtagval;
-
-    // Buffers for arc and character iterators on each subpath of a multipath.
     membuf_t<Node::wciter_t> arc_iters;
     membuf_t<size_t> char_iters;
-
-    // Buffer for the generated data and keys (before they are written to file).
-    // 8 bytes is enough for all data/key sizes and alignment requirements.
-    membuf_t<uint64_t> buffer;
+    OutBuf buf_data;
+    OutBuf buf_keys;
 
     Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
         const std::string &cond, const loc_t &loc, Msg &msg);

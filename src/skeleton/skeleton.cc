@@ -2,6 +2,7 @@
 
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
+#include "src/options/opt.h"
 #include "src/skeleton/skeleton.h"
 
 
@@ -72,7 +73,8 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     , mtagval()
     , arc_iters()
     , char_iters()
-    , buffer()
+    , buf_data()
+    , buf_keys()
 {
     // initialize nodes
     const size_t nil = nodes_count - 1;
@@ -95,17 +97,19 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     mtag_trie_init(tagtrie);
     init_membuf(arc_iters, 256);
     init_membuf(char_iters, 256);
-    init_membuf(buffer, 256);
+    buf_data.init(opts->encoding.szCodeUnit());
+    buf_keys.init(sizeof_key);
 }
 
 Skeleton::~Skeleton()
 {
+    delete[] nodes;
+    delete[] tagvals;
     mtag_trie_free(tagtrie);
     free_membuf(arc_iters);
     free_membuf(char_iters);
-    free_membuf(buffer);
-    delete[] tagvals;
-    delete[] nodes;
+    buf_data.free(opts->encoding.szCodeUnit());
+    buf_keys.free(sizeof_key);
 }
 
 uint64_t rule2key(size_t rule, size_t key, size_t def)
