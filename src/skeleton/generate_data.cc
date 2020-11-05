@@ -142,20 +142,40 @@ static void write_input(const path_t &path, Skeleton &skel, size_t width, FILE *
     const size_t len = path.len();
     const size_t size = len * width;
 
-    grow_membuf(skel.buffer, size);
-    cunit_t *buffer = (cunit_t*)skel.buffer.ptr;
-
-    // pick characters from ranges
+    grow_membuf(skel.arc_iters, len);
+    grow_membuf(skel.char_iters, len);
+    Node::wciter_t *arcs = skel.arc_iters.ptr;
+    size_t *chars = skel.char_iters.ptr;
     for (size_t i = 0; i < len; ++i) {
         Node::wciter_t a(path.arc(skel, i));
-        for (size_t w = 0; w < width; ++a) {
-            const uint32_t
-                l = a->lower,
-                u = a->upper,
-                d = step(l, u);
-            for (uint32_t m = l; m < u + d && w < width; m += d, ++w) {
-                buffer[w * len + i] = to_le(static_cast<cunit_t>(std::min(m, u)));
+        arcs[i] = a;
+        chars[i] = a->lower;
+    }
+
+    grow_membuf(skel.buffer, size);
+    cunit_t *buffer = (cunit_t*)skel.buffer.ptr, *p = buffer;
+
+    for (size_t w = 0; w < width; ++w) {
+        for (size_t i = 0; i < len; ++i) {
+            Node::wciter_t &a = arcs[i];
+            const uint32_t upper = a->upper;
+            const uint32_t stride = step(a->lower, upper);
+            uint32_t c = static_cast<uint32_t>(chars[i]);
+
+            if (c >= upper) {
+                // the current range covered, start the next one
+                chars[i] = (++a)->lower;
+            } else if (c >= upper - stride) {
+                // pick the last character in the current range
+                // (the last step may be shorter than stride, so round up to
+                // the upper bound, and avoid potential overflow on c + stride)
+                chars[i] = upper;
+            } else {
+                // step to the next character in the current range
+                chars[i] += stride;
             }
+
+            *p++ = to_le(static_cast<cunit_t>(c));
         }
     }
 
