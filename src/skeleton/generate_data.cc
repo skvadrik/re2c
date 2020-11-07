@@ -498,7 +498,11 @@ void emit_data(Skeleton &skel)
 
     const std::string input_name = fname + "." + skel.name + ".input";
     const std::string keys_name = std::string(fname) + "." + skel.name + ".keys";
-    // 'remove() / fopen("w")' works faster than 'fopen("w")' at least on ext4.
+    // For existing files 'remove() / fopen("w")' works faster than 'fopen("w")'
+    // at least on ext4. Slowdown happens due to 'auto_da_alloc' heuristic that
+    // forces data and metadata commit on open(O_TRUNC) for non-empty files:
+    //   https://www.kernel.org/doc/html/latest/admin-guide/ext4.html
+    // Presence of 'remove()' avoids it.
     remove(input_name.c_str());
     remove(keys_name.c_str());
 
