@@ -19,7 +19,7 @@
 #include "src/util/allocate.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
-#include "src/util/wrap_iter.h"
+#include "src/util/fixed_allocator.h"
 
 
 namespace re2c {
@@ -112,16 +112,11 @@ struct Node
         uint32_t lower;
         uint32_t upper;
         const tcmd_t *cmd;
-
-        range_t(): lower(0), upper(0), cmd(NULL) {}
-        range_t(uint32_t l, uint32_t u, const tcmd_t *c)
-            : lower(l), upper(u), cmd(c) {}
+        range_t *next;
     };
 
-    typedef std::vector<range_t> arc_t;
-    typedef std::map<size_t, arc_t> arcs_t;
-    typedef arc_t::const_iterator citer_t;
-    typedef wrap_citer_t<arc_t> wciter_t;
+    typedef std::map<size_t, range_t*> arcs_t;
+    typedef fixed_allocator_t<Node::range_t> range_allocator_t;
 
     arcs_t arcs;
     size_t rule;
@@ -129,8 +124,8 @@ struct Node
     const tcmd_t *stacmd;
 
     Node();
-    void init(const dfa_state_t *s,
-        const std::vector<uint32_t> &charset, size_t nil);
+    void init(const dfa_state_t *s, const std::vector<uint32_t> &charset,
+        size_t nil, range_allocator_t &allocator);
     bool end() const;
 
     FORBID_COPY(Node);
@@ -145,6 +140,8 @@ struct Skeleton
     const std::string cond;
     const loc_t loc;
     Msg &msg;
+
+    Node::range_allocator_t range_allocator;
 
     const size_t nodes_count;
     Node *nodes;
@@ -162,7 +159,7 @@ struct Skeleton
     uint32_t *tagvals;
     mtag_trie_t tagtrie;
     std::vector<uint32_t> mtagval;
-    membuf_t<Node::wciter_t> arc_iters;
+    membuf_t<const Node::range_t*> arc_iters;
     membuf_t<size_t> char_iters;
     OutBuf buf_data;
     OutBuf buf_keys;

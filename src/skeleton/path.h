@@ -48,7 +48,7 @@ public:
     {
         return skel.nodes[arcs[i]];
     }
-    const Node::arc_t& arc(const Skeleton &skel, size_t i) const
+    const Node::range_t* arc(const Skeleton &skel, size_t i) const
     {
         return skel.nodes[arcs[i]].arcs.find(arcs[i + 1])->second;
     }

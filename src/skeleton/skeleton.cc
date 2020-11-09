@@ -18,8 +18,8 @@ Node::Node()
     , stacmd(NULL)
 {}
 
-void Node::init(const dfa_state_t *s,
-    const std::vector<uint32_t> &charset, size_t nil)
+void Node::init(const dfa_state_t *s, const std::vector<uint32_t> &charset,
+    size_t nil, range_allocator_t &allocator)
 {
     const size_t nc = charset.size() - 1;
     for (uint32_t c = 0, l = 0; c < nc;) {
@@ -33,7 +33,20 @@ void Node::init(const dfa_state_t *s,
         if (l == 0 && c == nc && j == nil) break;
 
         const uint32_t u = charset[c];
-        arcs[j].push_back(Node::range_t(l, u - 1, t));
+        Node::range_t *r = allocator.alloc();
+        r->lower = l;
+        r->upper = u - 1;
+        r->cmd = t;
+
+        // insert range at the end of a circular list
+        if (arcs[j] == NULL) {
+            arcs[j] = r->next = r;
+        } else {
+            range_t *p0 = arcs[j], *p = p0;
+            for (; p->next != p0; p = p->next);
+            p->next = r;
+            r->next = p0;
+        }
 
         l = u;
     }
@@ -57,6 +70,7 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     , cond(cond)
     , loc(loc)
     , msg(msg)
+    , range_allocator()
     , nodes_count(dfa.states.size() + 1) // +1 for default state
     , nodes(new Node[nodes_count])
     , cmd0(dfa.tcmd0)
@@ -79,7 +93,7 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     // initialize nodes
     const size_t nil = nodes_count - 1;
     for (size_t i = 0; i < nil; ++i) {
-        nodes[i].init(dfa.states[i], charset, nil);
+        nodes[i].init(dfa.states[i], charset, nil, range_allocator);
     }
 
     // initialize size of key

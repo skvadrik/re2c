@@ -78,8 +78,7 @@ re2c_HDR = \
 	src/util/string_utils.h \
 	src/util/temp_file.h \
 	src/util/u32lim.h \
-	src/util/uniq_vector.h \
-	src/util/wrap_iter.h
+	src/util/uniq_vector.h
 re2c_SRC = \
 	src/codegen/code_goto.cc \
 	src/codegen/combine.cc \

@@ -30,23 +30,20 @@ struct StackItem {
     Node::arcs_t::const_iterator arc;
 };
 
-static void fprint_default_arc(FILE *f, const Node::arc_t &arc)
+static void fprint_default_arc(FILE *f, const Node::range_t *r)
 {
-    const size_t ranges = arc.size();
-    if (ranges == 1 && arc[0].lower == arc[0].upper) {
-        fprintf(f, "\\x%X", arc[0].lower);
-    }
-    else {
+    if (r->next == r && r->lower == r->upper) {
+        fprintf(f, "\\x%X", r->lower);
+    } else {
         fprintf(f, "[");
-        for (size_t i = 0; i < ranges; ++i) {
-            const uint32_t
-                l = arc[i].lower,
-                u = arc[i].upper;
-            fprintf(f, "\\x%X", l);
-            if (l != u) {
-                fprintf(f, "-\\x%X", u);
+        const Node::range_t *r0 = r;
+        do {
+            fprintf(f, "\\x%X", r->lower);
+            if (r->lower != r->upper) {
+                fprintf(f, "-\\x%X", r->upper);
             }
-        }
+            r = r->next;
+        } while (r != r0);
         fprintf(f, "]");
     }
 }
@@ -142,8 +139,7 @@ void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p)
         if (i > 0) {
             fprintf(f, " ");
         }
-        const Node::arc_t &arc = p.arc(skel, i);
-        fprint_default_arc(stderr, arc);
+        fprint_default_arc(stderr, p.arc(skel, i));
     }
     fprintf(f, "'");
 }

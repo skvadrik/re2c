@@ -19,7 +19,6 @@
 #include "src/skeleton/skeleton.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/u32lim.h"
-#include "src/util/wrap_iter.h"
 
 
 namespace re2c {
@@ -125,10 +124,11 @@ static size_t path_width(const path_t &path, const Skeleton &skel)
 
         // width of multiarc: total number of characters picked from all ranges
         size_t w = 0;
-        const Node::arc_t &arc = path.arc(skel, i);
-        for (Node::citer_t a = arc.begin(); a != arc.end(); ++a) {
+        const Node::range_t *a0 = path.arc(skel, i), *a = a0;
+        do {
             w += nsteps(a->lower, a->upper);
-        }
+            a = a->next;
+        } while (a != a0);
 
         // width of multipath: maximal width of multiarc
         width = std::max(width, w);
@@ -144,10 +144,10 @@ static void write_input(const path_t &path, Skeleton &skel, size_t width)
 
     grow_membuf(skel.arc_iters, len);
     grow_membuf(skel.char_iters, len);
-    Node::wciter_t *arcs = skel.arc_iters.ptr;
+    const Node::range_t **arcs = skel.arc_iters.ptr;
     size_t *chars = skel.char_iters.ptr;
     for (size_t i = 0; i < len; ++i) {
-        Node::wciter_t a(path.arc(skel, i));
+        const Node::range_t *a = path.arc(skel, i);
         arcs[i] = a;
         chars[i] = a->lower;
     }
@@ -156,14 +156,15 @@ static void write_input(const path_t &path, Skeleton &skel, size_t width)
 
     for (size_t w = 0; w < width; ++w) {
         for (size_t i = 0; i < len; ++i) {
-            Node::wciter_t &a = arcs[i];
+            const Node::range_t *a = arcs[i];
             const uint32_t upper = a->upper;
             const uint32_t stride = step(a->lower, upper);
             uint32_t c = static_cast<uint32_t>(chars[i]);
 
             if (c >= upper) {
                 // the current range covered, start the next one
-                chars[i] = (++a)->lower;
+                arcs[i] = a = a->next;
+                chars[i] = a->lower;
             } else if (c >= upper - stride) {
                 // pick the last character in the current range
                 // (the last step may be shorter than stride, so round up to
@@ -197,7 +198,7 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
         trail = r.ttag;
     }
 
-    Node::wciter_t *arcs = NULL;
+    const Node::range_t **arcs = NULL;
     size_t *chars = NULL;
     uint32_t *tags = skel.tagvals;
     mtag_trie_t &tagtrie = skel.tagtrie;
@@ -209,7 +210,7 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
         arcs = skel.arc_iters.ptr;
         chars = skel.char_iters.ptr;
         for (size_t i = 0; i < f; ++i) {
-            Node::wciter_t a(path.arc(skel, i));
+            const Node::range_t *a = path.arc(skel, i);
             arcs[i] = a;
             chars[i] = nsteps(a->lower, a->upper);
         }
@@ -232,13 +233,13 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
                 apply(skel, path.node(skel, i).stacmd, i - 1);
 
                 // tag commands on transitions (TDFA(0), TDFA(1))
-                Node::wciter_t &a = arcs[i];
+                const Node::range_t *a = arcs[i];
                 apply(skel, a->cmd, i + offby);
 
                 // advance character iterator
                 // if it's the last one, then switch to the next arc
                 if (--chars[i] == 0) {
-                    ++a;
+                    arcs[i] = a = a->next;
                     chars[i] = nsteps(a->lower, a->upper);
                 }
             }
