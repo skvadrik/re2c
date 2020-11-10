@@ -203,7 +203,7 @@ loop:
     "/*!header:re2c:on" {
         out.wraw(tok, ptr);
         out.header_mode(true);
-        out.need_header = true;
+        out.need_header = opts->target == TARGET_CODE;
         lex_end_of_comment(out);
         goto next;
     }
