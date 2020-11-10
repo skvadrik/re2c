@@ -228,13 +228,16 @@ run_pack() {
             esac
             printf "%-25s $outx\n" "$msg"
 
-            if [ $status -le 1 ]; then
-                rm -f "$outx" "$outy"{,.line*.{input,keys},.stderr,.out}
-            fi
+            case $status in
+                0 | 1 ) rm -f "$outx" "$outy"{,.line*.{input,keys},.stderr,.out} ;;
+            esac
 
             ran_tests=$(($ran_tests + 1))
-            [ $status -gt 0 ] && soft_errors=$(($soft_errors + 1))
-            [ $status -gt 1 ] && hard_errors=$(($hard_errors + 1))
+            case $status in
+                0 ) ;;
+                1 ) soft_errors=$(($soft_errors + 1)) ;;
+                * ) hard_errors=$(($hard_errors + 1)) ;;
+            esac
         fi
         cd ..
     done
