@@ -229,7 +229,7 @@ run_pack() {
             printf "%-25s $outx\n" "$msg"
 
             case $status in
-                0 | 1 ) rm -f "$outx" "$outy"{,.line*.{input,keys},.stderr,.out} ;;
+                0 | 1 ) rm "$outx" "$outy"* ;;
             esac
 
             ran_tests=$(($ran_tests + 1))
@@ -238,6 +238,10 @@ run_pack() {
                 1 ) soft_errors=$(($soft_errors + 1)) ;;
                 * ) hard_errors=$(($hard_errors + 1)) ;;
             esac
+
+        # skeleton tests for unsupported language; cleanup temporary files
+        else
+            rm "$outx" "$outy"
         fi
         cd ..
     done
