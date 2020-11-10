@@ -45,7 +45,6 @@ re2c="./re2c"
 diff_prog="diff"
 valgrind=""
 skeleton=0
-keep_tmp_files=0
 wine=""
 threads=`detect_cpu_count; echo $CPUS`
 tests=()
@@ -55,7 +54,6 @@ do
         "--help" ) usage ;;
         "--valgrind" ) valgrind=`which valgrind` ;;
         "--skeleton" ) skeleton=1 ;;
-        "--keep-tmp-files" ) keep_tmp_files=1 ;;
         "--wine" )
             wine=`which wine`
             re2c="${re2c}.exe"
@@ -230,7 +228,7 @@ run_pack() {
             esac
             printf "%-25s $outx\n" "$msg"
 
-            if [ $status -le 1 -a  $keep_tmp_files -eq 0 ]; then
+            if [ $status -le 1 ]; then
                 rm -f "$outx" "$outy"{,.line*.{input,keys},.stderr,.out}
             fi
 
