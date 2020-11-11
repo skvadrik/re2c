@@ -8,8 +8,7 @@ static int lex(input_t *in, Output *out)
 
 loop:
     in->tok = in->cur;
-/*!re2c
-    end       = "\x00";
+/*!use:re2c
     nl        = "\n";
     char      = [-._~%!$&'()*+,;=a-zA-Z0-9];
     scheme    = @s1 [-+.a-zA-Z0-9]+ @s2;
@@ -24,7 +23,6 @@ loop:
                 path ("?" query)? ("#" fragment)? nl;
 
     *   { return 1; }
-    end { return 0; }
     uri {
         OUT("scheme: ", s1, s2);
         if (u1) OUT("user: ", u1, u2);

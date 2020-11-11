@@ -8,8 +8,7 @@ static int lex(input_t *in, Output *out)
 
 loop:
     in->tok = in->cur;
-/*!re2c
-    end       = "\x00";
+/*!use:re2c
     sp        = [ \t]+;
     host      = @h1 [0-9.]+ @h2;
     userid    = @i1 [-] @i2;
@@ -32,7 +31,6 @@ loop:
         useragent [\n];
 
     *    { return 1; }
-    end  { return 0; }
     line {
         OUT("host: ",     h1, h2);
         OUT("userid: ",   i1, i2);

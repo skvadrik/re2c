@@ -8,8 +8,7 @@ static int lex(input_t *in, Output *out)
 
 loop:
     in->tok = in->cur;
-/*!re2c
-    end           = "\x00";
+/*!use:re2c
     nl            = "\n";
     alpha         = [a-zA-Z];
     digit         = [0-9];
@@ -60,7 +59,6 @@ loop:
     uri           = scheme ":" hier_part ("?" query)? ("#" fragment)? nl;
 
     *   { return 1; }
-    end { return 0; }
     uri {
         OUT("scheme: ", s1, s2);
         if (u1) OUT("user: ", u1, u2);
