@@ -7,8 +7,7 @@ static int lex(input_t *in, Output *out)
         *s2, *y2, *h2, *m2, *d2, *M2, *z2;
 loop:
     in->tok = in->cur;
-/*!re2c
-    end      = "\x00";
+/*!use:re2c
     year     = @y1 (([1-9][0-9]*)? [0-9]{4}) @y2;
     month    = @m1 ([1][0-2] | [0][1-9]) @m2;
     day      = @d1 ([3][0-1] | [0][1-9] | [1-2][0-9]) @d2;
@@ -19,7 +18,6 @@ loop:
     datetime = year [-] month [-] day [T] hours [:] minutes [:] seconds timezone [\n];
 
     *        { return 1; }
-    end      { return 0; }
     datetime {
         OUT("year: ",    y1, y2);
         OUT("month: ",   m1, m2);

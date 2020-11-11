@@ -8,14 +8,11 @@
     re2c:define:YYCURSOR     = in->cur;
     re2c:define:YYMARKER     = in->mar;
     re2c:define:YYLIMIT      = in->lim;
-    re2c:define:YYFILL       = "if (fill(in, @@) != 0) return 1;"; // error if YYFILL fails
     re2c:define:YYMTAGP      = "taglist(&@@, in->tok, in->cur, &in->tlp);";
     re2c:define:YYMTAGN      = "taglist(&@@, in->tok, NULL, &in->tlp);";
     re2c:define:YYSHIFTMTAG  = "@@{tag}->dist += @@{shift};";
     re2c:tags:expression     = "in->@@";
 */
-
-/*!max:re2c*/
 
 typedef struct taglist_t {
     struct taglist_t *pred;
@@ -81,49 +78,12 @@ static inline void taglist(taglist_t **ptl, const char *b, const char *t, taglis
     *ptl = tl;
 }
 
-static inline void init_input(input_t *in)
-{
-    in->buf = (char*) malloc(SIZE + YYMAXFILL);
-    in->lim = in->buf + SIZE;
-    in->cur = in->lim;
-    in->mar = in->lim;
-    in->tok = in->lim;
-    /*!stags:re2c format = "in->@@ = 0;\n"; */
-    /*!mtags:re2c format = "in->@@ = 0;\n"; */
-    taglistpool_init(&in->tlp);
-    in->eof = 0;
-}
+/*!include:re2c "fill.re" */
 
 static inline void free_input(input_t *in)
 {
     free(in->buf);
     taglistpool_free(&in->tlp);
-}
-
-static inline int fill(input_t *in, size_t need)
-{
-    size_t free;
-    if (in->eof) return 1;
-
-    free = in->tok - in->buf;
-    assert(free >= need);
-
-    memmove(in->buf, in->tok, in->lim - in->tok);
-    in->lim -= free;
-    in->cur -= free;
-    in->mar -= free;
-    in->tok -= free;
-    /*!stags:re2c format = "if (in->@@) in->@@ -= free;\n"; */
-
-    in->lim += fread(in->lim, 1, free, stdin);
-
-    if (in->lim < in->buf + SIZE) {
-        in->eof = 1;
-        memset(in->lim, 0, YYMAXFILL);
-        in->lim += YYMAXFILL;
-    }
-
-    return 0;
 }
 
 static int lex(input_t *in, Output *out);

@@ -1,4 +1,5 @@
 /*!include:re2c "common.re" */
+/*!include:re2c "fill_email.re" */
 
 static int lex(input_t *in, Output *out)
 {
@@ -6,10 +7,8 @@ static int lex(input_t *in, Output *out)
 
 loop:
     in->tok = in->cur;
-/*!re2c
-    // don't fail if YYFILL fails (because of the greedy garbage lexeme)
-    re2c:define:YYFILL = "if (fill(in, @@) != 0) return 0;";
 
+/*!use:re2c
     char      = [a-z0-9!#$%&'*+/=?^_`{|}~-];
     before_at = char+ ([.] char+)*;
     az09      = [a-z0-9];

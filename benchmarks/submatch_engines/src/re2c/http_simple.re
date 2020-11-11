@@ -17,8 +17,7 @@ static int lex(input_t *in, Output *out)
 
 loop:
     in->tok = in->cur;
-/*!re2c
-    end            = "\x00";
+/*!use:re2c
     eol            = "\n";
     sp             = " ";
     htab           = "\t";
@@ -49,7 +48,6 @@ loop:
     message_head   = start_line (header_field eol)* eol;
 
     *            { return 1; }
-    end          { return 0; }
     message_head {
         if (s1) {
             OUT("version: ", v1, v2);
