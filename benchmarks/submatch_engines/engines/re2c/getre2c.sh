@@ -9,7 +9,7 @@ RE2C_DIR=re2c-dev
 
 mkdir re2c-dev \
     && cd "$RE2C_DIR" \
-    && ../../../../../configure \
+    && ../../../../../configure --enable-debug \
     && make -j$(nproc) \
     && cd ..
 
