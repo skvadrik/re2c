@@ -37,6 +37,8 @@ GEN_RE2C_BC_TDFA1     = $(patsubst %, $(GEN_DIR)/re2c/%-bc-tdfa1.c,     $(BENCHM
 GEN_RE2C_EOF_TDFA1    = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa1.c,    $(BENCHMARKS))
 GEN_RE2C_BC_TDFA1_ES  = $(patsubst %, $(GEN_DIR)/re2c/%-bc-tdfa1-es.c,  $(BENCHMARKS))
 GEN_RE2C_EOF_TDFA1_ES = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa1-es.c, $(BENCHMARKS))
+GEN_RE2C_BC_TDFA0     = $(patsubst %, $(GEN_DIR)/re2c/%-bc-tdfa0.c,     $(BENCHMARKS))
+GEN_RE2C_EOF_TDFA0    = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa0.c,    $(BENCHMARKS))
 GEN_RE2C_BC_STADFA    = $(patsubst %, $(GEN_DIR)/re2c/%-bc-stadfa.c,    $(BENCHMARKS))
 GEN_RE2C_EOF_STADFA   = $(patsubst %, $(GEN_DIR)/re2c/%-eof-stadfa.c,   $(BENCHMARKS))
 GEN_RE2C = \
@@ -97,6 +99,12 @@ $(GEN_RE2C_BC_TDFA1_ES): $(GEN_DIR)/%-bc-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE
 
 $(GEN_RE2C_EOF_TDFA1_ES): $(GEN_DIR)/%-eof-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
 	$(RE2C) $(RE2C_FLAGS_EOF) --eager-skip $< -o $@
+
+$(GEN_RE2C_BC_TDFA0): $(GEN_DIR)/%-bc-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	$(RE2C) $(RE2C_FLAGS_BC) --no-lookahead $< -o $@
+
+$(GEN_RE2C_EOF_TDFA0): $(GEN_DIR)/%-eof-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	$(RE2C) $(RE2C_FLAGS_EOF) --no-lookahead $< -o $@
 
 $(GEN_RE2C_BC_STADFA): $(GEN_DIR)/%-bc-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
 	$(RE2C) $(RE2C_FLAGS_BC) --stadfa $< -o $@
