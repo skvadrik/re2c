@@ -59,31 +59,35 @@ for prog in $progs; do
     run "$engine" "$binary"
 done
 
-# calculate average time
-timings=logs/timings
-echo > "$timings"
-for engine in {kleenex,ragel,re2c} ; do
-    for log in logs/"$engine"/* ; do
-        # average speed
-        avg=$(awk '!/^$/ { total += $3; lines += 1 } END { print total/lines }' "$log")
+# calculate average time for each (benchmark, engine, compiler) group
+for compiler in gcc clang ; do
+    timings=logs/timings_"$compiler"
+    echo > "$timings"
+    for engine in {kleenex,ragel,re2c} ; do
+        for log in logs/"$engine"/*"$compiler" ; do
+            # average speed
+            avg=$(awk '!/^$/ { total += $3; lines += 1 } END { print total/lines }' "$log")
 
-        # binary size
-        cp bin/"$engine"/"$(basename $log)" tmp
-        strip tmp
-        binsize=$(stat -c%s tmp)
-        rm tmp
+            # binary size
+            cp bin/"$engine"/"$(basename $log)" tmp
+            strip tmp
+            binsize=$(stat -c%s tmp)
+            rm tmp
 
-        printf "%-40s%-10s%-10.2lf%-10d\n" "$(basename $log)" "$engine" "$avg" "$binsize" >> "$timings"
+            printf "%-40s%-10s%-10.2lf%-10d\n" \
+                "$(basename $log)" "$engine" "$avg" "$binsize" >> "$timings"
+        done
     done
 done
 
-# group by benchmarks, then sort by time
-results=logs/results
-echo > "$results"
-for bench in $(cat $timings | stem_bench | sort | uniq); do
-    egrep -o "^$bench[.-].*" "$timings" | sort -k3n,3 >> "$results"
-    echo >> "$results"
-done
-rm "$timings"
+{ # group by benchmark and compiler, then sort by time
+    for bench in $(cat $timings | stem_bench | sort | uniq); do
+        for compiler in gcc clang ; do
+            echo "---- $bench ---- $compiler ----"
+            egrep -o "^$bench[.-].*" logs/timings_"$compiler" | sort -k3n,3
+            echo
+        done
+    done
+    rm logs/timings_{gcc,clang}
+} | tee logs/results
 
-cat logs/results
