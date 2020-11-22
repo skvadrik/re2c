@@ -48,11 +48,12 @@ progs="$(find bin -type f)"
 if [ -n "$filter" ]; then
     echo "$progs" > tmp.1
     echo "$filter" | tr ' ' '\n' > tmp.2
-    progs="$(fgrep -f tmp.2 tmp.1)"
+    progs="$(fgrep -f tmp.2 tmp.1 | fgrep -v -f known_failures)"
     rm tmp.1 tmp.2
 fi
 
 # run
+rm -f logs/*/*
 for prog in $progs; do
     engine="$(echo $prog | cut -d'/' -f2)"
     binary="$(echo $prog | cut -d'/' -f3)"
@@ -64,7 +65,7 @@ for compiler in gcc clang ; do
     timings=logs/timings_"$compiler"
     echo > "$timings"
     for engine in {kleenex,ragel,re2c} ; do
-        for log in logs/"$engine"/*"$compiler" ; do
+        for log in $(find logs/"$engine" -name "*$compiler") ; do
             # average speed
             avg=$(awk '!/^$/ { total += $3; lines += 1 } END { print total/lines }' "$log")
 
