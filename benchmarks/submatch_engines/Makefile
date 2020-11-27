@@ -13,6 +13,9 @@ RE2C_FLAGS_EOF = $(RE2C_FLAGS) -I $(SRC_DIR)/re2c/include_eof
 KLEENEX = engines/kleenex/kexc
 
 BENCHMARKS = \
+	alt1_2 alt1_4 alt1_8 \
+	alt2_2 alt2_4 alt2_8 \
+	alt4_2 alt4_4 alt4_8 \
 	cat2_0 cat2_4 cat2_8 \
 	cat4_0 cat4_2 cat4_4 \
 	cat8_0 cat8_1 cat8_2 \
