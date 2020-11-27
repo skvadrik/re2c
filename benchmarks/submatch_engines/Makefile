@@ -13,9 +13,9 @@ RE2C_FLAGS_EOF = $(RE2C_FLAGS) -I $(SRC_DIR)/re2c/include_eof
 KLEENEX = engines/kleenex/kexc
 
 BENCHMARKS = \
-	ab2_0 ab2_4 ab2_8 \
-	ab4_0 ab4_2 ab4_4 \
-	ab8_0 ab8_1 ab8_2 \
+	cat2_0 cat2_4 cat2_8 \
+	cat4_0 cat4_2 cat4_4 \
+	cat8_0 cat8_1 cat8_2 \
 	apache_log \
 	datetime \
 	email \
