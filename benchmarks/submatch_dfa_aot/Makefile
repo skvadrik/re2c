@@ -4,8 +4,8 @@ BIN_DIR = bin
 DATA_DIR = data
 CC = gcc
 CFLAGS = -O3 -g -I $(SRC_DIR)
-RAGEL_LIBRARY_PATH = engines/ragel/ragel-7.0.0.12/install/lib:engines/ragel/colm-0.13.0.7/install/lib
-RAGEL = LD_LIBRARY_PATH=$(RAGEL_LIBRARY_PATH) engines/ragel/ragel7
+RAGEL_LIBRARY_PATH = LD_LIBRARY_PATH=engines/ragel/ragel-7.0.0.12/install/lib:engines/ragel/colm-0.13.0.7/install/lib
+RAGEL = engines/ragel/ragel7
 RE2C = engines/re2c/re2c
 RE2C_FLAGS = --reusable --tags
 RE2C_FLAGS_BC = $(RE2C_FLAGS) -I $(SRC_DIR)/re2c/include_bc
@@ -85,51 +85,51 @@ DATA = $(patsubst %, $(DATA_DIR)/%/big, \
 
 all: $(BIN)
 
-$(GEN_RAGEL_T1): $(GEN_DIR)/%-T1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL)
+$(GEN_RAGEL_T1): $(GEN_DIR)/%-T1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
 	@mkdir -p $(@D)
-	$(RAGEL) -T1 $< -o $@
+	$(RAGEL_LIBRARY_PATH) $(RAGEL) -T1 $< -o $@
 
-$(GEN_RAGEL_F1): $(GEN_DIR)/%-F1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL)
+$(GEN_RAGEL_F1): $(GEN_DIR)/%-F1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
 	@mkdir -p $(@D)
-	$(RAGEL) -F1 $< -o $@
+	$(RAGEL_LIBRARY_PATH) $(RAGEL) -F1 $< -o $@
 
-$(GEN_RAGEL_G2): $(GEN_DIR)/%-G2.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL)
+$(GEN_RAGEL_G2): $(GEN_DIR)/%-G2.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
 	@mkdir -p $(@D)
-	$(RAGEL) -G2 $< -o $@
+	$(RAGEL_LIBRARY_PATH) $(RAGEL) -G2 $< -o $@
 
-$(GEN_RE2C_BC_TDFA1): $(GEN_DIR)/%-bc-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+$(GEN_RE2C_BC_TDFA1): $(GEN_DIR)/%-bc-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_BC) $< -o $@
 
-$(GEN_RE2C_EOF_TDFA1): $(GEN_DIR)/%-eof-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+$(GEN_RE2C_EOF_TDFA1): $(GEN_DIR)/%-eof-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_EOF) $< -o $@
 
-$(GEN_RE2C_BC_TDFA1_ES): $(GEN_DIR)/%-bc-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+$(GEN_RE2C_BC_TDFA1_ES): $(GEN_DIR)/%-bc-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_BC) --eager-skip $< -o $@
 
-$(GEN_RE2C_EOF_TDFA1_ES): $(GEN_DIR)/%-eof-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+$(GEN_RE2C_EOF_TDFA1_ES): $(GEN_DIR)/%-eof-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_EOF) --eager-skip $< -o $@
 
-$(GEN_RE2C_BC_TDFA0): $(GEN_DIR)/%-bc-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+$(GEN_RE2C_BC_TDFA0): $(GEN_DIR)/%-bc-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_BC) --no-lookahead $< -o $@
 
-$(GEN_RE2C_EOF_TDFA0): $(GEN_DIR)/%-eof-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+$(GEN_RE2C_EOF_TDFA0): $(GEN_DIR)/%-eof-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_EOF) --no-lookahead $< -o $@
 
-$(GEN_RE2C_BC_STADFA): $(GEN_DIR)/%-bc-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+$(GEN_RE2C_BC_STADFA): $(GEN_DIR)/%-bc-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_BC) --stadfa $< -o $@
 
-$(GEN_RE2C_EOF_STADFA): $(GEN_DIR)/%-eof-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+$(GEN_RE2C_EOF_STADFA): $(GEN_DIR)/%-eof-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_EOF) --stadfa $< -o $@
 
-$(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex
+$(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex $(KLEENEX)
 	@mkdir -p $(@D)
 	$(KLEENEX) compile $< --srcout $@ --act=false --la=true
 
@@ -145,6 +145,15 @@ data: $(DATA)
 
 $(DATA): $(DATA_DIR)/%/big:
 	(cd $(@D) && ./gen_*)
+
+$(KLEENEX):
+	( cd engines/kleenex && ./getkleenex.sh )
+
+$(RAGEL):
+	( cd engines/ragel && ./getragel7.sh )
+
+$(RE2C):
+	( cd engines/re2c && ./getre2c.sh )
 
 clean:
 	find bin -type f -delete
