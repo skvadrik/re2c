@@ -177,7 +177,7 @@ test_libre2c_SOURCES = lib/test.cc
 test_libre2c_LDADD = libre2c.la
 check_PROGRAMS += test_libre2c
 
-bench_libre2c_SOURCES = lib/bench.cc
+bench_libre2c_SOURCES = benchmarks/submatch_nfa/bench.cc
 bench_libre2c_CXXFLAGS = $(AM_CXXFLAGS) -std=c++11
 bench_libre2c_LDFLAGS = $(LDFLAGS_RE2)
 bench_libre2c_LDADD = libre2c.la

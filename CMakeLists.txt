@@ -489,7 +489,7 @@ if (RE2C_BUILD_LIBS)
     )
 
     # libre2c benchmark
-    add_executable(bench_libre2c lib/bench.cc)
+    add_executable(bench_libre2c benchmarks/submatch_nfa/bench.cc)
     set_property(TARGET bench_libre2c PROPERTY CXX_STANDARD 11)
     target_link_libraries(bench_libre2c libre2c)
 
