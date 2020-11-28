@@ -86,47 +86,59 @@ DATA = $(patsubst %, $(DATA_DIR)/%/big, \
 all: $(BIN)
 
 $(GEN_RAGEL_T1): $(GEN_DIR)/%-T1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL)
+	@mkdir -p $(@D)
 	$(RAGEL) -T1 $< -o $@
 
 $(GEN_RAGEL_F1): $(GEN_DIR)/%-F1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL)
+	@mkdir -p $(@D)
 	$(RAGEL) -F1 $< -o $@
 
 $(GEN_RAGEL_G2): $(GEN_DIR)/%-G2.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL)
+	@mkdir -p $(@D)
 	$(RAGEL) -G2 $< -o $@
 
 $(GEN_RE2C_BC_TDFA1): $(GEN_DIR)/%-bc-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_BC) $< -o $@
 
 $(GEN_RE2C_EOF_TDFA1): $(GEN_DIR)/%-eof-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_EOF) $< -o $@
 
 $(GEN_RE2C_BC_TDFA1_ES): $(GEN_DIR)/%-bc-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_BC) --eager-skip $< -o $@
 
 $(GEN_RE2C_EOF_TDFA1_ES): $(GEN_DIR)/%-eof-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_EOF) --eager-skip $< -o $@
 
 $(GEN_RE2C_BC_TDFA0): $(GEN_DIR)/%-bc-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_BC) --no-lookahead $< -o $@
 
 $(GEN_RE2C_EOF_TDFA0): $(GEN_DIR)/%-eof-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_EOF) --no-lookahead $< -o $@
 
 $(GEN_RE2C_BC_STADFA): $(GEN_DIR)/%-bc-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_BC) --stadfa $< -o $@
 
 $(GEN_RE2C_EOF_STADFA): $(GEN_DIR)/%-eof-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C)
+	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_EOF) --stadfa $< -o $@
 
 $(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex
+	@mkdir -p $(@D)
 	$(KLEENEX) compile $< --srcout $@ --act=false --la=true
 
 $(BIN_GCC): $(BIN_DIR)/%-gcc: $(GEN_DIR)/%.c
-	@mkdir -p $(dir $@)
+	@mkdir -p $(@D)
 	gcc $(CFLAGS) -o $@ $<
 
 $(BIN_CLANG): $(BIN_DIR)/%-clang: $(GEN_DIR)/%.c
-	@mkdir -p $(dir $@)
+	@mkdir -p $(@D)
 	clang $(CFLAGS) -o $@ $<
 
 data: $(DATA)

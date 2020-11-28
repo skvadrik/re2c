@@ -29,13 +29,13 @@ run() {
 # build
 make -j$(nproc)
 make data -j$(nproc)
+mkdir -p logs
 make clean-logs
 
 # select benchmarks
 progs="$(find bin -type f | fgrep -v -f known_failures)"
 
 # run, logging the output
-rm -f logs/*/*
 for prog in $progs; do
     engine="$(echo $prog | cut -d'/' -f2)"
     binary="$(echo $prog | cut -d'/' -f3)"

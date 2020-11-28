@@ -41,6 +41,7 @@ run() {
 # build
 make -j$(nproc)
 make data -j$(nproc)
+mkdir -p logs
 make clean-logs
 
 # select benchmarks to run
@@ -53,7 +54,6 @@ if [ -n "$filter" ]; then
 fi
 
 # run
-rm -f logs/*/*
 for prog in $progs; do
     engine="$(echo $prog | cut -d'/' -f2)"
     binary="$(echo $prog | cut -d'/' -f3)"
