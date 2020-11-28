@@ -1,8 +1,3 @@
-/*
- * This is not a real benchmark, just some very early attempt at comparing
- * various libre2c algorithms and re2.
- */
-
 #include "config.h"
 #include "src/util/c99_stdint.h"
 #include "lib/regex.h"
@@ -331,14 +326,14 @@ int main()
     char *longstring = new char[VERY_LONG + 1];
 
     // http
-    load_strings("../lib/bench.data_http", "\n\n", strings);
+    load_strings("../benchmarks/submatch_nfa/data/http", "\n\n", strings);
     regexp = MESSAGE_HEAD;
     bench(regexp, strings, 100, REG_BACKWARD | REG_STADFA, 0);
     regexp = MESSAGE_HEAD2;
     bench(regexp, strings, 100, REG_BACKWARD, 0);
 
     // uri
-    load_strings("../lib/bench.data_uri", "\n", strings);
+    load_strings("../benchmarks/submatch_nfa/data/uri", "\n", strings);
     regexp = URI;
     bench(regexp, strings, 100, REG_BACKWARD | REG_STADFA, 0);
     regexp = URI2;
@@ -418,7 +413,7 @@ int main()
     bench(regexp, strings, 1000, 0, 0);
 
     // atom
-    load_strings("../lib/bench.data_atom", "\n", strings);
+    load_strings("../benchmarks/submatch_nfa/data/atom", "\n", strings);
     regexp = PACKAGE_ATOM;
     bench(regexp, strings, 10, 0, 0);
     regexp = PACKAGE_ATOM2;
