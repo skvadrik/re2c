@@ -19,6 +19,9 @@ BENCHMARKS = \
 	cat2_0 cat2_4 cat2_8 \
 	cat4_0 cat4_2 cat4_4 \
 	cat8_0 cat8_1 cat8_2 \
+	iter_a_4 iter_a_16 iter_a_64 \
+	iter_b_2_3_5 iter_b_7_11_13 iter_b_17_19_23 \
+	iter_c_2_3_5 iter_c_7_11_13 iter_c_17_19_23 \
 	apache_log \
 	datetime \
 	email \
@@ -67,7 +70,14 @@ COMMON_RE2C = \
     $(SRC_DIR)/re2c/include_eof/fill.re \
     $(SRC_DIR)/re2c/include_eof/fill_email.re
 
-GEN_KLEENEX = $(patsubst %, $(GEN_DIR)/kleenex/%.c, $(BENCHMARKS))
+# Masked benchmarks for which Kleenex either generates very large output
+# (tens of megabytes of C code), or even causes out of memory condition.
+KLEENEX_MASKED = \
+	iter_b_7_11_13 iter_b_17_19_23 \
+	iter_c_7_11_13 iter_c_17_19_23
+
+GEN_KLEENEX = $(patsubst %, $(GEN_DIR)/kleenex/%.c, \
+	$(filter-out $(KLEENEX_MASKED), $(BENCHMARKS)))
 
 BIN_KLEENEX = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_KLEENEX))
 
