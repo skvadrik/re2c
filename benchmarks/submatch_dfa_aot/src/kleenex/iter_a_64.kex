@@ -1,0 +1,5 @@
+start: lines
+
+lines := aaa*
+
+aaa := (/[a]{64}/ ".")* /\n/

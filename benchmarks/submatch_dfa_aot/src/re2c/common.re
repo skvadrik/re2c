@@ -9,7 +9,7 @@
     re2c:define:YYMARKER     = in->mar;
     re2c:define:YYLIMIT      = in->lim;
     re2c:define:YYMTAGP      = "taglist(&@@, in->tok, in->cur, &in->tlp);";
-    re2c:define:YYMTAGN      = "taglist(&@@, in->tok, NULL, &in->tlp);";
+    re2c:define:YYMTAGN      = "taglist(&@@, in->tok, in->tok - 1, &in->tlp);"; // negative distance -1
     re2c:define:YYSHIFTMTAG  = "@@{tag}->dist += @@{shift};";
     re2c:tags:expression     = "in->@@";
 */
