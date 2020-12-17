@@ -21,7 +21,7 @@ typedef enum {
 	cmp_full_match = 0,		///< data matches exactly
 	cmp_no_match,			///< data doesn't match at all
 	cmp_ptr_has_extra_nl,	///< ss doesn't end in a newline, ptr ends in a single newline, otherwise they are identical.
-	cmp_ptr_has_more_nls,	///< ss ends in a newline, ptr ends in one more newline than ss, otheriwse they are identical.
+	cmp_ptr_has_more_nls,	///< ss ends in a newline, ptr ends in one more newline than ss, otherwise they are identical.
 	cmp_ss_has_extra_nl,	///< ss exactly matches ptr, except that ss has an extra newline.
 	cmp_ss_has_more_data	///< ptr and ss matched up to now but we haven't seen the EOF on ss so we can't be sure the two files are exactly equal.
 } compare_result;
