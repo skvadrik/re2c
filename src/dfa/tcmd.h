@@ -49,6 +49,25 @@ public:
     const tcmd_t *operator[](tcid_t id) const;
 };
 
+inline bool tcmd_t::iscopy(const tcmd_t *x)
+{
+    return x->rhs != TAGVER_ZERO && x->history[0] == TAGVER_ZERO;
+}
+
+inline bool tcmd_t::isset(const tcmd_t *x)
+{
+    if (x->rhs == TAGVER_ZERO) {
+        DASSERT(x->history[0] != TAGVER_ZERO);
+        return true;
+    }
+    return false;
+}
+
+inline bool tcmd_t::isadd(const tcmd_t *x)
+{
+    return x->rhs != TAGVER_ZERO && x->history[0] != TAGVER_ZERO;
+}
+
 } // namespace re2c
 
 #endif // _RE2C_DFA_TCMD_
