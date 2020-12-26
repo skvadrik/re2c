@@ -56,25 +56,6 @@ bool tcmd_t::equal_history(const tagver_t *h, const tagver_t *g)
     }
 }
 
-bool tcmd_t::iscopy(const tcmd_t *x)
-{
-    return x->rhs != TAGVER_ZERO && x->history[0] == TAGVER_ZERO;
-}
-
-bool tcmd_t::isset(const tcmd_t *x)
-{
-    if (x->rhs == TAGVER_ZERO) {
-        DASSERT(x->history[0] != TAGVER_ZERO);
-        return true;
-    }
-    return false;
-}
-
-bool tcmd_t::isadd(const tcmd_t *x)
-{
-    return x->rhs != TAGVER_ZERO && x->history[0] != TAGVER_ZERO;
-}
-
 tcmd_t **tcmd_t::topsort(tcmd_t **phead, tcmd_t *end, uint32_t *indeg)
 {
     tcmd_t *head = *phead, **ptail;
