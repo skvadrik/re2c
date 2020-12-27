@@ -16,18 +16,19 @@ static RE *negative_tags(RESpec &spec, const size_t *stidx, const size_t *etidx)
 {
     RE *x = NULL;
 
-    // DFA case: add transitions for all negative tags (including nested ones).
-    // This allows to avoid tag initialization and fixup.
-    if (spec.opts->dfa) {
+    // Add transitions for all negative tags (including nested ones). It allows
+    // to avoid tag initialization and fixup at the end of match, at the cost of
+    // adding more tag actions.
+    if (spec.opts->nested_negative_tags) {
         for (; stidx < etidx; ++stidx) {
             x = re_cat(spec, x, re_tag(spec, *stidx, true));
         }
     }
 
-    // NFA case: add transition only for one top-level negative tag, and save
-    // the full range of negative tags in this tag's metadata (it will be used
-    // during NFA simulation). Adding all tags increases NFA size and causes
-    // significant slowdonw on tests with a lot of tags.
+    // Add transition only for one top-level negative tag, and save the full
+    // range of negative tags in this tag's metadata. This reduces the amount of
+    // tag actions at the cost of post-processing. (This option is essential for
+    // NFA simulation and causes significant speedup on tests with many tags.)
     else if (stidx < etidx) {
         // POSIX syntax means that tags are defined by capturing parentheses
         // NFA with raw tags is possible, but we do not have any use cases yet

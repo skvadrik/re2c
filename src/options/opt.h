@@ -98,7 +98,6 @@ const uint32_t NOEOF = ~0u - 1;
     /* input encoding */ \
     CONSTOPT (Enc::type_t, input_encoding, Enc::ASCII) \
     /* internals */ \
-    CONSTOPT (bool, dfa, true) \
     CONSTOPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
     CONSTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1) \
     CONSTOPT (posix_prectable_alg_t, posix_prectable, POSIX_PRECTABLE_COMPLEX) \
@@ -108,6 +107,7 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, optimize_tags, true) \
     CONSTOPT (bool, backward, false) \
     CONSTOPT (bool, stadfa, false) \
+    CONSTOPT (bool, nested_negative_tags, true) \
     /* debug */ \
     CONSTOPT (bool, dump_nfa, false) \
     CONSTOPT (bool, dump_dfa_raw, false) \
