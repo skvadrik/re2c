@@ -493,7 +493,10 @@ if (RE2C_BUILD_LIBS)
     find_library(RE2_LIBRARY re2)
 
     # submatch NFA benchmark (libre2c)
-    add_executable(bench_submatch_nfa benchmarks/submatch_nfa/bench.cc)
+    add_executable(bench_submatch_nfa
+        benchmarks/submatch_nfa/bench.cc
+        benchmarks/common.cc
+    )
     set_property(TARGET bench_submatch_nfa PROPERTY CXX_STANDARD 11)
     target_link_libraries(bench_submatch_nfa libre2c)
     if (RE2_INCLUDE_DIRECTORY AND RE2_LIBRARY)

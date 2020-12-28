@@ -166,7 +166,8 @@ nodist_libre2c_la_SOURCES = $(libre2c_la_GEN)
 
 EXTRA_DIST += \
 	$(libre2c_la_BOOTSTRAP) \
-	$(libre2c_la_CUSTOM)
+	$(libre2c_la_CUSTOM) \
+	benchmarks/data
 
 CLEANFILES += $(libre2c_la_GEN)
 
@@ -177,7 +178,10 @@ test_libre2c_SOURCES = lib/test.cc
 test_libre2c_LDADD = libre2c.la
 check_PROGRAMS += test_libre2c
 
-bench_submatch_nfa_SOURCES = benchmarks/submatch_nfa/bench.cc
+bench_submatch_nfa_SOURCES = \
+    benchmarks/submatch_nfa/bench.cc \
+    benchmarks/common.cc \
+    benchmarks/common.h
 bench_submatch_nfa_CXXFLAGS = $(AM_CXXFLAGS) -std=c++11
 bench_submatch_nfa_LDFLAGS = $(LDFLAGS_RE2)
 bench_submatch_nfa_LDADD = libre2c.la
