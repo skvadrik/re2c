@@ -24,7 +24,8 @@ struct benchmark_t {
 struct Result
 {
     const char *title;
-    uint64_t ticks;
+    uint64_t ticks_gen;
+    uint64_t ticks_run;
 };
 
 extern const benchmark_t benchmarks[];
@@ -35,6 +36,8 @@ void bench(const char *regexp, const std::vector<std::string> &strings, uint32_t
 
 void load_strings(const char *fname, const char *delim,
     std::vector<std::string> &strings);
+
+void show(const std::vector<Result> &results);
 
 // RFC URI and HTTP
 #define CRLF           "[\\n]"

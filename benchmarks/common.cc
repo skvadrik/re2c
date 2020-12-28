@@ -14,45 +14,20 @@
 #endif
 
 
-static inline void show(const std::vector<Result> &results)
+static void bench_re2c(std::vector<Result> &results, const char *regexp,
+    const std::vector<std::string> &strings, size_t ntimes,
+    int flags, int mask, int need, const char *prefix)
 {
-    const size_t n = results.size();
-    assert(n > 0);
-
-    const uint64_t ticks0 = results[0].ticks;
-
-    for (size_t i = 0; i < n; ++i) {
-        const Result &r = results[i];
-        if (r.ticks == UNAVAIL) {
-            fprintf(stderr, "%30s:%10s%10s\n", r.title, "-", "-");
-        }
-        else {
-            fprintf(stderr, "%30s:%10.2lf%10.3lfs\n", r.title
-                , double(r.ticks) / double(ticks0)
-                , double(r.ticks) / CLOCKS_PER_SEC);
-        }
-    }
-}
-
-static Result bench_re2c(const char *regexp, const std::vector<std::string> &strings,
-    size_t ntimes, int flags, int mask, int need, const char *prefix)
-{
-    Result x;
-    x.title = prefix;
-
-    if ((flags & mask)
-        || (need != 0 && !(flags & need))) {
-        x.ticks = UNAVAIL;
-        return x;
-    }
+    Result x = {prefix, UNAVAIL, UNAVAIL};
+    if ((flags & mask) || (need != 0 && !(flags & need))) return;
 
     regex_t re;
     int err;
-    clock_t /*t1 = 0, t2 = 0,*/ t3 = 0, t4 = 0;
+    clock_t t1 = 0, t2 = 0, t3 = 0, t4 = 0;
 
-    //t1 = clock();
+    t1 = clock();
     err = regcomp(&re, regexp, flags);
-    //t2 = clock();
+    t2 = clock();
     if (err) {
         fprintf(stderr, "*** %s compile failed\n", prefix);
         exit(1);
@@ -80,29 +55,26 @@ static Result bench_re2c(const char *regexp, const std::vector<std::string> &str
     delete[] pmatch;
     regfree(&re);
 
-    x.ticks = uint64_t(t4 - t3);
-    return x;
+    x.ticks_gen = uint64_t(t2 - t1);
+    x.ticks_run = uint64_t(t4 - t3);
+
+    results.push_back(x);
 }
 
 #ifdef HAVE_RE2_RE2_H
-static Result bench_re2(const char *regexp, const std::vector<std::string> &strings,
-    size_t ntimes, int mask, const char *prefix)
+static void bench_re2(std::vector<Result> &results, const char *regexp,
+    const std::vector<std::string> &strings, size_t ntimes, int mask, const char *prefix)
 {
-    Result x;
-    x.title = prefix;
-
-    if (mask & XREG_RE2) {
-        x.ticks = UNAVAIL;
-        return x;
-    }
+    Result x = {prefix, UNAVAIL, UNAVAIL};
+    if (mask & XREG_RE2) return;
 
     RE2 *re2;
-    clock_t /*t1 = 0, t2 = 0,*/ t3 = 0, t4 = 0;
+    clock_t t1 = 0, t2 = 0, t3 = 0, t4 = 0;
     bool ok = true;
 
-    //t1 = clock();
+    t1 = clock();
     re2 = new RE2(regexp, RE2::POSIX);
-    //t2 = clock();
+    t2 = clock();
     if (!re2->ok()) {
         fprintf(stderr, "*** %s compile failed\n", prefix);
         exit(1);
@@ -111,9 +83,9 @@ static Result bench_re2(const char *regexp, const std::vector<std::string> &stri
     const int argc = re2->NumberOfCapturingGroups();
     RE2::Arg *args = new RE2::Arg[argc];
     RE2::Arg **argps = new RE2::Arg*[argc];
-    std::string *results = new std::string[argc];
+    std::string *submatch = new std::string[argc];
     for (int i = 0; i < argc; ++i) {
-        args[i] = &results[i];
+        args[i] = &submatch[i];
         argps[i] = &args[i];
     }
 
@@ -132,14 +104,19 @@ static Result bench_re2(const char *regexp, const std::vector<std::string> &stri
         exit(1);
     }
 
-    delete[] results;
+    delete[] submatch;
     delete[] argps;
     delete[] args;
     delete re2;
 
-    x.ticks = uint64_t(t4 - t3);
-    return x;
+    x.ticks_gen = uint64_t(t2 - t1);
+    x.ticks_run = uint64_t(t4 - t3);
+
+    results.push_back(x);
 }
+#else
+static void bench_re2(std::vector<Result>, const char *,
+    const std::vector<std::string> &, size_t, int, const char *) {}
 #endif
 
 static size_t groupcnt(const char *regexp)
@@ -171,13 +148,11 @@ void bench(const char *regexp, const std::vector<std::string> &strings, uint32_t
         const benchmark_t &b = benchmarks[i];
         switch (b.engine) {
         case ENGINE_RE2C:
-            rs.push_back(bench_re2c(regexp, strings, times, b.flags, mask, need, b.name));
+            bench_re2c(rs, regexp, strings, times, b.flags, mask, need, b.name);
             break;
-#ifdef HAVE_RE2_RE2_H
         case ENGINE_RE2:
-            rs.push_back(bench_re2(regexp, strings, times, mask, b.name));
+            bench_re2(rs, regexp, strings, times, mask, b.name);
             break;
-#endif
         }
     }
 
