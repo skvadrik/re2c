@@ -187,3 +187,12 @@ bench_submatch_nfa_LDFLAGS = $(LDFLAGS_RE2)
 bench_submatch_nfa_LDADD = libre2c.la
 noinst_PROGRAMS += bench_submatch_nfa
 
+bench_submatch_dfa_jit_SOURCES = \
+    benchmarks/submatch_dfa_jit/bench.cc \
+    benchmarks/common.cc \
+    benchmarks/common.h
+bench_submatch_dfa_jit_CXXFLAGS = $(AM_CXXFLAGS) -std=c++11
+bench_submatch_dfa_jit_LDFLAGS = $(LDFLAGS_RE2)
+bench_submatch_dfa_jit_LDADD = libre2c.la
+noinst_PROGRAMS += bench_submatch_dfa_jit
+
