@@ -4,6 +4,7 @@
 #include <ostream>
 #include <string>
 #include <vector>
+#include <cctype>
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
@@ -36,7 +37,7 @@ static std::string make_name(Output &output, const std::string &cond, const loc_
     if (loc.file > 0) {
         name += output.msg.filenames[loc.file];
         for (size_t i = 0; i < name.length(); ++i) {
-            if (!std::isalnum(name[i])) name[i] = '_';
+            if (!std::isalnum(static_cast<unsigned char>(name[i]))) name[i] = '_';
         }
         name += "_";
     }
