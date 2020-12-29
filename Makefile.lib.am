@@ -178,6 +178,9 @@ test_libre2c_SOURCES = lib/test.cc
 test_libre2c_LDADD = libre2c.la
 check_PROGRAMS += test_libre2c
 
+# benchmarks
+if WITH_BENCHMARKS
+
 bench_submatch_nfa_SOURCES = \
     benchmarks/submatch_nfa/bench.cc \
     benchmarks/common.cc \
@@ -196,3 +199,4 @@ bench_submatch_dfa_jit_LDFLAGS = $(LDFLAGS_RE2)
 bench_submatch_dfa_jit_LDADD = libre2c.la
 noinst_PROGRAMS += bench_submatch_dfa_jit
 
+endif
