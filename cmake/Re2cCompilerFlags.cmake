@@ -56,6 +56,7 @@ else()
     # /Wall enables all warnings that are off by default including
     # some of the ones GCC/Clang enables through -Wxxxx flags.
     try_cxxflag("/Wall")
+    try_cxxflag("/EHsc")    # Support C++ exceptions.
 endif()
 
 # Print compiler and linker flags
