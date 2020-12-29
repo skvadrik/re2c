@@ -48,94 +48,42 @@ int main()
     char *longstring = new char[VERY_LONG + 1];
 
     // http
-    load_strings("../benchmarks/data/http", "\n\n", strings);
+    load_strings_http(strings);
     regexp = MESSAGE_HEAD;
     bench(regexp, strings, 100, REG_BACKWARD | REG_STADFA, 0);
     regexp = MESSAGE_HEAD2;
     bench(regexp, strings, 100, REG_BACKWARD, 0);
 
     // uri
-    load_strings("../benchmarks/data/uri", "\n", strings);
+    load_strings_uri(strings);
     regexp = URI;
     bench(regexp, strings, 100, REG_BACKWARD | REG_STADFA, 0);
     regexp = URI2;
     bench(regexp, strings, 100, 0, 0);
 
     // ipv6
-    strings.clear();
-    strings.push_back("fee2:586:10aa:fd03:37f:76ee:bed7:880");
-    strings.push_back("::fee2:586:fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2::586:fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2:586::fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2:586:fd03::37f:76ee:bed7:880");
-    strings.push_back("fee2:586:fd03:37f::76ee:bed7:880");
-    strings.push_back("fee2:586:fd03:37f:76ee::bed7:880");
-    strings.push_back("fee2:586:fd03:37f:76ee:bed7::880");
-    strings.push_back("fee2:586:fd03:37f:76ee:bed7:880::");
-    strings.push_back("::586:fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2::fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2:fd03::37f:76ee:bed7:880");
-    strings.push_back("fee2:fd03:37f::76ee:bed7:880");
-    strings.push_back("fee2:fd03:37f:76ee::bed7:880");
-    strings.push_back("fee2:fd03:37f:76ee:bed7::880");
-    strings.push_back("fee2:fd03:37f:76ee:bed7:880::");
-    strings.push_back("::fd03:37f:76ee:bed7:880");
-    strings.push_back("fd03::37f:76ee:bed7:880");
-    strings.push_back("fd03:37f::76ee:bed7:880");
-    strings.push_back("fd03:37f:76ee::bed7:880");
-    strings.push_back("fd03:37f:76ee:bed7::880");
-    strings.push_back("fd03:fd03:37f:76ee:bed7::");
-    strings.push_back("::37f:76ee:bed7:880");
-    strings.push_back("fd03::76ee:bed7:880");
-    strings.push_back("fd03:37f::bed7:880");
-    strings.push_back("fd03:37f:76ee::880");
-    strings.push_back("fd03:37f:76ee:bed7::");
-    strings.push_back("::76ee:bed7:880");
-    strings.push_back("fd03::bed7:880");
-    strings.push_back("fd03:37f::880");
-    strings.push_back("fd03:37f:76ee::");
-    strings.push_back("::bed7:880");
-    strings.push_back("fd03::880");
-    strings.push_back("fd03:37f::");
-    strings.push_back("::bed7");
-    strings.push_back("fd03::");
-    strings.push_back("::");
+    load_strings_ipv6(strings);
     regexp = IPV6;
     bench(regexp, strings, 100, REG_BACKWARD, 0);
     regexp = IPV62;
     bench(regexp, strings, 100, 0, REG_NFA); // DFA is very large
 
-    strings.clear();
-    strings.push_back("127.0.0.1");
-    strings.push_back("192.168.1.200");
-    strings.push_back("255.255.255.255");
-    strings.push_back("8.8.8.8");
-    strings.push_back("240.147.163.34");
+    // ipv4
+    load_strings_ipv4(strings);
     regexp = IPV4;
     bench(regexp, strings, 10000, 0, 0);
-    regexp = "([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})";
+    regexp = IPV42;
     bench(regexp, strings, 10000, 0, 0);
 
-    strings.clear();
-    strings.push_back("Mon Jan 01 2019 00:24:00 GMT");
-    strings.push_back("Tue Feb 02 2018 01:24:00 GMT");
-    strings.push_back("Wed Mar 03 2017 02:24:00 GMT");
-    strings.push_back("Thu Apr 04 2016 03:24:00 GMT");
-    strings.push_back("Fri May 05 2015 04:24:00 GMT");
-    strings.push_back("Sat Jun 06 2014 05:24:00 GMT");
-    strings.push_back("Sun Jul 07 2013 06:24:00 GMT");
-    regexp = "(Mon|Tue|Wed|Thu|Fri|Sat|Sun)"
-        "[ ]+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)"
-        "[ ]+([0-9]{2})"
-        "[ ]+([0-9]{4})"
-        "[ ]+([0-9]{2}):([0-5][0-9]):[0-5][0-9](-[0-5][0-9])?(:[0-5][0-9])?"
-        "[ ]+(([A-Z]{3})([+-]([0-5][0-9]):([0-5][0-9]))?)";
+    // date
+    load_strings_date(strings);
+    regexp = DATE;
     bench(regexp, strings, 1000, 0, 0);
-    regexp = "([a-zA-Z]+)[ ]+([a-zA-Z]+)[ ]+([0-9]+)[ ]+([0-9]+)[ ]+([0-9:-]+)[ ]+([A-Z0-9+-]+)";
+    regexp = DATE2;
     bench(regexp, strings, 1000, 0, 0);
 
     // atom
-    load_strings("../benchmarks/data/atom", "\n", strings);
+    load_strings_atom(strings);
     regexp = PACKAGE_ATOM;
     bench(regexp, strings, 10, 0, 0);
     regexp = PACKAGE_ATOM2;

@@ -34,8 +34,12 @@ extern const size_t nbenchmarks;
 void bench(const char *regexp, const std::vector<std::string> &strings, uint32_t times,
     int mask, int need);
 
-void load_strings(const char *fname, const char *delim,
-    std::vector<std::string> &strings);
+void load_strings_http(std::vector<std::string> &strings);
+void load_strings_uri(std::vector<std::string> &strings);
+void load_strings_atom(std::vector<std::string> &strings);
+void load_strings_date(std::vector<std::string> &strings);
+void load_strings_ipv6(std::vector<std::string> &strings);
+void load_strings_ipv4(std::vector<std::string> &strings);
 
 void show(const std::vector<Result> &results);
 
@@ -110,6 +114,20 @@ void show(const std::vector<Result> &results);
 
 // simplified IPv6
 #define IPV62 "(((" H16 ":){0,7}" H16 ")?(::)?((" H16 ":){0,7}" H16 ")?)"
+
+// simplified IPv4
+#define IPV42 "([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})"
+
+// date
+#define DATE "(Mon|Tue|Wed|Thu|Fri|Sat|Sun)" \
+    "[ ]+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)" \
+    "[ ]+([0-9]{2})" \
+    "[ ]+([0-9]{4})" \
+    "[ ]+([0-9]{2}):([0-5][0-9]):[0-5][0-9](-[0-5][0-9])?(:[0-5][0-9])?" \
+    "[ ]+(([A-Z]{3})([+-]([0-5][0-9]):([0-5][0-9]))?)"
+
+// simplified date
+#define DATE2 "([a-zA-Z]+)[ ]+([a-zA-Z]+)[ ]+([0-9]+)[ ]+([0-9]+)[ ]+([0-9:-]+)[ ]+([A-Z0-9+-]+)"
 
 // Gentoo package atom
 #define PACKAGE_STR    "([a-zA-Z0-9_+-]+)"
