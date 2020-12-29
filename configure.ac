@@ -148,10 +148,15 @@ AC_CHECK_SIZEOF([0i8],       [], [[]])
 
 AC_CONFIG_FILES([\
     Makefile \
+    benchmarks/submatch_dfa_aot/Makefile \
     doc/manpage.rst \
     doc/help.rst \
 ])
 AC_CONFIG_FILES([run_tests.sh], [chmod +x run_tests.sh])
+AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/run.sh],
+    [chmod +x benchmarks/submatch_dfa_aot/run.sh])
+AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/verify.sh],
+    [chmod +x benchmarks/submatch_dfa_aot/verify.sh])
 
 
 LT_INIT([dlopen win32-dll])
