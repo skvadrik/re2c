@@ -1,5 +1,6 @@
 set -e
 
+rm -rf kleenexlang
 git clone --recursive https://github.com/diku-kmc/kleenexlang.git
 cd kleenexlang
 cabal v1-sandbox init && cabal v1-sandbox add-source regexps-syntax

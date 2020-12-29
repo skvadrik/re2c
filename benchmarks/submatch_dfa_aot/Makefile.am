@@ -1,35 +1,35 @@
-SRC_DIR = src
+SRC_DIR = $(srcdir)/src
+ENG_DIR = engines
 GEN_DIR = gen
 BIN_DIR = bin
-DATA_DIR = data
-CC = gcc
+DAT_DIR = data
 CFLAGS = -O3 -g -I $(SRC_DIR)
-RAGEL_LIBRARY_PATH = LD_LIBRARY_PATH=engines/ragel/ragel-7.0.0.12/install/lib:engines/ragel/colm-0.13.0.7/install/lib
-RAGEL = engines/ragel/ragel7
-RE2C = engines/re2c/re2c
+RAGEL_LIBRARY_PATH = LD_LIBRARY_PATH=$(ENG_DIR)/ragel/ragel-7.0.0.12/install/lib:$(ENG_DIR)/ragel/colm-0.13.0.7/install/lib
+RAGEL = $(ENG_DIR)/ragel/ragel7
+KLEENEX = $(ENG_DIR)/kleenex/kexc
+RE2C = $(top_builddir)/re2c
 RE2C_FLAGS = --reusable --tags
 RE2C_FLAGS_BC = $(RE2C_FLAGS) -I $(SRC_DIR)/re2c/include_bc
 RE2C_FLAGS_EOF = $(RE2C_FLAGS) -I $(SRC_DIR)/re2c/include_eof
-KLEENEX = engines/kleenex/kexc
 
 BENCHMARKS = \
-	alt1_2 alt1_4 alt1_8 \
-	alt2_2 alt2_4 alt2_8 \
-	alt4_2 alt4_4 alt4_8 \
-	cat2_0 cat2_4 cat2_8 \
-	cat4_0 cat4_2 cat4_4 \
-	cat8_0 cat8_1 cat8_2 \
-	iter_a_4 iter_a_16 iter_a_64 \
-	iter_b_2_3_5 iter_b_7_11_13 iter_b_17_19_23 \
-	iter_c_2_3_5 iter_c_7_11_13 iter_c_17_19_23 \
-	apache_log \
-	datetime \
-	email \
-	ipv4 \
-	uri_simple \
-	uri_rfc3986 \
-	http_simple \
-	http_rfc7230
+    alt1_2 alt1_4 alt1_8 \
+    alt2_2 alt2_4 alt2_8 \
+    alt4_2 alt4_4 alt4_8 \
+    cat2_0 cat2_4 cat2_8 \
+    cat4_0 cat4_2 cat4_4 \
+    cat8_0 cat8_1 cat8_2 \
+    iter_a_4 iter_a_16 iter_a_64 \
+    iter_b_2_3_5 iter_b_7_11_13 iter_b_17_19_23 \
+    iter_c_2_3_5 iter_c_7_11_13 iter_c_17_19_23 \
+    apache_log \
+    datetime \
+    email \
+    ipv4 \
+    uri_simple \
+    uri_rfc3986 \
+    http_simple \
+    http_rfc7230
 
 COMMON_SRC = $(SRC_DIR)/common.h
 
@@ -89,14 +89,15 @@ BIN_CLANG = $(patsubst %, %-clang, $(BIN_))
 BIN = $(BIN_GCC) $(BIN_CLANG)
 
 # Some benchmarks share the same data, like `uri_simple` and `uri_rfc3986`
-DATA = $(patsubst %, $(DATA_DIR)/%/big, \
+DAT = $(patsubst %, $(DAT_DIR)/%/big, \
     $(sort $(foreach bench, $(BENCHMARKS), \
         $(firstword $(subst _, , $(bench))))))
 
-all: $(BIN)
+all-local: $(BIN) $(DAT)
 
 $(GEN_RAGEL_T1): $(GEN_DIR)/%-T1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
 	@mkdir -p $(@D)
+	echo $^
 	$(RAGEL_LIBRARY_PATH) $(RAGEL) -T1 $< -o $@
 
 $(GEN_RAGEL_F1): $(GEN_DIR)/%-F1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
@@ -151,30 +152,17 @@ $(BIN_CLANG): $(BIN_DIR)/%-clang: $(GEN_DIR)/%.c
 	@mkdir -p $(@D)
 	clang $(CFLAGS) -o $@ $<
 
-data: $(DATA)
-
-$(DATA): $(DATA_DIR)/%/big:
-	(cd $(@D) && ./gen_*)
+$(DAT): $(DAT_DIR)/%/big: $(DAT_DIR)/%/small
+	mkdir -p $(@D) && cp $(srcdir)/$(@D)/small $(srcdir)/$(@D)/gen_* $(@D)
+	( cd $(@D) && ./gen_* )
 
 $(KLEENEX):
-	( cd engines/kleenex && ./getkleenex.sh )
+	mkdir -p $(@D) && cp $(srcdir)/engines/kleenex/getkleenex.sh $(srcdir)/engines/kleenex/0001-Updating-for-new-GHC.patch $(@D)
+	( cd $(@D) && ./getkleenex.sh )
 
 $(RAGEL):
-	( cd engines/ragel && ./getragel7.sh )
+	mkdir -p $(@D) && cp $(srcdir)/engines/ragel/getragel7.sh $(@D)
+	( cd $(@D) && ./getragel7.sh )
 
-$(RE2C):
-	( cd engines/re2c && ./getre2c.sh )
-
-clean:
-	find bin -type f -delete
-
-clean-gen:
-	find gen -type f -delete
-
-clean-data:
-	rm -f $(DATA)
-
-clean-logs:
-	find logs -type f -delete
-
-clean-all: clean clean-gen clean-data clean-logs
+clean-local:
+	@rm -f $(GEN) $(BIN) $(DAT)
