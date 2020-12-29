@@ -449,12 +449,14 @@ inline Code *code_tags(code_alc_t &alc, const std::string &fmt, const std::strin
 {
     Code *x = new_code(alc, mtags ? Code::MTAGS : Code::STAGS);
 
-    char *fmt_copy = alc.alloct<char>(fmt.length() + 1);
-    strcpy(fmt_copy, fmt.c_str());
+    const size_t fmt_size = fmt.length() + 1;
+    char *fmt_copy = alc.alloct<char>(fmt_size);
+    memcpy(fmt_copy, fmt.c_str(), fmt_size);
     x->tags.fmt = fmt_copy;
 
-    char *sep_copy = alc.alloct<char>(sep.length() + 1);
-    strcpy(sep_copy, sep.c_str());
+    const size_t sep_size = sep.length() + 1;
+    char *sep_copy = alc.alloct<char>(sep_size);
+    memcpy(sep_copy, sep.c_str(), sep_size);
     x->tags.sep = sep_copy;
 
     return x;
