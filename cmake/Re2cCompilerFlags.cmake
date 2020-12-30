@@ -1,9 +1,8 @@
 include(CheckCXXCompilerFlag)
 
-# Iff C++ compiler recognizes 'flag', append 'flag' and 'implied-flags' to re2c_cxx_flags
-# (Second param 'implied-flags' is needed for warning suppressions '-Wno-<warning>':
-# GCC warns about unrecognized suppressions options only in presence of other warnings,
-# which makes it hard to test for them with autoconf.)
+# If C++ compiler recognizes 'flag', append 'flag' and 'implied-flags' to
+# re2c_cxx_flags. Parameter 'implied-flags' is needed to suppress warnings (GCC
+# warns about unrecognized -Wno-* options only in presence of other warnings).
 function(try_cxxflag flag)
     set(varname "cxxflag_${flag}")
     string(MAKE_C_IDENTIFIER "${varname}" varname)
@@ -17,7 +16,7 @@ function(try_cxxflag flag)
     endif()
 endfunction()
 
-get_property(isMultiConfig  GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 set(re2c_cxx_flags "")
 
 # Set default optimization flag if there is no build type provided.
@@ -26,9 +25,6 @@ if(NOT CMAKE_BUILD_TYPE AND NOT isMultiConfig)
     try_cxxflag("-O2")
 endif()
 
-# The following flags are not supported by Visual Studio.
-# Thus, we can speed up the configuration of the project
-# by avoiding unnecessary checks.
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     try_cxxflag("-W")
     try_cxxflag("-Wall")
@@ -42,25 +38,30 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     try_cxxflag("-Wsign-conversion")
     try_cxxflag("-Werror=return-type")
     try_cxxflag("-Weverything"
-      "-Wno-unknown-warning-option" # CLANG eats some GCC options only to warn they are unknown
-      "-Wno-reserved-id-macro" # to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
+      # CLANG eats some GCC options only to warn they are unknown
+      "-Wno-unknown-warning-option"
+      # to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
+      "-Wno-reserved-id-macro"
       "-Wno-padded"
-      "-Wno-old-style-cast" # RE2C-generated lexer has lots of C-style casts because of 're2c:yych:conversion = 1;'
+      # RE2C-generated lexer has lots of C-style casts because of 're2c:yych:conversion = 1;'
+      "-Wno-old-style-cast"
       "-Wno-nested-anon-types"
-      "-Wno-global-constructors" # initialization of global constants with std::numeric_limits<...> (mostly for size_t)
-      "-Wno-shadow-field-in-constructor" # using same names in ctor seems more like a feature
-      "-Wno-undefined-func-template" # explicit specialization to reduce build dependencies
+      # initialization of global constants with std::numeric_limits<...> (mostly for size_t)
+      "-Wno-global-constructors"
+      # using same names in ctor seems more like a feature
+      "-Wno-shadow-field-in-constructor"
+      # explicit specialization to reduce build dependencies
+      "-Wno-undefined-func-template"
       )
-
     try_cxxflag("-fdiagnostics-color=always")
 
     # Prepend to avoid overriding user-defined options set with -DCMAKE_CXX_FLAGS.
     set(CMAKE_CXX_FLAGS "${re2c_cxx_flags} ${CMAKE_CXX_FLAGS}")
 else()
-    # /Wall enables all warnings that are off by default including
-    # some of the ones GCC/Clang enables through -Wxxxx flags.
+    # /Wall enables /W4 plus some more warnings.
     try_cxxflag("/Wall")
-    try_cxxflag("/EHsc")    # Support C++ exceptions.
+    # Standard C++ stack unwinding (s), assume extern "C" functions never throw (c).
+    try_cxxflag("/EHsc")
 
     # Append, possibly overriding user-defined options. This is necessary to
     # override default CMAKE_CXX_FLAGS options added by CMake in MSVC builds.
