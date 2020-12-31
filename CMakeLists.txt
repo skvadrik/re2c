@@ -526,6 +526,11 @@ else()
     add_custom_target(check_libre2c)
 endif()
 
+if(RE2C_BUILD_BENCHMARKS)
+    # submatch DFA AOT benchmark
+    add_subdirectory(benchmarks/submatch_dfa_aot)
+endif()
+
 # only add check target if toplevel project
 if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     add_custom_target(check)
