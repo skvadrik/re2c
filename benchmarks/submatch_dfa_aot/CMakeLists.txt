@@ -22,6 +22,7 @@ set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(ENG_DIR "${CMAKE_CURRENT_BINARY_DIR}/engines")
 set(GEN_DIR "${CMAKE_CURRENT_BINARY_DIR}/gen")
 set(BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/bin")
+set(PREGEN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/pregen")
 
 set(GEN "")
 
@@ -47,13 +48,25 @@ list(JOIN KLEENEX_MASKED "|" KLEENEX_MASKED_REGEXP)
 set(KLEENEX_BENCHMARKS ${BENCHMARKS})
 list(FILTER KLEENEX_BENCHMARKS EXCLUDE REGEX "${KLEENEX_MASKED_REGEXP}")
 foreach(bench ${KLEENEX_BENCHMARKS})
-    string(REGEX REPLACE "^.+$" "${SRC_DIR}/kleenex/\\0.kex" src_file "${bench}")
-    string(REGEX REPLACE "^.+$" "${GEN_DIR}/kleenex/\\0.c"   gen_file "${bench}")
-    add_custom_command(
-        OUTPUT "${gen_file}"
-        COMMAND "${KLEENEX}" compile "${src_file}" --srcout "${gen_file}" --act=false --la=true
-        DEPENDS "${src_file}" "${KLEENEX}"
-    )
+    set(src_file "${SRC_DIR}/kleenex/${bench}.kex")
+    set(gen_file "${GEN_DIR}/kleenex/${bench}.c")
+    set(pregen_file "${PREGEN_DIR}/kleenex/${bench}.c")
+    if(RE2C_REGEN_BENCHMARKS)
+        file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
+        file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
+        add_custom_command(
+            OUTPUT "${gen_file}"
+            COMMAND "${KLEENEX}" compile "${rel_src_file}" --srcout "${rel_gen_file}" --act=false --la=true
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
+            DEPENDS "${src_file}" "${KLEENEX}"
+        )
+    else()
+        add_custom_command(
+            OUTPUT "${gen_file}"
+            COMMAND "${CMAKE_COMMAND}" -E copy "${pregen_file}" "${gen_file}"
+            DEPENDS "${pregen_file}"
+        )
+    endif()
     list(APPEND GEN "${gen_file}")
 endforeach()
 
@@ -68,13 +81,25 @@ add_custom_command(
 )
 foreach(bench ${BENCHMARKS})
 foreach(mode "G2" "T1" "F1")
-    string(REGEX REPLACE "^.+$" "${SRC_DIR}/ragel/\\0.rl"        src_file "${bench}")
-    string(REGEX REPLACE "^.+$" "${GEN_DIR}/ragel/\\0-${mode}.c" gen_file "${bench}")
-    add_custom_command(
-        OUTPUT "${gen_file}"
-        COMMAND "${RAGEL}" "-${mode}" "${src_file}" -o "${gen_file}"
-        DEPENDS "${src_file}" "${RAGEL}"
-    )
+    set(src_file "${SRC_DIR}/ragel/${bench}.rl")
+    set(gen_file "${GEN_DIR}/ragel/${bench}-${mode}.c")
+    set(pregen_file "${PREGEN_DIR}/ragel/${bench}-${mode}.c")
+    if(RE2C_REGEN_BENCHMARKS)
+        file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
+        file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
+        add_custom_command(
+            OUTPUT "${gen_file}"
+            COMMAND "${RAGEL}" "-${mode}" "${rel_src_file}" -o "${rel_gen_file}"
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
+            DEPENDS "${src_file}" "${RAGEL}"
+        )
+    else()
+        add_custom_command(
+            OUTPUT "${gen_file}"
+            COMMAND "${CMAKE_COMMAND}" -E copy "${pregen_file}" "${gen_file}"
+            DEPENDS "${pregen_file}"
+        )
+    endif()
     list(APPEND GEN "${gen_file}")
 endforeach()
 endforeach()
@@ -82,7 +107,7 @@ endforeach()
 # re2c
 file(MAKE_DIRECTORY "${GEN_DIR}/re2c/")
 set(RE2C "${CMAKE_BINARY_DIR}/re2c")
-set(RE2C_FLAGS "--reusable" "--tags")
+set(RE2C_FLAGS "--reusable" "--tags" "--no-generation-date")
 set(COMMON_RE2C
     "${SRC_DIR}/re2c/common.re"
     "${SRC_DIR}/re2c/include_bc/fill.re"
@@ -93,23 +118,34 @@ set(COMMON_RE2C
 foreach(bench ${BENCHMARKS})
 foreach(eof "bc" "eof")
 foreach(alg "tdfa1" "tdfa1-es" "tdfa0" "stadfa")
-    string(REGEX REPLACE "^.+$" "${SRC_DIR}/re2c/\\0.re"              src_file "${bench}")
-    string(REGEX REPLACE "^.+$" "${GEN_DIR}/re2c/\\0-${eof}-${alg}.c" gen_file "${bench}")
-
-    set(re2c_flags ${RE2C_FLAGS} "-I" "${SRC_DIR}/re2c/include_${eof}")
-    if("${alg}" STREQUAL "tdfa1-es")
-        set(re2c_flags ${re2c_flags} "--eager-skip")
-    elseif("${alg}" STREQUAL "tdfa0")
-        set(re2c_flags ${re2c_flags} "--no-lookahead")
-    elseif("${alg}" STREQUAL "stadfa")
-        set(re2c_flags ${re2c_flags} "--stadfa")
+    set(src_file "${SRC_DIR}/re2c/${bench}.re")
+    set(gen_file "${GEN_DIR}/re2c/${bench}-${eof}-${alg}.c")
+    set(pregen_file "${PREGEN_DIR}/re2c/${bench}-${eof}-${alg}.c")
+    if(RE2C_REGEN_BENCHMARKS)
+        file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
+        file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
+        file(RELATIVE_PATH rel_inc_path "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DIR}/re2c/include_${eof}")
+        set(re2c_flags ${RE2C_FLAGS} "-I" "${rel_inc_path}")
+        if("${alg}" STREQUAL "tdfa1-es")
+            set(re2c_flags ${re2c_flags} "--eager-skip")
+        elseif("${alg}" STREQUAL "tdfa0")
+            set(re2c_flags ${re2c_flags} "--no-lookahead")
+        elseif("${alg}" STREQUAL "stadfa")
+            set(re2c_flags ${re2c_flags} "--stadfa")
+        endif()
+        add_custom_command(
+            OUTPUT "${gen_file}"
+            COMMAND "${RE2C}" ${re2c_flags} "${rel_src_file}" -o "${rel_gen_file}"
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
+            DEPENDS "${src_file}" ${COMMON_RE2C} "${RE2C}"
+        )
+    else()
+        add_custom_command(
+            OUTPUT "${gen_file}"
+            COMMAND "${CMAKE_COMMAND}" -E copy "${pregen_file}" "${gen_file}"
+            DEPENDS "${pregen_file}"
+        )
     endif()
-
-    add_custom_command(
-        OUTPUT "${gen_file}"
-        COMMAND "${RE2C}" ${re2c_flags} "${src_file}" -o "${gen_file}"
-        DEPENDS "${src_file}" ${COMMON_RE2C} "${RE2C}"
-    )
     list(APPEND GEN "${gen_file}")
 endforeach()
 endforeach()
