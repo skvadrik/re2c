@@ -63,8 +63,17 @@ AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" != "xno"])
 
 
 # --enable-benchmarks
-AC_ARG_ENABLE([benchmarks], [AS_HELP_STRING([--enable-benchmarks], [build benchmarks])])
+AC_ARG_ENABLE([benchmarks], [AS_HELP_STRING([--enable-benchmarks],
+    [build benchmarks])])
 AM_CONDITIONAL([WITH_BENCHMARKS], [test "x$enable_benchmarks" == "xyes"])
+
+
+# --enable-benchmarks-regenerate
+AC_ARG_ENABLE([benchmarks_regenerate],
+    [AS_HELP_STRING([--enable-benchmarks-regenerate],
+    [regenerate C code for benchmarks])])
+AM_CONDITIONAL([REGEN_BENCHMARKS],
+    [test "x$enable_benchmarks_regenerate" == "xyes"])
 
 
 # checks for programs

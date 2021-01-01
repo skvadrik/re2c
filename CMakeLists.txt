@@ -44,6 +44,7 @@ option(RE2C_BUILD_LIBS "Build libraries" OFF)
 option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
 
 option(RE2C_BUILD_BENCHMARKS "Build benchmarks" OFF)
+option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
 
 # checks for programs
 find_package(BISON)
