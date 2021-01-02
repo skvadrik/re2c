@@ -93,72 +93,72 @@ all-local: $(BIN) $(DAT)
 if REGEN_BENCHMARKS
 
 $(GEN_RAGEL): $(GEN_DIR)/%.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
-	@mkdir -p $(@D)
-	$(RAGEL_LIBRARY_PATH) $(RAGEL) -G2 $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/ragel/$(@F) ; then cp -f $@ $(PREGEN_DIR)/ragel/$(@F) ; fi
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RAGEL) -G2 $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/ragel/$(@F) ; then cp -f $@ $(PREGEN_DIR)/ragel/$(@F) ; fi
 
 $(GEN_RE2C_BC_TDFA1): $(GEN_DIR)/%-bc-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	@mkdir -p $(@D)
-	$(RE2C) $(RE2C_FLAGS_BC) $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_BC) $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 $(GEN_RE2C_EOF_TDFA1): $(GEN_DIR)/%-eof-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	@mkdir -p $(@D)
-	$(RE2C) $(RE2C_FLAGS_EOF) $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_EOF) $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 $(GEN_RE2C_BC_TDFA0): $(GEN_DIR)/%-bc-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	@mkdir -p $(@D)
-	$(RE2C) $(RE2C_FLAGS_BC) --no-lookahead $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_BC) --no-lookahead $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 $(GEN_RE2C_EOF_TDFA0): $(GEN_DIR)/%-eof-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	@mkdir -p $(@D)
-	$(RE2C) $(RE2C_FLAGS_EOF) --no-lookahead $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_EOF) --no-lookahead $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 $(GEN_RE2C_BC_STADFA): $(GEN_DIR)/%-bc-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	@mkdir -p $(@D)
-	$(RE2C) $(RE2C_FLAGS_BC) --stadfa $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_BC) --stadfa $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 $(GEN_RE2C_EOF_STADFA): $(GEN_DIR)/%-eof-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	@mkdir -p $(@D)
-	$(RE2C) $(RE2C_FLAGS_EOF) --stadfa $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_EOF) --stadfa $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 $(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex $(KLEENEX)
-	@mkdir -p $(@D)
-	$(KLEENEX) compile $< --srcout $@ --act=false --la=true
-	if ! cmp -s $@ $(PREGEN_DIR)/kleenex/$(@F) ; then cp -f $@ $(PREGEN_DIR)/kleenex/$(@F) ; fi
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(KLEENEX) compile $< --srcout $@ --act=false --la=true
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/kleenex/$(@F) ; then cp -f $@ $(PREGEN_DIR)/kleenex/$(@F) ; fi
 
 else
 
 $(GEN): $(GEN_DIR)/%: $(PREGEN_DIR)/%
-	@mkdir -p $(@D)
-	cp -f $< $@
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)cp -f $< $@
 
 endif
 
 $(BIN_GCC): $(BIN_DIR)/%-gcc: $(GEN_DIR)/%.c
-	@mkdir -p $(@D)
-	gcc $(CFLAGS) -o $@ $<
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)gcc $(CFLAGS) -o $@ $<
 
 $(BIN_CLANG): $(BIN_DIR)/%-clang: $(GEN_DIR)/%.c
-	@mkdir -p $(@D)
-	clang $(CFLAGS) -o $@ $<
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)clang $(CFLAGS) -o $@ $<
 
 $(DAT): $(DAT_DIR)/%/big: $(DAT_DIR)/%/small
-	mkdir -p $(@D) && cp $(srcdir)/$(@D)/small $(srcdir)/$(@D)/gen_* $(@D)
-	( cd $(@D) && ./gen_* )
+	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/$(@D)/small $(srcdir)/$(@D)/gen_* $(@D)
+	$(AM_V_GEN)( cd $(@D) && ./gen_* )
 
 $(KLEENEX):
-	mkdir -p $(@D) && cp $(srcdir)/engines/kleenex/getkleenex.sh $(srcdir)/engines/kleenex/0001-Updating-for-new-GHC.patch $(@D)
-	( cd $(@D) && ./getkleenex.sh )
+	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/engines/kleenex/getkleenex.sh $(srcdir)/engines/kleenex/0001-Updating-for-new-GHC.patch $(@D)
+	$(AM_V_GEN)( cd $(@D) && ./getkleenex.sh )
 
 $(RAGEL):
-	mkdir -p $(@D) && cp $(srcdir)/engines/ragel/getragel7.sh $(@D)
-	( cd $(@D) && ./getragel7.sh )
+	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/engines/ragel/getragel7.sh $(@D)
+	$(AM_V_GEN)( cd $(@D) && ./getragel7.sh )
 
 clean-local:
-	@rm -f $(GEN) $(BIN) $(DAT)
+	$(AM_V_at)rm -f $(GEN) $(BIN) $(DAT)
