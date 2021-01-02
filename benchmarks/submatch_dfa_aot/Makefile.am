@@ -33,10 +33,7 @@ BENCHMARKS = \
 
 COMMON_SRC = $(SRC_DIR)/common.h
 
-GEN_RAGEL_T1 = $(patsubst %, $(GEN_DIR)/ragel/%-T1.c, $(BENCHMARKS))
-GEN_RAGEL_F1 = $(patsubst %, $(GEN_DIR)/ragel/%-F1.c, $(BENCHMARKS))
-GEN_RAGEL_G2 = $(patsubst %, $(GEN_DIR)/ragel/%-G2.c, $(BENCHMARKS))
-GEN_RAGEL = $(GEN_RAGEL_T1) $(GEN_RAGEL_F1) $(GEN_RAGEL_G2)
+GEN_RAGEL = $(patsubst %, $(GEN_DIR)/ragel/%.c, $(BENCHMARKS))
 
 BIN_RAGEL = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_RAGEL))
 
@@ -53,8 +50,6 @@ GEN_RE2C_EOF_STADFA   = $(patsubst %, $(GEN_DIR)/re2c/%-eof-stadfa.c,   $(BENCHM
 GEN_RE2C = \
     $(GEN_RE2C_BC_TDFA1) \
     $(GEN_RE2C_EOF_TDFA1) \
-    $(GEN_RE2C_BC_TDFA1_ES) \
-    $(GEN_RE2C_EOF_TDFA1_ES) \
     $(GEN_RE2C_BC_TDFA0) \
     $(GEN_RE2C_EOF_TDFA0) \
     $(GEN_RE2C_BC_STADFA) \
@@ -97,17 +92,7 @@ all-local: $(BIN) $(DAT)
 
 if REGEN_BENCHMARKS
 
-$(GEN_RAGEL_T1): $(GEN_DIR)/%-T1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
-	@mkdir -p $(@D)
-	$(RAGEL_LIBRARY_PATH) $(RAGEL) -T1 $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/ragel/$(@F) ; then cp -f $@ $(PREGEN_DIR)/ragel/$(@F) ; fi
-
-$(GEN_RAGEL_F1): $(GEN_DIR)/%-F1.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
-	@mkdir -p $(@D)
-	$(RAGEL_LIBRARY_PATH) $(RAGEL) -F1 $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/ragel/$(@F) ; then cp -f $@ $(PREGEN_DIR)/ragel/$(@F) ; fi
-
-$(GEN_RAGEL_G2): $(GEN_DIR)/%-G2.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
+$(GEN_RAGEL): $(GEN_DIR)/%.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
 	@mkdir -p $(@D)
 	$(RAGEL_LIBRARY_PATH) $(RAGEL) -G2 $< -o $@
 	if ! cmp -s $@ $(PREGEN_DIR)/ragel/$(@F) ; then cp -f $@ $(PREGEN_DIR)/ragel/$(@F) ; fi
@@ -120,16 +105,6 @@ $(GEN_RE2C_BC_TDFA1): $(GEN_DIR)/%-bc-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(
 $(GEN_RE2C_EOF_TDFA1): $(GEN_DIR)/%-eof-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	@mkdir -p $(@D)
 	$(RE2C) $(RE2C_FLAGS_EOF) $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
-
-$(GEN_RE2C_BC_TDFA1_ES): $(GEN_DIR)/%-bc-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	@mkdir -p $(@D)
-	$(RE2C) $(RE2C_FLAGS_BC) --eager-skip $< -o $@
-	if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
-
-$(GEN_RE2C_EOF_TDFA1_ES): $(GEN_DIR)/%-eof-tdfa1-es.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	@mkdir -p $(@D)
-	$(RE2C) $(RE2C_FLAGS_EOF) --eager-skip $< -o $@
 	if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 $(GEN_RE2C_BC_TDFA0): $(GEN_DIR)/%-bc-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
