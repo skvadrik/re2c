@@ -80,16 +80,15 @@ add_custom_command(
     WORKING_DIRECTORY "${ENG_DIR}/ragel/"
 )
 foreach(bench ${BENCHMARKS})
-foreach(mode "G2" "T1" "F1")
     set(src_file "${SRC_DIR}/ragel/${bench}.rl")
-    set(gen_file "${GEN_DIR}/ragel/${bench}-${mode}.c")
-    set(pregen_file "${PREGEN_DIR}/ragel/${bench}-${mode}.c")
+    set(gen_file "${GEN_DIR}/ragel/${bench}.c")
+    set(pregen_file "${PREGEN_DIR}/ragel/${bench}.c")
     if(RE2C_REGEN_BENCHMARKS)
         file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
         file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
         add_custom_command(
             OUTPUT "${gen_file}"
-            COMMAND "${RAGEL}" "-${mode}" "${rel_src_file}" -o "${rel_gen_file}"
+            COMMAND "${RAGEL}" "-G2" "${rel_src_file}" -o "${rel_gen_file}"
             COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
             DEPENDS "${src_file}" "${RAGEL}"
         )
@@ -101,7 +100,6 @@ foreach(mode "G2" "T1" "F1")
         )
     endif()
     list(APPEND GEN "${gen_file}")
-endforeach()
 endforeach()
 
 # re2c
@@ -117,7 +115,7 @@ set(COMMON_RE2C
 )
 foreach(bench ${BENCHMARKS})
 foreach(eof "bc" "eof")
-foreach(alg "tdfa1" "tdfa1-es" "tdfa0" "stadfa")
+foreach(alg "tdfa1" "tdfa0" "stadfa")
     set(src_file "${SRC_DIR}/re2c/${bench}.re")
     set(gen_file "${GEN_DIR}/re2c/${bench}-${eof}-${alg}.c")
     set(pregen_file "${PREGEN_DIR}/re2c/${bench}-${eof}-${alg}.c")
