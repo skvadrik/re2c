@@ -450,6 +450,11 @@ TESTS = \
 	$(re2c_TESTSUITE) \
 	$(check_PROGRAMS)
 
+# benchmarks
+if WITH_BENCHMARKS
+SUBDIRS += benchmarks/submatch_dfa_aot
+endif
+
 # libre2c
 if WITH_LIBS
 ACLOCAL_AMFLAGS = -I m4
@@ -463,12 +468,4 @@ bin_PROGRAMS += re2go
 re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=LANG_GO
 re2go_SOURCES = $(re2c_SOURCES)
 nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
-endif
-
-# benchmarks
-if WITH_BENCHMARKS
-SUBDIRS += benchmarks/submatch_dfa_aot
-dist_bin_SCRIPTS = bench_submatch_dfa_aot.sh
-bench_submatch_dfa_aot.sh:
-	@cp -f $(top_srcdir)/benchmarks/submatch_dfa_aot/bench_submatch_dfa_aot.sh $@
 endif

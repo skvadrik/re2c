@@ -208,12 +208,6 @@ set(srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 set(builddir ".")
 configure_file(verify.sh.in verify.sh @ONLY)
 configure_file(run.sh.in run.sh @ONLY)
-add_custom_command(
-    TARGET benchmarks
-    COMMAND "${CMAKE_COMMAND}" -E copy
-        "${CMAKE_CURRENT_SOURCE_DIR}/bench_submatch_dfa_aot.sh"
-        "${CMAKE_BINARY_DIR}/bench_submatch_dfa_aot.sh"
-)
 
 # clean
 add_custom_target(clean_benchmarks)
