@@ -1,6 +1,6 @@
 add_executable(bench_submatch_nfa
     "bench.cc"
-    "${CMAKE_SOURCE_DIR}/benchmarks/common.cc"
+    "${CMAKE_SOURCE_DIR}/benchmarks/common/common.cc"
 )
 
 set_property(TARGET bench_submatch_nfa PROPERTY CXX_STANDARD 11)

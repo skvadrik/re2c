@@ -1,6 +1,6 @@
 add_executable(bench_submatch_dfa_jit
     "bench.cc"
-    "${CMAKE_SOURCE_DIR}/benchmarks/common.cc"
+    "${CMAKE_SOURCE_DIR}/benchmarks/common/common.cc"
 )
 
 set_property(TARGET bench_submatch_dfa_jit PROPERTY CXX_STANDARD 11)

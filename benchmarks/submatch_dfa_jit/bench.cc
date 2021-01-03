@@ -2,7 +2,13 @@
 #include <string.h>
 #include <time.h>
 
-#include "benchmarks/common.h"
+#include "benchmarks/common/common.h"
+#include "benchmarks/common/strings_atom.h"
+#include "benchmarks/common/strings_date.h"
+#include "benchmarks/common/strings_http.h"
+#include "benchmarks/common/strings_ipv4.h"
+#include "benchmarks/common/strings_ipv6.h"
+#include "benchmarks/common/strings_uri.h"
 #include "lib/regex.h"
 
 
@@ -46,42 +52,42 @@ int main()
     char *longstring = new char[VERY_LONG + 1];
 
     // http
-    load_strings_http(strings);
+    LOAD_STRINGS(strings, http);
     regexp = MESSAGE_HEAD;
     bench(regexp, strings, 10000, 0, 0);
     regexp = MESSAGE_HEAD2;
     bench(regexp, strings, 10000, 0, 0);
 
     // uri
-    load_strings_uri(strings);
+    LOAD_STRINGS(strings, uri);
     regexp = URI;
     bench(regexp, strings, 10000, 0, 0);
     regexp = URI2;
     bench(regexp, strings, 10000, 0, 0);
 
     // ipv6
-    load_strings_ipv6(strings);
+    LOAD_STRINGS(strings, ipv6);
     regexp = IPV6;
     bench(regexp, strings, 100000, 0, 0);
     regexp = IPV62;
     bench(regexp, strings, 100000, 0, 0);
 
     // ipv4
-    load_strings_ipv4(strings);
+    LOAD_STRINGS(strings, ipv4);
     regexp = IPV4;
     bench(regexp, strings, 1000000, 0, 0);
     regexp = IPV42;
     bench(regexp, strings, 1000000, 0, 0);
 
     // date
-    load_strings_date(strings);
+    LOAD_STRINGS(strings, date);
     regexp = DATE;
     bench(regexp, strings, 100000, 0, 0);
     regexp = DATE2;
     bench(regexp, strings, 100000, 0, 0);
 
     // atom
-    load_strings_atom(strings);
+    LOAD_STRINGS(strings, atom);
     regexp = PACKAGE_ATOM;
     bench(regexp, strings, 10000, 0, 0);
     regexp = PACKAGE_ATOM2;
