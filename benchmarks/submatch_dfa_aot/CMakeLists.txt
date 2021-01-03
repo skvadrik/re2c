@@ -201,7 +201,7 @@ foreach(input ${INPUTS})
     list(APPEND DAT "${dst_dir}/small" "${dst_dir}/big")
 endforeach()
 
-add_custom_target(benchmarks DEPENDS ${BIN} ${DAT})
+add_custom_target(benchmarks ALL DEPENDS ${BIN} ${DAT})
 
 # benchmark scripts
 set(srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -209,9 +209,8 @@ set(builddir ".")
 configure_file(verify.sh.in verify.sh @ONLY)
 configure_file(run.sh.in run.sh @ONLY)
 
-# clean
-add_custom_target(clean_benchmarks)
-add_custom_command(
-    TARGET clean_benchmarks
-    COMMAND "${CMAKE_COMMAND}" -E rm -f ${GEN} ${BIN} ${DAT}
+# override default clean command to keep engines (ragel, kleenex)
+set_directory_properties(PROPERTY
+    CLEAN_NO_CUSTOM On
+    ADDITIONAL_CLEAN_FILES "${GEN} ${BIN} ${DAT}"
 )
