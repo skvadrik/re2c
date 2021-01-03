@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 
-#include "benchmarks/common.h"
+#include "benchmarks/common/common.h"
 #include "lib/regex.h"
 
 #ifdef HAVE_RE2_RE2_H
@@ -157,118 +157,4 @@ void bench(const char *regexp, const std::vector<std::string> &strings, uint32_t
     }
 
     show(rs);
-}
-
-static void load_strings(std::vector<std::string> &strings,
-    const char *fname, const char *delim)
-{
-    FILE *f = fopen(fname, "r");
-    if (!f) {
-        fprintf(stderr, "cannot open file %s\n", fname);
-        exit(1);
-    }
-
-    fseek(f, 0, SEEK_END);
-    const size_t flen = static_cast<size_t>(ftell(f));
-    fseek(f, 0, SEEK_SET);
-
-    char *fbuf = new char[flen];
-    if (flen != fread(fbuf, 1, flen, f)) {
-        fprintf(stderr, "cannot read file %s\n", fname);
-        exit(1);
-    }
-
-    strings.clear();
-    const size_t dlen = strlen(delim);
-    for (char *p1 = fbuf, *p2 = fbuf, *p3 = fbuf + flen; p2 < p3; ) {
-        for (p1 = p2; p2 + dlen <= p3; ++p2) {
-            if (memcmp(p2, delim, dlen) == 0) {
-                p2 += dlen;
-                break;
-            }
-        }
-        strings.push_back(std::string(p1, static_cast<size_t>(p2 - p1 - 1)));
-    }
-
-    delete[] fbuf;
-    fclose(f);
-}
-
-void load_strings_http(std::vector<std::string> &strings)
-{
-    load_strings(strings, "../benchmarks/data/http", "\n\n");
-}
-
-void load_strings_uri(std::vector<std::string> &strings)
-{
-    load_strings(strings, "../benchmarks/data/uri", "\n");
-}
-
-void load_strings_atom(std::vector<std::string> &strings)
-{
-    load_strings(strings, "../benchmarks/data/atom", "\n");
-}
-
-void load_strings_date(std::vector<std::string> &strings)
-{
-    strings.clear();
-    strings.push_back("Mon Jan 01 2019 00:24:00 GMT");
-    strings.push_back("Tue Feb 02 2018 01:24:00 GMT");
-    strings.push_back("Wed Mar 03 2017 02:24:00 GMT");
-    strings.push_back("Thu Apr 04 2016 03:24:00 GMT");
-    strings.push_back("Fri May 05 2015 04:24:00 GMT");
-    strings.push_back("Sat Jun 06 2014 05:24:00 GMT");
-    strings.push_back("Sun Jul 07 2013 06:24:00 GMT");
-}
-
-void load_strings_ipv6(std::vector<std::string> &strings)
-{
-    strings.clear();
-    strings.push_back("fee2:586:10aa:fd03:37f:76ee:bed7:880");
-    strings.push_back("::fee2:586:fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2::586:fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2:586::fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2:586:fd03::37f:76ee:bed7:880");
-    strings.push_back("fee2:586:fd03:37f::76ee:bed7:880");
-    strings.push_back("fee2:586:fd03:37f:76ee::bed7:880");
-    strings.push_back("fee2:586:fd03:37f:76ee:bed7::880");
-    strings.push_back("fee2:586:fd03:37f:76ee:bed7:880::");
-    strings.push_back("::586:fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2::fd03:37f:76ee:bed7:880");
-    strings.push_back("fee2:fd03::37f:76ee:bed7:880");
-    strings.push_back("fee2:fd03:37f::76ee:bed7:880");
-    strings.push_back("fee2:fd03:37f:76ee::bed7:880");
-    strings.push_back("fee2:fd03:37f:76ee:bed7::880");
-    strings.push_back("fee2:fd03:37f:76ee:bed7:880::");
-    strings.push_back("::fd03:37f:76ee:bed7:880");
-    strings.push_back("fd03::37f:76ee:bed7:880");
-    strings.push_back("fd03:37f::76ee:bed7:880");
-    strings.push_back("fd03:37f:76ee::bed7:880");
-    strings.push_back("fd03:37f:76ee:bed7::880");
-    strings.push_back("fd03:fd03:37f:76ee:bed7::");
-    strings.push_back("::37f:76ee:bed7:880");
-    strings.push_back("fd03::76ee:bed7:880");
-    strings.push_back("fd03:37f::bed7:880");
-    strings.push_back("fd03:37f:76ee::880");
-    strings.push_back("fd03:37f:76ee:bed7::");
-    strings.push_back("::76ee:bed7:880");
-    strings.push_back("fd03::bed7:880");
-    strings.push_back("fd03:37f::880");
-    strings.push_back("fd03:37f:76ee::");
-    strings.push_back("::bed7:880");
-    strings.push_back("fd03::880");
-    strings.push_back("fd03:37f::");
-    strings.push_back("::bed7");
-    strings.push_back("fd03::");
-    strings.push_back("::");
-}
-
-void load_strings_ipv4(std::vector<std::string> &strings)
-{
-    strings.clear();
-    strings.push_back("127.0.0.1");
-    strings.push_back("192.168.1.200");
-    strings.push_back("255.255.255.255");
-    strings.push_back("8.8.8.8");
-    strings.push_back("240.147.163.34");
 }

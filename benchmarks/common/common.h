@@ -1,5 +1,5 @@
-#ifndef _RE2C_BENCHMRKS_COMMON_
-#define _RE2C_BENCHMRKS_COMMON_
+#ifndef _RE2C_BENCHMRKS_COMMON_COMMON_
+#define _RE2C_BENCHMRKS_COMMON_COMMON_
 
 #include <string>
 #include <vector>
@@ -33,13 +33,6 @@ extern const size_t nbenchmarks;
 
 void bench(const char *regexp, const std::vector<std::string> &strings, uint32_t times,
     int mask, int need);
-
-void load_strings_http(std::vector<std::string> &strings);
-void load_strings_uri(std::vector<std::string> &strings);
-void load_strings_atom(std::vector<std::string> &strings);
-void load_strings_date(std::vector<std::string> &strings);
-void load_strings_ipv6(std::vector<std::string> &strings);
-void load_strings_ipv4(std::vector<std::string> &strings);
 
 void show(const std::vector<Result> &results);
 
@@ -143,4 +136,13 @@ void show(const std::vector<Result> &results);
 #define PACKAGE_VER2    "([0-9.a-z_]+)"
 #define PACKAGE_ATOM2   PACKAGE_STR2 "-" PACKAGE_VER2 PACKAGE_REV
 
-#endif // _RE2C_BENCHMRKS_COMMON_
+#define LOAD_STRINGS(strings, name) do { \
+    const size_t n = sizeof(name##_strings)/sizeof(name##_strings[0]); \
+    strings.clear(); \
+    strings.reserve(n); \
+    for (size_t i = 0; i < n; ++i) { \
+        strings.push_back(name##_strings[i]); \
+    } \
+} while(0)
+
+#endif // _RE2C_BENCHMRKS_COMMON_COMMON_
