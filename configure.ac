@@ -157,7 +157,9 @@ AC_CHECK_SIZEOF([0i8],       [], [[]])
 
 AC_CONFIG_FILES([\
     Makefile \
+    benchmarks/submatch_nfa/Makefile \
     benchmarks/submatch_dfa_aot/Makefile \
+    benchmarks/submatch_dfa_jit/Makefile \
     doc/manpage.rst \
     doc/help.rst \
 ])
