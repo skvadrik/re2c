@@ -1,0 +1,78 @@
+name: benchmarks
+
+on:
+  # allow to trigger manually (on default branch)
+  workflow_dispatch:
+
+  # run once a week
+  schedule:
+    - cron: '0 0 * * 0'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-and-run:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+
+        include:
+          # Linux
+          - name: linux-gcc
+            os: ubuntu-latest
+
+          # macOS
+          - name: macos-clang
+            os: macos-latest
+
+          # no Windows, as Kleenex generates non-portable C code
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup
+        run: |
+          case ${{ runner.os }} in
+            Linux*)
+              echo "CC=gcc" >> $GITHUB_ENV
+              echo "CXX=g++" >> $GITHUB_ENV
+              sudo apt-get install libre2-dev
+              ;;
+            macOS*)
+              sudo xcode-select -switch /Applications/Xcode.app
+              echo "CC=$(xcrun -f clang)" >> $GITHUB_ENV
+              echo "CXX=$(xcrun -f clang++)" >> $GITHUB_ENV
+              echo "SDKROOT=$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_ENV
+              echo "$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_PATH
+              brew install re2
+              ;;
+          esac
+
+      - name: Configure
+        run: |
+          cmake -S . -B .build \
+            -G "Unix Makefiles" \
+            -DRE2C_BUILD_LIBS=ON \
+            -DRE2C_BUILD_RE2GO=OFF \
+            -DRE2C_BUILD_BENCHMARKS=ON \
+            -DCMAKE_CXX_FLAGS="-O3"
+
+      - name: Build
+        run: cmake --build .build
+
+      - name: Run submatch DFA AOT benchmark
+        working-directory: .build/benchmarks/submatch_dfa_aot
+        run: ./verify.sh --small && ./run.sh 5
+
+      - name: Run submatch DFA JIT benchmark
+        working-directory: .build/benchmarks/submatch_dfa_jit
+        run: ./bench_submatch_dfa_jit
+
+      - name: Run submatch NFA benchmark
+        working-directory: .build/benchmarks/submatch_nfa
+        run: ./bench_submatch_nfa
