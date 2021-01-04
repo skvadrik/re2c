@@ -201,7 +201,7 @@ foreach(input ${INPUTS})
     list(APPEND DAT "${dst_dir}/small" "${dst_dir}/big")
 endforeach()
 
-add_custom_target(benchmarks ALL DEPENDS ${BIN} ${DAT})
+add_custom_target(bench_submatch_dfa_aot ALL DEPENDS ${BIN} ${DAT})
 
 # benchmark scripts
 set(srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
