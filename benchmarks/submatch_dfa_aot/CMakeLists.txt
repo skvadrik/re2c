@@ -151,7 +151,7 @@ endforeach()
 
 # binaries
 set(BIN "")
-set(CFLAGS "-O3" "-g" "-I" "${SRC_DIR}")
+set(CFLAGS "-O3" "-I" "${SRC_DIR}")
 set(COMMON_SRC "${SRC_DIR}/common.h")
 file(MAKE_DIRECTORY "${BIN_DIR}/kleenex/")
 file(MAKE_DIRECTORY "${BIN_DIR}/ragel/")
