@@ -36,17 +36,18 @@ static void bench_re2c(std::vector<Result> &results, const char *regexp,
     const size_t nmatch = re.re_nsub;
     regmatch_t *pmatch = new regmatch_t[nmatch];
 
-    // first time is warmup
-    for (size_t k = 0; k < 2; ++k) {
-        t3 = clock();
-        err = 0;
-        for (size_t j = 0; j < strings.size(); ++j) {
-            for (size_t i = 0; i < ntimes; ++i) {
-                err |= regexec(&re, strings[j].c_str(), nmatch, pmatch, 0);
-            }
-        }
-        t4 = clock();
+    // warmup
+    for (size_t j = 0; j < strings.size(); ++j) {
+        regexec(&re, strings[j].c_str(), nmatch, pmatch, 0);
     }
+    t3 = clock();
+    err = 0;
+    for (size_t j = 0; j < strings.size(); ++j) {
+        for (size_t i = 0; i < ntimes; ++i) {
+            err |= regexec(&re, strings[j].c_str(), nmatch, pmatch, 0);
+        }
+    }
+    t4 = clock();
     if (err) {
         fprintf(stderr, "*** %s run failed\n", prefix);
         exit(1);
@@ -89,16 +90,17 @@ static void bench_re2(std::vector<Result> &results, const char *regexp,
         argps[i] = &args[i];
     }
 
-    // first time is warmup
-    for (size_t k = 0; k < 2; ++k) {
-        t3 = clock();
-        for (size_t j = 0; j < strings.size(); ++j) {
-            for (size_t i = 0; i < ntimes; ++i) {
-                ok = ok && RE2::FullMatchN(strings[j].c_str(), *re2, argps, argc);
-            }
-        }
-        t4 = clock();
+    // warmup
+    for (size_t j = 0; j < strings.size(); ++j) {
+        RE2::FullMatchN(strings[j].c_str(), *re2, argps, argc);
     }
+    t3 = clock();
+    for (size_t j = 0; j < strings.size(); ++j) {
+        for (size_t i = 0; i < ntimes; ++i) {
+            ok = ok && RE2::FullMatchN(strings[j].c_str(), *re2, argps, argc);
+        }
+    }
+    t4 = clock();
     if (!ok) {
         fprintf(stderr, "*** %s run failed\n", prefix);
         exit(1);

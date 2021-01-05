@@ -38,9 +38,10 @@ void show(const std::vector<Result> &results)
         if (r.ticks_run == UNAVAIL) {
             fprintf(stderr, "%30s:%10s%10s\n", r.title, "-", "-");
         } else {
-            fprintf(stderr, "%30s:%10.2lf%10.3lfs\n", r.title,
+            fprintf(stderr, "%30s:%10.2lf%10.3lfs%10lu\n", r.title,
                 double(r.ticks_run) / double(ticks0),
-                double(r.ticks_run) / CLOCKS_PER_SEC);
+                double(r.ticks_run) / CLOCKS_PER_SEC,
+                r.ticks_run);
         }
     }
 }
@@ -49,23 +50,22 @@ int main()
 {
     const char *regexp;
     std::vector<std::string> strings;
-    static const size_t VERY_LONG = (1 << 14) + 1;
-    static const size_t TIMES = 10;
+    static const size_t VERY_LONG = (1 << 13) + 1;
     char *longstring = new char[VERY_LONG + 1];
 
     // http
     LOAD_STRINGS(strings, http);
     regexp = MESSAGE_HEAD;
-    bench(regexp, strings, 100, REG_BACKWARD | REG_STADFA, 0);
+    bench(regexp, strings, 10, REG_BACKWARD | REG_STADFA, 0);
     regexp = MESSAGE_HEAD2;
-    bench(regexp, strings, 100, REG_BACKWARD, 0);
+    bench(regexp, strings, 10, REG_BACKWARD, 0);
 
     // uri
     LOAD_STRINGS(strings, uri);
     regexp = URI;
-    bench(regexp, strings, 100, REG_BACKWARD | REG_STADFA, 0);
+    bench(regexp, strings, 10, REG_BACKWARD | REG_STADFA, 0);
     regexp = URI2;
-    bench(regexp, strings, 100, 0, 0);
+    bench(regexp, strings, 10, 0, 0);
 
     // ipv6
     LOAD_STRINGS(strings, ipv6);
@@ -102,43 +102,43 @@ int main()
     strings.push_back(longstring);
 
     regexp = "(a{2}|a{3}|a{5})*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(a{7}|a{13}|a{19})*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(a{29}|a{41}|a{53})*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(a{67}|a{83}|a{103})*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(a{127}|a{151}|a{179})*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(a{199}|a{239}|a{271})*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
 
     regexp = "(((a){2})|((a){3})|((a){5}))*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(((a){7})|((a){13})|((a){19}))*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(((a){29})|((a){41})|((a){53}))*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(((a){67})|((a){83})|((a){103}))*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(((a){127})|((a){151})|((a){179}))*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
     regexp = "(((a){199})|((a){239})|((a){271}))*";
-    bench(regexp, strings, TIMES, 0, 0);
+    bench(regexp, strings, 1, 0, 0);
 
-    regexp = "(a{0,1})*";
+    regexp = "(a{0,16})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "(a{0,64})*";
     bench(regexp, strings, 1, 0, 0);
     regexp = "(a{0,256})*";
     bench(regexp, strings, 1, 0, 0);
-    regexp = "(a{0,512})*";
-    bench(regexp, strings, 1, 0, 0);
 
-    regexp = "((a){0,1})*";
+    regexp = "((a){0,16})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "((a){0,64})*";
     bench(regexp, strings, 1, 0, 0);
     regexp = "((a){0,256})*";
-    bench(regexp, strings, 1, 0, 0);
-    regexp = "((a){0,512})*";
     bench(regexp, strings, 1, 0, 0);
 
     // Pathological case for constant-memory POSIX algorithms that use naive
@@ -150,18 +150,18 @@ int main()
     // affected, but they consume memory proportional to the length of input,
     // and so are also not practical.
 
-    regexp = "((a?){0,1})*";
+    regexp = "((a?){0,16})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "((a?){0,64})*";
     bench(regexp, strings, 1, 0, 0);
     regexp = "((a?){0,256})*";
     bench(regexp, strings, 1, 0, 0);
-    regexp = "((a?){0,512})*";
-    bench(regexp, strings, 1, 0, 0);
 
-    regexp = "((a*){0,1})*";
+    regexp = "((a*){0,16})*";
+    bench(regexp, strings, 1, 0, 0);
+    regexp = "((a*){0,64})*";
     bench(regexp, strings, 1, 0, 0);
     regexp = "((a*){0,256})*";
-    bench(regexp, strings, 1, 0, 0);
-    regexp = "((a*){0,512})*";
     bench(regexp, strings, 1, 0, 0);
 
     delete[] longstring;
