@@ -72,7 +72,7 @@ for compiler in gcc clang ; do
             # binary size
             cp "$builddir/bin/$engine/$(basename $log)" tmp
             strip tmp
-            binsize=$(stat -c%s tmp)
+            binsize=$(ls -s tmp | cut -d' ' -f1)
             rm tmp
 
             printf "%-40s%-10s%-10.2lf%-10d\n" \
