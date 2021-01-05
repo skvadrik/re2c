@@ -42,9 +42,6 @@ run() {
     done
 }
 
-# build
-make -j$(nproc)
-
 rm -rf "$logdir" && mkdir -p "$logdir"
 
 # select benchmarks to run
