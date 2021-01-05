@@ -51,6 +51,7 @@ foreach(bench ${KLEENEX_BENCHMARKS})
     set(src_file "${SRC_DIR}/kleenex/${bench}.kex")
     set(gen_file "${GEN_DIR}/kleenex/${bench}.c")
     set(pregen_file "${PREGEN_DIR}/kleenex/${bench}.c")
+    # optionally regenerate kleenex benchmarks if RE2C_REGEN_BENCHMARKS is set
     if(RE2C_REGEN_BENCHMARKS)
         file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
         file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
@@ -83,6 +84,7 @@ foreach(bench ${BENCHMARKS})
     set(src_file "${SRC_DIR}/ragel/${bench}.rl")
     set(gen_file "${GEN_DIR}/ragel/${bench}.c")
     set(pregen_file "${PREGEN_DIR}/ragel/${bench}.c")
+    # optionally regenerate ragel benchmarks if RE2C_REGEN_BENCHMARKS is set
     if(RE2C_REGEN_BENCHMARKS)
         file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
         file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
@@ -119,31 +121,24 @@ foreach(alg "tdfa1" "tdfa0" "stadfa")
     set(src_file "${SRC_DIR}/re2c/${bench}.re")
     set(gen_file "${GEN_DIR}/re2c/${bench}-${eof}-${alg}.c")
     set(pregen_file "${PREGEN_DIR}/re2c/${bench}-${eof}-${alg}.c")
-    if(RE2C_REGEN_BENCHMARKS)
-        file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
-        file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
-        file(RELATIVE_PATH rel_inc_path "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DIR}/re2c/include_${eof}")
-        set(re2c_flags ${RE2C_FLAGS} "-I" "${rel_inc_path}")
-        if("${alg}" STREQUAL "tdfa1-es")
-            set(re2c_flags ${re2c_flags} "--eager-skip")
-        elseif("${alg}" STREQUAL "tdfa0")
-            set(re2c_flags ${re2c_flags} "--no-lookahead")
-        elseif("${alg}" STREQUAL "stadfa")
-            set(re2c_flags ${re2c_flags} "--stadfa")
-        endif()
-        add_custom_command(
-            OUTPUT "${gen_file}"
-            COMMAND "${RE2C}" ${re2c_flags} "${rel_src_file}" -o "${rel_gen_file}"
-            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
-            DEPENDS "${src_file}" ${COMMON_RE2C} "${RE2C}"
-        )
-    else()
-        add_custom_command(
-            OUTPUT "${gen_file}"
-            COMMAND "${CMAKE_COMMAND}" -E copy "${pregen_file}" "${gen_file}"
-            DEPENDS "${pregen_file}"
-        )
+    # always regenerate re2c benchmarks (regardless of RE2C_REGEN_BENCHMARKS)
+    file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
+    file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
+    file(RELATIVE_PATH rel_inc_path "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DIR}/re2c/include_${eof}")
+    set(re2c_flags ${RE2C_FLAGS} "-I" "${rel_inc_path}")
+    if("${alg}" STREQUAL "tdfa1-es")
+        set(re2c_flags ${re2c_flags} "--eager-skip")
+    elseif("${alg}" STREQUAL "tdfa0")
+        set(re2c_flags ${re2c_flags} "--no-lookahead")
+    elseif("${alg}" STREQUAL "stadfa")
+        set(re2c_flags ${re2c_flags} "--stadfa")
     endif()
+    add_custom_command(
+        OUTPUT "${gen_file}"
+        COMMAND "${RE2C}" ${re2c_flags} "${rel_src_file}" -o "${rel_gen_file}"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
+        DEPENDS "${src_file}" ${COMMON_RE2C} "${RE2C}"
+    )
     list(APPEND GEN "${gen_file}")
 endforeach()
 endforeach()

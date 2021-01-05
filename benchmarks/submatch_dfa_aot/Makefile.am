@@ -90,12 +90,7 @@ DAT = $(patsubst %, $(DAT_DIR)/%/big, \
 
 all-local: $(BIN) $(DAT)
 
-if REGEN_BENCHMARKS
-
-$(GEN_RAGEL): $(GEN_DIR)/%.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
-	$(AM_V_at)mkdir -p $(@D)
-	$(AM_V_GEN)$(RAGEL) -G2 $< -o $@
-	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/ragel/$(@F) ; then cp -f $@ $(PREGEN_DIR)/ragel/$(@F) ; fi
+# always regenerate re2c benchmarks
 
 $(GEN_RE2C_BC_TDFA1): $(GEN_DIR)/%-bc-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	$(AM_V_at)mkdir -p $(@D)
@@ -127,6 +122,14 @@ $(GEN_RE2C_EOF_STADFA): $(GEN_DIR)/%-eof-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C
 	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_EOF) --stadfa $< -o $@
 	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
+# optionally regenerate ragel and kleenex benchmarks
+if REGEN_BENCHMARKS
+
+$(GEN_RAGEL): $(GEN_DIR)/%.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RAGEL) -G2 $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/ragel/$(@F) ; then cp -f $@ $(PREGEN_DIR)/ragel/$(@F) ; fi
+
 $(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex $(KLEENEX)
 	$(AM_V_at)mkdir -p $(@D)
 	$(AM_V_GEN)$(KLEENEX) compile $< --srcout $@ --act=false --la=true
@@ -134,7 +137,7 @@ $(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex $(KLEENEX)
 
 else
 
-$(GEN): $(GEN_DIR)/%: $(PREGEN_DIR)/%
+$(GEN_RAGEL) $(GEN_KLEENEX): $(GEN_DIR)/%: $(PREGEN_DIR)/%
 	$(AM_V_at)mkdir -p $(@D)
 	$(AM_V_GEN)cp -f $< $@
 
