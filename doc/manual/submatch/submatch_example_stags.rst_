@@ -1,5 +1,2 @@
-Here is an example of using s-tags to parse a file with IPv4 addresses.
-It shows how tags should be handled in the more complex case when ``YYFILL`` is
-used: tag variables should be part of the lexer state, shifted like other input
-positions by ``YYFILL``. (In the simpler case when buffer refilling is not
-needed, tag variables can be defined as local variables.)
+Here is a simple example of using s-tags to parse an IPv4 address
+(see below for a more complex example that uses ``YYFILL``).

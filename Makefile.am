@@ -242,6 +242,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/submatch/submatch_example_mtags.rst_ \
 	doc/manual/submatch/submatch_example_posix.rst_ \
 	doc/manual/submatch/submatch_example_stags.rst_ \
+	doc/manual/submatch/submatch_example_stags_fill.rst_ \
 	doc/manual/submatch/submatch.rst_ \
 	doc/manual/syntax/syntax.rst_ \
 	doc/manual/warnings/warnings_general.rst_ \
@@ -262,6 +263,7 @@ re2c_SRC_DOC_EXT = \
 	examples/c/reuse/reuse.re \
 	examples/c/state/push.re \
 	examples/c/submatch/01_stags.re \
+	examples/c/submatch/01_stags_fill.re \
 	examples/c/submatch/02_mtags.re \
 	examples/c/submatch/03_posix.re \
 	examples/go/01_basic.re \

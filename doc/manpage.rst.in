@@ -151,6 +151,10 @@ Submatch extraction
 .. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags.re
     :literal:
     :code: RE2C_LANG
+.. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags_fill.rst_
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags_fill.re
+    :literal:
+    :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_posix.rst_
 .. include:: @top_srcdir@/examples/RE2C_LANG/submatch/03_posix.re
     :literal:

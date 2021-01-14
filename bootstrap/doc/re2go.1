@@ -2380,11 +2380,95 @@ of tag values; a more efficient representation is to store all m\-tags in a
 prefix\-tree represented as array of nodes \fB(v, p)\fP, where \fBv\fP is tag value
 and \fBp\fP is a pointer to parent node.
 .sp
-Here is an example of using s\-tags to parse a file with IPv4 addresses.
-It shows how tags should be handled in the more complex case when \fBYYFILL\fP is
-used: tag variables should be part of the lexer state, shifted like other input
-positions by \fBYYFILL\fP\&. (In the simpler case when buffer refilling is not
-needed, tag variables can be defined as local variables.)
+Here is a simple example of using s\-tags to parse an IPv4 address
+(see below for a more complex example that uses \fBYYFILL\fP).
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+//go:generate re2go $INPUT \-o $OUTPUT
+package main
+
+import (
+    "errors"
+    "testing"
+)
+
+var eBadIP error = errors.New("bad IP")
+
+func lex(str string) (int, error) {
+    var cursor, marker, o1, o2, o3, o4 int
+    /*!stags:re2c format = \(aqvar @@ int\(aq; separator = "\en\et"; */
+
+    num := func(pos int, end int) int {
+        n := 0
+        for ; pos < end; pos++ {
+            n = n*10 + int(str[pos]\-\(aq0\(aq)
+        }
+        return n
+    }
+
+    /*!re2c
+    re2c:flags:tags = 1;
+    re2c:yyfill:enable = 0;
+    re2c:define:YYCTYPE   = byte;
+    re2c:define:YYPEEK    = "str[cursor]";
+    re2c:define:YYSKIP    = "cursor += 1";
+    re2c:define:YYBACKUP  = "marker = cursor";
+    re2c:define:YYRESTORE = "cursor = marker";
+    re2c:define:YYSTAGP   = "@@{tag} = cursor";
+    re2c:define:YYSTAGN   = "@@{tag} = \-1";
+
+    octet = [0\-9] | [1\-9][0\-9] | [1][0\-9][0\-9] | [2][0\-4][0\-9] | [2][5][0\-5];
+    dot = [.];
+    end = [\ex00];
+
+    @o1 octet dot @o2 octet dot @o3 octet dot @o4 octet end {
+        return num(o4, cursor\-1)+
+            (num(o3, o4\-1) << 8)+
+            (num(o2, o3\-1) << 16)+
+            (num(o1, o2\-1) << 24), nil
+    }
+    * { return 0, eBadIP }
+    */
+}
+
+func TestLex(t *testing.T) {
+    var tests = []struct {
+        str string
+        res int
+        err error
+    }{
+        {"1.2.3.4\e000", 0x01020304, nil},
+        {"127.0.0.1\e000", 0x7f000001, nil},
+        {"255.255.255.255\e000", 0xffffffff, nil},
+        {"1.2.3.\e000", 0, eBadIP},
+        {"1.2.3.256\e000", 0, eBadIP},
+    }
+
+    for _, x := range tests {
+        t.Run(x.str, func(t *testing.T) {
+            res, err := lex(x.str)
+            if !(res == x.res && err == x.err) {
+                t.Errorf("got %d, want %d", res, x.res)
+            }
+        })
+    }
+}
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Here is a more complex example of using s\-tags with \fBYYFILL\fP to parse a file
+with IPv4 addresses. Tag variables are part of the lexer state, and they are
+adjusted in \fBYYFILL\fP like other input positions.
+Note that it is necessary for s\-tags because their values are invalidated after
+shifting buffer contents. It may not be necessary in a custom implementation
+where tag variables store offsets relative to the start of the input string
+rather than buffer, which may be the case with m\-tags.
 .INDENT 0.0
 .INDENT 3.5
 .sp
