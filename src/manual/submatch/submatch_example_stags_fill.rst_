@@ -1,0 +1,7 @@
+Here is a more complex example of using s-tags with ``YYFILL`` to parse a file
+with IPv4 addresses. Tag variables are part of the lexer state, and they are
+adjusted in ``YYFILL`` like other input positions.
+Note that it is necessary for s-tags because their values are invalidated after
+shifting buffer contents. It may not be necessary in a custom implementation
+where tag variables store offsets relative to the start of the input string
+rather than buffer, which may be the case with m-tags.

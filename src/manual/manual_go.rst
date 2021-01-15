@@ -135,6 +135,9 @@ Submatch extraction
 .. include:: /manual/submatch/submatch_example_stags.rst_
 .. literalinclude:: ../examples/go/submatch/01_stags.re
     :language: go
+.. include:: /manual/submatch/submatch_example_stags_fill.rst_
+.. literalinclude:: ../examples/go/submatch/01_stags_fill.re
+    :language: go
 .. include:: /manual/submatch/submatch_example_posix.rst_
 .. literalinclude:: ../examples/go/submatch/03_posix.re
     :language: go
