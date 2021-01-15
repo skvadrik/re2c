@@ -111,8 +111,10 @@ div.sphinxsidebarwrapper h6 {
 }
 div.sphinxsidebarwrapper div.re2c-logo {
     background-color: silver;
-    font-family: Courier, monospace;
+    font-family: monospace;
     font-size: 150%;
+    font-style: italic;
+    color: slategray;
     text-align: center;
     border: 1px solid darkgray;
     overflow: hidden;
