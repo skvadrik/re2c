@@ -23,15 +23,15 @@
 .highlight .cp  { color: steelblue; } /* Comment.Preproc   */
 .highlight .cpf { color: steelblue; } /* Comment.Preproc ? */
 
-.highlight .k  { color: steelblue; } /* Keyword      */
-.highlight .kt { color: midnightblue; } /* Keyword.Type */
+.highlight .k  { color: darkslateblue; } /* Keyword      */
+.highlight .kt { color: darkslateblue; } /* Keyword.Type */
 
-.highlight .m  { color: darkslateblue; } /* Literal.Number */
-.highlight .mf { color: darkslateblue; } /* Literal.Number.Float */
-.highlight .mh { color: darkslateblue; } /* Literal.Number.Hex */
-.highlight .mi { color: darkslateblue; } /* Literal.Number.Integer */
-.highlight .mo { color: darkslateblue; } /* Literal.Number.Oct */
-.highlight .il { color: darkslateblue; } /* Literal.Number.Integer.Long */
+.highlight .m  { color: steelblue; } /* Literal.Number */
+.highlight .mf { color: steelblue; } /* Literal.Number.Float */
+.highlight .mh { color: steelblue; } /* Literal.Number.Hex */
+.highlight .mi { color: steelblue; } /* Literal.Number.Integer */
+.highlight .mo { color: steelblue; } /* Literal.Number.Oct */
+.highlight .il { color: steelblue; } /* Literal.Number.Integer.Long */
 
 .highlight .s  { color: #a08080; } /* Literal.String */
 .highlight .sb { color: #a08080; } /* Literal.String.Backtick */
