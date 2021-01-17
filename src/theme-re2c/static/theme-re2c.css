@@ -6,10 +6,11 @@ body {
 }
 
 div.document {
-    margin: 0 0 0 360px;
+    margin: 0 0 0 370px;
     padding: 1em;
     text-align: justify;
     color: darkslategray;
+    line-height: 1.5;
 }
 div.document a { color: steelblue; }
 div.document h1,
@@ -50,8 +51,9 @@ div.document div.math img {
     margin: auto;
 }
 div.document code {
-    font-size: 85%;
-    padding: 1px;
+    font-family: monospace;
+    font-size: 13px;
+    padding: 1px 3px 1px 3px;
     border: 1px solid lightgray;
     background-color: aliceblue;
 }
@@ -73,7 +75,7 @@ div.document dl > dd > p {
 }
 
 div.footer {
-    margin: 0 0 0 360px;
+    margin: 0 0 0 370px;
     padding: 1em;
     float: right;
     font-style: italic;
@@ -82,7 +84,7 @@ div.footer {
 
 div.sphinxsidebar {
     border-right: 1px solid darkgray;
-    min-width: 360px;
+    width: 370px;
     text-align: left;
     position: fixed;
     background-color: gainsboro;
@@ -97,6 +99,7 @@ div.sphinxsidebarwrapper {
 div.sphinxsidebarwrapper ul {
     list-style-type: disc;
     padding: 0 0 0 1em;
+    margin: 0;
     font-size: 90%;
     color: darkgray;
 }
@@ -121,6 +124,7 @@ div.sphinxsidebarwrapper div.re2c-logo {
 }
 div.re2c-toc-global {
     font-size: 115%;
+    line-height: 1.4;
 }
 div.re2c-toc-local {
     padding: 0.5em;
@@ -128,7 +132,7 @@ div.re2c-toc-local {
     border: 1px solid darkgray;
     overflow: auto;
     font-size: 115%;
-    line-height: 100%;
+    line-height: 1.4;
 }
 
 /* searchbox */
@@ -173,7 +177,7 @@ a:focus { outline: none; }
         margin: 0;
     }
     body {
-        font-size: 150%;
+        font-size: 100%;
     }
 }
 
