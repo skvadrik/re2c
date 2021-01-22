@@ -166,8 +166,7 @@ nodist_libre2c_la_SOURCES = $(libre2c_la_GEN)
 
 EXTRA_DIST += \
 	$(libre2c_la_BOOTSTRAP) \
-	$(libre2c_la_CUSTOM) \
-	benchmarks/data
+	$(libre2c_la_CUSTOM)
 
 CLEANFILES += $(libre2c_la_GEN)
 

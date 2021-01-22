@@ -296,16 +296,6 @@ man_MANS = $(DOCS)
 # include files (stdlib)
 dist_stdlib_DATA = include/unicode_categories.re
 
-CMAKEFILES = \
-	CMakeLists.txt \
-	cmake/Re2cAutotoolsHelpers.cmake \
-	cmake/Re2cBootstrapLexer.cmake \
-	cmake/Re2cBootstrapParser.cmake \
-	cmake/Re2cGenDocs.cmake \
-	cmake/Re2cTryCXXFlag.cmake \
-	cmake/Toolchain-cross-mingw32-linux.cmake \
-	cmake/Toolchain-cross-mingw64-linux.cmake
-
 EXTRA_DIST = \
 	$(re2c_BOOT) \
 	$(re2c_CUSTOM) \
@@ -315,10 +305,11 @@ EXTRA_DIST = \
 	NO_WARRANTY \
 	README.md \
 	autogen.sh \
+	benchmarks \
 	build \
+	cmake \
 	examples \
-	test \
-	$(CMAKEFILES)
+	test
 
 CLEANFILES = \
 	$(re2c_GEN) \
