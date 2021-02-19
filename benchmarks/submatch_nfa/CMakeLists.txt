@@ -7,6 +7,9 @@ set_property(TARGET bench_submatch_nfa PROPERTY CXX_STANDARD 11)
 
 target_link_libraries(bench_submatch_nfa libre2c)
 
+find_package(benchmark REQUIRED)
+target_link_libraries(bench_submatch_nfa benchmark::benchmark)
+
 # if present, re2 is used for benchmarks
 find_path(RE2_INCLUDE_DIRECTORY "re2/re2.h")
 find_library(RE2_LIBRARY re2)

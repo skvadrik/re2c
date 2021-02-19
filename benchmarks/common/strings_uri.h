@@ -55,7 +55,8 @@ static const char *uri_strings[] = {
     "http://rdbfmbaf:GrYcY4u29MIh@zgfqtbewiz.cgfgzqgpnp.pwfslpyfzs.yndq.ryn/xaubwwwskxajwtmooz/wexfwfmc/ksbqjuesya/irkfredpblhqlofankgv/kdmjaazfgwnqqvycufmazpy/pkejffkwqehzzigfmpghurj/ghruhwkcwljeyjqx/hlcytprgyGdAym#bluC5",
     "https://en.wikipedia.org",
     "http://re2c.org",
-    "https://google.com"
+    "https://google.com",
+    NULL
 };
 
 #endif // _RE2C_BENCHMRKS_COMMON_STRINGS_URI_

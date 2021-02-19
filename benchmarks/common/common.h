@@ -1,40 +1,38 @@
 #ifndef _RE2C_BENCHMRKS_COMMON_COMMON_
 #define _RE2C_BENCHMRKS_COMMON_COMMON_
 
+#include <benchmark/benchmark.h>
 #include <string>
 #include <vector>
 
 #include "src/util/c99_stdint.h"
 
 
-static const uint64_t UNAVAIL = 0xFFFFffffFFFFffff;
-static const int XREG_RE2 = 1 << 30;
-
 enum engine_t {
     ENGINE_RE2C,
     ENGINE_RE2
 };
 
-struct benchmark_t {
+struct alg_t {
     const char *name;
     engine_t engine;
     int flags;
 };
 
-struct Result
-{
-    const char *title;
-    uint64_t ticks_gen;
-    uint64_t ticks_run;
+struct bench_t {
+    const char *name;
+    const char *regexp;
+    const char **strings;
+    int not_flags;
 };
 
-extern const benchmark_t benchmarks[];
-extern const size_t nbenchmarks;
-
-void bench(const char *regexp, const std::vector<std::string> &strings, uint32_t times,
-    int mask, int need);
-
-void show(const std::vector<Result> &results);
+// Need to define benchmarks as functors for benchmark::RegisterBenchmark.
+struct bench_regcomp_t {
+    void operator()(benchmark::State&, const alg_t&, const bench_t&) const;
+};
+struct bench_regexec_t {
+    void operator()(benchmark::State&, const alg_t&, const bench_t&) const;
+};
 
 // RFC URI and HTTP
 #define CRLF           "[\\n]"
@@ -135,14 +133,5 @@ void show(const std::vector<Result> &results);
 #define PACKAGE_STR2    "([a-zA-Z0-9_/+-]+)"
 #define PACKAGE_VER2    "([0-9.a-z_]+)"
 #define PACKAGE_ATOM2   PACKAGE_STR2 "-" PACKAGE_VER2 PACKAGE_REV
-
-#define LOAD_STRINGS(strings, name) do { \
-    const size_t n = sizeof(name##_strings)/sizeof(name##_strings[0]); \
-    strings.clear(); \
-    strings.reserve(n); \
-    for (size_t i = 0; i < n; ++i) { \
-        strings.push_back(name##_strings[i]); \
-    } \
-} while(0)
 
 #endif // _RE2C_BENCHMRKS_COMMON_COMMON_

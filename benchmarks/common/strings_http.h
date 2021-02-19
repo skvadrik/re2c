@@ -298,6 +298,8 @@ static const char *http_strings[] = {
     "Accept-Charset: utf-8\n"
     "Allow: GET, HEAD\n"
     "Age: 12345\n"
+,
+    NULL
 };
 
 #endif // _RE2C_BENCHMRKS_COMMON_STRINGS_HTTP_

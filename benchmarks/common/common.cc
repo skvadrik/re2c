@@ -1,11 +1,3 @@
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <vector>
-#include <string>
-
 #include "benchmarks/common/common.h"
 #include "lib/regex.h"
 
@@ -14,74 +6,88 @@
 #endif
 
 
-static void bench_re2c(std::vector<Result> &results, const char *regexp,
-    const std::vector<std::string> &strings, size_t ntimes,
-    int flags, int mask, int need, const char *prefix)
+static void add_counters(benchmark::State &state, const alg_t &,
+    const bench_t &bench, int captures)
 {
-    Result x = {prefix, UNAVAIL, UNAVAIL};
-    if ((flags & mask) || (need != 0 && !(flags & need))) return;
+    size_t bytes = 0;
+    for (const char **s = bench.strings; *s; ++s) {
+        bytes += strlen(*s);
+    }
 
-    regex_t re;
-    int err;
-    clock_t t1 = 0, t2 = 0, t3 = 0, t4 = 0;
+    state.counters["captures"] = double(captures);
+    state.counters["regsize"] = double(strlen(bench.regexp));
+}
 
-    t1 = clock();
-    err = regcomp(&re, regexp, flags);
-    t2 = clock();
+void bench_regcomp_re2c(benchmark::State& state, const alg_t &alg, const bench_t &bench)
+{
+    int err = 0;
+    size_t nmatch = 0;
+
+    for (auto _ : state) {
+        regex_t re;
+        err = regcomp(&re, bench.regexp, alg.flags);
+        nmatch = re.re_nsub;
+        regfree(&re);
+    }
     if (err) {
-        fprintf(stderr, "*** %s compile failed\n", prefix);
-        exit(1);
+        state.SkipWithError("regcomp failed");
+    }
+
+    add_counters(state, alg, bench, int(nmatch) - 1);
+}
+
+void bench_regexec_re2c(benchmark::State& state, const alg_t &alg, const bench_t &bench)
+{
+    regex_t re;
+    int err = regcomp(&re, bench.regexp, alg.flags);
+    if (err) {
+        state.SkipWithError("regcomp failed");
     }
 
     const size_t nmatch = re.re_nsub;
     regmatch_t *pmatch = new regmatch_t[nmatch];
 
-    // warmup
-    for (size_t j = 0; j < strings.size(); ++j) {
-        regexec(&re, strings[j].c_str(), nmatch, pmatch, 0);
-    }
-    t3 = clock();
-    err = 0;
-    for (size_t j = 0; j < strings.size(); ++j) {
-        for (size_t i = 0; i < ntimes; ++i) {
-            err |= regexec(&re, strings[j].c_str(), nmatch, pmatch, 0);
+    for (auto _ : state) {
+        for (const char **strings = bench.strings; *strings; ++strings) {
+            err |= regexec(&re, *strings, nmatch, pmatch, 0);
         }
     }
-    t4 = clock();
     if (err) {
-        fprintf(stderr, "*** %s run failed\n", prefix);
-        exit(1);
+        state.SkipWithError("regexec failed");
     }
+
+    add_counters(state, alg, bench, int(nmatch) - 1);
 
     delete[] pmatch;
     regfree(&re);
-
-    x.ticks_gen = uint64_t(t2 - t1);
-    x.ticks_run = uint64_t(t4 - t3);
-
-    results.push_back(x);
 }
 
 #ifdef HAVE_RE2_RE2_H
-static void bench_re2(std::vector<Result> &results, const char *regexp,
-    const std::vector<std::string> &strings, size_t ntimes, int mask, const char *prefix)
+void bench_regcomp_re2(benchmark::State &state, const alg_t &alg, const bench_t &bench)
 {
-    Result x = {prefix, UNAVAIL, UNAVAIL};
-    if (mask & XREG_RE2) return;
-
-    RE2 *re2;
-    clock_t t1 = 0, t2 = 0, t3 = 0, t4 = 0;
     bool ok = true;
+    int argc = 0;
 
-    t1 = clock();
-    re2 = new RE2(regexp, RE2::POSIX);
-    t2 = clock();
-    if (!re2->ok()) {
-        fprintf(stderr, "*** %s compile failed\n", prefix);
-        exit(1);
+    for (auto _ : state) {
+        RE2 re(bench.regexp, RE2::POSIX);
+        ok = re.ok();
+        argc = re.NumberOfCapturingGroups();
+    }
+    if (!ok) {
+        state.SkipWithError("regcomp failed");
     }
 
-    const int argc = re2->NumberOfCapturingGroups();
+    add_counters(state, alg, bench, argc);
+}
+
+void bench_regexec_re2(benchmark::State &state, const alg_t &alg, const bench_t &bench)
+{
+    RE2 re(bench.regexp, RE2::POSIX);
+    if (!re.ok()) {
+        state.SkipWithError("regcomp failed");
+    }
+
+    const int argc = re.NumberOfCapturingGroups();
     RE2::Arg *args = new RE2::Arg[argc];
     RE2::Arg **argps = new RE2::Arg*[argc];
     std::string *submatch = new std::string[argc];
@@ -90,73 +96,37 @@ static void bench_re2(std::vector<Result> &results, const char *regexp,
         argps[i] = &args[i];
     }
 
-    // warmup
-    for (size_t j = 0; j < strings.size(); ++j) {
-        RE2::FullMatchN(strings[j].c_str(), *re2, argps, argc);
-    }
-    t3 = clock();
-    for (size_t j = 0; j < strings.size(); ++j) {
-        for (size_t i = 0; i < ntimes; ++i) {
-            ok = ok && RE2::FullMatchN(strings[j].c_str(), *re2, argps, argc);
+    bool ok = true;
+    for (auto _ : state) {
+        for (const char **strings = bench.strings; *strings; ++strings) {
+            ok = ok && RE2::FullMatchN(*strings, re, argps, argc);
         }
     }
-    t4 = clock();
     if (!ok) {
-        fprintf(stderr, "*** %s run failed\n", prefix);
-        exit(1);
+        state.SkipWithError("regexec failed");
     }
+
+    add_counters(state, alg, bench, argc);
 
     delete[] submatch;
     delete[] argps;
     delete[] args;
-    delete re2;
-
-    x.ticks_gen = uint64_t(t2 - t1);
-    x.ticks_run = uint64_t(t4 - t3);
-
-    results.push_back(x);
 }
 #else
-static void bench_re2(std::vector<Result>, const char *,
-    const std::vector<std::string> &, size_t, int, const char *) {}
+void bench_regcomp_re2(benchmark::State &, const alg_t &, const bench_t &) {}
+void bench_regexec_re2(benchmark::State &, const alg_t &, const bench_t &) {}
 #endif
 
-static size_t groupcnt(const char *regexp)
-{
-    regex_t re;
-    int err = regcomp(&re, regexp, REG_NFA);
-    if (err) {
-        fprintf(stderr,
-            "*** cannot find the number of capturing groups for RE %s\n",
-            regexp);
-        exit(1);
-    }
-    return re.re_nsub;
+void bench_regcomp_t::operator()(benchmark::State &state, const alg_t &alg,
+    const bench_t &bench) const {
+    alg.engine == ENGINE_RE2C
+        ? bench_regcomp_re2c(state, alg, bench)
+        : bench_regcomp_re2(state, alg, bench);
 }
 
-void bench(const char *regexp, const std::vector<std::string> &strings, uint32_t times,
-    int mask, int need)
-{
-    assert(!strings.empty());
-    const char *s0 = strings[0].c_str();
-
-    fprintf(stderr, "\nr: %.*s..., s: %.*s..., n: %u, %u chars, %u groups\n",
-        30, regexp, 30, s0, times, (uint32_t)strlen(regexp), (uint32_t)groupcnt(regexp));
-
-    std::vector<Result> rs;
-    rs.reserve(nbenchmarks);
-
-    for (size_t i = 0; i < nbenchmarks; ++i) {
-        const benchmark_t &b = benchmarks[i];
-        switch (b.engine) {
-        case ENGINE_RE2C:
-            bench_re2c(rs, regexp, strings, times, b.flags, mask, need, b.name);
-            break;
-        case ENGINE_RE2:
-            bench_re2(rs, regexp, strings, times, mask, b.name);
-            break;
-        }
-    }
-
-    show(rs);
+void bench_regexec_t::operator()(benchmark::State &state, const alg_t &alg,
+    const bench_t &bench) const {
+    alg.engine == ENGINE_RE2C
+        ? bench_regexec_re2c(state, alg, bench)
+        : bench_regexec_re2(state, alg, bench);
 }

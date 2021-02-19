@@ -41,7 +41,7 @@ jobs:
             Linux*)
               echo "CC=gcc" >> $GITHUB_ENV
               echo "CXX=g++" >> $GITHUB_ENV
-              sudo apt-get install libre2-dev
+              sudo apt-get install libre2-dev libbenchmark-dev
               ;;
             macOS*)
               sudo xcode-select -switch /Applications/Xcode.app
@@ -49,7 +49,7 @@ jobs:
               echo "CXX=$(xcrun -f clang++)" >> $GITHUB_ENV
               echo "SDKROOT=$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_ENV
               echo "$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_PATH
-              brew install re2
+              brew install re2 google-benchmark
               ;;
           esac
 

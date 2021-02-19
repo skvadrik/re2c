@@ -38,7 +38,8 @@ static const char *ipv6_strings[] = {
     "fd03:37f::",
     "::bed7",
     "fd03::",
-    "::"
+    "::",
+    NULL
 };
 
 #endif // _RE2C_BENCHMRKS_COMMON_STRINGS_IPV6_

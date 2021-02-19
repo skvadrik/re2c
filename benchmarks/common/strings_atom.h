@@ -1001,7 +1001,8 @@ static const char *atom_strings[] = {
     "dev-python/flask-wtf-0.9.5",
     "dev-tex/rcsinfo-1.9",
     "media-fonts/acroread-asianfonts-9.1",
-    "app-i18n/xsunpinyin-2.0.4_pre20130108"
+    "app-i18n/xsunpinyin-2.0.4_pre20130108",
+    NULL
 };
 
 #endif // _RE2C_BENCHMRKS_COMMON_STRINGS_ATOM_
