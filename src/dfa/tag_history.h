@@ -17,7 +17,7 @@ typedef int32_t hidx_t;
 typedef std::vector<tag_info_t> tag_path_t;
 
 static const hidx_t HROOT = 0;
-const tag_info_t NOINFO = {0x3fffFFFF, 0};
+const tag_info_t NOINFO = {~0u, 0};
 static const uint32_t NONFIN = ~0u;
 static const uint32_t USED = NONFIN - 1;
 
