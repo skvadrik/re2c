@@ -164,13 +164,14 @@ typedef simctx_t<zhistory_t> pzsimctx_t;
 typedef simctx_t<zhistory_t> lzsimctx_t;
 typedef simctx_t<khistory_t> ksimctx_t;
 
-int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
-int regexec_nfa_posix(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
-int regexec_nfa_posix_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
-int regexec_nfa_posix_backward(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
-int regexec_nfa_posix_kuklewicz(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
-int regexec_nfa_leftmost(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
-int regexec_nfa_leftmost_trie(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+template<bool stadfa> int regexec_dfa(const regex_t *, const char *, size_t,
+   regmatch_t[], int);
+int regexec_nfa_posix(const regex_t *, const char *, size_t, regmatch_t[], int);
+int regexec_nfa_posix_trie(const regex_t *, const char *, size_t, regmatch_t[], int);
+int regexec_nfa_posix_backward(const regex_t *, const char *, size_t, regmatch_t[], int);
+int regexec_nfa_posix_kuklewicz(const regex_t *, const char *, size_t, regmatch_t[], int);
+int regexec_nfa_leftmost(const regex_t *, const char *, size_t, regmatch_t[], int);
+int regexec_nfa_leftmost_trie(const regex_t *, const char *, size_t, regmatch_t[], int);
 
 template<typename history_t>
 simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsub, int flags)

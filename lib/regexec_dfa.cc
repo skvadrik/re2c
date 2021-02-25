@@ -27,6 +27,7 @@ static void apply_regops(regoff_t *regs, const tcmd_t *cmd, regoff_t pos)
     }
 }
 
+template<bool stadfa>
 int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
     regmatch_t pmatch[], int /* eflags */)
 {
@@ -36,7 +37,7 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
     const char *p = string, *q = p;
     const dfa_state_t *s, *x = NULL;
 
-    apply_regops(regs, dfa->tcmd0, 0);
+    if (!stadfa) apply_regops(regs, dfa->tcmd0, 0);
 
     for (;;) {
         s = dfa->states[i];
@@ -49,11 +50,11 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
             x = s;
         }
 
-        apply_regops(regs, s->stacmd, p - string - 2);
+        if (stadfa) apply_regops(regs, s->stacmd, p - string - 2);
 
         if (i == dfa_t::NIL || c == 0) break;
 
-        apply_regops(regs, s->tcmd[j], p - string - 1);
+        if (!stadfa) apply_regops(regs, s->tcmd[j], p - string - 1);
     }
 
     if (s->rule == Rule::NONE && x != NULL) {
@@ -71,6 +72,9 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
     tags_to_submatch(dfa->tags, nmatch, pmatch, mlen, fn);
     return 0;
 }
+
+template int regexec_dfa<true>(const regex_t *, const char *, size_t, regmatch_t[], int);
+template int regexec_dfa<false>(const regex_t *, const char *, size_t, regmatch_t[], int);
 
 } // namespace libre2c
 } // namespace re2c
