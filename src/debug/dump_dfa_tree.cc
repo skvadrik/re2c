@@ -10,7 +10,7 @@
 
 namespace re2c {
 
-// explicit specialization for context types
+// explicit instantiation for context types
 template dump_dfa_tree_t<pdetctx_t>::dump_dfa_tree_t(const pdetctx_t &ctx);
 template dump_dfa_tree_t<ldetctx_t>::dump_dfa_tree_t(const ldetctx_t &ctx);
 template dump_dfa_tree_t<pdetctx_t>::~dump_dfa_tree_t();

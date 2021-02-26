@@ -123,7 +123,7 @@ template<bool stadfa>
 static void group_by_tag(tag_path_t &, tag_path_t &, std::vector<uint32_t> &);
 static uint32_t hash_kernel(const kernel_t *);
 
-// explicit specialization for context types
+// explicit instantiation for context types
 template void find_state<pdetctx_t>(pdetctx_t &ctx);
 template void find_state<ldetctx_t>(ldetctx_t &ctx);
 

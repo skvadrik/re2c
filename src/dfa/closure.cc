@@ -85,7 +85,7 @@ template<typename ctx_t> void prune(ctx_t &ctx);
 static void lower_lookahead_to_transition(closure_t &);
 static bool cmpby_rule_state(const clos_t &, const clos_t &);
 
-// explicit specialization for context types
+// explicit instantiation for context types
 template void tagged_epsilon_closure<pdetctx_t>(pdetctx_t &ctx);
 template void tagged_epsilon_closure<ldetctx_t>(ldetctx_t &ctx);
 

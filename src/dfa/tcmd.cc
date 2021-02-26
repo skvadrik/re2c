@@ -32,7 +32,7 @@ namespace re2c {
  * cannot be topsorted and are appended at the end of the list.
  */
 
-// explicit specialization for history types
+// explicit instantiation for history types
 template tcmd_t *tcpool_t::make_add<phistory_t>(tcmd_t *next, tagver_t lhs
     , tagver_t rhs, const phistory_t &history, hidx_t hidx, size_t tag);
 template tcmd_t *tcpool_t::make_add<lhistory_t>(tcmd_t *next, tagver_t lhs

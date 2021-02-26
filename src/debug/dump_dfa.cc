@@ -27,7 +27,7 @@ static void dump_tcmd_or_tcid(tcmd_t *const *, const tcid_t *, size_t, const tcp
 static const char *tagname(const Tag &);
 template <typename ctx_t> static void dump_stacmd(const ctx_t &, const stacmd_t *);
 
-// explicit specialization for context types
+// explicit instantiation for context types
 template void dump_dfa_t::state<pdetctx_t>(const pdetctx_t &ctx, bool isnew);
 template void dump_dfa_t::state<ldetctx_t>(const ldetctx_t &ctx, bool isnew);
 template void dump_clstats<pdetctx_t>(const pdetctx_t &);
