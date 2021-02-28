@@ -78,7 +78,6 @@ namespace re2c {
  * Thus in general TDFA(1) raises less conflicts than TDFA(0).
  */
 
-template<typename ctx_t> static inline void closure(ctx_t &ctx);
 template<typename ctx_t> static void generate_versions(ctx_t &);
 template<typename ctx_t> static void generate_stadfa_actions(ctx_t &);
 template<typename ctx_t> void prune(ctx_t &ctx);
@@ -108,8 +107,7 @@ void tagged_epsilon_closure(ctx_t &ctx)
     }
 }
 
-template<>
-inline void closure<pdetctx_t>(pdetctx_t &ctx)
+template<> void closure<pdetctx_t>(pdetctx_t &ctx)
 {
     closure_posix(ctx);
     prune(ctx);
@@ -117,8 +115,7 @@ inline void closure<pdetctx_t>(pdetctx_t &ctx)
     compute_prectable(ctx);
 }
 
-template<>
-inline void closure<ldetctx_t>(ldetctx_t &ctx)
+template<> void closure<ldetctx_t>(ldetctx_t &ctx)
 {
     closure_leftmost(ctx);
     prune(ctx);

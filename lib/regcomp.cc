@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "lib/lex.h"
+#include "lib/regcomp_dfa_regless.h"
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
 #include "src/debug/debug.h"
@@ -27,11 +28,12 @@ const AST *regexp;
 } // namespace re2c
 
 using namespace re2c;
+using namespace re2c::libre2c;
 
 int regcomp(regex_t *preg, const char *pattern, int cflags)
 {
     conopt_t globopts;
-    globopts.nested_negative_tags = !(cflags & REG_NFA);
+    globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_REGLESS));
     globopts.FFlag = true;
     globopts.backward = cflags & REG_BACKWARD;
     globopts.stadfa = cflags & REG_STADFA;
@@ -73,24 +75,21 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     preg->pmatch = new regmatch_t[preg->re_nsub];
 
     dfa_t *dfa = NULL;
+    rldfa_t *rldfa = NULL;
+
     if (cflags & REG_NFA) {
         if ((cflags & REG_TRIE) && (cflags & REG_LEFTMOST)) {
-            preg->simctx = new libre2c::lzsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+            preg->simctx = new lzsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+        } else if (cflags & REG_TRIE) {
+            preg->simctx = new pzsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+        } else if (cflags & REG_LEFTMOST) {
+            preg->simctx = new lsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+        } else if (cflags & REG_KUKLEWICZ) {
+            preg->simctx = new ksimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+        } else {
+            preg->simctx = new psimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         }
-        else if (cflags & REG_TRIE) {
-            preg->simctx = new libre2c::pzsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
-        }
-        else if (cflags & REG_LEFTMOST) {
-            preg->simctx = new libre2c::lsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
-        }
-        else if (cflags & REG_KUKLEWICZ) {
-            preg->simctx = new libre2c::ksimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
-        }
-        else {
-            preg->simctx = new libre2c::psimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
-        }
-    }
-    else {
+    } else {
         preg->char2class = new size_t[256];
         split_charset(re);
         for (uint32_t i = 1, j = 0; i < re.charset.size(); ++i) {
@@ -99,15 +98,22 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
             }
         }
 
-        dfa = new dfa_t(*nfa, opt, "", msg, Rule::NONE, Rule::NONE);
-
-        compact_and_optimize_tags(opt, *dfa);
+        dfa = new dfa_t(*nfa, Rule::NONE, Rule::NONE);
+        if (cflags & REG_REGLESS) {
+            DASSERT((cflags & REG_STADFA) == 0);
+            rldfa = new rldfa_t(*nfa, *dfa, opt);
+            opt = NULL; // transfer options ownership to RLDFA
+        } else {
+            determinization(*nfa, *dfa, opt, msg, "");
+            compact_and_optimize_tags(opt, *dfa);
+        }
 
         preg->regs = new regoff_t[dfa->maxtagver + 1];
     }
 
     preg->nfa = nfa;
     preg->dfa = dfa;
+    preg->rldfa = rldfa;
 
     delete opt;
     return 0;

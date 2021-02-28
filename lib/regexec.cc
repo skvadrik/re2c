@@ -14,10 +14,20 @@ int regexec(const regex_t *re, const char *string, size_t nmatch,
     const int cflags = re->flags;
     if (!(cflags & REG_NFA)) {
         // DFA-based algorithms
-        if (cflags & REG_STADFA) {
-            return regexec_dfa<true>(re, string, nmatch, pmatch, eflags);
+        if (cflags & REG_REGLESS) {
+            // Registerless TDFA.
+            if (cflags & REG_LEFTMOST) {
+                return regexec_dfa_regless<ldetctx_t>(re, string, nmatch, pmatch, eflags);
+            } else {
+                return regexec_dfa_regless<pdetctx_t>(re, string, nmatch, pmatch, eflags);
+            }
         } else {
-            return regexec_dfa<false>(re, string, nmatch, pmatch, eflags);
+            // TDFA with registers and register operations on transitions.
+            if (cflags & REG_STADFA) {
+                return regexec_dfa<true>(re, string, nmatch, pmatch, eflags);
+            } else {
+                return regexec_dfa<false>(re, string, nmatch, pmatch, eflags);
+            }
         }
     } else {
         // NFA-based algorithms

@@ -200,7 +200,12 @@ typedef determ_context_t<phistory_t> pdetctx_t;
 typedef determ_context_t<lhistory_t> ldetctx_t;
 
 template<typename ctx_t> void tagged_epsilon_closure(ctx_t &ctx);
+template<typename ctx_t> void closure(ctx_t &ctx);
 template<typename ctx_t> void find_state(ctx_t &ctx);
+template<typename ctx_t, bool stadfa, bool b> bool do_find_state(ctx_t &ctx);
+template<typename ctx_t> void reach_on_symbol(ctx_t &ctx, uint32_t sym);
+template<typename ctx_t> uint32_t init_tag_versions(ctx_t &ctx);
+nfa_state_t *transition(nfa_state_t *, uint32_t);
 
 inline bool cmp_gtop_t::operator() (const nfa_state_t *x, const nfa_state_t *y) const
 {

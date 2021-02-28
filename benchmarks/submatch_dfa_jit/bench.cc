@@ -48,11 +48,13 @@ int main(int argc, char** argv)
     };
 
     const std::vector<alg_t> algs {
-        {"TDFA-OS",   ENGINE_RE2C, 0},
-        {"TDFA-LG",   ENGINE_RE2C, REG_LEFTMOST},
-        //{"staDFA-OS", ENGINE_RE2C, REG_STADFA},
+        {"TDFA-OS",           ENGINE_RE2C, 0},
+        {"TDFA-LG",           ENGINE_RE2C, REG_LEFTMOST},
+        {"regless-TDFA-OS",   ENGINE_RE2C, REG_REGLESS},
+        {"regless-TDFA-LG",   ENGINE_RE2C, REG_REGLESS | REG_LEFTMOST},
+        //{"staDFA-OS",         ENGINE_RE2C, REG_STADFA},
 #ifdef HAVE_RE2_RE2_H
-        //{"re2-LG",    ENGINE_RE2,  0},
+        //{"re2-LG",            ENGINE_RE2,  0},
 #endif
     };
 

@@ -22,15 +22,11 @@ namespace re2c {
 
 template<typename ctx_t> static void determinization(ctx_t &ctx);
 template<typename ctx_t> static void clear_caches(ctx_t &ctx);
-template<typename ctx_t> static void reach_on_symbol(ctx_t &ctx, uint32_t sym);
-template<typename ctx_t> static uint32_t init_tag_versions(ctx_t &ctx);
 template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t &ctx);
-static nfa_state_t *transition(nfa_state_t *, uint32_t);
 
 const uint32_t dfa_t::NIL = ~0u;
 
-dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond,
-        Msg &msg, size_t def_rule, size_t eof_rule)
+dfa_t::dfa_t(const nfa_t &nfa, size_t def_rule, size_t eof_rule)
     : states()
     , nchars(nfa.charset.size() - 1) // (n + 1) bounds for n ranges
     , charset(nfa.charset)
@@ -44,13 +40,17 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond,
     , tcid0(TCID0)
     , def_rule(def_rule)
     , eof_rule(eof_rule)
+{}
+
+void determinization(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts, Msg &msg,
+    const std::string &cond)
 {
     if (opts->posix_semantics) {
-        pdetctx_t ctx(opts, msg, cond, nfa, *this);
+        pdetctx_t ctx(opts, msg, cond, nfa, dfa);
         determinization(ctx);
     }
     else {
-        ldetctx_t ctx(opts, msg, cond, nfa, *this);
+        ldetctx_t ctx(opts, msg, cond, nfa, dfa);
         determinization(ctx);
     }
 }
@@ -315,6 +315,18 @@ determ_context_t<history_t>::~determ_context_t()
     delete[] newprectbl;
     delete[] histlevel;
 }
+
+// explicit instantiation for context types
+template void reach_on_symbol<ldetctx_t>(ldetctx_t &ctx, uint32_t sym);
+template void reach_on_symbol<pdetctx_t>(pdetctx_t &ctx, uint32_t sym);
+template uint32_t init_tag_versions<ldetctx_t>(ldetctx_t &ctx);
+template uint32_t init_tag_versions<pdetctx_t>(pdetctx_t &ctx);
+template determ_context_t<lhistory_t>::~determ_context_t();
+template determ_context_t<phistory_t>::~determ_context_t();
+template determ_context_t<lhistory_t>::determ_context_t(const opt_t*, Msg&,
+    const std::string&, const nfa_t&, dfa_t&);
+template determ_context_t<phistory_t>::determ_context_t(const opt_t*, Msg&,
+    const std::string&, const nfa_t&, dfa_t&);
 
 } // namespace re2c
 

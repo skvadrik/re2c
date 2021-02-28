@@ -391,6 +391,7 @@ if (RE2C_BUILD_LIBS)
         lib/regcomp.cc
         lib/regexec.cc
         lib/regexec_dfa.cc
+        lib/regexec_dfa_regless.cc
         lib/regexec_nfa_leftmost.cc
         lib/regexec_nfa_leftmost_trie.cc
         lib/regexec_nfa_posix.cc

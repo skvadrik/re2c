@@ -85,7 +85,7 @@ struct kernel_eq_t
     bool operator()(const kernel_t *x, const kernel_t *y) const;
 };
 
-template<typename ctx_t>
+template<typename ctx_t, bool regless>
 struct kernel_map_t
 {
     ctx_t &ctx;
@@ -94,8 +94,6 @@ struct kernel_map_t
 
 template<typename ctx_t, bool stadfa>
     static void find_state_specialized(ctx_t &);
-template<typename ctx_t, bool stadfa>
-    static bool do_find_state(ctx_t &);
 template<typename ctx_t>
     static tcmd_t *final_actions(ctx_t &, const clos_t &);
 template<typename ctx_t>
@@ -126,6 +124,9 @@ static uint32_t hash_kernel(const kernel_t *);
 // explicit instantiation for context types
 template void find_state<pdetctx_t>(pdetctx_t &ctx);
 template void find_state<ldetctx_t>(ldetctx_t &ctx);
+// explicit instantiation for registerless TDFA (in libre2c)
+template bool do_find_state<pdetctx_t, false, true>(pdetctx_t &);
+template bool do_find_state<ldetctx_t, false, true>(ldetctx_t &);
 
 template<typename ctx_t>
 void find_state(ctx_t &ctx)
@@ -141,7 +142,7 @@ void find_state_specialized(ctx_t &ctx)
     dfa_t &dfa = ctx.dfa;
 
     // find or add the new state in the existing set of states
-    const bool is_new = do_find_state<ctx_t, stadfa>(ctx);
+    const bool is_new = do_find_state<ctx_t, stadfa, false>(ctx);
 
     if (is_new) {
         // create new DFA state
@@ -180,7 +181,7 @@ void find_state_specialized(ctx_t &ctx)
     DDUMP_DFA_TREE(is_new);
 }
 
-template<typename ctx_t, bool stadfa>
+template<typename ctx_t, bool stadfa, bool regless>
 bool do_find_state(ctx_t &ctx)
 {
     kernels_t &kernels = ctx.dc_kernels;
@@ -211,7 +212,7 @@ bool do_find_state(ctx_t &ctx)
     // else if not staDFA try to find mappable kernel
     // see note [bijective mappings]
     if (!stadfa) {
-        kernel_map_t<ctx_t> cmp_map = {ctx};
+        kernel_map_t<ctx_t, regless> cmp_map = {ctx};
         ctx.dc_target = kernels.find_with(hash, k, cmp_map);
         if (ctx.dc_target != kernels_t::NIL) return false;
     }
@@ -627,8 +628,8 @@ bool kernel_eq_t<ctx_t, stadfa>::operator()(const kernel_t *x, const kernel_t *y
         && equal_lookahead_tags(ctx, x, y);
 }
 
-template<typename ctx_t>
-bool kernel_map_t<ctx_t>::operator()(const kernel_t *x, const kernel_t *y)
+template<typename ctx_t, bool regless>
+bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t *x, const kernel_t *y)
 {
     // check that kernel sizes, NFA states lookahead tags
     // and precedence table coincide (versions might differ)
@@ -672,6 +673,9 @@ bool kernel_map_t<ctx_t>::operator()(const kernel_t *x, const kernel_t *y)
             }
         }
     }
+
+    // Registerless automaton does not need register operations (actions).
+    if (regless) return true;
 
     // we have bijective mapping; now try to create list of commands
     tcmd_t **pacts = &ctx.dc_actions, *a, **pa, *copy = NULL;

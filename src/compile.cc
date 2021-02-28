@@ -74,7 +74,8 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     nfa_t nfa(re);
     DDUMP_NFA(opts, nfa);
 
-    dfa_t dfa(nfa, opts, cond, msg, spec.def_rule, spec.eof_rule);
+    dfa_t dfa(nfa, spec.def_rule, spec.eof_rule);
+    determinization(nfa, dfa, opts, msg, cond);
     DDUMP_DFA_DET(opts, dfa);
 
     rangemgr.clear();

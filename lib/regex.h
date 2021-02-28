@@ -6,17 +6,21 @@
 #include <limits.h>
 
 
-// fwd
 namespace re2c {
 struct nfa_t;
 struct dfa_t;
 class RangeMgr;
 } // namespace re2c
 
+namespace re2c {
+namespace libre2c {
+struct rldfa_t;
+} // namespace libre2c
+} // namespace re2c
+
 typedef ptrdiff_t regoff_t;
 
-struct regmatch_t
-{
+struct regmatch_t {
     regoff_t rm_so;
     regoff_t rm_eo;
 };
@@ -37,25 +41,27 @@ static const int REG_SLOWPREC  = 1u << 10;
 static const int REG_BACKWARD  = 1u << 11;
 static const int REG_KUKLEWICZ = 1u << 12;
 static const int REG_STADFA    = 1u << 13;
+static const int REG_REGLESS   = 1u << 14;
 
-struct regex_t
-{
+struct regex_t {
     size_t re_nsub;
     re2c::RangeMgr *rmgr;
     const re2c::nfa_t *nfa;
     const re2c::dfa_t *dfa;
+    const re2c::libre2c::rldfa_t *rldfa;
+    void *simctx;
     regmatch_t *pmatch;
     regoff_t *regs;
     size_t *char2class;
     int flags;
-    void *simctx;
 };
 
 static const int REG_NOMATCH = INT_MAX;
 
 int regcomp(regex_t *preg, const char *pattern, int cflags);
 size_t regerror(int errcode, const regex_t *preg, char *errbuf, size_t errbuf_size);
-int regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags);
+int regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[],
+    int eflags);
 void regfree(regex_t *preg);
 
 #endif // _RE2C_LIB_REGEX_
