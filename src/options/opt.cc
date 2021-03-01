@@ -23,6 +23,11 @@ static void fix_conopt(conopt_t &glob)
             p.push_back('/');
         }
     }
+
+    if (!glob.dep_file.empty() && glob.output_file.empty()) {
+        error("cannot generate dep file, output file not specified");
+        exit(1);
+    }
 }
 
 // This function should only change mutable option defaults (based on the global

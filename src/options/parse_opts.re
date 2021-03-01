@@ -192,6 +192,7 @@ opt_long:
     "lang"                  end { NEXT_ARG("--lang",             opt_lang); }
     "output"                end { NEXT_ARG("-o, --output",       opt_output); }
     "type-header"           end { NEXT_ARG("-t, --type-header",  opt_header); }
+    "depfile"               end { NEXT_ARG("--depfile",          opt_depfile); }
     "encoding-policy"       end { NEXT_ARG("--encoding-policy",  opt_encoding_policy); }
     "input"                 end { NEXT_ARG("--input",            opt_input); }
     "empty-class"           end { NEXT_ARG("--empty-class",      opt_empty_class); }
@@ -240,6 +241,12 @@ opt_header:
 /*!re2c
     * { ERRARG("-t, --type-header", "filename", *argv); }
     filename end { opts.set_header_file (*argv); goto opt; }
+*/
+
+opt_depfile:
+/*!re2c
+    * { ERRARG("--depfile", "filename", *argv); }
+    filename end { globopts.dep_file = *argv; goto opt; }
 */
 
 opt_incpath:

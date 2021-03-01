@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
+#include <set>
 #include <string>
 #include <vector>
 
@@ -33,6 +34,7 @@ public:
 
 private:
     std::vector<Input*> files;
+    std::set<std::string> filedeps;
     const conopt_t *globopts;
     loc_t location;
 
@@ -41,6 +43,7 @@ public:
     ~Scanner();
     bool open(const std::string &filename, const std::string *parent);
     bool include(const std::string &filename);
+    bool gen_dep_file() const;
     const loc_t &tok_loc() const;
     loc_t cur_loc() const;
     ParseMode echo(Output &out);
@@ -94,6 +97,7 @@ inline Scanner::Scanner(const conopt_t *o, Msg &m)
     : ScannerState()
     , msg(m)
     , files()
+    , filedeps()
     , globopts(o)
     , location(ATSTART)
 {}

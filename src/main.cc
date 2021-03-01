@@ -40,6 +40,10 @@ int main(int, char *argv[])
         return 1;
     }
 
+    if (!scanner.gen_dep_file()) {
+        return 1;
+    }
+
     if (globopts.verbose) {
         fprintf(stderr, "re2c: success\n");
     }

@@ -38,6 +38,7 @@ bool Scanner::open(const std::string &filename, const std::string *parent)
 {
     Input *in = new Input(msg.filenames.size());
     files.push_back(in);
+    filedeps.insert(filename);
     if (!in->open(filename, parent, globopts->incpaths)) {
         return false;
     }
@@ -172,6 +173,28 @@ bool Scanner::fill(size_t need)
         lim += YYMAXFILL;
     }
 
+    return true;
+}
+
+bool Scanner::gen_dep_file() const
+{
+    const std::string &fname = globopts->dep_file;
+    if (fname.empty()) return true;
+
+    FILE *file = fopen(fname.c_str(), "w");
+    if (file == NULL) {
+        error("cannot open dep file %s", fname.c_str());
+        return false;
+    }
+
+    fprintf(file, "%s:", globopts->output_file.c_str());
+    for (std::set<std::string>::const_iterator i = filedeps.begin();
+        i != filedeps.end(); ++i) {
+        fprintf(file, " %s", i->c_str());
+    }
+    fprintf(file, "\n");
+
+    fclose(file);
     return true;
 }
 

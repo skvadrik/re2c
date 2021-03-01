@@ -93,6 +93,7 @@ const uint32_t NOEOF = ~0u - 1;
     /* files */ \
     CONSTOPT (std::string, source_file, "") \
     CONSTOPT (std::string, output_file, "") \
+    CONSTOPT (std::string, dep_file, "") \
     /* include paths */ \
     CONSTOPT (std::vector<std::string>, incpaths, std::vector<std::string>()) \
     /* input encoding */ \
