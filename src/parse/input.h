@@ -14,6 +14,7 @@ struct Input
 {
     FILE *file;
     std::string name;
+    std::string path;
     std::string escaped_name;
     const char *so; // start offset in buffer
     const char *eo; // end offset in buffer

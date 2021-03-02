@@ -38,10 +38,10 @@ bool Scanner::open(const std::string &filename, const std::string *parent)
 {
     Input *in = new Input(msg.filenames.size());
     files.push_back(in);
-    filedeps.insert(filename);
     if (!in->open(filename, parent, globopts->incpaths)) {
         return false;
     }
+    filedeps.insert(in->path);
     msg.filenames.push_back(in->escaped_name);
     return true;
 }

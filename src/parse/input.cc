@@ -10,6 +10,7 @@ namespace re2c {
 Input::Input(size_t fidx)
     : file(NULL)
     , name()
+    , path()
     , escaped_name()
     , so(Scanner::ENDPOS)
     , eo(Scanner::ENDPOS)
@@ -20,7 +21,6 @@ Input::Input(size_t fidx)
 bool Input::open(const std::string &filename, const std::string *parent
     , const std::vector<std::string> &incpaths)
 {
-    std::string path;
     name = filename;
 
     if (!parent) {
