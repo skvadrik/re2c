@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT 
+// re2c $INPUT -o $OUTPUT --depfile $DEPFILE
 /*!include:re2c "nested/include002.re.b.inc" */
 
 /*!re2c
