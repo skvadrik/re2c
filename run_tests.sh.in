@@ -162,6 +162,7 @@ run_pack() {
             -e 's,.*re2c \(.*\)$,\1,' \
             -e 's,$INPUT,'"$outx"',' \
             -e 's,$OUTPUT,'"$outy"',' \
+            -e 's,$DEPFILE,'"$outy.d"',' \
             -e 's,\(--type-header \)\([^ ]*\),\1'"$(dirname $outx)"'/\2,' \
         `
         # enable warnings globally
