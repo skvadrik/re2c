@@ -33,7 +33,7 @@ run() {
 rm -rf "$logdir" && mkdir -p "$logdir"
 
 # select benchmarks
-progs="$(find $builddir/bin -type f | fgrep -v -f $srcdir/known_failures)"
+progs="$(find $builddir/bin -type f -not -name '*.o' | fgrep -v -f $srcdir/known_failures)"
 
 # run, logging the output
 for prog in $progs; do

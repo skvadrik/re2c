@@ -145,6 +145,7 @@ endforeach()
 endforeach()
 
 # binaries
+set(OBJ "")
 set(BIN "")
 set(CFLAGS "-O3" "-I" "${SRC_DIR}")
 set(COMMON_SRC "${SRC_DIR}/common.h")
@@ -154,11 +155,14 @@ file(MAKE_DIRECTORY "${BIN_DIR}/re2c/")
 foreach(gen_file ${GEN})
 foreach(compiler "gcc" "clang")
     string(REGEX REPLACE "^${GEN_DIR}(.+)\.c$" "${BIN_DIR}\\1-${compiler}" bin_file "${gen_file}")
+    set(obj_file "${bin_file}.o")
     add_custom_command(
         OUTPUT "${bin_file}"
-        COMMAND "${compiler}" ${CFLAGS} "${gen_file}" -o "${bin_file}"
+        COMMAND "${compiler}" ${CFLAGS} -c "${gen_file}" -o "${obj_file}"
+        COMMAND "${compiler}" ${CFLAGS} "${obj_file}" -o "${bin_file}"
         DEPENDS "${gen_file}" ${COMMON_SRC}
     )
+    list(APPEND OBJ "${obj_file}")
     list(APPEND BIN "${bin_file}")
 endforeach()
 endforeach()
@@ -207,5 +211,5 @@ configure_file(run.sh.in run.sh @ONLY)
 # override default clean command to keep engines (ragel, kleenex)
 set_directory_properties(PROPERTY
     CLEAN_NO_CUSTOM On
-    ADDITIONAL_CLEAN_FILES "${GEN} ${BIN} ${DAT}"
+    ADDITIONAL_CLEAN_FILES "${GEN};${OBJ};${BIN};${DAT}"
 )

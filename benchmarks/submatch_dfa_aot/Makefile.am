@@ -83,6 +83,8 @@ BIN_GCC   = $(patsubst %, %-gcc, $(BIN_))
 BIN_CLANG = $(patsubst %, %-clang, $(BIN_))
 BIN = $(BIN_GCC) $(BIN_CLANG)
 
+OBJ = $(patsubst %, %.o, $(BIN))
+
 # Some benchmarks share the same data, like `uri_simple` and `uri_rfc3986`
 DAT = $(patsubst %, $(DAT_DIR)/%/big, \
     $(sort $(foreach bench, $(BENCHMARKS), \
@@ -145,11 +147,13 @@ endif
 
 $(BIN_GCC): $(BIN_DIR)/%-gcc: $(GEN_DIR)/%.c
 	$(AM_V_at)mkdir -p $(@D)
-	$(AM_V_GEN)gcc $(CFLAGS) -o $@ $<
+	$(AM_V_at)gcc $(CFLAGS) -c -o $@.o $<
+	$(AM_V_GEN)gcc $(CFLAGS) -o $@ $@.o
 
 $(BIN_CLANG): $(BIN_DIR)/%-clang: $(GEN_DIR)/%.c
 	$(AM_V_at)mkdir -p $(@D)
-	$(AM_V_GEN)clang $(CFLAGS) -o $@ $<
+	$(AM_V_at)clang $(CFLAGS) -c -o $@.o $<
+	$(AM_V_GEN)clang $(CFLAGS) -o $@ $@.o
 
 $(DAT): $(DAT_DIR)/%/big: $(DAT_DIR)/%/small
 	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/$(@D)/small $(srcdir)/$(@D)/gen_* $(@D)
@@ -164,4 +168,4 @@ $(RAGEL):
 	$(AM_V_GEN)( cd $(@D) && ./getragel7.sh )
 
 clean-local:
-	$(AM_V_at)rm -f $(GEN) $(BIN) $(DAT)
+	$(AM_V_at)rm -f $(GEN) $(OBJ) $(BIN) $(DAT)

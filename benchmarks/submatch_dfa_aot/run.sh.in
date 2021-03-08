@@ -45,7 +45,7 @@ run() {
 rm -rf "$logdir" && mkdir -p "$logdir"
 
 # select benchmarks to run
-progs="$(find $builddir/bin -type f)"
+progs="$(find $builddir/bin -type f -not -name '*.o')"
 if [ -n "$filter" ]; then
     echo "$progs" > tmp.1
     echo "$filter" | tr ' ' '\n' > tmp.2
