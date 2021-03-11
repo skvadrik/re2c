@@ -100,6 +100,19 @@ def gen_title(oldname):
 # Split benchmarks into groups by regexp (the first component of the name).
 # If the relative mode is on, normalize CPU time by the time of the first
 # benchmark in each group.
+#
+# Expected JSON fomat:
+# {
+#   "benchmarks": [
+#     {
+#       "name": <string>,
+#       "cpu_time": <number>,
+#       "captures": <number>,
+#       "regsize": <number>, ...
+#     }, ...
+#   ], ...
+# }
+#
 def group_benchmarks(benchmarks, relative):
     benchcount = len(benchmarks)
     benchgroups = OrderedDict()
