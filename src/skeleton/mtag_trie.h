@@ -64,7 +64,7 @@ inline uint32_t mtag(mtag_trie_t &trie, uint32_t pred, uint32_t dist)
 }
 
 inline uint32_t mtag_length(mtag_trie_t &trie, uint32_t mtag)
-{;
+{
     uint32_t len = 0;
     for (; mtag != MTAG_TRIE_ROOT; ) {
         ++len;
