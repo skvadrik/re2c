@@ -202,7 +202,8 @@ static void warn_sentinel_in_midrule(const dfa_t &dfa, const opt_t *opts
     const uint32_t sentsym = opts->sentinel == NOEOF ? 0 : opts->sentinel;
     uint32_t sentcls = 0;
     DASSERT(dfa.charset.size() == nsym + 1);
-    for (; sentcls < nsym && sentsym >= dfa.charset[sentcls + 1]; ++sentcls);
+    for (; sentcls < nsym && sentsym >= dfa.charset[sentcls + 1]; ++sentcls)
+        ;
     DASSERT(sentcls < nsym);
 
     // check that every transition on sentinel symbol goes to an end state
