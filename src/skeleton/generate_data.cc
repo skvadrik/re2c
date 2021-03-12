@@ -322,9 +322,9 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
                 std::vector<uint32_t> &history = skel.mtagval;
                 history.clear();
                 for (; tval != MTAG_TRIE_ROOT; ) {
-                    const mtag_t &t = tagtrie.head[tval];
-                    history.push_back(t.dist);
-                    tval = t.pred;
+                    const mtag_t &mt = tagtrie.head[tval];
+                    history.push_back(mt.dist);
+                    tval = mt.pred;
                 }
 
                 *k++ = to_le(static_cast<key_t>(len));
