@@ -115,35 +115,30 @@ def gen_title(oldname):
 #
 def group_benchmarks(benchmarks, relative):
     benchcount = len(benchmarks)
-    benchgroups = OrderedDict()
 
-    i = 0
-    while i < benchcount:
-        bench0 = benchmarks[i]
-        name0, _ = bench0["name"].split('_')
-        time0 = bench0["cpu_time"]
-        captures = bench0["captures"]
-        regsize = bench0["regsize"]
+    groups = OrderedDict()
+    for bench in benchmarks:
+        name, algo = bench["name"].split('_')
+        time = bench["cpu_time"]
+        captures = bench["captures"]
+        regsize = bench["regsize"]
+        groups.setdefault(name, []).append((algo, time, captures, regsize))
+
+    benchgroups = OrderedDict()
+    for name in groups:
+        group = groups[name]
+        (_, time0, captures, regsize) = group[0]
         maxtime = 0
         table = "alg time\n"
 
-        j = i
-        while j < benchcount:
-            bench = benchmarks[j]
-            name, alg = bench["name"].split('_')
-            if name != name0:
-                break
-            time = bench["cpu_time"]
+        for (algo, time, _, _) in group:
             if relative:
                 time = time / time0
-            table += "{%s} %lf\n" % (alg, time)
             maxtime = max(maxtime, time)
-            j += 1
+            table += "{%s} %lf\n" % (algo, time)
 
-        nrows = j - i
-        title = gen_title(name0)
-        benchgroups[title] = (table, nrows, maxtime, captures, regsize)
-        i = j
+        title = gen_title(name)
+        benchgroups[title] = (table, len(group), maxtime, captures, regsize)
 
     return benchgroups
 
