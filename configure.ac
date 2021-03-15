@@ -170,8 +170,8 @@ AC_CONFIG_FILES([\
     doc/help.rst \
 ])
 AC_CONFIG_FILES([run_tests.sh], [chmod +x run_tests.sh])
-AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/run.sh],
-    [chmod +x benchmarks/submatch_dfa_aot/run.sh])
+AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/run.py],
+    [chmod +x benchmarks/submatch_dfa_aot/run.py])
 AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/verify.sh],
     [chmod +x benchmarks/submatch_dfa_aot/verify.sh])
 

@@ -1,0 +1,167 @@
+#!/usr/bin/env python3
+
+import argparse
+import functools
+import json
+import os
+import os.path
+import re
+import shutil
+import subprocess
+
+
+srcdir = "@srcdir@"
+builddir = "@builddir@"
+bindir = os.path.join(builddir, "bin")
+datadir = os.path.join(builddir, "data")
+logdir = os.path.join(builddir, "logs")
+
+
+# Parse command-line arguments.
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("repcount", type=int,
+        help="number of times to run one benchmark")
+    parser.add_argument("--output",
+        help="JSON file to write benchmark results to")
+    parser.add_argument("--filter",
+        help="pattern to select a subset of benchmarks by name")
+    parser.add_argument("--filter-out",
+        help="pattern to mask a subset of benchmarks by name")
+    return parser.parse_args()
+
+
+# Format: <path>/<engine>/<benchmark>[-<sfx1>[-<sfx2>...]]-<compiler>
+def benchmark_components(path):
+    [_, engine, binary] = path.rsplit(os.sep, 2)
+    components = binary.split('-')
+    name = components[0].replace('_', '-')
+    compiler = components[-1]
+    suffixes = components[1:-1]
+    return (binary, name, engine, suffixes, compiler)
+
+
+# Order on regexp engines.
+def ord_engine(engine):
+    if engine == "ragel":
+        return 1
+    elif engine == "kleenex":
+        return 2
+    elif engine == "re2c":
+        return 3
+    return 4
+
+
+# Order on compilers.
+def ord_compiler(compiler):
+    if compiler == "gcc":
+        return 1
+    elif compiler == "clang":
+        return 2
+    return 3
+
+
+# Compare two benchmarks by their name, compiler, engine, etc.
+def compare_benchmarks(x, y):
+    (_, xname, xengine, xsuffixes, xcompiler) = benchmark_components(x)
+    (_, yname, yengine, ysuffixes, ycompiler) = benchmark_components(y)
+    if xname < yname:
+        return -1
+    elif yname < xname:
+        return 1
+    elif ord_compiler(xcompiler) < ord_compiler(ycompiler):
+        return -1
+    elif ord_compiler(ycompiler) < ord_compiler(xcompiler):
+        return 1
+    elif ord_engine(xengine) < ord_engine(yengine):
+        return -1
+    elif ord_engine(yengine) < ord_engine(xengine):
+        return 1
+    elif xsuffixes < ysuffixes:
+        return -1
+    elif ysuffixes < xsuffixes:
+        return 1
+    else:
+        return 0
+
+
+# Find benchmarks to run, taking filter into account.
+def find_benchmarks(filter, filter_out):
+    known_failures = []
+    with open(os.path.join(srcdir, "known_failures")) as f:
+        known_failures = f.readlines()
+
+    benchmarks = []
+    for path, subdirs, files in os.walk(bindir):
+        for name in files:
+            if name.endswith('.o'):
+                # This is an object file => skip (we need only executables).
+                continue
+            elif name in known_failures:
+                # This benchmark is known to fail => skip.
+                continue
+            elif filter != None and not name.startswith(filter):
+                # This benchmark is does not match the current filter => skip.
+                continue
+            elif filter_out != None and filter_out in name:
+                # This benchmark is masked by the current filter-out => skip.
+                continue
+            benchmarks.append(os.path.join(path, name))
+
+    # Sort benchmarks in the order they should appear on the chart.
+    return sorted(benchmarks, key=functools.cmp_to_key(compare_benchmarks))
+
+
+# Run the benchmark and return its average time in milliseconds.
+def run(engine, binary, repcount):
+    stem = re.search('^([a-z0-9]+).*$', binary).group(1)
+    data = os.path.join(datadir, stem, 'big')
+    prog = os.path.join(bindir, engine, binary)
+
+    time = 0
+    for _ in range(repcount):
+        with open(data) as f:
+            p = subprocess.run([prog, '-t'], universal_newlines=True,
+                stdin=f, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+
+            # output format: time (ms): <number>
+            time += float(p.stderr.rsplit(' ', 1)[1])
+
+    time /= repcount
+    print('%-10s %-30s %g' % (engine, binary, time))
+    return time
+
+
+def main():
+    args = parse_args()
+    benchmarks = find_benchmarks(args.filter, args.filter_out)
+
+    # clean up log directory
+    shutil.rmtree(logdir)
+    os.mkdir(logdir)
+
+    # run all benchmarks, store in 3-level map: benchmark => compiler => engine
+    results = []
+    for bench in benchmarks:
+        (binary, name, engine, suffixes, compiler) = benchmark_components(bench)
+        algo = '-'.join([engine] + suffixes)
+        title = '-'.join([name, compiler])
+
+        time = run(engine, binary, args.repcount)
+
+        results.append({
+            'name':     '%s-%s_%s' % (name, compiler, algo),
+            'cpu_time': time,
+            'regsize':  0,
+            'captures': 0,
+        })
+
+    results = {'benchmarks': results}
+    if args.output != None:
+        with open(args.output, 'w') as f:
+            f.write(json.dumps(results, indent=2))
+
+
+if __name__ == "__main__":
+    main()
+
