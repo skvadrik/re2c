@@ -172,8 +172,6 @@ AC_CONFIG_FILES([\
 AC_CONFIG_FILES([run_tests.sh], [chmod +x run_tests.sh])
 AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/run.py],
     [chmod +x benchmarks/submatch_dfa_aot/run.py])
-AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/verify.sh],
-    [chmod +x benchmarks/submatch_dfa_aot/verify.sh])
 
 
 LT_INIT([dlopen win32-dll])

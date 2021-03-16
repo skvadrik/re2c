@@ -205,7 +205,6 @@ add_custom_target(bench_submatch_dfa_aot ALL DEPENDS ${BIN} ${DAT})
 # benchmark scripts
 set(srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 set(builddir ".")
-configure_file(verify.sh.in verify.sh @ONLY)
 configure_file(run.py.in run.py @ONLY)
 
 # override default clean command to keep engines (ragel, kleenex)
