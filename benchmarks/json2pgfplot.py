@@ -17,7 +17,6 @@ plot_begin = """
 
 \\def\\plotwidth{%lfin}
 \\def\\barwidth{%lfin}
-\\def\\xmax{%lf}
 
 \\pgfplotsset{styleX/.style={
     font=\\scriptsize,
@@ -31,6 +30,7 @@ plot_begin = """
     xshift=\\xplotshift,
     yshift=\\yplotshift,
     xmin=\\xmin,
+    xmax=\\xmax,
     ytick=data,
     yticklabels from table={\\table}{alg},
     every axis title/.style={below right, at={(-0.5in,-0.1in)}},
@@ -43,7 +43,6 @@ plot_begin = """
 }}
 
 \\pgfplotsset{styleXrel/.style={
-    xmax=\\xmax,
     clip=false,
     visualization depends on={x > \\xmax \\as \\xoverflow},
     visualization depends on={x > \\xmax ? -x + \\xmax - 1 : 0 \\as \\xshift},
@@ -53,11 +52,13 @@ plot_begin = """
 }}
 """
 
+
 plot_middle = """
 \\def\\enlargelim{%lf}
 \\def\\xplotshift{%lfin}
 \\def\\yplotshift{%lfin}
 \\def\\xmin{%lf}
+\\def\\xmax{%lf}
 \\def\\title{\\textbf{%s} \\, (%d symbols, %d captures)},
 
 \\pgfplotstableread {%s} \\table
@@ -68,10 +69,12 @@ plot_middle = """
 \\end{axis}
 """
 
+
 plot_end = """
 \\end{tikzpicture}
 \\end{document}
 """
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -80,6 +83,7 @@ def parse_args():
     parser.add_argument("--relative", action="store_true",
         help="output CPU time relative to the first algorithm")
     return parser.parse_args()
+
 
 # Generate benchmark title from benchmark name.
 def gen_title(oldname):
@@ -96,6 +100,7 @@ def gen_title(oldname):
             newname += "^"
         newname += char
     return "$\\boldsymbol{" + newname + "}$"
+
 
 # Split benchmarks into groups by regexp (the first component of the name).
 # If the relative mode is on, normalize CPU time by the time of the first
@@ -142,6 +147,7 @@ def group_benchmarks(benchmarks, relative):
 
     return benchgroups
 
+
 # Generate a Tikz picture with a PGF plot for each benchmark group.
 # If the relative mode is on, cut off outliers (very long bars), so that they
 # do not completely squash other bars to the left.
@@ -158,11 +164,8 @@ def generate_plot(benchgroups, relative):
     barwidth = 0.08
     # Plot height is roughly bar width times maximum group size.
     plotheight = 0.15 + maxrows * barwidth * 0.75
-    # Maximum X value is set only in relative mode. Cutoff value is chosen
-    # arbitrarily to make the bars not too thin.
-    xmax = min(maxgrouptime + 0.1, 100)
 
-    plot = plot_begin % (plotwidth, barwidth, xmax)
+    plot = plot_begin % (plotwidth, barwidth)
 
     i = 0
     for name, benchgroup in benchgroups.items():
@@ -172,16 +175,23 @@ def generate_plot(benchgroups, relative):
         (table, nrows, maxtime, captures, regsize) = benchgroup
 
         enlargelim = 1 / nrows
+
         xshift = 0 if even else plotwidth
         yshift = -plotheight * (i if even else i - 1)
+
+        # Maximum X value is set only in uniform scale mode.
+        # Cutoff value is chosen arbitrarily to make the bars not too thin.
+        xmax = (min(maxgrouptime, 100) if relative else maxgrouptime) * 1.01
         xmin = -(xmax if relative else maxtime) / 50
+
         style = "rel" if relative else "abs"
 
         plot += plot_middle % (enlargelim,
-            xshift, yshift, xmin, name, regsize, captures, table, style)
+            xshift, yshift, xmin, xmax, name, regsize, captures, table, style)
 
     plot += plot_end
     return plot
+
 
 def main():
     args = parse_args()
@@ -194,6 +204,7 @@ def main():
 
     with open(args.output, 'w') as f:
         f.write(plot)
+
 
 if __name__ == "__main__":
     main()
