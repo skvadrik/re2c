@@ -150,8 +150,6 @@ def run_all(benchmarks, repcount, output):
         results.append({
             'name':     '%s-%s_%s' % (name.replace('_', '-'), compiler, algo),
             'cpu_time': time,
-            'regsize':  0,
-            'captures': 0,
         })
 
     results = {'benchmarks': results}

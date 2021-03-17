@@ -59,7 +59,7 @@ plot_middle = """
 \\def\\yplotshift{%lfin}
 \\def\\xmin{%lf}
 \\def\\xmax{%lf}
-\\def\\title{\\textbf{%s} \\, (%d symbols, %d captures)},
+\\def\\title{%s},
 
 \\pgfplotstableread {%s} \\table
 
@@ -112,8 +112,8 @@ def gen_title(oldname):
 #     {
 #       "name": <string>,
 #       "cpu_time": <number>,
-#       "captures": <number>,
-#       "regsize": <number>, ...
+#       ["captures": <number>,]
+#       ["regsize": <number>,] ...
 #     }, ...
 #   ], ...
 # }
@@ -125,8 +125,8 @@ def group_benchmarks(benchmarks, relative):
     for bench in benchmarks:
         name, algo = bench["name"].split('_')
         time = bench["cpu_time"]
-        captures = bench["captures"]
-        regsize = bench["regsize"]
+        captures = bench["captures"] if "captures" in bench else None
+        regsize = bench["regsize"] if "regsize" in bench else None
         groups.setdefault(name, []).append((algo, time, captures, regsize))
 
     benchgroups = OrderedDict()
@@ -184,10 +184,14 @@ def generate_plot(benchgroups, relative):
         xmax = (min(maxgrouptime, 100) if relative else maxgrouptime) * 1.01
         xmin = -(xmax if relative else maxtime) / 50
 
+        title = '\\textbf{%s}' % name
+        if regsize != None and captures != None:
+            title += ' \\, (%d sym, %d cap)' % (regsize, captures)
+
         style = "rel" if relative else "abs"
 
         plot += plot_middle % (enlargelim,
-            xshift, yshift, xmin, xmax, name, regsize, captures, table, style)
+            xshift, yshift, xmin, xmax, title, table, style)
 
     plot += plot_end
     return plot
