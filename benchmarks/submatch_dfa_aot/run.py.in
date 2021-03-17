@@ -133,23 +133,35 @@ def run(engine, binary, repcount):
             # output format: time (ms): <number>
             time += float(p.stderr.rsplit(' ', 1)[1])
 
+    # Measure stripped binary size.
+    tmp = prog + ".tmp"
+    shutil.copy(prog, tmp)
+    subprocess.run(['strip', tmp])
+    size = os.stat(tmp).st_size
+    os.remove(tmp)
+
     time /= repcount
-    print('%-10s %-30s %g' % (engine, binary, time))
-    return time
+    size = int(size / 1024)
+    print('%-10s %-30s %10.2lf %10d' % (engine, binary, time, size))
+    return time, size
 
 
 # Run all benchmarks, write results in a JSON file.
 def run_all(benchmarks, repcount, output):
+    print('%-10s %-30s %10s %10s\n%s' % (
+        'engine', 'algorithm', 'time (ms)', 'size (KB)', '-' * 64))
+
     results = []
     for bench in benchmarks:
         (binary, name, engine, suffixes, compiler) = decompose(bench)
         algo = '-'.join([engine] + suffixes)
-        title = '-'.join([name, compiler])
+        title = '%s-%s_%s' % (name.replace('_', '-'), compiler, algo)
 
-        time = run(engine, binary, repcount)
+        time, size = run(engine, binary, repcount)
         results.append({
-            'name':     '%s-%s_%s' % (name.replace('_', '-'), compiler, algo),
+            'name':     title,
             'cpu_time': time,
+            'bin_size': size,
         })
 
     results = {'benchmarks': results}
