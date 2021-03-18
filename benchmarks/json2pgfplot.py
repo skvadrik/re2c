@@ -30,14 +30,15 @@ plot_begin = """
     yshift=\\yplotshift,
     xmax=\\xmax,
     xmin=-\\xmax/50,
+    ymax=0.7,
+    ymin=0.3 - \\nrows,
     ytick=data,
     yticklabels from table={\\table}{algo},
-    every axis title/.style={below right, at={(-0.5in,-0.1in)}},
+    every axis title/.style={below right, at={(-0.5in,0)}},
     title=\\title,
-    enlarge y limits=\\enlargelim,
     clip=false,
     visualization depends on={x > \\xmax \\as \\xoverflow},
-    visualization depends on={x > \\xmax ? -x + \\xmax - 1 : 0 \\as \\xshift},
+    visualization depends on={x > \\xmax ? -x + \\xmax : 0 \\as \\xshift},
     every node near coord/.style={shift={(axis direction cs:\\xshift,0)}},
     nodes near coords={\\ifdim \\xoverflow pt=1pt \\textbf{...} \\fi
         \\pgfmathprintnumber{\\pgfplotspointmeta}},
@@ -52,9 +53,9 @@ plot_begin_picture = """
 
 
 plot_middle = """
-\\def\\enlargelim{%lf}
 \\def\\xplotshift{%lfin}
 \\def\\yplotshift{%lfin}
+\\def\\nrows{%d},
 \\def\\title{%s},
 
 \\pgfplotstableread {%s} \\table
@@ -144,7 +145,7 @@ def group_benchmarks(benchmarks, relative):
         group = groups[name]
         (_, cputime0, binsize0, captures, regsize) = group[0]
 
-        group_time = None
+        timetbl = None
         if cputime0 != None:
             table = 'algo value\n'
             for (algo, time, _, _, _) in group:
@@ -152,22 +153,23 @@ def group_benchmarks(benchmarks, relative):
                 maxtime = max(maxtime, time)
                 avgtime += time
                 table += '{%s} %lf\n' % (algo, time)
-            group_time = table
+            timetbl = table
 
-        group_size = None
+        sizetbl = None
         if binsize0 != None:
             table = 'algo value\n'
             for (algo, _, size, _, _) in group:
                 maxsize = max(maxsize, size)
                 avgsize += size
                 table += '{%s} %lf\n' % (algo, size)
-            group_size = table
+            sizetbl = table
 
         title = gen_title(name)
-        benchgroups[title] = (group_time, group_size, captures, regsize)
+        nrows = len(group)
+        benchgroups[title] = (timetbl, sizetbl, nrows, captures, regsize)
 
-        nbench += len(group)
-        maxrows = max(maxrows, len(group))
+        nbench += nrows
+        maxrows = max(maxrows, nrows)
 
     avgtime /= nbench
     avgsize /= nbench
@@ -196,9 +198,8 @@ def generate_plot(groups, relative):
     for name, benchgroup in benchgroups.items():
         even = i % 2 == 0
         i += 1
-        (timetbl, sizetbl, regsize, captures) = benchgroup
+        (timetbl, sizetbl, nrows, regsize, captures) = benchgroup
 
-        enlargelim = 1 / maxrows
         xshift = 0 if even else plotwidth
         yshift = -plotheight * (i if even else i - 1)
         title = '\\textbf{%s}' % name
@@ -207,13 +208,11 @@ def generate_plot(groups, relative):
 
         # Generate CPU time plots.
         if timetbl != None:
-            plot_time += plot_middle % (enlargelim, xshift, yshift, title,
-                timetbl)
+            plot_time += plot_middle % (xshift, yshift, nrows, title, timetbl)
 
         # Generate binary size plots.
         if sizetbl != None:
-            plot_size += plot_middle % (enlargelim, xshift, yshift, title,
-                sizetbl)
+            plot_size += plot_middle % (xshift, yshift, nrows, title, sizetbl)
 
     # Glue plots together in one TeX document
     plot = plot_begin % (plotwidth, barwidth)
