@@ -28,20 +28,13 @@ plot_begin = """
     bar width=\\barwidth,
     xshift=\\xplotshift,
     yshift=\\yplotshift,
-    xmin=\\xmin,
     xmax=\\xmax,
+    xmin=-\\xmax/50,
     ytick=data,
     yticklabels from table={\\table}{algo},
     every axis title/.style={below right, at={(-0.5in,-0.1in)}},
     title=\\title,
     enlarge y limits=\\enlargelim,
-}}
-
-\\pgfplotsset{styleXabs/.style={
-    nodes near coords,
-}}
-
-\\pgfplotsset{styleXrel/.style={
     clip=false,
     visualization depends on={x > \\xmax \\as \\xoverflow},
     visualization depends on={x > \\xmax ? -x + \\xmax - 1 : 0 \\as \\xshift},
@@ -54,6 +47,7 @@ plot_begin = """
 
 plot_begin_picture = """
 \\begin{tikzpicture}
+\\def\\xmax{%lf}
 """
 
 
@@ -61,13 +55,11 @@ plot_middle = """
 \\def\\enlargelim{%lf}
 \\def\\xplotshift{%lfin}
 \\def\\yplotshift{%lfin}
-\\def\\xmin{%lf}
-\\def\\xmax{%lf}
 \\def\\title{%s},
 
 \\pgfplotstableread {%s} \\table
 
-\\begin{axis}[styleX, styleX%s]
+\\begin{axis}[styleX]
     \\clip(current axis.south west) rectangle(current axis.north east);
     \\addplot[fill=lightgray] table[x=value, y expr=-\\coordindex] from \\table;
 \\end{axis}
@@ -140,6 +132,13 @@ def group_benchmarks(benchmarks, relative):
         groups.setdefault(name, []).append(
             (algo, cputime, binsize, captures, regsize))
 
+    maxtime = 0
+    avgtime = 0
+    maxsize = 0
+    avgsize = 0
+    maxrows = 0
+    nbench = 0
+
     benchgroups = OrderedDict()
     for name in groups:
         group = groups[name]
@@ -147,46 +146,42 @@ def group_benchmarks(benchmarks, relative):
 
         group_time = None
         if cputime0 != None:
-            maxtime = 0
             table = 'algo value\n'
             for (algo, time, _, _, _) in group:
                 time = time / (cputime0 if relative else 1)
                 maxtime = max(maxtime, time)
+                avgtime += time
                 table += '{%s} %lf\n' % (algo, time)
-            group_time = (table, maxtime)
+            group_time = table
 
         group_size = None
         if binsize0 != None:
-            maxsize = 0
             table = 'algo value\n'
             for (algo, _, size, _, _) in group:
                 maxsize = max(maxsize, size)
+                avgsize += size
                 table += '{%s} %lf\n' % (algo, size)
-            group_size = (table, maxsize)
+            group_size = table
 
         title = gen_title(name)
-        benchgroups[title] = (group_time, group_size, len(group),
-            captures, regsize)
+        benchgroups[title] = (group_time, group_size, captures, regsize)
 
-    return benchgroups
+        nbench += len(group)
+        maxrows = max(maxrows, len(group))
+
+    avgtime /= nbench
+    avgsize /= nbench
+    maxtime = min(maxtime, 5 * avgtime)
+    maxsize = min(maxsize, 5 * avgsize)
+
+    return benchgroups, maxtime, maxsize, maxrows
 
 
 # Generate a Tikz picture with a PGF plot for each benchmark group.
 # If the relative mode is on, cut off outliers (very long bars), so that they
 # do not completely squash other bars to the left.
-def generate_plot(benchgroups, relative):
-    # Compute global maximum values.
-    maxrows = 0
-    maxgrouptime = 0
-    maxgroupsize = 0
-    for _, (group_time, group_size, nrows, _, _) in benchgroups.items():
-        maxrows = max(maxrows, nrows)
-        if group_time != None:
-            (_, maxtime) = group_time
-            maxgrouptime = max(maxgrouptime, maxtime)
-        if group_size != None:
-            (_, maxsize) = group_size
-            maxgroupsize = max(maxgroupsize, maxsize)
+def generate_plot(groups, relative):
+    (benchgroups, maxtime, maxsize, maxrows) = groups
 
     # Plot width is approximately half the usual page width.
     plotwidth = 3.5
@@ -201,9 +196,9 @@ def generate_plot(benchgroups, relative):
     for name, benchgroup in benchgroups.items():
         even = i % 2 == 0
         i += 1
-        (group_time, group_size, nrows, regsize, captures) = benchgroup
+        (timetbl, sizetbl, regsize, captures) = benchgroup
 
-        enlargelim = 1 / nrows
+        enlargelim = 1 / maxrows
         xshift = 0 if even else plotwidth
         yshift = -plotheight * (i if even else i - 1)
         title = '\\textbf{%s}' % name
@@ -211,30 +206,21 @@ def generate_plot(benchgroups, relative):
             title += ' \\, (%d sym, %d cap)' % (regsize, captures)
 
         # Generate CPU time plots.
-        if group_time != None:
-            (table, maxtime) = group_time
-            xmax = (min(maxgrouptime, 100) if relative else maxgrouptime) * 1.1
-            xmin = -(xmax if relative else maxtime) / 50
-            style = 'rel' if relative else 'abs'
-
-            plot_time += plot_middle % (enlargelim,
-                xshift, yshift, xmin, xmax, title, table, style)
+        if timetbl != None:
+            plot_time += plot_middle % (enlargelim, xshift, yshift, title,
+                timetbl)
 
         # Generate binary size plots.
-        if group_size != None:
-            (table, maxsize) = group_size
-            xmax = maxgroupsize * 1.1
-            xmin = -maxtime / 50
-
-            plot_size += plot_middle % (enlargelim,
-                xshift, yshift, xmin, xmax, title, table, 'abs')
+        if sizetbl != None:
+            plot_size += plot_middle % (enlargelim, xshift, yshift, title,
+                sizetbl)
 
     # Glue plots together in one TeX document
     plot = plot_begin % (plotwidth, barwidth)
     if plot_time != '':
-        plot += plot_begin_picture + plot_time + plot_end_picture
+        plot += (plot_begin_picture % maxtime) + plot_time + plot_end_picture
     if plot_size != '':
-        plot += plot_begin_picture + plot_size + plot_end_picture
+        plot += (plot_begin_picture % maxsize) + plot_size + plot_end_picture
     plot += plot_end
 
     return plot
@@ -246,8 +232,8 @@ def main():
     with open(args.input) as f:
         input = json.load(f)
 
-    benchgroups = group_benchmarks(input['benchmarks'], args.relative)
-    plot = generate_plot(benchgroups, args.relative)
+    groups = group_benchmarks(input['benchmarks'], args.relative)
+    plot = generate_plot(groups, args.relative)
 
     with open(args.output, 'w') as f:
         f.write(plot)
