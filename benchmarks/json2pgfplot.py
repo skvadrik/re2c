@@ -40,8 +40,10 @@ plot_begin = """
     visualization depends on={x > \\xmax \\as \\xoverflow},
     visualization depends on={x > \\xmax ? -x + \\xmax : 0 \\as \\xshift},
     every node near coord/.style={shift={(axis direction cs:\\xshift,0)}},
-    nodes near coords={\\ifdim \\xoverflow pt=1pt \\textbf{...} \\fi
-        \\pgfmathprintnumber{\\pgfplotspointmeta}},
+    nodes near coords={
+        \\ifdim \\xoverflow pt=1pt \\!\\Large{...}\\scriptsize\\! \\fi
+        \\pgfmathprintnumber{\\pgfplotspointmeta}
+    },
 }}
 """
 
