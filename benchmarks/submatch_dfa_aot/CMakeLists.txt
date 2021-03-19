@@ -110,25 +110,23 @@ set(RE2C "${CMAKE_BINARY_DIR}/re2c")
 set(RE2C_FLAGS "--reusable" "--tags" "--no-generation-date")
 set(COMMON_RE2C
     "${SRC_DIR}/re2c/common.re"
-    "${SRC_DIR}/re2c/include_bc/fill.re"
-    "${SRC_DIR}/re2c/include_bc/fill_email.re"
-    "${SRC_DIR}/re2c/include_eof/fill.re"
-    "${SRC_DIR}/re2c/include_eof/fill_email.re"
+    "${SRC_DIR}/re2c/include/fill.re"
+    "${SRC_DIR}/re2c/include/fill_email.re"
+    "${SRC_DIR}/re2c/include-eof/fill.re"
+    "${SRC_DIR}/re2c/include-eof/fill_email.re"
 )
 foreach(bench ${BENCHMARKS})
-foreach(eof "bc" "eof")
+foreach(eof "" "-eof")
 foreach(alg "tdfa1" "tdfa0" "stadfa")
     set(src_file "${SRC_DIR}/re2c/${bench}.re")
-    set(gen_file "${GEN_DIR}/re2c/${bench}-${eof}-${alg}.c")
-    set(pregen_file "${PREGEN_DIR}/re2c/${bench}-${eof}-${alg}.c")
+    set(gen_file "${GEN_DIR}/re2c/${bench}${eof}-${alg}.c")
+    set(pregen_file "${PREGEN_DIR}/re2c/${bench}${eof}-${alg}.c")
     # always regenerate re2c benchmarks (regardless of RE2C_REGEN_BENCHMARKS)
     file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
     file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
-    file(RELATIVE_PATH rel_inc_path "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DIR}/re2c/include_${eof}")
+    file(RELATIVE_PATH rel_inc_path "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DIR}/re2c/include${eof}")
     set(re2c_flags ${RE2C_FLAGS} "-I" "${rel_inc_path}")
-    if("${alg}" STREQUAL "tdfa1-es")
-        set(re2c_flags ${re2c_flags} "--eager-skip")
-    elseif("${alg}" STREQUAL "tdfa0")
+    if("${alg}" STREQUAL "tdfa0")
         set(re2c_flags ${re2c_flags} "--no-lookahead")
     elseif("${alg}" STREQUAL "stadfa")
         set(re2c_flags ${re2c_flags} "--stadfa")

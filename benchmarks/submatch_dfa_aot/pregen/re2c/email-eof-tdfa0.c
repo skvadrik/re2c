@@ -72,7 +72,7 @@ static inline void taglist(taglist_t **ptl, const char *b, const char *t, taglis
     *ptl = tl;
 }
 
-#line 6 "../../../benchmarks/submatch_dfa_aot/src/re2c/include_eof/fill.re"
+#line 6 "../../../benchmarks/submatch_dfa_aot/src/re2c/include-eof/fill.re"
 
 
 static inline int fill(input_t *in)
@@ -847,7 +847,7 @@ yyFillLabel3_11:
 		goto yy7;
 	}
 yy24:
-#line 5 "../../../benchmarks/submatch_dfa_aot/src/re2c/include_eof/fill.re"
+#line 5 "../../../benchmarks/submatch_dfa_aot/src/re2c/include-eof/fill.re"
 	{ return 0; }
 #line 853 "gen/re2c/email-eof-tdfa0.c"
 yy25:
