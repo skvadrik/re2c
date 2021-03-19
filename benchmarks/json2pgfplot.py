@@ -83,8 +83,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("input", help="input JSON file")
     parser.add_argument("output", help="output TeX file")
-    parser.add_argument("--relative", action="store_true",
-        help="output CPU time relative to the first algorithm")
+    parser.add_argument("--relative-to",
+        help="output CPU time relative to the specified algorithm")
     return parser.parse_args()
 
 
@@ -105,6 +105,19 @@ def gen_title(oldname):
     return "$\\boldsymbol{" + newname + "}$"
 
 
+# Find index of a group which algorithm contains the given string (stem).
+def index_of_algo(group, stem):
+    if stem == None:
+        return 0;
+
+    for i in range(len(group)):
+        (algo, _, _, _, _) = group[i]
+        if stem in algo:
+            return i
+
+    return 0
+
+
 # Split benchmarks into groups by regexp (the first component of the name).
 # If the relative mode is on, normalize CPU time by the time of the first
 # benchmark in each group.
@@ -122,7 +135,7 @@ def gen_title(oldname):
 #   ], ...
 # }
 #
-def group_benchmarks(benchmarks, relative):
+def group_benchmarks(benchmarks, relative_to):
     benchcount = len(benchmarks)
 
     groups = OrderedDict()
@@ -145,13 +158,15 @@ def group_benchmarks(benchmarks, relative):
     benchgroups = OrderedDict()
     for name in groups:
         group = groups[name]
-        (_, cputime0, binsize0, captures, regsize) = group[0]
+
+        relto = index_of_algo(group, relative_to)
+        (_, cputime0, binsize0, captures, regsize) = group[relto]
 
         timetbl = None
         if cputime0 != None:
             table = 'algo value\n'
             for (algo, time, _, _, _) in group:
-                time = time / (cputime0 if relative else 1)
+                time = time / (cputime0 if relative_to != None else 1)
                 maxtime = max(maxtime, time)
                 avgtime += time
                 table += '{%s} %lf\n' % (algo, time)
@@ -181,10 +196,9 @@ def group_benchmarks(benchmarks, relative):
     return benchgroups, maxtime, maxsize, maxrows
 
 
-# Generate a Tikz picture with a PGF plot for each benchmark group.
-# If the relative mode is on, cut off outliers (very long bars), so that they
-# do not completely squash other bars to the left.
-def generate_plot(groups, relative):
+# Generate a Tikz picture with a PGF plot for each benchmark group. Crop
+# very long bars, so that they do not squash other bars to the left.
+def generate_plot(groups):
     (benchgroups, maxtime, maxsize, maxrows) = groups
 
     # Plot width is approximately half the usual page width.
@@ -233,8 +247,8 @@ def main():
     with open(args.input) as f:
         input = json.load(f)
 
-    groups = group_benchmarks(input['benchmarks'], args.relative)
-    plot = generate_plot(groups, args.relative)
+    groups = group_benchmarks(input['benchmarks'], args.relative_to)
+    plot = generate_plot(groups)
 
     with open(args.output, 'w') as f:
         f.write(plot)
