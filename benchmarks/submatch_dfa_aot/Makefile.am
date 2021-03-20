@@ -181,7 +181,6 @@ $(DAT): $(DAT_DIR)/%/big: $(DAT_DIR)/%/small
 	$(AM_V_GEN)( cd $(@D) && ./gen_* )
 
 $(KLEENEX):
-	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/engines/kleenex/getkleenex.sh $(srcdir)/engines/kleenex/0001-Updating-for-new-GHC.patch $(@D)
 	$(AM_V_GEN)( cd $(@D) && ./getkleenex.sh )
 
 $(RAGEL):

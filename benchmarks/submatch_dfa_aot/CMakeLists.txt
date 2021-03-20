@@ -53,9 +53,6 @@ file(MAKE_DIRECTORY "${GEN_DIR}/kleenex/")
 set(KLEENEX "${ENG_DIR}/kleenex/kexc")
 add_custom_command(
     OUTPUT "${KLEENEX}"
-    COMMAND "${CMAKE_COMMAND}" -E copy
-        "${CMAKE_CURRENT_SOURCE_DIR}/engines/kleenex/0001-Updating-for-new-GHC.patch"
-        "${ENG_DIR}/kleenex/0001-Updating-for-new-GHC.patch"
     COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/engines/kleenex/getkleenex.sh"
     WORKING_DIRECTORY "${ENG_DIR}/kleenex/"
 )
