@@ -35,6 +35,10 @@ def parse_args():
     return parser.parse_args()
 
 
+DATA_STEM = re.compile('^[0-9]+__([a-z0-9]+).*$')
+PROG_STEM = re.compile('^[0-9]+__([a-z0-9_]+).*$')
+
+
 # Format: <path>/<engine>/<benchmark>[-<sfx1>[-<sfx2>...]]-<compiler>
 def decompose(path):
     [_, engine, binary] = path.rsplit(os.sep, 2)
@@ -123,7 +127,7 @@ def find_benchmarks(filter, filter_out):
 
 # Run the benchmark and return its average time in milliseconds.
 def run(engine, binary, repcount):
-    stem = re.search('^([a-z0-9]+).*$', binary).group(1)
+    stem = DATA_STEM.search(binary).group(1)
     data = os.path.join(datadir, stem, 'big')
     prog = os.path.join(bindir, engine, binary)
 
@@ -145,20 +149,21 @@ def run(engine, binary, repcount):
 
     time /= repcount
     size = int(size / 1024)
-    print('%-10s %-30s %10.2lf %10d' % (engine, binary, time, size))
+    print('%-10s %-40s %10d %10d' % (engine, binary, time, size))
     return time, size
 
 
 # Run all benchmarks, write results in a JSON file.
 def run_all(benchmarks, repcount, output):
-    print('%-10s %-30s %10s %10s\n%s' % (
-        'engine', 'algorithm', 'time (ms)', 'size (KB)', '-' * 64))
+    print('%-10s %-40s %10s %10s\n%s' % (
+        'engine', 'algorithm', 'time (ms)', 'size (KB)', '-' * 80))
 
     results = []
     for bench in benchmarks:
         (binary, name, engine, suffixes, compiler) = decompose(bench)
         algo = '-'.join([engine] + suffixes)
-        title = '%s-%s_%s' % (name.replace('_', '-'), compiler, algo)
+        stem = PROG_STEM.search(name).group(1)
+        title = '%s-%s_%s' % (stem.replace('_', '-'), compiler, algo)
 
         time, size = run(engine, binary, repcount)
         results.append({
@@ -185,7 +190,7 @@ def verify(benchmarks, quick):
     for name in groups:
         print('verifying %s...' % name)
 
-        stem = re.search('^([a-z0-9]+).*$', name).group(1)
+        stem = DATA_STEM.search(name).group(1)
         data = os.path.join(datadir, stem, 'small' if quick else 'big')
 
         group = groups[name]

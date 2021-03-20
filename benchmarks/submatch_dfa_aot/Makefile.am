@@ -13,23 +13,44 @@ RE2C_FLAGS     = $(RE2C_FLAGS_COMMON) -I $(SRC_DIR)/re2c/include
 RE2C_FLAGS_EOF = $(RE2C_FLAGS_COMMON) -I $(SRC_DIR)/re2c/include-eof
 
 BENCHMARKS = \
-    alt1_2 alt1_4 alt1_8 \
-    alt2_2 alt2_4 alt2_8 \
-    alt4_2 alt4_4 alt4_8 \
-    cat2_0 cat2_4 cat2_8 \
-    cat4_0 cat4_2 cat4_4 \
-    cat8_0 cat8_1 cat8_2 \
-    iter_a_4 iter_a_16 iter_a_64 \
-    iter_b_2_3_5 iter_b_7_11_13 iter_b_17_19_23 \
-    iter_c_2_3_5 iter_c_7_11_13 iter_c_17_19_23 \
-    apache_log \
-    datetime \
-    email \
-    ipv4 \
-    uri_simple \
-    uri_rfc3986 \
-    http_simple \
-    http_rfc7230
+    00__http_rfc7230 \
+    01__http_simple \
+    02__uri_rfc3986 \
+    03__uri_simple \
+    04__apache_log \
+    05__datetime \
+    06__email \
+    07__ipv4 \
+    \
+    10__alt1_2 \
+    11__alt1_4 \
+    12__alt1_8 \
+    13__alt2_2 \
+    14__alt2_4 \
+    15__alt2_8 \
+    16__alt4_2 \
+    17__alt4_4 \
+    18__alt4_8 \
+    \
+    20__cat2_0 \
+    21__cat2_4 \
+    22__cat2_8 \
+    23__cat4_0 \
+    24__cat4_2 \
+    25__cat4_4 \
+    26__cat8_0 \
+    27__cat8_1 \
+    28__cat8_2 \
+    \
+    30__iter_4 \
+    31__iter_16 \
+    32__iter_64 \
+    33__iter_2_3_5 \
+    34__iter_7_11_13 \
+    35__iter_17_19_23 \
+    36__iter_2_3_5 \
+    37__iter_7_11_13 \
+    38__iter_17_19_23
 
 COMMON_SRC = $(SRC_DIR)/common.h
 
@@ -66,8 +87,10 @@ COMMON_RE2C = \
 # Masked benchmarks for which Kleenex either generates very large output
 # (tens of megabytes of C code), or even causes out of memory condition.
 KLEENEX_MASKED = \
-	iter_b_7_11_13 iter_b_17_19_23 \
-	iter_c_7_11_13 iter_c_17_19_23
+    34__iter_7_11_13 \
+    35__iter_17_19_23 \
+    37__iter_7_11_13 \
+    38__iter_17_19_23
 
 GEN_KLEENEX = $(patsubst %, $(GEN_DIR)/kleenex/%.c, \
 	$(filter-out $(KLEENEX_MASKED), $(BENCHMARKS)))
@@ -83,10 +106,10 @@ BIN = $(BIN_GCC) $(BIN_CLANG)
 
 OBJ = $(patsubst %, %.o, $(BIN))
 
-# Some benchmarks share the same data, like `uri_simple` and `uri_rfc3986`
+# Some benchmarks share the same data, like 03__uri_simple and 02__uri_rfc3986.
 DAT = $(patsubst %, $(DAT_DIR)/%/big, \
     $(sort $(foreach bench, $(BENCHMARKS), \
-        $(firstword $(subst _, , $(bench))))))
+        $(word 2, $(subst _, , $(bench))))))
 
 all-local: $(BIN) $(DAT)
 
