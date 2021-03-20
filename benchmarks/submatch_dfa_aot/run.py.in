@@ -25,9 +25,9 @@ def parse_args():
     parser.add_argument("--repetitions", type=int, default=1,
         help="number of times to run one benchmark")
     parser.add_argument("--filter",
-        help="pattern to select a subset of benchmarks by name")
+        help="regexp to select a subset of benchmarks by name")
     parser.add_argument("--filter-out",
-        help="pattern to mask a subset of benchmarks by name")
+        help="regexp to mask a subset of benchmarks by name")
     parser.add_argument("--verify", action='store_true',
         help="verify parse results on full data files")
     parser.add_argument("--quickverify", action='store_true',
@@ -95,6 +95,9 @@ def find_benchmarks(filter, filter_out):
     with open(os.path.join(srcdir, "known_failures")) as f:
         known_failures = f.read().splitlines()
 
+    re_accept = re.compile('.*' if filter == None else filter)
+    re_reject = re.compile('^$' if filter_out == None else filter_out)
+
     benchmarks = []
     for path, subdirs, files in os.walk(bindir):
         for basename in files:
@@ -103,10 +106,10 @@ def find_benchmarks(filter, filter_out):
             if basename.endswith('.o'):
                 # This is an object file => skip (we need only executables).
                 continue
-            elif filter != None and not basename.startswith(filter):
+            elif re_accept.search(basename) == None:
                 # This benchmark is does not match the current filter => skip.
                 continue
-            elif filter_out != None and filter_out in basename:
+            elif re_reject.search(basename) != None:
                 # This benchmark is masked by the current filter-out => skip.
                 continue
             elif '%s/%s' % (engine, name) in known_failures:
