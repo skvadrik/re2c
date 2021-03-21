@@ -1,5 +1,0 @@
-start: lines
-
-lines := aaa*
-
-aaa := (/[a]{16}/ ".")* /\n/

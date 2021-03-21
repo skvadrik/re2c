@@ -1,5 +1,0 @@
-start: lines
-
-lines := aaa*
-
-aaa := (/[a]{4}/ ".")* /\n/

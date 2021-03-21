@@ -28,15 +28,15 @@ set(BENCHMARKS
     "27__cat8_1"
     "28__cat8_2"
 
-    "30__iter_4"
-    "31__iter_16"
-    "32__iter_64"
-    "33__iter_2_3_5"
-    "34__iter_7_11_13"
-    "35__iter_17_19_23"
-    "36__iter_2_3_5"
-    "37__iter_7_11_13"
-    "38__iter_17_19_23"
+    "30__rep_cat_5_3_2"
+    "31__rep_cat_13_11_7"
+    "32__rep_cat_23_19_17"
+    "33__rep_alt_5_3_2"
+    "34__rep_alt_13_11_7"
+    "35__rep_alt_23_19_17"
+    "36__rep_5_rep_3_rep_2"
+    "37__rep_13_rep_11_rep_7"
+    "38__rep_23_rep_19_rep_17"
 )
 
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
@@ -59,10 +59,10 @@ add_custom_command(
 # Masked benchmarks for which Kleenex either generates very large output
 # (tens of megabytes of C code), or even causes out of memory condition.
 set(KLEENEX_MASKED
-    "34__iter_7_11_13"
-    "35__iter_17_19_23"
-    "37__iter_7_11_13"
-    "38__iter_17_19_23"
+    "34__rep_alt_13_11_7"
+    "35__rep_alt_23_19_17"
+    "37__rep_13_rep_11_rep_7"
+    "38__rep_23_rep_19_rep_17"
 )
 list(JOIN KLEENEX_MASKED "|" KLEENEX_MASKED_REGEXP)
 set(KLEENEX_BENCHMARKS ${BENCHMARKS})
