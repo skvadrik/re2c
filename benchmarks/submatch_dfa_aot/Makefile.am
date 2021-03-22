@@ -177,8 +177,8 @@ $(BIN_CLANG): $(BIN_DIR)/%-clang: $(GEN_DIR)/%.c
 	$(AM_V_GEN)clang $(CFLAGS) -o $@ $@.o
 
 $(DAT): $(DAT_DIR)/%/big: $(DAT_DIR)/%/small
-	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/$(@D)/small $(srcdir)/$(@D)/gen_* $(@D)
-	$(AM_V_GEN)( cd $(@D) && ./gen_* )
+	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/$(@D)/small $(@D)
+	$(AM_V_GEN)( cd $(@D) && ../../$(srcdir)/data/gen.py )
 
 $(KLEENEX):
 	$(AM_V_GEN)( cd $(@D) && ./getkleenex.sh )

@@ -25,35 +25,35 @@ me@at&t.net
 me@att.net
 someone@-test.com
 someone@test-.com
-joeblow@apa,che.org
-joeblow@apache.o,rg
-joeblow@apache,org
-joeblow @apache.org
-joeblow@ apache.org
- joeblow@apache.org
-joeblow@apache.org 
-joe blow@apache.org 
-joeblow@apa che.org 
-joe1blow@apache.org
-joe$blow@apache.org
-joe-@apache.org
-joe_@apache.org
-joe+@apache.org
-joe!@apache.org
-joe*@apache.org
-joe'@apache.org
-joe%45@apache.org
-joe?@apache.org
-joe&@apache.org
-joe=@apache.org
-+joe@apache.org
-!joe@apache.org
-*joe@apache.org
-'joe@apache.org
-%joe45@apache.org
-?joe@apache.org
-&joe@apache.org
-=joe@apache.org
+joe1234567890blow@apa,che.org
+joe1234567890blow@apache.o,rg
+joe1234567890blow@apache,org
+joe1234567890blow @apache.org
+joe1234567890blow@ apache.org
+ joe1234567890blow@apache.org
+joe1234567890blow@apache.org 
+joe1234567890 blow@apache.org 
+joe1234567890blow@apa che.org 
+joe12345678901blow@apache.org
+joe1234567890$blow@apache.org
+joe1234567890-@apache.org
+joe1234567890_@apache.org
+joe1234567890+@apache.org
+joe1234567890!@apache.org
+joe1234567890*@apache.org
+joe1234567890'@apache.org
+joe1234567890%45@apache.org
+joe1234567890?@apache.org
+joe1234567890&@apache.org
+joe1234567890=@apache.org
++joe1234567890@apache.org
+!joe1234567890@apache.org
+*joe1234567890@apache.org
+'joe1234567890@apache.org
+%joe123456789045@apache.org
+?joe1234567890@apache.org
+&joe1234567890@apache.org
+=joe1234567890@apache.org
 +@apache.org
 !@apache.org
 *@apache.org
@@ -62,34 +62,33 @@ joe=@apache.org
 ?@apache.org
 &@apache.org
 =@apache.org
-joe.@apache.org
-.joe@apache.org
+joe1234567890.@apache.org
+.joe1234567890@apache.org
 .@apache.org
-joe.ok@apache.org
-joe..ok@apache.org
+joe1234567890.ok@apache.org
+joe1234567890..ok@apache.org
 ..@apache.org
-joe(@apache.org
-joe)@apache.org
-joe,@apache.org
-joe;@apache.org
-\"joe.\"@apache.org
-\".joe\"@apache.org
-\"joe+\"@apache.org
-\"joe!\"@apache.org
-\"joe*\"@apache.org
-\"joe'\"@apache.org
-\"joe(\"@apache.org
-\"joe)\"@apache.org
-\"joe,\"@apache.org
-\"joe%45\"@apache.org
-\"joe;\"@apache.org
-\"joe?\"@apache.org
-\"joe&\"@apache.org
-\"joe=\"@apache.org
+joe1234567890(@apache.org
+joe1234567890)@apache.org
+joe1234567890,@apache.org
+joe1234567890;@apache.org
+\"joe1234567890.\"@apache.org
+\".joe1234567890\"@apache.org
+\"joe1234567890+\"@apache.org
+\"joe1234567890!\"@apache.org
+\"joe1234567890*\"@apache.org
+\"joe1234567890'\"@apache.org
+\"joe1234567890(\"@apache.org
+\"joe1234567890)\"@apache.org
+\"joe1234567890,\"@apache.org
+\"joe1234567890%45\"@apache.org
+\"joe1234567890;\"@apache.org
+\"joe1234567890?\"@apache.org
+\"joe1234567890&\"@apache.org
+\"joe1234567890=\"@apache.org
 \"..\"@apache.org
 abc-@abc.com
 abc_@abc.com
 abc-def@abc.com
 abc_def@abc.com
 abc@abc_def.com
-\?p`_qdl=@3vqpa.gxnsqaws6

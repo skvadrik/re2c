@@ -197,13 +197,13 @@ endfunction()
 
 # input data
 set(DAT)
-## Some benchmarks share the same data, like `uri_simple` and `uri_rfc3986`
+# Some benchmarks share the same data, like 03__uri_simple and 02__uri_rfc3986.
 regex_replace_list("^[0-9]+__([^_]+).*" "\\1" INPUTS ${BENCHMARKS})
 list(REMOVE_DUPLICATES INPUTS)
 foreach(input ${INPUTS})
     set(src_dir "${CMAKE_CURRENT_SOURCE_DIR}/data/${input}")
     set(dst_dir "${CMAKE_CURRENT_BINARY_DIR}/data/${input}")
-    file(GLOB script "${src_dir}/gen_${input}\.*")
+    file(GLOB script "${CMAKE_CURRENT_SOURCE_DIR}/data/gen.py")
     add_custom_command(
         OUTPUT "${dst_dir}/small"
         COMMAND "${CMAKE_COMMAND}" -E copy "${src_dir}/small" "${dst_dir}/small"
