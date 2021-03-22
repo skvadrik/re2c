@@ -147,7 +147,7 @@ def run(engine, binary, repcount):
     size = os.stat(tmp).st_size
     os.remove(tmp)
 
-    time /= repcount
+    time = int(time / repcount)
     size = int(size / 1024)
     print('%-10s %-40s %10d %10d' % (engine, binary, time, size))
     return time, size
