@@ -26,6 +26,7 @@ struct Tag
     static const size_t RIGHTMOST;
     static const uint32_t VARDIST;
     static const size_t FICTIVE;
+    static const size_t NONE;
 
     const std::string *name;
     size_t lsub;

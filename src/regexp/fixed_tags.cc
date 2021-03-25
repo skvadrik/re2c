@@ -37,8 +37,6 @@ struct Level {
     uint32_t dist_to_end; // full level distance
 };
 
-static const size_t NOTAG = ~0u;
-
 static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
     std::vector<Level> &levels, RE *re0)
 {
@@ -71,7 +69,7 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 stack.push_back(j);
 
                 // increase level when descending into the left sub-RE
-                Level l = {NOTAG, 0, 0};
+                Level l = {Tag::NONE, 0, 0};
                 levels.push_back(l);
 
             } else if (i.succ == 1) {
@@ -84,7 +82,7 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 // increase level when descending into the right sub-RE
                 // keep the left sub-RE level on stack, it will be needed to
                 // compare left and right distance
-                Level l = {NOTAG, 0, 0};
+                Level l = {Tag::NONE, 0, 0};
                 levels.push_back(l);
 
             } else {
@@ -112,7 +110,7 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 stack.push_back(j);
 
                 // increase level when descending into sub-RE
-                Level l = {NOTAG, 0, 0};
+                Level l = {Tag::NONE, 0, 0};
                 levels.push_back(l);
             } else {
                 // sub-RE visited, pop level from stack: if it has fixed distance
@@ -149,7 +147,7 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 // fixed tags do not apply to m-tags
             } else if (spec.opts->fixed_tags == FIXTAG_NONE) {
                 // fixed tag optimization is globally disabled
-            } else if (l.tag != NOTAG && l.dist_to_tag != VARDIST
+            } else if (l.tag != Tag::NONE && l.dist_to_tag != VARDIST
                     && (spec.opts->fixed_tags == FIXTAG_ALL || toplevel)) {
                 // this tag can be fixed
                 tag.base = l.tag;
