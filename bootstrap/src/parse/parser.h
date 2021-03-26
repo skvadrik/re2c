@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.7.3.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -31,8 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
 #ifndef YY_YY_SRC_PARSE_PARSER_H_INCLUDED
 # define YY_YY_SRC_PARSE_PARSER_H_INCLUDED
@@ -44,25 +45,30 @@
 extern int yydebug;
 #endif
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    TOKEN_CJUMP = 258,
-    TOKEN_CNEXT = 259,
-    TOKEN_CLIST = 260,
-    TOKEN_CSETUP = 261,
-    TOKEN_CZERO = 262,
-    TOKEN_CLOSESIZE = 263,
-    TOKEN_CODE = 264,
-    TOKEN_CONF = 265,
-    TOKEN_ID = 266,
-    TOKEN_FID = 267,
-    TOKEN_FID_END = 268,
-    TOKEN_LINE_INFO = 269,
-    TOKEN_REGEXP = 270
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    TOKEN_CJUMP = 258,             /* TOKEN_CJUMP  */
+    TOKEN_CNEXT = 259,             /* TOKEN_CNEXT  */
+    TOKEN_CLIST = 260,             /* TOKEN_CLIST  */
+    TOKEN_CSETUP = 261,            /* TOKEN_CSETUP  */
+    TOKEN_CZERO = 262,             /* TOKEN_CZERO  */
+    TOKEN_CLOSESIZE = 263,         /* TOKEN_CLOSESIZE  */
+    TOKEN_CODE = 264,              /* TOKEN_CODE  */
+    TOKEN_CONF = 265,              /* TOKEN_CONF  */
+    TOKEN_ID = 266,                /* TOKEN_ID  */
+    TOKEN_FID = 267,               /* TOKEN_FID  */
+    TOKEN_FID_END = 268,           /* TOKEN_FID_END  */
+    TOKEN_LINE_INFO = 269,         /* TOKEN_LINE_INFO  */
+    TOKEN_REGEXP = 270             /* TOKEN_REGEXP  */
   };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
@@ -78,7 +84,7 @@ union YYSTYPE
     std::string     *str;
     re2c::CondList  *clist;
 
-#line 82 "src/parse/parser.h"
+#line 88 "src/parse/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
