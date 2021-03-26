@@ -2,6 +2,58 @@ Changelog
 =========
 
 ----
+2.1x
+----
+
+2.1 (2021-03-26)
+~~~~~~~~~~~~~~~~
+
+- Added GitHub Actions CI for Linux, macOS and Windows and fixed numerous build
+  issues on those platforms (thanks to
+  `Serghei Iakovlev <https://github.com/sergeyklay>`_).
+
+- Added benchmarks for submatch extraction in lexer generators (ragel vs.
+  kleenex vs. re2c with TDFA(0), TDFA(1) or sta-DFA algorithms).
+
+  + New Autotools (configure) options: ``--enable-benchmarks``,
+    ``--enable-benchmarks-regenerate``
+
+  + New CMake options: ``-DRE2C_BUILD_BENCHMARKS``, ``-DRE2C_REGEN_BENCHMARKS``
+
+  + New `json2pgfplot.py
+    <https://github.com/skvadrik/re2c/blob/master/benchmarks/json2pgfplot.py>`_
+    script that converts benchmark results in JSON to a PDF with bar charts
+
+- Added option ``--depfile <filename>`` to generate build dependency files
+  (allows to track ``/*!include:re2c*/`` dependencies in the build system).
+
+- Added option ``--fixed-tags <none | all | toplevel>`` and improved fixed-tag
+  optimization to work with nested tags.
+
+- Added lzip to the distribution tarballs.
+
+- Added registerless-TDFA algorithm in the experimental libre2c library.
+
+- Explicitly disallowed invalid configuration when ``-f``, ``--storable-state``
+  option is used, but ``YYFILL`` is disabled
+  (`#306 <https://github.com/skvadrik/re2c/issues/306>`_).
+
+- Fixed bug in UTF-8 decode for 4-bytes rune
+  (`#307 <https://github.com/skvadrik/re2c/pull/307>`_, thanks to
+  `Satoshi Yasushima <https://github.com/s-yasu>`_).
+
+- Fixed bugs in rare cases of the end-of-input rule ``$`` usage
+  (`277f0295 <https://github.com/skvadrik/re2c/commit/277f0295fc77a2dad3b9838e45f787319b54a25f>`_,
+  `68611a57 <https://github.com/skvadrik/re2c/commit/68611a57a9683c05801255b35ba6217b91391dd8>`_
+  and `a9d582f9 <https://github.com/skvadrik/re2c/commit/a9d582f9d2a6d123aa55f3b8b73076aae7cb5616>`_).
+
+- Optimized ``--skeleton`` generation time.
+
+- Renamed internal option ``--dfa`` to ``--nested-negative-tags``.
+
+- Updated documentation for end of input handling and submatch extraction.
+
+----
 2.0x
 ----
 
