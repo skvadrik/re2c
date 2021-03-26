@@ -55,7 +55,6 @@ jobs:
             generator: Unix Makefiles
             build-type: Release
             build-dir: .build
-            cxx-flags: ${{ null }}
             skeleton: ${{ true }}
 
           # macOS
@@ -80,7 +79,6 @@ jobs:
             generator: Unix Makefiles
             build-type: Release
             build-dir: .build
-            cxx-flags: ${{ null }}
             skeleton: ${{ true }}
 
           # Windows
@@ -89,7 +87,6 @@ jobs:
             generator: Visual Studio 16 2019
             build-type: Debug
             build-dir: .build
-            cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
           - name: windows-msvc-debug-intree
@@ -97,7 +94,6 @@ jobs:
             generator: Visual Studio 16 2019
             build-type: Debug
             build-dir: .
-            cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
           - name: windows-msvc-release-ootree
@@ -105,7 +101,6 @@ jobs:
             generator: Visual Studio 16 2019
             build-type: Release
             build-dir: .build
-            cxx-flags: ${{ null }}
             skeleton: ${{ false }}
 
     steps:
@@ -184,8 +179,8 @@ jobs:
           esac
 
           # CFLAGS, CXXFLAGS
-          [[ ! -z '${{ matrix.cxx-flags }}' ]] && \
-            args+=( -DCMAKE_C_FLAGS="${{ matrix.cxx-flags }}" -DCMAKE_CXX_FLAGS="${{ matrix.cxx-flags }}" )
+          args+=( -DCMAKE_C_FLAGS="${{ matrix.cxx-flags }}" )
+          args+=( -DCMAKE_CXX_FLAGS="${{ matrix.cxx-flags }}" )
 
           # Quote each argument to prevent word split.
           echo "::set-output name=cmake::$(printf " '%s'" "${args[@]}")"
