@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "benchmarks/common/common.h"
 #include "lib/regex.h"
 
