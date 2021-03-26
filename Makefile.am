@@ -305,7 +305,6 @@ EXTRA_DIST = \
 	NO_WARRANTY \
 	README.md \
 	autogen.sh \
-	benchmarks \
 	build \
 	cmake \
 	examples \
@@ -446,6 +445,7 @@ TESTS = \
 # benchmarks
 if WITH_BENCHMARKS
 SUBDIRS += benchmarks/submatch_dfa_aot
+EXTRA_DIST += benchmarks/submatch_dfa_aot
 endif
 
 # libre2c

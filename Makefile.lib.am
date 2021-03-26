@@ -184,4 +184,6 @@ check_PROGRAMS += test_libre2c
 if WITH_BENCHMARKS
 SUBDIRS += benchmarks/submatch_nfa
 SUBDIRS += benchmarks/submatch_dfa_jit
+EXTRA_DIST += benchmarks/submatch_nfa
+EXTRA_DIST += benchmarks/submatch_dfa_jit
 endif
