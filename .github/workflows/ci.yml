@@ -23,7 +23,7 @@ jobs:
             generator: Unix Makefiles
             build-type: Ubsan
             build-dir: .build
-            cxx-flags: '-O2'
+            cxx-flags: -O2
             skeleton: ${{ false }}
 
           - name: linux-gcc-asan-ootree
@@ -31,7 +31,7 @@ jobs:
             generator: Unix Makefiles
             build-type: Asan
             build-dir: .build
-            cxx-flags: '-O2'
+            cxx-flags: -O2
             skeleton: ${{ false }}
 
           - name: linux-gcc-debug-ootree-skeleton
@@ -188,13 +188,13 @@ jobs:
           [[ ! -z '${{ matrix.cxx-flags }}' ]] && \
             args+=( -DCMAKE_C_FLAGS="${{ matrix.cxx-flags }}" -DCMAKE_CXX_FLAGS="${{ matrix.cxx-flags }}" )
 
-          echo "::set-output name=cmake::${args[@]}"
+          # Quote each argument to prevent word split.
+          echo "::set-output name=cmake::$(printf " '%s'" "${args[@]}")"
 
       - name: Fast Configure
         run: |
           # Read prepared command into an array
-          astr="${{ steps.configure-command.outputs.cmake }}"
-          args=($astr)
+          args=( ${{ steps.configure-command.outputs.cmake }} )
 
           # Amend Build Options
           args+=( -DCMAKE_INSTALL_PREFIX="$(pwd)/install" )
@@ -210,10 +210,10 @@ jobs:
           args+=( -G "${{ matrix.generator }}" )
 
           # Print the resulting command line for debugging purposes
-          echo "cmake ${args[@]}"
+          printf "cmake" && printf " '%s'" "${args[@]}" && printf "\n"
 
-          # Run
-          cmake "${args[@]}"
+          # Run CMake, pass quoted arguments to prevent word split.
+          printf " '%s'" "${args[@]}" | xargs cmake
 
       - name: Fast Build
         run: cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }}
@@ -230,8 +230,7 @@ jobs:
       - name: Full Configure
         run: |
           # Read prepared command into an array
-          astr="${{ steps.configure-command.outputs.cmake }}"
-          args=($astr)
+          args=( ${{ steps.configure-command.outputs.cmake }} )
 
           # Amend Build Options
           args+=( -DCMAKE_INSTALL_PREFIX="$(pwd)/install-2" -DRE2C_BUILD_RE2GO=ON -DRE2C_BUILD_LIBS=ON )
@@ -256,10 +255,10 @@ jobs:
           args+=( -G "${{ matrix.generator }}" )
 
           # Print the resulting command line for debugging purposes
-          echo "cmake ${args[@]}"
+          printf "cmake" && printf " '%s'" "${args[@]}" && printf "\n"
 
-          # Run
-          cmake "${args[@]}"
+          # Run CMake, pass quoted arguments to prevent word split.
+          printf " '%s'" "${args[@]}" | xargs cmake
 
       - name: Full Build
         run: |
