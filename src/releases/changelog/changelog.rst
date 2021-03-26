@@ -8,19 +8,19 @@ Changelog
 2.1 (2021-03-26)
 ~~~~~~~~~~~~~~~~
 
-- Added GitHub Actions CI for Linux, macOS and Windows, and fixed numerous build
+- Added GitHub Actions CI for Linux, macOS and Windows and fixed numerous build
   issues on those platforms (thanks to
   `Serghei Iakovlev <https://github.com/sergeyklay>`_).
 
 - Added benchmarks for submatch extraction in lexer generators (ragel vs.
-  kleenex vs. re2c with TDFA(0), TDFA(1) or sta-DFA algorithms)
+  kleenex vs. re2c with TDFA(0), TDFA(1) or sta-DFA algorithms).
 
-  + Autotools (configure) options: ``--enable-benchmarks``,
+  + New Autotools (configure) options: ``--enable-benchmarks``,
     ``--enable-benchmarks-regenerate``
 
-  + CMake options: ``-DRE2C_BUILD_BENCHMARKS``, ``-DRE2C_REGEN_BENCHMARKS``
+  + New CMake options: ``-DRE2C_BUILD_BENCHMARKS``, ``-DRE2C_REGEN_BENCHMARKS``
 
-  + new `json2pgfplot.py
+  + New `json2pgfplot.py
     <https://github.com/skvadrik/re2c/blob/master/benchmarks/json2pgfplot.py>`_
     script that converts benchmark results in JSON to a PDF with bar charts
 
@@ -52,7 +52,6 @@ Changelog
 - Renamed internal option ``--dfa`` to ``--nested-negative-tags``.
 
 - Updated documentation for end of input handling and submatch extraction.
-  
 
 ----
 2.0x

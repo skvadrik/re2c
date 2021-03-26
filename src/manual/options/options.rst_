@@ -34,6 +34,13 @@
     although for some compilers like Tcc it also results in smaller binary size.
     This option doesn't work for the Go backend.
 
+``--depfile FILE``
+    Write dependency information to ``FILE`` in the form of a Makefile rule
+    ``<output-file> : <input-file> [include-file ...]``. This allows to track
+    build dependencies in the presence of ``/*!include:re2c*/`` directives, so
+    that updating include files triggers regeneration of the output file.
+    This option requires that ``-o --output`` option is specified.
+
 ``-e --ecb``
     Generate a lexer that reads input in EBCDIC encoding.
     re2c assumes that character range is 0 -- 0xFF an character size is 1 byte.
