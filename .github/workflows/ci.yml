@@ -170,8 +170,7 @@ jobs:
           args=( -S . -B ${{ matrix.build-dir }} )
 
           # Generator's specific stuff.
-          # We don't add generator here to avoid word split when expanding
-          # array elements, e.g. 'Visual Studio' passed as two arguments.
+          args+=( -G "${{ matrix.generator }}" )
           case "${{ matrix.generator }}" in
             'Visual Studio'*)
               args+=( -A x64 )
@@ -202,12 +201,6 @@ jobs:
           # Disable some defaults for now to speed up the build as
           # they are not necessary in a minimal installation
           args+=( -DRE2C_BUILD_RE2GO=OFF )
-
-          # Generator's specific stuff.
-          # Some generator names contains a space e.g. 'Visual Studio'.
-          # So, to avoid word split when expanding array elements in 'args=($astr)'
-          # we add generator here instead of 'Prepare Configure Command' step.
-          args+=( -G "${{ matrix.generator }}" )
 
           # Print the resulting command line for debugging purposes
           printf "cmake" && printf " '%s'" "${args[@]}" && printf "\n"
@@ -247,12 +240,6 @@ jobs:
               args+=( -DRE2C_REBUILD_DOCS=ON )
               ;;
           esac
-
-          # Generator's specific stuff
-          # Some generator names contains a space e.g. 'Visual Studio'.
-          # So, to avoid word split when expanding array elements in 'args=($astr)'
-          # we add generator here instead of 'Prepare Configure Command' step.
-          args+=( -G "${{ matrix.generator }}" )
 
           # Print the resulting command line for debugging purposes
           printf "cmake" && printf " '%s'" "${args[@]}" && printf "\n"
