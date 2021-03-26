@@ -42,12 +42,13 @@ jobs:
             cxx-flags: -O2
             skeleton: ${{ true }}
 
-          - name: linux-gcc-debug-intree-skeleton
+          - name: linux-gcc-debug-intree-m32-skeleton
             os: ubuntu-latest
             generator: Unix Makefiles
             build-type: Debug
             build-dir: .
-            cxx-flags: -O2
+            cxx-flags: -O2 -m32
+            ld-flags: -m32
             skeleton: ${{ true }}
 
           - name: linux-gcc-release-ootree-skeleton
@@ -121,6 +122,7 @@ jobs:
         run: |
           case ${{ runner.os }} in
             Linux*)
+              sudo apt install gcc-multilib g++-multilib  # for -m32
               echo "CC=gcc" >> $GITHUB_ENV
               echo "CXX=g++" >> $GITHUB_ENV
               ;;
@@ -178,9 +180,11 @@ jobs:
               ;;
           esac
 
-          # CFLAGS, CXXFLAGS
+          # CFLAGS, CXXFLAGS, LDFLAGS
           args+=( -DCMAKE_C_FLAGS="${{ matrix.cxx-flags }}" )
           args+=( -DCMAKE_CXX_FLAGS="${{ matrix.cxx-flags }}" )
+          args+=( -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.ld-flags }}" )
+          args+=( -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.ld-flags }}" )
 
           # Quote each argument to prevent word split.
           echo "::set-output name=cmake::$(printf " '%s'" "${args[@]}")"
