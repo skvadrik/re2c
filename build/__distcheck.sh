@@ -17,10 +17,19 @@ do
     rm -rf $builddir
     mkdir $builddir
     cd $builddir
-        # 'make' implies 'make docs'; running both in parallel may cause data races
-        # configure without --enable-debug, this is the release binary
-        ../configure --enable-docs --enable-libs \
+    # 'make' implies 'make docs'; running both in parallel may cause data races
+    # configure without --enable-debug, this is the release binary
+    ../configure --enable-docs --enable-libs \
         && $make_prog bootstrap -j$(nproc) \
         && $make_prog distcheck -j$(nproc)
     cd ..
 done
+
+# test that the release tarball builds with CMake
+cd $builddir
+tarball=$(find . -name 're2c-*.tar.xz')
+test -f "$tarball" && tar -xf "$tarball" \
+    || { echo "*** failed to find tarball ***" && exit 1; }
+cd "${tarball%.tar.xz}" && cmake . && make -j$(nproc) && cd .. \
+    || { echo "*** failed to build with cmake ***" && exit 1; }
+cd ..
