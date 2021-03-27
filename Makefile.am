@@ -296,17 +296,21 @@ man_MANS = $(DOCS)
 # include files (stdlib)
 dist_stdlib_DATA = include/unicode_categories.re
 
+CMAKEFILES := \
+	CMakeLists.txt \
+	cmake
+
 EXTRA_DIST = \
 	$(re2c_BOOT) \
 	$(re2c_CUSTOM) \
 	$(re2c_SRC_DOC_EXT) \
+	$(CMAKEFILES) \
 	CHANGELOG \
 	LICENSE \
 	NO_WARRANTY \
 	README.md \
 	autogen.sh \
 	build \
-	cmake \
 	examples \
 	test
 
