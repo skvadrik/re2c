@@ -5,6 +5,12 @@ Changelog
 2.1x
 ----
 
+2.1.1 (2021-03-27)
+~~~~~~~~~~~~~~~~~~
+
+- Added missing CMakeLists.txt to release tarballs
+  (`#346 <https://github.com/skvadrik/re2c/issues/346>`_).
+
 2.1 (2021-03-26)
 ~~~~~~~~~~~~~~~~
 
