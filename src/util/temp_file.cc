@@ -76,7 +76,10 @@ bool overwrite_file(const char *srcname, const char *dstname)
 
     // rename failed: try write
     FILE *src = NULL, *dst = NULL;
+    static const size_t BLK = 4096;
+    char buf[BLK];
     bool ok = false;
+    size_t n;
 
     src = fopen(srcname, "r");
     if (!src) goto end;
@@ -84,10 +87,8 @@ bool overwrite_file(const char *srcname, const char *dstname)
     dst = fopen(dstname, "w");
     if (!dst) goto end;
 
-    static const size_t BLK = 4096;
-    char buf[BLK];
     for (;;) {
-        const size_t n = fread(buf, 1, BLK, src);
+        n = fread(buf, 1, BLK, src);
         fwrite(buf, 1, n, dst);
         if (n < BLK) break;
     }
