@@ -14,13 +14,13 @@
     display: block;
     overflow: auto;
     font-size: 13px; /* must be in sync with .linenos */
-    color: darkslategray;
+    color: #305070;
     line-height: normal;
 }
 
-.highlight .c  { color: #507080; } /* Comment           */
-.highlight .cm { color: #507080; } /* Comment.Multiline */
-.highlight .c1 { color: #507080; } /* Comment.Single    */
+.highlight .c  { color: #305070; } /* Comment           */
+.highlight .cm { color: #305070; } /* Comment.Multiline */
+.highlight .c1 { color: #305070; } /* Comment.Single    */
 .highlight .cp  { color: steelblue; } /* Comment.Preproc   */
 .highlight .cpf { color: steelblue; } /* Comment.Preproc ? */
 
