@@ -2,16 +2,35 @@
 
 import argparse
 import json
+import sys
 from collections import OrderedDict
 
 
-plot_begin = """
+plot_preamble = """
 \\documentclass[tikz]{standalone}
 
 \\usepackage[utf8]{inputenc}
 \\usepackage{amsmath, amssymb, amsfonts}
 \\usepackage{tikz, pgfplots, pgfplotstable}
+"""
 
+# Use Comic Neue font.
+plot_font_comicneue = """
+\\usepackage{comicneue}
+\\usepackage[T1]{fontenc}
+\\renewcommand{\\familydefault}{\sfdefault}
+"""
+
+# Use Computer Modern Bright font.
+plot_font_cmbright = """
+\\usepackage{cmbright}
+\\usepackage[T1]{fontenc}
+\\renewcommand{\\familydefault}{\sfdefault}
+"""
+
+# Counterintuitively, 'assume math mode' tricks pgfmathprintnumber into not
+# setting math mode, which is needed because Comic Neue does not support math.
+plot_begin = """
 \\begin{document}
 
 \\def\\plotwidth{%lfin}
@@ -42,17 +61,15 @@ plot_begin = """
     every node near coord/.style={shift={(axis direction cs:\\xshift,0)}},
     nodes near coords={
         \\ifdim \\xoverflow pt=1pt \\!\\Large{...}\\scriptsize\\! \\fi
-        \\pgfmathprintnumber{\\pgfplotspointmeta}
+        \\pgfmathprintnumber[assume math mode=true]{\\pgfplotspointmeta}
     },
 }}
 """
-
 
 plot_begin_picture = """
 \\begin{tikzpicture}
 \\def\\xmax{%lf}
 """
-
 
 plot_middle = """
 \\def\\xplotshift{%lfin}
@@ -68,11 +85,9 @@ plot_middle = """
 \\end{axis}
 """
 
-
 plot_end_picture = """
 \\end{tikzpicture}
 """
-
 
 plot_end = """
 \\end{document}
@@ -85,6 +100,8 @@ def parse_args():
     parser.add_argument("output", help="output TeX file")
     parser.add_argument("--relative-to",
         help="output CPU time relative to the specified algorithm")
+    parser.add_argument("--font",
+        help="use the specified font (supported fonts: cmbright, comicneue)")
     return parser.parse_args()
 
 
@@ -198,7 +215,7 @@ def group_benchmarks(benchmarks, relative_to):
 
 # Generate a Tikz picture with a PGF plot for each benchmark group. Crop
 # very long bars, so that they do not squash other bars to the left.
-def generate_plot(groups):
+def generate_plot(groups, font):
     (benchgroups, maxtime, maxsize, maxrows) = groups
 
     # Plot width is approximately half the usual page width.
@@ -231,11 +248,22 @@ def generate_plot(groups):
             plot_size += plot_middle % (xshift, yshift, nrows, title, sizetbl)
 
     # Glue plots together in one TeX document
-    plot = plot_begin % (plotwidth, barwidth)
+    plot = plot_preamble
+
+    if font == 'comicneue':
+        plot += plot_font_comicneue
+    elif font == 'cmbright':
+        plot += plot_font_cmbright
+    elif font != None:
+        sys.exit('error: unsupported font: "%s"' % font)
+
+    plot += plot_begin % (plotwidth, barwidth)
+
     if plot_time != '':
         plot += (plot_begin_picture % maxtime) + plot_time + plot_end_picture
     if plot_size != '':
         plot += (plot_begin_picture % maxsize) + plot_size + plot_end_picture
+
     plot += plot_end
 
     return plot
@@ -248,7 +276,7 @@ def main():
         input = json.load(f)
 
     groups = group_benchmarks(input['benchmarks'], args.relative_to)
-    plot = generate_plot(groups)
+    plot = generate_plot(groups, args.font)
 
     with open(args.output, 'w') as f:
         f.write(plot)
