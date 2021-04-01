@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import math
 import sys
 from collections import OrderedDict
 
@@ -30,6 +31,10 @@ plot_font_cmbright = """
 
 # Counterintuitively, 'assume math mode' tricks pgfmathprintnumber into not
 # setting math mode, which is needed because Comic Neue does not support math.
+#
+# Use 'fixed relative' number format with very high precision (the numbers have
+# been previously rounded to a few non-zero digits in the fractional part, so
+# the trailing zeroes will will not be printed).
 plot_begin = """
 \\begin{document}
 
@@ -41,7 +46,6 @@ plot_begin = """
     xbar,
     axis y line*=none,
     axis x line=none,
-    nodes near coords style={/pgf/number format/.cd,1000 sep={\\,}},
     y=0.12in,
     width=(\\plotwidth * 0.75),
     bar width=\\barwidth,
@@ -58,10 +62,15 @@ plot_begin = """
     clip=false,
     visualization depends on={x > \\xmax \\as \\xoverflow},
     visualization depends on={x > \\xmax ? -x + \\xmax : 0 \\as \\xshift},
-    every node near coord/.style={shift={(axis direction cs:\\xshift,0)}},
     nodes near coords={
         \\ifdim \\xoverflow pt=1pt \\!\\Large{...}\\scriptsize\\! \\fi
         \\pgfmathprintnumber[assume math mode=true]{\\pgfplotspointmeta}
+    },
+    nodes near coords style={shift={(axis direction cs:\\xshift,0)}},
+    nodes near coords style={/pgf/number format/.cd,
+        fixed relative,
+        precision = 10,
+        1000 sep = {\\,}
     },
 }}
 """
@@ -135,6 +144,20 @@ def index_of_algo(group, stem):
     return 0
 
 
+# Time format: keep integer part precise, round fractional part relative to the
+# exponent (similar to PGFPLOTS's "fixed relative, precision = 2" numer format,
+# but doesn't round integer part). This is to reduce visual noise on the plot.
+#
+# Examples: 1004, 195, 13, 3.8, 0.85, 0.017, 0.0048
+#
+def time_format(time):
+    order = math.floor(math.log(time, 10))
+    if order > 0:
+        return '%.0lf'
+    else:
+        return '%%.%dlf' % (-order + 1)
+
+
 # Split benchmarks into groups by regexp (the first component of the name).
 # If the relative mode is on, normalize CPU time by the time of the first
 # benchmark in each group.
@@ -186,7 +209,7 @@ def group_benchmarks(benchmarks, relative_to):
                 time = time / (cputime0 if relative_to != None else 1)
                 maxtime = max(maxtime, time)
                 avgtime += time
-                table += '{%s} %lf\n' % (algo, time)
+                table += ('{%s} ' + time_format(time) + '\n') % (algo, time)
             timetbl = table
 
         sizetbl = None
