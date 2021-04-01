@@ -8,7 +8,7 @@ CFLAGS = -O3 -I $(SRC_DIR)
 RAGEL = $(ENG_DIR)/ragel/ragel7
 KLEENEX = $(ENG_DIR)/kleenex/kexc
 RE2C = $(top_builddir)/re2c
-RE2C_FLAGS_COMMON = --reusable --tags --no-generation-date
+RE2C_FLAGS_COMMON = --reusable --tags --no-generation-date --no-version
 RE2C_FLAGS     = $(RE2C_FLAGS_COMMON) -I $(SRC_DIR)/re2c/include
 RE2C_FLAGS_EOF = $(RE2C_FLAGS_COMMON) -I $(SRC_DIR)/re2c/include-eof
 

@@ -127,7 +127,7 @@ endforeach()
 # re2c
 file(MAKE_DIRECTORY "${GEN_DIR}/re2c/")
 set(RE2C "${CMAKE_BINARY_DIR}/re2c")
-set(RE2C_FLAGS "--reusable" "--tags" "--no-generation-date")
+set(RE2C_FLAGS "--reusable" "--tags" "--no-generation-date --no-version")
 set(COMMON_RE2C
     "${SRC_DIR}/re2c/common.re"
     "${SRC_DIR}/re2c/include/fill.re"
