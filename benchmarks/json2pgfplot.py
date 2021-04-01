@@ -223,7 +223,7 @@ def group_benchmarks(benchmarks, relative_to):
 
         title = gen_title(name)
         nrows = len(group)
-        benchgroups[title] = (timetbl, sizetbl, nrows, captures, regsize)
+        benchgroups[title] = (timetbl, sizetbl, nrows, regsize, captures)
 
         nbench += nrows
         maxrows = max(maxrows, nrows)
@@ -260,7 +260,9 @@ def generate_plot(groups, font):
         yshift = -plotheight * (i if even else i - 1)
         title = '\\textbf{%s}' % name
         if regsize != None and captures != None:
-            title += ' \\, (%d sym, %d cap)' % (regsize, captures)
+            title += ' \\, (%d symbol%s, %d capture%s)' % (
+                regsize, 's' if regsize > 1 else '',
+                captures, 's' if captures > 1 else '')
 
         # Generate CPU time plots.
         if timetbl != None:
