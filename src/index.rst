@@ -8,6 +8,7 @@ re2c
     User manual (C)    </manual/manual_c>
     User manual (Go)   </manual/manual_go>
     Build instructions </install/install>
+    Benchmarks         </benchmarks/benchmarks>
     Release notes      </releases/release_notes>
     Changelog          </releases/changelog/changelog>
 

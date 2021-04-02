@@ -63,6 +63,14 @@ Configure options specific to re2c (to see all options run ``configure --help``)
 ``--enable-docs``
     Enable regeneration of documentation (requires rst2man).
 
+``--enable-benchmarks``
+    Build benchmarks (requires google benchmarks library).
+
+``--enable-benchmarks-regenerate``
+    Regenerate C code for Ragel and Kleenex benchmarks (this requires
+    downloading and building Ragel and Kleenex). Note that re2c benchmarks are
+    always regenerated regardless of this option.
+
 Cross-compile re2c for Windows (for some Mingw versions you might have to use ``-std=gnu++11`` compiler option):
 
 .. code-block:: bash
@@ -106,6 +114,14 @@ CMake configuration options that are specific to re2c or have re2c-specific beha
 
 ``-DRE2C_REBUILD_DOCS=yes``
     Enable regeneration of documentation (requires rst2man).
+
+``-DRE2C_BUILD_BENCHMARKS=yes``
+    Build benchmarks (requires google benchmarks library).
+
+``-DRE2C_REGEN_BENCHMARKS=yes``
+    Regenerate C code for Ragel and Kleenex benchmarks (this requires
+    downloading and building Ragel and Kleenex). Note that re2c benchmarks are
+    always regenerated regardless of this option.
 
 Cross-compile re2c for Windows using Mingw:
 
