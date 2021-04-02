@@ -46,8 +46,6 @@ static void lex(Input *in, Output *out)
 	
 #line 48 "gen/ragel/18__alt4_8.c"
 	{
-		if ( p == pe )
-			goto _test_eof;
 		switch ( cs ) {
 			case 33:
 			goto st_case_33;
@@ -118,301 +116,300 @@ static void lex(Input *in, Output *out)
 			case 32:
 			goto st_case_32;
 		}
-		goto st_out;
 		_ctr2:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 128 "gen/ragel/18__alt4_8.c"
+#line 125 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 134 "gen/ragel/18__alt4_8.c"
+#line 131 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 140 "gen/ragel/18__alt4_8.c"
+#line 137 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 146 "gen/ragel/18__alt4_8.c"
+#line 143 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 152 "gen/ragel/18__alt4_8.c"
+#line 149 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 158 "gen/ragel/18__alt4_8.c"
+#line 155 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 164 "gen/ragel/18__alt4_8.c"
+#line 161 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 170 "gen/ragel/18__alt4_8.c"
+#line 167 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 176 "gen/ragel/18__alt4_8.c"
+#line 173 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 182 "gen/ragel/18__alt4_8.c"
+#line 179 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 188 "gen/ragel/18__alt4_8.c"
+#line 185 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 194 "gen/ragel/18__alt4_8.c"
+#line 191 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 200 "gen/ragel/18__alt4_8.c"
+#line 197 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 206 "gen/ragel/18__alt4_8.c"
+#line 203 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 212 "gen/ragel/18__alt4_8.c"
+#line 209 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a3 = p; }
 		
-#line 218 "gen/ragel/18__alt4_8.c"
+#line 215 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 224 "gen/ragel/18__alt4_8.c"
+#line 221 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 230 "gen/ragel/18__alt4_8.c"
+#line 227 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 236 "gen/ragel/18__alt4_8.c"
+#line 233 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 242 "gen/ragel/18__alt4_8.c"
+#line 239 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 248 "gen/ragel/18__alt4_8.c"
+#line 245 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 254 "gen/ragel/18__alt4_8.c"
+#line 251 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 260 "gen/ragel/18__alt4_8.c"
+#line 257 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 266 "gen/ragel/18__alt4_8.c"
+#line 263 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 272 "gen/ragel/18__alt4_8.c"
+#line 269 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 278 "gen/ragel/18__alt4_8.c"
+#line 275 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 284 "gen/ragel/18__alt4_8.c"
+#line 281 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 290 "gen/ragel/18__alt4_8.c"
+#line 287 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 296 "gen/ragel/18__alt4_8.c"
+#line 293 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 302 "gen/ragel/18__alt4_8.c"
+#line 299 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 308 "gen/ragel/18__alt4_8.c"
+#line 305 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 314 "gen/ragel/18__alt4_8.c"
+#line 311 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 320 "gen/ragel/18__alt4_8.c"
+#line 317 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 326 "gen/ragel/18__alt4_8.c"
+#line 323 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 332 "gen/ragel/18__alt4_8.c"
+#line 329 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 338 "gen/ragel/18__alt4_8.c"
+#line 335 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 344 "gen/ragel/18__alt4_8.c"
+#line 341 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 350 "gen/ragel/18__alt4_8.c"
+#line 347 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 356 "gen/ragel/18__alt4_8.c"
+#line 353 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 362 "gen/ragel/18__alt4_8.c"
+#line 359 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 368 "gen/ragel/18__alt4_8.c"
+#line 365 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 374 "gen/ragel/18__alt4_8.c"
+#line 371 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 380 "gen/ragel/18__alt4_8.c"
+#line 377 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 386 "gen/ragel/18__alt4_8.c"
+#line 383 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 392 "gen/ragel/18__alt4_8.c"
+#line 389 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 398 "gen/ragel/18__alt4_8.c"
+#line 395 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 404 "gen/ragel/18__alt4_8.c"
+#line 401 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 410 "gen/ragel/18__alt4_8.c"
+#line 407 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 416 "gen/ragel/18__alt4_8.c"
+#line 413 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -452,7 +449,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 456 "gen/ragel/18__alt4_8.c"
+#line 453 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr11:
@@ -460,199 +457,199 @@ static void lex(Input *in, Output *out)
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 464 "gen/ragel/18__alt4_8.c"
+#line 461 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 470 "gen/ragel/18__alt4_8.c"
+#line 467 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 476 "gen/ragel/18__alt4_8.c"
+#line 473 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 482 "gen/ragel/18__alt4_8.c"
+#line 479 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 488 "gen/ragel/18__alt4_8.c"
+#line 485 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 494 "gen/ragel/18__alt4_8.c"
+#line 491 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 500 "gen/ragel/18__alt4_8.c"
+#line 497 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 506 "gen/ragel/18__alt4_8.c"
+#line 503 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 512 "gen/ragel/18__alt4_8.c"
+#line 509 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 518 "gen/ragel/18__alt4_8.c"
+#line 515 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 524 "gen/ragel/18__alt4_8.c"
+#line 521 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 530 "gen/ragel/18__alt4_8.c"
+#line 527 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 536 "gen/ragel/18__alt4_8.c"
+#line 533 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 542 "gen/ragel/18__alt4_8.c"
+#line 539 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 548 "gen/ragel/18__alt4_8.c"
+#line 545 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 554 "gen/ragel/18__alt4_8.c"
+#line 551 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 560 "gen/ragel/18__alt4_8.c"
+#line 557 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 566 "gen/ragel/18__alt4_8.c"
+#line 563 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 572 "gen/ragel/18__alt4_8.c"
+#line 569 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 578 "gen/ragel/18__alt4_8.c"
+#line 575 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 584 "gen/ragel/18__alt4_8.c"
+#line 581 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 590 "gen/ragel/18__alt4_8.c"
+#line 587 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 596 "gen/ragel/18__alt4_8.c"
+#line 593 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 602 "gen/ragel/18__alt4_8.c"
+#line 599 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 608 "gen/ragel/18__alt4_8.c"
+#line 605 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 614 "gen/ragel/18__alt4_8.c"
+#line 611 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 620 "gen/ragel/18__alt4_8.c"
+#line 617 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 626 "gen/ragel/18__alt4_8.c"
+#line 623 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 632 "gen/ragel/18__alt4_8.c"
+#line 629 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 638 "gen/ragel/18__alt4_8.c"
+#line 635 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 644 "gen/ragel/18__alt4_8.c"
+#line 641 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 650 "gen/ragel/18__alt4_8.c"
+#line 647 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 656 "gen/ragel/18__alt4_8.c"
+#line 653 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -692,7 +689,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 696 "gen/ragel/18__alt4_8.c"
+#line 693 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr20:
@@ -700,103 +697,103 @@ static void lex(Input *in, Output *out)
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 704 "gen/ragel/18__alt4_8.c"
+#line 701 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 710 "gen/ragel/18__alt4_8.c"
+#line 707 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 716 "gen/ragel/18__alt4_8.c"
+#line 713 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 722 "gen/ragel/18__alt4_8.c"
+#line 719 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 728 "gen/ragel/18__alt4_8.c"
+#line 725 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 734 "gen/ragel/18__alt4_8.c"
+#line 731 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 740 "gen/ragel/18__alt4_8.c"
+#line 737 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 746 "gen/ragel/18__alt4_8.c"
+#line 743 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 752 "gen/ragel/18__alt4_8.c"
+#line 749 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 758 "gen/ragel/18__alt4_8.c"
+#line 755 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 764 "gen/ragel/18__alt4_8.c"
+#line 761 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 770 "gen/ragel/18__alt4_8.c"
+#line 767 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 776 "gen/ragel/18__alt4_8.c"
+#line 773 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 782 "gen/ragel/18__alt4_8.c"
+#line 779 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 788 "gen/ragel/18__alt4_8.c"
+#line 785 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 794 "gen/ragel/18__alt4_8.c"
+#line 791 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 800 "gen/ragel/18__alt4_8.c"
+#line 797 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -836,7 +833,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 840 "gen/ragel/18__alt4_8.c"
+#line 837 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr29:
@@ -844,7 +841,7 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 848 "gen/ragel/18__alt4_8.c"
+#line 845 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -884,7 +881,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 888 "gen/ragel/18__alt4_8.c"
+#line 885 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr31:
@@ -892,7 +889,7 @@ static void lex(Input *in, Output *out)
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 896 "gen/ragel/18__alt4_8.c"
+#line 893 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -932,7 +929,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 936 "gen/ragel/18__alt4_8.c"
+#line 933 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr33:
@@ -940,7 +937,7 @@ static void lex(Input *in, Output *out)
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 944 "gen/ragel/18__alt4_8.c"
+#line 941 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -980,7 +977,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 984 "gen/ragel/18__alt4_8.c"
+#line 981 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr35:
@@ -988,7 +985,7 @@ static void lex(Input *in, Output *out)
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 992 "gen/ragel/18__alt4_8.c"
+#line 989 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1028,7 +1025,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1032 "gen/ragel/18__alt4_8.c"
+#line 1029 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr37:
@@ -1036,7 +1033,7 @@ static void lex(Input *in, Output *out)
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1040 "gen/ragel/18__alt4_8.c"
+#line 1037 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1076,7 +1073,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1080 "gen/ragel/18__alt4_8.c"
+#line 1077 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr39:
@@ -1084,7 +1081,7 @@ static void lex(Input *in, Output *out)
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 1088 "gen/ragel/18__alt4_8.c"
+#line 1085 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1124,7 +1121,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1128 "gen/ragel/18__alt4_8.c"
+#line 1125 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr41:
@@ -1132,7 +1129,7 @@ static void lex(Input *in, Output *out)
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 1136 "gen/ragel/18__alt4_8.c"
+#line 1133 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1172,7 +1169,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1176 "gen/ragel/18__alt4_8.c"
+#line 1173 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr43:
@@ -1180,103 +1177,103 @@ static void lex(Input *in, Output *out)
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 1184 "gen/ragel/18__alt4_8.c"
+#line 1181 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 1190 "gen/ragel/18__alt4_8.c"
+#line 1187 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1196 "gen/ragel/18__alt4_8.c"
+#line 1193 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 1202 "gen/ragel/18__alt4_8.c"
+#line 1199 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1208 "gen/ragel/18__alt4_8.c"
+#line 1205 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 1214 "gen/ragel/18__alt4_8.c"
+#line 1211 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1220 "gen/ragel/18__alt4_8.c"
+#line 1217 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 1226 "gen/ragel/18__alt4_8.c"
+#line 1223 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1232 "gen/ragel/18__alt4_8.c"
+#line 1229 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 1238 "gen/ragel/18__alt4_8.c"
+#line 1235 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1244 "gen/ragel/18__alt4_8.c"
+#line 1241 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 1250 "gen/ragel/18__alt4_8.c"
+#line 1247 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 1256 "gen/ragel/18__alt4_8.c"
+#line 1253 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 1262 "gen/ragel/18__alt4_8.c"
+#line 1259 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 1268 "gen/ragel/18__alt4_8.c"
+#line 1265 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 1274 "gen/ragel/18__alt4_8.c"
+#line 1271 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1280 "gen/ragel/18__alt4_8.c"
+#line 1277 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1316,7 +1313,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1320 "gen/ragel/18__alt4_8.c"
+#line 1317 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr52:
@@ -1324,7 +1321,7 @@ static void lex(Input *in, Output *out)
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1328 "gen/ragel/18__alt4_8.c"
+#line 1325 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1364,7 +1361,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1368 "gen/ragel/18__alt4_8.c"
+#line 1365 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr54:
@@ -1372,103 +1369,103 @@ static void lex(Input *in, Output *out)
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 1376 "gen/ragel/18__alt4_8.c"
+#line 1373 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 1382 "gen/ragel/18__alt4_8.c"
+#line 1379 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1388 "gen/ragel/18__alt4_8.c"
+#line 1385 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 1394 "gen/ragel/18__alt4_8.c"
+#line 1391 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1400 "gen/ragel/18__alt4_8.c"
+#line 1397 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 1406 "gen/ragel/18__alt4_8.c"
+#line 1403 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1412 "gen/ragel/18__alt4_8.c"
+#line 1409 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 1418 "gen/ragel/18__alt4_8.c"
+#line 1415 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1424 "gen/ragel/18__alt4_8.c"
+#line 1421 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 1430 "gen/ragel/18__alt4_8.c"
+#line 1427 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1436 "gen/ragel/18__alt4_8.c"
+#line 1433 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 1442 "gen/ragel/18__alt4_8.c"
+#line 1439 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 1448 "gen/ragel/18__alt4_8.c"
+#line 1445 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 1454 "gen/ragel/18__alt4_8.c"
+#line 1451 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 1460 "gen/ragel/18__alt4_8.c"
+#line 1457 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 1466 "gen/ragel/18__alt4_8.c"
+#line 1463 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1472 "gen/ragel/18__alt4_8.c"
+#line 1469 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1508,7 +1505,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1512 "gen/ragel/18__alt4_8.c"
+#line 1509 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr63:
@@ -1516,103 +1513,103 @@ static void lex(Input *in, Output *out)
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 1520 "gen/ragel/18__alt4_8.c"
+#line 1517 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 1526 "gen/ragel/18__alt4_8.c"
+#line 1523 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1532 "gen/ragel/18__alt4_8.c"
+#line 1529 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 1538 "gen/ragel/18__alt4_8.c"
+#line 1535 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1544 "gen/ragel/18__alt4_8.c"
+#line 1541 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 1550 "gen/ragel/18__alt4_8.c"
+#line 1547 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1556 "gen/ragel/18__alt4_8.c"
+#line 1553 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 1562 "gen/ragel/18__alt4_8.c"
+#line 1559 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1568 "gen/ragel/18__alt4_8.c"
+#line 1565 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 1574 "gen/ragel/18__alt4_8.c"
+#line 1571 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1580 "gen/ragel/18__alt4_8.c"
+#line 1577 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 1586 "gen/ragel/18__alt4_8.c"
+#line 1583 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 1592 "gen/ragel/18__alt4_8.c"
+#line 1589 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 1598 "gen/ragel/18__alt4_8.c"
+#line 1595 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 1604 "gen/ragel/18__alt4_8.c"
+#line 1601 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 1610 "gen/ragel/18__alt4_8.c"
+#line 1607 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1616 "gen/ragel/18__alt4_8.c"
+#line 1613 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1652,7 +1649,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1656 "gen/ragel/18__alt4_8.c"
+#line 1653 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr72:
@@ -1660,103 +1657,103 @@ static void lex(Input *in, Output *out)
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 1664 "gen/ragel/18__alt4_8.c"
+#line 1661 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 1670 "gen/ragel/18__alt4_8.c"
+#line 1667 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1676 "gen/ragel/18__alt4_8.c"
+#line 1673 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 1682 "gen/ragel/18__alt4_8.c"
+#line 1679 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1688 "gen/ragel/18__alt4_8.c"
+#line 1685 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 1694 "gen/ragel/18__alt4_8.c"
+#line 1691 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1700 "gen/ragel/18__alt4_8.c"
+#line 1697 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 1706 "gen/ragel/18__alt4_8.c"
+#line 1703 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1712 "gen/ragel/18__alt4_8.c"
+#line 1709 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 1718 "gen/ragel/18__alt4_8.c"
+#line 1715 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1724 "gen/ragel/18__alt4_8.c"
+#line 1721 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 1730 "gen/ragel/18__alt4_8.c"
+#line 1727 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 1736 "gen/ragel/18__alt4_8.c"
+#line 1733 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 1742 "gen/ragel/18__alt4_8.c"
+#line 1739 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 1748 "gen/ragel/18__alt4_8.c"
+#line 1745 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 1754 "gen/ragel/18__alt4_8.c"
+#line 1751 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1760 "gen/ragel/18__alt4_8.c"
+#line 1757 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1796,7 +1793,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1800 "gen/ragel/18__alt4_8.c"
+#line 1797 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr81:
@@ -1804,103 +1801,103 @@ static void lex(Input *in, Output *out)
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 1808 "gen/ragel/18__alt4_8.c"
+#line 1805 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 1814 "gen/ragel/18__alt4_8.c"
+#line 1811 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1820 "gen/ragel/18__alt4_8.c"
+#line 1817 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 1826 "gen/ragel/18__alt4_8.c"
+#line 1823 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1832 "gen/ragel/18__alt4_8.c"
+#line 1829 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 1838 "gen/ragel/18__alt4_8.c"
+#line 1835 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1844 "gen/ragel/18__alt4_8.c"
+#line 1841 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 1850 "gen/ragel/18__alt4_8.c"
+#line 1847 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1856 "gen/ragel/18__alt4_8.c"
+#line 1853 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 1862 "gen/ragel/18__alt4_8.c"
+#line 1859 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1868 "gen/ragel/18__alt4_8.c"
+#line 1865 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 1874 "gen/ragel/18__alt4_8.c"
+#line 1871 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 1880 "gen/ragel/18__alt4_8.c"
+#line 1877 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 1886 "gen/ragel/18__alt4_8.c"
+#line 1883 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 1892 "gen/ragel/18__alt4_8.c"
+#line 1889 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 1898 "gen/ragel/18__alt4_8.c"
+#line 1895 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1904 "gen/ragel/18__alt4_8.c"
+#line 1901 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -1940,7 +1937,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1944 "gen/ragel/18__alt4_8.c"
+#line 1941 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr90:
@@ -1948,103 +1945,103 @@ static void lex(Input *in, Output *out)
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 1952 "gen/ragel/18__alt4_8.c"
+#line 1949 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 1958 "gen/ragel/18__alt4_8.c"
+#line 1955 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1964 "gen/ragel/18__alt4_8.c"
+#line 1961 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 1970 "gen/ragel/18__alt4_8.c"
+#line 1967 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1976 "gen/ragel/18__alt4_8.c"
+#line 1973 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 1982 "gen/ragel/18__alt4_8.c"
+#line 1979 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 1988 "gen/ragel/18__alt4_8.c"
+#line 1985 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 1994 "gen/ragel/18__alt4_8.c"
+#line 1991 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2000 "gen/ragel/18__alt4_8.c"
+#line 1997 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 2006 "gen/ragel/18__alt4_8.c"
+#line 2003 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2012 "gen/ragel/18__alt4_8.c"
+#line 2009 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 2018 "gen/ragel/18__alt4_8.c"
+#line 2015 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 2024 "gen/ragel/18__alt4_8.c"
+#line 2021 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 2030 "gen/ragel/18__alt4_8.c"
+#line 2027 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 2036 "gen/ragel/18__alt4_8.c"
+#line 2033 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 2042 "gen/ragel/18__alt4_8.c"
+#line 2039 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2048 "gen/ragel/18__alt4_8.c"
+#line 2045 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -2084,7 +2081,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 2088 "gen/ragel/18__alt4_8.c"
+#line 2085 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr99:
@@ -2092,199 +2089,199 @@ static void lex(Input *in, Output *out)
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 2096 "gen/ragel/18__alt4_8.c"
+#line 2093 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 2102 "gen/ragel/18__alt4_8.c"
+#line 2099 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2108 "gen/ragel/18__alt4_8.c"
+#line 2105 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 2114 "gen/ragel/18__alt4_8.c"
+#line 2111 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2120 "gen/ragel/18__alt4_8.c"
+#line 2117 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 2126 "gen/ragel/18__alt4_8.c"
+#line 2123 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2132 "gen/ragel/18__alt4_8.c"
+#line 2129 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 2138 "gen/ragel/18__alt4_8.c"
+#line 2135 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2144 "gen/ragel/18__alt4_8.c"
+#line 2141 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 2150 "gen/ragel/18__alt4_8.c"
+#line 2147 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2156 "gen/ragel/18__alt4_8.c"
+#line 2153 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 2162 "gen/ragel/18__alt4_8.c"
+#line 2159 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 2168 "gen/ragel/18__alt4_8.c"
+#line 2165 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 2174 "gen/ragel/18__alt4_8.c"
+#line 2171 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 2180 "gen/ragel/18__alt4_8.c"
+#line 2177 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 2186 "gen/ragel/18__alt4_8.c"
+#line 2183 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2192 "gen/ragel/18__alt4_8.c"
+#line 2189 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 2198 "gen/ragel/18__alt4_8.c"
+#line 2195 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2204 "gen/ragel/18__alt4_8.c"
+#line 2201 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 2210 "gen/ragel/18__alt4_8.c"
+#line 2207 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2216 "gen/ragel/18__alt4_8.c"
+#line 2213 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 2222 "gen/ragel/18__alt4_8.c"
+#line 2219 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2228 "gen/ragel/18__alt4_8.c"
+#line 2225 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 2234 "gen/ragel/18__alt4_8.c"
+#line 2231 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2240 "gen/ragel/18__alt4_8.c"
+#line 2237 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 2246 "gen/ragel/18__alt4_8.c"
+#line 2243 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2252 "gen/ragel/18__alt4_8.c"
+#line 2249 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 2258 "gen/ragel/18__alt4_8.c"
+#line 2255 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 2264 "gen/ragel/18__alt4_8.c"
+#line 2261 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 2270 "gen/ragel/18__alt4_8.c"
+#line 2267 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 2276 "gen/ragel/18__alt4_8.c"
+#line 2273 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 2282 "gen/ragel/18__alt4_8.c"
+#line 2279 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2288 "gen/ragel/18__alt4_8.c"
+#line 2285 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -2324,7 +2321,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 2328 "gen/ragel/18__alt4_8.c"
+#line 2325 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr108:
@@ -2332,103 +2329,103 @@ static void lex(Input *in, Output *out)
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2336 "gen/ragel/18__alt4_8.c"
+#line 2333 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 2342 "gen/ragel/18__alt4_8.c"
+#line 2339 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2348 "gen/ragel/18__alt4_8.c"
+#line 2345 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 2354 "gen/ragel/18__alt4_8.c"
+#line 2351 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2360 "gen/ragel/18__alt4_8.c"
+#line 2357 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 2366 "gen/ragel/18__alt4_8.c"
+#line 2363 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2372 "gen/ragel/18__alt4_8.c"
+#line 2369 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 2378 "gen/ragel/18__alt4_8.c"
+#line 2375 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2384 "gen/ragel/18__alt4_8.c"
+#line 2381 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 2390 "gen/ragel/18__alt4_8.c"
+#line 2387 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2396 "gen/ragel/18__alt4_8.c"
+#line 2393 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 2402 "gen/ragel/18__alt4_8.c"
+#line 2399 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 2408 "gen/ragel/18__alt4_8.c"
+#line 2405 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 2414 "gen/ragel/18__alt4_8.c"
+#line 2411 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 2420 "gen/ragel/18__alt4_8.c"
+#line 2417 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 2426 "gen/ragel/18__alt4_8.c"
+#line 2423 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2432 "gen/ragel/18__alt4_8.c"
+#line 2429 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -2468,7 +2465,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 2472 "gen/ragel/18__alt4_8.c"
+#line 2469 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr117:
@@ -2476,199 +2473,199 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 2480 "gen/ragel/18__alt4_8.c"
+#line 2477 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 2486 "gen/ragel/18__alt4_8.c"
+#line 2483 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2492 "gen/ragel/18__alt4_8.c"
+#line 2489 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 2498 "gen/ragel/18__alt4_8.c"
+#line 2495 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2504 "gen/ragel/18__alt4_8.c"
+#line 2501 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 2510 "gen/ragel/18__alt4_8.c"
+#line 2507 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2516 "gen/ragel/18__alt4_8.c"
+#line 2513 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 2522 "gen/ragel/18__alt4_8.c"
+#line 2519 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2528 "gen/ragel/18__alt4_8.c"
+#line 2525 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 2534 "gen/ragel/18__alt4_8.c"
+#line 2531 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2540 "gen/ragel/18__alt4_8.c"
+#line 2537 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 2546 "gen/ragel/18__alt4_8.c"
+#line 2543 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 2552 "gen/ragel/18__alt4_8.c"
+#line 2549 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 2558 "gen/ragel/18__alt4_8.c"
+#line 2555 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 2564 "gen/ragel/18__alt4_8.c"
+#line 2561 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 2570 "gen/ragel/18__alt4_8.c"
+#line 2567 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2576 "gen/ragel/18__alt4_8.c"
+#line 2573 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 2582 "gen/ragel/18__alt4_8.c"
+#line 2579 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2588 "gen/ragel/18__alt4_8.c"
+#line 2585 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 2594 "gen/ragel/18__alt4_8.c"
+#line 2591 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2600 "gen/ragel/18__alt4_8.c"
+#line 2597 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 2606 "gen/ragel/18__alt4_8.c"
+#line 2603 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2612 "gen/ragel/18__alt4_8.c"
+#line 2609 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 2618 "gen/ragel/18__alt4_8.c"
+#line 2615 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2624 "gen/ragel/18__alt4_8.c"
+#line 2621 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 2630 "gen/ragel/18__alt4_8.c"
+#line 2627 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2636 "gen/ragel/18__alt4_8.c"
+#line 2633 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 2642 "gen/ragel/18__alt4_8.c"
+#line 2639 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 2648 "gen/ragel/18__alt4_8.c"
+#line 2645 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 2654 "gen/ragel/18__alt4_8.c"
+#line 2651 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 2660 "gen/ragel/18__alt4_8.c"
+#line 2657 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 2666 "gen/ragel/18__alt4_8.c"
+#line 2663 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2672 "gen/ragel/18__alt4_8.c"
+#line 2669 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -2708,7 +2705,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 2712 "gen/ragel/18__alt4_8.c"
+#line 2709 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr126:
@@ -2716,199 +2713,199 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 2720 "gen/ragel/18__alt4_8.c"
+#line 2717 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 2726 "gen/ragel/18__alt4_8.c"
+#line 2723 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2732 "gen/ragel/18__alt4_8.c"
+#line 2729 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 2738 "gen/ragel/18__alt4_8.c"
+#line 2735 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2744 "gen/ragel/18__alt4_8.c"
+#line 2741 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 2750 "gen/ragel/18__alt4_8.c"
+#line 2747 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2756 "gen/ragel/18__alt4_8.c"
+#line 2753 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 2762 "gen/ragel/18__alt4_8.c"
+#line 2759 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2768 "gen/ragel/18__alt4_8.c"
+#line 2765 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 2774 "gen/ragel/18__alt4_8.c"
+#line 2771 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2780 "gen/ragel/18__alt4_8.c"
+#line 2777 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 2786 "gen/ragel/18__alt4_8.c"
+#line 2783 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 2792 "gen/ragel/18__alt4_8.c"
+#line 2789 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 2798 "gen/ragel/18__alt4_8.c"
+#line 2795 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 2804 "gen/ragel/18__alt4_8.c"
+#line 2801 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 2810 "gen/ragel/18__alt4_8.c"
+#line 2807 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2816 "gen/ragel/18__alt4_8.c"
+#line 2813 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 2822 "gen/ragel/18__alt4_8.c"
+#line 2819 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2828 "gen/ragel/18__alt4_8.c"
+#line 2825 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 2834 "gen/ragel/18__alt4_8.c"
+#line 2831 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2840 "gen/ragel/18__alt4_8.c"
+#line 2837 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 2846 "gen/ragel/18__alt4_8.c"
+#line 2843 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2852 "gen/ragel/18__alt4_8.c"
+#line 2849 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 2858 "gen/ragel/18__alt4_8.c"
+#line 2855 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2864 "gen/ragel/18__alt4_8.c"
+#line 2861 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 2870 "gen/ragel/18__alt4_8.c"
+#line 2867 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2876 "gen/ragel/18__alt4_8.c"
+#line 2873 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 2882 "gen/ragel/18__alt4_8.c"
+#line 2879 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 2888 "gen/ragel/18__alt4_8.c"
+#line 2885 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 2894 "gen/ragel/18__alt4_8.c"
+#line 2891 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 2900 "gen/ragel/18__alt4_8.c"
+#line 2897 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 2906 "gen/ragel/18__alt4_8.c"
+#line 2903 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 2912 "gen/ragel/18__alt4_8.c"
+#line 2909 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -2948,7 +2945,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 2952 "gen/ragel/18__alt4_8.c"
+#line 2949 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr135:
@@ -2956,199 +2953,199 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 2960 "gen/ragel/18__alt4_8.c"
+#line 2957 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 2966 "gen/ragel/18__alt4_8.c"
+#line 2963 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2972 "gen/ragel/18__alt4_8.c"
+#line 2969 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 2978 "gen/ragel/18__alt4_8.c"
+#line 2975 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2984 "gen/ragel/18__alt4_8.c"
+#line 2981 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 2990 "gen/ragel/18__alt4_8.c"
+#line 2987 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 2996 "gen/ragel/18__alt4_8.c"
+#line 2993 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 3002 "gen/ragel/18__alt4_8.c"
+#line 2999 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3008 "gen/ragel/18__alt4_8.c"
+#line 3005 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 3014 "gen/ragel/18__alt4_8.c"
+#line 3011 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3020 "gen/ragel/18__alt4_8.c"
+#line 3017 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 3026 "gen/ragel/18__alt4_8.c"
+#line 3023 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 3032 "gen/ragel/18__alt4_8.c"
+#line 3029 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 3038 "gen/ragel/18__alt4_8.c"
+#line 3035 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 3044 "gen/ragel/18__alt4_8.c"
+#line 3041 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 3050 "gen/ragel/18__alt4_8.c"
+#line 3047 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3056 "gen/ragel/18__alt4_8.c"
+#line 3053 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 3062 "gen/ragel/18__alt4_8.c"
+#line 3059 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3068 "gen/ragel/18__alt4_8.c"
+#line 3065 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 3074 "gen/ragel/18__alt4_8.c"
+#line 3071 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3080 "gen/ragel/18__alt4_8.c"
+#line 3077 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 3086 "gen/ragel/18__alt4_8.c"
+#line 3083 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3092 "gen/ragel/18__alt4_8.c"
+#line 3089 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 3098 "gen/ragel/18__alt4_8.c"
+#line 3095 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3104 "gen/ragel/18__alt4_8.c"
+#line 3101 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 3110 "gen/ragel/18__alt4_8.c"
+#line 3107 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3116 "gen/ragel/18__alt4_8.c"
+#line 3113 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 3122 "gen/ragel/18__alt4_8.c"
+#line 3119 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 3128 "gen/ragel/18__alt4_8.c"
+#line 3125 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 3134 "gen/ragel/18__alt4_8.c"
+#line 3131 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 3140 "gen/ragel/18__alt4_8.c"
+#line 3137 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 3146 "gen/ragel/18__alt4_8.c"
+#line 3143 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3152 "gen/ragel/18__alt4_8.c"
+#line 3149 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -3188,7 +3185,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 3192 "gen/ragel/18__alt4_8.c"
+#line 3189 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr144:
@@ -3196,199 +3193,199 @@ static void lex(Input *in, Output *out)
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 3200 "gen/ragel/18__alt4_8.c"
+#line 3197 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 3206 "gen/ragel/18__alt4_8.c"
+#line 3203 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3212 "gen/ragel/18__alt4_8.c"
+#line 3209 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 3218 "gen/ragel/18__alt4_8.c"
+#line 3215 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3224 "gen/ragel/18__alt4_8.c"
+#line 3221 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 3230 "gen/ragel/18__alt4_8.c"
+#line 3227 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3236 "gen/ragel/18__alt4_8.c"
+#line 3233 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 3242 "gen/ragel/18__alt4_8.c"
+#line 3239 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3248 "gen/ragel/18__alt4_8.c"
+#line 3245 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 3254 "gen/ragel/18__alt4_8.c"
+#line 3251 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3260 "gen/ragel/18__alt4_8.c"
+#line 3257 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 3266 "gen/ragel/18__alt4_8.c"
+#line 3263 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 3272 "gen/ragel/18__alt4_8.c"
+#line 3269 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 3278 "gen/ragel/18__alt4_8.c"
+#line 3275 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 3284 "gen/ragel/18__alt4_8.c"
+#line 3281 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 3290 "gen/ragel/18__alt4_8.c"
+#line 3287 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3296 "gen/ragel/18__alt4_8.c"
+#line 3293 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 3302 "gen/ragel/18__alt4_8.c"
+#line 3299 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3308 "gen/ragel/18__alt4_8.c"
+#line 3305 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 3314 "gen/ragel/18__alt4_8.c"
+#line 3311 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3320 "gen/ragel/18__alt4_8.c"
+#line 3317 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 3326 "gen/ragel/18__alt4_8.c"
+#line 3323 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3332 "gen/ragel/18__alt4_8.c"
+#line 3329 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 3338 "gen/ragel/18__alt4_8.c"
+#line 3335 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3344 "gen/ragel/18__alt4_8.c"
+#line 3341 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 3350 "gen/ragel/18__alt4_8.c"
+#line 3347 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3356 "gen/ragel/18__alt4_8.c"
+#line 3353 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 3362 "gen/ragel/18__alt4_8.c"
+#line 3359 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 3368 "gen/ragel/18__alt4_8.c"
+#line 3365 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 3374 "gen/ragel/18__alt4_8.c"
+#line 3371 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 3380 "gen/ragel/18__alt4_8.c"
+#line 3377 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 3386 "gen/ragel/18__alt4_8.c"
+#line 3383 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3392 "gen/ragel/18__alt4_8.c"
+#line 3389 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -3428,7 +3425,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 3432 "gen/ragel/18__alt4_8.c"
+#line 3429 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr153:
@@ -3436,199 +3433,199 @@ static void lex(Input *in, Output *out)
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 3440 "gen/ragel/18__alt4_8.c"
+#line 3437 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 3446 "gen/ragel/18__alt4_8.c"
+#line 3443 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3452 "gen/ragel/18__alt4_8.c"
+#line 3449 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 3458 "gen/ragel/18__alt4_8.c"
+#line 3455 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3464 "gen/ragel/18__alt4_8.c"
+#line 3461 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 3470 "gen/ragel/18__alt4_8.c"
+#line 3467 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3476 "gen/ragel/18__alt4_8.c"
+#line 3473 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 3482 "gen/ragel/18__alt4_8.c"
+#line 3479 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3488 "gen/ragel/18__alt4_8.c"
+#line 3485 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 3494 "gen/ragel/18__alt4_8.c"
+#line 3491 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3500 "gen/ragel/18__alt4_8.c"
+#line 3497 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 3506 "gen/ragel/18__alt4_8.c"
+#line 3503 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 3512 "gen/ragel/18__alt4_8.c"
+#line 3509 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 3518 "gen/ragel/18__alt4_8.c"
+#line 3515 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 3524 "gen/ragel/18__alt4_8.c"
+#line 3521 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 3530 "gen/ragel/18__alt4_8.c"
+#line 3527 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3536 "gen/ragel/18__alt4_8.c"
+#line 3533 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 3542 "gen/ragel/18__alt4_8.c"
+#line 3539 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3548 "gen/ragel/18__alt4_8.c"
+#line 3545 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 3554 "gen/ragel/18__alt4_8.c"
+#line 3551 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3560 "gen/ragel/18__alt4_8.c"
+#line 3557 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 3566 "gen/ragel/18__alt4_8.c"
+#line 3563 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3572 "gen/ragel/18__alt4_8.c"
+#line 3569 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 3578 "gen/ragel/18__alt4_8.c"
+#line 3575 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3584 "gen/ragel/18__alt4_8.c"
+#line 3581 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 3590 "gen/ragel/18__alt4_8.c"
+#line 3587 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3596 "gen/ragel/18__alt4_8.c"
+#line 3593 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 3602 "gen/ragel/18__alt4_8.c"
+#line 3599 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 3608 "gen/ragel/18__alt4_8.c"
+#line 3605 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 3614 "gen/ragel/18__alt4_8.c"
+#line 3611 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 3620 "gen/ragel/18__alt4_8.c"
+#line 3617 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 3626 "gen/ragel/18__alt4_8.c"
+#line 3623 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3632 "gen/ragel/18__alt4_8.c"
+#line 3629 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -3668,7 +3665,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 3672 "gen/ragel/18__alt4_8.c"
+#line 3669 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr162:
@@ -3676,295 +3673,295 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 3680 "gen/ragel/18__alt4_8.c"
+#line 3677 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 3686 "gen/ragel/18__alt4_8.c"
+#line 3683 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 3692 "gen/ragel/18__alt4_8.c"
+#line 3689 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 3698 "gen/ragel/18__alt4_8.c"
+#line 3695 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 3704 "gen/ragel/18__alt4_8.c"
+#line 3701 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 3710 "gen/ragel/18__alt4_8.c"
+#line 3707 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 3716 "gen/ragel/18__alt4_8.c"
+#line 3713 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 3722 "gen/ragel/18__alt4_8.c"
+#line 3719 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 3728 "gen/ragel/18__alt4_8.c"
+#line 3725 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 3734 "gen/ragel/18__alt4_8.c"
+#line 3731 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 3740 "gen/ragel/18__alt4_8.c"
+#line 3737 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 3746 "gen/ragel/18__alt4_8.c"
+#line 3743 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 3752 "gen/ragel/18__alt4_8.c"
+#line 3749 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 3758 "gen/ragel/18__alt4_8.c"
+#line 3755 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 3764 "gen/ragel/18__alt4_8.c"
+#line 3761 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a3 = p; }
 		
-#line 3770 "gen/ragel/18__alt4_8.c"
+#line 3767 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 3776 "gen/ragel/18__alt4_8.c"
+#line 3773 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 3782 "gen/ragel/18__alt4_8.c"
+#line 3779 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3788 "gen/ragel/18__alt4_8.c"
+#line 3785 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 3794 "gen/ragel/18__alt4_8.c"
+#line 3791 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3800 "gen/ragel/18__alt4_8.c"
+#line 3797 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 3806 "gen/ragel/18__alt4_8.c"
+#line 3803 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3812 "gen/ragel/18__alt4_8.c"
+#line 3809 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 3818 "gen/ragel/18__alt4_8.c"
+#line 3815 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3824 "gen/ragel/18__alt4_8.c"
+#line 3821 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 3830 "gen/ragel/18__alt4_8.c"
+#line 3827 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3836 "gen/ragel/18__alt4_8.c"
+#line 3833 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 3842 "gen/ragel/18__alt4_8.c"
+#line 3839 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 3848 "gen/ragel/18__alt4_8.c"
+#line 3845 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 3854 "gen/ragel/18__alt4_8.c"
+#line 3851 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 3860 "gen/ragel/18__alt4_8.c"
+#line 3857 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 3866 "gen/ragel/18__alt4_8.c"
+#line 3863 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 3872 "gen/ragel/18__alt4_8.c"
+#line 3869 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 3878 "gen/ragel/18__alt4_8.c"
+#line 3875 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3884 "gen/ragel/18__alt4_8.c"
+#line 3881 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 3890 "gen/ragel/18__alt4_8.c"
+#line 3887 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3896 "gen/ragel/18__alt4_8.c"
+#line 3893 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 3902 "gen/ragel/18__alt4_8.c"
+#line 3899 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3908 "gen/ragel/18__alt4_8.c"
+#line 3905 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 3914 "gen/ragel/18__alt4_8.c"
+#line 3911 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3920 "gen/ragel/18__alt4_8.c"
+#line 3917 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 3926 "gen/ragel/18__alt4_8.c"
+#line 3923 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3932 "gen/ragel/18__alt4_8.c"
+#line 3929 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 3938 "gen/ragel/18__alt4_8.c"
+#line 3935 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 3944 "gen/ragel/18__alt4_8.c"
+#line 3941 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 3950 "gen/ragel/18__alt4_8.c"
+#line 3947 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 3956 "gen/ragel/18__alt4_8.c"
+#line 3953 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 3962 "gen/ragel/18__alt4_8.c"
+#line 3959 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 3968 "gen/ragel/18__alt4_8.c"
+#line 3965 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -4004,7 +4001,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 4008 "gen/ragel/18__alt4_8.c"
+#line 4005 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr171:
@@ -4012,199 +4009,199 @@ static void lex(Input *in, Output *out)
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4016 "gen/ragel/18__alt4_8.c"
+#line 4013 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 4022 "gen/ragel/18__alt4_8.c"
+#line 4019 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4028 "gen/ragel/18__alt4_8.c"
+#line 4025 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 4034 "gen/ragel/18__alt4_8.c"
+#line 4031 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4040 "gen/ragel/18__alt4_8.c"
+#line 4037 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 4046 "gen/ragel/18__alt4_8.c"
+#line 4043 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4052 "gen/ragel/18__alt4_8.c"
+#line 4049 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 4058 "gen/ragel/18__alt4_8.c"
+#line 4055 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4064 "gen/ragel/18__alt4_8.c"
+#line 4061 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 4070 "gen/ragel/18__alt4_8.c"
+#line 4067 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4076 "gen/ragel/18__alt4_8.c"
+#line 4073 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 4082 "gen/ragel/18__alt4_8.c"
+#line 4079 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 4088 "gen/ragel/18__alt4_8.c"
+#line 4085 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 4094 "gen/ragel/18__alt4_8.c"
+#line 4091 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 4100 "gen/ragel/18__alt4_8.c"
+#line 4097 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 4106 "gen/ragel/18__alt4_8.c"
+#line 4103 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4112 "gen/ragel/18__alt4_8.c"
+#line 4109 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 4118 "gen/ragel/18__alt4_8.c"
+#line 4115 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4124 "gen/ragel/18__alt4_8.c"
+#line 4121 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 4130 "gen/ragel/18__alt4_8.c"
+#line 4127 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4136 "gen/ragel/18__alt4_8.c"
+#line 4133 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 4142 "gen/ragel/18__alt4_8.c"
+#line 4139 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4148 "gen/ragel/18__alt4_8.c"
+#line 4145 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 4154 "gen/ragel/18__alt4_8.c"
+#line 4151 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4160 "gen/ragel/18__alt4_8.c"
+#line 4157 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 4166 "gen/ragel/18__alt4_8.c"
+#line 4163 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4172 "gen/ragel/18__alt4_8.c"
+#line 4169 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 4178 "gen/ragel/18__alt4_8.c"
+#line 4175 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 4184 "gen/ragel/18__alt4_8.c"
+#line 4181 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 4190 "gen/ragel/18__alt4_8.c"
+#line 4187 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 4196 "gen/ragel/18__alt4_8.c"
+#line 4193 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 4202 "gen/ragel/18__alt4_8.c"
+#line 4199 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4208 "gen/ragel/18__alt4_8.c"
+#line 4205 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -4244,7 +4241,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 4248 "gen/ragel/18__alt4_8.c"
+#line 4245 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr180:
@@ -4252,295 +4249,295 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 4256 "gen/ragel/18__alt4_8.c"
+#line 4253 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 4262 "gen/ragel/18__alt4_8.c"
+#line 4259 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4268 "gen/ragel/18__alt4_8.c"
+#line 4265 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 4274 "gen/ragel/18__alt4_8.c"
+#line 4271 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4280 "gen/ragel/18__alt4_8.c"
+#line 4277 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 4286 "gen/ragel/18__alt4_8.c"
+#line 4283 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4292 "gen/ragel/18__alt4_8.c"
+#line 4289 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 4298 "gen/ragel/18__alt4_8.c"
+#line 4295 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4304 "gen/ragel/18__alt4_8.c"
+#line 4301 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 4310 "gen/ragel/18__alt4_8.c"
+#line 4307 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4316 "gen/ragel/18__alt4_8.c"
+#line 4313 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 4322 "gen/ragel/18__alt4_8.c"
+#line 4319 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 4328 "gen/ragel/18__alt4_8.c"
+#line 4325 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 4334 "gen/ragel/18__alt4_8.c"
+#line 4331 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 4340 "gen/ragel/18__alt4_8.c"
+#line 4337 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a3 = p; }
 		
-#line 4346 "gen/ragel/18__alt4_8.c"
+#line 4343 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4352 "gen/ragel/18__alt4_8.c"
+#line 4349 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 4358 "gen/ragel/18__alt4_8.c"
+#line 4355 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4364 "gen/ragel/18__alt4_8.c"
+#line 4361 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 4370 "gen/ragel/18__alt4_8.c"
+#line 4367 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4376 "gen/ragel/18__alt4_8.c"
+#line 4373 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 4382 "gen/ragel/18__alt4_8.c"
+#line 4379 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4388 "gen/ragel/18__alt4_8.c"
+#line 4385 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 4394 "gen/ragel/18__alt4_8.c"
+#line 4391 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4400 "gen/ragel/18__alt4_8.c"
+#line 4397 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 4406 "gen/ragel/18__alt4_8.c"
+#line 4403 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4412 "gen/ragel/18__alt4_8.c"
+#line 4409 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 4418 "gen/ragel/18__alt4_8.c"
+#line 4415 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 4424 "gen/ragel/18__alt4_8.c"
+#line 4421 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 4430 "gen/ragel/18__alt4_8.c"
+#line 4427 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 4436 "gen/ragel/18__alt4_8.c"
+#line 4433 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 4442 "gen/ragel/18__alt4_8.c"
+#line 4439 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4448 "gen/ragel/18__alt4_8.c"
+#line 4445 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 4454 "gen/ragel/18__alt4_8.c"
+#line 4451 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4460 "gen/ragel/18__alt4_8.c"
+#line 4457 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 4466 "gen/ragel/18__alt4_8.c"
+#line 4463 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4472 "gen/ragel/18__alt4_8.c"
+#line 4469 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 4478 "gen/ragel/18__alt4_8.c"
+#line 4475 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4484 "gen/ragel/18__alt4_8.c"
+#line 4481 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 4490 "gen/ragel/18__alt4_8.c"
+#line 4487 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4496 "gen/ragel/18__alt4_8.c"
+#line 4493 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 4502 "gen/ragel/18__alt4_8.c"
+#line 4499 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4508 "gen/ragel/18__alt4_8.c"
+#line 4505 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 4514 "gen/ragel/18__alt4_8.c"
+#line 4511 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 4520 "gen/ragel/18__alt4_8.c"
+#line 4517 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 4526 "gen/ragel/18__alt4_8.c"
+#line 4523 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 4532 "gen/ragel/18__alt4_8.c"
+#line 4529 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 4538 "gen/ragel/18__alt4_8.c"
+#line 4535 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4544 "gen/ragel/18__alt4_8.c"
+#line 4541 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -4580,7 +4577,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 4584 "gen/ragel/18__alt4_8.c"
+#line 4581 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr189:
@@ -4588,295 +4585,295 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 4592 "gen/ragel/18__alt4_8.c"
+#line 4589 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 4598 "gen/ragel/18__alt4_8.c"
+#line 4595 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4604 "gen/ragel/18__alt4_8.c"
+#line 4601 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 4610 "gen/ragel/18__alt4_8.c"
+#line 4607 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4616 "gen/ragel/18__alt4_8.c"
+#line 4613 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 4622 "gen/ragel/18__alt4_8.c"
+#line 4619 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4628 "gen/ragel/18__alt4_8.c"
+#line 4625 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 4634 "gen/ragel/18__alt4_8.c"
+#line 4631 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4640 "gen/ragel/18__alt4_8.c"
+#line 4637 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 4646 "gen/ragel/18__alt4_8.c"
+#line 4643 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4652 "gen/ragel/18__alt4_8.c"
+#line 4649 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 4658 "gen/ragel/18__alt4_8.c"
+#line 4655 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 4664 "gen/ragel/18__alt4_8.c"
+#line 4661 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 4670 "gen/ragel/18__alt4_8.c"
+#line 4667 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 4676 "gen/ragel/18__alt4_8.c"
+#line 4673 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a3 = p; }
 		
-#line 4682 "gen/ragel/18__alt4_8.c"
+#line 4679 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4688 "gen/ragel/18__alt4_8.c"
+#line 4685 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 4694 "gen/ragel/18__alt4_8.c"
+#line 4691 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4700 "gen/ragel/18__alt4_8.c"
+#line 4697 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 4706 "gen/ragel/18__alt4_8.c"
+#line 4703 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4712 "gen/ragel/18__alt4_8.c"
+#line 4709 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 4718 "gen/ragel/18__alt4_8.c"
+#line 4715 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4724 "gen/ragel/18__alt4_8.c"
+#line 4721 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 4730 "gen/ragel/18__alt4_8.c"
+#line 4727 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4736 "gen/ragel/18__alt4_8.c"
+#line 4733 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 4742 "gen/ragel/18__alt4_8.c"
+#line 4739 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4748 "gen/ragel/18__alt4_8.c"
+#line 4745 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 4754 "gen/ragel/18__alt4_8.c"
+#line 4751 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 4760 "gen/ragel/18__alt4_8.c"
+#line 4757 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 4766 "gen/ragel/18__alt4_8.c"
+#line 4763 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 4772 "gen/ragel/18__alt4_8.c"
+#line 4769 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 4778 "gen/ragel/18__alt4_8.c"
+#line 4775 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 4784 "gen/ragel/18__alt4_8.c"
+#line 4781 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 4790 "gen/ragel/18__alt4_8.c"
+#line 4787 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4796 "gen/ragel/18__alt4_8.c"
+#line 4793 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 4802 "gen/ragel/18__alt4_8.c"
+#line 4799 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4808 "gen/ragel/18__alt4_8.c"
+#line 4805 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 4814 "gen/ragel/18__alt4_8.c"
+#line 4811 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4820 "gen/ragel/18__alt4_8.c"
+#line 4817 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 4826 "gen/ragel/18__alt4_8.c"
+#line 4823 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4832 "gen/ragel/18__alt4_8.c"
+#line 4829 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 4838 "gen/ragel/18__alt4_8.c"
+#line 4835 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4844 "gen/ragel/18__alt4_8.c"
+#line 4841 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 4850 "gen/ragel/18__alt4_8.c"
+#line 4847 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 4856 "gen/ragel/18__alt4_8.c"
+#line 4853 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 4862 "gen/ragel/18__alt4_8.c"
+#line 4859 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 4868 "gen/ragel/18__alt4_8.c"
+#line 4865 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 4874 "gen/ragel/18__alt4_8.c"
+#line 4871 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 4880 "gen/ragel/18__alt4_8.c"
+#line 4877 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -4916,7 +4913,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 4920 "gen/ragel/18__alt4_8.c"
+#line 4917 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr198:
@@ -4924,295 +4921,295 @@ static void lex(Input *in, Output *out)
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 4928 "gen/ragel/18__alt4_8.c"
+#line 4925 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 4934 "gen/ragel/18__alt4_8.c"
+#line 4931 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4940 "gen/ragel/18__alt4_8.c"
+#line 4937 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 4946 "gen/ragel/18__alt4_8.c"
+#line 4943 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4952 "gen/ragel/18__alt4_8.c"
+#line 4949 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 4958 "gen/ragel/18__alt4_8.c"
+#line 4955 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4964 "gen/ragel/18__alt4_8.c"
+#line 4961 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 4970 "gen/ragel/18__alt4_8.c"
+#line 4967 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4976 "gen/ragel/18__alt4_8.c"
+#line 4973 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 4982 "gen/ragel/18__alt4_8.c"
+#line 4979 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 4988 "gen/ragel/18__alt4_8.c"
+#line 4985 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 4994 "gen/ragel/18__alt4_8.c"
+#line 4991 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 5000 "gen/ragel/18__alt4_8.c"
+#line 4997 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 5006 "gen/ragel/18__alt4_8.c"
+#line 5003 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 5012 "gen/ragel/18__alt4_8.c"
+#line 5009 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a3 = p; }
 		
-#line 5018 "gen/ragel/18__alt4_8.c"
+#line 5015 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5024 "gen/ragel/18__alt4_8.c"
+#line 5021 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 5030 "gen/ragel/18__alt4_8.c"
+#line 5027 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5036 "gen/ragel/18__alt4_8.c"
+#line 5033 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 5042 "gen/ragel/18__alt4_8.c"
+#line 5039 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5048 "gen/ragel/18__alt4_8.c"
+#line 5045 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 5054 "gen/ragel/18__alt4_8.c"
+#line 5051 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5060 "gen/ragel/18__alt4_8.c"
+#line 5057 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 5066 "gen/ragel/18__alt4_8.c"
+#line 5063 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5072 "gen/ragel/18__alt4_8.c"
+#line 5069 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 5078 "gen/ragel/18__alt4_8.c"
+#line 5075 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5084 "gen/ragel/18__alt4_8.c"
+#line 5081 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 5090 "gen/ragel/18__alt4_8.c"
+#line 5087 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 5096 "gen/ragel/18__alt4_8.c"
+#line 5093 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 5102 "gen/ragel/18__alt4_8.c"
+#line 5099 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 5108 "gen/ragel/18__alt4_8.c"
+#line 5105 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 5114 "gen/ragel/18__alt4_8.c"
+#line 5111 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5120 "gen/ragel/18__alt4_8.c"
+#line 5117 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 5126 "gen/ragel/18__alt4_8.c"
+#line 5123 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5132 "gen/ragel/18__alt4_8.c"
+#line 5129 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 5138 "gen/ragel/18__alt4_8.c"
+#line 5135 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5144 "gen/ragel/18__alt4_8.c"
+#line 5141 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 5150 "gen/ragel/18__alt4_8.c"
+#line 5147 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5156 "gen/ragel/18__alt4_8.c"
+#line 5153 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 5162 "gen/ragel/18__alt4_8.c"
+#line 5159 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5168 "gen/ragel/18__alt4_8.c"
+#line 5165 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 5174 "gen/ragel/18__alt4_8.c"
+#line 5171 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5180 "gen/ragel/18__alt4_8.c"
+#line 5177 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 5186 "gen/ragel/18__alt4_8.c"
+#line 5183 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 5192 "gen/ragel/18__alt4_8.c"
+#line 5189 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 5198 "gen/ragel/18__alt4_8.c"
+#line 5195 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 5204 "gen/ragel/18__alt4_8.c"
+#line 5201 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 5210 "gen/ragel/18__alt4_8.c"
+#line 5207 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5216 "gen/ragel/18__alt4_8.c"
+#line 5213 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -5252,7 +5249,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 5256 "gen/ragel/18__alt4_8.c"
+#line 5253 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr207:
@@ -5260,295 +5257,295 @@ static void lex(Input *in, Output *out)
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 5264 "gen/ragel/18__alt4_8.c"
+#line 5261 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 5270 "gen/ragel/18__alt4_8.c"
+#line 5267 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5276 "gen/ragel/18__alt4_8.c"
+#line 5273 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 5282 "gen/ragel/18__alt4_8.c"
+#line 5279 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5288 "gen/ragel/18__alt4_8.c"
+#line 5285 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 5294 "gen/ragel/18__alt4_8.c"
+#line 5291 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5300 "gen/ragel/18__alt4_8.c"
+#line 5297 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 5306 "gen/ragel/18__alt4_8.c"
+#line 5303 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5312 "gen/ragel/18__alt4_8.c"
+#line 5309 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 5318 "gen/ragel/18__alt4_8.c"
+#line 5315 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5324 "gen/ragel/18__alt4_8.c"
+#line 5321 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 5330 "gen/ragel/18__alt4_8.c"
+#line 5327 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 5336 "gen/ragel/18__alt4_8.c"
+#line 5333 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 5342 "gen/ragel/18__alt4_8.c"
+#line 5339 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 5348 "gen/ragel/18__alt4_8.c"
+#line 5345 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a3 = p; }
 		
-#line 5354 "gen/ragel/18__alt4_8.c"
+#line 5351 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5360 "gen/ragel/18__alt4_8.c"
+#line 5357 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 5366 "gen/ragel/18__alt4_8.c"
+#line 5363 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5372 "gen/ragel/18__alt4_8.c"
+#line 5369 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 5378 "gen/ragel/18__alt4_8.c"
+#line 5375 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5384 "gen/ragel/18__alt4_8.c"
+#line 5381 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 5390 "gen/ragel/18__alt4_8.c"
+#line 5387 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5396 "gen/ragel/18__alt4_8.c"
+#line 5393 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 5402 "gen/ragel/18__alt4_8.c"
+#line 5399 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5408 "gen/ragel/18__alt4_8.c"
+#line 5405 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 5414 "gen/ragel/18__alt4_8.c"
+#line 5411 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5420 "gen/ragel/18__alt4_8.c"
+#line 5417 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 5426 "gen/ragel/18__alt4_8.c"
+#line 5423 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 5432 "gen/ragel/18__alt4_8.c"
+#line 5429 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 5438 "gen/ragel/18__alt4_8.c"
+#line 5435 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 5444 "gen/ragel/18__alt4_8.c"
+#line 5441 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 5450 "gen/ragel/18__alt4_8.c"
+#line 5447 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5456 "gen/ragel/18__alt4_8.c"
+#line 5453 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 5462 "gen/ragel/18__alt4_8.c"
+#line 5459 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5468 "gen/ragel/18__alt4_8.c"
+#line 5465 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 5474 "gen/ragel/18__alt4_8.c"
+#line 5471 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5480 "gen/ragel/18__alt4_8.c"
+#line 5477 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 5486 "gen/ragel/18__alt4_8.c"
+#line 5483 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5492 "gen/ragel/18__alt4_8.c"
+#line 5489 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 5498 "gen/ragel/18__alt4_8.c"
+#line 5495 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5504 "gen/ragel/18__alt4_8.c"
+#line 5501 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 5510 "gen/ragel/18__alt4_8.c"
+#line 5507 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5516 "gen/ragel/18__alt4_8.c"
+#line 5513 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 5522 "gen/ragel/18__alt4_8.c"
+#line 5519 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 5528 "gen/ragel/18__alt4_8.c"
+#line 5525 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 5534 "gen/ragel/18__alt4_8.c"
+#line 5531 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 5540 "gen/ragel/18__alt4_8.c"
+#line 5537 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 5546 "gen/ragel/18__alt4_8.c"
+#line 5543 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5552 "gen/ragel/18__alt4_8.c"
+#line 5549 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -5588,7 +5585,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 5592 "gen/ragel/18__alt4_8.c"
+#line 5589 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr216:
@@ -5596,295 +5593,295 @@ static void lex(Input *in, Output *out)
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
 		
-#line 5600 "gen/ragel/18__alt4_8.c"
+#line 5597 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 5606 "gen/ragel/18__alt4_8.c"
+#line 5603 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5612 "gen/ragel/18__alt4_8.c"
+#line 5609 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 5618 "gen/ragel/18__alt4_8.c"
+#line 5615 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5624 "gen/ragel/18__alt4_8.c"
+#line 5621 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 5630 "gen/ragel/18__alt4_8.c"
+#line 5627 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5636 "gen/ragel/18__alt4_8.c"
+#line 5633 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 5642 "gen/ragel/18__alt4_8.c"
+#line 5639 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5648 "gen/ragel/18__alt4_8.c"
+#line 5645 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 5654 "gen/ragel/18__alt4_8.c"
+#line 5651 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5660 "gen/ragel/18__alt4_8.c"
+#line 5657 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 5666 "gen/ragel/18__alt4_8.c"
+#line 5663 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 5672 "gen/ragel/18__alt4_8.c"
+#line 5669 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 5678 "gen/ragel/18__alt4_8.c"
+#line 5675 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 5684 "gen/ragel/18__alt4_8.c"
+#line 5681 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a3 = p; }
 		
-#line 5690 "gen/ragel/18__alt4_8.c"
+#line 5687 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5696 "gen/ragel/18__alt4_8.c"
+#line 5693 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 5702 "gen/ragel/18__alt4_8.c"
+#line 5699 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5708 "gen/ragel/18__alt4_8.c"
+#line 5705 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 5714 "gen/ragel/18__alt4_8.c"
+#line 5711 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5720 "gen/ragel/18__alt4_8.c"
+#line 5717 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 5726 "gen/ragel/18__alt4_8.c"
+#line 5723 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5732 "gen/ragel/18__alt4_8.c"
+#line 5729 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 5738 "gen/ragel/18__alt4_8.c"
+#line 5735 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5744 "gen/ragel/18__alt4_8.c"
+#line 5741 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 5750 "gen/ragel/18__alt4_8.c"
+#line 5747 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5756 "gen/ragel/18__alt4_8.c"
+#line 5753 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 5762 "gen/ragel/18__alt4_8.c"
+#line 5759 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 5768 "gen/ragel/18__alt4_8.c"
+#line 5765 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 5774 "gen/ragel/18__alt4_8.c"
+#line 5771 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 5780 "gen/ragel/18__alt4_8.c"
+#line 5777 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 5786 "gen/ragel/18__alt4_8.c"
+#line 5783 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 5792 "gen/ragel/18__alt4_8.c"
+#line 5789 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 5798 "gen/ragel/18__alt4_8.c"
+#line 5795 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5804 "gen/ragel/18__alt4_8.c"
+#line 5801 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 5810 "gen/ragel/18__alt4_8.c"
+#line 5807 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5816 "gen/ragel/18__alt4_8.c"
+#line 5813 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 5822 "gen/ragel/18__alt4_8.c"
+#line 5819 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5828 "gen/ragel/18__alt4_8.c"
+#line 5825 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 5834 "gen/ragel/18__alt4_8.c"
+#line 5831 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5840 "gen/ragel/18__alt4_8.c"
+#line 5837 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 5846 "gen/ragel/18__alt4_8.c"
+#line 5843 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5852 "gen/ragel/18__alt4_8.c"
+#line 5849 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 5858 "gen/ragel/18__alt4_8.c"
+#line 5855 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 5864 "gen/ragel/18__alt4_8.c"
+#line 5861 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 5870 "gen/ragel/18__alt4_8.c"
+#line 5867 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 5876 "gen/ragel/18__alt4_8.c"
+#line 5873 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 5882 "gen/ragel/18__alt4_8.c"
+#line 5879 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 5888 "gen/ragel/18__alt4_8.c"
+#line 5885 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -5924,7 +5921,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 5928 "gen/ragel/18__alt4_8.c"
+#line 5925 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr225:
@@ -5932,295 +5929,295 @@ static void lex(Input *in, Output *out)
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
 		
-#line 5936 "gen/ragel/18__alt4_8.c"
+#line 5933 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 5942 "gen/ragel/18__alt4_8.c"
+#line 5939 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5948 "gen/ragel/18__alt4_8.c"
+#line 5945 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 5954 "gen/ragel/18__alt4_8.c"
+#line 5951 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5960 "gen/ragel/18__alt4_8.c"
+#line 5957 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 5966 "gen/ragel/18__alt4_8.c"
+#line 5963 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5972 "gen/ragel/18__alt4_8.c"
+#line 5969 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 5978 "gen/ragel/18__alt4_8.c"
+#line 5975 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5984 "gen/ragel/18__alt4_8.c"
+#line 5981 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 5990 "gen/ragel/18__alt4_8.c"
+#line 5987 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 5996 "gen/ragel/18__alt4_8.c"
+#line 5993 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 6002 "gen/ragel/18__alt4_8.c"
+#line 5999 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 6008 "gen/ragel/18__alt4_8.c"
+#line 6005 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 6014 "gen/ragel/18__alt4_8.c"
+#line 6011 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 6020 "gen/ragel/18__alt4_8.c"
+#line 6017 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a3 = p; }
 		
-#line 6026 "gen/ragel/18__alt4_8.c"
+#line 6023 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6032 "gen/ragel/18__alt4_8.c"
+#line 6029 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 6038 "gen/ragel/18__alt4_8.c"
+#line 6035 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6044 "gen/ragel/18__alt4_8.c"
+#line 6041 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 6050 "gen/ragel/18__alt4_8.c"
+#line 6047 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6056 "gen/ragel/18__alt4_8.c"
+#line 6053 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 6062 "gen/ragel/18__alt4_8.c"
+#line 6059 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6068 "gen/ragel/18__alt4_8.c"
+#line 6065 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 6074 "gen/ragel/18__alt4_8.c"
+#line 6071 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6080 "gen/ragel/18__alt4_8.c"
+#line 6077 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 6086 "gen/ragel/18__alt4_8.c"
+#line 6083 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6092 "gen/ragel/18__alt4_8.c"
+#line 6089 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 6098 "gen/ragel/18__alt4_8.c"
+#line 6095 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 6104 "gen/ragel/18__alt4_8.c"
+#line 6101 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 6110 "gen/ragel/18__alt4_8.c"
+#line 6107 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 6116 "gen/ragel/18__alt4_8.c"
+#line 6113 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 6122 "gen/ragel/18__alt4_8.c"
+#line 6119 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6128 "gen/ragel/18__alt4_8.c"
+#line 6125 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 6134 "gen/ragel/18__alt4_8.c"
+#line 6131 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6140 "gen/ragel/18__alt4_8.c"
+#line 6137 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 6146 "gen/ragel/18__alt4_8.c"
+#line 6143 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6152 "gen/ragel/18__alt4_8.c"
+#line 6149 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 6158 "gen/ragel/18__alt4_8.c"
+#line 6155 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6164 "gen/ragel/18__alt4_8.c"
+#line 6161 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 6170 "gen/ragel/18__alt4_8.c"
+#line 6167 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6176 "gen/ragel/18__alt4_8.c"
+#line 6173 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 6182 "gen/ragel/18__alt4_8.c"
+#line 6179 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6188 "gen/ragel/18__alt4_8.c"
+#line 6185 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 6194 "gen/ragel/18__alt4_8.c"
+#line 6191 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 6200 "gen/ragel/18__alt4_8.c"
+#line 6197 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 6206 "gen/ragel/18__alt4_8.c"
+#line 6203 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 6212 "gen/ragel/18__alt4_8.c"
+#line 6209 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 6218 "gen/ragel/18__alt4_8.c"
+#line 6215 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6224 "gen/ragel/18__alt4_8.c"
+#line 6221 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -6260,7 +6257,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 6264 "gen/ragel/18__alt4_8.c"
+#line 6261 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_ctr234:
@@ -6268,385 +6265,385 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b1 = p; }
 		
-#line 6272 "gen/ragel/18__alt4_8.c"
+#line 6269 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6278 "gen/ragel/18__alt4_8.c"
+#line 6275 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c1 = p; }
 		
-#line 6284 "gen/ragel/18__alt4_8.c"
+#line 6281 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6290 "gen/ragel/18__alt4_8.c"
+#line 6287 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d1 = p; }
 		
-#line 6296 "gen/ragel/18__alt4_8.c"
+#line 6293 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6302 "gen/ragel/18__alt4_8.c"
+#line 6299 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e1 = p; }
 		
-#line 6308 "gen/ragel/18__alt4_8.c"
+#line 6305 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6314 "gen/ragel/18__alt4_8.c"
+#line 6311 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f1 = p; }
 		
-#line 6320 "gen/ragel/18__alt4_8.c"
+#line 6317 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6326 "gen/ragel/18__alt4_8.c"
+#line 6323 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g1 = p; }
 		
-#line 6332 "gen/ragel/18__alt4_8.c"
+#line 6329 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
 		
-#line 6338 "gen/ragel/18__alt4_8.c"
+#line 6335 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h1 = p; }
 		
-#line 6344 "gen/ragel/18__alt4_8.c"
+#line 6341 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
 		
-#line 6350 "gen/ragel/18__alt4_8.c"
+#line 6347 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a1 = p; }
 		
-#line 6356 "gen/ragel/18__alt4_8.c"
+#line 6353 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6362 "gen/ragel/18__alt4_8.c"
+#line 6359 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 6368 "gen/ragel/18__alt4_8.c"
+#line 6365 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6374 "gen/ragel/18__alt4_8.c"
+#line 6371 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 6380 "gen/ragel/18__alt4_8.c"
+#line 6377 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6386 "gen/ragel/18__alt4_8.c"
+#line 6383 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 6392 "gen/ragel/18__alt4_8.c"
+#line 6389 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6398 "gen/ragel/18__alt4_8.c"
+#line 6395 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 6404 "gen/ragel/18__alt4_8.c"
+#line 6401 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6410 "gen/ragel/18__alt4_8.c"
+#line 6407 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 6416 "gen/ragel/18__alt4_8.c"
+#line 6413 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6422 "gen/ragel/18__alt4_8.c"
+#line 6419 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 6428 "gen/ragel/18__alt4_8.c"
+#line 6425 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 6434 "gen/ragel/18__alt4_8.c"
+#line 6431 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 6440 "gen/ragel/18__alt4_8.c"
+#line 6437 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 6446 "gen/ragel/18__alt4_8.c"
+#line 6443 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a3 = p; }
 		
-#line 6452 "gen/ragel/18__alt4_8.c"
+#line 6449 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6458 "gen/ragel/18__alt4_8.c"
+#line 6455 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b5 = p; }
 		
-#line 6464 "gen/ragel/18__alt4_8.c"
+#line 6461 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6470 "gen/ragel/18__alt4_8.c"
+#line 6467 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 6476 "gen/ragel/18__alt4_8.c"
+#line 6473 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6482 "gen/ragel/18__alt4_8.c"
+#line 6479 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 6488 "gen/ragel/18__alt4_8.c"
+#line 6485 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6494 "gen/ragel/18__alt4_8.c"
+#line 6491 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 6500 "gen/ragel/18__alt4_8.c"
+#line 6497 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6506 "gen/ragel/18__alt4_8.c"
+#line 6503 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 6512 "gen/ragel/18__alt4_8.c"
+#line 6509 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6518 "gen/ragel/18__alt4_8.c"
+#line 6515 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 6524 "gen/ragel/18__alt4_8.c"
+#line 6521 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 6530 "gen/ragel/18__alt4_8.c"
+#line 6527 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 6536 "gen/ragel/18__alt4_8.c"
+#line 6533 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 6542 "gen/ragel/18__alt4_8.c"
+#line 6539 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 6548 "gen/ragel/18__alt4_8.c"
+#line 6545 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 6554 "gen/ragel/18__alt4_8.c"
+#line 6551 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 6560 "gen/ragel/18__alt4_8.c"
+#line 6557 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6566 "gen/ragel/18__alt4_8.c"
+#line 6563 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c7 = p; }
 		
-#line 6572 "gen/ragel/18__alt4_8.c"
+#line 6569 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6578 "gen/ragel/18__alt4_8.c"
+#line 6575 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 6584 "gen/ragel/18__alt4_8.c"
+#line 6581 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6590 "gen/ragel/18__alt4_8.c"
+#line 6587 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 6596 "gen/ragel/18__alt4_8.c"
+#line 6593 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6602 "gen/ragel/18__alt4_8.c"
+#line 6599 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 6608 "gen/ragel/18__alt4_8.c"
+#line 6605 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6614 "gen/ragel/18__alt4_8.c"
+#line 6611 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 6620 "gen/ragel/18__alt4_8.c"
+#line 6617 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = h7 = h8 = NULL; }
 		
-#line 6626 "gen/ragel/18__alt4_8.c"
+#line 6623 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 6632 "gen/ragel/18__alt4_8.c"
+#line 6629 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h8 = p; a7 = a8 = b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = NULL; }
 		
-#line 6638 "gen/ragel/18__alt4_8.c"
+#line 6635 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a7 = p; }
 		
-#line 6644 "gen/ragel/18__alt4_8.c"
+#line 6641 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = e7 = e8 = f7 = f8 = g7 = g8 = h7 = h8 = NULL; }
 		
-#line 6650 "gen/ragel/18__alt4_8.c"
+#line 6647 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 59 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
@@ -6686,14 +6683,14 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 6690 "gen/ragel/18__alt4_8.c"
+#line 6687 "gen/ragel/18__alt4_8.c"
 		
 		goto _st33;
 		_st33:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof33;
 		st_case_33:
+		if ( p == pe )
+			goto _out33;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr234;
@@ -6723,26 +6720,23 @@ static void lex(Input *in, Output *out)
 				goto _ctr242;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_case_0:
+		goto _st0;
 		_st0:
-		cs = 0;
-		goto _pop;
+		st_case_0:
+		goto _out0;
 		_ctr235:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a1 = p; }
 		
-#line 6739 "gen/ragel/18__alt4_8.c"
+#line 6733 "gen/ragel/18__alt4_8.c"
 		
 		goto _st1;
 		_st1:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof1;
 		st_case_1:
+		if ( p == pe )
+			goto _out1;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr2;
@@ -6772,21 +6766,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr9;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr3:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6784 "gen/ragel/18__alt4_8.c"
+#line 6776 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 6790 "gen/ragel/18__alt4_8.c"
+#line 6782 "gen/ragel/18__alt4_8.c"
 		
 		goto _st2;
 		_ctr182:
@@ -6794,13 +6786,13 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6798 "gen/ragel/18__alt4_8.c"
+#line 6790 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 6804 "gen/ragel/18__alt4_8.c"
+#line 6796 "gen/ragel/18__alt4_8.c"
 		
 		goto _st2;
 		_ctr191:
@@ -6808,13 +6800,13 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6812 "gen/ragel/18__alt4_8.c"
+#line 6804 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 6818 "gen/ragel/18__alt4_8.c"
+#line 6810 "gen/ragel/18__alt4_8.c"
 		
 		goto _st2;
 		_ctr200:
@@ -6822,13 +6814,13 @@ static void lex(Input *in, Output *out)
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6826 "gen/ragel/18__alt4_8.c"
+#line 6818 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 6832 "gen/ragel/18__alt4_8.c"
+#line 6824 "gen/ragel/18__alt4_8.c"
 		
 		goto _st2;
 		_ctr209:
@@ -6836,13 +6828,13 @@ static void lex(Input *in, Output *out)
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 6840 "gen/ragel/18__alt4_8.c"
+#line 6832 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 6846 "gen/ragel/18__alt4_8.c"
+#line 6838 "gen/ragel/18__alt4_8.c"
 		
 		goto _st2;
 		_ctr218:
@@ -6850,13 +6842,13 @@ static void lex(Input *in, Output *out)
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
 		
-#line 6854 "gen/ragel/18__alt4_8.c"
+#line 6846 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 6860 "gen/ragel/18__alt4_8.c"
+#line 6852 "gen/ragel/18__alt4_8.c"
 		
 		goto _st2;
 		_ctr227:
@@ -6864,20 +6856,20 @@ static void lex(Input *in, Output *out)
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
 		
-#line 6868 "gen/ragel/18__alt4_8.c"
+#line 6860 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b3 = p; }
 		
-#line 6874 "gen/ragel/18__alt4_8.c"
+#line 6866 "gen/ragel/18__alt4_8.c"
 		
 		goto _st2;
 		_st2:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof2;
 		st_case_2:
+		if ( p == pe )
+			goto _out2;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr11;
@@ -6907,21 +6899,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr18;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr12:
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6919 "gen/ragel/18__alt4_8.c"
+#line 6909 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 6925 "gen/ragel/18__alt4_8.c"
+#line 6915 "gen/ragel/18__alt4_8.c"
 		
 		goto _st3;
 		_ctr100:
@@ -6929,13 +6919,13 @@ static void lex(Input *in, Output *out)
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6933 "gen/ragel/18__alt4_8.c"
+#line 6923 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 6939 "gen/ragel/18__alt4_8.c"
+#line 6929 "gen/ragel/18__alt4_8.c"
 		
 		goto _st3;
 		_ctr118:
@@ -6943,13 +6933,13 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6947 "gen/ragel/18__alt4_8.c"
+#line 6937 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 6953 "gen/ragel/18__alt4_8.c"
+#line 6943 "gen/ragel/18__alt4_8.c"
 		
 		goto _st3;
 		_ctr127:
@@ -6957,13 +6947,13 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6961 "gen/ragel/18__alt4_8.c"
+#line 6951 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 6967 "gen/ragel/18__alt4_8.c"
+#line 6957 "gen/ragel/18__alt4_8.c"
 		
 		goto _st3;
 		_ctr136:
@@ -6971,13 +6961,13 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 6975 "gen/ragel/18__alt4_8.c"
+#line 6965 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 6981 "gen/ragel/18__alt4_8.c"
+#line 6971 "gen/ragel/18__alt4_8.c"
 		
 		goto _st3;
 		_ctr145:
@@ -6985,13 +6975,13 @@ static void lex(Input *in, Output *out)
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 6989 "gen/ragel/18__alt4_8.c"
+#line 6979 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 6995 "gen/ragel/18__alt4_8.c"
+#line 6985 "gen/ragel/18__alt4_8.c"
 		
 		goto _st3;
 		_ctr154:
@@ -6999,20 +6989,20 @@ static void lex(Input *in, Output *out)
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 7003 "gen/ragel/18__alt4_8.c"
+#line 6993 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a5 = p; }
 		
-#line 7009 "gen/ragel/18__alt4_8.c"
+#line 6999 "gen/ragel/18__alt4_8.c"
 		
 		goto _st3;
 		_st3:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof3;
 		st_case_3:
+		if ( p == pe )
+			goto _out3;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr20;
@@ -7042,21 +7032,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr27;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr21:
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7054 "gen/ragel/18__alt4_8.c"
+#line 7042 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 7060 "gen/ragel/18__alt4_8.c"
+#line 7048 "gen/ragel/18__alt4_8.c"
 		
 		goto _st4;
 		_ctr45:
@@ -7064,13 +7052,13 @@ static void lex(Input *in, Output *out)
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7068 "gen/ragel/18__alt4_8.c"
+#line 7056 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 7074 "gen/ragel/18__alt4_8.c"
+#line 7062 "gen/ragel/18__alt4_8.c"
 		
 		goto _st4;
 		_ctr56:
@@ -7078,13 +7066,13 @@ static void lex(Input *in, Output *out)
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7082 "gen/ragel/18__alt4_8.c"
+#line 7070 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 7088 "gen/ragel/18__alt4_8.c"
+#line 7076 "gen/ragel/18__alt4_8.c"
 		
 		goto _st4;
 		_ctr65:
@@ -7092,13 +7080,13 @@ static void lex(Input *in, Output *out)
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7096 "gen/ragel/18__alt4_8.c"
+#line 7084 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 7102 "gen/ragel/18__alt4_8.c"
+#line 7090 "gen/ragel/18__alt4_8.c"
 		
 		goto _st4;
 		_ctr74:
@@ -7106,13 +7094,13 @@ static void lex(Input *in, Output *out)
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7110 "gen/ragel/18__alt4_8.c"
+#line 7098 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 7116 "gen/ragel/18__alt4_8.c"
+#line 7104 "gen/ragel/18__alt4_8.c"
 		
 		goto _st4;
 		_ctr83:
@@ -7120,13 +7108,13 @@ static void lex(Input *in, Output *out)
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 7124 "gen/ragel/18__alt4_8.c"
+#line 7112 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 7130 "gen/ragel/18__alt4_8.c"
+#line 7118 "gen/ragel/18__alt4_8.c"
 		
 		goto _st4;
 		_ctr92:
@@ -7134,20 +7122,20 @@ static void lex(Input *in, Output *out)
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 7138 "gen/ragel/18__alt4_8.c"
+#line 7126 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b7 = p; }
 		
-#line 7144 "gen/ragel/18__alt4_8.c"
+#line 7132 "gen/ragel/18__alt4_8.c"
 		
 		goto _st4;
 		_st4:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof4;
 		st_case_4:
+		if ( p == pe )
+			goto _out4;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr29;
@@ -7156,13 +7144,25 @@ static void lex(Input *in, Output *out)
 				goto _st4;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr22:
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
+		
+#line 7154 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			c7 = p; }
+		
+#line 7160 "gen/ragel/18__alt4_8.c"
+		
+		goto _st5;
+		_ctr57:
+		{
+#line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
 #line 7168 "gen/ragel/18__alt4_8.c"
 		
@@ -7173,10 +7173,10 @@ static void lex(Input *in, Output *out)
 #line 7174 "gen/ragel/18__alt4_8.c"
 		
 		goto _st5;
-		_ctr57:
+		_ctr66:
 		{
-#line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
+#line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
 #line 7182 "gen/ragel/18__alt4_8.c"
 		
@@ -7187,10 +7187,10 @@ static void lex(Input *in, Output *out)
 #line 7188 "gen/ragel/18__alt4_8.c"
 		
 		goto _st5;
-		_ctr66:
+		_ctr75:
 		{
-#line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
+#line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
 #line 7196 "gen/ragel/18__alt4_8.c"
 		
@@ -7201,10 +7201,10 @@ static void lex(Input *in, Output *out)
 #line 7202 "gen/ragel/18__alt4_8.c"
 		
 		goto _st5;
-		_ctr75:
+		_ctr84:
 		{
-#line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
+#line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
 #line 7210 "gen/ragel/18__alt4_8.c"
 		
@@ -7215,10 +7215,10 @@ static void lex(Input *in, Output *out)
 #line 7216 "gen/ragel/18__alt4_8.c"
 		
 		goto _st5;
-		_ctr84:
+		_ctr93:
 		{
-#line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
+#line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
 #line 7224 "gen/ragel/18__alt4_8.c"
 		
@@ -7229,10 +7229,10 @@ static void lex(Input *in, Output *out)
 #line 7230 "gen/ragel/18__alt4_8.c"
 		
 		goto _st5;
-		_ctr93:
+		_ctr110:
 		{
-#line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
+#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
 #line 7238 "gen/ragel/18__alt4_8.c"
 		
@@ -7243,25 +7243,11 @@ static void lex(Input *in, Output *out)
 #line 7244 "gen/ragel/18__alt4_8.c"
 		
 		goto _st5;
-		_ctr110:
-		{
-#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
-		
-#line 7252 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 51 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			c7 = p; }
-		
-#line 7258 "gen/ragel/18__alt4_8.c"
-		
-		goto _st5;
 		_st5:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof5;
 		st_case_5:
+		if ( p == pe )
+			goto _out5;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr31;
@@ -7270,21 +7256,19 @@ static void lex(Input *in, Output *out)
 				goto _st5;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr23:
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7282 "gen/ragel/18__alt4_8.c"
+#line 7266 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 7288 "gen/ragel/18__alt4_8.c"
+#line 7272 "gen/ragel/18__alt4_8.c"
 		
 		goto _st6;
 		_ctr46:
@@ -7292,13 +7276,13 @@ static void lex(Input *in, Output *out)
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7296 "gen/ragel/18__alt4_8.c"
+#line 7280 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 7302 "gen/ragel/18__alt4_8.c"
+#line 7286 "gen/ragel/18__alt4_8.c"
 		
 		goto _st6;
 		_ctr67:
@@ -7306,13 +7290,13 @@ static void lex(Input *in, Output *out)
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7310 "gen/ragel/18__alt4_8.c"
+#line 7294 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 7316 "gen/ragel/18__alt4_8.c"
+#line 7300 "gen/ragel/18__alt4_8.c"
 		
 		goto _st6;
 		_ctr76:
@@ -7320,13 +7304,13 @@ static void lex(Input *in, Output *out)
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7324 "gen/ragel/18__alt4_8.c"
+#line 7308 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 7330 "gen/ragel/18__alt4_8.c"
+#line 7314 "gen/ragel/18__alt4_8.c"
 		
 		goto _st6;
 		_ctr85:
@@ -7334,13 +7318,13 @@ static void lex(Input *in, Output *out)
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 7338 "gen/ragel/18__alt4_8.c"
+#line 7322 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 7344 "gen/ragel/18__alt4_8.c"
+#line 7328 "gen/ragel/18__alt4_8.c"
 		
 		goto _st6;
 		_ctr94:
@@ -7348,13 +7332,13 @@ static void lex(Input *in, Output *out)
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 7352 "gen/ragel/18__alt4_8.c"
+#line 7336 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 7358 "gen/ragel/18__alt4_8.c"
+#line 7342 "gen/ragel/18__alt4_8.c"
 		
 		goto _st6;
 		_ctr111:
@@ -7362,20 +7346,20 @@ static void lex(Input *in, Output *out)
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7366 "gen/ragel/18__alt4_8.c"
+#line 7350 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 52 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d7 = p; }
 		
-#line 7372 "gen/ragel/18__alt4_8.c"
+#line 7356 "gen/ragel/18__alt4_8.c"
 		
 		goto _st6;
 		_st6:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof6;
 		st_case_6:
+		if ( p == pe )
+			goto _out6;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr33;
@@ -7384,21 +7368,19 @@ static void lex(Input *in, Output *out)
 				goto _st6;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr24:
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7396 "gen/ragel/18__alt4_8.c"
+#line 7378 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 7402 "gen/ragel/18__alt4_8.c"
+#line 7384 "gen/ragel/18__alt4_8.c"
 		
 		goto _st7;
 		_ctr47:
@@ -7406,13 +7388,13 @@ static void lex(Input *in, Output *out)
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7410 "gen/ragel/18__alt4_8.c"
+#line 7392 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 7416 "gen/ragel/18__alt4_8.c"
+#line 7398 "gen/ragel/18__alt4_8.c"
 		
 		goto _st7;
 		_ctr58:
@@ -7420,13 +7402,13 @@ static void lex(Input *in, Output *out)
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7424 "gen/ragel/18__alt4_8.c"
+#line 7406 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 7430 "gen/ragel/18__alt4_8.c"
+#line 7412 "gen/ragel/18__alt4_8.c"
 		
 		goto _st7;
 		_ctr77:
@@ -7434,13 +7416,13 @@ static void lex(Input *in, Output *out)
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7438 "gen/ragel/18__alt4_8.c"
+#line 7420 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 7444 "gen/ragel/18__alt4_8.c"
+#line 7426 "gen/ragel/18__alt4_8.c"
 		
 		goto _st7;
 		_ctr86:
@@ -7448,13 +7430,13 @@ static void lex(Input *in, Output *out)
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 7452 "gen/ragel/18__alt4_8.c"
+#line 7434 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 7458 "gen/ragel/18__alt4_8.c"
+#line 7440 "gen/ragel/18__alt4_8.c"
 		
 		goto _st7;
 		_ctr95:
@@ -7462,13 +7444,13 @@ static void lex(Input *in, Output *out)
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 7466 "gen/ragel/18__alt4_8.c"
+#line 7448 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 7472 "gen/ragel/18__alt4_8.c"
+#line 7454 "gen/ragel/18__alt4_8.c"
 		
 		goto _st7;
 		_ctr112:
@@ -7476,20 +7458,20 @@ static void lex(Input *in, Output *out)
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7480 "gen/ragel/18__alt4_8.c"
+#line 7462 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e7 = p; }
 		
-#line 7486 "gen/ragel/18__alt4_8.c"
+#line 7468 "gen/ragel/18__alt4_8.c"
 		
 		goto _st7;
 		_st7:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof7;
 		st_case_7:
+		if ( p == pe )
+			goto _out7;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr35;
@@ -7498,21 +7480,19 @@ static void lex(Input *in, Output *out)
 				goto _st7;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr25:
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7510 "gen/ragel/18__alt4_8.c"
+#line 7490 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 7516 "gen/ragel/18__alt4_8.c"
+#line 7496 "gen/ragel/18__alt4_8.c"
 		
 		goto _st8;
 		_ctr48:
@@ -7520,13 +7500,13 @@ static void lex(Input *in, Output *out)
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7524 "gen/ragel/18__alt4_8.c"
+#line 7504 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 7530 "gen/ragel/18__alt4_8.c"
+#line 7510 "gen/ragel/18__alt4_8.c"
 		
 		goto _st8;
 		_ctr59:
@@ -7534,13 +7514,13 @@ static void lex(Input *in, Output *out)
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7538 "gen/ragel/18__alt4_8.c"
+#line 7518 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 7544 "gen/ragel/18__alt4_8.c"
+#line 7524 "gen/ragel/18__alt4_8.c"
 		
 		goto _st8;
 		_ctr68:
@@ -7548,13 +7528,13 @@ static void lex(Input *in, Output *out)
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7552 "gen/ragel/18__alt4_8.c"
+#line 7532 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 7558 "gen/ragel/18__alt4_8.c"
+#line 7538 "gen/ragel/18__alt4_8.c"
 		
 		goto _st8;
 		_ctr87:
@@ -7562,13 +7542,13 @@ static void lex(Input *in, Output *out)
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 7566 "gen/ragel/18__alt4_8.c"
+#line 7546 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 7572 "gen/ragel/18__alt4_8.c"
+#line 7552 "gen/ragel/18__alt4_8.c"
 		
 		goto _st8;
 		_ctr96:
@@ -7576,13 +7556,13 @@ static void lex(Input *in, Output *out)
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 7580 "gen/ragel/18__alt4_8.c"
+#line 7560 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 7586 "gen/ragel/18__alt4_8.c"
+#line 7566 "gen/ragel/18__alt4_8.c"
 		
 		goto _st8;
 		_ctr113:
@@ -7590,20 +7570,20 @@ static void lex(Input *in, Output *out)
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7594 "gen/ragel/18__alt4_8.c"
+#line 7574 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 54 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f7 = p; }
 		
-#line 7600 "gen/ragel/18__alt4_8.c"
+#line 7580 "gen/ragel/18__alt4_8.c"
 		
 		goto _st8;
 		_st8:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof8;
 		st_case_8:
+		if ( p == pe )
+			goto _out8;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr37;
@@ -7612,21 +7592,19 @@ static void lex(Input *in, Output *out)
 				goto _st8;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr26:
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7624 "gen/ragel/18__alt4_8.c"
+#line 7602 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 7630 "gen/ragel/18__alt4_8.c"
+#line 7608 "gen/ragel/18__alt4_8.c"
 		
 		goto _st9;
 		_ctr49:
@@ -7634,13 +7612,13 @@ static void lex(Input *in, Output *out)
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7638 "gen/ragel/18__alt4_8.c"
+#line 7616 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 7644 "gen/ragel/18__alt4_8.c"
+#line 7622 "gen/ragel/18__alt4_8.c"
 		
 		goto _st9;
 		_ctr60:
@@ -7648,13 +7626,13 @@ static void lex(Input *in, Output *out)
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7652 "gen/ragel/18__alt4_8.c"
+#line 7630 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 7658 "gen/ragel/18__alt4_8.c"
+#line 7636 "gen/ragel/18__alt4_8.c"
 		
 		goto _st9;
 		_ctr69:
@@ -7662,13 +7640,13 @@ static void lex(Input *in, Output *out)
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7666 "gen/ragel/18__alt4_8.c"
+#line 7644 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 7672 "gen/ragel/18__alt4_8.c"
+#line 7650 "gen/ragel/18__alt4_8.c"
 		
 		goto _st9;
 		_ctr78:
@@ -7676,13 +7654,13 @@ static void lex(Input *in, Output *out)
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7680 "gen/ragel/18__alt4_8.c"
+#line 7658 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 7686 "gen/ragel/18__alt4_8.c"
+#line 7664 "gen/ragel/18__alt4_8.c"
 		
 		goto _st9;
 		_ctr97:
@@ -7690,13 +7668,13 @@ static void lex(Input *in, Output *out)
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
-#line 7694 "gen/ragel/18__alt4_8.c"
+#line 7672 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 7700 "gen/ragel/18__alt4_8.c"
+#line 7678 "gen/ragel/18__alt4_8.c"
 		
 		goto _st9;
 		_ctr114:
@@ -7704,20 +7682,20 @@ static void lex(Input *in, Output *out)
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7708 "gen/ragel/18__alt4_8.c"
+#line 7686 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 55 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g7 = p; }
 		
-#line 7714 "gen/ragel/18__alt4_8.c"
+#line 7692 "gen/ragel/18__alt4_8.c"
 		
 		goto _st9;
 		_st9:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof9;
 		st_case_9:
+		if ( p == pe )
+			goto _out9;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr39;
@@ -7726,21 +7704,19 @@ static void lex(Input *in, Output *out)
 				goto _st9;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr27:
 		{
 #line 47 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7738 "gen/ragel/18__alt4_8.c"
+#line 7714 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 7744 "gen/ragel/18__alt4_8.c"
+#line 7720 "gen/ragel/18__alt4_8.c"
 		
 		goto _st10;
 		_ctr50:
@@ -7748,13 +7724,13 @@ static void lex(Input *in, Output *out)
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7752 "gen/ragel/18__alt4_8.c"
+#line 7728 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 7758 "gen/ragel/18__alt4_8.c"
+#line 7734 "gen/ragel/18__alt4_8.c"
 		
 		goto _st10;
 		_ctr61:
@@ -7762,13 +7738,13 @@ static void lex(Input *in, Output *out)
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7766 "gen/ragel/18__alt4_8.c"
+#line 7742 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 7772 "gen/ragel/18__alt4_8.c"
+#line 7748 "gen/ragel/18__alt4_8.c"
 		
 		goto _st10;
 		_ctr70:
@@ -7776,13 +7752,13 @@ static void lex(Input *in, Output *out)
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7780 "gen/ragel/18__alt4_8.c"
+#line 7756 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 7786 "gen/ragel/18__alt4_8.c"
+#line 7762 "gen/ragel/18__alt4_8.c"
 		
 		goto _st10;
 		_ctr79:
@@ -7790,13 +7766,13 @@ static void lex(Input *in, Output *out)
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7794 "gen/ragel/18__alt4_8.c"
+#line 7770 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 7800 "gen/ragel/18__alt4_8.c"
+#line 7776 "gen/ragel/18__alt4_8.c"
 		
 		goto _st10;
 		_ctr88:
@@ -7804,13 +7780,13 @@ static void lex(Input *in, Output *out)
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
-#line 7808 "gen/ragel/18__alt4_8.c"
+#line 7784 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 7814 "gen/ragel/18__alt4_8.c"
+#line 7790 "gen/ragel/18__alt4_8.c"
 		
 		goto _st10;
 		_ctr115:
@@ -7818,20 +7794,20 @@ static void lex(Input *in, Output *out)
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
-#line 7822 "gen/ragel/18__alt4_8.c"
+#line 7798 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 56 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h7 = p; }
 		
-#line 7828 "gen/ragel/18__alt4_8.c"
+#line 7804 "gen/ragel/18__alt4_8.c"
 		
 		goto _st10;
 		_st10:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof10;
 		st_case_10:
+		if ( p == pe )
+			goto _out10;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr41;
@@ -7840,21 +7816,19 @@ static void lex(Input *in, Output *out)
 				goto _st10;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr13:
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 7852 "gen/ragel/18__alt4_8.c"
+#line 7826 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 7858 "gen/ragel/18__alt4_8.c"
+#line 7832 "gen/ragel/18__alt4_8.c"
 		
 		goto _st11;
 		_ctr120:
@@ -7862,13 +7836,13 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 7866 "gen/ragel/18__alt4_8.c"
+#line 7840 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 7872 "gen/ragel/18__alt4_8.c"
+#line 7846 "gen/ragel/18__alt4_8.c"
 		
 		goto _st11;
 		_ctr129:
@@ -7876,13 +7850,13 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 7880 "gen/ragel/18__alt4_8.c"
+#line 7854 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 7886 "gen/ragel/18__alt4_8.c"
+#line 7860 "gen/ragel/18__alt4_8.c"
 		
 		goto _st11;
 		_ctr138:
@@ -7890,13 +7864,13 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 7894 "gen/ragel/18__alt4_8.c"
+#line 7868 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 7900 "gen/ragel/18__alt4_8.c"
+#line 7874 "gen/ragel/18__alt4_8.c"
 		
 		goto _st11;
 		_ctr147:
@@ -7904,13 +7878,13 @@ static void lex(Input *in, Output *out)
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 7908 "gen/ragel/18__alt4_8.c"
+#line 7882 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 7914 "gen/ragel/18__alt4_8.c"
+#line 7888 "gen/ragel/18__alt4_8.c"
 		
 		goto _st11;
 		_ctr156:
@@ -7918,13 +7892,13 @@ static void lex(Input *in, Output *out)
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 7922 "gen/ragel/18__alt4_8.c"
+#line 7896 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 7928 "gen/ragel/18__alt4_8.c"
+#line 7902 "gen/ragel/18__alt4_8.c"
 		
 		goto _st11;
 		_ctr173:
@@ -7932,20 +7906,20 @@ static void lex(Input *in, Output *out)
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 7936 "gen/ragel/18__alt4_8.c"
+#line 7910 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c5 = p; }
 		
-#line 7942 "gen/ragel/18__alt4_8.c"
+#line 7916 "gen/ragel/18__alt4_8.c"
 		
 		goto _st11;
 		_st11:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof11;
 		st_case_11:
+		if ( p == pe )
+			goto _out11;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr43;
@@ -7975,13 +7949,39 @@ static void lex(Input *in, Output *out)
 				goto _ctr50;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr44:
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
+		
+#line 7959 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			a7 = p; }
+		
+#line 7965 "gen/ragel/18__alt4_8.c"
+		
+		goto _st12;
+		_ctr55:
+		{
+#line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
+		
+#line 7973 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			a7 = p; }
+		
+#line 7979 "gen/ragel/18__alt4_8.c"
+		
+		goto _st12;
+		_ctr64:
+		{
+#line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
 #line 7987 "gen/ragel/18__alt4_8.c"
 		
@@ -7992,10 +7992,10 @@ static void lex(Input *in, Output *out)
 #line 7993 "gen/ragel/18__alt4_8.c"
 		
 		goto _st12;
-		_ctr55:
+		_ctr73:
 		{
-#line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
+#line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
 		
 #line 8001 "gen/ragel/18__alt4_8.c"
 		
@@ -8006,10 +8006,10 @@ static void lex(Input *in, Output *out)
 #line 8007 "gen/ragel/18__alt4_8.c"
 		
 		goto _st12;
-		_ctr64:
+		_ctr82:
 		{
-#line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			e6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
+#line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
 		
 #line 8015 "gen/ragel/18__alt4_8.c"
 		
@@ -8020,10 +8020,10 @@ static void lex(Input *in, Output *out)
 #line 8021 "gen/ragel/18__alt4_8.c"
 		
 		goto _st12;
-		_ctr73:
+		_ctr91:
 		{
-#line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			f6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = g5 = g6 = h5 = h6 = NULL; }
+#line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
 		
 #line 8029 "gen/ragel/18__alt4_8.c"
 		
@@ -8034,10 +8034,10 @@ static void lex(Input *in, Output *out)
 #line 8035 "gen/ragel/18__alt4_8.c"
 		
 		goto _st12;
-		_ctr82:
+		_ctr109:
 		{
-#line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			g6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = h5 = h6 = NULL; }
+#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
 		
 #line 8043 "gen/ragel/18__alt4_8.c"
 		
@@ -8048,39 +8048,11 @@ static void lex(Input *in, Output *out)
 #line 8049 "gen/ragel/18__alt4_8.c"
 		
 		goto _st12;
-		_ctr91:
-		{
-#line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			h6 = p; a5 = a6 = b5 = b6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = NULL; }
-		
-#line 8057 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			a7 = p; }
-		
-#line 8063 "gen/ragel/18__alt4_8.c"
-		
-		goto _st12;
-		_ctr109:
-		{
-#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = e5 = e6 = f5 = f6 = g5 = g6 = h5 = h6 = NULL; }
-		
-#line 8071 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 57 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			a7 = p; }
-		
-#line 8077 "gen/ragel/18__alt4_8.c"
-		
-		goto _st12;
 		_st12:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof12;
 		st_case_12:
+		if ( p == pe )
+			goto _out12;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr52;
@@ -8089,21 +8061,19 @@ static void lex(Input *in, Output *out)
 				goto _st12;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr14:
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8101 "gen/ragel/18__alt4_8.c"
+#line 8071 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 8107 "gen/ragel/18__alt4_8.c"
+#line 8077 "gen/ragel/18__alt4_8.c"
 		
 		goto _st13;
 		_ctr102:
@@ -8111,13 +8081,13 @@ static void lex(Input *in, Output *out)
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8115 "gen/ragel/18__alt4_8.c"
+#line 8085 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 8121 "gen/ragel/18__alt4_8.c"
+#line 8091 "gen/ragel/18__alt4_8.c"
 		
 		goto _st13;
 		_ctr130:
@@ -8125,13 +8095,13 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8129 "gen/ragel/18__alt4_8.c"
+#line 8099 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 8135 "gen/ragel/18__alt4_8.c"
+#line 8105 "gen/ragel/18__alt4_8.c"
 		
 		goto _st13;
 		_ctr139:
@@ -8139,13 +8109,13 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8143 "gen/ragel/18__alt4_8.c"
+#line 8113 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 8149 "gen/ragel/18__alt4_8.c"
+#line 8119 "gen/ragel/18__alt4_8.c"
 		
 		goto _st13;
 		_ctr148:
@@ -8153,13 +8123,13 @@ static void lex(Input *in, Output *out)
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 8157 "gen/ragel/18__alt4_8.c"
+#line 8127 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 8163 "gen/ragel/18__alt4_8.c"
+#line 8133 "gen/ragel/18__alt4_8.c"
 		
 		goto _st13;
 		_ctr157:
@@ -8167,13 +8137,13 @@ static void lex(Input *in, Output *out)
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 8171 "gen/ragel/18__alt4_8.c"
+#line 8141 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 8177 "gen/ragel/18__alt4_8.c"
+#line 8147 "gen/ragel/18__alt4_8.c"
 		
 		goto _st13;
 		_ctr174:
@@ -8181,20 +8151,20 @@ static void lex(Input *in, Output *out)
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8185 "gen/ragel/18__alt4_8.c"
+#line 8155 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 42 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d5 = p; }
 		
-#line 8191 "gen/ragel/18__alt4_8.c"
+#line 8161 "gen/ragel/18__alt4_8.c"
 		
 		goto _st13;
 		_st13:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof13;
 		st_case_13:
+		if ( p == pe )
+			goto _out13;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr54;
@@ -8224,21 +8194,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr61;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr15:
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8236 "gen/ragel/18__alt4_8.c"
+#line 8204 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 8242 "gen/ragel/18__alt4_8.c"
+#line 8210 "gen/ragel/18__alt4_8.c"
 		
 		goto _st14;
 		_ctr103:
@@ -8246,13 +8214,13 @@ static void lex(Input *in, Output *out)
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8250 "gen/ragel/18__alt4_8.c"
+#line 8218 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 8256 "gen/ragel/18__alt4_8.c"
+#line 8224 "gen/ragel/18__alt4_8.c"
 		
 		goto _st14;
 		_ctr121:
@@ -8260,13 +8228,13 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8264 "gen/ragel/18__alt4_8.c"
+#line 8232 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 8270 "gen/ragel/18__alt4_8.c"
+#line 8238 "gen/ragel/18__alt4_8.c"
 		
 		goto _st14;
 		_ctr140:
@@ -8274,13 +8242,13 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8278 "gen/ragel/18__alt4_8.c"
+#line 8246 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 8284 "gen/ragel/18__alt4_8.c"
+#line 8252 "gen/ragel/18__alt4_8.c"
 		
 		goto _st14;
 		_ctr149:
@@ -8288,13 +8256,13 @@ static void lex(Input *in, Output *out)
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 8292 "gen/ragel/18__alt4_8.c"
+#line 8260 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 8298 "gen/ragel/18__alt4_8.c"
+#line 8266 "gen/ragel/18__alt4_8.c"
 		
 		goto _st14;
 		_ctr158:
@@ -8302,13 +8270,13 @@ static void lex(Input *in, Output *out)
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 8306 "gen/ragel/18__alt4_8.c"
+#line 8274 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 8312 "gen/ragel/18__alt4_8.c"
+#line 8280 "gen/ragel/18__alt4_8.c"
 		
 		goto _st14;
 		_ctr175:
@@ -8316,20 +8284,20 @@ static void lex(Input *in, Output *out)
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8320 "gen/ragel/18__alt4_8.c"
+#line 8288 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e5 = p; }
 		
-#line 8326 "gen/ragel/18__alt4_8.c"
+#line 8294 "gen/ragel/18__alt4_8.c"
 		
 		goto _st14;
 		_st14:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof14;
 		st_case_14:
+		if ( p == pe )
+			goto _out14;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr63;
@@ -8359,21 +8327,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr70;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr16:
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8371 "gen/ragel/18__alt4_8.c"
+#line 8337 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 8377 "gen/ragel/18__alt4_8.c"
+#line 8343 "gen/ragel/18__alt4_8.c"
 		
 		goto _st15;
 		_ctr104:
@@ -8381,13 +8347,13 @@ static void lex(Input *in, Output *out)
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8385 "gen/ragel/18__alt4_8.c"
+#line 8351 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 8391 "gen/ragel/18__alt4_8.c"
+#line 8357 "gen/ragel/18__alt4_8.c"
 		
 		goto _st15;
 		_ctr122:
@@ -8395,13 +8361,13 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8399 "gen/ragel/18__alt4_8.c"
+#line 8365 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 8405 "gen/ragel/18__alt4_8.c"
+#line 8371 "gen/ragel/18__alt4_8.c"
 		
 		goto _st15;
 		_ctr131:
@@ -8409,13 +8375,13 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8413 "gen/ragel/18__alt4_8.c"
+#line 8379 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 8419 "gen/ragel/18__alt4_8.c"
+#line 8385 "gen/ragel/18__alt4_8.c"
 		
 		goto _st15;
 		_ctr150:
@@ -8423,13 +8389,13 @@ static void lex(Input *in, Output *out)
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 8427 "gen/ragel/18__alt4_8.c"
+#line 8393 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 8433 "gen/ragel/18__alt4_8.c"
+#line 8399 "gen/ragel/18__alt4_8.c"
 		
 		goto _st15;
 		_ctr159:
@@ -8437,13 +8403,13 @@ static void lex(Input *in, Output *out)
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 8441 "gen/ragel/18__alt4_8.c"
+#line 8407 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 8447 "gen/ragel/18__alt4_8.c"
+#line 8413 "gen/ragel/18__alt4_8.c"
 		
 		goto _st15;
 		_ctr176:
@@ -8451,20 +8417,20 @@ static void lex(Input *in, Output *out)
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8455 "gen/ragel/18__alt4_8.c"
+#line 8421 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 44 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f5 = p; }
 		
-#line 8461 "gen/ragel/18__alt4_8.c"
+#line 8427 "gen/ragel/18__alt4_8.c"
 		
 		goto _st15;
 		_st15:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof15;
 		st_case_15:
+		if ( p == pe )
+			goto _out15;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr72;
@@ -8494,21 +8460,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr79;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr17:
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8506 "gen/ragel/18__alt4_8.c"
+#line 8470 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 8512 "gen/ragel/18__alt4_8.c"
+#line 8476 "gen/ragel/18__alt4_8.c"
 		
 		goto _st16;
 		_ctr105:
@@ -8516,13 +8480,13 @@ static void lex(Input *in, Output *out)
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8520 "gen/ragel/18__alt4_8.c"
+#line 8484 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 8526 "gen/ragel/18__alt4_8.c"
+#line 8490 "gen/ragel/18__alt4_8.c"
 		
 		goto _st16;
 		_ctr123:
@@ -8530,13 +8494,13 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8534 "gen/ragel/18__alt4_8.c"
+#line 8498 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 8540 "gen/ragel/18__alt4_8.c"
+#line 8504 "gen/ragel/18__alt4_8.c"
 		
 		goto _st16;
 		_ctr132:
@@ -8544,13 +8508,13 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8548 "gen/ragel/18__alt4_8.c"
+#line 8512 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 8554 "gen/ragel/18__alt4_8.c"
+#line 8518 "gen/ragel/18__alt4_8.c"
 		
 		goto _st16;
 		_ctr141:
@@ -8558,13 +8522,13 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8562 "gen/ragel/18__alt4_8.c"
+#line 8526 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 8568 "gen/ragel/18__alt4_8.c"
+#line 8532 "gen/ragel/18__alt4_8.c"
 		
 		goto _st16;
 		_ctr160:
@@ -8572,13 +8536,13 @@ static void lex(Input *in, Output *out)
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
-#line 8576 "gen/ragel/18__alt4_8.c"
+#line 8540 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 8582 "gen/ragel/18__alt4_8.c"
+#line 8546 "gen/ragel/18__alt4_8.c"
 		
 		goto _st16;
 		_ctr177:
@@ -8586,20 +8550,20 @@ static void lex(Input *in, Output *out)
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8590 "gen/ragel/18__alt4_8.c"
+#line 8554 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 45 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g5 = p; }
 		
-#line 8596 "gen/ragel/18__alt4_8.c"
+#line 8560 "gen/ragel/18__alt4_8.c"
 		
 		goto _st16;
 		_st16:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof16;
 		st_case_16:
+		if ( p == pe )
+			goto _out16;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr81;
@@ -8629,21 +8593,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr88;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr18:
 		{
 #line 30 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8641 "gen/ragel/18__alt4_8.c"
+#line 8603 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 8647 "gen/ragel/18__alt4_8.c"
+#line 8609 "gen/ragel/18__alt4_8.c"
 		
 		goto _st17;
 		_ctr106:
@@ -8651,13 +8613,13 @@ static void lex(Input *in, Output *out)
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8655 "gen/ragel/18__alt4_8.c"
+#line 8617 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 8661 "gen/ragel/18__alt4_8.c"
+#line 8623 "gen/ragel/18__alt4_8.c"
 		
 		goto _st17;
 		_ctr124:
@@ -8665,13 +8627,13 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8669 "gen/ragel/18__alt4_8.c"
+#line 8631 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 8675 "gen/ragel/18__alt4_8.c"
+#line 8637 "gen/ragel/18__alt4_8.c"
 		
 		goto _st17;
 		_ctr133:
@@ -8679,13 +8641,13 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8683 "gen/ragel/18__alt4_8.c"
+#line 8645 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 8689 "gen/ragel/18__alt4_8.c"
+#line 8651 "gen/ragel/18__alt4_8.c"
 		
 		goto _st17;
 		_ctr142:
@@ -8693,13 +8655,13 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8697 "gen/ragel/18__alt4_8.c"
+#line 8659 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 8703 "gen/ragel/18__alt4_8.c"
+#line 8665 "gen/ragel/18__alt4_8.c"
 		
 		goto _st17;
 		_ctr151:
@@ -8707,13 +8669,13 @@ static void lex(Input *in, Output *out)
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
-#line 8711 "gen/ragel/18__alt4_8.c"
+#line 8673 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 8717 "gen/ragel/18__alt4_8.c"
+#line 8679 "gen/ragel/18__alt4_8.c"
 		
 		goto _st17;
 		_ctr178:
@@ -8721,20 +8683,20 @@ static void lex(Input *in, Output *out)
 #line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
-#line 8725 "gen/ragel/18__alt4_8.c"
+#line 8687 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 46 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h5 = p; }
 		
-#line 8731 "gen/ragel/18__alt4_8.c"
+#line 8693 "gen/ragel/18__alt4_8.c"
 		
 		goto _st17;
 		_st17:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof17;
 		st_case_17:
+		if ( p == pe )
+			goto _out17;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr90;
@@ -8764,21 +8726,19 @@ static void lex(Input *in, Output *out)
 				goto _st17;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr4:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 8776 "gen/ragel/18__alt4_8.c"
+#line 8736 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 8782 "gen/ragel/18__alt4_8.c"
+#line 8742 "gen/ragel/18__alt4_8.c"
 		
 		goto _st18;
 		_ctr164:
@@ -8786,13 +8746,13 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 8790 "gen/ragel/18__alt4_8.c"
+#line 8750 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 8796 "gen/ragel/18__alt4_8.c"
+#line 8756 "gen/ragel/18__alt4_8.c"
 		
 		goto _st18;
 		_ctr192:
@@ -8800,13 +8760,13 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 8804 "gen/ragel/18__alt4_8.c"
+#line 8764 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 8810 "gen/ragel/18__alt4_8.c"
+#line 8770 "gen/ragel/18__alt4_8.c"
 		
 		goto _st18;
 		_ctr201:
@@ -8814,13 +8774,13 @@ static void lex(Input *in, Output *out)
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 8818 "gen/ragel/18__alt4_8.c"
+#line 8778 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 8824 "gen/ragel/18__alt4_8.c"
+#line 8784 "gen/ragel/18__alt4_8.c"
 		
 		goto _st18;
 		_ctr210:
@@ -8828,13 +8788,13 @@ static void lex(Input *in, Output *out)
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 8832 "gen/ragel/18__alt4_8.c"
+#line 8792 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 8838 "gen/ragel/18__alt4_8.c"
+#line 8798 "gen/ragel/18__alt4_8.c"
 		
 		goto _st18;
 		_ctr219:
@@ -8842,13 +8802,13 @@ static void lex(Input *in, Output *out)
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
 		
-#line 8846 "gen/ragel/18__alt4_8.c"
+#line 8806 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 8852 "gen/ragel/18__alt4_8.c"
+#line 8812 "gen/ragel/18__alt4_8.c"
 		
 		goto _st18;
 		_ctr228:
@@ -8856,20 +8816,20 @@ static void lex(Input *in, Output *out)
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
 		
-#line 8860 "gen/ragel/18__alt4_8.c"
+#line 8820 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c3 = p; }
 		
-#line 8866 "gen/ragel/18__alt4_8.c"
+#line 8826 "gen/ragel/18__alt4_8.c"
 		
 		goto _st18;
 		_st18:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof18;
 		st_case_18:
+		if ( p == pe )
+			goto _out18;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr99;
@@ -8899,13 +8859,53 @@ static void lex(Input *in, Output *out)
 				goto _ctr106;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr101:
 		{
 #line 31 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
+		
+#line 8869 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			b5 = p; }
+		
+#line 8875 "gen/ragel/18__alt4_8.c"
+		
+		goto _st19;
+		_ctr119:
+		{
+#line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
+		
+#line 8883 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			b5 = p; }
+		
+#line 8889 "gen/ragel/18__alt4_8.c"
+		
+		goto _st19;
+		_ctr128:
+		{
+#line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
+		
+#line 8897 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			b5 = p; }
+		
+#line 8903 "gen/ragel/18__alt4_8.c"
+		
+		goto _st19;
+		_ctr137:
+		{
+#line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
 		
 #line 8911 "gen/ragel/18__alt4_8.c"
 		
@@ -8916,10 +8916,10 @@ static void lex(Input *in, Output *out)
 #line 8917 "gen/ragel/18__alt4_8.c"
 		
 		goto _st19;
-		_ctr119:
+		_ctr146:
 		{
-#line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
+#line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
 		
 #line 8925 "gen/ragel/18__alt4_8.c"
 		
@@ -8930,10 +8930,10 @@ static void lex(Input *in, Output *out)
 #line 8931 "gen/ragel/18__alt4_8.c"
 		
 		goto _st19;
-		_ctr128:
+		_ctr155:
 		{
-#line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			e4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
+#line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
 		
 #line 8939 "gen/ragel/18__alt4_8.c"
 		
@@ -8944,10 +8944,10 @@ static void lex(Input *in, Output *out)
 #line 8945 "gen/ragel/18__alt4_8.c"
 		
 		goto _st19;
-		_ctr137:
+		_ctr172:
 		{
-#line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			f4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = g3 = g4 = h3 = h4 = NULL; }
+#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
 		
 #line 8953 "gen/ragel/18__alt4_8.c"
 		
@@ -8958,53 +8958,11 @@ static void lex(Input *in, Output *out)
 #line 8959 "gen/ragel/18__alt4_8.c"
 		
 		goto _st19;
-		_ctr146:
-		{
-#line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			g4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = h3 = h4 = NULL; }
-		
-#line 8967 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			b5 = p; }
-		
-#line 8973 "gen/ragel/18__alt4_8.c"
-		
-		goto _st19;
-		_ctr155:
-		{
-#line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			h4 = p; a3 = a4 = b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = NULL; }
-		
-#line 8981 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			b5 = p; }
-		
-#line 8987 "gen/ragel/18__alt4_8.c"
-		
-		goto _st19;
-		_ctr172:
-		{
-#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = e3 = e4 = f3 = f4 = g3 = g4 = h3 = h4 = NULL; }
-		
-#line 8995 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			b5 = p; }
-		
-#line 9001 "gen/ragel/18__alt4_8.c"
-		
-		goto _st19;
 		_st19:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof19;
 		st_case_19:
+		if ( p == pe )
+			goto _out19;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -9034,21 +8992,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr115;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr5:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9046 "gen/ragel/18__alt4_8.c"
+#line 9002 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 9052 "gen/ragel/18__alt4_8.c"
+#line 9008 "gen/ragel/18__alt4_8.c"
 		
 		goto _st20;
 		_ctr165:
@@ -9056,13 +9012,13 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9060 "gen/ragel/18__alt4_8.c"
+#line 9016 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 9066 "gen/ragel/18__alt4_8.c"
+#line 9022 "gen/ragel/18__alt4_8.c"
 		
 		goto _st20;
 		_ctr183:
@@ -9070,13 +9026,13 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9074 "gen/ragel/18__alt4_8.c"
+#line 9030 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 9080 "gen/ragel/18__alt4_8.c"
+#line 9036 "gen/ragel/18__alt4_8.c"
 		
 		goto _st20;
 		_ctr202:
@@ -9084,13 +9040,13 @@ static void lex(Input *in, Output *out)
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9088 "gen/ragel/18__alt4_8.c"
+#line 9044 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 9094 "gen/ragel/18__alt4_8.c"
+#line 9050 "gen/ragel/18__alt4_8.c"
 		
 		goto _st20;
 		_ctr211:
@@ -9098,13 +9054,13 @@ static void lex(Input *in, Output *out)
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9102 "gen/ragel/18__alt4_8.c"
+#line 9058 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 9108 "gen/ragel/18__alt4_8.c"
+#line 9064 "gen/ragel/18__alt4_8.c"
 		
 		goto _st20;
 		_ctr220:
@@ -9112,13 +9068,13 @@ static void lex(Input *in, Output *out)
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
 		
-#line 9116 "gen/ragel/18__alt4_8.c"
+#line 9072 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 9122 "gen/ragel/18__alt4_8.c"
+#line 9078 "gen/ragel/18__alt4_8.c"
 		
 		goto _st20;
 		_ctr229:
@@ -9126,20 +9082,20 @@ static void lex(Input *in, Output *out)
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
 		
-#line 9130 "gen/ragel/18__alt4_8.c"
+#line 9086 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d3 = p; }
 		
-#line 9136 "gen/ragel/18__alt4_8.c"
+#line 9092 "gen/ragel/18__alt4_8.c"
 		
 		goto _st20;
 		_st20:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof20;
 		st_case_20:
+		if ( p == pe )
+			goto _out20;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr117;
@@ -9169,21 +9125,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr124;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr6:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9181 "gen/ragel/18__alt4_8.c"
+#line 9135 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 9187 "gen/ragel/18__alt4_8.c"
+#line 9141 "gen/ragel/18__alt4_8.c"
 		
 		goto _st21;
 		_ctr166:
@@ -9191,13 +9145,13 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9195 "gen/ragel/18__alt4_8.c"
+#line 9149 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 9201 "gen/ragel/18__alt4_8.c"
+#line 9155 "gen/ragel/18__alt4_8.c"
 		
 		goto _st21;
 		_ctr184:
@@ -9205,13 +9159,13 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9209 "gen/ragel/18__alt4_8.c"
+#line 9163 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 9215 "gen/ragel/18__alt4_8.c"
+#line 9169 "gen/ragel/18__alt4_8.c"
 		
 		goto _st21;
 		_ctr193:
@@ -9219,13 +9173,13 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9223 "gen/ragel/18__alt4_8.c"
+#line 9177 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 9229 "gen/ragel/18__alt4_8.c"
+#line 9183 "gen/ragel/18__alt4_8.c"
 		
 		goto _st21;
 		_ctr212:
@@ -9233,13 +9187,13 @@ static void lex(Input *in, Output *out)
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9237 "gen/ragel/18__alt4_8.c"
+#line 9191 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 9243 "gen/ragel/18__alt4_8.c"
+#line 9197 "gen/ragel/18__alt4_8.c"
 		
 		goto _st21;
 		_ctr221:
@@ -9247,13 +9201,13 @@ static void lex(Input *in, Output *out)
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
 		
-#line 9251 "gen/ragel/18__alt4_8.c"
+#line 9205 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 9257 "gen/ragel/18__alt4_8.c"
+#line 9211 "gen/ragel/18__alt4_8.c"
 		
 		goto _st21;
 		_ctr230:
@@ -9261,20 +9215,20 @@ static void lex(Input *in, Output *out)
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
 		
-#line 9265 "gen/ragel/18__alt4_8.c"
+#line 9219 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e3 = p; }
 		
-#line 9271 "gen/ragel/18__alt4_8.c"
+#line 9225 "gen/ragel/18__alt4_8.c"
 		
 		goto _st21;
 		_st21:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof21;
 		st_case_21:
+		if ( p == pe )
+			goto _out21;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr126;
@@ -9304,21 +9258,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr133;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr7:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9316 "gen/ragel/18__alt4_8.c"
+#line 9268 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 9322 "gen/ragel/18__alt4_8.c"
+#line 9274 "gen/ragel/18__alt4_8.c"
 		
 		goto _st22;
 		_ctr167:
@@ -9326,13 +9278,13 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9330 "gen/ragel/18__alt4_8.c"
+#line 9282 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 9336 "gen/ragel/18__alt4_8.c"
+#line 9288 "gen/ragel/18__alt4_8.c"
 		
 		goto _st22;
 		_ctr185:
@@ -9340,13 +9292,13 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9344 "gen/ragel/18__alt4_8.c"
+#line 9296 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 9350 "gen/ragel/18__alt4_8.c"
+#line 9302 "gen/ragel/18__alt4_8.c"
 		
 		goto _st22;
 		_ctr194:
@@ -9354,13 +9306,13 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9358 "gen/ragel/18__alt4_8.c"
+#line 9310 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 9364 "gen/ragel/18__alt4_8.c"
+#line 9316 "gen/ragel/18__alt4_8.c"
 		
 		goto _st22;
 		_ctr203:
@@ -9368,13 +9320,13 @@ static void lex(Input *in, Output *out)
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9372 "gen/ragel/18__alt4_8.c"
+#line 9324 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 9378 "gen/ragel/18__alt4_8.c"
+#line 9330 "gen/ragel/18__alt4_8.c"
 		
 		goto _st22;
 		_ctr222:
@@ -9382,13 +9334,13 @@ static void lex(Input *in, Output *out)
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
 		
-#line 9386 "gen/ragel/18__alt4_8.c"
+#line 9338 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 9392 "gen/ragel/18__alt4_8.c"
+#line 9344 "gen/ragel/18__alt4_8.c"
 		
 		goto _st22;
 		_ctr231:
@@ -9396,20 +9348,20 @@ static void lex(Input *in, Output *out)
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
 		
-#line 9400 "gen/ragel/18__alt4_8.c"
+#line 9352 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f3 = p; }
 		
-#line 9406 "gen/ragel/18__alt4_8.c"
+#line 9358 "gen/ragel/18__alt4_8.c"
 		
 		goto _st22;
 		_st22:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof22;
 		st_case_22:
+		if ( p == pe )
+			goto _out22;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr135;
@@ -9439,21 +9391,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr142;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr8:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9451 "gen/ragel/18__alt4_8.c"
+#line 9401 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 9457 "gen/ragel/18__alt4_8.c"
+#line 9407 "gen/ragel/18__alt4_8.c"
 		
 		goto _st23;
 		_ctr168:
@@ -9461,13 +9411,13 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9465 "gen/ragel/18__alt4_8.c"
+#line 9415 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 9471 "gen/ragel/18__alt4_8.c"
+#line 9421 "gen/ragel/18__alt4_8.c"
 		
 		goto _st23;
 		_ctr186:
@@ -9475,13 +9425,13 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9479 "gen/ragel/18__alt4_8.c"
+#line 9429 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 9485 "gen/ragel/18__alt4_8.c"
+#line 9435 "gen/ragel/18__alt4_8.c"
 		
 		goto _st23;
 		_ctr195:
@@ -9489,13 +9439,13 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9493 "gen/ragel/18__alt4_8.c"
+#line 9443 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 9499 "gen/ragel/18__alt4_8.c"
+#line 9449 "gen/ragel/18__alt4_8.c"
 		
 		goto _st23;
 		_ctr204:
@@ -9503,13 +9453,13 @@ static void lex(Input *in, Output *out)
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9507 "gen/ragel/18__alt4_8.c"
+#line 9457 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 9513 "gen/ragel/18__alt4_8.c"
+#line 9463 "gen/ragel/18__alt4_8.c"
 		
 		goto _st23;
 		_ctr213:
@@ -9517,13 +9467,13 @@ static void lex(Input *in, Output *out)
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9521 "gen/ragel/18__alt4_8.c"
+#line 9471 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 9527 "gen/ragel/18__alt4_8.c"
+#line 9477 "gen/ragel/18__alt4_8.c"
 		
 		goto _st23;
 		_ctr232:
@@ -9531,20 +9481,20 @@ static void lex(Input *in, Output *out)
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
 		
-#line 9535 "gen/ragel/18__alt4_8.c"
+#line 9485 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g3 = p; }
 		
-#line 9541 "gen/ragel/18__alt4_8.c"
+#line 9491 "gen/ragel/18__alt4_8.c"
 		
 		goto _st23;
 		_st23:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof23;
 		st_case_23:
+		if ( p == pe )
+			goto _out23;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr144;
@@ -9574,21 +9524,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr151;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr9:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9586 "gen/ragel/18__alt4_8.c"
+#line 9534 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 9592 "gen/ragel/18__alt4_8.c"
+#line 9540 "gen/ragel/18__alt4_8.c"
 		
 		goto _st24;
 		_ctr169:
@@ -9596,13 +9544,13 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9600 "gen/ragel/18__alt4_8.c"
+#line 9548 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 9606 "gen/ragel/18__alt4_8.c"
+#line 9554 "gen/ragel/18__alt4_8.c"
 		
 		goto _st24;
 		_ctr187:
@@ -9610,13 +9558,13 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9614 "gen/ragel/18__alt4_8.c"
+#line 9562 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 9620 "gen/ragel/18__alt4_8.c"
+#line 9568 "gen/ragel/18__alt4_8.c"
 		
 		goto _st24;
 		_ctr196:
@@ -9624,13 +9572,13 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9628 "gen/ragel/18__alt4_8.c"
+#line 9576 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 9634 "gen/ragel/18__alt4_8.c"
+#line 9582 "gen/ragel/18__alt4_8.c"
 		
 		goto _st24;
 		_ctr205:
@@ -9638,13 +9586,13 @@ static void lex(Input *in, Output *out)
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9642 "gen/ragel/18__alt4_8.c"
+#line 9590 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 9648 "gen/ragel/18__alt4_8.c"
+#line 9596 "gen/ragel/18__alt4_8.c"
 		
 		goto _st24;
 		_ctr214:
@@ -9652,13 +9600,13 @@ static void lex(Input *in, Output *out)
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
 		
-#line 9656 "gen/ragel/18__alt4_8.c"
+#line 9604 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 9662 "gen/ragel/18__alt4_8.c"
+#line 9610 "gen/ragel/18__alt4_8.c"
 		
 		goto _st24;
 		_ctr223:
@@ -9666,20 +9614,20 @@ static void lex(Input *in, Output *out)
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
 		
-#line 9670 "gen/ragel/18__alt4_8.c"
+#line 9618 "gen/ragel/18__alt4_8.c"
 		
 		{
 #line 36 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h3 = p; }
 		
-#line 9676 "gen/ragel/18__alt4_8.c"
+#line 9624 "gen/ragel/18__alt4_8.c"
 		
 		goto _st24;
 		_st24:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof24;
 		st_case_24:
+		if ( p == pe )
+			goto _out24;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr153;
@@ -9709,22 +9657,20 @@ static void lex(Input *in, Output *out)
 				goto _st24;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr236:
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b1 = p; }
 		
-#line 9721 "gen/ragel/18__alt4_8.c"
+#line 9667 "gen/ragel/18__alt4_8.c"
 		
 		goto _st25;
 		_st25:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof25;
 		st_case_25:
+		if ( p == pe )
+			goto _out25;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr162;
@@ -9754,13 +9700,67 @@ static void lex(Input *in, Output *out)
 				goto _ctr169;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr163:
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
+		
+#line 9710 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			a3 = p; }
+		
+#line 9716 "gen/ragel/18__alt4_8.c"
+		
+		goto _st26;
+		_ctr181:
+		{
+#line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
+		
+#line 9724 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			a3 = p; }
+		
+#line 9730 "gen/ragel/18__alt4_8.c"
+		
+		goto _st26;
+		_ctr190:
+		{
+#line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
+		
+#line 9738 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			a3 = p; }
+		
+#line 9744 "gen/ragel/18__alt4_8.c"
+		
+		goto _st26;
+		_ctr199:
+		{
+#line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
+		
+#line 9752 "gen/ragel/18__alt4_8.c"
+		
+		{
+#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			a3 = p; }
+		
+#line 9758 "gen/ragel/18__alt4_8.c"
+		
+		goto _st26;
+		_ctr208:
+		{
+#line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
 		
 #line 9766 "gen/ragel/18__alt4_8.c"
 		
@@ -9771,10 +9771,10 @@ static void lex(Input *in, Output *out)
 #line 9772 "gen/ragel/18__alt4_8.c"
 		
 		goto _st26;
-		_ctr181:
+		_ctr217:
 		{
-#line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
+#line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
 		
 #line 9780 "gen/ragel/18__alt4_8.c"
 		
@@ -9785,10 +9785,10 @@ static void lex(Input *in, Output *out)
 #line 9786 "gen/ragel/18__alt4_8.c"
 		
 		goto _st26;
-		_ctr190:
+		_ctr226:
 		{
-#line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = e1 = e2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
+#line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
+			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
 		
 #line 9794 "gen/ragel/18__alt4_8.c"
 		
@@ -9799,67 +9799,11 @@ static void lex(Input *in, Output *out)
 #line 9800 "gen/ragel/18__alt4_8.c"
 		
 		goto _st26;
-		_ctr199:
-		{
-#line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			e2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = f1 = f2 = g1 = g2 = h1 = h2 = NULL; }
-		
-#line 9808 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			a3 = p; }
-		
-#line 9814 "gen/ragel/18__alt4_8.c"
-		
-		goto _st26;
-		_ctr208:
-		{
-#line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			f2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = g1 = g2 = h1 = h2 = NULL; }
-		
-#line 9822 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			a3 = p; }
-		
-#line 9828 "gen/ragel/18__alt4_8.c"
-		
-		goto _st26;
-		_ctr217:
-		{
-#line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			g2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = h1 = h2 = NULL; }
-		
-#line 9836 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			a3 = p; }
-		
-#line 9842 "gen/ragel/18__alt4_8.c"
-		
-		goto _st26;
-		_ctr226:
-		{
-#line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			h2 = p; a1 = a2 = b1 = b2 = c1 = c2 = d1 = d2 = e1 = e2 = f1 = f2 = g1 = g2 = NULL; }
-		
-#line 9850 "gen/ragel/18__alt4_8.c"
-		
-		{
-#line 37 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
-			a3 = p; }
-		
-#line 9856 "gen/ragel/18__alt4_8.c"
-		
-		goto _st26;
 		_st26:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof26;
 		st_case_26:
+		if ( p == pe )
+			goto _out26;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr171;
@@ -9889,22 +9833,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr178;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr237:
 		{
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			c1 = p; }
 		
-#line 9901 "gen/ragel/18__alt4_8.c"
+#line 9843 "gen/ragel/18__alt4_8.c"
 		
 		goto _st27;
 		_st27:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof27;
 		st_case_27:
+		if ( p == pe )
+			goto _out27;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr180;
@@ -9934,22 +9876,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr187;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr238:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			d1 = p; }
 		
-#line 9946 "gen/ragel/18__alt4_8.c"
+#line 9886 "gen/ragel/18__alt4_8.c"
 		
 		goto _st28;
 		_st28:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof28;
 		st_case_28:
+		if ( p == pe )
+			goto _out28;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr189;
@@ -9979,22 +9919,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr196;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr239:
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			e1 = p; }
 		
-#line 9991 "gen/ragel/18__alt4_8.c"
+#line 9929 "gen/ragel/18__alt4_8.c"
 		
 		goto _st29;
 		_st29:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof29;
 		st_case_29:
+		if ( p == pe )
+			goto _out29;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr198;
@@ -10024,22 +9962,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr205;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr240:
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			f1 = p; }
 		
-#line 10036 "gen/ragel/18__alt4_8.c"
+#line 9972 "gen/ragel/18__alt4_8.c"
 		
 		goto _st30;
 		_st30:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof30;
 		st_case_30:
+		if ( p == pe )
+			goto _out30;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr207;
@@ -10069,22 +10005,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr214;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr241:
 		{
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			g1 = p; }
 		
-#line 10081 "gen/ragel/18__alt4_8.c"
+#line 10015 "gen/ragel/18__alt4_8.c"
 		
 		goto _st31;
 		_st31:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof31;
 		st_case_31:
+		if ( p == pe )
+			goto _out31;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr216;
@@ -10114,22 +10048,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr223;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr242:
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/18__alt4_8.rl"
 			h1 = p; }
 		
-#line 10126 "gen/ragel/18__alt4_8.c"
+#line 10058 "gen/ragel/18__alt4_8.c"
 		
 		goto _st32;
 		_st32:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof32;
 		st_case_32:
+		if ( p == pe )
+			goto _out32;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr225;
@@ -10159,47 +10091,41 @@ static void lex(Input *in, Output *out)
 				goto _st32;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_out:
-		_test_eof33: cs = 33; goto _test_eof; 
-		_test_eof1: cs = 1; goto _test_eof; 
-		_test_eof2: cs = 2; goto _test_eof; 
-		_test_eof3: cs = 3; goto _test_eof; 
-		_test_eof4: cs = 4; goto _test_eof; 
-		_test_eof5: cs = 5; goto _test_eof; 
-		_test_eof6: cs = 6; goto _test_eof; 
-		_test_eof7: cs = 7; goto _test_eof; 
-		_test_eof8: cs = 8; goto _test_eof; 
-		_test_eof9: cs = 9; goto _test_eof; 
-		_test_eof10: cs = 10; goto _test_eof; 
-		_test_eof11: cs = 11; goto _test_eof; 
-		_test_eof12: cs = 12; goto _test_eof; 
-		_test_eof13: cs = 13; goto _test_eof; 
-		_test_eof14: cs = 14; goto _test_eof; 
-		_test_eof15: cs = 15; goto _test_eof; 
-		_test_eof16: cs = 16; goto _test_eof; 
-		_test_eof17: cs = 17; goto _test_eof; 
-		_test_eof18: cs = 18; goto _test_eof; 
-		_test_eof19: cs = 19; goto _test_eof; 
-		_test_eof20: cs = 20; goto _test_eof; 
-		_test_eof21: cs = 21; goto _test_eof; 
-		_test_eof22: cs = 22; goto _test_eof; 
-		_test_eof23: cs = 23; goto _test_eof; 
-		_test_eof24: cs = 24; goto _test_eof; 
-		_test_eof25: cs = 25; goto _test_eof; 
-		_test_eof26: cs = 26; goto _test_eof; 
-		_test_eof27: cs = 27; goto _test_eof; 
-		_test_eof28: cs = 28; goto _test_eof; 
-		_test_eof29: cs = 29; goto _test_eof; 
-		_test_eof30: cs = 30; goto _test_eof; 
-		_test_eof31: cs = 31; goto _test_eof; 
-		_test_eof32: cs = 32; goto _test_eof; 
-		
-		_test_eof: {}
-		if ( cs >= 33 )
-			goto _out; _pop: {}
+		goto _st0;
+		_out33: cs = 33; goto _out; 
+		_out0: cs = 0; goto _out; 
+		_out1: cs = 1; goto _out; 
+		_out2: cs = 2; goto _out; 
+		_out3: cs = 3; goto _out; 
+		_out4: cs = 4; goto _out; 
+		_out5: cs = 5; goto _out; 
+		_out6: cs = 6; goto _out; 
+		_out7: cs = 7; goto _out; 
+		_out8: cs = 8; goto _out; 
+		_out9: cs = 9; goto _out; 
+		_out10: cs = 10; goto _out; 
+		_out11: cs = 11; goto _out; 
+		_out12: cs = 12; goto _out; 
+		_out13: cs = 13; goto _out; 
+		_out14: cs = 14; goto _out; 
+		_out15: cs = 15; goto _out; 
+		_out16: cs = 16; goto _out; 
+		_out17: cs = 17; goto _out; 
+		_out18: cs = 18; goto _out; 
+		_out19: cs = 19; goto _out; 
+		_out20: cs = 20; goto _out; 
+		_out21: cs = 21; goto _out; 
+		_out22: cs = 22; goto _out; 
+		_out23: cs = 23; goto _out; 
+		_out24: cs = 24; goto _out; 
+		_out25: cs = 25; goto _out; 
+		_out26: cs = 26; goto _out; 
+		_out27: cs = 27; goto _out; 
+		_out28: cs = 28; goto _out; 
+		_out29: cs = 29; goto _out; 
+		_out30: cs = 30; goto _out; 
+		_out31: cs = 31; goto _out; 
+		_out32: cs = 32; goto _out; 
 		_out: {}
 	}
 	

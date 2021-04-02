@@ -42,8 +42,6 @@ static void lex(Input *in, Output *out)
 	
 #line 44 "gen/ragel/13__alt2_2.c"
 	{
-		if ( p == pe )
-			goto _test_eof;
 		switch ( cs ) {
 			case 5:
 			goto st_case_5;
@@ -58,37 +56,36 @@ static void lex(Input *in, Output *out)
 			case 4:
 			goto st_case_4;
 		}
-		goto st_out;
 		_ctr2:
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a2 = p; b1 = b2 = NULL; }
 		
-#line 68 "gen/ragel/13__alt2_2.c"
+#line 65 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b3 = p; }
 		
-#line 74 "gen/ragel/13__alt2_2.c"
+#line 71 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b4 = p; a3 = a4 = NULL; }
 		
-#line 80 "gen/ragel/13__alt2_2.c"
+#line 77 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a3 = p; }
 		
-#line 86 "gen/ragel/13__alt2_2.c"
+#line 83 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a4 = p; b3 = b4 = NULL; }
 		
-#line 92 "gen/ragel/13__alt2_2.c"
+#line 89 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
@@ -100,7 +97,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 104 "gen/ragel/13__alt2_2.c"
+#line 101 "gen/ragel/13__alt2_2.c"
 		
 		goto _st5;
 		_ctr5:
@@ -108,7 +105,7 @@ static void lex(Input *in, Output *out)
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b4 = p; a3 = a4 = NULL; }
 		
-#line 112 "gen/ragel/13__alt2_2.c"
+#line 109 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
@@ -120,7 +117,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 124 "gen/ragel/13__alt2_2.c"
+#line 121 "gen/ragel/13__alt2_2.c"
 		
 		goto _st5;
 		_ctr7:
@@ -128,31 +125,31 @@ static void lex(Input *in, Output *out)
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b2 = p; a1 = a2 = NULL; }
 		
-#line 132 "gen/ragel/13__alt2_2.c"
+#line 129 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b3 = p; }
 		
-#line 138 "gen/ragel/13__alt2_2.c"
+#line 135 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b4 = p; a3 = a4 = NULL; }
 		
-#line 144 "gen/ragel/13__alt2_2.c"
+#line 141 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a3 = p; }
 		
-#line 150 "gen/ragel/13__alt2_2.c"
+#line 147 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a4 = p; b3 = b4 = NULL; }
 		
-#line 156 "gen/ragel/13__alt2_2.c"
+#line 153 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
@@ -164,7 +161,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 168 "gen/ragel/13__alt2_2.c"
+#line 165 "gen/ragel/13__alt2_2.c"
 		
 		goto _st5;
 		_ctr10:
@@ -172,7 +169,7 @@ static void lex(Input *in, Output *out)
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a4 = p; b3 = b4 = NULL; }
 		
-#line 176 "gen/ragel/13__alt2_2.c"
+#line 173 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
@@ -184,7 +181,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 188 "gen/ragel/13__alt2_2.c"
+#line 185 "gen/ragel/13__alt2_2.c"
 		
 		goto _st5;
 		_ctr12:
@@ -192,49 +189,49 @@ static void lex(Input *in, Output *out)
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b1 = p; }
 		
-#line 196 "gen/ragel/13__alt2_2.c"
+#line 193 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b2 = p; a1 = a2 = NULL; }
 		
-#line 202 "gen/ragel/13__alt2_2.c"
+#line 199 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a1 = p; }
 		
-#line 208 "gen/ragel/13__alt2_2.c"
+#line 205 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a2 = p; b1 = b2 = NULL; }
 		
-#line 214 "gen/ragel/13__alt2_2.c"
+#line 211 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b3 = p; }
 		
-#line 220 "gen/ragel/13__alt2_2.c"
+#line 217 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b4 = p; a3 = a4 = NULL; }
 		
-#line 226 "gen/ragel/13__alt2_2.c"
+#line 223 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a3 = p; }
 		
-#line 232 "gen/ragel/13__alt2_2.c"
+#line 229 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a4 = p; b3 = b4 = NULL; }
 		
-#line 238 "gen/ragel/13__alt2_2.c"
+#line 235 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
@@ -246,14 +243,14 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 250 "gen/ragel/13__alt2_2.c"
+#line 247 "gen/ragel/13__alt2_2.c"
 		
 		goto _st5;
 		_st5:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof5;
 		st_case_5:
+		if ( p == pe )
+			goto _out5;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr12;
@@ -265,26 +262,23 @@ static void lex(Input *in, Output *out)
 				goto _ctr14;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_case_0:
+		goto _st0;
 		_st0:
-		cs = 0;
-		goto _pop;
+		st_case_0:
+		goto _out0;
 		_ctr13:
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a1 = p; }
 		
-#line 281 "gen/ragel/13__alt2_2.c"
+#line 275 "gen/ragel/13__alt2_2.c"
 		
 		goto _st1;
 		_st1:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof1;
 		st_case_1:
+		if ( p == pe )
+			goto _out1;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr2;
@@ -296,28 +290,26 @@ static void lex(Input *in, Output *out)
 				goto _ctr3;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr3:
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a2 = p; b1 = b2 = NULL; }
 		
-#line 308 "gen/ragel/13__alt2_2.c"
+#line 300 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b3 = p; }
 		
-#line 314 "gen/ragel/13__alt2_2.c"
+#line 306 "gen/ragel/13__alt2_2.c"
 		
 		goto _st2;
 		_st2:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof2;
 		st_case_2:
+		if ( p == pe )
+			goto _out2;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr5;
@@ -326,22 +318,20 @@ static void lex(Input *in, Output *out)
 				goto _st2;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr14:
 		{
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b1 = p; }
 		
-#line 338 "gen/ragel/13__alt2_2.c"
+#line 328 "gen/ragel/13__alt2_2.c"
 		
 		goto _st3;
 		_st3:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof3;
 		st_case_3:
+		if ( p == pe )
+			goto _out3;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr7;
@@ -353,28 +343,26 @@ static void lex(Input *in, Output *out)
 				goto _st3;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr8:
 		{
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			b2 = p; a1 = a2 = NULL; }
 		
-#line 365 "gen/ragel/13__alt2_2.c"
+#line 353 "gen/ragel/13__alt2_2.c"
 		
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/13__alt2_2.rl"
 			a3 = p; }
 		
-#line 371 "gen/ragel/13__alt2_2.c"
+#line 359 "gen/ragel/13__alt2_2.c"
 		
 		goto _st4;
 		_st4:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof4;
 		st_case_4:
+		if ( p == pe )
+			goto _out4;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr10;
@@ -383,19 +371,13 @@ static void lex(Input *in, Output *out)
 				goto _st4;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_out:
-		_test_eof5: cs = 5; goto _test_eof; 
-		_test_eof1: cs = 1; goto _test_eof; 
-		_test_eof2: cs = 2; goto _test_eof; 
-		_test_eof3: cs = 3; goto _test_eof; 
-		_test_eof4: cs = 4; goto _test_eof; 
-		
-		_test_eof: {}
-		if ( cs >= 5 )
-			goto _out; _pop: {}
+		goto _st0;
+		_out5: cs = 5; goto _out; 
+		_out0: cs = 0; goto _out; 
+		_out1: cs = 1; goto _out; 
+		_out2: cs = 2; goto _out; 
+		_out3: cs = 3; goto _out; 
+		_out4: cs = 4; goto _out; 
 		_out: {}
 	}
 	

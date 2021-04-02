@@ -39,8 +39,6 @@ static void lex(Input *in, Output *out)
 	
 #line 41 "gen/ragel/27__cat8_1.c"
 	{
-		if ( p == pe )
-			goto _test_eof;
 		switch ( cs ) {
 			case 73:
 			goto st_case_73;
@@ -191,7 +189,6 @@ static void lex(Input *in, Output *out)
 			case 72:
 			goto st_case_72;
 		}
-		goto st_out;
 		_ctr23:
 		{
 #line 17 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
@@ -206,43 +203,40 @@ static void lex(Input *in, Output *out)
 			outs(out, a7, b7); outc(out, '.'); outs(out, b7, p + 1);
 		}
 		
-#line 210 "gen/ragel/27__cat8_1.c"
+#line 207 "gen/ragel/27__cat8_1.c"
 		
 		goto _st73;
 		_st73:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof73;
 		st_case_73:
+		if ( p == pe )
+			goto _out73;
 		if ( ( (*( p))) == 97 ) {
 			goto _ctr132;
 		}
-		{
-			goto _st0;
-		}
-		st_case_0:
+		goto _st0;
 		_st0:
-		cs = 0;
-		goto _pop;
+		st_case_0:
+		goto _out0;
 		_ctr132:
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a0 = p; }
 		
-#line 233 "gen/ragel/27__cat8_1.c"
+#line 227 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b0 = p; }
 		
-#line 239 "gen/ragel/27__cat8_1.c"
+#line 233 "gen/ragel/27__cat8_1.c"
 		
 		goto _st1;
 		_st1:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof1;
 		st_case_1:
+		if ( p == pe )
+			goto _out1;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr2;
@@ -251,34 +245,32 @@ static void lex(Input *in, Output *out)
 				goto _st60;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr2:
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b0 = p; }
 		
-#line 263 "gen/ragel/27__cat8_1.c"
+#line 255 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 269 "gen/ragel/27__cat8_1.c"
+#line 261 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 275 "gen/ragel/27__cat8_1.c"
+#line 267 "gen/ragel/27__cat8_1.c"
 		
 		goto _st2;
 		_st2:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof2;
 		st_case_2:
+		if ( p == pe )
+			goto _out2;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr5;
@@ -287,46 +279,44 @@ static void lex(Input *in, Output *out)
 				goto _st49;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr5:
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b0 = p; }
 		
-#line 299 "gen/ragel/27__cat8_1.c"
+#line 289 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 305 "gen/ragel/27__cat8_1.c"
+#line 295 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 311 "gen/ragel/27__cat8_1.c"
+#line 301 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 317 "gen/ragel/27__cat8_1.c"
+#line 307 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 323 "gen/ragel/27__cat8_1.c"
+#line 313 "gen/ragel/27__cat8_1.c"
 		
 		goto _st3;
 		_st3:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof3;
 		st_case_3:
+		if ( p == pe )
+			goto _out3;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr8;
@@ -335,58 +325,56 @@ static void lex(Input *in, Output *out)
 				goto _st40;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr8:
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b0 = p; }
 		
-#line 347 "gen/ragel/27__cat8_1.c"
+#line 335 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 353 "gen/ragel/27__cat8_1.c"
+#line 341 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 359 "gen/ragel/27__cat8_1.c"
+#line 347 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 365 "gen/ragel/27__cat8_1.c"
+#line 353 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 371 "gen/ragel/27__cat8_1.c"
+#line 359 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 377 "gen/ragel/27__cat8_1.c"
+#line 365 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 383 "gen/ragel/27__cat8_1.c"
+#line 371 "gen/ragel/27__cat8_1.c"
 		
 		goto _st4;
 		_st4:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof4;
 		st_case_4:
+		if ( p == pe )
+			goto _out4;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr11;
@@ -395,70 +383,68 @@ static void lex(Input *in, Output *out)
 				goto _st33;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr11:
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b0 = p; }
 		
-#line 407 "gen/ragel/27__cat8_1.c"
+#line 393 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 413 "gen/ragel/27__cat8_1.c"
+#line 399 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 419 "gen/ragel/27__cat8_1.c"
+#line 405 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 425 "gen/ragel/27__cat8_1.c"
+#line 411 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 431 "gen/ragel/27__cat8_1.c"
+#line 417 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 437 "gen/ragel/27__cat8_1.c"
+#line 423 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 443 "gen/ragel/27__cat8_1.c"
+#line 429 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 449 "gen/ragel/27__cat8_1.c"
+#line 435 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 455 "gen/ragel/27__cat8_1.c"
+#line 441 "gen/ragel/27__cat8_1.c"
 		
 		goto _st5;
 		_st5:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof5;
 		st_case_5:
+		if ( p == pe )
+			goto _out5;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr14;
@@ -467,82 +453,80 @@ static void lex(Input *in, Output *out)
 				goto _st28;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr14:
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b0 = p; }
 		
-#line 479 "gen/ragel/27__cat8_1.c"
+#line 463 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 485 "gen/ragel/27__cat8_1.c"
+#line 469 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 491 "gen/ragel/27__cat8_1.c"
+#line 475 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 497 "gen/ragel/27__cat8_1.c"
+#line 481 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 503 "gen/ragel/27__cat8_1.c"
+#line 487 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 509 "gen/ragel/27__cat8_1.c"
+#line 493 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 515 "gen/ragel/27__cat8_1.c"
+#line 499 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 521 "gen/ragel/27__cat8_1.c"
+#line 505 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 527 "gen/ragel/27__cat8_1.c"
+#line 511 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 533 "gen/ragel/27__cat8_1.c"
+#line 517 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 539 "gen/ragel/27__cat8_1.c"
+#line 523 "gen/ragel/27__cat8_1.c"
 		
 		goto _st6;
 		_st6:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof6;
 		st_case_6:
+		if ( p == pe )
+			goto _out6;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr17;
@@ -551,94 +535,92 @@ static void lex(Input *in, Output *out)
 				goto _st25;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr17:
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b0 = p; }
 		
-#line 563 "gen/ragel/27__cat8_1.c"
+#line 545 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 569 "gen/ragel/27__cat8_1.c"
+#line 551 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 575 "gen/ragel/27__cat8_1.c"
+#line 557 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 581 "gen/ragel/27__cat8_1.c"
+#line 563 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 587 "gen/ragel/27__cat8_1.c"
+#line 569 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 593 "gen/ragel/27__cat8_1.c"
+#line 575 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 599 "gen/ragel/27__cat8_1.c"
+#line 581 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 605 "gen/ragel/27__cat8_1.c"
+#line 587 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 611 "gen/ragel/27__cat8_1.c"
+#line 593 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 617 "gen/ragel/27__cat8_1.c"
+#line 599 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 623 "gen/ragel/27__cat8_1.c"
+#line 605 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 629 "gen/ragel/27__cat8_1.c"
+#line 611 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 635 "gen/ragel/27__cat8_1.c"
+#line 617 "gen/ragel/27__cat8_1.c"
 		
 		goto _st7;
 		_st7:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof7;
 		st_case_7:
+		if ( p == pe )
+			goto _out7;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr20;
@@ -647,106 +629,104 @@ static void lex(Input *in, Output *out)
 				goto _st24;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr20:
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b0 = p; }
 		
-#line 659 "gen/ragel/27__cat8_1.c"
+#line 639 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 665 "gen/ragel/27__cat8_1.c"
+#line 645 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 671 "gen/ragel/27__cat8_1.c"
+#line 651 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 677 "gen/ragel/27__cat8_1.c"
+#line 657 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 683 "gen/ragel/27__cat8_1.c"
+#line 663 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 689 "gen/ragel/27__cat8_1.c"
+#line 669 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 695 "gen/ragel/27__cat8_1.c"
+#line 675 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 701 "gen/ragel/27__cat8_1.c"
+#line 681 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 707 "gen/ragel/27__cat8_1.c"
+#line 687 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 713 "gen/ragel/27__cat8_1.c"
+#line 693 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 719 "gen/ragel/27__cat8_1.c"
+#line 699 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 725 "gen/ragel/27__cat8_1.c"
+#line 705 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 731 "gen/ragel/27__cat8_1.c"
+#line 711 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 737 "gen/ragel/27__cat8_1.c"
+#line 717 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 743 "gen/ragel/27__cat8_1.c"
+#line 723 "gen/ragel/27__cat8_1.c"
 		
 		goto _st8;
 		_st8:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof8;
 		st_case_8:
+		if ( p == pe )
+			goto _out8;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -758,14 +738,12 @@ static void lex(Input *in, Output *out)
 				goto _st9;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st9:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof9;
 		st_case_9:
+		if ( p == pe )
+			goto _out9;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -777,93 +755,91 @@ static void lex(Input *in, Output *out)
 				goto _st9;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr25:
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 789 "gen/ragel/27__cat8_1.c"
+#line 765 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 795 "gen/ragel/27__cat8_1.c"
+#line 771 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 801 "gen/ragel/27__cat8_1.c"
+#line 777 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 807 "gen/ragel/27__cat8_1.c"
+#line 783 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 813 "gen/ragel/27__cat8_1.c"
+#line 789 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 819 "gen/ragel/27__cat8_1.c"
+#line 795 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 825 "gen/ragel/27__cat8_1.c"
+#line 801 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 831 "gen/ragel/27__cat8_1.c"
+#line 807 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 837 "gen/ragel/27__cat8_1.c"
+#line 813 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 843 "gen/ragel/27__cat8_1.c"
+#line 819 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 849 "gen/ragel/27__cat8_1.c"
+#line 825 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 855 "gen/ragel/27__cat8_1.c"
+#line 831 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 861 "gen/ragel/27__cat8_1.c"
+#line 837 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 867 "gen/ragel/27__cat8_1.c"
+#line 843 "gen/ragel/27__cat8_1.c"
 		
 		goto _st10;
 		_ctr27:
@@ -871,86 +847,86 @@ static void lex(Input *in, Output *out)
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 875 "gen/ragel/27__cat8_1.c"
+#line 851 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 881 "gen/ragel/27__cat8_1.c"
+#line 857 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 887 "gen/ragel/27__cat8_1.c"
+#line 863 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 893 "gen/ragel/27__cat8_1.c"
+#line 869 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 899 "gen/ragel/27__cat8_1.c"
+#line 875 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 905 "gen/ragel/27__cat8_1.c"
+#line 881 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 911 "gen/ragel/27__cat8_1.c"
+#line 887 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 917 "gen/ragel/27__cat8_1.c"
+#line 893 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 923 "gen/ragel/27__cat8_1.c"
+#line 899 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 929 "gen/ragel/27__cat8_1.c"
+#line 905 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 935 "gen/ragel/27__cat8_1.c"
+#line 911 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 941 "gen/ragel/27__cat8_1.c"
+#line 917 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 947 "gen/ragel/27__cat8_1.c"
+#line 923 "gen/ragel/27__cat8_1.c"
 		
 		goto _st10;
 		_st10:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof10;
 		st_case_10:
+		if ( p == pe )
+			goto _out10;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -962,14 +938,12 @@ static void lex(Input *in, Output *out)
 				goto _st11;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st11:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof11;
 		st_case_11:
+		if ( p == pe )
+			goto _out11;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -981,81 +955,79 @@ static void lex(Input *in, Output *out)
 				goto _st11;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr29:
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 993 "gen/ragel/27__cat8_1.c"
+#line 965 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 999 "gen/ragel/27__cat8_1.c"
+#line 971 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 1005 "gen/ragel/27__cat8_1.c"
+#line 977 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 1011 "gen/ragel/27__cat8_1.c"
+#line 983 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 1017 "gen/ragel/27__cat8_1.c"
+#line 989 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 1023 "gen/ragel/27__cat8_1.c"
+#line 995 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1029 "gen/ragel/27__cat8_1.c"
+#line 1001 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1035 "gen/ragel/27__cat8_1.c"
+#line 1007 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1041 "gen/ragel/27__cat8_1.c"
+#line 1013 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1047 "gen/ragel/27__cat8_1.c"
+#line 1019 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1053 "gen/ragel/27__cat8_1.c"
+#line 1025 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1059 "gen/ragel/27__cat8_1.c"
+#line 1031 "gen/ragel/27__cat8_1.c"
 		
 		goto _st12;
 		_ctr31:
@@ -1063,74 +1035,74 @@ static void lex(Input *in, Output *out)
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 1067 "gen/ragel/27__cat8_1.c"
+#line 1039 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 1073 "gen/ragel/27__cat8_1.c"
+#line 1045 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 1079 "gen/ragel/27__cat8_1.c"
+#line 1051 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 1085 "gen/ragel/27__cat8_1.c"
+#line 1057 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 1091 "gen/ragel/27__cat8_1.c"
+#line 1063 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1097 "gen/ragel/27__cat8_1.c"
+#line 1069 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1103 "gen/ragel/27__cat8_1.c"
+#line 1075 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1109 "gen/ragel/27__cat8_1.c"
+#line 1081 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1115 "gen/ragel/27__cat8_1.c"
+#line 1087 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1121 "gen/ragel/27__cat8_1.c"
+#line 1093 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1127 "gen/ragel/27__cat8_1.c"
+#line 1099 "gen/ragel/27__cat8_1.c"
 		
 		goto _st12;
 		_st12:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof12;
 		st_case_12:
+		if ( p == pe )
+			goto _out12;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1142,14 +1114,12 @@ static void lex(Input *in, Output *out)
 				goto _st13;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st13:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof13;
 		st_case_13:
+		if ( p == pe )
+			goto _out13;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1161,69 +1131,67 @@ static void lex(Input *in, Output *out)
 				goto _st13;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr33:
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 1173 "gen/ragel/27__cat8_1.c"
+#line 1141 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 1179 "gen/ragel/27__cat8_1.c"
+#line 1147 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 1185 "gen/ragel/27__cat8_1.c"
+#line 1153 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 1191 "gen/ragel/27__cat8_1.c"
+#line 1159 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1197 "gen/ragel/27__cat8_1.c"
+#line 1165 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1203 "gen/ragel/27__cat8_1.c"
+#line 1171 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1209 "gen/ragel/27__cat8_1.c"
+#line 1177 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1215 "gen/ragel/27__cat8_1.c"
+#line 1183 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1221 "gen/ragel/27__cat8_1.c"
+#line 1189 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1227 "gen/ragel/27__cat8_1.c"
+#line 1195 "gen/ragel/27__cat8_1.c"
 		
 		goto _st14;
 		_ctr35:
@@ -1231,62 +1199,62 @@ static void lex(Input *in, Output *out)
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 1235 "gen/ragel/27__cat8_1.c"
+#line 1203 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 1241 "gen/ragel/27__cat8_1.c"
+#line 1209 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 1247 "gen/ragel/27__cat8_1.c"
+#line 1215 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1253 "gen/ragel/27__cat8_1.c"
+#line 1221 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1259 "gen/ragel/27__cat8_1.c"
+#line 1227 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1265 "gen/ragel/27__cat8_1.c"
+#line 1233 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1271 "gen/ragel/27__cat8_1.c"
+#line 1239 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1277 "gen/ragel/27__cat8_1.c"
+#line 1245 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1283 "gen/ragel/27__cat8_1.c"
+#line 1251 "gen/ragel/27__cat8_1.c"
 		
 		goto _st14;
 		_st14:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof14;
 		st_case_14:
+		if ( p == pe )
+			goto _out14;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1298,14 +1266,12 @@ static void lex(Input *in, Output *out)
 				goto _st15;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st15:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof15;
 		st_case_15:
+		if ( p == pe )
+			goto _out15;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1317,57 +1283,55 @@ static void lex(Input *in, Output *out)
 				goto _st15;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr37:
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 1329 "gen/ragel/27__cat8_1.c"
+#line 1293 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 1335 "gen/ragel/27__cat8_1.c"
+#line 1299 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1341 "gen/ragel/27__cat8_1.c"
+#line 1305 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1347 "gen/ragel/27__cat8_1.c"
+#line 1311 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1353 "gen/ragel/27__cat8_1.c"
+#line 1317 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1359 "gen/ragel/27__cat8_1.c"
+#line 1323 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1365 "gen/ragel/27__cat8_1.c"
+#line 1329 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1371 "gen/ragel/27__cat8_1.c"
+#line 1335 "gen/ragel/27__cat8_1.c"
 		
 		goto _st16;
 		_ctr39:
@@ -1375,50 +1339,50 @@ static void lex(Input *in, Output *out)
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 1379 "gen/ragel/27__cat8_1.c"
+#line 1343 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1385 "gen/ragel/27__cat8_1.c"
+#line 1349 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1391 "gen/ragel/27__cat8_1.c"
+#line 1355 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1397 "gen/ragel/27__cat8_1.c"
+#line 1361 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1403 "gen/ragel/27__cat8_1.c"
+#line 1367 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1409 "gen/ragel/27__cat8_1.c"
+#line 1373 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1415 "gen/ragel/27__cat8_1.c"
+#line 1379 "gen/ragel/27__cat8_1.c"
 		
 		goto _st16;
 		_st16:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof16;
 		st_case_16:
+		if ( p == pe )
+			goto _out16;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1430,14 +1394,12 @@ static void lex(Input *in, Output *out)
 				goto _st17;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st17:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof17;
 		st_case_17:
+		if ( p == pe )
+			goto _out17;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1449,45 +1411,43 @@ static void lex(Input *in, Output *out)
 				goto _st17;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr41:
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1461 "gen/ragel/27__cat8_1.c"
+#line 1421 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1467 "gen/ragel/27__cat8_1.c"
+#line 1427 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1473 "gen/ragel/27__cat8_1.c"
+#line 1433 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1479 "gen/ragel/27__cat8_1.c"
+#line 1439 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1485 "gen/ragel/27__cat8_1.c"
+#line 1445 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1491 "gen/ragel/27__cat8_1.c"
+#line 1451 "gen/ragel/27__cat8_1.c"
 		
 		goto _st18;
 		_ctr43:
@@ -1495,38 +1455,38 @@ static void lex(Input *in, Output *out)
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1499 "gen/ragel/27__cat8_1.c"
+#line 1459 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1505 "gen/ragel/27__cat8_1.c"
+#line 1465 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1511 "gen/ragel/27__cat8_1.c"
+#line 1471 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1517 "gen/ragel/27__cat8_1.c"
+#line 1477 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1523 "gen/ragel/27__cat8_1.c"
+#line 1483 "gen/ragel/27__cat8_1.c"
 		
 		goto _st18;
 		_st18:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof18;
 		st_case_18:
+		if ( p == pe )
+			goto _out18;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1538,14 +1498,12 @@ static void lex(Input *in, Output *out)
 				goto _st19;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st19:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof19;
 		st_case_19:
+		if ( p == pe )
+			goto _out19;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1557,33 +1515,31 @@ static void lex(Input *in, Output *out)
 				goto _st19;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr45:
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1569 "gen/ragel/27__cat8_1.c"
+#line 1525 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1575 "gen/ragel/27__cat8_1.c"
+#line 1531 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1581 "gen/ragel/27__cat8_1.c"
+#line 1537 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1587 "gen/ragel/27__cat8_1.c"
+#line 1543 "gen/ragel/27__cat8_1.c"
 		
 		goto _st20;
 		_ctr47:
@@ -1591,26 +1547,26 @@ static void lex(Input *in, Output *out)
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1595 "gen/ragel/27__cat8_1.c"
+#line 1551 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1601 "gen/ragel/27__cat8_1.c"
+#line 1557 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1607 "gen/ragel/27__cat8_1.c"
+#line 1563 "gen/ragel/27__cat8_1.c"
 		
 		goto _st20;
 		_st20:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof20;
 		st_case_20:
+		if ( p == pe )
+			goto _out20;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1622,14 +1578,12 @@ static void lex(Input *in, Output *out)
 				goto _st21;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st21:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof21;
 		st_case_21:
+		if ( p == pe )
+			goto _out21;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1641,21 +1595,19 @@ static void lex(Input *in, Output *out)
 				goto _st21;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr49:
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a7 = p; }
 		
-#line 1653 "gen/ragel/27__cat8_1.c"
+#line 1605 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1659 "gen/ragel/27__cat8_1.c"
+#line 1611 "gen/ragel/27__cat8_1.c"
 		
 		goto _st22;
 		_ctr51:
@@ -1663,14 +1615,14 @@ static void lex(Input *in, Output *out)
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b7 = p; }
 		
-#line 1667 "gen/ragel/27__cat8_1.c"
+#line 1619 "gen/ragel/27__cat8_1.c"
 		
 		goto _st22;
 		_st22:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof22;
 		st_case_22:
+		if ( p == pe )
+			goto _out22;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1682,14 +1634,12 @@ static void lex(Input *in, Output *out)
 				goto _st23;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st23:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof23;
 		st_case_23:
+		if ( p == pe )
+			goto _out23;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -1698,14 +1648,12 @@ static void lex(Input *in, Output *out)
 				goto _st23;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st24:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof24;
 		st_case_24:
+		if ( p == pe )
+			goto _out24;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr25;
@@ -1714,14 +1662,12 @@ static void lex(Input *in, Output *out)
 				goto _st24;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st25:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof25;
 		st_case_25:
+		if ( p == pe )
+			goto _out25;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr53;
@@ -1730,81 +1676,79 @@ static void lex(Input *in, Output *out)
 				goto _st25;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr53:
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 1742 "gen/ragel/27__cat8_1.c"
+#line 1686 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 1748 "gen/ragel/27__cat8_1.c"
+#line 1692 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 1754 "gen/ragel/27__cat8_1.c"
+#line 1698 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 1760 "gen/ragel/27__cat8_1.c"
+#line 1704 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 1766 "gen/ragel/27__cat8_1.c"
+#line 1710 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 1772 "gen/ragel/27__cat8_1.c"
+#line 1716 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 1778 "gen/ragel/27__cat8_1.c"
+#line 1722 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 1784 "gen/ragel/27__cat8_1.c"
+#line 1728 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1790 "gen/ragel/27__cat8_1.c"
+#line 1734 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1796 "gen/ragel/27__cat8_1.c"
+#line 1740 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1802 "gen/ragel/27__cat8_1.c"
+#line 1746 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1808 "gen/ragel/27__cat8_1.c"
+#line 1752 "gen/ragel/27__cat8_1.c"
 		
 		goto _st26;
 		_ctr58:
@@ -1812,74 +1756,74 @@ static void lex(Input *in, Output *out)
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 1816 "gen/ragel/27__cat8_1.c"
+#line 1760 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 1822 "gen/ragel/27__cat8_1.c"
+#line 1766 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 1828 "gen/ragel/27__cat8_1.c"
+#line 1772 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 1834 "gen/ragel/27__cat8_1.c"
+#line 1778 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 1840 "gen/ragel/27__cat8_1.c"
+#line 1784 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 1846 "gen/ragel/27__cat8_1.c"
+#line 1790 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 1852 "gen/ragel/27__cat8_1.c"
+#line 1796 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1858 "gen/ragel/27__cat8_1.c"
+#line 1802 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1864 "gen/ragel/27__cat8_1.c"
+#line 1808 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 1870 "gen/ragel/27__cat8_1.c"
+#line 1814 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 1876 "gen/ragel/27__cat8_1.c"
+#line 1820 "gen/ragel/27__cat8_1.c"
 		
 		goto _st26;
 		_st26:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof26;
 		st_case_26:
+		if ( p == pe )
+			goto _out26;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr27;
@@ -1888,14 +1832,12 @@ static void lex(Input *in, Output *out)
 				goto _st27;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st27:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof27;
 		st_case_27:
+		if ( p == pe )
+			goto _out27;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr29;
@@ -1904,14 +1846,12 @@ static void lex(Input *in, Output *out)
 				goto _st27;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st28:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof28;
 		st_case_28:
+		if ( p == pe )
+			goto _out28;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr56;
@@ -1920,69 +1860,67 @@ static void lex(Input *in, Output *out)
 				goto _st28;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr56:
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 1932 "gen/ragel/27__cat8_1.c"
+#line 1870 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 1938 "gen/ragel/27__cat8_1.c"
+#line 1876 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 1944 "gen/ragel/27__cat8_1.c"
+#line 1882 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 1950 "gen/ragel/27__cat8_1.c"
+#line 1888 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 1956 "gen/ragel/27__cat8_1.c"
+#line 1894 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 1962 "gen/ragel/27__cat8_1.c"
+#line 1900 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 1968 "gen/ragel/27__cat8_1.c"
+#line 1906 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 1974 "gen/ragel/27__cat8_1.c"
+#line 1912 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 1980 "gen/ragel/27__cat8_1.c"
+#line 1918 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 1986 "gen/ragel/27__cat8_1.c"
+#line 1924 "gen/ragel/27__cat8_1.c"
 		
 		goto _st29;
 		_ctr65:
@@ -1990,62 +1928,62 @@ static void lex(Input *in, Output *out)
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 1994 "gen/ragel/27__cat8_1.c"
+#line 1932 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 2000 "gen/ragel/27__cat8_1.c"
+#line 1938 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 2006 "gen/ragel/27__cat8_1.c"
+#line 1944 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 2012 "gen/ragel/27__cat8_1.c"
+#line 1950 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2018 "gen/ragel/27__cat8_1.c"
+#line 1956 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2024 "gen/ragel/27__cat8_1.c"
+#line 1962 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2030 "gen/ragel/27__cat8_1.c"
+#line 1968 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2036 "gen/ragel/27__cat8_1.c"
+#line 1974 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2042 "gen/ragel/27__cat8_1.c"
+#line 1980 "gen/ragel/27__cat8_1.c"
 		
 		goto _st29;
 		_st29:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof29;
 		st_case_29:
+		if ( p == pe )
+			goto _out29;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr58;
@@ -2054,14 +1992,12 @@ static void lex(Input *in, Output *out)
 				goto _st30;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st30:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof30;
 		st_case_30:
+		if ( p == pe )
+			goto _out30;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr60;
@@ -2070,69 +2006,67 @@ static void lex(Input *in, Output *out)
 				goto _st30;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr60:
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 2082 "gen/ragel/27__cat8_1.c"
+#line 2016 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 2088 "gen/ragel/27__cat8_1.c"
+#line 2022 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 2094 "gen/ragel/27__cat8_1.c"
+#line 2028 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2100 "gen/ragel/27__cat8_1.c"
+#line 2034 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2106 "gen/ragel/27__cat8_1.c"
+#line 2040 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2112 "gen/ragel/27__cat8_1.c"
+#line 2046 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2118 "gen/ragel/27__cat8_1.c"
+#line 2052 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2124 "gen/ragel/27__cat8_1.c"
+#line 2058 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 2130 "gen/ragel/27__cat8_1.c"
+#line 2064 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 2136 "gen/ragel/27__cat8_1.c"
+#line 2070 "gen/ragel/27__cat8_1.c"
 		
 		goto _st31;
 		_ctr69:
@@ -2140,62 +2074,62 @@ static void lex(Input *in, Output *out)
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 2144 "gen/ragel/27__cat8_1.c"
+#line 2078 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 2150 "gen/ragel/27__cat8_1.c"
+#line 2084 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2156 "gen/ragel/27__cat8_1.c"
+#line 2090 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2162 "gen/ragel/27__cat8_1.c"
+#line 2096 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2168 "gen/ragel/27__cat8_1.c"
+#line 2102 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2174 "gen/ragel/27__cat8_1.c"
+#line 2108 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2180 "gen/ragel/27__cat8_1.c"
+#line 2114 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 2186 "gen/ragel/27__cat8_1.c"
+#line 2120 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 2192 "gen/ragel/27__cat8_1.c"
+#line 2126 "gen/ragel/27__cat8_1.c"
 		
 		goto _st31;
 		_st31:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof31;
 		st_case_31:
+		if ( p == pe )
+			goto _out31;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr31;
@@ -2204,14 +2138,12 @@ static void lex(Input *in, Output *out)
 				goto _st32;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st32:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof32;
 		st_case_32:
+		if ( p == pe )
+			goto _out32;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr33;
@@ -2220,14 +2152,12 @@ static void lex(Input *in, Output *out)
 				goto _st32;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st33:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof33;
 		st_case_33:
+		if ( p == pe )
+			goto _out33;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr63;
@@ -2236,57 +2166,55 @@ static void lex(Input *in, Output *out)
 				goto _st33;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr63:
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 2248 "gen/ragel/27__cat8_1.c"
+#line 2176 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 2254 "gen/ragel/27__cat8_1.c"
+#line 2182 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 2260 "gen/ragel/27__cat8_1.c"
+#line 2188 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 2266 "gen/ragel/27__cat8_1.c"
+#line 2194 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 2272 "gen/ragel/27__cat8_1.c"
+#line 2200 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2278 "gen/ragel/27__cat8_1.c"
+#line 2206 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2284 "gen/ragel/27__cat8_1.c"
+#line 2212 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2290 "gen/ragel/27__cat8_1.c"
+#line 2218 "gen/ragel/27__cat8_1.c"
 		
 		goto _st34;
 		_ctr76:
@@ -2294,50 +2222,50 @@ static void lex(Input *in, Output *out)
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 2298 "gen/ragel/27__cat8_1.c"
+#line 2226 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 2304 "gen/ragel/27__cat8_1.c"
+#line 2232 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 2310 "gen/ragel/27__cat8_1.c"
+#line 2238 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 2316 "gen/ragel/27__cat8_1.c"
+#line 2244 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2322 "gen/ragel/27__cat8_1.c"
+#line 2250 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2328 "gen/ragel/27__cat8_1.c"
+#line 2256 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2334 "gen/ragel/27__cat8_1.c"
+#line 2262 "gen/ragel/27__cat8_1.c"
 		
 		goto _st34;
 		_st34:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof34;
 		st_case_34:
+		if ( p == pe )
+			goto _out34;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr65;
@@ -2346,14 +2274,12 @@ static void lex(Input *in, Output *out)
 				goto _st35;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st35:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof35;
 		st_case_35:
+		if ( p == pe )
+			goto _out35;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr67;
@@ -2362,57 +2288,55 @@ static void lex(Input *in, Output *out)
 				goto _st35;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr67:
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 2374 "gen/ragel/27__cat8_1.c"
+#line 2298 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 2380 "gen/ragel/27__cat8_1.c"
+#line 2304 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 2386 "gen/ragel/27__cat8_1.c"
+#line 2310 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2392 "gen/ragel/27__cat8_1.c"
+#line 2316 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2398 "gen/ragel/27__cat8_1.c"
+#line 2322 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2404 "gen/ragel/27__cat8_1.c"
+#line 2328 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2410 "gen/ragel/27__cat8_1.c"
+#line 2334 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2416 "gen/ragel/27__cat8_1.c"
+#line 2340 "gen/ragel/27__cat8_1.c"
 		
 		goto _st36;
 		_ctr80:
@@ -2420,50 +2344,50 @@ static void lex(Input *in, Output *out)
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 2424 "gen/ragel/27__cat8_1.c"
+#line 2348 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 2430 "gen/ragel/27__cat8_1.c"
+#line 2354 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2436 "gen/ragel/27__cat8_1.c"
+#line 2360 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2442 "gen/ragel/27__cat8_1.c"
+#line 2366 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2448 "gen/ragel/27__cat8_1.c"
+#line 2372 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2454 "gen/ragel/27__cat8_1.c"
+#line 2378 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2460 "gen/ragel/27__cat8_1.c"
+#line 2384 "gen/ragel/27__cat8_1.c"
 		
 		goto _st36;
 		_st36:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof36;
 		st_case_36:
+		if ( p == pe )
+			goto _out36;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr69;
@@ -2472,14 +2396,12 @@ static void lex(Input *in, Output *out)
 				goto _st37;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st37:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof37;
 		st_case_37:
+		if ( p == pe )
+			goto _out37;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr71;
@@ -2488,57 +2410,55 @@ static void lex(Input *in, Output *out)
 				goto _st37;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr71:
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 2500 "gen/ragel/27__cat8_1.c"
+#line 2420 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2506 "gen/ragel/27__cat8_1.c"
+#line 2426 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2512 "gen/ragel/27__cat8_1.c"
+#line 2432 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2518 "gen/ragel/27__cat8_1.c"
+#line 2438 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2524 "gen/ragel/27__cat8_1.c"
+#line 2444 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2530 "gen/ragel/27__cat8_1.c"
+#line 2450 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 2536 "gen/ragel/27__cat8_1.c"
+#line 2456 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 2542 "gen/ragel/27__cat8_1.c"
+#line 2462 "gen/ragel/27__cat8_1.c"
 		
 		goto _st38;
 		_ctr84:
@@ -2546,50 +2466,50 @@ static void lex(Input *in, Output *out)
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2550 "gen/ragel/27__cat8_1.c"
+#line 2470 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2556 "gen/ragel/27__cat8_1.c"
+#line 2476 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2562 "gen/ragel/27__cat8_1.c"
+#line 2482 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2568 "gen/ragel/27__cat8_1.c"
+#line 2488 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2574 "gen/ragel/27__cat8_1.c"
+#line 2494 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 2580 "gen/ragel/27__cat8_1.c"
+#line 2500 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 2586 "gen/ragel/27__cat8_1.c"
+#line 2506 "gen/ragel/27__cat8_1.c"
 		
 		goto _st38;
 		_st38:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof38;
 		st_case_38:
+		if ( p == pe )
+			goto _out38;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr35;
@@ -2598,14 +2518,12 @@ static void lex(Input *in, Output *out)
 				goto _st39;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st39:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof39;
 		st_case_39:
+		if ( p == pe )
+			goto _out39;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr37;
@@ -2614,14 +2532,12 @@ static void lex(Input *in, Output *out)
 				goto _st39;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st40:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof40;
 		st_case_40:
+		if ( p == pe )
+			goto _out40;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr74;
@@ -2630,22 +2546,106 @@ static void lex(Input *in, Output *out)
 				goto _st40;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr74:
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 2642 "gen/ragel/27__cat8_1.c"
+#line 2556 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 2648 "gen/ragel/27__cat8_1.c"
+#line 2562 "gen/ragel/27__cat8_1.c"
 		
+		{
+#line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			a2 = p; }
+		
+#line 2568 "gen/ragel/27__cat8_1.c"
+		
+		{
+#line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			b2 = p; }
+		
+#line 2574 "gen/ragel/27__cat8_1.c"
+		
+		{
+#line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			a3 = p; }
+		
+#line 2580 "gen/ragel/27__cat8_1.c"
+		
+		{
+#line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			b3 = p; }
+		
+#line 2586 "gen/ragel/27__cat8_1.c"
+		
+		goto _st41;
+		_ctr91:
+		{
+#line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			b1 = p; }
+		
+#line 2594 "gen/ragel/27__cat8_1.c"
+		
+		{
+#line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			a2 = p; }
+		
+#line 2600 "gen/ragel/27__cat8_1.c"
+		
+		{
+#line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			b2 = p; }
+		
+#line 2606 "gen/ragel/27__cat8_1.c"
+		
+		{
+#line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			a3 = p; }
+		
+#line 2612 "gen/ragel/27__cat8_1.c"
+		
+		{
+#line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			b3 = p; }
+		
+#line 2618 "gen/ragel/27__cat8_1.c"
+		
+		goto _st41;
+		_st41:
+		p+= 1;
+		st_case_41:
+		if ( p == pe )
+			goto _out41;
+		switch( ( (*( p))) ) {
+			case 97: {
+				goto _ctr76;
+			}
+			case 98: {
+				goto _st42;
+			}
+		}
+		goto _st0;
+		_st42:
+		p+= 1;
+		st_case_42:
+		if ( p == pe )
+			goto _out42;
+		switch( ( (*( p))) ) {
+			case 97: {
+				goto _ctr78;
+			}
+			case 98: {
+				goto _st42;
+			}
+		}
+		goto _st0;
+		_ctr78:
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
@@ -2670,20 +2670,20 @@ static void lex(Input *in, Output *out)
 		
 #line 2672 "gen/ragel/27__cat8_1.c"
 		
-		goto _st41;
-		_ctr91:
 		{
-#line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			b1 = p; }
+#line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			a4 = p; }
 		
-#line 2680 "gen/ragel/27__cat8_1.c"
+#line 2678 "gen/ragel/27__cat8_1.c"
 		
 		{
-#line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			a2 = p; }
+#line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
+			b4 = p; }
 		
-#line 2686 "gen/ragel/27__cat8_1.c"
+#line 2684 "gen/ragel/27__cat8_1.c"
 		
+		goto _st43;
+		_ctr95:
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
@@ -2702,114 +2702,24 @@ static void lex(Input *in, Output *out)
 		
 #line 2704 "gen/ragel/27__cat8_1.c"
 		
-		goto _st41;
-		_st41:
-		p+= 1;
-		if ( p == pe )
-			goto _test_eof41;
-		st_case_41:
-		switch( ( (*( p))) ) {
-			case 97: {
-				goto _ctr76;
-			}
-			case 98: {
-				goto _st42;
-			}
-		}
-		{
-			goto _st0;
-		}
-		_st42:
-		p+= 1;
-		if ( p == pe )
-			goto _test_eof42;
-		st_case_42:
-		switch( ( (*( p))) ) {
-			case 97: {
-				goto _ctr78;
-			}
-			case 98: {
-				goto _st42;
-			}
-		}
-		{
-			goto _st0;
-		}
-		_ctr78:
-		{
-#line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			a2 = p; }
-		
-#line 2744 "gen/ragel/27__cat8_1.c"
-		
-		{
-#line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			b2 = p; }
-		
-#line 2750 "gen/ragel/27__cat8_1.c"
-		
-		{
-#line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			a3 = p; }
-		
-#line 2756 "gen/ragel/27__cat8_1.c"
-		
-		{
-#line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			b3 = p; }
-		
-#line 2762 "gen/ragel/27__cat8_1.c"
-		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2768 "gen/ragel/27__cat8_1.c"
+#line 2710 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2774 "gen/ragel/27__cat8_1.c"
-		
-		goto _st43;
-		_ctr95:
-		{
-#line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			b2 = p; }
-		
-#line 2782 "gen/ragel/27__cat8_1.c"
-		
-		{
-#line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			a3 = p; }
-		
-#line 2788 "gen/ragel/27__cat8_1.c"
-		
-		{
-#line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			b3 = p; }
-		
-#line 2794 "gen/ragel/27__cat8_1.c"
-		
-		{
-#line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			a4 = p; }
-		
-#line 2800 "gen/ragel/27__cat8_1.c"
-		
-		{
-#line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
-			b4 = p; }
-		
-#line 2806 "gen/ragel/27__cat8_1.c"
+#line 2716 "gen/ragel/27__cat8_1.c"
 		
 		goto _st43;
 		_st43:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof43;
 		st_case_43:
+		if ( p == pe )
+			goto _out43;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr80;
@@ -2818,14 +2728,12 @@ static void lex(Input *in, Output *out)
 				goto _st44;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st44:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof44;
 		st_case_44:
+		if ( p == pe )
+			goto _out44;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr82;
@@ -2834,45 +2742,43 @@ static void lex(Input *in, Output *out)
 				goto _st44;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr82:
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 2846 "gen/ragel/27__cat8_1.c"
+#line 2752 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2852 "gen/ragel/27__cat8_1.c"
+#line 2758 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2858 "gen/ragel/27__cat8_1.c"
+#line 2764 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2864 "gen/ragel/27__cat8_1.c"
+#line 2770 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2870 "gen/ragel/27__cat8_1.c"
+#line 2776 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2876 "gen/ragel/27__cat8_1.c"
+#line 2782 "gen/ragel/27__cat8_1.c"
 		
 		goto _st45;
 		_ctr99:
@@ -2880,38 +2786,38 @@ static void lex(Input *in, Output *out)
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 2884 "gen/ragel/27__cat8_1.c"
+#line 2790 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2890 "gen/ragel/27__cat8_1.c"
+#line 2796 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2896 "gen/ragel/27__cat8_1.c"
+#line 2802 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2902 "gen/ragel/27__cat8_1.c"
+#line 2808 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2908 "gen/ragel/27__cat8_1.c"
+#line 2814 "gen/ragel/27__cat8_1.c"
 		
 		goto _st45;
 		_st45:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof45;
 		st_case_45:
+		if ( p == pe )
+			goto _out45;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr84;
@@ -2920,14 +2826,12 @@ static void lex(Input *in, Output *out)
 				goto _st46;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st46:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof46;
 		st_case_46:
+		if ( p == pe )
+			goto _out46;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr86;
@@ -2936,45 +2840,43 @@ static void lex(Input *in, Output *out)
 				goto _st46;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr86:
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 2948 "gen/ragel/27__cat8_1.c"
+#line 2850 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2954 "gen/ragel/27__cat8_1.c"
+#line 2856 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2960 "gen/ragel/27__cat8_1.c"
+#line 2862 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2966 "gen/ragel/27__cat8_1.c"
+#line 2868 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 2972 "gen/ragel/27__cat8_1.c"
+#line 2874 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 2978 "gen/ragel/27__cat8_1.c"
+#line 2880 "gen/ragel/27__cat8_1.c"
 		
 		goto _st47;
 		_ctr103:
@@ -2982,38 +2884,38 @@ static void lex(Input *in, Output *out)
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 2986 "gen/ragel/27__cat8_1.c"
+#line 2888 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 2992 "gen/ragel/27__cat8_1.c"
+#line 2894 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 2998 "gen/ragel/27__cat8_1.c"
+#line 2900 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 3004 "gen/ragel/27__cat8_1.c"
+#line 2906 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 3010 "gen/ragel/27__cat8_1.c"
+#line 2912 "gen/ragel/27__cat8_1.c"
 		
 		goto _st47;
 		_st47:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof47;
 		st_case_47:
+		if ( p == pe )
+			goto _out47;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr39;
@@ -3022,14 +2924,12 @@ static void lex(Input *in, Output *out)
 				goto _st48;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st48:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof48;
 		st_case_48:
+		if ( p == pe )
+			goto _out48;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr41;
@@ -3038,14 +2938,12 @@ static void lex(Input *in, Output *out)
 				goto _st48;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st49:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof49;
 		st_case_49:
+		if ( p == pe )
+			goto _out49;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr89;
@@ -3054,33 +2952,31 @@ static void lex(Input *in, Output *out)
 				goto _st49;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr89:
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 3066 "gen/ragel/27__cat8_1.c"
+#line 2962 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 3072 "gen/ragel/27__cat8_1.c"
+#line 2968 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 3078 "gen/ragel/27__cat8_1.c"
+#line 2974 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 3084 "gen/ragel/27__cat8_1.c"
+#line 2980 "gen/ragel/27__cat8_1.c"
 		
 		goto _st50;
 		_ctr110:
@@ -3088,26 +2984,26 @@ static void lex(Input *in, Output *out)
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 3092 "gen/ragel/27__cat8_1.c"
+#line 2988 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 3098 "gen/ragel/27__cat8_1.c"
+#line 2994 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 3104 "gen/ragel/27__cat8_1.c"
+#line 3000 "gen/ragel/27__cat8_1.c"
 		
 		goto _st50;
 		_st50:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof50;
 		st_case_50:
+		if ( p == pe )
+			goto _out50;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr91;
@@ -3116,14 +3012,12 @@ static void lex(Input *in, Output *out)
 				goto _st51;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st51:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof51;
 		st_case_51:
+		if ( p == pe )
+			goto _out51;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr93;
@@ -3132,33 +3026,31 @@ static void lex(Input *in, Output *out)
 				goto _st51;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr93:
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 3144 "gen/ragel/27__cat8_1.c"
+#line 3036 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 3150 "gen/ragel/27__cat8_1.c"
+#line 3042 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 3156 "gen/ragel/27__cat8_1.c"
+#line 3048 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 3162 "gen/ragel/27__cat8_1.c"
+#line 3054 "gen/ragel/27__cat8_1.c"
 		
 		goto _st52;
 		_ctr114:
@@ -3166,26 +3058,26 @@ static void lex(Input *in, Output *out)
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 3170 "gen/ragel/27__cat8_1.c"
+#line 3062 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 3176 "gen/ragel/27__cat8_1.c"
+#line 3068 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 3182 "gen/ragel/27__cat8_1.c"
+#line 3074 "gen/ragel/27__cat8_1.c"
 		
 		goto _st52;
 		_st52:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof52;
 		st_case_52:
+		if ( p == pe )
+			goto _out52;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr95;
@@ -3194,14 +3086,12 @@ static void lex(Input *in, Output *out)
 				goto _st53;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st53:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof53;
 		st_case_53:
+		if ( p == pe )
+			goto _out53;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr97;
@@ -3210,33 +3100,31 @@ static void lex(Input *in, Output *out)
 				goto _st53;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr97:
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 3222 "gen/ragel/27__cat8_1.c"
+#line 3110 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 3228 "gen/ragel/27__cat8_1.c"
+#line 3116 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 3234 "gen/ragel/27__cat8_1.c"
+#line 3122 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 3240 "gen/ragel/27__cat8_1.c"
+#line 3128 "gen/ragel/27__cat8_1.c"
 		
 		goto _st54;
 		_ctr118:
@@ -3244,26 +3132,26 @@ static void lex(Input *in, Output *out)
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 3248 "gen/ragel/27__cat8_1.c"
+#line 3136 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 3254 "gen/ragel/27__cat8_1.c"
+#line 3142 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 3260 "gen/ragel/27__cat8_1.c"
+#line 3148 "gen/ragel/27__cat8_1.c"
 		
 		goto _st54;
 		_st54:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof54;
 		st_case_54:
+		if ( p == pe )
+			goto _out54;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr99;
@@ -3272,14 +3160,12 @@ static void lex(Input *in, Output *out)
 				goto _st55;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st55:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof55;
 		st_case_55:
+		if ( p == pe )
+			goto _out55;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr101;
@@ -3288,33 +3174,31 @@ static void lex(Input *in, Output *out)
 				goto _st55;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr101:
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 3300 "gen/ragel/27__cat8_1.c"
+#line 3184 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 3306 "gen/ragel/27__cat8_1.c"
+#line 3190 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 3312 "gen/ragel/27__cat8_1.c"
+#line 3196 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 3318 "gen/ragel/27__cat8_1.c"
+#line 3202 "gen/ragel/27__cat8_1.c"
 		
 		goto _st56;
 		_ctr122:
@@ -3322,26 +3206,26 @@ static void lex(Input *in, Output *out)
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 3326 "gen/ragel/27__cat8_1.c"
+#line 3210 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 3332 "gen/ragel/27__cat8_1.c"
+#line 3216 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 3338 "gen/ragel/27__cat8_1.c"
+#line 3222 "gen/ragel/27__cat8_1.c"
 		
 		goto _st56;
 		_st56:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof56;
 		st_case_56:
+		if ( p == pe )
+			goto _out56;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr103;
@@ -3350,14 +3234,12 @@ static void lex(Input *in, Output *out)
 				goto _st57;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st57:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof57;
 		st_case_57:
+		if ( p == pe )
+			goto _out57;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr105;
@@ -3366,33 +3248,31 @@ static void lex(Input *in, Output *out)
 				goto _st57;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr105:
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 3378 "gen/ragel/27__cat8_1.c"
+#line 3258 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 3384 "gen/ragel/27__cat8_1.c"
+#line 3264 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 3390 "gen/ragel/27__cat8_1.c"
+#line 3270 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 3396 "gen/ragel/27__cat8_1.c"
+#line 3276 "gen/ragel/27__cat8_1.c"
 		
 		goto _st58;
 		_ctr126:
@@ -3400,26 +3280,26 @@ static void lex(Input *in, Output *out)
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 3404 "gen/ragel/27__cat8_1.c"
+#line 3284 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 3410 "gen/ragel/27__cat8_1.c"
+#line 3290 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 3416 "gen/ragel/27__cat8_1.c"
+#line 3296 "gen/ragel/27__cat8_1.c"
 		
 		goto _st58;
 		_st58:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof58;
 		st_case_58:
+		if ( p == pe )
+			goto _out58;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr43;
@@ -3428,14 +3308,12 @@ static void lex(Input *in, Output *out)
 				goto _st59;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st59:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof59;
 		st_case_59:
+		if ( p == pe )
+			goto _out59;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr45;
@@ -3444,14 +3322,12 @@ static void lex(Input *in, Output *out)
 				goto _st59;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st60:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof60;
 		st_case_60:
+		if ( p == pe )
+			goto _out60;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr108;
@@ -3460,28 +3336,26 @@ static void lex(Input *in, Output *out)
 				goto _st60;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr108:
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a1 = p; }
 		
-#line 3472 "gen/ragel/27__cat8_1.c"
+#line 3346 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 10 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b1 = p; }
 		
-#line 3478 "gen/ragel/27__cat8_1.c"
+#line 3352 "gen/ragel/27__cat8_1.c"
 		
 		goto _st61;
 		_st61:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof61;
 		st_case_61:
+		if ( p == pe )
+			goto _out61;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr110;
@@ -3490,14 +3364,12 @@ static void lex(Input *in, Output *out)
 				goto _st62;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st62:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof62;
 		st_case_62:
+		if ( p == pe )
+			goto _out62;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr112;
@@ -3506,28 +3378,26 @@ static void lex(Input *in, Output *out)
 				goto _st62;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr112:
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a2 = p; }
 		
-#line 3518 "gen/ragel/27__cat8_1.c"
+#line 3388 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 11 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b2 = p; }
 		
-#line 3524 "gen/ragel/27__cat8_1.c"
+#line 3394 "gen/ragel/27__cat8_1.c"
 		
 		goto _st63;
 		_st63:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof63;
 		st_case_63:
+		if ( p == pe )
+			goto _out63;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr114;
@@ -3536,14 +3406,12 @@ static void lex(Input *in, Output *out)
 				goto _st64;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st64:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof64;
 		st_case_64:
+		if ( p == pe )
+			goto _out64;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr116;
@@ -3552,28 +3420,26 @@ static void lex(Input *in, Output *out)
 				goto _st64;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr116:
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a3 = p; }
 		
-#line 3564 "gen/ragel/27__cat8_1.c"
+#line 3430 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b3 = p; }
 		
-#line 3570 "gen/ragel/27__cat8_1.c"
+#line 3436 "gen/ragel/27__cat8_1.c"
 		
 		goto _st65;
 		_st65:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof65;
 		st_case_65:
+		if ( p == pe )
+			goto _out65;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr118;
@@ -3582,14 +3448,12 @@ static void lex(Input *in, Output *out)
 				goto _st66;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st66:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof66;
 		st_case_66:
+		if ( p == pe )
+			goto _out66;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr120;
@@ -3598,28 +3462,26 @@ static void lex(Input *in, Output *out)
 				goto _st66;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr120:
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a4 = p; }
 		
-#line 3610 "gen/ragel/27__cat8_1.c"
+#line 3472 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b4 = p; }
 		
-#line 3616 "gen/ragel/27__cat8_1.c"
+#line 3478 "gen/ragel/27__cat8_1.c"
 		
 		goto _st67;
 		_st67:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof67;
 		st_case_67:
+		if ( p == pe )
+			goto _out67;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr122;
@@ -3628,14 +3490,12 @@ static void lex(Input *in, Output *out)
 				goto _st68;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st68:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof68;
 		st_case_68:
+		if ( p == pe )
+			goto _out68;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr124;
@@ -3644,28 +3504,26 @@ static void lex(Input *in, Output *out)
 				goto _st68;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr124:
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a5 = p; }
 		
-#line 3656 "gen/ragel/27__cat8_1.c"
+#line 3514 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b5 = p; }
 		
-#line 3662 "gen/ragel/27__cat8_1.c"
+#line 3520 "gen/ragel/27__cat8_1.c"
 		
 		goto _st69;
 		_st69:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof69;
 		st_case_69:
+		if ( p == pe )
+			goto _out69;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr126;
@@ -3674,14 +3532,12 @@ static void lex(Input *in, Output *out)
 				goto _st70;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st70:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof70;
 		st_case_70:
+		if ( p == pe )
+			goto _out70;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr128;
@@ -3690,28 +3546,26 @@ static void lex(Input *in, Output *out)
 				goto _st70;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr128:
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			a6 = p; }
 		
-#line 3702 "gen/ragel/27__cat8_1.c"
+#line 3556 "gen/ragel/27__cat8_1.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/27__cat8_1.rl"
 			b6 = p; }
 		
-#line 3708 "gen/ragel/27__cat8_1.c"
+#line 3562 "gen/ragel/27__cat8_1.c"
 		
 		goto _st71;
 		_st71:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof71;
 		st_case_71:
+		if ( p == pe )
+			goto _out71;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr47;
@@ -3720,14 +3574,12 @@ static void lex(Input *in, Output *out)
 				goto _st72;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st72:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof72;
 		st_case_72:
+		if ( p == pe )
+			goto _out72;
 		switch( ( (*( p))) ) {
 			case 97: {
 				goto _ctr49;
@@ -3736,87 +3588,81 @@ static void lex(Input *in, Output *out)
 				goto _st72;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_out:
-		_test_eof73: cs = 73; goto _test_eof; 
-		_test_eof1: cs = 1; goto _test_eof; 
-		_test_eof2: cs = 2; goto _test_eof; 
-		_test_eof3: cs = 3; goto _test_eof; 
-		_test_eof4: cs = 4; goto _test_eof; 
-		_test_eof5: cs = 5; goto _test_eof; 
-		_test_eof6: cs = 6; goto _test_eof; 
-		_test_eof7: cs = 7; goto _test_eof; 
-		_test_eof8: cs = 8; goto _test_eof; 
-		_test_eof9: cs = 9; goto _test_eof; 
-		_test_eof10: cs = 10; goto _test_eof; 
-		_test_eof11: cs = 11; goto _test_eof; 
-		_test_eof12: cs = 12; goto _test_eof; 
-		_test_eof13: cs = 13; goto _test_eof; 
-		_test_eof14: cs = 14; goto _test_eof; 
-		_test_eof15: cs = 15; goto _test_eof; 
-		_test_eof16: cs = 16; goto _test_eof; 
-		_test_eof17: cs = 17; goto _test_eof; 
-		_test_eof18: cs = 18; goto _test_eof; 
-		_test_eof19: cs = 19; goto _test_eof; 
-		_test_eof20: cs = 20; goto _test_eof; 
-		_test_eof21: cs = 21; goto _test_eof; 
-		_test_eof22: cs = 22; goto _test_eof; 
-		_test_eof23: cs = 23; goto _test_eof; 
-		_test_eof24: cs = 24; goto _test_eof; 
-		_test_eof25: cs = 25; goto _test_eof; 
-		_test_eof26: cs = 26; goto _test_eof; 
-		_test_eof27: cs = 27; goto _test_eof; 
-		_test_eof28: cs = 28; goto _test_eof; 
-		_test_eof29: cs = 29; goto _test_eof; 
-		_test_eof30: cs = 30; goto _test_eof; 
-		_test_eof31: cs = 31; goto _test_eof; 
-		_test_eof32: cs = 32; goto _test_eof; 
-		_test_eof33: cs = 33; goto _test_eof; 
-		_test_eof34: cs = 34; goto _test_eof; 
-		_test_eof35: cs = 35; goto _test_eof; 
-		_test_eof36: cs = 36; goto _test_eof; 
-		_test_eof37: cs = 37; goto _test_eof; 
-		_test_eof38: cs = 38; goto _test_eof; 
-		_test_eof39: cs = 39; goto _test_eof; 
-		_test_eof40: cs = 40; goto _test_eof; 
-		_test_eof41: cs = 41; goto _test_eof; 
-		_test_eof42: cs = 42; goto _test_eof; 
-		_test_eof43: cs = 43; goto _test_eof; 
-		_test_eof44: cs = 44; goto _test_eof; 
-		_test_eof45: cs = 45; goto _test_eof; 
-		_test_eof46: cs = 46; goto _test_eof; 
-		_test_eof47: cs = 47; goto _test_eof; 
-		_test_eof48: cs = 48; goto _test_eof; 
-		_test_eof49: cs = 49; goto _test_eof; 
-		_test_eof50: cs = 50; goto _test_eof; 
-		_test_eof51: cs = 51; goto _test_eof; 
-		_test_eof52: cs = 52; goto _test_eof; 
-		_test_eof53: cs = 53; goto _test_eof; 
-		_test_eof54: cs = 54; goto _test_eof; 
-		_test_eof55: cs = 55; goto _test_eof; 
-		_test_eof56: cs = 56; goto _test_eof; 
-		_test_eof57: cs = 57; goto _test_eof; 
-		_test_eof58: cs = 58; goto _test_eof; 
-		_test_eof59: cs = 59; goto _test_eof; 
-		_test_eof60: cs = 60; goto _test_eof; 
-		_test_eof61: cs = 61; goto _test_eof; 
-		_test_eof62: cs = 62; goto _test_eof; 
-		_test_eof63: cs = 63; goto _test_eof; 
-		_test_eof64: cs = 64; goto _test_eof; 
-		_test_eof65: cs = 65; goto _test_eof; 
-		_test_eof66: cs = 66; goto _test_eof; 
-		_test_eof67: cs = 67; goto _test_eof; 
-		_test_eof68: cs = 68; goto _test_eof; 
-		_test_eof69: cs = 69; goto _test_eof; 
-		_test_eof70: cs = 70; goto _test_eof; 
-		_test_eof71: cs = 71; goto _test_eof; 
-		_test_eof72: cs = 72; goto _test_eof; 
-		
-		_test_eof: {}
-		if ( cs >= 73 )
-			goto _out; _pop: {}
+		goto _st0;
+		_out73: cs = 73; goto _out; 
+		_out0: cs = 0; goto _out; 
+		_out1: cs = 1; goto _out; 
+		_out2: cs = 2; goto _out; 
+		_out3: cs = 3; goto _out; 
+		_out4: cs = 4; goto _out; 
+		_out5: cs = 5; goto _out; 
+		_out6: cs = 6; goto _out; 
+		_out7: cs = 7; goto _out; 
+		_out8: cs = 8; goto _out; 
+		_out9: cs = 9; goto _out; 
+		_out10: cs = 10; goto _out; 
+		_out11: cs = 11; goto _out; 
+		_out12: cs = 12; goto _out; 
+		_out13: cs = 13; goto _out; 
+		_out14: cs = 14; goto _out; 
+		_out15: cs = 15; goto _out; 
+		_out16: cs = 16; goto _out; 
+		_out17: cs = 17; goto _out; 
+		_out18: cs = 18; goto _out; 
+		_out19: cs = 19; goto _out; 
+		_out20: cs = 20; goto _out; 
+		_out21: cs = 21; goto _out; 
+		_out22: cs = 22; goto _out; 
+		_out23: cs = 23; goto _out; 
+		_out24: cs = 24; goto _out; 
+		_out25: cs = 25; goto _out; 
+		_out26: cs = 26; goto _out; 
+		_out27: cs = 27; goto _out; 
+		_out28: cs = 28; goto _out; 
+		_out29: cs = 29; goto _out; 
+		_out30: cs = 30; goto _out; 
+		_out31: cs = 31; goto _out; 
+		_out32: cs = 32; goto _out; 
+		_out33: cs = 33; goto _out; 
+		_out34: cs = 34; goto _out; 
+		_out35: cs = 35; goto _out; 
+		_out36: cs = 36; goto _out; 
+		_out37: cs = 37; goto _out; 
+		_out38: cs = 38; goto _out; 
+		_out39: cs = 39; goto _out; 
+		_out40: cs = 40; goto _out; 
+		_out41: cs = 41; goto _out; 
+		_out42: cs = 42; goto _out; 
+		_out43: cs = 43; goto _out; 
+		_out44: cs = 44; goto _out; 
+		_out45: cs = 45; goto _out; 
+		_out46: cs = 46; goto _out; 
+		_out47: cs = 47; goto _out; 
+		_out48: cs = 48; goto _out; 
+		_out49: cs = 49; goto _out; 
+		_out50: cs = 50; goto _out; 
+		_out51: cs = 51; goto _out; 
+		_out52: cs = 52; goto _out; 
+		_out53: cs = 53; goto _out; 
+		_out54: cs = 54; goto _out; 
+		_out55: cs = 55; goto _out; 
+		_out56: cs = 56; goto _out; 
+		_out57: cs = 57; goto _out; 
+		_out58: cs = 58; goto _out; 
+		_out59: cs = 59; goto _out; 
+		_out60: cs = 60; goto _out; 
+		_out61: cs = 61; goto _out; 
+		_out62: cs = 62; goto _out; 
+		_out63: cs = 63; goto _out; 
+		_out64: cs = 64; goto _out; 
+		_out65: cs = 65; goto _out; 
+		_out66: cs = 66; goto _out; 
+		_out67: cs = 67; goto _out; 
+		_out68: cs = 68; goto _out; 
+		_out69: cs = 69; goto _out; 
+		_out70: cs = 70; goto _out; 
+		_out71: cs = 71; goto _out; 
+		_out72: cs = 72; goto _out; 
 		_out: {}
 	}
 	

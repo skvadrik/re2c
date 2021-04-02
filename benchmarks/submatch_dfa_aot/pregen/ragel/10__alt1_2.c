@@ -40,8 +40,6 @@ static void lex(Input *in, Output *out)
 	
 #line 42 "gen/ragel/10__alt1_2.c"
 	{
-		if ( p == pe )
-			goto _test_eof;
 		switch ( cs ) {
 			case 3:
 			goto st_case_3;
@@ -52,13 +50,12 @@ static void lex(Input *in, Output *out)
 			case 2:
 			goto st_case_2;
 		}
-		goto st_out;
 		_ctr2:
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
 			a2 = p; b1 = b2 = NULL; }
 		
-#line 62 "gen/ragel/10__alt1_2.c"
+#line 59 "gen/ragel/10__alt1_2.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
@@ -68,7 +65,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 72 "gen/ragel/10__alt1_2.c"
+#line 69 "gen/ragel/10__alt1_2.c"
 		
 		goto _st3;
 		_ctr4:
@@ -76,7 +73,7 @@ static void lex(Input *in, Output *out)
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
 			b2 = p; a1 = a2 = NULL; }
 		
-#line 80 "gen/ragel/10__alt1_2.c"
+#line 77 "gen/ragel/10__alt1_2.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
@@ -86,7 +83,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 90 "gen/ragel/10__alt1_2.c"
+#line 87 "gen/ragel/10__alt1_2.c"
 		
 		goto _st3;
 		_ctr6:
@@ -94,25 +91,25 @@ static void lex(Input *in, Output *out)
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
 			b1 = p; }
 		
-#line 98 "gen/ragel/10__alt1_2.c"
+#line 95 "gen/ragel/10__alt1_2.c"
 		
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
 			b2 = p; a1 = a2 = NULL; }
 		
-#line 104 "gen/ragel/10__alt1_2.c"
+#line 101 "gen/ragel/10__alt1_2.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
 			a1 = p; }
 		
-#line 110 "gen/ragel/10__alt1_2.c"
+#line 107 "gen/ragel/10__alt1_2.c"
 		
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
 			a2 = p; b1 = b2 = NULL; }
 		
-#line 116 "gen/ragel/10__alt1_2.c"
+#line 113 "gen/ragel/10__alt1_2.c"
 		
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
@@ -122,14 +119,14 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 126 "gen/ragel/10__alt1_2.c"
+#line 123 "gen/ragel/10__alt1_2.c"
 		
 		goto _st3;
 		_st3:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof3;
 		st_case_3:
+		if ( p == pe )
+			goto _out3;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr6;
@@ -141,26 +138,23 @@ static void lex(Input *in, Output *out)
 				goto _ctr8;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_case_0:
+		goto _st0;
 		_st0:
-		cs = 0;
-		goto _pop;
+		st_case_0:
+		goto _out0;
 		_ctr7:
 		{
 #line 13 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
 			a1 = p; }
 		
-#line 157 "gen/ragel/10__alt1_2.c"
+#line 151 "gen/ragel/10__alt1_2.c"
 		
 		goto _st1;
 		_st1:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof1;
 		st_case_1:
+		if ( p == pe )
+			goto _out1;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr2;
@@ -169,22 +163,20 @@ static void lex(Input *in, Output *out)
 				goto _st1;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr8:
 		{
 #line 12 "../../../benchmarks/submatch_dfa_aot/src/ragel/10__alt1_2.rl"
 			b1 = p; }
 		
-#line 181 "gen/ragel/10__alt1_2.c"
+#line 173 "gen/ragel/10__alt1_2.c"
 		
 		goto _st2;
 		_st2:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof2;
 		st_case_2:
+		if ( p == pe )
+			goto _out2;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr4;
@@ -193,17 +185,11 @@ static void lex(Input *in, Output *out)
 				goto _st2;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_out:
-		_test_eof3: cs = 3; goto _test_eof; 
-		_test_eof1: cs = 1; goto _test_eof; 
-		_test_eof2: cs = 2; goto _test_eof; 
-		
-		_test_eof: {}
-		if ( cs >= 3 )
-			goto _out; _pop: {}
+		goto _st0;
+		_out3: cs = 3; goto _out; 
+		_out0: cs = 0; goto _out; 
+		_out1: cs = 1; goto _out; 
+		_out2: cs = 2; goto _out; 
 		_out: {}
 	}
 	

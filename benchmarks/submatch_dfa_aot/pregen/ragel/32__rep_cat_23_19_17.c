@@ -37,8 +37,6 @@ static void lex(Input *in, Output *out)
 	
 #line 39 "gen/ragel/32__rep_cat_23_19_17.c"
 	{
-		if ( p == pe )
-			goto _test_eof;
 		switch ( cs ) {
 			case 60:
 			goto st_case_60;
@@ -163,7 +161,6 @@ static void lex(Input *in, Output *out)
 			case 59:
 			goto st_case_59;
 		}
-		goto st_out;
 		_ctr62:
 		{
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/32__rep_cat_23_19_17.rl"
@@ -173,13 +170,13 @@ static void lex(Input *in, Output *out)
 			s = p;
 		}
 		
-#line 177 "gen/ragel/32__rep_cat_23_19_17.c"
+#line 174 "gen/ragel/32__rep_cat_23_19_17.c"
 		
 		{
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/32__rep_cat_23_19_17.rl"
 			outc(out, '\n'); }
 		
-#line 183 "gen/ragel/32__rep_cat_23_19_17.c"
+#line 180 "gen/ragel/32__rep_cat_23_19_17.c"
 		
 		goto _st60;
 		_ctr65:
@@ -187,14 +184,14 @@ static void lex(Input *in, Output *out)
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/32__rep_cat_23_19_17.rl"
 			outc(out, '\n'); }
 		
-#line 191 "gen/ragel/32__rep_cat_23_19_17.c"
+#line 188 "gen/ragel/32__rep_cat_23_19_17.c"
 		
 		goto _st60;
 		_st60:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof60;
 		st_case_60:
+		if ( p == pe )
+			goto _out60;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr65;
@@ -203,13 +200,10 @@ static void lex(Input *in, Output *out)
 				goto _st1;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_case_0:
+		goto _st0;
 		_st0:
-		cs = 0;
-		goto _pop;
+		st_case_0:
+		goto _out0;
 		_ctr63:
 		{
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/32__rep_cat_23_19_17.rl"
@@ -219,262 +213,216 @@ static void lex(Input *in, Output *out)
 			s = p;
 		}
 		
-#line 223 "gen/ragel/32__rep_cat_23_19_17.c"
+#line 217 "gen/ragel/32__rep_cat_23_19_17.c"
 		
 		goto _st1;
 		_st1:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof1;
 		st_case_1:
+		if ( p == pe )
+			goto _out1;
 		if ( ( (*( p))) == 97 ) {
 			goto _st2;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st2:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof2;
 		st_case_2:
+		if ( p == pe )
+			goto _out2;
 		if ( ( (*( p))) == 97 ) {
 			goto _st3;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st3:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof3;
 		st_case_3:
+		if ( p == pe )
+			goto _out3;
 		if ( ( (*( p))) == 97 ) {
 			goto _st4;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st4:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof4;
 		st_case_4:
+		if ( p == pe )
+			goto _out4;
 		if ( ( (*( p))) == 97 ) {
 			goto _st5;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st5:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof5;
 		st_case_5:
+		if ( p == pe )
+			goto _out5;
 		if ( ( (*( p))) == 97 ) {
 			goto _st6;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st6:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof6;
 		st_case_6:
+		if ( p == pe )
+			goto _out6;
 		if ( ( (*( p))) == 97 ) {
 			goto _st7;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st7:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof7;
 		st_case_7:
+		if ( p == pe )
+			goto _out7;
 		if ( ( (*( p))) == 97 ) {
 			goto _st8;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st8:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof8;
 		st_case_8:
+		if ( p == pe )
+			goto _out8;
 		if ( ( (*( p))) == 97 ) {
 			goto _st9;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st9:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof9;
 		st_case_9:
+		if ( p == pe )
+			goto _out9;
 		if ( ( (*( p))) == 97 ) {
 			goto _st10;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st10:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof10;
 		st_case_10:
+		if ( p == pe )
+			goto _out10;
 		if ( ( (*( p))) == 97 ) {
 			goto _st11;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st11:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof11;
 		st_case_11:
+		if ( p == pe )
+			goto _out11;
 		if ( ( (*( p))) == 97 ) {
 			goto _st12;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st12:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof12;
 		st_case_12:
+		if ( p == pe )
+			goto _out12;
 		if ( ( (*( p))) == 97 ) {
 			goto _st13;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st13:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof13;
 		st_case_13:
+		if ( p == pe )
+			goto _out13;
 		if ( ( (*( p))) == 97 ) {
 			goto _st14;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st14:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof14;
 		st_case_14:
+		if ( p == pe )
+			goto _out14;
 		if ( ( (*( p))) == 97 ) {
 			goto _st15;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st15:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof15;
 		st_case_15:
+		if ( p == pe )
+			goto _out15;
 		if ( ( (*( p))) == 97 ) {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st16:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof16;
 		st_case_16:
+		if ( p == pe )
+			goto _out16;
 		if ( ( (*( p))) == 97 ) {
 			goto _st17;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st17:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof17;
 		st_case_17:
+		if ( p == pe )
+			goto _out17;
 		if ( ( (*( p))) == 97 ) {
 			goto _st18;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st18:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof18;
 		st_case_18:
+		if ( p == pe )
+			goto _out18;
 		if ( ( (*( p))) == 97 ) {
 			goto _st19;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st19:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof19;
 		st_case_19:
+		if ( p == pe )
+			goto _out19;
 		if ( ( (*( p))) == 97 ) {
 			goto _st20;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st20:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof20;
 		st_case_20:
+		if ( p == pe )
+			goto _out20;
 		if ( ( (*( p))) == 97 ) {
 			goto _st21;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st21:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof21;
 		st_case_21:
+		if ( p == pe )
+			goto _out21;
 		if ( ( (*( p))) == 97 ) {
 			goto _st22;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st22:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof22;
 		st_case_22:
+		if ( p == pe )
+			goto _out22;
 		if ( ( (*( p))) == 97 ) {
 			goto _st23;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st23:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof23;
 		st_case_23:
+		if ( p == pe )
+			goto _out23;
 		if ( ( (*( p))) == 97 ) {
 			goto _ctr24;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr24:
 		{
 #line 9 "../../../benchmarks/submatch_dfa_aot/src/ragel/32__rep_cat_23_19_17.rl"
@@ -484,218 +432,180 @@ static void lex(Input *in, Output *out)
 			s = p;
 		}
 		
-#line 488 "gen/ragel/32__rep_cat_23_19_17.c"
+#line 436 "gen/ragel/32__rep_cat_23_19_17.c"
 		
 		goto _st24;
 		_st24:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof24;
 		st_case_24:
+		if ( p == pe )
+			goto _out24;
 		if ( ( (*( p))) == 97 ) {
 			goto _st25;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st25:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof25;
 		st_case_25:
+		if ( p == pe )
+			goto _out25;
 		if ( ( (*( p))) == 97 ) {
 			goto _st26;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st26:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof26;
 		st_case_26:
+		if ( p == pe )
+			goto _out26;
 		if ( ( (*( p))) == 97 ) {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st27:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof27;
 		st_case_27:
+		if ( p == pe )
+			goto _out27;
 		if ( ( (*( p))) == 97 ) {
 			goto _st28;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st28:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof28;
 		st_case_28:
+		if ( p == pe )
+			goto _out28;
 		if ( ( (*( p))) == 97 ) {
 			goto _st29;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st29:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof29;
 		st_case_29:
+		if ( p == pe )
+			goto _out29;
 		if ( ( (*( p))) == 97 ) {
 			goto _st30;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st30:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof30;
 		st_case_30:
+		if ( p == pe )
+			goto _out30;
 		if ( ( (*( p))) == 97 ) {
 			goto _st31;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st31:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof31;
 		st_case_31:
+		if ( p == pe )
+			goto _out31;
 		if ( ( (*( p))) == 97 ) {
 			goto _st32;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st32:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof32;
 		st_case_32:
+		if ( p == pe )
+			goto _out32;
 		if ( ( (*( p))) == 97 ) {
 			goto _st33;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st33:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof33;
 		st_case_33:
+		if ( p == pe )
+			goto _out33;
 		if ( ( (*( p))) == 97 ) {
 			goto _st34;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st34:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof34;
 		st_case_34:
+		if ( p == pe )
+			goto _out34;
 		if ( ( (*( p))) == 97 ) {
 			goto _st35;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st35:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof35;
 		st_case_35:
+		if ( p == pe )
+			goto _out35;
 		if ( ( (*( p))) == 97 ) {
 			goto _st36;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st36:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof36;
 		st_case_36:
+		if ( p == pe )
+			goto _out36;
 		if ( ( (*( p))) == 97 ) {
 			goto _st37;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st37:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof37;
 		st_case_37:
+		if ( p == pe )
+			goto _out37;
 		if ( ( (*( p))) == 97 ) {
 			goto _st38;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st38:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof38;
 		st_case_38:
+		if ( p == pe )
+			goto _out38;
 		if ( ( (*( p))) == 97 ) {
 			goto _st39;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st39:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof39;
 		st_case_39:
+		if ( p == pe )
+			goto _out39;
 		if ( ( (*( p))) == 97 ) {
 			goto _st40;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st40:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof40;
 		st_case_40:
+		if ( p == pe )
+			goto _out40;
 		if ( ( (*( p))) == 97 ) {
 			goto _st41;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st41:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof41;
 		st_case_41:
+		if ( p == pe )
+			goto _out41;
 		if ( ( (*( p))) == 97 ) {
 			goto _st42;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st42:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof42;
 		st_case_42:
+		if ( p == pe )
+			goto _out42;
 		if ( ( (*( p))) == 97 ) {
 			goto _ctr44;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr44:
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/32__rep_cat_23_19_17.rl"
@@ -705,190 +615,158 @@ static void lex(Input *in, Output *out)
 			s = p;
 		}
 		
-#line 709 "gen/ragel/32__rep_cat_23_19_17.c"
+#line 619 "gen/ragel/32__rep_cat_23_19_17.c"
 		
 		goto _st43;
 		_st43:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof43;
 		st_case_43:
+		if ( p == pe )
+			goto _out43;
 		if ( ( (*( p))) == 97 ) {
 			goto _st44;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st44:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof44;
 		st_case_44:
+		if ( p == pe )
+			goto _out44;
 		if ( ( (*( p))) == 97 ) {
 			goto _st45;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st45:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof45;
 		st_case_45:
+		if ( p == pe )
+			goto _out45;
 		if ( ( (*( p))) == 97 ) {
 			goto _st46;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st46:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof46;
 		st_case_46:
+		if ( p == pe )
+			goto _out46;
 		if ( ( (*( p))) == 97 ) {
 			goto _st47;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st47:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof47;
 		st_case_47:
+		if ( p == pe )
+			goto _out47;
 		if ( ( (*( p))) == 97 ) {
 			goto _st48;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st48:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof48;
 		st_case_48:
+		if ( p == pe )
+			goto _out48;
 		if ( ( (*( p))) == 97 ) {
 			goto _st49;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st49:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof49;
 		st_case_49:
+		if ( p == pe )
+			goto _out49;
 		if ( ( (*( p))) == 97 ) {
 			goto _st50;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st50:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof50;
 		st_case_50:
+		if ( p == pe )
+			goto _out50;
 		if ( ( (*( p))) == 97 ) {
 			goto _st51;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st51:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof51;
 		st_case_51:
+		if ( p == pe )
+			goto _out51;
 		if ( ( (*( p))) == 97 ) {
 			goto _st52;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st52:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof52;
 		st_case_52:
+		if ( p == pe )
+			goto _out52;
 		if ( ( (*( p))) == 97 ) {
 			goto _st53;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st53:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof53;
 		st_case_53:
+		if ( p == pe )
+			goto _out53;
 		if ( ( (*( p))) == 97 ) {
 			goto _st54;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st54:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof54;
 		st_case_54:
+		if ( p == pe )
+			goto _out54;
 		if ( ( (*( p))) == 97 ) {
 			goto _st55;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st55:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof55;
 		st_case_55:
+		if ( p == pe )
+			goto _out55;
 		if ( ( (*( p))) == 97 ) {
 			goto _st56;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st56:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof56;
 		st_case_56:
+		if ( p == pe )
+			goto _out56;
 		if ( ( (*( p))) == 97 ) {
 			goto _st57;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st57:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof57;
 		st_case_57:
+		if ( p == pe )
+			goto _out57;
 		if ( ( (*( p))) == 97 ) {
 			goto _st58;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st58:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof58;
 		st_case_58:
+		if ( p == pe )
+			goto _out58;
 		if ( ( (*( p))) == 97 ) {
 			goto _st59;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st59:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof59;
 		st_case_59:
+		if ( p == pe )
+			goto _out59;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr62;
@@ -897,74 +775,68 @@ static void lex(Input *in, Output *out)
 				goto _ctr63;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_out:
-		_test_eof60: cs = 60; goto _test_eof; 
-		_test_eof1: cs = 1; goto _test_eof; 
-		_test_eof2: cs = 2; goto _test_eof; 
-		_test_eof3: cs = 3; goto _test_eof; 
-		_test_eof4: cs = 4; goto _test_eof; 
-		_test_eof5: cs = 5; goto _test_eof; 
-		_test_eof6: cs = 6; goto _test_eof; 
-		_test_eof7: cs = 7; goto _test_eof; 
-		_test_eof8: cs = 8; goto _test_eof; 
-		_test_eof9: cs = 9; goto _test_eof; 
-		_test_eof10: cs = 10; goto _test_eof; 
-		_test_eof11: cs = 11; goto _test_eof; 
-		_test_eof12: cs = 12; goto _test_eof; 
-		_test_eof13: cs = 13; goto _test_eof; 
-		_test_eof14: cs = 14; goto _test_eof; 
-		_test_eof15: cs = 15; goto _test_eof; 
-		_test_eof16: cs = 16; goto _test_eof; 
-		_test_eof17: cs = 17; goto _test_eof; 
-		_test_eof18: cs = 18; goto _test_eof; 
-		_test_eof19: cs = 19; goto _test_eof; 
-		_test_eof20: cs = 20; goto _test_eof; 
-		_test_eof21: cs = 21; goto _test_eof; 
-		_test_eof22: cs = 22; goto _test_eof; 
-		_test_eof23: cs = 23; goto _test_eof; 
-		_test_eof24: cs = 24; goto _test_eof; 
-		_test_eof25: cs = 25; goto _test_eof; 
-		_test_eof26: cs = 26; goto _test_eof; 
-		_test_eof27: cs = 27; goto _test_eof; 
-		_test_eof28: cs = 28; goto _test_eof; 
-		_test_eof29: cs = 29; goto _test_eof; 
-		_test_eof30: cs = 30; goto _test_eof; 
-		_test_eof31: cs = 31; goto _test_eof; 
-		_test_eof32: cs = 32; goto _test_eof; 
-		_test_eof33: cs = 33; goto _test_eof; 
-		_test_eof34: cs = 34; goto _test_eof; 
-		_test_eof35: cs = 35; goto _test_eof; 
-		_test_eof36: cs = 36; goto _test_eof; 
-		_test_eof37: cs = 37; goto _test_eof; 
-		_test_eof38: cs = 38; goto _test_eof; 
-		_test_eof39: cs = 39; goto _test_eof; 
-		_test_eof40: cs = 40; goto _test_eof; 
-		_test_eof41: cs = 41; goto _test_eof; 
-		_test_eof42: cs = 42; goto _test_eof; 
-		_test_eof43: cs = 43; goto _test_eof; 
-		_test_eof44: cs = 44; goto _test_eof; 
-		_test_eof45: cs = 45; goto _test_eof; 
-		_test_eof46: cs = 46; goto _test_eof; 
-		_test_eof47: cs = 47; goto _test_eof; 
-		_test_eof48: cs = 48; goto _test_eof; 
-		_test_eof49: cs = 49; goto _test_eof; 
-		_test_eof50: cs = 50; goto _test_eof; 
-		_test_eof51: cs = 51; goto _test_eof; 
-		_test_eof52: cs = 52; goto _test_eof; 
-		_test_eof53: cs = 53; goto _test_eof; 
-		_test_eof54: cs = 54; goto _test_eof; 
-		_test_eof55: cs = 55; goto _test_eof; 
-		_test_eof56: cs = 56; goto _test_eof; 
-		_test_eof57: cs = 57; goto _test_eof; 
-		_test_eof58: cs = 58; goto _test_eof; 
-		_test_eof59: cs = 59; goto _test_eof; 
-		
-		_test_eof: {}
-		if ( cs >= 60 )
-			goto _out; _pop: {}
+		goto _st0;
+		_out60: cs = 60; goto _out; 
+		_out0: cs = 0; goto _out; 
+		_out1: cs = 1; goto _out; 
+		_out2: cs = 2; goto _out; 
+		_out3: cs = 3; goto _out; 
+		_out4: cs = 4; goto _out; 
+		_out5: cs = 5; goto _out; 
+		_out6: cs = 6; goto _out; 
+		_out7: cs = 7; goto _out; 
+		_out8: cs = 8; goto _out; 
+		_out9: cs = 9; goto _out; 
+		_out10: cs = 10; goto _out; 
+		_out11: cs = 11; goto _out; 
+		_out12: cs = 12; goto _out; 
+		_out13: cs = 13; goto _out; 
+		_out14: cs = 14; goto _out; 
+		_out15: cs = 15; goto _out; 
+		_out16: cs = 16; goto _out; 
+		_out17: cs = 17; goto _out; 
+		_out18: cs = 18; goto _out; 
+		_out19: cs = 19; goto _out; 
+		_out20: cs = 20; goto _out; 
+		_out21: cs = 21; goto _out; 
+		_out22: cs = 22; goto _out; 
+		_out23: cs = 23; goto _out; 
+		_out24: cs = 24; goto _out; 
+		_out25: cs = 25; goto _out; 
+		_out26: cs = 26; goto _out; 
+		_out27: cs = 27; goto _out; 
+		_out28: cs = 28; goto _out; 
+		_out29: cs = 29; goto _out; 
+		_out30: cs = 30; goto _out; 
+		_out31: cs = 31; goto _out; 
+		_out32: cs = 32; goto _out; 
+		_out33: cs = 33; goto _out; 
+		_out34: cs = 34; goto _out; 
+		_out35: cs = 35; goto _out; 
+		_out36: cs = 36; goto _out; 
+		_out37: cs = 37; goto _out; 
+		_out38: cs = 38; goto _out; 
+		_out39: cs = 39; goto _out; 
+		_out40: cs = 40; goto _out; 
+		_out41: cs = 41; goto _out; 
+		_out42: cs = 42; goto _out; 
+		_out43: cs = 43; goto _out; 
+		_out44: cs = 44; goto _out; 
+		_out45: cs = 45; goto _out; 
+		_out46: cs = 46; goto _out; 
+		_out47: cs = 47; goto _out; 
+		_out48: cs = 48; goto _out; 
+		_out49: cs = 49; goto _out; 
+		_out50: cs = 50; goto _out; 
+		_out51: cs = 51; goto _out; 
+		_out52: cs = 52; goto _out; 
+		_out53: cs = 53; goto _out; 
+		_out54: cs = 54; goto _out; 
+		_out55: cs = 55; goto _out; 
+		_out56: cs = 56; goto _out; 
+		_out57: cs = 57; goto _out; 
+		_out58: cs = 58; goto _out; 
+		_out59: cs = 59; goto _out; 
 		_out: {}
 	}
 	

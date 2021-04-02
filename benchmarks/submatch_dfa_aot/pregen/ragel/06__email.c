@@ -37,8 +37,6 @@ static void lex(Input *in, Output *out)
 	
 #line 39 "gen/ragel/06__email.c"
 	{
-		if ( p == pe )
-			goto _test_eof;
 		switch ( cs ) {
 			case 9:
 			goto st_case_9;
@@ -61,7 +59,6 @@ static void lex(Input *in, Output *out)
 			case 8:
 			goto st_case_8;
 		}
-		goto st_out;
 		_ctr10:
 		{
 #line 17 "../../../benchmarks/submatch_dfa_aot/src/ragel/06__email.rl"
@@ -73,14 +70,14 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 77 "gen/ragel/06__email.c"
+#line 74 "gen/ragel/06__email.c"
 		
 		goto _st9;
 		_st9:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof9;
 		st_case_9:
+		if ( p == pe )
+			goto _out9;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st9;
@@ -113,33 +110,29 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _ctr12;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st0:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof0;
 		st_case_0:
+		if ( p == pe )
+			goto _out0;
 		if ( ( (*( p))) == 10 ) {
 			goto _st9;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr12:
 		{
 #line 15 "../../../benchmarks/submatch_dfa_aot/src/ragel/06__email.rl"
 			p1 = p; }
 		
-#line 136 "gen/ragel/06__email.c"
+#line 129 "gen/ragel/06__email.c"
 		
 		goto _st1;
 		_st1:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof1;
 		st_case_1:
+		if ( p == pe )
+			goto _out1;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st9;
@@ -175,14 +168,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st1;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st2:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof2;
 		st_case_2:
+		if ( p == pe )
+			goto _out2;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st9;
@@ -215,14 +206,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st1;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st3:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof3;
 		st_case_3:
+		if ( p == pe )
+			goto _out3;
 		if ( ( (*( p))) == 10 ) {
 			goto _st9;
 		}
@@ -233,22 +222,20 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 48 ) {
 			goto _ctr5;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr5:
 		{
 #line 16 "../../../benchmarks/submatch_dfa_aot/src/ragel/06__email.rl"
 			p2 = p; }
 		
-#line 245 "gen/ragel/06__email.c"
+#line 232 "gen/ragel/06__email.c"
 		
 		goto _st4;
 		_st4:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof4;
 		st_case_4:
+		if ( p == pe )
+			goto _out4;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st9;
@@ -267,14 +254,12 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 48 ) {
 			goto _st4;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st5:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof5;
 		st_case_5:
+		if ( p == pe )
+			goto _out5;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st9;
@@ -290,14 +275,12 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 48 ) {
 			goto _st4;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st6:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof6;
 		st_case_6:
+		if ( p == pe )
+			goto _out6;
 		if ( ( (*( p))) == 10 ) {
 			goto _st9;
 		}
@@ -308,14 +291,12 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 48 ) {
 			goto _st7;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st7:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof7;
 		st_case_7:
+		if ( p == pe )
+			goto _out7;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr10;
@@ -334,14 +315,12 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 48 ) {
 			goto _st7;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st8:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof8;
 		st_case_8:
+		if ( p == pe )
+			goto _out8;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st9;
@@ -357,24 +336,18 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 48 ) {
 			goto _st7;
 		}
-		{
-			goto _st0;
-		}
-		st_out:
-		_test_eof9: cs = 9; goto _test_eof; 
-		_test_eof0: cs = 0; goto _test_eof; 
-		_test_eof1: cs = 1; goto _test_eof; 
-		_test_eof2: cs = 2; goto _test_eof; 
-		_test_eof3: cs = 3; goto _test_eof; 
-		_test_eof4: cs = 4; goto _test_eof; 
-		_test_eof5: cs = 5; goto _test_eof; 
-		_test_eof6: cs = 6; goto _test_eof; 
-		_test_eof7: cs = 7; goto _test_eof; 
-		_test_eof8: cs = 8; goto _test_eof; 
-		
-		_test_eof: {}
-		if ( cs >= 9 )
-			goto _out; _out: {}
+		goto _st0;
+		_out9: cs = 9; goto _out; 
+		_out0: cs = 0; goto _out; 
+		_out1: cs = 1; goto _out; 
+		_out2: cs = 2; goto _out; 
+		_out3: cs = 3; goto _out; 
+		_out4: cs = 4; goto _out; 
+		_out5: cs = 5; goto _out; 
+		_out6: cs = 6; goto _out; 
+		_out7: cs = 7; goto _out; 
+		_out8: cs = 8; goto _out; 
+		_out: {}
 	}
 	
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/06__email.rl"

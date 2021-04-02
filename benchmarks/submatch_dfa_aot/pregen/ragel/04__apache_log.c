@@ -39,8 +39,6 @@ static void lex(Input *in, Output *out)
 	
 #line 41 "gen/ragel/04__apache_log.c"
 	{
-		if ( p == pe )
-			goto _test_eof;
 		switch ( cs ) {
 			case 25:
 			goto st_case_25;
@@ -95,13 +93,12 @@ static void lex(Input *in, Output *out)
 			case 24:
 			goto st_case_24;
 		}
-		goto st_out;
 		_ctr41:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			g2 = p; }
 		
-#line 105 "gen/ragel/04__apache_log.c"
+#line 102 "gen/ragel/04__apache_log.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
@@ -118,40 +115,37 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 122 "gen/ragel/04__apache_log.c"
+#line 119 "gen/ragel/04__apache_log.c"
 		
 		goto _st25;
 		_st25:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof25;
 		st_case_25:
+		if ( p == pe )
+			goto _out25;
 		if ( ( (*( p))) == 46 ) {
 			goto _ctr44;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _ctr44;
 		}
-		{
-			goto _st0;
-		}
-		st_case_0:
+		goto _st0;
 		_st0:
-		cs = 0;
-		goto _pop;
+		st_case_0:
+		goto _out0;
 		_ctr44:
 		{
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			h1 = p; }
 		
-#line 148 "gen/ragel/04__apache_log.c"
+#line 142 "gen/ragel/04__apache_log.c"
 		
 		goto _st1;
 		_st1:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof1;
 		st_case_1:
+		if ( p == pe )
+			goto _out1;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _ctr2;
@@ -166,22 +160,20 @@ static void lex(Input *in, Output *out)
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st1;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr2:
 		{
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			h2 = p; }
 		
-#line 178 "gen/ragel/04__apache_log.c"
+#line 170 "gen/ragel/04__apache_log.c"
 		
 		goto _st2;
 		_st2:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof2;
 		st_case_2:
+		if ( p == pe )
+			goto _out2;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _st2;
@@ -193,22 +185,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr4;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr4:
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			i1 = p; }
 		
-#line 205 "gen/ragel/04__apache_log.c"
+#line 195 "gen/ragel/04__apache_log.c"
 		
 		goto _st3;
 		_st3:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof3;
 		st_case_3:
+		if ( p == pe )
+			goto _out3;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _ctr6;
@@ -217,22 +207,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr6;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr6:
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			i2 = p; }
 		
-#line 229 "gen/ragel/04__apache_log.c"
+#line 217 "gen/ragel/04__apache_log.c"
 		
 		goto _st4;
 		_st4:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof4;
 		st_case_4:
+		if ( p == pe )
+			goto _out4;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _st4;
@@ -244,22 +232,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr8;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr8:
 		{
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			a1 = p; }
 		
-#line 256 "gen/ragel/04__apache_log.c"
+#line 242 "gen/ragel/04__apache_log.c"
 		
 		goto _st5;
 		_st5:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof5;
 		st_case_5:
+		if ( p == pe )
+			goto _out5;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _ctr10;
@@ -268,22 +254,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr10;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr10:
 		{
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			a2 = p; }
 		
-#line 280 "gen/ragel/04__apache_log.c"
+#line 264 "gen/ragel/04__apache_log.c"
 		
 		goto _st6;
 		_st6:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof6;
 		st_case_6:
+		if ( p == pe )
+			goto _out6;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _st6;
@@ -295,22 +279,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr12;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr12:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			d1 = p; }
 		
-#line 307 "gen/ragel/04__apache_log.c"
+#line 289 "gen/ragel/04__apache_log.c"
 		
 		goto _st7;
 		_st7:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof7;
 		st_case_7:
+		if ( p == pe )
+			goto _out7;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st0;
@@ -319,14 +301,12 @@ static void lex(Input *in, Output *out)
 				goto _st0;
 			}
 		}
-		{
-			goto _st8;
-		}
+		goto _st8;
 		_st8:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof8;
 		st_case_8:
+		if ( p == pe )
+			goto _out8;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st0;
@@ -335,14 +315,12 @@ static void lex(Input *in, Output *out)
 				goto _st9;
 			}
 		}
-		{
-			goto _st8;
-		}
+		goto _st8;
 		_st9:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof9;
 		st_case_9:
+		if ( p == pe )
+			goto _out9;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _ctr16;
@@ -351,22 +329,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr16;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr16:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			d2 = p; }
 		
-#line 363 "gen/ragel/04__apache_log.c"
+#line 339 "gen/ragel/04__apache_log.c"
 		
 		goto _st10;
 		_st10:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof10;
 		st_case_10:
+		if ( p == pe )
+			goto _out10;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _st10;
@@ -378,22 +354,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr18;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr18:
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			r1 = p; }
 		
-#line 390 "gen/ragel/04__apache_log.c"
+#line 364 "gen/ragel/04__apache_log.c"
 		
 		goto _st11;
 		_st11:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof11;
 		st_case_11:
+		if ( p == pe )
+			goto _out11;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st0;
@@ -402,14 +376,12 @@ static void lex(Input *in, Output *out)
 				goto _st0;
 			}
 		}
-		{
-			goto _st12;
-		}
+		goto _st12;
 		_st12:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof12;
 		st_case_12:
+		if ( p == pe )
+			goto _out12;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st0;
@@ -418,14 +390,12 @@ static void lex(Input *in, Output *out)
 				goto _st13;
 			}
 		}
-		{
-			goto _st12;
-		}
+		goto _st12;
 		_st13:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof13;
 		st_case_13:
+		if ( p == pe )
+			goto _out13;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _ctr22;
@@ -434,22 +404,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr22;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr22:
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			r2 = p; }
 		
-#line 446 "gen/ragel/04__apache_log.c"
+#line 414 "gen/ragel/04__apache_log.c"
 		
 		goto _st14;
 		_st14:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof14;
 		st_case_14:
+		if ( p == pe )
+			goto _out14;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _st14;
@@ -461,22 +429,20 @@ static void lex(Input *in, Output *out)
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _ctr24;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr24:
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			s1 = p; }
 		
-#line 473 "gen/ragel/04__apache_log.c"
+#line 439 "gen/ragel/04__apache_log.c"
 		
 		goto _st15;
 		_st15:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof15;
 		st_case_15:
+		if ( p == pe )
+			goto _out15;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _ctr26;
@@ -488,22 +454,20 @@ static void lex(Input *in, Output *out)
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st15;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr26:
 		{
 #line 24 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			s2 = p; }
 		
-#line 500 "gen/ragel/04__apache_log.c"
+#line 464 "gen/ragel/04__apache_log.c"
 		
 		goto _st16;
 		_st16:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof16;
 		st_case_16:
+		if ( p == pe )
+			goto _out16;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _st16;
@@ -518,22 +482,20 @@ static void lex(Input *in, Output *out)
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _ctr29;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr28:
 		{
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			z1 = p; }
 		
-#line 530 "gen/ragel/04__apache_log.c"
+#line 492 "gen/ragel/04__apache_log.c"
 		
 		goto _st17;
 		_st17:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof17;
 		st_case_17:
+		if ( p == pe )
+			goto _out17;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _ctr31;
@@ -542,22 +504,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr31;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr31:
 		{
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			z2 = p; }
 		
-#line 554 "gen/ragel/04__apache_log.c"
+#line 514 "gen/ragel/04__apache_log.c"
 		
 		goto _st18;
 		_st18:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof18;
 		st_case_18:
+		if ( p == pe )
+			goto _out18;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _st18;
@@ -569,22 +529,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr33;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr33:
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			u1 = p; }
 		
-#line 581 "gen/ragel/04__apache_log.c"
+#line 539 "gen/ragel/04__apache_log.c"
 		
 		goto _st19;
 		_st19:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof19;
 		st_case_19:
+		if ( p == pe )
+			goto _out19;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st0;
@@ -593,14 +551,12 @@ static void lex(Input *in, Output *out)
 				goto _st20;
 			}
 		}
-		{
-			goto _st19;
-		}
+		goto _st19;
 		_st20:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof20;
 		st_case_20:
+		if ( p == pe )
+			goto _out20;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _ctr36;
@@ -609,22 +565,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr36;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr36:
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			u2 = p; }
 		
-#line 621 "gen/ragel/04__apache_log.c"
+#line 575 "gen/ragel/04__apache_log.c"
 		
 		goto _st21;
 		_st21:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof21;
 		st_case_21:
+		if ( p == pe )
+			goto _out21;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _st21;
@@ -636,22 +590,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr38;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr38:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			g1 = p; }
 		
-#line 648 "gen/ragel/04__apache_log.c"
+#line 600 "gen/ragel/04__apache_log.c"
 		
 		goto _st22;
 		_st22:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof22;
 		st_case_22:
+		if ( p == pe )
+			goto _out22;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _st0;
@@ -660,33 +612,29 @@ static void lex(Input *in, Output *out)
 				goto _st23;
 			}
 		}
-		{
-			goto _st22;
-		}
+		goto _st22;
 		_st23:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof23;
 		st_case_23:
+		if ( p == pe )
+			goto _out23;
 		if ( ( (*( p))) == 10 ) {
 			goto _ctr41;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr29:
 		{
 #line 25 "../../../benchmarks/submatch_dfa_aot/src/ragel/04__apache_log.rl"
 			z1 = p; }
 		
-#line 683 "gen/ragel/04__apache_log.c"
+#line 631 "gen/ragel/04__apache_log.c"
 		
 		goto _st24;
 		_st24:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof24;
 		st_case_24:
+		if ( p == pe )
+			goto _out24;
 		switch( ( (*( p))) ) {
 			case 9: {
 				goto _ctr31;
@@ -698,39 +646,33 @@ static void lex(Input *in, Output *out)
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st24;
 		}
-		{
-			goto _st0;
-		}
-		st_out:
-		_test_eof25: cs = 25; goto _test_eof; 
-		_test_eof1: cs = 1; goto _test_eof; 
-		_test_eof2: cs = 2; goto _test_eof; 
-		_test_eof3: cs = 3; goto _test_eof; 
-		_test_eof4: cs = 4; goto _test_eof; 
-		_test_eof5: cs = 5; goto _test_eof; 
-		_test_eof6: cs = 6; goto _test_eof; 
-		_test_eof7: cs = 7; goto _test_eof; 
-		_test_eof8: cs = 8; goto _test_eof; 
-		_test_eof9: cs = 9; goto _test_eof; 
-		_test_eof10: cs = 10; goto _test_eof; 
-		_test_eof11: cs = 11; goto _test_eof; 
-		_test_eof12: cs = 12; goto _test_eof; 
-		_test_eof13: cs = 13; goto _test_eof; 
-		_test_eof14: cs = 14; goto _test_eof; 
-		_test_eof15: cs = 15; goto _test_eof; 
-		_test_eof16: cs = 16; goto _test_eof; 
-		_test_eof17: cs = 17; goto _test_eof; 
-		_test_eof18: cs = 18; goto _test_eof; 
-		_test_eof19: cs = 19; goto _test_eof; 
-		_test_eof20: cs = 20; goto _test_eof; 
-		_test_eof21: cs = 21; goto _test_eof; 
-		_test_eof22: cs = 22; goto _test_eof; 
-		_test_eof23: cs = 23; goto _test_eof; 
-		_test_eof24: cs = 24; goto _test_eof; 
-		
-		_test_eof: {}
-		if ( cs >= 25 )
-			goto _out; _pop: {}
+		goto _st0;
+		_out25: cs = 25; goto _out; 
+		_out0: cs = 0; goto _out; 
+		_out1: cs = 1; goto _out; 
+		_out2: cs = 2; goto _out; 
+		_out3: cs = 3; goto _out; 
+		_out4: cs = 4; goto _out; 
+		_out5: cs = 5; goto _out; 
+		_out6: cs = 6; goto _out; 
+		_out7: cs = 7; goto _out; 
+		_out8: cs = 8; goto _out; 
+		_out9: cs = 9; goto _out; 
+		_out10: cs = 10; goto _out; 
+		_out11: cs = 11; goto _out; 
+		_out12: cs = 12; goto _out; 
+		_out13: cs = 13; goto _out; 
+		_out14: cs = 14; goto _out; 
+		_out15: cs = 15; goto _out; 
+		_out16: cs = 16; goto _out; 
+		_out17: cs = 17; goto _out; 
+		_out18: cs = 18; goto _out; 
+		_out19: cs = 19; goto _out; 
+		_out20: cs = 20; goto _out; 
+		_out21: cs = 21; goto _out; 
+		_out22: cs = 22; goto _out; 
+		_out23: cs = 23; goto _out; 
+		_out24: cs = 24; goto _out; 
 		_out: {}
 	}
 	

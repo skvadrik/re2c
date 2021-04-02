@@ -39,8 +39,6 @@ static void lex(Input *in, Output *out)
 	
 #line 41 "gen/ragel/02__uri_rfc3986.c"
 	{
-		if ( p == pe )
-			goto _test_eof;
 		switch ( cs ) {
 			case 235:
 			goto st_case_235;
@@ -515,19 +513,18 @@ static void lex(Input *in, Output *out)
 			case 234:
 			goto st_case_234;
 		}
-		goto st_out;
 		_ctr4:
 		{
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p3 = p; }
 		
-#line 525 "gen/ragel/02__uri_rfc3986.c"
+#line 522 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p4 = p; }
 		
-#line 531 "gen/ragel/02__uri_rfc3986.c"
+#line 528 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -545,7 +542,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 549 "gen/ragel/02__uri_rfc3986.c"
+#line 546 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr11:
@@ -553,7 +550,7 @@ static void lex(Input *in, Output *out)
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p4 = p; }
 		
-#line 557 "gen/ragel/02__uri_rfc3986.c"
+#line 554 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -571,7 +568,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 575 "gen/ragel/02__uri_rfc3986.c"
+#line 572 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr16:
@@ -579,13 +576,13 @@ static void lex(Input *in, Output *out)
 #line 67 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			f1 = p; }
 		
-#line 583 "gen/ragel/02__uri_rfc3986.c"
+#line 580 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 67 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			f2 = p; }
 		
-#line 589 "gen/ragel/02__uri_rfc3986.c"
+#line 586 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -603,7 +600,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 607 "gen/ragel/02__uri_rfc3986.c"
+#line 604 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr20:
@@ -611,7 +608,7 @@ static void lex(Input *in, Output *out)
 #line 67 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			f2 = p; }
 		
-#line 615 "gen/ragel/02__uri_rfc3986.c"
+#line 612 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -629,7 +626,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 633 "gen/ragel/02__uri_rfc3986.c"
+#line 630 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr25:
@@ -637,13 +634,13 @@ static void lex(Input *in, Output *out)
 #line 66 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			q1 = p; }
 		
-#line 641 "gen/ragel/02__uri_rfc3986.c"
+#line 638 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 66 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			q2 = p; }
 		
-#line 647 "gen/ragel/02__uri_rfc3986.c"
+#line 644 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -661,7 +658,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 665 "gen/ragel/02__uri_rfc3986.c"
+#line 662 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr30:
@@ -669,7 +666,7 @@ static void lex(Input *in, Output *out)
 #line 66 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			q2 = p; }
 		
-#line 673 "gen/ragel/02__uri_rfc3986.c"
+#line 670 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -687,7 +684,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 691 "gen/ragel/02__uri_rfc3986.c"
+#line 688 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr36:
@@ -695,25 +692,25 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 699 "gen/ragel/02__uri_rfc3986.c"
+#line 696 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 705 "gen/ragel/02__uri_rfc3986.c"
+#line 702 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 711 "gen/ragel/02__uri_rfc3986.c"
+#line 708 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 717 "gen/ragel/02__uri_rfc3986.c"
+#line 714 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -731,7 +728,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 735 "gen/ragel/02__uri_rfc3986.c"
+#line 732 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr50:
@@ -739,19 +736,19 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 743 "gen/ragel/02__uri_rfc3986.c"
+#line 740 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 749 "gen/ragel/02__uri_rfc3986.c"
+#line 746 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 755 "gen/ragel/02__uri_rfc3986.c"
+#line 752 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -769,7 +766,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 773 "gen/ragel/02__uri_rfc3986.c"
+#line 770 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr59:
@@ -777,7 +774,7 @@ static void lex(Input *in, Output *out)
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 781 "gen/ragel/02__uri_rfc3986.c"
+#line 778 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -795,7 +792,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 799 "gen/ragel/02__uri_rfc3986.c"
+#line 796 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr65:
@@ -803,25 +800,25 @@ static void lex(Input *in, Output *out)
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r1 = p; }
 		
-#line 807 "gen/ragel/02__uri_rfc3986.c"
+#line 804 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r2 = p; }
 		
-#line 813 "gen/ragel/02__uri_rfc3986.c"
+#line 810 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 819 "gen/ragel/02__uri_rfc3986.c"
+#line 816 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 825 "gen/ragel/02__uri_rfc3986.c"
+#line 822 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -839,7 +836,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 843 "gen/ragel/02__uri_rfc3986.c"
+#line 840 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr88:
@@ -847,19 +844,19 @@ static void lex(Input *in, Output *out)
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r2 = p; }
 		
-#line 851 "gen/ragel/02__uri_rfc3986.c"
+#line 848 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 857 "gen/ragel/02__uri_rfc3986.c"
+#line 854 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 863 "gen/ragel/02__uri_rfc3986.c"
+#line 860 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -877,7 +874,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 881 "gen/ragel/02__uri_rfc3986.c"
+#line 878 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr108:
@@ -885,25 +882,25 @@ static void lex(Input *in, Output *out)
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h4 = p; }
 		
-#line 889 "gen/ragel/02__uri_rfc3986.c"
+#line 886 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 895 "gen/ragel/02__uri_rfc3986.c"
+#line 892 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 901 "gen/ragel/02__uri_rfc3986.c"
+#line 898 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 907 "gen/ragel/02__uri_rfc3986.c"
+#line 904 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -921,7 +918,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 925 "gen/ragel/02__uri_rfc3986.c"
+#line 922 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_ctr182:
@@ -929,19 +926,19 @@ static void lex(Input *in, Output *out)
 #line 48 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h2 = p; }
 		
-#line 933 "gen/ragel/02__uri_rfc3986.c"
+#line 930 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 939 "gen/ragel/02__uri_rfc3986.c"
+#line 936 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 945 "gen/ragel/02__uri_rfc3986.c"
+#line 942 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 70 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -959,14 +956,14 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 963 "gen/ragel/02__uri_rfc3986.c"
+#line 960 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st235;
 		_st235:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof235;
 		st_case_235:
+		if ( p == pe )
+			goto _out235;
 		if ( ( (*( p))) > 90 ) {
 			if ( 97 <= ( (*( p))) && ( (*( p))) <= 122 ) {
 				goto _ctr307;
@@ -974,13 +971,10 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 65 ) {
 			goto _ctr307;
 		}
-		{
-			goto _st0;
-		}
-		st_case_0:
+		goto _st0;
 		_st0:
-		cs = 0;
-		goto _pop;
+		st_case_0:
+		goto _out0;
 		_ctr307:
 		{
 #line 14 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
@@ -990,14 +984,14 @@ static void lex(Input *in, Output *out)
 			s1 = p;
 		}
 		
-#line 994 "gen/ragel/02__uri_rfc3986.c"
+#line 988 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st1;
 		_st1:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof1;
 		st_case_1:
+		if ( p == pe )
+			goto _out1;
 		switch( ( (*( p))) ) {
 			case 43: {
 				goto _st1;
@@ -1021,22 +1015,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st1;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr2:
 		{
 #line 19 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			s2 = p; }
 		
-#line 1033 "gen/ragel/02__uri_rfc3986.c"
+#line 1025 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st2;
 		_st2:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof2;
 		st_case_2:
+		if ( p == pe )
+			goto _out2;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr4;
@@ -1077,22 +1069,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _ctr5;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr5:
 		{
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p3 = p; }
 		
-#line 1089 "gen/ragel/02__uri_rfc3986.c"
+#line 1079 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st3;
 		_st3:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof3;
 		st_case_3:
+		if ( p == pe )
+			goto _out3;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr11;
@@ -1130,21 +1120,19 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st3;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr6:
 		{
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p3 = p; }
 		
-#line 1142 "gen/ragel/02__uri_rfc3986.c"
+#line 1130 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p4 = p; }
 		
-#line 1148 "gen/ragel/02__uri_rfc3986.c"
+#line 1136 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr12:
@@ -1152,7 +1140,7 @@ static void lex(Input *in, Output *out)
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p4 = p; }
 		
-#line 1156 "gen/ragel/02__uri_rfc3986.c"
+#line 1144 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr27:
@@ -1160,13 +1148,13 @@ static void lex(Input *in, Output *out)
 #line 66 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			q1 = p; }
 		
-#line 1164 "gen/ragel/02__uri_rfc3986.c"
+#line 1152 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 66 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			q2 = p; }
 		
-#line 1170 "gen/ragel/02__uri_rfc3986.c"
+#line 1158 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr31:
@@ -1174,7 +1162,7 @@ static void lex(Input *in, Output *out)
 #line 66 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			q2 = p; }
 		
-#line 1178 "gen/ragel/02__uri_rfc3986.c"
+#line 1166 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr38:
@@ -1182,25 +1170,25 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 1186 "gen/ragel/02__uri_rfc3986.c"
+#line 1174 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 1192 "gen/ragel/02__uri_rfc3986.c"
+#line 1180 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1198 "gen/ragel/02__uri_rfc3986.c"
+#line 1186 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1204 "gen/ragel/02__uri_rfc3986.c"
+#line 1192 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr51:
@@ -1208,19 +1196,19 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 1212 "gen/ragel/02__uri_rfc3986.c"
+#line 1200 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1218 "gen/ragel/02__uri_rfc3986.c"
+#line 1206 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1224 "gen/ragel/02__uri_rfc3986.c"
+#line 1212 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr60:
@@ -1228,7 +1216,7 @@ static void lex(Input *in, Output *out)
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1232 "gen/ragel/02__uri_rfc3986.c"
+#line 1220 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr67:
@@ -1236,25 +1224,25 @@ static void lex(Input *in, Output *out)
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r1 = p; }
 		
-#line 1240 "gen/ragel/02__uri_rfc3986.c"
+#line 1228 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r2 = p; }
 		
-#line 1246 "gen/ragel/02__uri_rfc3986.c"
+#line 1234 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1252 "gen/ragel/02__uri_rfc3986.c"
+#line 1240 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1258 "gen/ragel/02__uri_rfc3986.c"
+#line 1246 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr89:
@@ -1262,19 +1250,19 @@ static void lex(Input *in, Output *out)
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r2 = p; }
 		
-#line 1266 "gen/ragel/02__uri_rfc3986.c"
+#line 1254 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1272 "gen/ragel/02__uri_rfc3986.c"
+#line 1260 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1278 "gen/ragel/02__uri_rfc3986.c"
+#line 1266 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr109:
@@ -1282,25 +1270,25 @@ static void lex(Input *in, Output *out)
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h4 = p; }
 		
-#line 1286 "gen/ragel/02__uri_rfc3986.c"
+#line 1274 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 1292 "gen/ragel/02__uri_rfc3986.c"
+#line 1280 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1298 "gen/ragel/02__uri_rfc3986.c"
+#line 1286 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1304 "gen/ragel/02__uri_rfc3986.c"
+#line 1292 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_ctr183:
@@ -1308,26 +1296,26 @@ static void lex(Input *in, Output *out)
 #line 48 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h2 = p; }
 		
-#line 1312 "gen/ragel/02__uri_rfc3986.c"
+#line 1300 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1318 "gen/ragel/02__uri_rfc3986.c"
+#line 1306 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1324 "gen/ragel/02__uri_rfc3986.c"
+#line 1312 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st4;
 		_st4:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof4;
 		st_case_4:
+		if ( p == pe )
+			goto _out4;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr16;
@@ -1359,22 +1347,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _ctr17;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr17:
 		{
 #line 67 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			f1 = p; }
 		
-#line 1371 "gen/ragel/02__uri_rfc3986.c"
+#line 1357 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st5;
 		_st5:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof5;
 		st_case_5:
+		if ( p == pe )
+			goto _out5;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr20;
@@ -1406,22 +1392,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st5;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr18:
 		{
 #line 67 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			f1 = p; }
 		
-#line 1418 "gen/ragel/02__uri_rfc3986.c"
+#line 1402 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st6;
 		_st6:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof6;
 		st_case_6:
+		if ( p == pe )
+			goto _out6;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st7;
@@ -1433,14 +1417,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st7;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st7:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof7;
 		st_case_7:
+		if ( p == pe )
+			goto _out7;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st5;
@@ -1452,22 +1434,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st5;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr7:
 		{
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p3 = p; }
 		
-#line 1464 "gen/ragel/02__uri_rfc3986.c"
+#line 1444 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st8;
 		_st8:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof8;
 		st_case_8:
+		if ( p == pe )
+			goto _out8;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st9;
@@ -1479,14 +1459,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st9;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st9:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof9;
 		st_case_9:
+		if ( p == pe )
+			goto _out9;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st3;
@@ -1498,21 +1476,19 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st3;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr9:
 		{
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p3 = p; }
 		
-#line 1510 "gen/ragel/02__uri_rfc3986.c"
+#line 1486 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p4 = p; }
 		
-#line 1516 "gen/ragel/02__uri_rfc3986.c"
+#line 1492 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st10;
 		_ctr14:
@@ -1520,7 +1496,7 @@ static void lex(Input *in, Output *out)
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p4 = p; }
 		
-#line 1524 "gen/ragel/02__uri_rfc3986.c"
+#line 1500 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st10;
 		_ctr46:
@@ -1528,25 +1504,25 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 1532 "gen/ragel/02__uri_rfc3986.c"
+#line 1508 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 1538 "gen/ragel/02__uri_rfc3986.c"
+#line 1514 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1544 "gen/ragel/02__uri_rfc3986.c"
+#line 1520 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1550 "gen/ragel/02__uri_rfc3986.c"
+#line 1526 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st10;
 		_ctr55:
@@ -1554,19 +1530,19 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 1558 "gen/ragel/02__uri_rfc3986.c"
+#line 1534 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1564 "gen/ragel/02__uri_rfc3986.c"
+#line 1540 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1570 "gen/ragel/02__uri_rfc3986.c"
+#line 1546 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st10;
 		_ctr62:
@@ -1574,7 +1550,7 @@ static void lex(Input *in, Output *out)
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1578 "gen/ragel/02__uri_rfc3986.c"
+#line 1554 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st10;
 		_ctr71:
@@ -1582,25 +1558,25 @@ static void lex(Input *in, Output *out)
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r1 = p; }
 		
-#line 1586 "gen/ragel/02__uri_rfc3986.c"
+#line 1562 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r2 = p; }
 		
-#line 1592 "gen/ragel/02__uri_rfc3986.c"
+#line 1568 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1598 "gen/ragel/02__uri_rfc3986.c"
+#line 1574 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1604 "gen/ragel/02__uri_rfc3986.c"
+#line 1580 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st10;
 		_ctr91:
@@ -1608,19 +1584,19 @@ static void lex(Input *in, Output *out)
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r2 = p; }
 		
-#line 1612 "gen/ragel/02__uri_rfc3986.c"
+#line 1588 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1618 "gen/ragel/02__uri_rfc3986.c"
+#line 1594 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1624 "gen/ragel/02__uri_rfc3986.c"
+#line 1600 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st10;
 		_ctr112:
@@ -1628,25 +1604,25 @@ static void lex(Input *in, Output *out)
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h4 = p; }
 		
-#line 1632 "gen/ragel/02__uri_rfc3986.c"
+#line 1608 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 1638 "gen/ragel/02__uri_rfc3986.c"
+#line 1614 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1644 "gen/ragel/02__uri_rfc3986.c"
+#line 1620 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1650 "gen/ragel/02__uri_rfc3986.c"
+#line 1626 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st10;
 		_ctr186:
@@ -1654,26 +1630,26 @@ static void lex(Input *in, Output *out)
 #line 48 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h2 = p; }
 		
-#line 1658 "gen/ragel/02__uri_rfc3986.c"
+#line 1634 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 1664 "gen/ragel/02__uri_rfc3986.c"
+#line 1640 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p2 = p; }
 		
-#line 1670 "gen/ragel/02__uri_rfc3986.c"
+#line 1646 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st10;
 		_st10:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof10;
 		st_case_10:
+		if ( p == pe )
+			goto _out10;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr25;
@@ -1708,22 +1684,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _ctr26;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr26:
 		{
 #line 66 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			q1 = p; }
 		
-#line 1720 "gen/ragel/02__uri_rfc3986.c"
+#line 1694 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st11;
 		_st11:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof11;
 		st_case_11:
+		if ( p == pe )
+			goto _out11;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr30;
@@ -1758,22 +1732,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st11;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr28:
 		{
 #line 66 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			q1 = p; }
 		
-#line 1770 "gen/ragel/02__uri_rfc3986.c"
+#line 1742 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st12;
 		_st12:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof12;
 		st_case_12:
+		if ( p == pe )
+			goto _out12;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st13;
@@ -1785,14 +1757,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st13;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st13:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof13;
 		st_case_13:
+		if ( p == pe )
+			goto _out13;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st11;
@@ -1804,22 +1774,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st11;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr8:
 		{
 #line 62 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p3 = p; }
 		
-#line 1816 "gen/ragel/02__uri_rfc3986.c"
+#line 1784 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st14;
 		_st14:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof14;
 		st_case_14:
+		if ( p == pe )
+			goto _out14;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr11;
@@ -1860,14 +1828,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st3;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st15:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof15;
 		st_case_15:
+		if ( p == pe )
+			goto _out15;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr36;
@@ -1933,28 +1899,26 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _ctr44;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr37:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u1 = p; }
 		
-#line 1945 "gen/ragel/02__uri_rfc3986.c"
+#line 1909 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 1951 "gen/ragel/02__uri_rfc3986.c"
+#line 1915 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st16;
 		_st16:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof16;
 		st_case_16:
+		if ( p == pe )
+			goto _out16;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -2001,28 +1965,26 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr39:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u1 = p; }
 		
-#line 2013 "gen/ragel/02__uri_rfc3986.c"
+#line 1975 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 2019 "gen/ragel/02__uri_rfc3986.c"
+#line 1981 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st17;
 		_st17:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof17;
 		st_case_17:
+		if ( p == pe )
+			goto _out17;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st18;
@@ -2034,14 +1996,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st18;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st18:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof18;
 		st_case_18:
+		if ( p == pe )
+			goto _out18;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st16;
@@ -2053,27 +2013,25 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr40:
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 2065 "gen/ragel/02__uri_rfc3986.c"
+#line 2023 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 2071 "gen/ragel/02__uri_rfc3986.c"
+#line 2029 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 2077 "gen/ragel/02__uri_rfc3986.c"
+#line 2035 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st19;
 		_ctr53:
@@ -2081,13 +2039,13 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 2085 "gen/ragel/02__uri_rfc3986.c"
+#line 2043 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 2091 "gen/ragel/02__uri_rfc3986.c"
+#line 2049 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st19;
 		_ctr69:
@@ -2095,19 +2053,19 @@ static void lex(Input *in, Output *out)
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r1 = p; }
 		
-#line 2099 "gen/ragel/02__uri_rfc3986.c"
+#line 2057 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r2 = p; }
 		
-#line 2105 "gen/ragel/02__uri_rfc3986.c"
+#line 2063 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 2111 "gen/ragel/02__uri_rfc3986.c"
+#line 2069 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st19;
 		_ctr90:
@@ -2115,13 +2073,13 @@ static void lex(Input *in, Output *out)
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r2 = p; }
 		
-#line 2119 "gen/ragel/02__uri_rfc3986.c"
+#line 2077 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 2125 "gen/ragel/02__uri_rfc3986.c"
+#line 2083 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st19;
 		_ctr110:
@@ -2129,19 +2087,19 @@ static void lex(Input *in, Output *out)
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h4 = p; }
 		
-#line 2133 "gen/ragel/02__uri_rfc3986.c"
+#line 2091 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 2139 "gen/ragel/02__uri_rfc3986.c"
+#line 2097 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 2145 "gen/ragel/02__uri_rfc3986.c"
+#line 2103 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st19;
 		_ctr184:
@@ -2149,20 +2107,20 @@ static void lex(Input *in, Output *out)
 #line 48 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h2 = p; }
 		
-#line 2153 "gen/ragel/02__uri_rfc3986.c"
+#line 2111 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 61 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			p1 = p; }
 		
-#line 2159 "gen/ragel/02__uri_rfc3986.c"
+#line 2117 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st19;
 		_st19:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof19;
 		st_case_19:
+		if ( p == pe )
+			goto _out19;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr59;
@@ -2200,14 +2158,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st19;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st20:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof20;
 		st_case_20:
+		if ( p == pe )
+			goto _out20;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st21;
@@ -2219,14 +2175,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st21;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st21:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof21;
 		st_case_21:
+		if ( p == pe )
+			goto _out21;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st19;
@@ -2238,27 +2192,25 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st19;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr45:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u1 = p; }
 		
-#line 2250 "gen/ragel/02__uri_rfc3986.c"
+#line 2202 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 2256 "gen/ragel/02__uri_rfc3986.c"
+#line 2208 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 2262 "gen/ragel/02__uri_rfc3986.c"
+#line 2214 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st22;
 		_ctr54:
@@ -2266,7 +2218,7 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 2270 "gen/ragel/02__uri_rfc3986.c"
+#line 2222 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st22;
 		_ctr298:
@@ -2274,20 +2226,20 @@ static void lex(Input *in, Output *out)
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h4 = p; }
 		
-#line 2278 "gen/ragel/02__uri_rfc3986.c"
+#line 2230 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 2284 "gen/ragel/02__uri_rfc3986.c"
+#line 2236 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st22;
 		_st22:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof22;
 		st_case_22:
+		if ( p == pe )
+			goto _out22;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr65;
@@ -2339,14 +2291,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st23;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st23:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof23;
 		st_case_23:
+		if ( p == pe )
+			goto _out23;
 		switch( ( (*( p))) ) {
 			case 33: {
 				goto _st23;
@@ -2382,14 +2332,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st23;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st24:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof24;
 		st_case_24:
+		if ( p == pe )
+			goto _out24;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st25;
@@ -2401,14 +2349,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st25;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st25:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof25;
 		st_case_25:
+		if ( p == pe )
+			goto _out25;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st23;
@@ -2420,21 +2366,19 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st23;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr47:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u1 = p; }
 		
-#line 2432 "gen/ragel/02__uri_rfc3986.c"
+#line 2376 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u2 = p; }
 		
-#line 2438 "gen/ragel/02__uri_rfc3986.c"
+#line 2382 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st26;
 		_ctr56:
@@ -2442,14 +2386,14 @@ static void lex(Input *in, Output *out)
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u2 = p; }
 		
-#line 2446 "gen/ragel/02__uri_rfc3986.c"
+#line 2390 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st26;
 		_st26:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof26;
 		st_case_26:
+		if ( p == pe )
+			goto _out26;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr36;
@@ -2512,22 +2456,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _ctr79;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr74:
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 2524 "gen/ragel/02__uri_rfc3986.c"
+#line 2466 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st27;
 		_st27:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof27;
 		st_case_27:
+		if ( p == pe )
+			goto _out27;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -2571,22 +2513,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr75:
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 2583 "gen/ragel/02__uri_rfc3986.c"
+#line 2523 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st28;
 		_st28:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof28;
 		st_case_28:
+		if ( p == pe )
+			goto _out28;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st29;
@@ -2598,14 +2538,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st29;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st29:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof29;
 		st_case_29:
+		if ( p == pe )
+			goto _out29;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st27;
@@ -2617,15 +2555,13 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr83:
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 2629 "gen/ragel/02__uri_rfc3986.c"
+#line 2565 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st30;
 		_ctr80:
@@ -2633,13 +2569,13 @@ static void lex(Input *in, Output *out)
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 2637 "gen/ragel/02__uri_rfc3986.c"
+#line 2573 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 2643 "gen/ragel/02__uri_rfc3986.c"
+#line 2579 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st30;
 		_ctr111:
@@ -2647,13 +2583,13 @@ static void lex(Input *in, Output *out)
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h4 = p; }
 		
-#line 2651 "gen/ragel/02__uri_rfc3986.c"
+#line 2587 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h6 = p; }
 		
-#line 2657 "gen/ragel/02__uri_rfc3986.c"
+#line 2593 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st30;
 		_ctr185:
@@ -2661,14 +2597,14 @@ static void lex(Input *in, Output *out)
 #line 48 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h2 = p; }
 		
-#line 2665 "gen/ragel/02__uri_rfc3986.c"
+#line 2601 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st30;
 		_st30:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof30;
 		st_case_30:
+		if ( p == pe )
+			goto _out30;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr65;
@@ -2686,22 +2622,20 @@ static void lex(Input *in, Output *out)
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _ctr86;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr86:
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r1 = p; }
 		
-#line 2698 "gen/ragel/02__uri_rfc3986.c"
+#line 2632 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st31;
 		_st31:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof31;
 		st_case_31:
+		if ( p == pe )
+			goto _out31;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr88;
@@ -2719,28 +2653,26 @@ static void lex(Input *in, Output *out)
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st31;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr76:
 		{
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h3 = p; }
 		
-#line 2731 "gen/ragel/02__uri_rfc3986.c"
+#line 2663 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 2737 "gen/ragel/02__uri_rfc3986.c"
+#line 2669 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st32;
 		_st32:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof32;
 		st_case_32:
+		if ( p == pe )
+			goto _out32;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -2787,14 +2719,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st33:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof33;
 		st_case_33:
+		if ( p == pe )
+			goto _out33;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -2854,14 +2784,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st48;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st34:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof34;
 		st_case_34:
+		if ( p == pe )
+			goto _out34;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -2908,14 +2836,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st35:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof35;
 		st_case_35:
+		if ( p == pe )
+			goto _out35;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -2975,14 +2901,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st44;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st36:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof36;
 		st_case_36:
+		if ( p == pe )
+			goto _out36;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3029,14 +2953,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st37:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof37;
 		st_case_37:
+		if ( p == pe )
+			goto _out37;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3096,14 +3018,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st40;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st38:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof38;
 		st_case_38:
+		if ( p == pe )
+			goto _out38;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -3147,14 +3067,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st39:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof39;
 		st_case_39:
+		if ( p == pe )
+			goto _out39;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -3205,14 +3123,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st40;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st40:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof40;
 		st_case_40:
+		if ( p == pe )
+			goto _out40;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -3263,14 +3179,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st38;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st41:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof41;
 		st_case_41:
+		if ( p == pe )
+			goto _out41;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -3328,14 +3242,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st38;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st42:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof42;
 		st_case_42:
+		if ( p == pe )
+			goto _out42;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -3387,14 +3299,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st43:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof43;
 		st_case_43:
+		if ( p == pe )
+			goto _out43;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3448,14 +3358,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st44;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st44:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof44;
 		st_case_44:
+		if ( p == pe )
+			goto _out44;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3509,14 +3417,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st36;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st45:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof45;
 		st_case_45:
+		if ( p == pe )
+			goto _out45;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3577,14 +3483,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st36;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st46:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof46;
 		st_case_46:
+		if ( p == pe )
+			goto _out46;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3639,14 +3543,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st47:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof47;
 		st_case_47:
+		if ( p == pe )
+			goto _out47;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3700,14 +3602,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st48;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st48:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof48;
 		st_case_48:
+		if ( p == pe )
+			goto _out48;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3761,14 +3661,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st34;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st49:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof49;
 		st_case_49:
+		if ( p == pe )
+			goto _out49;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3829,14 +3727,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st34;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st50:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof50;
 		st_case_50:
+		if ( p == pe )
+			goto _out50;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3891,28 +3787,26 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr77:
 		{
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h3 = p; }
 		
-#line 3903 "gen/ragel/02__uri_rfc3986.c"
+#line 3797 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 3909 "gen/ragel/02__uri_rfc3986.c"
+#line 3803 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st51;
 		_st51:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof51;
 		st_case_51:
+		if ( p == pe )
+			goto _out51;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -3966,28 +3860,26 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st52;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr79:
 		{
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h3 = p; }
 		
-#line 3978 "gen/ragel/02__uri_rfc3986.c"
+#line 3870 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 3984 "gen/ragel/02__uri_rfc3986.c"
+#line 3876 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st52;
 		_st52:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof52;
 		st_case_52:
+		if ( p == pe )
+			goto _out52;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -4041,28 +3933,26 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st32;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr78:
 		{
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h3 = p; }
 		
-#line 4053 "gen/ragel/02__uri_rfc3986.c"
+#line 3943 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 4059 "gen/ragel/02__uri_rfc3986.c"
+#line 3949 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st53;
 		_st53:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof53;
 		st_case_53:
+		if ( p == pe )
+			goto _out53;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -4123,14 +4013,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st32;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st54:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof54;
 		st_case_54:
+		if ( p == pe )
+			goto _out54;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -4185,22 +4073,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st27;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr48:
 		{
 #line 48 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h1 = p; }
 		
-#line 4197 "gen/ragel/02__uri_rfc3986.c"
+#line 4083 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st55;
 		_st55:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof55;
 		st_case_55:
+		if ( p == pe )
+			goto _out55;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st192;
@@ -4220,14 +4106,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st56;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st56:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof56;
 		st_case_56:
+		if ( p == pe )
+			goto _out56;
 		if ( ( (*( p))) == 58 ) {
 			goto _st60;
 		}
@@ -4242,14 +4126,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st57;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st57:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof57;
 		st_case_57:
+		if ( p == pe )
+			goto _out57;
 		if ( ( (*( p))) == 58 ) {
 			goto _st60;
 		}
@@ -4264,14 +4146,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st58;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st58:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof58;
 		st_case_58:
+		if ( p == pe )
+			goto _out58;
 		if ( ( (*( p))) == 58 ) {
 			goto _st60;
 		}
@@ -4286,25 +4166,21 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st59;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st59:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof59;
 		st_case_59:
+		if ( p == pe )
+			goto _out59;
 		if ( ( (*( p))) == 58 ) {
 			goto _st60;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st60:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof60;
 		st_case_60:
+		if ( p == pe )
+			goto _out60;
 		if ( ( (*( p))) == 58 ) {
 			goto _st178;
 		}
@@ -4319,14 +4195,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st61;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st61:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof61;
 		st_case_61:
+		if ( p == pe )
+			goto _out61;
 		if ( ( (*( p))) == 58 ) {
 			goto _st65;
 		}
@@ -4341,14 +4215,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st62;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st62:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof62;
 		st_case_62:
+		if ( p == pe )
+			goto _out62;
 		if ( ( (*( p))) == 58 ) {
 			goto _st65;
 		}
@@ -4363,14 +4235,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st63;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st63:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof63;
 		st_case_63:
+		if ( p == pe )
+			goto _out63;
 		if ( ( (*( p))) == 58 ) {
 			goto _st65;
 		}
@@ -4385,25 +4255,21 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st64;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st64:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof64;
 		st_case_64:
+		if ( p == pe )
+			goto _out64;
 		if ( ( (*( p))) == 58 ) {
 			goto _st65;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st65:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof65;
 		st_case_65:
+		if ( p == pe )
+			goto _out65;
 		if ( ( (*( p))) == 58 ) {
 			goto _st164;
 		}
@@ -4418,14 +4284,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st66;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st66:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof66;
 		st_case_66:
+		if ( p == pe )
+			goto _out66;
 		if ( ( (*( p))) == 58 ) {
 			goto _st70;
 		}
@@ -4440,14 +4304,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st67;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st67:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof67;
 		st_case_67:
+		if ( p == pe )
+			goto _out67;
 		if ( ( (*( p))) == 58 ) {
 			goto _st70;
 		}
@@ -4462,14 +4324,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st68;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st68:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof68;
 		st_case_68:
+		if ( p == pe )
+			goto _out68;
 		if ( ( (*( p))) == 58 ) {
 			goto _st70;
 		}
@@ -4484,25 +4344,21 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st69;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st69:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof69;
 		st_case_69:
+		if ( p == pe )
+			goto _out69;
 		if ( ( (*( p))) == 58 ) {
 			goto _st70;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st70:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof70;
 		st_case_70:
+		if ( p == pe )
+			goto _out70;
 		if ( ( (*( p))) == 58 ) {
 			goto _st150;
 		}
@@ -4517,14 +4373,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st71;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st71:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof71;
 		st_case_71:
+		if ( p == pe )
+			goto _out71;
 		if ( ( (*( p))) == 58 ) {
 			goto _st75;
 		}
@@ -4539,14 +4393,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st72;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st72:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof72;
 		st_case_72:
+		if ( p == pe )
+			goto _out72;
 		if ( ( (*( p))) == 58 ) {
 			goto _st75;
 		}
@@ -4561,14 +4413,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st73;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st73:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof73;
 		st_case_73:
+		if ( p == pe )
+			goto _out73;
 		if ( ( (*( p))) == 58 ) {
 			goto _st75;
 		}
@@ -4583,25 +4433,21 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st74;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st74:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof74;
 		st_case_74:
+		if ( p == pe )
+			goto _out74;
 		if ( ( (*( p))) == 58 ) {
 			goto _st75;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st75:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof75;
 		st_case_75:
+		if ( p == pe )
+			goto _out75;
 		if ( ( (*( p))) == 58 ) {
 			goto _st136;
 		}
@@ -4616,14 +4462,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st76;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st76:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof76;
 		st_case_76:
+		if ( p == pe )
+			goto _out76;
 		if ( ( (*( p))) == 58 ) {
 			goto _st80;
 		}
@@ -4638,14 +4482,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st77;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st77:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof77;
 		st_case_77:
+		if ( p == pe )
+			goto _out77;
 		if ( ( (*( p))) == 58 ) {
 			goto _st80;
 		}
@@ -4660,14 +4502,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st78;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st78:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof78;
 		st_case_78:
+		if ( p == pe )
+			goto _out78;
 		if ( ( (*( p))) == 58 ) {
 			goto _st80;
 		}
@@ -4682,25 +4522,21 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st79;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st79:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof79;
 		st_case_79:
+		if ( p == pe )
+			goto _out79;
 		if ( ( (*( p))) == 58 ) {
 			goto _st80;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st80:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof80;
 		st_case_80:
+		if ( p == pe )
+			goto _out80;
 		if ( ( (*( p))) == 58 ) {
 			goto _st122;
 		}
@@ -4715,14 +4551,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st81;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st81:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof81;
 		st_case_81:
+		if ( p == pe )
+			goto _out81;
 		if ( ( (*( p))) == 58 ) {
 			goto _st85;
 		}
@@ -4737,14 +4571,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st82;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st82:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof82;
 		st_case_82:
+		if ( p == pe )
+			goto _out82;
 		if ( ( (*( p))) == 58 ) {
 			goto _st85;
 		}
@@ -4759,14 +4591,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st83;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st83:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof83;
 		st_case_83:
+		if ( p == pe )
+			goto _out83;
 		if ( ( (*( p))) == 58 ) {
 			goto _st85;
 		}
@@ -4781,25 +4611,21 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st84;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st84:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof84;
 		st_case_84:
+		if ( p == pe )
+			goto _out84;
 		if ( ( (*( p))) == 58 ) {
 			goto _st85;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st85:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof85;
 		st_case_85:
+		if ( p == pe )
+			goto _out85;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st86;
@@ -4825,14 +4651,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st121;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st86:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof86;
 		st_case_86:
+		if ( p == pe )
+			goto _out86;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -4852,14 +4676,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st106;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st87:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof87;
 		st_case_87:
+		if ( p == pe )
+			goto _out87;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st88;
@@ -4874,25 +4696,21 @@ static void lex(Input *in, Output *out)
 		if ( 51 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st103;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st88:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof88;
 		st_case_88:
+		if ( p == pe )
+			goto _out88;
 		if ( ( (*( p))) == 46 ) {
 			goto _st89;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st89:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof89;
 		st_case_89:
+		if ( p == pe )
+			goto _out89;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st90;
@@ -4907,25 +4725,21 @@ static void lex(Input *in, Output *out)
 		if ( 51 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st99;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st90:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof90;
 		st_case_90:
+		if ( p == pe )
+			goto _out90;
 		if ( ( (*( p))) == 46 ) {
 			goto _st91;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st91:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof91;
 		st_case_91:
+		if ( p == pe )
+			goto _out91;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st92;
@@ -4940,25 +4754,21 @@ static void lex(Input *in, Output *out)
 		if ( 51 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st95;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st92:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof92;
 		st_case_92:
+		if ( p == pe )
+			goto _out92;
 		if ( ( (*( p))) == 93 ) {
 			goto _st93;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st93:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof93;
 		st_case_93:
+		if ( p == pe )
+			goto _out93;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr182;
@@ -4976,42 +4786,36 @@ static void lex(Input *in, Output *out)
 				goto _ctr186;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st94:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof94;
 		st_case_94:
+		if ( p == pe )
+			goto _out94;
 		if ( ( (*( p))) == 93 ) {
 			goto _st93;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st95;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st95:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof95;
 		st_case_95:
+		if ( p == pe )
+			goto _out95;
 		if ( ( (*( p))) == 93 ) {
 			goto _st93;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st92;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st96:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof96;
 		st_case_96:
+		if ( p == pe )
+			goto _out96;
 		switch( ( (*( p))) ) {
 			case 53: {
 				goto _st97;
@@ -5027,56 +4831,48 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 48 ) {
 			goto _st95;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st97:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof97;
 		st_case_97:
+		if ( p == pe )
+			goto _out97;
 		if ( ( (*( p))) == 93 ) {
 			goto _st93;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 53 ) {
 			goto _st92;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st98:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof98;
 		st_case_98:
+		if ( p == pe )
+			goto _out98;
 		if ( ( (*( p))) == 46 ) {
 			goto _st91;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st99;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st99:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof99;
 		st_case_99:
+		if ( p == pe )
+			goto _out99;
 		if ( ( (*( p))) == 46 ) {
 			goto _st91;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st90;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st100:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof100;
 		st_case_100:
+		if ( p == pe )
+			goto _out100;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st91;
@@ -5092,56 +4888,48 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 48 ) {
 			goto _st99;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st101:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof101;
 		st_case_101:
+		if ( p == pe )
+			goto _out101;
 		if ( ( (*( p))) == 46 ) {
 			goto _st91;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 53 ) {
 			goto _st90;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st102:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof102;
 		st_case_102:
+		if ( p == pe )
+			goto _out102;
 		if ( ( (*( p))) == 46 ) {
 			goto _st89;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st103;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st103:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof103;
 		st_case_103:
+		if ( p == pe )
+			goto _out103;
 		if ( ( (*( p))) == 46 ) {
 			goto _st89;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 			goto _st88;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st104:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof104;
 		st_case_104:
+		if ( p == pe )
+			goto _out104;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st89;
@@ -5157,28 +4945,24 @@ static void lex(Input *in, Output *out)
 		} else if ( ( (*( p))) >= 48 ) {
 			goto _st103;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st105:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof105;
 		st_case_105:
+		if ( p == pe )
+			goto _out105;
 		if ( ( (*( p))) == 46 ) {
 			goto _st89;
 		}
 		if ( 48 <= ( (*( p))) && ( (*( p))) <= 53 ) {
 			goto _st88;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st106:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof106;
 		st_case_106:
+		if ( p == pe )
+			goto _out106;
 		if ( ( (*( p))) == 58 ) {
 			goto _st109;
 		}
@@ -5193,14 +4977,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st107;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st107:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof107;
 		st_case_107:
+		if ( p == pe )
+			goto _out107;
 		if ( ( (*( p))) == 58 ) {
 			goto _st109;
 		}
@@ -5215,25 +4997,21 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st108;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st108:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof108;
 		st_case_108:
+		if ( p == pe )
+			goto _out108;
 		if ( ( (*( p))) == 58 ) {
 			goto _st109;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st109:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof109;
 		st_case_109:
+		if ( p == pe )
+			goto _out109;
 		if ( ( (*( p))) == 58 ) {
 			goto _st92;
 		}
@@ -5248,14 +5026,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st110;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st110:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof110;
 		st_case_110:
+		if ( p == pe )
+			goto _out110;
 		if ( ( (*( p))) == 93 ) {
 			goto _st93;
 		}
@@ -5270,14 +5046,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st111;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st111:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof111;
 		st_case_111:
+		if ( p == pe )
+			goto _out111;
 		if ( ( (*( p))) == 93 ) {
 			goto _st93;
 		}
@@ -5292,14 +5066,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st112;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st112:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof112;
 		st_case_112:
+		if ( p == pe )
+			goto _out112;
 		if ( ( (*( p))) == 93 ) {
 			goto _st93;
 		}
@@ -5314,14 +5086,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st92;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st113:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof113;
 		st_case_113:
+		if ( p == pe )
+			goto _out113;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5341,14 +5111,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st106;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st114:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof114;
 		st_case_114:
+		if ( p == pe )
+			goto _out114;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5368,14 +5136,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st107;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st115:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof115;
 		st_case_115:
+		if ( p == pe )
+			goto _out115;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5395,14 +5161,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st108;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st116:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof116;
 		st_case_116:
+		if ( p == pe )
+			goto _out116;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5429,14 +5193,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st118;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st117:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof117;
 		st_case_117:
+		if ( p == pe )
+			goto _out117;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5460,14 +5222,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st107;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st118:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof118;
 		st_case_118:
+		if ( p == pe )
+			goto _out118;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5487,14 +5247,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st107;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st119:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof119;
 		st_case_119:
+		if ( p == pe )
+			goto _out119;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5514,14 +5272,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st106;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st120:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof120;
 		st_case_120:
+		if ( p == pe )
+			goto _out120;
 		if ( ( (*( p))) == 93 ) {
 			goto _st93;
 		}
@@ -5536,14 +5292,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st110;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st121:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof121;
 		st_case_121:
+		if ( p == pe )
+			goto _out121;
 		if ( ( (*( p))) == 58 ) {
 			goto _st109;
 		}
@@ -5558,14 +5312,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st106;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st122:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof122;
 		st_case_122:
+		if ( p == pe )
+			goto _out122;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st123;
@@ -5591,14 +5343,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st135;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st123:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof123;
 		st_case_123:
+		if ( p == pe )
+			goto _out123;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5621,14 +5371,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st124;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st124:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof124;
 		st_case_124:
+		if ( p == pe )
+			goto _out124;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st127;
@@ -5648,14 +5396,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st125;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st125:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof125;
 		st_case_125:
+		if ( p == pe )
+			goto _out125;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st127;
@@ -5675,14 +5421,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st126;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st126:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof126;
 		st_case_126:
+		if ( p == pe )
+			goto _out126;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st127;
@@ -5691,14 +5435,12 @@ static void lex(Input *in, Output *out)
 				goto _st93;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st127:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof127;
 		st_case_127:
+		if ( p == pe )
+			goto _out127;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st110;
@@ -5710,14 +5452,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st110;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st128:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof128;
 		st_case_128:
+		if ( p == pe )
+			goto _out128;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5740,14 +5480,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st124;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st129:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof129;
 		st_case_129:
+		if ( p == pe )
+			goto _out129;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5770,14 +5508,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st125;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st130:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof130;
 		st_case_130:
+		if ( p == pe )
+			goto _out130;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5800,14 +5536,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st126;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st131:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof131;
 		st_case_131:
+		if ( p == pe )
+			goto _out131;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5837,14 +5571,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st133;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st132:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof132;
 		st_case_132:
+		if ( p == pe )
+			goto _out132;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5871,14 +5603,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st125;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st133:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof133;
 		st_case_133:
+		if ( p == pe )
+			goto _out133;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5901,14 +5631,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st125;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st134:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof134;
 		st_case_134:
+		if ( p == pe )
+			goto _out134;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -5931,14 +5659,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st124;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st135:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof135;
 		st_case_135:
+		if ( p == pe )
+			goto _out135;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st127;
@@ -5958,14 +5684,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st124;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st136:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof136;
 		st_case_136:
+		if ( p == pe )
+			goto _out136;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st137;
@@ -5991,14 +5715,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st149;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st137:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof137;
 		st_case_137:
+		if ( p == pe )
+			goto _out137;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6021,14 +5743,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st138;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st138:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof138;
 		st_case_138:
+		if ( p == pe )
+			goto _out138;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st141;
@@ -6048,14 +5768,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st139;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st139:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof139;
 		st_case_139:
+		if ( p == pe )
+			goto _out139;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st141;
@@ -6075,14 +5793,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st140;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st140:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof140;
 		st_case_140:
+		if ( p == pe )
+			goto _out140;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st141;
@@ -6091,14 +5807,12 @@ static void lex(Input *in, Output *out)
 				goto _st93;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st141:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof141;
 		st_case_141:
+		if ( p == pe )
+			goto _out141;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st123;
@@ -6121,14 +5835,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st135;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st142:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof142;
 		st_case_142:
+		if ( p == pe )
+			goto _out142;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6151,14 +5863,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st138;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st143:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof143;
 		st_case_143:
+		if ( p == pe )
+			goto _out143;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6181,14 +5891,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st139;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st144:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof144;
 		st_case_144:
+		if ( p == pe )
+			goto _out144;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6211,14 +5919,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st140;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st145:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof145;
 		st_case_145:
+		if ( p == pe )
+			goto _out145;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6248,14 +5954,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st147;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st146:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof146;
 		st_case_146:
+		if ( p == pe )
+			goto _out146;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6282,14 +5986,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st139;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st147:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof147;
 		st_case_147:
+		if ( p == pe )
+			goto _out147;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6312,14 +6014,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st139;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st148:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof148;
 		st_case_148:
+		if ( p == pe )
+			goto _out148;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6342,14 +6042,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st138;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st149:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof149;
 		st_case_149:
+		if ( p == pe )
+			goto _out149;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st141;
@@ -6369,14 +6067,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st138;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st150:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof150;
 		st_case_150:
+		if ( p == pe )
+			goto _out150;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st151;
@@ -6402,14 +6098,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st163;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st151:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof151;
 		st_case_151:
+		if ( p == pe )
+			goto _out151;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6432,14 +6126,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st152;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st152:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof152;
 		st_case_152:
+		if ( p == pe )
+			goto _out152;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st155;
@@ -6459,14 +6151,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st153;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st153:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof153;
 		st_case_153:
+		if ( p == pe )
+			goto _out153;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st155;
@@ -6486,14 +6176,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st154;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st154:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof154;
 		st_case_154:
+		if ( p == pe )
+			goto _out154;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st155;
@@ -6502,14 +6190,12 @@ static void lex(Input *in, Output *out)
 				goto _st93;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st155:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof155;
 		st_case_155:
+		if ( p == pe )
+			goto _out155;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st137;
@@ -6532,14 +6218,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st149;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st156:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof156;
 		st_case_156:
+		if ( p == pe )
+			goto _out156;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6562,14 +6246,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st152;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st157:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof157;
 		st_case_157:
+		if ( p == pe )
+			goto _out157;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6592,14 +6274,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st153;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st158:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof158;
 		st_case_158:
+		if ( p == pe )
+			goto _out158;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6622,14 +6302,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st154;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st159:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof159;
 		st_case_159:
+		if ( p == pe )
+			goto _out159;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6659,14 +6337,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st161;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st160:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof160;
 		st_case_160:
+		if ( p == pe )
+			goto _out160;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6693,14 +6369,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st153;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st161:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof161;
 		st_case_161:
+		if ( p == pe )
+			goto _out161;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6723,14 +6397,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st153;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st162:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof162;
 		st_case_162:
+		if ( p == pe )
+			goto _out162;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6753,14 +6425,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st152;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st163:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof163;
 		st_case_163:
+		if ( p == pe )
+			goto _out163;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st155;
@@ -6780,14 +6450,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st152;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st164:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof164;
 		st_case_164:
+		if ( p == pe )
+			goto _out164;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st165;
@@ -6813,14 +6481,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st177;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st165:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof165;
 		st_case_165:
+		if ( p == pe )
+			goto _out165;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6843,14 +6509,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st166;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st166:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof166;
 		st_case_166:
+		if ( p == pe )
+			goto _out166;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st169;
@@ -6870,14 +6534,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st167;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st167:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof167;
 		st_case_167:
+		if ( p == pe )
+			goto _out167;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st169;
@@ -6897,14 +6559,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st168;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st168:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof168;
 		st_case_168:
+		if ( p == pe )
+			goto _out168;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st169;
@@ -6913,14 +6573,12 @@ static void lex(Input *in, Output *out)
 				goto _st93;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st169:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof169;
 		st_case_169:
+		if ( p == pe )
+			goto _out169;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st151;
@@ -6943,14 +6601,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st163;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st170:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof170;
 		st_case_170:
+		if ( p == pe )
+			goto _out170;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -6973,14 +6629,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st166;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st171:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof171;
 		st_case_171:
+		if ( p == pe )
+			goto _out171;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7003,14 +6657,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st167;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st172:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof172;
 		st_case_172:
+		if ( p == pe )
+			goto _out172;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7033,14 +6685,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st168;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st173:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof173;
 		st_case_173:
+		if ( p == pe )
+			goto _out173;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7070,14 +6720,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st175;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st174:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof174;
 		st_case_174:
+		if ( p == pe )
+			goto _out174;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7104,14 +6752,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st167;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st175:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof175;
 		st_case_175:
+		if ( p == pe )
+			goto _out175;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7134,14 +6780,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st167;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st176:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof176;
 		st_case_176:
+		if ( p == pe )
+			goto _out176;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7164,14 +6808,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st166;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st177:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof177;
 		st_case_177:
+		if ( p == pe )
+			goto _out177;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st169;
@@ -7191,14 +6833,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st166;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st178:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof178;
 		st_case_178:
+		if ( p == pe )
+			goto _out178;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st179;
@@ -7224,14 +6864,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st191;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st179:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof179;
 		st_case_179:
+		if ( p == pe )
+			goto _out179;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7254,14 +6892,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st180;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st180:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof180;
 		st_case_180:
+		if ( p == pe )
+			goto _out180;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st183;
@@ -7281,14 +6917,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st181;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st181:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof181;
 		st_case_181:
+		if ( p == pe )
+			goto _out181;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st183;
@@ -7308,14 +6942,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st182;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st182:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof182;
 		st_case_182:
+		if ( p == pe )
+			goto _out182;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st183;
@@ -7324,14 +6956,12 @@ static void lex(Input *in, Output *out)
 				goto _st93;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st183:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof183;
 		st_case_183:
+		if ( p == pe )
+			goto _out183;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st165;
@@ -7354,14 +6984,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st177;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st184:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof184;
 		st_case_184:
+		if ( p == pe )
+			goto _out184;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7384,14 +7012,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st180;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st185:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof185;
 		st_case_185:
+		if ( p == pe )
+			goto _out185;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7414,14 +7040,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st181;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st186:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof186;
 		st_case_186:
+		if ( p == pe )
+			goto _out186;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7444,14 +7068,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st182;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st187:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof187;
 		st_case_187:
+		if ( p == pe )
+			goto _out187;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7481,14 +7103,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st189;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st188:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof188;
 		st_case_188:
+		if ( p == pe )
+			goto _out188;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7515,14 +7135,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st181;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st189:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof189;
 		st_case_189:
+		if ( p == pe )
+			goto _out189;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7545,14 +7163,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st181;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st190:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof190;
 		st_case_190:
+		if ( p == pe )
+			goto _out190;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7575,14 +7191,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st180;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st191:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof191;
 		st_case_191:
+		if ( p == pe )
+			goto _out191;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st183;
@@ -7602,25 +7216,21 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st180;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st192:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof192;
 		st_case_192:
+		if ( p == pe )
+			goto _out192;
 		if ( ( (*( p))) == 58 ) {
 			goto _st193;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st193:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof193;
 		st_case_193:
+		if ( p == pe )
+			goto _out193;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st194;
@@ -7646,14 +7256,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st206;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st194:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof194;
 		st_case_194:
+		if ( p == pe )
+			goto _out194;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7676,14 +7284,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st195;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st195:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof195;
 		st_case_195:
+		if ( p == pe )
+			goto _out195;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st198;
@@ -7703,14 +7309,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st196;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st196:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof196;
 		st_case_196:
+		if ( p == pe )
+			goto _out196;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st198;
@@ -7730,14 +7334,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st197;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st197:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof197;
 		st_case_197:
+		if ( p == pe )
+			goto _out197;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st198;
@@ -7746,14 +7348,12 @@ static void lex(Input *in, Output *out)
 				goto _st93;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st198:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof198;
 		st_case_198:
+		if ( p == pe )
+			goto _out198;
 		switch( ( (*( p))) ) {
 			case 48: {
 				goto _st179;
@@ -7776,14 +7376,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st191;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st199:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof199;
 		st_case_199:
+		if ( p == pe )
+			goto _out199;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7806,14 +7404,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st195;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st200:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof200;
 		st_case_200:
+		if ( p == pe )
+			goto _out200;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7836,14 +7432,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st196;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st201:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof201;
 		st_case_201:
+		if ( p == pe )
+			goto _out201;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7866,14 +7460,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st197;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st202:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof202;
 		st_case_202:
+		if ( p == pe )
+			goto _out202;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7903,14 +7495,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st204;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st203:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof203;
 		st_case_203:
+		if ( p == pe )
+			goto _out203;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7937,14 +7527,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st196;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st204:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof204;
 		st_case_204:
+		if ( p == pe )
+			goto _out204;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7967,14 +7555,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st196;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st205:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof205;
 		st_case_205:
+		if ( p == pe )
+			goto _out205;
 		switch( ( (*( p))) ) {
 			case 46: {
 				goto _st87;
@@ -7997,14 +7583,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st195;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st206:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof206;
 		st_case_206:
+		if ( p == pe )
+			goto _out206;
 		switch( ( (*( p))) ) {
 			case 58: {
 				goto _st198;
@@ -8024,14 +7608,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st195;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st207:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof207;
 		st_case_207:
+		if ( p == pe )
+			goto _out207;
 		if ( ( (*( p))) < 65 ) {
 			if ( 48 <= ( (*( p))) && ( (*( p))) <= 57 ) {
 				goto _st208;
@@ -8043,14 +7625,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st208;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st208:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof208;
 		st_case_208:
+		if ( p == pe )
+			goto _out208;
 		if ( ( (*( p))) == 46 ) {
 			goto _st209;
 		}
@@ -8065,14 +7645,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st208;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st209:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof209;
 		st_case_209:
+		if ( p == pe )
+			goto _out209;
 		switch( ( (*( p))) ) {
 			case 33: {
 				goto _st210;
@@ -8105,14 +7683,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st210;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st210:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof210;
 		st_case_210:
+		if ( p == pe )
+			goto _out210;
 		switch( ( (*( p))) ) {
 			case 33: {
 				goto _st210;
@@ -8148,22 +7724,20 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st210;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr70:
 		{
 #line 53 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			r1 = p; }
 		
-#line 8160 "gen/ragel/02__uri_rfc3986.c"
+#line 7734 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st211;
 		_st211:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof211;
 		st_case_211:
+		if ( p == pe )
+			goto _out211;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr88;
@@ -8215,34 +7789,32 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st23;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr41:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u1 = p; }
 		
-#line 8227 "gen/ragel/02__uri_rfc3986.c"
+#line 7799 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h3 = p; }
 		
-#line 8233 "gen/ragel/02__uri_rfc3986.c"
+#line 7805 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 8239 "gen/ragel/02__uri_rfc3986.c"
+#line 7811 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st212;
 		_st212:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof212;
 		st_case_212:
+		if ( p == pe )
+			goto _out212;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -8292,14 +7864,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st213:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof213;
 		st_case_213:
+		if ( p == pe )
+			goto _out213;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -8362,14 +7932,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st228;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st214:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof214;
 		st_case_214:
+		if ( p == pe )
+			goto _out214;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -8419,14 +7987,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st215:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof215;
 		st_case_215:
+		if ( p == pe )
+			goto _out215;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -8489,14 +8055,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st224;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st216:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof216;
 		st_case_216:
+		if ( p == pe )
+			goto _out216;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -8546,14 +8110,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st217:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof217;
 		st_case_217:
+		if ( p == pe )
+			goto _out217;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -8616,14 +8178,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st220;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st218:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof218;
 		st_case_218:
+		if ( p == pe )
+			goto _out218;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -8670,14 +8230,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st219:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof219;
 		st_case_219:
+		if ( p == pe )
+			goto _out219;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -8731,14 +8289,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st220;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st220:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof220;
 		st_case_220:
+		if ( p == pe )
+			goto _out220;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -8792,14 +8348,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st218;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st221:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof221;
 		st_case_221:
+		if ( p == pe )
+			goto _out221;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -8860,14 +8414,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st218;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st222:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof222;
 		st_case_222:
+		if ( p == pe )
+			goto _out222;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr108;
@@ -8922,14 +8474,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st223:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof223;
 		st_case_223:
+		if ( p == pe )
+			goto _out223;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -8986,14 +8536,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st224;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st224:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof224;
 		st_case_224:
+		if ( p == pe )
+			goto _out224;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9050,14 +8598,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st216;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st225:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof225;
 		st_case_225:
+		if ( p == pe )
+			goto _out225;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9121,14 +8667,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st216;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st226:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof226;
 		st_case_226:
+		if ( p == pe )
+			goto _out226;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9186,14 +8730,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st227:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof227;
 		st_case_227:
+		if ( p == pe )
+			goto _out227;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9250,14 +8792,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st228;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st228:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof228;
 		st_case_228:
+		if ( p == pe )
+			goto _out228;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9314,14 +8854,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st214;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st229:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof229;
 		st_case_229:
+		if ( p == pe )
+			goto _out229;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9385,14 +8923,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st214;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st230:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof230;
 		st_case_230:
+		if ( p == pe )
+			goto _out230;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9450,34 +8986,32 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr42:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u1 = p; }
 		
-#line 9462 "gen/ragel/02__uri_rfc3986.c"
+#line 8996 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h3 = p; }
 		
-#line 9468 "gen/ragel/02__uri_rfc3986.c"
+#line 9002 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 9474 "gen/ragel/02__uri_rfc3986.c"
+#line 9008 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st231;
 		_st231:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof231;
 		st_case_231:
+		if ( p == pe )
+			goto _out231;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9534,34 +9068,32 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st232;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr44:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u1 = p; }
 		
-#line 9546 "gen/ragel/02__uri_rfc3986.c"
+#line 9078 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h3 = p; }
 		
-#line 9552 "gen/ragel/02__uri_rfc3986.c"
+#line 9084 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 9558 "gen/ragel/02__uri_rfc3986.c"
+#line 9090 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st232;
 		_st232:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof232;
 		st_case_232:
+		if ( p == pe )
+			goto _out232;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9618,34 +9150,32 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st212;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr43:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			u1 = p; }
 		
-#line 9630 "gen/ragel/02__uri_rfc3986.c"
+#line 9160 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 49 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h3 = p; }
 		
-#line 9636 "gen/ragel/02__uri_rfc3986.c"
+#line 9166 "gen/ragel/02__uri_rfc3986.c"
 		
 		{
 #line 50 "../../../benchmarks/submatch_dfa_aot/src/ragel/02__uri_rfc3986.rl"
 			h5 = p; }
 		
-#line 9642 "gen/ragel/02__uri_rfc3986.c"
+#line 9172 "gen/ragel/02__uri_rfc3986.c"
 		
 		goto _st233;
 		_st233:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof233;
 		st_case_233:
+		if ( p == pe )
+			goto _out233;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9709,14 +9239,12 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st212;
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_st234:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof234;
 		st_case_234:
+		if ( p == pe )
+			goto _out234;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -9774,249 +9302,243 @@ static void lex(Input *in, Output *out)
 		} else {
 			goto _st16;
 		}
-		{
-			goto _st0;
-		}
-		st_out:
-		_test_eof235: cs = 235; goto _test_eof; 
-		_test_eof1: cs = 1; goto _test_eof; 
-		_test_eof2: cs = 2; goto _test_eof; 
-		_test_eof3: cs = 3; goto _test_eof; 
-		_test_eof4: cs = 4; goto _test_eof; 
-		_test_eof5: cs = 5; goto _test_eof; 
-		_test_eof6: cs = 6; goto _test_eof; 
-		_test_eof7: cs = 7; goto _test_eof; 
-		_test_eof8: cs = 8; goto _test_eof; 
-		_test_eof9: cs = 9; goto _test_eof; 
-		_test_eof10: cs = 10; goto _test_eof; 
-		_test_eof11: cs = 11; goto _test_eof; 
-		_test_eof12: cs = 12; goto _test_eof; 
-		_test_eof13: cs = 13; goto _test_eof; 
-		_test_eof14: cs = 14; goto _test_eof; 
-		_test_eof15: cs = 15; goto _test_eof; 
-		_test_eof16: cs = 16; goto _test_eof; 
-		_test_eof17: cs = 17; goto _test_eof; 
-		_test_eof18: cs = 18; goto _test_eof; 
-		_test_eof19: cs = 19; goto _test_eof; 
-		_test_eof20: cs = 20; goto _test_eof; 
-		_test_eof21: cs = 21; goto _test_eof; 
-		_test_eof22: cs = 22; goto _test_eof; 
-		_test_eof23: cs = 23; goto _test_eof; 
-		_test_eof24: cs = 24; goto _test_eof; 
-		_test_eof25: cs = 25; goto _test_eof; 
-		_test_eof26: cs = 26; goto _test_eof; 
-		_test_eof27: cs = 27; goto _test_eof; 
-		_test_eof28: cs = 28; goto _test_eof; 
-		_test_eof29: cs = 29; goto _test_eof; 
-		_test_eof30: cs = 30; goto _test_eof; 
-		_test_eof31: cs = 31; goto _test_eof; 
-		_test_eof32: cs = 32; goto _test_eof; 
-		_test_eof33: cs = 33; goto _test_eof; 
-		_test_eof34: cs = 34; goto _test_eof; 
-		_test_eof35: cs = 35; goto _test_eof; 
-		_test_eof36: cs = 36; goto _test_eof; 
-		_test_eof37: cs = 37; goto _test_eof; 
-		_test_eof38: cs = 38; goto _test_eof; 
-		_test_eof39: cs = 39; goto _test_eof; 
-		_test_eof40: cs = 40; goto _test_eof; 
-		_test_eof41: cs = 41; goto _test_eof; 
-		_test_eof42: cs = 42; goto _test_eof; 
-		_test_eof43: cs = 43; goto _test_eof; 
-		_test_eof44: cs = 44; goto _test_eof; 
-		_test_eof45: cs = 45; goto _test_eof; 
-		_test_eof46: cs = 46; goto _test_eof; 
-		_test_eof47: cs = 47; goto _test_eof; 
-		_test_eof48: cs = 48; goto _test_eof; 
-		_test_eof49: cs = 49; goto _test_eof; 
-		_test_eof50: cs = 50; goto _test_eof; 
-		_test_eof51: cs = 51; goto _test_eof; 
-		_test_eof52: cs = 52; goto _test_eof; 
-		_test_eof53: cs = 53; goto _test_eof; 
-		_test_eof54: cs = 54; goto _test_eof; 
-		_test_eof55: cs = 55; goto _test_eof; 
-		_test_eof56: cs = 56; goto _test_eof; 
-		_test_eof57: cs = 57; goto _test_eof; 
-		_test_eof58: cs = 58; goto _test_eof; 
-		_test_eof59: cs = 59; goto _test_eof; 
-		_test_eof60: cs = 60; goto _test_eof; 
-		_test_eof61: cs = 61; goto _test_eof; 
-		_test_eof62: cs = 62; goto _test_eof; 
-		_test_eof63: cs = 63; goto _test_eof; 
-		_test_eof64: cs = 64; goto _test_eof; 
-		_test_eof65: cs = 65; goto _test_eof; 
-		_test_eof66: cs = 66; goto _test_eof; 
-		_test_eof67: cs = 67; goto _test_eof; 
-		_test_eof68: cs = 68; goto _test_eof; 
-		_test_eof69: cs = 69; goto _test_eof; 
-		_test_eof70: cs = 70; goto _test_eof; 
-		_test_eof71: cs = 71; goto _test_eof; 
-		_test_eof72: cs = 72; goto _test_eof; 
-		_test_eof73: cs = 73; goto _test_eof; 
-		_test_eof74: cs = 74; goto _test_eof; 
-		_test_eof75: cs = 75; goto _test_eof; 
-		_test_eof76: cs = 76; goto _test_eof; 
-		_test_eof77: cs = 77; goto _test_eof; 
-		_test_eof78: cs = 78; goto _test_eof; 
-		_test_eof79: cs = 79; goto _test_eof; 
-		_test_eof80: cs = 80; goto _test_eof; 
-		_test_eof81: cs = 81; goto _test_eof; 
-		_test_eof82: cs = 82; goto _test_eof; 
-		_test_eof83: cs = 83; goto _test_eof; 
-		_test_eof84: cs = 84; goto _test_eof; 
-		_test_eof85: cs = 85; goto _test_eof; 
-		_test_eof86: cs = 86; goto _test_eof; 
-		_test_eof87: cs = 87; goto _test_eof; 
-		_test_eof88: cs = 88; goto _test_eof; 
-		_test_eof89: cs = 89; goto _test_eof; 
-		_test_eof90: cs = 90; goto _test_eof; 
-		_test_eof91: cs = 91; goto _test_eof; 
-		_test_eof92: cs = 92; goto _test_eof; 
-		_test_eof93: cs = 93; goto _test_eof; 
-		_test_eof94: cs = 94; goto _test_eof; 
-		_test_eof95: cs = 95; goto _test_eof; 
-		_test_eof96: cs = 96; goto _test_eof; 
-		_test_eof97: cs = 97; goto _test_eof; 
-		_test_eof98: cs = 98; goto _test_eof; 
-		_test_eof99: cs = 99; goto _test_eof; 
-		_test_eof100: cs = 100; goto _test_eof; 
-		_test_eof101: cs = 101; goto _test_eof; 
-		_test_eof102: cs = 102; goto _test_eof; 
-		_test_eof103: cs = 103; goto _test_eof; 
-		_test_eof104: cs = 104; goto _test_eof; 
-		_test_eof105: cs = 105; goto _test_eof; 
-		_test_eof106: cs = 106; goto _test_eof; 
-		_test_eof107: cs = 107; goto _test_eof; 
-		_test_eof108: cs = 108; goto _test_eof; 
-		_test_eof109: cs = 109; goto _test_eof; 
-		_test_eof110: cs = 110; goto _test_eof; 
-		_test_eof111: cs = 111; goto _test_eof; 
-		_test_eof112: cs = 112; goto _test_eof; 
-		_test_eof113: cs = 113; goto _test_eof; 
-		_test_eof114: cs = 114; goto _test_eof; 
-		_test_eof115: cs = 115; goto _test_eof; 
-		_test_eof116: cs = 116; goto _test_eof; 
-		_test_eof117: cs = 117; goto _test_eof; 
-		_test_eof118: cs = 118; goto _test_eof; 
-		_test_eof119: cs = 119; goto _test_eof; 
-		_test_eof120: cs = 120; goto _test_eof; 
-		_test_eof121: cs = 121; goto _test_eof; 
-		_test_eof122: cs = 122; goto _test_eof; 
-		_test_eof123: cs = 123; goto _test_eof; 
-		_test_eof124: cs = 124; goto _test_eof; 
-		_test_eof125: cs = 125; goto _test_eof; 
-		_test_eof126: cs = 126; goto _test_eof; 
-		_test_eof127: cs = 127; goto _test_eof; 
-		_test_eof128: cs = 128; goto _test_eof; 
-		_test_eof129: cs = 129; goto _test_eof; 
-		_test_eof130: cs = 130; goto _test_eof; 
-		_test_eof131: cs = 131; goto _test_eof; 
-		_test_eof132: cs = 132; goto _test_eof; 
-		_test_eof133: cs = 133; goto _test_eof; 
-		_test_eof134: cs = 134; goto _test_eof; 
-		_test_eof135: cs = 135; goto _test_eof; 
-		_test_eof136: cs = 136; goto _test_eof; 
-		_test_eof137: cs = 137; goto _test_eof; 
-		_test_eof138: cs = 138; goto _test_eof; 
-		_test_eof139: cs = 139; goto _test_eof; 
-		_test_eof140: cs = 140; goto _test_eof; 
-		_test_eof141: cs = 141; goto _test_eof; 
-		_test_eof142: cs = 142; goto _test_eof; 
-		_test_eof143: cs = 143; goto _test_eof; 
-		_test_eof144: cs = 144; goto _test_eof; 
-		_test_eof145: cs = 145; goto _test_eof; 
-		_test_eof146: cs = 146; goto _test_eof; 
-		_test_eof147: cs = 147; goto _test_eof; 
-		_test_eof148: cs = 148; goto _test_eof; 
-		_test_eof149: cs = 149; goto _test_eof; 
-		_test_eof150: cs = 150; goto _test_eof; 
-		_test_eof151: cs = 151; goto _test_eof; 
-		_test_eof152: cs = 152; goto _test_eof; 
-		_test_eof153: cs = 153; goto _test_eof; 
-		_test_eof154: cs = 154; goto _test_eof; 
-		_test_eof155: cs = 155; goto _test_eof; 
-		_test_eof156: cs = 156; goto _test_eof; 
-		_test_eof157: cs = 157; goto _test_eof; 
-		_test_eof158: cs = 158; goto _test_eof; 
-		_test_eof159: cs = 159; goto _test_eof; 
-		_test_eof160: cs = 160; goto _test_eof; 
-		_test_eof161: cs = 161; goto _test_eof; 
-		_test_eof162: cs = 162; goto _test_eof; 
-		_test_eof163: cs = 163; goto _test_eof; 
-		_test_eof164: cs = 164; goto _test_eof; 
-		_test_eof165: cs = 165; goto _test_eof; 
-		_test_eof166: cs = 166; goto _test_eof; 
-		_test_eof167: cs = 167; goto _test_eof; 
-		_test_eof168: cs = 168; goto _test_eof; 
-		_test_eof169: cs = 169; goto _test_eof; 
-		_test_eof170: cs = 170; goto _test_eof; 
-		_test_eof171: cs = 171; goto _test_eof; 
-		_test_eof172: cs = 172; goto _test_eof; 
-		_test_eof173: cs = 173; goto _test_eof; 
-		_test_eof174: cs = 174; goto _test_eof; 
-		_test_eof175: cs = 175; goto _test_eof; 
-		_test_eof176: cs = 176; goto _test_eof; 
-		_test_eof177: cs = 177; goto _test_eof; 
-		_test_eof178: cs = 178; goto _test_eof; 
-		_test_eof179: cs = 179; goto _test_eof; 
-		_test_eof180: cs = 180; goto _test_eof; 
-		_test_eof181: cs = 181; goto _test_eof; 
-		_test_eof182: cs = 182; goto _test_eof; 
-		_test_eof183: cs = 183; goto _test_eof; 
-		_test_eof184: cs = 184; goto _test_eof; 
-		_test_eof185: cs = 185; goto _test_eof; 
-		_test_eof186: cs = 186; goto _test_eof; 
-		_test_eof187: cs = 187; goto _test_eof; 
-		_test_eof188: cs = 188; goto _test_eof; 
-		_test_eof189: cs = 189; goto _test_eof; 
-		_test_eof190: cs = 190; goto _test_eof; 
-		_test_eof191: cs = 191; goto _test_eof; 
-		_test_eof192: cs = 192; goto _test_eof; 
-		_test_eof193: cs = 193; goto _test_eof; 
-		_test_eof194: cs = 194; goto _test_eof; 
-		_test_eof195: cs = 195; goto _test_eof; 
-		_test_eof196: cs = 196; goto _test_eof; 
-		_test_eof197: cs = 197; goto _test_eof; 
-		_test_eof198: cs = 198; goto _test_eof; 
-		_test_eof199: cs = 199; goto _test_eof; 
-		_test_eof200: cs = 200; goto _test_eof; 
-		_test_eof201: cs = 201; goto _test_eof; 
-		_test_eof202: cs = 202; goto _test_eof; 
-		_test_eof203: cs = 203; goto _test_eof; 
-		_test_eof204: cs = 204; goto _test_eof; 
-		_test_eof205: cs = 205; goto _test_eof; 
-		_test_eof206: cs = 206; goto _test_eof; 
-		_test_eof207: cs = 207; goto _test_eof; 
-		_test_eof208: cs = 208; goto _test_eof; 
-		_test_eof209: cs = 209; goto _test_eof; 
-		_test_eof210: cs = 210; goto _test_eof; 
-		_test_eof211: cs = 211; goto _test_eof; 
-		_test_eof212: cs = 212; goto _test_eof; 
-		_test_eof213: cs = 213; goto _test_eof; 
-		_test_eof214: cs = 214; goto _test_eof; 
-		_test_eof215: cs = 215; goto _test_eof; 
-		_test_eof216: cs = 216; goto _test_eof; 
-		_test_eof217: cs = 217; goto _test_eof; 
-		_test_eof218: cs = 218; goto _test_eof; 
-		_test_eof219: cs = 219; goto _test_eof; 
-		_test_eof220: cs = 220; goto _test_eof; 
-		_test_eof221: cs = 221; goto _test_eof; 
-		_test_eof222: cs = 222; goto _test_eof; 
-		_test_eof223: cs = 223; goto _test_eof; 
-		_test_eof224: cs = 224; goto _test_eof; 
-		_test_eof225: cs = 225; goto _test_eof; 
-		_test_eof226: cs = 226; goto _test_eof; 
-		_test_eof227: cs = 227; goto _test_eof; 
-		_test_eof228: cs = 228; goto _test_eof; 
-		_test_eof229: cs = 229; goto _test_eof; 
-		_test_eof230: cs = 230; goto _test_eof; 
-		_test_eof231: cs = 231; goto _test_eof; 
-		_test_eof232: cs = 232; goto _test_eof; 
-		_test_eof233: cs = 233; goto _test_eof; 
-		_test_eof234: cs = 234; goto _test_eof; 
-		
-		_test_eof: {}
-		if ( cs >= 235 )
-			goto _out; _pop: {}
+		goto _st0;
+		_out235: cs = 235; goto _out; 
+		_out0: cs = 0; goto _out; 
+		_out1: cs = 1; goto _out; 
+		_out2: cs = 2; goto _out; 
+		_out3: cs = 3; goto _out; 
+		_out4: cs = 4; goto _out; 
+		_out5: cs = 5; goto _out; 
+		_out6: cs = 6; goto _out; 
+		_out7: cs = 7; goto _out; 
+		_out8: cs = 8; goto _out; 
+		_out9: cs = 9; goto _out; 
+		_out10: cs = 10; goto _out; 
+		_out11: cs = 11; goto _out; 
+		_out12: cs = 12; goto _out; 
+		_out13: cs = 13; goto _out; 
+		_out14: cs = 14; goto _out; 
+		_out15: cs = 15; goto _out; 
+		_out16: cs = 16; goto _out; 
+		_out17: cs = 17; goto _out; 
+		_out18: cs = 18; goto _out; 
+		_out19: cs = 19; goto _out; 
+		_out20: cs = 20; goto _out; 
+		_out21: cs = 21; goto _out; 
+		_out22: cs = 22; goto _out; 
+		_out23: cs = 23; goto _out; 
+		_out24: cs = 24; goto _out; 
+		_out25: cs = 25; goto _out; 
+		_out26: cs = 26; goto _out; 
+		_out27: cs = 27; goto _out; 
+		_out28: cs = 28; goto _out; 
+		_out29: cs = 29; goto _out; 
+		_out30: cs = 30; goto _out; 
+		_out31: cs = 31; goto _out; 
+		_out32: cs = 32; goto _out; 
+		_out33: cs = 33; goto _out; 
+		_out34: cs = 34; goto _out; 
+		_out35: cs = 35; goto _out; 
+		_out36: cs = 36; goto _out; 
+		_out37: cs = 37; goto _out; 
+		_out38: cs = 38; goto _out; 
+		_out39: cs = 39; goto _out; 
+		_out40: cs = 40; goto _out; 
+		_out41: cs = 41; goto _out; 
+		_out42: cs = 42; goto _out; 
+		_out43: cs = 43; goto _out; 
+		_out44: cs = 44; goto _out; 
+		_out45: cs = 45; goto _out; 
+		_out46: cs = 46; goto _out; 
+		_out47: cs = 47; goto _out; 
+		_out48: cs = 48; goto _out; 
+		_out49: cs = 49; goto _out; 
+		_out50: cs = 50; goto _out; 
+		_out51: cs = 51; goto _out; 
+		_out52: cs = 52; goto _out; 
+		_out53: cs = 53; goto _out; 
+		_out54: cs = 54; goto _out; 
+		_out55: cs = 55; goto _out; 
+		_out56: cs = 56; goto _out; 
+		_out57: cs = 57; goto _out; 
+		_out58: cs = 58; goto _out; 
+		_out59: cs = 59; goto _out; 
+		_out60: cs = 60; goto _out; 
+		_out61: cs = 61; goto _out; 
+		_out62: cs = 62; goto _out; 
+		_out63: cs = 63; goto _out; 
+		_out64: cs = 64; goto _out; 
+		_out65: cs = 65; goto _out; 
+		_out66: cs = 66; goto _out; 
+		_out67: cs = 67; goto _out; 
+		_out68: cs = 68; goto _out; 
+		_out69: cs = 69; goto _out; 
+		_out70: cs = 70; goto _out; 
+		_out71: cs = 71; goto _out; 
+		_out72: cs = 72; goto _out; 
+		_out73: cs = 73; goto _out; 
+		_out74: cs = 74; goto _out; 
+		_out75: cs = 75; goto _out; 
+		_out76: cs = 76; goto _out; 
+		_out77: cs = 77; goto _out; 
+		_out78: cs = 78; goto _out; 
+		_out79: cs = 79; goto _out; 
+		_out80: cs = 80; goto _out; 
+		_out81: cs = 81; goto _out; 
+		_out82: cs = 82; goto _out; 
+		_out83: cs = 83; goto _out; 
+		_out84: cs = 84; goto _out; 
+		_out85: cs = 85; goto _out; 
+		_out86: cs = 86; goto _out; 
+		_out87: cs = 87; goto _out; 
+		_out88: cs = 88; goto _out; 
+		_out89: cs = 89; goto _out; 
+		_out90: cs = 90; goto _out; 
+		_out91: cs = 91; goto _out; 
+		_out92: cs = 92; goto _out; 
+		_out93: cs = 93; goto _out; 
+		_out94: cs = 94; goto _out; 
+		_out95: cs = 95; goto _out; 
+		_out96: cs = 96; goto _out; 
+		_out97: cs = 97; goto _out; 
+		_out98: cs = 98; goto _out; 
+		_out99: cs = 99; goto _out; 
+		_out100: cs = 100; goto _out; 
+		_out101: cs = 101; goto _out; 
+		_out102: cs = 102; goto _out; 
+		_out103: cs = 103; goto _out; 
+		_out104: cs = 104; goto _out; 
+		_out105: cs = 105; goto _out; 
+		_out106: cs = 106; goto _out; 
+		_out107: cs = 107; goto _out; 
+		_out108: cs = 108; goto _out; 
+		_out109: cs = 109; goto _out; 
+		_out110: cs = 110; goto _out; 
+		_out111: cs = 111; goto _out; 
+		_out112: cs = 112; goto _out; 
+		_out113: cs = 113; goto _out; 
+		_out114: cs = 114; goto _out; 
+		_out115: cs = 115; goto _out; 
+		_out116: cs = 116; goto _out; 
+		_out117: cs = 117; goto _out; 
+		_out118: cs = 118; goto _out; 
+		_out119: cs = 119; goto _out; 
+		_out120: cs = 120; goto _out; 
+		_out121: cs = 121; goto _out; 
+		_out122: cs = 122; goto _out; 
+		_out123: cs = 123; goto _out; 
+		_out124: cs = 124; goto _out; 
+		_out125: cs = 125; goto _out; 
+		_out126: cs = 126; goto _out; 
+		_out127: cs = 127; goto _out; 
+		_out128: cs = 128; goto _out; 
+		_out129: cs = 129; goto _out; 
+		_out130: cs = 130; goto _out; 
+		_out131: cs = 131; goto _out; 
+		_out132: cs = 132; goto _out; 
+		_out133: cs = 133; goto _out; 
+		_out134: cs = 134; goto _out; 
+		_out135: cs = 135; goto _out; 
+		_out136: cs = 136; goto _out; 
+		_out137: cs = 137; goto _out; 
+		_out138: cs = 138; goto _out; 
+		_out139: cs = 139; goto _out; 
+		_out140: cs = 140; goto _out; 
+		_out141: cs = 141; goto _out; 
+		_out142: cs = 142; goto _out; 
+		_out143: cs = 143; goto _out; 
+		_out144: cs = 144; goto _out; 
+		_out145: cs = 145; goto _out; 
+		_out146: cs = 146; goto _out; 
+		_out147: cs = 147; goto _out; 
+		_out148: cs = 148; goto _out; 
+		_out149: cs = 149; goto _out; 
+		_out150: cs = 150; goto _out; 
+		_out151: cs = 151; goto _out; 
+		_out152: cs = 152; goto _out; 
+		_out153: cs = 153; goto _out; 
+		_out154: cs = 154; goto _out; 
+		_out155: cs = 155; goto _out; 
+		_out156: cs = 156; goto _out; 
+		_out157: cs = 157; goto _out; 
+		_out158: cs = 158; goto _out; 
+		_out159: cs = 159; goto _out; 
+		_out160: cs = 160; goto _out; 
+		_out161: cs = 161; goto _out; 
+		_out162: cs = 162; goto _out; 
+		_out163: cs = 163; goto _out; 
+		_out164: cs = 164; goto _out; 
+		_out165: cs = 165; goto _out; 
+		_out166: cs = 166; goto _out; 
+		_out167: cs = 167; goto _out; 
+		_out168: cs = 168; goto _out; 
+		_out169: cs = 169; goto _out; 
+		_out170: cs = 170; goto _out; 
+		_out171: cs = 171; goto _out; 
+		_out172: cs = 172; goto _out; 
+		_out173: cs = 173; goto _out; 
+		_out174: cs = 174; goto _out; 
+		_out175: cs = 175; goto _out; 
+		_out176: cs = 176; goto _out; 
+		_out177: cs = 177; goto _out; 
+		_out178: cs = 178; goto _out; 
+		_out179: cs = 179; goto _out; 
+		_out180: cs = 180; goto _out; 
+		_out181: cs = 181; goto _out; 
+		_out182: cs = 182; goto _out; 
+		_out183: cs = 183; goto _out; 
+		_out184: cs = 184; goto _out; 
+		_out185: cs = 185; goto _out; 
+		_out186: cs = 186; goto _out; 
+		_out187: cs = 187; goto _out; 
+		_out188: cs = 188; goto _out; 
+		_out189: cs = 189; goto _out; 
+		_out190: cs = 190; goto _out; 
+		_out191: cs = 191; goto _out; 
+		_out192: cs = 192; goto _out; 
+		_out193: cs = 193; goto _out; 
+		_out194: cs = 194; goto _out; 
+		_out195: cs = 195; goto _out; 
+		_out196: cs = 196; goto _out; 
+		_out197: cs = 197; goto _out; 
+		_out198: cs = 198; goto _out; 
+		_out199: cs = 199; goto _out; 
+		_out200: cs = 200; goto _out; 
+		_out201: cs = 201; goto _out; 
+		_out202: cs = 202; goto _out; 
+		_out203: cs = 203; goto _out; 
+		_out204: cs = 204; goto _out; 
+		_out205: cs = 205; goto _out; 
+		_out206: cs = 206; goto _out; 
+		_out207: cs = 207; goto _out; 
+		_out208: cs = 208; goto _out; 
+		_out209: cs = 209; goto _out; 
+		_out210: cs = 210; goto _out; 
+		_out211: cs = 211; goto _out; 
+		_out212: cs = 212; goto _out; 
+		_out213: cs = 213; goto _out; 
+		_out214: cs = 214; goto _out; 
+		_out215: cs = 215; goto _out; 
+		_out216: cs = 216; goto _out; 
+		_out217: cs = 217; goto _out; 
+		_out218: cs = 218; goto _out; 
+		_out219: cs = 219; goto _out; 
+		_out220: cs = 220; goto _out; 
+		_out221: cs = 221; goto _out; 
+		_out222: cs = 222; goto _out; 
+		_out223: cs = 223; goto _out; 
+		_out224: cs = 224; goto _out; 
+		_out225: cs = 225; goto _out; 
+		_out226: cs = 226; goto _out; 
+		_out227: cs = 227; goto _out; 
+		_out228: cs = 228; goto _out; 
+		_out229: cs = 229; goto _out; 
+		_out230: cs = 230; goto _out; 
+		_out231: cs = 231; goto _out; 
+		_out232: cs = 232; goto _out; 
+		_out233: cs = 233; goto _out; 
+		_out234: cs = 234; goto _out; 
 		_out: {}
 	}
 	

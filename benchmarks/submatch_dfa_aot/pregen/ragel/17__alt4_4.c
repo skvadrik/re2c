@@ -46,8 +46,6 @@ static void lex(Input *in, Output *out)
 	
 #line 48 "gen/ragel/17__alt4_4.c"
 	{
-		if ( p == pe )
-			goto _test_eof;
 		switch ( cs ) {
 			case 17:
 			goto st_case_17;
@@ -86,157 +84,156 @@ static void lex(Input *in, Output *out)
 			case 16:
 			goto st_case_16;
 		}
-		goto st_out;
 		_ctr2:
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = NULL; }
 		
-#line 96 "gen/ragel/17__alt4_4.c"
+#line 93 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b3 = p; }
 		
-#line 102 "gen/ragel/17__alt4_4.c"
+#line 99 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 108 "gen/ragel/17__alt4_4.c"
+#line 105 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c3 = p; }
 		
-#line 114 "gen/ragel/17__alt4_4.c"
+#line 111 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = NULL; }
 		
-#line 120 "gen/ragel/17__alt4_4.c"
+#line 117 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d3 = p; }
 		
-#line 126 "gen/ragel/17__alt4_4.c"
+#line 123 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = NULL; }
 		
-#line 132 "gen/ragel/17__alt4_4.c"
+#line 129 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a3 = p; }
 		
-#line 138 "gen/ragel/17__alt4_4.c"
+#line 135 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 144 "gen/ragel/17__alt4_4.c"
+#line 141 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 150 "gen/ragel/17__alt4_4.c"
+#line 147 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 156 "gen/ragel/17__alt4_4.c"
+#line 153 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 162 "gen/ragel/17__alt4_4.c"
+#line 159 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 168 "gen/ragel/17__alt4_4.c"
+#line 165 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 174 "gen/ragel/17__alt4_4.c"
+#line 171 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 180 "gen/ragel/17__alt4_4.c"
+#line 177 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 186 "gen/ragel/17__alt4_4.c"
+#line 183 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 192 "gen/ragel/17__alt4_4.c"
+#line 189 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 198 "gen/ragel/17__alt4_4.c"
+#line 195 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 204 "gen/ragel/17__alt4_4.c"
+#line 201 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 210 "gen/ragel/17__alt4_4.c"
+#line 207 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 216 "gen/ragel/17__alt4_4.c"
+#line 213 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 222 "gen/ragel/17__alt4_4.c"
+#line 219 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 228 "gen/ragel/17__alt4_4.c"
+#line 225 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 234 "gen/ragel/17__alt4_4.c"
+#line 231 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 240 "gen/ragel/17__alt4_4.c"
+#line 237 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -260,7 +257,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 264 "gen/ragel/17__alt4_4.c"
+#line 261 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr7:
@@ -268,103 +265,103 @@ static void lex(Input *in, Output *out)
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 272 "gen/ragel/17__alt4_4.c"
+#line 269 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 278 "gen/ragel/17__alt4_4.c"
+#line 275 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 284 "gen/ragel/17__alt4_4.c"
+#line 281 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 290 "gen/ragel/17__alt4_4.c"
+#line 287 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 296 "gen/ragel/17__alt4_4.c"
+#line 293 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 302 "gen/ragel/17__alt4_4.c"
+#line 299 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 308 "gen/ragel/17__alt4_4.c"
+#line 305 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 314 "gen/ragel/17__alt4_4.c"
+#line 311 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 320 "gen/ragel/17__alt4_4.c"
+#line 317 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 326 "gen/ragel/17__alt4_4.c"
+#line 323 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 332 "gen/ragel/17__alt4_4.c"
+#line 329 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 338 "gen/ragel/17__alt4_4.c"
+#line 335 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 344 "gen/ragel/17__alt4_4.c"
+#line 341 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 350 "gen/ragel/17__alt4_4.c"
+#line 347 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 356 "gen/ragel/17__alt4_4.c"
+#line 353 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 362 "gen/ragel/17__alt4_4.c"
+#line 359 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 368 "gen/ragel/17__alt4_4.c"
+#line 365 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -388,7 +385,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 392 "gen/ragel/17__alt4_4.c"
+#line 389 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr12:
@@ -396,55 +393,55 @@ static void lex(Input *in, Output *out)
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 400 "gen/ragel/17__alt4_4.c"
+#line 397 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 406 "gen/ragel/17__alt4_4.c"
+#line 403 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 412 "gen/ragel/17__alt4_4.c"
+#line 409 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 418 "gen/ragel/17__alt4_4.c"
+#line 415 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 424 "gen/ragel/17__alt4_4.c"
+#line 421 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 430 "gen/ragel/17__alt4_4.c"
+#line 427 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 436 "gen/ragel/17__alt4_4.c"
+#line 433 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 442 "gen/ragel/17__alt4_4.c"
+#line 439 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 448 "gen/ragel/17__alt4_4.c"
+#line 445 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -468,7 +465,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 472 "gen/ragel/17__alt4_4.c"
+#line 469 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr17:
@@ -476,7 +473,7 @@ static void lex(Input *in, Output *out)
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 480 "gen/ragel/17__alt4_4.c"
+#line 477 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -500,7 +497,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 504 "gen/ragel/17__alt4_4.c"
+#line 501 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr19:
@@ -508,7 +505,7 @@ static void lex(Input *in, Output *out)
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 512 "gen/ragel/17__alt4_4.c"
+#line 509 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -532,7 +529,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 536 "gen/ragel/17__alt4_4.c"
+#line 533 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr21:
@@ -540,7 +537,7 @@ static void lex(Input *in, Output *out)
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 544 "gen/ragel/17__alt4_4.c"
+#line 541 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -564,7 +561,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 568 "gen/ragel/17__alt4_4.c"
+#line 565 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr23:
@@ -572,55 +569,55 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 576 "gen/ragel/17__alt4_4.c"
+#line 573 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 582 "gen/ragel/17__alt4_4.c"
+#line 579 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 588 "gen/ragel/17__alt4_4.c"
+#line 585 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 594 "gen/ragel/17__alt4_4.c"
+#line 591 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 600 "gen/ragel/17__alt4_4.c"
+#line 597 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 606 "gen/ragel/17__alt4_4.c"
+#line 603 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 612 "gen/ragel/17__alt4_4.c"
+#line 609 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 618 "gen/ragel/17__alt4_4.c"
+#line 615 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 624 "gen/ragel/17__alt4_4.c"
+#line 621 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -644,7 +641,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 648 "gen/ragel/17__alt4_4.c"
+#line 645 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr28:
@@ -652,7 +649,7 @@ static void lex(Input *in, Output *out)
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 656 "gen/ragel/17__alt4_4.c"
+#line 653 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -676,7 +673,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 680 "gen/ragel/17__alt4_4.c"
+#line 677 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr30:
@@ -684,55 +681,55 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 688 "gen/ragel/17__alt4_4.c"
+#line 685 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 694 "gen/ragel/17__alt4_4.c"
+#line 691 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 700 "gen/ragel/17__alt4_4.c"
+#line 697 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 706 "gen/ragel/17__alt4_4.c"
+#line 703 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 712 "gen/ragel/17__alt4_4.c"
+#line 709 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 718 "gen/ragel/17__alt4_4.c"
+#line 715 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 724 "gen/ragel/17__alt4_4.c"
+#line 721 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 730 "gen/ragel/17__alt4_4.c"
+#line 727 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 736 "gen/ragel/17__alt4_4.c"
+#line 733 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -756,7 +753,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 760 "gen/ragel/17__alt4_4.c"
+#line 757 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr35:
@@ -764,103 +761,103 @@ static void lex(Input *in, Output *out)
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = NULL; }
 		
-#line 768 "gen/ragel/17__alt4_4.c"
+#line 765 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 774 "gen/ragel/17__alt4_4.c"
+#line 771 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 780 "gen/ragel/17__alt4_4.c"
+#line 777 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 786 "gen/ragel/17__alt4_4.c"
+#line 783 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 792 "gen/ragel/17__alt4_4.c"
+#line 789 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 798 "gen/ragel/17__alt4_4.c"
+#line 795 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 804 "gen/ragel/17__alt4_4.c"
+#line 801 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 810 "gen/ragel/17__alt4_4.c"
+#line 807 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 816 "gen/ragel/17__alt4_4.c"
+#line 813 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 822 "gen/ragel/17__alt4_4.c"
+#line 819 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 828 "gen/ragel/17__alt4_4.c"
+#line 825 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 834 "gen/ragel/17__alt4_4.c"
+#line 831 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 840 "gen/ragel/17__alt4_4.c"
+#line 837 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 846 "gen/ragel/17__alt4_4.c"
+#line 843 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 852 "gen/ragel/17__alt4_4.c"
+#line 849 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 858 "gen/ragel/17__alt4_4.c"
+#line 855 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 864 "gen/ragel/17__alt4_4.c"
+#line 861 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -884,7 +881,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 888 "gen/ragel/17__alt4_4.c"
+#line 885 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr40:
@@ -892,55 +889,55 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 896 "gen/ragel/17__alt4_4.c"
+#line 893 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 902 "gen/ragel/17__alt4_4.c"
+#line 899 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 908 "gen/ragel/17__alt4_4.c"
+#line 905 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 914 "gen/ragel/17__alt4_4.c"
+#line 911 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 920 "gen/ragel/17__alt4_4.c"
+#line 917 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 926 "gen/ragel/17__alt4_4.c"
+#line 923 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 932 "gen/ragel/17__alt4_4.c"
+#line 929 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 938 "gen/ragel/17__alt4_4.c"
+#line 935 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 944 "gen/ragel/17__alt4_4.c"
+#line 941 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -964,7 +961,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 968 "gen/ragel/17__alt4_4.c"
+#line 965 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr45:
@@ -972,103 +969,103 @@ static void lex(Input *in, Output *out)
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = NULL; }
 		
-#line 976 "gen/ragel/17__alt4_4.c"
+#line 973 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 982 "gen/ragel/17__alt4_4.c"
+#line 979 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 988 "gen/ragel/17__alt4_4.c"
+#line 985 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 994 "gen/ragel/17__alt4_4.c"
+#line 991 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 1000 "gen/ragel/17__alt4_4.c"
+#line 997 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 1006 "gen/ragel/17__alt4_4.c"
+#line 1003 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 1012 "gen/ragel/17__alt4_4.c"
+#line 1009 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 1018 "gen/ragel/17__alt4_4.c"
+#line 1015 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1024 "gen/ragel/17__alt4_4.c"
+#line 1021 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 1030 "gen/ragel/17__alt4_4.c"
+#line 1027 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1036 "gen/ragel/17__alt4_4.c"
+#line 1033 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 1042 "gen/ragel/17__alt4_4.c"
+#line 1039 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 1048 "gen/ragel/17__alt4_4.c"
+#line 1045 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 1054 "gen/ragel/17__alt4_4.c"
+#line 1051 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 1060 "gen/ragel/17__alt4_4.c"
+#line 1057 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 1066 "gen/ragel/17__alt4_4.c"
+#line 1063 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1072 "gen/ragel/17__alt4_4.c"
+#line 1069 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -1092,7 +1089,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1096 "gen/ragel/17__alt4_4.c"
+#line 1093 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr50:
@@ -1100,151 +1097,151 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = NULL; }
 		
-#line 1104 "gen/ragel/17__alt4_4.c"
+#line 1101 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b3 = p; }
 		
-#line 1110 "gen/ragel/17__alt4_4.c"
+#line 1107 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 1116 "gen/ragel/17__alt4_4.c"
+#line 1113 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c3 = p; }
 		
-#line 1122 "gen/ragel/17__alt4_4.c"
+#line 1119 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = NULL; }
 		
-#line 1128 "gen/ragel/17__alt4_4.c"
+#line 1125 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d3 = p; }
 		
-#line 1134 "gen/ragel/17__alt4_4.c"
+#line 1131 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = NULL; }
 		
-#line 1140 "gen/ragel/17__alt4_4.c"
+#line 1137 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a3 = p; }
 		
-#line 1146 "gen/ragel/17__alt4_4.c"
+#line 1143 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 1152 "gen/ragel/17__alt4_4.c"
+#line 1149 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 1158 "gen/ragel/17__alt4_4.c"
+#line 1155 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1164 "gen/ragel/17__alt4_4.c"
+#line 1161 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 1170 "gen/ragel/17__alt4_4.c"
+#line 1167 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 1176 "gen/ragel/17__alt4_4.c"
+#line 1173 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 1182 "gen/ragel/17__alt4_4.c"
+#line 1179 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 1188 "gen/ragel/17__alt4_4.c"
+#line 1185 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 1194 "gen/ragel/17__alt4_4.c"
+#line 1191 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1200 "gen/ragel/17__alt4_4.c"
+#line 1197 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 1206 "gen/ragel/17__alt4_4.c"
+#line 1203 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1212 "gen/ragel/17__alt4_4.c"
+#line 1209 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 1218 "gen/ragel/17__alt4_4.c"
+#line 1215 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 1224 "gen/ragel/17__alt4_4.c"
+#line 1221 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 1230 "gen/ragel/17__alt4_4.c"
+#line 1227 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 1236 "gen/ragel/17__alt4_4.c"
+#line 1233 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 1242 "gen/ragel/17__alt4_4.c"
+#line 1239 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1248 "gen/ragel/17__alt4_4.c"
+#line 1245 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -1268,7 +1265,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1272 "gen/ragel/17__alt4_4.c"
+#line 1269 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr55:
@@ -1276,103 +1273,103 @@ static void lex(Input *in, Output *out)
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 1280 "gen/ragel/17__alt4_4.c"
+#line 1277 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 1286 "gen/ragel/17__alt4_4.c"
+#line 1283 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1292 "gen/ragel/17__alt4_4.c"
+#line 1289 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 1298 "gen/ragel/17__alt4_4.c"
+#line 1295 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 1304 "gen/ragel/17__alt4_4.c"
+#line 1301 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 1310 "gen/ragel/17__alt4_4.c"
+#line 1307 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 1316 "gen/ragel/17__alt4_4.c"
+#line 1313 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 1322 "gen/ragel/17__alt4_4.c"
+#line 1319 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1328 "gen/ragel/17__alt4_4.c"
+#line 1325 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 1334 "gen/ragel/17__alt4_4.c"
+#line 1331 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1340 "gen/ragel/17__alt4_4.c"
+#line 1337 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 1346 "gen/ragel/17__alt4_4.c"
+#line 1343 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 1352 "gen/ragel/17__alt4_4.c"
+#line 1349 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 1358 "gen/ragel/17__alt4_4.c"
+#line 1355 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 1364 "gen/ragel/17__alt4_4.c"
+#line 1361 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 1370 "gen/ragel/17__alt4_4.c"
+#line 1367 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1376 "gen/ragel/17__alt4_4.c"
+#line 1373 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -1396,7 +1393,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1400 "gen/ragel/17__alt4_4.c"
+#line 1397 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr60:
@@ -1404,151 +1401,151 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = NULL; }
 		
-#line 1408 "gen/ragel/17__alt4_4.c"
+#line 1405 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b3 = p; }
 		
-#line 1414 "gen/ragel/17__alt4_4.c"
+#line 1411 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 1420 "gen/ragel/17__alt4_4.c"
+#line 1417 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c3 = p; }
 		
-#line 1426 "gen/ragel/17__alt4_4.c"
+#line 1423 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = NULL; }
 		
-#line 1432 "gen/ragel/17__alt4_4.c"
+#line 1429 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d3 = p; }
 		
-#line 1438 "gen/ragel/17__alt4_4.c"
+#line 1435 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = NULL; }
 		
-#line 1444 "gen/ragel/17__alt4_4.c"
+#line 1441 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a3 = p; }
 		
-#line 1450 "gen/ragel/17__alt4_4.c"
+#line 1447 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 1456 "gen/ragel/17__alt4_4.c"
+#line 1453 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 1462 "gen/ragel/17__alt4_4.c"
+#line 1459 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1468 "gen/ragel/17__alt4_4.c"
+#line 1465 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 1474 "gen/ragel/17__alt4_4.c"
+#line 1471 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 1480 "gen/ragel/17__alt4_4.c"
+#line 1477 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 1486 "gen/ragel/17__alt4_4.c"
+#line 1483 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 1492 "gen/ragel/17__alt4_4.c"
+#line 1489 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 1498 "gen/ragel/17__alt4_4.c"
+#line 1495 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1504 "gen/ragel/17__alt4_4.c"
+#line 1501 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 1510 "gen/ragel/17__alt4_4.c"
+#line 1507 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1516 "gen/ragel/17__alt4_4.c"
+#line 1513 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 1522 "gen/ragel/17__alt4_4.c"
+#line 1519 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 1528 "gen/ragel/17__alt4_4.c"
+#line 1525 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 1534 "gen/ragel/17__alt4_4.c"
+#line 1531 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 1540 "gen/ragel/17__alt4_4.c"
+#line 1537 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 1546 "gen/ragel/17__alt4_4.c"
+#line 1543 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1552 "gen/ragel/17__alt4_4.c"
+#line 1549 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -1572,7 +1569,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1576 "gen/ragel/17__alt4_4.c"
+#line 1573 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr65:
@@ -1580,151 +1577,151 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = NULL; }
 		
-#line 1584 "gen/ragel/17__alt4_4.c"
+#line 1581 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b3 = p; }
 		
-#line 1590 "gen/ragel/17__alt4_4.c"
+#line 1587 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 1596 "gen/ragel/17__alt4_4.c"
+#line 1593 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c3 = p; }
 		
-#line 1602 "gen/ragel/17__alt4_4.c"
+#line 1599 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = NULL; }
 		
-#line 1608 "gen/ragel/17__alt4_4.c"
+#line 1605 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d3 = p; }
 		
-#line 1614 "gen/ragel/17__alt4_4.c"
+#line 1611 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = NULL; }
 		
-#line 1620 "gen/ragel/17__alt4_4.c"
+#line 1617 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a3 = p; }
 		
-#line 1626 "gen/ragel/17__alt4_4.c"
+#line 1623 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 1632 "gen/ragel/17__alt4_4.c"
+#line 1629 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 1638 "gen/ragel/17__alt4_4.c"
+#line 1635 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1644 "gen/ragel/17__alt4_4.c"
+#line 1641 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 1650 "gen/ragel/17__alt4_4.c"
+#line 1647 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 1656 "gen/ragel/17__alt4_4.c"
+#line 1653 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 1662 "gen/ragel/17__alt4_4.c"
+#line 1659 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 1668 "gen/ragel/17__alt4_4.c"
+#line 1665 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 1674 "gen/ragel/17__alt4_4.c"
+#line 1671 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1680 "gen/ragel/17__alt4_4.c"
+#line 1677 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 1686 "gen/ragel/17__alt4_4.c"
+#line 1683 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1692 "gen/ragel/17__alt4_4.c"
+#line 1689 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 1698 "gen/ragel/17__alt4_4.c"
+#line 1695 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 1704 "gen/ragel/17__alt4_4.c"
+#line 1701 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 1710 "gen/ragel/17__alt4_4.c"
+#line 1707 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 1716 "gen/ragel/17__alt4_4.c"
+#line 1713 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 1722 "gen/ragel/17__alt4_4.c"
+#line 1719 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1728 "gen/ragel/17__alt4_4.c"
+#line 1725 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -1748,7 +1745,7 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1752 "gen/ragel/17__alt4_4.c"
+#line 1749 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_ctr70:
@@ -1756,193 +1753,193 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b1 = p; }
 		
-#line 1760 "gen/ragel/17__alt4_4.c"
+#line 1757 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = NULL; }
 		
-#line 1766 "gen/ragel/17__alt4_4.c"
+#line 1763 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c1 = p; }
 		
-#line 1772 "gen/ragel/17__alt4_4.c"
+#line 1769 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = NULL; }
 		
-#line 1778 "gen/ragel/17__alt4_4.c"
+#line 1775 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d1 = p; }
 		
-#line 1784 "gen/ragel/17__alt4_4.c"
+#line 1781 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = NULL; }
 		
-#line 1790 "gen/ragel/17__alt4_4.c"
+#line 1787 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a1 = p; }
 		
-#line 1796 "gen/ragel/17__alt4_4.c"
+#line 1793 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = NULL; }
 		
-#line 1802 "gen/ragel/17__alt4_4.c"
+#line 1799 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b3 = p; }
 		
-#line 1808 "gen/ragel/17__alt4_4.c"
+#line 1805 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 1814 "gen/ragel/17__alt4_4.c"
+#line 1811 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c3 = p; }
 		
-#line 1820 "gen/ragel/17__alt4_4.c"
+#line 1817 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = NULL; }
 		
-#line 1826 "gen/ragel/17__alt4_4.c"
+#line 1823 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d3 = p; }
 		
-#line 1832 "gen/ragel/17__alt4_4.c"
+#line 1829 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = NULL; }
 		
-#line 1838 "gen/ragel/17__alt4_4.c"
+#line 1835 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a3 = p; }
 		
-#line 1844 "gen/ragel/17__alt4_4.c"
+#line 1841 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 1850 "gen/ragel/17__alt4_4.c"
+#line 1847 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 1856 "gen/ragel/17__alt4_4.c"
+#line 1853 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1862 "gen/ragel/17__alt4_4.c"
+#line 1859 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 1868 "gen/ragel/17__alt4_4.c"
+#line 1865 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 1874 "gen/ragel/17__alt4_4.c"
+#line 1871 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 1880 "gen/ragel/17__alt4_4.c"
+#line 1877 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 1886 "gen/ragel/17__alt4_4.c"
+#line 1883 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 1892 "gen/ragel/17__alt4_4.c"
+#line 1889 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 1898 "gen/ragel/17__alt4_4.c"
+#line 1895 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 1904 "gen/ragel/17__alt4_4.c"
+#line 1901 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b8 = p; a7 = a8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1910 "gen/ragel/17__alt4_4.c"
+#line 1907 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c7 = p; }
 		
-#line 1916 "gen/ragel/17__alt4_4.c"
+#line 1913 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c8 = p; a7 = a8 = b7 = b8 = d7 = d8 = NULL; }
 		
-#line 1922 "gen/ragel/17__alt4_4.c"
+#line 1919 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 1928 "gen/ragel/17__alt4_4.c"
+#line 1925 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d8 = p; a7 = a8 = b7 = b8 = c7 = c8 = NULL; }
 		
-#line 1934 "gen/ragel/17__alt4_4.c"
+#line 1931 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 1940 "gen/ragel/17__alt4_4.c"
+#line 1937 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a8 = p; b7 = b8 = c7 = c8 = d7 = d8 = NULL; }
 		
-#line 1946 "gen/ragel/17__alt4_4.c"
+#line 1943 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 43 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
@@ -1966,14 +1963,14 @@ static void lex(Input *in, Output *out)
 			outc(out, '\n');
 		}
 		
-#line 1970 "gen/ragel/17__alt4_4.c"
+#line 1967 "gen/ragel/17__alt4_4.c"
 		
 		goto _st17;
 		_st17:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof17;
 		st_case_17:
+		if ( p == pe )
+			goto _out17;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr70;
@@ -1991,26 +1988,23 @@ static void lex(Input *in, Output *out)
 				goto _ctr74;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_case_0:
+		goto _st0;
 		_st0:
-		cs = 0;
-		goto _pop;
+		st_case_0:
+		goto _out0;
 		_ctr71:
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a1 = p; }
 		
-#line 2007 "gen/ragel/17__alt4_4.c"
+#line 2001 "gen/ragel/17__alt4_4.c"
 		
 		goto _st1;
 		_st1:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof1;
 		st_case_1:
+		if ( p == pe )
+			goto _out1;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr2;
@@ -2028,21 +2022,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr5;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr3:
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = NULL; }
 		
-#line 2040 "gen/ragel/17__alt4_4.c"
+#line 2032 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b3 = p; }
 		
-#line 2046 "gen/ragel/17__alt4_4.c"
+#line 2038 "gen/ragel/17__alt4_4.c"
 		
 		goto _st2;
 		_ctr62:
@@ -2050,13 +2042,13 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = NULL; }
 		
-#line 2054 "gen/ragel/17__alt4_4.c"
+#line 2046 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b3 = p; }
 		
-#line 2060 "gen/ragel/17__alt4_4.c"
+#line 2052 "gen/ragel/17__alt4_4.c"
 		
 		goto _st2;
 		_ctr67:
@@ -2064,20 +2056,20 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = NULL; }
 		
-#line 2068 "gen/ragel/17__alt4_4.c"
+#line 2060 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b3 = p; }
 		
-#line 2074 "gen/ragel/17__alt4_4.c"
+#line 2066 "gen/ragel/17__alt4_4.c"
 		
 		goto _st2;
 		_st2:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof2;
 		st_case_2:
+		if ( p == pe )
+			goto _out2;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr7;
@@ -2095,21 +2087,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr10;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr8:
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 2107 "gen/ragel/17__alt4_4.c"
+#line 2097 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 2113 "gen/ragel/17__alt4_4.c"
+#line 2103 "gen/ragel/17__alt4_4.c"
 		
 		goto _st3;
 		_ctr36:
@@ -2117,13 +2107,13 @@ static void lex(Input *in, Output *out)
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = NULL; }
 		
-#line 2121 "gen/ragel/17__alt4_4.c"
+#line 2111 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 2127 "gen/ragel/17__alt4_4.c"
+#line 2117 "gen/ragel/17__alt4_4.c"
 		
 		goto _st3;
 		_ctr46:
@@ -2131,20 +2121,20 @@ static void lex(Input *in, Output *out)
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = NULL; }
 		
-#line 2135 "gen/ragel/17__alt4_4.c"
+#line 2125 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a5 = p; }
 		
-#line 2141 "gen/ragel/17__alt4_4.c"
+#line 2131 "gen/ragel/17__alt4_4.c"
 		
 		goto _st3;
 		_st3:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof3;
 		st_case_3:
+		if ( p == pe )
+			goto _out3;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr12;
@@ -2162,21 +2152,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr15;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr13:
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 2174 "gen/ragel/17__alt4_4.c"
+#line 2162 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 2180 "gen/ragel/17__alt4_4.c"
+#line 2168 "gen/ragel/17__alt4_4.c"
 		
 		goto _st4;
 		_ctr25:
@@ -2184,13 +2172,13 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 2188 "gen/ragel/17__alt4_4.c"
+#line 2176 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 2194 "gen/ragel/17__alt4_4.c"
+#line 2182 "gen/ragel/17__alt4_4.c"
 		
 		goto _st4;
 		_ctr32:
@@ -2198,20 +2186,20 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 2202 "gen/ragel/17__alt4_4.c"
+#line 2190 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 38 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b7 = p; }
 		
-#line 2208 "gen/ragel/17__alt4_4.c"
+#line 2196 "gen/ragel/17__alt4_4.c"
 		
 		goto _st4;
 		_st4:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof4;
 		st_case_4:
+		if ( p == pe )
+			goto _out4;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr17;
@@ -2220,13 +2208,25 @@ static void lex(Input *in, Output *out)
 				goto _st4;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr14:
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
+		
+#line 2218 "gen/ragel/17__alt4_4.c"
+		
+		{
+#line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
+			c7 = p; }
+		
+#line 2224 "gen/ragel/17__alt4_4.c"
+		
+		goto _st5;
+		_ctr33:
+		{
+#line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
+			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
 #line 2232 "gen/ragel/17__alt4_4.c"
 		
@@ -2237,10 +2237,10 @@ static void lex(Input *in, Output *out)
 #line 2238 "gen/ragel/17__alt4_4.c"
 		
 		goto _st5;
-		_ctr33:
+		_ctr42:
 		{
-#line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
-			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
+#line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
+			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
 #line 2246 "gen/ragel/17__alt4_4.c"
 		
@@ -2251,25 +2251,11 @@ static void lex(Input *in, Output *out)
 #line 2252 "gen/ragel/17__alt4_4.c"
 		
 		goto _st5;
-		_ctr42:
-		{
-#line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
-			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
-		
-#line 2260 "gen/ragel/17__alt4_4.c"
-		
-		{
-#line 39 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
-			c7 = p; }
-		
-#line 2266 "gen/ragel/17__alt4_4.c"
-		
-		goto _st5;
 		_st5:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof5;
 		st_case_5:
+		if ( p == pe )
+			goto _out5;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr19;
@@ -2278,21 +2264,19 @@ static void lex(Input *in, Output *out)
 				goto _st5;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr15:
 		{
 #line 35 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a6 = p; b5 = b6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 2290 "gen/ragel/17__alt4_4.c"
+#line 2274 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 2296 "gen/ragel/17__alt4_4.c"
+#line 2280 "gen/ragel/17__alt4_4.c"
 		
 		goto _st6;
 		_ctr26:
@@ -2300,13 +2284,13 @@ static void lex(Input *in, Output *out)
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 2304 "gen/ragel/17__alt4_4.c"
+#line 2288 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 2310 "gen/ragel/17__alt4_4.c"
+#line 2294 "gen/ragel/17__alt4_4.c"
 		
 		goto _st6;
 		_ctr43:
@@ -2314,20 +2298,20 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 2318 "gen/ragel/17__alt4_4.c"
+#line 2302 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 40 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d7 = p; }
 		
-#line 2324 "gen/ragel/17__alt4_4.c"
+#line 2308 "gen/ragel/17__alt4_4.c"
 		
 		goto _st6;
 		_st6:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof6;
 		st_case_6:
+		if ( p == pe )
+			goto _out6;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr21;
@@ -2336,21 +2320,19 @@ static void lex(Input *in, Output *out)
 				goto _st6;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr9:
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 2348 "gen/ragel/17__alt4_4.c"
+#line 2330 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 2354 "gen/ragel/17__alt4_4.c"
+#line 2336 "gen/ragel/17__alt4_4.c"
 		
 		goto _st7;
 		_ctr48:
@@ -2358,13 +2340,13 @@ static void lex(Input *in, Output *out)
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = NULL; }
 		
-#line 2362 "gen/ragel/17__alt4_4.c"
+#line 2344 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 2368 "gen/ragel/17__alt4_4.c"
+#line 2350 "gen/ragel/17__alt4_4.c"
 		
 		goto _st7;
 		_ctr57:
@@ -2372,20 +2354,20 @@ static void lex(Input *in, Output *out)
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 2376 "gen/ragel/17__alt4_4.c"
+#line 2358 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c5 = p; }
 		
-#line 2382 "gen/ragel/17__alt4_4.c"
+#line 2364 "gen/ragel/17__alt4_4.c"
 		
 		goto _st7;
 		_st7:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof7;
 		st_case_7:
+		if ( p == pe )
+			goto _out7;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr23;
@@ -2403,21 +2385,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr26;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr24:
 		{
 #line 33 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c6 = p; a5 = a6 = b5 = b6 = d5 = d6 = NULL; }
 		
-#line 2415 "gen/ragel/17__alt4_4.c"
+#line 2395 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 2421 "gen/ragel/17__alt4_4.c"
+#line 2401 "gen/ragel/17__alt4_4.c"
 		
 		goto _st8;
 		_ctr31:
@@ -2425,13 +2405,13 @@ static void lex(Input *in, Output *out)
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d6 = p; a5 = a6 = b5 = b6 = c5 = c6 = NULL; }
 		
-#line 2429 "gen/ragel/17__alt4_4.c"
+#line 2409 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 2435 "gen/ragel/17__alt4_4.c"
+#line 2415 "gen/ragel/17__alt4_4.c"
 		
 		goto _st8;
 		_ctr41:
@@ -2439,20 +2419,20 @@ static void lex(Input *in, Output *out)
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b6 = p; a5 = a6 = c5 = c6 = d5 = d6 = NULL; }
 		
-#line 2443 "gen/ragel/17__alt4_4.c"
+#line 2423 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 41 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a7 = p; }
 		
-#line 2449 "gen/ragel/17__alt4_4.c"
+#line 2429 "gen/ragel/17__alt4_4.c"
 		
 		goto _st8;
 		_st8:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof8;
 		st_case_8:
+		if ( p == pe )
+			goto _out8;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr28;
@@ -2461,21 +2441,19 @@ static void lex(Input *in, Output *out)
 				goto _st8;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr10:
 		{
 #line 26 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b4 = p; a3 = a4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 2473 "gen/ragel/17__alt4_4.c"
+#line 2451 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 2479 "gen/ragel/17__alt4_4.c"
+#line 2457 "gen/ragel/17__alt4_4.c"
 		
 		goto _st9;
 		_ctr38:
@@ -2483,13 +2461,13 @@ static void lex(Input *in, Output *out)
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = NULL; }
 		
-#line 2487 "gen/ragel/17__alt4_4.c"
+#line 2465 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 2493 "gen/ragel/17__alt4_4.c"
+#line 2471 "gen/ragel/17__alt4_4.c"
 		
 		goto _st9;
 		_ctr58:
@@ -2497,20 +2475,20 @@ static void lex(Input *in, Output *out)
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 2501 "gen/ragel/17__alt4_4.c"
+#line 2479 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 34 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d5 = p; }
 		
-#line 2507 "gen/ragel/17__alt4_4.c"
+#line 2485 "gen/ragel/17__alt4_4.c"
 		
 		goto _st9;
 		_st9:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof9;
 		st_case_9:
+		if ( p == pe )
+			goto _out9;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr30;
@@ -2528,21 +2506,19 @@ static void lex(Input *in, Output *out)
 				goto _st9;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr4:
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = NULL; }
 		
-#line 2540 "gen/ragel/17__alt4_4.c"
+#line 2516 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c3 = p; }
 		
-#line 2546 "gen/ragel/17__alt4_4.c"
+#line 2522 "gen/ragel/17__alt4_4.c"
 		
 		goto _st10;
 		_ctr52:
@@ -2550,13 +2526,13 @@ static void lex(Input *in, Output *out)
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = NULL; }
 		
-#line 2554 "gen/ragel/17__alt4_4.c"
+#line 2530 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c3 = p; }
 		
-#line 2560 "gen/ragel/17__alt4_4.c"
+#line 2536 "gen/ragel/17__alt4_4.c"
 		
 		goto _st10;
 		_ctr68:
@@ -2564,20 +2540,20 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = NULL; }
 		
-#line 2568 "gen/ragel/17__alt4_4.c"
+#line 2544 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c3 = p; }
 		
-#line 2574 "gen/ragel/17__alt4_4.c"
+#line 2550 "gen/ragel/17__alt4_4.c"
 		
 		goto _st10;
 		_st10:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof10;
 		st_case_10:
+		if ( p == pe )
+			goto _out10;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr35;
@@ -2595,21 +2571,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr38;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr37:
 		{
 #line 27 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c4 = p; a3 = a4 = b3 = b4 = d3 = d4 = NULL; }
 		
-#line 2607 "gen/ragel/17__alt4_4.c"
+#line 2581 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 2613 "gen/ragel/17__alt4_4.c"
+#line 2587 "gen/ragel/17__alt4_4.c"
 		
 		goto _st11;
 		_ctr47:
@@ -2617,13 +2591,13 @@ static void lex(Input *in, Output *out)
 #line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d4 = p; a3 = a4 = b3 = b4 = c3 = c4 = NULL; }
 		
-#line 2621 "gen/ragel/17__alt4_4.c"
+#line 2595 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 2627 "gen/ragel/17__alt4_4.c"
+#line 2601 "gen/ragel/17__alt4_4.c"
 		
 		goto _st11;
 		_ctr56:
@@ -2631,20 +2605,20 @@ static void lex(Input *in, Output *out)
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a4 = p; b3 = b4 = c3 = c4 = d3 = d4 = NULL; }
 		
-#line 2635 "gen/ragel/17__alt4_4.c"
+#line 2609 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 32 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b5 = p; }
 		
-#line 2641 "gen/ragel/17__alt4_4.c"
+#line 2615 "gen/ragel/17__alt4_4.c"
 		
 		goto _st11;
 		_st11:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof11;
 		st_case_11:
+		if ( p == pe )
+			goto _out11;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr40;
@@ -2662,13 +2636,39 @@ static void lex(Input *in, Output *out)
 				goto _ctr43;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr5:
 		{
 #line 23 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a2 = p; b1 = b2 = c1 = c2 = d1 = d2 = NULL; }
+		
+#line 2646 "gen/ragel/17__alt4_4.c"
+		
+		{
+#line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
+			d3 = p; }
+		
+#line 2652 "gen/ragel/17__alt4_4.c"
+		
+		goto _st12;
+		_ctr53:
+		{
+#line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
+			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = NULL; }
+		
+#line 2660 "gen/ragel/17__alt4_4.c"
+		
+		{
+#line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
+			d3 = p; }
+		
+#line 2666 "gen/ragel/17__alt4_4.c"
+		
+		goto _st12;
+		_ctr63:
+		{
+#line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
+			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = NULL; }
 		
 #line 2674 "gen/ragel/17__alt4_4.c"
 		
@@ -2679,39 +2679,11 @@ static void lex(Input *in, Output *out)
 #line 2680 "gen/ragel/17__alt4_4.c"
 		
 		goto _st12;
-		_ctr53:
-		{
-#line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
-			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = NULL; }
-		
-#line 2688 "gen/ragel/17__alt4_4.c"
-		
-		{
-#line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
-			d3 = p; }
-		
-#line 2694 "gen/ragel/17__alt4_4.c"
-		
-		goto _st12;
-		_ctr63:
-		{
-#line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
-			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = NULL; }
-		
-#line 2702 "gen/ragel/17__alt4_4.c"
-		
-		{
-#line 28 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
-			d3 = p; }
-		
-#line 2708 "gen/ragel/17__alt4_4.c"
-		
-		goto _st12;
 		_st12:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof12;
 		st_case_12:
+		if ( p == pe )
+			goto _out12;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr45;
@@ -2729,22 +2701,20 @@ static void lex(Input *in, Output *out)
 				goto _st12;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr72:
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b1 = p; }
 		
-#line 2741 "gen/ragel/17__alt4_4.c"
+#line 2711 "gen/ragel/17__alt4_4.c"
 		
 		goto _st13;
 		_st13:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof13;
 		st_case_13:
+		if ( p == pe )
+			goto _out13;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr50;
@@ -2762,21 +2732,19 @@ static void lex(Input *in, Output *out)
 				goto _ctr53;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr51:
 		{
 #line 20 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			b2 = p; a1 = a2 = c1 = c2 = d1 = d2 = NULL; }
 		
-#line 2774 "gen/ragel/17__alt4_4.c"
+#line 2742 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a3 = p; }
 		
-#line 2780 "gen/ragel/17__alt4_4.c"
+#line 2748 "gen/ragel/17__alt4_4.c"
 		
 		goto _st14;
 		_ctr61:
@@ -2784,13 +2752,13 @@ static void lex(Input *in, Output *out)
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c2 = p; a1 = a2 = b1 = b2 = d1 = d2 = NULL; }
 		
-#line 2788 "gen/ragel/17__alt4_4.c"
+#line 2756 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a3 = p; }
 		
-#line 2794 "gen/ragel/17__alt4_4.c"
+#line 2762 "gen/ragel/17__alt4_4.c"
 		
 		goto _st14;
 		_ctr66:
@@ -2798,20 +2766,20 @@ static void lex(Input *in, Output *out)
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d2 = p; a1 = a2 = b1 = b2 = c1 = c2 = NULL; }
 		
-#line 2802 "gen/ragel/17__alt4_4.c"
+#line 2770 "gen/ragel/17__alt4_4.c"
 		
 		{
 #line 29 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			a3 = p; }
 		
-#line 2808 "gen/ragel/17__alt4_4.c"
+#line 2776 "gen/ragel/17__alt4_4.c"
 		
 		goto _st14;
 		_st14:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof14;
 		st_case_14:
+		if ( p == pe )
+			goto _out14;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr55;
@@ -2829,22 +2797,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr58;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr73:
 		{
 #line 21 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			c1 = p; }
 		
-#line 2841 "gen/ragel/17__alt4_4.c"
+#line 2807 "gen/ragel/17__alt4_4.c"
 		
 		goto _st15;
 		_st15:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof15;
 		st_case_15:
+		if ( p == pe )
+			goto _out15;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr60;
@@ -2862,22 +2828,20 @@ static void lex(Input *in, Output *out)
 				goto _ctr63;
 			}
 		}
-		{
-			goto _st0;
-		}
+		goto _st0;
 		_ctr74:
 		{
 #line 22 "../../../benchmarks/submatch_dfa_aot/src/ragel/17__alt4_4.rl"
 			d1 = p; }
 		
-#line 2874 "gen/ragel/17__alt4_4.c"
+#line 2838 "gen/ragel/17__alt4_4.c"
 		
 		goto _st16;
 		_st16:
 		p+= 1;
-		if ( p == pe )
-			goto _test_eof16;
 		st_case_16:
+		if ( p == pe )
+			goto _out16;
 		switch( ( (*( p))) ) {
 			case 10: {
 				goto _ctr65;
@@ -2895,31 +2859,25 @@ static void lex(Input *in, Output *out)
 				goto _st16;
 			}
 		}
-		{
-			goto _st0;
-		}
-		st_out:
-		_test_eof17: cs = 17; goto _test_eof; 
-		_test_eof1: cs = 1; goto _test_eof; 
-		_test_eof2: cs = 2; goto _test_eof; 
-		_test_eof3: cs = 3; goto _test_eof; 
-		_test_eof4: cs = 4; goto _test_eof; 
-		_test_eof5: cs = 5; goto _test_eof; 
-		_test_eof6: cs = 6; goto _test_eof; 
-		_test_eof7: cs = 7; goto _test_eof; 
-		_test_eof8: cs = 8; goto _test_eof; 
-		_test_eof9: cs = 9; goto _test_eof; 
-		_test_eof10: cs = 10; goto _test_eof; 
-		_test_eof11: cs = 11; goto _test_eof; 
-		_test_eof12: cs = 12; goto _test_eof; 
-		_test_eof13: cs = 13; goto _test_eof; 
-		_test_eof14: cs = 14; goto _test_eof; 
-		_test_eof15: cs = 15; goto _test_eof; 
-		_test_eof16: cs = 16; goto _test_eof; 
-		
-		_test_eof: {}
-		if ( cs >= 17 )
-			goto _out; _pop: {}
+		goto _st0;
+		_out17: cs = 17; goto _out; 
+		_out0: cs = 0; goto _out; 
+		_out1: cs = 1; goto _out; 
+		_out2: cs = 2; goto _out; 
+		_out3: cs = 3; goto _out; 
+		_out4: cs = 4; goto _out; 
+		_out5: cs = 5; goto _out; 
+		_out6: cs = 6; goto _out; 
+		_out7: cs = 7; goto _out; 
+		_out8: cs = 8; goto _out; 
+		_out9: cs = 9; goto _out; 
+		_out10: cs = 10; goto _out; 
+		_out11: cs = 11; goto _out; 
+		_out12: cs = 12; goto _out; 
+		_out13: cs = 13; goto _out; 
+		_out14: cs = 14; goto _out; 
+		_out15: cs = 15; goto _out; 
+		_out16: cs = 16; goto _out; 
 		_out: {}
 	}
 	
