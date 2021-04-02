@@ -181,6 +181,7 @@ $(DAT): $(DAT_DIR)/%/big: $(DAT_DIR)/%/small
 	$(AM_V_GEN)( cd $(@D) && ../../$(srcdir)/data/gen.py )
 
 $(KLEENEX):
+	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/engines/kleenex/getkleenex.sh $(@D)
 	$(AM_V_GEN)( cd $(@D) && ./getkleenex.sh )
 
 $(RAGEL):
