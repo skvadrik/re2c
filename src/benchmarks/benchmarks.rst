@@ -9,28 +9,28 @@ Benchmarks
 Benchmarks are not built by default, as some of them contain large automata that
 take considerable time to compile with GCC or Clang. To enable them, configure
 with ``--enable-benchmarks`` (Autotools) or ``-DRE2C_BUILD_BENCHMARKS=yes``
-(CMake). There are a few different groups of benchmarks:
+(CMake). There are a few different groups of benchmarks.
 
-- Submatch extraction in lexer generators:
+Submatch extraction in lexer generators:
 
-  .. code-block:: bash
+.. code-block:: bash
 
-      $ cd ${BUILD_DIR}/benchmarks/submatch_dfa_aot
-      $ ./run.py --repetitions ${REP_COUNT} --output=results.json
+    $ cd ${BUILD_DIR}/benchmarks/submatch_dfa_aot
+    $ ./run.py --repetitions ${REP_COUNT} --output=results.json
 
-- Submatch extraction in library algorithms based on deterministic automata:
+Submatch extraction in library algorithms based on deterministic automata:
 
-  .. code-block:: bash
+.. code-block:: bash
 
-      $ cd ${BUILD_DIR}/benchmarks/submatch_dfa_jit
-      $ ./bench_submatch_dfa_jit --benchmark_out_format=json --benchmark_out=results.json
+    $ cd ${BUILD_DIR}/benchmarks/submatch_dfa_jit
+    $ ./bench_submatch_dfa_jit --benchmark_out_format=json --benchmark_out=results.json
 
-- Submatch extraction in library algorithms based on non-deterministic automata:
+Submatch extraction in library algorithms based on non-deterministic automata:
 
-  .. code-block:: bash
+.. code-block:: bash
 
-      $ cd ${BUILD_DIR}/benchmarks/submatch_nfa
-      $ ./bench_submatch_nfa --benchmark_out_format=json --benchmark_out=results.json
+    $ cd ${BUILD_DIR}/benchmarks/submatch_nfa
+    $ ./bench_submatch_nfa --benchmark_out_format=json --benchmark_out=results.json
 
 To generate a TeX bar chart (PGF plot) from the JSON output, use json2pgfplot.py
 script. It has a few options, such as ``--relative-to <algo>`` (which scales the
@@ -46,8 +46,8 @@ converted to SVG, etc.
     $ pdf2svg results.pdf results.svg
 
 
-Submatch extraction (lexer generators)
-======================================
+Submatch (lexer generators)
+===========================
 
 These benchmarks contain regular expressions with submatch markers that are
 compiled to C code by a lexer generator, and further compiled to native code by
@@ -113,18 +113,18 @@ ambiguous regular expressions, both in speed and in the automaton size.
 Run time (milliseconds on 100MB text)
 -------------------------------------
 
-.. image:: submatch_dfa_aot/results_1.svg
-  :width: 1000px
+.. figure:: submatch_dfa_aot/results_1.svg
+    :class: benchmark
 
 Binary size (stripped, kilobytes)
 ---------------------------------
 
-.. image:: submatch_dfa_aot/results_2.svg
-  :width: 1000px
+.. figure:: submatch_dfa_aot/results_2.svg
+    :class: benchmark
 
 
-Submatch extraction (libraries, DFA)
-====================================
+Submatch (libraries, DFA)
+=========================
 
 This group contains library algorithms for submatch extraction that are based on
 deterministic automata. These are regular expressions that undergo just-in-time
@@ -150,12 +150,12 @@ arbitrary many tag variables. Regless-TDFA(1) does not have tag variables.
 Determinization / run time (relative to first)
 ----------------------------------------------
 
-.. image:: submatch_dfa_jit/results_1.svg
-  :width: 1000px
+.. figure:: submatch_dfa_jit/results_1.svg
+    :class: benchmark
 
 
-Submatch extraction (libraries, NFA)
-====================================
+Submatch (libraries, NFA)
+=========================
 
 This group contains library algorithms for submatch extraction based on
 non-deterministic automata. They are described in depth in the paper `Efficient
@@ -181,6 +181,6 @@ algorithms are much slower on large real-world regular expressions.
 Simulation time (relative to first)
 -----------------------------------
 
-.. image:: submatch_nfa/results_1.svg
-  :width: 1000px
+.. figure:: submatch_nfa/results_1.svg
+    :class: benchmark
 

@@ -17,6 +17,11 @@
     color: #305070;
     line-height: normal;
 }
+@media (max-width: 1000px) {
+    .highlight {
+        font-size: 12px;
+    }
+}
 
 .highlight .c  { color: #305070; } /* Comment           */
 .highlight .cm { color: #305070; } /* Comment.Multiline */

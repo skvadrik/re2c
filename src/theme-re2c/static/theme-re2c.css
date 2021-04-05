@@ -34,6 +34,10 @@ div.document img {
     /* border: 1px dotted; */
     margin: auto;
 }
+div.document img.benchmark {
+    width: 1000px;
+    max-width: 100%;
+}
 div.document img.feed {
     display: inline;
     border: none;
@@ -56,6 +60,11 @@ div.document code {
     padding: 1px 3px 1px 3px;
     border: 1px solid lightgray;
     background-color: aliceblue;
+}
+@media (max-width: 1000px) {
+    div.document code {
+        font-size: 12px;
+    }
 }
 /* :download: role; should look like a normal link rather than inline code block */
 div.document a code.download {
@@ -176,8 +185,10 @@ a:focus { outline: none; }
     div.document {
         margin: 0;
     }
+}
+@media (max-width: 1000px) {
     body {
-        font-size: 100%;
+        font-size: 15px;
     }
 }
 
