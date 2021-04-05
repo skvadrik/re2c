@@ -12,7 +12,6 @@ a result of range negation or the difference operator. The code below (empty.re)
 demonstrates some of the possibilities:
 
 .. code-block:: cpp
-    :linenos:
 
     /*!re2c
         []                        { return 0; }

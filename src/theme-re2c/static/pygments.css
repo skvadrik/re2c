@@ -1,11 +1,6 @@
 
 .highlighttable td.code {  width: 100%; }
 
-.linenos {
-    color: darkgray;
-    font-size: 13px; /* must be in sync with .highlight */
-}
-
 .highlight {
     border: 1px solid lightgray;
     /*border-left: 3px solid lightgray;*/
@@ -13,7 +8,7 @@
     background-color: aliceblue;
     display: block;
     overflow: auto;
-    font-size: 13px; /* must be in sync with .linenos */
+    font-size: 13px;
     color: #305070;
     line-height: normal;
 }

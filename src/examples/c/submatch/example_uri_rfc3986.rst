@@ -10,6 +10,5 @@ It uses s-tags.
 
 .. literalinclude:: uri_rfc3986.re
     :language: cpp
-    :linenos:
 
 Compile as ``re2c -o uri_rfc3986.c uri_rfc3986.re``.

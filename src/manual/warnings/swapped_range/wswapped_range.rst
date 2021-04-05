@@ -7,7 +7,6 @@ reason older versions of re2c did not consider this an error and silently
 swapped range bounds. Consider the following example (swapped.re):
 
 .. code-block:: cpp
-    :linenos:
 
     /*!re2c
         *     { return "*"; }

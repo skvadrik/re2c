@@ -13,7 +13,6 @@ other semantic action by accident. For example, consider this simple piece of
 code (a.re) that is supposed to match letter ``a``:
 
 .. code-block:: cpp
-    :linenos:
 
     /*!re2c
         "a" { return 'a'; }
@@ -22,7 +21,6 @@ code (a.re) that is supposed to match letter ``a``:
 The generated code looks like this:
 
 .. code-block:: cpp
-    :linenos:
 
     {
             YYCTYPE yych;
@@ -49,7 +47,6 @@ If we run re2c with ``-Wundefined-control-flow``, we will see that it complains 
 Let's follow the advice and change the code:
 
 .. code-block:: cpp
-    :linenos:
 
     /*!re2c
         *   { return '*'; }
@@ -59,7 +56,6 @@ Let's follow the advice and change the code:
 Now the generated code looks much better:
 
 .. code-block:: cpp
-    :linenos:
 
     {
             YYCTYPE yych;

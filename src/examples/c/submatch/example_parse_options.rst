@@ -22,6 +22,5 @@ Our imaginary options are summarized below:
 
 .. literalinclude:: parse_options.re
     :language: cpp
-    :linenos:
 
 Compile as ``re2c -o options.c options.re``.

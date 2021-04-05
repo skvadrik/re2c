@@ -14,7 +14,6 @@ memory access violation, or worse --- it accidentally hits a single quote and
 assumes this to be the end of the string.
 
 .. code-block:: cpp
-    :linenos:
 
     #include <assert.h>
     
@@ -48,7 +47,6 @@ However, re2c suggests us to define the sentinel symbol using ``re2c:sentinel``
 configuration. Let's do it.
 
 .. code-block:: cpp
-    :linenos:
 
     #include <assert.h>
     

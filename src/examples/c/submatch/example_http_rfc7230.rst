@@ -10,6 +10,5 @@ It uses both s-tags and m-tags.
 
 .. literalinclude:: http_rfc7230.re
     :language: cpp
-    :linenos:
 
 Compile as ``re2c -o http_rfc7230.c http_rfc7230.re``.

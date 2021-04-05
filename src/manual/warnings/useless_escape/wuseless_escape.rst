@@ -9,7 +9,6 @@ means something (when it actually doesn't), or just by pure accident. With
 example (escapes.re):
 
 .. code-block:: cpp
-    :linenos:
 
     /*!re2c
         *                        {}
@@ -45,7 +44,6 @@ Useless escapes are ignored: the escaped symbol is treated as not escaped (``\A`
 The above example should be fixed as follows:
 
 .. code-block:: cpp
-    :linenos:
 
     /*!re2c
         *                    {}

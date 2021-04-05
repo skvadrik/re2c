@@ -11,7 +11,6 @@ consist of lowercase letters only.
 
 .. literalinclude:: /manual/warnings/match_empty_string/hang.re
     :language: cpp
-    :linenos:
 
 On well-formed input the program runs as expected. However, if one of the
 arguments contains a symbol diffrerent from lowercase letter, the program hangs

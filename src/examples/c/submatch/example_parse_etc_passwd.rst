@@ -8,6 +8,5 @@ This file consists of multiple lines of the form ``user`` ``:`` ``password`` ``:
 
 .. literalinclude:: parse_etc_passwd.re
     :language: cpp
-    :linenos:
 
 Compile as: ``re2c -o etc_passwd.c etc_passwd.re``.

@@ -11,7 +11,6 @@ the grammar, and ``-Wunreachable-rules`` detects and reports such rules.
 Let's see an example of the first kind: shadowed rules (shadowed.re).
 
 .. code-block:: cpp
-    :linenos:
 
     /*!re2c
         ""          { return ""; }
@@ -41,7 +40,6 @@ code elimination pass.
 Now let's see an example of second kind: infinitely greedy rule (greedy.re).
 
 .. code-block:: cpp
-    :linenos:
 
     /*!re2c
         [^]* { return "greeedy"; }

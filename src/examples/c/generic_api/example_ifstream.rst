@@ -20,6 +20,5 @@ However, this method allows to avoid padding, which would require buffering inpu
 
 .. literalinclude:: ifstream.re
     :language: cpp
-    :linenos:
 
 Compile as ``re2c -o ifstream.cc ifstream.re``.

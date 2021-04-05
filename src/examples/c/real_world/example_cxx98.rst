@@ -12,7 +12,6 @@ In fact, C++ is an easy language to lex: unlike in many other languages, the C++
 
 .. literalinclude:: cxx98.re
     :language: cpp
-    :linenos:
 
 Compile as ``re2c -o cxx98.cc cxx98.re``. Notes:
 

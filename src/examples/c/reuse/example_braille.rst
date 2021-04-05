@@ -30,7 +30,6 @@ one another in a spirit of brotherhood."*
 
 .. literalinclude:: braille.re
     :language: cpp
-    :linenos:
 
 Compile as ``re2c -cr -o braille.cc braille.re``. Notes:
 

@@ -11,6 +11,5 @@ Attributes are name, country and a list of IRC channels.
 
 .. literalinclude:: parse_records.re
     :language: cpp
-    :linenos:
 
 Compile as ``re2c -o records.c records.re``.

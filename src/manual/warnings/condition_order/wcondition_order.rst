@@ -15,7 +15,6 @@ conditions to numbers is toggled by ``REVERSED_CONDITION_ORDER`` define).
 
 .. literalinclude:: /manual/warnings/condition_order/fixorder.re.txt
     :language: cpp
-    :linenos:
 
 Let's compile and run it.
 Everything works fine: we get ``aaaa,bbb!`` in both cases.

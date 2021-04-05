@@ -6,7 +6,6 @@ before re2c-0.13.7) everyone used ``[^]`` as the default rule, as in this
 example (any.re):
 
 .. code-block:: cpp
-    :linenos:
 
     /*!re2c
         // ... normal rules ...
