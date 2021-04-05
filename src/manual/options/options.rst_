@@ -48,7 +48,7 @@
 ``--empty-class <match-empty | match-none | error>``
     Define the way re2c treats empty character classes. With ``match-empty``
     (the default) empty class matches empty input (which is illogical, but
-    backwards-compatible). With``match-none`` empty class always fails to match.
+    backwards-compatible). With ``match-none`` empty class always fails to match.
     With ``error`` empty class raises a compilation error.
 
 ``--encoding-policy <fail | substitute | ignore>``
