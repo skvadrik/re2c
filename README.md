@@ -40,7 +40,7 @@ CONTRIBUTING
 ------------
 
 re2c is an Open Source, community-driven project. See
-[CONTRIBUTING.md](https://github.com/skvadrik/re2c/blob/master/README.md) for
+[CONTRIBUTING.md](https://github.com/skvadrik/re2c/blob/master/CONTRIBUTING.md) for
 details about contributions to this repository.
 
 
