@@ -61,8 +61,10 @@ Re2c has an IRC channel ``#re2c`` on `freenode <https://freenode.net>`_.
 Re2c developers are happy to answer questions and provide help.
 Contributions are always welcome!
 
-Papers
-------
+Papers, articles
+----------------
+
+Papers:
 
 - `RE2C: a more versatile scanner generator
   <1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps>`_
@@ -82,11 +84,17 @@ Papers
   2019
 
 - `RE2C: A lexer generator based on lookahead-TDFA
-  <2020_trofimovich_re2c_a_lexer_generator_base_on_lookahead_tdfa.pdf>`_
+  <2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf>`_
   by Ulya Trofimovich,
   Software Impacts,
   Volume 6, November 2020, 100027,
   `DOI:10.1016/j.simpa.2020.100027 <https://doi.org/10.1016/j.simpa.2020.100027>`_.
+
+Presentations:
+
+- Lookahead TDFA in pictures:
+  `RE2C: A lexer generator based on lookahead-TDFA (slides)
+  <2021_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa_(slides).pdf>`_, 2021.
 
 Authors
 -------
