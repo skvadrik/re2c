@@ -15,6 +15,7 @@ class RangeMgr;
 namespace re2c {
 namespace libre2c {
 struct rldfa_t;
+struct regoff_trie_t;
 } // namespace libre2c
 } // namespace re2c
 
@@ -23,6 +24,11 @@ typedef ptrdiff_t regoff_t;
 struct regmatch_t {
     regoff_t rm_so;
     regoff_t rm_eo;
+};
+
+struct subhistory_t {
+    size_t size;
+    regmatch_t *offs;
 };
 
 // standard flags
@@ -42,6 +48,7 @@ static const int REG_BACKWARD  = 1u << 11;
 static const int REG_KUKLEWICZ = 1u << 12;
 static const int REG_STADFA    = 1u << 13;
 static const int REG_REGLESS   = 1u << 14;
+static const int REG_SUBHIST   = 1u << 15;
 
 struct regex_t {
     size_t re_nsub;
@@ -50,18 +57,30 @@ struct regex_t {
     const re2c::dfa_t *dfa;
     const re2c::libre2c::rldfa_t *rldfa;
     void *simctx;
-    regmatch_t *pmatch;
-    regoff_t *regs;
     size_t *char2class;
     int flags;
+    union {
+        regoff_t *regs;
+        re2c::libre2c::regoff_trie_t *regtrie;
+    };
+    // Allow storing submatch results in RE (this is needed for Java bindings).
+    union {
+        regmatch_t *pmatch;
+        subhistory_t *psubhist;
+    };
 };
 
 static const int REG_NOMATCH = INT_MAX;
 
+// standard functions
 int regcomp(regex_t *preg, const char *pattern, int cflags);
 size_t regerror(int errcode, const regex_t *preg, char *errbuf, size_t errbuf_size);
 int regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[],
     int eflags);
 void regfree(regex_t *preg);
+
+// extensions
+subhistory_t *regparse(const regex_t *preg, const char *string, size_t nmatch);
+void regfreesub(subhistory_t *history);
 
 #endif // _RE2C_LIB_REGEX_

@@ -175,6 +175,11 @@ regexec_t regexec_nfa_posix_kuklewicz;
 regexec_t regexec_nfa_leftmost;
 regexec_t regexec_nfa_leftmost_trie;
 
+// regparse functions (non-standard)
+typedef subhistory_t*(regparse_t)(const regex_t*, const char*, size_t);
+template<bool stadfa> regparse_t regparse_dfa;
+template<typename ctx_t> regparse_t regparse_dfa_regless;
+
 template<typename history_t>
 simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsub, int flags)
     : nfa(nfa)

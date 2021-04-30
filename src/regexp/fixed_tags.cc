@@ -140,6 +140,7 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
             Level &l = levels.back();
             bool toplevel = levels.size() == 1;
 
+            // Don't check for orbit tags, as they will have VARDIST automatically.
             if (fictive(tag)) {
                 // fictive tags are marked as fixed to suppress code generation
                 tag.base = tag.dist = 0;
@@ -147,6 +148,9 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 // fixed tags do not apply to m-tags
             } else if (spec.opts->fixed_tags == FIXTAG_NONE) {
                 // fixed tag optimization is globally disabled
+            } else if (spec.opts->subhistories) {
+                // Fixed tags with subhistories are possible in principle, but it
+                // ends up being too slow (handling special case adds overhead).
             } else if (l.tag != Tag::NONE && l.dist_to_tag != VARDIST
                     && (spec.opts->fixed_tags == FIXTAG_ALL || toplevel)) {
                 // this tag can be fixed

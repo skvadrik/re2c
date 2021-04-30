@@ -44,8 +44,12 @@ int main(int argc, char** argv)
     const std::vector<alg_t> algs {
         {"tdfa1-P",         ENGINE_RE2C, 0},
         {"tdfa1-L",         ENGINE_RE2C, REG_LEFTMOST},
+        {"tdfa1-P",         ENGINE_RE2C, REG_SUBHIST},
+        {"tdfa1-L",         ENGINE_RE2C, REG_SUBHIST | REG_LEFTMOST},
         {"regless-tdfa1-P", ENGINE_RE2C, REG_REGLESS},
         {"regless-tdfa1-L", ENGINE_RE2C, REG_REGLESS | REG_LEFTMOST},
+        {"regless-tdfa1-P", ENGINE_RE2C, REG_REGLESS | REG_SUBHIST},
+        {"regless-tdfa1-L", ENGINE_RE2C, REG_REGLESS | REG_SUBHIST | REG_LEFTMOST},
     };
 
     benchmark::Initialize(&argc, argv);

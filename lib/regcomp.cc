@@ -8,6 +8,7 @@
 #include "lib/regcomp_dfa_regless.h"
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
+#include "lib/regoff_trie.h"
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/msg/location.h"
@@ -39,6 +40,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     globopts.stadfa = cflags & REG_STADFA;
     Opt opts(globopts);
     Msg msg;
+    opts.set_subhistories((cflags & REG_SUBHIST) != 0);
     opts.set_posix_syntax(true);
     opts.set_posix_semantics((cflags & REG_LEFTMOST) == 0);
     const opt_t *opt = opts.snapshot();
@@ -72,7 +74,9 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 
     DASSERT(nfa->rules.size() == 1);
     preg->re_nsub = nfa->rules[0].ncap + 1;
-    preg->pmatch = new regmatch_t[preg->re_nsub];
+    if (!(cflags & REG_SUBHIST)) {
+        preg->pmatch = new regmatch_t[preg->re_nsub];
+    }
 
     dfa_t *dfa = NULL;
     rldfa_t *rldfa = NULL;
@@ -110,7 +114,13 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
             compact_and_optimize_tags(opt, *dfa);
         }
 
-        preg->regs = new regoff_t[dfa->maxtagver + 1];
+        if (cflags & REG_SUBHIST) {
+            const size_t nlists = (cflags & REG_REGLESS)
+                ? dfa->tags.size() : static_cast<size_t>(dfa->maxtagver + 1);
+            preg->regtrie = new regoff_trie_t(nlists);
+        } else {
+            preg->regs = new regoff_t[dfa->maxtagver + 1];
+        }
     }
 
     preg->nfa = nfa;

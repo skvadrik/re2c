@@ -41,7 +41,7 @@ struct Tag
     int32_t height;
 
     Tag(const std::string *nm, bool hi, int32_t ht);
-    Tag(size_t lsub, size_t hsub, bool ob, int32_t ht);
+    Tag(size_t lsub, size_t hsub, bool history, bool orbit, int32_t height);
 };
 
 inline bool operator == (const tag_info_t &x, const tag_info_t &y)

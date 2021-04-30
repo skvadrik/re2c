@@ -161,6 +161,7 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, tags_expression, RE2C_SIGIL) \
     MUTOPT (bool, posix_syntax, false) \
     MUTOPT (bool, posix_semantics, false) \
+    MUTOPT (bool, subhistories, false) \
     /* code generation */ \
     MUTOPT (bool, sFlag, false) \
     MUTOPT (bool, bFlag, false) \

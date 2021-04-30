@@ -387,6 +387,11 @@ if (RE2C_BUILD_LIBS)
     re2c_bootstrap_lexer("lib/lex.re" "lib/lex.cc")
     re2c_bootstrap_parser("lib/parse.ypp" "lib/parse.cc" "lib/parse.h")
 
+    add_library(test_libre2c_objects_autogen OBJECT
+        "${CMAKE_CURRENT_BINARY_DIR}/lib/test_helper.cc"
+    )
+    re2c_bootstrap_lexer("lib/test_helper.re" "lib/test_helper.cc")
+
     add_library(libre2c_objects OBJECT
         lib/regcomp.cc
         lib/regexec.cc
@@ -490,6 +495,7 @@ if (RE2C_BUILD_LIBS)
     # libre2c test
     add_executable(test_libre2c lib/test.cc)
     target_link_libraries(test_libre2c libre2c)
+    target_link_libraries(test_libre2c test_libre2c_objects_autogen)
     add_custom_target(check_libre2c
         COMMAND ./test_libre2c
     )

@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stddef.h>
 
 #include "lib/regex.h"
@@ -50,6 +51,34 @@ int regexec(const regex_t *re, const char *string, size_t nmatch,
                 return regexec_nfa_posix(re, string, nmatch, pmatch, eflags);
             }
         }
+    }
+}
+
+subhistory_t *regparse(const regex_t *re, const char *string, size_t nmatch)
+{
+    const int cflags = re->flags;
+    assert(cflags & REG_SUBHIST);
+    if (!(cflags & REG_NFA)) {
+        // DFA-based algorithms
+        if (cflags & REG_REGLESS) {
+            // Registerless TDFA.
+            if (cflags & REG_LEFTMOST) {
+                return regparse_dfa_regless<ldetctx_t>(re, string, nmatch);
+            } else {
+                return regparse_dfa_regless<pdetctx_t>(re, string, nmatch);
+            }
+        } else {
+            // TDFA with registers and register operations on transitions.
+            if (cflags & REG_STADFA) {
+                return regparse_dfa<true>(re, string, nmatch);
+            } else {
+                return regparse_dfa<false>(re, string, nmatch);
+            }
+        }
+    } else {
+        // NFA-based algorithms (not implemented yet).
+        assert(false);
+        return NULL;
     }
 }
 

@@ -6,6 +6,7 @@
 #include "lib/regcomp_dfa_regless.h"
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
+#include "lib/regoff_trie.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/encoding/range_suffix.h"
@@ -29,7 +30,9 @@ void regfree(regex_t *preg)
     delete &preg->nfa->tags;
     delete preg->nfa;
 
-    delete[] preg->pmatch;
+    if (!(preg->flags & REG_SUBHIST)) {
+        delete[] preg->pmatch;
+    }
 
     if (preg->flags & REG_NFA) {
         if ((preg->flags & REG_TRIE) && (preg->flags & REG_LEFTMOST)) {
@@ -44,7 +47,6 @@ void regfree(regex_t *preg)
             delete static_cast<psimctx_t*>(preg->simctx);
         }
     } else {
-        delete[] preg->regs;
         delete[] preg->char2class;
         delete[] preg->dfa->finvers;
 
@@ -62,8 +64,18 @@ void regfree(regex_t *preg)
             delete[] preg->rldfa->result;
             delete preg->rldfa;
         }
+        if (preg->flags & REG_SUBHIST) {
+            delete preg->regtrie;
+        } else {
+            delete[] preg->regs;
+        }
     }
 
     AST::flist.clear();
     RangeSuffix::freeList.clear();
+}
+
+void regfreesub(subhistory_t *history)
+{
+    free(history);
 }

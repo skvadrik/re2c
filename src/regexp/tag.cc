@@ -25,7 +25,7 @@ Tag::Tag(const std::string *nm, bool hi, int32_t ht)
 {}
 
 
-Tag::Tag(size_t lsub, size_t hsub, bool ob, int32_t ht)
+Tag::Tag(size_t lsub, size_t hsub, bool history, bool orbit, int32_t height)
     : name(NULL)
     , lsub(lsub)
     , hsub(hsub)
@@ -33,10 +33,10 @@ Tag::Tag(size_t lsub, size_t hsub, bool ob, int32_t ht)
     , dist(Tag::VARDIST)
     , lnest(Tag::RIGHTMOST)
     , hnest(Tag::RIGHTMOST)
-    , history(false)
-    , orbit(ob)
+    , history(history)
+    , orbit(orbit)
     , toplevel(false)
-    , height(ht)
+    , height(height)
 {}
 
 } // namespace re2c

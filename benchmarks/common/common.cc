@@ -46,12 +46,24 @@ void bench_regexec_re2c(benchmark::State& state, const alg_t &alg, const bench_t
         state.SkipWithError("regcomp failed");
     }
 
+    const bool with_hist = alg.flags & REG_SUBHIST;
     const size_t nmatch = re.re_nsub;
-    regmatch_t *pmatch = new regmatch_t[nmatch];
+    regmatch_t *pmatch = with_hist ? NULL : new regmatch_t[nmatch];
 
-    for (auto _ : state) {
-        for (const char **strings = bench.strings; *strings; ++strings) {
-            err |= regexec(&re, *strings, nmatch, pmatch, 0);
+    // Do not move condition inside of the loop to avoid overhead.
+    if (with_hist) {
+        for (auto _ : state) {
+            for (const char **strings = bench.strings; *strings; ++strings) {
+                subhistory_t *h = regparse(&re, *strings, nmatch);
+                err |= h ? 0 : 1;
+                regfreesub(h);
+            }
+        }
+    } else {
+        for (auto _ : state) {
+            for (const char **strings = bench.strings; *strings; ++strings) {
+                err |= regexec(&re, *strings, nmatch, pmatch, 0);
+            }
         }
     }
     if (err) {
