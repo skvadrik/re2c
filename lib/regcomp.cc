@@ -105,6 +105,8 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
             opt = NULL; // transfer options ownership to RLDFA
         } else {
             determinization(*nfa, *dfa, opt, msg, "");
+            cutoff_dead_rules(*dfa, opt, "", msg);
+            insert_fallback_tags(opt, *dfa);
             compact_and_optimize_tags(opt, *dfa);
         }
 

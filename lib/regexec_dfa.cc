@@ -60,6 +60,9 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
     if (s->rule == Rule::NONE && x != NULL) {
         s = x;
         p = q;
+
+        // apply fallback tags
+        apply_regops(regs, s->tcmd[dfa->nchars + 1], p - string - 1);
     }
 
     if (s->rule == Rule::NONE) {
