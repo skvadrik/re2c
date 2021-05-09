@@ -72,12 +72,6 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
         delete opt0;
     }
 
-    DASSERT(nfa->rules.size() == 1);
-    preg->re_nsub = nfa->rules[0].ncap + 1;
-    if (!(cflags & REG_SUBHIST)) {
-        preg->pmatch = new regmatch_t[preg->re_nsub];
-    }
-
     dfa_t *dfa = NULL;
     rldfa_t *rldfa = NULL;
 
@@ -114,7 +108,9 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
             compact_and_optimize_tags(opt, *dfa);
         }
 
-        if (cflags & REG_SUBHIST) {
+        if (cflags & REG_TSTRING) {
+            // T-string does not need intermediate storage for tag values.
+        } else if (cflags & REG_SUBHIST) {
             const size_t nlists = (cflags & REG_REGLESS)
                 ? dfa->tags.size() : static_cast<size_t>(dfa->maxtagver + 1);
             preg->regtrie = new regoff_trie_t(nlists);
@@ -126,6 +122,23 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     preg->nfa = nfa;
     preg->dfa = dfa;
     preg->rldfa = rldfa;
+
+    DASSERT(nfa->rules.size() == 1);
+    preg->re_nsub = nfa->rules[0].ncap + 1;
+    preg->re_ntag = nfa->tags.size();
+
+    if (cflags & REG_TSTRING) {
+        // T-string is stored in RE (reallocated on each regtstring() call if
+        // needed), and the user gets an immutable view of it (const ref).
+        tstring_t &ts = preg->tstring;
+        ts.capacity = 256;
+        ts.string = new tchar_t[ts.capacity];
+        ts.length = 0;
+    } else if (cflags & REG_SUBHIST) {
+        // Allocated on every call to regparse() and returned to the user.
+    } else {
+        preg->pmatch = new regmatch_t[preg->re_nsub];
+    }
 
     delete opt;
     return 0;

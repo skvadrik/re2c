@@ -1,6 +1,8 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -129,6 +131,54 @@ end:
         fprintf(stderr, "failed %u of %u\n", failed, total);
     }
 
+    return result;
+}
+
+static int test_tstring(const char *pattern, const char *string, const char *expected)
+{
+    regex_t re;
+    const tstring_t *tstr;
+    std::ostringstream s;
+    int result;
+
+    result = regcomp(&re, pattern, REG_REGLESS | REG_TSTRING);
+    if (result != 0) {
+        fprintf(stderr, "[t-string] regcomp() failed for RE %s\n", pattern);
+        goto end;
+    }
+
+    // run multiple times to ensure everything gets cleaned up properly
+    static const uint32_t NRUNS = 2;
+    for (uint32_t i = 0; i < NRUNS; ++i) {
+        tstr = regtstring(&re, string);
+        if (tstr == NULL) {
+            result = 1;
+            fprintf(stderr, "regtstring() failed for RE %s and string %s\n",
+                pattern, string);
+            goto end;
+        }
+    }
+
+    // Convert T-string to a C++ string.
+    for (size_t i = 0; i < tstr->length; ++i) {
+        const tchar_t c = tstr->string[i];
+        if (c < TAG_BASE) {
+            assert(c < 0xff); // expect 1-byte characters
+            s << static_cast<char>(c);
+        } else {
+            s << c - TAG_BASE;
+        }
+        s << ' ';
+    }
+
+    if (strcmp(expected, s.str().c_str()) != 0) {
+        result = 1;
+        fprintf(stderr, "incorrect t-string for RE %s and string %s:\n"
+            "\texpect: %s\n\tactual: %s\n", pattern, string, expected, s.str().c_str());
+    }
+
+end:
+    regfree(&re);
     return result;
 }
 
@@ -1289,6 +1339,27 @@ static int test_all_leftmost(int f)
     return e;
 }
 
+static int test_all_tstring()
+{
+    int e = 0;
+
+    e |= test_tstring("a",        "a",   "1 a 2 ");
+    e |= test_tstring("(a)",      "a",   "1 3 a 4 2 ");
+    e |= test_tstring("(((a)))",  "a",   "1 3 a 4 2 ");
+    e |= test_tstring("(a)*",     "aaa", "1 3 a 4 3 a 4 3 a 4 2 ");
+    e |= test_tstring("(a(b?))*", "aba", "1 3 5 a 6 7 b 8 4 3 5 a 6 7 8 4 2 ");
+    e |= test_tstring("(a(b)?)*", "aba", "1 3 5 a 6 7 9 b 10 8 4 3 5 a 6 7 8 4 2 ");
+    e |= test_tstring("(a(b*))*", "abb", "1 3 5 a 6 7 b b 8 4 2 ");
+    e |= test_tstring("(a(b)*)*", "abb", "1 3 5 a 6 7 9 b 10 9 b 10 8 4 2 ");
+    e |= test_tstring("(a){2}",   "aa",  "1 3 a 4 3 a 4 2 ");
+    e |= test_tstring("ab",       "ab",  "1 a b 2 ");
+    e |= test_tstring("a(b)",     "ab",  "1 3 a 4 5 b 6 2 ");
+    e |= test_tstring("(a)b",     "ab",  "1 3 a 4 5 b 6 2 ");
+    e |= test_tstring("(a)(b)",   "ab",  "1 3 a 4 5 b 6 2 ");
+
+    return e;
+}
+
 int main()
 {
     int e = 0;
@@ -1321,6 +1392,8 @@ int main()
 
     e |= test_all_posix(REG_NFA | REG_BACKWARD);
     e |= test_all_posix(REG_NFA | REG_BACKWARD | REG_GTOP);
+
+    e |= test_all_tstring();
 
     return e;
 }

@@ -31,6 +31,19 @@ struct subhistory_t {
     regmatch_t *offs;
 };
 
+// T-string chars are 16 bits.
+// This is aligned with Java implementation by Angelo Borsotti.
+typedef uint16_t tchar_t;
+
+struct tstring_t {
+    size_t capacity;
+    size_t length;
+    tchar_t *string;
+};
+
+// Tags use the upper half of the t-string charater value range.
+static const tchar_t TAG_BASE = 1 << (8 * sizeof(tchar_t) - 1);
+
 // standard flags
 static const int REG_EXTENDED  = 1u << 0;
 static const int REG_ICASE     = 1u << 1;
@@ -49,9 +62,11 @@ static const int REG_KUKLEWICZ = 1u << 12;
 static const int REG_STADFA    = 1u << 13;
 static const int REG_REGLESS   = 1u << 14;
 static const int REG_SUBHIST   = 1u << 15;
+static const int REG_TSTRING   = 1u << 16;
 
 struct regex_t {
     size_t re_nsub;
+    size_t re_ntag;
     re2c::RangeMgr *rmgr;
     const re2c::nfa_t *nfa;
     const re2c::dfa_t *dfa;
@@ -67,6 +82,7 @@ struct regex_t {
     union {
         regmatch_t *pmatch;
         subhistory_t *psubhist;
+        mutable tstring_t tstring;
     };
 };
 
@@ -81,6 +97,7 @@ void regfree(regex_t *preg);
 
 // extensions
 subhistory_t *regparse(const regex_t *preg, const char *string, size_t nmatch);
+const tstring_t *regtstring(const regex_t *preg, const char *string);
 void regfreesub(subhistory_t *history);
 
 #endif // _RE2C_LIB_REGEX_

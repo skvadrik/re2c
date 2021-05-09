@@ -30,7 +30,11 @@ void regfree(regex_t *preg)
     delete &preg->nfa->tags;
     delete preg->nfa;
 
-    if (!(preg->flags & REG_SUBHIST)) {
+    if (preg->flags & REG_TSTRING) {
+        delete[] preg->tstring.string;
+    } else if (preg->flags & REG_SUBHIST) {
+        // regfreesub() should be called by the user after regparse()
+    } else {
         delete[] preg->pmatch;
     }
 
@@ -64,7 +68,9 @@ void regfree(regex_t *preg)
             delete[] preg->rldfa->result;
             delete preg->rldfa;
         }
-        if (preg->flags & REG_SUBHIST) {
+        if (preg->flags & REG_TSTRING) {
+            // t-string construction does not use this
+        } else if (preg->flags & REG_SUBHIST) {
             delete preg->regtrie;
         } else {
             delete[] preg->regs;

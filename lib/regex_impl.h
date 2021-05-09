@@ -180,6 +180,10 @@ typedef subhistory_t*(regparse_t)(const regex_t*, const char*, size_t);
 template<bool stadfa> regparse_t regparse_dfa;
 template<typename ctx_t> regparse_t regparse_dfa_regless;
 
+// regtstring function (non-standard)
+template<typename ctx_t>
+const tstring_t *regtstring_dfa_regless(const regex_t*, const char*);
+
 template<typename history_t>
 simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsub, int flags)
     : nfa(nfa)

@@ -21,6 +21,10 @@ struct rldfa_backlink_t {
     uint32_t conf;
     // Index of tag history corresponding to the origin configuration.
     hidx_t hidx;
+    // T-string fragment corresponding to tagged path from the origin configuration.
+    tchar_t *tfrag;
+    // Length of t-string fragment.
+    size_t tfrag_size;
 };
 
 // Registerless TDFA arc (transition). There are no registers and register
@@ -39,7 +43,7 @@ struct rldfa_state_t {
     // Final link stores final configuration index (if any) and its history.
     rldfa_backlink_t finlink;
 
-    rldfa_state_t(size_t nchars, uint32_t finidx, hidx_t finhist);
+    rldfa_state_t(size_t nchars, const rldfa_backlink_t &link);
     ~rldfa_state_t();
     FORBID_COPY(rldfa_state_t);
 };
@@ -70,6 +74,46 @@ struct rldfa_t {
     FORBID_COPY(rldfa_t);
 };
 
+static tchar_t encode_tag(size_t tag)
+{
+    // Tags in the t-string are indexed from 1 rather than 0 (so that
+    // negative tags can be represented by negating tag index).
+    tag += 1;
+    // Two extra tags for the outermost capture that wraps the whole RE.
+    tag += 2;
+    // T-string characters store either symbols or tags. Symbols use the
+    // lower half of the range (so they don't need to be translated),
+    // and tags use the upper half.
+    tag += TAG_BASE;
+
+    return static_cast<tchar_t>(tag);
+}
+
+template<typename history_t>
+static inline void get_tstring_fragment(determ_context_t<history_t> &ctx,
+    hidx_t hidx, std::vector<tchar_t> &tfrag, rldfa_backlink_t &link)
+{
+    tfrag.clear();
+    for (int32_t i = hidx; i != HROOT; ) {
+        const typename history_t::node_t &n = ctx.history.node(i);
+        i = n.pred;
+
+        // Add only positive tags (including fictive ones) to the t-string.
+        // If needed, negative tags can be added as well (including nested ones)
+        // but then we'll need a different encoding scheme that would reserve
+        // half of the tag value range for negative numbers.
+        if (!n.info.neg) {
+            tfrag.push_back(encode_tag(n.info.idx));
+        }
+    }
+
+    std::reverse(tfrag.begin(), tfrag.end());
+
+    link.tfrag_size = tfrag.size();
+    link.tfrag = ctx.dc_allocator.template alloct<tchar_t>(tfrag.size());
+    memcpy(link.tfrag, tfrag.data(), tfrag.size() * sizeof(tchar_t));
+}
+
 template<typename ctx_t>
 static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa,
     const opt_t *opts)
@@ -81,12 +125,14 @@ static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa
     rldfa.ctx = &ctx;
     allocator_t &alc = ctx.dc_allocator;
 
+    std::vector<tchar_t> tfrag;
+
     // Construct initial TDFA state.
     const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
     const clos_t c0(ctx.nfa.root, 0, INITIAL_TAGS, HROOT, HROOT);
     ctx.reach.push_back(c0);
     closure(ctx);
-    find_state_regless(ctx, rldfa);
+    find_state_regless(ctx, rldfa, tfrag);
 
     // Iterate while new states are added: for each alphabet symbol build tagged
     // epsilon-closure of all reachable NFA states, then find identical or
@@ -97,13 +143,16 @@ static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa
         for (uint32_t c = 0; c < ctx.dfa.nchars; ++c) {
             reach_on_symbol(ctx, c);
             closure(ctx);
-            find_state_regless(ctx, rldfa);
+            find_state_regless(ctx, rldfa, tfrag);
 
             // Unlike TDFA, RLDFA stores backlinks instead of tag actions.
             rldfa_backlink_t *links = alc.alloct<rldfa_backlink_t>(ctx.state.size());
             for (size_t j = 0; j < ctx.state.size(); ++j) {
-                links[j].conf = ctx.state[j].origin;
-                links[j].hidx = ctx.state[j].ttran;
+                const typename ctx_t::conf_t &x = ctx.state[j];
+                rldfa_backlink_t &l = links[j];
+                l.conf = x.origin;
+                l.hidx = x.ttran;
+                get_tstring_fragment(ctx, x.ttran, tfrag, l);
             }
             rldfa.states[ctx.dc_origin]->arcs[c].backlinks = links;
         }
@@ -111,7 +160,7 @@ static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa
 }
 
 template<typename ctx_t>
-static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa)
+static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> &tfrag)
 {
     dfa_t &dfa = ctx.dfa;
 
@@ -121,18 +170,19 @@ static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa)
     if (is_new) {
         // Check if the new TDFA state is final.
         // See note [at most one final item per closure].
-        uint32_t finconf = NOCONF;
-        hidx_t finhidx = HROOT;
+        rldfa_backlink_t finlink = {NOCONF, HROOT, NULL, 0};
         for (uint32_t i = 0; i < ctx.state.size(); ++i) {
-            if (ctx.state[i].state->type == nfa_state_t::FIN) {
-                finconf = i;
-                finhidx = ctx.state[i].thist;
+            const typename ctx_t::conf_t &x = ctx.state[i];
+            if (x.state->type == nfa_state_t::FIN) {
+                finlink.conf = i;
+                finlink.hidx = x.thist;
+                get_tstring_fragment(ctx, x.thist, tfrag, finlink);
                 break;
             }
         }
 
         // Create a new regless-DFA state.
-        rldfa_state_t *s = new rldfa_state_t(dfa.nchars, finconf, finhidx);
+        rldfa_state_t *s = new rldfa_state_t(dfa.nchars, finlink);
         rldfa.states.push_back(s);
     }
 
@@ -144,12 +194,14 @@ static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa)
     DDUMP_DFA_TREE(is_new);
 }
 
-inline rldfa_state_t::rldfa_state_t(size_t nchars, uint32_t finconf, hidx_t finhidx)
+inline rldfa_state_t::rldfa_state_t(size_t nchars, const rldfa_backlink_t &link)
     : arcs(new rldfa_arc_t[nchars])
     , finlink()
 {
-    finlink.conf = finconf;
-    finlink.hidx = finhidx;
+    finlink.conf = link.conf;
+    finlink.hidx = link.hidx;
+    finlink.tfrag = link.tfrag;
+    finlink.tfrag_size = link.tfrag_size;
 }
 
 inline rldfa_state_t::~rldfa_state_t()

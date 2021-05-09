@@ -82,3 +82,28 @@ subhistory_t *regparse(const regex_t *re, const char *string, size_t nmatch)
     }
 }
 
+const tstring_t *regtstring(const regex_t *re, const char *string)
+{
+    const int cflags = re->flags;
+    assert(cflags & REG_TSTRING);
+    if (!(cflags & REG_NFA)) {
+        // DFA-based algorithms
+        if (cflags & REG_REGLESS) {
+            // Registerless TDFA.
+            if (cflags & REG_LEFTMOST) {
+                return regtstring_dfa_regless<ldetctx_t>(re, string);
+            } else {
+                return regtstring_dfa_regless<pdetctx_t>(re, string);
+            }
+        } else {
+            // TDFA with registers is not suited to tstring construction.
+            assert(false);
+            return NULL;
+        }
+    } else {
+        // NFA-based algorithms (not implemented yet).
+        assert(false);
+        return NULL;
+    }
+}
+
