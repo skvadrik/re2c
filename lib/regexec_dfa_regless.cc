@@ -17,6 +17,41 @@
 namespace re2c {
 namespace libre2c {
 
+// Match RLDFA on the input string, logging backlink arrays on the way.
+// This is the forward pass that is common to all algorithms in this file.
+static rldfa_backlink_t forward_pass(const regex_t *preg, const char *string,
+    size_t *matchlen)
+{
+    const rldfa_t *rldfa = preg->rldfa;
+    const std::vector<rldfa_state_t*> &states = rldfa->states;
+    std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
+
+    const char *strptr = string, *finstrptr = strptr;
+    rldfa_backlink_t finlink = {NOCONF, HROOT, NULL, 0};
+
+    log.clear();
+    for (size_t stidx = 0;;) {
+        const int32_t chr = *strptr++;
+        const size_t cls = preg->char2class[chr];
+
+        const rldfa_state_t *state = states[stidx];
+        const rldfa_arc_t &arc = state->arcs[cls];
+        stidx = arc.state;
+
+        log.push_back(&arc.backlinks);
+
+        if (state->finlink.conf != NOCONF) {
+            finlink = state->finlink;
+            finstrptr = strptr;
+        }
+
+        if (stidx == dfa_t::NIL || chr == 0) break;
+    }
+
+    *matchlen = static_cast<size_t>(finstrptr - string) - 1;
+    return finlink;
+}
+
 template<typename history_t>
 inline void unwind_tag_history(const determ_context_t<history_t> &ctx, hidx_t hidx,
     regoff_t *result, regoff_t offset)
@@ -47,36 +82,14 @@ template<typename ctx_t>
 int regexec_dfa_regless(const regex_t *preg, const char *string, size_t nmatch,
     regmatch_t pmatch[], int /* eflags */)
 {
-    const rldfa_t *rldfa = preg->rldfa;
-    const std::vector<rldfa_state_t*> &states = rldfa->states;
-    std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
-
-    const char *strptr = string, *finstrptr = strptr;
-    rldfa_backlink_t finlink = {NOCONF, HROOT, NULL, 0};
-
-    // Match RLDFA on the input string, logging backlink arrays on the way.
-    log.clear();
-    for (size_t stidx = 0;;) {
-        const int32_t chr = *strptr++;
-        const size_t cls = preg->char2class[chr];
-
-        const rldfa_state_t *state = states[stidx];
-        const rldfa_arc_t &arc = state->arcs[cls];
-        stidx = arc.state;
-
-        log.push_back(&arc.backlinks);
-
-        if (state->finlink.conf != NOCONF) {
-            finlink = state->finlink;
-            finstrptr = strptr;
-        }
-
-        if (stidx == dfa_t::NIL || chr == 0) break;
-    }
+    // Forward pass.
+    size_t matchlen;
+    rldfa_backlink_t finlink = forward_pass(preg, string, &matchlen);
 
     // No final state has been encountered on the way; return no-match.
     if (finlink.conf == NOCONF) return REG_NOMATCH;
 
+    const rldfa_t *rldfa = preg->rldfa;
     ctx_t &ctx = *static_cast<ctx_t*>(rldfa->ctx);
     const std::vector<Tag> &tags = ctx.dfa.tags;
     const size_t ntags = tags.size();
@@ -86,23 +99,22 @@ int regexec_dfa_regless(const regex_t *preg, const char *string, size_t nmatch,
     regoff_t *result = rldfa->result;
     std::fill(result, result + ntags, NORESULT);
 
-    const regoff_t finoffset = finstrptr - string - 1;
-
     // Unwind tag history back from the final RLDFA state to the initial state.
+    std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
     rldfa_backlink_t link = finlink;
-    for (regoff_t offset = finoffset;;) {
-        unwind_tag_history(ctx, link.hidx, result, offset);
+    for (size_t offset = matchlen;;) {
+        unwind_tag_history(ctx, link.hidx, result, static_cast<regoff_t>(offset));
 
         if (offset == 0) break;
         --offset;
 
-        link = (*log[static_cast<size_t>(offset)])[link.conf];
+        link = (*log[offset])[link.conf];
     }
 
     // Copy tag offsets to submatch results in the pmatch[] array.
     regmatch_t *match = pmatch, *lastmatch = pmatch + nmatch;
     match->rm_so = 0;
-    match->rm_eo = finoffset;
+    match->rm_eo = static_cast<regoff_t>(matchlen);
     ++match;
 
     for (size_t t = 0; t < ntags && match < lastmatch; t += 2) {
@@ -149,54 +161,30 @@ inline void unwind_tag_history_full(const determ_context_t<history_t> &ctx, hidx
 template<typename ctx_t>
 subhistory_t *regparse_dfa_regless(const regex_t *preg, const char *string, size_t nmatch)
 {
-    const rldfa_t *rldfa = preg->rldfa;
-    const std::vector<rldfa_state_t*> &states = rldfa->states;
-    std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
-
-    const char *strptr = string, *finstrptr = strptr;
-    rldfa_backlink_t finlink = {NOCONF, HROOT, 0, 0};
-
-    // Match RLDFA on the input string, logging backlink arrays on the way.
-    log.clear();
-    for (size_t stidx = 0;;) {
-        const int32_t chr = *strptr++;
-        const size_t cls = preg->char2class[chr];
-
-        const rldfa_state_t *state = states[stidx];
-        const rldfa_arc_t &arc = state->arcs[cls];
-        stidx = arc.state;
-
-        log.push_back(&arc.backlinks);
-
-        if (state->finlink.conf != NOCONF) {
-            finlink = state->finlink;
-            finstrptr = strptr;
-        }
-
-        if (stidx == dfa_t::NIL || chr == 0) break;
-    }
+    // Forward pass.
+    size_t matchlen;
+    rldfa_backlink_t finlink = forward_pass(preg, string, &matchlen);
 
     // No final state has been encountered on the way; return no-match.
     if (finlink.conf == NOCONF) return NULL;
 
+    const rldfa_t *rldfa = preg->rldfa;
     ctx_t &ctx = *static_cast<ctx_t*>(rldfa->ctx);
     const std::vector<Tag> &tags = ctx.dfa.tags;
     const size_t ntags = tags.size();
-
-    const regoff_t finoffset = finstrptr - string - 1;
-
     regoff_trie_t *regtrie = preg->regtrie;
-    regtrie->clear();
 
     // Unwind tag history back from the final RLDFA state to the initial state.
+    std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
     rldfa_backlink_t link = finlink;
-    for (regoff_t offset = finoffset;;) {
-        unwind_tag_history_full(ctx, link.hidx, regtrie, offset);
+    regtrie->clear();
+    for (size_t offset = matchlen;;) {
+        unwind_tag_history_full(ctx, link.hidx, regtrie, static_cast<regoff_t>(offset));
 
         if (offset == 0) break;
         --offset;
 
-        link = (*log[static_cast<size_t>(offset)])[link.conf];
+        link = (*log[offset])[link.conf];
     }
 
     const regoff_trie_t::node_t *storage = regtrie->storage;
@@ -221,7 +209,7 @@ subhistory_t *regparse_dfa_regless(const regex_t *preg, const char *string, size
     h->offs = rm;
     rm += 1;
     h->offs[0].rm_so = 0;
-    h->offs[0].rm_eo = finoffset;
+    h->offs[0].rm_eo = static_cast<regoff_t>(matchlen);
     ++h;
 
     for (size_t t = 0; t < ntags && h < lasth; t += 2) {
@@ -257,42 +245,20 @@ subhistory_t *regparse_dfa_regless(const regex_t *preg, const char *string, size
 template<typename ctx_t>
 const tstring_t *regtstring_dfa_regless(const regex_t *preg, const char *string)
 {
-    const rldfa_t *rldfa = preg->rldfa;
-    const std::vector<rldfa_state_t*> &states = rldfa->states;
-    std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
-
-    const char *strptr = string, *finstrptr = strptr;
-    rldfa_backlink_t finlink = {NOCONF, HROOT, 0, 0};
-
-    // Match RLDFA on the input string, logging backlink arrays on the way.
-    log.clear();
-    for (size_t stidx = 0;;) {
-        const int32_t chr = *strptr++;
-        const size_t cls = preg->char2class[chr];
-
-        const rldfa_state_t *state = states[stidx];
-        const rldfa_arc_t &arc = state->arcs[cls];
-        stidx = arc.state;
-
-        log.push_back(&arc.backlinks);
-
-        if (state->finlink.conf != NOCONF) {
-            finlink = state->finlink;
-            finstrptr = strptr;
-        }
-
-        if (stidx == dfa_t::NIL || chr == 0) break;
-    }
+    // Forward pass.
+    size_t matchlen;
+    rldfa_backlink_t finlink = forward_pass(preg, string, &matchlen);
 
     // No final state has been encountered on the way; return no-match.
     if (finlink.conf == NOCONF) return NULL;
 
-    const size_t finoffset = static_cast<size_t>(finstrptr - string) - 1;
+    const rldfa_t *rldfa = preg->rldfa;
+    std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
     rldfa_backlink_t link = finlink;
 
     // Calculate the length of the resulting t-string.
-    size_t len = finoffset;
-    for (size_t offset = finoffset;;) {
+    size_t len = matchlen;
+    for (size_t offset = matchlen;;) {
         len += link.tfrag_size;
 
         if (offset == 0) break;
@@ -317,7 +283,7 @@ const tstring_t *regtstring_dfa_regless(const regex_t *preg, const char *string)
     *--s = TAG_BASE + 2; // outermost closing parenthesis
 
     link = finlink;
-    for (size_t offset = finoffset;;) {
+    for (size_t offset = matchlen;;) {
         s -= link.tfrag_size;
         memcpy(s, link.tfrag, link.tfrag_size * sizeof(tchar_t));
 
