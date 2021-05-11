@@ -51,6 +51,7 @@ struct rldfa_state_t {
 // Registerless TDFA.
 struct rldfa_t {
     const opt_t *opts;
+    const int flags;
 
     // Determinization context, specialized either for leftmost greedy policy or
     // for POSIX policy. Context lifetime should cover regexec, as it needs some
@@ -69,12 +70,12 @@ struct rldfa_t {
     // unknown until the final state which of them will match.
     mutable std::vector<const rldfa_backlink_t* const*> log;
 
-    rldfa_t(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts);
+    rldfa_t(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts, int flags);
     ~rldfa_t();
     FORBID_COPY(rldfa_t);
 };
 
-static tchar_t encode_tag(size_t tag)
+static inline tchar_t encode_tag(size_t tag)
 {
     // Tags in the t-string are indexed from 1 rather than 0 (so that
     // negative tags can be represented by negating tag index).
@@ -91,19 +92,27 @@ static tchar_t encode_tag(size_t tag)
 
 template<typename history_t>
 static inline void get_tstring_fragment(determ_context_t<history_t> &ctx,
-    hidx_t hidx, std::vector<tchar_t> &tfrag, rldfa_backlink_t &link)
+    hidx_t hidx, std::vector<tchar_t> &tfrag, rldfa_backlink_t &link, bool tstring)
 {
     tfrag.clear();
     for (int32_t i = hidx; i != HROOT; ) {
         const typename history_t::node_t &n = ctx.history.node(i);
+        const size_t t = n.info.idx;
+        const bool negative = n.info.neg;
         i = n.pred;
 
-        // Add only positive tags (including fictive ones) to the t-string.
-        // If needed, negative tags can be added as well (including nested ones)
-        // but then we'll need a different encoding scheme that would reserve
-        // half of the tag value range for negative numbers.
-        if (!n.info.neg) {
-            tfrag.push_back(encode_tag(n.info.idx));
+        if (tstring) {
+            // For t-string construction add only positive tags. The idea is to
+            // get the cheapest possible representation of parse results, and
+            // adding negative tags slows it down quite a bit.
+            if (!negative) tfrag.push_back(encode_tag(t));
+        } else {
+            // For offset construction add both positive and negative tags.
+            // Shift negative tags by TAG_BASE to make them distinguishable from
+            // positive tags. Do not expand nested negative tags here: it makes
+            // regexec() slower, because it cannot skip all nested tags with one
+            // check when a tag has already been set.
+            tfrag.push_back(static_cast<tchar_t>(t + (negative ? TAG_BASE : 0)));
         }
     }
 
@@ -115,16 +124,15 @@ static inline void get_tstring_fragment(determ_context_t<history_t> &ctx,
 }
 
 template<typename ctx_t>
-static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa,
-    const opt_t *opts)
+static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa)
 {
     Msg msg;
     // Determinization context lifetime must cover regexec, as some of the data
     // stored in the context is used during matching.
-    ctx_t &ctx = *new ctx_t(opts, msg, "", nfa, dfa);
+    ctx_t &ctx = *new ctx_t(rldfa.opts, msg, "", nfa, dfa);
     rldfa.ctx = &ctx;
     allocator_t &alc = ctx.dc_allocator;
-
+    const bool tstring = rldfa.flags & REG_TSTRING;
     std::vector<tchar_t> tfrag;
 
     // Construct initial TDFA state.
@@ -152,7 +160,7 @@ static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa
                 rldfa_backlink_t &l = links[j];
                 l.conf = x.origin;
                 l.hidx = x.ttran;
-                get_tstring_fragment(ctx, x.ttran, tfrag, l);
+                get_tstring_fragment(ctx, x.ttran, tfrag, l, tstring);
             }
             rldfa.states[ctx.dc_origin]->arcs[c].backlinks = links;
         }
@@ -162,6 +170,7 @@ static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa
 template<typename ctx_t>
 static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> &tfrag)
 {
+    const bool tstring = rldfa.flags & REG_TSTRING;
     dfa_t &dfa = ctx.dfa;
 
     // Find or add the new state in the existing set of states.
@@ -176,7 +185,7 @@ static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> 
             if (x.state->type == nfa_state_t::FIN) {
                 finlink.conf = i;
                 finlink.hidx = x.thist;
-                get_tstring_fragment(ctx, x.thist, tfrag, finlink);
+                get_tstring_fragment(ctx, x.thist, tfrag, finlink, tstring);
                 break;
             }
         }
@@ -209,17 +218,18 @@ inline rldfa_state_t::~rldfa_state_t()
     delete[] arcs;
 }
 
-inline rldfa_t::rldfa_t(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts)
+inline rldfa_t::rldfa_t(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts, int flags)
     : opts(opts)
+    , flags(flags)
     , ctx(NULL)
     , states()
     , result(new regoff_t[nfa.tags.size()])
     , log()
 {
     if (opts->posix_semantics) {
-        determinization_regless<pdetctx_t>(nfa, dfa, *this, opts);
+        determinization_regless<pdetctx_t>(nfa, dfa, *this);
     } else {
-        determinization_regless<ldetctx_t>(nfa, dfa, *this, opts);
+        determinization_regless<ldetctx_t>(nfa, dfa, *this);
     }
 }
 

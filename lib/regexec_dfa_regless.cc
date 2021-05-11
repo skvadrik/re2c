@@ -52,25 +52,24 @@ static rldfa_backlink_t forward_pass(const regex_t *preg, const char *string,
     return finlink;
 }
 
-template<typename history_t>
-inline void unwind_tag_history(const determ_context_t<history_t> &ctx, hidx_t hidx,
-    regoff_t *result, regoff_t offset)
+static inline void apply_tfrag(const tchar_t *tfrag, size_t tfrag_size,
+    regoff_t *result, size_t offset, const std::vector<Tag> &tags)
 {
-    for (int32_t i = hidx; i != HROOT; ) {
-        const typename history_t::node_t &n = ctx.history.node(i);
-        const size_t t = n.info.idx;
-        i = n.pred;
+    for (size_t i = tfrag_size; i --> 0;) {
+        size_t t = tfrag[i];
+        const bool negative = t >= TAG_BASE;
+        if (negative) t -= TAG_BASE;
 
         // If already updated, skip.
         if (result[t] != NORESULT) continue;
 
         // Process fictive tags as well, as they may have nested negative tags.
-        if (!n.info.neg) {
+        if (!negative) {
             // Update positive tag.
-            result[t] = offset;
+            result[t] = static_cast<regoff_t>(offset);
         } else {
             // Update negative tag together with its sibling and nested tags.
-            const Tag &tag = ctx.dfa.tags[t];
+            const Tag &tag = tags[t];
             for (size_t l = tag.lnest; l < tag.hnest; ++l) {
                 result[l] = -1;
             }
@@ -103,7 +102,7 @@ int regexec_dfa_regless(const regex_t *preg, const char *string, size_t nmatch,
     std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
     rldfa_backlink_t link = finlink;
     for (size_t offset = matchlen;;) {
-        unwind_tag_history(ctx, link.hidx, result, static_cast<regoff_t>(offset));
+        apply_tfrag(link.tfrag, link.tfrag_size, result, offset, tags);
 
         if (offset == 0) break;
         --offset;
@@ -135,22 +134,19 @@ int regexec_dfa_regless(const regex_t *preg, const char *string, size_t nmatch,
     return 0;
 }
 
-template<typename history_t>
-inline void unwind_tag_history_full(const determ_context_t<history_t> &ctx, hidx_t hidx,
-    regoff_trie_t *regtrie, regoff_t offset)
+static inline void apply_tfrag_subhist(const tchar_t *tfrag, size_t tfrag_size,
+    regoff_trie_t *regtrie, size_t offset, const std::vector<Tag> &tags)
 {
-    for (int32_t i = hidx; i != HROOT; ) {
-        const typename history_t::node_t &n = ctx.history.node(i);
-        const size_t t = n.info.idx;
-        i = n.pred;
+    for (size_t i = tfrag_size; i --> 0;) {
+        const size_t t = tfrag[i];
 
         // Process fictive tags as well, as they may have nested negative tags.
-        if (!n.info.neg) {
+        if (t < TAG_BASE) {
             // Update positive tag.
-            regtrie->add(t, offset);
+            regtrie->add(t, static_cast<regoff_t>(offset));
         } else {
             // Update negative tag together with its sibling and nested tags.
-            const Tag &tag = ctx.dfa.tags[t];
+            const Tag &tag = tags[t - TAG_BASE];
             for (size_t l = tag.lnest; l < tag.hnest; ++l) {
                 regtrie->add(l, -1);
             }
@@ -179,7 +175,7 @@ subhistory_t *regparse_dfa_regless(const regex_t *preg, const char *string, size
     rldfa_backlink_t link = finlink;
     regtrie->clear();
     for (size_t offset = matchlen;;) {
-        unwind_tag_history_full(ctx, link.hidx, regtrie, static_cast<regoff_t>(offset));
+        apply_tfrag_subhist(link.tfrag, link.tfrag_size, regtrie, offset, tags);
 
         if (offset == 0) break;
         --offset;

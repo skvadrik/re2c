@@ -99,7 +99,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
         dfa = new dfa_t(*nfa, Rule::NONE, Rule::NONE);
         if (cflags & REG_REGLESS) {
             DASSERT((cflags & REG_STADFA) == 0);
-            rldfa = new rldfa_t(*nfa, *dfa, opt);
+            rldfa = new rldfa_t(*nfa, *dfa, opt, cflags);
             opt = NULL; // transfer options ownership to RLDFA
         } else {
             determinization(*nfa, *dfa, opt, msg, "");
