@@ -103,8 +103,7 @@ bool has_tags(const AST *ast)
     return false; /* unreachable */
 }
 
-static inline void add_fictive_tags(RESpec &spec, int32_t height,
-    RE **ptag1, RE **ptag2)
+static void add_fictive_tags(RESpec &spec, int32_t height, RE **ptag1, RE **ptag2)
 {
     std::vector<Tag> &tags = spec.tags;
 
@@ -117,26 +116,24 @@ static inline void add_fictive_tags(RESpec &spec, int32_t height,
     tags.push_back(Tag(Tag::FICTIVE, Tag::FICTIVE, false, false, height));
 }
 
-static inline void add_capture_tags(RESpec &spec, const AST **past,
+static void add_capture_tags(RESpec &spec, const AST **past,
     size_t &ncap, int32_t height, RE **ptag1, RE **ptag2, bool orbit, bool in_iter)
 {
     std::vector<Tag> &tags = spec.tags;
     const size_t lcap = ncap;
+
     const AST *ast = *past;
-
-    DASSERT(ast->type == AST::CAP);
-
-    // save the range of repeated captures and collapse them: (...(R)...) -> (R)
-    for (ast = ast->cap; ast && ast->type == AST::CAP; ast = ast->cap) {
-        ++ncap;
+    if (ast->type == AST::CAP) {
+        // save the range of repeated captures and collapse them: (...(R)...) -> (R)
+        for (ast = ast->cap; ast && ast->type == AST::CAP; ast = ast->cap) {
+            ++ncap;
+        }
+        // dereference to avoid future check for non-parenthesized rerefences
+        if (ast->type == AST::REF) {
+            ast = ast->ref.ast;
+        }
+        *past = ast;
     }
-
-    // dereference to avoid future check for non-parenthesized rerefences
-    if (ast->type == AST::REF) {
-        ast = ast->ref.ast;
-    }
-
-    *past = ast;
 
     bool history = spec.opts->subhistories && (orbit || in_iter);
 
@@ -149,6 +146,19 @@ static inline void add_capture_tags(RESpec &spec, const AST **past,
     tags.push_back(Tag(2 * lcap + 1, 2 * ncap + 1, history, orbit, height));
 
     ++ncap;
+}
+
+static inline void add_structural_tags(RESpec &spec, const AST **past,
+    size_t &ncap, int32_t height, RE **ptag1, RE **ptag2, bool orbit, bool in_iter)
+{
+    if (spec.opts->autotags) {
+        // Full parsing: automatically add tags as if this sub-RE was a capture.
+        add_capture_tags(spec, past, ncap, height, ptag1, ptag2, orbit, in_iter);
+    } else if (spec.opts->posix_semantics && has_tags(*past)) {
+        // POSIX submatch extraction: add fictive structural tags.
+        // See note [POSIX subexpression hierarchy].
+        add_fictive_tags(spec, height, ptag1, ptag2);
+    }
 }
 
 RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height, bool in_iter)
@@ -187,18 +197,16 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height, bool i
         }
 
         case AST::ALT: {
-            // see note [POSIX subexpression hierarchy]
-            const bool need_tags = opts->posix_semantics && has_tags(ast);
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
 
-            if (need_tags && ast->alt.ast1->type != AST::CAP) {
-                add_fictive_tags(spec, height, &t1, &t2);
+            if (ast->alt.ast1->type != AST::CAP) {
+                add_structural_tags(spec, &ast, ncap, height, &t1, &t2, false, in_iter);
             }
             x = ast_to_re(spec, ast->alt.ast1, ncap, height, in_iter);
             x = re_cat(spec, t1, re_cat(spec, x, t2));
 
-            if (need_tags && ast->alt.ast2->type != AST::CAP) {
-                add_fictive_tags(spec, height, &t3, &t4);
+            if (ast->alt.ast2->type != AST::CAP) {
+                add_structural_tags(spec, &ast, ncap, height, &t3, &t4, false, in_iter);
             }
             y = ast_to_re(spec, ast->alt.ast2, ncap, height, in_iter);
             y = re_cat(spec, t3, re_cat(spec, y, t4));
@@ -207,18 +215,16 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height, bool i
         }
 
         case AST::CAT: {
-            // see note [POSIX subexpression hierarchy]
-            const bool need_tags = opts->posix_semantics && has_tags(ast);
             RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
 
-            if (need_tags && ast->cat.ast1->type != AST::CAP) {
-                add_fictive_tags(spec, height, &t1, &t2);
+            if (ast->cat.ast1->type != AST::CAP) {
+                add_structural_tags(spec, &ast, ncap, height, &t1, &t2, false, in_iter);
             }
             x = ast_to_re(spec, ast->cat.ast1, ncap, height, in_iter);
             x = re_cat(spec, t1, re_cat(spec, x, t2));
 
-            if (need_tags && ast->cat.ast2->type != AST::CAP) {
-                add_fictive_tags(spec, height, &t3, &t4);
+            if (ast->cat.ast2->type != AST::CAP) {
+                add_structural_tags(spec, &ast, ncap, height, &t3, &t4, false, in_iter);
             }
             y = ast_to_re(spec, ast->cat.ast2, ncap, height, in_iter);
             y = re_cat(spec, t3, re_cat(spec, y, t4));
@@ -265,7 +271,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height, bool i
 
             ast = ast->iter.ast;
 
-            if (opts->posix_semantics && ast->type == AST::CAP) {
+            if ((opts->posix_semantics && ast->type == AST::CAP) || opts->autotags) {
                 add_capture_tags(spec, &ast, ncap, height, &t1, &t2, m > 1, in_iter);
             }
 

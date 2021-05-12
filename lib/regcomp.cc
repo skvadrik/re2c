@@ -41,6 +41,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     Opt opts(globopts);
     Msg msg;
     opts.set_subhistories((cflags & REG_SUBHIST) != 0);
+    opts.set_autotags((cflags & REG_AUTOTAGS) != 0);
     opts.set_posix_syntax(true);
     opts.set_posix_semantics((cflags & REG_LEFTMOST) == 0);
     const opt_t *opt = opts.snapshot();

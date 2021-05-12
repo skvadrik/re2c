@@ -162,6 +162,7 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (bool, posix_syntax, false) \
     MUTOPT (bool, posix_semantics, false) \
     MUTOPT (bool, subhistories, false) \
+    MUTOPT (bool, autotags, false) \
     /* code generation */ \
     MUTOPT (bool, sFlag, false) \
     MUTOPT (bool, bFlag, false) \
