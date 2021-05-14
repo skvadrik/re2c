@@ -35,7 +35,7 @@ void regfree(regex_t *preg)
     } else if (preg->flags & REG_SUBHIST) {
         // regfreesub() should be called by the user after regparse()
     } else {
-        delete[] preg->pmatch;
+        // allocated and freed by the user (pointer stored in regex_t)
     }
 
     if (preg->flags & REG_NFA) {
