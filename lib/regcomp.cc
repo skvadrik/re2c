@@ -138,7 +138,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     } else if (cflags & REG_SUBHIST) {
         // Allocated on every call to regparse() and returned to the user.
     } else {
-        preg->pmatch = new regmatch_t[preg->re_nsub];
+        // Allocated by the user.
     }
 
     delete opt;
