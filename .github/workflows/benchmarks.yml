@@ -32,8 +32,16 @@ jobs:
           # no Windows, as Kleenex generates non-portable C code
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
 
       - name: Setup
         run: |
@@ -41,7 +49,7 @@ jobs:
             Linux*)
               echo "CC=gcc" >> $GITHUB_ENV
               echo "CXX=g++" >> $GITHUB_ENV
-              sudo apt-get install libre2-dev libbenchmark-dev
+              sudo apt install libre2-dev libbenchmark-dev
               ;;
             macOS*)
               sudo xcode-select -switch /Applications/Xcode.app
@@ -52,6 +60,7 @@ jobs:
               brew install re2 google-benchmark
               ;;
           esac
+          pip install psutil
 
       - name: Configure
         run: |
@@ -75,6 +84,10 @@ jobs:
       - name: Run submatch DFA JIT benchmark
         working-directory: .build/benchmarks/submatch_dfa_jit
         run: ./bench_submatch_dfa_jit
+
+      - name: Run submatch Java benchmark (ReTdfa)
+        working-directory: .build/benchmarks/submatch_java
+        run: ./run.py
 
       - name: Run submatch NFA benchmark
         working-directory: .build/benchmarks/submatch_nfa
