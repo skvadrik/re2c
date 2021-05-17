@@ -504,6 +504,7 @@ if (RE2C_BUILD_LIBS)
     if(RE2C_BUILD_BENCHMARKS)
         add_subdirectory(benchmarks/submatch_nfa)
         add_subdirectory(benchmarks/submatch_dfa_jit)
+        add_subdirectory(benchmarks/submatch_java)
     endif()
 else()
     # empty check target
