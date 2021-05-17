@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+import glob
+import os
+import psutil
+import subprocess
+import sys
+
+
+builddir = "@builddir@"
+
+
+def main():
+    # Limit the benchmark to a single CPU (not working on macOS).
+    try:
+        psutil.Process().cpu_affinity([1])
+    except AttributeError as error:
+        sys.stderr.write("warning: cannot set CPU affinity\n")
+
+    # Run a small check for Java bindings to libre2c.
+    subprocess.run(['java',
+        '-cp', '%s/*' % builddir,
+        '-Djava.library.path=%s' % builddir,
+        '-Dfile.encoding=UTF8',
+        're2c.RE2C'
+    ])
+
+    # Remove previous measurements (otherwise ReTdfa will not rerun the
+    # benchmark, it will only regenerate charts).
+    for f in glob.glob('./measure_*.ser'):
+        os.remove(f)
+
+    # Run the benchmark.
+    subprocess.run(['java',
+        '-cp', '%s/*' % builddir,
+        '-Djava.library.path=%s' % builddir,
+        '-Dfile.encoding=UTF8',
+        '-Xmx1000m',
+        '-Xss10m',
+        'ReTdfa'
+    ])
+
+
+if __name__ == "__main__":
+    main()
+
