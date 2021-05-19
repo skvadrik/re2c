@@ -306,7 +306,7 @@ loop:
 
 int Scanner::scan()
 {
-    const char *p;
+    const char *p, *x, *y;
 scan:
     tok = cur;
     location = cur_loc();
@@ -406,6 +406,17 @@ scan:
             yylval.regexp = ast_str(tok_loc(), str, false);
             return TOKEN_REGEXP;
         }
+    }
+
+    // Include directive is allowed in the middle of a block.
+    "!include" space+ @x dstring @y space* ";" eol {
+        include(getstr(x + 1, y - 1));
+        goto scan;
+    }
+    "!include" {
+        msg.error(tok_loc(), "ill-formed include directive"
+            ", expected format: `!include \"<file>\" ; <newline>`");
+        exit(1);
     }
 
     "." {
