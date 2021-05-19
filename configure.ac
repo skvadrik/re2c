@@ -72,6 +72,7 @@ AM_COND_IF([WITH_BENCHMARKS], [
         [AC_MSG_ERROR([benchmark library is required with --enable-benchmarks])], [[]])
     AC_LANG_POP([C++])
 ])
+AM_CONDITIONAL([WITH_JAVA], [test -n "$JAVA_HOME"])
 
 
 # --enable-benchmarks-regenerate
@@ -166,12 +167,16 @@ AC_CONFIG_FILES([\
     benchmarks/submatch_nfa/Makefile \
     benchmarks/submatch_dfa_aot/Makefile \
     benchmarks/submatch_dfa_jit/Makefile \
+    benchmarks/submatch_java/Makefile \
     doc/manpage.rst \
     doc/help.rst \
 ])
-AC_CONFIG_FILES([run_tests.sh], [chmod +x run_tests.sh])
+AC_CONFIG_FILES([run_tests.sh],
+    [chmod +x run_tests.sh])
 AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/run.py],
     [chmod +x benchmarks/submatch_dfa_aot/run.py])
+AC_CONFIG_FILES([benchmarks/submatch_java/run.py],
+    [chmod +x benchmarks/submatch_java/run.py])
 
 
 LT_INIT([dlopen win32-dll])

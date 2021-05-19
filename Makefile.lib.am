@@ -193,4 +193,8 @@ SUBDIRS += benchmarks/submatch_nfa
 SUBDIRS += benchmarks/submatch_dfa_jit
 EXTRA_DIST += benchmarks/submatch_nfa
 EXTRA_DIST += benchmarks/submatch_dfa_jit
-endif
+if WITH_JAVA
+SUBDIRS += benchmarks/submatch_java
+EXTRA_DIST += benchmarks/submatch_java
+endif # WITH_JAVA
+endif # WITH_BENCHMARKS
