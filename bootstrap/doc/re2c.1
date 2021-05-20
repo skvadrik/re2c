@@ -881,8 +881,16 @@ substituted with the name of each tag variable), and \fBseparator = "";\fP
 tag variables).
 .TP
 .B \fB/*!include:re2c FILE */\fP
-This directive allows one to include \fBFILE\fP (in the same sense as \fB#include\fP
-directive in C/C++).
+This directive allows one to include \fBFILE\fP (the contents of the \fBFILE\fP
+are literally substituted in place of the directive, in the same way as
+\fB#include\fP works in C/C++). This directive can be used together with the
+\fB\-\-depfile\fP option to generate build system dependencies on the included
+files.
+.TP
+.B \fB!include FILE ;\fP
+This directive is the same as \fB/*!include:re2c FILE */\fP, except that it is
+meant to be used inside of a re2c block (and therefore has a slightly
+different syntax).
 .TP
 .B \fB/*!header:re2c:on*/\fP
 This directive marks the start of header file. Everything after it and up to
@@ -1985,8 +1993,10 @@ int main()
 .UNINDENT
 .SH INCLUDE FILES
 .sp
-re2c allows one to include other files using directive \fB/*!include:re2c FILE */\fP,
-where \fBFILE\fP is the name of file to be included. re2c looks for included
+re2c allows one to include other files using directive \fB/*!include:re2c FILE */\fP
+or \fB!include FILE ;\fP, where \fBFILE\fP is a path to the file to be included.
+The first form should be used outside of re2c blocks, and the second form allows
+one to include a file in the middle of a re2c block. re2c looks for included
 files in the directory of the including file and in include locations, which
 can be specified with \fB\-I\fP option.
 Include directives in re2c work in the same way as C/C++ \fB#include\fP: the contents
@@ -1998,7 +2008,7 @@ re2c provides some predefined include files that can be found in the
 can be useful to other projects (such as Unicode categories) and form something
 like a standard library for re2c.
 Below is an example of using include directive.
-.SS Include file (definitions.h)
+.SS Include file 1 (definitions.h)
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -2009,6 +2019,23 @@ typedef enum { OK, FAIL } Result;
 /*!re2c
     number = [1\-9][0\-9]*;
 */
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Include file 2 (extra_rules.re.inc)
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+// floating\-point numbers
+frac  = [0\-9]* "." [0\-9]+ | [0\-9]+ ".";
+exp   = \(aqe\(aq [+\-]? [0\-9]+;
+float = frac exp? | [0\-9]+ exp;
+
+float { return OK; }
 
 .ft P
 .fi
@@ -2026,18 +2053,21 @@ typedef enum { OK, FAIL } Result;
 
 Result lex(const char *YYCURSOR)
 {
+    const char *YYMARKER;
     /*!re2c
     re2c:define:YYCTYPE = char;
     re2c:yyfill:enable = 0;
 
     number { return OK; }
-    *      { return FAIL; }
+    !include "extra_rules.re.inc";
+    * { return FAIL; }
     */
 }
 
 int main()
 {
     assert(lex("123") == OK);
+    assert(lex("123.4567") == OK);
     return 0;
 }
 
