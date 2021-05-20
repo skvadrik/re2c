@@ -41,8 +41,16 @@ More information on each directive can be found in the related sections.
     tag variables).
 
 ``/*!include:re2c FILE */``
-    This directive allows one to include ``FILE`` (in the same sense as ``#include``
-    directive in C/C++).
+    This directive allows one to include ``FILE`` (the contents of the ``FILE``
+    are literally substituted in place of the directive, in the same way as
+    ``#include`` works in C/C++). This directive can be used together with the
+    ``--depfile`` option to generate build system dependencies on the included
+    files.
+
+``!include FILE ;``
+    This directive is the same as ``/*!include:re2c FILE */``, except that it is
+    meant to be used inside of a re2c block (and therefore has a slightly
+    different syntax).
 
 ``/*!header:re2c:on*/``
     This directive marks the start of header file. Everything after it and up to

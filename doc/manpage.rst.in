@@ -116,9 +116,15 @@ Include files
 =============
 .. include:: @top_srcdir@/doc/manual/includes/includes.rst_
 
-Include file (definitions.RE2C_HEADER_EXT)
+Include file 1 (definitions.RE2C_HEADER_EXT)
 ------------------------------------------
 .. include:: @top_srcdir@/examples/RE2C_LANG/includes/definitions.RE2C_HEADER_EXT
+    :literal:
+    :code: RE2C_LANG
+
+Include file 2 (extra_rules.re.inc)
+-----------------------------------
+.. include:: @top_srcdir@/examples/RE2C_LANG/includes/extra_rules.re.inc
     :literal:
     :code: RE2C_LANG
 
