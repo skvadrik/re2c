@@ -107,10 +107,14 @@ Include files
 =============
 .. include:: /manual/includes/includes.rst_
 
-Include file (definitions.go):
+Include file 1 (definitions.go):
 
 .. literalinclude:: ../examples/go/includes/definitions.go
     :language: go
+
+Include file 2 (extra_rules.re.inc):
+
+.. literalinclude:: ../examples/go/includes/extra_rules.re.inc
 
 Input file:
 

@@ -107,10 +107,14 @@ Include files
 =============
 .. include:: /manual/includes/includes.rst_
 
-Include file (definitions.h):
+Include file 1 (definitions.h):
 
 .. literalinclude:: ../examples/c/includes/definitions.h
     :language: c
+
+Include file 2 (extra_rules.re.inc):
+
+.. literalinclude:: ../examples/c/includes/extra_rules.re.inc
 
 Input file:
 

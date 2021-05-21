@@ -107,10 +107,14 @@ Include files
 =============
 .. include:: /manual/includes/includes.rst_
 
-Include file (definitions.RE2C_HEADER_EXT):
+Include file 1 (definitions.RE2C_HEADER_EXT):
 
 .. literalinclude:: ../examples/RE2C_LANG/includes/definitions.RE2C_HEADER_EXT
     :language: RE2C_LANG
+
+Include file 2 (extra_rules.re.inc):
+
+.. literalinclude:: ../examples/RE2C_LANG/includes/extra_rules.re.inc
 
 Input file:
 

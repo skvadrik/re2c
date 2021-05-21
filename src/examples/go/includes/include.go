@@ -12,12 +12,17 @@ const (
 
 
 func lex(str string) int {
-	var cursor int
+	var cursor, marker int
 	
 {
 	var yych byte
+	yyaccept := 0
 	yych = str[cursor]
 	switch (yych) {
+	case '.':
+		goto yy4
+	case '0':
+		goto yy5
 	case '1':
 		fallthrough
 	case '2':
@@ -35,12 +40,13 @@ func lex(str string) int {
 	case '8':
 		fallthrough
 	case '9':
-		goto yy4
+		goto yy6
 	default:
 		goto yy2
 	}
 yy2:
 	cursor += 1
+yy3:
 	{ return ResultFail }
 yy4:
 	cursor += 1
@@ -65,18 +71,254 @@ yy4:
 	case '8':
 		fallthrough
 	case '9':
-		goto yy4
+		goto yy9
 	default:
-		goto yy6
+		goto yy3
+	}
+yy5:
+	yyaccept = 0
+	cursor += 1
+	marker = cursor
+	yych = str[cursor]
+	switch (yych) {
+	case '.':
+		goto yy9
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy12
+	case 'E':
+		fallthrough
+	case 'e':
+		goto yy15
+	default:
+		goto yy3
 	}
 yy6:
+	yyaccept = 1
+	cursor += 1
+	marker = cursor
+	yych = str[cursor]
+	switch (yych) {
+	case '.':
+		goto yy9
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy6
+	case 'E':
+		fallthrough
+	case 'e':
+		goto yy15
+	default:
+		goto yy8
+	}
+yy8:
 	{ return ResultOk }
+yy9:
+	yyaccept = 2
+	cursor += 1
+	marker = cursor
+	yych = str[cursor]
+	switch (yych) {
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy9
+	case 'E':
+		fallthrough
+	case 'e':
+		goto yy15
+	default:
+		goto yy11
+	}
+yy11:
+	{ return ResultOk }
+yy12:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case '.':
+		goto yy9
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy12
+	case 'E':
+		fallthrough
+	case 'e':
+		goto yy15
+	default:
+		goto yy14
+	}
+yy14:
+	cursor = marker
+	switch (yyaccept) {
+	case 0:
+		goto yy3
+	case 1:
+		goto yy8
+	default:
+		goto yy11
+	}
+yy15:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case '+':
+		fallthrough
+	case '-':
+		goto yy16
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy17
+	default:
+		goto yy14
+	}
+yy16:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy17
+	default:
+		goto yy14
+	}
+yy17:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case '0':
+		fallthrough
+	case '1':
+		fallthrough
+	case '2':
+		fallthrough
+	case '3':
+		fallthrough
+	case '4':
+		fallthrough
+	case '5':
+		fallthrough
+	case '6':
+		fallthrough
+	case '7':
+		fallthrough
+	case '8':
+		fallthrough
+	case '9':
+		goto yy17
+	default:
+		goto yy11
+	}
 }
 
 }
 
 func TestLex(t *testing.T) {
 	if lex("123\000") != ResultOk {
+		t.Errorf("error")
+	}
+	if lex("123.4567\000") != ResultOk {
 		t.Errorf("error")
 	}
 }
