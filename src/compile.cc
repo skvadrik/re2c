@@ -129,10 +129,31 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     return make_smart_ptr(adfa);
 }
 
+struct rules_block_t {
+    const std::string name;
+    const opt_t *opts;
+    specs_t specs;
+};
+
+static const rules_block_t *find_rules_block(const std::string &name,
+    const std::vector<rules_block_t> &rules)
+{
+    if (name.empty()) {
+        return rules.empty() ? NULL : &rules.back();
+    }
+    for (size_t i = 0; i < rules.size(); ++i) {
+        const rules_block_t *rb = &rules[i];
+        if (rb->name == name) {
+            return rb;
+        }
+    }
+    return NULL;
+}
+
 void compile(Scanner &input, Output &output, Opt &opts)
 {
-    specs_t rspecs;
     symtab_t symtab;
+    std::vector<rules_block_t> rules;
     const conopt_t *globopts = &opts.glob;
     code_alc_t &alc = output.allocator;
     const loc_t &loc0 = input.tok_loc();
@@ -150,20 +171,24 @@ void compile(Scanner &input, Output &output, Opt &opts)
         output.wdelay_stmt(0, emit_skeleton_prolog(output));
     }
 
-    const opt_t *rules_opts = NULL;
     const opt_t *accum_opts = output.block().opts;
 
     for (;;) {
         // parse everything up to the next re2c block
         Scanner::ParseMode mode = input.echo(output);
         if (mode == Scanner::Stop) break;
-        validate_mode(mode, globopts->rFlag, rules_opts, input);
+        validate_mode(mode, globopts->rFlag, !rules.empty(), input);
 
         // parse the next re2c block
         specs_t specs;
         if (mode == Scanner::Reuse) {
-            specs = rspecs;
-            opts.restore(rules_opts);
+            const rules_block_t *rb = find_rules_block(output.rules_block_name, rules);
+            if (rb == NULL) {
+                error("cannot find rules block '%s'", output.rules_block_name.c_str());
+                exit(1);
+            }
+            specs = rb->specs;
+            opts.restore(rb->opts);
             output.state_goto = false;
         }
         output.cond_goto = false;
@@ -175,8 +200,12 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
         if (mode == Scanner::Rules) {
             // save AST and options for future use
-            rspecs = specs;
-            rules_opts = output.block().opts;
+            const rules_block_t rb = {
+                output.rules_block_name,
+                output.block().opts,
+                specs
+            };
+            rules.push_back(rb);
         } else {
             validate_ast(specs, output.block().opts, output.msg);
             normalize_ast(specs);
@@ -203,7 +232,8 @@ void compile(Scanner &input, Output &output, Opt &opts)
         }
     }
 
-    output.total_opts = accum_opts ? accum_opts : rules_opts;
+    output.total_opts = accum_opts ? accum_opts
+        : rules.empty() ? NULL : rules.back().opts;
 
     if (globopts->target == TARGET_SKELETON) {
         output.wdelay_stmt(0, emit_skeleton_epilog(output));

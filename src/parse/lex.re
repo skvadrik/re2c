@@ -119,6 +119,15 @@ struct ScannerState
 #endif // _RE2C_PARSE_LEX_
 /*!header:re2c:off*/
 
+static inline void save_string(std::string &str, const char *s, const char *e)
+{
+    if (s == NULL) {
+        str.clear();
+    } else {
+        str.assign(s, e);
+    }
+}
+
 Scanner::ParseMode Scanner::echo(Output &out)
 {
     const opt_t *opts = out.block().opts;
@@ -137,13 +146,15 @@ loop:
         return Parse;
     }
 
-    "/*!rules:re2c" {
+    "/*!rules:re2c" (":" @x name @y)? {
         out.wraw(tok, ptr);
+        save_string(out.rules_block_name, x, y);
         return Rules;
     }
 
-    "/*!use:re2c" {
+    "/*!use:re2c" (":" @x name @y)? {
         out.wraw(tok, ptr);
+        save_string(out.rules_block_name, x, y);
         return Reuse;
     }
 

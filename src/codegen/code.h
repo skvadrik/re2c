@@ -740,6 +740,9 @@ public:
     code_alc_t allocator;
     Scratchbuf scratchbuf;
 
+    // Name of the rules block specified in the most recent directive.
+    std::string rules_block_name;
+
     // used in state dispatch (accumulated for all non-reuse blocks)
     uint32_t total_fill_index;              // upper bound of YYFILL state index
     std::vector<CodeList*> total_fill_goto; // transitions to YYFILL states
