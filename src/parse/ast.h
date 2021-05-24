@@ -91,23 +91,6 @@ struct ASTBounds {
     uint32_t max;
 };
 
-struct spec_t {
-    std::string name;
-    std::vector<ASTRule> rules;
-    std::vector<const SemAct*> defs;
-    std::vector<const SemAct*> eofs;
-    std::vector<const SemAct*> setup;
-    size_t def_rule;
-    size_t eof_rule;
-
-    explicit spec_t(const std::string &n)
-        : name(n), rules(), defs(), eofs(), setup()
-        , def_rule(Rule::NONE), eof_rule(Rule::NONE) {}
-};
-
-typedef std::vector<spec_t> specs_t;
-typedef std::map<std::string, const AST*> symtab_t;
-
 const AST *ast_nil(const loc_t &loc);
 const AST *ast_str(const loc_t &loc, std::vector<ASTChar> *chars, bool icase);
 const AST *ast_cls(const loc_t &loc, std::vector<ASTRange> *ranges, bool negated);

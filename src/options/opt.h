@@ -345,6 +345,7 @@ public:
     const opt_t *snapshot();
     void fix_global_and_defaults();
     void restore(const opt_t *opts);
+    void merge(const opt_t *opts);
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \

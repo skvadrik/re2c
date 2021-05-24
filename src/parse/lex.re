@@ -419,7 +419,6 @@ scan:
         }
     }
 
-    // Include directive is allowed in the middle of a block.
     "!include" space+ @x dstring @y space* ";" eol {
         include(getstr(x + 1, y - 1));
         goto scan;
@@ -427,6 +426,17 @@ scan:
     "!include" {
         msg.error(tok_loc(), "ill-formed include directive"
             ", expected format: `!include \"<file>\" ; <newline>`");
+        exit(1);
+    }
+
+    "!use:" @x name @y ";" eol {
+        next_line();
+        yylval.str = newstr(x, y); // save the name of the used block
+        return TOKEN_BLOCK;
+    }
+    "!use" {
+        msg.error(tok_loc(), "ill-formed use directive"
+            ", expected format: `!use:<block-name> ; <newline>`");
         exit(1);
     }
 

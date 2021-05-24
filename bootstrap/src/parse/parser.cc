@@ -93,7 +93,7 @@ void yyerror(context_t &context, const char*) RE2C_ATTR((noreturn));
 
 } // extern "C"
 
-static spec_t &find(specs_t &specs, const std::string &name)
+static spec_t &find_or_add_spec(specs_t &specs, const std::string &name)
 {
     for (specs_t::iterator i = specs.begin(); i != specs.end(); ++i) {
         if (i->name == name) return *i;
@@ -102,8 +102,29 @@ static spec_t &find(specs_t &specs, const std::string &name)
     return specs.back();
 }
 
+static void merge_block(context_t &context, const std::string name)
+{
+    const rules_block_t *rb = find_rules_block(name, context.rules);
+    if (rb == NULL) {
+        error("cannot find rules block '%s'", name.c_str());
+        exit(1);
+    }
+    for (specs_t::const_iterator i = rb->specs.begin(); i != rb->specs.end(); ++i) {
+        spec_t &spec = find_or_add_spec(context.specs, i->name);
 
-#line 107 "src/parse/parser.cc"
+        // Merge rules.
+        spec.rules.insert(spec.rules.end(), i->rules.begin(), i->rules.end());
+        spec.defs.insert(spec.defs.end(), i->defs.begin(), i->defs.end());
+        spec.eofs.insert(spec.eofs.end(), i->eofs.begin(), i->eofs.end());
+        spec.setup.insert(spec.setup.end(), i->setup.begin(), i->setup.end());
+
+        // Merge configurations.
+        context.opts.merge(rb->opts);
+    }
+}
+
+
+#line 128 "src/parse/parser.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -147,32 +168,33 @@ enum yysymbol_kind_t
   YYSYMBOL_TOKEN_FID_END = 13,             /* TOKEN_FID_END  */
   YYSYMBOL_TOKEN_LINE_INFO = 14,           /* TOKEN_LINE_INFO  */
   YYSYMBOL_TOKEN_REGEXP = 15,              /* TOKEN_REGEXP  */
-  YYSYMBOL_16_ = 16,                       /* '/'  */
-  YYSYMBOL_17_ = 17,                       /* '='  */
-  YYSYMBOL_18_ = 18,                       /* ';'  */
-  YYSYMBOL_19_ = 19,                       /* '*'  */
-  YYSYMBOL_20_ = 20,                       /* '$'  */
-  YYSYMBOL_21_ = 21,                       /* '|'  */
-  YYSYMBOL_22_ = 22,                       /* '\\'  */
-  YYSYMBOL_23_ = 23,                       /* '+'  */
-  YYSYMBOL_24_ = 24,                       /* '?'  */
-  YYSYMBOL_25_ = 25,                       /* '('  */
-  YYSYMBOL_26_ = 26,                       /* ')'  */
-  YYSYMBOL_YYACCEPT = 27,                  /* $accept  */
-  YYSYMBOL_spec = 28,                      /* spec  */
-  YYSYMBOL_def = 29,                       /* def  */
-  YYSYMBOL_name = 30,                      /* name  */
-  YYSYMBOL_enddef = 31,                    /* enddef  */
-  YYSYMBOL_rule = 32,                      /* rule  */
-  YYSYMBOL_ccode = 33,                     /* ccode  */
-  YYSYMBOL_trailexpr = 34,                 /* trailexpr  */
-  YYSYMBOL_expr = 35,                      /* expr  */
-  YYSYMBOL_diff = 36,                      /* diff  */
-  YYSYMBOL_term = 37,                      /* term  */
-  YYSYMBOL_factor = 38,                    /* factor  */
-  YYSYMBOL_closes = 39,                    /* closes  */
-  YYSYMBOL_close = 40,                     /* close  */
-  YYSYMBOL_primary = 41                    /* primary  */
+  YYSYMBOL_TOKEN_BLOCK = 16,               /* TOKEN_BLOCK  */
+  YYSYMBOL_17_ = 17,                       /* '/'  */
+  YYSYMBOL_18_ = 18,                       /* '='  */
+  YYSYMBOL_19_ = 19,                       /* ';'  */
+  YYSYMBOL_20_ = 20,                       /* '*'  */
+  YYSYMBOL_21_ = 21,                       /* '$'  */
+  YYSYMBOL_22_ = 22,                       /* '|'  */
+  YYSYMBOL_23_ = 23,                       /* '\\'  */
+  YYSYMBOL_24_ = 24,                       /* '+'  */
+  YYSYMBOL_25_ = 25,                       /* '?'  */
+  YYSYMBOL_26_ = 26,                       /* '('  */
+  YYSYMBOL_27_ = 27,                       /* ')'  */
+  YYSYMBOL_YYACCEPT = 28,                  /* $accept  */
+  YYSYMBOL_spec = 29,                      /* spec  */
+  YYSYMBOL_def = 30,                       /* def  */
+  YYSYMBOL_name = 31,                      /* name  */
+  YYSYMBOL_enddef = 32,                    /* enddef  */
+  YYSYMBOL_rule = 33,                      /* rule  */
+  YYSYMBOL_ccode = 34,                     /* ccode  */
+  YYSYMBOL_trailexpr = 35,                 /* trailexpr  */
+  YYSYMBOL_expr = 36,                      /* expr  */
+  YYSYMBOL_diff = 37,                      /* diff  */
+  YYSYMBOL_term = 38,                      /* term  */
+  YYSYMBOL_factor = 39,                    /* factor  */
+  YYSYMBOL_closes = 40,                    /* closes  */
+  YYSYMBOL_close = 41,                     /* close  */
+  YYSYMBOL_primary = 42                    /* primary  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -482,19 +504,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   56
+#define YYLAST   58
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  27
+#define YYNTOKENS  28
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  15
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  42
+#define YYNRULES  43
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  61
+#define YYNSTATES  62
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   270
+#define YYMAXUTOK   271
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -511,16 +533,16 @@ static const yytype_int8 yytranslate[] =
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,    20,     2,     2,     2,
-      25,    26,    19,    23,     2,     2,     2,    16,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    18,
-       2,    17,     2,    24,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,    21,     2,     2,     2,
+      26,    27,    20,    24,     2,     2,     2,    17,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    19,
+       2,    18,     2,    25,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,    22,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,    23,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,    21,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,    22,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -535,18 +557,18 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15
+      15,    16
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    75,    75,    76,    77,    78,    79,    83,    92,    99,
-     100,   103,   103,   106,   109,   112,   115,   121,   127,   133,
-     139,   146,   147,   152,   159,   160,   166,   167,   171,   172,
-     176,   178,   182,   183,   190,   196,   197,   201,   202,   203,
-     207,   208,   221
+       0,    97,    97,    98,    99,   100,   101,   102,   106,   115,
+     122,   123,   126,   126,   129,   132,   135,   138,   144,   150,
+     156,   162,   169,   170,   175,   182,   183,   189,   190,   194,
+     195,   199,   201,   205,   206,   213,   219,   220,   224,   225,
+     226,   230,   231,   244
 };
 #endif
 
@@ -565,10 +587,10 @@ static const char *const yytname[] =
   "\"end of file\"", "error", "\"invalid token\"", "TOKEN_CJUMP",
   "TOKEN_CNEXT", "TOKEN_CLIST", "TOKEN_CSETUP", "TOKEN_CZERO",
   "TOKEN_CLOSESIZE", "TOKEN_CODE", "TOKEN_CONF", "TOKEN_ID", "TOKEN_FID",
-  "TOKEN_FID_END", "TOKEN_LINE_INFO", "TOKEN_REGEXP", "'/'", "'='", "';'",
-  "'*'", "'$'", "'|'", "'\\\\'", "'+'", "'?'", "'('", "')'", "$accept",
-  "spec", "def", "name", "enddef", "rule", "ccode", "trailexpr", "expr",
-  "diff", "term", "factor", "closes", "close", "primary", YY_NULLPTR
+  "TOKEN_FID_END", "TOKEN_LINE_INFO", "TOKEN_REGEXP", "TOKEN_BLOCK", "'/'",
+  "'='", "';'", "'*'", "'$'", "'|'", "'\\\\'", "'+'", "'?'", "'('", "')'",
+  "$accept", "spec", "def", "name", "enddef", "rule", "ccode", "trailexpr",
+  "expr", "diff", "term", "factor", "closes", "close", "primary", YY_NULLPTR
 };
 
 static const char *
@@ -584,8 +606,8 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 static const yytype_int16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268,   269,   270,    47,    61,    59,    42,
-      36,   124,    92,    43,    63,    40,    41
+     265,   266,   267,   268,   269,   270,   271,    47,    61,    59,
+      42,    36,   124,    92,    43,    63,    40,    41
 };
 #endif
 
@@ -603,13 +625,13 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -20,     0,   -20,    12,    25,    13,   -20,    -8,   -20,   -20,
-     -20,    33,    40,    -7,   -20,    -7,   -20,    41,    24,    29,
-     -20,    -7,     5,   -20,    13,    13,    13,   -20,   -20,    43,
-     -20,   -20,   -20,   -20,   -20,    15,    17,   -20,    -7,    -7,
-      -7,   -20,   -20,   -20,   -20,   -20,    20,   -20,   -20,   -20,
-     -20,   -20,   -20,   -20,   -20,   -20,   -20,    32,    29,   -20,
-     -20
+     -20,     0,   -20,     8,    -1,    21,   -20,    -9,   -20,   -20,
+     -20,   -20,    31,    36,    20,   -20,    20,   -20,    43,    22,
+      10,   -20,    20,    -7,   -20,    21,    21,    21,   -20,   -20,
+      44,   -20,   -20,   -20,   -20,   -20,    15,    19,   -20,    20,
+      20,    20,   -20,   -20,   -20,   -20,   -20,    23,   -20,   -20,
+     -20,   -20,   -20,   -20,   -20,   -20,   -20,   -20,    32,    10,
+     -20,   -20
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -617,27 +639,27 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1,     0,     0,     0,     3,    41,    10,     6,
-      40,     0,     0,     0,     4,     0,     5,     0,    24,    26,
-      28,    30,    32,    41,     0,     0,     0,    19,    23,     0,
-      21,    20,     9,    14,    15,     0,     0,    13,     0,     0,
-       0,    31,    34,    37,    38,    39,    33,    35,    17,    18,
-      16,    22,    42,    12,     8,    11,     7,    25,    27,    29,
-      36
+       2,     0,     1,     0,     0,     0,     3,    42,    11,     6,
+      41,     7,     0,     0,     0,     4,     0,     5,     0,    25,
+      27,    29,    31,    33,    42,     0,     0,     0,    20,    24,
+       0,    22,    21,    10,    15,    16,     0,     0,    14,     0,
+       0,     0,    32,    35,    38,    39,    40,    34,    36,    18,
+      19,    17,    23,    43,    13,     9,    12,     8,    26,    28,
+      30,    37
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -20,   -20,   -20,   -20,   -20,   -20,    22,    51,   -12,    16,
-     -19,   -20,   -20,    10,   -20
+     -20,   -20,   -20,   -20,   -20,   -20,    24,    52,   -12,    16,
+     -19,   -20,   -20,    11,   -20
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,    14,    15,    56,    16,    31,    17,    18,    19,
-      20,    21,    46,    47,    22
+      -1,     1,    15,    16,    57,    17,    32,    18,    19,    20,
+      21,    22,    47,    48,    23
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -645,55 +667,55 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       2,    35,    41,    36,    23,     3,     4,     5,    10,    32,
-       6,     7,     8,    42,     9,    10,    28,    29,    13,    11,
-      12,    59,    30,    23,    43,    13,    57,    10,    44,    45,
-      53,    24,    25,    54,    27,    55,    39,    13,    39,    43,
-      38,    52,    33,    44,    45,    39,    48,    49,    50,    34,
-      37,    40,    51,    39,    26,    58,    60
+       2,    43,    36,    42,    37,     3,     4,     5,    28,    33,
+       6,     7,     8,    44,     9,    10,    11,    45,    46,    24,
+      12,    13,    60,    10,    29,    30,    14,    58,    25,    26,
+      31,    24,    54,    41,    14,    10,    55,    40,    56,    39,
+      34,    40,    53,    44,    40,    35,    14,    45,    46,    49,
+      50,    51,    38,    52,    40,    27,    59,     0,    61
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,    13,    21,    15,    11,     5,     6,     7,    15,    17,
-      10,    11,    12,     8,    14,    15,     3,     4,    25,    19,
-      20,    40,     9,    11,    19,    25,    38,    15,    23,    24,
-      13,    19,    20,    16,     9,    18,    21,    25,    21,    19,
-      16,    26,     9,    23,    24,    21,    24,    25,    26,     9,
-       9,    22,     9,    21,     3,    39,    46
+       0,     8,    14,    22,    16,     5,     6,     7,     9,    18,
+      10,    11,    12,    20,    14,    15,    16,    24,    25,    11,
+      20,    21,    41,    15,     3,     4,    26,    39,    20,    21,
+       9,    11,    13,    23,    26,    15,    17,    22,    19,    17,
+       9,    22,    27,    20,    22,     9,    26,    24,    25,    25,
+      26,    27,     9,     9,    22,     3,    40,    -1,    47
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    28,     0,     5,     6,     7,    10,    11,    12,    14,
-      15,    19,    20,    25,    29,    30,    32,    34,    35,    36,
-      37,    38,    41,    11,    19,    20,    34,     9,     3,     4,
-       9,    33,    17,     9,     9,    35,    35,     9,    16,    21,
-      22,    37,     8,    19,    23,    24,    39,    40,    33,    33,
-      33,     9,    26,    13,    16,    18,    31,    35,    36,    37,
-      40
+       0,    29,     0,     5,     6,     7,    10,    11,    12,    14,
+      15,    16,    20,    21,    26,    30,    31,    33,    35,    36,
+      37,    38,    39,    42,    11,    20,    21,    35,     9,     3,
+       4,     9,    34,    18,     9,     9,    36,    36,     9,    17,
+      22,    23,    38,     8,    20,    24,    25,    40,    41,    34,
+      34,    34,     9,    27,    13,    17,    19,    32,    36,    37,
+      38,    41
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    27,    28,    28,    28,    28,    28,    29,    29,    30,
-      30,    31,    31,    32,    32,    32,    32,    32,    32,    32,
-      32,    33,    33,    33,    34,    34,    35,    35,    36,    36,
-      37,    37,    38,    38,    38,    39,    39,    40,    40,    40,
-      41,    41,    41
+       0,    28,    29,    29,    29,    29,    29,    29,    30,    30,
+      31,    31,    32,    32,    33,    33,    33,    33,    33,    33,
+      33,    33,    34,    34,    34,    35,    35,    36,    36,    37,
+      37,    38,    38,    39,    39,    39,    40,    40,    41,    41,
+      41,    42,    42,    42
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0,     2,     2,     2,     2,     3,     3,     2,
-       1,     1,     1,     2,     2,     2,     3,     3,     3,     2,
-       2,     1,     2,     1,     1,     3,     1,     3,     1,     3,
-       1,     2,     1,     2,     2,     1,     2,     1,     1,     1,
-       1,     1,     3
+       0,     2,     0,     2,     2,     2,     2,     2,     3,     3,
+       2,     1,     1,     1,     2,     2,     2,     3,     3,     3,
+       2,     2,     1,     2,     1,     1,     3,     1,     3,     1,
+       3,     1,     2,     1,     2,     2,     1,     2,     1,     1,
+       1,     1,     1,     3
 };
 
 
@@ -1163,13 +1185,19 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* spec: spec TOKEN_CONF  */
-#line 76 "../src/parse/parser.ypp"
+#line 98 "../src/parse/parser.ypp"
                   { context.input.lex_conf(context.opts); }
-#line 1169 "src/parse/parser.cc"
+#line 1191 "src/parse/parser.cc"
     break;
 
-  case 7: /* def: name expr enddef  */
-#line 83 "../src/parse/parser.ypp"
+  case 7: /* spec: spec TOKEN_BLOCK  */
+#line 102 "../src/parse/parser.ypp"
+                   { merge_block(context, *(yyvsp[0].str)); }
+#line 1197 "src/parse/parser.cc"
+    break;
+
+  case 8: /* def: name expr enddef  */
+#line 106 "../src/parse/parser.ypp"
                    {
     if (!context.symtab.insert(std::make_pair(*(yyvsp[-2].str), (yyvsp[-1].regexp))).second) {
         context.input.msg.error(context.input.tok_loc()
@@ -1178,158 +1206,158 @@ yyreduce:
     }
     delete (yyvsp[-2].str);
 }
-#line 1182 "src/parse/parser.cc"
+#line 1210 "src/parse/parser.cc"
     break;
 
-  case 8: /* def: name expr '/'  */
-#line 92 "../src/parse/parser.ypp"
+  case 9: /* def: name expr '/'  */
+#line 115 "../src/parse/parser.ypp"
                 {
     context.input.msg.error(context.input.tok_loc()
         , "trailing contexts are not allowed in named definitions");
     exit(1);
 }
-#line 1192 "src/parse/parser.cc"
+#line 1220 "src/parse/parser.cc"
     break;
 
-  case 9: /* name: TOKEN_ID '='  */
-#line 99 "../src/parse/parser.ypp"
+  case 10: /* name: TOKEN_ID '='  */
+#line 122 "../src/parse/parser.ypp"
                { (yyval.str) = (yyvsp[-1].str); }
-#line 1198 "src/parse/parser.cc"
+#line 1226 "src/parse/parser.cc"
     break;
 
-  case 13: /* rule: trailexpr TOKEN_CODE  */
-#line 106 "../src/parse/parser.ypp"
+  case 14: /* rule: trailexpr TOKEN_CODE  */
+#line 129 "../src/parse/parser.ypp"
                        {
-    find(context.specs, "").rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
+    find_or_add_spec(context.specs, "").rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
 }
-#line 1206 "src/parse/parser.cc"
+#line 1234 "src/parse/parser.cc"
     break;
 
-  case 14: /* rule: '*' TOKEN_CODE  */
-#line 109 "../src/parse/parser.ypp"
+  case 15: /* rule: '*' TOKEN_CODE  */
+#line 132 "../src/parse/parser.ypp"
                  {
-    find(context.specs, "").defs.push_back((yyvsp[0].semact));
+    find_or_add_spec(context.specs, "").defs.push_back((yyvsp[0].semact));
 }
-#line 1214 "src/parse/parser.cc"
+#line 1242 "src/parse/parser.cc"
     break;
 
-  case 15: /* rule: '$' TOKEN_CODE  */
-#line 112 "../src/parse/parser.ypp"
+  case 16: /* rule: '$' TOKEN_CODE  */
+#line 135 "../src/parse/parser.ypp"
                  {
-    find(context.specs, "").eofs.push_back((yyvsp[0].semact));
+    find_or_add_spec(context.specs, "").eofs.push_back((yyvsp[0].semact));
 }
-#line 1222 "src/parse/parser.cc"
+#line 1250 "src/parse/parser.cc"
     break;
 
-  case 16: /* rule: TOKEN_CLIST trailexpr ccode  */
-#line 115 "../src/parse/parser.ypp"
+  case 17: /* rule: TOKEN_CLIST trailexpr ccode  */
+#line 138 "../src/parse/parser.ypp"
                               {
     for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-        find(context.specs, *i).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
+        find_or_add_spec(context.specs, *i).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
     }
     delete (yyvsp[-2].clist);
 }
-#line 1233 "src/parse/parser.cc"
+#line 1261 "src/parse/parser.cc"
     break;
 
-  case 17: /* rule: TOKEN_CLIST '*' ccode  */
-#line 121 "../src/parse/parser.ypp"
+  case 18: /* rule: TOKEN_CLIST '*' ccode  */
+#line 144 "../src/parse/parser.ypp"
                         {
     for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-        find(context.specs, *i).defs.push_back((yyvsp[0].semact));
+        find_or_add_spec(context.specs, *i).defs.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-2].clist);
 }
-#line 1244 "src/parse/parser.cc"
+#line 1272 "src/parse/parser.cc"
     break;
 
-  case 18: /* rule: TOKEN_CLIST '$' ccode  */
-#line 127 "../src/parse/parser.ypp"
+  case 19: /* rule: TOKEN_CLIST '$' ccode  */
+#line 150 "../src/parse/parser.ypp"
                         {
     for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-        find(context.specs, *i).eofs.push_back((yyvsp[0].semact));
+        find_or_add_spec(context.specs, *i).eofs.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-2].clist);
 }
-#line 1255 "src/parse/parser.cc"
+#line 1283 "src/parse/parser.cc"
     break;
 
-  case 19: /* rule: TOKEN_CSETUP TOKEN_CODE  */
-#line 133 "../src/parse/parser.ypp"
+  case 20: /* rule: TOKEN_CSETUP TOKEN_CODE  */
+#line 156 "../src/parse/parser.ypp"
                           {
     for (CondList::const_iterator i = (yyvsp[-1].clist)->begin(); i != (yyvsp[-1].clist)->end(); ++i) {
-        find(context.specs, *i).setup.push_back((yyvsp[0].semact));
+        find_or_add_spec(context.specs, *i).setup.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-1].clist);
 }
-#line 1266 "src/parse/parser.cc"
+#line 1294 "src/parse/parser.cc"
     break;
 
-  case 20: /* rule: TOKEN_CZERO ccode  */
-#line 139 "../src/parse/parser.ypp"
+  case 21: /* rule: TOKEN_CZERO ccode  */
+#line 162 "../src/parse/parser.ypp"
                     {
     const AST *r = ast_nil(context.input.tok_loc());
-    find(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].semact)));
+    find_or_add_spec(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].semact)));
     delete (yyvsp[-1].clist);
 }
-#line 1276 "src/parse/parser.cc"
+#line 1304 "src/parse/parser.cc"
     break;
 
-  case 22: /* ccode: TOKEN_CNEXT TOKEN_CODE  */
-#line 147 "../src/parse/parser.ypp"
+  case 23: /* ccode: TOKEN_CNEXT TOKEN_CODE  */
+#line 170 "../src/parse/parser.ypp"
                          {
     (yyval.semact) = (yyvsp[0].semact);
     (yyval.semact)->cond = *(yyvsp[-1].str);
     delete (yyvsp[-1].str);
 }
-#line 1286 "src/parse/parser.cc"
+#line 1314 "src/parse/parser.cc"
     break;
 
-  case 23: /* ccode: TOKEN_CJUMP  */
-#line 152 "../src/parse/parser.ypp"
+  case 24: /* ccode: TOKEN_CJUMP  */
+#line 175 "../src/parse/parser.ypp"
               {
     (yyval.semact) = new SemAct(context.input.tok_loc());
     (yyval.semact)->cond = *(yyvsp[0].str);
     delete (yyvsp[0].str);
 }
-#line 1296 "src/parse/parser.cc"
+#line 1324 "src/parse/parser.cc"
     break;
 
-  case 24: /* trailexpr: expr  */
-#line 159 "../src/parse/parser.ypp"
+  case 25: /* trailexpr: expr  */
+#line 182 "../src/parse/parser.ypp"
        { (yyval.regexp) = ast_cap((yyvsp[0].regexp)); }
-#line 1302 "src/parse/parser.cc"
+#line 1330 "src/parse/parser.cc"
     break;
 
-  case 25: /* trailexpr: expr '/' expr  */
-#line 160 "../src/parse/parser.ypp"
+  case 26: /* trailexpr: expr '/' expr  */
+#line 183 "../src/parse/parser.ypp"
                 {
     (yyval.regexp) = ast_cat(ast_cap((yyvsp[-2].regexp)),
         ast_cat(ast_tag(context.input.tok_loc(), NULL, false), (yyvsp[0].regexp)));
 }
-#line 1311 "src/parse/parser.cc"
+#line 1339 "src/parse/parser.cc"
     break;
 
-  case 27: /* expr: expr '|' diff  */
-#line 167 "../src/parse/parser.ypp"
+  case 28: /* expr: expr '|' diff  */
+#line 190 "../src/parse/parser.ypp"
                 { (yyval.regexp) = ast_alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1317 "src/parse/parser.cc"
+#line 1345 "src/parse/parser.cc"
     break;
 
-  case 29: /* diff: diff '\\' term  */
-#line 172 "../src/parse/parser.ypp"
+  case 30: /* diff: diff '\\' term  */
+#line 195 "../src/parse/parser.ypp"
                  { (yyval.regexp) = ast_diff((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1323 "src/parse/parser.cc"
+#line 1351 "src/parse/parser.cc"
     break;
 
-  case 31: /* term: factor term  */
-#line 178 "../src/parse/parser.ypp"
+  case 32: /* term: factor term  */
+#line 201 "../src/parse/parser.ypp"
               { (yyval.regexp) = ast_cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
-#line 1329 "src/parse/parser.cc"
+#line 1357 "src/parse/parser.cc"
     break;
 
-  case 33: /* factor: primary closes  */
-#line 183 "../src/parse/parser.ypp"
+  case 34: /* factor: primary closes  */
+#line 206 "../src/parse/parser.ypp"
                  {
     switch((yyvsp[0].op)) {
         case '*': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, AST::MANY); break;
@@ -1337,43 +1365,43 @@ yyreduce:
         case '?': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, 1); break;
     }
 }
-#line 1341 "src/parse/parser.cc"
+#line 1369 "src/parse/parser.cc"
     break;
 
-  case 34: /* factor: primary TOKEN_CLOSESIZE  */
-#line 190 "../src/parse/parser.ypp"
+  case 35: /* factor: primary TOKEN_CLOSESIZE  */
+#line 213 "../src/parse/parser.ypp"
                           {
     (yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max);
 }
-#line 1349 "src/parse/parser.cc"
+#line 1377 "src/parse/parser.cc"
     break;
 
-  case 36: /* closes: closes close  */
-#line 197 "../src/parse/parser.ypp"
+  case 37: /* closes: closes close  */
+#line 220 "../src/parse/parser.ypp"
                { (yyval.op) = ((yyvsp[-1].op) == (yyvsp[0].op)) ? (yyvsp[-1].op) : '*'; }
-#line 1355 "src/parse/parser.cc"
+#line 1383 "src/parse/parser.cc"
     break;
 
-  case 37: /* close: '*'  */
-#line 201 "../src/parse/parser.ypp"
+  case 38: /* close: '*'  */
+#line 224 "../src/parse/parser.ypp"
       { (yyval.op) = '*'; }
-#line 1361 "src/parse/parser.cc"
+#line 1389 "src/parse/parser.cc"
     break;
 
-  case 38: /* close: '+'  */
-#line 202 "../src/parse/parser.ypp"
+  case 39: /* close: '+'  */
+#line 225 "../src/parse/parser.ypp"
       { (yyval.op) = '+'; }
-#line 1367 "src/parse/parser.cc"
+#line 1395 "src/parse/parser.cc"
     break;
 
-  case 39: /* close: '?'  */
-#line 203 "../src/parse/parser.ypp"
+  case 40: /* close: '?'  */
+#line 226 "../src/parse/parser.ypp"
       { (yyval.op) = '?'; }
-#line 1373 "src/parse/parser.cc"
+#line 1401 "src/parse/parser.cc"
     break;
 
-  case 41: /* primary: TOKEN_ID  */
-#line 208 "../src/parse/parser.ypp"
+  case 42: /* primary: TOKEN_ID  */
+#line 231 "../src/parse/parser.ypp"
            {
     symtab_t::iterator i = context.symtab.find(*(yyvsp[0].str));
     if (i == context.symtab.end()) {
@@ -1387,17 +1415,17 @@ yyreduce:
     }
     delete (yyvsp[0].str);
 }
-#line 1391 "src/parse/parser.cc"
+#line 1419 "src/parse/parser.cc"
     break;
 
-  case 42: /* primary: '(' expr ')'  */
-#line 221 "../src/parse/parser.ypp"
+  case 43: /* primary: '(' expr ')'  */
+#line 244 "../src/parse/parser.ypp"
                { (yyval.regexp) = ast_cap((yyvsp[-1].regexp)); }
-#line 1397 "src/parse/parser.cc"
+#line 1425 "src/parse/parser.cc"
     break;
 
 
-#line 1401 "src/parse/parser.cc"
+#line 1429 "src/parse/parser.cc"
 
       default: break;
     }
@@ -1591,7 +1619,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 224 "../src/parse/parser.ypp"
+#line 247 "../src/parse/parser.ypp"
 
 
 #pragma GCC diagnostic pop
@@ -1613,9 +1641,10 @@ int yylex(context_t &context)
 
 namespace re2c {
 
-void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts)
+void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts,
+    const rules_blocks_t &rules)
 {
-    context_t context = {input, specs, symtab, opts};
+    context_t context = {input, specs, symtab, opts, rules};
     yyparse(context);
 }
 
