@@ -61,7 +61,7 @@ private:
     inline void set_line(uint32_t l);
     inline void next_line();
     void set_sourceline ();
-    void lex_end_of_comment(Output &out);
+    void lex_end_of_comment(Output &out, bool allow_garbage = false);
     void lex_code_indented();
     void lex_code_in_braces();
     void lex_c_comment();

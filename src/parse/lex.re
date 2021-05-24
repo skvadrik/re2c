@@ -160,14 +160,16 @@ loop:
 
     "/*!ignore:re2c" {
         out.wraw(tok, ptr);
-        lex_end_of_comment(out);
+        // allows arbitrary garbage before the end of the comment
+        lex_end_of_comment(out, true);
         goto next;
     }
 
     "/*!max:re2c" {
         out.wraw(tok, ptr);
         out.wdelay_stmt(0, code_yymaxfill(alc));
-        lex_end_of_comment(out);
+        // historically allows garbage before the end of the comment
+        lex_end_of_comment(out, true);
         goto next;
     }
 
@@ -227,8 +229,9 @@ loop:
         goto next;
     }
 
-    "/*!include:re2c" space+ @x dstring @y space* eoc {
+    "/*!include:re2c" space+ @x dstring @y space* {
         out.wraw(tok, ptr);
+        lex_end_of_comment(out);
         include(getstr(x + 1, y - 1));
         goto next;
     }
@@ -257,16 +260,17 @@ loop:
 */
 }
 
-void Scanner::lex_end_of_comment(Output &out)
+void Scanner::lex_end_of_comment(Output &out, bool allow_garbage)
 {
     bool multiline = false;
 loop:
 /*!re2c
-    * { goto loop; }
-    eof {
+    * {
+        if (allow_garbage && !is_eof()) goto loop;
         msg.error(cur_loc(), "expected end of block");
         exit(1);
     }
+    space { goto loop; }
     eol {
         next_line();
         multiline = true;
