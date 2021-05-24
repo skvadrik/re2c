@@ -23,4 +23,4 @@ yy6:
 
 include/include004_inline.c: include/include004_inline.re include/include004_inline.re.inc
 include/include004_inline.re.inc:1:4: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
-include/include004_inline.re:11:8: warning: unreachable rule (shadowed by rule at line 2) [-Wunreachable-rules]
+include/include004_inline.re:12:8: warning: unreachable rule (shadowed by rule at line 2) [-Wunreachable-rules]
