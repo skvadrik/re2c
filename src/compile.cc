@@ -129,14 +129,8 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     return make_smart_ptr(adfa);
 }
 
-struct rules_block_t {
-    const std::string name;
-    const opt_t *opts;
-    specs_t specs;
-};
-
-static const rules_block_t *find_rules_block(const std::string &name,
-    const std::vector<rules_block_t> &rules)
+const rules_block_t *find_rules_block(const std::string &name,
+    const rules_blocks_t &rules)
 {
     if (name.empty()) {
         return rules.empty() ? NULL : &rules.back();
@@ -153,7 +147,7 @@ static const rules_block_t *find_rules_block(const std::string &name,
 void compile(Scanner &input, Output &output, Opt &opts)
 {
     symtab_t symtab;
-    std::vector<rules_block_t> rules;
+    rules_blocks_t rules;
     const conopt_t *globopts = &opts.glob;
     code_alc_t &alc = output.allocator;
     const loc_t &loc0 = input.tok_loc();
@@ -192,7 +186,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             output.state_goto = false;
         }
         output.cond_goto = false;
-        parse(input, specs, symtab, opts);
+        parse(input, specs, symtab, opts, rules);
 
         // start new output block with accumulated options
         const loc_t &loc = input.cur_loc();

@@ -382,6 +382,22 @@ void Opt::restore(const opt_t *opts)
     sync();
 }
 
+void Opt::merge(const opt_t *opts)
+{
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) \
+    if (!opts->is_default_##name) { \
+        user.name = opts->name; \
+        is_default.name = false; \
+    }
+    RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+
+    diverge = true;
+    sync();
+}
+
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
 void Opt::set_##name(const type &arg) \
