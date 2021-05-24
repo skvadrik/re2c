@@ -198,6 +198,7 @@ set(re2c_sources
     src/parse/ast.cc
     src/parse/input.cc
     src/parse/normalize.cc
+    src/parse/parse.cc
     src/parse/scanner.cc
     src/parse/unescape.cc
     src/parse/validate.cc

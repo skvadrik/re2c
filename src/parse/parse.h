@@ -14,6 +14,7 @@ namespace re2c {
 class Scanner;
 struct Opt;
 
+typedef std::map<std::string, const AST*> symtab_t;
 typedef std::set<std::string> CondList;
 
 struct spec_t {
@@ -32,14 +33,26 @@ struct spec_t {
 
 typedef std::vector<spec_t> specs_t;
 
-struct rules_block_t {
-    const std::string name;
+struct RulesBlock {
+    std::string name;
     const opt_t *opts;
     specs_t specs;
+
+    RulesBlock(const std::string &name, const opt_t *opts, const specs_t &specs);
+    FORBID_COPY(RulesBlock);
 };
 
-typedef std::vector<rules_block_t> rules_blocks_t;
-typedef std::map<std::string, const AST*> symtab_t;
+struct RulesBlocks {
+    std::vector<RulesBlock*> blocks;
+
+public:
+    RulesBlocks();
+    ~RulesBlocks();
+    bool empty() const;
+    void add(const std::string &name, const opt_t *opts, const specs_t &specs);
+    const RulesBlock *find(const std::string &name) const;
+    const opt_t *last_opts() const;
+};
 
 struct context_t
 {
@@ -47,13 +60,13 @@ struct context_t
     specs_t &specs;
     symtab_t &symtab;
     Opt &opts;
-    const rules_blocks_t &rules;
+    const RulesBlocks &rblocks;
 };
 
+spec_t &find_or_add_spec(specs_t &specs, const std::string &name);
+void use_block(context_t &context, const std::string &name);
 void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts,
-    const rules_blocks_t &rules);
-const rules_block_t *find_rules_block(const std::string &name,
-    const rules_blocks_t &rules);
+    const RulesBlocks &rblocks);
 void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input);
 void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg);
 void normalize_ast(specs_t &specs);
