@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -cfir
+// re2c $INPUT -o $OUTPUT -cfi
 /*!types:re2c*/
 
 /*!rules:re2c

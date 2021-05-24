@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -ri
+// re2c $INPUT -o $OUTPUT -i
 /*!re2c
     re2c:yyfill:enable = 0;
 */

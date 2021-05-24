@@ -156,16 +156,12 @@ void compile(Scanner &input, Output &output, Opt &opts)
         // parse everything up to the next re2c block
         Scanner::ParseMode mode = input.echo(output);
         if (mode == Scanner::Stop) break;
-        validate_mode(mode, globopts->rFlag, !rblocks.empty(), input);
 
         // parse the next re2c block
         specs_t specs;
         if (mode == Scanner::Reuse) {
             const RulesBlock *rb = rblocks.find(output.rules_block_name);
-            if (rb == NULL) {
-                error("cannot find rules block '%s'", output.rules_block_name.c_str());
-                exit(1);
-            }
+            if (rb == NULL) exit(1);
             specs = rb->specs;
             opts.restore(rb->opts);
             output.state_goto = false;

@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -cgir --eager-skip
+// re2c $INPUT -o $OUTPUT -cgi --eager-skip
 
 /*!types:re2c */
 

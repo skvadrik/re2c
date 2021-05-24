@@ -117,7 +117,6 @@ opt_short:
     "D" { globopts.target = TARGET_DOT;      goto opt_short; }
     "f" { globopts.fFlag = true;             goto opt_short; }
     "F" { globopts.FFlag = true;             goto opt_short; }
-    "r" { globopts.rFlag = true;             goto opt_short; }
     "S" { globopts.target = TARGET_SKELETON; goto opt_short; }
 
     "b" { opts.set_bFlag(true);           goto opt_short; }
@@ -147,7 +146,9 @@ opt_short:
     "t" end { NEXT_ARG("-t, --type-header", opt_header); }
     "t"     { *argv = YYCURSOR; goto opt_header; }
 
-    "1" { goto opt_short; } // deprecated
+    // deprecated
+    "1" { goto opt_short; }
+    "r" { goto opt_short; }
 */
 
 opt_long:
@@ -162,7 +163,6 @@ opt_long:
     "emit-dot"              end { globopts.target = TARGET_DOT;      goto opt; }
     "storable-state"        end { globopts.fFlag = true;             goto opt; }
     "flex-syntax"           end { globopts.FFlag = true;             goto opt; }
-    "reusable"              end { globopts.rFlag = true;             goto opt; }
     "verbose"               end { globopts.verbose = true;           goto opt; }
     "no-generation-date"    end { globopts.bNoGenerationDate = true; goto opt; }
     "no-version"            end { globopts.version = false;          goto opt; }
@@ -199,7 +199,9 @@ opt_long:
     "location-format"       end { NEXT_ARG("--location-format",  opt_location_format); }
     "input-encoding"        end { NEXT_ARG("--input-encoding",   opt_input_encoding); }
 
-    "single-pass"           end { goto opt; } // deprecated
+     // deprecated
+    "single-pass"           end { goto opt; }
+    "reusable"              end { goto opt; }
 
     // internals
     "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_dfa_minimization); }

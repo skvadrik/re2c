@@ -87,7 +87,6 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (bool, version, true) \
     CONSTOPT (bool, cFlag, false) \
     CONSTOPT (bool, fFlag, false) \
-    CONSTOPT (bool, rFlag, false) \
     CONSTOPT (bool, FFlag, false) \
     CONSTOPT (bool, verbose, false) \
     /* files */ \
