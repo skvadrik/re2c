@@ -23,36 +23,6 @@ void yyerror(context_t &context, const char*) RE2C_ATTR((noreturn));
 
 } // extern "C"
 
-static spec_t &find_or_add_spec(specs_t &specs, const std::string &name)
-{
-    for (specs_t::iterator i = specs.begin(); i != specs.end(); ++i) {
-        if (i->name == name) return *i;
-    }
-    specs.push_back(spec_t(name));
-    return specs.back();
-}
-
-static void merge_block(context_t &context, const std::string name)
-{
-    const rules_block_t *rb = find_rules_block(name, context.rules);
-    if (rb == NULL) {
-        error("cannot find rules block '%s'", name.c_str());
-        exit(1);
-    }
-    for (specs_t::const_iterator i = rb->specs.begin(); i != rb->specs.end(); ++i) {
-        spec_t &spec = find_or_add_spec(context.specs, i->name);
-
-        // Merge rules.
-        spec.rules.insert(spec.rules.end(), i->rules.begin(), i->rules.end());
-        spec.defs.insert(spec.defs.end(), i->defs.begin(), i->defs.end());
-        spec.eofs.insert(spec.eofs.end(), i->eofs.begin(), i->eofs.end());
-        spec.setup.insert(spec.setup.end(), i->setup.begin(), i->setup.end());
-
-        // Merge configurations.
-        context.opts.merge(rb->opts);
-    }
-}
-
 %}
 
 %start spec
@@ -95,11 +65,16 @@ static void merge_block(context_t &context, const std::string name)
 
 spec
 : /* empty */
-| spec TOKEN_CONF { context.input.lex_conf(context.opts); }
+| spec TOKEN_BLOCK {
+    use_block(context, *$2);
+    delete $2;
+}
+| spec TOKEN_CONF {
+    context.input.lex_conf(context.opts);
+}
 | spec def
 | spec rule
 | spec TOKEN_LINE_INFO
-| spec TOKEN_BLOCK { merge_block(context, *$2); }
 ;
 
 def
@@ -266,9 +241,9 @@ int yylex(context_t &context)
 namespace re2c {
 
 void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts,
-    const rules_blocks_t &rules)
+    const RulesBlocks &rblocks)
 {
-    context_t context = {input, specs, symtab, opts, rules};
+    context_t context = {input, specs, symtab, opts, rblocks};
     yyparse(context);
 }
 

@@ -129,25 +129,10 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     return make_smart_ptr(adfa);
 }
 
-const rules_block_t *find_rules_block(const std::string &name,
-    const rules_blocks_t &rules)
-{
-    if (name.empty()) {
-        return rules.empty() ? NULL : &rules.back();
-    }
-    for (size_t i = 0; i < rules.size(); ++i) {
-        const rules_block_t *rb = &rules[i];
-        if (rb->name == name) {
-            return rb;
-        }
-    }
-    return NULL;
-}
-
 void compile(Scanner &input, Output &output, Opt &opts)
 {
     symtab_t symtab;
-    rules_blocks_t rules;
+    RulesBlocks rblocks;
     const conopt_t *globopts = &opts.glob;
     code_alc_t &alc = output.allocator;
     const loc_t &loc0 = input.tok_loc();
@@ -171,12 +156,12 @@ void compile(Scanner &input, Output &output, Opt &opts)
         // parse everything up to the next re2c block
         Scanner::ParseMode mode = input.echo(output);
         if (mode == Scanner::Stop) break;
-        validate_mode(mode, globopts->rFlag, !rules.empty(), input);
+        validate_mode(mode, globopts->rFlag, !rblocks.empty(), input);
 
         // parse the next re2c block
         specs_t specs;
         if (mode == Scanner::Reuse) {
-            const rules_block_t *rb = find_rules_block(output.rules_block_name, rules);
+            const RulesBlock *rb = rblocks.find(output.rules_block_name);
             if (rb == NULL) {
                 error("cannot find rules block '%s'", output.rules_block_name.c_str());
                 exit(1);
@@ -186,7 +171,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             output.state_goto = false;
         }
         output.cond_goto = false;
-        parse(input, specs, symtab, opts, rules);
+        parse(input, specs, symtab, opts, rblocks);
 
         // start new output block with accumulated options
         const loc_t &loc = input.cur_loc();
@@ -194,12 +179,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
         if (mode == Scanner::Rules) {
             // save AST and options for future use
-            const rules_block_t rb = {
-                output.rules_block_name,
-                output.block().opts,
-                specs
-            };
-            rules.push_back(rb);
+            rblocks.add(output.rules_block_name, output.block().opts, specs);
         } else {
             validate_ast(specs, output.block().opts, output.msg);
             normalize_ast(specs);
@@ -226,8 +206,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         }
     }
 
-    output.total_opts = accum_opts ? accum_opts
-        : rules.empty() ? NULL : rules.back().opts;
+    output.total_opts = accum_opts ? accum_opts : rblocks.last_opts();
 
     if (globopts->target == TARGET_SKELETON) {
         output.wdelay_stmt(0, emit_skeleton_epilog(output));
