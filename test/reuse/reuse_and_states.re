@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -fir
+// re2c $INPUT -o $OUTPUT -fi
 /*!rules:re2c
   [a] { a }
   *   { x }

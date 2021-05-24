@@ -26,13 +26,18 @@ void RulesBlocks::add(const std::string &name, const opt_t *opts,
 const RulesBlock *RulesBlocks::find(const std::string &name) const
 {
     if (name.empty()) {
-        return blocks.empty() ? NULL : blocks.back();
-    }
-    for (size_t i = 0; i < blocks.size(); ++i) {
-        const RulesBlock *b = blocks[i];
-        if (b->name == name) {
-            return b;
+        if (!blocks.empty()) {
+            return blocks.back();
         }
+        error("cannot find `/*!rules:re2c ... */` block");
+    } else {
+        for (size_t i = 0; i < blocks.size(); ++i) {
+            const RulesBlock *b = blocks[i];
+            if (b->name == name) {
+                return b;
+            }
+        }
+        error("cannot find `/*!rules:re2c:%s ... */` block", name.c_str());
     }
     return NULL;
 }
@@ -54,10 +59,8 @@ spec_t &find_or_add_spec(specs_t &specs, const std::string &name)
 void use_block(context_t &context, const std::string &name)
 {
     const RulesBlock *rb = context.rblocks.find(name);
-    if (rb == NULL) {
-        error("cannot find rules block '%s'", name.c_str());
-        exit(1);
-    }
+    if (rb == NULL) exit(1);
+
     for (specs_t::const_iterator i = rb->specs.begin(); i != rb->specs.end(); ++i) {
         spec_t &spec = find_or_add_spec(context.specs, i->name);
 

@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -r
+// re2c $INPUT -o $OUTPUT
 
 // This test is for merging blocks with inline !use directive.
 // It checks that overlapping configurations and rules are merged with correct

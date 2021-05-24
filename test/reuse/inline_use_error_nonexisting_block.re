@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -r
+// re2c $INPUT -o $OUTPUT
 /*!rules:re2c:x */
 
 /*!re2c

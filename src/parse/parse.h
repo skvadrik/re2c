@@ -67,7 +67,6 @@ spec_t &find_or_add_spec(specs_t &specs, const std::string &name);
 void use_block(context_t &context, const std::string &name);
 void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts,
     const RulesBlocks &rblocks);
-void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input);
 void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg);
 void normalize_ast(specs_t &specs);
 

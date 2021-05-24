@@ -14,29 +14,6 @@
 
 namespace re2c {
 
-void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules
-    , Scanner &input)
-{
-    Msg &msg = input.msg;
-    const loc_t &l = input.tok_loc();
-    if (mode == Scanner::Rules) {
-        if (!rflag) {
-            msg.error(l, "found 'rules:re2c' block without -r flag");
-            exit(1);
-        }
-    }
-    else if (mode == Scanner::Reuse) {
-        if (!rflag) {
-            msg.error(l, "found 'use:re2c' block without -r flag");
-            exit(1);
-        }
-        else if (!rules) {
-            msg.error(l, "got 'use:re2c' without 'rules:re2c'");
-            exit(1);
-        }
-    }
-}
-
 void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg)
 {
     specs_t::const_iterator i, b = specs.begin(), e = specs.end();

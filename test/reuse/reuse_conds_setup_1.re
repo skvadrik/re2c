@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -cgir
+// re2c $INPUT -o $OUTPUT -cgi
 
 /*!types:re2c */
 

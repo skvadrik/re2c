@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -ir
+// re2c $INPUT -o $OUTPUT -i
 // rules block disables YYFILL
 /*!rules:re2c
     re2c:yyfill:enable = 0;

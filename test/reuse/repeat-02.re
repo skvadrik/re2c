@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -cgir
+// re2c $INPUT -o $OUTPUT -cgi
 // multiple scanners
 
 /*!types:re2c */
