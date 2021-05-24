@@ -420,6 +420,7 @@ scan:
     }
 
     "!include" space+ @x dstring @y space* ";" eol {
+        next_line();
         include(getstr(x + 1, y - 1));
         goto scan;
     }
