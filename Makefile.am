@@ -262,6 +262,7 @@ re2c_SRC_DOC_EXT = \
 	examples/c/includes/include.re \
 	examples/c/includes/definitions.h \
 	examples/c/reuse/reuse.re \
+	examples/c/reuse/usedir.re \
 	examples/c/state/push.re \
 	examples/c/submatch/01_stags.re \
 	examples/c/submatch/01_stags_fill.re \
@@ -281,6 +282,7 @@ re2c_SRC_DOC_EXT = \
 	examples/go/includes/include.re \
 	examples/go/includes/definitions.go \
 	examples/go/reuse/reuse.re \
+	examples/go/reuse/usedir.re \
 	examples/go/state/push.re \
 	examples/go/submatch/01_stags.re \
 	examples/go/submatch/02_mtags.re \

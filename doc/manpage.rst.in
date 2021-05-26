@@ -182,8 +182,15 @@ Example
 Reusable blocks
 ===============
 .. include:: @top_srcdir@/doc/manual/reuse/reuse.rst_
-Example
--------
+
+Example of ``!use`` directive
+-----------------------------
+.. include:: @top_srcdir@/examples/RE2C_LANG/reuse/usedir.re
+    :literal:
+    :code: RE2C_LANG
+
+Example of ``/*!use:re2c ... */`` directive
+-------------------------------------------
 .. include:: @top_srcdir@/examples/RE2C_LANG/reuse/reuse.re
     :literal:
     :code: RE2C_LANG

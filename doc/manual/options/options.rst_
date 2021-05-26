@@ -127,10 +127,8 @@
     Enable submatch extraction with POSIX-style capturing groups.
 
 ``-r --reusable``
-    Allows reuse of re2c rules with ``/*!rules:re2c */`` and ``/*!use:re2c */``
-    blocks. Exactly one rules-block must be present. The rules are saved and
-    used by every use-block that follows, which may add its own rules and
-    configurations.
+    Deprecated since re2c version 2.2 (reusable blocks are allowed by default
+    now).
 
 ``-S --skeleton``
     Ignore user-defined interface code and generate a self-contained "skeleton"
