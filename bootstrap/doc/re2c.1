@@ -275,10 +275,8 @@ Specify the \fBOUTPUT\fP file.
 Enable submatch extraction with POSIX\-style capturing groups.
 .TP
 .B \fB\-r \-\-reusable\fP
-Allows reuse of re2c rules with \fB/*!rules:re2c */\fP and \fB/*!use:re2c */\fP
-blocks. Exactly one rules\-block must be present. The rules are saved and
-used by every use\-block that follows, which may add its own rules and
-configurations.
+Deprecated since re2c version 2.2 (reusable blocks are allowed by default
+now).
 .TP
 .B \fB\-S \-\-skeleton\fP
 Ignore user\-defined interface code and generate a self\-contained "skeleton"
@@ -847,12 +845,32 @@ A standard re2c block.
 .B \fB%{ ... %}\fP
 A standard re2c block in \fB\-F \-\-flex\-support\fP mode.
 .TP
-.B \fB/*!rules:re2c ... */\fP
-A reusable re2c block (requires \fB\-r \-\-reuse\fP option).
+.B \fB/*!rules:re2c[:<name>] ... */\fP
+A reusable block with an optional \fB<name>\fP\&. Rules bloks have the same
+structure as ordinary \fB/*!re2c ... */\fP blocks (a mixture of named
+definitions, configurations and rules), but they can be reused multiple
+times in a \fB/*!use:re2c[:<name>] ... */\fP or \fB!use:<name>;\fP directive.
+The code for a rules block is generated at the point where it is referenced
+by a use directive. Prior to re2c version 2.2 rules blocks required
+\fB\-r \-\-reusable\fP option, and named blocks were not supported.
 .TP
-.B \fB/*!use:re2c ... */\fP
-A block that reuses previous rules\-block specified with
-\fB/*!rules:re2c ... */\fP (requires \fB\-r \-\-reuse\fP option).
+.B \fB/*!use:re2c[:<name>] ... */\fP
+A use block with an optional \fB<name>\fP that references a previously defined
+rules block. If \fB<name>\fP is not specified, the most recent rules block is
+used (either a named or unnamed one). A use block can add definitions,
+configurations and rules of its own, which are merged to those of the
+referenced rules block. Prior to re2c version 2.2 use blocks required
+\fB\-r \-\-reusable\fP option, and named blocks were not supported.
+.TP
+.B \fB!use:<name> ; <newline>\fP
+This directive merges a previously defined rules block with \fB<name>\fP into
+the current block: named definitions, configurations and rules of the
+referenced block are added to the current ones. Conflicts with overlapping
+rules and configurations are resolved in the usual way (as if the referenced
+block was literally inlined into the current block): the first rule takes
+priority, and the latest configuration overrides preceding configurations.
+Use directive can be placed anywhere inside of a block (not necessarily at
+the beginning), and multiple use directives are allowed.
 .TP
 .B \fB/*!ignore:re2c ... */\fP
 A block which contents are ignored and cut off from the output file.
@@ -880,16 +898,16 @@ substituted with the name of each tag variable), and \fBseparator = "";\fP
 (specifies the piece of code used to join the generated pieces for different
 tag variables).
 .TP
-.B \fB/*!include:re2c FILE */\fP
-This directive allows one to include \fBFILE\fP (the contents of the \fBFILE\fP
-are literally substituted in place of the directive, in the same way as
-\fB#include\fP works in C/C++). This directive can be used together with the
-\fB\-\-depfile\fP option to generate build system dependencies on the included
-files.
+.B \fB/*!include:re2c <file> */\fP
+This directive allows one to include \fB<file>\fP (the contents of the
+\fB<file>\fP are literally substituted in place of the directive, in the same
+way as \fB#include\fP works in C/C++). This directive can be used together
+with the \fB\-\-depfile\fP option to generate build system dependencies on the
+included files.
 .TP
-.B \fB!include FILE ;\fP
-This directive is the same as \fB/*!include:re2c FILE */\fP, except that it is
-meant to be used inside of a re2c block (and therefore has a slightly
+.B \fB!include <file> ; <newline>\fP
+This directive is the same as \fB/*!include:re2c <file> */\fP, except that it
+is meant to be used inside of a re2c block (and therefore has a slightly
 different syntax).
 .TP
 .B \fB/*!header:re2c:on*/\fP
@@ -2772,37 +2790,100 @@ int main()
 .UNINDENT
 .SH REUSABLE BLOCKS
 .sp
-Reuse mode is enabled with the \fB\-r \-\-reusable\fP option. In this mode re2c
-allows one to reuse definitions, configurations and rules specified by a
-\fB/*!rules:re2c*/\fP block in subsequent \fB/*!use:re2c*/\fP blocks. As of
-re2c\-1.2 it is possible to mix such blocks with normal \fB/*!re2c*/\fP blocks;
-prior to that re2c expects a single rules\-block followed by use\-blocks (normal
-blocks are disallowed). Use\-blocks can have additional definitions,
-configurations and rules: they are merged to those specified by the rules\-block.
-A very common use case for \fB\-r \-\-reusable\fP option is a lexer that supports
-multiple input encodings: lexer rules are defined once and reused multiple times
-with encoding\-specific configurations, such as \fBre2c:flags:utf\-8\fP\&.
+Reusable blocks are re2c blocks that can be reused any number of times and
+combined with other re2c blocks. They are defined with
+\fB/*!rules:re2c[:<name>] ... */\fP (the \fB<name>\fP is optional). A rules block
+can be used in two contexts: either in a use block, or in a use directive inside
+of another block. The code for a rules block is generated at every point of use.
 .sp
-Below is an example of a multi\-encoding lexer: it reads a phrase with Unicode
-math symbols and accepts input either in UTF8 or in UT32. Note that the
-\fB\-\-input\-encoding utf8\fP option allows us to write UTF8\-encoded symbols in the
-regular expressions; without this option re2c would parse them as a plain ASCII
-byte sequnce (and we would have to use hexadecimal escape sequences).
-.SS Example
+Use blocks are defined with \fB/*!use:re2c[:<name>] ... */\fP\&. The \fB<name>\fP
+is optional; if not specified, the associated rules block is the most recent one
+(whether named or unnamed). A use block can add named definitions,
+configurations and rules of its own.
+An important use case for use blocks is a lexer that supports multiple input
+encodings: the same rules block is reused multiple times with encoding\-specific
+configurations (see the example below).
+.sp
+In\-block use directive \fB!use:<name>;\fP can be used from inside of a re2c
+block. It merges the referenced block \fB<name>\fP into the current one. If some
+of the merged rules and configurations overlap with the previously defined ones,
+conflicts are resolved in the usual way: the earliest rule takes priority, and
+latest configuration overrides preceding configurations. Use directive allows
+one to combine different re2c blocks (see the example below).
+.sp
+Named blocks and in\-block use directive were added in re2c version 2.2.
+Since that version reusable blocks are allowed by default (no special option
+is needed). Before version 2.2 reuse mode was enabled with \fB\-r \-\-reusable\fP
+option. Before version 1.2 reusable blocks could not be mixed with normal
+blocks.
+.SS Example of \fB!use\fP directive
 .INDENT 0.0
 .INDENT 3.5
 .sp
 .nf
 .ft C
-// re2c $INPUT \-o $OUTPUT \-r \-\-input\-encoding utf8
+// re2c $INPUT \-o $OUTPUT
+
+// This example shows how to combine reusable re2c blocks with the
+// use directive. Two rules blocks (\(aqcolors\(aq and \(aqfish\(aq) are merged
+// into one re2c block. The rule for \(aqsalmon\(aq occurs in both blocks;
+// the \(aqfish\(aq block takes priority because it is used earlier.
+
+#include <assert.h>
+
+enum What { COLOR, FISH, DUNNO };
+
+/*!rules:re2c:colors
+    "red" | "salmon" | "magenta" { return COLOR; }
+*/
+
+/*!rules:re2c:fish
+    "swordfish" | "salmon" | "haddock" { return FISH; }
+*/
+
+static What lex(const char *YYCURSOR)
+{
+    const char *YYMARKER;
+    /*!re2c
+    re2c:yyfill:enable = 0;
+    re2c:define:YYCTYPE = char;
+
+    !use:fish;
+    !use:colors;
+    * { return DUNNO; }
+    */
+}
+
+int main()
+{
+    assert(lex("salmon") == FISH);
+    return 0;
+}
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Example of \fB/*!use:re2c ... */\fP directive
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+// re2c $INPUT \-o $OUTPUT \-\-input\-encoding utf8
+
+// This example supports multiple input encodings: UTF\-8 and UTF\-32.
+// Both lexers are generated from the same rules block, and the use
+// blocks add only encoding\-specific configurations.
+
 #include <assert.h>
 #include <stdint.h>
 
 /*!rules:re2c
     re2c:yyfill:enable = 0;
 
-    "∀x ∃y: p(x, y)" { return 0; }
-    *                { return 1; }
+    "∀x ∃y" { return 0; }
+    *       { return 1; }
 */
 
 static int lex_utf8(const uint8_t *YYCURSOR)
@@ -2827,14 +2908,10 @@ static int lex_utf32(const uint32_t *YYCURSOR)
 int main()
 {
     static const uint8_t s8[] = // UTF\-8
-        { 0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79
-        , 0x3a, 0x20, 0x70, 0x28, 0x78, 0x2c, 0x20, 0x79, 0x29 };
+        { 0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79 };
 
     static const uint32_t s32[] = // UTF32
-        { 0x00002200, 0x00000078, 0x00000020, 0x00002203
-        , 0x00000079, 0x0000003a, 0x00000020, 0x00000070
-        , 0x00000028, 0x00000078, 0x0000002c, 0x00000020
-        , 0x00000079, 0x00000029 };
+        { 0x00002200, 0x00000078, 0x00000020, 0x00002203, 0x00000079 };
 
     assert(lex_utf8(s8) == 0);
     assert(lex_utf32(s32) == 0);

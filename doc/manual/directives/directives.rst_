@@ -7,12 +7,32 @@ More information on each directive can be found in the related sections.
 ``%{ ... %}``
     A standard re2c block in ``-F --flex-support`` mode.
 
-``/*!rules:re2c ... */``
-    A reusable re2c block (requires ``-r --reuse`` option).
+``/*!rules:re2c[:<name>] ... */``
+    A reusable block with an optional ``<name>``. Rules bloks have the same
+    structure as ordinary ``/*!re2c ... */`` blocks (a mixture of named
+    definitions, configurations and rules), but they can be reused multiple
+    times in a ``/*!use:re2c[:<name>] ... */`` or ``!use:<name>;`` directive.
+    The code for a rules block is generated at the point where it is referenced
+    by a use directive. Prior to re2c version 2.2 rules blocks required
+    ``-r --reusable`` option, and named blocks were not supported.
 
-``/*!use:re2c ... */``
-    A block that reuses previous rules-block specified with
-    ``/*!rules:re2c ... */`` (requires ``-r --reuse`` option).
+``/*!use:re2c[:<name>] ... */``
+    A use block with an optional ``<name>`` that references a previously defined
+    rules block. If ``<name>`` is not specified, the most recent rules block is
+    used (either a named or unnamed one). A use block can add definitions,
+    configurations and rules of its own, which are merged to those of the
+    referenced rules block. Prior to re2c version 2.2 use blocks required
+    ``-r --reusable`` option, and named blocks were not supported.
+
+``!use:<name> ; <newline>``
+    This directive merges a previously defined rules block with ``<name>`` into
+    the current block: named definitions, configurations and rules of the
+    referenced block are added to the current ones. Conflicts with overlapping
+    rules and configurations are resolved in the usual way (as if the referenced
+    block was literally inlined into the current block): the first rule takes
+    priority, and the latest configuration overrides preceding configurations.
+    Use directive can be placed anywhere inside of a block (not necessarily at
+    the beginning), and multiple use directives are allowed.
 
 ``/*!ignore:re2c ... */``
     A block which contents are ignored and cut off from the output file.
@@ -40,16 +60,16 @@ More information on each directive can be found in the related sections.
     (specifies the piece of code used to join the generated pieces for different
     tag variables).
 
-``/*!include:re2c FILE */``
-    This directive allows one to include ``FILE`` (the contents of the ``FILE``
-    are literally substituted in place of the directive, in the same way as
-    ``#include`` works in C/C++). This directive can be used together with the
-    ``--depfile`` option to generate build system dependencies on the included
-    files.
+``/*!include:re2c <file> */``
+    This directive allows one to include ``<file>`` (the contents of the
+    ``<file>`` are literally substituted in place of the directive, in the same
+    way as ``#include`` works in C/C++). This directive can be used together
+    with the ``--depfile`` option to generate build system dependencies on the
+    included files.
 
-``!include FILE ;``
-    This directive is the same as ``/*!include:re2c FILE */``, except that it is
-    meant to be used inside of a re2c block (and therefore has a slightly
+``!include <file> ; <newline>``
+    This directive is the same as ``/*!include:re2c <file> */``, except that it
+    is meant to be used inside of a re2c block (and therefore has a slightly
     different syntax).
 
 ``/*!header:re2c:on*/``
