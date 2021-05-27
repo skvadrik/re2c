@@ -16,8 +16,10 @@ In-block use directive ``!use:<name>;`` can be used from inside of a re2c
 block. It merges the referenced block ``<name>`` into the current one. If some
 of the merged rules and configurations overlap with the previously defined ones,
 conflicts are resolved in the usual way: the earliest rule takes priority, and
-latest configuration overrides preceding configurations. Use directive allows
-one to combine different re2c blocks (see the example below).
+latest configuration overrides preceding ones. One exception are the special
+rules ``*``, ``$`` and (in condition mode) ``<!>``, for which a block-local
+definition overrides any inherited ones. Use directive allows one to combine
+different re2c blocks together in one block (see the example below).
 
 Named blocks and in-block use directive were added in re2c version 2.2.
 Since that version reusable blocks are allowed by default (no special option
