@@ -197,11 +197,9 @@ set(re2c_sources
     src/skeleton/skeleton.cc
     src/parse/ast.cc
     src/parse/input.cc
-    src/parse/normalize.cc
     src/parse/parse.cc
     src/parse/scanner.cc
     src/parse/unescape.cc
-    src/parse/validate.cc
     src/util/get_dir.cc
     src/util/s_to_n32_unsafe.cc
     src/util/temp_file.cc
