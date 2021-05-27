@@ -177,8 +177,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             // save AST and options for future use
             rblocks.add(output.rules_block_name, output.block().opts, specs);
         } else {
-            validate_ast(specs, output.block().opts, output.msg);
-            normalize_ast(specs);
+            check_and_merge_special_rules(specs, output.block().opts, output.msg);
 
             // compile AST to DFA
             dfas_t dfas;

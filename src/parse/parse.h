@@ -3,6 +3,7 @@
 
 #include <set>
 #include <string>
+#include <vector>
 
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
@@ -19,16 +20,34 @@ typedef std::set<std::string> CondList;
 
 struct spec_t {
     std::string name;
+
+    // Normal rules specified in this block or inherited from other blocks.
     std::vector<ASTRule> rules;
+
+    // Special rules *, $ and <!> specified in this block.
     std::vector<const SemAct*> defs;
     std::vector<const SemAct*> eofs;
     std::vector<const SemAct*> setup;
+
+    // Special rules *, $ and <!>  inherited from other blocks.
+    std::vector<const SemAct*> inherited_defs;
+    std::vector<const SemAct*> inherited_eofs;
+    std::vector<const SemAct*> inherited_setup;
+
     size_t def_rule;
     size_t eof_rule;
 
     explicit spec_t(const std::string &n)
-        : name(n), rules(), defs(), eofs(), setup()
-        , def_rule(Rule::NONE), eof_rule(Rule::NONE) {}
+        : name(n)
+        , rules()
+        , defs()
+        , eofs()
+        , setup()
+        , inherited_defs()
+        , inherited_eofs()
+        , inherited_setup()
+        , def_rule(Rule::NONE)
+        , eof_rule(Rule::NONE) {}
 };
 
 typedef std::vector<spec_t> specs_t;
@@ -67,8 +86,7 @@ spec_t &find_or_add_spec(specs_t &specs, const std::string &name);
 void use_block(context_t &context, const std::string &name);
 void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts,
     const RulesBlocks &rblocks);
-void validate_ast(const specs_t &specs, const opt_t *opts, Msg &msg);
-void normalize_ast(specs_t &specs);
+void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg);
 
 } // namespace re2c
 
