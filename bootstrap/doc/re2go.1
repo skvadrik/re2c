@@ -869,14 +869,15 @@ referenced rules block. Prior to re2c version 2.2 use blocks required
 \fB\-r \-\-reusable\fP option, and named blocks were not supported.
 .TP
 .B \fB!use:<name> ; <newline>\fP
-This directive merges a previously defined rules block with \fB<name>\fP into
-the current block: named definitions, configurations and rules of the
-referenced block are added to the current ones. Conflicts with overlapping
-rules and configurations are resolved in the usual way (as if the referenced
-block was literally inlined into the current block): the first rule takes
-priority, and the latest configuration overrides preceding configurations.
-Use directive can be placed anywhere inside of a block (not necessarily at
-the beginning), and multiple use directives are allowed.
+This directive merges a previously defined rules block \fB<name>\fP into the
+current block: named definitions, configurations and rules of the referenced
+block are added to the current ones. Conflicts between overlapping rules and
+configurations are resolved in the usual way: the first rule takes priority,
+and the latest configuration overrides preceding ones. One exception are the
+special rules \fB*\fP, \fB$\fP and \fB<!>\fP: for them a block\-local definition
+overrides any inherited ones, regardless of their order. A use directive can
+be placed anywhere inside of a block (not necessarily at the beginning), and
+multiple use directives are allowed.
 .TP
 .B \fB/*!ignore:re2c ... */\fP
 A block which contents are ignored and cut off from the output file.
@@ -3122,8 +3123,10 @@ In\-block use directive \fB!use:<name>;\fP can be used from inside of a re2c
 block. It merges the referenced block \fB<name>\fP into the current one. If some
 of the merged rules and configurations overlap with the previously defined ones,
 conflicts are resolved in the usual way: the earliest rule takes priority, and
-latest configuration overrides preceding configurations. Use directive allows
-one to combine different re2c blocks (see the example below).
+latest configuration overrides preceding ones. One exception are the special
+rules \fB*\fP, \fB$\fP and (in condition mode) \fB<!>\fP, for which a block\-local
+definition overrides any inherited ones. Use directive allows one to combine
+different re2c blocks together in one block (see the example below).
 .sp
 Named blocks and in\-block use directive were added in re2c version 2.2.
 Since that version reusable blocks are allowed by default (no special option
@@ -3138,10 +3141,11 @@ blocks.
 .ft C
 //go:generate re2go $INPUT \-o $OUTPUT
 
-// This example shows how to combine reusable re2c blocks with the
-// use directive. Two rules blocks (\(aqcolors\(aq and \(aqfish\(aq) are merged
-// into one re2c block. The rule for \(aqsalmon\(aq occurs in both blocks;
-// the \(aqfish\(aq block takes priority because it is used earlier.
+// This example shows how to combine reusable re2c blocks: two blocks
+// (\(aqcolors\(aq and \(aqfish\(aq) are merged into one. The \(aqsalmon\(aq rule occurs
+// in both blocks; the \(aqfish\(aq block takes priority because it is used
+// earlier. Default rule * occurs in all three blocks; the local (not
+// inherited) definition takes priority.
 
 package main
 
@@ -3154,11 +3158,13 @@ const (
 )
 
 /*!rules:re2c:colors
+    *                            { panic("eh!") }
     "red" | "salmon" | "magenta" { return Color }
 */
 
 /*!rules:re2c:fish
-    "swordfish" | "salmon" | "haddock" { return Fish }
+    *                            { panic("oh!") }
+    "haddock" | "salmon" | "eel" { return Fish }
 */
 
 func lex(str string) int {
@@ -3178,7 +3184,7 @@ func lex(str string) int {
 }
 
 func TestLex(t *testing.T) {
-    if lex("salmon") != Fish {
+    if lex("salmon") != Fish || lex("what?") != Dunno {
         t.Errorf("lex failed")
     }
 }

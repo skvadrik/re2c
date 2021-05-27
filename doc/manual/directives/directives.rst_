@@ -25,14 +25,15 @@ More information on each directive can be found in the related sections.
     ``-r --reusable`` option, and named blocks were not supported.
 
 ``!use:<name> ; <newline>``
-    This directive merges a previously defined rules block with ``<name>`` into
-    the current block: named definitions, configurations and rules of the
-    referenced block are added to the current ones. Conflicts with overlapping
-    rules and configurations are resolved in the usual way (as if the referenced
-    block was literally inlined into the current block): the first rule takes
-    priority, and the latest configuration overrides preceding configurations.
-    Use directive can be placed anywhere inside of a block (not necessarily at
-    the beginning), and multiple use directives are allowed.
+    This directive merges a previously defined rules block ``<name>`` into the
+    current block: named definitions, configurations and rules of the referenced
+    block are added to the current ones. Conflicts between overlapping rules and
+    configurations are resolved in the usual way: the first rule takes priority,
+    and the latest configuration overrides preceding ones. One exception are the
+    special rules ``*``, ``$`` and ``<!>``: for them a block-local definition
+    overrides any inherited ones, regardless of their order. A use directive can
+    be placed anywhere inside of a block (not necessarily at the beginning), and
+    multiple use directives are allowed.
 
 ``/*!ignore:re2c ... */``
     A block which contents are ignored and cut off from the output file.

@@ -1,20 +1,23 @@
 // re2c $INPUT -o $OUTPUT
 
-// This example shows how to combine reusable re2c blocks with the
-// use directive. Two rules blocks ('colors' and 'fish') are merged
-// into one re2c block. The rule for 'salmon' occurs in both blocks;
-// the 'fish' block takes priority because it is used earlier.
+// This example shows how to combine reusable re2c blocks: two blocks
+// ('colors' and 'fish') are merged into one. The 'salmon' rule occurs
+// in both blocks; the 'fish' block takes priority because it is used
+// earlier. Default rule * occurs in all three blocks; the local (not
+// inherited) definition takes priority.
 
 #include <assert.h>
 
 enum What { COLOR, FISH, DUNNO };
 
 /*!rules:re2c:colors
+    *                            { assert(false); }
     "red" | "salmon" | "magenta" { return COLOR; }
 */
 
 /*!rules:re2c:fish
-    "swordfish" | "salmon" | "haddock" { return FISH; }
+    *                            { assert(false); }
+    "haddock" | "salmon" | "eel" { return FISH; }
 */
 
 static What lex(const char *YYCURSOR)
@@ -33,5 +36,6 @@ static What lex(const char *YYCURSOR)
 int main()
 {
     assert(lex("salmon") == FISH);
+    assert(lex("what?") == DUNNO);
     return 0;
 }

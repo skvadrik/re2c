@@ -2,10 +2,11 @@
 //line "go/reuse/usedir.re":1
 //go:generate re2go $INPUT -o $OUTPUT
 
-// This example shows how to combine reusable re2c blocks with the
-// use directive. Two rules blocks ('colors' and 'fish') are merged
-// into one re2c block. The rule for 'salmon' occurs in both blocks;
-// the 'fish' block takes priority because it is used earlier.
+// This example shows how to combine reusable re2c blocks: two blocks
+// ('colors' and 'fish') are merged into one. The 'salmon' rule occurs
+// in both blocks; the 'fish' block takes priority because it is used
+// earlier. Default rule * occurs in all three blocks; the local (not
+// inherited) definition takes priority.
 
 package main
 
@@ -17,44 +18,46 @@ const (
 	Dunno
 )
 
-//line "go/reuse/usedir.re":20
+//line "go/reuse/usedir.re":22
 
 
-//line "go/reuse/usedir.re":24
+//line "go/reuse/usedir.re":27
 
 
 func lex(str string) int {
 	var cursor, marker int
 	
-//line "go/reuse/usedir.go":30
+//line "go/reuse/usedir.go":31
 {
 	var yych byte
 	yych = str[cursor]
 	switch (yych) {
-	case 'h':
+	case 'e':
 		goto yy4
-	case 'm':
+	case 'h':
 		goto yy5
-	case 'r':
+	case 'm':
 		goto yy6
-	case 's':
+	case 'r':
 		goto yy7
+	case 's':
+		goto yy8
 	default:
 		goto yy2
 	}
 yy2:
 	cursor += 1
 yy3:
-//line "go/reuse/usedir.re":38
+//line "go/reuse/usedir.re":41
 	{ return Dunno }
-//line "go/reuse/usedir.go":51
+//line "go/reuse/usedir.go":54
 yy4:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
-	case 'a':
-		goto yy8
+	case 'e':
+		goto yy9
 	default:
 		goto yy3
 	}
@@ -64,7 +67,7 @@ yy5:
 	yych = str[cursor]
 	switch (yych) {
 	case 'a':
-		goto yy10
+		goto yy11
 	default:
 		goto yy3
 	}
@@ -73,8 +76,8 @@ yy6:
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
-	case 'e':
-		goto yy11
+	case 'a':
+		goto yy12
 	default:
 		goto yy3
 	}
@@ -83,231 +86,185 @@ yy7:
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
-	case 'a':
-		goto yy12
-	case 'w':
+	case 'e':
 		goto yy13
 	default:
 		goto yy3
 	}
 yy8:
 	cursor += 1
+	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
-	case 'd':
+	case 'a':
 		goto yy14
 	default:
-		goto yy9
+		goto yy3
 	}
 yy9:
-	cursor = marker
-	goto yy3
-yy10:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'g':
+	case 'l':
 		goto yy15
 	default:
-		goto yy9
+		goto yy10
 	}
+yy10:
+	cursor = marker
+	goto yy3
 yy11:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'd':
-		goto yy16
+		goto yy17
 	default:
-		goto yy9
+		goto yy10
 	}
 yy12:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'l':
+	case 'g':
 		goto yy18
 	default:
-		goto yy9
+		goto yy10
 	}
 yy13:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'o':
+	case 'd':
 		goto yy19
 	default:
-		goto yy9
+		goto yy10
 	}
 yy14:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'd':
-		goto yy20
+	case 'l':
+		goto yy21
 	default:
-		goto yy9
+		goto yy10
 	}
 yy15:
 	cursor += 1
+//line "go/reuse/usedir.re":26
+	{ return Fish }
+//line "go/reuse/usedir.go":157
+yy17:
+	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'e':
-		goto yy21
+	case 'd':
+		goto yy22
 	default:
-		goto yy9
+		goto yy10
 	}
-yy16:
-	cursor += 1
-//line "go/reuse/usedir.re":19
-	{ return Color }
-//line "go/reuse/usedir.go":164
 yy18:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'm':
-		goto yy22
+	case 'e':
+		goto yy23
 	default:
-		goto yy9
+		goto yy10
 	}
 yy19:
 	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 'r':
-		goto yy23
-	default:
-		goto yy9
-	}
-yy20:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 'o':
-		goto yy24
-	default:
-		goto yy9
-	}
+//line "go/reuse/usedir.re":21
+	{ return Color }
+//line "go/reuse/usedir.go":180
 yy21:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'n':
-		goto yy25
+	case 'm':
+		goto yy24
 	default:
-		goto yy9
+		goto yy10
 	}
 yy22:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'o':
-		goto yy26
+		goto yy25
 	default:
-		goto yy9
+		goto yy10
 	}
 yy23:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'd':
-		goto yy27
+	case 'n':
+		goto yy26
 	default:
-		goto yy9
+		goto yy10
 	}
 yy24:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case 'o':
+		goto yy27
+	default:
+		goto yy10
+	}
+yy25:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'c':
 		goto yy28
 	default:
-		goto yy9
+		goto yy10
 	}
-yy25:
+yy26:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 't':
 		goto yy29
 	default:
-		goto yy9
-	}
-yy26:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 'n':
-		goto yy30
-	default:
-		goto yy9
+		goto yy10
 	}
 yy27:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'f':
-		goto yy32
+	case 'n':
+		goto yy15
 	default:
-		goto yy9
+		goto yy10
 	}
 yy28:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'k':
-		goto yy30
+		goto yy15
 	default:
-		goto yy9
+		goto yy10
 	}
 yy29:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'a':
-		goto yy16
+		goto yy19
 	default:
-		goto yy9
-	}
-yy30:
-	cursor += 1
-//line "go/reuse/usedir.re":23
-	{ return Fish }
-//line "go/reuse/usedir.go":277
-yy32:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 'i':
-		goto yy33
-	default:
-		goto yy9
-	}
-yy33:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 's':
-		goto yy34
-	default:
-		goto yy9
-	}
-yy34:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 'h':
-		goto yy30
-	default:
-		goto yy9
+		goto yy10
 	}
 }
-//line "go/reuse/usedir.re":39
+//line "go/reuse/usedir.re":42
 
 }
 
 func TestLex(t *testing.T) {
-	if lex("salmon") != Fish {
+	if lex("salmon") != Fish || lex("what?") != Dunno {
 		t.Errorf("lex failed")
 	}
 }
