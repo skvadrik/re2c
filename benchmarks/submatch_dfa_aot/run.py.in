@@ -32,7 +32,12 @@ def parse_args():
         help="verify parse results on full data files")
     parser.add_argument("--quickverify", action='store_true',
         help="verify parse results on small data samples")
-    return parser.parse_args()
+
+    args = parser.parse_args()
+    if args.output == None and not (args.verify or args.quickverify):
+        sys.exit("no output file!")
+
+    return args
 
 
 DATA_STEM = re.compile('^[0-9]+__([a-z0-9]+).*$')
