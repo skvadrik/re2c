@@ -89,6 +89,10 @@ private:
     bool is_eof() const;
     void fail_if_eof() const;
     uint32_t decode(const char *str) const;
+    void error_block_start(const char *block) const;
+    void error_named_block_start(const char *block) const;
+    void error_include_directive() const;
+    void error_header_directive() const;
 
     FORBID_COPY (Scanner);
 };

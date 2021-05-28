@@ -51,6 +51,7 @@ namespace re2c {
     ws         = (space | [\r\n]);
     eol        = "\r"? "\n";
     eoc        = "*" "/";
+    ws_or_eoc  = ws | eoc;
     linedir    = eol space* "#" space* "line" space+;
     lineinf    = lineno (space+ dstring)? eol;
     esc        = "\\";
@@ -128,6 +129,34 @@ static inline void save_string(std::string &str, const char *s, const char *e)
     }
 }
 
+void Scanner::error_block_start(const char *block) const
+{
+    msg.error(cur_loc(), "ill-formed start of a block: expected `/*!%s`"
+        " followed by a space, a newline or the end of block `*/`", block);
+}
+
+void Scanner::error_named_block_start(const char *block) const
+{
+    msg.error(cur_loc(), "ill-formed start of a block: expected `/*!%s`"
+        ", optionally followed by a name of the form `:[a-zA-Z_][a-zA-Z0-9_]*`"
+        ", followed by a space, a newline or the end of block `*/`", block);
+}
+
+void Scanner::error_include_directive() const
+{
+    msg.error(cur_loc(), "ill-formed include directive: expected `/*"
+        // split string to prevent re2c from lexing this as a real directive
+        "!include:re2c \"<file>\" */`");
+}
+
+void Scanner::error_header_directive() const
+{
+    msg.error(cur_loc(), "ill-formed header directive: expected `/*"
+        // split string to prevent re2c from lexing this as a real directive
+        "!header:re2c:<on|off>`"
+        " followed by a space, a newline or the end of block `*/`");
+}
+
 Scanner::ParseMode Scanner::echo(Output &out)
 {
     const opt_t *opts = out.block().opts;
@@ -141,31 +170,36 @@ loop:
     location = cur_loc();
     ptr = cur;
 /*!re2c
-    "%{" | "/*!re2c" {
+    "%{" {
         out.wraw(tok, ptr);
         return Parse;
     }
 
-    "/*!rules:re2c" (":" @x name @y)? {
+    "/*!re2c" / ws_or_eoc {
+        out.wraw(tok, ptr);
+        return Parse;
+    }
+
+    "/*!rules:re2c" (":" @x name @y)? / ws_or_eoc {
         out.wraw(tok, ptr);
         save_string(out.rules_block_name, x, y);
         return Rules;
     }
 
-    "/*!use:re2c" (":" @x name @y)? {
+    "/*!use:re2c" (":" @x name @y)? / ws_or_eoc {
         out.wraw(tok, ptr);
         save_string(out.rules_block_name, x, y);
         return Reuse;
     }
 
-    "/*!ignore:re2c" {
+    "/*!ignore:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         // allows arbitrary garbage before the end of the comment
         lex_end_of_comment(out, true);
         goto next;
     }
 
-    "/*!max:re2c" {
+    "/*!max:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         out.wdelay_stmt(0, code_yymaxfill(alc));
         // historically allows garbage before the end of the comment
@@ -173,14 +207,14 @@ loop:
         goto next;
     }
 
-    "/*!maxnmatch:re2c" {
+    "/*!maxnmatch:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         out.wdelay_stmt(0, code_yymaxnmatch(alc));
         lex_end_of_comment(out);
         goto next;
     }
 
-    "/*!getstate:re2c" {
+    "/*!getstate:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         if (opts->fFlag && opts->target == TARGET_CODE && !out.state_goto) {
             out.wdelay_stmt(opts->topIndent, code_state_goto(alc));
@@ -190,7 +224,7 @@ loop:
         goto next;
     }
 
-    "/*!types:re2c" {
+    "/*!types:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         out.wdelay_stmt(0, code_line_info_output(alc));
         out.wdelay_stmt(opts->topIndent, code_cond_enum(alc));
@@ -201,19 +235,19 @@ loop:
         goto next;
     }
 
-    "/*!stags:re2c" {
+    "/*!stags:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         lex_tags(out, false);
         goto next;
     }
 
-    "/*!mtags:re2c" {
+    "/*!mtags:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         lex_tags(out, true);
         goto next;
     }
 
-    "/*!header:re2c:on" {
+    "/*!header:re2c:on" / ws_or_eoc {
         out.wraw(tok, ptr);
         out.header_mode(true);
         out.need_header = opts->target == TARGET_CODE;
@@ -221,7 +255,7 @@ loop:
         goto next;
     }
 
-    "/*!header:re2c:off" {
+    "/*!header:re2c:off" / ws_or_eoc {
         out.wraw(tok, ptr);
         out.header_mode(false);
         out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
@@ -229,12 +263,25 @@ loop:
         goto next;
     }
 
-    "/*!include:re2c" space+ @x dstring @y space* {
+    "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
         out.wraw(tok, ptr);
         lex_end_of_comment(out);
         include(getstr(x + 1, y - 1));
         goto next;
     }
+
+    "/*!re2c"           { error_block_start("re2c");             exit(1); }
+    "/*!ignore:re2c"    { error_block_start("ignore:re2c");      exit(1); }
+    "/*!max:re2c"       { error_block_start("max:re2c");         exit(1); }
+    "/*!maxnmatch:re2c" { error_block_start("maxnmatch:re2c");   exit(1); }
+    "/*!getstate:re2c"  { error_block_start("getstate:re2c");    exit(1); }
+    "/*!types:re2c"     { error_block_start("types:re2c");       exit(1); }
+    "/*!stags:re2c"     { error_block_start("stags:re2c");       exit(1); }
+    "/*!mtags:re2c"     { error_block_start("mtags:re2c");       exit(1); }
+    "/*!rules:re2c"     { error_named_block_start("rules:re2c"); exit(1); }
+    "/*!use:re2c"       { error_named_block_start("use:re2c");   exit(1); }
+    "/*!include:re2c"   { error_include_directive();             exit(1); }
+    "/*!header:re2c"    { error_header_directive();              exit(1); }
 
     eof {
         if (is_eof()) {
