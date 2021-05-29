@@ -15003,6 +15003,70 @@ for (int a = 0; a < reTest.length; a++){
 
         html.printf("</body></html>\n");
         html.close();
+
+        // produce TeX chart
+        try {
+            String texfile = chart.replace(".html", ".tex");
+            PrintStream tex = new PrintStream(texfile);
+            System.out.printf("generating chart file %s\n",texfile);
+
+            tex.printf("\\documentclass[tikz]{standalone}\n");
+            tex.printf("\n");
+            tex.printf("\\usepackage[utf8]{inputenc}\n");
+            tex.printf("\\usepackage{amsmath, amssymb, amsfonts}\n");
+            tex.printf("\\usepackage{tikz, pgfplots, pgfplotstable}\n");
+            tex.printf("\n");
+            tex.printf("\\usepackage{comicneue}\n");
+            tex.printf("\\usepackage[T1]{fontenc}\n");
+            tex.printf("\\renewcommand{\\familydefault}{\\sfdefault}\n");
+            tex.printf("\n");
+            tex.printf("\\begin{document}\n");
+            tex.printf("\n");
+            tex.printf("\\pgfplotstableread {\n");
+            speedVsReLength(matrp,texts,algolabels,fact,-1);
+            for (int i = 1; i < plot.size(); i++){
+                String[] row = plot.get(i);
+                for (int j = 0; j < row.length; j++){
+                    String cell = row[j];
+                    if (cell.length() > 0){
+                        tex.printf(" %10s",cell);
+                    }
+                }
+                tex.printf("\n");
+            }
+            tex.printf("} \\datatable\n");
+            tex.printf("\n");
+            tex.printf("\\begin{tikzpicture}\n");
+            tex.printf("\\begin{axis} [\n");
+            tex.printf("  font=\\scriptsize,\n");
+            tex.printf("  xtick = data,\n");
+            tex.printf("  scaled y ticks = false,\n");
+            tex.printf("  y tick label style = {/pgf/number format/.cd,fixed,1000 sep = {\\,}},\n");
+            tex.printf("  ymajorgrids,\n");
+            tex.printf("  grid style={line width=.1pt, draw=gray!20},\n");
+            tex.printf("  legend pos=outer north east,\n");
+            tex.printf("  legend cell align = left,\n");
+            tex.printf("  legend style = {thick, draw = none},\n");
+            tex.printf("  xlabel = regular expression size (characters),\n");
+            tex.printf("  ylabel = parse speed (characters per second)\n");
+            tex.printf("]\n");
+            String[] row0 = plot.get(0);
+            for (int i = 1; i < row0.length; i++){
+                String name = row0[i].split("\\|")[0];
+                tex.printf("\\addplot [color=%s] table [x index=0, y index=%s] from \\datatable;\n",
+                    tex_colors[i - 1], i);
+                tex.printf("\\addlegendentry{%s}\n", name);
+            }
+            tex.printf("\\end{axis}\n");
+            tex.printf("\\end{tikzpicture}\n");
+            tex.printf("\n");
+            tex.printf("\\end{document}\n");
+
+            tex.close();
+        } catch (FileNotFoundException exc){
+            Trc.out.printf("charts TeX file error\n");
+            System.exit(1);
+        }
     }
 
     /** The html file for the charts. */
@@ -15012,6 +15076,10 @@ for (int a = 0; a < reTest.length; a++){
     private static String[] colors = new String[]{
         "blue","violet","indigo","red","orange","black","limegreen","brown",
         "deeppink","slateblue","darkblue","green"};
+
+    /** TeX colors. */
+    private static String[] tex_colors = new String[]{
+        "violet","teal","blue","cyan","lightgray","pink","gray","purple","orange","olive"};
 
     /** The list of values to be plotted in charts. */
     private static LinkedList<String[]> plot;
@@ -15023,7 +15091,7 @@ for (int a = 0; a < reTest.length; a++){
      * @param      texts matrix of texts
      * @param      algoLabels name and color of algorithms
      * @param      fact vector telling the number of times texts are concatenated for each bucket
-     * @param      nchart sequence number of the chart to produce
+     * @param      nchart sequence number of the chart to produce (no chart if negative)
      */
 
     private void speedVsReLength(long[][][][] matr, String[][][][] texts, String[] algoLabels,
@@ -15070,8 +15138,10 @@ for (int a = 0; a < reTest.length; a++){
                 plotEle[b+1] = String.format("%.2f",val);
             }
         }
-        String xtitle = "Parse speed vs RE length, texts 0:1M";
-        addChart(nchart,"RE length (characters)","characters/ms",xtitle,"Algorithm",true,0);
+        if (nchart > 0) {
+            String xtitle = "Parse speed vs RE length, texts 0:1M";
+            addChart(nchart,"RE length (characters)","characters/ms",xtitle,"Algorithm",true,0);
+        }
     }
 
     /**
