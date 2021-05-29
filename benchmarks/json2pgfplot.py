@@ -19,14 +19,14 @@ plot_preamble = """
 plot_font_comicneue = """
 \\usepackage{comicneue}
 \\usepackage[T1]{fontenc}
-\\renewcommand{\\familydefault}{\sfdefault}
+\\renewcommand{\\familydefault}{\\sfdefault}
 """
 
 # Use Computer Modern Bright font.
 plot_font_cmbright = """
 \\usepackage{cmbright}
 \\usepackage[T1]{fontenc}
-\\renewcommand{\\familydefault}{\sfdefault}
+\\renewcommand{\\familydefault}{\\sfdefault}
 """
 
 # Counterintuitively, 'assume math mode' tricks pgfmathprintnumber into not
