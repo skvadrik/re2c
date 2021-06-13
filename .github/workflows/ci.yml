@@ -243,7 +243,7 @@ jobs:
       - name: Full Build
         run: |
           find src -name '*.re' | xargs touch
-          cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }} --verbose
+          cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }}
 
       - name: Test
         if: startsWith(runner.os, 'Windows') == false
@@ -254,5 +254,5 @@ jobs:
 
           # skeleton tests (if enabled)
           if [[ "x${{ matrix.skeleton }}" == "xtrue" ]] ; then
-            ./run_tests.sh --skeleton
+            python run_tests.py --skeleton
           fi

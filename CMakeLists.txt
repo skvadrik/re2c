@@ -98,11 +98,9 @@ set(top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 configure_file(doc/manpage.rst.in doc/manpage.rst @ONLY)
 configure_file(doc/help.rst.in doc/help.rst @ONLY)
 
-configure_file(run_tests.sh.in run_tests.sh @ONLY)
-set(RE2C_RUN_TESTS "${CMAKE_CURRENT_BINARY_DIR}/run_tests.sh")
-if(CMAKE_HOST_UNIX)
-    execute_process(COMMAND chmod +x "${RE2C_RUN_TESTS}")
-endif()
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+configure_file(run_tests.py.in run_tests.py @ONLY)
+set(RE2C_RUN_TESTS "${CMAKE_CURRENT_BINARY_DIR}/run_tests.py")
 
 ac_config_headers("config.h")
 
@@ -326,19 +324,19 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     add_custom_target(tests
         DEPENDS "${RE2C_RUN_TESTS}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMAND "${RE2C_RUN_TESTS}"
+        COMMAND "${Python3_EXECUTABLE}" "${RE2C_RUN_TESTS}"
     )
     add_dependencies(tests re2c)
     add_custom_target(vtests
         DEPENDS "${RE2C_RUN_TESTS}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMAND "${RE2C_RUN_TESTS}" --valgrind
+        COMMAND "${Python3_EXECUTABLE}" "${RE2C_RUN_TESTS}" --valgrind
     )
     add_dependencies(vtests re2c)
     add_custom_target(wtests
         DEPENDS "${RE2C_RUN_TESTS}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMAND "${RE2C_RUN_TESTS}" --wine -j1
+        COMMAND "${Python3_EXECUTABLE}" "${RE2C_RUN_TESTS}" --wine -j1
     )
     add_dependencies(wtests re2c)
     add_executable(re2c_test_range
