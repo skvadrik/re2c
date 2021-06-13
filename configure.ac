@@ -179,6 +179,9 @@ AC_CONFIG_FILES([benchmarks/submatch_java/run.py],
     [chmod +x benchmarks/submatch_java/run.py])
 
 
+AC_CONFIG_LINKS([benchmarks/submatch_java/chart.js:benchmarks/submatch_java/chart.js])
+
+
 LT_INIT([dlopen win32-dll])
 AC_CONFIG_MACRO_DIRS([m4])
 
