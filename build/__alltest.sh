@@ -13,7 +13,7 @@ done
 # skeleton
 build/__build.sh \
     && cd __build \
-    && ./run_tests.sh --skeleton \
+    && ./run_tests.py --skeleton \
     && cd .. \
     || { cd .. ; echo "*** skeleton failed ***"; exit 1; }
 

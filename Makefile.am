@@ -407,7 +407,7 @@ endif
 all-local: docs $(re2c_BOOT_PARSER)
 
 # tests
-re2c_TESTSUITE = run_tests.sh
+re2c_TESTSUITE = run_tests.py
 .PHONY: tests
 tests: all $(re2c_TESTSUITE)
 	$(top_builddir)/$(re2c_TESTSUITE)
