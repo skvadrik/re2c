@@ -22,6 +22,10 @@ from pathlib import Path
 # stage. Can be relative or absolute.
 TOP_SRCDIR = '@top_srcdir@'
 
+# This contains current root of the build directory
+# and will be populated at the generation stage.
+TOP_BUILDIR = '@top_builddir@'
+
 
 @dataclass
 class Context:
@@ -301,19 +305,27 @@ def filter_tests(path):  # type: (str) -> list
     return test_files
 
 
-def run_pack(tests_pack):
+def run_pack(tests_pack):  # type: (list[str]) -> None
     """Run tests pack."""
     # counters
     ran_tests = 0
     hard_errors = 0
     soft_errors = 0
 
-    # Set locale to use in sort functions
+    # Set locale to use in sort functions below
     locale.setlocale(locale.LC_ALL, 'C')
 
-    for x in tests_pack:
+    # Pattern compilation in a loop is not a good idea.
+    # Thus, we prepare patterns once.
+    re2c_pattern = re.compile(r'.*re2c[ \t]*(.*)$')
+    type_header_pattern1 = re.compile(r'--type-header[ \t]*')
+    type_header_pattern2 = re.compile(
+        r'.*--type-header[ \t]*([^ \t]*).*'
+    )
+
+    for test in tests_pack:
         # remove prefix
-        outx = x[len(os.path.basename(_ctx.base_path))+1:]
+        outx = test[len(os.path.basename(_ctx.base_path))+1:]
 
         os.chdir(_ctx.base_path)
 
@@ -322,43 +334,45 @@ def run_pack(tests_pack):
             # generate file extension (.c for C/C++, .go for Go)
             ext = 'go' if 're2go' in head else 'c'
 
-        oute = os.path.splitext(outx)
-        outy = f'{oute[0]}.{ext if oute[1] == ".re" else oute[1]}'
+        outy = f'{os.path.splitext(outx)[0]}.{ext}'
 
         # Prepare re2c flags
         switches = head.replace('re2go', 're2c --lang go')
-        switches = re.sub(r'.*re2c (.*)$', r'\1', switches)
+        switches = re2c_pattern.sub(r'\1', switches)
         switches = switches.replace('$INPUT', outx)
         switches = switches.replace('$OUTPUT', outy)
         switches = switches.replace('$DEPFILE', f'{outy}.d')
-        switches = re.sub(
-            r'(--type-header )([^ ]*)',
-            r'\1' + f'{os.path.dirname(outx)}/' + r'\2',
+        switches = type_header_pattern1.sub(
+            # If outx contains Windows directory separator '\'
+            # it will be interpreted as a regex escape command
+            # and we'll get an error like
+            #     re.error: bad escape \c at position 16
+            # Therefore, we need to tilt the slashes in the opposite
+            # direction :)
+            f'--type-header {Path(outx).parent.as_posix()}/',
             switches
         )
 
         # enable warnings globally
         switches = f'{switches} -W --no-version --no-generation-date'
 
-        re2c = abshere(os.path.dirname(_ctx.base_path), _ctx.re2c)
-
         # normal tests
         if not _ctx.skeleton:
             # copy expected result
-            orig = f'{oute[0]}.orig.{ext if oute[1] == ".re" else oute[1]}'
+            orig = f'{os.path.splitext(outx)[0]}.orig.{ext}'
             shutil.move(outy, orig)
 
             # if options contain a header, create directory structure for it
             header = ''
             if '--type-header' in switches:
-                header = re.sub(r'.*--type-header ([^ ]*).*', r'\1', switches)
+                header = type_header_pattern2.sub(r'\1', switches)
 
             if header:
                 os.makedirs(os.path.dirname(header), exist_ok=True)
 
             # run re2c
             args = [_ctx.valgrind] + _ctx.valgrind_opts
-            args += [_ctx.wine, re2c] + _ctx.incpaths + switches.split()
+            args += [_ctx.wine, _ctx.re2c] + _ctx.incpaths + switches.split()
             with open(f'{outy}.stderr', mode='wb') as process_out:
                 process = subprocess.Popen(
                     list(filter(None, args)),
@@ -421,7 +435,7 @@ def run_pack(tests_pack):
 
             # run re2c
             args = [_ctx.valgrind] + _ctx.valgrind_opts
-            args += [_ctx.wine, re2c] + _ctx.incpaths + switches.split()
+            args += [_ctx.wine, _ctx.re2c] + _ctx.incpaths + switches.split()
             with open(f'{outy}.stderr', mode='wb') as process_out:
                 process = subprocess.Popen(
                     list(filter(None, args)),
@@ -647,8 +661,8 @@ def main():
 # This should be in the global scope
 _ctx = Context(
     # This should find 're2c.exe' for Windows or just 're2c'
-    # for Linux/UNIX under the os.getcwd().
-    re2c=abshere(shutil.which('re2c', path=os.getcwd()))
+    # for Linux/UNIX in TOP_BUILDIR.
+    re2c=abshere(shutil.which('re2c', path=TOP_BUILDIR))
 )
 
 

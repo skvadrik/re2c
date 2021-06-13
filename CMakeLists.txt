@@ -95,6 +95,8 @@ set(re2c_docs
 )
 
 set(top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
+set(top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
+
 configure_file(doc/manpage.rst.in doc/manpage.rst @ONLY)
 configure_file(doc/help.rst.in doc/help.rst @ONLY)
 

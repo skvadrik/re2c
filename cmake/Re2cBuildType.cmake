@@ -32,6 +32,21 @@ elseif(NOT MULTICONFIG_DONE) # Xcode, Visual Studio, ...
     endif()
 endif()
 
+# Put all the runtime targets in one folder.
+#
+# Multiconfiguration build tools, like Visual Studio, for each specific
+# configuration will create subdirectory (named as configuration itself)
+# under CMAKE_RUNTIME_OUTPUT_DIRECTORY. This is not needed for this project.
+# Otherwise, we would have to do tricky checks inside the test runner to
+# determine the re2c executable path as well as the environment name.
+if(MULTICONFIG_DONE)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_CURRENT_BINARY_DIR}")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${CMAKE_CURRENT_BINARY_DIR}")
+endif()
+
 # Notes for Windows with Visual Studio:
 #
 # - Address Sanitizer (Asan) currently is under experimental stage

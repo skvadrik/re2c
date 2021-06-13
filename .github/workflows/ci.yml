@@ -14,6 +14,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      # When set to true, GitHub cancels
+      # all in-progress jobs if any matrix job fails.
+      fail-fast: false
+
       matrix:
 
         include:
@@ -246,6 +250,7 @@ jobs:
           cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }}
 
       - name: Test
+        # Remove the following line after fix Windows tests
         if: startsWith(runner.os, 'Windows') == false
         working-directory: ${{ matrix.build-dir }}
         run: |
@@ -256,3 +261,16 @@ jobs:
           if [[ "x${{ matrix.skeleton }}" == "xtrue" ]] ; then
             python run_tests.py --skeleton
           fi
+
+      - name: Archive test artifacts
+        # Run this step even if previous fails
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          # To ensure that jobs don't overwrite existing artifacts,
+          # use a different name per job.
+          name: test-${{ matrix.name }}
+          path: test
+          # Artifacts are retained for 90 days by default.
+          # In fact we don't need such long period.
+          retention-days: 30
