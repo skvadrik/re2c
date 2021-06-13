@@ -23,7 +23,16 @@ if (Java_FOUND AND JNI_FOUND)
         ENTRY_POINT ReTdfa
     )
 
+    # Benchmark input data.
+    file(ARCHIVE_EXTRACT
+        INPUT "${CMAKE_CURRENT_SOURCE_DIR}/samples.ser.zip"
+    )
+
     # Python script that runs the benchmark.
     set(builddir ".")
     configure_file(run.py.in run.py @ONLY)
+
+    set_directory_properties(PROPERTY
+        ADDITIONAL_CLEAN_FILES "samples.ser"
+    )
 endif()
