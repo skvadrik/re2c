@@ -14498,7 +14498,7 @@ if (a.equals(b)) break doit;
     // Benchmarks
 
     /** The name of the samples file. */
-    private static final String SAMPLES = "samples4.ser";
+    private static final String SAMPLES = "samples.ser";
 
     /** The numeric suffix of the measures and chart files. */
 //    private static final String WNUMBER = "9";
@@ -16201,12 +16201,12 @@ this.finreg = false;
         ReTdfa[] rearrDF = concatArrays(rearrDFO, concatArrays(rearrDFH, rearrDFT));
 
         //bench(rearrN,   "measure_N.ser",   "chart_N.html");
-        bench(rearrDPO, "measure_DPO.ser", "chart_DPO.html");
-        bench(rearrDPH, "measure_DPH.ser", "chart_DPH.html");
-        bench(rearrDPT, "measure_DPT.ser", "chart_DPT.html");
-        bench(rearrDFO, "measure_DFO.ser", "chart_DFO.html");
-        bench(rearrDFH, "measure_DFH.ser", "chart_DFH.html");
-        bench(rearrDFT, "measure_DFT.ser", "chart_DFT.html");
+        //bench(rearrDPO, "measure_DPO.ser", "chart_DPO.html");
+        //bench(rearrDPH, "measure_DPH.ser", "chart_DPH.html");
+        //bench(rearrDPT, "measure_DPT.ser", "chart_DPT.html");
+        //bench(rearrDFO, "measure_DFO.ser", "chart_DFO.html");
+        //bench(rearrDFH, "measure_DFH.ser", "chart_DFH.html");
+        //bench(rearrDFT, "measure_DFT.ser", "chart_DFT.html");
         bench(rearrDP,  "measure_DP.ser",  "chart_DP.html");
         bench(rearrDF,  "measure_DF.ser",  "chart_DF.html");
 
