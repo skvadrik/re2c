@@ -14988,7 +14988,7 @@ for (int a = 0; a < reTest.length; a++){
 
         int fact[] = new int[]{1,2,5, 10,20,50, 100,200,500, 1000};
         html.printf("<h3>Parse speed</h3>\n");
-        speedVsReLength(matrp,texts,algolabels,fact,1);
+        speedVsReLength(res,matrp,texts,algolabels,fact,1);
         // speedVsTextLength(matrp,texts,algolabels,fact,2);
         html.printf("<h3>Compilation speed</h3>\n");
         speedCompVsReLength(matrc,res,algolabels,100);
@@ -15023,14 +15023,11 @@ for (int a = 0; a < reTest.length; a++){
             tex.printf("\\begin{document}\n");
             tex.printf("\n");
             tex.printf("\\pgfplotstableread {\n");
-            speedVsReLength(matrp,texts,algolabels,fact,-1);
-            for (int i = 1; i < plot.size(); i++){
-                String[] row = plot.get(i);
-                for (int j = 0; j < row.length; j++){
-                    String cell = row[j];
-                    if (cell.length() > 0){
-                        tex.printf(" %10s",cell);
-                    }
+            double[][] data = dataForPGFPlot(res,matrp,texts,algolabels.length);
+            for (int i = 1; i < data.length; i++){
+                if (data[i][0] == 0) continue;
+                for (int j = 0; j < data[i].length; j++){
+                    tex.printf(" %10.2f",data[i][j]);
                 }
                 tex.printf("\n");
             }
@@ -15039,7 +15036,6 @@ for (int a = 0; a < reTest.length; a++){
             tex.printf("\\begin{tikzpicture}\n");
             tex.printf("\\begin{axis} [\n");
             tex.printf("  font=\\scriptsize,\n");
-            tex.printf("  xtick = data,\n");
             tex.printf("  scaled y ticks = false,\n");
             tex.printf("  y tick label style = {/pgf/number format/.cd,fixed,1000 sep = {\\,}},\n");
             tex.printf("  ymajorgrids,\n");
@@ -15052,7 +15048,7 @@ for (int a = 0; a < reTest.length; a++){
             tex.printf("]\n");
             String[] row0 = plot.get(0);
             for (int i = 1; i < row0.length; i++){
-                String name = row0[i].split("\\|")[0];
+                String name = algolabels[i-1].split("\\|")[0];
                 tex.printf("\\addplot [color=%s] table [x index=0, y index=%s] from \\datatable;\n",
                     tex_colors[i - 1], i);
                 tex.printf("\\addlegendentry{%s}\n", name);
@@ -15084,6 +15080,154 @@ for (int a = 0; a < reTest.length; a++){
     /** The list of values to be plotted in charts. */
     private static LinkedList<String[]> plot;
 
+    private double[][] dataForPGFPlot(String[][] res, long[][][][] matr,
+        String[][][][] texts, int nalgs){
+
+        double[][] data = new double[res.length * res[0].length][nalgs+1];
+
+        int nrows = 0;
+        for (int i = 0; i < res.length; i++){
+            for (int j = 0; j < res[0].length; j++){ // visit bucket of a RE
+                if (matr[i][j][0][0] == Long.MAX_VALUE-1) continue;
+                if (Double.isNaN(matr[i][j][0][0])) continue;
+
+                data[nrows][0] = res[i][j].length();
+
+                for (int b = 0; b < nalgs; b++){
+                    long tim = 0;
+                    long tok = 0;
+                    // visit the text buckets
+                    for (int k = 0; k < matr[0][0].length; k++){
+                        long timb = 0;
+                        long tokb = 0;
+                        // visit the measures of a RE
+                        long v = matr[i][j][k][b];
+                        if (v == Long.MAX_VALUE-1){ // measure not done
+                            tokb = 0;
+                        }
+                        timb += v;
+                        for (int l = 0; l < texts[i][j][k].length; l++){
+                            String s = texts[i][j][k][l];
+                            tokb += s == null ? 0 : s.length();
+                        }
+                        if (tokb == 0) break;
+                        tim += timb;
+                        if (tim < 0) tim = Long.MAX_VALUE;
+                        tok += tokb;
+                    }
+                    double val = 0;
+                    if (tim > 0) val = (double)tok/((double)tim/1000000.0); // cycles to ms
+                    if (tok == 0) val = Double.NaN;
+                    data[nrows][b+1] = val;
+                }
+
+                ++nrows;
+            }
+        }
+
+        // sort table rows by first column (RE size)
+        java.util.Arrays.sort(data, new java.util.Comparator<double[]>() {
+            public int compare(double[] a, double[] b) {
+                return Double.compare(a[0], b[0]);
+            }
+        });
+
+        data = centered_moving_median(data, 1);  // remove outliers
+        data = average_at_coord(data);           // get rid of vertical segments on the plot
+        data = centered_moving_average(data, 5); // smooth
+        return data;
+    }
+
+    private double[][] average_at_coord(double[][] data) {
+        double[][] new_data = new double[data.length][data[0].length];
+        int new_size = 0;
+        for (int i = 0; i < data.length;) {
+            int i0 = i;
+            final int len = (int)data[i][0];
+            for (; i < data.length && (int)data[i][0] == len; ++i); // while the same RE size
+            new_data[new_size][0] = len;
+
+            //if (new_size > 0 && len - new_data[new_size-1][0] > 2) break;
+
+            for (int k = 1; k < data[0].length; ++k) {
+                int n = 0;
+                double avg = 0;
+                for (int j = i0; j < i; ++j) {
+                    if (Double.isNaN(data[j][k])) continue;
+                    avg += data[j][k];
+                    n++;
+                }
+                avg /= n;
+                new_data[new_size][k] = avg;
+            }
+
+            ++new_size;
+        }
+        return Arrays.copyOf(new_data, new_size);
+    }
+
+    private double[][] centered_moving_median(double[][] data, int half_window) {
+        int nrows = data.length;
+        int ncolumns = data[0].length;
+
+        double[][] new_data = new double[nrows][ncolumns];
+        double[] window = new double[2 * half_window + 1];
+
+        // first column (RE size) stays the same
+        for (int i = half_window; i < nrows - half_window; i++) {
+            new_data[i - half_window][0] = data[i][0];
+        }
+
+        for (int k = 1; k < ncolumns; ++k) {
+            // head
+            for (int i = 0; i < half_window; i++) {
+                new_data[i][k] = data[i][k];
+            }
+            // sliding window
+            // TODO: optimize algorithm to avoid worst-case quadratic complexity
+            for (int i = half_window; i < nrows - half_window; i++) {
+                for (int j = -half_window; j <= half_window; ++j) {
+                    window[j + half_window] = data[i + j][k];
+                }
+                java.util.Arrays.sort(window);
+                new_data[i][k] = window[half_window]; // median
+            }
+            // tail
+            for (int i = nrows - half_window; i < nrows; i++) {
+                new_data[i][k] = data[i][k];
+            }
+        }
+
+        return new_data;
+    }
+
+    private double[][] centered_moving_average(double[][] data, int half_window) {
+        int nrows = data.length;
+        int ncolumns = data[0].length;
+
+        double[][] new_data = new double[nrows - 2 * half_window][ncolumns];
+
+        // first column (RE size) stays the same
+        for (int i = half_window; i < nrows - half_window; i++) {
+            new_data[i - half_window][0] = data[i][0];
+        }
+
+        for (int k = 1; k < ncolumns; ++k) {
+            // sliding window
+            // TODO: optimize algorithm to avoid worst-case quadratic complexity
+            for (int i = half_window; i < nrows - half_window; i++) {
+                double avg = 0;
+                for (int j = -half_window; j <= half_window; ++j) {
+                    avg += data[i + j][k];
+                }
+                avg /= 2 * half_window + 1;
+                new_data[i - half_window][k] = avg;
+            }
+        }
+
+        return new_data;
+    }
+
     /**
      * Produce a chart with the parse speed vs RE length.
      *
@@ -15094,8 +15238,8 @@ for (int a = 0; a < reTest.length; a++){
      * @param      nchart sequence number of the chart to produce (no chart if negative)
      */
 
-    private void speedVsReLength(long[][][][] matr, String[][][][] texts, String[] algoLabels,
-        int fact[], int nchart){
+    private void speedVsReLength(String[][] res, long[][][][] matr, String[][][][] texts,
+        String[] algoLabels, int fact[], int nchart){
         // chart speed vs RE length
         plot = new LinkedList<String[]>();
         String[] labels = new String[algoLabels.length+1];
@@ -15106,7 +15250,15 @@ for (int a = 0; a < reTest.length; a++){
         for (int i = 0; i < matr.length; i++){
             String[] plotEle = new String[labels.length];
             plot.add(plotEle);
-            plotEle[0] = "" + ((i+1)*10);
+
+            // compute average RE size in this bucket
+            int avgReLen = 0;
+            for (int j = 0; j < matr[i].length; j++){
+                avgReLen += res[i][j].length();
+            }
+            avgReLen /= matr[i].length;
+
+            plotEle[0] = "" + avgReLen;
             for (int b = 0; b < algoLabels.length; b++){
                 long tim = 0;
                 long tok = 0;
@@ -15321,10 +15473,11 @@ for (int a = 0; a < reTest.length; a++){
         String[] complLabels = new String[]{"0",
             "10|#000033","20|#000099","30|#0000FF","40|#009933","50|#009999",
             "60|#0099FF","70|#660000","80|#660066","90|#6600CC","100|#990000"};
+        int nTextBuckets = matr[0][0].length; // all buckets have the same size
         for (int b = 0; b < algoLabels.length; b++){
             plot = new LinkedList<String[]>();
             plot.add(complLabels);
-            for (int k = 0; k < 10; k++){                // visit text buckets
+            for (int k = 0; k < nTextBuckets; k++){                // visit text buckets
                 String[] plotEle = new String[complLabels.length];
                 plot.add(plotEle);
                 plotEle[0] = "" + ((k+1)*TEXT_SAMPLES_LENGTH);
@@ -15374,7 +15527,8 @@ for (int a = 0; a < reTest.length; a++){
         labels[0] = "0";
         System.arraycopy(algoLabels,0,labels,1,algoLabels.length);
         plot.add(labels);
-        for (int k = 0; k < 10; k++){                  // for each text bucket
+        int nTextBuckets = matr[0][0].length; // all buckets have the same size
+        for (int k = 0; k < nTextBuckets; k++){                  // for each text bucket
             String[] plotEle = new String[labels.length];
             plot.add(plotEle);
             plotEle[0] = "" + ((k+1)*TEXT_SAMPLES_LENGTH);
