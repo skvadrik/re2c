@@ -4,11 +4,12 @@ usage () {
     echo "Synopsis: re2c test script."
     echo ""
     echo "Available options:"
-    echo "  --help        show this help"
-    echo "  --valgrind    run ./re2c under valgrind"
-    echo "  --skeleton    run skeleton validation for sources that support it"
-    echo "  --wine        run ./re2c.exe under wine"
-    echo "  -j<N>         override CPU autodetection and use specified value"
+    echo "  --help                 show this help"
+    echo "  --valgrind             run ./re2c under valgrind"
+    echo "  --skeleton             run skeleton validation for sources that support it"
+    echo "  --keep-temp-files      don't delete temporary files after test run"
+    echo "  --wine                 run ./re2c.exe under wine"
+    echo "  -j<N>                  override CPU autodetection and use specified value"
     echo ""
     echo "Usage examples:"
     echo "  - run tests in parallel"
@@ -40,10 +41,15 @@ lc_run() {
     LANG=C LC_ALL=C "$@"
 }
 
+rm_tmp_files() {
+    [ $keep_tmp_files -eq 0 ] && rm $@
+}
+
 re2c="./re2c"
 diff_prog="diff"
 valgrind=""
 skeleton=0
+keep_tmp_files=0
 wine=""
 threads=`detect_cpu_count; echo $CPUS`
 tests=()
@@ -53,6 +59,7 @@ do
         "--help" ) usage ;;
         "--valgrind" ) valgrind=`which valgrind` ;;
         "--skeleton" ) skeleton=1 ;;
+        "--keep-tmp-files" ) keep_tmp_files=1 ;;
         "--wine" )
             wine=`which wine`
             re2c="${re2c}.exe"
@@ -201,7 +208,7 @@ run_pack() {
 
             # cleanup
             if [ $status = "OK" ]; then
-                echo "$header" "$outy" "$outy".* "$orig" "$outx" | xargs rm
+                rm_tmp_files $(echo "$header" "$outy" "$outy".* "$orig" "$outx")
             else
                 hard_errors=$(($hard_errors + 1))
             fi
@@ -229,7 +236,7 @@ run_pack() {
             printf "%-25s $outx\n" "$msg"
 
             case $status in
-                0 | 1 ) rm "$outx" "$outy"* ;;
+                0 | 1 ) rm_tmp_files "$outx" "$outy"* ;;
             esac
 
             ran_tests=$(($ran_tests + 1))
@@ -241,7 +248,7 @@ run_pack() {
 
         # skeleton tests for unsupported language; cleanup temporary files
         else
-            rm "$outx" "$outy"
+            rm_tmp_files "$outx" "$outy"
         fi
         cd ..
     done
