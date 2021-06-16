@@ -59,13 +59,13 @@ jobs:
             skeleton: ${{ true }}
 
           # macOS
-          - name: macos-clang-debug-ootree-skeleton
+          - name: macos-clang-debug-ootree
             os: macos-latest
             generator: Unix Makefiles
             build-type: Debug
             build-dir: .build
             cxx-flags: -O2
-            skeleton: ${{ true }}
+            skeleton: ${{ false }}
 
           - name: macos-clang-debug-intree-skeleton
             os: macos-latest
