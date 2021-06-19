@@ -206,27 +206,6 @@ def abshere(*paths):
     return os.path.abspath(here(*paths))
 
 
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
-
-
-def glob_re(pattern, path, flags=0):
-    """glob.glob() style searching which uses regex."""
-    return list(filter(re.compile(pattern, flags).match, os.listdir(path)))
-
-
-def grep_count(file, pattern):
-    """Read file, "grep" line and return a number from the end of the line."""
-    with open(file, mode='r', encoding='utf-8') as f:
-        contents = f.read()
-        match = re.search(pattern + r'([0-9]+)', contents)
-        if match and match.lastindex is not None:
-            return int(match.group(match.lastindex))
-    return 0
-
-
 def crlf_to_lf(file_path):
     """Convert CRLF to LF."""
     crlf = b'\r\n'
@@ -301,12 +280,17 @@ def clean_test_tree(path):  # type: (str) -> None
 def filter_tests(path):  # type: (str) -> list
     """Filter and sort tests in ascending order."""
     test_files = [str(f) for f in Path(path).rglob('*.re')]
-    test_files.sort()
     return test_files
 
 
-def run_pack(tests_pack):  # type: (list[str]) -> None
-    """Run tests pack."""
+# Prepare static patterns once at start.
+RE2C_PATTERN = re.compile(r'.*re2c[ \t]*(.*)$')
+TYPE_HEADER_PATTERN1 = re.compile(r'--type-header[ \t]*')
+TYPE_HEADER_PATTERN2 = re.compile(r'.*--type-header[ \t]*([^ \t]*).*')
+
+
+def run_test(test):
+    """Run a single test."""
     # counters
     ran_tests = 0
     hard_errors = 0
@@ -315,210 +299,183 @@ def run_pack(tests_pack):  # type: (list[str]) -> None
     # Set locale to use in sort functions below
     locale.setlocale(locale.LC_ALL, 'C')
 
-    # Pattern compilation in a loop is not a good idea.
-    # Thus, we prepare patterns once.
-    re2c_pattern = re.compile(r'.*re2c[ \t]*(.*)$')
-    type_header_pattern1 = re.compile(r'--type-header[ \t]*')
-    type_header_pattern2 = re.compile(
-        r'.*--type-header[ \t]*([^ \t]*).*'
+    # remove prefix
+    outx = test[len(os.path.basename(_ctx.base_path))+1:]
+
+    os.chdir(_ctx.base_path)
+
+    with open(outx, mode='rb') as f:
+        head = f.readline().decode('utf-8').strip()
+        # generate file extension (.c for C/C++, .go for Go)
+        ext = 'go' if 're2go' in head else 'c'
+
+    outy = f'{os.path.splitext(outx)[0]}.{ext}'
+
+    # Prepare re2c flags
+    switches = head.replace('re2go', 're2c --lang go')
+    switches = RE2C_PATTERN.sub(r'\1', switches)
+    switches = switches.replace('$INPUT', outx)
+    switches = switches.replace('$OUTPUT', outy)
+    switches = switches.replace('$DEPFILE', f'{outy}.d')
+    switches = TYPE_HEADER_PATTERN1.sub(
+        # If outx contains Windows directory separator '\'
+        # it will be interpreted as a regex escape command
+        # and we'll get an error like
+        #     re.error: bad escape \c at position 16
+        # Therefore, we need to tilt the slashes in the opposite
+        # direction :)
+        f'--type-header {Path(outx).parent.as_posix()}/',
+        switches
     )
 
-    for test in tests_pack:
-        # remove prefix
-        outx = test[len(os.path.basename(_ctx.base_path))+1:]
+    # enable warnings globally
+    switches = f'{switches} -W --no-version --no-generation-date'
 
-        os.chdir(_ctx.base_path)
+    # normal tests
+    if not _ctx.skeleton:
+        # copy expected result
+        orig = f'{os.path.splitext(outx)[0]}.orig.{ext}'
+        shutil.move(outy, orig)
 
-        with open(outx, mode='rb') as f:
-            head = f.readline().decode('utf-8').strip()
-            # generate file extension (.c for C/C++, .go for Go)
-            ext = 'go' if 're2go' in head else 'c'
+        # if options contain a header, create directory structure for it
+        header = ''
+        if '--type-header' in switches:
+            header = TYPE_HEADER_PATTERN2.sub(r'\1', switches)
 
-        outy = f'{os.path.splitext(outx)[0]}.{ext}'
+        if header:
+            os.makedirs(os.path.dirname(header), exist_ok=True)
 
-        # Prepare re2c flags
-        switches = head.replace('re2go', 're2c --lang go')
-        switches = re2c_pattern.sub(r'\1', switches)
-        switches = switches.replace('$INPUT', outx)
-        switches = switches.replace('$OUTPUT', outy)
-        switches = switches.replace('$DEPFILE', f'{outy}.d')
-        switches = type_header_pattern1.sub(
-            # If outx contains Windows directory separator '\'
-            # it will be interpreted as a regex escape command
-            # and we'll get an error like
-            #     re.error: bad escape \c at position 16
-            # Therefore, we need to tilt the slashes in the opposite
-            # direction :)
-            f'--type-header {Path(outx).parent.as_posix()}/',
-            switches
-        )
+        # run re2c
+        args = [_ctx.valgrind] + _ctx.valgrind_opts
+        args += [_ctx.wine, _ctx.re2c] + _ctx.incpaths + switches.split()
+        with open(f'{outy}.stderr', mode='wb') as process_out:
+            process = subprocess.Popen(
+                list(filter(None, args)),
+                stdout=process_out,
+                stderr=process_out,
+            )
 
-        # enable warnings globally
-        switches = f'{switches} -W --no-version --no-generation-date'
+            # wait blocks until the process terminates
+            process.wait()
 
-        # normal tests
-        if not _ctx.skeleton:
-            # copy expected result
-            orig = f'{os.path.splitext(outx)[0]}.orig.{ext}'
-            shutil.move(outy, orig)
+        # paste all files created by re2c into output file
+        # (this includes stderr and optionally header and skeleton files)
+        files = [header] if header else []
+        files += [str(f) for f in Path('.').glob(f'{outy}.*')]
 
-            # if options contain a header, create directory structure for it
-            header = ''
-            if '--type-header' in switches:
-                header = type_header_pattern2.sub(r'\1', switches)
+        # An ugly hack to put '*.stderr' files at the end of list
+        # but keep the list sorted using 'locale.strcoll' collate
+        files = sorted(files, key=cmp_to_key(locale.strcoll))
+        f1 = list(filter(lambda i: not str(i).endswith('.stderr'), files))
+        f2 = list(filter(lambda i: str(i).endswith('.stderr'), files))
+        files = f1 + f2
 
-            if header:
-                os.makedirs(os.path.dirname(header), exist_ok=True)
+        for f in files:
+            # on windows output contains CR LF, cut CR to match test results
+            crlf_to_lf(f)
 
-            # run re2c
-            args = [_ctx.valgrind] + _ctx.valgrind_opts
-            args += [_ctx.wine, _ctx.re2c] + _ctx.incpaths + switches.split()
-            with open(f'{outy}.stderr', mode='wb') as process_out:
+            with open(f, mode='rb') as fi, open(outy, mode='ab') as fo:
+                fo.write(fi.read())
+
+        # compare results
+        status = '' if os.path.isfile(orig) else 'MISSING'
+        if not status:
+            with open(f'{outy}.diff', mode='wb') as process_out:
+                args = [_ctx.diff] + _ctx.diff_opts + [orig, outy]
                 process = subprocess.Popen(
                     list(filter(None, args)),
                     stdout=process_out,
-                    stderr=process_out,
+                    stderr=process_out
                 )
 
                 # wait blocks until the process terminates
                 process.wait()
+                status = 'FAIL' if process.returncode != 0 else 'OK'
 
-            # paste all files created by re2c into output file
-            # (this includes stderr and optionally header and skeleton files)
-            files = [header] if header else []
-            files += [str(f) for f in Path('.').glob(f'{outy}.*')]
+        print('{:<10s} {:s}'.format(status, outx))
+        ran_tests += 1
 
-            # An ugly hack to put '*.stderr' files at the end of list
-            # but keep the list sorted using 'locale.strcoll' collate
-            files = sorted(files, key=cmp_to_key(locale.strcoll))
-            f1 = list(filter(lambda i: not str(i).endswith('.stderr'), files))
-            f2 = list(filter(lambda i: str(i).endswith('.stderr'), files))
-            files = f1 + f2
+        # cleanup
+        if status == 'OK':
+            all_files = [header, outy, orig, outx]
+            all_files += [str(f) for f in Path('.').glob(f'{outy}.*')]
+            remove(*all_files, keep_temp_files=_ctx.keep_temp_files)
+        else:
+            hard_errors += 1
+    elif ext == 'c':  # skeleton tests; only C files are supported
+        # cleanup temporary files
+        remove(outy)
 
-            for f in files:
-                # on windows output contains CR LF, cut CR to match test results
-                crlf_to_lf(f)
+        switches = f'{switches} --skeleton -Werror-undefined-control-flow'
 
-                with open(f, mode='rb') as fi, open(outy, mode='ab') as fo:
-                    fo.write(fi.read())
+        # run re2c
+        args = [_ctx.valgrind] + _ctx.valgrind_opts
+        args += [_ctx.wine, _ctx.re2c] + _ctx.incpaths + switches.split()
+        with open(f'{outy}.stderr', mode='wb') as process_out:
+            process = subprocess.Popen(
+                list(filter(None, args)),
+                stdout=process_out,
+                stderr=process_out,
+            )
 
-            # compare results
-            status = '' if os.path.isfile(orig) else 'MISSING'
-            if not status:
-                with open(f'{outy}.diff', mode='wb') as process_out:
-                    args = [_ctx.diff] + _ctx.diff_opts + [orig, outy]
-                    process = subprocess.Popen(
-                        list(filter(None, args)),
-                        stdout=process_out,
-                        stderr=process_out
-                    )
+            # wait blocks until the process terminates
+            process.wait()
+            status = process.returncode
 
-                    # wait blocks until the process terminates
-                    process.wait()
-                    status = 'FAIL' if process.returncode != 0 else 'OK'
-
-            print('{:<10s} {:s}'.format(status, outx))
-            ran_tests += 1
-
-            # cleanup
-            if status == 'OK':
-                all_files = [header, outy, orig, outx]
-                all_files += [str(f) for f in Path('.').glob(f'{outy}.*')]
-                remove(*all_files, keep_temp_files=_ctx.keep_temp_files)
-            else:
-                hard_errors += 1
-        elif ext == 'c':  # skeleton tests; only C files are supported
-            # cleanup temporary files
-            remove(outy)
-
-            switches = f'{switches} --skeleton -Werror-undefined-control-flow'
-
-            # run re2c
-            args = [_ctx.valgrind] + _ctx.valgrind_opts
-            args += [_ctx.wine, _ctx.re2c] + _ctx.incpaths + switches.split()
-            with open(f'{outy}.stderr', mode='wb') as process_out:
+        # Use plain 'cc' instead of @-substition, because CMake and
+        # Autoconf use different variables (CMAKE_C_COMPILER and CC)
+        if status == 0:
+            with open(f'{outy}.stderr', mode='ab') as process_out:
                 process = subprocess.Popen(
-                    list(filter(None, args)),
-                    stdout=process_out,
+                    ['cc', '-Wall', '-Wextra', '-o', f'{outy}.out', outy],
+                    stdout=subprocess.DEVNULL,
                     stderr=process_out,
                 )
 
-                # wait blocks until the process terminates
-                process.wait()
-                status = process.returncode
+            # wait blocks until the process terminates
+            process.wait()
+            if process.returncode != 0:
+                status = 2
 
-            # Use plain 'cc' instead of @-substition, because CMake and
-            # Autoconf use different variables (CMAKE_C_COMPILER and CC)
-            if status == 0:
-                with open(f'{outy}.stderr', mode='ab') as process_out:
-                    process = subprocess.Popen(
-                        ['cc', '-Wall', '-Wextra', '-o', f'{outy}.out', outy],
-                        stdout=subprocess.DEVNULL,
-                        stderr=process_out,
-                    )
+        if status == 0:
+            with open(f'{outy}.stderr', mode='ab') as process_out:
+                process = subprocess.Popen(
+                    [f'./{outy}.out'],
+                    stdout=subprocess.DEVNULL,
+                    stderr=process_out,
+                )
 
-                # wait blocks until the process terminates
-                process.wait()
-                if process.returncode != 0:
-                    status = 2
+            # wait blocks until the process terminates
+            process.wait()
+            if process.returncode != 0:
+                status = 3
 
-            if status == 0:
-                with open(f'{outy}.stderr', mode='ab') as process_out:
-                    process = subprocess.Popen(
-                        [f'./{outy}.out'],
-                        stdout=subprocess.DEVNULL,
-                        stderr=process_out,
-                    )
+        status_map = {
+            0: 'OK',
+            1: 'OK (expected re2c error)',
+            2: 'FAIL (compilation error)',
+            3: 'FAIL (runtime error)',
+        }
 
-                # wait blocks until the process terminates
-                process.wait()
-                if process.returncode != 0:
-                    status = 3
+        msg = status_map.get(status, 'FAIL (unknown error)')
+        print('{:<25s} {:s}'.format(msg, outx))
 
-            status_map = {
-                0: 'OK',
-                1: 'OK (expected re2c error)',
-                2: 'FAIL (compilation error)',
-                3: 'FAIL (runtime error)',
-            }
+        if status in [0, 1]:
+            files = [outx] + [str(f) for f in Path('.').glob(f'{outy}*')]
+            remove(*files, keep_temp_files=_ctx.keep_temp_files)
 
-            msg = status_map.get(status, 'FAIL (unknown error)')
-            print('{:<25s} {:s}'.format(msg, outx))
+        ran_tests += 1
+        if status == 0:
+            pass
+        elif status == 1:
+            soft_errors += 1
+        else:
+            hard_errors += 1
+    else:  # skeleton tests for unsupported language;
+        # cleanup temporary files
+        remove(outx, outy, keep_temp_files=_ctx.keep_temp_files)
 
-            if status in [0, 1]:
-                files = [outx] + [str(f) for f in Path('.').glob(f'{outy}*')]
-                remove(*files, keep_temp_files=_ctx.keep_temp_files)
-
-            ran_tests += 1
-            if status == 0:
-                pass
-            elif status == 1:
-                soft_errors += 1
-            else:
-                hard_errors += 1
-        else:  # skeleton tests for unsupported language;
-            # cleanup temporary files
-            remove(outx, outy, keep_temp_files=_ctx.keep_temp_files)
-
-    # log results
-    _ctx.reporter.info('ran tests:   %d' % ran_tests)
-    _ctx.reporter.info('hard errors: %d' % hard_errors)
-    _ctx.reporter.info('soft errors: %d' % soft_errors)
-
-
-def create_reporter(base_path):  # type: (str) -> logging.Logger
-    """Create reporter on a per-process basis."""
-    reporter = logging.getLogger('run_tests')
-    reporter.setLevel(logging.INFO)
-
-    now = datetime.now().strftime('%y%m%d%H%M%S')
-    filename = f'{now}_{os.getpid()}.log'
-    handler = logging.FileHandler(abshere(base_path, filename))
-    handler.setFormatter(logging.Formatter('%(message)s'))
-
-    reporter.addHandler(handler)
-
-    return reporter
+    return (ran_tests, soft_errors, hard_errors)
 
 
 def init_process(base_path, skeleton=False, keep_temp_files=False,
@@ -531,9 +488,6 @@ def init_process(base_path, skeleton=False, keep_temp_files=False,
     _ctx.base_path = abshere(base_path)
     _ctx.skeleton = skeleton
     _ctx.keep_temp_files = keep_temp_files
-
-    # Setup logger for use within multiprocessing pool
-    _ctx.reporter = create_reporter(base_path)
 
     # Set include paths, relative to build directory
     cwd = os.getcwd()
@@ -607,6 +561,11 @@ def main():
     clean_test_tree(test_blddir)
     tests = filter_tests(test_blddir)
 
+    # collect results from all threads
+    total = len(tests)
+    total_ran_tests = 0
+    total_hard_errors = 0
+    total_soft_errors = 0
     with multiprocessing.Pool(
             processes=jobs,
             initializer=init_process,
@@ -614,20 +573,10 @@ def main():
             initargs=(test_blddir, args.skeleton, args.keep_temp_files,
                       args.valgrind, args.wine,)
     ) as pool:
-        pool.map(run_pack, chunks(tests, int(len(tests) / jobs + 1)))
-
-    # collect results from all threads
-    total = len(tests)
-    total_ran_tests = 0
-    total_hard_errors = 0
-    total_soft_errors = 0
-
-    for log in glob_re(r'\d+_\d+\.log$', test_blddir):
-        log = abshere(test_blddir, log)
-        total_ran_tests += grep_count(log, r'ran[^\d]+')
-        total_hard_errors += grep_count(log, r'hard[^\d]+')
-        total_soft_errors += grep_count(log, r'soft[^\d]+')
-        remove(log)
+        for (ran, soft_err, hard_err) in pool.imap_unordered(run_test, tests):
+            total_ran_tests += ran
+            total_soft_errors += soft_err
+            total_hard_errors += hard_err
 
     # Recursively remove subdirectories that do not contain .re files.
     # Note that the removed subdirectories are still listed when iterating the
