@@ -64,9 +64,10 @@ Mailing lists:
 - re2c-general@lists.sourceforge.net
 - re2c-devel@lists.sourceforge.net
 
-IRC channel:
+IRC channels:
 
-- freenode/#re2c
+- irc.oftc.net/#re2c
+- irc.libera.chat/#re2c
 
 You are welcome to ask for help or share your thoughts and ideas.
 
