@@ -263,14 +263,15 @@ jobs:
           fi
 
       - name: Archive test artifacts
-        # Run this step even if previous fails
-        if: always()
+        # Run this step only if tests failed (otherwise there is nothing to upload).
+        if: failure()
         uses: actions/upload-artifact@v2
         with:
           # To ensure that jobs don't overwrite existing artifacts,
           # use a different name per job.
           name: test-${{ matrix.name }}
-          path: test
+          # Tests run in a temporary directory that has a name test_<timestamp>.
+          path: ${{ matrix.build-dir }}/test_[0-9]*
           # Artifacts are retained for 90 days by default.
           # In fact we don't need such long period.
           retention-days: 30
