@@ -174,13 +174,8 @@ def remove(*args, **kwargs):
     Delete a file which may not exist.
 
     If 'ignore_errors' is set to False, file-not-found errors are raised.
-    Does nothing if 'keep_temp_files' is True.
     """
     ignore_errors = kwargs.get('ignore_errors', True)
-    keep_temp_files = kwargs.get('keep_temp_files', False)
-
-    if keep_temp_files:
-        return
 
     for filename in args:
         # Special case for empty filename
@@ -190,9 +185,7 @@ def remove(*args, **kwargs):
             os.remove(filename)
         except OSError as e:
             # Raise all errors which is not that the file was not found
-            if e.errno != errno.ENOENT:
-                raise
-            if not ignore_errors:
+            if e.errno != errno.ENOENT or not ignore_errors:
                 raise
 
 
@@ -397,9 +390,10 @@ def run_test(test):
 
         # cleanup
         if status == 'OK':
-            all_files = [header, outy, orig, outx]
-            all_files += [str(f) for f in Path('.').glob(f'{outy}.*')]
-            remove(*all_files, keep_temp_files=_ctx.keep_temp_files)
+            if not _ctx.keep_temp_files:
+                all_files = [header, outy, orig, outx]
+                all_files += [str(f) for f in Path('.').glob(f'{outy}.*')]
+                remove(*all_files)
         else:
             hard_errors += 1
     elif ext == 'c':  # skeleton tests; only C files are supported
@@ -460,9 +454,9 @@ def run_test(test):
         msg = status_map.get(status, 'FAIL (unknown error)')
         print('{:<25s} {:s}'.format(msg, outx))
 
-        if status in [0, 1]:
+        if status in [0, 1] and not _ctx.keep_temp_files:
             files = [outx] + [str(f) for f in Path('.').glob(f'{outy}*')]
-            remove(*files, keep_temp_files=_ctx.keep_temp_files)
+            remove(*files)
 
         ran_tests += 1
         if status == 0:
@@ -473,7 +467,8 @@ def run_test(test):
             hard_errors += 1
     else:  # skeleton tests for unsupported language;
         # cleanup temporary files
-        remove(outx, outy, keep_temp_files=_ctx.keep_temp_files)
+        if not _ctx.keep_temp_files:
+            remove(outx, outy)
 
     return (ran_tests, soft_errors, hard_errors)
 
