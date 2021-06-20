@@ -251,7 +251,6 @@ jobs:
 
       - name: Test
         # Remove the following line after fix Windows tests
-        if: startsWith(runner.os, 'Windows') == false
         working-directory: ${{ matrix.build-dir }}
         run: |
           # main test suite
