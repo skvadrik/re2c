@@ -252,13 +252,11 @@ def clean_test_tree(path):  # type: (str) -> None
     remove(*[f for f in files if os.path.isfile(f)])
 
     process = subprocess.Popen(
-        [_ctx.re2c, '--version'],
+        list(filter(None, [_ctx.wine, _ctx.re2c, '--version'])),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
-
-    # Communicate blocks until the process terminates
-    out, err = process.communicate(timeout=2)
+    out, err = process.communicate()
     out = out.decode('utf-8').rstrip()
 
     # If not a debug build, remove all debug subdirs
@@ -470,10 +468,10 @@ def run_test(test):
         if not _ctx.keep_temp_files:
             remove(outx, outy)
 
-    return (ran_tests, soft_errors, hard_errors)
+    return ran_tests, soft_errors, hard_errors
 
 
-def init_process(base_path, skeleton=False, keep_temp_files=False,
+def init_context(base_path, skeleton=False, keep_temp_files=False,
                  valgrind=False, wine=False):
     """Call when new processes start.
 
@@ -483,6 +481,13 @@ def init_process(base_path, skeleton=False, keep_temp_files=False,
     _ctx.base_path = abshere(base_path)
     _ctx.skeleton = skeleton
     _ctx.keep_temp_files = keep_temp_files
+
+    # Find 're2c.exe' on Windows or 're2c' for Linux/UNIX in TOP_BUILDIR
+    # (shutil.which cannot find re2c.exe when running tests on Wine).
+    exe_sfx = '.exe' if wine else ''
+    _ctx.re2c = abshere(shutil.which('re2c' + exe_sfx, path=TOP_BUILDIR))
+    if not _ctx.re2c:
+        raise RuntimeError(f'Cannot find re2c executable')
 
     # Set include paths, relative to build directory
     cwd = os.getcwd()
@@ -540,18 +545,17 @@ def main():
 
     # Check environment
     environment_check(args.valgrind, args.wine)
-
     jobs = abs(args.jobs or 1)
     print(f'Running in {jobs} job(s)')
-
-    if not _ctx.re2c or not os.access(_ctx.re2c, os.X_OK):
-        raise RuntimeError(f'Cannot find re2c executable')
 
     test_blddir = create_tests_tree()
     copy_tests(args.tests, test_blddir)
 
     if os.name == 'posix':
         subprocess.call(['chmod', '-R', 'u+w', test_blddir])
+
+    init_context(test_blddir, args.skeleton, args.keep_temp_files,
+        args.valgrind, args.wine)
 
     clean_test_tree(test_blddir)
     tests = filter_tests(test_blddir)
@@ -563,7 +567,7 @@ def main():
     total_soft_errors = 0
     with multiprocessing.Pool(
             processes=jobs,
-            initializer=init_process,
+            initializer=init_context,
             # Note: the arguments order is important here
             initargs=(test_blddir, args.skeleton, args.keep_temp_files,
                       args.valgrind, args.wine,)
@@ -603,11 +607,7 @@ def main():
 
 
 # This should be in the global scope
-_ctx = Context(
-    # This should find 're2c.exe' for Windows or just 're2c'
-    # for Linux/UNIX in TOP_BUILDIR.
-    re2c=abshere(shutil.which('re2c', path=TOP_BUILDIR))
-)
+_ctx = Context()
 
 
 # Run main() when current file is executed by an interpreter.
