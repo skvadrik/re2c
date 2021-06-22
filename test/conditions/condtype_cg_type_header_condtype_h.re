@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -cg --type-header condtype.h
+// re2c $INPUT -o $OUTPUT -cg --type-header condtype_g.h
 int main ()
 {
 	YYCONDTYPE cond;
