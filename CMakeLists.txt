@@ -48,6 +48,7 @@ option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
 
 # checks for programs
 find_package(BISON)
+find_package(Python3 COMPONENTS Interpreter)
 
 # checks for C++ compiler flags
 set(CMAKE_CXX_STANDARD 98)
@@ -96,11 +97,11 @@ set(re2c_docs
 
 set(top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 set(top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
+set(PYTHON "${Python3_EXECUTABLE}")
 
 configure_file(doc/manpage.rst.in doc/manpage.rst @ONLY)
 configure_file(doc/help.rst.in doc/help.rst @ONLY)
 
-find_package(Python3 REQUIRED COMPONENTS Interpreter)
 configure_file(run_tests.py.in run_tests.py @ONLY)
 set(RE2C_RUN_TESTS "${CMAKE_CURRENT_BINARY_DIR}/run_tests.py")
 

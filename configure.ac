@@ -85,6 +85,7 @@ AM_CONDITIONAL([REGEN_BENCHMARKS],
 
 # checks for programs
 AC_PATH_PROG(BISON, bison, no)
+AC_CHECK_PROGS(PYTHON, [python3 python])
 AC_PROG_CC # used in skeleton tests
 AC_PROG_CXX
 AC_PROG_INSTALL
