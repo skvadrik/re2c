@@ -64,10 +64,10 @@ re2c_HDR = \
 	src/util/allocate.h \
 	src/util/attribute.h \
 	src/util/c99_stdint.h \
+	src/util/file_utils.h \
 	src/util/fixed_allocator.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
-	src/util/get_dir.h \
 	src/util/hash32.h \
 	src/util/local_increment.h \
 	src/util/lookup.h \
@@ -149,7 +149,7 @@ re2c_SRC = \
 	src/parse/parse.cc \
 	src/parse/scanner.cc \
 	src/parse/unescape.cc \
-	src/util/get_dir.cc \
+	src/util/file_utils.cc \
 	src/util/s_to_n32_unsafe.cc \
 	src/util/temp_file.cc \
 	src/util/range.cc

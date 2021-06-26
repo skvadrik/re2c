@@ -11,6 +11,7 @@
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
+#include "src/util/file_utils.h"
 #include "src/util/string_utils.h"
 #include "src/util/temp_file.h"
 #include "src/util/uniq_vector.h"
@@ -190,6 +191,7 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
         error("cannot open output file %s", filename.c_str());
         return false;
     }
+    filename = escape_backslashes(filename);
 
     fix_first_block_opts(blocks);
 

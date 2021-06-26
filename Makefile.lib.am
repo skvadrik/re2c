@@ -56,9 +56,9 @@ libre2c_la_HDR = \
 	src/util/allocate.h \
 	src/util/attribute.h \
 	src/util/c99_stdint.h \
+	src/util/file_utils.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
-	src/util/get_dir.h \
 	src/util/hash32.h \
 	src/util/local_increment.h \
 	src/util/lookup.h \
