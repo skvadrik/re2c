@@ -27,6 +27,19 @@ TOP_SRCDIR = '@top_srcdir@'
 TOP_BUILDIR = '@top_builddir@'
 
 
+# Prepare static patterns once at start.
+RE2C_PATTERN = re.compile(r'.*re2c[ \t]*(.*)$')
+TYPE_HEADER_PATTERN1 = re.compile(r'--type-header[ \t]*')
+TYPE_HEADER_PATTERN2 = re.compile(r'.*--type-header[ \t]*([^ \t]*).*')
+START_OF_MESSAGE = b'^[a-z0-9_]+([\\\\/]+[a-z0-9_]+)+([.][a-z]+)+[(:]'
+START_OF_LINEDIR = b'^(//|#)line '
+FILEPATH_CONTEXT_PATTERN = re.compile(b'('
+    + START_OF_MESSAGE
+    + b'|'
+    + START_OF_LINEDIR
+    + b')')
+
+
 @dataclass
 class Context:
     """Class for passing a context to parallel processes."""
@@ -199,15 +212,34 @@ def abshere(*paths):
     return os.path.abspath(here(*paths))
 
 
-def crlf_to_lf(file_path):
-    """Convert CRLF to LF."""
+def patch_newlines_and_slashes(file_path, stem):
+    """Convert CRLF to LF. Reverse slashes in path separators."""
+
     crlf = b'\r\n'
     lf = b'\n'
 
-    with open(file_path, 'rb') as file:
-        content = file.read()
+    # Escape backslashes in stem before replacing, as the generated file
+    # contains paths with escaped backslashes.
+    stem = stem.replace('\\', '\\\\')
+    stem1 = stem.encode('utf-8')
+    stem2 = stem1.replace(b'\\\\', b'/')
 
-    content = content.replace(crlf, lf)
+    content = b''
+    with open(file_path, 'rb') as file:
+        for line in file:
+            # Replace backslashes in filenames with forward slashes.
+            if FILEPATH_CONTEXT_PATTERN.match(line):
+                line = line.replace(b'\\\\', b'/')
+            elif stem1 != stem2:
+                # Stems may be equal for tests in the toplevel directory
+                # that don't have subdirectories in the file path.
+                line = line.replace(stem1, stem2)
+
+            # Replace CR LF with LF.
+            line = line.replace(crlf, lf)
+
+            content += line
+
 
     with open(file_path, 'wb') as file:
         file.write(content)
@@ -274,12 +306,6 @@ def filter_tests(path):  # type: (str) -> list
     return test_files
 
 
-# Prepare static patterns once at start.
-RE2C_PATTERN = re.compile(r'.*re2c[ \t]*(.*)$')
-TYPE_HEADER_PATTERN1 = re.compile(r'--type-header[ \t]*')
-TYPE_HEADER_PATTERN2 = re.compile(r'.*--type-header[ \t]*([^ \t]*).*')
-
-
 def run_test(test):
     """Run a single test."""
     # counters
@@ -300,7 +326,8 @@ def run_test(test):
         # generate file extension (.c for C/C++, .go for Go)
         ext = 'go' if 're2go' in head else 'c'
 
-    outy = f'{os.path.splitext(outx)[0]}.{ext}'
+    stem = os.path.splitext(outx)[0]
+    outy = f'{stem}.{ext}'
 
     # Known failure: on windows overflow-1.re fails due to small stack size.
     if os.name == 'nt' and outx.endswith('overflow-1.re'):
@@ -330,7 +357,7 @@ def run_test(test):
     # normal tests
     if not _ctx.skeleton:
         # copy expected result
-        orig = f'{os.path.splitext(outx)[0]}.orig.{ext}'
+        orig = f'{stem}.orig.{ext}'
         shutil.move(outy, orig)
 
         # if options contain a header, create directory structure for it
@@ -366,12 +393,14 @@ def run_test(test):
         f2 = list(filter(lambda i: str(i).endswith('.stderr'), files))
         files = f1 + f2
 
-        for f in files:
-            # on windows output contains CR LF, cut CR to match test results
-            crlf_to_lf(f)
+        with open(outy, mode='ab') as fo:
+            for f in files:
+                with open(f, mode='rb') as fi:
+                    fo.write(fi.read())
 
-            with open(f, mode='rb') as fi, open(outy, mode='ab') as fo:
-                fo.write(fi.read())
+        # On windows we need to patch output to match expected test results.
+        if os.name == 'nt':
+            patch_newlines_and_slashes(outy, stem)
 
         # compare results
         status = '' if os.path.isfile(orig) else 'MISSING'
