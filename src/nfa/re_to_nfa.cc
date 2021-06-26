@@ -38,8 +38,6 @@ struct rtn_ctx_t
     size_t nrule;
 };
 
-static void stats(nfa_state_t *n, uint32_t &topord, uint32_t &ncores);
-
 static nfa_state_t *re_to_nfa(rtn_ctx_t &ctx, const RE *re, nfa_state_t *t)
 {
     nfa_t &nfa = ctx.nfa;
@@ -111,6 +109,77 @@ static nfa_state_t *re_to_nfa(rtn_ctx_t &ctx, const RE *re, nfa_state_t *t)
     return s;
 }
 
+// On-stack information for iterative DFS that computes NFA statistics.
+struct DfsNfaStats {
+    nfa_state_t *state; // current NFA state
+    uint32_t     next;  // index of the next state to be visited
+};
+
+static uint32_t stats(nfa_state_t *root)
+{
+    std::vector<DfsNfaStats> stack;
+    uint32_t topord = 0;
+    uint32_t ncores = 0;
+
+    DfsNfaStats i0 = {root, 0};
+    stack.push_back(i0);
+
+    while (!stack.empty()) {
+        // Don't store references to stack as it may grow and get reallocated.
+        nfa_state_t *state = stack.back().state;
+        const uint32_t next = stack.back().next++;
+        const size_t stack_size = stack.size();
+
+        if (next == 0) {
+            // Recursive enter: increase state in-degree.
+            ++state->indeg;
+
+            if (state->indeg > 1) {
+                // In-degree was non-null => we have been here before, stop DFS.
+                stack.pop_back();
+                continue;
+            }
+        }
+
+        switch (state->type) {
+            case nfa_state_t::ALT:
+                if (next == 0) {
+                    DfsNfaStats i = {state->alt.out1, 0};
+                    stack.push_back(i);
+                } else if (next == 1) {
+                    DfsNfaStats i = {state->alt.out2, 0};
+                    stack.push_back(i);
+                }
+                break;
+            case nfa_state_t::TAG:
+                if (next == 0) {
+                    DfsNfaStats i = {state->tag.out, 0};
+                    stack.push_back(i);
+                }
+                break;
+            case nfa_state_t::RAN:
+                if (next == 0) {
+                    ++ncores;
+                    DfsNfaStats i = {state->tag.out, 0};
+                    stack.push_back(i);
+                }
+                break;
+            case nfa_state_t::FIN:
+                ++ncores;
+                break;
+        }
+
+        if (stack.size() == stack_size) {
+            // No new states have been pushed on stack: all children have been
+            // visited and this is the recursive return. Set topological index.
+            state->topord = topord++;
+            stack.pop_back();
+        }
+    }
+
+    return ncores;
+}
+
 nfa_t::nfa_t(const RESpec &spec)
     : max_size(estimate_size(spec.res))
     , size(0)
@@ -141,40 +210,14 @@ nfa_t::nfa_t(const RESpec &spec)
         }
     }
 
-    // in-degree and topological index are used by POSIX disambiguation;
-    // the number of core states is used for both POSIX and leftmost
-    uint32_t topord = 0;
-    stats(root, topord, ncores);
+    // In-degree and topological index are used by POSIX disambiguation;
+    // the number of core states is used for both POSIX and leftmost.
+    ncores = stats(root);
 }
 
 nfa_t::~nfa_t()
 {
     delete[] states;
-}
-
-void stats(nfa_state_t *n, uint32_t &topord, uint32_t &ncores)
-{
-    ++n->indeg;
-    if (n->indeg > 1) return;
-
-    switch (n->type) {
-        case nfa_state_t::ALT:
-            stats(n->alt.out1, topord, ncores);
-            stats(n->alt.out2, topord, ncores);
-            break;
-        case nfa_state_t::TAG:
-            stats(n->tag.out, topord, ncores);
-            break;
-        case nfa_state_t::RAN:
-            ncores++;
-            stats(n->ran.out, topord, ncores);
-            break;
-        case nfa_state_t::FIN:
-            ncores++;
-            break;
-    }
-
-    n->topord = topord++;
 }
 
 } // namespace re2c
