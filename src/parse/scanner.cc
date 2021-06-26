@@ -7,6 +7,7 @@
 #include "src/msg/msg.h"
 #include "src/parse/scanner.h"
 #include "src/debug/debug.h"
+#include "src/util/file_utils.h"
 
 
 namespace re2c {
@@ -41,7 +42,7 @@ bool Scanner::open(const std::string &filename, const std::string *parent)
     if (!in->open(filename, parent, globopts->incpaths)) {
         return false;
     }
-    filedeps.insert(in->path);
+    filedeps.insert(in->escaped_name);
     msg.filenames.push_back(in->escaped_name);
     return true;
 }
@@ -188,7 +189,7 @@ bool Scanner::gen_dep_file() const
         return false;
     }
 
-    fprintf(file, "%s:", globopts->output_file.c_str());
+    fprintf(file, "%s:", escape_backslashes(globopts->output_file).c_str());
     for (std::set<std::string>::const_iterator i = filedeps.begin();
         i != filedeps.end(); ++i) {
         fprintf(file, " %s", i->c_str());

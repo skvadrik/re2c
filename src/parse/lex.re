@@ -1,6 +1,5 @@
 #include <ctype.h>
 #include "src/util/c99_stdint.h"
-#include <algorithm>
 #include <limits>
 #include <string>
 #include <utility>
@@ -19,6 +18,7 @@
 #include "src/parse/parse.h" // needed by "parser.h"
 #include "src/parse/unescape.h"
 #include "src/regexp/rule.h"
+#include "src/util/file_utils.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "src/util/string_utils.h"
 #include "parser.h"
@@ -795,8 +795,7 @@ sourceline:
     dstring {
         Input &in = get_input();
         std::string &name = in.escaped_name;
-        name = getstr(tok + 1, cur - 1);
-        strrreplace(name, "\\", "\\\\");
+        name = escape_backslashes(getstr(tok + 1, cur - 1));
         in.fidx = static_cast<uint32_t>(msg.filenames.size());
         msg.filenames.push_back(name);
         goto sourceline;

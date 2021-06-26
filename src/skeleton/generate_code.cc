@@ -13,6 +13,8 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/file_utils.h"
+#include "src/util/string_utils.h"
 
 
 namespace re2c {
@@ -498,6 +500,7 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
     if (filename.empty()) {
         filename = "<stdout>";
     }
+    filename = escape_backslashes(filename);
 
     append(code, code_newline(alc));
 

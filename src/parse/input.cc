@@ -1,8 +1,7 @@
 #include "src/msg/msg.h"
 #include "src/parse/input.h"
 #include "src/parse/scanner.h"
-#include "src/util/get_dir.h"
-#include "src/util/string_utils.h"
+#include "src/util/file_utils.h"
 
 
 namespace re2c {
@@ -53,8 +52,7 @@ bool Input::open(const std::string &filename, const std::string *parent
     }
 
     // name displayed in #line directives is the resolved name
-    escaped_name = path;
-    strrreplace(escaped_name, "\\", "\\\\");
+    escaped_name = escape_backslashes(path);
 
     return true;
 }

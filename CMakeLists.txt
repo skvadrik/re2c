@@ -201,7 +201,7 @@ set(re2c_sources
     src/parse/parse.cc
     src/parse/scanner.cc
     src/parse/unescape.cc
-    src/util/get_dir.cc
+    src/util/file_utils.cc
     src/util/s_to_n32_unsafe.cc
     src/util/temp_file.cc
     src/util/range.cc
