@@ -27,7 +27,7 @@ struct ASTChar;
 class Scanner: private ScannerState
 {
 public:
-    enum ParseMode {Stop, Parse, Reuse, Rules};
+    enum ParseMode {Stop, Global, Local, Reuse, Rules};
     static const char *const ENDPOS;
 
     Msg &msg;
