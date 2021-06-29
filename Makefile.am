@@ -21,6 +21,7 @@ re2c_HDR = \
 	src/codegen/code.h \
 	src/codegen/helpers.h \
 	src/options/opt.h \
+	src/options/symtab.h \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
 	src/cfg/cfg.h \
@@ -92,6 +93,7 @@ re2c_SRC = \
 	src/codegen/helpers.cc \
 	src/codegen/render.cc \
 	src/options/opt.cc \
+	src/options/symtab.cc \
 	src/nfa/estimate_size.cc \
 	src/nfa/re_to_nfa.cc \
 	src/adfa/adfa.cc \

@@ -315,6 +315,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
 
 Opt::Opt(const conopt_t &globopts)
     : glob(globopts)
+    , symtab()
     , defaults()
     , is_default()
     , user()
@@ -365,7 +366,7 @@ void Opt::sync()
 const opt_t *Opt::snapshot()
 {
     sync();
-    return new opt_t(glob, real, is_default);
+    return new opt_t(glob, real, is_default, symtab);
 }
 
 void Opt::restore(const opt_t *opts)
@@ -378,11 +379,13 @@ void Opt::restore(const opt_t *opts)
 #undef MUTOPT1
 #undef MUTOPT
 
+    symtab = opts->symtab;
+
     diverge = true;
     sync();
 }
 
-void Opt::merge(const opt_t *opts)
+void Opt::merge(const opt_t *opts, const loc_t &loc, Msg &msg)
 {
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
@@ -393,6 +396,8 @@ void Opt::merge(const opt_t *opts)
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
+
+    merge_symtab(symtab, opts->symtab, loc, msg);
 
     diverge = true;
     sync();

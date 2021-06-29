@@ -106,7 +106,7 @@ static inline void append(std::vector<T> &x, const std::vector<T> &y)
     x.insert(x.end(), y.begin(), y.end());
 }
 
-void use_block(context_t &context, const std::string &name)
+void use_block(context_t &context, const std::string &name, const loc_t &loc, Msg &msg)
 {
     const RulesBlock *rb = context.rblocks.find(name);
     if (rb == NULL) exit(1);
@@ -123,10 +123,10 @@ void use_block(context_t &context, const std::string &name)
         append(spec.inherited_defs, i->defs);
         append(spec.inherited_eofs, i->eofs);
         append(spec.inherited_setup, i->setup);
-
-        // Merge configurations.
-        context.opts.merge(rb->opts);
     }
+
+    // Merge configurations and symtab.
+    context.opts.merge(rb->opts, loc, msg);
 }
 
 void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg)

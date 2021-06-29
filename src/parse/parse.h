@@ -15,7 +15,6 @@ namespace re2c {
 class Scanner;
 struct Opt;
 
-typedef std::map<std::string, const AST*> symtab_t;
 typedef std::set<std::string> CondList;
 
 struct spec_t {
@@ -77,15 +76,13 @@ struct context_t
 {
     Scanner &input;
     specs_t &specs;
-    symtab_t &symtab;
     Opt &opts;
     const RulesBlocks &rblocks;
 };
 
 spec_t &find_or_add_spec(specs_t &specs, const std::string &name);
-void use_block(context_t &context, const std::string &name);
-void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts,
-    const RulesBlocks &rblocks);
+void use_block(context_t &context, const std::string &name, const loc_t &loc, Msg &msg);
+void parse(Scanner &input, specs_t &specs, Opt &opts, const RulesBlocks &rblocks);
 void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg);
 
 } // namespace re2c

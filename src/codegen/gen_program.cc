@@ -167,7 +167,7 @@ static void fix_first_block_opts(blocks_t &blocks)
     if (blocks.size() >= 2) {
         OutputBlock *fst = blocks[0], *snd = blocks[1];
         if (!fst->have_user_code) {
-            *const_cast<opt_t *>(fst->opts) = *snd->opts;
+            *const_cast<opt_t*>(fst->opts) = *snd->opts;
         }
     }
 }

@@ -13,6 +13,7 @@ libre2c_la_HDR = \
 	lib/regoff_trie.h \
 	src/codegen/code.h \
 	src/options/opt.h \
+	src/options/symtab.h \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
 	src/cfg/cfg.h \
@@ -87,6 +88,7 @@ libre2c_la_SRC = \
 	src/parse/ast.cc \
 	src/parse/unescape.cc \
 	src/options/opt.cc \
+	src/options/symtab.cc \
 	src/cfg/cfg.cc \
 	src/cfg/compact.cc \
 	src/cfg/dce.cc \
