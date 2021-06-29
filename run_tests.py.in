@@ -358,7 +358,13 @@ def run_test(test):
     if not _ctx.skeleton:
         # copy expected result
         orig = f'{stem}.orig.{ext}'
-        shutil.move(outy, orig)
+        try:
+            shutil.move(outy, orig)
+        except FileNotFoundError:
+            # Do not fail immediately, run tests to the end and produce results.
+            # This helps when adding new tests: one can add .re files, run the
+            # tests, manually verify the generated results and copy them.
+            pass
 
         # if options contain a header, create directory structure for it
         header = ''
