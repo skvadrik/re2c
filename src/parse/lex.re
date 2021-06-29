@@ -172,12 +172,17 @@ loop:
 /*!re2c
     "%{" {
         out.wraw(tok, ptr);
-        return Parse;
+        return Global;
     }
 
     "/*!re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
-        return Parse;
+        return Global;
+    }
+
+    "/*!local:re2c" / ws_or_eoc {
+        out.wraw(tok, ptr);
+        return Local;
     }
 
     "/*!rules:re2c" (":" @x name @y)? / ws_or_eoc {

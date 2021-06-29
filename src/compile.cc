@@ -192,8 +192,10 @@ void compile(Scanner &input, Output &output, Opt &opts)
         // accumulate whole-program information from this block
         output.gather_info_from_block();
 
-        // accumulated whole-program options exclude rules/reuse blocks
-        if (mode == Scanner::Parse) {
+        // Do not accumulate whole-program options for rules/reuse/local blocks.
+        // Global blocks add their named definitions and configurations to the
+        // global scope, local blocks don't. Historically global is the default.
+        if (mode == Scanner::Global) {
             accum_opts = output.block().opts;
         } else {
             opts.restore(accum_opts);
