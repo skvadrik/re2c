@@ -147,6 +147,7 @@ set(re2c_sources
     src/codegen/helpers.cc
     src/codegen/render.cc
     src/options/opt.cc
+    src/options/symtab.cc
     src/nfa/estimate_size.cc
     src/nfa/re_to_nfa.cc
     src/adfa/adfa.cc
@@ -413,6 +414,7 @@ if (RE2C_BUILD_LIBS)
         src/parse/ast.cc
         src/parse/unescape.cc
         src/options/opt.cc
+        src/options/symtab.cc
         src/cfg/cfg.cc
         src/cfg/compact.cc
         src/cfg/dce.cc

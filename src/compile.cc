@@ -131,7 +131,6 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 
 void compile(Scanner &input, Output &output, Opt &opts)
 {
-    symtab_t symtab;
     RulesBlocks rblocks;
     const conopt_t *globopts = &opts.glob;
     code_alc_t &alc = output.allocator;
@@ -167,7 +166,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             output.state_goto = false;
         }
         output.cond_goto = false;
-        parse(input, specs, symtab, opts, rblocks);
+        parse(input, specs, opts, rblocks);
 
         // start new output block with accumulated options
         const loc_t &loc = input.cur_loc();

@@ -66,7 +66,7 @@ void yyerror(context_t &context, const char*) RE2C_ATTR((noreturn));
 spec
 : /* empty */
 | spec TOKEN_BLOCK {
-    use_block(context, *$2);
+    use_block(context, *$2, context.input.tok_loc(), context.input.msg);
     delete $2;
 }
 | spec TOKEN_CONF {
@@ -79,11 +79,8 @@ spec
 
 def
 : name expr enddef {
-    if (!context.symtab.insert(std::make_pair(*$1, $2)).second) {
-        context.input.msg.error(context.input.tok_loc()
-            , "sym already defined");
-        exit(1);
-    }
+    add_named_def(context.opts.symtab, *$1, $2, context.input.tok_loc(),
+        context.input.msg);
     delete $1;
 }
 /* errors */
@@ -204,13 +201,7 @@ close
 primary
 : TOKEN_REGEXP
 | TOKEN_ID {
-    symtab_t::iterator i = context.symtab.find(*$1);
-    if (i == context.symtab.end()) {
-        context.input.msg.error(context.input.tok_loc()
-            , "undefined symbol '%s'", $1->c_str());
-        exit(1);
-    }
-    $$ = i->second;
+    $$ = find_def(context.opts.symtab, *$1, context.input.tok_loc(), context.input.msg);
     if (ast_need_wrap($$)) {
         $$ = ast_ref($$, *$1);
     }
@@ -240,10 +231,9 @@ int yylex(context_t &context)
 
 namespace re2c {
 
-void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts,
-    const RulesBlocks &rblocks)
+void parse(Scanner &input, specs_t &specs, Opt &opts, const RulesBlocks &rblocks)
 {
-    context_t context = {input, specs, symtab, opts, rblocks};
+    context_t context = {input, specs, opts, rblocks};
     yyparse(context);
 }
 

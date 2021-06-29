@@ -9,6 +9,7 @@
 #include "src/dfa/dfa.h"
 #include "src/regexp/empty_class_policy.h"
 #include "src/encoding/enc.h"
+#include "src/options/symtab.h"
 #include "src/util/forbid_copy.h"
 
 
@@ -292,7 +293,10 @@ struct opt_t {
 #undef MUTOPT1
 #undef MUTOPT
 
-    opt_t(const conopt_t &con, const mutopt_t &mut, const mutdef_t &def)
+    const symtab_t symtab;
+
+    opt_t(const conopt_t &con, const mutopt_t &mut, const mutdef_t &def,
+        const symtab_t symtab)
 #define CONSTOPT1(type, name, value) : name(con.name)
 #define CONSTOPT(type, name, value)  , name(con.name)
         RE2C_CONSTOPTS
@@ -307,13 +311,51 @@ struct opt_t {
         RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
+        , symtab(symtab)
     {}
+
+    opt_t(const opt_t &opt)
+#define CONSTOPT1(type, name, value) : name(opt.name)
+#define CONSTOPT(type, name, value)  , name(opt.name)
+        RE2C_CONSTOPTS
+#undef CONSTOPT1
+#undef CONSTOPT
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) , name(opt.name)
+        RE2C_MUTOPTS
+#undef MUTOPT
+#define MUTOPT(type, name, value) , is_default_##name(opt.is_default_##name)
+        RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+        , symtab(opt.symtab)
+    {}
+
+    opt_t& operator=(const opt_t &opt)
+    {
+#define CONSTOPT1 CONSTOPT
+#define CONSTOPT(type, name, value) name = opt.name;
+        RE2C_CONSTOPTS
+#undef CONSTOPT1
+#undef CONSTOPT
+#define MUTOPT1 MUTOPT
+#define MUTOPT(type, name, value) name = opt.name;
+        RE2C_MUTOPTS
+#undef MUTOPT
+#define MUTOPT(type, name, value) is_default_##name = opt.is_default_##name;
+        RE2C_MUTOPTS
+#undef MUTOPT1
+#undef MUTOPT
+        const_cast<symtab_t&>(symtab) = opt.symtab;
+        return *this;
+    }
 };
 
 // Options management.
 struct Opt {
 public:
     const conopt_t &glob;
+    symtab_t symtab;
 
 private:
     // Default mutable options. They depend on the global options, such as the
@@ -344,7 +386,7 @@ public:
     const opt_t *snapshot();
     void fix_global_and_defaults();
     void restore(const opt_t *opts);
-    void merge(const opt_t *opts);
+    void merge(const opt_t *opts, const loc_t &loc, Msg &msg);
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \

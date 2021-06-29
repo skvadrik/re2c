@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.7.3.  */
+/* A Bison parser, made by GNU Bison 3.7.6.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -45,11 +45,11 @@
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
 
-/* Identify Bison output.  */
-#define YYBISON 1
+/* Identify Bison output, and Bison version.  */
+#define YYBISON 30706
 
-/* Bison version.  */
-#define YYBISON_VERSION "3.7.3"
+/* Bison version string.  */
+#define YYBISON_VERSION "3.7.6"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -208,6 +208,18 @@ typedef int_least16_t yytype_int16;
 typedef short yytype_int16;
 #endif
 
+/* Work around bug in HP-UX 11.23, which defines these macros
+   incorrectly for preprocessor constants.  This workaround can likely
+   be removed in 2023, as HPE has promised support for HP-UX 11.23
+   (aka HP-UX 11i v2) only through the end of 2022; see Table 2 of
+   <https://h20195.www2.hpe.com/V2/getpdf.aspx/4AA4-7673ENW.pdf>.  */
+#ifdef __hpux
+# undef UINT_LEAST8_MAX
+# undef UINT_LEAST16_MAX
+# define UINT_LEAST8_MAX 255
+# define UINT_LEAST16_MAX 65535
+#endif
+
 #if defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
 typedef __UINT_LEAST8_TYPE__ yytype_uint8;
 #elif (!defined __UINT_LEAST8_MAX__ && defined YY_STDINT_H \
@@ -305,9 +317,9 @@ typedef int yy_state_fast_t;
 
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
-# define YYUSE(E) ((void) (E))
+# define YY_USE(E) ((void) (E))
 #else
-# define YYUSE(E) /* empty */
+# define YY_USE(E) /* empty */
 #endif
 
 #if defined __GNUC__ && ! defined __ICC && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
@@ -534,11 +546,11 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    67,    67,    68,    72,    75,    76,    77,    81,    90,
-      97,    98,   101,   101,   104,   107,   110,   113,   119,   125,
-     131,   137,   144,   145,   150,   157,   158,   164,   165,   169,
-     170,   174,   176,   180,   181,   188,   194,   195,   199,   200,
-     201,   205,   206,   219
+       0,    67,    67,    68,    72,    75,    76,    77,    81,    87,
+      94,    95,    98,    98,   101,   104,   107,   110,   116,   122,
+     128,   134,   141,   142,   147,   154,   155,   161,   162,   166,
+     167,   171,   173,   177,   178,   185,   191,   192,   196,   197,
+     198,   202,   203,   210
 };
 #endif
 
@@ -628,7 +640,7 @@ static const yytype_int8 yypgoto[] =
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,    15,    16,    57,    17,    32,    18,    19,    20,
+       0,     1,    15,    16,    57,    17,    32,    18,    19,    20,
       21,    22,    47,    48,    23
 };
 
@@ -764,8 +776,8 @@ yy_symbol_value_print (FILE *yyo,
                        yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::context_t &context)
 {
   FILE *yyoutput = yyo;
-  YYUSE (yyoutput);
-  YYUSE (context);
+  YY_USE (yyoutput);
+  YY_USE (context);
   if (!yyvaluep)
     return;
 # ifdef YYPRINT
@@ -773,7 +785,7 @@ yy_symbol_value_print (FILE *yyo,
     YYPRINT (yyo, yytoknum[yykind], *yyvaluep);
 # endif
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  YYUSE (yykind);
+  YY_USE (yykind);
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
@@ -887,14 +899,14 @@ static void
 yydestruct (const char *yymsg,
             yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::context_t &context)
 {
-  YYUSE (yyvaluep);
-  YYUSE (context);
+  YY_USE (yyvaluep);
+  YY_USE (context);
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
 
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  YYUSE (yykind);
+  YY_USE (yykind);
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
@@ -1157,10 +1169,10 @@ yyreduce:
   case 3: /* spec: spec TOKEN_BLOCK  */
 #line 68 "../src/parse/parser.ypp"
                    {
-    use_block(context, *(yyvsp[0].str));
+    use_block(context, *(yyvsp[0].str), context.input.tok_loc(), context.input.msg);
     delete (yyvsp[0].str);
 }
-#line 1164 "src/parse/parser.cc"
+#line 1176 "src/parse/parser.cc"
     break;
 
   case 4: /* spec: spec TOKEN_CONF  */
@@ -1168,171 +1180,168 @@ yyreduce:
                   {
     context.input.lex_conf(context.opts);
 }
-#line 1172 "src/parse/parser.cc"
+#line 1184 "src/parse/parser.cc"
     break;
 
   case 8: /* def: name expr enddef  */
 #line 81 "../src/parse/parser.ypp"
                    {
-    if (!context.symtab.insert(std::make_pair(*(yyvsp[-2].str), (yyvsp[-1].regexp))).second) {
-        context.input.msg.error(context.input.tok_loc()
-            , "sym already defined");
-        exit(1);
-    }
+    add_named_def(context.opts.symtab, *(yyvsp[-2].str), (yyvsp[-1].regexp), context.input.tok_loc(),
+        context.input.msg);
     delete (yyvsp[-2].str);
 }
-#line 1185 "src/parse/parser.cc"
+#line 1194 "src/parse/parser.cc"
     break;
 
   case 9: /* def: name expr '/'  */
-#line 90 "../src/parse/parser.ypp"
+#line 87 "../src/parse/parser.ypp"
                 {
     context.input.msg.error(context.input.tok_loc()
         , "trailing contexts are not allowed in named definitions");
     exit(1);
 }
-#line 1195 "src/parse/parser.cc"
+#line 1204 "src/parse/parser.cc"
     break;
 
   case 10: /* name: TOKEN_ID '='  */
-#line 97 "../src/parse/parser.ypp"
+#line 94 "../src/parse/parser.ypp"
                { (yyval.str) = (yyvsp[-1].str); }
-#line 1201 "src/parse/parser.cc"
+#line 1210 "src/parse/parser.cc"
     break;
 
   case 14: /* rule: trailexpr TOKEN_CODE  */
-#line 104 "../src/parse/parser.ypp"
+#line 101 "../src/parse/parser.ypp"
                        {
     find_or_add_spec(context.specs, "").rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
 }
-#line 1209 "src/parse/parser.cc"
+#line 1218 "src/parse/parser.cc"
     break;
 
   case 15: /* rule: '*' TOKEN_CODE  */
-#line 107 "../src/parse/parser.ypp"
+#line 104 "../src/parse/parser.ypp"
                  {
     find_or_add_spec(context.specs, "").defs.push_back((yyvsp[0].semact));
 }
-#line 1217 "src/parse/parser.cc"
+#line 1226 "src/parse/parser.cc"
     break;
 
   case 16: /* rule: '$' TOKEN_CODE  */
-#line 110 "../src/parse/parser.ypp"
+#line 107 "../src/parse/parser.ypp"
                  {
     find_or_add_spec(context.specs, "").eofs.push_back((yyvsp[0].semact));
 }
-#line 1225 "src/parse/parser.cc"
+#line 1234 "src/parse/parser.cc"
     break;
 
   case 17: /* rule: TOKEN_CLIST trailexpr ccode  */
-#line 113 "../src/parse/parser.ypp"
+#line 110 "../src/parse/parser.ypp"
                               {
     for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
         find_or_add_spec(context.specs, *i).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
     }
     delete (yyvsp[-2].clist);
 }
-#line 1236 "src/parse/parser.cc"
+#line 1245 "src/parse/parser.cc"
     break;
 
   case 18: /* rule: TOKEN_CLIST '*' ccode  */
-#line 119 "../src/parse/parser.ypp"
+#line 116 "../src/parse/parser.ypp"
                         {
     for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
         find_or_add_spec(context.specs, *i).defs.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-2].clist);
 }
-#line 1247 "src/parse/parser.cc"
+#line 1256 "src/parse/parser.cc"
     break;
 
   case 19: /* rule: TOKEN_CLIST '$' ccode  */
-#line 125 "../src/parse/parser.ypp"
+#line 122 "../src/parse/parser.ypp"
                         {
     for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
         find_or_add_spec(context.specs, *i).eofs.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-2].clist);
 }
-#line 1258 "src/parse/parser.cc"
+#line 1267 "src/parse/parser.cc"
     break;
 
   case 20: /* rule: TOKEN_CSETUP TOKEN_CODE  */
-#line 131 "../src/parse/parser.ypp"
+#line 128 "../src/parse/parser.ypp"
                           {
     for (CondList::const_iterator i = (yyvsp[-1].clist)->begin(); i != (yyvsp[-1].clist)->end(); ++i) {
         find_or_add_spec(context.specs, *i).setup.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-1].clist);
 }
-#line 1269 "src/parse/parser.cc"
+#line 1278 "src/parse/parser.cc"
     break;
 
   case 21: /* rule: TOKEN_CZERO ccode  */
-#line 137 "../src/parse/parser.ypp"
+#line 134 "../src/parse/parser.ypp"
                     {
     const AST *r = ast_nil(context.input.tok_loc());
     find_or_add_spec(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].semact)));
     delete (yyvsp[-1].clist);
 }
-#line 1279 "src/parse/parser.cc"
+#line 1288 "src/parse/parser.cc"
     break;
 
   case 23: /* ccode: TOKEN_CNEXT TOKEN_CODE  */
-#line 145 "../src/parse/parser.ypp"
+#line 142 "../src/parse/parser.ypp"
                          {
     (yyval.semact) = (yyvsp[0].semact);
     (yyval.semact)->cond = *(yyvsp[-1].str);
     delete (yyvsp[-1].str);
 }
-#line 1289 "src/parse/parser.cc"
+#line 1298 "src/parse/parser.cc"
     break;
 
   case 24: /* ccode: TOKEN_CJUMP  */
-#line 150 "../src/parse/parser.ypp"
+#line 147 "../src/parse/parser.ypp"
               {
     (yyval.semact) = new SemAct(context.input.tok_loc());
     (yyval.semact)->cond = *(yyvsp[0].str);
     delete (yyvsp[0].str);
 }
-#line 1299 "src/parse/parser.cc"
+#line 1308 "src/parse/parser.cc"
     break;
 
   case 25: /* trailexpr: expr  */
-#line 157 "../src/parse/parser.ypp"
+#line 154 "../src/parse/parser.ypp"
        { (yyval.regexp) = ast_cap((yyvsp[0].regexp)); }
-#line 1305 "src/parse/parser.cc"
+#line 1314 "src/parse/parser.cc"
     break;
 
   case 26: /* trailexpr: expr '/' expr  */
-#line 158 "../src/parse/parser.ypp"
+#line 155 "../src/parse/parser.ypp"
                 {
     (yyval.regexp) = ast_cat(ast_cap((yyvsp[-2].regexp)),
         ast_cat(ast_tag(context.input.tok_loc(), NULL, false), (yyvsp[0].regexp)));
 }
-#line 1314 "src/parse/parser.cc"
+#line 1323 "src/parse/parser.cc"
     break;
 
   case 28: /* expr: expr '|' diff  */
-#line 165 "../src/parse/parser.ypp"
+#line 162 "../src/parse/parser.ypp"
                 { (yyval.regexp) = ast_alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1320 "src/parse/parser.cc"
+#line 1329 "src/parse/parser.cc"
     break;
 
   case 30: /* diff: diff '\\' term  */
-#line 170 "../src/parse/parser.ypp"
+#line 167 "../src/parse/parser.ypp"
                  { (yyval.regexp) = ast_diff((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1326 "src/parse/parser.cc"
+#line 1335 "src/parse/parser.cc"
     break;
 
   case 32: /* term: factor term  */
-#line 176 "../src/parse/parser.ypp"
+#line 173 "../src/parse/parser.ypp"
               { (yyval.regexp) = ast_cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
-#line 1332 "src/parse/parser.cc"
+#line 1341 "src/parse/parser.cc"
     break;
 
   case 34: /* factor: primary closes  */
-#line 181 "../src/parse/parser.ypp"
+#line 178 "../src/parse/parser.ypp"
                  {
     switch((yyvsp[0].op)) {
         case '*': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, AST::MANY); break;
@@ -1340,67 +1349,61 @@ yyreduce:
         case '?': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, 1); break;
     }
 }
-#line 1344 "src/parse/parser.cc"
+#line 1353 "src/parse/parser.cc"
     break;
 
   case 35: /* factor: primary TOKEN_CLOSESIZE  */
-#line 188 "../src/parse/parser.ypp"
+#line 185 "../src/parse/parser.ypp"
                           {
     (yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max);
 }
-#line 1352 "src/parse/parser.cc"
+#line 1361 "src/parse/parser.cc"
     break;
 
   case 37: /* closes: closes close  */
-#line 195 "../src/parse/parser.ypp"
+#line 192 "../src/parse/parser.ypp"
                { (yyval.op) = ((yyvsp[-1].op) == (yyvsp[0].op)) ? (yyvsp[-1].op) : '*'; }
-#line 1358 "src/parse/parser.cc"
+#line 1367 "src/parse/parser.cc"
     break;
 
   case 38: /* close: '*'  */
-#line 199 "../src/parse/parser.ypp"
+#line 196 "../src/parse/parser.ypp"
       { (yyval.op) = '*'; }
-#line 1364 "src/parse/parser.cc"
+#line 1373 "src/parse/parser.cc"
     break;
 
   case 39: /* close: '+'  */
-#line 200 "../src/parse/parser.ypp"
+#line 197 "../src/parse/parser.ypp"
       { (yyval.op) = '+'; }
-#line 1370 "src/parse/parser.cc"
+#line 1379 "src/parse/parser.cc"
     break;
 
   case 40: /* close: '?'  */
-#line 201 "../src/parse/parser.ypp"
+#line 198 "../src/parse/parser.ypp"
       { (yyval.op) = '?'; }
-#line 1376 "src/parse/parser.cc"
+#line 1385 "src/parse/parser.cc"
     break;
 
   case 42: /* primary: TOKEN_ID  */
-#line 206 "../src/parse/parser.ypp"
+#line 203 "../src/parse/parser.ypp"
            {
-    symtab_t::iterator i = context.symtab.find(*(yyvsp[0].str));
-    if (i == context.symtab.end()) {
-        context.input.msg.error(context.input.tok_loc()
-            , "undefined symbol '%s'", (yyvsp[0].str)->c_str());
-        exit(1);
-    }
-    (yyval.regexp) = i->second;
+    (yyval.regexp) = find_def(context.opts.symtab, *(yyvsp[0].str), context.input.tok_loc(), context.input.msg);
     if (ast_need_wrap((yyval.regexp))) {
         (yyval.regexp) = ast_ref((yyval.regexp), *(yyvsp[0].str));
     }
     delete (yyvsp[0].str);
 }
-#line 1394 "src/parse/parser.cc"
+#line 1397 "src/parse/parser.cc"
     break;
 
   case 43: /* primary: '(' expr ')'  */
-#line 219 "../src/parse/parser.ypp"
+#line 210 "../src/parse/parser.ypp"
                { (yyval.regexp) = ast_cap((yyvsp[-1].regexp)); }
-#line 1400 "src/parse/parser.cc"
+#line 1403 "src/parse/parser.cc"
     break;
 
 
-#line 1404 "src/parse/parser.cc"
+#line 1407 "src/parse/parser.cc"
 
       default: break;
     }
@@ -1594,7 +1597,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 222 "../src/parse/parser.ypp"
+#line 213 "../src/parse/parser.ypp"
 
 
 #pragma GCC diagnostic pop
@@ -1616,10 +1619,9 @@ int yylex(context_t &context)
 
 namespace re2c {
 
-void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts,
-    const RulesBlocks &rblocks)
+void parse(Scanner &input, specs_t &specs, Opt &opts, const RulesBlocks &rblocks)
 {
-    context_t context = {input, specs, symtab, opts, rblocks};
+    context_t context = {input, specs, opts, rblocks};
     yyparse(context);
 }
 
