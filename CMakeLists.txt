@@ -104,6 +104,9 @@ configure_file(doc/help.rst.in doc/help.rst @ONLY)
 
 configure_file(run_tests.py.in run_tests.py @ONLY)
 set(RE2C_RUN_TESTS "${CMAKE_CURRENT_BINARY_DIR}/run_tests.py")
+if(CMAKE_HOST_UNIX)
+    execute_process(COMMAND chmod +x "${RE2C_RUN_TESTS}")
+endif()
 
 ac_config_headers("config.h")
 
