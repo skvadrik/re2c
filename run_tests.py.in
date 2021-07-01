@@ -331,7 +331,8 @@ def run_test(test):
 
     # Known failure: on windows overflow-1.re fails due to small stack size.
     if os.name == 'nt' and outx.endswith('overflow-1.re'):
-        remove(outx, outy, keep_temp_files=_ctx.keep_temp_files)
+        if not _ctx.keep_temp_files:
+            remove(outx, outy)
         return 0, 0, 0
 
     # Prepare re2c flags
