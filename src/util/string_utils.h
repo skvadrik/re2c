@@ -31,16 +31,34 @@ std::string to_string(const T &v)
     return s.str();
 }
 
-// Yet another constructor of std::string, useful when the strings
-// are constructed from fragments in buffer. A separate function is
-// needed mainly to avoid static_cast's everywhere.
 inline std::string getstr(const char *s, const char *e)
 {
     return std::string(s, static_cast<size_t>(e - s));
 }
+
 inline std::string *newstr(const char *s, const char *e)
 {
     return new std::string(s, static_cast<size_t>(e - s));
+}
+
+template<typename allocator_t>
+inline const char *newcstr(const char *s, const char *e, allocator_t &alc)
+{
+    if (s == NULL) return NULL;
+    const size_t n = static_cast<size_t>(e - s);
+    char *p = alc.template alloct<char>(n + 1);
+    memcpy(p, s, n);
+    p[n] = 0;
+    return p;
+}
+
+template<typename allocator_t>
+inline const char *copystr(const std::string &s, allocator_t &alc)
+{
+    const size_t n = s.length() + 1;
+    char *p = alc.template alloct<char>(n);
+    memcpy(p, s.data(), n);
+    return p;
 }
 
 } // namespace re2c

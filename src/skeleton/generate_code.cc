@@ -607,7 +607,7 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
     if (!dfa.stagnames.empty()) {
         text = o.cstr("\n").str(indent(2, opts->indString))
             .cstr("const YYCTYPE *@@ = NULL;").flush();
-        Code *stags = code_tags(alc, text, "", false);
+        Code *stags = code_tags(alc, text, "", NULL, false);
         gen_tags(o, opts, stags, dfa.stagnames);
         append(block2, stags);
         append(block2, code_textraw(alc, ""));
@@ -631,7 +631,7 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
 
         text = o.cstr("\n").str(indent(2, opts->indString))
             .cstr("ptrdiff_t @@ = -1;").flush();
-        Code *mtags = code_tags(alc, text, "", true);
+        Code *mtags = code_tags(alc, text, "", NULL, true);
         gen_tags(o, opts, mtags, dfa.mtagnames);
         append(block2, mtags);
         append(block2, code_textraw(alc, ""));

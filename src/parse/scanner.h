@@ -23,11 +23,15 @@ class Msg;
 class Output;
 struct AST;
 struct ASTChar;
+struct BlockNameList;
+
+// Must be defined exacly as in codegen.
+typedef slab_allocator_t<1024 * 1024, 8> code_alc_t;
 
 class Scanner: private ScannerState
 {
 public:
-    enum ParseMode {Stop, Global, Local, Reuse, Rules};
+    enum ParseMode {Stop, Global, Local, Reuse, Rules, Error};
     static const char *const ENDPOS;
 
     Msg &msg;
@@ -46,7 +50,7 @@ public:
     bool gen_dep_file() const;
     const loc_t &tok_loc() const;
     loc_t cur_loc() const;
-    ParseMode echo(Output &out);
+    ParseMode echo(Output &out, std::string &block_name);
     int scan();
     void lex_conf(Opt &opts);
 
@@ -61,7 +65,10 @@ private:
     inline void set_line(uint32_t l);
     inline void next_line();
     void set_sourceline ();
-    void lex_end_of_comment(Output &out, bool allow_garbage = false);
+    bool lex_end_of_block(Output &out, bool allow_garbage = false);
+    bool lex_opt_name(std::string &name);
+    bool lex_name_list(code_alc_t &alc, BlockNameList **ptail);
+    bool lex_tags(Output &out, BlockNameList *blocks, bool mtags);
     void lex_code_indented();
     void lex_code_in_braces();
     void lex_c_comment();
@@ -70,7 +77,6 @@ private:
     bool lex_namedef_context_flex();
     int lex_clist();
     void lex_string(char delim);
-    void lex_tags(Output &out, bool mtags);
     uint32_t lex_cls_chr();
     bool lex_str_chr(char quote, ASTChar &ast);
     const AST *lex_cls(bool neg);
@@ -89,10 +95,6 @@ private:
     bool is_eof() const;
     void fail_if_eof() const;
     uint32_t decode(const char *str) const;
-    void error_block_start(const char *block) const;
-    void error_named_block_start(const char *block) const;
-    void error_include_directive() const;
-    void error_header_directive() const;
 
     FORBID_COPY (Scanner);
 };

@@ -135,6 +135,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     const conopt_t *globopts = &opts.glob;
     code_alc_t &alc = output.allocator;
     const loc_t &loc0 = input.tok_loc();
+    std::string block_name;
 
     output.header_mode(1);
     output.new_block(opts, loc0, false /* reuse */);
@@ -153,13 +154,14 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
     for (;;) {
         // parse everything up to the next re2c block
-        Scanner::ParseMode mode = input.echo(output);
+        Scanner::ParseMode mode = input.echo(output, block_name);
+        if (mode == Scanner::Error) exit(1);
         if (mode == Scanner::Stop) break;
 
         // parse the next re2c block
         specs_t specs;
         if (mode == Scanner::Reuse) {
-            const RulesBlock *rb = rblocks.find(output.rules_block_name);
+            const RulesBlock *rb = rblocks.find(block_name);
             if (rb == NULL) exit(1);
             specs = rb->specs;
             opts.restore(rb->opts);
@@ -174,7 +176,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
         if (mode == Scanner::Rules) {
             // save AST and options for future use
-            rblocks.add(output.rules_block_name, output.block().opts, specs);
+            rblocks.add(block_name, output.block().opts, specs);
         } else {
             check_and_merge_special_rules(specs, output.block().opts, output.msg);
 

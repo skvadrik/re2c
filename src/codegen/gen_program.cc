@@ -79,7 +79,6 @@ Output::Output(Msg &msg)
     , max_nmatch(1)
     , allocator()
     , scratchbuf(allocator)
-    , rules_block_name()
     , total_fill_index(0)
     , total_fill_goto()
     , total_opts(NULL)
@@ -288,7 +287,7 @@ bool Output::emit()
         if (!conds.empty() && !this->cond_enum_in_hdr) {
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
-            wdelay_stmt(0, code_cond_enum(allocator));
+            wdelay_stmt(0, code_cond_enum(allocator, NULL));
             header_mode(false);
         }
 
