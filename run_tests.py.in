@@ -401,8 +401,11 @@ def run_test(test):
 
         with open(outy, mode='ab') as fo:
             for f in files:
-                with open(f, mode='rb') as fi:
-                    fo.write(fi.read())
+                try:
+                    with open(f, mode='rb') as fi:
+                        fo.write(fi.read())
+                except OSError:
+                    pass # if there is an error, some files may be missing
 
         # On windows we need to patch output to match expected test results.
         if os.name == 'nt':
