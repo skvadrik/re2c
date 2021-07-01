@@ -110,7 +110,7 @@ struct ScannerState
         tok += offs;
         ptr += offs;
         pos += offs;
-        /*!stags:re2c format = "@@ += offs;"; */
+        /*!stags:re2c format = "if (@@) { @@ += offs; }"; */
     }
 
     FORBID_COPY(ScannerState);
@@ -120,48 +120,13 @@ struct ScannerState
 #endif // _RE2C_PARSE_LEX_
 /*!header:re2c:off*/
 
-static inline void save_string(std::string &str, const char *s, const char *e)
-{
-    if (s == NULL) {
-        str.clear();
-    } else {
-        str.assign(s, e);
-    }
-}
-
-void Scanner::error_block_start(const char *block) const
-{
-    msg.error(cur_loc(), "ill-formed start of a block: expected `/*!%s`"
-        " followed by a space, a newline or the end of block `*/`", block);
-}
-
-void Scanner::error_named_block_start(const char *block) const
-{
-    msg.error(cur_loc(), "ill-formed start of a block: expected `/*!%s`"
-        ", optionally followed by a name of the form `:[a-zA-Z_][a-zA-Z0-9_]*`"
-        ", followed by a space, a newline or the end of block `*/`", block);
-}
-
-void Scanner::error_include_directive() const
-{
-    msg.error(cur_loc(), "ill-formed include directive: expected `/*"
-        // split string to prevent re2c from lexing this as a real directive
-        "!include:re2c \"<file>\" */`");
-}
-
-void Scanner::error_header_directive() const
-{
-    msg.error(cur_loc(), "ill-formed header directive: expected `/*"
-        // split string to prevent re2c from lexing this as a real directive
-        "!header:re2c:<on|off>`"
-        " followed by a space, a newline or the end of block `*/`");
-}
-
-Scanner::ParseMode Scanner::echo(Output &out)
+Scanner::ParseMode Scanner::echo(Output &out, std::string &block_name)
 {
     const opt_t *opts = out.block().opts;
     code_alc_t &alc = out.allocator;
     const char *x, *y;
+    BlockNameList *block_list;
+
     if (is_eof()) return Stop;
 
 next:
@@ -172,121 +137,137 @@ loop:
 /*!re2c
     "%{" {
         out.wraw(tok, ptr);
+        block_name.clear();
         return Global;
     }
 
-    "/*!re2c" / ws_or_eoc {
+    "/*!re2c" {
         out.wraw(tok, ptr);
+        if (!lex_opt_name(block_name)) return Error;
         return Global;
     }
 
-    "/*!local:re2c" / ws_or_eoc {
+    "/*!local:re2c" {
         out.wraw(tok, ptr);
+        if (!lex_opt_name(block_name)) return Error;
         return Local;
     }
 
-    "/*!rules:re2c" (":" @x name @y)? / ws_or_eoc {
+    "/*!rules:re2c" {
         out.wraw(tok, ptr);
-        save_string(out.rules_block_name, x, y);
+        if (!lex_opt_name(block_name)) return Error;
         return Rules;
     }
 
-    "/*!use:re2c" (":" @x name @y)? / ws_or_eoc {
+    "/*!use:re2c" {
         out.wraw(tok, ptr);
-        save_string(out.rules_block_name, x, y);
+        if (!lex_opt_name(block_name)) return Error;
         return Reuse;
+    }
+
+    "/*!max:re2c" {
+        out.wraw(tok, ptr);
+        if (!lex_name_list(alc, &block_list)) return Error;
+        out.wdelay_stmt(0, code_yymaxfill(alc, block_list));
+        // historically allows garbage before the end of the comment
+        if (!lex_end_of_block(out, true)) return Error;
+        goto next;
+    }
+
+    "/*!maxnmatch:re2c" {
+        out.wraw(tok, ptr);
+        if (!lex_name_list(alc, &block_list)) return Error;
+        if (!lex_end_of_block(out)) return Error;
+        out.wdelay_stmt(0, code_yymaxnmatch(alc, block_list));
+        goto next;
+    }
+
+    "/*!getstate:re2c" {
+        out.wraw(tok, ptr);
+        if (!lex_name_list(alc, &block_list)) return Error;
+        if (!lex_end_of_block(out)) return Error;
+        if (!opts->fFlag) {
+            msg.error(cur_loc(), "`getstate:re2c` without `-f --storable-state` option");
+            return Error;
+        }
+        if (opts->target == TARGET_CODE && !out.state_goto) {
+            out.wdelay_stmt(opts->topIndent, code_state_goto(alc, block_list));
+            out.state_goto = true;
+        }
+        goto next;
+    }
+
+    "/*!types:re2c" {
+        out.wraw(tok, ptr);
+        out.wdelay_stmt(0, code_line_info_output(alc));
+        if (!lex_name_list(alc, &block_list)) return Error;
+        if (!lex_end_of_block(out)) return Error;
+        out.wdelay_stmt(opts->topIndent, code_cond_enum(alc, block_list));
+        out.cond_enum_in_hdr = out.in_header();
+        out.warn_condition_order = false; // see note [condition order]
+        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
+        goto next;
+    }
+
+    "/*!stags:re2c" {
+        out.wraw(tok, ptr);
+        if (!lex_name_list(alc, &block_list)) return Error;
+        if (!lex_tags(out, block_list, false)) return Error;
+        goto next;
+    }
+
+    "/*!mtags:re2c" {
+        out.wraw(tok, ptr);
+        if (!lex_name_list(alc, &block_list)) return Error;
+        if (!lex_tags(out, block_list, true)) return Error;
+        goto next;
+    }
+
+    "/*!header:re2c:on" {
+        out.wraw(tok, ptr);
+        out.header_mode(true);
+        out.need_header = opts->target == TARGET_CODE;
+        if (!lex_end_of_block(out)) return Error;
+        goto next;
+    }
+
+    "/*!header:re2c:off" {
+        out.wraw(tok, ptr);
+        out.header_mode(false);
+        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
+        if (!lex_end_of_block(out)) return Error;
+        goto next;
+    }
+    "/*!header:re2c" {
+        msg.error(cur_loc(), "ill-formed header directive: expected"
+            " `/*!header:re2c:<on|off>` followed by a space, a newline or the"
+            " end of block `*" "/`");
+        return Error;
+    }
+
+    "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
+        out.wraw(tok, ptr);
+        if (!lex_end_of_block(out)) return Error;
+        include(getstr(x + 1, y - 1));
+        goto next;
+    }
+    "/*!include:re2c" {
+        msg.error(cur_loc(), "ill-formed include directive: expected"
+            " `/*!include:re2c \"<file>\" *" "/`");
+        return Error;
     }
 
     "/*!ignore:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         // allows arbitrary garbage before the end of the comment
-        lex_end_of_comment(out, true);
+        if (!lex_end_of_block(out, true)) return Error;
         goto next;
     }
-
-    "/*!max:re2c" / ws_or_eoc {
-        out.wraw(tok, ptr);
-        out.wdelay_stmt(0, code_yymaxfill(alc));
-        // historically allows garbage before the end of the comment
-        lex_end_of_comment(out, true);
-        goto next;
+    "/*!ignore:re2c" {
+        msg.error(cur_loc(), "ill-formed start of `ignore:re2c` block: expected"
+            " a space, a newline, or the end of block `*" "/`");
+        return Error;
     }
-
-    "/*!maxnmatch:re2c" / ws_or_eoc {
-        out.wraw(tok, ptr);
-        out.wdelay_stmt(0, code_yymaxnmatch(alc));
-        lex_end_of_comment(out);
-        goto next;
-    }
-
-    "/*!getstate:re2c" / ws_or_eoc {
-        out.wraw(tok, ptr);
-        if (opts->fFlag && opts->target == TARGET_CODE && !out.state_goto) {
-            out.wdelay_stmt(opts->topIndent, code_state_goto(alc));
-            out.state_goto = true;
-        }
-        lex_end_of_comment(out);
-        goto next;
-    }
-
-    "/*!types:re2c" / ws_or_eoc {
-        out.wraw(tok, ptr);
-        out.wdelay_stmt(0, code_line_info_output(alc));
-        out.wdelay_stmt(opts->topIndent, code_cond_enum(alc));
-        out.cond_enum_in_hdr = out.in_header();
-        out.warn_condition_order = false; // see note [condition order]
-        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
-        lex_end_of_comment(out);
-        goto next;
-    }
-
-    "/*!stags:re2c" / ws_or_eoc {
-        out.wraw(tok, ptr);
-        lex_tags(out, false);
-        goto next;
-    }
-
-    "/*!mtags:re2c" / ws_or_eoc {
-        out.wraw(tok, ptr);
-        lex_tags(out, true);
-        goto next;
-    }
-
-    "/*!header:re2c:on" / ws_or_eoc {
-        out.wraw(tok, ptr);
-        out.header_mode(true);
-        out.need_header = opts->target == TARGET_CODE;
-        lex_end_of_comment(out);
-        goto next;
-    }
-
-    "/*!header:re2c:off" / ws_or_eoc {
-        out.wraw(tok, ptr);
-        out.header_mode(false);
-        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
-        lex_end_of_comment(out);
-        goto next;
-    }
-
-    "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
-        out.wraw(tok, ptr);
-        lex_end_of_comment(out);
-        include(getstr(x + 1, y - 1));
-        goto next;
-    }
-
-    "/*!re2c"           { error_block_start("re2c");             exit(1); }
-    "/*!ignore:re2c"    { error_block_start("ignore:re2c");      exit(1); }
-    "/*!max:re2c"       { error_block_start("max:re2c");         exit(1); }
-    "/*!maxnmatch:re2c" { error_block_start("maxnmatch:re2c");   exit(1); }
-    "/*!getstate:re2c"  { error_block_start("getstate:re2c");    exit(1); }
-    "/*!types:re2c"     { error_block_start("types:re2c");       exit(1); }
-    "/*!stags:re2c"     { error_block_start("stags:re2c");       exit(1); }
-    "/*!mtags:re2c"     { error_block_start("mtags:re2c");       exit(1); }
-    "/*!rules:re2c"     { error_named_block_start("rules:re2c"); exit(1); }
-    "/*!use:re2c"       { error_named_block_start("use:re2c");   exit(1); }
-    "/*!include:re2c"   { error_include_directive();             exit(1); }
-    "/*!header:re2c"    { error_header_directive();              exit(1); }
 
     eof {
         if (is_eof()) {
@@ -312,32 +293,73 @@ loop:
 */
 }
 
-void Scanner::lex_end_of_comment(Output &out, bool allow_garbage)
+bool Scanner::lex_opt_name(std::string &name)
+{
+    tok = cur;
+/*!re2c
+    "" {
+        msg.error(cur_loc(), "ill-formed start of a block: expected a space, a"
+            " newline, a colon followed by a block name, or the end of block `*"
+            "/`");
+        return false;
+    }
+
+    ""       / ws_or_eoc { name.clear();              return true; }
+    ":" name / ws_or_eoc { name.assign(tok + 1, cur); return true; }
+*/
+}
+
+bool Scanner::lex_name_list(code_alc_t &alc, BlockNameList **ptail)
+{
+loop:
+    tok = cur;
+/*!re2c
+    "" {
+        msg.error(cur_loc(), "ill-formed start of a block: expected a space, a"
+            " newline, a colon followed by a list of colon-separated block"
+            " names, or the end of block `*" "/`");
+        return false;
+    }
+
+    "" / ws_or_eoc {
+        *ptail = NULL;
+        return true;
+    }
+
+    ":" name {
+        BlockNameList *l = alc.alloct<BlockNameList>(1);
+        l->name = newcstr(tok + 1, cur, alc);
+        l->next = NULL;
+        *ptail = l;
+        ptail = &l->next;
+        goto loop;
+    }
+*/
+}
+
+bool Scanner::lex_end_of_block(Output &out, bool allow_garbage)
 {
     bool multiline = false;
 loop:
 /*!re2c
     * {
         if (allow_garbage && !is_eof()) goto loop;
-        msg.error(cur_loc(), "expected end of block");
-        exit(1);
+        msg.error(cur_loc(), "ill-formed end of block: expected optional"
+            " whitespaces followed by `*" "/`");
+        return false;
     }
     space { goto loop; }
-    eol {
-        next_line();
-        multiline = true;
-        goto loop;
-    }
-    eoc {
+    eol   { next_line(); multiline = true; goto loop; }
+    eoc   {
         if (multiline) {
             out.wdelay_stmt(0, code_line_info_input(out.allocator, cur_loc()));
         }
-        return;
+        return true;
     }
 */
 }
 
-void Scanner::lex_tags(Output &out, bool mtags)
+bool Scanner::lex_tags(Output &out, BlockNameList *blocks, bool mtags)
 {
     const opt_t *opts = out.block().opts;
     std::string fmt, sep;
@@ -345,28 +367,20 @@ loop:
 /*!re2c
     * {
         msg.error(cur_loc(), "unrecognized configuration");
-        exit(1);
+        return false;
     }
-    "format" {
-        fmt = lex_conf_string();
-        goto loop;
-    }
-    "separator" {
-        sep = lex_conf_string();
-        goto loop;
-    }
-    space+ {
-        goto loop;
-    }
-    eol {
-        next_line();
-        goto loop;
-    }
-    eoc {
+
+    "format"    { fmt = lex_conf_string(); goto loop; }
+    "separator" { sep = lex_conf_string(); goto loop; }
+
+    space+ { goto loop; }
+    eol    { next_line(); goto loop; }
+    eoc    {
         if (opts->target == TARGET_CODE) {
-            out.wdelay_stmt(opts->topIndent, code_tags(out.allocator, fmt, sep, mtags));
+            out.wdelay_stmt(opts->topIndent,
+                code_tags(out.allocator, fmt, sep, blocks, mtags));
         }
-        return;
+        return true;
     }
 */
 }

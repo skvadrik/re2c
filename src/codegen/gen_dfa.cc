@@ -221,7 +221,7 @@ void gen_code(Output &output, dfas_t &dfas)
             }
 
             if (opts->fFlag && !output.state_goto) {
-                append(program1, code_state_goto(alc));
+                append(program1, code_state_goto(alc, NULL));
                 output.state_goto = true;
             }
 

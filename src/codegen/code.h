@@ -17,6 +17,7 @@
 #include "src/util/slab_allocator.h"
 #include "src/util/uniq_vector.h"
 #include "src/util/smart_ptr.h"
+#include "src/util/string_utils.h"
 
 
 namespace re2c {
@@ -259,9 +260,15 @@ struct CodeVar {
     const char *init;
 };
 
+struct BlockNameList {
+    const char    *name;
+    BlockNameList *next;
+};
+
 struct CodeTags {
-    const char *fmt;
-    const char *sep;
+    const char    *fmt;
+    const char    *sep;
+    BlockNameList *block_names;
 };
 
 struct CodeRaw {
@@ -332,16 +339,17 @@ struct Code {
     } kind;
 
     union {
-        const char *text;
-        CodeIfTE    ifte;
-        CodeSwitch  swch;
-        CodeBlock   block;
-        CodeFunc    func;
-        CodeRaw     raw;
-        CodeVar     var;
-        CodeTags    tags;
-        CodeLabel   label;
-        loc_t       loc;
+        const char    *text;
+        BlockNameList *block_names;
+        CodeIfTE       ifte;
+        CodeSwitch     swch;
+        CodeBlock      block;
+        CodeFunc       func;
+        CodeRaw        raw;
+        CodeVar        var;
+        CodeTags       tags;
+        CodeLabel      label;
+        loc_t          loc;
     };
 
     Code *next;
@@ -445,36 +453,34 @@ inline Code *code_slabel(code_alc_t &alc, const char *label)
 }
 
 inline Code *code_tags(code_alc_t &alc, const std::string &fmt, const std::string &sep,
-    bool mtags)
+    BlockNameList *blocks, bool mtags)
 {
     Code *x = new_code(alc, mtags ? Code::MTAGS : Code::STAGS);
-
-    const size_t fmt_size = fmt.length() + 1;
-    char *fmt_copy = alc.alloct<char>(fmt_size);
-    memcpy(fmt_copy, fmt.c_str(), fmt_size);
-    x->tags.fmt = fmt_copy;
-
-    const size_t sep_size = sep.length() + 1;
-    char *sep_copy = alc.alloct<char>(sep_size);
-    memcpy(sep_copy, sep.c_str(), sep_size);
-    x->tags.sep = sep_copy;
-
+    x->tags.fmt = copystr(fmt, alc);
+    x->tags.sep = copystr(sep, alc);
+    x->tags.block_names = blocks;
     return x;
 }
 
-inline Code *code_yymaxfill(code_alc_t &alc)
+inline Code *code_yymaxfill(code_alc_t &alc, BlockNameList *blocks)
 {
-    return new_code(alc, Code::YYMAXFILL);
+    Code *x = new_code(alc, Code::YYMAXFILL);
+    x->block_names = blocks;
+    return x;
 }
 
-inline Code *code_yymaxnmatch(code_alc_t &alc)
+inline Code *code_yymaxnmatch(code_alc_t &alc, BlockNameList *blocks)
 {
-    return new_code(alc, Code::YYMAXNMATCH);
+    Code *x = new_code(alc, Code::YYMAXNMATCH);
+    x->block_names = blocks;
+    return x;
 }
 
-inline Code *code_cond_enum(code_alc_t &alc)
+inline Code *code_cond_enum(code_alc_t &alc, BlockNameList *blocks)
 {
-    return new_code(alc, Code::COND_ENUM);
+    Code *x = new_code(alc, Code::COND_ENUM);
+    x->block_names = blocks;
+    return x;
 }
 
 inline Code *code_cond_table(code_alc_t &alc)
@@ -487,9 +493,11 @@ inline Code *code_cond_goto(code_alc_t &alc)
     return new_code(alc, Code::COND_GOTO);
 }
 
-inline Code *code_state_goto(code_alc_t &alc)
+inline Code *code_state_goto(code_alc_t &alc, BlockNameList *blocks)
 {
-    return new_code(alc, Code::STATE_GOTO);
+    Code *x = new_code(alc, Code::STATE_GOTO);
+    x->block_names = blocks;
+    return x;
 }
 
 inline Code *code_line_info_input(code_alc_t &alc, const loc_t &loc)
@@ -739,9 +747,6 @@ public:
     size_t max_nmatch;
     code_alc_t allocator;
     Scratchbuf scratchbuf;
-
-    // Name of the rules block specified in the most recent directive.
-    std::string rules_block_name;
 
     // used in state dispatch (accumulated for all non-reuse blocks)
     uint32_t total_fill_index;              // upper bound of YYFILL state index
