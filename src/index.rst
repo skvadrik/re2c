@@ -57,8 +57,8 @@ Please send bugs reports, patches and other feedback to `Github issue tracker
 `re2c-devel@lists.sourceforge.net <re2c-devel@lists.sourceforge.net>`_ and
 `re2c-general@lists.sourceforge.net <re2c-general@lists.sourceforge.net>`_
 mailing lists.
-There is an IRC channel ``#re2c`` on `freenode <https://freenode.net>`_
-and `oftc <https://www.oftc.net/>`_.
+There is an IRC channel ``#re2c`` on `irc.libera.chat <https://libera.chat>`_
+and `irc.oftc.net <https://www.oftc.net/>`_.
 Questions and contributions are welcome!
 
 Papers, articles
