@@ -8,7 +8,7 @@ Build instructions
 Dependencies
 ============
 
-To build re2c from a release tarball one needs only a C++ compiler, and optionally Bash to run the tests.
+To build re2c from a release tarball one needs only a C++ compiler and optionally Python to run the tests.
 
 To develop re2c (or to regenerate precompiled files) one also needs either CMake or Autotools (including Libtool), Bison (to rebuild parsers),
 rst2man (to rebuild documentation), Sphinx (to rebuild the website) and optionally Mingw and Wine (to
@@ -147,19 +147,19 @@ Run only the main test suite and watch the progress dumped on stdout:
 
 .. code-block:: bash
 
-    $ ./run_tests.sh -j<N>
+    $ python3 run_tests.py -j<N>
 
 Run the main test suite with ``--skeleton`` re2c option:
 
 .. code-block:: bash
 
-    $ ./run_tests.sh --skeleton
+    $ python3 run_tests.py --skeleton
 
 Run the test suite under Valgrind (takes some time and memory):
 
 .. code-block:: bash
 
-    $ make vtests
+    $ python3 run_tests.py --valgrind
 
 Test mingw builds with Wine:
 
@@ -167,7 +167,7 @@ Test mingw builds with Wine:
 
     $ make wtests
 
-Check the distribution:
+Check the distribution (works with Autotools):
 
 .. code-block:: bash
 
