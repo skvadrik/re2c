@@ -189,8 +189,8 @@ loop:
         if (!opts->fFlag) {
             msg.error(cur_loc(), "`getstate:re2c` without `-f --storable-state` option");
             return Error;
-        }
-        if (opts->target == TARGET_CODE && !out.state_goto) {
+        } else if (opts->target == TARGET_CODE) {
+            // User-defined state switch is generated as many times as needed.
             out.wdelay_stmt(opts->topIndent, code_state_goto(alc, block_list));
             out.state_goto = true;
         }
