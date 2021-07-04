@@ -31,6 +31,7 @@ struct Code;
 struct CodeGo;
 struct CodeGoIf;
 class Output;
+class OutputBlock;
 struct State;
 struct DFA;
 typedef std::vector<smart_ptr<DFA> > dfas_t;
@@ -674,6 +675,9 @@ inline CodeBitmap *code_bitmap(code_alc_t &alc, uint32_t nchars)
     return x;
 }
 
+typedef std::vector<OutputBlock *> blocks_t;
+typedef blocks_t::const_iterator blocks_citer_t;
+
 struct CodegenContext {
     code_alc_t &allocator;
     Scratchbuf &scratchbuf;
@@ -681,6 +685,7 @@ struct CodegenContext {
     const opt_t *opts;
     Msg &msg;
     const loc_t &loc;
+    const blocks_t &blocks;
     const uniq_vector_t<std::string> &allcondnames;
     const std::set<std::string> &allstags;
     const std::set<std::string> &allmtags;
@@ -689,8 +694,6 @@ struct CodegenContext {
     const size_t maxnmatch;
     const bool used_yyaccept;
     const bool warn_cond_ord;
-    const uint32_t fill_index;
-    const std::vector<CodeList*> &fill_goto;
 };
 
 struct RenderContext {
@@ -719,17 +722,16 @@ struct OutputBlock {
     std::set<std::string> mtags;
     const opt_t *opts;
 
-    // used in state dispatch
-    uint32_t fill_index;              // upper bound of YYFILL state index
+    // Used in the state switch (with `-f --storable-state` option).
+    Label *start_label;        // label of the DFA start state
+    uint32_t fill_index_start; // start of YYFILL index range
+    uint32_t fill_index_end;   // end of YYFILL index range (not included)
     std::vector<CodeList*> fill_goto; // transitions to YYFILL states
 
     OutputBlock(InputBlockKind kind, const std::string &name, const loc_t &loc);
     ~OutputBlock();
     FORBID_COPY(OutputBlock);
 };
-
-typedef std::vector<OutputBlock *> blocks_t;
-typedef blocks_t::const_iterator blocks_citer_t;
 
 class Output {
     blocks_t cblocks; /* .c file */
@@ -750,9 +752,8 @@ public:
     code_alc_t allocator;
     Scratchbuf scratchbuf;
 
-    // used in state dispatch (accumulated for all non-reuse blocks)
-    uint32_t total_fill_index;              // upper bound of YYFILL state index
-    std::vector<CodeList*> total_fill_goto; // transitions to YYFILL states
+    // YYFILL state index accumulated for all non-reuse blocks
+    uint32_t total_fill_index;
 
     // "final" options accumulated for all non-reuse blocks
     const opt_t *total_opts;
@@ -760,7 +761,6 @@ public:
     explicit Output(Msg &msg);
     ~Output();
     OutputBlock &block();
-    size_t blockid() const;
     bool open ();
     void new_block(Opt &opts, InputBlockKind kind, const std::string &name,
         const loc_t &loc);
