@@ -140,11 +140,17 @@ void gen_code(Output &output, dfas_t &dfas)
             || (first && oblock.is_reuse_block);
         DFA &dfa = *(*i);
 
-        // Start label is needed in `-f` mode: it points to state 0 (the
-        // beginning of block, before condition dispatch in `-c` mode).
-        if ((opts->startlabel_force && first) || (opts->fFlag && first_state)) {
-            dfa.start_label = new_label(alc, output.label_counter++);
-            dfa.start_label->used = true;
+        if (first) {
+            if (opts->startlabel_force) {
+                // User-enforced start label.
+                dfa.start_label = new_label(alc, output.label_counter++);
+                dfa.start_label->used = true;
+            } else if (opts->fFlag) {
+                // Start label is needed in `-f` mode: it points to state 0 (the
+                // beginning of block, before condition dispatch in `-c` mode).
+                dfa.start_label = new_label(alc, output.label_counter++);
+                dfa.start_label->used = first_state;
+            }
         }
 
         // Initial label points to the beginning of the DFA (after condition
@@ -226,7 +232,7 @@ void gen_code(Output &output, dfas_t &dfas)
             }
 
             // start label
-            if (dfa.start_label) {
+            if (dfa.start_label && dfa.start_label->used) {
                 append(program1, code_nlabel(alc, dfa.start_label));
                 gen_goto_start_state(output, dfa.start_label);
             }
