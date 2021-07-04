@@ -13,6 +13,7 @@
 #include "src/dfa/tcmd.h"
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
+#include "src/options/opt.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/slab_allocator.h"
 #include "src/util/uniq_vector.h"
@@ -707,11 +708,11 @@ struct OutputFragment {
 };
 
 struct OutputBlock {
+    InputBlockKind kind;
     const loc_t loc;
     std::vector<OutputFragment> fragments;
     bool used_yyaccept;
     bool have_user_code;
-    bool is_reuse_block;
     std::vector<std::string> types;
     std::set<std::string> stags;
     std::set<std::string> mtags;
@@ -721,7 +722,7 @@ struct OutputBlock {
     uint32_t fill_index;              // upper bound of YYFILL state index
     std::vector<CodeList*> fill_goto; // transitions to YYFILL states
 
-    OutputBlock(const loc_t &loc, bool reuse);
+    OutputBlock(InputBlockKind kind, const loc_t &loc);
     ~OutputBlock();
     FORBID_COPY(OutputBlock);
 };
@@ -760,7 +761,7 @@ public:
     OutputBlock &block();
     size_t blockid() const;
     bool open ();
-    void new_block(Opt &opts, const loc_t &loc, bool reuse);
+    void new_block(Opt &opts, InputBlockKind kind, const loc_t &loc);
     void gather_info_from_block();
     void header_mode(bool on);
     bool in_header() const;
