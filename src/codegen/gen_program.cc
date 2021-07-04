@@ -44,12 +44,12 @@ static uint32_t write_converting_newlines(const std::string &str, FILE *f)
     return lines;
 }
 
-OutputBlock::OutputBlock(const loc_t &loc, bool reuse)
-    : loc(loc)
+OutputBlock::OutputBlock(InputBlockKind kind, const loc_t &loc)
+    : kind(kind)
+    , loc(loc)
     , fragments()
     , used_yyaccept(false)
     , have_user_code(false)
-    , is_reuse_block(reuse)
     , types()
     , stags()
     , mtags()
@@ -134,11 +134,11 @@ void Output::wdelay_stmt(uint32_t ind, Code *stmt)
     block().fragments.push_back(f);
 }
 
-void Output::new_block(Opt &opts, const loc_t &loc, bool reuse)
+void Output::new_block(Opt &opts, InputBlockKind kind, const loc_t &loc)
 {
-    OutputBlock *b = new OutputBlock(loc, reuse);
+    OutputBlock *b = new OutputBlock(kind, loc);
     b->opts = opts.snapshot();
-    b->fill_index = reuse ? 0 : total_fill_index;
+    b->fill_index = (kind == INPUT_USE) ? 0 : total_fill_index;
     pblocks->push_back(b);
 
     // start label hapens to be the only option
@@ -151,7 +151,7 @@ void Output::gather_info_from_block()
     DASSERT(!pblocks->empty());
 
     const OutputBlock *b = pblocks->back();
-    if (!b->is_reuse_block) {
+    if (b->kind != INPUT_USE) {
         total_fill_index = b->fill_index;
         total_fill_goto.insert(total_fill_goto.end(),
             b->fill_goto.begin(), b->fill_goto.end());
@@ -201,7 +201,7 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
         CodegenContext gctx =
             { allocator
             , scratchbuf
-            , b.is_reuse_block ? b.opts : total_opts
+            , b.kind == INPUT_USE ? b.opts : total_opts
             , b.opts
             , msg
             , b.loc
@@ -213,8 +213,8 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             , max_nmatch
             , b.used_yyaccept
             , warn_condition_order
-            , b.is_reuse_block ? b.fill_index : total_fill_index
-            , b.is_reuse_block ? b.fill_goto : total_fill_goto
+            , b.kind == INPUT_USE ? b.fill_index : total_fill_index
+            , b.kind == INPUT_USE ? b.fill_goto : total_fill_goto
             };
 
         const size_t n = b.fragments.size();

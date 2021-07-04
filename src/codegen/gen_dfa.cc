@@ -137,7 +137,7 @@ void gen_code(Output &output, dfas_t &dfas)
     for (i = b; i != e; ++i) {
         const bool first = i == b;
         const bool first_state = output.label_counter == 0
-            || (first && oblock.is_reuse_block);
+            || (first && oblock.kind == INPUT_USE);
         DFA &dfa = *(*i);
 
         if (first) {

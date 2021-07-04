@@ -50,7 +50,7 @@ public:
     bool gen_dep_file() const;
     const loc_t &tok_loc() const;
     loc_t cur_loc() const;
-    ParseMode echo(Output &out, std::string &block_name);
+    InputBlockKind echo(Output &out, std::string &block_name);
     int scan();
     void lex_conf(Opt &opts);
 

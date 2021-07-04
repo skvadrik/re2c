@@ -120,14 +120,14 @@ struct ScannerState
 #endif // _RE2C_PARSE_LEX_
 /*!header:re2c:off*/
 
-Scanner::ParseMode Scanner::echo(Output &out, std::string &block_name)
+InputBlockKind Scanner::echo(Output &out, std::string &block_name)
 {
     const opt_t *opts = out.block().opts;
     code_alc_t &alc = out.allocator;
     const char *x, *y;
     BlockNameList *block_list;
 
-    if (is_eof()) return Stop;
+    if (is_eof()) return INPUT_END;
 
 next:
     tok = cur;
@@ -138,57 +138,57 @@ loop:
     "%{" {
         out.wraw(tok, ptr);
         block_name.clear();
-        return Global;
+        return INPUT_GLOBAL;
     }
 
     "/*!re2c" {
         out.wraw(tok, ptr);
-        if (!lex_opt_name(block_name)) return Error;
-        return Global;
+        if (!lex_opt_name(block_name)) return INPUT_ERROR;
+        return INPUT_GLOBAL;
     }
 
     "/*!local:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_opt_name(block_name)) return Error;
-        return Local;
+        if (!lex_opt_name(block_name)) return INPUT_ERROR;
+        return INPUT_LOCAL;
     }
 
     "/*!rules:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_opt_name(block_name)) return Error;
-        return Rules;
+        if (!lex_opt_name(block_name)) return INPUT_ERROR;
+        return INPUT_RULES;
     }
 
     "/*!use:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_opt_name(block_name)) return Error;
-        return Reuse;
+        if (!lex_opt_name(block_name)) return INPUT_ERROR;
+        return INPUT_USE;
     }
 
     "/*!max:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_name_list(alc, &block_list)) return Error;
+        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
         out.wdelay_stmt(0, code_yymaxfill(alc, block_list));
         // historically allows garbage before the end of the comment
-        if (!lex_end_of_block(out, true)) return Error;
+        if (!lex_end_of_block(out, true)) return INPUT_ERROR;
         goto next;
     }
 
     "/*!maxnmatch:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_name_list(alc, &block_list)) return Error;
-        if (!lex_end_of_block(out)) return Error;
+        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
+        if (!lex_end_of_block(out)) return INPUT_ERROR;
         out.wdelay_stmt(0, code_yymaxnmatch(alc, block_list));
         goto next;
     }
 
     "/*!getstate:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_name_list(alc, &block_list)) return Error;
-        if (!lex_end_of_block(out)) return Error;
+        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
+        if (!lex_end_of_block(out)) return INPUT_ERROR;
         if (!opts->fFlag) {
             msg.error(cur_loc(), "`getstate:re2c` without `-f --storable-state` option");
-            return Error;
+            return INPUT_ERROR;
         } else if (opts->target == TARGET_CODE) {
             // User-defined state switch is generated as many times as needed.
             out.wdelay_stmt(opts->topIndent, code_state_goto(alc, block_list));
@@ -200,8 +200,8 @@ loop:
     "/*!types:re2c" {
         out.wraw(tok, ptr);
         out.wdelay_stmt(0, code_line_info_output(alc));
-        if (!lex_name_list(alc, &block_list)) return Error;
-        if (!lex_end_of_block(out)) return Error;
+        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
+        if (!lex_end_of_block(out)) return INPUT_ERROR;
         out.wdelay_stmt(opts->topIndent, code_cond_enum(alc, block_list));
         out.cond_enum_in_hdr = out.in_header();
         out.warn_condition_order = false; // see note [condition order]
@@ -211,15 +211,15 @@ loop:
 
     "/*!stags:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_name_list(alc, &block_list)) return Error;
-        if (!lex_tags(out, block_list, false)) return Error;
+        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
+        if (!lex_tags(out, block_list, false)) return INPUT_ERROR;
         goto next;
     }
 
     "/*!mtags:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_name_list(alc, &block_list)) return Error;
-        if (!lex_tags(out, block_list, true)) return Error;
+        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
+        if (!lex_tags(out, block_list, true)) return INPUT_ERROR;
         goto next;
     }
 
@@ -227,7 +227,7 @@ loop:
         out.wraw(tok, ptr);
         out.header_mode(true);
         out.need_header = opts->target == TARGET_CODE;
-        if (!lex_end_of_block(out)) return Error;
+        if (!lex_end_of_block(out)) return INPUT_ERROR;
         goto next;
     }
 
@@ -235,44 +235,44 @@ loop:
         out.wraw(tok, ptr);
         out.header_mode(false);
         out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
-        if (!lex_end_of_block(out)) return Error;
+        if (!lex_end_of_block(out)) return INPUT_ERROR;
         goto next;
     }
     "/*!header:re2c" {
         msg.error(cur_loc(), "ill-formed header directive: expected"
             " `/*!header:re2c:<on|off>` followed by a space, a newline or the"
             " end of block `*" "/`");
-        return Error;
+        return INPUT_ERROR;
     }
 
     "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
         out.wraw(tok, ptr);
-        if (!lex_end_of_block(out)) return Error;
+        if (!lex_end_of_block(out)) return INPUT_ERROR;
         include(getstr(x + 1, y - 1));
         goto next;
     }
     "/*!include:re2c" {
         msg.error(cur_loc(), "ill-formed include directive: expected"
             " `/*!include:re2c \"<file>\" *" "/`");
-        return Error;
+        return INPUT_ERROR;
     }
 
     "/*!ignore:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         // allows arbitrary garbage before the end of the comment
-        if (!lex_end_of_block(out, true)) return Error;
+        if (!lex_end_of_block(out, true)) return INPUT_ERROR;
         goto next;
     }
     "/*!ignore:re2c" {
         msg.error(cur_loc(), "ill-formed start of `ignore:re2c` block: expected"
             " a space, a newline, or the end of block `*" "/`");
-        return Error;
+        return INPUT_ERROR;
     }
 
     eof {
         if (is_eof()) {
             out.wraw(tok, ptr);
-            return Stop;
+            return INPUT_END;
         }
         goto loop;
     }

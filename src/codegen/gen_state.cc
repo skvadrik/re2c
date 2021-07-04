@@ -40,7 +40,7 @@ static const char *gen_fill_label(Output &output, uint32_t index)
     DASSERT(o.empty());
 
     o.str(opts->yyfilllabel);
-    if (output.block().is_reuse_block) o.u64(output.blockid()).cstr("_");
+    if (output.block().kind == INPUT_USE) o.u64(output.blockid()).cstr("_");
     o.u32(index);
 
     return o.flush();

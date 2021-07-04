@@ -72,6 +72,15 @@ enum parse_opts_t {
     EXIT_FAIL
 };
 
+enum InputBlockKind {
+    INPUT_END,
+    INPUT_GLOBAL,
+    INPUT_LOCAL,
+    INPUT_USE,
+    INPUT_RULES,
+    INPUT_ERROR
+};
+
 const uint32_t NOEOF = ~0u - 1;
 
 #define RE2C_SIGIL "@@"

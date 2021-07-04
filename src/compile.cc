@@ -138,11 +138,11 @@ void compile(Scanner &input, Output &output, Opt &opts)
     std::string block_name;
 
     output.header_mode(1);
-    output.new_block(opts, loc0, false /* reuse */);
+    output.new_block(opts, INPUT_GLOBAL, loc0);
     output.wversion_time();
 
     output.header_mode(0);
-    output.new_block(opts, loc0, false /* reuse */);
+    output.new_block(opts, INPUT_GLOBAL, loc0);
     output.wversion_time();
     output.wdelay_stmt(0, code_line_info_input(alc, loc0));
 
@@ -154,13 +154,13 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
     for (;;) {
         // parse everything up to the next re2c block
-        Scanner::ParseMode mode = input.echo(output, block_name);
-        if (mode == Scanner::Error) exit(1);
-        if (mode == Scanner::Stop) break;
+        InputBlockKind kind = input.echo(output, block_name);
+        if (kind == INPUT_ERROR) exit(1);
+        if (kind == INPUT_END) break;
 
         // parse the next re2c block
         specs_t specs;
-        if (mode == Scanner::Reuse) {
+        if (kind == INPUT_USE) {
             const RulesBlock *rb = rblocks.find(block_name);
             if (rb == NULL) exit(1);
             specs = rb->specs;
@@ -172,9 +172,9 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
         // start new output block with accumulated options
         const loc_t &loc = input.cur_loc();
-        output.new_block(opts, loc, mode == Scanner::Reuse);
+        output.new_block(opts, kind, loc);
 
-        if (mode == Scanner::Rules) {
+        if (kind == INPUT_RULES) {
             // save AST and options for future use
             rblocks.add(block_name, output.block().opts, specs);
         } else {
@@ -197,7 +197,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         // Do not accumulate whole-program options for rules/reuse/local blocks.
         // Global blocks add their named definitions and configurations to the
         // global scope, local blocks don't. Historically global is the default.
-        if (mode == Scanner::Global) {
+        if (kind == INPUT_GLOBAL) {
             accum_opts = output.block().opts;
         } else {
             opts.restore(accum_opts);
