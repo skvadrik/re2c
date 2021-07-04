@@ -10,8 +10,8 @@
 		goto yy0;
 	case 0:
 		goto yyFillLabel0;
-	case 1:
-		goto yyFillLabel1;
+	case 4:
+		goto yyFillLabel4;
 	}
 yy0:
 	SETSTATE_1(0);
@@ -36,17 +36,17 @@ yy5:
 	switch (GETSTATE_REUSE_1()) {
 	default:
 		goto yy7;
-	case 0:
-		goto yyFillLabel3_0;
 	case 1:
-		goto yyFillLabel3_1;
+		goto yyFillLabel1;
 	case 2:
-		goto yyFillLabel3_2;
+		goto yyFillLabel2;
+	case 3:
+		goto yyFillLabel3;
 	}
 yy7:
-	SETSTATE_REUSE_1(0);
+	SETSTATE_REUSE_1(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel3_0:
+yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy12;
@@ -62,9 +62,9 @@ yy12:
 	{ a }
 yy14:
 	++YYCURSOR;
-	SETSTATE_REUSE_1(1);
+	SETSTATE_REUSE_1(2);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel3_1:
+yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'b':	goto yy14;
@@ -74,9 +74,9 @@ yy16:
 	{ c }
 yy17:
 	++YYCURSOR;
-	SETSTATE_REUSE_1(2);
+	SETSTATE_REUSE_1(3);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel3_2:
+yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'c':	goto yy17;
@@ -87,9 +87,9 @@ yyFillLabel3_2:
 // normal block, 1 state
 
 
-	SETSTATE_2(1);
+	SETSTATE_2(4);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel1:
+yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'f':	goto yy24;
@@ -112,13 +112,13 @@ yy24:
 	switch (GETSTATE_REUSE_2()) {
 	default:
 		goto yy26;
-	case 0:
-		goto yyFillLabel6_0;
+	case 5:
+		goto yyFillLabel5;
 	}
 yy26:
-	SETSTATE_REUSE_2(0);
+	SETSTATE_REUSE_2(5);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel6_0:
+yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy31;

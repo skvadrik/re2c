@@ -8,12 +8,12 @@
 	default:
 		goto yy0;
 	case 0:
-		goto yyFillLabel2_0;
+		goto yyFillLabel0;
 	}
 yy0:
 	YYSETSTATE(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel2_0:
+yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy5;
@@ -33,13 +33,13 @@ yy5:
 	switch (YYGETSTATE) {
 	default:
 		goto yy7;
-	case 0:
-		goto yyFillLabel3_0;
+	case 1:
+		goto yyFillLabel1;
 	}
 yy7:
 	YYSETSTATE
 	if (YYLIMIT <= YYCURSOR) YYFILL
-yyFillLabel3_0:
+yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy12;
@@ -59,13 +59,13 @@ yy12:
 	switch (YYGETSTATE()) {
 	default:
 		goto yy14;
-	case 0:
-		goto yyFillLabel4_0;
+	case 2:
+		goto yyFillLabel2;
 	}
 yy14:
-	YYSETSTATE(0);
+	YYSETSTATE(2);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel4_0:
+yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy19;
@@ -85,13 +85,13 @@ yy19:
 	switch (YYGETSTATE()) {
 	default:
 		goto yy21;
-	case 0:
-		goto yyFillLabel5_0;
+	case 3:
+		goto yyFillLabel3;
 	}
 yy21:
-	YYSETSTATE(0);
+	YYSETSTATE(3);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel5_0:
+yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy26;
@@ -112,13 +112,13 @@ yy26:
 	switch (YYGETSTATE) {
 	default:
 		goto yy28;
-	case 0:
-		goto yyFillLabel6_0;
+	case 4:
+		goto yyFillLabel4;
 	}
 yy28:
-	YYSETSTATE(0);
+	YYSETSTATE(4);
 	if (YYLIMIT <= YYCURSOR) YYFILL
-yyFillLabel6_0:
+yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy33;
@@ -139,13 +139,13 @@ yy33:
 	switch (YYGETSTATE()) {
 	default:
 		goto yy35;
-	case 0:
-		goto yyFillLabel7_0;
+	case 5:
+		goto yyFillLabel5;
 	}
 yy35:
-	YYSETSTATE(0);
+	YYSETSTATE(5);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel7_0:
+yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy40;
@@ -165,13 +165,13 @@ yy40:
 	switch (YYGETSTATE()) {
 	default:
 		goto yy42;
-	case 0:
-		goto yyFillLabel8_0;
+	case 6:
+		goto yyFillLabel6;
 	}
 yy42:
 	YYSETSTATE
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel8_0:
+yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy47;
@@ -192,13 +192,13 @@ yy47:
 	switch (YYGETSTATE) {
 	default:
 		goto yy49;
-	case 0:
-		goto yyFillLabel9_0;
+	case 7:
+		goto yyFillLabel7;
 	}
 yy49:
 	YYSETSTATE
 	if (YYLIMIT <= YYCURSOR) YYFILL
-yyFillLabel9_0:
+yyFillLabel7:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy54;
@@ -219,13 +219,13 @@ yy54:
 	switch (YYGETSTATE()) {
 	default:
 		goto yy56;
-	case 0:
-		goto yyFillLabel10_0;
+	case 8:
+		goto yyFillLabel8;
 	}
 yy56:
 	YYSETSTATE
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-yyFillLabel10_0:
+yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy61;

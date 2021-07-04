@@ -38,12 +38,7 @@ static const char *gen_fill_label(Output &output, uint32_t index)
     const opt_t *opts = output.block().opts;
     Scratchbuf &o = output.scratchbuf;
     DASSERT(o.empty());
-
-    o.str(opts->yyfilllabel);
-    if (output.block().kind == INPUT_USE) o.u64(output.blockid()).cstr("_");
-    o.u32(index);
-
-    return o.flush();
+    return o.str(opts->yyfilllabel).u32(index).flush();
 }
 
 void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts)
@@ -352,7 +347,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
 {
     const opt_t *opts = output.block().opts;
     const bool eof_rule = opts->eof != NOEOF;
-    const uint32_t fillidx = output.block().fill_index - 1;
+    const uint32_t fillidx = output.block().fill_index_end - 1;
     const size_t need = eof_rule ? 1 : from->fill;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
@@ -435,7 +430,7 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
     const bool need_fill_label = need_fill_on_trans || (need_fill_in_state && opts->fFlag);
 
     if (need_fill_label) {
-        ++output.block().fill_index;
+        ++output.block().fill_index_end;
     }
 
     if (need_fill_in_state) {
@@ -452,7 +447,7 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
     }
 
     if (need_fill_label) {
-        const char *flabel = gen_fill_label(output, output.block().fill_index - 1);
+        const char *flabel = gen_fill_label(output, output.block().fill_index_end - 1);
         append(stmts, code_slabel(output.allocator, flabel));
     }
 }
