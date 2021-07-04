@@ -92,13 +92,13 @@ yyFillLabel3_2:
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'f':	goto yy23;
-	default:	goto yy21;
+	case 'f':	goto yy24;
+	default:	goto yy22;
 	}
-yy21:
+yy22:
 	++YYCURSOR;
 	{ x }
-yy23:
+yy24:
 	++YYCURSOR;
 	{ f }
 
@@ -111,23 +111,23 @@ yy23:
 
 	switch (GETSTATE_REUSE_2()) {
 	default:
-		goto yy25;
+		goto yy26;
 	case 0:
 		goto yyFillLabel6_0;
 	}
-yy25:
+yy26:
 	SETSTATE_REUSE_2(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel6_0:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy30;
-	default:	goto yy28;
+	case 'a':	goto yy31;
+	default:	goto yy29;
 	}
-yy28:
+yy29:
 	++YYCURSOR;
 	{ x }
-yy30:
+yy31:
 	++YYCURSOR;
 	{ a }
 

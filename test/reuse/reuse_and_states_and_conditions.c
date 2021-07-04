@@ -263,13 +263,13 @@ yyc_w:
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'w':	goto yy62;
-	default:	goto yy60;
+	case 'w':	goto yy63;
+	default:	goto yy61;
 	}
-yy60:
+yy61:
 	++YYCURSOR;
 	{ x }
-yy62:
+yy63:
 	++YYCURSOR;
 	{ w }
 

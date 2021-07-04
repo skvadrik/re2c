@@ -49,13 +49,13 @@ yy5:
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy11;
-	default:	goto yy9;
+	case 'a':	goto yy12;
+	default:	goto yy10;
 	}
-yy9:
+yy10:
 	++YYCURSOR;
 	{ x }
-yy11:
+yy12:
 	++YYCURSOR;
 	{ a }
 
@@ -68,13 +68,13 @@ yy11:
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy17;
-	default:	goto yy15;
+	case 'a':	goto yy19;
+	default:	goto yy17;
 	}
-yy15:
+yy17:
 	++YYCURSOR;
 	{ x }
-yy17:
+yy19:
 	++YYCURSOR;
 	{ a }
 
@@ -87,13 +87,13 @@ yy17:
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy23;
-	default:	goto yy21;
+	case 'a':	goto yy26;
+	default:	goto yy24;
 	}
-yy21:
+yy24:
 	++YYCURSOR;
 	{ x }
-yy23:
+yy26:
 	++YYCURSOR;
 	{ a }
 
@@ -107,13 +107,13 @@ yy23:
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy29;
-	default:	goto yy27;
+	case 'a':	goto yy33;
+	default:	goto yy31;
 	}
-yy27:
+yy31:
 	++YYCURSOR;
 	{ x }
-yy29:
+yy33:
 	++YYCURSOR;
 	{ a }
 
@@ -127,13 +127,13 @@ yy29:
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy35;
-	default:	goto yy33;
+	case 'a':	goto yy40;
+	default:	goto yy38;
 	}
-yy33:
+yy38:
 	++YYCURSOR;
 	{ x }
-yy35:
+yy40:
 	++YYCURSOR;
 	{ a }
 
@@ -144,26 +144,6 @@ yy35:
 	YYSETSTATE(6);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel6:
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 'a':	goto yy41;
-	default:	goto yy39;
-	}
-yy39:
-	++YYCURSOR;
-	{ x }
-yy41:
-	++YYCURSOR;
-	{ a }
-
-
-// re2c:define:YYGETSTATE:naked = 1;
-// re2c:api:style = free-form;
-
-
-	YYSETSTATE
-	if (YYLIMIT <= YYCURSOR) YYFILL
-yyFillLabel7:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy47;
@@ -178,6 +158,26 @@ yy47:
 
 
 // re2c:define:YYGETSTATE:naked = 1;
+// re2c:api:style = free-form;
+
+
+	YYSETSTATE
+	if (YYLIMIT <= YYCURSOR) YYFILL
+yyFillLabel7:
+	yych = *YYCURSOR;
+	switch (yych) {
+	case 'a':	goto yy54;
+	default:	goto yy52;
+	}
+yy52:
+	++YYCURSOR;
+	{ x }
+yy54:
+	++YYCURSOR;
+	{ a }
+
+
+// re2c:define:YYGETSTATE:naked = 1;
 // re2c:api:style = functions;
 
 
@@ -186,13 +186,13 @@ yy47:
 yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy53;
-	default:	goto yy51;
+	case 'a':	goto yy61;
+	default:	goto yy59;
 	}
-yy51:
+yy59:
 	++YYCURSOR;
 	{ x }
-yy53:
+yy61:
 	++YYCURSOR;
 	{ a }
 
