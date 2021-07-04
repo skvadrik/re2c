@@ -709,6 +709,7 @@ struct OutputFragment {
 
 struct OutputBlock {
     InputBlockKind kind;
+    std::string name;
     const loc_t loc;
     std::vector<OutputFragment> fragments;
     bool used_yyaccept;
@@ -722,7 +723,7 @@ struct OutputBlock {
     uint32_t fill_index;              // upper bound of YYFILL state index
     std::vector<CodeList*> fill_goto; // transitions to YYFILL states
 
-    OutputBlock(InputBlockKind kind, const loc_t &loc);
+    OutputBlock(InputBlockKind kind, const std::string &name, const loc_t &loc);
     ~OutputBlock();
     FORBID_COPY(OutputBlock);
 };
@@ -761,7 +762,8 @@ public:
     OutputBlock &block();
     size_t blockid() const;
     bool open ();
-    void new_block(Opt &opts, InputBlockKind kind, const loc_t &loc);
+    void new_block(Opt &opts, InputBlockKind kind, const std::string &name,
+        const loc_t &loc);
     void gather_info_from_block();
     void header_mode(bool on);
     bool in_header() const;

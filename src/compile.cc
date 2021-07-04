@@ -138,11 +138,11 @@ void compile(Scanner &input, Output &output, Opt &opts)
     std::string block_name;
 
     output.header_mode(1);
-    output.new_block(opts, INPUT_GLOBAL, loc0);
+    output.new_block(opts, INPUT_GLOBAL, block_name, loc0);
     output.wversion_time();
 
     output.header_mode(0);
-    output.new_block(opts, INPUT_GLOBAL, loc0);
+    output.new_block(opts, INPUT_GLOBAL, block_name, loc0);
     output.wversion_time();
     output.wdelay_stmt(0, code_line_info_input(alc, loc0));
 
@@ -172,7 +172,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
         // start new output block with accumulated options
         const loc_t &loc = input.cur_loc();
-        output.new_block(opts, kind, loc);
+        output.new_block(opts, kind, block_name, loc);
 
         if (kind == INPUT_RULES) {
             // save AST and options for future use
