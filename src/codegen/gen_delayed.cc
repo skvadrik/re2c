@@ -69,7 +69,7 @@ static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, Code *code,
     code->block.fmt = CodeBlock::RAW;
 }
 
-static void gen_state_goto_cases(CodegenContext &ctx, CodeCases *cases,
+static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,
     const OutputBlock *block)
 {
     uint32_t index_count = block->fill_index_end - block->fill_index_start;
@@ -80,7 +80,7 @@ static void gen_state_goto_cases(CodegenContext &ctx, CodeCases *cases,
     }
 }
 
-static const OutputBlock *find_named_block(CodegenContext &ctx, const char *name)
+static const OutputBlock *find_named_block(CodegenCtxPass1 &ctx, const char *name)
 {
     for (size_t i = 0; i < ctx.blocks.size(); ++i) {
         const OutputBlock *b = ctx.blocks[i];
@@ -92,7 +92,7 @@ static const OutputBlock *find_named_block(CodegenContext &ctx, const char *name
     return NULL;
 }
 
-static void gen_state_goto(CodegenContext &ctx, Code *code)
+static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
 {
     const opt_t *opts = ctx.globopts; // whole-program options
     Scratchbuf &o = ctx.scratchbuf;
@@ -384,45 +384,27 @@ static void gen_cond_table(Scratchbuf &o, code_alc_t &alc, Code *code,
     code->block.fmt = CodeBlock::RAW;
 }
 
-static void gen_label(Scratchbuf &o, const opt_t *opts, Code *code)
-{
-    DASSERT(code->kind == Code::LABEL);
-    CodeLabel *label = &code->label;
-
-    if (label->kind == CodeLabel::SLABEL) {
-        code->kind = Code::TEXT_RAW;
-        code->text = o.cstr(label->slabel).cstr(":").flush();
-    }
-    else if (label->nlabel->used) {
-        code->kind = Code::TEXT_RAW;
-        code->text = o.str(opts->labelPrefix).u32(label->nlabel->index).cstr(":").flush();
-    }
-    else {
-        code->kind = Code::EMPTY;
-    }
-}
-
-static void expand_list(CodegenContext &ctx, CodeList *stmts)
+static void expand_pass_1_list(CodegenCtxPass1 &ctx, CodeList *stmts)
 {
     if (!stmts) return;
     for (Code *x = stmts->head; x; x = x->next) {
-        expand(ctx, x);
+        expand_pass_1(ctx, x);
     }
 }
 
-void expand(CodegenContext &ctx, Code *code)
+void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
 {
     switch (code->kind) {
         case Code::BLOCK:
-            expand_list(ctx, code->block.stmts);
+            expand_pass_1_list(ctx, code->block.stmts);
             break;
         case Code::IF_THEN_ELSE:
-            expand_list(ctx, code->ifte.if_code);
-            expand_list(ctx, code->ifte.else_code);
+            expand_pass_1_list(ctx, code->ifte.if_code);
+            expand_pass_1_list(ctx, code->ifte.else_code);
             break;
         case Code::SWITCH:
             for (CodeCase *x = code->swch.cases->head; x; x = x->next) {
-                expand_list(ctx, x->body);
+                expand_pass_1_list(ctx, x->body);
             }
             break;
         case Code::STAGS:
@@ -459,7 +441,9 @@ void expand(CodegenContext &ctx, Code *code)
             gen_state_goto(ctx, code);
             break;
         case Code::LABEL:
-            gen_label(ctx.scratchbuf, ctx.opts, code);
+            // Do nothing on the first pass (use information is not available
+            // yet, as the rest of the first pass may generate some additional
+            // label uses, e.g. for a block start label in `getstate:re2c`).
             break;
         case Code::EMPTY:
         case Code::FUNC:
@@ -480,6 +464,53 @@ void expand(CodegenContext &ctx, Code *code)
         case Code::LINE_INFO_INPUT:
         case Code::LINE_INFO_OUTPUT:
         case Code::VAR:
+            break;
+    }
+}
+
+static void gen_label(Scratchbuf &o, const opt_t *opts, Code *code)
+{
+    DASSERT(code->kind == Code::LABEL);
+    CodeLabel *label = &code->label;
+
+    if (label->kind == CodeLabel::SLABEL) {
+        code->kind = Code::TEXT_RAW;
+        code->text = o.cstr(label->slabel).cstr(":").flush();
+    } else if (label->nlabel->used) {
+        code->kind = Code::TEXT_RAW;
+        code->text = o.str(opts->labelPrefix).u32(label->nlabel->index).cstr(":").flush();
+    } else {
+        code->kind = Code::EMPTY;
+    }
+}
+
+static void expand_pass_2_list(CodegenCtxPass2 &ctx, CodeList *stmts)
+{
+    if (!stmts) return;
+    for (Code *x = stmts->head; x; x = x->next) {
+        expand_pass_2(ctx, x);
+    }
+}
+
+void expand_pass_2(CodegenCtxPass2 &ctx, Code *code)
+{
+    switch (code->kind) {
+        case Code::BLOCK:
+            expand_pass_2_list(ctx, code->block.stmts);
+            break;
+        case Code::IF_THEN_ELSE:
+            expand_pass_2_list(ctx, code->ifte.if_code);
+            expand_pass_2_list(ctx, code->ifte.else_code);
+            break;
+        case Code::SWITCH:
+            for (CodeCase *x = code->swch.cases->head; x; x = x->next) {
+                expand_pass_2_list(ctx, x->body);
+            }
+            break;
+        case Code::LABEL:
+            gen_label(ctx.scratchbuf, ctx.opts, code);
+            break;
+        default:
             break;
     }
 }

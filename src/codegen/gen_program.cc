@@ -203,11 +203,14 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
 
     fix_first_block_opts(blocks);
 
-    unsigned int line_count = 1;
+    // First code generation pass: expand all delayed code blocks except labels.
+    // Labels need to wait until the next pass because the first pass may add
+    // transitions to previously unused labels (e.g. start label of a block that
+    // is specified in a `getstate:re2c` directive).
     for (unsigned int j = 0; j < blocks.size(); ++j) {
         OutputBlock &b = *blocks[j];
 
-        CodegenContext gctx =
+        CodegenCtxPass1 gctx =
             { allocator
             , scratchbuf
             , b.kind == INPUT_USE ? b.opts : total_opts
@@ -225,8 +228,24 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             , warn_condition_order
             };
 
-        const size_t n = b.fragments.size();
-        for (size_t i = 0; i < n; ++i) {
+        for (size_t i = 0; i < b.fragments.size(); ++i) {
+            expand_pass_1(gctx, b.fragments[i].code);
+        }
+    }
+
+    // Second code generation pass: expand labels, combine/simplify statements,
+    // convert newlines, write the generated code to a file.
+    unsigned int line_count = 1;
+    for (unsigned int j = 0; j < blocks.size(); ++j) {
+        OutputBlock &b = *blocks[j];
+
+        CodegenCtxPass2 gctx =
+            { allocator
+            , scratchbuf
+            , b.opts
+            };
+
+        for (size_t i = 0; i < b.fragments.size(); ++i) {
             OutputFragment &f = b.fragments[i];
             std::ostringstream os;
 
@@ -239,7 +258,7 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
                 , line_count
                 };
 
-            expand(gctx, f.code);
+            expand_pass_2(gctx, f.code);
             combine(gctx, f.code);
             render(rctx, f.code);
             write_converting_newlines(os.str(), file);

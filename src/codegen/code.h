@@ -678,7 +678,7 @@ inline CodeBitmap *code_bitmap(code_alc_t &alc, uint32_t nchars)
 typedef std::vector<OutputBlock *> blocks_t;
 typedef blocks_t::const_iterator blocks_citer_t;
 
-struct CodegenContext {
+struct CodegenCtxPass1 {
     code_alc_t &allocator;
     Scratchbuf &scratchbuf;
     const opt_t *globopts;
@@ -694,6 +694,12 @@ struct CodegenContext {
     const size_t maxnmatch;
     const bool used_yyaccept;
     const bool warn_cond_ord;
+};
+
+struct CodegenCtxPass2 {
+    code_alc_t &allocator;
+    Scratchbuf &scratchbuf;
+    const opt_t *opts;
 };
 
 struct RenderContext {
@@ -797,8 +803,9 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
 const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n);
 void gen_code(Output &output, dfas_t &dfas);
 
-void expand(CodegenContext &ctx, Code *code);
-void combine(CodegenContext &ctx, Code *code);
+void expand_pass_1(CodegenCtxPass1 &ctx, Code *code);
+void expand_pass_2(CodegenCtxPass2 &ctx, Code *code);
+void combine(CodegenCtxPass2 &ctx, Code *code);
 void render(RenderContext &rctx, const Code *code);
 
 bool consume(const State *s);

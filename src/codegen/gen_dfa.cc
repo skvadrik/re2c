@@ -142,8 +142,6 @@ void gen_code(Output &output, dfas_t &dfas)
 
     for (i = b; i != e; ++i) {
         const bool first = i == b;
-        const bool first_state = output.label_counter == 0
-            || (first && oblock.kind == INPUT_USE);
         DFA &dfa = *(*i);
 
         if (first) {
@@ -155,7 +153,6 @@ void gen_code(Output &output, dfas_t &dfas)
                 // Start label is needed in `-f` mode: it points to state 0 (the
                 // beginning of block, before condition dispatch in `-c` mode).
                 dfa.start_label = new_label(alc, output.label_counter++);
-                dfa.start_label->used = first_state;
             }
             oblock.start_label = dfa.start_label;
         }
@@ -240,7 +237,7 @@ void gen_code(Output &output, dfas_t &dfas)
             }
 
             // start label
-            if (dfa.start_label && dfa.start_label->used) {
+            if (dfa.start_label) {
                 append(program1, code_nlabel(alc, dfa.start_label));
             }
 
