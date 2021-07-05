@@ -5,9 +5,9 @@
 
 namespace re2c {
 
-static void combine_code(CodegenContext &ctx, Code *code);
+static void combine_code(CodegenCtxPass2 &ctx, Code *code);
 
-static void combine_list(CodegenContext &ctx, CodeList *stmts)
+static void combine_list(CodegenCtxPass2 &ctx, CodeList *stmts)
 {
     // remove empty statements
     for (Code **px = &stmts->head, *x; (x = *px); ) {
@@ -76,7 +76,7 @@ static void combine_list(CodegenContext &ctx, CodeList *stmts)
     }
 }
 
-void combine_code(CodegenContext &ctx, Code *code)
+void combine_code(CodegenCtxPass2 &ctx, Code *code)
 {
     // don't recurse into other constructs because they have no skip/peek/backup
     if (code->kind == Code::BLOCK) {
@@ -84,7 +84,7 @@ void combine_code(CodegenContext &ctx, Code *code)
     }
 }
 
-void combine(CodegenContext &ctx, Code *code)
+void combine(CodegenCtxPass2 &ctx, Code *code)
 {
     // folding skip/peek/backup expressions is only possible with default input API
     if (ctx.opts->input_api != INPUT_DEFAULT) return;
