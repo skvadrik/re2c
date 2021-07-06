@@ -80,18 +80,6 @@ static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,
     }
 }
 
-static const OutputBlock *find_named_block(CodegenCtxPass1 &ctx, const char *name)
-{
-    for (size_t i = 0; i < ctx.blocks.size(); ++i) {
-        const OutputBlock *b = ctx.blocks[i];
-        if (b->name.compare(name) == 0) return b;
-    }
-
-    error("cannot find block '%s'", name);
-    exit(1);
-    return NULL;
-}
-
 static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
 {
     const opt_t *opts = ctx.globopts; // whole-program options
@@ -116,45 +104,9 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     //
     bool global = (code->block_names == NULL);
 
-    // Generate transition to the start label of the first block in switch.
-    Label *start_label = NULL;
-    if (global) {
-        // Find first block that is not a `use:re2c` block and has a start label
-        // (`re2c:use` blocks are ignored as they have a local state switch).
-        for (size_t i = 0; !start_label && i < ctx.blocks.size(); ++i) {
-            const OutputBlock *b = ctx.blocks[i];
-            if (b->kind != INPUT_USE) {
-                start_label = b->start_label;
-            }
-        }
-    } else {
-        // Find first block with name on the list that has a start label.
-        for (BlockNameList *p = code->block_names; !start_label && p; p = p->next) {
-            const OutputBlock *b = find_named_block(ctx, p->name);
-            start_label = b->start_label;
-        }
-    }
-    DASSERT(start_label != NULL);
-    start_label->used = true;
-
-    CodeList *goto_start = code_list(alc);
-    text = o.cstr("goto ").str(opts->labelPrefix).u32(start_label->index).flush();
-    append(goto_start, code_stmt(alc, text));
-
-    // Generate cases in the state switch.
     CodeCases *cases = code_cases(alc);
-    if (opts->bUseStateAbort) {
-        // default: abort();
-        CodeList *abort = code_list(alc);
-        append(abort, code_stmt(alc, "abort()"));
-        append(cases, code_case_default(alc, abort));
+    Label *start_label = NULL;
 
-        // case -1: goto <start label>;
-        append(cases, code_case_number(alc, goto_start, -1));
-    } else {
-        // default: goto <start label>;
-        append(cases, code_case_default(alc, goto_start));
-    }
     if (global) {
         // No block names are specified: generate a global switch. It includes
         // all blocks except for the `re2c:use` ones which have a local switch.
@@ -162,14 +114,63 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
             const OutputBlock *b = ctx.blocks[i];
             if (b->kind != INPUT_USE) {
                 gen_state_goto_cases(ctx, cases, b);
+
+                // Use start label of the first non-use block that generates code.
+                if (!start_label) start_label = b->start_label;
             }
         }
-    } else {
-        // Generate a switch that covers all specified blocks.
-        for (BlockNameList *p = code->block_names; p; p = p->next) {
-            const OutputBlock *b = find_named_block(ctx, p->name);
-            gen_state_goto_cases(ctx, cases, b);
+        if (!start_label) {
+            // This must be a user-defined directive: the automatic state switch
+            // is generated only when processing the first block that has code.
+            error("none of the blocks in `getstate:re2c` generate any code");
+            exit(1);
         }
+    } else {
+        // Generate a switch for all specified named blocks.
+        for (BlockNameList *p = code->block_names; p; p = p->next) {
+            //  Find block with the specified name.
+            const OutputBlock *b = NULL;
+            for (size_t i = 0; i < ctx.blocks.size(); ++i) {
+                if (ctx.blocks[i]->name.compare(p->name) == 0) {
+                    b = ctx.blocks[i];
+                    break;
+                }
+            }
+            if (!b) {
+                error("cannot find block '%s' listed in `getstate:re2c`"
+                    " directive", p->name);
+                exit(1);
+            } else if (!b->start_label) {
+                error("block '%s' does not generate code, so it should not be"
+                    " listed in `getstate:re2c` directive", p->name);
+                exit(1);
+            }
+
+            gen_state_goto_cases(ctx, cases, b);
+
+            // Use start label of the first block on the list.
+            if (!start_label) start_label = b->start_label;
+        }
+    }
+
+    // This is the use that makes 2nd codegen pass for labels necessary.
+    start_label->used = true;
+
+    CodeList *goto_start = code_list(alc);
+    text = o.cstr("goto ").str(opts->labelPrefix).u32(start_label->index).flush();
+    append(goto_start, code_stmt(alc, text));
+
+    if (opts->bUseStateAbort) {
+        // case -1: goto <start label>;
+        prepend(cases, code_case_number(alc, goto_start, -1));
+
+        // default: abort();
+        CodeList *abort = code_list(alc);
+        append(abort, code_stmt(alc, "abort()"));
+        prepend(cases, code_case_default(alc, abort));
+    } else {
+        // default: goto <start label>;
+        prepend(cases, code_case_default(alc, goto_start));
     }
 
     CodeList *stmts = code_list(alc);
