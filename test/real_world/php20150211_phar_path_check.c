@@ -232,4 +232,4 @@ yy31:
 }
 
 }
-real_world/php20150211_phar_path_check.re:109:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+real_world/php20150211_phar_path_check.re:44:0: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

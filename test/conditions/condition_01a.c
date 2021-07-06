@@ -55,11 +55,11 @@ yy10:
 #line 6 "conditions/condition_01a.re"
 
 conditions/condition_01a.re:3:39: warning: escape has no effect: '\/' [-Wuseless-escape]
-conditions/condition_01a.re:6:2: warning: control flow in condition 'a' is undefined for strings that match 
+conditions/condition_01a.re:2:0: warning: control flow in condition 'a' is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x61\x63-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-conditions/condition_01a.re:6:2: warning: control flow in condition 'b' is undefined for strings that match 
+conditions/condition_01a.re:2:0: warning: control flow in condition 'b' is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x61\x63-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]

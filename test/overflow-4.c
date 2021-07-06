@@ -31,7 +31,7 @@ yy5:
 #line 32 "overflow-4.c"
 }
 #line 7 "overflow-4.re"
-overflow-4.re:7:2: warning: control flow is undefined for strings that match 
+overflow-4.re:2:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x61\x63-\xFF]'
 	'\x62 [\x0-\x6B\x6D-\xFF]'
 	'\x62 \x6C [\x0-\x60\x62-\xFF]'

@@ -26,4 +26,4 @@ yy3:
 }
 #line 4 "conditions/condtype_single_c.re"
 
-conditions/condtype_single_c.re:4:2: warning: control flow in condition 'a' is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+conditions/condtype_single_c.re:2:0: warning: control flow in condition 'a' is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

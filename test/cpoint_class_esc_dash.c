@@ -22,4 +22,4 @@ yy3:
 }
 #line 4 "cpoint_class_esc_dash.re"
 
-cpoint_class_esc_dash.re:4:2: warning: control flow is undefined for strings that match '[\x0-\x2C\x2E-\x60\x62\x64-\xFF]', use default rule '*' [-Wundefined-control-flow]
+cpoint_class_esc_dash.re:2:0: warning: control flow is undefined for strings that match '[\x0-\x2C\x2E-\x60\x62\x64-\xFF]', use default rule '*' [-Wundefined-control-flow]

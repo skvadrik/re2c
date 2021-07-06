@@ -63,7 +63,7 @@ yy3:
 }
 #line 6 "input2_b.re"
 
-input2_b.re:6:2: warning: control flow is undefined for strings that match 
+input2_b.re:2:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x60\x63-\xFF]'
 	'\x61 \x62 [\x0-\x61\x63-\xFF]'

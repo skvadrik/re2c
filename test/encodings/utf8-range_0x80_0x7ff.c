@@ -118,7 +118,7 @@ yy4:
 }
 #line 4 "encodings/utf8-range_0x80_0x7ff.re"
 
-encodings/utf8-range_0x80_0x7ff.re:4:2: warning: control flow is undefined for strings that match 
+encodings/utf8-range_0x80_0x7ff.re:2:0: warning: control flow is undefined for strings that match 
 	'[\x0-\xC1\xE0-\xFF]'
 	'[\xC2-\xDF] [\x0-\x7F\xC0-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]

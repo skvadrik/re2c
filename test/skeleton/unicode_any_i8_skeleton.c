@@ -60,7 +60,7 @@ error:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line5
+static int action_line2
     ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
@@ -78,7 +78,7 @@ static int action_line5
     if (rule_exp == 255) {
         fprintf
             ( stderr
-            , "warning: lex_line5: control flow is undefined"
+            , "warning: lex_line2: control flow is undefined"
                 " for input at position %ld, rerun re2c with '-W'\n"
             , pos
             );
@@ -90,7 +90,7 @@ static int action_line5
     } else {
         fprintf
             ( stderr
-            , "error: lex_line5: at position %ld (key %u):\n"
+            , "error: lex_line2: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
@@ -104,14 +104,14 @@ static int action_line5
     }
 }
 
-static int check_key_count_line5(unsigned have, unsigned used, unsigned need)
+static int check_key_count_line2(unsigned have, unsigned used, unsigned need)
 {
     if (used + need <= have) return 0;
-    fprintf(stderr, "error: lex_line5: not enough keys\n");
+    fprintf(stderr, "error: lex_line2: not enough keys\n");
     return 1;
 }
 
-int lex_line5()
+int lex_line2()
 {
     const size_t padding = 4; /* YYMAXFILL */
     int status = 0;
@@ -126,7 +126,7 @@ int lex_line5()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ( "skeleton/unicode_any_i8_skeleton.c.line5.input"
+        ( "skeleton/unicode_any_i8_skeleton.c.line2.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -137,7 +137,7 @@ int lex_line5()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ( "skeleton/unicode_any_i8_skeleton.c.line5.keys"
+        ( "skeleton/unicode_any_i8_skeleton.c.line2.keys"
         , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -342,14 +342,14 @@ int lex_line5()
         }
 yy2:
         YYSKIP();
-        status = check_key_count_line5(keys_count, i, 3)
-             || action_line5(&i, keys, input, token, &cursor, 0);
+        status = check_key_count_line2(keys_count, i, 3)
+             || action_line2(&i, keys, input, token, &cursor, 0);
         continue;
 yy4:
         YYSKIP();
 yy5:
-        status = check_key_count_line5(keys_count, i, 3)
-             || action_line5(&i, keys, input, token, &cursor, 254);
+        status = check_key_count_line2(keys_count, i, 3)
+             || action_line2(&i, keys, input, token, &cursor, 254);
         continue;
 yy6:
         YYSKIP();
@@ -829,11 +829,11 @@ yy14:
         if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf(stderr, "error: lex_line5: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line2: unused input strings left at position %ld\n", pos);
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line5: unused keys left after %u keys\n", i);
+            fprintf(stderr, "error: lex_line2: unused keys left after %u keys\n", i);
         }
     }
 
@@ -855,7 +855,7 @@ end:
 
 int main()
 {
-    if (lex_line5() != 0) {
+    if (lex_line2() != 0) {
         return 1;
     }
     return 0;

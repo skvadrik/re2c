@@ -6,5 +6,5 @@
 }
 
 bug61_difference_positive_i_empty_class_match_none.re:3:4: warning: empty character class [-Wempty-character-class]
-bug61_difference_positive_i_empty_class_match_none.re:4:2: warning: control flow is undefined for strings that match '', use default rule '*' [-Wundefined-control-flow]
+bug61_difference_positive_i_empty_class_match_none.re:2:0: warning: control flow is undefined for strings that match '', use default rule '*' [-Wundefined-control-flow]
 bug61_difference_positive_i_empty_class_match_none.re:3:10: warning: unreachable rule  [-Wunreachable-rules]

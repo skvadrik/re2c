@@ -21,4 +21,4 @@ yy3:
 }
 #line 4 "bug116.re"
 
-bug116.re:4:2: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+bug116.re:2:0: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

@@ -32,4 +32,4 @@ digraph re2c {
 21 -> 22
 22 [label="dot/bug47_dot_escapes.re:13"]
 }
-dot/bug47_dot_escapes.re:15:2: warning: control flow is undefined for strings that match '[\x0-\x6\xE-\x21\x23-\x26\x28-\x5B\x5D-\xFF]', use default rule '*' [-Wundefined-control-flow]
+dot/bug47_dot_escapes.re:2:0: warning: control flow is undefined for strings that match '[\x0-\x6\xE-\x21\x23-\x26\x28-\x5B\x5D-\xFF]', use default rule '*' [-Wundefined-control-flow]

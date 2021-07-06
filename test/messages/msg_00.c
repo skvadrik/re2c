@@ -15,4 +15,4 @@ yy3:
 	{}
 }
 
-messages/msg_00.re(4,2): warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+messages/msg_00.re(2,0): warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

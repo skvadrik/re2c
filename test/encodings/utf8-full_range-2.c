@@ -1098,7 +1098,7 @@ yy29:
 }
 #line 10 "encodings/utf8-full_range-2.re"
 
-encodings/utf8-full_range-2.re:10:2: warning: control flow is undefined for strings that match 
+encodings/utf8-full_range-2.re:2:0: warning: control flow is undefined for strings that match 
 	'[\x80-\xC1\xF5-\xFF]'
 	'[\xC2-\xDF] [\x0-\x7F\xC0-\xFF]'
 	'\xE0 [\x0-\x9F\xC0-\xFF]'

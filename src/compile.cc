@@ -136,6 +136,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     code_alc_t &alc = output.allocator;
     const loc_t &loc0 = input.tok_loc();
     std::string block_name;
+    loc_t block_loc;
 
     output.header_mode(1);
     output.new_block(opts, INPUT_GLOBAL, block_name, loc0);
@@ -168,11 +169,11 @@ void compile(Scanner &input, Output &output, Opt &opts)
             output.state_goto = false;
         }
         output.cond_goto = false;
+        block_loc = input.tok_loc();
         parse(input, specs, opts, rblocks);
 
         // start new output block with accumulated options
-        const loc_t &loc = input.cur_loc();
-        output.new_block(opts, kind, block_name, loc);
+        output.new_block(opts, kind, block_name, block_loc);
 
         if (kind == INPUT_RULES) {
             // save AST and options for future use
@@ -189,7 +190,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
             // compile DFA to code
             gen_code(output, dfas);
         }
-        output.wdelay_stmt(0, code_line_info_input(alc, loc));
+        output.wdelay_stmt(0, code_line_info_input(alc, input.cur_loc()));
 
         // accumulate whole-program information from this block
         output.gather_info_from_block();

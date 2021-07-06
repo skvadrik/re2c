@@ -20,4 +20,4 @@ yy3:
 }
 #line 4 "encodings/range_dot_e.re"
 
-encodings/range_dot_e.re:4:2: warning: control flow is undefined for strings that match '\x25', use default rule '*' [-Wundefined-control-flow]
+encodings/range_dot_e.re:2:0: warning: control flow is undefined for strings that match '\x25', use default rule '*' [-Wundefined-control-flow]

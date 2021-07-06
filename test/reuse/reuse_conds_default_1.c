@@ -193,4 +193,4 @@ yy45:
 }
 
 }
-reuse/reuse_conds_default_1.re:29:2: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/reuse_conds_default_1.re:25:0: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
