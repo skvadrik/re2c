@@ -311,6 +311,7 @@ bool Scanner::lex_opt_name(std::string &name)
 
 bool Scanner::lex_name_list(code_alc_t &alc, BlockNameList **ptail)
 {
+    BlockNameList **phead = ptail;
 loop:
     tok = cur;
 /*!re2c
@@ -332,6 +333,15 @@ loop:
         l->next = NULL;
         *ptail = l;
         ptail = &l->next;
+
+        // Check that the added name is unique.
+        for (const BlockNameList *p = *phead; p != l; p = p->next) {
+            if (strcmp(p->name, l->name) == 0) {
+                msg.error(cur_loc(), "duplicate block '%s' on the list", p->name);
+                return false;
+            }
+        }
+
         goto loop;
     }
 */
