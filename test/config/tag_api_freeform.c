@@ -384,7 +384,7 @@ config/tag_api_freeform.re:58:25: warning: rule matches empty string [-Wmatch-em
 config/tag_api_freeform.re:59:25: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_freeform.re:57:25: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 config/tag_api_freeform.re:59:25: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_freeform.re:60:2: warning: control flow is undefined for strings that match 
+config/tag_api_freeform.re:54:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x64-\xFF]'
 	'\x63 [\x0-\x62\x64-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
@@ -393,15 +393,15 @@ config/tag_api_freeform.re:67:25: warning: rule matches empty string [-Wmatch-em
 config/tag_api_freeform.re:68:25: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_freeform.re:66:25: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 config/tag_api_freeform.re:68:25: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_freeform.re:69:2: warning: control flow is undefined for strings that match 
+config/tag_api_freeform.re:63:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x64-\xFF]'
 	'\x63 [\x0-\x62\x64-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
 config/tag_api_freeform.re:75:12: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_freeform.re:76:12: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_freeform.re:75:12: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_freeform.re:77:2: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
+config/tag_api_freeform.re:72:0: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
 config/tag_api_freeform.re:83:12: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_freeform.re:84:12: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_freeform.re:83:12: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_freeform.re:85:2: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
+config/tag_api_freeform.re:80:0: warning: control flow is undefined for strings that match '[\x0-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]

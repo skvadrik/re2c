@@ -202,6 +202,6 @@ yy43:
 	}
 
 }
-reuse/repeat-06.re:25:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-reuse/repeat-06.re:40:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-reuse/repeat-06.re:55:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/repeat-06.re:15:2: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/repeat-06.re:30:0: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+reuse/repeat-06.re:45:0: warning: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

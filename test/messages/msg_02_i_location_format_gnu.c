@@ -48,4 +48,4 @@ yy9:
 
 messages/nested/msg_02.re.inc:2:9: warning: range lower bound (0x61) is greater than upper bound (0x5A), swapping [-Wswapped-range]
 messages/nested/msg_02.re.inc:6:11: warning: escape has no effect: '\h' [-Wuseless-escape]
-messages/msg_02_i_location_format_gnu.re:11:2: warning: control flow is undefined for strings that match '[\x0-\x6\x8-\x67\x69-\xFF]', use default rule '*' [-Wundefined-control-flow]
+messages/msg_02_i_location_format_gnu.re:9:0: warning: control flow is undefined for strings that match '[\x0-\x6\x8-\x67\x69-\xFF]', use default rule '*' [-Wundefined-control-flow]

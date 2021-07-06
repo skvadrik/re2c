@@ -54,11 +54,11 @@ yy10:
 }
 #line 6 "conditions/condition_01.re"
 
-conditions/condition_01.re:6:2: warning: control flow in condition 'a' is undefined for strings that match 
+conditions/condition_01.re:2:0: warning: control flow in condition 'a' is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x61\x63-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-conditions/condition_01.re:6:2: warning: control flow in condition 'b' is undefined for strings that match 
+conditions/condition_01.re:2:0: warning: control flow in condition 'b' is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x61\x63-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]

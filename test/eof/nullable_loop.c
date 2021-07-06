@@ -304,8 +304,8 @@ int main()
 
     return 0;
 }
-eof/nullable_loop.re:19:6: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
-eof/nullable_loop.re:30:6: warning: control flow is undefined for strings that match 
+eof/nullable_loop.re:16:4: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+eof/nullable_loop.re:27:4: warning: control flow is undefined for strings that match 
 	'[\x0-\x9\xB-\x60\x62-\xFF]'
 	'\xA'
 , use default rule '*' [-Wundefined-control-flow]

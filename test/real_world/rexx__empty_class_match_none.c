@@ -6902,7 +6902,7 @@ yy445:
 }
 real_world/rexx__empty_class_match_none.re:254:5: warning: rule matches empty string [-Wmatch-empty-string]
 real_world/rexx__empty_class_match_none.re:289:0: warning: empty character class [-Wempty-character-class]
-real_world/rexx__empty_class_match_none.re:291:2: warning: control flow is undefined for strings that match 
+real_world/rexx__empty_class_match_none.re:276:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x8\xA-\xC\xE-\x1F\x21-\x2E\x30-\xFF]'
 	'\x2F [\x0-\x29\x2B-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]

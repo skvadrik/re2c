@@ -21,4 +21,4 @@ yy5:
 }
 
 }
-casing-flags_i.re:5:2: warning: control flow is undefined for strings that match '[\x0-\x41\x43-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
+casing-flags_i.re:2:0: warning: control flow is undefined for strings that match '[\x0-\x41\x43-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]

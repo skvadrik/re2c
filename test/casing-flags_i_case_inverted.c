@@ -21,4 +21,4 @@ yy5:
 }
 
 }
-casing-flags_i_case_inverted.re:5:2: warning: control flow is undefined for strings that match '[\x0-\x40\x42-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
+casing-flags_i_case_inverted.re:2:0: warning: control flow is undefined for strings that match '[\x0-\x40\x42-\x60\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]

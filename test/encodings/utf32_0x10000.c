@@ -16,4 +16,4 @@ yy3:
 }
 #line 4 "encodings/utf32_0x10000.re"
 
-encodings/utf32_0x10000.re:4:2: warning: control flow is undefined for strings that match '[\x0-\xFFFF\x10001-\x10FFFF]', use default rule '*' [-Wundefined-control-flow]
+encodings/utf32_0x10000.re:2:0: warning: control flow is undefined for strings that match '[\x0-\xFFFF\x10001-\x10FFFF]', use default rule '*' [-Wundefined-control-flow]

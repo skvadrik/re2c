@@ -515,7 +515,7 @@ yy10:
 }
 #line 4 "encodings/range_dot_8.re"
 
-encodings/range_dot_8.re:4:2: warning: control flow is undefined for strings that match 
+encodings/range_dot_8.re:2:0: warning: control flow is undefined for strings that match 
 	'[\xA\x80-\xC1\xF5-\xFF]'
 	'[\xC2-\xDF] [\x0-\x7F\xC0-\xFF]'
 	'\xE0 [\x0-\x9F\xC0-\xFF]'

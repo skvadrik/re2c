@@ -23,4 +23,4 @@ yy5:
 }
 
 }
-config/config11.re:17:2: warning: control flow is undefined for strings that match '[\x0-\x80\x83-\xFF]', use default rule '*' [-Wundefined-control-flow]
+config/config11.re:6:0: warning: control flow is undefined for strings that match '[\x0-\x80\x83-\xFF]', use default rule '*' [-Wundefined-control-flow]

@@ -37,4 +37,4 @@ yy7:
 }
 #line 7 "control_flow_fail.re"
 
-control_flow_fail.re:7:2: warning: control flow is undefined for strings that match '[\x0-\xFF] \x61 [\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+control_flow_fail.re:2:0: warning: control flow is undefined for strings that match '[\x0-\xFF] \x61 [\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
