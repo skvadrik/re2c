@@ -12,8 +12,9 @@ namespace re2c {
 static const OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx,
     const char *name, const char *where)
 {
-    for (size_t i = 0; i < ctx.blocks.size(); ++i) {
-        const OutputBlock *b = ctx.blocks[i];
+    const blocks_t &blocks = ctx.global->blocks;
+    for (size_t i = 0; i < blocks.size(); ++i) {
+        const OutputBlock *b = blocks[i];
         if (b->name.compare(name) == 0) return b;
     }
     error("cannot find block '%s' listed in `%s` directive", name, where);
@@ -83,10 +84,13 @@ static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, Code *code,
 static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,
     const OutputBlock *block)
 {
+    code_alc_t &alc = ctx.global->allocator;
+
     uint32_t index_count = block->fill_index_end - block->fill_index_start;
     DASSERT(index_count <= block->fill_goto.size());
+
     for (uint32_t i = 0; i < index_count; ++i) {
-        append(cases, code_case_number(ctx.allocator, block->fill_goto[i],
+        append(cases, code_case_number(alc, block->fill_goto[i],
             static_cast<int32_t>(i + block->fill_index_start)));
     }
 }
@@ -94,8 +98,8 @@ static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,
 static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
 {
     const opt_t *opts = ctx.globopts; // whole-program options
-    Scratchbuf &o = ctx.scratchbuf;
-    code_alc_t &alc = ctx.allocator;
+    Scratchbuf &o = ctx.global->scratchbuf;
+    code_alc_t &alc = ctx.global->allocator;
     const char *text;
 
     // There are two possibilities:
@@ -121,8 +125,9 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     if (global) {
         // No block names are specified: generate a global switch. It includes
         // all blocks except for the `re2c:use` ones which have a local switch.
-        for (size_t i = 0; i < ctx.blocks.size(); ++i) {
-            const OutputBlock *b = ctx.blocks[i];
+        const blocks_t &blocks = ctx.global->blocks;
+        for (size_t i = 0; i < blocks.size(); ++i) {
+            const OutputBlock *b = blocks[i];
             if (b->kind != INPUT_USE) {
                 gen_state_goto_cases(ctx, cases, b);
 
@@ -217,7 +222,7 @@ static void gen_yyaccept_def(const opt_t *opts, Code *code, bool used_yyaccept)
 static void gen_yymaxfill(CodegenCtxPass1 &ctx, Code *code)
 {
     const opt_t *opts = ctx.opts;
-    Scratchbuf &o = ctx.scratchbuf;
+    Scratchbuf &o = ctx.global->scratchbuf;
 
     if (opts->target != TARGET_CODE) {
         code->kind = Code::EMPTY;
@@ -227,7 +232,7 @@ static void gen_yymaxfill(CodegenCtxPass1 &ctx, Code *code)
     size_t max_fill;
     if (code->block_names == NULL) {
         // Global maximum in the file.
-        max_fill = ctx.global_max_fill;
+        max_fill = ctx.global->max_fill;
     } else {
         // Maximum among the blocks listed in the directive.
         max_fill = 0;
@@ -253,7 +258,7 @@ static void gen_yymaxfill(CodegenCtxPass1 &ctx, Code *code)
 static void gen_yymaxnmatch(CodegenCtxPass1 &ctx, Code *code)
 {
     const opt_t *opts = ctx.opts;
-    Scratchbuf &o = ctx.scratchbuf;
+    Scratchbuf &o = ctx.global->scratchbuf;
 
     if (opts->target != TARGET_CODE) {
         code->kind = Code::EMPTY;
@@ -263,7 +268,7 @@ static void gen_yymaxnmatch(CodegenCtxPass1 &ctx, Code *code)
     size_t max_nmatch;
     if (code->block_names == NULL) {
         // Global maximum in the file.
-        max_nmatch = ctx.global_max_nmatch;
+        max_nmatch = ctx.global->max_nmatch;
     } else {
         // Maximum among the blocks listed in the directive.
         max_nmatch = 0;
@@ -429,6 +434,10 @@ static void expand_pass_1_list(CodegenCtxPass1 &ctx, CodeList *stmts)
 
 void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
 {
+    const opt_t *opts = ctx.opts;
+    Scratchbuf &buf = ctx.global->scratchbuf;
+    code_alc_t &alc = ctx.global->allocator;
+
     switch (code->kind) {
         case Code::BLOCK:
             expand_pass_1_list(ctx, code->block.stmts);
@@ -443,10 +452,10 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             }
             break;
         case Code::STAGS:
-            gen_tags(ctx.scratchbuf, ctx.opts, code, ctx.allstags);
+            gen_tags(buf, opts, code, ctx.global->stags);
             break;
         case Code::MTAGS:
-            gen_tags(ctx.scratchbuf, ctx.opts, code, ctx.allmtags);
+            gen_tags(buf, opts, code, ctx.global->mtags);
             break;
         case Code::YYMAXFILL:
             gen_yymaxfill(ctx, code);
@@ -455,22 +464,20 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             gen_yymaxnmatch(ctx, code);
             break;
         case Code::YYCH:
-            gen_yych_decl(ctx.opts, code);
+            gen_yych_decl(opts, code);
             break;
         case Code::YYACCEPT:
-            gen_yyaccept_def(ctx.opts, code, ctx.used_yyaccept);
+            gen_yyaccept_def(opts, code, ctx.used_yyaccept);
             break;
         case Code::COND_ENUM:
-            gen_cond_enum(ctx.scratchbuf, ctx.allocator, code, ctx.globopts,
-                ctx.allcondnames);
+            gen_cond_enum(buf, alc, code, ctx.globopts, ctx.global->conditions);
             break;
         case Code::COND_GOTO:
-            gen_cond_goto(ctx.scratchbuf, ctx.allocator, code, ctx.condnames,
-                ctx.opts, ctx.msg, ctx.warn_cond_ord, ctx.loc);
+            gen_cond_goto(buf, alc, code, ctx.conditions, opts, ctx.global->msg,
+                ctx.global->warn_cond_ord, ctx.loc);
             break;
         case Code::COND_TABLE:
-            gen_cond_table(ctx.scratchbuf, ctx.allocator, code, ctx.condnames,
-                ctx.opts);
+            gen_cond_table(buf, alc, code, ctx.conditions, opts);
             break;
         case Code::STATE_GOTO:
             gen_state_goto(ctx, code);
