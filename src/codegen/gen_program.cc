@@ -181,25 +181,20 @@ void Output::gather_info_from_block()
     total_fill_index = b->fill_index_end;
 }
 
-static void fix_first_block_opts(blocks_t &blocks)
+static void fix_first_block_opts(const blocks_t &blocks)
 {
     // If the initial block contains only whitespace and no user code,
     // then re2c options specified in the first re2c block are also
     // applied to the initial block.
     if (blocks.size() >= 2) {
-        OutputBlock *fst = blocks[0], *snd = blocks[1];
+        const OutputBlock *fst = blocks[0], *snd = blocks[1];
         if (!fst->have_user_code) {
             *const_cast<opt_t*>(fst->opts) = *snd->opts;
         }
     }
 }
 
-bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
-    const uniq_vector_t<std::string> &global_types,
-    const std::set<std::string> &global_stags,
-    const std::set<std::string> &global_mtags,
-    size_t global_max_fill,
-    size_t global_max_nmatch)
+bool Output::emit_blocks(const std::string &fname, const CodegenCtxGlobal &globalctx)
 {
     FILE *file = NULL, *temp = NULL;
     std::string filename = fname, tempname = fname;
@@ -217,20 +212,9 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     }
     filename = escape_backslashes(filename);
 
-    fix_first_block_opts(blocks);
+    const blocks_t &blocks = *globalctx.pblocks;
 
-    const CodegenCtxGlobal globalctx =
-        { allocator
-        , scratchbuf
-        , msg
-        , blocks
-        , global_types
-        , global_stags
-        , global_mtags
-        , global_max_fill
-        , global_max_nmatch
-        , warn_condition_order
-        };
+    fix_first_block_opts(blocks);
 
     // First code generation pass: expand all delayed code blocks except labels.
     // Labels need to wait until the next pass because the first pass may add
@@ -295,42 +279,46 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     return true;
 }
 
-static void add_symbols(const OutputBlock &block,
-    uniq_vector_t<std::string> &conds,
-    std::set<std::string> &stags,
-    std::set<std::string> &mtags,
-    size_t &max_fill,
-    size_t &max_nmatch)
+static void add_symbols(const OutputBlock &block, CodegenCtxGlobal &ctx)
 {
     DASSERT(!block.name.empty());
 
     const std::vector<std::string> &cs = block.types;
     for (size_t j = 0; j < cs.size(); ++j) {
-        conds.find_or_add(cs[j]);
+        ctx.conditions.find_or_add(cs[j]);
     }
 
     const std::set<std::string> &st = block.stags, &mt = block.mtags;
-    stags.insert(st.begin(), st.end());
-    mtags.insert(mt.begin(), mt.end());
+    ctx.stags.insert(st.begin(), st.end());
+    ctx.mtags.insert(mt.begin(), mt.end());
 
-    max_fill = std::max(max_fill, block.max_fill);
-    max_nmatch = std::max(max_nmatch, block.max_nmatch);
+    ctx.max_fill = std::max(ctx.max_fill, block.max_fill);
+    ctx.max_nmatch = std::max(ctx.max_nmatch, block.max_nmatch);
 }
 
 bool Output::emit()
 {
     if (msg.warn.error()) return false;
 
-    // gather global lists of conditions and tags
-    uniq_vector_t<std::string> conds;
-    std::set<std::string> stags, mtags;
-    size_t max_fill = 0;
-    size_t max_nmatch = 0;
+    CodegenCtxGlobal ctx =
+        { allocator
+        , scratchbuf
+        , msg
+        , /*pblocks*/ NULL
+        , /*conditions*/ uniq_vector_t<std::string>()
+        , /*stags*/ std::set<std::string>()
+        , /*mtags*/ std::set<std::string>()
+        , /*max_fill*/ 1
+        , /*max_nmatch*/ 1
+        , warn_condition_order
+        };
+
+    // gather global data accumulated across all blocks and files
     for (uint32_t i = 0; i < cblocks.size(); ++i) {
-        add_symbols (*cblocks[i], conds, stags, mtags, max_fill, max_nmatch);
+        add_symbols (*cblocks[i], ctx);
     }
     for (uint32_t i = 0; i < hblocks.size(); ++i) {
-        add_symbols (*hblocks[i], conds, stags, mtags, max_fill, max_nmatch);
+        add_symbols (*hblocks[i], ctx);
     }
 
     // global options are last block's options
@@ -340,20 +328,20 @@ bool Output::emit()
     // emit .h file
     if (!opts->header_file.empty() || need_header) {
         // old-style -t, --type-headers usage implies condition generation
-        if (!conds.empty() && !this->cond_enum_in_hdr) {
+        if (!ctx.conditions.empty() && !this->cond_enum_in_hdr) {
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
             wdelay_stmt(0, code_cond_enum(allocator, NULL));
             header_mode(false);
         }
 
-        ok &= emit_blocks(opts->header_file, hblocks, conds, stags, mtags,
-            max_fill, max_nmatch);
+        ctx.pblocks = &hblocks;
+        ok &= emit_blocks(opts->header_file, ctx);
     }
 
     // emit .c file
-    ok &= emit_blocks(opts->output_file, cblocks, conds, stags, mtags,
-        max_fill, max_nmatch);
+    ctx.pblocks = &cblocks;
+    ok &= emit_blocks(opts->output_file, ctx);
 
     return ok;
 }

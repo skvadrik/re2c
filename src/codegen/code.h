@@ -682,12 +682,12 @@ struct CodegenCtxGlobal {
     code_alc_t &allocator;
     Scratchbuf &scratchbuf;
     Msg &msg;
-    const blocks_t &blocks;
-    const uniq_vector_t<std::string> &conditions;
-    const std::set<std::string> &stags;
-    const std::set<std::string> &mtags;
-    const size_t max_fill;
-    const size_t max_nmatch;
+    const blocks_t *pblocks;
+    uniq_vector_t<std::string> conditions;
+    std::set<std::string> stags;
+    std::set<std::string> mtags;
+    size_t max_fill;
+    size_t max_nmatch;
     const bool warn_cond_ord;
 };
 
@@ -785,12 +785,7 @@ public:
     void wversion_time ();
     void wdelay_stmt(uint32_t ind, Code *code);
     bool emit();
-    bool emit_blocks(const std::string &fname, blocks_t &blocks,
-        const uniq_vector_t<std::string> &global_types,
-        const std::set<std::string> &global_stags,
-        const std::set<std::string> &global_mtags,
-        size_t global_max_fill,
-        size_t global_max_nmatch);
+    bool emit_blocks(const std::string &fname, const CodegenCtxGlobal &globalctx);
     FORBID_COPY (Output);
 };
 

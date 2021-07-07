@@ -12,7 +12,7 @@ namespace re2c {
 static const OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx,
     const char *name, const char *where)
 {
-    const blocks_t &blocks = ctx.global->blocks;
+    const blocks_t &blocks = *ctx.global->pblocks;
     for (size_t i = 0; i < blocks.size(); ++i) {
         const OutputBlock *b = blocks[i];
         if (b->name.compare(name) == 0) return b;
@@ -125,7 +125,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     if (global) {
         // No block names are specified: generate a global switch. It includes
         // all blocks except for the `re2c:use` ones which have a local switch.
-        const blocks_t &blocks = ctx.global->blocks;
+        const blocks_t &blocks = *ctx.global->pblocks;
         for (size_t i = 0; i < blocks.size(); ++i) {
             const OutputBlock *b = blocks[i];
             if (b->kind != INPUT_USE) {
