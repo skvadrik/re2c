@@ -678,22 +678,29 @@ inline CodeBitmap *code_bitmap(code_alc_t &alc, uint32_t nchars)
 typedef std::vector<OutputBlock *> blocks_t;
 typedef blocks_t::const_iterator blocks_citer_t;
 
-struct CodegenCtxPass1 {
+struct CodegenCtxGlobal {
     code_alc_t &allocator;
     Scratchbuf &scratchbuf;
+    Msg &msg;
+    const blocks_t &blocks;
+    const uniq_vector_t<std::string> &conditions;
+    const std::set<std::string> &stags;
+    const std::set<std::string> &mtags;
+    const size_t max_fill;
+    const size_t max_nmatch;
+    const bool warn_cond_ord;
+};
+
+struct CodegenCtxPass1 {
+    // global part
+    const CodegenCtxGlobal *global;
+
+    // block-local part
     const opt_t *globopts;
     const opt_t *opts;
-    Msg &msg;
     const loc_t &loc;
-    const blocks_t &blocks;
-    const uniq_vector_t<std::string> &allcondnames;
-    const std::set<std::string> &allstags;
-    const std::set<std::string> &allmtags;
-    const std::vector<std::string> &condnames;
-    const size_t global_max_fill;
-    const size_t global_max_nmatch;
+    const std::vector<std::string> &conditions;
     const bool used_yyaccept;
-    const bool warn_cond_ord;
 };
 
 struct CodegenCtxPass2 {

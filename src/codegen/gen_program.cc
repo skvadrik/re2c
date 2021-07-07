@@ -219,6 +219,19 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
 
     fix_first_block_opts(blocks);
 
+    const CodegenCtxGlobal globalctx =
+        { allocator
+        , scratchbuf
+        , msg
+        , blocks
+        , global_types
+        , global_stags
+        , global_mtags
+        , global_max_fill
+        , global_max_nmatch
+        , warn_condition_order
+        };
+
     // First code generation pass: expand all delayed code blocks except labels.
     // Labels need to wait until the next pass because the first pass may add
     // transitions to previously unused labels (e.g. start label of a block that
@@ -227,21 +240,12 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
         OutputBlock &b = *blocks[j];
 
         CodegenCtxPass1 gctx =
-            { allocator
-            , scratchbuf
+            { &globalctx
             , b.kind == INPUT_USE ? b.opts : total_opts
             , b.opts
-            , msg
             , b.loc
-            , blocks
-            , global_types
-            , global_stags
-            , global_mtags
             , b.types
-            , global_max_fill
-            , global_max_nmatch
             , b.used_yyaccept
-            , warn_condition_order
             };
 
         for (size_t i = 0; i < b.fragments.size(); ++i) {
