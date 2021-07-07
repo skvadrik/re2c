@@ -54,8 +54,9 @@ static std::string make_name(Output &output, const std::string &cond, const loc_
 
 static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 {
-    const opt_t *opts = output.block().opts;
-    const loc_t &loc = output.block().loc;
+    OutputBlock &block = output.block();
+    const opt_t *opts = block.opts;
+    const loc_t &loc = block.loc;
     Msg &msg = output.msg;
     const std::vector<ASTRule> &rules = spec.rules;
     const std::string
@@ -116,15 +117,11 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     adfa->prepare(opts);
     DDUMP_ADFA(opts, *adfa);
 
-    // finally gather overall DFA statistics
-    adfa->calc_stats(output.block());
-
-    // accumulate global statistics from this particular DFA
-    output.max_fill = std::max(output.max_fill, adfa->max_fill);
+    // gather overall DFA statistics and add it to the output block
+    adfa->calc_stats(block);
+    block.max_fill = std::max(block.max_fill, adfa->max_fill);
     output.max_nmatch = std::max(output.max_nmatch, adfa->max_nmatch);
-    if (adfa->need_accept) {
-        output.block().used_yyaccept = true;
-    }
+    block.used_yyaccept = block.used_yyaccept || adfa->need_accept;
 
     return make_smart_ptr(adfa);
 }

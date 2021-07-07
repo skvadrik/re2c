@@ -9,6 +9,17 @@
 
 namespace re2c {
 
+static const OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx,
+    const char *name, const char *where)
+{
+    for (size_t i = 0; i < ctx.blocks.size(); ++i) {
+        const OutputBlock *b = ctx.blocks[i];
+        if (b->name.compare(name) == 0) return b;
+    }
+    error("cannot find block '%s' listed in `%s` directive", name, where);
+    return NULL;
+}
+
 void gen_tags(Scratchbuf &o, const opt_t *opts, Code *code,
     const std::set<std::string> &tags)
 {
@@ -128,19 +139,9 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     } else {
         // Generate a switch for all specified named blocks.
         for (BlockNameList *p = code->block_names; p; p = p->next) {
-            //  Find block with the specified name.
-            const OutputBlock *b = NULL;
-            for (size_t i = 0; i < ctx.blocks.size(); ++i) {
-                if (ctx.blocks[i]->name.compare(p->name) == 0) {
-                    b = ctx.blocks[i];
-                    break;
-                }
-            }
-            if (!b) {
-                error("cannot find block '%s' listed in `getstate:re2c`"
-                    " directive", p->name);
-                exit(1);
-            } else if (!b->start_label) {
+            const OutputBlock *b = find_block_with_name(ctx, p->name, "getstate:re2c");
+            if (!b) exit(1);
+            if (!b->start_label) {
                 error("block '%s' does not generate code, so it should not be"
                     " listed in `getstate:re2c` directive", p->name);
                 exit(1);
@@ -213,21 +214,38 @@ static void gen_yyaccept_def(const opt_t *opts, Code *code, bool used_yyaccept)
     }
 }
 
-static void gen_yymaxfill(Scratchbuf &o, const opt_t *opts, Code *code, size_t maxfill)
+static void gen_yymaxfill(CodegenCtxPass1 &ctx, Code *code)
 {
+    const opt_t *opts = ctx.opts;
+    Scratchbuf &o = ctx.scratchbuf;
+
     if (opts->target != TARGET_CODE) {
         code->kind = Code::EMPTY;
         return;
     }
 
+    size_t max_fill;
+    if (code->block_names == NULL) {
+        // Global maximum in the file.
+        max_fill = ctx.global_max_fill;
+    } else {
+        // Maximum among the blocks listed in the directive.
+        max_fill = 0;
+        for (BlockNameList *p = code->block_names; p; p = p->next) {
+            const OutputBlock *b = find_block_with_name(ctx, p->name, "max:re2c");
+            if (!b) exit(1);
+            max_fill = std::max(max_fill, b->max_fill);
+        }
+    }
+
     switch (opts->lang) {
         case LANG_C:
             code->kind = Code::TEXT;
-            code->text = o.cstr("#define YYMAXFILL ").u64(maxfill).flush();
+            code->text = o.cstr("#define YYMAXFILL ").u64(max_fill).flush();
             break;
         case LANG_GO:
             code->kind = Code::STMT;
-            code->text = o.cstr("var YYMAXFILL int = ").u64(maxfill).flush();
+            code->text = o.cstr("var YYMAXFILL int = ").u64(max_fill).flush();
             break;
     }
 }
@@ -415,7 +433,7 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             gen_tags(ctx.scratchbuf, ctx.opts, code, ctx.allmtags);
             break;
         case Code::YYMAXFILL:
-            gen_yymaxfill(ctx.scratchbuf, ctx.opts, code, ctx.maxfill);
+            gen_yymaxfill(ctx, code);
             break;
         case Code::YYMAXNMATCH:
             gen_yymaxnmatch(ctx.scratchbuf, ctx.opts, code, ctx.maxnmatch);

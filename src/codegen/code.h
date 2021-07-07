@@ -690,7 +690,7 @@ struct CodegenCtxPass1 {
     const std::set<std::string> &allstags;
     const std::set<std::string> &allmtags;
     const std::vector<std::string> &condnames;
-    const size_t maxfill;
+    const size_t global_max_fill;
     const size_t maxnmatch;
     const bool used_yyaccept;
     const bool warn_cond_ord;
@@ -728,6 +728,8 @@ struct OutputBlock {
     std::set<std::string> mtags;
     const opt_t *opts;
 
+    size_t max_fill; // YYMAXFILL
+
     // Used in the state switch (with `-f --storable-state` option).
     Label *start_label;        // label of the DFA start state
     uint32_t fill_index_start; // start of YYFILL index range
@@ -753,7 +755,6 @@ public:
     bool need_header;
     Msg &msg;
     std::set<std::string> skeletons;
-    size_t max_fill;
     size_t max_nmatch;
     code_alc_t allocator;
     Scratchbuf scratchbuf;
@@ -780,7 +781,8 @@ public:
     bool emit_blocks(const std::string &fname, blocks_t &blocks,
         const uniq_vector_t<std::string> &global_types,
         const std::set<std::string> &global_stags,
-        const std::set<std::string> &global_mtags);
+        const std::set<std::string> &global_mtags,
+        size_t max_fill);
     FORBID_COPY (Output);
 };
 
