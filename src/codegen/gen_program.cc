@@ -57,6 +57,7 @@ OutputBlock::OutputBlock(InputBlockKind kind, const std::string &name,
     , mtags()
     , opts(NULL)
     , max_fill(1)
+    , max_nmatch(1)
     , start_label(NULL)
     , fill_index_start(0)
     , fill_index_end(0)
@@ -80,7 +81,6 @@ Output::Output(Msg &msg)
     , need_header(false)
     , msg(msg)
     , skeletons()
-    , max_nmatch(1)
     , allocator()
     , scratchbuf(allocator)
     , total_fill_index(0)
@@ -198,7 +198,8 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     const uniq_vector_t<std::string> &global_types,
     const std::set<std::string> &global_stags,
     const std::set<std::string> &global_mtags,
-    size_t global_max_fill)
+    size_t global_max_fill,
+    size_t global_max_nmatch)
 {
     FILE *file = NULL, *temp = NULL;
     std::string filename = fname, tempname = fname;
@@ -238,7 +239,7 @@ bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
             , global_mtags
             , b.types
             , global_max_fill
-            , max_nmatch
+            , global_max_nmatch
             , b.used_yyaccept
             , warn_condition_order
             };
@@ -294,7 +295,8 @@ static void add_symbols(const OutputBlock &block,
     uniq_vector_t<std::string> &conds,
     std::set<std::string> &stags,
     std::set<std::string> &mtags,
-    size_t &max_fill)
+    size_t &max_fill,
+    size_t &max_nmatch)
 {
     DASSERT(!block.name.empty());
 
@@ -308,6 +310,7 @@ static void add_symbols(const OutputBlock &block,
     mtags.insert(mt.begin(), mt.end());
 
     max_fill = std::max(max_fill, block.max_fill);
+    max_nmatch = std::max(max_nmatch, block.max_nmatch);
 }
 
 bool Output::emit()
@@ -318,11 +321,12 @@ bool Output::emit()
     uniq_vector_t<std::string> conds;
     std::set<std::string> stags, mtags;
     size_t max_fill = 0;
+    size_t max_nmatch = 0;
     for (uint32_t i = 0; i < cblocks.size(); ++i) {
-        add_symbols (*cblocks[i], conds, stags, mtags, max_fill);
+        add_symbols (*cblocks[i], conds, stags, mtags, max_fill, max_nmatch);
     }
     for (uint32_t i = 0; i < hblocks.size(); ++i) {
-        add_symbols (*hblocks[i], conds, stags, mtags, max_fill);
+        add_symbols (*hblocks[i], conds, stags, mtags, max_fill, max_nmatch);
     }
 
     // global options are last block's options
@@ -339,11 +343,13 @@ bool Output::emit()
             header_mode(false);
         }
 
-        ok &= emit_blocks(opts->header_file, hblocks, conds, stags, mtags, max_fill);
+        ok &= emit_blocks(opts->header_file, hblocks, conds, stags, mtags,
+            max_fill, max_nmatch);
     }
 
     // emit .c file
-    ok &= emit_blocks(opts->output_file, cblocks, conds, stags, mtags, max_fill);
+    ok &= emit_blocks(opts->output_file, cblocks, conds, stags, mtags,
+        max_fill, max_nmatch);
 
     return ok;
 }

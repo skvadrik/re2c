@@ -120,7 +120,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     // gather overall DFA statistics and add it to the output block
     adfa->calc_stats(block);
     block.max_fill = std::max(block.max_fill, adfa->max_fill);
-    output.max_nmatch = std::max(output.max_nmatch, adfa->max_nmatch);
+    block.max_nmatch = std::max(block.max_nmatch, adfa->max_nmatch);
     block.used_yyaccept = block.used_yyaccept || adfa->need_accept;
 
     return make_smart_ptr(adfa);
