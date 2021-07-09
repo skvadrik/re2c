@@ -21,25 +21,52 @@ static const OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx,
     return NULL;
 }
 
-void gen_tags(Scratchbuf &o, const opt_t *opts, Code *code,
-    const std::set<std::string> &tags)
+void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &tags)
 {
     DASSERT(code->kind == Code::STAGS || code->kind == Code::MTAGS);
 
     const char *fmt = code->tags.fmt;
     const char *sep = code->tags.sep;
 
-    std::set<std::string>::const_iterator tag = tags.begin(), end = tags.end();
+    tagnames_t::const_iterator tag = tags.begin(), end = tags.end();
     for (; tag != end; ) {
         std::ostringstream s(fmt);
         argsubst(s, opts->api_sigil, "tag", true, *tag);
-        o.str(s.str());
+        buf.str(s.str());
         if (++tag == end) break;
-        o.cstr(sep);
+        buf.cstr(sep);
     }
     code->kind = Code::RAW;
-    code->raw.size = o.stream().str().length();
-    code->raw.data = o.flush();
+    code->raw.size = buf.stream().str().length();
+    code->raw.data = buf.flush();
+}
+
+static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
+{
+    DASSERT(code->kind == Code::STAGS || code->kind == Code::MTAGS);
+
+    Scratchbuf &buf = ctx.global->scratchbuf;
+    bool oneval = (code->kind == Code::STAGS);
+
+    if (code->tags.block_names == NULL) {
+        // Use the global set of tags accumulated from all blocks.
+        gen_tags(buf, ctx.opts, code,
+            oneval ? ctx.global->stags : ctx.global->mtags);
+    } else {
+        // Gather tags from the blocks on the list.
+        const char *directive = oneval ? "stags:re2c" : "mtags:re2c";
+        tagnames_t tags;
+        for (BlockNameList *p = code->tags.block_names; p; p = p->next) {
+            const OutputBlock *b = find_block_with_name(ctx, p->name, directive);
+            if (!b) exit(1);
+            if (oneval) {
+                tags.insert(b->stags.begin(), b->stags.end());
+            } else {
+                tags.insert(b->mtags.begin(), b->mtags.end());
+            }
+        }
+        gen_tags(buf, ctx.opts, code, tags);
+    }
 }
 
 static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, Code *code,
@@ -422,10 +449,8 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             }
             break;
         case Code::STAGS:
-            gen_tags(buf, opts, code, ctx.global->stags);
-            break;
         case Code::MTAGS:
-            gen_tags(buf, opts, code, ctx.global->mtags);
+            expand_tags_directive(ctx, code);
             break;
         case Code::YYMAX:
             gen_yymax(ctx, code);

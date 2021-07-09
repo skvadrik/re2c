@@ -289,7 +289,7 @@ static void add_symbols(const OutputBlock &block, CodegenCtxGlobal &ctx)
         ctx.conditions.find_or_add(cs[j]);
     }
 
-    const std::set<std::string> &st = block.stags, &mt = block.mtags;
+    const tagnames_t &st = block.stags, &mt = block.mtags;
     ctx.stags.insert(st.begin(), st.end());
     ctx.mtags.insert(mt.begin(), mt.end());
 
@@ -307,8 +307,8 @@ bool Output::emit()
         , msg
         , /*pblocks*/ NULL
         , /*conditions*/ uniq_vector_t<std::string>()
-        , /*stags*/ std::set<std::string>()
-        , /*mtags*/ std::set<std::string>()
+        , /*stags*/ tagnames_t()
+        , /*mtags*/ tagnames_t()
         , /*max_fill*/ 1
         , /*max_nmatch*/ 1
         , warn_condition_order

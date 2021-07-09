@@ -679,6 +679,7 @@ inline CodeBitmap *code_bitmap(code_alc_t &alc, uint32_t nchars)
 
 typedef std::vector<OutputBlock *> blocks_t;
 typedef blocks_t::const_iterator blocks_citer_t;
+typedef std::set<std::string> tagnames_t;
 
 struct CodegenCtxGlobal {
     code_alc_t &allocator;
@@ -686,8 +687,8 @@ struct CodegenCtxGlobal {
     Msg &msg;
     const blocks_t *pblocks;
     uniq_vector_t<std::string> conditions;
-    std::set<std::string> stags;
-    std::set<std::string> mtags;
+    tagnames_t stags;
+    tagnames_t mtags;
     size_t max_fill;
     size_t max_nmatch;
     const bool warn_cond_ord;
@@ -733,8 +734,8 @@ struct OutputBlock {
     bool used_yyaccept;
     bool have_user_code;
     std::vector<std::string> types;
-    std::set<std::string> stags;
-    std::set<std::string> mtags;
+    tagnames_t stags;
+    tagnames_t mtags;
     const opt_t *opts;
 
     size_t max_fill;   // YYMAXFILL
@@ -801,8 +802,7 @@ CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap);
 
 void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
     CodeList *stmts);
-void gen_tags(Scratchbuf &o, const opt_t *opts, Code *code,
-    const std::set<std::string> &tags);
+void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &tags);
 void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts);
 void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t tcid,
     bool delayed);
