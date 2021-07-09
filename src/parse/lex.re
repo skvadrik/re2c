@@ -168,17 +168,14 @@ loop:
     "/*!max:re2c" {
         out.wraw(tok, ptr);
         if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
-        out.wdelay_stmt(0, code_yymaxfill(alc, block_list));
-        // historically allows garbage before the end of the comment
-        if (!lex_end_of_block(out, true)) return INPUT_ERROR;
+        if (!lex_max(out, MAX_FILL, block_list)) return INPUT_ERROR;
         goto next;
     }
 
     "/*!maxnmatch:re2c" {
         out.wraw(tok, ptr);
         if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
-        if (!lex_end_of_block(out)) return INPUT_ERROR;
-        out.wdelay_stmt(0, code_yymaxnmatch(alc, block_list));
+        if (!lex_max(out, MAX_NMATCH, block_list)) return INPUT_ERROR;
         goto next;
     }
 
@@ -358,14 +355,35 @@ loop:
             " whitespaces followed by `*" "/`");
         return false;
     }
-    space { goto loop; }
-    eol   { next_line(); multiline = true; goto loop; }
-    eoc   {
-        if (multiline) {
-            out.wdelay_stmt(0, code_line_info_input(out.allocator, cur_loc()));
-        }
+    eoc {
+        if (multiline) out.wdelay_stmt(0, code_line_info_input(out.allocator, cur_loc()));
         return true;
     }
+    space+ { goto loop; }
+    eol    { next_line(); multiline = true; goto loop; }
+*/
+}
+
+bool Scanner::lex_max(Output &out, MaxDirectiveKind kind, BlockNameList *blocks)
+{
+    code_alc_t &alc = out.allocator;
+    bool multiline = false;
+    const char *format = NULL;
+loop:
+/*!re2c
+    * {
+        msg.error(cur_loc(), "ill-formed directive: expected an optional "
+            "configuration 'format' followed by the end of block `*" "/`");
+        return false;
+    }
+    eoc {
+        out.wdelay_stmt(0, code_yymax(alc, kind, blocks, format));
+        if (multiline) out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
+        return true;
+    }
+    "format" { format = copystr(lex_conf_string(), alc); goto loop; }
+    space+   { goto loop; }
+    eol      { next_line(); multiline = true; goto loop; }
 */
 }
 

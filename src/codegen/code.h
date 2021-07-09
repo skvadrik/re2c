@@ -273,6 +273,12 @@ struct CodeTags {
     BlockNameList *block_names;
 };
 
+struct CodeMax {
+    MaxDirectiveKind  kind;
+    const char       *format;
+    BlockNameList    *block_names;
+};
+
 struct CodeRaw {
     const char *data;
     size_t      size;
@@ -328,8 +334,7 @@ struct Code {
         STATE_GOTO,
         STAGS,
         MTAGS,
-        YYMAXFILL,
-        YYMAXNMATCH,
+        YYMAX,
         YYCH,
         YYACCEPT,
         VAR,
@@ -350,6 +355,7 @@ struct Code {
         CodeRaw        raw;
         CodeVar        var;
         CodeTags       tags;
+        CodeMax        max;
         CodeLabel      label;
         loc_t          loc;
     };
@@ -464,17 +470,13 @@ inline Code *code_tags(code_alc_t &alc, const std::string &fmt, const std::strin
     return x;
 }
 
-inline Code *code_yymaxfill(code_alc_t &alc, BlockNameList *blocks)
+inline Code *code_yymax(code_alc_t &alc, MaxDirectiveKind kind, BlockNameList *blocks,
+    const char *format)
 {
-    Code *x = new_code(alc, Code::YYMAXFILL);
-    x->block_names = blocks;
-    return x;
-}
-
-inline Code *code_yymaxnmatch(code_alc_t &alc, BlockNameList *blocks)
-{
-    Code *x = new_code(alc, Code::YYMAXNMATCH);
-    x->block_names = blocks;
+    Code *x = new_code(alc, Code::YYMAX);
+    x->max.kind = kind;
+    x->max.format = format;
+    x->max.block_names = blocks;
     return x;
 }
 

@@ -219,76 +219,46 @@ static void gen_yyaccept_def(const opt_t *opts, Code *code, bool used_yyaccept)
     }
 }
 
-static void gen_yymaxfill(CodegenCtxPass1 &ctx, Code *code)
+static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
 {
     const opt_t *opts = ctx.opts;
     Scratchbuf &o = ctx.global->scratchbuf;
+    CodeMax &m = code->max;
 
     if (opts->target != TARGET_CODE) {
         code->kind = Code::EMPTY;
         return;
     }
 
-    size_t max_fill;
-    if (code->block_names == NULL) {
+    const char *dirname = (m.kind == MAX_FILL) ? "max:re2c" : "maxnmatch:re2c";
+    const char *varname = (m.kind == MAX_FILL) ? "YYMAXFILL" : "YYMAXNMATCH";
+
+    size_t max;
+    if (code->max.block_names == NULL) {
         // Global maximum in the file.
-        max_fill = ctx.global->max_fill;
+        max = (m.kind == MAX_FILL) ? ctx.global->max_fill : ctx.global->max_nmatch;
     } else {
         // Maximum among the blocks listed in the directive.
-        max_fill = 0;
-        for (BlockNameList *p = code->block_names; p; p = p->next) {
-            const OutputBlock *b = find_block_with_name(ctx, p->name, "max:re2c");
+        max = 0;
+        for (BlockNameList *p = m.block_names; p; p = p->next) {
+            const OutputBlock *b = find_block_with_name(ctx, p->name, dirname);
             if (!b) exit(1);
-            max_fill = std::max(max_fill, b->max_fill);
+            max = std::max(max, (m.kind == MAX_FILL) ? b->max_fill : b->max_nmatch);
         }
     }
 
-    switch (opts->lang) {
-        case LANG_C:
-            code->kind = Code::TEXT;
-            code->text = o.cstr("#define YYMAXFILL ").u64(max_fill).flush();
-            break;
-        case LANG_GO:
-            code->kind = Code::STMT;
-            code->text = o.cstr("var YYMAXFILL int = ").u64(max_fill).flush();
-            break;
-    }
-}
-
-static void gen_yymaxnmatch(CodegenCtxPass1 &ctx, Code *code)
-{
-    const opt_t *opts = ctx.opts;
-    Scratchbuf &o = ctx.global->scratchbuf;
-
-    if (opts->target != TARGET_CODE) {
-        code->kind = Code::EMPTY;
-        return;
-    }
-
-    size_t max_nmatch;
-    if (code->block_names == NULL) {
-        // Global maximum in the file.
-        max_nmatch = ctx.global->max_nmatch;
+    if (m.format) {
+        std::ostringstream os(m.format);
+        argsubst(os, opts->api_sigil, "max", true, max);
+        code->text = o.str(os.str()).flush();
     } else {
-        // Maximum among the blocks listed in the directive.
-        max_nmatch = 0;
-        for (BlockNameList *p = code->block_names; p; p = p->next) {
-            const OutputBlock *b = find_block_with_name(ctx, p->name, "maxnmatch:re2c");
-            if (!b) exit(1);
-            max_nmatch = std::max(max_nmatch, b->max_nmatch);
+        if (opts->lang == LANG_C) {
+            code->text = o.cstr("#define ").cstr(varname).cstr(" ").u64(max).flush();
+        } else if (opts->lang == LANG_GO) {
+            code->text = o.cstr("var ").cstr(varname).cstr(" int = ").u64(max).flush();
         }
     }
-
-    switch (opts->lang) {
-        case LANG_C:
-            code->kind = Code::TEXT;
-            code->text = o.cstr("#define YYMAXNMATCH ").u64(max_nmatch).flush();
-            break;
-        case LANG_GO:
-            code->kind = Code::STMT;
-            code->text = o.cstr("var YYMAXNMATCH int = ").u64(max_nmatch).flush();
-            break;
-    }
+    code->kind = (opts->lang == LANG_C) ? Code::TEXT : Code::STMT;
 }
 
 /*
@@ -457,11 +427,8 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
         case Code::MTAGS:
             gen_tags(buf, opts, code, ctx.global->mtags);
             break;
-        case Code::YYMAXFILL:
-            gen_yymaxfill(ctx, code);
-            break;
-        case Code::YYMAXNMATCH:
-            gen_yymaxnmatch(ctx, code);
+        case Code::YYMAX:
+            gen_yymax(ctx, code);
             break;
         case Code::YYCH:
             gen_yych_decl(opts, code);
