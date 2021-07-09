@@ -81,6 +81,11 @@ enum InputBlockKind {
     INPUT_ERROR
 };
 
+enum MaxDirectiveKind {
+    MAX_FILL,
+    MAX_NMATCH
+};
+
 const uint32_t NOEOF = ~0u - 1;
 
 #define RE2C_SIGIL "@@"
