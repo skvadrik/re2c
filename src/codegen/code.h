@@ -763,6 +763,7 @@ public:
     bool cond_goto;
     bool warn_condition_order;
     bool need_header;
+    bool done_mtag_defs;
     Msg &msg;
     std::set<std::string> skeletons;
     code_alc_t allocator;
