@@ -280,22 +280,22 @@ static void emit_skeleton_stags(Output &output, CodeList *code, const DFA &dfa)
     append(code, code_block(alc, body, CodeBlock::WRAPPED));
 }
 
-static void emit_skeleton_mtags(Output &output, CodeList *code, const DFA &dfa)
+static void emit_skeleton_mtag_defs(Output &output, CodeList *code)
 {
-    if (dfa.mtagvars.empty()) return;
-
     code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
     CodeArgs *args;
-    CodeList *if_code, *block, *body;
-    const char *if_cond, *text;
+    CodeList *if_code, *block;
+    const char *if_cond;
+
+    // Use `void *` instead of `YYCTYPE *`, as YYCTYPE may vary for different
+    // blocks. and this definition must be valid throughout the whole file.
 
     append(code, code_newline(alc));
 
     append(code, code_text(alc, "typedef struct yymtag_t {"));
     block = code_list(alc);
     append(block, code_text(alc, "ptrdiff_t pred;"));
-    append(block, code_text(alc, "const YYCTYPE *elem;"));
+    append(block, code_text(alc, "const void *elem;"));
     append(code, code_block(alc, block, CodeBlock::INDENTED));
     append(code, code_text(alc, "} yymtag_t;"));
 
@@ -365,7 +365,7 @@ static void emit_skeleton_mtags(Output &output, CodeList *code, const DFA &dfa)
 
     args = code_args(alc);
     append(args, code_arg(alc, "ptrdiff_t *pt"));
-    append(args, code_arg(alc, "const YYCTYPE *t"));
+    append(args, code_arg(alc, "const void *t"));
     append(args, code_arg(alc, "yymtagpool_t *tp"));
     append(code, code_fdecl(alc, "static void yymtag", args));
     block = code_list(alc);
@@ -374,6 +374,27 @@ static void emit_skeleton_mtags(Output &output, CodeList *code, const DFA &dfa)
     append(block, code_stmt(alc, "n->elem = t"));
     append(block, code_stmt(alc, "*pt = n - tp->head"));
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
+
+    append(code, code_newline(alc));
+}
+
+static void emit_skeleton_mtags(Output &output, CodeList *code, const DFA &dfa)
+{
+    if (dfa.mtagvars.empty()) return;
+
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+    CodeArgs *args;
+    CodeList *if_code, *block, *body;
+    const char *if_cond, *text;
+
+    // Data structures for m-tags are the same for all blocks in the file. They
+    // are emitted at the first block that has m-tags, because it's impossible
+    // to know earlier (when generating prologue) if m-tags are needed at all.
+    if (!output.done_mtag_defs) {
+        output.done_mtag_defs = true;
+        emit_skeleton_mtag_defs(output, code);
+    }
 
     append(code, code_newline(alc));
 
