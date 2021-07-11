@@ -685,6 +685,7 @@ struct CodegenCtxGlobal {
     code_alc_t &allocator;
     Scratchbuf &scratchbuf;
     Msg &msg;
+    const opt_t *opts;
     const blocks_t *pblocks;
     uniq_vector_t<std::string> conds;
     tagnames_t stags;
@@ -695,15 +696,8 @@ struct CodegenCtxGlobal {
 };
 
 struct CodegenCtxPass1 {
-    // global part
-    const CodegenCtxGlobal *global;
-
-    // block-local part
-    const opt_t *globopts;
-    const opt_t *opts;
-    const loc_t &loc;
-    const std::vector<std::string> &conds;
-    const bool used_yyaccept;
+    const CodegenCtxGlobal *global; // global part
+    const OutputBlock *block;       // block-local part
 };
 
 struct CodegenCtxPass2 {
