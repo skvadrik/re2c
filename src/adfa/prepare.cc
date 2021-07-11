@@ -322,7 +322,7 @@ void DFA::calc_stats(OutputBlock &out)
     }
 
     if (!cond.empty()) {
-        out.types.push_back(cond);
+        out.conds.push_back(cond);
     }
 }
 

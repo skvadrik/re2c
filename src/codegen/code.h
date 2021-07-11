@@ -686,7 +686,7 @@ struct CodegenCtxGlobal {
     Scratchbuf &scratchbuf;
     Msg &msg;
     const blocks_t *pblocks;
-    uniq_vector_t<std::string> conditions;
+    uniq_vector_t<std::string> conds;
     tagnames_t stags;
     tagnames_t mtags;
     size_t max_fill;
@@ -702,7 +702,7 @@ struct CodegenCtxPass1 {
     const opt_t *globopts;
     const opt_t *opts;
     const loc_t &loc;
-    const std::vector<std::string> &conditions;
+    const std::vector<std::string> &conds;
     const bool used_yyaccept;
 };
 
@@ -733,7 +733,7 @@ struct OutputBlock {
     std::vector<OutputFragment> fragments;
     bool used_yyaccept;
     bool have_user_code;
-    std::vector<std::string> types;
+    std::vector<std::string> conds;
     tagnames_t stags;
     tagnames_t mtags;
     const opt_t *opts;

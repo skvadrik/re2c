@@ -69,30 +69,27 @@ static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
     }
 }
 
-static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, Code *code,
-    const opt_t *opts, const uniq_vector_t<std::string> &condnames)
+static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code,
+    const opt_t *opts, const uniq_vector_t<std::string> &conds)
 {
-    if (opts->target != TARGET_CODE) {
-        code->kind = Code::EMPTY;
-        return;
-    }
+    DASSERT(opts->target == TARGET_CODE);
 
     const char *text, *start = NULL, *end = NULL;
     CodeList *stmts = code_list(alc);
     CodeList *block = code_list(alc);
 
     if (opts->lang == LANG_C) {
-        start = o.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
+        start = buf.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
         end = "};";
-        for (size_t i = 0; i < condnames.size(); ++i) {
-            text = o.str(condnames[i]).cstr(",").flush();
+        for (size_t i = 0; i < conds.size(); ++i) {
+            text = buf.str(conds[i]).cstr(",").flush();
             append(block, code_text(alc, text));
         }
     } else if (opts->lang == LANG_GO) {
-        start = o.cstr("const (").flush();
+        start = buf.cstr("const (").flush();
         end = ")";
-        for (size_t i = 0; i < condnames.size(); ++i) {
-            text = o.str(condnames[i]).cstr(i == 0 ? " = iota" : "").flush();
+        for (size_t i = 0; i < conds.size(); ++i) {
+            text = buf.str(conds[i]).cstr(i == 0 ? " = iota" : "").flush();
             append(block, code_text(alc, text));
         }
     }
@@ -104,6 +101,35 @@ static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, Code *code,
     code->kind = Code::BLOCK;
     code->block.stmts = stmts;
     code->block.fmt = CodeBlock::RAW;
+}
+
+static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
+{
+    const opt_t *opts = ctx.globopts; // whole-program options
+    Scratchbuf &buf = ctx.global->scratchbuf;
+    code_alc_t &alc = ctx.global->allocator;
+
+    if (opts->target != TARGET_CODE) {
+        code->kind = Code::EMPTY;
+        return;
+    }
+
+    if (code->block_names == NULL) {
+        // Use the global set of conditions accumulated from all blocks.
+        gen_cond_enum(buf, alc, code, opts, ctx.global->conds);
+    } else {
+        // Gather conditions from the blocks on the list.
+        uniq_vector_t<std::string> conds;
+        tagnames_t tags;
+        for (BlockNameList *p = code->block_names; p; p = p->next) {
+            const OutputBlock *b = find_block_with_name(ctx, p->name, "types:re2c");
+            if (!b) exit(1);
+            for (size_t i = 0; i < b->conds.size(); ++i) {
+                conds.find_or_add(b->opts->condEnumPrefix + b->conds[i]);
+            }
+        }
+        gen_cond_enum(buf, alc, code, opts, conds);
+    }
 }
 
 static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,
@@ -460,14 +486,14 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             gen_yyaccept_def(opts, code, ctx.used_yyaccept);
             break;
         case Code::COND_ENUM:
-            gen_cond_enum(buf, alc, code, ctx.globopts, ctx.global->conditions);
+            expand_cond_enum(ctx, code);
             break;
         case Code::COND_GOTO:
-            gen_cond_goto(buf, alc, code, ctx.conditions, opts, ctx.global->msg,
+            gen_cond_goto(buf, alc, code, ctx.conds, opts, ctx.global->msg,
                 ctx.global->warn_cond_ord, ctx.loc);
             break;
         case Code::COND_TABLE:
-            gen_cond_table(buf, alc, code, ctx.conditions, opts);
+            gen_cond_table(buf, alc, code, ctx.conds, opts);
             break;
         case Code::STATE_GOTO:
             gen_state_goto(ctx, code);
