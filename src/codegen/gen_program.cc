@@ -222,19 +222,11 @@ bool Output::emit_blocks(const std::string &fname, const CodegenCtxGlobal &globa
     // transitions to previously unused labels (e.g. start label of a block that
     // is specified in a `getstate:re2c` directive).
     for (unsigned int j = 0; j < blocks.size(); ++j) {
-        OutputBlock &b = *blocks[j];
+        OutputBlock *b = blocks[j];
+        CodegenCtxPass1 gctx = {&globalctx, b};
 
-        CodegenCtxPass1 gctx =
-            { &globalctx
-            , b.kind == INPUT_USE ? b.opts : total_opts
-            , b.opts
-            , b.loc
-            , b.conds
-            , b.used_yyaccept
-            };
-
-        for (size_t i = 0; i < b.fragments.size(); ++i) {
-            expand_pass_1(gctx, b.fragments[i].code);
+        for (size_t i = 0; i < b->fragments.size(); ++i) {
+            expand_pass_1(gctx, b->fragments[i].code);
         }
     }
 
@@ -305,6 +297,7 @@ bool Output::emit()
         { allocator
         , scratchbuf
         , msg
+        , total_opts
         , /*pblocks*/ NULL
         , /*conditions*/ uniq_vector_t<std::string>()
         , /*stags*/ tagnames_t()

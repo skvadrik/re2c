@@ -50,7 +50,7 @@ static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
 
     if (code->tags.block_names == NULL) {
         // Use the global set of tags accumulated from all blocks.
-        gen_tags(buf, ctx.opts, code,
+        gen_tags(buf, ctx.block->opts, code,
             oneval ? ctx.global->stags : ctx.global->mtags);
     } else {
         // Gather tags from the blocks on the list.
@@ -65,7 +65,7 @@ static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
                 tags.insert(b->mtags.begin(), b->mtags.end());
             }
         }
-        gen_tags(buf, ctx.opts, code, tags);
+        gen_tags(buf, ctx.block->opts, code, tags);
     }
 }
 
@@ -105,7 +105,7 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code,
 
 static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
 {
-    const opt_t *opts = ctx.globopts; // whole-program options
+    const opt_t *opts = ctx.block->kind == INPUT_USE ? ctx.block->opts : ctx.global->opts;
     Scratchbuf &buf = ctx.global->scratchbuf;
     code_alc_t &alc = ctx.global->allocator;
 
@@ -148,7 +148,7 @@ static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,
 
 static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
 {
-    const opt_t *opts = ctx.globopts; // whole-program options
+    const opt_t *opts = ctx.block->kind == INPUT_USE ? ctx.block->opts : ctx.global->opts;
     Scratchbuf &o = ctx.global->scratchbuf;
     code_alc_t &alc = ctx.global->allocator;
     const char *text;
@@ -272,7 +272,7 @@ static void gen_yyaccept_def(const opt_t *opts, Code *code, bool used_yyaccept)
 
 static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
 {
-    const opt_t *opts = ctx.opts;
+    const opt_t *opts = ctx.block->opts;
     Scratchbuf &o = ctx.global->scratchbuf;
     CodeMax &m = code->max;
 
@@ -455,7 +455,7 @@ static void expand_pass_1_list(CodegenCtxPass1 &ctx, CodeList *stmts)
 
 void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
 {
-    const opt_t *opts = ctx.opts;
+    const opt_t *opts = ctx.block->opts;
     Scratchbuf &buf = ctx.global->scratchbuf;
     code_alc_t &alc = ctx.global->allocator;
 
@@ -483,17 +483,17 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             gen_yych_decl(opts, code);
             break;
         case Code::YYACCEPT:
-            gen_yyaccept_def(opts, code, ctx.used_yyaccept);
+            gen_yyaccept_def(opts, code, ctx.block->used_yyaccept);
             break;
         case Code::COND_ENUM:
             expand_cond_enum(ctx, code);
             break;
         case Code::COND_GOTO:
-            gen_cond_goto(buf, alc, code, ctx.conds, opts, ctx.global->msg,
-                ctx.global->warn_cond_ord, ctx.loc);
+            gen_cond_goto(buf, alc, code, ctx.block->conds, opts,
+                ctx.global->msg, ctx.global->warn_cond_ord, ctx.block->loc);
             break;
         case Code::COND_TABLE:
-            gen_cond_table(buf, alc, code, ctx.conds, opts);
+            gen_cond_table(buf, alc, code, ctx.block->conds, opts);
             break;
         case Code::STATE_GOTO:
             gen_state_goto(ctx, code);
