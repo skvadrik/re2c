@@ -85,16 +85,14 @@ static void gen_cond_enum(Scratchbuf &o, code_alc_t &alc, Code *code,
         start = o.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
         end = "};";
         for (size_t i = 0; i < condnames.size(); ++i) {
-            text = o.str(opts->condEnumPrefix).str(condnames[i]).cstr(",").flush();
+            text = o.str(condnames[i]).cstr(",").flush();
             append(block, code_text(alc, text));
         }
-    }
-    else if (opts->lang == LANG_GO) {
+    } else if (opts->lang == LANG_GO) {
         start = o.cstr("const (").flush();
         end = ")";
         for (size_t i = 0; i < condnames.size(); ++i) {
-            text = o.str(opts->condEnumPrefix).str(condnames[i])
-                .cstr(i == 0 ? " = iota" : "").flush();
+            text = o.str(condnames[i]).cstr(i == 0 ? " = iota" : "").flush();
             append(block, code_text(alc, text));
         }
     }

@@ -284,9 +284,10 @@ static void add_symbols(const OutputBlock &block, CodegenCtxGlobal &ctx)
 {
     DASSERT(!block.name.empty());
 
+    const std::string &condenumprefix = block.opts->condEnumPrefix;
     const std::vector<std::string> &cs = block.types;
     for (size_t j = 0; j < cs.size(); ++j) {
-        ctx.conditions.find_or_add(cs[j]);
+        ctx.conditions.find_or_add(condenumprefix + cs[j]);
     }
 
     const tagnames_t &st = block.stags, &mt = block.mtags;
