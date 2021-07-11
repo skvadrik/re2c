@@ -52,7 +52,7 @@ OutputBlock::OutputBlock(InputBlockKind kind, const std::string &name,
     , fragments()
     , used_yyaccept(false)
     , have_user_code(false)
-    , types()
+    , conds()
     , stags()
     , mtags()
     , opts(NULL)
@@ -229,7 +229,7 @@ bool Output::emit_blocks(const std::string &fname, const CodegenCtxGlobal &globa
             , b.kind == INPUT_USE ? b.opts : total_opts
             , b.opts
             , b.loc
-            , b.types
+            , b.conds
             , b.used_yyaccept
             };
 
@@ -285,9 +285,8 @@ static void add_symbols(const OutputBlock &block, CodegenCtxGlobal &ctx)
     DASSERT(!block.name.empty());
 
     const std::string &condenumprefix = block.opts->condEnumPrefix;
-    const std::vector<std::string> &cs = block.types;
-    for (size_t j = 0; j < cs.size(); ++j) {
-        ctx.conditions.find_or_add(condenumprefix + cs[j]);
+    for (size_t j = 0; j < block.conds.size(); ++j) {
+        ctx.conds.find_or_add(condenumprefix + block.conds[j]);
     }
 
     const tagnames_t &st = block.stags, &mt = block.mtags;
@@ -330,7 +329,7 @@ bool Output::emit()
     // emit .h file
     if (!opts->header_file.empty() || need_header) {
         // old-style -t, --type-headers usage implies condition generation
-        if (!ctx.conditions.empty() && !this->cond_enum_in_hdr) {
+        if (!ctx.conds.empty() && !this->cond_enum_in_hdr) {
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
             wdelay_stmt(0, code_cond_enum(allocator, NULL));
