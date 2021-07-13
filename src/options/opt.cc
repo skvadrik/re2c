@@ -7,8 +7,11 @@ namespace re2c {
 // This function should only change global options.
 static void fix_conopt(conopt_t &glob)
 {
-    if (glob.target == TARGET_SKELETON) {
+    if (glob.target == TARGET_DOT) {
+        glob.iFlag = true;
+    } else if (glob.target == TARGET_SKELETON) {
         glob.fFlag = false;
+        glob.iFlag = true;
     }
 
     if (!glob.lookahead) {
@@ -56,8 +59,6 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (glob.target != TARGET_CODE) {
         // output files
         real.header_file = "";
-        // default line information
-        real.iFlag = defaults.iFlag;
         // default environment-sensitive formatting
         real.topIndent = defaults.topIndent;
         real.indString = defaults.indString;
@@ -206,11 +207,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     }
 
     // set implied options
-    if (glob.target == TARGET_DOT) {
-        real.iFlag = true;
-    }
-    else if (glob.target == TARGET_SKELETON) {
-        real.iFlag = true;
+    if (glob.target == TARGET_SKELETON) {
         real.input_api = INPUT_CUSTOM;
         real.indString = "    ";
         real.topIndent = 2;

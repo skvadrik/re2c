@@ -46,7 +46,6 @@ void Scanner::lex_conf(Opt &opts)
     "flags:" ("b" | "bit-vectors")    { opts.set_bFlag            (lex_conf_bool());   return; }
     "flags:" ("d" | "debug-output")   { opts.set_dFlag            (lex_conf_bool());   return; }
     "flags:" ("g" | "computed-gotos") { opts.set_gFlag            (lex_conf_bool());   return; }
-    "flags:" ("i" | "no-debug-info")  { opts.set_iFlag            (lex_conf_bool());   return; }
     "flags:" ("s" | "nested-ifs")     { opts.set_sFlag            (lex_conf_bool());   return; }
     "flags:" ("T" | "tags")           { opts.set_tags             (lex_conf_bool());   return; }
     "flags:case-insensitive"          { opts.set_bCaseInsensitive (lex_conf_bool());   return; }
@@ -180,8 +179,15 @@ void Scanner::lex_conf(Opt &opts)
     "startlabel" / conf_assign number { opts.set_startlabel_force (lex_conf_bool());   return; }
     "startlabel"                      { opts.set_startlabel       (lex_conf_string()); return; }
 
-    // deprecated
+    // deprecated (still accepted, but do nothing)
     "variable:yystable" { lex_conf_string (); return; }
+
+    // deprecated and will be removed in future releases
+    "flags:" ("i" | "no-debug-info") {
+        msg.error(tok_loc(), "configurations `flags:i`, `flags:no-debug-info` "
+            "are deprecated, use global options `-i`, `--no-debug-info` instead");
+        exit(1);
+    }
 
     [a-zA-Z0-9_:-]* {
         msg.error(tok_loc(), "unrecognized configuration '%.*s'",

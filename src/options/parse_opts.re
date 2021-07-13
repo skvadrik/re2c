@@ -117,12 +117,12 @@ opt_short:
     "D" { globopts.target = TARGET_DOT;      goto opt_short; }
     "f" { globopts.fFlag = true;             goto opt_short; }
     "F" { globopts.FFlag = true;             goto opt_short; }
+    "i" { globopts.iFlag = true;             goto opt_short; }
     "S" { globopts.target = TARGET_SKELETON; goto opt_short; }
 
     "b" { opts.set_bFlag(true);           goto opt_short; }
     "d" { opts.set_dFlag(true);           goto opt_short; }
     "g" { opts.set_gFlag(true);           goto opt_short; }
-    "i" { opts.set_iFlag(true);           goto opt_short; }
     "s" { opts.set_sFlag(true);           goto opt_short; }
     "T" { opts.set_tags(true);            goto opt_short; }
     "e" { opts.set_encoding(Enc::EBCDIC); goto opt_short; }
@@ -164,6 +164,7 @@ opt_long:
     "storable-state"        end { globopts.fFlag = true;             goto opt; }
     "flex-syntax"           end { globopts.FFlag = true;             goto opt; }
     "verbose"               end { globopts.verbose = true;           goto opt; }
+    "no-debug-info"         end { globopts.iFlag = true;             goto opt; }
     "no-generation-date"    end { globopts.bNoGenerationDate = true; goto opt; }
     "no-version"            end { globopts.version = false;          goto opt; }
     "skeleton"              end { globopts.target = TARGET_SKELETON; goto opt; }
@@ -172,7 +173,6 @@ opt_long:
     "debug-output"          end { opts.set_dFlag (true);             goto opt; }
     "case-ranges"           end { opts.set_case_ranges (true);       goto opt; }
     "computed-gotos"        end { opts.set_gFlag (true);             goto opt; }
-    "no-debug-info"         end { opts.set_iFlag (true);             goto opt; }
     "nested-ifs"            end { opts.set_sFlag (true);             goto opt; }
     "case-insensitive"      end { opts.set_bCaseInsensitive (true);  goto opt; }
     "case-inverted"         end { opts.set_bCaseInverted (true);     goto opt; }
