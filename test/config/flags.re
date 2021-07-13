@@ -6,8 +6,6 @@
     re2c:flags:debug-output = 1;
     re2c:flags:g = 0;
     re2c:flags:computed-gotos = 1;
-    re2c:flags:i = 0;
-    re2c:flags:no-debug-info = 1;
     re2c:flags:s = 0;
     re2c:flags:nested-ifs = 1;
     re2c:flags:T = 0;

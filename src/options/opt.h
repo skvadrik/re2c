@@ -112,6 +112,8 @@ const uint32_t NOEOF = ~0u - 1;
     CONSTOPT (std::vector<std::string>, incpaths, std::vector<std::string>()) \
     /* input encoding */ \
     CONSTOPT (Enc::type_t, input_encoding, Enc::ASCII) \
+    /* #line directives */ \
+    CONSTOPT (bool, iFlag, false) \
     /* internals */ \
     CONSTOPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
     CONSTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1) \
@@ -214,8 +216,6 @@ const uint32_t NOEOF = ~0u - 1;
     MUTOPT (std::string, yyshiftmtag, "YYSHIFTMTAG") \
     MUTOPT (api_style_t, api_style, API_FUNCTIONS) \
     MUTOPT (std::string, api_sigil, RE2C_SIGIL) \
-    /* #line directives */ \
-    MUTOPT (bool, iFlag, false) \
     /* debug */ \
     MUTOPT (bool, dFlag, false) \
     MUTOPT (std::string, yydebug, "YYDEBUG") \
