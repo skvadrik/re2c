@@ -185,6 +185,13 @@ loop:
         goto next;
     }
 
+    "/*!types:re2c" {
+        out.cond_enum_in_hdr = out.in_header();
+        out.warn_condition_order = false; // see note [condition order]
+        if (!lex_block_fmt(out, CODE_COND_ENUM, true)) return INPUT_ERROR;
+        goto next;
+    }
+
     "/*!getstate:re2c" {
         out.wraw(tok, ptr);
         if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
@@ -197,18 +204,6 @@ loop:
             out.wdelay_stmt(opts->topIndent, code_state_goto(alc, block_list));
             out.state_goto = true;
         }
-        goto next;
-    }
-
-    "/*!types:re2c" {
-        out.wraw(tok, ptr);
-        out.wdelay_stmt(0, code_line_info_output(alc));
-        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
-        if (!lex_end_of_block(out)) return INPUT_ERROR;
-        out.wdelay_stmt(opts->topIndent, code_cond_enum(alc, block_list));
-        out.cond_enum_in_hdr = out.in_header();
-        out.warn_condition_order = false; // see note [condition order]
-        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
         goto next;
     }
 

@@ -429,13 +429,6 @@ inline Code *code_fmt(code_alc_t &alc, CodeKind kind, BlockNameList *blocks,
     return x;
 }
 
-inline Code *code_cond_enum(code_alc_t &alc, BlockNameList *blocks)
-{
-    Code *x = new_code(alc, CODE_COND_ENUM);
-    x->block_names = blocks;
-    return x;
-}
-
 inline Code *code_cond_table(code_alc_t &alc)
 {
     return new_code(alc, CODE_COND_TABLE);

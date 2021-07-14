@@ -86,33 +86,54 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code,
 {
     DASSERT(opts->target == TARGET_CODE);
 
-    const char *text, *start = NULL, *end = NULL;
-    CodeList *stmts = code_list(alc);
-    CodeList *block = code_list(alc);
+    if (code->fmt.format) {
+        const char *fmt = code->fmt.format;
+        const char *sep = code->fmt.separator;
 
-    if (opts->lang == LANG_C) {
-        start = buf.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
-        end = "};";
         for (size_t i = 0; i < conds.size(); ++i) {
-            text = buf.str(conds[i]).cstr(",").flush();
-            append(block, code_text(alc, text));
+            if (i > 0 && sep) buf.cstr(sep);
+            std::ostringstream s(fmt);
+            // The main substitution (the one allowing unnamed sigil) must go
+            // last, or else it will erroneously substitute all the named ones.
+            argsubst(s, opts->api_sigil, "num", false, i);
+            argsubst(s, opts->api_sigil, "cond", true, conds[i]);
+            buf.str(s.str());
         }
-    } else if (opts->lang == LANG_GO) {
-        start = buf.cstr("const (").flush();
-        end = ")";
-        for (size_t i = 0; i < conds.size(); ++i) {
-            text = buf.str(conds[i]).cstr(i == 0 ? " = iota" : "").flush();
-            append(block, code_text(alc, text));
+        buf.cstr("\n");
+
+        code->kind = CODE_RAW;
+        code->raw.size = buf.stream().str().length();
+        code->raw.data = buf.flush();
+
+    } else {
+        const char *text, *start = NULL, *end = NULL;
+        CodeList *stmts = code_list(alc);
+        CodeList *block = code_list(alc);
+
+        if (opts->lang == LANG_C) {
+            start = buf.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
+            end = "};";
+            for (size_t i = 0; i < conds.size(); ++i) {
+                text = buf.str(conds[i]).cstr(",").flush();
+                append(block, code_text(alc, text));
+            }
+        } else if (opts->lang == LANG_GO) {
+            start = buf.cstr("const (").flush();
+            end = ")";
+            for (size_t i = 0; i < conds.size(); ++i) {
+                text = buf.str(conds[i]).cstr(i == 0 ? " = iota" : "").flush();
+                append(block, code_text(alc, text));
+            }
         }
+
+        append(stmts, code_text(alc, start));
+        append(stmts, code_block(alc, block, CodeBlock::INDENTED));
+        append(stmts, code_text(alc, end));
+
+        code->kind = CODE_BLOCK;
+        code->block.stmts = stmts;
+        code->block.fmt = CodeBlock::RAW;
     }
-
-    append(stmts, code_text(alc, start));
-    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
-    append(stmts, code_text(alc, end));
-
-    code->kind = CODE_BLOCK;
-    code->block.stmts = stmts;
-    code->block.fmt = CodeBlock::RAW;
 }
 
 static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
@@ -130,13 +151,13 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
         return;
     }
 
-    if (code->block_names == NULL) {
+    if (code->fmt.block_names == NULL) {
         // Use the global set of conditions accumulated from all blocks.
         gen_cond_enum(buf, alc, code, globopts, ctx.global->conds);
     } else {
         // Gather conditions from the blocks on the list.
         uniq_vector_t<std::string> conds;
-        for (BlockNameList *p = code->block_names; p; p = p->next) {
+        for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
             const OutputBlock *b = find_block_with_name(ctx, p->name, "types:re2c");
             if (!b) exit(1);
             for (size_t i = 0; i < b->conds.size(); ++i) {

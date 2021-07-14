@@ -329,7 +329,7 @@ bool Output::emit()
         if (!ctx.conds.empty() && !this->cond_enum_in_hdr) {
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
-            wdelay_stmt(0, code_cond_enum(allocator, NULL));
+            wdelay_stmt(0, code_fmt(allocator, CODE_COND_ENUM, NULL, NULL, NULL));
             header_mode(false);
         }
 
