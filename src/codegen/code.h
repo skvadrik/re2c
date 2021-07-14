@@ -267,16 +267,10 @@ struct BlockNameList {
     BlockNameList *next;
 };
 
-struct CodeTags {
-    const char    *fmt;
-    const char    *sep;
+struct CodeFmt {
     BlockNameList *block_names;
-};
-
-struct CodeMax {
-    MaxDirectiveKind  kind;
-    const char       *format;
-    BlockNameList    *block_names;
+    const char    *format;
+    const char    *separator;
 };
 
 struct CodeRaw {
@@ -319,8 +313,7 @@ struct Code {
         CodeFunc       func;
         CodeRaw        raw;
         CodeVar        var;
-        CodeTags       tags;
-        CodeMax        max;
+        CodeFmt        fmt;
         CodeLabel      label;
         loc_t          loc;
     };
@@ -426,23 +419,13 @@ inline Code *code_slabel(code_alc_t &alc, const char *label)
     return x;
 }
 
-inline Code *code_tags(code_alc_t &alc, const std::string &fmt, const std::string &sep,
-    BlockNameList *blocks, bool mtags)
+inline Code *code_fmt(code_alc_t &alc, CodeKind kind, BlockNameList *blocks,
+    const char *format, const char *separator)
 {
-    Code *x = new_code(alc, mtags ? CODE_MTAGS : CODE_STAGS);
-    x->tags.fmt = copystr(fmt, alc);
-    x->tags.sep = copystr(sep, alc);
-    x->tags.block_names = blocks;
-    return x;
-}
-
-inline Code *code_yymax(code_alc_t &alc, MaxDirectiveKind kind, BlockNameList *blocks,
-    const char *format)
-{
-    Code *x = new_code(alc, CODE_YYMAX);
-    x->max.kind = kind;
-    x->max.format = format;
-    x->max.block_names = blocks;
+    Code *x = new_code(alc, kind);
+    x->fmt.block_names = blocks;
+    x->fmt.format      = format;
+    x->fmt.separator   = separator;
     return x;
 }
 
