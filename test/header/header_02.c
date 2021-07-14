@@ -65,7 +65,11 @@ yy6:
 #define YYCTYPE char
 struct tags_t
 {
-    const YYCTYPE * yyt1;const YYCTYPE * yyt2;
+    
+#line 8 "header/header_02.h"
+const YYCTYPE * yyt1;const YYCTYPE * yyt2;
+#line 8 "header/header_02.re"
+
 };
 
 void lex(const YYCTYPE *, tags_t &);

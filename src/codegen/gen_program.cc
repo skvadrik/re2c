@@ -109,7 +109,7 @@ OutputBlock& Output::block()
     return *pblocks->back();
 }
 
-void Output::wraw(const char *s, const char *e)
+void Output::wraw(const char *s, const char *e, bool newline)
 {
     if (s != e && block().opts->target == TARGET_CODE) {
         // scan for non-whitespace characters
@@ -118,6 +118,10 @@ void Output::wraw(const char *s, const char *e)
             code = !isspace(*p);
         }
         wdelay_stmt(0, code_raw(allocator, s, static_cast<size_t>(e - s)));
+    }
+    if (newline && e > s && e[-1] != '\n') {
+        // Insert newline unless the block ends in a newline.
+        wdelay_stmt(0, code_newline(allocator));
     }
 }
 

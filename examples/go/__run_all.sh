@@ -18,7 +18,8 @@ for f in $(find -name '*.re'); do
         head -n $l "$gotest" > "$gotest".mod && mv "$gotest".mod "$gotest"
     fi
 
-    GOPATH=$GOPATH:"$(pwd)/$(dirname $gofile)" \
+    GO111MODULE=off \
+    GOPATH="${GOPATH}:$(pwd)/$(dirname $gofile)" \
         go test "$gotest" || { echo "*** error ***"; exit 1; }
     rm -f "$gotest"
 done

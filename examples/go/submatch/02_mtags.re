@@ -55,7 +55,7 @@ func lex(str string) []string {
 	trie := createTrie(256)
 	x := mtagRoot
 	y := mtagRoot
-	/*!mtags:re2c format = "@@ := mtagRoot"; separator = "\n\t"; */
+	/*!mtags:re2c format = "\t@@ := mtagRoot\n"; */
 
 	/*!re2c
 	re2c:flags:tags = 1;

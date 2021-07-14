@@ -3,10 +3,7 @@ package main
 
 func Lex(str string) (a int, b int, c int) {
 	var cursor, marker int
-	/*!stags:re2c
-		format = "var @@ int";
-		separator = "\n\t";
-	*/
+	/*!stags:re2c format = "\tvar @@ int\n"; */
 
 	/*!re2c
 	re2c:flags:tags = 1;

@@ -728,7 +728,7 @@ public:
     void gather_info_from_block();
     void header_mode(bool on);
     bool in_header() const;
-    void wraw (const char *s, const char *e);
+    void wraw(const char *s, const char *e, bool newline = false);
     void wversion_time ();
     void wdelay_stmt(uint32_t ind, Code *code);
     bool emit();

@@ -4,31 +4,41 @@
 // Test `max:re2c` and `maxnmatch:re2c` directives with optional format.
 
 // default
+#line 8 "directives/max_format.c"
 #define YYMAXFILL 1
+#line 5 "directives/max_format.re"
 
 // #define YYMAXFILL @@
+#line 13 "directives/max_format.c"
 #define YYMAXFILL 1
+#line 7 "directives/max_format.re"
 
 // static const int MaxFill = @@{max};
+#line 18 "directives/max_format.c"
 static const int MaxFill = 1;
 #line 11 "directives/max_format.re"
 
 // line 12
 
 // default
+#line 25 "directives/max_format.c"
 #define YYMAXNMATCH 1
+#line 15 "directives/max_format.re"
 
 // #define YYMAXFILL @@
+#line 30 "directives/max_format.c"
 #define YYMAXNMATCH 1
+#line 17 "directives/max_format.re"
 
 // static const int MaxNMatch = @@{max};
+#line 35 "directives/max_format.c"
 static const int MaxNMatch = 1;
 #line 21 "directives/max_format.re"
 
 // line 22
 
 
-#line 32 "directives/max_format.c"
+#line 42 "directives/max_format.c"
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -41,7 +51,7 @@ yy2:
 	++YYCURSOR;
 #line 26 "directives/max_format.re"
 	{ x }
-#line 45 "directives/max_format.c"
+#line 55 "directives/max_format.c"
 yy4:
 	++YYCURSOR;
 	yynmatch = 1;
@@ -49,7 +59,7 @@ yy4:
 	yypmatch[1] = YYCURSOR;
 #line 25 "directives/max_format.re"
 	{ a }
-#line 53 "directives/max_format.c"
+#line 63 "directives/max_format.c"
 }
 #line 27 "directives/max_format.re"
 

@@ -9,10 +9,7 @@ func Lex(str string) (int, []int) {
 	var cursor, marker, yynmatch int
 	yypmatch := make([]int, YYMAXNMATCH*2)
 
-	/*!stags:re2c
-	format = "var @@ int";
-	separator = "\n\t";
-	*/
+	/*!stags:re2c format = "\tvar @@ int\n"; */
 
 	/*!re2c
 	re2c:flags:posix-captures = 1;

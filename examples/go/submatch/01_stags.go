@@ -12,10 +12,14 @@ var eBadIP error = errors.New("bad IP")
 
 func lex(str string) (int, error) {
 	var cursor, marker, o1, o2, o3, o4 int
-	var yyt1 int
+	
+//line "go/submatch/01_stags.go":17
+var yyt1 int
 	var yyt2 int
 	var yyt3 int
 	var yyt4 int
+//line "go/submatch/01_stags.re":13
+
 
 	num := func(pos int, end int) int {
 		n := 0
@@ -26,7 +30,7 @@ func lex(str string) (int, error) {
 	}
 
 	
-//line "go/submatch/01_stags.go":30
+//line "go/submatch/01_stags.go":34
 {
 	var yych byte
 	yych = str[cursor]
@@ -63,7 +67,7 @@ yy2:
 yy3:
 //line "go/submatch/01_stags.re":44
 	{ return 0, eBadIP }
-//line "go/submatch/01_stags.go":67
+//line "go/submatch/01_stags.go":71
 yy4:
 	cursor += 1
 	marker = cursor
@@ -660,7 +664,7 @@ yy29:
 			(num(o2, o3-1) << 16)+
 			(num(o1, o2-1) << 24), nil
 	}
-//line "go/submatch/01_stags.go":664
+//line "go/submatch/01_stags.go":668
 yy31:
 	cursor += 1
 	yych = str[cursor]

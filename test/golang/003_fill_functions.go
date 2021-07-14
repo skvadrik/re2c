@@ -6,7 +6,9 @@ package main
 import "fmt"
 import "os"
 
+//line "golang/003_fill_functions.go":10
 var YYMAXFILL int = 2
+//line "golang/003_fill_functions.re":7
 
 var SIZE int = 11
 
@@ -106,7 +108,7 @@ func Lex(in *Input) int {
 	in.token = in.cursor
 
 	
-//line "golang/003_fill_functions.go":110
+//line "golang/003_fill_functions.go":112
 {
 	var yych YYCTYPE
 	if (YYLESSTHAN(1)) {
@@ -148,7 +150,7 @@ yy2:
 		fmt.Println("end")
 		return 0
 	}
-//line "golang/003_fill_functions.go":152
+//line "golang/003_fill_functions.go":154
 yy4:
 	YYSKIP()
 //line "golang/003_fill_functions.re":110
@@ -156,14 +158,14 @@ yy4:
 		fmt.Println("error")
 		return -1
 	}
-//line "golang/003_fill_functions.go":160
+//line "golang/003_fill_functions.go":162
 yy6:
 	YYSKIP()
 //line "golang/003_fill_functions.re":130
 	{
 		return 3
 	}
-//line "golang/003_fill_functions.go":167
+//line "golang/003_fill_functions.go":169
 yy8:
 	YYSKIP()
 	YYBACKUP()
@@ -203,7 +205,7 @@ yy10:
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return 1
 	}
-//line "golang/003_fill_functions.go":207
+//line "golang/003_fill_functions.go":209
 yy11:
 	YYSKIP()
 	yych = YYPEEK()
@@ -270,7 +272,7 @@ yy15:
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return 2
 	}
-//line "golang/003_fill_functions.go":274
+//line "golang/003_fill_functions.go":276
 }
 //line "golang/003_fill_functions.re":133
 

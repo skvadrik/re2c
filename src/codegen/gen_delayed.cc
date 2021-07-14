@@ -39,6 +39,10 @@ void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &
             buf.str(s.str());
         }
     }
+    if (!opts->iFlag) {
+        const std::string &s = buf.stream().str();
+        if (!s.empty() && *s.rbegin() != '\n') buf.cstr("\n");
+    }
 
     code->kind = CODE_RAW;
     code->raw.size = buf.stream().str().length();

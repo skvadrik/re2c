@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#line 9 "c/eof/02_bounds_checking.c"
 #define YYMAXFILL 1
+#line 6 "c/eof/02_bounds_checking.re"
 
 
 // expect YYMAXFILL-padded string
@@ -16,7 +18,7 @@ static int lex(const char *str, unsigned int len)
 
 loop:
     
-#line 20 "c/eof/02_bounds_checking.c"
+#line 22 "c/eof/02_bounds_checking.c"
 {
 	char yych;
 	if (YYLIMIT <= YYCURSOR) return -1;
@@ -31,12 +33,12 @@ yy2:
 	++YYCURSOR;
 #line 21 "c/eof/02_bounds_checking.re"
 	{ return YYCURSOR + YYMAXFILL - 1 == YYLIMIT ? count : -1; }
-#line 35 "c/eof/02_bounds_checking.c"
+#line 37 "c/eof/02_bounds_checking.c"
 yy4:
 	++YYCURSOR;
 #line 20 "c/eof/02_bounds_checking.re"
 	{ return -1; }
-#line 40 "c/eof/02_bounds_checking.c"
+#line 42 "c/eof/02_bounds_checking.c"
 yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) return -1;
@@ -48,7 +50,7 @@ yy6:
 yy8:
 #line 23 "c/eof/02_bounds_checking.re"
 	{ goto loop; }
-#line 52 "c/eof/02_bounds_checking.c"
+#line 54 "c/eof/02_bounds_checking.c"
 yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) return -1;
@@ -62,7 +64,7 @@ yy11:
 	++YYCURSOR;
 #line 22 "c/eof/02_bounds_checking.re"
 	{ ++count; goto loop; }
-#line 66 "c/eof/02_bounds_checking.c"
+#line 68 "c/eof/02_bounds_checking.c"
 yy13:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) return -1;

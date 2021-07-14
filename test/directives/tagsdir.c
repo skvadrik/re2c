@@ -6,45 +6,85 @@
 
 
 // stags:re2c
+#line 10 "directives/tagsdir.c"
 x2_1;x2_2;y2_1;y2_2;yyt1;yyt2;
+#line 6 "directives/tagsdir.re"
+
 // mtags:re2c
+#line 15 "directives/tagsdir.c"
 y2_3;yyt3;
+#line 8 "directives/tagsdir.re"
+
 
 
 // tags have common 'yyt' prefix, so tag variables are shared between blocks
 
 // stags:re2c:x1
+#line 24 "directives/tagsdir.c"
 yyt1;yyt2;
+#line 14 "directives/tagsdir.re"
+
 // mtags:re2c:x1
+#line 29 "directives/tagsdir.c"
+#line 16 "directives/tagsdir.re"
 
 
 // stags:re2c:y1
+#line 34 "directives/tagsdir.c"
 yyt1;yyt2;
+#line 19 "directives/tagsdir.re"
+
 // mtags:re2c:y1
+#line 39 "directives/tagsdir.c"
 yyt3;
+#line 21 "directives/tagsdir.re"
+
 
 // stags:re2c:x1:y1
+#line 45 "directives/tagsdir.c"
 yyt1;yyt2;
+#line 24 "directives/tagsdir.re"
+
 // mtags:re2c:x1:y1
+#line 50 "directives/tagsdir.c"
 yyt3;
+#line 26 "directives/tagsdir.re"
+
 
 
 // tags have custom block-specific prefixes, so tag variables are separate
 
 // stags:re2c:x2
+#line 59 "directives/tagsdir.c"
 x2_1;x2_2;
+#line 32 "directives/tagsdir.re"
+
 // mtags:re2c:x2
+#line 64 "directives/tagsdir.c"
+#line 34 "directives/tagsdir.re"
 
 
 // stags:re2c:y2
+#line 69 "directives/tagsdir.c"
 y2_1;y2_2;
+#line 37 "directives/tagsdir.re"
+
 // mtags:re2c:y2
+#line 74 "directives/tagsdir.c"
 y2_3;
+#line 39 "directives/tagsdir.re"
+
 
 // stags:re2c:x2:y2
+#line 80 "directives/tagsdir.c"
 x2_1;x2_2;y2_1;y2_2;
+#line 42 "directives/tagsdir.re"
+
 // mtags:re2c:x2:y2
+#line 85 "directives/tagsdir.c"
 y2_3;
+#line 44 "directives/tagsdir.re"
+
 
 
 // rules:re2c:x
@@ -58,7 +98,7 @@ y2_3;
 
 // re2c:x1
 
-#line 62 "directives/tagsdir.c"
+#line 102 "directives/tagsdir.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -73,7 +113,7 @@ yy2:
 	x2 = yyt2;
 #line 49 "directives/tagsdir.re"
 	{ a }
-#line 77 "directives/tagsdir.c"
+#line 117 "directives/tagsdir.c"
 yy3:
 	++YYCURSOR;
 	goto yy2;
@@ -83,7 +123,7 @@ yy3:
 
 // re2c:y1
 
-#line 87 "directives/tagsdir.c"
+#line 127 "directives/tagsdir.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -101,7 +141,7 @@ yy6:
 	y3 = yyt3;
 #line 54 "directives/tagsdir.re"
 	{ b }
-#line 105 "directives/tagsdir.c"
+#line 145 "directives/tagsdir.c"
 yy7:
 	++YYCURSOR;
 	goto yy6;
@@ -112,7 +152,7 @@ yy7:
 
 // re2c:x2
 
-#line 116 "directives/tagsdir.c"
+#line 156 "directives/tagsdir.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -127,7 +167,7 @@ yy10:
 	x2 = x2_2;
 #line 49 "directives/tagsdir.re"
 	{ a }
-#line 131 "directives/tagsdir.c"
+#line 171 "directives/tagsdir.c"
 yy11:
 	++YYCURSOR;
 	goto yy10;
@@ -137,7 +177,7 @@ yy11:
 
 // re2c:y2
 
-#line 141 "directives/tagsdir.c"
+#line 181 "directives/tagsdir.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -155,7 +195,7 @@ yy14:
 	y3 = y2_3;
 #line 54 "directives/tagsdir.re"
 	{ b }
-#line 159 "directives/tagsdir.c"
+#line 199 "directives/tagsdir.c"
 yy15:
 	++YYCURSOR;
 	goto yy14;
