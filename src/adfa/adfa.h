@@ -11,6 +11,7 @@
 #include "src/codegen/code.h"
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
+#include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"

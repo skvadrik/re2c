@@ -9,7 +9,6 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
-#include "src/codegen/code.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
