@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT 
+// re2c $INPUT -o $OUTPUT
 #include <assert.h>
 #include <vector>
 #include <string>
@@ -33,7 +33,7 @@ static void unfold(const MtagTree &tree, int x, int y, Words &words)
 static bool lex(const char *YYCURSOR, Words &words)
 {
     const char *YYMARKER;
-    /*!mtags:re2c format = "int @@ = ROOT;"; */
+    /*!mtags:re2c format = "int @@ = ROOT;\n"; */
     MtagTree tree;
     int x, y;
 

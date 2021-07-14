@@ -357,7 +357,9 @@ yy51:
 	std::cerr << str << "\t-\t" << (res ? "fail" : "ok") << std::endl; \
 	result += res
 
+#line 361 "bug1163046.c"
 #define YYMAXFILL 45
+#line 36 "bug1163046.re"
 
 
 int main(int,void**)

@@ -5,13 +5,17 @@ package main
 
 import "reflect"
 
+//line "golang/005_posix_captures.go":9
 var YYMAXNMATCH int = 5
+//line "golang/005_posix_captures.re":6
 
 
 func Lex(str string) (int, []int) {
 	var cursor, marker, yynmatch int
 	yypmatch := make([]int, YYMAXNMATCH*2)
 
+	
+//line "golang/005_posix_captures.go":19
 	var yyt1 int
 	var yyt2 int
 	var yyt3 int
@@ -19,9 +23,11 @@ func Lex(str string) (int, []int) {
 	var yyt5 int
 	var yyt6 int
 	var yyt7 int
+//line "golang/005_posix_captures.re":12
+
 
 	
-//line "golang/005_posix_captures.go":25
+//line "golang/005_posix_captures.go":31
 {
 	var yych byte
 	yych = str[cursor]
@@ -80,19 +86,19 @@ yy2:
 	if (yypmatch[8] != yyt3) {
 		yypmatch[8] += -1
 	}
-//line "golang/005_posix_captures.re":43
+//line "golang/005_posix_captures.re":40
 	{
 		return yynmatch, yypmatch
 	}
-//line "golang/005_posix_captures.go":88
+//line "golang/005_posix_captures.go":94
 yy4:
 	cursor += 1
 yy5:
-//line "golang/005_posix_captures.re":31
+//line "golang/005_posix_captures.re":28
 	{
 		return -1, nil
 	}
-//line "golang/005_posix_captures.go":96
+//line "golang/005_posix_captures.go":102
 yy6:
 	cursor += 1
 	marker = cursor
@@ -158,11 +164,11 @@ yy9:
 	yypmatch[1] = cursor
 	yypmatch[3] = cursor
 	yypmatch[3] += -1
-//line "golang/005_posix_captures.re":39
+//line "golang/005_posix_captures.re":36
 	{
 		return yynmatch, yypmatch
 	}
-//line "golang/005_posix_captures.go":166
+//line "golang/005_posix_captures.go":172
 yy11:
 	cursor += 1
 	yych = str[cursor]
@@ -291,11 +297,11 @@ yy25:
 	yypmatch[5] = yyt2
 	yypmatch[7] = cursor
 	yypmatch[7] += -1
-//line "golang/005_posix_captures.re":35
+//line "golang/005_posix_captures.re":32
 	{
 		return yynmatch, yypmatch
 	}
-//line "golang/005_posix_captures.go":299
+//line "golang/005_posix_captures.go":305
 yy27:
 	cursor += 1
 	yych = str[cursor]
@@ -307,7 +313,7 @@ yy27:
 		goto yy13
 	}
 }
-//line "golang/005_posix_captures.re":46
+//line "golang/005_posix_captures.re":43
 
 }
 

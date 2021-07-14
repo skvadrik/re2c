@@ -4,13 +4,17 @@
 
 #line 3 "newlines/nl_01.re"
 
+#line 8 "newlines/nl_01.c"
 yyt1
+#line 4 "newlines/nl_01.re"
 
+#line 12 "newlines/nl_01.c"
 #define YYMAXFILL 1
+#line 5 "newlines/nl_01.re"
 
 
 
-#line 14 "newlines/nl_01.c"
+#line 18 "newlines/nl_01.c"
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -26,7 +30,7 @@ yy2:
 	{
         ;
     }
-#line 30 "newlines/nl_01.c"
+#line 34 "newlines/nl_01.c"
 yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

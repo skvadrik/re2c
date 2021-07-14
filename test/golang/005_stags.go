@@ -5,12 +5,16 @@ package main
 
 func Lex(str string) (a int, b int, c int) {
 	var cursor, marker int
+	
+//line "golang/005_stags.go":10
 	var yyt1 int
 	var yyt2 int
 	var yyt3 int
+//line "golang/005_stags.re":6
+
 
 	
-//line "golang/005_stags.go":14
+//line "golang/005_stags.go":18
 {
 	var yych byte
 	yych = str[cursor]
@@ -37,19 +41,19 @@ yy2:
 	a = yyt1
 	b = yyt2
 	c = yyt3
-//line "golang/005_stags.re":37
+//line "golang/005_stags.re":34
 	{
 		return a, b, c
 	}
-//line "golang/005_stags.go":45
+//line "golang/005_stags.go":49
 yy4:
 	cursor += 1
 yy5:
-//line "golang/005_stags.re":25
+//line "golang/005_stags.re":22
 	{
 		return -2, -2, -2
 	}
-//line "golang/005_stags.go":53
+//line "golang/005_stags.go":57
 yy6:
 	cursor += 1
 	marker = cursor
@@ -103,11 +107,11 @@ yy9:
 	a = yyt1
 	b = yyt2
 	c = yyt3
-//line "golang/005_stags.re":33
+//line "golang/005_stags.re":30
 	{
 		return a, b, c
 	}
-//line "golang/005_stags.go":111
+//line "golang/005_stags.go":115
 yy11:
 	cursor += 1
 	yych = str[cursor]
@@ -226,11 +230,11 @@ yy25:
 	c = yyt2
 	b = yyt2
 	b += -1
-//line "golang/005_stags.re":29
+//line "golang/005_stags.re":26
 	{
 		return a, b, c
 	}
-//line "golang/005_stags.go":234
+//line "golang/005_stags.go":238
 yy27:
 	cursor += 1
 	yych = str[cursor]
@@ -242,7 +246,7 @@ yy27:
 		goto yy13
 	}
 }
-//line "golang/005_stags.re":40
+//line "golang/005_stags.re":37
 
 }
 

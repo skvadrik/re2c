@@ -6,7 +6,9 @@ package main
 import "fmt"
 import "os"
 
+//line "golang/003_fill.go":10
 var YYMAXFILL int = 2
+//line "golang/003_fill.re":7
 
 var SIZE int = 11
 
@@ -68,7 +70,7 @@ func Lex(in *Input) int {
 	in.token = in.cursor
 
 	
-//line "golang/003_fill.go":72
+//line "golang/003_fill.go":74
 {
 	var yych YYCTYPE
 	if (in.limit-in.cursor < 1) {
@@ -110,7 +112,7 @@ yy2:
 		fmt.Println("end")
 		return 0
 	}
-//line "golang/003_fill.go":114
+//line "golang/003_fill.go":116
 yy4:
 	in.cursor += 1
 //line "golang/003_fill.re":75
@@ -118,14 +120,14 @@ yy4:
 		fmt.Println("error")
 		return -1
 	}
-//line "golang/003_fill.go":122
+//line "golang/003_fill.go":124
 yy6:
 	in.cursor += 1
 //line "golang/003_fill.re":95
 	{
 		return 3
 	}
-//line "golang/003_fill.go":129
+//line "golang/003_fill.go":131
 yy8:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -165,7 +167,7 @@ yy10:
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return 1
 	}
-//line "golang/003_fill.go":169
+//line "golang/003_fill.go":171
 yy11:
 	in.cursor += 1
 	yych = YYCTYPE(in.data[in.cursor])
@@ -232,7 +234,7 @@ yy15:
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return 2
 	}
-//line "golang/003_fill.go":236
+//line "golang/003_fill.go":238
 }
 //line "golang/003_fill.re":98
 

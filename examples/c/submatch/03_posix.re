@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT 
+// re2c $INPUT -o $OUTPUT
 #include <assert.h>
 #include <stdint.h>
 
@@ -17,7 +17,7 @@ static uint64_t lex(const char *YYCURSOR)
     const char *YYMARKER;
     const char *yypmatch[YYMAXNMATCH * 2];
     uint32_t yynmatch;
-    /*!stags:re2c format = 'const char *@@;'; */
+    /*!stags:re2c format = 'const char *@@;\n'; */
 
     /*!re2c
     re2c:yyfill:enable = 0;

@@ -6,7 +6,9 @@ package main
 import "fmt"
 import "os"
 
+//line "golang/003_fill_bf.go":10
 var YYMAXFILL int = 2
+//line "golang/003_fill_bf.re":7
 
 var SIZE int = 11
 
@@ -80,7 +82,7 @@ func Lex(in *Input) (int, int) {
 	var yych YYCTYPE
 
 	
-//line "golang/003_fill_bf.go":84
+//line "golang/003_fill_bf.go":86
 {
 
 	yybm := []byte{
@@ -156,7 +158,7 @@ yy3:
 		fmt.Println("end")
 		return lexEnd, 0
 	}
-//line "golang/003_fill_bf.go":160
+//line "golang/003_fill_bf.go":162
 yy5:
 	in.cursor += 1
 //line "golang/003_fill_bf.re":89
@@ -164,7 +166,7 @@ yy5:
 		fmt.Println("error")
 		return lexError, 0
 	}
-//line "golang/003_fill_bf.go":168
+//line "golang/003_fill_bf.go":170
 yy7:
 	in.cursor += 1
 	in.state = 1
@@ -180,7 +182,7 @@ yyFillLabel1:
 	{
 		return lexSpace, 0
 	}
-//line "golang/003_fill_bf.go":184
+//line "golang/003_fill_bf.go":186
 yy10:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -202,7 +204,7 @@ yy12:
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber1, 0
 	}
-//line "golang/003_fill_bf.go":206
+//line "golang/003_fill_bf.go":208
 yy13:
 	in.cursor += 1
 	yych = YYCTYPE(in.data[in.cursor])
@@ -235,7 +237,7 @@ yy17:
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber2, 0
 	}
-//line "golang/003_fill_bf.go":239
+//line "golang/003_fill_bf.go":241
 }
 //line "golang/003_fill_bf.re":112
 

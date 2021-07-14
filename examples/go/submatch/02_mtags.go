@@ -57,11 +57,15 @@ func lex(str string) []string {
 	trie := createTrie(256)
 	x := mtagRoot
 	y := mtagRoot
+	
+//line "go/submatch/02_mtags.go":62
 	yyt1 := mtagRoot
 	yyt2 := mtagRoot
+//line "go/submatch/02_mtags.re":58
+
 
 	
-//line "go/submatch/02_mtags.go":65
+//line "go/submatch/02_mtags.go":69
 {
 	var yych byte
 	yych = str[cursor]
@@ -132,13 +136,13 @@ yy2:
 	y = yyt2
 //line "go/submatch/02_mtags.re":73
 	{ return unwind(trie, x, y, str) }
-//line "go/submatch/02_mtags.go":136
+//line "go/submatch/02_mtags.go":140
 yy4:
 	cursor += 1
 yy5:
 //line "go/submatch/02_mtags.re":74
 	{ return nil }
-//line "go/submatch/02_mtags.go":142
+//line "go/submatch/02_mtags.go":146
 yy6:
 	cursor += 1
 	marker = cursor

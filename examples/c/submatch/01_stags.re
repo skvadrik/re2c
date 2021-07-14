@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT 
+// re2c $INPUT -o $OUTPUT
 #include <assert.h>
 #include <stdint.h>
 
@@ -14,7 +14,7 @@ static const uint64_t ERROR = ~0lu;
 static uint64_t lex(const char *YYCURSOR)
 {
     const char *YYMARKER, *o1, *o2, *o3, *o4;
-    /*!stags:re2c format = 'const char *@@;'; */
+    /*!stags:re2c format = 'const char *@@;\n'; */
 
     /*!re2c
     re2c:yyfill:enable = 0;

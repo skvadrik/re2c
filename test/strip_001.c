@@ -9,7 +9,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#line 13 "strip_001.c"
 #define YYMAXFILL 2
+#line 38 "strip_001.re"
 
 #define	BSIZE	128
 
@@ -79,7 +81,7 @@ int scan(FILE *fp)
 	{
 		s.tok = s.cur;
 
-#line 83 "strip_001.c"
+#line 85 "strip_001.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -89,7 +91,7 @@ int scan(FILE *fp)
 yy3:
 #line 114 "strip_001.re"
 			{ fputc(*s.tok, stdout); continue; }
-#line 93 "strip_001.c"
+#line 95 "strip_001.c"
 yy4:
 			yych = *++YYCURSOR;
 			if (yych == '*') goto yy5;
@@ -99,19 +101,19 @@ yy5:
 			++YYCURSOR;
 #line 113 "strip_001.re"
 			{ goto comment; }
-#line 103 "strip_001.c"
+#line 105 "strip_001.c"
 yy7:
 			++YYCURSOR;
 #line 112 "strip_001.re"
 			{ goto cppcomment; }
-#line 108 "strip_001.c"
+#line 110 "strip_001.c"
 		}
 #line 115 "strip_001.re"
 
 comment:
 		s.tok = s.cur;
 
-#line 115 "strip_001.c"
+#line 117 "strip_001.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -121,21 +123,21 @@ comment:
 yy12:
 #line 120 "strip_001.re"
 			{ goto comment; }
-#line 125 "strip_001.c"
+#line 127 "strip_001.c"
 yy13:
 			yych = *++YYCURSOR;
 			if (yych != '/') goto yy12;
 			++YYCURSOR;
 #line 119 "strip_001.re"
 			{ continue; }
-#line 132 "strip_001.c"
+#line 134 "strip_001.c"
 		}
 #line 121 "strip_001.re"
 
 cppcomment:
 		s.tok = s.cur;
 
-#line 139 "strip_001.c"
+#line 141 "strip_001.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -146,12 +148,12 @@ cppcomment:
 yy19:
 #line 126 "strip_001.re"
 			{ goto cppcomment; }
-#line 150 "strip_001.c"
+#line 152 "strip_001.c"
 yy20:
 			++YYCURSOR;
 #line 125 "strip_001.re"
 			{ fwrite(s.tok, 1, s.cur - s.tok, stdout); continue; }
-#line 155 "strip_001.c"
+#line 157 "strip_001.c"
 yy22:
 			yych = *++YYCURSOR;
 			if (yych == '\n') goto yy20;

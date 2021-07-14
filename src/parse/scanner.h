@@ -72,8 +72,7 @@ private:
     bool lex_end_of_block(Output &out, bool allow_garbage = false);
     bool lex_opt_name(std::string &name);
     bool lex_name_list(code_alc_t &alc, BlockNameList **ptail);
-    bool lex_block_fmt(code_alc_t &alc, const char **fmt, const char **sep,
-        bool *multiline);
+    bool lex_block_fmt(Output &out, CodeKind kind, bool many);
     void lex_code_indented();
     void lex_code_in_braces();
     void lex_c_comment();
