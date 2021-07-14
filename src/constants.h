@@ -48,11 +48,6 @@ enum InputBlockKind {
     INPUT_ERROR
 };
 
-enum MaxDirectiveKind {
-    MAX_FILL,
-    MAX_NMATCH
-};
-
 enum empty_class_policy_t {
     EMPTY_CLASS_MATCH_EMPTY, // match on empty input
     EMPTY_CLASS_MATCH_NONE,  // fail to match on any input
@@ -98,7 +93,8 @@ enum CodeKind {
     CODE_STATE_GOTO,
     CODE_STAGS,
     CODE_MTAGS,
-    CODE_YYMAX,
+    CODE_MAXFILL,
+    CODE_MAXNMATCH,
     CODE_YYCH,
     CODE_YYACCEPT,
     CODE_VAR,

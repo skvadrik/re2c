@@ -25,17 +25,21 @@ void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &
 {
     DASSERT(code->kind == CODE_STAGS || code->kind == CODE_MTAGS);
 
-    const char *fmt = code->tags.fmt;
-    const char *sep = code->tags.sep;
+    const char *fmt = code->fmt.format;
+    const char *sep = code->fmt.separator;
 
-    tagnames_t::const_iterator tag = tags.begin(), end = tags.end();
-    for (; tag != end; ) {
-        std::ostringstream s(fmt);
-        argsubst(s, opts->api_sigil, "tag", true, *tag);
-        buf.str(s.str());
-        if (++tag == end) break;
-        buf.cstr(sep);
+    tagnames_t::const_iterator ib = tags.begin(), ie = tags.end(), it;
+    for (it = ib; it != ie; ++it) {
+        if (sep && it != ib) {
+            buf.cstr(sep);
+        }
+        if (fmt) {
+            std::ostringstream s(fmt);
+            argsubst(s, opts->api_sigil, "tag", true, *it);
+            buf.str(s.str());
+        }
     }
+
     code->kind = CODE_RAW;
     code->raw.size = buf.stream().str().length();
     code->raw.data = buf.flush();
@@ -44,11 +48,15 @@ void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &
 static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
 {
     DASSERT(code->kind == CODE_STAGS || code->kind == CODE_MTAGS);
+    if (ctx.global->opts->target != TARGET_CODE) {
+        code->kind = CODE_EMPTY;
+        return;
+    }
 
     Scratchbuf &buf = ctx.global->scratchbuf;
     bool oneval = (code->kind == CODE_STAGS);
 
-    if (code->tags.block_names == NULL) {
+    if (code->fmt.block_names == NULL) {
         // Use the global set of tags accumulated from all blocks.
         gen_tags(buf, ctx.block->opts, code,
             oneval ? ctx.global->stags : ctx.global->mtags);
@@ -56,7 +64,7 @@ static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
         // Gather tags from the blocks on the list.
         const char *directive = oneval ? "stags:re2c" : "mtags:re2c";
         tagnames_t tags;
-        for (BlockNameList *p = code->tags.block_names; p; p = p->next) {
+        for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
             const OutputBlock *b = find_block_with_name(ctx, p->name, directive);
             if (!b) exit(1);
             if (oneval) {
@@ -288,32 +296,32 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
 {
     const opt_t *opts = ctx.block->opts;
     Scratchbuf &o = ctx.global->scratchbuf;
-    CodeMax &m = code->max;
 
     if (opts->target != TARGET_CODE) {
         code->kind = CODE_EMPTY;
         return;
     }
 
-    const char *dirname = (m.kind == MAX_FILL) ? "max:re2c" : "maxnmatch:re2c";
-    const char *varname = (m.kind == MAX_FILL) ? "YYMAXFILL" : "YYMAXNMATCH";
+    bool is_maxfill = (code->kind == CODE_MAXFILL);
+    const char *dirname = is_maxfill ? "max:re2c" : "maxnmatch:re2c";
+    const char *varname = is_maxfill ? "YYMAXFILL" : "YYMAXNMATCH";
 
     size_t max;
-    if (code->max.block_names == NULL) {
+    if (code->fmt.block_names == NULL) {
         // Global maximum in the file.
-        max = (m.kind == MAX_FILL) ? ctx.global->max_fill : ctx.global->max_nmatch;
+        max = is_maxfill ? ctx.global->max_fill : ctx.global->max_nmatch;
     } else {
         // Maximum among the blocks listed in the directive.
         max = 0;
-        for (BlockNameList *p = m.block_names; p; p = p->next) {
+        for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
             const OutputBlock *b = find_block_with_name(ctx, p->name, dirname);
             if (!b) exit(1);
-            max = std::max(max, (m.kind == MAX_FILL) ? b->max_fill : b->max_nmatch);
+            max = std::max(max, is_maxfill ? b->max_fill : b->max_nmatch);
         }
     }
 
-    if (m.format) {
-        std::ostringstream os(m.format);
+    if (code->fmt.format) {
+        std::ostringstream os(code->fmt.format);
         argsubst(os, opts->api_sigil, "max", true, max);
         code->text = o.str(os.str()).flush();
     } else {
@@ -490,7 +498,8 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
         case CODE_MTAGS:
             expand_tags_directive(ctx, code);
             break;
-        case CODE_YYMAX:
+        case CODE_MAXFILL:
+        case CODE_MAXNMATCH:
             gen_yymax(ctx, code);
             break;
         case CODE_YYCH:

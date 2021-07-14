@@ -572,7 +572,8 @@ void render(RenderContext &rctx, const Code *code)
             break;
         case CODE_STAGS:
         case CODE_MTAGS:
-        case CODE_YYMAX:
+        case CODE_MAXFILL:
+        case CODE_MAXNMATCH:
         case CODE_YYCH:
         case CODE_YYACCEPT:
         case CODE_COND_ENUM:

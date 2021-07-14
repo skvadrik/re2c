@@ -124,8 +124,9 @@ InputBlockKind Scanner::echo(Output &out, std::string &block_name)
 {
     const opt_t *opts = out.block().opts;
     code_alc_t &alc = out.allocator;
-    const char *x, *y;
+    const char *x, *y, *fmt, *sep;
     BlockNameList *block_list;
+    bool multiline;
 
     if (is_eof()) return INPUT_END;
 
@@ -165,17 +166,13 @@ loop:
         return INPUT_USE;
     }
 
-    "/*!max:re2c" {
+    "/*!" ("max" @x | "maxnmatch") ":re2c" {
+        CodeKind kind = x ? CODE_MAXFILL : CODE_MAXNMATCH;
         out.wraw(tok, ptr);
         if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
-        if (!lex_max(out, MAX_FILL, block_list)) return INPUT_ERROR;
-        goto next;
-    }
-
-    "/*!maxnmatch:re2c" {
-        out.wraw(tok, ptr);
-        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
-        if (!lex_max(out, MAX_NMATCH, block_list)) return INPUT_ERROR;
+        if (!lex_block_fmt(alc, &fmt, NULL, &multiline)) return INPUT_ERROR;
+        out.wdelay_stmt(0, code_fmt(alc, kind, block_list, fmt, NULL));
+        if (multiline) out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
         goto next;
     }
 
@@ -206,17 +203,12 @@ loop:
         goto next;
     }
 
-    "/*!stags:re2c" {
+    "/*!" @x [sm] "tags:re2c" {
+        CodeKind kind = (*x == 's') ? CODE_STAGS : CODE_MTAGS;
         out.wraw(tok, ptr);
         if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
-        if (!lex_tags(out, block_list, false)) return INPUT_ERROR;
-        goto next;
-    }
-
-    "/*!mtags:re2c" {
-        out.wraw(tok, ptr);
-        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
-        if (!lex_tags(out, block_list, true)) return INPUT_ERROR;
+        if (!lex_block_fmt(alc, &fmt, &sep, &multiline)) return INPUT_ERROR;
+        out.wdelay_stmt(0, code_fmt(alc, kind, block_list, fmt, sep));
         goto next;
     }
 
@@ -364,53 +356,34 @@ loop:
 */
 }
 
-bool Scanner::lex_max(Output &out, MaxDirectiveKind kind, BlockNameList *blocks)
+bool Scanner::lex_block_fmt(code_alc_t &alc, const char **fmt, const char **sep,
+    bool *multiline)
 {
-    code_alc_t &alc = out.allocator;
-    bool multiline = false;
-    const char *format = NULL;
+    *fmt = NULL;
+    if (sep) *sep = NULL;
+    *multiline = false;
 loop:
 /*!re2c
-    * {
-        msg.error(cur_loc(), "ill-formed directive: expected an optional "
-            "configuration 'format' followed by the end of block `*" "/`");
-        return false;
-    }
-    eoc {
-        out.wdelay_stmt(0, code_yymax(alc, kind, blocks, format));
-        if (multiline) out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
-        return true;
-    }
-    "format" { format = copystr(lex_conf_string(), alc); goto loop; }
-    space+   { goto loop; }
-    eol      { next_line(); multiline = true; goto loop; }
-*/
-}
-
-bool Scanner::lex_tags(Output &out, BlockNameList *blocks, bool mtags)
-{
-    const opt_t *opts = out.block().opts;
-    std::string fmt, sep;
-loop:
-/*!re2c
-    * {
-        msg.error(cur_loc(), "unrecognized configuration");
-        return false;
+    "format" {
+        *fmt = copystr(lex_conf_string(), alc);
+        goto loop;
     }
 
-    "format"    { fmt = lex_conf_string(); goto loop; }
-    "separator" { sep = lex_conf_string(); goto loop; }
+    "separator" {
+        if (!sep) goto error;
+        *sep = copystr(lex_conf_string(), alc);
+        goto loop;
+    }
 
+    *      { goto error; }
     space+ { goto loop; }
-    eol    { next_line(); goto loop; }
-    eoc    {
-        if (opts->target == TARGET_CODE) {
-            out.wdelay_stmt(opts->topIndent,
-                code_tags(out.allocator, fmt, sep, blocks, mtags));
-        }
-        return true;
-    }
+    eol    { next_line(); *multiline = true; goto loop; }
+    eoc    { return true; }
 */
+error:
+    msg.error(cur_loc(), "ill-formed directive: expected an optional "
+        "configuration 'format' followed by the end of block `*" "/`");
+    return false;
 }
 
 int Scanner::scan()
