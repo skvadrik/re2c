@@ -310,41 +310,6 @@ struct CodeLabel {
 };
 
 struct Code {
-    enum Kind {
-        EMPTY,
-        IF_THEN_ELSE,
-        SWITCH,
-        BLOCK,
-        FUNC,
-        SKIP,
-        PEEK,
-        BACKUP,
-        PEEK_SKIP,
-        SKIP_PEEK,
-        SKIP_BACKUP,
-        BACKUP_SKIP,
-        BACKUP_PEEK,
-        BACKUP_PEEK_SKIP,
-        SKIP_BACKUP_PEEK,
-        LINE_INFO_INPUT,
-        LINE_INFO_OUTPUT,
-        COND_ENUM,
-        COND_GOTO,
-        COND_TABLE,
-        STATE_GOTO,
-        STAGS,
-        MTAGS,
-        YYMAX,
-        YYCH,
-        YYACCEPT,
-        VAR,
-        STMT,
-        TEXT,
-        TEXT_RAW,
-        RAW,
-        LABEL
-    } kind;
-
     union {
         const char    *text;
         BlockNameList *block_names;
@@ -360,7 +325,8 @@ struct Code {
         loc_t          loc;
     };
 
-    Code *next;
+    CodeKind  kind;
+    Code     *next;
 };
 
 template<typename T>
@@ -400,7 +366,7 @@ inline void append(code_list_t<T> *list1, code_list_t<T> *list2)
     }
 }
 
-inline Code *new_code(code_alc_t &alc, Code::Kind kind)
+inline Code *new_code(code_alc_t &alc, CodeKind kind)
 {
     Code *x = alc.alloct<Code>(1);
     x->kind = kind;
@@ -410,21 +376,21 @@ inline Code *new_code(code_alc_t &alc, Code::Kind kind)
 
 inline Code *code_stmt(code_alc_t &alc, const char *text)
 {
-    Code *x = new_code(alc, Code::STMT);
+    Code *x = new_code(alc, CODE_STMT);
     x->text = text;
     return x;
 }
 
 inline Code *code_text(code_alc_t &alc, const char *text)
 {
-    Code *x = new_code(alc, Code::TEXT);
+    Code *x = new_code(alc, CODE_TEXT);
     x->text = text;
     return x;
 }
 
 inline Code *code_raw(code_alc_t &alc, const char *data, size_t size)
 {
-    Code *x = new_code(alc, Code::RAW);
+    Code *x = new_code(alc, CODE_RAW);
     char *copy = alc.alloct<char>(size);
     memcpy(copy, data, size);
     x->raw.size = size;
@@ -434,7 +400,7 @@ inline Code *code_raw(code_alc_t &alc, const char *data, size_t size)
 
 inline Code *code_textraw(code_alc_t &alc, const char *text)
 {
-    Code *x = new_code(alc, Code::TEXT_RAW);
+    Code *x = new_code(alc, CODE_TEXT_RAW);
     x->text = text;
     return x;
 }
@@ -446,7 +412,7 @@ inline Code *code_newline(code_alc_t &alc)
 
 inline Code *code_nlabel(code_alc_t &alc, Label *label)
 {
-    Code *x = new_code(alc, Code::LABEL);
+    Code *x = new_code(alc, CODE_LABEL);
     x->label.kind = CodeLabel::NLABEL;
     x->label.nlabel = label;
     return x;
@@ -454,7 +420,7 @@ inline Code *code_nlabel(code_alc_t &alc, Label *label)
 
 inline Code *code_slabel(code_alc_t &alc, const char *label)
 {
-    Code *x = new_code(alc, Code::LABEL);
+    Code *x = new_code(alc, CODE_LABEL);
     x->label.kind = CodeLabel::SLABEL;
     x->label.slabel = label;
     return x;
@@ -463,7 +429,7 @@ inline Code *code_slabel(code_alc_t &alc, const char *label)
 inline Code *code_tags(code_alc_t &alc, const std::string &fmt, const std::string &sep,
     BlockNameList *blocks, bool mtags)
 {
-    Code *x = new_code(alc, mtags ? Code::MTAGS : Code::STAGS);
+    Code *x = new_code(alc, mtags ? CODE_MTAGS : CODE_STAGS);
     x->tags.fmt = copystr(fmt, alc);
     x->tags.sep = copystr(sep, alc);
     x->tags.block_names = blocks;
@@ -473,7 +439,7 @@ inline Code *code_tags(code_alc_t &alc, const std::string &fmt, const std::strin
 inline Code *code_yymax(code_alc_t &alc, MaxDirectiveKind kind, BlockNameList *blocks,
     const char *format)
 {
-    Code *x = new_code(alc, Code::YYMAX);
+    Code *x = new_code(alc, CODE_YYMAX);
     x->max.kind = kind;
     x->max.format = format;
     x->max.block_names = blocks;
@@ -482,68 +448,68 @@ inline Code *code_yymax(code_alc_t &alc, MaxDirectiveKind kind, BlockNameList *b
 
 inline Code *code_cond_enum(code_alc_t &alc, BlockNameList *blocks)
 {
-    Code *x = new_code(alc, Code::COND_ENUM);
+    Code *x = new_code(alc, CODE_COND_ENUM);
     x->block_names = blocks;
     return x;
 }
 
 inline Code *code_cond_table(code_alc_t &alc)
 {
-    return new_code(alc, Code::COND_TABLE);
+    return new_code(alc, CODE_COND_TABLE);
 }
 
 inline Code *code_cond_goto(code_alc_t &alc)
 {
-    return new_code(alc, Code::COND_GOTO);
+    return new_code(alc, CODE_COND_GOTO);
 }
 
 inline Code *code_state_goto(code_alc_t &alc, BlockNameList *blocks)
 {
-    Code *x = new_code(alc, Code::STATE_GOTO);
+    Code *x = new_code(alc, CODE_STATE_GOTO);
     x->block_names = blocks;
     return x;
 }
 
 inline Code *code_line_info_input(code_alc_t &alc, const loc_t &loc)
 {
-    Code *x = new_code(alc, Code::LINE_INFO_INPUT);
+    Code *x = new_code(alc, CODE_LINE_INFO_INPUT);
     x->loc = loc;
     return x;
 }
 
 inline Code *code_yych_decl(code_alc_t &alc)
 {
-    return new_code(alc, Code::YYCH);
+    return new_code(alc, CODE_YYCH);
 }
 
 inline Code *code_yyaccept_def(code_alc_t &alc)
 {
-    return new_code(alc, Code::YYACCEPT);
+    return new_code(alc, CODE_YYACCEPT);
 }
 
 inline Code *code_line_info_output(code_alc_t &alc)
 {
-    return new_code(alc, Code::LINE_INFO_OUTPUT);
+    return new_code(alc, CODE_LINE_INFO_OUTPUT);
 }
 
 inline Code *code_skip(code_alc_t &alc)
 {
-    return new_code(alc, Code::SKIP);
+    return new_code(alc, CODE_SKIP);
 }
 
 inline Code *code_peek(code_alc_t &alc)
 {
-    return new_code(alc, Code::PEEK);
+    return new_code(alc, CODE_PEEK);
 }
 
 inline Code *code_backup(code_alc_t &alc)
 {
-    return new_code(alc, Code::BACKUP);
+    return new_code(alc, CODE_BACKUP);
 }
 
 inline Code *code_block(code_alc_t &alc, CodeList *stmts, CodeBlock::Fmt fmt)
 {
-    Code *x = new_code(alc, Code::BLOCK);
+    Code *x = new_code(alc, CODE_BLOCK);
     x->block.stmts = stmts;
     x->block.fmt   = fmt;
     return x;
@@ -552,7 +518,7 @@ inline Code *code_block(code_alc_t &alc, CodeList *stmts, CodeBlock::Fmt fmt)
 inline Code *code_if_then_else(code_alc_t &alc, const char *if_cond, CodeList *if_code,
     CodeList *else_code, bool oneline = true)
 {
-    Code *x = new_code(alc, Code::IF_THEN_ELSE);
+    Code *x = new_code(alc, CODE_IF_THEN_ELSE);
     x->ifte.if_cond   = if_cond;
     x->ifte.else_cond = NULL;
     x->ifte.if_code   = if_code;
@@ -626,7 +592,7 @@ inline CodeArgs *code_args(code_alc_t &alc)
 inline Code *code_func(code_alc_t &alc, const char *name, CodeArgs *args,
     const char *semi)
 {
-    Code *x = new_code(alc, Code::FUNC);
+    Code *x = new_code(alc, CODE_FUNC);
     x->func.args = args;
     x->func.name = name;
     x->func.semi = semi;
@@ -646,7 +612,7 @@ inline Code *code_fcall(code_alc_t &alc, const char *name, CodeArgs *args,
 
 inline Code *code_switch(code_alc_t &alc, const char *expr, CodeCases *cases)
 {
-    Code *x = new_code(alc, Code::SWITCH);
+    Code *x = new_code(alc, CODE_SWITCH);
     x->swch.expr   = expr;
     x->swch.cases  = cases;
     return x;
