@@ -7,14 +7,15 @@
 #include <string>
 #include <vector>
 
+#include "src/constants.h"
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
 #include "src/parse/input.h"
 #include "src/parse/lex.h"
-#include "src/options/opt.h"
 #include "src/encoding/enc.h"
 #include "src/encoding/utf8/utf8.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/slab_allocator.h"
 
 
 namespace re2c {
@@ -24,6 +25,9 @@ class Output;
 struct AST;
 struct ASTChar;
 struct BlockNameList;
+struct conopt_t;
+struct opt_t;
+struct Opt;
 
 // Must be defined exacly as in codegen.
 typedef slab_allocator_t<1024 * 1024, 8> code_alc_t;
@@ -150,13 +154,6 @@ inline Input& Scanner::get_input()
 inline const Input& Scanner::get_cinput() const
 {
     return *files[get_input_index()];
-}
-
-inline uint32_t Scanner::decode(const char *str) const
-{
-    return globopts->input_encoding == Enc::ASCII
-        ? static_cast<uint8_t>(str[0])
-        : utf8::decode_unsafe(str);
 }
 
 } // end namespace re2c

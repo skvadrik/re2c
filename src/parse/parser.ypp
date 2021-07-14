@@ -12,6 +12,8 @@
 #pragma GCC diagnostic ignored "-Wunreachable-code-break"
 
 #include "src/parse/parse.h"
+#include "src/msg/msg.h"
+#include "src/options/opt.h"
 
 
 using namespace re2c;

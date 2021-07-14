@@ -1,10 +1,13 @@
 #ifndef _RE2C_LIB_REGCOMP_DFA_REGLESS_
 #define _RE2C_LIB_REGCOMP_DFA_REGLESS_
 
-#include "regex.h"
+#include <string.h>
 
+#include "regex.h"
+#include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/nfa/nfa.h"
+#include "src/options/opt.h"
 
 
 namespace re2c {

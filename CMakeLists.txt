@@ -151,7 +151,6 @@ set(re2c_sources
     src/nfa/estimate_size.cc
     src/nfa/re_to_nfa.cc
     src/adfa/adfa.cc
-    src/adfa/prepare.cc
     src/debug/dump_adfa.cc
     src/debug/dump_cfg.cc
     src/debug/dump_dfa.cc
@@ -191,6 +190,7 @@ set(re2c_sources
     src/regexp/default_tags.cc
     src/regexp/fixed_tags.cc
     src/regexp/nullable.cc
+    src/regexp/re.cc
     src/regexp/rule.cc
     src/regexp/split_charset.cc
     src/regexp/tag.cc
@@ -456,6 +456,7 @@ if (RE2C_BUILD_LIBS)
         src/regexp/default_tags.cc
         src/regexp/fixed_tags.cc
         src/regexp/nullable.cc
+        src/regexp/re.cc
         src/regexp/rule.cc
         src/regexp/split_charset.cc
         src/regexp/tag.cc

@@ -1,3 +1,5 @@
+#include "src/msg/msg.h"
+#include "src/options/opt.h"
 #include "src/parse/parse.h"
 
 

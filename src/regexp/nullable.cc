@@ -3,6 +3,7 @@
 #include <valarray>
 #include <vector>
 
+#include "src/debug/debug.h"
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/regexp/re.h"

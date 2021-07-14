@@ -18,7 +18,6 @@
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
 #include "src/parse/ast.h"
-#include "src/regexp/empty_class_policy.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"

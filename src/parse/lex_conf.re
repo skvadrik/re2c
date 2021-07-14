@@ -6,7 +6,6 @@
 #include "src/options/opt.h"
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
-#include "src/regexp/empty_class_policy.h"
 #include "src/util/file_utils.h"
 #include "src/util/s_to_n32_unsafe.h"
 #include "src/util/string_utils.h"

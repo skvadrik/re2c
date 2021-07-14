@@ -7,7 +7,6 @@
 
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
-#include "src/options/opt.h"
 
 
 namespace re2c {

@@ -8,22 +8,53 @@
 #include <valarray>
 #include <vector>
 
-#include "src/adfa/action.h"
 #include "src/codegen/code.h"
-#include "src/dfa/tcmd.h"
+#include "src/debug/debug.h"
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/uniq_vector.h"
 
 
 namespace re2c {
 
 class Msg;
-struct opt_t;
 class Output;
 struct dfa_t;
+struct opt_t;
 struct Label;
+struct State;
+
+static const size_t NOSAVE = std::numeric_limits<size_t>::max();
+
+typedef uniq_vector_t<std::pair<State*, tcid_t> > accept_t;
+
+class Action {
+public:
+    enum type_t {
+        MATCH,
+        INITIAL,
+        SAVE,
+        MOVE,
+        ACCEPT,
+        RULE
+    } type;
+
+    union {
+        size_t save;
+        const accept_t * accepts;
+        size_t rule;
+    } info;
+
+public:
+    Action();
+    void set_initial();
+    void set_save(size_t save);
+    void set_move();
+    void set_accept(const accept_t * accepts);
+    void set_rule(size_t rule);
+};
 
 struct State {
     State * next;
@@ -40,31 +71,12 @@ struct State {
     CodeGo go;
     Action action;
 
-    State()
-        : next (0)
-        , prev (0)
-        , label(NULL)
-        , fill (0)
-        , fallback (false)
-        , rule (Rule::NONE)
-        , stadfa_tags (TCID0)
-        , rule_tags (TCID0)
-        , fall_tags (TCID0)
-        , isBase (false)
-        , go()
-        , action ()
-    {
-        init_go(&go);
-    }
-    ~State()
-    {
-        operator delete (go.span);
-    }
+    State();
+    ~State();
     FORBID_COPY (State);
 };
 
-struct DFA
-{
+struct DFA {
     accept_t accepts;
     const loc_t loc;
     const std::string name;
@@ -129,6 +141,73 @@ private:
 
     FORBID_COPY (DFA);
 };
+
+inline Action::Action(): type(MATCH), info() {}
+
+inline void Action::set_initial()
+{
+    if (type == MATCH) {
+        // ordinary state with no special action
+        type = INITIAL;
+        info.save = NOSAVE;
+    } else if (type == SAVE) {
+        // fallback state: do not loose 'yyaccept'
+        type = INITIAL;
+    } else if (type == INITIAL) {
+        // already marked as initial, probably reuse mode
+    } else {
+        DASSERT(false);
+    }
+}
+
+inline void Action::set_save(size_t save)
+{
+    DASSERT(type == MATCH);
+    type = SAVE;
+    info.save = save;
+}
+
+inline void Action::set_move()
+{
+    DASSERT(type == MATCH);
+    type = MOVE;
+}
+
+inline void Action::set_accept(const accept_t * accepts)
+{
+    DASSERT(type == MATCH);
+    type = ACCEPT;
+    info.accepts = accepts;
+}
+
+inline void Action::set_rule(size_t rule)
+{
+    DASSERT(type == MATCH);
+    type = RULE;
+    info.rule = rule;
+}
+
+inline State::State()
+    : next (0)
+    , prev (0)
+    , label(NULL)
+    , fill (0)
+    , fallback (false)
+    , rule (Rule::NONE)
+    , stadfa_tags (TCID0)
+    , rule_tags (TCID0)
+    , fall_tags (TCID0)
+    , isBase (false)
+    , go()
+    , action ()
+{
+    init_go(&go);
+}
+
+inline State::~State()
+{
+    operator delete (go.span);
+}
 
 } // namespace re2c
 

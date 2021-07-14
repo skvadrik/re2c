@@ -7,6 +7,7 @@
 #include <set>
 #include <string.h>
 
+#include "src/constants.h"
 #include "src/msg/msg.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
@@ -75,24 +76,6 @@ struct dfa_t
     ~dfa_t();
 
     FORBID_COPY(dfa_t);
-};
-
-enum dfa_minimization_t
-{
-    DFA_MINIMIZATION_TABLE,
-    DFA_MINIMIZATION_MOORE
-};
-
-enum posix_closure_t
-{
-    POSIX_CLOSURE_GOR1,
-    POSIX_CLOSURE_GTOP
-};
-
-enum posix_prectable_alg_t
-{
-    POSIX_PRECTABLE_NAIVE,
-    POSIX_PRECTABLE_COMPLEX
 };
 
 void determinization(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts, Msg &msg,
