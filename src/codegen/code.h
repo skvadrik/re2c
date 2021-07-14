@@ -10,10 +10,10 @@
 #include <sstream>
 #include <vector>
 
+#include "src/constants.h"
 #include "src/dfa/tcmd.h"
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
-#include "src/options/opt.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/slab_allocator.h"
 #include "src/util/uniq_vector.h"

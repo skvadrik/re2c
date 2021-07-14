@@ -4,6 +4,7 @@
 #include "src/dfa/determinization.h"
 #include "src/dfa/tag_history.h"
 #include "src/debug/debug.h"
+#include "src/options/opt.h"
 #include "src/util/attribute.h"
 
 

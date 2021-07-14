@@ -18,11 +18,11 @@ noinst_PROGRAMS =
 
 # sources
 re2c_HDR = \
+	src/constants.h \
 	src/codegen/code.h \
 	src/codegen/helpers.h \
 	src/options/opt.h \
 	src/options/symtab.h \
-	src/adfa/action.h \
 	src/adfa/adfa.h \
 	src/cfg/cfg.h \
 	src/dfa/closure_leftmost.h \
@@ -48,7 +48,6 @@ re2c_HDR = \
 	src/msg/msg.h \
 	src/msg/ver_to_vernum.h \
 	src/msg/warn.h \
-	src/regexp/empty_class_policy.h \
 	src/regexp/re.h \
 	src/regexp/rule.h \
 	src/regexp/tag.h \
@@ -97,7 +96,6 @@ re2c_SRC = \
 	src/nfa/estimate_size.cc \
 	src/nfa/re_to_nfa.cc \
 	src/adfa/adfa.cc \
-	src/adfa/prepare.cc \
 	src/debug/dump_adfa.cc \
 	src/debug/dump_cfg.cc \
 	src/debug/dump_dfa.cc \
@@ -137,6 +135,7 @@ re2c_SRC = \
 	src/regexp/default_tags.cc \
 	src/regexp/fixed_tags.cc \
 	src/regexp/nullable.cc \
+	src/regexp/re.cc \
 	src/regexp/rule.cc \
 	src/regexp/split_charset.cc \
 	src/regexp/tag.cc \

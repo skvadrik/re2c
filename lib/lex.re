@@ -3,6 +3,7 @@
 #include "src/util/c99_stdint.h"
 
 #include "src/encoding/enc.h"
+#include "src/msg/msg.h"
 #include "src/parse/ast.h"
 #include "src/parse/unescape.h"
 #include "src/util/range.h"

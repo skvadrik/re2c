@@ -6,8 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "src/dfa/dfa.h"
-#include "src/regexp/empty_class_policy.h"
+#include "src/constants.h"
 #include "src/encoding/enc.h"
 #include "src/options/symtab.h"
 #include "src/util/forbid_copy.h"
@@ -38,55 +37,6 @@ namespace re2c {
  */
 
 class Msg;
-
-enum target_t {
-    TARGET_CODE,
-    TARGET_DOT,
-    TARGET_SKELETON
-};
-
-enum lang_t {
-    LANG_C,
-    LANG_GO
-};
-
-enum input_api_t {
-    INPUT_DEFAULT,
-    INPUT_CUSTOM
-};
-
-enum api_style_t {
-    API_FUNCTIONS,
-    API_FREEFORM
-};
-
-enum fixed_tags_t {
-    FIXTAG_NONE,
-    FIXTAG_TOPLEVEL,
-    FIXTAG_ALL
-};
-
-enum parse_opts_t {
-    OK,
-    EXIT_OK,
-    EXIT_FAIL
-};
-
-enum InputBlockKind {
-    INPUT_END,
-    INPUT_GLOBAL,
-    INPUT_LOCAL,
-    INPUT_USE,
-    INPUT_RULES,
-    INPUT_ERROR
-};
-
-enum MaxDirectiveKind {
-    MAX_FILL,
-    MAX_NMATCH
-};
-
-const uint32_t NOEOF = ~0u - 1;
 
 #define RE2C_SIGIL "@@"
 

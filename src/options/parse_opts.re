@@ -9,7 +9,6 @@
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
-#include "src/regexp/empty_class_policy.h"
 
 
 namespace re2c {

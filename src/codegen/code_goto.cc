@@ -1,7 +1,6 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 
-#include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
 #include "src/options/opt.h"

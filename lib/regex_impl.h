@@ -1,12 +1,14 @@
 #ifndef _RE2C_LIB_REGEX_IMPL_
 #define _RE2C_LIB_REGEX_IMPL_
 
-#include "regex.h"
 #include <stddef.h>
+#include <string.h>
 #include <map>
 #include <vector>
 #include <queue>
 
+#include "regex.h"
+#include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/nfa/nfa.h"
 

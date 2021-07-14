@@ -4,8 +4,10 @@
 #include <stdio.h>
 
 #include "src/debug/debug.h"
+#include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/tag_history.h"
+#include "src/options/opt.h"
 
 
 namespace re2c {

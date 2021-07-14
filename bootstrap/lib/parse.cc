@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.7.3.  */
+/* A Bison parser, made by GNU Bison 3.7.6.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -45,11 +45,11 @@
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
 
-/* Identify Bison output.  */
-#define YYBISON 1
+/* Identify Bison output, and Bison version.  */
+#define YYBISON 30706
 
-/* Bison version.  */
-#define YYBISON_VERSION "3.7.3"
+/* Bison version string.  */
+#define YYBISON_VERSION "3.7.6"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -73,8 +73,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "src/util/c99_stdint.h"
 #include "src/parse/ast.h"
+#include "src/util/attribute.h"
+#include "src/util/c99_stdint.h"
 #include "lib/lex.h"
 
 // disable certain GCC and/or Clang warnings,  as we have no control over
@@ -98,7 +99,7 @@ void yyerror(const char *pattern, const char*) RE2C_ATTR((noreturn));
 } // extern "C"
 
 
-#line 102 "lib/parse.cc"
+#line 103 "lib/parse.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -185,6 +186,18 @@ typedef __INT_LEAST16_TYPE__ yytype_int16;
 typedef int_least16_t yytype_int16;
 #else
 typedef short yytype_int16;
+#endif
+
+/* Work around bug in HP-UX 11.23, which defines these macros
+   incorrectly for preprocessor constants.  This workaround can likely
+   be removed in 2023, as HPE has promised support for HP-UX 11.23
+   (aka HP-UX 11i v2) only through the end of 2022; see Table 2 of
+   <https://h20195.www2.hpe.com/V2/getpdf.aspx/4AA4-7673ENW.pdf>.  */
+#ifdef __hpux
+# undef UINT_LEAST8_MAX
+# undef UINT_LEAST16_MAX
+# define UINT_LEAST8_MAX 255
+# define UINT_LEAST16_MAX 65535
 #endif
 
 #if defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
@@ -284,9 +297,9 @@ typedef int yy_state_fast_t;
 
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
-# define YYUSE(E) ((void) (E))
+# define YY_USE(E) ((void) (E))
 #else
-# define YYUSE(E) /* empty */
+# define YY_USE(E) /* empty */
 #endif
 
 #if defined __GNUC__ && ! defined __ICC && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
@@ -512,8 +525,8 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    51,    51,    54,    55,    59,    60,    64,    65,    66,
-      67,    68,    72,    73,    74
+       0,    52,    52,    55,    56,    60,    61,    65,    66,    67,
+      68,    69,    73,    74,    75
 };
 #endif
 
@@ -587,7 +600,7 @@ static const yytype_int8 yypgoto[] =
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     3,     4,     5,     6,     7
+       0,     3,     4,     5,     6,     7
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -703,8 +716,8 @@ yy_symbol_value_print (FILE *yyo,
                        yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const char *&pattern)
 {
   FILE *yyoutput = yyo;
-  YYUSE (yyoutput);
-  YYUSE (pattern);
+  YY_USE (yyoutput);
+  YY_USE (pattern);
   if (!yyvaluep)
     return;
 # ifdef YYPRINT
@@ -712,7 +725,7 @@ yy_symbol_value_print (FILE *yyo,
     YYPRINT (yyo, yytoknum[yykind], *yyvaluep);
 # endif
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  YYUSE (yykind);
+  YY_USE (yykind);
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
@@ -826,14 +839,14 @@ static void
 yydestruct (const char *yymsg,
             yysymbol_kind_t yykind, YYSTYPE *yyvaluep, const char *&pattern)
 {
-  YYUSE (yyvaluep);
-  YYUSE (pattern);
+  YY_USE (yyvaluep);
+  YY_USE (pattern);
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
 
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  YYUSE (yykind);
+  YY_USE (yykind);
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
@@ -1094,61 +1107,61 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* regexp: expr  */
-#line 51 "../lib/parse.ypp"
+#line 52 "../lib/parse.ypp"
              { regexp = (yyval.regexp); }
-#line 1100 "lib/parse.cc"
+#line 1113 "lib/parse.cc"
     break;
 
   case 4: /* expr: expr '|' term  */
-#line 55 "../lib/parse.ypp"
+#line 56 "../lib/parse.ypp"
                 { (yyval.regexp) = ast_alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1106 "lib/parse.cc"
+#line 1119 "lib/parse.cc"
     break;
 
   case 6: /* term: factor term  */
-#line 60 "../lib/parse.ypp"
+#line 61 "../lib/parse.ypp"
               { (yyval.regexp) = ast_cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
-#line 1112 "lib/parse.cc"
+#line 1125 "lib/parse.cc"
     break;
 
   case 8: /* factor: primary '*'  */
-#line 65 "../lib/parse.ypp"
+#line 66 "../lib/parse.ypp"
                       { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, AST::MANY); }
-#line 1118 "lib/parse.cc"
+#line 1131 "lib/parse.cc"
     break;
 
   case 9: /* factor: primary '+'  */
-#line 66 "../lib/parse.ypp"
+#line 67 "../lib/parse.ypp"
                       { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 1, AST::MANY); }
-#line 1124 "lib/parse.cc"
+#line 1137 "lib/parse.cc"
     break;
 
   case 10: /* factor: primary '?'  */
-#line 67 "../lib/parse.ypp"
+#line 68 "../lib/parse.ypp"
                       { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, 1); }
-#line 1130 "lib/parse.cc"
+#line 1143 "lib/parse.cc"
     break;
 
   case 11: /* factor: primary TOKEN_COUNT  */
-#line 68 "../lib/parse.ypp"
+#line 69 "../lib/parse.ypp"
                       { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max); }
-#line 1136 "lib/parse.cc"
+#line 1149 "lib/parse.cc"
     break;
 
   case 13: /* primary: '(' ')'  */
-#line 73 "../lib/parse.ypp"
+#line 74 "../lib/parse.ypp"
                { (yyval.regexp) = ast_cap(ast_nil(NOWHERE)); }
-#line 1142 "lib/parse.cc"
+#line 1155 "lib/parse.cc"
     break;
 
   case 14: /* primary: '(' expr ')'  */
-#line 74 "../lib/parse.ypp"
+#line 75 "../lib/parse.ypp"
                { (yyval.regexp) = ast_cap((yyvsp[-1].regexp)); }
-#line 1148 "lib/parse.cc"
+#line 1161 "lib/parse.cc"
     break;
 
 
-#line 1152 "lib/parse.cc"
+#line 1165 "lib/parse.cc"
 
       default: break;
     }
@@ -1342,7 +1355,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 77 "../lib/parse.ypp"
+#line 78 "../lib/parse.ypp"
 
 
 #pragma GCC diagnostic pop

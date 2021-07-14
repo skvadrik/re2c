@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "src/msg/msg.h"
+#include "src/options/opt.h"
 #include "src/parse/scanner.h"
 #include "src/debug/debug.h"
 #include "src/util/file_utils.h"
@@ -198,6 +199,13 @@ bool Scanner::gen_dep_file() const
 
     fclose(file);
     return true;
+}
+
+uint32_t Scanner::decode(const char *str) const
+{
+    return globopts->input_encoding == Enc::ASCII
+        ? static_cast<uint8_t>(str[0])
+        : utf8::decode_unsafe(str);
 }
 
 } // namespace re2c

@@ -11,6 +11,7 @@
 #include "src/dfa/tag_history.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
+#include "src/options/opt.h"
 #include "src/regexp/tag.h"
 #include "src/regexp/rule.h"
 #include "src/util/hash32.h"

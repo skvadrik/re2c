@@ -8,7 +8,6 @@
 #include <valarray>
 #include <vector>
 
-#include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
 #include "src/codegen/helpers.h"
