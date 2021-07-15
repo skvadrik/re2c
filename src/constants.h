@@ -105,6 +105,12 @@ enum CodeKind {
     CODE_LABEL
 };
 
+// Bit flags for configurations used in directives.
+enum DirConf {
+    DCONF_FORMAT    = 1u,
+    DCONF_SEPARATOR = 2u
+};
+
 const uint32_t NOEOF = ~0u - 1;
 
 } // namespace re2c

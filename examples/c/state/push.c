@@ -50,7 +50,9 @@ static Status fill(Input *in)
 static Status lex(Input *in, unsigned int *recv)
 {
     char yych;
-    switch (in->state) {
+    
+#line 55 "c/state/push.c"
+switch (in->state) {
 default:
 	goto yy0;
 case 0:
@@ -63,11 +65,12 @@ case 2:
 	if (in->lim <= in->cur) goto yy10;
 	goto yyFillLabel2;
 }
+#line 51 "c/state/push.re"
 
 loop:
     in->tok = in->cur;
     
-#line 71 "c/state/push.c"
+#line 74 "c/state/push.c"
 
 yy0:
 yyFillLabel0:
@@ -111,7 +114,7 @@ yy3:
 yy4:
 #line 67 "c/state/push.re"
 	{ return BAD_PACKET; }
-#line 115 "c/state/push.c"
+#line 118 "c/state/push.c"
 yy5:
 	in->mar = ++in->cur;
 yyFillLabel1:
@@ -155,7 +158,7 @@ yy6:
 	++in->cur;
 #line 69 "c/state/push.re"
 	{ *recv = *recv + 1; goto loop; }
-#line 159 "c/state/push.c"
+#line 162 "c/state/push.c"
 yy8:
 	++in->cur;
 yyFillLabel2:
@@ -201,7 +204,7 @@ yy10:
 yy11:
 #line 68 "c/state/push.re"
 	{ return END; }
-#line 205 "c/state/push.c"
+#line 208 "c/state/push.c"
 #line 70 "c/state/push.re"
 
 }
