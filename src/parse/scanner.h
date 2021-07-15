@@ -69,10 +69,10 @@ private:
     inline void set_line(uint32_t l);
     inline void next_line();
     void set_sourceline ();
-    bool lex_end_of_block(Output &out, bool allow_garbage = false);
     bool lex_opt_name(std::string &name);
     bool lex_name_list(code_alc_t &alc, BlockNameList **ptail);
-    bool lex_block_fmt(Output &out, CodeKind kind, bool many);
+    bool lex_block(Output &out, CodeKind kind, uint32_t indent, uint32_t mask);
+    bool lex_block_end(Output &out, bool allow_garbage = false);
     void lex_code_indented();
     void lex_code_in_braces();
     void lex_c_comment();

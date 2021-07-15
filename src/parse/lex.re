@@ -125,7 +125,6 @@ InputBlockKind Scanner::echo(Output &out, std::string &block_name)
     const opt_t *opts = out.block().opts;
     code_alc_t &alc = out.allocator;
     const char *x, *y;
-    BlockNameList *block_list;
 
     if (is_eof()) return INPUT_END;
 
@@ -166,44 +165,42 @@ loop:
     }
 
     "/*!max:re2c" {
-        if (!lex_block_fmt(out, CODE_MAXFILL, false)) return INPUT_ERROR;
+        if (!lex_block(out, CODE_MAXFILL, 0, DCONF_FORMAT)) return INPUT_ERROR;
         goto next;
     }
 
     "/*!maxnmatch:re2c" {
-        if (!lex_block_fmt(out, CODE_MAXNMATCH, false)) return INPUT_ERROR;
+        if (!lex_block(out, CODE_MAXNMATCH, 0, DCONF_FORMAT)) return INPUT_ERROR;
         goto next;
     }
 
     "/*!stags:re2c" {
-        if (!lex_block_fmt(out, CODE_STAGS, true)) return INPUT_ERROR;
+        uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
+        if (!lex_block(out, CODE_STAGS, 0, allow)) return INPUT_ERROR;
         goto next;
     }
 
     "/*!mtags:re2c" {
-        if (!lex_block_fmt(out, CODE_MTAGS, true)) return INPUT_ERROR;
+        uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
+        if (!lex_block(out, CODE_MTAGS, 0, allow)) return INPUT_ERROR;
         goto next;
     }
 
     "/*!types:re2c" {
         out.cond_enum_in_hdr = out.in_header();
         out.warn_condition_order = false; // see note [condition order]
-        if (!lex_block_fmt(out, CODE_COND_ENUM, true)) return INPUT_ERROR;
+        uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
+        if (!lex_block(out, CODE_COND_ENUM, opts->topIndent, allow)) return INPUT_ERROR;
         goto next;
     }
 
     "/*!getstate:re2c" {
-        out.wraw(tok, ptr);
-        if (!lex_name_list(alc, &block_list)) return INPUT_ERROR;
-        if (!lex_end_of_block(out)) return INPUT_ERROR;
+        out.state_goto = true;
         if (!opts->fFlag) {
             msg.error(cur_loc(), "`getstate:re2c` without `-f --storable-state` option");
             return INPUT_ERROR;
-        } else if (opts->target == TARGET_CODE) {
-            // User-defined state switch is generated as many times as needed.
-            out.wdelay_stmt(opts->topIndent, code_state_goto(alc, block_list));
-            out.state_goto = true;
         }
+        if (!lex_block(out, CODE_STATE_GOTO, opts->topIndent, 0)) return INPUT_ERROR;
         goto next;
     }
 
@@ -211,7 +208,7 @@ loop:
         out.wraw(tok, ptr);
         out.header_mode(true);
         out.need_header = opts->target == TARGET_CODE;
-        if (!lex_end_of_block(out)) return INPUT_ERROR;
+        if (!lex_block_end(out)) return INPUT_ERROR;
         goto next;
     }
 
@@ -219,7 +216,7 @@ loop:
         out.wraw(tok, ptr);
         out.header_mode(false);
         out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
-        if (!lex_end_of_block(out)) return INPUT_ERROR;
+        if (!lex_block_end(out)) return INPUT_ERROR;
         goto next;
     }
     "/*!header:re2c" {
@@ -231,7 +228,7 @@ loop:
 
     "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
         out.wraw(tok, ptr);
-        if (!lex_end_of_block(out)) return INPUT_ERROR;
+        if (!lex_block_end(out)) return INPUT_ERROR;
         include(getstr(x + 1, y - 1));
         goto next;
     }
@@ -244,7 +241,7 @@ loop:
     "/*!ignore:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         // allows arbitrary garbage before the end of the comment
-        if (!lex_end_of_block(out, true)) return INPUT_ERROR;
+        if (!lex_block_end(out, true)) return INPUT_ERROR;
         goto next;
     }
     "/*!ignore:re2c" {
@@ -331,7 +328,7 @@ loop:
 */
 }
 
-bool Scanner::lex_end_of_block(Output &out, bool allow_garbage)
+bool Scanner::lex_block_end(Output &out, bool allow_garbage)
 {
     bool multiline = false;
 loop:
@@ -351,7 +348,7 @@ loop:
 */
 }
 
-bool Scanner::lex_block_fmt(Output &out, CodeKind kind, bool many)
+bool Scanner::lex_block(Output &out, CodeKind kind, uint32_t indent, uint32_t mask)
 {
     code_alc_t &alc = out.allocator;
     const char *fmt = NULL, *sep = NULL;
@@ -369,12 +366,16 @@ loop:
     }
 
     "format" {
+        if ((mask & DCONF_FORMAT) == 0) {
+            msg.error(cur_loc(), "unexpected configuration 'format'");
+            return false;
+        }
         fmt = copystr(lex_conf_string(), alc);
         goto loop;
     }
 
     "separator" {
-        if (!many) {
+        if ((mask & DCONF_SEPARATOR) == 0) {
             msg.error(cur_loc(), "unexpected configuration 'separator'");
             return false;
         }
@@ -388,7 +389,7 @@ loop:
 
     eoc {
         out.wdelay_stmt(0, code_line_info_output(alc));
-        out.wdelay_stmt(0, code_fmt(alc, kind, blocks, fmt, sep));
+        out.wdelay_stmt(indent, code_fmt(alc, kind, blocks, fmt, sep));
         out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
         return true;
     }

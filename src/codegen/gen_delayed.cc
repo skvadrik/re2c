@@ -195,6 +195,11 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     const opt_t *globopts = (ctx.block->kind == INPUT_USE)
         ? ctx.block->opts : ctx.global->opts;
 
+    if (globopts->target != TARGET_CODE) {
+        code->kind = CODE_EMPTY;
+        return;
+    }
+
     Scratchbuf &o = ctx.global->scratchbuf;
     code_alc_t &alc = ctx.global->allocator;
     const char *text;
@@ -214,7 +219,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     //    includes all blocks except `use:re2c` (if a block generates no code it
     //    does not contribute any cases to the state switch).
     //
-    bool global = (code->block_names == NULL);
+    bool global = (code->fmt.block_names == NULL);
 
     CodeCases *cases = code_cases(alc);
     const OutputBlock *bstart = NULL;
@@ -240,7 +245,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
         }
     } else {
         // Generate a switch for all specified named blocks.
-        for (BlockNameList *p = code->block_names; p; p = p->next) {
+        for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
             const OutputBlock *b = find_block_with_name(ctx, p->name, "getstate:re2c");
             if (!b) exit(1);
             if (!b->start_label) {
