@@ -1,1 +1,1 @@
-include/include006_syntax_error.re:4:4: error: ill-formed include directive, expected format: `!include "<file>" ; <newline>`
+include/include006_syntax_error.re:11:4: error: ill-formed include directive: expected `!include` followed by spaces, a double-quoted file path, optional spaces, a semicolon, and finally a space, a newline, or the end of block

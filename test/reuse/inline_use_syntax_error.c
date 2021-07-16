@@ -1,1 +1,1 @@
-reuse/inline_use_syntax_error.re:3:4: error: ill-formed use directive, expected format: `!use:<block-name> ; <newline>`
+reuse/inline_use_syntax_error.re:14:4: error: ill-formed use directive: expected `!use` followed by a colon, a block name, optional spaces, a semicolon, and finally a space, a newline, or the end of block
