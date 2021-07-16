@@ -500,25 +500,25 @@ scan:
         }
     }
 
-    "!include" space+ @x dstring @y space* ";" eol {
-        next_line();
+    "!include" space+ @x dstring @y space* ";" / ws_or_eoc {
         include(getstr(x + 1, y - 1));
         goto scan;
     }
     "!include" {
-        msg.error(tok_loc(), "ill-formed include directive"
-            ", expected format: `!include \"<file>\" ; <newline>`");
+        msg.error(tok_loc(), "ill-formed include directive: expected `!include`"
+            " followed by spaces, a double-quoted file path, optional spaces, a"
+            " semicolon, and finally a space, a newline, or the end of block");
         exit(1);
     }
 
-    "!use:" @x name @y ";" eol {
-        next_line();
+    "!use:" @x name @y space* ";" / ws_or_eoc {
         yylval.str = newstr(x, y); // save the name of the used block
         return TOKEN_BLOCK;
     }
     "!use" {
-        msg.error(tok_loc(), "ill-formed use directive"
-            ", expected format: `!use:<block-name> ; <newline>`");
+        msg.error(tok_loc(), "ill-formed use directive: expected `!use`"
+            " followed by a colon, a block name, optional spaces, a semicolon,"
+            " and finally a space, a newline, or the end of block");
         exit(1);
     }
 
