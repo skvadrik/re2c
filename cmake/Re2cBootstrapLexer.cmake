@@ -10,7 +10,7 @@ function(re2c_bootstrap_lexer input output)
     set(boot_output "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/${output}")
     set(boot_header "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/${header}")
 
-    set(re2c_flags "-br" "-W" "-Wno-match-empty-string")
+    set(re2c_flags "-b" "-W" "-Wno-match-empty-string")
 
     if (RE2C_REBUILD_LEXERS)
         # recompile the lexer and update bootstrap file(s)

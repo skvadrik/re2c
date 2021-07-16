@@ -15,8 +15,8 @@ std::string ver_to_vernum(const char *ver)
         *p1, *p2, *p3, *e1, *e2, *e3;
 
 /*!re2c re2c:flags:tags = 1; */
-/*!stags:re2c format = "const char *@@;\n"; */
-/*!re2c
+/*!stags:re2c:ver format = "const char *@@;\n"; */
+/*!local:re2c:ver
     re2c:yyfill:enable = 0;
 
     dot = [.];
