@@ -62,7 +62,7 @@ parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
 
 opt:
     if (!next (YYCURSOR, argv)) goto end;
-/*!re2c
+/*!local:re2c
     * { ERROR("bad option: %s", *argv); }
 
     "--" end {
@@ -89,7 +89,7 @@ opt:
 */
 
 opt_warn:
-/*!re2c
+/*!local:re2c
     * { ERROR("bad warning: %s", *argv); }
 
     "condition-order"          end { msg.warn.set (Warn::CONDITION_ORDER,        option); goto opt; }
@@ -104,7 +104,7 @@ opt_warn:
 */
 
 opt_short:
-/*!re2c
+/*!local:re2c
     * { ERROR("bad short option: %s", *argv); }
 
     end { goto opt; }
@@ -151,7 +151,7 @@ opt_short:
 */
 
 opt_long:
-/*!re2c
+/*!local:re2c
     * { ERROR("bad long option: %s", *argv); }
 
     "help"                  end { usage ();   return EXIT_OK; }
@@ -226,38 +226,38 @@ opt_long:
 */
 
 opt_lang:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--lang", "c | go", *argv); }
     "c"  end { globopts.lang = LANG_C;  goto opt; }
     "go" end { globopts.lang = LANG_GO; goto opt; }
 */
 
 opt_output:
-/*!re2c
+/*!local:re2c
     * { ERRARG("-o, --output", "filename", *argv); }
     filename end { globopts.output_file = *argv; goto opt; }
 */
 
 opt_header:
-/*!re2c
+/*!local:re2c
     * { ERRARG("-t, --type-header", "filename", *argv); }
     filename end { opts.set_header_file (*argv); goto opt; }
 */
 
 opt_depfile:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--depfile", "filename", *argv); }
     filename end { globopts.dep_file = *argv; goto opt; }
 */
 
 opt_incpath:
-/*!re2c
+/*!local:re2c
     * { ERRARG("-I", "filename", *argv); }
     filename end { globopts.incpaths.push_back(*argv); goto opt; }
 */
 
 opt_encoding_policy:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--encoding-policy", "ignore | substitute | fail", *argv); }
     "ignore"     end { opts.set_encoding_policy (Enc::POLICY_IGNORE);     goto opt; }
     "substitute" end { opts.set_encoding_policy (Enc::POLICY_SUBSTITUTE); goto opt; }
@@ -265,14 +265,14 @@ opt_encoding_policy:
 */
 
 opt_input:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--input", "default | custom", *argv); }
     "default" end { opts.set_input_api(INPUT_DEFAULT); goto opt; }
     "custom"  end { opts.set_input_api(INPUT_CUSTOM);  goto opt; }
 */
 
 opt_empty_class:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--empty-class", "match-empty | match-none | error", *argv); }
     "match-empty" end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_EMPTY); goto opt; }
     "match-none"  end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_NONE);  goto opt; }
@@ -280,42 +280,42 @@ opt_empty_class:
 */
 
 opt_location_format:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--location-format", "gnu | msvc", *argv); }
     "gnu"  end { msg.locfmt = LOCFMT_GNU;  goto opt; }
     "msvc" end { msg.locfmt = LOCFMT_MSVC; goto opt; }
 */
 
 opt_input_encoding:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--input-encoding", "ascii | utf8", *argv); }
     "ascii" end { globopts.input_encoding = Enc::ASCII; goto opt; }
     "utf8"  end { globopts.input_encoding = Enc::UTF8;  goto opt; }
 */
 
 opt_dfa_minimization:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--dfa-minimization", "table | moore", *argv); }
     "table" end { globopts.dfa_minimization = DFA_MINIMIZATION_TABLE; goto opt; }
     "moore" end { globopts.dfa_minimization = DFA_MINIMIZATION_MOORE; goto opt; }
 */
 
 opt_posix_closure:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--posix-closure", "gor1 | gtop", *argv); }
     "gor1" end { globopts.posix_closure = POSIX_CLOSURE_GOR1; goto opt; }
     "gtop" end { globopts.posix_closure = POSIX_CLOSURE_GTOP; goto opt; }
 */
 
 opt_posix_prectable:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--posix-prectable", "naive | complex", *argv); }
     "naive"   end { globopts.posix_prectable = POSIX_PRECTABLE_NAIVE;   goto opt; }
     "complex" end { globopts.posix_prectable = POSIX_PRECTABLE_COMPLEX; goto opt; }
 */
 
 opt_fixed_tags:
-/*!re2c
+/*!local:re2c
     * { ERRARG("--fixed-tags", "none | toplevel | all", *argv); }
     "none"     end { globopts.fixed_tags = FIXTAG_NONE;     goto opt; }
     "toplevel" end { globopts.fixed_tags = FIXTAG_TOPLEVEL; goto opt; }

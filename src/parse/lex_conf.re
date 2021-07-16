@@ -41,7 +41,7 @@ namespace re2c {
 void Scanner::lex_conf(Opt &opts)
 {
     tok = cur;
-/*!re2c
+/*!local:re2c
     "flags:" ("b" | "bit-vectors")    { opts.set_bFlag            (lex_conf_bool());   return; }
     "flags:" ("d" | "debug-output")   { opts.set_dFlag            (lex_conf_bool());   return; }
     "flags:" ("g" | "computed-gotos") { opts.set_gFlag            (lex_conf_bool());   return; }
@@ -199,7 +199,7 @@ void Scanner::lex_conf(Opt &opts)
 void Scanner::lex_conf_encoding_policy(Opt &opts)
 {
     lex_conf_assign ();
-/*!re2c
+/*!local:re2c
     * {
         msg.error(cur_loc(),
             "bad configuration value (expected: 'ignore', 'substitute', 'fail')");
@@ -216,7 +216,7 @@ end:
 void Scanner::lex_conf_input(Opt &opts)
 {
     lex_conf_assign ();
-/*!re2c
+/*!local:re2c
     * {
         msg.error(cur_loc(),
             "bad configuration value (expected: 'default', 'custom')");
@@ -232,7 +232,7 @@ end:
 void Scanner::lex_conf_empty_class(Opt &opts)
 {
     lex_conf_assign ();
-/*!re2c
+/*!local:re2c
     * {
         msg.error(cur_loc(),
             "bad configuration value (expected: 'match-empty', 'match-none', 'error')");
@@ -249,7 +249,7 @@ end:
 void Scanner::lex_conf_api_style(Opt &opts)
 {
     lex_conf_assign ();
-/*!re2c
+/*!local:re2c
     * {
         msg.error(cur_loc(),
             "bad configuration value (expected: 'functions', 'free-form')");
@@ -273,7 +273,7 @@ void Scanner::lex_conf_enc(Enc::type_t enc, Opt &opts)
 
 void Scanner::lex_conf_assign ()
 {
-/*!re2c
+/*!local:re2c
     * {
         msg.error(cur_loc(), "missing '=' in configuration");
         exit(1);
@@ -284,7 +284,7 @@ void Scanner::lex_conf_assign ()
 
 void Scanner::lex_conf_semicolon ()
 {
-/*!re2c
+/*!local:re2c
     * {
         msg.error(cur_loc(), "missing ending ';' in configuration");
         exit(1);
@@ -302,7 +302,7 @@ int32_t Scanner::lex_conf_number ()
 {
     lex_conf_assign ();
     tok = cur;
-/*!re2c
+/*!local:re2c
     * {
         msg.error(cur_loc(), "bad configuration value (expected number)");
         exit(1);
@@ -330,7 +330,7 @@ std::string Scanner::lex_conf_string ()
     lex_conf_assign ();
     std::string s;
     tok = cur;
-/*!re2c
+/*!local:re2c
     ['"] {
         const char quote = tok[0];
         for (;;) {

@@ -37,7 +37,7 @@ int lex(const char *&cur)
     bool neg = false;
     uint32_t l, u;
 
-/*!re2c
+/*!local:re2c
     * { goto err; }
 
     nil { return 0; }
@@ -86,14 +86,14 @@ int lex(const char *&cur)
 
 cls:
     if (lex_cls_chr(cur, l) != 0) goto err;
-/*!re2c
+/*!local:re2c
     ""          { u = l; goto add; }
     "-" / [^\]] { if (lex_cls_chr(cur, u) != 0) goto err; goto add; }
 */
 add:
     if (l > u) goto err;
     cls.push_back(ASTRange(l, u, NOWHERE));
-/*!re2c
+/*!local:re2c
     ""  { goto cls; }
     "]" {
         std::vector<ASTRange> *p = new std::vector<ASTRange>;
@@ -115,7 +115,7 @@ err_cnt:
 int32_t lex_cls_chr(const char *&cur, uint32_t &c)
 {
     const char *mar, *p = cur;
-/*!re2c
+/*!local:re2c
     *    { return 1; }
     "[." { error("collating characters not supported"); return 1; }
     "[:" { error("character classes not supported");    return 1; }

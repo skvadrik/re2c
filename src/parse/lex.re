@@ -28,17 +28,19 @@ extern YYSTYPE yylval;
 
 namespace re2c {
 
-#define YYCTYPE   unsigned char
-#define YYCURSOR  cur
-#define YYLIMIT   lim
-#define YYMARKER  mar
-#define YYFILL(n) do { if (!fill(n)) { error("unexpected end of input"); exit(1); }} while(0)
-
+// Global re2c configurations and definitions.
 /*!re2c
     // source code is in ASCII, but re2c assumes unsigned chars
     re2c:yych:conversion = 1;
     re2c:flags:type-header = "lex.h";
     re2c:flags:tags = 1;
+    re2c:api:style = free-form;
+
+    re2c:define:YYCTYPE  = "unsigned char";
+    re2c:define:YYCURSOR = "cur";
+    re2c:define:YYLIMIT  = "lim";
+    re2c:define:YYMARKER = "mar";
+    re2c:define:YYFILL   = '{ if (!fill(@@)) { error("unexpected end of input"); exit(1); } }';
 
     eof        = "\000";
     dstring    = "\"" ([^\x00\n\\"] | "\\" [^\x00\n])* "\"";
@@ -133,7 +135,7 @@ next:
 loop:
     location = cur_loc();
     ptr = cur;
-/*!re2c
+/*!local:re2c
     "%{" {
         out.wraw(tok, ptr);
         block_name.clear();
@@ -277,7 +279,7 @@ loop:
 bool Scanner::lex_opt_name(std::string &name)
 {
     tok = cur;
-/*!re2c
+/*!local:re2c
     "" {
         msg.error(cur_loc(), "ill-formed start of a block: expected a space, a"
             " newline, a colon followed by a block name, or the end of block `*"
@@ -295,7 +297,7 @@ bool Scanner::lex_name_list(code_alc_t &alc, BlockNameList **ptail)
     BlockNameList **phead = ptail;
 loop:
     tok = cur;
-/*!re2c
+/*!local:re2c
     "" {
         msg.error(cur_loc(), "ill-formed start of a block: expected a space, a"
             " newline, a colon followed by a list of colon-separated block"
@@ -332,7 +334,7 @@ bool Scanner::lex_block_end(Output &out, bool allow_garbage)
 {
     bool multiline = false;
 loop:
-/*!re2c
+/*!local:re2c
     * {
         if (allow_garbage && !is_eof()) goto loop;
         msg.error(cur_loc(), "ill-formed end of block: expected optional"
@@ -358,7 +360,7 @@ bool Scanner::lex_block(Output &out, CodeKind kind, uint32_t indent, uint32_t ma
     if (!lex_name_list(alc, &blocks)) return false;
 
 loop:
-/*!re2c
+/*!local:re2c
     * {
         msg.error(cur_loc(), "ill-formed directive: expected optional "
             "configurations followed by the end of block `*" "/`");
@@ -402,7 +404,8 @@ int Scanner::scan()
 scan:
     tok = cur;
     location = cur_loc();
-/*!re2c
+/*!local:re2c
+
     "{"  { lex_code_in_braces(); return TOKEN_CODE; }
     ":=" { lex_code_indented(); return TOKEN_CODE; }
 
@@ -720,7 +723,8 @@ uint32_t Scanner::lex_cls_chr()
 {
     tok = cur;
     const loc_t &loc = cur_loc();
-    /*!rules:re2c
+    /*!rules:re2c:cls_chr
+
     esc? eol   { msg.error(loc, "newline in character class"); exit(1); }
     esc [xXuU] { msg.error(loc, "syntax error in hexadecimal escape sequence"); exit(1); }
     esc [0-7]  { msg.error(loc, "syntax error in octal escape sequence"); exit(1); }
@@ -748,10 +752,10 @@ uint32_t Scanner::lex_cls_chr()
     }
     */
     if (globopts->input_encoding == Enc::ASCII) {
-        /*!use:re2c*/
+        /*!local:re2c !use:cls_chr; */
     }
     else {
-        /*!use:re2c re2c:flags:8 = 1; */ /*!re2c re2c:flags:8 = 0; */
+        /*!local:re2c !use:cls_chr; re2c:flags:8 = 1; */
     }
 }
 
@@ -759,8 +763,8 @@ bool Scanner::lex_str_chr(char quote, ASTChar &ast)
 {
     tok = cur;
     ast.loc = cur_loc();
+    /*!rules:re2c:str_chr
 
-    /*!rules:re2c
     esc? eol   { msg.error(ast.loc, "newline in character string"); exit(1); }
     esc [xXuU] { msg.error(ast.loc, "syntax error in hexadecimal escape sequence"); exit(1); }
     esc [0-7]  { msg.error(ast.loc, "syntax error in octal escape sequence"); exit(1); }
@@ -787,10 +791,10 @@ bool Scanner::lex_str_chr(char quote, ASTChar &ast)
     }
     */
     if (globopts->input_encoding == Enc::ASCII) {
-        /*!use:re2c*/
+        /*!local:re2c !use:str_chr; */
     }
     else {
-        /*!use:re2c re2c:flags:8 = 1; */ /*!re2c re2c:flags:8 = 0; */
+        /*!local:re2c !use:str_chr; re2c:flags:8 = 1; */
     }
 }
 
@@ -811,7 +815,7 @@ void Scanner::set_sourceline ()
 {
 sourceline:
     tok = cur;
-/*!re2c
+/*!local:re2c
     lineno {
         uint32_t l;
         if (!s_to_u32_unsafe(tok, cur, l)) {
