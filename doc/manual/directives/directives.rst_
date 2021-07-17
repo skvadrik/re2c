@@ -1,77 +1,118 @@
-Below is the list of all directives provided by re2c (in no particular order).
-More information on each directive can be found in the related sections.
+Below is the list of re2c directives (syntactic constructs that mark the
+beginning and end of the code that should be processed by re2c). Named blocks
+were added in re2c version 2.2. They are exactly the same as unnamed blocks,
+except that the name can be used to reference a block in other parts of the
+program. More information on each directive can be found in the related
+sections.
 
-``/*!re2c ... */``
-    A standard re2c block.
+``/*!re2c[:NAME] ... */``
+    A global re2c block with an optional name. The block may contain named
+    definitions, configurations and rules in any order. Named definitions and
+    configurations are defined in the global scope, so they are inherited by
+    subsequent blocks. The code for a global block is generated at the point
+    where the block is specified.
 
-``%{ ... %}``
-    A standard re2c block in ``-F --flex-support`` mode.
+``/*!local:re2c[:NAME] ... */``
+    A local re2c block with an optional name. Unlike global blocks, definitions
+    and configurations inside of a local block are not added into the global
+    scope. In all other respects local blocks are the same as global blocks.
 
-``/*!rules:re2c[:<name>] ... */``
-    A reusable block with an optional ``<name>``. Rules bloks have the same
-    structure as ordinary ``/*!re2c ... */`` blocks (a mixture of named
-    definitions, configurations and rules), but they can be reused multiple
-    times in a ``/*!use:re2c[:<name>] ... */`` or ``!use:<name>;`` directive.
-    The code for a rules block is generated at the point where it is referenced
-    by a use directive. Prior to re2c version 2.2 rules blocks required
-    ``-r --reusable`` option, and named blocks were not supported.
+``/*!rules:re2c[:NAME] ... */``
+    A reusable block with an optional name. Rules blocks have the same structure
+    as local or global blocks, but they do not produce any code and they can be
+    reused multiple times in other blocks with the help of a ``!use:NAME;``
+    directive or a ``/*!use:re2c[:NAME] ... */`` block. A rules block on its
+    own does not add any definitions into the global scope. The code for it is
+    generated at the point of use. Prior to re2c version 2.2 rules blocks
+    required ``-r --reusable`` option.
 
-``/*!use:re2c[:<name>] ... */``
-    A use block with an optional ``<name>`` that references a previously defined
-    rules block. If ``<name>`` is not specified, the most recent rules block is
-    used (either a named or unnamed one). A use block can add definitions,
-    configurations and rules of its own, which are merged to those of the
-    referenced rules block. Prior to re2c version 2.2 use blocks required
-    ``-r --reusable`` option, and named blocks were not supported.
+``/*!use:re2c[:NAME] ... */``
+    A use block that references a previously defined rules block. If the name is
+    specified, re2c looks for a rules blocks with this name. Otherwise the most
+    recent rules block is used (either a named or an unnamed one). A use block
+    can add definitions, configurations and rules of its own, which are added to
+    those of the referenced rules block. Prior to re2c version 2.2 use blocks
+    required ``-r --reusable`` option.
 
-``!use:<name> ; <newline>``
-    This directive merges a previously defined rules block ``<name>`` into the
-    current block: named definitions, configurations and rules of the referenced
-    block are added to the current ones. Conflicts between overlapping rules and
-    configurations are resolved in the usual way: the first rule takes priority,
-    and the latest configuration overrides preceding ones. One exception are the
-    special rules ``*``, ``$`` and ``<!>``: for them a block-local definition
-    overrides any inherited ones, regardless of their order. A use directive can
-    be placed anywhere inside of a block (not necessarily at the beginning), and
-    multiple use directives are allowed.
+``!use:NAME;``
+    An in-block use directive that merges a previously defined rules block with
+    the specified name into the current block. Named definitions, configurations
+    and rules of the referenced block are added to the current ones. Conflicts
+    between overlapping rules and configurations are resolved in the usual way:
+    the first rule takes priority, and the latest configuration overrides the
+    preceding ones. One exception is the special rules ``*``, ``$`` and ``<!>``
+    for which a block-local definition always takes priority. A use directive
+    can be placed anywhere inside of a block, and multiple use directives are
+    allowed.
 
-``/*!ignore:re2c ... */``
-    A block which contents are ignored and cut off from the output file.
+``/*!max:re2c[:NAME1[:NAME2...]] ... */``
+    A directive that generates ``YYMAXFILL`` definition.
+    An optional list of block names specifies which blocks should be included
+    when computing ``YYMAXFILL`` value (if the list is empty, all blocks are
+    included).
+    By default the generated code is a macro-definition for C
+    (``#define YYMAXFILL <n>``), or a global variable for Go
+    (``var YYMAXFILL int = <n>``). It can be customized with an optional
+    configuration ``format`` that specifies a template string where ``@@{max}``
+    (or ``@@`` for short) is replaced with the numeric value of ``YYMAXFILL``.
 
-``/*!max:re2c*/``
-    This directive is substituted with the macro-definition of ``YYMAXFILL``.
+``/*!maxnmatch:re2c[:NAME1[:NAME2...]] ... */``
+    A directive that generates ``YYMAXNMATCH`` definition (it requires
+    ``-P --posix-captures`` option).
+    An optional list of block names specifies which blocks should be included
+    when computing ``YYMAXNMATCH`` value (if the list is empty, all blocks are
+    included).
+    By default the generated code is a macro-definition for C
+    (``#define YYMAXNMATCH <n>``), or a global variable for Go
+    (``var YYMAXNMATCH int = <n>``). It can be customized with an optional
+    configuration ``format`` that specifies a template string where ``@@{max}``
+    (or ``@@`` for short) is replaced with the numeric value of ``YYMAXNMATCH``.
 
-``/*!maxnmatch:re2c*/``
-    This directive is substituted with the macro-definition of ``YYMAXNMATCH``
-    (requires ``-P --posix-captures`` option).
+``/*!stags:re2c[:NAME1[:NAME2...]] ... */``, ``/*!mtags:re2c[:NAME1[:NAME2...]] ... */``
+    Directives that specify a template piece of code that is expanded for each
+    s-tag/m-tag variable generated by re2c.
+    An optional list of block names specifies which blocks should be included
+    when computing the set of tag variables (if the list is empty, all blocks
+    are included).
+    There are two optional configurations: ``format`` and ``separator``.
+    Configuration ``format`` specifies a template string where ``@@(tag}`` (or
+    ``@@`` for short) is replaced with the name of each tag variable.
+    Configuration ``separator`` specifies a piece of code used to join the
+    generated ``format`` pieces for different tag variables.
 
-``/*!getstate:re2c*/``
-    This directive is substituted with conditional dispatch on lexer state
-    (requires ``-f --storable-state`` option).
+``/*!getstate:re2c[:NAME1[:NAME2...]] ... */``
+    A directive that generates conditional dispatch on the lexer state (it
+    requires ``-f --storable-state`` option).
+    An optional list of block names specifies which blocks should be included in
+    the state dispatch. The default transition goes to the start label of the
+    first block on the list. If the list is empty, all blocks are included, and
+    the default transition goes to the first block in the file that has a start
+    label.
 
-``/*!types:re2c ... */``
-    This directive is substituted with the definition of condition ``enum``
-    (requires ``-c --conditions`` option).
+``/*!types:re2c[:NAME1[:NAME2...]] ... */``
+    A directive that generates condition enumeration (it requires
+    ``-c --conditions`` option).
+    An optional list of block names specifies which blocks should be included
+    when computing the set of conditions (if the list is empty, all blocks are
+    included).
+    By default the generated code is an enumeration ``YYCONDTYPE``. It can be
+    customized with optional configurations ``format`` and ``separator``.
+    Configuration ``format`` specifies a template string where ``@@(cond}`` (or
+    ``@@`` for short) is replaced with the name of each condition, and
+    ``@@{num}`` is replaced with a numeric index of that condition.
+    Configuration ``separator`` specifies a piece of code used to join the
+    generated ``format`` pieces for different conditions.
 
-``/*!stags:re2c ... */``, ``/*!mtags:re2c ... */``
-    These directives allow one to specify a template piece of code that is expanded
-    for each s-tag/m-tag variable generated by re2c. This block has two optional
-    configurations: ``format = "@@";`` (specifies the template where ``@@`` is
-    substituted with the name of each tag variable), and ``separator = "";``
-    (specifies the piece of code used to join the generated pieces for different
-    tag variables).
+``/*!include:re2c FILE */``
+    This directive allows one to include ``FILE``, which must be a double-quoted
+    file path. The contents of the file are literally substituted in place of
+    the directive, in the same way as ``#include`` works in C/C++. This
+    directive can be used together with the ``--depfile`` option to generate
+    build system dependencies on the included files.
 
-``/*!include:re2c <file> */``
-    This directive allows one to include ``<file>`` (the contents of the
-    ``<file>`` are literally substituted in place of the directive, in the same
-    way as ``#include`` works in C/C++). This directive can be used together
-    with the ``--depfile`` option to generate build system dependencies on the
-    included files.
-
-``!include <file> ; <newline>``
-    This directive is the same as ``/*!include:re2c <file> */``, except that it
-    is meant to be used inside of a re2c block (and therefore has a slightly
-    different syntax).
+``!include FILE;``
+    This directive is the same as ``/*!include:re2c FILE */``, except that it
+    should be used inside of a re2c block.
 
 ``/*!header:re2c:on*/``
     This directive marks the start of header file. Everything after it and up to
@@ -81,3 +122,10 @@ More information on each directive can be found in the related sections.
 ``/*!header:re2c:off*/``
     This directive marks the end of header file started with
     ``/*!header:re2c:on*/``.
+
+``/*!ignore:re2c ... */``
+    A block which contents are ignored and removed from the output file.
+
+``%{ ... %}``
+    A global re2c block in ``-F --flex-support`` mode. This is deprecated and
+    exists for backward compatibility.
