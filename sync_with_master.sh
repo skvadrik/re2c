@@ -58,5 +58,5 @@ gen_bar_charts_for_benchmark() {
 }
 
 gen_bar_charts_for_benchmark submatch_dfa_aot 2 ""
-gen_bar_charts_for_benchmark submatch_dfa_jit 1 "--relative-to tdfa1-P"
+gen_bar_charts_for_benchmark submatch_dfa_jit 1 "--relative-to ''"
 gen_bar_charts_for_benchmark submatch_nfa     1 "--relative-to LG"
