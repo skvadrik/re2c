@@ -841,81 +841,122 @@ Used only with \fB\-P\fP \fB\-\-posix\-captures\fP option.
 .UNINDENT
 .SS Directives
 .sp
-Below is the list of all directives provided by re2c (in no particular order).
-More information on each directive can be found in the related sections.
+Below is the list of re2c directives (syntactic constructs that mark the
+beginning and end of the code that should be processed by re2c). Named blocks
+were added in re2c version 2.2. They are exactly the same as unnamed blocks,
+except that the name can be used to reference a block in other parts of the
+program. More information on each directive can be found in the related
+sections.
 .INDENT 0.0
 .TP
-.B \fB/*!re2c ... */\fP
-A standard re2c block.
+.B \fB/*!re2c[:NAME] ... */\fP
+A global re2c block with an optional name. The block may contain named
+definitions, configurations and rules in any order. Named definitions and
+configurations are defined in the global scope, so they are inherited by
+subsequent blocks. The code for a global block is generated at the point
+where the block is specified.
 .TP
-.B \fB%{ ... %}\fP
-A standard re2c block in \fB\-F \-\-flex\-support\fP mode.
+.B \fB/*!local:re2c[:NAME] ... */\fP
+A local re2c block with an optional name. Unlike global blocks, definitions
+and configurations inside of a local block are not added into the global
+scope. In all other respects local blocks are the same as global blocks.
 .TP
-.B \fB/*!rules:re2c[:<name>] ... */\fP
-A reusable block with an optional \fB<name>\fP\&. Rules bloks have the same
-structure as ordinary \fB/*!re2c ... */\fP blocks (a mixture of named
-definitions, configurations and rules), but they can be reused multiple
-times in a \fB/*!use:re2c[:<name>] ... */\fP or \fB!use:<name>;\fP directive.
-The code for a rules block is generated at the point where it is referenced
-by a use directive. Prior to re2c version 2.2 rules blocks required
-\fB\-r \-\-reusable\fP option, and named blocks were not supported.
+.B \fB/*!rules:re2c[:NAME] ... */\fP
+A reusable block with an optional name. Rules blocks have the same structure
+as local or global blocks, but they do not produce any code and they can be
+reused multiple times in other blocks with the help of a \fB!use:NAME;\fP
+directive or a \fB/*!use:re2c[:NAME] ... */\fP block. A rules block on its
+own does not add any definitions into the global scope. The code for it is
+generated at the point of use. Prior to re2c version 2.2 rules blocks
+required \fB\-r \-\-reusable\fP option.
 .TP
-.B \fB/*!use:re2c[:<name>] ... */\fP
-A use block with an optional \fB<name>\fP that references a previously defined
-rules block. If \fB<name>\fP is not specified, the most recent rules block is
-used (either a named or unnamed one). A use block can add definitions,
-configurations and rules of its own, which are merged to those of the
-referenced rules block. Prior to re2c version 2.2 use blocks required
-\fB\-r \-\-reusable\fP option, and named blocks were not supported.
+.B \fB/*!use:re2c[:NAME] ... */\fP
+A use block that references a previously defined rules block. If the name is
+specified, re2c looks for a rules blocks with this name. Otherwise the most
+recent rules block is used (either a named or an unnamed one). A use block
+can add definitions, configurations and rules of its own, which are added to
+those of the referenced rules block. Prior to re2c version 2.2 use blocks
+required \fB\-r \-\-reusable\fP option.
 .TP
-.B \fB!use:<name> ; <newline>\fP
-This directive merges a previously defined rules block \fB<name>\fP into the
-current block: named definitions, configurations and rules of the referenced
-block are added to the current ones. Conflicts between overlapping rules and
-configurations are resolved in the usual way: the first rule takes priority,
-and the latest configuration overrides preceding ones. One exception are the
-special rules \fB*\fP, \fB$\fP and \fB<!>\fP: for them a block\-local definition
-overrides any inherited ones, regardless of their order. A use directive can
-be placed anywhere inside of a block (not necessarily at the beginning), and
-multiple use directives are allowed.
+.B \fB!use:NAME;\fP
+An in\-block use directive that merges a previously defined rules block with
+the specified name into the current block. Named definitions, configurations
+and rules of the referenced block are added to the current ones. Conflicts
+between overlapping rules and configurations are resolved in the usual way:
+the first rule takes priority, and the latest configuration overrides the
+preceding ones. One exception is the special rules \fB*\fP, \fB$\fP and \fB<!>\fP
+for which a block\-local definition always takes priority. A use directive
+can be placed anywhere inside of a block, and multiple use directives are
+allowed.
 .TP
-.B \fB/*!ignore:re2c ... */\fP
-A block which contents are ignored and cut off from the output file.
+.B \fB/*!max:re2c[:NAME1[:NAME2...]] ... */\fP
+A directive that generates \fBYYMAXFILL\fP definition.
+An optional list of block names specifies which blocks should be included
+when computing \fBYYMAXFILL\fP value (if the list is empty, all blocks are
+included).
+By default the generated code is a macro\-definition for C
+(\fB#define YYMAXFILL <n>\fP), or a global variable for Go
+(\fBvar YYMAXFILL int = <n>\fP). It can be customized with an optional
+configuration \fBformat\fP that specifies a template string where \fB@@{max}\fP
+(or \fB@@\fP for short) is replaced with the numeric value of \fBYYMAXFILL\fP\&.
 .TP
-.B \fB/*!max:re2c*/\fP
-This directive is substituted with the macro\-definition of \fBYYMAXFILL\fP\&.
+.B \fB/*!maxnmatch:re2c[:NAME1[:NAME2...]] ... */\fP
+A directive that generates \fBYYMAXNMATCH\fP definition (it requires
+\fB\-P \-\-posix\-captures\fP option).
+An optional list of block names specifies which blocks should be included
+when computing \fBYYMAXNMATCH\fP value (if the list is empty, all blocks are
+included).
+By default the generated code is a macro\-definition for C
+(\fB#define YYMAXNMATCH <n>\fP), or a global variable for Go
+(\fBvar YYMAXNMATCH int = <n>\fP). It can be customized with an optional
+configuration \fBformat\fP that specifies a template string where \fB@@{max}\fP
+(or \fB@@\fP for short) is replaced with the numeric value of \fBYYMAXNMATCH\fP\&.
 .TP
-.B \fB/*!maxnmatch:re2c*/\fP
-This directive is substituted with the macro\-definition of \fBYYMAXNMATCH\fP
-(requires \fB\-P \-\-posix\-captures\fP option).
+.B \fB/*!stags:re2c[:NAME1[:NAME2...]] ... */\fP, \fB/*!mtags:re2c[:NAME1[:NAME2...]] ... */\fP
+Directives that specify a template piece of code that is expanded for each
+s\-tag/m\-tag variable generated by re2c.
+An optional list of block names specifies which blocks should be included
+when computing the set of tag variables (if the list is empty, all blocks
+are included).
+There are two optional configurations: \fBformat\fP and \fBseparator\fP\&.
+Configuration \fBformat\fP specifies a template string where \fB@@(tag}\fP (or
+\fB@@\fP for short) is replaced with the name of each tag variable.
+Configuration \fBseparator\fP specifies a piece of code used to join the
+generated \fBformat\fP pieces for different tag variables.
 .TP
-.B \fB/*!getstate:re2c*/\fP
-This directive is substituted with conditional dispatch on lexer state
-(requires \fB\-f \-\-storable\-state\fP option).
+.B \fB/*!getstate:re2c[:NAME1[:NAME2...]] ... */\fP
+A directive that generates conditional dispatch on the lexer state (it
+requires \fB\-f \-\-storable\-state\fP option).
+An optional list of block names specifies which blocks should be included in
+the state dispatch. The default transition goes to the start label of the
+first block on the list. If the list is empty, all blocks are included, and
+the default transition goes to the first block in the file that has a start
+label.
 .TP
-.B \fB/*!types:re2c ... */\fP
-This directive is substituted with the definition of condition \fBenum\fP
-(requires \fB\-c \-\-conditions\fP option).
+.B \fB/*!types:re2c[:NAME1[:NAME2...]] ... */\fP
+A directive that generates condition enumeration (it requires
+\fB\-c \-\-conditions\fP option).
+An optional list of block names specifies which blocks should be included
+when computing the set of conditions (if the list is empty, all blocks are
+included).
+By default the generated code is an enumeration \fBYYCONDTYPE\fP\&. It can be
+customized with optional configurations \fBformat\fP and \fBseparator\fP\&.
+Configuration \fBformat\fP specifies a template string where \fB@@(cond}\fP (or
+\fB@@\fP for short) is replaced with the name of each condition, and
+\fB@@{num}\fP is replaced with a numeric index of that condition.
+Configuration \fBseparator\fP specifies a piece of code used to join the
+generated \fBformat\fP pieces for different conditions.
 .TP
-.B \fB/*!stags:re2c ... */\fP, \fB/*!mtags:re2c ... */\fP
-These directives allow one to specify a template piece of code that is expanded
-for each s\-tag/m\-tag variable generated by re2c. This block has two optional
-configurations: \fBformat = "@@";\fP (specifies the template where \fB@@\fP is
-substituted with the name of each tag variable), and \fBseparator = "";\fP
-(specifies the piece of code used to join the generated pieces for different
-tag variables).
+.B \fB/*!include:re2c FILE */\fP
+This directive allows one to include \fBFILE\fP, which must be a double\-quoted
+file path. The contents of the file are literally substituted in place of
+the directive, in the same way as \fB#include\fP works in C/C++. This
+directive can be used together with the \fB\-\-depfile\fP option to generate
+build system dependencies on the included files.
 .TP
-.B \fB/*!include:re2c <file> */\fP
-This directive allows one to include \fB<file>\fP (the contents of the
-\fB<file>\fP are literally substituted in place of the directive, in the same
-way as \fB#include\fP works in C/C++). This directive can be used together
-with the \fB\-\-depfile\fP option to generate build system dependencies on the
-included files.
-.TP
-.B \fB!include <file> ; <newline>\fP
-This directive is the same as \fB/*!include:re2c <file> */\fP, except that it
-is meant to be used inside of a re2c block (and therefore has a slightly
-different syntax).
+.B \fB!include FILE;\fP
+This directive is the same as \fB/*!include:re2c FILE */\fP, except that it
+should be used inside of a re2c block.
 .TP
 .B \fB/*!header:re2c:on*/\fP
 This directive marks the start of header file. Everything after it and up to
@@ -925,6 +966,13 @@ written to the header file specified with \fB\-t \-\-type\-header\fP option.
 .B \fB/*!header:re2c:off*/\fP
 This directive marks the end of header file started with
 \fB/*!header:re2c:on*/\fP\&.
+.TP
+.B \fB/*!ignore:re2c ... */\fP
+A block which contents are ignored and removed from the output file.
+.TP
+.B \fB%{ ... %}\fP
+A global re2c block in \fB\-F \-\-flex\-support\fP mode. This is deprecated and
+exists for backward compatibility.
 .UNINDENT
 .SS Configurations
 .INDENT 0.0
@@ -1241,9 +1289,6 @@ Same as \fB\-\-case\-insensitive\fP command\-line option.
 .TP
 .B \fBre2c:flags:case\-inverted\fP
 Same as \fB\-\-case\-inverted\fP command\-line option.
-.TP
-.B \fBre2c:flags:i\fP, \fBre2c:flags:no\-debug\-info\fP
-Same as \fB\-i \-\-no\-debug\-info\fP command\-line option.
 .TP
 .B \fBre2c:indent:string\fP
 Specifies the string to use for indentation.
@@ -2555,7 +2600,7 @@ type Input struct {
     limit  int
     // Tag variables must be part of the lexer state passed to YYFILL.
     // They don\(aqt correspond to tags and should be autogenerated by re2c.
-    /*!stags:re2c format = "@@ int"; separator= "\en\et"; */
+    /*!stags:re2c format = "\et@@ int\en"; */
     eof    bool
 }
 
@@ -2581,8 +2626,7 @@ func fill(in *Input) int {
     // check for \-1 is only needed if some tags are nested inside of
     // alternative or repetition, so that they can have \-1 value.
     /*!stags:re2c
-        format = "if in.@@ != \-1 { in.@@ \-= in.token }";
-        separator= "\en\et";
+        format = "\etif in.@@ != \-1 { in.@@ \-= in.token }\en";
     */
     in.token = 0
 
@@ -2604,7 +2648,7 @@ func fill(in *Input) int {
 
 func lex(in *Input) []int {
     // User\-defined local variables that store final tag values. They are
-    // different from tag variables autogenerated with /*!stags:re2c*/, as
+    // different from tag variables autogenerated with \(gastags:re2c\(ga, as
     // they are set at the end of match and used only in semantic actions.
     var o1, o2, o3, o4 int
     var ips []int
@@ -2715,7 +2759,7 @@ var eBadIP error = errors.New("bad IP")
 func lex(str string) (int, error) {
     var cursor, marker, yynmatch int
     yypmatch := make([]int, YYMAXNMATCH*2)
-    /*!stags:re2c format = \(aqvar @@ int\(aq; separator = "\en\et"; */
+    /*!stags:re2c format = \(aq\etvar @@ int\en\(aq; */
 
     num := func(pos int, end int) int {
         n := 0
@@ -2846,7 +2890,7 @@ func lex(str string) []string {
     trie := createTrie(256)
     x := mtagRoot
     y := mtagRoot
-    /*!mtags:re2c format = "@@ := mtagRoot"; separator = "\en\et"; */
+    /*!mtags:re2c format = "\et@@ := mtagRoot\en"; */
 
     /*!re2c
     re2c:flags:tags = 1;
@@ -3133,7 +3177,7 @@ Since that version reusable blocks are allowed by default (no special option
 is needed). Before version 2.2 reuse mode was enabled with \fB\-r \-\-reusable\fP
 option. Before version 1.2 reusable blocks could not be mixed with normal
 blocks.
-.SS Example of \fB!use\fP directive
+.SS Example of a \fB!use\fP directive
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -3193,7 +3237,7 @@ func TestLex(t *testing.T) {
 .fi
 .UNINDENT
 .UNINDENT
-.SS Example of \fB/*!use:re2c ... */\fP directive
+.SS Example of a \fB/*!use:re2c ... */\fP block
 .INDENT 0.0
 .INDENT 3.5
 .sp

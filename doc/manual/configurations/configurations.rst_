@@ -311,9 +311,6 @@
 ``re2c:flags:case-inverted``
     Same as ``--case-inverted`` command-line option.
 
-``re2c:flags:i``, ``re2c:flags:no-debug-info``
-    Same as ``-i --no-debug-info`` command-line option.
-
 ``re2c:indent:string``
     Specifies the string to use for indentation.
     The default value is ``"\t"``.
