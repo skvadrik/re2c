@@ -10,6 +10,9 @@ rm -rf src/benchmarks/submatch_*/*
 # except for a few helper scripts.
 remote=$(git config branch.master.remote) \
     && git fetch $remote \
+    && { git archive --remote=. remotes/$remote/master BUILD.md \
+        | tar -C src/build -xpf - \
+        && mv src/build/BUILD.md src/build/build.md; } \
     && { git archive --remote=. remotes/$remote/master doc/manual \
         | tar -C src/ --strip-components=1 -xpf -; } \
     && { git archive --remote=. remotes/$remote/master examples/**/*.{re,c,h,go,txt,inc} \
