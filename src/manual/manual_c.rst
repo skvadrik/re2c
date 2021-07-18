@@ -158,6 +158,14 @@ Storable state
 Reusable blocks
 ===============
 .. include:: /manual/reuse/reuse.rst_
+
+Example of a ``!use`` directive:
+
+.. literalinclude:: ../examples/c/reuse/usedir.re
+    :language: c
+
+Example of a ``/*!use:re2c ... */`` block:
+
 .. literalinclude:: ../examples/c/reuse/reuse.re
     :language: c
 

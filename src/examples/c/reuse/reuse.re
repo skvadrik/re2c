@@ -1,12 +1,17 @@
-// re2c $INPUT -o $OUTPUT -r --input-encoding utf8
+// re2c $INPUT -o $OUTPUT --input-encoding utf8
+
+// This example supports multiple input encodings: UTF-8 and UTF-32.
+// Both lexers are generated from the same rules block, and the use
+// blocks add only encoding-specific configurations.
+
 #include <assert.h>
 #include <stdint.h>
 
 /*!rules:re2c
     re2c:yyfill:enable = 0;
 
-    "∀x ∃y: p(x, y)" { return 0; }
-    *                { return 1; }
+    "∀x ∃y" { return 0; }
+    *       { return 1; }
 */
 
 static int lex_utf8(const uint8_t *YYCURSOR)
@@ -31,14 +36,10 @@ static int lex_utf32(const uint32_t *YYCURSOR)
 int main()
 {
     static const uint8_t s8[] = // UTF-8
-        { 0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79
-        , 0x3a, 0x20, 0x70, 0x28, 0x78, 0x2c, 0x20, 0x79, 0x29 };
+        { 0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79 };
 
     static const uint32_t s32[] = // UTF32
-        { 0x00002200, 0x00000078, 0x00000020, 0x00002203
-        , 0x00000079, 0x0000003a, 0x00000020, 0x00000070
-        , 0x00000028, 0x00000078, 0x0000002c, 0x00000020
-        , 0x00000079, 0x00000029 };
+        { 0x00002200, 0x00000078, 0x00000020, 0x00002203, 0x00000079 };
 
     assert(lex_utf8(s8) == 0);
     assert(lex_utf32(s32) == 0);

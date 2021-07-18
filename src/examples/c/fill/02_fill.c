@@ -5,7 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#line 9 "c/fill/02_fill.c"
 #define YYMAXFILL 1
+#line 6 "c/fill/02_fill.re"
 
 #define SIZE 4096
 
@@ -52,7 +54,7 @@ static int lex(Input *in)
 loop:
     in->tok = in->cur;
     
-#line 56 "c/fill/02_fill.c"
+#line 58 "c/fill/02_fill.c"
 {
 	char yych;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
@@ -67,12 +69,12 @@ yy2:
 	++in->cur;
 #line 60 "c/fill/02_fill.re"
 	{ return (in->lim - in->cur == YYMAXFILL - 1) ? count : -1; }
-#line 71 "c/fill/02_fill.c"
+#line 73 "c/fill/02_fill.c"
 yy4:
 	++in->cur;
 #line 59 "c/fill/02_fill.re"
 	{ return -1; }
-#line 76 "c/fill/02_fill.c"
+#line 78 "c/fill/02_fill.c"
 yy6:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
@@ -84,7 +86,7 @@ yy6:
 yy8:
 #line 62 "c/fill/02_fill.re"
 	{ goto loop; }
-#line 88 "c/fill/02_fill.c"
+#line 90 "c/fill/02_fill.c"
 yy9:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
@@ -98,7 +100,7 @@ yy11:
 	++in->cur;
 #line 61 "c/fill/02_fill.re"
 	{ ++count; goto loop; }
-#line 102 "c/fill/02_fill.c"
+#line 104 "c/fill/02_fill.c"
 yy13:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;

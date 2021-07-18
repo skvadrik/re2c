@@ -17,7 +17,7 @@ example (escapes.re):
         [\a\A\"\'\[\]\-\x5d\377] {}
     */
 
-Re2c reports a bunch of warnings:
+re2c reports a bunch of warnings:
 
 .. code-block:: none
 

@@ -13,7 +13,7 @@ swapped range bounds. Consider the following example (swapped.re):
         [a-Z] { return "is it what you wanted?"; }
     */
 
-Re2c interprets this code as ``[Z-a]``, but generates a warning:
+re2c interprets this code as ``[Z-a]``, but generates a warning:
 
 .. code-block:: none
 

@@ -21,7 +21,7 @@ demonstrates some of the possibilities:
         "a" \ [a-z]               { return 4; }
     */
 
-Re2c gives the following warnings:
+re2c gives the following warnings:
 
 .. code-block:: none
 

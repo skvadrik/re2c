@@ -1,30 +1,33 @@
-====
+========
 re2c
-====
+========
 
 .. toctree::
     :hidden:
 
-    User manual (C)    </manual/manual_c>
-    User manual (Go)   </manual/manual_go>
-    Build instructions </install/install>
-    Benchmarks         </benchmarks/benchmarks>
-    Release notes      </releases/release_notes>
-    Changelog          </releases/changelog/changelog>
+    Release notes    </releases/release_notes>
+    How to build     </build/build>
+    User manual (C)  </manual/manual_c>
+    User manual (Go) </manual/manual_go>
+    Benchmarks       </benchmarks/benchmarks>
+    Changelog        </releases/changelog/changelog>
 
-Re2c is a free and open-source lexer generator for C, C++ and Go.
-It compiles regular expressions to determinisitic finite automata
-and encodes the automata in the form of a program in the target language.
-The main advantages of re2c are speed of the generated code and a flexible user interface
-that allows one to adapt the generated lexer to a particular environment and input model.
-Re2c supports fast and lightweight submatch extraction with either POSIX or leftmost greedy semantics.
-Re2c is used in other open-source projects such as
+Re2c is a free and open-source lexer generator for C, C++ and Go
+with a focus on generating fast code and providing a flexible user interface.
+It finds regular expression specifications in the form of comments intermixed with normal code,
+compiles them to determinisitic finite automata and encodes the automata directly in the target language
+(instead of using a slower table-based approach).
+At the core of re2c is the
+`lookahead-TDFA <2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf>`_
+algorithm that allows it to perform fast and lightweight submatch extraction.
+Re2c is used in other open-source projects, such as
 `php <http://php.net/>`_,
 `ninja <https://ninja-build.org/>`_,
 `yasm <http://yasm.tortall.net/>`_,
 `spamassassin <https://spamassassin.apache.org/>`_,
-`BRL-CAD <http://brlcad.org/>`_
-and `wake <https://github.com/sifive/wake>`_, etc.
+`BRL-CAD <http://brlcad.org/>`_,
+`wake <https://github.com/sifive/wake>`_, etc.
+It should always remain open-source and free to use for anyone.
 
 
 .. |feed| image:: feed/feed/feed.png
@@ -33,7 +36,7 @@ and `wake <https://github.com/sifive/wake>`_, etc.
     :width:  2em
 
 |feed| `Subscribe <feed/atom.xml>`_ to receive the latest news and updates.
-See the user manuals (`C <manual/manual_c.html>`_, `Go <manual/manual_go.html>`_) for a complete overview with
+See the user manuals (`C/C++ <manual/manual_c.html>`_, `Go <manual/manual_go.html>`_) for a complete overview with
 examples.
 
 Download
@@ -43,7 +46,7 @@ You can get the
 `latest release <https://github.com/skvadrik/re2c/releases/latest>`_ on Github,
 as well as the `older releases <https://github.com/skvadrik/re2c/releases>`_.
 Many Linux distributions and other systems provide their own packages.
-Re2c source code is hosted on both Github
+The source code is hosted on both Github
 (`<https://github.com/skvadrik/re2c>`_) and SourceForge
 (`<https://sourceforge.net/p/re2c>`_).
 Github serves as the main repository, bugtracker and tarball hosting.
@@ -105,26 +108,12 @@ most notably,
 Brian Young (bayoung@acm.org),
 Markus Boerger (helly@users.sourceforge.net),
 Dan Nuffer (nuffer@users.sourceforge.net)
-and Ulya Trofimovich (skvadrik@gmail.com).
-Other re2c contributors are
-Derick Rethans,
-Emmanuel Mogenet,
-Hartmut Kaiser,
-jcfp,
-joscherl,
-Mike Gilbert,
-Nerd,
-nuno-lopes,
-Oleksii Taran,
-Peter Bumbulis,
-Petr Skocik,
-Paulo Custodio,
-Ross Burton,
-Ryan Mast,
-Serghei Iakovlev,
-Sergei Trofimovich
-and Tim Kelly
-(apologies if someone is missing).
+`Ulya Trofimovich <https://github.com/skvadrik>`_ (skvadrik@gmail.com),
+`Serghei Iakovlev <https://github.com/sergeyklay>`_,
+`Sergei Trofimovich <https://github.com/trofi>`_,
+`Petr Skocik <https://github.com/pskocik>`_
+and `ligfx <https://github.com/ligfx>`_.
+Many thanks to all other contibutors!
 
 License
 -------

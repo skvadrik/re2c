@@ -158,6 +158,14 @@ Storable state
 Reusable blocks
 ===============
 .. include:: /manual/reuse/reuse.rst_
+
+Example of a ``!use`` directive:
+
+.. literalinclude:: ../examples/go/reuse/usedir.re
+    :language: go
+
+Example of a ``/*!use:re2c ... */`` block:
+
 .. literalinclude:: ../examples/go/reuse/reuse.re
     :language: go
 

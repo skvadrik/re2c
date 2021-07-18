@@ -8,7 +8,9 @@ import (
 	"testing"
 )
 
+//line "go/eof/02_bounds_checking.go":12
 var YYMAXFILL int = 1
+//line "go/eof/02_bounds_checking.re":9
 
 
 // Expects YYMAXFILL-padded string.
@@ -18,7 +20,7 @@ func lex(str string) int {
 	count := 0
 loop:
 	
-//line "go/eof/02_bounds_checking.go":22
+//line "go/eof/02_bounds_checking.go":24
 {
 	var yych byte
 	if (limit - cursor < 1) {
@@ -45,14 +47,14 @@ yy2:
 			return -1
 		}
 	}
-//line "go/eof/02_bounds_checking.go":49
+//line "go/eof/02_bounds_checking.go":51
 yy4:
 	cursor += 1
 //line "go/eof/02_bounds_checking.re":24
 	{
 		return -1
 	}
-//line "go/eof/02_bounds_checking.go":56
+//line "go/eof/02_bounds_checking.go":58
 yy6:
 	cursor += 1
 	if (limit - cursor < 1) {
@@ -70,7 +72,7 @@ yy8:
 	{
 		goto loop
 	}
-//line "go/eof/02_bounds_checking.go":74
+//line "go/eof/02_bounds_checking.go":76
 yy9:
 	cursor += 1
 	if (limit - cursor < 1) {
@@ -92,7 +94,7 @@ yy11:
 		count += 1;
 		goto loop
 	}
-//line "go/eof/02_bounds_checking.go":96
+//line "go/eof/02_bounds_checking.go":98
 yy13:
 	cursor += 1
 	if (limit - cursor < 1) {

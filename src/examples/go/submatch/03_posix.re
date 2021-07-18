@@ -13,7 +13,7 @@ var eBadIP error = errors.New("bad IP")
 func lex(str string) (int, error) {
 	var cursor, marker, yynmatch int
 	yypmatch := make([]int, YYMAXNMATCH*2)
-	/*!stags:re2c format = 'var @@ int'; separator = "\n\t"; */
+	/*!stags:re2c format = '\tvar @@ int\n'; */
 
 	num := func(pos int, end int) int {
 		n := 0

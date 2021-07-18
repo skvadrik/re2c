@@ -57,7 +57,9 @@ func fill(in *Input) int {
 
 func lex(in *Input, recv *int) int {
 	var yych byte
-	switch (in.state) {
+	
+//line "go/state/push.go":62
+switch (in.state) {
 default:
 	goto yy0
 case 0:
@@ -76,11 +78,12 @@ case 2:
 	}
 	goto yyFillLabel2
 }
+//line "go/state/push.re":58
 
 loop:
 	in.token = in.cursor
 	
-//line "go/state/push.go":84
+//line "go/state/push.go":87
 
 yy0:
 yyFillLabel0:
@@ -150,7 +153,7 @@ yy3:
 yy4:
 //line "go/state/push.re":74
 	{ return lexPacketBroken }
-//line "go/state/push.go":154
+//line "go/state/push.go":157
 yy5:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -222,7 +225,7 @@ yy6:
 	in.cursor += 1
 //line "go/state/push.re":76
 	{ *recv = *recv + 1; goto loop }
-//line "go/state/push.go":226
+//line "go/state/push.go":229
 yy8:
 	in.cursor += 1
 yyFillLabel2:
@@ -295,7 +298,7 @@ yy10:
 yy11:
 //line "go/state/push.re":75
 	{ return lexEnd }
-//line "go/state/push.go":299
+//line "go/state/push.go":302
 //line "go/state/push.re":77
 
 }

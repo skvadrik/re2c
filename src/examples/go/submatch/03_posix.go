@@ -8,7 +8,9 @@ import (
 	"testing"
 )
 
+//line "go/submatch/03_posix.go":12
 var YYMAXNMATCH int = 5
+//line "go/submatch/03_posix.re":9
 
 
 var eBadIP error = errors.New("bad IP")
@@ -16,10 +18,14 @@ var eBadIP error = errors.New("bad IP")
 func lex(str string) (int, error) {
 	var cursor, marker, yynmatch int
 	yypmatch := make([]int, YYMAXNMATCH*2)
+	
+//line "go/submatch/03_posix.go":23
 	var yyt1 int
 	var yyt2 int
 	var yyt3 int
 	var yyt4 int
+//line "go/submatch/03_posix.re":16
+
 
 	num := func(pos int, end int) int {
 		n := 0
@@ -30,7 +36,7 @@ func lex(str string) (int, error) {
 	}
 
 	
-//line "go/submatch/03_posix.go":34
+//line "go/submatch/03_posix.go":40
 {
 	var yych byte
 	yych = str[cursor]
@@ -67,7 +73,7 @@ yy2:
 yy3:
 //line "go/submatch/03_posix.re":51
 	{ return 0, eBadIP }
-//line "go/submatch/03_posix.go":71
+//line "go/submatch/03_posix.go":77
 yy4:
 	cursor += 1
 	marker = cursor
@@ -678,7 +684,7 @@ yy29:
 			(num(yypmatch[4], yypmatch[5]) << 16)+
 			(num(yypmatch[2], yypmatch[3]) << 24), nil
 	}
-//line "go/submatch/03_posix.go":682
+//line "go/submatch/03_posix.go":688
 yy31:
 	cursor += 1
 	yych = str[cursor]

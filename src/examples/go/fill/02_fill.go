@@ -9,7 +9,9 @@ import (
 	"testing"
 )
 
+//line "go/fill/02_fill.go":13
 var YYMAXFILL int = 1
+//line "go/fill/02_fill.re":10
 
 
 // Intentionally small to trigger buffer refill.
@@ -69,7 +71,7 @@ func lex(in *Input) int {
 loop:
 	in.token = in.cursor
 	
-//line "go/fill/02_fill.go":73
+//line "go/fill/02_fill.go":75
 {
 	var yych byte
 	if (in.limit-in.cursor < 1) {
@@ -96,14 +98,14 @@ yy2:
 			return -1
 		}
 	}
-//line "go/fill/02_fill.go":100
+//line "go/fill/02_fill.go":102
 yy4:
 	in.cursor += 1
 //line "go/fill/02_fill.re":77
 	{
 		return -1
 	}
-//line "go/fill/02_fill.go":107
+//line "go/fill/02_fill.go":109
 yy6:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
@@ -121,7 +123,7 @@ yy8:
 	{
 		goto loop
 	}
-//line "go/fill/02_fill.go":125
+//line "go/fill/02_fill.go":127
 yy9:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
@@ -143,7 +145,7 @@ yy11:
 		count += 1;
 		goto loop
 	}
-//line "go/fill/02_fill.go":147
+//line "go/fill/02_fill.go":149
 yy13:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
