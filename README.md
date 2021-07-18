@@ -47,8 +47,7 @@ details about contributions to this repository.
 BUILD
 -----
 
-re2c has two build systems: Autotools and CMake. Both are maintained and tested
-on Travis CI. See [the documentation](http://re2c.org/install/install.html) for
+See BUILD.md or the [online docs](https://re2c.org/build/build.html) for
 instructions how to build re2c.
 
 
