@@ -12,10 +12,10 @@ var YYMAXFILL int = 2
 
 var SIZE int = 11
 
-type YYCTYPE byte
+type YYCTYPE = byte
 type Input struct {
 	file   *os.File
-	data   []byte
+	data   []YYCTYPE
 	cursor int
 	marker int
 	token  int
@@ -23,92 +23,61 @@ type Input struct {
 	eof    bool
 }
 
-func peek(in *Input) func() YYCTYPE {
-	return func() YYCTYPE {
-		return YYCTYPE(in.data[in.cursor])
+func fill(in *Input, need int) int {
+	// End of input has already been reached, nothing to do.
+	if in.eof {
+		fmt.Println("fill error: unexpected EOF")
+		return 1
 	}
-}
 
-func skip(in *Input) func() {
-	return func() {
-		in.cursor++
+	// Check if after moving the current lexeme to the beginning
+	// of buffer there will be enough free space.
+	if SIZE-(in.cursor-in.token) < need {
+		fmt.Println("fill error: lexeme too long")
+		return 2
 	}
-}
 
-func backup(in *Input) func() {
-	return func() {
-		in.marker = in.cursor
-	}
-}
+	// Discard everything up to the start of the current lexeme,
+	// shift buffer contents and adjust offsets.
+	copy(in.data[0:], in.data[in.token:in.limit])
+	in.cursor -= in.token
+	in.marker -= in.token
+	in.limit -= in.token
+	in.token = 0
 
-func restore(in *Input) func() {
-	return func() {
-		in.cursor = in.marker
-	}
-}
+	// Read new data (as much as possible to fill the buffer).
+	n, _ := in.file.Read(in.data[in.limit:SIZE])
+	in.limit += n
+	fmt.Printf("fill(%d): %v '%s'\n", need, in.data[:in.limit+1],
+		string(in.data[:in.limit]))
 
-func fill(in *Input) func(int) int {
-	return func(need int) int {
-		// End of input has already been reached, nothing to do.
-		if in.eof {
-			fmt.Println("fill error: unexpected EOF")
-			return 1
+	// If read less than expected, this is the end of input.
+	in.eof = in.limit < SIZE
+
+	// If end of input, add padding so that the lexer can read
+	// the remaining characters at the end of buffer.
+	if in.eof {
+		for i := 0; i < YYMAXFILL; i += 1 {
+			in.data[in.limit+i] = 0
 		}
-
-		// Check if after moving the current lexeme to the beginning
-		// of buffer there will be enough free space.
-		if SIZE-(in.cursor-in.token) < need {
-			fmt.Println("fill error: lexeme too long")
-			return 2
-		}
-
-		// Discard everything up to the start of the current lexeme,
-		// shift buffer contents and adjust offsets.
-		copy(in.data[0:], in.data[in.token:in.limit])
-		in.cursor -= in.token
-		in.marker -= in.token
-		in.limit -= in.token
-		in.token = 0
-
-		// Read new data (as much as possible to fill the buffer).
-		n, _ := in.file.Read(in.data[in.limit:SIZE])
-		in.limit += n
-		fmt.Printf("fill(%d): %v '%s'\n", need, in.data[:in.limit+1],
-			string(in.data[:in.limit]))
-
-		// If read less than expected, this is the end of input.
-		in.eof = in.limit < SIZE
-
-		// If end of input, add padding so that the lexer can read
-		// the remaining characters at the end of buffer.
-		if in.eof {
-			for i := 0; i < YYMAXFILL; i += 1 {
-				in.data[in.limit+i] = 0
-			}
-			in.limit += YYMAXFILL
-		}
-
-		return 0
+		in.limit += YYMAXFILL
 	}
-}
 
-func lessthan(in *Input) func(int) bool {
-	return func(n int) bool {
-		return in.limit-in.cursor < n
-	}
+	return 0
 }
 
 func Lex(in *Input) int {
-	YYPEEK := peek(in)
-	YYSKIP := skip(in)
-	YYBACKUP := backup(in)
-	YYRESTORE := restore(in)
-	YYFILL := fill(in)
-	YYLESSTHAN := lessthan(in)
+	YYPEEK := func() YYCTYPE { return in.data[in.cursor] }
+	YYSKIP := func() { in.cursor++ }
+	YYBACKUP := func() { in.marker = in.cursor }
+	YYRESTORE := func() { in.cursor = in.marker }
+	YYLESSTHAN := func(n int) bool { return in.limit-in.cursor < n }
+	YYFILL := func(n int) int { return fill(in, n) }
+
 	in.token = in.cursor
 
 	
-//line "golang/003_fill_functions.go":112
+//line "golang/003_fill_functions.go":81
 {
 	var yych YYCTYPE
 	if (YYLESSTHAN(1)) {
@@ -145,27 +114,27 @@ func Lex(in *Input) int {
 	}
 yy2:
 	YYSKIP()
-//line "golang/003_fill_functions.re":115
+//line "golang/003_fill_functions.re":84
 	{
 		fmt.Println("end")
 		return 0
 	}
-//line "golang/003_fill_functions.go":154
+//line "golang/003_fill_functions.go":123
 yy4:
 	YYSKIP()
-//line "golang/003_fill_functions.re":110
+//line "golang/003_fill_functions.re":79
 	{
 		fmt.Println("error")
 		return -1
 	}
-//line "golang/003_fill_functions.go":162
+//line "golang/003_fill_functions.go":131
 yy6:
 	YYSKIP()
-//line "golang/003_fill_functions.re":130
+//line "golang/003_fill_functions.re":99
 	{
 		return 3
 	}
-//line "golang/003_fill_functions.go":169
+//line "golang/003_fill_functions.go":138
 yy8:
 	YYSKIP()
 	YYBACKUP()
@@ -200,12 +169,12 @@ yy8:
 		goto yy10
 	}
 yy10:
-//line "golang/003_fill_functions.re":120
+//line "golang/003_fill_functions.re":89
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return 1
 	}
-//line "golang/003_fill_functions.go":209
+//line "golang/003_fill_functions.go":178
 yy11:
 	YYSKIP()
 	yych = YYPEEK()
@@ -267,14 +236,14 @@ yy13:
 		goto yy15
 	}
 yy15:
-//line "golang/003_fill_functions.re":125
+//line "golang/003_fill_functions.re":94
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return 2
 	}
-//line "golang/003_fill_functions.go":276
+//line "golang/003_fill_functions.go":245
 }
-//line "golang/003_fill_functions.re":133
+//line "golang/003_fill_functions.re":102
 
 }
 

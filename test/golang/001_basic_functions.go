@@ -4,48 +4,18 @@
 package main
 
 type YYCTYPE byte
-type Input struct {
-	data   []YYCTYPE
-	cursor int
-	marker int
-}
-
-func peek(in *Input) func() YYCTYPE {
-	return func() YYCTYPE {
-		return in.data[in.cursor]
-	}
-}
-
-func skip(in *Input) func() {
-	return func() {
-		in.cursor++
-	}
-}
-
-func backup(in *Input) func() {
-	return func() {
-		in.marker = in.cursor
-	}
-}
-
-func restore(in *Input) func() {
-	return func() {
-		in.cursor = in.marker
-	}
-}
 
 func Lex(str string) int {
-	in := &Input{
-		data:   []YYCTYPE(str),
-		cursor: 0,
-	}
-	YYPEEK := peek(in)
-	YYSKIP := skip(in)
-	YYBACKUP := backup(in)
-	YYRESTORE := restore(in)
+	data := []YYCTYPE(str)
+	var cursor, marker int
+
+	YYPEEK := func() YYCTYPE { return data[cursor] }
+	YYSKIP := func() { cursor++ }
+	YYBACKUP := func() { marker = cursor }
+	YYRESTORE := func() { cursor = marker }
 
 	
-//line "golang/001_basic_functions.go":49
+//line "golang/001_basic_functions.go":19
 {
 	var yych YYCTYPE
 	yych = YYPEEK()
@@ -76,11 +46,11 @@ func Lex(str string) int {
 yy2:
 	YYSKIP()
 yy3:
-//line "golang/001_basic_functions.re":51
+//line "golang/001_basic_functions.re":21
 	{
 		return -1
 	}
-//line "golang/001_basic_functions.go":84
+//line "golang/001_basic_functions.go":54
 yy4:
 	YYSKIP()
 	YYBACKUP()
@@ -113,11 +83,11 @@ yy4:
 	}
 yy5:
 	YYSKIP()
-//line "golang/001_basic_functions.re":55
+//line "golang/001_basic_functions.re":25
 	{
 		return 1
 	}
-//line "golang/001_basic_functions.go":121
+//line "golang/001_basic_functions.go":91
 yy7:
 	YYSKIP()
 	yych = YYPEEK()
@@ -151,7 +121,7 @@ yy9:
 	YYRESTORE()
 	goto yy3
 }
-//line "golang/001_basic_functions.re":58
+//line "golang/001_basic_functions.re":28
 
 }
 

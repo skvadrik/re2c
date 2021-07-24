@@ -2,45 +2,15 @@
 package main
 
 type YYCTYPE byte
-type Input struct {
-	data   []YYCTYPE
-	cursor int
-	marker int
-}
-
-func peek(in *Input) func() YYCTYPE {
-	return func() YYCTYPE {
-		return in.data[in.cursor]
-	}
-}
-
-func skip(in *Input) func() {
-	return func() {
-		in.cursor++
-	}
-}
-
-func backup(in *Input) func() {
-	return func() {
-		in.marker = in.cursor
-	}
-}
-
-func restore(in *Input) func() {
-	return func() {
-		in.cursor = in.marker
-	}
-}
 
 func Lex(str string) int {
-	in := &Input{
-		data:   []YYCTYPE(str),
-		cursor: 0,
-	}
-	YYPEEK := peek(in)
-	YYSKIP := skip(in)
-	YYBACKUP := backup(in)
-	YYRESTORE := restore(in)
+	data := []YYCTYPE(str)
+	var cursor, marker int
+
+	YYPEEK := func() YYCTYPE { return data[cursor] }
+	YYSKIP := func() { cursor++ }
+	YYBACKUP := func() { marker = cursor }
+	YYRESTORE := func() { cursor = marker }
 
 	/*!re2c
 	re2c:yyfill:enable = 0;
