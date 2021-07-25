@@ -56,14 +56,15 @@ div.document div.math img {
 }
 div.document code {
     font-family: monospace;
-    font-size: 13px;
+    font-size: 14px;
     padding: 1px 3px 1px 3px;
-    border: 1px solid lightgray;
-    background-color: aliceblue;
+    /*border: 1px solid gainsboro;*/
+    /*background-color: aliceblue;*/
+    color: #004080;
 }
 @media (max-width: 1000px) {
     div.document code {
-        font-size: 12px;
+        font-size: 13px;
     }
 }
 /* :download: role; should look like a normal link rather than inline code block */
@@ -99,9 +100,9 @@ div.sphinxsidebar {
     background-color: gainsboro;
     overflow: auto;
     height: 100%;
-    color: midnightblue;
+    color: #002255;
 }
-div.sphinxsidebar a { color: midnightblue; }
+div.sphinxsidebar a { color: #002255; }
 div.sphinxsidebarwrapper {
     padding: 1em;
 }
@@ -122,11 +123,11 @@ div.sphinxsidebarwrapper h6 {
     border-bottom: 1px solid;
 }
 div.sphinxsidebarwrapper div.re2c-logo {
-    background-color: silver;
+    background-color: #c2ccd6;
     font-family: monospace;
     font-size: 150%;
     font-style: italic;
-    color: slategray;
+    color: gray;
     text-align: center;
     border: 1px solid darkgray;
     overflow: hidden;

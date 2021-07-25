@@ -20,7 +20,7 @@ parameter ``--enable-golang`` for Autotools or ``-DRE2C_BUILD_RE2GO=yes`` for
 CMake.
 Unlike C, Go does not have pointer arithmetics, therefore re2go programs use
 integer indices instead of pointers and have
-:ref:`generic API <manual/manual_go:program interface>` enabled by default.
+:ref:`generic API <generic_api>` enabled by default.
 Almost all re2c features have been ported to re2go, with the exception of code
 generation options like ``--computed-gotos`` and ``--case-ranges`` that
 need unsupported language features.
@@ -48,7 +48,7 @@ more details.
 
 **Free-form generic API.**
 Generic API now supports
-:ref:`two styles <manual/manual_go:program interface>`: function-like style is
+:ref:`two styles <generic_api>`: function-like style is
 enabled with ``re2c:api:style = functions;``, and free-form style is enabled
 with ``re2c:api:style = free-form;``.
 Previously only the function-like style was supported, and free-form style

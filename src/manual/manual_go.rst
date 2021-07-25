@@ -14,63 +14,51 @@ User manual (re2go)
 
     <p style="color:gray";><i>Note: This manual includes examples for Go, but it refers to re2c (rather than re2go) as the name of the program in general.</i></p>
 
+Introduction
+============
 .. include:: /manual/syntax/syntax.rst_
+.. include:: /manual/syntax/api1.rst_
+.. include:: /manual/syntax/api2_go.rst_
+.. include:: /manual/syntax/api3.rst_
 
-Here is an example program that shows various aspects of re2c syntax:
+Example
+-------
 
 .. literalinclude:: ../examples/go/01_basic.re
     :language: go
 
-This is the generated output:
+The output looks like this (everything between ``/*!re2c`` and ``*/`` has been
+replaced with the generated code):
 
 .. literalinclude:: ../examples/go/01_basic.go
     :language: go
 
+Command-line options
+====================
+Command-line interface consists of options and warnings. Some of the options
+have corresponding `configurations`_, others are global and cannot be changed
+after re2c starts reading the input file. Debug options generally require
+building re2c in debug configuration. Internal options are useful for
+experimenting with the algorithms used in re2c. Warnings can be invividually
+enabled, disabled and turned into an error. For each warning there is a
+`detailed description with examples <warnings/warnings.html>`_.
 
-Command-line interface
-======================
-Command-line interface consists of options and warnings.
-Some of the options have corresponding `configurations`_,
-others are global and cannot be changed after re2c starts reading the input file.
-Debug options generally require building re2c in debug configuration.
-Internal options are useful for experimenting with the algorithms used in re2c.
-Each warning can be enabled, disabled and turned into an error.
-
-Options
--------
 .. include:: /manual/options/options.rst_
-
-Debug options:
-
 .. include:: /manual/options/debug.rst_
-
-Internal options:
-
 .. include:: /manual/options/internal.rst_
-
-Warnings
---------
-See `detailed descriptions with examples <warnings/warnings.html>`_ for all warnings.
-
 .. include:: /manual/warnings/warnings_general.rst_
 .. include:: /manual/warnings/warnings_list.rst_
 
-
-Program interface
-=================
-.. include:: /manual/api/api.rst_
-
-API primitives
---------------
-
-.. include:: /manual/api/interface.rst_
-
-Directives
-----------
+Blocks and directives
+=====================
 .. include:: /manual/directives/directives.rst_
 
+Interface primitives
+====================
+.. include:: /manual/api/interface.rst_
+
 Configurations
---------------
+==============
 .. include:: /manual/configurations/configurations.rst_
 
 Regular expressions

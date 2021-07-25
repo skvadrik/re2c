@@ -1,0 +1,5 @@
+
+For ``YYFILL`` definition and instructions how to customize or disable
+end-of-input checks see the `handling the end of input`_ and
+`buffer refilling`_ sections.
+
