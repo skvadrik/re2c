@@ -1,0 +1,52 @@
+
+  **Free-form**
+    This style is enabled with ``re2c:api:style = free-form;`` configuration.
+    Interface primitives should be defined as free-form pieces of code with
+    interpolated variables of the form ``@@{name}`` or optionally just ``@@``
+    if there is only one variable. The ``@@`` marker can be customized with the
+    ``re2c:api:sigil`` configuration. In C/C++ free-form style generic API can
+    be defined in terms of pointers ``cursor``, ``limit``, ``marker`` and
+    ``ctxmarker`` as follows:
+
+    .. code-block:: c
+
+        /*!re2c
+        re2c:define:YYPEEK       = "*cursor";
+        re2c:define:YYSKIP       = "++cursor";
+        re2c:define:YYBACKUP     = "marker = cursor";
+        re2c:define:YYRESTORE    = "cursor = marker";
+        re2c:define:YYBACKUPCTX  = "ctxmarker = cursor";
+        re2c:define:YYRESTORECTX = "cursor = ctxmarker";
+        re2c:define:YYRESTORETAG = "cursor = ${tag}";
+        re2c:define:YYLESSTHAN   = "limit - cursor < @@{len}";
+        re2c:define:YYSTAGP      = "@@{tag} = cursor";
+        re2c:define:YYSTAGN      = "@@{tag} = NULL";
+        re2c:define:YYSHIFT      = "cursor += @@{shift}";
+        re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift}";
+        */
+
+    |
+
+  **Function-like**
+    This style is enabled with ``re2c:api:style = functions;`` configuration.
+    Primitives should be defined as functions or macros with parentheses,
+    accepting the necessary number of arguments. For historical reasons this
+    API style is the default for C/C++ backend. Function style generic API can
+    be defined in terms of pointers ``cursor``, ``limit``, ``marker`` and
+    ``ctxmarker`` as follows:
+
+    .. code-block:: c
+
+        #define  YYPEEK()                 *cursor
+        #define  YYSKIP()                 ++cursor
+        #define  YYBACKUP()               marker = cursor
+        #define  YYRESTORE()              cursor = marker
+        #define  YYBACKUPCTX()            ctxmarker = cursor
+        #define  YYRESTORECTX()           cursor = ctxmarker
+        #define  YYRESTORETAG(tag)        cursor = tag
+        #define  YYLESSTHAN(len)          limit - cursor < len
+        #define  YYSTAGP(tag)             tag = cursor
+        #define  YYSTAGN(tag)             tag = NULL
+        #define  YYSHIFT(shift)           cursor += shift
+        #define  YYSHIFTSTAG(tag, shift)  tag += shift
+

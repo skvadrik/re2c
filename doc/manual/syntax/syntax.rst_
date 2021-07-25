@@ -1,20 +1,70 @@
-A re2c program consists of normal code intermixed with re2c blocks and `directives`_.
-Each re2c block may contain definitions, configurations and rules.
-Definitions are of the form ``name = regexp;``  where ``name`` is an identifier that
-consists of letters, digits and underscores, and ``regexp`` is a regular expression.
-`Regular expressions`_ may contain other definitions, but recursion is not allowed and each name should be defined before used.
-`Configurations`_ are of the form ``re2c:config = value;`` where ``config`` is the configuration descriptor
-and ``value`` can be a number, a string or a special word.
-Rules consist of a regular expression followed by a semantic action
-(a block of code enclosed in curly braces ``{`` and ``}``,
-or a raw one line of code preceded with ``:=`` and ended with a newline that is not followed by a whitespace).
-If the input matches the regular expression, the associated semantic action is executed.
-If multiple rules match, the longest match takes precedence.
-If multiple rules match the same string, the earlier rule takes precedence.
-There are two special rules: default rule ``*`` and EOF rule ``$``.
-Default rule should always be defined, it has the lowest priority regardless of its place and matches any code unit (not necessarily a valid character, see `encoding support`_).
-EOF rule matches the end of input, it should be defined if the corresponding method for `handling the end of input`_ is used.
-If `start conditions`_ are used, rules have more complex syntax.
-All rules of a single block are compiled into a deterministic finite-state automaton (DFA) and encoded in the form of a program in the target language.
-The generated code interfaces with the outer program by the means of a few user-defined primitives (see the `program interface`_ section).
-`Reusable blocks`_ allow sharing rules, definitions and configurations between different blocks.
+Re2c works as a preprocessor. It reads the input file (which is usually a
+program in the target language, but can be anything) and looks for blocks of
+code enclosed in special-form comments. The text outside of these blocks is
+copied verbatim into the output file. The contents of the blocks are processed
+by re2c. It translates them to code in the target language and outputs the
+generated code in place of the block. There are different kinds of blocks;
+see the `blocks and directives`_ section for a full list of them. The main block
+kinds are the following:
+
+  ``/*!re2c[:<name>] ... */``
+    A *global block* that contains a mixture of named definitions,
+    configurations, directives and rules (regular expressions with associated
+    semantic actions). Re2c compiles regular expressions to a deterministic
+    finite automaton, encodes it in the form of conditional jumps and replaces
+    the block with the generated code. Names and configurations defined
+    in the block are added to the global scope and become visible to subsequent
+    blocks (at the start of the program global scope is initialized with the
+    `command-line options`_).
+    The ``:<name>`` part is optional: if specified, the name can be used to
+    refer to the block in another part of the program.
+
+  ``/*!local:re2c[:<name>] ... */``
+    A *local block* is like a global block, but the names and configurations
+    defined in it have local scope (they do not affect other blocks).
+
+  ``/*!rules:re2c[:<name>] ... */``
+    A *rules block* is like a local block, but it does not generate any code and
+    is meant to be reused in other blocks. This is a way of sharing code
+    (more details in the `reusable blocks`_ section).
+
+A block may contain the following kinds of statements:
+
+  ``<name> = <regular expression>;``
+    A *named definition* binds a name to a regular expression. Names may contain
+    alphanumeric characters and underscore. The `regular expressions`_ section
+    gives an overview of re2c syntax for regular expressions. Once defined, the
+    name can be used in other regular expressions and in rules. Recursion in
+    named definitions is not allowed, and each name should be defined before it
+    is used. A block inherits named definitions from the global scope.
+    Redefining a name that exists in the current scope is an error.
+
+  ``<configuration> = <value>;``
+    A *configuration* allows one to change re2c behavior and customize the
+    generated code. For a full list of configurations supported by re2c see the
+    `configurations`_ section. Depending on a particular configuration, the
+    value can be a keyword, a nonnegative integer number or a one-line string
+    which should be enclosed in double or single quotes unless it consists of
+    alphanumeric characters. A block inherits configurations from the global
+    scope and may redefine them or add new ones. Configurations defined inside
+    of a block affect the whole block, even if they appear at the end of it.
+
+  ``<regular expression> { <code> }``
+    A *rule* binds a regular expression to a semantic action (a block of code in
+    the target language). If the regular expression matches, the associated
+    semantic action is executed. If multiple rules match, the longest match
+    takes precedence. If multiple rules match the same string, the earliest one
+    takes precedence. There are two special rules: the default rule ``*`` and
+    the end of input rule ``$``. The default rule should always be defined, it
+    has the lowest priority regardless of its place in the block, and it matches
+    any code unit (not necessarily a valid character, see the
+    `encoding support`_ section). The end of input rule should be defined if the
+    corresponding method for `handling the end of input`_ is used. If
+    `start conditions`_ are used, rules have more complex syntax.
+
+  ``!<directive>;``
+    A *directive* is one of the special predefined statements. Each directive
+    has a unique purpose. For example, the ``!use`` directive merges a rules
+    block into the current one (see the `reusable blocks`_ section), and the
+    ``!include`` directive allows one to include an outer file (see the
+    `include files`_ section).

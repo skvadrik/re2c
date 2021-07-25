@@ -232,7 +232,6 @@ re2c_bootstrap_parser("src/parse/parser.ypp" "src/parse/parser.cc" "src/parse/pa
 # docs
 set(re2c_docs_sources
     "${re2c_manpage_source}"
-    "doc/manual/api/api.rst_"
     "doc/manual/api/interface.rst_"
     "doc/manual/conditions/conditions.rst_"
     "doc/manual/configurations/configurations.rst_"
@@ -262,6 +261,10 @@ set(re2c_docs_sources
     "doc/manual/submatch/submatch_example_stags_fill.rst_"
     "doc/manual/submatch/submatch.rst_"
     "doc/manual/syntax/syntax.rst_"
+    "doc/manual/syntax/api1.rst_"
+    "doc/manual/syntax/api2_c.rst_"
+    "doc/manual/syntax/api2_go.rst_"
+    "doc/manual/syntax/api3.rst_"
     "doc/manual/warnings/warnings_general.rst_"
     "doc/manual/warnings/warnings_list.rst_"
     "examples/c/01_basic.re"

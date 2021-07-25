@@ -2,9 +2,9 @@
 re2c
 ++++
 
-===================================
-compile regular expressions to code
-===================================
+================================================
+generate fast lexical analyzers for C/C++ and Go
+================================================
 
 :Manual section: 1
 
@@ -15,65 +15,55 @@ SYNOPSIS
 
 ``re2go [OPTIONS] INPUT [-o OUTPUT]``
 
-DESCRIPTION
-===========
-
-re2c is a tool for generating fast lexical analyzers for C, C++ and Go.
-
 RE2C_DISCLAIMER
 
-Syntax
-======
+Introduction
+============
 .. include:: @top_srcdir@/doc/manual/syntax/syntax.rst_
+.. include:: @top_srcdir@/doc/manual/syntax/api1.rst_
+.. include:: @top_srcdir@/doc/manual/syntax/api2_RE2C_LANG.rst_
+.. include:: @top_srcdir@/doc/manual/syntax/api3.rst_
 
-EXAMPLE
+Example
 =======
 
-Input file
-----------
+Here is a simple re2c program:
 
 .. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.re
     :literal:
     :code: RE2C_LANG
 
-Output file
------------
+The generated code looks like this:
 
 .. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.RE2C_LANG
     :literal:
     :code: RE2C_LANG
 
-Options
-=======
+Command-line options
+====================
+Command-line interface consists of options and warnings.
+Some of the options have corresponding `configurations`_,
+others are global and cannot be changed after re2c starts reading the input file.
+Debug options generally require building re2c in debug configuration.
+Internal options are useful for experimenting with the algorithms used in re2c.
+Warnings can be invividually enabled, disabled and turned into an error.
+
 .. include:: @top_srcdir@/doc/manual/options/options.rst_
-
-Debug options
--------------
 .. include:: @top_srcdir@/doc/manual/options/debug.rst_
-
-Internal options
-----------------
 .. include:: @top_srcdir@/doc/manual/options/internal.rst_
-
-Warnings
---------
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst_
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_list.rst_
 
-Program interface
-=================
-.. include:: @top_srcdir@/doc/manual/api/api.rst_
-
-API primitives
---------------
-.. include:: @top_srcdir@/doc/manual/api/interface.rst_
-
-Directives
-----------
+Blocks and directives
+=====================
 .. include:: @top_srcdir@/doc/manual/directives/directives.rst_
 
+Interface primitives
+====================
+.. include:: @top_srcdir@/doc/manual/api/interface.rst_
+
 Configurations
---------------
+==============
 .. include:: @top_srcdir@/doc/manual/configurations/configurations.rst_
 
 Regular expressions
