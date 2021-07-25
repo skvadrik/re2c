@@ -215,7 +215,6 @@ re2c_CUSTOM = \
 # docs
 re2c_SRC_DOC = doc/manpage.rst
 re2c_SRC_DOC_EXT = \
-	doc/manual/api/api.rst_ \
 	doc/manual/api/interface.rst_ \
 	doc/manual/conditions/conditions.rst_ \
 	doc/manual/configurations/configurations.rst_ \
@@ -245,6 +244,10 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/submatch/submatch_example_stags_fill.rst_ \
 	doc/manual/submatch/submatch.rst_ \
 	doc/manual/syntax/syntax.rst_ \
+	doc/manual/syntax/api1.rst_ \
+	doc/manual/syntax/api2_c.rst_ \
+	doc/manual/syntax/api2_go.rst_ \
+	doc/manual/syntax/api3.rst_ \
 	doc/manual/warnings/warnings_general.rst_ \
 	doc/manual/warnings/warnings_list.rst_ \
 	examples/c/01_basic.re \
