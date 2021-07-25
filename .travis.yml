@@ -1,5 +1,8 @@
 language: cpp
 
+# use Ubuntu 20.04 (Focal Fossa) that defaults to Python 3
+dist: focal
+
 # speed up incremental builds
 cache: ccache
 
