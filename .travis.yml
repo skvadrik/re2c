@@ -75,7 +75,7 @@ script:
   - make -j$(nproc)
   - |
     if [ x${SKELETON} = "xyes" ]; then
-        ./run_tests.sh --skeleton
+        ./run_tests.py --skeleton
     else
         make -j$(nproc) check VERBOSE=1
     fi
