@@ -110,6 +110,7 @@ div.sphinxsidebarwrapper ul {
     list-style-type: disc;
     padding: 0 0 0 1em;
     margin: 0;
+    /* proportionally decrease font size for nested elements */
     font-size: 90%;
     color: darkgray;
 }
@@ -133,15 +134,20 @@ div.sphinxsidebarwrapper div.re2c-logo {
     overflow: hidden;
 }
 div.re2c-toc-global {
-    font-size: 115%;
+    font-size: 120%;
     line-height: 1.4;
 }
+/* hide first list element (page title) to make all other entries larger */
+div.re2c-toc-local > ul          { margin: 0; padding: 0; }
+div.re2c-toc-local > ul > li     { list-style-type: none; }
+div.re2c-toc-local > ul > li > a { display: none; }
 div.re2c-toc-local {
     padding: 0.5em;
+    padding-left: 1em;
     background-color: linen;
     border: 1px solid darkgray;
     overflow: auto;
-    font-size: 115%;
+    font-size: 120%;
     line-height: 1.4;
 }
 

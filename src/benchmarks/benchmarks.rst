@@ -110,14 +110,14 @@ ambiguous regular expressions, both in speed and in the automaton size.
 
 .. include:: submatch_dfa_aot/env.rst
 
-Run time (milliseconds on 100MB text)
--------------------------------------
+Run time (ms on 100MB text)
+---------------------------
 
 .. figure:: submatch_dfa_aot/results_1.svg
     :class: benchmark
 
-Binary size (stripped, kilobytes)
----------------------------------
+Binary size (KB, stripped)
+--------------------------
 
 .. figure:: submatch_dfa_aot/results_2.svg
     :class: benchmark
@@ -147,8 +147,8 @@ arbitrary many tag variables. Regless-TDFA(1) does not have tag variables.
 
 .. include:: submatch_dfa_jit/env.rst
 
-Determinization / run time (relative to first)
-----------------------------------------------
+Compile / run time (rel. to 1st)
+--------------------------------
 
 .. figure:: submatch_dfa_jit/results_1.svg
     :class: benchmark
@@ -178,8 +178,8 @@ algorithms are much slower on large real-world regular expressions.
 
 .. include:: submatch_nfa/env.rst
 
-Simulation time (relative to first)
------------------------------------
+Simulation time (rel. to 1st)
+-----------------------------
 
 .. figure:: submatch_nfa/results_1.svg
     :class: benchmark
