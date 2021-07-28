@@ -2,6 +2,45 @@ Changelog
 =========
 
 ----
+2.2x
+----
+
+2.2 (2021-08-01)
+~~~~~~~~~~~~~~~~
+
+- Added named blocks and block lists in directives.
+
+- Added local blocks ``/*!local:re2c ... */``.
+
+- Added in-block ``!include`` directive.
+
+- Added in-block ``!use`` directive.
+
+- Allowed reusable blocks without ``-r --reusable`` option.
+
+- Allowed customizing the generated code with configurations for directives
+  ``max:re2c``, ``maxnmatch:re2c``, ``stags:re2c``, ``mtags:re2c`` and
+  ``types:re2c`` (see directive descriptions for details).
+
+- Forbid arbitrary text at the end of ``max:re2c`` directive. This may break
+  backwards compatibility, although it is unlikely that this was used by anyone.
+  The change was necessary in order to allow customization of the generated code
+  with configurations.
+
+- Deprecated configurations ``flags:i``, ``flags:no-debug-info`` in favour of
+  the global options ``-i``, ``--no-debug-info``.
+
+- Reimplemented re2c test runner in Python (thanks to
+  `Serghei Iakovlev <https://github.com/sergeyklay>`_). Improved integration
+  with GitHub Actions.
+
+- Changes in the experimental libre2c library: added new algorithms that
+  construct t-string or extract submatch on all repetitions; added TDFA
+  benchmark written in Java by Angelo Borsotti.
+
+- Updated documentation.
+
+----
 2.1x
 ----
 
