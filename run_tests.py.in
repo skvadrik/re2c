@@ -253,12 +253,29 @@ def create_tests_tree():
     return test_blddir
 
 
+# We cannot use `shutil.copytree` because we need to copy multiple directories
+# into one, and that is problematic for two reasons:
+#   1) it requires `dirs_exist_ok` parameter which was added only in python-3.8
+#   2) `make distcheck` fails when trying to copy the second directory because
+#      it makes source files read-only
+def copy_dir(src, dst):
+    """Copy the contents of directory `src` to directory `dst`, preserving
+    directory structure."""
+
+    for path, dirs, files in os.walk(src, topdown=False):
+        dstpath = os.path.join(dst, path[len(src)+1:])
+        if not os.path.isdir(dstpath):
+            os.makedirs(dstpath)
+        for f in files:
+            shutil.copy(os.path.join(path, f), dstpath)
+
+
 def copy_tests(tests, dst):  # type: (list, str) -> None
     """Copy the test structure to 'dst'."""
     # preserve directory structure unless given explicit args
     if not tests:
-        shutil.copytree(here(TOP_SRCDIR, 'test'), dst, dirs_exist_ok=True)
-        shutil.copytree(here(TOP_SRCDIR, 'examples'), dst, dirs_exist_ok=True)
+        copy_dir(here(TOP_SRCDIR, 'test'), dst)
+        copy_dir(here(TOP_SRCDIR, 'examples'), dst)
         return
 
     files = []
