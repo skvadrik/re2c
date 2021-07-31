@@ -1,6 +1,7 @@
 #ifndef _RE2C_UTIL_UNIQ_VECTOR_
 #define _RE2C_UTIL_UNIQ_VECTOR_
 
+#include <stddef.h>
 #include <vector>
 
 

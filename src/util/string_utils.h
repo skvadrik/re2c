@@ -1,6 +1,7 @@
 #ifndef _RE2C_UTIL_STRING_UTILS_
 #define _RE2C_UTIL_STRING_UTILS_
 
+#include <string.h>
 #include <sstream>
 #include <string>
 

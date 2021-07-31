@@ -1,9 +1,14 @@
 #ifndef _RE2C_LIB_REGOFF_TRIE_
 #define _RE2C_LIB_REGOFF_TRIE_
 
+#include <algorithm>
 #include "regex.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include "src/debug/debug.h"
+#include "src/util/forbid_copy.h"
 
 
 namespace re2c {
