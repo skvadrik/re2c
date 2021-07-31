@@ -392,6 +392,11 @@ def run_test(test):
         if header:
             os.makedirs(os.path.dirname(header), exist_ok=True)
 
+        # Disable Wine warnings, or else they are dumped into .stderr files for
+        # random tests, so the test results don't match and the tests fail.
+        if _ctx.wine != None:
+            os.environ['WINEDEBUG'] = '-all'
+
         # run re2c
         args = [_ctx.valgrind] + _ctx.valgrind_opts
         args += [_ctx.wine, _ctx.re2c] + _ctx.incpaths + switches.split()
@@ -426,7 +431,7 @@ def run_test(test):
                     pass # if there is an error, some files may be missing
 
         # On windows we need to patch output to match expected test results.
-        if os.name == 'nt':
+        if os.name == 'nt' or _ctx.wine != None:
             patch_newlines_and_slashes(outy, stem)
 
         # compare results
