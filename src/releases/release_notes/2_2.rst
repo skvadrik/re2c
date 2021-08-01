@@ -1,0 +1,79 @@
+Release 2.2
+===========
+
+This release adds scoping rules and improves code sharing between re2c blocks.
+It brings in a bunch of new features, most importantly named blocks, local
+blocks, scoped directives and the ability to include arbitrary blocks in the
+middle of another block. Much work has been done on improving testing and
+continuous integration.
+
+**Local blocks.**
+This release adds a new kind of blocks: ``/*!local:re2c ... */``, which are
+exactly like the usual ``/*!re2c ... */`` blocks, except that they do not add
+their named definitions and configurations to the global scope. The contents of
+a local block are not visible outside of the block and do not affect subsequent
+blocks.
+
+**Named blocks.**
+Previously all re2c blocks were anonymous. Now it is possible to give block a
+name: for example, ``/*!re2c:woot42 ... */`` defines a global block named
+``woot42``. The name can be used to refer to this block in other parts of the
+program (for example in
+:ref:`directives <manual/manual_c:blocks and directives>`). Rules blocks can
+have names as well: a block ``/*!rules:re2c:woot42 ... */`` can be mentioned in
+a use block ``/*!use:woot42 ... */`` or in a use directive ``!use:woot42;``.
+Use blocks cannot have their own name; if you need to have a named block that
+reuses another block, do that with the new ``!use`` directive.
+
+**Block lists in directives.**
+Previously re2c :ref:`directives <manual/manual_c:blocks and directives>`
+such as ``max:re2c``, ``stags:re2c``, ``getstate:re2c`` etc. were global: they
+accumulated the information across all blocks in the file. Now it is possible to
+specify a list of colon-separated block names in each directive: for example
+``/*!<directive>:re2c:<name1>:<name2>... */`` where ``<name1>``, ``<name2>`` and
+so on are the names of re2c blocks defined somewhere in the file. This allows
+one to have scoped directives, and also multiple directives per file for
+different groups of blocks. For example, if the file defines named blocks
+``foo``, ``bar`` and ``baz``, one can define all s-tag variables in blocks
+``foo`` and ``baz`` with a directive ``/*!stags:foo:baz ... */``.
+
+**In-block use directive.**
+Now it is possible to :ref:`use a block <manual/manual_c:reusable blocks>` in
+the middle of another block: for example, a rules block
+``/*!rules:re2c:woot42 ... */`` can be used in the middle of another block with
+a statement ``!use:woot42;``. Rules, named definitions and configurations of the
+used block are added to those of the current block. The new use directive is
+more flexible than the old ``/*!use:re2c ... */`` block, because there is no
+limitation on the number of used blocks, and they don't have to be used at the
+beginning of a block.
+
+**In-block include directive.**
+The existing ``/*!include ... */`` directive now has an
+:ref:`in-block variant <manual/manual_c:include files>`. For example,
+``!include "x/y/z.re";`` includes a file ``x/y/z.re`` in the middle of a block.
+The in-block include directive works in the same way as the out-of-block one:
+the contents of the file are inserted verbatim in place of the directive.
+
+**Configurable directives.**
+More :ref:`directives <manual/manual_c:blocks and directives>` can now be
+customized with configurations that define the form of the generated code.
+Directives ``max:re2c`` and ``maxnmatch:re2c`` now have an optional ``format``
+configuration that accepts a template string with interpolated variable
+``@@{max}`` (or just ``@@`` for short), for example
+``/*!max:re2c format="int maxfill = @@;"; */`` would generate code
+``maxfill = <N>;`` where ``<N>`` is the ``YYMAXFILL`` value.
+Directive ``types:re2c`` now has optional configurations ``format`` and
+``separator``: the former accepts a template string with interpolated variables
+``@@{cond}`` and ``@@{num}`` (the name and numeric index of each condition), and
+the latter specifies the glue text used to join different ``format`` pieces
+together.
+
+**Testing.**
+`Serghei Iakovlev <https://github.com/sergeyklay>`_ ported the old and hairy
+testing script from Bash to Python 3. The new script covers more platforms and
+is much faster than the old one (and also easier to debug and modify).
+
+
+See the changelog :ref:`releases/changelog/changelog:2.2 (2021-08-01)` for
+details. As always, a big thanks to all contributors!
+
