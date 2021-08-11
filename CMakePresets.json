@@ -1,0 +1,471 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 1
+  },
+  "configurePresets": [
+    {
+      "name": "default-full-configuration",
+      "hidden": true,
+      "installDir": "${sourceDir}/install-2",
+      "cacheVariables": {
+        "RE2C_BUILD_RE2GO": true,
+        "RE2C_BUILD_LIBS": true,
+        "RE2C_REBUILD_LEXERS": true,
+        "RE2C_REBUILD_DOCS": true,
+        "RE2C_FOR_BUILD": "${sourceDir}/install/bin/re2c"
+      }
+    },
+
+    {
+      "name": "linux-config-base",
+      "hidden": true,
+      "generator": "Unix Makefiles",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "linux-gcc-ubsan-ootree-fast",
+      "displayName": "Linux x86_64: GCC / Ubsan / Out of tree (fast)",
+      "inherits": "linux-config-base",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Ubsan",
+        "CMAKE_C_FLAGS": "-O2",
+        "CMAKE_CXX_FLAGS": "-O2",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "linux-gcc-ubsan-ootree-full",
+      "displayName": "Linux x86_64: GCC / Ubsan / Out of tree (full)",
+      "inherits": ["linux-gcc-ubsan-ootree-fast", "default-full-configuration"]
+    },
+    {
+      "name": "linux-gcc-asan-ootree-fast",
+      "displayName": "Linux x86_64: GCC / Asan / Out of tree (fast)",
+      "inherits": "linux-config-base",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Asan",
+        "CMAKE_C_FLAGS": "-O2",
+        "CMAKE_CXX_FLAGS": "-O2",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "linux-gcc-asan-ootree-full",
+      "displayName": "Linux x86_64: GCC / Asan / Out of tree (full)",
+      "inherits": ["linux-gcc-asan-ootree-fast", "default-full-configuration"]
+    },
+    {
+      "name": "linux-gcc-debug-ootree-skeleton-fast",
+      "displayName": "Linux x86_64: GCC / Debug / Skeleton / Out of tree (fast)",
+      "inherits": "linux-config-base",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_FLAGS": "-O2",
+        "CMAKE_CXX_FLAGS": "-O2",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "linux-gcc-debug-ootree-skeleton-full",
+      "displayName": "Linux x86_64: GCC / Debug / Skeleton / Out of tree (full)",
+      "inherits": ["linux-gcc-debug-ootree-skeleton-fast", "default-full-configuration"]
+    },
+    {
+      "name": "linux-gcc-debug-intree-m32-skeleton-fast",
+      "displayName": "Linux x86: GCC / Debug / Skeleton / In tree (fast)",
+      "inherits": "linux-config-base",
+      "binaryDir": "${sourceDir}",
+      "installDir": "${sourceDir}/install",
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_FLAGS": "-O2 -m32",
+        "CMAKE_CXX_FLAGS": "-O2 -m32",
+        "CMAKE_EXE_LINKER_FLAGS": "-m32",
+        "CMAKE_SHARED_LINKER_FLAGS": "-m32",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "linux-gcc-debug-intree-m32-skeleton-full",
+      "displayName": "Linux x86: GCC / Debug / Skeleton / In tree (full)",
+      "inherits": ["linux-gcc-debug-intree-m32-skeleton-fast", "default-full-configuration"]
+    },
+    {
+      "name": "linux-gcc-release-ootree-skeleton-fast",
+      "displayName": "Linux x86_64: GCC / Release / Skeleton / Out of tree (fast)",
+      "inherits": "linux-config-base",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "linux-gcc-release-ootree-skeleton-full",
+      "displayName": "Linux x86_64: GCC / Release / Skeleton / Out of tree (full)",
+      "inherits": ["linux-gcc-release-ootree-skeleton-fast", "default-full-configuration"]
+    },
+
+
+    {
+      "name": "macos-config-base",
+      "hidden": true,
+      "generator": "Unix Makefiles",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      },
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "macos-clang-debug-ootree-skeleton-fast",
+      "displayName": "macOS x86_64: Clang / Debug / Skeleton / Out of tree (fast)",
+      "inherits": "macos-config-base",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_FLAGS": "-O2",
+        "CMAKE_CXX_FLAGS": "-O2",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "macos-clang-debug-ootree-skeleton-full",
+      "displayName": "macOS x86_64: Clang / Debug / Skeleton / Out of tree (full)",
+      "inherits": ["macos-clang-debug-ootree-skeleton-fast", "default-full-configuration"]
+    },
+    {
+      "name": "macos-clang-debug-intree-skeleton-fast",
+      "displayName": "macOS x86_64: Clang / Debug / Skeleton / In tree (fast)",
+      "inherits": "macos-config-base",
+      "binaryDir": "${sourceDir}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_FLAGS": "-O2",
+        "CMAKE_CXX_FLAGS": "-O2",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "macos-clang-debug-intree-skeleton-full",
+      "displayName": "macOS x86_64: Clang / Debug / Skeleton / In tree (full)",
+      "inherits": ["macos-clang-debug-intree-skeleton-fast", "default-full-configuration"]
+    },
+    {
+      "name": "macos-clang-release-ootree-skeleton-fast",
+      "displayName": "macOS x86_64: CLang / Release / Skeleton / Out of tree (fast)",
+      "inherits": "macos-config-base",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "macos-clang-release-ootree-skeleton-full",
+      "displayName": "macOS x86_64: CLang / Release / Skeleton / Out of tree (full)",
+      "inherits": ["macos-clang-release-ootree-skeleton-fast", "default-full-configuration"]
+    },
+
+
+    {
+      "name": "windows-config-base",
+      "hidden": true,
+      "generator": "Visual Studio 16 2019",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_CXX_COMPILER": "cl"
+      }
+    },
+    {
+      "name": "windows-msvc-debug-ootree-fast",
+      "displayName": "Windows x86_64: MSVC / Debug / Out of tree (fast)",
+      "inherits": "windows-config-base",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "windows-msvc-debug-ootree-full",
+      "displayName": "Windows x86_64: MSVC / Debug / Out of tree (full)",
+      "inherits": ["windows-msvc-debug-ootree-fast", "default-full-configuration"],
+      "cacheVariables": {
+        "RE2C_REBUILD_DOCS": false
+      }
+    },
+    {
+      "name": "windows-msvc-debug-intree-fast",
+      "displayName": "Windows x86_64: MSVC / Debug / In tree (fast)",
+      "inherits": "windows-config-base",
+      "binaryDir": "${sourceDir}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "windows-msvc-debug-intree-full",
+      "displayName": "Windows x86_64: MSVC / Debug / In tree (full)",
+      "inherits": ["windows-msvc-debug-intree-fast", "default-full-configuration"],
+      "cacheVariables": {
+        "RE2C_REBUILD_DOCS": false
+      }
+    },
+    {
+      "name": "windows-msvc-release-ootree-fast",
+      "displayName": "Windows x86_64: MSVC / Release / Out of tree (fast)",
+      "inherits": "windows-config-base",
+      "binaryDir": "${sourceDir}/.build/${presetName}",
+      "installDir": "${sourceDir}/install",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "RE2C_BUILD_RE2GO": false
+      }
+    },
+    {
+      "name": "windows-msvc-release-ootree-full",
+      "displayName": "Windows x86_64: MSVC / Release / Out of tree (full)",
+      "inherits": ["windows-msvc-release-ootree-fast", "default-full-configuration"],
+      "cacheVariables": {
+        "RE2C_REBUILD_DOCS": false
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux-build-base",
+      "hidden": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "linux-gcc-ubsan-ootree-fast",
+      "displayName": "Linux x86_64: GCC / Ubsan / Out of tree (fast)",
+      "configurePreset": "linux-gcc-ubsan-ootree-fast",
+      "inherits": "linux-build-base",
+      "configuration": "Ubsan"
+    },
+    {
+      "name": "linux-gcc-ubsan-ootree-full",
+      "displayName": "Linux x86_64: GCC / Ubsan / Out of tree (full)",
+      "configurePreset": "linux-gcc-ubsan-ootree-full",
+      "inherits": "linux-build-base",
+      "configuration": "Ubsan"
+    },
+    {
+      "name": "linux-gcc-asan-ootree-fast",
+      "displayName": "Linux x86_64: GCC / Asan / Out of tree (fast)",
+      "configurePreset": "linux-gcc-asan-ootree-fast",
+      "inherits": "linux-build-base",
+      "configuration": "Asan"
+    },
+    {
+      "name": "linux-gcc-asan-ootree-full",
+      "displayName": "Linux x86_64: GCC / Asan / Out of tree (full)",
+      "configurePreset": "linux-gcc-asan-ootree-full",
+      "inherits": "linux-build-base",
+      "configuration": "Asan"
+    },
+    {
+      "name": "linux-gcc-debug-ootree-skeleton-fast",
+      "displayName": "Linux x86_64: GCC / Debug / Skeleton / Out of tree (fast)",
+      "configurePreset": "linux-gcc-debug-ootree-skeleton-fast",
+      "inherits": "linux-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "linux-gcc-debug-ootree-skeleton-full",
+      "displayName": "Linux x86_64: GCC / Debug / Skeleton / Out of tree (full)",
+      "configurePreset": "linux-gcc-debug-ootree-skeleton-full",
+      "inherits": "linux-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "linux-gcc-debug-intree-m32-skeleton-fast",
+      "displayName": "Linux x86: GCC / Debug / Skeleton / In tree (fast)",
+      "configurePreset": "linux-gcc-debug-intree-m32-skeleton-fast",
+      "inherits": "linux-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "linux-gcc-debug-intree-m32-skeleton-full",
+      "displayName": "Linux x86: GCC / Debug / Skeleton / In tree (full)",
+      "configurePreset": "linux-gcc-debug-intree-m32-skeleton-full",
+      "inherits": "linux-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "linux-gcc-release-ootree-skeleton-fast",
+      "displayName": "Linux x86_64: GCC / Release / Skeleton / Out of tree (fast)",
+      "configurePreset": "linux-gcc-release-ootree-skeleton-fast",
+      "inherits": "linux-build-base",
+      "configuration": "Release"
+    },
+    {
+      "name": "linux-gcc-release-ootree-skeleton-full",
+      "displayName": "Linux x86_64: GCC / Release / Skeleton / Out of tree (full)",
+      "configurePreset": "linux-gcc-release-ootree-skeleton-full",
+      "inherits": "linux-build-base",
+      "configuration": "Release"
+    },
+
+
+    {
+      "name": "macos-build-base",
+      "hidden": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
+    },
+    {
+      "name": "macos-clang-debug-ootree-skeleton-fast",
+      "displayName": "macOS x86_64: Clang / Debug / Skeleton / Out of tree (fast)",
+      "configurePreset": "macos-clang-debug-ootree-skeleton-fast",
+      "inherits": "macos-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "macos-clang-debug-ootree-skeleton-full",
+      "displayName": "macOS x86_64: Clang / Debug / Skeleton / Out of tree (full)",
+      "configurePreset": "macos-clang-debug-ootree-skeleton-full",
+      "inherits": "macos-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "macos-clang-debug-intree-skeleton-fast",
+      "displayName": "macOS x86_64: Clang / Debug / Skeleton / In tree (fast)",
+      "configurePreset": "macos-clang-debug-intree-skeleton-fast",
+      "inherits": "macos-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "macos-clang-debug-intree-skeleton-full",
+      "displayName": "macOS x86_64: Clang / Debug / Skeleton / In tree (full)",
+      "configurePreset": "macos-clang-debug-intree-skeleton-full",
+      "inherits": "macos-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "macos-clang-release-ootree-skeleton-fast",
+      "displayName": "macOS x86_64: CLang / Release / Skeleton / Out of tree (fast)",
+      "configurePreset": "macos-clang-release-ootree-skeleton-fast",
+      "inherits": "macos-build-base",
+      "configuration": "Release"
+    },
+    {
+      "name": "macos-clang-release-ootree-skeleton-full",
+      "displayName": "macOS x86_64: CLang / Release / Skeleton / Out of tree (full)",
+      "configurePreset": "macos-clang-release-ootree-skeleton-full",
+      "inherits": "macos-build-base",
+      "configuration": "Release"
+    },
+
+
+    {
+      "name": "windows-build-base",
+      "hidden": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-msvc-debug-ootree-fast",
+      "displayName": "Windows x86_64: MSVC / Debug / Out of tree (fast)",
+      "configurePreset": "windows-msvc-debug-ootree-fast",
+      "inherits": "windows-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-msvc-debug-ootree-full",
+      "displayName": "Windows x86_64: MSVC / Debug / Out of tree (full)",
+      "configurePreset": "windows-msvc-debug-ootree-full",
+      "inherits": "windows-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-msvc-debug-intree-fast",
+      "displayName": "Windows x86_64: MSVC / Debug / In tree (fast)",
+      "configurePreset": "windows-msvc-debug-intree-fast",
+      "inherits": "windows-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-msvc-debug-intree-full",
+      "displayName": "Windows x86_64: MSVC / Debug / In tree (full)",
+      "configurePreset": "windows-msvc-debug-intree-full",
+      "inherits": "windows-build-base",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-msvc-release-ootree-fast",
+      "displayName": "Windows x86_64: MSVC / Release / Out of tree (fast)",
+      "configurePreset": "windows-msvc-release-ootree-fast",
+      "inherits": "windows-build-base",
+      "configuration": "Release"
+    },
+    {
+      "name": "windows-msvc-release-ootree-full",
+      "displayName": "Windows x86_64: MSVC / Release / Out of tree (full)",
+      "configurePreset": "windows-msvc-release-ootree-full",
+      "inherits": "windows-build-base",
+      "configuration": "Release"
+    }
+  ]
+}

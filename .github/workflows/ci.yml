@@ -24,89 +24,38 @@ jobs:
           # Linux
           - name: linux-gcc-ubsan-ootree
             os: ubuntu-latest
-            generator: Unix Makefiles
-            build-type: Ubsan
-            build-dir: .build
-            cxx-flags: -O2
-            skeleton: ${{ false }}
 
           - name: linux-gcc-asan-ootree
             os: ubuntu-latest
-            generator: Unix Makefiles
-            build-type: Asan
-            build-dir: .build
-            cxx-flags: -O2
-            skeleton: ${{ false }}
 
           - name: linux-gcc-debug-ootree-skeleton
             os: ubuntu-latest
-            generator: Unix Makefiles
-            build-type: Debug
-            build-dir: .build
-            cxx-flags: -O2
-            skeleton: ${{ true }}
 
           - name: linux-gcc-debug-intree-m32-skeleton
             os: ubuntu-latest
-            generator: Unix Makefiles
-            build-type: Debug
-            build-dir: .
-            cxx-flags: -O2 -m32
-            ld-flags: -m32
-            skeleton: ${{ true }}
 
           - name: linux-gcc-release-ootree-skeleton
             os: ubuntu-latest
-            generator: Unix Makefiles
-            build-type: Release
-            build-dir: .build
-            skeleton: ${{ true }}
 
           # macOS
           - name: macos-clang-debug-ootree-skeleton
             os: macos-latest
-            generator: Unix Makefiles
-            build-type: Debug
-            build-dir: .build
-            cxx-flags: -O2
-            skeleton: ${{ true }}
 
           - name: macos-clang-debug-intree-skeleton
             os: macos-latest
-            generator: Unix Makefiles
-            build-type: Debug
-            build-dir: .
-            cxx-flags: -O2
-            skeleton: ${{ true }}
 
           - name: macos-clang-release-ootree-skeleton
             os: macos-latest
-            generator: Unix Makefiles
-            build-type: Release
-            build-dir: .build
-            skeleton: ${{ true }}
 
           # Windows
           - name: windows-msvc-debug-ootree
             os: windows-latest
-            generator: Visual Studio 16 2019
-            build-type: Debug
-            build-dir: .build
-            skeleton: ${{ false }}
 
           - name: windows-msvc-debug-intree
             os: windows-latest
-            generator: Visual Studio 16 2019
-            build-type: Debug
-            build-dir: .
-            skeleton: ${{ false }}
 
           - name: windows-msvc-release-ootree
             os: windows-latest
-            generator: Visual Studio 16 2019
-            build-type: Release
-            build-dir: .build
-            skeleton: ${{ false }}
 
     steps:
       - name: Checkout Code
@@ -127,16 +76,10 @@ jobs:
           case ${{ runner.os }} in
             Linux*)
               sudo apt install gcc-multilib g++-multilib  # for -m32
-              echo "CC=gcc" >> $GITHUB_ENV
-              echo "CXX=g++" >> $GITHUB_ENV
               ;;
             macOS*)
               sudo xcode-select -switch /Applications/Xcode.app
-
-              echo "CC=$(xcrun -f clang)" >> $GITHUB_ENV
-              echo "CXX=$(xcrun -f clang++)" >> $GITHUB_ENV
               echo "SDKROOT=$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_ENV
-
               echo "$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_PATH
               ;;
             Windows*)
@@ -158,108 +101,49 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install docutils pygments
 
-      - name: Prepare Configure Command
-        id: configure-command
-        run: |
-          # Common CMake arguments
-          args=( -S . -B ${{ matrix.build-dir }} )
-
-          # Generator's specific stuff.
-          args+=( -G "${{ matrix.generator }}" )
-          case "${{ matrix.generator }}" in
-            'Visual Studio'*)
-              args+=( -A x64 )
-              ;;
-            *)
-              # CMAKE_BUILD_TYPE is not used by multi-config build
-              # types (e.g Visual Studio) at the configure time
-              # thus we add it only for single-config build types
-              args+=( -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} )
-              ;;
-          esac
-
-          # CFLAGS, CXXFLAGS, LDFLAGS
-          args+=( -DCMAKE_C_FLAGS="${{ matrix.cxx-flags }}" )
-          args+=( -DCMAKE_CXX_FLAGS="${{ matrix.cxx-flags }}" )
-          args+=( -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.ld-flags }}" )
-          args+=( -DCMAKE_SHARED_LINKER_FLAGS="${{ matrix.ld-flags }}" )
-
-          # Quote each argument to prevent word split.
-          echo "::set-output name=cmake::$(printf " '%s'" "${args[@]}")"
+      - name: Check Available Configure Presets
+        run: cmake --list-presets
 
       - name: Fast Configure
-        run: |
-          # Read prepared command into an array
-          args=( ${{ steps.configure-command.outputs.cmake }} )
-
-          # Amend Build Options
-          args+=( -DCMAKE_INSTALL_PREFIX="$(pwd)/install" )
-
-          # Disable some defaults for now to speed up the build as
-          # they are not necessary in a minimal installation
-          args+=( -DRE2C_BUILD_RE2GO=OFF )
-
-          # Print the resulting command line for debugging purposes
-          printf "cmake" && printf " '%s'" "${args[@]}" && printf "\n"
-
-          # Run CMake, pass quoted arguments to prevent word split.
-          printf " '%s'" "${args[@]}" | xargs cmake
+        run: cmake --preset=${{ matrix.name }}-fast
 
       - name: Fast Build
-        run: cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }}
+        run: cmake --build --preset=${{ matrix.name }}-fast
 
       - name: Install
-        run: |
-          cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }} --target install
-          echo -e "Install tree:\n$(find install | sed 's/^/-- /')"
+        run: cmake --build --preset=${{ matrix.name }}-fast --target install
 
       - name: Minimal Install Test
         working-directory: ./install/bin
         run: ./re2c --version
 
       - name: Full Configure
-        run: |
-          # Read prepared command into an array
-          args=( ${{ steps.configure-command.outputs.cmake }} )
-
-          # Amend Build Options
-          args+=( -DCMAKE_INSTALL_PREFIX="$(pwd)/install-2" -DRE2C_BUILD_RE2GO=ON -DRE2C_BUILD_LIBS=ON )
-          args+=( -DRE2C_REBUILD_LEXERS=ON -DRE2C_FOR_BUILD="$(pwd)/install/bin/re2c" )
-
-          # Windows does not have a native 'man' and 'sed' commands.
-          # Disabled until this https://github.com/skvadrik/re2c/issues/327
-          # will be implemented
-          case ${{ runner.os }} in
-            Windows*)
-              args+=( -DRE2C_REBUILD_DOCS=OFF )
-              ;;
-            *)
-              args+=( -DRE2C_REBUILD_DOCS=ON )
-              ;;
-          esac
-
-          # Print the resulting command line for debugging purposes
-          printf "cmake" && printf " '%s'" "${args[@]}" && printf "\n"
-
-          # Run CMake, pass quoted arguments to prevent word split.
-          printf " '%s'" "${args[@]}" | xargs cmake
+        run: cmake --preset=${{ matrix.name }}-full
 
       - name: Full Build
         run: |
           find src -name '*.re' | xargs touch
-          cmake --build ${{ matrix.build-dir }} --config ${{ matrix.build-type }}
+          cmake --build --preset=${{ matrix.name }}-full
 
-      - name: Test
-        # Remove the following line after fix Windows tests
-        working-directory: ${{ matrix.build-dir }}
+      - name: Run Main Test Suite
+        run: cmake --build --preset=${{ matrix.name }}-full --target tests
+
+      - name: Get build dir
+        id: build-info
         run: |
-          # main test suite
-          cmake --build . --target check
-
-          # skeleton tests (if enabled)
-          if [[ "x${{ matrix.skeleton }}" == "xtrue" ]] ; then
-            python run_tests.py --skeleton
+          if echo "${{ matrix.name }}" | grep -q "ootree"; then
+            BUILD_DIR="$(pwd)/.build/${{ matrix.name }}-full"
+          else
+            BUILD_DIR="$(pwd)"
           fi
+
+          echo "::set-output name=BUILD_DIR::$BUILD_DIR"
+
+      - name: Run Skeleton Tests
+        if: "contains(matrix.name, 'skeleton')"
+        # Remove the following line after fix Windows tests
+        working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
+        run: python run_tests.py --skeleton
 
       - name: Archive test artifacts
         # Run this step only if tests failed (otherwise there is nothing to upload).
@@ -270,7 +154,7 @@ jobs:
           # use a different name per job.
           name: test-${{ matrix.name }}
           # Tests run in a temporary directory that has a name test_<timestamp>.
-          path: ${{ matrix.build-dir }}/test_[0-9]*
+          path: ${{ steps.build-info.outputs.BUILD_DIR }}/test_[0-9]*
           # Artifacts are retained for 90 days by default.
-          # In fact we don't need such long period.
+          # In fact, we don't need such long period.
           retention-days: 30
