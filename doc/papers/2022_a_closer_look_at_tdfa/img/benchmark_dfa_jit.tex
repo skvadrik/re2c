@@ -1,0 +1,501 @@
+
+\documentclass[tikz]{standalone}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{xcolor}
+\usepackage{tikz, pgfplots, pgfplotstable}
+\usepackage{pifont}
+
+\definecolor{colorX}{HTML}{A1CAF1}
+\definecolor{colorY}{HTML}{FBCEB1}
+
+\begin{document}
+
+\def\plotwidth{2.700000in}
+\def\barwidth{0.080000in}
+
+\pgfplotsset{styleX/.style={
+    font=\scriptsize,
+    xbar,
+    axis y line*=none,
+    axis x line=none,
+    y=0.12in,
+    width=\plotwidth*1.15,
+    bar width=\barwidth,
+    xshift=\xplotshift,
+    yshift=\yplotshift,
+    xmax=\xmax,
+    xmin=0,
+    ymax=0.7,
+    ymin=0.3 - \nrows,
+    ytick=data,
+    ytick style={draw=none},
+    yticklabels=\empty,
+    title=\empty,
+    clip=false,
+    visualization depends on={x > \xmax \as \xoverflow},
+    visualization depends on={x > \xmax ? -x + \xmax : 0 \as \xshift},
+    nodes near coords={
+        \ifdim \xoverflow pt=1pt \!\ding{220}\! \scriptsize \fi
+        \pgfmathprintnumber[assume math mode=true]{\pgfplotspointmeta}
+    },
+    nodes near coords style={shift={(axis direction cs:\xshift,0)}},
+    nodes near coords style={/pgf/number format/.cd,
+        fixed relative,
+        precision = 10,
+        1000 sep = {\,}
+    },}}
+
+\begin{tikzpicture}
+
+\begin{scope}[xshift=-0.2in, yshift=0.39in * 0.75]
+
+            \node (x0) at (0.6in,0) {\scriptsize$\mathbf{regcomp \; (time)}$};
+            \node (x1) at (3.3in,0) {\scriptsize$\mathbf{regexec \; (time)}$};
+        
+\end{scope}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-0.390000in}
+\def\nrows{4},
+\def\title{\textbf{http-rfc7230}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.0093
+{all-offsets} 1.1
+{multipass-all-offsets} 0.0092
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-0.390000in}
+\def\nrows{4},
+\def\title{\textbf{http-rfc7230}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 1.6
+{all-offsets} 3.8
+{multipass-all-offsets} 5.2
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-1.170000in}
+\def\nrows{4},
+\def\title{\textbf{http-simple}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.077
+{all-offsets} 1.8
+{multipass-all-offsets} 0.077
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-1.170000in}
+\def\nrows{4},
+\def\title{\textbf{http-simple}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 1.6
+{all-offsets} 1.4
+{multipass-all-offsets} 2.2
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-1.950000in}
+\def\nrows{4},
+\def\title{\textbf{uri-rfc3986}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.015
+{all-offsets} 1.1
+{multipass-all-offsets} 0.015
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-1.950000in}
+\def\nrows{4},
+\def\title{\textbf{uri-rfc3986}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 1.3
+{all-offsets} 2.7
+{multipass-all-offsets} 2.7
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-2.730000in}
+\def\nrows{4},
+\def\title{\textbf{uri-simple}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.15
+{all-offsets} 1.5
+{multipass-all-offsets} 0.15
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-2.730000in}
+\def\nrows{4},
+\def\title{\textbf{uri-simple}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 1.7
+{all-offsets} 3.4
+{multipass-all-offsets} 3.5
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-3.510000in}
+\def\nrows{4},
+\def\title{\textbf{ipv6}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.051
+{all-offsets} 1.3
+{multipass-all-offsets} 0.051
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-3.510000in}
+\def\nrows{4},
+\def\title{\textbf{ipv6}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.99
+{all-offsets} 2.0
+{multipass-all-offsets} 2.4
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-4.290000in}
+\def\nrows{4},
+\def\title{\textbf{ipv4}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.60
+{all-offsets} 1.1
+{multipass-all-offsets} 0.60
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-4.290000in}
+\def\nrows{4},
+\def\title{\textbf{ipv4}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 1.5
+{all-offsets} 1.8
+{multipass-all-offsets} 3.0
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-5.070000in}
+\def\nrows{4},
+\def\title{\textbf{date}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.63
+{all-offsets} 1.1
+{multipass-all-offsets} 0.63
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-5.070000in}
+\def\nrows{4},
+\def\title{\textbf{date}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 1.4
+{all-offsets} 1.6
+{multipass-all-offsets} 2.7
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-5.850000in}
+\def\nrows{4},
+\def\title{\textbf{package}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.24
+{all-offsets} 1.5
+{multipass-all-offsets} 0.24
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-5.850000in}
+\def\nrows{4},
+\def\title{\textbf{package}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 1.5
+{all-offsets} 2.0
+{multipass-all-offsets} 2.6
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-6.630000in}
+\def\nrows{4},
+\def\title{\textbf{$\boldsymbol{(a)^*a^{10}}$}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.48
+{all-offsets} 1.7
+{multipass-all-offsets} 0.47
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-6.630000in}
+\def\nrows{4},
+\def\title{\textbf{$\boldsymbol{(a)^*a^{10}}$}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.41
+{all-offsets} 3.0
+{multipass-all-offsets} 0.87
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-7.410000in}
+\def\nrows{4},
+\def\title{\textbf{$\boldsymbol{(a)^*a^{100}}$}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.71
+{all-offsets} 1.8
+{multipass-all-offsets} 0.71
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-7.410000in}
+\def\nrows{4},
+\def\title{\textbf{$\boldsymbol{(a)^*a^{100}}$}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.034
+{all-offsets} 2.3
+{multipass-all-offsets} 0.073
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-8.190000in}
+\def\nrows{4},
+\def\title{\textbf{$\boldsymbol{(a)^*a^{1000}}$}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.82
+{all-offsets} 1.2
+{multipass-all-offsets} 0.82
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{2.700000in}
+\def\yplotshift{-8.190000in}
+\def\nrows{4},
+\def\title{\textbf{$\boldsymbol{(a)^*a^{1000}}$}},
+\def\xmax{5.240006}
+
+\pgfplotstableread {algo value
+{last-offset} 1.0
+{multipass-last-offset} 0.0043
+{all-offsets} 2.3
+{multipass-all-offsets} 0.0084
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\end{tikzpicture}
+
+\end{document}

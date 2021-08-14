@@ -1,0 +1,324 @@
+{
+  "benchmarks": [
+    {
+      "name": "rep-cat-5-3-2-gcc_kleenex",
+      "cpu_time": 291,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-5-3-2-gcc_re2c-stadfa",
+      "cpu_time": 273,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-cat-5-3-2-gcc_re2c-tdfa0",
+      "cpu_time": 273,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-cat-5-3-2-gcc_re2c-tdfa1",
+      "cpu_time": 277,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-cat-5-3-2-clang_kleenex",
+      "cpu_time": 336,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-5-3-2-clang_re2c-stadfa",
+      "cpu_time": 212,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-cat-5-3-2-clang_re2c-tdfa0",
+      "cpu_time": 209,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-cat-5-3-2-clang_re2c-tdfa1",
+      "cpu_time": 203,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-cat-13-11-7-gcc_kleenex",
+      "cpu_time": 284,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-13-11-7-gcc_re2c-stadfa",
+      "cpu_time": 174,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-13-11-7-gcc_re2c-tdfa0",
+      "cpu_time": 176,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-13-11-7-gcc_re2c-tdfa1",
+      "cpu_time": 178,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-13-11-7-clang_kleenex",
+      "cpu_time": 282,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-13-11-7-clang_re2c-stadfa",
+      "cpu_time": 92,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-13-11-7-clang_re2c-tdfa0",
+      "cpu_time": 94,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-13-11-7-clang_re2c-tdfa1",
+      "cpu_time": 94,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-23-19-17-gcc_kleenex",
+      "cpu_time": 284,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-23-19-17-gcc_re2c-stadfa",
+      "cpu_time": 157,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-23-19-17-gcc_re2c-tdfa0",
+      "cpu_time": 157,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-23-19-17-gcc_re2c-tdfa1",
+      "cpu_time": 159,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-23-19-17-clang_kleenex",
+      "cpu_time": 269,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-cat-23-19-17-clang_re2c-stadfa",
+      "cpu_time": 168,
+      "bin_size": 22
+    },
+    {
+      "name": "rep-cat-23-19-17-clang_re2c-tdfa0",
+      "cpu_time": 75,
+      "bin_size": 22
+    },
+    {
+      "name": "rep-cat-23-19-17-clang_re2c-tdfa1",
+      "cpu_time": 75,
+      "bin_size": 22
+    },
+    {
+      "name": "rep-alt-5-3-2-gcc_kleenex",
+      "cpu_time": 334,
+      "bin_size": 30
+    },
+    {
+      "name": "rep-alt-5-3-2-gcc_re2c-stadfa",
+      "cpu_time": 463,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-alt-5-3-2-gcc_re2c-tdfa0",
+      "cpu_time": 392,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-alt-5-3-2-gcc_re2c-tdfa1",
+      "cpu_time": 292,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-alt-5-3-2-clang_kleenex",
+      "cpu_time": 375,
+      "bin_size": 50
+    },
+    {
+      "name": "rep-alt-5-3-2-clang_re2c-stadfa",
+      "cpu_time": 309,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-alt-5-3-2-clang_re2c-tdfa0",
+      "cpu_time": 364,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-alt-5-3-2-clang_re2c-tdfa1",
+      "cpu_time": 261,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-alt-13-11-7-gcc_re2c-stadfa",
+      "cpu_time": 661,
+      "bin_size": 22
+    },
+    {
+      "name": "rep-alt-13-11-7-gcc_re2c-tdfa0",
+      "cpu_time": 354,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-alt-13-11-7-gcc_re2c-tdfa1",
+      "cpu_time": 294,
+      "bin_size": 22
+    },
+    {
+      "name": "rep-alt-13-11-7-clang_re2c-stadfa",
+      "cpu_time": 550,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-alt-13-11-7-clang_re2c-tdfa0",
+      "cpu_time": 363,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-alt-13-11-7-clang_re2c-tdfa1",
+      "cpu_time": 300,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-alt-23-19-17-gcc_re2c-stadfa",
+      "cpu_time": 745,
+      "bin_size": 42
+    },
+    {
+      "name": "rep-alt-23-19-17-gcc_re2c-tdfa0",
+      "cpu_time": 313,
+      "bin_size": 30
+    },
+    {
+      "name": "rep-alt-23-19-17-gcc_re2c-tdfa1",
+      "cpu_time": 268,
+      "bin_size": 30
+    },
+    {
+      "name": "rep-alt-23-19-17-clang_re2c-stadfa",
+      "cpu_time": 852,
+      "bin_size": 42
+    },
+    {
+      "name": "rep-alt-23-19-17-clang_re2c-tdfa0",
+      "cpu_time": 308,
+      "bin_size": 26
+    },
+    {
+      "name": "rep-alt-23-19-17-clang_re2c-tdfa1",
+      "cpu_time": 333,
+      "bin_size": 22
+    },
+    {
+      "name": "rep-5-rep-3-rep-2-gcc_kleenex",
+      "cpu_time": 270,
+      "bin_size": 42
+    },
+    {
+      "name": "rep-5-rep-3-rep-2-gcc_re2c-stadfa",
+      "cpu_time": 810,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-5-rep-3-rep-2-gcc_re2c-tdfa0",
+      "cpu_time": 615,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-5-rep-3-rep-2-gcc_re2c-tdfa1",
+      "cpu_time": 354,
+      "bin_size": 18
+    },
+    {
+      "name": "rep-5-rep-3-rep-2-clang_kleenex",
+      "cpu_time": 316,
+      "bin_size": 54
+    },
+    {
+      "name": "rep-5-rep-3-rep-2-clang_re2c-stadfa",
+      "cpu_time": 342,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-5-rep-3-rep-2-clang_re2c-tdfa0",
+      "cpu_time": 548,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-5-rep-3-rep-2-clang_re2c-tdfa1",
+      "cpu_time": 327,
+      "bin_size": 14
+    },
+    {
+      "name": "rep-13-rep-11-rep-7-gcc_re2c-stadfa",
+      "cpu_time": 1171,
+      "bin_size": 58
+    },
+    {
+      "name": "rep-13-rep-11-rep-7-gcc_re2c-tdfa0",
+      "cpu_time": 416,
+      "bin_size": 34
+    },
+    {
+      "name": "rep-13-rep-11-rep-7-gcc_re2c-tdfa1",
+      "cpu_time": 313,
+      "bin_size": 38
+    },
+    {
+      "name": "rep-13-rep-11-rep-7-clang_re2c-stadfa",
+      "cpu_time": 1161,
+      "bin_size": 70
+    },
+    {
+      "name": "rep-13-rep-11-rep-7-clang_re2c-tdfa0",
+      "cpu_time": 533,
+      "bin_size": 26
+    },
+    {
+      "name": "rep-13-rep-11-rep-7-clang_re2c-tdfa1",
+      "cpu_time": 386,
+      "bin_size": 26
+    },
+    {
+      "name": "rep-23-rep-19-rep-17-gcc_re2c-stadfa",
+      "cpu_time": 1546,
+      "bin_size": 286
+    },
+    {
+      "name": "rep-23-rep-19-rep-17-gcc_re2c-tdfa0",
+      "cpu_time": 388,
+      "bin_size": 78
+    },
+    {
+      "name": "rep-23-rep-19-rep-17-gcc_re2c-tdfa1",
+      "cpu_time": 317,
+      "bin_size": 90
+    },
+    {
+      "name": "rep-23-rep-19-rep-17-clang_re2c-stadfa",
+      "cpu_time": 1984,
+      "bin_size": 334
+    },
+    {
+      "name": "rep-23-rep-19-rep-17-clang_re2c-tdfa0",
+      "cpu_time": 458,
+      "bin_size": 42
+    },
+    {
+      "name": "rep-23-rep-19-rep-17-clang_re2c-tdfa1",
+      "cpu_time": 378,
+      "bin_size": 42
+    }
+  ]
+}

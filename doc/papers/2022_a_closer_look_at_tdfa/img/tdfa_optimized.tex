@@ -1,0 +1,471 @@
+
+\documentclass[tikz, margin=0]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows.meta, shapes, automata, calc, decorations}
+\usepackage{arydshln}
+\usegdlibrary{trees, layered}
+
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth, -{to}, auto]
+
+\tikzstyle{every loop}=[]
+\tikzstyle{every node}=[]
+\tikzstyle{every state}=[circle
+    , minimum size=0.17in
+    , inner sep = 1pt
+    , outer sep = 0pt
+    , node distance = 0.55in]
+\newcommand{\pos}{\mathbf{p}}
+\newcommand{\nopos}{\mathbf{n}}
+
+
+\tikzstyle{stylesymtrans}=[line width=1]
+\tikzstyle{styletagtrans}=[thick, densely dashed]
+\tikzstyle{stylefintrans}=[-{To[length=1.25mm]}]% [-{Rays[n=7, length=2mm]}]% [-{Circle[open]}]% [-{Triangle[length=2.5mm, width=3mm, open]}]
+\tikzstyle{stylex}=[-{To[length=1.25mm]}]
+
+
+\begin{scope}[xshift=-1.1in, yshift=7.7in]
+    \scriptsize
+    %\small
+
+    \node[inner sep=3, outer sep=0] (x0) {$
+        \text{\scriptsize basic block 0}
+    $};
+    \draw [rounded corners=0.4em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, below right of=x0, xshift=0.7in] (x1) {$
+        \begin{aligned}
+            & \underline{\text{\scriptsize basic block 1}} \\[-0.5em]
+            & r_{11} \leftarrow \pos \\[-0.6em]
+            & r_{12} \leftarrow \nopos \\[-0.6em]
+            & r_{13} \leftarrow \nopos \\[-0.6em]
+            & r_{14} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x1.north west) rectangle (x1.south east);
+
+    \node[draw=none, below right of=x1, xshift=0.75in] (x3) {$
+        \begin{aligned}
+            & \underline{\text{\scriptsize basic block 3}} \\[-0.5em]
+            & r_{12} \leftarrow r_{11} \\[-0.6em]
+            & r_{11} \leftarrow \pos \\[-0.6em]
+            & r_{13} \leftarrow \pos \\[-0.6em]
+            & r_{14} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x3.north west) rectangle (x3.south east);
+
+    \node[draw=none, below right of=x3, xshift=0.75in] (x4) {$
+        \begin{aligned}
+            & \underline{\text{\scriptsize basic block 4}} \\[-0.5em]
+            & r_{12} \leftarrow r_{11} \\[-0.6em]
+            & r_{13} \leftarrow \pos \\[-0.6em]
+            & r_{14} \leftarrow \pos \\[-0.6em]
+            & r_{15} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x4.north west) rectangle (x4.south east);
+
+    \node[draw=none, above right of=x3, xshift=0.75in, yshift=0.2in] (x6) {$
+        \begin{aligned}
+            & \underline{\text{\scriptsize final block 6}} \\[-0.5em]
+            & r_6    \leftarrow r_{12} \\[-0.6em]
+            & r_7    \leftarrow r_{13} \\[-0.6em]
+            & r_8    \leftarrow r_{14} \\[-0.6em]
+            & r_9    \leftarrow \nopos \\[-0.6em]
+            & r_{10} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x6.north west) rectangle (x6.south east);
+
+    \node[draw=none, above of=x6, yshift=0.35in] (x2) {$
+        \begin{aligned}
+            & \underline{\text{\scriptsize basic block 2}} \\[-0.5em]
+            & r_{12} \leftarrow \nopos \\[-0.6em]
+            & r_{13} \leftarrow \nopos \\[-0.6em]
+            & r_{14} \leftarrow \pos \\[-0.6em]
+            & r_{15} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x2.north west) rectangle (x2.south east);
+
+    \node[draw=none, above right of=x4, xshift=0.75in, yshift=0in] (x7) {$
+        \begin{aligned}
+            & \underline{\text{\scriptsize final block 7}} \\[-0.5em]
+            & r_6    \leftarrow r_{12} \\[-0.6em]
+            & r_7    \leftarrow r_{13} \\[-0.6em]
+            & r_8    \leftarrow r_{14} \\[-0.6em]
+            & r_9    \leftarrow r_{15} \\[-0.6em]
+            & r_{10} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x7.north west) rectangle (x7.south east);
+
+    \node[draw=none, above of=x7, yshift=0.7in] (x5) {$
+        \begin{aligned}
+            & \underline{\text{\scriptsize basic block 5}} \\[-0.5em]
+            & r_{20} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x5.north west) rectangle (x5.south east);
+
+    \node[draw=none, right of=x5, xshift=0.65in] (x8) {$
+        \begin{aligned}
+            & \underline{\text{\scriptsize final block 8}} \\[-0.5em]
+            & r_6    \leftarrow r_{12} \\[-0.6em]
+            & r_7    \leftarrow r_{13} \\[-0.6em]
+            & r_8    \leftarrow r_{14} \\[-0.6em]
+            & r_9    \leftarrow r_{15} \\[-0.6em]
+            & r_{10} \leftarrow r_{20}
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x8.north west) rectangle (x8.south east);
+
+    \path
+        (x0) edge [stylex, bend right=5] node [] {} (x1.west)
+        (x1) edge [stylex, bend right=5] node [] {} (x3)
+        (x1) edge [stylex, out=280, in=200, looseness=0.5] node [] {} (x4)
+        (x1) edge [stylex, bend left=22] node [] {} (x6)
+        (x3) edge [stylex, out=130, in=50, looseness=2] node [] {} (x3)
+        (x3) edge [stylex, bend left=5] node [] {} (x4)
+        (x3) edge [stylex, bend left=5] node [] {} (x6)
+        (x0) edge [stylex, bend left=10] node [] {} (x2)
+        (x4) edge [stylex, bend right=10] node [] {} (x5)
+        (x4.east) edge [stylex, bend right=5] node [] {} (x7)
+        (x2) edge [stylex, bend left=5] node [] {} (x5)
+        (x2) edge [stylex, bend left=10] node [] {} (x7)
+        (x5) edge [stylex] node [] {} (x8)
+    ;
+\end{scope}
+
+
+\begin{scope}[xshift=-1.3in, yshift=5.3in]
+    \scriptsize
+    %\small
+
+    \node[inner sep=3, outer sep=0] (x0) {$
+        live\!: \emptyset
+    $};
+    \draw [rounded corners=0.4em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, below right of=x0, xshift=0.7in] (x1) {$
+        \begin{aligned}
+            & \underline{live\!: r_6\, r_7\, r_8\, r_9} \\[-0.5em]
+            & r_{6} \leftarrow \pos \\[-0.6em]
+            & r_{7} \leftarrow \nopos \\[-0.6em]
+            & r_{8} \leftarrow \nopos \\[-0.6em]
+            & r_{9} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x1.north west) rectangle (x1.south east);
+
+    \node[draw=none, below right of=x1, xshift=0.8in] (x3) {$
+        \begin{aligned}
+            & \underline{live\!: r_6\, r_7\, r_8\, r_9} \\[-0.5em]
+            & r_{7} \leftarrow r_{6} \\[-0.6em]
+            & r_{6} \leftarrow \pos \\[-0.6em]
+            & r_{8} \leftarrow \pos \\[-0.6em]
+            & r_{9} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x3.north west) rectangle (x3.south east);
+
+    \node[draw=none, below right of=x3, xshift=0.9in] (x4) {$
+        \begin{aligned}
+            & \underline{live\!: r_7\, r_8\, r_9\, r_{10}} \\[-0.5em]
+            & r_{7} \leftarrow r_{6} \\[-0.6em]
+            & r_{8} \leftarrow \pos \\[-0.6em]
+            & r_{9} \leftarrow \pos \\[-0.6em]
+            & r_{10} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x4.north west) rectangle (x4.south east);
+
+    \node[draw=none, above right of=x3, xshift=0.9in, yshift=0.2in] (x6) {$
+        \begin{aligned}
+            & \underline{live\!: r_1\, r_2\, r_3\, r_4\, r_5} \\[-0.5em]
+            & r_1 \leftarrow r_{7} \\[-0.6em]
+            & r_2 \leftarrow r_{8} \\[-0.6em]
+            & r_3 \leftarrow r_{9} \\[-0.6em]
+            & r_4 \leftarrow \nopos \\[-0.6em]
+            & r_5 \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x6.north west) rectangle (x6.south east);
+
+    \node[draw=none, above of=x6, yshift=0.35in] (x2) {$
+        \begin{aligned}
+            & \underline{live\!: r_7\, r_8\, r_9\, r_{10}} \\[-0.5em]
+            & r_{7} \leftarrow \nopos \\[-0.6em]
+            & r_{8} \leftarrow \nopos \\[-0.6em]
+            & r_{9} \leftarrow \pos \\[-0.6em]
+            & r_{10} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x2.north west) rectangle (x2.south east);
+
+    \node[draw=none, above right of=x4, xshift=1in, yshift=0in] (x7) {$
+        \begin{aligned}
+            & \underline{live\!: r_1\, r_2\, r_3\, r_4\, r_5} \\[-0.5em]
+            & r_1 \leftarrow r_{7} \\[-0.6em]
+            & r_2 \leftarrow r_{8} \\[-0.6em]
+            & r_3 \leftarrow r_{9} \\[-0.6em]
+            & r_4 \leftarrow r_{10} \\[-0.6em]
+            & r_5 \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x7.north west) rectangle (x7.south east);
+
+    \node[draw=none, above of=x7, yshift=0.7in] (x5) {$
+        \begin{aligned}
+            & \underline{live\!: r_7\, r_8\, r_9\, r_{10}\, r_{11}} \\[-0.5em]
+            & r_{11} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x5.north west) rectangle (x5.south east);
+
+    \node[draw=none, right of=x5, xshift=0.9in] (x8) {$
+        \begin{aligned}
+            & \underline{live\!: r_1 \, r_2 \, r_3 \, r_4 \, r_5} \\[-0.5em]
+            & r_1 \leftarrow r_{7} \\[-0.6em]
+            & r_2 \leftarrow r_{8} \\[-0.6em]
+            & r_3 \leftarrow r_{9} \\[-0.6em]
+            & r_4 \leftarrow r_{10} \\[-0.6em]
+            & r_5 \leftarrow r_{11}
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x8.north west) rectangle (x8.south east);
+
+    \path
+        (x0) edge [stylex, bend right=5] node [] {} (x1.west)
+        (x1) edge [stylex, bend right=5] node [] {} (x3)
+        (x1) edge [stylex, out=280, in=200, looseness=0.5] node [] {} (x4)
+        (x1) edge [stylex, bend left=22] node [] {} (x6)
+        (x3) edge [stylex, out=130, in=50, looseness=2] node [] {} (x3)
+        (x3) edge [stylex, bend left=5] node [] {} (x4)
+        (x3) edge [stylex, bend left=5] node [] {} (x6)
+        (x0) edge [stylex, bend left=10] node [] {} (x2)
+        (x4) edge [stylex, bend right=10] node [] {} (x5)
+        (x4.east) edge [stylex, bend right=5] node [] {} (x7)
+        (x2) edge [stylex, bend left=5] node [] {} (x5)
+        (x2) edge [stylex, bend left=10] node [] {} (x7)
+        (x5) edge [stylex] node [] {} (x8)
+    ;
+
+    \setlength\tabcolsep{1.2pt}
+    \node[draw=none, inner sep=0, outer sep=0, below of=x8, xshift=0.4in, yshift=-0.9in] (interf) {$
+        \begin{tabular}{c|ccccccccccc}
+            \multicolumn{12}{c}{Interference} \\[0.3em]
+            & $r_1$ & $r_2$ & $r_3$ & $r_4$ & $r_5$ & $r_6$ & $r_7$ & $r_8$ & $r_9$ & $\!r_{10}\!$ & $\!r_{11}\!$ \\
+            \hline
+            $r_1$    & $.$ & $*$ & $*$ & $*$ & $*$ & $.$ & $.$ & $.$ & $.$ & $.$ & $.$ \\
+            $r_2$    & $*$ & $.$ & $*$ & $*$ & $*$ & $.$ & $*$ & $.$ & $.$ & $.$ & $.$ \\
+            $r_3$    & $*$ & $*$ & $.$ & $*$ & $*$ & $.$ & $*$ & $*$ & $.$ & $.$ & $.$ \\
+            $r_4$    & $*$ & $*$ & $*$ & $.$ & $*$ & $.$ & $*$ & $*$ & $*$ & $.$ & $.$ \\
+            $r_5$    & $*$ & $*$ & $*$ & $*$ & $.$ & $.$ & $*$ & $*$ & $*$ & $*$ & $.$ \\
+            $r_6$    & $.$ & $.$ & $.$ & $.$ & $.$ & $.$ & $*$ & $*$ & $.$ & $.$ & $.$ \\
+            $r_7$    & $.$ & $*$ & $*$ & $*$ & $*$ & $*$ & $.$ & $*$ & $*$ & $*$ & $*$ \\
+            $r_8$    & $.$ & $.$ & $*$ & $*$ & $*$ & $*$ & $*$ & $.$ & $*$ & $*$ & $*$ \\
+            $r_9$    & $.$ & $.$ & $.$ & $*$ & $*$ & $.$ & $*$ & $*$ & $.$ & $.$ & $*$ \\
+            $r_{10}$ & $.$ & $.$ & $.$ & $.$ & $*$ & $.$ & $*$ & $*$ & $.$ & $.$ & $*$ \\
+            $r_{11}$ & $.$ & $.$ & $.$ & $.$ & $.$ & $.$ & $*$ & $*$ & $*$ & $*$ & $.$ \\
+        \end{tabular}
+    $};
+\end{scope}
+
+
+\begin{scope}[xshift=-1.2in, yshift=2.8in]
+    \scriptsize
+    %\small
+
+    \node[inner sep=3, outer sep=0] (x0) {$
+        live\!: \emptyset
+    $};
+    \draw [rounded corners=0.4em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, below right of=x0, xshift=0.7in, yshift=0.1in] (x1) {$
+        \begin{aligned}
+            & \underline{live\!: r_1\, r_2\, r_3} \\[-0.5em]
+            & r_{1} \leftarrow \nopos \\[-0.6em]
+            & r_{2} \leftarrow \nopos \\[-0.6em]
+            & r_{3} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x1.north west) rectangle (x1.south east);
+
+    \node[draw=none, below right of=x1, xshift=0.75in, yshift=0.1in] (x3) {$
+        \begin{aligned}
+            & \underline{live\!: r_1\, r_2\, r_3} \\[-0.5em]
+            & r_{1} \leftarrow r_{3} \\[-0.6em]
+            & r_{1} \leftarrow \pos \\[-0.6em]
+            & r_{2} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x3.north west) rectangle (x3.south east);
+
+    \node[draw=none, below right of=x3, xshift=0.85in] (x4) {$
+        \begin{aligned}
+            & \underline{live\!: r_1\, r_2\, r_3\, r_4} \\[-0.5em]
+            & r_{1} \leftarrow r_{3} \\[-0.6em]
+            & r_{2} \leftarrow \pos \\[-0.6em]
+            & r_{3} \leftarrow \pos \\[-0.6em]
+            & r_{4} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x4.north west) rectangle (x4.south east);
+
+    \node[draw=none, above right of=x3, xshift=0.85in, yshift=0.1in] (x6) {$
+        \begin{aligned}
+            & \underline{live\!: r_1\, r_2\, r_3\, r_4\, r_5} \\[-0.5em]
+            & r_4 \leftarrow \nopos \\[-0.6em]
+            & r_5 \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x6.north west) rectangle (x6.south east);
+
+    \node[draw=none, above of=x6, yshift=0.25in] (x2) {$
+        \begin{aligned}
+            & \underline{live\!: r_1\, r_2\, r_3\, r_4} \\[-0.5em]
+            & r_{1} \leftarrow \nopos \\[-0.6em]
+            & r_{2} \leftarrow \nopos \\[-0.6em]
+            & r_{3} \leftarrow \pos \\[-0.6em]
+            & r_{4} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x2.north west) rectangle (x2.south east);
+
+    \node[draw=none, above right of=x4, xshift=0.9in, yshift=0in] (x7) {$
+        \begin{aligned}
+            & \underline{live\!: r_1\, r_2\, r_3\, r_4\, r_5} \\[-0.5em]
+            & r_{5} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x7.north west) rectangle (x7.south east);
+
+    \node[draw=none, above of=x7, yshift=0.45in] (x5) {$
+        \begin{aligned}
+            & \underline{live\!: r_1\, r_2\, r_3\, r_4\, r_5} \\[-0.5em]
+            & r_{5} \leftarrow \pos
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x5.north west) rectangle (x5.south east);
+
+    \node[draw=none, right of=x5, xshift=0.95in] (x8) {$
+        \begin{aligned}
+            live\!: r_1\, r_2\, r_3\, r_4\, r_5
+        \end{aligned}
+    $};
+    \draw [rounded corners=0.5em] (x8.north west) rectangle (x8.south east);
+
+    \path
+        (x0) edge [stylex, bend right=5] node [] {} (x1.west)
+        (x1) edge [stylex, bend right=5] node [] {} (x3)
+        (x1) edge [stylex, out=280, in=200, looseness=0.5] node [] {} (x4)
+        (x1) edge [stylex, bend left=22] node [] {} (x6)
+        (x3) edge [stylex, out=130, in=50, looseness=2] node [] {} (x3)
+        (x3) edge [stylex, bend left=5] node [] {} (x4)
+        (x3) edge [stylex, bend left=5] node [] {} (x6)
+        (x0) edge [stylex, bend left=10] node [] {} (x2)
+        (x4) edge [stylex, bend right=10] node [] {} (x5)
+        (x4.east) edge [stylex, bend right=5] node [] {} (x7)
+        (x2) edge [stylex, bend left=5] node [] {} (x5)
+        (x2) edge [stylex, bend left=10] node [] {} (x7)
+        (x5) edge [stylex] node [] {} (x8)
+    ;
+
+    \setlength\tabcolsep{1.1pt}
+    \node[draw=none, below of=x8, xshift=0.4in, yshift=-0.4in] (interf) {$
+        \begin{tabular}{c|ccccc}
+            \multicolumn{6}{c}{Interference} \\[0.3em]
+            & $r_1$ & $r_2$ & $r_3$ & $r_4$ & $r_5$ \\
+            \hline
+            $r_1$ & $.$ & $*$ & $*$ & $*$ & $*$ \\
+            $r_2$ & $*$ & $.$ & $*$ & $*$ & $*$ \\
+            $r_3$ & $*$ & $*$ & $.$ & $*$ & $*$ \\
+            $r_4$ & $*$ & $*$ & $*$ & $.$ & $*$ \\
+            $r_5$ & $*$ & $*$ & $*$ & $*$ & $.$ \\
+        \end{tabular}
+    $};
+\end{scope}
+
+
+\begin{scope}[xshift=1in, yshift=0.2in]
+    %\draw [draw=none] rectangle (-2in,0in) -- (5.3in,0in); % enforce image width
+    %\small
+    \footnotesize
+    %\scriptsize
+
+    \node[state] (x0) {$0$};
+    \node[state, above right of=x0, xshift=0.5in, yshift=0.2in, accepting] (x1) {$1$};
+    \node[state, below right of=x1, xshift=0.5in, yshift=-0.2in, accepting] (x2) {$2$};
+    \node[state, right of=x2, xshift=1in, accepting] (x3) {$3$};
+    \node[state, draw=none, below of = x1, yshift=0.29in] (xf1) {};
+    \node[state, draw=none, below of = x2, yshift=0.29in] (xf2) {};
+    \node[state, draw=none, below of = x3, yshift=0.29in] (xf3) {};
+    \path
+        (x1) edge [stylefintrans] node [below, yshift=-0.02in] {$
+            \begin{aligned}
+                & r_4 \leftarrow \nopos \\[-0.6em]
+                & r_5 \leftarrow \pos
+            \end{aligned}
+        $} (xf1)
+        (x2) edge [stylefintrans] node [below, yshift=-0.02in] {$
+            \begin{aligned}
+                r_5 \leftarrow \pos
+            \end{aligned}
+        $} (xf2)
+        (x3) edge [stylefintrans] node [below, yshift=-0.02in] {} (xf3)
+        (x1) edge [in=50,out=130,loop] node [] {$
+            \begin{aligned}
+                a / & r_{1} \leftarrow r_{3} \\[-0.6em]
+                    & r_{2} \leftarrow \pos \\[-0.6em]
+                    & r_{3} \leftarrow \pos
+            \end{aligned}
+        $} (x1)
+        (x0) edge [bend left=10] node [] {$
+            \begin{aligned}
+                a / & r_{1} \leftarrow \nopos \\[-0.6em]
+                    & r_{2} \leftarrow \nopos \\[-0.6em]
+                    & r_{3} \leftarrow \pos
+            \end{aligned}
+        $} (x1)
+        (x1) edge [bend left=10] node [] {$
+            \begin{aligned}
+                b / & r_{1} \leftarrow r_{3} \\[-0.6em]
+                    & r_{2} \leftarrow \pos \\[-0.6em]
+                    & r_{3} \leftarrow \pos \\[-0.6em]
+                    & r_{4} \leftarrow \pos
+            \end{aligned}
+        $} (x2)
+        (x0) edge [bend right=3] node [below] {$
+            \begin{aligned}
+                b / & r_{1} \leftarrow \nopos \\[-0.6em]
+                    & r_{2} \leftarrow \nopos \\[-0.6em]
+                    & r_{3} \leftarrow \pos \\[-0.6em]
+                    & r_{4} \leftarrow \pos
+            \end{aligned}
+        $} (x2)
+        (x2) edge [] node [above] {$
+            \begin{aligned}
+                b / & r_{5} \leftarrow \pos
+            \end{aligned}
+        $} (x3)
+        (x3) edge [in=50,out=130,loop] node [] {$b$} (x3)
+    ;
+\end{scope}
+
+
+\end{tikzpicture}
+
+\end{document}
+

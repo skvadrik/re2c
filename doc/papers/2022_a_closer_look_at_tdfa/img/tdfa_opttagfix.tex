@@ -1,0 +1,106 @@
+
+\documentclass[tikz, margin=0]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows.meta, shapes, automata, calc, decorations}
+\usepackage{arydshln}
+\usegdlibrary{trees, layered}
+
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth, -{to}, auto]
+
+\tikzstyle{every loop}=[]
+\tikzstyle{every node}=[]
+\tikzstyle{every state}=[circle
+    , minimum size=0.17in
+    , inner sep = 1pt
+    , outer sep = 0pt
+    , node distance = 0.55in]
+\newcommand{\pos}{\mathbf{p}}
+\newcommand{\nopos}{\mathbf{n}}
+
+
+\tikzstyle{stylesymtrans}=[line width=1]
+\tikzstyle{styletagtrans}=[thick, densely dashed]
+\tikzstyle{stylefintrans}=[-{To[length=1.25mm]}]% [-{Rays[n=7, length=2mm]}]% [-{Circle[open]}]% [-{Triangle[length=2.5mm, width=3mm, open]}]
+
+\begin{scope}[xshift=0in, yshift=0in]
+    %\draw [draw=none] rectangle (-2.3in,0in) -- (5in,0in); % enforce image width
+
+    %\small
+    \footnotesize
+    %\scriptsize
+    \node[state] (x0) {$0$};
+    \node[state, above right of=x0, xshift=0.5in, yshift=0.2in, accepting] (x1) {$1$};
+    \node[state, below right of=x1, xshift=0.5in, yshift=-0.2in, accepting] (x2) {$2$};
+    \node[state, right of=x2, xshift=0.8in, accepting] (x3) {$3$};
+    \node[state, draw=none, below of = x1, yshift=0.29in] (xf1) {};
+    \node[state, draw=none, below of = x2, yshift=0.29in] (xf2) {};
+    \node[state, draw=none, below of = x3, yshift=0.29in] (xf3) {};
+    %\node[below of = x2, xshift=-0.1in, yshift=-0.6in] (x) {$\small
+    %    \begin{aligned}
+    %        &t_2 = r_1 \\[-0.4em]
+    %        &t_4 = r_2 \\[-0.4em]
+    %        &t_5 = r_3 \\[-0.4em]
+    %        &t_1 = \text{if } (t_2 = \nopos) \text{ then } \nopos \text{ else } t_2 - 1 \\[-0.4em]
+    %        &t_3 = t_{4} - 1
+    %        \\
+    %    \end{aligned}
+    %$};
+    \path
+        (x1) edge [stylefintrans] node [below] {$
+            \begin{aligned}
+                & r_2 \leftarrow \nopos \\[-0.6em]
+                & r_3 \leftarrow \pos
+            \end{aligned}
+        $} (xf1)
+        (x2) edge [stylefintrans] node [below] {$
+            \begin{aligned}
+                r_3 \leftarrow \pos
+            \end{aligned}
+        $} (xf2)
+        (x3) edge [stylefintrans] node [] {} (xf3)
+        (x1) edge [in=50,out=130,loop] node [] {$
+            \begin{aligned}
+                a / r_{1} \leftarrow \pos
+            \end{aligned}
+        $} (x1)
+        (x0) edge [bend left=10] node [] {$
+            \begin{aligned}
+                a / r_{1} \leftarrow \nopos
+            \end{aligned}
+        $} (x1)
+        (x1) edge [bend left=10] node [] {$
+            \begin{aligned}
+                b / & r_{1} \leftarrow \pos \\[-0.6em]
+                    & r_{2} \leftarrow \pos
+            \end{aligned}
+        $} (x2)
+        (x0) edge [bend right=3] node [below] {$
+            \begin{aligned}
+                b / & r_{1} \leftarrow \nopos \\[-0.6em]
+                    & r_{2} \leftarrow \pos
+            \end{aligned}
+        $} (x2)
+        (x2) edge [] node [above] {$
+            \begin{aligned}
+                b / r_{3} \leftarrow \pos
+            \end{aligned}
+        $} (x3)
+        (x3) edge [in=50,out=130,loop] node [] {$b$} (x3)
+    ;
+\end{scope}
+
+
+\end{tikzpicture}
+
+\end{document}
+

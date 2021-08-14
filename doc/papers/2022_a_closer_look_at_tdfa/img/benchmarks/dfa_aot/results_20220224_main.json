@@ -1,0 +1,404 @@
+{
+  "benchmarks": [
+    {
+      "name": "http-rfc7230-gcc_ragel",
+      "cpu_time": 196,
+      "bin_size": 82
+    },
+    {
+      "name": "http-rfc7230-gcc_kleenex",
+      "cpu_time": 598,
+      "bin_size": 786
+    },
+    {
+      "name": "http-rfc7230-gcc_re2c-stadfa",
+      "cpu_time": 1393,
+      "bin_size": 582
+    },
+    {
+      "name": "http-rfc7230-gcc_re2c-tdfa0",
+      "cpu_time": 299,
+      "bin_size": 134
+    },
+    {
+      "name": "http-rfc7230-gcc_re2c-tdfa1",
+      "cpu_time": 197,
+      "bin_size": 134
+    },
+    {
+      "name": "http-rfc7230-clang_ragel",
+      "cpu_time": 217,
+      "bin_size": 74
+    },
+    {
+      "name": "http-rfc7230-clang_kleenex",
+      "cpu_time": 664,
+      "bin_size": 518
+    },
+    {
+      "name": "http-rfc7230-clang_re2c-stadfa",
+      "cpu_time": 1700,
+      "bin_size": 814
+    },
+    {
+      "name": "http-rfc7230-clang_re2c-tdfa0",
+      "cpu_time": 381,
+      "bin_size": 134
+    },
+    {
+      "name": "http-rfc7230-clang_re2c-tdfa1",
+      "cpu_time": 210,
+      "bin_size": 142
+    },
+    {
+      "name": "http-simple-gcc_ragel",
+      "cpu_time": 157,
+      "bin_size": 22
+    },
+    {
+      "name": "http-simple-gcc_kleenex",
+      "cpu_time": 511,
+      "bin_size": 70
+    },
+    {
+      "name": "http-simple-gcc_re2c-stadfa",
+      "cpu_time": 506,
+      "bin_size": 30
+    },
+    {
+      "name": "http-simple-gcc_re2c-tdfa0",
+      "cpu_time": 227,
+      "bin_size": 22
+    },
+    {
+      "name": "http-simple-gcc_re2c-tdfa1",
+      "cpu_time": 174,
+      "bin_size": 22
+    },
+    {
+      "name": "http-simple-clang_ragel",
+      "cpu_time": 192,
+      "bin_size": 26
+    },
+    {
+      "name": "http-simple-clang_kleenex",
+      "cpu_time": 578,
+      "bin_size": 86
+    },
+    {
+      "name": "http-simple-clang_re2c-stadfa",
+      "cpu_time": 525,
+      "bin_size": 66
+    },
+    {
+      "name": "http-simple-clang_re2c-tdfa0",
+      "cpu_time": 286,
+      "bin_size": 38
+    },
+    {
+      "name": "http-simple-clang_re2c-tdfa1",
+      "cpu_time": 199,
+      "bin_size": 42
+    },
+    {
+      "name": "uri-rfc3986-gcc_ragel",
+      "cpu_time": 169,
+      "bin_size": 102
+    },
+    {
+      "name": "uri-rfc3986-gcc_kleenex",
+      "cpu_time": 744,
+      "bin_size": 342
+    },
+    {
+      "name": "uri-rfc3986-gcc_re2c-stadfa",
+      "cpu_time": 228,
+      "bin_size": 262
+    },
+    {
+      "name": "uri-rfc3986-gcc_re2c-tdfa0",
+      "cpu_time": 276,
+      "bin_size": 82
+    },
+    {
+      "name": "uri-rfc3986-gcc_re2c-tdfa1",
+      "cpu_time": 196,
+      "bin_size": 82
+    },
+    {
+      "name": "uri-rfc3986-clang_ragel",
+      "cpu_time": 175,
+      "bin_size": 106
+    },
+    {
+      "name": "uri-rfc3986-clang_kleenex",
+      "cpu_time": 903,
+      "bin_size": 186
+    },
+    {
+      "name": "uri-rfc3986-clang_re2c-stadfa",
+      "cpu_time": 180,
+      "bin_size": 302
+    },
+    {
+      "name": "uri-rfc3986-clang_re2c-tdfa0",
+      "cpu_time": 235,
+      "bin_size": 78
+    },
+    {
+      "name": "uri-rfc3986-clang_re2c-tdfa1",
+      "cpu_time": 154,
+      "bin_size": 78
+    },
+    {
+      "name": "uri-simple-gcc_ragel",
+      "cpu_time": 239,
+      "bin_size": 30
+    },
+    {
+      "name": "uri-simple-gcc_kleenex",
+      "cpu_time": 505,
+      "bin_size": 38
+    },
+    {
+      "name": "uri-simple-gcc_re2c-stadfa",
+      "cpu_time": 197,
+      "bin_size": 30
+    },
+    {
+      "name": "uri-simple-gcc_re2c-tdfa0",
+      "cpu_time": 230,
+      "bin_size": 22
+    },
+    {
+      "name": "uri-simple-gcc_re2c-tdfa1",
+      "cpu_time": 194,
+      "bin_size": 22
+    },
+    {
+      "name": "uri-simple-clang_ragel",
+      "cpu_time": 205,
+      "bin_size": 34
+    },
+    {
+      "name": "uri-simple-clang_kleenex",
+      "cpu_time": 631,
+      "bin_size": 34
+    },
+    {
+      "name": "uri-simple-clang_re2c-stadfa",
+      "cpu_time": 160,
+      "bin_size": 58
+    },
+    {
+      "name": "uri-simple-clang_re2c-tdfa0",
+      "cpu_time": 186,
+      "bin_size": 34
+    },
+    {
+      "name": "uri-simple-clang_re2c-tdfa1",
+      "cpu_time": 195,
+      "bin_size": 38
+    },
+    {
+      "name": "apache-log-gcc_ragel",
+      "cpu_time": 88,
+      "bin_size": 18
+    },
+    {
+      "name": "apache-log-gcc_kleenex",
+      "cpu_time": 467,
+      "bin_size": 30
+    },
+    {
+      "name": "apache-log-gcc_re2c-stadfa",
+      "cpu_time": 151,
+      "bin_size": 18
+    },
+    {
+      "name": "apache-log-gcc_re2c-tdfa0",
+      "cpu_time": 186,
+      "bin_size": 18
+    },
+    {
+      "name": "apache-log-gcc_re2c-tdfa1",
+      "cpu_time": 187,
+      "bin_size": 18
+    },
+    {
+      "name": "apache-log-clang_ragel",
+      "cpu_time": 264,
+      "bin_size": 18
+    },
+    {
+      "name": "apache-log-clang_kleenex",
+      "cpu_time": 481,
+      "bin_size": 26
+    },
+    {
+      "name": "apache-log-clang_re2c-stadfa",
+      "cpu_time": 107,
+      "bin_size": 22
+    },
+    {
+      "name": "apache-log-clang_re2c-tdfa0",
+      "cpu_time": 103,
+      "bin_size": 22
+    },
+    {
+      "name": "apache-log-clang_re2c-tdfa1",
+      "cpu_time": 110,
+      "bin_size": 22
+    },
+    {
+      "name": "datetime-gcc_ragel",
+      "cpu_time": 250,
+      "bin_size": 14
+    },
+    {
+      "name": "datetime-gcc_kleenex",
+      "cpu_time": 865,
+      "bin_size": 38
+    },
+    {
+      "name": "datetime-gcc_re2c-stadfa",
+      "cpu_time": 221,
+      "bin_size": 14
+    },
+    {
+      "name": "datetime-gcc_re2c-tdfa0",
+      "cpu_time": 238,
+      "bin_size": 14
+    },
+    {
+      "name": "datetime-gcc_re2c-tdfa1",
+      "cpu_time": 228,
+      "bin_size": 14
+    },
+    {
+      "name": "datetime-clang_ragel",
+      "cpu_time": 153,
+      "bin_size": 14
+    },
+    {
+      "name": "datetime-clang_kleenex",
+      "cpu_time": 967,
+      "bin_size": 34
+    },
+    {
+      "name": "datetime-clang_re2c-stadfa",
+      "cpu_time": 151,
+      "bin_size": 14
+    },
+    {
+      "name": "datetime-clang_re2c-tdfa0",
+      "cpu_time": 140,
+      "bin_size": 14
+    },
+    {
+      "name": "datetime-clang_re2c-tdfa1",
+      "cpu_time": 138,
+      "bin_size": 14
+    },
+    {
+      "name": "email-gcc_ragel",
+      "cpu_time": 141,
+      "bin_size": 14
+    },
+    {
+      "name": "email-gcc_kleenex",
+      "cpu_time": 425,
+      "bin_size": 26
+    },
+    {
+      "name": "email-gcc_re2c-stadfa",
+      "cpu_time": 108,
+      "bin_size": 14
+    },
+    {
+      "name": "email-gcc_re2c-tdfa0",
+      "cpu_time": 100,
+      "bin_size": 14
+    },
+    {
+      "name": "email-gcc_re2c-tdfa1",
+      "cpu_time": 112,
+      "bin_size": 14
+    },
+    {
+      "name": "email-clang_ragel",
+      "cpu_time": 130,
+      "bin_size": 14
+    },
+    {
+      "name": "email-clang_kleenex",
+      "cpu_time": 542,
+      "bin_size": 26
+    },
+    {
+      "name": "email-clang_re2c-stadfa",
+      "cpu_time": 134,
+      "bin_size": 18
+    },
+    {
+      "name": "email-clang_re2c-tdfa0",
+      "cpu_time": 139,
+      "bin_size": 18
+    },
+    {
+      "name": "email-clang_re2c-tdfa1",
+      "cpu_time": 129,
+      "bin_size": 18
+    },
+    {
+      "name": "ipv4-gcc_ragel",
+      "cpu_time": 126,
+      "bin_size": 14
+    },
+    {
+      "name": "ipv4-gcc_kleenex",
+      "cpu_time": 337,
+      "bin_size": 22
+    },
+    {
+      "name": "ipv4-gcc_re2c-stadfa",
+      "cpu_time": 141,
+      "bin_size": 14
+    },
+    {
+      "name": "ipv4-gcc_re2c-tdfa0",
+      "cpu_time": 142,
+      "bin_size": 14
+    },
+    {
+      "name": "ipv4-gcc_re2c-tdfa1",
+      "cpu_time": 140,
+      "bin_size": 14
+    },
+    {
+      "name": "ipv4-clang_ragel",
+      "cpu_time": 143,
+      "bin_size": 14
+    },
+    {
+      "name": "ipv4-clang_kleenex",
+      "cpu_time": 355,
+      "bin_size": 22
+    },
+    {
+      "name": "ipv4-clang_re2c-stadfa",
+      "cpu_time": 154,
+      "bin_size": 14
+    },
+    {
+      "name": "ipv4-clang_re2c-tdfa0",
+      "cpu_time": 142,
+      "bin_size": 14
+    },
+    {
+      "name": "ipv4-clang_re2c-tdfa1",
+      "cpu_time": 154,
+      "bin_size": 14
+    }
+  ]
+}
