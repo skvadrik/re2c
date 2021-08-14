@@ -1,0 +1,364 @@
+{
+  "benchmarks": [
+    {
+      "name": "cat2-0-gcc_kleenex",
+      "cpu_time": 353,
+      "bin_size": 18
+    },
+    {
+      "name": "cat2-0-gcc_re2c-stadfa",
+      "cpu_time": 137,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-0-gcc_re2c-tdfa0",
+      "cpu_time": 164,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-0-gcc_re2c-tdfa1",
+      "cpu_time": 153,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-0-clang_kleenex",
+      "cpu_time": 364,
+      "bin_size": 18
+    },
+    {
+      "name": "cat2-0-clang_re2c-stadfa",
+      "cpu_time": 78,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-0-clang_re2c-tdfa0",
+      "cpu_time": 94,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-0-clang_re2c-tdfa1",
+      "cpu_time": 90,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-4-gcc_kleenex",
+      "cpu_time": 467,
+      "bin_size": 50
+    },
+    {
+      "name": "cat2-4-gcc_re2c-stadfa",
+      "cpu_time": 290,
+      "bin_size": 18
+    },
+    {
+      "name": "cat2-4-gcc_re2c-tdfa0",
+      "cpu_time": 194,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-4-gcc_re2c-tdfa1",
+      "cpu_time": 184,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-4-clang_kleenex",
+      "cpu_time": 466,
+      "bin_size": 78
+    },
+    {
+      "name": "cat2-4-clang_re2c-stadfa",
+      "cpu_time": 338,
+      "bin_size": 18
+    },
+    {
+      "name": "cat2-4-clang_re2c-tdfa0",
+      "cpu_time": 96,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-4-clang_re2c-tdfa1",
+      "cpu_time": 110,
+      "bin_size": 14
+    },
+    {
+      "name": "cat2-8-gcc_kleenex",
+      "cpu_time": 367,
+      "bin_size": 90
+    },
+    {
+      "name": "cat2-8-gcc_re2c-stadfa",
+      "cpu_time": 240,
+      "bin_size": 18
+    },
+    {
+      "name": "cat2-8-gcc_re2c-tdfa0",
+      "cpu_time": 128,
+      "bin_size": 18
+    },
+    {
+      "name": "cat2-8-gcc_re2c-tdfa1",
+      "cpu_time": 132,
+      "bin_size": 18
+    },
+    {
+      "name": "cat2-8-clang_kleenex",
+      "cpu_time": 359,
+      "bin_size": 74
+    },
+    {
+      "name": "cat2-8-clang_re2c-stadfa",
+      "cpu_time": 467,
+      "bin_size": 22
+    },
+    {
+      "name": "cat2-8-clang_re2c-tdfa0",
+      "cpu_time": 126,
+      "bin_size": 18
+    },
+    {
+      "name": "cat2-8-clang_re2c-tdfa1",
+      "cpu_time": 111,
+      "bin_size": 18
+    },
+    {
+      "name": "cat4-0-gcc_kleenex",
+      "cpu_time": 382,
+      "bin_size": 22
+    },
+    {
+      "name": "cat4-0-gcc_re2c-stadfa",
+      "cpu_time": 150,
+      "bin_size": 18
+    },
+    {
+      "name": "cat4-0-gcc_re2c-tdfa0",
+      "cpu_time": 164,
+      "bin_size": 14
+    },
+    {
+      "name": "cat4-0-gcc_re2c-tdfa1",
+      "cpu_time": 161,
+      "bin_size": 14
+    },
+    {
+      "name": "cat4-0-clang_kleenex",
+      "cpu_time": 381,
+      "bin_size": 22
+    },
+    {
+      "name": "cat4-0-clang_re2c-stadfa",
+      "cpu_time": 142,
+      "bin_size": 18
+    },
+    {
+      "name": "cat4-0-clang_re2c-tdfa0",
+      "cpu_time": 170,
+      "bin_size": 18
+    },
+    {
+      "name": "cat4-0-clang_re2c-tdfa1",
+      "cpu_time": 122,
+      "bin_size": 18
+    },
+    {
+      "name": "cat4-2-gcc_kleenex",
+      "cpu_time": 764,
+      "bin_size": 54
+    },
+    {
+      "name": "cat4-2-gcc_re2c-stadfa",
+      "cpu_time": 494,
+      "bin_size": 26
+    },
+    {
+      "name": "cat4-2-gcc_re2c-tdfa0",
+      "cpu_time": 194,
+      "bin_size": 22
+    },
+    {
+      "name": "cat4-2-gcc_re2c-tdfa1",
+      "cpu_time": 163,
+      "bin_size": 22
+    },
+    {
+      "name": "cat4-2-clang_kleenex",
+      "cpu_time": 712,
+      "bin_size": 106
+    },
+    {
+      "name": "cat4-2-clang_re2c-stadfa",
+      "cpu_time": 684,
+      "bin_size": 30
+    },
+    {
+      "name": "cat4-2-clang_re2c-tdfa0",
+      "cpu_time": 181,
+      "bin_size": 22
+    },
+    {
+      "name": "cat4-2-clang_re2c-tdfa1",
+      "cpu_time": 144,
+      "bin_size": 18
+    },
+    {
+      "name": "cat4-4-gcc_kleenex",
+      "cpu_time": 462,
+      "bin_size": 286
+    },
+    {
+      "name": "cat4-4-gcc_re2c-stadfa",
+      "cpu_time": 333,
+      "bin_size": 38
+    },
+    {
+      "name": "cat4-4-gcc_re2c-tdfa0",
+      "cpu_time": 146,
+      "bin_size": 26
+    },
+    {
+      "name": "cat4-4-gcc_re2c-tdfa1",
+      "cpu_time": 150,
+      "bin_size": 26
+    },
+    {
+      "name": "cat4-4-clang_kleenex",
+      "cpu_time": 481,
+      "bin_size": 290
+    },
+    {
+      "name": "cat4-4-clang_re2c-stadfa",
+      "cpu_time": 551,
+      "bin_size": 42
+    },
+    {
+      "name": "cat4-4-clang_re2c-tdfa0",
+      "cpu_time": 137,
+      "bin_size": 26
+    },
+    {
+      "name": "cat4-4-clang_re2c-tdfa1",
+      "cpu_time": 115,
+      "bin_size": 22
+    },
+    {
+      "name": "cat8-0-gcc_kleenex",
+      "cpu_time": 465,
+      "bin_size": 26
+    },
+    {
+      "name": "cat8-0-gcc_re2c-stadfa",
+      "cpu_time": 162,
+      "bin_size": 18
+    },
+    {
+      "name": "cat8-0-gcc_re2c-tdfa0",
+      "cpu_time": 215,
+      "bin_size": 18
+    },
+    {
+      "name": "cat8-0-gcc_re2c-tdfa1",
+      "cpu_time": 180,
+      "bin_size": 18
+    },
+    {
+      "name": "cat8-0-clang_kleenex",
+      "cpu_time": 427,
+      "bin_size": 30
+    },
+    {
+      "name": "cat8-0-clang_re2c-stadfa",
+      "cpu_time": 148,
+      "bin_size": 22
+    },
+    {
+      "name": "cat8-0-clang_re2c-tdfa0",
+      "cpu_time": 286,
+      "bin_size": 22
+    },
+    {
+      "name": "cat8-0-clang_re2c-tdfa1",
+      "cpu_time": 162,
+      "bin_size": 22
+    },
+    {
+      "name": "cat8-1-gcc_kleenex",
+      "cpu_time": 2794,
+      "bin_size": 66
+    },
+    {
+      "name": "cat8-1-gcc_re2c-stadfa",
+      "cpu_time": 1328,
+      "bin_size": 82
+    },
+    {
+      "name": "cat8-1-gcc_re2c-tdfa0",
+      "cpu_time": 385,
+      "bin_size": 154
+    },
+    {
+      "name": "cat8-1-gcc_re2c-tdfa1",
+      "cpu_time": 282,
+      "bin_size": 122
+    },
+    {
+      "name": "cat8-1-clang_kleenex",
+      "cpu_time": 2158,
+      "bin_size": 170
+    },
+    {
+      "name": "cat8-1-clang_re2c-stadfa",
+      "cpu_time": 2073,
+      "bin_size": 98
+    },
+    {
+      "name": "cat8-1-clang_re2c-tdfa0",
+      "cpu_time": 432,
+      "bin_size": 170
+    },
+    {
+      "name": "cat8-1-clang_re2c-tdfa1",
+      "cpu_time": 304,
+      "bin_size": 118
+    },
+    {
+      "name": "cat8-2-gcc_kleenex",
+      "cpu_time": 1285,
+      "bin_size": 170
+    },
+    {
+      "name": "cat8-2-gcc_re2c-stadfa",
+      "cpu_time": 1681,
+      "bin_size": 154
+    },
+    {
+      "name": "cat8-2-gcc_re2c-tdfa0",
+      "cpu_time": 265,
+      "bin_size": 230
+    },
+    {
+      "name": "cat8-2-gcc_re2c-tdfa1",
+      "cpu_time": 227,
+      "bin_size": 194
+    },
+    {
+      "name": "cat8-2-clang_kleenex",
+      "cpu_time": 1155,
+      "bin_size": 442
+    },
+    {
+      "name": "cat8-2-clang_re2c-stadfa",
+      "cpu_time": 2091,
+      "bin_size": 158
+    },
+    {
+      "name": "cat8-2-clang_re2c-tdfa0",
+      "cpu_time": 311,
+      "bin_size": 254
+    },
+    {
+      "name": "cat8-2-clang_re2c-tdfa1",
+      "cpu_time": 247,
+      "bin_size": 202
+    }
+  ]
+}

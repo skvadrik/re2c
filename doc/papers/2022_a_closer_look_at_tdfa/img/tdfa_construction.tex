@@ -1,0 +1,654 @@
+
+\documentclass[tikz, margin=0]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows.meta, shapes, automata, calc, decorations}
+\usepackage{arydshln}
+\usegdlibrary{trees, layered}
+
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth, -{to}, auto]
+
+\tikzstyle{every loop}=[]
+\tikzstyle{every node}=[]
+\tikzstyle{every state}=[circle
+    , minimum size=0.17in
+    , inner sep = 1pt
+    , outer sep = 0pt
+    , node distance = 0.55in]
+\newcommand{\pos}{\mathbf{p}}
+\newcommand{\nopos}{\mathbf{n}}
+\newcommand{\undpos}{-}
+
+
+\tikzstyle{stylesymtrans}=[line width=1]
+\tikzstyle{styletagtrans}=[thick, densely dashed]
+\tikzstyle{stylefintrans}=[-{To[length=1.25mm]}]% [-{Rays[n=7, length=2mm]}]% [-{Circle[open]}]% [-{Triangle[length=2.5mm, width=3mm, open]}]
+
+
+\begin{scope}[xshift=0.0in, yshift=3.5in]
+    \draw [draw=none] rectangle (-1in,0in) -- (6.5in,0in); % enforce image width
+
+    \footnotesize
+    \node[state] (x17) {$0$};
+    \node[state, above right of = x17, yshift = -0.05in, xshift = -0.15in] (x14) {$1$};
+    \node[state, above right of = x14, yshift = -0.15in] (x13) {$2$};
+    \node[state, right of = x13] (x12) {$3$};
+    \node[state, below right of = x12, yshift = 0.15in] (x11) {$4$};
+    \node[state, below right of = x11, yshift = 0.05in, xshift = -0.15in] (x10) {$7$};
+    \node[state, below right of = x17, yshift = 0.2in, xshift = 0.2in] (x16) {$5$};
+    \node[state, below left of = x10, yshift = 0.2in, xshift = -0.2in] (x15) {$6$};
+    \node[state, right of = x10] (x9) {$8$};
+    \node[state, above right of = x9, yshift = -0.15in] (x6) {$9$};
+    \node[state, below right of = x9, yshift = 0.15in] (x8) {$11$};
+    \node[state, right of = x6] (x5) {$10$};
+    \node[state, right of = x8] (x7) {$12$};
+    \node[state, below right of = x5, yshift = 0.15in] (x4) {$13$};
+    \node[state, right of = x4] (x3) {$14$};
+    \node[state, above right of = x3, yshift = -0.1in] (x2) {$15$};
+    \node[state, right of = x2] (x1) {$16$};
+    \node[state, below right of = x1, yshift = 0.1in, accepting] (x0) {$17$};
+
+    \path
+        (x17) edge [bend left=10] node [] {$1/\epsilon$} (x14)
+        (x14) edge [bend left=10, styletagtrans] node [] {$1/t_1$} (x13)
+        (x13) edge [stylesymtrans] node [] {$a/\epsilon$} (x12)
+        (x12) edge [bend left=10, styletagtrans] node [] {$1/t_2$} (x11)
+        (x11) edge [bend left=10] node [] {$2/\epsilon$} (x10)
+        (x11) edge [bend left=10] node [above] {$1/\epsilon$} (x14)
+        (x17) edge [bend right=10] node [above right, near start] {$2/\epsilon$} (x16)
+        (x16) edge [styletagtrans] node [] {$1/\!-\!t_1$} (x15)
+        (x15) edge [bend right=10, styletagtrans] node [above left, near end] {$1/\!-\!t_2$} (x10)
+        (x10) edge [styletagtrans] node [below] {$1/t_3$} (x9)
+        (x9) edge [bend left=10] node [] {$1/\epsilon$} (x6)
+        (x6) edge [stylesymtrans] node [] {$a/\epsilon$} (x5)
+        (x5) edge [bend left=10, styletagtrans] node [] {$1/\!-\!t_4$} (x4)
+        (x9) edge [bend right=10] node [below left] {$2/\epsilon$} (x8)
+        (x8) edge [styletagtrans] node [] {$1/t_4$} (x7)
+        (x7) edge [bend right=10, stylesymtrans] node [below right] {$b/\epsilon$} (x4)
+        (x4) edge [styletagtrans] node [below] {$1/t_5$} (x3)
+        (x3) edge [bend left=10] node [] {$1/\epsilon$} (x2)
+        (x2) edge [bend left=30, stylesymtrans] node [] {$b/\epsilon$} (x1)
+        (x1) edge [bend left=30] node [] {$1/\epsilon$} (x2)
+        (x1) edge [bend left=10] node [] {$2/\epsilon$} (x0)
+        (x3) edge [bend right=10] node [below] {$2/\epsilon$} (x0)
+    ;
+\end{scope}
+
+
+\begin{scope}[xshift=0.1in, yshift=-0.2in]
+    \tikzstyle{every state}=[draw=none, inner sep=0pt, outer sep=0pt]
+
+    \footnotesize
+    \renewcommand{\arraystretch}{1.1}
+    %\setlength{\extrarowheight}{10pt}
+    \setlength\tabcolsep{2pt}
+    \setlength{\dashlinedash}{\pgflinewidth}
+    \setlength{\dashlinegap}{1pt}
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (1,6) (x0) {$
+        \begin{tabular}{c|ccccc}
+            \multicolumn{6}{c}{closure 0} \\
+            \hline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{|c|}{\scriptsize$t_1$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_2$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_3$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_4$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_5$} \\
+            \hline
+            \cline{1-6}
+            2  & $0$ & $\undpos$ & $\undpos$ & $\undpos$ & $\undpos$ \\
+            \hline
+            9  & $\nopos$ & $\nopos$ & $0$ & $\undpos$ & $\undpos$ \\
+            \hline
+            12 & $\nopos$ & $\nopos$ & $0$ & $0$ & $\undpos$ \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (6,6) (x0) {$
+        \begin{tabular}{c|ccccc}
+            \multicolumn{6}{c}{closure 1} \\
+            \hline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{|c|}{\scriptsize$t_1$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_2$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_3$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_4$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_5$} \\
+            \hline
+            \cline{1-6}
+            2  & $1$ & $1$ & $\undpos$ & $\undpos$ & $\undpos$ \\
+            \hline
+            9  & $0$ & $1$ & $1$ & $\undpos$ & $\undpos$ \\
+            \hline
+            12 & $0$ & $1$ & $1$ & $1$ & $\undpos$ \\
+            \hline
+            15 & $\nopos$ & $\nopos$ & $0$ & $\nopos$ & $1$ \\
+            \hline
+            17 & $\nopos$ & $\nopos$ & $0$ & $\nopos$ & $1$ \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (11,6) (x0) {$
+        \begin{tabular}{c|ccccc}
+            \multicolumn{6}{c}{closure 2} \\
+            \hline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{|c|}{\scriptsize$t_1$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_2$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_3$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_4$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_5$} \\
+            \hline
+            \cline{1-6}
+            2  & $2$ & $2$ & $\undpos$ & $\undpos$ & $\undpos$ \\
+            \hline
+            9  & $1$ & $2$ & $2$ & $\undpos$ & $\undpos$ \\
+            \hline
+            12 & $1$ & $2$ & $2$ & $2$ & $\undpos$ \\
+            \hline
+            15 & $0$ & $1$ & $1$ & $\nopos$ & $2$ \\
+            \hline
+            17 & $0$ & $1$ & $1$ & $\nopos$ & $2$ \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (15,6) (x0) {$
+        \begin{tabular}{c|ccccc}
+            \multicolumn{6}{c}{closure 3} \\
+            \hline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{|c|}{\scriptsize$t_1$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_2$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_3$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_4$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_5$} \\
+            \hline
+            \cline{1-6}
+            15 & $1$ & $2$ & $2$ & $2$ & $3$ \\
+            \hline
+            17 & $1$ & $2$ & $2$ & $2$ & $3$ \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em] (x0.north west) rectangle (x0.south east);
+
+
+    \tikzstyle{xstyle}=[]%[densely dotted]
+
+    \draw [xstyle] (-2.5,5.6) ..  controls (-2.3,5.6) and (-2.7,6.1) .. node [xshift=0.5in, yshift=0.05in] {
+        $\begin{aligned}
+            t_1
+        \end{aligned}$
+    } (-0.37,6);
+    \draw [xstyle] (-2.5,5.6) .. controls (-2.3,5.6) and (-2.7,5.6) .. node [xshift=0.35in, yshift=-0.03in] {
+        $\begin{aligned}
+            -t_1\!\!-\!t_2\, t_3
+        \end{aligned}$
+    } (-0.37,5.6);
+    \draw [xstyle] (-2.5,5.6) .. controls (-2.3,5.6) and (-2.7,5.1) .. node [xshift=-0.01in, yshift=-0.095in] {
+        $\begin{aligned}
+            -t_1\!\!-\!t_2\, t_3\, t_4
+        \end{aligned}$
+    } (-0.37,5.2);
+
+
+    \draw [xstyle] (2.35,6) ..  controls (3,6) and (2,6.5) .. node [xshift=0.56in, yshift=0.05in] {
+        $\begin{aligned}
+            a/t_2\, t_1
+        \end{aligned}$
+    } (4.6,6.4);
+    \draw [xstyle] (2.35,6) .. controls (3,6) and (2,6) .. node [xshift=0.35in, yshift=-0.02in] {
+        $\begin{aligned}
+            a/t_2\, t_3
+        \end{aligned}$
+    } (4.6,6);
+    \draw [xstyle] (2.35,6) .. controls (3,6) and (2,5.5) .. node [xshift=0.14in, yshift=-0.095in] {
+        $\begin{aligned}
+            a/t_2 \, t_3 \, t_4
+        \end{aligned}$
+    } (4.6,5.6);
+
+    \draw [xstyle] (2.35,5.6) .. controls (3,5.6) and (2,5.1) .. node [xshift=0.14in, yshift=-0.1in] {
+        $\begin{aligned}
+            a/\!\!-\!t_4 \, t_5
+        \end{aligned}$
+    } (4.6,5.2);
+    \draw [xstyle] (2.35,5.6) .. controls (3,5.6) and (2,4.6) .. node [xshift=0.14in, yshift=-0.17in] {
+        $\begin{aligned}
+            a/\!\!-\!t_4 \, t_5
+        \end{aligned}$
+    } (4.6,4.8);
+
+
+    \draw [xstyle] (7.33,6.4) ..  controls (8,6.4) and (7,6.4) .. node [xshift=0.35in, yshift=-0.03in] {
+        $\begin{aligned}
+            a/t_2\, t_1
+        \end{aligned}$
+    } (9.6,6.4);
+    \draw [xstyle] (7.33,6.4) .. controls (8,6.4) and (7,5.9) .. node [xshift=0.14in, yshift=-0.09in] {
+        $\begin{aligned}
+            a/t_2\, t_3
+        \end{aligned}$
+    } (9.6,6);
+    \draw [xstyle] (7.33,6.4) .. controls (8,6.4) and (7,5.4) .. node [xshift=0.14in, yshift=-0.16in] {
+        $\begin{aligned}
+            a/t_2 \, t_3 \, t_4
+        \end{aligned}$
+    } (9.6,5.6);
+
+    \draw [xstyle] (7.33,6) .. controls (8,6) and (7,5.0) .. node [xshift=0.15in, yshift=-0.17in] {
+        $\begin{aligned}
+            a/\!\!-\!t_4 \, t_5
+        \end{aligned}$
+    } (9.6,5.2);
+    \draw [xstyle] (7.33,6) .. controls (8,6) and (7,4.5) .. node [xshift=0.15in, yshift=-0.23in] {
+        $\begin{aligned}
+            a/\!\!-\!t_4 \, t_5
+        \end{aligned}$
+    } (9.6,4.8);
+
+
+    \draw [xstyle] (12.33,5.6) .. controls (13,5.6) and (12.5,5.9) .. node [xshift=0.28in, yshift=-0.in] {
+        $\begin{aligned}
+            b/t_5
+        \end{aligned}$
+    } (13.65,5.8);
+    \draw [xstyle] (12.33,5.6) .. controls (13,5.6) and (12.5,5.3) .. node [xshift=-0in, yshift=-0.07in] {
+        $\begin{aligned}
+            b/t_5
+        \end{aligned}$
+    } (13.65,5.4);
+
+
+    \node[circle, draw, fill=white, minimum size=0.17in, inner sep=1pt, outer sep=0pt] at (-2.45,5.6) (x00) {$0$};
+    \node[regular polygon, regular polygon sides=3, draw, fill=white, rotate=30, inner sep=1.5pt, outer sep=0pt] at (16.47,5.45) (x00) {};
+
+\end{scope}
+
+
+\begin{scope}[xshift=0.0in, yshift=-3.4in]
+    \tikzstyle{every state}=[draw=none, inner sep=0pt, outer sep=0pt]
+
+    \footnotesize
+    \renewcommand{\arraystretch}{1.1}
+    %\setlength{\extrarowheight}{10pt}
+    \setlength\tabcolsep{2pt}
+    \setlength{\dashlinedash}{\pgflinewidth}
+    \setlength{\dashlinegap}{1pt}
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (0.2,6) (x0) {$
+        \begin{tabular}{c|ccccc|c}
+            \multicolumn{7}{c}{TDFA state 0} \\
+            \hline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{|c|}{\scriptsize$t_1$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_2$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_3$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_4$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_5$}
+                & \scriptsize{\textit{la}} \\
+            \hline
+            \cline{1-7}
+            2  & $r_1$ & $r_2$ & $r_3$ & $r_4$ & $r_5$ & \; $t_1$ \hfill\null \\
+            \hline
+            9  & $r_1$ & $r_2$ & $r_3$ & $r_4$ & $r_5$ & $-t_1\!-\!t_2\;t_3$ \hfill\null \\
+            \hline
+            12 & $r_1$ & $r_2$ & $r_3$ & $r_4$ & $r_5$ & $-t_1\!-\!t_2\;t_3\;t_4$ \hfill\null \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (6.5,9) (x0) {$
+        \begin{tabular}{c|ccccc|c}
+            \multicolumn{7}{c}{TDFA state 1} \\
+            \hline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{|c|}{\scriptsize$t_1$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_2$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_3$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_4$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_5$}
+                & \scriptsize{\textit{la}} \\
+            \hline
+            \cline{1-7}
+            2  & $r_{11}$ & $r_2$    & $r_3$    & $r_4$ & $r_5$ & \; $t_2\;t_1$ \hfill\null \\
+            \hline
+            9  & $r_{11}$ & $r_2$    & $r_3$    & $r_4$ & $r_5$ & \; $t_2\;t_3$ \hfill\null \\
+            \hline
+            12 & $r_{11}$ & $r_2$    & $r_3$    & $r_4$ & $r_5$ & \; $t_2\;t_3\;t_4$ \hfill\null \\
+            \hline
+            15 & $r_{12}$ & $r_{13}$ & $r_{14}$ & $r_4$ & $r_5$ & $-t_4\;t_5$ \hfill\null \\
+            \hline
+            17 & $r_{12}$ & $r_{13}$ & $r_{14}$ & $r_4$ & $r_5$ & $-t_4\;t_5$ \hfill\null \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (14.3,9) (xx0) {$
+        \begin{tabular}{c:ccccc:c}
+            \multicolumn{7}{c}{mapped to state 1} \\
+            \hdashline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{:c:}{\scriptsize$t_1$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_2$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_3$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_4$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_5$}
+                & \scriptsize{\textit{la}} \\
+            \hdashline
+            2  & $r_{16}$ & $r_{17}$ & $r_3$    & $r_4$ & $r_5$ & \; $t_2\;t_1$ \hfill\null \\
+            \hdashline
+            9  & $r_{16}$ & $r_{17}$ & $r_3$    & $r_4$ & $r_5$ & \; $t_2\;t_3$ \hfill\null \\
+            \hdashline
+            12 & $r_{16}$ & $r_{17}$ & $r_3$    & $r_4$ & $r_5$ & \; $t_2\;t_3\;t_4$ \hfill\null \\
+            \hdashline
+            15 & $r_{11}$ & $r_{17}$ & $r_{18}$ & $r_4$ & $r_5$ & $-t_4\;t_5$ \hfill\null \\
+            \hdashline
+            17 & $r_{11}$ & $r_{17}$ & $r_{18}$ & $r_4$ & $r_5$ & $-t_4\;t_5$ \hfill\null \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em, dotted] (xx0.north west) rectangle (xx0.south east);
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (14.3,6) (xx2) {$
+        \begin{tabular}{c:ccccc:c}
+            \multicolumn{7}{c}{mapped to state 2} \\
+            \hdashline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{:c:}{\scriptsize$t_1$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_2$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_3$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_4$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_5$}
+                & \scriptsize{\textit{la}} \\
+            \hdashline
+            15 & $r_{11}$ & $r_{17}$ & $r_{18}$ & $r_{19}$ & $r_5$ & \; $t_5$ \hfill\null \\
+            \hdashline
+            17 & $r_{11}$ & $r_{17}$ & $r_{18}$ & $r_{19}$ & $r_5$ & \; $t_5$ \hfill\null \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em, dotted] (xx2.north west) rectangle (xx2.south east);
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (4.3,3) (x0) {$
+        \begin{tabular}{c|ccccc|c}
+            \multicolumn{7}{c}{TDFA state 2} \\
+            \hline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{|c|}{\scriptsize$t_1$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_2$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_3$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_4$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_5$}
+                & \scriptsize{\textit{la}} \\
+            \hline
+            \cline{1-7}
+            15 & $r_{12}$ & $r_{13}$ & $r_{14}$ & $r_{15}$ & $r_5$ & \; $t_5$ \hfill\null \\
+            \hline
+            17 & $r_{12}$ & $r_{13}$ & $r_{14}$ & $r_{15}$ & $r_5$ & \; $t_5$ \hfill\null \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (11,3) (x0) {$
+        \begin{tabular}{c|ccccc|c}
+            \multicolumn{7}{c}{TDFA state 3} \\
+            \hline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{|c|}{\scriptsize$t_1$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_2$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_3$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_4$}
+                & \multicolumn{1}{|c|}{\scriptsize$t_5$}
+                & \scriptsize{\textit{la}} \\
+            \hline
+            \cline{1-7}
+            15 & $r_{12}$ & $r_{13}$ & $r_{14}$ & $r_{15}$ & $r_{20}$ & \\
+            \hline
+            17 & $r_{12}$ & $r_{13}$ & $r_{14}$ & $r_{15}$ & $r_{20}$ & \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em] (x0.north west) rectangle (x0.south east);
+
+    \node[draw=none, inner sep=0pt, outer sep=0pt] at (14.3,0) (xx2) {$
+        \begin{tabular}{c:ccccc:c}
+            \multicolumn{7}{c}{mapped to state 3} \\
+            \hdashline
+            \scriptsize{\textit{state}}
+                & \multicolumn{1}{:c:}{\scriptsize$t_1$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_2$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_3$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_4$}
+                & \multicolumn{1}{:c:}{\scriptsize$t_5$}
+                & \scriptsize{\textit{la}} \\
+            \hdashline
+            15 & $r_{12}$ & $r_{13}$ & $r_{14}$ & $r_{15}$ & $r_{20}$ & \\
+            \hdashline
+            17 & $r_{12}$ & $r_{13}$ & $r_{14}$ & $r_{15}$ & $r_{20}$ & \\
+        \end{tabular}
+    $};
+    \draw [rounded corners=0.5em, dotted] (xx2.north west) rectangle (xx2.south east);
+
+
+    \draw (2.6,5.3) .. controls (4.7,5.4) and (-0.3,2.6) .. node {} (2.2,2.8);
+    \draw (2.6,5.3) .. controls (4.7,5.4) and (-1,2.2) .. node [xshift=-1in, yshift=0.in] {
+    $\begin{aligned}
+        b / & r_{12} \leftarrow \nopos \\[-0.6em]
+            & r_{13} \leftarrow \nopos \\[-0.6em]
+            & r_{14} \leftarrow \pos \\[-0.6em]
+            & r_{15} \leftarrow \pos
+    \end{aligned}$
+    } (2.2,2.4);
+
+
+    \draw (2.6,6) .. controls (4.2,6.2) and (1.7,9.4) .. node [xshift=-0.1in, yshift=0.1in] {
+    $\begin{aligned}
+        a / r_{11} \leftarrow \pos
+    \end{aligned}$
+    } (4.15,9.4);
+    \draw (2.6,6) .. controls (4.2,6.3) and (1.8,9.) .. node {} (4.15,9);
+    \draw (2.6,6) .. controls (4.2,6.4) and (1.9,8.6) .. node {} (4.15,8.6);
+
+    \draw (2.6,5.6) .. controls (4.7,5.6) and (2.6,8.4) .. node {} (4.15,8.2);
+    \draw (2.6,5.6) .. controls (4.7,5.6) and (2.8,8.0) .. node [xshift=0.7in, yshift=0.1in] {
+    $\begin{aligned}
+        a / & r_{12} \leftarrow \nopos \\[-0.6em]
+            & r_{13} \leftarrow \nopos \\[-0.6em]
+            & r_{14} \leftarrow \pos
+    \end{aligned}$
+    } (4.15,7.85);
+
+
+    \draw (8.8,9.4) .. controls (9.8,9.5) and (10.8,9.5) .. node [xshift=0.in, yshift=0.in] {
+    $\begin{aligned}
+        a / & r_{16} \leftarrow \pos \\[-0.6em]
+            & r_{17} \leftarrow \pos
+    \end{aligned}$
+    } (11.95,9.4);
+    \draw (8.8,9.4) .. controls (10.8,9.5) and (11.3,9.3) .. node {} (11.95,9.0);
+    \draw (8.8,9.4) .. controls (11.8,9.5) and (11.3,8.6) .. node {} (11.95,8.6);
+
+    \draw (8.8,9) .. controls (9.5,9) and (9,7.8) .. node [xshift=0.1in, yshift=-0.1in] {
+    $\begin{aligned}
+        a / & r_{17} \leftarrow \pos \\[-0.6em]
+            & r_{18} \leftarrow \pos
+    \end{aligned}$
+    } (11.95,8.2);
+    \draw (8.8,9) .. controls (9.5,9) and (8.8,8) .. node {} (11.95,7.85);
+
+
+    \draw (8.8,8.6) .. controls (9.8,8.6) and (9.4,5.6) .. node [xshift=0.2in, yshift=-0.4in] {
+    $\begin{aligned}
+        b / & r_{17} \leftarrow \pos \\[-0.6em]
+            & r_{18} \leftarrow \pos \\[-0.6em]
+            & r_{19} \leftarrow \pos
+    \end{aligned}$
+    } (12.2,5.8);
+    \draw (8.8,8.6) .. controls (9.8,8.6) and (9.4,5.4) .. node {} (12.2,5.4);
+
+
+    \draw[stylefintrans] (8.8,7.9) .. controls (10,7.9) and (7,6.5) .. node [xshift=-0.05in, yshift=-0.15in] {
+    $\begin{aligned}
+        & r_6    \leftarrow r_{12} \\[-0.6em]
+        & r_7    \leftarrow r_{13} \\[-0.6em]
+        & r_8    \leftarrow r_{14} \\[-0.6em]
+        & r_9    \leftarrow \nopos \\[-0.6em]
+        & r_{10} \leftarrow \pos
+    \end{aligned}$
+    } (8.3,6.5);
+
+
+    \draw [densely dashed] (14.3,10.4) .. controls (13.8,11.2) and (7,11.2) .. node [xshift=0in, yshift=0.55in] {
+    $\begin{aligned}
+        & r_{12} \leftarrow r_{11} \\[-0.6em]
+        & r_{11} \leftarrow \pos \\[-0.6em]
+        & r_{13} \leftarrow \pos \\[-0.6em]
+        & r_{14} \leftarrow \pos
+    \end{aligned}$
+    } (6.5,10.4);
+
+
+    \draw [densely dashed] (14.3,5.2) .. controls (14.3,4) and (4.3,5.8) .. node [xshift=-0.6in, yshift=-0in] {
+    $\begin{aligned}
+        & r_{12} \leftarrow r_{11} \\[-0.6em]
+        & r_{13} \leftarrow \pos \\[-0.6em]
+        & r_{14} \leftarrow \pos \\[-0.6em]
+        & r_{15} \leftarrow \pos
+    \end{aligned}$
+    } (4.3,3.8);
+
+
+    \draw (6.35,2.8) .. controls (7.3,2.87) and (8.1,2.87) .. node [xshift=0.05in, yshift=-0in] {
+    $\begin{aligned}
+        b/ & r_{20} \leftarrow \pos
+    \end{aligned}$
+    } (9,2.8);
+    \draw (6.35,2.8) .. controls (8.5,2.9) and (8.5,2.5) .. node {} (9,2.45);
+    \draw[stylefintrans] (6.35,2.45) .. controls (6.35,2.45) and (7,2.45) .. node [xshift=0.41in, yshift=-0.52in] {
+    $\begin{aligned}
+        & r_6    \leftarrow r_{12} \\[-0.6em]
+        & r_7    \leftarrow r_{13} \\[-0.6em]
+        & r_8    \leftarrow r_{14} \\[-0.6em]
+        & r_9    \leftarrow r_{15} \\[-0.6em]
+        & r_{10} \leftarrow \pos
+    \end{aligned}$
+    } (7,2.45);
+
+
+    \draw (12.95,2.8) .. controls (15,2.8) and (9.6,-0.5) .. node [xshift=-0.3in, yshift=0.1in] {
+    $\begin{aligned}
+        b
+    \end{aligned}$
+    } (12.3,-0.2);
+    \draw (12.95,2.8) .. controls (15,2.8) and (9,-0.8) .. node{} (12.3,-0.6);
+    \draw[stylefintrans] (12.95,2.45) .. controls (12.95,2.45) and (13.7,2.45) .. node [xshift=0.45in, yshift=-0.52in] {
+    $\begin{aligned}
+        & r_6    \leftarrow r_{12} \\[-0.6em]
+        & r_7    \leftarrow r_{13} \\[-0.6em]
+        & r_8    \leftarrow r_{14} \\[-0.6em]
+        & r_9    \leftarrow r_{15} \\[-0.6em]
+        & r_{10} \leftarrow r_{20}
+    \end{aligned}$
+    } (13.7,2.45);
+
+
+    \draw [densely dashed] (16.25,0) .. controls (16.9,-0.1) and (16.9,3.5) .. node{} (13,3.5);
+
+\end{scope}
+
+
+\begin{scope}[xshift=0.9in, yshift=-4.8in]
+    %\small
+    \footnotesize
+    %\scriptsize
+    \node[state] (x0) {$0$};
+    \node[state, above right of=x0, xshift=0.8in, yshift=0.4in, accepting] (x1) {$1$};
+    \node[state, below right of=x1, xshift=0.8in, yshift=-0.4in, accepting] (x2) {$2$};
+    \node[state, right of=x2, xshift=1in, accepting] (x3) {$3$};
+    \node[state, draw=none, below of = x1, yshift=0.29in] (xf1) {};
+    \node[state, draw=none, below of = x2, yshift=0.29in] (xf2) {};
+    \node[state, draw=none, below of = x3, yshift=0.29in] (xf3) {};
+    \path
+        (x1) edge [stylefintrans] node [below, yshift=-0.02in] {$
+            \begin{aligned}
+                & r_6    \leftarrow r_{12} \\[-0.6em]
+                & r_7    \leftarrow r_{13} \\[-0.6em]
+                & r_8    \leftarrow r_{14} \\[-0.6em]
+                & r_9    \leftarrow \nopos \\[-0.6em]
+                & r_{10} \leftarrow \pos
+            \end{aligned}
+        $} (xf1)
+        (x2) edge [stylefintrans] node [below, yshift=-0.02in] {$
+            \begin{aligned}
+                & r_6    \leftarrow r_{12} \\[-0.6em]
+                & r_7    \leftarrow r_{13} \\[-0.6em]
+                & r_8    \leftarrow r_{14} \\[-0.6em]
+                & r_9    \leftarrow r_{15} \\[-0.6em]
+                & r_{10} \leftarrow \pos
+            \end{aligned}
+        $} (xf2)
+        (x3) edge [stylefintrans] node [below, yshift=-0.02in] {$
+            \begin{aligned}
+                & r_6    \leftarrow r_{12} \\[-0.6em]
+                & r_7    \leftarrow r_{13} \\[-0.6em]
+                & r_8    \leftarrow r_{14} \\[-0.6em]
+                & r_9    \leftarrow r_{15} \\[-0.6em]
+                & r_{10} \leftarrow r_{20}
+            \end{aligned}
+        $} (xf3)
+        (x1) edge [in=50,out=130,loop] node [] {$
+            \begin{aligned}
+                a / & r_{12} \leftarrow r_{11} \\[-0.6em]
+                    & r_{11} \leftarrow \pos \\[-0.6em]
+                    & r_{13} \leftarrow \pos \\[-0.6em]
+                    & r_{14} \leftarrow \pos
+            \end{aligned}
+        $} (x1)
+        (x0) edge [bend left=10] node [] {$
+            \begin{aligned}
+                a / & r_{11} \leftarrow \pos \\[-0.6em]
+                    & r_{12} \leftarrow \nopos \\[-0.6em]
+                    & r_{13} \leftarrow \nopos \\[-0.6em]
+                    & r_{14} \leftarrow \pos
+            \end{aligned}
+        $} (x1)
+        (x1) edge [bend left=10] node [] {$
+            \begin{aligned}
+                b / & r_{12} \leftarrow r_{11} \\[-0.6em]
+                    & r_{13} \leftarrow \pos \\[-0.6em]
+                    & r_{14} \leftarrow \pos \\[-0.6em]
+                    & r_{15} \leftarrow \pos
+            \end{aligned}
+        $} (x2)
+        (x0) edge [bend right=3] node [below, yshift=-0.1in] {$
+            \begin{aligned}
+                b / & r_{12} \leftarrow \nopos \\[-0.6em]
+                    & r_{13} \leftarrow \nopos \\[-0.6em]
+                    & r_{14} \leftarrow \pos \\[-0.6em]
+                    & r_{15} \leftarrow \pos
+            \end{aligned}
+        $} (x2)
+        (x2) edge [] node [above] {$
+            \begin{aligned}
+                b / & r_{20} \leftarrow \pos
+            \end{aligned}
+        $} (x3)
+        (x3) edge [in=50,out=130,loop] node [] {$b$} (x3)
+    ;
+\end{scope}
+
+
+\end{tikzpicture}
+
+\end{document}
+

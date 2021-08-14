@@ -1,0 +1,747 @@
+
+\documentclass[tikz]{standalone}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{xcolor}
+\usepackage{tikz, pgfplots, pgfplotstable}
+\usepackage{pifont}
+
+\definecolor{colorX}{HTML}{A1CAF1}
+\definecolor{colorY}{HTML}{FBCEB1}
+
+\begin{document}
+
+\def\plotwidth{1.500000in}
+\def\barwidth{0.080000in}
+
+\pgfplotsset{styleX/.style={
+    font=\scriptsize,
+    xbar,
+    axis y line*=none,
+    axis x line=none,
+    y=0.12in,
+    width=\plotwidth*1.15,
+    bar width=\barwidth,
+    xshift=\xplotshift,
+    yshift=\yplotshift,
+    xmax=\xmax,
+    xmin=0,
+    ymax=0.7,
+    ymin=0.3 - \nrows,
+    ytick=data,
+    ytick style={draw=none},
+    yticklabels=\empty,
+    title=\empty,
+    clip=false,
+    visualization depends on={x > \xmax \as \xoverflow},
+    visualization depends on={x > \xmax ? -x + \xmax : 0 \as \xshift},
+    nodes near coords={
+        \ifdim \xoverflow pt=1pt \!\ding{220}\! \scriptsize \fi
+        \pgfmathprintnumber[assume math mode=true]{\pgfplotspointmeta}
+    },
+    nodes near coords style={shift={(axis direction cs:\xshift,0)}},
+    nodes near coords style={/pgf/number format/.cd,
+        fixed relative,
+        precision = 10,
+        1000 sep = {\,}
+    },}}
+
+\begin{tikzpicture}
+
+\begin{scope}[xshift=-0.2in, yshift=0.39in * 0.75]
+
+            \node (x0) at (0.5in,0) {\scriptsize$\mathbf{gcc \; (time)}$};
+            \node (x1) at (2.0in,0) {\scriptsize$\mathbf{gcc \; (size)}$};
+            \node (x2) at (3.5in,0) {\scriptsize$\mathbf{clang \; (time)}$};
+            \node (x3) at (5.0in,0) {\scriptsize$\mathbf{clang \; (size)}$};
+        
+\end{scope}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-0.390000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-0}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 353
+{re2c-stadfa} 137
+{re2c-tdfa0} 164
+{re2c-tdfa1} 153
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{1.500000in}
+\def\yplotshift{-0.390000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-0}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 18.000000
+{re2c-stadfa} 14.000000
+{re2c-tdfa0} 14.000000
+{re2c-tdfa1} 14.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{3.000000in}
+\def\yplotshift{-0.390000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-0}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 364
+{re2c-stadfa} 78
+{re2c-tdfa0} 94
+{re2c-tdfa1} 90
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{4.500000in}
+\def\yplotshift{-0.390000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-0}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 18.000000
+{re2c-stadfa} 14.000000
+{re2c-tdfa0} 14.000000
+{re2c-tdfa1} 14.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-1.170000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-4}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 467
+{re2c-stadfa} 290
+{re2c-tdfa0} 194
+{re2c-tdfa1} 184
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{1.500000in}
+\def\yplotshift{-1.170000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-4}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 50.000000
+{re2c-stadfa} 18.000000
+{re2c-tdfa0} 14.000000
+{re2c-tdfa1} 14.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{3.000000in}
+\def\yplotshift{-1.170000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-4}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 466
+{re2c-stadfa} 338
+{re2c-tdfa0} 96
+{re2c-tdfa1} 110
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{4.500000in}
+\def\yplotshift{-1.170000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-4}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 78.000000
+{re2c-stadfa} 18.000000
+{re2c-tdfa0} 14.000000
+{re2c-tdfa1} 14.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-1.950000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-8}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 367
+{re2c-stadfa} 240
+{re2c-tdfa0} 128
+{re2c-tdfa1} 132
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{1.500000in}
+\def\yplotshift{-1.950000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-8}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 90.000000
+{re2c-stadfa} 18.000000
+{re2c-tdfa0} 18.000000
+{re2c-tdfa1} 18.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{3.000000in}
+\def\yplotshift{-1.950000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-8}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 359
+{re2c-stadfa} 467
+{re2c-tdfa0} 126
+{re2c-tdfa1} 111
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{4.500000in}
+\def\yplotshift{-1.950000in}
+\def\nrows{4},
+\def\title{\textbf{cat2-8}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 74.000000
+{re2c-stadfa} 22.000000
+{re2c-tdfa0} 18.000000
+{re2c-tdfa1} 18.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-2.730000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-0}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 382
+{re2c-stadfa} 150
+{re2c-tdfa0} 164
+{re2c-tdfa1} 161
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{1.500000in}
+\def\yplotshift{-2.730000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-0}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 22.000000
+{re2c-stadfa} 18.000000
+{re2c-tdfa0} 14.000000
+{re2c-tdfa1} 14.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{3.000000in}
+\def\yplotshift{-2.730000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-0}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 381
+{re2c-stadfa} 142
+{re2c-tdfa0} 170
+{re2c-tdfa1} 122
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{4.500000in}
+\def\yplotshift{-2.730000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-0}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 22.000000
+{re2c-stadfa} 18.000000
+{re2c-tdfa0} 18.000000
+{re2c-tdfa1} 18.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-3.510000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-2}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 764
+{re2c-stadfa} 494
+{re2c-tdfa0} 194
+{re2c-tdfa1} 163
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{1.500000in}
+\def\yplotshift{-3.510000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-2}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 54.000000
+{re2c-stadfa} 26.000000
+{re2c-tdfa0} 22.000000
+{re2c-tdfa1} 22.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{3.000000in}
+\def\yplotshift{-3.510000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-2}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 712
+{re2c-stadfa} 684
+{re2c-tdfa0} 181
+{re2c-tdfa1} 144
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{4.500000in}
+\def\yplotshift{-3.510000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-2}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 106.000000
+{re2c-stadfa} 30.000000
+{re2c-tdfa0} 22.000000
+{re2c-tdfa1} 18.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-4.290000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-4}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 462
+{re2c-stadfa} 333
+{re2c-tdfa0} 146
+{re2c-tdfa1} 150
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{1.500000in}
+\def\yplotshift{-4.290000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-4}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 286.000000
+{re2c-stadfa} 38.000000
+{re2c-tdfa0} 26.000000
+{re2c-tdfa1} 26.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{3.000000in}
+\def\yplotshift{-4.290000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-4}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 481
+{re2c-stadfa} 551
+{re2c-tdfa0} 137
+{re2c-tdfa1} 115
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{4.500000in}
+\def\yplotshift{-4.290000in}
+\def\nrows{4},
+\def\title{\textbf{cat4-4}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 290.000000
+{re2c-stadfa} 42.000000
+{re2c-tdfa0} 26.000000
+{re2c-tdfa1} 22.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-5.070000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-0}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 465
+{re2c-stadfa} 162
+{re2c-tdfa0} 215
+{re2c-tdfa1} 180
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{1.500000in}
+\def\yplotshift{-5.070000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-0}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 26.000000
+{re2c-stadfa} 18.000000
+{re2c-tdfa0} 18.000000
+{re2c-tdfa1} 18.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{3.000000in}
+\def\yplotshift{-5.070000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-0}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 427
+{re2c-stadfa} 148
+{re2c-tdfa0} 286
+{re2c-tdfa1} 162
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{4.500000in}
+\def\yplotshift{-5.070000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-0}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 30.000000
+{re2c-stadfa} 22.000000
+{re2c-tdfa0} 22.000000
+{re2c-tdfa1} 22.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-5.850000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-1}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 2794
+{re2c-stadfa} 1328
+{re2c-tdfa0} 385
+{re2c-tdfa1} 282
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{1.500000in}
+\def\yplotshift{-5.850000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-1}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 66.000000
+{re2c-stadfa} 82.000000
+{re2c-tdfa0} 154.000000
+{re2c-tdfa1} 122.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{3.000000in}
+\def\yplotshift{-5.850000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-1}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 2158
+{re2c-stadfa} 2073
+{re2c-tdfa0} 432
+{re2c-tdfa1} 304
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{4.500000in}
+\def\yplotshift{-5.850000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-1}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 170.000000
+{re2c-stadfa} 98.000000
+{re2c-tdfa0} 170.000000
+{re2c-tdfa1} 118.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{0.000000in}
+\def\yplotshift{-6.630000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-2}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 1285
+{re2c-stadfa} 1681
+{re2c-tdfa0} 265
+{re2c-tdfa1} 227
+} \table
+
+\begin{axis}[styleX,
+    yticklabels from table={\table}{algo},
+    every axis title/.style={below left, at={(-0.08in,0)}},
+    title=\title,
+]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{1.500000in}
+\def\yplotshift{-6.630000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-2}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 170.000000
+{re2c-stadfa} 154.000000
+{re2c-tdfa0} 230.000000
+{re2c-tdfa1} 194.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{3.000000in}
+\def\yplotshift{-6.630000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-2}},
+\def\xmax{1331.416667}
+
+\pgfplotstableread {algo value
+{kleenex} 1155
+{re2c-stadfa} 2091
+{re2c-tdfa0} 311
+{re2c-tdfa1} 247
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorX] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\def\xplotshift{4.500000in}
+\def\yplotshift{-6.630000in}
+\def\nrows{4},
+\def\title{\textbf{cat8-2}},
+\def\xmax{199.000000}
+
+\pgfplotstableread {algo value
+{kleenex} 442.000000
+{re2c-stadfa} 158.000000
+{re2c-tdfa0} 254.000000
+{re2c-tdfa1} 202.000000
+} \table
+
+\begin{axis}[styleX,]
+    \clip(current axis.south west) rectangle(current axis.north east);
+    \addplot[fill=colorY] table[x=value, y expr=-\coordindex] from \table;
+\end{axis}
+
+\end{tikzpicture}
+
+\end{document}

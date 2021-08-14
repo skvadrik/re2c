@@ -1,0 +1,364 @@
+{
+  "benchmarks": [
+    {
+      "name": "alt1-2-gcc_kleenex",
+      "cpu_time": 359,
+      "bin_size": 18
+    },
+    {
+      "name": "alt1-2-gcc_re2c-stadfa",
+      "cpu_time": 146,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-2-gcc_re2c-tdfa0",
+      "cpu_time": 190,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-2-gcc_re2c-tdfa1",
+      "cpu_time": 146,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-2-clang_kleenex",
+      "cpu_time": 374,
+      "bin_size": 18
+    },
+    {
+      "name": "alt1-2-clang_re2c-stadfa",
+      "cpu_time": 65,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-2-clang_re2c-tdfa0",
+      "cpu_time": 74,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-2-clang_re2c-tdfa1",
+      "cpu_time": 66,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-4-gcc_kleenex",
+      "cpu_time": 359,
+      "bin_size": 18
+    },
+    {
+      "name": "alt1-4-gcc_re2c-stadfa",
+      "cpu_time": 145,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-4-gcc_re2c-tdfa0",
+      "cpu_time": 185,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-4-gcc_re2c-tdfa1",
+      "cpu_time": 146,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-4-clang_kleenex",
+      "cpu_time": 371,
+      "bin_size": 18
+    },
+    {
+      "name": "alt1-4-clang_re2c-stadfa",
+      "cpu_time": 76,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-4-clang_re2c-tdfa0",
+      "cpu_time": 75,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-4-clang_re2c-tdfa1",
+      "cpu_time": 68,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-8-gcc_kleenex",
+      "cpu_time": 354,
+      "bin_size": 22
+    },
+    {
+      "name": "alt1-8-gcc_re2c-stadfa",
+      "cpu_time": 153,
+      "bin_size": 18
+    },
+    {
+      "name": "alt1-8-gcc_re2c-tdfa0",
+      "cpu_time": 318,
+      "bin_size": 18
+    },
+    {
+      "name": "alt1-8-gcc_re2c-tdfa1",
+      "cpu_time": 154,
+      "bin_size": 18
+    },
+    {
+      "name": "alt1-8-clang_kleenex",
+      "cpu_time": 358,
+      "bin_size": 22
+    },
+    {
+      "name": "alt1-8-clang_re2c-stadfa",
+      "cpu_time": 78,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-8-clang_re2c-tdfa0",
+      "cpu_time": 77,
+      "bin_size": 14
+    },
+    {
+      "name": "alt1-8-clang_re2c-tdfa1",
+      "cpu_time": 68,
+      "bin_size": 18
+    },
+    {
+      "name": "alt2-2-gcc_kleenex",
+      "cpu_time": 426,
+      "bin_size": 22
+    },
+    {
+      "name": "alt2-2-gcc_re2c-stadfa",
+      "cpu_time": 142,
+      "bin_size": 14
+    },
+    {
+      "name": "alt2-2-gcc_re2c-tdfa0",
+      "cpu_time": 220,
+      "bin_size": 14
+    },
+    {
+      "name": "alt2-2-gcc_re2c-tdfa1",
+      "cpu_time": 174,
+      "bin_size": 14
+    },
+    {
+      "name": "alt2-2-clang_kleenex",
+      "cpu_time": 568,
+      "bin_size": 18
+    },
+    {
+      "name": "alt2-2-clang_re2c-stadfa",
+      "cpu_time": 85,
+      "bin_size": 14
+    },
+    {
+      "name": "alt2-2-clang_re2c-tdfa0",
+      "cpu_time": 91,
+      "bin_size": 14
+    },
+    {
+      "name": "alt2-2-clang_re2c-tdfa1",
+      "cpu_time": 89,
+      "bin_size": 14
+    },
+    {
+      "name": "alt2-4-gcc_kleenex",
+      "cpu_time": 429,
+      "bin_size": 26
+    },
+    {
+      "name": "alt2-4-gcc_re2c-stadfa",
+      "cpu_time": 151,
+      "bin_size": 18
+    },
+    {
+      "name": "alt2-4-gcc_re2c-tdfa0",
+      "cpu_time": 334,
+      "bin_size": 18
+    },
+    {
+      "name": "alt2-4-gcc_re2c-tdfa1",
+      "cpu_time": 182,
+      "bin_size": 18
+    },
+    {
+      "name": "alt2-4-clang_kleenex",
+      "cpu_time": 504,
+      "bin_size": 22
+    },
+    {
+      "name": "alt2-4-clang_re2c-stadfa",
+      "cpu_time": 92,
+      "bin_size": 18
+    },
+    {
+      "name": "alt2-4-clang_re2c-tdfa0",
+      "cpu_time": 276,
+      "bin_size": 18
+    },
+    {
+      "name": "alt2-4-clang_re2c-tdfa1",
+      "cpu_time": 100,
+      "bin_size": 18
+    },
+    {
+      "name": "alt2-8-gcc_kleenex",
+      "cpu_time": 431,
+      "bin_size": 30
+    },
+    {
+      "name": "alt2-8-gcc_re2c-stadfa",
+      "cpu_time": 242,
+      "bin_size": 38
+    },
+    {
+      "name": "alt2-8-gcc_re2c-tdfa0",
+      "cpu_time": 560,
+      "bin_size": 30
+    },
+    {
+      "name": "alt2-8-gcc_re2c-tdfa1",
+      "cpu_time": 205,
+      "bin_size": 30
+    },
+    {
+      "name": "alt2-8-clang_kleenex",
+      "cpu_time": 505,
+      "bin_size": 30
+    },
+    {
+      "name": "alt2-8-clang_re2c-stadfa",
+      "cpu_time": 206,
+      "bin_size": 34
+    },
+    {
+      "name": "alt2-8-clang_re2c-tdfa0",
+      "cpu_time": 486,
+      "bin_size": 26
+    },
+    {
+      "name": "alt2-8-clang_re2c-tdfa1",
+      "cpu_time": 101,
+      "bin_size": 26
+    },
+    {
+      "name": "alt4-2-gcc_kleenex",
+      "cpu_time": 783,
+      "bin_size": 30
+    },
+    {
+      "name": "alt4-2-gcc_re2c-stadfa",
+      "cpu_time": 319,
+      "bin_size": 18
+    },
+    {
+      "name": "alt4-2-gcc_re2c-tdfa0",
+      "cpu_time": 235,
+      "bin_size": 18
+    },
+    {
+      "name": "alt4-2-gcc_re2c-tdfa1",
+      "cpu_time": 167,
+      "bin_size": 18
+    },
+    {
+      "name": "alt4-2-clang_kleenex",
+      "cpu_time": 754,
+      "bin_size": 26
+    },
+    {
+      "name": "alt4-2-clang_re2c-stadfa",
+      "cpu_time": 356,
+      "bin_size": 18
+    },
+    {
+      "name": "alt4-2-clang_re2c-tdfa0",
+      "cpu_time": 222,
+      "bin_size": 18
+    },
+    {
+      "name": "alt4-2-clang_re2c-tdfa1",
+      "cpu_time": 115,
+      "bin_size": 18
+    },
+    {
+      "name": "alt4-4-gcc_kleenex",
+      "cpu_time": 863,
+      "bin_size": 34
+    },
+    {
+      "name": "alt4-4-gcc_re2c-stadfa",
+      "cpu_time": 1970,
+      "bin_size": 66
+    },
+    {
+      "name": "alt4-4-gcc_re2c-tdfa0",
+      "cpu_time": 554,
+      "bin_size": 38
+    },
+    {
+      "name": "alt4-4-gcc_re2c-tdfa1",
+      "cpu_time": 187,
+      "bin_size": 30
+    },
+    {
+      "name": "alt4-4-clang_kleenex",
+      "cpu_time": 786,
+      "bin_size": 58
+    },
+    {
+      "name": "alt4-4-clang_re2c-stadfa",
+      "cpu_time": 1682,
+      "bin_size": 70
+    },
+    {
+      "name": "alt4-4-clang_re2c-tdfa0",
+      "cpu_time": 525,
+      "bin_size": 30
+    },
+    {
+      "name": "alt4-4-clang_re2c-tdfa1",
+      "cpu_time": 125,
+      "bin_size": 30
+    },
+    {
+      "name": "alt4-8-gcc_kleenex",
+      "cpu_time": 727,
+      "bin_size": 50
+    },
+    {
+      "name": "alt4-8-gcc_re2c-stadfa",
+      "cpu_time": 5673,
+      "bin_size": 550
+    },
+    {
+      "name": "alt4-8-gcc_re2c-tdfa0",
+      "cpu_time": 1000,
+      "bin_size": 98
+    },
+    {
+      "name": "alt4-8-gcc_re2c-tdfa1",
+      "cpu_time": 264,
+      "bin_size": 106
+    },
+    {
+      "name": "alt4-8-clang_kleenex",
+      "cpu_time": 729,
+      "bin_size": 150
+    },
+    {
+      "name": "alt4-8-clang_re2c-stadfa",
+      "cpu_time": 6107,
+      "bin_size": 566
+    },
+    {
+      "name": "alt4-8-clang_re2c-tdfa0",
+      "cpu_time": 888,
+      "bin_size": 74
+    },
+    {
+      "name": "alt4-8-clang_re2c-tdfa1",
+      "cpu_time": 188,
+      "bin_size": 110
+    }
+  ]
+}

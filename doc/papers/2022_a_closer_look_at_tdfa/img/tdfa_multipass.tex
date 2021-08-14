@@ -1,0 +1,110 @@
+
+\documentclass[tikz, margin=0]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows.meta, shapes, automata, calc, decorations}
+\usepackage{arydshln}
+\usegdlibrary{trees, layered}
+
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth, -{to}, auto]
+
+\tikzstyle{every loop}=[]
+\tikzstyle{every node}=[]
+\tikzstyle{every state}=[circle
+    , minimum size=0.17in
+    , inner sep = 1pt
+    , outer sep = 0pt
+    , node distance = 0.55in]
+\newcommand{\pos}{\mathbf{p}}
+\newcommand{\nopos}{\mathbf{n}}
+\newcommand{\undpos}{-}
+
+
+\tikzstyle{stylesymtrans}=[line width=1]
+\tikzstyle{styletagtrans}=[thick, densely dashed]
+\tikzstyle{stylefintrans}=[-{To[length=1.25mm]}]% [-{Rays[n=7, length=2mm]}]% [-{Circle[open]}]% [-{Triangle[length=2.5mm, width=3mm, open]}]
+
+\begin{scope}[xshift=0.0in, yshift=0.0in]
+    %\draw [draw=none] rectangle (-2in,0in) -- (5.3in,0in); % enforce image width
+    \draw [draw=none] rectangle (-1.8in,0in) -- (5.3in,0in); % enforce image width
+    \footnotesize
+    \node[draw, rectangle, rounded corners=5] (x0) {$0: \varnothing$};%{$0: (\varnothing,\; \epsilon)$};
+    \node[draw, rectangle, rounded corners=5, above right of=x0, xshift=0.8in, yshift=0.4in, accepting] (x1) {$1: (1,\; -t_4\,t_5)$};
+    \node[draw, rectangle, rounded corners=5, below right of=x1, xshift=0.8in, yshift=-0.4in, accepting] (x2) {$2: (0,\; t_5)$};
+    \node[draw, rectangle, rounded corners=5, right of=x2, xshift=1in, accepting] (x3) {$3: (0,\; \epsilon)$};
+    \node[draw, rectangle, rounded corners=5, draw=none, below of = x1, yshift=0.29in] (xf1) {};
+    \node[draw, rectangle, rounded corners=5, draw=none, below of = x2, yshift=0.29in] (xf2) {};
+    \node[draw, rectangle, rounded corners=5, draw=none, below of = x3, yshift=0.29in] (xf3) {};
+    \path
+        (x1) edge [in=55,out=125,loop] node [xshift=-0.1in] {$
+        \begin{aligned}
+            a/\{& (0,\; t_2 \, t_1), \\[-0.5em]
+                & (0,\; t_2 \, t_3) \}
+        \end{aligned}
+        $} (x1)
+        (x0) edge [bend left=10] node [] {$
+        \begin{aligned}
+            a/\{& (0, \;\;t_1), \\[-0.5em]
+                & (0, -t_1 \!\!-\!t_2 \, t_3) \}
+        \end{aligned}
+        $} (x1)
+        (x1) edge [bend left=10] node [] {$
+            b/\{ (0,\; t_2 \, t_3 \, t_4) \}
+        $} (x2)
+        (x0) edge [bend right=3] node [] {$
+            b/\{ (0, -t_1 \!\!-\!t_2 \, t_3 \, t_4) \}
+        $} (x2)
+        (x2) edge [] node [] {$
+            b/\{ (0,\; t_5) \}
+        $} (x3)
+        (x3) edge [in=55,out=125,loop] node [] {$
+            b/\{ (0,\; \epsilon) \}
+        $} (x3)
+    ;
+\end{scope}
+
+\begin{scope}[xshift=0in, yshift=-0.5in]
+    %\footnotesize
+    \small
+    \node[] (x0) {$0$};
+    \node[right of=x0, xshift=0.7in] (x1) {$1$};
+    \node[right of=x1, xshift=0.7in] (x2) {$1$};
+    \node[right of=x2, xshift=0.7in] (x3) {$2$};
+    \path
+        (x0) edge [] node [] {$a$} (x1)
+        (x1) edge [] node [] {$a$} (x2)
+        (x2) edge [] node [] {$b$} (x3)
+    ;
+
+    \node[below of=x0] (y0) [yshift=0.2in] {$(0,\; t_1)$};
+    \node[below of=x1] (y1) [yshift=0.2in] {$(0,\; t_2 \, t_1)$};
+    \node[below of=x2] (y2) [yshift=0.2in] {$(0,\; t_2 \, t_3 \, t_4)$};
+    \node[below of=x3] (y3) [yshift=0.2in] {$(0,\; t_5)$};
+    \path
+        (y3) edge [] node [above] {$b$} (y2)
+        (y2) edge [] node [above] {$a$} (y1)
+        (y1) edge [] node [above] {$a$} (y0)
+    ;
+
+    %\node[below of=x0, xshift=1.7in, yshift=-0.3in] (z0) {$
+    %    \begin{aligned}
+    %        \text{offsets:  }       & t_1\!=\!1, t_2\!=\!2, t_3\!=\!2, t_4\!=\!2, t_5\!=\!3 \\[-0.3em]
+    %        \text{offset lists:  }  & t_1\!=\!\{0,1\}, t_2\!=\!\{1,2\}, t_3\!=\!\{2\}, t_4\!=\!\{2\}, t_5\!=\!\{3\} \\[-0.3em]
+    %        \text{tagged string:  } & 1\,a\,2\,1\,a\,2\,3\,4\,b\,5
+    %    \end{aligned}
+    %$};
+\end{scope}
+
+\end{tikzpicture}
+
+\end{document}
+
