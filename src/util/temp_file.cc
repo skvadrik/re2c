@@ -1,3 +1,7 @@
+#ifndef _POSIX_SOURCE
+#define _POSIX_SOURCE 1 // for fdopen
+#endif
+
 #include "config.h"
 #include <time.h>
 #include "src/util/temp_file.h"
