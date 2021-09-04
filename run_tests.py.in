@@ -394,7 +394,7 @@ def run_test(test):
 
         # Disable Wine warnings, or else they are dumped into .stderr files for
         # random tests, so the test results don't match and the tests fail.
-        if _ctx.wine != None:
+        if _ctx.wine:
             os.environ['WINEDEBUG'] = '-all'
 
         # run re2c
@@ -431,7 +431,7 @@ def run_test(test):
                     pass # if there is an error, some files may be missing
 
         # On windows we need to patch output to match expected test results.
-        if os.name == 'nt' or _ctx.wine != None:
+        if os.name == 'nt' or _ctx.wine:
             patch_newlines_and_slashes(outy, stem)
 
         # compare results
