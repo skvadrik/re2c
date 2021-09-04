@@ -63,6 +63,9 @@ void interfere(const tcmd_t *cmd, const bool *live, bool *interf,
         memcpy(buf, live, nver * sizeof(bool));
         cfg_t::live_through_bblock(p->next, buf);
 
+        // a register does not interfere with itself
+        buf[l] = false;
+
         // if copy command, exclude RHS
         if (tcmd_t::iscopy(p)) buf[r] = false;
 
