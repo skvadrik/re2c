@@ -219,7 +219,7 @@ void generate_versions(ctx_t &ctx)
             const tagver_t v = history(tag) ? vs[t] : TAGVER_ZERO;
             newver_t x = {t, v, h};
             const tagver_t
-                n = (maxver + 1) * (h0 == TAGVER_BOTTOM ? -1 : 1),
+                n = maxver + 1,
                 m = newvers.insert(std::make_pair(x, n)).first->second;
             if (n == m) ++maxver;
 

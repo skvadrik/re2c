@@ -485,14 +485,9 @@ void reserve_buffers(ctx_t &ctx)
         kbufs.indegree = alc.alloct<uint32_t>(n);
 
         if (!stadfa) {
-            const size_t m = 2 * n + 1;
-
-            // point to the center (zero index) of each buffer
-            // indexes in range [-N .. N] must be valid, where N is capacity
-            kbufs.x2y = alc.alloct<tagver_t>(m) + n;
-            kbufs.y2x = alc.alloct<tagver_t>(m) + n;
-            kbufs.x2t = alc.alloct<size_t>(m) + n;
-
+            kbufs.x2y = alc.alloct<tagver_t>(n);
+            kbufs.y2x = alc.alloct<tagver_t>(n);
+            kbufs.x2t = alc.alloct<size_t>(n);
             kbufs.backup_actions = alc.alloct<tcmd_t>(n);
         }
     }
@@ -649,8 +644,8 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t *x, const kernel_t 
 
     // map tag versions of one kernel to that of another
     // and check that lookahead versions (if any) coincide
-    std::fill(x2y - max, x2y + max, TAGVER_ZERO);
-    std::fill(y2x - max, y2x + max, TAGVER_ZERO);
+    std::fill(x2y, x2y + max, TAGVER_ZERO);
+    std::fill(y2x, y2x + max, TAGVER_ZERO);
     for (size_t i = 0; i < n; ++i) {
         const tagver_t
             *xvs = ctx.dc_tagvertbl[x->tvers[i]],
@@ -691,15 +686,13 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t *x, const kernel_t 
     // fix LHS of 'save' commands to reuse old version
     // see note [save(X), copy(Y,X) optimization]
     for (a = *pacts; a; a = a->next) {
-        const tagver_t
-            yv = a->lhs * (a->history[0] == TAGVER_BOTTOM ? -1 : 1),
-            xv = y2x[yv];
+        const tagver_t yv = a->lhs, xv = y2x[yv];
         a->lhs = abs(xv);
         y2x[yv] = x2y[xv] = TAGVER_ZERO;
     }
 
     // create 'copy' commands
-    for (tagver_t xv = -max; xv < max; ++xv) {
+    for (tagver_t xv = 0; xv < max; ++xv) {
         const tagver_t yv = x2y[xv], axv = abs(xv), ayv = abs(yv);
         if (yv != TAGVER_ZERO && xv != yv && !fixed(tags[x2t[xv]])) {
             DASSERT(axv != ayv);
