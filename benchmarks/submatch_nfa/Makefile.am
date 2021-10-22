@@ -1,5 +1,5 @@
 bench_submatch_nfa_CXXFLAGS = $(AM_CXXFLAGS) -std=c++11 -O3 -I $(top_srcdir)
-bench_submatch_nfa_LDFLAGS = $(LDFLAGS_RE2) -lbenchmark
+bench_submatch_nfa_LDFLAGS = $(LDFLAGS_RE2) -lbenchmark -lpthread
 bench_submatch_nfa_LDADD = $(top_builddir)/libre2c.la
 
 noinst_PROGRAMS = bench_submatch_nfa
