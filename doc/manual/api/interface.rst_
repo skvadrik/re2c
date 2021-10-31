@@ -1,8 +1,13 @@
-Here is a list of API primitives that may be used by the generated code in order to interface with the outer program.
+Here is a list of API primitives that may be used by the generated
+code in order to interface with the outer program.
 Which primitives are needed depends on multiple factors, including
-the complexity of regular expressions, input representation, buffering, the use of various features and so on.
-All the necessary primitives should be defined by the user in the form of macros, functions, variables, free-form pieces of code or any other suitable form.
-Re2c does not (and cannot) check the definitions, so if anything is missing or defined incorrectly the generated code will not compile.
+the complexity of regular expressions, input representation,
+buffering, the use of various features and so on.
+All the necessary primitives should be defined by the user in the form
+of macros, functions, variables, free-form pieces of code, or any other
+suitable form.
+Re2c does not (and cannot) check the definitions, so if anything is
+missing or defined incorrectly the generated code will not compile.
 
 ``YYCTYPE``
     The type of the input characters (code units).
@@ -14,22 +19,23 @@ Re2c does not (and cannot) check the definitions, so if anything is missing or d
     A pointer-like l-value that stores the current input position (usually a
     pointer of type ``YYCTYPE*``). Initially ``YYCURSOR`` should point to the
     first input character. It is advanced by the generated code.
-    When a rule matches, ``YYCURSOR`` points to the one after the last matched
-    character. It is used only in the default C API.
+    When a rule matches, ``YYCURSOR`` points to the position after the
+    last matched character. It is used only in the default C API.
 
 ``YYLIMIT``
     A pointer-like r-value that stores the end of input position (usually a
     pointer of type ``YYCTYPE*``). Initially ``YYLIMIT`` should point to the
-    one after the last available input character. It is not changed by the
-    generated code. Lexer compares ``YYCURSOR`` to ``YYLIMIT``
-    in order to determine if there is enough input characters left.
+    position after the last available input character. It is not changed by the
+    generated code. The lexer compares ``YYCURSOR`` to ``YYLIMIT``
+    in order to determine if there are enough input characters left.
     ``YYLIMIT`` is used only in the default C API.
 
 ``YYMARKER``
-    A pointer-like l-value (usually a pointer of type ``YYCTYPE*``) that stores
-    the position of the latest matched rule. It is used to restores ``YYCURSOR``
-    position if the longer match fails and lexer needs to rollback.
-    Initialization is not needed. ``YYMARKER`` is used only in the default C API.
+    A pointer-like l-value (usually a pointer of type ``YYCTYPE*``)
+    that stores the position of the latest matched rule. It is used to
+    restore the ``YYCURSOR`` position if the longer match fails and
+    the lexer needs to rollback. Initialization is not
+    needed. ``YYMARKER`` is used only in the default C API.
 
 ``YYCTXMARKER``
     A pointer-like l-value that stores the position of the trailing context
@@ -38,24 +44,28 @@ Re2c does not (and cannot) check the definitions, so if anything is missing or d
     ``/``.
 
 ``YYFILL``
-    API primitive with one argument ``len``.
-    The meaning of ``YYFILL`` is to provide at least ``len`` more input
-    characters or fail. If EOF rule is used, ``YYFILL`` should always return to
-    the calling function; the return value should be zero on success and non-zero
-    on failure. If EOF rule is not used, ``YYFILL`` return value is ignored and
-    it should not return on failure. Maximal value of ``len`` is ``YYMAXFILL``,
-    which can be generated with ``/*!max:re2c*/`` directive. The definition of
-    ``YYFILL`` can be either function-like or free-form depending on the API
-    style (see ``re2c:api:style`` and ``re2c:define:YYFILL:naked``).
+    A generic API primitive with one argument ``len``. ``YYFILL`` requests
+    that the program provide at least ``len`` more input characters or
+    fail.
+    If an EOF rule is used, ``YYFILL`` should always return to the
+    calling function; the return value should be zero on success and
+    non-zero on failure.
+    If an EOF rule is not used, the ``YYFILL`` return value is ignored
+    and it should not return on failure.
+    The maximal value of ``len`` is ``YYMAXFILL``, which can be
+    generated with the ``/*!max:re2c*/`` directive. The definition of
+    ``YYFILL`` can be either function-like or free-form depending on
+    the API style (see ``re2c:api:style`` and
+    ``re2c:define:YYFILL:naked``).
 
 ``YYMAXFILL``
-    An integral constant equal to the  maximal value of ``YYFILL`` argument.
-    It can be generated with ``/*!max:re2c*/`` directive.
+    An integral constant equal to the maximal value of the argument to
+    ``YYFILL``.  It can be generated with ``/*!max:re2c*/`` directive.
 
 ``YYLESSTHAN``
     A generic API primitive with one argument ``len``.
     It should be defined as an r-value of boolean type that equals ``true`` if
-    and only if there is less than ``len`` input characters left.
+    and only if there are less than ``len`` input characters left.
     The definition can be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
@@ -63,93 +73,101 @@ Re2c does not (and cannot) check the definitions, so if anything is missing or d
     A generic API primitive with no arguments.
     It should be defined as an r-value of type ``YYCTYPE`` that is equal to the
     character at the current input position. The definition can be either
-    function-like or free-form depending on the API style (see ``re2c:api:style``).
+    function-like or free-form depending on the API style
+    (see ``re2c:api:style``).
 
 ``YYSKIP``
     A generic API primitive with no arguments.
-    The meaning of ``YYSKIP`` is to advance the current input position by one
+    ``YYSKIP`` should advance the current input position by one
     character. The definition can be either function-like or free-form
     depending on the API style (see ``re2c:api:style``).
 
 ``YYBACKUP``
     A generic API primitive with no arguments.
-    The meaning of ``YYBACKUP`` is to save the current input position, which is
+    ``YYBACKUP`` should save the current input position, which is
     later restored with ``YYRESTORE``.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYRESTORE``
     A generic API primitive with no arguments.
-    The meaning of ``YYRESTORE`` is to restore the current input position to the
+    ``YYRESTORE`` should restore the current input position to the
     value saved by ``YYBACKUP``.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYBACKUPCTX``
     A generic API primitive with zero arguments.
-    The meaning of ``YYBACKUPCTX`` is to save the current input position as the
-    position of the trailing context, which is later restored by ``YYRESTORECTX``.
+    ``YYBACKUPCTX`` should save the current input position as the
+    position of the trailing context, which is later restored by
+    ``YYRESTORECTX``.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYRESTORECTX``
     A generic API primitive with no arguments.
-    The meaning of ``YYRESTORECTX`` is to restore the trailing context position
+    ``YYRESTORECTX`` should restore the trailing context position
     saved with ``YYBACKUPCTX``.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYRESTORETAG``
     A generic API primitive with one argument ``tag``.
-    The meaning of ``YYRESTORETAG`` is to restore the trailing context position
+    ``YYRESTORETAG`` should restore the trailing context position
     to the value of ``tag``.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYSTAGP``
     A generic API primitive with one argument ``tag``.
-    The meaning of ``YYSTAGP`` is to set ``tag`` value to the current input
+    (``tag`` should represent a pointer or an offset, see the section
+    on submatch extraction for details.)
+    ``YYSTAGP`` should set the ``tag`` value to the current input
     position.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYSTAGN``
     A generic API primitive with one argument ``tag``.
-    The meaning of ``YYSTAGN`` is to set ``tag`` value to null (or some default
-    value). The definition should be either function-like or free-form depending
-    on the API style (see ``re2c:api:style``).
+    (``tag`` should represent a pointer or an offset, see the section
+    on submatch extraction for details.)
+    ``YYSTAGN`` should to set the ``tag`` value to null (or
+    some default value).
+    The definition should be either function-like or free-form depending on the
+    API style (see ``re2c:api:style``).
 
 ``YYMTAGP``
     A generic API primitive with one argument ``tag``.
-    The meaning of ``YYMTAGP`` is to append the current position to the history
-    of ``tag``.
+    ``YYMTAGP`` should append the current position to the history
+    of ``tag``. (See the section on submatch extraction for details.)
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYMTAGN``
     A generic API primitive with one argument ``tag``.
-    The meaning of ``YYMTAGN`` is to append null (or some other default) value
+    ``YYMTAGN`` should append null (or some other default) value
     to the history of ``tag``.
+    (See the section on submatch extraction for details.)
     The definition can be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYSHIFT``
     A generic API primitive with one argument ``shift``.
-    The meaning of ``YYSHIFT`` is to shift the current input position by
+    ``YYSHIFT`` should shift the current input position by
     ``shift`` characters (the shift value may be negative). The definition
     can be either function-like or free-form depending on the API style
     (see ``re2c:api:style``).
 
 ``YYSHIFTSTAG``
     A generic  API primitive with two arguments, ``tag`` and ``shift``.
-    The meaning of ``YYSHIFTSTAG`` is to shift ``tag`` by ``shift`` characters
+    ``YYSHIFTSTAG`` should shift ``tag`` by ``shift`` characters
     (the shift value may be negative).
     The definition can be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYSHIFTMTAG``
     A generic API primitive with two arguments, ``tag`` and ``shift``.
-    The meaning of ``YYSHIFTMTAG`` is to shift the latest value in the history
+    ``YYSHIFTMTAG`` should shift the latest value in the history
     of ``tag`` by ``shift`` characters (the shift value may be negative).
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
@@ -160,8 +178,8 @@ Re2c does not (and cannot) check the definitions, so if anything is missing or d
 
 ``YYCONDTYPE``
     The type of the condition enum.
-    It should be generated either with ``/*!types:re2c*/`` directive or ``-t``
-    ``--type-header`` option.
+    It should be generated either with the ``/*!types:re2c*/``
+    directive or the ``-t`` ``--type-header`` option.
 
 ``YYGETCONDITION``
     An API primitive with zero arguments.
@@ -172,8 +190,8 @@ Re2c does not (and cannot) check the definitions, so if anything is missing or d
 
 ``YYSETCONDITION``
     An API primitive with one argument ``cond``.
-    The meaning of ``YYSETCONDITION`` is to set the current condition identifier
-    to ``cond``.
+    The meaning of ``YYSETCONDITION`` is to set the current condition
+    identifier to ``cond``.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style`` and ``re2c:define:YYSETCONDITION@cond``).
 
@@ -186,7 +204,8 @@ Re2c does not (and cannot) check the definitions, so if anything is missing or d
 
 ``YYSETSTATE``
     An API primitive with one argument ``state``.
-    The meaning of ``YYSETSTATE`` is to set the current lexer state to ``state``.
+    The meaning of ``YYSETSTATE`` is to set the current lexer state to
+    ``state``.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style`` and ``re2c:define:YYSETSTATE@state``).
 

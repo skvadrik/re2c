@@ -1,8 +1,5 @@
 .\" Man page generated from reStructuredText.
 .
-.TH RE2C 1 "" "" ""
-.SH NAME
-re2c \- generate fast lexical analyzers for C/C++ and Go
 .
 .nr rst2man-indent-level 0
 .
@@ -30,6 +27,9 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
+.TH "RE2C" 1 "" "" ""
+.SH NAME
+re2c \- generate fast lexical analyzers for C/C++ and Go
 .SH SYNOPSIS
 .sp
 \fBre2c  [OPTIONS] INPUT [\-o OUTPUT]\fP
@@ -834,11 +834,16 @@ exists for backward compatibility.
 .UNINDENT
 .SH INTERFACE PRIMITIVES
 .sp
-Here is a list of API primitives that may be used by the generated code in order to interface with the outer program.
+Here is a list of API primitives that may be used by the generated
+code in order to interface with the outer program.
 Which primitives are needed depends on multiple factors, including
-the complexity of regular expressions, input representation, buffering, the use of various features and so on.
-All the necessary primitives should be defined by the user in the form of macros, functions, variables, free\-form pieces of code or any other suitable form.
-Re2c does not (and cannot) check the definitions, so if anything is missing or defined incorrectly the generated code will not compile.
+the complexity of regular expressions, input representation,
+buffering, the use of various features and so on.
+All the necessary primitives should be defined by the user in the form
+of macros, functions, variables, free\-form pieces of code, or any other
+suitable form.
+Re2c does not (and cannot) check the definitions, so if anything is
+missing or defined incorrectly the generated code will not compile.
 .INDENT 0.0
 .TP
 .B \fBYYCTYPE\fP
@@ -851,22 +856,23 @@ should be 4\-byte unsigned integer.
 A pointer\-like l\-value that stores the current input position (usually a
 pointer of type \fBYYCTYPE*\fP). Initially \fBYYCURSOR\fP should point to the
 first input character. It is advanced by the generated code.
-When a rule matches, \fBYYCURSOR\fP points to the one after the last matched
-character. It is used only in the default C API.
+When a rule matches, \fBYYCURSOR\fP points to the position after the
+last matched character. It is used only in the default C API.
 .TP
 .B \fBYYLIMIT\fP
 A pointer\-like r\-value that stores the end of input position (usually a
 pointer of type \fBYYCTYPE*\fP). Initially \fBYYLIMIT\fP should point to the
-one after the last available input character. It is not changed by the
-generated code. Lexer compares \fBYYCURSOR\fP to \fBYYLIMIT\fP
-in order to determine if there is enough input characters left.
+position after the last available input character. It is not changed by the
+generated code. The lexer compares \fBYYCURSOR\fP to \fBYYLIMIT\fP
+in order to determine if there are enough input characters left.
 \fBYYLIMIT\fP is used only in the default C API.
 .TP
 .B \fBYYMARKER\fP
-A pointer\-like l\-value (usually a pointer of type \fBYYCTYPE*\fP) that stores
-the position of the latest matched rule. It is used to restores \fBYYCURSOR\fP
-position if the longer match fails and lexer needs to rollback.
-Initialization is not needed. \fBYYMARKER\fP is used only in the default C API.
+A pointer\-like l\-value (usually a pointer of type \fBYYCTYPE*\fP)
+that stores the position of the latest matched rule. It is used to
+restore the \fBYYCURSOR\fP position if the longer match fails and
+the lexer needs to rollback. Initialization is not
+needed. \fBYYMARKER\fP is used only in the default C API.
 .TP
 .B \fBYYCTXMARKER\fP
 A pointer\-like l\-value that stores the position of the trailing context
@@ -875,24 +881,28 @@ It is used only in the default C API, and only with the lookahead operator
 \fB/\fP\&.
 .TP
 .B \fBYYFILL\fP
-API primitive with one argument \fBlen\fP\&.
-The meaning of \fBYYFILL\fP is to provide at least \fBlen\fP more input
-characters or fail. If EOF rule is used, \fBYYFILL\fP should always return to
-the calling function; the return value should be zero on success and non\-zero
-on failure. If EOF rule is not used, \fBYYFILL\fP return value is ignored and
-it should not return on failure. Maximal value of \fBlen\fP is \fBYYMAXFILL\fP,
-which can be generated with \fB/*!max:re2c*/\fP directive. The definition of
-\fBYYFILL\fP can be either function\-like or free\-form depending on the API
-style (see \fBre2c:api:style\fP and \fBre2c:define:YYFILL:naked\fP).
+A generic API primitive with one argument \fBlen\fP\&. \fBYYFILL\fP requests
+that the program provide at least \fBlen\fP more input characters or
+fail.
+If an EOF rule is used, \fBYYFILL\fP should always return to the
+calling function; the return value should be zero on success and
+non\-zero on failure.
+If an EOF rule is not used, the \fBYYFILL\fP return value is ignored
+and it should not return on failure.
+The maximal value of \fBlen\fP is \fBYYMAXFILL\fP, which can be
+generated with the \fB/*!max:re2c*/\fP directive. The definition of
+\fBYYFILL\fP can be either function\-like or free\-form depending on
+the API style (see \fBre2c:api:style\fP and
+\fBre2c:define:YYFILL:naked\fP).
 .TP
 .B \fBYYMAXFILL\fP
-An integral constant equal to the  maximal value of \fBYYFILL\fP argument.
-It can be generated with \fB/*!max:re2c*/\fP directive.
+An integral constant equal to the maximal value of the argument to
+\fBYYFILL\fP\&.  It can be generated with \fB/*!max:re2c*/\fP directive.
 .TP
 .B \fBYYLESSTHAN\fP
 A generic API primitive with one argument \fBlen\fP\&.
 It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
-and only if there is less than \fBlen\fP input characters left.
+and only if there are less than \fBlen\fP input characters left.
 The definition can be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
@@ -900,93 +910,101 @@ API style (see \fBre2c:api:style\fP).
 A generic API primitive with no arguments.
 It should be defined as an r\-value of type \fBYYCTYPE\fP that is equal to the
 character at the current input position. The definition can be either
-function\-like or free\-form depending on the API style (see \fBre2c:api:style\fP).
+function\-like or free\-form depending on the API style
+(see \fBre2c:api:style\fP).
 .TP
 .B \fBYYSKIP\fP
 A generic API primitive with no arguments.
-The meaning of \fBYYSKIP\fP is to advance the current input position by one
+\fBYYSKIP\fP should advance the current input position by one
 character. The definition can be either function\-like or free\-form
 depending on the API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYBACKUP\fP
 A generic API primitive with no arguments.
-The meaning of \fBYYBACKUP\fP is to save the current input position, which is
+\fBYYBACKUP\fP should save the current input position, which is
 later restored with \fBYYRESTORE\fP\&.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYRESTORE\fP
 A generic API primitive with no arguments.
-The meaning of \fBYYRESTORE\fP is to restore the current input position to the
+\fBYYRESTORE\fP should restore the current input position to the
 value saved by \fBYYBACKUP\fP\&.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYBACKUPCTX\fP
 A generic API primitive with zero arguments.
-The meaning of \fBYYBACKUPCTX\fP is to save the current input position as the
-position of the trailing context, which is later restored by \fBYYRESTORECTX\fP\&.
+\fBYYBACKUPCTX\fP should save the current input position as the
+position of the trailing context, which is later restored by
+\fBYYRESTORECTX\fP\&.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYRESTORECTX\fP
 A generic API primitive with no arguments.
-The meaning of \fBYYRESTORECTX\fP is to restore the trailing context position
+\fBYYRESTORECTX\fP should restore the trailing context position
 saved with \fBYYBACKUPCTX\fP\&.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYRESTORETAG\fP
 A generic API primitive with one argument \fBtag\fP\&.
-The meaning of \fBYYRESTORETAG\fP is to restore the trailing context position
+\fBYYRESTORETAG\fP should restore the trailing context position
 to the value of \fBtag\fP\&.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYSTAGP\fP
 A generic API primitive with one argument \fBtag\fP\&.
-The meaning of \fBYYSTAGP\fP is to set \fBtag\fP value to the current input
+(\fBtag\fP should represent a pointer or an offset, see the section
+on submatch extraction for details.)
+\fBYYSTAGP\fP should set the \fBtag\fP value to the current input
 position.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYSTAGN\fP
 A generic API primitive with one argument \fBtag\fP\&.
-The meaning of \fBYYSTAGN\fP is to set \fBtag\fP value to null (or some default
-value). The definition should be either function\-like or free\-form depending
-on the API style (see \fBre2c:api:style\fP).
+(\fBtag\fP should represent a pointer or an offset, see the section
+on submatch extraction for details.)
+\fBYYSTAGN\fP should to set the \fBtag\fP value to null (or
+some default value).
+The definition should be either function\-like or free\-form depending on the
+API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYMTAGP\fP
 A generic API primitive with one argument \fBtag\fP\&.
-The meaning of \fBYYMTAGP\fP is to append the current position to the history
-of \fBtag\fP\&.
+\fBYYMTAGP\fP should append the current position to the history
+of \fBtag\fP\&. (See the section on submatch extraction for details.)
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYMTAGN\fP
 A generic API primitive with one argument \fBtag\fP\&.
-The meaning of \fBYYMTAGN\fP is to append null (or some other default) value
+\fBYYMTAGN\fP should append null (or some other default) value
 to the history of \fBtag\fP\&.
+(See the section on submatch extraction for details.)
 The definition can be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYSHIFT\fP
 A generic API primitive with one argument \fBshift\fP\&.
-The meaning of \fBYYSHIFT\fP is to shift the current input position by
+\fBYYSHIFT\fP should shift the current input position by
 \fBshift\fP characters (the shift value may be negative). The definition
 can be either function\-like or free\-form depending on the API style
 (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYSHIFTSTAG\fP
 A generic  API primitive with two arguments, \fBtag\fP and \fBshift\fP\&.
-The meaning of \fBYYSHIFTSTAG\fP is to shift \fBtag\fP by \fBshift\fP characters
+\fBYYSHIFTSTAG\fP should shift \fBtag\fP by \fBshift\fP characters
 (the shift value may be negative).
 The definition can be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYSHIFTMTAG\fP
 A generic API primitive with two arguments, \fBtag\fP and \fBshift\fP\&.
-The meaning of \fBYYSHIFTMTAG\fP is to shift the latest value in the history
+\fBYYSHIFTMTAG\fP should shift the latest value in the history
 of \fBtag\fP by \fBshift\fP characters (the shift value may be negative).
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
@@ -997,8 +1015,8 @@ in a rule. It is generated with \fB/*!maxnmatch:re2c*/\fP directive.
 .TP
 .B \fBYYCONDTYPE\fP
 The type of the condition enum.
-It should be generated either with \fB/*!types:re2c*/\fP directive or \fB\-t\fP
-\fB\-\-type\-header\fP option.
+It should be generated either with the \fB/*!types:re2c*/\fP
+directive or the \fB\-t\fP \fB\-\-type\-header\fP option.
 .TP
 .B \fBYYGETCONDITION\fP
 An API primitive with zero arguments.
@@ -1009,8 +1027,8 @@ or free\-form depending on the API style (see \fBre2c:api:style\fP and
 .TP
 .B \fBYYSETCONDITION\fP
 An API primitive with one argument \fBcond\fP\&.
-The meaning of \fBYYSETCONDITION\fP is to set the current condition identifier
-to \fBcond\fP\&.
+The meaning of \fBYYSETCONDITION\fP is to set the current condition
+identifier to \fBcond\fP\&.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP and \fBre2c:define:YYSETCONDITION@cond\fP).
 .TP
@@ -1023,7 +1041,8 @@ either function\-like or free\-form depending on the API style (see
 .TP
 .B \fBYYSETSTATE\fP
 An API primitive with one argument \fBstate\fP\&.
-The meaning of \fBYYSETSTATE\fP is to set the current lexer state to \fBstate\fP\&.
+The meaning of \fBYYSETSTATE\fP is to set the current lexer state to
+\fBstate\fP\&.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP and \fBre2c:define:YYSETSTATE@state\fP).
 .TP
