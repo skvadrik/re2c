@@ -94,11 +94,11 @@ yy12:
 yy13:
 	p0 = yyt1;
 	p2 = yyt2;
-	YYRESTORETAG(yyt3);
 	p1 = yyt2;
 	YYSHIFTSTAG(p1, -1);
 	p3 = yyt3;
 	YYSHIFTSTAG(p3, -1);
+	YYRESTORETAG(yyt3);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
                 p1 - p0, p0,

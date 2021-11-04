@@ -677,7 +677,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
 
     CodeList *varops = code_list(alc);
     CodeList *fixops = code_list(alc);
-    CodeList *fixtrailops = code_list(alc);
+    CodeList *trailops = code_list(alc);
     CodeList *fixpostops = code_list(alc);
     std::string negtag;
 
@@ -695,9 +695,9 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             if (trailing(tag)) {
                 const bool notag = dfa.oldstyle_ctxmarker;
                 if (generic) {
-                    gen_restorectx(output, varops, notag ? "" : expr);
+                    gen_restorectx(output, trailops, notag ? "" : expr);
                 } else {
-                    gen_assign(output, varops, opts->yycursor,
+                    gen_assign(output, trailops, opts->yycursor,
                         notag ? opts->yyctxmarker : expr);
                 }
             } else {
@@ -716,9 +716,9 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 DASSERT(tag.toplevel);
                 if (generic) {
                     if (!fixed_on_cursor) {
-                        gen_restorectx(output, fixtrailops, base);
+                        gen_restorectx(output, trailops, base);
                     }
-                    gen_shift(output, fixtrailops, -dist, "", false /* unused */);
+                    gen_shift(output, trailops, -dist, "", false /* unused */);
                 } else {
                     if (!fixed_on_cursor) {
                         o.str(opts->yycursor).cstr(" = ").str(base);
@@ -726,7 +726,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                     } else if (dist > 0) {
                         o.str(opts->yycursor).cstr(" -= ").i32(dist);
                     }
-                    append(fixtrailops, code_stmt(alc, o.flush()));
+                    append(trailops, code_stmt(alc, o.flush()));
                 }
             } else {
                 DASSERT(!fintags.empty());
@@ -778,9 +778,11 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         }
     }
 
+    // Variable tags must be set before fixed tags which depend on them. Trailing context
+    // is updated after all tags, because fixed tags may depend on the rightmost position.
     append(stmts, varops);
-    append(stmts, fixtrailops);
     append(stmts, fixops);
+    append(stmts, trailops);
 
     if (!negtag.empty()) {
         // With generic API there is no explicit negative NULL value, so it is

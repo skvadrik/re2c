@@ -163,10 +163,8 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 l.tag = re->tag.idx;
                 l.dist_to_tag = 0;
             }
-
-            if (trailing(tag)) {
-                l.dist_to_tag = 0;
-            }
+            // Trailing context is not special: tags are fixed on the rightmost cursor
+            // position, and trailing context is just another tag.
         }
     }
 

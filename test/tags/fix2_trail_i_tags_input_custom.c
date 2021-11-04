@@ -132,15 +132,15 @@ yy18:
 	}
 yy19:
 	YYSKIP();
-	YYSHIFT(-5);
 	YYSTAGP(p0);
-	YYSHIFTSTAG(p0, -10);
+	YYSHIFTSTAG(p0, -15);
 	YYSTAGP(p1);
-	YYSHIFTSTAG(p1, -9);
+	YYSHIFTSTAG(p1, -14);
 	YYSTAGP(p2);
-	YYSHIFTSTAG(p2, -7);
+	YYSHIFTSTAG(p2, -12);
 	YYSTAGP(p3);
-	YYSHIFTSTAG(p3, -4);
+	YYSHIFTSTAG(p3, -9);
+	YYSHIFT(-5);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
                 p1 - p0, p0,

@@ -213,9 +213,9 @@ yy38:
 	}
 yy40:
 	z = yyt1;
-	YYCURSOR = yyt1 - 1;
 	x = yyt1 - 1;
 	y = yyt1 - 1;
+	YYCURSOR = yyt1 - 1;
 	{ c }
 }
 
@@ -280,12 +280,12 @@ yy51:
 	}
 yy53:
 	z = yyt1;
-	cur = yyt1;
-	cur += -1;
 	x = yyt1;
 	x += -1;
 	y = yyt1;
 	y += -1;
+	cur = yyt1;
+	cur += -1;
 	{ c }
 }
 

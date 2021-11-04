@@ -213,9 +213,9 @@ yy38:
 	}
 yy40:
 	z = yyt1;
-	YYCURSOR = yyt1 - 1;
 	x = yyt1 - 1;
 	y = yyt1 - 1;
+	YYCURSOR = yyt1 - 1;
 	{ c }
 }
 
@@ -280,12 +280,12 @@ yy51:
 	}
 yy53:
 	z = yyt1;
-	restoretag(yyt1);
-	shift(-1);
 	x = yyt1;
 	shiftstag(x, -1);
 	y = yyt1;
 	shiftstag(y, -1);
+	restoretag(yyt1);
+	shift(-1);
 	{ c }
 }
 

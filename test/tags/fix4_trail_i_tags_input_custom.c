@@ -76,11 +76,11 @@ yy11:
 	YYSKIP();
 	p1 = yyt1;
 	p3 = yyt2;
-	YYSHIFT(-1);
 	p0 = yyt1;
 	YYSHIFTSTAG(p0, -1);
 	p2 = yyt2;
 	YYSHIFTSTAG(p2, -1);
+	YYSHIFT(-1);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
                 p1 - p0, p0,

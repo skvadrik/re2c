@@ -343,8 +343,8 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
                     tval = tags[tver];
                     if (tval != Skeleton::DEFTAG) tval -= tag.dist;
                 } else {
-                    // fixed-length tag based on cursor
-                    tval = matched - tag.dist;
+                    // fixed-length tag based on the rightmost position
+                    tval = f - tag.dist;
                 }
                 *k++ = to_le(static_cast<key_t>(tval));
             }
