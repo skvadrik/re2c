@@ -116,6 +116,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         real.yych = defaults.yych;
         real.bEmitYYCh = defaults.bEmitYYCh;
         real.yychConversion = defaults.yychConversion;
+        real.yystate = defaults.yystate;
         real.fill = defaults.fill;
         real.fill_use = defaults.fill_use;
         real.fill_check = defaults.fill_check;

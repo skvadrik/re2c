@@ -172,6 +172,7 @@ opt_long:
     "debug-output"          end { opts.set_dFlag (true);             goto opt; }
     "case-ranges"           end { opts.set_case_ranges (true);       goto opt; }
     "eager-skip"            end { opts.set_eager_skip(true);         goto opt; }
+    "loop-switch"           end { opts.set_loop_switch (true);       goto opt; }
     "computed-gotos"        end { opts.set_gFlag (true);             goto opt; }
     "nested-ifs"            end { opts.set_sFlag (true);             goto opt; }
     "case-insensitive"      end { opts.set_bCaseInsensitive (true);  goto opt; }
