@@ -58,7 +58,7 @@ error:
 #define YYRESTORE() cursor = marker
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
-#define YYFILL(n) { break; }
+#define YYFILL(n) { goto loop_end; }
 
 static int action_line44
     ( unsigned *pkix
@@ -151,7 +151,10 @@ int lex_line44()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
+    i = 0;
+loop:
+    if (!(status == 0 && cursor < eof && i < keys_count)) goto loop_end;
+    {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -207,24 +210,24 @@ yy3:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 7);
-        continue;
+        goto loop;
 yy5:
         YYSKIP();
 yy6:
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 8);
-        continue;
+        goto loop;
 yy7:
         YYSKIP();
 yy8:
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 6);
-        continue;
+        goto loop;
 yy9:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 4);
-        continue;
+        goto loop;
 yy11:
         yyaccept = 0;
         YYSKIP();
@@ -238,12 +241,12 @@ yy12:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 5);
-        continue;
+        goto loop;
 yy14:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 3);
-        continue;
+        goto loop;
 yy16:
         YYSKIP();
         yych = YYPEEK();
@@ -310,7 +313,7 @@ yy24:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 0);
-        continue;
+        goto loop;
 yy26:
         YYSKIP();
         yych = YYPEEK();
@@ -327,7 +330,7 @@ yy28:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 2);
-        continue;
+        goto loop;
 yy30:
         YYSKIP();
         yych = YYPEEK();
@@ -337,9 +340,10 @@ yy31:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 1);
-        continue;
+        goto loop;
 
     }
+loop_end:
     if (status == 0) {
         if (cursor != eof) {
             status = 1;

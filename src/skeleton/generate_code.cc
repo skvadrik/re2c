@@ -152,7 +152,7 @@ static void emit_skeleton_defines(Output &output, CodeList *code, const DFA &dfa
     append(code, code_textraw(alc, "#define YYSHIFT(o) cursor += o"));
     append(code, code_textraw(alc, "#define YYLESSTHAN(n) (limit - cursor) < n"));
     append(code, code_textraw(alc, opts->eof == NOEOF
-        ? "#define YYFILL(n) { break; }"
+        ? "#define YYFILL(n) { goto loop_end; }"
         : "#define YYFILL(n) 1 /* fail */"));
     append(code, code_newline(alc));
 }
@@ -610,8 +610,17 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
 
     append(block, code_textraw(alc, ""));
 
-    append(block, code_text(alc,
-        "for (i = 0; status == 0 && cursor < eof && i < keys_count;) {"));
+    // Don't use `for` loops or `while` loops: the generated code may contain an
+    // inner loop if the --loop-switch option is used, and then `continue` and
+    // `break` statements may result in unexpected control flow. Use `goto` loop.
+    append(block, code_stmt(alc, "i = 0"));
+    append(block, code_slabel(alc, "loop"));
+
+    block2 = code_list(alc);
+    append(block2, code_stmt(alc, "goto loop_end"));
+    append(block, code_if_then_else(alc,
+        "!(status == 0 && cursor < eof && i < keys_count)", block2, NULL));
+
     block2 = code_list(alc);
     append(block2, code_stmt(alc, "token = cursor"));
     if (dfa.need_backup) {
@@ -679,8 +688,8 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
     dfa.emit_body(output, block2);
     append(block2, code_textraw(alc, ""));
 
-    append(block, code_block(alc, block2, CodeBlock::INDENTED));
-    append(block, code_text(alc, "}"));
+    append(block, code_block(alc, block2, CodeBlock::WRAPPED));
+    append(block, code_slabel(alc, "loop_end"));
 
     if_code = code_list(alc);
 
@@ -837,7 +846,7 @@ void emit_skeleton_action(Output &output, CodeList *code, const DFA &dfa, size_t
 
     append(code, code_block(alc, hangafter, CodeBlock::INDENTED));
 
-    append(code, code_stmt(alc, "continue"));
+    append(code, code_stmt(alc, "goto loop"));
 }
 
 } // namespace re2c
