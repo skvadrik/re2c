@@ -171,6 +171,7 @@ opt_long:
     "bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
     "debug-output"          end { opts.set_dFlag (true);             goto opt; }
     "case-ranges"           end { opts.set_case_ranges (true);       goto opt; }
+    "eager-skip"            end { opts.set_eager_skip(true);         goto opt; }
     "computed-gotos"        end { opts.set_gFlag (true);             goto opt; }
     "nested-ifs"            end { opts.set_sFlag (true);             goto opt; }
     "case-insensitive"      end { opts.set_bCaseInsensitive (true);  goto opt; }
@@ -209,7 +210,6 @@ opt_long:
     "fixed-tags"            end { NEXT_ARG("--fixed-tags",       opt_fixed_tags); }
     "no-lookahead"          end { globopts.lookahead = false;     goto opt; }
     "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
-    "eager-skip"            end { globopts.eager_skip = true;     goto opt; }
     "stadfa"                end { globopts.stadfa = true;         goto opt; }
 
     // debug options

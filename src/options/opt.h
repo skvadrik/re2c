@@ -70,7 +70,6 @@ class Msg;
     CONSTOPT (posix_prectable_alg_t, posix_prectable, POSIX_PRECTABLE_COMPLEX) \
     CONSTOPT (fixed_tags_t, fixed_tags, FIXTAG_ALL) \
     CONSTOPT (bool, lookahead, true) \
-    CONSTOPT (bool, eager_skip, false) \
     CONSTOPT (bool, optimize_tags, true) \
     CONSTOPT (bool, backward, false) \
     CONSTOPT (bool, stadfa, false) \
@@ -140,6 +139,7 @@ class Msg;
     MUTOPT (uint32_t, cGotoThreshold, 9) \
     MUTOPT (uint32_t, eof, NOEOF) \
     MUTOPT (uint32_t, sentinel, NOEOF) \
+    MUTOPT (bool, eager_skip, false) \
     /* formatting */ \
     MUTOPT (uint32_t, topIndent, 0) \
     MUTOPT (std::string, indString, "\t") \
