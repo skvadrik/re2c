@@ -58,7 +58,7 @@ error:
 #define YYRESTORE() cursor = marker
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
-#define YYFILL(n) { break; }
+#define YYFILL(n) { goto loop_end; }
 
 static int action_line2
     ( unsigned *pkix
@@ -151,7 +151,10 @@ int lex_line2()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
+    i = 0;
+loop:
+    if (!(status == 0 && cursor < eof && i < keys_count)) goto loop_end;
+    {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -344,13 +347,13 @@ yy2:
         YYSKIP();
         status = check_key_count_line2(keys_count, i, 3)
              || action_line2(&i, keys, input, token, &cursor, 0);
-        continue;
+        goto loop;
 yy4:
         YYSKIP();
 yy5:
         status = check_key_count_line2(keys_count, i, 3)
              || action_line2(&i, keys, input, token, &cursor, 254);
-        continue;
+        goto loop;
 yy6:
         YYSKIP();
         yych = YYPEEK();
@@ -825,6 +828,7 @@ yy14:
         }
 
     }
+loop_end:
     if (status == 0) {
         if (cursor != eof) {
             status = 1;

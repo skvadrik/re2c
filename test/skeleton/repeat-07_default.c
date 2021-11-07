@@ -56,7 +56,7 @@ error:
 #define YYSKIP() ++cursor
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
-#define YYFILL(n) { break; }
+#define YYFILL(n) { goto loop_end; }
 
 static int action_line16
     ( unsigned *pkix
@@ -149,7 +149,10 @@ int lex_line16()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
+    i = 0;
+loop:
+    if (!(status == 0 && cursor < eof && i < keys_count)) goto loop_end;
+    {
         token = cursor;
         YYCTYPE yych;
 
@@ -196,39 +199,40 @@ yy2:
         YYSKIP();
         status = check_key_count_line16(keys_count, i, 3)
              || action_line16(&i, keys, input, token, &cursor, 5);
-        continue;
+        goto loop;
 yy4:
         YYSKIP();
         status = check_key_count_line16(keys_count, i, 3)
              || action_line16(&i, keys, input, token, &cursor, 254);
-        continue;
+        goto loop;
 yy6:
         YYSKIP();
         status = check_key_count_line16(keys_count, i, 3)
              || action_line16(&i, keys, input, token, &cursor, 4);
-        continue;
+        goto loop;
 yy8:
         YYSKIP();
         status = check_key_count_line16(keys_count, i, 3)
              || action_line16(&i, keys, input, token, &cursor, 0);
-        continue;
+        goto loop;
 yy10:
         YYSKIP();
         status = check_key_count_line16(keys_count, i, 3)
              || action_line16(&i, keys, input, token, &cursor, 1);
-        continue;
+        goto loop;
 yy12:
         YYSKIP();
         status = check_key_count_line16(keys_count, i, 3)
              || action_line16(&i, keys, input, token, &cursor, 2);
-        continue;
+        goto loop;
 yy14:
         YYSKIP();
         status = check_key_count_line16(keys_count, i, 3)
              || action_line16(&i, keys, input, token, &cursor, 3);
-        continue;
+        goto loop;
 
     }
+loop_end:
     if (status == 0) {
         if (cursor != eof) {
             status = 1;
@@ -261,7 +265,7 @@ end:
 #define YYSKIP() ++cursor
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
-#define YYFILL(n) { break; }
+#define YYFILL(n) { goto loop_end; }
 
 static int action_line34
     ( unsigned *pkix
@@ -360,7 +364,10 @@ int lex_line34()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
+    i = 0;
+loop:
+    if (!(status == 0 && cursor < eof && i < keys_count)) goto loop_end;
+    {
         token = cursor;
         YYCTYPE yych;
 
@@ -408,39 +415,40 @@ yy18:
         YYSKIP();
         status = check_key_count_line34(keys_count, i, 3)
              || action_line34(&i, keys, input, token, &cursor, 5);
-        continue;
+        goto loop;
 yy20:
         YYSKIP();
         status = check_key_count_line34(keys_count, i, 3)
              || action_line34(&i, keys, input, token, &cursor, 254);
-        continue;
+        goto loop;
 yy22:
         YYSKIP();
         status = check_key_count_line34(keys_count, i, 3)
              || action_line34(&i, keys, input, token, &cursor, 4);
-        continue;
+        goto loop;
 yy24:
         YYSKIP();
         status = check_key_count_line34(keys_count, i, 3)
              || action_line34(&i, keys, input, token, &cursor, 0);
-        continue;
+        goto loop;
 yy26:
         YYSKIP();
         status = check_key_count_line34(keys_count, i, 3)
              || action_line34(&i, keys, input, token, &cursor, 1);
-        continue;
+        goto loop;
 yy28:
         YYSKIP();
         status = check_key_count_line34(keys_count, i, 3)
              || action_line34(&i, keys, input, token, &cursor, 2);
-        continue;
+        goto loop;
 yy30:
         YYSKIP();
         status = check_key_count_line34(keys_count, i, 3)
              || action_line34(&i, keys, input, token, &cursor, 3);
-        continue;
+        goto loop;
 
     }
+loop_end:
     if (status == 0) {
         if (cursor != eof) {
             status = 1;
@@ -473,7 +481,7 @@ end:
 #define YYSKIP() ++cursor
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
-#define YYFILL(n) { break; }
+#define YYFILL(n) { goto loop_end; }
 
 static int action_line52
     ( unsigned *pkix
@@ -572,7 +580,10 @@ int lex_line52()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
+    i = 0;
+loop:
+    if (!(status == 0 && cursor < eof && i < keys_count)) goto loop_end;
+    {
         token = cursor;
         YYCTYPE yych;
 
@@ -620,39 +631,40 @@ yy34:
         YYSKIP();
         status = check_key_count_line52(keys_count, i, 3)
              || action_line52(&i, keys, input, token, &cursor, 5);
-        continue;
+        goto loop;
 yy36:
         YYSKIP();
         status = check_key_count_line52(keys_count, i, 3)
              || action_line52(&i, keys, input, token, &cursor, 254);
-        continue;
+        goto loop;
 yy38:
         YYSKIP();
         status = check_key_count_line52(keys_count, i, 3)
              || action_line52(&i, keys, input, token, &cursor, 4);
-        continue;
+        goto loop;
 yy40:
         YYSKIP();
         status = check_key_count_line52(keys_count, i, 3)
              || action_line52(&i, keys, input, token, &cursor, 0);
-        continue;
+        goto loop;
 yy42:
         YYSKIP();
         status = check_key_count_line52(keys_count, i, 3)
              || action_line52(&i, keys, input, token, &cursor, 1);
-        continue;
+        goto loop;
 yy44:
         YYSKIP();
         status = check_key_count_line52(keys_count, i, 3)
              || action_line52(&i, keys, input, token, &cursor, 2);
-        continue;
+        goto loop;
 yy46:
         YYSKIP();
         status = check_key_count_line52(keys_count, i, 3)
              || action_line52(&i, keys, input, token, &cursor, 3);
-        continue;
+        goto loop;
 
     }
+loop_end:
     if (status == 0) {
         if (cursor != eof) {
             status = 1;
