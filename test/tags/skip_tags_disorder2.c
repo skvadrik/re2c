@@ -4,9 +4,7 @@
 {
 	YYCTYPE yych;
 	yyt1 = YYCURSOR;
-	goto yy0;
 yy1:
-yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR++;
 	switch (yych) {
