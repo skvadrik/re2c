@@ -40,7 +40,9 @@ static void emit_state(Output &output, const State *s, CodeList *stmts)
     Scratchbuf &o = output.scratchbuf;
     const char *text;
 
-    append(stmts, code_nlabel(alc, s->label));
+    if (!opts->loop_switch) {
+        append(stmts, code_nlabel(alc, s->label));
+    }
 
     if (opts->dFlag && (s->action.type != Action::INITIAL)) {
         text = o.str(opts->yydebug).cstr("(").label(*s->label).cstr(", ")
@@ -60,17 +62,34 @@ void DFA::emit_body(Output &output, CodeList *stmts) const
 
     // If DFA has transitions into the initial state and --eager-skip option is not used,
     // then the initial state must have a YYSKIP statement that must be bypassed when
-    // first entering the DFA.
+    // first entering the DFA. With --loop-switch that would be impossible, because there
+    // can be no transitions in the middle of a state.
     if (head->label->used && !opts->eager_skip) {
+        DASSERT(!opts->loop_switch);
         initial_label->used = true;
         text = o.cstr("goto ").str(opts->labelPrefix).label(*initial_label).flush();
         append(stmts, code_stmt(alc, text));
     }
 
-    for (State * s = head; s; s = s->next) {
-        emit_state(output, s, stmts);
-        emit_action(output, *this, s, stmts);
-        gen_go(output, *this, &s->go, s, stmts);
+    if (!opts->loop_switch) {
+        for (State * s = head; s; s = s->next) {
+            emit_state(output, s, stmts);
+            emit_action(output, *this, s, stmts);
+            gen_go(output, *this, &s->go, s, stmts);
+        }
+    } else {
+        CodeList* loop = code_list(alc);
+        CodeCases *cases = code_cases(alc);
+        for (State * s = head; s; s = s->next) {
+            CodeList *body = code_list(alc);
+            emit_state(output, s, body);
+            emit_action(output, *this, s, body);
+            gen_go(output, *this, &s->go, s, body);
+            append(cases, code_case_number(alc, body,
+                static_cast<int32_t>(s->label->index)));
+        }
+        append(loop, code_switch(alc, opts->yystate.c_str(), cases));
+        append(stmts, code_loop(alc, loop));
     }
 }
 
@@ -219,6 +238,7 @@ void gen_code(Output &output, dfas_t &dfas)
             if (first && !opts->fFlag) {
                 append(program1, code_yych_decl(alc));
                 append(program1, code_yyaccept_def(alc));
+                append(program1, code_yystate_def(alc, dfa.head->label->index));
             }
 
             if (!is_cond_block && bms) {

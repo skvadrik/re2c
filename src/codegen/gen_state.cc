@@ -330,8 +330,14 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
 
         // go to fallback state
         fallback->label->used = true;
-        append(fallback_trans, code_stmt(alc, output.scratchbuf.cstr("goto ")
-            .str(opts->labelPrefix).label(*fallback->label).flush()));
+        if (!opts->loop_switch) {
+            append(fallback_trans, code_stmt(alc, output.scratchbuf.cstr("goto ")
+                .str(opts->labelPrefix).label(*fallback->label).flush()));
+        } else {
+            append(fallback_trans, code_stmt(alc, output.scratchbuf.str(opts->yystate)
+                .cstr(" = ").label(*fallback->label).flush()));
+            append(fallback_trans, code_stmt(alc, "continue"));
+        }
     }
     else {
         // Transition can be elided, because control flow "falls through" to an
@@ -356,8 +362,14 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
 
     // Transition to YYFILL label from the initial state dispatch.
     CodeList *goto_fill = code_list(alc);
-    const char *flabel = gen_fill_label(output, fillidx);
-    append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
+    if (!opts->loop_switch) {
+        const char *flabel = gen_fill_label(output, fillidx);
+        append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
+    } else {
+        o.str(opts->yystate).cstr(" = ").u32(fillidx);
+        append(goto_fill, code_stmt(alc, o.flush()));
+        append(goto_fill, code_stmt(alc, "continue"));
+    }
 
     CodeList *fill = code_list(alc);
 
@@ -407,7 +419,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
         }
     }
     if (opts->fFlag) {
-        output.block().fill_goto.push_back(goto_fill);
+        output.block().fill_goto[fillidx] = goto_fill;
     }
 
     if (opts->fill_check && fill->head) {
@@ -429,7 +441,14 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
     const bool need_fill_label = need_fill_on_trans || (need_fill_in_state && opts->fFlag);
 
     if (need_fill_label) {
-        ++output.block().fill_index_end;
+        if (!opts->loop_switch) {
+            ++output.block().fill_index_end;
+        } else {
+            // With --loop-switch option we use state labels instead of YYFILL labels.
+            // Add +1 to state label here to mimic the non --loop-switch case that
+            // increments the next free index.
+            output.block().fill_index_end = s->label->index + 1;
+        }
     }
 
     if (need_fill_in_state) {
@@ -445,7 +464,7 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
         gen_settags(output, stmts, dfa, s->go.tags, opts->stadfa /* delayed */);
     }
 
-    if (need_fill_label) {
+    if (need_fill_label && !opts->loop_switch) {
         const char *flabel = gen_fill_label(output, output.block().fill_index_end - 1);
         append(stmts, code_slabel(output.allocator, flabel));
     }
@@ -475,8 +494,14 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
 
     if (!jump.elide) {
         jump.to->label->used = true;
-        text = o.cstr("goto ").str(opts->labelPrefix).label(*jump.to->label).flush();
-        append(stmts, code_stmt(alc, text));
+        if (!opts->loop_switch) {
+            text = o.cstr("goto ").str(opts->labelPrefix).label(*jump.to->label).flush();
+            append(stmts, code_stmt(alc, text));
+        } else {
+            text = o.str(opts->yystate).cstr(" = ").label(*jump.to->label).flush();
+            append(stmts, code_stmt(alc, text));
+            append(stmts, code_stmt(alc, "continue"));
+        }
     }
     else {
         // Goto can be elided, because control flow "falls through" to the

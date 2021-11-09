@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <map>
 
 #include "src/constants.h"
 #include "src/dfa/tcmd.h"
@@ -315,7 +316,9 @@ struct Code {
         CodeVar        var;
         CodeFmt        fmt;
         CodeLabel      label;
+        CodeList      *loop;
         loc_t          loc;
+        uint32_t       num;
     };
 
     CodeKind  kind;
@@ -371,6 +374,13 @@ inline Code *code_stmt(code_alc_t &alc, const char *text)
 {
     Code *x = new_code(alc, CODE_STMT);
     x->text = text;
+    return x;
+}
+
+inline Code *code_loop(code_alc_t &alc, CodeList *loop)
+{
+    Code *x = new_code(alc, CODE_LOOP);
+    x->loop = loop;
     return x;
 }
 
@@ -461,6 +471,13 @@ inline Code *code_yych_decl(code_alc_t &alc)
 inline Code *code_yyaccept_def(code_alc_t &alc)
 {
     return new_code(alc, CODE_YYACCEPT);
+}
+
+inline Code *code_yystate_def(code_alc_t &alc, uint32_t num)
+{
+    Code *x = new_code(alc, CODE_YYSTATE);
+    x->num = num;
+    return x;
 }
 
 inline Code *code_line_info_output(code_alc_t &alc)
@@ -681,7 +698,7 @@ struct OutputBlock {
     Label *start_label;        // label of the DFA start state
     uint32_t fill_index_start; // start of YYFILL index range
     uint32_t fill_index_end;   // end of YYFILL index range (not included)
-    std::vector<CodeList*> fill_goto; // transitions to YYFILL states
+    std::map<uint32_t, CodeList*> fill_goto; // transitions to YYFILL states
 
     OutputBlock(InputBlockKind kind, const std::string &name, const loc_t &loc);
     ~OutputBlock();
