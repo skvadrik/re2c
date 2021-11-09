@@ -1,4 +1,4 @@
-//go:generate re2go -c $INPUT -o $OUTPUT -i
+//go:generate re2go $INPUT -o $OUTPUT -i
 package main
 
 import (
