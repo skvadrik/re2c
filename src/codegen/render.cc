@@ -334,6 +334,31 @@ static void render_func(RenderContext &rctx, const CodeFunc *func)
     ++rctx.line;
 }
 
+static void render_loop(RenderContext &rctx, const CodeList *loop)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    os << indent(rctx.ind, opts->indString);
+    switch (opts->lang) {
+    case LANG_C:
+        os << "for (;;) {";
+        break;
+    case LANG_GO:
+        os << "for {";
+        break;
+    }
+    os << std::endl;
+    ++rctx.line;
+
+    ++rctx.ind;
+    render_list(rctx, loop);
+    --rctx.ind;
+
+    os << indent(rctx.ind, opts->indString) << "}" << std::endl;
+    ++rctx.line;
+}
+
 static inline void yych_conv(std::ostream &os, const opt_t *opts)
 {
     if (opts->yychConversion) {
@@ -509,6 +534,9 @@ void render(RenderContext &rctx, const Code *code)
         case CODE_FUNC:
             render_func(rctx, &code->func);
             break;
+        case CODE_LOOP:
+            render_loop(rctx, code->loop);
+            break;
         case CODE_TEXT_RAW:
             os << code->text << std::endl;
             line += count_lines_text(code->text) + 1;
@@ -576,6 +604,7 @@ void render(RenderContext &rctx, const Code *code)
         case CODE_MAXNMATCH:
         case CODE_YYCH:
         case CODE_YYACCEPT:
+        case CODE_YYSTATE:
         case CODE_COND_ENUM:
         case CODE_COND_GOTO:
         case CODE_COND_TABLE:

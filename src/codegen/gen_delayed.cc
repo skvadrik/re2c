@@ -176,12 +176,10 @@ static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,
 {
     code_alc_t &alc = ctx.global->allocator;
 
-    uint32_t index_count = block->fill_index_end - block->fill_index_start;
-    DASSERT(index_count <= block->fill_goto.size());
-
-    for (uint32_t i = 0; i < index_count; ++i) {
-        append(cases, code_case_number(alc, block->fill_goto[i],
-            static_cast<int32_t>(i + block->fill_index_start)));
+    std::map<uint32_t, CodeList*>::const_iterator
+        i = block->fill_goto.begin(), e = block->fill_goto.end();
+    for (; i != e; ++i) {
+        append(cases, code_case_number(alc, i->second, static_cast<int32_t>(i->first)));
     }
 }
 
@@ -316,6 +314,25 @@ static void gen_yyaccept_def(const opt_t *opts, Code *code, bool used_yyaccept)
         code->var.type = "unsigned int";
         code->var.name = opts->yyaccept.c_str();
         code->var.init = "0";
+    }
+    else {
+        code->kind = CODE_EMPTY;
+    }
+}
+
+static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
+{
+    const opt_t *opts = ctx.block->opts;
+    Scratchbuf &o = ctx.global->scratchbuf;
+
+    if (opts->loop_switch) {
+        // save old value before overwriting it
+        const uint32_t init = code->num;
+
+        code->kind = CODE_VAR;
+        code->var.type = "unsigned int";
+        code->var.name = o.str(opts->yystate).flush();
+        code->var.init = o.u32(init).flush();
     }
     else {
         code->kind = CODE_EMPTY;
@@ -524,6 +541,9 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
                 expand_pass_1_list(ctx, x->body);
             }
             break;
+        case CODE_LOOP:
+            expand_pass_1_list(ctx, code->loop);
+            break;
         case CODE_STAGS:
         case CODE_MTAGS:
             expand_tags_directive(ctx, code);
@@ -537,6 +557,9 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             break;
         case CODE_YYACCEPT:
             gen_yyaccept_def(opts, code, ctx.block->used_yyaccept);
+            break;
+        case CODE_YYSTATE:
+            gen_yystate_def(ctx, code);
             break;
         case CODE_COND_ENUM:
             expand_cond_enum(ctx, code);
@@ -617,6 +640,9 @@ void expand_pass_2(CodegenCtxPass2 &ctx, Code *code)
             for (CodeCase *x = code->swch.cases->head; x; x = x->next) {
                 expand_pass_2_list(ctx, x->body);
             }
+            break;
+        case CODE_LOOP:
+            expand_pass_2_list(ctx, code->loop);
             break;
         case CODE_LABEL:
             gen_label(ctx.scratchbuf, ctx.opts, code);

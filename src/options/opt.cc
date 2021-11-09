@@ -245,7 +245,10 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (real.fill_naked) {
         real.fill_arg_use = false;
     }
-    if (!glob.lookahead) {
+    if (!glob.lookahead || real.loop_switch) {
+        // for loop-switch enable eager-skip always (not only in cases when
+        // YYFILL labels are used) to avoid special handling of initial state
+        // when there are transitions into it.
         real.eager_skip = true;
     }
 
@@ -309,6 +312,22 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         // lexer is resumed from the wrong program point.
         error("storable state requires YYFILL to be enabled");
         exit(1);
+    }
+    if (real.loop_switch) {
+        if (real.gFlag) {
+            error("cannot combine loop switch and computed gotos");
+            exit(1);
+        }
+        // TODO: support --loop-switch with conditions
+        if (glob.cFlag) {
+            error("cannot combine loop switch and conditions");
+            exit(1);
+        }
+        // TODO: support --loop-switch with storable state
+        if (glob.fFlag) {
+            error("cannot combine loop switch and storable state");
+            exit(1);
+        }
     }
 }
 
