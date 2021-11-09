@@ -58,10 +58,10 @@ void DFA::emit_body(Output &output, CodeList *stmts) const
 
     gen_settags(output, stmts, *this, tags0, false /* delayed */);
 
-    // If DFA has transitions to initial state, then initial state
-    // has a piece of code that advances input position. Wee must
-    // skip it when entering DFA.
-    if (head->label->used) {
+    // If DFA has transitions into the initial state and --eager-skip option is not used,
+    // then the initial state must have a YYSKIP statement that must be bypassed when
+    // first entering the DFA.
+    if (head->label->used && !opts->eager_skip) {
         initial_label->used = true;
         text = o.cstr("goto ").str(opts->labelPrefix).label(*initial_label).flush();
         append(stmts, code_stmt(alc, text));
