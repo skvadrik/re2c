@@ -50,7 +50,6 @@ void Scanner::lex_conf(Opt &opts)
     "flags:case-insensitive"          { opts.set_bCaseInsensitive (lex_conf_bool());   return; }
     "flags:case-inverted"             { opts.set_bCaseInverted    (lex_conf_bool());   return; }
     "flags:case-ranges"               { opts.set_case_ranges      (lex_conf_bool());   return; }
-    "flags:loop-switch"               { opts.set_loop_switch      (lex_conf_bool());   return; }
 
     // header filename in configuration is relative to the output file directory
     "flags:" ("t" | "type-header") {

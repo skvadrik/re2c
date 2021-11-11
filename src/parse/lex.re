@@ -202,6 +202,12 @@ loop:
             msg.error(cur_loc(), "`getstate:re2c` without `-f --storable-state` option");
             return INPUT_ERROR;
         }
+        if (opts->loop_switch) {
+            msg.error(cur_loc(), "`getstate:re2c` is incompatible with the --loop-switch "
+                "option, as it requires cross-block transitions that are unsupported "
+                "without the `goto` statement");
+            return INPUT_ERROR;
+        }
         if (!lex_block(out, CODE_STATE_GOTO, opts->topIndent, 0)) return INPUT_ERROR;
         goto next;
     }

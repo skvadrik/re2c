@@ -25,6 +25,13 @@ static void fix_conopt(conopt_t &glob)
         }
     }
 
+    if (!glob.lookahead || glob.loop_switch) {
+        // for loop-switch enable eager-skip always (not only in cases when
+        // YYFILL labels are used) to avoid special handling of initial state
+        // when there are transitions into it.
+        glob.eager_skip = true;
+    }
+
     if (!glob.dep_file.empty() && glob.output_file.empty()) {
         error("cannot generate dep file, output file not specified");
         exit(1);
@@ -245,12 +252,6 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (real.fill_naked) {
         real.fill_arg_use = false;
     }
-    if (!glob.lookahead || real.loop_switch) {
-        // for loop-switch enable eager-skip always (not only in cases when
-        // YYFILL labels are used) to avoid special handling of initial state
-        // when there are transitions into it.
-        real.eager_skip = true;
-    }
 
     // errors
     if (glob.target == TARGET_SKELETON && glob.lang != LANG_C) {
@@ -313,7 +314,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         error("storable state requires YYFILL to be enabled");
         exit(1);
     }
-    if (real.loop_switch) {
+    if (glob.loop_switch) {
         if (real.gFlag) {
             error("cannot combine loop switch and computed gotos");
             exit(1);
