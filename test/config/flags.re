@@ -13,7 +13,6 @@
     re2c:flags:case-insensitive = 0;
     re2c:flags:case-inverted = 1;
     re2c:flags:case-ranges = 1;
-    re2c:flags:loop-switch = 0;
 
     re2c:flags:e = 1;
     re2c:flags:ecb = 0;

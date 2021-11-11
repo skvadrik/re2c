@@ -74,6 +74,8 @@ class Msg;
     CONSTOPT (bool, backward, false) \
     CONSTOPT (bool, stadfa, false) \
     CONSTOPT (bool, nested_negative_tags, true) \
+    CONSTOPT (bool, eager_skip, false) \
+    CONSTOPT (bool, loop_switch, false) \
     /* debug */ \
     CONSTOPT (bool, dump_nfa, false) \
     CONSTOPT (bool, dump_dfa_raw, false) \
@@ -135,13 +137,11 @@ class Msg;
     MUTOPT (bool, yybmHexTable, false) \
     MUTOPT (bool, gFlag, false) \
     MUTOPT (bool, case_ranges, false) \
-    MUTOPT (bool, loop_switch, false) \
     MUTOPT (std::string, yystate, "yystate") \
     MUTOPT (std::string, yytarget, "yytarget") \
     MUTOPT (uint32_t, cGotoThreshold, 9) \
     MUTOPT (uint32_t, eof, NOEOF) \
     MUTOPT (uint32_t, sentinel, NOEOF) \
-    MUTOPT (bool, eager_skip, false) \
     /* formatting */ \
     MUTOPT (uint32_t, topIndent, 0) \
     MUTOPT (std::string, indString, "\t") \
