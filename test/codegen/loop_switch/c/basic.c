@@ -5,43 +5,43 @@ int lex(const char *YYCURSOR) {       // C/C++ code
 
 {
 	char yych;
-	unsigned int yystate = 1;
+	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 1:
+		case 0:
 			yych = *YYCURSOR;
 			++YYCURSOR;
 			switch (yych) {
 			case 'A' ... 'Z':
 			case 'a' ... 'z':
-				yystate = 4;
+				yystate = 3;
 				continue;
 			default:
-				yystate = 2;
+				yystate = 1;
 				continue;
 			}
+		case 1:
+			yystate = 2;
+			continue;
 		case 2:
-			yystate = 3;
-			continue;
-		case 3:
 			{ return 1; }
-		case 4:
+		case 3:
 			yych = *YYCURSOR;
-			yystate = 5;
+			yystate = 4;
 			continue;
-		case 5:
+		case 4:
 			switch (yych) {
 			case '0' ... '9':
 			case 'A' ... 'Z':
 			case 'a' ... 'z':
 				++YYCURSOR;
-				yystate = 4;
+				yystate = 3;
 				continue;
 			default:
-				yystate = 6;
+				yystate = 5;
 				continue;
 			}
-		case 6:
+		case 5:
 			{ return 0; }
 		}
 	}

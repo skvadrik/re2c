@@ -9,44 +9,44 @@ func lex(str string) {                    // Go code
 
 {
 	var yych byte
-	yystate := 1
+	yystate := 0
 	for {
 		switch (yystate) {
-		case 1:
+		case 0:
 			yych = str[cursor]
 			cursor += 1
 			if (yych <= '0') {
-				yystate = 2
+				yystate = 1
 				continue
 			}
 			if (yych <= '9') {
-				yystate = 4
+				yystate = 3
 				continue
 			}
+			yystate = 1
+			continue
+		case 1:
 			yystate = 2
 			continue
 		case 2:
-			yystate = 3
-			continue
-		case 3:
 			{ panic("error!"); }
-		case 4:
+		case 3:
 			yych = str[cursor]
-			yystate = 5
+			yystate = 4
 			continue
-		case 5:
+		case 4:
 			if (yych <= '/') {
-				yystate = 6
+				yystate = 5
 				continue
 			}
 			if (yych <= '9') {
 				cursor += 1
-				yystate = 4
+				yystate = 3
 				continue
 			}
-			yystate = 6
+			yystate = 5
 			continue
-		case 6:
+		case 5:
 			{ return }
 		}
 	}

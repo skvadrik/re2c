@@ -10,18 +10,18 @@ loop:
     
 {
 	char yych;
-	unsigned int yystate = 1;
+	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 1:
+		case 0:
 			yych = *YYCURSOR;
 			++YYCURSOR;
 			switch (yych) {
 			case 0x00:
-				yystate = 2;
+				yystate = 1;
 				continue;
 			case ' ':
-				yystate = 6;
+				yystate = 5;
 				continue;
 			case 'a':
 			case 'b':
@@ -49,43 +49,43 @@ loop:
 			case 'x':
 			case 'y':
 			case 'z':
-				yystate = 9;
-				continue;
-			default:
-				yystate = 4;
-				continue;
-			}
-		case 2:
-			yystate = 3;
-			continue;
-		case 3:
-			{ return count; }
-		case 4:
-			yystate = 5;
-			continue;
-		case 5:
-			{ return -1; }
-		case 6:
-			yych = *YYCURSOR;
-			yystate = 7;
-			continue;
-		case 7:
-			switch (yych) {
-			case ' ':
-				++YYCURSOR;
-				yystate = 6;
-				continue;
-			default:
 				yystate = 8;
 				continue;
+			default:
+				yystate = 3;
+				continue;
 			}
-		case 8:
-			{ goto loop; }
-		case 9:
-			yych = *YYCURSOR;
-			yystate = 10;
+		case 1:
+			yystate = 2;
 			continue;
-		case 10:
+		case 2:
+			{ return count; }
+		case 3:
+			yystate = 4;
+			continue;
+		case 4:
+			{ return -1; }
+		case 5:
+			yych = *YYCURSOR;
+			yystate = 6;
+			continue;
+		case 6:
+			switch (yych) {
+			case ' ':
+				++YYCURSOR;
+				yystate = 5;
+				continue;
+			default:
+				yystate = 7;
+				continue;
+			}
+		case 7:
+			{ goto loop; }
+		case 8:
+			yych = *YYCURSOR;
+			yystate = 9;
+			continue;
+		case 9:
 			switch (yych) {
 			case 'a':
 			case 'b':
@@ -114,13 +114,13 @@ loop:
 			case 'y':
 			case 'z':
 				++YYCURSOR;
-				yystate = 9;
+				yystate = 8;
 				continue;
 			default:
-				yystate = 11;
+				yystate = 10;
 				continue;
 			}
-		case 11:
+		case 10:
 			{ ++count; goto loop; }
 		}
 	}

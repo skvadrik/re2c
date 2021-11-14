@@ -22,18 +22,18 @@ loop:
 	
 {
 	var yych byte
-	yystate := 1
+	yystate := 0
 	for {
 		switch (yystate) {
-		case 1:
+		case 0:
 			yych = peek(str, cursor, limit)
 			cursor += 1
 			switch (yych) {
 			case 0x00:
-				yystate = 2
+				yystate = 1
 				continue
 			case ' ':
-				yystate = 6
+				yystate = 5
 				continue
 			case 'a':
 				fallthrough
@@ -86,43 +86,43 @@ loop:
 			case 'y':
 				fallthrough
 			case 'z':
-				yystate = 9
-				continue
-			default:
-				yystate = 4
-				continue
-			}
-		case 2:
-			yystate = 3
-			continue
-		case 3:
-			{ return count }
-		case 4:
-			yystate = 5
-			continue
-		case 5:
-			{ return -1 }
-		case 6:
-			yych = peek(str, cursor, limit)
-			yystate = 7
-			continue
-		case 7:
-			switch (yych) {
-			case ' ':
-				cursor += 1
-				yystate = 6
-				continue
-			default:
 				yystate = 8
 				continue
+			default:
+				yystate = 3
+				continue
 			}
-		case 8:
-			{ goto loop }
-		case 9:
-			yych = peek(str, cursor, limit)
-			yystate = 10
+		case 1:
+			yystate = 2
 			continue
-		case 10:
+		case 2:
+			{ return count }
+		case 3:
+			yystate = 4
+			continue
+		case 4:
+			{ return -1 }
+		case 5:
+			yych = peek(str, cursor, limit)
+			yystate = 6
+			continue
+		case 6:
+			switch (yych) {
+			case ' ':
+				cursor += 1
+				yystate = 5
+				continue
+			default:
+				yystate = 7
+				continue
+			}
+		case 7:
+			{ goto loop }
+		case 8:
+			yych = peek(str, cursor, limit)
+			yystate = 9
+			continue
+		case 9:
 			switch (yych) {
 			case 'a':
 				fallthrough
@@ -176,13 +176,13 @@ loop:
 				fallthrough
 			case 'z':
 				cursor += 1
-				yystate = 9
+				yystate = 8
 				continue
 			default:
-				yystate = 11
+				yystate = 10
 				continue
 			}
-		case 11:
+		case 10:
 			{ count += 1; goto loop }
 		}
 	}
