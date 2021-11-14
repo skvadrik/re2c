@@ -16,122 +16,122 @@ func lexUTF8(str []uint8) int {
 	
 {
 	var yych uint8
-	yystate := 1
+	yystate := 0
 	for {
 		switch (yystate) {
-		case 1:
+		case 0:
 			yych = str[cursor]
 			cursor += 1
 			switch (yych) {
 			case 0xE2:
+				yystate = 3
+				continue
+			default:
+				yystate = 1
+				continue
+			}
+		case 1:
+			yystate = 2
+			continue
+		case 2:
+			{ return 1; }
+		case 3:
+			marker = cursor
+			yych = str[cursor]
+			switch (yych) {
+			case 0x88:
+				cursor += 1
 				yystate = 4
 				continue
 			default:
 				yystate = 2
 				continue
 			}
-		case 2:
-			yystate = 3
-			continue
-		case 3:
-			{ return 1; }
 		case 4:
-			marker = cursor
-			yych = str[cursor]
-			switch (yych) {
-			case 0x88:
-				cursor += 1
-				yystate = 5
-				continue
-			default:
-				yystate = 3
-				continue
-			}
-		case 5:
 			yych = str[cursor]
 			switch (yych) {
 			case 0x80:
 				cursor += 1
-				yystate = 7
-				continue
-			default:
 				yystate = 6
 				continue
+			default:
+				yystate = 5
+				continue
 			}
-		case 6:
+		case 5:
 			cursor = marker
-			yystate = 3
+			yystate = 2
 			continue
-		case 7:
+		case 6:
 			yych = str[cursor]
 			switch (yych) {
 			case 'x':
 				cursor += 1
+				yystate = 7
+				continue
+			default:
+				yystate = 5
+				continue
+			}
+		case 7:
+			yych = str[cursor]
+			switch (yych) {
+			case ' ':
+				cursor += 1
 				yystate = 8
 				continue
 			default:
-				yystate = 6
+				yystate = 5
 				continue
 			}
 		case 8:
 			yych = str[cursor]
 			switch (yych) {
-			case ' ':
+			case 0xE2:
 				cursor += 1
 				yystate = 9
 				continue
 			default:
-				yystate = 6
+				yystate = 5
 				continue
 			}
 		case 9:
 			yych = str[cursor]
 			switch (yych) {
-			case 0xE2:
+			case 0x88:
 				cursor += 1
 				yystate = 10
 				continue
 			default:
-				yystate = 6
+				yystate = 5
 				continue
 			}
 		case 10:
 			yych = str[cursor]
 			switch (yych) {
-			case 0x88:
+			case 0x83:
 				cursor += 1
 				yystate = 11
 				continue
 			default:
-				yystate = 6
+				yystate = 5
 				continue
 			}
 		case 11:
 			yych = str[cursor]
 			switch (yych) {
-			case 0x83:
+			case 'y':
 				cursor += 1
 				yystate = 12
 				continue
 			default:
-				yystate = 6
+				yystate = 5
 				continue
 			}
 		case 12:
-			yych = str[cursor]
-			switch (yych) {
-			case 'y':
-				cursor += 1
-				yystate = 13
-				continue
-			default:
-				yystate = 6
-				continue
-			}
-		case 13:
-			yystate = 14
+			yystate = 13
 			continue
-		case 14:
+		case 13:
 			{ return 0; }
 		}
 	}
@@ -144,68 +144,68 @@ func lexUTF32(str []uint32) int {
 	
 {
 	var yych uint32
-	yystate := 16
+	yystate := 0
 	for {
 		switch (yystate) {
-		case 16:
+		case 0:
 			yych = str[cursor]
 			cursor += 1
 			if (yych == 0x00002200) {
-				yystate = 19
+				yystate = 3
 				continue
 			}
-			yystate = 17
+			yystate = 1
 			continue
-		case 17:
-			yystate = 18
+		case 1:
+			yystate = 2
 			continue
-		case 18:
+		case 2:
 			{ return 1; }
-		case 19:
+		case 3:
 			marker = cursor
 			yych = str[cursor]
 			if (yych != 'x') {
-				yystate = 18
+				yystate = 2
 				continue
 			}
 			cursor += 1
-			yystate = 20
+			yystate = 4
 			continue
-		case 20:
+		case 4:
 			yych = str[cursor]
 			if (yych == ' ') {
 				cursor += 1
-				yystate = 22
+				yystate = 6
 				continue
 			}
-			yystate = 21
+			yystate = 5
 			continue
-		case 21:
+		case 5:
 			cursor = marker
-			yystate = 18
+			yystate = 2
 			continue
-		case 22:
+		case 6:
 			yych = str[cursor]
 			if (yych != 0x00002203) {
-				yystate = 21
+				yystate = 5
 				continue
 			}
 			cursor += 1
-			yystate = 23
+			yystate = 7
 			continue
-		case 23:
+		case 7:
 			yych = str[cursor]
 			if (yych != 'y') {
-				yystate = 21
+				yystate = 5
 				continue
 			}
 			cursor += 1
-			yystate = 24
+			yystate = 8
 			continue
-		case 24:
-			yystate = 25
+		case 8:
+			yystate = 9
 			continue
-		case 25:
+		case 9:
 			{ return 0; }
 		}
 	}

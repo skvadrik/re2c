@@ -326,13 +326,10 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
     Scratchbuf &o = ctx.global->scratchbuf;
 
     if (opts->loop_switch) {
-        // save old value before overwriting it
-        const uint32_t init = code->num;
-
         code->kind = CODE_VAR;
         code->var.type = "unsigned int";
         code->var.name = o.str(opts->yystate).flush();
-        code->var.init = o.u32(init).flush();
+        code->var.init = "0";
     }
     else {
         code->kind = CODE_EMPTY;

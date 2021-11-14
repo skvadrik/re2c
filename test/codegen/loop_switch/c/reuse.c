@@ -16,122 +16,122 @@ static int lex_utf8(const uint8_t *YYCURSOR)
     
 {
 	uint8_t yych;
-	unsigned int yystate = 1;
+	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 1:
+		case 0:
 			yych = *YYCURSOR;
 			++YYCURSOR;
 			switch (yych) {
 			case 0xE2:
+				yystate = 3;
+				continue;
+			default:
+				yystate = 1;
+				continue;
+			}
+		case 1:
+			yystate = 2;
+			continue;
+		case 2:
+			{ return 1; }
+		case 3:
+			YYMARKER = YYCURSOR;
+			yych = *YYCURSOR;
+			switch (yych) {
+			case 0x88:
+				++YYCURSOR;
 				yystate = 4;
 				continue;
 			default:
 				yystate = 2;
 				continue;
 			}
-		case 2:
-			yystate = 3;
-			continue;
-		case 3:
-			{ return 1; }
 		case 4:
-			YYMARKER = YYCURSOR;
-			yych = *YYCURSOR;
-			switch (yych) {
-			case 0x88:
-				++YYCURSOR;
-				yystate = 5;
-				continue;
-			default:
-				yystate = 3;
-				continue;
-			}
-		case 5:
 			yych = *YYCURSOR;
 			switch (yych) {
 			case 0x80:
 				++YYCURSOR;
-				yystate = 7;
-				continue;
-			default:
 				yystate = 6;
 				continue;
+			default:
+				yystate = 5;
+				continue;
 			}
-		case 6:
+		case 5:
 			YYCURSOR = YYMARKER;
-			yystate = 3;
+			yystate = 2;
 			continue;
-		case 7:
+		case 6:
 			yych = *YYCURSOR;
 			switch (yych) {
 			case 'x':
 				++YYCURSOR;
+				yystate = 7;
+				continue;
+			default:
+				yystate = 5;
+				continue;
+			}
+		case 7:
+			yych = *YYCURSOR;
+			switch (yych) {
+			case ' ':
+				++YYCURSOR;
 				yystate = 8;
 				continue;
 			default:
-				yystate = 6;
+				yystate = 5;
 				continue;
 			}
 		case 8:
 			yych = *YYCURSOR;
 			switch (yych) {
-			case ' ':
+			case 0xE2:
 				++YYCURSOR;
 				yystate = 9;
 				continue;
 			default:
-				yystate = 6;
+				yystate = 5;
 				continue;
 			}
 		case 9:
 			yych = *YYCURSOR;
 			switch (yych) {
-			case 0xE2:
+			case 0x88:
 				++YYCURSOR;
 				yystate = 10;
 				continue;
 			default:
-				yystate = 6;
+				yystate = 5;
 				continue;
 			}
 		case 10:
 			yych = *YYCURSOR;
 			switch (yych) {
-			case 0x88:
+			case 0x83:
 				++YYCURSOR;
 				yystate = 11;
 				continue;
 			default:
-				yystate = 6;
+				yystate = 5;
 				continue;
 			}
 		case 11:
 			yych = *YYCURSOR;
 			switch (yych) {
-			case 0x83:
+			case 'y':
 				++YYCURSOR;
 				yystate = 12;
 				continue;
 			default:
-				yystate = 6;
+				yystate = 5;
 				continue;
 			}
 		case 12:
-			yych = *YYCURSOR;
-			switch (yych) {
-			case 'y':
-				++YYCURSOR;
-				yystate = 13;
-				continue;
-			default:
-				yystate = 6;
-				continue;
-			}
-		case 13:
-			yystate = 14;
+			yystate = 13;
 			continue;
-		case 14:
+		case 13:
 			{ return 0; }
 		}
 	}
@@ -145,68 +145,68 @@ static int lex_utf32(const uint32_t *YYCURSOR)
     
 {
 	uint32_t yych;
-	unsigned int yystate = 16;
+	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 16:
+		case 0:
 			yych = *YYCURSOR;
 			++YYCURSOR;
 			if (yych == 0x00002200) {
-				yystate = 19;
+				yystate = 3;
 				continue;
 			}
-			yystate = 17;
+			yystate = 1;
 			continue;
-		case 17:
-			yystate = 18;
+		case 1:
+			yystate = 2;
 			continue;
-		case 18:
+		case 2:
 			{ return 1; }
-		case 19:
+		case 3:
 			YYMARKER = YYCURSOR;
 			yych = *YYCURSOR;
 			if (yych != 'x') {
-				yystate = 18;
+				yystate = 2;
 				continue;
 			}
 			++YYCURSOR;
-			yystate = 20;
+			yystate = 4;
 			continue;
-		case 20:
+		case 4:
 			yych = *YYCURSOR;
 			if (yych == ' ') {
 				++YYCURSOR;
-				yystate = 22;
+				yystate = 6;
 				continue;
 			}
-			yystate = 21;
+			yystate = 5;
 			continue;
-		case 21:
+		case 5:
 			YYCURSOR = YYMARKER;
-			yystate = 18;
+			yystate = 2;
 			continue;
-		case 22:
+		case 6:
 			yych = *YYCURSOR;
 			if (yych != 0x00002203) {
-				yystate = 21;
+				yystate = 5;
 				continue;
 			}
 			++YYCURSOR;
-			yystate = 23;
+			yystate = 7;
 			continue;
-		case 23:
+		case 7:
 			yych = *YYCURSOR;
 			if (yych != 'y') {
-				yystate = 21;
+				yystate = 5;
 				continue;
 			}
 			++YYCURSOR;
-			yystate = 24;
+			yystate = 8;
 			continue;
-		case 24:
-			yystate = 25;
+		case 8:
+			yystate = 9;
 			continue;
-		case 25:
+		case 9:
 			{ return 0; }
 		}
 	}

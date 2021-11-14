@@ -63,133 +63,133 @@ loop:
 	
 {
 	var yych byte
-	yystate := 1
+	yystate := 0
 	for {
 		switch (yystate) {
-		case 1:
+		case 0:
 			yych = in.data[in.cursor]
 			switch (yych) {
 			case ' ':
 				in.cursor += 1
-				yystate = 4
+				yystate = 3
 				continue
 			case '\'':
 				in.cursor += 1
-				yystate = 7
+				yystate = 6
 				continue
 			default:
 				if (in.limit <= in.cursor) {
 					if (fill(in) == 0) {
-						yystate = 1
+						yystate = 0
+						continue
+					}
+					yystate = 12
+					continue
+				}
+				in.cursor += 1
+				yystate = 1
+				continue
+			}
+		case 1:
+			yystate = 2
+			continue
+		case 2:
+			{ return -1 }
+		case 3:
+			yych = in.data[in.cursor]
+			yystate = 4
+			continue
+		case 4:
+			switch (yych) {
+			case ' ':
+				in.cursor += 1
+				yystate = 3
+				continue
+			default:
+				if (in.limit <= in.cursor) {
+					if (fill(in) == 0) {
+						yystate = 3
+						continue
+					}
+				}
+				yystate = 5
+				continue
+			}
+		case 5:
+			{ goto loop }
+		case 6:
+			in.marker = in.cursor
+			yych = in.data[in.cursor]
+			if (yych >= 0x01) {
+				yystate = 8
+				continue
+			}
+			if (in.limit <= in.cursor) {
+				if (fill(in) == 0) {
+					yystate = 6
+					continue
+				}
+				yystate = 2
+				continue
+			}
+			in.cursor += 1
+			yystate = 7
+			continue
+		case 7:
+			yych = in.data[in.cursor]
+			yystate = 8
+			continue
+		case 8:
+			switch (yych) {
+			case '\'':
+				in.cursor += 1
+				yystate = 9
+				continue
+			case '\\':
+				in.cursor += 1
+				yystate = 11
+				continue
+			default:
+				if (in.limit <= in.cursor) {
+					if (fill(in) == 0) {
+						yystate = 7
 						continue
 					}
 					yystate = 13
 					continue
 				}
 				in.cursor += 1
-				yystate = 2
+				yystate = 7
 				continue
 			}
-		case 2:
-			yystate = 3
-			continue
-		case 3:
-			{ return -1 }
-		case 4:
-			yych = in.data[in.cursor]
-			yystate = 5
-			continue
-		case 5:
-			switch (yych) {
-			case ' ':
-				in.cursor += 1
-				yystate = 4
-				continue
-			default:
-				if (in.limit <= in.cursor) {
-					if (fill(in) == 0) {
-						yystate = 4
-						continue
-					}
-				}
-				yystate = 6
-				continue
-			}
-		case 6:
-			{ goto loop }
-		case 7:
-			in.marker = in.cursor
-			yych = in.data[in.cursor]
-			if (yych >= 0x01) {
-				yystate = 9
-				continue
-			}
-			if (in.limit <= in.cursor) {
-				if (fill(in) == 0) {
-					yystate = 7
-					continue
-				}
-				yystate = 3
-				continue
-			}
-			in.cursor += 1
-			yystate = 8
-			continue
-		case 8:
-			yych = in.data[in.cursor]
-			yystate = 9
-			continue
 		case 9:
-			switch (yych) {
-			case '\'':
-				in.cursor += 1
-				yystate = 10
-				continue
-			case '\\':
-				in.cursor += 1
-				yystate = 12
-				continue
-			default:
-				if (in.limit <= in.cursor) {
-					if (fill(in) == 0) {
-						yystate = 8
-						continue
-					}
-					yystate = 14
-					continue
-				}
-				in.cursor += 1
-				yystate = 8
-				continue
-			}
-		case 10:
-			yystate = 11
+			yystate = 10
 			continue
-		case 11:
+		case 10:
 			{ count += 1; goto loop }
-		case 12:
+		case 11:
 			yych = in.data[in.cursor]
 			if (yych <= 0x00) {
 				if (in.limit <= in.cursor) {
 					if (fill(in) == 0) {
-						yystate = 12
+						yystate = 11
 						continue
 					}
-					yystate = 14
+					yystate = 13
 					continue
 				}
 				in.cursor += 1
-				yystate = 8
+				yystate = 7
 				continue
 			}
 			in.cursor += 1
-			yystate = 8
+			yystate = 7
 			continue
-		case 13:
+		case 12:
 			{ return count }
-		case 14:
+		case 13:
 			in.cursor = in.marker
-			yystate = 3
+			yystate = 2
 			continue
 		}
 	}

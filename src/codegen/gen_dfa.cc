@@ -158,28 +158,34 @@ void gen_code(Output &output, dfas_t &dfas)
     // All conditions are named, so it suffices to check the first DFA.
     const bool is_cond_block = !(*b)->cond.empty();
 
+    if (opts->loop_switch) {
+        // With loop/switch there are no labels, and each block has its own state switch.
+        // Restart state counter from zero so that cases start from zero.
+        output.label_counter = 0;
+    }
+
     for (i = b; i != e; ++i) {
         const bool first = i == b;
         DFA &dfa = *(*i);
 
-        if (first) {
-            if (opts->startlabel_force) {
-                // User-enforced start label.
-                dfa.start_label = new_label(alc, output.label_counter++);
-                dfa.start_label->used = true;
-            } else if (opts->fFlag) {
-                // Start label is needed in `-f` mode: it points to state 0 (the
-                // beginning of block, before condition dispatch in `-c` mode).
-                dfa.start_label = new_label(alc, output.label_counter++);
+        if (!opts->loop_switch) {
+            if (first) {
+                if (opts->startlabel_force) {
+                    // User-enforced start label.
+                    dfa.start_label = new_label(alc, output.label_counter++);
+                    dfa.start_label->used = true;
+                } else if (opts->fFlag) {
+                    // Start label is needed in `-f` mode: it points to state 0 (the
+                    // beginning of block, before condition dispatch in `-c` mode).
+                    dfa.start_label = new_label(alc, output.label_counter++);
+                }
+                oblock.start_label = dfa.start_label;
             }
-            oblock.start_label = dfa.start_label;
+            // Initial label points to the beginning of the DFA (after condition
+            // dispatch in `-c` mode).
+            dfa.initial_label = new_label(alc, output.label_counter++);
+            dfa.head->action.set_initial();
         }
-
-        // Initial label points to the beginning of the DFA (after condition
-        // dispatch in `-c` mode).
-        dfa.initial_label = new_label(alc, output.label_counter++);
-        dfa.head->action.set_initial();
-
         for (State *s = dfa.head; s; s = s->next) {
             s->label = new_label(alc, output.label_counter++);
         }
@@ -238,7 +244,7 @@ void gen_code(Output &output, dfas_t &dfas)
             if (first && !opts->fFlag) {
                 append(program1, code_yych_decl(alc));
                 append(program1, code_yyaccept_def(alc));
-                append(program1, code_yystate_def(alc, dfa.head->label->index));
+                append(program1, code_yystate_def(alc));
             }
 
             if (!is_cond_block && bms) {

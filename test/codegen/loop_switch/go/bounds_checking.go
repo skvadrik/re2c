@@ -19,10 +19,10 @@ loop:
 	
 {
 	var yych byte
-	yystate := 1
+	yystate := 0
 	for {
 		switch (yystate) {
-		case 1:
+		case 0:
 			if (limit - cursor < 1) {
 				return -1
 			}
@@ -30,22 +30,22 @@ loop:
 			cursor += 1
 			switch (yych) {
 			case 0x00:
-				yystate = 2
+				yystate = 1
 				continue
 			case ' ':
-				yystate = 6
+				yystate = 5
 				continue
 			case '\'':
-				yystate = 9
+				yystate = 8
 				continue
 			default:
-				yystate = 4
+				yystate = 3
 				continue
 			}
-		case 2:
-			yystate = 3
+		case 1:
+			yystate = 2
 			continue
-		case 3:
+		case 2:
 			{
 		if limit - cursor == YYMAXFILL - 1 {
 			return count
@@ -53,69 +53,69 @@ loop:
 			return -1
 		}
 	}
-		case 4:
-			yystate = 5
+		case 3:
+			yystate = 4
 			continue
-		case 5:
+		case 4:
 			{
 		return -1
 	}
-		case 6:
+		case 5:
 			if (limit - cursor < 1) {
 				return -1
 			}
 			yych = str[cursor]
-			yystate = 7
+			yystate = 6
 			continue
-		case 7:
+		case 6:
 			switch (yych) {
 			case ' ':
 				cursor += 1
-				yystate = 6
+				yystate = 5
+				continue
+			default:
+				yystate = 7
+				continue
+			}
+		case 7:
+			{
+		goto loop
+	}
+		case 8:
+			if (limit - cursor < 1) {
+				return -1
+			}
+			yych = str[cursor]
+			yystate = 9
+			continue
+		case 9:
+			cursor += 1
+			switch (yych) {
+			case '\'':
+				yystate = 10
+				continue
+			case '\\':
+				yystate = 12
 				continue
 			default:
 				yystate = 8
 				continue
 			}
-		case 8:
-			{
-		goto loop
-	}
-		case 9:
-			if (limit - cursor < 1) {
-				return -1
-			}
-			yych = str[cursor]
-			yystate = 10
-			continue
 		case 10:
-			cursor += 1
-			switch (yych) {
-			case '\'':
-				yystate = 11
-				continue
-			case '\\':
-				yystate = 13
-				continue
-			default:
-				yystate = 9
-				continue
-			}
-		case 11:
-			yystate = 12
+			yystate = 11
 			continue
-		case 12:
+		case 11:
 			{
 		count += 1;
 		goto loop
 	}
-		case 13:
+		case 12:
 			if (limit - cursor < 1) {
 				return -1
 			}
 			yych = str[cursor]
 			cursor += 1
-			yystate = 9
+			yystate = 8
 			continue
 		}
 	}

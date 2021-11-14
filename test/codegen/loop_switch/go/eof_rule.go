@@ -13,19 +13,77 @@ loop:
 	
 {
 	var yych byte
-	yystate := 1
+	yystate := 0
 	for {
 		switch (yystate) {
-		case 1:
+		case 0:
 			yych = str[cursor]
 			switch (yych) {
 			case ' ':
 				cursor += 1
-				yystate = 4
+				yystate = 3
 				continue
 			case '\'':
 				cursor += 1
-				yystate = 7
+				yystate = 6
+				continue
+			default:
+				if (limit <= cursor) {
+					yystate = 12
+					continue
+				}
+				cursor += 1
+				yystate = 1
+				continue
+			}
+		case 1:
+			yystate = 2
+			continue
+		case 2:
+			{ return -1 }
+		case 3:
+			yych = str[cursor]
+			yystate = 4
+			continue
+		case 4:
+			switch (yych) {
+			case ' ':
+				cursor += 1
+				yystate = 3
+				continue
+			default:
+				yystate = 5
+				continue
+			}
+		case 5:
+			{ goto loop }
+		case 6:
+			marker = cursor
+			yych = str[cursor]
+			if (yych >= 0x01) {
+				yystate = 8
+				continue
+			}
+			if (limit <= cursor) {
+				yystate = 2
+				continue
+			}
+			cursor += 1
+			yystate = 7
+			continue
+		case 7:
+			yych = str[cursor]
+			yystate = 8
+			continue
+		case 8:
+			switch (yych) {
+			case '\'':
+				cursor += 1
+				yystate = 9
+				continue
+			case '\\':
+				cursor += 1
+				yystate = 11
 				continue
 			default:
 				if (limit <= cursor) {
@@ -33,91 +91,33 @@ loop:
 					continue
 				}
 				cursor += 1
-				yystate = 2
+				yystate = 7
 				continue
 			}
-		case 2:
-			yystate = 3
-			continue
-		case 3:
-			{ return -1 }
-		case 4:
-			yych = str[cursor]
-			yystate = 5
-			continue
-		case 5:
-			switch (yych) {
-			case ' ':
-				cursor += 1
-				yystate = 4
-				continue
-			default:
-				yystate = 6
-				continue
-			}
-		case 6:
-			{ goto loop }
-		case 7:
-			marker = cursor
-			yych = str[cursor]
-			if (yych >= 0x01) {
-				yystate = 9
-				continue
-			}
-			if (limit <= cursor) {
-				yystate = 3
-				continue
-			}
-			cursor += 1
-			yystate = 8
-			continue
-		case 8:
-			yych = str[cursor]
-			yystate = 9
-			continue
 		case 9:
-			switch (yych) {
-			case '\'':
-				cursor += 1
-				yystate = 10
-				continue
-			case '\\':
-				cursor += 1
-				yystate = 12
-				continue
-			default:
-				if (limit <= cursor) {
-					yystate = 14
-					continue
-				}
-				cursor += 1
-				yystate = 8
-				continue
-			}
-		case 10:
-			yystate = 11
+			yystate = 10
 			continue
-		case 11:
+		case 10:
 			{ count += 1; goto loop }
-		case 12:
+		case 11:
 			yych = str[cursor]
 			if (yych <= 0x00) {
 				if (limit <= cursor) {
-					yystate = 14
+					yystate = 13
 					continue
 				}
 				cursor += 1
-				yystate = 8
+				yystate = 7
 				continue
 			}
 			cursor += 1
-			yystate = 8
+			yystate = 7
 			continue
-		case 13:
+		case 12:
 			{ return count }
-		case 14:
+		case 13:
 			cursor = marker
-			yystate = 3
+			yystate = 2
 			continue
 		}
 	}

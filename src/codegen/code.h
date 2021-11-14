@@ -318,7 +318,6 @@ struct Code {
         CodeLabel      label;
         CodeList      *loop;
         loc_t          loc;
-        uint32_t       num;
     };
 
     CodeKind  kind;
@@ -473,11 +472,9 @@ inline Code *code_yyaccept_def(code_alc_t &alc)
     return new_code(alc, CODE_YYACCEPT);
 }
 
-inline Code *code_yystate_def(code_alc_t &alc, uint32_t num)
+inline Code *code_yystate_def(code_alc_t &alc)
 {
-    Code *x = new_code(alc, CODE_YYSTATE);
-    x->num = num;
-    return x;
+    return new_code(alc, CODE_YYSTATE);
 }
 
 inline Code *code_line_info_output(code_alc_t &alc)
