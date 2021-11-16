@@ -59,8 +59,8 @@ OutputBlock::OutputBlock(InputBlockKind kind, const std::string &name,
     , max_fill(1)
     , max_nmatch(1)
     , start_label(NULL)
-    , fill_index_start(0)
-    , fill_index_end(0)
+    , fill_index(0)
+    , fill_state(0)
     , fill_goto()
 {}
 
@@ -169,8 +169,7 @@ void Output::new_block(Opt &opts, InputBlockKind kind, const std::string &name,
 
     b->opts = opts.snapshot();
 
-    b->fill_index_start = total_fill_index;
-    b->fill_index_end   = total_fill_index;
+    b->fill_index = total_fill_index;
 
     pblocks->push_back(b);
 
@@ -183,7 +182,7 @@ void Output::gather_info_from_block()
 {
     DASSERT(!pblocks->empty());
     const OutputBlock *b = pblocks->back();
-    total_fill_index = b->fill_index_end;
+    total_fill_index = b->fill_index;
 }
 
 static void fix_first_block_opts(const blocks_t &blocks)

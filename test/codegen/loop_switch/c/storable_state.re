@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DEBUG    0
+#define DEBUG    1
 #define LOG(...) if (DEBUG) fprintf(stderr, __VA_ARGS__);
 #define BUFSIZE  10
 
@@ -48,9 +48,7 @@ static Status fill(Input *in)
 static Status lex(Input *in, unsigned int *recv)
 {
     char yych;
-    /*!getstate:re2c*/
 loop:
-    in->tok = in->cur;
     /*!re2c
         re2c:eof = 0;
         re2c:api:style = free-form;
@@ -66,7 +64,7 @@ loop:
 
         *      { return BAD_PACKET; }
         $      { return END; }
-        packet { *recv = *recv + 1; goto loop; }
+        packet { *recv = *recv + 1; in->tok = in->cur; goto loop; }
     */
 }
 

@@ -51,6 +51,29 @@ static void emit_state(Output &output, const State *s, CodeList *stmts)
     }
 }
 
+static void gen_storable_state_cases(Output &output, CodeCases *cases)
+{
+    OutputBlock &block = output.block();
+    const opt_t *opts = block.opts;
+    code_alc_t &alc = output.allocator;
+
+    if (!opts->fFlag || !opts->loop_switch) return;
+
+    // TODO: If `re2c:eof` is not used, some of these cases are redundant (they contain a
+    // single transition to the DFA state that has the corresponding YYFILL invocation).
+    for (storable_states_t::const_iterator i = block.fill_goto.begin();
+            i != block.fill_goto.end(); ++i) {
+        append(cases, code_case_number(alc, i->second, static_cast<int32_t>(i->first)));
+    }
+
+    CodeList *start_case = code_list(alc);
+    if (opts->lang == LANG_GO) {
+        append(start_case, code_stmt(alc, "fallthrough"));
+    }
+    prepend(cases, code_case_number(alc, start_case, -1));
+}
+
+
 void DFA::emit_body(Output &output, CodeList *stmts) const
 {
     const opt_t *opts = output.block().opts;
@@ -88,6 +111,7 @@ void DFA::emit_body(Output &output, CodeList *stmts) const
             append(cases, code_case_number(alc, body,
                 static_cast<int32_t>(s->label->index)));
         }
+        gen_storable_state_cases(output, cases);
         append(loop, code_switch(alc, opts->yystate.c_str(), cases));
         append(stmts, code_loop(alc, loop));
     }
@@ -190,6 +214,13 @@ void gen_code(Output &output, dfas_t &dfas)
             s->label = new_label(alc, output.label_counter++);
         }
 
+        // With loop/switch storable states need their own cases in the state switch, as
+        // they have some logic on top of transition to the state that invoked YYFILL.
+        // Give them continuous indices after the last state index.
+        if (opts->loop_switch && opts->fFlag) {
+            oblock.fill_index = output.label_counter;
+        }
+
         if (opts->bFlag) {
             dfa.bitmap = code_bitmap(alc, std::min(dfa.ubChar, 256u));
             for (State *s = dfa.head; s; s = s->next) {
@@ -244,6 +275,8 @@ void gen_code(Output &output, dfas_t &dfas)
             if (first && !opts->fFlag) {
                 append(program1, code_yych_decl(alc));
                 append(program1, code_yyaccept_def(alc));
+            }
+            if (first) {
                 append(program1, code_yystate_def(alc));
             }
 
@@ -255,7 +288,7 @@ void gen_code(Output &output, dfas_t &dfas)
                 append(program1, code_cond_table(alc));
             }
 
-            if (opts->fFlag && !output.state_goto) {
+            if (opts->fFlag && !output.state_goto && !opts->loop_switch) {
                 append(program1, code_state_goto(alc,
                     block_list_for_implicit_state_goto(alc, oblock)));
                 output.state_goto = true;

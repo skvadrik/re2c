@@ -175,10 +175,8 @@ static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,
     const OutputBlock *block)
 {
     code_alc_t &alc = ctx.global->allocator;
-
-    std::map<uint32_t, CodeList*>::const_iterator
-        i = block->fill_goto.begin(), e = block->fill_goto.end();
-    for (; i != e; ++i) {
+    for (storable_states_t::const_iterator i = block->fill_goto.begin();
+            i != block->fill_goto.end(); ++i) {
         append(cases, code_case_number(alc, i->second, static_cast<int32_t>(i->first)));
     }
 }
@@ -197,6 +195,10 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
         code->kind = CODE_EMPTY;
         return;
     }
+
+    // Loop/switch approach is handled differently (by appending special cases
+    // to the state switch).
+    DASSERT(!globopts->loop_switch);
 
     Scratchbuf &o = ctx.global->scratchbuf;
     code_alc_t &alc = ctx.global->allocator;
@@ -327,11 +329,17 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
 
     if (opts->loop_switch) {
         code->kind = CODE_VAR;
-        code->var.type = "unsigned int";
         code->var.name = o.str(opts->yystate).flush();
-        code->var.init = "0";
-    }
-    else {
+        if (opts->fFlag) {
+            // With storable state `yystate` should be initialized to `YYGETSTATE`.
+            // Since there is a -1 case, `yystate` should have a signed type.
+            code->var.type = "int";
+            code->var.init = o.str(opts->state_get).flush();
+        } else {
+            code->var.type = "unsigned int";
+            code->var.init = "0";
+        }
+    } else {
         code->kind = CODE_EMPTY;
     }
 }
