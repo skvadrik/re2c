@@ -55,9 +55,7 @@ func fill(in *Input) int {
 
 func lex(in *Input, recv *int) int {
 	var yych byte
-	/*!getstate:re2c*/
 loop:
-	in.token = in.cursor
 	/*!re2c
 	re2c:eof = 0;
 	re2c:define:YYPEEK     = "in.data[in.cursor]";
@@ -73,7 +71,7 @@ loop:
 
 	*      { return lexPacketBroken }
 	$      { return lexEnd }
-	packet { *recv = *recv + 1; goto loop }
+	packet { *recv = *recv + 1; in.token = in.cursor; goto loop }
 	*/
 }
 

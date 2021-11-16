@@ -676,6 +676,8 @@ struct OutputFragment {
     uint32_t  indent;
 };
 
+typedef std::map<uint32_t, CodeList*> storable_states_t;
+
 struct OutputBlock {
     InputBlockKind kind;
     std::string name;
@@ -692,10 +694,10 @@ struct OutputBlock {
     size_t max_nmatch; // YYMAXNMATCH
 
     // Used in the state switch (with `-f --storable-state` option).
-    Label *start_label;        // label of the DFA start state
-    uint32_t fill_index_start; // start of YYFILL index range
-    uint32_t fill_index_end;   // end of YYFILL index range (not included)
-    std::map<uint32_t, CodeList*> fill_goto; // transitions to YYFILL states
+    Label *start_label; // label of the DFA start state
+    uint32_t fill_index; // next free index in YYFILL state enumeration
+    uint32_t fill_state; // index of the most recent YYFILL state
+    storable_states_t fill_goto; // transitions to YYFILL states
 
     OutputBlock(InputBlockKind kind, const std::string &name, const loc_t &loc);
     ~OutputBlock();

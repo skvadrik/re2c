@@ -31,6 +31,7 @@ static void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t ru
 static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa,
     const Rule &rule);
 static bool endstate(const State *s);
+static void gen_setstate(Output &output, CodeList *stmts, int32_t fillidx);
 
 static const char *gen_fill_label(Output &output, uint32_t index)
 {
@@ -254,6 +255,9 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
                 append(stmts, code_stmt(alc, o.flush()));
             }
         }
+        if (opts->loop_switch && opts->fFlag) {
+            gen_setstate(output, stmts, 0);
+        }
         if (!semact->autogen) {
             if (!dfa.setup.empty()) {
                 text = o.str(dfa.setup).flush();
@@ -273,7 +277,7 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
     }
 }
 
-static void gen_setstate(Output &output, CodeList *stmts, uint32_t fillidx)
+static void gen_setstate(Output &output, CodeList *stmts, int32_t fillidx)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -284,7 +288,7 @@ static void gen_setstate(Output &output, CodeList *stmts, uint32_t fillidx)
     if (opts->state_set_naked) {
         append(stmts, code_text(alc, o.flush()));
     } else {
-        o.cstr("(").u32(fillidx).cstr(")");
+        o.cstr("(").i32(fillidx).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
     }
 }
@@ -352,7 +356,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
 {
     const opt_t *opts = output.block().opts;
     const bool eof_rule = opts->eof != NOEOF;
-    const uint32_t fillidx = output.block().fill_index_end - 1;
+    const uint32_t fillidx = output.block().fill_index - 1;
     const size_t need = eof_rule ? 1 : from->fill;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
@@ -366,7 +370,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
         const char *flabel = gen_fill_label(output, fillidx);
         append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
     } else {
-        o.str(opts->yystate).cstr(" = ").u32(fillidx);
+        o.str(opts->yystate).cstr(" = ").u32(output.block().fill_state);
         append(goto_fill, code_stmt(alc, o.flush()));
         append(goto_fill, code_stmt(alc, "continue"));
     }
@@ -374,7 +378,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
     CodeList *fill = code_list(alc);
 
     if (opts->fFlag) {
-        gen_setstate(output, eof_rule ? fill : stmts, fillidx);
+        gen_setstate(output, eof_rule ? fill : stmts, static_cast<int32_t>(fillidx));
     }
 
     if (opts->fill_use) {
@@ -441,14 +445,8 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
     const bool need_fill_label = need_fill_on_trans || (need_fill_in_state && opts->fFlag);
 
     if (need_fill_label) {
-        if (!opts->loop_switch) {
-            ++output.block().fill_index_end;
-        } else {
-            // With --loop-switch option we use state labels instead of YYFILL labels.
-            // Add +1 to state label here to mimic the non --loop-switch case that
-            // increments the next free index.
-            output.block().fill_index_end = s->label->index + 1;
-        }
+        ++output.block().fill_index;
+        output.block().fill_state = s->label->index;
     }
 
     if (need_fill_in_state) {
@@ -465,7 +463,7 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
     }
 
     if (need_fill_label && !opts->loop_switch) {
-        const char *flabel = gen_fill_label(output, output.block().fill_index_end - 1);
+        const char *flabel = gen_fill_label(output, output.block().fill_index - 1);
         append(stmts, code_slabel(output.allocator, flabel));
     }
 }

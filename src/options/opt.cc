@@ -324,11 +324,6 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
             error("cannot combine loop switch and conditions");
             exit(1);
         }
-        // TODO: support --loop-switch with storable state
-        if (glob.fFlag) {
-            error("cannot combine loop switch and storable state");
-            exit(1);
-        }
     }
 }
 
