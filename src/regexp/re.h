@@ -14,7 +14,7 @@ namespace re2c {
 
 struct AST;
 struct ASTRule;
-struct Msg;
+class Msg;
 struct Rule;
 struct opt_t;
 
