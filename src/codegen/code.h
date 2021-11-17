@@ -32,7 +32,7 @@ struct Code;
 struct CodeGo;
 struct CodeGoIf;
 class Output;
-class OutputBlock;
+struct OutputBlock;
 struct State;
 struct DFA;
 typedef std::vector<smart_ptr<DFA> > dfas_t;

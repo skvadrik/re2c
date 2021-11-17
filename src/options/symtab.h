@@ -9,7 +9,7 @@ namespace re2c {
 
 struct AST;
 struct loc_t;
-struct Msg;
+class Msg;
 
 typedef std::map<std::string, const AST*> symtab_t;
 
