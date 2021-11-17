@@ -13,7 +13,7 @@
 namespace re2c {
 
 struct SemAct;
-template <class _Ty> class free_list;
+template <class Ty> class free_list;
 
 struct ASTChar {
     uint32_t chr;

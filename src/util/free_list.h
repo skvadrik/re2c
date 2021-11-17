@@ -6,25 +6,25 @@
 
 namespace re2c {
 
-template<class _Ty>
-class free_list: protected std::set<_Ty>
+template<class Ty>
+class free_list: protected std::set<Ty>
 {
 public:
-    typedef typename std::set<_Ty>::iterator   iterator;
-    typedef typename std::set<_Ty>::size_type  size_type;
-    typedef typename std::set<_Ty>::key_type   key_type;
+    typedef typename std::set<Ty>::iterator   iterator;
+    typedef typename std::set<Ty>::size_type  size_type;
+    typedef typename std::set<Ty>::key_type   key_type;
     
     free_list(): in_clear(false)
     {
     }
     
-    using std::set<_Ty>::insert;
+    using std::set<Ty>::insert;
 
     size_type erase(const key_type& key)
     {
         if (!in_clear)
         {
-            return std::set<_Ty>::erase(key);
+            return std::set<Ty>::erase(key);
         }
         return 0;
     }
@@ -37,7 +37,7 @@ public:
         {
             delete *it;
         }
-        std::set<_Ty>::clear();
+        std::set<Ty>::clear();
         
         in_clear = false;
     }
