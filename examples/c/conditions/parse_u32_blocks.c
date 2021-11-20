@@ -5,9 +5,6 @@
 #include <assert.h>
 
 static const uint64_t ERROR = ~0lu;
-enum YYCONDTYPE {
-};
-
 
 template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
 {

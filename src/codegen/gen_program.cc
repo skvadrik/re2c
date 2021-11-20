@@ -325,7 +325,7 @@ bool Output::emit()
     // emit .h file
     if (!opts->header_file.empty() || need_header) {
         // old-style -t, --type-headers usage implies condition generation
-        if (!ctx.conds.empty() && !this->cond_enum_in_hdr) {
+        if (opts->cFlag && !this->cond_enum_in_hdr) {
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
             wdelay_stmt(0, code_fmt(allocator, CODE_COND_ENUM, NULL, NULL, NULL));

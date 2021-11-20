@@ -37,8 +37,6 @@ enum YYCONDTYPE {
 
 
 // types:re2c:z (expect empty)
-enum YYCONDTYPE {
-};
 
 
 // unnamed global block (conditions C1, C2)
