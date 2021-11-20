@@ -4,7 +4,6 @@
 #include <assert.h>
 
 static const uint64_t ERROR = ~0lu;
-/*!types:re2c*/
 
 template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
 {

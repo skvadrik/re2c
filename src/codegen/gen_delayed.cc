@@ -151,12 +151,12 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
         return;
     }
 
+    uniq_vector_t<std::string> conds;
     if (code->fmt.block_names == NULL) {
         // Use the global set of conditions accumulated from all blocks.
-        gen_cond_enum(buf, alc, code, globopts, ctx.global->conds);
+        conds = ctx.global->conds;
     } else {
         // Gather conditions from the blocks on the list.
-        uniq_vector_t<std::string> conds;
         for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
             const OutputBlock *b = find_block_with_name(ctx, p->name, "types:re2c");
             if (!b) exit(1);
@@ -167,8 +167,16 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
                 conds.find_or_add(b->opts->condEnumPrefix + b->conds[i]);
             }
         }
-        gen_cond_enum(buf, alc, code, globopts, conds);
     }
+
+    // Do not generate empty condition enum. Some compilers or language standards
+    // allow it, but generally it's more likely to indicate an error in user code.
+    if (conds.empty()) {
+        code->kind = CODE_EMPTY;
+        return;
+    }
+
+    gen_cond_enum(buf, alc, code, globopts, conds);
 }
 
 static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,

@@ -2,8 +2,6 @@
 #line 1 "bug152.re"
 // re2c $INPUT -o $OUTPUT -c
 #line 5 "bug152.c"
-enum YYCONDTYPE {
-};
 #line 2 "bug152.re"
 
 
