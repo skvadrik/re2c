@@ -54,6 +54,15 @@ void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &
     code->raw.data = buf.flush();
 }
 
+static void add_tags_from_block(tagnames_t &tags, const OutputBlock &block, bool multival)
+{
+    if (multival) {
+        tags.insert(block.mtags.begin(), block.mtags.end());
+    } else {
+        tags.insert(block.stags.begin(), block.stags.end());
+    }
+}
+
 static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
 {
     DASSERT(code->kind == CODE_STAGS || code->kind == CODE_MTAGS);
@@ -63,27 +72,30 @@ static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
     }
 
     Scratchbuf &buf = ctx.global->scratchbuf;
-    bool oneval = (code->kind == CODE_STAGS);
+    bool multival = (code->kind == CODE_MTAGS);
 
+    tagnames_t tags;
     if (code->fmt.block_names == NULL) {
-        // Use the global set of tags accumulated from all blocks.
-        gen_tags(buf, ctx.block->opts, code,
-            oneval ? ctx.global->stags : ctx.global->mtags);
+        // Gather tags from all blocks in the output file.
+        const blocks_t &cblocks = ctx.global->cblocks;
+        for (size_t i = 0; i < cblocks.size(); ++i) {
+            add_tags_from_block(tags, *cblocks[i], multival);
+        }
+        // Gather tags from all blocks in the header file.
+        const blocks_t &hblocks = ctx.global->hblocks;
+        for (size_t i = 0; i < hblocks.size(); ++i) {
+            add_tags_from_block(tags, *hblocks[i], multival);
+        }
     } else {
         // Gather tags from the blocks on the list.
-        const char *directive = oneval ? "stags:re2c" : "mtags:re2c";
-        tagnames_t tags;
+        const char *directive = multival ? "mtags:re2c" : "stags:re2c";
         for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
             const OutputBlock *b = find_block_with_name(ctx, p->name, directive);
             if (!b) exit(1);
-            if (oneval) {
-                tags.insert(b->stags.begin(), b->stags.end());
-            } else {
-                tags.insert(b->mtags.begin(), b->mtags.end());
-            }
+            add_tags_from_block(tags, *b, multival);
         }
-        gen_tags(buf, ctx.block->opts, code, tags);
     }
+    gen_tags(buf, ctx.block->opts, code, tags);
 }
 
 static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code,

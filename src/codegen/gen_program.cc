@@ -279,10 +279,6 @@ static void add_symbols(const OutputBlock &block, CodegenCtxGlobal &ctx)
 {
     DASSERT(!block.name.empty());
 
-    const tagnames_t &st = block.stags, &mt = block.mtags;
-    ctx.stags.insert(st.begin(), st.end());
-    ctx.mtags.insert(mt.begin(), mt.end());
-
     ctx.max_fill = std::max(ctx.max_fill, block.max_fill);
     ctx.max_nmatch = std::max(ctx.max_nmatch, block.max_nmatch);
 }
@@ -299,8 +295,6 @@ bool Output::emit()
         , /*cblocks*/ cblocks
         , /*hblocks*/ hblocks
         , /*pblocks*/ NULL
-        , /*stags*/ tagnames_t()
-        , /*mtags*/ tagnames_t()
         , /*max_fill*/ 1
         , /*max_nmatch*/ 1
         , warn_condition_order
