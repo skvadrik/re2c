@@ -12,11 +12,16 @@ namespace re2c {
 static const OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx,
     const char *name, const char *where)
 {
-    const blocks_t &blocks = *ctx.global->pblocks;
-    for (size_t i = 0; i < blocks.size(); ++i) {
-        const OutputBlock *b = blocks[i];
-        if (b->name.compare(name) == 0) return b;
+    const blocks_t &cblocks = ctx.global->cblocks;
+    for (size_t i = 0; i < cblocks.size(); ++i) {
+        if (cblocks[i]->name.compare(name) == 0) return cblocks[i];
     }
+
+    const blocks_t &hblocks = ctx.global->hblocks;
+    for (size_t i = 0; i < hblocks.size(); ++i) {
+        if (hblocks[i]->name.compare(name) == 0) return hblocks[i];
+    }
+
     error("cannot find block '%s' listed in `%s` directive", name, where);
     return NULL;
 }
@@ -136,6 +141,16 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code,
     }
 }
 
+static void add_conditions_from_block(uniq_vector_t<std::string> &conds, const OutputBlock &block)
+{
+    for (size_t i = 0; i < block.conds.size(); ++i) {
+        // Condition prefix is specific to the block that defines it. If a few blocks
+        // define conditions with the same name, but a different prefix, they should have
+        // different enum entries.
+        conds.find_or_add(block.opts->condEnumPrefix + block.conds[i]);
+    }
+}
+
 static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
 {
     Scratchbuf &buf = ctx.global->scratchbuf;
@@ -153,19 +168,22 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
 
     uniq_vector_t<std::string> conds;
     if (code->fmt.block_names == NULL) {
-        // Use the global set of conditions accumulated from all blocks.
-        conds = ctx.global->conds;
+        // Gather conditions from all blocks in the output file.
+        const blocks_t &cblocks = ctx.global->cblocks;
+        for (size_t i = 0; i < cblocks.size(); ++i) {
+            add_conditions_from_block(conds, *cblocks[i]);
+        }
+        // Gather conditions from all blocks in the header file.
+        const blocks_t &hblocks = ctx.global->hblocks;
+        for (size_t i = 0; i < hblocks.size(); ++i) {
+            add_conditions_from_block(conds, *hblocks[i]);
+        }
     } else {
         // Gather conditions from the blocks on the list.
         for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
             const OutputBlock *b = find_block_with_name(ctx, p->name, "types:re2c");
             if (!b) exit(1);
-            for (size_t i = 0; i < b->conds.size(); ++i) {
-                // Condition prefix is specific to the block that defines it.
-                // If a few blocks define conditions with the same name, but a
-                // different prefix, they result in different enum entries.
-                conds.find_or_add(b->opts->condEnumPrefix + b->conds[i]);
-            }
+            add_conditions_from_block(conds, *b);
         }
     }
 
