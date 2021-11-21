@@ -275,14 +275,6 @@ bool Output::emit_blocks(const std::string &fname, const CodegenCtxGlobal &globa
     return true;
 }
 
-static void add_symbols(const OutputBlock &block, CodegenCtxGlobal &ctx)
-{
-    DASSERT(!block.name.empty());
-
-    ctx.max_fill = std::max(ctx.max_fill, block.max_fill);
-    ctx.max_nmatch = std::max(ctx.max_nmatch, block.max_nmatch);
-}
-
 bool Output::emit()
 {
     if (msg.warn.error()) return false;
@@ -295,18 +287,8 @@ bool Output::emit()
         , /*cblocks*/ cblocks
         , /*hblocks*/ hblocks
         , /*pblocks*/ NULL
-        , /*max_fill*/ 1
-        , /*max_nmatch*/ 1
         , warn_condition_order
         };
-
-    // gather global data accumulated across all blocks and files
-    for (uint32_t i = 0; i < cblocks.size(); ++i) {
-        add_symbols (*cblocks[i], ctx);
-    }
-    for (uint32_t i = 0; i < hblocks.size(); ++i) {
-        add_symbols (*hblocks[i], ctx);
-    }
 
     // global options are last block's options
     const opt_t *opts = block().opts;

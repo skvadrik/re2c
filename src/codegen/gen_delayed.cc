@@ -382,6 +382,11 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
     }
 }
 
+static size_t max_from_block(size_t max, const OutputBlock &block, CodeKind kind)
+{
+    return std::max(max, kind == CODE_MAXFILL ? block.max_fill : block.max_nmatch);
+}
+
 static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
 {
     const opt_t *opts = ctx.block->opts;
@@ -392,21 +397,28 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
         return;
     }
 
-    bool is_maxfill = (code->kind == CODE_MAXFILL);
-    const char *dirname = is_maxfill ? "max:re2c" : "maxnmatch:re2c";
-    const char *varname = is_maxfill ? "YYMAXFILL" : "YYMAXNMATCH";
+    CodeKind kind = code->kind;
+    const char *dirname = kind == CODE_MAXFILL ? "max:re2c" : "maxnmatch:re2c";
+    const char *varname = kind == CODE_MAXFILL ? "YYMAXFILL" : "YYMAXNMATCH";
 
-    size_t max;
+    size_t max = 1;
     if (code->fmt.block_names == NULL) {
-        // Global maximum in the file.
-        max = is_maxfill ? ctx.global->max_fill : ctx.global->max_nmatch;
+        // Gather max value from all blocks in the output file.
+        const blocks_t &cblocks = ctx.global->cblocks;
+        for (size_t i = 0; i < cblocks.size(); ++i) {
+            max = max_from_block(max, *cblocks[i], kind);
+        }
+        // Gather max_value from all blocks in the header file.
+        const blocks_t &hblocks = ctx.global->hblocks;
+        for (size_t i = 0; i < hblocks.size(); ++i) {
+            max = max_from_block(max, *hblocks[i], kind);
+        }
     } else {
         // Maximum among the blocks listed in the directive.
-        max = 0;
         for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
             const OutputBlock *b = find_block_with_name(ctx, p->name, dirname);
             if (!b) exit(1);
-            max = std::max(max, is_maxfill ? b->max_fill : b->max_nmatch);
+            max = max_from_block(max, *b, kind);
         }
     }
 
