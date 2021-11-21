@@ -14,7 +14,6 @@
 #include "src/util/file_utils.h"
 #include "src/util/string_utils.h"
 #include "src/util/temp_file.h"
-#include "src/util/uniq_vector.h"
 
 
 namespace re2c {

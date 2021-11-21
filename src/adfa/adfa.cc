@@ -510,10 +510,6 @@ void DFA::calc_stats(OutputBlock &out)
         out.stags.insert(stagnames.begin(), stagnames.end());
         out.mtags.insert(mtagnames.begin(), mtagnames.end());
     }
-
-    if (!cond.empty()) {
-        out.conds.push_back(cond);
-    }
 }
 
 static bool can_hoist_tags(const State *s, const opt_t *opts)

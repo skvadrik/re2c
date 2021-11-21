@@ -221,6 +221,14 @@ void gen_code(Output &output, dfas_t &dfas)
             oblock.fill_index = output.label_counter;
         }
 
+        if (!dfa.cond.empty()) {
+            // If loop/switch is used, condition numbers are the numeric indices of their
+            // initial DFA state. Otherwise we do not assign explicit numbers, and
+            // conditions are implicitly assigned consecutive numbers starting from zero.
+            StartCond sc = {dfa.cond, opts->loop_switch ? dfa.head->label->index : 0};
+            oblock.conds.push_back(sc);
+        }
+
         if (opts->bFlag) {
             dfa.bitmap = code_bitmap(alc, std::min(dfa.ubChar, 256u));
             for (State *s = dfa.head; s; s = s->next) {

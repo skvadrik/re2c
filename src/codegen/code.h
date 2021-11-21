@@ -17,7 +17,6 @@
 #include "src/msg/location.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/slab_allocator.h"
-#include "src/util/uniq_vector.h"
 #include "src/util/smart_ptr.h"
 #include "src/util/string_utils.h"
 
@@ -674,6 +673,12 @@ struct OutputFragment {
     uint32_t  indent;
 };
 
+struct StartCond {
+    std::string name;
+    uint32_t number;
+};
+typedef std::vector<StartCond> StartConds;
+
 typedef std::map<uint32_t, CodeList*> storable_states_t;
 
 struct OutputBlock {
@@ -683,7 +688,7 @@ struct OutputBlock {
     std::vector<OutputFragment> fragments;
     bool used_yyaccept;
     bool have_user_code;
-    std::vector<std::string> conds;
+    StartConds conds;
     tagnames_t stags;
     tagnames_t mtags;
     const opt_t *opts;
