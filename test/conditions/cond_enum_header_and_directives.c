@@ -131,10 +131,3 @@ enum YYCONDTYPE {
 
 
 // header end
-
-enum YYCONDTYPE {
-	yyca1,
-	yyca2,
-	yycb1,
-	yycb2,
-};

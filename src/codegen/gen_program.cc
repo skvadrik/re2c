@@ -75,7 +75,7 @@ Output::Output(Msg &msg)
     , pblocks(&cblocks)
     , label_counter(0)
     , state_goto(false)
-    , cond_enum_in_hdr(false)
+    , cond_enum_autogen(true)
     , cond_goto(false)
     , warn_condition_order(true)
     , need_header(false)
@@ -321,7 +321,7 @@ bool Output::emit()
     // emit .h file
     if (!opts->header_file.empty() || need_header) {
         // old-style -t, --type-headers usage implies condition generation
-        if (opts->cFlag && !this->cond_enum_in_hdr) {
+        if (opts->cFlag && this->cond_enum_autogen) {
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
             wdelay_stmt(0, code_fmt(allocator, CODE_COND_ENUM, NULL, NULL, NULL));
