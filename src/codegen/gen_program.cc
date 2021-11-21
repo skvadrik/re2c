@@ -284,9 +284,10 @@ bool Output::emit()
         , scratchbuf
         , msg
         , total_opts
-        , /*cblocks*/ cblocks
-        , /*hblocks*/ hblocks
+        , cblocks
+        , hblocks
         , /*pblocks*/ NULL
+        , /*tmpblocks*/ blocks_t()
         , warn_condition_order
         };
 

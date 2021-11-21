@@ -645,6 +645,7 @@ struct CodegenCtxGlobal {
     const blocks_t &cblocks;
     const blocks_t &hblocks;
     const blocks_t *pblocks;
+    mutable blocks_t tmpblocks; // temporary buffer for block lists in directives
     const bool warn_cond_ord;
 };
 

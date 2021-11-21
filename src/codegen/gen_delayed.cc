@@ -9,21 +9,32 @@
 
 namespace re2c {
 
-static const OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx,
-    const char *name, const char *where)
+static OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx, const char *name)
 {
     const blocks_t &cblocks = ctx.global->cblocks;
     for (size_t i = 0; i < cblocks.size(); ++i) {
         if (cblocks[i]->name.compare(name) == 0) return cblocks[i];
     }
-
     const blocks_t &hblocks = ctx.global->hblocks;
     for (size_t i = 0; i < hblocks.size(); ++i) {
         if (hblocks[i]->name.compare(name) == 0) return hblocks[i];
     }
-
-    error("cannot find block '%s' listed in `%s` directive", name, where);
     return NULL;
+}
+
+static void find_blocks(CodegenCtxPass1 &ctx, const BlockNameList *names,
+    blocks_t &blocks, const char *directive)
+{
+    blocks.clear();
+    for (const BlockNameList *p = names; p; p = p->next) {
+        OutputBlock *b = find_block_with_name(ctx, p->name);
+        if (b) {
+            blocks.push_back(b);
+        } else {
+            error("cannot find block '%s' listed in `%s` directive", p->name, directive);
+            exit(1);
+        }
+    }
 }
 
 void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &tags)
@@ -54,12 +65,15 @@ void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &
     code->raw.data = buf.flush();
 }
 
-static void add_tags_from_block(tagnames_t &tags, const OutputBlock &block, bool multival)
+static void add_tags_from_blocks(const blocks_t &blocks, tagnames_t &tags, bool multival)
 {
-    if (multival) {
-        tags.insert(block.mtags.begin(), block.mtags.end());
-    } else {
-        tags.insert(block.stags.begin(), block.stags.end());
+    for (size_t i = 0; i < blocks.size(); ++i) {
+        const OutputBlock &block = *blocks[i];
+        if (multival) {
+            tags.insert(block.mtags.begin(), block.mtags.end());
+        } else {
+            tags.insert(block.stags.begin(), block.stags.end());
+        }
     }
 }
 
@@ -76,24 +90,14 @@ static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
 
     tagnames_t tags;
     if (code->fmt.block_names == NULL) {
-        // Gather tags from all blocks in the output file.
-        const blocks_t &cblocks = ctx.global->cblocks;
-        for (size_t i = 0; i < cblocks.size(); ++i) {
-            add_tags_from_block(tags, *cblocks[i], multival);
-        }
-        // Gather tags from all blocks in the header file.
-        const blocks_t &hblocks = ctx.global->hblocks;
-        for (size_t i = 0; i < hblocks.size(); ++i) {
-            add_tags_from_block(tags, *hblocks[i], multival);
-        }
+        // Gather tags from all blocks in the output and header files.
+        add_tags_from_blocks(ctx.global->cblocks, tags, multival);
+        add_tags_from_blocks(ctx.global->hblocks, tags, multival);
     } else {
         // Gather tags from the blocks on the list.
         const char *directive = multival ? "mtags:re2c" : "stags:re2c";
-        for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
-            const OutputBlock *b = find_block_with_name(ctx, p->name, directive);
-            if (!b) exit(1);
-            add_tags_from_block(tags, *b, multival);
-        }
+        find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, directive);
+        add_tags_from_blocks(ctx.global->tmpblocks, tags, multival);
     }
     gen_tags(buf, ctx.block->opts, code, tags);
 }
@@ -153,13 +157,17 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code,
     }
 }
 
-static void add_conditions_from_block(uniq_vector_t<std::string> &conds, const OutputBlock &block)
+static void add_conditions_from_blocks(const blocks_t &blocks,
+    uniq_vector_t<std::string> &conds)
 {
-    for (size_t i = 0; i < block.conds.size(); ++i) {
-        // Condition prefix is specific to the block that defines it. If a few blocks
-        // define conditions with the same name, but a different prefix, they should have
-        // different enum entries.
-        conds.find_or_add(block.opts->condEnumPrefix + block.conds[i]);
+    for (size_t i = 0; i < blocks.size(); ++i) {
+        const OutputBlock &block = *blocks[i];
+        for (size_t i = 0; i < block.conds.size(); ++i) {
+            // Condition prefix is specific to the block that defines it. If a few blocks
+            // define conditions with the same name, but a different prefix, they should have
+            // different enum entries.
+            conds.find_or_add(block.opts->condEnumPrefix + block.conds[i]);
+        }
     }
 }
 
@@ -180,23 +188,13 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
 
     uniq_vector_t<std::string> conds;
     if (code->fmt.block_names == NULL) {
-        // Gather conditions from all blocks in the output file.
-        const blocks_t &cblocks = ctx.global->cblocks;
-        for (size_t i = 0; i < cblocks.size(); ++i) {
-            add_conditions_from_block(conds, *cblocks[i]);
-        }
-        // Gather conditions from all blocks in the header file.
-        const blocks_t &hblocks = ctx.global->hblocks;
-        for (size_t i = 0; i < hblocks.size(); ++i) {
-            add_conditions_from_block(conds, *hblocks[i]);
-        }
+        // Gather conditions from all blocks in the output and header files.
+        add_conditions_from_blocks(ctx.global->cblocks, conds);
+        add_conditions_from_blocks(ctx.global->hblocks, conds);
     } else {
         // Gather conditions from the blocks on the list.
-        for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
-            const OutputBlock *b = find_block_with_name(ctx, p->name, "types:re2c");
-            if (!b) exit(1);
-            add_conditions_from_block(conds, *b);
-        }
+        find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, "types:re2c");
+        add_conditions_from_blocks(ctx.global->tmpblocks, conds);
     }
 
     // Do not generate empty condition enum. Some compilers or language standards
@@ -283,19 +281,18 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
         }
     } else {
         // Generate a switch for all specified named blocks.
-        for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
-            const OutputBlock *b = find_block_with_name(ctx, p->name, "getstate:re2c");
-            if (!b) exit(1);
+        blocks_t &blocks = ctx.global->tmpblocks;
+        find_blocks(ctx, code->fmt.block_names, blocks, "getstate:re2c");
+        for (size_t i = 0; i < blocks.size(); ++i) {
+            const OutputBlock *b = blocks[i];
             if (!b->start_label) {
                 error("block '%s' does not generate code, so it should not be"
-                    " listed in `getstate:re2c` directive", p->name);
+                    " listed in `getstate:re2c` directive", b->name.c_str());
                 exit(1);
             }
-
-            gen_state_goto_cases(ctx, cases, b);
-
             // Use start label of the first block on the list.
             if (!bstart) bstart = b;
+            gen_state_goto_cases(ctx, cases, b);
         }
     }
 
@@ -382,9 +379,13 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
     }
 }
 
-static size_t max_from_block(size_t max, const OutputBlock &block, CodeKind kind)
+static size_t max_among_blocks(const blocks_t &blocks, size_t max, CodeKind kind)
 {
-    return std::max(max, kind == CODE_MAXFILL ? block.max_fill : block.max_nmatch);
+    for (size_t i = 0; i < blocks.size(); ++i) {
+        const OutputBlock &block = *blocks[i];
+        max = std::max(max, kind == CODE_MAXFILL ? block.max_fill : block.max_nmatch);
+    }
+    return max;
 }
 
 static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
@@ -403,23 +404,13 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
 
     size_t max = 1;
     if (code->fmt.block_names == NULL) {
-        // Gather max value from all blocks in the output file.
-        const blocks_t &cblocks = ctx.global->cblocks;
-        for (size_t i = 0; i < cblocks.size(); ++i) {
-            max = max_from_block(max, *cblocks[i], kind);
-        }
-        // Gather max_value from all blocks in the header file.
-        const blocks_t &hblocks = ctx.global->hblocks;
-        for (size_t i = 0; i < hblocks.size(); ++i) {
-            max = max_from_block(max, *hblocks[i], kind);
-        }
+        // Gather max value from all blocks in the output and header files.
+        max = max_among_blocks(ctx.global->cblocks, max, kind);
+        max = max_among_blocks(ctx.global->hblocks, max, kind);
     } else {
         // Maximum among the blocks listed in the directive.
-        for (BlockNameList *p = code->fmt.block_names; p; p = p->next) {
-            const OutputBlock *b = find_block_with_name(ctx, p->name, dirname);
-            if (!b) exit(1);
-            max = max_from_block(max, *b, kind);
-        }
+        find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, dirname);
+        max = max_among_blocks(ctx.global->tmpblocks, max, kind);
     }
 
     if (code->fmt.format) {
