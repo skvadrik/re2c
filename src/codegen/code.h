@@ -645,8 +645,6 @@ struct CodegenCtxGlobal {
     const blocks_t &cblocks;
     const blocks_t &hblocks;
     const blocks_t *pblocks;
-    size_t max_fill;
-    size_t max_nmatch;
     const bool warn_cond_ord;
 };
 
