@@ -279,11 +279,6 @@ static void add_symbols(const OutputBlock &block, CodegenCtxGlobal &ctx)
 {
     DASSERT(!block.name.empty());
 
-    const std::string &condenumprefix = block.opts->condEnumPrefix;
-    for (size_t j = 0; j < block.conds.size(); ++j) {
-        ctx.conds.find_or_add(condenumprefix + block.conds[j]);
-    }
-
     const tagnames_t &st = block.stags, &mt = block.mtags;
     ctx.stags.insert(st.begin(), st.end());
     ctx.mtags.insert(mt.begin(), mt.end());
@@ -301,8 +296,9 @@ bool Output::emit()
         , scratchbuf
         , msg
         , total_opts
+        , /*cblocks*/ cblocks
+        , /*hblocks*/ hblocks
         , /*pblocks*/ NULL
-        , /*conditions*/ uniq_vector_t<std::string>()
         , /*stags*/ tagnames_t()
         , /*mtags*/ tagnames_t()
         , /*max_fill*/ 1

@@ -642,8 +642,9 @@ struct CodegenCtxGlobal {
     Scratchbuf &scratchbuf;
     Msg &msg;
     const opt_t *opts;
+    const blocks_t &cblocks;
+    const blocks_t &hblocks;
     const blocks_t *pblocks;
-    uniq_vector_t<std::string> conds;
     tagnames_t stags;
     tagnames_t mtags;
     size_t max_fill;
