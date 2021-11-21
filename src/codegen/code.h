@@ -713,7 +713,7 @@ class Output {
 public:
     uint32_t label_counter;
     bool state_goto;
-    bool cond_enum_in_hdr;
+    bool cond_enum_autogen; // true unless an explicit `types:re2c` directive is used
     bool cond_goto;
     bool warn_condition_order;
     bool need_header;

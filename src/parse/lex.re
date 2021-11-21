@@ -189,7 +189,7 @@ loop:
     }
 
     "/*!types:re2c" {
-        out.cond_enum_in_hdr = out.in_header();
+        out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
         if (!lex_block(out, CODE_COND_ENUM, opts->topIndent, allow)) return INPUT_ERROR;
