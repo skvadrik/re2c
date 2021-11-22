@@ -294,21 +294,20 @@ bool Output::emit()
     const opt_t *opts = block().opts;
     bool ok = true;
 
-    // emit .h file
+    // Emit header file.
     if (!opts->header_file.empty() || need_header) {
-        // old-style -t, --type-headers usage implies condition generation
         if (opts->cFlag && this->cond_enum_autogen) {
+            // Old-style -t, --type-headers usage implies condition enum.
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
             wdelay_stmt(0, code_fmt(allocator, CODE_COND_ENUM, NULL, NULL, NULL));
             header_mode(false);
         }
-
         ctx.pblocks = &hblocks;
         ok &= emit_blocks(opts->header_file, ctx);
     }
 
-    // emit .c file
+    // Emit output file.
     ctx.pblocks = &cblocks;
     ok &= emit_blocks(opts->output_file, ctx);
 

@@ -21,7 +21,7 @@
 namespace re2c {
 
 class Msg;
-class Output;
+struct Output;
 struct AST;
 struct ASTChar;
 struct BlockNameList;

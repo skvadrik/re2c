@@ -21,7 +21,7 @@
 namespace re2c {
 
 class Msg;
-class Output;
+struct Output;
 struct dfa_t;
 struct opt_t;
 struct Label;

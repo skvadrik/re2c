@@ -215,7 +215,7 @@ loop:
     "/*!header:re2c:on" {
         out.wraw(tok, ptr);
         out.header_mode(true);
-        out.need_header = opts->target == TARGET_CODE;
+        out.need_header = true;
         if (!lex_block_end(out)) return INPUT_ERROR;
         goto next;
     }

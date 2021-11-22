@@ -6,7 +6,7 @@ namespace re2c {
 
 class Scanner;
 struct Opt;
-class Output;
+struct Output;
 
 void compile(Scanner &input, Output &output, Opt &opts);
 
