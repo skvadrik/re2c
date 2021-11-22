@@ -30,7 +30,7 @@ struct opt_t;
 struct Code;
 struct CodeGo;
 struct CodeGoIf;
-class Output;
+struct Output;
 struct OutputBlock;
 struct State;
 struct DFA;
@@ -707,12 +707,10 @@ struct OutputBlock {
     FORBID_COPY(OutputBlock);
 };
 
-class Output {
+struct Output {
     blocks_t cblocks; /* .c file */
     blocks_t hblocks; /* .h file */
     blocks_t *pblocks; /* selector */
-
-public:
     uint32_t label_counter;
     bool state_goto;
     bool cond_enum_autogen; // true unless an explicit `types:re2c` directive is used
