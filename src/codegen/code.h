@@ -754,8 +754,10 @@ void render(RenderContext &rctx, const Code *code);
 
 bool consume(const State *s);
 void expand_fintags(const Tag &tag, std::vector<std::string> &fintags);
-std::string vartag_name(tagver_t ver, const std::string &prefix);
-std::string vartag_expr(tagver_t ver, const opt_t *opts);
+std::string vartag_name(tagver_t ver, const std::string &prefix,
+    const std::set<tagver_t> &mtagvers);
+std::string vartag_expr(tagver_t ver, const opt_t *opts,
+    const std::set<tagver_t> &mtagvers);
 void output_version_time(std::ostream &os, const opt_t *opts);
 
 } // namespace re2c

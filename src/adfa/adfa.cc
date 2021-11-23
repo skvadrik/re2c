@@ -499,7 +499,7 @@ void DFA::calc_stats(OutputBlock &out)
             }
         }
         for (tagver_t v = 1; v <= maxtagver; ++v) {
-            const std::string s = vartag_name(v, opts->tags_prefix);
+            const std::string s = vartag_name(v, opts->tags_prefix, mtagvers);
             if (mtagvers.find(v) != mtagvers.end()) {
                 mtagnames.insert(s);
             }

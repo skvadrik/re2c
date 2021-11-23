@@ -29,11 +29,11 @@ func LexSlices(str string) (a []int, b []int, c int) {
 
 	var yyt3 int
 
-	var yyt1 []int
-	var yyt2 []int
-	var yyt4 []int
-	var yyt5 []int
-	var yyt6 []int
+	var yytm1 []int
+	var yytm2 []int
+	var yytm4 []int
+	var yytm5 []int
+	var yytm6 []int
 
 	
 {
@@ -42,16 +42,16 @@ func LexSlices(str string) (a []int, b []int, c int) {
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt2 = append(yyt2, -1)
-		yyt1 = append(yyt1, -1)
+		yytm2 = append(yytm2, -1)
+		yytm1 = append(yytm1, -1)
 		goto yy2
 	case 'a':
-		yyt1 = append(yyt1, cursor)
-		yyt5 = append(yyt5, cursor)
-		yyt4 = append(yyt4, cursor)
+		yytm1 = append(yytm1, cursor)
+		yytm5 = append(yytm5, cursor)
+		yytm4 = append(yytm4, cursor)
 		goto yy6
 	case 'b':
-		yyt2 = append(yyt2, cursor)
+		yytm2 = append(yytm2, cursor)
 		goto yy7
 	case 'c':
 		yyt3 = cursor
@@ -61,8 +61,8 @@ func LexSlices(str string) (a []int, b []int, c int) {
 	}
 yy2:
 	cursor += 1
-	a = yyt1
-	b = yyt2
+	a = yytm1
+	b = yytm2
 	c = yyt3
 	{ return }
 yy4:
@@ -76,17 +76,17 @@ yy6:
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt2 = append(yyt2, -1)
+		yytm2 = append(yytm2, -1)
 		goto yy9
 	case 'a':
 		goto yy11
 	case 'b':
-		yyt2 = append(yyt2, cursor)
-		yyt6 = append(yyt6, cursor)
+		yytm2 = append(yytm2, cursor)
+		yytm6 = append(yytm6, cursor)
 		goto yy14
 	case 'c':
 		yyt3 = cursor
-		yyt2 = append(yyt2, -1)
+		yytm2 = append(yytm2, -1)
 		goto yy15
 	default:
 		goto yy5
@@ -98,7 +98,7 @@ yy7:
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt5 = append(yyt5, -1)
+		yytm5 = append(yytm5, -1)
 		goto yy9
 	case 'b':
 		goto yy16
@@ -111,8 +111,8 @@ yy8:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt2 = append(yyt2, -1)
-		yyt5 = append(yyt5, -1)
+		yytm2 = append(yytm2, -1)
+		yytm5 = append(yytm5, -1)
 		goto yy9
 	case 'c':
 		goto yy18
@@ -121,8 +121,8 @@ yy8:
 	}
 yy9:
 	cursor += 1
-	a = yyt5
-	b = yyt2
+	a = yytm5
+	b = yytm2
 	c = yyt3
 	{ return }
 yy11:
@@ -131,12 +131,12 @@ yy11:
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt2 = append(yyt2, -1)
+		yytm2 = append(yytm2, -1)
 		goto yy9
 	case 'a':
 		goto yy11
 	case 'b':
-		yyt6 = append(yyt6, cursor)
+		yytm6 = append(yytm6, cursor)
 		goto yy20
 	default:
 		goto yy13
@@ -161,7 +161,7 @@ yy15:
 	case 0x00:
 		goto yy2
 	case 'a':
-		yyt1 = append(yyt1, cursor)
+		yytm1 = append(yytm1, cursor)
 		goto yy22
 	default:
 		goto yy13
@@ -172,7 +172,7 @@ yy16:
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt5 = append(yyt5, -1)
+		yytm5 = append(yytm5, -1)
 		goto yy9
 	case 'b':
 		goto yy16
@@ -184,8 +184,8 @@ yy18:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt2 = append(yyt2, -1)
-		yyt5 = append(yyt5, -1)
+		yytm2 = append(yytm2, -1)
+		yytm5 = append(yytm5, -1)
 		goto yy9
 	case 'c':
 		goto yy18
@@ -207,7 +207,7 @@ yy21:
 	yych = str[cursor]
 	switch (yych) {
 	case 'a':
-		yyt1 = append(yyt1, cursor)
+		yytm1 = append(yytm1, cursor)
 		goto yy22
 	default:
 		goto yy24
@@ -217,11 +217,11 @@ yy22:
 	yych = str[cursor]
 	switch (yych) {
 	case 'b':
-		yyt2 = append(yyt2, cursor)
+		yytm2 = append(yytm2, cursor)
 		goto yy27
 	case 'c':
 		yyt3 = cursor
-		yyt2 = append(yyt2, -1)
+		yytm2 = append(yytm2, -1)
 		goto yy15
 	default:
 		goto yy13
@@ -240,8 +240,8 @@ yy24:
 	}
 yy25:
 	cursor += 1
-	a = yyt4
-	b = yyt6
+	a = yytm4
+	b = yytm6
 	c = yyt3
 	{ return }
 yy27:
@@ -264,11 +264,11 @@ func LexTrie(str string) (mt mtagTrie, a int, b int, c int) {
 
 	var yyt3 int
 
-	yyt1 := mtagRoot
-	yyt2 := mtagRoot
-	yyt4 := mtagRoot
-	yyt5 := mtagRoot
-	yyt6 := mtagRoot
+	yytm1 := mtagRoot
+	yytm2 := mtagRoot
+	yytm4 := mtagRoot
+	yytm5 := mtagRoot
+	yytm6 := mtagRoot
 
 	
 {
@@ -277,16 +277,16 @@ func LexTrie(str string) (mt mtagTrie, a int, b int, c int) {
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt2 = mtag(&mt, yyt2, -1)
-		yyt1 = mtag(&mt, yyt1, -1)
+		yytm2 = mtag(&mt, yytm2, -1)
+		yytm1 = mtag(&mt, yytm1, -1)
 		goto yy30
 	case 'a':
-		yyt1 = mtag(&mt, yyt1, cursor)
-		yyt5 = mtag(&mt, yyt5, cursor)
-		yyt4 = mtag(&mt, yyt4, cursor)
+		yytm1 = mtag(&mt, yytm1, cursor)
+		yytm5 = mtag(&mt, yytm5, cursor)
+		yytm4 = mtag(&mt, yytm4, cursor)
 		goto yy34
 	case 'b':
-		yyt2 = mtag(&mt, yyt2, cursor)
+		yytm2 = mtag(&mt, yytm2, cursor)
 		goto yy35
 	case 'c':
 		yyt3 = cursor
@@ -296,8 +296,8 @@ func LexTrie(str string) (mt mtagTrie, a int, b int, c int) {
 	}
 yy30:
 	cursor += 1
-	a = yyt1
-	b = yyt2
+	a = yytm1
+	b = yytm2
 	c = yyt3
 	{ return }
 yy32:
@@ -311,17 +311,17 @@ yy34:
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt2 = mtag(&mt, yyt2, -1)
+		yytm2 = mtag(&mt, yytm2, -1)
 		goto yy37
 	case 'a':
 		goto yy39
 	case 'b':
-		yyt2 = mtag(&mt, yyt2, cursor)
-		yyt6 = mtag(&mt, yyt6, cursor)
+		yytm2 = mtag(&mt, yytm2, cursor)
+		yytm6 = mtag(&mt, yytm6, cursor)
 		goto yy42
 	case 'c':
 		yyt3 = cursor
-		yyt2 = mtag(&mt, yyt2, -1)
+		yytm2 = mtag(&mt, yytm2, -1)
 		goto yy43
 	default:
 		goto yy33
@@ -333,7 +333,7 @@ yy35:
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt5 = mtag(&mt, yyt5, -1)
+		yytm5 = mtag(&mt, yytm5, -1)
 		goto yy37
 	case 'b':
 		goto yy44
@@ -346,8 +346,8 @@ yy36:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt2 = mtag(&mt, yyt2, -1)
-		yyt5 = mtag(&mt, yyt5, -1)
+		yytm2 = mtag(&mt, yytm2, -1)
+		yytm5 = mtag(&mt, yytm5, -1)
 		goto yy37
 	case 'c':
 		goto yy46
@@ -356,8 +356,8 @@ yy36:
 	}
 yy37:
 	cursor += 1
-	a = yyt5
-	b = yyt2
+	a = yytm5
+	b = yytm2
 	c = yyt3
 	{ return }
 yy39:
@@ -366,12 +366,12 @@ yy39:
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt2 = mtag(&mt, yyt2, -1)
+		yytm2 = mtag(&mt, yytm2, -1)
 		goto yy37
 	case 'a':
 		goto yy39
 	case 'b':
-		yyt6 = mtag(&mt, yyt6, cursor)
+		yytm6 = mtag(&mt, yytm6, cursor)
 		goto yy48
 	default:
 		goto yy41
@@ -396,7 +396,7 @@ yy43:
 	case 0x00:
 		goto yy30
 	case 'a':
-		yyt1 = mtag(&mt, yyt1, cursor)
+		yytm1 = mtag(&mt, yytm1, cursor)
 		goto yy50
 	default:
 		goto yy41
@@ -407,7 +407,7 @@ yy44:
 	switch (yych) {
 	case 0x00:
 		yyt3 = -1
-		yyt5 = mtag(&mt, yyt5, -1)
+		yytm5 = mtag(&mt, yytm5, -1)
 		goto yy37
 	case 'b':
 		goto yy44
@@ -419,8 +419,8 @@ yy46:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt2 = mtag(&mt, yyt2, -1)
-		yyt5 = mtag(&mt, yyt5, -1)
+		yytm2 = mtag(&mt, yytm2, -1)
+		yytm5 = mtag(&mt, yytm5, -1)
 		goto yy37
 	case 'c':
 		goto yy46
@@ -442,7 +442,7 @@ yy49:
 	yych = str[cursor]
 	switch (yych) {
 	case 'a':
-		yyt1 = mtag(&mt, yyt1, cursor)
+		yytm1 = mtag(&mt, yytm1, cursor)
 		goto yy50
 	default:
 		goto yy52
@@ -452,11 +452,11 @@ yy50:
 	yych = str[cursor]
 	switch (yych) {
 	case 'b':
-		yyt2 = mtag(&mt, yyt2, cursor)
+		yytm2 = mtag(&mt, yytm2, cursor)
 		goto yy55
 	case 'c':
 		yyt3 = cursor
-		yyt2 = mtag(&mt, yyt2, -1)
+		yytm2 = mtag(&mt, yytm2, -1)
 		goto yy43
 	default:
 		goto yy41
@@ -475,8 +475,8 @@ yy52:
 	}
 yy53:
 	cursor += 1
-	a = yyt4
-	b = yyt6
+	a = yytm4
+	b = yytm6
 	c = yyt3
 	{ return }
 yy55:

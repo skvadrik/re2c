@@ -612,8 +612,8 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
 
     for (const tcmd_t *p = cmd; p; p = p->next) {
         const tagver_t l = p->lhs, r = p->rhs, *h = p->history, *h0;
-        const std::string le = vartag_expr(l, opts);
-        const std::string re = vartag_expr(r, opts);
+        const std::string le = vartag_expr(l, opts, dfa.mtagvers);
+        const std::string re = vartag_expr(r, opts, dfa.mtagvers);
         std::string s;
 
         if (tcmd_t::iscopy(p)) {
@@ -645,7 +645,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
                 Scratchbuf o2(alc);
                 for (const tcmd_t *q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
                     Scratchbuf &x = q->history[0] == TAGVER_BOTTOM ? o : o2;
-                    x.str(vartag_expr(q->lhs, opts)).cstr(" = ");
+                    x.str(vartag_expr(q->lhs, opts, dfa.mtagvers)).cstr(" = ");
                 }
                 if (!o.empty()) {
                     o.cstr("NULL");
@@ -691,7 +691,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
 
         if (!fixed(tag)) {
             // variable tag
-            const std::string expr = vartag_expr(fins[t], opts);
+            const std::string expr = vartag_expr(fins[t], opts, dfa.mtagvers);
             if (trailing(tag)) {
                 const bool notag = dfa.oldstyle_ctxmarker;
                 if (generic) {
@@ -710,7 +710,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             const int32_t dist = static_cast<int32_t>(tag.dist);
             const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
             const std::string base = fixed_on_cursor
-                ? opts->yycursor : vartag_expr(fins[tag.base], opts);
+                ? opts->yycursor : vartag_expr(fins[tag.base], opts, dfa.mtagvers);
 
             if (trailing(tag)) {
                 DASSERT(tag.toplevel);

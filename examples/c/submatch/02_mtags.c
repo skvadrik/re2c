@@ -37,9 +37,9 @@ static bool lex(const char *YYCURSOR, Words &words)
     const char *YYMARKER;
     
 #line 40 "c/submatch/02_mtags.c"
-int yyt1 = ROOT;
-int yyt2 = ROOT;
-int yyt3 = ROOT;
+int yytm1 = ROOT;
+int yytm2 = ROOT;
+int yytm3 = ROOT;
 #line 36 "c/submatch/02_mtags.re"
 
     MtagTree tree;
@@ -78,7 +78,7 @@ int yyt3 = ROOT;
 	case 'x':
 	case 'y':
 	case 'z':
-		YYMTAGP(yyt2);
+		YYMTAGP(yytm2);
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -93,7 +93,7 @@ yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case ';':
-		YYMTAGP(yyt3);
+		YYMTAGP(yytm3);
 		goto yy5;
 	case 'a':
 	case 'b':
@@ -153,16 +153,16 @@ yy5:
 	case 'x':
 	case 'y':
 	case 'z':
-		yyt1 = yyt2;
-		YYMTAGP(yyt2);
+		yytm1 = yytm2;
+		YYMTAGP(yytm2);
 		goto yy7;
 	default:
-		yyt1 = yyt2;
+		yytm1 = yytm2;
 		goto yy6;
 	}
 yy6:
-	x = yyt1;
-	y = yyt3;
+	x = yytm1;
+	y = yytm3;
 #line 45 "c/submatch/02_mtags.re"
 	{
         words.clear();
@@ -174,7 +174,7 @@ yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case ';':
-		YYMTAGP(yyt3);
+		YYMTAGP(yytm3);
 		goto yy5;
 	case 'a':
 	case 'b':

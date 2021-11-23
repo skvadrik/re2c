@@ -13,20 +13,20 @@ yy2:
 	{}
 yy3:
 	yych = *++YYCURSOR;
-	yyt2 = yyt1;
-	YYMTAGP(yyt1);
-	YYSHIFTMTAG(yyt1, -1);
+	yytm2 = yytm1;
+	YYMTAGP(yytm1);
+	YYSHIFTMTAG(yytm1, -1);
 	switch (yych) {
 	case 'b':	goto yy5;
 	default:	goto yy4;
 	}
 yy4:
-	t = yyt1;
+	t = yytm1;
 	{}
 yy5:
 	++YYCURSOR;
-	yyt1 = yyt2;
-	YYMTAGN(yyt1);
+	yytm1 = yytm2;
+	YYMTAGN(yytm1);
 	goto yy4;
 }
 

@@ -248,9 +248,9 @@ static void gen_godot(Output &output, const DFA &dfa, const CodeGoSw *go,
 
             const tcmd_t *cmd = dfa.tcpool[c->jump.tags];
             for (const tcmd_t *p = cmd; p; p = p->next) {
-                o.cstr("<").str(vartag_name(p->lhs, prefix));
+                o.cstr("<").str(vartag_name(p->lhs, prefix, dfa.mtagvers));
                 if (tcmd_t::iscopy(p)) {
-                    o.cstr("~").str(vartag_name(p->rhs, prefix));
+                    o.cstr("~").str(vartag_name(p->rhs, prefix, dfa.mtagvers));
                 }
                 o.cstr(">");
             }

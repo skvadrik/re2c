@@ -82,11 +82,11 @@ yy13:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yyt2 = yyt1;
-		mtagp(yyt2);
-		yyt3 = yyt4;
-		mtagp(yyt3);
-		mtagn(yyt4);
+		yytm2 = yytm1;
+		mtagp(yytm2);
+		yytm3 = yytm4;
+		mtagp(yytm3);
+		mtagn(yytm4);
 		goto yy18;
 	default:	goto yy16;
 	}
@@ -99,17 +99,17 @@ yy18:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yyt4 = yyt3;
-		yyt2 = yyt1;
-		mtagp(yyt2);
-		mtagp(yyt3);
+		yytm4 = yytm3;
+		yytm2 = yytm1;
+		mtagp(yytm2);
+		mtagp(yytm3);
 		goto yy18;
 	default:	goto yy20;
 	}
 yy20:
-	x = yyt4;
-	y = yyt2;
-	z = yyt2;
+	x = yytm4;
+	y = yytm2;
+	z = yytm2;
 	{ a }
 }
 
@@ -122,11 +122,11 @@ yy20:
 	yych = peek();
 	switch (yych) {
 	case 'a':
-		yyt2 = yyt1;
-		mtagp(yyt2);
-		yyt3 = yyt4;
-		mtagp(yyt3);
-		mtagn(yyt4);
+		yytm2 = yytm1;
+		mtagp(yytm2);
+		yytm3 = yytm4;
+		mtagp(yytm3);
+		mtagn(yytm4);
 		goto yy25;
 	default:	goto yy23;
 	}
@@ -139,17 +139,17 @@ yy25:
 	yych = peek();
 	switch (yych) {
 	case 'a':
-		yyt4 = yyt3;
-		yyt2 = yyt1;
-		mtagp(yyt2);
-		mtagp(yyt3);
+		yytm4 = yytm3;
+		yytm2 = yytm1;
+		mtagp(yytm2);
+		mtagp(yytm3);
 		goto yy25;
 	default:	goto yy27;
 	}
 yy27:
-	x = yyt4;
-	y = yyt2;
-	z = yyt2;
+	x = yytm4;
+	y = yytm2;
+	z = yytm2;
 	{ a }
 }
 

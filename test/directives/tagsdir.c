@@ -12,7 +12,7 @@ x2_1;x2_2;y2_1;y2_2;yyt1;yyt2;
 
 // mtags:re2c
 #line 15 "directives/tagsdir.c"
-y2_3;yyt3;
+y2_m3;yytm3;
 #line 8 "directives/tagsdir.re"
 
 
@@ -36,7 +36,7 @@ yyt1;yyt2;
 
 // mtags:re2c:y1
 #line 39 "directives/tagsdir.c"
-yyt3;
+yytm3;
 #line 21 "directives/tagsdir.re"
 
 
@@ -47,7 +47,7 @@ yyt1;yyt2;
 
 // mtags:re2c:x1:y1
 #line 50 "directives/tagsdir.c"
-yyt3;
+yytm3;
 #line 26 "directives/tagsdir.re"
 
 
@@ -71,7 +71,7 @@ y2_1;y2_2;
 
 // mtags:re2c:y2
 #line 74 "directives/tagsdir.c"
-y2_3;
+y2_m3;
 #line 39 "directives/tagsdir.re"
 
 
@@ -82,7 +82,7 @@ x2_1;x2_2;y2_1;y2_2;
 
 // mtags:re2c:x2:y2
 #line 85 "directives/tagsdir.c"
-y2_3;
+y2_m3;
 #line 44 "directives/tagsdir.re"
 
 
@@ -128,17 +128,17 @@ yy3:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 'b') {
-		YYMTAGP(yyt3);
+		YYMTAGP(yytm3);
 		yyt1 = yyt2 = YYCURSOR;
 		goto yy7;
 	}
-	YYMTAGN(yyt3);
+	YYMTAGN(yytm3);
 	yyt2 = NULL;
 	yyt1 = YYCURSOR;
 yy6:
 	y1 = yyt1;
 	y2 = yyt2;
-	y3 = yyt3;
+	y3 = yytm3;
 #line 54 "directives/tagsdir.re"
 	{ b }
 #line 145 "directives/tagsdir.c"
@@ -182,17 +182,17 @@ yy11:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 'b') {
-		YYMTAGP(y2_3);
+		YYMTAGP(y2_m3);
 		y2_1 = y2_2 = YYCURSOR;
 		goto yy15;
 	}
-	YYMTAGN(y2_3);
+	YYMTAGN(y2_m3);
 	y2_2 = NULL;
 	y2_1 = YYCURSOR;
 yy14:
 	y1 = y2_1;
 	y2 = y2_2;
-	y3 = y2_3;
+	y3 = y2_m3;
 #line 54 "directives/tagsdir.re"
 	{ b }
 #line 199 "directives/tagsdir.c"

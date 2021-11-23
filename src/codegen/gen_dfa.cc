@@ -296,17 +296,24 @@ void gen_code(Output &output, dfas_t &dfas)
     output.wdelay_stmt(ind, code_block(alc, program, CodeBlock::RAW));
 }
 
-std::string vartag_name(tagver_t ver, const std::string &prefix)
+std::string vartag_name(tagver_t ver, const std::string &prefix,
+    const std::set<tagver_t> &mtagvers)
 {
     std::ostringstream s;
-    s << prefix << ver;
+    s << prefix;
+    // S-tags and m-tags should not overlap, so m-tags have an additional "m" prefix
+    // (note that tag variables in different conditions may have identical numbers).
+    if (mtagvers.find(ver) != mtagvers.end()) s << "m";
+    s << ver;
     return s.str();
 }
 
-std::string vartag_expr(tagver_t ver, const opt_t *opts)
+std::string vartag_expr(tagver_t ver, const opt_t *opts,
+    const std::set<tagver_t> &mtagvers)
 {
     std::ostringstream os(opts->tags_expression);
-    argsubst(os, opts->api_sigil, "tag", true, vartag_name(ver, opts->tags_prefix));
+    std::string name = vartag_name(ver, opts->tags_prefix, mtagvers);
+    argsubst(os, opts->api_sigil, "tag", true, name);
     return os.str();
 }
 

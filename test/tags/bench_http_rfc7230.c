@@ -55,13 +55,13 @@ char *yyt7;
 char *yyt8;
 char *yyt9;
 
-    taglist_t *yyt31;
-taglist_t *yyt32;
-taglist_t *yyt33;
-taglist_t *yyt34;
-taglist_t *yyt35;
-taglist_t *yyt36;
-taglist_t *yyt37;
+    taglist_t *yytm31;
+taglist_t *yytm32;
+taglist_t *yytm33;
+taglist_t *yytm34;
+taglist_t *yytm35;
+taglist_t *yytm36;
+taglist_t *yytm37;
 
     taglistpool_t tlp;
     int eof;
@@ -70,13 +70,13 @@ taglist_t *yyt37;
 static void taglistpool_clear(taglistpool_t *tlp, input_t *in)
 {
     tlp->next = tlp->head;
-    in->yyt31 = 0;
-in->yyt32 = 0;
-in->yyt33 = 0;
-in->yyt34 = 0;
-in->yyt35 = 0;
-in->yyt36 = 0;
-in->yyt37 = 0;
+    in->yytm31 = 0;
+in->yytm32 = 0;
+in->yytm33 = 0;
+in->yytm34 = 0;
+in->yytm35 = 0;
+in->yytm36 = 0;
+in->yytm37 = 0;
 
 }
 
@@ -161,13 +161,13 @@ in->yyt7 = 0;
 in->yyt8 = 0;
 in->yyt9 = 0;
 
-    in->yyt31 = 0;
-in->yyt32 = 0;
-in->yyt33 = 0;
-in->yyt34 = 0;
-in->yyt35 = 0;
-in->yyt36 = 0;
-in->yyt37 = 0;
+    in->yytm31 = 0;
+in->yytm32 = 0;
+in->yytm33 = 0;
+in->yytm34 = 0;
+in->yytm35 = 0;
+in->yytm36 = 0;
+in->yytm37 = 0;
 
     taglistpool_init(&in->tlp);
     in->eof = 0;
@@ -7343,11 +7343,11 @@ yy234:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '\n':
-		YYMTAGN(in->yyt35);
-		YYMTAGN(in->yyt34);
-		YYMTAGN(in->yyt33);
-		YYMTAGN(in->yyt32);
-		YYMTAGN(in->yyt31);
+		YYMTAGN(in->yytm35);
+		YYMTAGN(in->yytm34);
+		YYMTAGN(in->yytm33);
+		YYMTAGN(in->yytm32);
+		YYMTAGN(in->yytm31);
 		in->yyt29 = in->yyt30 = NULL;
 		goto yy263;
 	case '!':
@@ -7427,7 +7427,7 @@ yy234:
 	case 'z':
 	case '|':
 	case '~':
-		YYMTAGP(in->yyt31);
+		YYMTAGP(in->yytm31);
 		in->yyt29 = in->yyt30 = NULL;
 		goto yy265;
 	default:	goto yy11;
@@ -8104,11 +8104,11 @@ yy263:
 	v4 = in->yyt8;
 	rp1 = in->yyt29;
 	rp2 = in->yyt30;
-	h1 = in->yyt31;
-	h2 = in->yyt32;
-	h3 = in->yyt33;
-	h4 = in->yyt34;
-	h5 = in->yyt35;
+	h1 = in->yytm31;
+	h2 = in->yytm32;
+	h3 = in->yytm33;
+	h4 = in->yytm34;
+	h5 = in->yytm35;
 	au = in->yyt13;
 	of = in->yyt26;
 	v3 = in->yyt8;
@@ -8255,7 +8255,7 @@ yy265:
 	case '|':
 	case '~':	goto yy265;
 	case ':':
-		YYMTAGP(in->yyt32);
+		YYMTAGP(in->yytm32);
 		goto yy292;
 	default:	goto yy11;
 	}
@@ -8923,14 +8923,14 @@ yy292:
 	case '\t':
 	case ' ':	goto yy292;
 	case '\n':
-		in->yyt36 = in->yyt35;
-		YYMTAGP(in->yyt36);
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt37);
-		YYMTAGP(in->yyt33);
+		in->yytm36 = in->yytm35;
+		YYMTAGP(in->yytm36);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm37);
+		YYMTAGP(in->yytm33);
 		goto yy319;
 	default:
-		YYMTAGP(in->yyt33);
+		YYMTAGP(in->yytm33);
 		goto yy320;
 	}
 yy294:
@@ -9505,11 +9505,11 @@ yy318:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '\n':
-		YYMTAGN(in->yyt35);
-		YYMTAGN(in->yyt34);
-		YYMTAGN(in->yyt33);
-		YYMTAGN(in->yyt32);
-		YYMTAGN(in->yyt31);
+		YYMTAGN(in->yytm35);
+		YYMTAGN(in->yytm34);
+		YYMTAGN(in->yytm33);
+		YYMTAGN(in->yytm32);
+		YYMTAGN(in->yytm31);
 		in->yyt1 = in->yyt2 = in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
 		goto yy263;
 	case '!':
@@ -9589,7 +9589,7 @@ yy318:
 	case 'z':
 	case '|':
 	case '~':
-		YYMTAGP(in->yyt31);
+		YYMTAGP(in->yytm31);
 		in->yyt1 = in->yyt2 = in->yyt3 = in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt12 = in->yyt13 = in->yyt14 = in->yyt15 = in->yyt16 = in->yyt17 = in->yyt18 = in->yyt19 = in->yyt20 = in->yyt21 = in->yyt22 = in->yyt23 = in->yyt24 = in->yyt25 = in->yyt26 = in->yyt27 = in->yyt28 = NULL;
 		goto yy265;
 	default:	goto yy11;
@@ -9602,8 +9602,8 @@ yy319:
 	case '\t':
 	case ' ':	goto yy344;
 	case '\n':
-		in->yyt34 = in->yyt37;
-		in->yyt35 = in->yyt36;
+		in->yytm34 = in->yytm37;
+		in->yytm35 = in->yytm36;
 		goto yy263;
 	case '!':
 	case '#':
@@ -9682,9 +9682,9 @@ yy319:
 	case 'z':
 	case '|':
 	case '~':
-		in->yyt34 = in->yyt37;
-		in->yyt35 = in->yyt36;
-		YYMTAGP(in->yyt31);
+		in->yytm34 = in->yytm37;
+		in->yytm35 = in->yytm36;
+		YYMTAGP(in->yytm31);
 		goto yy265;
 	default:	goto yy11;
 	}
@@ -9724,14 +9724,14 @@ yy320:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\t':
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt37);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm37);
 		goto yy346;
 	case '\n':
-		in->yyt36 = in->yyt35;
-		YYMTAGP(in->yyt36);
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt37);
+		in->yytm36 = in->yytm35;
+		YYMTAGP(in->yytm36);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm37);
 		goto yy319;
 	case ' ':	goto yy348;
 	default:	goto yy320;
@@ -10341,10 +10341,10 @@ yy344:
 	case '\t':
 	case ' ':	goto yy344;
 	case '\n':
-		in->yyt36 = in->yyt35;
-		YYMTAGP(in->yyt36);
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt37);
+		in->yytm36 = in->yytm35;
+		YYMTAGP(in->yytm36);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm37);
 		goto yy319;
 	default:	goto yy320;
 	}
@@ -10385,7 +10385,7 @@ yy346:
 	case 0x7F:	goto yy11;
 	case '\t':	goto yy346;
 	case '\n':
-		YYMTAGP(in->yyt35);
+		YYMTAGP(in->yytm35);
 		goto yy376;
 	case ' ':	goto yy348;
 	default:	goto yy377;
@@ -10426,14 +10426,14 @@ yy348:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\t':
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt37);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm37);
 		goto yy346;
 	case '\n':
-		in->yyt36 = in->yyt35;
-		YYMTAGP(in->yyt36);
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt37);
+		in->yytm36 = in->yytm35;
+		YYMTAGP(in->yytm36);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm37);
 		goto yy319;
 	case ' ':	goto yy348;
 	default:	goto yy378;
@@ -11088,7 +11088,7 @@ yy376:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':
-		in->yyt34 = in->yyt37;
+		in->yytm34 = in->yytm37;
 		goto yy263;
 	case '!':
 	case '#':
@@ -11167,8 +11167,8 @@ yy376:
 	case 'z':
 	case '|':
 	case '~':
-		in->yyt34 = in->yyt37;
-		YYMTAGP(in->yyt31);
+		in->yytm34 = in->yytm37;
+		YYMTAGP(in->yytm31);
 		goto yy265;
 	default:	goto yy11;
 	}
@@ -11208,13 +11208,13 @@ yy377:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\t':
-		YYMTAGP(in->yyt34);
+		YYMTAGP(in->yytm34);
 		goto yy399;
 	case '\n':
-		in->yyt36 = in->yyt35;
-		YYMTAGP(in->yyt36);
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt37);
+		in->yytm36 = in->yytm35;
+		YYMTAGP(in->yytm36);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm37);
 		goto yy319;
 	default:	goto yy320;
 	}
@@ -11254,14 +11254,14 @@ yy378:
 	case 0x1E:
 	case 0x7F:	goto yy11;
 	case '\t':
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt37);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm37);
 		goto yy401;
 	case '\n':
-		in->yyt36 = in->yyt35;
-		YYMTAGP(in->yyt36);
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt37);
+		in->yytm36 = in->yytm35;
+		YYMTAGP(in->yytm36);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm37);
 		goto yy319;
 	default:	goto yy320;
 	}
@@ -11791,8 +11791,8 @@ yy399:
 	case '\t':
 	case ' ':	goto yy399;
 	case '\n':
-		in->yyt37 = in->yyt34;
-		YYMTAGP(in->yyt35);
+		in->yytm37 = in->yytm34;
+		YYMTAGP(in->yytm35);
 		goto yy376;
 	default:	goto yy11;
 	}
@@ -11833,7 +11833,7 @@ yy401:
 	case 0x7F:	goto yy11;
 	case '\t':	goto yy401;
 	case '\n':
-		YYMTAGP(in->yyt35);
+		YYMTAGP(in->yytm35);
 		goto yy376;
 	case ' ':	goto yy416;
 	default:	goto yy377;
@@ -12204,8 +12204,8 @@ yy416:
 	case 0x7F:	goto yy11;
 	case '\t':	goto yy401;
 	case '\n':
-		in->yyt36 = in->yyt35;
-		YYMTAGP(in->yyt36);
+		in->yytm36 = in->yytm35;
+		YYMTAGP(in->yytm36);
 		goto yy319;
 	case ' ':	goto yy416;
 	default:	goto yy378;

@@ -37,10 +37,10 @@ static int lex(const char *YYCURSOR)
     mtagpool_t tp;
     int h1, h2;
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;const char *yyt6;
-    int yyt7;int yyt8;
+    int yytm7;int yytm8;
 loop:
     tp.clear();
-    yyt7 = -1;yyt8 = -1;
+    yytm7 = -1;yytm8 = -1;
     
 {
 	char yych;
@@ -922,11 +922,11 @@ yy64:
 	case '\t':
 	case ' ':	goto yy64;
 	case '\n':
-		YYMTAGN(yyt8);
-		YYMTAGN(yyt7);
+		YYMTAGN(yytm8);
+		YYMTAGN(yytm7);
 		goto yy66;
 	case '#':
-		YYMTAGP(yyt7);
+		YYMTAGP(yytm7);
 		goto yy68;
 	case '-':
 	case '0':
@@ -965,7 +965,7 @@ yy64:
 	case 'x':
 	case 'y':
 	case 'z':
-		YYMTAGP(yyt7);
+		YYMTAGP(yytm7);
 		goto yy69;
 	default:	goto yy13;
 	}
@@ -1070,8 +1070,8 @@ yy71:
 	a2 = yyt4;
 	c1 = yyt5;
 	c2 = yyt6;
-	h1 = yyt7;
-	h2 = yyt8;
+	h1 = yytm7;
+	h2 = yytm8;
 	{
             fprintf(stderr, "\n%.*s\n", (int) (n2 - n1), n1);
             fprintf(stderr, "  name:     %.*s\n", (int) (a2 - a1), a1);
@@ -1085,7 +1085,7 @@ yy73:
 	switch (yych) {
 	case '\t':
 	case ' ':
-		YYMTAGP(yyt8);
+		YYMTAGP(yytm8);
 		goto yy76;
 	case '-':
 	case '0':
@@ -1125,7 +1125,7 @@ yy73:
 	case 'y':
 	case 'z':	goto yy73;
 	case ';':
-		YYMTAGP(yyt8);
+		YYMTAGP(yytm8);
 		goto yy78;
 	default:	goto yy13;
 	}
@@ -1150,7 +1150,7 @@ yy78:
 	case ' ':	goto yy78;
 	case '\n':	goto yy66;
 	case '#':
-		YYMTAGP(yyt7);
+		YYMTAGP(yytm7);
 		goto yy68;
 	case '-':
 	case '0':
@@ -1189,7 +1189,7 @@ yy78:
 	case 'x':
 	case 'y':
 	case 'z':
-		YYMTAGP(yyt7);
+		YYMTAGP(yytm7);
 		goto yy69;
 	default:	goto yy13;
 	}

@@ -59,8 +59,8 @@ func lex(str string) []string {
 	y := mtagRoot
 	
 //line "go/submatch/02_mtags.go":62
-	yyt1 := mtagRoot
-	yyt2 := mtagRoot
+	yytm1 := mtagRoot
+	yytm2 := mtagRoot
 //line "go/submatch/02_mtags.re":58
 
 
@@ -71,8 +71,8 @@ func lex(str string) []string {
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		yyt2 = mtag(&trie, yyt2, mtagNil)
-		yyt1 = mtag(&trie, yyt1, mtagNil)
+		yytm2 = mtag(&trie, yytm2, mtagNil)
+		yytm1 = mtag(&trie, yytm1, mtagNil)
 		goto yy2
 	case 'a':
 		fallthrough
@@ -125,15 +125,15 @@ func lex(str string) []string {
 	case 'y':
 		fallthrough
 	case 'z':
-		yyt1 = mtag(&trie, yyt1, cursor)
+		yytm1 = mtag(&trie, yytm1, cursor)
 		goto yy6
 	default:
 		goto yy4
 	}
 yy2:
 	cursor += 1
-	x = yyt1
-	y = yyt2
+	x = yytm1
+	y = yytm2
 //line "go/submatch/02_mtags.re":73
 	{ return unwind(trie, x, y, str) }
 //line "go/submatch/02_mtags.go":140
@@ -149,7 +149,7 @@ yy6:
 	yych = str[cursor]
 	switch (yych) {
 	case ';':
-		yyt2 = mtag(&trie, yyt2, cursor)
+		yytm2 = mtag(&trie, yytm2, cursor)
 		goto yy7
 	case 'a':
 		fallthrough
@@ -263,7 +263,7 @@ yy7:
 	case 'y':
 		fallthrough
 	case 'z':
-		yyt1 = mtag(&trie, yyt1, cursor)
+		yytm1 = mtag(&trie, yytm1, cursor)
 		goto yy9
 	default:
 		goto yy8
@@ -276,7 +276,7 @@ yy9:
 	yych = str[cursor]
 	switch (yych) {
 	case ';':
-		yyt2 = mtag(&trie, yyt2, cursor)
+		yytm2 = mtag(&trie, yytm2, cursor)
 		goto yy7
 	case 'a':
 		fallthrough
