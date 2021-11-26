@@ -37,6 +37,16 @@ static void find_blocks(CodegenCtxPass1 &ctx, const BlockNameList *names,
     }
 }
 
+static std::string output_cond_get(const opt_t *opts)
+{
+    return opts->cond_get + (opts->cond_get_naked ? "" : "()");
+}
+
+static std::string output_state_get(const opt_t *opts)
+{
+    return opts->state_get + (opts->state_get_naked ? "" : "()");
+}
+
 void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &tags)
 {
     DASSERT(code->kind == CODE_STAGS || code->kind == CODE_MTAGS);
@@ -350,7 +360,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     }
 
     CodeList *stmts = code_list(alc);
-    text = o.str(globopts->state_get).cstr(globopts->state_get_naked ? "" : "()").flush();
+    text = o.str(output_state_get(globopts)).flush();
     append(stmts, code_switch(alc, text, cases));
 
     if (globopts->bUseStateNext) {
@@ -401,7 +411,7 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
             // With storable state `yystate` should be initialized to `YYGETSTATE`.
             // Since there is a -1 case, `yystate` should have a signed type.
             code->var.type = "int";
-            code->var.init = o.str(opts->state_get).flush();
+            code->var.init = o.str(output_state_get(opts)).flush();
         } else {
             code->var.type = "unsigned int";
             code->var.init = "0";
@@ -482,11 +492,6 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
  *       explicit condition names or there's only one condition and
  *       dispatch shrinks to unconditional jump
  */
-
-static std::string output_cond_get(const opt_t *opts)
-{
-    return opts->cond_get + (opts->cond_get_naked ? "" : "()");
-}
 
 static CodeList *gen_cond_goto_binary(CodegenCtxPass1 &ctx, size_t lower, size_t upper)
 {
