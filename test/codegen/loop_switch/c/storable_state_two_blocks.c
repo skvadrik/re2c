@@ -3,7 +3,7 @@
 
 
 
-	int yystate = YYGETSTATE;
+	int yystate = YYGETSTATE();
 	for (;;) {
 		switch (yystate) {
 		case -1:
@@ -41,7 +41,7 @@
 
 
 
-	int yystate = YYGETSTATE;
+	int yystate = YYGETSTATE();
 	for (;;) {
 		switch (yystate) {
 		case -1:
