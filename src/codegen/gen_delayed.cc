@@ -408,11 +408,19 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
         code->kind = CODE_VAR;
         code->var.name = o.str(opts->yystate).flush();
         if (opts->fFlag) {
-            // With storable state `yystate` should be initialized to `YYGETSTATE`.
+            // With storable state `yystate` should be initialized to YYGETSTATE.
             // Since there is a -1 case, `yystate` should have a signed type.
+            // If conditions are also used, YYGETSTATE takes priority over YYGETCONDITION,
+            // because the lexer may be reentered after an YYFILL invocation. In that case
+            // we use YYSETSTATE instead of YYSETCONDITION in the final states.
             code->var.type = "int";
             code->var.init = o.str(output_state_get(opts)).flush();
+        } else if (opts->cFlag) {
+            // Else with start conditions yystate should be initialized to YYGETCONDITION.
+            code->var.type = "unsigned int";
+            code->var.init = o.str(output_cond_get(opts)).flush();
         } else {
+            // Else it should be the start DFA state (always case 0 with --loop-switch).
             code->var.type = "unsigned int";
             code->var.init = "0";
         }

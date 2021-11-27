@@ -252,6 +252,14 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (real.fill_naked) {
         real.fill_arg_use = false;
     }
+    if (glob.loop_switch) {
+        // With --loop-switch there is no `goto`.
+        real.yyctable = defaults.yyctable;
+        real.condDivider = defaults.condDivider;
+        real.condDividerParam = defaults.condDividerParam;
+        real.condGoto = defaults.condGoto;
+        real.condGotoParam = defaults.condGotoParam;
+    }
 
     // errors
     if (glob.target == TARGET_SKELETON && glob.lang != LANG_C) {
@@ -319,9 +327,17 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
             error("cannot combine loop switch and computed gotos");
             exit(1);
         }
-        // TODO: support --loop-switch with conditions
-        if (glob.cFlag) {
-            error("cannot combine loop switch and conditions");
+        if (real.bFlag) {
+            // TODO: generate bitmaps before the joined loop/switch for all conditions.
+            error("bitmaps with loop switch are not supported");
+            exit(1);
+        }
+        if (!glob.lookahead) {
+            // The problem here is that TDFA(0) may have initial register operations that
+            // should be executed on DFA entry. With loop/switch these operations would
+            // need to go in a special initial state (they can't go before the `yystate`
+            // loop because that would not work with start conditions).
+            error("TDFA(0) with loop switch is not supported");
             exit(1);
         }
     }

@@ -763,6 +763,9 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
     const CodeJump &jump);
 const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n);
 void gen_code(Output &output, dfas_t &dfas);
+void gen_dfa_as_blocks_with_labels(Output &output, const DFA &dfa, CodeList *stmts);
+void gen_dfa_as_switch_cases(Output &output, DFA &dfa, CodeCases *cases);
+void wrap_dfas_in_loop_switch(Output &output, CodeList *stmts, CodeCases *cases);
 
 void expand_pass_1(CodegenCtxPass1 &ctx, Code *code);
 void expand_pass_2(CodegenCtxPass2 &ctx, Code *code);
