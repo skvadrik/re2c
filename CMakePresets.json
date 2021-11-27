@@ -53,7 +53,7 @@
     {
       "name": "linux-gcc-ubsan-ootree-full",
       "displayName": "Linux x86_64: GCC / Ubsan / Out of tree (full)",
-      "inherits": ["linux-gcc-ubsan-ootree-fast", "default-full-configuration"]
+      "inherits": ["default-full-configuration", "linux-gcc-ubsan-ootree-fast"]
     },
     {
       "name": "linux-gcc-asan-ootree-fast",
@@ -71,7 +71,7 @@
     {
       "name": "linux-gcc-asan-ootree-full",
       "displayName": "Linux x86_64: GCC / Asan / Out of tree (full)",
-      "inherits": ["linux-gcc-asan-ootree-fast", "default-full-configuration"]
+      "inherits": ["default-full-configuration", "linux-gcc-asan-ootree-fast"]
     },
     {
       "name": "linux-gcc-debug-ootree-skeleton-fast",
@@ -89,7 +89,7 @@
     {
       "name": "linux-gcc-debug-ootree-skeleton-full",
       "displayName": "Linux x86_64: GCC / Debug / Skeleton / Out of tree (full)",
-      "inherits": ["linux-gcc-debug-ootree-skeleton-fast", "default-full-configuration"]
+      "inherits": ["default-full-configuration", "linux-gcc-debug-ootree-skeleton-fast"]
     },
     {
       "name": "linux-gcc-debug-intree-m32-skeleton-fast",
@@ -113,7 +113,7 @@
     {
       "name": "linux-gcc-debug-intree-m32-skeleton-full",
       "displayName": "Linux x86: GCC / Debug / Skeleton / In tree (full)",
-      "inherits": ["linux-gcc-debug-intree-m32-skeleton-fast", "default-full-configuration"]
+      "inherits": ["default-full-configuration", "linux-gcc-debug-intree-m32-skeleton-fast"]
     },
     {
       "name": "linux-gcc-release-ootree-skeleton-fast",
@@ -129,7 +129,7 @@
     {
       "name": "linux-gcc-release-ootree-skeleton-full",
       "displayName": "Linux x86_64: GCC / Release / Skeleton / Out of tree (full)",
-      "inherits": ["linux-gcc-release-ootree-skeleton-fast", "default-full-configuration"]
+      "inherits": ["default-full-configuration", "linux-gcc-release-ootree-skeleton-fast"]
     },
 
 
@@ -167,7 +167,7 @@
     {
       "name": "macos-clang-debug-ootree-skeleton-full",
       "displayName": "macOS x86_64: Clang / Debug / Skeleton / Out of tree (full)",
-      "inherits": ["macos-clang-debug-ootree-skeleton-fast", "default-full-configuration"]
+      "inherits": ["default-full-configuration", "macos-clang-debug-ootree-skeleton-fast"]
     },
     {
       "name": "macos-clang-debug-intree-skeleton-fast",
@@ -185,7 +185,7 @@
     {
       "name": "macos-clang-debug-intree-skeleton-full",
       "displayName": "macOS x86_64: Clang / Debug / Skeleton / In tree (full)",
-      "inherits": ["macos-clang-debug-intree-skeleton-fast", "default-full-configuration"]
+      "inherits": ["default-full-configuration", "macos-clang-debug-intree-skeleton-fast"]
     },
     {
       "name": "macos-clang-release-ootree-skeleton-fast",
@@ -201,7 +201,7 @@
     {
       "name": "macos-clang-release-ootree-skeleton-full",
       "displayName": "macOS x86_64: CLang / Release / Skeleton / Out of tree (full)",
-      "inherits": ["macos-clang-release-ootree-skeleton-fast", "default-full-configuration"]
+      "inherits": ["default-full-configuration", "macos-clang-release-ootree-skeleton-fast"]
     },
 
 
@@ -237,7 +237,7 @@
     {
       "name": "windows-msvc-debug-ootree-full",
       "displayName": "Windows x86_64: MSVC / Debug / Out of tree (full)",
-      "inherits": ["windows-msvc-debug-ootree-fast", "default-full-configuration"],
+      "inherits": ["default-full-configuration", "windows-msvc-debug-ootree-fast"],
       "cacheVariables": {
         "RE2C_REBUILD_DOCS": false
       }
@@ -256,7 +256,7 @@
     {
       "name": "windows-msvc-debug-intree-full",
       "displayName": "Windows x86_64: MSVC / Debug / In tree (full)",
-      "inherits": ["windows-msvc-debug-intree-fast", "default-full-configuration"],
+      "inherits": ["default-full-configuration", "windows-msvc-debug-intree-fast"],
       "cacheVariables": {
         "RE2C_REBUILD_DOCS": false
       }
@@ -275,7 +275,7 @@
     {
       "name": "windows-msvc-release-ootree-full",
       "displayName": "Windows x86_64: MSVC / Release / Out of tree (full)",
-      "inherits": ["windows-msvc-release-ootree-fast", "default-full-configuration"],
+      "inherits": ["default-full-configuration", "windows-msvc-release-ootree-fast"],
       "cacheVariables": {
         "RE2C_REBUILD_DOCS": false
       }
