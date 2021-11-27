@@ -130,7 +130,6 @@ struct DFA {
     void reorder();
     void prepare(const opt_t *opts);
     void calc_stats(OutputBlock &out);
-    void emit_body(Output &output, CodeList *program) const;
     void emit_dot(Output &output, CodeList *program) const;
 
 private:

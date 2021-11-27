@@ -31,7 +31,6 @@ static void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t ru
 static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa,
     const Rule &rule);
 static bool endstate(const State *s);
-static void gen_setstate(Output &output, CodeList *stmts, int32_t fillidx);
 
 static const char *gen_fill_label(Output &output, uint32_t index)
 {
@@ -227,57 +226,7 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
     append(stmts, code_switch(alc, text, cases));
 }
 
-void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
-{
-    const opt_t *opts = output.block().opts;
-    const Rule &rule = dfa.rules[rule_idx];
-    const SemAct *semact = rule.semact;
-    const std::string &cond = semact->cond;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    std::string s;
-    const char *text;
-
-    gen_fintags(output, stmts, dfa, rule);
-
-    if (opts->target == TARGET_SKELETON) {
-        emit_skeleton_action(output, stmts, dfa, rule_idx);
-    }
-    else {
-        if (!cond.empty() && dfa.cond != cond) {
-            o.str(opts->cond_set);
-            argsubst(o.stream(), opts->cond_set_arg, "cond", true,
-                opts->condEnumPrefix + cond);
-            if (opts->cond_set_naked) {
-                append(stmts, code_text(alc, o.flush()));
-            } else {
-                o.cstr("(").str(opts->condEnumPrefix).str(cond).cstr(")");
-                append(stmts, code_stmt(alc, o.flush()));
-            }
-        }
-        if (opts->loop_switch && opts->fFlag) {
-            gen_setstate(output, stmts, 0);
-        }
-        if (!semact->autogen) {
-            if (!dfa.setup.empty()) {
-                text = o.str(dfa.setup).flush();
-                append(stmts, code_text(alc, text));
-            }
-            append(stmts, code_line_info_input(alc, semact->loc));
-            text = o.str(semact->text).flush();
-            append(stmts, code_text(alc, text));
-            append(stmts, code_line_info_output(alc));
-        }
-        else if (!cond.empty()) {
-            o.str(opts->condGoto);
-            argsubst(o.stream(), opts->condGotoParam, "cond", true,
-                opts->condPrefix + cond);
-            append(stmts, code_text(alc, o.flush()));
-        }
-    }
-}
-
-static void gen_setstate(Output &output, CodeList *stmts, int32_t fillidx)
+static void gen_setstate(Output &output, CodeList *stmts, const char *fillidx)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
@@ -288,8 +237,82 @@ static void gen_setstate(Output &output, CodeList *stmts, int32_t fillidx)
     if (opts->state_set_naked) {
         append(stmts, code_text(alc, o.flush()));
     } else {
-        o.cstr("(").i32(fillidx).cstr(")");
+        o.cstr("(").cstr(fillidx).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
+    }
+}
+
+static void gen_setcondition(Output &output, CodeList *stmts, const char *cond)
+{
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+
+    o.str(opts->cond_set);
+    argsubst(o.stream(), opts->cond_set_arg, "cond", true, cond);
+    if (opts->cond_set_naked) {
+        append(stmts, code_text(alc, o.flush()));
+    } else {
+        o.cstr("(").cstr(cond).cstr(")");
+        append(stmts, code_stmt(alc, o.flush()));
+    }
+}
+
+void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
+{
+    const opt_t *opts = output.block().opts;
+    const Rule &rule = dfa.rules[rule_idx];
+    const SemAct *semact = rule.semact;
+    code_alc_t &alc = output.allocator;
+    Scratchbuf &o = output.scratchbuf;
+
+    gen_fintags(output, stmts, dfa, rule);
+
+    if (opts->target == TARGET_SKELETON) {
+        emit_skeleton_action(output, stmts, dfa, rule_idx);
+        return;
+    }
+
+    bool is_cond_block = !dfa.cond.empty();
+    const std::string &cond = semact->cond.empty() ? dfa.cond : semact->cond;
+    const char *next = is_cond_block
+        ? o.str(opts->condEnumPrefix).str(cond).flush() : "0";
+
+    if (opts->loop_switch && opts->fFlag) {
+        // With loop/switch and storable state we need YYSETSTATE in the final state,
+        // because the user may enclose lexer in an outer loop and expect the next
+        // iteration to start from the initial DFA state. Since `yystate` is initialized
+        // to YYGETSTATE, we need to do YYSETSTATE before the user-defined action.
+        //
+        // If both storable state and start conditions are used, only one of YYGETSTATE
+        // and YYGETCONDITION can be used to initialize `yystate`. It must be YYGETSTATE
+        // because the lexer may be reentered after an YYFILL invocation. Consequently we
+        // need to use YYSETSTATE instead of YYSETCONDITION in the final state to match
+        // YYGETSTATE in `yystate` initialization.
+        gen_setstate(output, stmts, next);
+    } else if (is_cond_block && cond != dfa.cond) {
+        // Omit YYSETCONDITION if the current condition is the same as the new one.
+        gen_setcondition(output, stmts, next);
+    }
+
+    if (!semact->autogen) {
+        // User-defined semantic action.
+        if (!dfa.setup.empty()) append(stmts, code_text(alc, o.str(dfa.setup).flush()));
+        append(stmts, code_line_info_input(alc, semact->loc));
+        append(stmts, code_text(alc, o.str(semact->text).flush()));
+        append(stmts, code_line_info_output(alc));
+    } else if (opts->loop_switch) {
+        // Autogenerated action for the :=> rule, loop/switch mode: set `yystate` to the
+        // initial state of the next condition and continue to the head of the loop.
+        o.str(opts->yystate).cstr(" = ").cstr(next);
+        append(stmts, code_stmt(alc, o.flush()));
+        append(stmts, code_stmt(alc, "continue"));
+    } else {
+        // Autogenerated action for the :=> rule, goto/label mode: emit `cond:goto`
+        // configuration with `cond:goto@cond` replaced by the next condition label.
+        o.str(opts->condGoto);
+        argsubst(o.stream(), opts->condGotoParam, "cond", true, opts->condPrefix + cond);
+        append(stmts, code_text(alc, o.flush()));
     }
 }
 
@@ -378,7 +401,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
     CodeList *fill = code_list(alc);
 
     if (opts->fFlag) {
-        gen_setstate(output, eof_rule ? fill : stmts, static_cast<int32_t>(fillidx));
+        gen_setstate(output, eof_rule ? fill : stmts, o.u32(fillidx).flush());
     }
 
     if (opts->fill_use) {

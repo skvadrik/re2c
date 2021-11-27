@@ -18,6 +18,7 @@ static uint64_t parse_u32(const char *s)
     int c = yycinit;
     uint64_t u = 0;
 
+loop:
     /*!re2c
     re2c:yyfill:enable = 0;
     re2c:api:style = free-form;
@@ -35,12 +36,12 @@ static uint64_t parse_u32(const char *s)
 
     <bin, oct, dec, hex> "\x00" { return u; }
 
-    <bin> [01]  { adddgt<2> (u, s[-1] - '0');      goto yyc_bin; }
-    <oct> [0-7] { adddgt<8> (u, s[-1] - '0');      goto yyc_oct; }
-    <dec> [0-9] { adddgt<10>(u, s[-1] - '0');      goto yyc_dec; }
-    <hex> [0-9] { adddgt<16>(u, s[-1] - '0');      goto yyc_hex; }
-    <hex> [a-f] { adddgt<16>(u, s[-1] - 'a' + 10); goto yyc_hex; }
-    <hex> [A-F] { adddgt<16>(u, s[-1] - 'A' + 10); goto yyc_hex; }
+    <bin> [01]  { adddgt<2> (u, s[-1] - '0');      goto loop; }
+    <oct> [0-7] { adddgt<8> (u, s[-1] - '0');      goto loop; }
+    <dec> [0-9] { adddgt<10>(u, s[-1] - '0');      goto loop; }
+    <hex> [0-9] { adddgt<16>(u, s[-1] - '0');      goto loop; }
+    <hex> [a-f] { adddgt<16>(u, s[-1] - 'a' + 10); goto loop; }
+    <hex> [A-F] { adddgt<16>(u, s[-1] - 'A' + 10); goto loop; }
     */
 }
 

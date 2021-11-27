@@ -27,6 +27,7 @@ func parse_u32(str string) (uint32, error) {
 		}
 	}
 
+loop:
 	/*!re2c
 	re2c:yyfill:enable = 0;
 	re2c:define:YYCTYPE        = byte;
@@ -53,12 +54,12 @@ func parse_u32(str string) (uint32, error) {
 		}
 	}
 
-	<bin> [01]  { add_digit(2, '0');     goto yyc_bin }
-	<oct> [0-7] { add_digit(8, '0');     goto yyc_oct }
-	<dec> [0-9] { add_digit(10, '0');    goto yyc_dec }
-	<hex> [0-9] { add_digit(16, '0');    goto yyc_hex }
-	<hex> [a-f] { add_digit(16, 'a'-10); goto yyc_hex }
-	<hex> [A-F] { add_digit(16, 'A'-10); goto yyc_hex }
+	<bin> [01]  { add_digit(2, '0');     goto loop }
+	<oct> [0-7] { add_digit(8, '0');     goto loop }
+	<dec> [0-9] { add_digit(10, '0');    goto loop }
+	<hex> [0-9] { add_digit(16, '0');    goto loop }
+	<hex> [a-f] { add_digit(16, 'a'-10); goto loop }
+	<hex> [A-F] { add_digit(16, 'A'-10); goto loop }
 	*/
 }
 

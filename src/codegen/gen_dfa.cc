@@ -73,48 +73,60 @@ static void gen_storable_state_cases(Output &output, CodeCases *cases)
     prepend(cases, code_case_number(alc, start_case, -1));
 }
 
-
-void DFA::emit_body(Output &output, CodeList *stmts) const
+void gen_dfa_as_blocks_with_labels(Output &output, const DFA &dfa, CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const char *text;
 
-    gen_settags(output, stmts, *this, tags0, false /* delayed */);
+    gen_settags(output, stmts, dfa, dfa.tags0, /*delayed*/ false);
 
     // If DFA has transitions into the initial state and --eager-skip option is not used,
     // then the initial state must have a YYSKIP statement that must be bypassed when
     // first entering the DFA. With --loop-switch that would be impossible, because there
     // can be no transitions in the middle of a state.
-    if (head->label->used && !opts->eager_skip) {
-        DASSERT(!opts->loop_switch);
-        initial_label->used = true;
-        text = o.cstr("goto ").str(opts->labelPrefix).label(*initial_label).flush();
-        append(stmts, code_stmt(alc, text));
+    DASSERT(!opts->loop_switch);
+    if (dfa.head->label->used && !opts->eager_skip) {
+        dfa.initial_label->used = true;
+        o.cstr("goto ").str(opts->labelPrefix).label(*dfa.initial_label);
+        append(stmts, code_stmt(alc, o.flush()));
     }
 
-    if (!opts->loop_switch) {
-        for (State * s = head; s; s = s->next) {
-            emit_state(output, s, stmts);
-            emit_action(output, *this, s, stmts);
-            gen_go(output, *this, &s->go, s, stmts);
-        }
-    } else {
-        CodeList* loop = code_list(alc);
-        CodeCases *cases = code_cases(alc);
-        for (State * s = head; s; s = s->next) {
-            CodeList *body = code_list(alc);
-            emit_state(output, s, body);
-            emit_action(output, *this, s, body);
-            gen_go(output, *this, &s->go, s, body);
-            append(cases, code_case_number(alc, body,
-                static_cast<int32_t>(s->label->index)));
-        }
-        gen_storable_state_cases(output, cases);
-        append(loop, code_switch(alc, opts->yystate.c_str(), cases));
-        append(stmts, code_loop(alc, loop));
+    for (State *s = dfa.head; s; s = s->next) {
+        emit_state(output, s, stmts);
+        emit_action(output, dfa, s, stmts);
+        gen_go(output, dfa, &s->go, s, stmts);
     }
+}
+
+void gen_dfa_as_switch_cases(Output &output, DFA &dfa, CodeCases *cases)
+{
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+
+    DASSERT(opts->loop_switch);
+    DASSERT(dfa.tags0 == TCID0);
+
+    for (State *s = dfa.head; s; s = s->next) {
+        CodeList *body = code_list(alc);
+        emit_state(output, s, body);
+        emit_action(output, dfa, s, body);
+        gen_go(output, dfa, &s->go, s, body);
+        append(cases, code_case_number(alc, body, static_cast<int32_t>(s->label->index)));
+    }
+}
+
+void wrap_dfas_in_loop_switch(Output &output, CodeList *stmts, CodeCases *cases)
+{
+    const opt_t *opts = output.block().opts;
+    code_alc_t &alc = output.allocator;
+
+    DASSERT(opts->loop_switch);
+
+    CodeList* loop = code_list(alc);
+    gen_storable_state_cases(output, cases);
+    append(loop, code_switch(alc, opts->yystate.c_str(), cases));
+    append(stmts, code_loop(alc, loop));
 }
 
 void DFA::emit_dot(Output &output, CodeList *program) const
@@ -182,15 +194,16 @@ void gen_code(Output &output, dfas_t &dfas)
     // All conditions are named, so it suffices to check the first DFA.
     const bool is_cond_block = !(*b)->cond.empty();
 
-    if (opts->loop_switch) {
-        // With loop/switch there are no labels, and each block has its own state switch.
-        // Restart state counter from zero so that cases start from zero.
-        output.label_counter = 0;
-    }
-
     for (i = b; i != e; ++i) {
         const bool first = i == b;
         DFA &dfa = *(*i);
+
+        if (opts->loop_switch && (first || opts->target == TARGET_SKELETON)) {
+            // With loop/switch there are no labels, and each block has its own state
+            // switch where all conditions are joined. Restart state counter from zero so
+            // that cases start from zero. With skeleton conditions are separate.
+            output.label_counter = 0;
+        }
 
         if (!opts->loop_switch) {
             if (first) {
@@ -269,6 +282,7 @@ void gen_code(Output &output, dfas_t &dfas)
 
         const char *text;
         CodeList *program1 = code_list(alc);
+        CodeCases *cases = code_cases(alc);
         for (i = b; i != e; ++i) {
             const bool first = i == b;
             DFA &dfa = *(*i);
@@ -313,12 +327,11 @@ void gen_code(Output &output, dfas_t &dfas)
                 append(program1, code_slabel(alc, text));
             }
 
-            if (is_cond_block && !output.cond_goto) {
-                append(program1, code_cond_goto(alc));
-                output.cond_goto = true;
-            }
-
-            if (is_cond_block && !dfa.cond.empty()) {
+            if (is_cond_block && !opts->loop_switch) {
+                if (!output.cond_goto) {
+                    append(program1, code_cond_goto(alc));
+                    output.cond_goto = true;
+                }
                 if (opts->condDivider.length()) {
                     o.str(opts->condDivider);
                     argsubst(o.stream(), opts->condDividerParam, "cond", true, dfa.cond);
@@ -328,19 +341,28 @@ void gen_code(Output &output, dfas_t &dfas)
                 append(program1, code_slabel(alc, text));
             }
 
-            // generate code for DFA
-            CodeList *body = code_list(alc);
-            dfa.emit_body(output, body);
-
-            if (is_cond_block && bms) {
-                CodeList *block = code_list(alc);
-                append(block, bms);
-                append(block, body);
-                append(program1, code_block(alc, block, CodeBlock::WRAPPED));
+            if (!opts->loop_switch) {
+                // In the goto/label mode, generate DFA states as blocks of code preceded
+                // with labels, and `goto` transitions between states.
+                CodeList *body = code_list(alc);
+                gen_dfa_as_blocks_with_labels(output, dfa, body);
+                if (is_cond_block && bms) {
+                    CodeList *block = code_list(alc);
+                    append(block, bms);
+                    append(block, body);
+                    append(program1, code_block(alc, block, CodeBlock::WRAPPED));
+                } else {
+                    append(program1, body);
+                }
+            } else {
+                // In the loop/switch mode append all DFA states as cases of the `yystate`
+                // switch. Merge DFAs for different conditions together in one switch.
+                DASSERT(!bms);
+                gen_dfa_as_switch_cases(output, dfa, cases);
             }
-            else {
-                append(program1, body);
-            }
+        }
+        if (opts->loop_switch) {
+            wrap_dfas_in_loop_switch(output, program1, cases);
         }
 
         const bool prolog = (opts->fFlag && opts->gFlag)
