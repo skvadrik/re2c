@@ -48,29 +48,40 @@ bool Scanner::open(const std::string &filename, const std::string *parent)
     return true;
 }
 
-bool Scanner::include(const std::string &filename)
+bool Scanner::include(const std::string &filename, char *at)
 {
+    // This function is called twice for each included file: first time when opening the
+    // file, and second time when it has been fully read and can be closed. Second time
+    // is needed to generate a line directive marking the end of the included file and the
+    // continuation of the parent file. To get the second call, we "unread" include
+    // directive on the first call (essentially just don't move token pointer to cursor)
+    // and let the lexer scan it twice. To differentiate the first and the second times,
+    // we compare the topmost file on stack with the inlude file (after popping all
+    // finished files, as there may be nested includes). This logic can't handle recursive
+    // self-includes, but they would be erroneous anyway.
+    pop_finished_files();
+    if (files.back()->name == filename) return true;
+
     // get name of the current file (before unreading)
     const size_t fidx = get_input_index();
     DASSERT(fidx < files.size());
     const std::string &parent = files[fidx]->escaped_name;
 
-    // unread buffer tail: we'll return to it later
-    // In the buffer nested files go before outer files. In the file stack,
-    // however, outer files go before nested files (nested are at the top).
-    // We want to break from the unreading cycle early, therefore we go in
-    // reverse order of file offsets in buffer and break as soon as the end
-    // offset is less than cursor (current position).
+    // Unread buffer tail: we'll return to it later. In the buffer nested files go before
+    // outer files. In the file stack, however, outer files go before nested files (nested
+    // are at the top). We want to break from the unreading cycle early, therefore we go
+    // in reverse order of file offsets in buffer and break as soon as the end offset is
+    // less than cursor (current position). `at` points at the start of include directive.
     for (size_t i = 0; i < files.size(); ++i) {
         Input *in = files[i];
-        if (in->so >= cur) {
+        if (in->so >= at) {
             // unread whole fragment
             fseek(in->file, in->so - in->eo, SEEK_CUR);
             in->so = in->eo = ENDPOS;
         }
-        else if (in->eo >= cur) {
+        else if (in->eo >= at) {
             // fragment on the boundary, unread partially
-            fseek(in->file, cur - in->eo, SEEK_CUR);
+            fseek(in->file, at - in->eo, SEEK_CUR);
             in->eo = cur - 1;
         }
         else {

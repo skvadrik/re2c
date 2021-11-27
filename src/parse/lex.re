@@ -231,7 +231,8 @@ loop:
     "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
         out.wraw(tok, ptr);
         if (!lex_block_end(out)) return INPUT_ERROR;
-        include(getstr(x + 1, y - 1));
+        include(getstr(x + 1, y - 1), ptr);
+        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
         goto next;
     }
     "/*!include:re2c" {
@@ -504,7 +505,7 @@ scan:
     }
 
     "!include" space+ @x dstring @y space* ";" / ws_or_eoc {
-        include(getstr(x + 1, y - 1));
+        include(getstr(x + 1, y - 1), tok);
         goto scan;
     }
     "!include" {

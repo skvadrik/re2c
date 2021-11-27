@@ -50,7 +50,7 @@ public:
     Scanner(const conopt_t *o, Msg &m);
     ~Scanner();
     bool open(const std::string &filename, const std::string *parent);
-    bool include(const std::string &filename);
+    bool include(const std::string &filename, char *at);
     bool gen_dep_file() const;
     const loc_t &tok_loc() const;
     loc_t cur_loc() const;
