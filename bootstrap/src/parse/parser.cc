@@ -1171,7 +1171,7 @@ yyreduce:
   case 3: /* spec: spec TOKEN_BLOCK  */
 #line 70 "../src/parse/parser.ypp"
                    {
-    use_block(context, *(yyvsp[0].str), context.input.tok_loc(), context.input.msg);
+    use_block(context, *(yyvsp[0].str), context.input.tok_loc());
     delete (yyvsp[0].str);
 }
 #line 1178 "src/parse/parser.cc"

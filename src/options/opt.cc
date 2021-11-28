@@ -343,9 +343,10 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     }
 }
 
-Opt::Opt(const conopt_t &globopts)
+Opt::Opt(const conopt_t &globopts, Msg &msg)
     : glob(globopts)
     , symtab()
+    , msg(msg)
     , defaults()
     , is_default()
     , user()
@@ -415,7 +416,7 @@ void Opt::restore(const opt_t *opts)
     sync();
 }
 
-void Opt::merge(const opt_t *opts, const loc_t &loc, Msg &msg)
+void Opt::merge(const opt_t *opts, const loc_t &loc)
 {
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \

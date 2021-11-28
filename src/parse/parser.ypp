@@ -68,7 +68,7 @@ void yyerror(context_t &context, const char*) RE2C_ATTR((noreturn));
 spec
 : /* empty */
 | spec TOKEN_BLOCK {
-    use_block(context, *$2, context.input.tok_loc(), context.input.msg);
+    use_block(context, *$2, context.input.tok_loc());
     delete $2;
 }
 | spec TOKEN_CONF {

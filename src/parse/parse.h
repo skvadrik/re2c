@@ -80,7 +80,7 @@ struct context_t
 };
 
 spec_t &find_or_add_spec(specs_t &specs, const std::string &name);
-void use_block(context_t &context, const std::string &name, const loc_t &loc, Msg &msg);
+void use_block(context_t &context, const std::string &name, const loc_t &loc);
 void parse(Scanner &input, specs_t &specs, Opt &opts, const RulesBlocks &rblocks);
 void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg);
 

@@ -108,7 +108,7 @@ static inline void append(std::vector<T> &x, const std::vector<T> &y)
     x.insert(x.end(), y.begin(), y.end());
 }
 
-void use_block(context_t &context, const std::string &name, const loc_t &loc, Msg &msg)
+void use_block(context_t &context, const std::string &name, const loc_t &loc)
 {
     const RulesBlock *rb = context.rblocks.find(name);
     if (rb == NULL) exit(1);
@@ -128,7 +128,7 @@ void use_block(context_t &context, const std::string &name, const loc_t &loc, Ms
     }
 
     // Merge configurations and symtab.
-    context.opts.merge(rb->opts, loc, msg);
+    context.opts.merge(rb->opts, loc);
 }
 
 void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg)

@@ -14,8 +14,8 @@ using namespace re2c;
 int main(int, char *argv[])
 {
     conopt_t globopts;
-    Opt opts(globopts);
     Msg msg;
+    Opt opts(globopts, msg);
 
     switch (parse_opts(argv, globopts, opts, msg)) {
         case OK:        break;

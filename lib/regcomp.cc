@@ -38,8 +38,8 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     globopts.FFlag = true;
     globopts.backward = cflags & REG_BACKWARD;
     globopts.stadfa = cflags & REG_STADFA;
-    Opt opts(globopts);
     Msg msg;
+    Opt opts(globopts, msg);
     opts.set_subhistories((cflags & REG_SUBHIST) != 0);
     opts.set_autotags((cflags & REG_AUTOTAGS) != 0);
     opts.set_posix_syntax(true);
@@ -66,7 +66,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     if (cflags & REG_BACKWARD) {
         conopt_t globopts0;
         globopts0.FFlag = true;
-        Opt opts0(globopts0);
+        Opt opts0(globopts0, msg);
         const opt_t *opt0 = opts0.snapshot();
         RESpec re0(arv, opt0, msg, *preg->rmgr);
         nfa0 = new nfa_t(re0);

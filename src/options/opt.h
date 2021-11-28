@@ -322,6 +322,7 @@ struct Opt {
 public:
     const conopt_t &glob;
     symtab_t symtab;
+    Msg &msg;
 
 private:
     // Default mutable options. They depend on the global options, such as the
@@ -348,11 +349,11 @@ private:
     bool diverge;
 
 public:
-    explicit Opt(const conopt_t &globopts);
+    Opt(const conopt_t &globopts, Msg &msg);
     const opt_t *snapshot();
     void fix_global_and_defaults();
     void restore(const opt_t *opts);
-    void merge(const opt_t *opts, const loc_t &loc, Msg &msg);
+    void merge(const opt_t *opts, const loc_t &loc);
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
