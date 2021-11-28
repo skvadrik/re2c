@@ -1,8 +1,10 @@
 function(re2c_gen_manpage source target bootstrap lang)
     if(RE2C_REBUILD_DOCS)
+        get_filename_component(targetdir "${target}" DIRECTORY)
         set(source_l "${source}.${lang}")
         add_custom_command(
             OUTPUT "${target}"
+            COMMAND "${CMAKE_COMMAND}" -E make_directory ${targetdir}
             COMMAND "${re2c_splitman}" "${source}" "${source_l}" "${lang}"
             COMMAND "${RST2MAN}" --tab-width=4 "${source_l}" "${target}"
             COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${target}" "${bootstrap}"
@@ -23,8 +25,10 @@ endfunction()
 
 function(re2c_gen_help source target bootstrap)
     if(RE2C_REBUILD_DOCS)
+        get_filename_component(targetdir "${target}" DIRECTORY)
         add_custom_command(
             OUTPUT "${target}"
+            COMMAND "${CMAKE_COMMAND}" -E make_directory ${targetdir}
             COMMAND "${RST2MAN}" "${source}" "${target}.1"
             COMMAND "${re2c_genhelp}" "${target}.1" "${target}"
             COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${target}" "${bootstrap}"
