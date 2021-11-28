@@ -50,21 +50,44 @@ bool Scanner::open(const std::string &filename, const std::string *parent)
 
 bool Scanner::include(const std::string &filename, char *at)
 {
-    // This function is called twice for each included file: first time when opening the
-    // file, and second time when it has been fully read and can be closed. Second time
-    // is needed to generate a line directive marking the end of the included file and the
-    // continuation of the parent file. To get the second call, we "unread" include
-    // directive on the first call (essentially just don't move token pointer to cursor)
-    // and let the lexer scan it twice. To differentiate the first and the second times,
-    // we compare the topmost file on stack with the inlude file (after popping all
-    // finished files, as there may be nested includes). This logic can't handle recursive
-    // self-includes, but they would be erroneous anyway.
+    // This function is called twice for each include file: first time when opening the
+    // file, and second time when it has been fully read. The second time is needed to
+    // generate a line directive marking the end of the include file and the continuation
+    // of the parent file. In order to make the lexer stop at the boundary between files
+    // and do the second call, we "unread" the directive on the first call (push it back
+    // to the parent file before filling the buffer with the contents of include file),
+    // and let the lexer scan the directive twice.
+    //
+    // To avoid infinite recursion we need to differentiate the two calls. We do this by
+    // inspecting the files on stack. First, we pop all finished files: there may be
+    // sibling includes before this one in the parent file. They must be finished by now,
+    // meaning that the token pointer has moved past their end pointer (even if another
+    // directive immediately precedes this one, "unreading" the directive has the effect
+    // of inserting an artificial boundary between include files). However if the current
+    // include file is already on stack, then `at` must point exactly at the end of it
+    // (not past the end), so we will not pop it.
+    //
+    // After popping finished files we have two alternatives:
+    //  - Parent file is on top (then it is the first call).
+    //  - There is exactly one file on top of the parent file (then it is the second call,
+    //    and the file on top is the current include file).
+
+    assert(tok <= at); // ensure that we won't pop the include file itself
     pop_finished_files();
-    if (files.back()->name == filename) return true;
+
+    const size_t fidx = get_input_index(); // index of the parent file with the directive
+    const size_t last = files.size() - 1; // index of the topmost file
+    if (fidx == last) {
+        // This is the first call, go on.
+    } else {
+        // This is the second call, quit.
+        assert(fidx + 1 == last
+            && files[last]->name == filename
+            && files[last]->eo == at);
+        return true;
+    }
 
     // get name of the current file (before unreading)
-    const size_t fidx = get_input_index();
-    DASSERT(fidx < files.size());
     const std::string &parent = files[fidx]->escaped_name;
 
     // Unread buffer tail: we'll return to it later. In the buffer nested files go before
@@ -135,15 +158,15 @@ void Scanner::shift_ptrs_and_fpos(ptrdiff_t offs)
 
 void Scanner::pop_finished_files()
 {
-    // Pop all files that have been fully processed (file upper bound
-    // in buffer points before the first character of current lexeme),
-    // except for the first (main) file which must always remain at the
-    // bottom of the stack.
+    // Pop all files that have been fully processed (file upper bound in buffer points
+    // before the first character of current lexeme), except for the first (main) file
+    // which must always remain at the bottom of the stack.
     size_t i = files.size();
     DASSERT(i > 0);
     for (;;) {
         --i;
         Input *in = files[i];
+        // Keep the file if the end equals token. It is crucial for the include files.
         if (i == 0 || in->eo >= tok) break;
         files.pop_back();
         delete in;
