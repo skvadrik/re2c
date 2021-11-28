@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <algorithm>
 #include "src/util/c99_stdint.h"
