@@ -321,54 +321,64 @@ yyFillLabel0:
 	}
 yy3:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 260 "push_fg.re"
 	{ send(kEOF); return 1;  }
-#line 327 "push_fg.c"
+#line 328 "push_fg.c"
 yy5:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 261 "push_fg.re"
 	{ SEND(kUnknown);        }
-#line 332 "push_fg.c"
+#line 334 "push_fg.c"
 yy7:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 259 "push_fg.re"
 	{ SKIP();                }
-#line 337 "push_fg.c"
+#line 340 "push_fg.c"
 yy9:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 258 "push_fg.re"
 	{ SKIP();                }
-#line 342 "push_fg.c"
+#line 346 "push_fg.c"
 yy11:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 251 "push_fg.re"
 	{ SEND(kLeftParen);      }
-#line 347 "push_fg.c"
+#line 352 "push_fg.c"
 yy13:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 252 "push_fg.re"
 	{ SEND(kRightParen);     }
-#line 352 "push_fg.c"
+#line 358 "push_fg.c"
 yy15:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 255 "push_fg.re"
 	{ SEND(kStar);           }
-#line 357 "push_fg.c"
+#line 364 "push_fg.c"
 yy17:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 254 "push_fg.re"
 	{ SEND(kPlus);           }
-#line 362 "push_fg.c"
+#line 370 "push_fg.c"
 yy19:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 253 "push_fg.re"
 	{ SEND(kMinus);          }
-#line 367 "push_fg.c"
+#line 376 "push_fg.c"
 yy21:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 256 "push_fg.re"
 	{ SEND(kSlash);          }
-#line 372 "push_fg.c"
+#line 382 "push_fg.c"
 yy23:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -378,14 +388,16 @@ yyFillLabel1:
 	if (yybm[0+yych] & 64) {
 		goto yy23;
 	}
+	YYSETSTATE(-1);
 #line 248 "push_fg.re"
 	{ SEND(kDecimalConstant);}
-#line 384 "push_fg.c"
+#line 395 "push_fg.c"
 yy26:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 250 "push_fg.re"
 	{ SEND(kEqual);          }
-#line 389 "push_fg.c"
+#line 401 "push_fg.c"
 yy28:
 	++YYCURSOR;
 	YYSETSTATE(2);
@@ -396,9 +408,10 @@ yy29:
 	if (yybm[0+yych] & 128) {
 		goto yy28;
 	}
+	YYSETSTATE(-1);
 #line 247 "push_fg.re"
 	{ SEND(kIdentifier);     }
-#line 402 "push_fg.c"
+#line 415 "push_fg.c"
 yy31:
 	yych = *++YYCURSOR;
 	if (yych == 'r') goto yy38;
@@ -448,9 +461,10 @@ yy42:
 	if (yybm[0+yych] & 128) {
 		goto yy28;
 	}
+	YYSETSTATE(-1);
 #line 240 "push_fg.re"
 	{ SEND(kIf);             }
-#line 454 "push_fg.c"
+#line 468 "push_fg.c"
 yy44:
 	yych = *++YYCURSOR;
 	if (yych == 't') goto yy51;
@@ -472,9 +486,10 @@ yy48:
 	if (yybm[0+yych] & 128) {
 		goto yy28;
 	}
+	YYSETSTATE(-1);
 #line 241 "push_fg.re"
 	{ SEND(kFor);            }
-#line 478 "push_fg.c"
+#line 493 "push_fg.c"
 yy50:
 	yych = *++YYCURSOR;
 	if (yych == 'o') goto yy56;
@@ -496,17 +511,19 @@ yy54:
 	if (yybm[0+yych] & 128) {
 		goto yy28;
 	}
+	YYSETSTATE(-1);
 #line 242 "push_fg.re"
 	{ SEND(kElse);           }
-#line 502 "push_fg.c"
+#line 518 "push_fg.c"
 yy56:
 	yych = *++YYCURSOR;
 	if (yybm[0+yych] & 128) {
 		goto yy28;
 	}
+	YYSETSTATE(-1);
 #line 243 "push_fg.re"
 	{ SEND(kGoto);           }
-#line 510 "push_fg.c"
+#line 527 "push_fg.c"
 yy58:
 	yych = *++YYCURSOR;
 	if (yych == 'r') goto yy62;
@@ -520,9 +537,10 @@ yy60:
 	if (yybm[0+yych] & 128) {
 		goto yy28;
 	}
+	YYSETSTATE(-1);
 #line 244 "push_fg.re"
 	{ SEND(kBreak);          }
-#line 526 "push_fg.c"
+#line 544 "push_fg.c"
 yy62:
 	yych = *++YYCURSOR;
 	if (yych == 'n') goto yy65;
@@ -532,17 +550,19 @@ yy63:
 	if (yybm[0+yych] & 128) {
 		goto yy28;
 	}
+	YYSETSTATE(-1);
 #line 245 "push_fg.re"
 	{ SEND(kWhile);          }
-#line 538 "push_fg.c"
+#line 557 "push_fg.c"
 yy65:
 	yych = *++YYCURSOR;
 	if (yybm[0+yych] & 128) {
 		goto yy28;
 	}
+	YYSETSTATE(-1);
 #line 246 "push_fg.re"
 	{ SEND(kReturn);         }
-#line 546 "push_fg.c"
+#line 566 "push_fg.c"
 }
 #line 262 "push_fg.re"
 

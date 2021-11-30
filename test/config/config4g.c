@@ -30,6 +30,7 @@ yyFillLabel0:
 	if (c <= '9') goto yy5;
 yy3:
 	++p;
+	*state = -1;
 	{ return NULL; }
 yy5:
 	++p;
@@ -42,6 +43,7 @@ yyFillLabel1:
 	if (c <= '/') goto yy7;
 	if (c <= '9') goto yy5;
 yy7:
+	*state = -1;
 	{ return p; }
 
 }

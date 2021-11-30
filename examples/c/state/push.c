@@ -112,9 +112,10 @@ yyFillLabel0:
 yy3:
 	++in->cur;
 yy4:
+	in->state = -1;
 #line 67 "c/state/push.re"
 	{ return BAD_PACKET; }
-#line 118 "c/state/push.c"
+#line 119 "c/state/push.c"
 yy5:
 	in->mar = ++in->cur;
 yyFillLabel1:
@@ -156,9 +157,10 @@ yyFillLabel1:
 	}
 yy6:
 	++in->cur;
+	in->state = -1;
 #line 69 "c/state/push.re"
 	{ *recv = *recv + 1; goto loop; }
-#line 162 "c/state/push.c"
+#line 164 "c/state/push.c"
 yy8:
 	++in->cur;
 yyFillLabel2:
@@ -202,9 +204,10 @@ yy10:
 	in->cur = in->mar;
 	goto yy4;
 yy11:
+	in->state = -1;
 #line 68 "c/state/push.re"
 	{ return END; }
-#line 208 "c/state/push.c"
+#line 211 "c/state/push.c"
 #line 70 "c/state/push.re"
 
 }

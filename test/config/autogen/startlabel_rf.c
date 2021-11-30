@@ -25,6 +25,7 @@ yyFillLabel0:
 	default:	goto yy4;
 	}
 yy4:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -52,6 +53,7 @@ yyFillLabel1:
 	default:	goto yy9;
 	}
 yy9:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -79,6 +81,7 @@ yyFillLabel2:
 	default:	goto yy14;
 	}
 yy14:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -107,6 +110,7 @@ yyFillLabel3:
 	default:	goto yy19;
 	}
 yy19:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -134,6 +138,7 @@ yyFillLabel4:
 	default:	goto yy24;
 	}
 yy24:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -162,6 +167,7 @@ yyFillLabel5:
 	default:	goto yy29;
 	}
 yy29:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -190,6 +196,7 @@ yyFillLabel6:
 	default:	goto yy34;
 	}
 yy34:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -219,6 +226,7 @@ yyFillLabel7:
 	default:	goto yy39;
 	}
 yy39:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -248,6 +256,7 @@ yyFillLabel8:
 	default:	goto yy44;
 	}
 yy44:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -278,6 +287,7 @@ yyFillLabel9:
 	default:	goto yy49;
 	}
 yy49:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -307,6 +317,7 @@ yyFillLabel10:
 	default:	goto yy54;
 	}
 yy54:
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -337,6 +348,7 @@ yyFillLabel11:
 	default:	goto yy59;
 	}
 yy59:
+	YYSETSTATE(-1);
 	{ a }
 
 

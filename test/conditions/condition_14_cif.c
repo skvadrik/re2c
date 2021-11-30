@@ -123,10 +123,12 @@ yyFillLabel0:
 yy3:
 		++s->cur;
 yy4:
+		s->state = -1;(-1);
 		fputc(s->cur[-1], stdout);
 		continue;
 yy5:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateString;(EStateString);
 		fputc(s->cur[-1], stdout);
 		continue;
@@ -167,10 +169,12 @@ yy12:
 		}
 yy13:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateComment;(EStateComment);
 		continue;
 yy15:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateSkiptoeol;(EStateSkiptoeol);
 		continue;
 yy17:
@@ -189,42 +193,52 @@ yy17:
 		}
 yy18:
 		++s->cur;
+		s->state = -1;(-1);
 		fputl("'\"'", 3, stdout);
 		continue;
 yy20:
 		++s->cur;
+		s->state = -1;(-1);
 		fputc('|', stdout);
 		continue;
 yy22:
 		++s->cur;
+		s->state = -1;(-1);
 		fputc('^', stdout);
 		continue;
 yy24:
 		++s->cur;
+		s->state = -1;(-1);
 		fputc('[', stdout);
 		continue;
 yy26:
 		++s->cur;
+		s->state = -1;(-1);
 		fputc(']', stdout);
 		continue;
 yy28:
 		++s->cur;
+		s->state = -1;(-1);
 		fputc('~', stdout);
 		continue;
 yy30:
 		++s->cur;
+		s->state = -1;(-1);
 		fputc('\\', stdout);
 		continue;
 yy32:
 		++s->cur;
+		s->state = -1;(-1);
 		fputc('{', stdout);
 		continue;
 yy34:
 		++s->cur;
+		s->state = -1;(-1);
 		fputc('#', stdout);
 		continue;
 yy36:
 		++s->cur;
+		s->state = -1;(-1);
 		fputc('}', stdout);
 		continue;
 /* *********************************** */
@@ -240,6 +254,7 @@ yyFillLabel1:
 yy40:
 		++s->cur;
 yy41:
+		s->state = -1;(-1);
 		continue;
 yy42:
 		s->yych = *++s->cur;
@@ -249,6 +264,7 @@ yy42:
 		}
 yy43:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateNormal;(EStateNormal);
 		continue;
 /* *********************************** */
@@ -267,9 +283,11 @@ yyFillLabel2:
 yy47:
 		++s->cur;
 yy48:
+		s->state = -1;(-1);
 		continue;
 yy49:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateNormal;(EStateNormal);
 		fputc('\n', stdout);
 		continue;
@@ -294,6 +312,7 @@ yy53:
 		}
 yy54:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateNormal;(EStateNormal);
 		fputc('\r', stdout);
 		fputc('\n', stdout);
@@ -309,6 +328,7 @@ yy57:
 		goto yy48;
 yy58:
 		++s->cur;
+		s->state = -1;(-1);
 		continue;
 yy60:
 		s->yych = *++s->cur;
@@ -325,6 +345,7 @@ yy61:
 		}
 yy62:
 		++s->cur;
+		s->state = -1;(-1);
 		continue;
 yy64:
 		s->yych = *++s->cur;
@@ -346,10 +367,12 @@ yyFillLabel3:
 yy67:
 		++s->cur;
 yy68:
+		s->state = -1;(-1);
 		fputc(s->cur[-1], stdout);
 		continue;
 yy69:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateNormal;(EStateNormal);
 		fputc(s->cur[-1], stdout);
 		continue;
@@ -361,6 +384,7 @@ yy71:
 		}
 yy72:
 		++s->cur;
+		s->state = -1;(-1);
 		fputl((const char*)s->cur-2, 2, stdout);
 		continue;
 

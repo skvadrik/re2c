@@ -34,11 +34,14 @@ yyFillLabel0:
 	}
 yy3:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ return FAIL; }
 yy5:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ return OK; }
 yy7:
+	YYSETSTATE(-1);
 	{ return EOF; }
 
 
@@ -57,11 +60,14 @@ yyFillLabel1:
 	}
 yy11:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ return FAIL; }
 yy13:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ return OK; }
 yy15:
+	YYSETSTATE(-1);
 	{ return EOF; }
 
 
@@ -80,11 +86,14 @@ yyFillLabel2:
 	}
 yy19:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ return FAIL; }
 yy21:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ return OK; }
 yy23:
+	YYSETSTATE(-1);
 	{ return EOF; }
 
 
@@ -103,10 +112,13 @@ yyFillLabel3:
 	}
 yy27:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ return FAIL; }
 yy29:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ return OK; }
 yy31:
+	YYSETSTATE(-1);
 	{ return EOF; }
 

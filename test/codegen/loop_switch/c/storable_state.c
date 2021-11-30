@@ -101,7 +101,7 @@ loop:
 			yystate = 2;
 			continue;
 		case 2:
-			in->state = 0;
+			in->state = -1;
 			{ return BAD_PACKET; }
 		case 3:
 			in->mar = in->cur;
@@ -152,7 +152,7 @@ loop:
 			yystate = 5;
 			continue;
 		case 5:
-			in->state = 0;
+			in->state = -1;
 			{ *recv = *recv + 1; in->tok = in->cur; goto loop; }
 		case 6:
 			yych = *in->cur;
@@ -206,7 +206,7 @@ loop:
 			yystate = 2;
 			continue;
 		case 9:
-			in->state = 0;
+			in->state = -1;
 			{ return END; }
 		case 10:
 			if (in->lim <= in->cur) {

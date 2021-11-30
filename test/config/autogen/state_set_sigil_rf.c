@@ -23,9 +23,11 @@ yyFillLabel0:
 	}
 yy3:
 	++YYCURSOR;
+	state = @@;(-1);
 	{ x }
 yy5:
 	++YYCURSOR;
+	state = @@;(-1);
 	{ a }
 
 
@@ -50,9 +52,11 @@ yyFillLabel1:
 	}
 yy10:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ x }
 yy12:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ a }
 
 
@@ -77,9 +81,11 @@ yyFillLabel2:
 	}
 yy17:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ x }
 yy19:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ a }
 
 
@@ -104,9 +110,11 @@ yyFillLabel3:
 	}
 yy24:
 	++YYCURSOR;
+	state = ÿ;(-1);
 	{ x }
 yy26:
 	++YYCURSOR;
+	state = ÿ;(-1);
 	{ a }
 
 
@@ -132,9 +140,11 @@ yyFillLabel4:
 	}
 yy31:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ x }
 yy33:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ a }
 
 
@@ -160,9 +170,11 @@ yyFillLabel5:
 	}
 yy38:
 	++YYCURSOR;
+	state = ÿ;(-1);
 	{ x }
 yy40:
 	++YYCURSOR;
+	state = ÿ;(-1);
 	{ a }
 
 
@@ -188,9 +200,11 @@ yyFillLabel6:
 	}
 yy45:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ x }
 yy47:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ a }
 
 
@@ -216,9 +230,11 @@ yyFillLabel7:
 	}
 yy52:
 	++YYCURSOR;
+	state = ÿ;(-1);
 	{ x }
 yy54:
 	++YYCURSOR;
+	state = ÿ;(-1);
 	{ a }
 
 
@@ -244,9 +260,11 @@ yyFillLabel8:
 	}
 yy59:
 	++YYCURSOR;
+	state = @@;(-1);
 	{ x }
 yy61:
 	++YYCURSOR;
+	state = @@;(-1);
 	{ a }
 
 
@@ -272,9 +290,11 @@ yyFillLabel9:
 	}
 yy66:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ x }
 yy68:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ a }
 
 
@@ -300,9 +320,11 @@ yyFillLabel10:
 	}
 yy73:
 	++YYCURSOR;
+	state = @@;(-1);
 	{ x }
 yy75:
 	++YYCURSOR;
+	state = @@;(-1);
 	{ a }
 
 
@@ -328,9 +350,11 @@ yyFillLabel11:
 	}
 yy80:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ x }
 yy82:
 	++YYCURSOR;
+	state = -1;(-1);
 	{ a }
 
 

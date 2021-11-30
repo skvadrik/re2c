@@ -134,7 +134,7 @@ loop:
 			yystate = 2
 			continue
 		case 2:
-			in.state = 0
+			in.state = -1
 			{ return lexPacketBroken }
 		case 3:
 			in.marker = in.cursor
@@ -210,7 +210,7 @@ loop:
 			yystate = 5
 			continue
 		case 5:
-			in.state = 0
+			in.state = -1
 			{ *recv = *recv + 1; in.token = in.cursor; goto loop }
 		case 6:
 			yych = in.data[in.cursor]
@@ -289,7 +289,7 @@ loop:
 			yystate = 2
 			continue
 		case 9:
-			in.state = 0
+			in.state = -1
 			{ return lexEnd }
 		case 10:
 			if (in.limit <= in.cursor) {

@@ -135,12 +135,13 @@ yyFillLabel0:
 	}
 yy3:
 	in.cursor += 1
+	in.state = -1
 //line "golang/002_fill_eof_rule_f.re":80
 	{
 		fmt.Println("error")
 		return lexError
 	}
-//line "golang/002_fill_eof_rule_f.go":144
+//line "golang/002_fill_eof_rule_f.go":145
 yy5:
 	in.cursor += 1
 yyFillLabel1:
@@ -156,11 +157,12 @@ yyFillLabel1:
 		goto yy7
 	}
 yy7:
+	in.state = -1
 //line "golang/002_fill_eof_rule_f.re":100
 	{
 		return lexSpace
 	}
-//line "golang/002_fill_eof_rule_f.go":164
+//line "golang/002_fill_eof_rule_f.go":166
 yy8:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -197,12 +199,13 @@ yyFillLabel2:
 		goto yy10
 	}
 yy10:
+	in.state = -1
 //line "golang/002_fill_eof_rule_f.re":90
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber1
 	}
-//line "golang/002_fill_eof_rule_f.go":206
+//line "golang/002_fill_eof_rule_f.go":209
 yy11:
 	in.cursor += 1
 yyFillLabel3:
@@ -271,19 +274,21 @@ yyFillLabel4:
 		goto yy15
 	}
 yy15:
+	in.state = -1
 //line "golang/002_fill_eof_rule_f.re":95
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber2
 	}
-//line "golang/002_fill_eof_rule_f.go":280
+//line "golang/002_fill_eof_rule_f.go":284
 yy16:
+	in.state = -1
 //line "golang/002_fill_eof_rule_f.re":85
 	{
 		fmt.Println("end")
 		return lexEnd
 	}
-//line "golang/002_fill_eof_rule_f.go":287
+//line "golang/002_fill_eof_rule_f.go":292
 //line "golang/002_fill_eof_rule_f.re":103
 
 }

@@ -24,9 +24,11 @@ yyFillLabel0:
 	}
 yy3:
 	++YYCURSOR;
+	SETSTATE_1(-1);
 	{ x }
 yy5:
 	++YYCURSOR;
+	SETSTATE_1(-1);
 	{ e }
 
 
@@ -56,9 +58,11 @@ yyFillLabel1:
 	}
 yy10:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	{ x }
 yy12:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	{ a }
 yy14:
 	++YYCURSOR;
@@ -71,6 +75,7 @@ yyFillLabel2:
 	default:	goto yy16;
 	}
 yy16:
+	SETSTATE_REUSE_1(-1);
 	{ c }
 yy17:
 	++YYCURSOR;
@@ -97,9 +102,11 @@ yyFillLabel4:
 	}
 yy22:
 	++YYCURSOR;
+	SETSTATE_2(-1);
 	{ x }
 yy24:
 	++YYCURSOR;
+	SETSTATE_2(-1);
 	{ f }
 
 
@@ -126,8 +133,10 @@ yyFillLabel5:
 	}
 yy29:
 	++YYCURSOR;
+	SETSTATE_REUSE_2(-1);
 	{ x }
 yy31:
 	++YYCURSOR;
+	SETSTATE_REUSE_2(-1);
 	{ a }
 

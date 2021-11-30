@@ -24,13 +24,13 @@
 			yystate = 2;
 			continue;
 		case 2:
-			YYSETSTATE(0);
+			YYSETSTATE(-1);
 			{ * }
 		case 3:
 			yystate = 4;
 			continue;
 		case 4:
-			YYSETSTATE(0);
+			YYSETSTATE(-1);
 			{ a }
 		case 5:
 			yystate = 0;
@@ -65,16 +65,16 @@
 			yystate = 2;
 			continue;
 		case 2:
-			YYSETSTATE(0);
+			YYSETSTATE(-1);
 			{ * }
 		case 3:
 			yystate = 4;
 			continue;
 		case 4:
-			YYSETSTATE(0);
+			YYSETSTATE(-1);
 			{ b }
 		case 5:
-			YYSETSTATE(0);
+			YYSETSTATE(-1);
 			{ $ }
 		case 6:
 			if (YYLIMIT <= YYCURSOR) {

@@ -50,19 +50,21 @@ yyFillLabel0:
 	}
 yy4:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 33 "bug1472770_f.re"
 	{
 		return n;
 	}
-#line 58 "bug1472770_f.c"
+#line 59 "bug1472770_f.c"
 yy6:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 28 "bug1472770_f.re"
 	{
 		++n;
 		goto start;
 	}
-#line 66 "bug1472770_f.c"
+#line 68 "bug1472770_f.c"
 #line 36 "bug1472770_f.re"
 
 }

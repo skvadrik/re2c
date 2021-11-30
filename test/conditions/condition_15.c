@@ -128,11 +128,13 @@ yyFillLabel0:
 		}
 		++s->cur;
 yy4:
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc(s->cur[-1], stdout);
 		continue;
 yy5:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateString;(EStateString);
 		fprintf(stderr, "Normal\n");
 		fputc(s->cur[-1], stdout);
@@ -163,10 +165,12 @@ yy12:
 		goto yy11;
 yy13:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateComment;(EStateComment);
 		continue;
 yy15:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateSkiptoeol;(EStateSkiptoeol);
 		continue;
 yy17:
@@ -185,51 +189,61 @@ yy17:
 		}
 yy18:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputl("'\"'", 3, stdout);
 		continue;
 yy20:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc('|', stdout);
 		continue;
 yy22:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc('^', stdout);
 		continue;
 yy24:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc('[', stdout);
 		continue;
 yy26:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc(']', stdout);
 		continue;
 yy28:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc('~', stdout);
 		continue;
 yy30:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc('\\', stdout);
 		continue;
 yy32:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc('{', stdout);
 		continue;
 yy34:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc('#', stdout);
 		continue;
 yy36:
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc('}', stdout);
 		continue;
@@ -242,11 +256,13 @@ yyFillLabel1:
 		if (s->yych == '*') goto yy42;
 		++s->cur;
 yy41:
+		s->state = -1;(-1);
 		continue;
 yy42:
 		s->yych = *++s->cur;
 		if (s->yych != '/') goto yy41;
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateNormal;(EStateNormal);
 		continue;
 /* *********************************** */
@@ -267,9 +283,11 @@ yyFillLabel2:
 		}
 		++s->cur;
 yy48:
+		s->state = -1;(-1);
 		continue;
 yy49:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateNormal;(EStateNormal);
 		fprintf(stderr, "Comment\n");
 		fputc('\n', stdout);
@@ -289,6 +307,7 @@ yy53:
 		goto yy48;
 yy54:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateNormal;(EStateNormal);
 		fprintf(stderr, "Comment\n");
 		fputc('\r', stdout);
@@ -302,6 +321,7 @@ yy57:
 		goto yy48;
 yy58:
 		++s->cur;
+		s->state = -1;(-1);
 		continue;
 yy60:
 		s->yych = *++s->cur;
@@ -314,6 +334,7 @@ yy61:
 		goto yy57;
 yy62:
 		++s->cur;
+		s->state = -1;(-1);
 		continue;
 yy64:
 		s->yych = *++s->cur;
@@ -329,11 +350,13 @@ yyFillLabel3:
 		if (s->yych == '\\') goto yy71;
 		++s->cur;
 yy68:
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputc(s->cur[-1], stdout);
 		continue;
 yy69:
 		++s->cur;
+		s->state = -1;(-1);
 		s->cond = EStateNormal;(EStateNormal);
 		fprintf(stderr, "Normal\n");
 		fputc(s->cur[-1], stdout);
@@ -342,6 +365,7 @@ yy71:
 		s->yych = *++s->cur;
 		if (s->yych == '\n') goto yy68;
 		++s->cur;
+		s->state = -1;(-1);
 		fprintf(stderr, "Normal\n");
 		fputl((const char*)s->cur-2, 2, stdout);
 		continue;

@@ -151,9 +151,10 @@ yyFillLabel0:
 yy3:
 	in.cursor += 1
 yy4:
+	in.state = -1
 //line "go/state/push.re":74
 	{ return lexPacketBroken }
-//line "go/state/push.go":157
+//line "go/state/push.go":158
 yy5:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -223,9 +224,10 @@ yyFillLabel1:
 	}
 yy6:
 	in.cursor += 1
+	in.state = -1
 //line "go/state/push.re":76
 	{ *recv = *recv + 1; goto loop }
-//line "go/state/push.go":229
+//line "go/state/push.go":231
 yy8:
 	in.cursor += 1
 yyFillLabel2:
@@ -296,9 +298,10 @@ yy10:
 	in.cursor = in.marker
 	goto yy4
 yy11:
+	in.state = -1
 //line "go/state/push.re":75
 	{ return lexEnd }
-//line "go/state/push.go":302
+//line "go/state/push.go":305
 //line "go/state/push.re":77
 
 }

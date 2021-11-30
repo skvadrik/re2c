@@ -50,9 +50,10 @@ yyFillLabel0:
 	}
 yy3:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 23 "config/config4f.re"
 	{ return NULL; }
-#line 56 "config/config4f.c"
+#line 57 "config/config4f.c"
 yy5:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -73,9 +74,10 @@ yyFillLabel1:
 	default:	goto yy7;
 	}
 yy7:
+	YYSETSTATE(-1);
 #line 22 "config/config4f.re"
 	{ return YYCURSOR; }
-#line 79 "config/config4f.c"
+#line 81 "config/config4f.c"
 #line 24 "config/config4f.re"
 
 }

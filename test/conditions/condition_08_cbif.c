@@ -117,12 +117,14 @@ yyFillLabel0:
 		}
 		++s->cur;
 yy4:
+		s->state = -1;(-1);
 		{
 				fputc(*s->tok, stdout);
 				continue;
 			}
 yy5:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc(*s->tok, stdout);
 				s->state = EStateString;
@@ -154,12 +156,14 @@ yy12:
 		goto yy11;
 yy13:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				s->cond = EStateComment;
 				goto yyc_Comment;
 			}
 yy15:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				s->cond = EStateSkiptoeol;
 				goto yyc_Skiptoeol;
@@ -180,60 +184,70 @@ yy17:
 		}
 yy18:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputl("'\"'", 3, stdout);
 				continue;
 			}
 yy20:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc('|', stdout);
 				continue;
 			}
 yy22:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc('^', stdout);
 				continue;
 			}
 yy24:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc('[', stdout);
 				continue;
 			}
 yy26:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc(']', stdout);
 				continue;
 			}
 yy28:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc('~', stdout);
 				continue;
 			}
 yy30:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc('\\', stdout);
 				continue;
 			}
 yy32:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc('{', stdout);
 				continue;
 			}
 yy34:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc('#', stdout);
 				continue;
 			}
 yy36:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc('}', stdout);
 				continue;
@@ -247,6 +261,7 @@ yyFillLabel1:
 		if (s->yych == '*') goto yy42;
 		++s->cur;
 yy41:
+		s->state = -1;(-1);
 		{
 				goto yyc_Comment;
 			}
@@ -254,6 +269,7 @@ yy42:
 		s->yych = *++s->cur;
 		if (s->yych != '/') goto yy41;
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				s->cond = EStateNormal;
 				continue;
@@ -272,11 +288,13 @@ yyFillLabel2:
 		}
 		++s->cur;
 yy48:
+		s->state = -1;(-1);
 		{
 				goto yyc_Skiptoeol;
 			}
 yy49:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				s->cond = EStateNormal;
 				continue;
@@ -298,6 +316,7 @@ yy54:
 		goto yy48;
 yy55:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				goto yyc_Skiptoeol;
 			}
@@ -312,6 +331,7 @@ yy58:
 		goto yy54;
 yy59:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				goto yyc_Skiptoeol;
 			}
@@ -329,12 +349,14 @@ yyFillLabel3:
 		if (s->yych == '\\') goto yy68;
 		++s->cur;
 yy65:
+		s->state = -1;(-1);
 		{
 				fputc(*s->tok, stdout);
 				continue;
 			}
 yy66:
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputc(*s->tok, stdout);
 				s->cond = EStateNormal;
@@ -344,6 +366,7 @@ yy68:
 		s->yych = *++s->cur;
 		if (s->yych == '\n') goto yy65;
 		++s->cur;
+		s->state = -1;(-1);
 		{
 				fputl((const char*)s->tok, 2, stdout);
 				continue;

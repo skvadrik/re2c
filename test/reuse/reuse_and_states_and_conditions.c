@@ -46,9 +46,11 @@ yyFillLabel0:
 	}
 yy3:
 	++YYCURSOR;
+	SETSTATE_1(-1);
 	{ x }
 yy5:
 	++YYCURSOR;
+	SETSTATE_1(-1);
 	YYSETCONDITION(yycv);
 	goto yyc_v;
 /* *********************************** */
@@ -63,9 +65,11 @@ yyFillLabel1:
 	}
 yy9:
 	++YYCURSOR;
+	SETSTATE_1(-1);
 	{ x }
 yy11:
 	++YYCURSOR;
+	SETSTATE_1(-1);
 	YYSETCONDITION(yycu);
 	goto yyc_u;
 
@@ -108,9 +112,11 @@ yyFillLabel2:
 	}
 yy16:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	{ x }
 yy18:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	YYSETCONDITION(yycb);
 	goto yyc_b;
 /* *********************************** */
@@ -125,9 +131,11 @@ yyFillLabel3:
 	}
 yy22:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	{ x }
 yy24:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	YYSETCONDITION(yyca);
 	goto yyc_a;
 /* *********************************** */
@@ -142,9 +150,11 @@ yyFillLabel4:
 	}
 yy28:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	{ x }
 yy30:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	{ c }
 /* *********************************** */
 yyc_d:
@@ -158,9 +168,11 @@ yyFillLabel5:
 	}
 yy34:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	{ x }
 yy36:
 	++YYCURSOR;
+	SETSTATE_REUSE_1(-1);
 	{ d }
 
 
@@ -200,9 +212,11 @@ yyFillLabel6:
 	}
 yy41:
 	++YYCURSOR;
+	SETSTATE_REUSE_2(-1);
 	{ x }
 yy43:
 	++YYCURSOR;
+	SETSTATE_REUSE_2(-1);
 	YYSETCONDITION(yycb);
 	goto yyc_b;
 /* *********************************** */
@@ -217,9 +231,11 @@ yyFillLabel7:
 	}
 yy47:
 	++YYCURSOR;
+	SETSTATE_REUSE_2(-1);
 	{ x }
 yy49:
 	++YYCURSOR;
+	SETSTATE_REUSE_2(-1);
 	YYSETCONDITION(yyca);
 	goto yyc_a;
 /* *********************************** */
@@ -234,6 +250,7 @@ yyFillLabel8:
 	}
 yy53:
 	++YYCURSOR;
+	SETSTATE_REUSE_2(-1);
 	{ x }
 yy55:
 	++YYCURSOR;
@@ -246,6 +263,7 @@ yyFillLabel9:
 	default:	goto yy57;
 	}
 yy57:
+	SETSTATE_REUSE_2(-1);
 	{ e }
 
 
@@ -268,9 +286,11 @@ yyFillLabel10:
 	}
 yy61:
 	++YYCURSOR;
+	SETSTATE_2(-1);
 	{ x }
 yy63:
 	++YYCURSOR;
+	SETSTATE_2(-1);
 	{ w }
 
 

@@ -10,6 +10,7 @@
 		goto yy0;
 	}
 yy0:
+	YYSETSTATE(-1);
 	{}
 }
 

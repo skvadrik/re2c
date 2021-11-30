@@ -21,9 +21,11 @@ yyFillLabel0:
 	}
 yy3:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ x }
 yy5:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -47,9 +49,11 @@ yyFillLabel1:
 	}
 yy10:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ x }
 yy12:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -73,9 +77,11 @@ yyFillLabel2:
 	}
 yy17:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ x }
 yy19:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ a }
 
 

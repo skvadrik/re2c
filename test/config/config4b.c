@@ -44,9 +44,10 @@ yyFillLabel0:
 	}
 yy3:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 #line 15 "config/config4b.re"
 	{ return NULL; }
-#line 50 "config/config4b.c"
+#line 51 "config/config4b.c"
 yy5:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -67,9 +68,10 @@ yyFillLabel1:
 	default:	goto yy7;
 	}
 yy7:
+	YYSETSTATE(-1);
 #line 14 "config/config4b.re"
 	{ return YYCURSOR; }
-#line 73 "config/config4b.c"
+#line 75 "config/config4b.c"
 #line 16 "config/config4b.re"
 
 }

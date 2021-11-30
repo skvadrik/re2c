@@ -133,20 +133,22 @@ yyFillLabel0:
 	}
 yy3:
 	in.cursor += 1
+	in.state = -1
 //line "golang/003_fill_f.re":94
 	{
 		fmt.Println("end")
 		return lexEnd, 0
 	}
-//line "golang/003_fill_f.go":142
+//line "golang/003_fill_f.go":143
 yy5:
 	in.cursor += 1
+	in.state = -1
 //line "golang/003_fill_f.re":89
 	{
 		fmt.Println("error")
 		return lexError, 0
 	}
-//line "golang/003_fill_f.go":150
+//line "golang/003_fill_f.go":152
 yy7:
 	in.cursor += 1
 	in.state = 1
@@ -162,11 +164,12 @@ yyFillLabel1:
 		goto yy9
 	}
 yy9:
+	in.state = -1
 //line "golang/003_fill_f.re":109
 	{
 		return lexSpace, 0
 	}
-//line "golang/003_fill_f.go":170
+//line "golang/003_fill_f.go":173
 yy10:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -203,12 +206,13 @@ yyFillLabel2:
 		goto yy12
 	}
 yy12:
+	in.state = -1
 //line "golang/003_fill_f.re":99
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber1, 0
 	}
-//line "golang/003_fill_f.go":212
+//line "golang/003_fill_f.go":216
 yy13:
 	in.cursor += 1
 	yych = YYCTYPE(in.data[in.cursor])
@@ -272,12 +276,13 @@ yyFillLabel3:
 		goto yy17
 	}
 yy17:
+	in.state = -1
 //line "golang/003_fill_f.re":104
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber2, 0
 	}
-//line "golang/003_fill_f.go":281
+//line "golang/003_fill_f.go":286
 //line "golang/003_fill_f.re":112
 
 }

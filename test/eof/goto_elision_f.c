@@ -46,6 +46,7 @@ yyFillLabel0:
 yy3:
 	++YYCURSOR;
 yy4:
+	YYSETSTATE(-1);
 	{ err }
 yy5:
 	++YYCURSOR;
@@ -91,6 +92,7 @@ yyFillLabel3:
 	}
 yy8:
 	c = yyt1;
+	YYSETSTATE(-1);
 	{ one }
 yy9:
 	++YYCURSOR;
@@ -104,6 +106,7 @@ yyFillLabel4:
 	}
 yy10:
 	z = yyt1;
+	YYSETSTATE(-1);
 	{ two }
 yy11:
 	++YYCURSOR;
@@ -135,5 +138,6 @@ yy14:
 		goto yy10;
 	}
 yy15:
+	YYSETSTATE(-1);
 	{ eof }
 

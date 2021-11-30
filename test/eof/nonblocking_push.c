@@ -226,6 +226,7 @@ yyFillLabel0:
 	}
 yy3:
 	++in.cur;
+	YYSETSTATE(-1);
 	{ printf("< Unexpected character >%c<\n", in.yych); return FAIL; }
 yy5:
 	++in.cur;
@@ -242,6 +243,7 @@ yyFillLabel1:
 		goto yy7;
 	}
 yy7:
+	YYSETSTATE(-1);
 	{ printf("< whitespace\n");                         return WHITESPACE; }
 yy8:
 	++in.cur;
@@ -309,6 +311,7 @@ yy9:
 		goto yy10;
 	}
 yy10:
+	YYSETSTATE(-1);
 	{ printf("< word\n");                               return WORD; }
 yy11:
 	++in.cur;
@@ -554,8 +557,10 @@ yyFillLabel20:
 	}
 yy30:
 	++in.cur;
+	YYSETSTATE(-1);
 	{ printf("< Thing w/ newlines\n");                  return THING; }
 yy32:
+	YYSETSTATE(-1);
 	{ printf("< EOF\n");                                return OK; }
 
 }

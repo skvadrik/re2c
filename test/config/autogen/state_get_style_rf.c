@@ -21,9 +21,11 @@ yyFillLabel0:
 	}
 yy3:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ x }
 yy5:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -47,9 +49,11 @@ yyFillLabel1:
 	}
 yy10:
 	++YYCURSOR;
+	YYSETSTATE
 	{ x }
 yy12:
 	++YYCURSOR;
+	YYSETSTATE
 	{ a }
 
 
@@ -73,9 +77,11 @@ yyFillLabel2:
 	}
 yy17:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ x }
 yy19:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -99,9 +105,11 @@ yyFillLabel3:
 	}
 yy24:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ x }
 yy26:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -126,9 +134,11 @@ yyFillLabel4:
 	}
 yy31:
 	++YYCURSOR;
+	YYSETSTATE
 	{ x }
 yy33:
 	++YYCURSOR;
+	YYSETSTATE
 	{ a }
 
 
@@ -153,9 +163,11 @@ yyFillLabel5:
 	}
 yy38:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ x }
 yy40:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -179,9 +191,11 @@ yyFillLabel6:
 	}
 yy45:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ x }
 yy47:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ a }
 
 
@@ -206,9 +220,11 @@ yyFillLabel7:
 	}
 yy52:
 	++YYCURSOR;
+	YYSETSTATE
 	{ x }
 yy54:
 	++YYCURSOR;
+	YYSETSTATE
 	{ a }
 
 
@@ -233,9 +249,11 @@ yyFillLabel8:
 	}
 yy59:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ x }
 yy61:
 	++YYCURSOR;
+	YYSETSTATE(-1);
 	{ a }
 
 

@@ -20,6 +20,7 @@ yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel0:
 	yych = *YYCURSOR++;
+	YYSETSTATE(-1);
 	{ x }
 
 
@@ -37,5 +38,6 @@ yy5:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	yych = *YYCURSOR++;
+	YYSETSTATE(-1);
 	{ x }
 
