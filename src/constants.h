@@ -14,7 +14,8 @@ enum target_t {
 
 enum lang_t {
     LANG_C,
-    LANG_GO
+    LANG_GO,
+    LANG_RUST
 };
 
 enum input_api_t {

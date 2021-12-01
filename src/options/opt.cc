@@ -16,6 +16,10 @@ static void fix_conopt(conopt_t &glob)
         glob.iFlag = true;
     }
 
+    if (glob.lang == LANG_RUST) {
+        glob.loop_switch = true;
+    }
+
     // append directory separator '/' to all paths that do not have it
     for (size_t i = 0; i < glob.incpaths.size(); ++i) {
         std::string &p = glob.incpaths[i];
@@ -42,10 +46,11 @@ static void fix_conopt(conopt_t &glob)
 // options).
 static void fix_mutopt_defaults(const conopt_t &glob, mutopt_t &defaults)
 {
-    // For the Go backend, generic API is set by default, because "default" C
-    // API with pointers doesn't work (there is no pointer arithmetics in Go).
-    // To make the default Go API less restrictive, decorations are disabled.
-    if (glob.lang == LANG_GO) {
+    // For the Go and Rust backends generic API is set by default, because the default C
+    // API with pointers doesn't work (there is no pointer arithmetics in Go, and in Rust
+    // it is different enough from C). Use freeform generic API by default to make it less
+    // restrictive.
+    if (glob.lang != LANG_C) {
         defaults.input_api = INPUT_CUSTOM;
         defaults.api_style = API_FREEFORM;
     }
@@ -262,24 +267,21 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     }
 
     // errors
-    if (glob.target == TARGET_SKELETON && glob.lang != LANG_C) {
-        error("skeleton is not supported for non-C language backends");
-        exit(1);
-    }
-    if (glob.lang == LANG_GO) {
+    if (glob.lang != LANG_C) {
+        if (glob.target == TARGET_SKELETON) {
+            error("skeleton is not supported for non-C backends");
+            exit(1);
+        }
         if (real.input_api == INPUT_DEFAULT) {
-            error("default C API is not supported for the Go backend,"
-                " as Go has no pointer arithmetics");
+            error("pointer API is not supported for non-C backends");
             exit(1);
         }
         if (real.gFlag) {
-            error("-g, --computed-gotos option is not supported for the Go backend,"
-                " as Go does not have computed goto");
+            error("-g, --computed-gotos option is not supported for non-C backends");
             exit(1);
         }
         if (real.case_ranges) {
-            error("--case-ranges option is not supported for the Go backend,"
-                " as Go has no case ranges");
+            error("--case-ranges option is not supported for non-C backends");
             exit(1);
         }
     }
