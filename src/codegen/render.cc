@@ -123,27 +123,61 @@ static void render_block(RenderContext &rctx, const CodeBlock *code)
     }
 }
 
+static const char *var_type_c(VarType type, const opt_t *opts)
+{
+    switch (type) {
+    case VAR_TYPE_INT:     return "int";
+    case VAR_TYPE_UINT:    return "unsigned int";
+    case VAR_TYPE_YYCTYPE: return opts->yyctype.c_str();
+    default:               return NULL;
+    }
+}
+
+static const char *var_type_go(VarType type, const opt_t *opts)
+{
+    switch (type) {
+    case VAR_TYPE_INT:     return "int";
+    case VAR_TYPE_UINT:    return "uint";
+    case VAR_TYPE_YYCTYPE: return opts->yyctype.c_str();
+    default:               return NULL;
+    }
+}
+
+static const char *var_type_rust(VarType type, const opt_t *opts)
+{
+    switch (type) {
+    case VAR_TYPE_INT:     return "isize";
+    case VAR_TYPE_UINT:    return "usize";
+    case VAR_TYPE_YYCTYPE: return opts->yyctype.c_str();
+    default:               return NULL;
+    }
+}
+
 static void render_var(RenderContext &rctx, const CodeVar *var)
 {
     std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
 
-    os << indent(rctx.ind, rctx.opts->indString);
-    switch (rctx.opts->lang) {
-        case LANG_C:
-            os << var->type << " " << var->name;
-            if (var->init) {
-                os << " = " << var->init;
-            }
-            os << ";";
-            break;
-        case LANG_GO:
-            if (var->init) {
-                os << var->name << " := " << var->init;
-            }
-            else {
-                os << "var " << var->name << " " << var->type;
-            }
-            break;
+    os << indent(rctx.ind, opts->indString);
+
+    switch (opts->lang) {
+    case LANG_C:
+        os << var_type_c(var->type, opts) << " " << var->name;
+        if (var->init) os << " = " << var->init;
+        os << ";";
+        break;
+    case LANG_GO:
+        if (var->init) {
+            os << var->name << " := " << var->init;
+        } else {
+            os << "var " << var->name << " " << var_type_go(var->type, opts);
+        }
+        break;
+    case LANG_RUST:
+        os << "let mut " << var->name << " : " << var_type_rust(var->type, opts);
+        if (var->init) os << " = " << var->init;
+        os << ";";
+        break;
     }
     os << std::endl;
     ++rctx.line;

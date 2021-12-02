@@ -109,6 +109,12 @@ enum CodeKind {
     CODE_ABORT
 };
 
+enum VarType {
+    VAR_TYPE_INT,
+    VAR_TYPE_UINT,
+    VAR_TYPE_YYCTYPE
+};
+
 // Bit flags for configurations used in directives.
 enum DirConf {
     DCONF_FORMAT    = 1u,

@@ -257,7 +257,7 @@ struct CodeBlock {
 };
 
 struct CodeVar {
-    const char *type;
+    VarType type;
     const char *name;
     const char *init;
 };
