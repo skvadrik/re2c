@@ -406,6 +406,11 @@ inline Code *code_textraw(code_alc_t &alc, const char *text)
     return x;
 }
 
+inline Code *code_abort(code_alc_t &alc)
+{
+    return new_code(alc, CODE_ABORT);
+}
+
 inline Code *code_newline(code_alc_t &alc)
 {
     return code_textraw(alc, "");

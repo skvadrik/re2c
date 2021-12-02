@@ -176,6 +176,8 @@ func parse_u32(str string) (uint32, error) {
 		case 13:
 			cursor += -1
 			{ goto hex }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }
@@ -218,6 +220,8 @@ bin:
 			continue
 		case 6:
 			{ add_digit(2, '0'); goto bin }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }
@@ -272,6 +276,8 @@ oct:
 			continue
 		case 6:
 			{ add_digit(8, '0'); goto oct }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }
@@ -330,6 +336,8 @@ dec:
 			continue
 		case 6:
 			{ add_digit(10, '0'); goto dec }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }
@@ -424,6 +432,8 @@ hex:
 			continue
 		case 10:
 			{ add_digit(16, 'a'-10); goto hex }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }

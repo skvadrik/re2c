@@ -312,6 +312,8 @@ loop:
 			}
 			yystate = 6
 			continue
+		default:
+			panic("internal lexer error")
 		}
 	}
 

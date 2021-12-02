@@ -125,6 +125,12 @@ void wrap_dfas_in_loop_switch(Output &output, CodeList *stmts, CodeCases *cases)
 
     CodeList* loop = code_list(alc);
     gen_storable_state_cases(output, cases);
+    if (opts->bUseStateAbort || opts->lang != LANG_C) {
+        // Do not abort by default in C/C++ as it requires including a header.
+        CodeList *abort = code_list(alc);
+        append(abort, code_abort(alc));
+        append(cases, code_case_default(alc, abort));
+    }
     append(loop, code_switch(alc, opts->yystate.c_str(), cases));
     append(stmts, code_loop(alc, loop));
 }

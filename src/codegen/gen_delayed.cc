@@ -350,9 +350,9 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
         // case -1: goto <start label>;
         prepend(cases, code_case_number(alc, goto_start, -1));
 
-        // default: abort();
+        // default: abort
         CodeList *abort = code_list(alc);
-        append(abort, code_stmt(alc, "abort()"));
+        append(abort, code_abort(alc));
         prepend(cases, code_case_default(alc, abort));
     } else {
         // default: goto <start label>;
@@ -685,6 +685,7 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
         case CODE_LINE_INFO_INPUT:
         case CODE_LINE_INFO_OUTPUT:
         case CODE_VAR:
+        case CODE_ABORT:
             break;
     }
 }

@@ -168,6 +168,8 @@ loop:
 			in.cursor += 1
 			yystate = 8
 			continue
+		default:
+			panic("internal lexer error")
 		}
 	}
 }

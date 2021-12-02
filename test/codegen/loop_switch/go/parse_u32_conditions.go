@@ -423,6 +423,8 @@ loop:
 			continue
 		case 45:
 			{ add_digit(8, '0');     goto loop }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }

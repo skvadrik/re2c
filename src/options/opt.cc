@@ -165,8 +165,10 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         real.yyfilllabel = defaults.yyfilllabel;
         real.yynext = defaults.yynext;
         real.yyaccept = defaults.yyaccept;
-        real.bUseStateAbort = defaults.bUseStateAbort;
         real.bUseStateNext = defaults.bUseStateNext;
+    }
+    if (!glob.fFlag && !glob.loop_switch) {
+        real.bUseStateAbort = defaults.bUseStateAbort;
     }
     if (real.posix_semantics) {
         real.posix_syntax = true;

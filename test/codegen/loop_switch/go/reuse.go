@@ -133,6 +133,8 @@ func lexUTF8(str []uint8) int {
 			continue
 		case 13:
 			{ return 0; }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }
@@ -207,6 +209,8 @@ func lexUTF32(str []uint32) int {
 			continue
 		case 9:
 			{ return 0; }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }

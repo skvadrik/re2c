@@ -105,7 +105,8 @@ enum CodeKind {
     CODE_TEXT,
     CODE_TEXT_RAW,
     CODE_RAW,
-    CODE_LABEL
+    CODE_LABEL,
+    CODE_ABORT
 };
 
 // Bit flags for configurations used in directives.

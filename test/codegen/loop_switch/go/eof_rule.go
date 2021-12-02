@@ -119,6 +119,8 @@ loop:
 			cursor = marker
 			yystate = 2
 			continue
+		default:
+			panic("internal lexer error")
 		}
 	}
 }

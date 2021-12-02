@@ -38,6 +38,8 @@
 		case 5:
 			yystate = 0
 			continue
+		default:
+			panic("internal lexer error")
 		}
 	}
 
@@ -87,6 +89,8 @@
 			}
 			yystate = 0
 			continue
+		default:
+			panic("internal lexer error")
 		}
 	}
 

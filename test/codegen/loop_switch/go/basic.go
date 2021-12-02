@@ -48,6 +48,8 @@ func lex(str string) {                    // Go code
 			continue
 		case 5:
 			{ return }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }

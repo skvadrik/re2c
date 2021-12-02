@@ -512,6 +512,28 @@ static void render_backup_peek_skip(RenderContext &rctx)
     render_stmt_end(rctx, true);
 }
 
+static void render_abort(RenderContext &rctx)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    os << indent(rctx.ind, opts->indString);
+    switch (opts->lang) {
+    case LANG_C:
+        DASSERT(opts->bUseStateAbort);
+        os << "abort();";
+        break;
+    case LANG_GO:
+        os << "panic(\"internal lexer error\")";
+        break;
+    case LANG_RUST:
+        os << "panic!(\"internal lexer error\")";
+        break;
+    }
+    os << std::endl;
+    ++rctx.line;
+}
+
 void render(RenderContext &rctx, const Code *code)
 {
     std::ostringstream &os = rctx.os;
@@ -555,6 +577,9 @@ void render(RenderContext &rctx, const Code *code)
             for (size_t i = 0; i < code->raw.size; ++i) {
                 if (code->raw.data[i] == '\n') ++line;
             }
+            break;
+        case CODE_ABORT:
+            render_abort(rctx);
             break;
         case CODE_SKIP:
             render_skip(rctx);

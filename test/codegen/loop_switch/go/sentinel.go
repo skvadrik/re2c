@@ -174,6 +174,8 @@ loop:
 			}
 		case 10:
 			{ count += 1; goto loop }
+		default:
+			panic("internal lexer error")
 		}
 	}
 }
