@@ -32,14 +32,17 @@ static void render_line_info(std::ostream &o, uint32_t line, const std::string &
     if (opts->iFlag) return;
 
     switch (opts->lang) {
-        case LANG_GO:
-            // Go: //line <filename>:<line-number>
-            o << "//line \"" << fname << "\":" << line << "\n";
-            break;
-        case LANG_C:
-            // C/C++: #line <line-number> <filename>
-            o << "#line " << line << " \"" << fname << "\"\n";
-            break;
+    case LANG_GO:
+        // Go: //line <filename>:<line-number>
+        o << "//line \"" << fname << "\":" << line << "\n";
+        break;
+    case LANG_C:
+        // C/C++: #line <line-number> <filename>
+        o << "#line " << line << " \"" << fname << "\"\n";
+        break;
+    case LANG_RUST:
+        // No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862
+        break;
     }
 }
 
@@ -218,6 +221,7 @@ static void render_case_range(RenderContext &rctx, uint32_t low, uint32_t upp, b
             ++rctx.line;
         }
         break;
+
     case LANG_GO:
         os << "case ";
         prtChOrHex(os, low, szcunit, hex, false);
@@ -232,6 +236,20 @@ static void render_case_range(RenderContext &rctx, uint32_t low, uint32_t upp, b
             rctx.line += 2;
         }
         break;
+
+    case LANG_RUST:
+        prtChOrHex(os, low, szcunit, true, false);
+        if (low != upp) {
+            os << " ..= ";
+            prtChOrHex(os, upp, szcunit, true, false);
+        }
+        if (last) {
+            os << " => {";
+        } else {
+            os << " |" << std::endl;
+            ++rctx.line;
+        }
+        break;
     }
 }
 
@@ -242,12 +260,23 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
     const uint32_t ind = rctx.ind;
     const Code *first = code->body->head;
 
+    const char *s_case, *s_then, *s_default;
+    if (opts->lang == LANG_RUST) {
+        s_case = "";
+        s_then = " => {";
+        s_default = "_";
+    } else {
+        s_case = "case ";
+        s_then = ":";
+        s_default = "default";
+    }
+
     if (code->kind == CodeCase::DEFAULT) {
-        os << indent(ind, opts->indString) << "default:";
+        os << indent(ind, opts->indString) << s_default << s_then;
     } else if (code->kind == CodeCase::NUMBER) {
-        os << indent(ind, opts->indString) << "case " << code->number << ":";
+        os << indent(ind, opts->indString) << s_case << code->number << s_then;
     } else if (code->kind == CodeCase::STRING) {
-        os << indent(ind, opts->indString) << "case " << code->string << ":";
+        os << indent(ind, opts->indString) << s_case << code->string << s_then;
     } else {
         const size_t nranges = code->gocase->nranges;
         const uint32_t *ranges = code->gocase->ranges;
@@ -270,6 +299,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
     if (oneline && oneline_case(code, opts)) {
         // Do not indent-align with case ranges, they are wider then 'default'.
         // TODO: compute precise alignment instead of relying on tab indentation.
+        DASSERT(opts->lang == LANG_C);
         os << (opts->case_ranges ? " " : opts->indString) << first->text << ";\n";
         ++rctx.line;
     } else {
@@ -280,6 +310,10 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
             render(rctx, s);
             --rctx.ind;
         }
+        if (opts->lang == LANG_RUST) {
+            os << indent(rctx.ind, opts->indString) << "}" << std::endl;
+            ++rctx.line;
+        }
     }
 }
 
@@ -289,15 +323,23 @@ static void render_switch(RenderContext &rctx, const CodeSwitch *code)
     const opt_t *opts = rctx.opts;
     const uint32_t ind = rctx.ind;
 
-    os << indent(ind, opts->indString) << "switch (" << code->expr << ") {\n";
+    os << indent(ind, opts->indString);
+    if (opts->lang == LANG_RUST) {
+        os << "match " << code->expr;
+    } else {
+        os << "switch (" << code->expr << ")";
+    }
+    os << " {\n";
     ++rctx.line;
 
     // If this is a switch on input symbol, prefer single-line cases.
     const bool oneline = code->cases->head->kind == CodeCase::RANGES;
 
+    if (opts->lang == LANG_RUST) ++rctx.ind;
     for (const CodeCase *c = code->cases->head; c; c = c->next) {
         render_case(rctx, c, oneline);
     }
+    if (opts->lang == LANG_RUST) --rctx.ind;
 
     os << indent(ind, opts->indString) << "}\n";
     ++rctx.line;
@@ -380,13 +422,16 @@ static void render_loop(RenderContext &rctx, const CodeList *loop)
     os << indent(rctx.ind, opts->indString);
     switch (opts->lang) {
     case LANG_C:
-        os << "for (;;) {";
+        os << "for (;;)";
         break;
     case LANG_GO:
-        os << "for {";
+        os << "for";
+        break;
+    case LANG_RUST:
+        os << "loop";
         break;
     }
-    os << std::endl;
+    os << " {" << std::endl;
     ++rctx.line;
 
     ++rctx.ind;
