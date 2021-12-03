@@ -82,25 +82,7 @@ func Lex(in *Input) int {
 		goto yy2
 	case ' ':
 		goto yy6
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy8
 	default:
 		goto yy4
@@ -112,7 +94,7 @@ yy2:
 		fmt.Println("end")
 		return 0
 	}
-//line "golang/003_fill.go":116
+//line "golang/003_fill.go":98
 yy4:
 	in.cursor += 1
 //line "golang/003_fill.re":75
@@ -120,14 +102,14 @@ yy4:
 		fmt.Println("error")
 		return -1
 	}
-//line "golang/003_fill.go":124
+//line "golang/003_fill.go":106
 yy6:
 	in.cursor += 1
 //line "golang/003_fill.re":95
 	{
 		return 3
 	}
-//line "golang/003_fill.go":131
+//line "golang/003_fill.go":113
 yy8:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -138,25 +120,7 @@ yy8:
 	switch (yych) {
 	case '-':
 		goto yy11
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy8
 	default:
 		goto yy10
@@ -167,30 +131,12 @@ yy10:
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return 1
 	}
-//line "golang/003_fill.go":171
+//line "golang/003_fill.go":135
 yy11:
 	in.cursor += 1
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy13
 	default:
 		goto yy12
@@ -205,25 +151,7 @@ yy13:
 	}
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy13
 	default:
 		goto yy15
@@ -234,7 +162,7 @@ yy15:
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return 2
 	}
-//line "golang/003_fill.go":238
+//line "golang/003_fill.go":166
 }
 //line "golang/003_fill.re":98
 

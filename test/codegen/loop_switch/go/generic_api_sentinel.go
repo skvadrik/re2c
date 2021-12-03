@@ -35,57 +35,7 @@ loop:
 			case ' ':
 				yystate = 5
 				continue
-			case 'a':
-				fallthrough
-			case 'b':
-				fallthrough
-			case 'c':
-				fallthrough
-			case 'd':
-				fallthrough
-			case 'e':
-				fallthrough
-			case 'f':
-				fallthrough
-			case 'g':
-				fallthrough
-			case 'h':
-				fallthrough
-			case 'i':
-				fallthrough
-			case 'j':
-				fallthrough
-			case 'k':
-				fallthrough
-			case 'l':
-				fallthrough
-			case 'm':
-				fallthrough
-			case 'n':
-				fallthrough
-			case 'o':
-				fallthrough
-			case 'p':
-				fallthrough
-			case 'q':
-				fallthrough
-			case 'r':
-				fallthrough
-			case 's':
-				fallthrough
-			case 't':
-				fallthrough
-			case 'u':
-				fallthrough
-			case 'v':
-				fallthrough
-			case 'w':
-				fallthrough
-			case 'x':
-				fallthrough
-			case 'y':
-				fallthrough
-			case 'z':
+			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 				yystate = 8
 				continue
 			default:
@@ -124,57 +74,7 @@ loop:
 			continue
 		case 9:
 			switch (yych) {
-			case 'a':
-				fallthrough
-			case 'b':
-				fallthrough
-			case 'c':
-				fallthrough
-			case 'd':
-				fallthrough
-			case 'e':
-				fallthrough
-			case 'f':
-				fallthrough
-			case 'g':
-				fallthrough
-			case 'h':
-				fallthrough
-			case 'i':
-				fallthrough
-			case 'j':
-				fallthrough
-			case 'k':
-				fallthrough
-			case 'l':
-				fallthrough
-			case 'm':
-				fallthrough
-			case 'n':
-				fallthrough
-			case 'o':
-				fallthrough
-			case 'p':
-				fallthrough
-			case 'q':
-				fallthrough
-			case 'r':
-				fallthrough
-			case 's':
-				fallthrough
-			case 't':
-				fallthrough
-			case 'u':
-				fallthrough
-			case 'v':
-				fallthrough
-			case 'w':
-				fallthrough
-			case 'x':
-				fallthrough
-			case 'y':
-				fallthrough
-			case 'z':
+			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 				cursor += 1
 				yystate = 8
 				continue

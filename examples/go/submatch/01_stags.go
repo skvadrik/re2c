@@ -44,19 +44,7 @@ var yyt1 int
 	case '2':
 		yyt1 = cursor
 		goto yy6
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '3','4','5','6','7','8','9':
 		yyt1 = cursor
 		goto yy7
 	default:
@@ -67,7 +55,7 @@ yy2:
 yy3:
 //line "go/submatch/01_stags.re":44
 	{ return 0, eBadIP }
-//line "go/submatch/01_stags.go":71
+//line "go/submatch/01_stags.go":59
 yy4:
 	cursor += 1
 	marker = cursor
@@ -85,25 +73,7 @@ yy5:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy10
 	default:
 		goto yy3
@@ -115,25 +85,11 @@ yy6:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
+	case '0','1','2','3','4':
 		goto yy10
 	case '5':
 		goto yy11
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '6','7','8','9':
 		goto yy12
 	default:
 		goto yy3
@@ -145,25 +101,7 @@ yy7:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy12
 	default:
 		goto yy3
@@ -181,19 +119,7 @@ yy8:
 	case '2':
 		yyt2 = cursor
 		goto yy15
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '3','4','5','6','7','8','9':
 		yyt2 = cursor
 		goto yy16
 	default:
@@ -208,25 +134,7 @@ yy10:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy12
 	default:
 		goto yy9
@@ -237,17 +145,7 @@ yy11:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
+	case '0','1','2','3','4','5':
 		goto yy12
 	default:
 		goto yy9
@@ -276,25 +174,7 @@ yy14:
 	switch (yych) {
 	case '.':
 		goto yy17
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy16
 	default:
 		goto yy9
@@ -305,25 +185,11 @@ yy15:
 	switch (yych) {
 	case '.':
 		goto yy17
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
+	case '0','1','2','3','4':
 		goto yy16
 	case '5':
 		goto yy18
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '6','7','8','9':
 		goto yy13
 	default:
 		goto yy9
@@ -334,25 +200,7 @@ yy16:
 	switch (yych) {
 	case '.':
 		goto yy17
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy13
 	default:
 		goto yy9
@@ -370,19 +218,7 @@ yy17:
 	case '2':
 		yyt3 = cursor
 		goto yy21
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '3','4','5','6','7','8','9':
 		yyt3 = cursor
 		goto yy22
 	default:
@@ -394,17 +230,7 @@ yy18:
 	switch (yych) {
 	case '.':
 		goto yy17
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
+	case '0','1','2','3','4','5':
 		goto yy13
 	default:
 		goto yy9
@@ -424,25 +250,7 @@ yy20:
 	switch (yych) {
 	case '.':
 		goto yy23
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy22
 	default:
 		goto yy9
@@ -453,25 +261,11 @@ yy21:
 	switch (yych) {
 	case '.':
 		goto yy23
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
+	case '0','1','2','3','4':
 		goto yy22
 	case '5':
 		goto yy24
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '6','7','8','9':
 		goto yy19
 	default:
 		goto yy9
@@ -482,25 +276,7 @@ yy22:
 	switch (yych) {
 	case '.':
 		goto yy23
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy19
 	default:
 		goto yy9
@@ -518,19 +294,7 @@ yy23:
 	case '2':
 		yyt4 = cursor
 		goto yy27
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '3','4','5','6','7','8','9':
 		yyt4 = cursor
 		goto yy28
 	default:
@@ -542,17 +306,7 @@ yy24:
 	switch (yych) {
 	case '.':
 		goto yy23
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
+	case '0','1','2','3','4','5':
 		goto yy19
 	default:
 		goto yy9
@@ -570,25 +324,7 @@ yy26:
 	switch (yych) {
 	case 0x00:
 		goto yy29
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy28
 	default:
 		goto yy9
@@ -599,25 +335,11 @@ yy27:
 	switch (yych) {
 	case 0x00:
 		goto yy29
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
+	case '0','1','2','3','4':
 		goto yy28
 	case '5':
 		goto yy31
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '6','7','8','9':
 		goto yy25
 	default:
 		goto yy9
@@ -628,25 +350,7 @@ yy28:
 	switch (yych) {
 	case 0x00:
 		goto yy29
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy25
 	default:
 		goto yy9
@@ -664,24 +368,14 @@ yy29:
 			(num(o2, o3-1) << 16)+
 			(num(o1, o2-1) << 24), nil
 	}
-//line "go/submatch/01_stags.go":668
+//line "go/submatch/01_stags.go":372
 yy31:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
 		goto yy29
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
+	case '0','1','2','3','4','5':
 		goto yy25
 	default:
 		goto yy9

@@ -89,57 +89,7 @@ yy0:
 yyFillLabel0:
 	yych = in.data[in.cursor]
 	switch (yych) {
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy5
 	default:
 		if (in.limit <= in.cursor) {
@@ -154,7 +104,7 @@ yy4:
 	in.state = -1
 //line "go/state/push.re":74
 	{ return lexPacketBroken }
-//line "go/state/push.go":158
+//line "go/state/push.go":108
 yy5:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -163,57 +113,7 @@ yyFillLabel1:
 	switch (yych) {
 	case ';':
 		goto yy6
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy8
 	default:
 		if (in.limit <= in.cursor) {
@@ -227,7 +127,7 @@ yy6:
 	in.state = -1
 //line "go/state/push.re":76
 	{ *recv = *recv + 1; goto loop }
-//line "go/state/push.go":231
+//line "go/state/push.go":131
 yy8:
 	in.cursor += 1
 yyFillLabel2:
@@ -235,57 +135,7 @@ yyFillLabel2:
 	switch (yych) {
 	case ';':
 		goto yy6
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy8
 	default:
 		if (in.limit <= in.cursor) {
@@ -301,7 +151,7 @@ yy11:
 	in.state = -1
 //line "go/state/push.re":75
 	{ return lexEnd }
-//line "go/state/push.go":305
+//line "go/state/push.go":155
 //line "go/state/push.re":77
 
 }

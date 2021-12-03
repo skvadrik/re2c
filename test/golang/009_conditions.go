@@ -39,23 +39,7 @@ yyc_init:
 	switch (yych) {
 	case '0':
 		goto yy4
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '1','2','3','4','5','6','7','8','9':
 		goto yy6
 	default:
 		goto yy2
@@ -100,9 +84,7 @@ yyc_bin:
 	switch (yych) {
 	case 0x00:
 		goto yy14
-	case '0':
-		fallthrough
-	case '1':
+	case '0','1':
 		goto yy18
 	default:
 		goto yy16
@@ -122,25 +104,7 @@ yyc_dec:
 	switch (yych) {
 	case 0x00:
 		goto yy22
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy26
 	default:
 		goto yy24
@@ -160,49 +124,11 @@ yyc_hex:
 	switch (yych) {
 	case 0x00:
 		goto yy30
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy34
-	case 'A':
-		fallthrough
-	case 'B':
-		fallthrough
-	case 'C':
-		fallthrough
-	case 'D':
-		fallthrough
-	case 'E':
-		fallthrough
-	case 'F':
+	case 'A','B','C','D','E','F':
 		goto yy36
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
+	case 'a','b','c','d','e','f':
 		goto yy38
 	default:
 		goto yy32
@@ -228,21 +154,7 @@ yyc_oct:
 	switch (yych) {
 	case 0x00:
 		goto yy42
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
+	case '0','1','2','3','4','5','6','7':
 		goto yy46
 	default:
 		goto yy44

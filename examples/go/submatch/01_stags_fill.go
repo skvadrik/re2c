@@ -112,19 +112,7 @@ yyFillLabel0:
 	case '2':
 		in.yyt1 = in.cursor
 		goto yy6
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '3','4','5','6','7','8','9':
 		in.yyt1 = in.cursor
 		goto yy7
 	default:
@@ -141,7 +129,7 @@ yy2:
 yy3:
 //line "go/submatch/01_stags_fill.re":113
 	{ return nil }
-//line "go/submatch/01_stags_fill.go":145
+//line "go/submatch/01_stags_fill.go":133
 yy4:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -166,25 +154,7 @@ yyFillLabel2:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy10
 	default:
 		if (in.limit <= in.cursor) {
@@ -202,25 +172,11 @@ yyFillLabel3:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
+	case '0','1','2','3','4':
 		goto yy10
 	case '5':
 		goto yy11
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '6','7','8','9':
 		goto yy12
 	default:
 		if (in.limit <= in.cursor) {
@@ -238,25 +194,7 @@ yyFillLabel4:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy12
 	default:
 		if (in.limit <= in.cursor) {
@@ -280,19 +218,7 @@ yyFillLabel5:
 	case '2':
 		in.yyt2 = in.cursor
 		goto yy15
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '3','4','5','6','7','8','9':
 		in.yyt2 = in.cursor
 		goto yy16
 	default:
@@ -313,25 +239,7 @@ yyFillLabel6:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy12
 	default:
 		if (in.limit <= in.cursor) {
@@ -348,17 +256,7 @@ yyFillLabel7:
 	switch (yych) {
 	case '.':
 		goto yy8
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
+	case '0','1','2','3','4','5':
 		goto yy12
 	default:
 		if (in.limit <= in.cursor) {
@@ -405,25 +303,7 @@ yyFillLabel10:
 	switch (yych) {
 	case '.':
 		goto yy17
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy16
 	default:
 		if (in.limit <= in.cursor) {
@@ -440,25 +320,11 @@ yyFillLabel11:
 	switch (yych) {
 	case '.':
 		goto yy17
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
+	case '0','1','2','3','4':
 		goto yy16
 	case '5':
 		goto yy18
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '6','7','8','9':
 		goto yy13
 	default:
 		if (in.limit <= in.cursor) {
@@ -475,25 +341,7 @@ yyFillLabel12:
 	switch (yych) {
 	case '.':
 		goto yy17
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy13
 	default:
 		if (in.limit <= in.cursor) {
@@ -517,19 +365,7 @@ yyFillLabel13:
 	case '2':
 		in.yyt3 = in.cursor
 		goto yy21
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '3','4','5','6','7','8','9':
 		in.yyt3 = in.cursor
 		goto yy22
 	default:
@@ -547,17 +383,7 @@ yyFillLabel14:
 	switch (yych) {
 	case '.':
 		goto yy17
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
+	case '0','1','2','3','4','5':
 		goto yy13
 	default:
 		if (in.limit <= in.cursor) {
@@ -589,25 +415,7 @@ yyFillLabel16:
 	switch (yych) {
 	case '.':
 		goto yy23
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy22
 	default:
 		if (in.limit <= in.cursor) {
@@ -624,25 +432,11 @@ yyFillLabel17:
 	switch (yych) {
 	case '.':
 		goto yy23
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
+	case '0','1','2','3','4':
 		goto yy22
 	case '5':
 		goto yy24
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '6','7','8','9':
 		goto yy19
 	default:
 		if (in.limit <= in.cursor) {
@@ -659,25 +453,7 @@ yyFillLabel18:
 	switch (yych) {
 	case '.':
 		goto yy23
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy19
 	default:
 		if (in.limit <= in.cursor) {
@@ -701,19 +477,7 @@ yyFillLabel19:
 	case '2':
 		in.yyt4 = in.cursor
 		goto yy27
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '3','4','5','6','7','8','9':
 		in.yyt4 = in.cursor
 		goto yy28
 	default:
@@ -731,17 +495,7 @@ yyFillLabel20:
 	switch (yych) {
 	case '.':
 		goto yy23
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
+	case '0','1','2','3','4','5':
 		goto yy19
 	default:
 		if (in.limit <= in.cursor) {
@@ -773,25 +527,7 @@ yyFillLabel22:
 	switch (yych) {
 	case '\n':
 		goto yy29
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy28
 	default:
 		if (in.limit <= in.cursor) {
@@ -808,25 +544,11 @@ yyFillLabel23:
 	switch (yych) {
 	case '\n':
 		goto yy29
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
+	case '0','1','2','3','4':
 		goto yy28
 	case '5':
 		goto yy31
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '6','7','8','9':
 		goto yy25
 	default:
 		if (in.limit <= in.cursor) {
@@ -843,25 +565,7 @@ yyFillLabel24:
 	switch (yych) {
 	case '\n':
 		goto yy29
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy25
 	default:
 		if (in.limit <= in.cursor) {
@@ -885,7 +589,7 @@ yy29:
 			(num(o1, o2-1) << 24))
 		goto loop
 	}
-//line "go/submatch/01_stags_fill.go":889
+//line "go/submatch/01_stags_fill.go":593
 yy31:
 	in.cursor += 1
 yyFillLabel25:
@@ -893,17 +597,7 @@ yyFillLabel25:
 	switch (yych) {
 	case '\n':
 		goto yy29
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
+	case '0','1','2','3','4','5':
 		goto yy25
 	default:
 		if (in.limit <= in.cursor) {
@@ -916,7 +610,7 @@ yyFillLabel25:
 yy32:
 //line "go/submatch/01_stags_fill.re":112
 	{ return ips }
-//line "go/submatch/01_stags_fill.go":920
+//line "go/submatch/01_stags_fill.go":614
 }
 //line "go/submatch/01_stags_fill.re":114
 

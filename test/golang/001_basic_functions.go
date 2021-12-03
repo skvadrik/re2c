@@ -20,25 +20,7 @@ func Lex(str string) int {
 	var yych YYCTYPE
 	yych = YYPEEK()
 	switch (yych) {
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy4
 	default:
 		goto yy2
@@ -50,7 +32,7 @@ yy3:
 	{
 		return -1
 	}
-//line "golang/001_basic_functions.go":54
+//line "golang/001_basic_functions.go":36
 yy4:
 	YYSKIP()
 	YYBACKUP()
@@ -58,25 +40,7 @@ yy4:
 	switch (yych) {
 	case 0x00:
 		goto yy5
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy7
 	default:
 		goto yy3
@@ -87,32 +51,14 @@ yy5:
 	{
 		return 1
 	}
-//line "golang/001_basic_functions.go":91
+//line "golang/001_basic_functions.go":55
 yy7:
 	YYSKIP()
 	yych = YYPEEK()
 	switch (yych) {
 	case 0x00:
 		goto yy5
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy7
 	default:
 		goto yy9

@@ -74,57 +74,7 @@ func lex(str string) []string {
 		yytm2 = mtag(&trie, yytm2, mtagNil)
 		yytm1 = mtag(&trie, yytm1, mtagNil)
 		goto yy2
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		yytm1 = mtag(&trie, yytm1, cursor)
 		goto yy6
 	default:
@@ -136,13 +86,13 @@ yy2:
 	y = yytm2
 //line "go/submatch/02_mtags.re":73
 	{ return unwind(trie, x, y, str) }
-//line "go/submatch/02_mtags.go":140
+//line "go/submatch/02_mtags.go":90
 yy4:
 	cursor += 1
 yy5:
 //line "go/submatch/02_mtags.re":74
 	{ return nil }
-//line "go/submatch/02_mtags.go":146
+//line "go/submatch/02_mtags.go":96
 yy6:
 	cursor += 1
 	marker = cursor
@@ -151,57 +101,7 @@ yy6:
 	case ';':
 		yytm2 = mtag(&trie, yytm2, cursor)
 		goto yy7
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy9
 	default:
 		goto yy5
@@ -212,57 +112,7 @@ yy7:
 	switch (yych) {
 	case 0x00:
 		goto yy2
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		yytm1 = mtag(&trie, yytm1, cursor)
 		goto yy9
 	default:
@@ -278,57 +128,7 @@ yy9:
 	case ';':
 		yytm2 = mtag(&trie, yytm2, cursor)
 		goto yy7
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy9
 	default:
 		goto yy8

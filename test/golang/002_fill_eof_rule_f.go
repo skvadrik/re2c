@@ -106,25 +106,7 @@ yyFillLabel0:
 	switch (yych) {
 	case ' ':
 		goto yy5
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy8
 	default:
 		if (in.limit-in.cursor < 1) {
@@ -141,7 +123,7 @@ yy3:
 		fmt.Println("error")
 		return lexError
 	}
-//line "golang/002_fill_eof_rule_f.go":145
+//line "golang/002_fill_eof_rule_f.go":127
 yy5:
 	in.cursor += 1
 yyFillLabel1:
@@ -162,7 +144,7 @@ yy7:
 	{
 		return lexSpace
 	}
-//line "golang/002_fill_eof_rule_f.go":166
+//line "golang/002_fill_eof_rule_f.go":148
 yy8:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -171,25 +153,7 @@ yyFillLabel2:
 	switch (yych) {
 	case '-':
 		goto yy11
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy8
 	default:
 		if (in.limit-in.cursor < 1) {
@@ -205,31 +169,13 @@ yy10:
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber1
 	}
-//line "golang/002_fill_eof_rule_f.go":209
+//line "golang/002_fill_eof_rule_f.go":173
 yy11:
 	in.cursor += 1
 yyFillLabel3:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy13
 	default:
 		if (in.limit-in.cursor < 1) {
@@ -246,25 +192,7 @@ yy13:
 yyFillLabel4:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy13
 	default:
 		if (in.limit-in.cursor < 1) {
@@ -280,7 +208,7 @@ yy15:
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber2
 	}
-//line "golang/002_fill_eof_rule_f.go":284
+//line "golang/002_fill_eof_rule_f.go":212
 yy16:
 	in.state = -1
 //line "golang/002_fill_eof_rule_f.re":85
@@ -288,7 +216,7 @@ yy16:
 		fmt.Println("end")
 		return lexEnd
 	}
-//line "golang/002_fill_eof_rule_f.go":292
+//line "golang/002_fill_eof_rule_f.go":220
 //line "golang/002_fill_eof_rule_f.re":103
 
 }

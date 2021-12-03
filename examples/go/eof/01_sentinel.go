@@ -20,57 +20,7 @@ loop:
 		goto yy2
 	case ' ':
 		goto yy6
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy9
 	default:
 		goto yy4
@@ -79,12 +29,12 @@ yy2:
 	cursor += 1
 //line "go/eof/01_sentinel.re":18
 	{ return count }
-//line "go/eof/01_sentinel.go":83
+//line "go/eof/01_sentinel.go":33
 yy4:
 	cursor += 1
 //line "go/eof/01_sentinel.re":17
 	{ return -1 }
-//line "go/eof/01_sentinel.go":88
+//line "go/eof/01_sentinel.go":38
 yy6:
 	cursor += 1
 	yych = str[cursor]
@@ -97,62 +47,12 @@ yy6:
 yy8:
 //line "go/eof/01_sentinel.re":20
 	{ goto loop }
-//line "go/eof/01_sentinel.go":101
+//line "go/eof/01_sentinel.go":51
 yy9:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy9
 	default:
 		goto yy11
@@ -160,7 +60,7 @@ yy9:
 yy11:
 //line "go/eof/01_sentinel.re":19
 	{ count += 1; goto loop }
-//line "go/eof/01_sentinel.go":164
+//line "go/eof/01_sentinel.go":64
 }
 //line "go/eof/01_sentinel.re":21
 

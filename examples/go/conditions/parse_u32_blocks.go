@@ -32,23 +32,7 @@ func parse_u32(str string) (uint32, error) {
 	switch (yych) {
 	case '0':
 		goto yy4
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '1','2','3','4','5','6','7','8','9':
 		goto yy6
 	default:
 		goto yy2
@@ -82,9 +66,7 @@ yy8:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case '0':
-		fallthrough
-	case '1':
+	case '0','1':
 		goto yy11
 	default:
 		goto yy9
@@ -96,49 +78,11 @@ yy10:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case '0':
+	case '0','1','2','3','4','5','6','7','8','9':
 		fallthrough
-	case '1':
+	case 'A','B','C','D','E','F':
 		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
-		fallthrough
-	case 'A':
-		fallthrough
-	case 'B':
-		fallthrough
-	case 'C':
-		fallthrough
-	case 'D':
-		fallthrough
-	case 'E':
-		fallthrough
-	case 'F':
-		fallthrough
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
+	case 'a','b','c','d','e','f':
 		goto yy13
 	default:
 		goto yy9
@@ -161,9 +105,7 @@ bin:
 	switch (yych) {
 	case 0x00:
 		goto yy17
-	case '0':
-		fallthrough
-	case '1':
+	case '0','1':
 		goto yy21
 	default:
 		goto yy19
@@ -187,21 +129,7 @@ oct:
 	switch (yych) {
 	case 0x00:
 		goto yy25
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
+	case '0','1','2','3','4','5','6','7':
 		goto yy29
 	default:
 		goto yy27
@@ -225,25 +153,7 @@ dec:
 	switch (yych) {
 	case 0x00:
 		goto yy33
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy37
 	default:
 		goto yy35
@@ -267,49 +177,11 @@ hex:
 	switch (yych) {
 	case 0x00:
 		goto yy41
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		fallthrough
-	case '4':
-		fallthrough
-	case '5':
-		fallthrough
-	case '6':
-		fallthrough
-	case '7':
-		fallthrough
-	case '8':
-		fallthrough
-	case '9':
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy45
-	case 'A':
-		fallthrough
-	case 'B':
-		fallthrough
-	case 'C':
-		fallthrough
-	case 'D':
-		fallthrough
-	case 'E':
-		fallthrough
-	case 'F':
+	case 'A','B','C','D','E','F':
 		goto yy47
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
+	case 'a','b','c','d','e','f':
 		goto yy49
 	default:
 		goto yy43

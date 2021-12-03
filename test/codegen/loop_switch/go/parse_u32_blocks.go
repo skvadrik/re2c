@@ -38,23 +38,7 @@ func parse_u32(str string) (uint32, error) {
 			case '0':
 				yystate = 3
 				continue
-			case '1':
-				fallthrough
-			case '2':
-				fallthrough
-			case '3':
-				fallthrough
-			case '4':
-				fallthrough
-			case '5':
-				fallthrough
-			case '6':
-				fallthrough
-			case '7':
-				fallthrough
-			case '8':
-				fallthrough
-			case '9':
+			case '1','2','3','4','5','6','7','8','9':
 				yystate = 5
 				continue
 			default:
@@ -97,9 +81,7 @@ func parse_u32(str string) (uint32, error) {
 		case 7:
 			yych = str[cursor]
 			switch (yych) {
-			case '0':
-				fallthrough
-			case '1':
+			case '0','1':
 				cursor += 1
 				yystate = 10
 				continue
@@ -114,49 +96,11 @@ func parse_u32(str string) (uint32, error) {
 		case 9:
 			yych = str[cursor]
 			switch (yych) {
-			case '0':
+			case '0','1','2','3','4','5','6','7','8','9':
 				fallthrough
-			case '1':
+			case 'A','B','C','D','E','F':
 				fallthrough
-			case '2':
-				fallthrough
-			case '3':
-				fallthrough
-			case '4':
-				fallthrough
-			case '5':
-				fallthrough
-			case '6':
-				fallthrough
-			case '7':
-				fallthrough
-			case '8':
-				fallthrough
-			case '9':
-				fallthrough
-			case 'A':
-				fallthrough
-			case 'B':
-				fallthrough
-			case 'C':
-				fallthrough
-			case 'D':
-				fallthrough
-			case 'E':
-				fallthrough
-			case 'F':
-				fallthrough
-			case 'a':
-				fallthrough
-			case 'b':
-				fallthrough
-			case 'c':
-				fallthrough
-			case 'd':
-				fallthrough
-			case 'e':
-				fallthrough
-			case 'f':
+			case 'a','b','c','d','e','f':
 				cursor += 1
 				yystate = 12
 				continue
@@ -196,9 +140,7 @@ bin:
 			case 0x00:
 				yystate = 1
 				continue
-			case '0':
-				fallthrough
-			case '1':
+			case '0','1':
 				yystate = 5
 				continue
 			default:
@@ -240,21 +182,7 @@ oct:
 			case 0x00:
 				yystate = 1
 				continue
-			case '0':
-				fallthrough
-			case '1':
-				fallthrough
-			case '2':
-				fallthrough
-			case '3':
-				fallthrough
-			case '4':
-				fallthrough
-			case '5':
-				fallthrough
-			case '6':
-				fallthrough
-			case '7':
+			case '0','1','2','3','4','5','6','7':
 				yystate = 5
 				continue
 			default:
@@ -296,25 +224,7 @@ dec:
 			case 0x00:
 				yystate = 1
 				continue
-			case '0':
-				fallthrough
-			case '1':
-				fallthrough
-			case '2':
-				fallthrough
-			case '3':
-				fallthrough
-			case '4':
-				fallthrough
-			case '5':
-				fallthrough
-			case '6':
-				fallthrough
-			case '7':
-				fallthrough
-			case '8':
-				fallthrough
-			case '9':
+			case '0','1','2','3','4','5','6','7','8','9':
 				yystate = 5
 				continue
 			default:
@@ -356,51 +266,13 @@ hex:
 			case 0x00:
 				yystate = 1
 				continue
-			case '0':
-				fallthrough
-			case '1':
-				fallthrough
-			case '2':
-				fallthrough
-			case '3':
-				fallthrough
-			case '4':
-				fallthrough
-			case '5':
-				fallthrough
-			case '6':
-				fallthrough
-			case '7':
-				fallthrough
-			case '8':
-				fallthrough
-			case '9':
+			case '0','1','2','3','4','5','6','7','8','9':
 				yystate = 5
 				continue
-			case 'A':
-				fallthrough
-			case 'B':
-				fallthrough
-			case 'C':
-				fallthrough
-			case 'D':
-				fallthrough
-			case 'E':
-				fallthrough
-			case 'F':
+			case 'A','B','C','D','E','F':
 				yystate = 7
 				continue
-			case 'a':
-				fallthrough
-			case 'b':
-				fallthrough
-			case 'c':
-				fallthrough
-			case 'd':
-				fallthrough
-			case 'e':
-				fallthrough
-			case 'f':
+			case 'a','b','c','d','e','f':
 				yystate = 9
 				continue
 			default:
