@@ -197,36 +197,31 @@ static void render_case_range(RenderContext &rctx, uint32_t low, uint32_t upp, b
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
     const Enc &enc = opts->encoding;
-    const bool ebcdic = enc.type() == Enc::EBCDIC;
+    bool ebcdic = enc.type() == Enc::EBCDIC, hex = ebcdic;
     const uint32_t szcunit = enc.szCodeUnit();
 
     os << indent(rctx.ind, opts->indString) << "case ";
-    prtChOrHex(os, low, szcunit, ebcdic, false);
+    prtChOrHex(os, low, szcunit, hex, false);
 
     if (low != upp) {
         // case range of the form `case low ... high:`
         os << " ... ";
-        prtChOrHex(os, upp, szcunit, ebcdic, false);
-        os << ":";
+        prtChOrHex(os, upp, szcunit, hex, false);
     } else {
         // single case of the form `case low:`
-        os << ":";
         if (opts->dFlag && ebcdic) {
             const uint32_t c = enc.decodeUnsafe(low);
-            if (is_print(c)) {
-                os << " /* " << static_cast<char>(c) << " */";
-            }
+            if (is_print(c)) os << " /* " << static_cast<char>(c) << " */";
         }
     }
 
     if (!last) {
+        os << ":" << std::endl;
+        ++rctx.line;
         if (opts->lang == LANG_GO) {
-            os << std::endl;
-            os << indent(rctx.ind + 1, opts->indString) << "fallthrough";
+            os << indent(rctx.ind + 1, opts->indString) << "fallthrough" << std::endl;
             ++rctx.line;
         }
-        os << std::endl;
-        ++rctx.line;
     }
 }
 
@@ -238,11 +233,11 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
     const Code *first = code->body->head;
 
     if (code->kind == CodeCase::DEFAULT) {
-        os << indent(ind, opts->indString) << "default:";
+        os << indent(ind, opts->indString) << "default";
     } else if (code->kind == CodeCase::NUMBER) {
-        os << indent(ind, opts->indString) << "case " << code->number << ":";
+        os << indent(ind, opts->indString) << "case " << code->number;
     } else if (code->kind == CodeCase::STRING) {
-        os << indent(ind, opts->indString) << "case " << code->string << ":";
+        os << indent(ind, opts->indString) << "case " << code->string;
     } else {
         const size_t nranges = code->gocase->nranges;
         const uint32_t *ranges = code->gocase->ranges;
@@ -262,6 +257,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
             }
         }
     }
+    os << ":";
 
     if (oneline && oneline_case(code, opts)) {
         // Do not indent-align with case ranges, they are wider then 'default'.

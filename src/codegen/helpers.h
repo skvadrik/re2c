@@ -13,7 +13,7 @@ namespace re2c {
 
 bool is_print(uint32_t c);
 void prtHex(std::ostream &o, uint32_t c, uint32_t szcunit);
-void prtChOrHex(std::ostream &o, uint32_t c, uint32_t szcunit, bool ebcdic, bool dot);
+void prtChOrHex(std::ostream &o, uint32_t c, uint32_t szcunit, bool hex, bool dot);
 void printSpan(std::ostream &o, uint32_t l, uint32_t u, uint32_t szcunit, bool ebcdic,
     bool dot);
 

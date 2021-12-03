@@ -27,18 +27,18 @@ int scan(char *s, int l)
 			yych = *YYCURSOR;
 			switch (yych) {
 			case 0x00:	goto yy2;
-			case 0x4E: /* + */	goto yy6;
-			case 0x60: /* - */	goto yy8;
-			case 0xF0: /* 0 */	goto yy10;
-			case 0xF1: /* 1 */
-			case 0xF2: /* 2 */
-			case 0xF3: /* 3 */
-			case 0xF4: /* 4 */
-			case 0xF5: /* 5 */
-			case 0xF6: /* 6 */
-			case 0xF7: /* 7 */
-			case 0xF8: /* 8 */
-			case 0xF9: /* 9 */	goto yy12;
+			case 0x4E /* + */:	goto yy6;
+			case 0x60 /* - */:	goto yy8;
+			case 0xF0 /* 0 */:	goto yy10;
+			case 0xF1 /* 1 */:
+			case 0xF2 /* 2 */:
+			case 0xF3 /* 3 */:
+			case 0xF4 /* 4 */:
+			case 0xF5 /* 5 */:
+			case 0xF6 /* 6 */:
+			case 0xF7 /* 7 */:
+			case 0xF8 /* 8 */:
+			case 0xF9 /* 9 */:	goto yy12;
 			default:	goto yy4;
 			}
 yy2:
@@ -65,16 +65,16 @@ yy10:
 			YYDEBUG(10, *YYCURSOR);
 			yych = *++YYCURSOR;
 			switch (yych) {
-			case 0xF0: /* 0 */
-			case 0xF1: /* 1 */
-			case 0xF2: /* 2 */
-			case 0xF3: /* 3 */
-			case 0xF4: /* 4 */
-			case 0xF5: /* 5 */
-			case 0xF6: /* 6 */
-			case 0xF7: /* 7 */
-			case 0xF8: /* 8 */
-			case 0xF9: /* 9 */	goto yy15;
+			case 0xF0 /* 0 */:
+			case 0xF1 /* 1 */:
+			case 0xF2 /* 2 */:
+			case 0xF3 /* 3 */:
+			case 0xF4 /* 4 */:
+			case 0xF5 /* 5 */:
+			case 0xF6 /* 6 */:
+			case 0xF7 /* 7 */:
+			case 0xF8 /* 8 */:
+			case 0xF9 /* 9 */:	goto yy15;
 			default:	goto yy11;
 			}
 yy11:
@@ -87,16 +87,16 @@ yy12:
 			yych = *YYCURSOR;
 			YYDEBUG(13, *YYCURSOR);
 			switch (yych) {
-			case 0xF0: /* 0 */
-			case 0xF1: /* 1 */
-			case 0xF2: /* 2 */
-			case 0xF3: /* 3 */
-			case 0xF4: /* 4 */
-			case 0xF5: /* 5 */
-			case 0xF6: /* 6 */
-			case 0xF7: /* 7 */
-			case 0xF8: /* 8 */
-			case 0xF9: /* 9 */	goto yy12;
+			case 0xF0 /* 0 */:
+			case 0xF1 /* 1 */:
+			case 0xF2 /* 2 */:
+			case 0xF3 /* 3 */:
+			case 0xF4 /* 4 */:
+			case 0xF5 /* 5 */:
+			case 0xF6 /* 6 */:
+			case 0xF7 /* 7 */:
+			case 0xF8 /* 8 */:
+			case 0xF9 /* 9 */:	goto yy12;
 			default:	goto yy14;
 			}
 yy14:
@@ -109,16 +109,16 @@ yy15:
 			yych = *YYCURSOR;
 			YYDEBUG(16, *YYCURSOR);
 			switch (yych) {
-			case 0xF0: /* 0 */
-			case 0xF1: /* 1 */
-			case 0xF2: /* 2 */
-			case 0xF3: /* 3 */
-			case 0xF4: /* 4 */
-			case 0xF5: /* 5 */
-			case 0xF6: /* 6 */
-			case 0xF7: /* 7 */
-			case 0xF8: /* 8 */
-			case 0xF9: /* 9 */	goto yy15;
+			case 0xF0 /* 0 */:
+			case 0xF1 /* 1 */:
+			case 0xF2 /* 2 */:
+			case 0xF3 /* 3 */:
+			case 0xF4 /* 4 */:
+			case 0xF5 /* 5 */:
+			case 0xF6 /* 6 */:
+			case 0xF7 /* 7 */:
+			case 0xF8 /* 8 */:
+			case 0xF9 /* 9 */:	goto yy15;
 			default:	goto yy17;
 			}
 yy17:

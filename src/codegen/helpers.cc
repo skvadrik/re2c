@@ -61,9 +61,9 @@ void prtHex(std::ostream& o, uint32_t c, uint32_t szcunit)
     o << hex(c >> 4u) << hex(c);
 }
 
-void prtChOrHex(std::ostream& o, uint32_t c, uint32_t szcunit, bool ebcdic, bool dot)
+void prtChOrHex(std::ostream& o, uint32_t c, uint32_t szcunit, bool hex, bool dot)
 {
-    if (!ebcdic && (is_print(c) || is_space(c))) {
+    if (!hex && (is_print(c) || is_space(c))) {
         o << '\'';
         prtCh(o, c, dot);
         o << '\'';
