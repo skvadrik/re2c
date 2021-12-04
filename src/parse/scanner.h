@@ -75,6 +75,7 @@ private:
     bool lex_block_end(Output &out, bool allow_garbage = false);
     void lex_code_indented();
     void lex_code_in_braces();
+    void try_lex_string_in_code(char quote);
     void lex_c_comment();
     void lex_cpp_comment();
     bool lex_namedef_context_re2c();

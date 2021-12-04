@@ -633,7 +633,7 @@ code:
     }
     "/*" { lex_c_comment(); goto code; }
     "//" { lex_cpp_comment(); goto code; }
-    ["'] { lex_string(cur[-1]); goto code; }
+    ["'] { try_lex_string_in_code(cur[-1]); goto code; }
     *    { goto code; }
 */
 }
@@ -658,8 +658,37 @@ code:
     eof               { fail_if_eof(); goto code; }
     "/*"              { lex_c_comment(); goto code; }
     "//"              { lex_cpp_comment(); goto code; }
-    ["']              { lex_string(cur[-1]); goto code; }
+    ["']              { try_lex_string_in_code(cur[-1]); goto code; }
     *                 { goto code; }
+*/
+}
+
+void Scanner::try_lex_string_in_code(char quote)
+{
+    // We need to lex string literals in code blocks because they may contain closing
+    // brace symbol that would otherwise be erroneously lexed as a real closing brace.
+    //
+    // However, single quote in Rust may be either the beginning of a char literal as in
+    // '\u{1F600}', or a standalone one as in 'label. In the latter case trying to lex a
+    // generic string literal will consume a fragment of the file until the next single
+    // quote (if any) and result in either a spurios parse error, or incorrect generated
+    // code. Therefore in Rust we try to lex a char literal, or else consume the quote.
+
+    if (globopts->lang != LANG_RUST || quote != '\'') {
+        lex_string(quote);
+        return;
+    }
+
+    // Rust spec (literals): https://doc.rust-lang.org/reference/tokens.html#literals
+    // Rust spec (input encoding): https://doc.rust-lang.org/reference/input-format.html
+/*!local:re2c
+    re2c:flags:utf-8 = 1;
+
+    esc [u][{] hex_digit+ [}]['] | // Unicode hex escapes
+    esc [x] hex_digit+       ['] | // 2-byte hex escapes
+    esc ['"\\nrt0]           ['] | // ASCII/byte/quote escapes
+    [^]                      ['] | // any UTF-8 encoded Unicode symbol, unescaped
+    "" { return; }                 // standalone single quote
 */
 }
 
