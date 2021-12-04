@@ -371,19 +371,18 @@ void gen_code(Output &output, dfas_t &dfas)
             wrap_dfas_in_loop_switch(output, program1, cases);
         }
 
-        const bool prolog = (opts->fFlag && opts->gFlag)
-            || (!opts->fFlag && (oblock.used_yyaccept || opts->bEmitYYCh))
-            || (!is_cond_block && have_bitmaps)
-            || (is_cond_block && opts->gFlag);
-
         append(program, code_newline(alc));
         append(program, code_line_info_output(alc));
 
-        if (prolog) {
+        if (opts->lang == LANG_RUST) {
+            append(program, code_block(alc, program1, CodeBlock::UNSAFE));
+        } else if ((opts->fFlag && opts->gFlag)
+                || (!opts->fFlag && (oblock.used_yyaccept || opts->bEmitYYCh))
+                || (!is_cond_block && have_bitmaps)
+                || (is_cond_block && opts->gFlag)) {
             append(program, code_block(alc, program1, CodeBlock::WRAPPED));
-        }
-        else {
-            ind = ind == 0 ? 1 : ind;
+        } else {
+            ind = std::max(ind, 1u);
             append(program, program1);
         }
     }

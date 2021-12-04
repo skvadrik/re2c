@@ -105,24 +105,29 @@ static void render_if_then_else(RenderContext &rctx, const CodeIfTE *code)
 
 static void render_block(RenderContext &rctx, const CodeBlock *code)
 {
+    const char *prefix = "";
     switch (code->fmt) {
-        case CodeBlock::WRAPPED:
-            rctx.os << indent(rctx.ind, rctx.opts->indString) << "{" << std::endl;
-            ++rctx.line;
-            ++rctx.ind;
-            render_list(rctx, code->stmts);
-            --rctx.ind;
-            rctx.os << indent(rctx.ind, rctx.opts->indString) << "}" << std::endl;
-            ++rctx.line;
-            break;
-        case CodeBlock::INDENTED:
-            ++rctx.ind;
-            render_list(rctx, code->stmts);
-            --rctx.ind;
-            break;
-        case CodeBlock::RAW:
-            render_list(rctx, code->stmts);
-            break;
+    case CodeBlock::UNSAFE:
+        DASSERT(rctx.opts->lang == LANG_RUST);
+        prefix = "unsafe ";
+        /* fallthrough */
+    case CodeBlock::WRAPPED:
+        rctx.os << indent(rctx.ind, rctx.opts->indString) << prefix << "{" << std::endl;
+        ++rctx.line;
+        ++rctx.ind;
+        render_list(rctx, code->stmts);
+        --rctx.ind;
+        rctx.os << indent(rctx.ind, rctx.opts->indString) << "}" << std::endl;
+        ++rctx.line;
+        break;
+    case CodeBlock::INDENTED:
+        ++rctx.ind;
+        render_list(rctx, code->stmts);
+        --rctx.ind;
+        break;
+    case CodeBlock::RAW:
+        render_list(rctx, code->stmts);
+        break;
     }
 }
 

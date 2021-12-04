@@ -1,8 +1,7 @@
 // re2rust $INPUT -o $OUTPUT
 
-unsafe fn lex(s: &[u8]) -> bool {                     // Rust code
-    let mut cursor : usize = 0;                       //
-                                                      //
+fn lex(s: &[u8]) -> bool {                            // Rust code
+    let mut cursor = 0;                               //
 /*!re2c
     re2c:define:YYCTYPE = u8;                         //
     re2c:define:YYPEEK = "*s.get_unchecked(cursor)";  //
@@ -18,9 +17,7 @@ unsafe fn lex(s: &[u8]) -> bool {                     // Rust code
 }                                                     //
                                                       //
 fn main() {                                           // Rust code
-    unsafe {                                          //
-        if !lex(("qwerty42\0").as_bytes()) {          //
-            panic!("error");                          //
-        }                                             //
+    if !lex(("qwerty42\0").as_bytes()) {              //
+        panic!("error");                              //
     }                                                 //
 }                                                     //

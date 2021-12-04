@@ -249,7 +249,8 @@ struct CodeBlock {
     enum Fmt {
         WRAPPED,
         INDENTED,
-        RAW
+        RAW,
+        UNSAFE
     };
 
     CodeList *stmts;
