@@ -16,8 +16,7 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 */
 }                                                     //
                                                       //
-fn main() {                                           // Rust code
-    if !lex(("qwerty42\0").as_bytes()) {              //
-        panic!("error");                              //
-    }                                                 //
+#[test]                                               // Rust code
+fn test_lex() {                                       //
+    assert!(lex(b"qwerty42\0"));                      //
 }                                                     //
