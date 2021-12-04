@@ -296,6 +296,7 @@ if WITH_GOLANG
 DOC_GO = doc/re2go.1
 DOCS += $(DOC_GO)
 endif
+# TODO: add docs for Rust.
 man_MANS = $(DOCS)
 
 # include files (stdlib)
@@ -470,4 +471,12 @@ bin_PROGRAMS += re2go
 re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=LANG_GO
 re2go_SOURCES = $(re2c_SOURCES)
 nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
+endif
+
+# re2go
+if WITH_RUST
+bin_PROGRAMS += re2rust
+re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=LANG_RUST
+re2rust_SOURCES = $(re2c_SOURCES)
+nodist_re2rust_SOURCES = $(nodist_re2c_SOURCES)
 endif
