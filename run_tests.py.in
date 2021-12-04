@@ -295,7 +295,7 @@ def copy_tests(tests, dst):  # type: (list, str) -> None
 def clean_test_tree(path):  # type: (str) -> None
     """Clean the test tree from the not needed files."""
     files = set([str(f) for f in Path(path).rglob('*.*')])
-    for ext in ['re', 'c', 'h', 'go', 'inc']:
+    for ext in ['re', 'c', 'h', 'go', 'rs', 'inc']:
         files -= set([str(f) for f in Path(path).rglob(f'*.{ext}')])
 
     remove(*[f for f in files if os.path.isfile(f)])
@@ -340,8 +340,15 @@ def run_test(test):
 
     with open(outx, mode='rb') as f:
         head = f.readline().decode('utf-8').strip()
-        # generate file extension (.c for C/C++, .go for Go)
-        ext = 'go' if 're2go' in head else 'c'
+        # generate file extension (.c for C/C++, .go for Go, .rs for Rust)
+        if head.startswith("// re2c"):
+            ext = "c"
+        elif head.startswith("//go:generate re2go"):
+            ext = "go"
+        elif head.startswith("// re2rust"):
+            ext = "rs"
+        else:
+            ext = "??"
 
     stem = os.path.splitext(outx)[0]
     outy = f'{stem}.{ext}'
@@ -353,7 +360,9 @@ def run_test(test):
         return 0, 0, 0
 
     # Prepare re2c flags
-    switches = head.replace('re2go', 're2c --lang go')
+    switches = head
+    switches = switches.replace('re2go', 're2c --lang go')
+    switches = switches.replace('re2rust', 're2c --lang rust')
     switches = RE2C_PATTERN.sub(r'\1', switches)
     switches = switches.replace('$INPUT', outx)
     switches = switches.replace('$OUTPUT', outy)
