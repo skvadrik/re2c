@@ -12,6 +12,7 @@
       "installDir": "${sourceDir}/install-2",
       "cacheVariables": {
         "RE2C_BUILD_RE2GO": true,
+        "RE2C_BUILD_RE2RUST": true,
         "RE2C_BUILD_LIBS": true,
         "RE2C_REBUILD_LEXERS": true,
         "RE2C_REBUILD_DOCS": true,
@@ -47,7 +48,8 @@
         "CMAKE_BUILD_TYPE": "Ubsan",
         "CMAKE_C_FLAGS": "-O2",
         "CMAKE_CXX_FLAGS": "-O2",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -65,7 +67,8 @@
         "CMAKE_BUILD_TYPE": "Asan",
         "CMAKE_C_FLAGS": "-O2",
         "CMAKE_CXX_FLAGS": "-O2",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -83,7 +86,8 @@
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_C_FLAGS": "-O2",
         "CMAKE_CXX_FLAGS": "-O2",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -107,7 +111,8 @@
         "CMAKE_CXX_FLAGS": "-O2 -m32",
         "CMAKE_EXE_LINKER_FLAGS": "-m32",
         "CMAKE_SHARED_LINKER_FLAGS": "-m32",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -123,7 +128,8 @@
       "installDir": "${sourceDir}/install",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -161,7 +167,8 @@
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_C_FLAGS": "-O2",
         "CMAKE_CXX_FLAGS": "-O2",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -179,7 +186,8 @@
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_C_FLAGS": "-O2",
         "CMAKE_CXX_FLAGS": "-O2",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -195,7 +203,8 @@
       "installDir": "${sourceDir}/install",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -231,7 +240,8 @@
       "installDir": "${sourceDir}/install",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -250,7 +260,8 @@
       "installDir": "${sourceDir}/install",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
@@ -269,7 +280,8 @@
       "installDir": "${sourceDir}/install",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "RE2C_BUILD_RE2GO": false
+        "RE2C_BUILD_RE2GO": false,
+        "RE2C_BUILD_RE2RUST": false
       }
     },
     {
