@@ -42,6 +42,7 @@ endif()
 option(RE2C_BUILD_LIBS "Build libraries" OFF)
 
 option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
+option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
 
 option(RE2C_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
@@ -223,6 +224,12 @@ if (RE2C_BUILD_RE2GO)
     target_compile_definitions(re2go PUBLIC "RE2C_LANG=LANG_GO")
 endif()
 
+# re2rust
+if (RE2C_BUILD_RE2RUST)
+    add_executable(re2rust ${re2c_sources})
+    target_compile_definitions(re2rust PUBLIC "RE2C_LANG=LANG_RUST")
+endif()
+
 re2c_bootstrap_lexer("src/parse/lex.re" "src/parse/lex.cc" "src/parse/lex.h")
 re2c_bootstrap_lexer("src/parse/lex_conf.re" "src/parse/lex_conf.cc")
 re2c_bootstrap_lexer("src/options/parse_opts.re" "src/options/parse_opts.cc")
@@ -320,6 +327,10 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     if(RE2C_BUILD_RE2GO)
         install(TARGETS re2go RUNTIME DESTINATION bin)
         install(FILES "${re2c_manpage_go}" DESTINATION "share/man/man1")
+    endif()
+    if(RE2C_BUILD_RE2RUST)
+        install(TARGETS re2rust RUNTIME DESTINATION bin)
+        # TODO: add docs for Rust.
     endif()
     install(FILES include/unicode_categories.re DESTINATION "${RE2C_STDLIB_DIR}")
 
