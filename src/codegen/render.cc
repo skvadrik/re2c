@@ -57,50 +57,49 @@ static bool oneline_if(const CodeIfTE *code, const opt_t *opts)
         && code->oneline;
 }
 
-static void render_if_then_else(RenderContext &rctx, const CodeIfTE *code)
+static void render_if_nonl(RenderContext &rctx, const char *cond, const Code *then,
+    bool oneline)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
-    const Code *first = code->if_code->head;
 
-    os << indent(rctx.ind, opts->indString) << "if (" << code->if_cond << ") ";
-    DASSERT(count_lines_text(code->if_cond) == 0);
-
-    if (oneline_if(code, opts)) {
-        os << first->text;
-        if (first->kind == CODE_STMT) os << ";";
-        os << std::endl;
-        DASSERT(count_lines_text(first->text) == 0);
-        ++rctx.line;
+    if (cond) {
+        DASSERT(count_lines_text(cond) == 0);
+        bool wrap = opts->lang != LANG_RUST;
+        os << "if " << (wrap ? "(" : "") << cond << (wrap ? ")" : "")  << " ";
     }
-    else {
+
+    if (oneline) {
+        DASSERT(count_lines_text(then->text) == 0);
+        os << then->text;
+        if (then->kind == CODE_STMT) os << ";";
+    } else {
         os << "{" << std::endl;
         ++rctx.line;
-        for (const Code *s = first; s; s = s->next) {
+        for (const Code *s = then; s; s = s->next) {
             ++rctx.ind;
             render(rctx, s);
             --rctx.ind;
         }
         os << indent(rctx.ind, opts->indString) << "}";
-        if (code->else_code) {
-            if (code->else_cond) {
-                os << " else if (" << code->else_cond << ") {" << std::endl;
-                DASSERT(count_lines_text(code->else_cond) == 0);
-            }
-            else {
-                os << " else {" << std::endl;
-            }
-            ++rctx.line;
-            for (const Code *s = code->else_code->head; s; s = s->next) {
-                ++rctx.ind;
-                render(rctx, s);
-                --rctx.ind;
-            }
-            os << indent(rctx.ind, opts->indString) << "}";
-        }
-        os << std::endl;
-        ++rctx.line;
     }
+}
+
+static void render_if_then_else(RenderContext &rctx, const CodeIfTE *code)
+{
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+
+    bool oneline = oneline_if(code, opts);
+
+    os << indent(rctx.ind, opts->indString);
+    render_if_nonl(rctx, code->if_cond, code->if_code->head, oneline);
+    if (code->else_code) {
+        os << " else ";
+        render_if_nonl(rctx, code->else_cond, code->else_code->head, oneline);
+    }
+    os << std::endl;
+    ++rctx.line;
 }
 
 static void render_block(RenderContext &rctx, const CodeBlock *code)

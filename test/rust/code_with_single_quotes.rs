@@ -9,7 +9,7 @@ unsafe {
 	loop {
 		match yystate {
 			0 => {
-				if (YYLESSTHAN) YYFILL
+				if YYLESSTHAN YYFILL
 				yych = YYPEEK;
 				YYSKIP
 				yystate = 1;
