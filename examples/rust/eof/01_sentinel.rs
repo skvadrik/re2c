@@ -7,13 +7,13 @@ fn lex(s: &[u8]) -> isize {
     let mut count = 0;
 
     'lex: loop { 
-unsafe {
+{
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
 	loop {
 		match yystate {
 			0 => {
-				yych = *s.get_unchecked(cursor);
+				yych = unsafe {*s.get_unchecked(cursor)};
 				cursor += 1;
 				match yych {
 					0x00 => {
@@ -49,7 +49,7 @@ unsafe {
 				{ return -1; }
 			}
 			5 => {
-				yych = *s.get_unchecked(cursor);
+				yych = unsafe {*s.get_unchecked(cursor)};
 				yystate = 6;
 				continue;
 			}
@@ -70,7 +70,7 @@ unsafe {
 				{ continue 'lex; }
 			}
 			8 => {
-				yych = *s.get_unchecked(cursor);
+				yych = unsafe {*s.get_unchecked(cursor)};
 				yystate = 9;
 				continue;
 			}

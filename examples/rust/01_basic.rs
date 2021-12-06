@@ -4,13 +4,13 @@
 fn lex(s: &[u8]) -> bool {                            // Rust code
     let mut cursor = 0;                               //
 
-unsafe {
+{
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
 	loop {
 		match yystate {
 			0 => {
-				yych = *s.get_unchecked(cursor);
+				yych = unsafe {*s.get_unchecked(cursor)};
 				cursor += 1;
 				match yych {
 					0x41 ..= 0x5A |
@@ -32,7 +32,7 @@ unsafe {
 				{ return false; }
 			}
 			3 => {
-				yych = *s.get_unchecked(cursor);
+				yych = unsafe {*s.get_unchecked(cursor)};
 				yystate = 4;
 				continue;
 			}

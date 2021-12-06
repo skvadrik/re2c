@@ -249,8 +249,7 @@ struct CodeBlock {
     enum Fmt {
         WRAPPED,
         INDENTED,
-        RAW,
-        UNSAFE
+        RAW
     };
 
     CodeList *stmts;
@@ -785,6 +784,7 @@ std::string vartag_name(tagver_t ver, const std::string &prefix,
 std::string vartag_expr(tagver_t ver, const opt_t *opts,
     const std::set<tagver_t> &mtagvers);
 void output_version_time(std::ostream &os, const opt_t *opts);
+void gen_peek_expr(std::ostream &os, const opt_t *opts);
 
 } // namespace re2c
 

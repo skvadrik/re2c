@@ -14,14 +14,14 @@ fn lex(s: &[u8]) -> isize {
     buf.extend(vec![0; YYMAXFILL]);
 
     'lex: loop { 
-unsafe {
+{
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
 	loop {
 		match yystate {
 			0 => {
 				if cursor + 1 > buf.len() { return -1; }
-				yych = *buf.get_unchecked(cursor);
+				yych = unsafe {*buf.get_unchecked(cursor)};
 				cursor += 1;
 				match yych {
 					0x00 => {
@@ -58,7 +58,7 @@ unsafe {
 			}
 			5 => {
 				if cursor + 1 > buf.len() { return -1; }
-				yych = *buf.get_unchecked(cursor);
+				yych = unsafe {*buf.get_unchecked(cursor)};
 				yystate = 6;
 				continue;
 			}
@@ -80,7 +80,7 @@ unsafe {
 			}
 			8 => {
 				if cursor + 1 > buf.len() { return -1; }
-				yych = *buf.get_unchecked(cursor);
+				yych = unsafe {*buf.get_unchecked(cursor)};
 				yystate = 9;
 				continue;
 			}
@@ -110,7 +110,7 @@ unsafe {
 			}
 			12 => {
 				if cursor + 1 > buf.len() { return -1; }
-				yych = *buf.get_unchecked(cursor);
+				yych = unsafe {*buf.get_unchecked(cursor)};
 				cursor += 1;
 				yystate = 8;
 				continue;

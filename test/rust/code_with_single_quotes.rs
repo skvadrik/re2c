@@ -3,14 +3,14 @@
 // Test that re2c is able to lex Rust code block with braces and quotes.
 
 'outer: loop { 
-unsafe {
+{
 	let mut yych : YYCTYPE = 0;
 	let mut yystate : usize = 0;
 	loop {
 		match yystate {
 			0 => {
 				if YYLESSTHAN YYFILL
-				yych = YYPEEK;
+				yych = unsafe {YYPEEK};
 				YYSKIP
 				yystate = 1;
 				continue;

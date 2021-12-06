@@ -22,32 +22,21 @@
 
 namespace re2c {
 
-static const char *gen_peek_expr(Scratchbuf &o, const opt_t *opts)
-{
-    if (opts->input_api == INPUT_DEFAULT) {
-        o.cstr("*").str(opts->yycursor);
-    }
-    else {
-        o.str(opts->yypeek).cstr("()");
-    }
-    return o.flush();
-}
-
 static void emit_state(Output &output, const State *s, CodeList *stmts)
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const char *text;
 
     if (!opts->loop_switch) {
         append(stmts, code_nlabel(alc, s->label));
     }
 
     if (opts->dFlag && (s->action.type != Action::INITIAL)) {
-        text = o.str(opts->yydebug).cstr("(").label(*s->label).cstr(", ")
-            .cstr(gen_peek_expr(o, opts)).cstr(")").flush();
-        append(stmts, code_stmt(alc, text));
+        o.str(opts->yydebug).cstr("(").label(*s->label).cstr(", ");
+        gen_peek_expr(o.stream(), opts);
+        o.cstr(")");
+        append(stmts, code_stmt(alc, o.flush()));
     }
 }
 
@@ -373,9 +362,7 @@ void gen_code(Output &output, dfas_t &dfas)
         append(program, code_newline(alc));
         append(program, code_line_info_output(alc));
 
-        if (opts->lang == LANG_RUST) {
-            append(program, code_block(alc, program1, CodeBlock::UNSAFE));
-        } else if ((opts->fFlag && opts->gFlag)
+        if ((opts->fFlag && opts->gFlag)
                 || (!opts->fFlag && (oblock.used_yyaccept || opts->bEmitYYCh))
                 || (!is_cond_block && have_bitmaps)
                 || (is_cond_block && opts->gFlag)) {

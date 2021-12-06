@@ -104,14 +104,9 @@ static void render_if_then_else(RenderContext &rctx, const CodeIfTE *code)
 
 static void render_block(RenderContext &rctx, const CodeBlock *code)
 {
-    const char *prefix = "";
     switch (code->fmt) {
-    case CodeBlock::UNSAFE:
-        DASSERT(rctx.opts->lang == LANG_RUST);
-        prefix = "unsafe ";
-        /* fallthrough */
     case CodeBlock::WRAPPED:
-        rctx.os << indent(rctx.ind, rctx.opts->indString) << prefix << "{" << std::endl;
+        rctx.os << indent(rctx.ind, rctx.opts->indString) << "{" << std::endl;
         ++rctx.line;
         ++rctx.ind;
         render_list(rctx, code->stmts);
@@ -460,20 +455,28 @@ static inline void render_stmt_end(RenderContext &rctx, bool semi)
     ++rctx.line;
 }
 
+void gen_peek_expr(std::ostream &os, const opt_t *opts)
+{
+    yych_conv(os, opts);
+    if (opts->input_api == INPUT_DEFAULT) {
+        os << "*" << opts->yycursor;
+    } else if (opts->lang == LANG_RUST) {
+        os << "unsafe {" << opts->yypeek;
+        if (opts->api_style == API_FUNCTIONS) os << "()";
+        os << "}";
+    } else {
+        os << opts->yypeek;
+        if (opts->api_style == API_FUNCTIONS) os << "()";
+    }
+}
+
 static void render_peek(RenderContext &rctx)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
 
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
-    yych_conv(os, opts);
-    if (opts->input_api == INPUT_CUSTOM) {
-        os << opts->yypeek;
-        if (opts->api_style == API_FUNCTIONS) os << "()";
-    }
-    else {
-        os << "*" << opts->yycursor;
-    }
+    gen_peek_expr(os, opts);
     render_stmt_end(rctx, true);
 }
 
