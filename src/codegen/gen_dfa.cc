@@ -101,10 +101,9 @@ void gen_dfa_as_blocks_with_labels(Output &output, const DFA &dfa, CodeList *stm
 
 void gen_dfa_as_switch_cases(Output &output, DFA &dfa, CodeCases *cases)
 {
-    const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
 
-    DASSERT(opts->loop_switch);
+    DASSERT(output.block().opts->loop_switch);
     DASSERT(dfa.tags0 == TCID0);
 
     for (State *s = dfa.head; s; s = s->next) {
