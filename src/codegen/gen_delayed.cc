@@ -467,10 +467,17 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
         argsubst(os, opts->api_sigil, "max", true, max);
         code->text = o.str(os.str()).flush();
     } else {
-        if (opts->lang == LANG_C) {
+        switch (opts->lang) {
+        case LANG_C:
             code->text = o.cstr("#define ").cstr(varname).cstr(" ").u64(max).flush();
-        } else if (opts->lang == LANG_GO) {
+            break;
+        case LANG_GO:
             code->text = o.cstr("var ").cstr(varname).cstr(" int = ").u64(max).flush();
+            break;
+        case LANG_RUST:
+            code->text = o.cstr("const ").cstr(varname).cstr(": usize = ").u64(max)
+                .flush();
+            break;
         }
     }
     code->kind = (opts->lang == LANG_C) ? CODE_TEXT : CODE_STMT;

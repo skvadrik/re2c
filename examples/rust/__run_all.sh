@@ -22,7 +22,7 @@ for f in $(find -name '*.re'); do
         head -n $l "$rstest" > "$rstest".mod && mv "$rstest".mod "$rstest"
     fi
 
-    rustc --test "$rstest" && ./example 2>/dev/null || { echo "*** error ***"; exit 1; }
+    rustc "$rstest" && ./example 2>/dev/null || { echo "*** error ***"; exit 1; }
 
     rm -f "$rstest" example
     cd $root_dir

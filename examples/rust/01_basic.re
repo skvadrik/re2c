@@ -16,7 +16,6 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 */
 }                                                     //
                                                       //
-#[test]                                               // Rust code
-fn test_lex() {                                       //
+fn main() {                                           // Rust code
     assert!(lex(b"qwerty42\0"));                      //
 }                                                     //

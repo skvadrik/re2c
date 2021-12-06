@@ -18,8 +18,7 @@ fn lex(s: &[u8]) -> isize {
     */ }
 }
 
-#[test]
-fn test_lex() {
+fn main() {
     assert_eq!(lex(b"\x00"), 0);
     assert_eq!(lex(b"one two three\x00"), 3);
     assert_eq!(lex(b"f0ur\x00"), -1);
