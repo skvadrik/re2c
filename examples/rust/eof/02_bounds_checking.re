@@ -11,7 +11,7 @@ fn lex(s: &[u8]) -> isize {
     buf.extend(s.iter());
     buf.extend(vec![0; YYMAXFILL]);
 
-    'lex: loop { /*!re2c
+    'lex: loop {/*!re2c
         re2c:define:YYCTYPE = u8;
         re2c:define:YYPEEK = "*buf.get_unchecked(cursor)";
         re2c:define:YYSKIP = "cursor += 1;";
@@ -22,7 +22,7 @@ fn lex(s: &[u8]) -> isize {
         [\x00]                      { return if cursor == s.len() + 1 { count } else { -1 }; }
         ['] ([^'\\] | [\\][^])* ['] { count += 1; continue 'lex; }
         [ ]+                        { continue 'lex; }
-    */ }
+    */}
 }
 
 fn main() {

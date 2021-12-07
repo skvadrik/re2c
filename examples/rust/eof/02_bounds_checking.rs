@@ -13,7 +13,7 @@ fn lex(s: &[u8]) -> isize {
     buf.extend(s.iter());
     buf.extend(vec![0; YYMAXFILL]);
 
-    'lex: loop { 
+    'lex: loop {
 {
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
@@ -121,7 +121,7 @@ fn lex(s: &[u8]) -> isize {
 		}
 	}
 }
- }
+}
 }
 
 fn main() {
