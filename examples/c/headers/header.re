@@ -11,8 +11,7 @@ typedef struct {
 
 /*!header:re2c:off*/
 
-int lex(LexerState *st)
-{
+int lex(LexerState *st) {
     /*!re2c
     re2c:flags:type-header = "src/lexer/lexer.h";
     re2c:yyfill:enable = 0;
@@ -27,8 +26,7 @@ int lex(LexerState *st)
     */
 }
 
-int main()
-{
+int main() {
     LexerState st;
     st.str = st.cur = "xxxxxxxx";
     assert(lex(&st) == 0 && st.cur - st.str == 4);

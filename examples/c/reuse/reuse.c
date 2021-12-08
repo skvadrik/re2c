@@ -12,11 +12,10 @@
 #line 15 "c/reuse/reuse.re"
 
 
-static int lex_utf8(const uint8_t *YYCURSOR)
-{
+static int lex_utf8(const uint8_t *YYCURSOR) {
     const uint8_t *YYMARKER;
     
-#line 20 "c/reuse/reuse.c"
+#line 19 "c/reuse/reuse.c"
 {
 	uint8_t yych;
 	yych = *YYCURSOR;
@@ -29,7 +28,7 @@ yy2:
 yy3:
 #line 14 "c/reuse/reuse.re"
 	{ return 1; }
-#line 33 "c/reuse/reuse.c"
+#line 32 "c/reuse/reuse.c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -85,17 +84,16 @@ yy13:
 	++YYCURSOR;
 #line 13 "c/reuse/reuse.re"
 	{ return 0; }
-#line 89 "c/reuse/reuse.c"
+#line 88 "c/reuse/reuse.c"
 }
-#line 23 "c/reuse/reuse.re"
+#line 22 "c/reuse/reuse.re"
 
 }
 
-static int lex_utf32(const uint32_t *YYCURSOR)
-{
+static int lex_utf32(const uint32_t *YYCURSOR) {
     const uint32_t *YYMARKER;
     
-#line 99 "c/reuse/reuse.c"
+#line 97 "c/reuse/reuse.c"
 {
 	uint32_t yych;
 	yych = *YYCURSOR;
@@ -104,7 +102,7 @@ static int lex_utf32(const uint32_t *YYCURSOR)
 yy18:
 #line 14 "c/reuse/reuse.re"
 	{ return 1; }
-#line 108 "c/reuse/reuse.c"
+#line 106 "c/reuse/reuse.c"
 yy19:
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych != 'x') goto yy18;
@@ -121,14 +119,13 @@ yy22:
 	++YYCURSOR;
 #line 13 "c/reuse/reuse.re"
 	{ return 0; }
-#line 125 "c/reuse/reuse.c"
+#line 123 "c/reuse/reuse.c"
 }
-#line 33 "c/reuse/reuse.re"
+#line 31 "c/reuse/reuse.re"
 
 }
 
-int main()
-{
+int main() {
     static const uint8_t s8[] = // UTF-8
         { 0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79 };
 

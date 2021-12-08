@@ -13,15 +13,13 @@ struct Mtag {
 typedef std::vector<Mtag> MtagTree;
 typedef std::vector<std::string> Words;
 
-static void mtag(int *pt, const char *t, MtagTree *tree)
-{
+static void mtag(int *pt, const char *t, MtagTree *tree) {
     Mtag m = {*pt, t};
     *pt = (int)tree->size();
     tree->push_back(m);
 }
 
-static void unfold(const MtagTree &tree, int x, int y, Words &words)
-{
+static void unfold(const MtagTree &tree, int x, int y, Words &words) {
     if (x == ROOT) return;
     unfold(tree, tree[x].pred, tree[y].pred, words);
     const char *px = tree[x].tag, *py = tree[y].tag;
@@ -30,8 +28,7 @@ static void unfold(const MtagTree &tree, int x, int y, Words &words)
 
 #define YYMTAGP(t) mtag(&t, YYCURSOR, &tree)
 #define YYMTAGN(t) mtag(&t, NULL,     &tree)
-static bool lex(const char *YYCURSOR, Words &words)
-{
+static bool lex(const char *YYCURSOR, Words &words) {
     const char *YYMARKER;
     /*!mtags:re2c format = "int @@ = ROOT;\n"; */
     MtagTree tree;
@@ -51,8 +48,7 @@ static bool lex(const char *YYCURSOR, Words &words)
     */
 }
 
-int main()
-{
+int main() {
     Words w;
     assert(lex("one;two;three;", w) && w == Words({"one", "two", "three"}));
     return 0;

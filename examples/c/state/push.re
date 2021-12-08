@@ -14,8 +14,7 @@ typedef struct {
     int state;
 } Input;
 
-static void init(Input *in, FILE *f)
-{
+static void init(Input *in, FILE *f) {
     in->file = f;
     in->cur = in->mar = in->tok = in->lim = in->buf + BUFSIZE;
     in->lim[0] = 0; // append sentinel symbol
@@ -25,8 +24,7 @@ static void init(Input *in, FILE *f)
 
 typedef enum {END, READY, WAITING, BAD_PACKET, BIG_PACKET} Status;
 
-static Status fill(Input *in)
-{
+static Status fill(Input *in) {
     const size_t shift = in->tok - in->buf;
     const size_t free = BUFSIZE - (in->lim - in->tok);
 
@@ -45,33 +43,32 @@ static Status fill(Input *in)
     return READY;
 }
 
-static Status lex(Input *in, unsigned int *recv)
-{
+static Status lex(Input *in, unsigned int *recv) {
     char yych;
     /*!getstate:re2c*/
-loop:
-    in->tok = in->cur;
+
+    for (;;) {
+        in->tok = in->cur;
     /*!re2c
         re2c:eof = 0;
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE    = "char";
-        re2c:define:YYCURSOR   = "in->cur";
-        re2c:define:YYMARKER   = "in->mar";
-        re2c:define:YYLIMIT    = "in->lim";
+        re2c:define:YYCTYPE = "char";
+        re2c:define:YYCURSOR = "in->cur";
+        re2c:define:YYMARKER = "in->mar";
+        re2c:define:YYLIMIT = "in->lim";
         re2c:define:YYGETSTATE = "in->state";
         re2c:define:YYSETSTATE = "in->state = @@;";
-        re2c:define:YYFILL     = "return WAITING;";
+        re2c:define:YYFILL = "return WAITING;";
 
         packet = [a-z]+[;];
 
         *      { return BAD_PACKET; }
         $      { return END; }
-        packet { *recv = *recv + 1; goto loop; }
-    */
+        packet { *recv = *recv + 1; continue; }
+    */}
 }
 
-void test(const char **packets, Status status)
-{
+void test(const char **packets, Status status) {
     const char *fname = "pipe";
     FILE *fw = fopen(fname, "w");
     FILE *fr = fopen(fname, "r");
@@ -118,8 +115,7 @@ void test(const char **packets, Status status)
     remove(fname);
 }
 
-int main()
-{
+int main() {
     const char *packets1[] = {0};
     const char *packets2[] = {"zero;", "one;", "two;", "three;", "four;", 0};
     const char *packets3[] = {"zer0;", 0};

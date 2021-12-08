@@ -18,11 +18,10 @@ enum What { COLOR, FISH, DUNNO };
 #line 21 "c/reuse/usedir.re"
 
 
-static What lex(const char *YYCURSOR)
-{
+static What lex(const char *YYCURSOR) {
     const char *YYMARKER;
     
-#line 26 "c/reuse/usedir.c"
+#line 25 "c/reuse/usedir.c"
 {
 	char yych;
 	yych = *YYCURSOR;
@@ -37,9 +36,9 @@ static What lex(const char *YYCURSOR)
 yy2:
 	++YYCURSOR;
 yy3:
-#line 32 "c/reuse/usedir.re"
+#line 31 "c/reuse/usedir.re"
 	{ return DUNNO; }
-#line 43 "c/reuse/usedir.c"
+#line 42 "c/reuse/usedir.c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -107,7 +106,7 @@ yy15:
 	++YYCURSOR;
 #line 20 "c/reuse/usedir.re"
 	{ return FISH; }
-#line 111 "c/reuse/usedir.c"
+#line 110 "c/reuse/usedir.c"
 yy17:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -124,7 +123,7 @@ yy19:
 	++YYCURSOR;
 #line 15 "c/reuse/usedir.re"
 	{ return COLOR; }
-#line 128 "c/reuse/usedir.c"
+#line 127 "c/reuse/usedir.c"
 yy21:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -180,12 +179,11 @@ yy29:
 	default:	goto yy10;
 	}
 }
-#line 33 "c/reuse/usedir.re"
+#line 32 "c/reuse/usedir.re"
 
 }
 
-int main()
-{
+int main() {
     assert(lex("salmon") == FISH);
     assert(lex("what?") == DUNNO);
     return 0;

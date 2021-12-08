@@ -2,8 +2,7 @@
 #include <assert.h>
 #include <stdint.h>
 
-static uint32_t num(const char *s, const char *e)
-{
+static uint32_t num(const char *s, const char *e) {
     uint32_t n = 0;
     for (; s < e; ++s) n = n * 10 + (*s - '0');
     return n;
@@ -11,8 +10,7 @@ static uint32_t num(const char *s, const char *e)
 
 static const uint64_t ERROR = ~0lu;
 
-static uint64_t lex(const char *YYCURSOR)
-{
+static uint64_t lex(const char *YYCURSOR) {
     const char *YYMARKER, *o1, *o2, *o3, *o4;
     /*!stags:re2c format = 'const char *@@;\n'; */
 
@@ -35,8 +33,7 @@ static uint64_t lex(const char *YYCURSOR)
     */
 }
 
-int main()
-{
+int main() {
     assert(lex("1.2.3.4") == 0x01020304);
     assert(lex("127.0.0.1") == 0x7f000001);
     assert(lex("255.255.255.255") == 0xffffffff);

@@ -6,8 +6,7 @@ typedef enum { OK, FAIL } Result;
 
 
 
-Result lex(const char *YYCURSOR)
-{
+Result lex(const char *YYCURSOR) {
     const char *YYMARKER;
     
 {
@@ -186,8 +185,7 @@ yy17:
 
 }
 
-int main()
-{
+int main() {
     assert(lex("123") == OK);
     assert(lex("123.4567") == OK);
     return 0;

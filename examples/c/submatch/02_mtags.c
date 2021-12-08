@@ -15,15 +15,13 @@ struct Mtag {
 typedef std::vector<Mtag> MtagTree;
 typedef std::vector<std::string> Words;
 
-static void mtag(int *pt, const char *t, MtagTree *tree)
-{
+static void mtag(int *pt, const char *t, MtagTree *tree) {
     Mtag m = {*pt, t};
     *pt = (int)tree->size();
     tree->push_back(m);
 }
 
-static void unfold(const MtagTree &tree, int x, int y, Words &words)
-{
+static void unfold(const MtagTree &tree, int x, int y, Words &words) {
     if (x == ROOT) return;
     unfold(tree, tree[x].pred, tree[y].pred, words);
     const char *px = tree[x].tag, *py = tree[y].tag;
@@ -32,21 +30,20 @@ static void unfold(const MtagTree &tree, int x, int y, Words &words)
 
 #define YYMTAGP(t) mtag(&t, YYCURSOR, &tree)
 #define YYMTAGN(t) mtag(&t, NULL,     &tree)
-static bool lex(const char *YYCURSOR, Words &words)
-{
+static bool lex(const char *YYCURSOR, Words &words) {
     const char *YYMARKER;
     
-#line 40 "c/submatch/02_mtags.c"
+#line 37 "c/submatch/02_mtags.c"
 int yytm1 = ROOT;
 int yytm2 = ROOT;
 int yytm3 = ROOT;
-#line 36 "c/submatch/02_mtags.re"
+#line 33 "c/submatch/02_mtags.re"
 
     MtagTree tree;
     int x, y;
 
     
-#line 50 "c/submatch/02_mtags.c"
+#line 47 "c/submatch/02_mtags.c"
 {
 	char yych;
 	unsigned int yyaccept = 0;
@@ -85,9 +82,9 @@ int yytm3 = ROOT;
 yy2:
 	++YYCURSOR;
 yy3:
-#line 50 "c/submatch/02_mtags.re"
+#line 47 "c/submatch/02_mtags.re"
 	{ return false; }
-#line 91 "c/submatch/02_mtags.c"
+#line 88 "c/submatch/02_mtags.c"
 yy4:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -163,13 +160,13 @@ yy5:
 yy6:
 	x = yytm1;
 	y = yytm3;
-#line 45 "c/submatch/02_mtags.re"
+#line 42 "c/submatch/02_mtags.re"
 	{
         words.clear();
         unfold(tree, x, y, words);
         return true;
     }
-#line 173 "c/submatch/02_mtags.c"
+#line 170 "c/submatch/02_mtags.c"
 yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -212,12 +209,11 @@ yy9:
 		goto yy6;
 	}
 }
-#line 51 "c/submatch/02_mtags.re"
+#line 48 "c/submatch/02_mtags.re"
 
 }
 
-int main()
-{
+int main() {
     Words w;
     assert(lex("one;two;three;", w) && w == Words({"one", "two", "three"}));
     return 0;

@@ -12,8 +12,7 @@ static uint32_t num(const char *s, const char *e)
 /*!maxnmatch:re2c*/
 static const uint64_t ERROR = ~0lu;
 
-static uint64_t lex(const char *YYCURSOR)
-{
+static uint64_t lex(const char *YYCURSOR) {
     const char *YYMARKER;
     const char *yypmatch[YYMAXNMATCH * 2];
     uint32_t yynmatch;
@@ -39,8 +38,7 @@ static uint64_t lex(const char *YYCURSOR)
     */
 }
 
-int main()
-{
+int main() {
     assert(lex("1.2.3.4") == 0x01020304);
     assert(lex("127.0.0.1") == 0x7f000001);
     assert(lex("255.255.255.255") == 0xffffffff);

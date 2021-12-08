@@ -7,12 +7,11 @@
 #define YYMAXFILL 4
 
 
-static int lex(const char *YYCURSOR)
-{
+static int lex(const char *YYCURSOR) {
     const char *YYMARKER, *n, *p, *u, *g, *f, *h, *c;
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;const char *yyt6;const char *yyt7;
-loop:
-    
+
+    for (;;) {
 {
 	char yych;
 	yych = *YYCURSOR;
@@ -207,14 +206,13 @@ yy28:
             fprintf(stderr, "home:     %.*s\n", (int)(c - h) - 1, h);
             fprintf(stderr, "command:  %.*s\n", (int)(YYCURSOR - c - 1), c);
             fprintf(stderr, "\n");
-            goto loop;
+            continue;
         }
 }
-
+}
 }
 
-int main()
-{
+int main() {
     const char *fname = "etc_passwd";
     FILE *f;
 

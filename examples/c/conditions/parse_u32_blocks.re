@@ -5,14 +5,12 @@
 
 static const uint64_t ERROR = ~0lu;
 
-template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
-{
+template<int BASE> static void adddgt(uint64_t &u, unsigned int d) {
     u = u * BASE + d;
     if (u > UINT32_MAX) u = ERROR;
 }
 
-static uint64_t parse_u32(const char *s)
-{
+static uint64_t parse_u32(const char *s) {
     const char *YYMARKER;
     uint64_t u = 0;
 
@@ -57,8 +55,7 @@ hex:
     */
 }
 
-int main()
-{
+int main() {
     assert(parse_u32("1234567890") == 1234567890);
     assert(parse_u32("0b1101") == 13);
     assert(parse_u32("0x7Fe") == 2046);

@@ -16,8 +16,7 @@ typedef struct {
     int state;
 } Input;
 
-static void init(Input *in, FILE *f)
-{
+static void init(Input *in, FILE *f) {
     in->file = f;
     in->cur = in->mar = in->tok = in->lim = in->buf + BUFSIZE;
     in->lim[0] = 0; // append sentinel symbol
@@ -27,8 +26,7 @@ static void init(Input *in, FILE *f)
 
 typedef enum {END, READY, WAITING, BAD_PACKET, BIG_PACKET} Status;
 
-static Status fill(Input *in)
-{
+static Status fill(Input *in) {
     const size_t shift = in->tok - in->buf;
     const size_t free = BUFSIZE - (in->lim - in->tok);
 
@@ -47,11 +45,10 @@ static Status fill(Input *in)
     return READY;
 }
 
-static Status lex(Input *in, unsigned int *recv)
-{
+static Status lex(Input *in, unsigned int *recv) {
     char yych;
     
-#line 55 "c/state/push.c"
+#line 52 "c/state/push.c"
 switch (in->state) {
 default:
 	goto yy0;
@@ -65,12 +62,13 @@ case 2:
 	if (in->lim <= in->cur) goto yy10;
 	goto yyFillLabel2;
 }
-#line 51 "c/state/push.re"
+#line 48 "c/state/push.re"
 
-loop:
-    in->tok = in->cur;
+
+    for (;;) {
+        in->tok = in->cur;
     
-#line 74 "c/state/push.c"
+#line 72 "c/state/push.c"
 
 yy0:
 yyFillLabel0:
@@ -113,9 +111,9 @@ yy3:
 	++in->cur;
 yy4:
 	in->state = -1;
-#line 67 "c/state/push.re"
+#line 65 "c/state/push.re"
 	{ return BAD_PACKET; }
-#line 119 "c/state/push.c"
+#line 117 "c/state/push.c"
 yy5:
 	in->mar = ++in->cur;
 yyFillLabel1:
@@ -158,9 +156,9 @@ yyFillLabel1:
 yy6:
 	++in->cur;
 	in->state = -1;
-#line 69 "c/state/push.re"
-	{ *recv = *recv + 1; goto loop; }
-#line 164 "c/state/push.c"
+#line 67 "c/state/push.re"
+	{ *recv = *recv + 1; continue; }
+#line 162 "c/state/push.c"
 yy8:
 	++in->cur;
 yyFillLabel2:
@@ -205,15 +203,14 @@ yy10:
 	goto yy4;
 yy11:
 	in->state = -1;
-#line 68 "c/state/push.re"
+#line 66 "c/state/push.re"
 	{ return END; }
-#line 211 "c/state/push.c"
-#line 70 "c/state/push.re"
-
+#line 209 "c/state/push.c"
+#line 68 "c/state/push.re"
+}
 }
 
-void test(const char **packets, Status status)
-{
+void test(const char **packets, Status status) {
     const char *fname = "pipe";
     FILE *fw = fopen(fname, "w");
     FILE *fr = fopen(fname, "r");
@@ -260,8 +257,7 @@ void test(const char **packets, Status status)
     remove(fname);
 }
 
-int main()
-{
+int main() {
     const char *packets1[] = {0};
     const char *packets2[] = {"zero;", "one;", "two;", "three;", "four;", 0};
     const char *packets3[] = {"zer0;", 0};

@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT 
+// re2c $INPUT -o $OUTPUT
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,8 +11,7 @@ typedef struct {
     int eof;
 } Input;
 
-static int fill(Input *in)
-{
+static int fill(Input *in) {
     if (in->eof) {
         return 1;
     }
@@ -31,38 +30,34 @@ static int fill(Input *in)
     return 0;
 }
 
-static void init(Input *in, FILE *file)
-{
+static void init(Input *in, FILE *file) {
     in->file = file;
     in->cur = in->mar = in->tok = in->lim = in->buf + SIZE;
     in->eof = 0;
     fill(in);
 }
 
-static int lex(Input *in)
-{
+static int lex(Input *in) {
     int count = 0;
-loop:
-    in->tok = in->cur;
+    for (;;) {
+        in->tok = in->cur;
     /*!re2c
-    re2c:eof = 0;
-    re2c:api:style = free-form;
-    re2c:define:YYCTYPE  = char;
-    re2c:define:YYCURSOR = in->cur;
-    re2c:define:YYMARKER = in->mar;
-    re2c:define:YYLIMIT  = in->lim;
-    re2c:define:YYFILL   = "fill(in) == 0";
+        re2c:eof = 0;
+        re2c:api:style = free-form;
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYCURSOR = in->cur;
+        re2c:define:YYMARKER = in->mar;
+        re2c:define:YYLIMIT = in->lim;
+        re2c:define:YYFILL = "fill(in) == 0";
 
-    *                           { return -1; }
-    $                           { return count; }
-    ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
-    [ ]+                        { goto loop; }
-
-    */
+        *                           { return -1; }
+        $                           { return count; }
+        ['] ([^'\\] | [\\][^])* ['] { ++count; continue; }
+        [ ]+                        { continue; }
+    */}
 }
 
-int main()
-{
+int main() {
     const char *fname = "input";
     const char str[] = "'qu\0tes' 'are' 'fine: \\'' ";
     FILE *f;

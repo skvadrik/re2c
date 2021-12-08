@@ -5,8 +5,7 @@
 
 
 
-int lex(LexerState *st)
-{
+int lex(LexerState *st) {
     
 {
 	char yych;
@@ -92,8 +91,7 @@ yy14:
 
 }
 
-int main()
-{
+int main() {
     LexerState st;
     st.str = st.cur = "xxxxxxxx";
     assert(lex(&st) == 0 && st.cur - st.str == 4);
@@ -107,4 +105,4 @@ typedef struct {
     const char *yyt1; const char *yyt2; const char *yyt3; 
 } LexerState;
 
-c/headers/header.re:25:24: warning: trailing context has 4th degree of nondeterminism [-Wnondeterministic-tags]
+c/headers/header.re:24:24: warning: trailing context has 4th degree of nondeterminism [-Wnondeterministic-tags]

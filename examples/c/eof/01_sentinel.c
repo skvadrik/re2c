@@ -3,13 +3,11 @@
 // re2c $INPUT -o $OUTPUT 
 #include <assert.h>
 
-// expect a null-terminated string
-static int lex(const char *YYCURSOR)
-{
+// Expect a null-terminated string.
+static int lex(const char *YYCURSOR) {
     int count = 0;
-loop:
-    
-#line 13 "c/eof/01_sentinel.c"
+    for (;;) {
+#line 11 "c/eof/01_sentinel.c"
 {
 	char yych;
 	yych = *YYCURSOR;
@@ -46,14 +44,14 @@ loop:
 	}
 yy2:
 	++YYCURSOR;
-#line 14 "c/eof/01_sentinel.re"
+#line 12 "c/eof/01_sentinel.re"
 	{ return count; }
-#line 52 "c/eof/01_sentinel.c"
+#line 50 "c/eof/01_sentinel.c"
 yy4:
 	++YYCURSOR;
-#line 13 "c/eof/01_sentinel.re"
+#line 11 "c/eof/01_sentinel.re"
 	{ return -1; }
-#line 57 "c/eof/01_sentinel.c"
+#line 55 "c/eof/01_sentinel.c"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -61,9 +59,9 @@ yy6:
 	default:	goto yy8;
 	}
 yy8:
-#line 16 "c/eof/01_sentinel.re"
-	{ goto loop; }
-#line 67 "c/eof/01_sentinel.c"
+#line 14 "c/eof/01_sentinel.re"
+	{ continue; }
+#line 65 "c/eof/01_sentinel.c"
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -96,16 +94,15 @@ yy9:
 	default:	goto yy11;
 	}
 yy11:
+#line 13 "c/eof/01_sentinel.re"
+	{ ++count; continue; }
+#line 100 "c/eof/01_sentinel.c"
+}
 #line 15 "c/eof/01_sentinel.re"
-	{ ++count; goto loop; }
-#line 102 "c/eof/01_sentinel.c"
 }
-#line 18 "c/eof/01_sentinel.re"
-
 }
 
-int main()
-{
+int main() {
     assert(lex("") == 0);
     assert(lex("one two three") == 3);
     assert(lex("f0ur") == -1);

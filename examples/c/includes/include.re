@@ -2,8 +2,7 @@
 #include <assert.h>
 /*!include:re2c "definitions.h" */
 
-Result lex(const char *YYCURSOR)
-{
+Result lex(const char *YYCURSOR) {
     const char *YYMARKER;
     /*!re2c
     re2c:define:YYCTYPE = char;
@@ -15,8 +14,7 @@ Result lex(const char *YYCURSOR)
     */
 }
 
-int main()
-{
+int main() {
     assert(lex("123") == OK);
     assert(lex("123.4567") == OK);
     return 0;

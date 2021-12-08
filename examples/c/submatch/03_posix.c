@@ -17,22 +17,21 @@ static uint32_t num(const char *s, const char *e)
 
 static const uint64_t ERROR = ~0lu;
 
-static uint64_t lex(const char *YYCURSOR)
-{
+static uint64_t lex(const char *YYCURSOR) {
     const char *YYMARKER;
     const char *yypmatch[YYMAXNMATCH * 2];
     uint32_t yynmatch;
     
-#line 27 "c/submatch/03_posix.c"
+#line 26 "c/submatch/03_posix.c"
 const char *yyt1;
 const char *yyt2;
 const char *yyt3;
 const char *yyt4;
-#line 20 "c/submatch/03_posix.re"
+#line 19 "c/submatch/03_posix.re"
 
 
     
-#line 36 "c/submatch/03_posix.c"
+#line 35 "c/submatch/03_posix.c"
 {
 	char yych;
 	yych = *YYCURSOR;
@@ -60,9 +59,9 @@ const char *yyt4;
 yy2:
 	++YYCURSOR;
 yy3:
-#line 38 "c/submatch/03_posix.re"
+#line 37 "c/submatch/03_posix.re"
 	{ return ERROR; }
-#line 66 "c/submatch/03_posix.c"
+#line 65 "c/submatch/03_posix.c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -420,7 +419,7 @@ yy29:
 	yypmatch[5] = yyt3 - 1;
 	yypmatch[7] = yyt4 - 1;
 	yypmatch[9] = YYCURSOR - 1;
-#line 31 "c/submatch/03_posix.re"
+#line 30 "c/submatch/03_posix.re"
 	{
         assert(yynmatch == 5);
         return num(yypmatch[8], yypmatch[9])
@@ -428,7 +427,7 @@ yy29:
             + (num(yypmatch[4], yypmatch[5]) << 16)
             + (num(yypmatch[2], yypmatch[3]) << 24);
     }
-#line 432 "c/submatch/03_posix.c"
+#line 431 "c/submatch/03_posix.c"
 yy31:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -442,12 +441,11 @@ yy31:
 	default:	goto yy9;
 	}
 }
-#line 39 "c/submatch/03_posix.re"
+#line 38 "c/submatch/03_posix.re"
 
 }
 
-int main()
-{
+int main() {
     assert(lex("1.2.3.4") == 0x01020304);
     assert(lex("127.0.0.1") == 0x7f000001);
     assert(lex("255.255.255.255") == 0xffffffff);

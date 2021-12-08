@@ -4,8 +4,7 @@
 #include <assert.h>
 #include <stdint.h>
 
-static uint32_t num(const char *s, const char *e)
-{
+static uint32_t num(const char *s, const char *e) {
     uint32_t n = 0;
     for (; s < e; ++s) n = n * 10 + (*s - '0');
     return n;
@@ -13,20 +12,19 @@ static uint32_t num(const char *s, const char *e)
 
 static const uint64_t ERROR = ~0lu;
 
-static uint64_t lex(const char *YYCURSOR)
-{
+static uint64_t lex(const char *YYCURSOR) {
     const char *YYMARKER, *o1, *o2, *o3, *o4;
     
-#line 21 "c/submatch/01_stags.c"
+#line 19 "c/submatch/01_stags.c"
 const char *yyt1;
 const char *yyt2;
 const char *yyt3;
 const char *yyt4;
-#line 17 "c/submatch/01_stags.re"
+#line 15 "c/submatch/01_stags.re"
 
 
     
-#line 30 "c/submatch/01_stags.c"
+#line 28 "c/submatch/01_stags.c"
 {
 	char yych;
 	yych = *YYCURSOR;
@@ -54,9 +52,9 @@ const char *yyt4;
 yy2:
 	++YYCURSOR;
 yy3:
-#line 34 "c/submatch/01_stags.re"
+#line 32 "c/submatch/01_stags.re"
 	{ return ERROR; }
-#line 60 "c/submatch/01_stags.c"
+#line 58 "c/submatch/01_stags.c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -407,14 +405,14 @@ yy29:
 	o2 = yyt2;
 	o3 = yyt3;
 	o4 = yyt4;
-#line 28 "c/submatch/01_stags.re"
+#line 26 "c/submatch/01_stags.re"
 	{
         return num(o4, YYCURSOR - 1)
             + (num(o3, o4 - 1) << 8)
             + (num(o2, o3 - 1) << 16)
             + (num(o1, o2 - 1) << 24);
     }
-#line 418 "c/submatch/01_stags.c"
+#line 416 "c/submatch/01_stags.c"
 yy31:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -428,12 +426,11 @@ yy31:
 	default:	goto yy9;
 	}
 }
-#line 35 "c/submatch/01_stags.re"
+#line 33 "c/submatch/01_stags.re"
 
 }
 
-int main()
-{
+int main() {
     assert(lex("1.2.3.4") == 0x01020304);
     assert(lex("127.0.0.1") == 0x7f000001);
     assert(lex("255.255.255.255") == 0xffffffff);

@@ -7,8 +7,7 @@
 
 typedef std::vector<std::pair<std::string, std::string> > unknown_t;
 
-struct options_t
-{
+struct options_t {
     std::string date;
     std::string path;
     std::string format;
@@ -16,8 +15,7 @@ struct options_t
     bool verbose;
 };
 
-static void show(const options_t &o, const unknown_t &u)
-{
+static void show(const options_t &o, const unknown_t &u) {
     fprintf(stderr, "\noptions:\n");
     fprintf(stderr, "  date:    %s\n", o.date.c_str());
     fprintf(stderr, "  path:    %s\n", o.path.c_str());
@@ -32,20 +30,18 @@ static void show(const options_t &o, const unknown_t &u)
     }
 }
 
-static void bad_arg(const char *k, const char *v, const char *e)
-{
+static void bad_arg(const char *k, const char *v, const char *e) {
     fprintf(stderr, "bad argument '%.*s' to option %.*s\n",
         (int) (e - v), v, (int) (v - k), k);
 }
 
-static int lex(const char *s)
-{
+static int lex(const char *s) {
     options_t o;
     unknown_t u;
     const char *m, *k, *v;
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;
-loop:
-    
+
+    for (;;) {
 {
 	char yych;
 	unsigned int yyaccept = 0;
@@ -78,7 +74,7 @@ yy6:
 	default:	goto yy8;
 	}
 yy8:
-	{ goto loop; }
+	{ continue; }
 yy9:
 	yych = *++s;
 	switch (yych) {
@@ -134,7 +130,7 @@ yy12:
 	v = yyt4;
 	{
             u.push_back(std::make_pair(std::string(k, v), std::string(v, s)));
-            goto loop;
+            continue;
         }
 yy13:
 	yych = *++s;
@@ -194,7 +190,7 @@ yy15:
 	v = yyt5;
 	{
             bad_arg(k, v, s);
-            goto loop;
+            continue;
         }
 yy16:
 	yych = *++s;
@@ -270,7 +266,7 @@ yy18:
 	}
 yy19:
 	v = yyt1;
-	{ o.path   = std::string(v, s); goto loop; }
+	{ o.path   = std::string(v, s); continue; }
 yy20:
 	yych = *++s;
 	switch (yych) {
@@ -282,7 +278,7 @@ yy20:
 	default:	goto yy11;
 	}
 yy21:
-	{ o.verbose = true; goto loop; }
+	{ o.verbose = true; continue; }
 yy22:
 	yyaccept = 0;
 	yych = *(m = ++s);
@@ -549,7 +545,7 @@ yy40:
 	}
 yy42:
 	v = yyt1;
-	{ o.limit  = std::string(v, s); goto loop; }
+	{ o.limit  = std::string(v, s); continue; }
 yy43:
 	yych = *++s;
 	switch (yych) {
@@ -831,7 +827,7 @@ yy70:
 	}
 yy72:
 	v = yyt1;
-	{ o.format = std::string(v, s); goto loop; }
+	{ o.format = std::string(v, s); continue; }
 yy73:
 	yych = *++s;
 	switch (yych) {
@@ -1540,7 +1536,7 @@ yy124:
 	}
 yy125:
 	v = s - 10;
-	{ o.date   = std::string(v, s); goto loop; }
+	{ o.date   = std::string(v, s); continue; }
 yy126:
 	yych = *++s;
 	switch (yych) {
@@ -1613,15 +1609,14 @@ yy130:
 	default:	goto yy64;
 	}
 }
-
+}
 }
 
-int main()
-{
+int main() {
     assert(lex("-v --limit=8K -d08/08/1985 -p/usr/src/linux "
         "--format=\"%s\" --limit -f=3 --verbos --d\"19th May\"") == 0);
     return 0;
 }
-c/submatch/parse_options.re:71:12: warning: rule matches empty string [-Wmatch-empty-string]
-c/submatch/parse_options.re:83:35: warning: tag 'k' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/parse_options.re:83:35: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_options.re:67:12: warning: rule matches empty string [-Wmatch-empty-string]
+c/submatch/parse_options.re:79:35: warning: tag 'k' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_options.re:79:35: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

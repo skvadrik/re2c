@@ -5,12 +5,11 @@
 
 /*!max:re2c*/
 
-static int lex(const char *YYCURSOR)
-{
+static int lex(const char *YYCURSOR) {
     const char *YYMARKER, *n, *p, *u, *g, *f, *h, *c;
     /*!stags:re2c format = 'const char *@@;'; */
-loop:
-    /*!re2c
+
+    for (;;) {/*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
         re2c:flags:tags = 1;
@@ -45,13 +44,12 @@ loop:
             fprintf(stderr, "home:     %.*s\n", (int)(c - h) - 1, h);
             fprintf(stderr, "command:  %.*s\n", (int)(YYCURSOR - c - 1), c);
             fprintf(stderr, "\n");
-            goto loop;
+            continue;
         }
-    */
+    */}
 }
 
-int main()
-{
+int main() {
     const char *fname = "etc_passwd";
     FILE *f;
 

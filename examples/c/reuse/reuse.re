@@ -14,8 +14,7 @@
     *       { return 1; }
 */
 
-static int lex_utf8(const uint8_t *YYCURSOR)
-{
+static int lex_utf8(const uint8_t *YYCURSOR) {
     const uint8_t *YYMARKER;
     /*!use:re2c
     re2c:define:YYCTYPE = uint8_t;
@@ -23,8 +22,7 @@ static int lex_utf8(const uint8_t *YYCURSOR)
     */
 }
 
-static int lex_utf32(const uint32_t *YYCURSOR)
-{
+static int lex_utf32(const uint32_t *YYCURSOR) {
     const uint32_t *YYMARKER;
     /*!use:re2c
     re2c:define:YYCTYPE = uint32_t;
@@ -33,8 +31,7 @@ static int lex_utf32(const uint32_t *YYCURSOR)
     */
 }
 
-int main()
-{
+int main() {
     static const uint8_t s8[] = // UTF-8
         { 0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79 };
 

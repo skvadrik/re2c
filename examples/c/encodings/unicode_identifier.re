@@ -8,8 +8,7 @@
 
 /*!include:re2c "unicode_categories.re" */
 
-static int lex(const char *YYCURSOR)
-{
+static int lex(const char *YYCURSOR) {
     const char *YYMARKER;
     /*!re2c
     re2c:define:YYCTYPE = 'unsigned char';
@@ -24,8 +23,7 @@ static int lex(const char *YYCURSOR)
     */
 }
 
-int main()
-{
+int main() {
     assert(lex("_Ыдентификатор") == 0);
     return 0;
 }

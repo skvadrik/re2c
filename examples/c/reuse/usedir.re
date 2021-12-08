@@ -20,8 +20,7 @@ enum What { COLOR, FISH, DUNNO };
     "haddock" | "salmon" | "eel" { return FISH; }
 */
 
-static What lex(const char *YYCURSOR)
-{
+static What lex(const char *YYCURSOR) {
     const char *YYMARKER;
     /*!re2c
     re2c:yyfill:enable = 0;
@@ -33,8 +32,7 @@ static What lex(const char *YYCURSOR)
     */
 }
 
-int main()
-{
+int main() {
     assert(lex("salmon") == FISH);
     assert(lex("what?") == DUNNO);
     return 0;

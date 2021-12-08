@@ -13,15 +13,13 @@ struct mtag_t
 
 typedef std::vector<mtag_t> mtagpool_t;
 
-static void mtag(int *pt, const char *t, mtagpool_t *tp)
-{
+static void mtag(int *pt, const char *t, mtagpool_t *tp) {
     mtag_t l = {*pt, t};
     *pt = (int) tp->size();
     tp->push_back(l);
 }
 
-static void print_channels(const mtagpool_t &tp, int x, int y)
-{
+static void print_channels(const mtagpool_t &tp, int x, int y) {
     if (x == -1) return;
     print_channels(tp, tp[x].pred, tp[y].pred);
     const char *px = tp[x].tag, *py = tp[y].tag;
@@ -31,15 +29,15 @@ static void print_channels(const mtagpool_t &tp, int x, int y)
 #define YYMTAGP(t) mtag(&t, YYCURSOR, &tp)
 #define YYMTAGN(t) mtag(&t, NULL,     &tp)
 
-static int lex(const char *YYCURSOR)
-{
+static int lex(const char *YYCURSOR) {
     const char *YYMARKER, *n1, *n2, *a1, *a2, *c1, *c2;
     mtagpool_t tp;
     int h1, h2;
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;const char *yyt6;
     int yytm7;int yytm8;
-loop:
-    tp.clear();
+
+    for (;;) {
+        tp.clear();
     yytm7 = -1;yytm8 = -1;
     
 {
@@ -132,7 +130,7 @@ yy6:
 	default:	goto yy8;
 	}
 yy8:
-	{ goto loop; }
+	{ continue; }
 yy9:
 	++YYCURSOR;
 	goto yy8;
@@ -1078,7 +1076,7 @@ yy71:
             fprintf(stderr, "  country:  %.*s\n", (int) (c2 - c1), c1);
             fprintf(stderr, "  channels:\n");
             print_channels(tp, h1, h2);
-            goto loop;
+            continue;
         }
 yy73:
 	yych = *++YYCURSOR;
@@ -1194,11 +1192,10 @@ yy78:
 	default:	goto yy13;
 	}
 }
-
+}
 }
 
-int main()
-{
+int main() {
     const char *fname = "etc_passwd";
     FILE *f;
 
@@ -1236,7 +1233,7 @@ int main()
     free(buffer);
     return 0;
 }
-c/submatch/parse_records.re:60:18: warning: rule matches empty string [-Wmatch-empty-string]
-c/submatch/parse_records.re:66:16: warning: tag 'a2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/parse_records.re:66:16: warning: tag 'c1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/parse_records.re:66:16: warning: tag 'c2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_records.re:58:18: warning: rule matches empty string [-Wmatch-empty-string]
+c/submatch/parse_records.re:64:16: warning: tag 'a2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_records.re:64:16: warning: tag 'c1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_records.re:64:16: warning: tag 'c2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
