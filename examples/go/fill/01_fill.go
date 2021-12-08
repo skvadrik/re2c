@@ -3,10 +3,7 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import (
-	"os"
-	"testing"
-)
+import "os"
 
 // Intentionally small to trigger buffer refill.
 const SIZE int = 16
@@ -59,10 +56,11 @@ func fill(in *Input) int {
 
 func lex(in *Input) int {
 	count := 0
-loop:
-	in.token = in.cursor
+
+	for {
+		in.token = in.cursor
 	
-//line "go/fill/01_fill.go":66
+//line "go/fill/01_fill.go":64
 {
 	var yych byte
 yyFillLabel0:
@@ -84,9 +82,9 @@ yyFillLabel0:
 yy2:
 	in.cursor += 1
 yy3:
-//line "go/fill/01_fill.re":72
+//line "go/fill/01_fill.re":70
 	{ return -1 }
-//line "go/fill/01_fill.go":90
+//line "go/fill/01_fill.go":88
 yy4:
 	in.cursor += 1
 yyFillLabel1:
@@ -103,9 +101,9 @@ yyFillLabel1:
 		goto yy6
 	}
 yy6:
-//line "go/fill/01_fill.re":75
-	{ goto loop }
-//line "go/fill/01_fill.go":109
+//line "go/fill/01_fill.re":73
+	{ continue }
+//line "go/fill/01_fill.go":107
 yy7:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -141,9 +139,9 @@ yy9:
 	}
 yy10:
 	in.cursor += 1
-//line "go/fill/01_fill.re":74
-	{ count += 1; goto loop }
-//line "go/fill/01_fill.go":147
+//line "go/fill/01_fill.re":72
+	{ count += 1; continue }
+//line "go/fill/01_fill.go":145
 yy12:
 	in.cursor += 1
 yyFillLabel4:
@@ -159,15 +157,15 @@ yyFillLabel4:
 	}
 	goto yy8
 yy13:
-//line "go/fill/01_fill.re":73
+//line "go/fill/01_fill.re":71
 	{ return count }
-//line "go/fill/01_fill.go":165
+//line "go/fill/01_fill.go":163
 yy14:
 	in.cursor = in.marker
 	goto yy3
 }
-//line "go/fill/01_fill.re":76
-
+//line "go/fill/01_fill.re":74
+}
 }
 
 // Prepare a file with the input text and run the lexer.
@@ -199,24 +197,11 @@ func test(data string) (result int) {
 	return lex(in)
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, ""},
-		{2, "'one' 'two'"},
-		{3, "'qu\000tes' 'are' 'fine: \\'' "},
-		{-1, "'unterminated\\'"},
-		{-2, "'loooooooooooong'"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := test(x.str)
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(test(""), 0)
+	assert_eq(test("'one' 'two'"), 2)
+	assert_eq(test("'qu\000tes' 'are' 'fine: \\'' "), 3)
+	assert_eq(test("'unterminated\\'"), -1)
+	assert_eq(test("'loooooooooooong'"), -2)
 }

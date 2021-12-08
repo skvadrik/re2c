@@ -1,7 +1,6 @@
 //go:generate re2go $INPUT -o $OUTPUT -i
 package main
 
-import "testing"
 /*!include:re2c "definitions.go" */
 
 func lex(str string) int {
@@ -20,11 +19,8 @@ func lex(str string) int {
 	*/
 }
 
-func TestLex(t *testing.T) {
-	if lex("123\000") != ResultOk {
-		t.Errorf("error")
-	}
-	if lex("123.4567\000") != ResultOk {
-		t.Errorf("error")
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex("123\000"), ResultOk)
+	assert_eq(lex("123.4567\000"), ResultOk)
 }

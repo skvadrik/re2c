@@ -1,10 +1,7 @@
 //go:generate re2go $INPUT -o $OUTPUT -i
 package main
 
-import (
-	"errors"
-	"testing"
-)
+import "errors"
 
 var (
 	eSyntax   = errors.New("syntax error")
@@ -77,26 +74,16 @@ err:
 	return 0, eSyntax
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		num uint32
-		str string
-		err error
-	}{
-		{1234567890, "1234567890\000", nil},
-		{13, "0b1101\000", nil},
-		{0x7fe, "0x007Fe\000", nil},
-		{0644, "0644\000", nil},
-		{0, "9999999999\000", eOverflow},
-		{0, "123??\000", eSyntax},
+func main() {
+	test := func(num uint32, str string, err error) {
+		if n, e := parse_u32(str); !(n == num && e == err) {
+			panic("error")
+		}
 	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			num, err := parse_u32(x.str)
-			if !(num == x.num && err == x.err) {
-				t.Errorf("got %d, want %d", num, x.num)
-			}
-		})
-	}
+	test(1234567890, "1234567890\000", nil)
+	test(13, "0b1101\000", nil)
+	test(0x7fe, "0x007Fe\000", nil)
+	test(0644, "0644\000", nil)
+	test(0, "9999999999\000", eOverflow)
+	test(0, "123??\000", eSyntax)
 }

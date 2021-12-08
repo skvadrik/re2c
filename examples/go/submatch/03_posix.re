@@ -1,10 +1,7 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import (
-	"errors"
-	"testing"
-)
+import "errors"
 
 /*!maxnmatch:re2c*/
 
@@ -52,25 +49,15 @@ func lex(str string) (int, error) {
 	*/
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		str string
-		res int
-		err error
-	}{
-		{"1.2.3.4\000", 0x01020304, nil},
-		{"127.0.0.1\000", 0x7f000001, nil},
-		{"255.255.255.255\000", 0xffffffff, nil},
-		{"1.2.3.\000", 0, eBadIP},
-		{"1.2.3.256\000", 0, eBadIP},
+func main() {
+	test := func(str string, res int, err error) {
+		if r, e := lex(str); !(r == res && e == err) {
+			panic("error")
+		}
 	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res, err := lex(x.str)
-			if !(res == x.res && err == x.err) {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+	test("1.2.3.4\000", 0x01020304, nil)
+	test("127.0.0.1\000", 0x7f000001, nil)
+	test("255.255.255.255\000", 0xffffffff, nil)
+	test("1.2.3.\000", 0, eBadIP)
+	test("1.2.3.256\000", 0, eBadIP)
 }

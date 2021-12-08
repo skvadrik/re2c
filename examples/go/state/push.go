@@ -6,7 +6,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"testing"
 )
 
 // Intentionally small to trigger buffer refill.
@@ -58,7 +57,7 @@ func fill(in *Input) int {
 func lex(in *Input, recv *int) int {
 	var yych byte
 	
-//line "go/state/push.go":62
+//line "go/state/push.go":61
 switch (in.state) {
 default:
 	goto yy0
@@ -78,12 +77,12 @@ case 2:
 	}
 	goto yyFillLabel2
 }
-//line "go/state/push.re":58
+//line "go/state/push.re":57
 
 loop:
 	in.token = in.cursor
 	
-//line "go/state/push.go":87
+//line "go/state/push.go":86
 
 yy0:
 yyFillLabel0:
@@ -102,9 +101,9 @@ yy3:
 	in.cursor += 1
 yy4:
 	in.state = -1
-//line "go/state/push.re":74
+//line "go/state/push.re":73
 	{ return lexPacketBroken }
-//line "go/state/push.go":108
+//line "go/state/push.go":107
 yy5:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -125,9 +124,9 @@ yyFillLabel1:
 yy6:
 	in.cursor += 1
 	in.state = -1
-//line "go/state/push.re":76
+//line "go/state/push.re":75
 	{ *recv = *recv + 1; goto loop }
-//line "go/state/push.go":131
+//line "go/state/push.go":130
 yy8:
 	in.cursor += 1
 yyFillLabel2:
@@ -149,17 +148,17 @@ yy10:
 	goto yy4
 yy11:
 	in.state = -1
-//line "go/state/push.re":75
+//line "go/state/push.re":74
 	{ return lexEnd }
-//line "go/state/push.go":155
-//line "go/state/push.re":77
+//line "go/state/push.go":154
+//line "go/state/push.re":76
 
 }
 
 func test(packets []string) int {
 	fname := "pipe"
-	fw, _ := os.Create(fname);
-	fr, _ := os.Open(fname);
+	fw, _ := os.Create(fname)
+	fr, _ := os.Open(fname)
 
 	in := &Input{
 		file:   fr,
@@ -206,23 +205,14 @@ loop:
 	return status
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		status  int
-		packets []string
-	}{
-		{lexEnd, []string{}},
-		{lexEnd, []string{"zero;", "one;", "two;", "three;", "four;"}},
-		{lexPacketBroken, []string{"??;"}},
-		{lexPacketTooBig, []string{"looooooooooooong;"}},
+func main() {
+	test := func(status int, packets []string) {
+		if s := test(packets); s != status {
+			panic(fmt.Sprintf("got %d, want %d", s, status))
+		}
 	}
-
-	for i, x := range tests {
-		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
-			status := test(x.packets)
-			if status != x.status {
-				t.Errorf("got %d, want %d", status, x.status)
-			}
-		})
-	}
+	test(lexEnd, []string{})
+	test(lexEnd, []string{"zero;", "one;", "two;", "three;", "four;"})
+	test(lexPacketBroken, []string{"??;"})
+	test(lexPacketTooBig, []string{"looooooooooooong;"})
 }

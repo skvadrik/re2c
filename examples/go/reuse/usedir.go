@@ -10,24 +10,22 @@
 
 package main
 
-import "testing"
-
 const (
 	Color = iota
 	Fish
 	Dunno
 )
 
-//line "go/reuse/usedir.re":22
+//line "go/reuse/usedir.re":20
 
 
-//line "go/reuse/usedir.re":27
+//line "go/reuse/usedir.re":25
 
 
 func lex(str string) int {
 	var cursor, marker int
 	
-//line "go/reuse/usedir.go":31
+//line "go/reuse/usedir.go":29
 {
 	var yych byte
 	yych = str[cursor]
@@ -48,9 +46,9 @@ func lex(str string) int {
 yy2:
 	cursor += 1
 yy3:
-//line "go/reuse/usedir.re":41
+//line "go/reuse/usedir.re":39
 	{ return Dunno }
-//line "go/reuse/usedir.go":54
+//line "go/reuse/usedir.go":52
 yy4:
 	cursor += 1
 	marker = cursor
@@ -151,9 +149,9 @@ yy14:
 	}
 yy15:
 	cursor += 1
-//line "go/reuse/usedir.re":26
+//line "go/reuse/usedir.re":24
 	{ return Fish }
-//line "go/reuse/usedir.go":157
+//line "go/reuse/usedir.go":155
 yy17:
 	cursor += 1
 	yych = str[cursor]
@@ -174,9 +172,9 @@ yy18:
 	}
 yy19:
 	cursor += 1
-//line "go/reuse/usedir.re":21
+//line "go/reuse/usedir.re":19
 	{ return Color }
-//line "go/reuse/usedir.go":180
+//line "go/reuse/usedir.go":178
 yy21:
 	cursor += 1
 	yych = str[cursor]
@@ -259,12 +257,12 @@ yy29:
 		goto yy10
 	}
 }
-//line "go/reuse/usedir.re":42
+//line "go/reuse/usedir.re":40
 
 }
 
-func TestLex(t *testing.T) {
+func main() {
 	if lex("salmon") != Fish || lex("what?") != Dunno {
-		t.Errorf("lex failed")
+		panic("error")
 	}
 }

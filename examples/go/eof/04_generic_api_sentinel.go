@@ -3,11 +3,9 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import "testing"
-
 // Returns "fake" terminating null if cursor has reached limit.
-func peek(str string, cursor int, limit int) byte {
-	if cursor >= limit {
+func peek(str string, cursor int) byte {
+	if cursor >= len(str) {
 		return 0 // fake null
 	} else {
 		return str[cursor]
@@ -17,14 +15,13 @@ func peek(str string, cursor int, limit int) byte {
 // Expects a string without terminating null.
 func lex(str string) int {
 	var cursor int
-	limit := len(str)
 	count := 0
-loop:
-	
-//line "go/eof/04_generic_api_sentinel.go":25
+
+	for {
+//line "go/eof/04_generic_api_sentinel.go":22
 {
 	var yych byte
-	yych = peek(str, cursor, limit)
+	yych = peek(str, cursor)
 	switch (yych) {
 	case 0x00:
 		goto yy2
@@ -37,17 +34,17 @@ loop:
 	}
 yy2:
 	cursor += 1
-//line "go/eof/04_generic_api_sentinel.re":29
+//line "go/eof/04_generic_api_sentinel.re":25
 	{ return count }
-//line "go/eof/04_generic_api_sentinel.go":43
+//line "go/eof/04_generic_api_sentinel.go":40
 yy4:
 	cursor += 1
-//line "go/eof/04_generic_api_sentinel.re":28
+//line "go/eof/04_generic_api_sentinel.re":24
 	{ return -1 }
-//line "go/eof/04_generic_api_sentinel.go":48
+//line "go/eof/04_generic_api_sentinel.go":45
 yy6:
 	cursor += 1
-	yych = peek(str, cursor, limit)
+	yych = peek(str, cursor)
 	switch (yych) {
 	case ' ':
 		goto yy6
@@ -55,12 +52,12 @@ yy6:
 		goto yy8
 	}
 yy8:
-//line "go/eof/04_generic_api_sentinel.re":31
-	{ goto loop }
-//line "go/eof/04_generic_api_sentinel.go":61
+//line "go/eof/04_generic_api_sentinel.re":27
+	{ continue }
+//line "go/eof/04_generic_api_sentinel.go":58
 yy9:
 	cursor += 1
-	yych = peek(str, cursor, limit)
+	yych = peek(str, cursor)
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy9
@@ -68,30 +65,17 @@ yy9:
 		goto yy11
 	}
 yy11:
-//line "go/eof/04_generic_api_sentinel.re":30
-	{ count += 1; goto loop }
-//line "go/eof/04_generic_api_sentinel.go":74
+//line "go/eof/04_generic_api_sentinel.re":26
+	{ count += 1; continue }
+//line "go/eof/04_generic_api_sentinel.go":71
 }
-//line "go/eof/04_generic_api_sentinel.re":32
-
+//line "go/eof/04_generic_api_sentinel.re":28
+}
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, ""},
-		{3, "one two three"},
-		{-1, "f0ur"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := lex(x.str)
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex(""), 0)
+	assert_eq(lex("one two three"), 3)
+	assert_eq(lex("f0ur"), -1)
 }

@@ -4,7 +4,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"testing"
 )
 
 // Intentionally small to trigger buffer refill.
@@ -79,8 +78,8 @@ loop:
 
 func test(packets []string) int {
 	fname := "pipe"
-	fw, _ := os.Create(fname);
-	fr, _ := os.Open(fname);
+	fw, _ := os.Create(fname)
+	fr, _ := os.Open(fname)
 
 	in := &Input{
 		file:   fr,
@@ -127,23 +126,14 @@ loop:
 	return status
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		status  int
-		packets []string
-	}{
-		{lexEnd, []string{}},
-		{lexEnd, []string{"zero;", "one;", "two;", "three;", "four;"}},
-		{lexPacketBroken, []string{"??;"}},
-		{lexPacketTooBig, []string{"looooooooooooong;"}},
+func main() {
+	test := func(status int, packets []string) {
+		if s := test(packets); s != status {
+			panic(fmt.Sprintf("got %d, want %d", s, status))
+		}
 	}
-
-	for i, x := range tests {
-		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
-			status := test(x.packets)
-			if status != x.status {
-				t.Errorf("got %d, want %d", status, x.status)
-			}
-		})
-	}
+	test(lexEnd, []string{})
+	test(lexEnd, []string{"zero;", "one;", "two;", "three;", "four;"})
+	test(lexPacketBroken, []string{"??;"})
+	test(lexPacketTooBig, []string{"looooooooooooong;"})
 }

@@ -6,12 +6,11 @@ package main
 import (
 	"fmt"
 	"os"
-	"testing"
 )
 
-//line "go/fill/02_fill.go":13
+//line "go/fill/02_fill.go":12
 var YYMAXFILL int = 1
-//line "go/fill/02_fill.re":10
+//line "go/fill/02_fill.re":9
 
 
 // Intentionally small to trigger buffer refill.
@@ -68,10 +67,10 @@ func fill(in *Input, need int) int {
 
 func lex(in *Input) int {
 	count := 0
-loop:
-	in.token = in.cursor
+	for {
+		in.token = in.cursor
 	
-//line "go/fill/02_fill.go":75
+//line "go/fill/02_fill.go":74
 {
 	var yych byte
 	if (in.limit-in.cursor < 1) {
@@ -90,22 +89,20 @@ loop:
 	}
 yy2:
 	in.cursor += 1
-//line "go/fill/02_fill.re":80
-	{
-		if in.limit - in.cursor == YYMAXFILL - 1 {
-			return count
-		} else {
-			return -1
-		}
-	}
-//line "go/fill/02_fill.go":102
-yy4:
-	in.cursor += 1
 //line "go/fill/02_fill.re":77
 	{
-		return -1
-	}
-//line "go/fill/02_fill.go":109
+			if in.limit - in.cursor == YYMAXFILL - 1 {
+				return count
+			} else {
+				return -1
+			}
+		}
+//line "go/fill/02_fill.go":101
+yy4:
+	in.cursor += 1
+//line "go/fill/02_fill.re":76
+	{ return -1 }
+//line "go/fill/02_fill.go":106
 yy6:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
@@ -119,11 +116,9 @@ yy6:
 		goto yy8
 	}
 yy8:
-//line "go/fill/02_fill.re":91
-	{
-		goto loop
-	}
-//line "go/fill/02_fill.go":127
+//line "go/fill/02_fill.re":85
+	{ continue }
+//line "go/fill/02_fill.go":122
 yy9:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
@@ -140,12 +135,9 @@ yy9:
 	}
 yy11:
 	in.cursor += 1
-//line "go/fill/02_fill.re":87
-	{
-		count += 1;
-		goto loop
-	}
-//line "go/fill/02_fill.go":149
+//line "go/fill/02_fill.re":84
+	{ count += 1; continue }
+//line "go/fill/02_fill.go":141
 yy13:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
@@ -154,8 +146,8 @@ yy13:
 	yych = in.data[in.cursor]
 	goto yy9
 }
-//line "go/fill/02_fill.re":94
-
+//line "go/fill/02_fill.re":86
+}
 }
 
 // Prepare a file with the input text and run the lexer.
@@ -188,24 +180,11 @@ func test(data string) (result int) {
 	return lex(in)
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, ""},
-		{2, "'one' 'two'"},
-		{3, "'qu\000tes' 'are' 'fine: \\'' "},
-		{-1, "'unterminated\\'"},
-		{-2, "'loooooooooooong'"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := test(x.str)
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(test(""), 0)
+	assert_eq(test("'one' 'two'"), 2)
+	assert_eq(test("'qu\000tes' 'are' 'fine: \\'' "), 3)
+	assert_eq(test("'unterminated\\'"), -1)
+	assert_eq(test("'loooooooooooong'"), -2)
 }

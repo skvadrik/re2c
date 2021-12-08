@@ -2,7 +2,6 @@
 //go:generate re2go $INPUT -o $OUTPUT -i
 package main
 
-import "testing"
 const (
 	ResultOk = iota
 	ResultFail
@@ -154,11 +153,8 @@ yy17:
 
 }
 
-func TestLex(t *testing.T) {
-	if lex("123\000") != ResultOk {
-		t.Errorf("error")
-	}
-	if lex("123.4567\000") != ResultOk {
-		t.Errorf("error")
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex("123\000"), ResultOk)
+	assert_eq(lex("123.4567\000"), ResultOk)
 }

@@ -8,8 +8,6 @@
 
 package main
 
-import "testing"
-
 const (
 	Color = iota
 	Fish
@@ -42,8 +40,8 @@ func lex(str string) int {
 	*/
 }
 
-func TestLex(t *testing.T) {
+func main() {
 	if lex("salmon") != Fish || lex("what?") != Dunno {
-		t.Errorf("lex failed")
+		panic("error")
 	}
 }

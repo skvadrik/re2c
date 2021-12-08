@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"reflect"
-	"testing"
 )
 
 const SIZE int = 4096
@@ -114,7 +113,7 @@ loop:
 	*/
 }
 
-func TestLex(t *testing.T) {
+func main() {
 	tmpfile := "input.txt"
 	var want, have []int
 
@@ -123,7 +122,7 @@ func TestLex(t *testing.T) {
 	f, _ := os.Create(tmpfile)
 	for i := 0; i < 256; i++ {
 		fmt.Fprintf(f, "%d.%d.%d.%d\n", i, i, i, i)
-		want = append(want, i + (i<<8) + (i<<16) + (i<<24));
+		want = append(want, i + (i<<8) + (i<<16) + (i<<24))
 	}
 	f.Seek(0, 0)
 
@@ -148,6 +147,6 @@ func TestLex(t *testing.T) {
 	have = lex(in)
 
 	if !reflect.DeepEqual(have, want) {
-		t.Errorf("have %d, want %d", have, want)
+		panic(fmt.Sprintf("have %d, want %d", have, want))
 	}
 }

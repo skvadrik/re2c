@@ -3,22 +3,19 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import (
-	"errors"
-	"testing"
-)
+import "errors"
 
 var eBadIP error = errors.New("bad IP")
 
 func lex(str string) (int, error) {
 	var cursor, marker, o1, o2, o3, o4 int
 	
-//line "go/submatch/01_stags.go":17
+//line "go/submatch/01_stags.go":14
 var yyt1 int
 	var yyt2 int
 	var yyt3 int
 	var yyt4 int
-//line "go/submatch/01_stags.re":13
+//line "go/submatch/01_stags.re":10
 
 
 	num := func(pos int, end int) int {
@@ -30,7 +27,7 @@ var yyt1 int
 	}
 
 	
-//line "go/submatch/01_stags.go":34
+//line "go/submatch/01_stags.go":31
 {
 	var yych byte
 	yych = str[cursor]
@@ -53,9 +50,9 @@ var yyt1 int
 yy2:
 	cursor += 1
 yy3:
-//line "go/submatch/01_stags.re":44
+//line "go/submatch/01_stags.re":41
 	{ return 0, eBadIP }
-//line "go/submatch/01_stags.go":59
+//line "go/submatch/01_stags.go":56
 yy4:
 	cursor += 1
 	marker = cursor
@@ -361,14 +358,14 @@ yy29:
 	o2 = yyt2
 	o3 = yyt3
 	o4 = yyt4
-//line "go/submatch/01_stags.re":38
+//line "go/submatch/01_stags.re":35
 	{
 		return num(o4, cursor-1)+
 			(num(o3, o4-1) << 8)+
 			(num(o2, o3-1) << 16)+
 			(num(o1, o2-1) << 24), nil
 	}
-//line "go/submatch/01_stags.go":372
+//line "go/submatch/01_stags.go":369
 yy31:
 	cursor += 1
 	yych = str[cursor]
@@ -381,29 +378,19 @@ yy31:
 		goto yy9
 	}
 }
-//line "go/submatch/01_stags.re":45
+//line "go/submatch/01_stags.re":42
 
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		str string
-		res int
-		err error
-	}{
-		{"1.2.3.4\000", 0x01020304, nil},
-		{"127.0.0.1\000", 0x7f000001, nil},
-		{"255.255.255.255\000", 0xffffffff, nil},
-		{"1.2.3.\000", 0, eBadIP},
-		{"1.2.3.256\000", 0, eBadIP},
+func main() {
+	test := func(str string, res int, err error) {
+		if r, e := lex(str); !(r == res && e == err) {
+			panic("error")
+		}
 	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res, err := lex(x.str)
-			if !(res == x.res && err == x.err) {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+	test("1.2.3.4\000", 0x01020304, nil)
+	test("127.0.0.1\000", 0x7f000001, nil)
+	test("255.255.255.255\000", 0xffffffff, nil)
+	test("1.2.3.\000", 0, eBadIP)
+	test("1.2.3.256\000", 0, eBadIP)
 }

@@ -1,7 +1,7 @@
 for f in $(find -name '*.re'); do
     echo $f
     gofile="${f%.re}.go"
-    gotest="example_test.go"
+    gotest="example.go"
 
     cat "$gofile" \
         | egrep -v 'warning: rule .*matches empty string \[-Wmatch-empty-string\]' \
@@ -20,7 +20,7 @@ for f in $(find -name '*.re'); do
 
     GO111MODULE=off \
     GOPATH="${GOPATH}:$(pwd)/$(dirname $gofile)" \
-        go test "$gotest" || { echo "*** error ***"; exit 1; }
+        go run "$gotest" || { echo "*** error ***"; exit 1; }
     rm -f "$gotest"
 done
 

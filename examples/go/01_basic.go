@@ -18,7 +18,7 @@ func lex(str string) {                    // Go code
 	}
 yy2:
 	cursor += 1
-	{ panic("error!"); }
+	{ panic("error!") }
 yy4:
 	cursor += 1
 	yych = str[cursor]

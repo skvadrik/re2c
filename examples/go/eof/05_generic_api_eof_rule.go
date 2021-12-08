@@ -3,8 +3,6 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import "testing"
-
 // Returns "fake" terminating null if cursor has reached limit.
 func peek(str string, cursor int, limit int) byte {
 	if cursor >= limit {
@@ -19,9 +17,9 @@ func lex(str string) int {
 	var cursor, marker int
 	limit := len(str)
 	count := 0
-loop:
-	
-//line "go/eof/05_generic_api_eof_rule.go":25
+
+	for {
+//line "go/eof/05_generic_api_eof_rule.go":23
 {
 	var yych byte
 	yych = peek(str, cursor, limit)
@@ -39,9 +37,9 @@ loop:
 yy2:
 	cursor += 1
 yy3:
-//line "go/eof/05_generic_api_eof_rule.re":31
+//line "go/eof/05_generic_api_eof_rule.re":29
 	{ return -1 }
-//line "go/eof/05_generic_api_eof_rule.go":45
+//line "go/eof/05_generic_api_eof_rule.go":43
 yy4:
 	cursor += 1
 	yych = peek(str, cursor, limit)
@@ -52,9 +50,9 @@ yy4:
 		goto yy6
 	}
 yy6:
-//line "go/eof/05_generic_api_eof_rule.re":34
-	{ goto loop }
-//line "go/eof/05_generic_api_eof_rule.go":58
+//line "go/eof/05_generic_api_eof_rule.re":32
+	{ continue }
+//line "go/eof/05_generic_api_eof_rule.go":56
 yy7:
 	cursor += 1
 	marker = cursor
@@ -82,9 +80,9 @@ yy9:
 	}
 yy10:
 	cursor += 1
-//line "go/eof/05_generic_api_eof_rule.re":33
-	{ count += 1; goto loop }
-//line "go/eof/05_generic_api_eof_rule.go":88
+//line "go/eof/05_generic_api_eof_rule.re":31
+	{ count += 1; continue }
+//line "go/eof/05_generic_api_eof_rule.go":86
 yy12:
 	cursor += 1
 	yych = peek(str, cursor, limit)
@@ -96,33 +94,20 @@ yy12:
 	}
 	goto yy8
 yy13:
-//line "go/eof/05_generic_api_eof_rule.re":32
+//line "go/eof/05_generic_api_eof_rule.re":30
 	{ return count }
-//line "go/eof/05_generic_api_eof_rule.go":102
+//line "go/eof/05_generic_api_eof_rule.go":100
 yy14:
 	cursor = marker
 	goto yy3
 }
-//line "go/eof/05_generic_api_eof_rule.re":35
-
+//line "go/eof/05_generic_api_eof_rule.re":33
+}
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, ""},
-		{3, "'qu\000tes' 'are' 'fine: \\'' "},
-		{-1, "'unterminated\\'"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := lex(x.str)
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex(""), 0)
+	assert_eq(lex("'qu\000tes' 'are' 'fine: \\'' "), 3)
+	assert_eq(lex("'unterminated\\'"), -1)
 }

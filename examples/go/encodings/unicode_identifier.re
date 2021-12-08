@@ -5,8 +5,6 @@
 
 package main
 
-import "testing"
-
 /*!include:re2c "unicode_categories.re" */
 
 func lex(str string) int {
@@ -28,8 +26,8 @@ func lex(str string) int {
 	*/
 }
 
-func TestLex(t *testing.T) {
+func main() {
 	if lex("_Ыдентификатор\000") != 0 {
-		t.Errorf("failed")
+		panic("error")
 	}
 }

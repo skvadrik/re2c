@@ -3,30 +3,30 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import (
-	"strings"
-	"testing"
-)
+import "strings"
 
-//line "go/eof/02_bounds_checking.go":12
+//line "go/eof/02_bounds_checking.go":9
 var YYMAXFILL int = 1
-//line "go/eof/02_bounds_checking.re":9
+//line "go/eof/02_bounds_checking.re":6
 
 
 // Expects YYMAXFILL-padded string.
 func lex(str string) int {
+	// Pad string with YYMAXFILL zeroes at the end.
+	buf := str + strings.Repeat("\000", YYMAXFILL)
+
 	var cursor int
-	limit := len(str)
+	limit := len(buf)
 	count := 0
-loop:
-	
+
+	for{
 //line "go/eof/02_bounds_checking.go":24
 {
 	var yych byte
 	if (limit - cursor < 1) {
 		return -1
 	}
-	yych = str[cursor]
+	yych = buf[cursor]
 	switch (yych) {
 	case 0x00:
 		goto yy2
@@ -39,28 +39,26 @@ loop:
 	}
 yy2:
 	cursor += 1
-//line "go/eof/02_bounds_checking.re":27
+//line "go/eof/02_bounds_checking.re":25
 	{
-		if limit - cursor == YYMAXFILL - 1 {
-			return count
-		} else {
-			return -1
+			if limit - cursor == YYMAXFILL - 1 {
+				return count
+			} else {
+				return -1
+			}
 		}
-	}
 //line "go/eof/02_bounds_checking.go":51
 yy4:
 	cursor += 1
 //line "go/eof/02_bounds_checking.re":24
-	{
-		return -1
-	}
-//line "go/eof/02_bounds_checking.go":58
+	{ return -1 }
+//line "go/eof/02_bounds_checking.go":56
 yy6:
 	cursor += 1
 	if (limit - cursor < 1) {
 		return -1
 	}
-	yych = str[cursor]
+	yych = buf[cursor]
 	switch (yych) {
 	case ' ':
 		goto yy6
@@ -68,17 +66,15 @@ yy6:
 		goto yy8
 	}
 yy8:
-//line "go/eof/02_bounds_checking.re":38
-	{
-		goto loop
-	}
-//line "go/eof/02_bounds_checking.go":76
+//line "go/eof/02_bounds_checking.re":33
+	{ continue }
+//line "go/eof/02_bounds_checking.go":72
 yy9:
 	cursor += 1
 	if (limit - cursor < 1) {
 		return -1
 	}
-	yych = str[cursor]
+	yych = buf[cursor]
 	switch (yych) {
 	case '\'':
 		goto yy11
@@ -89,45 +85,24 @@ yy9:
 	}
 yy11:
 	cursor += 1
-//line "go/eof/02_bounds_checking.re":34
-	{
-		count += 1;
-		goto loop
-	}
-//line "go/eof/02_bounds_checking.go":98
+//line "go/eof/02_bounds_checking.re":32
+	{ count += 1; continue }
+//line "go/eof/02_bounds_checking.go":91
 yy13:
 	cursor += 1
 	if (limit - cursor < 1) {
 		return -1
 	}
-	yych = str[cursor]
+	yych = buf[cursor]
 	goto yy9
 }
-//line "go/eof/02_bounds_checking.re":41
-
+//line "go/eof/02_bounds_checking.re":34
+}
 }
 
-// Pad string with YYMAXFILL zeroes at the end.
-func pad(str string) string {
-	return str + strings.Repeat("\000", YYMAXFILL)
-}
-
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, ""},
-		{3, "'qu\000tes' 'are' 'fine: \\'' "},
-		{-1, "'unterminated\\'"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := lex(pad(x.str))
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex(""), 0)
+	assert_eq(lex("'qu\000tes' 'are' 'fine: \\'' "), 3)
+	assert_eq(lex("'unterminated\\'"), -1)
 }

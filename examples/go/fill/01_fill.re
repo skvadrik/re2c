@@ -1,10 +1,7 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import (
-	"os"
-	"testing"
-)
+import "os"
 
 // Intentionally small to trigger buffer refill.
 const SIZE int = 16
@@ -57,23 +54,24 @@ func fill(in *Input) int {
 
 func lex(in *Input) int {
 	count := 0
-loop:
-	in.token = in.cursor
-	/*!re2c
-	re2c:eof = 0;
-	re2c:define:YYCTYPE    = byte;
-	re2c:define:YYPEEK     = "in.data[in.cursor]";
-	re2c:define:YYSKIP     = "in.cursor += 1";
-	re2c:define:YYBACKUP   = "in.marker = in.cursor";
-	re2c:define:YYRESTORE  = "in.cursor = in.marker";
-	re2c:define:YYLESSTHAN = "in.limit <= in.cursor";
-	re2c:define:YYFILL     = "fill(in) == 0";
 
-	*                           { return -1 }
-	$                           { return count }
-	['] ([^'\\] | [\\][^])* ['] { count += 1; goto loop }
-	[ ]+                        { goto loop }
-	*/
+	for {
+		in.token = in.cursor
+	/*!re2c
+		re2c:eof = 0;
+		re2c:define:YYCTYPE    = byte;
+		re2c:define:YYPEEK     = "in.data[in.cursor]";
+		re2c:define:YYSKIP     = "in.cursor += 1";
+		re2c:define:YYBACKUP   = "in.marker = in.cursor";
+		re2c:define:YYRESTORE  = "in.cursor = in.marker";
+		re2c:define:YYLESSTHAN = "in.limit <= in.cursor";
+		re2c:define:YYFILL     = "fill(in) == 0";
+
+		*                           { return -1 }
+		$                           { return count }
+		['] ([^'\\] | [\\][^])* ['] { count += 1; continue }
+		[ ]+                        { continue }
+	*/}
 }
 
 // Prepare a file with the input text and run the lexer.
@@ -105,24 +103,11 @@ func test(data string) (result int) {
 	return lex(in)
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, ""},
-		{2, "'one' 'two'"},
-		{3, "'qu\000tes' 'are' 'fine: \\'' "},
-		{-1, "'unterminated\\'"},
-		{-2, "'loooooooooooong'"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := test(x.str)
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(test(""), 0)
+	assert_eq(test("'one' 'two'"), 2)
+	assert_eq(test("'qu\000tes' 'are' 'fine: \\'' "), 3)
+	assert_eq(test("'unterminated\\'"), -1)
+	assert_eq(test("'loooooooooooong'"), -2)
 }

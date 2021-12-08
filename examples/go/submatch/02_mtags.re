@@ -1,10 +1,7 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import (
-	"reflect"
-	"testing"
-)
+import "reflect"
 
 const (
 	mtagRoot int = -1
@@ -75,22 +72,13 @@ func lex(str string) []string {
 	*/
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		str string
-		res []string
-	}{
-		{"\000", []string{}},
-		{"one;two;three;\000", []string{"one", "two", "three"}},
-		{"one;two\000", nil},
+func main() {
+	test := func(str string, res []string) {
+		if r := lex(str); !reflect.DeepEqual(r, res) {
+			panic("error")
+		}
 	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := lex(x.str)
-			if !reflect.DeepEqual(res, x.res) {
-				t.Errorf("got %v, want %v", res, x.res)
-			}
-		})
-	}
+	test("\000", []string{})
+	test("one;two;three;\000", []string{"one", "two", "three"})
+	test("one;two\000", nil)
 }

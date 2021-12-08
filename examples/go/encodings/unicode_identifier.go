@@ -6,8 +6,6 @@
 
 package main
 
-import "testing"
-
 
 
 
@@ -8500,8 +8498,8 @@ yy374:
 
 }
 
-func TestLex(t *testing.T) {
+func main() {
 	if lex("_Ыдентификатор\000") != 0 {
-		t.Errorf("failed")
+		panic("error")
 	}
 }

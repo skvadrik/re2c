@@ -3,16 +3,14 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import "testing"
-
 // Expects a null-terminated string.
 func lex(str string) int {
 	var cursor, marker int
 	limit := len(str) - 1 // limit points at the terminating null
 	count := 0
-loop:
-	
-//line "go/eof/03_eof_rule.go":16
+
+	for {
+//line "go/eof/03_eof_rule.go":14
 {
 	var yych byte
 	yych = str[cursor]
@@ -30,9 +28,9 @@ loop:
 yy2:
 	cursor += 1
 yy3:
-//line "go/eof/03_eof_rule.re":22
+//line "go/eof/03_eof_rule.re":20
 	{ return -1 }
-//line "go/eof/03_eof_rule.go":36
+//line "go/eof/03_eof_rule.go":34
 yy4:
 	cursor += 1
 	yych = str[cursor]
@@ -43,9 +41,9 @@ yy4:
 		goto yy6
 	}
 yy6:
-//line "go/eof/03_eof_rule.re":25
-	{ goto loop }
-//line "go/eof/03_eof_rule.go":49
+//line "go/eof/03_eof_rule.re":23
+	{ continue }
+//line "go/eof/03_eof_rule.go":47
 yy7:
 	cursor += 1
 	marker = cursor
@@ -73,9 +71,9 @@ yy9:
 	}
 yy10:
 	cursor += 1
-//line "go/eof/03_eof_rule.re":24
-	{ count += 1; goto loop }
-//line "go/eof/03_eof_rule.go":79
+//line "go/eof/03_eof_rule.re":22
+	{ count += 1; continue }
+//line "go/eof/03_eof_rule.go":77
 yy12:
 	cursor += 1
 	yych = str[cursor]
@@ -87,33 +85,20 @@ yy12:
 	}
 	goto yy8
 yy13:
-//line "go/eof/03_eof_rule.re":23
+//line "go/eof/03_eof_rule.re":21
 	{ return count }
-//line "go/eof/03_eof_rule.go":93
+//line "go/eof/03_eof_rule.go":91
 yy14:
 	cursor = marker
 	goto yy3
 }
-//line "go/eof/03_eof_rule.re":26
-
+//line "go/eof/03_eof_rule.re":24
+}
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, "\000"},
-		{3, "'qu\000tes' 'are' 'fine: \\'' \000"},
-		{-1, "'unterminated\\'\000"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := lex(x.str)
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex("\000"), 0)
+	assert_eq(lex("'qu\000tes' 'are' 'fine: \\'' \000"), 3)
+	assert_eq(lex("'unterminated\\'\000"), -1)
 }

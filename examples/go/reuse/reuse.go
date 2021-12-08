@@ -8,15 +8,13 @@
 
 package main
 
-import "testing"
-
-//line "go/reuse/reuse.re":20
+//line "go/reuse/reuse.re":18
 
 
 func lexUTF8(str []uint8) int {
 	var cursor, marker int
 	
-//line "go/reuse/reuse.go":20
+//line "go/reuse/reuse.go":18
 {
 	var yych uint8
 	yych = str[cursor]
@@ -29,9 +27,9 @@ func lexUTF8(str []uint8) int {
 yy2:
 	cursor += 1
 yy3:
-//line "go/reuse/reuse.re":19
+//line "go/reuse/reuse.re":17
 	{ return 1; }
-//line "go/reuse/reuse.go":35
+//line "go/reuse/reuse.go":33
 yy4:
 	cursor += 1
 	marker = cursor
@@ -110,18 +108,18 @@ yy12:
 	}
 yy13:
 	cursor += 1
-//line "go/reuse/reuse.re":18
+//line "go/reuse/reuse.re":16
 	{ return 0; }
-//line "go/reuse/reuse.go":116
+//line "go/reuse/reuse.go":114
 }
-//line "go/reuse/reuse.re":27
+//line "go/reuse/reuse.re":25
 
 }
 
 func lexUTF32(str []uint32) int {
 	var cursor, marker int
 	
-//line "go/reuse/reuse.go":125
+//line "go/reuse/reuse.go":123
 {
 	var yych uint32
 	yych = str[cursor]
@@ -130,9 +128,9 @@ func lexUTF32(str []uint32) int {
 	}
 	cursor += 1
 yy18:
-//line "go/reuse/reuse.re":19
+//line "go/reuse/reuse.re":17
 	{ return 1; }
-//line "go/reuse/reuse.go":136
+//line "go/reuse/reuse.go":134
 yy19:
 	cursor += 1
 	marker = cursor
@@ -160,22 +158,16 @@ yy22:
 		goto yy21
 	}
 	cursor += 1
-//line "go/reuse/reuse.re":18
+//line "go/reuse/reuse.re":16
 	{ return 0; }
-//line "go/reuse/reuse.go":166
+//line "go/reuse/reuse.go":164
 }
-//line "go/reuse/reuse.re":35
+//line "go/reuse/reuse.re":33
 
 }
 
-func TestLex(t *testing.T) {
-	s8 := []uint8{0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79};
-	if lexUTF8(s8) != 0 {
-		t.Errorf("utf8 failed")
-	}
-
-	s32 := []uint32{0x2200, 0x78, 0x20, 0x2203, 0x79};
-	if lexUTF32(s32) != 0 {
-		t.Errorf("utf32 failed")
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lexUTF8([]uint8{0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79}), 0)
+	assert_eq(lexUTF32([]uint32{0x2200, 0x78, 0x20, 0x2203, 0x79}), 0)
 }

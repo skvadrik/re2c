@@ -6,8 +6,6 @@
 
 package main
 
-import "testing"
-
 /*!rules:re2c
 	re2c:yyfill:enable = 0;
 	re2c:define:YYPEEK    = "str[cursor]";
@@ -35,14 +33,8 @@ func lexUTF32(str []uint32) int {
 	*/
 }
 
-func TestLex(t *testing.T) {
-	s8 := []uint8{0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79};
-	if lexUTF8(s8) != 0 {
-		t.Errorf("utf8 failed")
-	}
-
-	s32 := []uint32{0x2200, 0x78, 0x20, 0x2203, 0x79};
-	if lexUTF32(s32) != 0 {
-		t.Errorf("utf32 failed")
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lexUTF8([]uint8{0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79}), 0)
+	assert_eq(lexUTF32([]uint32{0x2200, 0x78, 0x20, 0x2203, 0x79}), 0)
 }

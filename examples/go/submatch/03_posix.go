@@ -3,14 +3,11 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import (
-	"errors"
-	"testing"
-)
+import "errors"
 
-//line "go/submatch/03_posix.go":12
+//line "go/submatch/03_posix.go":9
 var YYMAXNMATCH int = 5
-//line "go/submatch/03_posix.re":9
+//line "go/submatch/03_posix.re":6
 
 
 var eBadIP error = errors.New("bad IP")
@@ -19,12 +16,12 @@ func lex(str string) (int, error) {
 	var cursor, marker, yynmatch int
 	yypmatch := make([]int, YYMAXNMATCH*2)
 	
-//line "go/submatch/03_posix.go":23
+//line "go/submatch/03_posix.go":20
 	var yyt1 int
 	var yyt2 int
 	var yyt3 int
 	var yyt4 int
-//line "go/submatch/03_posix.re":16
+//line "go/submatch/03_posix.re":13
 
 
 	num := func(pos int, end int) int {
@@ -36,7 +33,7 @@ func lex(str string) (int, error) {
 	}
 
 	
-//line "go/submatch/03_posix.go":40
+//line "go/submatch/03_posix.go":37
 {
 	var yych byte
 	yych = str[cursor]
@@ -59,9 +56,9 @@ func lex(str string) (int, error) {
 yy2:
 	cursor += 1
 yy3:
-//line "go/submatch/03_posix.re":51
+//line "go/submatch/03_posix.re":48
 	{ return 0, eBadIP }
-//line "go/submatch/03_posix.go":65
+//line "go/submatch/03_posix.go":62
 yy4:
 	cursor += 1
 	marker = cursor
@@ -378,7 +375,7 @@ yy29:
 	yypmatch[7] += -1
 	yypmatch[9] = cursor
 	yypmatch[9] += -1
-//line "go/submatch/03_posix.re":42
+//line "go/submatch/03_posix.re":39
 	{
 		if yynmatch != 5 {
 			panic("expected 5 submatch groups")
@@ -388,7 +385,7 @@ yy29:
 			(num(yypmatch[4], yypmatch[5]) << 16)+
 			(num(yypmatch[2], yypmatch[3]) << 24), nil
 	}
-//line "go/submatch/03_posix.go":392
+//line "go/submatch/03_posix.go":389
 yy31:
 	cursor += 1
 	yych = str[cursor]
@@ -401,29 +398,19 @@ yy31:
 		goto yy9
 	}
 }
-//line "go/submatch/03_posix.re":52
+//line "go/submatch/03_posix.re":49
 
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		str string
-		res int
-		err error
-	}{
-		{"1.2.3.4\000", 0x01020304, nil},
-		{"127.0.0.1\000", 0x7f000001, nil},
-		{"255.255.255.255\000", 0xffffffff, nil},
-		{"1.2.3.\000", 0, eBadIP},
-		{"1.2.3.256\000", 0, eBadIP},
+func main() {
+	test := func(str string, res int, err error) {
+		if r, e := lex(str); !(r == res && e == err) {
+			panic("error")
+		}
 	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res, err := lex(x.str)
-			if !(res == x.res && err == x.err) {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+	test("1.2.3.4\000", 0x01020304, nil)
+	test("127.0.0.1\000", 0x7f000001, nil)
+	test("255.255.255.255\000", 0xffffffff, nil)
+	test("1.2.3.\000", 0, eBadIP)
+	test("1.2.3.256\000", 0, eBadIP)
 }

@@ -15,7 +15,7 @@ func lex(str string) {                    // Go code
     number = [1-9][0-9]*;                 // named definition
                                           //
     number { return }                     // rules
-    *      { panic("error!"); }           //
+    *      { panic("error!") }            //
 */
 }                                         //
                                           //
