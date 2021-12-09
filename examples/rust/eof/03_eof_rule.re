@@ -1,6 +1,6 @@
 // re2rust $INPUT -o $OUTPUT
 
-// expect a null-terminated string
+// Expect a null-terminated string.
 fn lex(s: &[u8]) -> isize {
     let mut count = 0;
     let mut cursor = 0;

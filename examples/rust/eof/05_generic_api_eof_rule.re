@@ -1,26 +1,24 @@
 // re2rust $INPUT -o $OUTPUT
 
-/*!max:re2c*/
-
+// Expect a string without terminating null.
 fn lex(s: &[u8]) -> isize {
     let mut count = 0;
     let mut cursor = 0;
-    let limit = s.len() + YYMAXFILL;
-
-    // Copy string to a buffer and add YYMAXFILL zero padding.
-    let mut buf = Vec::with_capacity(limit);
-    buf.extend(s.iter());
-    buf.extend(vec![0; YYMAXFILL]);
+    let mut marker = 0;
+    let limit = s.len();
 
     'lex: loop {/*!re2c
         re2c:define:YYCTYPE = u8;
-        re2c:define:YYPEEK = "*buf.get_unchecked(cursor)";
+        re2c:define:YYPEEK = "if cursor < limit { *s.get_unchecked(cursor) } else { 0 }";
         re2c:define:YYSKIP = "cursor += 1;";
-        re2c:define:YYFILL = "{ return -1; }";
-        re2c:define:YYLESSTHAN = "cursor + @@ > limit";
+        re2c:define:YYBACKUP = "marker = cursor;";
+        re2c:define:YYRESTORE = "cursor = marker;";
+        re2c:define:YYLESSTHAN = "cursor >= limit";
+        re2c:yyfill:enable = 0;
+        re2c:eof = 0;
 
         *                           { return -1; }
-        [\x00]                      { return if cursor == s.len() + 1 { count } else { -1 }; }
+        $                           { return count; }
         ['] ([^'\\] | [\\][^])* ['] { count += 1; continue 'lex; }
         [ ]+                        { continue 'lex; }
     */}

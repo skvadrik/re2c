@@ -1,13 +1,14 @@
 // re2rust $INPUT -o $OUTPUT
 
-// expect a string without terminating null
+// Expect a string without terminating null.
 fn lex(s: &[u8]) -> isize {
     let mut count = 0;
     let mut cursor = 0;
+    let limit = s.len();
 
     'lex: loop {/*!re2c
         re2c:define:YYCTYPE = u8;
-        re2c:define:YYPEEK = "if cursor < s.len() { *s.get_unchecked(cursor) } else { 0 }";
+        re2c:define:YYPEEK = "if cursor < limit { *s.get_unchecked(cursor) } else { 0 }";
         re2c:define:YYSKIP = "cursor += 1;";
         re2c:define:YYFILL = "{ return -1; }";
         re2c:yyfill:enable = 0;

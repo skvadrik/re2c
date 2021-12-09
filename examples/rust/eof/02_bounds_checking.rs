@@ -4,12 +4,13 @@
 const YYMAXFILL: usize = 1;
 
 
-// expect YYMAXFILL-padded string
 fn lex(s: &[u8]) -> isize {
     let mut count = 0;
     let mut cursor = 0;
+    let limit = s.len() + YYMAXFILL;
 
-    let mut buf = Vec::with_capacity(s.len() + YYMAXFILL);
+    // Copy string to a buffer and add YYMAXFILL zero padding.
+    let mut buf = Vec::with_capacity(limit);
     buf.extend(s.iter());
     buf.extend(vec![0; YYMAXFILL]);
 
@@ -20,7 +21,7 @@ fn lex(s: &[u8]) -> isize {
 	loop {
 		match yystate {
 			0 => {
-				if cursor + 1 > buf.len() { return -1; }
+				if cursor + 1 > limit { return -1; }
 				yych = unsafe {*buf.get_unchecked(cursor)};
 				cursor += 1;
 				match yych {
@@ -57,7 +58,7 @@ fn lex(s: &[u8]) -> isize {
 				{ return -1; }
 			}
 			5 => {
-				if cursor + 1 > buf.len() { return -1; }
+				if cursor + 1 > limit { return -1; }
 				yych = unsafe {*buf.get_unchecked(cursor)};
 				yystate = 6;
 				continue;
@@ -79,7 +80,7 @@ fn lex(s: &[u8]) -> isize {
 				{ continue 'lex; }
 			}
 			8 => {
-				if cursor + 1 > buf.len() { return -1; }
+				if cursor + 1 > limit { return -1; }
 				yych = unsafe {*buf.get_unchecked(cursor)};
 				yystate = 9;
 				continue;
@@ -109,7 +110,7 @@ fn lex(s: &[u8]) -> isize {
 				{ count += 1; continue 'lex; }
 			}
 			12 => {
-				if cursor + 1 > buf.len() { return -1; }
+				if cursor + 1 > limit { return -1; }
 				yych = unsafe {*buf.get_unchecked(cursor)};
 				cursor += 1;
 				yystate = 8;
