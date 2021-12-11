@@ -11286,20 +11286,20 @@ yy703:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '-':	goto yy796;
-	case '.':	goto yy425;
-	case '0':
-	case '1':	goto yy426;
-	case '2':	goto yy427;
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy428;
-	case ':':	goto yy429;
-	default:	goto yy282;
+		case '-': goto yy796;
+		case '.': goto yy425;
+		case '0':
+		case '1': goto yy426;
+		case '2': goto yy427;
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy428;
+		case ':': goto yy429;
+		default: goto yy282;
 	}
 yy704:
 	++YYCURSOR;

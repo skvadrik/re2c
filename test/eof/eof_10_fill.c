@@ -53,40 +53,40 @@ loop:
 yyFillLabel0:
 	yych = *in->cur;
 	switch (yych) {
-	case ' ':	goto yy4;
-	case '\'':	goto yy7;
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy8;
-	default:
-		if (in->lim <= in->cur) {
-			if (YYFILL() == 0) goto yyFillLabel0;
-			goto yy18;
-		}
-		goto yy2;
+		case ' ': goto yy4;
+		case '\'': goto yy7;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z': goto yy8;
+		default:
+			if (in->lim <= in->cur) {
+				if (YYFILL() == 0) goto yyFillLabel0;
+				goto yy18;
+			}
+			goto yy2;
 	}
 yy2:
 	++in->cur;
@@ -99,12 +99,12 @@ yy4:
 yyFillLabel1:
 	yych = *in->cur;
 	switch (yych) {
-	case ' ':	goto yy4;
-	default:
-		if (in->lim <= in->cur) {
-			if (YYFILL() == 0) goto yyFillLabel1;
-		}
-		goto yy6;
+		case ' ': goto yy4;
+		default:
+			if (in->lim <= in->cur) {
+				if (YYFILL() == 0) goto yyFillLabel1;
+			}
+			goto yy6;
 	}
 yy6:
 #line 56 "eof/eof_10_fill.re"
@@ -128,37 +128,37 @@ yy8:
 yyFillLabel3:
 	yych = *in->cur;
 	switch (yych) {
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy8;
-	default:
-		if (in->lim <= in->cur) {
-			if (YYFILL() == 0) goto yyFillLabel3;
-		}
-		goto yy10;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z': goto yy8;
+		default:
+			if (in->lim <= in->cur) {
+				if (YYFILL() == 0) goto yyFillLabel3;
+			}
+			goto yy10;
 	}
 yy10:
 #line 54 "eof/eof_10_fill.re"
@@ -170,14 +170,14 @@ yyFillLabel4:
 	yych = *in->cur;
 yy12:
 	switch (yych) {
-	case '\'':	goto yy13;
-	case '\\':	goto yy15;
-	default:
-		if (in->lim <= in->cur) {
-			if (YYFILL() == 0) goto yyFillLabel4;
-			goto yy19;
-		}
-		goto yy11;
+		case '\'': goto yy13;
+		case '\\': goto yy15;
+		default:
+			if (in->lim <= in->cur) {
+				if (YYFILL() == 0) goto yyFillLabel4;
+				goto yy19;
+			}
+			goto yy11;
 	}
 yy13:
 	++in->cur;
@@ -190,14 +190,14 @@ yy15:
 yyFillLabel5:
 	yych = *in->cur;
 	switch (yych) {
-	case '\'':	goto yy17;
-	case '\\':	goto yy15;
-	default:
-		if (in->lim <= in->cur) {
-			if (YYFILL() == 0) goto yyFillLabel5;
-			goto yy19;
-		}
-		goto yy11;
+		case '\'': goto yy17;
+		case '\\': goto yy15;
+		default:
+			if (in->lim <= in->cur) {
+				if (YYFILL() == 0) goto yyFillLabel5;
+				goto yy19;
+			}
+			goto yy11;
 	}
 yy17:
 	yyaccept = 1;
@@ -205,14 +205,14 @@ yy17:
 yyFillLabel6:
 	yych = *in->cur;
 	switch (yych) {
-	case '\'':	goto yy13;
-	case '\\':	goto yy15;
-	default:
-		if (in->lim <= in->cur) {
-			if (YYFILL() == 0) goto yyFillLabel6;
-			goto yy14;
-		}
-		goto yy11;
+		case '\'': goto yy13;
+		case '\\': goto yy15;
+		default:
+			if (in->lim <= in->cur) {
+				if (YYFILL() == 0) goto yyFillLabel6;
+				goto yy14;
+			}
+			goto yy11;
 	}
 yy18:
 #line 53 "eof/eof_10_fill.re"

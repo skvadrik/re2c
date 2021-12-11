@@ -19,9 +19,9 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy4;
-	case 'c':	goto yy6;
-	default:	goto yy2;
+		case 'b': goto yy4;
+		case 'c': goto yy6;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;

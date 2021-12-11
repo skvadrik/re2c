@@ -7,14 +7,14 @@
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	case 'b':	goto yy5;
-	case 'c':	goto yy6;
-	case 'd':	goto yy7;
-	case 'e':	goto yy8;
-	case 'f':	goto yy9;
-	case 'g':	goto yy10;
-	default:	goto yy2;
+		case 'a': goto yy4;
+		case 'b': goto yy5;
+		case 'c': goto yy6;
+		case 'd': goto yy7;
+		case 'e': goto yy8;
+		case 'f': goto yy9;
+		case 'g': goto yy10;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;

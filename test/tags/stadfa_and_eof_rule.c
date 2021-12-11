@@ -7,15 +7,15 @@
 yyFillLabel0:
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy3;
-	case 'a':	goto yy5;
-	case 'b':	goto yy8;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel0;
-			goto yy14;
-		}
-		goto yy2;
+		case '\n': goto yy3;
+		case 'a': goto yy5;
+		case 'b': goto yy8;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel0;
+				goto yy14;
+			}
+			goto yy2;
 	}
 yy2:
 	{ return 1; }
@@ -31,14 +31,14 @@ yy5:
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy3;
-	case 'a':	goto yy5;
-	case 'b':	goto yy8;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel1;
-		}
-		goto yy7;
+		case '\n': goto yy3;
+		case 'a': goto yy5;
+		case 'b': goto yy8;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel1;
+			}
+			goto yy7;
 	}
 yy7:
 	YYCURSOR = YYMARKER;
@@ -48,13 +48,13 @@ yy8:
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy9;
-	case 'a':	goto yy10;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel2;
-		}
-		goto yy7;
+		case '\n': goto yy9;
+		case 'a': goto yy10;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel2;
+			}
+			goto yy7;
 	}
 yy9:
 	++YYCURSOR;
@@ -66,13 +66,13 @@ yy10:
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy11;
-	case 'a':	goto yy12;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel3;
-		}
-		goto yy7;
+		case '\n': goto yy11;
+		case 'a': goto yy12;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel3;
+			}
+			goto yy7;
 	}
 yy11:
 	++YYCURSOR;
@@ -83,13 +83,13 @@ yy12:
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy11;
-	case 'a':	goto yy12;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel4;
-		}
-		goto yy7;
+		case '\n': goto yy11;
+		case 'a': goto yy12;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel4;
+			}
+			goto yy7;
 	}
 yy14:
 	{ return 0; }

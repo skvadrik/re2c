@@ -25,8 +25,7 @@ enum YYCONDTYPE {
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyca1:
-		goto yyc_a1;
+		case yyca1: goto yyc_a1;
 	}
 /* *********************************** */
 yyc_a1:
@@ -40,8 +39,7 @@ yyc_a1:
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyca2:
-		goto yyc_a2;
+		case yyca2: goto yyc_a2;
 	}
 /* *********************************** */
 yyc_a2:
@@ -89,8 +87,7 @@ enum YYCONDTYPE {
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yycb1:
-		goto yyc_b1;
+		case yycb1: goto yyc_b1;
 	}
 /* *********************************** */
 yyc_b1:
@@ -104,8 +101,7 @@ yyc_b1:
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yycb2:
-		goto yyc_b2;
+		case yycb2: goto yyc_b2;
 	}
 /* *********************************** */
 yyc_b2:

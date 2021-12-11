@@ -19,11 +19,11 @@ static int lex(const char *str, unsigned int len) {
 	char yych;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
-	case ' ':	goto yy4;
-	case '\'':	goto yy7;
-	default:
-		if (cur >= lim) goto yy13;
-		goto yy2;
+		case ' ': goto yy4;
+		case '\'': goto yy7;
+		default:
+			if (cur >= lim) goto yy13;
+			goto yy2;
 	}
 yy2:
 	++cur;
@@ -35,8 +35,8 @@ yy4:
 	++cur;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
-	case ' ':	goto yy4;
-	default:	goto yy6;
+		case ' ': goto yy4;
+		default: goto yy6;
 	}
 yy6:
 #line 29 "c/eof/05_generic_api_eof_rule.re"
@@ -53,11 +53,11 @@ yy8:
 	yych = cur < lim ? *cur : 0;
 yy9:
 	switch (yych) {
-	case '\'':	goto yy10;
-	case '\\':	goto yy12;
-	default:
-		if (cur >= lim) goto yy14;
-		goto yy8;
+		case '\'': goto yy10;
+		case '\\': goto yy12;
+		default:
+			if (cur >= lim) goto yy14;
+			goto yy8;
 	}
 yy10:
 	++cur;

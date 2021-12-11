@@ -6,14 +6,14 @@
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	case 'x':	goto yy5;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel0;
-			goto yy14;
-		}
-		goto yy2;
+		case 'a': goto yy4;
+		case 'x': goto yy5;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel0;
+				goto yy14;
+			}
+			goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -24,39 +24,39 @@ yy4:
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy6;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel1;
-		}
-		goto yy3;
+		case 'b': goto yy6;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel1;
+			}
+			goto yy3;
 	}
 yy5:
 	++YYCURSOR;
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'y':	goto yy8;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel2;
-		}
-		goto yy3;
+		case 'y': goto yy8;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel2;
+			}
+			goto yy3;
 	}
 yy6:
 	++YYCURSOR;
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':
-		yyt1 = YYCURSOR;
-		goto yy10;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel3;
-		}
-		yyt1 = NULL;
-		goto yy7;
+		case 'c':
+			yyt1 = YYCURSOR;
+			goto yy10;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel3;
+			}
+			yyt1 = NULL;
+			goto yy7;
 	}
 yy7:
 	c = yyt1;
@@ -78,14 +78,14 @@ yy10:
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':
-		yyt1 = YYCURSOR;
-		goto yy10;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel5;
-		}
-		goto yy7;
+		case 'c':
+			yyt1 = YYCURSOR;
+			goto yy10;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel5;
+			}
+			goto yy7;
 	}
 yy12:
 	++YYCURSOR;
@@ -93,12 +93,12 @@ yyFillLabel6:
 	yych = *YYCURSOR;
 yy13:
 	switch (yych) {
-	case 'z':	goto yy12;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel6;
-		}
-		goto yy9;
+		case 'z': goto yy12;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel6;
+			}
+			goto yy9;
 	}
 yy14:
 	{ eof }

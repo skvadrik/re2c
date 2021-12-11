@@ -15,14 +15,11 @@ char *scan(char *p)
 #line 16 "config/config4b.c"
 
 	switch (YYGETSTATE()) {
-	default:
-		abort();
-	case -1:
-		goto yy0;
-	case 0:
-		goto yyFillLabel0;
-	case 1:
-		goto yyFillLabel1;
+		default:
+			abort();
+		case -1: goto yy0;
+		case 0: goto yyFillLabel0;
+		case 1: goto yyFillLabel1;
 	}
 yy0:
 	YYSETSTATE(0);
@@ -30,24 +27,24 @@ yy0:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy5;
-	default:	goto yy3;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy5;
+		default: goto yy3;
 	}
 yy3:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 15 "config/config4b.re"
 	{ return NULL; }
-#line 51 "config/config4b.c"
+#line 48 "config/config4b.c"
 yy5:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -55,23 +52,23 @@ yy5:
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy5;
-	default:	goto yy7;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy5;
+		default: goto yy7;
 	}
 yy7:
 	YYSETSTATE(-1);
 #line 14 "config/config4b.re"
 	{ return YYCURSOR; }
-#line 75 "config/config4b.c"
+#line 72 "config/config4b.c"
 #line 16 "config/config4b.re"
 
 }

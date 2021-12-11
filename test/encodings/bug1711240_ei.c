@@ -8,10 +8,10 @@ char scan(const unsigned char *s)
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x07:	goto yy4;
-	case 0x61:	goto yy6;
-	case 0x7F:	goto yy8;
-	default:	goto yy2;
+		case 0x07: goto yy4;
+		case 0x61: goto yy6;
+		case 0x7F: goto yy8;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;

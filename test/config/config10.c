@@ -49,22 +49,22 @@ std:
 	if ((s.lim - s.cur) < 3) fill();
 	curr = *s.cur;
 	switch (curr) {
-	case '\t':
-	case '\n':
-	case ' ':	goto xx4;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto xx6;
-	case 'a':
-	case 'b':	goto xx9;
-	default:	goto xx2;
+		case '\t':
+		case '\n':
+		case ' ': goto xx4;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto xx6;
+		case 'a':
+		case 'b': goto xx9;
+		default: goto xx2;
 	}
 xx2:
 	++s.cur;
@@ -89,17 +89,17 @@ xx6:
 	if (s.lim <= s.cur) fill();
 	curr = *s.cur;
 	switch (curr) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto xx6;
-	default:	goto xx8;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto xx6;
+		default: goto xx8;
 	}
 xx8:
 #line 58 "config/config10.re"
@@ -108,38 +108,38 @@ xx8:
 xx9:
 	curr = *++s.cur;
 	switch (curr) {
-	case '0':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-		s.ctx = s.cur;
-		goto xx10;
-	case '1':
-		s.ctx = s.cur;
-		goto xx13;
-	default:	goto xx3;
+		case '0':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			s.ctx = s.cur;
+			goto xx10;
+		case '1':
+			s.ctx = s.cur;
+			goto xx13;
+		default: goto xx3;
 	}
 xx10:
 	++s.cur;
 	if (s.lim <= s.cur) fill();
 	curr = *s.cur;
 	switch (curr) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto xx10;
-	default:	goto xx12;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto xx10;
+		default: goto xx12;
 	}
 xx12:
 	s.cur = s.ctx;
@@ -149,17 +149,17 @@ xx12:
 xx13:
 	curr = *++s.cur;
 	switch (curr) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto xx10;
-	default:	goto xx14;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto xx10;
+		default: goto xx14;
 	}
 xx14:
 	s.cur -= 1;

@@ -20,8 +20,8 @@ static int lex_utf8(const uint8_t *YYCURSOR) {
 	uint8_t yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0xE2:	goto yy4;
-	default:	goto yy2;
+		case 0xE2: goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -32,14 +32,14 @@ yy3:
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x88:	goto yy5;
-	default:	goto yy3;
+		case 0x88: goto yy5;
+		default: goto yy3;
 	}
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x80:	goto yy7;
-	default:	goto yy6;
+		case 0x80: goto yy7;
+		default: goto yy6;
 	}
 yy6:
 	YYCURSOR = YYMARKER;
@@ -47,38 +47,38 @@ yy6:
 yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'x':	goto yy8;
-	default:	goto yy6;
+		case 'x': goto yy8;
+		default: goto yy6;
 	}
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case ' ':	goto yy9;
-	default:	goto yy6;
+		case ' ': goto yy9;
+		default: goto yy6;
 	}
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xE2:	goto yy10;
-	default:	goto yy6;
+		case 0xE2: goto yy10;
+		default: goto yy6;
 	}
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x88:	goto yy11;
-	default:	goto yy6;
+		case 0x88: goto yy11;
+		default: goto yy6;
 	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x83:	goto yy12;
-	default:	goto yy6;
+		case 0x83: goto yy12;
+		default: goto yy6;
 	}
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'y':	goto yy13;
-	default:	goto yy6;
+		case 'y': goto yy13;
+		default: goto yy6;
 	}
 yy13:
 	++YYCURSOR;

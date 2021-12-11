@@ -26,10 +26,10 @@ static int lex(const char *str, unsigned int len) {
 	if (YYLIMIT <= YYCURSOR) return -1;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy2;
-	case ' ':	goto yy6;
-	case '\'':	goto yy9;
-	default:	goto yy4;
+		case 0x00: goto yy2;
+		case ' ': goto yy6;
+		case '\'': goto yy9;
+		default: goto yy4;
 	}
 yy2:
 	++YYCURSOR;
@@ -46,8 +46,8 @@ yy6:
 	if (YYLIMIT <= YYCURSOR) return -1;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case ' ':	goto yy6;
-	default:	goto yy8;
+		case ' ': goto yy6;
+		default: goto yy8;
 	}
 yy8:
 #line 25 "c/eof/02_bounds_checking.re"
@@ -58,9 +58,9 @@ yy9:
 	if (YYLIMIT <= YYCURSOR) return -1;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\'':	goto yy11;
-	case '\\':	goto yy13;
-	default:	goto yy9;
+		case '\'': goto yy11;
+		case '\\': goto yy13;
+		default: goto yy9;
 	}
 yy11:
 	++YYCURSOR;

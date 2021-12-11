@@ -82,18 +82,18 @@ loop:
 	if (YYLESSTHAN(16)) if (!in.fill(16)) return false;
 	yych = YYPEEK();
 	switch (yych) {
-	case 0x00:	goto yy2;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy6;
-	default:	goto yy4;
+		case 0x00: goto yy2;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy6;
+		default: goto yy4;
 	}
 yy2:
 	YYSKIP();
@@ -107,36 +107,36 @@ yy6:
 	YYBACKUP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '.':
-		YYSTAGP(in.yyt1);
-		goto yy7;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy9;
-	default:	goto yy5;
+		case '.':
+			YYSTAGP(in.yyt1);
+			goto yy7;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy9;
+		default: goto yy5;
 	}
 yy7:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy10;
-	default:	goto yy8;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy10;
+		default: goto yy8;
 	}
 yy8:
 	YYRESTORE();
@@ -145,172 +145,172 @@ yy9:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '.':
-		YYSTAGP(in.yyt1);
-		goto yy7;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy11;
-	default:	goto yy8;
+		case '.':
+			YYSTAGP(in.yyt1);
+			goto yy7;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy11;
+		default: goto yy8;
 	}
 yy10:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '.':
-		YYSTAGP(in.yyt2);
-		goto yy12;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy13;
-	default:	goto yy8;
+		case '.':
+			YYSTAGP(in.yyt2);
+			goto yy12;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy13;
+		default: goto yy8;
 	}
 yy11:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '.':
-		YYSTAGP(in.yyt1);
-		goto yy7;
-	default:	goto yy8;
+		case '.':
+			YYSTAGP(in.yyt1);
+			goto yy7;
+		default: goto yy8;
 	}
 yy12:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy14;
-	default:	goto yy8;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy14;
+		default: goto yy8;
 	}
 yy13:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '.':
-		YYSTAGP(in.yyt2);
-		goto yy12;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy15;
-	default:	goto yy8;
+		case '.':
+			YYSTAGP(in.yyt2);
+			goto yy12;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy15;
+		default: goto yy8;
 	}
 yy14:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '.':
-		YYSTAGP(in.yyt3);
-		goto yy16;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy17;
-	default:	goto yy8;
+		case '.':
+			YYSTAGP(in.yyt3);
+			goto yy16;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy17;
+		default: goto yy8;
 	}
 yy15:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '.':
-		YYSTAGP(in.yyt2);
-		goto yy12;
-	default:	goto yy8;
+		case '.':
+			YYSTAGP(in.yyt2);
+			goto yy12;
+		default: goto yy8;
 	}
 yy16:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy18;
-	default:	goto yy8;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy18;
+		default: goto yy8;
 	}
 yy17:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '.':
-		YYSTAGP(in.yyt3);
-		goto yy16;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy19;
-	default:	goto yy8;
+		case '.':
+			YYSTAGP(in.yyt3);
+			goto yy16;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy19;
+		default: goto yy8;
 	}
 yy18:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '\n':	goto yy20;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy22;
-	default:	goto yy8;
+		case '\n': goto yy20;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy22;
+		default: goto yy8;
 	}
 yy19:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '.':
-		YYSTAGP(in.yyt3);
-		goto yy16;
-	default:	goto yy8;
+		case '.':
+			YYSTAGP(in.yyt3);
+			goto yy16;
+		default: goto yy8;
 	}
 yy20:
 	YYSKIP();
@@ -329,25 +329,25 @@ yy22:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '\n':	goto yy20;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy23;
-	default:	goto yy8;
+		case '\n': goto yy20;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy23;
+		default: goto yy8;
 	}
 yy23:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '\n':	goto yy20;
-	default:	goto yy8;
+		case '\n': goto yy20;
+		default: goto yy8;
 	}
 }
 

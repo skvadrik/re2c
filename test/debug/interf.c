@@ -6,14 +6,14 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt1 = YYCURSOR;
-		goto yy4;
-	case 'b':
-		yyt1 = yyt2 = NULL;
-		yyt3 = YYCURSOR;
-		goto yy6;
-	default:	goto yy2;
+		case 'a':
+			yyt1 = YYCURSOR;
+			goto yy4;
+		case 'b':
+			yyt1 = yyt2 = NULL;
+			yyt3 = YYCURSOR;
+			goto yy6;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;

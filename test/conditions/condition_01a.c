@@ -6,51 +6,49 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyca:
-		goto yyc_a;
-	case yycb:
-		goto yyc_b;
+		case yyca: goto yyc_a;
+		case yycb: goto yyc_b;
 	}
 /**** State a ***/
 yyc_a:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy3;
-	default:	goto yy2;
+		case 'a': goto yy3;
+		default: goto yy2;
 	}
 yy2:
 yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy4;
-	default:	goto yy2;
+		case 'b': goto yy4;
+		default: goto yy2;
 	}
 yy4:
 	++YYCURSOR;
 #line 4 "conditions/condition_01a.re"
 	{ }
-#line 34 "conditions/condition_01a.c"
+#line 32 "conditions/condition_01a.c"
 /**** State b ***/
 yyc_b:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy9;
-	default:	goto yy8;
+		case 'a': goto yy9;
+		default: goto yy8;
 	}
 yy8:
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy10;
-	default:	goto yy8;
+		case 'b': goto yy10;
+		default: goto yy8;
 	}
 yy10:
 	++YYCURSOR;
 #line 4 "conditions/condition_01a.re"
 	{ }
-#line 54 "conditions/condition_01a.c"
+#line 52 "conditions/condition_01a.c"
 }
 #line 6 "conditions/condition_01a.re"
 

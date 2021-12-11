@@ -18,21 +18,15 @@ enum YYCONDTYPE {
 
 
 	switch (GETSTATE_LAST()) {
-	default:
-		goto yy0;
-	case 0:
-		goto yyFillLabel0;
-	case 1:
-		goto yyFillLabel1;
-	case 10:
-		goto yyFillLabel10;
+		default: goto yy0;
+		case 0: goto yyFillLabel0;
+		case 1: goto yyFillLabel1;
+		case 10: goto yyFillLabel10;
 	}
 yy0:
 	switch (YYGETCONDITION()) {
-	case yycu:
-		goto yyc_u;
-	case yycv:
-		goto yyc_v;
+		case yycu: goto yyc_u;
+		case yycv: goto yyc_v;
 	}
 /* *********************************** */
 yyc_u:
@@ -41,8 +35,8 @@ yyc_u:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'u':	goto yy5;
-	default:	goto yy3;
+		case 'u': goto yy5;
+		default: goto yy3;
 	}
 yy3:
 	++YYCURSOR;
@@ -60,8 +54,8 @@ yyc_v:
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'v':	goto yy11;
-	default:	goto yy9;
+		case 'v': goto yy11;
+		default: goto yy9;
 	}
 yy9:
 	++YYCURSOR;
@@ -78,27 +72,18 @@ yy11:
 
 
 	switch (GETSTATE_REUSE_1()) {
-	default:
-		goto yy13;
-	case 2:
-		goto yyFillLabel2;
-	case 3:
-		goto yyFillLabel3;
-	case 4:
-		goto yyFillLabel4;
-	case 5:
-		goto yyFillLabel5;
+		default: goto yy13;
+		case 2: goto yyFillLabel2;
+		case 3: goto yyFillLabel3;
+		case 4: goto yyFillLabel4;
+		case 5: goto yyFillLabel5;
 	}
 yy13:
 	switch (YYGETCONDITION()) {
-	case yyca:
-		goto yyc_a;
-	case yycb:
-		goto yyc_b;
-	case yycc:
-		goto yyc_c;
-	case yycd:
-		goto yyc_d;
+		case yyca: goto yyc_a;
+		case yycb: goto yyc_b;
+		case yycc: goto yyc_c;
+		case yycd: goto yyc_d;
 	}
 /* *********************************** */
 yyc_a:
@@ -107,8 +92,8 @@ yyc_a:
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy18;
-	default:	goto yy16;
+		case 'a': goto yy18;
+		default: goto yy16;
 	}
 yy16:
 	++YYCURSOR;
@@ -126,8 +111,8 @@ yyc_b:
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy24;
-	default:	goto yy22;
+		case 'b': goto yy24;
+		default: goto yy22;
 	}
 yy22:
 	++YYCURSOR;
@@ -145,8 +130,8 @@ yyc_c:
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':	goto yy30;
-	default:	goto yy28;
+		case 'c': goto yy30;
+		default: goto yy28;
 	}
 yy28:
 	++YYCURSOR;
@@ -163,8 +148,8 @@ yyc_d:
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'd':	goto yy36;
-	default:	goto yy34;
+		case 'd': goto yy36;
+		default: goto yy34;
 	}
 yy34:
 	++YYCURSOR;
@@ -180,25 +165,17 @@ yy36:
 
 
 	switch (GETSTATE_REUSE_2()) {
-	default:
-		goto yy38;
-	case 6:
-		goto yyFillLabel6;
-	case 7:
-		goto yyFillLabel7;
-	case 8:
-		goto yyFillLabel8;
-	case 9:
-		goto yyFillLabel9;
+		default: goto yy38;
+		case 6: goto yyFillLabel6;
+		case 7: goto yyFillLabel7;
+		case 8: goto yyFillLabel8;
+		case 9: goto yyFillLabel9;
 	}
 yy38:
 	switch (YYGETCONDITION()) {
-	case yyca:
-		goto yyc_a;
-	case yycb:
-		goto yyc_b;
-	case yyce:
-		goto yyc_e;
+		case yyca: goto yyc_a;
+		case yycb: goto yyc_b;
+		case yyce: goto yyc_e;
 	}
 /* *********************************** */
 yyc_a:
@@ -207,8 +184,8 @@ yyc_a:
 yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy43;
-	default:	goto yy41;
+		case 'a': goto yy43;
+		default: goto yy41;
 	}
 yy41:
 	++YYCURSOR;
@@ -226,8 +203,8 @@ yyc_b:
 yyFillLabel7:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy49;
-	default:	goto yy47;
+		case 'b': goto yy49;
+		default: goto yy47;
 	}
 yy47:
 	++YYCURSOR;
@@ -245,8 +222,8 @@ yyc_e:
 yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'e':	goto yy55;
-	default:	goto yy53;
+		case 'e': goto yy55;
+		default: goto yy53;
 	}
 yy53:
 	++YYCURSOR;
@@ -259,8 +236,8 @@ yy55:
 yyFillLabel9:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'e':	goto yy55;
-	default:	goto yy57;
+		case 'e': goto yy55;
+		default: goto yy57;
 	}
 yy57:
 	SETSTATE_REUSE_2(-1);
@@ -271,8 +248,7 @@ yy57:
 
 
 	switch (YYGETCONDITION()) {
-	case yycw:
-		goto yyc_w;
+		case yycw: goto yyc_w;
 	}
 /* *********************************** */
 yyc_w:
@@ -281,8 +257,8 @@ yyc_w:
 yyFillLabel10:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'w':	goto yy63;
-	default:	goto yy61;
+		case 'w': goto yy63;
+		default: goto yy61;
 	}
 yy61:
 	++YYCURSOR;

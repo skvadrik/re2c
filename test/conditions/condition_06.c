@@ -143,16 +143,16 @@ yy10:
 yy12:
 			yych = *++s->cur;
 			switch (yych) {
-			case '!':	goto yy14;
-			case '\'':	goto yy16;
-			case '(':	goto yy18;
-			case ')':	goto yy20;
-			case '-':	goto yy22;
-			case '/':	goto yy24;
-			case '<':	goto yy26;
-			case '=':	goto yy28;
-			case '>':	goto yy30;
-			default:	goto yy13;
+				case '!': goto yy14;
+				case '\'': goto yy16;
+				case '(': goto yy18;
+				case ')': goto yy20;
+				case '-': goto yy22;
+				case '/': goto yy24;
+				case '<': goto yy26;
+				case '=': goto yy28;
+				case '>': goto yy30;
+				default: goto yy13;
 			}
 yy13:
 			s->cur = s->tok;

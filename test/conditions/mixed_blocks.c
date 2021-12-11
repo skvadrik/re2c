@@ -14,8 +14,8 @@ enum YYCONDTYPE {
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	default:	goto yy2;
+		case 'a': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -30,18 +30,16 @@ yy4:
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yycb:
-		goto yyc_b;
-	case yycc:
-		goto yyc_c;
+		case yycb: goto yyc_b;
+		case yycc: goto yyc_c;
 	}
 /* *********************************** */
 yyc_b:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy10;
-	default:	goto yy8;
+		case 'b': goto yy10;
+		default: goto yy8;
 	}
 yy8:
 	++YYCURSOR;
@@ -54,8 +52,8 @@ yyc_c:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':	goto yy16;
-	default:	goto yy14;
+		case 'c': goto yy16;
+		default: goto yy14;
 	}
 yy14:
 	++YYCURSOR;
@@ -70,16 +68,15 @@ yy16:
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yycd:
-		goto yyc_d;
+		case yycd: goto yyc_d;
 	}
 /* *********************************** */
 yyc_d:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'd':	goto yy22;
-	default:	goto yy20;
+		case 'd': goto yy22;
+		default: goto yy20;
 	}
 yy20:
 	++YYCURSOR;

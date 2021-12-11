@@ -6,8 +6,8 @@
 	if (YYLESSTHAN(3)) YYFILL(3);
 	yych = YYPEEK();
 	switch (yych) {
-	case 'a':	goto yy4;
-	default:	goto yy2;
+		case 'a': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	YYSKIP();
@@ -22,13 +22,13 @@ yy4:
 	YYBACKUP();
 	yych = YYPEEK();
 	switch (yych) {
-	case 'a':	goto yy8;
-	case 'b':
-		YYBACKUPCTX();
-		goto yy10;
-	default:
-		YYBACKUPCTX();
-		goto yy5;
+		case 'a': goto yy8;
+		case 'b':
+			YYBACKUPCTX();
+			goto yy10;
+		default:
+			YYBACKUPCTX();
+			goto yy5;
 	}
 yy5:
 	YYRESTORECTX();
@@ -39,17 +39,17 @@ yy6:
 	yych = YYPEEK();
 yy7:
 	switch (yych) {
-	case 'b':	goto yy6;
-	default:	goto yy3;
+		case 'b': goto yy6;
+		default: goto yy3;
 	}
 yy8:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case 'b':
-		YYBACKUPCTX();
-		goto yy12;
-	default:	goto yy9;
+		case 'b':
+			YYBACKUPCTX();
+			goto yy12;
+		default: goto yy9;
 	}
 yy9:
 	YYRESTORE();
@@ -60,16 +60,16 @@ yy10:
 	if (YYLESSTHAN(1)) YYFILL(1);
 	yych = YYPEEK();
 	switch (yych) {
-	case 'b':	goto yy10;
-	default:	goto yy5;
+		case 'b': goto yy10;
+		default: goto yy5;
 	}
 yy12:
 	YYSKIP();
 	if (YYLESSTHAN(1)) YYFILL(1);
 	yych = YYPEEK();
 	switch (yych) {
-	case 'b':	goto yy12;
-	default:	goto yy14;
+		case 'b': goto yy12;
+		default: goto yy14;
 	}
 yy14:
 	YYRESTORECTX();

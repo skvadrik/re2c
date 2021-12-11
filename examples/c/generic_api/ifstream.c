@@ -14,8 +14,8 @@ static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
 	char yych;
 	yych = in.peek();
 	switch (yych) {
-	case '\r':	goto yy4;
-	default:	goto yy2;
+		case '\r': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	{ in.ignore(); if (in.eof()) return; }
@@ -27,8 +27,8 @@ yy4:
 	{ in.ignore(); if (in.eof()) return; }
 	yych = in.peek();
 	switch (yych) {
-	case '\n':	goto yy5;
-	default:	goto yy3;
+		case '\n': goto yy5;
+		default: goto yy3;
 	}
 yy5:
 	{ in.ignore(); if (in.eof()) return; }

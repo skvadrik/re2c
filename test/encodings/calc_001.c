@@ -25,20 +25,20 @@ int scan(char *s, int l)
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			switch (yych) {
-			case 0x00:	goto yy2;
-			case 0x4E:	goto yy6;
-			case 0x60:	goto yy8;
-			case 0xF0:	goto yy10;
-			case 0xF1:
-			case 0xF2:
-			case 0xF3:
-			case 0xF4:
-			case 0xF5:
-			case 0xF6:
-			case 0xF7:
-			case 0xF8:
-			case 0xF9:	goto yy12;
-			default:	goto yy4;
+				case 0x00: goto yy2;
+				case 0x4E: goto yy6;
+				case 0x60: goto yy8;
+				case 0xF0: goto yy10;
+				case 0xF1:
+				case 0xF2:
+				case 0xF3:
+				case 0xF4:
+				case 0xF5:
+				case 0xF6:
+				case 0xF7:
+				case 0xF8:
+				case 0xF9: goto yy12;
+				default: goto yy4;
 			}
 yy2:
 			++YYCURSOR;
@@ -55,17 +55,17 @@ yy8:
 yy10:
 			yych = *++YYCURSOR;
 			switch (yych) {
-			case 0xF0:
-			case 0xF1:
-			case 0xF2:
-			case 0xF3:
-			case 0xF4:
-			case 0xF5:
-			case 0xF6:
-			case 0xF7:
-			case 0xF8:
-			case 0xF9:	goto yy15;
-			default:	goto yy11;
+				case 0xF0:
+				case 0xF1:
+				case 0xF2:
+				case 0xF3:
+				case 0xF4:
+				case 0xF5:
+				case 0xF6:
+				case 0xF7:
+				case 0xF8:
+				case 0xF9: goto yy15;
+				default: goto yy11;
 			}
 yy11:
 			{ printf("Num\n");	continue; }
@@ -74,17 +74,17 @@ yy12:
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			switch (yych) {
-			case 0xF0:
-			case 0xF1:
-			case 0xF2:
-			case 0xF3:
-			case 0xF4:
-			case 0xF5:
-			case 0xF6:
-			case 0xF7:
-			case 0xF8:
-			case 0xF9:	goto yy12;
-			default:	goto yy14;
+				case 0xF0:
+				case 0xF1:
+				case 0xF2:
+				case 0xF3:
+				case 0xF4:
+				case 0xF5:
+				case 0xF6:
+				case 0xF7:
+				case 0xF8:
+				case 0xF9: goto yy12;
+				default: goto yy14;
 			}
 yy14:
 			{ printf("Num\n");	continue; }
@@ -93,17 +93,17 @@ yy15:
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			switch (yych) {
-			case 0xF0:
-			case 0xF1:
-			case 0xF2:
-			case 0xF3:
-			case 0xF4:
-			case 0xF5:
-			case 0xF6:
-			case 0xF7:
-			case 0xF8:
-			case 0xF9:	goto yy15;
-			default:	goto yy17;
+				case 0xF0:
+				case 0xF1:
+				case 0xF2:
+				case 0xF3:
+				case 0xF4:
+				case 0xF5:
+				case 0xF6:
+				case 0xF7:
+				case 0xF8:
+				case 0xF9: goto yy15;
+				default: goto yy17;
 			}
 yy17:
 			{ printf("Oct\n");	continue; }

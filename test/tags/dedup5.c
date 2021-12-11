@@ -13,13 +13,13 @@
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt1 = YYCURSOR;
-		goto yy4;
-	case 'b':
-		yyt1 = NULL;
-		goto yy5;
-	default:	goto yy2;
+		case 'a':
+			yyt1 = YYCURSOR;
+			goto yy4;
+		case 'b':
+			yyt1 = NULL;
+			goto yy5;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -28,8 +28,8 @@ yy3:
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 'c':	goto yy7;
-	default:	goto yy3;
+		case 'c': goto yy7;
+		default: goto yy3;
 	}
 yy5:
 	++YYCURSOR;
@@ -40,11 +40,11 @@ yy7:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt1 = YYCURSOR;
-		goto yy9;
-	case 'b':	goto yy5;
-	default:	goto yy8;
+		case 'a':
+			yyt1 = YYCURSOR;
+			goto yy9;
+		case 'b': goto yy5;
+		default: goto yy8;
 	}
 yy8:
 	YYCURSOR = YYMARKER;
@@ -54,8 +54,8 @@ yy9:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':	goto yy7;
-	default:	goto yy8;
+		case 'c': goto yy7;
+		default: goto yy8;
 	}
 }
 
@@ -66,13 +66,13 @@ yy9:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt1 = NULL;
-		goto yy14;
-	case 'b':
-		yyt1 = YYCURSOR;
-		goto yy16;
-	default:	goto yy12;
+		case 'a':
+			yyt1 = NULL;
+			goto yy14;
+		case 'b':
+			yyt1 = YYCURSOR;
+			goto yy16;
+		default: goto yy12;
 	}
 yy12:
 	++YYCURSOR;
@@ -85,19 +85,19 @@ yy14:
 yy16:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 'c':	goto yy17;
-	default:	goto yy13;
+		case 'c': goto yy17;
+		default: goto yy13;
 	}
 yy17:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy14;
-	case 'b':
-		yyt1 = YYCURSOR;
-		goto yy19;
-	default:	goto yy18;
+		case 'a': goto yy14;
+		case 'b':
+			yyt1 = YYCURSOR;
+			goto yy19;
+		default: goto yy18;
 	}
 yy18:
 	YYCURSOR = YYMARKER;
@@ -107,8 +107,8 @@ yy19:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':	goto yy17;
-	default:	goto yy18;
+		case 'c': goto yy17;
+		default: goto yy18;
 	}
 }
 

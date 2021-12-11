@@ -9,12 +9,9 @@ const unsigned char *scan(const unsigned char *p, unsigned int len, int *state)
 	const unsigned char * const e = p + len;
 
 	switch (*state) {
-	default:
-		goto yy0;
-	case 0:
-		goto yyFillLabel0;
-	case 1:
-		goto yyFillLabel1;
+		default: goto yy0;
+		case 0: goto yyFillLabel0;
+		case 1: goto yyFillLabel1;
 	}
 
 

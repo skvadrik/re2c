@@ -17,9 +17,9 @@ enum YYCONDTYPE {
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	case 'b':	goto yy6;
-	default:	goto yy2;
+		case 'a': goto yy4;
+		case 'b': goto yy6;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -39,16 +39,15 @@ yy6:
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yycf:
-		goto yyc_f;
+		case yycf: goto yyc_f;
 	}
 /* *********************************** */
 yyc_f:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'f':	goto yy12;
-	default:	goto yy10;
+		case 'f': goto yy12;
+		default: goto yy10;
 	}
 yy10:
 	++YYCURSOR;
@@ -65,8 +64,8 @@ yy12:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'g':	goto yy18;
-	default:	goto yy16;
+		case 'g': goto yy18;
+		default: goto yy16;
 	}
 yy16:
 	++YYCURSOR;
@@ -81,20 +80,17 @@ yy18:
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yycc:
-		goto yyc_c;
-	case yycd:
-		goto yyc_d;
-	case yyce:
-		goto yyc_e;
+		case yycc: goto yyc_c;
+		case yycd: goto yyc_d;
+		case yyce: goto yyc_e;
 	}
 /* *********************************** */
 yyc_c:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':	goto yy24;
-	default:	goto yy22;
+		case 'c': goto yy24;
+		default: goto yy22;
 	}
 yy22:
 	++YYCURSOR;
@@ -107,8 +103,8 @@ yyc_d:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'd':	goto yy30;
-	default:	goto yy28;
+		case 'd': goto yy30;
+		default: goto yy28;
 	}
 yy28:
 	++YYCURSOR;
@@ -121,8 +117,8 @@ yyc_e:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'e':	goto yy36;
-	default:	goto yy34;
+		case 'e': goto yy36;
+		default: goto yy34;
 	}
 yy34:
 	++YYCURSOR;
@@ -152,16 +148,15 @@ yy36:
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yych:
-		goto yyc_h;
+		case yych: goto yyc_h;
 	}
 /* *********************************** */
 yyc_h:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'h':	goto yy46;
-	default:	goto yy44;
+		case 'h': goto yy46;
+		default: goto yy44;
 	}
 yy44:
 	++YYCURSOR;

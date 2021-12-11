@@ -3,26 +3,16 @@
 
 
 	switch (YYGETSTATE) {
-	default:
-		goto yy0;
-	case 0:
-		goto yyFillLabel0;
-	case 1:
-		goto yyFillLabel1;
-	case 2:
-		goto yyFillLabel2;
-	case 3:
-		goto yyFillLabel3;
-	case 4:
-		goto yyFillLabel4;
-	case 5:
-		goto yyFillLabel5;
-	case 6:
-		goto yyFillLabel6;
-	case 7:
-		goto yyFillLabel7;
-	case 8:
-		goto yyFillLabel8;
+		default: goto yy0;
+		case 0: goto yyFillLabel0;
+		case 1: goto yyFillLabel1;
+		case 2: goto yyFillLabel2;
+		case 3: goto yyFillLabel3;
+		case 4: goto yyFillLabel4;
+		case 5: goto yyFillLabel5;
+		case 6: goto yyFillLabel6;
+		case 7: goto yyFillLabel7;
+		case 8: goto yyFillLabel8;
 	}
 yy0:
 	YYSETSTATE(0);
@@ -30,8 +20,8 @@ yy0:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy5;
-	default:	goto yy3;
+		case 'a': goto yy5;
+		default: goto yy3;
 	}
 yy3:
 	++YYCURSOR;
@@ -51,8 +41,8 @@ yy5:
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy12;
-	default:	goto yy10;
+		case 'a': goto yy12;
+		default: goto yy10;
 	}
 yy10:
 	++YYCURSOR;
@@ -72,8 +62,8 @@ yy12:
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy19;
-	default:	goto yy17;
+		case 'a': goto yy19;
+		default: goto yy17;
 	}
 yy17:
 	++YYCURSOR;
@@ -93,8 +83,8 @@ yy19:
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy26;
-	default:	goto yy24;
+		case 'a': goto yy26;
+		default: goto yy24;
 	}
 yy24:
 	++YYCURSOR;
@@ -115,8 +105,8 @@ yy26:
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy33;
-	default:	goto yy31;
+		case 'a': goto yy33;
+		default: goto yy31;
 	}
 yy31:
 	++YYCURSOR;
@@ -137,8 +127,8 @@ yy33:
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy40;
-	default:	goto yy38;
+		case 'a': goto yy40;
+		default: goto yy38;
 	}
 yy38:
 	++YYCURSOR;
@@ -158,8 +148,8 @@ yy40:
 yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy47;
-	default:	goto yy45;
+		case 'a': goto yy47;
+		default: goto yy45;
 	}
 yy45:
 	++YYCURSOR;
@@ -180,8 +170,8 @@ yy47:
 yyFillLabel7:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy54;
-	default:	goto yy52;
+		case 'a': goto yy54;
+		default: goto yy52;
 	}
 yy52:
 	++YYCURSOR;
@@ -202,8 +192,8 @@ yy54:
 yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy61;
-	default:	goto yy59;
+		case 'a': goto yy61;
+		default: goto yy59;
 	}
 yy59:
 	++YYCURSOR;

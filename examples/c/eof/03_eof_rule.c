@@ -14,11 +14,11 @@ static int lex(const char *str, unsigned int len) {
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case ' ':	goto yy4;
-	case '\'':	goto yy7;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy13;
-		goto yy2;
+		case ' ': goto yy4;
+		case '\'': goto yy7;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy13;
+			goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -29,8 +29,8 @@ yy3:
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case ' ':	goto yy4;
-	default:	goto yy6;
+		case ' ': goto yy4;
+		default: goto yy6;
 	}
 yy6:
 #line 17 "c/eof/03_eof_rule.re"
@@ -44,11 +44,11 @@ yy8:
 	yych = *++YYCURSOR;
 yy9:
 	switch (yych) {
-	case '\'':	goto yy10;
-	case '\\':	goto yy12;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy14;
-		goto yy8;
+		case '\'': goto yy10;
+		case '\\': goto yy12;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy14;
+			goto yy8;
 	}
 yy10:
 	++YYCURSOR;

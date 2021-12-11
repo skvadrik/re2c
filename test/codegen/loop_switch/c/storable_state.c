@@ -55,180 +55,180 @@ loop:
 	int yystate = in->state;
 	for (;;) {
 		switch (yystate) {
-		case -1:
-		case 0:
-			yych = *in->cur;
-			switch (yych) {
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-				++in->cur;
+			case -1:
+			case 0:
+				yych = *in->cur;
+				switch (yych) {
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+						++in->cur;
+						yystate = 3;
+						continue;
+					default:
+						if (in->lim <= in->cur) {
+							in->state = 10;
+							return WAITING;
+						}
+						++in->cur;
+						yystate = 1;
+						continue;
+				}
+			case 1:
+				yystate = 2;
+				continue;
+			case 2:
+				in->state = -1;
+				{ return BAD_PACKET; }
+			case 3:
+				in->mar = in->cur;
+				yych = *in->cur;
+				switch (yych) {
+					case ';':
+						++in->cur;
+						yystate = 4;
+						continue;
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+						++in->cur;
+						yystate = 6;
+						continue;
+					default:
+						if (in->lim <= in->cur) {
+							in->state = 11;
+							return WAITING;
+						}
+						yystate = 2;
+						continue;
+				}
+			case 4:
+				yystate = 5;
+				continue;
+			case 5:
+				in->state = -1;
+				{ *recv = *recv + 1; in->tok = in->cur; goto loop; }
+			case 6:
+				yych = *in->cur;
+				yystate = 7;
+				continue;
+			case 7:
+				switch (yych) {
+					case ';':
+						++in->cur;
+						yystate = 4;
+						continue;
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+						++in->cur;
+						yystate = 6;
+						continue;
+					default:
+						if (in->lim <= in->cur) {
+							in->state = 12;
+							return WAITING;
+						}
+						yystate = 8;
+						continue;
+				}
+			case 8:
+				in->cur = in->mar;
+				yystate = 2;
+				continue;
+			case 9:
+				in->state = -1;
+				{ return END; }
+			case 10:
+				if (in->lim <= in->cur) {
+					yystate = 9;
+					continue;
+				}
+				yystate = 0;
+				continue;
+			case 11:
+				if (in->lim <= in->cur) {
+					yystate = 2;
+					continue;
+				}
 				yystate = 3;
 				continue;
-			default:
+			case 12:
 				if (in->lim <= in->cur) {
-					in->state = 10;
-					return WAITING;
+					yystate = 8;
+					continue;
 				}
-				++in->cur;
-				yystate = 1;
-				continue;
-			}
-		case 1:
-			yystate = 2;
-			continue;
-		case 2:
-			in->state = -1;
-			{ return BAD_PACKET; }
-		case 3:
-			in->mar = in->cur;
-			yych = *in->cur;
-			switch (yych) {
-			case ';':
-				++in->cur;
-				yystate = 4;
-				continue;
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-				++in->cur;
 				yystate = 6;
 				continue;
-			default:
-				if (in->lim <= in->cur) {
-					in->state = 11;
-					return WAITING;
-				}
-				yystate = 2;
-				continue;
-			}
-		case 4:
-			yystate = 5;
-			continue;
-		case 5:
-			in->state = -1;
-			{ *recv = *recv + 1; in->tok = in->cur; goto loop; }
-		case 6:
-			yych = *in->cur;
-			yystate = 7;
-			continue;
-		case 7:
-			switch (yych) {
-			case ';':
-				++in->cur;
-				yystate = 4;
-				continue;
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-				++in->cur;
-				yystate = 6;
-				continue;
-			default:
-				if (in->lim <= in->cur) {
-					in->state = 12;
-					return WAITING;
-				}
-				yystate = 8;
-				continue;
-			}
-		case 8:
-			in->cur = in->mar;
-			yystate = 2;
-			continue;
-		case 9:
-			in->state = -1;
-			{ return END; }
-		case 10:
-			if (in->lim <= in->cur) {
-				yystate = 9;
-				continue;
-			}
-			yystate = 0;
-			continue;
-		case 11:
-			if (in->lim <= in->cur) {
-				yystate = 2;
-				continue;
-			}
-			yystate = 3;
-			continue;
-		case 12:
-			if (in->lim <= in->cur) {
-				yystate = 8;
-				continue;
-			}
-			yystate = 6;
-			continue;
 		}
 	}
 

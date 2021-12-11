@@ -75,21 +75,21 @@ int scan(char *s, int l)
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			switch (yych) {
-			case '\t':
-			case ' ':	goto yy4;
-			case '+':	goto yy7;
-			case '-':	goto yy9;
-			case '0':	goto yy11;
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy13;
-			default:	goto yy2;
+				case '\t':
+				case ' ': goto yy4;
+				case '+': goto yy7;
+				case '-': goto yy9;
+				case '0': goto yy11;
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9': goto yy13;
+				default: goto yy2;
 			}
 yy2:
 			++YYCURSOR;
@@ -101,9 +101,9 @@ yy4:
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			switch (yych) {
-			case '\t':
-			case ' ':	goto yy4;
-			default:	goto yy6;
+				case '\t':
+				case ' ': goto yy4;
+				default: goto yy6;
 			}
 yy6:
 #line 92 "calc_005.re"
@@ -122,17 +122,17 @@ yy9:
 yy11:
 			yych = *++YYCURSOR;
 			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy15;
-			default:	goto yy12;
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9': goto yy15;
+				default: goto yy12;
 			}
 yy12:
 #line 94 "calc_005.re"
@@ -143,34 +143,34 @@ yy13:
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy13;
-			default:	goto yy12;
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9': goto yy13;
+				default: goto yy12;
 			}
 yy15:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy15;
-			default:	goto yy17;
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9': goto yy15;
+				default: goto yy17;
 			}
 yy17:
 #line 93 "calc_005.re"

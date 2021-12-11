@@ -33,295 +33,295 @@ loop:
 	unsigned int yystate = c;
 	for (;;) {
 		switch (yystate) {
-		case 0:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case '0':
-				yystate = 3;
-				continue;
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				yystate = 5;
-				continue;
-			default:
-				yystate = 1;
-				continue;
-			}
-		case 1:
-			yystate = 2;
-			continue;
-		case 2:
-			{ return ERROR; }
-		case 3:
-			YYMARKER = s;
-			yych = *s;
-			switch (yych) {
-			case 'B':
-			case 'b':
+			case 0:
+				yych = *s;
 				++s;
-				yystate = 7;
+				switch (yych) {
+					case '0':
+						yystate = 3;
+						continue;
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+						yystate = 5;
+						continue;
+					default:
+						yystate = 1;
+						continue;
+				}
+			case 1:
+				yystate = 2;
 				continue;
-			case 'X':
-			case 'x':
-				++s;
-				yystate = 9;
+			case 2:
+				{ return ERROR; }
+			case 3:
+				YYMARKER = s;
+				yych = *s;
+				switch (yych) {
+					case 'B':
+					case 'b':
+						++s;
+						yystate = 7;
+						continue;
+					case 'X':
+					case 'x':
+						++s;
+						yystate = 9;
+						continue;
+					default:
+						yystate = 4;
+						continue;
+				}
+			case 4:
+				c = yycoct;
+				yystate = yycoct;
 				continue;
-			default:
+			case 5:
+				yystate = 6;
+				continue;
+			case 6:
+				s -= 1;
+				c = yycdec;
+				yystate = yycdec;
+				continue;
+			case 7:
+				yych = *s;
+				switch (yych) {
+					case '0':
+					case '1':
+						++s;
+						yystate = 10;
+						continue;
+					default:
+						yystate = 8;
+						continue;
+				}
+			case 8:
+				s = YYMARKER;
 				yystate = 4;
 				continue;
-			}
-		case 4:
-			c = yycoct;
-			yystate = yycoct;
-			continue;
-		case 5:
-			yystate = 6;
-			continue;
-		case 6:
-			s -= 1;
-			c = yycdec;
-			yystate = yycdec;
-			continue;
-		case 7:
-			yych = *s;
-			switch (yych) {
-			case '0':
-			case '1':
+			case 9:
+				yych = *s;
+				switch (yych) {
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+						++s;
+						yystate = 12;
+						continue;
+					default:
+						yystate = 8;
+						continue;
+				}
+			case 10:
+				yystate = 11;
+				continue;
+			case 11:
+				s -= 1;
+				c = yycbin;
+				yystate = yycbin;
+				continue;
+			case 12:
+				yystate = 13;
+				continue;
+			case 13:
+				s -= 1;
+				c = yychex;
+				yystate = yychex;
+				continue;
+			case 14:
+				yych = *s;
 				++s;
-				yystate = 10;
+				switch (yych) {
+					case 0x00:
+						yystate = 15;
+						continue;
+					case '0':
+					case '1':
+						yystate = 19;
+						continue;
+					default:
+						yystate = 17;
+						continue;
+				}
+			case 15:
+				yystate = 16;
 				continue;
-			default:
-				yystate = 8;
+			case 16:
+				{ return u; }
+			case 17:
+				yystate = 18;
 				continue;
-			}
-		case 8:
-			s = YYMARKER;
-			yystate = 4;
-			continue;
-		case 9:
-			yych = *s;
-			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
+			case 18:
+				{ return ERROR; }
+			case 19:
+				yystate = 20;
+				continue;
+			case 20:
+				{ adddgt<2> (u, s[-1] - '0');      goto loop; }
+			case 21:
+				yych = *s;
 				++s;
-				yystate = 12;
+				switch (yych) {
+					case 0x00:
+						yystate = 22;
+						continue;
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+						yystate = 26;
+						continue;
+					default:
+						yystate = 24;
+						continue;
+				}
+			case 22:
+				yystate = 23;
 				continue;
-			default:
-				yystate = 8;
+			case 23:
+				{ return u; }
+			case 24:
+				yystate = 25;
 				continue;
-			}
-		case 10:
-			yystate = 11;
-			continue;
-		case 11:
-			s -= 1;
-			c = yycbin;
-			yystate = yycbin;
-			continue;
-		case 12:
-			yystate = 13;
-			continue;
-		case 13:
-			s -= 1;
-			c = yychex;
-			yystate = yychex;
-			continue;
-		case 14:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case 0x00:
-				yystate = 15;
+			case 25:
+				{ return ERROR; }
+			case 26:
+				yystate = 27;
 				continue;
-			case '0':
-			case '1':
-				yystate = 19;
+			case 27:
+				{ adddgt<10>(u, s[-1] - '0');      goto loop; }
+			case 28:
+				yych = *s;
+				++s;
+				switch (yych) {
+					case 0x00:
+						yystate = 29;
+						continue;
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+						yystate = 33;
+						continue;
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+						yystate = 35;
+						continue;
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+						yystate = 37;
+						continue;
+					default:
+						yystate = 31;
+						continue;
+				}
+			case 29:
+				yystate = 30;
 				continue;
-			default:
-				yystate = 17;
+			case 30:
+				{ return u; }
+			case 31:
+				yystate = 32;
 				continue;
-			}
-		case 15:
-			yystate = 16;
-			continue;
-		case 16:
-			{ return u; }
-		case 17:
-			yystate = 18;
-			continue;
-		case 18:
-			{ return ERROR; }
-		case 19:
-			yystate = 20;
-			continue;
-		case 20:
-			{ adddgt<2> (u, s[-1] - '0');      goto loop; }
-		case 21:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case 0x00:
-				yystate = 22;
+			case 32:
+				{ return ERROR; }
+			case 33:
+				yystate = 34;
 				continue;
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				yystate = 26;
+			case 34:
+				{ adddgt<16>(u, s[-1] - '0');      goto loop; }
+			case 35:
+				yystate = 36;
 				continue;
-			default:
-				yystate = 24;
+			case 36:
+				{ adddgt<16>(u, s[-1] - 'A' + 10); goto loop; }
+			case 37:
+				yystate = 38;
 				continue;
-			}
-		case 22:
-			yystate = 23;
-			continue;
-		case 23:
-			{ return u; }
-		case 24:
-			yystate = 25;
-			continue;
-		case 25:
-			{ return ERROR; }
-		case 26:
-			yystate = 27;
-			continue;
-		case 27:
-			{ adddgt<10>(u, s[-1] - '0');      goto loop; }
-		case 28:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case 0x00:
-				yystate = 29;
+			case 38:
+				{ adddgt<16>(u, s[-1] - 'a' + 10); goto loop; }
+			case 39:
+				yych = *s;
+				++s;
+				switch (yych) {
+					case 0x00:
+						yystate = 40;
+						continue;
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+						yystate = 44;
+						continue;
+					default:
+						yystate = 42;
+						continue;
+				}
+			case 40:
+				yystate = 41;
 				continue;
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				yystate = 33;
+			case 41:
+				{ return u; }
+			case 42:
+				yystate = 43;
 				continue;
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-				yystate = 35;
+			case 43:
+				{ return ERROR; }
+			case 44:
+				yystate = 45;
 				continue;
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-				yystate = 37;
-				continue;
-			default:
-				yystate = 31;
-				continue;
-			}
-		case 29:
-			yystate = 30;
-			continue;
-		case 30:
-			{ return u; }
-		case 31:
-			yystate = 32;
-			continue;
-		case 32:
-			{ return ERROR; }
-		case 33:
-			yystate = 34;
-			continue;
-		case 34:
-			{ adddgt<16>(u, s[-1] - '0');      goto loop; }
-		case 35:
-			yystate = 36;
-			continue;
-		case 36:
-			{ adddgt<16>(u, s[-1] - 'A' + 10); goto loop; }
-		case 37:
-			yystate = 38;
-			continue;
-		case 38:
-			{ adddgt<16>(u, s[-1] - 'a' + 10); goto loop; }
-		case 39:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case 0x00:
-				yystate = 40;
-				continue;
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-				yystate = 44;
-				continue;
-			default:
-				yystate = 42;
-				continue;
-			}
-		case 40:
-			yystate = 41;
-			continue;
-		case 41:
-			{ return u; }
-		case 42:
-			yystate = 43;
-			continue;
-		case 43:
-			{ return ERROR; }
-		case 44:
-			yystate = 45;
-			continue;
-		case 45:
-			{ adddgt<8> (u, s[-1] - '0');      goto loop; }
+			case 45:
+				{ adddgt<8> (u, s[-1] - '0');      goto loop; }
 		}
 	}
 }

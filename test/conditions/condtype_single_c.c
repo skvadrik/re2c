@@ -6,23 +6,22 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyca:
-		goto yyc_a;
+		case yyca: goto yyc_a;
 	}
 /* *********************************** */
 yyc_a:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy3;
-	default:	goto yy2;
+		case 'a': goto yy3;
+		default: goto yy2;
 	}
 yy2:
 yy3:
 	++YYCURSOR;
 #line 3 "conditions/condtype_single_c.re"
 	{}
-#line 26 "conditions/condtype_single_c.c"
+#line 25 "conditions/condtype_single_c.c"
 }
 #line 4 "conditions/condtype_single_c.re"
 

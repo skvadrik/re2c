@@ -7,15 +7,15 @@
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-	case 'a':
-		yyt6 = NULL;
-		yyt1 = yyt5 = YYCURSOR;
-		goto yy3;
-	case 'b':
-		yyt6 = NULL;
-		yyt1 = yyt3 = yyt4 = yyt5 = YYCURSOR;
-		goto yy6;
-	default:	goto yy2;
+		case 'a':
+			yyt6 = NULL;
+			yyt1 = yyt5 = YYCURSOR;
+			goto yy3;
+		case 'b':
+			yyt6 = NULL;
+			yyt1 = yyt3 = yyt4 = yyt5 = YYCURSOR;
+			goto yy6;
+		default: goto yy2;
 	}
 yy2:
 	yynmatch = 1;
@@ -27,15 +27,15 @@ yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt6 = NULL;
-		yyt5 = YYCURSOR;
-		goto yy3;
-	case 'b':
-		yyt4 = NULL;
-		yyt2 = yyt3 = YYCURSOR;
-		goto yy8;
-	default:	goto yy5;
+		case 'a':
+			yyt6 = NULL;
+			yyt5 = YYCURSOR;
+			goto yy3;
+		case 'b':
+			yyt4 = NULL;
+			yyt2 = yyt3 = YYCURSOR;
+			goto yy8;
+		default: goto yy5;
 	}
 yy5:
 	YYCURSOR = YYMARKER;
@@ -48,18 +48,18 @@ yy6:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 'a':
-		yyt2 = yyt5;
-		yyt6 = NULL;
-		yyt5 = YYCURSOR;
-		goto yy3;
-	case 'b':
-		yyt4 = NULL;
-		yyt2 = yyt3 = YYCURSOR;
-		goto yy8;
-	default:
-		yyt2 = yyt5;
-		goto yy7;
+		case 'a':
+			yyt2 = yyt5;
+			yyt6 = NULL;
+			yyt5 = YYCURSOR;
+			goto yy3;
+		case 'b':
+			yyt4 = NULL;
+			yyt2 = yyt3 = YYCURSOR;
+			goto yy8;
+		default:
+			yyt2 = yyt5;
+			goto yy7;
 	}
 yy7:
 	yynmatch = 3;
@@ -76,22 +76,22 @@ yy8:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt2 = yyt5;
-		yyt4 = yyt6;
-		yyt6 = NULL;
-		yyt5 = YYCURSOR;
-		goto yy3;
-	case 'b':
-		yyt5 = yyt2;
-		yyt6 = yyt4;
-		yyt4 = NULL;
-		yyt2 = yyt3 = YYCURSOR;
-		goto yy8;
-	default:
-		yyt2 = yyt5;
-		yyt4 = yyt6;
-		goto yy7;
+		case 'a':
+			yyt2 = yyt5;
+			yyt4 = yyt6;
+			yyt6 = NULL;
+			yyt5 = YYCURSOR;
+			goto yy3;
+		case 'b':
+			yyt5 = yyt2;
+			yyt6 = yyt4;
+			yyt4 = NULL;
+			yyt2 = yyt3 = YYCURSOR;
+			goto yy8;
+		default:
+			yyt2 = yyt5;
+			yyt4 = yyt6;
+			goto yy7;
 	}
 }
 

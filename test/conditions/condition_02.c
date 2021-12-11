@@ -6,52 +6,49 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyc0:
-		goto yyc_0;
-	case yycr1:
-		goto yyc_r1;
-	case yycr2:
-		goto yyc_r2;
+		case yyc0: goto yyc_0;
+		case yycr1: goto yyc_r1;
+		case yycr2: goto yyc_r2;
 	}
 /* *********************************** */
 yyc_0:
 #line 4 "conditions/condition_02.re"
 	{ return NULL; }
-#line 21 "conditions/condition_02.c"
+#line 18 "conditions/condition_02.c"
 /* *********************************** */
 yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy6;
-	case 'b':	goto yy8;
-	default:	goto yy5;
+		case 'a': goto yy6;
+		case 'b': goto yy8;
+		default: goto yy5;
 	}
 yy5:
 yy6:
 	++YYCURSOR;
 #line 5 "conditions/condition_02.re"
 	{ return "a"; }
-#line 36 "conditions/condition_02.c"
+#line 33 "conditions/condition_02.c"
 yy8:
 	++YYCURSOR;
 #line 6 "conditions/condition_02.re"
 	{ return "b"; }
-#line 41 "conditions/condition_02.c"
+#line 38 "conditions/condition_02.c"
 /* *********************************** */
 yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy13;
-	default:	goto yy12;
+		case 'b': goto yy13;
+		default: goto yy12;
 	}
 yy12:
 yy13:
 	++YYCURSOR;
 #line 6 "conditions/condition_02.re"
 	{ return "b"; }
-#line 55 "conditions/condition_02.c"
+#line 52 "conditions/condition_02.c"
 }
 #line 8 "conditions/condition_02.re"
 

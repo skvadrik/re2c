@@ -260,13 +260,13 @@ yy24:
 yy25:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'g':	goto yy27;
-	case 'i':	goto yy28;
-	case 'm':	goto yy29;
-	case 'r':	goto yy30;
-	case 't':	goto yy31;
-	case 'u':	goto yy32;
-	default:	goto yy13;
+		case 'g': goto yy27;
+		case 'i': goto yy28;
+		case 'm': goto yy29;
+		case 'r': goto yy30;
+		case 't': goto yy31;
+		case 'u': goto yy32;
+		default: goto yy13;
 	}
 yy26:
 	yych = *++YYCURSOR;

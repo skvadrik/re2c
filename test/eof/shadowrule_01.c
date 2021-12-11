@@ -11,8 +11,8 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\'':	goto yy4;
-	default:	goto yy2;
+		case '\'': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -22,8 +22,8 @@ yy4:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\'':	goto yy6;
-	default:	goto yy4;
+		case '\'': goto yy6;
+		default: goto yy4;
 	}
 yy6:
 	++YYCURSOR;
@@ -40,13 +40,13 @@ yy6:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\'':	goto yy12;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel0;
-			goto yy18;
-		}
-		goto yy10;
+		case '\'': goto yy12;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel0;
+				goto yy18;
+			}
+			goto yy10;
 	}
 yy10:
 	++YYCURSOR;
@@ -71,13 +71,13 @@ yyFillLabel2:
 	yych = *YYCURSOR;
 yy15:
 	switch (yych) {
-	case '\'':	goto yy16;
-	default:
-		if (YYLIMIT <= YYCURSOR) {
-			if (YYFILL() == 0) goto yyFillLabel2;
-			goto yy19;
-		}
-		goto yy14;
+		case '\'': goto yy16;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel2;
+				goto yy19;
+			}
+			goto yy14;
 	}
 yy16:
 	++YYCURSOR;

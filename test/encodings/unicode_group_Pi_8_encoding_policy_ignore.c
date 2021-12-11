@@ -15,9 +15,9 @@ Pi:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0xC2:	goto yy4;
-	case 0xE2:	goto yy5;
-	default:	goto yy2;
+		case 0xC2: goto yy4;
+		case 0xE2: goto yy5;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -28,15 +28,15 @@ yy3:
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xAB:	goto yy6;
-	default:	goto yy3;
+		case 0xAB: goto yy6;
+		default: goto yy3;
 	}
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x80:	goto yy8;
-	case 0xB8:	goto yy10;
-	default:	goto yy3;
+		case 0x80: goto yy8;
+		case 0xB8: goto yy10;
+		default: goto yy3;
 	}
 yy6:
 	++YYCURSOR;
@@ -46,12 +46,12 @@ yy6:
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x98:
-	case 0x9B:
-	case 0x9C:
-	case 0x9F:
-	case 0xB9:	goto yy6;
-	default:	goto yy9;
+		case 0x98:
+		case 0x9B:
+		case 0x9C:
+		case 0x9F:
+		case 0xB9: goto yy6;
+		default: goto yy9;
 	}
 yy9:
 	YYCURSOR = YYMARKER;
@@ -59,13 +59,13 @@ yy9:
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x82:
-	case 0x84:
-	case 0x89:
-	case 0x8C:
-	case 0x9C:
-	case 0xA0:	goto yy6;
-	default:	goto yy9;
+		case 0x82:
+		case 0x84:
+		case 0x89:
+		case 0x8C:
+		case 0x9C:
+		case 0xA0: goto yy6;
+		default: goto yy9;
 	}
 }
 #line 15 "encodings/unicode_group_Pi_8_encoding_policy_ignore.re"

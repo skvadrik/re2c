@@ -19,9 +19,9 @@
 	xchar yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	case 'c':	goto yy6;
-	default:	goto yy2;
+		case 'a': goto yy4;
+		case 'c': goto yy6;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -49,9 +49,9 @@ yy6:
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy12;
-	case 'c':	goto yy14;
-	default:	goto yy10;
+		case 'a': goto yy12;
+		case 'c': goto yy14;
+		default: goto yy10;
 	}
 yy10:
 	++YYCURSOR;

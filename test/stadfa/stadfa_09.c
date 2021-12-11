@@ -6,8 +6,8 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-	case 'c':	goto yy3;
-	default:	goto yy2;
+		case 'c': goto yy3;
+		default: goto yy2;
 	}
 yy2:
 	{}
@@ -15,8 +15,8 @@ yy3:
 	yych = *++YYCURSOR;
 	yyt2 = YYCURSOR - 1;
 	switch (yych) {
-	case 'c':	goto yy5;
-	default:	goto yy4;
+		case 'c': goto yy5;
+		default: goto yy4;
 	}
 yy4:
 	YYCURSOR = YYMARKER;
@@ -26,8 +26,8 @@ yy5:
 	yyt1 = yyt2;
 	yyt2 = NULL;
 	switch (yych) {
-	case 'c':	goto yy7;
-	default:	goto yy6;
+		case 'c': goto yy7;
+		default: goto yy6;
 	}
 yy6:
 	t = yyt1;

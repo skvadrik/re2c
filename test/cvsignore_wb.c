@@ -88,12 +88,12 @@ yy3:
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 'D':	goto yy5;
-	case 'I':	goto yy7;
-	case 'L':	goto yy8;
-	case 'R':	goto yy9;
-	case 'S':	goto yy10;
-	default:	goto yy3;
+		case 'D': goto yy5;
+		case 'I': goto yy7;
+		case 'L': goto yy8;
+		case 'R': goto yy9;
+		case 'S': goto yy10;
+		default: goto yy3;
 	}
 yy5:
 	yych = *++YYCURSOR;

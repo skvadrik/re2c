@@ -15,8 +15,8 @@ Cs:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0xEF:	goto yy4;
-	default:	goto yy2;
+		case 0xEF: goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -27,14 +27,14 @@ yy3:
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0xBF:	goto yy5;
-	default:	goto yy3;
+		case 0xBF: goto yy5;
+		default: goto yy3;
 	}
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xBD:	goto yy7;
-	default:	goto yy6;
+		case 0xBD: goto yy7;
+		default: goto yy6;
 	}
 yy6:
 	YYCURSOR = YYMARKER;

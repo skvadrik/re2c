@@ -4,16 +4,11 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yyc0:
-		goto yyc_0;
-	case yycx:
-		goto yyc_x;
-	case yycy0:
-		goto yyc_y0;
-	case yycz11:
-		goto yyc_z11;
-	case yycy:
-		goto yyc_y;
+		case yyc0: goto yyc_0;
+		case yycx: goto yyc_x;
+		case yycy0: goto yyc_y0;
+		case yycz11: goto yyc_z11;
+		case yycy: goto yyc_y;
 	}
 /* *********************************** */
 yyc_0:
@@ -23,16 +18,16 @@ yyc_x:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy7;
-	case 'b':	goto yy9;
-	case 'c':	goto yy11;
-	case 'd':	goto yy13;
-	case 'e':	goto yy15;
-	case 'f':	goto yy17;
-	case 'g':	goto yy19;
-	case 'h':	goto yy21;
-	case 'i':	goto yy23;
-	default:	goto yy5;
+		case 'a': goto yy7;
+		case 'b': goto yy9;
+		case 'c': goto yy11;
+		case 'd': goto yy13;
+		case 'e': goto yy15;
+		case 'f': goto yy17;
+		case 'g': goto yy19;
+		case 'h': goto yy21;
+		case 'i': goto yy23;
+		default: goto yy5;
 	}
 yy5:
 	++YYCURSOR;
@@ -79,11 +74,11 @@ yyc_y0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy29;
-	case 'b':	goto yy31;
-	case 'd':	goto yy33;
-	case 'e':	goto yy35;
-	default:	goto yy27;
+		case 'a': goto yy29;
+		case 'b': goto yy31;
+		case 'd': goto yy33;
+		case 'e': goto yy35;
+		default: goto yy27;
 	}
 yy27:
 	++YYCURSOR;
@@ -110,10 +105,10 @@ yyc_z11:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy41;
-	case 'b':	goto yy43;
-	case 'e':	goto yy45;
-	default:	goto yy39;
+		case 'a': goto yy41;
+		case 'b': goto yy43;
+		case 'e': goto yy45;
+		default: goto yy39;
 	}
 yy39:
 	++YYCURSOR;
@@ -136,12 +131,12 @@ yyc_y:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy51;
-	case 'b':	goto yy53;
-	case 'g':	goto yy55;
-	case 'h':	goto yy57;
-	case 'i':	goto yy59;
-	default:	goto yy49;
+		case 'a': goto yy51;
+		case 'b': goto yy53;
+		case 'g': goto yy55;
+		case 'h': goto yy57;
+		case 'i': goto yy59;
+		default: goto yy49;
 	}
 yy49:
 	++YYCURSOR;

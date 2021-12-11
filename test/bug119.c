@@ -3,8 +3,7 @@
 
 
 	switch (YYGETSTATE()) {
-	default:
-		goto yy0;
+		default: goto yy0;
 	}
 yy0:
 	YYSETSTATE(-1);

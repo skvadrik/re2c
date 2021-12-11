@@ -19,37 +19,35 @@ int main ()
 {
 	unsigned char yych;
 	switch (YYGETCONDITION()) {
-	case yyca:
-		goto yyc_a;
-	case yycb:
-		goto yyc_b;
+		case yyca: goto yyc_a;
+		case yycb: goto yyc_b;
 	}
 /* *********************************** */
 yyc_a:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy3;
-	default:	goto yy2;
+		case 'a': goto yy3;
+		default: goto yy2;
 	}
 yy2:
 yy3:
 	++YYCURSOR;
 #line 12 "conditions/condtype_decl_c.re"
 	{}
-#line 40 "conditions/condtype_decl_c.c"
+#line 38 "conditions/condtype_decl_c.c"
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy8;
-	default:	goto yy7;
+		case 'b': goto yy8;
+		default: goto yy7;
 	}
 yy7:
 yy8:
 	++YYCURSOR;
 #line 13 "conditions/condtype_decl_c.re"
 	{}
-#line 53 "conditions/condtype_decl_c.c"
+#line 51 "conditions/condtype_decl_c.c"
 }
 #line 14 "conditions/condtype_decl_c.re"
 

@@ -252,7 +252,7 @@ static void render_case_range(RenderContext &rctx, uint32_t low, uint32_t upp, b
     }
 }
 
-static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
+static void render_case(RenderContext &rctx, const CodeCase *code)
 {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
@@ -295,11 +295,8 @@ static void render_case(RenderContext &rctx, const CodeCase *code, bool oneline)
         }
     }
 
-    if (oneline && oneline_case(code, opts)) {
-        // Do not indent-align with case ranges, they are wider then 'default'.
-        // TODO: compute precise alignment instead of relying on tab indentation.
-        DASSERT(opts->lang == LANG_C);
-        os << (opts->case_ranges ? " " : opts->indString) << first->text << ";\n";
+    if (oneline_case(code, opts)) {
+        os << " " << first->text << ";\n";
         ++rctx.line;
     } else {
         os << std::endl;
@@ -331,14 +328,12 @@ static void render_switch(RenderContext &rctx, const CodeSwitch *code)
     os << " {\n";
     ++rctx.line;
 
-    // If this is a switch on input symbol, prefer single-line cases.
-    const bool oneline = code->cases->head->kind == CodeCase::RANGES;
-
-    if (opts->lang == LANG_RUST) ++rctx.ind;
+    // Do not indent switch cases for Go, as gofmt prefers them unindented.
+    if (opts->lang != LANG_GO) ++rctx.ind;
     for (const CodeCase *c = code->cases->head; c; c = c->next) {
-        render_case(rctx, c, oneline);
+        render_case(rctx, c);
     }
-    if (opts->lang == LANG_RUST) --rctx.ind;
+    if (opts->lang != LANG_GO) --rctx.ind;
 
     os << indent(ind, opts->indString) << "}\n";
     ++rctx.line;

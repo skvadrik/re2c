@@ -11,15 +11,15 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'Z':
-	case '[':
-	case '\\':
-	case ']':
-	case '^':
-	case '_':
-	case '`':
-	case 'a':	goto yy4;
-	default:	goto yy2;
+		case 'Z':
+		case '[':
+		case '\\':
+		case ']':
+		case '^':
+		case '_':
+		case '`':
+		case 'a': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -36,9 +36,9 @@ yy4:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x07:
-	case 'h':	goto yy9;
-	default:	goto yy8;
+		case 0x07:
+		case 'h': goto yy9;
+		default: goto yy8;
 	}
 yy8:
 yy9:

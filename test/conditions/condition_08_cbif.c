@@ -74,16 +74,11 @@ void scan(Scanner *s)
 
 
 		switch (s->state) {
-		default:
-			goto yy0;
-		case 0:
-			goto yyFillLabel0;
-		case 1:
-			goto yyFillLabel1;
-		case 2:
-			goto yyFillLabel2;
-		case 3:
-			goto yyFillLabel3;
+			default: goto yy0;
+			case 0: goto yyFillLabel0;
+			case 1: goto yyFillLabel1;
+			case 2: goto yyFillLabel2;
+			case 3: goto yyFillLabel3;
 		}
 yy0:
 		if (s->cond < 2) {
@@ -171,16 +166,16 @@ yy15:
 yy17:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '!':	goto yy20;
-		case '\'':	goto yy22;
-		case '(':	goto yy24;
-		case ')':	goto yy26;
-		case '-':	goto yy28;
-		case '/':	goto yy30;
-		case '<':	goto yy32;
-		case '=':	goto yy34;
-		case '>':	goto yy36;
-		default:	goto yy11;
+			case '!': goto yy20;
+			case '\'': goto yy22;
+			case '(': goto yy24;
+			case ')': goto yy26;
+			case '-': goto yy28;
+			case '/': goto yy30;
+			case '<': goto yy32;
+			case '=': goto yy34;
+			case '>': goto yy36;
+			default: goto yy11;
 		}
 yy18:
 		++s->cur;

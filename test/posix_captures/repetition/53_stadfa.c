@@ -7,8 +7,8 @@
 	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-	case 'X':	goto yy3;
-	default:	goto yy2;
+		case 'X': goto yy3;
+		default: goto yy2;
 	}
 yy2:
 	yynmatch = 1;
@@ -19,9 +19,9 @@ yy3:
 	yych = *++YYCURSOR;
 	yyt4 = YYCURSOR - 1;
 	switch (yych) {
-	case 0x00:	goto yy4;
-	case 'Y':	goto yy6;
-	default:	goto yy5;
+		case 0x00: goto yy4;
+		case 'Y': goto yy6;
+		default: goto yy5;
 	}
 yy4:
 	YYCURSOR = YYMARKER;
@@ -33,9 +33,9 @@ yy4:
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy4;
-	case 'Y':	goto yy9;
-	default:	goto yy8;
+		case 0x00: goto yy4;
+		case 'Y': goto yy9;
+		default: goto yy8;
 	}
 yy6:
 	yyaccept = 1;
@@ -43,9 +43,9 @@ yy6:
 	yyt1 = yyt4;
 	yyt2 = yyt3 = YYCURSOR - 1;
 	switch (yych) {
-	case 0x00:	goto yy7;
-	case 'Y':	goto yy9;
-	default:	goto yy8;
+		case 0x00: goto yy7;
+		case 'Y': goto yy9;
+		default: goto yy8;
 	}
 yy7:
 	yynmatch = 2;
@@ -57,8 +57,8 @@ yy7:
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'Y':	goto yy12;
-	default:	goto yy11;
+		case 'Y': goto yy12;
+		default: goto yy11;
 	}
 yy9:
 	yyaccept = 1;
@@ -66,9 +66,9 @@ yy9:
 	yyt1 = yyt4;
 	yyt2 = yyt3 = YYCURSOR - 1;
 	switch (yych) {
-	case 0x00:	goto yy7;
-	case 'Y':	goto yy12;
-	default:	goto yy10;
+		case 0x00: goto yy7;
+		case 'Y': goto yy12;
+		default: goto yy10;
 	}
 yy10:
 	++YYCURSOR;
@@ -77,9 +77,9 @@ yy10:
 	yyt5 = YYCURSOR - 1;
 yy11:
 	switch (yych) {
-	case 0x00:	goto yy4;
-	case 'Y':	goto yy13;
-	default:	goto yy10;
+		case 0x00: goto yy4;
+		case 'Y': goto yy13;
+		default: goto yy10;
 	}
 yy12:
 	yyaccept = 1;
@@ -87,9 +87,9 @@ yy12:
 	yyt1 = yyt4;
 	yyt2 = yyt3 = yyt5 = YYCURSOR - 1;
 	switch (yych) {
-	case 0x00:	goto yy7;
-	case 'Y':	goto yy13;
-	default:	goto yy10;
+		case 0x00: goto yy7;
+		case 'Y': goto yy13;
+		default: goto yy10;
 	}
 yy13:
 	yyaccept = 1;
@@ -100,9 +100,9 @@ yy13:
 	yyt1 = yyt4;
 	yyt3 = yyt5 = YYCURSOR - 1;
 	switch (yych) {
-	case 0x00:	goto yy7;
-	case 'Y':	goto yy13;
-	default:	goto yy10;
+		case 0x00: goto yy7;
+		case 'Y': goto yy13;
+		default: goto yy10;
 	}
 }
 

@@ -7,16 +7,16 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-	case 'a':
-		yyt1 = yyt3 = YYCURSOR;
-		goto yy3;
-	case 'b':
-		yyt1 = yyt3 = YYCURSOR;
-		goto yy5;
-	default:
-		yyt2 = yyt3 = NULL;
-		yyt1 = YYCURSOR;
-		goto yy2;
+		case 'a':
+			yyt1 = yyt3 = YYCURSOR;
+			goto yy3;
+		case 'b':
+			yyt1 = yyt3 = YYCURSOR;
+			goto yy5;
+		default:
+			yyt2 = yyt3 = NULL;
+			yyt1 = YYCURSOR;
+			goto yy2;
 	}
 yy2:
 	yynmatch = 2;
@@ -30,22 +30,22 @@ yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt3 = YYCURSOR;
-		goto yy3;
-	case 'b':	goto yy7;
-	default:
-		yyt2 = yyt3;
-		yyt3 = YYCURSOR;
-		goto yy2;
+		case 'a':
+			yyt3 = YYCURSOR;
+			goto yy3;
+		case 'b': goto yy7;
+		default:
+			yyt2 = yyt3;
+			yyt3 = YYCURSOR;
+			goto yy2;
 	}
 yy5:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy7;
-	default:	goto yy6;
+		case 'a': goto yy7;
+		default: goto yy6;
 	}
 yy6:
 	YYCURSOR = YYMARKER;
@@ -63,17 +63,17 @@ yy7:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt3 = YYCURSOR;
-		goto yy3;
-	case 'b':
-		yyt2 = yyt3;
-		yyt3 = YYCURSOR;
-		goto yy5;
-	default:
-		yyt2 = yyt3;
-		yyt3 = YYCURSOR;
-		goto yy2;
+		case 'a':
+			yyt3 = YYCURSOR;
+			goto yy3;
+		case 'b':
+			yyt2 = yyt3;
+			yyt3 = YYCURSOR;
+			goto yy5;
+		default:
+			yyt2 = yyt3;
+			yyt3 = YYCURSOR;
+			goto yy2;
 	}
 }
 

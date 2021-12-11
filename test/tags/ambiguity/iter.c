@@ -6,21 +6,21 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt1 = YYCURSOR;
-		goto yy3;
-	case 'b':
-		yyt1 = YYCURSOR;
-		goto yy5;
-	case 'c':
-		yyt1 = YYCURSOR;
-		goto yy8;
-	case 'd':	goto yy11;
-	case 'e':	goto yy14;
-	case 'f':	goto yy17;
-	default:
-		yyt1 = NULL;
-		goto yy2;
+		case 'a':
+			yyt1 = YYCURSOR;
+			goto yy3;
+		case 'b':
+			yyt1 = YYCURSOR;
+			goto yy5;
+		case 'c':
+			yyt1 = YYCURSOR;
+			goto yy8;
+		case 'd': goto yy11;
+		case 'e': goto yy14;
+		case 'f': goto yy17;
+		default:
+			yyt1 = NULL;
+			goto yy2;
 	}
 yy2:
 	a = yyt1;
@@ -30,18 +30,18 @@ yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt1 = YYCURSOR;
-		goto yy3;
-	default:	goto yy2;
+		case 'a':
+			yyt1 = YYCURSOR;
+			goto yy3;
+		default: goto yy2;
 	}
 yy5:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy5;
-	default:	goto yy7;
+		case 'b': goto yy5;
+		default: goto yy7;
 	}
 yy7:
 	b = yyt1;
@@ -51,8 +51,8 @@ yy8:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':	goto yy8;
-	default:	goto yy10;
+		case 'c': goto yy8;
+		default: goto yy10;
 	}
 yy10:
 	c = yyt1;
@@ -62,10 +62,10 @@ yy11:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'd':	goto yy11;
-	default:
-		yyt1 = YYCURSOR;
-		goto yy13;
+		case 'd': goto yy11;
+		default:
+			yyt1 = YYCURSOR;
+			goto yy13;
 	}
 yy13:
 	d = yyt1;
@@ -75,10 +75,10 @@ yy14:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'e':	goto yy14;
-	default:
-		yyt1 = YYCURSOR;
-		goto yy16;
+		case 'e': goto yy14;
+		default:
+			yyt1 = YYCURSOR;
+			goto yy16;
 	}
 yy16:
 	e = yyt1;
@@ -88,10 +88,10 @@ yy17:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'f':	goto yy17;
-	default:
-		yyt1 = YYCURSOR;
-		goto yy19;
+		case 'f': goto yy17;
+		default:
+			yyt1 = YYCURSOR;
+			goto yy19;
 	}
 yy19:
 	f = yyt1;

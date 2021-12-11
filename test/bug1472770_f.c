@@ -29,10 +29,8 @@ start:
 #line 30 "bug1472770_f.c"
 
 	switch (YYGETSTATE()) {
-	default:
-		goto yy0;
-	case 0:
-		goto yyFillLabel0;
+		default: goto yy0;
+		case 0: goto yyFillLabel0;
 	}
 yy0:
 	goto yy1;
@@ -44,9 +42,9 @@ yy1:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy4;
-	case '\n':	goto yy6;
-	default:	goto yy2;
+		case 0x00: goto yy4;
+		case '\n': goto yy6;
+		default: goto yy2;
 	}
 yy4:
 	++YYCURSOR;
@@ -55,7 +53,7 @@ yy4:
 	{
 		return n;
 	}
-#line 59 "bug1472770_f.c"
+#line 57 "bug1472770_f.c"
 yy6:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -64,7 +62,7 @@ yy6:
 		++n;
 		goto start;
 	}
-#line 68 "bug1472770_f.c"
+#line 66 "bug1472770_f.c"
 #line 36 "bug1472770_f.re"
 
 }

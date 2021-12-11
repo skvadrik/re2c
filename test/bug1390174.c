@@ -22,10 +22,10 @@ const char *q;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy4;
-	case 'A':
-	case 'a':	goto yy6;
-	default:	goto yy2;
+		case '\n': goto yy4;
+		case 'A':
+		case 'a': goto yy6;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -41,20 +41,20 @@ yy4:
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy4;
-	case 'A':
-	case 'a':	goto yy7;
-	default:	goto yy3;
+		case '\n': goto yy4;
+		case 'A':
+		case 'a': goto yy7;
+		default: goto yy3;
 	}
 yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy4;
-	case 'A':
-	case 'a':	goto yy7;
-	default:	goto yy9;
+		case '\n': goto yy4;
+		case 'A':
+		case 'a': goto yy7;
+		default: goto yy9;
 	}
 yy9:
 	YYCURSOR = YYMARKER;

@@ -27,108 +27,105 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yycc1:
-		goto yyc_c1;
-	case yycc2:
-		goto yyc_c2;
-	case yycc3:
-		goto yyc_c3;
+		case yycc1: goto yyc_c1;
+		case yycc2: goto yyc_c2;
+		case yycc3: goto yyc_c3;
 	}
 /* *********************************** */
 yyc_c1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	case 'b':
-	case 'c':	goto yy6;
-	case 'd':	goto yy8;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy10;
-		goto yy2;
+		case 'a': goto yy4;
+		case 'b':
+		case 'c': goto yy6;
+		case 'd': goto yy8;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy10;
+			goto yy2;
 	}
 yy2:
 	++YYCURSOR;
 	{ f1(); }
 #line 18 "reuse/inline_use_conditions.re"
 	{ return xdef1; }
-#line 55 "reuse/inline_use_conditions.c"
+#line 52 "reuse/inline_use_conditions.c"
 yy4:
 	++YYCURSOR;
 	{ f1(); }
 #line 16 "reuse/inline_use_conditions.re"
 	{ return xa; }
-#line 61 "reuse/inline_use_conditions.c"
+#line 58 "reuse/inline_use_conditions.c"
 yy6:
 	++YYCURSOR;
 	YYSETCONDITION(yycc2);
 	{ f1(); }
 #line 17 "reuse/inline_use_conditions.re"
 	{ return xbc; }
-#line 68 "reuse/inline_use_conditions.c"
+#line 65 "reuse/inline_use_conditions.c"
 yy8:
 	++YYCURSOR;
 	YYSETCONDITION(yycc3);
 	{ f1(); }
 #line 28 "reuse/inline_use_conditions.re"
 	{ return ybd; }
-#line 75 "reuse/inline_use_conditions.c"
+#line 72 "reuse/inline_use_conditions.c"
 yy10:
 	{ f1(); }
 #line 45 "reuse/inline_use_conditions.re"
 	{ return eof; }
-#line 80 "reuse/inline_use_conditions.c"
+#line 77 "reuse/inline_use_conditions.c"
 /* *********************************** */
 yyc_c2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy15;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy17;
-		goto yy13;
+		case 'a': goto yy15;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy17;
+			goto yy13;
 	}
 yy13:
 	++YYCURSOR;
 	{ f2(x); }
 #line 44 "reuse/inline_use_conditions.re"
 	{ return def; }
-#line 95 "reuse/inline_use_conditions.c"
+#line 92 "reuse/inline_use_conditions.c"
 yy15:
 	++YYCURSOR;
 	{ f2(x); }
 #line 16 "reuse/inline_use_conditions.re"
 	{ return xa; }
-#line 101 "reuse/inline_use_conditions.c"
+#line 98 "reuse/inline_use_conditions.c"
 yy17:
 	{ f2(x); }
 #line 46 "reuse/inline_use_conditions.re"
 	{ return eof2; }
-#line 106 "reuse/inline_use_conditions.c"
+#line 103 "reuse/inline_use_conditions.c"
 /* *********************************** */
 yyc_c3:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy22;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy24;
-		goto yy20;
+		case 'a': goto yy22;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy24;
+			goto yy20;
 	}
 yy20:
 	++YYCURSOR;
 	{ f3(y); }
 #line 44 "reuse/inline_use_conditions.re"
 	{ return def; }
-#line 121 "reuse/inline_use_conditions.c"
+#line 118 "reuse/inline_use_conditions.c"
 yy22:
 	++YYCURSOR;
 	{ f3(y); }
 #line 27 "reuse/inline_use_conditions.re"
 	{ return ya; }
-#line 127 "reuse/inline_use_conditions.c"
+#line 124 "reuse/inline_use_conditions.c"
 yy24:
 	{ f3(y); }
 #line 31 "reuse/inline_use_conditions.re"
 	{ return yeof3; }
-#line 132 "reuse/inline_use_conditions.c"
+#line 129 "reuse/inline_use_conditions.c"
 }
 #line 49 "reuse/inline_use_conditions.re"
 
@@ -138,112 +135,109 @@ yy24:
 //     c2: ydef,  xeof2, f2(x)
 //     c3: ydef,  yeof3, f3(y)
 
-#line 142 "reuse/inline_use_conditions.c"
+#line 139 "reuse/inline_use_conditions.c"
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yycc1:
-		goto yyc_c1;
-	case yycc3:
-		goto yyc_c3;
-	case yycc2:
-		goto yyc_c2;
+		case yycc1: goto yyc_c1;
+		case yycc3: goto yyc_c3;
+		case yycc2: goto yyc_c2;
 	}
 /* *********************************** */
 yyc_c1:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy29;
-	case 'b':
-	case 'd':	goto yy31;
-	case 'c':	goto yy33;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy35;
-		goto yy27;
+		case 'a': goto yy29;
+		case 'b':
+		case 'd': goto yy31;
+		case 'c': goto yy33;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy35;
+			goto yy27;
 	}
 yy27:
 	++YYCURSOR;
 	{ f(y); }
 #line 29 "reuse/inline_use_conditions.re"
 	{ return ydef1; }
-#line 170 "reuse/inline_use_conditions.c"
+#line 164 "reuse/inline_use_conditions.c"
 yy29:
 	++YYCURSOR;
 	{ f(y); }
 #line 27 "reuse/inline_use_conditions.re"
 	{ return ya; }
-#line 176 "reuse/inline_use_conditions.c"
+#line 170 "reuse/inline_use_conditions.c"
 yy31:
 	++YYCURSOR;
 	YYSETCONDITION(yycc3);
 	{ f(y); }
 #line 28 "reuse/inline_use_conditions.re"
 	{ return ybd; }
-#line 183 "reuse/inline_use_conditions.c"
+#line 177 "reuse/inline_use_conditions.c"
 yy33:
 	++YYCURSOR;
 	YYSETCONDITION(yycc2);
 	{ f(y); }
 #line 17 "reuse/inline_use_conditions.re"
 	{ return xbc; }
-#line 190 "reuse/inline_use_conditions.c"
+#line 184 "reuse/inline_use_conditions.c"
 yy35:
 	{ f(y); }
 #line 32 "reuse/inline_use_conditions.re"
 	{ return yeof; }
-#line 195 "reuse/inline_use_conditions.c"
+#line 189 "reuse/inline_use_conditions.c"
 /* *********************************** */
 yyc_c3:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy40;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy42;
-		goto yy38;
+		case 'a': goto yy40;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy42;
+			goto yy38;
 	}
 yy38:
 	++YYCURSOR;
 	{ f3(y); }
 #line 30 "reuse/inline_use_conditions.re"
 	{ return ydef; }
-#line 210 "reuse/inline_use_conditions.c"
+#line 204 "reuse/inline_use_conditions.c"
 yy40:
 	++YYCURSOR;
 	{ f3(y); }
 #line 27 "reuse/inline_use_conditions.re"
 	{ return ya; }
-#line 216 "reuse/inline_use_conditions.c"
+#line 210 "reuse/inline_use_conditions.c"
 yy42:
 	{ f3(y); }
 #line 31 "reuse/inline_use_conditions.re"
 	{ return yeof3; }
-#line 221 "reuse/inline_use_conditions.c"
+#line 215 "reuse/inline_use_conditions.c"
 /* *********************************** */
 yyc_c2:
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy47;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy49;
-		goto yy45;
+		case 'a': goto yy47;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy49;
+			goto yy45;
 	}
 yy45:
 	++YYCURSOR;
 	{ f2(x); }
 #line 30 "reuse/inline_use_conditions.re"
 	{ return ydef; }
-#line 236 "reuse/inline_use_conditions.c"
+#line 230 "reuse/inline_use_conditions.c"
 yy47:
 	++YYCURSOR;
 	{ f2(x); }
 #line 16 "reuse/inline_use_conditions.re"
 	{ return xa; }
-#line 242 "reuse/inline_use_conditions.c"
+#line 236 "reuse/inline_use_conditions.c"
 yy49:
 	{ f2(x); }
 #line 20 "reuse/inline_use_conditions.re"
 	{ return xeof2; }
-#line 247 "reuse/inline_use_conditions.c"
+#line 241 "reuse/inline_use_conditions.c"
 }
 #line 58 "reuse/inline_use_conditions.re"
 

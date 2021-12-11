@@ -151,16 +151,16 @@ yy14:
 yy16:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '!':	goto yy19;
-		case '\'':	goto yy21;
-		case '(':	goto yy23;
-		case ')':	goto yy25;
-		case '-':	goto yy27;
-		case '/':	goto yy29;
-		case '<':	goto yy31;
-		case '=':	goto yy33;
-		case '>':	goto yy35;
-		default:	goto yy10;
+			case '!': goto yy19;
+			case '\'': goto yy21;
+			case '(': goto yy23;
+			case ')': goto yy25;
+			case '-': goto yy27;
+			case '/': goto yy29;
+			case '<': goto yy31;
+			case '=': goto yy33;
+			case '>': goto yy35;
+			default: goto yy10;
 		}
 yy17:
 		++s->cur;

@@ -14,26 +14,26 @@ int lex1(const char *s)
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy7;
-		goto yy2;
+		case 'a': goto yy4;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy7;
+			goto yy2;
 	}
 yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy8;
-		goto yy2;
+		case 'a': goto yy4;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy8;
+			goto yy2;
 	}
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 'a':	goto yy4;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy6;
-		goto yy2;
+		case 'a': goto yy4;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy6;
+			goto yy2;
 	}
 yy6:
 	{ continue; }
@@ -56,11 +56,11 @@ int lex2(const char *s)
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy11;
-	case 'a':	goto yy14;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy17;
-		goto yy12;
+		case '\n': goto yy11;
+		case 'a': goto yy14;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy17;
+			goto yy12;
 	}
 yy11:
 	YYCURSOR = YYMARKER;
@@ -68,20 +68,20 @@ yy11:
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy11;
-	case 'a':	goto yy14;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy11;
-		goto yy12;
+		case '\n': goto yy11;
+		case 'a': goto yy14;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy11;
+			goto yy12;
 	}
 yy14:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy16;
-	case 'a':	goto yy14;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy16;
-		goto yy12;
+		case '\n': goto yy16;
+		case 'a': goto yy14;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy16;
+			goto yy12;
 	}
 yy16:
 	{ continue; }
@@ -102,21 +102,21 @@ int lex3(const char *s)
 	unsigned int yyaccept = 0;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy22;
-	case 'a':	goto yy23;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy29;
-		goto yy20;
+		case '\n': goto yy22;
+		case 'a': goto yy23;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy29;
+			goto yy20;
 	}
 yy20:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x00:
-		if (YYLIMIT <= YYCURSOR) goto yy21;
-		goto yy26;
-	case '\n':	goto yy21;
-	default:	goto yy27;
+		case 0x00:
+			if (YYLIMIT <= YYCURSOR) goto yy21;
+			goto yy26;
+		case '\n': goto yy21;
+		default: goto yy27;
 	}
 yy21:
 	{ return 1; }
@@ -127,11 +127,11 @@ yy23:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy25;
-	case 'a':	goto yy23;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy25;
-		goto yy26;
+		case '\n': goto yy25;
+		case 'a': goto yy23;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy25;
+			goto yy26;
 	}
 yy25:
 	{ continue; }
@@ -139,11 +139,11 @@ yy26:
 	yych = *++YYCURSOR;
 yy27:
 	switch (yych) {
-	case '\n':	goto yy28;
-	case 'a':	goto yy23;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy28;
-		goto yy26;
+		case '\n': goto yy28;
+		case 'a': goto yy23;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy28;
+			goto yy26;
 	}
 yy28:
 	YYCURSOR = YYMARKER;
@@ -169,22 +169,22 @@ int lex4(const char *s)
 	unsigned int yyaccept = 0;
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy32;
-	case 'a':	goto yy36;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy39;
-		goto yy33;
+		case '\n': goto yy32;
+		case 'a': goto yy36;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy39;
+			goto yy33;
 	}
 yy32:
 	{ return 1; }
 yy33:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy35;
-	case 'a':	goto yy36;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy35;
-		goto yy33;
+		case '\n': goto yy35;
+		case 'a': goto yy36;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy35;
+			goto yy33;
 	}
 yy35:
 	YYCURSOR = YYMARKER;
@@ -197,11 +197,11 @@ yy36:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy38;
-	case 'a':	goto yy36;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy38;
-		goto yy33;
+		case '\n': goto yy38;
+		case 'a': goto yy36;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy38;
+			goto yy33;
 	}
 yy38:
 	{ continue; }
@@ -222,21 +222,21 @@ int lex5(const char *s)
 	unsigned int yyaccept = 0;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy44;
-	case 'a':	goto yy45;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy51;
-		goto yy42;
+		case '\n': goto yy44;
+		case 'a': goto yy45;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy51;
+			goto yy42;
 	}
 yy42:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x00:
-		if (YYLIMIT <= YYCURSOR) goto yy43;
-		goto yy48;
-	case '\n':	goto yy43;
-	default:	goto yy49;
+		case 0x00:
+			if (YYLIMIT <= YYCURSOR) goto yy43;
+			goto yy48;
+		case '\n': goto yy43;
+		default: goto yy49;
 	}
 yy43:
 	{ return 2; }
@@ -247,11 +247,11 @@ yy45:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy47;
-	case 'a':	goto yy45;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy47;
-		goto yy48;
+		case '\n': goto yy47;
+		case 'a': goto yy45;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy47;
+			goto yy48;
 	}
 yy47:
 	{ continue; }
@@ -259,11 +259,11 @@ yy48:
 	yych = *++YYCURSOR;
 yy49:
 	switch (yych) {
-	case '\n':	goto yy50;
-	case 'a':	goto yy45;
-	default:
-		if (YYLIMIT <= YYCURSOR) goto yy50;
-		goto yy48;
+		case '\n': goto yy50;
+		case 'a': goto yy45;
+		default:
+			if (YYLIMIT <= YYCURSOR) goto yy50;
+			goto yy48;
 	}
 yy50:
 	YYCURSOR = YYMARKER;

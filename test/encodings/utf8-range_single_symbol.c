@@ -8,15 +8,15 @@
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0xD0:	goto yy3;
-	default:	goto yy2;
+		case 0xD0: goto yy3;
+		default: goto yy2;
 	}
 yy2:
 yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xB0:	goto yy4;
-	default:	goto yy2;
+		case 0xB0: goto yy4;
+		default: goto yy2;
 	}
 yy4:
 	++YYCURSOR;

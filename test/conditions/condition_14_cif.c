@@ -79,16 +79,11 @@ void scan(Scanner *s)
 	s->tok = s->cur;
 
 	switch (s->state) {
-	default:
-		goto yy0;
-	case 0:
-		goto yyFillLabel0;
-	case 1:
-		goto yyFillLabel1;
-	case 2:
-		goto yyFillLabel2;
-	case 3:
-		goto yyFillLabel3;
+		default: goto yy0;
+		case 0: goto yyFillLabel0;
+		case 1: goto yyFillLabel1;
+		case 2: goto yyFillLabel2;
+		case 3: goto yyFillLabel3;
 	}
 
 	for(;;)
@@ -98,14 +93,10 @@ void scan(Scanner *s)
 
 yy0:
 		switch (s->cond) {
-		case EStateNormal:
-			goto yyc_Normal;
-		case EStateComment:
-			goto yyc_Comment;
-		case EStateSkiptoeol:
-			goto yyc_Skiptoeol;
-		case EStateString:
-			goto yyc_String;
+			case EStateNormal: goto yyc_Normal;
+			case EStateComment: goto yyc_Comment;
+			case EStateSkiptoeol: goto yyc_Skiptoeol;
+			case EStateString: goto yyc_String;
 		}
 /* *********************************** */
 yyc_Normal:
@@ -114,11 +105,11 @@ yyc_Normal:
 yyFillLabel0:
 		s->yych = *s->cur;
 		switch (s->yych) {
-		case '"':	goto yy5;
-		case '\'':	goto yy7;
-		case '/':	goto yy8;
-		case '?':	goto yy9;
-		default:	goto yy3;
+			case '"': goto yy5;
+			case '\'': goto yy7;
+			case '/': goto yy8;
+			case '?': goto yy9;
+			default: goto yy3;
 		}
 yy3:
 		++s->cur;
@@ -135,28 +126,28 @@ yy5:
 yy7:
 		s->yych = *(s->tok = ++s->cur);
 		switch (s->yych) {
-		case '"':	goto yy10;
-		case '\\':	goto yy12;
-		default:	goto yy4;
+			case '"': goto yy10;
+			case '\\': goto yy12;
+			default: goto yy4;
 		}
 yy8:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '*':	goto yy13;
-		case '/':	goto yy15;
-		default:	goto yy4;
+			case '*': goto yy13;
+			case '/': goto yy15;
+			default: goto yy4;
 		}
 yy9:
 		s->yych = *(s->tok = ++s->cur);
 		switch (s->yych) {
-		case '?':	goto yy17;
-		default:	goto yy4;
+			case '?': goto yy17;
+			default: goto yy4;
 		}
 yy10:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '\'':	goto yy18;
-		default:	goto yy11;
+			case '\'': goto yy18;
+			default: goto yy11;
 		}
 yy11:
 		s->cur = s->tok;
@@ -164,8 +155,8 @@ yy11:
 yy12:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '"':	goto yy10;
-		default:	goto yy11;
+			case '"': goto yy10;
+			default: goto yy11;
 		}
 yy13:
 		++s->cur;
@@ -180,16 +171,16 @@ yy15:
 yy17:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '!':	goto yy20;
-		case '\'':	goto yy22;
-		case '(':	goto yy24;
-		case ')':	goto yy26;
-		case '-':	goto yy28;
-		case '/':	goto yy30;
-		case '<':	goto yy32;
-		case '=':	goto yy34;
-		case '>':	goto yy36;
-		default:	goto yy11;
+			case '!': goto yy20;
+			case '\'': goto yy22;
+			case '(': goto yy24;
+			case ')': goto yy26;
+			case '-': goto yy28;
+			case '/': goto yy30;
+			case '<': goto yy32;
+			case '=': goto yy34;
+			case '>': goto yy36;
+			default: goto yy11;
 		}
 yy18:
 		++s->cur;
@@ -248,8 +239,8 @@ yyc_Comment:
 yyFillLabel1:
 		s->yych = *s->cur;
 		switch (s->yych) {
-		case '*':	goto yy42;
-		default:	goto yy40;
+			case '*': goto yy42;
+			default: goto yy40;
 		}
 yy40:
 		++s->cur;
@@ -259,8 +250,8 @@ yy41:
 yy42:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '/':	goto yy43;
-		default:	goto yy41;
+			case '/': goto yy43;
+			default: goto yy41;
 		}
 yy43:
 		++s->cur;
@@ -274,11 +265,11 @@ yyc_Skiptoeol:
 yyFillLabel2:
 		s->yych = *s->cur;
 		switch (s->yych) {
-		case '\n':	goto yy49;
-		case '\r':	goto yy51;
-		case '?':	goto yy52;
-		case '\\':	goto yy53;
-		default:	goto yy47;
+			case '\n': goto yy49;
+			case '\r': goto yy51;
+			case '?': goto yy52;
+			case '\\': goto yy53;
+			default: goto yy47;
 		}
 yy47:
 		++s->cur;
@@ -294,21 +285,21 @@ yy49:
 yy51:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '\n':	goto yy54;
-		default:	goto yy48;
+			case '\n': goto yy54;
+			default: goto yy48;
 		}
 yy52:
 		s->yych = *(s->tok = ++s->cur);
 		switch (s->yych) {
-		case '?':	goto yy56;
-		default:	goto yy48;
+			case '?': goto yy56;
+			default: goto yy48;
 		}
 yy53:
 		s->yych = *(s->tok = ++s->cur);
 		switch (s->yych) {
-		case '\n':	goto yy58;
-		case '\r':	goto yy60;
-		default:	goto yy48;
+			case '\n': goto yy58;
+			case '\r': goto yy60;
+			default: goto yy48;
 		}
 yy54:
 		++s->cur;
@@ -320,8 +311,8 @@ yy54:
 yy56:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '/':	goto yy61;
-		default:	goto yy57;
+			case '/': goto yy61;
+			default: goto yy57;
 		}
 yy57:
 		s->cur = s->tok;
@@ -333,15 +324,15 @@ yy58:
 yy60:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '\n':	goto yy58;
-		default:	goto yy57;
+			case '\n': goto yy58;
+			default: goto yy57;
 		}
 yy61:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '\n':	goto yy62;
-		case '\r':	goto yy64;
-		default:	goto yy57;
+			case '\n': goto yy62;
+			case '\r': goto yy64;
+			default: goto yy57;
 		}
 yy62:
 		++s->cur;
@@ -350,8 +341,8 @@ yy62:
 yy64:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '\n':	goto yy62;
-		default:	goto yy57;
+			case '\n': goto yy62;
+			default: goto yy57;
 		}
 /* *********************************** */
 yyc_String:
@@ -360,9 +351,9 @@ yyc_String:
 yyFillLabel3:
 		s->yych = *s->cur;
 		switch (s->yych) {
-		case '"':	goto yy69;
-		case '\\':	goto yy71;
-		default:	goto yy67;
+			case '"': goto yy69;
+			case '\\': goto yy71;
+			default: goto yy67;
 		}
 yy67:
 		++s->cur;
@@ -379,8 +370,8 @@ yy69:
 yy71:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '\n':	goto yy68;
-		default:	goto yy72;
+			case '\n': goto yy68;
+			default: goto yy72;
 		}
 yy72:
 		++s->cur;

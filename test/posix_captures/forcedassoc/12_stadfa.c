@@ -6,8 +6,8 @@
 	if ((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-	case 'a':	goto yy3;
-	default:	goto yy2;
+		case 'a': goto yy3;
+		default: goto yy2;
 	}
 yy2:
 	yynmatch = 1;
@@ -18,9 +18,9 @@ yy3:
 	yych = *++YYCURSOR;
 	yyt4 = YYCURSOR - 1;
 	switch (yych) {
-	case 'b':	goto yy5;
-	case 'c':	goto yy6;
-	default:	goto yy4;
+		case 'b': goto yy5;
+		case 'c': goto yy6;
+		default: goto yy4;
 	}
 yy4:
 	YYCURSOR = YYMARKER;
@@ -28,20 +28,20 @@ yy4:
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy8;
-	case 'c':	goto yy6;
-	default:	goto yy4;
+		case 'b': goto yy8;
+		case 'c': goto yy6;
+		default: goto yy4;
 	}
 yy6:
 	yych = *++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
 	switch (yych) {
-	case 'd':	goto yy9;
-	default:
-		yyt3 = YYCURSOR;
-		yyt2 = yyt1;
-		yyt1 = yyt4;
-		goto yy7;
+		case 'd': goto yy9;
+		default:
+			yyt3 = YYCURSOR;
+			yyt2 = yyt1;
+			yyt1 = yyt4;
+			goto yy7;
 	}
 yy7:
 	yynmatch = 5;
@@ -60,47 +60,47 @@ yy8:
 	yych = *++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
 	switch (yych) {
-	case 'c':	goto yy10;
-	default:	goto yy4;
+		case 'c': goto yy10;
+		default: goto yy4;
 	}
 yy9:
 	yych = *++YYCURSOR;
 	yyt2 = YYCURSOR - 1;
 	switch (yych) {
-	case 'd':	goto yy11;
-	default:
-		yyt3 = yyt2;
-		yyt2 = yyt1;
-		yyt1 = yyt4;
-		goto yy7;
+		case 'd': goto yy11;
+		default:
+			yyt3 = yyt2;
+			yyt2 = yyt1;
+			yyt1 = yyt4;
+			goto yy7;
 	}
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'd':	goto yy13;
-	default:	goto yy4;
+		case 'd': goto yy13;
+		default: goto yy4;
 	}
 yy11:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'd':	goto yy11;
-	default:
-		yyt3 = yyt2;
-		yyt2 = yyt1;
-		yyt1 = yyt4;
-		goto yy7;
+		case 'd': goto yy11;
+		default:
+			yyt3 = yyt2;
+			yyt2 = yyt1;
+			yyt1 = yyt4;
+			goto yy7;
 	}
 yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'd':	goto yy9;
-	default:
-		yyt3 = YYCURSOR;
-		yyt2 = yyt1;
-		yyt1 = yyt4;
-		goto yy7;
+		case 'd': goto yy9;
+		default:
+			yyt3 = YYCURSOR;
+			yyt2 = yyt1;
+			yyt1 = yyt4;
+			goto yy7;
 	}
 }
 

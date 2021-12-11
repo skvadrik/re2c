@@ -20,80 +20,80 @@ loop:
 	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 0:
-			if (YYLIMIT <= YYCURSOR) return -1;
-			yych = *YYCURSOR;
-			++YYCURSOR;
-			switch (yych) {
-			case 0x00:
-				yystate = 1;
-				continue;
-			case ' ':
-				yystate = 5;
-				continue;
-			case '\'':
-				yystate = 8;
-				continue;
-			default:
-				yystate = 3;
-				continue;
-			}
-		case 1:
-			yystate = 2;
-			continue;
-		case 2:
-			{ return YYCURSOR + YYMAXFILL - 1 == YYLIMIT ? count : -1; }
-		case 3:
-			yystate = 4;
-			continue;
-		case 4:
-			{ return -1; }
-		case 5:
-			if (YYLIMIT <= YYCURSOR) return -1;
-			yych = *YYCURSOR;
-			yystate = 6;
-			continue;
-		case 6:
-			switch (yych) {
-			case ' ':
+			case 0:
+				if (YYLIMIT <= YYCURSOR) return -1;
+				yych = *YYCURSOR;
 				++YYCURSOR;
-				yystate = 5;
+				switch (yych) {
+					case 0x00:
+						yystate = 1;
+						continue;
+					case ' ':
+						yystate = 5;
+						continue;
+					case '\'':
+						yystate = 8;
+						continue;
+					default:
+						yystate = 3;
+						continue;
+				}
+			case 1:
+				yystate = 2;
 				continue;
-			default:
-				yystate = 7;
+			case 2:
+				{ return YYCURSOR + YYMAXFILL - 1 == YYLIMIT ? count : -1; }
+			case 3:
+				yystate = 4;
 				continue;
-			}
-		case 7:
-			{ goto loop; }
-		case 8:
-			if (YYLIMIT <= YYCURSOR) return -1;
-			yych = *YYCURSOR;
-			yystate = 9;
-			continue;
-		case 9:
-			++YYCURSOR;
-			switch (yych) {
-			case '\'':
-				yystate = 10;
+			case 4:
+				{ return -1; }
+			case 5:
+				if (YYLIMIT <= YYCURSOR) return -1;
+				yych = *YYCURSOR;
+				yystate = 6;
 				continue;
-			case '\\':
-				yystate = 12;
+			case 6:
+				switch (yych) {
+					case ' ':
+						++YYCURSOR;
+						yystate = 5;
+						continue;
+					default:
+						yystate = 7;
+						continue;
+				}
+			case 7:
+				{ goto loop; }
+			case 8:
+				if (YYLIMIT <= YYCURSOR) return -1;
+				yych = *YYCURSOR;
+				yystate = 9;
 				continue;
-			default:
+			case 9:
+				++YYCURSOR;
+				switch (yych) {
+					case '\'':
+						yystate = 10;
+						continue;
+					case '\\':
+						yystate = 12;
+						continue;
+					default:
+						yystate = 8;
+						continue;
+				}
+			case 10:
+				yystate = 11;
+				continue;
+			case 11:
+				{ ++count; goto loop; }
+			case 12:
+				if (YYLIMIT <= YYCURSOR) return -1;
+				yych = *YYCURSOR;
+				++YYCURSOR;
 				yystate = 8;
 				continue;
-			}
-		case 10:
-			yystate = 11;
-			continue;
-		case 11:
-			{ ++count; goto loop; }
-		case 12:
-			if (YYLIMIT <= YYCURSOR) return -1;
-			yych = *YYCURSOR;
-			++YYCURSOR;
-			yystate = 8;
-			continue;
 		}
 	}
 }

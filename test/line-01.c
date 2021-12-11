@@ -10,12 +10,12 @@ const char* scan(unsigned char* in)
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy2;
-	case 'a':	goto yy5;
-	case 'b':	goto yy7;
-	case 'c':	goto yy9;
-	case 'd':	goto yy11;
-	default:	goto yy3;
+		case '\n': goto yy2;
+		case 'a': goto yy5;
+		case 'b': goto yy7;
+		case 'c': goto yy9;
+		case 'd': goto yy11;
+		default: goto yy3;
 	}
 yy2:
 yy3:

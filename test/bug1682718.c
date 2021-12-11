@@ -9,17 +9,17 @@ char *scan(char *p)
 		unsigned char yych;
 		yych = (unsigned char)*p;
 		switch (yych) {
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':	goto yy4;
-		default:	goto yy2;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9': goto yy4;
+			default: goto yy2;
 		}
 yy2:
 		++p;
@@ -29,17 +29,17 @@ yy2:
 yy4:
 		yych = (unsigned char)*++p;
 		switch (yych) {
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':	goto yy4;
-		default:	goto yy6;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9': goto yy4;
+			default: goto yy6;
 		}
 yy6:
 #line 10 "bug1682718.re"

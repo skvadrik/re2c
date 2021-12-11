@@ -10,8 +10,8 @@
 	yych = *YYCURSOR++;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy5;
-	default:	goto yy4;
+		case 'a': goto yy5;
+		default: goto yy4;
 	}
 yy4:
 #line 5 "control_flow_ok.re"

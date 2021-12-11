@@ -109,598 +109,598 @@ static enum con_status parse_con_req(struct con_state* c)
 	int yystate = c->state;
 	for (;;) {
 		switch (yystate) {
-		case -1:
-		case 0:
-			yych = *c->cur;
-			switch (yych) {
-			case '!':
-			case '#':
-			case '$':
-			case '%':
-			case '&':
-			case '\'':
-			case '*':
-			case '+':
-			case '-':
-			case '.':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-			case '^':
-			case '_':
-			case '`':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-			case '|':
-			case '~':
-				c->yyt1 = c->cur;
-				++c->cur;
-				yystate = 3;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 57;
-					return CON_STATUS_WAITING;
+			case -1:
+			case 0:
+				yych = *c->cur;
+				switch (yych) {
+					case '!':
+					case '#':
+					case '$':
+					case '%':
+					case '&':
+					case '\'':
+					case '*':
+					case '+':
+					case '-':
+					case '.':
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'G':
+					case 'H':
+					case 'I':
+					case 'J':
+					case 'K':
+					case 'L':
+					case 'M':
+					case 'N':
+					case 'O':
+					case 'P':
+					case 'Q':
+					case 'R':
+					case 'S':
+					case 'T':
+					case 'U':
+					case 'V':
+					case 'W':
+					case 'X':
+					case 'Y':
+					case 'Z':
+					case '^':
+					case '_':
+					case '`':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+					case '|':
+					case '~':
+						c->yyt1 = c->cur;
+						++c->cur;
+						yystate = 3;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 57;
+							return CON_STATUS_WAITING;
+						}
+						++c->cur;
+						yystate = 1;
+						continue;
 				}
-				++c->cur;
-				yystate = 1;
-				continue;
-			}
-		case 1:
-			yystate = 2;
-			continue;
-		case 2:
-			c->state = yycmedia_type;
-			{ return CON_STATUS_ERROR; }
-		case 3:
-			c->mar = c->cur;
-			yych = *c->cur;
-			switch (yych) {
-			case '!':
-			case '#':
-			case '$':
-			case '%':
-			case '&':
-			case '\'':
-			case '*':
-			case '+':
-			case '-':
-			case '.':
-			case '/':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-			case '^':
-			case '_':
-			case '`':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-			case '|':
-			case '~':
-				yystate = 5;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 58;
-					return CON_STATUS_WAITING;
-				}
+			case 1:
 				yystate = 2;
 				continue;
-			}
-		case 4:
-			yych = *c->cur;
-			yystate = 5;
-			continue;
-		case 5:
-			switch (yych) {
-			case '!':
-			case '#':
-			case '$':
-			case '%':
-			case '&':
-			case '\'':
-			case '*':
-			case '+':
-			case '-':
-			case '.':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-			case '^':
-			case '_':
-			case '`':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-			case '|':
-			case '~':
-				++c->cur;
-				yystate = 4;
-				continue;
-			case '/':
-				++c->cur;
-				yystate = 7;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 59;
-					return CON_STATUS_WAITING;
+			case 2:
+				c->state = yycmedia_type;
+				{ return CON_STATUS_ERROR; }
+			case 3:
+				c->mar = c->cur;
+				yych = *c->cur;
+				switch (yych) {
+					case '!':
+					case '#':
+					case '$':
+					case '%':
+					case '&':
+					case '\'':
+					case '*':
+					case '+':
+					case '-':
+					case '.':
+					case '/':
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'G':
+					case 'H':
+					case 'I':
+					case 'J':
+					case 'K':
+					case 'L':
+					case 'M':
+					case 'N':
+					case 'O':
+					case 'P':
+					case 'Q':
+					case 'R':
+					case 'S':
+					case 'T':
+					case 'U':
+					case 'V':
+					case 'W':
+					case 'X':
+					case 'Y':
+					case 'Z':
+					case '^':
+					case '_':
+					case '`':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+					case '|':
+					case '~':
+						yystate = 5;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 58;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 2;
+						continue;
 				}
-				yystate = 6;
+			case 4:
+				yych = *c->cur;
+				yystate = 5;
 				continue;
-			}
-		case 6:
-			c->cur = c->mar;
-			yystate = 2;
-			continue;
-		case 7:
-			yych = *c->cur;
-			switch (yych) {
-			case 0x00:
-			case '\t':
-			case '\r':
-			case ' ':
-			case ';':
-				if (c->lim <= c->cur) {
-					c->state = 60;
-					return CON_STATUS_WAITING;
+			case 5:
+				switch (yych) {
+					case '!':
+					case '#':
+					case '$':
+					case '%':
+					case '&':
+					case '\'':
+					case '*':
+					case '+':
+					case '-':
+					case '.':
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'G':
+					case 'H':
+					case 'I':
+					case 'J':
+					case 'K':
+					case 'L':
+					case 'M':
+					case 'N':
+					case 'O':
+					case 'P':
+					case 'Q':
+					case 'R':
+					case 'S':
+					case 'T':
+					case 'U':
+					case 'V':
+					case 'W':
+					case 'X':
+					case 'Y':
+					case 'Z':
+					case '^':
+					case '_':
+					case '`':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+					case '|':
+					case '~':
+						++c->cur;
+						yystate = 4;
+						continue;
+					case '/':
+						++c->cur;
+						yystate = 7;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 59;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
+			case 6:
+				c->cur = c->mar;
+				yystate = 2;
 				continue;
-			default:
+			case 7:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case '\t':
+					case '\r':
+					case ' ':
+					case ';':
+						if (c->lim <= c->cur) {
+							c->state = 60;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
+					default:
+						yystate = 9;
+						continue;
+				}
+			case 8:
+				yych = *c->cur;
 				yystate = 9;
 				continue;
-			}
-		case 8:
-			yych = *c->cur;
-			yystate = 9;
-			continue;
-		case 9:
-			switch (yych) {
-			case '\t':
-			case ' ':
-				c->yytm6 = c->yytm10;
-				mtag(&c->yytm6, c->tok, NULL, &c->mtp);
-				c->yytm5 = c->yytm9;
-				mtag(&c->yytm5, c->tok, NULL, &c->mtp);
-				c->yytm4 = c->yytm8;
-				mtag(&c->yytm4, c->tok, NULL, &c->mtp);
-				c->yytm3 = c->yytm7;
-				mtag(&c->yytm3, c->tok, NULL, &c->mtp);
-				c->yyt2 = c->cur;
-				++c->cur;
-				yystate = 10;
-				continue;
-			case '\r':
-				c->yytm6 = c->yytm10;
-				mtag(&c->yytm6, c->tok, NULL, &c->mtp);
-				c->yytm5 = c->yytm9;
-				mtag(&c->yytm5, c->tok, NULL, &c->mtp);
-				c->yytm4 = c->yytm8;
-				mtag(&c->yytm4, c->tok, NULL, &c->mtp);
-				c->yytm3 = c->yytm7;
-				mtag(&c->yytm3, c->tok, NULL, &c->mtp);
-				c->yyt2 = c->cur;
-				++c->cur;
-				yystate = 12;
-				continue;
-			case '!':
-			case '#':
-			case '$':
-			case '%':
-			case '&':
-			case '\'':
-			case '*':
-			case '+':
-			case '-':
-			case '.':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-			case '^':
-			case '_':
-			case '`':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-			case '|':
-			case '~':
-				++c->cur;
-				yystate = 8;
-				continue;
-			case ';':
-				c->yyt2 = c->cur;
-				++c->cur;
-				yystate = 13;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 61;
-					return CON_STATUS_WAITING;
+			case 9:
+				switch (yych) {
+					case '\t':
+					case ' ':
+						c->yytm6 = c->yytm10;
+						mtag(&c->yytm6, c->tok, NULL, &c->mtp);
+						c->yytm5 = c->yytm9;
+						mtag(&c->yytm5, c->tok, NULL, &c->mtp);
+						c->yytm4 = c->yytm8;
+						mtag(&c->yytm4, c->tok, NULL, &c->mtp);
+						c->yytm3 = c->yytm7;
+						mtag(&c->yytm3, c->tok, NULL, &c->mtp);
+						c->yyt2 = c->cur;
+						++c->cur;
+						yystate = 10;
+						continue;
+					case '\r':
+						c->yytm6 = c->yytm10;
+						mtag(&c->yytm6, c->tok, NULL, &c->mtp);
+						c->yytm5 = c->yytm9;
+						mtag(&c->yytm5, c->tok, NULL, &c->mtp);
+						c->yytm4 = c->yytm8;
+						mtag(&c->yytm4, c->tok, NULL, &c->mtp);
+						c->yytm3 = c->yytm7;
+						mtag(&c->yytm3, c->tok, NULL, &c->mtp);
+						c->yyt2 = c->cur;
+						++c->cur;
+						yystate = 12;
+						continue;
+					case '!':
+					case '#':
+					case '$':
+					case '%':
+					case '&':
+					case '\'':
+					case '*':
+					case '+':
+					case '-':
+					case '.':
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'G':
+					case 'H':
+					case 'I':
+					case 'J':
+					case 'K':
+					case 'L':
+					case 'M':
+					case 'N':
+					case 'O':
+					case 'P':
+					case 'Q':
+					case 'R':
+					case 'S':
+					case 'T':
+					case 'U':
+					case 'V':
+					case 'W':
+					case 'X':
+					case 'Y':
+					case 'Z':
+					case '^':
+					case '_':
+					case '`':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+					case '|':
+					case '~':
+						++c->cur;
+						yystate = 8;
+						continue;
+					case ';':
+						c->yyt2 = c->cur;
+						++c->cur;
+						yystate = 13;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 61;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
+			case 10:
+				yych = *c->cur;
+				yystate = 11;
 				continue;
-			}
-		case 10:
-			yych = *c->cur;
-			yystate = 11;
-			continue;
-		case 11:
-			switch (yych) {
-			case '\t':
-			case ' ':
-				++c->cur;
-				yystate = 10;
-				continue;
-			case '\r':
-				++c->cur;
-				yystate = 12;
-				continue;
-			case ';':
-				++c->cur;
-				yystate = 13;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 62;
-					return CON_STATUS_WAITING;
+			case 11:
+				switch (yych) {
+					case '\t':
+					case ' ':
+						++c->cur;
+						yystate = 10;
+						continue;
+					case '\r':
+						++c->cur;
+						yystate = 12;
+						continue;
+					case ';':
+						++c->cur;
+						yystate = 13;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 62;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
-				continue;
-			}
-		case 12:
-			yych = *c->cur;
-			switch (yych) {
-			case '\n':
-				++c->cur;
-				yystate = 15;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 63;
-					return CON_STATUS_WAITING;
+			case 12:
+				yych = *c->cur;
+				switch (yych) {
+					case '\n':
+						++c->cur;
+						yystate = 15;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 63;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
+			case 13:
+				yych = *c->cur;
+				yystate = 14;
 				continue;
-			}
-		case 13:
-			yych = *c->cur;
-			yystate = 14;
-			continue;
-		case 14:
-			switch (yych) {
-			case '\t':
-			case ' ':
-				++c->cur;
-				yystate = 13;
-				continue;
-			case '!':
-			case '#':
-			case '$':
-			case '%':
-			case '&':
-			case '\'':
-			case '*':
-			case '+':
-			case '-':
-			case '.':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-			case '^':
-			case '_':
-			case '`':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-			case '|':
-			case '~':
-				mtag(&c->yytm7, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 17;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 64;
-					return CON_STATUS_WAITING;
+			case 14:
+				switch (yych) {
+					case '\t':
+					case ' ':
+						++c->cur;
+						yystate = 13;
+						continue;
+					case '!':
+					case '#':
+					case '$':
+					case '%':
+					case '&':
+					case '\'':
+					case '*':
+					case '+':
+					case '-':
+					case '.':
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'G':
+					case 'H':
+					case 'I':
+					case 'J':
+					case 'K':
+					case 'L':
+					case 'M':
+					case 'N':
+					case 'O':
+					case 'P':
+					case 'Q':
+					case 'R':
+					case 'S':
+					case 'T':
+					case 'U':
+					case 'V':
+					case 'W':
+					case 'X':
+					case 'Y':
+					case 'Z':
+					case '^':
+					case '_':
+					case '`':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+					case '|':
+					case '~':
+						mtag(&c->yytm7, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 17;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 64;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
+			case 15:
+				yystate = 16;
 				continue;
-			}
-		case 15:
-			yystate = 16;
-			continue;
-		case 16:
-			l1 = c->yyt1;
-			l2 = c->yyt2;
-			p1 = c->yytm3;
-			p2 = c->yytm4;
-			p3 = c->yytm5;
-			p4 = c->yytm6;
-			c->state = yycmedia_type;
-			{
+			case 16:
+				l1 = c->yyt1;
+				l2 = c->yyt2;
+				p1 = c->yytm3;
+				p2 = c->yytm4;
+				p3 = c->yytm5;
+				p4 = c->yytm6;
+				c->state = yycmedia_type;
+				{
             struct mtag*    pname_start = p1;
             struct mtag*    pname_end   = p2;
             struct mtag*    pval_start  = p3;
@@ -721,970 +721,970 @@ static enum con_status parse_con_req(struct con_state* c)
 
             return CON_STATUS_DONE;
         }
-		case 17:
-			yych = *c->cur;
-			yystate = 18;
-			continue;
-		case 18:
-			switch (yych) {
-			case '!':
-			case '#':
-			case '$':
-			case '%':
-			case '&':
-			case '\'':
-			case '*':
-			case '+':
-			case '-':
-			case '.':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-			case '^':
-			case '_':
-			case '`':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-			case '|':
-			case '~':
-				++c->cur;
-				yystate = 17;
+			case 17:
+				yych = *c->cur;
+				yystate = 18;
 				continue;
-			case '=':
-				mtag(&c->yytm8, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 19;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 65;
-					return CON_STATUS_WAITING;
+			case 18:
+				switch (yych) {
+					case '!':
+					case '#':
+					case '$':
+					case '%':
+					case '&':
+					case '\'':
+					case '*':
+					case '+':
+					case '-':
+					case '.':
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'G':
+					case 'H':
+					case 'I':
+					case 'J':
+					case 'K':
+					case 'L':
+					case 'M':
+					case 'N':
+					case 'O':
+					case 'P':
+					case 'Q':
+					case 'R':
+					case 'S':
+					case 'T':
+					case 'U':
+					case 'V':
+					case 'W':
+					case 'X':
+					case 'Y':
+					case 'Z':
+					case '^':
+					case '_':
+					case '`':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+					case '|':
+					case '~':
+						++c->cur;
+						yystate = 17;
+						continue;
+					case '=':
+						mtag(&c->yytm8, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 19;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 65;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
-				continue;
-			}
-		case 19:
-			yych = *c->cur;
-			switch (yych) {
-			case '!':
-			case '#':
-			case '$':
-			case '%':
-			case '&':
-			case '\'':
-			case '*':
-			case '+':
-			case '-':
-			case '.':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-			case '^':
-			case '_':
-			case '`':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-			case '|':
-			case '~':
-				mtag(&c->yytm9, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 20;
-				continue;
-			case '"':
-				mtag(&c->yytm9, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 22;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 66;
-					return CON_STATUS_WAITING;
+			case 19:
+				yych = *c->cur;
+				switch (yych) {
+					case '!':
+					case '#':
+					case '$':
+					case '%':
+					case '&':
+					case '\'':
+					case '*':
+					case '+':
+					case '-':
+					case '.':
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'G':
+					case 'H':
+					case 'I':
+					case 'J':
+					case 'K':
+					case 'L':
+					case 'M':
+					case 'N':
+					case 'O':
+					case 'P':
+					case 'Q':
+					case 'R':
+					case 'S':
+					case 'T':
+					case 'U':
+					case 'V':
+					case 'W':
+					case 'X':
+					case 'Y':
+					case 'Z':
+					case '^':
+					case '_':
+					case '`':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+					case '|':
+					case '~':
+						mtag(&c->yytm9, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 20;
+						continue;
+					case '"':
+						mtag(&c->yytm9, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 22;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 66;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
+			case 20:
+				yych = *c->cur;
+				yystate = 21;
 				continue;
-			}
-		case 20:
-			yych = *c->cur;
-			yystate = 21;
-			continue;
-		case 21:
-			switch (yych) {
-			case '\t':
-			case ' ':
-				mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 24;
-				continue;
-			case '\r':
-				c->yytm3 = c->yytm7;
-				c->yytm4 = c->yytm8;
-				c->yytm5 = c->yytm9;
-				c->yytm6 = c->yytm10;
-				mtag(&c->yytm6, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 12;
-				continue;
-			case '!':
-			case '#':
-			case '$':
-			case '%':
-			case '&':
-			case '\'':
-			case '*':
-			case '+':
-			case '-':
-			case '.':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-			case '^':
-			case '_':
-			case '`':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-			case '|':
-			case '~':
-				++c->cur;
-				yystate = 20;
-				continue;
-			case ';':
-				mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 13;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 67;
-					return CON_STATUS_WAITING;
+			case 21:
+				switch (yych) {
+					case '\t':
+					case ' ':
+						mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 24;
+						continue;
+					case '\r':
+						c->yytm3 = c->yytm7;
+						c->yytm4 = c->yytm8;
+						c->yytm5 = c->yytm9;
+						c->yytm6 = c->yytm10;
+						mtag(&c->yytm6, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 12;
+						continue;
+					case '!':
+					case '#':
+					case '$':
+					case '%':
+					case '&':
+					case '\'':
+					case '*':
+					case '+':
+					case '-':
+					case '.':
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'G':
+					case 'H':
+					case 'I':
+					case 'J':
+					case 'K':
+					case 'L':
+					case 'M':
+					case 'N':
+					case 'O':
+					case 'P':
+					case 'Q':
+					case 'R':
+					case 'S':
+					case 'T':
+					case 'U':
+					case 'V':
+					case 'W':
+					case 'X':
+					case 'Y':
+					case 'Z':
+					case '^':
+					case '_':
+					case '`':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+					case 'g':
+					case 'h':
+					case 'i':
+					case 'j':
+					case 'k':
+					case 'l':
+					case 'm':
+					case 'n':
+					case 'o':
+					case 'p':
+					case 'q':
+					case 'r':
+					case 's':
+					case 't':
+					case 'u':
+					case 'v':
+					case 'w':
+					case 'x':
+					case 'y':
+					case 'z':
+					case '|':
+					case '~':
+						++c->cur;
+						yystate = 20;
+						continue;
+					case ';':
+						mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 13;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 67;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
+			case 22:
+				yych = *c->cur;
+				yystate = 23;
 				continue;
-			}
-		case 22:
-			yych = *c->cur;
-			yystate = 23;
-			continue;
-		case 23:
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\n':
-			case '\v':
-			case '\f':
-			case '\r':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x1F:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 68;
-					return CON_STATUS_WAITING;
+			case 23:
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case '\r':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x1F:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 68;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
+					case '"':
+						++c->cur;
+						yystate = 26;
+						continue;
+					case '\\':
+						++c->cur;
+						yystate = 27;
+						continue;
+					default:
+						++c->cur;
+						yystate = 22;
+						continue;
 				}
-				yystate = 6;
+			case 24:
+				yych = *c->cur;
+				yystate = 25;
 				continue;
-			case '"':
-				++c->cur;
-				yystate = 26;
-				continue;
-			case '\\':
-				++c->cur;
-				yystate = 27;
-				continue;
-			default:
-				++c->cur;
-				yystate = 22;
-				continue;
-			}
-		case 24:
-			yych = *c->cur;
-			yystate = 25;
-			continue;
-		case 25:
-			switch (yych) {
-			case '\t':
-			case ' ':
-				++c->cur;
-				yystate = 24;
-				continue;
-			case '\r':
-				c->yytm3 = c->yytm7;
-				c->yytm4 = c->yytm8;
-				c->yytm5 = c->yytm9;
-				c->yytm6 = c->yytm10;
-				++c->cur;
-				yystate = 12;
-				continue;
-			case ';':
-				++c->cur;
-				yystate = 13;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 69;
-					return CON_STATUS_WAITING;
+			case 25:
+				switch (yych) {
+					case '\t':
+					case ' ':
+						++c->cur;
+						yystate = 24;
+						continue;
+					case '\r':
+						c->yytm3 = c->yytm7;
+						c->yytm4 = c->yytm8;
+						c->yytm5 = c->yytm9;
+						c->yytm6 = c->yytm10;
+						++c->cur;
+						yystate = 12;
+						continue;
+					case ';':
+						++c->cur;
+						yystate = 13;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 69;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
-				continue;
-			}
-		case 26:
-			yych = *c->cur;
-			switch (yych) {
-			case '\t':
-			case ' ':
-				mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 24;
-				continue;
-			case '\r':
-				c->yytm3 = c->yytm7;
-				c->yytm4 = c->yytm8;
-				c->yytm5 = c->yytm9;
-				c->yytm6 = c->yytm10;
-				mtag(&c->yytm6, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 12;
-				continue;
-			case ';':
-				mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 13;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 70;
-					return CON_STATUS_WAITING;
+			case 26:
+				yych = *c->cur;
+				switch (yych) {
+					case '\t':
+					case ' ':
+						mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 24;
+						continue;
+					case '\r':
+						c->yytm3 = c->yytm7;
+						c->yytm4 = c->yytm8;
+						c->yytm5 = c->yytm9;
+						c->yytm6 = c->yytm10;
+						mtag(&c->yytm6, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 12;
+						continue;
+					case ';':
+						mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 13;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 70;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
 				}
-				yystate = 6;
-				continue;
-			}
-		case 27:
-			yych = *c->cur;
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\n':
-			case '\v':
-			case '\f':
-			case '\r':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 71;
-					return CON_STATUS_WAITING;
+			case 27:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case '\r':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 71;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
+					default:
+						++c->cur;
+						yystate = 22;
+						continue;
 				}
-				yystate = 6;
-				continue;
-			default:
-				++c->cur;
-				yystate = 22;
-				continue;
-			}
-		case 28:
-			c->state = yycmedia_type;
-			{ return CON_STATUS_END; }
-		case 29:
-			yych = *c->cur;
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\t':
-			case '\n':
-			case '\v':
-			case '\f':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 72;
-					return CON_STATUS_WAITING;
+			case 28:
+				c->state = yycmedia_type;
+				{ return CON_STATUS_END; }
+			case 29:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\t':
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 72;
+							return CON_STATUS_WAITING;
+						}
+						++c->cur;
+						yystate = 30;
+						continue;
+					case '\r':
+						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 32;
+						continue;
+					default:
+						++c->cur;
+						yystate = 33;
+						continue;
 				}
-				++c->cur;
-				yystate = 30;
-				continue;
-			case '\r':
-				mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 32;
-				continue;
-			default:
-				++c->cur;
-				yystate = 33;
-				continue;
-			}
-		case 30:
-			yystate = 31;
-			continue;
-		case 31:
-			c->state = yycheader;
-			{ return CON_STATUS_ERROR; }
-		case 32:
-			yyaccept = 0;
-			c->mar = c->cur;
-			yych = *c->cur;
-			switch (yych) {
-			case '\n':
-				++c->cur;
-				yystate = 34;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 73;
-					return CON_STATUS_WAITING;
-				}
+			case 30:
 				yystate = 31;
 				continue;
-			}
-		case 33:
-			yyaccept = 0;
-			c->mar = c->cur;
-			yych = *c->cur;
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\n':
-			case '\v':
-			case '\f':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 74;
-					return CON_STATUS_WAITING;
+			case 31:
+				c->state = yycheader;
+				{ return CON_STATUS_ERROR; }
+			case 32:
+				yyaccept = 0;
+				c->mar = c->cur;
+				yych = *c->cur;
+				switch (yych) {
+					case '\n':
+						++c->cur;
+						yystate = 34;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 73;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 31;
+						continue;
 				}
-				yystate = 31;
-				continue;
-			case '\t':
-				++c->cur;
-				yystate = 36;
-				continue;
-			case '\r':
-				mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 38;
-				continue;
-			default:
-				++c->cur;
-				yystate = 39;
-				continue;
-			}
-		case 34:
-			yych = *c->cur;
-			switch (yych) {
-			case '\t':
-			case ' ':
-				++c->cur;
-				yystate = 41;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 75;
-					return CON_STATUS_WAITING;
+			case 33:
+				yyaccept = 0;
+				c->mar = c->cur;
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 74;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 31;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 36;
+						continue;
+					case '\r':
+						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 38;
+						continue;
+					default:
+						++c->cur;
+						yystate = 39;
+						continue;
 				}
-				yystate = 35;
-				continue;
-			}
-		case 35:
-			c->cur = c->mar;
-			if (yyaccept == 0) {
-				yystate = 31;
-				continue;
-			} else {
-				yystate = 48;
-				continue;
-			}
-		case 36:
-			yych = *c->cur;
-			yystate = 37;
-			continue;
-		case 37:
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\n':
-			case '\v':
-			case '\f':
-			case '\r':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 76;
-					return CON_STATUS_WAITING;
+			case 34:
+				yych = *c->cur;
+				switch (yych) {
+					case '\t':
+					case ' ':
+						++c->cur;
+						yystate = 41;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 75;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
 				}
-				yystate = 35;
-				continue;
-			case '\t':
-				++c->cur;
-				yystate = 36;
-				continue;
-			case ' ':
-				++c->cur;
-				yystate = 39;
-				continue;
-			default:
-				++c->cur;
-				yystate = 43;
-				continue;
-			}
-		case 38:
-			yych = *c->cur;
-			switch (yych) {
-			case '\n':
-				++c->cur;
-				yystate = 34;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 77;
-					return CON_STATUS_WAITING;
+			case 35:
+				c->cur = c->mar;
+				if (yyaccept == 0) {
+					yystate = 31;
+					continue;
+				} else {
+					yystate = 48;
+					continue;
 				}
-				yystate = 35;
+			case 36:
+				yych = *c->cur;
+				yystate = 37;
 				continue;
-			}
-		case 39:
-			yych = *c->cur;
-			yystate = 40;
-			continue;
-		case 40:
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\n':
-			case '\v':
-			case '\f':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 78;
-					return CON_STATUS_WAITING;
+			case 37:
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case '\r':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 76;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 36;
+						continue;
+					case ' ':
+						++c->cur;
+						yystate = 39;
+						continue;
+					default:
+						++c->cur;
+						yystate = 43;
+						continue;
 				}
-				yystate = 35;
-				continue;
-			case '\t':
-				++c->cur;
-				yystate = 36;
-				continue;
-			case '\r':
-				mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 38;
-				continue;
-			default:
-				++c->cur;
-				yystate = 39;
-				continue;
-			}
-		case 41:
-			yych = *c->cur;
-			yystate = 42;
-			continue;
-		case 42:
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\n':
-			case '\v':
-			case '\f':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 79;
-					return CON_STATUS_WAITING;
+			case 38:
+				yych = *c->cur;
+				switch (yych) {
+					case '\n':
+						++c->cur;
+						yystate = 34;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 77;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
 				}
-				yystate = 35;
+			case 39:
+				yych = *c->cur;
+				yystate = 40;
 				continue;
-			case '\t':
-			case ' ':
-				++c->cur;
-				yystate = 41;
-				continue;
-			case '\r':
-				mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
-				c->yytm2 = c->yytm1;
-				mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 44;
-				continue;
-			default:
-				mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 45;
-				continue;
-			}
-		case 43:
-			yych = *c->cur;
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\t':
-			case '\n':
-			case '\v':
-			case '\f':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 80;
-					return CON_STATUS_WAITING;
+			case 40:
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 78;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 36;
+						continue;
+					case '\r':
+						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 38;
+						continue;
+					default:
+						++c->cur;
+						yystate = 39;
+						continue;
 				}
-				yystate = 35;
+			case 41:
+				yych = *c->cur;
+				yystate = 42;
 				continue;
-			case '\r':
-				mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 38;
-				continue;
-			default:
-				++c->cur;
-				yystate = 39;
-				continue;
-			}
-		case 44:
-			yych = *c->cur;
-			switch (yych) {
-			case '\n':
-				++c->cur;
-				yystate = 47;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 81;
-					return CON_STATUS_WAITING;
+			case 42:
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 79;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
+					case '\t':
+					case ' ':
+						++c->cur;
+						yystate = 41;
+						continue;
+					case '\r':
+						mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
+						c->yytm2 = c->yytm1;
+						mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 44;
+						continue;
+					default:
+						mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 45;
+						continue;
 				}
-				yystate = 35;
-				continue;
-			}
-		case 45:
-			yych = *c->cur;
-			yystate = 46;
-			continue;
-		case 46:
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\n':
-			case '\v':
-			case '\f':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 82;
-					return CON_STATUS_WAITING;
+			case 43:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\t':
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 80;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
+					case '\r':
+						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 38;
+						continue;
+					default:
+						++c->cur;
+						yystate = 39;
+						continue;
 				}
-				yystate = 35;
-				continue;
-			case '\t':
-				++c->cur;
-				yystate = 49;
-				continue;
-			case '\r':
-				c->yytm2 = c->yytm1;
-				mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 44;
-				continue;
-			default:
-				++c->cur;
-				yystate = 45;
-				continue;
-			}
-		case 47:
-			yyaccept = 1;
-			c->mar = c->cur;
-			yych = *c->cur;
-			switch (yych) {
-			case '\t':
-			case ' ':
-				c->yytm1 = c->yytm2;
-				++c->cur;
-				yystate = 41;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 83;
-					return CON_STATUS_WAITING;
+			case 44:
+				yych = *c->cur;
+				switch (yych) {
+					case '\n':
+						++c->cur;
+						yystate = 47;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 81;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
 				}
-				yystate = 48;
+			case 45:
+				yych = *c->cur;
+				yystate = 46;
 				continue;
-			}
-		case 48:
-			f1 = c->yytm1;
-			f2 = c->yytm3;
-			c->state = yycheader;
-			{
+			case 46:
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 82;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 49;
+						continue;
+					case '\r':
+						c->yytm2 = c->yytm1;
+						mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 44;
+						continue;
+					default:
+						++c->cur;
+						yystate = 45;
+						continue;
+				}
+			case 47:
+				yyaccept = 1;
+				c->mar = c->cur;
+				yych = *c->cur;
+				switch (yych) {
+					case '\t':
+					case ' ':
+						c->yytm1 = c->yytm2;
+						++c->cur;
+						yystate = 41;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 83;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 48;
+						continue;
+				}
+			case 48:
+				f1 = c->yytm1;
+				f2 = c->yytm3;
+				c->state = yycheader;
+				{
             struct mtag*    fold_start  = f1;
             struct mtag*    fold_end    = f2;
 
@@ -1696,380 +1696,380 @@ static enum con_status parse_con_req(struct con_state* c)
 
             return CON_STATUS_DONE;
         }
-		case 49:
-			yych = *c->cur;
-			yystate = 50;
-			continue;
-		case 50:
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\n':
-			case '\v':
-			case '\f':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 84;
-					return CON_STATUS_WAITING;
+			case 49:
+				yych = *c->cur;
+				yystate = 50;
+				continue;
+			case 50:
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 84;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 49;
+						continue;
+					case '\r':
+						++c->cur;
+						yystate = 51;
+						continue;
+					case ' ':
+						++c->cur;
+						yystate = 45;
+						continue;
+					default:
+						++c->cur;
+						yystate = 52;
+						continue;
 				}
-				yystate = 35;
-				continue;
-			case '\t':
-				++c->cur;
-				yystate = 49;
-				continue;
-			case '\r':
-				++c->cur;
-				yystate = 51;
-				continue;
-			case ' ':
-				++c->cur;
-				yystate = 45;
-				continue;
-			default:
-				++c->cur;
-				yystate = 52;
-				continue;
-			}
-		case 51:
-			yych = *c->cur;
-			switch (yych) {
-			case '\n':
-				++c->cur;
-				yystate = 53;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 85;
-					return CON_STATUS_WAITING;
+			case 51:
+				yych = *c->cur;
+				switch (yych) {
+					case '\n':
+						++c->cur;
+						yystate = 53;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 85;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
 				}
-				yystate = 35;
-				continue;
-			}
-		case 52:
-			yych = *c->cur;
-			switch (yych) {
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-			case 0x07:
-			case 0x08:
-			case '\n':
-			case '\v':
-			case '\f':
-			case 0x0E:
-			case 0x0F:
-			case 0x10:
-			case 0x11:
-			case 0x12:
-			case 0x13:
-			case 0x14:
-			case 0x15:
-			case 0x16:
-			case 0x17:
-			case 0x18:
-			case 0x19:
-			case 0x1A:
-			case 0x1B:
-			case 0x1C:
-			case 0x1D:
-			case 0x1E:
-			case 0x7F:
-				if (c->lim <= c->cur) {
-					c->state = 86;
-					return CON_STATUS_WAITING;
+			case 52:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 86;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 54;
+						continue;
+					case '\r':
+						c->yytm2 = c->yytm1;
+						mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 44;
+						continue;
+					default:
+						++c->cur;
+						yystate = 45;
+						continue;
 				}
-				yystate = 35;
-				continue;
-			case '\t':
-				++c->cur;
-				yystate = 54;
-				continue;
-			case '\r':
-				c->yytm2 = c->yytm1;
-				mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
-				++c->cur;
-				yystate = 44;
-				continue;
-			default:
-				++c->cur;
-				yystate = 45;
-				continue;
-			}
-		case 53:
-			yystate = 48;
-			continue;
-		case 54:
-			yych = *c->cur;
-			yystate = 55;
-			continue;
-		case 55:
-			switch (yych) {
-			case '\t':
-			case ' ':
-				++c->cur;
-				yystate = 54;
-				continue;
-			case '\r':
-				++c->cur;
-				yystate = 51;
-				continue;
-			default:
-				if (c->lim <= c->cur) {
-					c->state = 87;
-					return CON_STATUS_WAITING;
-				}
-				yystate = 35;
-				continue;
-			}
-		case 56:
-			c->state = yycheader;
-			{ return CON_STATUS_END; }
-		case 57:
-			if (c->lim <= c->cur) {
-				yystate = 28;
-				continue;
-			}
-			yystate = 0;
-			continue;
-		case 58:
-			if (c->lim <= c->cur) {
-				yystate = 2;
-				continue;
-			}
-			yystate = 3;
-			continue;
-		case 59:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 4;
-			continue;
-		case 60:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 7;
-			continue;
-		case 61:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 8;
-			continue;
-		case 62:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 10;
-			continue;
-		case 63:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 12;
-			continue;
-		case 64:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 13;
-			continue;
-		case 65:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 17;
-			continue;
-		case 66:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 19;
-			continue;
-		case 67:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 20;
-			continue;
-		case 68:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 22;
-			continue;
-		case 69:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 24;
-			continue;
-		case 70:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 26;
-			continue;
-		case 71:
-			if (c->lim <= c->cur) {
-				yystate = 6;
-				continue;
-			}
-			yystate = 27;
-			continue;
-		case 72:
-			if (c->lim <= c->cur) {
-				yystate = 56;
-				continue;
-			}
-			yystate = 29;
-			continue;
-		case 73:
-			if (c->lim <= c->cur) {
-				yystate = 31;
-				continue;
-			}
-			yystate = 32;
-			continue;
-		case 74:
-			if (c->lim <= c->cur) {
-				yystate = 31;
-				continue;
-			}
-			yystate = 33;
-			continue;
-		case 75:
-			if (c->lim <= c->cur) {
-				yystate = 35;
-				continue;
-			}
-			yystate = 34;
-			continue;
-		case 76:
-			if (c->lim <= c->cur) {
-				yystate = 35;
-				continue;
-			}
-			yystate = 36;
-			continue;
-		case 77:
-			if (c->lim <= c->cur) {
-				yystate = 35;
-				continue;
-			}
-			yystate = 38;
-			continue;
-		case 78:
-			if (c->lim <= c->cur) {
-				yystate = 35;
-				continue;
-			}
-			yystate = 39;
-			continue;
-		case 79:
-			if (c->lim <= c->cur) {
-				yystate = 35;
-				continue;
-			}
-			yystate = 41;
-			continue;
-		case 80:
-			if (c->lim <= c->cur) {
-				yystate = 35;
-				continue;
-			}
-			yystate = 43;
-			continue;
-		case 81:
-			if (c->lim <= c->cur) {
-				yystate = 35;
-				continue;
-			}
-			yystate = 44;
-			continue;
-		case 82:
-			if (c->lim <= c->cur) {
-				yystate = 35;
-				continue;
-			}
-			yystate = 45;
-			continue;
-		case 83:
-			if (c->lim <= c->cur) {
+			case 53:
 				yystate = 48;
 				continue;
-			}
-			yystate = 47;
-			continue;
-		case 84:
-			if (c->lim <= c->cur) {
-				yystate = 35;
+			case 54:
+				yych = *c->cur;
+				yystate = 55;
 				continue;
-			}
-			yystate = 49;
-			continue;
-		case 85:
-			if (c->lim <= c->cur) {
-				yystate = 35;
+			case 55:
+				switch (yych) {
+					case '\t':
+					case ' ':
+						++c->cur;
+						yystate = 54;
+						continue;
+					case '\r':
+						++c->cur;
+						yystate = 51;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 87;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 35;
+						continue;
+				}
+			case 56:
+				c->state = yycheader;
+				{ return CON_STATUS_END; }
+			case 57:
+				if (c->lim <= c->cur) {
+					yystate = 28;
+					continue;
+				}
+				yystate = 0;
 				continue;
-			}
-			yystate = 51;
-			continue;
-		case 86:
-			if (c->lim <= c->cur) {
-				yystate = 35;
+			case 58:
+				if (c->lim <= c->cur) {
+					yystate = 2;
+					continue;
+				}
+				yystate = 3;
 				continue;
-			}
-			yystate = 52;
-			continue;
-		case 87:
-			if (c->lim <= c->cur) {
-				yystate = 35;
+			case 59:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 4;
 				continue;
-			}
-			yystate = 54;
-			continue;
+			case 60:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 7;
+				continue;
+			case 61:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 8;
+				continue;
+			case 62:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 10;
+				continue;
+			case 63:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 12;
+				continue;
+			case 64:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 13;
+				continue;
+			case 65:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 17;
+				continue;
+			case 66:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 19;
+				continue;
+			case 67:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 20;
+				continue;
+			case 68:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 22;
+				continue;
+			case 69:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 24;
+				continue;
+			case 70:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 26;
+				continue;
+			case 71:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 27;
+				continue;
+			case 72:
+				if (c->lim <= c->cur) {
+					yystate = 56;
+					continue;
+				}
+				yystate = 29;
+				continue;
+			case 73:
+				if (c->lim <= c->cur) {
+					yystate = 31;
+					continue;
+				}
+				yystate = 32;
+				continue;
+			case 74:
+				if (c->lim <= c->cur) {
+					yystate = 31;
+					continue;
+				}
+				yystate = 33;
+				continue;
+			case 75:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 34;
+				continue;
+			case 76:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 36;
+				continue;
+			case 77:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 38;
+				continue;
+			case 78:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 39;
+				continue;
+			case 79:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 41;
+				continue;
+			case 80:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 43;
+				continue;
+			case 81:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 44;
+				continue;
+			case 82:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 45;
+				continue;
+			case 83:
+				if (c->lim <= c->cur) {
+					yystate = 48;
+					continue;
+				}
+				yystate = 47;
+				continue;
+			case 84:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 49;
+				continue;
+			case 85:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 51;
+				continue;
+			case 86:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 52;
+				continue;
+			case 87:
+				if (c->lim <= c->cur) {
+					yystate = 35;
+					continue;
+				}
+				yystate = 54;
+				continue;
 		}
 	}
 

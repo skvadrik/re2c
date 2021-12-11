@@ -46,8 +46,8 @@ loop:
 	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy4;
-	default:	goto yy2;
+		case '$': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -58,18 +58,18 @@ yy3:
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 'D':	goto yy5;
-	case 'I':	goto yy7;
-	case 'L':	goto yy8;
-	case 'R':	goto yy9;
-	case 'S':	goto yy10;
-	default:	goto yy3;
+		case 'D': goto yy5;
+		case 'I': goto yy7;
+		case 'L': goto yy8;
+		case 'R': goto yy9;
+		case 'S': goto yy10;
+		default: goto yy3;
 	}
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy11;
-	default:	goto yy6;
+		case 'a': goto yy11;
+		default: goto yy6;
 	}
 yy6:
 	YYCURSOR = YYMARKER;
@@ -77,63 +77,63 @@ yy6:
 yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'd':	goto yy12;
-	default:	goto yy6;
+		case 'd': goto yy12;
+		default: goto yy6;
 	}
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'o':	goto yy13;
-	default:	goto yy6;
+		case 'o': goto yy13;
+		default: goto yy6;
 	}
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'e':	goto yy14;
-	default:	goto yy6;
+		case 'e': goto yy14;
+		default: goto yy6;
 	}
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'o':	goto yy15;
-	default:	goto yy6;
+		case 'o': goto yy15;
+		default: goto yy6;
 	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 't':	goto yy16;
-	default:	goto yy6;
+		case 't': goto yy16;
+		default: goto yy6;
 	}
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy17;
-	case ':':	goto yy19;
-	default:	goto yy6;
+		case '$': goto yy17;
+		case ':': goto yy19;
+		default: goto yy6;
 	}
 yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'g':	goto yy20;
-	default:	goto yy6;
+		case 'g': goto yy20;
+		default: goto yy6;
 	}
 yy14:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'v':	goto yy21;
-	default:	goto yy6;
+		case 'v': goto yy21;
+		default: goto yy6;
 	}
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'u':	goto yy22;
-	default:	goto yy6;
+		case 'u': goto yy22;
+		default: goto yy6;
 	}
 yy16:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'e':	goto yy23;
-	default:	goto yy6;
+		case 'e': goto yy23;
+		default: goto yy6;
 	}
 yy17:
 	++YYCURSOR;
@@ -143,34 +143,34 @@ yy17:
 yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy6;
-	default:	goto yy25;
+		case '$': goto yy6;
+		default: goto yy25;
 	}
 yy20:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy26;
-	case ':':	goto yy28;
-	default:	goto yy6;
+		case '$': goto yy26;
+		case ':': goto yy28;
+		default: goto yy6;
 	}
 yy21:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'i':	goto yy29;
-	default:	goto yy6;
+		case 'i': goto yy29;
+		default: goto yy6;
 	}
 yy22:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'r':	goto yy30;
-	default:	goto yy6;
+		case 'r': goto yy30;
+		default: goto yy6;
 	}
 yy23:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy31;
-	case ':':	goto yy33;
-	default:	goto yy6;
+		case '$': goto yy31;
+		case ':': goto yy33;
+		default: goto yy6;
 	}
 yy24:
 	++YYCURSOR;
@@ -178,9 +178,9 @@ yy24:
 	yych = *YYCURSOR;
 yy25:
 	switch (yych) {
-	case '\n':	goto yy6;
-	case '$':	goto yy17;
-	default:	goto yy24;
+		case '\n': goto yy6;
+		case '$': goto yy17;
+		default: goto yy24;
 	}
 yy26:
 	++YYCURSOR;
@@ -190,20 +190,20 @@ yy26:
 yy28:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy6;
-	default:	goto yy35;
+		case '$': goto yy6;
+		default: goto yy35;
 	}
 yy29:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 's':	goto yy36;
-	default:	goto yy6;
+		case 's': goto yy36;
+		default: goto yy6;
 	}
 yy30:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'c':	goto yy37;
-	default:	goto yy6;
+		case 'c': goto yy37;
+		default: goto yy6;
 	}
 yy31:
 	++YYCURSOR;
@@ -213,8 +213,8 @@ yy31:
 yy33:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy6;
-	default:	goto yy39;
+		case '$': goto yy6;
+		default: goto yy39;
 	}
 yy34:
 	++YYCURSOR;
@@ -222,21 +222,21 @@ yy34:
 	yych = *YYCURSOR;
 yy35:
 	switch (yych) {
-	case '\n':	goto yy6;
-	case '$':	goto yy26;
-	default:	goto yy34;
+		case '\n': goto yy6;
+		case '$': goto yy26;
+		default: goto yy34;
 	}
 yy36:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'i':	goto yy40;
-	default:	goto yy6;
+		case 'i': goto yy40;
+		default: goto yy6;
 	}
 yy37:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'e':	goto yy41;
-	default:	goto yy6;
+		case 'e': goto yy41;
+		default: goto yy6;
 	}
 yy38:
 	++YYCURSOR;
@@ -244,28 +244,28 @@ yy38:
 	yych = *YYCURSOR;
 yy39:
 	switch (yych) {
-	case '\n':	goto yy6;
-	case '$':	goto yy31;
-	default:	goto yy38;
+		case '\n': goto yy6;
+		case '$': goto yy31;
+		default: goto yy38;
 	}
 yy40:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'o':	goto yy42;
-	default:	goto yy6;
+		case 'o': goto yy42;
+		default: goto yy6;
 	}
 yy41:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy43;
-	case ':':	goto yy45;
-	default:	goto yy6;
+		case '$': goto yy43;
+		case ':': goto yy45;
+		default: goto yy6;
 	}
 yy42:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'n':	goto yy46;
-	default:	goto yy6;
+		case 'n': goto yy46;
+		default: goto yy6;
 	}
 yy43:
 	++YYCURSOR;
@@ -275,15 +275,15 @@ yy43:
 yy45:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy6;
-	default:	goto yy48;
+		case '$': goto yy6;
+		default: goto yy48;
 	}
 yy46:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy49;
-	case ':':	goto yy51;
-	default:	goto yy6;
+		case '$': goto yy49;
+		case ':': goto yy51;
+		default: goto yy6;
 	}
 yy47:
 	++YYCURSOR;
@@ -291,9 +291,9 @@ yy47:
 	yych = *YYCURSOR;
 yy48:
 	switch (yych) {
-	case '\n':	goto yy6;
-	case '$':	goto yy43;
-	default:	goto yy47;
+		case '\n': goto yy6;
+		case '$': goto yy43;
+		default: goto yy47;
 	}
 yy49:
 	++YYCURSOR;
@@ -303,8 +303,8 @@ yy49:
 yy51:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy6;
-	default:	goto yy53;
+		case '$': goto yy6;
+		default: goto yy53;
 	}
 yy52:
 	++YYCURSOR;
@@ -312,9 +312,9 @@ yy52:
 	yych = *YYCURSOR;
 yy53:
 	switch (yych) {
-	case '\n':	goto yy6;
-	case '$':	goto yy49;
-	default:	goto yy52;
+		case '\n': goto yy6;
+		case '$': goto yy49;
+		default: goto yy52;
 	}
 }
 #line 56 "cvsignore.re"

@@ -10,8 +10,8 @@
 	if (YYLIMIT <= YYCURSOR) fill(@@)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy4;
-	default:	goto yy2;
+		case 'a': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -30,8 +30,8 @@ yy4:
 	if (YYLIMIT <= YYCURSOR) fill(1);(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy10;
-	default:	goto yy8;
+		case 'a': goto yy10;
+		default: goto yy8;
 	}
 yy8:
 	++YYCURSOR;
@@ -50,8 +50,8 @@ yy10:
 	if (YYLIMIT <= YYCURSOR) fill(1)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy16;
-	default:	goto yy14;
+		case 'a': goto yy16;
+		default: goto yy14;
 	}
 yy14:
 	++YYCURSOR;
@@ -70,8 +70,8 @@ yy16:
 	if (YYLIMIT <= YYCURSOR) fill(need);(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy22;
-	default:	goto yy20;
+		case 'a': goto yy22;
+		default: goto yy20;
 	}
 yy20:
 	++YYCURSOR;
@@ -91,8 +91,8 @@ yy22:
 	if (YYLIMIT <= YYCURSOR) fill(1)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy28;
-	default:	goto yy26;
+		case 'a': goto yy28;
+		default: goto yy26;
 	}
 yy26:
 	++YYCURSOR;
@@ -112,8 +112,8 @@ yy28:
 	if (YYLIMIT <= YYCURSOR) fill(need);(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy34;
-	default:	goto yy32;
+		case 'a': goto yy34;
+		default: goto yy32;
 	}
 yy32:
 	++YYCURSOR;
@@ -133,8 +133,8 @@ yy34:
 	if (YYLIMIT <= YYCURSOR) fill(1)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy40;
-	default:	goto yy38;
+		case 'a': goto yy40;
+		default: goto yy38;
 	}
 yy38:
 	++YYCURSOR;
@@ -154,8 +154,8 @@ yy40:
 	if (YYLIMIT <= YYCURSOR) fill(need);(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy46;
-	default:	goto yy44;
+		case 'a': goto yy46;
+		default: goto yy44;
 	}
 yy44:
 	++YYCURSOR;
@@ -175,8 +175,8 @@ yy46:
 	if (YYLIMIT <= YYCURSOR) fill(@@)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy52;
-	default:	goto yy50;
+		case 'a': goto yy52;
+		default: goto yy50;
 	}
 yy50:
 	++YYCURSOR;
@@ -196,8 +196,8 @@ yy52:
 	if (YYLIMIT <= YYCURSOR) fill(1);(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy58;
-	default:	goto yy56;
+		case 'a': goto yy58;
+		default: goto yy56;
 	}
 yy56:
 	++YYCURSOR;
@@ -217,8 +217,8 @@ yy58:
 	if (YYLIMIT <= YYCURSOR) fill(@@)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy64;
-	default:	goto yy62;
+		case 'a': goto yy64;
+		default: goto yy62;
 	}
 yy62:
 	++YYCURSOR;
@@ -238,8 +238,8 @@ yy64:
 	if (YYLIMIT <= YYCURSOR) fill(1);(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy70;
-	default:	goto yy68;
+		case 'a': goto yy70;
+		default: goto yy68;
 	}
 yy68:
 	++YYCURSOR;

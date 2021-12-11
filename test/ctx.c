@@ -53,22 +53,22 @@ std:
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\t':
-	case '\n':
-	case ' ':	goto yy4;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy6;
-	case 'a':
-	case 'b':	goto yy9;
-	default:	goto yy2;
+		case '\t':
+		case '\n':
+		case ' ': goto yy4;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy6;
+		case 'a':
+		case 'b': goto yy9;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -93,17 +93,17 @@ yy6:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy6;
-	default:	goto yy8;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy6;
+		default: goto yy8;
 	}
 yy8:
 #line 51 "ctx.re"
@@ -112,38 +112,38 @@ yy8:
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '0':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-		YYCTXMARKER = YYCURSOR;
-		goto yy10;
-	case '1':
-		YYCTXMARKER = YYCURSOR;
-		goto yy13;
-	default:	goto yy3;
+		case '0':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			YYCTXMARKER = YYCURSOR;
+			goto yy10;
+		case '1':
+			YYCTXMARKER = YYCURSOR;
+			goto yy13;
+		default: goto yy3;
 	}
 yy10:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy10;
-	default:	goto yy12;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy10;
+		default: goto yy12;
 	}
 yy12:
 	YYCURSOR = YYCTXMARKER;
@@ -153,17 +153,17 @@ yy12:
 yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy10;
-	default:	goto yy14;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy10;
+		default: goto yy14;
 	}
 yy14:
 	YYCURSOR -= 1;

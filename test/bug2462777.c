@@ -4,8 +4,7 @@
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
-	case yycX:
-		goto yyc_X;
+		case yycX: goto yyc_X;
 	}
 /* *********************************** */
 yyc_X:
@@ -16,8 +15,8 @@ yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy1;
-	default:	goto yy3;
+		case 'a': goto yy1;
+		default: goto yy3;
 	}
 yy3:
 	{x;}

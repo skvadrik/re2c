@@ -21,8 +21,8 @@ static void lex(const char *s)
 	char yych;
 	yych = YYPEEK();
 	switch (yych) {
-	case '0':	goto yy4;
-	default:	goto yy2;
+		case '0': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	YYSKIP();
@@ -33,21 +33,21 @@ yy4:
 	YYBACKUP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '1':
-		YYSTAGP(yyt1);
-		goto yy5;
-	case '2':
-		YYSTAGP(yyt1);
-		goto yy8;
-	default:	goto yy3;
+		case '1':
+			YYSTAGP(yyt1);
+			goto yy5;
+		case '2':
+			YYSTAGP(yyt1);
+			goto yy8;
+		default: goto yy3;
 	}
 yy5:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '1':	goto yy5;
-	case '2':	goto yy8;
-	default:	goto yy7;
+		case '1': goto yy5;
+		case '2': goto yy8;
+		default: goto yy7;
 	}
 yy7:
 	YYRESTORE();
@@ -56,21 +56,21 @@ yy8:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '3':
-		YYSTAGP(yyt2);
-		goto yy9;
-	case '4':
-		YYSTAGP(yyt2);
-		goto yy11;
-	default:	goto yy7;
+		case '3':
+			YYSTAGP(yyt2);
+			goto yy9;
+		case '4':
+			YYSTAGP(yyt2);
+			goto yy11;
+		default: goto yy7;
 	}
 yy9:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-	case '3':	goto yy9;
-	case '4':	goto yy11;
-	default:	goto yy7;
+		case '3': goto yy9;
+		case '4': goto yy11;
+		default: goto yy7;
 	}
 yy11:
 	YYSKIP();

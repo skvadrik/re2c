@@ -18,17 +18,17 @@ char *scan0(char *p)
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy4;
-	default:	goto yy2;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -40,17 +40,17 @@ yy4:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy4;
-	default:	goto yy6;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy4;
+		default: goto yy6;
 	}
 yy6:
 #line 14 "config/config1.re"
@@ -71,17 +71,17 @@ char *scan1(char *p)
 		if (YYLIMIT <= YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 		switch (yych) {
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':	goto yy11;
-		default:	goto yy9;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9': goto yy11;
+			default: goto yy9;
 		}
 yy9:
 		++YYCURSOR;
@@ -93,17 +93,17 @@ yy11:
 		if (YYLIMIT <= YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 		switch (yych) {
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':	goto yy11;
-		default:	goto yy13;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9': goto yy11;
+			default: goto yy13;
 		}
 yy13:
 #line 24 "config/config1.re"
@@ -124,17 +124,17 @@ char *scan(char *p)
 		if (YYLIMIT <= YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 		switch (yych) {
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':	goto yy18;
-		default:	goto yy16;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9': goto yy18;
+			default: goto yy16;
 		}
 yy16:
 		++YYCURSOR;
@@ -146,17 +146,17 @@ yy18:
 		if (YYLIMIT <= YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 		switch (yych) {
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':	goto yy18;
-		default:	goto yy20;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9': goto yy18;
+			default: goto yy20;
 		}
 yy20:
 #line 33 "config/config1.re"

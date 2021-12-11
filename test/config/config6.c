@@ -20,20 +20,20 @@ int scan(char *s)
 			YYCTYPE yych;
 			yych = *YYCURSOR;
 			switch (yych) {
-			case 0x00:	goto yy2;
-			case '+':	goto yy6;
-			case '-':	goto yy8;
-			case '0':	goto yy10;
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy12;
-			default:	goto yy4;
+				case 0x00: goto yy2;
+				case '+': goto yy6;
+				case '-': goto yy8;
+				case '0': goto yy10;
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9': goto yy12;
+				default: goto yy4;
 			}
 yy2:
 			++YYCURSOR;
@@ -58,17 +58,17 @@ yy8:
 yy10:
 			yych = *++YYCURSOR;
 			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy15;
-			default:	goto yy11;
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9': goto yy15;
+				default: goto yy11;
 			}
 yy11:
 #line 21 "config/config6.re"
@@ -77,17 +77,17 @@ yy11:
 yy12:
 			yych = *++YYCURSOR;
 			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy12;
-			default:	goto yy14;
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9': goto yy12;
+				default: goto yy14;
 			}
 yy14:
 #line 20 "config/config6.re"
@@ -96,17 +96,17 @@ yy14:
 yy15:
 			yych = *++YYCURSOR;
 			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy15;
-			default:	goto yy17;
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9': goto yy15;
+				default: goto yy17;
 			}
 yy17:
 #line 19 "config/config6.re"

@@ -23,119 +23,119 @@ static uint64_t parse_u32(const char *s)
 	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 0:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case '0':
-				yystate = 3;
-				continue;
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				yystate = 5;
-				continue;
-			default:
-				yystate = 1;
-				continue;
-			}
-		case 1:
-			yystate = 2;
-			continue;
-		case 2:
-			{ return ERROR; }
-		case 3:
-			YYMARKER = s;
-			yych = *s;
-			switch (yych) {
-			case 'B':
-			case 'b':
+			case 0:
+				yych = *s;
 				++s;
-				yystate = 7;
+				switch (yych) {
+					case '0':
+						yystate = 3;
+						continue;
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+						yystate = 5;
+						continue;
+					default:
+						yystate = 1;
+						continue;
+				}
+			case 1:
+				yystate = 2;
 				continue;
-			case 'X':
-			case 'x':
-				++s;
-				yystate = 9;
+			case 2:
+				{ return ERROR; }
+			case 3:
+				YYMARKER = s;
+				yych = *s;
+				switch (yych) {
+					case 'B':
+					case 'b':
+						++s;
+						yystate = 7;
+						continue;
+					case 'X':
+					case 'x':
+						++s;
+						yystate = 9;
+						continue;
+					default:
+						yystate = 4;
+						continue;
+				}
+			case 4:
+				{ goto oct; }
+			case 5:
+				yystate = 6;
 				continue;
-			default:
+			case 6:
+				s -= 1;
+				{ goto dec; }
+			case 7:
+				yych = *s;
+				switch (yych) {
+					case '0':
+					case '1':
+						++s;
+						yystate = 10;
+						continue;
+					default:
+						yystate = 8;
+						continue;
+				}
+			case 8:
+				s = YYMARKER;
 				yystate = 4;
 				continue;
-			}
-		case 4:
-			{ goto oct; }
-		case 5:
-			yystate = 6;
-			continue;
-		case 6:
-			s -= 1;
-			{ goto dec; }
-		case 7:
-			yych = *s;
-			switch (yych) {
-			case '0':
-			case '1':
-				++s;
-				yystate = 10;
+			case 9:
+				yych = *s;
+				switch (yych) {
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+						++s;
+						yystate = 12;
+						continue;
+					default:
+						yystate = 8;
+						continue;
+				}
+			case 10:
+				yystate = 11;
 				continue;
-			default:
-				yystate = 8;
+			case 11:
+				s -= 1;
+				{ goto bin; }
+			case 12:
+				yystate = 13;
 				continue;
-			}
-		case 8:
-			s = YYMARKER;
-			yystate = 4;
-			continue;
-		case 9:
-			yych = *s;
-			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-				++s;
-				yystate = 12;
-				continue;
-			default:
-				yystate = 8;
-				continue;
-			}
-		case 10:
-			yystate = 11;
-			continue;
-		case 11:
-			s -= 1;
-			{ goto bin; }
-		case 12:
-			yystate = 13;
-			continue;
-		case 13:
-			s -= 1;
-			{ goto hex; }
+			case 13:
+				s -= 1;
+				{ goto hex; }
 		}
 	}
 }
@@ -147,36 +147,36 @@ bin:
 	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 0:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case 0x00:
-				yystate = 1;
+			case 0:
+				yych = *s;
+				++s;
+				switch (yych) {
+					case 0x00:
+						yystate = 1;
+						continue;
+					case '0':
+					case '1':
+						yystate = 5;
+						continue;
+					default:
+						yystate = 3;
+						continue;
+				}
+			case 1:
+				yystate = 2;
 				continue;
-			case '0':
-			case '1':
-				yystate = 5;
+			case 2:
+				{ return u; }
+			case 3:
+				yystate = 4;
 				continue;
-			default:
-				yystate = 3;
+			case 4:
+				{ return ERROR; }
+			case 5:
+				yystate = 6;
 				continue;
-			}
-		case 1:
-			yystate = 2;
-			continue;
-		case 2:
-			{ return u; }
-		case 3:
-			yystate = 4;
-			continue;
-		case 4:
-			{ return ERROR; }
-		case 5:
-			yystate = 6;
-			continue;
-		case 6:
-			{ adddgt<2>(u, s[-1] - '0'); goto bin; }
+			case 6:
+				{ adddgt<2>(u, s[-1] - '0'); goto bin; }
 		}
 	}
 }
@@ -188,42 +188,42 @@ oct:
 	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 0:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case 0x00:
-				yystate = 1;
+			case 0:
+				yych = *s;
+				++s;
+				switch (yych) {
+					case 0x00:
+						yystate = 1;
+						continue;
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+						yystate = 5;
+						continue;
+					default:
+						yystate = 3;
+						continue;
+				}
+			case 1:
+				yystate = 2;
 				continue;
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-				yystate = 5;
+			case 2:
+				{ return u; }
+			case 3:
+				yystate = 4;
 				continue;
-			default:
-				yystate = 3;
+			case 4:
+				{ return ERROR; }
+			case 5:
+				yystate = 6;
 				continue;
-			}
-		case 1:
-			yystate = 2;
-			continue;
-		case 2:
-			{ return u; }
-		case 3:
-			yystate = 4;
-			continue;
-		case 4:
-			{ return ERROR; }
-		case 5:
-			yystate = 6;
-			continue;
-		case 6:
-			{ adddgt<8>(u, s[-1] - '0'); goto oct; }
+			case 6:
+				{ adddgt<8>(u, s[-1] - '0'); goto oct; }
 		}
 	}
 }
@@ -235,44 +235,44 @@ dec:
 	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 0:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case 0x00:
-				yystate = 1;
+			case 0:
+				yych = *s;
+				++s;
+				switch (yych) {
+					case 0x00:
+						yystate = 1;
+						continue;
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+						yystate = 5;
+						continue;
+					default:
+						yystate = 3;
+						continue;
+				}
+			case 1:
+				yystate = 2;
 				continue;
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				yystate = 5;
+			case 2:
+				{ return u; }
+			case 3:
+				yystate = 4;
 				continue;
-			default:
-				yystate = 3;
+			case 4:
+				{ return ERROR; }
+			case 5:
+				yystate = 6;
 				continue;
-			}
-		case 1:
-			yystate = 2;
-			continue;
-		case 2:
-			{ return u; }
-		case 3:
-			yystate = 4;
-			continue;
-		case 4:
-			{ return ERROR; }
-		case 5:
-			yystate = 6;
-			continue;
-		case 6:
-			{ adddgt<10>(u, s[-1] - '0'); goto dec; }
+			case 6:
+				{ adddgt<10>(u, s[-1] - '0'); goto dec; }
 		}
 	}
 }
@@ -284,70 +284,70 @@ hex:
 	unsigned int yystate = 0;
 	for (;;) {
 		switch (yystate) {
-		case 0:
-			yych = *s;
-			++s;
-			switch (yych) {
-			case 0x00:
-				yystate = 1;
+			case 0:
+				yych = *s;
+				++s;
+				switch (yych) {
+					case 0x00:
+						yystate = 1;
+						continue;
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+						yystate = 5;
+						continue;
+					case 'A':
+					case 'B':
+					case 'C':
+					case 'D':
+					case 'E':
+					case 'F':
+						yystate = 7;
+						continue;
+					case 'a':
+					case 'b':
+					case 'c':
+					case 'd':
+					case 'e':
+					case 'f':
+						yystate = 9;
+						continue;
+					default:
+						yystate = 3;
+						continue;
+				}
+			case 1:
+				yystate = 2;
 				continue;
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				yystate = 5;
+			case 2:
+				{ return u; }
+			case 3:
+				yystate = 4;
 				continue;
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-				yystate = 7;
+			case 4:
+				{ return ERROR; }
+			case 5:
+				yystate = 6;
 				continue;
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-				yystate = 9;
+			case 6:
+				{ adddgt<16>(u, s[-1] - '0');      goto hex; }
+			case 7:
+				yystate = 8;
 				continue;
-			default:
-				yystate = 3;
+			case 8:
+				{ adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
+			case 9:
+				yystate = 10;
 				continue;
-			}
-		case 1:
-			yystate = 2;
-			continue;
-		case 2:
-			{ return u; }
-		case 3:
-			yystate = 4;
-			continue;
-		case 4:
-			{ return ERROR; }
-		case 5:
-			yystate = 6;
-			continue;
-		case 6:
-			{ adddgt<16>(u, s[-1] - '0');      goto hex; }
-		case 7:
-			yystate = 8;
-			continue;
-		case 8:
-			{ adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
-		case 9:
-			yystate = 10;
-			continue;
-		case 10:
-			{ adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
+			case 10:
+				{ adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
 		}
 	}
 }

@@ -57,10 +57,10 @@ static int lex(Input *in) {
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 	yych = *in->cur;
 	switch (yych) {
-	case 0x00:	goto yy2;
-	case ' ':	goto yy6;
-	case '\'':	goto yy9;
-	default:	goto yy4;
+		case 0x00: goto yy2;
+		case ' ': goto yy6;
+		case '\'': goto yy9;
+		default: goto yy4;
 	}
 yy2:
 	++in->cur;
@@ -77,8 +77,8 @@ yy6:
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 	yych = *in->cur;
 	switch (yych) {
-	case ' ':	goto yy6;
-	default:	goto yy8;
+		case ' ': goto yy6;
+		default: goto yy8;
 	}
 yy8:
 #line 59 "c/fill/02_fill.re"
@@ -89,9 +89,9 @@ yy9:
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 	yych = *in->cur;
 	switch (yych) {
-	case '\'':	goto yy11;
-	case '\\':	goto yy13;
-	default:	goto yy9;
+		case '\'': goto yy11;
+		case '\\': goto yy13;
+		default: goto yy9;
 	}
 yy11:
 	++in->cur;

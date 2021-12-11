@@ -33,10 +33,10 @@ yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy7;
-	case 'b':
-	case 'c':	goto yy6;
-	default:	goto yy4;
+		case 'a': goto yy7;
+		case 'b':
+		case 'c': goto yy6;
+		default: goto yy4;
 	}
 yy6:
 #line 19 "bug46_infinite_loop.re"

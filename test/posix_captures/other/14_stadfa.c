@@ -6,11 +6,11 @@
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'y':	goto yy3;
-	default:
-		yyt1 = NULL;
-		yyt2 = YYCURSOR;
-		goto yy2;
+		case 'y': goto yy3;
+		default:
+			yyt1 = NULL;
+			yyt2 = YYCURSOR;
+			goto yy2;
 	}
 yy2:
 	yynmatch = 2;
@@ -24,10 +24,10 @@ yy3:
 	yych = *++YYCURSOR;
 	yyt2 = YYCURSOR - 1;
 	switch (yych) {
-	case 'y':	goto yy4;
-	default:
-		yyt1 = YYCURSOR;
-		goto yy2;
+		case 'y': goto yy4;
+		default:
+			yyt1 = YYCURSOR;
+			goto yy2;
 	}
 yy4:
 	++YYCURSOR;

@@ -8,20 +8,20 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'F':
-	case 'G':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':	goto yy4;
-	default:	goto yy2;
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'F':
+		case 'G':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;

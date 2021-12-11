@@ -23,11 +23,11 @@ const char *q;
 	if ((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':
-	case 'q':	goto yy4;
-	case 'A':	goto yy6;
-	case 'a':	goto yy7;
-	default:	goto yy2;
+		case '\n':
+		case 'q': goto yy4;
+		case 'A': goto yy6;
+		case 'a': goto yy7;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -45,19 +45,19 @@ yy6:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy8;
-	case 'A':
-	case 'a':	goto yy10;
-	default:	goto yy3;
+		case '\n': goto yy8;
+		case 'A':
+		case 'a': goto yy10;
+		default: goto yy3;
 	}
 yy7:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy8;
-	case 'A':
-	case 'a':	goto yy10;
-	default:	goto yy5;
+		case '\n': goto yy8;
+		case 'A':
+		case 'a': goto yy10;
+		default: goto yy5;
 	}
 yy8:
 	++YYCURSOR;
@@ -67,10 +67,10 @@ yy8:
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy12;
-	case 'A':
-	case 'a':	goto yy14;
-	default:	goto yy11;
+		case '\n': goto yy12;
+		case 'A':
+		case 'a': goto yy14;
+		default: goto yy11;
 	}
 yy11:
 	YYCURSOR = YYMARKER;
@@ -87,18 +87,18 @@ yy12:
 yy14:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy12;
-	case 'A':
-	case 'a':	goto yy15;
-	default:	goto yy11;
+		case '\n': goto yy12;
+		case 'A':
+		case 'a': goto yy15;
+		default: goto yy11;
 	}
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy16;
-	case 'A':
-	case 'a':	goto yy18;
-	default:	goto yy11;
+		case '\n': goto yy16;
+		case 'A':
+		case 'a': goto yy18;
+		default: goto yy11;
 	}
 yy16:
 	++YYCURSOR;
@@ -108,16 +108,16 @@ yy16:
 yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy16;
-	case 'A':
-	case 'a':	goto yy19;
-	default:	goto yy11;
+		case '\n': goto yy16;
+		case 'A':
+		case 'a': goto yy19;
+		default: goto yy11;
 	}
 yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy20;
-	default:	goto yy23;
+		case '\n': goto yy20;
+		default: goto yy23;
 	}
 yy20:
 	++YYCURSOR;
@@ -130,10 +130,10 @@ yy22:
 	yych = *YYCURSOR;
 yy23:
 	switch (yych) {
-	case '\n':	goto yy16;
-	case 'A':
-	case 'a':	goto yy22;
-	default:	goto yy11;
+		case '\n': goto yy16;
+		case 'A':
+		case 'a': goto yy22;
+		default: goto yy11;
 	}
 }
 #line 25 "repeater.re"

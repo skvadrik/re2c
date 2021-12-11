@@ -7,9 +7,9 @@ int lex(const char *YYCURSOR) {       // C/C++ code
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'A' ... 'Z':
-	case 'a' ... 'z': goto yy4;
-	default: goto yy2;
+		case 'A' ... 'Z':
+		case 'a' ... 'z': goto yy4;
+		default: goto yy2;
 	}
 yy2:
 	++YYCURSOR;
@@ -17,10 +17,10 @@ yy2:
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '0' ... '9':
-	case 'A' ... 'Z':
-	case 'a' ... 'z': goto yy4;
-	default: goto yy6;
+		case '0' ... '9':
+		case 'A' ... 'Z':
+		case 'a' ... 'z': goto yy4;
+		default: goto yy6;
 	}
 yy6:
 	{ return 0; }

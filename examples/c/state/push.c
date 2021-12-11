@@ -50,17 +50,16 @@ static Status lex(Input *in, unsigned int *recv) {
     
 #line 52 "c/state/push.c"
 switch (in->state) {
-default:
-	goto yy0;
-case 0:
-	if (in->lim <= in->cur) goto yy11;
-	goto yyFillLabel0;
-case 1:
-	if (in->lim <= in->cur) goto yy4;
-	goto yyFillLabel1;
-case 2:
-	if (in->lim <= in->cur) goto yy10;
-	goto yyFillLabel2;
+	default: goto yy0;
+	case 0:
+		if (in->lim <= in->cur) goto yy11;
+		goto yyFillLabel0;
+	case 1:
+		if (in->lim <= in->cur) goto yy4;
+		goto yyFillLabel1;
+	case 2:
+		if (in->lim <= in->cur) goto yy10;
+		goto yyFillLabel2;
 }
 #line 48 "c/state/push.re"
 
@@ -68,44 +67,44 @@ case 2:
     for (;;) {
         in->tok = in->cur;
     
-#line 72 "c/state/push.c"
+#line 71 "c/state/push.c"
 
 yy0:
 yyFillLabel0:
 	yych = *in->cur;
 	switch (yych) {
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy5;
-	default:
-		if (in->lim <= in->cur) {
-			in->state = 0;
-			return WAITING;
-		}
-		goto yy3;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z': goto yy5;
+		default:
+			if (in->lim <= in->cur) {
+				in->state = 0;
+				return WAITING;
+			}
+			goto yy3;
 	}
 yy3:
 	++in->cur;
@@ -113,90 +112,90 @@ yy4:
 	in->state = -1;
 #line 65 "c/state/push.re"
 	{ return BAD_PACKET; }
-#line 117 "c/state/push.c"
+#line 116 "c/state/push.c"
 yy5:
 	in->mar = ++in->cur;
 yyFillLabel1:
 	yych = *in->cur;
 	switch (yych) {
-	case ';':	goto yy6;
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy8;
-	default:
-		if (in->lim <= in->cur) {
-			in->state = 1;
-			return WAITING;
-		}
-		goto yy4;
+		case ';': goto yy6;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z': goto yy8;
+		default:
+			if (in->lim <= in->cur) {
+				in->state = 1;
+				return WAITING;
+			}
+			goto yy4;
 	}
 yy6:
 	++in->cur;
 	in->state = -1;
 #line 67 "c/state/push.re"
 	{ *recv = *recv + 1; continue; }
-#line 162 "c/state/push.c"
+#line 161 "c/state/push.c"
 yy8:
 	++in->cur;
 yyFillLabel2:
 	yych = *in->cur;
 	switch (yych) {
-	case ';':	goto yy6;
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy8;
-	default:
-		if (in->lim <= in->cur) {
-			in->state = 2;
-			return WAITING;
-		}
-		goto yy10;
+		case ';': goto yy6;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z': goto yy8;
+		default:
+			if (in->lim <= in->cur) {
+				in->state = 2;
+				return WAITING;
+			}
+			goto yy10;
 	}
 yy10:
 	in->cur = in->mar;
@@ -205,7 +204,7 @@ yy11:
 	in->state = -1;
 #line 66 "c/state/push.re"
 	{ return END; }
-#line 209 "c/state/push.c"
+#line 208 "c/state/push.c"
 #line 68 "c/state/push.re"
 }
 }
