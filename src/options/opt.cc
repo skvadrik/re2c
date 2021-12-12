@@ -267,6 +267,10 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         real.condGoto = defaults.condGoto;
         real.condGotoParam = defaults.condGotoParam;
     }
+    if (glob.lang == LANG_RUST) {
+        // In Rust constants should be uppercase.
+        if (is_default.condEnumPrefix) real.condEnumPrefix = "YYC_";
+    }
 
     // errors
     if (glob.lang != LANG_C) {

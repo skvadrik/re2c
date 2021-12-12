@@ -164,6 +164,20 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
                 }
                 append(block, code_text(alc, buf.flush()));
             }
+        } else if (opts->lang == LANG_RUST) {
+            // For Rust generate standalone constants instead of enum to avoid casting to
+            // `yystate` type on each operation. With the loop/switch approach conditions
+            // are handled as regular states anyway, so the enum doesn't make much sense.
+            start = "";
+            end = "";
+            DASSERT(opts->loop_switch);
+            for (size_t i = 0; i < conds.size(); ++i) {
+                const StartCond &c = conds[i];
+                buf.cstr("const ").str(c.name).cstr(": usize = ").u32(c.number);
+                append(block, code_stmt(alc, buf.flush()));
+            }
+        } else {
+            DASSERT(false); // no such language
         }
 
         append(stmts, code_text(alc, start));
@@ -534,6 +548,8 @@ static void gen_cond_goto(CodegenCtxPass1 &ctx, Code *code)
     Scratchbuf &o = ctx.global->scratchbuf;
     const StartConds &conds = ctx.block->conds;
     bool warn_cond_ord = ctx.global->warn_cond_ord;
+
+    DASSERT(!opts->loop_switch);
 
     const size_t ncond = conds.size();
     CodeList *stmts = code_list(alc);
