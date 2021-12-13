@@ -4,6 +4,7 @@
 
 'outer: loop { 
 {
+	#[allow(unused_assignments)]
 	let mut yych : YYCTYPE = 0;
 	let mut yystate : usize = 0;
 	loop {

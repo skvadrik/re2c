@@ -160,29 +160,36 @@ static void render_var(RenderContext &rctx, const CodeVar *var)
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
 
-    os << indent(rctx.ind, opts->indString);
-
+    const std::string &ind = indent(rctx.ind, opts->indString);
     switch (opts->lang) {
     case LANG_C:
-        os << var_type_c(var->type, opts) << " " << var->name;
+        os << ind << var_type_c(var->type, opts) << " " << var->name;
         if (var->init) os << " = " << var->init;
-        os << ";";
+        os << ";" << std::endl;
+        ++rctx.line;
         break;
+
     case LANG_GO:
+        os << ind;
         if (var->init) {
             os << var->name << " := " << var->init;
         } else {
             os << "var " << var->name << " " << var_type_go(var->type, opts);
         }
+        os << std::endl;
+        ++rctx.line;
         break;
+
     case LANG_RUST:
-        os << "let mut " << var->name << " : " << var_type_rust(var->type, opts);
-        if (var->init) os << " = " << var->init;
-        os << ";";
+        // In Rust uninitialized variable is an error, but if the compiler is able to see
+        // that all paths overwrite the initial value, it warns about unused assignments.
+        if (!var->init) os << ind << "#[allow(unused_assignments)]" << std::endl;
+        os << ind << "let mut " << var->name << " : " << var_type_rust(var->type, opts);
+        os << " = " << (var->init ? var->init : "0");
+        os << ";" << std::endl;
+        rctx.line += 2;
         break;
     }
-    os << std::endl;
-    ++rctx.line;
 }
 
 static bool oneline_case(const CodeCase *code, const opt_t *opts)

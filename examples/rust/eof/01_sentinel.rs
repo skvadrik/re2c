@@ -8,6 +8,7 @@ fn lex(s: &[u8]) -> isize {
 
     'lex: loop { 
 {
+	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
 	loop {

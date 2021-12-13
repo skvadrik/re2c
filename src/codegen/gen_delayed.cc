@@ -393,8 +393,7 @@ static void gen_yych_decl(const opt_t *opts, Code *code)
         code->kind = CODE_VAR;
         code->var.type = VAR_TYPE_YYCTYPE;
         code->var.name = opts->yych.c_str();
-        // In Rust uninitialized variable is a compilation error.
-        code->var.init = opts->lang == LANG_RUST ? "0" : NULL;
+        code->var.init = NULL;
     } else {
         code->kind = CODE_EMPTY;
     }

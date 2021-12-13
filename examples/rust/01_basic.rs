@@ -5,6 +5,7 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
     let mut cursor = 0;                               //
 
 {
+	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
 	loop {

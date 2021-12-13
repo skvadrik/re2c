@@ -60,6 +60,7 @@ fn lex(st: &mut State) -> isize {
         st.tok = st.cur;
     
 {
+	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
 	loop {

@@ -24,6 +24,7 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 
     'lex : loop {
 {
+	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = cond;
 	loop {
