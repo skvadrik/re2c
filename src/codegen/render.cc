@@ -19,6 +19,13 @@ static uint32_t count_lines_text(const char *text)
     return lc;
 }
 
+static inline void render_stmt_end(RenderContext &rctx, bool semi)
+{
+    if (semi && rctx.opts->lang != LANG_GO) rctx.os << ";";
+    rctx.os << std::endl;
+    ++rctx.line;
+}
+
 static void render_list(RenderContext &rctx, const CodeList *code)
 {
     for (const Code *s = code->head; s; s = s->next) {
@@ -41,7 +48,9 @@ static void render_line_info(std::ostream &o, uint32_t line, const std::string &
         o << "#line " << line << " \"" << fname << "\"\n";
         break;
     case LANG_RUST:
-        // No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862
+        // For Rust line directives should be removed by now, as they confuse rendering
+        // functions into formating a block as multiline even it fits on a single line.
+        DASSERT(false);
         break;
     }
 }
@@ -192,12 +201,12 @@ static void render_var(RenderContext &rctx, const CodeVar *var)
     }
 }
 
-static bool oneline_case(const CodeCase *code, const opt_t *opts)
+static bool case_on_same_line(const CodeCase *code, const opt_t *opts)
 {
     const Code *first = code->body->head;
     return first
         && first->next == NULL
-        && first->kind == CODE_STMT
+        && (first->kind == CODE_STMT || first->kind == CODE_TEXT)
         && opts->lang != LANG_GO; // gofmt prefers cases on a new line
 }
 
@@ -250,7 +259,7 @@ static void render_case_range(RenderContext &rctx, uint32_t low, uint32_t upp, b
             prtChOrHex(os, upp, szcunit, true, false);
         }
         if (last) {
-            os << " => {";
+            os << " =>";
         } else {
             os << " |" << std::endl;
             ++rctx.line;
@@ -269,7 +278,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code)
     const char *s_case, *s_then, *s_default;
     if (opts->lang == LANG_RUST) {
         s_case = "";
-        s_then = " => {";
+        s_then = " =>";
         s_default = "_";
     } else {
         s_case = "case ";
@@ -302,10 +311,13 @@ static void render_case(RenderContext &rctx, const CodeCase *code)
         }
     }
 
-    if (oneline_case(code, opts)) {
-        os << " " << first->text << ";\n";
-        ++rctx.line;
+    if (case_on_same_line(code, opts)) {
+        os << " " << first->text;
+        rctx.line += count_lines_text(first->text);
+        render_stmt_end(rctx, first->kind == CODE_STMT);
     } else {
+        // For Rust wrap multi-line cases in braces.
+        if (opts->lang == LANG_RUST) os << " {";
         os << std::endl;
         ++rctx.line;
         for (const Code *s = first; s; s = s->next) {
@@ -448,13 +460,6 @@ static inline void yych_conv(std::ostream &os, const opt_t *opts)
     if (opts->yychConversion) {
         os << "(" <<  opts->yyctype << ")";
     }
-}
-
-static inline void render_stmt_end(RenderContext &rctx, bool semi)
-{
-    if (semi && rctx.opts->lang != LANG_GO) rctx.os << ";";
-    rctx.os << std::endl;
-    ++rctx.line;
 }
 
 void gen_peek_expr(std::ostream &os, const opt_t *opts)

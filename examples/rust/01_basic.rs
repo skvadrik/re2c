@@ -29,9 +29,7 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 				yystate = 2;
 				continue;
 			}
-			2 => {
-				{ return false; }
-			}
+			2 => { return false; }
 			3 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
 				yystate = 4;
@@ -52,9 +50,7 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 					}
 				}
 			}
-			5 => {
-				{ return true; }
-			}
+			5 => { return true; }
 			_ => {
 				panic!("internal lexer error")
 			}

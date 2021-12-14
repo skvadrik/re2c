@@ -9,16 +9,6 @@ static void combine_code(CodegenCtxPass2 &ctx, Code *code);
 
 static void combine_list(CodegenCtxPass2 &ctx, CodeList *stmts)
 {
-    // remove empty statements
-    for (Code **px = &stmts->head, *x; (x = *px); ) {
-        if (x->kind == CODE_EMPTY) {
-            *px = x->next;
-        }
-        else {
-            px = &x->next;
-        }
-    }
-
     Code *x, *y, *z;
     for (x = stmts->head; x; ) {
         // have three statements ahead

@@ -39,16 +39,12 @@ fn lex(s: &[u8]) -> isize {
 				yystate = 2;
 				continue;
 			}
-			2 => {
-				{ return count; }
-			}
+			2 => { return count; }
 			3 => {
 				yystate = 4;
 				continue;
 			}
-			4 => {
-				{ return -1; }
-			}
+			4 => { return -1; }
 			5 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
 				yystate = 6;
@@ -67,9 +63,7 @@ fn lex(s: &[u8]) -> isize {
 					}
 				}
 			}
-			7 => {
-				{ continue 'lex; }
-			}
+			7 => { continue 'lex; }
 			8 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
 				yystate = 9;
@@ -88,9 +82,7 @@ fn lex(s: &[u8]) -> isize {
 					}
 				}
 			}
-			10 => {
-				{ count += 1; continue 'lex; }
-			}
+			10 => { count += 1; continue 'lex; }
 			_ => {
 				panic!("internal lexer error")
 			}

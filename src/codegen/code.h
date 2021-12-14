@@ -774,6 +774,7 @@ void wrap_dfas_in_loop_switch(Output &output, CodeList *stmts, CodeCases *cases)
 
 void expand_pass_1(CodegenCtxPass1 &ctx, Code *code);
 void expand_pass_2(CodegenCtxPass2 &ctx, Code *code);
+void remove_empty(CodegenCtxPass2 &ctx, Code *code);
 void combine(CodegenCtxPass2 &ctx, Code *code);
 void render(RenderContext &rctx, const Code *code);
 

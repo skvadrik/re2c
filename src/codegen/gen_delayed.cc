@@ -687,6 +687,11 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             // yet, as the rest of the first pass may generate some additional
             // label uses, e.g. for a block start label in `getstate:re2c`).
             break;
+        case CODE_LINE_INFO_INPUT:
+        case CODE_LINE_INFO_OUTPUT:
+            // No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862
+            if (opts->lang == LANG_RUST) code->kind = CODE_EMPTY;
+            break;
         case CODE_EMPTY:
         case CODE_FUNC:
         case CODE_STMT:
@@ -703,8 +708,6 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
         case CODE_BACKUP_PEEK:
         case CODE_BACKUP_PEEK_SKIP:
         case CODE_SKIP_BACKUP_PEEK:
-        case CODE_LINE_INFO_INPUT:
-        case CODE_LINE_INFO_OUTPUT:
         case CODE_VAR:
         case CODE_ABORT:
             break;
