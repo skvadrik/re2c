@@ -468,9 +468,10 @@ void gen_peek_expr(std::ostream &os, const opt_t *opts)
     if (opts->input_api == INPUT_DEFAULT) {
         os << "*" << opts->yycursor;
     } else if (opts->lang == LANG_RUST) {
-        os << "unsafe {" << opts->yypeek;
+        if (opts->unsafe) os << "unsafe {";
+        os << opts->yypeek;
         if (opts->api_style == API_FUNCTIONS) os << "()";
-        os << "}";
+        if (opts->unsafe) os << "}";
     } else {
         os << opts->yypeek;
         if (opts->api_style == API_FUNCTIONS) os << "()";

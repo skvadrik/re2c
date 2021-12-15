@@ -1,7 +1,6 @@
 root_dir=$(pwd)
 
 for f in $(find -name '*.re'); do
-    echo $f
     cd $(dirname $f)
 
     rsfile="$(basename ${f%.re}.rs)"
@@ -22,7 +21,14 @@ for f in $(find -name '*.re'); do
         head -n $l "$rstest" > "$rstest".mod && mv "$rstest".mod "$rstest"
     fi
 
-    rustc "$rstest" && ./example 2>/dev/null || { echo "*** error ***"; exit 1; }
+    echo "$f"
+    rustc "$rstest" && ./example || { echo "*** error ***"; exit 1; }
+
+    # patch YYPEEK definition: `unsafe {*s.get_unchecked(cursor)}` -> `s[cursor]`
+    sed -E 's/unsafe \{\*([^ ]+).get_unchecked\(([^ ]+)\)\}/\1[\2]/' -i "$rstest"
+
+    echo "$f (with bounds checks)"
+    rustc "$rstest" && ./example || { echo "*** error ***"; exit 1; }
 
     rm -f "$rstest" example
     cd $root_dir

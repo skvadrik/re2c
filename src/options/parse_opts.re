@@ -168,7 +168,7 @@ opt_long:
     "no-version"            end { globopts.version = false;          goto opt; }
     "skeleton"              end { globopts.target = TARGET_SKELETON; goto opt; }
     "eager-skip"            end { globopts.eager_skip = true;        goto opt; }
-    "loop-switch"           end { globopts.loop_switch = true;      goto opt; }
+    "loop-switch"           end { globopts.loop_switch = true;       goto opt; }
 
     "bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
     "debug-output"          end { opts.set_dFlag (true);             goto opt; }
@@ -178,6 +178,7 @@ opt_long:
     "case-insensitive"      end { opts.set_bCaseInsensitive (true);  goto opt; }
     "case-inverted"         end { opts.set_bCaseInverted (true);     goto opt; }
     "tags"                  end { opts.set_tags (true);              goto opt; }
+    "no-unsafe"             end { opts.set_unsafe(false);            goto opt; }
     "ecb"                   end { opts.set_encoding(Enc::EBCDIC);    goto opt; }
     "unicode"               end { opts.set_encoding(Enc::UTF32);     goto opt; }
     "wide-chars"            end { opts.set_encoding(Enc::UCS2);      goto opt; }

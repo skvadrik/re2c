@@ -137,6 +137,7 @@ class Msg;
     MUTOPT (bool, yybmHexTable, false) \
     MUTOPT (bool, gFlag, false) \
     MUTOPT (bool, case_ranges, false) \
+    MUTOPT (bool, unsafe, true) \
     MUTOPT (std::string, yystate, "yystate") \
     MUTOPT (std::string, yytarget, "yytarget") \
     MUTOPT (uint32_t, cGotoThreshold, 9) \
