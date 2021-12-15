@@ -10,21 +10,25 @@ static int lex(const char *str, unsigned int len) {
     char *buf = (char*) malloc(len + YYMAXFILL);
     memcpy(buf, str, len);
     memset(buf + len, 0, YYMAXFILL);
-
     const char *YYCURSOR = buf, *YYLIMIT = buf + len + YYMAXFILL;
     int count = 0;
-
-    for (;;) {/*!re2c
+loop:
+    /*!re2c
         re2c:api:style = free-form;
         re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL = "return -1;";
+        re2c:define:YYFILL = "goto fail;";
 
-        *                           { count = -1; break; }
-        [\x00]                      { if (YYCURSOR + YYMAXFILL - 1 != YYLIMIT) count = -1; break; }
-        ['] ([^'\\] | [\\][^])* ['] { ++count; continue; }
-        [ ]+                        { continue; }
-    */}
-
+        [\x00] {
+            if (YYCURSOR + YYMAXFILL - 1 != YYLIMIT) goto fail;
+            goto exit;
+        }
+        ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
+        [ ]+                        { goto loop; }
+        *                           { goto fail; }
+    */
+fail:
+    count = -1;
+exit:
     free(buf);
     return count;
 }

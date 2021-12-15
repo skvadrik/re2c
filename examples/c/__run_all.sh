@@ -22,7 +22,8 @@ for f in $(find -name '*.re'); do
         head -n $l "$ctest" > "$ctest".mod && mv "$ctest".mod "$ctest"
     fi
 
-    g++ "$ctest" -Wall -oexample && ./example 2>/dev/null || { echo "*** error ***"; exit 1; }
+    g++ -fsanitize=leak -fsanitize=address -Wall -oexample  "$ctest" \
+        && ./example 2>/dev/null || { echo "*** error ***"; exit 1; }
 
     rm -f "$ctest" example
     cd $root_dir

@@ -15,15 +15,14 @@ static int lex(const char *str, unsigned int len) {
     char *buf = (char*) malloc(len + YYMAXFILL);
     memcpy(buf, str, len);
     memset(buf + len, 0, YYMAXFILL);
-
     const char *YYCURSOR = buf, *YYLIMIT = buf + len + YYMAXFILL;
     int count = 0;
-
-    for (;;) {
-#line 24 "c/eof/02_bounds_checking.c"
+loop:
+    
+#line 23 "c/eof/02_bounds_checking.c"
 {
 	char yych;
-	if (YYLIMIT <= YYCURSOR) return -1;
+	if (YYLIMIT <= YYCURSOR) goto fail;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy2;
@@ -33,29 +32,32 @@ static int lex(const char *str, unsigned int len) {
 	}
 yy2:
 	++YYCURSOR;
-#line 23 "c/eof/02_bounds_checking.re"
-	{ if (YYCURSOR + YYMAXFILL - 1 != YYLIMIT) count = -1; break; }
-#line 39 "c/eof/02_bounds_checking.c"
+#line 21 "c/eof/02_bounds_checking.re"
+	{
+            if (YYCURSOR + YYMAXFILL - 1 != YYLIMIT) goto fail;
+            goto exit;
+        }
+#line 41 "c/eof/02_bounds_checking.c"
 yy4:
 	++YYCURSOR;
-#line 22 "c/eof/02_bounds_checking.re"
-	{ count = -1; break; }
-#line 44 "c/eof/02_bounds_checking.c"
+#line 27 "c/eof/02_bounds_checking.re"
+	{ goto fail; }
+#line 46 "c/eof/02_bounds_checking.c"
 yy6:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) return -1;
+	if (YYLIMIT <= YYCURSOR) goto fail;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case ' ': goto yy6;
 		default: goto yy8;
 	}
 yy8:
-#line 25 "c/eof/02_bounds_checking.re"
-	{ continue; }
-#line 56 "c/eof/02_bounds_checking.c"
+#line 26 "c/eof/02_bounds_checking.re"
+	{ goto loop; }
+#line 58 "c/eof/02_bounds_checking.c"
 yy9:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) return -1;
+	if (YYLIMIT <= YYCURSOR) goto fail;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '\'': goto yy11;
@@ -64,18 +66,20 @@ yy9:
 	}
 yy11:
 	++YYCURSOR;
-#line 24 "c/eof/02_bounds_checking.re"
-	{ ++count; continue; }
-#line 70 "c/eof/02_bounds_checking.c"
+#line 25 "c/eof/02_bounds_checking.re"
+	{ ++count; goto loop; }
+#line 72 "c/eof/02_bounds_checking.c"
 yy13:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) return -1;
+	if (YYLIMIT <= YYCURSOR) goto fail;
 	yych = *YYCURSOR;
 	goto yy9;
 }
-#line 26 "c/eof/02_bounds_checking.re"
-}
+#line 28 "c/eof/02_bounds_checking.re"
 
+fail:
+    count = -1;
+exit:
     free(buf);
     return count;
 }
