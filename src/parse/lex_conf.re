@@ -13,9 +13,27 @@
 
 namespace re2c {
 
-#define YYFILL(n) do { if (!fill(n)) { error("unexpected end of input"); exit(1); }} while(0)
+#define YYFILL(n) \
+    do { if (!fill(n)) { error("unexpected end of input"); exit(1); }} while(0)
+#define RET_CONF_BOOL(conf) \
+    do { opts.set_##conf(lex_conf_bool()); return; } while(0)
+#define RET_CONF_STR(conf) \
+    do { opts.set_##conf(lex_conf_string()); return; } while(0)
+#define RET_CONF_ENC(enc) \
+    do { opts.set_encoding(enc, lex_conf_bool()); return; } while(0)
+#define RET_CONF_NUM(conf) \
+    do { opts.set_##conf(lex_conf_number()); return; } while(0)
+#define RET_CONF_NUM_NONNEG(conf) \
+    do { \
+        const int32_t n = lex_conf_number(); \
+        if (n < 0) { \
+            msg.error(cur_loc(), "expected nonnegative value in configuration"); \
+            exit(1); \
+        } \
+        opts.set_##conf(static_cast<uint32_t>(n)); \
+        return; \
+    } while(0)
 
-// global re2c config (affects the whole file)
 /*!re2c
     re2c:define:YYCTYPE     = "unsigned char";
     re2c:define:YYCURSOR    = cur;
@@ -28,32 +46,22 @@ namespace re2c {
     // when it generates comparisons
     re2c:yych:conversion = 1;
 
-    space = [ \t];
-
+    space       = [ \t];
     conf_assign = space* "=" space*;
-
-    naked_char = [^\x00\n] \ (space | [;]);
-    naked      = (naked_char \ ['"]) naked_char*;
-
-    number = "0" | ("-"? [1-9] [0-9]*);
+    naked_char  = [^\x00\n] \ (space | [;]);
+    naked       = (naked_char \ ['"]) naked_char*;
+    number      = "0" | ("-"? [1-9] [0-9]*);
 */
 
-void Scanner::lex_conf(Opt &opts)
-{
+void Scanner::lex_conf(Opt &opts) {
     tok = cur;
 /*!local:re2c
-    "flags:" ("b" | "bit-vectors")    { opts.set_bFlag            (lex_conf_bool());   return; }
-    "flags:" ("d" | "debug-output")   { opts.set_dFlag            (lex_conf_bool());   return; }
-    "flags:" ("g" | "computed-gotos") { opts.set_gFlag            (lex_conf_bool());   return; }
-    "flags:" ("s" | "nested-ifs")     { opts.set_sFlag            (lex_conf_bool());   return; }
-    "flags:" ("T" | "tags")           { opts.set_tags             (lex_conf_bool());   return; }
-    "flags:case-insensitive"          { opts.set_bCaseInsensitive (lex_conf_bool());   return; }
-    "flags:case-inverted"             { opts.set_bCaseInverted    (lex_conf_bool());   return; }
-    "flags:case-ranges"               { opts.set_case_ranges      (lex_conf_bool());   return; }
-    "flags:unsafe"                    { opts.set_unsafe           (lex_conf_bool());   return; }
+    "api" | "flags:input" { lex_conf_input(opts); return; }
+    "api:style"           { lex_conf_api_style(opts); return; }
+    "api:sigil"           { RET_CONF_STR(api_sigil); }
 
     // header filename in configuration is relative to the output file directory
-    "flags:" ("t" | "type-header") {
+    "header" | "flags:type-header" | "flags:t" {
         std::string name(lex_conf_string());
         std::string path(opts.glob.output_file);
         get_dir(path);
@@ -61,138 +69,110 @@ void Scanner::lex_conf(Opt &opts)
         return;
     }
 
-    "flags:" ("P" | "posix-captures") {
+    "eof"      { opts.set_eof(lex_conf_eof()); return; }
+    "sentinel" { opts.set_sentinel(lex_conf_eof()); return; }
+
+    "yyfill:enable"    { RET_CONF_BOOL(fill_use); }
+    "yyfill:parameter" { RET_CONF_BOOL(fill_arg_use); }
+    "yyfill:check"     { RET_CONF_BOOL(fill_check); }
+
+    "flags:"? "tags"           | "flags:T" { RET_CONF_BOOL(tags); }
+    "flags:"? "posix-captures" | "flags:P" {
         bool b = lex_conf_bool();
         opts.set_posix_syntax(b);
         opts.set_posix_semantics(b);
         return;
     }
+    "tags:prefix"     { RET_CONF_STR(tags_prefix); }
+    "tags:expression" { RET_CONF_STR(tags_expression); }
 
-    "flags:" ("e" | "ecb")        { lex_conf_enc(Enc::EBCDIC, opts); return; }
-    "flags:" ("u" | "unicode")    { lex_conf_enc(Enc::UTF32, opts);  return; }
-    "flags:" ("w" | "wide-chars") { lex_conf_enc(Enc::UCS2, opts);   return; }
-    "flags:" ("x" | "utf-16")     { lex_conf_enc(Enc::UTF16, opts);  return; }
-    "flags:" ("8" | "utf-8")      { lex_conf_enc(Enc::UTF8, opts);   return; }
+    "define:YYBACKUP"             { RET_CONF_STR(yybackup); }
+    "define:YYBACKUPCTX"          { RET_CONF_STR(yybackupctx); }
+    "define:YYCONDTYPE"           { RET_CONF_STR(yycondtype); }
+    "define:YYCTYPE"              { RET_CONF_STR(yyctype); }
+    "define:YYCTXMARKER"          { RET_CONF_STR(yyctxmarker); }
+    "define:YYCURSOR"             { RET_CONF_STR(yycursor); }
+    "define:YYDEBUG"              { RET_CONF_STR(yydebug); }
+    "define:YYFILL"               { RET_CONF_STR(fill); }
+    "define:YYFILL@len"           { RET_CONF_STR(fill_arg); }
+    "define:YYFILL:naked"         { RET_CONF_BOOL(fill_naked); }
+    "define:YYGETCONDITION"       { RET_CONF_STR(cond_get); }
+    "define:YYGETCONDITION:naked" { RET_CONF_BOOL(cond_get_naked); }
+    "define:YYGETSTATE"           { RET_CONF_STR(state_get); }
+    "define:YYGETSTATE:naked"     { RET_CONF_BOOL(state_get_naked); }
+    "define:YYLESSTHAN"           { RET_CONF_STR(yylessthan); }
+    "define:YYLIMIT"              { RET_CONF_STR(yylimit); }
+    "define:YYMARKER"             { RET_CONF_STR(yymarker); }
+    "define:YYMTAGN"              { RET_CONF_STR(yymtagn); }
+    "define:YYMTAGP"              { RET_CONF_STR(yymtagp); }
+    "define:YYPEEK"               { RET_CONF_STR(yypeek); }
+    "define:YYRESTORE"            { RET_CONF_STR(yyrestore); }
+    "define:YYRESTORECTX"         { RET_CONF_STR(yyrestorectx); }
+    "define:YYRESTORETAG"         { RET_CONF_STR(yyrestoretag); }
+    "define:YYSETCONDITION"       { RET_CONF_STR(cond_set); }
+    "define:YYSETCONDITION@cond"  { RET_CONF_STR(cond_set_arg); }
+    "define:YYSETCONDITION:naked" { RET_CONF_BOOL(cond_set_naked); }
+    "define:YYSETSTATE"           { RET_CONF_STR(state_set); }
+    "define:YYSETSTATE:naked"     { RET_CONF_BOOL(state_set_naked); }
+    "define:YYSETSTATE@state"     { RET_CONF_STR(state_set_arg); }
+    "define:YYSHIFT"              { RET_CONF_STR(yyshift); }
+    "define:YYSHIFTSTAG"          { RET_CONF_STR(yyshiftstag); }
+    "define:YYSHIFTMTAG"          { RET_CONF_STR(yyshiftmtag); }
+    "define:YYSKIP"               { RET_CONF_STR(yyskip); }
+    "define:YYSTAGN"              { RET_CONF_STR(yystagn); }
+    "define:YYSTAGP"              { RET_CONF_STR(yystagp); }
 
-    "flags:encoding-policy"  { lex_conf_encoding_policy(opts);  return; }
-    "flags:input"            { lex_conf_input(opts);            return; }
-    "flags:empty-class"      { lex_conf_empty_class(opts);      return; }
+    "variable:"  "yyctable"        { RET_CONF_STR(yyctable); }
+    "variable:"  "yyaccept"        { RET_CONF_STR(yyaccept); }
+    "variable:"  "yytarget"        { RET_CONF_STR(yytarget); }
+    "variable:"  "yystate"         { RET_CONF_STR(yystate); }
+    "variable:"  "yych"            { RET_CONF_STR(yych); }
+    "variable:"? "yych:conversion" { RET_CONF_BOOL(yychConversion); }
+    "variable:"? "yych:emit"       { RET_CONF_BOOL(bEmitYYCh); }
+    "variable:"  "yybm"            { RET_CONF_STR(yybm); }
+    "variable:"? "yybm:hex"        { RET_CONF_BOOL(yybmHexTable); }
+    "variable:"  "yystable"        { lex_conf_string(); return; } // deprecated
 
-    "eof"      { opts.set_eof     (lex_conf_eof()); return; }
-    "sentinel" { opts.set_sentinel(lex_conf_eof()); return; }
+    "cond:prefix" | "condprefix"         { RET_CONF_STR(condPrefix); }
+    "cond:enumprefix" | "condenumprefix" { RET_CONF_STR(condEnumPrefix); }
+    "cond:divider"                       { RET_CONF_STR(condDivider); }
+    "cond:divider@cond"                  { RET_CONF_STR(condDividerParam); }
+    "cond:goto"                          { RET_CONF_STR(condGoto); }
+    "cond:goto@cond"                     { RET_CONF_STR(condGotoParam); }
 
-    // internal options do not have configurations
+    "state:abort"     { RET_CONF_BOOL(bUseStateAbort); }
+    "state:nextlabel" { RET_CONF_BOOL(bUseStateNext); }
 
-    "define:YYCONDTYPE"           { opts.set_yycondtype       (lex_conf_string ()); return; }
-    "define:YYGETCONDITION"       { opts.set_cond_get         (lex_conf_string ()); return; }
-    "define:YYGETCONDITION:naked" { opts.set_cond_get_naked   (lex_conf_bool()); return; }
-    "define:YYSETCONDITION"       { opts.set_cond_set         (lex_conf_string ()); return; }
-    "define:YYSETCONDITION@cond"  { opts.set_cond_set_arg     (lex_conf_string ()); return; }
-    "define:YYSETCONDITION:naked" { opts.set_cond_set_naked   (lex_conf_bool()); return; }
-    "condprefix"                  { opts.set_condPrefix       (lex_conf_string ()); return; }
-    "condenumprefix"              { opts.set_condEnumPrefix   (lex_conf_string ()); return; }
-    "cond:divider"                { opts.set_condDivider      (lex_conf_string ()); return; }
-    "cond:divider@cond"           { opts.set_condDividerParam (lex_conf_string ()); return; }
-    "cond:goto"                   { opts.set_condGoto         (lex_conf_string ()); return; }
-    "cond:goto@cond"              { opts.set_condGotoParam    (lex_conf_string ()); return; }
-    "variable:yyctable"           { opts.set_yyctable         (lex_conf_string ()); return; }
+    "flags:"? "bit-vectors"    | "flags:b"    { RET_CONF_BOOL(bFlag); }
+    "flags:"? "debug-output"   | "flags:d"    { RET_CONF_BOOL(dFlag); }
+    "flags:"? "computed-gotos" | "flags:g"    { RET_CONF_BOOL(gFlag); }
+    ("computed-gotos" | "cgoto") ":threshold" { RET_CONF_NUM_NONNEG(cGotoThreshold); }
+    "flags:"? "nested-ifs"     | "flags:s"    { RET_CONF_BOOL(sFlag); }
+    "flags:"? "case-insensitive"              { RET_CONF_BOOL(bCaseInsensitive); }
+    "flags:"? "case-inverted"                 { RET_CONF_BOOL(bCaseInverted); }
+    "flags:"? "case-ranges"                   { RET_CONF_BOOL(case_ranges); }
+    "flags:"? "unsafe"                        { RET_CONF_BOOL(unsafe); }
 
-    "define:YYGETSTATE"       { opts.set_state_get       (lex_conf_string ()); return; }
-    "define:YYGETSTATE:naked" { opts.set_state_get_naked (lex_conf_bool()); return; }
-    "define:YYSETSTATE"       { opts.set_state_set       (lex_conf_string ()); return; }
-    "define:YYSETSTATE:naked" { opts.set_state_set_naked (lex_conf_bool()); return; }
-    "define:YYSETSTATE@state" { opts.set_state_set_arg   (lex_conf_string ()); return; }
-    "label:yyFillLabel"       { opts.set_yyfilllabel     (lex_conf_string ()); return; }
-    "label:yyNext"            { opts.set_yynext          (lex_conf_string ()); return; }
-    "state:abort"             { opts.set_bUseStateAbort  (lex_conf_bool()); return; }
-    "state:nextlabel"         { opts.set_bUseStateNext   (lex_conf_bool()); return; }
-    "variable:yyaccept"       { opts.set_yyaccept        (lex_conf_string ()); return; }
+    "encoding:ebcdic" | "flags:ecb"        | "flags:e" { RET_CONF_ENC(Enc::EBCDIC); }
+    "encoding:utf32"  | "flags:unicode"    | "flags:u" { RET_CONF_ENC(Enc::UTF32); }
+    "encoding:ucs2"   | "flags:wide-chars" | "flags:w" { RET_CONF_ENC(Enc::UCS2); }
+    "encoding:utf16"  | "flags:utf-16"     | "flags:x" { RET_CONF_ENC(Enc::UTF16); }
+    "encoding:utf8"   | "flags:utf-8"      | "flags:8" { RET_CONF_ENC(Enc::UTF8); }
 
-    "variable:yybm"     { opts.set_yybm         (lex_conf_string ()); return; }
-    "yybm:hex"          { opts.set_yybmHexTable (lex_conf_bool()); return; }
-    "cgoto:threshold" {
-        const int32_t n = lex_conf_number ();
-        if (n < 0) {
-            msg.error(cur_loc(), "configuration 'cgoto:threshold' must be nonnegative");
-            exit(1);
-        }
-        opts.set_cGotoThreshold (static_cast<uint32_t> (n));
-        return;
-    }
-    "variable:yytarget" { opts.set_yytarget (lex_conf_string ()); return; }
-    "variable:yystate"  { opts.set_yystate  (lex_conf_string ()); return; }
+    "flags:"? "encoding-policy" { lex_conf_encoding_policy(opts); return; }
+    "flags:"? "empty-class"     { lex_conf_empty_class(opts); return; }
 
-    "define:YYCURSOR"    { opts.set_yycursor    (lex_conf_string ()); return; }
-    "define:YYMARKER"    { opts.set_yymarker    (lex_conf_string ()); return; }
-    "define:YYCTXMARKER" { opts.set_yyctxmarker (lex_conf_string ()); return; }
-    "define:YYLIMIT"     { opts.set_yylimit     (lex_conf_string ()); return; }
+    "indent:string" { RET_CONF_STR(indString); }
+    "indent:top"    { RET_CONF_NUM_NONNEG(topIndent); }
 
-    "define:YYPEEK"       { opts.set_yypeek       (lex_conf_string ()); return; }
-    "define:YYSKIP"       { opts.set_yyskip       (lex_conf_string ()); return; }
-    "define:YYBACKUP"     { opts.set_yybackup     (lex_conf_string ()); return; }
-    "define:YYBACKUPCTX"  { opts.set_yybackupctx  (lex_conf_string ()); return; }
-    "define:YYRESTORE"    { opts.set_yyrestore    (lex_conf_string ()); return; }
-    "define:YYRESTORECTX" { opts.set_yyrestorectx (lex_conf_string ()); return; }
-    "define:YYRESTORETAG" { opts.set_yyrestoretag (lex_conf_string ()); return; }
-    "define:YYLESSTHAN"   { opts.set_yylessthan   (lex_conf_string ()); return; }
-    "define:YYSTAGN"      { opts.set_yystagn      (lex_conf_string ()); return; }
-    "define:YYSTAGP"      { opts.set_yystagp      (lex_conf_string ()); return; }
-    "define:YYMTAGN"      { opts.set_yymtagn      (lex_conf_string ()); return; }
-    "define:YYMTAGP"      { opts.set_yymtagp      (lex_conf_string ()); return; }
-    "define:YYSHIFT"      { opts.set_yyshift      (lex_conf_string ()); return; }
-    "define:YYSHIFTSTAG"  { opts.set_yyshiftstag  (lex_conf_string ()); return; }
-    "define:YYSHIFTMTAG"  { opts.set_yyshiftmtag  (lex_conf_string ()); return; }
-
-    "api:style" { lex_conf_api_style(opts); return; }
-    "api:sigil" { opts.set_api_sigil(lex_conf_string()); return; }
-
-    "tags:prefix"     { opts.set_tags_prefix    (lex_conf_string ()); return; }
-    "tags:expression" { opts.set_tags_expression(lex_conf_string ()); return; }
-
-    "indent:string" { opts.set_indString (lex_conf_string ()); return; }
-    "indent:top" {
-        const int32_t n = lex_conf_number ();
-        if (n < 0) {
-            msg.error(cur_loc(), "configuration 'indent:top' must be nonnegative");
-            exit(1);
-        }
-        opts.set_topIndent (static_cast<uint32_t> (n));
-        return;
-    }
-
-    "define:YYDEBUG" { opts.set_yydebug (lex_conf_string ()); return; }
-
-    "define:YYCTYPE"  { opts.set_yyctype        (lex_conf_string ()); return; }
-    "variable:yych"   { opts.set_yych           (lex_conf_string ()); return; }
-    "yych:conversion" { opts.set_yychConversion (lex_conf_bool()); return; }
-    "yych:emit"       { opts.set_bEmitYYCh      (lex_conf_bool()); return; }
-
-    "define:YYFILL"       { opts.set_fill         (lex_conf_string ()); return; }
-    "yyfill:enable"       { opts.set_fill_use     (lex_conf_bool()); return; }
-    "define:YYFILL@len"   { opts.set_fill_arg     (lex_conf_string ()); return; }
-    "yyfill:parameter"    { opts.set_fill_arg_use (lex_conf_bool()); return; }
-    "define:YYFILL:naked" { opts.set_fill_naked   (lex_conf_bool()); return; }
-    "yyfill:check"        { opts.set_fill_check   (lex_conf_bool()); return; }
-
-    "labelprefix" { opts.set_labelPrefix (lex_conf_string ()); return; }
-
-    // try to lex number first, otherwise it would be lexed as a naked string
-    "startlabel" / conf_assign number { opts.set_startlabel_force (lex_conf_bool());   return; }
-    "startlabel"                      { opts.set_startlabel       (lex_conf_string()); return; }
-
-    // deprecated (still accepted, but do nothing)
-    "variable:yystable" { lex_conf_string (); return; }
-
-    // deprecated and will be removed in future releases
-    "flags:" ("i" | "no-debug-info") {
-        msg.error(tok_loc(), "configurations `flags:i`, `flags:no-debug-info` "
-            "are deprecated, use global options `-i`, `--no-debug-info` instead");
-        exit(1);
-    }
+    "label:prefix" | "labelprefix"                    { RET_CONF_STR(labelPrefix); }
+    "label:yyfill" | "label:yyFillLabel"              { RET_CONF_STR(yyfilllabel); }
+    "label:yyNext"                                    { RET_CONF_STR(yynext); }
+    "label:start" | "startlabel" / conf_assign number { RET_CONF_BOOL(startlabel_force); }
+    "label:start" | "startlabel"                      { RET_CONF_STR(startlabel); }
 
     [a-zA-Z0-9_:-]* {
-        msg.error(tok_loc(), "unrecognized configuration '%.*s'",
-            static_cast<int>(cur - tok), tok);
+        msg.error(tok_loc(), "unrecognized configuration '%.*s'", (int)(cur - tok), tok);
         exit(1);
     }
 */
@@ -264,15 +244,6 @@ end:
     lex_conf_semicolon();
 }
 
-void Scanner::lex_conf_enc(Enc::type_t enc, Opt &opts)
-{
-    if (lex_conf_bool()) {
-        opts.set_encoding(enc);
-    } else {
-        opts.unset_encoding(enc);
-    }
-}
-
 void Scanner::lex_conf_assign ()
 {
 /*!local:re2c
@@ -295,11 +266,6 @@ void Scanner::lex_conf_semicolon ()
 */
 }
 
-bool Scanner::lex_conf_bool()
-{
-    return lex_conf_number() != 0;
-}
-
 int32_t Scanner::lex_conf_number ()
 {
     lex_conf_assign ();
@@ -319,12 +285,6 @@ int32_t Scanner::lex_conf_number ()
         return n;
     }
 */
-}
-
-uint32_t Scanner::lex_conf_eof()
-{
-    const int32_t n = lex_conf_number();
-    return n < 0 ? NOEOF : static_cast<uint32_t>(n);
 }
 
 std::string Scanner::lex_conf_string ()
@@ -362,5 +322,8 @@ end:
 }
 
 #undef YYFILL
+#undef RET_CONF_BOOL
+#undef RET_CONF_STR
+#undef RET_CONF_ENC
 
 } // end namespace re2c

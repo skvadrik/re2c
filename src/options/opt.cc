@@ -460,17 +460,13 @@ RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
 
-void Opt::set_encoding(Enc::type_t t)
-{
-    user.encoding.set(t);
+void Opt::set_encoding(Enc::type_t type, bool on) {
+    if (on) {
+        user.encoding.set(type);
+    } else {
+        user.encoding.unset(type);
+    }
     is_default.encoding = false;
-    diverge = true;
-}
-
-void Opt::unset_encoding(Enc::type_t t)
-{
-    user.encoding.unset(t);
-    is_default.encoding = false; // explicitly unset by the user => not default
     diverge = true;
 }
 

@@ -363,8 +363,7 @@ public:
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
-    void set_encoding(Enc::type_t t);
-    void unset_encoding(Enc::type_t t);
+    void set_encoding(Enc::type_t type, bool on);
     void set_encoding_policy(Enc::policy_t p);
 
     void reset_group_startlabel();

@@ -89,7 +89,6 @@ private:
     void lex_conf_encoding_policy(Opt &opts);
     void lex_conf_input(Opt &opts);
     void lex_conf_empty_class(Opt &opts);
-    void lex_conf_enc(Enc::type_t enc, Opt &opts);
     void lex_conf_api_style(Opt &opts);
     void lex_conf_assign();
     void lex_conf_semicolon();
@@ -154,6 +153,15 @@ inline Input& Scanner::get_input()
 inline const Input& Scanner::get_cinput() const
 {
     return *files[get_input_index()];
+}
+
+inline bool Scanner::lex_conf_bool() {
+    return lex_conf_number() != 0;
+}
+
+inline uint32_t Scanner::lex_conf_eof() {
+    const int32_t n = lex_conf_number();
+    return n < 0 ? NOEOF : static_cast<uint32_t>(n);
 }
 
 } // end namespace re2c
