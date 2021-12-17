@@ -145,6 +145,10 @@ loop:
     "/*!re2c" {
         out.wraw(tok, ptr);
         if (!lex_opt_name(block_name)) return INPUT_ERROR;
+        if (block_name == "local") {
+            msg.error(cur_loc(), "ill-formed local block, expected `local:re2c`");
+            return INPUT_ERROR;
+        }
         return INPUT_GLOBAL;
     }
 
@@ -188,7 +192,7 @@ loop:
         goto next;
     }
 
-    "/*!types:re2c" {
+    "/*!conditions:re2c" | "/*!types:re2c" {
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
