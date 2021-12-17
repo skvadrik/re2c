@@ -11,15 +11,15 @@
 static int lex(const char *YYCURSOR) {
     const char *YYMARKER;
     /*!re2c
-    re2c:define:YYCTYPE = 'unsigned char';
-    re2c:yyfill:enable  = 0;
+        re2c:define:YYCTYPE = 'unsigned char';
+        re2c:yyfill:enable  = 0;
 
-    id_start    = L | Nl | [$_];
-    id_continue = id_start | Mn | Mc | Nd | Pc | [\u200D\u05F3];
-    identifier  = id_start id_continue*;
+        id_start    = L | Nl | [$_];
+        id_continue = id_start | Mn | Mc | Nd | Pc | [\u200D\u05F3];
+        identifier  = id_start id_continue*;
 
-    identifier { return 0; }
-    *          { return 1; }
+        identifier { return 0; }
+        *          { return 1; }
     */
 }
 

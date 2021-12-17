@@ -14,7 +14,7 @@ static int lex(const char *str, unsigned int len) {
     for (;;) {/*!re2c
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
-        re2c:flags:input = custom;
+        re2c:api = custom;
         re2c:api:style = free-form;
         re2c:define:YYCTYPE = char;
         re2c:define:YYLESSTHAN = "cur >= lim";

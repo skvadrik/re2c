@@ -582,12 +582,12 @@ yy29:
 	o4 = in.yyt4
 //line "go/submatch/01_stags_fill.re":104
 	{
-		ips = append(ips, num(o4, in.cursor-1)+
-			(num(o3, o4-1) << 8)+
-			(num(o2, o3-1) << 16)+
-			(num(o1, o2-1) << 24))
-		goto loop
-	}
+			ips = append(ips, num(o4, in.cursor-1)+
+				(num(o3, o4-1) << 8)+
+				(num(o2, o3-1) << 16)+
+				(num(o1, o2-1) << 24))
+			goto loop
+		}
 //line "go/submatch/01_stags_fill.go":592
 yy31:
 	in.cursor += 1

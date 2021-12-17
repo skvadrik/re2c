@@ -13,16 +13,16 @@ typedef struct {
 
 int lex(LexerState *st) {
     /*!re2c
-    re2c:header = "src/lexer/lexer.h";
-    re2c:yyfill:enable = 0;
-    re2c:flags:tags = 1;
-    re2c:define:YYCTYPE  = char;
-    re2c:define:YYCURSOR = "st->cur";
-    re2c:define:YYMARKER = "st->mar";
-    re2c:tags:expression = "st->@@{tag}";
+        re2c:header = "src/lexer/lexer.h";
+        re2c:yyfill:enable = 0;
+        re2c:define:YYCTYPE  = char;
+        re2c:define:YYCURSOR = "st->cur";
+        re2c:define:YYMARKER = "st->mar";
+        re2c:tags = 1;
+        re2c:tags:expression = "st->@@{tag}";
 
-    [x]{1,4} / [x]{3,5} { return 0; } // ambiguous trailing context
-    *                   { return 1; }
+        [x]{1,4} / [x]{3,5} { return 0; } // ambiguous trailing context
+        *                   { return 1; }
     */
 }
 

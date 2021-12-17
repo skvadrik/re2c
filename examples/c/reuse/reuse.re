@@ -17,17 +17,16 @@
 static int lex_utf8(const uint8_t *YYCURSOR) {
     const uint8_t *YYMARKER;
     /*!use:re2c
-    re2c:define:YYCTYPE = uint8_t;
-    re2c:flags:8 = 1;
+        re2c:define:YYCTYPE = uint8_t;
+        re2c:encoding:utf8 = 1;
     */
 }
 
 static int lex_utf32(const uint32_t *YYCURSOR) {
     const uint32_t *YYMARKER;
     /*!use:re2c
-    re2c:define:YYCTYPE = uint32_t;
-    re2c:flags:8 = 0;
-    re2c:flags:u = 1;
+        re2c:define:YYCTYPE = uint32_t;
+        re2c:encoding:utf32 = 1;
     */
 }
 

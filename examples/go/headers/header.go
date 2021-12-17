@@ -127,4 +127,4 @@ type State struct {
 	Data string
 	Cur, Mar, Tag1, Tag2, Tag3 int
 }
-go/headers/header.re:30:21: warning: trailing context has 4th degree of nondeterminism [-Wnondeterministic-tags]
+go/headers/header.re:30:22: warning: trailing context has 4th degree of nondeterminism [-Wnondeterministic-tags]

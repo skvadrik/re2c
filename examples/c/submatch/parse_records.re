@@ -41,7 +41,7 @@ static int lex(const char *YYCURSOR) {
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
-        re2c:flags:tags = 1;
+        re2c:tags = 1;
 
         end     = "\x00";
         eol     = "\n";

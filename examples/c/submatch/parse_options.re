@@ -45,7 +45,7 @@ static int lex(const char *s) {
         re2c:define:YYCURSOR = s;
         re2c:define:YYMARKER = m;
         re2c:yyfill:enable = 0;
-        re2c:flags:tags = 1;
+        re2c:tags = 1;
 
         end    = "\x00";
         sp     = [ \t\n\r];

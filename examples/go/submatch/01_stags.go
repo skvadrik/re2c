@@ -360,11 +360,11 @@ yy29:
 	o4 = yyt4
 //line "go/submatch/01_stags.re":35
 	{
-		return num(o4, cursor-1)+
-			(num(o3, o4-1) << 8)+
-			(num(o2, o3-1) << 16)+
-			(num(o1, o2-1) << 24), nil
-	}
+			return num(o4, cursor-1)+
+				(num(o3, o4-1) << 8)+
+				(num(o2, o3-1) << 16)+
+				(num(o1, o2-1) << 24), nil
+		}
 //line "go/submatch/01_stags.go":369
 yy31:
 	cursor += 1

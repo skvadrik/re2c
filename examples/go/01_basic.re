@@ -1,19 +1,17 @@
-//go:generate re2go $INPUT -o $OUTPUT -i
+//go:generate re2go $INPUT -o $OUTPUT -i --nested-ifs
 
 package main                              //
-                                          //
-func lex(str string) {                    // Go code
+                                          // Go code
+func lex(str string) {                    //
     var cursor int                        //
-                                          //
 /*!re2c
-    re2c:define:YYCTYPE = byte;           //
+    re2c:define:YYCTYPE = byte;           // configurations
     re2c:define:YYPEEK = "str[cursor]";   //
-    re2c:define:YYSKIP = "cursor += 1";   // configurations
+    re2c:define:YYSKIP = "cursor += 1";   //
     re2c:yyfill:enable = 0;               //
-    re2c:flags:nested-ifs = 1;            //
-                                          //
+
     number = [1-9][0-9]*;                 // named definition
-                                          //
+
     number { return }                     // rules
     *      { panic("error!") }            //
 */

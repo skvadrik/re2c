@@ -22,9 +22,8 @@ const char *yyt3;
 const char *yyt4;
 #line 15 "c/submatch/01_stags.re"
 
-
     
-#line 28 "c/submatch/01_stags.c"
+#line 27 "c/submatch/01_stags.c"
 {
 	char yych;
 	yych = *YYCURSOR;
@@ -52,9 +51,9 @@ const char *yyt4;
 yy2:
 	++YYCURSOR;
 yy3:
-#line 32 "c/submatch/01_stags.re"
+#line 31 "c/submatch/01_stags.re"
 	{ return ERROR; }
-#line 58 "c/submatch/01_stags.c"
+#line 57 "c/submatch/01_stags.c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -405,14 +404,14 @@ yy29:
 	o2 = yyt2;
 	o3 = yyt3;
 	o4 = yyt4;
-#line 26 "c/submatch/01_stags.re"
+#line 25 "c/submatch/01_stags.re"
 	{
-        return num(o4, YYCURSOR - 1)
-            + (num(o3, o4 - 1) << 8)
-            + (num(o2, o3 - 1) << 16)
-            + (num(o1, o2 - 1) << 24);
-    }
-#line 416 "c/submatch/01_stags.c"
+            return num(o4, YYCURSOR - 1)
+                + (num(o3, o4 - 1) << 8)
+                + (num(o2, o3 - 1) << 16)
+                + (num(o1, o2 - 1) << 24);
+        }
+#line 415 "c/submatch/01_stags.c"
 yy31:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -426,7 +425,7 @@ yy31:
 		default: goto yy9;
 	}
 }
-#line 33 "c/submatch/01_stags.re"
+#line 32 "c/submatch/01_stags.re"
 
 }
 

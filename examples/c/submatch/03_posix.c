@@ -29,9 +29,8 @@ const char *yyt3;
 const char *yyt4;
 #line 19 "c/submatch/03_posix.re"
 
-
     
-#line 35 "c/submatch/03_posix.c"
+#line 34 "c/submatch/03_posix.c"
 {
 	char yych;
 	yych = *YYCURSOR;
@@ -59,9 +58,9 @@ const char *yyt4;
 yy2:
 	++YYCURSOR;
 yy3:
-#line 37 "c/submatch/03_posix.re"
+#line 36 "c/submatch/03_posix.re"
 	{ return ERROR; }
-#line 65 "c/submatch/03_posix.c"
+#line 64 "c/submatch/03_posix.c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -419,15 +418,15 @@ yy29:
 	yypmatch[5] = yyt3 - 1;
 	yypmatch[7] = yyt4 - 1;
 	yypmatch[9] = YYCURSOR - 1;
-#line 30 "c/submatch/03_posix.re"
+#line 29 "c/submatch/03_posix.re"
 	{
-        assert(yynmatch == 5);
-        return num(yypmatch[8], yypmatch[9])
-            + (num(yypmatch[6], yypmatch[7]) << 8)
-            + (num(yypmatch[4], yypmatch[5]) << 16)
-            + (num(yypmatch[2], yypmatch[3]) << 24);
-    }
-#line 431 "c/submatch/03_posix.c"
+            assert(yynmatch == 5);
+            return num(yypmatch[8], yypmatch[9])
+                + (num(yypmatch[6], yypmatch[7]) << 8)
+                + (num(yypmatch[4], yypmatch[5]) << 16)
+                + (num(yypmatch[2], yypmatch[3]) << 24);
+        }
+#line 430 "c/submatch/03_posix.c"
 yy31:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -441,7 +440,7 @@ yy31:
 		default: goto yy9;
 	}
 }
-#line 38 "c/submatch/03_posix.re"
+#line 37 "c/submatch/03_posix.re"
 
 }
 

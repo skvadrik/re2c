@@ -20,16 +20,16 @@ package main
 func lexUTF8(str []uint8) int {
 	var cursor, marker int
 	/*!use:re2c
-	re2c:flags:8 = 1;
-	re2c:define:YYCTYPE = uint8;
+		re2c:encoding:utf8 = 1;
+		re2c:define:YYCTYPE = uint8;
 	*/
 }
 
 func lexUTF32(str []uint32) int {
 	var cursor, marker int
 	/*!use:re2c
-	re2c:flags:u = 1;
-	re2c:define:YYCTYPE = uint32;
+		re2c:encoding:utf32 = 1;
+		re2c:define:YYCTYPE = uint32;
 	*/
 }
 

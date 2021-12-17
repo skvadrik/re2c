@@ -43,7 +43,7 @@ struct out_t {
 /*!rules:re2c
     re2c:yyfill:enable = 0;
     re2c:api:style = free-form;
-    re2c:flags:8 = 1;
+    re2c:encoding:utf8 = 1;
     re2c:define:YYGETCONDITION = "c";
     re2c:define:YYSETCONDITION = "c = @@;";
 
@@ -136,7 +136,7 @@ static void lex_utf8(const iutf8_t & in)
     out_t out;
     /*!use:re2c
         re2c:define:YYCTYPE = "unsigned char";
-        re2c:flags:8 = 1;
+        re2c:encoding:utf8 = 1;
     */
 }
 
@@ -147,7 +147,7 @@ static void lex_utf16(const iutf16_t & in)
     out_t out;
     /*!use:re2c
         re2c:define:YYCTYPE = "unsigned int";
-        re2c:flags:x = 1;
+        re2c:encoding:utf16 = 1;
     */
 }
 
@@ -158,7 +158,7 @@ static void lex_utf32(const iutf32_t & in)
     out_t out;
     /*!use:re2c
         re2c:define:YYCTYPE = "unsigned int";
-        re2c:flags:u = 1;
+        re2c:encoding:utf32 = 1;
     */
 }
 
@@ -169,7 +169,7 @@ static void lex_ucs2(const iucs2_t & in)
     out_t out;
     /*!use:re2c
         re2c:define:YYCTYPE = "unsigned int";
-        re2c:flags:w = 1;
+        re2c:encoding:ucs2 = 1;
     */
 }
 

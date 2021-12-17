@@ -35,16 +35,16 @@ static bool lex(const char *YYCURSOR, Words &words) {
     int x, y;
 
     /*!re2c
-    re2c:yyfill:enable = 0;
-    re2c:flags:tags = 1;
-    re2c:define:YYCTYPE = char;
+        re2c:yyfill:enable = 0;
+        re2c:tags = 1;
+        re2c:define:YYCTYPE = char;
 
-    (#x [a-z]+ #y [;])+ {
-        words.clear();
-        unfold(tree, x, y, words);
-        return true;
-    }
-    * { return false; }
+        (#x [a-z]+ #y [;])+ {
+            words.clear();
+            unfold(tree, x, y, words);
+            return true;
+        }
+        * { return false; }
     */
 }
 

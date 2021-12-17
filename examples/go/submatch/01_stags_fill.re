@@ -82,34 +82,34 @@ func lex(in *Input) []int {
 loop:
 	in.token = in.cursor
 	/*!re2c
-	re2c:eof = 0;
-	re2c:define:YYCTYPE    = byte;
-	re2c:define:YYPEEK     = "in.data[in.cursor]";
-	re2c:define:YYSKIP     = "in.cursor += 1";
-	re2c:define:YYBACKUP   = "in.marker = in.cursor";
-	re2c:define:YYRESTORE  = "in.cursor = in.marker";
-	re2c:define:YYLESSTHAN = "in.limit <= in.cursor";
-	re2c:define:YYFILL     = "fill(in) == 0";
-	re2c:define:YYSTAGP    = "@@{tag} = in.cursor";
-	re2c:define:YYSTAGN    = "@@{tag} = -1";
+		re2c:eof = 0;
+		re2c:define:YYCTYPE    = byte;
+		re2c:define:YYPEEK     = "in.data[in.cursor]";
+		re2c:define:YYSKIP     = "in.cursor += 1";
+		re2c:define:YYBACKUP   = "in.marker = in.cursor";
+		re2c:define:YYRESTORE  = "in.cursor = in.marker";
+		re2c:define:YYLESSTHAN = "in.limit <= in.cursor";
+		re2c:define:YYFILL     = "fill(in) == 0";
+		re2c:define:YYSTAGP    = "@@{tag} = in.cursor";
+		re2c:define:YYSTAGN    = "@@{tag} = -1";
 
-	// The way tag variables are accessed from the lexer (not needed if tag
-	// variables are defined as local variables).
-	re2c:tags:expression = "in.@@";
+		// The way tag variables are accessed from the lexer (not needed if tag
+		// variables are defined as local variables).
+		re2c:tags:expression = "in.@@";
 
-	octet = [0-9] | [1-9][0-9] | [1][0-9][0-9] | [2][0-4][0-9] | [2][5][0-5];
-	dot = [.];
-	eol = [\n];
+		octet = [0-9] | [1-9][0-9] | [1][0-9][0-9] | [2][0-4][0-9] | [2][5][0-5];
+		dot = [.];
+		eol = [\n];
 
-	@o1 octet dot @o2 octet dot @o3 octet dot @o4 octet eol {
-		ips = append(ips, num(o4, in.cursor-1)+
-			(num(o3, o4-1) << 8)+
-			(num(o2, o3-1) << 16)+
-			(num(o1, o2-1) << 24))
-		goto loop
-	}
-	$ { return ips }
-	* { return nil }
+		@o1 octet dot @o2 octet dot @o3 octet dot @o4 octet eol {
+			ips = append(ips, num(o4, in.cursor-1)+
+				(num(o3, o4-1) << 8)+
+				(num(o2, o3-1) << 16)+
+				(num(o1, o2-1) << 24))
+			goto loop
+		}
+		$ { return ips }
+		* { return nil }
 	*/
 }
 

@@ -55,20 +55,20 @@ func lex(str string) []string {
 	/*!mtags:re2c format = "\t@@ := mtagRoot\n"; */
 
 	/*!re2c
-	re2c:flags:tags = 1;
-	re2c:yyfill:enable = 0;
-	re2c:define:YYCTYPE   = byte;
-	re2c:define:YYPEEK    = "str[cursor]";
-	re2c:define:YYSKIP    = "cursor += 1";
-	re2c:define:YYBACKUP  = "marker = cursor";
-	re2c:define:YYRESTORE = "cursor = marker";
-	re2c:define:YYMTAGP   = "@@{tag} = mtag(&trie, @@{tag}, cursor)";
-	re2c:define:YYMTAGN   = "@@{tag} = mtag(&trie, @@{tag}, mtagNil)";
+		re2c:tags = 1;
+		re2c:yyfill:enable = 0;
+		re2c:define:YYCTYPE   = byte;
+		re2c:define:YYPEEK    = "str[cursor]";
+		re2c:define:YYSKIP    = "cursor += 1";
+		re2c:define:YYBACKUP  = "marker = cursor";
+		re2c:define:YYRESTORE = "cursor = marker";
+		re2c:define:YYMTAGP   = "@@{tag} = mtag(&trie, @@{tag}, cursor)";
+		re2c:define:YYMTAGN   = "@@{tag} = mtag(&trie, @@{tag}, mtagNil)";
 
-	end = [\x00];
+		end = [\x00];
 
-	(#x [a-z]+ #y [;])* end { return unwind(trie, x, y, str) }
-	*                       { return nil }
+		(#x [a-z]+ #y [;])* end { return unwind(trie, x, y, str) }
+		*                       { return nil }
 	*/
 }
 

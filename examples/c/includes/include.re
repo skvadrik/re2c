@@ -5,12 +5,12 @@
 Result lex(const char *YYCURSOR) {
     const char *YYMARKER;
     /*!re2c
-    re2c:define:YYCTYPE = char;
-    re2c:yyfill:enable = 0;
+        re2c:define:YYCTYPE = char;
+        re2c:yyfill:enable = 0;
 
-    number { return OK; }
-    !include "extra_rules.re.inc";
-    * { return FAIL; }
+        number { return OK; }
+        !include "extra_rules.re.inc";
+        * { return FAIL; }
     */
 }
 

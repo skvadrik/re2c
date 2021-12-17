@@ -15,43 +15,43 @@ static uint64_t parse_u32(const char *s) {
     uint64_t u = 0;
 
     /*!re2c
-    re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE = char;
-    re2c:define:YYCURSOR = s;
+        re2c:yyfill:enable = 0;
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYCURSOR = s;
 
-    end = "\x00";
+        end = "\x00";
 
-    '0b' / [01]        { goto bin; }
-    "0"                { goto oct; }
-    "" / [1-9]         { goto dec; }
-    '0x' / [0-9a-fA-F] { goto hex; }
-    *                  { return ERROR; }
+        '0b' / [01]        { goto bin; }
+        "0"                { goto oct; }
+        "" / [1-9]         { goto dec; }
+        '0x' / [0-9a-fA-F] { goto hex; }
+        *                  { return ERROR; }
     */
 bin:
     /*!re2c
-    end   { return u; }
-    [01]  { adddgt<2>(u, s[-1] - '0'); goto bin; }
-    *     { return ERROR; }
+        end   { return u; }
+        [01]  { adddgt<2>(u, s[-1] - '0'); goto bin; }
+        *     { return ERROR; }
     */
 oct:
     /*!re2c
-    end   { return u; }
-    [0-7] { adddgt<8>(u, s[-1] - '0'); goto oct; }
-    *     { return ERROR; }
+        end   { return u; }
+        [0-7] { adddgt<8>(u, s[-1] - '0'); goto oct; }
+        *     { return ERROR; }
     */
 dec:
     /*!re2c
-    end   { return u; }
-    [0-9] { adddgt<10>(u, s[-1] - '0'); goto dec; }
-    *     { return ERROR; }
+        end   { return u; }
+        [0-9] { adddgt<10>(u, s[-1] - '0'); goto dec; }
+        *     { return ERROR; }
     */
 hex:
     /*!re2c
-    end   { return u; }
-    [0-9] { adddgt<16>(u, s[-1] - '0');      goto hex; }
-    [a-f] { adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
-    [A-F] { adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
-    *     { return ERROR; }
+        end   { return u; }
+        [0-9] { adddgt<16>(u, s[-1] - '0');      goto hex; }
+        [a-f] { adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
+        [A-F] { adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
+        *     { return ERROR; }
     */
 }
 

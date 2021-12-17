@@ -134,12 +134,12 @@ yyc_bin:
 yy17:
 	cursor += 1
 	{
-		if result < u32Limit {
-			return uint32(result), nil
-		} else {
-			return 0, eOverflow
+			if result < u32Limit {
+				return uint32(result), nil
+			} else {
+				return 0, eOverflow
+			}
 		}
-	}
 yy19:
 	cursor += 1
 	{ return 0, eSyntax }
@@ -160,12 +160,12 @@ yyc_dec:
 yy25:
 	cursor += 1
 	{
-		if result < u32Limit {
-			return uint32(result), nil
-		} else {
-			return 0, eOverflow
+			if result < u32Limit {
+				return uint32(result), nil
+			} else {
+				return 0, eOverflow
+			}
 		}
-	}
 yy27:
 	cursor += 1
 	{ return 0, eSyntax }
@@ -190,12 +190,12 @@ yyc_hex:
 yy33:
 	cursor += 1
 	{
-		if result < u32Limit {
-			return uint32(result), nil
-		} else {
-			return 0, eOverflow
+			if result < u32Limit {
+				return uint32(result), nil
+			} else {
+				return 0, eOverflow
+			}
 		}
-	}
 yy35:
 	cursor += 1
 	{ return 0, eSyntax }
@@ -222,12 +222,12 @@ yyc_oct:
 yy45:
 	cursor += 1
 	{
-		if result < u32Limit {
-			return uint32(result), nil
-		} else {
-			return 0, eOverflow
+			if result < u32Limit {
+				return uint32(result), nil
+			} else {
+				return 0, eOverflow
+			}
 		}
-	}
 yy47:
 	cursor += 1
 	{ return 0, eSyntax }

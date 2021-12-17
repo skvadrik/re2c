@@ -377,14 +377,14 @@ yy29:
 	yypmatch[9] += -1
 //line "go/submatch/03_posix.re":39
 	{
-		if yynmatch != 5 {
-			panic("expected 5 submatch groups")
+			if yynmatch != 5 {
+				panic("expected 5 submatch groups")
+			}
+			return num(yypmatch[8], yypmatch[9])+
+				(num(yypmatch[6], yypmatch[7]) << 8)+
+				(num(yypmatch[4], yypmatch[5]) << 16)+
+				(num(yypmatch[2], yypmatch[3]) << 24), nil
 		}
-		return num(yypmatch[8], yypmatch[9])+
-			(num(yypmatch[6], yypmatch[7]) << 8)+
-			(num(yypmatch[4], yypmatch[5]) << 16)+
-			(num(yypmatch[2], yypmatch[3]) << 24), nil
-	}
 //line "go/submatch/03_posix.go":389
 yy31:
 	cursor += 1

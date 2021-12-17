@@ -162,10 +162,10 @@ yy6:
 	y = yytm3;
 #line 42 "c/submatch/02_mtags.re"
 	{
-        words.clear();
-        unfold(tree, x, y, words);
-        return true;
-    }
+            words.clear();
+            unfold(tree, x, y, words);
+            return true;
+        }
 #line 170 "c/submatch/02_mtags.c"
 yy7:
 	yych = *++YYCURSOR;

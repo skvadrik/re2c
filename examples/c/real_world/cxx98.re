@@ -103,10 +103,10 @@ static bool lex_str(input_t &in, unsigned char q)
     for (unsigned long u = q;; fprintf(stderr, "\\x%lx", u)) {
         in.tok = in.cur;
         /*!re2c
+            re2c:yyfill:enable = 1;
             re2c:define:YYCURSOR = in.cur;
             re2c:define:YYMARKER = in.mar;
             re2c:define:YYLIMIT = in.lim;
-            re2c:yyfill:enable = 1;
             re2c:define:YYFILL = "if (!in.fill(@@)) return false;";
             re2c:define:YYFILL:naked = 1;
             *                    { return false; }
@@ -179,10 +179,10 @@ static bool lex(input_t &in)
     for (;;) {
         in.tok = in.cur;
         /*!re2c
+            re2c:yyfill:enable = 1;
             re2c:define:YYCURSOR = in.cur;
             re2c:define:YYMARKER = in.mar;
             re2c:define:YYLIMIT = in.lim;
-            re2c:yyfill:enable = 1;
             re2c:define:YYFILL = "if (!in.fill(@@)) return false;";
             re2c:define:YYFILL:naked = 1;
 

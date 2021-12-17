@@ -105,4 +105,4 @@ typedef struct {
     const char *yyt1; const char *yyt2; const char *yyt3; 
 } LexerState;
 
-c/headers/header.re:24:24: warning: trailing context has 4th degree of nondeterminism [-Wnondeterministic-tags]
+c/headers/header.re:24:28: warning: trailing context has 4th degree of nondeterminism [-Wnondeterministic-tags]

@@ -17,24 +17,23 @@ static uint64_t lex(const char *YYCURSOR) {
     const char *yypmatch[YYMAXNMATCH * 2];
     uint32_t yynmatch;
     /*!stags:re2c format = 'const char *@@;\n'; */
-
     /*!re2c
-    re2c:yyfill:enable = 0;
-    re2c:flags:posix-captures = 1;
-    re2c:define:YYCTYPE = char;
+        re2c:yyfill:enable = 0;
+        re2c:posix-captures = 1;
+        re2c:define:YYCTYPE = char;
 
-    octet = [0-9] | [1-9][0-9] | [1][0-9][0-9] | [2][0-4][0-9] | [2][5][0-5];
-    dot = [.];
-    end = [\x00];
+        octet = [0-9] | [1-9][0-9] | [1][0-9][0-9] | [2][0-4][0-9] | [2][5][0-5];
+        dot = [.];
+        end = [\x00];
 
-    (octet) dot (octet) dot (octet) dot (octet) end {
-        assert(yynmatch == 5);
-        return num(yypmatch[8], yypmatch[9])
-            + (num(yypmatch[6], yypmatch[7]) << 8)
-            + (num(yypmatch[4], yypmatch[5]) << 16)
-            + (num(yypmatch[2], yypmatch[3]) << 24);
-    }
-    * { return ERROR; }
+        (octet) dot (octet) dot (octet) dot (octet) end {
+            assert(yynmatch == 5);
+            return num(yypmatch[8], yypmatch[9])
+                + (num(yypmatch[6], yypmatch[7]) << 8)
+                + (num(yypmatch[4], yypmatch[5]) << 16)
+                + (num(yypmatch[2], yypmatch[3]) << 24);
+        }
+        * { return ERROR; }
     */
 }
 

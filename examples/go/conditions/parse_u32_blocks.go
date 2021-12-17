@@ -4,12 +4,11 @@ package main
 
 import "errors"
 
+const u32Limit uint64 = 1<<32
 var (
 	eSyntax   = errors.New("syntax error")
 	eOverflow = errors.New("overflow error")
 )
-
-const u32Limit uint64 = 1<<32
 
 func parse_u32(str string) (uint32, error) {
 	var cursor, marker int

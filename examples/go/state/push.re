@@ -58,21 +58,21 @@ func lex(in *Input, recv *int) int {
 loop:
 	in.token = in.cursor
 	/*!re2c
-	re2c:eof = 0;
-	re2c:define:YYPEEK     = "in.data[in.cursor]";
-	re2c:define:YYSKIP     = "in.cursor += 1";
-	re2c:define:YYBACKUP   = "in.marker = in.cursor";
-	re2c:define:YYRESTORE  = "in.cursor = in.marker";
-	re2c:define:YYLESSTHAN = "in.limit <= in.cursor";
-	re2c:define:YYFILL     = "return lexWaitingForInput";
-	re2c:define:YYGETSTATE = "in.state";
-	re2c:define:YYSETSTATE = "in.state = @@{state}";
+		re2c:eof = 0;
+		re2c:define:YYPEEK     = "in.data[in.cursor]";
+		re2c:define:YYSKIP     = "in.cursor += 1";
+		re2c:define:YYBACKUP   = "in.marker = in.cursor";
+		re2c:define:YYRESTORE  = "in.cursor = in.marker";
+		re2c:define:YYLESSTHAN = "in.limit <= in.cursor";
+		re2c:define:YYFILL     = "return lexWaitingForInput";
+		re2c:define:YYGETSTATE = "in.state";
+		re2c:define:YYSETSTATE = "in.state = @@{state}";
 
-	packet = [a-z]+[;];
+		packet = [a-z]+[;];
 
-	*      { return lexPacketBroken }
-	$      { return lexEnd }
-	packet { *recv = *recv + 1; goto loop }
+		*      { return lexPacketBroken }
+		$      { return lexEnd }
+		packet { *recv = *recv + 1; goto loop }
 	*/
 }
 

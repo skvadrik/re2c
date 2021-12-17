@@ -23,12 +23,12 @@ enum What { COLOR, FISH, DUNNO };
 static What lex(const char *YYCURSOR) {
     const char *YYMARKER;
     /*!re2c
-    re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE = char;
+        re2c:yyfill:enable = 0;
+        re2c:define:YYCTYPE = char;
 
-    !use:fish;
-    !use:colors;
-    * { return DUNNO; }
+        !use:fish;
+        !use:colors;
+        * { return DUNNO; }
     */
 }
 
