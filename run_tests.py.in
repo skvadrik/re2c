@@ -469,9 +469,11 @@ def run_test(test):
                 remove(*all_files)
         else:
             hard_errors += 1
-    elif ext == 'c':  # skeleton tests; only C files are supported
+
+    # skeleton tests (exclude non-C tests and tests that output help message)
+    elif ext == 'c' and '--help' not in switches:
         # cleanup temporary files
-        remove(outy)
+        remove(outy) 
 
         switches = f'{switches} --skeleton -Werror-undefined-control-flow'
 

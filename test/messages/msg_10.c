@@ -1,1 +1,1 @@
-re2c: error: bad argument '-' to option -o, --output <filename>
+re2c: error: bad argument '-' to option -o, --output (expected <filename>)

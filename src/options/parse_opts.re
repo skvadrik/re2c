@@ -45,7 +45,7 @@ parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
 } while(0)
 
 #define ERRARG(opt, exp, arg) do { \
-    error("bad argument '%s' to option %s <%s>", arg, opt, exp); \
+    error("bad argument '%s' to option %s (expected <%s>)", arg, opt, exp); \
     return EXIT_FAIL; \
 } while(0)
 
@@ -181,11 +181,11 @@ opt_long:
     "tags"                  end { opts.set_tags (true);              goto opt; }
     "no-unsafe"             end { opts.set_unsafe(false);            goto opt; }
 
-    "ecb"        end { opts.set_encoding(Enc::EBCDIC, true); goto opt; }
-    "unicode"    end { opts.set_encoding(Enc::UTF32, true);  goto opt; }
-    "wide-chars" end { opts.set_encoding(Enc::UCS2, true);   goto opt; }
-    "utf-16"     end { opts.set_encoding(Enc::UTF16, true);  goto opt; }
-    "utf-8"      end { opts.set_encoding(Enc::UTF8, true);   goto opt; }
+    "ebcdic" | "ecb"        end { opts.set_encoding(Enc::EBCDIC, true); goto opt; }
+    "utf32"  | "unicode"    end { opts.set_encoding(Enc::UTF32, true);  goto opt; }
+    "ucs2"   | "wide-chars" end { opts.set_encoding(Enc::UCS2, true);   goto opt; }
+    "utf16"  | "utf-16"     end { opts.set_encoding(Enc::UTF16, true);  goto opt; }
+    "utf8"   | "utf-8"      end { opts.set_encoding(Enc::UTF8, true);   goto opt; }
 
     "posix-captures" end {
         opts.set_posix_syntax(true);
@@ -195,10 +195,10 @@ opt_long:
 
     "lang"                  end { NEXT_ARG("--lang",             opt_lang); }
     "output"                end { NEXT_ARG("-o, --output",       opt_output); }
-    "type-header"           end { NEXT_ARG("-t, --type-header",  opt_header); }
+    "type-"? "header"       end { NEXT_ARG("-t, --header, --type-header", opt_header); }
     "depfile"               end { NEXT_ARG("--depfile",          opt_depfile); }
     "encoding-policy"       end { NEXT_ARG("--encoding-policy",  opt_encoding_policy); }
-    "input"                 end { NEXT_ARG("--input",            opt_input); }
+    "api" | "input"         end { NEXT_ARG("--api, --input",     opt_input); }
     "empty-class"           end { NEXT_ARG("--empty-class",      opt_empty_class); }
     "location-format"       end { NEXT_ARG("--location-format",  opt_location_format); }
     "input-encoding"        end { NEXT_ARG("--input-encoding",   opt_input_encoding); }
@@ -245,7 +245,7 @@ opt_output:
 
 opt_header:
 /*!local:re2c
-    * { ERRARG("-t, --type-header", "filename", *argv); }
+    * { ERRARG("-t, --header, --type-header", "filename", *argv); }
     filename end { opts.set_header_file (*argv); goto opt; }
 */
 
@@ -271,7 +271,7 @@ opt_encoding_policy:
 
 opt_input:
 /*!local:re2c
-    * { ERRARG("--input", "default | custom", *argv); }
+    * { ERRARG("--api, --input", "default | custom", *argv); }
     "default" end { opts.set_input_api(INPUT_DEFAULT); goto opt; }
     "custom"  end { opts.set_input_api(INPUT_CUSTOM);  goto opt; }
 */
@@ -293,7 +293,7 @@ opt_location_format:
 
 opt_input_encoding:
 /*!local:re2c
-    * { ERRARG("--input-encoding", "ascii | utf8", *argv); }
+    * { ERRARG("--input-encoding", "ascii | utf8 ", *argv); }
     "ascii" end { globopts.input_encoding = Enc::ASCII; goto opt; }
     "utf8"  end { globopts.input_encoding = Enc::UTF8;  goto opt; }
 */
