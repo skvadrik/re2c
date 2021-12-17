@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT  --type-header header_03.h
+// re2c $INPUT -o $OUTPUT --header header_03.h
 /*!re2c re2c:flags:type-header = "header_03.h"; */
 
 /*!header:re2c:on*/

@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT  --type-header header_01.h
+// re2c $INPUT -o $OUTPUT --header header_01.h
 /*!header:re2c:on*/
 bool lex(const char *);
 /*!header:re2c:off*/

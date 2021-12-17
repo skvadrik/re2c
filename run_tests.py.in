@@ -29,8 +29,8 @@ TOP_BUILDIR = '@top_builddir@'
 
 # Prepare static patterns once at start.
 RE2C_PATTERN = re.compile(r'.*re2c[ \t]*(.*)$')
-TYPE_HEADER_PATTERN1 = re.compile(r'--type-header[ \t]*')
-TYPE_HEADER_PATTERN2 = re.compile(r'.*--type-header[ \t]*([^ \t]*).*')
+TYPE_HEADER_PATTERN1 = re.compile(r'--header[ \t]*')
+TYPE_HEADER_PATTERN2 = re.compile(r'.*--header[ \t]*([^ \t]*).*')
 START_OF_MESSAGE = b'^[a-z0-9_]+([\\\\/]+[a-z0-9_]+)+([.][a-z]+)+[(:]'
 START_OF_LINEDIR = b'^(//|#)line '
 FILEPATH_CONTEXT_PATTERN = re.compile(b'('
@@ -374,7 +374,7 @@ def run_test(test):
         #     re.error: bad escape \c at position 16
         # Therefore, we need to tilt the slashes in the opposite
         # direction :)
-        f'--type-header {Path(outx).parent.as_posix()}/',
+        f'--header {Path(outx).parent.as_posix()}/',
         switches
     )
 
@@ -395,7 +395,7 @@ def run_test(test):
 
         # if options contain a header, create directory structure for it
         header = ''
-        if '--type-header' in switches:
+        if '--header' in switches:
             header = TYPE_HEADER_PATTERN2.sub(r'\1', switches)
 
         if header:

@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -ci --type-header cond_enum_header_and_directives.h
+// re2c $INPUT -o $OUTPUT -ci --header cond_enum_header_and_directives.h
 // This test ensures that `types:re2c` includes all necessary conditions,
 // whether they are defined in the output file or in the generated header.
 
