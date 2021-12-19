@@ -120,14 +120,6 @@ jobs:
       - name: Full Configure
         run: cmake --preset=${{ matrix.name }}-full
 
-      - name: Full Build
-        run: |
-          find src -name '*.re' | xargs touch
-          cmake --build --preset=${{ matrix.name }}-full
-
-      - name: Run Main Test Suite
-        run: cmake --build --preset=${{ matrix.name }}-full --target tests
-
       - name: Get build dir
         id: build-info
         run: |
@@ -136,8 +128,15 @@ jobs:
           else
             BUILD_DIR="$(pwd)"
           fi
-
           echo "::set-output name=BUILD_DIR::$BUILD_DIR"
+
+      - name: Full Build
+        run: |
+          find src -name '*.re' | xargs touch
+          cmake --build --preset=${{ matrix.name }}-full
+
+      - name: Run Main Test Suite
+        run: cmake --build --preset=${{ matrix.name }}-full --target tests
 
       - name: Run Skeleton Tests
         if: "contains(matrix.name, 'skeleton')"
