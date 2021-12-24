@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -i
+// re2c $INPUT -o $OUTPUT
 
 // re2c block that starts with %{ on a new line
 %{
@@ -7,7 +7,7 @@
 
 // re2c block that starts with %{ on a new line with spaces
 	  %{
-    * := return "%{ * {} %}"; /* %{ %} */
+    * := return "%{ * {} %}"; /* %{ %} */ // %{ %}
 %}
 
 // not a block, just a %{ in a string

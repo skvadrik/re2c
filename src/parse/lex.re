@@ -621,31 +621,29 @@ error:
     exit(1);
 }
 
-void Scanner::lex_code_indented()
-{
+void Scanner::lex_code_indented() {
     const loc_t &loc = tok_loc();
     tok = cur;
 code:
 /*!re2c
-    eol / ws { next_line(); goto code; }
-    eol {
-        next_line();
+    eof  { fail_if_eof(); goto code; }
+    eol  { next_line(); goto indent; }
+    "//" { lex_cpp_comment(); goto indent; }
+    "/*" { lex_c_comment(); goto code; }
+    ["'] { try_lex_string_in_code(cur[-1]); goto code; }
+    [{}] { msg.error(cur_loc(), "Curly braces are not allowed after ':='"); exit(1); }
+    *    { goto code; }
+*/
+indent:
+/*!re2c
+    "" / ws { goto code; } // indent after newline => still in semantic action
+    "" {
         while (isspace(tok[0])) ++tok;
         char *p = cur;
         while (p > tok && isspace(p[-1])) --p;
         yylval.semact = new SemAct(loc, getstr(tok, p));
         return;
     }
-
-    eof  { fail_if_eof(); goto code; }
-    [{}] {
-        msg.error(cur_loc(), "Curly braces are not allowed after ':='");
-        exit(1);
-    }
-    "/*" { lex_c_comment(); goto code; }
-    "//" { lex_cpp_comment(); goto code; }
-    ["'] { try_lex_string_in_code(cur[-1]); goto code; }
-    *    { goto code; }
 */
 }
 
