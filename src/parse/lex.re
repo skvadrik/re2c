@@ -136,7 +136,14 @@ loop:
     location = cur_loc();
     ptr = cur;
 /*!local:re2c
-    "%{" {
+    space* "%{" {
+        if (pos != ptr) {
+            // re2c does not parse user-defined code outside of re2c blocks, therefore it
+            // can confuse `%{` in the middle of a string or a comment with a block start.
+            // To avoid this recognize `%{` as a block start only on a new line, possibly
+            // preceded by whitespaces.
+            goto loop;
+        }
         out.wraw(tok, ptr);
         block_name.clear();
         return INPUT_GLOBAL;
