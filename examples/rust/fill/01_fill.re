@@ -64,7 +64,6 @@ fn lex(st: &mut State) -> isize {
         re2c:define:YYSKIP     = "st.cur += 1;";
         re2c:define:YYBACKUP   = "st.mar = st.cur;";
         re2c:define:YYRESTORE  = "st.cur = st.mar;";
-        re2c:define:YYFILL     = "{ return -1; }";
         re2c:define:YYLESSTHAN = "st.cur + @@ > st.lim";
         re2c:define:YYFILL     = "fill(st) == Fill::Ok";
 

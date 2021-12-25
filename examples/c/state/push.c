@@ -12,66 +12,61 @@
 typedef struct {
     FILE *file;
     char buf[BUFSIZE + 1], *lim, *cur, *mar, *tok;
-    unsigned yyaccept;
     int state;
-} Input;
-
-static void init(Input *in, FILE *f) {
-    in->file = f;
-    in->cur = in->mar = in->tok = in->lim = in->buf + BUFSIZE;
-    in->lim[0] = 0; // append sentinel symbol
-    in->yyaccept = 0;
-    in->state = -1;
-}
+} State;
 
 typedef enum {END, READY, WAITING, BAD_PACKET, BIG_PACKET} Status;
 
-static Status fill(Input *in) {
-    const size_t shift = in->tok - in->buf;
-    const size_t free = BUFSIZE - (in->lim - in->tok);
+static Status fill(State *st) {
+    const size_t shift = st->tok - st->buf;
+    const size_t used = st->lim - st->tok;
+    const size_t free = BUFSIZE - used;
 
+    // Error: no space. In real life can reallocate a larger buffer.
     if (free < 1) return BIG_PACKET;
 
-    memmove(in->buf, in->tok, BUFSIZE - shift);
-    in->lim -= shift;
-    in->cur -= shift;
-    in->mar -= shift;
-    in->tok -= shift;
+    // Shift buffer contents (discard already processed data).
+    memmove(st->buf, st->tok, used);
+    st->lim -= shift;
+    st->cur -= shift;
+    st->mar -= shift;
+    st->tok -= shift;
 
-    const size_t read = fread(in->lim, 1, free, in->file);
-    in->lim += read;
-    in->lim[0] = 0; // append sentinel symbol
+    // Fill free space at the end of buffer with new data.
+    const size_t read = fread(st->lim, 1, free, st->file);
+    st->lim += read;
+    st->lim[0] = 0; // append sentinel symbol
 
     return READY;
 }
 
-static Status lex(Input *in, unsigned int *recv) {
+static Status lex(State *st, unsigned int *recv) {
     char yych;
     
-#line 52 "c/state/push.c"
-switch (in->state) {
+#line 47 "c/state/push.c"
+switch (st->state) {
 	default: goto yy0;
 	case 0:
-		if (in->lim <= in->cur) goto yy11;
+		if (st->lim <= st->cur) goto yy11;
 		goto yyFillLabel0;
 	case 1:
-		if (in->lim <= in->cur) goto yy4;
+		if (st->lim <= st->cur) goto yy4;
 		goto yyFillLabel1;
 	case 2:
-		if (in->lim <= in->cur) goto yy10;
+		if (st->lim <= st->cur) goto yy10;
 		goto yyFillLabel2;
 }
-#line 48 "c/state/push.re"
+#line 43 "c/state/push.re"
 
 
     for (;;) {
-        in->tok = in->cur;
+        st->tok = st->cur;
     
-#line 71 "c/state/push.c"
+#line 66 "c/state/push.c"
 
 yy0:
 yyFillLabel0:
-	yych = *in->cur;
+	yych = *st->cur;
 	switch (yych) {
 		case 'a':
 		case 'b':
@@ -100,23 +95,23 @@ yyFillLabel0:
 		case 'y':
 		case 'z': goto yy5;
 		default:
-			if (in->lim <= in->cur) {
-				in->state = 0;
+			if (st->lim <= st->cur) {
+				st->state = 0;
 				return WAITING;
 			}
 			goto yy3;
 	}
 yy3:
-	++in->cur;
+	++st->cur;
 yy4:
-	in->state = -1;
-#line 65 "c/state/push.re"
+	st->state = -1;
+#line 60 "c/state/push.re"
 	{ return BAD_PACKET; }
-#line 116 "c/state/push.c"
+#line 111 "c/state/push.c"
 yy5:
-	in->mar = ++in->cur;
+	st->mar = ++st->cur;
 yyFillLabel1:
-	yych = *in->cur;
+	yych = *st->cur;
 	switch (yych) {
 		case ';': goto yy6;
 		case 'a':
@@ -146,22 +141,22 @@ yyFillLabel1:
 		case 'y':
 		case 'z': goto yy8;
 		default:
-			if (in->lim <= in->cur) {
-				in->state = 1;
+			if (st->lim <= st->cur) {
+				st->state = 1;
 				return WAITING;
 			}
 			goto yy4;
 	}
 yy6:
-	++in->cur;
-	in->state = -1;
-#line 67 "c/state/push.re"
+	++st->cur;
+	st->state = -1;
+#line 62 "c/state/push.re"
 	{ *recv = *recv + 1; continue; }
-#line 161 "c/state/push.c"
+#line 156 "c/state/push.c"
 yy8:
-	++in->cur;
+	++st->cur;
 yyFillLabel2:
-	yych = *in->cur;
+	yych = *st->cur;
 	switch (yych) {
 		case ';': goto yy6;
 		case 'a':
@@ -191,66 +186,76 @@ yyFillLabel2:
 		case 'y':
 		case 'z': goto yy8;
 		default:
-			if (in->lim <= in->cur) {
-				in->state = 2;
+			if (st->lim <= st->cur) {
+				st->state = 2;
 				return WAITING;
 			}
 			goto yy10;
 	}
 yy10:
-	in->cur = in->mar;
+	st->cur = st->mar;
 	goto yy4;
 yy11:
-	in->state = -1;
-#line 66 "c/state/push.re"
+	st->state = -1;
+#line 61 "c/state/push.re"
 	{ return END; }
-#line 208 "c/state/push.c"
-#line 68 "c/state/push.re"
+#line 203 "c/state/push.c"
+#line 63 "c/state/push.re"
 }
 }
 
-void test(const char **packets, Status status) {
+void test(const char **packets, Status expect) {
+    // Create a "socket" (open the same file for reading and writing).
     const char *fname = "pipe";
     FILE *fw = fopen(fname, "w");
     FILE *fr = fopen(fname, "r");
     setvbuf(fw, NULL, _IONBF, 0);
     setvbuf(fr, NULL, _IONBF, 0);
 
-    Input in;
-    init(&in, fr);
-    Status st;
-    unsigned int send = 0, recv = 0;
+    // Initialize lexer state: `state` value is -1, all pointers are at the end
+    // of buffer, the character at YYLIMIT is the sentinel (null).
+    State st;
+    st.file = fr;
+    st.cur = st.mar = st.tok = st.lim = st.buf + BUFSIZE;
+    st.lim[0] = 0;
+    st.state = -1;
 
+    // Main loop. The buffer contains incomplete data which appears packet by
+    // packet. When the lexer needs more input it saves its internal state and
+    // returns to the caller which should provide more input and resume lexing.
+    Status status;
+    unsigned int send = 0, recv = 0;
     for (;;) {
-        st = lex(&in, &recv);
-        if (st == END) {
+        status = lex(&st, &recv);
+        if (status == END) {
             LOG("done: got %u packets\n", recv);
             break;
-        } else if (st == WAITING) {
+        } else if (status == WAITING) {
             LOG("waiting...\n");
             if (*packets) {
                 LOG("sent packet %u\n", send);
                 fprintf(fw, "%s", *packets++);
                 ++send;
             }
-            st = fill(&in);
-            LOG("queue: '%s'\n", in.buf);
-            if (st == BIG_PACKET) {
+            status = fill(&st);
+            LOG("queue: '%s'\n", st.buf);
+            if (status == BIG_PACKET) {
                 LOG("error: packet too big\n");
                 break;
             }
-            assert(st == READY);
+            assert(status == READY);
         } else {
-            assert(st == BAD_PACKET);
+            assert(status == BAD_PACKET);
             LOG("error: ill-formed packet\n");
             break;
         }
     }
 
-    LOG("\n");
-    assert(st == status);
-    if (st == END) assert(recv == send);
+    // Check results.
+    assert(status == expect);
+    if (status == END) assert(recv == send);
 
+    // Cleanup: remove input file.
     fclose(fw);
     fclose(fr);
     remove(fname);

@@ -9,17 +9,16 @@ import (
 )
 
 // Intentionally small to trigger buffer refill.
-const SIZE int = 16
+const BUFSIZE int = 10
 
-type Input struct {
-	file     *os.File
-	data     []byte
-	cursor   int
-	marker   int
-	token    int
-	limit    int
-	state    int
-	yyaccept int
+type State struct {
+	file   *os.File
+	data   []byte
+	cursor int
+	marker int
+	token  int
+	limit  int
+	state  int
 }
 
 const (
@@ -28,189 +27,187 @@ const (
 	lexWaitingForInput
 	lexPacketBroken
 	lexPacketTooBig
-	lexCountMismatch
 )
 
-func fill(in *Input) int {
-	if in.token == 0 {
-		// Error: no space can be freed.
-		// In real life can reallocate a larger buffer.
-		return lexPacketTooBig
-	}
+func fill(st *State) int {
+	shift := st.token
+	used := st.limit - st.token
+	free := BUFSIZE - used
 
-	// Discard everything up to the start of the current lexeme,
-	// shift buffer contents and adjust offsets.
-	copy(in.data[0:], in.data[in.token:in.limit])
-	in.cursor -= in.token
-	in.marker -= in.token
-	in.limit -= in.token
-	in.token = 0
+	// Error: no space. In real life can reallocate a larger buffer.
+	if free < 1 { return lexPacketTooBig }
 
-	// Read new data (as much as possible to fill the buffer).
-	n, _ := in.file.Read(in.data[in.limit:SIZE])
-	in.limit += n
-	in.data[in.limit] = 0 // append sentinel symbol
+	// Shift buffer contents (discard already processed data).
+	copy(st.data[0:], st.data[shift:shift+used])
+	st.cursor -= shift
+	st.marker -= shift
+	st.limit -= shift
+	st.token -= shift
+
+	// Fill free space at the end of buffer with new data.
+	n, _ := st.file.Read(st.data[st.limit:BUFSIZE])
+	st.limit += n
+	st.data[st.limit] = 0 // append sentinel symbol
 
 	return lexReady
 }
 
-func lex(in *Input, recv *int) int {
+func lex(st *State, recv *int) int {
 	var yych byte
 	
-//line "go/state/push.go":61
-switch (in.state) {
+//line "go/state/push.go":59
+switch (st.state) {
 default:
 	goto yy0
 case 0:
-	if (in.limit <= in.cursor) {
+	if (st.limit <= st.cursor) {
 		goto yy11
 	}
 	goto yyFillLabel0
 case 1:
-	if (in.limit <= in.cursor) {
+	if (st.limit <= st.cursor) {
 		goto yy4
 	}
 	goto yyFillLabel1
 case 2:
-	if (in.limit <= in.cursor) {
+	if (st.limit <= st.cursor) {
 		goto yy10
 	}
 	goto yyFillLabel2
 }
-//line "go/state/push.re":57
+//line "go/state/push.re":55
 
 loop:
-	in.token = in.cursor
+	st.token = st.cursor
 	
-//line "go/state/push.go":86
+//line "go/state/push.go":84
 
 yy0:
 yyFillLabel0:
-	yych = in.data[in.cursor]
+	yych = st.data[st.cursor]
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy5
 	default:
-		if (in.limit <= in.cursor) {
-			in.state = 0
+		if (st.limit <= st.cursor) {
+			st.state = 0
 			return lexWaitingForInput
 		}
 		goto yy3
 	}
 yy3:
-	in.cursor += 1
+	st.cursor += 1
 yy4:
-	in.state = -1
-//line "go/state/push.re":73
+	st.state = -1
+//line "go/state/push.re":71
 	{ return lexPacketBroken }
-//line "go/state/push.go":107
+//line "go/state/push.go":105
 yy5:
-	in.cursor += 1
-	in.marker = in.cursor
+	st.cursor += 1
+	st.marker = st.cursor
 yyFillLabel1:
-	yych = in.data[in.cursor]
+	yych = st.data[st.cursor]
 	switch (yych) {
 	case ';':
 		goto yy6
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy8
 	default:
-		if (in.limit <= in.cursor) {
-			in.state = 1
+		if (st.limit <= st.cursor) {
+			st.state = 1
 			return lexWaitingForInput
 		}
 		goto yy4
 	}
 yy6:
-	in.cursor += 1
-	in.state = -1
-//line "go/state/push.re":75
+	st.cursor += 1
+	st.state = -1
+//line "go/state/push.re":73
 	{ *recv = *recv + 1; goto loop }
-//line "go/state/push.go":130
+//line "go/state/push.go":128
 yy8:
-	in.cursor += 1
+	st.cursor += 1
 yyFillLabel2:
-	yych = in.data[in.cursor]
+	yych = st.data[st.cursor]
 	switch (yych) {
 	case ';':
 		goto yy6
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy8
 	default:
-		if (in.limit <= in.cursor) {
-			in.state = 2
+		if (st.limit <= st.cursor) {
+			st.state = 2
 			return lexWaitingForInput
 		}
 		goto yy10
 	}
 yy10:
-	in.cursor = in.marker
+	st.cursor = st.marker
 	goto yy4
 yy11:
-	in.state = -1
-//line "go/state/push.re":74
+	st.state = -1
+//line "go/state/push.re":72
 	{ return lexEnd }
-//line "go/state/push.go":154
-//line "go/state/push.re":76
+//line "go/state/push.go":152
+//line "go/state/push.re":74
 
 }
 
-func test(packets []string) int {
+func test(expect int, packets []string) {
+	// Create a "socket" (open the same file for reading and writing).
 	fname := "pipe"
 	fw, _ := os.Create(fname)
 	fr, _ := os.Open(fname)
 
-	in := &Input{
+	// Initialize lexer state: `state` value is -1, all offsets are at the end
+	// of buffer, the character at `lim` offset is the sentinel (null).
+	st := &State{
 		file:   fr,
-		data:   make([]byte, SIZE+1),
-		cursor: SIZE,
-		marker: SIZE,
-		token:  SIZE,
-		limit:  SIZE,
+		data:   make([]byte, BUFSIZE+1),
+		cursor: BUFSIZE,
+		marker: BUFSIZE,
+		token:  BUFSIZE,
+		limit:  BUFSIZE,
 		state:  -1,
 	}
 	// data is zero-initialized, no need to write sentinel
 
+	// Main loop. The buffer contains incomplete data which appears packet by
+	// packet. When the lexer needs more input it saves its internal state and
+	// returns to the caller which should provide more input and resume lexing.
 	var status int
 	send := 0
 	recv := 0
-loop:
 	for {
-		status = lex(in, &recv)
+		status = lex(st, &recv)
 		if status == lexEnd {
-			if send != recv {
-				status = lexCountMismatch
-			}
-			break loop
+			break
 		} else if status == lexWaitingForInput {
 			if send < len(packets) {
 				fw.WriteString(packets[send])
 				send += 1
 			}
-			status = fill(in)
+			status = fill(st)
 			if status != lexReady {
-				break loop
+				break
 			}
 		} else if status == lexPacketBroken {
-			break loop
-		} else {
-			panic("unexpected status")
+			break
 		}
 	}
 
+	// Check results.
+	if status != expect || (status == lexEnd && recv != send) {
+		panic(fmt.Sprintf("got %d, want %d", status, expect))
+	}
+
+	// Cleanup: remove input file.
 	fr.Close()
 	fw.Close()
 	os.Remove(fname)
-
-	return status
 }
 
 func main() {
-	test := func(status int, packets []string) {
-		if s := test(packets); s != status {
-			panic(fmt.Sprintf("got %d, want %d", s, status))
-		}
-	}
 	test(lexEnd, []string{})
 	test(lexEnd, []string{"zero;", "one;", "two;", "three;", "four;"})
 	test(lexPacketBroken, []string{"??;"})
