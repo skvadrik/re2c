@@ -111,10 +111,15 @@ struct Span {
     tcid_t    tags;
 };
 
+struct CodeRanges {
+    VarType   type;
+    uint32_t  size;
+    int64_t  *elems;
+};
+
 struct CodeGoCase {
-    uint32_t  nranges;
-    uint32_t *ranges;
-    CodeJump  jump;
+    const CodeRanges *ranges;
+    CodeJump          jump;
 };
 
 struct CodeGoSw {
@@ -230,7 +235,7 @@ struct CodeCase {
     } kind;
 
     union {
-        const CodeGoCase *gocase;
+        const CodeRanges *ranges;
         int32_t           number;
         const char       *string;
     };
@@ -557,11 +562,19 @@ inline CodeCase *code_case_string(code_alc_t &alc, CodeList *body, const char *s
     return x;
 }
 
-inline CodeCase *code_case_ranges(code_alc_t &alc, CodeList *body,
-    const CodeGoCase *gocase)
-{
+inline CodeCase *code_case_ranges(
+        code_alc_t &alc, CodeList *body, const CodeRanges *ranges) {
     CodeCase *x = code_case(alc, body, CodeCase::RANGES);
-    x->gocase = gocase;
+    x->ranges = ranges;
+    return x;
+}
+
+inline CodeRanges *code_ranges(
+        code_alc_t &alc, VarType type, int64_t *start, int64_t *end) {
+    CodeRanges *x = alc.alloct<CodeRanges>(1);
+    x->size = static_cast<uint32_t>(end - start) / 2;
+    x->type = type;
+    x->elems = start;
     return x;
 }
 

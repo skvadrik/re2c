@@ -210,25 +210,45 @@ static bool case_on_same_line(const CodeCase *code, const opt_t *opts)
         && opts->lang != LANG_GO; // gofmt prefers cases on a new line
 }
 
-static void render_case_range(RenderContext &rctx, uint32_t low, uint32_t upp, bool last)
-{
+static void render_number(RenderContext &rctx, int64_t num, VarType type) {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
     const Enc &enc = opts->encoding;
-    bool ebcdic = enc.type() == Enc::EBCDIC, hex = ebcdic;
-    uint32_t szcunit = enc.szCodeUnit(), c;
+    bool hex = opts->lang == LANG_RUST || enc.type() == Enc::EBCDIC;
+
+    switch (type) {
+    case VAR_TYPE_UINT:
+        DASSERT(num >= 0);
+        os << static_cast<uint32_t>(num);
+        break;
+    case VAR_TYPE_INT:
+        os << num;
+        break;
+    case VAR_TYPE_YYCTYPE:
+        DASSERT(num >= 0);
+        prtChOrHex(os, static_cast<uint32_t>(num), enc.szCodeUnit(), hex, /*dot*/ false);
+        break;
+    }
+}
+
+static void render_case_range(RenderContext &rctx, int64_t low, int64_t upp, bool last,
+        VarType type) {
+    std::ostringstream &os = rctx.os;
+    const opt_t *opts = rctx.opts;
+    const Enc &enc = opts->encoding;
 
     os << indent(rctx.ind, opts->indString);
 
     switch (opts->lang) {
     case LANG_C:
         os << "case ";
-        prtChOrHex(os, low, szcunit, hex, false);
+        render_number(rctx, low, type);
         if (low != upp) {
             os << " ... ";
-            prtChOrHex(os, upp, szcunit, hex, false);
-        } else if (opts->dFlag && ebcdic && is_print(c = enc.decodeUnsafe(low))) {
-            os << " /* " << static_cast<char>(c) << " */";
+            render_number(rctx, upp, type);
+        } else if (opts->dFlag && type == VAR_TYPE_YYCTYPE && enc.type() == Enc::EBCDIC) {
+            uint32_t c = enc.decodeUnsafe(static_cast<uint32_t>(low));
+            if (is_print(c)) os << " /* " << static_cast<char>(c) << " */";
         }
         os << ":";
         if (!last) {
@@ -239,10 +259,10 @@ static void render_case_range(RenderContext &rctx, uint32_t low, uint32_t upp, b
 
     case LANG_GO:
         os << "case ";
-        prtChOrHex(os, low, szcunit, hex, false);
-        for (uint32_t c = low + 1; c <= upp; ++c) {
+        render_number(rctx, low, type);
+        for (int64_t c = low + 1; c <= upp; ++c) {
             os << ",";
-            prtChOrHex(os, c, szcunit, hex, false);
+            render_number(rctx, c, type);
         }
         os << ":";
         if (!last) {
@@ -253,10 +273,10 @@ static void render_case_range(RenderContext &rctx, uint32_t low, uint32_t upp, b
         break;
 
     case LANG_RUST:
-        prtChOrHex(os, low, szcunit, true, false);
+        render_number(rctx, low, type);
         if (low != upp) {
             os << " ..= ";
-            prtChOrHex(os, upp, szcunit, true, false);
+            render_number(rctx, upp, type);
         }
         if (last) {
             os << " =>";
@@ -293,19 +313,20 @@ static void render_case(RenderContext &rctx, const CodeCase *code)
     } else if (code->kind == CodeCase::STRING) {
         os << indent(ind, opts->indString) << s_case << code->string << s_then;
     } else {
-        const size_t nranges = code->gocase->nranges;
-        const uint32_t *ranges = code->gocase->ranges;
+        const size_t nranges = code->ranges->size;
+        const int64_t *ranges = code->ranges->elems;
+        const VarType type = code->ranges->type;
 
         for (uint32_t i = 0; i < nranges; ++i) {
             const bool last = i == nranges - 1;
-            const uint32_t low = ranges[2*i], upp = ranges[2*i + 1] - 1;
-            DASSERT(low <= upp);
+            const int64_t low = ranges[2*i], upp = ranges[2*i + 1];
+            DASSERT(low < upp);
 
             if (opts->lang != LANG_C || opts->case_ranges) {
-                render_case_range(rctx, low, upp, last);
+                render_case_range(rctx, low, upp - 1, last, type);
             } else {
-                for (uint32_t c = low; c <= upp; ++c) {
-                    render_case_range(rctx, c, c, last && c == upp);
+                for (int64_t c = low; c < upp; ++c) {
+                    render_case_range(rctx, c, c, last && c == upp - 1, type);
                 }
             }
         }

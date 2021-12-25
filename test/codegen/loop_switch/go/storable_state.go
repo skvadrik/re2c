@@ -62,9 +62,7 @@ loop:
 	yystate := in.state
 	for {
 		switch (yystate) {
-		case -1:
-			fallthrough
-		case 0:
+		case -1,0:
 			yych = in.data[in.cursor]
 			switch (yych) {
 			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':

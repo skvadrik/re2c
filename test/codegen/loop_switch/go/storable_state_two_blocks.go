@@ -6,9 +6,7 @@
 	yystate := YYGETSTATE
 	for {
 		switch (yystate) {
-		case -1:
-			fallthrough
-		case 0:
+		case -1,0:
 			YYSETSTATE
 			if (YYLESSTHAN) {
 				YYFILL
@@ -49,9 +47,7 @@
 	yystate := YYGETSTATE
 	for {
 		switch (yystate) {
-		case -1:
-			fallthrough
-		case 0:
+		case -1,0:
 			yych = YYPEEK
 			switch (yych) {
 			case 'b':

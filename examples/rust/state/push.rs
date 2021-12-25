@@ -61,11 +61,7 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 	let mut yystate : isize = st.state;
 	loop {
 		match yystate {
-			-1 => {
-				yystate = 0;
-				continue;
-			}
-			0 => {
+			-1 ..= 0 => {
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
 				match yych {
 					0x61 ..= 0x7A => {

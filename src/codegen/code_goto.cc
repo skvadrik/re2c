@@ -25,7 +25,7 @@ static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
     CodeGoSw *go = alc.alloct<CodeGoSw>(1);
     go->cases = alc.alloct<CodeGoCase>(nspans);
 
-    uint32_t *ranges = alc.alloct<uint32_t>(nspans * 2), *range = ranges;
+    int64_t *ranges = alc.alloct<int64_t>(nspans * 2), *ranges_end = ranges;
     CodeGoCase *cases = go->cases, *c;
     const Span *span = spans, *endspan = span + nspans, *s;
 
@@ -44,27 +44,24 @@ static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
             ++cases;
 
             to->label->used = true;
+
             c->jump.to    = to;
             c->jump.tags  = span->tags;
             c->jump.skip  = skip && consume(to);
             c->jump.eof   = eofcase;
             c->jump.elide = false;
-            c->ranges   = range;
 
-            // add the current range
-            *range++ = span == spans ? 0 : (span - 1)->ub;
-            *range++ = span->ub;
-
-            // go over the remaining spans and for all spans that have the same
-            // destination state and tags, add their range to the current range
-            for (s = span + 1; s < endspan; ++s) {
+            // Collect ranges that have the current destination state and identical tags.
+            int64_t *ranges_start = ranges_end;
+            int64_t ub = span == spans ? 0 : (span - 1)->ub;
+            for (s = span; s < endspan; ++s) {
                 if (s->to == to && s->tags == tags) {
-                    *range++ = (s - 1)->ub;
-                    *range++ = s->ub;
+                    *ranges_end++ = ub;
+                    *ranges_end++ = s->ub;
                 }
+                ub = s->ub;
             }
-
-            c->nranges = static_cast<uint32_t>(range - c->ranges) / 2;
+            c->ranges = code_ranges(alc, VAR_TYPE_YYCTYPE, ranges_start, ranges_end);
         }
         else {
             // found a case that already contains this range
@@ -72,7 +69,7 @@ static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
         }
     }
 
-    DASSERT(static_cast<uint32_t>(range - ranges) == 2 * nspans);
+    DASSERT(static_cast<uint32_t>(ranges_end - ranges) == 2 * nspans);
     go->ncases = static_cast<uint32_t>(cases - go->cases);
 
     // find default case

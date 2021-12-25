@@ -45,7 +45,6 @@ static void gen_storable_state_cases(Output &output, CodeCases *cases)
     OutputBlock &block = output.block();
     const opt_t *opts = block.opts;
     code_alc_t &alc = output.allocator;
-    Scratchbuf &buf = output.scratchbuf;
 
     if (!opts->fFlag || !opts->loop_switch) return;
 
@@ -56,14 +55,16 @@ static void gen_storable_state_cases(Output &output, CodeCases *cases)
         append(cases, code_case_number(alc, i->second, static_cast<int32_t>(i->first)));
     }
 
-    CodeList *start_case = code_list(alc);
-    if (opts->lang == LANG_GO) {
-        append(start_case, code_stmt(alc, "fallthrough"));
-    } else if (opts->lang == LANG_RUST) {
-        append(start_case, code_stmt(alc, buf.str(opts->yystate).cstr(" = 0").flush()));
-        append(start_case, code_stmt(alc, "continue"));
-    }
-    prepend(cases, code_case_number(alc, start_case, -1));
+    // Prepare a single range [-1, 1) covering cases `yystate = -1` and `yystate = 0`.
+    int64_t *ranges = alc.alloct<int64_t>(2), *ranges_end = ranges;
+    *ranges_end++ = -1;
+    *ranges_end++ = 1;
+
+    // Replace the first case 0 with a case that covers both -1 and 0.
+    CodeCase *first = cases->head;
+    DASSERT(first->kind == CodeCase::NUMBER && first->number == 0);
+    first->kind = CodeCase::RANGES;
+    first->ranges = code_ranges(alc, VAR_TYPE_INT, ranges, ranges_end);
 }
 
 void gen_dfa_as_blocks_with_labels(Output &output, const DFA &dfa, CodeList *stmts)

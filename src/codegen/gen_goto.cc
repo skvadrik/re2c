@@ -41,9 +41,8 @@ static CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go,
         gen_goto(output, dfa, body, from, c->jump);
         if (c == go->defcase) {
             defcase = code_case_default(alc, body);
-        }
-        else {
-            append(cases, code_case_ranges(alc, body, c));
+        } else {
+            append(cases, code_case_ranges(alc, body, c->ranges));
         }
     }
     append(cases, defcase);
@@ -234,15 +233,17 @@ static void gen_godot(Output &output, const DFA &dfa, const CodeGoSw *go,
         text = o.label(*from->label).cstr(" -> ")
             .label(*go->cases[0].jump.to->label).flush();
         append(stmts, code_text(alc, text));
-    }
-    else {
+    } else {
         for (const CodeGoCase *c = go->cases, *e = c + go->ncases; c < e; ++c) {
             o.label(*from->label).cstr(" -> ").label(*c->jump.to->label)
                 .cstr(" [label=\"");
 
-            for (uint32_t i = 0; i < c->nranges; ++i) {
-                const Enc &enc = opts->encoding;
-                printSpan(o.stream(), c->ranges[2 * i], c->ranges[2 * i + 1],
+            const Enc &enc = opts->encoding;
+            const int64_t *ranges = c->ranges->elems;
+            for (uint32_t i = 0; i < c->ranges->size; ++i) {
+                printSpan(o.stream(),
+                    static_cast<uint32_t>(ranges[2 * i]),
+                    static_cast<uint32_t>(ranges[2 * i + 1]),
                     enc.szCodeUnit(), enc.type() == Enc::EBCDIC, true);
             }
 
