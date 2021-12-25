@@ -45,6 +45,7 @@ static void gen_storable_state_cases(Output &output, CodeCases *cases)
     OutputBlock &block = output.block();
     const opt_t *opts = block.opts;
     code_alc_t &alc = output.allocator;
+    Scratchbuf &buf = output.scratchbuf;
 
     if (!opts->fFlag || !opts->loop_switch) return;
 
@@ -58,6 +59,9 @@ static void gen_storable_state_cases(Output &output, CodeCases *cases)
     CodeList *start_case = code_list(alc);
     if (opts->lang == LANG_GO) {
         append(start_case, code_stmt(alc, "fallthrough"));
+    } else if (opts->lang == LANG_RUST) {
+        append(start_case, code_stmt(alc, buf.str(opts->yystate).cstr(" = 0").flush()));
+        append(start_case, code_stmt(alc, "continue"));
     }
     prepend(cases, code_case_number(alc, start_case, -1));
 }
