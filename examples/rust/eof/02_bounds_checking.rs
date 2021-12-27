@@ -50,7 +50,10 @@ fn lex(s: &[u8]) -> isize {
 				yystate = 2;
 				continue;
 			}
-			2 => { return if cursor == s.len() + 1 { count } else { -1 }; }
+			2 => {
+            // Check that it is the sentinel, not some unexpected null.
+            return if cursor == s.len() + 1 { count } else { -1 }
+        }
 			3 => {
 				yystate = 4;
 				continue;
@@ -130,4 +133,5 @@ fn main() {
     assert_eq!(lex(b""), 0);
     assert_eq!(lex(b"'qu\0tes' 'are' 'fine: \\'' "), 3);
     assert_eq!(lex(b"'unterminated\\'"), -1);
+    assert_eq!(lex(b"'unexpected \0 null"), -1);
 }

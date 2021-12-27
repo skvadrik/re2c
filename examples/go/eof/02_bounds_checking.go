@@ -39,20 +39,17 @@ func lex(str string) int {
 	}
 yy2:
 	cursor += 1
-//line "go/eof/02_bounds_checking.re":25
+//line "go/eof/02_bounds_checking.re":24
 	{
-			if limit - cursor == YYMAXFILL - 1 {
-				return count
-			} else {
-				return -1
-			}
+			// Check that it is the sentinel, not some unexpected null.
+			if cursor - 1 == len(str) { return count } else { return -1 }
 		}
-//line "go/eof/02_bounds_checking.go":51
+//line "go/eof/02_bounds_checking.go":48
 yy4:
 	cursor += 1
-//line "go/eof/02_bounds_checking.re":24
+//line "go/eof/02_bounds_checking.re":30
 	{ return -1 }
-//line "go/eof/02_bounds_checking.go":56
+//line "go/eof/02_bounds_checking.go":53
 yy6:
 	cursor += 1
 	if (limit - cursor < 1) {
@@ -66,9 +63,9 @@ yy6:
 		goto yy8
 	}
 yy8:
-//line "go/eof/02_bounds_checking.re":33
+//line "go/eof/02_bounds_checking.re":29
 	{ continue }
-//line "go/eof/02_bounds_checking.go":72
+//line "go/eof/02_bounds_checking.go":69
 yy9:
 	cursor += 1
 	if (limit - cursor < 1) {
@@ -85,9 +82,9 @@ yy9:
 	}
 yy11:
 	cursor += 1
-//line "go/eof/02_bounds_checking.re":32
+//line "go/eof/02_bounds_checking.re":28
 	{ count += 1; continue }
-//line "go/eof/02_bounds_checking.go":91
+//line "go/eof/02_bounds_checking.go":88
 yy13:
 	cursor += 1
 	if (limit - cursor < 1) {
@@ -96,7 +93,7 @@ yy13:
 	yych = buf[cursor]
 	goto yy9
 }
-//line "go/eof/02_bounds_checking.re":34
+//line "go/eof/02_bounds_checking.re":31
 }
 }
 
@@ -105,4 +102,5 @@ func main() {
 	assert_eq(lex(""), 0)
 	assert_eq(lex("'qu\000tes' 'are' 'fine: \\'' "), 3)
 	assert_eq(lex("'unterminated\\'"), -1)
+	assert_eq(lex("'unexpected \000 null\\'"), -1)
 }

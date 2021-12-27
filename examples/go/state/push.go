@@ -8,8 +8,7 @@ import (
 	"os"
 )
 
-// Intentionally small to trigger buffer refill.
-const BUFSIZE int = 10
+const BUFSIZE int = 10 // small for the sake of example
 
 type State struct {
 	file   *os.File
@@ -55,7 +54,7 @@ func fill(st *State) int {
 func lex(st *State, recv *int) int {
 	var yych byte
 	
-//line "go/state/push.go":59
+//line "go/state/push.go":58
 switch (st.state) {
 default:
 	goto yy0
@@ -75,12 +74,12 @@ case 2:
 	}
 	goto yyFillLabel2
 }
-//line "go/state/push.re":55
+//line "go/state/push.re":54
 
 loop:
 	st.token = st.cursor
 	
-//line "go/state/push.go":84
+//line "go/state/push.go":83
 
 yy0:
 yyFillLabel0:
@@ -99,9 +98,9 @@ yy3:
 	st.cursor += 1
 yy4:
 	st.state = -1
-//line "go/state/push.re":71
+//line "go/state/push.re":70
 	{ return lexPacketBroken }
-//line "go/state/push.go":105
+//line "go/state/push.go":104
 yy5:
 	st.cursor += 1
 	st.marker = st.cursor
@@ -122,9 +121,9 @@ yyFillLabel1:
 yy6:
 	st.cursor += 1
 	st.state = -1
-//line "go/state/push.re":73
+//line "go/state/push.re":72
 	{ *recv = *recv + 1; goto loop }
-//line "go/state/push.go":128
+//line "go/state/push.go":127
 yy8:
 	st.cursor += 1
 yyFillLabel2:
@@ -146,10 +145,10 @@ yy10:
 	goto yy4
 yy11:
 	st.state = -1
-//line "go/state/push.re":72
+//line "go/state/push.re":71
 	{ return lexEnd }
-//line "go/state/push.go":152
-//line "go/state/push.re":74
+//line "go/state/push.go":151
+//line "go/state/push.re":73
 
 }
 

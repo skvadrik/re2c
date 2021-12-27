@@ -1,40 +1,38 @@
 // re2c $INPUT -o $OUTPUT
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
-#define SIZE 4096
+#define BUFSIZE 4096
 
 typedef struct {
     FILE *file;
-    char buf[SIZE + 1], *lim, *cur, *mar, *tok;
+    char buf[BUFSIZE + 1], *lim, *cur, *mar, *tok; // +1 for sentinel
     int eof;
 } Input;
 
 static int fill(Input *in) {
-    if (in->eof) {
-        return 1;
-    }
-    const size_t free = in->tok - in->buf;
-    if (free < 1) {
-        return 2;
-    }
-    memmove(in->buf, in->tok, in->lim - in->tok);
-    in->lim -= free;
-    in->cur -= free;
-    in->mar -= free;
-    in->tok -= free;
-    in->lim += fread(in->lim, 1, free, in->file);
-    in->lim[0] = 0;
-    in->eof |= in->lim < in->buf + SIZE;
-    return 0;
-}
+    if (in->eof) return 1;
 
-static void init(Input *in, FILE *file) {
-    in->file = file;
-    in->cur = in->mar = in->tok = in->lim = in->buf + SIZE;
-    in->eof = 0;
-    fill(in);
+    const size_t shift = in->tok - in->buf;
+    const size_t used = in->lim - in->tok;
+
+    // Error: lexeme too long. In real life could reallocate a larger buffer.
+    if (shift < 1) return 2;
+
+    // Shift buffer contents (discard everything up to the current token).
+    memmove(in->buf, in->tok, used);
+    in->lim -= shift;
+    in->cur -= shift;
+    in->mar -= shift;
+    in->tok -= shift;
+
+    // Fill free space at the end of buffer with new data from file.
+    in->lim += fread(in->lim, 1, BUFSIZE - used, in->file);
+    in->lim[0] = 0;
+    in->eof = in->lim < in->buf + BUFSIZE;
+    return 0;
 }
 
 static int lex(Input *in) {
@@ -44,11 +42,11 @@ static int lex(Input *in) {
     /*!re2c
         re2c:eof = 0;
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE  = char;
         re2c:define:YYCURSOR = in->cur;
         re2c:define:YYMARKER = in->mar;
-        re2c:define:YYLIMIT = in->lim;
-        re2c:define:YYFILL = "fill(in) == 0";
+        re2c:define:YYLIMIT  = in->lim;
+        re2c:define:YYFILL   = "fill(in) == 0";
 
         *                           { return -1; }
         $                           { return count; }
@@ -59,23 +57,29 @@ static int lex(Input *in) {
 
 int main() {
     const char *fname = "input";
-    const char str[] = "'qu\0tes' 'are' 'fine: \\'' ";
-    FILE *f;
-    Input in;
+    const char content[] = "'qu\0tes' 'are' 'fine: \\'' ";
 
-    // prepare input file: a few times the size of the buffer,
-    // containing strings with zeroes and escaped quotes
-    f = fopen(fname, "w");
-    for (int i = 0; i < SIZE; ++i) {
-        fwrite(str, 1, sizeof(str) - 1, f);
+    // Prepare input file: a few times the size of the buffer, containing
+    // strings with zeroes and escaped quotes.
+    FILE *f = fopen(fname, "w");
+    for (int i = 0; i < BUFSIZE; ++i) {
+        fwrite(content, 1, sizeof(content) - 1, f);
     }
     fclose(f);
+    int count = 3 * BUFSIZE; // number of quoted strings written to file
 
-    f = fopen(fname, "r");
-    init(&in, f);
-    assert(lex(&in) == SIZE * 3);
-    fclose(f);
+    // Prepare lexer state and fill buffer.
+    Input in;
+    in.file = fopen(fname, "r");
+    in.cur = in.mar = in.tok = in.lim = in.buf + BUFSIZE;
+    in.eof = 0;
+    fill(&in);
 
+    // Run the lexer.
+    assert(lex(&in) == count);
+
+    // Cleanup: remove input file.
+    fclose(in.file);
     remove(fname);
     return 0;
 }

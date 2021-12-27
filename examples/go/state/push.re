@@ -6,8 +6,7 @@ import (
 	"os"
 )
 
-// Intentionally small to trigger buffer refill.
-const BUFSIZE int = 10
+const BUFSIZE int = 10 // small for the sake of example
 
 type State struct {
 	file   *os.File

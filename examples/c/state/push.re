@@ -5,7 +5,7 @@
 
 #define DEBUG    0
 #define LOG(...) if (DEBUG) fprintf(stderr, __VA_ARGS__);
-#define BUFSIZE  10
+#define BUFSIZE  10 // small for the sake of example
 
 typedef struct {
     FILE *file;

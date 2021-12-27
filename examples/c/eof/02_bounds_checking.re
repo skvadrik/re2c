@@ -19,8 +19,8 @@ loop:
         re2c:define:YYFILL = "goto fail;";
 
         [\x00] {
-            if (YYCURSOR + YYMAXFILL - 1 != YYLIMIT) goto fail;
-            goto exit;
+            // Check that it is the sentinel, not some unexpected null.
+            if (YYCURSOR - 1 == buf + len) goto exit; else goto fail;
         }
         ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
         [ ]+                        { goto loop; }
@@ -38,5 +38,6 @@ int main() {
     TEST("", 0);
     TEST("'qu\0tes' 'are' 'fine: \\'' ", 3);
     TEST("'unterminated\\'", -1);
+    TEST("'unexpected \0 null\\'", -1);
     return 0;
 }

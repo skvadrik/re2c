@@ -3,16 +3,15 @@
 use std::fs::File;
 use std::io::{Read, Write};
 
-const BUFSIZE: usize = 10;
-
 const DEBUG: bool = false;
 macro_rules! log {
     ($($fmt:expr)? $(, $args:expr)*) => { if DEBUG { println!($($fmt)? $(, $args)*) } }
 }
 
+const BUFSIZE: usize = 10; // small for the sake of example
 struct State {
     file: File,
-    buf: [u8; BUFSIZE + 1],
+    buf: [u8; BUFSIZE],
     lim: usize,
     cur: usize,
     mar: usize,
@@ -24,29 +23,24 @@ struct State {
 enum Status {End, Ready, Waiting, BadPacket, BigPacket}
 
 fn fill(st: &mut State) -> Status {
-    let shift = st.tok;
-    let used = st.lim - st.tok;
-    let free = BUFSIZE - used;
+    // Error: lexeme too long. In real life can reallocate a larger buffer.
+    if st.tok < 1 { return Status::BigPacket; }
 
-    // Error: no space. In real life can reallocate a larger buffer.
-    if free < 1 { return Status::BigPacket; }
-
-    // Shift buffer contents (discard already processed data).
-    unsafe {
-        let p = st.buf.as_mut_ptr();
-        std::ptr::copy(p, p.offset(shift as isize), used);
-    }
-    st.lim -= shift;
-    st.cur -= shift;
-    st.mar = st.mar.overflowing_sub(free).0; // underflow ok if marker is unused
-    st.tok -= shift;
+    // Shift buffer contents (discard everything up to the current lexeme).
+    st.buf.copy_within(st.tok..st.lim, 0);
+    st.lim -= st.tok;
+    st.cur -= st.tok;
+    st.mar = st.mar.overflowing_sub(st.tok).0; // underflows if marker is unused
+    st.tok = 0;
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.buf[st.lim..BUFSIZE]) {
-        Ok(n) => st.lim += n,
+    match st.file.read(&mut st.buf[st.lim..BUFSIZE - 1]) { // -1 for sentinel
+        Ok(n) => {
+            st.lim += n;
+            st.buf[st.lim] = 0; // append sentinel symbol
+        },
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.buf[st.lim] = 0; // append sentinel symbol
 
     return Status::Ready;
 }
@@ -89,13 +83,14 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
 
     // Initialize lexer state: `state` value is -1, all offsets are at the end
     // of buffer, the character at `lim` offset is the sentinel (null).
+    let lim = BUFSIZE - 1;
     let mut state = State {
         file: fr,
-        buf: [0; BUFSIZE + 1], // sentinel (at `lim` offset) is set to null
-        cur: BUFSIZE,
-        mar: BUFSIZE,
-        tok: BUFSIZE,
-        lim: BUFSIZE,
+        buf: [0; BUFSIZE], // sentinel (at `lim` offset) is set to null
+        cur: lim,
+        mar: lim,
+        tok: lim,
+        lim: lim,
         state: -1,
     };
 

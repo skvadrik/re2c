@@ -34,8 +34,8 @@ yy2:
 	++YYCURSOR;
 #line 21 "c/eof/02_bounds_checking.re"
 	{
-            if (YYCURSOR + YYMAXFILL - 1 != YYLIMIT) goto fail;
-            goto exit;
+            // Check that it is the sentinel, not some unexpected null.
+            if (YYCURSOR - 1 == buf + len) goto exit; else goto fail;
         }
 #line 41 "c/eof/02_bounds_checking.c"
 yy4:
@@ -89,5 +89,6 @@ int main() {
     TEST("", 0);
     TEST("'qu\0tes' 'are' 'fine: \\'' ", 3);
     TEST("'unterminated\\'", -1);
+    TEST("'unexpected \0 null\\'", -1);
     return 0;
 }

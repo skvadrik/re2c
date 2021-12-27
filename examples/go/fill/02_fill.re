@@ -2,58 +2,43 @@
 package main
 
 import (
-	"fmt"
 	"os"
+	"strings"
 )
 
 /*!max:re2c*/
-
-// Intentionally small to trigger buffer refill.
-const SIZE int = 16
+const BUFSIZE int = 4096
 
 type Input struct {
 	file   *os.File
 	data   []byte
 	cursor int
-	marker int
 	token  int
 	limit  int
 	eof    bool
 }
 
 func fill(in *Input, need int) int {
-	// End of input has already been reached, nothing to do.
-	if in.eof {
-		return -1 // Error: unexpected EOF
-	}
+	if in.eof { return -1 } // unexpected EOF
 
-	// Check if after moving the current lexeme to the beginning
-	// of buffer there will be enough free space.
-	if SIZE-(in.cursor-in.token) < need {
-		return -2 // Error: lexeme too long
-	}
+	// Error: lexeme too long. In real life can reallocate a larger buffer.
+	if in.token < need { return -2 }
 
-	// Discard everything up to the start of the current lexeme,
-	// shift buffer contents and adjust offsets.
+	// Shift buffer contents (discard everything up to the current token).
 	copy(in.data[0:], in.data[in.token:in.limit])
 	in.cursor -= in.token
-	in.marker -= in.token
 	in.limit -= in.token
 	in.token = 0
 
-	// Read new data (as much as possible to fill the buffer).
-	n, _ := in.file.Read(in.data[in.limit:SIZE])
+	// Fill free space at the end of buffer with new data from file.
+	n, _ := in.file.Read(in.data[in.limit:BUFSIZE])
 	in.limit += n
 
-	// If read less than expected, this is the end of input.
-	in.eof = in.limit < SIZE
-
-	// If end of input, add padding so that the lexer can read
-	// the remaining characters at the end of buffer.
-	if in.eof {
-		for i := 0; i < YYMAXFILL; i += 1 {
-			in.data[in.limit+i] = 0
-		}
+	// If read less than expected, this is end of input => add zero padding
+	// so that the lexer can access characters at the end of buffer.
+	if in.limit < BUFSIZE {
+		in.eof = true
+		for i := 0; i < YYMAXFILL; i += 1 { in.data[in.limit+i] = 0 }
 		in.limit += YYMAXFILL
 	}
 
@@ -65,62 +50,48 @@ func lex(in *Input) int {
 	for {
 		in.token = in.cursor
 	/*!re2c
-		re2c:define:YYCTYPE = byte;
-		re2c:define:YYPEEK = "in.data[in.cursor]";
-		re2c:define:YYSKIP = "in.cursor += 1";
-		re2c:define:YYBACKUP = "in.marker = in.cursor";
-		re2c:define:YYRESTORE = "in.cursor = in.marker";
+		re2c:define:YYCTYPE    = byte;
+		re2c:define:YYPEEK     = "in.data[in.cursor]";
+		re2c:define:YYSKIP     = "in.cursor += 1";
 		re2c:define:YYLESSTHAN = "in.limit-in.cursor < @@{len}";
-		re2c:define:YYFILL = "if r := fill(in, @@{len}); r != 0 { return r }";
+		re2c:define:YYFILL     = "if r := fill(in, @@{len}); r != 0 { return r }";
 
-		* { return -1 }
 		[\x00] {
-			if in.limit - in.cursor == YYMAXFILL - 1 {
-				return count
-			} else {
-				return -1
-			}
+			// Check that it is the sentinel, not some unexpected null.
+			if in.token == in.limit - YYMAXFILL { return count } else { return -1 }
 		}
 		['] ([^'\\] | [\\][^])* ['] { count += 1; continue }
-		[ ]+ { continue }
+		[ ]+                        { continue }
+		*                           { return -1 }
 	*/}
 }
 
-// Prepare a file with the input text and run the lexer.
-func test(data string) (result int) {
-	tmpfile := "input.txt"
+func main() () {
+	fname := "input"
+	content := "'qu\000tes' 'are' 'fine: \\'' ";
 
-	f, _ := os.Create(tmpfile)
-	f.WriteString(data)
+	// Prepare input file: a few times the size of the buffer, containing
+	// strings with zeroes and escaped quotes.
+	f, _ := os.Create(fname)
+	f.WriteString(strings.Repeat(content, BUFSIZE))
 	f.Seek(0, 0)
+	count := 3 * BUFSIZE // number of quoted strings written to file
 
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println(r)
-			result = -2
-		}
-		f.Close()
-		os.Remove(tmpfile)
-	}()
-
+	// Prepare lexer state and fill buffer.
 	in := &Input{
 		file:   f,
-		data:   make([]byte, SIZE+YYMAXFILL),
-		cursor: SIZE,
-		marker: SIZE,
-		token:  SIZE,
-		limit:  SIZE,
+		data:   make([]byte, BUFSIZE+YYMAXFILL),
+		cursor: BUFSIZE,
+		token:  BUFSIZE,
+		limit:  BUFSIZE,
 		eof:    false,
 	}
+	fill(in, 1)
 
-	return lex(in)
-}
+	// Run the lexer.
+	if lex(in) != count { panic("error"); }
 
-func main() {
-	assert_eq := func(x, y int) { if x != y { panic("error") } }
-	assert_eq(test(""), 0)
-	assert_eq(test("'one' 'two'"), 2)
-	assert_eq(test("'qu\000tes' 'are' 'fine: \\'' "), 3)
-	assert_eq(test("'unterminated\\'"), -1)
-	assert_eq(test("'loooooooooooong'"), -2)
+	// Cleanup: remove input file.
+	f.Close();
+	os.Remove(fname);
 }

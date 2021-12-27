@@ -4,6 +4,8 @@
 use std::fs::File;
 use std::io::{Read, Write};
 
+const YYMAXFILL: usize = 1;
+
 const BUFSIZE: usize = 4096;
 
 struct State {
@@ -19,27 +21,32 @@ struct State {
 #[derive(PartialEq)]
 enum Fill { Ok, Eof, LongLexeme }
 
-fn fill(st: &mut State) -> Fill {
+fn fill(st: &mut State, need: usize) -> Fill {
     if st.eof { return Fill::Eof; }
 
-    // Error: lexeme too long. In real life could reallocate a larger buffer.
-    if st.tok < 1 { return Fill::LongLexeme; }
+    // Error: lexeme too long. In real life can reallocate a larger buffer.
+    if st.tok < need { return Fill::LongLexeme; }
 
     // Shift buffer contents (discard everything up to the current token).
     st.buf.copy_within(st.tok..st.lim, 0);
     st.lim -= st.tok;
     st.cur -= st.tok;
-    st.mar = st.mar.overflowing_sub(st.tok).0; // may underflow if marker is unused
+    st.mar = st.mar.overflowing_sub(st.tok).0; // underflows if marker is unused
     st.tok = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    match st.file.read(&mut st.buf[st.lim..BUFSIZE - 1]) { // -1 for sentinel
-        Ok(n) => {
-            st.lim += n;
-            st.eof = n == 0; // end of file
-            st.buf[st.lim] = 0; // append sentinel
-        }
+    let n = match st.file.read(&mut st.buf[st.lim..BUFSIZE - YYMAXFILL]) {
+        Ok(n) => n,
         Err(why) => panic!("cannot read from file: {}", why)
+    };
+    st.lim += n;
+
+    // If read zero characters, this is end of input => add zero padding
+    // so that the lexer can access characters at the end of buffer.
+    if n == 0 {
+        st.eof = true;
+        for i in 0..YYMAXFILL { st.buf[st.lim + i] = 0; }
+        st.lim += YYMAXFILL;
     }
 
     return Fill::Ok;
@@ -58,29 +65,26 @@ fn lex(st: &mut State) -> isize {
 	loop {
 		match yystate {
 			0 => {
+				if st.lim - st.cur < 1 {
+					if fill(st, 1) != Fill::Ok { return -1; }
+				}
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				st.cur += 1;
 				match yych {
+					0x00 => {
+						yystate = 1;
+						continue;
+					}
 					0x20 => {
-						st.cur += 1;
-						yystate = 3;
+						yystate = 5;
 						continue;
 					}
 					0x27 => {
-						st.cur += 1;
-						yystate = 6;
+						yystate = 8;
 						continue;
 					}
 					_ => {
-						if st.cur >= st.lim {
-							if fill(st) == Fill::Ok {
-								yystate = 0;
-								continue;
-							}
-							yystate = 12;
-							continue;
-						}
-						st.cur += 1;
-						yystate = 1;
+						yystate = 3;
 						continue;
 					}
 				}
@@ -89,111 +93,74 @@ fn lex(st: &mut State) -> isize {
 				yystate = 2;
 				continue;
 			}
-			2 => { return -1; }
+			2 => {
+            // Check that it is the sentinel, not some unexpected null.
+            return if st.tok == st.lim - YYMAXFILL { count } else { -1 }
+        }
 			3 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
 				yystate = 4;
 				continue;
 			}
-			4 => {
+			4 => { return -1; }
+			5 => {
+				if st.lim - st.cur < 1 {
+					if fill(st, 1) != Fill::Ok { return -1; }
+				}
+				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				yystate = 6;
+				continue;
+			}
+			6 => {
 				match yych {
 					0x20 => {
 						st.cur += 1;
-						yystate = 3;
-						continue;
-					}
-					_ => {
-						if st.cur >= st.lim {
-							if fill(st) == Fill::Ok {
-								yystate = 3;
-								continue;
-							}
-						}
 						yystate = 5;
 						continue;
 					}
-				}
-			}
-			5 => { continue 'lex; }
-			6 => {
-				st.mar = st.cur;
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
-				if yych >= 0x01 {
-					yystate = 8;
-					continue;
-				}
-				if st.cur >= st.lim {
-					if fill(st) == Fill::Ok {
-						yystate = 6;
-						continue;
-					}
-					yystate = 2;
-					continue;
-				}
-				st.cur += 1;
-				yystate = 7;
-				continue;
-			}
-			7 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
-				yystate = 8;
-				continue;
-			}
-			8 => {
-				match yych {
-					0x27 => {
-						st.cur += 1;
-						yystate = 9;
-						continue;
-					}
-					0x5C => {
-						st.cur += 1;
-						yystate = 11;
-						continue;
-					}
 					_ => {
-						if st.cur >= st.lim {
-							if fill(st) == Fill::Ok {
-								yystate = 7;
-								continue;
-							}
-							yystate = 13;
-							continue;
-						}
-						st.cur += 1;
 						yystate = 7;
 						continue;
 					}
 				}
 			}
-			9 => {
-				yystate = 10;
+			7 => { continue 'lex; }
+			8 => {
+				if st.lim - st.cur < 1 {
+					if fill(st, 1) != Fill::Ok { return -1; }
+				}
+				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				yystate = 9;
 				continue;
 			}
-			10 => { count += 1; continue 'lex; }
-			11 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
-				if yych <= 0x00 {
-					if st.cur >= st.lim {
-						if fill(st) == Fill::Ok {
-							yystate = 11;
-							continue;
-						}
-						yystate = 13;
+			9 => {
+				st.cur += 1;
+				match yych {
+					0x27 => {
+						yystate = 10;
 						continue;
 					}
-					st.cur += 1;
-					yystate = 7;
-					continue;
+					0x5C => {
+						yystate = 12;
+						continue;
+					}
+					_ => {
+						yystate = 8;
+						continue;
+					}
 				}
-				st.cur += 1;
-				yystate = 7;
+			}
+			10 => {
+				yystate = 11;
 				continue;
 			}
-			12 => { return count; }
-			13 => {
-				st.cur = st.mar;
-				yystate = 2;
+			11 => { count += 1; continue 'lex; }
+			12 => {
+				if st.lim - st.cur < 1 {
+					if fill(st, 1) != Fill::Ok { return -1; }
+				}
+				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				st.cur += 1;
+				yystate = 8;
 				continue;
 			}
 			_ => {
@@ -227,7 +194,7 @@ fn main() {
     };
 
     // Prepare lexer state and fill buffer.
-    let lim = BUFSIZE - 1;
+    let lim = BUFSIZE - YYMAXFILL;
     let mut st = State {
         file: file,
         buf: [0; BUFSIZE],
@@ -237,7 +204,7 @@ fn main() {
         tok: lim,
         eof: false,
     };
-    fill(&mut st);
+    fill(&mut st, YYMAXFILL);
 
     // Run the lexer.
     assert_eq!(lex(&mut st), count as isize);
