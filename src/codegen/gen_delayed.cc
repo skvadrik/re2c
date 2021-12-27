@@ -173,7 +173,8 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
             DASSERT(opts->loop_switch);
             for (size_t i = 0; i < conds.size(); ++i) {
                 const StartCond &c = conds[i];
-                buf.cstr("const ").str(c.name).cstr(": usize = ").u32(c.number);
+                buf.cstr("const ").str(c.name).cstr(": ")
+                    .cstr(opts->fFlag ? "isize" : "usize").cstr(" = ").u32(c.number);
                 append(block, code_stmt(alc, buf.flush()));
             }
         } else {
@@ -181,7 +182,8 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
         }
 
         append(stmts, code_text(alc, start));
-        append(stmts, code_block(alc, block, CodeBlock::INDENTED));
+        append(stmts, code_block(alc, block,
+            opts->lang == LANG_RUST ? CodeBlock::RAW : CodeBlock::INDENTED));
         append(stmts, code_text(alc, end));
 
         code->kind = CODE_BLOCK;

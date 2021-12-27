@@ -1,9 +1,11 @@
-// re2rust $INPUT -o $OUTPUT -f
+// re2rust $INPUT -o $OUTPUT -fc --no-unsafe
 
 use std::fs::File;
 use std::io::{Read, Write};
 
 const BUFSIZE: usize = 10;
+
+/*!conditions:re2c*/
 
 const DEBUG: bool = false;
 macro_rules! log {
@@ -51,31 +53,42 @@ fn fill(st: &mut State) -> Status {
     return Status::Ready;
 }
 
-fn lex(st: &mut State, recv: &mut usize) -> Status {
+fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
     let mut yych: u8 = 0;
     'lex: loop {
         st.tok = st.cur;
     /*!re2c
         re2c:eof = 0;
         re2c:define:YYCTYPE = "u8";
-        re2c:define:YYPEEK = "*st.buf.get_unchecked(st.cur)";
+        re2c:define:YYPEEK = "st.buf[st.cur]";
         re2c:define:YYSKIP = "st.cur += 1;";
         re2c:define:YYBACKUP = "st.mar = st.cur;";
         re2c:define:YYRESTORE = "st.cur = st.mar;";
+        re2c:define:YYSHIFT = "st.cur = (st.cur as isize + @@) as usize;";
         re2c:define:YYLESSTHAN = "st.cur >= st.lim";
         re2c:define:YYGETSTATE = "st.state";
         re2c:define:YYSETSTATE = "st.state = @@;";
         re2c:define:YYFILL = "return Status::Waiting;";
 
-        packet = [a-z]+[;];
+        digit  = [0-9];
+        letter = [a-z];
+        space  = [ \t];
 
-        *      { return Status::BadPacket; }
-        $      { return Status::End; }
-        packet { *recv += 1; continue 'lex; }
+        <*> * { return Status::BadPacket; }
+        <*> $ { return Status::End; }
+
+        <INIT> "" / digit  :=> NUMBER
+        <INIT> "" / letter :=> WORD
+        <INIT> "" / space  :=> SPACES
+
+        <SPACES> space+ => INIT{ continue 'lex; }
+
+        <NUMBER> digit+  => SPACES { *nc += 1; continue 'lex; }
+        <WORD>   letter+ => SPACES { *wc += 1; continue 'lex; }
     */}
 }
 
-fn test(packets: Vec<&[u8]>, expect: Status) {
+fn test(packets: Vec<&[u8]>, expect: Status, expect_nc: isize, expect_wc: isize) {
     // Create a "socket" (open the same file for reading and writing).
     let fname = "pipe";
     let mut fw: File = match File::create(fname) {
@@ -104,11 +117,12 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
     // returns to the caller which should provide more input and resume lexing.
     let mut status;
     let mut send = 0;
-    let mut recv = 0;
+    let mut nc = 0;
+    let mut wc = 0;
     loop {
-        status = lex(&mut state, &mut recv);
+        status = lex(&mut state, &mut nc, &mut wc);
         if status == Status::End {
-            log!("done: got {} packets", recv);
+            log!("done: got {} numbers and {} words", nc, wc);
             break;
         } else if status == Status::Waiting {
             log!("waiting...");
@@ -135,7 +149,10 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
 
     // Check results.
     assert_eq!(status, expect);
-    if status == Status::End { assert_eq!(recv, send); }
+    if status == Status::End {
+        assert_eq!(nc, expect_nc);
+        assert_eq!(wc, expect_wc);
+    }
 
     // Cleanup: remove input file.
     match std::fs::remove_file(fname) {
@@ -145,8 +162,8 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
 }
 
 fn main() {
-    test(vec![], Status::End);
-    test(vec![b"zero;", b"one;", b"two;", b"three;", b"four;"], Status::End);
-    test(vec![b"zer0;"], Status::BadPacket);
-    test(vec![b"goooooooooogle;"], Status::BigPacket);
+    test(vec![], Status::End, 0, 0);
+    test(vec![b" zero one", b" ", b"123", b"4 tw", b"o  ", b"456789"], Status::End, 2, 3);
+    test(vec![b"zer0"], Status::BadPacket, -1, -1);
+    test(vec![b"tooooooloooooong"], Status::BigPacket, -1, -1);
 }

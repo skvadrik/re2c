@@ -2,11 +2,11 @@
 // re2rust $INPUT -o $OUTPUT -c
 
 
-	const YYC_INIT: usize = 0;
-	const YYC_BIN: usize = 14;
-	const YYC_DEC: usize = 21;
-	const YYC_HEX: usize = 28;
-	const YYC_OCT: usize = 39;
+const YYC_INIT: usize = 0;
+const YYC_BIN: usize = 14;
+const YYC_DEC: usize = 21;
+const YYC_HEX: usize = 28;
+const YYC_OCT: usize = 39;
 
 
 
