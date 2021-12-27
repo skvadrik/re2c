@@ -16,7 +16,7 @@ fn lex(s: &[u8]) -> isize {
         re2c:define:YYCTYPE = u8;
         re2c:define:YYPEEK = "*buf.get_unchecked(cursor)";
         re2c:define:YYSKIP = "cursor += 1;";
-        re2c:define:YYFILL = "{ return -1; }";
+        re2c:define:YYFILL = "return -1;";
         re2c:define:YYLESSTHAN = "cursor + @@ > limit";
 
         *                           { return -1; }

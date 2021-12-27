@@ -55,15 +55,14 @@ static void render_line_info(std::ostream &o, uint32_t line, const std::string &
     }
 }
 
-static bool oneline_if(const CodeIfTE *code, const opt_t *opts)
-{
+static bool oneline_if(const CodeIfTE *code, const opt_t *opts) {
     const Code *first = code->if_code->head;
-    return first
-        && first->next == NULL
-        && (first->kind == CODE_STMT || first->kind == CODE_TEXT)
-        && opts->lang != LANG_GO // Go requires braces
+    return opts->lang == LANG_C // Go and Rust require braces
+        && code->oneline
         && code->else_code == NULL
-        && code->oneline;
+        && first
+        && first->next == NULL
+        && (first->kind == CODE_STMT || first->kind == CODE_TEXT);
 }
 
 static void render_if_nonl(RenderContext &rctx, const char *cond, const Code *then,
