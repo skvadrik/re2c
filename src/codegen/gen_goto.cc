@@ -15,14 +15,14 @@ namespace re2c {
 static CodeList *gen_goif(Output &output, const DFA &dfa, const CodeGoIf *go,
     const State *from);
 
-static std::string gen_if(const opt_t *opts, const std::string &compare, uint32_t value)
-{
-    std::ostringstream os;
-    const Enc &e = opts->encoding;
-    os << opts->yych << " " << compare << " ";
-    prtChOrHex(os, value, e.szCodeUnit(), e.type() == Enc::EBCDIC,
+static const char *gen_cond(Output &output, const CodeCmp *cond) {
+    const opt_t *opts = output.block().opts;
+    Scratchbuf &buf = output.scratchbuf;
+    buf.str(opts->yych).cstr(" ").str(cond->cmp).cstr(" ");
+    prtChOrHex(buf.stream(), cond->val, opts->encoding.szCodeUnit(),
+        opts->lang == LANG_RUST || opts->encoding.type() == Enc::EBCDIC,
         opts->target == TARGET_DOT);
-    return os.str();
+    return buf.flush();
 }
 
 static CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go,
@@ -53,40 +53,30 @@ static CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go,
     return stmts;
 }
 
-static CodeList *gen_goifb(Output &output, const DFA &dfa, const CodeGoIfB *go,
-    const State *from)
-{
-    const opt_t *opts = output.block().opts;
+static CodeList *gen_goifb(
+        Output &output, const DFA &dfa, const CodeGoIfB *go, const State *from) {
     code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-
     CodeList *stmts = code_list(alc);
-    const char *if_cond = o.str(gen_if(opts, go->cond->cmp, go->cond->val)).flush();
+    const char *if_cond = gen_cond(output, go->cond);
     CodeList *if_then = gen_goif(output, dfa, go->gothen, from);
     CodeList *if_else = gen_goif(output, dfa, go->goelse, from);
     append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
-
     return stmts;
 }
 
-static CodeList *gen_goifl(Output &output, const DFA &dfa, const CodeGoIfL *go,
-    const State *from)
-{
-    const opt_t *opts = output.block().opts;
+static CodeList *gen_goifl(
+        Output &output, const DFA &dfa, const CodeGoIfL *go, const State *from) {
     code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-
     CodeList *stmts = code_list(alc);
     for (uint32_t i = 0; i < go->nbranches; ++i) {
         const CodeGoIfL::Branch &b = go->branches[i];
         const CodeCmp *cond = b.cond;
         if (cond) {
-            const char *if_cond = o.str(gen_if(opts, cond->cmp, cond->val)).flush();
+            const char *if_cond = gen_cond(output, cond);
             CodeList *if_then = code_list(alc);
             gen_goto(output, dfa, if_then, from, b.jump);
             append(stmts, code_if_then_else(alc, if_cond, if_then, NULL));
-        }
-        else {
+        } else {
             gen_goto(output, dfa, stmts, from, b.jump);
         }
     }
