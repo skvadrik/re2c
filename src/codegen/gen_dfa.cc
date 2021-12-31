@@ -252,7 +252,7 @@ void gen_code(Output &output, dfas_t &dfas)
         }
 
         for (State *s = dfa.head; s; s = s->next) {
-            code_go(alc, &s->go, s, opts, dfa.bitmap);
+            code_go(alc, dfa, opts, s);
         }
     }
 

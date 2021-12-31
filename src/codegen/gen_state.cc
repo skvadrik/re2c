@@ -188,7 +188,6 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
         append(block, code_text(alc, text));
         for (uint32_t i = 0; i < nacc; ++i) {
             Label *l = acc[i].first->label;
-            l->used = true;
             text = o.cstr("&&").str(opts->labelPrefix).label(*l).cstr(",").flush();
             append(table, code_text(alc, text));
         }
@@ -327,23 +326,11 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
 {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
-    const State *fallback;
-    tcid_t falltags;
 
     DASSERT(opts->eof != NOEOF);
-    if (from->action.type == Action::INITIAL) {
-        // EOF in the initial state: EOF rule takes priority over any other rule.
-        fallback = dfa.eof_state;
-        falltags = TCID0;
-    } else if (from->rule != Rule::NONE) {
-        // EOF in accepting state: match the rule in this state.
-        fallback = dfa.finstates[from->rule];
-        falltags = from->rule_tags;
-    } else {
-        // EOF in a non-accepting state: fallback to default state.
-        fallback = dfa.defstate;
-        falltags = from->fall_tags;
-    }
+
+    tcid_t falltags;
+    const State *fallback = fallback_state_with_eof_rule(dfa, opts, from, &falltags);
 
     if (opts->stadfa) {
         DASSERT(from->go.tags == from->stadfa_tags);
@@ -362,7 +349,6 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
         gen_settags(output, fallback_trans, dfa, falltags, false /* delayed */);
 
         // go to fallback state
-        fallback->label->used = true;
         if (!opts->loop_switch) {
             append(fallback_trans, code_stmt(alc, output.scratchbuf.cstr("goto ")
                 .str(opts->labelPrefix).label(*fallback->label).flush()));
@@ -520,7 +506,6 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
     }
 
     if (!jump.elide) {
-        jump.to->label->used = true;
         if (!opts->loop_switch) {
             text = o.cstr("goto ").str(opts->labelPrefix).label(*jump.to->label).flush();
             append(stmts, code_stmt(alc, text));

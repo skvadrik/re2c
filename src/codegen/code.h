@@ -765,8 +765,9 @@ struct Output {
 };
 
 void init_go(CodeGo *go);
-void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
-    CodeBitmap *bitmap);
+void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from);
+State *fallback_state_with_eof_rule(
+        const DFA &dfa, const opt_t *opts, const State *state, tcid_t *ptags);
 CodeBmState *find_bitmap(const CodeBitmap *bitmap, const CodeGo *go, const State *s);
 void insert_bitmap(code_alc_t &alc, CodeBitmap *bitmap, const CodeGo *go, const State *s);
 CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap);

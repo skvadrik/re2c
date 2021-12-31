@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 
@@ -293,17 +294,55 @@ static CodeGoCp *code_gocp(code_alc_t &alc, const Span *span, uint32_t nSpans,
     return x;
 }
 
-void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
-    CodeBitmap *bitmap)
-{
+State *fallback_state_with_eof_rule(
+        const DFA &dfa, const opt_t *opts, const State *state, tcid_t *ptags) {
+    assert(opts->eof != NOEOF);
+
+    State *fallback = NULL;
+    tcid_t falltags = TCID0;
+
+    if (state->action.type == Action::INITIAL) {
+        // EOF in the initial state: EOF rule takes priority over any other rule.
+        fallback = dfa.eof_state;
+        falltags = TCID0;
+    } else if (state->rule != Rule::NONE) {
+        // EOF in accepting state: match the rule in this state.
+        fallback = dfa.finstates[state->rule];
+        falltags = state->rule_tags;
+    } else {
+        // EOF in a non-accepting state: fallback to default state.
+        fallback = dfa.defstate;
+        falltags = state->fall_tags;
+    }
+
+    if (ptags) *ptags = falltags;
+    return fallback;
+}
+
+void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from) {
+    // Mark all states that are targets of `yyaccept` switch to as used.
+    if (from->action.type == Action::ACCEPT) {
+        const accept_t &acc = *from->action.info.accepts;
+        for (size_t i = 0; i < acc.size(); ++i) {
+            acc[i].first->label->used = true;
+        }
+    }
+
+    CodeGo *go = &from->go;
+    Span *span = go->span;
+
     if (go->nspans == 0) return;
+
+    // With EOF rule, mark states that are targets of fallback transitions as used.
+    if (opts->eof != NOEOF && !(go->nspans == 1 && from->next == span[0].to)) {
+        State *f = fallback_state_with_eof_rule(dfa, opts, from, NULL);
+        if (f) f->label->used = true;
+    }
 
     if (opts->stadfa) {
         DASSERT(go->tags == TCID0);
         go->tags = from->stadfa_tags;
     }
-
-    Span *span = go->span;
 
     // initialize high (wide) spans
     uint32_t hSpans = 0;
@@ -332,7 +371,7 @@ void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
             State *s = go->span[i].to;
             if (!s->isBase) continue;
 
-            const CodeBmState *b = find_bitmap(bitmap, go, s);
+            const CodeBmState *b = find_bitmap(dfa.bitmap, go, s);
             if (b) {
                 if (bm == NULL) {
                     bm = b;
@@ -351,22 +390,19 @@ void code_go(code_alc_t &alc, CodeGo *go, const State *from, const opt_t *opts,
     if (opts->target == TARGET_DOT) {
         go->kind = CodeGo::DOT;
         go->godot = code_gosw(alc, go->span, go->nspans, false, eof);
-    }
-    else if (opts->gFlag
+    } else if (opts->gFlag
             && !part_skip
             && dSpans >= opts->cGotoThreshold
             && !low_spans_have_tags) {
         go->kind = CodeGo::CPGOTO;
         go->gocp = code_gocp(alc, go->span, go->nspans, hspan, hSpans, from->next,
             eof, opts);
-    }
-    else if (opts->bFlag && !part_skip && nBitmaps > 0) {
+    } else if (opts->bFlag && !part_skip && nBitmaps > 0) {
         go->kind = CodeGo::BITMAP;
         go->gobm = code_gobm(alc, go->span, go->nspans, hspan, hSpans, bm,
             from->next, eof, opts);
-        bitmap->used = true;
-    }
-    else {
+        dfa.bitmap->used = true;
+    } else {
         go->kind = CodeGo::SWITCH_IF;
         go->goswif = code_goswif(alc, go->span, go->nspans, from->next,
             part_skip, eof, opts);

@@ -60,7 +60,7 @@ public:
 struct State {
     State * next;
     State * prev;
-    Label *label;
+    Label *label; // labels are allocated in codegen as they live longer
     size_t fill;
     bool fallback;
 
