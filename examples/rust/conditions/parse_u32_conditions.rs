@@ -47,11 +47,7 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 					}
 				}
 			}
-			1 => {
-				yystate = 2;
-				continue;
-			}
-			2 => { return None; }
+			1 => { return None; }
 			3 => {
 				mar = cur;
 				yych = unsafe {*s.get_unchecked(cur)};
@@ -80,10 +76,6 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 				continue;
 			}
 			5 => {
-				yystate = 6;
-				continue;
-			}
-			6 => {
 				cur = (cur as isize + -1) as usize;
 				cond = YYC_DEC;
 				yystate = YYC_DEC;
@@ -125,20 +117,12 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 				}
 			}
 			10 => {
-				yystate = 11;
-				continue;
-			}
-			11 => {
 				cur = (cur as isize + -1) as usize;
 				cond = YYC_BIN;
 				yystate = YYC_BIN;
 				continue;
 			}
 			12 => {
-				yystate = 13;
-				continue;
-			}
-			13 => {
 				cur = (cur as isize + -1) as usize;
 				cond = YYC_HEX;
 				yystate = YYC_HEX;
@@ -163,22 +147,10 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 				}
 			}
 			15 => {
-				yystate = 16;
-				continue;
-			}
-			16 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			17 => {
-				yystate = 18;
-				continue;
-			}
-			18 => { return None; }
-			19 => {
-				yystate = 20;
-				continue;
-			}
-			20 => { num = add(num, s[cur-1] - 48, 2);  continue 'lex; }
+			17 => { return None; }
+			19 => { num = add(num, s[cur-1] - 48, 2);  continue 'lex; }
 			21 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				cur += 1;
@@ -198,22 +170,10 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 				}
 			}
 			22 => {
-				yystate = 23;
-				continue;
-			}
-			23 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			24 => {
-				yystate = 25;
-				continue;
-			}
-			25 => { return None; }
-			26 => {
-				yystate = 27;
-				continue;
-			}
-			27 => { num = add(num, s[cur-1] - 48, 10); continue 'lex; }
+			24 => { return None; }
+			26 => { num = add(num, s[cur-1] - 48, 10); continue 'lex; }
 			28 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				cur += 1;
@@ -241,32 +201,12 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 				}
 			}
 			29 => {
-				yystate = 30;
-				continue;
-			}
-			30 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			31 => {
-				yystate = 32;
-				continue;
-			}
-			32 => { return None; }
-			33 => {
-				yystate = 34;
-				continue;
-			}
-			34 => { num = add(num, s[cur-1] - 48, 16); continue 'lex; }
-			35 => {
-				yystate = 36;
-				continue;
-			}
-			36 => { num = add(num, s[cur-1] - 55, 16); continue 'lex; }
-			37 => {
-				yystate = 38;
-				continue;
-			}
-			38 => { num = add(num, s[cur-1] - 87, 16); continue 'lex; }
+			31 => { return None; }
+			33 => { num = add(num, s[cur-1] - 48, 16); continue 'lex; }
+			35 => { num = add(num, s[cur-1] - 55, 16); continue 'lex; }
+			37 => { num = add(num, s[cur-1] - 87, 16); continue 'lex; }
 			39 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				cur += 1;
@@ -286,22 +226,10 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 				}
 			}
 			40 => {
-				yystate = 41;
-				continue;
-			}
-			41 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			42 => {
-				yystate = 43;
-				continue;
-			}
-			43 => { return None; }
-			44 => {
-				yystate = 45;
-				continue;
-			}
-			45 => { num = add(num, s[cur-1] - 48, 8);  continue 'lex; }
+			42 => { return None; }
+			44 => { num = add(num, s[cur-1] - 48, 8);  continue 'lex; }
 			_ => {
 				panic!("internal lexer error")
 			}

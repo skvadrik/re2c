@@ -93,8 +93,7 @@ void gen_dfa_as_blocks_with_labels(Output &output, const DFA &dfa, CodeList *stm
     }
 }
 
-void gen_dfa_as_switch_cases(Output &output, DFA &dfa, CodeCases *cases)
-{
+void gen_dfa_as_switch_cases(Output &output, DFA &dfa, CodeCases *cases) {
     code_alc_t &alc = output.allocator;
 
     DASSERT(output.block().opts->loop_switch);
@@ -102,10 +101,25 @@ void gen_dfa_as_switch_cases(Output &output, DFA &dfa, CodeCases *cases)
 
     for (State *s = dfa.head; s; s = s->next) {
         CodeList *body = code_list(alc);
+
+        // Emit current state.
         emit_state(output, s, body);
         emit_action(output, dfa, s, body);
         gen_go(output, dfa, &s->go, s, body);
-        append(cases, code_case_number(alc, body, static_cast<int32_t>(s->label->index)));
+        int32_t label = static_cast<int32_t>(s->label->index);
+
+        // As long as the following state has no incoming transitions (its label is
+        // unused), generate it as a continuation of the current state. This avoids
+        // looping through the `yystate` switch only to return to the next case.
+        while (s->next && !s->next->label->used) {
+            s = s->next;
+            emit_state(output, s, body);
+            emit_action(output, dfa, s, body);
+            gen_go(output, dfa, &s->go, s, body);
+        }
+
+        // TODO: Relabel states after use analysis to avoid gaps between labels.
+        append(cases, code_case_number(alc, body, label));
     }
 }
 

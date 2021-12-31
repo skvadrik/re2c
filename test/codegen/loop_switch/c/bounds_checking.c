@@ -39,21 +39,12 @@ loop:
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return YYCURSOR + YYMAXFILL - 1 == YYLIMIT ? count : -1; }
 			case 3:
-				yystate = 4;
-				continue;
-			case 4:
 				{ return -1; }
 			case 5:
 				if (YYLIMIT <= YYCURSOR) return -1;
 				yych = *YYCURSOR;
-				yystate = 6;
-				continue;
-			case 6:
 				switch (yych) {
 					case ' ':
 						++YYCURSOR;
@@ -68,9 +59,6 @@ loop:
 			case 8:
 				if (YYLIMIT <= YYCURSOR) return -1;
 				yych = *YYCURSOR;
-				yystate = 9;
-				continue;
-			case 9:
 				++YYCURSOR;
 				switch (yych) {
 					case '\'':
@@ -84,9 +72,6 @@ loop:
 						continue;
 				}
 			case 10:
-				yystate = 11;
-				continue;
-			case 11:
 				{ ++count; goto loop; }
 			case 12:
 				if (YYLIMIT <= YYCURSOR) return -1;

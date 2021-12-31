@@ -21,15 +21,9 @@
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				YYSETSTATE(-1);
 				{ * }
 			case 3:
-				yystate = 4;
-				continue;
-			case 4:
 				YYSETSTATE(-1);
 				{ a }
 			case 5:
@@ -62,15 +56,9 @@
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				YYSETSTATE(-1);
 				{ * }
 			case 3:
-				yystate = 4;
-				continue;
-			case 4:
 				YYSETSTATE(-1);
 				{ b }
 			case 5:

@@ -90,27 +90,15 @@ fn lex(st: &mut State) -> isize {
 				}
 			}
 			1 => {
-				yystate = 2;
-				continue;
-			}
-			2 => {
             // Check that it is the sentinel, not some unexpected null.
             return if st.tok == st.lim - YYMAXFILL { count } else { -1 }
         }
-			3 => {
-				yystate = 4;
-				continue;
-			}
-			4 => { return -1; }
+			3 => { return -1; }
 			5 => {
 				if st.lim - st.cur < 1 {
 					if fill(st, 1) != Fill::Ok { return -1; }
 				}
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
-				yystate = 6;
-				continue;
-			}
-			6 => {
 				match yych {
 					0x20 => {
 						st.cur += 1;
@@ -129,10 +117,6 @@ fn lex(st: &mut State) -> isize {
 					if fill(st, 1) != Fill::Ok { return -1; }
 				}
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
-				yystate = 9;
-				continue;
-			}
-			9 => {
 				st.cur += 1;
 				match yych {
 					0x27 => {
@@ -149,11 +133,7 @@ fn lex(st: &mut State) -> isize {
 					}
 				}
 			}
-			10 => {
-				yystate = 11;
-				continue;
-			}
-			11 => { count += 1; continue 'lex; }
+			10 => { count += 1; continue 'lex; }
 			12 => {
 				if st.lim - st.cur < 1 {
 					if fill(st, 1) != Fill::Ok { return -1; }

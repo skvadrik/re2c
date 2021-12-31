@@ -21,15 +21,9 @@ int lex(const char *YYCURSOR) {       // C/C++ code
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return 1; }
 			case 3:
 				yych = *YYCURSOR;
-				yystate = 4;
-				continue;
-			case 4:
 				switch (yych) {
 					case '0' ... '9':
 					case 'A' ... 'Z':

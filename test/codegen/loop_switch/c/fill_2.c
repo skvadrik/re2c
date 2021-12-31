@@ -75,21 +75,12 @@ loop:
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return (in->lim - in->cur == YYMAXFILL - 1) ? count : -1; }
 			case 3:
-				yystate = 4;
-				continue;
-			case 4:
 				{ return -1; }
 			case 5:
 				if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 				yych = *in->cur;
-				yystate = 6;
-				continue;
-			case 6:
 				switch (yych) {
 					case ' ':
 						++in->cur;
@@ -104,9 +95,6 @@ loop:
 			case 8:
 				if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 				yych = *in->cur;
-				yystate = 9;
-				continue;
-			case 9:
 				++in->cur;
 				switch (yych) {
 					case '\'':
@@ -120,9 +108,6 @@ loop:
 						continue;
 				}
 			case 10:
-				yystate = 11;
-				continue;
-			case 11:
 				{ ++count; goto loop; }
 			case 12:
 				if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;

@@ -46,9 +46,6 @@ static uint64_t parse_u32(const char *s)
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return ERROR; }
 			case 3:
 				YYMARKER = s;
@@ -71,9 +68,6 @@ static uint64_t parse_u32(const char *s)
 			case 4:
 				{ goto oct; }
 			case 5:
-				yystate = 6;
-				continue;
-			case 6:
 				s -= 1;
 				{ goto dec; }
 			case 7:
@@ -125,15 +119,9 @@ static uint64_t parse_u32(const char *s)
 						continue;
 				}
 			case 10:
-				yystate = 11;
-				continue;
-			case 11:
 				s -= 1;
 				{ goto bin; }
 			case 12:
-				yystate = 13;
-				continue;
-			case 13:
 				s -= 1;
 				{ goto hex; }
 		}
@@ -163,19 +151,10 @@ bin:
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return u; }
 			case 3:
-				yystate = 4;
-				continue;
-			case 4:
 				{ return ERROR; }
 			case 5:
-				yystate = 6;
-				continue;
-			case 6:
 				{ adddgt<2>(u, s[-1] - '0'); goto bin; }
 		}
 	}
@@ -210,19 +189,10 @@ oct:
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return u; }
 			case 3:
-				yystate = 4;
-				continue;
-			case 4:
 				{ return ERROR; }
 			case 5:
-				yystate = 6;
-				continue;
-			case 6:
 				{ adddgt<8>(u, s[-1] - '0'); goto oct; }
 		}
 	}
@@ -259,19 +229,10 @@ dec:
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return u; }
 			case 3:
-				yystate = 4;
-				continue;
-			case 4:
 				{ return ERROR; }
 			case 5:
-				yystate = 6;
-				continue;
-			case 6:
 				{ adddgt<10>(u, s[-1] - '0'); goto dec; }
 		}
 	}
@@ -324,29 +285,14 @@ hex:
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return u; }
 			case 3:
-				yystate = 4;
-				continue;
-			case 4:
 				{ return ERROR; }
 			case 5:
-				yystate = 6;
-				continue;
-			case 6:
 				{ adddgt<16>(u, s[-1] - '0');      goto hex; }
 			case 7:
-				yystate = 8;
-				continue;
-			case 8:
 				{ adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
 			case 9:
-				yystate = 10;
-				continue;
-			case 10:
 				{ adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
 		}
 	}

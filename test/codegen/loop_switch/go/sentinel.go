@@ -33,20 +33,11 @@ loop:
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{ return count }
 		case 3:
-			yystate = 4
-			continue
-		case 4:
 			{ return -1 }
 		case 5:
 			yych = str[cursor]
-			yystate = 6
-			continue
-		case 6:
 			switch (yych) {
 			case ' ':
 				cursor += 1
@@ -60,9 +51,6 @@ loop:
 			{ goto loop }
 		case 8:
 			yych = str[cursor]
-			yystate = 9
-			continue
-		case 9:
 			switch (yych) {
 			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 				cursor += 1

@@ -60,20 +60,11 @@ loop:
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return count; }
 			case 3:
-				yystate = 4;
-				continue;
-			case 4:
 				{ return -1; }
 			case 5:
 				yych = cur < lim ? *cur : 0;
-				yystate = 6;
-				continue;
-			case 6:
 				switch (yych) {
 					case ' ':
 						++cur;
@@ -87,9 +78,6 @@ loop:
 				{ goto loop; }
 			case 8:
 				yych = cur < lim ? *cur : 0;
-				yystate = 9;
-				continue;
-			case 9:
 				switch (yych) {
 					case 'a':
 					case 'b':

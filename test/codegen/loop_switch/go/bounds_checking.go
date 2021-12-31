@@ -43,9 +43,6 @@ loop:
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{
 		if limit - cursor == YYMAXFILL - 1 {
 			return count
@@ -54,9 +51,6 @@ loop:
 		}
 	}
 		case 3:
-			yystate = 4
-			continue
-		case 4:
 			{
 		return -1
 	}
@@ -65,9 +59,6 @@ loop:
 				return -1
 			}
 			yych = str[cursor]
-			yystate = 6
-			continue
-		case 6:
 			switch (yych) {
 			case ' ':
 				cursor += 1
@@ -86,9 +77,6 @@ loop:
 				return -1
 			}
 			yych = str[cursor]
-			yystate = 9
-			continue
-		case 9:
 			cursor += 1
 			switch (yych) {
 			case '\'':
@@ -102,9 +90,6 @@ loop:
 				continue
 			}
 		case 10:
-			yystate = 11
-			continue
-		case 11:
 			{
 		count += 1;
 		goto loop

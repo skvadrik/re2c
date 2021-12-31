@@ -22,15 +22,9 @@
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			YYSETSTATE
 			{ * }
 		case 3:
-			yystate = 4
-			continue
-		case 4:
 			YYSETSTATE
 			{ a }
 		case 5:
@@ -64,15 +58,9 @@
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			YYSETSTATE
 			{ * }
 		case 3:
-			yystate = 4
-			continue
-		case 4:
 			YYSETSTATE
 			{ b }
 		case 5:

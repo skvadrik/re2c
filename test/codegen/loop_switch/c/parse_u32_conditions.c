@@ -56,9 +56,6 @@ loop:
 						continue;
 				}
 			case 1:
-				yystate = 2;
-				continue;
-			case 2:
 				{ return ERROR; }
 			case 3:
 				YYMARKER = s;
@@ -83,9 +80,6 @@ loop:
 				yystate = yycoct;
 				continue;
 			case 5:
-				yystate = 6;
-				continue;
-			case 6:
 				s -= 1;
 				c = yycdec;
 				yystate = yycdec;
@@ -139,17 +133,11 @@ loop:
 						continue;
 				}
 			case 10:
-				yystate = 11;
-				continue;
-			case 11:
 				s -= 1;
 				c = yycbin;
 				yystate = yycbin;
 				continue;
 			case 12:
-				yystate = 13;
-				continue;
-			case 13:
 				s -= 1;
 				c = yychex;
 				yystate = yychex;
@@ -170,19 +158,10 @@ loop:
 						continue;
 				}
 			case 15:
-				yystate = 16;
-				continue;
-			case 16:
 				{ return u; }
 			case 17:
-				yystate = 18;
-				continue;
-			case 18:
 				{ return ERROR; }
 			case 19:
-				yystate = 20;
-				continue;
-			case 20:
 				{ adddgt<2> (u, s[-1] - '0');      goto loop; }
 			case 21:
 				yych = *s;
@@ -208,19 +187,10 @@ loop:
 						continue;
 				}
 			case 22:
-				yystate = 23;
-				continue;
-			case 23:
 				{ return u; }
 			case 24:
-				yystate = 25;
-				continue;
-			case 25:
 				{ return ERROR; }
 			case 26:
-				yystate = 27;
-				continue;
-			case 27:
 				{ adddgt<10>(u, s[-1] - '0');      goto loop; }
 			case 28:
 				yych = *s;
@@ -262,29 +232,14 @@ loop:
 						continue;
 				}
 			case 29:
-				yystate = 30;
-				continue;
-			case 30:
 				{ return u; }
 			case 31:
-				yystate = 32;
-				continue;
-			case 32:
 				{ return ERROR; }
 			case 33:
-				yystate = 34;
-				continue;
-			case 34:
 				{ adddgt<16>(u, s[-1] - '0');      goto loop; }
 			case 35:
-				yystate = 36;
-				continue;
-			case 36:
 				{ adddgt<16>(u, s[-1] - 'A' + 10); goto loop; }
 			case 37:
-				yystate = 38;
-				continue;
-			case 38:
 				{ adddgt<16>(u, s[-1] - 'a' + 10); goto loop; }
 			case 39:
 				yych = *s;
@@ -308,19 +263,10 @@ loop:
 						continue;
 				}
 			case 40:
-				yystate = 41;
-				continue;
-			case 41:
 				{ return u; }
 			case 42:
-				yystate = 43;
-				continue;
-			case 43:
 				{ return ERROR; }
 			case 44:
-				yystate = 45;
-				continue;
-			case 45:
 				{ adddgt<8> (u, s[-1] - '0');      goto loop; }
 		}
 	}

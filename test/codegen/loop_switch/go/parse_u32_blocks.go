@@ -46,9 +46,6 @@ func parse_u32(str string) (uint32, error) {
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{ goto err }
 		case 3:
 			marker = cursor
@@ -73,9 +70,6 @@ func parse_u32(str string) (uint32, error) {
 		case 4:
 			{ goto oct }
 		case 5:
-			yystate = 6
-			continue
-		case 6:
 			cursor += -1
 			{ goto dec }
 		case 7:
@@ -109,15 +103,9 @@ func parse_u32(str string) (uint32, error) {
 				continue
 			}
 		case 10:
-			yystate = 11
-			continue
-		case 11:
 			cursor += -1
 			{ goto bin }
 		case 12:
-			yystate = 13
-			continue
-		case 13:
 			cursor += -1
 			{ goto hex }
 		default:
@@ -148,19 +136,10 @@ bin:
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{ goto end }
 		case 3:
-			yystate = 4
-			continue
-		case 4:
 			{ goto err }
 		case 5:
-			yystate = 6
-			continue
-		case 6:
 			{ add_digit(2, '0'); goto bin }
 		default:
 			panic("internal lexer error")
@@ -190,19 +169,10 @@ oct:
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{ goto end }
 		case 3:
-			yystate = 4
-			continue
-		case 4:
 			{ goto err }
 		case 5:
-			yystate = 6
-			continue
-		case 6:
 			{ add_digit(8, '0'); goto oct }
 		default:
 			panic("internal lexer error")
@@ -232,19 +202,10 @@ dec:
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{ goto end }
 		case 3:
-			yystate = 4
-			continue
-		case 4:
 			{ goto err }
 		case 5:
-			yystate = 6
-			continue
-		case 6:
 			{ add_digit(10, '0'); goto dec }
 		default:
 			panic("internal lexer error")
@@ -280,29 +241,14 @@ hex:
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{ goto end }
 		case 3:
-			yystate = 4
-			continue
-		case 4:
 			{ goto err }
 		case 5:
-			yystate = 6
-			continue
-		case 6:
 			{ add_digit(16, '0');    goto hex }
 		case 7:
-			yystate = 8
-			continue
-		case 8:
 			{ add_digit(16, 'A'-10); goto hex }
 		case 9:
-			yystate = 10
-			continue
-		case 10:
 			{ add_digit(16, 'a'-10); goto hex }
 		default:
 			panic("internal lexer error")

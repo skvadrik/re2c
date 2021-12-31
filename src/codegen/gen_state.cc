@@ -509,7 +509,7 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
         if (!opts->loop_switch) {
             text = o.cstr("goto ").str(opts->labelPrefix).label(*jump.to->label).flush();
             append(stmts, code_stmt(alc, text));
-        } else {
+        } else if (jump.to->label->used) {
             text = o.str(opts->yystate).cstr(" = ").label(*jump.to->label).flush();
             append(stmts, code_stmt(alc, text));
             append(stmts, code_stmt(alc, "continue"));

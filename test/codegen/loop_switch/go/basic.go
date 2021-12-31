@@ -26,15 +26,9 @@ func lex(str string) {                    // Go code
 			yystate = 1
 			continue
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{ panic("error!"); }
 		case 3:
 			yych = str[cursor]
-			yystate = 4
-			continue
-		case 4:
 			if (yych <= '/') {
 				yystate = 5
 				continue

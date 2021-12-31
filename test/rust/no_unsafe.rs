@@ -15,14 +15,8 @@
 				}
 				yych = YYPEEK;
 				YYSKIP
-				yystate = 1;
-				continue;
+				{}
 			}
-			1 => {
-				yystate = 2;
-				continue;
-			}
-			2 => {}
 			_ => {
 				panic!("internal lexer error")
 			}
@@ -45,14 +39,8 @@
 				}
 				yych = unsafe {YYPEEK};
 				YYSKIP
-				yystate = 1;
-				continue;
+				{}
 			}
-			1 => {
-				yystate = 2;
-				continue;
-			}
-			2 => {}
 			_ => {
 				panic!("internal lexer error")
 			}
@@ -75,14 +63,8 @@
 				}
 				yych = YYPEEK;
 				YYSKIP
-				yystate = 1;
-				continue;
+				{}
 			}
-			1 => {
-				yystate = 2;
-				continue;
-			}
-			2 => {}
 			_ => {
 				panic!("internal lexer error")
 			}

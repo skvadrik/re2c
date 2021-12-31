@@ -129,9 +129,6 @@ static int lex_utf8(const uint8_t *YYCURSOR)
 						continue;
 				}
 			case 12:
-				yystate = 13;
-				continue;
-			case 13:
 				{ return 0; }
 		}
 	}
@@ -155,9 +152,6 @@ static int lex_utf32(const uint32_t *YYCURSOR)
 					yystate = 3;
 					continue;
 				}
-				yystate = 1;
-				continue;
-			case 1:
 				yystate = 2;
 				continue;
 			case 2:
@@ -170,9 +164,6 @@ static int lex_utf32(const uint32_t *YYCURSOR)
 					continue;
 				}
 				++YYCURSOR;
-				yystate = 4;
-				continue;
-			case 4:
 				yych = *YYCURSOR;
 				if (yych == ' ') {
 					++YYCURSOR;
@@ -192,21 +183,12 @@ static int lex_utf32(const uint32_t *YYCURSOR)
 					continue;
 				}
 				++YYCURSOR;
-				yystate = 7;
-				continue;
-			case 7:
 				yych = *YYCURSOR;
 				if (yych != 'y') {
 					yystate = 5;
 					continue;
 				}
 				++YYCURSOR;
-				yystate = 8;
-				continue;
-			case 8:
-				yystate = 9;
-				continue;
-			case 9:
 				{ return 0; }
 		}
 	}

@@ -129,9 +129,6 @@ func lexUTF8(str []uint8) int {
 				continue
 			}
 		case 12:
-			yystate = 13
-			continue
-		case 13:
 			{ return 0; }
 		default:
 			panic("internal lexer error")
@@ -156,9 +153,6 @@ func lexUTF32(str []uint32) int {
 				yystate = 3
 				continue
 			}
-			yystate = 1
-			continue
-		case 1:
 			yystate = 2
 			continue
 		case 2:
@@ -171,9 +165,6 @@ func lexUTF32(str []uint32) int {
 				continue
 			}
 			cursor += 1
-			yystate = 4
-			continue
-		case 4:
 			yych = str[cursor]
 			if (yych == ' ') {
 				cursor += 1
@@ -193,21 +184,12 @@ func lexUTF32(str []uint32) int {
 				continue
 			}
 			cursor += 1
-			yystate = 7
-			continue
-		case 7:
 			yych = str[cursor]
 			if (yych != 'y') {
 				yystate = 5
 				continue
 			}
 			cursor += 1
-			yystate = 8
-			continue
-		case 8:
-			yystate = 9
-			continue
-		case 9:
 			{ return 0; }
 		default:
 			panic("internal lexer error")

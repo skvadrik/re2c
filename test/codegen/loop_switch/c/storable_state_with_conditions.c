@@ -549,9 +549,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				}
 			case 10:
 				yych = *c->cur;
-				yystate = 11;
-				continue;
-			case 11:
 				switch (yych) {
 					case '\t':
 					case ' ':
@@ -591,9 +588,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				}
 			case 13:
 				yych = *c->cur;
-				yystate = 14;
-				continue;
-			case 14:
 				switch (yych) {
 					case '\t':
 					case ' ':
@@ -690,9 +684,6 @@ static enum con_status parse_con_req(struct con_state* c)
 						continue;
 				}
 			case 15:
-				yystate = 16;
-				continue;
-			case 16:
 				l1 = c->yyt1;
 				l2 = c->yyt2;
 				p1 = c->yytm3;
@@ -723,9 +714,6 @@ static enum con_status parse_con_req(struct con_state* c)
         }
 			case 17:
 				yych = *c->cur;
-				yystate = 18;
-				continue;
-			case 18:
 				switch (yych) {
 					case '!':
 					case '#':
@@ -919,9 +907,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				}
 			case 20:
 				yych = *c->cur;
-				yystate = 21;
-				continue;
-			case 21:
 				switch (yych) {
 					case '\t':
 					case ' ':
@@ -1033,9 +1018,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				}
 			case 22:
 				yych = *c->cur;
-				yystate = 23;
-				continue;
-			case 23:
 				switch (yych) {
 					case 0x00:
 					case 0x01:
@@ -1090,9 +1072,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				}
 			case 24:
 				yych = *c->cur;
-				yystate = 25;
-				continue;
-			case 25:
 				switch (yych) {
 					case '\t':
 					case ' ':
@@ -1354,9 +1333,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				}
 			case 36:
 				yych = *c->cur;
-				yystate = 37;
-				continue;
-			case 37:
 				switch (yych) {
 					case 0x00:
 					case 0x01:
@@ -1425,9 +1401,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				}
 			case 39:
 				yych = *c->cur;
-				yystate = 40;
-				continue;
-			case 40:
 				switch (yych) {
 					case 0x00:
 					case 0x01:
@@ -1481,9 +1454,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				}
 			case 41:
 				yych = *c->cur;
-				yystate = 42;
-				continue;
-			case 42:
 				switch (yych) {
 					case 0x00:
 					case 0x01:
@@ -1606,9 +1576,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				}
 			case 45:
 				yych = *c->cur;
-				yystate = 46;
-				continue;
-			case 46:
 				switch (yych) {
 					case 0x00:
 					case 0x01:
@@ -1698,9 +1665,6 @@ static enum con_status parse_con_req(struct con_state* c)
         }
 			case 49:
 				yych = *c->cur;
-				yystate = 50;
-				continue;
-			case 50:
 				switch (yych) {
 					case 0x00:
 					case 0x01:
@@ -1829,9 +1793,6 @@ static enum con_status parse_con_req(struct con_state* c)
 				continue;
 			case 54:
 				yych = *c->cur;
-				yystate = 55;
-				continue;
-			case 55:
 				switch (yych) {
 					case '\t':
 					case ' ':

@@ -100,38 +100,22 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				}
 			}
 			1 => {
-				yystate = 2;
-				continue;
-			}
-			2 => {
 				st.state = YYC_INIT;
 				{ return Status::BadPacket; }
 			}
 			3 => {
-				yystate = 4;
-				continue;
-			}
-			4 => {
 				st.cur = (st.cur as isize + -1) as usize;
 				st.state = YYC_SPACES;
 				yystate = YYC_SPACES;
 				continue;
 			}
 			5 => {
-				yystate = 6;
-				continue;
-			}
-			6 => {
 				st.cur = (st.cur as isize + -1) as usize;
 				st.state = YYC_NUMBER;
 				yystate = YYC_NUMBER;
 				continue;
 			}
 			7 => {
-				yystate = 8;
-				continue;
-			}
-			8 => {
 				st.cur = (st.cur as isize + -1) as usize;
 				st.state = YYC_WORD;
 				yystate = YYC_WORD;
@@ -162,19 +146,11 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				}
 			}
 			11 => {
-				yystate = 12;
-				continue;
-			}
-			12 => {
 				st.state = YYC_SPACES;
 				{ return Status::BadPacket; }
 			}
 			13 => {
 				yych = st.buf[st.cur];
-				yystate = 14;
-				continue;
-			}
-			14 => {
 				match yych {
 					0x09 |
 					0x20 => {
@@ -220,19 +196,11 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				}
 			}
 			18 => {
-				yystate = 19;
-				continue;
-			}
-			19 => {
 				st.state = YYC_NUMBER;
 				{ return Status::BadPacket; }
 			}
 			20 => {
 				yych = st.buf[st.cur];
-				yystate = 21;
-				continue;
-			}
-			21 => {
 				match yych {
 					0x30 ..= 0x39 => {
 						st.cur += 1;
@@ -277,19 +245,11 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				}
 			}
 			25 => {
-				yystate = 26;
-				continue;
-			}
-			26 => {
 				st.state = YYC_WORD;
 				{ return Status::BadPacket; }
 			}
 			27 => {
 				yych = st.buf[st.cur];
-				yystate = 28;
-				continue;
-			}
-			28 => {
 				match yych {
 					0x61 ..= 0x7A => {
 						st.cur += 1;

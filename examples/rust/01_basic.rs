@@ -25,17 +25,9 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 					}
 				}
 			}
-			1 => {
-				yystate = 2;
-				continue;
-			}
-			2 => { return false; }
+			1 => { return false; }
 			3 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
-				yystate = 4;
-				continue;
-			}
-			4 => {
 				match yych {
 					0x30 ..= 0x39 |
 					0x41 ..= 0x5A |

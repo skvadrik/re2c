@@ -107,19 +107,11 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 				}
 			}
 			4 => {
-				yystate = 5;
-				continue;
-			}
-			5 => {
 				st.state = -1;
 				{ *recv += 1; continue 'lex; }
 			}
 			6 => {
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
-				yystate = 7;
-				continue;
-			}
-			7 => {
 				match yych {
 					0x3B => {
 						st.cur += 1;

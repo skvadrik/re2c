@@ -149,16 +149,10 @@ loop:
 						continue;
 				}
 			case 4:
-				yystate = 5;
-				continue;
-			case 5:
 				in->state = -1;
 				{ *recv = *recv + 1; in->tok = in->cur; goto loop; }
 			case 6:
 				yych = *in->cur;
-				yystate = 7;
-				continue;
-			case 7:
 				switch (yych) {
 					case ';':
 						++in->cur;

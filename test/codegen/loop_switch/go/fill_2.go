@@ -94,9 +94,6 @@ loop:
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{
 		if in.limit - in.cursor == YYMAXFILL - 1 {
 			return count
@@ -105,9 +102,6 @@ loop:
 		}
 	}
 		case 3:
-			yystate = 4
-			continue
-		case 4:
 			{
 		return -1
 	}
@@ -116,9 +110,6 @@ loop:
 				if r := fill(in, 1); r != 0 { return r }
 			}
 			yych = in.data[in.cursor]
-			yystate = 6
-			continue
-		case 6:
 			switch (yych) {
 			case ' ':
 				in.cursor += 1
@@ -137,9 +128,6 @@ loop:
 				if r := fill(in, 1); r != 0 { return r }
 			}
 			yych = in.data[in.cursor]
-			yystate = 9
-			continue
-		case 9:
 			in.cursor += 1
 			switch (yych) {
 			case '\'':
@@ -153,9 +141,6 @@ loop:
 				continue
 			}
 		case 10:
-			yystate = 11
-			continue
-		case 11:
 			{
 		count += 1;
 		goto loop

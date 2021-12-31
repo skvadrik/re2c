@@ -168,10 +168,6 @@ fn lex(str: &[u8]) -> bool {
 				yyaccept = 0;
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
-				yystate = 4;
-				continue;
-			}
-			4 => {
 				match yych {
 					0x24 |
 					0x30 ..= 0x39 |

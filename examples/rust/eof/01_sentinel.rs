@@ -35,22 +35,10 @@ fn lex(s: &[u8]) -> isize {
 					}
 				}
 			}
-			1 => {
-				yystate = 2;
-				continue;
-			}
-			2 => { return count; }
-			3 => {
-				yystate = 4;
-				continue;
-			}
-			4 => { return -1; }
+			1 => { return count; }
+			3 => { return -1; }
 			5 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
-				yystate = 6;
-				continue;
-			}
-			6 => {
 				match yych {
 					0x20 => {
 						cursor += 1;
@@ -66,10 +54,6 @@ fn lex(s: &[u8]) -> isize {
 			7 => { continue 'lex; }
 			8 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
-				yystate = 9;
-				continue;
-			}
-			9 => {
 				match yych {
 					0x61 ..= 0x7A => {
 						cursor += 1;

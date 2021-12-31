@@ -97,9 +97,6 @@ loop:
 			{ return -1 }
 		case 3:
 			yych = in.data[in.cursor]
-			yystate = 4
-			continue
-		case 4:
 			switch (yych) {
 			case ' ':
 				in.cursor += 1
@@ -163,9 +160,6 @@ loop:
 				continue
 			}
 		case 9:
-			yystate = 10
-			continue
-		case 10:
 			{ count += 1; goto loop }
 		case 11:
 			yych = in.data[in.cursor]

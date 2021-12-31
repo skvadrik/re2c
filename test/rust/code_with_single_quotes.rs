@@ -15,14 +15,7 @@
 				}
 				yych = unsafe {YYPEEK};
 				YYSKIP
-				yystate = 1;
-				continue;
-			}
-			1 => {
-				yystate = 2;
-				continue;
-			}
-			2 => {
+				{
         let c0 = '\'';
         let c1 = '\x7F';
         let c2 = '}';
@@ -41,6 +34,7 @@
         let c6 = b'a';
         continue 'outer;
     }
+			}
 			_ => {
 				panic!("internal lexer error")
 			}

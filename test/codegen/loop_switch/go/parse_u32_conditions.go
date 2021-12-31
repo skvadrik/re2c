@@ -57,9 +57,6 @@ loop:
 				continue
 			}
 		case 1:
-			yystate = 2
-			continue
-		case 2:
 			{ return 0, eSyntax }
 		case 3:
 			marker = cursor
@@ -86,9 +83,6 @@ loop:
 			yystate = yycoct
 			continue
 		case 5:
-			yystate = 6
-			continue
-		case 6:
 			cursor += -1
 			cond = yycdec
 			yystate = yycdec
@@ -124,17 +118,11 @@ loop:
 				continue
 			}
 		case 10:
-			yystate = 11
-			continue
-		case 11:
 			cursor += -1
 			cond = yycbin
 			yystate = yycbin
 			continue
 		case 12:
-			yystate = 13
-			continue
-		case 13:
 			cursor += -1
 			cond = yychex
 			yystate = yychex
@@ -154,9 +142,6 @@ loop:
 				continue
 			}
 		case 15:
-			yystate = 16
-			continue
-		case 16:
 			{
 		if result < u32Limit {
 			return uint32(result), nil
@@ -165,14 +150,8 @@ loop:
 		}
 	}
 		case 17:
-			yystate = 18
-			continue
-		case 18:
 			{ return 0, eSyntax }
 		case 19:
-			yystate = 20
-			continue
-		case 20:
 			{ add_digit(2, '0');     goto loop }
 		case 21:
 			yych = str[cursor]
@@ -189,9 +168,6 @@ loop:
 				continue
 			}
 		case 22:
-			yystate = 23
-			continue
-		case 23:
 			{
 		if result < u32Limit {
 			return uint32(result), nil
@@ -200,14 +176,8 @@ loop:
 		}
 	}
 		case 24:
-			yystate = 25
-			continue
-		case 25:
 			{ return 0, eSyntax }
 		case 26:
-			yystate = 27
-			continue
-		case 27:
 			{ add_digit(10, '0');    goto loop }
 		case 28:
 			yych = str[cursor]
@@ -230,9 +200,6 @@ loop:
 				continue
 			}
 		case 29:
-			yystate = 30
-			continue
-		case 30:
 			{
 		if result < u32Limit {
 			return uint32(result), nil
@@ -241,24 +208,12 @@ loop:
 		}
 	}
 		case 31:
-			yystate = 32
-			continue
-		case 32:
 			{ return 0, eSyntax }
 		case 33:
-			yystate = 34
-			continue
-		case 34:
 			{ add_digit(16, '0');    goto loop }
 		case 35:
-			yystate = 36
-			continue
-		case 36:
 			{ add_digit(16, 'A'-10); goto loop }
 		case 37:
-			yystate = 38
-			continue
-		case 38:
 			{ add_digit(16, 'a'-10); goto loop }
 		case 39:
 			yych = str[cursor]
@@ -275,9 +230,6 @@ loop:
 				continue
 			}
 		case 40:
-			yystate = 41
-			continue
-		case 41:
 			{
 		if result < u32Limit {
 			return uint32(result), nil
@@ -286,14 +238,8 @@ loop:
 		}
 	}
 		case 42:
-			yystate = 43
-			continue
-		case 43:
 			{ return 0, eSyntax }
 		case 44:
-			yystate = 45
-			continue
-		case 45:
 			{ add_digit(8, '0');     goto loop }
 		default:
 			panic("internal lexer error")

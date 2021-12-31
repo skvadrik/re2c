@@ -82,9 +82,6 @@ loop:
 				{ return -1; }
 			case 3:
 				yych = *in->cur;
-				yystate = 4;
-				continue;
-			case 4:
 				switch (yych) {
 					case ' ':
 						++in->cur;
@@ -148,9 +145,6 @@ loop:
 						continue;
 				}
 			case 9:
-				yystate = 10;
-				continue;
-			case 10:
 				{ ++count; goto loop; }
 			case 11:
 				yych = *in->cur;
