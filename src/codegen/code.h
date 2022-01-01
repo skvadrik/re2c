@@ -41,6 +41,8 @@ template <typename value_t> class uniq_vector_t;
 typedef slab_allocator_t<1024 * 1024, 8> code_alc_t;
 
 struct Label {
+    static const uint32_t NONE = ~0u;
+
     uint32_t index;
     bool     used;
 };

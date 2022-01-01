@@ -725,6 +725,7 @@ static void gen_label(Scratchbuf &o, const opt_t *opts, Code *code)
         code->kind = CODE_TEXT_RAW;
         code->text = o.cstr(label->slabel).cstr(":").flush();
     } else if (label->nlabel->used) {
+        DASSERT(label->nlabel->index != Label::NONE);
         code->kind = CODE_TEXT_RAW;
         code->text = o.str(opts->labelPrefix).u32(label->nlabel->index).cstr(":").flush();
     } else {

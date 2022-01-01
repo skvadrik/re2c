@@ -211,11 +211,20 @@ void gen_code(Output &output, dfas_t &dfas)
         const bool first = i == b;
         DFA &dfa = *(*i);
 
-        if (opts->loop_switch && (first || opts->target == TARGET_SKELETON)) {
-            // With loop/switch there are no labels, and each block has its own state
-            // switch where all conditions are joined. Restart state counter from zero so
-            // that cases start from zero. With skeleton conditions are separate.
-            output.label_counter = 0;
+        if (opts->bFlag) {
+            dfa.bitmap = code_bitmap(alc, std::min(dfa.ubChar, 256u));
+            for (State *s = dfa.head; s; s = s->next) {
+                if (s->isBase) {
+                    DASSERT(s->next);
+                    insert_bitmap(alc, dfa.bitmap, &s->next->go, s);
+                }
+            }
+        }
+
+        // Allocate labels for DFA states, but do not assign indices yet: they will be
+        // assigned after the used label analysis only to the labels that are used.
+        for (State *s = dfa.head; s; s = s->next) {
+            s->label = new_label(alc, Label::NONE);
         }
 
         if (!opts->loop_switch) {
@@ -235,9 +244,25 @@ void gen_code(Output &output, dfas_t &dfas)
             // dispatch in `-c` mode).
             dfa.initial_label = new_label(alc, output.label_counter++);
             dfa.head->action.set_initial();
+        } else {
+            // In loop/switch mode the label of the first state is always used.
+            dfa.head->label->used = true;
+            // With loop/switch there are no labels, and each block has its own state
+            // switch where all conditions are joined. Restart state counter from zero so
+            // that cases start from zero. With skeleton conditions are separate.
+            if (first || opts->target == TARGET_SKELETON) output.label_counter = 0;
         }
+
+        // Generate DFA transitions and perform used label analysis: for every transition
+        // mark its destination state label as used.
         for (State *s = dfa.head; s; s = s->next) {
-            s->label = new_label(alc, output.label_counter++);
+            code_go(alc, dfa, opts, s);
+        }
+
+        // Assign label indices.
+        // TODO: do not assign indices to labels that are unused.
+        for (State *s = dfa.head; s; s = s->next) {
+            s->label->index = output.label_counter++;
         }
 
         // With loop/switch storable states need their own cases in the state switch, as
@@ -253,20 +278,6 @@ void gen_code(Output &output, dfas_t &dfas)
             // conditions are implicitly assigned consecutive numbers starting from zero.
             StartCond sc = {dfa.cond, opts->loop_switch ? dfa.head->label->index : 0};
             oblock.conds.push_back(sc);
-        }
-
-        if (opts->bFlag) {
-            dfa.bitmap = code_bitmap(alc, std::min(dfa.ubChar, 256u));
-            for (State *s = dfa.head; s; s = s->next) {
-                if (s->isBase) {
-                    DASSERT(s->next);
-                    insert_bitmap(alc, dfa.bitmap, &s->next->go, s);
-                }
-            }
-        }
-
-        for (State *s = dfa.head; s; s = s->next) {
-            code_go(alc, dfa, opts, s);
         }
     }
 

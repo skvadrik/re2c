@@ -339,6 +339,9 @@ void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from) {
         if (f) f->label->used = true;
     }
 
+    // In .dot format every node in the graph (a.k.a. DFA state) should be generated.
+    if (opts->target == TARGET_DOT) from->label->used = true;
+
     if (opts->stadfa) {
         DASSERT(go->tags == TCID0);
         go->tags = from->stadfa_tags;
