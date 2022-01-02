@@ -26,11 +26,11 @@ loop:
 						continue;
 					case '\'':
 						++cur;
-						yystate = 6;
+						yystate = 5;
 						continue;
 					default:
 						if (cur >= lim) {
-							yystate = 12;
+							yystate = 10;
 							continue;
 						}
 						++cur;
@@ -50,16 +50,16 @@ loop:
 						yystate = 3;
 						continue;
 					default:
-						yystate = 5;
+						yystate = 4;
 						continue;
 				}
-			case 5:
+			case 4:
 				{ goto loop; }
-			case 6:
+			case 5:
 				mar = cur;
 				yych = cur < lim ? *cur : 0;
 				if (yych >= 0x01) {
-					yystate = 8;
+					yystate = 7;
 					continue;
 				}
 				if (cur >= lim) {
@@ -67,50 +67,50 @@ loop:
 					continue;
 				}
 				++cur;
+				yystate = 6;
+				continue;
+			case 6:
+				yych = cur < lim ? *cur : 0;
 				yystate = 7;
 				continue;
 			case 7:
-				yych = cur < lim ? *cur : 0;
-				yystate = 8;
-				continue;
-			case 8:
 				switch (yych) {
 					case '\'':
 						++cur;
-						yystate = 9;
+						yystate = 8;
 						continue;
 					case '\\':
 						++cur;
-						yystate = 11;
+						yystate = 9;
 						continue;
 					default:
 						if (cur >= lim) {
-							yystate = 13;
+							yystate = 11;
 							continue;
 						}
 						++cur;
-						yystate = 7;
+						yystate = 6;
 						continue;
 				}
-			case 9:
+			case 8:
 				{ ++count; goto loop; }
-			case 11:
+			case 9:
 				yych = cur < lim ? *cur : 0;
 				if (yych <= 0x00) {
 					if (cur >= lim) {
-						yystate = 13;
+						yystate = 11;
 						continue;
 					}
 					++cur;
-					yystate = 7;
+					yystate = 6;
 					continue;
 				}
 				++cur;
-				yystate = 7;
+				yystate = 6;
 				continue;
-			case 12:
+			case 10:
 				{ return count; }
-			case 13:
+			case 11:
 				cur = mar;
 				yystate = 2;
 				continue;

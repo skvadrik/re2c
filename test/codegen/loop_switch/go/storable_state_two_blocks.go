@@ -15,7 +15,7 @@
 			YYSKIP
 			switch (yych) {
 			case 'a':
-				yystate = 3
+				yystate = 2
 				continue
 			default:
 				yystate = 1
@@ -24,10 +24,10 @@
 		case 1:
 			YYSETSTATE
 			{ * }
-		case 3:
+		case 2:
 			YYSETSTATE
 			{ a }
-		case 5:
+		case 3:
 			yystate = 0
 			continue
 		default:
@@ -46,7 +46,7 @@
 			switch (yych) {
 			case 'b':
 				YYSKIP
-				yystate = 3
+				yystate = 2
 				continue
 			default:
 				if (YYLESSTHAN) {
@@ -60,15 +60,15 @@
 		case 1:
 			YYSETSTATE
 			{ * }
-		case 3:
+		case 2:
 			YYSETSTATE
 			{ b }
-		case 5:
+		case 3:
 			YYSETSTATE
 			{ $ }
-		case 6:
+		case 4:
 			if (YYLESSTHAN) {
-				yystate = 5
+				yystate = 3
 				continue
 			}
 			yystate = 0

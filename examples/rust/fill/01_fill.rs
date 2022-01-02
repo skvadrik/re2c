@@ -67,7 +67,7 @@ fn lex(st: &mut State) -> isize {
 					}
 					0x27 => {
 						st.cur += 1;
-						yystate = 6;
+						yystate = 5;
 						continue;
 					}
 					_ => {
@@ -76,7 +76,7 @@ fn lex(st: &mut State) -> isize {
 								yystate = 0;
 								continue;
 							}
-							yystate = 12;
+							yystate = 10;
 							continue;
 						}
 						st.cur += 1;
@@ -105,85 +105,85 @@ fn lex(st: &mut State) -> isize {
 								continue;
 							}
 						}
-						yystate = 5;
+						yystate = 4;
 						continue;
 					}
 				}
 			}
-			5 => { continue 'lex; }
-			6 => {
+			4 => { continue 'lex; }
+			5 => {
 				st.mar = st.cur;
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
 				if yych >= 0x01 {
-					yystate = 8;
+					yystate = 7;
 					continue;
 				}
 				if st.cur >= st.lim {
 					if fill(st) == Fill::Ok {
-						yystate = 6;
+						yystate = 5;
 						continue;
 					}
 					yystate = 2;
 					continue;
 				}
 				st.cur += 1;
+				yystate = 6;
+				continue;
+			}
+			6 => {
+				yych = unsafe {*st.buf.get_unchecked(st.cur)};
 				yystate = 7;
 				continue;
 			}
 			7 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
-				yystate = 8;
-				continue;
-			}
-			8 => {
 				match yych {
 					0x27 => {
 						st.cur += 1;
-						yystate = 9;
+						yystate = 8;
 						continue;
 					}
 					0x5C => {
 						st.cur += 1;
-						yystate = 11;
+						yystate = 9;
 						continue;
 					}
 					_ => {
 						if st.cur >= st.lim {
 							if fill(st) == Fill::Ok {
-								yystate = 7;
+								yystate = 6;
 								continue;
 							}
-							yystate = 13;
+							yystate = 11;
 							continue;
 						}
 						st.cur += 1;
-						yystate = 7;
+						yystate = 6;
 						continue;
 					}
 				}
 			}
-			9 => { count += 1; continue 'lex; }
-			11 => {
+			8 => { count += 1; continue 'lex; }
+			9 => {
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
 				if yych <= 0x00 {
 					if st.cur >= st.lim {
 						if fill(st) == Fill::Ok {
-							yystate = 11;
+							yystate = 9;
 							continue;
 						}
-						yystate = 13;
+						yystate = 11;
 						continue;
 					}
 					st.cur += 1;
-					yystate = 7;
+					yystate = 6;
 					continue;
 				}
 				st.cur += 1;
-				yystate = 7;
+				yystate = 6;
 				continue;
 			}
-			12 => { return count; }
-			13 => {
+			10 => { return count; }
+			11 => {
 				st.cur = st.mar;
 				yystate = 2;
 				continue;

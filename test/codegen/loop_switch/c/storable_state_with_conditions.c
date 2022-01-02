@@ -7,7 +7,7 @@
 
 enum YYCONDTYPE {
 	yycmedia_type = 0,
-	yycheader = 29,
+	yycheader = 22,
 };
 
 
@@ -196,7 +196,7 @@ static enum con_status parse_con_req(struct con_state* c)
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 57;
+							c->state = 44;
 							return CON_STATUS_WAITING;
 						}
 						++c->cur;
@@ -295,7 +295,7 @@ static enum con_status parse_con_req(struct con_state* c)
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 58;
+							c->state = 45;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 2;
@@ -393,7 +393,7 @@ static enum con_status parse_con_req(struct con_state* c)
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 59;
+							c->state = 46;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
@@ -412,7 +412,7 @@ static enum con_status parse_con_req(struct con_state* c)
 					case ' ':
 					case ';':
 						if (c->lim <= c->cur) {
-							c->state = 60;
+							c->state = 47;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
@@ -452,7 +452,7 @@ static enum con_status parse_con_req(struct con_state* c)
 						mtag(&c->yytm3, c->tok, NULL, &c->mtp);
 						c->yyt2 = c->cur;
 						++c->cur;
-						yystate = 12;
+						yystate = 11;
 						continue;
 					case '!':
 					case '#':
@@ -537,11 +537,11 @@ static enum con_status parse_con_req(struct con_state* c)
 					case ';':
 						c->yyt2 = c->cur;
 						++c->cur;
-						yystate = 13;
+						yystate = 12;
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 61;
+							c->state = 48;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
@@ -557,15 +557,30 @@ static enum con_status parse_con_req(struct con_state* c)
 						continue;
 					case '\r':
 						++c->cur;
-						yystate = 12;
+						yystate = 11;
 						continue;
 					case ';':
+						++c->cur;
+						yystate = 12;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 49;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
+				}
+			case 11:
+				yych = *c->cur;
+				switch (yych) {
+					case '\n':
 						++c->cur;
 						yystate = 13;
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 62;
+							c->state = 50;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
@@ -574,25 +589,10 @@ static enum con_status parse_con_req(struct con_state* c)
 			case 12:
 				yych = *c->cur;
 				switch (yych) {
-					case '\n':
-						++c->cur;
-						yystate = 15;
-						continue;
-					default:
-						if (c->lim <= c->cur) {
-							c->state = 63;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 6;
-						continue;
-				}
-			case 13:
-				yych = *c->cur;
-				switch (yych) {
 					case '\t':
 					case ' ':
 						++c->cur;
-						yystate = 13;
+						yystate = 12;
 						continue;
 					case '!':
 					case '#':
@@ -673,17 +673,17 @@ static enum con_status parse_con_req(struct con_state* c)
 					case '~':
 						mtag(&c->yytm7, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 17;
+						yystate = 14;
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 64;
+							c->state = 51;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
 						continue;
 				}
-			case 15:
+			case 13:
 				l1 = c->yyt1;
 				l2 = c->yyt2;
 				p1 = c->yytm3;
@@ -712,7 +712,7 @@ static enum con_status parse_con_req(struct con_state* c)
 
             return CON_STATUS_DONE;
         }
-			case 17:
+			case 14:
 				yych = *c->cur;
 				switch (yych) {
 					case '!':
@@ -793,22 +793,22 @@ static enum con_status parse_con_req(struct con_state* c)
 					case '|':
 					case '~':
 						++c->cur;
-						yystate = 17;
+						yystate = 14;
 						continue;
 					case '=':
 						mtag(&c->yytm8, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 19;
+						yystate = 15;
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 65;
+							c->state = 52;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
 						continue;
 				}
-			case 19:
+			case 15:
 				yych = *c->cur;
 				switch (yych) {
 					case '!':
@@ -890,29 +890,29 @@ static enum con_status parse_con_req(struct con_state* c)
 					case '~':
 						mtag(&c->yytm9, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 20;
+						yystate = 16;
 						continue;
 					case '"':
 						mtag(&c->yytm9, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 22;
+						yystate = 17;
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 66;
+							c->state = 53;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
 						continue;
 				}
-			case 20:
+			case 16:
 				yych = *c->cur;
 				switch (yych) {
 					case '\t':
 					case ' ':
 						mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 24;
+						yystate = 18;
 						continue;
 					case '\r':
 						c->yytm3 = c->yytm7;
@@ -921,7 +921,7 @@ static enum con_status parse_con_req(struct con_state* c)
 						c->yytm6 = c->yytm10;
 						mtag(&c->yytm6, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 12;
+						yystate = 11;
 						continue;
 					case '!':
 					case '#':
@@ -1001,22 +1001,22 @@ static enum con_status parse_con_req(struct con_state* c)
 					case '|':
 					case '~':
 						++c->cur;
-						yystate = 20;
+						yystate = 16;
 						continue;
 					case ';':
 						mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 13;
+						yystate = 12;
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 67;
+							c->state = 54;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
 						continue;
 				}
-			case 22:
+			case 17:
 				yych = *c->cur;
 				switch (yych) {
 					case 0x00:
@@ -1052,31 +1052,31 @@ static enum con_status parse_con_req(struct con_state* c)
 					case 0x1F:
 					case 0x7F:
 						if (c->lim <= c->cur) {
-							c->state = 68;
+							c->state = 55;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
 						continue;
 					case '"':
 						++c->cur;
-						yystate = 26;
+						yystate = 19;
 						continue;
 					case '\\':
 						++c->cur;
-						yystate = 27;
+						yystate = 20;
 						continue;
 					default:
 						++c->cur;
-						yystate = 22;
+						yystate = 17;
 						continue;
 				}
-			case 24:
+			case 18:
 				yych = *c->cur;
 				switch (yych) {
 					case '\t':
 					case ' ':
 						++c->cur;
-						yystate = 24;
+						yystate = 18;
 						continue;
 					case '\r':
 						c->yytm3 = c->yytm7;
@@ -1084,28 +1084,28 @@ static enum con_status parse_con_req(struct con_state* c)
 						c->yytm5 = c->yytm9;
 						c->yytm6 = c->yytm10;
 						++c->cur;
-						yystate = 12;
+						yystate = 11;
 						continue;
 					case ';':
 						++c->cur;
-						yystate = 13;
+						yystate = 12;
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 69;
+							c->state = 56;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
 						continue;
 				}
-			case 26:
+			case 19:
 				yych = *c->cur;
 				switch (yych) {
 					case '\t':
 					case ' ':
 						mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 24;
+						yystate = 18;
 						continue;
 					case '\r':
 						c->yytm3 = c->yytm7;
@@ -1114,22 +1114,22 @@ static enum con_status parse_con_req(struct con_state* c)
 						c->yytm6 = c->yytm10;
 						mtag(&c->yytm6, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 12;
+						yystate = 11;
 						continue;
 					case ';':
 						mtag(&c->yytm10, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 13;
+						yystate = 12;
 						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 70;
+							c->state = 57;
 							return CON_STATUS_WAITING;
 						}
 						yystate = 6;
 						continue;
 				}
-			case 27:
+			case 20:
 				yych = *c->cur;
 				switch (yych) {
 					case 0x00:
@@ -1145,6 +1145,539 @@ static enum con_status parse_con_req(struct con_state* c)
 					case '\v':
 					case '\f':
 					case '\r':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 58;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 6;
+						continue;
+					default:
+						++c->cur;
+						yystate = 17;
+						continue;
+				}
+			case 21:
+				c->state = yycmedia_type;
+				{ return CON_STATUS_END; }
+			case 22:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\t':
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 59;
+							return CON_STATUS_WAITING;
+						}
+						++c->cur;
+						yystate = 23;
+						continue;
+					case '\r':
+						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 25;
+						continue;
+					default:
+						++c->cur;
+						yystate = 26;
+						continue;
+				}
+			case 23:
+				yystate = 24;
+				continue;
+			case 24:
+				c->state = yycheader;
+				{ return CON_STATUS_ERROR; }
+			case 25:
+				yyaccept = 0;
+				c->mar = c->cur;
+				yych = *c->cur;
+				switch (yych) {
+					case '\n':
+						++c->cur;
+						yystate = 27;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 60;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 24;
+						continue;
+				}
+			case 26:
+				yyaccept = 0;
+				c->mar = c->cur;
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 61;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 24;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 29;
+						continue;
+					case '\r':
+						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 30;
+						continue;
+					default:
+						++c->cur;
+						yystate = 31;
+						continue;
+				}
+			case 27:
+				yych = *c->cur;
+				switch (yych) {
+					case '\t':
+					case ' ':
+						++c->cur;
+						yystate = 32;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 62;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 28;
+						continue;
+				}
+			case 28:
+				c->cur = c->mar;
+				if (yyaccept == 0) {
+					yystate = 24;
+					continue;
+				} else {
+					yystate = 37;
+					continue;
+				}
+			case 29:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case '\r':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 63;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 28;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 29;
+						continue;
+					case ' ':
+						++c->cur;
+						yystate = 31;
+						continue;
+					default:
+						++c->cur;
+						yystate = 33;
+						continue;
+				}
+			case 30:
+				yych = *c->cur;
+				switch (yych) {
+					case '\n':
+						++c->cur;
+						yystate = 27;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 64;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 28;
+						continue;
+				}
+			case 31:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 65;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 28;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 29;
+						continue;
+					case '\r':
+						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 30;
+						continue;
+					default:
+						++c->cur;
+						yystate = 31;
+						continue;
+				}
+			case 32:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 66;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 28;
+						continue;
+					case '\t':
+					case ' ':
+						++c->cur;
+						yystate = 32;
+						continue;
+					case '\r':
+						mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
+						c->yytm2 = c->yytm1;
+						mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 34;
+						continue;
+					default:
+						mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 35;
+						continue;
+				}
+			case 33:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\t':
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 67;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 28;
+						continue;
+					case '\r':
+						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 30;
+						continue;
+					default:
+						++c->cur;
+						yystate = 31;
+						continue;
+				}
+			case 34:
+				yych = *c->cur;
+				switch (yych) {
+					case '\n':
+						++c->cur;
+						yystate = 36;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 68;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 28;
+						continue;
+				}
+			case 35:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x16:
+					case 0x17:
+					case 0x18:
+					case 0x19:
+					case 0x1A:
+					case 0x1B:
+					case 0x1C:
+					case 0x1D:
+					case 0x1E:
+					case 0x7F:
+						if (c->lim <= c->cur) {
+							c->state = 69;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 28;
+						continue;
+					case '\t':
+						++c->cur;
+						yystate = 38;
+						continue;
+					case '\r':
+						c->yytm2 = c->yytm1;
+						mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
+						++c->cur;
+						yystate = 34;
+						continue;
+					default:
+						++c->cur;
+						yystate = 35;
+						continue;
+				}
+			case 36:
+				yyaccept = 1;
+				c->mar = c->cur;
+				yych = *c->cur;
+				switch (yych) {
+					case '\t':
+					case ' ':
+						c->yytm1 = c->yytm2;
+						++c->cur;
+						yystate = 32;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 70;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 37;
+						continue;
+				}
+			case 37:
+				f1 = c->yytm1;
+				f2 = c->yytm3;
+				c->state = yycheader;
+				{
+            struct mtag*    fold_start  = f1;
+            struct mtag*    fold_end    = f2;
+
+            while (fold_start) {
+                memset(c->tok + fold_start->dist, ' ', fold_end->dist - fold_start->dist);
+                fold_start  = fold_start->prev;
+                fold_end    = fold_end->prev;
+            }
+
+            return CON_STATUS_DONE;
+        }
+			case 38:
+				yych = *c->cur;
+				switch (yych) {
+					case 0x00:
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case '\n':
+					case '\v':
+					case '\f':
 					case 0x0E:
 					case 0x0F:
 					case 0x10:
@@ -1167,241 +1700,43 @@ static enum con_status parse_con_req(struct con_state* c)
 							c->state = 71;
 							return CON_STATUS_WAITING;
 						}
-						yystate = 6;
-						continue;
-					default:
-						++c->cur;
-						yystate = 22;
-						continue;
-				}
-			case 28:
-				c->state = yycmedia_type;
-				{ return CON_STATUS_END; }
-			case 29:
-				yych = *c->cur;
-				switch (yych) {
-					case 0x00:
-					case 0x01:
-					case 0x02:
-					case 0x03:
-					case 0x04:
-					case 0x05:
-					case 0x06:
-					case 0x07:
-					case 0x08:
-					case '\t':
-					case '\n':
-					case '\v':
-					case '\f':
-					case 0x0E:
-					case 0x0F:
-					case 0x10:
-					case 0x11:
-					case 0x12:
-					case 0x13:
-					case 0x14:
-					case 0x15:
-					case 0x16:
-					case 0x17:
-					case 0x18:
-					case 0x19:
-					case 0x1A:
-					case 0x1B:
-					case 0x1C:
-					case 0x1D:
-					case 0x1E:
-					case 0x7F:
-						if (c->lim <= c->cur) {
-							c->state = 72;
-							return CON_STATUS_WAITING;
-						}
-						++c->cur;
-						yystate = 30;
-						continue;
-					case '\r':
-						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
-						++c->cur;
-						yystate = 32;
-						continue;
-					default:
-						++c->cur;
-						yystate = 33;
-						continue;
-				}
-			case 30:
-				yystate = 31;
-				continue;
-			case 31:
-				c->state = yycheader;
-				{ return CON_STATUS_ERROR; }
-			case 32:
-				yyaccept = 0;
-				c->mar = c->cur;
-				yych = *c->cur;
-				switch (yych) {
-					case '\n':
-						++c->cur;
-						yystate = 34;
-						continue;
-					default:
-						if (c->lim <= c->cur) {
-							c->state = 73;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 31;
-						continue;
-				}
-			case 33:
-				yyaccept = 0;
-				c->mar = c->cur;
-				yych = *c->cur;
-				switch (yych) {
-					case 0x00:
-					case 0x01:
-					case 0x02:
-					case 0x03:
-					case 0x04:
-					case 0x05:
-					case 0x06:
-					case 0x07:
-					case 0x08:
-					case '\n':
-					case '\v':
-					case '\f':
-					case 0x0E:
-					case 0x0F:
-					case 0x10:
-					case 0x11:
-					case 0x12:
-					case 0x13:
-					case 0x14:
-					case 0x15:
-					case 0x16:
-					case 0x17:
-					case 0x18:
-					case 0x19:
-					case 0x1A:
-					case 0x1B:
-					case 0x1C:
-					case 0x1D:
-					case 0x1E:
-					case 0x7F:
-						if (c->lim <= c->cur) {
-							c->state = 74;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 31;
+						yystate = 28;
 						continue;
 					case '\t':
-						++c->cur;
-						yystate = 36;
-						continue;
-					case '\r':
-						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
 						++c->cur;
 						yystate = 38;
 						continue;
-					default:
-						++c->cur;
-						yystate = 39;
-						continue;
-				}
-			case 34:
-				yych = *c->cur;
-				switch (yych) {
-					case '\t':
-					case ' ':
-						++c->cur;
-						yystate = 41;
-						continue;
-					default:
-						if (c->lim <= c->cur) {
-							c->state = 75;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 35;
-						continue;
-				}
-			case 35:
-				c->cur = c->mar;
-				if (yyaccept == 0) {
-					yystate = 31;
-					continue;
-				} else {
-					yystate = 48;
-					continue;
-				}
-			case 36:
-				yych = *c->cur;
-				switch (yych) {
-					case 0x00:
-					case 0x01:
-					case 0x02:
-					case 0x03:
-					case 0x04:
-					case 0x05:
-					case 0x06:
-					case 0x07:
-					case 0x08:
-					case '\n':
-					case '\v':
-					case '\f':
 					case '\r':
-					case 0x0E:
-					case 0x0F:
-					case 0x10:
-					case 0x11:
-					case 0x12:
-					case 0x13:
-					case 0x14:
-					case 0x15:
-					case 0x16:
-					case 0x17:
-					case 0x18:
-					case 0x19:
-					case 0x1A:
-					case 0x1B:
-					case 0x1C:
-					case 0x1D:
-					case 0x1E:
-					case 0x7F:
-						if (c->lim <= c->cur) {
-							c->state = 76;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 35;
-						continue;
-					case '\t':
-						++c->cur;
-						yystate = 36;
-						continue;
-					case ' ':
 						++c->cur;
 						yystate = 39;
 						continue;
-					default:
+					case ' ':
 						++c->cur;
-						yystate = 43;
-						continue;
-				}
-			case 38:
-				yych = *c->cur;
-				switch (yych) {
-					case '\n':
-						++c->cur;
-						yystate = 34;
-						continue;
-					default:
-						if (c->lim <= c->cur) {
-							c->state = 77;
-							return CON_STATUS_WAITING;
-						}
 						yystate = 35;
+						continue;
+					default:
+						++c->cur;
+						yystate = 40;
 						continue;
 				}
 			case 39:
 				yych = *c->cur;
 				switch (yych) {
+					case '\n':
+						++c->cur;
+						yystate = 41;
+						continue;
+					default:
+						if (c->lim <= c->cur) {
+							c->state = 72;
+							return CON_STATUS_WAITING;
+						}
+						yystate = 28;
+						continue;
+				}
+			case 40:
+				yych = *c->cur;
+				switch (yych) {
 					case 0x00:
 					case 0x01:
 					case 0x02:
@@ -1433,603 +1768,268 @@ static enum con_status parse_con_req(struct con_state* c)
 					case 0x1E:
 					case 0x7F:
 						if (c->lim <= c->cur) {
-							c->state = 78;
+							c->state = 73;
 							return CON_STATUS_WAITING;
 						}
-						yystate = 35;
+						yystate = 28;
 						continue;
 					case '\t':
 						++c->cur;
-						yystate = 36;
+						yystate = 42;
 						continue;
 					case '\r':
-						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+						c->yytm2 = c->yytm1;
+						mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
 						++c->cur;
-						yystate = 38;
+						yystate = 34;
 						continue;
 					default:
 						++c->cur;
-						yystate = 39;
+						yystate = 35;
 						continue;
 				}
 			case 41:
+				yystate = 37;
+				continue;
+			case 42:
 				yych = *c->cur;
 				switch (yych) {
-					case 0x00:
-					case 0x01:
-					case 0x02:
-					case 0x03:
-					case 0x04:
-					case 0x05:
-					case 0x06:
-					case 0x07:
-					case 0x08:
-					case '\n':
-					case '\v':
-					case '\f':
-					case 0x0E:
-					case 0x0F:
-					case 0x10:
-					case 0x11:
-					case 0x12:
-					case 0x13:
-					case 0x14:
-					case 0x15:
-					case 0x16:
-					case 0x17:
-					case 0x18:
-					case 0x19:
-					case 0x1A:
-					case 0x1B:
-					case 0x1C:
-					case 0x1D:
-					case 0x1E:
-					case 0x7F:
-						if (c->lim <= c->cur) {
-							c->state = 79;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 35;
-						continue;
 					case '\t':
 					case ' ':
 						++c->cur;
-						yystate = 41;
+						yystate = 42;
 						continue;
 					case '\r':
-						mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
-						c->yytm2 = c->yytm1;
-						mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
-						++c->cur;
-						yystate = 44;
-						continue;
-					default:
-						mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
-						++c->cur;
-						yystate = 45;
-						continue;
-				}
-			case 43:
-				yych = *c->cur;
-				switch (yych) {
-					case 0x00:
-					case 0x01:
-					case 0x02:
-					case 0x03:
-					case 0x04:
-					case 0x05:
-					case 0x06:
-					case 0x07:
-					case 0x08:
-					case '\t':
-					case '\n':
-					case '\v':
-					case '\f':
-					case 0x0E:
-					case 0x0F:
-					case 0x10:
-					case 0x11:
-					case 0x12:
-					case 0x13:
-					case 0x14:
-					case 0x15:
-					case 0x16:
-					case 0x17:
-					case 0x18:
-					case 0x19:
-					case 0x1A:
-					case 0x1B:
-					case 0x1C:
-					case 0x1D:
-					case 0x1E:
-					case 0x7F:
-						if (c->lim <= c->cur) {
-							c->state = 80;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 35;
-						continue;
-					case '\r':
-						mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
-						++c->cur;
-						yystate = 38;
-						continue;
-					default:
 						++c->cur;
 						yystate = 39;
 						continue;
-				}
-			case 44:
-				yych = *c->cur;
-				switch (yych) {
-					case '\n':
-						++c->cur;
-						yystate = 47;
-						continue;
 					default:
 						if (c->lim <= c->cur) {
-							c->state = 81;
+							c->state = 74;
 							return CON_STATUS_WAITING;
 						}
-						yystate = 35;
+						yystate = 28;
 						continue;
 				}
-			case 45:
-				yych = *c->cur;
-				switch (yych) {
-					case 0x00:
-					case 0x01:
-					case 0x02:
-					case 0x03:
-					case 0x04:
-					case 0x05:
-					case 0x06:
-					case 0x07:
-					case 0x08:
-					case '\n':
-					case '\v':
-					case '\f':
-					case 0x0E:
-					case 0x0F:
-					case 0x10:
-					case 0x11:
-					case 0x12:
-					case 0x13:
-					case 0x14:
-					case 0x15:
-					case 0x16:
-					case 0x17:
-					case 0x18:
-					case 0x19:
-					case 0x1A:
-					case 0x1B:
-					case 0x1C:
-					case 0x1D:
-					case 0x1E:
-					case 0x7F:
-						if (c->lim <= c->cur) {
-							c->state = 82;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 35;
-						continue;
-					case '\t':
-						++c->cur;
-						yystate = 49;
-						continue;
-					case '\r':
-						c->yytm2 = c->yytm1;
-						mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
-						++c->cur;
-						yystate = 44;
-						continue;
-					default:
-						++c->cur;
-						yystate = 45;
-						continue;
-				}
-			case 47:
-				yyaccept = 1;
-				c->mar = c->cur;
-				yych = *c->cur;
-				switch (yych) {
-					case '\t':
-					case ' ':
-						c->yytm1 = c->yytm2;
-						++c->cur;
-						yystate = 41;
-						continue;
-					default:
-						if (c->lim <= c->cur) {
-							c->state = 83;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 48;
-						continue;
-				}
-			case 48:
-				f1 = c->yytm1;
-				f2 = c->yytm3;
-				c->state = yycheader;
-				{
-            struct mtag*    fold_start  = f1;
-            struct mtag*    fold_end    = f2;
-
-            while (fold_start) {
-                memset(c->tok + fold_start->dist, ' ', fold_end->dist - fold_start->dist);
-                fold_start  = fold_start->prev;
-                fold_end    = fold_end->prev;
-            }
-
-            return CON_STATUS_DONE;
-        }
-			case 49:
-				yych = *c->cur;
-				switch (yych) {
-					case 0x00:
-					case 0x01:
-					case 0x02:
-					case 0x03:
-					case 0x04:
-					case 0x05:
-					case 0x06:
-					case 0x07:
-					case 0x08:
-					case '\n':
-					case '\v':
-					case '\f':
-					case 0x0E:
-					case 0x0F:
-					case 0x10:
-					case 0x11:
-					case 0x12:
-					case 0x13:
-					case 0x14:
-					case 0x15:
-					case 0x16:
-					case 0x17:
-					case 0x18:
-					case 0x19:
-					case 0x1A:
-					case 0x1B:
-					case 0x1C:
-					case 0x1D:
-					case 0x1E:
-					case 0x7F:
-						if (c->lim <= c->cur) {
-							c->state = 84;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 35;
-						continue;
-					case '\t':
-						++c->cur;
-						yystate = 49;
-						continue;
-					case '\r':
-						++c->cur;
-						yystate = 51;
-						continue;
-					case ' ':
-						++c->cur;
-						yystate = 45;
-						continue;
-					default:
-						++c->cur;
-						yystate = 52;
-						continue;
-				}
-			case 51:
-				yych = *c->cur;
-				switch (yych) {
-					case '\n':
-						++c->cur;
-						yystate = 53;
-						continue;
-					default:
-						if (c->lim <= c->cur) {
-							c->state = 85;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 35;
-						continue;
-				}
-			case 52:
-				yych = *c->cur;
-				switch (yych) {
-					case 0x00:
-					case 0x01:
-					case 0x02:
-					case 0x03:
-					case 0x04:
-					case 0x05:
-					case 0x06:
-					case 0x07:
-					case 0x08:
-					case '\n':
-					case '\v':
-					case '\f':
-					case 0x0E:
-					case 0x0F:
-					case 0x10:
-					case 0x11:
-					case 0x12:
-					case 0x13:
-					case 0x14:
-					case 0x15:
-					case 0x16:
-					case 0x17:
-					case 0x18:
-					case 0x19:
-					case 0x1A:
-					case 0x1B:
-					case 0x1C:
-					case 0x1D:
-					case 0x1E:
-					case 0x7F:
-						if (c->lim <= c->cur) {
-							c->state = 86;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 35;
-						continue;
-					case '\t':
-						++c->cur;
-						yystate = 54;
-						continue;
-					case '\r':
-						c->yytm2 = c->yytm1;
-						mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
-						++c->cur;
-						yystate = 44;
-						continue;
-					default:
-						++c->cur;
-						yystate = 45;
-						continue;
-				}
-			case 53:
-				yystate = 48;
-				continue;
-			case 54:
-				yych = *c->cur;
-				switch (yych) {
-					case '\t':
-					case ' ':
-						++c->cur;
-						yystate = 54;
-						continue;
-					case '\r':
-						++c->cur;
-						yystate = 51;
-						continue;
-					default:
-						if (c->lim <= c->cur) {
-							c->state = 87;
-							return CON_STATUS_WAITING;
-						}
-						yystate = 35;
-						continue;
-				}
-			case 56:
+			case 43:
 				c->state = yycheader;
 				{ return CON_STATUS_END; }
-			case 57:
+			case 44:
 				if (c->lim <= c->cur) {
-					yystate = 28;
+					yystate = 21;
 					continue;
 				}
 				yystate = 0;
 				continue;
-			case 58:
+			case 45:
 				if (c->lim <= c->cur) {
 					yystate = 2;
 					continue;
 				}
 				yystate = 3;
 				continue;
-			case 59:
+			case 46:
 				if (c->lim <= c->cur) {
 					yystate = 6;
 					continue;
 				}
 				yystate = 4;
 				continue;
-			case 60:
+			case 47:
 				if (c->lim <= c->cur) {
 					yystate = 6;
 					continue;
 				}
 				yystate = 7;
 				continue;
-			case 61:
+			case 48:
 				if (c->lim <= c->cur) {
 					yystate = 6;
 					continue;
 				}
 				yystate = 8;
 				continue;
-			case 62:
+			case 49:
 				if (c->lim <= c->cur) {
 					yystate = 6;
 					continue;
 				}
 				yystate = 10;
 				continue;
-			case 63:
+			case 50:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 11;
+				continue;
+			case 51:
 				if (c->lim <= c->cur) {
 					yystate = 6;
 					continue;
 				}
 				yystate = 12;
 				continue;
-			case 64:
+			case 52:
 				if (c->lim <= c->cur) {
 					yystate = 6;
 					continue;
 				}
-				yystate = 13;
+				yystate = 14;
 				continue;
-			case 65:
+			case 53:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 15;
+				continue;
+			case 54:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 16;
+				continue;
+			case 55:
 				if (c->lim <= c->cur) {
 					yystate = 6;
 					continue;
 				}
 				yystate = 17;
 				continue;
-			case 66:
+			case 56:
+				if (c->lim <= c->cur) {
+					yystate = 6;
+					continue;
+				}
+				yystate = 18;
+				continue;
+			case 57:
 				if (c->lim <= c->cur) {
 					yystate = 6;
 					continue;
 				}
 				yystate = 19;
 				continue;
-			case 67:
+			case 58:
 				if (c->lim <= c->cur) {
 					yystate = 6;
 					continue;
 				}
 				yystate = 20;
 				continue;
-			case 68:
+			case 59:
 				if (c->lim <= c->cur) {
-					yystate = 6;
+					yystate = 43;
 					continue;
 				}
 				yystate = 22;
 				continue;
-			case 69:
+			case 60:
 				if (c->lim <= c->cur) {
-					yystate = 6;
+					yystate = 24;
 					continue;
 				}
-				yystate = 24;
+				yystate = 25;
 				continue;
-			case 70:
+			case 61:
 				if (c->lim <= c->cur) {
-					yystate = 6;
+					yystate = 24;
 					continue;
 				}
 				yystate = 26;
 				continue;
-			case 71:
+			case 62:
 				if (c->lim <= c->cur) {
-					yystate = 6;
+					yystate = 28;
 					continue;
 				}
 				yystate = 27;
 				continue;
-			case 72:
+			case 63:
 				if (c->lim <= c->cur) {
-					yystate = 56;
+					yystate = 28;
 					continue;
 				}
 				yystate = 29;
 				continue;
-			case 73:
+			case 64:
 				if (c->lim <= c->cur) {
-					yystate = 31;
+					yystate = 28;
+					continue;
+				}
+				yystate = 30;
+				continue;
+			case 65:
+				if (c->lim <= c->cur) {
+					yystate = 28;
+					continue;
+				}
+				yystate = 31;
+				continue;
+			case 66:
+				if (c->lim <= c->cur) {
+					yystate = 28;
 					continue;
 				}
 				yystate = 32;
 				continue;
-			case 74:
+			case 67:
 				if (c->lim <= c->cur) {
-					yystate = 31;
+					yystate = 28;
 					continue;
 				}
 				yystate = 33;
 				continue;
-			case 75:
+			case 68:
 				if (c->lim <= c->cur) {
-					yystate = 35;
+					yystate = 28;
 					continue;
 				}
 				yystate = 34;
 				continue;
-			case 76:
+			case 69:
 				if (c->lim <= c->cur) {
-					yystate = 35;
+					yystate = 28;
+					continue;
+				}
+				yystate = 35;
+				continue;
+			case 70:
+				if (c->lim <= c->cur) {
+					yystate = 37;
 					continue;
 				}
 				yystate = 36;
 				continue;
-			case 77:
+			case 71:
 				if (c->lim <= c->cur) {
-					yystate = 35;
+					yystate = 28;
 					continue;
 				}
 				yystate = 38;
 				continue;
-			case 78:
+			case 72:
 				if (c->lim <= c->cur) {
-					yystate = 35;
+					yystate = 28;
 					continue;
 				}
 				yystate = 39;
 				continue;
-			case 79:
+			case 73:
 				if (c->lim <= c->cur) {
-					yystate = 35;
+					yystate = 28;
 					continue;
 				}
-				yystate = 41;
+				yystate = 40;
 				continue;
-			case 80:
+			case 74:
 				if (c->lim <= c->cur) {
-					yystate = 35;
+					yystate = 28;
 					continue;
 				}
-				yystate = 43;
-				continue;
-			case 81:
-				if (c->lim <= c->cur) {
-					yystate = 35;
-					continue;
-				}
-				yystate = 44;
-				continue;
-			case 82:
-				if (c->lim <= c->cur) {
-					yystate = 35;
-					continue;
-				}
-				yystate = 45;
-				continue;
-			case 83:
-				if (c->lim <= c->cur) {
-					yystate = 48;
-					continue;
-				}
-				yystate = 47;
-				continue;
-			case 84:
-				if (c->lim <= c->cur) {
-					yystate = 35;
-					continue;
-				}
-				yystate = 49;
-				continue;
-			case 85:
-				if (c->lim <= c->cur) {
-					yystate = 35;
-					continue;
-				}
-				yystate = 51;
-				continue;
-			case 86:
-				if (c->lim <= c->cur) {
-					yystate = 35;
-					continue;
-				}
-				yystate = 52;
-				continue;
-			case 87:
-				if (c->lim <= c->cur) {
-					yystate = 35;
-					continue;
-				}
-				yystate = 54;
+				yystate = 42;
 				continue;
 		}
 	}

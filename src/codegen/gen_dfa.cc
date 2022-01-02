@@ -115,7 +115,8 @@ void gen_dfa_as_switch_cases(Output &output, DFA &dfa, CodeCases *cases) {
         emit_state(output, s, body);
         emit_action(output, dfa, s, body);
         gen_go(output, dfa, &s->go, s, body);
-        int32_t label = static_cast<int32_t>(s->label->index);
+        uint32_t label = s->label->index;
+        DASSERT(label != Label::NONE);
 
         // As long as the following state has no incoming transitions (its label is
         // unused), generate it as a continuation of the current state. This avoids
@@ -127,8 +128,7 @@ void gen_dfa_as_switch_cases(Output &output, DFA &dfa, CodeCases *cases) {
             gen_go(output, dfa, &s->go, s, body);
         }
 
-        // TODO: Relabel states after use analysis to avoid gaps between labels.
-        append(cases, code_case_number(alc, body, label));
+        append(cases, code_case_number(alc, body, static_cast<int32_t>(label)));
     }
 }
 
@@ -269,9 +269,11 @@ void gen_code(Output &output, dfas_t &dfas)
         }
 
         // Assign label indices.
-        // TODO: do not assign indices to labels that are unused.
+        // TODO: do not assign indices to labels that are unused in goto/label mode.
         for (State *s = dfa.head; s; s = s->next) {
-            s->label->index = output.label_counter++;
+            if (s->label->used || !opts->loop_switch) {
+                s->label->index = output.label_counter++;
+            }
         }
 
         // With loop/switch storable states need their own cases in the state switch, as

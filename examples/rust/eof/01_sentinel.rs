@@ -22,51 +22,51 @@ fn lex(s: &[u8]) -> isize {
 						continue;
 					}
 					0x20 => {
-						yystate = 5;
+						yystate = 3;
 						continue;
 					}
 					0x61 ..= 0x7A => {
-						yystate = 8;
+						yystate = 5;
 						continue;
 					}
 					_ => {
-						yystate = 3;
+						yystate = 2;
 						continue;
 					}
 				}
 			}
 			1 => { return count; }
-			3 => { return -1; }
-			5 => {
+			2 => { return -1; }
+			3 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
 				match yych {
 					0x20 => {
+						cursor += 1;
+						yystate = 3;
+						continue;
+					}
+					_ => {
+						yystate = 4;
+						continue;
+					}
+				}
+			}
+			4 => { continue 'lex; }
+			5 => {
+				yych = unsafe {*s.get_unchecked(cursor)};
+				match yych {
+					0x61 ..= 0x7A => {
 						cursor += 1;
 						yystate = 5;
 						continue;
 					}
 					_ => {
-						yystate = 7;
+						yystate = 6;
 						continue;
 					}
 				}
 			}
-			7 => { continue 'lex; }
-			8 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
-				match yych {
-					0x61 ..= 0x7A => {
-						cursor += 1;
-						yystate = 8;
-						continue;
-					}
-					_ => {
-						yystate = 10;
-						continue;
-					}
-				}
-			}
-			10 => { count += 1; continue 'lex; }
+			6 => { count += 1; continue 'lex; }
 			_ => {
 				panic!("internal lexer error")
 			}

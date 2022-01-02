@@ -8,9 +8,9 @@ const BUFSIZE: usize = 10;
 
 
 const YYC_INIT: isize = 0;
-const YYC_SPACES: isize = 10;
-const YYC_NUMBER: isize = 17;
-const YYC_WORD: isize = 24;
+const YYC_SPACES: isize = 6;
+const YYC_NUMBER: isize = 11;
+const YYC_WORD: isize = 16;
 
 
 
@@ -75,22 +75,22 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 					0x09 |
 					0x20 => {
 						st.cur += 1;
-						yystate = 3;
+						yystate = 2;
 						continue;
 					}
 					0x30 ..= 0x39 => {
 						st.cur += 1;
-						yystate = 5;
+						yystate = 3;
 						continue;
 					}
 					0x61 ..= 0x7A => {
 						st.cur += 1;
-						yystate = 7;
+						yystate = 4;
 						continue;
 					}
 					_ => {
 						if st.cur >= st.lim {
-							st.state = 31;
+							st.state = 21;
 							return Status::Waiting;
 						}
 						st.cur += 1;
@@ -103,231 +103,231 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				st.state = YYC_INIT;
 				{ return Status::BadPacket; }
 			}
-			3 => {
+			2 => {
 				st.cur = (st.cur as isize + -1) as usize;
 				st.state = YYC_SPACES;
 				yystate = YYC_SPACES;
 				continue;
 			}
-			5 => {
+			3 => {
 				st.cur = (st.cur as isize + -1) as usize;
 				st.state = YYC_NUMBER;
 				yystate = YYC_NUMBER;
 				continue;
 			}
-			7 => {
+			4 => {
 				st.cur = (st.cur as isize + -1) as usize;
 				st.state = YYC_WORD;
 				yystate = YYC_WORD;
 				continue;
 			}
-			9 => {
+			5 => {
 				st.state = YYC_INIT;
 				{ return Status::End; }
 			}
-			10 => {
+			6 => {
 				yych = st.buf[st.cur];
 				match yych {
 					0x09 |
 					0x20 => {
+						st.cur += 1;
+						yystate = 8;
+						continue;
+					}
+					_ => {
+						if st.cur >= st.lim {
+							st.state = 22;
+							return Status::Waiting;
+						}
+						st.cur += 1;
+						yystate = 7;
+						continue;
+					}
+				}
+			}
+			7 => {
+				st.state = YYC_SPACES;
+				{ return Status::BadPacket; }
+			}
+			8 => {
+				yych = st.buf[st.cur];
+				match yych {
+					0x09 |
+					0x20 => {
+						st.cur += 1;
+						yystate = 8;
+						continue;
+					}
+					_ => {
+						if st.cur >= st.lim {
+							st.state = 23;
+							return Status::Waiting;
+						}
+						yystate = 9;
+						continue;
+					}
+				}
+			}
+			9 => {
+				st.state = YYC_INIT;
+				{ continue 'lex; }
+			}
+			10 => {
+				st.state = YYC_SPACES;
+				{ return Status::End; }
+			}
+			11 => {
+				yych = st.buf[st.cur];
+				match yych {
+					0x30 ..= 0x39 => {
 						st.cur += 1;
 						yystate = 13;
 						continue;
 					}
 					_ => {
 						if st.cur >= st.lim {
-							st.state = 32;
+							st.state = 24;
 							return Status::Waiting;
 						}
 						st.cur += 1;
-						yystate = 11;
+						yystate = 12;
 						continue;
 					}
 				}
 			}
-			11 => {
-				st.state = YYC_SPACES;
+			12 => {
+				st.state = YYC_NUMBER;
 				{ return Status::BadPacket; }
 			}
 			13 => {
 				yych = st.buf[st.cur];
 				match yych {
-					0x09 |
-					0x20 => {
+					0x30 ..= 0x39 => {
 						st.cur += 1;
 						yystate = 13;
 						continue;
 					}
 					_ => {
 						if st.cur >= st.lim {
-							st.state = 33;
+							st.state = 25;
 							return Status::Waiting;
 						}
-						yystate = 15;
+						yystate = 14;
 						continue;
 					}
 				}
 			}
-			15 => {
-				st.state = YYC_INIT;
-				{ continue 'lex; }
-			}
-			16 => {
+			14 => {
 				st.state = YYC_SPACES;
+				{ *nc += 1; continue 'lex; }
+			}
+			15 => {
+				st.state = YYC_NUMBER;
 				{ return Status::End; }
 			}
-			17 => {
+			16 => {
 				yych = st.buf[st.cur];
 				match yych {
-					0x30 ..= 0x39 => {
-						st.cur += 1;
-						yystate = 20;
-						continue;
-					}
-					_ => {
-						if st.cur >= st.lim {
-							st.state = 34;
-							return Status::Waiting;
-						}
+					0x61 ..= 0x7A => {
 						st.cur += 1;
 						yystate = 18;
 						continue;
 					}
-				}
-			}
-			18 => {
-				st.state = YYC_NUMBER;
-				{ return Status::BadPacket; }
-			}
-			20 => {
-				yych = st.buf[st.cur];
-				match yych {
-					0x30 ..= 0x39 => {
-						st.cur += 1;
-						yystate = 20;
-						continue;
-					}
 					_ => {
 						if st.cur >= st.lim {
-							st.state = 35;
-							return Status::Waiting;
-						}
-						yystate = 22;
-						continue;
-					}
-				}
-			}
-			22 => {
-				st.state = YYC_SPACES;
-				{ *nc += 1; continue 'lex; }
-			}
-			23 => {
-				st.state = YYC_NUMBER;
-				{ return Status::End; }
-			}
-			24 => {
-				yych = st.buf[st.cur];
-				match yych {
-					0x61 ..= 0x7A => {
-						st.cur += 1;
-						yystate = 27;
-						continue;
-					}
-					_ => {
-						if st.cur >= st.lim {
-							st.state = 36;
+							st.state = 26;
 							return Status::Waiting;
 						}
 						st.cur += 1;
-						yystate = 25;
+						yystate = 17;
 						continue;
 					}
 				}
 			}
-			25 => {
+			17 => {
 				st.state = YYC_WORD;
 				{ return Status::BadPacket; }
 			}
-			27 => {
+			18 => {
 				yych = st.buf[st.cur];
 				match yych {
 					0x61 ..= 0x7A => {
 						st.cur += 1;
-						yystate = 27;
+						yystate = 18;
 						continue;
 					}
 					_ => {
 						if st.cur >= st.lim {
-							st.state = 37;
+							st.state = 27;
 							return Status::Waiting;
 						}
-						yystate = 29;
+						yystate = 19;
 						continue;
 					}
 				}
 			}
-			29 => {
+			19 => {
 				st.state = YYC_SPACES;
 				{ *wc += 1; continue 'lex; }
 			}
-			30 => {
+			20 => {
 				st.state = YYC_WORD;
 				{ return Status::End; }
 			}
-			31 => {
+			21 => {
 				if st.cur >= st.lim {
-					yystate = 9;
+					yystate = 5;
 					continue;
 				}
 				yystate = 0;
 				continue;
 			}
-			32 => {
+			22 => {
 				if st.cur >= st.lim {
-					yystate = 16;
+					yystate = 10;
 					continue;
 				}
-				yystate = 10;
+				yystate = 6;
 				continue;
 			}
-			33 => {
+			23 => {
+				if st.cur >= st.lim {
+					yystate = 9;
+					continue;
+				}
+				yystate = 8;
+				continue;
+			}
+			24 => {
 				if st.cur >= st.lim {
 					yystate = 15;
+					continue;
+				}
+				yystate = 11;
+				continue;
+			}
+			25 => {
+				if st.cur >= st.lim {
+					yystate = 14;
 					continue;
 				}
 				yystate = 13;
 				continue;
 			}
-			34 => {
+			26 => {
 				if st.cur >= st.lim {
-					yystate = 23;
+					yystate = 20;
 					continue;
 				}
-				yystate = 17;
+				yystate = 16;
 				continue;
 			}
-			35 => {
+			27 => {
 				if st.cur >= st.lim {
-					yystate = 22;
+					yystate = 19;
 					continue;
 				}
-				yystate = 20;
-				continue;
-			}
-			36 => {
-				if st.cur >= st.lim {
-					yystate = 30;
-					continue;
-				}
-				yystate = 24;
-				continue;
-			}
-			37 => {
-				if st.cur >= st.lim {
-					yystate = 29;
-					continue;
-				}
-				yystate = 27;
+				yystate = 18;
 				continue;
 			}
 			_ => {

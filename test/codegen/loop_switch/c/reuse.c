@@ -149,43 +149,43 @@ static int lex_utf32(const uint32_t *YYCURSOR)
 				yych = *YYCURSOR;
 				++YYCURSOR;
 				if (yych == 0x00002200) {
-					yystate = 3;
+					yystate = 2;
 					continue;
 				}
-				yystate = 2;
+				yystate = 1;
 				continue;
-			case 2:
+			case 1:
 				{ return 1; }
-			case 3:
+			case 2:
 				YYMARKER = YYCURSOR;
 				yych = *YYCURSOR;
 				if (yych != 'x') {
-					yystate = 2;
+					yystate = 1;
 					continue;
 				}
 				++YYCURSOR;
 				yych = *YYCURSOR;
 				if (yych == ' ') {
 					++YYCURSOR;
-					yystate = 6;
+					yystate = 4;
 					continue;
 				}
-				yystate = 5;
+				yystate = 3;
 				continue;
-			case 5:
+			case 3:
 				YYCURSOR = YYMARKER;
-				yystate = 2;
+				yystate = 1;
 				continue;
-			case 6:
+			case 4:
 				yych = *YYCURSOR;
 				if (yych != 0x00002203) {
-					yystate = 5;
+					yystate = 3;
 					continue;
 				}
 				++YYCURSOR;
 				yych = *YYCURSOR;
 				if (yych != 'y') {
-					yystate = 5;
+					yystate = 3;
 					continue;
 				}
 				++YYCURSOR;

@@ -16,7 +16,7 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 				match yych {
 					0x41 ..= 0x5A |
 					0x61 ..= 0x7A => {
-						yystate = 3;
+						yystate = 2;
 						continue;
 					}
 					_ => {
@@ -26,23 +26,23 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 				}
 			}
 			1 => { return false; }
-			3 => {
+			2 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
 				match yych {
 					0x30 ..= 0x39 |
 					0x41 ..= 0x5A |
 					0x61 ..= 0x7A => {
 						cursor += 1;
-						yystate = 3;
+						yystate = 2;
 						continue;
 					}
 					_ => {
-						yystate = 5;
+						yystate = 3;
 						continue;
 					}
 				}
 			}
-			5 => { return true; }
+			3 => { return true; }
 			_ => {
 				panic!("internal lexer error")
 			}

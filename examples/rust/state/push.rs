@@ -65,7 +65,7 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 					}
 					_ => {
 						if st.cur >= st.lim {
-							st.state = 10;
+							st.state = 8;
 							return Status::Waiting;
 						}
 						st.cur += 1;
@@ -93,12 +93,12 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 					}
 					0x61 ..= 0x7A => {
 						st.cur += 1;
-						yystate = 6;
+						yystate = 5;
 						continue;
 					}
 					_ => {
 						if st.cur >= st.lim {
-							st.state = 11;
+							st.state = 9;
 							return Status::Waiting;
 						}
 						yystate = 2;
@@ -110,7 +110,7 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 				st.state = -1;
 				{ *recv += 1; continue 'lex; }
 			}
-			6 => {
+			5 => {
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
 				match yych {
 					0x3B => {
@@ -120,37 +120,37 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 					}
 					0x61 ..= 0x7A => {
 						st.cur += 1;
-						yystate = 6;
+						yystate = 5;
 						continue;
 					}
 					_ => {
 						if st.cur >= st.lim {
-							st.state = 12;
+							st.state = 10;
 							return Status::Waiting;
 						}
-						yystate = 8;
+						yystate = 6;
 						continue;
 					}
 				}
 			}
-			8 => {
+			6 => {
 				st.cur = st.mar;
 				yystate = 2;
 				continue;
 			}
-			9 => {
+			7 => {
 				st.state = -1;
 				{ return Status::End; }
 			}
-			10 => {
+			8 => {
 				if st.cur >= st.lim {
-					yystate = 9;
+					yystate = 7;
 					continue;
 				}
 				yystate = 0;
 				continue;
 			}
-			11 => {
+			9 => {
 				if st.cur >= st.lim {
 					yystate = 2;
 					continue;
@@ -158,12 +158,12 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 				yystate = 3;
 				continue;
 			}
-			12 => {
+			10 => {
 				if st.cur >= st.lim {
-					yystate = 8;
+					yystate = 6;
 					continue;
 				}
-				yystate = 6;
+				yystate = 5;
 				continue;
 			}
 			_ => {

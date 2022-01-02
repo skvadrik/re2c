@@ -25,12 +25,12 @@ fn lex(s: &[u8]) -> isize {
 					}
 					0x27 => {
 						cursor += 1;
-						yystate = 6;
+						yystate = 5;
 						continue;
 					}
 					_ => {
 						if cursor >= limit {
-							yystate = 12;
+							yystate = 10;
 							continue;
 						}
 						cursor += 1;
@@ -53,17 +53,17 @@ fn lex(s: &[u8]) -> isize {
 						continue;
 					}
 					_ => {
-						yystate = 5;
+						yystate = 4;
 						continue;
 					}
 				}
 			}
-			5 => { continue 'lex; }
-			6 => {
+			4 => { continue 'lex; }
+			5 => {
 				marker = cursor;
 				yych = unsafe {*s.get_unchecked(cursor)};
 				if yych >= 0x01 {
-					yystate = 8;
+					yystate = 7;
 					continue;
 				}
 				if cursor >= limit {
@@ -71,55 +71,55 @@ fn lex(s: &[u8]) -> isize {
 					continue;
 				}
 				cursor += 1;
+				yystate = 6;
+				continue;
+			}
+			6 => {
+				yych = unsafe {*s.get_unchecked(cursor)};
 				yystate = 7;
 				continue;
 			}
 			7 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
-				yystate = 8;
-				continue;
-			}
-			8 => {
 				match yych {
 					0x27 => {
 						cursor += 1;
-						yystate = 9;
+						yystate = 8;
 						continue;
 					}
 					0x5C => {
 						cursor += 1;
-						yystate = 11;
+						yystate = 9;
 						continue;
 					}
 					_ => {
 						if cursor >= limit {
-							yystate = 13;
+							yystate = 11;
 							continue;
 						}
 						cursor += 1;
-						yystate = 7;
+						yystate = 6;
 						continue;
 					}
 				}
 			}
-			9 => { count += 1; continue 'lex; }
-			11 => {
+			8 => { count += 1; continue 'lex; }
+			9 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
 				if yych <= 0x00 {
 					if cursor >= limit {
-						yystate = 13;
+						yystate = 11;
 						continue;
 					}
 					cursor += 1;
-					yystate = 7;
+					yystate = 6;
 					continue;
 				}
 				cursor += 1;
-				yystate = 7;
+				yystate = 6;
 				continue;
 			}
-			12 => { return count; }
-			13 => {
+			10 => { return count; }
+			11 => {
 				cursor = marker;
 				yystate = 2;
 				continue;

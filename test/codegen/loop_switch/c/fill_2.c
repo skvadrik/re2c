@@ -65,55 +65,55 @@ loop:
 						yystate = 1;
 						continue;
 					case ' ':
-						yystate = 5;
+						yystate = 3;
 						continue;
 					case '\'':
-						yystate = 8;
+						yystate = 5;
 						continue;
 					default:
-						yystate = 3;
+						yystate = 2;
 						continue;
 				}
 			case 1:
 				{ return (in->lim - in->cur == YYMAXFILL - 1) ? count : -1; }
-			case 3:
+			case 2:
 				{ return -1; }
-			case 5:
+			case 3:
 				if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 				yych = *in->cur;
 				switch (yych) {
 					case ' ':
 						++in->cur;
-						yystate = 5;
+						yystate = 3;
 						continue;
 					default:
-						yystate = 7;
+						yystate = 4;
 						continue;
 				}
-			case 7:
+			case 4:
 				{ goto loop; }
-			case 8:
+			case 5:
 				if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 				yych = *in->cur;
 				++in->cur;
 				switch (yych) {
 					case '\'':
-						yystate = 10;
+						yystate = 6;
 						continue;
 					case '\\':
-						yystate = 12;
+						yystate = 7;
 						continue;
 					default:
-						yystate = 8;
+						yystate = 5;
 						continue;
 				}
-			case 10:
+			case 6:
 				{ ++count; goto loop; }
-			case 12:
+			case 7:
 				if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 				yych = *in->cur;
 				++in->cur;
-				yystate = 8;
+				yystate = 5;
 				continue;
 		}
 	}

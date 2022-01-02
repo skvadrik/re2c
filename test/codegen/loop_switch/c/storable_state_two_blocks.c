@@ -8,13 +8,13 @@
 		switch (yystate) {
 			case -1:
 			case 0:
-				YYSETSTATE(5);
+				YYSETSTATE(3);
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
 				++YYCURSOR;
 				switch (yych) {
 					case 'a':
-						yystate = 3;
+						yystate = 2;
 						continue;
 					default:
 						yystate = 1;
@@ -23,10 +23,10 @@
 			case 1:
 				YYSETSTATE(-1);
 				{ * }
-			case 3:
+			case 2:
 				YYSETSTATE(-1);
 				{ a }
-			case 5:
+			case 3:
 				yystate = 0;
 				continue;
 		}
@@ -44,11 +44,11 @@
 				switch (yych) {
 					case 'b':
 						++YYCURSOR;
-						yystate = 3;
+						yystate = 2;
 						continue;
 					default:
 						if (YYLIMIT <= YYCURSOR) {
-							YYSETSTATE(6);
+							YYSETSTATE(4);
 							YYFILL();
 						}
 						++YYCURSOR;
@@ -58,15 +58,15 @@
 			case 1:
 				YYSETSTATE(-1);
 				{ * }
-			case 3:
+			case 2:
 				YYSETSTATE(-1);
 				{ b }
-			case 5:
+			case 3:
 				YYSETSTATE(-1);
 				{ $ }
-			case 6:
+			case 4:
 				if (YYLIMIT <= YYCURSOR) {
-					yystate = 5;
+					yystate = 3;
 					continue;
 				}
 				yystate = 0;

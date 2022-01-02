@@ -150,43 +150,43 @@ func lexUTF32(str []uint32) int {
 			yych = str[cursor]
 			cursor += 1
 			if (yych == 0x00002200) {
-				yystate = 3
+				yystate = 2
 				continue
 			}
-			yystate = 2
+			yystate = 1
 			continue
-		case 2:
+		case 1:
 			{ return 1; }
-		case 3:
+		case 2:
 			marker = cursor
 			yych = str[cursor]
 			if (yych != 'x') {
-				yystate = 2
+				yystate = 1
 				continue
 			}
 			cursor += 1
 			yych = str[cursor]
 			if (yych == ' ') {
 				cursor += 1
-				yystate = 6
+				yystate = 4
 				continue
 			}
-			yystate = 5
+			yystate = 3
 			continue
-		case 5:
+		case 3:
 			cursor = marker
-			yystate = 2
+			yystate = 1
 			continue
-		case 6:
+		case 4:
 			yych = str[cursor]
 			if (yych != 0x00002203) {
-				yystate = 5
+				yystate = 3
 				continue
 			}
 			cursor += 1
 			yych = str[cursor]
 			if (yych != 'y') {
-				yystate = 5
+				yystate = 3
 				continue
 			}
 			cursor += 1

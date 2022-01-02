@@ -28,7 +28,7 @@ static uint64_t parse_u32(const char *s)
 				++s;
 				switch (yych) {
 					case '0':
-						yystate = 3;
+						yystate = 2;
 						continue;
 					case '1':
 					case '2':
@@ -39,7 +39,7 @@ static uint64_t parse_u32(const char *s)
 					case '7':
 					case '8':
 					case '9':
-						yystate = 5;
+						yystate = 4;
 						continue;
 					default:
 						yystate = 1;
@@ -47,46 +47,46 @@ static uint64_t parse_u32(const char *s)
 				}
 			case 1:
 				{ return ERROR; }
-			case 3:
+			case 2:
 				YYMARKER = s;
 				yych = *s;
 				switch (yych) {
 					case 'B':
 					case 'b':
 						++s;
-						yystate = 7;
+						yystate = 5;
 						continue;
 					case 'X':
 					case 'x':
 						++s;
-						yystate = 9;
+						yystate = 7;
 						continue;
 					default:
-						yystate = 4;
+						yystate = 3;
 						continue;
 				}
-			case 4:
+			case 3:
 				{ goto oct; }
-			case 5:
+			case 4:
 				s -= 1;
 				{ goto dec; }
-			case 7:
+			case 5:
 				yych = *s;
 				switch (yych) {
 					case '0':
 					case '1':
 						++s;
-						yystate = 10;
-						continue;
-					default:
 						yystate = 8;
 						continue;
+					default:
+						yystate = 6;
+						continue;
 				}
-			case 8:
+			case 6:
 				s = YYMARKER;
-				yystate = 4;
+				yystate = 3;
 				continue;
-			case 9:
+			case 7:
 				yych = *s;
 				switch (yych) {
 					case '0':
@@ -112,16 +112,16 @@ static uint64_t parse_u32(const char *s)
 					case 'e':
 					case 'f':
 						++s;
-						yystate = 12;
+						yystate = 9;
 						continue;
 					default:
-						yystate = 8;
+						yystate = 6;
 						continue;
 				}
-			case 10:
+			case 8:
 				s -= 1;
 				{ goto bin; }
-			case 12:
+			case 9:
 				s -= 1;
 				{ goto hex; }
 		}
@@ -144,17 +144,17 @@ bin:
 						continue;
 					case '0':
 					case '1':
-						yystate = 5;
+						yystate = 3;
 						continue;
 					default:
-						yystate = 3;
+						yystate = 2;
 						continue;
 				}
 			case 1:
 				{ return u; }
-			case 3:
+			case 2:
 				{ return ERROR; }
-			case 5:
+			case 3:
 				{ adddgt<2>(u, s[-1] - '0'); goto bin; }
 		}
 	}
@@ -182,17 +182,17 @@ oct:
 					case '5':
 					case '6':
 					case '7':
-						yystate = 5;
+						yystate = 3;
 						continue;
 					default:
-						yystate = 3;
+						yystate = 2;
 						continue;
 				}
 			case 1:
 				{ return u; }
-			case 3:
+			case 2:
 				{ return ERROR; }
-			case 5:
+			case 3:
 				{ adddgt<8>(u, s[-1] - '0'); goto oct; }
 		}
 	}
@@ -222,17 +222,17 @@ dec:
 					case '7':
 					case '8':
 					case '9':
-						yystate = 5;
+						yystate = 3;
 						continue;
 					default:
-						yystate = 3;
+						yystate = 2;
 						continue;
 				}
 			case 1:
 				{ return u; }
-			case 3:
+			case 2:
 				{ return ERROR; }
-			case 5:
+			case 3:
 				{ adddgt<10>(u, s[-1] - '0'); goto dec; }
 		}
 	}
@@ -262,7 +262,7 @@ hex:
 					case '7':
 					case '8':
 					case '9':
-						yystate = 5;
+						yystate = 3;
 						continue;
 					case 'A':
 					case 'B':
@@ -270,7 +270,7 @@ hex:
 					case 'D':
 					case 'E':
 					case 'F':
-						yystate = 7;
+						yystate = 4;
 						continue;
 					case 'a':
 					case 'b':
@@ -278,21 +278,21 @@ hex:
 					case 'd':
 					case 'e':
 					case 'f':
-						yystate = 9;
+						yystate = 5;
 						continue;
 					default:
-						yystate = 3;
+						yystate = 2;
 						continue;
 				}
 			case 1:
 				{ return u; }
-			case 3:
+			case 2:
 				{ return ERROR; }
-			case 5:
+			case 3:
 				{ adddgt<16>(u, s[-1] - '0');      goto hex; }
-			case 7:
+			case 4:
 				{ adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
-			case 9:
+			case 5:
 				{ adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
 		}
 	}

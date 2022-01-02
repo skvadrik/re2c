@@ -30,127 +30,127 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					0xC2 => {
-						yystate = 6;
+						yystate = 5;
 						continue;
 					}
 					0xC3 => {
-						yystate = 7;
+						yystate = 6;
 						continue;
 					}
 					0xC4 ..= 0xCA |
 					0xD0 ..= 0xD1 |
 					0xD3 |
 					0xDA => {
-						yystate = 8;
+						yystate = 7;
 						continue;
 					}
 					0xCB => {
-						yystate = 9;
+						yystate = 8;
 						continue;
 					}
 					0xCD => {
-						yystate = 10;
+						yystate = 9;
 						continue;
 					}
 					0xCE => {
-						yystate = 11;
+						yystate = 10;
 						continue;
 					}
 					0xCF => {
-						yystate = 12;
+						yystate = 11;
 						continue;
 					}
 					0xD2 => {
-						yystate = 13;
+						yystate = 12;
 						continue;
 					}
 					0xD4 => {
-						yystate = 14;
+						yystate = 13;
 						continue;
 					}
 					0xD5 => {
-						yystate = 15;
+						yystate = 14;
 						continue;
 					}
 					0xD6 => {
-						yystate = 16;
+						yystate = 15;
 						continue;
 					}
 					0xD7 => {
-						yystate = 17;
+						yystate = 16;
 						continue;
 					}
 					0xD8 => {
-						yystate = 18;
+						yystate = 17;
 						continue;
 					}
 					0xD9 => {
-						yystate = 19;
+						yystate = 18;
 						continue;
 					}
 					0xDB => {
-						yystate = 20;
+						yystate = 19;
 						continue;
 					}
 					0xDC => {
-						yystate = 21;
+						yystate = 20;
 						continue;
 					}
 					0xDD => {
-						yystate = 22;
+						yystate = 21;
 						continue;
 					}
 					0xDE => {
-						yystate = 23;
+						yystate = 22;
 						continue;
 					}
 					0xDF => {
-						yystate = 24;
+						yystate = 23;
 						continue;
 					}
 					0xE0 => {
-						yystate = 25;
+						yystate = 24;
 						continue;
 					}
 					0xE1 => {
-						yystate = 26;
+						yystate = 25;
 						continue;
 					}
 					0xE2 => {
-						yystate = 27;
+						yystate = 26;
 						continue;
 					}
 					0xE3 => {
-						yystate = 28;
+						yystate = 27;
 						continue;
 					}
 					0xE4 => {
-						yystate = 29;
+						yystate = 28;
 						continue;
 					}
 					0xE5 ..= 0xE8 |
 					0xEB ..= 0xEC => {
-						yystate = 30;
+						yystate = 29;
 						continue;
 					}
 					0xE9 => {
-						yystate = 31;
+						yystate = 30;
 						continue;
 					}
 					0xEA => {
-						yystate = 32;
+						yystate = 31;
 						continue;
 					}
 					0xED => {
-						yystate = 33;
+						yystate = 32;
 						continue;
 					}
 					0xEF => {
-						yystate = 34;
+						yystate = 33;
 						continue;
 					}
 					0xF0 => {
-						yystate = 35;
+						yystate = 34;
 						continue;
 					}
 					_ => {
@@ -180,12 +180,12 @@ fn lex(str: &[u8]) -> bool {
 					}
 					0xC2 => {
 						cur += 1;
-						yystate = 36;
+						yystate = 35;
 						continue;
 					}
 					0xC3 => {
 						cur += 1;
-						yystate = 38;
+						yystate = 37;
 						continue;
 					}
 					0xC4 ..= 0xCA |
@@ -194,158 +194,158 @@ fn lex(str: &[u8]) -> bool {
 					0xD3 |
 					0xDA => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
 					0xCB => {
 						cur += 1;
-						yystate = 40;
+						yystate = 39;
 						continue;
 					}
 					0xCD => {
 						cur += 1;
-						yystate = 41;
+						yystate = 40;
 						continue;
 					}
 					0xCE => {
 						cur += 1;
-						yystate = 42;
+						yystate = 41;
 						continue;
 					}
 					0xCF => {
 						cur += 1;
-						yystate = 43;
+						yystate = 42;
 						continue;
 					}
 					0xD2 => {
 						cur += 1;
-						yystate = 44;
+						yystate = 43;
 						continue;
 					}
 					0xD4 => {
 						cur += 1;
-						yystate = 45;
+						yystate = 44;
 						continue;
 					}
 					0xD5 => {
 						cur += 1;
-						yystate = 46;
+						yystate = 45;
 						continue;
 					}
 					0xD6 => {
 						cur += 1;
-						yystate = 47;
+						yystate = 46;
 						continue;
 					}
 					0xD7 => {
 						cur += 1;
-						yystate = 48;
+						yystate = 47;
 						continue;
 					}
 					0xD8 => {
 						cur += 1;
-						yystate = 49;
+						yystate = 48;
 						continue;
 					}
 					0xD9 => {
 						cur += 1;
-						yystate = 50;
+						yystate = 49;
 						continue;
 					}
 					0xDB => {
 						cur += 1;
-						yystate = 51;
+						yystate = 50;
 						continue;
 					}
 					0xDC => {
 						cur += 1;
-						yystate = 52;
+						yystate = 51;
 						continue;
 					}
 					0xDD => {
 						cur += 1;
-						yystate = 53;
+						yystate = 52;
 						continue;
 					}
 					0xDE => {
 						cur += 1;
-						yystate = 54;
+						yystate = 53;
 						continue;
 					}
 					0xDF => {
 						cur += 1;
-						yystate = 55;
+						yystate = 54;
 						continue;
 					}
 					0xE0 => {
 						cur += 1;
-						yystate = 56;
+						yystate = 55;
 						continue;
 					}
 					0xE1 => {
 						cur += 1;
-						yystate = 57;
+						yystate = 56;
 						continue;
 					}
 					0xE2 => {
 						cur += 1;
-						yystate = 58;
+						yystate = 57;
 						continue;
 					}
 					0xE3 => {
 						cur += 1;
-						yystate = 59;
+						yystate = 58;
 						continue;
 					}
 					0xE4 => {
 						cur += 1;
-						yystate = 60;
+						yystate = 59;
 						continue;
 					}
 					0xE5 ..= 0xE8 |
 					0xEB ..= 0xEC => {
 						cur += 1;
-						yystate = 61;
+						yystate = 60;
 						continue;
 					}
 					0xE9 => {
 						cur += 1;
-						yystate = 62;
+						yystate = 61;
 						continue;
 					}
 					0xEA => {
 						cur += 1;
-						yystate = 63;
+						yystate = 62;
 						continue;
 					}
 					0xED => {
 						cur += 1;
-						yystate = 64;
+						yystate = 63;
 						continue;
 					}
 					0xEF => {
 						cur += 1;
-						yystate = 65;
+						yystate = 64;
 						continue;
 					}
 					0xF0 => {
 						cur += 1;
-						yystate = 66;
+						yystate = 65;
 						continue;
 					}
 					0xF3 => {
 						cur += 1;
-						yystate = 67;
+						yystate = 66;
 						continue;
 					}
 					_ => {
-						yystate = 5;
+						yystate = 4;
 						continue;
 					}
 				}
 			}
-			5 => { return true; }
-			6 => {
+			4 => { return true; }
+			5 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xAA |
@@ -361,7 +361,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			7 => {
+			6 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x96 |
@@ -377,7 +377,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			8 => {
+			7 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xBF => {
@@ -391,7 +391,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			9 => {
+			8 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x81 |
@@ -409,7 +409,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			10 => {
+			9 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xB0 ..= 0xB4 |
@@ -426,7 +426,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			11 => {
+			10 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x86 |
@@ -444,7 +444,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			12 => {
+			11 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB5 |
@@ -459,7 +459,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			13 => {
+			12 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x81 |
@@ -474,7 +474,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			14 => {
+			13 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAF |
@@ -489,7 +489,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			15 => {
+			14 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x96 |
@@ -505,7 +505,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			16 => {
+			15 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x87 => {
@@ -519,7 +519,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			17 => {
+			16 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0xAA |
@@ -534,7 +534,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			18 => {
+			17 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA0 ..= 0xBF => {
@@ -548,7 +548,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			19 => {
+			18 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8A |
@@ -564,7 +564,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			20 => {
+			19 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x93 |
@@ -583,7 +583,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			21 => {
+			20 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 |
@@ -598,7 +598,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			22 => {
+			21 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8D ..= 0xBF => {
@@ -612,7 +612,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			23 => {
+			22 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA5 |
@@ -627,7 +627,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			24 => {
+			23 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8A ..= 0xAA |
@@ -643,155 +643,379 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			25 => {
+			24 => {
 				yyaccept = 1;
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA0 => {
 						cur += 1;
-						yystate = 68;
+						yystate = 67;
 						continue;
 					}
 					0xA1 => {
 						cur += 1;
-						yystate = 69;
+						yystate = 68;
 						continue;
 					}
 					0xA2 => {
 						cur += 1;
-						yystate = 70;
+						yystate = 69;
 						continue;
 					}
 					0xA4 => {
 						cur += 1;
-						yystate = 71;
+						yystate = 70;
 						continue;
 					}
 					0xA5 => {
 						cur += 1;
-						yystate = 72;
+						yystate = 71;
 						continue;
 					}
 					0xA6 => {
 						cur += 1;
-						yystate = 73;
+						yystate = 72;
 						continue;
 					}
 					0xA7 => {
 						cur += 1;
-						yystate = 74;
+						yystate = 73;
 						continue;
 					}
 					0xA8 => {
 						cur += 1;
-						yystate = 75;
+						yystate = 74;
 						continue;
 					}
 					0xA9 => {
 						cur += 1;
-						yystate = 76;
+						yystate = 75;
 						continue;
 					}
 					0xAA => {
 						cur += 1;
-						yystate = 77;
+						yystate = 76;
 						continue;
 					}
 					0xAB => {
 						cur += 1;
-						yystate = 78;
+						yystate = 77;
 						continue;
 					}
 					0xAC => {
 						cur += 1;
-						yystate = 79;
+						yystate = 78;
 						continue;
 					}
 					0xAD => {
 						cur += 1;
-						yystate = 80;
+						yystate = 79;
 						continue;
 					}
 					0xAE => {
 						cur += 1;
-						yystate = 81;
+						yystate = 80;
 						continue;
 					}
 					0xAF => {
 						cur += 1;
-						yystate = 82;
+						yystate = 81;
 						continue;
 					}
 					0xB0 => {
 						cur += 1;
-						yystate = 83;
+						yystate = 82;
 						continue;
 					}
 					0xB1 => {
 						cur += 1;
-						yystate = 84;
+						yystate = 83;
 						continue;
 					}
 					0xB2 => {
 						cur += 1;
-						yystate = 85;
+						yystate = 84;
 						continue;
 					}
 					0xB3 => {
 						cur += 1;
-						yystate = 86;
+						yystate = 85;
 						continue;
 					}
 					0xB4 => {
 						cur += 1;
-						yystate = 87;
+						yystate = 86;
 						continue;
 					}
 					0xB5 => {
 						cur += 1;
-						yystate = 88;
+						yystate = 87;
 						continue;
 					}
 					0xB6 => {
 						cur += 1;
-						yystate = 89;
+						yystate = 88;
 						continue;
 					}
 					0xB7 |
 					0xB9 => {
 						cur += 1;
-						yystate = 90;
+						yystate = 89;
 						continue;
 					}
 					0xB8 => {
 						cur += 1;
-						yystate = 91;
+						yystate = 90;
 						continue;
 					}
 					0xBA => {
 						cur += 1;
-						yystate = 92;
+						yystate = 91;
 						continue;
 					}
 					0xBB => {
 						cur += 1;
-						yystate = 93;
+						yystate = 92;
 						continue;
 					}
 					0xBC => {
 						cur += 1;
-						yystate = 94;
+						yystate = 93;
 						continue;
 					}
 					0xBD => {
 						cur += 1;
-						yystate = 95;
+						yystate = 94;
 						continue;
 					}
 					0xBE => {
 						cur += 1;
+						yystate = 95;
+						continue;
+					}
+					_ => {
+						yystate = 2;
+						continue;
+					}
+				}
+			}
+			25 => {
+				yyaccept = 1;
+				mar = cur;
+				yych = unsafe {*str.get_unchecked(cur)};
+				match yych {
+					0x80 => {
+						cur += 1;
 						yystate = 96;
+						continue;
+					}
+					0x81 => {
+						cur += 1;
+						yystate = 97;
+						continue;
+					}
+					0x82 => {
+						cur += 1;
+						yystate = 98;
+						continue;
+					}
+					0x83 => {
+						cur += 1;
+						yystate = 99;
+						continue;
+					}
+					0x84 ..= 0x88 |
+					0x91 ..= 0x98 |
+					0xB4 ..= 0xB6 |
+					0xB8 ..= 0xBB => {
+						cur += 1;
+						yystate = 38;
+						continue;
+					}
+					0x89 => {
+						cur += 1;
+						yystate = 100;
+						continue;
+					}
+					0x8A => {
+						cur += 1;
+						yystate = 101;
+						continue;
+					}
+					0x8B => {
+						cur += 1;
+						yystate = 102;
+						continue;
+					}
+					0x8C => {
+						cur += 1;
+						yystate = 103;
+						continue;
+					}
+					0x8D => {
+						cur += 1;
+						yystate = 104;
+						continue;
+					}
+					0x8E => {
+						cur += 1;
+						yystate = 105;
+						continue;
+					}
+					0x8F => {
+						cur += 1;
+						yystate = 106;
+						continue;
+					}
+					0x90 => {
+						cur += 1;
+						yystate = 107;
+						continue;
+					}
+					0x99 => {
+						cur += 1;
+						yystate = 108;
+						continue;
+					}
+					0x9A => {
+						cur += 1;
+						yystate = 109;
+						continue;
+					}
+					0x9B => {
+						cur += 1;
+						yystate = 110;
+						continue;
+					}
+					0x9C => {
+						cur += 1;
+						yystate = 111;
+						continue;
+					}
+					0x9D => {
+						cur += 1;
+						yystate = 112;
+						continue;
+					}
+					0x9E => {
+						cur += 1;
+						yystate = 113;
+						continue;
+					}
+					0x9F => {
+						cur += 1;
+						yystate = 114;
+						continue;
+					}
+					0xA0 => {
+						cur += 1;
+						yystate = 115;
+						continue;
+					}
+					0xA1 => {
+						cur += 1;
+						yystate = 116;
+						continue;
+					}
+					0xA2 => {
+						cur += 1;
+						yystate = 117;
+						continue;
+					}
+					0xA3 => {
+						cur += 1;
+						yystate = 118;
+						continue;
+					}
+					0xA4 => {
+						cur += 1;
+						yystate = 119;
+						continue;
+					}
+					0xA5 => {
+						cur += 1;
+						yystate = 120;
+						continue;
+					}
+					0xA6 => {
+						cur += 1;
+						yystate = 121;
+						continue;
+					}
+					0xA7 => {
+						cur += 1;
+						yystate = 122;
+						continue;
+					}
+					0xA8 => {
+						cur += 1;
+						yystate = 123;
+						continue;
+					}
+					0xA9 => {
+						cur += 1;
+						yystate = 124;
+						continue;
+					}
+					0xAA => {
+						cur += 1;
+						yystate = 125;
+						continue;
+					}
+					0xAC => {
+						cur += 1;
+						yystate = 126;
+						continue;
+					}
+					0xAD => {
+						cur += 1;
+						yystate = 127;
+						continue;
+					}
+					0xAE => {
+						cur += 1;
+						yystate = 128;
+						continue;
+					}
+					0xAF => {
+						cur += 1;
+						yystate = 129;
+						continue;
+					}
+					0xB0 => {
+						cur += 1;
+						yystate = 130;
+						continue;
+					}
+					0xB1 => {
+						cur += 1;
+						yystate = 131;
+						continue;
+					}
+					0xB3 => {
+						cur += 1;
+						yystate = 132;
+						continue;
+					}
+					0xBC => {
+						cur += 1;
+						yystate = 133;
+						continue;
+					}
+					0xBD => {
+						cur += 1;
+						yystate = 134;
+						continue;
+					}
+					0xBE => {
+						cur += 1;
+						yystate = 135;
+						continue;
+					}
+					0xBF => {
+						cur += 1;
+						yystate = 136;
 						continue;
 					}
 					_ => {
@@ -805,217 +1029,74 @@ fn lex(str: &[u8]) -> bool {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 => {
-						cur += 1;
-						yystate = 97;
-						continue;
-					}
 					0x81 => {
 						cur += 1;
-						yystate = 98;
+						yystate = 137;
 						continue;
 					}
 					0x82 => {
 						cur += 1;
-						yystate = 99;
+						yystate = 138;
 						continue;
 					}
-					0x83 => {
+					0x84 => {
 						cur += 1;
-						yystate = 100;
+						yystate = 139;
 						continue;
 					}
-					0x84 ..= 0x88 |
-					0x91 ..= 0x98 |
-					0xB4 ..= 0xB6 |
-					0xB8 ..= 0xBB => {
+					0x85 => {
 						cur += 1;
-						yystate = 39;
+						yystate = 140;
 						continue;
 					}
-					0x89 => {
+					0x86 => {
 						cur += 1;
-						yystate = 101;
-						continue;
-					}
-					0x8A => {
-						cur += 1;
-						yystate = 102;
-						continue;
-					}
-					0x8B => {
-						cur += 1;
-						yystate = 103;
-						continue;
-					}
-					0x8C => {
-						cur += 1;
-						yystate = 104;
-						continue;
-					}
-					0x8D => {
-						cur += 1;
-						yystate = 105;
-						continue;
-					}
-					0x8E => {
-						cur += 1;
-						yystate = 106;
-						continue;
-					}
-					0x8F => {
-						cur += 1;
-						yystate = 107;
-						continue;
-					}
-					0x90 => {
-						cur += 1;
-						yystate = 108;
-						continue;
-					}
-					0x99 => {
-						cur += 1;
-						yystate = 109;
-						continue;
-					}
-					0x9A => {
-						cur += 1;
-						yystate = 110;
-						continue;
-					}
-					0x9B => {
-						cur += 1;
-						yystate = 111;
-						continue;
-					}
-					0x9C => {
-						cur += 1;
-						yystate = 112;
-						continue;
-					}
-					0x9D => {
-						cur += 1;
-						yystate = 113;
-						continue;
-					}
-					0x9E => {
-						cur += 1;
-						yystate = 114;
-						continue;
-					}
-					0x9F => {
-						cur += 1;
-						yystate = 115;
-						continue;
-					}
-					0xA0 => {
-						cur += 1;
-						yystate = 116;
-						continue;
-					}
-					0xA1 => {
-						cur += 1;
-						yystate = 117;
-						continue;
-					}
-					0xA2 => {
-						cur += 1;
-						yystate = 118;
-						continue;
-					}
-					0xA3 => {
-						cur += 1;
-						yystate = 119;
-						continue;
-					}
-					0xA4 => {
-						cur += 1;
-						yystate = 120;
-						continue;
-					}
-					0xA5 => {
-						cur += 1;
-						yystate = 121;
-						continue;
-					}
-					0xA6 => {
-						cur += 1;
-						yystate = 122;
-						continue;
-					}
-					0xA7 => {
-						cur += 1;
-						yystate = 123;
-						continue;
-					}
-					0xA8 => {
-						cur += 1;
-						yystate = 124;
-						continue;
-					}
-					0xA9 => {
-						cur += 1;
-						yystate = 125;
-						continue;
-					}
-					0xAA => {
-						cur += 1;
-						yystate = 126;
-						continue;
-					}
-					0xAC => {
-						cur += 1;
-						yystate = 127;
-						continue;
-					}
-					0xAD => {
-						cur += 1;
-						yystate = 128;
-						continue;
-					}
-					0xAE => {
-						cur += 1;
-						yystate = 129;
-						continue;
-					}
-					0xAF => {
-						cur += 1;
-						yystate = 130;
+						yystate = 141;
 						continue;
 					}
 					0xB0 => {
 						cur += 1;
-						yystate = 131;
+						yystate = 142;
 						continue;
 					}
 					0xB1 => {
 						cur += 1;
-						yystate = 132;
+						yystate = 143;
+						continue;
+					}
+					0xB2 => {
+						cur += 1;
+						yystate = 38;
 						continue;
 					}
 					0xB3 => {
 						cur += 1;
-						yystate = 133;
+						yystate = 144;
 						continue;
 					}
-					0xBC => {
+					0xB4 => {
 						cur += 1;
-						yystate = 134;
+						yystate = 145;
 						continue;
 					}
-					0xBD => {
+					0xB5 => {
 						cur += 1;
-						yystate = 135;
+						yystate = 146;
 						continue;
 					}
-					0xBE => {
+					0xB6 => {
 						cur += 1;
-						yystate = 136;
+						yystate = 147;
 						continue;
 					}
-					0xBF => {
+					0xB7 => {
 						cur += 1;
-						yystate = 137;
+						yystate = 148;
+						continue;
+					}
+					0xB8 => {
+						cur += 1;
+						yystate = 149;
 						continue;
 					}
 					_ => {
@@ -1029,74 +1110,45 @@ fn lex(str: &[u8]) -> bool {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
+					0x80 => {
+						cur += 1;
+						yystate = 150;
+						continue;
+					}
 					0x81 => {
 						cur += 1;
-						yystate = 138;
+						yystate = 107;
 						continue;
 					}
 					0x82 => {
 						cur += 1;
-						yystate = 139;
+						yystate = 151;
+						continue;
+					}
+					0x83 => {
+						cur += 1;
+						yystate = 152;
 						continue;
 					}
 					0x84 => {
 						cur += 1;
-						yystate = 140;
+						yystate = 153;
 						continue;
 					}
-					0x85 => {
+					0x85 |
+					0x90 ..= 0xBF => {
 						cur += 1;
-						yystate = 141;
+						yystate = 38;
 						continue;
 					}
 					0x86 => {
 						cur += 1;
-						yystate = 142;
+						yystate = 154;
 						continue;
 					}
-					0xB0 => {
+					0x87 => {
 						cur += 1;
-						yystate = 143;
-						continue;
-					}
-					0xB1 => {
-						cur += 1;
-						yystate = 144;
-						continue;
-					}
-					0xB2 => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xB3 => {
-						cur += 1;
-						yystate = 145;
-						continue;
-					}
-					0xB4 => {
-						cur += 1;
-						yystate = 146;
-						continue;
-					}
-					0xB5 => {
-						cur += 1;
-						yystate = 147;
-						continue;
-					}
-					0xB6 => {
-						cur += 1;
-						yystate = 148;
-						continue;
-					}
-					0xB7 => {
-						cur += 1;
-						yystate = 149;
-						continue;
-					}
-					0xB8 => {
-						cur += 1;
-						yystate = 150;
+						yystate = 155;
 						continue;
 					}
 					_ => {
@@ -1110,45 +1162,15 @@ fn lex(str: &[u8]) -> bool {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 => {
+					0x80 ..= 0xB5 |
+					0xB8 ..= 0xBF => {
 						cur += 1;
-						yystate = 151;
+						yystate = 38;
 						continue;
 					}
-					0x81 => {
+					0xB6 => {
 						cur += 1;
-						yystate = 108;
-						continue;
-					}
-					0x82 => {
-						cur += 1;
-						yystate = 152;
-						continue;
-					}
-					0x83 => {
-						cur += 1;
-						yystate = 153;
-						continue;
-					}
-					0x84 => {
-						cur += 1;
-						yystate = 154;
-						continue;
-					}
-					0x85 |
-					0x90 ..= 0xBF => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0x86 => {
-						cur += 1;
-						yystate = 155;
-						continue;
-					}
-					0x87 => {
-						cur += 1;
-						yystate = 156;
+						yystate = 118;
 						continue;
 					}
 					_ => {
@@ -1162,15 +1184,9 @@ fn lex(str: &[u8]) -> bool {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0xB5 |
-					0xB8 ..= 0xBF => {
+					0x80 ..= 0xBF => {
 						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xB6 => {
-						cur += 1;
-						yystate = 119;
+						yystate = 38;
 						continue;
 					}
 					_ => {
@@ -1184,9 +1200,14 @@ fn lex(str: &[u8]) -> bool {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0xBF => {
+					0x80 ..= 0xBE => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
+						continue;
+					}
+					0xBF => {
+						cur += 1;
+						yystate = 156;
 						continue;
 					}
 					_ => {
@@ -1200,14 +1221,132 @@ fn lex(str: &[u8]) -> bool {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0xBE => {
+					0x80 ..= 0x91 |
+					0x94 ..= 0x97 |
+					0x9D |
+					0xB0 ..= 0xBF => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
-					0xBF => {
+					0x92 => {
+						cur += 1;
+						yystate = 156;
+						continue;
+					}
+					0x93 => {
 						cur += 1;
 						yystate = 157;
+						continue;
+					}
+					0x98 => {
+						cur += 1;
+						yystate = 158;
+						continue;
+					}
+					0x99 => {
+						cur += 1;
+						yystate = 159;
+						continue;
+					}
+					0x9A => {
+						cur += 1;
+						yystate = 160;
+						continue;
+					}
+					0x9B => {
+						cur += 1;
+						yystate = 161;
+						continue;
+					}
+					0x9C => {
+						cur += 1;
+						yystate = 162;
+						continue;
+					}
+					0x9E => {
+						cur += 1;
+						yystate = 163;
+						continue;
+					}
+					0x9F => {
+						cur += 1;
+						yystate = 164;
+						continue;
+					}
+					0xA0 => {
+						cur += 1;
+						yystate = 165;
+						continue;
+					}
+					0xA1 => {
+						cur += 1;
+						yystate = 113;
+						continue;
+					}
+					0xA2 => {
+						cur += 1;
+						yystate = 166;
+						continue;
+					}
+					0xA3 => {
+						cur += 1;
+						yystate = 167;
+						continue;
+					}
+					0xA4 => {
+						cur += 1;
+						yystate = 168;
+						continue;
+					}
+					0xA5 => {
+						cur += 1;
+						yystate = 169;
+						continue;
+					}
+					0xA6 => {
+						cur += 1;
+						yystate = 170;
+						continue;
+					}
+					0xA7 => {
+						cur += 1;
+						yystate = 171;
+						continue;
+					}
+					0xA8 => {
+						cur += 1;
+						yystate = 172;
+						continue;
+					}
+					0xA9 => {
+						cur += 1;
+						yystate = 173;
+						continue;
+					}
+					0xAA => {
+						cur += 1;
+						yystate = 174;
+						continue;
+					}
+					0xAB => {
+						cur += 1;
+						yystate = 175;
+						continue;
+					}
+					0xAC => {
+						cur += 1;
+						yystate = 176;
+						continue;
+					}
+					0xAD => {
+						cur += 1;
+						yystate = 177;
+						continue;
+					}
+					0xAF => {
+						cur += 1;
+						yystate = 178;
 						continue;
 					}
 					_ => {
@@ -1221,132 +1360,19 @@ fn lex(str: &[u8]) -> bool {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0x91 |
-					0x94 ..= 0x97 |
-					0x9D |
-					0xB0 ..= 0xBF => {
+					0x80 ..= 0x9D => {
 						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0x92 => {
-						cur += 1;
-						yystate = 157;
-						continue;
-					}
-					0x93 => {
-						cur += 1;
-						yystate = 158;
-						continue;
-					}
-					0x98 => {
-						cur += 1;
-						yystate = 159;
-						continue;
-					}
-					0x99 => {
-						cur += 1;
-						yystate = 160;
-						continue;
-					}
-					0x9A => {
-						cur += 1;
-						yystate = 161;
-						continue;
-					}
-					0x9B => {
-						cur += 1;
-						yystate = 162;
-						continue;
-					}
-					0x9C => {
-						cur += 1;
-						yystate = 163;
+						yystate = 38;
 						continue;
 					}
 					0x9E => {
 						cur += 1;
-						yystate = 164;
+						yystate = 179;
 						continue;
 					}
 					0x9F => {
 						cur += 1;
-						yystate = 165;
-						continue;
-					}
-					0xA0 => {
-						cur += 1;
-						yystate = 166;
-						continue;
-					}
-					0xA1 => {
-						cur += 1;
-						yystate = 114;
-						continue;
-					}
-					0xA2 => {
-						cur += 1;
-						yystate = 167;
-						continue;
-					}
-					0xA3 => {
-						cur += 1;
-						yystate = 168;
-						continue;
-					}
-					0xA4 => {
-						cur += 1;
-						yystate = 169;
-						continue;
-					}
-					0xA5 => {
-						cur += 1;
-						yystate = 170;
-						continue;
-					}
-					0xA6 => {
-						cur += 1;
-						yystate = 171;
-						continue;
-					}
-					0xA7 => {
-						cur += 1;
-						yystate = 172;
-						continue;
-					}
-					0xA8 => {
-						cur += 1;
-						yystate = 173;
-						continue;
-					}
-					0xA9 => {
-						cur += 1;
-						yystate = 174;
-						continue;
-					}
-					0xAA => {
-						cur += 1;
-						yystate = 175;
-						continue;
-					}
-					0xAB => {
-						cur += 1;
-						yystate = 176;
-						continue;
-					}
-					0xAC => {
-						cur += 1;
-						yystate = 177;
-						continue;
-					}
-					0xAD => {
-						cur += 1;
-						yystate = 178;
-						continue;
-					}
-					0xAF => {
-						cur += 1;
-						yystate = 179;
+						yystate = 180;
 						continue;
 					}
 					_ => {
@@ -1360,19 +1386,92 @@ fn lex(str: &[u8]) -> bool {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0x9D => {
+					0xA4 ..= 0xA8 |
+					0xAA |
+					0xB0 ..= 0xB3 |
+					0xBA => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
-					0x9E => {
-						cur += 1;
-						yystate = 180;
-						continue;
-					}
-					0x9F => {
+					0xA9 => {
 						cur += 1;
 						yystate = 181;
+						continue;
+					}
+					0xAB => {
+						cur += 1;
+						yystate = 182;
+						continue;
+					}
+					0xAC => {
+						cur += 1;
+						yystate = 183;
+						continue;
+					}
+					0xAD => {
+						cur += 1;
+						yystate = 184;
+						continue;
+					}
+					0xAE => {
+						cur += 1;
+						yystate = 53;
+						continue;
+					}
+					0xAF => {
+						cur += 1;
+						yystate = 185;
+						continue;
+					}
+					0xB4 => {
+						cur += 1;
+						yystate = 186;
+						continue;
+					}
+					0xB5 => {
+						cur += 1;
+						yystate = 51;
+						continue;
+					}
+					0xB6 => {
+						cur += 1;
+						yystate = 187;
+						continue;
+					}
+					0xB7 => {
+						cur += 1;
+						yystate = 188;
+						continue;
+					}
+					0xB9 => {
+						cur += 1;
+						yystate = 189;
+						continue;
+					}
+					0xBB => {
+						cur += 1;
+						yystate = 190;
+						continue;
+					}
+					0xBC => {
+						cur += 1;
+						yystate = 191;
+						continue;
+					}
+					0xBD => {
+						cur += 1;
+						yystate = 192;
+						continue;
+					}
+					0xBE => {
+						cur += 1;
+						yystate = 193;
+						continue;
+					}
+					0xBF => {
+						cur += 1;
+						yystate = 194;
 						continue;
 					}
 					_ => {
@@ -1386,92 +1485,64 @@ fn lex(str: &[u8]) -> bool {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0xA4 ..= 0xA8 |
-					0xAA |
-					0xB0 ..= 0xB3 |
-					0xBA => {
+					0x90 => {
 						cur += 1;
-						yystate = 39;
+						yystate = 195;
 						continue;
 					}
-					0xA9 => {
+					0x91 => {
 						cur += 1;
-						yystate = 182;
+						yystate = 196;
+						continue;
+					}
+					0x92 => {
+						cur += 1;
+						yystate = 197;
+						continue;
+					}
+					0x93 => {
+						cur += 1;
+						yystate = 198;
+						continue;
+					}
+					0x96 => {
+						cur += 1;
+						yystate = 199;
+						continue;
+					}
+					0x9B => {
+						cur += 1;
+						yystate = 200;
+						continue;
+					}
+					0x9D => {
+						cur += 1;
+						yystate = 201;
+						continue;
+					}
+					0x9E => {
+						cur += 1;
+						yystate = 202;
+						continue;
+					}
+					0xA0 ..= 0xA9 => {
+						cur += 1;
+						yystate = 60;
+						continue;
+					}
+					0xAA => {
+						cur += 1;
+						yystate = 203;
 						continue;
 					}
 					0xAB => {
 						cur += 1;
-						yystate = 183;
-						continue;
-					}
-					0xAC => {
-						cur += 1;
-						yystate = 184;
-						continue;
-					}
-					0xAD => {
-						cur += 1;
-						yystate = 185;
-						continue;
-					}
-					0xAE => {
-						cur += 1;
-						yystate = 54;
+						yystate = 204;
 						continue;
 					}
 					0xAF => {
 						cur += 1;
-						yystate = 186;
-						continue;
-					}
-					0xB4 => {
-						cur += 1;
-						yystate = 187;
-						continue;
-					}
-					0xB5 => {
-						cur += 1;
-						yystate = 52;
-						continue;
-					}
-					0xB6 => {
-						cur += 1;
-						yystate = 188;
-						continue;
-					}
-					0xB7 => {
-						cur += 1;
-						yystate = 189;
-						continue;
-					}
-					0xB9 => {
-						cur += 1;
-						yystate = 190;
-						continue;
-					}
-					0xBB => {
-						cur += 1;
-						yystate = 191;
-						continue;
-					}
-					0xBC => {
-						cur += 1;
-						yystate = 192;
-						continue;
-					}
-					0xBD => {
-						cur += 1;
-						yystate = 193;
-						continue;
-					}
-					0xBE => {
-						cur += 1;
-						yystate = 194;
-						continue;
-					}
-					0xBF => {
-						cur += 1;
-						yystate = 195;
+						yystate = 205;
 						continue;
 					}
 					_ => {
@@ -1481,77 +1552,6 @@ fn lex(str: &[u8]) -> bool {
 				}
 			}
 			35 => {
-				yyaccept = 1;
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
-				match yych {
-					0x90 => {
-						cur += 1;
-						yystate = 196;
-						continue;
-					}
-					0x91 => {
-						cur += 1;
-						yystate = 197;
-						continue;
-					}
-					0x92 => {
-						cur += 1;
-						yystate = 198;
-						continue;
-					}
-					0x93 => {
-						cur += 1;
-						yystate = 199;
-						continue;
-					}
-					0x96 => {
-						cur += 1;
-						yystate = 200;
-						continue;
-					}
-					0x9B => {
-						cur += 1;
-						yystate = 201;
-						continue;
-					}
-					0x9D => {
-						cur += 1;
-						yystate = 202;
-						continue;
-					}
-					0x9E => {
-						cur += 1;
-						yystate = 203;
-						continue;
-					}
-					0xA0 ..= 0xA9 => {
-						cur += 1;
-						yystate = 61;
-						continue;
-					}
-					0xAA => {
-						cur += 1;
-						yystate = 204;
-						continue;
-					}
-					0xAB => {
-						cur += 1;
-						yystate = 205;
-						continue;
-					}
-					0xAF => {
-						cur += 1;
-						yystate = 206;
-						continue;
-					}
-					_ => {
-						yystate = 2;
-						continue;
-					}
-				}
-			}
-			36 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xAA |
@@ -1562,22 +1562,22 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			37 => {
+			36 => {
 				cur = mar;
 				if yyaccept == 0 {
-					yystate = 5;
+					yystate = 4;
 					continue;
 				} else {
 					yystate = 2;
 					continue;
 				}
 			}
-			38 => {
+			37 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x96 |
@@ -1588,12 +1588,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			39 => {
+			38 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xBF => {
@@ -1602,12 +1602,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			40 => {
+			39 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x81 |
@@ -1620,12 +1620,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			41 => {
+			40 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB4 |
@@ -1637,12 +1637,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			42 => {
+			41 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x86 |
@@ -1655,12 +1655,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			43 => {
+			42 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB5 |
@@ -1670,12 +1670,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			44 => {
+			43 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x81 |
@@ -1686,12 +1686,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			45 => {
+			44 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAF |
@@ -1701,12 +1701,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			46 => {
+			45 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x96 |
@@ -1717,12 +1717,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			47 => {
+			46 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x87 |
@@ -1733,12 +1733,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			48 => {
+			47 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x82 |
@@ -1751,12 +1751,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			49 => {
+			48 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0x9A |
@@ -1766,12 +1766,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			50 => {
+			49 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA9 |
@@ -1781,12 +1781,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			51 => {
+			50 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x93 |
@@ -1799,12 +1799,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			52 => {
+			51 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0xBF => {
@@ -1813,12 +1813,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			53 => {
+			52 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8A |
@@ -1828,12 +1828,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			54 => {
+			53 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB1 => {
@@ -1842,12 +1842,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			55 => {
+			54 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB5 |
@@ -1857,181 +1857,181 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
+						continue;
+					}
+				}
+			}
+			55 => {
+				yych = unsafe {*str.get_unchecked(cur)};
+				match yych {
+					0xA0 => {
+						cur += 1;
+						yystate = 206;
+						continue;
+					}
+					0xA1 => {
+						cur += 1;
+						yystate = 207;
+						continue;
+					}
+					0xA2 => {
+						cur += 1;
+						yystate = 69;
+						continue;
+					}
+					0xA3 => {
+						cur += 1;
+						yystate = 208;
+						continue;
+					}
+					0xA4 => {
+						cur += 1;
+						yystate = 38;
+						continue;
+					}
+					0xA5 => {
+						cur += 1;
+						yystate = 209;
+						continue;
+					}
+					0xA6 => {
+						cur += 1;
+						yystate = 210;
+						continue;
+					}
+					0xA7 => {
+						cur += 1;
+						yystate = 211;
+						continue;
+					}
+					0xA8 => {
+						cur += 1;
+						yystate = 212;
+						continue;
+					}
+					0xA9 => {
+						cur += 1;
+						yystate = 213;
+						continue;
+					}
+					0xAA => {
+						cur += 1;
+						yystate = 214;
+						continue;
+					}
+					0xAB => {
+						cur += 1;
+						yystate = 215;
+						continue;
+					}
+					0xAC => {
+						cur += 1;
+						yystate = 216;
+						continue;
+					}
+					0xAD => {
+						cur += 1;
+						yystate = 217;
+						continue;
+					}
+					0xAE => {
+						cur += 1;
+						yystate = 218;
+						continue;
+					}
+					0xAF => {
+						cur += 1;
+						yystate = 219;
+						continue;
+					}
+					0xB0 => {
+						cur += 1;
+						yystate = 220;
+						continue;
+					}
+					0xB1 => {
+						cur += 1;
+						yystate = 221;
+						continue;
+					}
+					0xB2 => {
+						cur += 1;
+						yystate = 222;
+						continue;
+					}
+					0xB3 => {
+						cur += 1;
+						yystate = 223;
+						continue;
+					}
+					0xB4 => {
+						cur += 1;
+						yystate = 224;
+						continue;
+					}
+					0xB5 => {
+						cur += 1;
+						yystate = 225;
+						continue;
+					}
+					0xB6 => {
+						cur += 1;
+						yystate = 226;
+						continue;
+					}
+					0xB7 => {
+						cur += 1;
+						yystate = 227;
+						continue;
+					}
+					0xB8 => {
+						cur += 1;
+						yystate = 228;
+						continue;
+					}
+					0xB9 => {
+						cur += 1;
+						yystate = 229;
+						continue;
+					}
+					0xBA => {
+						cur += 1;
+						yystate = 230;
+						continue;
+					}
+					0xBB => {
+						cur += 1;
+						yystate = 231;
+						continue;
+					}
+					0xBC => {
+						cur += 1;
+						yystate = 232;
+						continue;
+					}
+					0xBD => {
+						cur += 1;
+						yystate = 233;
+						continue;
+					}
+					0xBE => {
+						cur += 1;
+						yystate = 234;
+						continue;
+					}
+					0xBF => {
+						cur += 1;
+						yystate = 235;
+						continue;
+					}
+					_ => {
+						yystate = 36;
 						continue;
 					}
 				}
 			}
 			56 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				match yych {
-					0xA0 => {
-						cur += 1;
-						yystate = 207;
-						continue;
-					}
-					0xA1 => {
-						cur += 1;
-						yystate = 208;
-						continue;
-					}
-					0xA2 => {
-						cur += 1;
-						yystate = 70;
-						continue;
-					}
-					0xA3 => {
-						cur += 1;
-						yystate = 209;
-						continue;
-					}
-					0xA4 => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xA5 => {
-						cur += 1;
-						yystate = 210;
-						continue;
-					}
-					0xA6 => {
-						cur += 1;
-						yystate = 211;
-						continue;
-					}
-					0xA7 => {
-						cur += 1;
-						yystate = 212;
-						continue;
-					}
-					0xA8 => {
-						cur += 1;
-						yystate = 213;
-						continue;
-					}
-					0xA9 => {
-						cur += 1;
-						yystate = 214;
-						continue;
-					}
-					0xAA => {
-						cur += 1;
-						yystate = 215;
-						continue;
-					}
-					0xAB => {
-						cur += 1;
-						yystate = 216;
-						continue;
-					}
-					0xAC => {
-						cur += 1;
-						yystate = 217;
-						continue;
-					}
-					0xAD => {
-						cur += 1;
-						yystate = 218;
-						continue;
-					}
-					0xAE => {
-						cur += 1;
-						yystate = 219;
-						continue;
-					}
-					0xAF => {
-						cur += 1;
-						yystate = 220;
-						continue;
-					}
-					0xB0 => {
-						cur += 1;
-						yystate = 221;
-						continue;
-					}
-					0xB1 => {
-						cur += 1;
-						yystate = 222;
-						continue;
-					}
-					0xB2 => {
-						cur += 1;
-						yystate = 223;
-						continue;
-					}
-					0xB3 => {
-						cur += 1;
-						yystate = 224;
-						continue;
-					}
-					0xB4 => {
-						cur += 1;
-						yystate = 225;
-						continue;
-					}
-					0xB5 => {
-						cur += 1;
-						yystate = 226;
-						continue;
-					}
-					0xB6 => {
-						cur += 1;
-						yystate = 227;
-						continue;
-					}
-					0xB7 => {
-						cur += 1;
-						yystate = 228;
-						continue;
-					}
-					0xB8 => {
-						cur += 1;
-						yystate = 229;
-						continue;
-					}
-					0xB9 => {
-						cur += 1;
-						yystate = 230;
-						continue;
-					}
-					0xBA => {
-						cur += 1;
-						yystate = 231;
-						continue;
-					}
-					0xBB => {
-						cur += 1;
-						yystate = 232;
-						continue;
-					}
-					0xBC => {
-						cur += 1;
-						yystate = 233;
-						continue;
-					}
-					0xBD => {
-						cur += 1;
-						yystate = 234;
-						continue;
-					}
-					0xBE => {
-						cur += 1;
-						yystate = 235;
-						continue;
-					}
-					0xBF => {
-						cur += 1;
-						yystate = 236;
-						continue;
-					}
-					_ => {
-						yystate = 37;
-						continue;
-					}
-				}
-			}
-			57 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -2043,197 +2043,286 @@ fn lex(str: &[u8]) -> bool {
 					0xB4 ..= 0xB6 |
 					0xB8 ..= 0xBB => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
 					0x81 => {
 						cur += 1;
-						yystate = 237;
+						yystate = 236;
 						continue;
 					}
 					0x82 => {
 						cur += 1;
-						yystate = 161;
+						yystate = 160;
 						continue;
 					}
 					0x83 => {
 						cur += 1;
-						yystate = 100;
+						yystate = 99;
 						continue;
 					}
 					0x89 => {
 						cur += 1;
-						yystate = 101;
+						yystate = 100;
 						continue;
 					}
 					0x8A => {
 						cur += 1;
-						yystate = 102;
+						yystate = 101;
 						continue;
 					}
 					0x8B => {
 						cur += 1;
-						yystate = 103;
+						yystate = 102;
 						continue;
 					}
 					0x8C => {
 						cur += 1;
-						yystate = 104;
+						yystate = 103;
 						continue;
 					}
 					0x8D => {
 						cur += 1;
-						yystate = 238;
+						yystate = 237;
 						continue;
 					}
 					0x8E => {
 						cur += 1;
-						yystate = 106;
+						yystate = 105;
 						continue;
 					}
 					0x8F => {
 						cur += 1;
-						yystate = 107;
+						yystate = 106;
 						continue;
 					}
 					0x90 => {
 						cur += 1;
-						yystate = 108;
+						yystate = 107;
 						continue;
 					}
 					0x99 => {
 						cur += 1;
-						yystate = 109;
+						yystate = 108;
 						continue;
 					}
 					0x9A => {
 						cur += 1;
-						yystate = 110;
+						yystate = 109;
 						continue;
 					}
 					0x9B => {
 						cur += 1;
-						yystate = 111;
+						yystate = 110;
 						continue;
 					}
 					0x9C => {
 						cur += 1;
-						yystate = 239;
+						yystate = 238;
 						continue;
 					}
 					0x9D => {
 						cur += 1;
-						yystate = 240;
+						yystate = 239;
 						continue;
 					}
 					0x9F => {
 						cur += 1;
-						yystate = 241;
+						yystate = 240;
 						continue;
 					}
 					0xA0 => {
 						cur += 1;
-						yystate = 242;
+						yystate = 241;
 						continue;
 					}
 					0xA1 |
 					0xB0 => {
 						cur += 1;
-						yystate = 117;
+						yystate = 116;
 						continue;
 					}
 					0xA2 => {
 						cur += 1;
-						yystate = 243;
+						yystate = 242;
 						continue;
 					}
 					0xA3 => {
 						cur += 1;
-						yystate = 119;
+						yystate = 118;
 						continue;
 					}
 					0xA4 => {
 						cur += 1;
-						yystate = 244;
+						yystate = 243;
 						continue;
 					}
 					0xA5 => {
 						cur += 1;
-						yystate = 245;
+						yystate = 244;
 						continue;
 					}
 					0xA6 => {
 						cur += 1;
-						yystate = 246;
+						yystate = 245;
 						continue;
 					}
 					0xA7 => {
 						cur += 1;
-						yystate = 247;
+						yystate = 246;
 						continue;
 					}
 					0xA8 => {
 						cur += 1;
-						yystate = 248;
+						yystate = 247;
 						continue;
 					}
 					0xA9 => {
 						cur += 1;
-						yystate = 249;
+						yystate = 248;
 						continue;
 					}
 					0xAA => {
 						cur += 1;
-						yystate = 250;
+						yystate = 249;
 						continue;
 					}
 					0xAD => {
 						cur += 1;
-						yystate = 251;
+						yystate = 250;
 						continue;
 					}
 					0xAF => {
 						cur += 1;
-						yystate = 114;
+						yystate = 113;
 						continue;
 					}
 					0xB1 => {
 						cur += 1;
-						yystate = 252;
+						yystate = 251;
 						continue;
 					}
 					0xB3 => {
 						cur += 1;
-						yystate = 253;
+						yystate = 252;
 						continue;
 					}
 					0xB7 => {
 						cur += 1;
-						yystate = 254;
+						yystate = 253;
 						continue;
 					}
 					0xBC => {
 						cur += 1;
-						yystate = 134;
+						yystate = 133;
 						continue;
 					}
 					0xBD => {
 						cur += 1;
-						yystate = 135;
+						yystate = 134;
 						continue;
 					}
 					0xBE => {
 						cur += 1;
-						yystate = 136;
+						yystate = 135;
 						continue;
 					}
 					0xBF => {
 						cur += 1;
-						yystate = 137;
+						yystate = 136;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
+						continue;
+					}
+				}
+			}
+			57 => {
+				yych = unsafe {*str.get_unchecked(cur)};
+				match yych {
+					0x80 => {
+						cur += 1;
+						yystate = 254;
+						continue;
+					}
+					0x81 => {
+						cur += 1;
+						yystate = 255;
+						continue;
+					}
+					0x82 => {
+						cur += 1;
+						yystate = 138;
+						continue;
+					}
+					0x83 => {
+						cur += 1;
+						yystate = 256;
+						continue;
+					}
+					0x84 => {
+						cur += 1;
+						yystate = 139;
+						continue;
+					}
+					0x85 => {
+						cur += 1;
+						yystate = 140;
+						continue;
+					}
+					0x86 => {
+						cur += 1;
+						yystate = 141;
+						continue;
+					}
+					0xB0 => {
+						cur += 1;
+						yystate = 142;
+						continue;
+					}
+					0xB1 => {
+						cur += 1;
+						yystate = 143;
+						continue;
+					}
+					0xB2 => {
+						cur += 1;
+						yystate = 38;
+						continue;
+					}
+					0xB3 => {
+						cur += 1;
+						yystate = 257;
+						continue;
+					}
+					0xB4 => {
+						cur += 1;
+						yystate = 145;
+						continue;
+					}
+					0xB5 => {
+						cur += 1;
+						yystate = 258;
+						continue;
+					}
+					0xB6 => {
+						cur += 1;
+						yystate = 147;
+						continue;
+					}
+					0xB7 => {
+						cur += 1;
+						yystate = 259;
+						continue;
+					}
+					0xB8 => {
+						cur += 1;
+						yystate = 149;
+						continue;
+					}
+					_ => {
+						yystate = 36;
 						continue;
 					}
 				}
@@ -2243,86 +2332,47 @@ fn lex(str: &[u8]) -> bool {
 				match yych {
 					0x80 => {
 						cur += 1;
-						yystate = 255;
+						yystate = 260;
 						continue;
 					}
 					0x81 => {
 						cur += 1;
-						yystate = 256;
+						yystate = 107;
 						continue;
 					}
 					0x82 => {
 						cur += 1;
-						yystate = 139;
+						yystate = 261;
 						continue;
 					}
 					0x83 => {
 						cur += 1;
-						yystate = 257;
+						yystate = 152;
 						continue;
 					}
 					0x84 => {
 						cur += 1;
-						yystate = 140;
+						yystate = 153;
 						continue;
 					}
-					0x85 => {
+					0x85 |
+					0x90 ..= 0xBF => {
 						cur += 1;
-						yystate = 141;
+						yystate = 38;
 						continue;
 					}
 					0x86 => {
 						cur += 1;
-						yystate = 142;
+						yystate = 154;
 						continue;
 					}
-					0xB0 => {
+					0x87 => {
 						cur += 1;
-						yystate = 143;
-						continue;
-					}
-					0xB1 => {
-						cur += 1;
-						yystate = 144;
-						continue;
-					}
-					0xB2 => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xB3 => {
-						cur += 1;
-						yystate = 258;
-						continue;
-					}
-					0xB4 => {
-						cur += 1;
-						yystate = 146;
-						continue;
-					}
-					0xB5 => {
-						cur += 1;
-						yystate = 259;
-						continue;
-					}
-					0xB6 => {
-						cur += 1;
-						yystate = 148;
-						continue;
-					}
-					0xB7 => {
-						cur += 1;
-						yystate = 260;
-						continue;
-					}
-					0xB8 => {
-						cur += 1;
-						yystate = 150;
+						yystate = 155;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -2330,49 +2380,19 @@ fn lex(str: &[u8]) -> bool {
 			59 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 => {
+					0x80 ..= 0xB5 |
+					0xB8 ..= 0xBF => {
 						cur += 1;
-						yystate = 261;
+						yystate = 38;
 						continue;
 					}
-					0x81 => {
+					0xB6 => {
 						cur += 1;
-						yystate = 108;
-						continue;
-					}
-					0x82 => {
-						cur += 1;
-						yystate = 262;
-						continue;
-					}
-					0x83 => {
-						cur += 1;
-						yystate = 153;
-						continue;
-					}
-					0x84 => {
-						cur += 1;
-						yystate = 154;
-						continue;
-					}
-					0x85 |
-					0x90 ..= 0xBF => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0x86 => {
-						cur += 1;
-						yystate = 155;
-						continue;
-					}
-					0x87 => {
-						cur += 1;
-						yystate = 156;
+						yystate = 118;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -2380,19 +2400,13 @@ fn lex(str: &[u8]) -> bool {
 			60 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0xB5 |
-					0xB8 ..= 0xBF => {
+					0x80 ..= 0xBF => {
 						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xB6 => {
-						cur += 1;
-						yystate = 119;
+						yystate = 38;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -2400,37 +2414,23 @@ fn lex(str: &[u8]) -> bool {
 			61 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0xBF => {
+					0x80 ..= 0xBE => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
+						continue;
+					}
+					0xBF => {
+						cur += 1;
+						yystate = 156;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
 			62 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				match yych {
-					0x80 ..= 0xBE => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xBF => {
-						cur += 1;
-						yystate = 157;
-						continue;
-					}
-					_ => {
-						yystate = 37;
-						continue;
-					}
-				}
-			}
-			63 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x91 |
@@ -2441,116 +2441,140 @@ fn lex(str: &[u8]) -> bool {
 					0xAA |
 					0xB0 ..= 0xBF => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
 					0x92 => {
 						cur += 1;
-						yystate = 157;
+						yystate = 156;
 						continue;
 					}
 					0x93 => {
 						cur += 1;
-						yystate = 158;
+						yystate = 157;
 						continue;
 					}
 					0x98 => {
 						cur += 1;
-						yystate = 263;
+						yystate = 262;
 						continue;
 					}
 					0x99 => {
 						cur += 1;
-						yystate = 264;
+						yystate = 263;
 						continue;
 					}
 					0x9A => {
 						cur += 1;
-						yystate = 265;
+						yystate = 264;
 						continue;
 					}
 					0x9B => {
 						cur += 1;
-						yystate = 54;
+						yystate = 53;
 						continue;
 					}
 					0x9C => {
 						cur += 1;
-						yystate = 163;
+						yystate = 162;
 						continue;
 					}
 					0x9E => {
 						cur += 1;
-						yystate = 164;
+						yystate = 163;
 						continue;
 					}
 					0x9F => {
 						cur += 1;
-						yystate = 165;
+						yystate = 164;
 						continue;
 					}
 					0xA0 => {
 						cur += 1;
-						yystate = 266;
+						yystate = 265;
 						continue;
 					}
 					0xA1 => {
 						cur += 1;
-						yystate = 114;
+						yystate = 113;
 						continue;
 					}
 					0xA3 => {
 						cur += 1;
-						yystate = 267;
+						yystate = 266;
 						continue;
 					}
 					0xA4 => {
 						cur += 1;
-						yystate = 182;
+						yystate = 181;
 						continue;
 					}
 					0xA5 => {
 						cur += 1;
-						yystate = 268;
+						yystate = 267;
 						continue;
 					}
 					0xA7 => {
 						cur += 1;
-						yystate = 269;
+						yystate = 268;
 						continue;
 					}
 					0xA8 => {
 						cur += 1;
-						yystate = 270;
+						yystate = 269;
 						continue;
 					}
 					0xA9 => {
 						cur += 1;
-						yystate = 271;
+						yystate = 270;
 						continue;
 					}
 					0xAB => {
 						cur += 1;
-						yystate = 272;
+						yystate = 271;
 						continue;
 					}
 					0xAC => {
 						cur += 1;
-						yystate = 177;
+						yystate = 176;
 						continue;
 					}
 					0xAD => {
 						cur += 1;
-						yystate = 178;
+						yystate = 177;
 						continue;
 					}
 					0xAF => {
 						cur += 1;
-						yystate = 273;
+						yystate = 272;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
+						continue;
+					}
+				}
+			}
+			63 => {
+				yych = unsafe {*str.get_unchecked(cur)};
+				match yych {
+					0x80 ..= 0x9D => {
+						cur += 1;
+						yystate = 38;
+						continue;
+					}
+					0x9E => {
+						cur += 1;
+						yystate = 179;
+						continue;
+					}
+					0x9F => {
+						cur += 1;
+						yystate = 180;
+						continue;
+					}
+					_ => {
+						yystate = 36;
 						continue;
 					}
 				}
@@ -2558,23 +2582,101 @@ fn lex(str: &[u8]) -> bool {
 			64 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0x9D => {
+					0xA4 ..= 0xA8 |
+					0xAA |
+					0xB0 ..= 0xB3 |
+					0xBA => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
-					0x9E => {
-						cur += 1;
-						yystate = 180;
-						continue;
-					}
-					0x9F => {
+					0xA9 => {
 						cur += 1;
 						yystate = 181;
 						continue;
 					}
+					0xAB => {
+						cur += 1;
+						yystate = 182;
+						continue;
+					}
+					0xAC => {
+						cur += 1;
+						yystate = 273;
+						continue;
+					}
+					0xAD => {
+						cur += 1;
+						yystate = 184;
+						continue;
+					}
+					0xAE => {
+						cur += 1;
+						yystate = 53;
+						continue;
+					}
+					0xAF => {
+						cur += 1;
+						yystate = 185;
+						continue;
+					}
+					0xB4 => {
+						cur += 1;
+						yystate = 186;
+						continue;
+					}
+					0xB5 => {
+						cur += 1;
+						yystate = 51;
+						continue;
+					}
+					0xB6 => {
+						cur += 1;
+						yystate = 187;
+						continue;
+					}
+					0xB7 => {
+						cur += 1;
+						yystate = 188;
+						continue;
+					}
+					0xB8 => {
+						cur += 1;
+						yystate = 274;
+						continue;
+					}
+					0xB9 => {
+						cur += 1;
+						yystate = 275;
+						continue;
+					}
+					0xBB => {
+						cur += 1;
+						yystate = 190;
+						continue;
+					}
+					0xBC => {
+						cur += 1;
+						yystate = 276;
+						continue;
+					}
+					0xBD => {
+						cur += 1;
+						yystate = 192;
+						continue;
+					}
+					0xBE => {
+						cur += 1;
+						yystate = 193;
+						continue;
+					}
+					0xBF => {
+						cur += 1;
+						yystate = 194;
+						continue;
+					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -2582,101 +2684,68 @@ fn lex(str: &[u8]) -> bool {
 			65 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0xA4 ..= 0xA8 |
-					0xAA |
-					0xB0 ..= 0xB3 |
-					0xBA => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xA9 => {
-						cur += 1;
-						yystate = 182;
-						continue;
-					}
-					0xAB => {
-						cur += 1;
-						yystate = 183;
-						continue;
-					}
-					0xAC => {
-						cur += 1;
-						yystate = 274;
-						continue;
-					}
-					0xAD => {
-						cur += 1;
-						yystate = 185;
-						continue;
-					}
-					0xAE => {
-						cur += 1;
-						yystate = 54;
-						continue;
-					}
-					0xAF => {
-						cur += 1;
-						yystate = 186;
-						continue;
-					}
-					0xB4 => {
-						cur += 1;
-						yystate = 187;
-						continue;
-					}
-					0xB5 => {
-						cur += 1;
-						yystate = 52;
-						continue;
-					}
-					0xB6 => {
-						cur += 1;
-						yystate = 188;
-						continue;
-					}
-					0xB7 => {
-						cur += 1;
-						yystate = 189;
-						continue;
-					}
-					0xB8 => {
-						cur += 1;
-						yystate = 275;
-						continue;
-					}
-					0xB9 => {
-						cur += 1;
-						yystate = 276;
-						continue;
-					}
-					0xBB => {
-						cur += 1;
-						yystate = 191;
-						continue;
-					}
-					0xBC => {
+					0x90 => {
 						cur += 1;
 						yystate = 277;
 						continue;
 					}
-					0xBD => {
+					0x91 => {
 						cur += 1;
-						yystate = 193;
+						yystate = 278;
 						continue;
 					}
-					0xBE => {
+					0x92 => {
 						cur += 1;
-						yystate = 194;
+						yystate = 197;
 						continue;
 					}
-					0xBF => {
+					0x93 => {
 						cur += 1;
-						yystate = 195;
+						yystate = 198;
+						continue;
+					}
+					0x96 => {
+						cur += 1;
+						yystate = 279;
+						continue;
+					}
+					0x9B => {
+						cur += 1;
+						yystate = 280;
+						continue;
+					}
+					0x9D => {
+						cur += 1;
+						yystate = 281;
+						continue;
+					}
+					0x9E => {
+						cur += 1;
+						yystate = 282;
+						continue;
+					}
+					0xA0 ..= 0xA9 => {
+						cur += 1;
+						yystate = 60;
+						continue;
+					}
+					0xAA => {
+						cur += 1;
+						yystate = 203;
+						continue;
+					}
+					0xAB => {
+						cur += 1;
+						yystate = 204;
+						continue;
+					}
+					0xAF => {
+						cur += 1;
+						yystate = 205;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -2684,87 +2753,18 @@ fn lex(str: &[u8]) -> bool {
 			66 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x90 => {
-						cur += 1;
-						yystate = 278;
-						continue;
-					}
-					0x91 => {
-						cur += 1;
-						yystate = 279;
-						continue;
-					}
-					0x92 => {
-						cur += 1;
-						yystate = 198;
-						continue;
-					}
-					0x93 => {
-						cur += 1;
-						yystate = 199;
-						continue;
-					}
-					0x96 => {
-						cur += 1;
-						yystate = 280;
-						continue;
-					}
-					0x9B => {
-						cur += 1;
-						yystate = 281;
-						continue;
-					}
-					0x9D => {
-						cur += 1;
-						yystate = 282;
-						continue;
-					}
-					0x9E => {
+					0xA0 => {
 						cur += 1;
 						yystate = 283;
 						continue;
 					}
-					0xA0 ..= 0xA9 => {
-						cur += 1;
-						yystate = 61;
-						continue;
-					}
-					0xAA => {
-						cur += 1;
-						yystate = 204;
-						continue;
-					}
-					0xAB => {
-						cur += 1;
-						yystate = 205;
-						continue;
-					}
-					0xAF => {
-						cur += 1;
-						yystate = 206;
-						continue;
-					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
 			67 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				match yych {
-					0xA0 => {
-						cur += 1;
-						yystate = 284;
-						continue;
-					}
-					_ => {
-						yystate = 37;
-						continue;
-					}
-				}
-			}
-			68 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x95 |
@@ -2776,12 +2776,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			69 => {
+			68 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x98 => {
@@ -2790,12 +2790,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			70 => {
+			69 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA0 ..= 0xB2 => {
@@ -2804,12 +2804,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			71 => {
+			70 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x84 ..= 0xB9 |
@@ -2819,12 +2819,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			72 => {
+			71 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 |
@@ -2835,12 +2835,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			73 => {
+			72 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -2856,12 +2856,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			74 => {
+			73 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8E |
@@ -2873,12 +2873,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			75 => {
+			74 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x8A |
@@ -2893,12 +2893,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			76 => {
+			75 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x99 ..= 0x9C |
@@ -2909,12 +2909,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			77 => {
+			76 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x8D |
@@ -2929,12 +2929,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			78 => {
+			77 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 |
@@ -2944,12 +2944,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			79 => {
+			78 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x8C |
@@ -2964,12 +2964,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			80 => {
+			79 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x9C ..= 0x9D |
@@ -2980,12 +2980,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			81 => {
+			80 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x83 |
@@ -3003,12 +3003,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			82 => {
+			81 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 => {
@@ -3017,12 +3017,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			83 => {
+			82 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x8C |
@@ -3035,12 +3035,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			84 => {
+			83 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x98 ..= 0x99 |
@@ -3050,12 +3050,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			85 => {
+			84 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x8C |
@@ -3069,12 +3069,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			86 => {
+			85 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x9E |
@@ -3085,12 +3085,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			87 => {
+			86 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x8C |
@@ -3102,12 +3102,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			88 => {
+			87 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8E |
@@ -3118,12 +3118,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			89 => {
+			88 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x96 |
@@ -3135,12 +3135,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			90 => {
+			89 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x86 => {
@@ -3149,12 +3149,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			91 => {
+			90 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0xB0 |
@@ -3164,12 +3164,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			92 => {
+			91 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x82 |
@@ -3191,12 +3191,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			93 => {
+			92 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -3207,12 +3207,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			94 => {
+			93 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 => {
@@ -3221,12 +3221,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			95 => {
+			94 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x87 |
@@ -3236,12 +3236,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			96 => {
+			95 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x88 ..= 0x8C => {
@@ -3250,12 +3250,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			97 => {
+			96 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAA |
@@ -3265,12 +3265,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			98 => {
+			97 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0x95 |
@@ -3284,12 +3284,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			99 => {
+			98 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x81 |
@@ -3300,12 +3300,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			100 => {
+			99 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x85 |
@@ -3318,12 +3318,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			101 => {
+			100 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x88 |
@@ -3337,12 +3337,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			102 => {
+			101 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x88 |
@@ -3355,12 +3355,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			103 => {
+			102 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -3372,12 +3372,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			104 => {
+			103 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x90 |
@@ -3388,12 +3388,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			105 => {
+			104 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9A => {
@@ -3402,12 +3402,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			106 => {
+			105 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8F |
@@ -3417,12 +3417,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			107 => {
+			106 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB4 => {
@@ -3431,12 +3431,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			108 => {
+			107 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0xBF => {
@@ -3445,12 +3445,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			109 => {
+			108 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAC |
@@ -3460,12 +3460,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			110 => {
+			109 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x9A |
@@ -3475,12 +3475,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			111 => {
+			110 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAA |
@@ -3490,12 +3490,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			112 => {
+			111 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8C |
@@ -3506,12 +3506,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			113 => {
+			112 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x91 |
@@ -3522,12 +3522,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			114 => {
+			113 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB3 => {
@@ -3536,12 +3536,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			115 => {
+			114 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x97 |
@@ -3551,12 +3551,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			116 => {
+			115 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA0 ..= 0xBF => {
@@ -3565,12 +3565,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			117 => {
+			116 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB7 => {
@@ -3579,12 +3579,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			118 => {
+			117 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA8 |
@@ -3595,12 +3595,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			119 => {
+			118 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB5 => {
@@ -3609,12 +3609,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			120 => {
+			119 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9E => {
@@ -3623,12 +3623,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			121 => {
+			120 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0xAD |
@@ -3638,12 +3638,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			122 => {
+			121 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAB => {
@@ -3652,12 +3652,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			123 => {
+			122 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x87 => {
@@ -3666,12 +3666,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			124 => {
+			123 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x96 |
@@ -3681,12 +3681,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			125 => {
+			124 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x94 => {
@@ -3695,12 +3695,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			126 => {
+			125 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA7 => {
@@ -3709,12 +3709,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			127 => {
+			126 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0xB3 => {
@@ -3723,12 +3723,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			128 => {
+			127 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x8B => {
@@ -3737,12 +3737,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			129 => {
+			128 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x83 ..= 0xA0 |
@@ -3753,12 +3753,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			130 => {
+			129 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA5 => {
@@ -3767,12 +3767,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			131 => {
+			130 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA3 => {
@@ -3781,12 +3781,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			132 => {
+			131 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8D ..= 0x8F |
@@ -3796,12 +3796,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			133 => {
+			132 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA9 ..= 0xAC |
@@ -3812,12 +3812,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			134 => {
+			133 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x95 |
@@ -3828,12 +3828,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			135 => {
+			134 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x85 |
@@ -3848,12 +3848,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			136 => {
+			135 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB4 |
@@ -3864,12 +3864,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			137 => {
+			136 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x82 ..= 0x84 |
@@ -3884,12 +3884,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			138 => {
+			137 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xB1 |
@@ -3899,12 +3899,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			139 => {
+			138 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0x9C => {
@@ -3913,12 +3913,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			140 => {
+			139 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x82 |
@@ -3937,12 +3937,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			141 => {
+			140 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x89 |
@@ -3953,12 +3953,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			142 => {
+			141 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x88 => {
@@ -3967,12 +3967,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			143 => {
+			142 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAE |
@@ -3982,12 +3982,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			144 => {
+			143 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9E |
@@ -3997,12 +3997,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			145 => {
+			144 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA4 |
@@ -4013,12 +4013,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			146 => {
+			145 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA5 |
@@ -4030,12 +4030,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			147 => {
+			146 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA7 |
@@ -4045,12 +4045,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			148 => {
+			147 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x96 |
@@ -4063,12 +4063,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			149 => {
+			148 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x86 |
@@ -4080,12 +4080,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			150 => {
+			149 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xAF => {
@@ -4094,12 +4094,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			151 => {
+			150 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x87 |
@@ -4111,12 +4111,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			152 => {
+			151 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x96 |
@@ -4127,12 +4127,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			153 => {
+			152 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xBA |
@@ -4142,12 +4142,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			154 => {
+			153 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0xAD |
@@ -4157,12 +4157,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			155 => {
+			154 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8E |
@@ -4172,12 +4172,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			156 => {
+			155 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xB0 ..= 0xBF => {
@@ -4186,12 +4186,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			157 => {
+			156 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8C => {
@@ -4200,12 +4200,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			158 => {
+			157 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0xBD => {
@@ -4214,12 +4214,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			159 => {
+			158 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8C |
@@ -4230,12 +4230,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			160 => {
+			159 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAE |
@@ -4245,12 +4245,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			161 => {
+			160 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9D |
@@ -4260,12 +4260,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			162 => {
+			161 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAF => {
@@ -4274,12 +4274,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			163 => {
+			162 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x97 ..= 0x9F |
@@ -4289,12 +4289,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			164 => {
+			163 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x88 |
@@ -4306,12 +4306,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			165 => {
+			164 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xB7 ..= 0xBF => {
@@ -4320,12 +4320,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			166 => {
+			165 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x81 |
@@ -4337,12 +4337,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			167 => {
+			166 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x82 ..= 0xB3 => {
@@ -4351,12 +4351,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			168 => {
+			167 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xB2 ..= 0xB7 |
@@ -4366,12 +4366,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			169 => {
+			168 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8A ..= 0xA5 |
@@ -4381,12 +4381,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			170 => {
+			169 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x86 |
@@ -4396,12 +4396,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			171 => {
+			170 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x84 ..= 0xB2 => {
@@ -4410,12 +4410,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			172 => {
+			171 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8F |
@@ -4427,12 +4427,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			173 => {
+			172 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA8 => {
@@ -4441,12 +4441,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			174 => {
+			173 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x82 |
@@ -4459,12 +4459,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			175 => {
+			174 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAF |
@@ -4476,12 +4476,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			176 => {
+			175 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -4494,12 +4494,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			177 => {
+			176 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x86 |
@@ -4513,12 +4513,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			178 => {
+			177 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9A |
@@ -4529,12 +4529,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			179 => {
+			178 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA2 => {
@@ -4543,12 +4543,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			180 => {
+			179 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA3 |
@@ -4558,12 +4558,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			181 => {
+			180 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x86 |
@@ -4573,12 +4573,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			182 => {
+			181 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAD |
@@ -4588,12 +4588,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			183 => {
+			182 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x99 => {
@@ -4602,12 +4602,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			184 => {
+			183 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x86 |
@@ -4622,12 +4622,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			185 => {
+			184 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x81 |
@@ -4638,12 +4638,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			186 => {
+			185 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x93 ..= 0xBF => {
@@ -4652,12 +4652,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			187 => {
+			186 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xBD => {
@@ -4666,12 +4666,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			188 => {
+			187 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8F |
@@ -4681,12 +4681,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			189 => {
+			188 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x87 |
@@ -4696,12 +4696,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			190 => {
+			189 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xB0 ..= 0xB4 |
@@ -4711,12 +4711,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			191 => {
+			190 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xBC => {
@@ -4725,12 +4725,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			192 => {
+			191 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA1 ..= 0xBA => {
@@ -4739,12 +4739,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			193 => {
+			192 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x9A |
@@ -4754,12 +4754,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			194 => {
+			193 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xBE => {
@@ -4768,12 +4768,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			195 => {
+			194 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x82 ..= 0x87 |
@@ -4785,7 +4785,164 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
+						continue;
+					}
+				}
+			}
+			195 => {
+				yych = unsafe {*str.get_unchecked(cur)};
+				match yych {
+					0x80 => {
+						cur += 1;
+						yystate = 284;
+						continue;
+					}
+					0x81 => {
+						cur += 1;
+						yystate = 285;
+						continue;
+					}
+					0x82 |
+					0x90 ..= 0x91 |
+					0x98 ..= 0x9B |
+					0xB0 => {
+						cur += 1;
+						yystate = 38;
+						continue;
+					}
+					0x83 => {
+						cur += 1;
+						yystate = 286;
+						continue;
+					}
+					0x85 => {
+						cur += 1;
+						yystate = 106;
+						continue;
+					}
+					0x8A => {
+						cur += 1;
+						yystate = 287;
+						continue;
+					}
+					0x8B => {
+						cur += 1;
+						yystate = 288;
+						continue;
+					}
+					0x8C => {
+						cur += 1;
+						yystate = 289;
+						continue;
+					}
+					0x8D => {
+						cur += 1;
+						yystate = 290;
+						continue;
+					}
+					0x8E => {
+						cur += 1;
+						yystate = 160;
+						continue;
+					}
+					0x8F => {
+						cur += 1;
+						yystate = 291;
+						continue;
+					}
+					0x92 => {
+						cur += 1;
+						yystate = 292;
+						continue;
+					}
+					0x94 => {
+						cur += 1;
+						yystate = 293;
+						continue;
+					}
+					0x95 => {
+						cur += 1;
+						yystate = 130;
+						continue;
+					}
+					0x9C => {
+						cur += 1;
+						yystate = 269;
+						continue;
+					}
+					0x9D => {
+						cur += 1;
+						yystate = 294;
+						continue;
+					}
+					0xA0 => {
+						cur += 1;
+						yystate = 295;
+						continue;
+					}
+					0xA1 => {
+						cur += 1;
+						yystate = 296;
+						continue;
+					}
+					0xA2 => {
+						cur += 1;
+						yystate = 119;
+						continue;
+					}
+					0xA4 => {
+						cur += 1;
+						yystate = 297;
+						continue;
+					}
+					0xA6 => {
+						cur += 1;
+						yystate = 298;
+						continue;
+					}
+					0xA8 => {
+						cur += 1;
+						yystate = 299;
+						continue;
+					}
+					0xA9 => {
+						cur += 1;
+						yystate = 300;
+						continue;
+					}
+					0xAA => {
+						cur += 1;
+						yystate = 301;
+						continue;
+					}
+					0xAB => {
+						cur += 1;
+						yystate = 302;
+						continue;
+					}
+					0xAC => {
+						cur += 1;
+						yystate = 118;
+						continue;
+					}
+					0xAD => {
+						cur += 1;
+						yystate = 303;
+						continue;
+					}
+					0xAE => {
+						cur += 1;
+						yystate = 304;
+						continue;
+					}
+					0xB1 => {
+						cur += 1;
+						yystate = 141;
+						continue;
+					}
+					_ => {
+						yystate = 36;
 						continue;
 					}
 				}
@@ -4795,154 +4952,107 @@ fn lex(str: &[u8]) -> bool {
 				match yych {
 					0x80 => {
 						cur += 1;
-						yystate = 285;
+						yystate = 305;
 						continue;
 					}
-					0x81 => {
+					0x82 => {
 						cur += 1;
-						yystate = 286;
-						continue;
-					}
-					0x82 |
-					0x90 ..= 0x91 |
-					0x98 ..= 0x9B |
-					0xB0 => {
-						cur += 1;
-						yystate = 39;
+						yystate = 306;
 						continue;
 					}
 					0x83 => {
 						cur += 1;
-						yystate = 287;
+						yystate = 307;
+						continue;
+					}
+					0x84 => {
+						cur += 1;
+						yystate = 308;
 						continue;
 					}
 					0x85 => {
 						cur += 1;
-						yystate = 107;
+						yystate = 309;
+						continue;
+					}
+					0x86 => {
+						cur += 1;
+						yystate = 310;
+						continue;
+					}
+					0x87 => {
+						cur += 1;
+						yystate = 311;
+						continue;
+					}
+					0x88 => {
+						cur += 1;
+						yystate = 312;
 						continue;
 					}
 					0x8A => {
 						cur += 1;
-						yystate = 288;
+						yystate = 155;
 						continue;
 					}
 					0x8B => {
 						cur += 1;
-						yystate = 289;
+						yystate = 119;
 						continue;
 					}
 					0x8C => {
 						cur += 1;
-						yystate = 290;
+						yystate = 78;
 						continue;
 					}
 					0x8D => {
 						cur += 1;
-						yystate = 291;
+						yystate = 313;
 						continue;
 					}
-					0x8E => {
+					0x92 |
+					0x98 => {
 						cur += 1;
 						yystate = 161;
 						continue;
 					}
-					0x8F => {
+					0x93 => {
 						cur += 1;
-						yystate = 292;
+						yystate = 314;
 						continue;
 					}
-					0x92 => {
+					0x96 => {
 						cur += 1;
-						yystate = 293;
+						yystate = 315;
 						continue;
 					}
-					0x94 => {
+					0x99 => {
 						cur += 1;
-						yystate = 294;
+						yystate = 316;
 						continue;
 					}
-					0x95 => {
+					0x9A => {
 						cur += 1;
-						yystate = 131;
-						continue;
-					}
-					0x9C => {
-						cur += 1;
-						yystate = 270;
-						continue;
-					}
-					0x9D => {
-						cur += 1;
-						yystate = 295;
-						continue;
-					}
-					0xA0 => {
-						cur += 1;
-						yystate = 296;
-						continue;
-					}
-					0xA1 => {
-						cur += 1;
-						yystate = 297;
+						yystate = 317;
 						continue;
 					}
 					0xA2 => {
 						cur += 1;
-						yystate = 120;
+						yystate = 115;
 						continue;
 					}
-					0xA4 => {
+					0xA3 => {
 						cur += 1;
-						yystate = 298;
-						continue;
-					}
-					0xA6 => {
-						cur += 1;
-						yystate = 299;
-						continue;
-					}
-					0xA8 => {
-						cur += 1;
-						yystate = 300;
-						continue;
-					}
-					0xA9 => {
-						cur += 1;
-						yystate = 301;
-						continue;
-					}
-					0xAA => {
-						cur += 1;
-						yystate = 302;
+						yystate = 318;
 						continue;
 					}
 					0xAB => {
 						cur += 1;
-						yystate = 303;
-						continue;
-					}
-					0xAC => {
-						cur += 1;
-						yystate = 119;
-						continue;
-					}
-					0xAD => {
-						cur += 1;
-						yystate = 304;
-						continue;
-					}
-					0xAE => {
-						cur += 1;
-						yystate = 305;
-						continue;
-					}
-					0xB1 => {
-						cur += 1;
-						yystate = 142;
+						yystate = 319;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -4950,109 +5060,24 @@ fn lex(str: &[u8]) -> bool {
 			197 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 => {
+					0x80 ..= 0x8D |
+					0x90 => {
 						cur += 1;
-						yystate = 306;
+						yystate = 38;
 						continue;
 					}
-					0x82 => {
+					0x8E => {
 						cur += 1;
-						yystate = 307;
+						yystate = 68;
 						continue;
 					}
-					0x83 => {
-						cur += 1;
-						yystate = 308;
-						continue;
-					}
-					0x84 => {
-						cur += 1;
-						yystate = 309;
-						continue;
-					}
-					0x85 => {
-						cur += 1;
-						yystate = 310;
-						continue;
-					}
-					0x86 => {
-						cur += 1;
-						yystate = 311;
-						continue;
-					}
-					0x87 => {
-						cur += 1;
-						yystate = 312;
-						continue;
-					}
-					0x88 => {
-						cur += 1;
-						yystate = 313;
-						continue;
-					}
-					0x8A => {
-						cur += 1;
-						yystate = 156;
-						continue;
-					}
-					0x8B => {
-						cur += 1;
-						yystate = 120;
-						continue;
-					}
-					0x8C => {
-						cur += 1;
-						yystate = 79;
-						continue;
-					}
-					0x8D => {
-						cur += 1;
-						yystate = 314;
-						continue;
-					}
-					0x92 |
-					0x98 => {
-						cur += 1;
-						yystate = 162;
-						continue;
-					}
-					0x93 => {
+					0x91 => {
 						cur += 1;
 						yystate = 315;
 						continue;
 					}
-					0x96 => {
-						cur += 1;
-						yystate = 316;
-						continue;
-					}
-					0x99 => {
-						cur += 1;
-						yystate = 317;
-						continue;
-					}
-					0x9A => {
-						cur += 1;
-						yystate = 318;
-						continue;
-					}
-					0xA2 => {
-						cur += 1;
-						yystate = 116;
-						continue;
-					}
-					0xA3 => {
-						cur += 1;
-						yystate = 319;
-						continue;
-					}
-					0xAB => {
-						cur += 1;
-						yystate = 320;
-						continue;
-					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -5060,24 +5085,18 @@ fn lex(str: &[u8]) -> bool {
 			198 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0x8D |
+					0x80 ..= 0x8F => {
+						cur += 1;
+						yystate = 38;
+						continue;
+					}
 					0x90 => {
 						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0x8E => {
-						cur += 1;
-						yystate = 69;
-						continue;
-					}
-					0x91 => {
-						cur += 1;
-						yystate = 316;
+						yystate = 315;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -5085,18 +5104,54 @@ fn lex(str: &[u8]) -> bool {
 			199 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0x8F => {
+					0xA0 ..= 0xA7 |
+					0xBC => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
-					0x90 => {
+					0xA8 => {
 						cur += 1;
-						yystate = 316;
+						yystate = 319;
+						continue;
+					}
+					0xA9 => {
+						cur += 1;
+						yystate = 119;
+						continue;
+					}
+					0xAB => {
+						cur += 1;
+						yystate = 320;
+						continue;
+					}
+					0xAC => {
+						cur += 1;
+						yystate = 161;
+						continue;
+					}
+					0xAD => {
+						cur += 1;
+						yystate = 321;
+						continue;
+					}
+					0xAE => {
+						cur += 1;
+						yystate = 322;
+						continue;
+					}
+					0xBD => {
+						cur += 1;
+						yystate = 323;
+						continue;
+					}
+					0xBE => {
+						cur += 1;
+						yystate = 324;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -5104,54 +5159,28 @@ fn lex(str: &[u8]) -> bool {
 			200 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0xA0 ..= 0xA7 |
-					0xBC => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xA8 => {
-						cur += 1;
-						yystate = 320;
-						continue;
-					}
-					0xA9 => {
-						cur += 1;
-						yystate = 120;
-						continue;
-					}
-					0xAB => {
-						cur += 1;
-						yystate = 321;
-						continue;
-					}
-					0xAC => {
-						cur += 1;
-						yystate = 162;
-						continue;
-					}
-					0xAD => {
-						cur += 1;
-						yystate = 322;
-						continue;
-					}
-					0xAE => {
-						cur += 1;
-						yystate = 323;
-						continue;
-					}
-					0xBD => {
-						cur += 1;
-						yystate = 324;
-						continue;
-					}
-					0xBE => {
+					0x80 => {
 						cur += 1;
 						yystate = 325;
 						continue;
 					}
+					0xB0 => {
+						cur += 1;
+						yystate = 38;
+						continue;
+					}
+					0xB1 => {
+						cur += 1;
+						yystate = 326;
+						continue;
+					}
+					0xB2 => {
+						cur += 1;
+						yystate = 327;
+						continue;
+					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -5159,28 +5188,69 @@ fn lex(str: &[u8]) -> bool {
 			201 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 => {
+					0x90 |
+					0x96 ..= 0x99 => {
 						cur += 1;
-						yystate = 326;
+						yystate = 38;
 						continue;
 					}
-					0xB0 => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xB1 => {
-						cur += 1;
-						yystate = 327;
-						continue;
-					}
-					0xB2 => {
+					0x91 => {
 						cur += 1;
 						yystate = 328;
 						continue;
 					}
+					0x92 => {
+						cur += 1;
+						yystate = 329;
+						continue;
+					}
+					0x93 => {
+						cur += 1;
+						yystate = 330;
+						continue;
+					}
+					0x94 => {
+						cur += 1;
+						yystate = 331;
+						continue;
+					}
+					0x95 => {
+						cur += 1;
+						yystate = 332;
+						continue;
+					}
+					0x9A => {
+						cur += 1;
+						yystate = 333;
+						continue;
+					}
+					0x9B => {
+						cur += 1;
+						yystate = 334;
+						continue;
+					}
+					0x9C => {
+						cur += 1;
+						yystate = 335;
+						continue;
+					}
+					0x9D => {
+						cur += 1;
+						yystate = 336;
+						continue;
+					}
+					0x9E => {
+						cur += 1;
+						yystate = 337;
+						continue;
+					}
+					0x9F => {
+						cur += 1;
+						yystate = 338;
+						continue;
+					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -5188,69 +5258,33 @@ fn lex(str: &[u8]) -> bool {
 			202 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x90 |
-					0x96 ..= 0x99 => {
+					0xA0 ..= 0xA2 => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
-					0x91 => {
-						cur += 1;
-						yystate = 329;
-						continue;
-					}
-					0x92 => {
-						cur += 1;
-						yystate = 330;
-						continue;
-					}
-					0x93 => {
-						cur += 1;
-						yystate = 331;
-						continue;
-					}
-					0x94 => {
-						cur += 1;
-						yystate = 332;
-						continue;
-					}
-					0x95 => {
-						cur += 1;
-						yystate = 333;
-						continue;
-					}
-					0x9A => {
-						cur += 1;
-						yystate = 334;
-						continue;
-					}
-					0x9B => {
-						cur += 1;
-						yystate = 335;
-						continue;
-					}
-					0x9C => {
-						cur += 1;
-						yystate = 336;
-						continue;
-					}
-					0x9D => {
-						cur += 1;
-						yystate = 337;
-						continue;
-					}
-					0x9E => {
-						cur += 1;
-						yystate = 338;
-						continue;
-					}
-					0x9F => {
+					0xA3 => {
 						cur += 1;
 						yystate = 339;
 						continue;
 					}
+					0xB8 => {
+						cur += 1;
+						yystate = 340;
+						continue;
+					}
+					0xB9 => {
+						cur += 1;
+						yystate = 341;
+						continue;
+					}
+					0xBA => {
+						cur += 1;
+						yystate = 342;
+						continue;
+					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -5258,33 +5292,19 @@ fn lex(str: &[u8]) -> bool {
 			203 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0xA0 ..= 0xA2 => {
+					0x80 ..= 0x9A |
+					0x9C ..= 0xBF => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
-					0xA3 => {
-						cur += 1;
-						yystate = 340;
-						continue;
-					}
-					0xB8 => {
-						cur += 1;
-						yystate = 341;
-						continue;
-					}
-					0xB9 => {
-						cur += 1;
-						yystate = 342;
-						continue;
-					}
-					0xBA => {
+					0x9B => {
 						cur += 1;
 						yystate = 343;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -5292,19 +5312,24 @@ fn lex(str: &[u8]) -> bool {
 			204 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0x9A |
-					0x9C ..= 0xBF => {
+					0x80 ..= 0x9B |
+					0x9D ..= 0x9F => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
-					0x9B => {
+					0x9C => {
 						cur += 1;
-						yystate = 344;
+						yystate = 106;
+						continue;
+					}
+					0xA0 => {
+						cur += 1;
+						yystate = 292;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -5312,48 +5337,23 @@ fn lex(str: &[u8]) -> bool {
 			205 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 ..= 0x9B |
-					0x9D ..= 0x9F => {
+					0xA0 ..= 0xA7 => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
-					0x9C => {
+					0xA8 => {
 						cur += 1;
-						yystate = 107;
-						continue;
-					}
-					0xA0 => {
-						cur += 1;
-						yystate = 293;
+						yystate = 292;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
 			206 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				match yych {
-					0xA0 ..= 0xA7 => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xA8 => {
-						cur += 1;
-						yystate = 293;
-						continue;
-					}
-					_ => {
-						yystate = 37;
-						continue;
-					}
-				}
-			}
-			207 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAD => {
@@ -5362,12 +5362,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			208 => {
+			207 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9B => {
@@ -5376,12 +5376,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			209 => {
+			208 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA4 ..= 0xBF => {
@@ -5390,12 +5390,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			210 => {
+			209 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA3 |
@@ -5406,12 +5406,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			211 => {
+			210 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x83 |
@@ -5427,12 +5427,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			212 => {
+			211 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -5447,12 +5447,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			213 => {
+			212 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x83 |
@@ -5470,12 +5470,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			214 => {
+			213 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x82 |
@@ -5490,12 +5490,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			215 => {
+			214 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x83 |
@@ -5511,12 +5511,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			216 => {
+			215 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x85 |
@@ -5530,12 +5530,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			217 => {
+			216 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x83 |
@@ -5551,12 +5551,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			218 => {
+			217 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -5572,12 +5572,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			219 => {
+			218 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x82 ..= 0x83 |
@@ -5596,12 +5596,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			220 => {
+			219 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x82 |
@@ -5615,12 +5615,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			221 => {
+			220 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x83 |
@@ -5634,12 +5634,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			222 => {
+			221 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -5654,12 +5654,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			223 => {
+			222 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x83 |
@@ -5674,12 +5674,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			224 => {
+			223 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -5695,12 +5695,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			225 => {
+			224 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x83 |
@@ -5713,12 +5713,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			226 => {
+			225 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -5733,12 +5733,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			227 => {
+			226 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x82 ..= 0x83 |
@@ -5751,12 +5751,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			228 => {
+			227 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x86 |
@@ -5771,12 +5771,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			229 => {
+			228 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0xBA => {
@@ -5785,12 +5785,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			230 => {
+			229 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8E |
@@ -5800,12 +5800,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			231 => {
+			230 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x82 |
@@ -5826,12 +5826,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			232 => {
+			231 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -5844,12 +5844,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			233 => {
+			232 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -5864,12 +5864,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			234 => {
+			233 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x87 |
@@ -5880,12 +5880,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			235 => {
+			234 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -5896,12 +5896,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			236 => {
+			235 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x86 => {
@@ -5910,12 +5910,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			237 => {
+			236 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x89 |
@@ -5925,12 +5925,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			238 => {
+			237 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9A |
@@ -5940,12 +5940,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			239 => {
+			238 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8C |
@@ -5956,12 +5956,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			240 => {
+			239 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x93 |
@@ -5973,12 +5973,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			241 => {
+			240 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x93 |
@@ -5990,12 +5990,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			242 => {
+			241 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8B ..= 0x8D |
@@ -6006,12 +6006,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			243 => {
+			242 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAA |
@@ -6021,12 +6021,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			244 => {
+			243 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9E |
@@ -6037,12 +6037,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			245 => {
+			244 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x86 ..= 0xAD |
@@ -6052,12 +6052,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			246 => {
+			245 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAB |
@@ -6067,12 +6067,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			247 => {
+			246 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x89 |
@@ -6082,12 +6082,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			248 => {
+			247 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9B |
@@ -6097,12 +6097,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			249 => {
+			248 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9E |
@@ -6113,12 +6113,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			250 => {
+			249 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x89 |
@@ -6130,12 +6130,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			251 => {
+			250 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8B |
@@ -6146,12 +6146,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			252 => {
+			251 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x89 |
@@ -6161,12 +6161,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			253 => {
+			252 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0x92 |
@@ -6177,12 +6177,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			254 => {
+			253 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB5 |
@@ -6192,12 +6192,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			255 => {
+			254 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8D |
@@ -6207,12 +6207,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			256 => {
+			255 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -6224,12 +6224,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			257 => {
+			256 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0x9C |
@@ -6240,12 +6240,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			258 => {
+			257 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA4 |
@@ -6255,12 +6255,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			259 => {
+			258 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA7 |
@@ -6271,12 +6271,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			260 => {
+			259 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x86 |
@@ -6289,12 +6289,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			261 => {
+			260 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x85 ..= 0x87 |
@@ -6306,12 +6306,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			262 => {
+			261 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x96 |
@@ -6323,12 +6323,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			263 => {
+			262 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8C |
@@ -6338,12 +6338,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			264 => {
+			263 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAF |
@@ -6354,12 +6354,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			265 => {
+			264 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9D |
@@ -6369,12 +6369,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			266 => {
+			265 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA7 => {
@@ -6383,12 +6383,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			267 => {
+			266 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -6400,12 +6400,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			268 => {
+			267 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x93 |
@@ -6415,12 +6415,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			269 => {
+			268 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -6431,12 +6431,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			270 => {
+			269 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB6 => {
@@ -6445,12 +6445,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			271 => {
+			270 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8D |
@@ -6462,12 +6462,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			272 => {
+			271 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x82 |
@@ -6479,12 +6479,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			273 => {
+			272 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAA |
@@ -6495,12 +6495,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			274 => {
+			273 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x86 |
@@ -6514,12 +6514,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			275 => {
+			274 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8F |
@@ -6530,12 +6530,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			276 => {
+			275 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8D ..= 0x8F |
@@ -6546,12 +6546,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			277 => {
+			276 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0x99 |
@@ -6562,22 +6562,22 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			278 => {
+			277 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 => {
 						cur += 1;
-						yystate = 285;
+						yystate = 284;
 						continue;
 					}
 					0x81 => {
 						cur += 1;
-						yystate = 286;
+						yystate = 285;
 						continue;
 					}
 					0x82 |
@@ -6585,151 +6585,151 @@ fn lex(str: &[u8]) -> bool {
 					0x98 ..= 0x9B |
 					0xB0 => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
 					0x83 => {
 						cur += 1;
-						yystate = 287;
+						yystate = 286;
 						continue;
 					}
 					0x85 => {
 						cur += 1;
-						yystate = 107;
+						yystate = 106;
 						continue;
 					}
 					0x87 => {
 						cur += 1;
-						yystate = 345;
+						yystate = 344;
 						continue;
 					}
 					0x8A => {
 						cur += 1;
-						yystate = 288;
+						yystate = 287;
 						continue;
 					}
 					0x8B => {
 						cur += 1;
-						yystate = 346;
+						yystate = 345;
 						continue;
 					}
 					0x8C => {
 						cur += 1;
-						yystate = 290;
+						yystate = 289;
 						continue;
 					}
 					0x8D => {
 						cur += 1;
-						yystate = 347;
+						yystate = 346;
 						continue;
 					}
 					0x8E => {
 						cur += 1;
-						yystate = 161;
+						yystate = 160;
 						continue;
 					}
 					0x8F => {
 						cur += 1;
-						yystate = 292;
+						yystate = 291;
 						continue;
 					}
 					0x92 => {
 						cur += 1;
-						yystate = 348;
+						yystate = 347;
 						continue;
 					}
 					0x94 => {
 						cur += 1;
-						yystate = 294;
+						yystate = 293;
 						continue;
 					}
 					0x95 => {
 						cur += 1;
-						yystate = 131;
+						yystate = 130;
 						continue;
 					}
 					0x9C => {
 						cur += 1;
-						yystate = 270;
+						yystate = 269;
 						continue;
 					}
 					0x9D => {
 						cur += 1;
-						yystate = 295;
+						yystate = 294;
 						continue;
 					}
 					0xA0 => {
 						cur += 1;
-						yystate = 296;
+						yystate = 295;
 						continue;
 					}
 					0xA1 => {
 						cur += 1;
-						yystate = 297;
+						yystate = 296;
 						continue;
 					}
 					0xA2 => {
 						cur += 1;
-						yystate = 120;
+						yystate = 119;
 						continue;
 					}
 					0xA4 => {
 						cur += 1;
-						yystate = 298;
+						yystate = 297;
 						continue;
 					}
 					0xA6 => {
 						cur += 1;
-						yystate = 299;
+						yystate = 298;
 						continue;
 					}
 					0xA8 => {
 						cur += 1;
-						yystate = 349;
+						yystate = 348;
 						continue;
 					}
 					0xA9 => {
 						cur += 1;
-						yystate = 301;
+						yystate = 300;
 						continue;
 					}
 					0xAA => {
 						cur += 1;
-						yystate = 302;
+						yystate = 301;
 						continue;
 					}
 					0xAB => {
 						cur += 1;
-						yystate = 350;
+						yystate = 349;
 						continue;
 					}
 					0xAC => {
 						cur += 1;
-						yystate = 119;
+						yystate = 118;
 						continue;
 					}
 					0xAD => {
 						cur += 1;
-						yystate = 304;
+						yystate = 303;
 						continue;
 					}
 					0xAE => {
 						cur += 1;
-						yystate = 305;
+						yystate = 304;
 						continue;
 					}
 					0xB1 => {
 						cur += 1;
-						yystate = 142;
+						yystate = 141;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			279 => {
+			278 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -6737,111 +6737,166 @@ fn lex(str: &[u8]) -> bool {
 					0x92 |
 					0x98 => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
 					0x81 => {
 						cur += 1;
-						yystate = 351;
+						yystate = 350;
 						continue;
 					}
 					0x82 => {
 						cur += 1;
-						yystate = 287;
+						yystate = 286;
 						continue;
 					}
 					0x83 => {
 						cur += 1;
-						yystate = 352;
+						yystate = 351;
 						continue;
 					}
 					0x84 => {
 						cur += 1;
-						yystate = 353;
+						yystate = 352;
 						continue;
 					}
 					0x85 => {
 						cur += 1;
-						yystate = 354;
+						yystate = 353;
 						continue;
 					}
 					0x87 => {
 						cur += 1;
-						yystate = 355;
+						yystate = 354;
 						continue;
 					}
 					0x88 => {
 						cur += 1;
-						yystate = 356;
+						yystate = 355;
 						continue;
 					}
 					0x8A => {
 						cur += 1;
-						yystate = 156;
+						yystate = 155;
 						continue;
 					}
 					0x8B => {
 						cur += 1;
-						yystate = 357;
+						yystate = 356;
 						continue;
 					}
 					0x8C => {
 						cur += 1;
-						yystate = 217;
+						yystate = 216;
 						continue;
 					}
 					0x8D => {
 						cur += 1;
-						yystate = 358;
+						yystate = 357;
 						continue;
 					}
 					0x93 => {
 						cur += 1;
-						yystate = 359;
+						yystate = 358;
 						continue;
 					}
 					0x96 => {
 						cur += 1;
-						yystate = 360;
+						yystate = 359;
 						continue;
 					}
 					0x97 => {
 						cur += 1;
-						yystate = 94;
+						yystate = 93;
 						continue;
 					}
 					0x99 => {
 						cur += 1;
-						yystate = 361;
+						yystate = 360;
 						continue;
 					}
 					0x9A => {
 						cur += 1;
-						yystate = 117;
+						yystate = 116;
 						continue;
 					}
 					0x9B => {
 						cur += 1;
-						yystate = 362;
+						yystate = 361;
 						continue;
 					}
 					0xA2 => {
 						cur += 1;
-						yystate = 116;
+						yystate = 115;
 						continue;
 					}
 					0xA3 => {
+						cur += 1;
+						yystate = 362;
+						continue;
+					}
+					0xAB => {
+						cur += 1;
+						yystate = 319;
+						continue;
+					}
+					_ => {
+						yystate = 36;
+						continue;
+					}
+				}
+			}
+			279 => {
+				yych = unsafe {*str.get_unchecked(cur)};
+				match yych {
+					0xA0 ..= 0xA7 |
+					0xBC => {
+						cur += 1;
+						yystate = 38;
+						continue;
+					}
+					0xA8 => {
+						cur += 1;
+						yystate = 319;
+						continue;
+					}
+					0xA9 => {
 						cur += 1;
 						yystate = 363;
 						continue;
 					}
 					0xAB => {
 						cur += 1;
-						yystate = 320;
+						yystate = 120;
+						continue;
+					}
+					0xAC => {
+						cur += 1;
+						yystate = 269;
+						continue;
+					}
+					0xAD => {
+						cur += 1;
+						yystate = 364;
+						continue;
+					}
+					0xAE => {
+						cur += 1;
+						yystate = 322;
+						continue;
+					}
+					0xBD => {
+						cur += 1;
+						yystate = 365;
+						continue;
+					}
+					0xBE => {
+						cur += 1;
+						yystate = 366;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -6849,54 +6904,28 @@ fn lex(str: &[u8]) -> bool {
 			280 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0xA0 ..= 0xA7 |
-					0xBC => {
+					0x80 => {
 						cur += 1;
-						yystate = 39;
+						yystate = 325;
 						continue;
 					}
-					0xA8 => {
+					0xB0 => {
 						cur += 1;
-						yystate = 320;
+						yystate = 38;
 						continue;
 					}
-					0xA9 => {
+					0xB1 => {
 						cur += 1;
-						yystate = 364;
+						yystate = 326;
 						continue;
 					}
-					0xAB => {
-						cur += 1;
-						yystate = 121;
-						continue;
-					}
-					0xAC => {
-						cur += 1;
-						yystate = 270;
-						continue;
-					}
-					0xAD => {
-						cur += 1;
-						yystate = 365;
-						continue;
-					}
-					0xAE => {
-						cur += 1;
-						yystate = 323;
-						continue;
-					}
-					0xBD => {
-						cur += 1;
-						yystate = 366;
-						continue;
-					}
-					0xBE => {
+					0xB2 => {
 						cur += 1;
 						yystate = 367;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -6904,28 +6933,84 @@ fn lex(str: &[u8]) -> bool {
 			281 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x80 => {
-						cur += 1;
-						yystate = 326;
-						continue;
-					}
-					0xB0 => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0xB1 => {
-						cur += 1;
-						yystate = 327;
-						continue;
-					}
-					0xB2 => {
+					0x85 => {
 						cur += 1;
 						yystate = 368;
 						continue;
 					}
+					0x86 => {
+						cur += 1;
+						yystate = 369;
+						continue;
+					}
+					0x89 => {
+						cur += 1;
+						yystate = 370;
+						continue;
+					}
+					0x90 |
+					0x96 ..= 0x99 => {
+						cur += 1;
+						yystate = 38;
+						continue;
+					}
+					0x91 => {
+						cur += 1;
+						yystate = 328;
+						continue;
+					}
+					0x92 => {
+						cur += 1;
+						yystate = 329;
+						continue;
+					}
+					0x93 => {
+						cur += 1;
+						yystate = 330;
+						continue;
+					}
+					0x94 => {
+						cur += 1;
+						yystate = 331;
+						continue;
+					}
+					0x95 => {
+						cur += 1;
+						yystate = 332;
+						continue;
+					}
+					0x9A => {
+						cur += 1;
+						yystate = 333;
+						continue;
+					}
+					0x9B => {
+						cur += 1;
+						yystate = 334;
+						continue;
+					}
+					0x9C => {
+						cur += 1;
+						yystate = 335;
+						continue;
+					}
+					0x9D => {
+						cur += 1;
+						yystate = 336;
+						continue;
+					}
+					0x9E => {
+						cur += 1;
+						yystate = 337;
+						continue;
+					}
+					0x9F => {
+						cur += 1;
+						yystate = 371;
+						continue;
+					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -6933,84 +7018,33 @@ fn lex(str: &[u8]) -> bool {
 			282 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0x85 => {
+					0xA0 ..= 0xA2 => {
 						cur += 1;
-						yystate = 369;
+						yystate = 38;
 						continue;
 					}
-					0x86 => {
-						cur += 1;
-						yystate = 370;
-						continue;
-					}
-					0x89 => {
-						cur += 1;
-						yystate = 371;
-						continue;
-					}
-					0x90 |
-					0x96 ..= 0x99 => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0x91 => {
-						cur += 1;
-						yystate = 329;
-						continue;
-					}
-					0x92 => {
-						cur += 1;
-						yystate = 330;
-						continue;
-					}
-					0x93 => {
-						cur += 1;
-						yystate = 331;
-						continue;
-					}
-					0x94 => {
-						cur += 1;
-						yystate = 332;
-						continue;
-					}
-					0x95 => {
-						cur += 1;
-						yystate = 333;
-						continue;
-					}
-					0x9A => {
-						cur += 1;
-						yystate = 334;
-						continue;
-					}
-					0x9B => {
-						cur += 1;
-						yystate = 335;
-						continue;
-					}
-					0x9C => {
-						cur += 1;
-						yystate = 336;
-						continue;
-					}
-					0x9D => {
-						cur += 1;
-						yystate = 337;
-						continue;
-					}
-					0x9E => {
-						cur += 1;
-						yystate = 338;
-						continue;
-					}
-					0x9F => {
+					0xA3 => {
 						cur += 1;
 						yystate = 372;
 						continue;
 					}
+					0xB8 => {
+						cur += 1;
+						yystate = 340;
+						continue;
+					}
+					0xB9 => {
+						cur += 1;
+						yystate = 341;
+						continue;
+					}
+					0xBA => {
+						cur += 1;
+						yystate = 342;
+						continue;
+					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
@@ -7018,57 +7052,23 @@ fn lex(str: &[u8]) -> bool {
 			283 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
-					0xA0 ..= 0xA2 => {
+					0x84 ..= 0x86 => {
 						cur += 1;
-						yystate = 39;
+						yystate = 38;
 						continue;
 					}
-					0xA3 => {
+					0x87 => {
 						cur += 1;
-						yystate = 373;
-						continue;
-					}
-					0xB8 => {
-						cur += 1;
-						yystate = 341;
-						continue;
-					}
-					0xB9 => {
-						cur += 1;
-						yystate = 342;
-						continue;
-					}
-					0xBA => {
-						cur += 1;
-						yystate = 343;
+						yystate = 161;
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
 			284 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				match yych {
-					0x84 ..= 0x86 => {
-						cur += 1;
-						yystate = 39;
-						continue;
-					}
-					0x87 => {
-						cur += 1;
-						yystate = 162;
-						continue;
-					}
-					_ => {
-						yystate = 37;
-						continue;
-					}
-				}
-			}
-			285 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8B |
@@ -7081,12 +7081,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			286 => {
+			285 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8D |
@@ -7096,12 +7096,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			287 => {
+			286 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xBA => {
@@ -7110,12 +7110,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			288 => {
+			287 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9C |
@@ -7125,12 +7125,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			289 => {
+			288 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x90 => {
@@ -7139,12 +7139,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			290 => {
+			289 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9F |
@@ -7154,12 +7154,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			291 => {
+			290 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8A |
@@ -7169,12 +7169,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			292 => {
+			291 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x83 |
@@ -7185,12 +7185,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			293 => {
+			292 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9D => {
@@ -7199,12 +7199,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			294 => {
+			293 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA7 |
@@ -7214,12 +7214,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			295 => {
+			294 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x95 |
@@ -7229,12 +7229,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			296 => {
+			295 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x85 |
@@ -7248,12 +7248,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			297 => {
+			296 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x95 |
@@ -7263,12 +7263,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			298 => {
+			297 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x95 |
@@ -7278,12 +7278,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			299 => {
+			298 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB7 |
@@ -7293,12 +7293,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			300 => {
+			299 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -7310,12 +7310,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			301 => {
+			300 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA0 ..= 0xBC => {
@@ -7324,12 +7324,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			302 => {
+			301 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9C => {
@@ -7338,12 +7338,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			303 => {
+			302 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x87 |
@@ -7353,12 +7353,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			304 => {
+			303 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x95 |
@@ -7368,12 +7368,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			305 => {
+			304 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x91 => {
@@ -7382,12 +7382,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			306 => {
+			305 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x83 ..= 0xB7 => {
@@ -7396,12 +7396,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			307 => {
+			306 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x83 ..= 0xAF => {
@@ -7410,12 +7410,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			308 => {
+			307 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0xA8 => {
@@ -7424,12 +7424,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			309 => {
+			308 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x83 ..= 0xA6 => {
@@ -7438,12 +7438,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			310 => {
+			309 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0xB2 |
@@ -7453,12 +7453,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			311 => {
+			310 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x83 ..= 0xB2 => {
@@ -7467,12 +7467,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			312 => {
+			311 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x81 ..= 0x84 |
@@ -7482,12 +7482,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			313 => {
+			312 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x91 |
@@ -7497,12 +7497,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			314 => {
+			313 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x9D ..= 0xA1 => {
@@ -7511,12 +7511,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			315 => {
+			314 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x84 ..= 0x85 |
@@ -7526,12 +7526,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			316 => {
+			315 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAE => {
@@ -7540,12 +7540,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			317 => {
+			316 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x84 => {
@@ -7554,12 +7554,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			318 => {
+			317 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAA => {
@@ -7568,12 +7568,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			319 => {
+			318 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9F |
@@ -7583,12 +7583,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			320 => {
+			319 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB8 => {
@@ -7597,12 +7597,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			321 => {
+			320 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0xAD => {
@@ -7611,12 +7611,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			322 => {
+			321 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x83 |
@@ -7627,12 +7627,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			323 => {
+			322 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8F => {
@@ -7641,12 +7641,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			324 => {
+			323 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -7656,12 +7656,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			325 => {
+			324 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x93 ..= 0x9F => {
@@ -7670,12 +7670,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			326 => {
+			325 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x81 => {
@@ -7684,12 +7684,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			327 => {
+			326 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAA |
@@ -7699,12 +7699,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			328 => {
+			327 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x88 |
@@ -7714,12 +7714,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			329 => {
+			328 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x94 |
@@ -7729,12 +7729,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			330 => {
+			329 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9C |
@@ -7750,12 +7750,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			331 => {
+			330 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x83 |
@@ -7765,12 +7765,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			332 => {
+			331 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x85 |
@@ -7784,12 +7784,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			333 => {
+			332 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -7801,12 +7801,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			334 => {
+			333 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA5 |
@@ -7816,12 +7816,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			335 => {
+			334 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -7833,12 +7833,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			336 => {
+			335 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x94 |
@@ -7849,12 +7849,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			337 => {
+			336 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8E |
@@ -7865,12 +7865,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			338 => {
+			337 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x88 |
@@ -7881,12 +7881,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			339 => {
+			338 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x82 |
@@ -7896,12 +7896,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			340 => {
+			339 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 => {
@@ -7910,12 +7910,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			341 => {
+			340 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x83 |
@@ -7932,12 +7932,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			342 => {
+			341 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x82 |
@@ -7964,12 +7964,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			343 => {
+			342 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x89 |
@@ -7982,12 +7982,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			344 => {
+			343 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x96 => {
@@ -7996,12 +7996,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			345 => {
+			344 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xBD => {
@@ -8010,12 +8010,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			346 => {
+			345 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x90 |
@@ -8025,12 +8025,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			347 => {
+			346 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x8A |
@@ -8040,12 +8040,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			348 => {
+			347 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9D |
@@ -8055,12 +8055,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			349 => {
+			348 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x83 |
@@ -8075,12 +8075,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			350 => {
+			349 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x87 |
@@ -8090,12 +8090,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			351 => {
+			350 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x86 |
@@ -8106,12 +8106,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			352 => {
+			351 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0xA8 |
@@ -8121,12 +8121,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			353 => {
+			352 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB4 |
@@ -8136,12 +8136,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			354 => {
+			353 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x90 ..= 0xB3 |
@@ -8151,12 +8151,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			355 => {
+			354 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -8166,12 +8166,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			356 => {
+			355 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x91 |
@@ -8181,12 +8181,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			357 => {
+			356 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xAA |
@@ -8196,12 +8196,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			358 => {
+			357 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -8216,12 +8216,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			359 => {
+			358 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x85 |
@@ -8232,12 +8232,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			360 => {
+			359 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xB5 |
@@ -8247,12 +8247,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			361 => {
+			360 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 |
@@ -8263,12 +8263,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			362 => {
+			361 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x89 => {
@@ -8277,12 +8277,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			363 => {
+			362 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0xA9 |
@@ -8292,12 +8292,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			364 => {
+			363 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x9E |
@@ -8307,12 +8307,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			365 => {
+			364 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x83 |
@@ -8324,12 +8324,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			366 => {
+			365 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -8339,12 +8339,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			367 => {
+			366 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x8F ..= 0x9F => {
@@ -8353,12 +8353,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			368 => {
+			367 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x88 |
@@ -8369,12 +8369,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			369 => {
+			368 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0xA5 ..= 0xA9 |
@@ -8385,12 +8385,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			370 => {
+			369 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x82 |
@@ -8401,12 +8401,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			371 => {
+			370 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x82 ..= 0x84 => {
@@ -8415,12 +8415,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			372 => {
+			371 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x82 |
@@ -8431,12 +8431,12 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}
 			}
-			373 => {
+			372 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
 					0x80 ..= 0x84 |
@@ -8446,7 +8446,7 @@ fn lex(str: &[u8]) -> bool {
 						continue;
 					}
 					_ => {
-						yystate = 37;
+						yystate = 36;
 						continue;
 					}
 				}

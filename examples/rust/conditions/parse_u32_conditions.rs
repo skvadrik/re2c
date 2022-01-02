@@ -3,10 +3,10 @@
 
 
 const YYC_INIT: usize = 0;
-const YYC_BIN: usize = 14;
-const YYC_DEC: usize = 21;
-const YYC_HEX: usize = 28;
-const YYC_OCT: usize = 39;
+const YYC_BIN: usize = 10;
+const YYC_DEC: usize = 14;
+const YYC_HEX: usize = 18;
+const YYC_OCT: usize = 24;
 
 
 
@@ -34,11 +34,11 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 				cur += 1;
 				match yych {
 					0x30 => {
-						yystate = 3;
+						yystate = 2;
 						continue;
 					}
 					0x31 ..= 0x39 => {
-						yystate = 5;
+						yystate = 4;
 						continue;
 					}
 					_ => {
@@ -48,86 +48,109 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 				}
 			}
 			1 => { return None; }
-			3 => {
+			2 => {
 				mar = cur;
 				yych = unsafe {*s.get_unchecked(cur)};
 				match yych {
 					0x42 |
 					0x62 => {
 						cur += 1;
-						yystate = 7;
+						yystate = 5;
 						continue;
 					}
 					0x58 |
 					0x78 => {
 						cur += 1;
-						yystate = 9;
+						yystate = 7;
 						continue;
 					}
 					_ => {
-						yystate = 4;
+						yystate = 3;
 						continue;
 					}
 				}
 			}
-			4 => {
+			3 => {
 				cond = YYC_OCT;
 				yystate = YYC_OCT;
 				continue;
 			}
-			5 => {
+			4 => {
 				cur = (cur as isize + -1) as usize;
 				cond = YYC_DEC;
 				yystate = YYC_DEC;
 				continue;
 			}
-			7 => {
+			5 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				match yych {
 					0x30 ..= 0x31 => {
 						cur += 1;
-						yystate = 10;
+						yystate = 8;
 						continue;
 					}
 					_ => {
-						yystate = 8;
+						yystate = 6;
 						continue;
 					}
 				}
 			}
-			8 => {
+			6 => {
 				cur = mar;
-				yystate = 4;
+				yystate = 3;
 				continue;
 			}
-			9 => {
+			7 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				match yych {
 					0x30 ..= 0x39 |
 					0x41 ..= 0x46 |
 					0x61 ..= 0x66 => {
 						cur += 1;
-						yystate = 12;
+						yystate = 9;
 						continue;
 					}
 					_ => {
-						yystate = 8;
+						yystate = 6;
 						continue;
 					}
 				}
 			}
-			10 => {
+			8 => {
 				cur = (cur as isize + -1) as usize;
 				cond = YYC_BIN;
 				yystate = YYC_BIN;
 				continue;
 			}
-			12 => {
+			9 => {
 				cur = (cur as isize + -1) as usize;
 				cond = YYC_HEX;
 				yystate = YYC_HEX;
 				continue;
 			}
+			10 => {
+				yych = unsafe {*s.get_unchecked(cur)};
+				cur += 1;
+				match yych {
+					0x00 => {
+						yystate = 11;
+						continue;
+					}
+					0x30 ..= 0x31 => {
+						yystate = 13;
+						continue;
+					}
+					_ => {
+						yystate = 12;
+						continue;
+					}
+				}
+			}
+			11 => {
+            return if num < ERROR { Some(num as u32) } else { None };
+        }
+			12 => { return None; }
+			13 => { num = add(num, s[cur-1] - 48, 2);  continue 'lex; }
 			14 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				cur += 1;
@@ -136,12 +159,12 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 						yystate = 15;
 						continue;
 					}
-					0x30 ..= 0x31 => {
-						yystate = 19;
+					0x30 ..= 0x39 => {
+						yystate = 17;
 						continue;
 					}
 					_ => {
-						yystate = 17;
+						yystate = 16;
 						continue;
 					}
 				}
@@ -149,87 +172,64 @@ fn parse_u32(s: &[u8]) -> Option<u32> {
 			15 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			17 => { return None; }
-			19 => { num = add(num, s[cur-1] - 48, 2);  continue 'lex; }
-			21 => {
+			16 => { return None; }
+			17 => { num = add(num, s[cur-1] - 48, 10); continue 'lex; }
+			18 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				cur += 1;
 				match yych {
 					0x00 => {
-						yystate = 22;
+						yystate = 19;
 						continue;
 					}
 					0x30 ..= 0x39 => {
-						yystate = 26;
-						continue;
-					}
-					_ => {
-						yystate = 24;
-						continue;
-					}
-				}
-			}
-			22 => {
-            return if num < ERROR { Some(num as u32) } else { None };
-        }
-			24 => { return None; }
-			26 => { num = add(num, s[cur-1] - 48, 10); continue 'lex; }
-			28 => {
-				yych = unsafe {*s.get_unchecked(cur)};
-				cur += 1;
-				match yych {
-					0x00 => {
-						yystate = 29;
-						continue;
-					}
-					0x30 ..= 0x39 => {
-						yystate = 33;
+						yystate = 21;
 						continue;
 					}
 					0x41 ..= 0x46 => {
-						yystate = 35;
+						yystate = 22;
 						continue;
 					}
 					0x61 ..= 0x66 => {
-						yystate = 37;
+						yystate = 23;
 						continue;
 					}
 					_ => {
-						yystate = 31;
+						yystate = 20;
 						continue;
 					}
 				}
 			}
-			29 => {
+			19 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			31 => { return None; }
-			33 => { num = add(num, s[cur-1] - 48, 16); continue 'lex; }
-			35 => { num = add(num, s[cur-1] - 55, 16); continue 'lex; }
-			37 => { num = add(num, s[cur-1] - 87, 16); continue 'lex; }
-			39 => {
+			20 => { return None; }
+			21 => { num = add(num, s[cur-1] - 48, 16); continue 'lex; }
+			22 => { num = add(num, s[cur-1] - 55, 16); continue 'lex; }
+			23 => { num = add(num, s[cur-1] - 87, 16); continue 'lex; }
+			24 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				cur += 1;
 				match yych {
 					0x00 => {
-						yystate = 40;
+						yystate = 25;
 						continue;
 					}
 					0x30 ..= 0x37 => {
-						yystate = 44;
+						yystate = 27;
 						continue;
 					}
 					_ => {
-						yystate = 42;
+						yystate = 26;
 						continue;
 					}
 				}
 			}
-			40 => {
+			25 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			42 => { return None; }
-			44 => { num = add(num, s[cur-1] - 48, 8);  continue 'lex; }
+			26 => { return None; }
+			27 => { num = add(num, s[cur-1] - 48, 8);  continue 'lex; }
 			_ => {
 				panic!("internal lexer error")
 			}

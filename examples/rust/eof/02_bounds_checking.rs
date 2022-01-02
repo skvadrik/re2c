@@ -33,15 +33,15 @@ fn lex(s: &[u8]) -> isize {
 						continue;
 					}
 					0x20 => {
-						yystate = 5;
+						yystate = 3;
 						continue;
 					}
 					0x27 => {
-						yystate = 8;
+						yystate = 5;
 						continue;
 					}
 					_ => {
-						yystate = 3;
+						yystate = 2;
 						continue;
 					}
 				}
@@ -50,8 +50,8 @@ fn lex(s: &[u8]) -> isize {
             // Check that it is the sentinel, not some unexpected null.
             return if cursor == s.len() + 1 { count } else { -1 }
         }
-			3 => { return -1; }
-			5 => {
+			2 => { return -1; }
+			3 => {
 				if cursor + 1 > limit {
 					return -1;
 				}
@@ -59,17 +59,17 @@ fn lex(s: &[u8]) -> isize {
 				match yych {
 					0x20 => {
 						cursor += 1;
-						yystate = 5;
+						yystate = 3;
 						continue;
 					}
 					_ => {
-						yystate = 7;
+						yystate = 4;
 						continue;
 					}
 				}
 			}
-			7 => { continue 'lex; }
-			8 => {
+			4 => { continue 'lex; }
+			5 => {
 				if cursor + 1 > limit {
 					return -1;
 				}
@@ -77,27 +77,27 @@ fn lex(s: &[u8]) -> isize {
 				cursor += 1;
 				match yych {
 					0x27 => {
-						yystate = 10;
+						yystate = 6;
 						continue;
 					}
 					0x5C => {
-						yystate = 12;
+						yystate = 7;
 						continue;
 					}
 					_ => {
-						yystate = 8;
+						yystate = 5;
 						continue;
 					}
 				}
 			}
-			10 => { count += 1; continue 'lex; }
-			12 => {
+			6 => { count += 1; continue 'lex; }
+			7 => {
 				if cursor + 1 > limit {
 					return -1;
 				}
 				yych = unsafe {*buf.get_unchecked(cursor)};
 				cursor += 1;
-				yystate = 8;
+				yystate = 5;
 				continue;
 			}
 			_ => {

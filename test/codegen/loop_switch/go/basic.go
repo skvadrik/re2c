@@ -20,27 +20,27 @@ func lex(str string) {                    // Go code
 				continue
 			}
 			if (yych <= '9') {
-				yystate = 3
+				yystate = 2
 				continue
 			}
 			yystate = 1
 			continue
 		case 1:
 			{ panic("error!"); }
-		case 3:
+		case 2:
 			yych = str[cursor]
 			if (yych <= '/') {
-				yystate = 5
+				yystate = 3
 				continue
 			}
 			if (yych <= '9') {
 				cursor += 1
-				yystate = 3
+				yystate = 2
 				continue
 			}
-			yystate = 5
+			yystate = 3
 			continue
-		case 5:
+		case 3:
 			{ return }
 		default:
 			panic("internal lexer error")

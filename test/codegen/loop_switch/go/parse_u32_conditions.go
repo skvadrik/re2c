@@ -14,10 +14,10 @@ var (
 
 const (
 	yycinit = 0
-	yycbin = 14
-	yycdec = 21
-	yychex = 28
-	yycoct = 39
+	yycbin = 10
+	yycdec = 14
+	yychex = 18
+	yycoct = 24
 )
 
 
@@ -47,10 +47,10 @@ loop:
 			cursor += 1
 			switch (yych) {
 			case '0':
-				yystate = 3
+				yystate = 2
 				continue
 			case '1','2','3','4','5','6','7','8','9':
-				yystate = 5
+				yystate = 4
 				continue
 			default:
 				yystate = 1
@@ -58,7 +58,7 @@ loop:
 			}
 		case 1:
 			{ return 0, eSyntax }
-		case 3:
+		case 2:
 			marker = cursor
 			yych = str[cursor]
 			switch (yych) {
@@ -66,43 +66,43 @@ loop:
 				fallthrough
 			case 'b':
 				cursor += 1
-				yystate = 7
+				yystate = 5
 				continue
 			case 'X':
 				fallthrough
 			case 'x':
 				cursor += 1
-				yystate = 9
+				yystate = 7
 				continue
 			default:
-				yystate = 4
+				yystate = 3
 				continue
 			}
-		case 4:
+		case 3:
 			cond = yycoct
 			yystate = yycoct
 			continue
-		case 5:
+		case 4:
 			cursor += -1
 			cond = yycdec
 			yystate = yycdec
 			continue
-		case 7:
+		case 5:
 			yych = str[cursor]
 			switch (yych) {
 			case '0','1':
 				cursor += 1
-				yystate = 10
-				continue
-			default:
 				yystate = 8
 				continue
+			default:
+				yystate = 6
+				continue
 			}
-		case 8:
+		case 6:
 			cursor = marker
-			yystate = 4
+			yystate = 3
 			continue
-		case 9:
+		case 7:
 			yych = str[cursor]
 			switch (yych) {
 			case '0','1','2','3','4','5','6','7','8','9':
@@ -111,22 +111,48 @@ loop:
 				fallthrough
 			case 'a','b','c','d','e','f':
 				cursor += 1
-				yystate = 12
+				yystate = 9
 				continue
 			default:
-				yystate = 8
+				yystate = 6
 				continue
 			}
-		case 10:
+		case 8:
 			cursor += -1
 			cond = yycbin
 			yystate = yycbin
 			continue
-		case 12:
+		case 9:
 			cursor += -1
 			cond = yychex
 			yystate = yychex
 			continue
+		case 10:
+			yych = str[cursor]
+			cursor += 1
+			switch (yych) {
+			case 0x00:
+				yystate = 11
+				continue
+			case '0','1':
+				yystate = 13
+				continue
+			default:
+				yystate = 12
+				continue
+			}
+		case 11:
+			{
+		if result < u32Limit {
+			return uint32(result), nil
+		} else {
+			return 0, eOverflow
+		}
+	}
+		case 12:
+			{ return 0, eSyntax }
+		case 13:
+			{ add_digit(2, '0');     goto loop }
 		case 14:
 			yych = str[cursor]
 			cursor += 1
@@ -134,11 +160,11 @@ loop:
 			case 0x00:
 				yystate = 15
 				continue
-			case '0','1':
-				yystate = 19
+			case '0','1','2','3','4','5','6','7','8','9':
+				yystate = 17
 				continue
 			default:
-				yystate = 17
+				yystate = 16
 				continue
 			}
 		case 15:
@@ -149,57 +175,31 @@ loop:
 			return 0, eOverflow
 		}
 	}
+		case 16:
+			{ return 0, eSyntax }
 		case 17:
-			{ return 0, eSyntax }
-		case 19:
-			{ add_digit(2, '0');     goto loop }
-		case 21:
-			yych = str[cursor]
-			cursor += 1
-			switch (yych) {
-			case 0x00:
-				yystate = 22
-				continue
-			case '0','1','2','3','4','5','6','7','8','9':
-				yystate = 26
-				continue
-			default:
-				yystate = 24
-				continue
-			}
-		case 22:
-			{
-		if result < u32Limit {
-			return uint32(result), nil
-		} else {
-			return 0, eOverflow
-		}
-	}
-		case 24:
-			{ return 0, eSyntax }
-		case 26:
 			{ add_digit(10, '0');    goto loop }
-		case 28:
+		case 18:
 			yych = str[cursor]
 			cursor += 1
 			switch (yych) {
 			case 0x00:
-				yystate = 29
+				yystate = 19
 				continue
 			case '0','1','2','3','4','5','6','7','8','9':
-				yystate = 33
+				yystate = 21
 				continue
 			case 'A','B','C','D','E','F':
-				yystate = 35
+				yystate = 22
 				continue
 			case 'a','b','c','d','e','f':
-				yystate = 37
+				yystate = 23
 				continue
 			default:
-				yystate = 31
+				yystate = 20
 				continue
 			}
-		case 29:
+		case 19:
 			{
 		if result < u32Limit {
 			return uint32(result), nil
@@ -207,29 +207,29 @@ loop:
 			return 0, eOverflow
 		}
 	}
-		case 31:
+		case 20:
 			{ return 0, eSyntax }
-		case 33:
+		case 21:
 			{ add_digit(16, '0');    goto loop }
-		case 35:
+		case 22:
 			{ add_digit(16, 'A'-10); goto loop }
-		case 37:
+		case 23:
 			{ add_digit(16, 'a'-10); goto loop }
-		case 39:
+		case 24:
 			yych = str[cursor]
 			cursor += 1
 			switch (yych) {
 			case 0x00:
-				yystate = 40
+				yystate = 25
 				continue
 			case '0','1','2','3','4','5','6','7':
-				yystate = 44
+				yystate = 27
 				continue
 			default:
-				yystate = 42
+				yystate = 26
 				continue
 			}
-		case 40:
+		case 25:
 			{
 		if result < u32Limit {
 			return uint32(result), nil
@@ -237,9 +237,9 @@ loop:
 			return 0, eOverflow
 		}
 	}
-		case 42:
+		case 26:
 			{ return 0, eSyntax }
-		case 44:
+		case 27:
 			{ add_digit(8, '0');     goto loop }
 		default:
 			panic("internal lexer error")

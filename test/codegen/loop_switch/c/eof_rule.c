@@ -24,11 +24,11 @@ loop:
 						continue;
 					case '\'':
 						++YYCURSOR;
-						yystate = 6;
+						yystate = 5;
 						continue;
 					default:
 						if (YYLIMIT <= YYCURSOR) {
-							yystate = 12;
+							yystate = 10;
 							continue;
 						}
 						++YYCURSOR;
@@ -48,16 +48,16 @@ loop:
 						yystate = 3;
 						continue;
 					default:
-						yystate = 5;
+						yystate = 4;
 						continue;
 				}
-			case 5:
+			case 4:
 				{ goto loop; }
-			case 6:
+			case 5:
 				YYMARKER = YYCURSOR;
 				yych = *YYCURSOR;
 				if (yych >= 0x01) {
-					yystate = 8;
+					yystate = 7;
 					continue;
 				}
 				if (YYLIMIT <= YYCURSOR) {
@@ -65,50 +65,50 @@ loop:
 					continue;
 				}
 				++YYCURSOR;
+				yystate = 6;
+				continue;
+			case 6:
+				yych = *YYCURSOR;
 				yystate = 7;
 				continue;
 			case 7:
-				yych = *YYCURSOR;
-				yystate = 8;
-				continue;
-			case 8:
 				switch (yych) {
 					case '\'':
 						++YYCURSOR;
-						yystate = 9;
+						yystate = 8;
 						continue;
 					case '\\':
 						++YYCURSOR;
-						yystate = 11;
+						yystate = 9;
 						continue;
 					default:
 						if (YYLIMIT <= YYCURSOR) {
-							yystate = 13;
+							yystate = 11;
 							continue;
 						}
 						++YYCURSOR;
-						yystate = 7;
+						yystate = 6;
 						continue;
 				}
-			case 9:
+			case 8:
 				{ ++count; goto loop; }
-			case 11:
+			case 9:
 				yych = *YYCURSOR;
 				if (yych <= 0x00) {
 					if (YYLIMIT <= YYCURSOR) {
-						yystate = 13;
+						yystate = 11;
 						continue;
 					}
 					++YYCURSOR;
-					yystate = 7;
+					yystate = 6;
 					continue;
 				}
 				++YYCURSOR;
-				yystate = 7;
+				yystate = 6;
 				continue;
-			case 12:
+			case 10:
 				{ return count; }
-			case 13:
+			case 11:
 				YYCURSOR = YYMARKER;
 				yystate = 2;
 				continue;

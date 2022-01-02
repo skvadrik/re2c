@@ -29,55 +29,55 @@ loop:
 						yystate = 1;
 						continue;
 					case ' ':
-						yystate = 5;
+						yystate = 3;
 						continue;
 					case '\'':
-						yystate = 8;
+						yystate = 5;
 						continue;
 					default:
-						yystate = 3;
+						yystate = 2;
 						continue;
 				}
 			case 1:
 				{ return YYCURSOR + YYMAXFILL - 1 == YYLIMIT ? count : -1; }
-			case 3:
+			case 2:
 				{ return -1; }
-			case 5:
+			case 3:
 				if (YYLIMIT <= YYCURSOR) return -1;
 				yych = *YYCURSOR;
 				switch (yych) {
 					case ' ':
 						++YYCURSOR;
-						yystate = 5;
+						yystate = 3;
 						continue;
 					default:
-						yystate = 7;
+						yystate = 4;
 						continue;
 				}
-			case 7:
+			case 4:
 				{ goto loop; }
-			case 8:
+			case 5:
 				if (YYLIMIT <= YYCURSOR) return -1;
 				yych = *YYCURSOR;
 				++YYCURSOR;
 				switch (yych) {
 					case '\'':
-						yystate = 10;
+						yystate = 6;
 						continue;
 					case '\\':
-						yystate = 12;
+						yystate = 7;
 						continue;
 					default:
-						yystate = 8;
+						yystate = 5;
 						continue;
 				}
-			case 10:
+			case 6:
 				{ ++count; goto loop; }
-			case 12:
+			case 7:
 				if (YYLIMIT <= YYCURSOR) return -1;
 				yych = *YYCURSOR;
 				++YYCURSOR;
-				yystate = 8;
+				yystate = 5;
 				continue;
 		}
 	}

@@ -36,10 +36,10 @@ func parse_u32(str string) (uint32, error) {
 			cursor += 1
 			switch (yych) {
 			case '0':
-				yystate = 3
+				yystate = 2
 				continue
 			case '1','2','3','4','5','6','7','8','9':
-				yystate = 5
+				yystate = 4
 				continue
 			default:
 				yystate = 1
@@ -47,7 +47,7 @@ func parse_u32(str string) (uint32, error) {
 			}
 		case 1:
 			{ goto err }
-		case 3:
+		case 2:
 			marker = cursor
 			yych = str[cursor]
 			switch (yych) {
@@ -55,39 +55,39 @@ func parse_u32(str string) (uint32, error) {
 				fallthrough
 			case 'b':
 				cursor += 1
-				yystate = 7
+				yystate = 5
 				continue
 			case 'X':
 				fallthrough
 			case 'x':
 				cursor += 1
-				yystate = 9
+				yystate = 7
 				continue
 			default:
-				yystate = 4
+				yystate = 3
 				continue
 			}
-		case 4:
+		case 3:
 			{ goto oct }
-		case 5:
+		case 4:
 			cursor += -1
 			{ goto dec }
-		case 7:
+		case 5:
 			yych = str[cursor]
 			switch (yych) {
 			case '0','1':
 				cursor += 1
-				yystate = 10
-				continue
-			default:
 				yystate = 8
 				continue
+			default:
+				yystate = 6
+				continue
 			}
-		case 8:
+		case 6:
 			cursor = marker
-			yystate = 4
+			yystate = 3
 			continue
-		case 9:
+		case 7:
 			yych = str[cursor]
 			switch (yych) {
 			case '0','1','2','3','4','5','6','7','8','9':
@@ -96,16 +96,16 @@ func parse_u32(str string) (uint32, error) {
 				fallthrough
 			case 'a','b','c','d','e','f':
 				cursor += 1
-				yystate = 12
+				yystate = 9
 				continue
 			default:
-				yystate = 8
+				yystate = 6
 				continue
 			}
-		case 10:
+		case 8:
 			cursor += -1
 			{ goto bin }
-		case 12:
+		case 9:
 			cursor += -1
 			{ goto hex }
 		default:
@@ -129,17 +129,17 @@ bin:
 				yystate = 1
 				continue
 			case '0','1':
-				yystate = 5
+				yystate = 3
 				continue
 			default:
-				yystate = 3
+				yystate = 2
 				continue
 			}
 		case 1:
 			{ goto end }
-		case 3:
+		case 2:
 			{ goto err }
-		case 5:
+		case 3:
 			{ add_digit(2, '0'); goto bin }
 		default:
 			panic("internal lexer error")
@@ -162,17 +162,17 @@ oct:
 				yystate = 1
 				continue
 			case '0','1','2','3','4','5','6','7':
-				yystate = 5
+				yystate = 3
 				continue
 			default:
-				yystate = 3
+				yystate = 2
 				continue
 			}
 		case 1:
 			{ goto end }
-		case 3:
+		case 2:
 			{ goto err }
-		case 5:
+		case 3:
 			{ add_digit(8, '0'); goto oct }
 		default:
 			panic("internal lexer error")
@@ -195,17 +195,17 @@ dec:
 				yystate = 1
 				continue
 			case '0','1','2','3','4','5','6','7','8','9':
-				yystate = 5
+				yystate = 3
 				continue
 			default:
-				yystate = 3
+				yystate = 2
 				continue
 			}
 		case 1:
 			{ goto end }
-		case 3:
+		case 2:
 			{ goto err }
-		case 5:
+		case 3:
 			{ add_digit(10, '0'); goto dec }
 		default:
 			panic("internal lexer error")
@@ -228,27 +228,27 @@ hex:
 				yystate = 1
 				continue
 			case '0','1','2','3','4','5','6','7','8','9':
-				yystate = 5
+				yystate = 3
 				continue
 			case 'A','B','C','D','E','F':
-				yystate = 7
+				yystate = 4
 				continue
 			case 'a','b','c','d','e','f':
-				yystate = 9
+				yystate = 5
 				continue
 			default:
-				yystate = 3
+				yystate = 2
 				continue
 			}
 		case 1:
 			{ goto end }
-		case 3:
+		case 2:
 			{ goto err }
-		case 5:
+		case 3:
 			{ add_digit(16, '0');    goto hex }
-		case 7:
+		case 4:
 			{ add_digit(16, 'A'-10); goto hex }
-		case 9:
+		case 5:
 			{ add_digit(16, 'a'-10); goto hex }
 		default:
 			panic("internal lexer error")

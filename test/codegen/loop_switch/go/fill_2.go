@@ -84,13 +84,13 @@ loop:
 				yystate = 1
 				continue
 			case ' ':
-				yystate = 5
+				yystate = 3
 				continue
 			case '\'':
-				yystate = 8
+				yystate = 5
 				continue
 			default:
-				yystate = 3
+				yystate = 2
 				continue
 			}
 		case 1:
@@ -101,11 +101,11 @@ loop:
 			return -1
 		}
 	}
-		case 3:
+		case 2:
 			{
 		return -1
 	}
-		case 5:
+		case 3:
 			if (in.limit-in.cursor < 1) {
 				if r := fill(in, 1); r != 0 { return r }
 			}
@@ -113,17 +113,17 @@ loop:
 			switch (yych) {
 			case ' ':
 				in.cursor += 1
-				yystate = 5
+				yystate = 3
 				continue
 			default:
-				yystate = 7
+				yystate = 4
 				continue
 			}
-		case 7:
+		case 4:
 			{
 		goto loop
 	}
-		case 8:
+		case 5:
 			if (in.limit-in.cursor < 1) {
 				if r := fill(in, 1); r != 0 { return r }
 			}
@@ -131,27 +131,27 @@ loop:
 			in.cursor += 1
 			switch (yych) {
 			case '\'':
-				yystate = 10
+				yystate = 6
 				continue
 			case '\\':
-				yystate = 12
+				yystate = 7
 				continue
 			default:
-				yystate = 8
+				yystate = 5
 				continue
 			}
-		case 10:
+		case 6:
 			{
 		count += 1;
 		goto loop
 	}
-		case 12:
+		case 7:
 			if (in.limit-in.cursor < 1) {
 				if r := fill(in, 1); r != 0 { return r }
 			}
 			yych = in.data[in.cursor]
 			in.cursor += 1
-			yystate = 8
+			yystate = 5
 			continue
 		default:
 			panic("internal lexer error")

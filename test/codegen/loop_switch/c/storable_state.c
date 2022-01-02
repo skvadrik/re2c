@@ -90,7 +90,7 @@ loop:
 						continue;
 					default:
 						if (in->lim <= in->cur) {
-							in->state = 10;
+							in->state = 8;
 							return WAITING;
 						}
 						++in->cur;
@@ -138,11 +138,11 @@ loop:
 					case 'y':
 					case 'z':
 						++in->cur;
-						yystate = 6;
+						yystate = 5;
 						continue;
 					default:
 						if (in->lim <= in->cur) {
-							in->state = 11;
+							in->state = 9;
 							return WAITING;
 						}
 						yystate = 2;
@@ -151,7 +151,7 @@ loop:
 			case 4:
 				in->state = -1;
 				{ *recv = *recv + 1; in->tok = in->cur; goto loop; }
-			case 6:
+			case 5:
 				yych = *in->cur;
 				switch (yych) {
 					case ';':
@@ -185,43 +185,43 @@ loop:
 					case 'y':
 					case 'z':
 						++in->cur;
-						yystate = 6;
+						yystate = 5;
 						continue;
 					default:
 						if (in->lim <= in->cur) {
-							in->state = 12;
+							in->state = 10;
 							return WAITING;
 						}
-						yystate = 8;
+						yystate = 6;
 						continue;
 				}
-			case 8:
+			case 6:
 				in->cur = in->mar;
 				yystate = 2;
 				continue;
-			case 9:
+			case 7:
 				in->state = -1;
 				{ return END; }
-			case 10:
+			case 8:
 				if (in->lim <= in->cur) {
-					yystate = 9;
+					yystate = 7;
 					continue;
 				}
 				yystate = 0;
 				continue;
-			case 11:
+			case 9:
 				if (in->lim <= in->cur) {
 					yystate = 2;
 					continue;
 				}
 				yystate = 3;
 				continue;
-			case 12:
+			case 10:
 				if (in->lim <= in->cur) {
-					yystate = 8;
+					yystate = 6;
 					continue;
 				}
-				yystate = 6;
+				yystate = 5;
 				continue;
 		}
 	}

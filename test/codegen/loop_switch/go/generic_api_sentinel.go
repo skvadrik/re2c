@@ -33,44 +33,44 @@ loop:
 				yystate = 1
 				continue
 			case ' ':
-				yystate = 5
+				yystate = 3
 				continue
 			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
-				yystate = 8
+				yystate = 5
 				continue
 			default:
-				yystate = 3
+				yystate = 2
 				continue
 			}
 		case 1:
 			{ return count }
-		case 3:
+		case 2:
 			{ return -1 }
-		case 5:
+		case 3:
 			yych = peek(str, cursor, limit)
 			switch (yych) {
 			case ' ':
 				cursor += 1
-				yystate = 5
+				yystate = 3
 				continue
 			default:
-				yystate = 7
+				yystate = 4
 				continue
 			}
-		case 7:
+		case 4:
 			{ goto loop }
-		case 8:
+		case 5:
 			yych = peek(str, cursor, limit)
 			switch (yych) {
 			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 				cursor += 1
-				yystate = 8
+				yystate = 5
 				continue
 			default:
-				yystate = 10
+				yystate = 6
 				continue
 			}
-		case 10:
+		case 6:
 			{ count += 1; goto loop }
 		default:
 			panic("internal lexer error")
