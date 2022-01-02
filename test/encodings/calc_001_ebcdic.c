@@ -44,22 +44,18 @@ int scan(char *s, int l)
 yy2:
 			YYDEBUG(2, *YYCURSOR);
 			++YYCURSOR;
-			YYDEBUG(3, *YYCURSOR);
 			{ printf("EOF\n");	return 0; }
 yy4:
 			YYDEBUG(4, *YYCURSOR);
 			++YYCURSOR;
-			YYDEBUG(5, *YYCURSOR);
 			{ printf("ERR\n");	return 1; }
 yy6:
 			YYDEBUG(6, *YYCURSOR);
 			++YYCURSOR;
-			YYDEBUG(7, *YYCURSOR);
 			{ printf("+\n");	continue; }
 yy8:
 			YYDEBUG(8, *YYCURSOR);
 			++YYCURSOR;
-			YYDEBUG(9, *YYCURSOR);
 			{ printf("-\n");	continue; }
 yy10:
 			YYDEBUG(10, *YYCURSOR);
@@ -85,7 +81,6 @@ yy12:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			YYDEBUG(13, *YYCURSOR);
 			switch (yych) {
 				case 0xF0 /* 0 */:
 				case 0xF1 /* 1 */:
@@ -107,7 +102,6 @@ yy15:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			YYDEBUG(16, *YYCURSOR);
 			switch (yych) {
 				case 0xF0 /* 0 */:
 				case 0xF1 /* 1 */:

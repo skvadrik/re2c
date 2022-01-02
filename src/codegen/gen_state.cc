@@ -70,11 +70,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
             append(stmts, code_skip(alc));
         }
         append(stmts, code_nlabel(alc, dfa.initial_label));
-        if (opts->dFlag) {
-            text = o.str(opts->yydebug).cstr("(").label(*dfa.initial_label)
-                .cstr(", *").str(opts->yycursor).cstr(")").flush();
-            append(stmts, code_stmt(alc, text));
-        }
+        gen_yydebug(output, dfa.initial_label, stmts);
         gen_fill_and_label(output, stmts, dfa, s);
         if (backup) {
             append(stmts, code_backup(alc));

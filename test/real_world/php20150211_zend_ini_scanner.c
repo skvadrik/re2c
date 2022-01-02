@@ -534,7 +534,6 @@ yy5:
 		++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
-		YYDEBUG(6, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
@@ -599,7 +598,6 @@ yy11:
 		++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
-		YYDEBUG(12, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
@@ -640,7 +638,6 @@ yy11:
 yy13:
 		YYDEBUG(13, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(14, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Disallow these chars outside option values */
 	return yytext[0];
@@ -650,7 +647,6 @@ yy15:
 		++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
-		YYDEBUG(16, *YYCURSOR);
 		if (yybm[0+yych] & 128) {
 			goto yy15;
 		}
@@ -661,10 +657,8 @@ yy17:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(18, *YYCURSOR);
 		if (yych == '\t') goto yy17;
 		if (yych == ' ') goto yy17;
-		YYDEBUG(19, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Start option value */
 	if (SCNG(scanner_mode) == ZEND_INI_SCANNER_RAW) {
@@ -775,7 +769,6 @@ yy24:
 yy25:
 		YYDEBUG(25, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(26, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Section start */
 	/* Enter section data lookup state */
@@ -791,10 +784,8 @@ yy27:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(28, *YYCURSOR);
 		if (yych == '\t') goto yy27;
 		if (yych == ' ') goto yy27;
-		YYDEBUG(29, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Start of option with offset */
 	/* Eat leading whitespace */
@@ -893,7 +884,6 @@ yy38:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(39, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
@@ -960,7 +950,6 @@ yy44:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(45, *YYCURSOR);
 		if (yych == '\t') goto yy44;
 		if (yych == ' ') goto yy44;
 		goto yy35;
@@ -969,7 +958,6 @@ yy46:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(47, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
@@ -1024,7 +1012,6 @@ yy50:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(51, *YYCURSOR);
 		if (yych == '\t') goto yy50;
 		if (yych == ' ') goto yy50;
 		goto yy40;
@@ -1039,7 +1026,6 @@ yy53:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(54, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
@@ -1088,7 +1074,6 @@ yy56:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(57, *YYCURSOR);
 		if (yych == '\t') goto yy56;
 		if (yych == ' ') goto yy56;
 		goto yy55;
@@ -1197,7 +1182,6 @@ yy63:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(64, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60,
@@ -1247,7 +1231,6 @@ yy66:
 yy67:
 		YYDEBUG(67, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(68, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Double quoted '"' string start */
 	yy_push_state(ST_DOUBLE_QUOTES);
@@ -1284,7 +1267,6 @@ yy72:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(73, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60,
@@ -1334,7 +1316,6 @@ yy75:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(76, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60,
@@ -1387,7 +1368,6 @@ yy78:
 yy79:
 		YYDEBUG(79, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(80, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* End of section or an option offset */
 	BEGIN(INITIAL);
@@ -1422,7 +1402,6 @@ yy83:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(84, *YYCURSOR);
 		if (yybm[0+yych] & 64) {
 			goto yy83;
 		}
@@ -1430,7 +1409,6 @@ yy83:
 yy85:
 		YYDEBUG(85, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(86, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Variable start */
 	yy_push_state(ST_VARNAME);
@@ -1441,7 +1419,6 @@ yy87:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(88, *YYCURSOR);
 		if (yybm[0+yych] & 128) {
 			goto yy87;
 		}
@@ -1452,7 +1429,6 @@ yy89:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(90, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60,
@@ -1493,7 +1469,6 @@ yy89:
 yy91:
 		YYDEBUG(91, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(92, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Raw string */
 	/* Eat leading and trailing single quotes */
@@ -1608,7 +1583,6 @@ yy98:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(99, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,
@@ -1658,7 +1632,6 @@ yy101:
 yy102:
 		YYDEBUG(102, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(103, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Double quoted '"' string start */
 	yy_push_state(ST_DOUBLE_QUOTES);
@@ -1695,7 +1668,6 @@ yy107:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(108, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,
@@ -1745,7 +1717,6 @@ yy110:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(111, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,
@@ -1800,7 +1771,6 @@ yy114:
 		++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
-		YYDEBUG(115, *YYCURSOR);
 		if (yych <= '\f') {
 			if (yych <= 0x08) goto yy116;
 			if (yych <= '\t') goto yy114;
@@ -1846,7 +1816,6 @@ yy119:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(120, *YYCURSOR);
 		if (yybm[0+yych] & 64) {
 			goto yy119;
 		}
@@ -1854,7 +1823,6 @@ yy119:
 yy121:
 		YYDEBUG(121, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(122, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Variable start */
 	yy_push_state(ST_VARNAME);
@@ -1865,7 +1833,6 @@ yy123:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(124, *YYCURSOR);
 		if (yybm[0+yych] & 128) {
 			goto yy123;
 		}
@@ -1876,7 +1843,6 @@ yy125:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(126, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,  &&yy95,
@@ -1926,7 +1892,6 @@ yy128:
 yy129:
 		YYDEBUG(129, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(130, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Raw string */
 	/* Eat leading and trailing single quotes */
@@ -2080,7 +2045,6 @@ yy138:
 		++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
-		YYDEBUG(139, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy140, &&yy140, &&yy140, &&yy140, &&yy140, &&yy140, &&yy140, &&yy140,
@@ -2145,10 +2109,8 @@ yy144:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(145, *YYCURSOR);
 		if (yych == '\t') goto yy144;
 		if (yych == ' ') goto yy144;
-		YYDEBUG(146, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Boolean operators */
 	return yytext[0];
@@ -2156,7 +2118,6 @@ yy144:
 yy147:
 		YYDEBUG(147, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(148, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Double quoted '"' string start */
 	yy_push_state(ST_DOUBLE_QUOTES);
@@ -2193,7 +2154,6 @@ yy152:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(153, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy154, &&yy135, &&yy135, &&yy135, &&yy135, &&yy135, &&yy135, &&yy135,
@@ -2242,7 +2202,6 @@ yy155:
 		++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
-		YYDEBUG(156, *YYCURSOR);
 		if (yybm[0+yych] & 16) {
 			goto yy155;
 		}
@@ -2251,7 +2210,6 @@ yy155:
 yy157:
 		YYDEBUG(157, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(158, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Make = used in option value to trigger error */
 	yyless(0);
@@ -2264,7 +2222,6 @@ yy159:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(160, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy161, &&yy135, &&yy135, &&yy135, &&yy135, &&yy135, &&yy135, &&yy135,
@@ -2561,7 +2518,6 @@ yy169:
 yy170:
 		YYDEBUG(170, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(171, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Variable start */
 	yy_push_state(ST_VARNAME);
@@ -2572,7 +2528,6 @@ yy172:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(173, *YYCURSOR);
 		if (yybm[0+yych] & 64) {
 			goto yy172;
 		}
@@ -2583,7 +2538,6 @@ yy174:
 		YYMARKER = ++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(175, *YYCURSOR);
 		{
 			static void *yytarget[256] = {
 				&&yy154, &&yy135, &&yy135, &&yy135, &&yy135, &&yy135, &&yy135, &&yy135,
@@ -2941,7 +2895,6 @@ yy188:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(189, *YYCURSOR);
 		if (yybm[0+yych] & 128) {
 			goto yy188;
 		}
@@ -2951,7 +2904,6 @@ yy188:
 yy190:
 		YYDEBUG(190, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(191, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Raw string */
 	/* Eat leading and trailing single quotes */
@@ -3007,7 +2959,6 @@ yy193:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(194, *YYCURSOR);
 		if (yych == '\t') goto yy193;
 		if (yych == ' ') goto yy193;
 		goto yy181;
@@ -3139,7 +3090,6 @@ yy198:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(199, *YYCURSOR);
 		if (yych == '\t') goto yy198;
 		if (yych == ' ') goto yy198;
 		goto yy185;
@@ -3236,7 +3186,6 @@ yy203:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(204, *YYCURSOR);
 		if (yych == '\t') goto yy203;
 		if (yych == ' ') goto yy203;
 		goto yy202;
@@ -3291,11 +3240,9 @@ yy207:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(208, *YYCURSOR);
 		if (yybm[0+yych] & 64) {
 			goto yy207;
 		}
-		YYDEBUG(209, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Raw value, only used when SCNG(scanner_mode) == ZEND_INI_SCANNER_RAW. */
 	RETURN_TOKEN(TC_RAW, yytext, yyleng);
@@ -3303,7 +3250,6 @@ yy207:
 yy210:
 		YYDEBUG(210, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(211, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{
 	return 0;
@@ -3313,7 +3259,6 @@ yy212:
 		++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
-		YYDEBUG(213, *YYCURSOR);
 		if (yybm[0+yych] & 128) {
 			goto yy212;
 		}
@@ -3380,7 +3325,6 @@ yyc_ST_DOUBLE_QUOTES:
 		yych = *YYCURSOR;
 		if (yych == '"') goto yy221;
 		if (yych == '$') goto yy224;
-		YYDEBUG(219, *YYCURSOR);
 		++YYCURSOR;
 yy220:
 		YYDEBUG(220, *YYCURSOR);
@@ -3425,11 +3369,9 @@ yy221:
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(222, *YYCURSOR);
 		if (yybm[0+yych] & 128) {
 			goto yy221;
 		}
-		YYDEBUG(223, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Double quoted '"' string ends */
 	yy_pop_state();
@@ -3439,9 +3381,7 @@ yy224:
 		YYDEBUG(224, *YYCURSOR);
 		yych = *++YYCURSOR;
 		if (yych != '{') goto yy220;
-		YYDEBUG(225, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(226, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* Variable start */
 	yy_push_state(ST_VARNAME);
@@ -3495,7 +3435,6 @@ yy229:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	YYDEBUG(230, *YYCURSOR);
 	{
 		static void *yytarget[256] = {
 			&&yy229, &&yy229, &&yy229, &&yy229, &&yy229, &&yy229, &&yy229, &&yy229,
@@ -3548,7 +3487,6 @@ yy231:
 yy232:
 	YYDEBUG(232, *YYCURSOR);
 	++YYCURSOR;
-	YYDEBUG(233, *YYCURSOR);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return 0;
@@ -3556,7 +3494,6 @@ yy232:
 yy234:
 	YYDEBUG(234, *YYCURSOR);
 	++YYCURSOR;
-	YYDEBUG(235, *YYCURSOR);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Variable end */
 	yy_pop_state();
@@ -3642,7 +3579,6 @@ yyc_ST_RAW:
 yy238:
 		YYDEBUG(238, *YYCURSOR);
 		++YYCURSOR;
-		YYDEBUG(239, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{ /* End of option value (if EOF is reached before EOL */
 	BEGIN(INITIAL);
@@ -3751,7 +3687,6 @@ yy246:
 		++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
-		YYDEBUG(247, *YYCURSOR);
 		if (yybm[0+yych] & 64) {
 			goto yy246;
 		}

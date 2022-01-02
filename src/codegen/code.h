@@ -1,6 +1,7 @@
 #ifndef _RE2C_CODEGEN_CODE_
 #define _RE2C_CODEGEN_CODE_
 
+#include <assert.h>
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <string.h>
@@ -69,10 +70,16 @@ public:
     Scratchbuf& u64(uint64_t u) { os << u; return *this; }
     Scratchbuf& str(const std::string &s) { os << s; return *this; }
     Scratchbuf& cstr(const char *s) { os << s; return *this; }
-    Scratchbuf& label(const Label &l) { os << l.index; return *this; }
     Scratchbuf& u32_width(uint32_t u, int width);
     Scratchbuf& yybm_char(uint32_t u, const opt_t *opts, int width);
     Scratchbuf& exact_uint(size_t width);
+
+    Scratchbuf& label(const Label &l, bool check_used = false) {
+        // TODO: enforce `check_used` by default.
+        assert((l.used || !check_used) && l.index != Label::NONE);
+        os << l.index;
+        return *this;
+    }
 };
 
 template<typename T>
@@ -802,6 +809,7 @@ std::string vartag_expr(tagver_t ver, const opt_t *opts,
     const std::set<tagver_t> &mtagvers);
 void output_version_time(std::ostream &os, const opt_t *opts);
 void gen_peek_expr(std::ostream &os, const opt_t *opts);
+void gen_yydebug(Output &output, const Label *label, CodeList *stmts);
 
 } // namespace re2c
 

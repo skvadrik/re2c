@@ -22,21 +22,30 @@
 
 namespace re2c {
 
-static void emit_state(Output &output, const State *s, CodeList *stmts)
-{
+void gen_yydebug(Output &output, const Label *label, CodeList *stmts) {
     const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+    Scratchbuf &buf = output.scratchbuf;
 
-    if (!opts->loop_switch) {
-        append(stmts, code_nlabel(alc, s->label));
+    if (!opts->dFlag) return;
+
+    // The label may be unused but still have a valid index (one such example is the
+    // initial label in goto/label mode). It still needs an YYDEBUG statement.
+    buf.str(opts->yydebug).cstr("(").label(*label, /*check_used*/ false).cstr(", ");
+    gen_peek_expr(buf.stream(), opts);
+    buf.cstr(")");
+    append(stmts, code_stmt(output.allocator, buf.flush()));
+}
+
+static void emit_state(Output &output, const State *state, CodeList *stmts) {
+    // If state label is unused, we should not generate it.
+    // Nor can we emit an YYDEBUG statement, as there is no state number to pass to it.
+    if (!state->label->used) return;
+
+    if (!output.block().opts->loop_switch) {
+        append(stmts, code_nlabel(output.allocator, state->label));
     }
-
-    if (opts->dFlag && (s->action.type != Action::INITIAL)) {
-        o.str(opts->yydebug).cstr("(").label(*s->label).cstr(", ");
-        gen_peek_expr(o.stream(), opts);
-        o.cstr(")");
-        append(stmts, code_stmt(alc, o.flush()));
+    if (state->action.type != Action::INITIAL) {
+        gen_yydebug(output, state->label, stmts);
     }
 }
 
