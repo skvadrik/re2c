@@ -13,61 +13,71 @@ func lex(st *lexer.State) int {
 	yych = st.Data[st.Cur]
 	switch (yych) {
 	case 'x':
-		goto yy4
+		goto yy3
 	default:
-		goto yy2
+		goto yy1
 	}
-yy2:
+yy1:
 	st.Cur++
-yy3:
+yy2:
 	{ return 1 }
-yy4:
+yy3:
 	st.Cur++
 	st.Mar = st.Cur
 	yych = st.Data[st.Cur]
 	switch (yych) {
 	case 'x':
 		st.Tag1 = st.Cur
-		goto yy5
+		goto yy4
 	default:
-		goto yy3
+		goto yy2
 	}
-yy5:
+yy4:
 	st.Cur++
 	yych = st.Data[st.Cur]
 	switch (yych) {
 	case 'x':
 		st.Tag2 = st.Cur
-		goto yy7
-	default:
 		goto yy6
+	default:
+		goto yy5
 	}
-yy6:
+yy5:
 	st.Cur = st.Mar
-	goto yy3
-yy7:
+	goto yy2
+yy6:
 	st.Cur++
 	yych = st.Data[st.Cur]
 	switch (yych) {
 	case 'x':
 		st.Tag3 = st.Cur
-		goto yy8
+		goto yy7
 	default:
-		goto yy6
+		goto yy5
 	}
-yy8:
+yy7:
 	st.Cur++
 	yych = st.Data[st.Cur]
 	switch (yych) {
 	case 'x':
 		st.Tag1 = st.Cur
-		goto yy10
-	default:
 		goto yy9
+	default:
+		goto yy8
 	}
-yy9:
+yy8:
 	st.Cur = st.Tag1
 	{ return 0 }
+yy9:
+	st.Cur++
+	yych = st.Data[st.Cur]
+	switch (yych) {
+	case 'x':
+		goto yy10
+	default:
+		st.Tag1 = st.Tag2
+		goto yy8
+	}
 yy10:
 	st.Cur++
 	yych = st.Data[st.Cur]
@@ -75,8 +85,8 @@ yy10:
 	case 'x':
 		goto yy11
 	default:
-		st.Tag1 = st.Tag2
-		goto yy9
+		st.Tag1 = st.Tag3
+		goto yy8
 	}
 yy11:
 	st.Cur++
@@ -85,8 +95,7 @@ yy11:
 	case 'x':
 		goto yy12
 	default:
-		st.Tag1 = st.Tag3
-		goto yy9
+		goto yy8
 	}
 yy12:
 	st.Cur++
@@ -95,20 +104,11 @@ yy12:
 	case 'x':
 		goto yy13
 	default:
-		goto yy9
+		goto yy8
 	}
 yy13:
 	st.Cur++
-	yych = st.Data[st.Cur]
-	switch (yych) {
-	case 'x':
-		goto yy14
-	default:
-		goto yy9
-	}
-yy14:
-	st.Cur++
-	goto yy9
+	goto yy8
 }
 
 }

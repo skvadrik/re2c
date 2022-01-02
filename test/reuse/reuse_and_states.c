@@ -16,14 +16,14 @@ yy0:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'e': goto yy5;
-		default: goto yy3;
+		case 'e': goto yy3;
+		default: goto yy2;
 	}
-yy3:
+yy2:
 	++YYCURSOR;
 	SETSTATE_1(-1);
 	{ x }
-yy5:
+yy3:
 	++YYCURSOR;
 	SETSTATE_1(-1);
 	{ e }
@@ -33,52 +33,52 @@ yy5:
 
 
 	switch (GETSTATE_REUSE_1()) {
-		default: goto yy7;
+		default: goto yy4;
 		case 1: goto yyFillLabel1;
 		case 2: goto yyFillLabel2;
 		case 3: goto yyFillLabel3;
 	}
-yy7:
+yy4:
 	SETSTATE_REUSE_1(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy12;
-		case 'b': goto yy14;
-		case 'c': goto yy17;
-		default: goto yy10;
+		case 'a': goto yy7;
+		case 'b': goto yy8;
+		case 'c': goto yy10;
+		default: goto yy6;
 	}
-yy10:
+yy6:
 	++YYCURSOR;
 	SETSTATE_REUSE_1(-1);
 	{ x }
-yy12:
+yy7:
 	++YYCURSOR;
 	SETSTATE_REUSE_1(-1);
 	{ a }
-yy14:
+yy8:
 	++YYCURSOR;
 	SETSTATE_REUSE_1(2);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy14;
-		default: goto yy16;
+		case 'b': goto yy8;
+		default: goto yy9;
 	}
-yy16:
+yy9:
 	SETSTATE_REUSE_1(-1);
 	{ c }
-yy17:
+yy10:
 	++YYCURSOR;
 	SETSTATE_REUSE_1(3);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'c': goto yy17;
-		default: goto yy16;
+		case 'c': goto yy10;
+		default: goto yy9;
 	}
 
 
@@ -90,14 +90,14 @@ yyFillLabel3:
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'f': goto yy24;
-		default: goto yy22;
+		case 'f': goto yy14;
+		default: goto yy13;
 	}
-yy22:
+yy13:
 	++YYCURSOR;
 	SETSTATE_2(-1);
 	{ x }
-yy24:
+yy14:
 	++YYCURSOR;
 	SETSTATE_2(-1);
 	{ f }
@@ -110,23 +110,23 @@ yy24:
 
 
 	switch (GETSTATE_REUSE_2()) {
-		default: goto yy26;
+		default: goto yy15;
 		case 5: goto yyFillLabel5;
 	}
-yy26:
+yy15:
 	SETSTATE_REUSE_2(5);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy31;
-		default: goto yy29;
+		case 'a': goto yy18;
+		default: goto yy17;
 	}
-yy29:
+yy17:
 	++YYCURSOR;
 	SETSTATE_REUSE_2(-1);
 	{ x }
-yy31:
+yy18:
 	++YYCURSOR;
 	SETSTATE_REUSE_2(-1);
 	{ a }

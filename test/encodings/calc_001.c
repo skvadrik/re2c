@@ -25,10 +25,10 @@ int scan(char *s, int l)
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			switch (yych) {
-				case 0x00: goto yy2;
-				case 0x4E: goto yy6;
-				case 0x60: goto yy8;
-				case 0xF0: goto yy10;
+				case 0x00: goto yy1;
+				case 0x4E: goto yy3;
+				case 0x60: goto yy4;
+				case 0xF0: goto yy5;
 				case 0xF1:
 				case 0xF2:
 				case 0xF3:
@@ -37,22 +37,22 @@ int scan(char *s, int l)
 				case 0xF6:
 				case 0xF7:
 				case 0xF8:
-				case 0xF9: goto yy12;
-				default: goto yy4;
+				case 0xF9: goto yy7;
+				default: goto yy2;
 			}
-yy2:
+yy1:
 			++YYCURSOR;
 			{ printf("EOF\n");	return 0; }
-yy4:
+yy2:
 			++YYCURSOR;
 			{ printf("ERR\n");	return 1; }
-yy6:
+yy3:
 			++YYCURSOR;
 			{ printf("+\n");	continue; }
-yy8:
+yy4:
 			++YYCURSOR;
 			{ printf("-\n");	continue; }
-yy10:
+yy5:
 			yych = *++YYCURSOR;
 			switch (yych) {
 				case 0xF0:
@@ -64,12 +64,12 @@ yy10:
 				case 0xF6:
 				case 0xF7:
 				case 0xF8:
-				case 0xF9: goto yy15;
-				default: goto yy11;
+				case 0xF9: goto yy9;
+				default: goto yy6;
 			}
-yy11:
+yy6:
 			{ printf("Num\n");	continue; }
-yy12:
+yy7:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -83,12 +83,12 @@ yy12:
 				case 0xF6:
 				case 0xF7:
 				case 0xF8:
-				case 0xF9: goto yy12;
-				default: goto yy14;
+				case 0xF9: goto yy7;
+				default: goto yy8;
 			}
-yy14:
+yy8:
 			{ printf("Num\n");	continue; }
-yy15:
+yy9:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -102,10 +102,10 @@ yy15:
 				case 0xF6:
 				case 0xF7:
 				case 0xF8:
-				case 0xF9: goto yy15;
-				default: goto yy17;
+				case 0xF9: goto yy9;
+				default: goto yy10;
 			}
-yy17:
+yy10:
 			{ printf("Oct\n");	continue; }
 		}
 

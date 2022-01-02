@@ -9,13 +9,13 @@
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 	{ xa }
-yy4:
+yy2:
 	++YYCURSOR;
 	{ a }
 }
@@ -28,13 +28,13 @@ yy4:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy10;
-		default: goto yy8;
+		case 'b': goto yy5;
+		default: goto yy4;
 	}
-yy8:
+yy4:
 	++YYCURSOR;
 	{ xb }
-yy10:
+yy5:
 	++YYCURSOR;
 	{ b }
 }

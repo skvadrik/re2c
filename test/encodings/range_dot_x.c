@@ -7,22 +7,22 @@
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if (yych == '\n') goto yy2;
-	if (yych <= 0xD7FF) goto yy3;
-	if (yych <= 0xDBFF) goto yy5;
-	goto yy3;
+	if (yych == '\n') goto yy1;
+	if (yych <= 0xD7FF) goto yy2;
+	if (yych <= 0xDBFF) goto yy4;
+	goto yy2;
+yy1:
 yy2:
-yy3:
 	++YYCURSOR;
-yy4:
+yy3:
 #line 3 "encodings/range_dot_x.re"
 	{return 0;}
 #line 21 "encodings/range_dot_x.c"
-yy5:
+yy4:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy4;
-	if (yych <= 0xDFFF) goto yy3;
-	goto yy4;
+	if (yych <= 0xDBFF) goto yy3;
+	if (yych <= 0xDFFF) goto yy2;
+	goto yy3;
 }
 #line 4 "encodings/range_dot_x.re"
 

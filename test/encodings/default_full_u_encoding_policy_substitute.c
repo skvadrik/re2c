@@ -7,14 +7,14 @@
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= 0x0000D7FF) goto yy2;
-	if (yych <= 0x0000DFFF) goto yy4;
-yy2:
+	if (yych <= 0x0000D7FF) goto yy1;
+	if (yych <= 0x0000DFFF) goto yy2;
+yy1:
 	++YYCURSOR;
 #line 4 "encodings/default_full_u_encoding_policy_substitute.re"
 	{ return FULL; }
 #line 17 "encodings/default_full_u_encoding_policy_substitute.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 3 "encodings/default_full_u_encoding_policy_substitute.re"
 	{ return DEFAULT; }

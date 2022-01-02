@@ -5,25 +5,11 @@
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy4;
-	if (yych == 0x00000082) goto yy4;
+	if (yych == 0x00000080) goto yy1;
+	if (yych == 0x00000082) goto yy1;
 	++YYCURSOR;
 	{}
-yy4:
-	++YYCURSOR;
-	{}
-}
-
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy10;
-	if (yych == 0x00000082) goto yy10;
-	++YYCURSOR;
-	{}
-yy10:
+yy1:
 	++YYCURSOR;
 	{}
 }
@@ -33,25 +19,11 @@ yy10:
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy16;
-	if (yych == 0x00000082) goto yy16;
+	if (yych == 0x00000080) goto yy3;
+	if (yych == 0x00000082) goto yy3;
 	++YYCURSOR;
 	{}
-yy16:
-	++YYCURSOR;
-	{}
-}
-
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy22;
-	if (yych == 0x00000082) goto yy22;
-	++YYCURSOR;
-	{}
-yy22:
+yy3:
 	++YYCURSOR;
 	{}
 }
@@ -61,25 +33,11 @@ yy22:
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy28;
-	if (yych == 0x00000082) goto yy28;
+	if (yych == 0x00000080) goto yy5;
+	if (yych == 0x00000082) goto yy5;
 	++YYCURSOR;
 	{}
-yy28:
-	++YYCURSOR;
-	{}
-}
-
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy34;
-	if (yych == 0x00000082) goto yy34;
-	++YYCURSOR;
-	{}
-yy34:
+yy5:
 	++YYCURSOR;
 	{}
 }
@@ -89,25 +47,11 @@ yy34:
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy40;
-	if (yych == 0x00000082) goto yy40;
+	if (yych == 0x00000080) goto yy7;
+	if (yych == 0x00000082) goto yy7;
 	++YYCURSOR;
 	{}
-yy40:
-	++YYCURSOR;
-	{}
-}
-
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy46;
-	if (yych == 0x00000082) goto yy46;
-	++YYCURSOR;
-	{}
-yy46:
+yy7:
 	++YYCURSOR;
 	{}
 }
@@ -117,25 +61,11 @@ yy46:
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy52;
-	if (yych == 0x00000082) goto yy52;
+	if (yych == 0x00000080) goto yy9;
+	if (yych == 0x00000082) goto yy9;
 	++YYCURSOR;
 	{}
-yy52:
-	++YYCURSOR;
-	{}
-}
-
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy58;
-	if (yych == 0x00000082) goto yy58;
-	++YYCURSOR;
-	{}
-yy58:
+yy9:
 	++YYCURSOR;
 	{}
 }
@@ -145,11 +75,81 @@ yy58:
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x00000080) goto yy64;
-	if (yych == 0x00000082) goto yy64;
+	if (yych == 0x00000080) goto yy11;
+	if (yych == 0x00000082) goto yy11;
 	++YYCURSOR;
 	{}
-yy64:
+yy11:
+	++YYCURSOR;
+	{}
+}
+
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	if (yych == 0x00000080) goto yy13;
+	if (yych == 0x00000082) goto yy13;
+	++YYCURSOR;
+	{}
+yy13:
+	++YYCURSOR;
+	{}
+}
+
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	if (yych == 0x00000080) goto yy15;
+	if (yych == 0x00000082) goto yy15;
+	++YYCURSOR;
+	{}
+yy15:
+	++YYCURSOR;
+	{}
+}
+
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	if (yych == 0x00000080) goto yy17;
+	if (yych == 0x00000082) goto yy17;
+	++YYCURSOR;
+	{}
+yy17:
+	++YYCURSOR;
+	{}
+}
+
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	if (yych == 0x00000080) goto yy19;
+	if (yych == 0x00000082) goto yy19;
+	++YYCURSOR;
+	{}
+yy19:
+	++YYCURSOR;
+	{}
+}
+
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	if (yych == 0x00000080) goto yy21;
+	if (yych == 0x00000082) goto yy21;
+	++YYCURSOR;
+	{}
+yy21:
 	++YYCURSOR;
 	{}
 }

@@ -16,25 +16,25 @@ Zs:
 	yych = *YYCURSOR;
 	if (yych <= 0x1FFF) {
 		if (yych <= 0x009F) {
-			if (yych == ' ') goto yy4;
+			if (yych == ' ') goto yy1;
 		} else {
-			if (yych <= 0x00A0) goto yy4;
-			if (yych == 0x1680) goto yy4;
+			if (yych <= 0x00A0) goto yy1;
+			if (yych == 0x1680) goto yy1;
 		}
 	} else {
 		if (yych <= 0x205E) {
-			if (yych <= 0x200A) goto yy4;
-			if (yych == 0x202F) goto yy4;
+			if (yych <= 0x200A) goto yy1;
+			if (yych == 0x202F) goto yy1;
 		} else {
-			if (yych <= 0x205F) goto yy4;
-			if (yych == 0x3000) goto yy4;
+			if (yych <= 0x205F) goto yy1;
+			if (yych == 0x3000) goto yy1;
 		}
 	}
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Zs_x_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 37 "encodings/unicode_group_Zs_x_encoding_policy_ignore.c"
-yy4:
+yy1:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Zs_x_encoding_policy_ignore.re"
 	{ goto Zs; }

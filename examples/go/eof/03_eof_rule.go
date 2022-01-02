@@ -16,81 +16,81 @@ func lex(str string) int {
 	yych = str[cursor]
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy3
 	case '\'':
-		goto yy7
+		goto yy5
 	default:
 		if (limit <= cursor) {
-			goto yy13
+			goto yy10
 		}
-		goto yy2
+		goto yy1
 	}
-yy2:
+yy1:
 	cursor += 1
-yy3:
+yy2:
 //line "go/eof/03_eof_rule.re":20
 	{ return -1 }
 //line "go/eof/03_eof_rule.go":34
-yy4:
+yy3:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy3
 	default:
-		goto yy6
+		goto yy4
 	}
-yy6:
+yy4:
 //line "go/eof/03_eof_rule.re":23
 	{ continue }
 //line "go/eof/03_eof_rule.go":47
-yy7:
+yy5:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych >= 0x01) {
-		goto yy9
+		goto yy7
 	}
 	if (limit <= cursor) {
-		goto yy3
+		goto yy2
 	}
-yy8:
+yy6:
 	cursor += 1
 	yych = str[cursor]
-yy9:
+yy7:
 	switch (yych) {
 	case '\'':
-		goto yy10
+		goto yy8
 	case '\\':
-		goto yy12
+		goto yy9
 	default:
 		if (limit <= cursor) {
-			goto yy14
+			goto yy11
 		}
-		goto yy8
+		goto yy6
 	}
-yy10:
+yy8:
 	cursor += 1
 //line "go/eof/03_eof_rule.re":22
 	{ count += 1; continue }
 //line "go/eof/03_eof_rule.go":77
-yy12:
+yy9:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x00) {
 		if (limit <= cursor) {
-			goto yy14
+			goto yy11
 		}
-		goto yy8
+		goto yy6
 	}
-	goto yy8
-yy13:
+	goto yy6
+yy10:
 //line "go/eof/03_eof_rule.re":21
 	{ return count }
 //line "go/eof/03_eof_rule.go":91
-yy14:
+yy11:
 	cursor = marker
-	goto yy3
+	goto yy2
 }
 //line "go/eof/03_eof_rule.re":24
 }

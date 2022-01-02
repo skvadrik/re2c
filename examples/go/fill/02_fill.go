@@ -64,15 +64,15 @@ func lex(in *Input) int {
 	yych = in.data[in.cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy2
+		goto yy1
 	case ' ':
-		goto yy6
+		goto yy3
 	case '\'':
-		goto yy9
+		goto yy5
 	default:
-		goto yy4
+		goto yy2
 	}
-yy2:
+yy1:
 	in.cursor += 1
 //line "go/fill/02_fill.re":59
 	{
@@ -80,12 +80,12 @@ yy2:
 			if in.token == in.limit - YYMAXFILL { return count } else { return -1 }
 		}
 //line "go/fill/02_fill.go":83
-yy4:
+yy2:
 	in.cursor += 1
 //line "go/fill/02_fill.re":65
 	{ return -1 }
 //line "go/fill/02_fill.go":88
-yy6:
+yy3:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
 		if r := fill(in, 1); r != 0 { return r }
@@ -93,15 +93,15 @@ yy6:
 	yych = in.data[in.cursor]
 	switch (yych) {
 	case ' ':
-		goto yy6
+		goto yy3
 	default:
-		goto yy8
+		goto yy4
 	}
-yy8:
+yy4:
 //line "go/fill/02_fill.re":64
 	{ continue }
 //line "go/fill/02_fill.go":104
-yy9:
+yy5:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
 		if r := fill(in, 1); r != 0 { return r }
@@ -109,24 +109,24 @@ yy9:
 	yych = in.data[in.cursor]
 	switch (yych) {
 	case '\'':
-		goto yy11
+		goto yy6
 	case '\\':
-		goto yy13
+		goto yy7
 	default:
-		goto yy9
+		goto yy5
 	}
-yy11:
+yy6:
 	in.cursor += 1
 //line "go/fill/02_fill.re":63
 	{ count += 1; continue }
 //line "go/fill/02_fill.go":123
-yy13:
+yy7:
 	in.cursor += 1
 	if (in.limit-in.cursor < 1) {
 		if r := fill(in, 1); r != 0 { return r }
 	}
 	yych = in.data[in.cursor]
-	goto yy9
+	goto yy5
 }
 //line "go/fill/02_fill.re":66
 }

@@ -9,48 +9,48 @@
 		case 'a':
 			yyt2 = NULL;
 			yyt1 = YYCURSOR;
-			goto yy3;
+			goto yy2;
 		case 'b':
 			yyt2 = YYCURSOR;
-			goto yy5;
+			goto yy4;
 		default:
 			yyt2 = NULL;
 			yyt1 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	p = yyt2;
 	q = yyt1;
 	{}
-yy3:
+yy2:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy4:
+yy3:
 	switch (yych) {
-		case 'a': goto yy3;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
-yy5:
+yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	yyt1 = NULL;
 	switch (yych) {
-		case 'b': goto yy6;
-		default: goto yy4;
+		case 'b': goto yy5;
+		default: goto yy3;
 	}
-yy6:
+yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy8;
-		default: goto yy7;
+		case 'a': goto yy7;
+		default: goto yy6;
 	}
-yy7:
+yy6:
 	YYCURSOR = YYMARKER;
 	yyt1 = NULL;
-	goto yy2;
-yy8:
+	goto yy1;
+yy7:
 	++YYCURSOR;
-	goto yy2;
+	goto yy1;
 }
 
 tags/topsort2.re:4:28: warning: rule matches empty string [-Wmatch-empty-string]

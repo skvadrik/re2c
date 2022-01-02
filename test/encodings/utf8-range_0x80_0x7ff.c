@@ -37,11 +37,11 @@
 		case 0xDC:
 		case 0xDD:
 		case 0xDE:
-		case 0xDF: goto yy3;
-		default: goto yy2;
+		case 0xDF: goto yy2;
+		default: goto yy1;
 	}
+yy1:
 yy2:
-yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -107,10 +107,10 @@ yy3:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy4;
-		default: goto yy2;
+		case 0xBF: goto yy3;
+		default: goto yy1;
 	}
-yy4:
+yy3:
 	++YYCURSOR;
 #line 3 "encodings/utf8-range_0x80_0x7ff.re"
 	{ return 0; }

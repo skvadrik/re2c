@@ -25,10 +25,10 @@ size_t scan(const char *s, int l, char *r)
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *(YYMARKER = YYCURSOR);
-	if (yych <= 0x00) goto yy3;
-	if (yych == '?') goto yy7;
-	goto yy5;
-yy2:
+	if (yych <= 0x00) goto yy2;
+	if (yych == '?') goto yy4;
+	goto yy3;
+yy1:
 #line 41 "bug1454253_s.re"
 	{
 		*r++ = '0';
@@ -36,7 +36,7 @@ yy2:
 		return p - s;
 	}
 #line 39 "bug1454253_s.c"
-yy3:
+yy2:
 	++YYCURSOR;
 #line 35 "bug1454253_s.re"
 	{
@@ -45,61 +45,61 @@ yy3:
 		return p - s;
 	}
 #line 48 "bug1454253_s.c"
-yy5:
+yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= 0x00) goto yy2;
-	if (yych == '?') goto yy2;
-	goto yy5;
-yy7:
+	if (yych <= 0x00) goto yy1;
+	if (yych == '?') goto yy1;
+	goto yy3;
+yy4:
 	yych = *++YYCURSOR;
 	if (yych <= '9') {
-		if (yych == '!') goto yy9;
-		if (yych >= '0') goto yy12;
+		if (yych == '!') goto yy6;
+		if (yych >= '0') goto yy8;
 	} else {
 		if (yych <= 'Z') {
-			if (yych >= 'A') goto yy12;
+			if (yych >= 'A') goto yy8;
 		} else {
-			if (yych <= '`') goto yy8;
-			if (yych <= 'z') goto yy12;
+			if (yych <= '`') goto yy5;
+			if (yych <= 'z') goto yy8;
 		}
 	}
-yy8:
+yy5:
 	YYCURSOR = YYMARKER;
-	goto yy2;
-yy9:
+	goto yy1;
+yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') {
-		if (yych <= '/') goto yy11;
-		if (yych <= '9') goto yy9;
+		if (yych <= '/') goto yy7;
+		if (yych <= '9') goto yy6;
 	} else {
-		if (yych <= 'Z') goto yy9;
-		if (yych <= '`') goto yy11;
-		if (yych <= 'z') goto yy9;
+		if (yych <= 'Z') goto yy6;
+		if (yych <= '`') goto yy7;
+		if (yych <= 'z') goto yy6;
 	}
-yy11:
+yy7:
 #line 25 "bug1454253_s.re"
 	{
 		*r++ = '1';
 		continue;
 	}
 #line 90 "bug1454253_s.c"
-yy12:
+yy8:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') {
-		if (yych <= '/') goto yy14;
-		if (yych <= '9') goto yy12;
+		if (yych <= '/') goto yy9;
+		if (yych <= '9') goto yy8;
 	} else {
-		if (yych <= 'Z') goto yy12;
-		if (yych <= '`') goto yy14;
-		if (yych <= 'z') goto yy12;
+		if (yych <= 'Z') goto yy8;
+		if (yych <= '`') goto yy9;
+		if (yych <= 'z') goto yy8;
 	}
-yy14:
+yy9:
 #line 30 "bug1454253_s.re"
 	{
 		*r++ = '2';

@@ -29,15 +29,15 @@ func lex(str string) int {
 	yych = buf[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy2
+		goto yy1
 	case ' ':
-		goto yy6
+		goto yy3
 	case '\'':
-		goto yy9
+		goto yy5
 	default:
-		goto yy4
+		goto yy2
 	}
-yy2:
+yy1:
 	cursor += 1
 //line "go/eof/02_bounds_checking.re":24
 	{
@@ -45,12 +45,12 @@ yy2:
 			if cursor - 1 == len(str) { return count } else { return -1 }
 		}
 //line "go/eof/02_bounds_checking.go":48
-yy4:
+yy2:
 	cursor += 1
 //line "go/eof/02_bounds_checking.re":30
 	{ return -1 }
 //line "go/eof/02_bounds_checking.go":53
-yy6:
+yy3:
 	cursor += 1
 	if (limit - cursor < 1) {
 		return -1
@@ -58,15 +58,15 @@ yy6:
 	yych = buf[cursor]
 	switch (yych) {
 	case ' ':
-		goto yy6
+		goto yy3
 	default:
-		goto yy8
+		goto yy4
 	}
-yy8:
+yy4:
 //line "go/eof/02_bounds_checking.re":29
 	{ continue }
 //line "go/eof/02_bounds_checking.go":69
-yy9:
+yy5:
 	cursor += 1
 	if (limit - cursor < 1) {
 		return -1
@@ -74,24 +74,24 @@ yy9:
 	yych = buf[cursor]
 	switch (yych) {
 	case '\'':
-		goto yy11
+		goto yy6
 	case '\\':
-		goto yy13
+		goto yy7
 	default:
-		goto yy9
+		goto yy5
 	}
-yy11:
+yy6:
 	cursor += 1
 //line "go/eof/02_bounds_checking.re":28
 	{ count += 1; continue }
 //line "go/eof/02_bounds_checking.go":88
-yy13:
+yy7:
 	cursor += 1
 	if (limit - cursor < 1) {
 		return -1
 	}
 	yych = buf[cursor]
-	goto yy9
+	goto yy5
 }
 //line "go/eof/02_bounds_checking.re":31
 }

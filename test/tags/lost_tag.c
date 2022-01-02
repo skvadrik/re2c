@@ -8,12 +8,12 @@
 	yych = YYPEEK();
 	YYSKIP();
 	switch (yych) {
-		case 'a': goto yy2;
+		case 'a': goto yy1;
 		default:
 			YYSTAGN(yyt1);
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	a = yyt1;
 	YYSTAGP(b);
 	{}

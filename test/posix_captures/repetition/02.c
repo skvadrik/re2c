@@ -8,31 +8,31 @@
 	if (yych >= 0x01) {
 		yyt2 = NULL;
 		yyt1 = YYCURSOR;
-		goto yy3;
+		goto yy2;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) {
 		yyt5 = NULL;
 		yyt3 = yyt4 = YYCURSOR;
-		goto yy5;
+		goto yy3;
 	}
 	YYCURSOR = YYMARKER;
-	goto yy2;
-yy5:
+	goto yy1;
+yy3:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) {
 		yyt3 = yyt5 = NULL;
 		yyt2 = yyt4 = YYCURSOR;
-		goto yy7;
+		goto yy5;
 	}
 	yyt6 = YYCURSOR;
-yy6:
+yy4:
 	yynmatch = 7;
 	yypmatch[2] = yyt1;
 	yypmatch[5] = yyt2;
@@ -53,16 +53,16 @@ yy6:
 	yypmatch[12] = yyt6;
 	if (yyt6 != NULL) yypmatch[12] -= 1;
 	{}
-yy7:
+yy5:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
 		yyt6 = YYCURSOR;
-		goto yy6;
+		goto yy4;
 	}
 	++YYCURSOR;
 	yyt6 = NULL;
 	yyt5 = YYCURSOR;
-	goto yy6;
+	goto yy4;
 }
 
 posix_captures/repetition/02.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]

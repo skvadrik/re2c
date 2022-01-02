@@ -20,93 +20,93 @@ func lexUTF8(str []uint8) int {
 	yych = str[cursor]
 	switch (yych) {
 	case 0xE2:
-		goto yy4
+		goto yy3
 	default:
-		goto yy2
+		goto yy1
 	}
-yy2:
+yy1:
 	cursor += 1
-yy3:
+yy2:
 //line "go/reuse/reuse.re":17
 	{ return 1; }
 //line "go/reuse/reuse.go":33
-yy4:
+yy3:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 0x88:
-		goto yy5
+		goto yy4
 	default:
-		goto yy3
+		goto yy2
 	}
-yy5:
+yy4:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x80:
-		goto yy7
-	default:
 		goto yy6
+	default:
+		goto yy5
 	}
-yy6:
+yy5:
 	cursor = marker
-	goto yy3
-yy7:
+	goto yy2
+yy6:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'x':
+		goto yy7
+	default:
+		goto yy5
+	}
+yy7:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case ' ':
 		goto yy8
 	default:
-		goto yy6
+		goto yy5
 	}
 yy8:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case ' ':
+	case 0xE2:
 		goto yy9
 	default:
-		goto yy6
+		goto yy5
 	}
 yy9:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 0xE2:
+	case 0x88:
 		goto yy10
 	default:
-		goto yy6
+		goto yy5
 	}
 yy10:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 0x88:
+	case 0x83:
 		goto yy11
 	default:
-		goto yy6
+		goto yy5
 	}
 yy11:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 0x83:
+	case 'y':
 		goto yy12
 	default:
-		goto yy6
+		goto yy5
 	}
 yy12:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 'y':
-		goto yy13
-	default:
-		goto yy6
-	}
-yy13:
 	cursor += 1
 //line "go/reuse/reuse.re":16
 	{ return 0; }
@@ -124,38 +124,38 @@ func lexUTF32(str []uint32) int {
 	var yych uint32
 	yych = str[cursor]
 	if (yych == 0x00002200) {
-		goto yy19
+		goto yy15
 	}
 	cursor += 1
-yy18:
+yy14:
 //line "go/reuse/reuse.re":17
 	{ return 1; }
 //line "go/reuse/reuse.go":134
-yy19:
+yy15:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych != 'x') {
-		goto yy18
+		goto yy14
 	}
 	cursor += 1
 	yych = str[cursor]
 	if (yych == ' ') {
-		goto yy22
+		goto yy17
 	}
-yy21:
+yy16:
 	cursor = marker
-	goto yy18
-yy22:
+	goto yy14
+yy17:
 	cursor += 1
 	yych = str[cursor]
 	if (yych != 0x00002203) {
-		goto yy21
+		goto yy16
 	}
 	cursor += 1
 	yych = str[cursor]
 	if (yych != 'y') {
-		goto yy21
+		goto yy16
 	}
 	cursor += 1
 //line "go/reuse/reuse.re":16

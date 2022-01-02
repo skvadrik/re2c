@@ -14,15 +14,15 @@ bool lex(const char *YYCURSOR)
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 15 "header/header_01.re"
 	{ return false; }
 #line 25 "header/header_01.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 14 "header/header_01.re"
 	{ return true; }

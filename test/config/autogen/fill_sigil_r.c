@@ -10,39 +10,80 @@
 	if (YYLIMIT <= YYCURSOR) fill(@@)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
+yy1:
+	++YYCURSOR;
+	{ x }
 yy2:
 	++YYCURSOR;
-	{ x }
+	{ a }
+}
+
+
+// re2c:api:sigil = need;
+// re2c:define:YYFILL = "fill(need);";
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) fill(1);(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy5;
+		default: goto yy4;
+	}
 yy4:
 	++YYCURSOR;
+	{ x }
+yy5:
+	++YYCURSOR;
 	{ a }
 }
 
 
-// re2c:api:sigil = need;
-// re2c:define:YYFILL = "fill(need);";
+// re2c:api:sigil = @@;
+// re2c:define:YYFILL = "fill(@@)";
 
 {
 	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(1);(1);
+	if (YYLIMIT <= YYCURSOR) fill(1)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy10;
-		default: goto yy8;
+		case 'a': goto yy8;
+		default: goto yy7;
 	}
+yy7:
+	++YYCURSOR;
+	{ x }
 yy8:
 	++YYCURSOR;
-	{ x }
+	{ a }
+}
+
+
+// re2c:api:sigil = @@;
+// re2c:define:YYFILL = "fill(need);";
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) fill(need);(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy11;
+		default: goto yy10;
+	}
 yy10:
 	++YYCURSOR;
+	{ x }
+yy11:
+	++YYCURSOR;
 	{ a }
 }
 
 
-// re2c:api:sigil = @@;
+// re2c:define:YYFILL@len = @@;
+// re2c:api:sigil = need;
 // re2c:define:YYFILL = "fill(@@)";
 
 {
@@ -50,201 +91,160 @@ yy10:
 	if (YYLIMIT <= YYCURSOR) fill(1)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy16;
-		default: goto yy14;
+		case 'a': goto yy14;
+		default: goto yy13;
 	}
+yy13:
+	++YYCURSOR;
+	{ x }
 yy14:
 	++YYCURSOR;
-	{ x }
+	{ a }
+}
+
+
+// re2c:define:YYFILL@len = @@;
+// re2c:api:sigil = need;
+// re2c:define:YYFILL = "fill(need);";
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) fill(need);(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy17;
+		default: goto yy16;
+	}
 yy16:
 	++YYCURSOR;
+	{ x }
+yy17:
+	++YYCURSOR;
 	{ a }
 }
 
 
+// re2c:define:YYFILL@len = @@;
 // re2c:api:sigil = @@;
-// re2c:define:YYFILL = "fill(need);";
+// re2c:define:YYFILL = "fill(@@)";
 
 {
 	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(need);(1);
+	if (YYLIMIT <= YYCURSOR) fill(1)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy22;
-		default: goto yy20;
+		case 'a': goto yy20;
+		default: goto yy19;
 	}
+yy19:
+	++YYCURSOR;
+	{ x }
 yy20:
 	++YYCURSOR;
-	{ x }
+	{ a }
+}
+
+
+// re2c:define:YYFILL@len = @@;
+// re2c:api:sigil = @@;
+// re2c:define:YYFILL = "fill(need);";
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) fill(need);(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy23;
+		default: goto yy22;
+	}
 yy22:
 	++YYCURSOR;
+	{ x }
+yy23:
+	++YYCURSOR;
 	{ a }
 }
 
 
-// re2c:define:YYFILL@len = @@;
+// re2c:define:YYFILL@len = need;
 // re2c:api:sigil = need;
 // re2c:define:YYFILL = "fill(@@)";
 
 {
 	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(1)(1);
+	if (YYLIMIT <= YYCURSOR) fill(@@)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy28;
-		default: goto yy26;
+		case 'a': goto yy26;
+		default: goto yy25;
 	}
+yy25:
+	++YYCURSOR;
+	{ x }
 yy26:
 	++YYCURSOR;
-	{ x }
+	{ a }
+}
+
+
+// re2c:define:YYFILL@len = need;
+// re2c:api:sigil = need;
+// re2c:define:YYFILL = "fill(need);";
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) fill(1);(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy29;
+		default: goto yy28;
+	}
 yy28:
 	++YYCURSOR;
+	{ x }
+yy29:
+	++YYCURSOR;
 	{ a }
 }
 
 
-// re2c:define:YYFILL@len = @@;
-// re2c:api:sigil = need;
-// re2c:define:YYFILL = "fill(need);";
+// re2c:define:YYFILL@len = need;
+// re2c:api:sigil = @@;
+// re2c:define:YYFILL = "fill(@@)";
 
 {
 	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(need);(1);
+	if (YYLIMIT <= YYCURSOR) fill(@@)(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy34;
-		default: goto yy32;
+		case 'a': goto yy32;
+		default: goto yy31;
 	}
+yy31:
+	++YYCURSOR;
+	{ x }
 yy32:
 	++YYCURSOR;
-	{ x }
+	{ a }
+}
+
+
+// re2c:define:YYFILL@len = need;
+// re2c:api:sigil = @@;
+// re2c:define:YYFILL = "fill(need);";
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) fill(1);(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy35;
+		default: goto yy34;
+	}
 yy34:
 	++YYCURSOR;
-	{ a }
-}
-
-
-// re2c:define:YYFILL@len = @@;
-// re2c:api:sigil = @@;
-// re2c:define:YYFILL = "fill(@@)";
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(1)(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy40;
-		default: goto yy38;
-	}
-yy38:
-	++YYCURSOR;
 	{ x }
-yy40:
-	++YYCURSOR;
-	{ a }
-}
-
-
-// re2c:define:YYFILL@len = @@;
-// re2c:api:sigil = @@;
-// re2c:define:YYFILL = "fill(need);";
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(need);(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy46;
-		default: goto yy44;
-	}
-yy44:
-	++YYCURSOR;
-	{ x }
-yy46:
-	++YYCURSOR;
-	{ a }
-}
-
-
-// re2c:define:YYFILL@len = need;
-// re2c:api:sigil = need;
-// re2c:define:YYFILL = "fill(@@)";
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(@@)(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy52;
-		default: goto yy50;
-	}
-yy50:
-	++YYCURSOR;
-	{ x }
-yy52:
-	++YYCURSOR;
-	{ a }
-}
-
-
-// re2c:define:YYFILL@len = need;
-// re2c:api:sigil = need;
-// re2c:define:YYFILL = "fill(need);";
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(1);(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy58;
-		default: goto yy56;
-	}
-yy56:
-	++YYCURSOR;
-	{ x }
-yy58:
-	++YYCURSOR;
-	{ a }
-}
-
-
-// re2c:define:YYFILL@len = need;
-// re2c:api:sigil = @@;
-// re2c:define:YYFILL = "fill(@@)";
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(@@)(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy64;
-		default: goto yy62;
-	}
-yy62:
-	++YYCURSOR;
-	{ x }
-yy64:
-	++YYCURSOR;
-	{ a }
-}
-
-
-// re2c:define:YYFILL@len = need;
-// re2c:api:sigil = @@;
-// re2c:define:YYFILL = "fill(need);";
-
-{
-	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) fill(1);(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy70;
-		default: goto yy68;
-	}
-yy68:
-	++YYCURSOR;
-	{ x }
-yy70:
+yy35:
 	++YYCURSOR;
 	{ a }
 }

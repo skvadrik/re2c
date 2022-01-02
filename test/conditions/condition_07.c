@@ -116,18 +116,18 @@ yyc_R1:
 				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 				yych = *s->cur;
 				if (yybm[0+yych] & 128) {
-					goto yy4;
+					goto yy1;
 				}
 				++s->cur;
 				{
 					continue;
 				}
-yy4:
+yy1:
 				++s->cur;
 				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 				yych = *s->cur;
 				if (yybm[0+yych] & 128) {
-					goto yy4;
+					goto yy1;
 				}
 				{
 					continue;
@@ -173,18 +173,18 @@ yyc_R2:
 				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 				yych = *s->cur;
 				if (yybm[0+yych] & 128) {
-					goto yy11;
+					goto yy3;
 				}
 				++s->cur;
 				{
 					continue;
 				}
-yy11:
+yy3:
 				++s->cur;
 				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 				yych = *s->cur;
 				if (yybm[0+yych] & 128) {
-					goto yy11;
+					goto yy3;
 				}
 				{
 					continue;

@@ -47,22 +47,22 @@ Cc:
 		case 0x1D:
 		case 0x1E:
 		case 0x1F:
-		case 0x7F: goto yy2;
-		case 0xC2: goto yy6;
-		default: goto yy4;
+		case 0x7F: goto yy1;
+		case 0xC2: goto yy4;
+		default: goto yy2;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Cc_8_encoding_policy_substitute.re"
 	{ goto Cc; }
 #line 59 "encodings/unicode_group_Cc_8_encoding_policy_substitute.c"
-yy4:
+yy2:
 	++YYCURSOR;
-yy5:
+yy3:
 #line 14 "encodings/unicode_group_Cc_8_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }
 #line 65 "encodings/unicode_group_Cc_8_encoding_policy_substitute.c"
-yy6:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -96,8 +96,8 @@ yy6:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy2;
-		default: goto yy5;
+		case 0x9F: goto yy1;
+		default: goto yy3;
 	}
 }
 #line 15 "encodings/unicode_group_Cc_8_encoding_policy_substitute.re"

@@ -10,19 +10,19 @@
 		case 'a':
 		case 'b':
 			yyt1 = yyt2 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 		default:
 			yyt1 = YYCURSOR;
-			goto yy3;
+			goto yy2;
 	}
-yy2:
+yy1:
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt1;
 	yypmatch[3] = yyt2;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -31,8 +31,8 @@ yy3:
 		case 'a':
 		case 'b':
 			yyt2 = YYCURSOR;
-			goto yy2;
-		default: goto yy3;
+			goto yy1;
+		default: goto yy2;
 	}
 }
 

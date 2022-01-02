@@ -11,21 +11,21 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '\'': goto yy4;
-		default: goto yy2;
+		case '\'': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 	{ /* DEFAULT */ }
-yy4:
+yy2:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '\'': goto yy6;
-		default: goto yy4;
+		case '\'': goto yy3;
+		default: goto yy2;
 	}
-yy6:
+yy3:
 	++YYCURSOR;
 	{ /* STRING  */ }
 }
@@ -40,53 +40,53 @@ yy6:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '\'': goto yy12;
+		case '\'': goto yy6;
 		default:
 			if (YYLIMIT <= YYCURSOR) {
 				if (YYFILL() == 0) goto yyFillLabel0;
-				goto yy18;
+				goto yy11;
 			}
-			goto yy10;
+			goto yy5;
 	}
-yy10:
+yy5:
 	++YYCURSOR;
 	{ /* DEFAULT */ }
-yy12:
+yy6:
 	YYMARKER = ++YYCURSOR;
 yyFillLabel1:
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
 		if (YYLIMIT <= YYCURSOR) {
 			if (YYFILL() == 0) goto yyFillLabel1;
-			goto yy13;
+			goto yy7;
 		}
-		goto yy14;
+		goto yy8;
 	}
-	goto yy15;
-yy13:
+	goto yy9;
+yy7:
 	{ /* QUOTE   */ }
-yy14:
+yy8:
 	++YYCURSOR;
 yyFillLabel2:
 	yych = *YYCURSOR;
-yy15:
+yy9:
 	switch (yych) {
-		case '\'': goto yy16;
+		case '\'': goto yy10;
 		default:
 			if (YYLIMIT <= YYCURSOR) {
 				if (YYFILL() == 0) goto yyFillLabel2;
-				goto yy19;
+				goto yy12;
 			}
-			goto yy14;
+			goto yy8;
 	}
-yy16:
+yy10:
 	++YYCURSOR;
 	{ /* STRING  */ }
-yy18:
+yy11:
 	{ /* EOF     */ }
-yy19:
+yy12:
 	YYCURSOR = YYMARKER;
-	goto yy13;
+	goto yy7;
 }
 
 eof/shadowrule_01.re:11:6: warning: unreachable rule (shadowed by rule at line 12) [-Wunreachable-rules]

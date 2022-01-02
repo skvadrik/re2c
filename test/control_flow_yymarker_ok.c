@@ -9,21 +9,21 @@
 	yych = *YYCURSOR++;
 	yych = *YYCURSOR++;
 	yych = *(YYMARKER = YYCURSOR);
-	goto yy5;
-yy4:
+	goto yy2;
+yy1:
 #line 5 "control_flow_yymarker_ok.re"
 	{ action2 }
 #line 17 "control_flow_yymarker_ok.c"
-yy5:
+yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy7;
-		default: goto yy6;
+		case 'a': goto yy4;
+		default: goto yy3;
 	}
-yy6:
+yy3:
 	YYCURSOR = YYMARKER;
-	goto yy4;
-yy7:
+	goto yy1;
+yy4:
 	++YYCURSOR;
 #line 4 "control_flow_yymarker_ok.re"
 	{ action1 }

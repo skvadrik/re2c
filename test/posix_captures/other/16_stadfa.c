@@ -6,32 +6,32 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-		case 'y': goto yy3;
-		default: goto yy2;
+		case 'y': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
 	switch (yych) {
-		case 'y': goto yy5;
-		default: goto yy4;
+		case 'y': goto yy4;
+		default: goto yy3;
 	}
-yy4:
+yy3:
 	YYCURSOR = YYMARKER;
-	goto yy2;
-yy5:
+	goto yy1;
+yy4:
 	yych = *++YYCURSOR;
 	yyt2 = YYCURSOR - 1;
 	switch (yych) {
-		case 'y': goto yy7;
-		default: goto yy6;
+		case 'y': goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[3] = yyt2;
@@ -39,10 +39,10 @@ yy6:
 	yypmatch[2] = yyt2;
 	if (yyt2 != NULL) yypmatch[2] -= 1;
 	{}
-yy7:
+yy6:
 	++YYCURSOR;
 	yyt2 = YYCURSOR - 1;
-	goto yy6;
+	goto yy5;
 }
 
 posix_captures/other/16_stadfa.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]

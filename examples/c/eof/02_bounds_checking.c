@@ -25,12 +25,12 @@ loop:
 	if (YYLIMIT <= YYCURSOR) goto fail;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x00: goto yy2;
-		case ' ': goto yy6;
-		case '\'': goto yy9;
-		default: goto yy4;
+		case 0x00: goto yy1;
+		case ' ': goto yy3;
+		case '\'': goto yy5;
+		default: goto yy2;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 21 "c/eof/02_bounds_checking.re"
 	{
@@ -38,42 +38,42 @@ yy2:
             if (YYCURSOR - 1 == buf + len) goto exit; else goto fail;
         }
 #line 41 "c/eof/02_bounds_checking.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 27 "c/eof/02_bounds_checking.re"
 	{ goto fail; }
 #line 46 "c/eof/02_bounds_checking.c"
-yy6:
+yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) goto fail;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case ' ': goto yy6;
-		default: goto yy8;
+		case ' ': goto yy3;
+		default: goto yy4;
 	}
-yy8:
+yy4:
 #line 26 "c/eof/02_bounds_checking.re"
 	{ goto loop; }
 #line 58 "c/eof/02_bounds_checking.c"
-yy9:
+yy5:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) goto fail;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '\'': goto yy11;
-		case '\\': goto yy13;
-		default: goto yy9;
+		case '\'': goto yy6;
+		case '\\': goto yy7;
+		default: goto yy5;
 	}
-yy11:
+yy6:
 	++YYCURSOR;
 #line 25 "c/eof/02_bounds_checking.re"
 	{ ++count; goto loop; }
 #line 72 "c/eof/02_bounds_checking.c"
-yy13:
+yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) goto fail;
 	yych = *YYCURSOR;
-	goto yy9;
+	goto yy5;
 }
 #line 28 "c/eof/02_bounds_checking.re"
 

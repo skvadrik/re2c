@@ -15,30 +15,30 @@ Co:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych <= 0xDBFE) {
-		if (yych <= 0xDB7F) goto yy2;
-		if (yych == 0xDBBF) goto yy5;
-		goto yy4;
+		if (yych <= 0xDB7F) goto yy1;
+		if (yych == 0xDBBF) goto yy4;
+		goto yy3;
 	} else {
-		if (yych <= 0xDBFF) goto yy5;
-		if (yych <= 0xDFFF) goto yy2;
-		if (yych <= 0xF8FF) goto yy6;
+		if (yych <= 0xDBFF) goto yy4;
+		if (yych <= 0xDFFF) goto yy1;
+		if (yych <= 0xF8FF) goto yy5;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "encodings/unicode_group_Co_x_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }
 #line 32 "encodings/unicode_group_Co_x_encoding_policy_substitute.c"
+yy3:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy2;
+	if (yych <= 0xDFFF) goto yy5;
+	goto yy2;
 yy4:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy3;
-	if (yych <= 0xDFFF) goto yy6;
-	goto yy3;
+	if (yych <= 0xDBFF) goto yy2;
+	if (yych >= 0xDFFE) goto yy2;
 yy5:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy3;
-	if (yych >= 0xDFFE) goto yy3;
-yy6:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Co_x_encoding_policy_substitute.re"
 	{ goto Co; }

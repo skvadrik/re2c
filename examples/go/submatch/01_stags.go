@@ -34,34 +34,46 @@ var yyt1 int
 	switch (yych) {
 	case '0':
 		yyt1 = cursor
-		goto yy4
+		goto yy3
 	case '1':
 		yyt1 = cursor
-		goto yy5
+		goto yy4
 	case '2':
 		yyt1 = cursor
-		goto yy6
+		goto yy5
 	case '3','4','5','6','7','8','9':
 		yyt1 = cursor
+		goto yy6
+	default:
+		goto yy1
+	}
+yy1:
+	cursor += 1
+yy2:
+//line "go/submatch/01_stags.re":41
+	{ return 0, eBadIP }
+//line "go/submatch/01_stags.go":56
+yy3:
+	cursor += 1
+	marker = cursor
+	yych = str[cursor]
+	switch (yych) {
+	case '.':
 		goto yy7
 	default:
 		goto yy2
 	}
-yy2:
-	cursor += 1
-yy3:
-//line "go/submatch/01_stags.re":41
-	{ return 0, eBadIP }
-//line "go/submatch/01_stags.go":56
 yy4:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy8
+		goto yy7
+	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy9
 	default:
-		goto yy3
+		goto yy2
 	}
 yy5:
 	cursor += 1
@@ -69,11 +81,15 @@ yy5:
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy8
-	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy7
+	case '0','1','2','3','4':
+		goto yy9
+	case '5':
 		goto yy10
+	case '6','7','8','9':
+		goto yy11
 	default:
-		goto yy3
+		goto yy2
 	}
 yy6:
 	cursor += 1
@@ -81,278 +97,262 @@ yy6:
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy8
-	case '0','1','2','3','4':
-		goto yy10
-	case '5':
+		goto yy7
+	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy11
-	case '6','7','8','9':
-		goto yy12
 	default:
-		goto yy3
+		goto yy2
 	}
 yy7:
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
-	switch (yych) {
-	case '.':
-		goto yy8
-	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy12
-	default:
-		goto yy3
-	}
-yy8:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '0':
 		yyt2 = cursor
-		goto yy13
+		goto yy12
 	case '1':
 		yyt2 = cursor
-		goto yy14
+		goto yy13
 	case '2':
 		yyt2 = cursor
-		goto yy15
+		goto yy14
 	case '3','4','5','6','7','8','9':
 		yyt2 = cursor
-		goto yy16
+		goto yy15
 	default:
-		goto yy9
+		goto yy8
 	}
-yy9:
+yy8:
 	cursor = marker
-	goto yy3
+	goto yy2
+yy9:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case '.':
+		goto yy7
+	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy11
+	default:
+		goto yy8
+	}
 yy10:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy8
-	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy12
+		goto yy7
+	case '0','1','2','3','4','5':
+		goto yy11
 	default:
-		goto yy9
+		goto yy8
 	}
 yy11:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy8
-	case '0','1','2','3','4','5':
-		goto yy12
+		goto yy7
 	default:
-		goto yy9
+		goto yy8
 	}
 yy12:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy8
+		goto yy16
 	default:
-		goto yy9
+		goto yy8
 	}
 yy13:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy17
+		goto yy16
+	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy15
 	default:
-		goto yy9
+		goto yy8
 	}
 yy14:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy17
-	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy16
+	case '0','1','2','3','4':
+		goto yy15
+	case '5':
+		goto yy17
+	case '6','7','8','9':
+		goto yy12
 	default:
-		goto yy9
+		goto yy8
 	}
 yy15:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy17
-	case '0','1','2','3','4':
 		goto yy16
-	case '5':
-		goto yy18
-	case '6','7','8','9':
-		goto yy13
+	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy12
 	default:
-		goto yy9
+		goto yy8
 	}
 yy16:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case '.':
-		goto yy17
-	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy13
+	case '0':
+		yyt3 = cursor
+		goto yy18
+	case '1':
+		yyt3 = cursor
+		goto yy19
+	case '2':
+		yyt3 = cursor
+		goto yy20
+	case '3','4','5','6','7','8','9':
+		yyt3 = cursor
+		goto yy21
 	default:
-		goto yy9
+		goto yy8
 	}
 yy17:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case '0':
-		yyt3 = cursor
-		goto yy19
-	case '1':
-		yyt3 = cursor
-		goto yy20
-	case '2':
-		yyt3 = cursor
-		goto yy21
-	case '3','4','5','6','7','8','9':
-		yyt3 = cursor
-		goto yy22
+	case '.':
+		goto yy16
+	case '0','1','2','3','4','5':
+		goto yy12
 	default:
-		goto yy9
+		goto yy8
 	}
 yy18:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy17
-	case '0','1','2','3','4','5':
-		goto yy13
+		goto yy22
 	default:
-		goto yy9
+		goto yy8
 	}
 yy19:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy23
+		goto yy22
+	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy21
 	default:
-		goto yy9
+		goto yy8
 	}
 yy20:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy23
-	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy22
+	case '0','1','2','3','4':
+		goto yy21
+	case '5':
+		goto yy23
+	case '6','7','8','9':
+		goto yy18
 	default:
-		goto yy9
+		goto yy8
 	}
 yy21:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy23
-	case '0','1','2','3','4':
 		goto yy22
-	case '5':
-		goto yy24
-	case '6','7','8','9':
-		goto yy19
+	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy18
 	default:
-		goto yy9
+		goto yy8
 	}
 yy22:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case '.':
-		goto yy23
-	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy19
+	case '0':
+		yyt4 = cursor
+		goto yy24
+	case '1':
+		yyt4 = cursor
+		goto yy25
+	case '2':
+		yyt4 = cursor
+		goto yy26
+	case '3','4','5','6','7','8','9':
+		yyt4 = cursor
+		goto yy27
 	default:
-		goto yy9
+		goto yy8
 	}
 yy23:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case '0':
-		yyt4 = cursor
-		goto yy25
-	case '1':
-		yyt4 = cursor
-		goto yy26
-	case '2':
-		yyt4 = cursor
-		goto yy27
-	case '3','4','5','6','7','8','9':
-		yyt4 = cursor
-		goto yy28
+	case '.':
+		goto yy22
+	case '0','1','2','3','4','5':
+		goto yy18
 	default:
-		goto yy9
+		goto yy8
 	}
 yy24:
 	cursor += 1
 	yych = str[cursor]
-	switch (yych) {
-	case '.':
-		goto yy23
-	case '0','1','2','3','4','5':
-		goto yy19
-	default:
-		goto yy9
+	if (yych <= 0x00) {
+		goto yy28
 	}
+	goto yy8
 yy25:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x00) {
-		goto yy29
+	switch (yych) {
+	case 0x00:
+		goto yy28
+	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy27
+	default:
+		goto yy8
 	}
-	goto yy9
 yy26:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy29
-	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy28
+	case '0','1','2','3','4':
+		goto yy27
+	case '5':
+		goto yy29
+	case '6','7','8','9':
+		goto yy24
 	default:
-		goto yy9
+		goto yy8
 	}
 yy27:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy29
-	case '0','1','2','3','4':
 		goto yy28
-	case '5':
-		goto yy31
-	case '6','7','8','9':
-		goto yy25
+	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy24
 	default:
-		goto yy9
+		goto yy8
 	}
 yy28:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 0x00:
-		goto yy29
-	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy25
-	default:
-		goto yy9
-	}
-yy29:
 	cursor += 1
 	o1 = yyt1
 	o2 = yyt2
@@ -366,16 +366,16 @@ yy29:
 				(num(o1, o2-1) << 24), nil
 		}
 //line "go/submatch/01_stags.go":369
-yy31:
+yy29:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy29
+		goto yy28
 	case '0','1','2','3','4','5':
-		goto yy25
+		goto yy24
 	default:
-		goto yy9
+		goto yy8
 	}
 }
 //line "go/submatch/01_stags.re":42

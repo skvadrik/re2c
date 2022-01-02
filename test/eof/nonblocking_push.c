@@ -92,67 +92,67 @@ static status_t lex(input_t &in)
 switch (YYGETSTATE()) {
 	default: goto yy0;
 	case 0:
-		if (in.lim <= in.cur) goto yy32;
+		if (in.lim <= in.cur) goto yy28;
 		goto yyFillLabel0;
 	case 1:
-		if (in.lim <= in.cur) goto yy7;
+		if (in.lim <= in.cur) goto yy4;
 		goto yyFillLabel1;
 	case 2:
-		if (in.lim <= in.cur) goto yy10;
+		if (in.lim <= in.cur) goto yy7;
 		goto yyFillLabel2;
 	case 3:
-		if (in.lim <= in.cur) goto yy10;
+		if (in.lim <= in.cur) goto yy7;
 		goto yyFillLabel3;
 	case 4:
-		if (in.lim <= in.cur) goto yy10;
+		if (in.lim <= in.cur) goto yy7;
 		goto yyFillLabel4;
 	case 5:
-		if (in.lim <= in.cur) goto yy10;
+		if (in.lim <= in.cur) goto yy7;
 		goto yyFillLabel5;
 	case 6:
-		if (in.lim <= in.cur) goto yy10;
+		if (in.lim <= in.cur) goto yy7;
 		goto yyFillLabel6;
 	case 7:
-		if (in.lim <= in.cur) goto yy10;
+		if (in.lim <= in.cur) goto yy7;
 		goto yyFillLabel7;
 	case 8:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel8;
 	case 9:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel9;
 	case 10:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel10;
 	case 11:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel11;
 	case 12:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel12;
 	case 13:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel13;
 	case 14:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel14;
 	case 15:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel15;
 	case 16:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel16;
 	case 17:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel17;
 	case 18:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel18;
 	case 19:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel19;
 	case 20:
-		if (in.lim <= in.cur) goto yy17;
+		if (in.lim <= in.cur) goto yy14;
 		goto yyFillLabel20;
 }
 
@@ -163,7 +163,7 @@ yyFillLabel0:
 	in.yych = *in.cur;
 	switch (in.yych) {
 		case '\n':
-		case ' ': goto yy5;
+		case ' ': goto yy3;
 		case 'A':
 		case 'B':
 		case 'C':
@@ -214,41 +214,41 @@ yyFillLabel0:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy8;
-		case 'T': goto yy11;
+		case 'z': goto yy5;
+		case 'T': goto yy8;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(0);
 				YYFILL();
 			}
-			goto yy3;
+			goto yy2;
 	}
-yy3:
+yy2:
 	++in.cur;
 	YYSETSTATE(-1);
 	{ printf("< Unexpected character >%c<\n", in.yych); return FAIL; }
-yy5:
+yy3:
 	++in.cur;
 yyFillLabel1:
 	in.yych = *in.cur;
 	switch (in.yych) {
 		case '\n':
-		case ' ': goto yy5;
+		case ' ': goto yy3;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(1);
 				YYFILL();
 			}
-			goto yy7;
+			goto yy4;
 	}
-yy7:
+yy4:
 	YYSETSTATE(-1);
 	{ printf("< whitespace\n");                         return WHITESPACE; }
-yy8:
+yy5:
 	++in.cur;
 yyFillLabel2:
 	in.yych = *in.cur;
-yy9:
+yy6:
 	switch (in.yych) {
 		case 'A':
 		case 'B':
@@ -301,18 +301,18 @@ yy9:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy8;
+		case 'z': goto yy5;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(2);
 				YYFILL();
 			}
-			goto yy10;
+			goto yy7;
 	}
-yy10:
+yy7:
 	YYSETSTATE(-1);
 	{ printf("< word\n");                               return WORD; }
-yy11:
+yy8:
 	++in.cur;
 yyFillLabel3:
 	in.yych = *in.cur;
@@ -322,11 +322,11 @@ yyFillLabel3:
 				YYSETSTATE(3);
 				YYFILL();
 			}
-			goto yy10;
-		case 'H': goto yy12;
-		default: goto yy9;
+			goto yy7;
+		case 'H': goto yy9;
+		default: goto yy6;
 	}
-yy12:
+yy9:
 	++in.cur;
 yyFillLabel4:
 	in.yych = *in.cur;
@@ -336,11 +336,11 @@ yyFillLabel4:
 				YYSETSTATE(4);
 				YYFILL();
 			}
-			goto yy10;
-		case 'I': goto yy13;
-		default: goto yy9;
+			goto yy7;
+		case 'I': goto yy10;
+		default: goto yy6;
 	}
-yy13:
+yy10:
 	++in.cur;
 yyFillLabel5:
 	in.yych = *in.cur;
@@ -350,11 +350,11 @@ yyFillLabel5:
 				YYSETSTATE(5);
 				YYFILL();
 			}
-			goto yy10;
-		case 'N': goto yy14;
-		default: goto yy9;
+			goto yy7;
+		case 'N': goto yy11;
+		default: goto yy6;
 	}
-yy14:
+yy11:
 	++in.cur;
 yyFillLabel6:
 	in.yych = *in.cur;
@@ -364,11 +364,11 @@ yyFillLabel6:
 				YYSETSTATE(6);
 				YYFILL();
 			}
-			goto yy10;
-		case 'G': goto yy15;
-		default: goto yy9;
+			goto yy7;
+		case 'G': goto yy12;
+		default: goto yy6;
 	}
-yy15:
+yy12:
 	in.mark = ++in.cur;
 yyFillLabel7:
 	in.yych = *in.cur;
@@ -378,187 +378,187 @@ yyFillLabel7:
 				YYSETSTATE(7);
 				YYFILL();
 			}
-			goto yy10;
-		case '\n': goto yy16;
-		default: goto yy9;
+			goto yy7;
+		case '\n': goto yy13;
+		default: goto yy6;
 	}
-yy16:
+yy13:
 	++in.cur;
 yyFillLabel8:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'W': goto yy18;
+		case 'W': goto yy15;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(8);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy17:
+yy14:
 	in.cur = in.mark;
-	goto yy10;
-yy18:
+	goto yy7;
+yy15:
 	++in.cur;
 yyFillLabel9:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'I': goto yy19;
+		case 'I': goto yy16;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(9);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy19:
+yy16:
 	++in.cur;
 yyFillLabel10:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'T': goto yy20;
+		case 'T': goto yy17;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(10);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy20:
+yy17:
 	++in.cur;
 yyFillLabel11:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'H': goto yy21;
+		case 'H': goto yy18;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(11);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy21:
+yy18:
 	++in.cur;
 yyFillLabel12:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case '\n': goto yy22;
+		case '\n': goto yy19;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(12);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy22:
+yy19:
 	++in.cur;
 yyFillLabel13:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'N': goto yy23;
+		case 'N': goto yy20;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(13);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy23:
+yy20:
 	++in.cur;
 yyFillLabel14:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'E': goto yy24;
+		case 'E': goto yy21;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(14);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy24:
+yy21:
 	++in.cur;
 yyFillLabel15:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'W': goto yy25;
+		case 'W': goto yy22;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(15);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy25:
+yy22:
 	++in.cur;
 yyFillLabel16:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'L': goto yy26;
+		case 'L': goto yy23;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(16);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy26:
+yy23:
 	++in.cur;
 yyFillLabel17:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'I': goto yy27;
+		case 'I': goto yy24;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(17);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy27:
+yy24:
 	++in.cur;
 yyFillLabel18:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'N': goto yy28;
+		case 'N': goto yy25;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(18);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy28:
+yy25:
 	++in.cur;
 yyFillLabel19:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'E': goto yy29;
+		case 'E': goto yy26;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(19);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy29:
+yy26:
 	++in.cur;
 yyFillLabel20:
 	in.yych = *in.cur;
 	switch (in.yych) {
-		case 'S': goto yy30;
+		case 'S': goto yy27;
 		default:
 			if (in.lim <= in.cur) {
 				YYSETSTATE(20);
 				YYFILL();
 			}
-			goto yy17;
+			goto yy14;
 	}
-yy30:
+yy27:
 	++in.cur;
 	YYSETSTATE(-1);
 	{ printf("< Thing w/ newlines\n");                  return THING; }
-yy32:
+yy28:
 	YYSETSTATE(-1);
 	{ printf("< EOF\n");                                return OK; }
 

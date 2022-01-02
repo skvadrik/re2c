@@ -9,48 +9,48 @@
 	if (yych >= 0x01) {
 		yyt2 = NULL;
 		yyt1 = YYCURSOR;
-		goto yy3;
+		goto yy2;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'a':
-		case 'b': goto yy7;
-		default: goto yy6;
+		case 'b': goto yy6;
+		default: goto yy5;
 	}
-yy4:
+yy3:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
-		goto yy2;
+		goto yy1;
 	} else {
 		yyt3 = YYCURSOR;
-		goto yy8;
+		goto yy7;
 	}
-yy5:
+yy4:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy6:
+yy5:
 	switch (yych) {
-		case 0x00: goto yy4;
+		case 0x00: goto yy3;
 		case 'a':
-		case 'b': goto yy9;
-		default: goto yy5;
+		case 'b': goto yy8;
+		default: goto yy4;
 	}
-yy7:
+yy6:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) {
 		yyt2 = YYCURSOR;
-		goto yy11;
+		goto yy9;
 	}
 	yyt3 = NULL;
 	yyt2 = YYCURSOR;
-yy8:
+yy7:
 	yynmatch = 3;
 	yypmatch[0] = yyt1;
 	yypmatch[3] = yyt2;
@@ -61,7 +61,7 @@ yy8:
 	yypmatch[4] = yyt3;
 	if (yyt3 != NULL) yypmatch[4] -= 2;
 	{}
-yy9:
+yy8:
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -69,20 +69,20 @@ yy9:
 	switch (yych) {
 		case 0x00:
 			yyt3 = YYCURSOR;
-			goto yy8;
+			goto yy7;
 		case 'a':
-		case 'b': goto yy9;
-		default: goto yy5;
+		case 'b': goto yy8;
+		default: goto yy4;
 	}
-yy11:
+yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
 		yyt3 = NULL;
-		goto yy8;
+		goto yy7;
 	}
-	goto yy11;
+	goto yy9;
 }
 
 posix_captures/basic/15.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]

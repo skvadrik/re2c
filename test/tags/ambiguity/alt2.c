@@ -8,13 +8,13 @@
 	switch (yych) {
 		case 'a':
 			yyt1 = YYCURSOR;
-			goto yy4;
-		default: goto yy2;
+			goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 	{}
-yy4:
+yy2:
 	++YYCURSOR;
 	p = yyt1;
 	{ @p }

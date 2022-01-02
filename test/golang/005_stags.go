@@ -23,20 +23,20 @@ func Lex(str string) (a int, b int, c int) {
 		yyt1 = -1
 		yyt2 = -1
 		yyt3 = -1
-		goto yy2
+		goto yy1
 	case 'a':
 		yyt1 = cursor
-		goto yy6
+		goto yy4
 	case 'b':
 		yyt2 = cursor
-		goto yy7
+		goto yy5
 	case 'c':
 		yyt3 = cursor
-		goto yy8
+		goto yy6
 	default:
-		goto yy4
+		goto yy2
 	}
-yy2:
+yy1:
 	cursor += 1
 	a = yyt1
 	b = yyt2
@@ -46,63 +46,63 @@ yy2:
 		return a, b, c
 	}
 //line "golang/005_stags.go":49
-yy4:
+yy2:
 	cursor += 1
-yy5:
+yy3:
 //line "golang/005_stags.re":22
 	{
 		return -2, -2, -2
 	}
 //line "golang/005_stags.go":57
+yy4:
+	cursor += 1
+	marker = cursor
+	yych = str[cursor]
+	switch (yych) {
+	case 0x00:
+		yyt2 = -1
+		yyt3 = -1
+		goto yy7
+	case 'a':
+		goto yy8
+	case 'b':
+		goto yy10
+	case 'c':
+		yyt2 = -1
+		yyt3 = cursor
+		goto yy11
+	default:
+		goto yy3
+	}
+yy5:
+	cursor += 1
+	marker = cursor
+	yych = str[cursor]
+	switch (yych) {
+	case 0x00:
+		yyt1 = -1
+		yyt3 = -1
+		goto yy7
+	case 'b':
+		goto yy12
+	default:
+		goto yy3
+	}
 yy6:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
+		yyt1 = -1
 		yyt2 = -1
-		yyt3 = -1
-		goto yy9
-	case 'a':
-		goto yy11
-	case 'b':
-		goto yy14
+		goto yy7
 	case 'c':
-		yyt2 = -1
-		yyt3 = cursor
-		goto yy15
+		goto yy13
 	default:
-		goto yy5
+		goto yy3
 	}
 yy7:
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
-	switch (yych) {
-	case 0x00:
-		yyt1 = -1
-		yyt3 = -1
-		goto yy9
-	case 'b':
-		goto yy16
-	default:
-		goto yy5
-	}
-yy8:
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
-	switch (yych) {
-	case 0x00:
-		yyt1 = -1
-		yyt2 = -1
-		goto yy9
-	case 'c':
-		goto yy18
-	default:
-		goto yy5
-	}
-yy9:
 	cursor += 1
 	a = yyt1
 	b = yyt2
@@ -112,119 +112,119 @@ yy9:
 		return a, b, c
 	}
 //line "golang/005_stags.go":115
-yy11:
+yy8:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
 		yyt2 = -1
 		yyt3 = -1
-		goto yy9
+		goto yy7
 	case 'a':
-		goto yy11
+		goto yy8
 	case 'b':
-		goto yy20
+		goto yy14
 	default:
-		goto yy13
+		goto yy9
+	}
+yy9:
+	cursor = marker
+	goto yy3
+yy10:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case 'c':
+		yyt2 = cursor
+		goto yy15
+	default:
+		goto yy9
+	}
+yy11:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case 0x00:
+		goto yy1
+	case 'a':
+		yyt1 = cursor
+		goto yy16
+	default:
+		goto yy9
+	}
+yy12:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case 0x00:
+		yyt1 = -1
+		yyt3 = -1
+		goto yy7
+	case 'b':
+		goto yy12
+	default:
+		goto yy9
 	}
 yy13:
-	cursor = marker
-	goto yy5
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case 0x00:
+		yyt1 = -1
+		yyt2 = -1
+		goto yy7
+	case 'c':
+		goto yy13
+	default:
+		goto yy9
+	}
 yy14:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'c':
 		yyt2 = cursor
-		goto yy21
+		goto yy17
 	default:
-		goto yy13
+		goto yy9
 	}
 yy15:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 0x00:
-		goto yy2
 	case 'a':
 		yyt1 = cursor
-		goto yy22
+		goto yy16
 	default:
-		goto yy13
+		goto yy18
 	}
 yy16:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 0x00:
-		yyt1 = -1
-		yyt3 = -1
-		goto yy9
-	case 'b':
-		goto yy16
-	default:
-		goto yy13
-	}
-yy18:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 0x00:
-		yyt1 = -1
-		yyt2 = -1
-		goto yy9
-	case 'c':
-		goto yy18
-	default:
-		goto yy13
-	}
-yy20:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 'c':
-		yyt2 = cursor
-		goto yy23
-	default:
-		goto yy13
-	}
-yy21:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 'a':
-		yyt1 = cursor
-		goto yy22
-	default:
-		goto yy24
-	}
-yy22:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
 	case 'b':
 		yyt2 = cursor
-		goto yy27
+		goto yy20
 	case 'c':
 		yyt2 = -1
 		yyt3 = cursor
-		goto yy15
+		goto yy11
 	default:
-		goto yy13
+		goto yy9
 	}
-yy23:
+yy17:
 	cursor += 1
 	yych = str[cursor]
-yy24:
+yy18:
 	switch (yych) {
 	case 0x00:
-		goto yy25
+		goto yy19
 	case 'c':
-		goto yy23
+		goto yy17
 	default:
-		goto yy13
+		goto yy9
 	}
-yy25:
+yy19:
 	cursor += 1
 	a = yyt1
 	c = yyt2
@@ -235,15 +235,15 @@ yy25:
 		return a, b, c
 	}
 //line "golang/005_stags.go":238
-yy27:
+yy20:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'c':
 		yyt3 = cursor
-		goto yy15
+		goto yy11
 	default:
-		goto yy13
+		goto yy9
 	}
 }
 //line "golang/005_stags.re":37

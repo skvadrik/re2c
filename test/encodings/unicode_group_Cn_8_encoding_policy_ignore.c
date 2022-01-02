@@ -15,47 +15,47 @@ Cn:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xCD: goto yy4;
-		case 0xCE: goto yy5;
-		case 0xD4: goto yy6;
-		case 0xD5: goto yy7;
-		case 0xD6: goto yy8;
-		case 0xD7: goto yy9;
-		case 0xD8: goto yy10;
-		case 0xDC: goto yy11;
-		case 0xDD: goto yy12;
-		case 0xDE: goto yy13;
-		case 0xDF: goto yy14;
-		case 0xE0: goto yy15;
-		case 0xE1: goto yy16;
-		case 0xE2: goto yy17;
-		case 0xE3: goto yy18;
-		case 0xE4: goto yy19;
-		case 0xE9: goto yy20;
-		case 0xEA: goto yy21;
-		case 0xED: goto yy22;
-		case 0xEF: goto yy23;
-		case 0xF0: goto yy24;
+		case 0xCD: goto yy3;
+		case 0xCE: goto yy4;
+		case 0xD4: goto yy5;
+		case 0xD5: goto yy6;
+		case 0xD6: goto yy7;
+		case 0xD7: goto yy8;
+		case 0xD8: goto yy9;
+		case 0xDC: goto yy10;
+		case 0xDD: goto yy11;
+		case 0xDE: goto yy12;
+		case 0xDF: goto yy13;
+		case 0xE0: goto yy14;
+		case 0xE1: goto yy15;
+		case 0xE2: goto yy16;
+		case 0xE3: goto yy17;
+		case 0xE4: goto yy18;
+		case 0xE9: goto yy19;
+		case 0xEA: goto yy20;
+		case 0xED: goto yy21;
+		case 0xEF: goto yy22;
+		case 0xF0: goto yy23;
 		case 0xF1:
-		case 0xF2: goto yy25;
-		case 0xF3: goto yy26;
-		case 0xF4: goto yy27;
-		default: goto yy2;
+		case 0xF2: goto yy24;
+		case 0xF3: goto yy25;
+		case 0xF4: goto yy26;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "encodings/unicode_group_Cn_8_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 51 "encodings/unicode_group_Cn_8_encoding_policy_ignore.c"
-yy4:
+yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xB8:
-		case 0xB9: goto yy28;
-		default: goto yy3;
+		case 0xB9: goto yy27;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -64,33 +64,33 @@ yy5:
 		case 0x83:
 		case 0x8B:
 		case 0x8D:
-		case 0xA2: goto yy28;
-		default: goto yy3;
+		case 0xA2: goto yy27;
+		default: goto yy2;
+	}
+yy5:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0: goto yy27;
+		default: goto yy2;
 	}
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB0: goto yy28;
-		default: goto yy3;
-	}
-yy7:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x97:
 		case 0x98:
-		case 0xA0: goto yy28;
-		default: goto yy3;
+		case 0xA0: goto yy27;
+		default: goto yy2;
 	}
-yy8:
+yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x88:
 		case 0x8B:
 		case 0x8C:
-		case 0x90: goto yy28;
-		default: goto yy3;
+		case 0x90: goto yy27;
+		default: goto yy2;
 	}
-yy9:
+yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x88:
@@ -116,29 +116,29 @@ yy9:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy3;
+		case 0xBF: goto yy27;
+		default: goto yy2;
+	}
+yy9:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x9D: goto yy27;
+		default: goto yy2;
 	}
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9D: goto yy28;
-		default: goto yy3;
+		case 0x8E: goto yy27;
+		default: goto yy2;
 	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8E: goto yy28;
-		default: goto yy3;
+		case 0x8B:
+		case 0x8C: goto yy27;
+		default: goto yy2;
 	}
 yy12:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x8B:
-		case 0x8C: goto yy28;
-		default: goto yy3;
-	}
-yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xB2:
@@ -154,201 +154,201 @@ yy13:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy3;
+		case 0xBF: goto yy27;
+		default: goto yy2;
 	}
-yy14:
+yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy3;
+		case 0xBF: goto yy27;
+		default: goto yy2;
+	}
+yy14:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xA0: goto yy28;
+		case 0xA1: goto yy30;
+		case 0xA2: goto yy31;
+		case 0xA3: goto yy32;
+		case 0xA6: goto yy33;
+		case 0xA7: goto yy34;
+		case 0xA8: goto yy35;
+		case 0xA9: goto yy36;
+		case 0xAA: goto yy37;
+		case 0xAB: goto yy38;
+		case 0xAC: goto yy39;
+		case 0xAD: goto yy40;
+		case 0xAE: goto yy41;
+		case 0xAF: goto yy42;
+		case 0xB0: goto yy43;
+		case 0xB1: goto yy44;
+		case 0xB2: goto yy45;
+		case 0xB3: goto yy46;
+		case 0xB4: goto yy47;
+		case 0xB5: goto yy48;
+		case 0xB6: goto yy49;
+		case 0xB7: goto yy50;
+		case 0xB8: goto yy51;
+		case 0xB9: goto yy52;
+		case 0xBA: goto yy53;
+		case 0xBB: goto yy54;
+		case 0xBD: goto yy55;
+		case 0xBE: goto yy56;
+		case 0xBF: goto yy57;
+		default: goto yy2;
 	}
 yy15:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xA0: goto yy30;
-		case 0xA1: goto yy32;
-		case 0xA2: goto yy33;
-		case 0xA3: goto yy34;
-		case 0xA6: goto yy35;
-		case 0xA7: goto yy36;
-		case 0xA8: goto yy37;
-		case 0xA9: goto yy38;
-		case 0xAA: goto yy39;
-		case 0xAB: goto yy40;
-		case 0xAC: goto yy41;
-		case 0xAD: goto yy42;
-		case 0xAE: goto yy43;
-		case 0xAF: goto yy44;
-		case 0xB0: goto yy45;
-		case 0xB1: goto yy46;
-		case 0xB2: goto yy47;
-		case 0xB3: goto yy48;
-		case 0xB4: goto yy49;
-		case 0xB5: goto yy50;
-		case 0xB6: goto yy51;
-		case 0xB7: goto yy52;
-		case 0xB8: goto yy53;
-		case 0xB9: goto yy54;
-		case 0xBA: goto yy55;
-		case 0xBB: goto yy56;
-		case 0xBD: goto yy57;
-		case 0xBE: goto yy58;
-		case 0xBF: goto yy59;
-		default: goto yy3;
+		case 0x83: goto yy58;
+		case 0x89: goto yy59;
+		case 0x8A: goto yy60;
+		case 0x8B: goto yy61;
+		case 0x8C: goto yy62;
+		case 0x8D: goto yy63;
+		case 0x8E: goto yy64;
+		case 0x8F: goto yy65;
+		case 0x9A: goto yy66;
+		case 0x9B: goto yy67;
+		case 0x9C: goto yy68;
+		case 0x9D: goto yy69;
+		case 0x9F: goto yy70;
+		case 0xA0: goto yy71;
+		case 0xA1: goto yy72;
+		case 0xA2: goto yy73;
+		case 0xA3: goto yy74;
+		case 0xA4: goto yy75;
+		case 0xA5: goto yy76;
+		case 0xA6: goto yy77;
+		case 0xA7: goto yy78;
+		case 0xA8: goto yy79;
+		case 0xA9: goto yy80;
+		case 0xAA: goto yy81;
+		case 0xAB:
+		case 0xB2: goto yy82;
+		case 0xAD: goto yy83;
+		case 0xAF: goto yy84;
+		case 0xB0: goto yy85;
+		case 0xB1: goto yy86;
+		case 0xB3: goto yy87;
+		case 0xB7: goto yy88;
+		case 0xBC: goto yy89;
+		case 0xBD: goto yy90;
+		case 0xBE: goto yy91;
+		case 0xBF: goto yy92;
+		default: goto yy2;
 	}
 yy16:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x83: goto yy60;
-		case 0x89: goto yy61;
-		case 0x8A: goto yy62;
-		case 0x8B: goto yy63;
-		case 0x8C: goto yy64;
-		case 0x8D: goto yy65;
-		case 0x8E: goto yy66;
-		case 0x8F: goto yy67;
-		case 0x9A: goto yy68;
-		case 0x9B: goto yy69;
-		case 0x9C: goto yy70;
-		case 0x9D: goto yy71;
-		case 0x9F: goto yy72;
-		case 0xA0: goto yy73;
-		case 0xA1: goto yy74;
-		case 0xA2: goto yy75;
-		case 0xA3: goto yy76;
-		case 0xA4: goto yy77;
-		case 0xA5: goto yy78;
-		case 0xA6: goto yy79;
-		case 0xA7: goto yy80;
-		case 0xA8: goto yy81;
-		case 0xA9: goto yy82;
-		case 0xAA: goto yy83;
-		case 0xAB:
-		case 0xB2: goto yy84;
-		case 0xAD: goto yy85;
-		case 0xAF: goto yy86;
-		case 0xB0: goto yy87;
-		case 0xB1: goto yy88;
-		case 0xB3: goto yy89;
-		case 0xB7: goto yy90;
-		case 0xBC: goto yy91;
-		case 0xBD: goto yy92;
-		case 0xBE: goto yy93;
-		case 0xBF: goto yy94;
-		default: goto yy3;
+		case 0x81: goto yy93;
+		case 0x82: goto yy94;
+		case 0x83: goto yy95;
+		case 0x86: goto yy96;
+		case 0x8F: goto yy97;
+		case 0x90: goto yy98;
+		case 0x91: goto yy99;
+		case 0xAD: goto yy100;
+		case 0xAE: goto yy101;
+		case 0xAF: goto yy102;
+		case 0xB0: goto yy103;
+		case 0xB1: goto yy104;
+		case 0xB3: goto yy105;
+		case 0xB4: goto yy106;
+		case 0xB5: goto yy107;
+		case 0xB6: goto yy108;
+		case 0xB7: goto yy109;
+		case 0xB9: goto yy110;
+		case 0xBA: goto yy111;
+		case 0xBB: goto yy112;
+		case 0xBF: goto yy113;
+		default: goto yy2;
 	}
 yy17:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x81: goto yy95;
-		case 0x82: goto yy96;
-		case 0x83: goto yy97;
-		case 0x86: goto yy98;
-		case 0x8F: goto yy99;
-		case 0x90: goto yy100;
-		case 0x91: goto yy101;
-		case 0xAD: goto yy102;
-		case 0xAE: goto yy103;
-		case 0xAF: goto yy104;
-		case 0xB0: goto yy105;
-		case 0xB1: goto yy106;
-		case 0xB3: goto yy107;
-		case 0xB4: goto yy108;
-		case 0xB5: goto yy109;
-		case 0xB6: goto yy110;
-		case 0xB7: goto yy111;
-		case 0xB9: goto yy112;
-		case 0xBA: goto yy113;
-		case 0xBB: goto yy114;
-		case 0xBF: goto yy115;
-		default: goto yy3;
+		case 0x81: goto yy114;
+		case 0x82: goto yy115;
+		case 0x84: goto yy116;
+		case 0x86: goto yy117;
+		case 0x87: goto yy118;
+		case 0x88: goto yy104;
+		case 0x8B: goto yy119;
+		default: goto yy2;
 	}
 yy18:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x81: goto yy116;
-		case 0x82: goto yy117;
-		case 0x84: goto yy118;
-		case 0x86: goto yy119;
-		case 0x87: goto yy120;
-		case 0x88: goto yy106;
-		case 0x8B: goto yy121;
-		default: goto yy3;
+		case 0xB6: goto yy74;
+		default: goto yy2;
 	}
 yy19:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xB6: goto yy76;
-		default: goto yy3;
+		case 0xBF: goto yy120;
+		default: goto yy2;
 	}
 yy20:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xBF: goto yy122;
-		default: goto yy3;
+		case 0x92: goto yy121;
+		case 0x93: goto yy122;
+		case 0x98: goto yy123;
+		case 0x9A: goto yy124;
+		case 0x9B:
+		case 0xA1: goto yy72;
+		case 0x9E: goto yy125;
+		case 0x9F: goto yy126;
+		case 0xA0: goto yy127;
+		case 0xA3: goto yy128;
+		case 0xA5: goto yy129;
+		case 0xA7: goto yy130;
+		case 0xA8: goto yy131;
+		case 0xA9: goto yy132;
+		case 0xAB: goto yy133;
+		case 0xAC: goto yy134;
+		case 0xAD: goto yy135;
+		case 0xAE: goto yy82;
+		case 0xAF: goto yy136;
+		default: goto yy2;
 	}
 yy21:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x92: goto yy123;
-		case 0x93: goto yy124;
-		case 0x98: goto yy125;
-		case 0x9A: goto yy126;
-		case 0x9B:
-		case 0xA1: goto yy74;
-		case 0x9E: goto yy127;
-		case 0x9F: goto yy128;
-		case 0xA0: goto yy129;
-		case 0xA3: goto yy130;
-		case 0xA5: goto yy131;
-		case 0xA7: goto yy132;
-		case 0xA8: goto yy133;
-		case 0xA9: goto yy134;
-		case 0xAB: goto yy135;
-		case 0xAC: goto yy136;
-		case 0xAD: goto yy137;
-		case 0xAE: goto yy84;
-		case 0xAF: goto yy138;
-		default: goto yy3;
+		case 0x9E: goto yy118;
+		case 0x9F: goto yy137;
+		default: goto yy2;
 	}
 yy22:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9E: goto yy120;
-		case 0x9F: goto yy139;
-		default: goto yy3;
+		case 0xA9: goto yy138;
+		case 0xAB: goto yy139;
+		case 0xAC: goto yy140;
+		case 0xAD: goto yy141;
+		case 0xAF: goto yy142;
+		case 0xB5: goto yy143;
+		case 0xB6: goto yy144;
+		case 0xB7: goto yy145;
+		case 0xB8: goto yy146;
+		case 0xB9: goto yy147;
+		case 0xBB: goto yy148;
+		case 0xBC: goto yy114;
+		case 0xBE: goto yy119;
+		case 0xBF: goto yy149;
+		default: goto yy2;
 	}
 yy23:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xA9: goto yy140;
-		case 0xAB: goto yy141;
-		case 0xAC: goto yy142;
-		case 0xAD: goto yy143;
-		case 0xAF: goto yy144;
-		case 0xB5: goto yy145;
-		case 0xB6: goto yy146;
-		case 0xB7: goto yy147;
-		case 0xB8: goto yy148;
-		case 0xB9: goto yy149;
-		case 0xBB: goto yy150;
-		case 0xBC: goto yy116;
-		case 0xBE: goto yy121;
-		case 0xBF: goto yy151;
-		default: goto yy3;
-	}
-yy24:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x90: goto yy152;
-		case 0x91: goto yy153;
-		case 0x92: goto yy154;
-		case 0x93: goto yy155;
+		case 0x90: goto yy150;
+		case 0x91: goto yy151;
+		case 0x92: goto yy152;
+		case 0x93: goto yy153;
 		case 0x94:
 		case 0x95:
 		case 0x97:
@@ -374,16 +374,85 @@ yy24:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy156;
-		case 0x96: goto yy157;
-		case 0x9B: goto yy158;
-		case 0x9D: goto yy159;
-		case 0x9E: goto yy160;
-		case 0x9F: goto yy161;
-		case 0xAA: goto yy162;
-		case 0xAB: goto yy163;
-		case 0xAF: goto yy164;
-		default: goto yy3;
+		case 0xBF: goto yy154;
+		case 0x96: goto yy155;
+		case 0x9B: goto yy156;
+		case 0x9D: goto yy157;
+		case 0x9E: goto yy158;
+		case 0x9F: goto yy159;
+		case 0xAA: goto yy160;
+		case 0xAB: goto yy161;
+		case 0xAF: goto yy162;
+		default: goto yy2;
+	}
+yy24:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy154;
+		default: goto yy2;
 	}
 yy25:
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -420,7 +489,6 @@ yy25:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
-		case 0xA0:
 		case 0xA1:
 		case 0xA2:
 		case 0xA3:
@@ -435,102 +503,34 @@ yy25:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy156;
-		default: goto yy3;
+		case 0xAF: goto yy154;
+		case 0xA0: goto yy163;
+		case 0xBF: goto yy164;
+		default: goto yy2;
 	}
 yy26:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy156;
-		case 0xA0: goto yy165;
-		case 0xBF: goto yy166;
-		default: goto yy3;
+		case 0x8F: goto yy164;
+		default: goto yy2;
 	}
 yy27:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x8F: goto yy166;
-		default: goto yy3;
-	}
-yy28:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Cn_8_encoding_policy_ignore.re"
 	{ goto Cn; }
 #line 522 "encodings/unicode_group_Cn_8_encoding_policy_ignore.c"
-yy30:
+yy28:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xAE:
 		case 0xAF:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy31:
+yy29:
 	YYCURSOR = YYMARKER;
-	goto yy3;
-yy32:
+	goto yy2;
+yy30:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x9C:
@@ -567,10 +567,10 @@ yy32:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy33:
+yy31:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -617,10 +617,10 @@ yy33:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy34:
+yy32:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -658,10 +658,10 @@ yy34:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
-		case 0xA3: goto yy28;
-		default: goto yy31;
+		case 0xA3: goto yy27;
+		default: goto yy29;
 	}
-yy35:
+yy33:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x84:
@@ -675,10 +675,10 @@ yy35:
 		case 0xB4:
 		case 0xB5:
 		case 0xBA:
-		case 0xBB: goto yy28;
-		default: goto yy31;
+		case 0xBB: goto yy27;
+		default: goto yy29;
 	}
-yy36:
+yy34:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x85:
@@ -703,83 +703,83 @@ yy36:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy35:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x84:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x91:
+		case 0x92:
+		case 0xA9:
+		case 0xB1:
+		case 0xB4:
+		case 0xB7:
+		case 0xBA:
+		case 0xBB:
+		case 0xBD: goto yy27;
+		default: goto yy29;
+	}
+yy36:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x89:
+		case 0x8A:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x9D:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy37:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
 		case 0x84:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
 		case 0x8E:
-		case 0x91:
 		case 0x92:
 		case 0xA9:
 		case 0xB1:
 		case 0xB4:
-		case 0xB7:
 		case 0xBA:
-		case 0xBB:
-		case 0xBD: goto yy28;
-		default: goto yy31;
+		case 0xBB: goto yy27;
+		default: goto yy29;
 	}
 yy38:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x89:
-		case 0x8A:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x9D:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
-	}
-yy39:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x84:
-		case 0x8E:
-		case 0x92:
-		case 0xA9:
-		case 0xB1:
-		case 0xB4:
-		case 0xBA:
-		case 0xBB: goto yy28;
-		default: goto yy31;
-	}
-yy40:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x86:
@@ -816,10 +816,10 @@ yy40:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy41:
+yy39:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -832,10 +832,10 @@ yy41:
 		case 0xB1:
 		case 0xB4:
 		case 0xBA:
-		case 0xBB: goto yy28;
-		default: goto yy31;
+		case 0xBB: goto yy27;
+		default: goto yy29;
 	}
-yy42:
+yy40:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x85:
@@ -864,10 +864,10 @@ yy42:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy43:
+yy41:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -894,10 +894,10 @@ yy43:
 		case 0xBA:
 		case 0xBB:
 		case 0xBC:
-		case 0xBD: goto yy28;
-		default: goto yy31;
+		case 0xBD: goto yy27;
+		default: goto yy29;
 	}
-yy44:
+yy42:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x83:
@@ -930,10 +930,10 @@ yy44:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy45:
+yy43:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x84:
@@ -942,8 +942,52 @@ yy45:
 		case 0xA9:
 		case 0xBA:
 		case 0xBB:
-		case 0xBC: goto yy28;
-		default: goto yy31;
+		case 0xBC: goto yy27;
+		default: goto yy29;
+	}
+yy44:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x85:
+		case 0x89:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x97:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA4:
+		case 0xA5:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7: goto yy27;
+		default: goto yy29;
+	}
+yy45:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x84:
+		case 0x8D:
+		case 0x91:
+		case 0xA9:
+		case 0xB4:
+		case 0xBA:
+		case 0xBB: goto yy27;
+		default: goto yy29;
 	}
 yy46:
 	yych = *++YYCURSOR;
@@ -958,23 +1002,30 @@ yy46:
 		case 0x93:
 		case 0x94:
 		case 0x97:
+		case 0x98:
+		case 0x99:
 		case 0x9A:
 		case 0x9B:
 		case 0x9C:
 		case 0x9D:
-		case 0x9E:
 		case 0x9F:
 		case 0xA4:
 		case 0xA5:
 		case 0xB0:
-		case 0xB1:
-		case 0xB2:
 		case 0xB3:
 		case 0xB4:
 		case 0xB5:
 		case 0xB6:
-		case 0xB7: goto yy28;
-		default: goto yy31;
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy47:
 	yych = *++YYCURSOR;
@@ -983,124 +1034,124 @@ yy47:
 		case 0x84:
 		case 0x8D:
 		case 0x91:
-		case 0xA9:
-		case 0xB4:
-		case 0xBA:
-		case 0xBB: goto yy28;
-		default: goto yy31;
+		case 0xBB:
+		case 0xBC: goto yy27;
+		default: goto yy29;
 	}
 yy48:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x85:
 		case 0x89:
-		case 0x8E:
 		case 0x8F:
 		case 0x90:
 		case 0x91:
 		case 0x92:
 		case 0x93:
 		case 0x94:
-		case 0x97:
+		case 0x95:
+		case 0x96:
 		case 0x98:
 		case 0x99:
 		case 0x9A:
 		case 0x9B:
 		case 0x9C:
 		case 0x9D:
+		case 0x9E:
 		case 0x9F:
 		case 0xA4:
 		case 0xA5:
-		case 0xB0:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
 		case 0xB6:
 		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xB8: goto yy27;
+		default: goto yy29;
 	}
 yy49:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
+		case 0x81:
 		case 0x84:
-		case 0x8D:
-		case 0x91:
-		case 0xBB:
-		case 0xBC: goto yy28;
-		default: goto yy31;
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0xB2:
+		case 0xBC:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy50:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x85:
+		case 0x87:
+		case 0x88:
 		case 0x89:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
 		case 0x95:
-		case 0x96:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
+		case 0x97:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
 		case 0xA4:
 		case 0xA5:
+		case 0xB0:
+		case 0xB1:
+		case 0xB5:
 		case 0xB6:
 		case 0xB7:
-		case 0xB8: goto yy28;
-		default: goto yy31;
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy51:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
-		case 0x81:
-		case 0x84:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0xB2:
+		case 0xBB:
 		case 0xBC:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBD:
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy52:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x95:
-		case 0x97:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
 		case 0xA3:
 		case 0xA4:
 		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
 		case 0xB0:
 		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
 		case 0xB5:
 		case 0xB6:
 		case 0xB7:
@@ -1111,26 +1162,46 @@ yy52:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy53:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0x83:
+		case 0x85:
+		case 0x86:
+		case 0x89:
+		case 0x8B:
+		case 0x8C:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x98:
+		case 0xA0:
+		case 0xA4:
+		case 0xA6:
+		case 0xA8:
+		case 0xA9:
+		case 0xAC:
+		case 0xBA:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy54:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
+		case 0x85:
+		case 0x87:
+		case 0x8E:
+		case 0x8F:
+		case 0x9A:
+		case 0x9B:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -1162,342 +1233,296 @@ yy54:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy55:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x83:
-		case 0x85:
-		case 0x86:
-		case 0x89:
-		case 0x8B:
-		case 0x8C:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x98:
-		case 0xA0:
-		case 0xA4:
-		case 0xA6:
-		case 0xA8:
-		case 0xA9:
-		case 0xAC:
-		case 0xBA:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x88:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0: goto yy27;
+		default: goto yy29;
 	}
 yy56:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x85:
-		case 0x87:
-		case 0x8E:
-		case 0x8F:
-		case 0x9A:
-		case 0x9B:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x98:
+		case 0xBD: goto yy27;
+		default: goto yy29;
 	}
 yy57:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x88:
+		case 0x8D:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
 		case 0xAD:
 		case 0xAE:
 		case 0xAF:
-		case 0xB0: goto yy28;
-		default: goto yy31;
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy58:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x98:
-		case 0xBD: goto yy28;
-		default: goto yy31;
+		case 0x86:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8E:
+		case 0x8F: goto yy27;
+		default: goto yy29;
 	}
 yy59:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8D:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
+		case 0x89:
+		case 0x8E:
+		case 0x8F:
+		case 0x97:
+		case 0x99:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy60:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x86:
-		case 0x88:
 		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
 		case 0x8E:
-		case 0x8F: goto yy28;
-		default: goto yy31;
+		case 0x8F:
+		case 0xB1:
+		case 0xB6:
+		case 0xB7:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy61:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x89:
-		case 0x8E:
-		case 0x8F:
-		case 0x97:
-		case 0x99:
-		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0x81:
+		case 0x86:
+		case 0x87:
+		case 0x97: goto yy27;
+		default: goto yy29;
 	}
 yy62:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x89:
-		case 0x8E:
-		case 0x8F:
-		case 0xB1:
-		case 0xB6:
-		case 0xB7:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x91:
+		case 0x96:
+		case 0x97: goto yy27;
+		default: goto yy29;
 	}
 yy63:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x81:
-		case 0x86:
-		case 0x87:
-		case 0x97: goto yy28;
-		default: goto yy31;
+		case 0x9B:
+		case 0x9C:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy64:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x91:
-		case 0x96:
-		case 0x97: goto yy28;
-		default: goto yy31;
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy65:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9B:
-		case 0x9C:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy66:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy67:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
 		case 0xB9:
 		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy68:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x8D:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0x9F:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy69:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xAD:
+		case 0xB1:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
 		case 0xB9:
 		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy70:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8D:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
 		case 0x9E:
 		case 0x9F:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
 		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy71:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
+		case 0x8F:
 		case 0x9A:
 		case 0x9B:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xAD:
-		case 0xB1:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy72:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9E:
-		case 0x9F:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
+		case 0xB8:
+		case 0xB9:
 		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy73:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8F:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy74:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0xB6:
+		case 0xB7:
 		case 0xB8:
 		case 0xB9:
 		case 0xBA:
@@ -1505,22 +1530,32 @@ yy74:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy75:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAB:
+		case 0x9F:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0xAF:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy76:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0xAE:
+		case 0xAF:
+		case 0xB5:
 		case 0xB6:
 		case 0xB7:
 		case 0xB8:
@@ -1530,157 +1565,151 @@ yy76:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy77:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9F:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy78:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0xAE:
-		case 0xAF:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D: goto yy27;
+		default: goto yy29;
 	}
 yy79:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0x9C:
+		case 0x9D: goto yy27;
+		default: goto yy29;
 	}
 yy80:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D: goto yy28;
-		default: goto yy31;
+		case 0x9F:
+		case 0xBD:
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy81:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x9A:
+		case 0x9B:
 		case 0x9C:
-		case 0x9D: goto yy28;
-		default: goto yy31;
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xAE:
+		case 0xAF:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy82:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
 		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
 		case 0xBD:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy83:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8A:
-		case 0x8B:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
 		case 0x8F:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xAE:
-		case 0xAF:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy84:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
 		case 0xB4:
 		case 0xB5:
 		case 0xB6:
@@ -1688,393 +1717,411 @@ yy84:
 		case 0xB8:
 		case 0xB9:
 		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBB: goto yy27;
+		default: goto yy29;
 	}
 yy85:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xB8:
+		case 0xB9:
+		case 0xBA: goto yy27;
+		default: goto yy29;
 	}
 yy86:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB: goto yy28;
-		default: goto yy31;
+		case 0x8A:
+		case 0x8B:
+		case 0x8C: goto yy27;
+		default: goto yy29;
 	}
 yy87:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB8:
-		case 0xB9:
-		case 0xBA: goto yy28;
-		default: goto yy31;
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0xB7:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy88:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8A:
-		case 0x8B:
-		case 0x8C: goto yy28;
-		default: goto yy31;
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB: goto yy27;
+		default: goto yy29;
 	}
 yy89:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0xB7:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x96:
+		case 0x97:
+		case 0x9E:
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy90:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB: goto yy28;
-		default: goto yy31;
+		case 0x86:
+		case 0x87:
+		case 0x8E:
+		case 0x8F:
+		case 0x98:
+		case 0x9A:
+		case 0x9C:
+		case 0x9E:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy91:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x96:
-		case 0x97:
-		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0xB5: goto yy27;
+		default: goto yy29;
 	}
 yy92:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x86:
-		case 0x87:
-		case 0x8E:
-		case 0x8F:
-		case 0x98:
-		case 0x9A:
+		case 0x85:
+		case 0x94:
+		case 0x95:
 		case 0x9C:
-		case 0x9E:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xB0:
+		case 0xB1:
+		case 0xB5:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy93:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB5: goto yy28;
-		default: goto yy31;
+		case 0xA5:
+		case 0xB2:
+		case 0xB3: goto yy27;
+		default: goto yy29;
 	}
 yy94:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x85:
-		case 0x94:
-		case 0x95:
-		case 0x9C:
-		case 0xB0:
-		case 0xB1:
-		case 0xB5:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x8F:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy95:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA5:
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0xB1:
 		case 0xB2:
-		case 0xB3: goto yy28;
-		default: goto yy31;
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy96:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8F:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy27;
+		default: goto yy29;
 	}
 yy97:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy98:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy28;
-		default: goto yy31;
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy99:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy100:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
 		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xB5: goto yy27;
+		default: goto yy29;
 	}
 yy101:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
 		case 0x96:
 		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0xBA:
+		case 0xBB:
+		case 0xBC: goto yy27;
+		default: goto yy29;
 	}
 yy102:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x89:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
 		case 0xB4:
-		case 0xB5: goto yy28;
-		default: goto yy31;
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy103:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x96:
-		case 0x97:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC: goto yy28;
-		default: goto yy31;
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy104:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x89:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy105:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8: goto yy27;
+		default: goto yy29;
 	}
 yy106:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0xA6:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAE:
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy107:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
 		case 0xB4:
 		case 0xB5:
 		case 0xB6:
 		case 0xB7:
-		case 0xB8: goto yy28;
-		default: goto yy31;
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy108:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA6:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAE:
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA7:
+		case 0xAF:
+		case 0xB7:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy109:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0x87:
+		case 0x8F:
+		case 0x97:
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy110:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
 		case 0x97:
 		case 0x98:
 		case 0x99:
@@ -2084,73 +2131,49 @@ yy110:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
 		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
 		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
 		case 0xB7:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy111:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x87:
-		case 0x8F:
-		case 0x97:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0x9A: goto yy27;
+		default: goto yy29;
 	}
 yy112:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
 		case 0xB4:
 		case 0xB5:
 		case 0xB6:
@@ -2162,128 +2185,105 @@ yy112:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy113:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9A: goto yy28;
-		default: goto yy31;
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy114:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x80: goto yy27;
+		default: goto yy29;
 	}
 yy115:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x96:
 		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x98: goto yy27;
+		default: goto yy29;
 	}
 yy116:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80: goto yy28;
-		default: goto yy31;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0: goto yy27;
+		default: goto yy29;
 	}
 yy117:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x97:
-		case 0x98: goto yy28;
-		default: goto yy31;
+		case 0x8F:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy118:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0: goto yy28;
-		default: goto yy31;
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy119:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8F:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy120:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy28;
-		default: goto yy31;
-	}
-yy121:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBF: goto yy28;
-		default: goto yy31;
-	}
-yy122:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x8D:
@@ -2336,18 +2336,18 @@ yy122:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy123:
+yy121:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy28;
-		default: goto yy31;
+		case 0x8F: goto yy27;
+		default: goto yy29;
 	}
-yy124:
+yy122:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x87:
@@ -2358,10 +2358,10 @@ yy124:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy28;
-		default: goto yy31;
+		case 0x8F: goto yy27;
+		default: goto yy29;
 	}
-yy125:
+yy123:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xAC:
@@ -2383,16 +2383,16 @@ yy125:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy126:
+yy124:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9E: goto yy28;
-		default: goto yy31;
+		case 0x9E: goto yy27;
+		default: goto yy29;
 	}
-yy127:
+yy125:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x8F:
@@ -2411,10 +2411,10 @@ yy127:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy128:
+yy126:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -2471,10 +2471,10 @@ yy128:
 		case 0xB3:
 		case 0xB4:
 		case 0xB5:
-		case 0xB6: goto yy28;
-		default: goto yy31;
+		case 0xB6: goto yy27;
+		default: goto yy29;
 	}
-yy129:
+yy127:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xAC:
@@ -2486,10 +2486,10 @@ yy129:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy130:
+yy128:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x85:
@@ -2510,10 +2510,10 @@ yy130:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy131:
+yy129:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x94:
@@ -2529,44 +2529,44 @@ yy131:
 		case 0x9E:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy130:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8E:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy131:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy132:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x8E:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0xBF: goto yy28;
-		default: goto yy31;
-	}
-yy133:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
-	}
-yy134:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x8E:
 		case 0x8F:
 		case 0x9A:
-		case 0x9B: goto yy28;
-		default: goto yy31;
+		case 0x9B: goto yy27;
+		default: goto yy29;
 	}
-yy135:
+yy133:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x83:
@@ -2601,10 +2601,10 @@ yy135:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy136:
+yy134:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -2622,10 +2622,10 @@ yy136:
 		case 0x9E:
 		case 0x9F:
 		case 0xA7:
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
-yy137:
+yy135:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA0:
@@ -2657,88 +2657,125 @@ yy137:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy136:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAE:
+		case 0xAF:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy137:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy138:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xAE:
-		case 0xAF:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy139:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy140:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAE:
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0xB7:
+		case 0xBD:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy141:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x82:
+		case 0x85: goto yy27;
+		default: goto yy29;
 	}
 yy142:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
 		case 0x87:
 		case 0x88:
 		case 0x89:
@@ -2750,57 +2787,40 @@ yy142:
 		case 0x8F:
 		case 0x90:
 		case 0x91:
-		case 0x92:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0xB7:
-		case 0xBD:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x92: goto yy27;
+		default: goto yy29;
 	}
 yy143:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
 		case 0x82:
-		case 0x85: goto yy28;
-		default: goto yy31;
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy27;
+		default: goto yy29;
 	}
 yy144:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
 		case 0x90:
-		case 0x91:
-		case 0x92: goto yy28;
-		default: goto yy31;
+		case 0x91: goto yy27;
+		default: goto yy29;
 	}
 yy145:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
 		case 0x88:
 		case 0x89:
 		case 0x8A:
@@ -2808,110 +2828,196 @@ yy145:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy28;
-		default: goto yy31;
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy146:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x90:
-		case 0x91: goto yy28;
-		default: goto yy31;
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xAE:
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy147:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
 		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
 		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
 		case 0xAF:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xB5: goto yy27;
+		default: goto yy29;
 	}
 yy148:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xAE:
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0xBD:
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy149:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x93:
+		case 0x80:
+		case 0x81:
+		case 0x88:
+		case 0x89:
+		case 0x90:
+		case 0x91:
+		case 0x98:
+		case 0x99:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
 		case 0xA7:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
 		case 0xAF:
-		case 0xB5: goto yy28;
-		default: goto yy31;
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy150:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80: goto yy165;
+		case 0x81: goto yy166;
+		case 0x83: goto yy97;
+		case 0x84: goto yy167;
+		case 0x86: goto yy168;
+		case 0x87: goto yy169;
+		case 0x88:
+		case 0x89:
+		case 0x93:
+		case 0x96:
+		case 0x97:
+		case 0x9E:
+		case 0x9F:
+		case 0xA3:
+		case 0xA5:
+		case 0xA7:
+		case 0xAF:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
 		case 0xBD:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0xBE:
+		case 0xBF: goto yy82;
+		case 0x8A: goto yy66;
+		case 0x8B: goto yy170;
+		case 0x8C: goto yy118;
+		case 0x8D: goto yy171;
+		case 0x8E: goto yy124;
+		case 0x8F: goto yy172;
+		case 0x92: goto yy173;
+		case 0x94: goto yy174;
+		case 0x95: goto yy175;
+		case 0x9C: goto yy131;
+		case 0x9D: goto yy176;
+		case 0xA0: goto yy177;
+		case 0xA1: goto yy178;
+		case 0xA2: goto yy179;
+		case 0xA4: goto yy180;
+		case 0xA6: goto yy181;
+		case 0xA8: goto yy182;
+		case 0xA9: goto yy183;
+		case 0xAA: goto yy184;
+		case 0xAB: goto yy185;
+		case 0xAC: goto yy186;
+		case 0xAD: goto yy187;
+		case 0xAE: goto yy188;
+		case 0xB1: goto yy189;
+		case 0xB9: goto yy190;
+		default: goto yy29;
 	}
 yy151:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x88:
+		case 0x81: goto yy191;
+		case 0x83: goto yy192;
+		case 0x84: goto yy91;
+		case 0x85: goto yy193;
+		case 0x87: goto yy194;
+		case 0x88: goto yy195;
 		case 0x89:
+		case 0x8E:
+		case 0x8F:
 		case 0x90:
 		case 0x91:
-		case 0x98:
-		case 0x99:
+		case 0x94:
+		case 0x95:
+		case 0x9C:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
 		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
 		case 0xAF:
 		case 0xB0:
 		case 0xB1:
@@ -2922,30 +3028,65 @@ yy151:
 		case 0xB6:
 		case 0xB7:
 		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		case 0x8A: goto yy196;
+		case 0x8B: goto yy197;
+		case 0x8C: goto yy39;
+		case 0x8D: goto yy198;
+		case 0x93: goto yy199;
+		case 0x96: goto yy200;
+		case 0x97:
+		case 0x9B: goto yy201;
+		case 0x99: goto yy202;
+		case 0x9A: goto yy72;
+		case 0xA2: goto yy203;
+		case 0xA3: goto yy204;
+		case 0xAB: goto yy67;
+		default: goto yy29;
 	}
 yy152:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80: goto yy167;
-		case 0x81: goto yy168;
-		case 0x83: goto yy99;
-		case 0x84: goto yy169;
-		case 0x86: goto yy170;
-		case 0x87: goto yy171;
-		case 0x88:
-		case 0x89:
+		case 0x8E: goto yy205;
+		case 0x8F:
+		case 0x92:
 		case 0x93:
+		case 0x94:
+		case 0x95:
 		case 0x96:
 		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
 		case 0x9E:
 		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
 		case 0xA3:
+		case 0xA4:
 		case 0xA5:
+		case 0xA6:
 		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
 		case 0xAF:
+		case 0xB0:
+		case 0xB1:
 		case 0xB2:
 		case 0xB3:
 		case 0xB4:
@@ -2953,61 +3094,39 @@ yy152:
 		case 0xB6:
 		case 0xB7:
 		case 0xB8:
+		case 0xB9:
 		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy84;
-		case 0x8A: goto yy68;
-		case 0x8B: goto yy172;
-		case 0x8C: goto yy120;
-		case 0x8D: goto yy173;
-		case 0x8E: goto yy126;
-		case 0x8F: goto yy174;
-		case 0x92: goto yy175;
-		case 0x94: goto yy176;
-		case 0x95: goto yy177;
-		case 0x9C: goto yy133;
-		case 0x9D: goto yy178;
-		case 0xA0: goto yy179;
-		case 0xA1: goto yy180;
-		case 0xA2: goto yy181;
-		case 0xA4: goto yy182;
-		case 0xA6: goto yy183;
-		case 0xA8: goto yy184;
-		case 0xA9: goto yy185;
-		case 0xAA: goto yy186;
-		case 0xAB: goto yy187;
-		case 0xAC: goto yy188;
-		case 0xAD: goto yy189;
-		case 0xAE: goto yy190;
-		case 0xB1: goto yy191;
-		case 0xB9: goto yy192;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		case 0x91: goto yy206;
+		default: goto yy29;
 	}
 yy153:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x81: goto yy193;
-		case 0x83: goto yy194;
-		case 0x84: goto yy93;
-		case 0x85: goto yy195;
-		case 0x87: goto yy196;
-		case 0x88: goto yy197;
-		case 0x89:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
+		case 0x90: goto yy207;
 		case 0x91:
+		case 0x92:
+		case 0x93:
 		case 0x94:
 		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
 		case 0xA0:
 		case 0xA1:
+		case 0xA2:
+		case 0xA3:
 		case 0xA4:
 		case 0xA5:
 		case 0xA6:
@@ -3015,6 +3134,7 @@ yy153:
 		case 0xA8:
 		case 0xA9:
 		case 0xAA:
+		case 0xAB:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
@@ -3034,27 +3154,30 @@ yy153:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy84;
-		case 0x8A: goto yy198;
-		case 0x8B: goto yy199;
-		case 0x8C: goto yy41;
-		case 0x8D: goto yy200;
-		case 0x93: goto yy201;
-		case 0x96: goto yy202;
-		case 0x97:
-		case 0x9B: goto yy203;
-		case 0x99: goto yy204;
-		case 0x9A: goto yy74;
-		case 0xA2: goto yy205;
-		case 0xA3: goto yy206;
-		case 0xAB: goto yy69;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		default: goto yy29;
 	}
 yy154:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8E: goto yy207;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
 		case 0x8F:
+		case 0x90:
+		case 0x91:
 		case 0x92:
 		case 0x93:
 		case 0x94:
@@ -3100,14 +3223,29 @@ yy154:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy84;
-		case 0x91: goto yy208;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		default: goto yy29;
 	}
 yy155:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x90: goto yy209;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
 		case 0x91:
 		case 0x92:
 		case 0x93:
@@ -3123,21 +3261,7 @@ yy155:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
 		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
 		case 0xAF:
 		case 0xB0:
 		case 0xB1:
@@ -3151,16 +3275,20 @@ yy155:
 		case 0xB9:
 		case 0xBA:
 		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy84;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		case 0xA8: goto yy67;
+		case 0xA9: goto yy208;
+		case 0xAB: goto yy209;
+		case 0xAD: goto yy210;
+		case 0xAE: goto yy211;
+		case 0xBD: goto yy212;
+		case 0xBE: goto yy213;
+		default: goto yy29;
 	}
 yy156:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
+		case 0x80: goto yy214;
 		case 0x81:
 		case 0x82:
 		case 0x83:
@@ -3208,9 +3336,6 @@ yy156:
 		case 0xAD:
 		case 0xAE:
 		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
 		case 0xB3:
 		case 0xB4:
 		case 0xB5:
@@ -3223,45 +3348,37 @@ yy156:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy84;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		case 0xB1: goto yy215;
+		case 0xB2: goto yy216;
+		default: goto yy29;
 	}
 yy157:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
+		case 0x83: goto yy74;
+		case 0x84: goto yy217;
+		case 0x87: goto yy218;
+		case 0x89: goto yy219;
 		case 0x8A:
 		case 0x8B:
-		case 0x8C:
-		case 0x8D:
 		case 0x8E:
 		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
 		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
 		case 0xAF:
 		case 0xB0:
 		case 0xB1:
@@ -3275,20 +3392,24 @@ yy157:
 		case 0xB9:
 		case 0xBA:
 		case 0xBB:
-		case 0xBF: goto yy84;
-		case 0xA8: goto yy69;
-		case 0xA9: goto yy210;
-		case 0xAB: goto yy211;
-		case 0xAD: goto yy212;
-		case 0xAE: goto yy213;
-		case 0xBD: goto yy214;
-		case 0xBE: goto yy215;
-		default: goto yy31;
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy82;
+		case 0x8D: goto yy220;
+		case 0x91: goto yy221;
+		case 0x92: goto yy222;
+		case 0x93: goto yy223;
+		case 0x94: goto yy224;
+		case 0x95: goto yy225;
+		case 0x9A: goto yy226;
+		case 0x9F: goto yy227;
+		default: goto yy29;
 	}
 yy158:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80: goto yy216;
+		case 0x80:
 		case 0x81:
 		case 0x82:
 		case 0x83:
@@ -3320,10 +3441,6 @@ yy158:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
 		case 0xA4:
 		case 0xA5:
 		case 0xA6:
@@ -3336,37 +3453,39 @@ yy158:
 		case 0xAD:
 		case 0xAE:
 		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
 		case 0xB3:
 		case 0xB4:
 		case 0xB5:
 		case 0xB6:
 		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy84;
-		case 0xB1: goto yy217;
-		case 0xB2: goto yy218;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		case 0xA3: goto yy228;
+		case 0xB8: goto yy229;
+		case 0xB9: goto yy230;
+		case 0xBA: goto yy231;
+		case 0xBB: goto yy232;
+		default: goto yy29;
 	}
 yy159:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x83: goto yy76;
-		case 0x84: goto yy219;
-		case 0x87: goto yy220;
-		case 0x89: goto yy221;
+		case 0x80:
+		case 0x85: goto yy77;
+		case 0x82: goto yy233;
+		case 0x83: goto yy234;
+		case 0x84: goto yy235;
+		case 0x86: goto yy236;
+		case 0x87: goto yy237;
+		case 0x88: goto yy238;
+		case 0x89: goto yy239;
 		case 0x8A:
 		case 0x8B:
-		case 0x8E:
-		case 0x8F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
 		case 0xA3:
 		case 0xA4:
 		case 0xA5:
@@ -3395,97 +3514,35 @@ yy159:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy84;
-		case 0x8D: goto yy222;
-		case 0x91: goto yy223;
-		case 0x92: goto yy224;
-		case 0x93: goto yy225;
-		case 0x94: goto yy226;
-		case 0x95: goto yy227;
-		case 0x9A: goto yy228;
-		case 0x9F: goto yy229;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		case 0x8C: goto yy240;
+		case 0x8D: goto yy241;
+		case 0x8F: goto yy242;
+		case 0x93: goto yy119;
+		case 0x95: goto yy243;
+		case 0x96: goto yy244;
+		case 0x99: goto yy245;
+		case 0x9B: goto yy246;
+		case 0x9D: goto yy112;
+		case 0x9F: goto yy247;
+		case 0xA0: goto yy248;
+		case 0xA1: goto yy249;
+		case 0xA2: goto yy250;
+		default: goto yy29;
 	}
 yy160:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy84;
-		case 0xA3: goto yy230;
-		case 0xB8: goto yy231;
-		case 0xB9: goto yy232;
-		case 0xBA: goto yy233;
-		case 0xBB: goto yy234;
-		default: goto yy31;
+		case 0x9B: goto yy251;
+		default: goto yy29;
 	}
 yy161:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x85: goto yy79;
-		case 0x82: goto yy235;
-		case 0x83: goto yy236;
-		case 0x84: goto yy237;
-		case 0x86: goto yy238;
-		case 0x87: goto yy239;
-		case 0x88: goto yy240;
-		case 0x89: goto yy241;
-		case 0x8A:
-		case 0x8B:
+		case 0x9C: goto yy65;
+		case 0xA0: goto yy218;
+		case 0xA1:
+		case 0xA2:
 		case 0xA3:
 		case 0xA4:
 		case 0xA5:
@@ -3514,33 +3571,101 @@ yy161:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy84;
-		case 0x8C: goto yy242;
-		case 0x8D: goto yy243;
-		case 0x8F: goto yy244;
-		case 0x93: goto yy121;
-		case 0x95: goto yy245;
-		case 0x96: goto yy246;
-		case 0x99: goto yy247;
-		case 0x9B: goto yy248;
-		case 0x9D: goto yy114;
-		case 0x9F: goto yy249;
-		case 0xA0: goto yy250;
-		case 0xA1: goto yy251;
-		case 0xA2: goto yy252;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		default: goto yy29;
 	}
 yy162:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9B: goto yy253;
-		default: goto yy31;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy82;
+		case 0xA8: goto yy218;
+		default: goto yy29;
 	}
 yy163:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9C: goto yy67;
-		case 0xA0: goto yy220;
+		case 0x80: goto yy252;
+		case 0x82:
+		case 0x83:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
 		case 0xA1:
 		case 0xA2:
 		case 0xA3:
@@ -3571,158 +3696,88 @@ yy163:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy84;
-		default: goto yy31;
+		case 0xBF: goto yy82;
+		case 0x87: goto yy253;
+		default: goto yy29;
 	}
 yy164:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy84;
-		case 0xA8: goto yy220;
-		default: goto yy31;
+		case 0xBF: goto yy241;
+		default: goto yy29;
 	}
 yy165:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80: goto yy254;
-		case 0x82:
-		case 0x83:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
 		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
 		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
 		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy84;
-		case 0x87: goto yy255;
-		default: goto yy31;
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy166:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBF: goto yy243;
-		default: goto yy31;
+		case 0x8E:
+		case 0x8F:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy167:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8C:
-		case 0xA7:
-		case 0xBB:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6: goto yy27;
+		default: goto yy29;
 	}
 yy168:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x8D:
 		case 0x8E:
 		case 0x8F:
+		case 0x9C:
+		case 0x9D:
 		case 0x9E:
 		case 0x9F:
-		case 0xA0:
 		case 0xA1:
 		case 0xA2:
 		case 0xA3:
@@ -3753,95 +3808,78 @@ yy168:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy169:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
 		case 0x83:
 		case 0x84:
 		case 0x85:
 		case 0x86:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6: goto yy28;
-		default: goto yy31;
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy170:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy171:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
 		case 0x8B:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
 		case 0x8F:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy172:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
 		case 0x96:
 		case 0x97:
 		case 0x98:
@@ -3852,52 +3890,72 @@ yy172:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy173:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
+		case 0x9E:
+		case 0x9F:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy174:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
 		case 0xA8:
 		case 0xA9:
 		case 0xAA:
@@ -3905,36 +3963,23 @@ yy174:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy175:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9E:
-		case 0x9F:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
 		case 0xAA:
 		case 0xAB:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -3950,12 +3995,22 @@ yy175:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy176:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
 		case 0xA8:
 		case 0xA9:
 		case 0xAA:
@@ -3963,272 +4018,335 @@ yy176:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy177:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
+		case 0x86:
+		case 0x87:
+		case 0x89:
 		case 0xB6:
-		case 0xB7:
-		case 0xB8:
 		case 0xB9:
 		case 0xBA:
 		case 0xBB:
-		case 0xBC:
 		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy178:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x96: goto yy27;
+		default: goto yy29;
 	}
 yy179:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x86:
-		case 0x87:
-		case 0x89:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
 		case 0xB6:
+		case 0xB7:
+		case 0xB8:
 		case 0xB9:
 		case 0xBA:
 		case 0xBB:
+		case 0xBC:
 		case 0xBD:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy180:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x96: goto yy28;
-		default: goto yy31;
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy181:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
 		case 0xB8:
 		case 0xB9:
 		case 0xBA:
 		case 0xBB:
 		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBD: goto yy27;
+		default: goto yy29;
 	}
 yy182:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0xBA:
+		case 0x84:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x94:
+		case 0x98:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy183:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD: goto yy28;
-		default: goto yy31;
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy184:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x84:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x94:
-		case 0x98:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
 		case 0xB4:
 		case 0xB5:
 		case 0xB6:
 		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy185:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy186:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
 		case 0xB6:
 		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xB8: goto yy27;
+		default: goto yy29;
 	}
 yy187:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x96:
+		case 0x97:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7: goto yy27;
+		default: goto yy29;
 	}
 yy188:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
 		case 0xB6:
 		case 0xB7:
-		case 0xB8: goto yy28;
-		default: goto yy31;
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy189:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
 		case 0x96:
 		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
 		case 0xB3:
 		case 0xB4:
 		case 0xB5:
 		case 0xB6:
-		case 0xB7: goto yy28;
-		default: goto yy31;
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy190:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
 		case 0x92:
 		case 0x93:
 		case 0x94:
@@ -4236,78 +4354,23 @@ yy190:
 		case 0x96:
 		case 0x97:
 		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy191:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
 		case 0x8E:
 		case 0x8F:
 		case 0x90:
 		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -4322,15 +4385,12 @@ yy191:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy192:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
 		case 0x82:
 		case 0x83:
 		case 0x84:
@@ -4345,39 +4405,36 @@ yy192:
 		case 0x8D:
 		case 0x8E:
 		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy193:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
 		case 0x8E:
 		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
 		case 0xB7:
 		case 0xB8:
 		case 0xB9:
@@ -4385,120 +4442,122 @@ yy193:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy194:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
 		case 0x89:
 		case 0x8A:
 		case 0x8B:
 		case 0x8C:
-		case 0x8D:
 		case 0x8E:
 		case 0x8F:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
 		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy195:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
+		case 0x92:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy196:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
 		case 0x89:
 		case 0x8A:
 		case 0x8B:
 		case 0x8C:
+		case 0x8D:
 		case 0x8E:
 		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
 		case 0x9B:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
 		case 0xA0:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy197:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x92:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy198:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
 		case 0x85:
 		case 0x86:
-		case 0x87:
-		case 0x88:
 		case 0x89:
 		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
 		case 0x8E:
 		case 0x8F:
 		case 0x90:
@@ -4508,99 +4567,106 @@ yy198:
 		case 0x94:
 		case 0x95:
 		case 0x96:
-		case 0x97:
 		case 0x98:
 		case 0x99:
 		case 0x9A:
 		case 0x9B:
 		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
 		case 0xA4:
 		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0xAF:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy199:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
 		case 0xAB:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
 		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
 		case 0xBA:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy200:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x85:
-		case 0x86:
-		case 0x89:
-		case 0x8A:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0xA4:
-		case 0xA5:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB5:
 		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xB7: goto yy27;
+		default: goto yy29;
 	}
 yy201:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x88:
-		case 0x89:
 		case 0x8A:
 		case 0x8B:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
 		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
 		case 0x9A:
 		case 0x9B:
 		case 0x9C:
@@ -4638,19 +4704,76 @@ yy201:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy202:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
 		case 0xB6:
-		case 0xB7: goto yy28;
-		default: goto yy31;
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy203:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
 		case 0x8A:
 		case 0x8B:
 		case 0x8C:
@@ -4672,80 +4795,12 @@ yy203:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
 yy204:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
 		case 0xB3:
 		case 0xB4:
 		case 0xB5:
@@ -4757,52 +4812,57 @@ yy204:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBE: goto yy27;
+		default: goto yy29;
 	}
 yy205:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
 		case 0x99:
 		case 0x9A:
 		case 0x9B:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy206:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB3:
-		case 0xB4:
+		case 0xAF:
 		case 0xB5:
 		case 0xB6:
 		case 0xB7:
@@ -4812,34 +4872,13 @@ yy206:
 		case 0xBB:
 		case 0xBC:
 		case 0xBD:
-		case 0xBE: goto yy28;
-		default: goto yy31;
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy207:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
 		case 0xAF:
 		case 0xB0:
 		case 0xB1:
@@ -4856,13 +4895,22 @@ yy207:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy208:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAF:
+		case 0x9F:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
 		case 0xB5:
 		case 0xB6:
 		case 0xB7:
@@ -4873,19 +4921,30 @@ yy208:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy209:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0xAE:
 		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
 		case 0xB6:
 		case 0xB7:
 		case 0xB8:
@@ -4895,56 +4954,72 @@ yy209:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy210:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9F:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x9A:
+		case 0xA2:
 		case 0xB8:
 		case 0xB9:
 		case 0xBA:
 		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBC: goto yy27;
+		default: goto yy29;
 	}
 yy211:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
 		case 0xAE:
 		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
 		case 0xB6:
 		case 0xB7:
 		case 0xB8:
@@ -4954,87 +5029,12 @@ yy211:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy212:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x9A:
-		case 0xA2:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC: goto yy28;
-		default: goto yy31;
-	}
-yy213:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
-	}
-yy214:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x85:
 		case 0x86:
 		case 0x87:
@@ -5046,10 +5046,10 @@ yy214:
 		case 0x8D:
 		case 0x8E:
 		case 0x8F:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy215:
+yy213:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -5098,10 +5098,10 @@ yy215:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy216:
+yy214:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x82:
@@ -5165,10 +5165,10 @@ yy216:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy217:
+yy215:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xAB:
@@ -5178,10 +5178,10 @@ yy217:
 		case 0xAF:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy218:
+yy216:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x89:
@@ -5220,17 +5220,17 @@ yy218:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy219:
+yy217:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA7:
-		case 0xA8: goto yy28;
-		default: goto yy31;
+		case 0xA8: goto yy27;
+		default: goto yy29;
 	}
-yy220:
+yy218:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x9E:
@@ -5266,10 +5266,10 @@ yy220:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy221:
+yy219:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x86:
@@ -5329,10 +5329,10 @@ yy221:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy222:
+yy220:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x97:
@@ -5357,16 +5357,16 @@ yy222:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy223:
+yy221:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x95: goto yy28;
-		default: goto yy31;
+		case 0x95: goto yy27;
+		default: goto yy29;
 	}
-yy224:
+yy222:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x9D:
@@ -5378,16 +5378,16 @@ yy224:
 		case 0xA8:
 		case 0xAD:
 		case 0xBA:
-		case 0xBC: goto yy28;
-		default: goto yy31;
+		case 0xBC: goto yy27;
+		default: goto yy29;
 	}
-yy225:
+yy223:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x84: goto yy28;
-		default: goto yy31;
+		case 0x84: goto yy27;
+		default: goto yy29;
 	}
-yy226:
+yy224:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x86:
@@ -5396,34 +5396,34 @@ yy226:
 		case 0x95:
 		case 0x9D:
 		case 0xBA:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy227:
+yy225:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x85:
 		case 0x87:
 		case 0x88:
 		case 0x89:
-		case 0x91: goto yy28;
-		default: goto yy31;
+		case 0x91: goto yy27;
+		default: goto yy29;
 	}
-yy228:
+yy226:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA6:
-		case 0xA7: goto yy28;
-		default: goto yy31;
+		case 0xA7: goto yy27;
+		default: goto yy29;
 	}
-yy229:
+yy227:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x8C:
-		case 0x8D: goto yy28;
-		default: goto yy31;
+		case 0x8D: goto yy27;
+		default: goto yy29;
 	}
-yy230:
+yy228:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x85:
@@ -5468,10 +5468,10 @@ yy230:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy231:
+yy229:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x84:
@@ -5486,112 +5486,148 @@ yy231:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy230:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x88:
+		case 0x8A:
+		case 0x8C:
+		case 0x90:
+		case 0x93:
+		case 0x95:
+		case 0x96:
+		case 0x98:
+		case 0x9A:
+		case 0x9C:
+		case 0x9E:
+		case 0xA0:
+		case 0xA3:
+		case 0xA5:
+		case 0xA6:
+		case 0xAB:
+		case 0xB3:
+		case 0xB8:
+		case 0xBD:
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy231:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8A:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA4:
+		case 0xAA:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy232:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
 		case 0x81:
+		case 0x82:
 		case 0x83:
 		case 0x84:
 		case 0x85:
 		case 0x86:
+		case 0x87:
 		case 0x88:
+		case 0x89:
 		case 0x8A:
+		case 0x8B:
 		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
 		case 0x90:
+		case 0x91:
+		case 0x92:
 		case 0x93:
+		case 0x94:
 		case 0x95:
 		case 0x96:
+		case 0x97:
 		case 0x98:
+		case 0x99:
 		case 0x9A:
-		case 0x9C:
-		case 0x9E:
-		case 0xA0:
-		case 0xA3:
-		case 0xA5:
-		case 0xA6:
-		case 0xAB:
-		case 0xB3:
-		case 0xB8:
-		case 0xBD:
-		case 0xBF: goto yy28;
-		default: goto yy31;
-	}
-yy233:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x8A:
+		case 0x9B:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F:
 		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
 		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
 		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy233:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xAF:
+		case 0xB0: goto yy27;
+		default: goto yy29;
 	}
 yy234:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
 		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
 		case 0xB6:
 		case 0xB7:
 		case 0xB8:
@@ -5601,55 +5637,19 @@ yy234:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy235:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xAF:
-		case 0xB0: goto yy28;
-		default: goto yy31;
-	}
-yy236:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x90:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
-	}
-yy237:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x8D:
 		case 0x8E:
 		case 0x8F:
-		case 0xAF: goto yy28;
-		default: goto yy31;
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
-yy238:
+yy236:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x9B:
@@ -5688,10 +5688,10 @@ yy238:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy239:
+yy237:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -5731,10 +5731,10 @@ yy239:
 		case 0xA2:
 		case 0xA3:
 		case 0xA4:
-		case 0xA5: goto yy28;
-		default: goto yy31;
+		case 0xA5: goto yy27;
+		default: goto yy29;
 	}
-yy240:
+yy238:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x83:
@@ -5754,85 +5754,85 @@ yy240:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy239:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy27;
+		default: goto yy29;
+	}
+yy240:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy27;
+		default: goto yy29;
 	}
 yy241:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 yy242:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy28;
-		default: goto yy31;
-	}
-yy243:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
-	}
-yy244:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x8F:
 		case 0x90:
 		case 0x91:
@@ -5845,10 +5845,10 @@ yy244:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy245:
+yy243:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x8B:
@@ -5856,23 +5856,23 @@ yy245:
 		case 0x8D:
 		case 0x8E:
 		case 0x8F:
-		case 0xBA: goto yy28;
-		default: goto yy31;
+		case 0xBA: goto yy27;
+		default: goto yy29;
 	}
-yy246:
+yy244:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA4: goto yy28;
-		default: goto yy31;
+		case 0xA4: goto yy27;
+		default: goto yy29;
 	}
-yy247:
+yy245:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x83:
-		case 0x84: goto yy28;
-		default: goto yy31;
+		case 0x84: goto yy27;
+		default: goto yy29;
 	}
-yy248:
+yy246:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x90:
@@ -5905,10 +5905,10 @@ yy248:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy249:
+yy247:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x95:
@@ -5953,19 +5953,19 @@ yy249:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy250:
+yy248:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy28;
-		default: goto yy31;
+		case 0x8F: goto yy27;
+		default: goto yy29;
 	}
-yy251:
+yy249:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x88:
@@ -5981,10 +5981,10 @@ yy251:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
-yy252:
+yy250:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x88:
@@ -6012,10 +6012,10 @@ yy252:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy253:
+yy251:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x97:
@@ -6058,10 +6058,10 @@ yy253:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
-yy254:
+yy252:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -6094,10 +6094,10 @@ yy254:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy28;
-		default: goto yy31;
+		case 0x9F: goto yy27;
+		default: goto yy29;
 	}
-yy255:
+yy253:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xB0:
@@ -6115,8 +6115,8 @@ yy255:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy28;
-		default: goto yy31;
+		case 0xBF: goto yy27;
+		default: goto yy29;
 	}
 }
 #line 15 "encodings/unicode_group_Cn_8_encoding_policy_ignore.re"

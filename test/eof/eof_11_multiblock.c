@@ -16,7 +16,7 @@ loop:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '\n':
-		case ' ': goto yy4;
+		case ' ': goto yy2;
 		case 'A':
 		case 'B':
 		case 'C':
@@ -69,28 +69,28 @@ loop:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy7;
+		case 'z': goto yy4;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy9;
-			goto yy2;
+			if (YYLIMIT <= YYCURSOR) goto yy5;
+			goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 	{ return 1; }
-yy4:
+yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '\n':
-		case ' ': goto yy4;
-		default: goto yy6;
+		case ' ': goto yy2;
+		default: goto yy3;
 	}
-yy6:
+yy3:
 	{ goto loop; }
-yy7:
+yy4:
 	++YYCURSOR;
 	YYCURSOR -= 1;
 	{ goto word; }
-yy9:
+yy5:
 	{ return 0; }
 }
 
@@ -152,16 +152,16 @@ word:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy14;
+		case 'z': goto yy9;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy18;
-			goto yy12;
+			if (YYLIMIT <= YYCURSOR) goto yy12;
+			goto yy7;
 	}
-yy12:
+yy7:
 	++YYCURSOR;
-yy13:
+yy8:
 	{ return 2; }
-yy14:
+yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '0':
@@ -226,10 +226,10 @@ yy14:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy15;
-		default: goto yy13;
+		case 'z': goto yy10;
+		default: goto yy8;
 	}
-yy15:
+yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '0':
@@ -294,12 +294,12 @@ yy15:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy15;
-		default: goto yy17;
+		case 'z': goto yy10;
+		default: goto yy11;
 	}
-yy17:
+yy11:
 	{ ++count; goto loop; }
-yy18:
+yy12:
 	{ return 0; }
 }
 

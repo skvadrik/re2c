@@ -7,21 +7,21 @@
 	yych = *YYCURSOR;
 	yyt1 = YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy3;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = yyt1;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy3;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
 }
 

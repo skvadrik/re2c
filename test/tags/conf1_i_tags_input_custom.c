@@ -39,21 +39,37 @@ static void lex(const char *s)
 		case '8':
 		case '9':
 			ZZTP(zz_1);
-			goto yy4;
-		default: goto yy2;
+			goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	YYSKIP();
-yy3:
+yy2:
 	{ printf("error\n"); return; }
-yy4:
+yy3:
 	YYSKIP();
 	YYBACKUP();
 	yych = YYPEEK();
 	switch (yych) {
 		case '.':
 			ZZTP(zz_2);
-			goto yy5;
+			goto yy4;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy6;
+		default: goto yy2;
+	}
+yy4:
+	YYSKIP();
+	yych = YYPEEK();
+	switch (yych) {
 		case '0':
 		case '1':
 		case '2':
@@ -64,12 +80,18 @@ yy4:
 		case '7':
 		case '8':
 		case '9': goto yy7;
-		default: goto yy3;
+		default: goto yy5;
 	}
 yy5:
+	YYRESTORE();
+	goto yy2;
+yy6:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
+		case '.':
+			ZZTP(zz_2);
+			goto yy4;
 		case '0':
 		case '1':
 		case '2':
@@ -80,18 +102,15 @@ yy5:
 		case '7':
 		case '8':
 		case '9': goto yy8;
-		default: goto yy6;
+		default: goto yy5;
 	}
-yy6:
-	YYRESTORE();
-	goto yy3;
 yy7:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
 		case '.':
-			ZZTP(zz_2);
-			goto yy5;
+			ZZTP(zz_3);
+			goto yy9;
 		case '0':
 		case '1':
 		case '2':
@@ -101,16 +120,22 @@ yy7:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy9;
-		default: goto yy6;
+		case '9': goto yy10;
+		default: goto yy5;
 	}
 yy8:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
 		case '.':
-			ZZTP(zz_3);
-			goto yy10;
+			ZZTP(zz_2);
+			goto yy4;
+		default: goto yy5;
+	}
+yy9:
+	YYSKIP();
+	yych = YYPEEK();
+	switch (yych) {
 		case '0':
 		case '1':
 		case '2':
@@ -121,21 +146,15 @@ yy8:
 		case '7':
 		case '8':
 		case '9': goto yy11;
-		default: goto yy6;
-	}
-yy9:
-	YYSKIP();
-	yych = YYPEEK();
-	switch (yych) {
-		case '.':
-			ZZTP(zz_2);
-			goto yy5;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy10:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
+		case '.':
+			ZZTP(zz_3);
+			goto yy9;
 		case '0':
 		case '1':
 		case '2':
@@ -146,15 +165,15 @@ yy10:
 		case '7':
 		case '8':
 		case '9': goto yy12;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy11:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
 		case '.':
-			ZZTP(zz_3);
-			goto yy10;
+			ZZTP(zz_4);
+			goto yy13;
 		case '0':
 		case '1':
 		case '2':
@@ -164,16 +183,22 @@ yy11:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy13;
-		default: goto yy6;
+		case '9': goto yy14;
+		default: goto yy5;
 	}
 yy12:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
 		case '.':
-			ZZTP(zz_4);
-			goto yy14;
+			ZZTP(zz_3);
+			goto yy9;
+		default: goto yy5;
+	}
+yy13:
+	YYSKIP();
+	yych = YYPEEK();
+	switch (yych) {
 		case '0':
 		case '1':
 		case '2':
@@ -184,21 +209,15 @@ yy12:
 		case '7':
 		case '8':
 		case '9': goto yy15;
-		default: goto yy6;
-	}
-yy13:
-	YYSKIP();
-	yych = YYPEEK();
-	switch (yych) {
-		case '.':
-			ZZTP(zz_3);
-			goto yy10;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy14:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
+		case '.':
+			ZZTP(zz_4);
+			goto yy13;
 		case '0':
 		case '1':
 		case '2':
@@ -208,16 +227,13 @@ yy14:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy16;
-		default: goto yy6;
+		case '9': goto yy17;
+		default: goto yy5;
 	}
 yy15:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case '.':
-			ZZTP(zz_4);
-			goto yy14;
 		case '0':
 		case '1':
 		case '2':
@@ -228,9 +244,31 @@ yy15:
 		case '7':
 		case '8':
 		case '9': goto yy18;
-		default: goto yy6;
+		default: goto yy16;
 	}
 yy16:
+	p0 = zz_1;
+	p1 = zz_2;
+	p2 = zz_3;
+	p3 = zz_4;
+	{
+            printf("%u.%u.%u.%u\n",
+                parse_oct(p0, p1),
+                parse_oct(p1 + 1, p2),
+                parse_oct(p2 + 1, p3),
+                parse_oct(p3 + 1, s));
+            return;
+        }
+yy17:
+	YYSKIP();
+	yych = YYPEEK();
+	switch (yych) {
+		case '.':
+			ZZTP(zz_4);
+			goto yy13;
+		default: goto yy5;
+	}
+yy18:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
@@ -244,49 +282,11 @@ yy16:
 		case '7':
 		case '8':
 		case '9': goto yy19;
-		default: goto yy17;
-	}
-yy17:
-	p0 = zz_1;
-	p1 = zz_2;
-	p2 = zz_3;
-	p3 = zz_4;
-	{
-            printf("%u.%u.%u.%u\n",
-                parse_oct(p0, p1),
-                parse_oct(p1 + 1, p2),
-                parse_oct(p2 + 1, p3),
-                parse_oct(p3 + 1, s));
-            return;
-        }
-yy18:
-	YYSKIP();
-	yych = YYPEEK();
-	switch (yych) {
-		case '.':
-			ZZTP(zz_4);
-			goto yy14;
-		default: goto yy6;
+		default: goto yy16;
 	}
 yy19:
 	YYSKIP();
-	yych = YYPEEK();
-	switch (yych) {
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9': goto yy20;
-		default: goto yy17;
-	}
-yy20:
-	YYSKIP();
-	goto yy17;
+	goto yy16;
 }
 
 }

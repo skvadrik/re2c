@@ -10,11 +10,11 @@
 	switch (yych) {
 		case '-':
 		case 'a':
-		case 'c': goto yy3;
-		default: goto yy2;
+		case 'c': goto yy2;
+		default: goto yy1;
 	}
+yy1:
 yy2:
-yy3:
 	++YYCURSOR;
 #line 3 "cpoint_class_esc_dash.re"
 	{}

@@ -19,8 +19,8 @@ static int lex(const char *str, unsigned int len) {
 	char yych;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
-		case 0x00: goto yy2;
-		case ' ': goto yy6;
+		case 0x00: goto yy1;
+		case ' ': goto yy3;
 		case 'a':
 		case 'b':
 		case 'c':
@@ -46,31 +46,31 @@ static int lex(const char *str, unsigned int len) {
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy9;
-		default: goto yy4;
+		case 'z': goto yy5;
+		default: goto yy2;
 	}
-yy2:
+yy1:
 	++cur;
 #line 23 "c/eof/04_generic_api_sentinel.re"
 	{ break;; }
 #line 57 "c/eof/04_generic_api_sentinel.c"
-yy4:
+yy2:
 	++cur;
 #line 22 "c/eof/04_generic_api_sentinel.re"
 	{ count = -1; break; }
 #line 62 "c/eof/04_generic_api_sentinel.c"
-yy6:
+yy3:
 	++cur;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
-		case ' ': goto yy6;
-		default: goto yy8;
+		case ' ': goto yy3;
+		default: goto yy4;
 	}
-yy8:
+yy4:
 #line 25 "c/eof/04_generic_api_sentinel.re"
 	{ continue; }
 #line 73 "c/eof/04_generic_api_sentinel.c"
-yy9:
+yy5:
 	++cur;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
@@ -99,10 +99,10 @@ yy9:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy9;
-		default: goto yy11;
+		case 'z': goto yy5;
+		default: goto yy6;
 	}
-yy11:
+yy6:
 #line 24 "c/eof/04_generic_api_sentinel.re"
 	{ ++count; continue;; }
 #line 109 "c/eof/04_generic_api_sentinel.c"

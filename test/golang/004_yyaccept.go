@@ -14,106 +14,106 @@ func Lex(str string) int {
 	yych = str[cursor]
 	switch (yych) {
 	case 'a':
-		goto yy4
-	default:
 		goto yy2
+	default:
+		goto yy1
 	}
-yy2:
+yy1:
 	cursor += 1
 //line "golang/004_yyaccept.re":17
 	{
 		return -1
 	}
 //line "golang/004_yyaccept.go":28
-yy4:
+yy2:
 	yyaccept = 0
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 'b':
-		goto yy6
+		goto yy4
 	default:
-		goto yy5
+		goto yy3
 	}
-yy5:
+yy3:
 //line "golang/004_yyaccept.re":21
 	{
 		return 1
 	}
 //line "golang/004_yyaccept.go":45
-yy6:
+yy4:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'c':
-		goto yy8
+		goto yy6
 	default:
-		goto yy7
+		goto yy5
 	}
-yy7:
+yy5:
 	cursor = marker
 	switch (yyaccept) {
 	case 0:
-		goto yy5
+		goto yy3
 	case 1:
-		goto yy9
+		goto yy7
 	default:
-		goto yy12
+		goto yy10
 	}
-yy8:
+yy6:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 'd':
-		goto yy10
+		goto yy8
 	default:
-		goto yy9
+		goto yy7
 	}
-yy9:
+yy7:
 //line "golang/004_yyaccept.re":25
 	{
 		return 2
 	}
 //line "golang/004_yyaccept.go":81
-yy10:
+yy8:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'e':
-		goto yy11
+		goto yy9
 	default:
-		goto yy7
+		goto yy5
 	}
-yy11:
+yy9:
 	yyaccept = 2
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 'f':
-		goto yy13
+		goto yy11
 	default:
-		goto yy12
+		goto yy10
 	}
-yy12:
+yy10:
 //line "golang/004_yyaccept.re":29
 	{
 		return 3
 	}
 //line "golang/004_yyaccept.go":107
-yy13:
+yy11:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'g':
-		goto yy14
+		goto yy12
 	default:
-		goto yy7
+		goto yy5
 	}
-yy14:
+yy12:
 	cursor += 1
 //line "golang/004_yyaccept.re":33
 	{

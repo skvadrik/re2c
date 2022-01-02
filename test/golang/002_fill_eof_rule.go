@@ -68,19 +68,19 @@ yyFillLabel0:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy2
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy6
+		goto yy3
 	default:
 		if (in.limit-in.cursor < 1) {
 			if (fill(in) == 0) {
 				goto yyFillLabel0
 			}
-			goto yy14
+			goto yy9
 		}
-		goto yy2
+		goto yy1
 	}
-yy2:
+yy1:
 	in.cursor += 1
 //line "golang/002_fill_eof_rule.re":70
 	{
@@ -88,79 +88,79 @@ yy2:
 		return -1
 	}
 //line "golang/002_fill_eof_rule.go":91
-yy4:
+yy2:
 	in.cursor += 1
 //line "golang/002_fill_eof_rule.re":90
 	{
 		return 3
 	}
 //line "golang/002_fill_eof_rule.go":98
-yy6:
+yy3:
 	in.cursor += 1
 	in.marker = in.cursor
 yyFillLabel1:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case '-':
-		goto yy9
+		goto yy5
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy6
+		goto yy3
 	default:
 		if (in.limit-in.cursor < 1) {
 			if (fill(in) == 0) {
 				goto yyFillLabel1
 			}
 		}
-		goto yy8
+		goto yy4
 	}
-yy8:
+yy4:
 //line "golang/002_fill_eof_rule.re":80
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return 1
 	}
 //line "golang/002_fill_eof_rule.go":123
-yy9:
+yy5:
 	in.cursor += 1
 yyFillLabel2:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy11
+		goto yy7
 	default:
 		if (in.limit-in.cursor < 1) {
 			if (fill(in) == 0) {
 				goto yyFillLabel2
 			}
 		}
-		goto yy10
+		goto yy6
 	}
-yy10:
+yy6:
 	in.cursor = in.marker
-	goto yy8
-yy11:
+	goto yy4
+yy7:
 	in.cursor += 1
 yyFillLabel3:
 	yych = YYCTYPE(in.data[in.cursor])
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy11
+		goto yy7
 	default:
 		if (in.limit-in.cursor < 1) {
 			if (fill(in) == 0) {
 				goto yyFillLabel3
 			}
 		}
-		goto yy13
+		goto yy8
 	}
-yy13:
+yy8:
 //line "golang/002_fill_eof_rule.re":85
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return 2
 	}
 //line "golang/002_fill_eof_rule.go":163
-yy14:
+yy9:
 //line "golang/002_fill_eof_rule.re":75
 	{
 		fmt.Println("end")

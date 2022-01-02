@@ -27,16 +27,16 @@ func parse_u32(str string) (uint32, error) {
 	yych = str[cursor]
 	switch (yych) {
 	case '0':
-		goto yy4
-	case '1','2','3','4','5','6','7','8','9':
-		goto yy6
-	default:
 		goto yy2
+	case '1','2','3','4','5','6','7','8','9':
+		goto yy4
+	default:
+		goto yy1
 	}
-yy2:
+yy1:
 	cursor += 1
 	{ goto err }
-yy4:
+yy2:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
@@ -44,33 +44,33 @@ yy4:
 	case 'B':
 		fallthrough
 	case 'b':
-		goto yy8
+		goto yy5
 	case 'X':
 		fallthrough
 	case 'x':
-		goto yy10
+		goto yy7
 	default:
-		goto yy5
+		goto yy3
 	}
-yy5:
+yy3:
 	{ goto oct }
-yy6:
+yy4:
 	cursor += 1
 	cursor += -1
 	{ goto dec }
-yy8:
+yy5:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '0','1':
-		goto yy11
+		goto yy8
 	default:
-		goto yy9
+		goto yy6
 	}
-yy9:
+yy6:
 	cursor = marker
-	goto yy5
-yy10:
+	goto yy3
+yy7:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -79,15 +79,15 @@ yy10:
 	case 'A','B','C','D','E','F':
 		fallthrough
 	case 'a','b','c','d','e','f':
-		goto yy13
-	default:
 		goto yy9
+	default:
+		goto yy6
 	}
-yy11:
+yy8:
 	cursor += 1
 	cursor += -1
 	{ goto bin }
-yy13:
+yy9:
 	cursor += 1
 	cursor += -1
 	{ goto hex }
@@ -100,19 +100,19 @@ bin:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy17
+		goto yy11
 	case '0','1':
-		goto yy21
+		goto yy13
 	default:
-		goto yy19
+		goto yy12
 	}
-yy17:
+yy11:
 	cursor += 1
 	{ goto end }
-yy19:
+yy12:
 	cursor += 1
 	{ goto err }
-yy21:
+yy13:
 	cursor += 1
 	{ add_digit(2, '0'); goto bin }
 }
@@ -124,19 +124,19 @@ oct:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy25
+		goto yy15
 	case '0','1','2','3','4','5','6','7':
-		goto yy29
+		goto yy17
 	default:
-		goto yy27
+		goto yy16
 	}
-yy25:
+yy15:
 	cursor += 1
 	{ goto end }
-yy27:
+yy16:
 	cursor += 1
 	{ goto err }
-yy29:
+yy17:
 	cursor += 1
 	{ add_digit(8, '0'); goto oct }
 }
@@ -148,19 +148,19 @@ dec:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy33
+		goto yy19
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy37
+		goto yy21
 	default:
-		goto yy35
+		goto yy20
 	}
-yy33:
+yy19:
 	cursor += 1
 	{ goto end }
-yy35:
+yy20:
 	cursor += 1
 	{ goto err }
-yy37:
+yy21:
 	cursor += 1
 	{ add_digit(10, '0'); goto dec }
 }
@@ -172,29 +172,29 @@ hex:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy41
+		goto yy23
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy45
+		goto yy25
 	case 'A','B','C','D','E','F':
-		goto yy47
+		goto yy26
 	case 'a','b','c','d','e','f':
-		goto yy49
+		goto yy27
 	default:
-		goto yy43
+		goto yy24
 	}
-yy41:
+yy23:
 	cursor += 1
 	{ goto end }
-yy43:
+yy24:
 	cursor += 1
 	{ goto err }
-yy45:
+yy25:
 	cursor += 1
 	{ add_digit(16, '0');    goto hex }
-yy47:
+yy26:
 	cursor += 1
 	{ add_digit(16, 'A'-10); goto hex }
-yy49:
+yy27:
 	cursor += 1
 	{ add_digit(16, 'a'-10); goto hex }
 }

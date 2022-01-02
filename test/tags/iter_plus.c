@@ -11,23 +11,23 @@
 	switch (yych) {
 		case 'a':
 			yyt1 = YYCURSOR;
-			goto yy4;
-		default: goto yy2;
+			goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 	{ d }
-yy4:
+yy2:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a':
 			yyt1 = YYCURSOR;
-			goto yy4;
-		default: goto yy6;
+			goto yy2;
+		default: goto yy3;
 	}
-yy6:
+yy3:
 	p = yyt1;
 	{ p }
 }

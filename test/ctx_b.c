@@ -87,25 +87,25 @@ std:
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy6;
+		goto yy4;
 	}
 	if (yych <= 0x1F) {
-		if (yych <= 0x08) goto yy2;
-		if (yych <= '\n') goto yy4;
+		if (yych <= 0x08) goto yy1;
+		if (yych <= '\n') goto yy3;
 	} else {
-		if (yych <= ' ') goto yy4;
-		if (yych <= '`') goto yy2;
-		if (yych <= 'b') goto yy9;
+		if (yych <= ' ') goto yy3;
+		if (yych <= '`') goto yy1;
+		if (yych <= 'b') goto yy5;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 61 "ctx_b.re"
 	{
 		return UNEXPECTED;
 	}
 #line 108 "ctx_b.c"
-yy4:
+yy3:
 	++YYCURSOR;
 #line 54 "ctx_b.re"
 	{
@@ -115,41 +115,41 @@ yy4:
 		goto std;
 	}
 #line 118 "ctx_b.c"
-yy6:
+yy4:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy6;
+		goto yy4;
 	}
 #line 51 "ctx_b.re"
 	{ return NUMBER;  }
 #line 128 "ctx_b.c"
-yy9:
+yy5:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy3;
+	if (yych <= '/') goto yy2;
 	if (yych == '1') {
 		YYCTXMARKER = YYCURSOR;
-		goto yy13;
+		goto yy8;
 	}
-	if (yych >= ':') goto yy3;
+	if (yych >= ':') goto yy2;
 	YYCTXMARKER = YYCURSOR;
-yy10:
+yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '/') goto yy12;
-	if (yych <= '9') goto yy10;
-yy12:
+	if (yych <= '/') goto yy7;
+	if (yych <= '9') goto yy6;
+yy7:
 	YYCURSOR = YYCTXMARKER;
 #line 50 "ctx_b.re"
 	{ return KEYWORD; }
 #line 148 "ctx_b.c"
-yy13:
+yy8:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy14;
-	if (yych <= '9') goto yy10;
-yy14:
+	if (yych <= '/') goto yy9;
+	if (yych <= '9') goto yy6;
+yy9:
 	YYCURSOR -= 1;
 #line 49 "ctx_b.re"
 	{ return KEYWORD; }

@@ -9,27 +9,27 @@
 	yych = *YYCURSOR++;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy5;
-		default: goto yy3;
+		case 'a': goto yy3;
+		default: goto yy1;
 	}
-yy3:
+yy1:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy7;
-		default: goto yy4;
+		case 'a': goto yy5;
+		default: goto yy2;
 	}
-yy4:
+yy2:
 #line 5 "control_flow_fail.re"
 	{ action2 }
 #line 25 "control_flow_fail.c"
-yy5:
+yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy7;
-		default: goto yy6;
+		case 'a': goto yy5;
+		default: goto yy4;
 	}
-yy6:
-yy7:
+yy4:
+yy5:
 	++YYCURSOR;
 #line 4 "control_flow_fail.re"
 	{ action1 }

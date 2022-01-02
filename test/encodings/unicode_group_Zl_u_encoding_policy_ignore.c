@@ -14,12 +14,12 @@ Zl:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0x00002028) goto yy4;
+	if (yych == 0x00002028) goto yy1;
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Zl_u_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 22 "encodings/unicode_group_Zl_u_encoding_policy_ignore.c"
-yy4:
+yy1:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Zl_u_encoding_policy_ignore.re"
 	{ goto Zl; }

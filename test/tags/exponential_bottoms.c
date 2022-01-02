@@ -9,52 +9,52 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy3;
+		case 'a': goto yy2;
 		case 'b':
 			yyt1 = YYCURSOR;
-			goto yy4;
+			goto yy3;
 		case 'c':
 			yyt1 = yyt2 = YYCURSOR;
-			goto yy5;
+			goto yy4;
 		default:
 			yyt1 = yyt2 = yyt3 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	p = yyt1;
 	q = yyt2;
 	z = yyt3;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'b':
 			yyt1 = NULL;
-			goto yy4;
+			goto yy3;
 		case 'c':
 			yyt1 = NULL;
 			yyt2 = YYCURSOR;
-			goto yy5;
+			goto yy4;
 		default:
 			yyt1 = NULL;
 			yyt2 = yyt3 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy4:
+yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'c':
 			yyt2 = NULL;
-			goto yy5;
+			goto yy4;
 		default:
 			yyt2 = NULL;
 			yyt3 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy5:
+yy4:
 	++YYCURSOR;
 	yyt3 = NULL;
-	goto yy2;
+	goto yy1;
 }
 
 tags/exponential_bottoms.re:7:31: warning: rule matches empty string [-Wmatch-empty-string]

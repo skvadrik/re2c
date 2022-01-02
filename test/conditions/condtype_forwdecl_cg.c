@@ -20,8 +20,8 @@ int main ()
 /* *********************************** */
 yyc_a:
 	yych = *YYCURSOR;
-	if (yych == 'a') goto yy3;
-yy3:
+	if (yych == 'a') goto yy1;
+yy1:
 	++YYCURSOR;
 #line 13 "conditions/condtype_forwdecl_cg.re"
 	{}
@@ -29,8 +29,8 @@ yy3:
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
-	if (yych == 'b') goto yy8;
-yy8:
+	if (yych == 'b') goto yy3;
+yy3:
 	++YYCURSOR;
 #line 14 "conditions/condtype_forwdecl_cg.re"
 	{}

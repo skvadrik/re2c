@@ -10,15 +10,15 @@
 		case 'b':
 		case 'c':
 		case 'd':
-		case 'e': goto yy3;
-		default: goto yy2;
+		case 'e': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	++YYCURSOR;
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR - 1;

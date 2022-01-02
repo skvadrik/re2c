@@ -6,16 +6,16 @@ char *scan(char *p)
 	{
 		unsigned char yych;
 		yych = (unsigned char)*p;
-		if (yych <= '/') goto yy2;
-		if (yych <= '9') goto yy4;
-yy2:
+		if (yych <= '/') goto yy1;
+		if (yych <= '9') goto yy2;
+yy1:
 		++p;
 		{return (char*)0;}
-yy4:
+yy2:
 		yych = (unsigned char)*++p;
-		if (yych <= '/') goto yy6;
-		if (yych <= '9') goto yy4;
-yy6:
+		if (yych <= '/') goto yy3;
+		if (yych <= '9') goto yy2;
+yy3:
 		{return p;}
 	}
 

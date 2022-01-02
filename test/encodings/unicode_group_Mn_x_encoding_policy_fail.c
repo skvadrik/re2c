@@ -21,37 +21,37 @@ Mn:
 					if (yych <= 0x05C6) {
 						if (yych <= 0x05BD) {
 							if (yych <= 0x0482) {
-								if (yych <= 0x02FF) goto yy2;
-								if (yych <= 0x036F) goto yy4;
+								if (yych <= 0x02FF) goto yy1;
+								if (yych <= 0x036F) goto yy3;
 							} else {
-								if (yych <= 0x0487) goto yy4;
-								if (yych >= 0x0591) goto yy4;
+								if (yych <= 0x0487) goto yy3;
+								if (yych >= 0x0591) goto yy3;
 							}
 						} else {
 							if (yych <= 0x05C0) {
-								if (yych == 0x05BF) goto yy4;
+								if (yych == 0x05BF) goto yy3;
 							} else {
-								if (yych == 0x05C3) goto yy2;
-								if (yych <= 0x05C5) goto yy4;
+								if (yych == 0x05C3) goto yy1;
+								if (yych <= 0x05C5) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x066F) {
 							if (yych <= 0x061A) {
-								if (yych <= 0x05C7) goto yy4;
-								if (yych >= 0x0610) goto yy4;
+								if (yych <= 0x05C7) goto yy3;
+								if (yych >= 0x0610) goto yy3;
 							} else {
-								if (yych <= 0x064A) goto yy2;
-								if (yych <= 0x065F) goto yy4;
+								if (yych <= 0x064A) goto yy1;
+								if (yych <= 0x065F) goto yy3;
 							}
 						} else {
 							if (yych <= 0x06DC) {
-								if (yych <= 0x0670) goto yy4;
-								if (yych >= 0x06D6) goto yy4;
+								if (yych <= 0x0670) goto yy3;
+								if (yych >= 0x06D6) goto yy3;
 							} else {
-								if (yych <= 0x06DE) goto yy2;
-								if (yych <= 0x06E4) goto yy4;
-								if (yych >= 0x06E7) goto yy4;
+								if (yych <= 0x06DE) goto yy1;
+								if (yych <= 0x06E4) goto yy3;
+								if (yych >= 0x06E7) goto yy3;
 							}
 						}
 					}
@@ -59,37 +59,37 @@ Mn:
 					if (yych <= 0x081A) {
 						if (yych <= 0x074A) {
 							if (yych <= 0x0710) {
-								if (yych <= 0x06E9) goto yy2;
-								if (yych <= 0x06ED) goto yy4;
+								if (yych <= 0x06E9) goto yy1;
+								if (yych <= 0x06ED) goto yy3;
 							} else {
-								if (yych <= 0x0711) goto yy4;
-								if (yych >= 0x0730) goto yy4;
+								if (yych <= 0x0711) goto yy3;
+								if (yych >= 0x0730) goto yy3;
 							}
 						} else {
 							if (yych <= 0x07EA) {
-								if (yych <= 0x07A5) goto yy2;
-								if (yych <= 0x07B0) goto yy4;
+								if (yych <= 0x07A5) goto yy1;
+								if (yych <= 0x07B0) goto yy3;
 							} else {
-								if (yych <= 0x07F3) goto yy4;
-								if (yych <= 0x0815) goto yy2;
-								if (yych <= 0x0819) goto yy4;
+								if (yych <= 0x07F3) goto yy3;
+								if (yych <= 0x0815) goto yy1;
+								if (yych <= 0x0819) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x0858) {
 							if (yych <= 0x0827) {
-								if (yych != 0x0824) goto yy4;
+								if (yych != 0x0824) goto yy3;
 							} else {
-								if (yych <= 0x0828) goto yy2;
-								if (yych <= 0x082D) goto yy4;
+								if (yych <= 0x0828) goto yy1;
+								if (yych <= 0x082D) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0902) {
-								if (yych <= 0x085B) goto yy4;
-								if (yych >= 0x08E4) goto yy4;
+								if (yych <= 0x085B) goto yy3;
+								if (yych >= 0x08E4) goto yy3;
 							} else {
-								if (yych == 0x093A) goto yy4;
-								if (yych >= 0x093C) goto yy4;
+								if (yych == 0x093A) goto yy3;
+								if (yych >= 0x093C) goto yy3;
 							}
 						}
 					}
@@ -99,38 +99,38 @@ Mn:
 					if (yych <= 0x09C0) {
 						if (yych <= 0x0957) {
 							if (yych <= 0x094C) {
-								if (yych <= 0x0940) goto yy2;
-								if (yych <= 0x0948) goto yy4;
+								if (yych <= 0x0940) goto yy1;
+								if (yych <= 0x0948) goto yy3;
 							} else {
-								if (yych <= 0x094D) goto yy4;
-								if (yych >= 0x0951) goto yy4;
+								if (yych <= 0x094D) goto yy3;
+								if (yych >= 0x0951) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0980) {
-								if (yych <= 0x0961) goto yy2;
-								if (yych <= 0x0963) goto yy4;
+								if (yych <= 0x0961) goto yy1;
+								if (yych <= 0x0963) goto yy3;
 							} else {
-								if (yych <= 0x0981) goto yy4;
-								if (yych == 0x09BC) goto yy4;
+								if (yych <= 0x0981) goto yy3;
+								if (yych == 0x09BC) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x0A00) {
 							if (yych <= 0x09CD) {
-								if (yych <= 0x09C4) goto yy4;
-								if (yych >= 0x09CD) goto yy4;
+								if (yych <= 0x09C4) goto yy3;
+								if (yych >= 0x09CD) goto yy3;
 							} else {
-								if (yych <= 0x09E1) goto yy2;
-								if (yych <= 0x09E3) goto yy4;
+								if (yych <= 0x09E1) goto yy1;
+								if (yych <= 0x09E3) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0A3C) {
-								if (yych <= 0x0A02) goto yy4;
-								if (yych >= 0x0A3C) goto yy4;
+								if (yych <= 0x0A02) goto yy3;
+								if (yych >= 0x0A3C) goto yy3;
 							} else {
-								if (yych <= 0x0A40) goto yy2;
-								if (yych <= 0x0A42) goto yy4;
-								if (yych >= 0x0A47) goto yy4;
+								if (yych <= 0x0A40) goto yy1;
+								if (yych <= 0x0A42) goto yy3;
+								if (yych >= 0x0A47) goto yy3;
 							}
 						}
 					}
@@ -138,34 +138,34 @@ Mn:
 					if (yych <= 0x0AC0) {
 						if (yych <= 0x0A71) {
 							if (yych <= 0x0A50) {
-								if (yych <= 0x0A4A) goto yy2;
-								if (yych <= 0x0A4D) goto yy4;
+								if (yych <= 0x0A4A) goto yy1;
+								if (yych <= 0x0A4D) goto yy3;
 							} else {
-								if (yych <= 0x0A51) goto yy4;
-								if (yych >= 0x0A70) goto yy4;
+								if (yych <= 0x0A51) goto yy3;
+								if (yych >= 0x0A70) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0A80) {
-								if (yych == 0x0A75) goto yy4;
+								if (yych == 0x0A75) goto yy3;
 							} else {
-								if (yych <= 0x0A82) goto yy4;
-								if (yych == 0x0ABC) goto yy4;
+								if (yych <= 0x0A82) goto yy3;
+								if (yych == 0x0ABC) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x0AE1) {
 							if (yych <= 0x0AC8) {
-								if (yych != 0x0AC6) goto yy4;
+								if (yych != 0x0AC6) goto yy3;
 							} else {
-								if (yych == 0x0ACD) goto yy4;
+								if (yych == 0x0ACD) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0B01) {
-								if (yych <= 0x0AE3) goto yy4;
-								if (yych >= 0x0B01) goto yy4;
+								if (yych <= 0x0AE3) goto yy3;
+								if (yych >= 0x0B01) goto yy3;
 							} else {
-								if (yych == 0x0B3C) goto yy4;
-								if (yych >= 0x0B3F) goto yy4;
+								if (yych == 0x0B3C) goto yy3;
+								if (yych >= 0x0B3F) goto yy3;
 							}
 						}
 					}
@@ -177,37 +177,37 @@ Mn:
 					if (yych <= 0x0BCC) {
 						if (yych <= 0x0B56) {
 							if (yych <= 0x0B4C) {
-								if (yych <= 0x0B40) goto yy2;
-								if (yych <= 0x0B44) goto yy4;
+								if (yych <= 0x0B40) goto yy1;
+								if (yych <= 0x0B44) goto yy3;
 							} else {
-								if (yych <= 0x0B4D) goto yy4;
-								if (yych >= 0x0B56) goto yy4;
+								if (yych <= 0x0B4D) goto yy3;
+								if (yych >= 0x0B56) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0B81) {
-								if (yych <= 0x0B61) goto yy2;
-								if (yych <= 0x0B63) goto yy4;
+								if (yych <= 0x0B61) goto yy1;
+								if (yych <= 0x0B63) goto yy3;
 							} else {
-								if (yych <= 0x0B82) goto yy4;
-								if (yych == 0x0BC0) goto yy4;
+								if (yych <= 0x0B82) goto yy3;
+								if (yych == 0x0BC0) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x0C45) {
 							if (yych <= 0x0C00) {
-								if (yych <= 0x0BCD) goto yy4;
-								if (yych >= 0x0C00) goto yy4;
+								if (yych <= 0x0BCD) goto yy3;
+								if (yych >= 0x0C00) goto yy3;
 							} else {
-								if (yych <= 0x0C3D) goto yy2;
-								if (yych <= 0x0C40) goto yy4;
+								if (yych <= 0x0C3D) goto yy1;
+								if (yych <= 0x0C40) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0C4D) {
-								if (yych != 0x0C49) goto yy4;
+								if (yych != 0x0C49) goto yy3;
 							} else {
-								if (yych <= 0x0C54) goto yy2;
-								if (yych <= 0x0C56) goto yy4;
-								if (yych >= 0x0C62) goto yy4;
+								if (yych <= 0x0C54) goto yy1;
+								if (yych <= 0x0C56) goto yy3;
+								if (yych >= 0x0C62) goto yy3;
 							}
 						}
 					}
@@ -215,35 +215,35 @@ Mn:
 					if (yych <= 0x0D00) {
 						if (yych <= 0x0CBF) {
 							if (yych <= 0x0CBB) {
-								if (yych == 0x0C81) goto yy4;
+								if (yych == 0x0C81) goto yy3;
 							} else {
-								if (yych <= 0x0CBC) goto yy4;
-								if (yych >= 0x0CBF) goto yy4;
+								if (yych <= 0x0CBC) goto yy3;
+								if (yych >= 0x0CBF) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0CCB) {
-								if (yych == 0x0CC6) goto yy4;
+								if (yych == 0x0CC6) goto yy3;
 							} else {
-								if (yych <= 0x0CCD) goto yy4;
-								if (yych <= 0x0CE1) goto yy2;
-								if (yych <= 0x0CE3) goto yy4;
+								if (yych <= 0x0CCD) goto yy3;
+								if (yych <= 0x0CE1) goto yy1;
+								if (yych <= 0x0CE3) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x0D61) {
 							if (yych <= 0x0D44) {
-								if (yych <= 0x0D01) goto yy4;
-								if (yych >= 0x0D41) goto yy4;
+								if (yych <= 0x0D01) goto yy3;
+								if (yych >= 0x0D41) goto yy3;
 							} else {
-								if (yych == 0x0D4D) goto yy4;
+								if (yych == 0x0D4D) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0DCA) {
-								if (yych <= 0x0D63) goto yy4;
-								if (yych >= 0x0DCA) goto yy4;
+								if (yych <= 0x0D63) goto yy3;
+								if (yych >= 0x0DCA) goto yy3;
 							} else {
-								if (yych <= 0x0DD1) goto yy2;
-								if (yych != 0x0DD5) goto yy4;
+								if (yych <= 0x0DD1) goto yy1;
+								if (yych != 0x0DD5) goto yy3;
 							}
 						}
 					}
@@ -253,33 +253,33 @@ Mn:
 					if (yych <= 0x0EC7) {
 						if (yych <= 0x0E4E) {
 							if (yych <= 0x0E33) {
-								if (yych == 0x0E31) goto yy4;
+								if (yych == 0x0E31) goto yy3;
 							} else {
-								if (yych <= 0x0E3A) goto yy4;
-								if (yych >= 0x0E47) goto yy4;
+								if (yych <= 0x0E3A) goto yy3;
+								if (yych >= 0x0E47) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0EB3) {
-								if (yych == 0x0EB1) goto yy4;
+								if (yych == 0x0EB1) goto yy3;
 							} else {
-								if (yych == 0x0EBA) goto yy2;
-								if (yych <= 0x0EBC) goto yy4;
+								if (yych == 0x0EBA) goto yy1;
+								if (yych <= 0x0EBC) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x0F36) {
 							if (yych <= 0x0F19) {
-								if (yych <= 0x0ECD) goto yy4;
-								if (yych >= 0x0F18) goto yy4;
+								if (yych <= 0x0ECD) goto yy3;
+								if (yych >= 0x0F18) goto yy3;
 							} else {
-								if (yych == 0x0F35) goto yy4;
+								if (yych == 0x0F35) goto yy3;
 							}
 						} else {
 							if (yych <= 0x0F39) {
-								if (yych != 0x0F38) goto yy4;
+								if (yych != 0x0F38) goto yy3;
 							} else {
-								if (yych <= 0x0F70) goto yy2;
-								if (yych != 0x0F7F) goto yy4;
+								if (yych <= 0x0F70) goto yy1;
+								if (yych != 0x0F7F) goto yy3;
 							}
 						}
 					}
@@ -287,37 +287,37 @@ Mn:
 					if (yych <= 0x1038) {
 						if (yych <= 0x0FBC) {
 							if (yych <= 0x0F8C) {
-								if (yych <= 0x0F85) goto yy2;
-								if (yych <= 0x0F87) goto yy4;
+								if (yych <= 0x0F85) goto yy1;
+								if (yych <= 0x0F87) goto yy3;
 							} else {
-								if (yych != 0x0F98) goto yy4;
+								if (yych != 0x0F98) goto yy3;
 							}
 						} else {
 							if (yych <= 0x102C) {
-								if (yych == 0x0FC6) goto yy4;
+								if (yych == 0x0FC6) goto yy3;
 							} else {
-								if (yych == 0x1031) goto yy2;
-								if (yych <= 0x1037) goto yy4;
+								if (yych == 0x1031) goto yy1;
+								if (yych <= 0x1037) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x1060) {
 							if (yych <= 0x103E) {
-								if (yych <= 0x103A) goto yy4;
-								if (yych >= 0x103D) goto yy4;
+								if (yych <= 0x103A) goto yy3;
+								if (yych >= 0x103D) goto yy3;
 							} else {
-								if (yych <= 0x1057) goto yy2;
-								if (yych <= 0x1059) goto yy4;
-								if (yych >= 0x105E) goto yy4;
+								if (yych <= 0x1057) goto yy1;
+								if (yych <= 0x1059) goto yy3;
+								if (yych >= 0x105E) goto yy3;
 							}
 						} else {
 							if (yych <= 0x1081) {
-								if (yych <= 0x1070) goto yy2;
-								if (yych <= 0x1074) goto yy4;
+								if (yych <= 0x1070) goto yy1;
+								if (yych <= 0x1074) goto yy3;
 							} else {
-								if (yych <= 0x1082) goto yy4;
-								if (yych <= 0x1084) goto yy2;
-								if (yych <= 0x1086) goto yy4;
+								if (yych <= 0x1082) goto yy3;
+								if (yych <= 0x1084) goto yy1;
+								if (yych <= 0x1086) goto yy3;
 							}
 						}
 					}
@@ -331,39 +331,39 @@ Mn:
 					if (yych <= 0x1773) {
 						if (yych <= 0x1711) {
 							if (yych <= 0x109D) {
-								if (yych <= 0x108D) goto yy4;
-								if (yych >= 0x109D) goto yy4;
+								if (yych <= 0x108D) goto yy3;
+								if (yych >= 0x109D) goto yy3;
 							} else {
-								if (yych <= 0x135C) goto yy2;
-								if (yych <= 0x135F) goto yy4;
+								if (yych <= 0x135C) goto yy1;
+								if (yych <= 0x135F) goto yy3;
 							}
 						} else {
 							if (yych <= 0x1734) {
-								if (yych <= 0x1714) goto yy4;
-								if (yych >= 0x1732) goto yy4;
+								if (yych <= 0x1714) goto yy3;
+								if (yych >= 0x1732) goto yy3;
 							} else {
-								if (yych <= 0x1751) goto yy2;
-								if (yych <= 0x1753) goto yy4;
-								if (yych >= 0x1772) goto yy4;
+								if (yych <= 0x1751) goto yy1;
+								if (yych <= 0x1753) goto yy3;
+								if (yych >= 0x1772) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x17C6) {
 							if (yych <= 0x17B6) {
-								if (yych <= 0x17B3) goto yy2;
-								if (yych <= 0x17B5) goto yy4;
+								if (yych <= 0x17B3) goto yy1;
+								if (yych <= 0x17B5) goto yy3;
 							} else {
-								if (yych <= 0x17BD) goto yy4;
-								if (yych >= 0x17C6) goto yy4;
+								if (yych <= 0x17BD) goto yy3;
+								if (yych >= 0x17C6) goto yy3;
 							}
 						} else {
 							if (yych <= 0x17DC) {
-								if (yych <= 0x17C8) goto yy2;
-								if (yych <= 0x17D3) goto yy4;
+								if (yych <= 0x17C8) goto yy1;
+								if (yych <= 0x17D3) goto yy3;
 							} else {
-								if (yych <= 0x17DD) goto yy4;
-								if (yych <= 0x180A) goto yy2;
-								if (yych <= 0x180D) goto yy4;
+								if (yych <= 0x17DD) goto yy3;
+								if (yych <= 0x180A) goto yy1;
+								if (yych <= 0x180D) goto yy3;
 							}
 						}
 					}
@@ -371,36 +371,36 @@ Mn:
 					if (yych <= 0x1A1B) {
 						if (yych <= 0x1931) {
 							if (yych <= 0x1922) {
-								if (yych <= 0x18A9) goto yy4;
-								if (yych >= 0x1920) goto yy4;
+								if (yych <= 0x18A9) goto yy3;
+								if (yych >= 0x1920) goto yy3;
 							} else {
-								if (yych <= 0x1926) goto yy2;
-								if (yych <= 0x1928) goto yy4;
+								if (yych <= 0x1926) goto yy1;
+								if (yych <= 0x1928) goto yy3;
 							}
 						} else {
 							if (yych <= 0x193B) {
-								if (yych <= 0x1932) goto yy4;
-								if (yych >= 0x1939) goto yy4;
+								if (yych <= 0x1932) goto yy3;
+								if (yych >= 0x1939) goto yy3;
 							} else {
-								if (yych <= 0x1A16) goto yy2;
-								if (yych <= 0x1A18) goto yy4;
-								if (yych >= 0x1A1B) goto yy4;
+								if (yych <= 0x1A16) goto yy1;
+								if (yych <= 0x1A18) goto yy3;
+								if (yych >= 0x1A1B) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x1A60) {
 							if (yych <= 0x1A57) {
-								if (yych == 0x1A56) goto yy4;
+								if (yych == 0x1A56) goto yy3;
 							} else {
-								if (yych != 0x1A5F) goto yy4;
+								if (yych != 0x1A5F) goto yy3;
 							}
 						} else {
 							if (yych <= 0x1A64) {
-								if (yych == 0x1A62) goto yy4;
+								if (yych == 0x1A62) goto yy3;
 							} else {
-								if (yych <= 0x1A6C) goto yy4;
-								if (yych <= 0x1A72) goto yy2;
-								if (yych <= 0x1A7C) goto yy4;
+								if (yych <= 0x1A6C) goto yy3;
+								if (yych <= 0x1A72) goto yy1;
+								if (yych <= 0x1A7C) goto yy3;
 							}
 						}
 					}
@@ -410,36 +410,36 @@ Mn:
 					if (yych <= 0x1B42) {
 						if (yych <= 0x1B33) {
 							if (yych <= 0x1ABD) {
-								if (yych <= 0x1A7F) goto yy4;
-								if (yych >= 0x1AB0) goto yy4;
+								if (yych <= 0x1A7F) goto yy3;
+								if (yych >= 0x1AB0) goto yy3;
 							} else {
-								if (yych <= 0x1AFF) goto yy2;
-								if (yych <= 0x1B03) goto yy4;
+								if (yych <= 0x1AFF) goto yy1;
+								if (yych <= 0x1B03) goto yy3;
 							}
 						} else {
 							if (yych <= 0x1B3A) {
-								if (yych != 0x1B35) goto yy4;
+								if (yych != 0x1B35) goto yy3;
 							} else {
-								if (yych == 0x1B3C) goto yy4;
-								if (yych >= 0x1B42) goto yy4;
+								if (yych == 0x1B3C) goto yy3;
+								if (yych >= 0x1B42) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x1BA5) {
 							if (yych <= 0x1B7F) {
-								if (yych <= 0x1B6A) goto yy2;
-								if (yych <= 0x1B73) goto yy4;
+								if (yych <= 0x1B6A) goto yy1;
+								if (yych <= 0x1B73) goto yy3;
 							} else {
-								if (yych <= 0x1B81) goto yy4;
-								if (yych >= 0x1BA2) goto yy4;
+								if (yych <= 0x1B81) goto yy3;
+								if (yych >= 0x1BA2) goto yy3;
 							}
 						} else {
 							if (yych <= 0x1BAA) {
-								if (yych <= 0x1BA7) goto yy2;
-								if (yych <= 0x1BA9) goto yy4;
+								if (yych <= 0x1BA7) goto yy1;
+								if (yych <= 0x1BA9) goto yy3;
 							} else {
-								if (yych <= 0x1BAD) goto yy4;
-								if (yych == 0x1BE6) goto yy4;
+								if (yych <= 0x1BAD) goto yy3;
+								if (yych == 0x1BE6) goto yy3;
 							}
 						}
 					}
@@ -447,38 +447,38 @@ Mn:
 					if (yych <= 0x1CE0) {
 						if (yych <= 0x1C2B) {
 							if (yych <= 0x1BED) {
-								if (yych <= 0x1BE9) goto yy4;
-								if (yych >= 0x1BED) goto yy4;
+								if (yych <= 0x1BE9) goto yy3;
+								if (yych >= 0x1BED) goto yy3;
 							} else {
-								if (yych <= 0x1BEE) goto yy2;
-								if (yych <= 0x1BF1) goto yy4;
+								if (yych <= 0x1BEE) goto yy1;
+								if (yych <= 0x1BF1) goto yy3;
 							}
 						} else {
 							if (yych <= 0x1C37) {
-								if (yych <= 0x1C33) goto yy4;
-								if (yych >= 0x1C36) goto yy4;
+								if (yych <= 0x1C33) goto yy3;
+								if (yych >= 0x1C36) goto yy3;
 							} else {
-								if (yych <= 0x1CCF) goto yy2;
-								if (yych != 0x1CD3) goto yy4;
+								if (yych <= 0x1CCF) goto yy1;
+								if (yych != 0x1CD3) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0x1CF7) {
 							if (yych <= 0x1CEC) {
-								if (yych <= 0x1CE1) goto yy2;
-								if (yych <= 0x1CE8) goto yy4;
+								if (yych <= 0x1CE1) goto yy1;
+								if (yych <= 0x1CE8) goto yy3;
 							} else {
-								if (yych <= 0x1CED) goto yy4;
-								if (yych == 0x1CF4) goto yy4;
+								if (yych <= 0x1CED) goto yy3;
+								if (yych == 0x1CF4) goto yy3;
 							}
 						} else {
 							if (yych <= 0x1DF5) {
-								if (yych <= 0x1CF9) goto yy4;
-								if (yych >= 0x1DC0) goto yy4;
+								if (yych <= 0x1CF9) goto yy3;
+								if (yych >= 0x1DC0) goto yy3;
 							} else {
-								if (yych <= 0x1DFB) goto yy2;
-								if (yych <= 0x1DFF) goto yy4;
-								if (yych >= 0x20D0) goto yy4;
+								if (yych <= 0x1DFB) goto yy1;
+								if (yych <= 0x1DFF) goto yy3;
+								if (yych >= 0x20D0) goto yy3;
 							}
 						}
 					}
@@ -490,36 +490,36 @@ Mn:
 					if (yych <= 0x3098) {
 						if (yych <= 0x2CF1) {
 							if (yych <= 0x20E4) {
-								if (yych == 0x20E1) goto yy4;
+								if (yych == 0x20E1) goto yy3;
 							} else {
-								if (yych <= 0x20F0) goto yy4;
-								if (yych >= 0x2CEF) goto yy4;
+								if (yych <= 0x20F0) goto yy3;
+								if (yych >= 0x2CEF) goto yy3;
 							}
 						} else {
 							if (yych <= 0x2DDF) {
-								if (yych == 0x2D7F) goto yy4;
+								if (yych == 0x2D7F) goto yy3;
 							} else {
-								if (yych <= 0x2DFF) goto yy4;
-								if (yych <= 0x3029) goto yy2;
-								if (yych <= 0x302D) goto yy4;
+								if (yych <= 0x2DFF) goto yy3;
+								if (yych <= 0x3029) goto yy1;
+								if (yych <= 0x302D) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0xA69E) {
 							if (yych <= 0xA66F) {
-								if (yych <= 0x309A) goto yy4;
-								if (yych >= 0xA66F) goto yy4;
+								if (yych <= 0x309A) goto yy3;
+								if (yych >= 0xA66F) goto yy3;
 							} else {
-								if (yych <= 0xA673) goto yy2;
-								if (yych <= 0xA67D) goto yy4;
+								if (yych <= 0xA673) goto yy1;
+								if (yych <= 0xA67D) goto yy3;
 							}
 						} else {
 							if (yych <= 0xA6F1) {
-								if (yych <= 0xA69F) goto yy4;
-								if (yych >= 0xA6F0) goto yy4;
+								if (yych <= 0xA69F) goto yy3;
+								if (yych >= 0xA6F0) goto yy3;
 							} else {
-								if (yych == 0xA802) goto yy4;
-								if (yych >= 0xA806) goto yy4;
+								if (yych == 0xA802) goto yy3;
+								if (yych >= 0xA806) goto yy3;
 							}
 						}
 					}
@@ -527,38 +527,38 @@ Mn:
 					if (yych <= 0xA97F) {
 						if (yych <= 0xA8C4) {
 							if (yych <= 0xA824) {
-								if (yych == 0xA80B) goto yy4;
+								if (yych == 0xA80B) goto yy3;
 							} else {
-								if (yych <= 0xA826) goto yy4;
-								if (yych >= 0xA8C4) goto yy4;
+								if (yych <= 0xA826) goto yy3;
+								if (yych >= 0xA8C4) goto yy3;
 							}
 						} else {
 							if (yych <= 0xA925) {
-								if (yych <= 0xA8DF) goto yy2;
-								if (yych <= 0xA8F1) goto yy4;
+								if (yych <= 0xA8DF) goto yy1;
+								if (yych <= 0xA8F1) goto yy3;
 							} else {
-								if (yych <= 0xA92D) goto yy4;
-								if (yych <= 0xA946) goto yy2;
-								if (yych <= 0xA951) goto yy4;
+								if (yych <= 0xA92D) goto yy3;
+								if (yych <= 0xA946) goto yy1;
+								if (yych <= 0xA951) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0xA9BB) {
 							if (yych <= 0xA9B3) {
-								if (yych <= 0xA982) goto yy4;
-								if (yych >= 0xA9B3) goto yy4;
+								if (yych <= 0xA982) goto yy3;
+								if (yych >= 0xA9B3) goto yy3;
 							} else {
-								if (yych <= 0xA9B5) goto yy2;
-								if (yych <= 0xA9B9) goto yy4;
+								if (yych <= 0xA9B5) goto yy1;
+								if (yych <= 0xA9B9) goto yy3;
 							}
 						} else {
 							if (yych <= 0xA9E5) {
-								if (yych <= 0xA9BC) goto yy4;
-								if (yych >= 0xA9E5) goto yy4;
+								if (yych <= 0xA9BC) goto yy3;
+								if (yych >= 0xA9E5) goto yy3;
 							} else {
-								if (yych <= 0xAA28) goto yy2;
-								if (yych <= 0xAA2E) goto yy4;
-								if (yych >= 0xAA31) goto yy4;
+								if (yych <= 0xAA28) goto yy1;
+								if (yych <= 0xAA2E) goto yy3;
+								if (yych >= 0xAA31) goto yy3;
 							}
 						}
 					}
@@ -568,35 +568,35 @@ Mn:
 					if (yych <= 0xAAB6) {
 						if (yych <= 0xAA4C) {
 							if (yych <= 0xAA42) {
-								if (yych <= 0xAA34) goto yy2;
-								if (yych <= 0xAA36) goto yy4;
+								if (yych <= 0xAA34) goto yy1;
+								if (yych <= 0xAA36) goto yy3;
 							} else {
-								if (yych <= 0xAA43) goto yy4;
-								if (yych >= 0xAA4C) goto yy4;
+								if (yych <= 0xAA43) goto yy3;
+								if (yych >= 0xAA4C) goto yy3;
 							}
 						} else {
 							if (yych <= 0xAAAF) {
-								if (yych == 0xAA7C) goto yy4;
+								if (yych == 0xAA7C) goto yy3;
 							} else {
-								if (yych == 0xAAB1) goto yy2;
-								if (yych <= 0xAAB4) goto yy4;
+								if (yych == 0xAAB1) goto yy1;
+								if (yych <= 0xAAB4) goto yy3;
 							}
 						}
 					} else {
 						if (yych <= 0xAAEB) {
 							if (yych <= 0xAABF) {
-								if (yych <= 0xAAB8) goto yy4;
-								if (yych >= 0xAABE) goto yy4;
+								if (yych <= 0xAAB8) goto yy3;
+								if (yych >= 0xAABE) goto yy3;
 							} else {
-								if (yych == 0xAAC1) goto yy4;
+								if (yych == 0xAAC1) goto yy3;
 							}
 						} else {
 							if (yych <= 0xAAF6) {
-								if (yych <= 0xAAED) goto yy4;
-								if (yych >= 0xAAF6) goto yy4;
+								if (yych <= 0xAAED) goto yy3;
+								if (yych >= 0xAAF6) goto yy3;
 							} else {
-								if (yych == 0xABE5) goto yy4;
-								if (yych >= 0xABE8) goto yy4;
+								if (yych == 0xABE5) goto yy3;
+								if (yych >= 0xABE8) goto yy3;
 							}
 						}
 					}
@@ -604,38 +604,38 @@ Mn:
 					if (yych <= 0xD82E) {
 						if (yych <= 0xD802) {
 							if (yych <= 0xD7FF) {
-								if (yych == 0xABED) goto yy4;
+								if (yych == 0xABED) goto yy3;
 							} else {
-								if (yych <= 0xD800) goto yy6;
-								if (yych >= 0xD802) goto yy7;
+								if (yych <= 0xD800) goto yy4;
+								if (yych >= 0xD802) goto yy5;
 							}
 						} else {
 							if (yych <= 0xD805) {
-								if (yych <= 0xD803) goto yy2;
-								if (yych <= 0xD804) goto yy8;
-								goto yy9;
+								if (yych <= 0xD803) goto yy1;
+								if (yych <= 0xD804) goto yy6;
+								goto yy7;
 							} else {
-								if (yych <= 0xD819) goto yy2;
-								if (yych <= 0xD81A) goto yy10;
-								if (yych <= 0xD81B) goto yy11;
+								if (yych <= 0xD819) goto yy1;
+								if (yych <= 0xD81A) goto yy8;
+								if (yych <= 0xD81B) goto yy9;
 							}
 						}
 					} else {
 						if (yych <= 0xDB40) {
 							if (yych <= 0xD834) {
-								if (yych <= 0xD82F) goto yy12;
-								if (yych >= 0xD834) goto yy13;
+								if (yych <= 0xD82F) goto yy10;
+								if (yych >= 0xD834) goto yy11;
 							} else {
-								if (yych == 0xD83A) goto yy14;
-								if (yych >= 0xDB40) goto yy15;
+								if (yych == 0xD83A) goto yy12;
+								if (yych >= 0xDB40) goto yy13;
 							}
 						} else {
 							if (yych <= 0xFDFF) {
-								if (yych == 0xFB1E) goto yy4;
+								if (yych == 0xFB1E) goto yy3;
 							} else {
-								if (yych <= 0xFE0F) goto yy4;
-								if (yych <= 0xFE1F) goto yy2;
-								if (yych <= 0xFE2D) goto yy4;
+								if (yych <= 0xFE0F) goto yy3;
+								if (yych <= 0xFE1F) goto yy1;
+								if (yych <= 0xFE2D) goto yy3;
 							}
 						}
 					}
@@ -643,94 +643,94 @@ Mn:
 			}
 		}
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "encodings/unicode_group_Mn_x_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
 #line 652 "encodings/unicode_group_Mn_x_encoding_policy_fail.c"
-yy4:
+yy3:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Mn_x_encoding_policy_fail.re"
 	{ goto Mn; }
 #line 657 "encodings/unicode_group_Mn_x_encoding_policy_fail.c"
-yy6:
+yy4:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDEDF) {
-		if (yych == 0xDDFD) goto yy4;
-		goto yy3;
+		if (yych == 0xDDFD) goto yy3;
+		goto yy2;
 	} else {
-		if (yych <= 0xDEE0) goto yy4;
-		if (yych <= 0xDF75) goto yy3;
-		if (yych <= 0xDF7A) goto yy4;
-		goto yy3;
+		if (yych <= 0xDEE0) goto yy3;
+		if (yych <= 0xDF75) goto yy2;
+		if (yych <= 0xDF7A) goto yy3;
+		goto yy2;
 	}
-yy7:
+yy5:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDE0F) {
 		if (yych <= 0xDE04) {
-			if (yych <= 0xDE00) goto yy3;
-			if (yych <= 0xDE03) goto yy4;
-			goto yy3;
+			if (yych <= 0xDE00) goto yy2;
+			if (yych <= 0xDE03) goto yy3;
+			goto yy2;
 		} else {
-			if (yych <= 0xDE06) goto yy4;
-			if (yych <= 0xDE0B) goto yy3;
-			goto yy4;
+			if (yych <= 0xDE06) goto yy3;
+			if (yych <= 0xDE0B) goto yy2;
+			goto yy3;
 		}
 	} else {
 		if (yych <= 0xDE3E) {
-			if (yych <= 0xDE37) goto yy3;
-			if (yych <= 0xDE3A) goto yy4;
-			goto yy3;
+			if (yych <= 0xDE37) goto yy2;
+			if (yych <= 0xDE3A) goto yy3;
+			goto yy2;
 		} else {
-			if (yych <= 0xDE3F) goto yy4;
-			if (yych <= 0xDEE4) goto yy3;
-			if (yych <= 0xDEE6) goto yy4;
-			goto yy3;
+			if (yych <= 0xDE3F) goto yy3;
+			if (yych <= 0xDEE4) goto yy2;
+			if (yych <= 0xDEE6) goto yy3;
+			goto yy2;
 		}
 	}
-yy8:
+yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDDB5) {
 		if (yych <= 0xDCBA) {
 			if (yych <= 0xDC7E) {
 				if (yych <= 0xDC01) {
-					if (yych <= 0xDC00) goto yy3;
-					goto yy4;
-				} else {
-					if (yych <= 0xDC37) goto yy3;
-					if (yych <= 0xDC46) goto yy4;
+					if (yych <= 0xDC00) goto yy2;
 					goto yy3;
+				} else {
+					if (yych <= 0xDC37) goto yy2;
+					if (yych <= 0xDC46) goto yy3;
+					goto yy2;
 				}
 			} else {
 				if (yych <= 0xDCB2) {
-					if (yych <= 0xDC81) goto yy4;
-					goto yy3;
+					if (yych <= 0xDC81) goto yy3;
+					goto yy2;
 				} else {
-					if (yych <= 0xDCB6) goto yy4;
-					if (yych <= 0xDCB8) goto yy3;
-					goto yy4;
+					if (yych <= 0xDCB6) goto yy3;
+					if (yych <= 0xDCB8) goto yy2;
+					goto yy3;
 				}
 			}
 		} else {
 			if (yych <= 0xDD2C) {
 				if (yych <= 0xDD02) {
-					if (yych <= 0xDCFF) goto yy3;
-					goto yy4;
-				} else {
-					if (yych <= 0xDD26) goto yy3;
-					if (yych <= 0xDD2B) goto yy4;
+					if (yych <= 0xDCFF) goto yy2;
 					goto yy3;
+				} else {
+					if (yych <= 0xDD26) goto yy2;
+					if (yych <= 0xDD2B) goto yy3;
+					goto yy2;
 				}
 			} else {
 				if (yych <= 0xDD73) {
-					if (yych <= 0xDD34) goto yy4;
-					if (yych <= 0xDD72) goto yy3;
-					goto yy4;
-				} else {
-					if (yych <= 0xDD7F) goto yy3;
-					if (yych <= 0xDD81) goto yy4;
+					if (yych <= 0xDD34) goto yy3;
+					if (yych <= 0xDD72) goto yy2;
 					goto yy3;
+				} else {
+					if (yych <= 0xDD7F) goto yy2;
+					if (yych <= 0xDD81) goto yy3;
+					goto yy2;
 				}
 			}
 		}
@@ -738,143 +738,143 @@ yy8:
 		if (yych <= 0xDEEA) {
 			if (yych <= 0xDE34) {
 				if (yych <= 0xDE2E) {
-					if (yych <= 0xDDBE) goto yy4;
-					goto yy3;
+					if (yych <= 0xDDBE) goto yy3;
+					goto yy2;
 				} else {
-					if (yych <= 0xDE31) goto yy4;
-					if (yych <= 0xDE33) goto yy3;
-					goto yy4;
+					if (yych <= 0xDE31) goto yy3;
+					if (yych <= 0xDE33) goto yy2;
+					goto yy3;
 				}
 			} else {
 				if (yych <= 0xDEDE) {
-					if (yych <= 0xDE35) goto yy3;
-					if (yych <= 0xDE37) goto yy4;
-					goto yy3;
+					if (yych <= 0xDE35) goto yy2;
+					if (yych <= 0xDE37) goto yy3;
+					goto yy2;
 				} else {
-					if (yych <= 0xDEDF) goto yy4;
-					if (yych <= 0xDEE2) goto yy3;
-					goto yy4;
+					if (yych <= 0xDEDF) goto yy3;
+					if (yych <= 0xDEE2) goto yy2;
+					goto yy3;
 				}
 			}
 		} else {
 			if (yych <= 0xDF3F) {
 				if (yych <= 0xDF01) {
-					if (yych <= 0xDF00) goto yy3;
-					goto yy4;
-				} else {
-					if (yych == 0xDF3C) goto yy4;
+					if (yych <= 0xDF00) goto yy2;
 					goto yy3;
+				} else {
+					if (yych == 0xDF3C) goto yy3;
+					goto yy2;
 				}
 			} else {
 				if (yych <= 0xDF6C) {
-					if (yych <= 0xDF40) goto yy4;
-					if (yych <= 0xDF65) goto yy3;
-					goto yy4;
-				} else {
-					if (yych <= 0xDF6F) goto yy3;
-					if (yych <= 0xDF74) goto yy4;
+					if (yych <= 0xDF40) goto yy3;
+					if (yych <= 0xDF65) goto yy2;
 					goto yy3;
+				} else {
+					if (yych <= 0xDF6F) goto yy2;
+					if (yych <= 0xDF74) goto yy3;
+					goto yy2;
 				}
 			}
 		}
 	}
-yy9:
+yy7:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDDC0) {
 		if (yych <= 0xDCC1) {
 			if (yych <= 0xDCB9) {
-				if (yych <= 0xDCB2) goto yy3;
-				if (yych <= 0xDCB8) goto yy4;
-				goto yy3;
+				if (yych <= 0xDCB2) goto yy2;
+				if (yych <= 0xDCB8) goto yy3;
+				goto yy2;
 			} else {
-				if (yych <= 0xDCBA) goto yy4;
-				if (yych <= 0xDCBE) goto yy3;
-				if (yych <= 0xDCC0) goto yy4;
-				goto yy3;
+				if (yych <= 0xDCBA) goto yy3;
+				if (yych <= 0xDCBE) goto yy2;
+				if (yych <= 0xDCC0) goto yy3;
+				goto yy2;
 			}
 		} else {
 			if (yych <= 0xDDB5) {
-				if (yych <= 0xDCC3) goto yy4;
-				if (yych <= 0xDDB1) goto yy3;
-				goto yy4;
+				if (yych <= 0xDCC3) goto yy3;
+				if (yych <= 0xDDB1) goto yy2;
+				goto yy3;
 			} else {
-				if (yych <= 0xDDBB) goto yy3;
-				if (yych == 0xDDBE) goto yy3;
-				goto yy4;
+				if (yych <= 0xDDBB) goto yy2;
+				if (yych == 0xDDBE) goto yy2;
+				goto yy3;
 			}
 		}
 	} else {
 		if (yych <= 0xDEAA) {
 			if (yych <= 0xDE3C) {
-				if (yych <= 0xDE32) goto yy3;
-				if (yych <= 0xDE3A) goto yy4;
-				goto yy3;
+				if (yych <= 0xDE32) goto yy2;
+				if (yych <= 0xDE3A) goto yy3;
+				goto yy2;
 			} else {
-				if (yych == 0xDE3E) goto yy3;
-				if (yych <= 0xDE40) goto yy4;
-				goto yy3;
+				if (yych == 0xDE3E) goto yy2;
+				if (yych <= 0xDE40) goto yy3;
+				goto yy2;
 			}
 		} else {
 			if (yych <= 0xDEAF) {
-				if (yych == 0xDEAC) goto yy3;
-				if (yych <= 0xDEAD) goto yy4;
-				goto yy3;
+				if (yych == 0xDEAC) goto yy2;
+				if (yych <= 0xDEAD) goto yy3;
+				goto yy2;
 			} else {
-				if (yych == 0xDEB6) goto yy3;
-				if (yych <= 0xDEB7) goto yy4;
-				goto yy3;
+				if (yych == 0xDEB6) goto yy2;
+				if (yych <= 0xDEB7) goto yy3;
+				goto yy2;
 			}
 		}
 	}
+yy8:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEEF) goto yy2;
+	if (yych <= 0xDEF4) goto yy3;
+	if (yych <= 0xDF2F) goto yy2;
+	if (yych <= 0xDF36) goto yy3;
+	goto yy2;
+yy9:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF8E) goto yy2;
+	if (yych <= 0xDF92) goto yy3;
+	goto yy2;
 yy10:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEEF) goto yy3;
-	if (yych <= 0xDEF4) goto yy4;
-	if (yych <= 0xDF2F) goto yy3;
-	if (yych <= 0xDF36) goto yy4;
-	goto yy3;
+	if (yych <= 0xDC9C) goto yy2;
+	if (yych <= 0xDC9E) goto yy3;
+	goto yy2;
 yy11:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDF8E) goto yy3;
-	if (yych <= 0xDF92) goto yy4;
-	goto yy3;
-yy12:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDC9C) goto yy3;
-	if (yych <= 0xDC9E) goto yy4;
-	goto yy3;
-yy13:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDD84) {
 		if (yych <= 0xDD69) {
-			if (yych <= 0xDD66) goto yy3;
-			goto yy4;
-		} else {
-			if (yych <= 0xDD7A) goto yy3;
-			if (yych <= 0xDD82) goto yy4;
+			if (yych <= 0xDD66) goto yy2;
 			goto yy3;
+		} else {
+			if (yych <= 0xDD7A) goto yy2;
+			if (yych <= 0xDD82) goto yy3;
+			goto yy2;
 		}
 	} else {
 		if (yych <= 0xDDAD) {
-			if (yych <= 0xDD8B) goto yy4;
-			if (yych <= 0xDDA9) goto yy3;
-			goto yy4;
-		} else {
-			if (yych <= 0xDE41) goto yy3;
-			if (yych <= 0xDE44) goto yy4;
+			if (yych <= 0xDD8B) goto yy3;
+			if (yych <= 0xDDA9) goto yy2;
 			goto yy3;
+		} else {
+			if (yych <= 0xDE41) goto yy2;
+			if (yych <= 0xDE44) goto yy3;
+			goto yy2;
 		}
 	}
-yy14:
+yy12:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCCF) goto yy3;
-	if (yych <= 0xDCD6) goto yy4;
-	goto yy3;
-yy15:
+	if (yych <= 0xDCCF) goto yy2;
+	if (yych <= 0xDCD6) goto yy3;
+	goto yy2;
+yy13:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy3;
-	if (yych <= 0xDDEF) goto yy4;
-	goto yy3;
+	if (yych <= 0xDCFF) goto yy2;
+	if (yych <= 0xDDEF) goto yy3;
+	goto yy2;
 }
 #line 15 "encodings/unicode_group_Mn_x_encoding_policy_fail.re"
 

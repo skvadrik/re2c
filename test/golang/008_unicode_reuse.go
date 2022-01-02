@@ -12,133 +12,133 @@ func LexUtf8(str string) int {
 	yych = str[cursor]
 	switch (yych) {
 	case 'a':
-		goto yy4
+		goto yy3
 	case 0xD0:
-		goto yy5
+		goto yy4
 	case 0xD1:
-		goto yy6
+		goto yy5
 	case 0xF0:
-		goto yy7
+		goto yy6
 	default:
-		goto yy2
+		goto yy1
 	}
-yy2:
+yy1:
 	cursor += 1
-yy3:
+yy2:
 	{ return 1 }
-yy4:
+yy3:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 0xD0:
-		goto yy8
+		goto yy7
 	default:
-		goto yy3
+		goto yy2
+	}
+yy4:
+	cursor += 1
+	marker = cursor
+	yych = str[cursor]
+	switch (yych) {
+	case 0xBE:
+		goto yy9
+	default:
+		goto yy2
 	}
 yy5:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
-	case 0xBE:
-		goto yy10
+	case 0x83:
+		fallthrough
+	case 0x8B:
+		fallthrough
+	case 0x8D:
+		goto yy9
 	default:
-		goto yy3
+		goto yy2
 	}
 yy6:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
-	case 0x83:
-		fallthrough
-	case 0x8B:
-		fallthrough
-	case 0x8D:
+	case 0x92:
 		goto yy10
 	default:
-		goto yy3
+		goto yy2
 	}
 yy7:
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
-	switch (yych) {
-	case 0x92:
-		goto yy11
-	default:
-		goto yy3
-	}
-yy8:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0xB3:
-		goto yy12
+		goto yy11
 	default:
-		goto yy9
+		goto yy8
 	}
-yy9:
+yy8:
 	cursor = marker
-	goto yy3
-yy10:
+	goto yy2
+yy9:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0xD0:
-		goto yy8
+		goto yy7
 	default:
-		goto yy9
+		goto yy8
+	}
+yy10:
+	cursor += 1
+	yych = str[cursor]
+	switch (yych) {
+	case 0x80:
+		goto yy12
+	default:
+		goto yy8
 	}
 yy11:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 0x80:
+	case 'a':
 		goto yy13
+	case 0xD0:
+		goto yy14
+	case 0xD1:
+		goto yy15
 	default:
-		goto yy9
+		goto yy8
 	}
 yy12:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
-	case 'a':
-		goto yy14
-	case 0xD0:
-		goto yy15
-	case 0xD1:
+	case 0x94:
 		goto yy16
 	default:
-		goto yy9
+		goto yy8
 	}
 yy13:
 	cursor += 1
 	yych = str[cursor]
-	switch (yych) {
-	case 0x94:
-		goto yy17
-	default:
-		goto yy9
-	}
-yy14:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x00) {
-		goto yy18
+		goto yy17
 	}
-	goto yy9
-yy15:
+	goto yy8
+yy14:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0xBE:
-		goto yy14
+		goto yy13
 	default:
-		goto yy9
+		goto yy8
 	}
-yy16:
+yy15:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -147,21 +147,21 @@ yy16:
 	case 0x8B:
 		fallthrough
 	case 0x8D:
-		goto yy14
+		goto yy13
 	default:
-		goto yy9
+		goto yy8
 	}
-yy17:
+yy16:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x00) {
-		goto yy20
+		goto yy18
 	}
-	goto yy9
-yy18:
+	goto yy8
+yy17:
 	cursor += 1
 	{ return 0 }
-yy20:
+yy18:
 	cursor += 1
 	{ return 2 }
 }
@@ -177,97 +177,97 @@ func LexUtf16(str []uint16) int {
 	if (yych <= 0x0443) {
 		if (yych <= 0x043D) {
 			if (yych == 'a') {
-				goto yy26
+				goto yy21
 			}
 		} else {
 			if (yych <= 0x043E) {
-				goto yy26
+				goto yy21
 			}
 			if (yych >= 0x0443) {
-				goto yy26
+				goto yy21
 			}
 		}
 	} else {
 		if (yych <= 0x044C) {
 			if (yych == 0x044B) {
-				goto yy26
+				goto yy21
 			}
 		} else {
 			if (yych <= 0x044D) {
-				goto yy26
+				goto yy21
 			}
 			if (yych == 0xD808) {
-				goto yy27
+				goto yy22
 			}
 		}
 	}
 	cursor += 1
-yy25:
+yy20:
 	{ return 1 }
-yy26:
+yy21:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych == 0x0433) {
-		goto yy28
+		goto yy23
 	}
-	goto yy25
-yy27:
+	goto yy20
+yy22:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych == 0xDC14) {
-		goto yy30
+		goto yy25
 	}
-	goto yy25
-yy28:
+	goto yy20
+yy23:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x0442) {
 		if (yych <= 'a') {
 			if (yych >= 'a') {
-				goto yy31
+				goto yy26
 			}
 		} else {
 			if (yych == 0x043E) {
-				goto yy31
+				goto yy26
 			}
 		}
 	} else {
 		if (yych <= 0x044B) {
 			if (yych <= 0x0443) {
-				goto yy31
+				goto yy26
 			}
 			if (yych >= 0x044B) {
-				goto yy31
+				goto yy26
 			}
 		} else {
 			if (yych == 0x044D) {
-				goto yy31
+				goto yy26
 			}
 		}
 	}
-yy29:
+yy24:
 	cursor = marker
-	goto yy25
-yy30:
+	goto yy20
+yy25:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x0000) {
-		goto yy32
+		goto yy27
 	}
-	goto yy29
-yy31:
+	goto yy24
+yy26:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x0000) {
-		goto yy34
+		goto yy28
 	}
-	goto yy29
-yy32:
+	goto yy24
+yy27:
 	cursor += 1
 	{ return 2 }
-yy34:
+yy28:
 	cursor += 1
 	{ return 0 }
 }
@@ -283,71 +283,71 @@ func LexUcs2(str []uint16) int {
 	if (yych <= 0x0442) {
 		if (yych <= 'a') {
 			if (yych >= 'a') {
-				goto yy40
+				goto yy31
 			}
 		} else {
 			if (yych == 0x043E) {
-				goto yy40
+				goto yy31
 			}
 		}
 	} else {
 		if (yych <= 0x044B) {
 			if (yych <= 0x0443) {
-				goto yy40
+				goto yy31
 			}
 			if (yych >= 0x044B) {
-				goto yy40
+				goto yy31
 			}
 		} else {
 			if (yych == 0x044D) {
-				goto yy40
+				goto yy31
 			}
 		}
 	}
 	cursor += 1
-yy39:
+yy30:
 	{ return 1 }
-yy40:
+yy31:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych != 0x0433) {
-		goto yy39
+		goto yy30
 	}
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x0442) {
 		if (yych <= 'a') {
 			if (yych >= 'a') {
-				goto yy43
+				goto yy33
 			}
 		} else {
 			if (yych == 0x043E) {
-				goto yy43
+				goto yy33
 			}
 		}
 	} else {
 		if (yych <= 0x044B) {
 			if (yych <= 0x0443) {
-				goto yy43
+				goto yy33
 			}
 			if (yych >= 0x044B) {
-				goto yy43
+				goto yy33
 			}
 		} else {
 			if (yych == 0x044D) {
-				goto yy43
+				goto yy33
 			}
 		}
 	}
-yy42:
+yy32:
 	cursor = marker
-	goto yy39
-yy43:
+	goto yy30
+yy33:
 	cursor += 1
 	yych = str[cursor]
 	if (yych >= 0x0001) {
-		goto yy42
+		goto yy32
 	}
 	cursor += 1
 	{ return 0 }
@@ -364,86 +364,86 @@ func LexUtf32(str []uint32) int {
 	if (yych <= 0x00000443) {
 		if (yych <= 0x0000043D) {
 			if (yych == 'a') {
-				goto yy50
+				goto yy36
 			}
 		} else {
 			if (yych <= 0x0000043E) {
-				goto yy50
+				goto yy36
 			}
 			if (yych >= 0x00000443) {
-				goto yy50
+				goto yy36
 			}
 		}
 	} else {
 		if (yych <= 0x0000044C) {
 			if (yych == 0x0000044B) {
-				goto yy50
+				goto yy36
 			}
 		} else {
 			if (yych <= 0x0000044D) {
-				goto yy50
+				goto yy36
 			}
 			if (yych == 0x00012014) {
-				goto yy51
+				goto yy37
 			}
 		}
 	}
 	cursor += 1
-yy49:
+yy35:
 	{ return 1 }
-yy50:
+yy36:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych == 0x00000433) {
-		goto yy52
+		goto yy38
 	}
-	goto yy49
-yy51:
+	goto yy35
+yy37:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x00000000) {
-		goto yy54
+		goto yy40
 	}
-	goto yy49
-yy52:
+	goto yy35
+yy38:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x00000442) {
 		if (yych <= 'a') {
 			if (yych >= 'a') {
-				goto yy56
+				goto yy41
 			}
 		} else {
 			if (yych == 0x0000043E) {
-				goto yy56
+				goto yy41
 			}
 		}
 	} else {
 		if (yych <= 0x0000044B) {
 			if (yych <= 0x00000443) {
-				goto yy56
+				goto yy41
 			}
 			if (yych >= 0x0000044B) {
-				goto yy56
+				goto yy41
 			}
 		} else {
 			if (yych == 0x0000044D) {
-				goto yy56
+				goto yy41
 			}
 		}
 	}
-yy53:
+yy39:
 	cursor = marker
-	goto yy49
-yy54:
+	goto yy35
+yy40:
 	cursor += 1
 	{ return 2 }
-yy56:
+yy41:
 	cursor += 1
 	yych = str[cursor]
 	if (yych >= 0x00000001) {
-		goto yy53
+		goto yy39
 	}
 	cursor += 1
 	{ return 0 }

@@ -42,20 +42,20 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy3;
+		goto yy2;
 	}
+yy1:
 yy2:
-yy3:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy3;
+		goto yy2;
 	}
-	if (yych <= '`') goto yy2;
-	if (yych >= 'c') goto yy2;
+	if (yych <= '`') goto yy1;
+	if (yych >= 'c') goto yy1;
 	yych = *++YYCURSOR;
-	if (yych != 'b') goto yy2;
+	if (yych != 'b') goto yy1;
 	++YYCURSOR;
 #line 4 "input2_b.re"
 	{ return 1; }

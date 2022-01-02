@@ -84,15 +84,15 @@ Lstart:
 yyc_C1:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 45 "directives/cond_format.re"
 	{ return; }
 #line 95 "directives/cond_format.c"
-yy4:
+yy2:
 	++YYCURSOR;
 	YYSETCONDITION(yycC2);
 #line 43 "directives/cond_format.re"
@@ -102,15 +102,15 @@ yy4:
 yyc_C2:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy10;
-		default: goto yy8;
+		case 'b': goto yy5;
+		default: goto yy4;
 	}
-yy8:
+yy4:
 	++YYCURSOR;
 #line 45 "directives/cond_format.re"
 	{ return; }
 #line 113 "directives/cond_format.c"
-yy10:
+yy5:
 	++YYCURSOR;
 	YYSETCONDITION(yycC1);
 	goto yyc_C1;
@@ -131,15 +131,15 @@ yy10:
 Lx_C1:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy16;
-		default: goto yy14;
+		case 'a': goto yy8;
+		default: goto yy7;
 	}
-yy14:
+yy7:
 	++YYCURSOR;
 #line 53 "directives/cond_format.re"
 	{ return x; }
 #line 142 "directives/cond_format.c"
-yy16:
+yy8:
 	++YYCURSOR;
 	YYSETCONDITION(yycC3);
 #line 51 "directives/cond_format.re"
@@ -149,15 +149,15 @@ yy16:
 Lx_C3:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy22;
-		default: goto yy20;
+		case 'b': goto yy11;
+		default: goto yy10;
 	}
-yy20:
+yy10:
 	++YYCURSOR;
 #line 53 "directives/cond_format.re"
 	{ return x; }
 #line 160 "directives/cond_format.c"
-yy22:
+yy11:
 	++YYCURSOR;
 	YYSETCONDITION(yycC1);
 	goto Lx_C1;

@@ -14,61 +14,61 @@ static int lex(const char *str, unsigned int len) {
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case ' ': goto yy4;
-		case '\'': goto yy7;
+		case ' ': goto yy3;
+		case '\'': goto yy5;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy13;
-			goto yy2;
+			if (YYLIMIT <= YYCURSOR) goto yy10;
+			goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "c/eof/03_eof_rule.re"
 	{ return -1; }
 #line 29 "c/eof/03_eof_rule.c"
-yy4:
+yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case ' ': goto yy4;
-		default: goto yy6;
+		case ' ': goto yy3;
+		default: goto yy4;
 	}
-yy6:
+yy4:
 #line 17 "c/eof/03_eof_rule.re"
 	{ continue; }
 #line 39 "c/eof/03_eof_rule.c"
-yy7:
+yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych >= 0x01) goto yy9;
-	if (YYLIMIT <= YYCURSOR) goto yy3;
-yy8:
+	if (yych >= 0x01) goto yy7;
+	if (YYLIMIT <= YYCURSOR) goto yy2;
+yy6:
 	yych = *++YYCURSOR;
-yy9:
+yy7:
 	switch (yych) {
-		case '\'': goto yy10;
-		case '\\': goto yy12;
+		case '\'': goto yy8;
+		case '\\': goto yy9;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy14;
-			goto yy8;
+			if (YYLIMIT <= YYCURSOR) goto yy11;
+			goto yy6;
 	}
-yy10:
+yy8:
 	++YYCURSOR;
 #line 16 "c/eof/03_eof_rule.re"
 	{ ++count; continue; }
 #line 58 "c/eof/03_eof_rule.c"
-yy12:
+yy9:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
-		if (YYLIMIT <= YYCURSOR) goto yy14;
-		goto yy8;
+		if (YYLIMIT <= YYCURSOR) goto yy11;
+		goto yy6;
 	}
-	goto yy8;
-yy13:
+	goto yy6;
+yy10:
 #line 15 "c/eof/03_eof_rule.re"
 	{ return count; }
 #line 69 "c/eof/03_eof_rule.c"
-yy14:
+yy11:
 	YYCURSOR = YYMARKER;
-	goto yy3;
+	goto yy2;
 }
 #line 18 "c/eof/03_eof_rule.re"
 }

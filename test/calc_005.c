@@ -76,10 +76,10 @@ int scan(char *s, int l)
 			yych = *YYCURSOR;
 			switch (yych) {
 				case '\t':
-				case ' ': goto yy4;
-				case '+': goto yy7;
-				case '-': goto yy9;
-				case '0': goto yy11;
+				case ' ': goto yy2;
+				case '+': goto yy4;
+				case '-': goto yy5;
+				case '0': goto yy6;
 				case '1':
 				case '2':
 				case '3':
@@ -88,38 +88,38 @@ int scan(char *s, int l)
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy13;
-				default: goto yy2;
+				case '9': goto yy8;
+				default: goto yy1;
 			}
-yy2:
+yy1:
 			++YYCURSOR;
 #line 97 "calc_005.re"
 			{ res = 1; 					continue; }
 #line 99 "calc_005.c"
-yy4:
+yy2:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			switch (yych) {
 				case '\t':
-				case ' ': goto yy4;
-				default: goto yy6;
+				case ' ': goto yy2;
+				default: goto yy3;
 			}
-yy6:
+yy3:
 #line 92 "calc_005.re"
 			{ continue; }
 #line 112 "calc_005.c"
-yy7:
+yy4:
 			++YYCURSOR;
 #line 95 "calc_005.re"
 			{ res = stack_add();		continue; }
 #line 117 "calc_005.c"
-yy9:
+yy5:
 			++YYCURSOR;
 #line 96 "calc_005.re"
 			{ res = stack_sub();		continue; }
 #line 122 "calc_005.c"
-yy11:
+yy6:
 			yych = *++YYCURSOR;
 			switch (yych) {
 				case '0':
@@ -131,14 +131,14 @@ yy11:
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy15;
-				default: goto yy12;
+				case '9': goto yy9;
+				default: goto yy7;
 			}
-yy12:
+yy7:
 #line 94 "calc_005.re"
 			{ res = push_num(t, p, 10); continue; }
 #line 141 "calc_005.c"
-yy13:
+yy8:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -152,10 +152,10 @@ yy13:
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy13;
-				default: goto yy12;
+				case '9': goto yy8;
+				default: goto yy7;
 			}
-yy15:
+yy9:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -169,10 +169,10 @@ yy15:
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy15;
-				default: goto yy17;
+				case '9': goto yy9;
+				default: goto yy10;
 			}
-yy17:
+yy10:
 #line 93 "calc_005.re"
 			{ res = push_num(t, p, 8);	continue; }
 #line 179 "calc_005.c"

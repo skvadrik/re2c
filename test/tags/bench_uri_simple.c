@@ -117,8 +117,8 @@ loop:
 	if ((in->lim - in->cur) < 7) if (fill(in, 7) != 0) return 2;
 	yych = *in->cur;
 	switch (yych) {
-		case 0x00: goto yy2;
-		case '\n': goto yy6;
+		case 0x00: goto yy1;
+		case '\n': goto yy4;
 		case '+':
 		case '-':
 		case '.':
@@ -185,20 +185,20 @@ loop:
 		case 'y':
 		case 'z':
 			in->yyt1 = in->cur;
-			goto yy8;
-		default: goto yy4;
+			goto yy5;
+		default: goto yy2;
 	}
-yy2:
+yy1:
 	++in->cur;
 	{ *count = c; *total = t; return 0; }
+yy2:
+	++in->cur;
+yy3:
+	{ return 1; }
 yy4:
 	++in->cur;
-yy5:
-	{ return 1; }
-yy6:
-	++in->cur;
 	{ goto loop; }
-yy8:
+yy5:
 	yych = *(in->mar = ++in->cur);
 	switch (yych) {
 		case '+':
@@ -266,14 +266,14 @@ yy8:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy10;
-		default: goto yy5;
+		case 'z': goto yy7;
+		default: goto yy3;
 	}
-yy9:
+yy6:
 	++in->cur;
 	if ((in->lim - in->cur) < 6) if (fill(in, 6) != 0) return 2;
 	yych = *in->cur;
-yy10:
+yy7:
 	switch (yych) {
 		case '+':
 		case '-':
@@ -339,16 +339,16 @@ yy10:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy9;
+		case 'z': goto yy6;
 		case ':':
 			in->yyt2 = in->cur;
-			goto yy12;
-		default: goto yy11;
+			goto yy9;
+		default: goto yy8;
 	}
-yy11:
+yy8:
 	in->cur = in->mar;
-	goto yy5;
-yy12:
+	goto yy3;
+yy9:
 	yych = *++in->cur;
 	switch (yych) {
 		case '!':
@@ -433,25 +433,25 @@ yy12:
 		case '~':
 			in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = NULL;
 			in->yyt12 = in->cur;
-			goto yy14;
+			goto yy11;
 		case '#':
 			in->yyt4 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt13 = NULL;
 			in->yyt3 = in->yyt12 = in->cur;
-			goto yy16;
+			goto yy13;
 		case '/':
 			in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = NULL;
 			in->yyt12 = in->cur;
-			goto yy17;
+			goto yy14;
 		case '?':
 			in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = NULL;
 			in->yyt3 = in->yyt12 = in->cur;
-			goto yy18;
+			goto yy15;
 		default:
 			in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt13 = NULL;
 			in->yyt3 = in->yyt12 = in->cur;
-			goto yy13;
+			goto yy10;
 	}
-yy13:
+yy10:
 	s1 = in->yyt1;
 	s2 = in->yyt2;
 	u1 = in->yyt7;
@@ -484,11 +484,11 @@ yy13:
 #endif
         goto loop;
     }
-yy14:
+yy11:
 	++in->cur;
 	if ((in->lim - in->cur) < 3) if (fill(in, 3) != 0) return 2;
 	yych = *in->cur;
-yy15:
+yy12:
 	switch (yych) {
 		case '!':
 		case '$':
@@ -570,20 +570,20 @@ yy15:
 		case 'x':
 		case 'y':
 		case 'z':
-		case '~': goto yy14;
+		case '~': goto yy11;
 		case '#':
 			in->yyt4 = in->yyt13 = NULL;
 			in->yyt3 = in->cur;
-			goto yy16;
+			goto yy13;
 		case '?':
 			in->yyt3 = in->cur;
-			goto yy18;
+			goto yy15;
 		default:
 			in->yyt4 = in->yyt5 = in->yyt6 = in->yyt13 = NULL;
 			in->yyt3 = in->cur;
-			goto yy13;
+			goto yy10;
 	}
-yy16:
+yy13:
 	yych = *++in->cur;
 	switch (yych) {
 		case '!':
@@ -669,18 +669,18 @@ yy16:
 		case 'z':
 		case '~':
 			in->yyt5 = in->cur;
-			goto yy19;
+			goto yy16;
 		default:
 			in->yyt5 = in->yyt6 = in->cur;
-			goto yy13;
+			goto yy10;
 	}
-yy17:
+yy14:
 	yych = *++in->cur;
 	switch (yych) {
-		case '/': goto yy21;
-		default: goto yy15;
+		case '/': goto yy17;
+		default: goto yy12;
 	}
-yy18:
+yy15:
 	yych = *++in->cur;
 	switch (yych) {
 		case '!':
@@ -766,16 +766,16 @@ yy18:
 		case 'z':
 		case '~':
 			in->yyt13 = in->cur;
-			goto yy22;
+			goto yy18;
 		case '#':
 			in->yyt4 = in->yyt13 = in->cur;
-			goto yy16;
+			goto yy13;
 		default:
 			in->yyt5 = in->yyt6 = NULL;
 			in->yyt4 = in->yyt13 = in->cur;
-			goto yy13;
+			goto yy10;
 	}
-yy19:
+yy16:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return 2;
 	yych = *in->cur;
@@ -861,12 +861,12 @@ yy19:
 		case 'x':
 		case 'y':
 		case 'z':
-		case '~': goto yy19;
+		case '~': goto yy16;
 		default:
 			in->yyt6 = in->cur;
-			goto yy13;
+			goto yy10;
 	}
-yy21:
+yy17:
 	yych = *++in->cur;
 	switch (yych) {
 		case '!':
@@ -950,15 +950,15 @@ yy21:
 		case '~':
 			in->yyt7 = in->yyt8 = NULL;
 			in->yyt3 = in->yyt9 = in->cur;
-			goto yy24;
+			goto yy19;
 		case '[':
 		case ']':
 			in->yyt7 = in->yyt8 = NULL;
 			in->yyt9 = in->cur;
-			goto yy26;
-		default: goto yy15;
+			goto yy20;
+		default: goto yy12;
 	}
-yy22:
+yy18:
 	++in->cur;
 	if ((in->lim - in->cur) < 2) if (fill(in, 2) != 0) return 2;
 	yych = *in->cur;
@@ -1044,16 +1044,16 @@ yy22:
 		case 'x':
 		case 'y':
 		case 'z':
-		case '~': goto yy22;
+		case '~': goto yy18;
 		case '#':
 			in->yyt4 = in->cur;
-			goto yy16;
+			goto yy13;
 		default:
 			in->yyt5 = in->yyt6 = NULL;
 			in->yyt4 = in->cur;
-			goto yy13;
+			goto yy10;
 	}
-yy24:
+yy19:
 	++in->cur;
 	if ((in->lim - in->cur) < 4) if (fill(in, 4) != 0) return 2;
 	yych = *in->cur;
@@ -1136,31 +1136,31 @@ yy24:
 		case 'x':
 		case 'y':
 		case 'z':
-		case '~': goto yy24;
+		case '~': goto yy19;
 		case '#':
 			in->yyt4 = in->yyt11 = in->yyt13 = NULL;
 			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
-			goto yy16;
+			goto yy13;
 		case '/':
 			in->yyt11 = NULL;
 			in->yyt10 = in->yyt12 = in->cur;
-			goto yy14;
+			goto yy11;
 		case '?':
 			in->yyt11 = NULL;
 			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
-			goto yy18;
+			goto yy15;
 		case '@':
 			in->yyt11 = NULL;
 			in->yyt4 = in->yyt10 = in->yyt12 = in->cur;
-			goto yy28;
+			goto yy21;
 		case '[':
-		case ']': goto yy26;
+		case ']': goto yy20;
 		default:
 			in->yyt4 = in->yyt5 = in->yyt6 = in->yyt11 = in->yyt13 = NULL;
 			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
-			goto yy13;
+			goto yy10;
 	}
-yy26:
+yy20:
 	++in->cur;
 	if ((in->lim - in->cur) < 3) if (fill(in, 3) != 0) return 2;
 	yych = *in->cur;
@@ -1245,26 +1245,26 @@ yy26:
 		case 'x':
 		case 'y':
 		case 'z':
-		case '~': goto yy26;
+		case '~': goto yy20;
 		case '#':
 			in->yyt4 = in->yyt11 = in->yyt13 = NULL;
 			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
-			goto yy16;
+			goto yy13;
 		case '/':
 		case '@':
 			in->yyt11 = NULL;
 			in->yyt10 = in->yyt12 = in->cur;
-			goto yy14;
+			goto yy11;
 		case '?':
 			in->yyt11 = NULL;
 			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
-			goto yy18;
+			goto yy15;
 		default:
 			in->yyt4 = in->yyt5 = in->yyt6 = in->yyt11 = in->yyt13 = NULL;
 			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
-			goto yy13;
+			goto yy10;
 	}
-yy28:
+yy21:
 	yych = *++in->cur;
 	switch (yych) {
 		case '!':
@@ -1351,8 +1351,8 @@ yy28:
 			in->yyt7 = in->yyt3;
 			in->yyt8 = in->yyt4;
 			in->yyt9 = in->cur;
-			goto yy26;
-		default: goto yy15;
+			goto yy20;
+		default: goto yy12;
 	}
 }
 

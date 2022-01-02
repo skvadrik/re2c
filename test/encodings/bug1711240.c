@@ -8,26 +8,26 @@ char scan(const unsigned char *s)
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0x60) {
-		if (yych == 0x07) goto yy4;
+		if (yych == 0x07) goto yy1;
 	} else {
-		if (yych <= 0x61) goto yy6;
-		if (yych == 0x7F) goto yy8;
+		if (yych <= 0x61) goto yy2;
+		if (yych == 0x7F) goto yy3;
 	}
 	++YYCURSOR;
 	{
 		return '\0';
 	}
-yy4:
+yy1:
 	++YYCURSOR;
 	{
 		return '\x7F';
 	}
-yy6:
+yy2:
 	++YYCURSOR;
 	{
 		return '\x2F';
 	}
-yy8:
+yy3:
 	++YYCURSOR;
 	{
 		return '"';

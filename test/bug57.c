@@ -16,78 +16,78 @@ int scan(const char *p)
 	unsigned int yyaccept = 0;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '\n': goto yy2;
-		case '<': goto yy5;
-		case '\\': goto yy6;
-		case 'a': goto yy7;
-		default: goto yy3;
+		case '\n': goto yy1;
+		case '<': goto yy4;
+		case '\\': goto yy5;
+		case 'a': goto yy6;
+		default: goto yy2;
 	}
-yy2:
+yy1:
 #line 16 "bug57.re"
 	{ return YYCURSOR - p; }
 #line 29 "bug57.c"
-yy3:
+yy2:
 	++YYCURSOR;
-yy4:
+yy3:
 #line 17 "bug57.re"
 	{ return 0; }
 #line 35 "bug57.c"
-yy5:
+yy4:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case '>': goto yy9;
-		case '\\': goto yy11;
+		case '>': goto yy7;
+		case '\\': goto yy8;
 		case 'x':
-		case 'y': goto yy13;
-		default: goto yy4;
+		case 'y': goto yy10;
+		default: goto yy3;
 	}
-yy6:
+yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy7;
-		default: goto yy4;
+		case 'b': goto yy6;
+		default: goto yy3;
 	}
-yy7:
+yy6:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case '\\': goto yy15;
-		case 'a': goto yy7;
-		default: goto yy2;
+		case '\\': goto yy11;
+		case 'a': goto yy6;
+		default: goto yy1;
 	}
-yy9:
+yy7:
 	++YYCURSOR;
 #line 15 "bug57.re"
 	{ return YYCURSOR - p; }
 #line 64 "bug57.c"
+yy8:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'b': goto yy10;
+		default: goto yy9;
+	}
+yy9:
+	YYCURSOR = YYMARKER;
+	if (yyaccept == 0) {
+		goto yy3;
+	} else {
+		goto yy1;
+	}
+yy10:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case '>': goto yy7;
+		case '\\': goto yy8;
+		case 'x':
+		case 'y': goto yy10;
+		default: goto yy9;
+	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy13;
-		default: goto yy12;
-	}
-yy12:
-	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy4;
-	} else {
-		goto yy2;
-	}
-yy13:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case '>': goto yy9;
-		case '\\': goto yy11;
-		case 'x':
-		case 'y': goto yy13;
-		default: goto yy12;
-	}
-yy15:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'b': goto yy7;
-		default: goto yy12;
+		case 'b': goto yy6;
+		default: goto yy9;
 	}
 }
 #line 18 "bug57.re"

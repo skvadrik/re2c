@@ -11,10 +11,10 @@
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'a') goto yy4;
+	if (yych == 'a') goto yy1;
 	++YYCURSOR;
 	{}
-yy4:
+yy1:
 	++YYCURSOR;
 	{}
 }
@@ -25,24 +25,10 @@ yy4:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'b') goto yy10;
+	if (yych == 'b') goto yy3;
 	++YYCURSOR;
 	{}
-yy10:
-	++YYCURSOR;
-	{}
-}
-
-
-// match c
-
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 'c') goto yy16;
-	++YYCURSOR;
-	{}
-yy16:
+yy3:
 	++YYCURSOR;
 	{}
 }
@@ -53,10 +39,24 @@ yy16:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'c') goto yy22;
+	if (yych == 'c') goto yy5;
 	++YYCURSOR;
 	{}
-yy22:
+yy5:
+	++YYCURSOR;
+	{}
+}
+
+
+// match c
+
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 'c') goto yy7;
+	++YYCURSOR;
+	{}
+yy7:
 	++YYCURSOR;
 	{}
 }

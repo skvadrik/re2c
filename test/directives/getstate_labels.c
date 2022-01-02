@@ -13,7 +13,7 @@ switch (YYGETSTATE()) {
 
 // `getstate:re2c` for y, x, z (start in y)
 switch (YYGETSTATE()) {
-	default: goto yy5;
+	default: goto yy2;
 	case 1: goto Ly1;
 	case 0: goto yyFillLabel0;
 	case 2: goto Lz2;
@@ -41,7 +41,7 @@ yyFillLabel0:
 // global block y (with start label)
 
 
-yy5:
+yy2:
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 Ly1:
@@ -69,7 +69,7 @@ Lz2:
 
 // `getstate:re2c` for y, x, z (start in y)
 switch (YYGETSTATE()) {
-	default: goto yy5;
+	default: goto yy2;
 	case 1: goto Ly1;
 	case 0: goto yyFillLabel0;
 	case 2: goto Lz2;

@@ -34,16 +34,16 @@ yyFillLabel0:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy5;
-		default: goto yy3;
+		case '9': goto yy3;
+		default: goto yy2;
 	}
-yy3:
+yy2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 15 "config/config4a.re"
 	{ return NULL; }
 #line 46 "config/config4a.c"
-yy5:
+yy3:
 	++YYCURSOR;
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -59,10 +59,10 @@ yyFillLabel1:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy5;
-		default: goto yy7;
+		case '9': goto yy3;
+		default: goto yy4;
 	}
-yy7:
+yy4:
 	YYSETSTATE(-1);
 #line 14 "config/config4a.re"
 	{ return YYCURSOR; }

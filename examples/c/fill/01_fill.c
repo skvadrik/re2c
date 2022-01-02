@@ -48,85 +48,85 @@ static int lex(Input *in) {
 yyFillLabel0:
 	yych = *in->cur;
 	switch (yych) {
-		case ' ': goto yy4;
-		case '\'': goto yy7;
+		case ' ': goto yy3;
+		case '\'': goto yy5;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel0;
-				goto yy13;
+				goto yy10;
 			}
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	++in->cur;
-yy3:
+yy2:
 #line 51 "c/fill/01_fill.re"
 	{ return -1; }
 #line 66 "c/fill/01_fill.c"
-yy4:
+yy3:
 	++in->cur;
 yyFillLabel1:
 	yych = *in->cur;
 	switch (yych) {
-		case ' ': goto yy4;
+		case ' ': goto yy3;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel1;
 			}
-			goto yy6;
+			goto yy4;
 	}
-yy6:
+yy4:
 #line 54 "c/fill/01_fill.re"
 	{ continue; }
 #line 82 "c/fill/01_fill.c"
-yy7:
+yy5:
 	in->mar = ++in->cur;
 yyFillLabel2:
 	yych = *in->cur;
-	if (yych >= 0x01) goto yy9;
+	if (yych >= 0x01) goto yy7;
 	if (in->lim <= in->cur) {
 		if (fill(in) == 0) goto yyFillLabel2;
-		goto yy3;
+		goto yy2;
 	}
-yy8:
+yy6:
 	++in->cur;
 yyFillLabel3:
 	yych = *in->cur;
-yy9:
+yy7:
 	switch (yych) {
-		case '\'': goto yy10;
-		case '\\': goto yy12;
+		case '\'': goto yy8;
+		case '\\': goto yy9;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel3;
-				goto yy14;
+				goto yy11;
 			}
-			goto yy8;
+			goto yy6;
 	}
-yy10:
+yy8:
 	++in->cur;
 #line 53 "c/fill/01_fill.re"
 	{ ++count; continue; }
 #line 111 "c/fill/01_fill.c"
-yy12:
+yy9:
 	++in->cur;
 yyFillLabel4:
 	yych = *in->cur;
 	if (yych <= 0x00) {
 		if (in->lim <= in->cur) {
 			if (fill(in) == 0) goto yyFillLabel4;
-			goto yy14;
+			goto yy11;
 		}
-		goto yy8;
+		goto yy6;
 	}
-	goto yy8;
-yy13:
+	goto yy6;
+yy10:
 #line 52 "c/fill/01_fill.re"
 	{ return count; }
 #line 127 "c/fill/01_fill.c"
-yy14:
+yy11:
 	in->cur = in->mar;
-	goto yy3;
+	goto yy2;
 }
 #line 55 "c/fill/01_fill.re"
 }

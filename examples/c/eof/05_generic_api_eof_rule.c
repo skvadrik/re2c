@@ -19,66 +19,66 @@ static int lex(const char *str, unsigned int len) {
 	char yych;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
-		case ' ': goto yy4;
-		case '\'': goto yy7;
+		case ' ': goto yy3;
+		case '\'': goto yy5;
 		default:
-			if (cur >= lim) goto yy13;
-			goto yy2;
+			if (cur >= lim) goto yy10;
+			goto yy1;
 	}
-yy2:
+yy1:
 	++cur;
-yy3:
+yy2:
 #line 26 "c/eof/05_generic_api_eof_rule.re"
 	{ count = -1; break; }
 #line 34 "c/eof/05_generic_api_eof_rule.c"
-yy4:
+yy3:
 	++cur;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
-		case ' ': goto yy4;
-		default: goto yy6;
+		case ' ': goto yy3;
+		default: goto yy4;
 	}
-yy6:
+yy4:
 #line 29 "c/eof/05_generic_api_eof_rule.re"
 	{ continue; }
 #line 45 "c/eof/05_generic_api_eof_rule.c"
-yy7:
+yy5:
 	++cur;
 	mar = cur;
 	yych = cur < lim ? *cur : 0;
-	if (yych >= 0x01) goto yy9;
-	if (cur >= lim) goto yy3;
-yy8:
+	if (yych >= 0x01) goto yy7;
+	if (cur >= lim) goto yy2;
+yy6:
 	++cur;
 	yych = cur < lim ? *cur : 0;
-yy9:
+yy7:
 	switch (yych) {
-		case '\'': goto yy10;
-		case '\\': goto yy12;
+		case '\'': goto yy8;
+		case '\\': goto yy9;
 		default:
-			if (cur >= lim) goto yy14;
-			goto yy8;
+			if (cur >= lim) goto yy11;
+			goto yy6;
 	}
-yy10:
+yy8:
 	++cur;
 #line 28 "c/eof/05_generic_api_eof_rule.re"
 	{ ++count; continue; }
 #line 67 "c/eof/05_generic_api_eof_rule.c"
-yy12:
+yy9:
 	++cur;
 	yych = cur < lim ? *cur : 0;
 	if (yych <= 0x00) {
-		if (cur >= lim) goto yy14;
-		goto yy8;
+		if (cur >= lim) goto yy11;
+		goto yy6;
 	}
-	goto yy8;
-yy13:
+	goto yy6;
+yy10:
 #line 27 "c/eof/05_generic_api_eof_rule.re"
 	{ break;; }
 #line 79 "c/eof/05_generic_api_eof_rule.c"
-yy14:
+yy11:
 	cur = mar;
-	goto yy3;
+	goto yy2;
 }
 #line 30 "c/eof/05_generic_api_eof_rule.re"
 }

@@ -14,23 +14,23 @@ static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
 	char yych;
 	yych = in.peek();
 	switch (yych) {
-		case '\r': goto yy4;
-		default: goto yy2;
+		case '\r': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	{ in.ignore(); if (in.eof()) return; }
-yy3:
+yy2:
 #line 19 "c/generic_api/ifstream.re"
 	{ out.put(yych); continue; }
 #line 26 "c/generic_api/ifstream.c"
-yy4:
+yy3:
 	{ in.ignore(); if (in.eof()) return; }
 	yych = in.peek();
 	switch (yych) {
-		case '\n': goto yy5;
-		default: goto yy3;
+		case '\n': goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	{ in.ignore(); if (in.eof()) return; }
 #line 20 "c/generic_api/ifstream.re"
 	{ out.put('\n'); continue; }

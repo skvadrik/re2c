@@ -76,22 +76,22 @@ int yytm3 = ROOT;
 		case 'y':
 		case 'z':
 			YYMTAGP(yytm2);
-			goto yy4;
-		default: goto yy2;
+			goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 47 "c/submatch/02_mtags.re"
 	{ return false; }
 #line 88 "c/submatch/02_mtags.c"
-yy4:
+yy3:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 		case ';':
 			YYMTAGP(yytm3);
-			goto yy5;
+			goto yy4;
 		case 'a':
 		case 'b':
 		case 'c':
@@ -117,10 +117,10 @@ yy4:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy7;
-		default: goto yy3;
+		case 'z': goto yy6;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -152,12 +152,12 @@ yy5:
 		case 'z':
 			yytm1 = yytm2;
 			YYMTAGP(yytm2);
-			goto yy7;
+			goto yy6;
 		default:
 			yytm1 = yytm2;
-			goto yy6;
+			goto yy5;
 	}
-yy6:
+yy5:
 	x = yytm1;
 	y = yytm3;
 #line 42 "c/submatch/02_mtags.re"
@@ -167,12 +167,12 @@ yy6:
             return true;
         }
 #line 170 "c/submatch/02_mtags.c"
-yy7:
+yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case ';':
 			YYMTAGP(yytm3);
-			goto yy5;
+			goto yy4;
 		case 'a':
 		case 'b':
 		case 'c':
@@ -198,15 +198,15 @@ yy7:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy7;
-		default: goto yy9;
+		case 'z': goto yy6;
+		default: goto yy7;
 	}
-yy9:
+yy7:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
-		goto yy3;
+		goto yy2;
 	} else {
-		goto yy6;
+		goto yy5;
 	}
 }
 #line 48 "c/submatch/02_mtags.re"

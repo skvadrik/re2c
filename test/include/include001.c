@@ -20,17 +20,17 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy3;
-		case 'c': goto yy5;
-		default: goto yy2;
+		case 'b': goto yy2;
+		case 'c': goto yy3;
+		default: goto yy1;
 	}
+yy1:
 yy2:
-yy3:
 	++YYCURSOR;
 #line 5 "include/include001.re"
 	{}
 #line 33 "include/include001.c"
-yy5:
+yy3:
 	++YYCURSOR;
 #line 6 "include/include001.re"
 	{}

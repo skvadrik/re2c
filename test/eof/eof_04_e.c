@@ -57,44 +57,44 @@ static bool lex(input_t & in, unsigned int &count)
 yyFillLabel0:
 	yych = *in.cur;
 	switch (yych) {
-		case 0x25: goto yy5;
+		case 0x25: goto yy3;
 		default:
 			if (in.lim <= in.cur) {
 				if (in.fill() == 0) goto yyFillLabel0;
-				goto yy8;
+				goto yy5;
 			}
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	++in.cur;
 yyFillLabel1:
 	yych = *in.cur;
 	switch (yych) {
-		case 0x25: goto yy4;
+		case 0x25: goto yy2;
 		default:
 			if (in.lim <= in.cur) {
 				if (in.fill() == 0) goto yyFillLabel1;
-				goto yy4;
+				goto yy2;
 			}
-			goto yy2;
+			goto yy1;
 	}
-yy4:
+yy2:
 	{ ++count; continue; }
-yy5:
+yy3:
 	++in.cur;
 yyFillLabel2:
 	yych = *in.cur;
 	switch (yych) {
-		case 0x25: goto yy5;
+		case 0x25: goto yy3;
 		default:
 			if (in.lim <= in.cur) {
 				if (in.fill() == 0) goto yyFillLabel2;
 			}
-			goto yy7;
+			goto yy4;
 	}
-yy7:
+yy4:
 	{ continue; }
-yy8:
+yy5:
 	{ return true; }
 }
 

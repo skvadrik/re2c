@@ -7,30 +7,30 @@
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'b':
-		case 'c': goto yy3;
-		default: goto yy2;
+		case 'c': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
 	switch (yych) {
 		case 'b':
-		case 'c': goto yy5;
-		default: goto yy4;
+		case 'c': goto yy4;
+		default: goto yy3;
 	}
-yy4:
+yy3:
 	t = yyt1;
 	{}
-yy5:
+yy4:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'b':
-		case 'c': goto yy5;
-		default: goto yy4;
+		case 'c': goto yy4;
+		default: goto yy3;
 	}
 }
 

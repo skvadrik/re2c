@@ -148,42 +148,42 @@ yyc_JS:
 			yych = *YYCURSOR;
 			{
 				static void *yytarget[256] = {
-					&&yy2,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy6,  &&yy9,  &&yy4,  &&yy4,  &&yy10, &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy6,  &&yy4,  &&yy11, &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy13, &&yy15, &&yy4,  &&yy4,
-					&&yy16, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-					&&yy18, &&yy18, &&yy20, &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy22, &&yy4,  &&yy24, &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy26, &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy27, &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy28, &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy29, &&yy4,  &&yy31, &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
-					&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4
+					&&yy1,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy4,  &&yy7,  &&yy2,  &&yy2,  &&yy8,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy4,  &&yy2,  &&yy9,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy10, &&yy11, &&yy2,  &&yy2,
+					&&yy12, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14,
+					&&yy14, &&yy14, &&yy15, &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy16, &&yy2,  &&yy17, &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy18, &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy19, &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy20, &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy21, &&yy2,  &&yy22, &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2
 				};
 				goto *yytarget[yych];
 			}
-yy2:
+yy1:
 			++YYCURSOR;
 			{
 		if (s->limit < s->cursor) {
@@ -193,29 +193,29 @@ yy2:
 			return PHP_JSON_T_ERROR;
 		}
 	}
-yy4:
+yy2:
 			++YYCURSOR;
-yy5:
+yy3:
 			{
 		s->errcode = PHP_JSON_ERROR_SYNTAX;
 		return PHP_JSON_T_ERROR;
 	}
-yy6:
+yy4:
 			yych = *++YYCURSOR;
-yy7:
+yy5:
 			if (yybm[0+yych] & 64) {
-				goto yy6;
+				goto yy4;
 			}
-yy8:
+yy6:
 			{ goto std; }
-yy9:
+yy7:
 			++YYCURSOR;
-			goto yy8;
-yy10:
+			goto yy6;
+yy8:
 			yych = *++YYCURSOR;
-			if (yych == '\n') goto yy9;
-			goto yy7;
-yy11:
+			if (yych == '\n') goto yy7;
+			goto yy5;
+yy9:
 			++YYCURSOR;
 			{
 		s->str_start = s->cursor;
@@ -223,25 +223,25 @@ yy11:
 		PHP_JSON_CONDITION_SET(STR_P1);
 		PHP_JSON_CONDITION_GOTO(STR_P1);
 	}
-yy13:
+yy10:
 			++YYCURSOR;
 			{ return ','; }
-yy15:
+yy11:
 			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy5;
-			if (yych <= '0') goto yy16;
-			if (yych <= '9') goto yy18;
-			goto yy5;
-yy16:
+			if (yych <= '/') goto yy3;
+			if (yych <= '0') goto yy12;
+			if (yych <= '9') goto yy14;
+			goto yy3;
+yy12:
 			yyaccept = 0;
 			yych = *(YYMARKER = ++YYCURSOR);
 			if (yych <= 'D') {
-				if (yych == '.') goto yy33;
+				if (yych == '.') goto yy23;
 			} else {
-				if (yych <= 'E') goto yy35;
-				if (yych == 'e') goto yy35;
+				if (yych <= 'E') goto yy25;
+				if (yych == 'e') goto yy25;
 			}
-yy17:
+yy13:
 			{
 		zend_bool bigint = 0, negative = s->token[0] == '-';
 		size_t digits = (size_t) (s->cursor - s->token - negative);
@@ -266,141 +266,141 @@ yy17:
 			return PHP_JSON_T_DOUBLE;
 		}
 	}
-yy18:
+yy14:
 			yyaccept = 0;
 			yych = *(YYMARKER = ++YYCURSOR);
 			if (yybm[0+yych] & 128) {
-				goto yy18;
+				goto yy14;
 			}
 			if (yych <= 'D') {
-				if (yych == '.') goto yy33;
-				goto yy17;
+				if (yych == '.') goto yy23;
+				goto yy13;
 			} else {
-				if (yych <= 'E') goto yy35;
-				if (yych == 'e') goto yy35;
-				goto yy17;
+				if (yych <= 'E') goto yy25;
+				if (yych == 'e') goto yy25;
+				goto yy13;
 			}
-yy20:
+yy15:
 			++YYCURSOR;
 			{ return ':'; }
-yy22:
+yy16:
 			++YYCURSOR;
 			{ return '['; }
-yy24:
+yy17:
 			++YYCURSOR;
 			{ return ']'; }
-yy26:
+yy18:
 			yyaccept = 1;
 			yych = *(YYMARKER = ++YYCURSOR);
-			if (yych == 'a') goto yy36;
-			goto yy5;
-yy27:
+			if (yych == 'a') goto yy26;
+			goto yy3;
+yy19:
 			yyaccept = 1;
 			yych = *(YYMARKER = ++YYCURSOR);
-			if (yych == 'u') goto yy37;
-			goto yy5;
-yy28:
+			if (yych == 'u') goto yy27;
+			goto yy3;
+yy20:
 			yyaccept = 1;
 			yych = *(YYMARKER = ++YYCURSOR);
-			if (yych == 'r') goto yy38;
-			goto yy5;
-yy29:
+			if (yych == 'r') goto yy28;
+			goto yy3;
+yy21:
 			++YYCURSOR;
 			{ return '{'; }
-yy31:
+yy22:
 			++YYCURSOR;
 			{ return '}'; }
-yy33:
+yy23:
 			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy34;
-			if (yych <= '9') goto yy39;
-yy34:
+			if (yych <= '/') goto yy24;
+			if (yych <= '9') goto yy29;
+yy24:
 			YYCURSOR = YYMARKER;
 			if (yyaccept <= 1) {
 				if (yyaccept == 0) {
-					goto yy17;
+					goto yy13;
 				} else {
-					goto yy5;
+					goto yy3;
 				}
 			} else {
-				goto yy41;
+				goto yy30;
 			}
-yy35:
+yy25:
 			yych = *++YYCURSOR;
 			if (yych <= ',') {
-				if (yych == '+') goto yy42;
-				goto yy34;
+				if (yych == '+') goto yy31;
+				goto yy24;
 			} else {
-				if (yych <= '-') goto yy42;
-				if (yych <= '/') goto yy34;
-				if (yych <= '9') goto yy43;
-				goto yy34;
+				if (yych <= '-') goto yy31;
+				if (yych <= '/') goto yy24;
+				if (yych <= '9') goto yy32;
+				goto yy24;
 			}
-yy36:
+yy26:
 			yych = *++YYCURSOR;
-			if (yych == 'l') goto yy45;
-			goto yy34;
-yy37:
+			if (yych == 'l') goto yy33;
+			goto yy24;
+yy27:
 			yych = *++YYCURSOR;
-			if (yych == 'l') goto yy46;
-			goto yy34;
-yy38:
+			if (yych == 'l') goto yy34;
+			goto yy24;
+yy28:
 			yych = *++YYCURSOR;
-			if (yych == 'u') goto yy47;
-			goto yy34;
-yy39:
+			if (yych == 'u') goto yy35;
+			goto yy24;
+yy29:
 			yyaccept = 2;
 			yych = *(YYMARKER = ++YYCURSOR);
 			if (yych <= 'D') {
-				if (yych <= '/') goto yy41;
-				if (yych <= '9') goto yy39;
+				if (yych <= '/') goto yy30;
+				if (yych <= '9') goto yy29;
 			} else {
-				if (yych <= 'E') goto yy35;
-				if (yych == 'e') goto yy35;
+				if (yych <= 'E') goto yy25;
+				if (yych == 'e') goto yy25;
 			}
-yy41:
+yy30:
 			{
 		ZVAL_DOUBLE(&s->value, zend_strtod((char *) s->token, NULL));
 		return PHP_JSON_T_DOUBLE;
 	}
-yy42:
+yy31:
 			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy34;
-			if (yych >= ':') goto yy34;
-yy43:
+			if (yych <= '/') goto yy24;
+			if (yych >= ':') goto yy24;
+yy32:
 			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy41;
-			if (yych <= '9') goto yy43;
-			goto yy41;
-yy45:
+			if (yych <= '/') goto yy30;
+			if (yych <= '9') goto yy32;
+			goto yy30;
+yy33:
 			yych = *++YYCURSOR;
-			if (yych == 's') goto yy48;
-			goto yy34;
-yy46:
+			if (yych == 's') goto yy36;
+			goto yy24;
+yy34:
 			yych = *++YYCURSOR;
-			if (yych == 'l') goto yy49;
-			goto yy34;
-yy47:
+			if (yych == 'l') goto yy37;
+			goto yy24;
+yy35:
 			yych = *++YYCURSOR;
-			if (yych == 'e') goto yy51;
-			goto yy34;
-yy48:
+			if (yych == 'e') goto yy38;
+			goto yy24;
+yy36:
 			yych = *++YYCURSOR;
-			if (yych == 'e') goto yy53;
-			goto yy34;
-yy49:
+			if (yych == 'e') goto yy39;
+			goto yy24;
+yy37:
 			++YYCURSOR;
 			{
 		ZVAL_NULL(&s->value);
 		return PHP_JSON_T_NUL;
 	}
-yy51:
+yy38:
 			++YYCURSOR;
 			{
 		ZVAL_TRUE(&s->value);
 		return PHP_JSON_T_TRUE;
 	}
-yy53:
+yy39:
 			++YYCURSOR;
 			{
 		ZVAL_FALSE(&s->value);
@@ -412,51 +412,51 @@ yyc_STR_P1:
 		yych = *YYCURSOR;
 		{
 			static void *yytarget[256] = {
-				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
-				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
-				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
-				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
-				&&yy59, &&yy59, &&yy61, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy63, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59, &&yy59,
-				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65,
-				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65,
-				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65,
-				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65,
-				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65,
-				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65,
-				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65,
-				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65,
-				&&yy65, &&yy65, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67,
-				&&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67,
-				&&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67,
-				&&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67,
-				&&yy68, &&yy69, &&yy69, &&yy69, &&yy69, &&yy69, &&yy69, &&yy69,
-				&&yy69, &&yy69, &&yy69, &&yy69, &&yy69, &&yy70, &&yy69, &&yy69,
-				&&yy71, &&yy72, &&yy72, &&yy72, &&yy73, &&yy65, &&yy65, &&yy65,
-				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65
+				&&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41,
+				&&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41,
+				&&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41,
+				&&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41,
+				&&yy42, &&yy42, &&yy43, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy44, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42, &&yy42,
+				&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46,
+				&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46,
+				&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46,
+				&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46,
+				&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46,
+				&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46,
+				&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46,
+				&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46,
+				&&yy46, &&yy46, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+				&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+				&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+				&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+				&&yy49, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
+				&&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy51, &&yy50, &&yy50,
+				&&yy52, &&yy53, &&yy53, &&yy53, &&yy54, &&yy46, &&yy46, &&yy46,
+				&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46
 			};
 			goto *yytarget[yych];
 		}
-yy57:
+yy41:
 		++YYCURSOR;
 		{
 		s->errcode = PHP_JSON_ERROR_CTRL_CHAR;
 		return PHP_JSON_T_ERROR;
 	}
-yy59:
+yy42:
 		++YYCURSOR;
 		{ PHP_JSON_CONDITION_GOTO(STR_P1); }
-yy61:
+yy43:
 		++YYCURSOR;
 		{
 		zend_string *str;
@@ -480,407 +480,407 @@ yy61:
 			return PHP_JSON_T_STRING;
 		}
 	}
-yy63:
+yy44:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		{
 			static void *yytarget[256] = {
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy74, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy74,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy74, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy74, &&yy64, &&yy64, &&yy64, &&yy74, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy74, &&yy64,
-				&&yy64, &&yy64, &&yy74, &&yy64, &&yy74, &&yy76, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
-				&&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy55, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy55,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy55, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy55, &&yy45, &&yy45, &&yy45, &&yy55, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy55, &&yy45,
+				&&yy45, &&yy45, &&yy55, &&yy45, &&yy55, &&yy56, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
+				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45
 			};
 			goto *yytarget[yych];
 		}
-yy64:
+yy45:
 		{
 		s->errcode = PHP_JSON_ERROR_SYNTAX;
 		return PHP_JSON_T_ERROR;
 	}
-yy65:
+yy46:
 		++YYCURSOR;
-yy66:
+yy47:
 		{
 		s->errcode = PHP_JSON_ERROR_UTF8;
 		return PHP_JSON_T_ERROR;
 	}
-yy67:
+yy48:
 		yych = *++YYCURSOR;
-		if (yych <= 0x7F) goto yy66;
+		if (yych <= 0x7F) goto yy47;
+		if (yych <= 0xBF) goto yy42;
+		goto yy47;
+yy49:
+		yyaccept = 1;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yych <= 0x9F) goto yy47;
+		if (yych <= 0xBF) goto yy58;
+		goto yy47;
+yy50:
+		yyaccept = 1;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yych <= 0x7F) goto yy47;
+		if (yych <= 0xBF) goto yy58;
+		goto yy47;
+yy51:
+		yyaccept = 1;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yych <= 0x7F) goto yy47;
+		if (yych <= 0x9F) goto yy58;
+		goto yy47;
+yy52:
+		yyaccept = 1;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yych <= 0x8F) goto yy47;
 		if (yych <= 0xBF) goto yy59;
-		goto yy66;
-yy68:
+		goto yy47;
+yy53:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
-		if (yych <= 0x9F) goto yy66;
-		if (yych <= 0xBF) goto yy78;
-		goto yy66;
-yy69:
+		if (yych <= 0x7F) goto yy47;
+		if (yych <= 0xBF) goto yy59;
+		goto yy47;
+yy54:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
-		if (yych <= 0x7F) goto yy66;
-		if (yych <= 0xBF) goto yy78;
-		goto yy66;
-yy70:
-		yyaccept = 1;
-		yych = *(YYMARKER = ++YYCURSOR);
-		if (yych <= 0x7F) goto yy66;
-		if (yych <= 0x9F) goto yy78;
-		goto yy66;
-yy71:
-		yyaccept = 1;
-		yych = *(YYMARKER = ++YYCURSOR);
-		if (yych <= 0x8F) goto yy66;
-		if (yych <= 0xBF) goto yy79;
-		goto yy66;
-yy72:
-		yyaccept = 1;
-		yych = *(YYMARKER = ++YYCURSOR);
-		if (yych <= 0x7F) goto yy66;
-		if (yych <= 0xBF) goto yy79;
-		goto yy66;
-yy73:
-		yyaccept = 1;
-		yych = *(YYMARKER = ++YYCURSOR);
-		if (yych <= 0x7F) goto yy66;
-		if (yych <= 0x8F) goto yy79;
-		goto yy66;
-yy74:
+		if (yych <= 0x7F) goto yy47;
+		if (yych <= 0x8F) goto yy59;
+		goto yy47;
+yy55:
 		++YYCURSOR;
 		{
 		s->str_esc++;
 		PHP_JSON_CONDITION_GOTO(STR_P1);
 	}
-yy76:
+yy56:
 		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy80, &&yy81, &&yy81, &&yy81, &&yy81, &&yy81, &&yy81, &&yy81,
-				&&yy81, &&yy81, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy81, &&yy81, &&yy81, &&yy82, &&yy81, &&yy81, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy81, &&yy81, &&yy81, &&yy82, &&yy81, &&yy81, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy60, &&yy61, &&yy61, &&yy61, &&yy61, &&yy61, &&yy61, &&yy61,
+				&&yy61, &&yy61, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy61, &&yy61, &&yy61, &&yy62, &&yy61, &&yy61, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy61, &&yy61, &&yy61, &&yy62, &&yy61, &&yy61, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57
 			};
 			goto *yytarget[yych];
 		}
-yy77:
+yy57:
 		YYCURSOR = YYMARKER;
 		if (yyaccept <= 1) {
 			if (yyaccept == 0) {
-				goto yy64;
+				goto yy45;
 			} else {
-				goto yy66;
+				goto yy47;
 			}
 		} else {
-			goto yy96;
+			goto yy74;
 		}
-yy78:
+yy58:
 		yych = *++YYCURSOR;
-		if (yych <= 0x7F) goto yy77;
-		if (yych <= 0xBF) goto yy59;
-		goto yy77;
-yy79:
+		if (yych <= 0x7F) goto yy57;
+		if (yych <= 0xBF) goto yy42;
+		goto yy57;
+yy59:
 		yych = *++YYCURSOR;
-		if (yych <= 0x7F) goto yy77;
-		if (yych <= 0xBF) goto yy78;
-		goto yy77;
-yy80:
+		if (yych <= 0x7F) goto yy57;
+		if (yych <= 0xBF) goto yy58;
+		goto yy57;
+yy60:
 		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy83, &&yy84, &&yy84, &&yy84, &&yy84, &&yy84, &&yy84, &&yy84,
-				&&yy85, &&yy85, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy63, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64, &&yy64,
+				&&yy65, &&yy65, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57
 			};
 			goto *yytarget[yych];
 		}
-yy81:
+yy61:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych <= '9') goto yy85;
-			goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych <= '9') goto yy65;
+			goto yy57;
 		} else {
-			if (yych <= 'F') goto yy85;
-			if (yych <= '`') goto yy77;
-			if (yych <= 'f') goto yy85;
-			goto yy77;
+			if (yych <= 'F') goto yy65;
+			if (yych <= '`') goto yy57;
+			if (yych <= 'f') goto yy65;
+			goto yy57;
 		}
-yy82:
+yy62:
 		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
-				&&yy86, &&yy86, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy86, &&yy86, &&yy85, &&yy85, &&yy85, &&yy85, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy86, &&yy86, &&yy85, &&yy85, &&yy85, &&yy85, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77,
-				&&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77, &&yy77
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65, &&yy65,
+				&&yy66, &&yy66, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy66, &&yy66, &&yy65, &&yy65, &&yy65, &&yy65, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy66, &&yy66, &&yy65, &&yy65, &&yy65, &&yy65, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
+				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57
 			};
 			goto *yytarget[yych];
 		}
-yy83:
+yy63:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych <= '7') goto yy87;
-			if (yych <= '9') goto yy88;
-			goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych <= '7') goto yy67;
+			if (yych <= '9') goto yy68;
+			goto yy57;
 		} else {
-			if (yych <= 'F') goto yy88;
-			if (yych <= '`') goto yy77;
-			if (yych <= 'f') goto yy88;
-			goto yy77;
+			if (yych <= 'F') goto yy68;
+			if (yych <= '`') goto yy57;
+			if (yych <= 'f') goto yy68;
+			goto yy57;
 		}
-yy84:
+yy64:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych <= '9') goto yy88;
-			goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych <= '9') goto yy68;
+			goto yy57;
 		} else {
-			if (yych <= 'F') goto yy88;
-			if (yych <= '`') goto yy77;
-			if (yych <= 'f') goto yy88;
-			goto yy77;
+			if (yych <= 'F') goto yy68;
+			if (yych <= '`') goto yy57;
+			if (yych <= 'f') goto yy68;
+			goto yy57;
 		}
-yy85:
+yy65:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych <= '9') goto yy89;
-			goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych <= '9') goto yy69;
+			goto yy57;
 		} else {
-			if (yych <= 'F') goto yy89;
-			if (yych <= '`') goto yy77;
-			if (yych <= 'f') goto yy89;
-			goto yy77;
+			if (yych <= 'F') goto yy69;
+			if (yych <= '`') goto yy57;
+			if (yych <= 'f') goto yy69;
+			goto yy57;
 		}
-yy86:
+yy66:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych <= '9') goto yy90;
-			goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych <= '9') goto yy70;
+			goto yy57;
 		} else {
-			if (yych <= 'F') goto yy90;
-			if (yych <= '`') goto yy77;
-			if (yych <= 'f') goto yy90;
-			goto yy77;
+			if (yych <= 'F') goto yy70;
+			if (yych <= '`') goto yy57;
+			if (yych <= 'f') goto yy70;
+			goto yy57;
 		}
-yy87:
+yy67:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych <= '9') goto yy91;
-			goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych <= '9') goto yy71;
+			goto yy57;
 		} else {
-			if (yych <= 'F') goto yy91;
-			if (yych <= '`') goto yy77;
-			if (yych <= 'f') goto yy91;
-			goto yy77;
+			if (yych <= 'F') goto yy71;
+			if (yych <= '`') goto yy57;
+			if (yych <= 'f') goto yy71;
+			goto yy57;
 		}
-yy88:
+yy68:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych <= '9') goto yy93;
-			goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych <= '9') goto yy72;
+			goto yy57;
 		} else {
-			if (yych <= 'F') goto yy93;
-			if (yych <= '`') goto yy77;
-			if (yych <= 'f') goto yy93;
-			goto yy77;
+			if (yych <= 'F') goto yy72;
+			if (yych <= '`') goto yy57;
+			if (yych <= 'f') goto yy72;
+			goto yy57;
 		}
-yy89:
+yy69:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych <= '9') goto yy95;
-			goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych <= '9') goto yy73;
+			goto yy57;
 		} else {
-			if (yych <= 'F') goto yy95;
-			if (yych <= '`') goto yy77;
-			if (yych <= 'f') goto yy95;
-			goto yy77;
+			if (yych <= 'F') goto yy73;
+			if (yych <= '`') goto yy57;
+			if (yych <= 'f') goto yy73;
+			goto yy57;
 		}
-yy90:
+yy70:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych <= '9') goto yy97;
-			goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych <= '9') goto yy75;
+			goto yy57;
 		} else {
-			if (yych <= 'F') goto yy97;
-			if (yych <= '`') goto yy77;
-			if (yych <= 'f') goto yy97;
-			goto yy77;
+			if (yych <= 'F') goto yy75;
+			if (yych <= '`') goto yy57;
+			if (yych <= 'f') goto yy75;
+			goto yy57;
 		}
-yy91:
+yy71:
 		++YYCURSOR;
 		{
 		s->str_esc += 5;
 		PHP_JSON_CONDITION_GOTO(STR_P1);
 	}
-yy93:
+yy72:
 		++YYCURSOR;
 		{
 		s->str_esc += 4;
 		PHP_JSON_CONDITION_GOTO(STR_P1);
 	}
-yy95:
+yy73:
 		++YYCURSOR;
-yy96:
+yy74:
 		{
 		s->str_esc += 3;
 		PHP_JSON_CONDITION_GOTO(STR_P1);
 	}
-yy97:
+yy75:
 		yyaccept = 2;
 		yych = *(YYMARKER = ++YYCURSOR);
-		if (yych != '\\') goto yy96;
+		if (yych != '\\') goto yy74;
 		yych = *++YYCURSOR;
-		if (yych != 'u') goto yy77;
+		if (yych != 'u') goto yy57;
 		yych = *++YYCURSOR;
-		if (yych == 'D') goto yy100;
-		if (yych != 'd') goto yy77;
-yy100:
+		if (yych == 'D') goto yy76;
+		if (yych != 'd') goto yy57;
+yy76:
 		yych = *++YYCURSOR;
-		if (yych <= 'B') goto yy77;
-		if (yych <= 'F') goto yy101;
-		if (yych <= 'b') goto yy77;
-		if (yych >= 'g') goto yy77;
-yy101:
-		yych = *++YYCURSOR;
-		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych >= ':') goto yy77;
-		} else {
-			if (yych <= 'F') goto yy102;
-			if (yych <= '`') goto yy77;
-			if (yych >= 'g') goto yy77;
-		}
-yy102:
+		if (yych <= 'B') goto yy57;
+		if (yych <= 'F') goto yy77;
+		if (yych <= 'b') goto yy57;
+		if (yych >= 'g') goto yy57;
+yy77:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy77;
-			if (yych >= ':') goto yy77;
+			if (yych <= '/') goto yy57;
+			if (yych >= ':') goto yy57;
 		} else {
-			if (yych <= 'F') goto yy103;
-			if (yych <= '`') goto yy77;
-			if (yych >= 'g') goto yy77;
+			if (yych <= 'F') goto yy78;
+			if (yych <= '`') goto yy57;
+			if (yych >= 'g') goto yy57;
 		}
-yy103:
+yy78:
+		yych = *++YYCURSOR;
+		if (yych <= '@') {
+			if (yych <= '/') goto yy57;
+			if (yych >= ':') goto yy57;
+		} else {
+			if (yych <= 'F') goto yy79;
+			if (yych <= '`') goto yy57;
+			if (yych >= 'g') goto yy57;
+		}
+yy79:
 		++YYCURSOR;
 		{
 		s->str_esc += 8;
@@ -889,22 +889,22 @@ yy103:
 /* *********************************** */
 yyc_STR_P2:
 		yych = *YYCURSOR;
-		if (yych == '"') goto yy109;
-		if (yych == '\\') goto yy111;
+		if (yych == '"') goto yy81;
+		if (yych == '\\') goto yy82;
 		++YYCURSOR;
 		{ PHP_JSON_CONDITION_GOTO(STR_P2); }
-yy109:
+yy81:
 		++YYCURSOR;
 		YYSETCONDITION(yycJS);
 		{
 		PHP_JSON_SCANNER_COPY_ESC();
 		return PHP_JSON_T_STRING;
 	}
-yy111:
+yy82:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
-		if (yych == 'u') goto yy113;
-yy112:
+		if (yych == 'u') goto yy84;
+yy83:
 		{
 		char esc;
 		PHP_JSON_SCANNER_COPY_ESC();
@@ -938,240 +938,240 @@ yy112:
 		s->str_start = s->cursor;
 		PHP_JSON_CONDITION_GOTO(STR_P2);
 	}
-yy113:
+yy84:
 		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy115, &&yy116, &&yy116, &&yy116, &&yy116, &&yy116, &&yy116, &&yy116,
-				&&yy116, &&yy116, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy116, &&yy116, &&yy116, &&yy117, &&yy116, &&yy116, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy116, &&yy116, &&yy116, &&yy117, &&yy116, &&yy116, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy86, &&yy87, &&yy87, &&yy87, &&yy87, &&yy87, &&yy87, &&yy87,
+				&&yy87, &&yy87, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy87, &&yy87, &&yy87, &&yy88, &&yy87, &&yy87, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy87, &&yy87, &&yy87, &&yy88, &&yy87, &&yy87, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85
 			};
 			goto *yytarget[yych];
 		}
-yy114:
+yy85:
 		YYCURSOR = YYMARKER;
 		if (yyaccept == 0) {
-			goto yy112;
+			goto yy83;
 		} else {
-			goto yy131;
+			goto yy100;
 		}
-yy115:
+yy86:
 		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy118, &&yy119, &&yy119, &&yy119, &&yy119, &&yy119, &&yy119, &&yy119,
-				&&yy120, &&yy120, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy120, &&yy120, &&yy120, &&yy120, &&yy120, &&yy120, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy120, &&yy120, &&yy120, &&yy120, &&yy120, &&yy120, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy89, &&yy90, &&yy90, &&yy90, &&yy90, &&yy90, &&yy90, &&yy90,
+				&&yy91, &&yy91, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy91, &&yy91, &&yy91, &&yy91, &&yy91, &&yy91, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy91, &&yy91, &&yy91, &&yy91, &&yy91, &&yy91, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85
 			};
 			goto *yytarget[yych];
 		}
-yy116:
+yy87:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych <= '9') goto yy120;
-			goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych <= '9') goto yy91;
+			goto yy85;
 		} else {
-			if (yych <= 'F') goto yy120;
-			if (yych <= '`') goto yy114;
-			if (yych <= 'f') goto yy120;
-			goto yy114;
+			if (yych <= 'F') goto yy91;
+			if (yych <= '`') goto yy85;
+			if (yych <= 'f') goto yy91;
+			goto yy85;
 		}
-yy117:
+yy88:
 		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy120, &&yy120, &&yy120, &&yy120, &&yy120, &&yy120, &&yy120, &&yy120,
-				&&yy121, &&yy121, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy121, &&yy121, &&yy120, &&yy120, &&yy120, &&yy120, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy121, &&yy121, &&yy120, &&yy120, &&yy120, &&yy120, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114,
-				&&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114, &&yy114
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy91, &&yy91, &&yy91, &&yy91, &&yy91, &&yy91, &&yy91, &&yy91,
+				&&yy92, &&yy92, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy92, &&yy92, &&yy91, &&yy91, &&yy91, &&yy91, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy92, &&yy92, &&yy91, &&yy91, &&yy91, &&yy91, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
+				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85
 			};
 			goto *yytarget[yych];
 		}
-yy118:
+yy89:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych <= '7') goto yy122;
-			if (yych <= '9') goto yy123;
-			goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych <= '7') goto yy93;
+			if (yych <= '9') goto yy94;
+			goto yy85;
 		} else {
-			if (yych <= 'F') goto yy123;
-			if (yych <= '`') goto yy114;
-			if (yych <= 'f') goto yy123;
-			goto yy114;
+			if (yych <= 'F') goto yy94;
+			if (yych <= '`') goto yy85;
+			if (yych <= 'f') goto yy94;
+			goto yy85;
 		}
-yy119:
+yy90:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych <= '9') goto yy123;
-			goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych <= '9') goto yy94;
+			goto yy85;
 		} else {
-			if (yych <= 'F') goto yy123;
-			if (yych <= '`') goto yy114;
-			if (yych <= 'f') goto yy123;
-			goto yy114;
+			if (yych <= 'F') goto yy94;
+			if (yych <= '`') goto yy85;
+			if (yych <= 'f') goto yy94;
+			goto yy85;
 		}
-yy120:
+yy91:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych <= '9') goto yy124;
-			goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych <= '9') goto yy95;
+			goto yy85;
 		} else {
-			if (yych <= 'F') goto yy124;
-			if (yych <= '`') goto yy114;
-			if (yych <= 'f') goto yy124;
-			goto yy114;
+			if (yych <= 'F') goto yy95;
+			if (yych <= '`') goto yy85;
+			if (yych <= 'f') goto yy95;
+			goto yy85;
 		}
-yy121:
+yy92:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych <= '9') goto yy125;
-			goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych <= '9') goto yy96;
+			goto yy85;
 		} else {
-			if (yych <= 'F') goto yy125;
-			if (yych <= '`') goto yy114;
-			if (yych <= 'f') goto yy125;
-			goto yy114;
+			if (yych <= 'F') goto yy96;
+			if (yych <= '`') goto yy85;
+			if (yych <= 'f') goto yy96;
+			goto yy85;
 		}
-yy122:
+yy93:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych <= '9') goto yy126;
-			goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych <= '9') goto yy97;
+			goto yy85;
 		} else {
-			if (yych <= 'F') goto yy126;
-			if (yych <= '`') goto yy114;
-			if (yych <= 'f') goto yy126;
-			goto yy114;
+			if (yych <= 'F') goto yy97;
+			if (yych <= '`') goto yy85;
+			if (yych <= 'f') goto yy97;
+			goto yy85;
 		}
-yy123:
+yy94:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych <= '9') goto yy128;
-			goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych <= '9') goto yy98;
+			goto yy85;
 		} else {
-			if (yych <= 'F') goto yy128;
-			if (yych <= '`') goto yy114;
-			if (yych <= 'f') goto yy128;
-			goto yy114;
+			if (yych <= 'F') goto yy98;
+			if (yych <= '`') goto yy85;
+			if (yych <= 'f') goto yy98;
+			goto yy85;
 		}
-yy124:
+yy95:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych <= '9') goto yy130;
-			goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych <= '9') goto yy99;
+			goto yy85;
 		} else {
-			if (yych <= 'F') goto yy130;
-			if (yych <= '`') goto yy114;
-			if (yych <= 'f') goto yy130;
-			goto yy114;
+			if (yych <= 'F') goto yy99;
+			if (yych <= '`') goto yy85;
+			if (yych <= 'f') goto yy99;
+			goto yy85;
 		}
-yy125:
+yy96:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych <= '9') goto yy132;
-			goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych <= '9') goto yy101;
+			goto yy85;
 		} else {
-			if (yych <= 'F') goto yy132;
-			if (yych <= '`') goto yy114;
-			if (yych <= 'f') goto yy132;
-			goto yy114;
+			if (yych <= 'F') goto yy101;
+			if (yych <= '`') goto yy85;
+			if (yych <= 'f') goto yy101;
+			goto yy85;
 		}
-yy126:
+yy97:
 		++YYCURSOR;
 		{
 		int utf16 = php_json_ucs2_to_int(s, 2);
@@ -1180,7 +1180,7 @@ yy126:
 		s->str_start = s->cursor;
 		PHP_JSON_CONDITION_GOTO(STR_P2);
 	}
-yy128:
+yy98:
 		++YYCURSOR;
 		{
 		int utf16 = php_json_ucs2_to_int(s, 3);
@@ -1190,9 +1190,9 @@ yy128:
 		s->str_start = s->cursor;
 		PHP_JSON_CONDITION_GOTO(STR_P2);
 	}
-yy130:
+yy99:
 		++YYCURSOR;
-yy131:
+yy100:
 		{
 		int utf16 = php_json_ucs2_to_int(s, 4);
 		PHP_JSON_SCANNER_COPY_UTF();
@@ -1202,42 +1202,42 @@ yy131:
 		s->str_start = s->cursor;
 		PHP_JSON_CONDITION_GOTO(STR_P2);
 	}
-yy132:
+yy101:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
-		if (yych != '\\') goto yy131;
+		if (yych != '\\') goto yy100;
 		yych = *++YYCURSOR;
-		if (yych != 'u') goto yy114;
+		if (yych != 'u') goto yy85;
 		yych = *++YYCURSOR;
-		if (yych == 'D') goto yy135;
-		if (yych != 'd') goto yy114;
-yy135:
+		if (yych == 'D') goto yy102;
+		if (yych != 'd') goto yy85;
+yy102:
 		yych = *++YYCURSOR;
-		if (yych <= 'B') goto yy114;
-		if (yych <= 'F') goto yy136;
-		if (yych <= 'b') goto yy114;
-		if (yych >= 'g') goto yy114;
-yy136:
-		yych = *++YYCURSOR;
-		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych >= ':') goto yy114;
-		} else {
-			if (yych <= 'F') goto yy137;
-			if (yych <= '`') goto yy114;
-			if (yych >= 'g') goto yy114;
-		}
-yy137:
+		if (yych <= 'B') goto yy85;
+		if (yych <= 'F') goto yy103;
+		if (yych <= 'b') goto yy85;
+		if (yych >= 'g') goto yy85;
+yy103:
 		yych = *++YYCURSOR;
 		if (yych <= '@') {
-			if (yych <= '/') goto yy114;
-			if (yych >= ':') goto yy114;
+			if (yych <= '/') goto yy85;
+			if (yych >= ':') goto yy85;
 		} else {
-			if (yych <= 'F') goto yy138;
-			if (yych <= '`') goto yy114;
-			if (yych >= 'g') goto yy114;
+			if (yych <= 'F') goto yy104;
+			if (yych <= '`') goto yy85;
+			if (yych >= 'g') goto yy85;
 		}
-yy138:
+yy104:
+		yych = *++YYCURSOR;
+		if (yych <= '@') {
+			if (yych <= '/') goto yy85;
+			if (yych >= ':') goto yy85;
+		} else {
+			if (yych <= 'F') goto yy105;
+			if (yych <= '`') goto yy85;
+			if (yych >= 'g') goto yy85;
+		}
+yy105:
 		++YYCURSOR;
 		{
 		int utf32, utf16_hi, utf16_lo;

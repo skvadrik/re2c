@@ -30,18 +30,18 @@ yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x00: goto yy3;
-		case '\n': goto yy5;
+		case 0x00: goto yy2;
+		case '\n': goto yy3;
 		default: goto yy1;
 	}
-yy3:
+yy2:
 	++YYCURSOR;
 #line 27 "bug1472770.re"
 	{
 		return n;
 	}
 #line 44 "bug1472770.c"
-yy5:
+yy3:
 	++YYCURSOR;
 #line 22 "bug1472770.re"
 	{

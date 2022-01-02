@@ -280,280 +280,280 @@ yyFillLabel0:
 	yych = *YYCURSOR;
 	{
 		static void *yytarget[256] = {
-			&&yy3,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy7,  &&yy9,  &&yy7,  &&yy7,  &&yy7,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy7,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy11, &&yy13, &&yy15, &&yy17, &&yy5,  &&yy19, &&yy5,  &&yy21,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy5,  &&yy5,  &&yy5,  &&yy26, &&yy5,  &&yy5,
-			&&yy5,  &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28,
-			&&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28,
-			&&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28,
-			&&yy28, &&yy28, &&yy28, &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy28,
-			&&yy5,  &&yy28, &&yy31, &&yy28, &&yy28, &&yy32, &&yy33, &&yy34,
-			&&yy28, &&yy35, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28,
-			&&yy28, &&yy28, &&yy36, &&yy28, &&yy28, &&yy28, &&yy28, &&yy37,
-			&&yy28, &&yy28, &&yy28, &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5
+			&&yy2,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy4,  &&yy5,  &&yy4,  &&yy4,  &&yy4,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy4,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy6,  &&yy7,  &&yy8,  &&yy9,  &&yy3,  &&yy10, &&yy3,  &&yy11,
+			&&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12,
+			&&yy12, &&yy12, &&yy3,  &&yy3,  &&yy3,  &&yy13, &&yy3,  &&yy3,
+			&&yy3,  &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14,
+			&&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14,
+			&&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14,
+			&&yy14, &&yy14, &&yy14, &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy14,
+			&&yy3,  &&yy14, &&yy16, &&yy14, &&yy14, &&yy17, &&yy18, &&yy19,
+			&&yy14, &&yy20, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14,
+			&&yy14, &&yy14, &&yy21, &&yy14, &&yy14, &&yy14, &&yy14, &&yy22,
+			&&yy14, &&yy14, &&yy14, &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3
 		};
 		goto *yytarget[yych];
 	}
-yy3:
+yy2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 260 "push_fg.re"
 	{ send(kEOF); return 1;  }
 #line 324 "push_fg.c"
-yy5:
+yy3:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 261 "push_fg.re"
 	{ SEND(kUnknown);        }
 #line 330 "push_fg.c"
-yy7:
+yy4:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 259 "push_fg.re"
 	{ SKIP();                }
 #line 336 "push_fg.c"
-yy9:
+yy5:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 258 "push_fg.re"
 	{ SKIP();                }
 #line 342 "push_fg.c"
-yy11:
+yy6:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 251 "push_fg.re"
 	{ SEND(kLeftParen);      }
 #line 348 "push_fg.c"
-yy13:
+yy7:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 252 "push_fg.re"
 	{ SEND(kRightParen);     }
 #line 354 "push_fg.c"
-yy15:
+yy8:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 255 "push_fg.re"
 	{ SEND(kStar);           }
 #line 360 "push_fg.c"
-yy17:
+yy9:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 254 "push_fg.re"
 	{ SEND(kPlus);           }
 #line 366 "push_fg.c"
-yy19:
+yy10:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 253 "push_fg.re"
 	{ SEND(kMinus);          }
 #line 372 "push_fg.c"
-yy21:
+yy11:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 256 "push_fg.re"
 	{ SEND(kSlash);          }
 #line 378 "push_fg.c"
-yy23:
+yy12:
 	++YYCURSOR;
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 64) {
-		goto yy23;
+		goto yy12;
 	}
 	YYSETSTATE(-1);
 #line 248 "push_fg.re"
 	{ SEND(kDecimalConstant);}
 #line 391 "push_fg.c"
-yy26:
+yy13:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 250 "push_fg.re"
 	{ SEND(kEqual);          }
 #line 397 "push_fg.c"
-yy28:
+yy14:
 	++YYCURSOR;
 	YYSETSTATE(2);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel2:
 	yych = *YYCURSOR;
-yy29:
+yy15:
 	if (yybm[0+yych] & 128) {
-		goto yy28;
+		goto yy14;
 	}
 	YYSETSTATE(-1);
 #line 247 "push_fg.re"
 	{ SEND(kIdentifier);     }
 #line 411 "push_fg.c"
-yy31:
+yy16:
 	yych = *++YYCURSOR;
-	if (yych == 'r') goto yy38;
-	goto yy29;
-yy32:
+	if (yych == 'r') goto yy23;
+	goto yy15;
+yy17:
 	yych = *++YYCURSOR;
-	if (yych == 'l') goto yy39;
-	goto yy29;
-yy33:
+	if (yych == 'l') goto yy24;
+	goto yy15;
+yy18:
 	yych = *++YYCURSOR;
-	if (yych == 'o') goto yy40;
-	goto yy29;
-yy34:
+	if (yych == 'o') goto yy25;
+	goto yy15;
+yy19:
 	yych = *++YYCURSOR;
-	if (yych == 'o') goto yy41;
-	goto yy29;
-yy35:
+	if (yych == 'o') goto yy26;
+	goto yy15;
+yy20:
 	yych = *++YYCURSOR;
-	if (yych == 'f') goto yy42;
-	goto yy29;
-yy36:
+	if (yych == 'f') goto yy27;
+	goto yy15;
+yy21:
 	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy44;
-	goto yy29;
-yy37:
+	if (yych == 'e') goto yy28;
+	goto yy15;
+yy22:
 	yych = *++YYCURSOR;
-	if (yych == 'h') goto yy45;
-	goto yy29;
-yy38:
+	if (yych == 'h') goto yy29;
+	goto yy15;
+yy23:
 	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy46;
-	goto yy29;
-yy39:
+	if (yych == 'e') goto yy30;
+	goto yy15;
+yy24:
 	yych = *++YYCURSOR;
-	if (yych == 's') goto yy47;
-	goto yy29;
-yy40:
+	if (yych == 's') goto yy31;
+	goto yy15;
+yy25:
 	yych = *++YYCURSOR;
-	if (yych == 'r') goto yy48;
-	goto yy29;
-yy41:
+	if (yych == 'r') goto yy32;
+	goto yy15;
+yy26:
 	yych = *++YYCURSOR;
-	if (yych == 't') goto yy50;
-	goto yy29;
-yy42:
+	if (yych == 't') goto yy33;
+	goto yy15;
+yy27:
 	yych = *++YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy28;
+		goto yy14;
 	}
 	YYSETSTATE(-1);
 #line 240 "push_fg.re"
 	{ SEND(kIf);             }
 #line 464 "push_fg.c"
-yy44:
+yy28:
 	yych = *++YYCURSOR;
-	if (yych == 't') goto yy51;
-	goto yy29;
-yy45:
+	if (yych == 't') goto yy34;
+	goto yy15;
+yy29:
 	yych = *++YYCURSOR;
-	if (yych == 'i') goto yy52;
-	goto yy29;
-yy46:
+	if (yych == 'i') goto yy35;
+	goto yy15;
+yy30:
 	yych = *++YYCURSOR;
-	if (yych == 'a') goto yy53;
-	goto yy29;
-yy47:
+	if (yych == 'a') goto yy36;
+	goto yy15;
+yy31:
 	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy54;
-	goto yy29;
-yy48:
+	if (yych == 'e') goto yy37;
+	goto yy15;
+yy32:
 	yych = *++YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy28;
+		goto yy14;
 	}
 	YYSETSTATE(-1);
 #line 241 "push_fg.re"
 	{ SEND(kFor);            }
 #line 489 "push_fg.c"
-yy50:
+yy33:
 	yych = *++YYCURSOR;
-	if (yych == 'o') goto yy56;
-	goto yy29;
-yy51:
+	if (yych == 'o') goto yy38;
+	goto yy15;
+yy34:
 	yych = *++YYCURSOR;
-	if (yych == 'u') goto yy58;
-	goto yy29;
-yy52:
+	if (yych == 'u') goto yy39;
+	goto yy15;
+yy35:
 	yych = *++YYCURSOR;
-	if (yych == 'l') goto yy59;
-	goto yy29;
-yy53:
+	if (yych == 'l') goto yy40;
+	goto yy15;
+yy36:
 	yych = *++YYCURSOR;
-	if (yych == 'k') goto yy60;
-	goto yy29;
-yy54:
+	if (yych == 'k') goto yy41;
+	goto yy15;
+yy37:
 	yych = *++YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy28;
+		goto yy14;
 	}
 	YYSETSTATE(-1);
 #line 242 "push_fg.re"
 	{ SEND(kElse);           }
 #line 514 "push_fg.c"
-yy56:
+yy38:
 	yych = *++YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy28;
+		goto yy14;
 	}
 	YYSETSTATE(-1);
 #line 243 "push_fg.re"
 	{ SEND(kGoto);           }
 #line 523 "push_fg.c"
-yy58:
+yy39:
 	yych = *++YYCURSOR;
-	if (yych == 'r') goto yy62;
-	goto yy29;
-yy59:
+	if (yych == 'r') goto yy42;
+	goto yy15;
+yy40:
 	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy63;
-	goto yy29;
-yy60:
+	if (yych == 'e') goto yy43;
+	goto yy15;
+yy41:
 	yych = *++YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy28;
+		goto yy14;
 	}
 	YYSETSTATE(-1);
 #line 244 "push_fg.re"
 	{ SEND(kBreak);          }
 #line 540 "push_fg.c"
-yy62:
+yy42:
 	yych = *++YYCURSOR;
-	if (yych == 'n') goto yy65;
-	goto yy29;
-yy63:
+	if (yych == 'n') goto yy44;
+	goto yy15;
+yy43:
 	yych = *++YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy28;
+		goto yy14;
 	}
 	YYSETSTATE(-1);
 #line 245 "push_fg.re"
 	{ SEND(kWhile);          }
 #line 553 "push_fg.c"
-yy65:
+yy44:
 	yych = *++YYCURSOR;
 	if (yybm[0+yych] & 128) {
-		goto yy28;
+		goto yy14;
 	}
 	YYSETSTATE(-1);
 #line 246 "push_fg.re"

@@ -35,41 +35,41 @@
 yyc_c1:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
+		case 'a': goto yy2;
 		case 'b':
-		case 'c': goto yy6;
-		case 'd': goto yy8;
+		case 'c': goto yy3;
+		case 'd': goto yy4;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy10;
-			goto yy2;
+			if (YYLIMIT <= YYCURSOR) goto yy5;
+			goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 	{ f1(); }
 #line 18 "reuse/inline_use_conditions.re"
 	{ return xdef1; }
 #line 52 "reuse/inline_use_conditions.c"
-yy4:
+yy2:
 	++YYCURSOR;
 	{ f1(); }
 #line 16 "reuse/inline_use_conditions.re"
 	{ return xa; }
 #line 58 "reuse/inline_use_conditions.c"
-yy6:
+yy3:
 	++YYCURSOR;
 	YYSETCONDITION(yycc2);
 	{ f1(); }
 #line 17 "reuse/inline_use_conditions.re"
 	{ return xbc; }
 #line 65 "reuse/inline_use_conditions.c"
-yy8:
+yy4:
 	++YYCURSOR;
 	YYSETCONDITION(yycc3);
 	{ f1(); }
 #line 28 "reuse/inline_use_conditions.re"
 	{ return ybd; }
 #line 72 "reuse/inline_use_conditions.c"
-yy10:
+yy5:
 	{ f1(); }
 #line 45 "reuse/inline_use_conditions.re"
 	{ return eof; }
@@ -78,24 +78,24 @@ yy10:
 yyc_c2:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy15;
+		case 'a': goto yy8;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy17;
-			goto yy13;
+			if (YYLIMIT <= YYCURSOR) goto yy9;
+			goto yy7;
 	}
-yy13:
+yy7:
 	++YYCURSOR;
 	{ f2(x); }
 #line 44 "reuse/inline_use_conditions.re"
 	{ return def; }
 #line 92 "reuse/inline_use_conditions.c"
-yy15:
+yy8:
 	++YYCURSOR;
 	{ f2(x); }
 #line 16 "reuse/inline_use_conditions.re"
 	{ return xa; }
 #line 98 "reuse/inline_use_conditions.c"
-yy17:
+yy9:
 	{ f2(x); }
 #line 46 "reuse/inline_use_conditions.re"
 	{ return eof2; }
@@ -104,24 +104,24 @@ yy17:
 yyc_c3:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy22;
+		case 'a': goto yy12;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy24;
-			goto yy20;
+			if (YYLIMIT <= YYCURSOR) goto yy13;
+			goto yy11;
 	}
-yy20:
+yy11:
 	++YYCURSOR;
 	{ f3(y); }
 #line 44 "reuse/inline_use_conditions.re"
 	{ return def; }
 #line 118 "reuse/inline_use_conditions.c"
-yy22:
+yy12:
 	++YYCURSOR;
 	{ f3(y); }
 #line 27 "reuse/inline_use_conditions.re"
 	{ return ya; }
 #line 124 "reuse/inline_use_conditions.c"
-yy24:
+yy13:
 	{ f3(y); }
 #line 31 "reuse/inline_use_conditions.re"
 	{ return yeof3; }
@@ -147,41 +147,41 @@ yy24:
 yyc_c1:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy29;
+		case 'a': goto yy16;
 		case 'b':
-		case 'd': goto yy31;
-		case 'c': goto yy33;
+		case 'd': goto yy17;
+		case 'c': goto yy18;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy35;
-			goto yy27;
+			if (YYLIMIT <= YYCURSOR) goto yy19;
+			goto yy15;
 	}
-yy27:
+yy15:
 	++YYCURSOR;
 	{ f(y); }
 #line 29 "reuse/inline_use_conditions.re"
 	{ return ydef1; }
 #line 164 "reuse/inline_use_conditions.c"
-yy29:
+yy16:
 	++YYCURSOR;
 	{ f(y); }
 #line 27 "reuse/inline_use_conditions.re"
 	{ return ya; }
 #line 170 "reuse/inline_use_conditions.c"
-yy31:
+yy17:
 	++YYCURSOR;
 	YYSETCONDITION(yycc3);
 	{ f(y); }
 #line 28 "reuse/inline_use_conditions.re"
 	{ return ybd; }
 #line 177 "reuse/inline_use_conditions.c"
-yy33:
+yy18:
 	++YYCURSOR;
 	YYSETCONDITION(yycc2);
 	{ f(y); }
 #line 17 "reuse/inline_use_conditions.re"
 	{ return xbc; }
 #line 184 "reuse/inline_use_conditions.c"
-yy35:
+yy19:
 	{ f(y); }
 #line 32 "reuse/inline_use_conditions.re"
 	{ return yeof; }
@@ -190,24 +190,24 @@ yy35:
 yyc_c3:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy40;
+		case 'a': goto yy22;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy42;
-			goto yy38;
+			if (YYLIMIT <= YYCURSOR) goto yy23;
+			goto yy21;
 	}
-yy38:
+yy21:
 	++YYCURSOR;
 	{ f3(y); }
 #line 30 "reuse/inline_use_conditions.re"
 	{ return ydef; }
 #line 204 "reuse/inline_use_conditions.c"
-yy40:
+yy22:
 	++YYCURSOR;
 	{ f3(y); }
 #line 27 "reuse/inline_use_conditions.re"
 	{ return ya; }
 #line 210 "reuse/inline_use_conditions.c"
-yy42:
+yy23:
 	{ f3(y); }
 #line 31 "reuse/inline_use_conditions.re"
 	{ return yeof3; }
@@ -216,24 +216,24 @@ yy42:
 yyc_c2:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy47;
+		case 'a': goto yy26;
 		default:
-			if (YYLIMIT <= YYCURSOR) goto yy49;
-			goto yy45;
+			if (YYLIMIT <= YYCURSOR) goto yy27;
+			goto yy25;
 	}
-yy45:
+yy25:
 	++YYCURSOR;
 	{ f2(x); }
 #line 30 "reuse/inline_use_conditions.re"
 	{ return ydef; }
 #line 230 "reuse/inline_use_conditions.c"
-yy47:
+yy26:
 	++YYCURSOR;
 	{ f2(x); }
 #line 16 "reuse/inline_use_conditions.re"
 	{ return xa; }
 #line 236 "reuse/inline_use_conditions.c"
-yy49:
+yy27:
 	{ f2(x); }
 #line 20 "reuse/inline_use_conditions.re"
 	{ return xeof2; }

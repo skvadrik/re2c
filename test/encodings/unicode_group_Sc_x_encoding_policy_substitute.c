@@ -17,58 +17,58 @@ Sc:
 	if (yych <= 0x0E3E) {
 		if (yych <= 0x060B) {
 			if (yych <= 0x00A5) {
-				if (yych == '$') goto yy4;
-				if (yych >= 0x00A2) goto yy4;
+				if (yych == '$') goto yy2;
+				if (yych >= 0x00A2) goto yy2;
 			} else {
-				if (yych == 0x058F) goto yy4;
-				if (yych >= 0x060B) goto yy4;
+				if (yych == 0x058F) goto yy2;
+				if (yych >= 0x060B) goto yy2;
 			}
 		} else {
 			if (yych <= 0x09FB) {
-				if (yych <= 0x09F1) goto yy2;
-				if (yych <= 0x09F3) goto yy4;
-				if (yych >= 0x09FB) goto yy4;
+				if (yych <= 0x09F1) goto yy1;
+				if (yych <= 0x09F3) goto yy2;
+				if (yych >= 0x09FB) goto yy2;
 			} else {
 				if (yych <= 0x0AF1) {
-					if (yych >= 0x0AF1) goto yy4;
+					if (yych >= 0x0AF1) goto yy2;
 				} else {
-					if (yych == 0x0BF9) goto yy4;
+					if (yych == 0x0BF9) goto yy2;
 				}
 			}
 		}
 	} else {
 		if (yych <= 0xFDFC) {
 			if (yych <= 0x209F) {
-				if (yych <= 0x0E3F) goto yy4;
-				if (yych == 0x17DB) goto yy4;
+				if (yych <= 0x0E3F) goto yy2;
+				if (yych == 0x17DB) goto yy2;
 			} else {
 				if (yych <= 0xA837) {
-					if (yych <= 0x20BD) goto yy4;
+					if (yych <= 0x20BD) goto yy2;
 				} else {
-					if (yych <= 0xA838) goto yy4;
-					if (yych >= 0xFDFC) goto yy4;
+					if (yych <= 0xA838) goto yy2;
+					if (yych >= 0xFDFC) goto yy2;
 				}
 			}
 		} else {
 			if (yych <= 0xFF04) {
-				if (yych == 0xFE69) goto yy4;
-				if (yych >= 0xFF04) goto yy4;
+				if (yych == 0xFE69) goto yy2;
+				if (yych >= 0xFF04) goto yy2;
 			} else {
 				if (yych <= 0xFFE1) {
-					if (yych >= 0xFFE0) goto yy4;
+					if (yych >= 0xFFE0) goto yy2;
 				} else {
-					if (yych <= 0xFFE4) goto yy2;
-					if (yych <= 0xFFE6) goto yy4;
+					if (yych <= 0xFFE4) goto yy1;
+					if (yych <= 0xFFE6) goto yy2;
 				}
 			}
 		}
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Sc_x_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }
 #line 71 "encodings/unicode_group_Sc_x_encoding_policy_substitute.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Sc_x_encoding_policy_substitute.re"
 	{ goto Sc; }

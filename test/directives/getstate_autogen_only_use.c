@@ -26,10 +26,10 @@ yyFillLabel0:
 
 
 	switch (YYGETSTATE()) {
-		default: goto yy5;
+		default: goto yy2;
 		case 1: goto yyFillLabel1;
 	}
-yy5:
+yy2:
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:

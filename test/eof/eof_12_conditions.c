@@ -33,22 +33,30 @@ yyc_init:
 	yych = *cur;
 	switch (yych) {
 		case '\t':
-		case ' ': goto yy4;
-		case '\n': goto yy7;
-		case '/': goto yy10;
+		case ' ': goto yy3;
+		case '\n': goto yy5;
+		case '/': goto yy7;
 		default:
-			if (lim <= cur) goto yy16;
-			goto yy2;
+			if (lim <= cur) goto yy11;
+			goto yy1;
 	}
-yy2:
+yy1:
 	++cur;
-yy3:
+yy2:
 	{ return -1; }
-yy4:
+yy3:
 	yych = *++cur;
 	switch (yych) {
 		case '\t':
-		case ' ': goto yy4;
+		case ' ': goto yy3;
+		default: goto yy4;
+	}
+yy4:
+	{ goto loop; }
+yy5:
+	yych = *++cur;
+	switch (yych) {
+		case '\n': goto yy5;
 		default: goto yy6;
 	}
 yy6:
@@ -56,84 +64,76 @@ yy6:
 yy7:
 	yych = *++cur;
 	switch (yych) {
-		case '\n': goto yy7;
-		default: goto yy9;
+		case '*': goto yy8;
+		case '/': goto yy9;
+		default: goto yy2;
 	}
-yy9:
-	{ goto loop; }
-yy10:
-	yych = *++cur;
-	switch (yych) {
-		case '*': goto yy11;
-		case '/': goto yy13;
-		default: goto yy3;
-	}
-yy11:
+yy8:
 	++cur;
 	condition = yyccomment;
 	goto yyc_comment;
-yy13:
+yy9:
 	yych = *++cur;
 	switch (yych) {
-		case '\n': goto yy15;
+		case '\n': goto yy10;
 		default:
-			if (lim <= cur) goto yy15;
-			goto yy13;
+			if (lim <= cur) goto yy10;
+			goto yy9;
 	}
-yy15:
+yy10:
 	{ goto loop; }
-yy16:
+yy11:
 	{ return  0; }
 /* *********************************** */
 yyc_comment:
 	yych = *cur;
 	switch (yych) {
-		case '\n': goto yy22;
-		case '*': goto yy25;
+		case '\n': goto yy15;
+		case '*': goto yy17;
 		default:
-			if (lim <= cur) goto yy32;
-			goto yy19;
+			if (lim <= cur) goto yy21;
+			goto yy13;
 	}
+yy13:
+	yych = *++cur;
+	switch (yych) {
+		case '\n': goto yy14;
+		case '*': goto yy19;
+		default:
+			if (lim <= cur) goto yy14;
+			goto yy13;
+	}
+yy14:
+	goto yyc_comment;
+yy15:
+	yych = *++cur;
+	switch (yych) {
+		case '\n': goto yy15;
+		default: goto yy16;
+	}
+yy16:
+	{ goto loop; }
+yy17:
+	yych = *++cur;
+	switch (yych) {
+		case '*': goto yy17;
+		case '/': goto yy20;
+		default: goto yy18;
+	}
+yy18:
+	goto yyc_comment;
 yy19:
 	yych = *++cur;
 	switch (yych) {
-		case '\n': goto yy21;
-		case '*': goto yy28;
-		default:
-			if (lim <= cur) goto yy21;
-			goto yy19;
+		case '*': goto yy19;
+		case '/': goto yy20;
+		default: goto yy14;
 	}
-yy21:
-	goto yyc_comment;
-yy22:
-	yych = *++cur;
-	switch (yych) {
-		case '\n': goto yy22;
-		default: goto yy24;
-	}
-yy24:
-	{ goto loop; }
-yy25:
-	yych = *++cur;
-	switch (yych) {
-		case '*': goto yy25;
-		case '/': goto yy30;
-		default: goto yy27;
-	}
-yy27:
-	goto yyc_comment;
-yy28:
-	yych = *++cur;
-	switch (yych) {
-		case '*': goto yy28;
-		case '/': goto yy30;
-		default: goto yy21;
-	}
-yy30:
+yy20:
 	++cur;
 	condition = yycinit;
 	{ goto loop; }
-yy32:
+yy21:
 	{ return -1; }
 
 }

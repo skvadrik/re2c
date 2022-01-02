@@ -74,8 +74,7 @@ public:
     Scratchbuf& yybm_char(uint32_t u, const opt_t *opts, int width);
     Scratchbuf& exact_uint(size_t width);
 
-    Scratchbuf& label(const Label &l, bool check_used = false) {
-        // TODO: enforce `check_used` by default.
+    Scratchbuf& label(const Label &l, bool check_used = true) {
         assert((l.used || !check_used) && l.index != Label::NONE);
         os << l.index;
         return *this;

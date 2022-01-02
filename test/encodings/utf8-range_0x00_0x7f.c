@@ -7,8 +7,8 @@
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= 0x7F) goto yy3;
-yy3:
+	if (yych <= 0x7F) goto yy1;
+yy1:
 	++YYCURSOR;
 #line 3 "encodings/utf8-range_0x00_0x7f.re"
 	{ return 0; }

@@ -6,16 +6,16 @@
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy3;
+		case 'b': goto yy2;
 		default:
 			YYMTAGP(yytm2);
 			YYMTAGP(yytm2);
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	t = yytm2;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yytm1 = yytm2;
 	YYMTAGP(yytm1);
@@ -23,17 +23,17 @@ yy3:
 	YYMTAGP(yytm2);
 	YYSHIFTMTAG(yytm2, -1);
 	switch (yych) {
-		case 'b': goto yy4;
+		case 'b': goto yy3;
 		default:
 			YYMTAGP(yytm2);
-			goto yy2;
+			goto yy1;
 	}
-yy4:
+yy3:
 	++YYCURSOR;
 	yytm2 = yytm1;
 	YYMTAGP(yytm2);
 	YYSHIFTMTAG(yytm2, -1);
-	goto yy2;
+	goto yy1;
 }
 
 stadfa/stadfa_26.re:3:13: warning: rule matches empty string [-Wmatch-empty-string]

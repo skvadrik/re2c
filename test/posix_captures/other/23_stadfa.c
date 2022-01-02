@@ -6,40 +6,40 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'y': goto yy3;
+		case 'y': goto yy2;
 		default:
 			yyt1 = yyt2 = yyt3 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 2;
 	yypmatch[0] = yyt2;
 	yypmatch[2] = yyt3;
 	yypmatch[3] = yyt1;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt2 = yyt3 = YYCURSOR - 1;
+	switch (yych) {
+		case 'y': goto yy3;
+		default:
+			yyt1 = YYCURSOR;
+			goto yy1;
+	}
+yy3:
+	yych = *++YYCURSOR;
+	yyt3 = YYCURSOR - 1;
 	switch (yych) {
 		case 'y': goto yy4;
 		default:
 			yyt1 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
 yy4:
-	yych = *++YYCURSOR;
-	yyt3 = YYCURSOR - 1;
-	switch (yych) {
-		case 'y': goto yy5;
-		default:
-			yyt1 = YYCURSOR;
-			goto yy2;
-	}
-yy5:
 	++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
-	goto yy2;
+	goto yy1;
 }
 
 posix_captures/other/23_stadfa.re:6:4: warning: rule matches empty string [-Wmatch-empty-string]

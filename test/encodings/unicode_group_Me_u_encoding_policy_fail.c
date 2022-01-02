@@ -16,24 +16,24 @@ Me:
 	yych = *YYCURSOR;
 	if (yych <= 0x000020DC) {
 		if (yych <= 0x00000489) {
-			if (yych >= 0x00000488) goto yy4;
+			if (yych >= 0x00000488) goto yy2;
 		} else {
-			if (yych == 0x00001ABE) goto yy4;
+			if (yych == 0x00001ABE) goto yy2;
 		}
 	} else {
 		if (yych <= 0x000020E4) {
-			if (yych != 0x000020E1) goto yy4;
+			if (yych != 0x000020E1) goto yy2;
 		} else {
-			if (yych <= 0x0000A66F) goto yy2;
-			if (yych <= 0x0000A672) goto yy4;
+			if (yych <= 0x0000A66F) goto yy1;
+			if (yych <= 0x0000A672) goto yy2;
 		}
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Me_u_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
 #line 36 "encodings/unicode_group_Me_u_encoding_policy_fail.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Me_u_encoding_policy_fail.re"
 	{ goto Me; }

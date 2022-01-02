@@ -164,179 +164,179 @@ loop:
         yych = YYPEEK();
         {
             static void *yytarget[256] = {
-                &&yy3,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-                &&yy5,  &&yy5,  &&yy2,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+                &&yy2,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy1,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
                 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-                &&yy5,  &&yy5,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy9,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy11,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy12,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy14, &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
-                &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+                &&yy5,  &&yy5,  &&yy7,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy8,
+                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy9,
+                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy10, &&yy5,  &&yy5,  &&yy5,
                 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
                 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
                 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
                 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-                &&yy5,  &&yy5,  &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-                &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-                &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-                &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-                &&yy17, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-                &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy19, &&yy18, &&yy18,
-                &&yy20, &&yy21, &&yy21, &&yy21, &&yy22, &&yy5,  &&yy5,  &&yy5,
-                &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
+                &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
+                &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
+                &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
+                &&yy12, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13,
+                &&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy14, &&yy13, &&yy13,
+                &&yy15, &&yy16, &&yy16, &&yy16, &&yy17, &&yy3,  &&yy3,  &&yy3,
+                &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3
             };
             goto *yytarget[yych];
         }
-yy2:
+yy1:
         YYRESTORE();
         if (yyaccept == 0) {
-            goto yy8;
-        } else {
             goto yy6;
+        } else {
+            goto yy4;
         }
-yy3:
+yy2:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 7);
+        goto loop;
+yy3:
+        YYSKIP();
+yy4:
+        status = check_key_count_line44(keys_count, i, 3)
+             || action_line44(&i, keys, input, token, &cursor, 8);
         goto loop;
 yy5:
         YYSKIP();
 yy6:
         status = check_key_count_line44(keys_count, i, 3)
-             || action_line44(&i, keys, input, token, &cursor, 8);
-        goto loop;
-yy7:
-        YYSKIP();
-yy8:
-        status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 6);
         goto loop;
-yy9:
+yy7:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 4);
         goto loop;
-yy11:
+yy8:
         yyaccept = 0;
         YYSKIP();
         YYBACKUP();
         yych = YYPEEK();
-        if (yych <= '-') goto yy8;
-        if (yych <= '.') goto yy23;
-        if (yych <= '/') goto yy24;
-        goto yy8;
-yy12:
+        if (yych <= '-') goto yy6;
+        if (yych <= '.') goto yy18;
+        if (yych <= '/') goto yy19;
+        goto yy6;
+yy9:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 5);
         goto loop;
-yy14:
+yy10:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 3);
         goto loop;
-yy16:
+yy11:
         YYSKIP();
         yych = YYPEEK();
-        if (yych <= 0x7F) goto yy6;
-        if (yych <= 0xBF) goto yy7;
-        goto yy6;
+        if (yych <= 0x7F) goto yy4;
+        if (yych <= 0xBF) goto yy5;
+        goto yy4;
+yy12:
+        yyaccept = 1;
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
+        if (yych <= 0x9F) goto yy4;
+        if (yych <= 0xBF) goto yy20;
+        goto yy4;
+yy13:
+        yyaccept = 1;
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
+        if (yych <= 0x7F) goto yy4;
+        if (yych <= 0xBF) goto yy20;
+        goto yy4;
+yy14:
+        yyaccept = 1;
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
+        if (yych <= 0x7F) goto yy4;
+        if (yych <= 0x9F) goto yy20;
+        goto yy4;
+yy15:
+        yyaccept = 1;
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
+        if (yych <= 0x8F) goto yy4;
+        if (yych <= 0xBF) goto yy21;
+        goto yy4;
+yy16:
+        yyaccept = 1;
+        YYSKIP();
+        YYBACKUP();
+        yych = YYPEEK();
+        if (yych <= 0x7F) goto yy4;
+        if (yych <= 0xBF) goto yy21;
+        goto yy4;
 yy17:
         yyaccept = 1;
         YYSKIP();
         YYBACKUP();
         yych = YYPEEK();
-        if (yych <= 0x9F) goto yy6;
-        if (yych <= 0xBF) goto yy26;
-        goto yy6;
+        if (yych <= 0x7F) goto yy4;
+        if (yych <= 0x8F) goto yy21;
+        goto yy4;
 yy18:
-        yyaccept = 1;
         YYSKIP();
-        YYBACKUP();
         yych = YYPEEK();
-        if (yych <= 0x7F) goto yy6;
-        if (yych <= 0xBF) goto yy26;
-        goto yy6;
+        if (yych <= 0x00) goto yy22;
+        if (yych <= '-') goto yy1;
+        if (yych <= '.') goto yy23;
+        if (yych <= '/') goto yy22;
+        goto yy1;
 yy19:
-        yyaccept = 1;
-        YYSKIP();
-        YYBACKUP();
-        yych = YYPEEK();
-        if (yych <= 0x7F) goto yy6;
-        if (yych <= 0x9F) goto yy26;
-        goto yy6;
-yy20:
-        yyaccept = 1;
-        YYSKIP();
-        YYBACKUP();
-        yych = YYPEEK();
-        if (yych <= 0x8F) goto yy6;
-        if (yych <= 0xBF) goto yy27;
-        goto yy6;
-yy21:
-        yyaccept = 1;
-        YYSKIP();
-        YYBACKUP();
-        yych = YYPEEK();
-        if (yych <= 0x7F) goto yy6;
-        if (yych <= 0xBF) goto yy27;
-        goto yy6;
-yy22:
-        yyaccept = 1;
-        YYSKIP();
-        YYBACKUP();
-        yych = YYPEEK();
-        if (yych <= 0x7F) goto yy6;
-        if (yych <= 0x8F) goto yy27;
-        goto yy6;
-yy23:
-        YYSKIP();
-        yych = YYPEEK();
-        if (yych <= 0x00) goto yy28;
-        if (yych <= '-') goto yy2;
-        if (yych <= '.') goto yy30;
-        if (yych <= '/') goto yy28;
-        goto yy2;
-yy24:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 0);
         goto loop;
-yy26:
+yy20:
         YYSKIP();
         yych = YYPEEK();
-        if (yych <= 0x7F) goto yy2;
-        if (yych <= 0xBF) goto yy7;
-        goto yy2;
-yy27:
+        if (yych <= 0x7F) goto yy1;
+        if (yych <= 0xBF) goto yy5;
+        goto yy1;
+yy21:
         YYSKIP();
         yych = YYPEEK();
-        if (yych <= 0x7F) goto yy2;
-        if (yych <= 0xBF) goto yy26;
-        goto yy2;
-yy28:
+        if (yych <= 0x7F) goto yy1;
+        if (yych <= 0xBF) goto yy20;
+        goto yy1;
+yy22:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 2);
         goto loop;
-yy30:
+yy23:
         YYSKIP();
         yych = YYPEEK();
-        if (yych <= 0x00) goto yy31;
-        if (yych != '/') goto yy2;
-yy31:
+        if (yych <= 0x00) goto yy24;
+        if (yych != '/') goto yy1;
+yy24:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)
              || action_line44(&i, keys, input, token, &cursor, 1);

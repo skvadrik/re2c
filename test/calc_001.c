@@ -28,10 +28,10 @@ int scan(char *s, int l)
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			switch (yych) {
-				case 0x00: goto yy2;
-				case '+': goto yy6;
-				case '-': goto yy8;
-				case '0': goto yy10;
+				case 0x00: goto yy1;
+				case '+': goto yy3;
+				case '-': goto yy4;
+				case '0': goto yy5;
 				case '1':
 				case '2':
 				case '3':
@@ -40,30 +40,30 @@ int scan(char *s, int l)
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy12;
-				default: goto yy4;
+				case '9': goto yy7;
+				default: goto yy2;
 			}
-yy2:
+yy1:
 			++YYCURSOR;
 #line 68 "calc_001.re"
 			{ printf("EOF\n");	return 0; }
 #line 51 "calc_001.c"
-yy4:
+yy2:
 			++YYCURSOR;
 #line 69 "calc_001.re"
 			{ printf("ERR\n");	return 1; }
 #line 56 "calc_001.c"
-yy6:
+yy3:
 			++YYCURSOR;
 #line 66 "calc_001.re"
 			{ printf("+\n");	continue; }
 #line 61 "calc_001.c"
-yy8:
+yy4:
 			++YYCURSOR;
 #line 67 "calc_001.re"
 			{ printf("-\n");	continue; }
 #line 66 "calc_001.c"
-yy10:
+yy5:
 			yych = *++YYCURSOR;
 			switch (yych) {
 				case '0':
@@ -75,14 +75,14 @@ yy10:
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy15;
-				default: goto yy11;
+				case '9': goto yy9;
+				default: goto yy6;
 			}
-yy11:
+yy6:
 #line 65 "calc_001.re"
 			{ printf("Num\n");	continue; }
 #line 85 "calc_001.c"
-yy12:
+yy7:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -96,14 +96,14 @@ yy12:
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy12;
-				default: goto yy14;
+				case '9': goto yy7;
+				default: goto yy8;
 			}
-yy14:
+yy8:
 #line 64 "calc_001.re"
 			{ printf("Num\n");	continue; }
 #line 106 "calc_001.c"
-yy15:
+yy9:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -117,10 +117,10 @@ yy15:
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy15;
-				default: goto yy17;
+				case '9': goto yy9;
+				default: goto yy10;
 			}
-yy17:
+yy10:
 #line 63 "calc_001.re"
 			{ printf("Oct\n");	continue; }
 #line 127 "calc_001.c"

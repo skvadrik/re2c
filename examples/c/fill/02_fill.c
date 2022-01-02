@@ -58,12 +58,12 @@ static int lex(Input *in) {
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 	yych = *in->cur;
 	switch (yych) {
-		case 0x00: goto yy2;
-		case ' ': goto yy6;
-		case '\'': goto yy9;
-		default: goto yy4;
+		case 0x00: goto yy1;
+		case ' ': goto yy3;
+		case '\'': goto yy5;
+		default: goto yy2;
 	}
-yy2:
+yy1:
 	++in->cur;
 #line 56 "c/fill/02_fill.re"
 	{
@@ -71,42 +71,42 @@ yy2:
             return in->tok == in->lim - YYMAXFILL ? count : -1;
         }
 #line 74 "c/fill/02_fill.c"
-yy4:
+yy2:
 	++in->cur;
 #line 62 "c/fill/02_fill.re"
 	{ return -1; }
 #line 79 "c/fill/02_fill.c"
-yy6:
+yy3:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 	yych = *in->cur;
 	switch (yych) {
-		case ' ': goto yy6;
-		default: goto yy8;
+		case ' ': goto yy3;
+		default: goto yy4;
 	}
-yy8:
+yy4:
 #line 61 "c/fill/02_fill.re"
 	{ continue; }
 #line 91 "c/fill/02_fill.c"
-yy9:
+yy5:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 	yych = *in->cur;
 	switch (yych) {
-		case '\'': goto yy11;
-		case '\\': goto yy13;
-		default: goto yy9;
+		case '\'': goto yy6;
+		case '\\': goto yy7;
+		default: goto yy5;
 	}
-yy11:
+yy6:
 	++in->cur;
 #line 60 "c/fill/02_fill.re"
 	{ ++count; continue; }
 #line 105 "c/fill/02_fill.c"
-yy13:
+yy7:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 	yych = *in->cur;
-	goto yy9;
+	goto yy5;
 }
 #line 63 "c/fill/02_fill.re"
 }

@@ -56,82 +56,82 @@ yyFillLabel0:
 	yych = in.data[in.cursor]
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy3
 	case '\'':
-		goto yy7
+		goto yy5
 	default:
 		if (in.limit <= in.cursor) {
 			if (fill(in) == 0) {
 				goto yyFillLabel0
 			}
-			goto yy13
+			goto yy10
 		}
-		goto yy2
+		goto yy1
 	}
-yy2:
+yy1:
 	in.cursor += 1
-yy3:
+yy2:
 //line "go/fill/01_fill.re":59
 	{ return -1 }
 //line "go/fill/01_fill.go":77
-yy4:
+yy3:
 	in.cursor += 1
 yyFillLabel1:
 	yych = in.data[in.cursor]
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy3
 	default:
 		if (in.limit <= in.cursor) {
 			if (fill(in) == 0) {
 				goto yyFillLabel1
 			}
 		}
-		goto yy6
+		goto yy4
 	}
-yy6:
+yy4:
 //line "go/fill/01_fill.re":62
 	{ continue }
 //line "go/fill/01_fill.go":96
-yy7:
+yy5:
 	in.cursor += 1
 	in.marker = in.cursor
 yyFillLabel2:
 	yych = in.data[in.cursor]
 	if (yych >= 0x01) {
-		goto yy9
+		goto yy7
 	}
 	if (in.limit <= in.cursor) {
 		if (fill(in) == 0) {
 			goto yyFillLabel2
 		}
-		goto yy3
+		goto yy2
 	}
-yy8:
+yy6:
 	in.cursor += 1
 yyFillLabel3:
 	yych = in.data[in.cursor]
-yy9:
+yy7:
 	switch (yych) {
 	case '\'':
-		goto yy10
+		goto yy8
 	case '\\':
-		goto yy12
+		goto yy9
 	default:
 		if (in.limit <= in.cursor) {
 			if (fill(in) == 0) {
 				goto yyFillLabel3
 			}
-			goto yy14
+			goto yy11
 		}
-		goto yy8
+		goto yy6
 	}
-yy10:
+yy8:
 	in.cursor += 1
 //line "go/fill/01_fill.re":61
 	{ count += 1; continue }
 //line "go/fill/01_fill.go":134
-yy12:
+yy9:
 	in.cursor += 1
 yyFillLabel4:
 	yych = in.data[in.cursor]
@@ -140,18 +140,18 @@ yyFillLabel4:
 			if (fill(in) == 0) {
 				goto yyFillLabel4
 			}
-			goto yy14
+			goto yy11
 		}
-		goto yy8
+		goto yy6
 	}
-	goto yy8
-yy13:
+	goto yy6
+yy10:
 //line "go/fill/01_fill.re":60
 	{ return count }
 //line "go/fill/01_fill.go":152
-yy14:
+yy11:
 	in.cursor = in.marker
-	goto yy3
+	goto yy2
 }
 //line "go/fill/01_fill.re":63
 }

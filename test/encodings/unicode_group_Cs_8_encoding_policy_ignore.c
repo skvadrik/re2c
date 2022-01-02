@@ -15,16 +15,16 @@ Cs:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xED: goto yy4;
-		default: goto yy2;
+		case 0xED: goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "encodings/unicode_group_Cs_8_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 27 "encodings/unicode_group_Cs_8_encoding_policy_ignore.c"
-yy4:
+yy3:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 		case 0xA0:
@@ -58,10 +58,10 @@ yy4:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy5;
-		default: goto yy3;
+		case 0xBF: goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -127,13 +127,13 @@ yy5:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy7;
-		default: goto yy6;
+		case 0xBF: goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	YYCURSOR = YYMARKER;
-	goto yy3;
-yy7:
+	goto yy2;
+yy6:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Cs_8_encoding_policy_ignore.re"
 	{ goto Cs; }

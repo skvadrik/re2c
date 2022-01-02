@@ -5,7 +5,7 @@
 // global `getstate:re2c` including y, z and unnamed blocks,
 // with start label in the first unnamed block
 switch (YYGETSTATE()) {
-	default: goto yy5;
+	default: goto yy2;
 	case 1: goto yyFillLabel1;
 	case 2: goto yyFillLabel2;
 	case 3: goto yyFillLabel3;
@@ -35,7 +35,7 @@ yyFillLabel0:
 // unnamed global block that includes x (has start label)
 
 
-yy5:
+yy2:
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
@@ -81,10 +81,10 @@ yyFillLabel4:
 
 
 	switch (YYGETSTATE()) {
-		default: goto yy25;
+		default: goto yy10;
 		case 5: goto yyFillLabel5;
 	}
-yy25:
+yy10:
 	YYSETSTATE(5);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel5:

@@ -23,13 +23,13 @@ yy0:
 	}
 yyFillLabel0:
 	c = *p;
-	if (c <= '/') goto yy3;
-	if (c <= '9') goto yy5;
-yy3:
+	if (c <= '/') goto yy2;
+	if (c <= '9') goto yy3;
+yy2:
 	++p;
 	*state = -1;
 	{ return NULL; }
-yy5:
+yy3:
 	++p;
 	*state = 1;
 	if (p >= e) {
@@ -37,9 +37,9 @@ yy5:
 	}
 yyFillLabel1:
 	c = *p;
-	if (c <= '/') goto yy7;
-	if (c <= '9') goto yy5;
-yy7:
+	if (c <= '/') goto yy4;
+	if (c <= '9') goto yy3;
+yy4:
 	*state = -1;
 	{ return p; }
 

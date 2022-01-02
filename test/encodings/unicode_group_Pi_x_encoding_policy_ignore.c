@@ -17,31 +17,31 @@ Pi:
 	if (yych <= 0x2E01) {
 		if (yych <= 0x201A) {
 			if (yych <= 0x00AB) {
-				if (yych >= 0x00AB) goto yy4;
+				if (yych >= 0x00AB) goto yy1;
 			} else {
-				if (yych == 0x2018) goto yy4;
+				if (yych == 0x2018) goto yy1;
 			}
 		} else {
 			if (yych <= 0x201F) {
-				if (yych <= 0x201C) goto yy4;
-				if (yych >= 0x201F) goto yy4;
+				if (yych <= 0x201C) goto yy1;
+				if (yych >= 0x201F) goto yy1;
 			} else {
-				if (yych == 0x2039) goto yy4;
+				if (yych == 0x2039) goto yy1;
 			}
 		}
 	} else {
 		if (yych <= 0x2E0B) {
 			if (yych <= 0x2E04) {
-				if (yych != 0x2E03) goto yy4;
+				if (yych != 0x2E03) goto yy1;
 			} else {
-				if (yych == 0x2E09) goto yy4;
+				if (yych == 0x2E09) goto yy1;
 			}
 		} else {
 			if (yych <= 0x2E1C) {
-				if (yych <= 0x2E0C) goto yy4;
-				if (yych >= 0x2E1C) goto yy4;
+				if (yych <= 0x2E0C) goto yy1;
+				if (yych >= 0x2E1C) goto yy1;
 			} else {
-				if (yych == 0x2E20) goto yy4;
+				if (yych == 0x2E20) goto yy1;
 			}
 		}
 	}
@@ -49,7 +49,7 @@ Pi:
 #line 14 "encodings/unicode_group_Pi_x_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 52 "encodings/unicode_group_Pi_x_encoding_policy_ignore.c"
-yy4:
+yy1:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Pi_x_encoding_policy_ignore.re"
 	{ goto Pi; }

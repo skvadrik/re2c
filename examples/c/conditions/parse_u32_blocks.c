@@ -20,7 +20,7 @@ static uint64_t parse_u32(const char *s) {
 	char yych;
 	yych = *s;
 	switch (yych) {
-		case '0': goto yy4;
+		case '0': goto yy2;
 		case '1':
 		case '2':
 		case '3':
@@ -29,38 +29,38 @@ static uint64_t parse_u32(const char *s) {
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy6;
-		default: goto yy2;
+		case '9': goto yy4;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++s;
 	{ return ERROR; }
-yy4:
+yy2:
 	yych = *(YYMARKER = ++s);
 	switch (yych) {
 		case 'B':
-		case 'b': goto yy8;
+		case 'b': goto yy5;
 		case 'X':
-		case 'x': goto yy10;
-		default: goto yy5;
+		case 'x': goto yy7;
+		default: goto yy3;
 	}
-yy5:
+yy3:
 	{ goto oct; }
-yy6:
+yy4:
 	++s;
 	s -= 1;
 	{ goto dec; }
-yy8:
+yy5:
 	yych = *++s;
 	switch (yych) {
 		case '0':
-		case '1': goto yy11;
-		default: goto yy9;
+		case '1': goto yy8;
+		default: goto yy6;
 	}
-yy9:
+yy6:
 	s = YYMARKER;
-	goto yy5;
-yy10:
+	goto yy3;
+yy7:
 	yych = *++s;
 	switch (yych) {
 		case '0':
@@ -84,14 +84,14 @@ yy10:
 		case 'c':
 		case 'd':
 		case 'e':
-		case 'f': goto yy13;
-		default: goto yy9;
+		case 'f': goto yy9;
+		default: goto yy6;
 	}
-yy11:
+yy8:
 	++s;
 	s -= 1;
 	{ goto bin; }
-yy13:
+yy9:
 	++s;
 	s -= 1;
 	{ goto hex; }
@@ -103,18 +103,18 @@ bin:
 	char yych;
 	yych = *s;
 	switch (yych) {
-		case 0x00: goto yy17;
+		case 0x00: goto yy11;
 		case '0':
-		case '1': goto yy21;
-		default: goto yy19;
+		case '1': goto yy13;
+		default: goto yy12;
 	}
-yy17:
+yy11:
 	++s;
 	{ return u; }
-yy19:
+yy12:
 	++s;
 	{ return ERROR; }
-yy21:
+yy13:
 	++s;
 	{ adddgt<2>(u, s[-1] - '0'); goto bin; }
 }
@@ -125,7 +125,7 @@ oct:
 	char yych;
 	yych = *s;
 	switch (yych) {
-		case 0x00: goto yy25;
+		case 0x00: goto yy15;
 		case '0':
 		case '1':
 		case '2':
@@ -133,16 +133,16 @@ oct:
 		case '4':
 		case '5':
 		case '6':
-		case '7': goto yy29;
-		default: goto yy27;
+		case '7': goto yy17;
+		default: goto yy16;
 	}
-yy25:
+yy15:
 	++s;
 	{ return u; }
-yy27:
+yy16:
 	++s;
 	{ return ERROR; }
-yy29:
+yy17:
 	++s;
 	{ adddgt<8>(u, s[-1] - '0'); goto oct; }
 }
@@ -153,7 +153,7 @@ dec:
 	char yych;
 	yych = *s;
 	switch (yych) {
-		case 0x00: goto yy33;
+		case 0x00: goto yy19;
 		case '0':
 		case '1':
 		case '2':
@@ -163,16 +163,16 @@ dec:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy37;
-		default: goto yy35;
+		case '9': goto yy21;
+		default: goto yy20;
 	}
-yy33:
+yy19:
 	++s;
 	{ return u; }
-yy35:
+yy20:
 	++s;
 	{ return ERROR; }
-yy37:
+yy21:
 	++s;
 	{ adddgt<10>(u, s[-1] - '0'); goto dec; }
 }
@@ -183,7 +183,7 @@ hex:
 	char yych;
 	yych = *s;
 	switch (yych) {
-		case 0x00: goto yy41;
+		case 0x00: goto yy23;
 		case '0':
 		case '1':
 		case '2':
@@ -193,34 +193,34 @@ hex:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy45;
+		case '9': goto yy25;
 		case 'A':
 		case 'B':
 		case 'C':
 		case 'D':
 		case 'E':
-		case 'F': goto yy47;
+		case 'F': goto yy26;
 		case 'a':
 		case 'b':
 		case 'c':
 		case 'd':
 		case 'e':
-		case 'f': goto yy49;
-		default: goto yy43;
+		case 'f': goto yy27;
+		default: goto yy24;
 	}
-yy41:
+yy23:
 	++s;
 	{ return u; }
-yy43:
+yy24:
 	++s;
 	{ return ERROR; }
-yy45:
+yy25:
 	++s;
 	{ adddgt<16>(u, s[-1] - '0');      goto hex; }
-yy47:
+yy26:
 	++s;
 	{ adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
-yy49:
+yy27:
 	++s;
 	{ adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
 }

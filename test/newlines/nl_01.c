@@ -21,23 +21,23 @@ yyt1
 	yych = *YYCURSOR;
 	yyt1 = YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy3;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	x = yyt1;
 #line 8 "newlines/nl_01.re"
 	{
         ;
     }
 #line 34 "newlines/nl_01.c"
-yy3:
+yy2:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy3;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
 }
 #line 11 "newlines/nl_01.re"

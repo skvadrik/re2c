@@ -17,31 +17,31 @@ Pi:
 	if (yych <= 0x00002E01) {
 		if (yych <= 0x0000201A) {
 			if (yych <= 0x000000AB) {
-				if (yych >= 0x000000AB) goto yy4;
+				if (yych >= 0x000000AB) goto yy1;
 			} else {
-				if (yych == 0x00002018) goto yy4;
+				if (yych == 0x00002018) goto yy1;
 			}
 		} else {
 			if (yych <= 0x0000201F) {
-				if (yych <= 0x0000201C) goto yy4;
-				if (yych >= 0x0000201F) goto yy4;
+				if (yych <= 0x0000201C) goto yy1;
+				if (yych >= 0x0000201F) goto yy1;
 			} else {
-				if (yych == 0x00002039) goto yy4;
+				if (yych == 0x00002039) goto yy1;
 			}
 		}
 	} else {
 		if (yych <= 0x00002E0B) {
 			if (yych <= 0x00002E04) {
-				if (yych != 0x00002E03) goto yy4;
+				if (yych != 0x00002E03) goto yy1;
 			} else {
-				if (yych == 0x00002E09) goto yy4;
+				if (yych == 0x00002E09) goto yy1;
 			}
 		} else {
 			if (yych <= 0x00002E1C) {
-				if (yych <= 0x00002E0C) goto yy4;
-				if (yych >= 0x00002E1C) goto yy4;
+				if (yych <= 0x00002E0C) goto yy1;
+				if (yych >= 0x00002E1C) goto yy1;
 			} else {
-				if (yych == 0x00002E20) goto yy4;
+				if (yych == 0x00002E20) goto yy1;
 			}
 		}
 	}
@@ -49,7 +49,7 @@ Pi:
 #line 14 "encodings/unicode_group_Pi_u_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 52 "encodings/unicode_group_Pi_u_encoding_policy_ignore.c"
-yy4:
+yy1:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Pi_u_encoding_policy_ignore.re"
 	{ goto Pi; }

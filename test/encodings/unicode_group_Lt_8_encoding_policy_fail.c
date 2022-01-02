@@ -15,38 +15,38 @@ Lt:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xC7: goto yy4;
-		case 0xE1: goto yy5;
-		default: goto yy2;
+		case 0xC7: goto yy3;
+		case 0xE1: goto yy4;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "encodings/unicode_group_Lt_8_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
 #line 28 "encodings/unicode_group_Lt_8_encoding_policy_fail.c"
-yy4:
+yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x85:
 		case 0x88:
 		case 0x8B:
-		case 0xB2: goto yy6;
-		default: goto yy3;
+		case 0xB2: goto yy5;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xBE: goto yy8;
-		case 0xBF: goto yy10;
-		default: goto yy3;
+		case 0xBE: goto yy6;
+		case 0xBF: goto yy8;
+		default: goto yy2;
 	}
-yy6:
+yy5:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Lt_8_encoding_policy_fail.re"
 	{ goto Lt; }
 #line 49 "encodings/unicode_group_Lt_8_encoding_policy_fail.c"
-yy8:
+yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x88:
@@ -73,18 +73,18 @@ yy8:
 		case 0xAD:
 		case 0xAE:
 		case 0xAF:
-		case 0xBC: goto yy6;
-		default: goto yy9;
+		case 0xBC: goto yy5;
+		default: goto yy7;
 	}
-yy9:
+yy7:
 	YYCURSOR = YYMARKER;
-	goto yy3;
-yy10:
+	goto yy2;
+yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x8C:
-		case 0xBC: goto yy6;
-		default: goto yy9;
+		case 0xBC: goto yy5;
+		default: goto yy7;
 	}
 }
 #line 15 "encodings/unicode_group_Lt_8_encoding_policy_fail.re"

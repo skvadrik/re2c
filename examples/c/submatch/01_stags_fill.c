@@ -94,13 +94,13 @@ yyFillLabel0:
 	switch (yych) {
 		case '0':
 			in->yyt1 = in->cur;
-			goto yy4;
+			goto yy3;
 		case '1':
 			in->yyt1 = in->cur;
-			goto yy5;
+			goto yy4;
 		case '2':
 			in->yyt1 = in->cur;
-			goto yy6;
+			goto yy5;
 		case '3':
 		case '4':
 		case '5':
@@ -109,38 +109,38 @@ yyFillLabel0:
 		case '8':
 		case '9':
 			in->yyt1 = in->cur;
-			goto yy7;
+			goto yy6;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel0;
-				goto yy32;
+				goto yy30;
 			}
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	++in->cur;
-yy3:
+yy2:
 #line 93 "c/submatch/01_stags_fill.re"
 	{ return false; }
 #line 126 "c/submatch/01_stags_fill.c"
-yy4:
+yy3:
 	in->mar = ++in->cur;
 yyFillLabel1:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy8;
+		case '.': goto yy7;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel1;
 			}
-			goto yy3;
+			goto yy2;
 	}
-yy5:
+yy4:
 	in->mar = ++in->cur;
 yyFillLabel2:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy8;
+		case '.': goto yy7;
 		case '0':
 		case '1':
 		case '2':
@@ -150,41 +150,41 @@ yyFillLabel2:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy10;
+		case '9': goto yy9;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel2;
 			}
-			goto yy3;
+			goto yy2;
 	}
-yy6:
+yy5:
 	in->mar = ++in->cur;
 yyFillLabel3:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy8;
+		case '.': goto yy7;
 		case '0':
 		case '1':
 		case '2':
 		case '3':
-		case '4': goto yy10;
-		case '5': goto yy11;
+		case '4': goto yy9;
+		case '5': goto yy10;
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy12;
+		case '9': goto yy11;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel3;
 			}
-			goto yy3;
+			goto yy2;
 	}
-yy7:
+yy6:
 	in->mar = ++in->cur;
 yyFillLabel4:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy8;
+		case '.': goto yy7;
 		case '0':
 		case '1':
 		case '2':
@@ -194,27 +194,27 @@ yyFillLabel4:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy12;
+		case '9': goto yy11;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel4;
 			}
-			goto yy3;
+			goto yy2;
 	}
-yy8:
+yy7:
 	++in->cur;
 yyFillLabel5:
 	yych = *in->cur;
 	switch (yych) {
 		case '0':
 			in->yyt2 = in->cur;
-			goto yy13;
+			goto yy12;
 		case '1':
 			in->yyt2 = in->cur;
-			goto yy14;
+			goto yy13;
 		case '2':
 			in->yyt2 = in->cur;
-			goto yy15;
+			goto yy14;
 		case '3':
 		case '4':
 		case '5':
@@ -223,22 +223,130 @@ yyFillLabel5:
 		case '8':
 		case '9':
 			in->yyt2 = in->cur;
-			goto yy16;
+			goto yy15;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel5;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy9:
+yy8:
 	in->cur = in->mar;
-	goto yy3;
-yy10:
+	goto yy2;
+yy9:
 	++in->cur;
 yyFillLabel6:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy8;
+		case '.': goto yy7;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy11;
+		default:
+			if (in->lim <= in->cur) {
+				if (fill(in) == 0) goto yyFillLabel6;
+			}
+			goto yy8;
+	}
+yy10:
+	++in->cur;
+yyFillLabel7:
+	yych = *in->cur;
+	switch (yych) {
+		case '.': goto yy7;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5': goto yy11;
+		default:
+			if (in->lim <= in->cur) {
+				if (fill(in) == 0) goto yyFillLabel7;
+			}
+			goto yy8;
+	}
+yy11:
+	++in->cur;
+yyFillLabel8:
+	yych = *in->cur;
+	switch (yych) {
+		case '.': goto yy7;
+		default:
+			if (in->lim <= in->cur) {
+				if (fill(in) == 0) goto yyFillLabel8;
+			}
+			goto yy8;
+	}
+yy12:
+	++in->cur;
+yyFillLabel9:
+	yych = *in->cur;
+	switch (yych) {
+		case '.': goto yy16;
+		default:
+			if (in->lim <= in->cur) {
+				if (fill(in) == 0) goto yyFillLabel9;
+			}
+			goto yy8;
+	}
+yy13:
+	++in->cur;
+yyFillLabel10:
+	yych = *in->cur;
+	switch (yych) {
+		case '.': goto yy16;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy15;
+		default:
+			if (in->lim <= in->cur) {
+				if (fill(in) == 0) goto yyFillLabel10;
+			}
+			goto yy8;
+	}
+yy14:
+	++in->cur;
+yyFillLabel11:
+	yych = *in->cur;
+	switch (yych) {
+		case '.': goto yy16;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4': goto yy15;
+		case '5': goto yy17;
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy12;
+		default:
+			if (in->lim <= in->cur) {
+				if (fill(in) == 0) goto yyFillLabel11;
+			}
+			goto yy8;
+	}
+yy15:
+	++in->cur;
+yyFillLabel12:
+	yych = *in->cur;
+	switch (yych) {
+		case '.': goto yy16;
 		case '0':
 		case '1':
 		case '2':
@@ -251,16 +359,45 @@ yyFillLabel6:
 		case '9': goto yy12;
 		default:
 			if (in->lim <= in->cur) {
-				if (fill(in) == 0) goto yyFillLabel6;
+				if (fill(in) == 0) goto yyFillLabel12;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy11:
+yy16:
 	++in->cur;
-yyFillLabel7:
+yyFillLabel13:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy8;
+		case '0':
+			in->yyt3 = in->cur;
+			goto yy18;
+		case '1':
+			in->yyt3 = in->cur;
+			goto yy19;
+		case '2':
+			in->yyt3 = in->cur;
+			goto yy20;
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			in->yyt3 = in->cur;
+			goto yy21;
+		default:
+			if (in->lim <= in->cur) {
+				if (fill(in) == 0) goto yyFillLabel13;
+			}
+			goto yy8;
+	}
+yy17:
+	++in->cur;
+yyFillLabel14:
+	yych = *in->cur;
+	switch (yych) {
+		case '.': goto yy16;
 		case '0':
 		case '1':
 		case '2':
@@ -269,165 +406,28 @@ yyFillLabel7:
 		case '5': goto yy12;
 		default:
 			if (in->lim <= in->cur) {
-				if (fill(in) == 0) goto yyFillLabel7;
-			}
-			goto yy9;
-	}
-yy12:
-	++in->cur;
-yyFillLabel8:
-	yych = *in->cur;
-	switch (yych) {
-		case '.': goto yy8;
-		default:
-			if (in->lim <= in->cur) {
-				if (fill(in) == 0) goto yyFillLabel8;
-			}
-			goto yy9;
-	}
-yy13:
-	++in->cur;
-yyFillLabel9:
-	yych = *in->cur;
-	switch (yych) {
-		case '.': goto yy17;
-		default:
-			if (in->lim <= in->cur) {
-				if (fill(in) == 0) goto yyFillLabel9;
-			}
-			goto yy9;
-	}
-yy14:
-	++in->cur;
-yyFillLabel10:
-	yych = *in->cur;
-	switch (yych) {
-		case '.': goto yy17;
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9': goto yy16;
-		default:
-			if (in->lim <= in->cur) {
-				if (fill(in) == 0) goto yyFillLabel10;
-			}
-			goto yy9;
-	}
-yy15:
-	++in->cur;
-yyFillLabel11:
-	yych = *in->cur;
-	switch (yych) {
-		case '.': goto yy17;
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4': goto yy16;
-		case '5': goto yy18;
-		case '6':
-		case '7':
-		case '8':
-		case '9': goto yy13;
-		default:
-			if (in->lim <= in->cur) {
-				if (fill(in) == 0) goto yyFillLabel11;
-			}
-			goto yy9;
-	}
-yy16:
-	++in->cur;
-yyFillLabel12:
-	yych = *in->cur;
-	switch (yych) {
-		case '.': goto yy17;
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9': goto yy13;
-		default:
-			if (in->lim <= in->cur) {
-				if (fill(in) == 0) goto yyFillLabel12;
-			}
-			goto yy9;
-	}
-yy17:
-	++in->cur;
-yyFillLabel13:
-	yych = *in->cur;
-	switch (yych) {
-		case '0':
-			in->yyt3 = in->cur;
-			goto yy19;
-		case '1':
-			in->yyt3 = in->cur;
-			goto yy20;
-		case '2':
-			in->yyt3 = in->cur;
-			goto yy21;
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-			in->yyt3 = in->cur;
-			goto yy22;
-		default:
-			if (in->lim <= in->cur) {
-				if (fill(in) == 0) goto yyFillLabel13;
-			}
-			goto yy9;
-	}
-yy18:
-	++in->cur;
-yyFillLabel14:
-	yych = *in->cur;
-	switch (yych) {
-		case '.': goto yy17;
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5': goto yy13;
-		default:
-			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel14;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy19:
+yy18:
 	++in->cur;
 yyFillLabel15:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy23;
+		case '.': goto yy22;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel15;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy20:
+yy19:
 	++in->cur;
 yyFillLabel16:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy23;
+		case '.': goto yy22;
 		case '0':
 		case '1':
 		case '2':
@@ -437,41 +437,41 @@ yyFillLabel16:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy22;
+		case '9': goto yy21;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel16;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy21:
+yy20:
 	++in->cur;
 yyFillLabel17:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy23;
+		case '.': goto yy22;
 		case '0':
 		case '1':
 		case '2':
 		case '3':
-		case '4': goto yy22;
-		case '5': goto yy24;
+		case '4': goto yy21;
+		case '5': goto yy23;
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy19;
+		case '9': goto yy18;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel17;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy22:
+yy21:
 	++in->cur;
 yyFillLabel18:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy23;
+		case '.': goto yy22;
 		case '0':
 		case '1':
 		case '2':
@@ -481,27 +481,27 @@ yyFillLabel18:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy19;
+		case '9': goto yy18;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel18;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy23:
+yy22:
 	++in->cur;
 yyFillLabel19:
 	yych = *in->cur;
 	switch (yych) {
 		case '0':
 			in->yyt4 = in->cur;
-			goto yy25;
+			goto yy24;
 		case '1':
 			in->yyt4 = in->cur;
-			goto yy26;
+			goto yy25;
 		case '2':
 			in->yyt4 = in->cur;
-			goto yy27;
+			goto yy26;
 		case '3':
 		case '4':
 		case '5':
@@ -510,49 +510,49 @@ yyFillLabel19:
 		case '8':
 		case '9':
 			in->yyt4 = in->cur;
-			goto yy28;
+			goto yy27;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel19;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy24:
+yy23:
 	++in->cur;
 yyFillLabel20:
 	yych = *in->cur;
 	switch (yych) {
-		case '.': goto yy23;
+		case '.': goto yy22;
 		case '0':
 		case '1':
 		case '2':
 		case '3':
 		case '4':
-		case '5': goto yy19;
+		case '5': goto yy18;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel20;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy25:
+yy24:
 	++in->cur;
 yyFillLabel21:
 	yych = *in->cur;
 	switch (yych) {
-		case '\n': goto yy29;
+		case '\n': goto yy28;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel21;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy26:
+yy25:
 	++in->cur;
 yyFillLabel22:
 	yych = *in->cur;
 	switch (yych) {
-		case '\n': goto yy29;
+		case '\n': goto yy28;
 		case '0':
 		case '1':
 		case '2':
@@ -562,41 +562,41 @@ yyFillLabel22:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy28;
+		case '9': goto yy27;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel22;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy27:
+yy26:
 	++in->cur;
 yyFillLabel23:
 	yych = *in->cur;
 	switch (yych) {
-		case '\n': goto yy29;
+		case '\n': goto yy28;
 		case '0':
 		case '1':
 		case '2':
 		case '3':
-		case '4': goto yy28;
-		case '5': goto yy31;
+		case '4': goto yy27;
+		case '5': goto yy29;
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy25;
+		case '9': goto yy24;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel23;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy28:
+yy27:
 	++in->cur;
 yyFillLabel24:
 	yych = *in->cur;
 	switch (yych) {
-		case '\n': goto yy29;
+		case '\n': goto yy28;
 		case '0':
 		case '1':
 		case '2':
@@ -606,14 +606,14 @@ yyFillLabel24:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy25;
+		case '9': goto yy24;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel24;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy29:
+yy28:
 	++in->cur;
 	o1 = in->yyt1;
 	o2 = in->yyt2;
@@ -628,25 +628,25 @@ yy29:
             continue;
         }
 #line 631 "c/submatch/01_stags_fill.c"
-yy31:
+yy29:
 	++in->cur;
 yyFillLabel25:
 	yych = *in->cur;
 	switch (yych) {
-		case '\n': goto yy29;
+		case '\n': goto yy28;
 		case '0':
 		case '1':
 		case '2':
 		case '3':
 		case '4':
-		case '5': goto yy25;
+		case '5': goto yy24;
 		default:
 			if (in->lim <= in->cur) {
 				if (fill(in) == 0) goto yyFillLabel25;
 			}
-			goto yy9;
+			goto yy8;
 	}
-yy32:
+yy30:
 #line 92 "c/submatch/01_stags_fill.re"
 	{ return true; }
 #line 653 "c/submatch/01_stags_fill.c"

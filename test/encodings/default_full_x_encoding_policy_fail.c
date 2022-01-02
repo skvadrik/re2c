@@ -7,25 +7,25 @@
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if (yych <= 0xD7FF) goto yy2;
-	if (yych <= 0xDBFF) goto yy4;
-	if (yych <= 0xDFFF) goto yy6;
-yy2:
+	if (yych <= 0xD7FF) goto yy1;
+	if (yych <= 0xDBFF) goto yy2;
+	if (yych <= 0xDFFF) goto yy4;
+yy1:
 	++YYCURSOR;
 #line 4 "encodings/default_full_x_encoding_policy_fail.re"
 	{ return FULL; }
 #line 18 "encodings/default_full_x_encoding_policy_fail.c"
-yy4:
+yy2:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy5;
-	if (yych <= 0xDFFF) goto yy2;
-yy5:
+	if (yych <= 0xDBFF) goto yy3;
+	if (yych <= 0xDFFF) goto yy1;
+yy3:
 #line 3 "encodings/default_full_x_encoding_policy_fail.re"
 	{ return DEFAULT; }
 #line 26 "encodings/default_full_x_encoding_policy_fail.c"
-yy6:
+yy4:
 	++YYCURSOR;
-	goto yy5;
+	goto yy3;
 }
 #line 5 "encodings/default_full_x_encoding_policy_fail.re"
 

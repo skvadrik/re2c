@@ -8,56 +8,56 @@
 	if (YYLESSTHAN(5)) YYFILL(5);
 	yych = YYPEEK();
 	switch (yych) {
-		case 'a': goto yy4;
-		default: goto yy2;
+		case 'a': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	YYSKIP();
-yy3:
+yy2:
 	{ * }
-yy4:
+yy3:
 	yyaccept = 0;
 	YYSKIP();
 	YYBACKUP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'b': goto yy5;
-		default: goto yy3;
+		case 'b': goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'a': goto yy7;
-		default: goto yy6;
+		case 'a': goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	YYRESTORE();
 	if (yyaccept == 0) {
-		goto yy3;
+		goto yy2;
 	} else {
-		goto yy8;
+		goto yy7;
 	}
-yy7:
+yy6:
 	yyaccept = 1;
 	YYSKIP();
 	YYBACKUP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'b': goto yy9;
-		default: goto yy8;
+		case 'b': goto yy8;
+		default: goto yy7;
 	}
-yy8:
+yy7:
 	YYSHIFT(-2);
 	{ 1 }
-yy9:
+yy8:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'a': goto yy10;
-		default: goto yy6;
+		case 'a': goto yy9;
+		default: goto yy5;
 	}
-yy10:
+yy9:
 	YYSKIP();
 	YYSHIFT(-2);
 	{ 0 }

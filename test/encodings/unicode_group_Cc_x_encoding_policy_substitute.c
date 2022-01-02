@@ -14,15 +14,15 @@ Cc:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x001F) goto yy2;
-	if (yych <= '~') goto yy4;
-	if (yych >= 0x00A0) goto yy4;
-yy2:
+	if (yych <= 0x001F) goto yy1;
+	if (yych <= '~') goto yy2;
+	if (yych >= 0x00A0) goto yy2;
+yy1:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Cc_x_encoding_policy_substitute.re"
 	{ goto Cc; }
 #line 25 "encodings/unicode_group_Cc_x_encoding_policy_substitute.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Cc_x_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }

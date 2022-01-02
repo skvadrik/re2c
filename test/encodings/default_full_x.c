@@ -7,19 +7,19 @@
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if (yych <= 0xD7FF) goto yy2;
-	if (yych <= 0xDBFF) goto yy4;
-yy2:
+	if (yych <= 0xD7FF) goto yy1;
+	if (yych <= 0xDBFF) goto yy3;
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 4 "encodings/default_full_x.re"
 	{ return FULL; }
 #line 18 "encodings/default_full_x.c"
-yy4:
+yy3:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy3;
-	if (yych <= 0xDFFF) goto yy2;
-	goto yy3;
+	if (yych <= 0xDBFF) goto yy2;
+	if (yych <= 0xDFFF) goto yy1;
+	goto yy2;
 }
 #line 5 "encodings/default_full_x.re"
 

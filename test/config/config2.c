@@ -18,34 +18,34 @@ char *scan0(char *p)
    if (YYLIMIT <= YYCURSOR) YYFILL(1);
    yych = *YYCURSOR;
    if (yych <= 'b') {
-      if (yych <= '`') goto yy2;
-      if (yych <= 'a') goto yy4;
-      goto yy6;
+      if (yych <= '`') goto yy1;
+      if (yych <= 'a') goto yy2;
+      goto yy3;
    } else {
-      if (yych <= 'c') goto yy8;
-      if (yych <= 'd') goto yy10;
+      if (yych <= 'c') goto yy4;
+      if (yych <= 'd') goto yy5;
    }
-yy2:
+yy1:
    ++YYCURSOR;
 #line 18 "config/config2.re"
    { return NULL; }
 #line 33 "config/config2.c"
-yy4:
+yy2:
    ++YYCURSOR;
 #line 14 "config/config2.re"
    { return YYCURSOR; }
 #line 38 "config/config2.c"
-yy6:
+yy3:
    ++YYCURSOR;
 #line 15 "config/config2.re"
    { return YYCURSOR; }
 #line 43 "config/config2.c"
-yy8:
+yy4:
    ++YYCURSOR;
 #line 16 "config/config2.re"
    { return YYCURSOR; }
 #line 48 "config/config2.c"
-yy10:
+yy5:
    ++YYCURSOR;
 #line 17 "config/config2.re"
    { return YYCURSOR; }
@@ -65,34 +65,34 @@ char *scan1(char *p)
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'b') {
-		if (yych <= '`') goto yy14;
-		if (yych <= 'a') goto yy16;
-		goto yy18;
+		if (yych <= '`') goto yy7;
+		if (yych <= 'a') goto yy8;
+		goto yy9;
 	} else {
-		if (yych <= 'c') goto yy20;
-		if (yych <= 'd') goto yy22;
+		if (yych <= 'c') goto yy10;
+		if (yych <= 'd') goto yy11;
 	}
-yy14:
+yy7:
 	++YYCURSOR;
 #line 31 "config/config2.re"
 	{ return NULL; }
 #line 80 "config/config2.c"
-yy16:
+yy8:
 	++YYCURSOR;
 #line 27 "config/config2.re"
 	{ return YYCURSOR; }
 #line 85 "config/config2.c"
-yy18:
+yy9:
 	++YYCURSOR;
 #line 28 "config/config2.re"
 	{ return YYCURSOR; }
 #line 90 "config/config2.c"
-yy20:
+yy10:
 	++YYCURSOR;
 #line 29 "config/config2.re"
 	{ return YYCURSOR; }
 #line 95 "config/config2.c"
-yy22:
+yy11:
 	++YYCURSOR;
 #line 30 "config/config2.re"
 	{ return YYCURSOR; }
@@ -112,34 +112,34 @@ YYCTYPE yych;
 if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yych = *YYCURSOR;
 if (yych <= 'b') {
-if (yych <= '`') goto yy26;
-if (yych <= 'a') goto yy28;
-goto yy30;
+if (yych <= '`') goto yy13;
+if (yych <= 'a') goto yy14;
+goto yy15;
 } else {
-if (yych <= 'c') goto yy32;
-if (yych <= 'd') goto yy34;
+if (yych <= 'c') goto yy16;
+if (yych <= 'd') goto yy17;
 }
-yy26:
+yy13:
 ++YYCURSOR;
 #line 44 "config/config2.re"
 { return NULL; }
 #line 127 "config/config2.c"
-yy28:
+yy14:
 ++YYCURSOR;
 #line 40 "config/config2.re"
 { return YYCURSOR; }
 #line 132 "config/config2.c"
-yy30:
+yy15:
 ++YYCURSOR;
 #line 41 "config/config2.re"
 { return YYCURSOR; }
 #line 137 "config/config2.c"
-yy32:
+yy16:
 ++YYCURSOR;
 #line 42 "config/config2.re"
 { return YYCURSOR; }
 #line 142 "config/config2.c"
-yy34:
+yy17:
 ++YYCURSOR;
 #line 43 "config/config2.re"
 { return YYCURSOR; }

@@ -18,8 +18,8 @@ int main ()
 /* *********************************** */
 yyc_a:
 	yych = *YYCURSOR;
-	if (yych == 'a') goto yy3;
-yy3:
+	if (yych == 'a') goto yy1;
+yy1:
 	++YYCURSOR;
 #line 10 "conditions/condtype.re"
 	{}
@@ -27,8 +27,8 @@ yy3:
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
-	if (yych == 'b') goto yy8;
-yy8:
+	if (yych == 'b') goto yy3;
+yy3:
 	++YYCURSOR;
 #line 11 "conditions/condtype.re"
 	{}

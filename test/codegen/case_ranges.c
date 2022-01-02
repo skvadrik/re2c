@@ -17,22 +17,22 @@ static int lex1(const char *YYCURSOR)
 		case '#' ... '&':
 		case '*':
 		case '@':
-		case '^': goto yy4;
-		case '0' ... '9': goto yy6;
+		case '^': goto yy2;
+		case '0' ... '9': goto yy3;
 		case 'A' ... 'Z':
-		case 'a' ... 'z': goto yy8;
-		default: goto yy2;
+		case 'a' ... 'z': goto yy4;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 	{ return -1; }
-yy4:
+yy2:
 	++YYCURSOR;
 	{ return 2; }
-yy6:
+yy3:
 	++YYCURSOR;
 	{ return 1; }
-yy8:
+yy4:
 	++YYCURSOR;
 	{ return 0; }
 }
@@ -53,7 +53,7 @@ static int lex2(const char *YYCURSOR)
 		case '&':
 		case '*':
 		case '@':
-		case '^': goto yy14;
+		case '^': goto yy7;
 		case '0':
 		case '1':
 		case '2':
@@ -63,7 +63,7 @@ static int lex2(const char *YYCURSOR)
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy16;
+		case '9': goto yy8;
 		case 'A':
 		case 'B':
 		case 'C':
@@ -115,19 +115,19 @@ static int lex2(const char *YYCURSOR)
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy18;
-		default: goto yy12;
+		case 'z': goto yy9;
+		default: goto yy6;
 	}
-yy12:
+yy6:
 	++YYCURSOR;
 	{ return -1; }
-yy14:
+yy7:
 	++YYCURSOR;
 	{ return 2; }
-yy16:
+yy8:
 	++YYCURSOR;
 	{ return 1; }
-yy18:
+yy9:
 	++YYCURSOR;
 	{ return 0; }
 }
@@ -145,22 +145,22 @@ static int lex3(const char *YYCURSOR)
 		case '#' ... '&':
 		case '*':
 		case '@':
-		case '^': goto yy24;
-		case '0' ... '9': goto yy26;
+		case '^': goto yy12;
+		case '0' ... '9': goto yy13;
 		case 'A' ... 'Z':
-		case 'a' ... 'z': goto yy28;
-		default: goto yy22;
+		case 'a' ... 'z': goto yy14;
+		default: goto yy11;
 	}
-yy22:
+yy11:
 	++YYCURSOR;
 	{ return -1; }
-yy24:
+yy12:
 	++YYCURSOR;
 	{ return 2; }
-yy26:
+yy13:
 	++YYCURSOR;
 	{ return 1; }
-yy28:
+yy14:
 	++YYCURSOR;
 	{ return 0; }
 }

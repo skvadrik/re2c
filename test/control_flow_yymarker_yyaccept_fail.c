@@ -10,50 +10,50 @@
 	yych = *YYCURSOR++;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy5;
-		default: goto yy3;
+		case 'a': goto yy3;
+		default: goto yy1;
 	}
-yy3:
+yy1:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	goto yy6;
-yy4:
+	goto yy4;
+yy2:
 #line 6 "control_flow_yymarker_yyaccept_fail.re"
 	{ action3 }
 #line 24 "control_flow_yymarker_yyaccept_fail.c"
-yy5:
+yy3:
 	yych = *++YYCURSOR;
-yy6:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy8;
-		default: goto yy7;
+		case 'a': goto yy6;
+		default: goto yy5;
 	}
-yy7:
+yy5:
 	yych = *++YYCURSOR;
-	goto yy10;
-yy8:
+	goto yy8;
+yy6:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
-	goto yy10;
-yy9:
+	goto yy8;
+yy7:
 #line 5 "control_flow_yymarker_yyaccept_fail.re"
 	{ action2 }
 #line 43 "control_flow_yymarker_yyaccept_fail.c"
-yy10:
+yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy12;
-		default: goto yy11;
+		case 'a': goto yy10;
+		default: goto yy9;
 	}
-yy11:
+yy9:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
-		goto yy4;
+		goto yy2;
 	} else {
-		goto yy9;
+		goto yy7;
 	}
-yy12:
+yy10:
 	++YYCURSOR;
 #line 4 "control_flow_yymarker_yyaccept_fail.re"
 	{ action1 }

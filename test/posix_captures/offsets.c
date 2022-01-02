@@ -25,22 +25,22 @@ static void lex(const char *s)
 		case 'a':
 			YYSTAGP(yyt1);
 			YYSTAGP(yyt2);
-			goto yy4;
-		default: goto yy2;
+			goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	YYSKIP();
 	{ printf("error\n"); return; }
-yy4:
+yy2:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'a': goto yy6;
+		case 'a': goto yy4;
 		default:
 			YYSTAGP(yyt3);
-			goto yy5;
+			goto yy3;
 	}
-yy5:
+yy3:
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
@@ -52,16 +52,16 @@ yy5:
                 yypmatch[3] - yypmatch[2], p + yypmatch[2]);
             return;
         }
-yy6:
+yy4:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
 		case 'a':
 			YYSTAGP(yyt2);
-			goto yy4;
+			goto yy2;
 		default:
 			YYSTAGP(yyt3);
-			goto yy5;
+			goto yy3;
 	}
 }
 

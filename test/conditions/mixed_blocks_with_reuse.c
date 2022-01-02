@@ -17,17 +17,17 @@ enum YYCONDTYPE {
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
-		case 'b': goto yy6;
-		default: goto yy2;
+		case 'a': goto yy2;
+		case 'b': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 	{ xb }
-yy4:
+yy2:
 	++YYCURSOR;
 	{ a }
-yy6:
+yy3:
 	++YYCURSOR;
 	{ b }
 }
@@ -46,13 +46,13 @@ yyc_f:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'f': goto yy12;
-		default: goto yy10;
+		case 'f': goto yy6;
+		default: goto yy5;
 	}
-yy10:
+yy5:
 	++YYCURSOR;
 	{ xf }
-yy12:
+yy6:
 	++YYCURSOR;
 	{ f }
 }
@@ -64,13 +64,13 @@ yy12:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'g': goto yy18;
-		default: goto yy16;
+		case 'g': goto yy9;
+		default: goto yy8;
 	}
-yy16:
+yy8:
 	++YYCURSOR;
 	{ xg }
-yy18:
+yy9:
 	++YYCURSOR;
 	{ g }
 }
@@ -89,13 +89,13 @@ yyc_c:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'c': goto yy24;
-		default: goto yy22;
+		case 'c': goto yy12;
+		default: goto yy11;
 	}
-yy22:
+yy11:
 	++YYCURSOR;
 	{ xe }
-yy24:
+yy12:
 	++YYCURSOR;
 	{ c }
 /* *********************************** */
@@ -103,13 +103,13 @@ yyc_d:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'd': goto yy30;
-		default: goto yy28;
+		case 'd': goto yy15;
+		default: goto yy14;
 	}
-yy28:
+yy14:
 	++YYCURSOR;
 	{ xe }
-yy30:
+yy15:
 	++YYCURSOR;
 	{ d }
 /* *********************************** */
@@ -117,13 +117,13 @@ yyc_e:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'e': goto yy36;
-		default: goto yy34;
+		case 'e': goto yy18;
+		default: goto yy17;
 	}
-yy34:
+yy17:
 	++YYCURSOR;
 	{ xe }
-yy36:
+yy18:
 	++YYCURSOR;
 	{ e }
 }
@@ -155,13 +155,13 @@ yyc_h:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'h': goto yy46;
-		default: goto yy44;
+		case 'h': goto yy22;
+		default: goto yy21;
 	}
-yy44:
+yy21:
 	++YYCURSOR;
 	{ xx }
-yy46:
+yy22:
 	++YYCURSOR;
 	{ h }
 }

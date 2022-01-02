@@ -20,16 +20,16 @@ yyc_0:
 yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy5;
-	if (yych <= 'a') goto yy6;
-	if (yych <= 'b') goto yy8;
-yy5:
-yy6:
+	if (yych <= '`') goto yy2;
+	if (yych <= 'a') goto yy3;
+	if (yych <= 'b') goto yy4;
+yy2:
+yy3:
 	++YYCURSOR;
 #line 5 "conditions/condition_02_cg.re"
 	{ return "a"; }
 #line 32 "conditions/condition_02_cg.c"
-yy8:
+yy4:
 	++YYCURSOR;
 #line 6 "conditions/condition_02_cg.re"
 	{ return "b"; }
@@ -38,8 +38,8 @@ yy8:
 yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 'b') goto yy13;
-yy13:
+	if (yych == 'b') goto yy6;
+yy6:
 	++YYCURSOR;
 #line 6 "conditions/condition_02_cg.re"
 	{ return "b"; }

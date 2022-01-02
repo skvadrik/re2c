@@ -7,8 +7,8 @@
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych != '\n') goto yy3;
-yy3:
+	if (yych != '\n') goto yy1;
+yy1:
 	++YYCURSOR;
 #line 3 "encodings/range_neg_lf_u.re"
 	{return 0;}

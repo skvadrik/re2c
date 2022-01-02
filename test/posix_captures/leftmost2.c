@@ -8,22 +8,22 @@
 	switch (yych) {
 		case 'a':
 			yyt1 = YYCURSOR;
-			goto yy3;
+			goto yy2;
 		case 'b':
 			yyt1 = yyt2 = NULL;
-			goto yy5;
-		default: goto yy2;
+			goto yy4;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	++YYCURSOR;
 	yyt3 = NULL;
 	yyt2 = YYCURSOR;
-yy4:
+yy3:
 	yynmatch = 4;
 	yypmatch[2] = yypmatch[4] = yyt1;
 	yypmatch[3] = yypmatch[5] = yyt2;
@@ -32,10 +32,10 @@ yy4:
 	yypmatch[0] = YYCURSOR - 1;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy5:
+yy4:
 	++YYCURSOR;
 	yyt3 = NULL;
-	goto yy4;
+	goto yy3;
 }
 
 posix_captures/leftmost2.re:4:7: warning: rule matches empty string [-Wmatch-empty-string]

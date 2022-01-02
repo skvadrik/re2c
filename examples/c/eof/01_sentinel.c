@@ -12,8 +12,8 @@ static int lex(const char *YYCURSOR) {
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x00: goto yy2;
-		case ' ': goto yy6;
+		case 0x00: goto yy1;
+		case ' ': goto yy3;
 		case 'a':
 		case 'b':
 		case 'c':
@@ -39,30 +39,30 @@ static int lex(const char *YYCURSOR) {
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy9;
-		default: goto yy4;
+		case 'z': goto yy5;
+		default: goto yy2;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 12 "c/eof/01_sentinel.re"
 	{ return count; }
 #line 50 "c/eof/01_sentinel.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 11 "c/eof/01_sentinel.re"
 	{ return -1; }
 #line 55 "c/eof/01_sentinel.c"
-yy6:
+yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case ' ': goto yy6;
-		default: goto yy8;
+		case ' ': goto yy3;
+		default: goto yy4;
 	}
-yy8:
+yy4:
 #line 14 "c/eof/01_sentinel.re"
 	{ continue; }
 #line 65 "c/eof/01_sentinel.c"
-yy9:
+yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'a':
@@ -90,10 +90,10 @@ yy9:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy9;
-		default: goto yy11;
+		case 'z': goto yy5;
+		default: goto yy6;
 	}
-yy11:
+yy6:
 #line 13 "c/eof/01_sentinel.re"
 	{ ++count; continue; }
 #line 100 "c/eof/01_sentinel.c"

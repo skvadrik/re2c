@@ -6,35 +6,35 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'c': goto yy3;
-		default: goto yy2;
+		case 'c': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	{}
-yy3:
+yy2:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 'b': goto yy5;
+		case 'b': goto yy4;
 		default:
 			yyt1 = YYCURSOR;
-			goto yy4;
+			goto yy3;
 	}
-yy4:
+yy3:
 	t = yyt1;
 	{}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy7;
-		default: goto yy6;
+		case 'b': goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	YYCURSOR = YYMARKER;
 	yyt1 = YYCURSOR;
-	goto yy4;
-yy7:
+	goto yy3;
+yy6:
 	++YYCURSOR;
 	yyt1 = NULL;
-	goto yy4;
+	goto yy3;
 }
 

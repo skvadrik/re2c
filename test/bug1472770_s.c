@@ -29,17 +29,17 @@ yy1:
 yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= 0x00) goto yy3;
-	if (yych == '\n') goto yy5;
+	if (yych <= 0x00) goto yy2;
+	if (yych == '\n') goto yy3;
 	goto yy1;
-yy3:
+yy2:
 	++YYCURSOR;
 #line 27 "bug1472770_s.re"
 	{
 		return n;
 	}
 #line 42 "bug1472770_s.c"
-yy5:
+yy3:
 	++YYCURSOR;
 #line 22 "bug1472770_s.re"
 	{

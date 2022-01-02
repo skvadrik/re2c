@@ -7,8 +7,8 @@
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x00010000) goto yy3;
-yy3:
+	if (yych == 0x00010000) goto yy1;
+yy1:
 	++YYCURSOR;
 #line 3 "encodings/utf32_0x10000.re"
 	{}

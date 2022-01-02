@@ -6,31 +6,48 @@
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-		case 'y': goto yy3;
-		default: goto yy2;
+		case 'y': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt3 = YYCURSOR - 1;
 	switch (yych) {
-		case 'y': goto yy5;
-		default: goto yy4;
+		case 'y': goto yy4;
+		default: goto yy3;
 	}
-yy4:
+yy3:
 	YYCURSOR = YYMARKER;
-	goto yy2;
-yy5:
+	goto yy1;
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'y': goto yy6;
-		default: goto yy4;
+		case 'y': goto yy5;
+		default: goto yy3;
+	}
+yy5:
+	yych = *++YYCURSOR;
+	yyt1 = yyt3;
+	yyt2 = YYCURSOR - 1;
+	switch (yych) {
+		case 'y': goto yy7;
+		default:
+			yyt3 = YYCURSOR;
+			goto yy6;
 	}
 yy6:
+	yynmatch = 2;
+	yypmatch[0] = yyt1;
+	yypmatch[2] = yyt2;
+	yypmatch[3] = yyt3;
+	yypmatch[1] = YYCURSOR;
+	{}
+yy7:
 	yych = *++YYCURSOR;
 	yyt1 = yyt3;
 	yyt2 = YYCURSOR - 1;
@@ -38,15 +55,8 @@ yy6:
 		case 'y': goto yy8;
 		default:
 			yyt3 = YYCURSOR;
-			goto yy7;
+			goto yy6;
 	}
-yy7:
-	yynmatch = 2;
-	yypmatch[0] = yyt1;
-	yypmatch[2] = yyt2;
-	yypmatch[3] = yyt3;
-	yypmatch[1] = YYCURSOR;
-	{}
 yy8:
 	yych = *++YYCURSOR;
 	yyt1 = yyt3;
@@ -55,23 +65,13 @@ yy8:
 		case 'y': goto yy9;
 		default:
 			yyt3 = YYCURSOR;
-			goto yy7;
+			goto yy6;
 	}
 yy9:
-	yych = *++YYCURSOR;
-	yyt1 = yyt3;
-	yyt2 = YYCURSOR - 1;
-	switch (yych) {
-		case 'y': goto yy10;
-		default:
-			yyt3 = YYCURSOR;
-			goto yy7;
-	}
-yy10:
 	++YYCURSOR;
 	yyt1 = yyt3;
 	yyt3 = YYCURSOR;
-	goto yy7;
+	goto yy6;
 }
 
 posix_captures/other/26_stadfa.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]

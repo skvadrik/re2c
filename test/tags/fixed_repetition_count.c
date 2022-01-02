@@ -7,130 +7,130 @@
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
-		case 'b': goto yy5;
-		case 'c': goto yy6;
-		case 'd': goto yy7;
-		case 'e': goto yy8;
-		case 'f': goto yy9;
-		case 'g': goto yy10;
-		default: goto yy2;
+		case 'a': goto yy3;
+		case 'b': goto yy4;
+		case 'c': goto yy5;
+		case 'd': goto yy6;
+		case 'e': goto yy7;
+		case 'f': goto yy8;
+		case 'g': goto yy9;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 	{ * }
+yy3:
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych == 'a') goto yy10;
+	goto yy2;
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'a') goto yy11;
-	goto yy3;
+	if (yych == 'b') goto yy12;
+	goto yy2;
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'b') goto yy13;
-	goto yy3;
+	if (yych == 'c') goto yy13;
+	goto yy2;
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'c') goto yy14;
-	goto yy3;
+	if (yych == 'd') goto yy14;
+	goto yy2;
 yy7:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'd') goto yy15;
-	goto yy3;
+	if (yych == 'e') goto yy15;
+	goto yy2;
 yy8:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'e') goto yy16;
-	goto yy3;
+	if (yych == 'f') goto yy16;
+	goto yy2;
 yy9:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'f') goto yy17;
-	goto yy3;
+	if (yych == 'g') goto yy17;
+	goto yy2;
 yy10:
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'g') goto yy18;
-	goto yy3;
-yy11:
 	yych = *++YYCURSOR;
-	if (yych == 'a') goto yy19;
-yy12:
+	if (yych == 'a') goto yy18;
+yy11:
 	YYCURSOR = YYMARKER;
-	goto yy3;
+	goto yy2;
+yy12:
+	yych = *++YYCURSOR;
+	if (yych == 'b') goto yy19;
+	goto yy11;
 yy13:
 	yych = *++YYCURSOR;
-	if (yych == 'b') goto yy20;
-	goto yy12;
+	if (yych == 'c') goto yy20;
+	goto yy11;
 yy14:
 	yych = *++YYCURSOR;
-	if (yych == 'c') goto yy21;
-	goto yy12;
+	if (yych == 'd') goto yy21;
+	goto yy11;
 yy15:
 	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy22;
-	goto yy12;
+	if (yych == 'e') goto yy22;
+	goto yy11;
 yy16:
 	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy23;
-	goto yy12;
+	if (yych == 'f') goto yy23;
+	goto yy11;
 yy17:
 	yych = *++YYCURSOR;
-	if (yych == 'f') goto yy24;
-	goto yy12;
+	if (yych == 'g') goto yy24;
+	goto yy11;
 yy18:
 	yych = *++YYCURSOR;
-	if (yych == 'g') goto yy25;
-	goto yy12;
+	if (yych == 'a') goto yy25;
+	goto yy11;
 yy19:
 	yych = *++YYCURSOR;
-	if (yych == 'a') goto yy26;
-	goto yy12;
+	if (yych == 'b') goto yy26;
+	goto yy11;
 yy20:
 	yych = *++YYCURSOR;
-	if (yych == 'b') goto yy28;
-	goto yy12;
+	if (yych == 'c') goto yy27;
+	goto yy11;
 yy21:
 	yych = *++YYCURSOR;
-	if (yych == 'c') goto yy30;
-	goto yy12;
+	if (yych == 'd') goto yy28;
+	goto yy11;
 yy22:
 	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy32;
-	goto yy12;
+	if (yych == 'e') goto yy29;
+	goto yy11;
 yy23:
 	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy34;
-	goto yy12;
+	if (yych == 'f') goto yy30;
+	goto yy11;
 yy24:
 	yych = *++YYCURSOR;
-	if (yych == 'f') goto yy36;
-	goto yy12;
+	if (yych == 'g') goto yy31;
+	goto yy11;
 yy25:
-	yych = *++YYCURSOR;
-	if (yych == 'g') goto yy38;
-	goto yy12;
-yy26:
 	++YYCURSOR;
 	p = YYCURSOR - 4;
 	{ a }
-yy28:
+yy26:
 	++YYCURSOR;
 	p = YYCURSOR - 4;
 	{ b }
-yy30:
+yy27:
 	++YYCURSOR;
 	p = YYCURSOR - 4;
 	{ c }
-yy32:
+yy28:
 	++YYCURSOR;
 	p = YYCURSOR - 4;
 	{ d }
-yy34:
+yy29:
 	++YYCURSOR;
 	p = YYCURSOR - 4;
 	{ e }
-yy36:
+yy30:
 	++YYCURSOR;
 	p = YYCURSOR - 4;
 	{ f }
-yy38:
+yy31:
 	++YYCURSOR;
 	p = YYCURSOR - 4;
 	{ g }

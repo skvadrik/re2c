@@ -17,31 +17,31 @@ Pf:
 	if (yych <= 0x2E03) {
 		if (yych <= 0x201C) {
 			if (yych <= 0x00BB) {
-				if (yych >= 0x00BB) goto yy4;
+				if (yych >= 0x00BB) goto yy1;
 			} else {
-				if (yych == 0x2019) goto yy4;
+				if (yych == 0x2019) goto yy1;
 			}
 		} else {
 			if (yych <= 0x2039) {
-				if (yych <= 0x201D) goto yy4;
+				if (yych <= 0x201D) goto yy1;
 			} else {
-				if (yych <= 0x203A) goto yy4;
-				if (yych >= 0x2E03) goto yy4;
+				if (yych <= 0x203A) goto yy1;
+				if (yych >= 0x2E03) goto yy1;
 			}
 		}
 	} else {
 		if (yych <= 0x2E0C) {
 			if (yych <= 0x2E05) {
-				if (yych >= 0x2E05) goto yy4;
+				if (yych >= 0x2E05) goto yy1;
 			} else {
-				if (yych == 0x2E0A) goto yy4;
+				if (yych == 0x2E0A) goto yy1;
 			}
 		} else {
 			if (yych <= 0x2E1D) {
-				if (yych <= 0x2E0D) goto yy4;
-				if (yych >= 0x2E1D) goto yy4;
+				if (yych <= 0x2E0D) goto yy1;
+				if (yych >= 0x2E1D) goto yy1;
 			} else {
-				if (yych == 0x2E21) goto yy4;
+				if (yych == 0x2E21) goto yy1;
 			}
 		}
 	}
@@ -49,7 +49,7 @@ Pf:
 #line 14 "encodings/unicode_group_Pf_x_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 52 "encodings/unicode_group_Pf_x_encoding_policy_ignore.c"
-yy4:
+yy1:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Pf_x_encoding_policy_ignore.re"
 	{ goto Pf; }

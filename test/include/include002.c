@@ -17,15 +17,15 @@
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'B':
-		case 'd': goto yy4;
-		default: goto yy2;
+		case 'd': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 7 "include/nested/include002.re.b.inc"
 	{}
 #line 28 "include/include002.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 6 "include/nested/include002.re.b.inc"
 	{}
@@ -48,15 +48,15 @@ yy4:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'B':
-		case 'e': goto yy10;
-		default: goto yy8;
+		case 'e': goto yy5;
+		default: goto yy4;
 	}
-yy8:
+yy4:
 	++YYCURSOR;
 #line 15 "include/nested/include002.re.b.inc"
 	{}
 #line 59 "include/include002.c"
-yy10:
+yy5:
 	++YYCURSOR;
 #line 14 "include/nested/include002.re.b.inc"
 	{}
@@ -75,21 +75,21 @@ yy10:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '1':
-		case 'b': goto yy16;
-		case '2': goto yy18;
-		default: goto yy14;
+		case 'b': goto yy8;
+		case '2': goto yy9;
+		default: goto yy7;
 	}
-yy14:
+yy7:
 	++YYCURSOR;
 #line 7 "include/include002.re"
 	{}
 #line 87 "include/include002.c"
-yy16:
+yy8:
 	++YYCURSOR;
 #line 5 "include/include002.re"
 	{}
 #line 92 "include/include002.c"
-yy18:
+yy9:
 	++YYCURSOR;
 #line 6 "include/include002.re"
 	{}
@@ -115,15 +115,15 @@ yy18:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'C':
-		case 'd': goto yy24;
-		default: goto yy22;
+		case 'd': goto yy12;
+		default: goto yy11;
 	}
-yy22:
+yy11:
 	++YYCURSOR;
 #line 8 "include/nested/include002.re.c.inc"
 	{}
 #line 126 "include/include002.c"
-yy24:
+yy12:
 	++YYCURSOR;
 #line 7 "include/nested/include002.re.c.inc"
 	{}
@@ -146,15 +146,15 @@ yy24:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'C':
-		case 'e': goto yy30;
-		default: goto yy28;
+		case 'e': goto yy15;
+		default: goto yy14;
 	}
-yy28:
+yy14:
 	++YYCURSOR;
 #line 16 "include/nested/include002.re.c.inc"
 	{}
 #line 157 "include/include002.c"
-yy30:
+yy15:
 	++YYCURSOR;
 #line 15 "include/nested/include002.re.c.inc"
 	{}
@@ -173,21 +173,21 @@ yy30:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '1':
-		case 'c': goto yy36;
-		case '2': goto yy38;
-		default: goto yy34;
+		case 'c': goto yy18;
+		case '2': goto yy19;
+		default: goto yy17;
 	}
-yy34:
+yy17:
 	++YYCURSOR;
 #line 15 "include/include002.re"
 	{}
 #line 185 "include/include002.c"
-yy36:
+yy18:
 	++YYCURSOR;
 #line 13 "include/include002.re"
 	{}
 #line 190 "include/include002.c"
-yy38:
+yy19:
 	++YYCURSOR;
 #line 14 "include/include002.re"
 	{}

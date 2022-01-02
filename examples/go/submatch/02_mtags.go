@@ -70,65 +70,65 @@ func lex(str string) []string {
 	case 0x00:
 		yytm2 = mtag(&trie, yytm2, mtagNil)
 		yytm1 = mtag(&trie, yytm1, mtagNil)
-		goto yy2
+		goto yy1
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		yytm1 = mtag(&trie, yytm1, cursor)
-		goto yy6
-	default:
 		goto yy4
+	default:
+		goto yy2
 	}
-yy2:
+yy1:
 	cursor += 1
 	x = yytm1
 	y = yytm2
 //line "go/submatch/02_mtags.re":70
 	{ return unwind(trie, x, y, str) }
 //line "go/submatch/02_mtags.go":87
-yy4:
+yy2:
 	cursor += 1
-yy5:
+yy3:
 //line "go/submatch/02_mtags.re":71
 	{ return nil }
 //line "go/submatch/02_mtags.go":93
-yy6:
+yy4:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case ';':
 		yytm2 = mtag(&trie, yytm2, cursor)
-		goto yy7
-	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
-		goto yy9
-	default:
 		goto yy5
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
+		goto yy7
+	default:
+		goto yy3
 	}
-yy7:
+yy5:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy2
+		goto yy1
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		yytm1 = mtag(&trie, yytm1, cursor)
-		goto yy9
+		goto yy7
 	default:
-		goto yy8
+		goto yy6
 	}
-yy8:
+yy6:
 	cursor = marker
-	goto yy5
-yy9:
+	goto yy3
+yy7:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case ';':
 		yytm2 = mtag(&trie, yytm2, cursor)
-		goto yy7
+		goto yy5
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
-		goto yy9
+		goto yy7
 	default:
-		goto yy8
+		goto yy6
 	}
 }
 //line "go/submatch/02_mtags.re":72

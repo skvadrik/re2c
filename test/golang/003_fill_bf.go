@@ -139,19 +139,19 @@ yy0:
 yyFillLabel0:
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yybm[0+yych] & 64 != 0) {
-		goto yy7
+		goto yy4
 	}
 	if (yych <= 0x00) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= '/') {
-		goto yy5
+		goto yy3
 	}
 	if (yych <= '9') {
-		goto yy10
+		goto yy5
 	}
-	goto yy5
-yy3:
+	goto yy3
+yy2:
 	in.cursor += 1
 	in.state = -1
 //line "golang/003_fill_bf.re":94
@@ -160,7 +160,7 @@ yy3:
 		return lexEnd, 0
 	}
 //line "golang/003_fill_bf.go":163
-yy5:
+yy3:
 	in.cursor += 1
 	in.state = -1
 //line "golang/003_fill_bf.re":89
@@ -169,7 +169,7 @@ yy5:
 		return lexError, 0
 	}
 //line "golang/003_fill_bf.go":172
-yy7:
+yy4:
 	in.cursor += 1
 	in.state = 1
 	if (in.limit-in.cursor < 1) {
@@ -178,7 +178,7 @@ yy7:
 yyFillLabel1:
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yybm[0+yych] & 64 != 0) {
-		goto yy7
+		goto yy4
 	}
 	in.state = -1
 //line "golang/003_fill_bf.re":109
@@ -186,7 +186,7 @@ yyFillLabel1:
 		return lexSpace, 0
 	}
 //line "golang/003_fill_bf.go":189
-yy10:
+yy5:
 	in.cursor += 1
 	in.marker = in.cursor
 	in.state = 2
@@ -196,12 +196,12 @@ yy10:
 yyFillLabel2:
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yybm[0+yych] & 128 != 0) {
-		goto yy10
+		goto yy5
 	}
 	if (yych == '-') {
-		goto yy13
+		goto yy7
 	}
-yy12:
+yy6:
 	in.state = -1
 //line "golang/003_fill_bf.re":99
 	{
@@ -209,19 +209,19 @@ yy12:
 		return lexNumber1, 0
 	}
 //line "golang/003_fill_bf.go":212
-yy13:
+yy7:
 	in.cursor += 1
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yych <= '/') {
-		goto yy14
+		goto yy8
 	}
 	if (yych <= '9') {
-		goto yy15
+		goto yy9
 	}
-yy14:
+yy8:
 	in.cursor = in.marker
-	goto yy12
-yy15:
+	goto yy6
+yy9:
 	in.cursor += 1
 	in.state = 3
 	if (in.limit-in.cursor < 1) {
@@ -230,12 +230,12 @@ yy15:
 yyFillLabel3:
 	yych = YYCTYPE(in.data[in.cursor])
 	if (yych <= '/') {
-		goto yy17
+		goto yy10
 	}
 	if (yych <= '9') {
-		goto yy15
+		goto yy9
 	}
-yy17:
+yy10:
 	in.state = -1
 //line "golang/003_fill_bf.re":104
 	{

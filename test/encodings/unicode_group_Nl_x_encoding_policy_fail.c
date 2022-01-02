@@ -16,65 +16,65 @@ Nl:
 	yych = *YYCURSOR;
 	if (yych <= 0x3020) {
 		if (yych <= 0x2182) {
-			if (yych <= 0x16ED) goto yy2;
-			if (yych <= 0x16F0) goto yy4;
-			if (yych >= 0x2160) goto yy4;
+			if (yych <= 0x16ED) goto yy1;
+			if (yych <= 0x16F0) goto yy3;
+			if (yych >= 0x2160) goto yy3;
 		} else {
 			if (yych <= 0x2188) {
-				if (yych >= 0x2185) goto yy4;
+				if (yych >= 0x2185) goto yy3;
 			} else {
-				if (yych == 0x3007) goto yy4;
+				if (yych == 0x3007) goto yy3;
 			}
 		}
 	} else {
 		if (yych <= 0xA6EF) {
 			if (yych <= 0x3037) {
-				if (yych <= 0x3029) goto yy4;
+				if (yych <= 0x3029) goto yy3;
 			} else {
-				if (yych <= 0x303A) goto yy4;
-				if (yych >= 0xA6E6) goto yy4;
+				if (yych <= 0x303A) goto yy3;
+				if (yych >= 0xA6E6) goto yy3;
 			}
 		} else {
 			if (yych <= 0xD800) {
-				if (yych >= 0xD800) goto yy6;
+				if (yych >= 0xD800) goto yy4;
 			} else {
-				if (yych == 0xD809) goto yy7;
+				if (yych == 0xD809) goto yy5;
 			}
 		}
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "encodings/unicode_group_Nl_x_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
 #line 51 "encodings/unicode_group_Nl_x_encoding_policy_fail.c"
-yy4:
+yy3:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Nl_x_encoding_policy_fail.re"
 	{ goto Nl; }
 #line 56 "encodings/unicode_group_Nl_x_encoding_policy_fail.c"
-yy6:
+yy4:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDF41) {
-		if (yych <= 0xDD3F) goto yy3;
-		if (yych <= 0xDD74) goto yy4;
-		if (yych <= 0xDF40) goto yy3;
-		goto yy4;
+		if (yych <= 0xDD3F) goto yy2;
+		if (yych <= 0xDD74) goto yy3;
+		if (yych <= 0xDF40) goto yy2;
+		goto yy3;
 	} else {
 		if (yych <= 0xDF4A) {
-			if (yych <= 0xDF49) goto yy3;
-			goto yy4;
-		} else {
-			if (yych <= 0xDFD0) goto yy3;
-			if (yych <= 0xDFD5) goto yy4;
+			if (yych <= 0xDF49) goto yy2;
 			goto yy3;
+		} else {
+			if (yych <= 0xDFD0) goto yy2;
+			if (yych <= 0xDFD5) goto yy3;
+			goto yy2;
 		}
 	}
-yy7:
+yy5:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy3;
-	if (yych <= 0xDC6E) goto yy4;
-	goto yy3;
+	if (yych <= 0xDBFF) goto yy2;
+	if (yych <= 0xDC6E) goto yy3;
+	goto yy2;
 }
 #line 15 "encodings/unicode_group_Nl_x_encoding_policy_fail.re"
 

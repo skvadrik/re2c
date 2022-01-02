@@ -21,51 +21,51 @@ func Lex(str string) int {
 	yych = YYPEEK()
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy4
+		goto yy3
 	default:
-		goto yy2
+		goto yy1
 	}
-yy2:
+yy1:
 	YYSKIP()
-yy3:
+yy2:
 //line "golang/001_basic_functions.re":21
 	{
 		return -1
 	}
 //line "golang/001_basic_functions.go":36
-yy4:
+yy3:
 	YYSKIP()
 	YYBACKUP()
 	yych = YYPEEK()
 	switch (yych) {
 	case 0x00:
-		goto yy5
+		goto yy4
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy7
+		goto yy5
 	default:
-		goto yy3
+		goto yy2
 	}
-yy5:
+yy4:
 	YYSKIP()
 //line "golang/001_basic_functions.re":25
 	{
 		return 1
 	}
 //line "golang/001_basic_functions.go":55
-yy7:
+yy5:
 	YYSKIP()
 	yych = YYPEEK()
 	switch (yych) {
 	case 0x00:
-		goto yy5
+		goto yy4
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy7
+		goto yy5
 	default:
-		goto yy9
+		goto yy6
 	}
-yy9:
+yy6:
 	YYRESTORE()
-	goto yy3
+	goto yy2
 }
 //line "golang/001_basic_functions.re":28
 

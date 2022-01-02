@@ -15,19 +15,19 @@ Co:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych <= 0x000EFFFF) {
-		if (yych <= 0x0000DFFF) goto yy2;
-		if (yych <= 0x0000F8FF) goto yy4;
+		if (yych <= 0x0000DFFF) goto yy1;
+		if (yych <= 0x0000F8FF) goto yy2;
 	} else {
-		if (yych <= 0x000FFFFD) goto yy4;
-		if (yych <= 0x000FFFFF) goto yy2;
-		if (yych <= 0x0010FFFD) goto yy4;
+		if (yych <= 0x000FFFFD) goto yy2;
+		if (yych <= 0x000FFFFF) goto yy1;
+		if (yych <= 0x0010FFFD) goto yy2;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Co_u_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }
 #line 30 "encodings/unicode_group_Co_u_encoding_policy_substitute.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Co_u_encoding_policy_substitute.re"
 	{ goto Co; }

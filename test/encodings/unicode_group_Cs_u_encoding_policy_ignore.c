@@ -14,14 +14,14 @@ Cs:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x0000D7FF) goto yy2;
-	if (yych <= 0x0000DFFF) goto yy4;
-yy2:
+	if (yych <= 0x0000D7FF) goto yy1;
+	if (yych <= 0x0000DFFF) goto yy2;
+yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Cs_u_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 24 "encodings/unicode_group_Cs_u_encoding_policy_ignore.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Cs_u_encoding_policy_ignore.re"
 	{ goto Cs; }

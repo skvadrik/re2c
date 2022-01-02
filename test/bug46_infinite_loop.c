@@ -26,25 +26,25 @@ int main(int argc, char** argv)
 #line 27 "bug46_infinite_loop.c"
 {
 	unsigned char yych;
-	goto yy3;
-yy4:
+	goto yy1;
+yy2:
 	++YYCURSOR;
-yy3:
+yy1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy7;
+		case 'a': goto yy4;
 		case 'b':
-		case 'c': goto yy6;
-		default: goto yy4;
+		case 'c': goto yy3;
+		default: goto yy2;
 	}
-yy6:
+yy3:
 #line 19 "bug46_infinite_loop.re"
 	{ printf("exit 0\n"); return 0; }
 #line 45 "bug46_infinite_loop.c"
-yy7:
+yy4:
 	++YYCURSOR;
-	goto yy6;
+	goto yy3;
 }
 #line 20 "bug46_infinite_loop.re"
 

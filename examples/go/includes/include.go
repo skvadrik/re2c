@@ -19,135 +19,135 @@ func lex(str string) int {
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy4
+		goto yy3
 	case '0':
-		goto yy5
+		goto yy4
 	case '1','2','3','4','5','6','7','8','9':
-		goto yy6
+		goto yy5
 	default:
-		goto yy2
+		goto yy1
 	}
-yy2:
+yy1:
 	cursor += 1
-yy3:
+yy2:
 	{ return ResultFail }
-yy4:
+yy3:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy9
+		goto yy7
 	default:
-		goto yy3
+		goto yy2
 	}
-yy5:
+yy4:
 	yyaccept = 0
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy9
+		goto yy7
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy12
+		goto yy9
 	case 'E':
 		fallthrough
 	case 'e':
-		goto yy15
+		goto yy11
 	default:
-		goto yy3
+		goto yy2
 	}
-yy6:
+yy5:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy9
+		goto yy7
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy6
+		goto yy5
 	case 'E':
 		fallthrough
 	case 'e':
-		goto yy15
+		goto yy11
 	default:
-		goto yy8
+		goto yy6
 	}
-yy8:
+yy6:
 	{ return ResultOk }
-yy9:
+yy7:
 	yyaccept = 2
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy9
+		goto yy7
 	case 'E':
 		fallthrough
 	case 'e':
-		goto yy15
-	default:
 		goto yy11
+	default:
+		goto yy8
 	}
-yy11:
+yy8:
 	{ return ResultOk }
-yy12:
+yy9:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '.':
-		goto yy9
+		goto yy7
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy12
+		goto yy9
 	case 'E':
 		fallthrough
 	case 'e':
-		goto yy15
+		goto yy11
 	default:
-		goto yy14
+		goto yy10
 	}
-yy14:
+yy10:
 	cursor = marker
 	switch (yyaccept) {
 	case 0:
-		goto yy3
+		goto yy2
 	case 1:
-		goto yy8
+		goto yy6
 	default:
-		goto yy11
+		goto yy8
 	}
-yy15:
+yy11:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '+':
 		fallthrough
 	case '-':
-		goto yy16
+		goto yy12
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy17
+		goto yy13
 	default:
-		goto yy14
+		goto yy10
 	}
-yy16:
+yy12:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy17
+		goto yy13
 	default:
-		goto yy14
+		goto yy10
 	}
-yy17:
+yy13:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy17
+		goto yy13
 	default:
-		goto yy11
+		goto yy8
 	}
 }
 

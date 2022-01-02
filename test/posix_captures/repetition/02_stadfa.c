@@ -5,29 +5,29 @@
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *(YYMARKER = YYCURSOR);
-	if (yych >= 0x01) goto yy3;
-yy2:
+	if (yych >= 0x01) goto yy2;
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt7 = NULL;
 	yyt1 = YYCURSOR - 1;
-	if (yych >= 0x01) goto yy5;
+	if (yych >= 0x01) goto yy3;
 	YYCURSOR = YYMARKER;
-	goto yy2;
-yy5:
+	goto yy1;
+yy3:
 	yych = *++YYCURSOR;
 	yyt5 = NULL;
 	yyt2 = yyt3 = YYCURSOR - 1;
-	if (yych >= 0x01) goto yy7;
+	if (yych >= 0x01) goto yy5;
 	yyt6 = YYCURSOR;
 	yyt4 = yyt3;
 	yyt3 = yyt2;
 	yyt2 = yyt7;
-yy6:
+yy4:
 	yynmatch = 7;
 	yypmatch[2] = yyt1;
 	yypmatch[5] = yyt2;
@@ -48,7 +48,7 @@ yy6:
 	yypmatch[12] = yyt6;
 	if (yyt6 != NULL) yypmatch[12] -= 1;
 	{}
-yy7:
+yy5:
 	yych = *++YYCURSOR;
 	yyt4 = yyt1;
 	yyt2 = yyt5 = NULL;
@@ -58,7 +58,7 @@ yy7:
 		yyt4 = yyt3;
 		yyt3 = yyt2;
 		yyt2 = yyt7;
-		goto yy6;
+		goto yy4;
 	}
 	++YYCURSOR;
 	yyt1 = yyt4;
@@ -67,7 +67,7 @@ yy7:
 	yyt4 = yyt3;
 	yyt3 = yyt2;
 	yyt2 = yyt7;
-	goto yy6;
+	goto yy4;
 }
 
 posix_captures/repetition/02_stadfa.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]

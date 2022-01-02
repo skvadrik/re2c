@@ -5,9 +5,9 @@
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if (yych >= 0x01) goto yy3;
+	if (yych >= 0x01) goto yy2;
 	yyt1 = yyt2 = YYCURSOR;
-yy2:
+yy1:
 	yynmatch = 3;
 	yypmatch[2] = yyt2;
 	yypmatch[4] = yyt1;
@@ -16,16 +16,16 @@ yy2:
 	yypmatch[3] = yyt1;
 	yypmatch[5] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt2 = YYCURSOR - 1;
 	if (yych <= 0x00) {
 		yyt1 = YYCURSOR;
-		goto yy2;
+		goto yy1;
 	}
 	++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
-	goto yy2;
+	goto yy1;
 }
 
 posix_captures/glennfowler/07_stadfa.re:6:4: warning: rule matches empty string [-Wmatch-empty-string]

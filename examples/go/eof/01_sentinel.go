@@ -15,47 +15,47 @@ func lex(str string) int {
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy2
+		goto yy1
 	case ' ':
-		goto yy6
+		goto yy3
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
-		goto yy9
+		goto yy5
 	default:
-		goto yy4
+		goto yy2
 	}
-yy2:
+yy1:
 	cursor += 1
 //line "go/eof/01_sentinel.re":16
 	{ return count }
 //line "go/eof/01_sentinel.go":31
-yy4:
+yy2:
 	cursor += 1
 //line "go/eof/01_sentinel.re":15
 	{ return -1 }
 //line "go/eof/01_sentinel.go":36
-yy6:
+yy3:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case ' ':
-		goto yy6
+		goto yy3
 	default:
-		goto yy8
+		goto yy4
 	}
-yy8:
+yy4:
 //line "go/eof/01_sentinel.re":18
 	{ continue }
 //line "go/eof/01_sentinel.go":49
-yy9:
+yy5:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
-		goto yy9
+		goto yy5
 	default:
-		goto yy11
+		goto yy6
 	}
-yy11:
+yy6:
 //line "go/eof/01_sentinel.re":17
 	{ count += 1; continue }
 //line "go/eof/01_sentinel.go":62

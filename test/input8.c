@@ -9,62 +9,62 @@
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '\n': goto yy4;
-		default: goto yy2;
+		case '\n': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x00: goto yy6;
-		case '\n': goto yy3;
-		default: goto yy8;
+		case 0x00: goto yy4;
+		case '\n': goto yy2;
+		default: goto yy6;
 	}
-yy3:
+yy2:
 #line 7 "input8.re"
 	{ return 1; }
 #line 27 "input8.c"
-yy4:
+yy3:
 	++YYCURSOR;
 #line 8 "input8.re"
 	{ return 2; }
 #line 32 "input8.c"
-yy6:
+yy4:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x00: goto yy10;
-		case '\n': goto yy7;
-		default: goto yy11;
+		case 0x00: goto yy8;
+		case '\n': goto yy5;
+		default: goto yy9;
 	}
-yy7:
+yy5:
 #line 6 "input8.re"
 	{ return 0; }
 #line 44 "input8.c"
-yy8:
+yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x00: goto yy10;
-		case '\n': goto yy9;
-		default: goto yy11;
+		case 0x00: goto yy8;
+		case '\n': goto yy7;
+		default: goto yy9;
 	}
-yy9:
+yy7:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
-		goto yy3;
+		goto yy2;
 	} else {
-		goto yy7;
+		goto yy5;
 	}
+yy8:
+	yych = *++YYCURSOR;
+	if (yych <= 0x00) goto yy10;
+	goto yy5;
+yy9:
+	yych = *++YYCURSOR;
+	if (yych >= 0x01) goto yy7;
 yy10:
-	yych = *++YYCURSOR;
-	if (yych <= 0x00) goto yy12;
-	goto yy7;
-yy11:
-	yych = *++YYCURSOR;
-	if (yych >= 0x01) goto yy9;
-yy12:
 	++YYCURSOR;
-	goto yy7;
+	goto yy5;
 }
 #line 10 "input8.re"
 

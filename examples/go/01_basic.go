@@ -10,24 +10,24 @@ func lex(str string) {                    //
 	var yych byte
 	yych = str[cursor]
 	if (yych <= '0') {
-		goto yy2
+		goto yy1
 	}
 	if (yych <= '9') {
-		goto yy4
+		goto yy2
 	}
-yy2:
+yy1:
 	cursor += 1
 	{ panic("error!") }
-yy4:
+yy2:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= '/') {
-		goto yy6
+		goto yy3
 	}
 	if (yych <= '9') {
-		goto yy4
+		goto yy2
 	}
-yy6:
+yy3:
 	{ return }
 }
 

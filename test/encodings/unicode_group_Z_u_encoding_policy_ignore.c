@@ -16,31 +16,31 @@ Z:
 	yych = *YYCURSOR;
 	if (yych <= 0x0000200A) {
 		if (yych <= 0x000000A0) {
-			if (yych == ' ') goto yy4;
-			if (yych >= 0x000000A0) goto yy4;
+			if (yych == ' ') goto yy2;
+			if (yych >= 0x000000A0) goto yy2;
 		} else {
-			if (yych == 0x00001680) goto yy4;
-			if (yych >= 0x00002000) goto yy4;
+			if (yych == 0x00001680) goto yy2;
+			if (yych >= 0x00002000) goto yy2;
 		}
 	} else {
 		if (yych <= 0x0000202F) {
-			if (yych <= 0x00002027) goto yy2;
-			if (yych <= 0x00002029) goto yy4;
-			if (yych >= 0x0000202F) goto yy4;
+			if (yych <= 0x00002027) goto yy1;
+			if (yych <= 0x00002029) goto yy2;
+			if (yych >= 0x0000202F) goto yy2;
 		} else {
 			if (yych <= 0x0000205F) {
-				if (yych >= 0x0000205F) goto yy4;
+				if (yych >= 0x0000205F) goto yy2;
 			} else {
-				if (yych == 0x00003000) goto yy4;
+				if (yych == 0x00003000) goto yy2;
 			}
 		}
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Z_u_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 43 "encodings/unicode_group_Z_u_encoding_policy_ignore.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Z_u_encoding_policy_ignore.re"
 	{ goto Z; }

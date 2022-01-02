@@ -7,32 +7,32 @@
 	yych = *(YYMARKER = YYCURSOR);
 	if (yych >= 0x01) {
 		yyt1 = YYCURSOR;
-		goto yy3;
+		goto yy2;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
+yy2:
+	yych = *++YYCURSOR;
+	if (yych >= 0x01) goto yy4;
 yy3:
-	yych = *++YYCURSOR;
-	if (yych >= 0x01) goto yy5;
-yy4:
 	YYCURSOR = YYMARKER;
-	goto yy2;
-yy5:
+	goto yy1;
+yy4:
 	yych = *++YYCURSOR;
-	if (yych <= 0x00) goto yy4;
+	if (yych <= 0x00) goto yy3;
 	yyt4 = NULL;
 	yyt2 = YYCURSOR;
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) {
 		yyt4 = NULL;
 		yyt2 = YYCURSOR;
-		goto yy8;
+		goto yy6;
 	}
 	yyt3 = yyt5 = YYCURSOR;
-yy7:
+yy5:
 	yynmatch = 4;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
@@ -45,23 +45,23 @@ yy7:
 	yypmatch[6] = yyt5;
 	if (yyt5 != NULL) yypmatch[6] -= 1;
 	{}
-yy8:
+yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
 		yyt3 = yyt5 = YYCURSOR;
-		goto yy7;
+		goto yy5;
 	}
 	yyt4 = NULL;
 	yyt2 = YYCURSOR;
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
 		yyt3 = yyt5 = YYCURSOR;
-		goto yy7;
+		goto yy5;
 	}
 	++YYCURSOR;
 	yyt5 = NULL;
 	yyt3 = yyt4 = YYCURSOR;
-	goto yy7;
+	goto yy5;
 }
 
 posix_captures/repetition/06.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]

@@ -10,22 +10,22 @@
 	switch (yych) {
 		case 'a':
 			yyt1 = NULL;
-			goto yy3;
-		default: goto yy2;
+			goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	{}
-yy3:
+yy2:
 	YYMARKER = ++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'b':
 			yyt2 = YYCURSOR;
-			goto yy5;
-		default: goto yy4;
+			goto yy4;
+		default: goto yy3;
 	}
-yy4:
+yy3:
 	u = yyt1;
 	v = yyt1;
 	w = yyt1;
@@ -33,19 +33,19 @@ yy4:
 	y = yyt1;
 	z = yyt1;
 	{}
-yy5:
+yy4:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a':
 			yyt1 = yyt2;
-			goto yy3;
-		default: goto yy6;
+			goto yy2;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	YYCURSOR = YYMARKER;
-	goto yy4;
+	goto yy3;
 }
 
 tags/uniq_nofix.re:6:33: warning: tag 'u' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

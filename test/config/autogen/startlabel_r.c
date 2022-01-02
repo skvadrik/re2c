@@ -13,9 +13,9 @@ yy0:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy1;
-		default: goto yy3;
+		default: goto yy2;
 	}
-yy3:
+yy2:
 	{ a }
 }
 
@@ -24,17 +24,17 @@ yy3:
 
 {
 	YYCTYPE yych;
-	goto yy4;
-yy5:
-	++YYCURSOR;
+	goto yy3;
 yy4:
+	++YYCURSOR;
+yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy5;
-		default: goto yy7;
+		case 'a': goto yy4;
+		default: goto yy5;
 	}
-yy7:
+yy5:
 	{ a }
 }
 
@@ -43,14 +43,34 @@ yy7:
 
 {
 	YYCTYPE yych;
-	goto yy8;
-yy9:
+	goto yy6;
+yy7:
 	++YYCURSOR;
-yy8:
+yy6:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy9;
+		case 'a': goto yy7;
+		default: goto yy8;
+	}
+yy8:
+	{ a }
+}
+
+
+// re2c:startlabel = 0;
+// re2c:startlabel = ;
+
+{
+	YYCTYPE yych;
+	goto yy9;
+yy10:
+	++YYCURSOR;
+yy9:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy10;
 		default: goto yy11;
 	}
 yy11:
@@ -58,19 +78,19 @@ yy11:
 }
 
 
-// re2c:startlabel = 0;
-// re2c:startlabel = ;
+// re2c:startlabel = 1;
 
 {
 	YYCTYPE yych;
-	goto yy12;
-yy13:
-	++YYCURSOR;
 yy12:
+	goto yy13;
+yy14:
+	++YYCURSOR;
+yy13:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy13;
+		case 'a': goto yy14;
 		default: goto yy15;
 	}
 yy15:
@@ -79,38 +99,58 @@ yy15:
 
 
 // re2c:startlabel = 1;
-
-{
-	YYCTYPE yych;
-yy16:
-	goto yy17;
-yy18:
-	++YYCURSOR;
-yy17:
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy18;
-		default: goto yy20;
-	}
-yy20:
-	{ a }
-}
-
-
-// re2c:startlabel = 1;
 // re2c:startlabel = ;
 
 {
 	YYCTYPE yych;
-	goto yy21;
-yy22:
+	goto yy16;
+yy17:
 	++YYCURSOR;
-yy21:
+yy16:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy22;
+		case 'a': goto yy17;
+		default: goto yy18;
+	}
+yy18:
+	{ a }
+}
+
+
+// re2c:startlabel = Lstart;
+
+{
+	YYCTYPE yych;
+Lstart:
+	goto yy19;
+yy20:
+	++YYCURSOR;
+yy19:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy20;
+		default: goto yy21;
+	}
+yy21:
+	{ a }
+}
+
+
+// re2c:startlabel = Lstart;
+// re2c:startlabel = ;
+
+{
+	YYCTYPE yych;
+	goto yy22;
+yy23:
+	++YYCURSOR;
+yy22:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy23;
 		default: goto yy24;
 	}
 yy24:
@@ -119,6 +159,7 @@ yy24:
 
 
 // re2c:startlabel = Lstart;
+// re2c:startlabel = 0;
 
 {
 	YYCTYPE yych;
@@ -131,113 +172,72 @@ yy25:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy26;
-		default: goto yy28;
+		default: goto yy27;
 	}
-yy28:
-	{ a }
-}
-
-
-// re2c:startlabel = Lstart;
-// re2c:startlabel = ;
-
-{
-	YYCTYPE yych;
-	goto yy29;
-yy30:
-	++YYCURSOR;
-yy29:
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy30;
-		default: goto yy32;
-	}
-yy32:
+yy27:
 	{ a }
 }
 
 
 // re2c:startlabel = Lstart;
 // re2c:startlabel = 0;
+// re2c:startlabel = ;
+
+{
+	YYCTYPE yych;
+	goto yy28;
+yy29:
+	++YYCURSOR;
+yy28:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy29;
+		default: goto yy30;
+	}
+yy30:
+	{ a }
+}
+
+
+// re2c:startlabel = Lstart;
+// re2c:startlabel = 1;
 
 {
 	YYCTYPE yych;
 Lstart:
-	goto yy33;
-yy34:
+	goto yy31;
+yy32:
 	++YYCURSOR;
-yy33:
+yy31:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy34;
+		case 'a': goto yy32;
+		default: goto yy33;
+	}
+yy33:
+	{ a }
+}
+
+
+// re2c:startlabel = Lstart;
+// re2c:startlabel = 1;
+// re2c:startlabel = ;
+
+{
+	YYCTYPE yych;
+	goto yy34;
+yy35:
+	++YYCURSOR;
+yy34:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy35;
 		default: goto yy36;
 	}
 yy36:
-	{ a }
-}
-
-
-// re2c:startlabel = Lstart;
-// re2c:startlabel = 0;
-// re2c:startlabel = ;
-
-{
-	YYCTYPE yych;
-	goto yy37;
-yy38:
-	++YYCURSOR;
-yy37:
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy38;
-		default: goto yy40;
-	}
-yy40:
-	{ a }
-}
-
-
-// re2c:startlabel = Lstart;
-// re2c:startlabel = 1;
-
-{
-	YYCTYPE yych;
-Lstart:
-	goto yy41;
-yy42:
-	++YYCURSOR;
-yy41:
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy42;
-		default: goto yy44;
-	}
-yy44:
-	{ a }
-}
-
-
-// re2c:startlabel = Lstart;
-// re2c:startlabel = 1;
-// re2c:startlabel = ;
-
-{
-	YYCTYPE yych;
-	goto yy45;
-yy46:
-	++YYCURSOR;
-yy45:
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy46;
-		default: goto yy48;
-	}
-yy48:
 	{ a }
 }
 

@@ -8,33 +8,33 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
-		case 'b': goto yy6;
-		case 'c': goto yy8;
-		case 'd': goto yy10;
-		default: goto yy2;
+		case 'a': goto yy2;
+		case 'b': goto yy3;
+		case 'c': goto yy4;
+		case 'd': goto yy5;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 13 "input13.re"
 	{ return '\0'; }
 #line 22 "input13.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 9 "input13.re"
 	{ return 'a'; }
 #line 27 "input13.c"
-yy6:
+yy3:
 	++YYCURSOR;
 #line 10 "input13.re"
 	{ return 'b'; }
 #line 32 "input13.c"
-yy8:
+yy4:
 	++YYCURSOR;
 #line 11 "input13.re"
 	{ return 'c'; }
 #line 37 "input13.c"
-yy10:
+yy5:
 	++YYCURSOR;
 #line 12 "input13.re"
 	{ return 'd'; }

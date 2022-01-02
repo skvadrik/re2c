@@ -16,38 +16,38 @@ Sk:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '^':
-		case '`': goto yy4;
-		case 0xC2: goto yy6;
-		case 0xCB: goto yy7;
-		case 0xCD: goto yy8;
-		case 0xCE: goto yy9;
-		case 0xE1: goto yy10;
-		case 0xE3: goto yy11;
-		case 0xEA: goto yy12;
-		case 0xEF: goto yy13;
-		default: goto yy2;
+		case '`': goto yy3;
+		case 0xC2: goto yy4;
+		case 0xCB: goto yy5;
+		case 0xCD: goto yy6;
+		case 0xCE: goto yy7;
+		case 0xE1: goto yy8;
+		case 0xE3: goto yy9;
+		case 0xEA: goto yy10;
+		case 0xEF: goto yy11;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "encodings/unicode_group_Sk_8_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }
 #line 36 "encodings/unicode_group_Sk_8_encoding_policy_substitute.c"
-yy4:
+yy3:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Sk_8_encoding_policy_substitute.re"
 	{ goto Sk; }
 #line 41 "encodings/unicode_group_Sk_8_encoding_policy_substitute.c"
-yy6:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA8:
 		case 0xAF:
 		case 0xB4:
-		case 0xB8: goto yy4;
-		default: goto yy3;
+		case 0xB8: goto yy3;
+		default: goto yy2;
 	}
-yy7:
+yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x82:
@@ -92,64 +92,64 @@ yy7:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy4;
-		default: goto yy3;
+		case 0xBF: goto yy3;
+		default: goto yy2;
 	}
-yy8:
+yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB5: goto yy4;
-		default: goto yy3;
+		case 0xB5: goto yy3;
+		default: goto yy2;
 	}
-yy9:
+yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x84:
-		case 0x85: goto yy4;
-		default: goto yy3;
+		case 0x85: goto yy3;
+		default: goto yy2;
+	}
+yy8:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xBE: goto yy12;
+		case 0xBF: goto yy14;
+		default: goto yy2;
+	}
+yy9:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x82: goto yy15;
+		default: goto yy2;
 	}
 yy10:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xBE: goto yy14;
-		case 0xBF: goto yy16;
-		default: goto yy3;
+		case 0x9C: goto yy16;
+		case 0x9E: goto yy17;
+		case 0xAD: goto yy18;
+		default: goto yy2;
 	}
 yy11:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x82: goto yy17;
-		default: goto yy3;
+		case 0xAE: goto yy19;
+		case 0xAF: goto yy20;
+		case 0xBC: goto yy21;
+		case 0xBD: goto yy22;
+		case 0xBF: goto yy23;
+		default: goto yy2;
 	}
 yy12:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9C: goto yy18;
-		case 0x9E: goto yy19;
-		case 0xAD: goto yy20;
-		default: goto yy3;
-	}
-yy13:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0xAE: goto yy21;
-		case 0xAF: goto yy22;
-		case 0xBC: goto yy23;
-		case 0xBD: goto yy24;
-		case 0xBF: goto yy25;
-		default: goto yy3;
-	}
-yy14:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xBD:
-		case 0xBF: goto yy4;
-		default: goto yy15;
+		case 0xBF: goto yy3;
+		default: goto yy13;
 	}
-yy15:
+yy13:
 	YYCURSOR = YYMARKER;
-	goto yy3;
-yy16:
+	goto yy2;
+yy14:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -164,17 +164,17 @@ yy16:
 		case 0xAE:
 		case 0xAF:
 		case 0xBD:
-		case 0xBE: goto yy4;
-		default: goto yy15;
+		case 0xBE: goto yy3;
+		default: goto yy13;
 	}
-yy17:
+yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x9B:
-		case 0x9C: goto yy4;
-		default: goto yy15;
+		case 0x9C: goto yy3;
+		default: goto yy13;
 	}
-yy18:
+yy16:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -201,23 +201,23 @@ yy18:
 		case 0x95:
 		case 0x96:
 		case 0xA0:
-		case 0xA1: goto yy4;
-		default: goto yy15;
+		case 0xA1: goto yy3;
+		default: goto yy13;
 	}
-yy19:
+yy17:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x89:
-		case 0x8A: goto yy4;
-		default: goto yy15;
+		case 0x8A: goto yy3;
+		default: goto yy13;
 	}
-yy20:
+yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9B: goto yy4;
-		default: goto yy15;
+		case 0x9B: goto yy3;
+		default: goto yy13;
 	}
-yy21:
+yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xB2:
@@ -233,33 +233,33 @@ yy21:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy4;
-		default: goto yy15;
+		case 0xBF: goto yy3;
+		default: goto yy13;
+	}
+yy20:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81: goto yy3;
+		default: goto yy13;
+	}
+yy21:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBE: goto yy3;
+		default: goto yy13;
 	}
 yy22:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81: goto yy4;
-		default: goto yy15;
+		case 0x80: goto yy3;
+		default: goto yy13;
 	}
 yy23:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBE: goto yy4;
-		default: goto yy15;
-	}
-yy24:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80: goto yy4;
-		default: goto yy15;
-	}
-yy25:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA3: goto yy4;
-		default: goto yy15;
+		case 0xA3: goto yy3;
+		default: goto yy13;
 	}
 }
 #line 15 "encodings/unicode_group_Sk_8_encoding_policy_substitute.re"

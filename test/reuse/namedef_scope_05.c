@@ -11,10 +11,10 @@
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'a') goto yy4;
+	if (yych == 'a') goto yy1;
 	++YYCURSOR;
 	{}
-yy4:
+yy1:
 	++YYCURSOR;
 	{}
 }
@@ -25,10 +25,10 @@ yy4:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'b') goto yy10;
+	if (yych == 'b') goto yy3;
 	++YYCURSOR;
 	{}
-yy10:
+yy3:
 	++YYCURSOR;
 	{}
 }
@@ -39,10 +39,10 @@ yy10:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'a') goto yy16;
+	if (yych == 'a') goto yy5;
 	++YYCURSOR;
 	{}
-yy16:
+yy5:
 	++YYCURSOR;
 	{}
 }
@@ -53,10 +53,10 @@ yy16:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'b') goto yy22;
+	if (yych == 'b') goto yy7;
 	++YYCURSOR;
 	{}
-yy22:
+yy7:
 	++YYCURSOR;
 	{}
 }
@@ -67,10 +67,10 @@ yy22:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'c') goto yy28;
+	if (yych == 'c') goto yy9;
 	++YYCURSOR;
 	{}
-yy28:
+yy9:
 	++YYCURSOR;
 	{}
 }
@@ -81,10 +81,10 @@ yy28:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'd') goto yy34;
+	if (yych == 'd') goto yy11;
 	++YYCURSOR;
 	{}
-yy34:
+yy11:
 	++YYCURSOR;
 	{}
 }
@@ -95,10 +95,10 @@ yy34:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 'd') goto yy40;
+	if (yych == 'd') goto yy13;
 	++YYCURSOR;
 	{}
-yy40:
+yy13:
 	++YYCURSOR;
 	{}
 }

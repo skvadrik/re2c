@@ -12,53 +12,53 @@ static void lex(const char *YYCURSOR)
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '0': goto yy4;
-		default: goto yy2;
+		case '0': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 	{ printf("error\n"); return; }
-yy4:
+yy3:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 		case '1':
 			yyt1 = YYCURSOR;
-			goto yy5;
+			goto yy4;
 		case '2':
 			yyt1 = YYCURSOR;
-			goto yy8;
-		default: goto yy3;
+			goto yy6;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case '1': goto yy5;
-		case '2': goto yy8;
-		default: goto yy7;
+		case '1': goto yy4;
+		case '2': goto yy6;
+		default: goto yy5;
 	}
-yy7:
+yy5:
 	YYCURSOR = YYMARKER;
-	goto yy3;
-yy8:
+	goto yy2;
+yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '3':
 			yyt2 = YYCURSOR;
-			goto yy9;
+			goto yy7;
 		case '4':
 			yyt2 = YYCURSOR;
-			goto yy11;
-		default: goto yy7;
+			goto yy8;
+		default: goto yy5;
 	}
-yy9:
+yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case '3': goto yy9;
-		case '4': goto yy11;
-		default: goto yy7;
+		case '3': goto yy7;
+		case '4': goto yy8;
+		default: goto yy5;
 	}
-yy11:
+yy8:
 	++YYCURSOR;
 	p1 = yyt1;
 	p3 = yyt2;

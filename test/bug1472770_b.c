@@ -66,14 +66,14 @@ yy0:
 	if (yybm[0+yych] & 128) {
 		goto yy1;
 	}
-	if (yych >= 0x01) goto yy5;
+	if (yych >= 0x01) goto yy2;
 	++YYCURSOR;
 #line 27 "bug1472770_b.re"
 	{
 		return n;
 	}
 #line 76 "bug1472770_b.c"
-yy5:
+yy2:
 	++YYCURSOR;
 #line 22 "bug1472770_b.re"
 	{

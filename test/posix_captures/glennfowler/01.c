@@ -8,13 +8,13 @@
 	switch (yych) {
 		case 'a':
 			yyt1 = yyt3 = YYCURSOR;
-			goto yy3;
+			goto yy2;
 		default:
 			yyt2 = NULL;
 			yyt1 = yyt3 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 4;
 	yypmatch[2] = yyt1;
 	yypmatch[4] = yyt3;
@@ -26,33 +26,33 @@ yy2:
 	yypmatch[6] = yyt2;
 	if (yyt2 != NULL) yypmatch[6] -= 2;
 	{}
-yy3:
+yy2:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 		case 'a':
 			yyt3 = YYCURSOR;
-			goto yy4;
-		case 'b': goto yy6;
+			goto yy3;
+		case 'b': goto yy5;
 		default:
 			yyt2 = NULL;
 			yyt3 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy4:
+yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy6;
-		default: goto yy5;
+		case 'b': goto yy5;
+		default: goto yy4;
 	}
-yy5:
+yy4:
 	YYCURSOR = YYMARKER;
 	yyt2 = NULL;
 	yyt3 = YYCURSOR;
-	goto yy2;
-yy6:
+	goto yy1;
+yy5:
 	++YYCURSOR;
 	yyt2 = YYCURSOR;
-	goto yy2;
+	goto yy1;
 }
 
 posix_captures/glennfowler/01.re:6:4: warning: rule matches empty string [-Wmatch-empty-string]

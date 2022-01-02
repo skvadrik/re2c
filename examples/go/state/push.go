@@ -60,17 +60,17 @@ default:
 	goto yy0
 case 0:
 	if (st.limit <= st.cursor) {
-		goto yy11
+		goto yy8
 	}
 	goto yyFillLabel0
 case 1:
 	if (st.limit <= st.cursor) {
-		goto yy4
+		goto yy3
 	}
 	goto yyFillLabel1
 case 2:
 	if (st.limit <= st.cursor) {
-		goto yy10
+		goto yy7
 	}
 	goto yyFillLabel2
 }
@@ -86,64 +86,64 @@ yyFillLabel0:
 	yych = st.data[st.cursor]
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
-		goto yy5
+		goto yy4
 	default:
 		if (st.limit <= st.cursor) {
 			st.state = 0
 			return lexWaitingForInput
 		}
-		goto yy3
+		goto yy2
 	}
-yy3:
+yy2:
 	st.cursor += 1
-yy4:
+yy3:
 	st.state = -1
 //line "go/state/push.re":70
 	{ return lexPacketBroken }
 //line "go/state/push.go":104
-yy5:
+yy4:
 	st.cursor += 1
 	st.marker = st.cursor
 yyFillLabel1:
 	yych = st.data[st.cursor]
 	switch (yych) {
 	case ';':
-		goto yy6
+		goto yy5
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
-		goto yy8
+		goto yy6
 	default:
 		if (st.limit <= st.cursor) {
 			st.state = 1
 			return lexWaitingForInput
 		}
-		goto yy4
+		goto yy3
 	}
-yy6:
+yy5:
 	st.cursor += 1
 	st.state = -1
 //line "go/state/push.re":72
 	{ *recv = *recv + 1; goto loop }
 //line "go/state/push.go":127
-yy8:
+yy6:
 	st.cursor += 1
 yyFillLabel2:
 	yych = st.data[st.cursor]
 	switch (yych) {
 	case ';':
-		goto yy6
+		goto yy5
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
-		goto yy8
+		goto yy6
 	default:
 		if (st.limit <= st.cursor) {
 			st.state = 2
 			return lexWaitingForInput
 		}
-		goto yy10
+		goto yy7
 	}
-yy10:
+yy7:
 	st.cursor = st.marker
-	goto yy4
-yy11:
+	goto yy3
+yy8:
 	st.state = -1
 //line "go/state/push.re":71
 	{ return lexEnd }

@@ -162,285 +162,285 @@ Lexer::Token Lexer::ReadToken() {
 	};
 	yych = *p;
 	if (yybm[0+yych] & 32) {
-		goto yy9;
+		goto yy6;
 	}
 	if (yych <= '^') {
 		if (yych <= ',') {
 			if (yych <= '\f') {
-				if (yych <= 0x00) goto yy2;
-				if (yych == '\n') goto yy6;
-				goto yy4;
+				if (yych <= 0x00) goto yy1;
+				if (yych == '\n') goto yy4;
+				goto yy2;
 			} else {
-				if (yych <= '\r') goto yy8;
-				if (yych == '#') goto yy12;
-				goto yy4;
+				if (yych <= '\r') goto yy5;
+				if (yych == '#') goto yy8;
+				goto yy2;
 			}
 		} else {
 			if (yych <= ':') {
-				if (yych == '/') goto yy4;
-				if (yych <= '9') goto yy13;
-				goto yy16;
+				if (yych == '/') goto yy2;
+				if (yych <= '9') goto yy9;
+				goto yy11;
 			} else {
 				if (yych <= '=') {
-					if (yych <= '<') goto yy4;
-					goto yy18;
+					if (yych <= '<') goto yy2;
+					goto yy12;
 				} else {
-					if (yych <= '@') goto yy4;
-					if (yych <= 'Z') goto yy13;
-					goto yy4;
+					if (yych <= '@') goto yy2;
+					if (yych <= 'Z') goto yy9;
+					goto yy2;
 				}
 			}
 		}
 	} else {
 		if (yych <= 'i') {
 			if (yych <= 'b') {
-				if (yych == '`') goto yy4;
-				if (yych <= 'a') goto yy13;
-				goto yy20;
+				if (yych == '`') goto yy2;
+				if (yych <= 'a') goto yy9;
+				goto yy13;
 			} else {
-				if (yych == 'd') goto yy21;
-				if (yych <= 'h') goto yy13;
-				goto yy22;
+				if (yych == 'd') goto yy14;
+				if (yych <= 'h') goto yy9;
+				goto yy15;
 			}
 		} else {
 			if (yych <= 'r') {
-				if (yych == 'p') goto yy23;
-				if (yych <= 'q') goto yy13;
-				goto yy24;
+				if (yych == 'p') goto yy16;
+				if (yych <= 'q') goto yy9;
+				goto yy17;
 			} else {
 				if (yych <= 'z') {
-					if (yych <= 's') goto yy25;
-					goto yy13;
+					if (yych <= 's') goto yy18;
+					goto yy9;
 				} else {
-					if (yych == '|') goto yy26;
-					goto yy4;
+					if (yych == '|') goto yy19;
+					goto yy2;
 				}
 			}
 		}
 	}
-yy2:
+yy1:
 	++p;
 	{ token = TEOF;     break; }
+yy2:
+	++p;
+yy3:
+	{ token = ERROR;    break; }
 yy4:
 	++p;
-yy5:
-	{ token = ERROR;    break; }
-yy6:
-	++p;
 	{ token = NEWLINE;  break; }
-yy8:
+yy5:
 	yych = *++p;
-	if (yych == '\n') goto yy28;
-	goto yy5;
-yy9:
+	if (yych == '\n') goto yy20;
+	goto yy3;
+yy6:
 	yyaccept = 0;
 	yych = *(q = ++p);
 	if (yybm[0+yych] & 32) {
-		goto yy9;
+		goto yy6;
 	}
 	if (yych <= '\f') {
-		if (yych == '\n') goto yy6;
+		if (yych == '\n') goto yy4;
 	} else {
-		if (yych <= '\r') goto yy30;
-		if (yych == '#') goto yy32;
+		if (yych <= '\r') goto yy21;
+		if (yych == '#') goto yy23;
 	}
-yy11:
+yy7:
 	{ token = INDENT;   break; }
-yy12:
+yy8:
 	yyaccept = 1;
 	yych = *(q = ++p);
-	if (yych <= 0x00) goto yy5;
-	goto yy33;
-yy13:
+	if (yych <= 0x00) goto yy3;
+	goto yy24;
+yy9:
 	yych = *++p;
-yy14:
+yy10:
 	if (yybm[0+yych] & 64) {
-		goto yy13;
+		goto yy9;
 	}
 	{ token = IDENT;    break; }
-yy16:
+yy11:
 	++p;
 	{ token = COLON;    break; }
-yy18:
+yy12:
 	++p;
 	{ token = EQUALS;   break; }
-yy20:
+yy13:
 	yych = *++p;
-	if (yych == 'u') goto yy36;
-	goto yy14;
-yy21:
+	if (yych == 'u') goto yy25;
+	goto yy10;
+yy14:
 	yych = *++p;
-	if (yych == 'e') goto yy37;
-	goto yy14;
-yy22:
+	if (yych == 'e') goto yy26;
+	goto yy10;
+yy15:
 	yych = *++p;
-	if (yych == 'n') goto yy38;
-	goto yy14;
-yy23:
+	if (yych == 'n') goto yy27;
+	goto yy10;
+yy16:
 	yych = *++p;
-	if (yych == 'o') goto yy39;
-	goto yy14;
-yy24:
+	if (yych == 'o') goto yy28;
+	goto yy10;
+yy17:
 	yych = *++p;
-	if (yych == 'u') goto yy40;
-	goto yy14;
-yy25:
+	if (yych == 'u') goto yy29;
+	goto yy10;
+yy18:
 	yych = *++p;
-	if (yych == 'u') goto yy41;
-	goto yy14;
-yy26:
+	if (yych == 'u') goto yy30;
+	goto yy10;
+yy19:
 	yych = *++p;
-	if (yych == '|') goto yy42;
+	if (yych == '|') goto yy31;
 	{ token = PIPE;     break; }
-yy28:
+yy20:
 	++p;
 	{ token = NEWLINE;  break; }
-yy30:
+yy21:
 	yych = *++p;
-	if (yych == '\n') goto yy28;
-yy31:
+	if (yych == '\n') goto yy20;
+yy22:
 	p = q;
 	if (yyaccept == 0) {
-		goto yy11;
+		goto yy7;
 	} else {
-		goto yy5;
+		goto yy3;
 	}
-yy32:
+yy23:
 	yych = *++p;
-yy33:
+yy24:
 	if (yybm[0+yych] & 128) {
-		goto yy32;
+		goto yy23;
 	}
-	if (yych <= 0x00) goto yy31;
+	if (yych <= 0x00) goto yy22;
 	++p;
 	{ continue; }
-yy36:
+yy25:
 	yych = *++p;
-	if (yych == 'i') goto yy44;
-	goto yy14;
-yy37:
+	if (yych == 'i') goto yy32;
+	goto yy10;
+yy26:
 	yych = *++p;
-	if (yych == 'f') goto yy45;
-	goto yy14;
-yy38:
+	if (yych == 'f') goto yy33;
+	goto yy10;
+yy27:
 	yych = *++p;
-	if (yych == 'c') goto yy46;
-	goto yy14;
-yy39:
+	if (yych == 'c') goto yy34;
+	goto yy10;
+yy28:
 	yych = *++p;
-	if (yych == 'o') goto yy47;
-	goto yy14;
-yy40:
+	if (yych == 'o') goto yy35;
+	goto yy10;
+yy29:
 	yych = *++p;
-	if (yych == 'l') goto yy48;
-	goto yy14;
-yy41:
+	if (yych == 'l') goto yy36;
+	goto yy10;
+yy30:
 	yych = *++p;
-	if (yych == 'b') goto yy49;
-	goto yy14;
-yy42:
+	if (yych == 'b') goto yy37;
+	goto yy10;
+yy31:
 	++p;
 	{ token = PIPE2;    break; }
-yy44:
+yy32:
 	yych = *++p;
-	if (yych == 'l') goto yy50;
-	goto yy14;
-yy45:
+	if (yych == 'l') goto yy38;
+	goto yy10;
+yy33:
 	yych = *++p;
-	if (yych == 'a') goto yy51;
-	goto yy14;
-yy46:
+	if (yych == 'a') goto yy39;
+	goto yy10;
+yy34:
 	yych = *++p;
-	if (yych == 'l') goto yy52;
-	goto yy14;
-yy47:
+	if (yych == 'l') goto yy40;
+	goto yy10;
+yy35:
 	yych = *++p;
-	if (yych == 'l') goto yy53;
-	goto yy14;
-yy48:
+	if (yych == 'l') goto yy41;
+	goto yy10;
+yy36:
 	yych = *++p;
-	if (yych == 'e') goto yy55;
-	goto yy14;
-yy49:
+	if (yych == 'e') goto yy42;
+	goto yy10;
+yy37:
 	yych = *++p;
-	if (yych == 'n') goto yy57;
-	goto yy14;
-yy50:
+	if (yych == 'n') goto yy43;
+	goto yy10;
+yy38:
 	yych = *++p;
-	if (yych == 'd') goto yy58;
-	goto yy14;
-yy51:
+	if (yych == 'd') goto yy44;
+	goto yy10;
+yy39:
 	yych = *++p;
-	if (yych == 'u') goto yy60;
-	goto yy14;
-yy52:
+	if (yych == 'u') goto yy45;
+	goto yy10;
+yy40:
 	yych = *++p;
-	if (yych == 'u') goto yy61;
-	goto yy14;
-yy53:
+	if (yych == 'u') goto yy46;
+	goto yy10;
+yy41:
 	yych = *++p;
 	if (yybm[0+yych] & 64) {
-		goto yy13;
+		goto yy9;
 	}
 	{ token = POOL;     break; }
-yy55:
+yy42:
 	yych = *++p;
 	if (yybm[0+yych] & 64) {
-		goto yy13;
+		goto yy9;
 	}
 	{ token = RULE;     break; }
-yy57:
+yy43:
 	yych = *++p;
-	if (yych == 'i') goto yy62;
-	goto yy14;
-yy58:
+	if (yych == 'i') goto yy47;
+	goto yy10;
+yy44:
 	yych = *++p;
 	if (yybm[0+yych] & 64) {
-		goto yy13;
+		goto yy9;
 	}
 	{ token = BUILD;    break; }
-yy60:
+yy45:
 	yych = *++p;
-	if (yych == 'l') goto yy63;
-	goto yy14;
-yy61:
+	if (yych == 'l') goto yy48;
+	goto yy10;
+yy46:
 	yych = *++p;
-	if (yych == 'd') goto yy64;
-	goto yy14;
-yy62:
+	if (yych == 'd') goto yy49;
+	goto yy10;
+yy47:
 	yych = *++p;
-	if (yych == 'n') goto yy65;
-	goto yy14;
-yy63:
+	if (yych == 'n') goto yy50;
+	goto yy10;
+yy48:
 	yych = *++p;
-	if (yych == 't') goto yy66;
-	goto yy14;
-yy64:
+	if (yych == 't') goto yy51;
+	goto yy10;
+yy49:
 	yych = *++p;
-	if (yych == 'e') goto yy68;
-	goto yy14;
-yy65:
+	if (yych == 'e') goto yy52;
+	goto yy10;
+yy50:
 	yych = *++p;
-	if (yych == 'j') goto yy70;
-	goto yy14;
-yy66:
+	if (yych == 'j') goto yy53;
+	goto yy10;
+yy51:
 	yych = *++p;
 	if (yybm[0+yych] & 64) {
-		goto yy13;
+		goto yy9;
 	}
 	{ token = DEFAULT;  break; }
-yy68:
+yy52:
 	yych = *++p;
 	if (yybm[0+yych] & 64) {
-		goto yy13;
+		goto yy9;
 	}
 	{ token = INCLUDE;  break; }
-yy70:
+yy53:
 	yych = *++p;
-	if (yych != 'a') goto yy14;
+	if (yych != 'a') goto yy10;
 	yych = *++p;
 	if (yybm[0+yych] & 64) {
-		goto yy13;
+		goto yy9;
 	}
 	{ token = SUBNINJA; break; }
 }
@@ -506,38 +506,38 @@ void Lexer::EatWhitespace() {
 	};
 	yych = *p;
 	if (yybm[0+yych] & 128) {
-		goto yy79;
+		goto yy58;
 	}
-	if (yych <= 0x00) goto yy75;
-	if (yych == '$') goto yy82;
-	goto yy77;
-yy75:
+	if (yych <= 0x00) goto yy55;
+	if (yych == '$') goto yy59;
+	goto yy56;
+yy55:
 	++p;
 	{ break; }
-yy77:
+yy56:
 	++p;
-yy78:
+yy57:
 	{ break; }
-yy79:
+yy58:
 	yych = *++p;
 	if (yybm[0+yych] & 128) {
-		goto yy79;
+		goto yy58;
 	}
 	{ continue; }
-yy82:
+yy59:
 	yych = *(q = ++p);
-	if (yych == '\n') goto yy83;
-	if (yych == '\r') goto yy85;
-	goto yy78;
-yy83:
+	if (yych == '\n') goto yy60;
+	if (yych == '\r') goto yy61;
+	goto yy57;
+yy60:
 	++p;
 	{ continue; }
-yy85:
+yy61:
 	yych = *++p;
-	if (yych == '\n') goto yy87;
+	if (yych == '\n') goto yy62;
 	p = q;
-	goto yy78;
-yy87:
+	goto yy57;
+yy62:
 	++p;
 	{ continue; }
 }
@@ -589,17 +589,17 @@ bool Lexer::ReadIdent(string* out) {
 	};
 	yych = *p;
 	if (yybm[0+yych] & 128) {
-		goto yy93;
+		goto yy64;
 	}
 	++p;
 	{
       last_token_ = start;
       return false;
     }
-yy93:
+yy64:
 	yych = *++p;
 	if (yybm[0+yych] & 128) {
-		goto yy93;
+		goto yy64;
 	}
 	{
       out->assign(start, p - start);
@@ -659,33 +659,33 @@ bool Lexer::ReadEvalString(EvalString* eval, bool path, string* err) {
 	};
 	yych = *p;
 	if (yybm[0+yych] & 16) {
-		goto yy100;
+		goto yy67;
 	}
 	if (yych <= '\r') {
-		if (yych <= 0x00) goto yy98;
-		if (yych <= '\n') goto yy103;
-		goto yy105;
+		if (yych <= 0x00) goto yy66;
+		if (yych <= '\n') goto yy68;
+		goto yy69;
 	} else {
-		if (yych <= ' ') goto yy103;
-		if (yych <= '$') goto yy107;
-		goto yy103;
+		if (yych <= ' ') goto yy68;
+		if (yych <= '$') goto yy70;
+		goto yy68;
 	}
-yy98:
+yy66:
 	++p;
 	{
       last_token_ = start;
       return Error("unexpected EOF", err);
     }
-yy100:
+yy67:
 	yych = *++p;
 	if (yybm[0+yych] & 16) {
-		goto yy100;
+		goto yy67;
 	}
 	{
       eval->AddText(StringPiece(start, p - start));
       continue;
     }
-yy103:
+yy68:
 	++p;
 	{
       if (path) {
@@ -698,112 +698,112 @@ yy103:
         continue;
       }
     }
-yy105:
+yy69:
 	yych = *++p;
-	if (yych == '\n') goto yy108;
+	if (yych == '\n') goto yy71;
 	{
       last_token_ = start;
       return Error(DescribeLastError(), err);
     }
-yy107:
+yy70:
 	yych = *++p;
 	if (yybm[0+yych] & 64) {
-		goto yy120;
+		goto yy78;
 	}
 	if (yych <= ' ') {
 		if (yych <= '\f') {
-			if (yych == '\n') goto yy112;
-			goto yy110;
+			if (yych == '\n') goto yy74;
+			goto yy72;
 		} else {
-			if (yych <= '\r') goto yy115;
-			if (yych <= 0x1F) goto yy110;
-			goto yy116;
+			if (yych <= '\r') goto yy75;
+			if (yych <= 0x1F) goto yy72;
+			goto yy76;
 		}
 	} else {
 		if (yych <= '/') {
-			if (yych == '$') goto yy118;
-			goto yy110;
+			if (yych == '$') goto yy77;
+			goto yy72;
 		} else {
-			if (yych <= ':') goto yy123;
-			if (yych <= '`') goto yy110;
-			if (yych <= '{') goto yy125;
-			goto yy110;
+			if (yych <= ':') goto yy79;
+			if (yych <= '`') goto yy72;
+			if (yych <= '{') goto yy80;
+			goto yy72;
 		}
 	}
-yy108:
+yy71:
 	++p;
 	{
       if (path)
         p = start;
       break;
     }
-yy110:
+yy72:
 	++p;
-yy111:
+yy73:
 	{
       last_token_ = start;
       return Error("bad $-escape (literal $ must be written as $$)", err);
     }
-yy112:
+yy74:
 	yych = *++p;
 	if (yybm[0+yych] & 32) {
-		goto yy112;
+		goto yy74;
 	}
 	{
       continue;
     }
-yy115:
+yy75:
 	yych = *++p;
-	if (yych == '\n') goto yy126;
-	goto yy111;
-yy116:
+	if (yych == '\n') goto yy81;
+	goto yy73;
+yy76:
 	++p;
 	{
       eval->AddText(StringPiece(" ", 1));
       continue;
     }
-yy118:
+yy77:
 	++p;
 	{
       eval->AddText(StringPiece("$", 1));
       continue;
     }
-yy120:
+yy78:
 	yych = *++p;
 	if (yybm[0+yych] & 64) {
-		goto yy120;
+		goto yy78;
 	}
 	{
       eval->AddSpecial(StringPiece(start + 1, p - start - 1));
       continue;
     }
-yy123:
+yy79:
 	++p;
 	{
       eval->AddText(StringPiece(":", 1));
       continue;
     }
-yy125:
+yy80:
 	yych = *(q = ++p);
 	if (yybm[0+yych] & 128) {
-		goto yy129;
+		goto yy82;
 	}
-	goto yy111;
-yy126:
+	goto yy73;
+yy81:
 	yych = *++p;
-	if (yych == ' ') goto yy126;
+	if (yych == ' ') goto yy81;
 	{
       continue;
     }
-yy129:
+yy82:
 	yych = *++p;
 	if (yybm[0+yych] & 128) {
-		goto yy129;
+		goto yy82;
 	}
-	if (yych == '}') goto yy132;
+	if (yych == '}') goto yy83;
 	p = q;
-	goto yy111;
-yy132:
+	goto yy73;
+yy83:
 	++p;
 	{
       eval->AddSpecial(StringPiece(start + 2, p - start - 3));

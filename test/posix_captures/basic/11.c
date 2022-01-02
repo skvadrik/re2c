@@ -9,17 +9,17 @@
 		case 0x00:
 			yyt2 = NULL;
 			yyt1 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 		case 'a':
 		case 'b':
 			yyt1 = YYCURSOR;
-			goto yy5;
+			goto yy4;
 		default:
 			yyt2 = NULL;
 			yyt1 = YYCURSOR;
-			goto yy3;
+			goto yy2;
 	}
-yy2:
+yy1:
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[3] = yyt2;
@@ -27,17 +27,17 @@ yy2:
 	yypmatch[2] = yyt2;
 	if (yyt2 != NULL) yypmatch[2] -= 1;
 	{}
-yy3:
+yy2:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
+yy3:
+	if (yych <= 0x00) goto yy1;
+	goto yy2;
 yy4:
-	if (yych <= 0x00) goto yy2;
-	goto yy3;
-yy5:
 	yych = *++YYCURSOR;
 	yyt2 = YYCURSOR;
-	goto yy4;
+	goto yy3;
 }
 
 posix_captures/basic/11.re:6:4: warning: rule matches empty string [-Wmatch-empty-string]

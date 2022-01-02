@@ -8,11 +8,11 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '\n': goto yy2;
-		default: goto yy3;
+		case '\n': goto yy1;
+		default: goto yy2;
 	}
+yy1:
 yy2:
-yy3:
 	++YYCURSOR;
 #line 3 "encodings/range_neg_lf.re"
 	{return 0;}

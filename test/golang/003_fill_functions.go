@@ -86,15 +86,15 @@ func Lex(in *Input) int {
 	yych = YYPEEK()
 	switch (yych) {
 	case 0x00:
-		goto yy2
+		goto yy1
 	case ' ':
-		goto yy6
+		goto yy3
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy8
-	default:
 		goto yy4
+	default:
+		goto yy2
 	}
-yy2:
+yy1:
 	YYSKIP()
 //line "golang/003_fill_functions.re":84
 	{
@@ -102,7 +102,7 @@ yy2:
 		return 0
 	}
 //line "golang/003_fill_functions.go":105
-yy4:
+yy2:
 	YYSKIP()
 //line "golang/003_fill_functions.re":79
 	{
@@ -110,14 +110,14 @@ yy4:
 		return -1
 	}
 //line "golang/003_fill_functions.go":113
-yy6:
+yy3:
 	YYSKIP()
 //line "golang/003_fill_functions.re":99
 	{
 		return 3
 	}
 //line "golang/003_fill_functions.go":120
-yy8:
+yy4:
 	YYSKIP()
 	YYBACKUP()
 	if (YYLESSTHAN(2)) {
@@ -126,32 +126,32 @@ yy8:
 	yych = YYPEEK()
 	switch (yych) {
 	case '-':
-		goto yy11
+		goto yy6
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy8
+		goto yy4
 	default:
-		goto yy10
+		goto yy5
 	}
-yy10:
+yy5:
 //line "golang/003_fill_functions.re":89
 	{
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return 1
 	}
 //line "golang/003_fill_functions.go":142
-yy11:
+yy6:
 	YYSKIP()
 	yych = YYPEEK()
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy13
+		goto yy8
 	default:
-		goto yy12
+		goto yy7
 	}
-yy12:
+yy7:
 	YYRESTORE()
-	goto yy10
-yy13:
+	goto yy5
+yy8:
 	YYSKIP()
 	if (YYLESSTHAN(1)) {
 		if YYFILL(1) != 0 { return -2 }
@@ -159,11 +159,11 @@ yy13:
 	yych = YYPEEK()
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy13
+		goto yy8
 	default:
-		goto yy15
+		goto yy9
 	}
-yy15:
+yy9:
 //line "golang/003_fill_functions.re":94
 	{
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))

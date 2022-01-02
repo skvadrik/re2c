@@ -268,12 +268,9 @@ void gen_code(Output &output, dfas_t &dfas)
             code_go(alc, dfa, opts, s);
         }
 
-        // Assign label indices.
-        // TODO: do not assign indices to labels that are unused in goto/label mode.
+        // Assign label indices (only to the labels that are used).
         for (State *s = dfa.head; s; s = s->next) {
-            if (s->label->used || !opts->loop_switch) {
-                s->label->index = output.label_counter++;
-            }
+            if (s->label->used) s->label->index = output.label_counter++;
         }
 
         // With loop/switch storable states need their own cases in the state switch, as

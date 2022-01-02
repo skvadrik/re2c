@@ -5,25 +5,25 @@
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *(YYMARKER = YYCURSOR);
-	if (yych >= 0x01) goto yy3;
-yy2:
+	if (yych >= 0x01) goto yy2;
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
-	if (yych >= 0x01) goto yy5;
+	if (yych >= 0x01) goto yy3;
 	YYCURSOR = YYMARKER;
-	goto yy2;
-yy5:
+	goto yy1;
+yy3:
 	yych = *++YYCURSOR;
 	yyt4 = NULL;
 	yyt2 = YYCURSOR - 1;
-	if (yych >= 0x01) goto yy7;
+	if (yych >= 0x01) goto yy5;
 	yyt3 = yyt5 = YYCURSOR;
-yy6:
+yy4:
 	yynmatch = 4;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
@@ -36,20 +36,20 @@ yy6:
 	yypmatch[6] = yyt5;
 	if (yyt5 != NULL) yypmatch[6] -= 1;
 	{}
-yy7:
+yy5:
 	yych = *++YYCURSOR;
 	yyt3 = yyt1;
 	yyt4 = NULL;
 	yyt2 = YYCURSOR - 1;
 	if (yych <= 0x00) {
 		yyt3 = yyt5 = YYCURSOR;
-		goto yy6;
+		goto yy4;
 	}
 	++YYCURSOR;
 	yyt1 = yyt3;
 	yyt5 = NULL;
 	yyt3 = yyt4 = YYCURSOR;
-	goto yy6;
+	goto yy4;
 }
 
 posix_captures/repetition/05_stadfa.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]

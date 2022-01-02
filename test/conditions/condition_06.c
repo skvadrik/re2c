@@ -95,20 +95,20 @@ yyc_Normal:
 			if ((s->lim - s->cur) < 3) { if(fill(s, 3) >= 0) break; }
 			yych = *s->cur;
 			if (yych <= '.') {
-				if (yych == '"') goto yy4;
+				if (yych == '"') goto yy2;
 			} else {
-				if (yych <= '/') goto yy6;
-				if (yych == '?') goto yy7;
+				if (yych <= '/') goto yy3;
+				if (yych == '?') goto yy4;
 			}
 			++s->cur;
-yy3:
+yy1:
 #line 141 "conditions/condition_06.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
 #line 111 "conditions/condition_06.c"
-yy4:
+yy2:
 			++s->cur;
 #line 135 "conditions/condition_06.re"
 			{
@@ -117,47 +117,47 @@ yy4:
 				continue;
 			}
 #line 120 "conditions/condition_06.c"
-yy6:
+yy3:
 			yych = *++s->cur;
-			if (yych == '*') goto yy8;
-			if (yych == '/') goto yy10;
-			goto yy3;
-yy7:
+			if (yych == '*') goto yy5;
+			if (yych == '/') goto yy6;
+			goto yy1;
+yy4:
 			yych = *(s->tok = ++s->cur);
-			if (yych == '?') goto yy12;
-			goto yy3;
-yy8:
+			if (yych == '?') goto yy7;
+			goto yy1;
+yy5:
 			++s->cur;
 #line 127 "conditions/condition_06.re"
 			{
 				goto yyc_Comment;
 			}
 #line 136 "conditions/condition_06.c"
-yy10:
+yy6:
 			++s->cur;
 #line 131 "conditions/condition_06.re"
 			{
 				goto yyc_Skiptoeol;
 			}
 #line 143 "conditions/condition_06.c"
-yy12:
+yy7:
 			yych = *++s->cur;
 			switch (yych) {
-				case '!': goto yy14;
-				case '\'': goto yy16;
-				case '(': goto yy18;
-				case ')': goto yy20;
-				case '-': goto yy22;
-				case '/': goto yy24;
-				case '<': goto yy26;
-				case '=': goto yy28;
-				case '>': goto yy30;
-				default: goto yy13;
+				case '!': goto yy9;
+				case '\'': goto yy10;
+				case '(': goto yy11;
+				case ')': goto yy12;
+				case '-': goto yy13;
+				case '/': goto yy14;
+				case '<': goto yy15;
+				case '=': goto yy16;
+				case '>': goto yy17;
+				default: goto yy8;
 			}
-yy13:
+yy8:
 			s->cur = s->tok;
-			goto yy3;
-yy14:
+			goto yy1;
+yy9:
 			++s->cur;
 #line 117 "conditions/condition_06.re"
 			{
@@ -165,7 +165,7 @@ yy14:
 				continue;
 			}
 #line 168 "conditions/condition_06.c"
-yy16:
+yy10:
 			++s->cur;
 #line 112 "conditions/condition_06.re"
 			{
@@ -173,7 +173,7 @@ yy16:
 				continue;
 			}
 #line 176 "conditions/condition_06.c"
-yy18:
+yy11:
 			++s->cur;
 #line 82 "conditions/condition_06.re"
 			{
@@ -181,7 +181,7 @@ yy18:
 				continue;
 			}
 #line 184 "conditions/condition_06.c"
-yy20:
+yy12:
 			++s->cur;
 #line 87 "conditions/condition_06.re"
 			{
@@ -189,7 +189,7 @@ yy20:
 				continue;
 			}
 #line 192 "conditions/condition_06.c"
-yy22:
+yy13:
 			++s->cur;
 #line 122 "conditions/condition_06.re"
 			{
@@ -197,7 +197,7 @@ yy22:
 				continue;
 			}
 #line 200 "conditions/condition_06.c"
-yy24:
+yy14:
 			++s->cur;
 #line 107 "conditions/condition_06.re"
 			{
@@ -205,7 +205,7 @@ yy24:
 				continue;
 			}
 #line 208 "conditions/condition_06.c"
-yy26:
+yy15:
 			++s->cur;
 #line 92 "conditions/condition_06.re"
 			{
@@ -213,7 +213,7 @@ yy26:
 				continue;
 			}
 #line 216 "conditions/condition_06.c"
-yy28:
+yy16:
 			++s->cur;
 #line 102 "conditions/condition_06.re"
 			{
@@ -221,7 +221,7 @@ yy28:
 				continue;
 			}
 #line 224 "conditions/condition_06.c"
-yy30:
+yy17:
 			++s->cur;
 #line 97 "conditions/condition_06.re"
 			{
@@ -233,17 +233,17 @@ yy30:
 yyc_Comment:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych == '*') goto yy36;
+			if (yych == '*') goto yy20;
 			++s->cur;
-yy35:
+yy19:
 #line 150 "conditions/condition_06.re"
 			{
 				goto yyc_Comment;
 			}
 #line 244 "conditions/condition_06.c"
-yy36:
+yy20:
 			yych = *++s->cur;
-			if (yych != '/') goto yy35;
+			if (yych != '/') goto yy19;
 			++s->cur;
 #line 146 "conditions/condition_06.re"
 			{
@@ -255,82 +255,82 @@ yyc_Skiptoeol:
 			if ((s->lim - s->cur) < 5) { if(fill(s, 5) >= 0) break; }
 			yych = *s->cur;
 			if (yych <= '>') {
-				if (yych == '\n') goto yy43;
+				if (yych == '\n') goto yy23;
 			} else {
-				if (yych <= '?') goto yy45;
-				if (yych == '\\') goto yy46;
+				if (yych <= '?') goto yy24;
+				if (yych == '\\') goto yy25;
 			}
 			++s->cur;
-yy42:
+yy22:
 #line 166 "conditions/condition_06.re"
 			{
 				goto yyc_Skiptoeol;
 			}
 #line 270 "conditions/condition_06.c"
-yy43:
+yy23:
 			++s->cur;
 #line 162 "conditions/condition_06.re"
 			{
 				continue;
 			}
 #line 277 "conditions/condition_06.c"
-yy45:
+yy24:
 			yych = *(s->tok = ++s->cur);
-			if (yych == '?') goto yy47;
-			goto yy42;
-yy46:
+			if (yych == '?') goto yy26;
+			goto yy22;
+yy25:
 			yych = *(s->tok = ++s->cur);
-			if (yych == '\n') goto yy49;
-			if (yych == '\r') goto yy51;
-			goto yy42;
-yy47:
+			if (yych == '\n') goto yy28;
+			if (yych == '\r') goto yy29;
+			goto yy22;
+yy26:
 			yych = *++s->cur;
-			if (yych == '/') goto yy52;
-yy48:
+			if (yych == '/') goto yy30;
+yy27:
 			s->cur = s->tok;
-			goto yy42;
-yy49:
+			goto yy22;
+yy28:
 			++s->cur;
 #line 158 "conditions/condition_06.re"
 			{
 				goto yyc_Skiptoeol;
 			}
 #line 299 "conditions/condition_06.c"
-yy51:
+yy29:
 			yych = *++s->cur;
-			if (yych == '\n') goto yy49;
-			goto yy48;
-yy52:
+			if (yych == '\n') goto yy28;
+			goto yy27;
+yy30:
 			yych = *++s->cur;
-			if (yych == '\n') goto yy53;
-			if (yych == '\r') goto yy55;
-			goto yy48;
-yy53:
+			if (yych == '\n') goto yy31;
+			if (yych == '\r') goto yy32;
+			goto yy27;
+yy31:
 			++s->cur;
 #line 154 "conditions/condition_06.re"
 			{
 				goto yyc_Skiptoeol;
 			}
 #line 315 "conditions/condition_06.c"
-yy55:
+yy32:
 			yych = *++s->cur;
-			if (yych == '\n') goto yy53;
-			goto yy48;
+			if (yych == '\n') goto yy31;
+			goto yy27;
 /* *********************************** */
 yyc_String:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych == '"') goto yy60;
-			if (yych == '\\') goto yy62;
+			if (yych == '"') goto yy35;
+			if (yych == '\\') goto yy36;
 			++s->cur;
-yy59:
+yy34:
 #line 180 "conditions/condition_06.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
 #line 333 "conditions/condition_06.c"
-yy60:
+yy35:
 			++s->cur;
 #line 175 "conditions/condition_06.re"
 			{
@@ -338,9 +338,9 @@ yy60:
 				continue;
 			}
 #line 341 "conditions/condition_06.c"
-yy62:
+yy36:
 			yych = *++s->cur;
-			if (yych == '\n') goto yy59;
+			if (yych == '\n') goto yy34;
 			++s->cur;
 #line 170 "conditions/condition_06.re"
 			{

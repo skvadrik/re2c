@@ -52,16 +52,16 @@ yyc_init:
 	yych = str[cursor]
 	switch (yych) {
 	case '0':
-		goto yy4
-	case '1','2','3','4','5','6','7','8','9':
-		goto yy6
-	default:
 		goto yy2
+	case '1','2','3','4','5','6','7','8','9':
+		goto yy4
+	default:
+		goto yy1
 	}
-yy2:
+yy1:
 	cursor += 1
 	{ return 0, eSyntax }
-yy4:
+yy2:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
@@ -69,35 +69,35 @@ yy4:
 	case 'B':
 		fallthrough
 	case 'b':
-		goto yy8
+		goto yy5
 	case 'X':
 		fallthrough
 	case 'x':
-		goto yy10
+		goto yy7
 	default:
-		goto yy5
+		goto yy3
 	}
-yy5:
+yy3:
 	cond = yycoct
 	goto yyc_oct
-yy6:
+yy4:
 	cursor += 1
 	cursor += -1
 	cond = yycdec
 	goto yyc_dec
-yy8:
+yy5:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case '0','1':
-		goto yy11
+		goto yy8
 	default:
-		goto yy9
+		goto yy6
 	}
-yy9:
+yy6:
 	cursor = marker
-	goto yy5
-yy10:
+	goto yy3
+yy7:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -106,16 +106,16 @@ yy10:
 	case 'A','B','C','D','E','F':
 		fallthrough
 	case 'a','b','c','d','e','f':
-		goto yy13
-	default:
 		goto yy9
+	default:
+		goto yy6
 	}
-yy11:
+yy8:
 	cursor += 1
 	cursor += -1
 	cond = yycbin
 	goto yyc_bin
-yy13:
+yy9:
 	cursor += 1
 	cursor += -1
 	cond = yychex
@@ -125,13 +125,13 @@ yyc_bin:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy17
+		goto yy11
 	case '0','1':
-		goto yy21
+		goto yy13
 	default:
-		goto yy19
+		goto yy12
 	}
-yy17:
+yy11:
 	cursor += 1
 	{
 			if result < u32Limit {
@@ -140,10 +140,10 @@ yy17:
 				return 0, eOverflow
 			}
 		}
-yy19:
+yy12:
 	cursor += 1
 	{ return 0, eSyntax }
-yy21:
+yy13:
 	cursor += 1
 	{ add_digit(2, '0');     goto yyc_bin }
 /* *********************************** */
@@ -151,11 +151,73 @@ yyc_dec:
 	yych = str[cursor]
 	switch (yych) {
 	case 0x00:
-		goto yy25
+		goto yy15
 	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy29
+		goto yy17
 	default:
+		goto yy16
+	}
+yy15:
+	cursor += 1
+	{
+			if result < u32Limit {
+				return uint32(result), nil
+			} else {
+				return 0, eOverflow
+			}
+		}
+yy16:
+	cursor += 1
+	{ return 0, eSyntax }
+yy17:
+	cursor += 1
+	{ add_digit(10, '0');    goto yyc_dec }
+/* *********************************** */
+yyc_hex:
+	yych = str[cursor]
+	switch (yych) {
+	case 0x00:
+		goto yy19
+	case '0','1','2','3','4','5','6','7','8','9':
+		goto yy21
+	case 'A','B','C','D','E','F':
+		goto yy22
+	case 'a','b','c','d','e','f':
+		goto yy23
+	default:
+		goto yy20
+	}
+yy19:
+	cursor += 1
+	{
+			if result < u32Limit {
+				return uint32(result), nil
+			} else {
+				return 0, eOverflow
+			}
+		}
+yy20:
+	cursor += 1
+	{ return 0, eSyntax }
+yy21:
+	cursor += 1
+	{ add_digit(16, '0');    goto yyc_hex }
+yy22:
+	cursor += 1
+	{ add_digit(16, 'A'-10); goto yyc_hex }
+yy23:
+	cursor += 1
+	{ add_digit(16, 'a'-10); goto yyc_hex }
+/* *********************************** */
+yyc_oct:
+	yych = str[cursor]
+	switch (yych) {
+	case 0x00:
+		goto yy25
+	case '0','1','2','3','4','5','6','7':
 		goto yy27
+	default:
+		goto yy26
 	}
 yy25:
 	cursor += 1
@@ -166,72 +228,10 @@ yy25:
 				return 0, eOverflow
 			}
 		}
+yy26:
+	cursor += 1
+	{ return 0, eSyntax }
 yy27:
-	cursor += 1
-	{ return 0, eSyntax }
-yy29:
-	cursor += 1
-	{ add_digit(10, '0');    goto yyc_dec }
-/* *********************************** */
-yyc_hex:
-	yych = str[cursor]
-	switch (yych) {
-	case 0x00:
-		goto yy33
-	case '0','1','2','3','4','5','6','7','8','9':
-		goto yy37
-	case 'A','B','C','D','E','F':
-		goto yy39
-	case 'a','b','c','d','e','f':
-		goto yy41
-	default:
-		goto yy35
-	}
-yy33:
-	cursor += 1
-	{
-			if result < u32Limit {
-				return uint32(result), nil
-			} else {
-				return 0, eOverflow
-			}
-		}
-yy35:
-	cursor += 1
-	{ return 0, eSyntax }
-yy37:
-	cursor += 1
-	{ add_digit(16, '0');    goto yyc_hex }
-yy39:
-	cursor += 1
-	{ add_digit(16, 'A'-10); goto yyc_hex }
-yy41:
-	cursor += 1
-	{ add_digit(16, 'a'-10); goto yyc_hex }
-/* *********************************** */
-yyc_oct:
-	yych = str[cursor]
-	switch (yych) {
-	case 0x00:
-		goto yy45
-	case '0','1','2','3','4','5','6','7':
-		goto yy49
-	default:
-		goto yy47
-	}
-yy45:
-	cursor += 1
-	{
-			if result < u32Limit {
-				return uint32(result), nil
-			} else {
-				return 0, eOverflow
-			}
-		}
-yy47:
-	cursor += 1
-	{ return 0, eSyntax }
-yy49:
 	cursor += 1
 	{ add_digit(8, '0');     goto yyc_oct }
 }

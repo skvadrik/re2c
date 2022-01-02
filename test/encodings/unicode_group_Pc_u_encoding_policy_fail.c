@@ -16,26 +16,26 @@ Pc:
 	yych = *YYCURSOR;
 	if (yych <= 0x00002054) {
 		if (yych <= 0x0000203E) {
-			if (yych == '_') goto yy4;
+			if (yych == '_') goto yy2;
 		} else {
-			if (yych <= 0x00002040) goto yy4;
-			if (yych >= 0x00002054) goto yy4;
+			if (yych <= 0x00002040) goto yy2;
+			if (yych >= 0x00002054) goto yy2;
 		}
 	} else {
 		if (yych <= 0x0000FE4C) {
-			if (yych <= 0x0000FE32) goto yy2;
-			if (yych <= 0x0000FE34) goto yy4;
+			if (yych <= 0x0000FE32) goto yy1;
+			if (yych <= 0x0000FE34) goto yy2;
 		} else {
-			if (yych <= 0x0000FE4F) goto yy4;
-			if (yych == 0x0000FF3F) goto yy4;
+			if (yych <= 0x0000FE4F) goto yy2;
+			if (yych == 0x0000FF3F) goto yy2;
 		}
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Pc_u_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
 #line 38 "encodings/unicode_group_Pc_u_encoding_policy_fail.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Pc_u_encoding_policy_fail.re"
 	{ goto Pc; }

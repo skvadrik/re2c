@@ -19,21 +19,21 @@
 	xchar yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
-		case 'c': goto yy6;
-		default: goto yy2;
+		case 'a': goto yy2;
+		case 'c': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 27 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 31 "reuse/inline_use_merge_blocks.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 25 "reuse/inline_use_merge_blocks.re"
 	{ return a; }
 #line 36 "reuse/inline_use_merge_blocks.c"
-yy6:
+yy3:
 	++YYCURSOR;
 #line 11 "reuse/inline_use_merge_blocks.re"
 	{ return xc; }
@@ -49,21 +49,21 @@ yy6:
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy12;
-		case 'c': goto yy14;
-		default: goto yy10;
+		case 'a': goto yy6;
+		case 'c': goto yy7;
+		default: goto yy5;
 	}
-yy10:
+yy5:
 	++YYCURSOR;
 #line 35 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 61 "reuse/inline_use_merge_blocks.c"
-yy12:
+yy6:
 	++YYCURSOR;
 #line 10 "reuse/inline_use_merge_blocks.re"
 	{ return xa; }
 #line 66 "reuse/inline_use_merge_blocks.c"
-yy14:
+yy7:
 	++YYCURSOR;
 #line 11 "reuse/inline_use_merge_blocks.re"
 	{ return xc; }
@@ -79,20 +79,20 @@ yy14:
 	ychar yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy18;
-	if (yych <= 'a') goto yy20;
-	if (yych <= 'b') goto yy22;
-yy18:
+	if (yych <= '`') goto yy9;
+	if (yych <= 'a') goto yy10;
+	if (yych <= 'b') goto yy11;
+yy9:
 	++YYCURSOR;
 #line 43 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 90 "reuse/inline_use_merge_blocks.c"
-yy20:
+yy10:
 	++YYCURSOR;
 #line 41 "reuse/inline_use_merge_blocks.re"
 	{ return a; }
 #line 95 "reuse/inline_use_merge_blocks.c"
-yy22:
+yy11:
 	++YYCURSOR;
 #line 19 "reuse/inline_use_merge_blocks.re"
 	{ return yb; }
@@ -108,20 +108,20 @@ yy22:
 	char yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy26;
-	if (yych <= 'a') goto yy28;
-	if (yych <= 'b') goto yy30;
-yy26:
+	if (yych <= '`') goto yy13;
+	if (yych <= 'a') goto yy14;
+	if (yych <= 'b') goto yy15;
+yy13:
 	++YYCURSOR;
 #line 51 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 119 "reuse/inline_use_merge_blocks.c"
-yy28:
+yy14:
 	++YYCURSOR;
 #line 18 "reuse/inline_use_merge_blocks.re"
 	{ return ya; }
 #line 124 "reuse/inline_use_merge_blocks.c"
-yy30:
+yy15:
 	++YYCURSOR;
 #line 19 "reuse/inline_use_merge_blocks.re"
 	{ return yb; }
@@ -137,26 +137,26 @@ yy30:
 	ychar yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy34;
-	if (yych <= 'a') goto yy36;
-	if (yych <= 'b') goto yy38;
-	if (yych <= 'c') goto yy40;
-yy34:
+	if (yych <= '`') goto yy17;
+	if (yych <= 'a') goto yy18;
+	if (yych <= 'b') goto yy19;
+	if (yych <= 'c') goto yy20;
+yy17:
 	++YYCURSOR;
 #line 60 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 149 "reuse/inline_use_merge_blocks.c"
-yy36:
+yy18:
 	++YYCURSOR;
 #line 57 "reuse/inline_use_merge_blocks.re"
 	{ return a; }
 #line 154 "reuse/inline_use_merge_blocks.c"
-yy38:
+yy19:
 	++YYCURSOR;
 #line 19 "reuse/inline_use_merge_blocks.re"
 	{ return yb; }
 #line 159 "reuse/inline_use_merge_blocks.c"
-yy40:
+yy20:
 	++YYCURSOR;
 #line 11 "reuse/inline_use_merge_blocks.re"
 	{ return xc; }
@@ -171,26 +171,26 @@ yy40:
 {
 	xchar yych;
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy44;
-	if (yych <= 'a') goto yy46;
-	if (yych <= 'b') goto yy48;
-	if (yych <= 'c') goto yy50;
-yy44:
+	if (yych <= '`') goto yy22;
+	if (yych <= 'a') goto yy23;
+	if (yych <= 'b') goto yy24;
+	if (yych <= 'c') goto yy25;
+yy22:
 	++YYCURSOR;
 #line 69 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 183 "reuse/inline_use_merge_blocks.c"
-yy46:
+yy23:
 	++YYCURSOR;
 #line 66 "reuse/inline_use_merge_blocks.re"
 	{ return a; }
 #line 188 "reuse/inline_use_merge_blocks.c"
-yy48:
+yy24:
 	++YYCURSOR;
 #line 19 "reuse/inline_use_merge_blocks.re"
 	{ return yb; }
 #line 193 "reuse/inline_use_merge_blocks.c"
-yy50:
+yy25:
 	++YYCURSOR;
 #line 11 "reuse/inline_use_merge_blocks.re"
 	{ return xc; }
@@ -206,26 +206,26 @@ yy50:
 	ychar yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy54;
-	if (yych <= 'a') goto yy56;
-	if (yych <= 'b') goto yy58;
-	if (yych <= 'c') goto yy60;
-yy54:
+	if (yych <= '`') goto yy27;
+	if (yych <= 'a') goto yy28;
+	if (yych <= 'b') goto yy29;
+	if (yych <= 'c') goto yy30;
+yy27:
 	++YYCURSOR;
 #line 78 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 218 "reuse/inline_use_merge_blocks.c"
-yy56:
+yy28:
 	++YYCURSOR;
 #line 10 "reuse/inline_use_merge_blocks.re"
 	{ return xa; }
 #line 223 "reuse/inline_use_merge_blocks.c"
-yy58:
+yy29:
 	++YYCURSOR;
 #line 19 "reuse/inline_use_merge_blocks.re"
 	{ return yb; }
 #line 228 "reuse/inline_use_merge_blocks.c"
-yy60:
+yy30:
 	++YYCURSOR;
 #line 11 "reuse/inline_use_merge_blocks.re"
 	{ return xc; }
@@ -240,26 +240,26 @@ yy60:
 {
 	xchar yych;
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy64;
-	if (yych <= 'a') goto yy66;
-	if (yych <= 'b') goto yy68;
-	if (yych <= 'c') goto yy70;
-yy64:
+	if (yych <= '`') goto yy32;
+	if (yych <= 'a') goto yy33;
+	if (yych <= 'b') goto yy34;
+	if (yych <= 'c') goto yy35;
+yy32:
 	++YYCURSOR;
 #line 87 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 252 "reuse/inline_use_merge_blocks.c"
-yy66:
+yy33:
 	++YYCURSOR;
 #line 18 "reuse/inline_use_merge_blocks.re"
 	{ return ya; }
 #line 257 "reuse/inline_use_merge_blocks.c"
-yy68:
+yy34:
 	++YYCURSOR;
 #line 19 "reuse/inline_use_merge_blocks.re"
 	{ return yb; }
 #line 262 "reuse/inline_use_merge_blocks.c"
-yy70:
+yy35:
 	++YYCURSOR;
 #line 11 "reuse/inline_use_merge_blocks.re"
 	{ return xc; }
@@ -275,26 +275,26 @@ yy70:
 	char yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy74;
-	if (yych <= 'a') goto yy76;
-	if (yych <= 'b') goto yy78;
-	if (yych <= 'c') goto yy80;
-yy74:
+	if (yych <= '`') goto yy37;
+	if (yych <= 'a') goto yy38;
+	if (yych <= 'b') goto yy39;
+	if (yych <= 'c') goto yy40;
+yy37:
 	++YYCURSOR;
 #line 96 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 287 "reuse/inline_use_merge_blocks.c"
-yy76:
+yy38:
 	++YYCURSOR;
 #line 10 "reuse/inline_use_merge_blocks.re"
 	{ return xa; }
 #line 292 "reuse/inline_use_merge_blocks.c"
-yy78:
+yy39:
 	++YYCURSOR;
 #line 19 "reuse/inline_use_merge_blocks.re"
 	{ return yb; }
 #line 297 "reuse/inline_use_merge_blocks.c"
-yy80:
+yy40:
 	++YYCURSOR;
 #line 11 "reuse/inline_use_merge_blocks.re"
 	{ return xc; }
@@ -309,26 +309,26 @@ yy80:
 {
 	char yych;
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy84;
-	if (yych <= 'a') goto yy86;
-	if (yych <= 'b') goto yy88;
-	if (yych <= 'c') goto yy90;
-yy84:
+	if (yych <= '`') goto yy42;
+	if (yych <= 'a') goto yy43;
+	if (yych <= 'b') goto yy44;
+	if (yych <= 'c') goto yy45;
+yy42:
 	++YYCURSOR;
 #line 105 "reuse/inline_use_merge_blocks.re"
 	{ return -1; }
 #line 321 "reuse/inline_use_merge_blocks.c"
-yy86:
+yy43:
 	++YYCURSOR;
 #line 18 "reuse/inline_use_merge_blocks.re"
 	{ return ya; }
 #line 326 "reuse/inline_use_merge_blocks.c"
-yy88:
+yy44:
 	++YYCURSOR;
 #line 19 "reuse/inline_use_merge_blocks.re"
 	{ return yb; }
 #line 331 "reuse/inline_use_merge_blocks.c"
-yy90:
+yy45:
 	++YYCURSOR;
 #line 11 "reuse/inline_use_merge_blocks.re"
 	{ return xc; }

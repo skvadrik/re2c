@@ -6,14 +6,14 @@
 	if ((YYLIMIT - YYCURSOR) < 8) YYFILL(8);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy3;
-		case 'b': goto yy4;
+		case 'a': goto yy2;
+		case 'b': goto yy3;
 		default:
 			yyt3 = yyt6 = NULL;
 			yyt1 = yyt2 = yyt4 = yyt5 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 6;
 	yypmatch[2] = yyt1;
 	yypmatch[4] = yyt2;
@@ -30,56 +30,56 @@ yy2:
 	yypmatch[10] = yyt6;
 	if (yyt6 != NULL) yypmatch[10] -= 2;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt1 = yyt8 = yyt10 = YYCURSOR - 1;
 	switch (yych) {
-		case 'a': goto yy5;
-		case 'b': goto yy6;
+		case 'a': goto yy4;
+		case 'b': goto yy5;
 		default:
 			yyt3 = yyt6 = NULL;
 			yyt2 = yyt4 = yyt5 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy4:
+yy3:
 	yych = *++YYCURSOR;
 	yyt3 = yyt12 = NULL;
 	yyt1 = yyt2 = yyt4 = yyt7 = yyt8 = yyt9 = yyt11 = yyt13 = YYCURSOR - 1;
 	switch (yych) {
-		case 'a': goto yy7;
-		case 'b': goto yy8;
+		case 'a': goto yy6;
+		case 'b': goto yy7;
 		default:
 			yyt6 = NULL;
 			yyt5 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy5:
+yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	yyt1 = yyt8;
 	yyt3 = yyt12 = NULL;
 	yyt2 = yyt4 = yyt5 = yyt10 = yyt11 = yyt13 = YYCURSOR - 1;
 	switch (yych) {
-		case 'a': goto yy9;
-		case 'b': goto yy11;
+		case 'a': goto yy8;
+		case 'b': goto yy10;
 		default:
 			yyt6 = NULL;
-			goto yy2;
+			goto yy1;
 	}
-yy6:
+yy5:
 	yych = *++YYCURSOR;
 	yyt7 = yyt8;
 	yyt1 = yyt8;
 	yyt3 = yyt12 = NULL;
 	yyt2 = yyt4 = yyt9 = yyt11 = yyt13 = YYCURSOR - 1;
 	switch (yych) {
-		case 'a': goto yy7;
-		case 'b': goto yy12;
+		case 'a': goto yy6;
+		case 'b': goto yy11;
 		default:
 			yyt6 = NULL;
 			yyt5 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy7:
+yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
 	yyt4 = yyt13;
 	yyt3 = yyt12;
@@ -89,13 +89,13 @@ yy7:
 	yyt1 = yyt8;
 	yyt5 = yyt10 = YYCURSOR - 1;
 	switch (yych) {
-		case 'a': goto yy9;
-		case 'b': goto yy13;
+		case 'a': goto yy8;
+		case 'b': goto yy12;
 		default:
 			yyt6 = NULL;
-			goto yy2;
+			goto yy1;
 	}
-yy8:
+yy7:
 	++YYCURSOR;
 	yyt4 = yyt13;
 	yyt3 = yyt12;
@@ -103,31 +103,31 @@ yy8:
 	yyt1 = yyt7;
 	yyt6 = NULL;
 	yyt5 = YYCURSOR - 1;
-	goto yy2;
-yy9:
+	goto yy1;
+yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy14;
-		default: goto yy10;
+		case 'b': goto yy13;
+		default: goto yy9;
 	}
-yy10:
+yy9:
 	YYCURSOR = YYMARKER;
 	yyt6 = NULL;
-	goto yy2;
-yy11:
+	goto yy1;
+yy10:
 	yych = *++YYCURSOR;
 	yyt11 = yyt10;
 	yyt2 = yyt10;
 	yyt1 = yyt8;
 	switch (yych) {
-		case 'a': goto yy15;
-		case 'b': goto yy16;
+		case 'a': goto yy14;
+		case 'b': goto yy15;
 		default:
 			yyt6 = NULL;
 			yyt3 = yyt4 = yyt5 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy12:
+yy11:
 	yych = *++YYCURSOR;
 	yyt4 = yyt13;
 	yyt3 = yyt12;
@@ -139,11 +139,11 @@ yy12:
 	yyt9 = yyt10;
 	yyt7 = yyt8;
 	switch (yych) {
-		case 'a': goto yy7;
-		case 'b': goto yy8;
-		default: goto yy2;
+		case 'a': goto yy6;
+		case 'b': goto yy7;
+		default: goto yy1;
 	}
-yy13:
+yy12:
 	yych = *++YYCURSOR;
 	yyt5 = yyt10;
 	yyt4 = yyt13;
@@ -154,10 +154,10 @@ yy13:
 	yyt9 = yyt11;
 	yyt7 = yyt8;
 	switch (yych) {
-		case 'b': goto yy17;
-		default: goto yy2;
+		case 'b': goto yy16;
+		default: goto yy1;
 	}
-yy14:
+yy13:
 	yych = *++YYCURSOR;
 	yyt5 = yyt10;
 	yyt4 = yyt13;
@@ -167,12 +167,12 @@ yy14:
 	yyt7 = yyt8;
 	yyt1 = yyt8;
 	switch (yych) {
-		case 'b': goto yy17;
+		case 'b': goto yy16;
 		default:
 			yyt6 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy15:
+yy14:
 	yych = *(YYMARKER = ++YYCURSOR);
 	yyt9 = yyt11;
 	yyt2 = yyt11;
@@ -180,13 +180,13 @@ yy15:
 	yyt1 = yyt8;
 	yyt3 = yyt4 = yyt5 = yyt10 = yyt12 = yyt13 = YYCURSOR - 1;
 	switch (yych) {
-		case 'a': goto yy9;
-		case 'b': goto yy13;
+		case 'a': goto yy8;
+		case 'b': goto yy12;
 		default:
 			yyt6 = NULL;
-			goto yy2;
+			goto yy1;
 	}
-yy16:
+yy15:
 	yych = *++YYCURSOR;
 	yyt11 = yyt10;
 	yyt9 = yyt10;
@@ -195,14 +195,14 @@ yy16:
 	yyt1 = yyt8;
 	yyt3 = yyt4 = yyt12 = yyt13 = YYCURSOR - 1;
 	switch (yych) {
-		case 'a': goto yy7;
-		case 'b': goto yy8;
+		case 'a': goto yy6;
+		case 'b': goto yy7;
 		default:
 			yyt6 = NULL;
 			yyt5 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy17:
+yy16:
 	++YYCURSOR;
 	yyt5 = yyt10;
 	yyt4 = yyt13;
@@ -210,7 +210,7 @@ yy17:
 	yyt2 = yyt9;
 	yyt1 = yyt7;
 	yyt6 = YYCURSOR - 1;
-	goto yy2;
+	goto yy1;
 }
 
 posix_captures/categorize/11_stadfa.re:6:4: warning: rule matches empty string [-Wmatch-empty-string]

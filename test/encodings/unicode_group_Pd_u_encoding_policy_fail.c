@@ -17,57 +17,57 @@ Pd:
 	if (yych <= 0x00002E39) {
 		if (yych <= 0x00001400) {
 			if (yych <= 0x0000058A) {
-				if (yych == '-') goto yy4;
-				if (yych >= 0x0000058A) goto yy4;
+				if (yych == '-') goto yy2;
+				if (yych >= 0x0000058A) goto yy2;
 			} else {
-				if (yych == 0x000005BE) goto yy4;
-				if (yych >= 0x00001400) goto yy4;
+				if (yych == 0x000005BE) goto yy2;
+				if (yych >= 0x00001400) goto yy2;
 			}
 		} else {
 			if (yych <= 0x00002015) {
-				if (yych == 0x00001806) goto yy4;
-				if (yych >= 0x00002010) goto yy4;
+				if (yych == 0x00001806) goto yy2;
+				if (yych >= 0x00002010) goto yy2;
 			} else {
 				if (yych <= 0x00002E17) {
-					if (yych >= 0x00002E17) goto yy4;
+					if (yych >= 0x00002E17) goto yy2;
 				} else {
-					if (yych == 0x00002E1A) goto yy4;
+					if (yych == 0x00002E1A) goto yy2;
 				}
 			}
 		}
 	} else {
 		if (yych <= 0x000030A0) {
 			if (yych <= 0x0000301B) {
-				if (yych <= 0x00002E3B) goto yy4;
-				if (yych == 0x00002E40) goto yy4;
+				if (yych <= 0x00002E3B) goto yy2;
+				if (yych == 0x00002E40) goto yy2;
 			} else {
 				if (yych <= 0x0000302F) {
-					if (yych <= 0x0000301C) goto yy4;
+					if (yych <= 0x0000301C) goto yy2;
 				} else {
-					if (yych <= 0x00003030) goto yy4;
-					if (yych >= 0x000030A0) goto yy4;
+					if (yych <= 0x00003030) goto yy2;
+					if (yych >= 0x000030A0) goto yy2;
 				}
 			}
 		} else {
 			if (yych <= 0x0000FE58) {
-				if (yych <= 0x0000FE30) goto yy2;
-				if (yych <= 0x0000FE32) goto yy4;
-				if (yych >= 0x0000FE58) goto yy4;
+				if (yych <= 0x0000FE30) goto yy1;
+				if (yych <= 0x0000FE32) goto yy2;
+				if (yych >= 0x0000FE58) goto yy2;
 			} else {
 				if (yych <= 0x0000FE63) {
-					if (yych >= 0x0000FE63) goto yy4;
+					if (yych >= 0x0000FE63) goto yy2;
 				} else {
-					if (yych == 0x0000FF0D) goto yy4;
+					if (yych == 0x0000FF0D) goto yy2;
 				}
 			}
 		}
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Pd_u_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
 #line 70 "encodings/unicode_group_Pd_u_encoding_policy_fail.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Pd_u_encoding_policy_fail.re"
 	{ goto Pd; }

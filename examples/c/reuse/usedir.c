@@ -26,157 +26,157 @@ static What lex(const char *YYCURSOR) {
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'e': goto yy4;
-		case 'h': goto yy5;
-		case 'm': goto yy6;
-		case 'r': goto yy7;
-		case 's': goto yy8;
-		default: goto yy2;
+		case 'e': goto yy3;
+		case 'h': goto yy4;
+		case 'm': goto yy5;
+		case 'r': goto yy6;
+		case 's': goto yy7;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 31 "c/reuse/usedir.re"
 	{ return DUNNO; }
 #line 42 "c/reuse/usedir.c"
+yy3:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 'e': goto yy8;
+		default: goto yy2;
+	}
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 'e': goto yy9;
-		default: goto yy3;
+		case 'a': goto yy10;
+		default: goto yy2;
 	}
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 		case 'a': goto yy11;
-		default: goto yy3;
+		default: goto yy2;
 	}
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 'a': goto yy12;
-		default: goto yy3;
+		case 'e': goto yy12;
+		default: goto yy2;
 	}
 yy7:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 'e': goto yy13;
-		default: goto yy3;
+		case 'a': goto yy13;
+		default: goto yy2;
 	}
 yy8:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 'a': goto yy14;
-		default: goto yy3;
-	}
-yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'l': goto yy15;
-		default: goto yy10;
+		case 'l': goto yy14;
+		default: goto yy9;
 	}
-yy10:
+yy9:
 	YYCURSOR = YYMARKER;
-	goto yy3;
+	goto yy2;
+yy10:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'd': goto yy15;
+		default: goto yy9;
+	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'd': goto yy17;
-		default: goto yy10;
+		case 'g': goto yy16;
+		default: goto yy9;
 	}
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'g': goto yy18;
-		default: goto yy10;
+		case 'd': goto yy17;
+		default: goto yy9;
 	}
 yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'd': goto yy19;
-		default: goto yy10;
+		case 'l': goto yy18;
+		default: goto yy9;
 	}
 yy14:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'l': goto yy21;
-		default: goto yy10;
-	}
-yy15:
 	++YYCURSOR;
 #line 20 "c/reuse/usedir.re"
 	{ return FISH; }
 #line 110 "c/reuse/usedir.c"
+yy15:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'd': goto yy19;
+		default: goto yy9;
+	}
+yy16:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'e': goto yy20;
+		default: goto yy9;
+	}
 yy17:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'd': goto yy22;
-		default: goto yy10;
-	}
-yy18:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'e': goto yy23;
-		default: goto yy10;
-	}
-yy19:
 	++YYCURSOR;
 #line 15 "c/reuse/usedir.re"
 	{ return COLOR; }
 #line 127 "c/reuse/usedir.c"
+yy18:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'm': goto yy21;
+		default: goto yy9;
+	}
+yy19:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'o': goto yy22;
+		default: goto yy9;
+	}
+yy20:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'n': goto yy23;
+		default: goto yy9;
+	}
 yy21:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'm': goto yy24;
-		default: goto yy10;
+		case 'o': goto yy24;
+		default: goto yy9;
 	}
 yy22:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'o': goto yy25;
-		default: goto yy10;
+		case 'c': goto yy25;
+		default: goto yy9;
 	}
 yy23:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'n': goto yy26;
-		default: goto yy10;
+		case 't': goto yy26;
+		default: goto yy9;
 	}
 yy24:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'o': goto yy27;
-		default: goto yy10;
+		case 'n': goto yy14;
+		default: goto yy9;
 	}
 yy25:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'c': goto yy28;
-		default: goto yy10;
+		case 'k': goto yy14;
+		default: goto yy9;
 	}
 yy26:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 't': goto yy29;
-		default: goto yy10;
-	}
-yy27:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'n': goto yy15;
-		default: goto yy10;
-	}
-yy28:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'k': goto yy15;
-		default: goto yy10;
-	}
-yy29:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy19;
-		default: goto yy10;
+		case 'a': goto yy17;
+		default: goto yy9;
 	}
 }
 #line 32 "c/reuse/usedir.re"

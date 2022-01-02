@@ -10,1029 +10,1029 @@ int scan(const unsigned char *cr)
 	unsigned char ch;
 	ch = *cr;
 	switch (ch) {
-		case 0x00: goto yy2;
-		case 0x01: goto yy4;
-		case 0x02: goto yy6;
-		case 0x03: goto yy8;
-		case 0x04: goto yy10;
-		case 0x05: goto yy12;
-		case 0x06: goto yy14;
-		case 0x07: goto yy16;
-		case 0x08: goto yy18;
-		case 0x09: goto yy20;
-		case 0x0A: goto yy22;
-		case 0x0B: goto yy24;
-		case 0x0C: goto yy26;
-		case 0x0D: goto yy28;
-		case 0x0E: goto yy30;
-		case 0x0F: goto yy32;
-		case 0x10: goto yy34;
-		case 0x11: goto yy36;
-		case 0x12: goto yy38;
-		case 0x13: goto yy40;
-		case 0x14: goto yy42;
-		case 0x15: goto yy44;
-		case 0x16: goto yy46;
-		case 0x17: goto yy48;
-		case 0x18: goto yy50;
-		case 0x19: goto yy52;
-		case 0x1A: goto yy54;
-		case 0x1B: goto yy56;
-		case 0x1C: goto yy58;
-		case 0x1D: goto yy60;
-		case 0x1E: goto yy62;
-		case 0x1F: goto yy64;
-		case 0x20: goto yy66;
-		case 0x21: goto yy68;
-		case 0x22: goto yy70;
-		case 0x23: goto yy72;
-		case 0x24: goto yy74;
-		case 0x25: goto yy76;
-		case 0x26: goto yy78;
-		case 0x27: goto yy80;
-		case 0x28: goto yy82;
-		case 0x29: goto yy84;
-		case 0x2A: goto yy86;
-		case 0x2B: goto yy88;
-		case 0x2C: goto yy90;
-		case 0x2D: goto yy92;
-		case 0x2E: goto yy94;
-		case 0x2F: goto yy96;
-		case 0x30: goto yy98;
-		case 0x31: goto yy100;
-		case 0x32: goto yy102;
-		case 0x33: goto yy104;
-		case 0x34: goto yy106;
-		case 0x35: goto yy108;
-		case 0x36: goto yy110;
-		case 0x37: goto yy112;
-		case 0x38: goto yy114;
-		case 0x39: goto yy116;
-		case 0x3A: goto yy118;
-		case 0x3B: goto yy120;
-		case 0x3C: goto yy122;
-		case 0x3D: goto yy124;
-		case 0x3E: goto yy126;
-		case 0x3F: goto yy128;
-		case 0x40: goto yy130;
-		case 0x41: goto yy132;
-		case 0x42: goto yy134;
-		case 0x43: goto yy136;
-		case 0x44: goto yy138;
-		case 0x45: goto yy140;
-		case 0x46: goto yy142;
-		case 0x47: goto yy144;
-		case 0x48: goto yy146;
-		case 0x49: goto yy148;
-		case 0x4A: goto yy150;
-		case 0x4B: goto yy152;
-		case 0x4C: goto yy154;
-		case 0x4D: goto yy156;
-		case 0x4E: goto yy158;
-		case 0x4F: goto yy160;
-		case 0x50: goto yy162;
-		case 0x51: goto yy164;
-		case 0x52: goto yy166;
-		case 0x53: goto yy168;
-		case 0x54: goto yy170;
-		case 0x55: goto yy172;
-		case 0x56: goto yy174;
-		case 0x57: goto yy176;
-		case 0x58: goto yy178;
-		case 0x59: goto yy180;
-		case 0x5A: goto yy182;
-		case 0x5B: goto yy184;
-		case 0x5C: goto yy186;
-		case 0x5D: goto yy188;
-		case 0x5E: goto yy190;
-		case 0x5F: goto yy192;
-		case 0x60: goto yy194;
-		case 0x61: goto yy196;
-		case 0x62: goto yy198;
-		case 0x63: goto yy200;
-		case 0x64: goto yy202;
-		case 0x65: goto yy204;
-		case 0x66: goto yy206;
-		case 0x67: goto yy208;
-		case 0x68: goto yy210;
-		case 0x69: goto yy212;
-		case 0x6A: goto yy214;
-		case 0x6B: goto yy216;
-		case 0x6C: goto yy218;
-		case 0x6D: goto yy220;
-		case 0x6E: goto yy222;
-		case 0x6F: goto yy224;
-		case 0x70: goto yy226;
-		case 0x71: goto yy228;
-		case 0x72: goto yy230;
-		case 0x73: goto yy232;
-		case 0x74: goto yy234;
-		case 0x75: goto yy236;
-		case 0x76: goto yy238;
-		case 0x77: goto yy240;
-		case 0x78: goto yy242;
-		case 0x79: goto yy244;
-		case 0x7A: goto yy246;
-		case 0x7B: goto yy248;
-		case 0x7C: goto yy250;
-		case 0x7D: goto yy252;
-		case 0x7E: goto yy254;
-		case 0x7F: goto yy256;
-		case 0x80: goto yy258;
-		case 0x81: goto yy260;
-		case 0x82: goto yy262;
-		case 0x83: goto yy264;
-		case 0x84: goto yy266;
-		case 0x85: goto yy268;
-		case 0x86: goto yy270;
-		case 0x87: goto yy272;
-		case 0x88: goto yy274;
-		case 0x89: goto yy276;
-		case 0x8A: goto yy278;
-		case 0x8B: goto yy280;
-		case 0x8C: goto yy282;
-		case 0x8D: goto yy284;
-		case 0x8E: goto yy286;
-		case 0x8F: goto yy288;
-		case 0x90: goto yy290;
-		case 0x91: goto yy292;
-		case 0x92: goto yy294;
-		case 0x93: goto yy296;
-		case 0x94: goto yy298;
-		case 0x95: goto yy300;
-		case 0x96: goto yy302;
-		case 0x97: goto yy304;
-		case 0x98: goto yy306;
-		case 0x99: goto yy308;
-		case 0x9A: goto yy310;
-		case 0x9B: goto yy312;
-		case 0x9C: goto yy314;
-		case 0x9D: goto yy316;
-		case 0x9E: goto yy318;
-		case 0x9F: goto yy320;
-		case 0xA0: goto yy322;
-		case 0xA1: goto yy324;
-		case 0xA2: goto yy326;
-		case 0xA3: goto yy328;
-		case 0xA4: goto yy330;
-		case 0xA5: goto yy332;
-		case 0xA6: goto yy334;
-		case 0xA7: goto yy336;
-		case 0xA8: goto yy338;
-		case 0xA9: goto yy340;
-		case 0xAA: goto yy342;
-		case 0xAB: goto yy344;
-		case 0xAC: goto yy346;
-		case 0xAD: goto yy348;
-		case 0xAE: goto yy350;
-		case 0xAF: goto yy352;
-		case 0xB0: goto yy354;
-		case 0xB1: goto yy356;
-		case 0xB2: goto yy358;
-		case 0xB3: goto yy360;
-		case 0xB4: goto yy362;
-		case 0xB5: goto yy364;
-		case 0xB6: goto yy366;
-		case 0xB7: goto yy368;
-		case 0xB8: goto yy370;
-		case 0xB9: goto yy372;
-		case 0xBA: goto yy374;
-		case 0xBB: goto yy376;
-		case 0xBC: goto yy378;
-		case 0xBD: goto yy380;
-		case 0xBE: goto yy382;
-		case 0xBF: goto yy384;
-		case 0xC0: goto yy386;
-		case 0xC1: goto yy388;
-		case 0xC2: goto yy390;
-		case 0xC3: goto yy392;
-		case 0xC4: goto yy394;
-		case 0xC5: goto yy396;
-		case 0xC6: goto yy398;
-		case 0xC7: goto yy400;
-		case 0xC8: goto yy402;
-		case 0xC9: goto yy404;
-		case 0xCA: goto yy406;
-		case 0xCB: goto yy408;
-		case 0xCC: goto yy410;
-		case 0xCD: goto yy412;
-		case 0xCE: goto yy414;
-		case 0xCF: goto yy416;
-		case 0xD0: goto yy418;
-		case 0xD1: goto yy420;
-		case 0xD2: goto yy422;
-		case 0xD3: goto yy424;
-		case 0xD4: goto yy426;
-		case 0xD5: goto yy428;
-		case 0xD6: goto yy430;
-		case 0xD7: goto yy432;
-		case 0xD8: goto yy434;
-		case 0xD9: goto yy436;
-		case 0xDA: goto yy438;
-		case 0xDB: goto yy440;
-		case 0xDC: goto yy442;
-		case 0xDD: goto yy444;
-		case 0xDE: goto yy446;
-		case 0xDF: goto yy448;
-		case 0xE0: goto yy450;
-		case 0xE1: goto yy452;
-		case 0xE2: goto yy454;
-		case 0xE3: goto yy456;
-		case 0xE4: goto yy458;
-		case 0xE5: goto yy460;
-		case 0xE6: goto yy462;
-		case 0xE7: goto yy464;
-		case 0xE8: goto yy466;
-		case 0xE9: goto yy468;
-		case 0xEA: goto yy470;
-		case 0xEB: goto yy472;
-		case 0xEC: goto yy474;
-		case 0xED: goto yy476;
-		case 0xEE: goto yy478;
-		case 0xEF: goto yy480;
-		case 0xF0: goto yy482;
-		case 0xF1: goto yy484;
-		case 0xF2: goto yy486;
-		case 0xF3: goto yy488;
-		case 0xF4: goto yy490;
-		case 0xF5: goto yy492;
-		case 0xF6: goto yy494;
-		case 0xF7: goto yy496;
-		case 0xF8: goto yy498;
-		case 0xF9: goto yy500;
-		case 0xFA: goto yy502;
-		case 0xFB: goto yy504;
-		case 0xFC: goto yy506;
-		case 0xFD: goto yy508;
-		case 0xFE: goto yy510;
-		default: goto yy512;
+		case 0x00: goto yy1;
+		case 0x01: goto yy2;
+		case 0x02: goto yy3;
+		case 0x03: goto yy4;
+		case 0x04: goto yy5;
+		case 0x05: goto yy6;
+		case 0x06: goto yy7;
+		case 0x07: goto yy8;
+		case 0x08: goto yy9;
+		case 0x09: goto yy10;
+		case 0x0A: goto yy11;
+		case 0x0B: goto yy12;
+		case 0x0C: goto yy13;
+		case 0x0D: goto yy14;
+		case 0x0E: goto yy15;
+		case 0x0F: goto yy16;
+		case 0x10: goto yy17;
+		case 0x11: goto yy18;
+		case 0x12: goto yy19;
+		case 0x13: goto yy20;
+		case 0x14: goto yy21;
+		case 0x15: goto yy22;
+		case 0x16: goto yy23;
+		case 0x17: goto yy24;
+		case 0x18: goto yy25;
+		case 0x19: goto yy26;
+		case 0x1A: goto yy27;
+		case 0x1B: goto yy28;
+		case 0x1C: goto yy29;
+		case 0x1D: goto yy30;
+		case 0x1E: goto yy31;
+		case 0x1F: goto yy32;
+		case 0x20: goto yy33;
+		case 0x21: goto yy34;
+		case 0x22: goto yy35;
+		case 0x23: goto yy36;
+		case 0x24: goto yy37;
+		case 0x25: goto yy38;
+		case 0x26: goto yy39;
+		case 0x27: goto yy40;
+		case 0x28: goto yy41;
+		case 0x29: goto yy42;
+		case 0x2A: goto yy43;
+		case 0x2B: goto yy44;
+		case 0x2C: goto yy45;
+		case 0x2D: goto yy46;
+		case 0x2E: goto yy47;
+		case 0x2F: goto yy48;
+		case 0x30: goto yy49;
+		case 0x31: goto yy50;
+		case 0x32: goto yy51;
+		case 0x33: goto yy52;
+		case 0x34: goto yy53;
+		case 0x35: goto yy54;
+		case 0x36: goto yy55;
+		case 0x37: goto yy56;
+		case 0x38: goto yy57;
+		case 0x39: goto yy58;
+		case 0x3A: goto yy59;
+		case 0x3B: goto yy60;
+		case 0x3C: goto yy61;
+		case 0x3D: goto yy62;
+		case 0x3E: goto yy63;
+		case 0x3F: goto yy64;
+		case 0x40: goto yy65;
+		case 0x41: goto yy66;
+		case 0x42: goto yy67;
+		case 0x43: goto yy68;
+		case 0x44: goto yy69;
+		case 0x45: goto yy70;
+		case 0x46: goto yy71;
+		case 0x47: goto yy72;
+		case 0x48: goto yy73;
+		case 0x49: goto yy74;
+		case 0x4A: goto yy75;
+		case 0x4B: goto yy76;
+		case 0x4C: goto yy77;
+		case 0x4D: goto yy78;
+		case 0x4E: goto yy79;
+		case 0x4F: goto yy80;
+		case 0x50: goto yy81;
+		case 0x51: goto yy82;
+		case 0x52: goto yy83;
+		case 0x53: goto yy84;
+		case 0x54: goto yy85;
+		case 0x55: goto yy86;
+		case 0x56: goto yy87;
+		case 0x57: goto yy88;
+		case 0x58: goto yy89;
+		case 0x59: goto yy90;
+		case 0x5A: goto yy91;
+		case 0x5B: goto yy92;
+		case 0x5C: goto yy93;
+		case 0x5D: goto yy94;
+		case 0x5E: goto yy95;
+		case 0x5F: goto yy96;
+		case 0x60: goto yy97;
+		case 0x61: goto yy98;
+		case 0x62: goto yy99;
+		case 0x63: goto yy100;
+		case 0x64: goto yy101;
+		case 0x65: goto yy102;
+		case 0x66: goto yy103;
+		case 0x67: goto yy104;
+		case 0x68: goto yy105;
+		case 0x69: goto yy106;
+		case 0x6A: goto yy107;
+		case 0x6B: goto yy108;
+		case 0x6C: goto yy109;
+		case 0x6D: goto yy110;
+		case 0x6E: goto yy111;
+		case 0x6F: goto yy112;
+		case 0x70: goto yy113;
+		case 0x71: goto yy114;
+		case 0x72: goto yy115;
+		case 0x73: goto yy116;
+		case 0x74: goto yy117;
+		case 0x75: goto yy118;
+		case 0x76: goto yy119;
+		case 0x77: goto yy120;
+		case 0x78: goto yy121;
+		case 0x79: goto yy122;
+		case 0x7A: goto yy123;
+		case 0x7B: goto yy124;
+		case 0x7C: goto yy125;
+		case 0x7D: goto yy126;
+		case 0x7E: goto yy127;
+		case 0x7F: goto yy128;
+		case 0x80: goto yy129;
+		case 0x81: goto yy130;
+		case 0x82: goto yy131;
+		case 0x83: goto yy132;
+		case 0x84: goto yy133;
+		case 0x85: goto yy134;
+		case 0x86: goto yy135;
+		case 0x87: goto yy136;
+		case 0x88: goto yy137;
+		case 0x89: goto yy138;
+		case 0x8A: goto yy139;
+		case 0x8B: goto yy140;
+		case 0x8C: goto yy141;
+		case 0x8D: goto yy142;
+		case 0x8E: goto yy143;
+		case 0x8F: goto yy144;
+		case 0x90: goto yy145;
+		case 0x91: goto yy146;
+		case 0x92: goto yy147;
+		case 0x93: goto yy148;
+		case 0x94: goto yy149;
+		case 0x95: goto yy150;
+		case 0x96: goto yy151;
+		case 0x97: goto yy152;
+		case 0x98: goto yy153;
+		case 0x99: goto yy154;
+		case 0x9A: goto yy155;
+		case 0x9B: goto yy156;
+		case 0x9C: goto yy157;
+		case 0x9D: goto yy158;
+		case 0x9E: goto yy159;
+		case 0x9F: goto yy160;
+		case 0xA0: goto yy161;
+		case 0xA1: goto yy162;
+		case 0xA2: goto yy163;
+		case 0xA3: goto yy164;
+		case 0xA4: goto yy165;
+		case 0xA5: goto yy166;
+		case 0xA6: goto yy167;
+		case 0xA7: goto yy168;
+		case 0xA8: goto yy169;
+		case 0xA9: goto yy170;
+		case 0xAA: goto yy171;
+		case 0xAB: goto yy172;
+		case 0xAC: goto yy173;
+		case 0xAD: goto yy174;
+		case 0xAE: goto yy175;
+		case 0xAF: goto yy176;
+		case 0xB0: goto yy177;
+		case 0xB1: goto yy178;
+		case 0xB2: goto yy179;
+		case 0xB3: goto yy180;
+		case 0xB4: goto yy181;
+		case 0xB5: goto yy182;
+		case 0xB6: goto yy183;
+		case 0xB7: goto yy184;
+		case 0xB8: goto yy185;
+		case 0xB9: goto yy186;
+		case 0xBA: goto yy187;
+		case 0xBB: goto yy188;
+		case 0xBC: goto yy189;
+		case 0xBD: goto yy190;
+		case 0xBE: goto yy191;
+		case 0xBF: goto yy192;
+		case 0xC0: goto yy193;
+		case 0xC1: goto yy194;
+		case 0xC2: goto yy195;
+		case 0xC3: goto yy196;
+		case 0xC4: goto yy197;
+		case 0xC5: goto yy198;
+		case 0xC6: goto yy199;
+		case 0xC7: goto yy200;
+		case 0xC8: goto yy201;
+		case 0xC9: goto yy202;
+		case 0xCA: goto yy203;
+		case 0xCB: goto yy204;
+		case 0xCC: goto yy205;
+		case 0xCD: goto yy206;
+		case 0xCE: goto yy207;
+		case 0xCF: goto yy208;
+		case 0xD0: goto yy209;
+		case 0xD1: goto yy210;
+		case 0xD2: goto yy211;
+		case 0xD3: goto yy212;
+		case 0xD4: goto yy213;
+		case 0xD5: goto yy214;
+		case 0xD6: goto yy215;
+		case 0xD7: goto yy216;
+		case 0xD8: goto yy217;
+		case 0xD9: goto yy218;
+		case 0xDA: goto yy219;
+		case 0xDB: goto yy220;
+		case 0xDC: goto yy221;
+		case 0xDD: goto yy222;
+		case 0xDE: goto yy223;
+		case 0xDF: goto yy224;
+		case 0xE0: goto yy225;
+		case 0xE1: goto yy226;
+		case 0xE2: goto yy227;
+		case 0xE3: goto yy228;
+		case 0xE4: goto yy229;
+		case 0xE5: goto yy230;
+		case 0xE6: goto yy231;
+		case 0xE7: goto yy232;
+		case 0xE8: goto yy233;
+		case 0xE9: goto yy234;
+		case 0xEA: goto yy235;
+		case 0xEB: goto yy236;
+		case 0xEC: goto yy237;
+		case 0xED: goto yy238;
+		case 0xEE: goto yy239;
+		case 0xEF: goto yy240;
+		case 0xF0: goto yy241;
+		case 0xF1: goto yy242;
+		case 0xF2: goto yy243;
+		case 0xF3: goto yy244;
+		case 0xF4: goto yy245;
+		case 0xF5: goto yy246;
+		case 0xF6: goto yy247;
+		case 0xF7: goto yy248;
+		case 0xF8: goto yy249;
+		case 0xF9: goto yy250;
+		case 0xFA: goto yy251;
+		case 0xFB: goto yy252;
+		case 0xFC: goto yy253;
+		case 0xFD: goto yy254;
+		case 0xFE: goto yy255;
+		default: goto yy256;
 	}
-yy2:
+yy1:
 	++cr;
 	return 0x00;
-yy4:
+yy2:
 	++cr;
 	return 0x01;
-yy6:
+yy3:
 	++cr;
 	return 0x02;
-yy8:
+yy4:
 	++cr;
 	return 0x03;
-yy10:
+yy5:
 	++cr;
 	return 0x9C;
-yy12:
+yy6:
 	++cr;
 	return 0x09;
-yy14:
+yy7:
 	++cr;
 	return 0x86;
-yy16:
+yy8:
 	++cr;
 	return 0x7F;
-yy18:
+yy9:
 	++cr;
 	return 0x97;
-yy20:
+yy10:
 	++cr;
 	return 0x8D;
-yy22:
+yy11:
 	++cr;
 	return 0x8E;
-yy24:
+yy12:
 	++cr;
 	return 0x0B;
-yy26:
+yy13:
 	++cr;
 	return 0x0C;
-yy28:
+yy14:
 	++cr;
 	return 0x0D;
-yy30:
+yy15:
 	++cr;
 	return 0x0E;
-yy32:
+yy16:
 	++cr;
 	return 0x0F;
-yy34:
+yy17:
 	++cr;
 	return 0x10;
-yy36:
+yy18:
 	++cr;
 	return 0x11;
-yy38:
+yy19:
 	++cr;
 	return 0x12;
-yy40:
+yy20:
 	++cr;
 	return 0x13;
-yy42:
+yy21:
 	++cr;
 	return 0x9D;
-yy44:
+yy22:
 	++cr;
 	return 0x85;
-yy46:
+yy23:
 	++cr;
 	return 0x08;
-yy48:
+yy24:
 	++cr;
 	return 0x87;
-yy50:
+yy25:
 	++cr;
 	return 0x18;
-yy52:
+yy26:
 	++cr;
 	return 0x19;
-yy54:
+yy27:
 	++cr;
 	return 0x92;
-yy56:
+yy28:
 	++cr;
 	return 0x8F;
-yy58:
+yy29:
 	++cr;
 	return 0x1C;
-yy60:
+yy30:
 	++cr;
 	return 0x1D;
-yy62:
+yy31:
 	++cr;
 	return 0x1E;
-yy64:
+yy32:
 	++cr;
 	return 0x1F;
-yy66:
+yy33:
 	++cr;
 	return 0x80;
-yy68:
+yy34:
 	++cr;
 	return 0x81;
-yy70:
+yy35:
 	++cr;
 	return 0x82;
-yy72:
+yy36:
 	++cr;
 	return 0x83;
-yy74:
+yy37:
 	++cr;
 	return 0x84;
-yy76:
+yy38:
 	++cr;
 	return 0x0A;
-yy78:
+yy39:
 	++cr;
 	return 0x17;
-yy80:
+yy40:
 	++cr;
 	return 0x1B;
-yy82:
+yy41:
 	++cr;
 	return 0x88;
-yy84:
+yy42:
 	++cr;
 	return 0x89;
-yy86:
+yy43:
 	++cr;
 	return 0x8A;
-yy88:
+yy44:
 	++cr;
 	return 0x8B;
-yy90:
+yy45:
 	++cr;
 	return 0x8C;
-yy92:
+yy46:
 	++cr;
 	return 0x05;
-yy94:
+yy47:
 	++cr;
 	return 0x06;
-yy96:
+yy48:
 	++cr;
 	return 0x07;
-yy98:
+yy49:
 	++cr;
 	return 0x90;
-yy100:
+yy50:
 	++cr;
 	return 0x91;
-yy102:
+yy51:
 	++cr;
 	return 0x16;
-yy104:
+yy52:
 	++cr;
 	return 0x93;
-yy106:
+yy53:
 	++cr;
 	return 0x94;
-yy108:
+yy54:
 	++cr;
 	return 0x95;
-yy110:
+yy55:
 	++cr;
 	return 0x96;
-yy112:
+yy56:
 	++cr;
 	return 0x04;
-yy114:
+yy57:
 	++cr;
 	return 0x98;
-yy116:
+yy58:
 	++cr;
 	return 0x99;
-yy118:
+yy59:
 	++cr;
 	return 0x9A;
-yy120:
+yy60:
 	++cr;
 	return 0x9B;
-yy122:
+yy61:
 	++cr;
 	return 0x14;
-yy124:
+yy62:
 	++cr;
 	return 0x15;
-yy126:
+yy63:
 	++cr;
 	return 0x9E;
-yy128:
+yy64:
 	++cr;
 	return 0x1A;
-yy130:
+yy65:
 	++cr;
 	return 0x20;
-yy132:
+yy66:
 	++cr;
 	return 0xA0;
-yy134:
+yy67:
 	++cr;
 	return 0xE2;
-yy136:
+yy68:
 	++cr;
 	return 0xE4;
-yy138:
+yy69:
 	++cr;
 	return 0xE0;
-yy140:
+yy70:
 	++cr;
 	return 0xE1;
-yy142:
+yy71:
 	++cr;
 	return 0xE3;
-yy144:
+yy72:
 	++cr;
 	return 0xE5;
-yy146:
+yy73:
 	++cr;
 	return 0xE7;
-yy148:
+yy74:
 	++cr;
 	return 0xF1;
-yy150:
+yy75:
 	++cr;
 	return 0xA2;
-yy152:
+yy76:
 	++cr;
 	return 0x2E;
-yy154:
+yy77:
 	++cr;
 	return 0x3C;
-yy156:
+yy78:
 	++cr;
 	return 0x28;
-yy158:
+yy79:
 	++cr;
 	return 0x2B;
-yy160:
+yy80:
 	++cr;
 	return 0x7C;
-yy162:
+yy81:
 	++cr;
 	return 0x26;
-yy164:
+yy82:
 	++cr;
 	return 0xE9;
-yy166:
+yy83:
 	++cr;
 	return 0xEA;
-yy168:
+yy84:
 	++cr;
 	return 0xEB;
-yy170:
+yy85:
 	++cr;
 	return 0xE8;
-yy172:
+yy86:
 	++cr;
 	return 0xED;
-yy174:
+yy87:
 	++cr;
 	return 0xEE;
-yy176:
+yy88:
 	++cr;
 	return 0xEF;
-yy178:
+yy89:
 	++cr;
 	return 0xEC;
-yy180:
+yy90:
 	++cr;
 	return 0xDF;
-yy182:
+yy91:
 	++cr;
 	return 0x21;
-yy184:
+yy92:
 	++cr;
 	return 0x24;
-yy186:
+yy93:
 	++cr;
 	return 0x2A;
-yy188:
+yy94:
 	++cr;
 	return 0x29;
-yy190:
+yy95:
 	++cr;
 	return 0x3B;
-yy192:
+yy96:
 	++cr;
 	return 0xAC;
-yy194:
+yy97:
 	++cr;
 	return 0x2D;
-yy196:
+yy98:
 	++cr;
 	return 0x2F;
-yy198:
+yy99:
 	++cr;
 	return 0xC2;
-yy200:
+yy100:
 	++cr;
 	return 0xC4;
-yy202:
+yy101:
 	++cr;
 	return 0xC0;
-yy204:
+yy102:
 	++cr;
 	return 0xC1;
-yy206:
+yy103:
 	++cr;
 	return 0xC3;
-yy208:
+yy104:
 	++cr;
 	return 0xC5;
-yy210:
+yy105:
 	++cr;
 	return 0xC7;
-yy212:
+yy106:
 	++cr;
 	return 0xD1;
-yy214:
+yy107:
 	++cr;
 	return 0xA6;
-yy216:
+yy108:
 	++cr;
 	return 0x2C;
-yy218:
+yy109:
 	++cr;
 	return 0x25;
-yy220:
+yy110:
 	++cr;
 	return 0x5F;
-yy222:
+yy111:
 	++cr;
 	return 0x3E;
-yy224:
+yy112:
 	++cr;
 	return 0x3F;
-yy226:
+yy113:
 	++cr;
 	return 0xF8;
-yy228:
+yy114:
 	++cr;
 	return 0xC9;
-yy230:
+yy115:
 	++cr;
 	return 0xCA;
-yy232:
+yy116:
 	++cr;
 	return 0xCB;
-yy234:
+yy117:
 	++cr;
 	return 0xC8;
-yy236:
+yy118:
 	++cr;
 	return 0xCD;
-yy238:
+yy119:
 	++cr;
 	return 0xCE;
-yy240:
+yy120:
 	++cr;
 	return 0xCF;
-yy242:
+yy121:
 	++cr;
 	return 0xCC;
-yy244:
+yy122:
 	++cr;
 	return 0x60;
-yy246:
+yy123:
 	++cr;
 	return 0x3A;
-yy248:
+yy124:
 	++cr;
 	return 0x23;
-yy250:
+yy125:
 	++cr;
 	return 0x40;
-yy252:
+yy126:
 	++cr;
 	return 0x27;
-yy254:
+yy127:
 	++cr;
 	return 0x3D;
-yy256:
+yy128:
 	++cr;
 	return 0x22;
-yy258:
+yy129:
 	++cr;
 	return 0xD8;
-yy260:
+yy130:
 	++cr;
 	return 0x61;
-yy262:
+yy131:
 	++cr;
 	return 0x62;
-yy264:
+yy132:
 	++cr;
 	return 0x63;
-yy266:
+yy133:
 	++cr;
 	return 0x64;
-yy268:
+yy134:
 	++cr;
 	return 0x65;
-yy270:
+yy135:
 	++cr;
 	return 0x66;
-yy272:
+yy136:
 	++cr;
 	return 0x67;
-yy274:
+yy137:
 	++cr;
 	return 0x68;
-yy276:
+yy138:
 	++cr;
 	return 0x69;
-yy278:
+yy139:
 	++cr;
 	return 0xAB;
-yy280:
+yy140:
 	++cr;
 	return 0xBB;
-yy282:
+yy141:
 	++cr;
 	return 0xF0;
-yy284:
+yy142:
 	++cr;
 	return 0xFD;
-yy286:
+yy143:
 	++cr;
 	return 0xDE;
-yy288:
+yy144:
 	++cr;
 	return 0xB1;
-yy290:
+yy145:
 	++cr;
 	return 0xB0;
-yy292:
+yy146:
 	++cr;
 	return 0x6A;
-yy294:
+yy147:
 	++cr;
 	return 0x6B;
-yy296:
+yy148:
 	++cr;
 	return 0x6C;
-yy298:
+yy149:
 	++cr;
 	return 0x6D;
-yy300:
+yy150:
 	++cr;
 	return 0x6E;
-yy302:
+yy151:
 	++cr;
 	return 0x6F;
-yy304:
+yy152:
 	++cr;
 	return 0x70;
-yy306:
+yy153:
 	++cr;
 	return 0x71;
-yy308:
+yy154:
 	++cr;
 	return 0x72;
-yy310:
+yy155:
 	++cr;
 	return 0xAA;
-yy312:
+yy156:
 	++cr;
 	return 0xBA;
-yy314:
+yy157:
 	++cr;
 	return 0xE6;
-yy316:
+yy158:
 	++cr;
 	return 0xB8;
-yy318:
+yy159:
 	++cr;
 	return 0xC6;
-yy320:
+yy160:
 	++cr;
 	return 0xA4;
-yy322:
+yy161:
 	++cr;
 	return 0xB5;
-yy324:
+yy162:
 	++cr;
 	return 0x7E;
-yy326:
+yy163:
 	++cr;
 	return 0x73;
-yy328:
+yy164:
 	++cr;
 	return 0x74;
-yy330:
+yy165:
 	++cr;
 	return 0x75;
-yy332:
+yy166:
 	++cr;
 	return 0x76;
-yy334:
+yy167:
 	++cr;
 	return 0x77;
-yy336:
+yy168:
 	++cr;
 	return 0x78;
-yy338:
+yy169:
 	++cr;
 	return 0x79;
-yy340:
+yy170:
 	++cr;
 	return 0x7A;
-yy342:
+yy171:
 	++cr;
 	return 0xA1;
-yy344:
+yy172:
 	++cr;
 	return 0xBF;
-yy346:
+yy173:
 	++cr;
 	return 0xD0;
-yy348:
+yy174:
 	++cr;
 	return 0xDD;
-yy350:
+yy175:
 	++cr;
 	return 0xFE;
-yy352:
+yy176:
 	++cr;
 	return 0xAE;
-yy354:
+yy177:
 	++cr;
 	return 0x5E;
-yy356:
+yy178:
 	++cr;
 	return 0xA3;
-yy358:
+yy179:
 	++cr;
 	return 0xA5;
-yy360:
+yy180:
 	++cr;
 	return 0xB7;
-yy362:
+yy181:
 	++cr;
 	return 0xA9;
-yy364:
+yy182:
 	++cr;
 	return 0xA7;
-yy366:
+yy183:
 	++cr;
 	return 0xB6;
-yy368:
+yy184:
 	++cr;
 	return 0xBC;
-yy370:
+yy185:
 	++cr;
 	return 0xBD;
-yy372:
+yy186:
 	++cr;
 	return 0xBE;
-yy374:
+yy187:
 	++cr;
 	return 0x5B;
-yy376:
+yy188:
 	++cr;
 	return 0x5D;
-yy378:
+yy189:
 	++cr;
 	return 0xAF;
-yy380:
+yy190:
 	++cr;
 	return 0xA8;
-yy382:
+yy191:
 	++cr;
 	return 0xB4;
-yy384:
+yy192:
 	++cr;
 	return 0xD7;
-yy386:
+yy193:
 	++cr;
 	return 0x7B;
-yy388:
+yy194:
 	++cr;
 	return 0x41;
-yy390:
+yy195:
 	++cr;
 	return 0x42;
-yy392:
+yy196:
 	++cr;
 	return 0x43;
-yy394:
+yy197:
 	++cr;
 	return 0x44;
-yy396:
+yy198:
 	++cr;
 	return 0x45;
-yy398:
+yy199:
 	++cr;
 	return 0x46;
-yy400:
+yy200:
 	++cr;
 	return 0x47;
-yy402:
+yy201:
 	++cr;
 	return 0x48;
-yy404:
+yy202:
 	++cr;
 	return 0x49;
-yy406:
+yy203:
 	++cr;
 	return 0xAD;
-yy408:
+yy204:
 	++cr;
 	return 0xF4;
-yy410:
+yy205:
 	++cr;
 	return 0xF6;
-yy412:
+yy206:
 	++cr;
 	return 0xF2;
-yy414:
+yy207:
 	++cr;
 	return 0xF3;
-yy416:
+yy208:
 	++cr;
 	return 0xF5;
-yy418:
+yy209:
 	++cr;
 	return 0x7D;
-yy420:
+yy210:
 	++cr;
 	return 0x4A;
-yy422:
+yy211:
 	++cr;
 	return 0x4B;
-yy424:
+yy212:
 	++cr;
 	return 0x4C;
-yy426:
+yy213:
 	++cr;
 	return 0x4D;
-yy428:
+yy214:
 	++cr;
 	return 0x4E;
-yy430:
+yy215:
 	++cr;
 	return 0x4F;
-yy432:
+yy216:
 	++cr;
 	return 0x50;
-yy434:
+yy217:
 	++cr;
 	return 0x51;
-yy436:
+yy218:
 	++cr;
 	return 0x52;
-yy438:
+yy219:
 	++cr;
 	return 0xB9;
-yy440:
+yy220:
 	++cr;
 	return 0xFB;
-yy442:
+yy221:
 	++cr;
 	return 0xFC;
-yy444:
+yy222:
 	++cr;
 	return 0xF9;
-yy446:
+yy223:
 	++cr;
 	return 0xFA;
-yy448:
+yy224:
 	++cr;
 	return 0xFF;
-yy450:
+yy225:
 	++cr;
 	return 0x5C;
-yy452:
+yy226:
 	++cr;
 	return 0xF7;
-yy454:
+yy227:
 	++cr;
 	return 0x53;
-yy456:
+yy228:
 	++cr;
 	return 0x54;
-yy458:
+yy229:
 	++cr;
 	return 0x55;
-yy460:
+yy230:
 	++cr;
 	return 0x56;
-yy462:
+yy231:
 	++cr;
 	return 0x57;
-yy464:
+yy232:
 	++cr;
 	return 0x58;
-yy466:
+yy233:
 	++cr;
 	return 0x59;
-yy468:
+yy234:
 	++cr;
 	return 0x5A;
-yy470:
+yy235:
 	++cr;
 	return 0xB2;
-yy472:
+yy236:
 	++cr;
 	return 0xD4;
-yy474:
+yy237:
 	++cr;
 	return 0xD6;
-yy476:
+yy238:
 	++cr;
 	return 0xD2;
-yy478:
+yy239:
 	++cr;
 	return 0xD3;
-yy480:
+yy240:
 	++cr;
 	return 0xD5;
-yy482:
+yy241:
 	++cr;
 	return 0x30;
-yy484:
+yy242:
 	++cr;
 	return 0x31;
-yy486:
+yy243:
 	++cr;
 	return 0x32;
-yy488:
+yy244:
 	++cr;
 	return 0x33;
-yy490:
+yy245:
 	++cr;
 	return 0x34;
-yy492:
+yy246:
 	++cr;
 	return 0x35;
-yy494:
+yy247:
 	++cr;
 	return 0x36;
-yy496:
+yy248:
 	++cr;
 	return 0x37;
-yy498:
+yy249:
 	++cr;
 	return 0x38;
-yy500:
+yy250:
 	++cr;
 	return 0x39;
-yy502:
+yy251:
 	++cr;
 	return 0xB3;
-yy504:
+yy252:
 	++cr;
 	return 0xDB;
-yy506:
+yy253:
 	++cr;
 	return 0xDC;
-yy508:
+yy254:
 	++cr;
 	return 0xD9;
-yy510:
+yy255:
 	++cr;
 	return 0xDA;
-yy512:
+yy256:
 	++cr;
 	return 0x9F;
 }

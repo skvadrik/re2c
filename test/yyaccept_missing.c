@@ -44,23 +44,23 @@ int scan(char *s, int l)
 yyc_INITIAL:
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if (yych <= 0x00) goto yy2;
-			if (yych == '$') goto yy6;
-			goto yy4;
-yy2:
+			if (yych <= 0x00) goto yy1;
+			if (yych == '$') goto yy4;
+			goto yy2;
+yy1:
 			++YYCURSOR;
 			{ printf("EOF\n");	return 0; }
-yy4:
+yy2:
 			++YYCURSOR;
-yy5:
+yy3:
 			{ printf("ERR\n");	return 1; }
-yy6:
+yy4:
 			yych = *++YYCURSOR;
-			if (yych <= '@') goto yy5;
-			if (yych <= 'Z') goto yy7;
-			if (yych <= '`') goto yy5;
-			if (yych >= '{') goto yy5;
-yy7:
+			if (yych <= '@') goto yy3;
+			if (yych <= 'Z') goto yy5;
+			if (yych <= '`') goto yy3;
+			if (yych >= '{') goto yy3;
+yy5:
 			++YYCURSOR;
 			{
 		printf("FOUND %s\n", t);
@@ -106,44 +106,44 @@ yyc_ST_VALUE:
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *(YYMARKER = YYCURSOR);
 				if (yybm[0+yych] & 128) {
-					goto yy12;
+					goto yy8;
 				}
-				if (yych == '$') goto yy14;
-yy11:
+				if (yych == '$') goto yy9;
+yy7:
 				{
 		YYSETCONDITION(STATE(INITIAL));
 		printf("Found spaces\n");
 	}
-yy12:
+yy8:
 				++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
 				if (yybm[0+yych] & 128) {
-					goto yy12;
+					goto yy8;
 				}
-				goto yy11;
-yy14:
+				goto yy7;
+yy9:
 				++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
-				if (yych <= '@') goto yy15;
-				if (yych <= 'Z') goto yy16;
-				if (yych <= '`') goto yy15;
-				if (yych <= 'z') goto yy16;
-yy15:
+				if (yych <= '@') goto yy10;
+				if (yych <= 'Z') goto yy11;
+				if (yych <= '`') goto yy10;
+				if (yych <= 'z') goto yy11;
+yy10:
 				YYCURSOR = YYMARKER;
 				if (yyaccept == 0) {
-					goto yy11;
+					goto yy7;
 				} else {
-					goto yy17;
+					goto yy12;
 				}
-yy16:
+yy11:
 				yyaccept = 1;
 				YYMARKER = ++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
-				if (yych == '$') goto yy14;
-yy17:
+				if (yych == '$') goto yy9;
+yy12:
 				{
 		printf("Found $ or $\\<x>\n");
 		continue;

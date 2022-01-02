@@ -8,19 +8,19 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'E') {
-		if (yych <= '@') goto yy2;
-		if (yych <= 'D') goto yy4;
+		if (yych <= '@') goto yy1;
+		if (yych <= 'D') goto yy2;
 	} else {
-		if (yych <= 'G') goto yy4;
-		if (yych <= '`') goto yy2;
-		if (yych <= 'g') goto yy4;
+		if (yych <= 'G') goto yy2;
+		if (yych <= '`') goto yy1;
+		if (yych <= 'g') goto yy2;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 13 "config/config7a.re"
 	{ return -1; }
 #line 23 "config/config7a.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 11 "config/config7a.re"
 	{ return 1; }

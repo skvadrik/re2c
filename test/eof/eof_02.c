@@ -53,7 +53,7 @@ static bool lex(input_t & in, unsigned int &count)
 yyFillLabel0:
 	yych = *in.cur;
 	switch (yych) {
-		case '\n': goto yy4;
+		case '\n': goto yy2;
 		case '0':
 		case '1':
 		case '2':
@@ -63,32 +63,32 @@ yyFillLabel0:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy7;
+		case '9': goto yy4;
 		default:
 			if (in.lim <= in.cur) {
 				if (in.fill() == 0) goto yyFillLabel0;
-				goto yy10;
+				goto yy6;
 			}
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	++in.cur;
 	{ return false; }
-yy4:
+yy2:
 	++in.cur;
 yyFillLabel1:
 	yych = *in.cur;
 	switch (yych) {
-		case '\n': goto yy4;
+		case '\n': goto yy2;
 		default:
 			if (in.lim <= in.cur) {
 				if (in.fill() == 0) goto yyFillLabel1;
 			}
-			goto yy6;
+			goto yy3;
 	}
-yy6:
+yy3:
 	{ continue; }
-yy7:
+yy4:
 	++in.cur;
 yyFillLabel2:
 	yych = *in.cur;
@@ -102,16 +102,16 @@ yyFillLabel2:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy7;
+		case '9': goto yy4;
 		default:
 			if (in.lim <= in.cur) {
 				if (in.fill() == 0) goto yyFillLabel2;
 			}
-			goto yy9;
+			goto yy5;
 	}
-yy9:
+yy5:
 	{ ++count; continue; }
-yy10:
+yy6:
 	{ return true; }
 }
 

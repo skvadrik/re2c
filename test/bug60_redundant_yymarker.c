@@ -21,27 +21,27 @@ yyc_c2:
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
+		case 'd': goto yy4;
+		default: goto yy3;
+	}
+yy3:
+	YYCURSOR = YYMARKER;
+	goto yy5;
+yy4:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
 		case 'd': goto yy6;
 		default: goto yy5;
 	}
 yy5:
-	YYCURSOR = YYMARKER;
-	goto yy7;
-yy6:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 'd': goto yy8;
-		default: goto yy7;
-	}
-yy7:
 	{}
-yy8:
+yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'd': goto yy9;
-		default: goto yy5;
+		case 'd': goto yy7;
+		default: goto yy3;
 	}
-yy9:
+yy7:
 	++YYCURSOR;
 	{}
 }

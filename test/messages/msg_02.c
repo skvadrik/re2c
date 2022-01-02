@@ -18,13 +18,13 @@
 		case '^':
 		case '_':
 		case '`':
-		case 'a': goto yy4;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 	{}
-yy4:
+yy2:
 	++YYCURSOR;
 	{}
 }
@@ -37,11 +37,11 @@ yy4:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x07:
-		case 'h': goto yy9;
-		default: goto yy8;
+		case 'h': goto yy5;
+		default: goto yy4;
 	}
-yy8:
-yy9:
+yy4:
+yy5:
 	++YYCURSOR;
 	{}
 }

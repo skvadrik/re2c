@@ -22,48 +22,48 @@ yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '1') {
-		if (yych == '\n') goto yy2;
+		if (yych == '\n') goto yy1;
 		if (yych <= '0') {
 			++YYCURSOR;
-			goto yy3;
+			goto yy2;
 		}
 		++YYCURSOR;
-		goto yy5;
+		goto yy3;
 	} else {
 		if (yych <= 'a') {
 			if (yych <= '`') {
 				++YYCURSOR;
-				goto yy3;
+				goto yy2;
 			}
 			++YYCURSOR;
-			goto yy7;
+			goto yy4;
 		} else {
 			if (yych <= 'b') {
 				++YYCURSOR;
-				goto yy9;
+				goto yy5;
 			}
 			if (yych <= 'c') {
 				++YYCURSOR;
-				goto yy11;
+				goto yy6;
 			}
 			++YYCURSOR;
-			goto yy3;
+			goto yy2;
 		}
 	}
+yy1:
 yy2:
-yy3:
 	{ return "SETUP-r1"; }
 	{ return "."; }
-yy5:
+yy3:
 	{ return "SETUP-r1"; }
 	{ return "1"; }
-yy7:
+yy4:
 	{ return "SETUP-r1"; }
 	{ return "a"; }
-yy9:
+yy5:
 	{ return "SETUP-r1"; }
 	{ return "b"; }
-yy11:
+yy6:
 	{ return "SETUP-r1"; }
 	{ return "c"; }
 /* *********************************** */
@@ -73,27 +73,27 @@ yyc_r2:
 	if (yych <= '`') {
 		if (yych != '\n') {
 			++YYCURSOR;
-			goto yy16;
+			goto yy8;
 		}
 	} else {
 		if (yych <= 'a') {
 			++YYCURSOR;
-			goto yy18;
+			goto yy9;
 		}
 		if (yych == 'c') {
 			++YYCURSOR;
-			goto yy20;
+			goto yy10;
 		}
 		++YYCURSOR;
-		goto yy16;
+		goto yy8;
 	}
-yy16:
+yy8:
 	{ return "SETUP-r2"; }
 	{ return "."; }
-yy18:
+yy9:
 	{ return "SETUP-r2"; }
 	{ return "a"; }
-yy20:
+yy10:
 	{ return "SETUP-r2"; }
 	{ return "c"; }
 }
@@ -116,48 +116,48 @@ yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
-		if (yych == '\n') goto yy24;
+		if (yych == '\n') goto yy12;
 		if (yych <= '1') {
 			++YYCURSOR;
-			goto yy25;
+			goto yy13;
 		}
 		++YYCURSOR;
-		goto yy27;
+		goto yy14;
 	} else {
 		if (yych <= 'a') {
 			if (yych <= '`') {
 				++YYCURSOR;
-				goto yy25;
+				goto yy13;
 			}
 			++YYCURSOR;
-			goto yy29;
+			goto yy15;
 		} else {
 			if (yych <= 'b') {
 				++YYCURSOR;
-				goto yy31;
+				goto yy16;
 			}
 			if (yych <= 'c') {
 				++YYCURSOR;
-				goto yy33;
+				goto yy17;
 			}
 			++YYCURSOR;
-			goto yy25;
+			goto yy13;
 		}
 	}
-yy24:
-yy25:
+yy12:
+yy13:
 	{ return "SETUP-r1"; }
 	{ return "."; }
-yy27:
+yy14:
 	{ return "SETUP-r1"; }
 	{ return "2"; }
-yy29:
+yy15:
 	{ return "SETUP-r1"; }
 	{ return "a"; }
-yy31:
+yy16:
 	{ return "SETUP-r1"; }
 	{ return "b"; }
-yy33:
+yy17:
 	{ return "SETUP-r1"; }
 	{ return "c"; }
 /* *********************************** */
@@ -167,25 +167,25 @@ yyc_r2:
 	if (yych <= '`') {
 		if (yych != '\n') {
 			++YYCURSOR;
-			goto yy38;
+			goto yy19;
 		}
 	} else {
 		if (yych <= 'a') {
 			++YYCURSOR;
-			goto yy40;
+			goto yy20;
 		}
 		if (yych == 'c') {
 			++YYCURSOR;
-			goto yy42;
+			goto yy21;
 		}
 		++YYCURSOR;
-		goto yy38;
+		goto yy19;
 	}
-yy38:
+yy19:
 	{ return "."; }
-yy40:
+yy20:
 	{ return "a"; }
-yy42:
+yy21:
 	{ return "c"; }
 }
 

@@ -42,11 +42,11 @@ yy1:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x00: goto yy4;
-		case '\n': goto yy6;
+		case 0x00: goto yy3;
+		case '\n': goto yy4;
 		default: goto yy2;
 	}
-yy4:
+yy3:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 33 "bug1472770_f.re"
@@ -54,7 +54,7 @@ yy4:
 		return n;
 	}
 #line 57 "bug1472770_f.c"
-yy6:
+yy4:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 28 "bug1472770_f.re"

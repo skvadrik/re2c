@@ -47,13 +47,13 @@ static Status lex(State *st, unsigned int *recv) {
 switch (st->state) {
 	default: goto yy0;
 	case 0:
-		if (st->lim <= st->cur) goto yy11;
+		if (st->lim <= st->cur) goto yy8;
 		goto yyFillLabel0;
 	case 1:
-		if (st->lim <= st->cur) goto yy4;
+		if (st->lim <= st->cur) goto yy3;
 		goto yyFillLabel1;
 	case 2:
-		if (st->lim <= st->cur) goto yy10;
+		if (st->lim <= st->cur) goto yy7;
 		goto yyFillLabel2;
 }
 #line 43 "c/state/push.re"
@@ -93,27 +93,27 @@ yyFillLabel0:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy5;
+		case 'z': goto yy4;
 		default:
 			if (st->lim <= st->cur) {
 				st->state = 0;
 				return WAITING;
 			}
-			goto yy3;
+			goto yy2;
 	}
-yy3:
+yy2:
 	++st->cur;
-yy4:
+yy3:
 	st->state = -1;
 #line 60 "c/state/push.re"
 	{ return BAD_PACKET; }
 #line 111 "c/state/push.c"
-yy5:
+yy4:
 	st->mar = ++st->cur;
 yyFillLabel1:
 	yych = *st->cur;
 	switch (yych) {
-		case ';': goto yy6;
+		case ';': goto yy5;
 		case 'a':
 		case 'b':
 		case 'c':
@@ -139,26 +139,26 @@ yyFillLabel1:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy8;
+		case 'z': goto yy6;
 		default:
 			if (st->lim <= st->cur) {
 				st->state = 1;
 				return WAITING;
 			}
-			goto yy4;
+			goto yy3;
 	}
-yy6:
+yy5:
 	++st->cur;
 	st->state = -1;
 #line 62 "c/state/push.re"
 	{ *recv = *recv + 1; continue; }
 #line 156 "c/state/push.c"
-yy8:
+yy6:
 	++st->cur;
 yyFillLabel2:
 	yych = *st->cur;
 	switch (yych) {
-		case ';': goto yy6;
+		case ';': goto yy5;
 		case 'a':
 		case 'b':
 		case 'c':
@@ -184,18 +184,18 @@ yyFillLabel2:
 		case 'w':
 		case 'x':
 		case 'y':
-		case 'z': goto yy8;
+		case 'z': goto yy6;
 		default:
 			if (st->lim <= st->cur) {
 				st->state = 2;
 				return WAITING;
 			}
-			goto yy10;
+			goto yy7;
 	}
-yy10:
+yy7:
 	st->cur = st->mar;
-	goto yy4;
-yy11:
+	goto yy3;
+yy8:
 	st->state = -1;
 #line 61 "c/state/push.re"
 	{ return END; }

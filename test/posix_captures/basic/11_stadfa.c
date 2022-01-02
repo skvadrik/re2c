@@ -9,12 +9,12 @@
 		case 0x00:
 			yyt2 = NULL;
 			yyt1 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 		case 'a':
-		case 'b': goto yy4;
-		default: goto yy3;
+		case 'b': goto yy3;
+		default: goto yy2;
 	}
-yy2:
+yy1:
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[3] = yyt2;
@@ -22,31 +22,31 @@ yy2:
 	yypmatch[2] = yyt2;
 	if (yyt2 != NULL) yypmatch[2] -= 1;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt2 = NULL;
 	yyt1 = YYCURSOR - 1;
-	if (yych <= 0x00) goto yy2;
-	goto yy5;
-yy4:
+	if (yych <= 0x00) goto yy1;
+	goto yy4;
+yy3:
 	yych = *++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
 	if (yych <= 0x00) {
 		yyt2 = YYCURSOR;
-		goto yy2;
+		goto yy1;
 	}
-	goto yy7;
-yy5:
+	goto yy5;
+yy4:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= 0x00) goto yy2;
-	goto yy5;
-yy7:
+	if (yych <= 0x00) goto yy1;
+	goto yy4;
+yy5:
 	yych = *++YYCURSOR;
 	yyt2 = YYCURSOR - 1;
-	if (yych <= 0x00) goto yy2;
-	goto yy5;
+	if (yych <= 0x00) goto yy1;
+	goto yy4;
 }
 
 posix_captures/basic/11_stadfa.re:6:4: warning: rule matches empty string [-Wmatch-empty-string]

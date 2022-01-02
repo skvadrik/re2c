@@ -6,18 +6,18 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy3;
+		case 'b': goto yy2;
 		default:
 			yyt1 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	t = yyt1;
 	{}
-yy3:
+yy2:
 	++YYCURSOR;
 	yyt1 = NULL;
-	goto yy2;
+	goto yy1;
 }
 
 stadfa/stadfa_03.re:3:9: warning: rule matches empty string [-Wmatch-empty-string]

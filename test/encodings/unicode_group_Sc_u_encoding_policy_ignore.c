@@ -17,58 +17,58 @@ Sc:
 	if (yych <= 0x00000E3E) {
 		if (yych <= 0x0000060B) {
 			if (yych <= 0x000000A5) {
-				if (yych == '$') goto yy4;
-				if (yych >= 0x000000A2) goto yy4;
+				if (yych == '$') goto yy2;
+				if (yych >= 0x000000A2) goto yy2;
 			} else {
-				if (yych == 0x0000058F) goto yy4;
-				if (yych >= 0x0000060B) goto yy4;
+				if (yych == 0x0000058F) goto yy2;
+				if (yych >= 0x0000060B) goto yy2;
 			}
 		} else {
 			if (yych <= 0x000009FB) {
-				if (yych <= 0x000009F1) goto yy2;
-				if (yych <= 0x000009F3) goto yy4;
-				if (yych >= 0x000009FB) goto yy4;
+				if (yych <= 0x000009F1) goto yy1;
+				if (yych <= 0x000009F3) goto yy2;
+				if (yych >= 0x000009FB) goto yy2;
 			} else {
 				if (yych <= 0x00000AF1) {
-					if (yych >= 0x00000AF1) goto yy4;
+					if (yych >= 0x00000AF1) goto yy2;
 				} else {
-					if (yych == 0x00000BF9) goto yy4;
+					if (yych == 0x00000BF9) goto yy2;
 				}
 			}
 		}
 	} else {
 		if (yych <= 0x0000FDFC) {
 			if (yych <= 0x0000209F) {
-				if (yych <= 0x00000E3F) goto yy4;
-				if (yych == 0x000017DB) goto yy4;
+				if (yych <= 0x00000E3F) goto yy2;
+				if (yych == 0x000017DB) goto yy2;
 			} else {
 				if (yych <= 0x0000A837) {
-					if (yych <= 0x000020BD) goto yy4;
+					if (yych <= 0x000020BD) goto yy2;
 				} else {
-					if (yych <= 0x0000A838) goto yy4;
-					if (yych >= 0x0000FDFC) goto yy4;
+					if (yych <= 0x0000A838) goto yy2;
+					if (yych >= 0x0000FDFC) goto yy2;
 				}
 			}
 		} else {
 			if (yych <= 0x0000FF04) {
-				if (yych == 0x0000FE69) goto yy4;
-				if (yych >= 0x0000FF04) goto yy4;
+				if (yych == 0x0000FE69) goto yy2;
+				if (yych >= 0x0000FF04) goto yy2;
 			} else {
 				if (yych <= 0x0000FFE1) {
-					if (yych >= 0x0000FFE0) goto yy4;
+					if (yych >= 0x0000FFE0) goto yy2;
 				} else {
-					if (yych <= 0x0000FFE4) goto yy2;
-					if (yych <= 0x0000FFE6) goto yy4;
+					if (yych <= 0x0000FFE4) goto yy1;
+					if (yych <= 0x0000FFE6) goto yy2;
 				}
 			}
 		}
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Sc_u_encoding_policy_ignore.re"
 	{ return YYCURSOR == limit; }
 #line 71 "encodings/unicode_group_Sc_u_encoding_policy_ignore.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Sc_u_encoding_policy_ignore.re"
 	{ goto Sc; }

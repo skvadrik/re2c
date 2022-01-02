@@ -21,63 +21,63 @@ func lex(str string) int {
 			if (yych <= '^') {
 				if (yych <= '$') {
 					if (yych >= '$') {
-						goto yy4
+						goto yy3
 					}
 				} else {
 					if (yych <= '@') {
-						goto yy2
+						goto yy1
 					}
 					if (yych <= 'Z') {
-						goto yy4
+						goto yy3
 					}
 				}
 			} else {
 				if (yych <= 'z') {
 					if (yych != '`') {
-						goto yy4
+						goto yy3
 					}
 				} else {
 					if (yych <= 0xC1) {
-						goto yy2
+						goto yy1
 					}
 					if (yych <= 0xC2) {
-						goto yy7
+						goto yy5
 					}
-					goto yy8
+					goto yy6
 				}
 			}
 		} else {
 			if (yych <= 0xCF) {
 				if (yych <= 0xCC) {
 					if (yych <= 0xCA) {
-						goto yy9
+						goto yy7
 					}
 					if (yych <= 0xCB) {
-						goto yy10
+						goto yy8
 					}
 				} else {
 					if (yych <= 0xCD) {
-						goto yy11
+						goto yy9
 					}
 					if (yych <= 0xCE) {
-						goto yy12
+						goto yy10
 					}
-					goto yy13
+					goto yy11
 				}
 			} else {
 				if (yych <= 0xD3) {
 					if (yych == 0xD2) {
-						goto yy14
+						goto yy12
 					}
-					goto yy9
+					goto yy7
 				} else {
 					if (yych <= 0xD4) {
-						goto yy15
+						goto yy13
 					}
 					if (yych <= 0xD5) {
-						goto yy16
+						goto yy14
 					}
-					goto yy17
+					goto yy15
 				}
 			}
 		}
@@ -86,80 +86,80 @@ func lex(str string) int {
 			if (yych <= 0xDB) {
 				if (yych <= 0xD8) {
 					if (yych <= 0xD7) {
-						goto yy18
+						goto yy16
 					}
-					goto yy19
+					goto yy17
 				} else {
 					if (yych <= 0xD9) {
-						goto yy20
+						goto yy18
 					}
 					if (yych <= 0xDA) {
-						goto yy9
+						goto yy7
 					}
-					goto yy21
+					goto yy19
 				}
 			} else {
 				if (yych <= 0xDE) {
 					if (yych <= 0xDC) {
-						goto yy22
+						goto yy20
 					}
 					if (yych <= 0xDD) {
-						goto yy23
+						goto yy21
 					}
-					goto yy24
+					goto yy22
 				} else {
 					if (yych <= 0xDF) {
-						goto yy25
+						goto yy23
 					}
 					if (yych <= 0xE0) {
-						goto yy26
+						goto yy24
 					}
-					goto yy27
+					goto yy25
 				}
 			}
 		} else {
 			if (yych <= 0xEA) {
 				if (yych <= 0xE4) {
 					if (yych <= 0xE2) {
-						goto yy28
+						goto yy26
 					}
 					if (yych <= 0xE3) {
-						goto yy29
+						goto yy27
 					}
-					goto yy30
+					goto yy28
 				} else {
 					if (yych <= 0xE8) {
-						goto yy31
+						goto yy29
 					}
 					if (yych <= 0xE9) {
-						goto yy32
+						goto yy30
 					}
-					goto yy33
+					goto yy31
 				}
 			} else {
 				if (yych <= 0xEE) {
 					if (yych <= 0xEC) {
-						goto yy31
+						goto yy29
 					}
 					if (yych <= 0xED) {
-						goto yy34
+						goto yy32
 					}
 				} else {
 					if (yych <= 0xEF) {
-						goto yy35
+						goto yy33
 					}
 					if (yych <= 0xF0) {
-						goto yy36
+						goto yy34
 					}
 				}
 			}
 		}
 	}
-yy2:
+yy1:
 	cursor += 1
-yy3:
+yy2:
 	{ return 1 }
-yy4:
+yy3:
 	yyaccept = 0
 	cursor += 1
 	marker = cursor
@@ -169,27 +169,27 @@ yy4:
 			if (yych <= 'Z') {
 				if (yych <= '/') {
 					if (yych == '$') {
-						goto yy4
+						goto yy3
 					}
 				} else {
 					if (yych <= '9') {
-						goto yy4
+						goto yy3
 					}
 					if (yych >= 'A') {
-						goto yy4
+						goto yy3
 					}
 				}
 			} else {
 				if (yych <= '`') {
 					if (yych == '_') {
-						goto yy4
+						goto yy3
 					}
 				} else {
 					if (yych <= 'z') {
-						goto yy4
+						goto yy3
 					}
 					if (yych >= 0xC2) {
-						goto yy37
+						goto yy35
 					}
 				}
 			}
@@ -197,41 +197,41 @@ yy4:
 			if (yych <= 0xCE) {
 				if (yych <= 0xCB) {
 					if (yych <= 0xC3) {
-						goto yy39
+						goto yy37
 					}
 					if (yych <= 0xCA) {
+						goto yy38
+					}
+					goto yy39
+				} else {
+					if (yych <= 0xCC) {
+						goto yy38
+					}
+					if (yych <= 0xCD) {
 						goto yy40
 					}
 					goto yy41
-				} else {
-					if (yych <= 0xCC) {
-						goto yy40
-					}
-					if (yych <= 0xCD) {
-						goto yy42
-					}
-					goto yy43
 				}
 			} else {
 				if (yych <= 0xD2) {
 					if (yych <= 0xCF) {
-						goto yy44
+						goto yy42
 					}
 					if (yych <= 0xD1) {
-						goto yy40
+						goto yy38
 					}
-					goto yy45
+					goto yy43
 				} else {
 					if (yych <= 0xD3) {
-						goto yy40
+						goto yy38
 					}
 					if (yych <= 0xD4) {
-						goto yy46
+						goto yy44
 					}
 					if (yych <= 0xD5) {
-						goto yy47
+						goto yy45
 					}
-					goto yy48
+					goto yy46
 				}
 			}
 		}
@@ -240,162 +240,162 @@ yy4:
 			if (yych <= 0xDC) {
 				if (yych <= 0xD9) {
 					if (yych <= 0xD7) {
-						goto yy49
+						goto yy47
 					}
 					if (yych <= 0xD8) {
+						goto yy48
+					}
+					goto yy49
+				} else {
+					if (yych <= 0xDA) {
+						goto yy38
+					}
+					if (yych <= 0xDB) {
 						goto yy50
 					}
 					goto yy51
-				} else {
-					if (yych <= 0xDA) {
-						goto yy40
-					}
-					if (yych <= 0xDB) {
-						goto yy52
-					}
-					goto yy53
 				}
 			} else {
 				if (yych <= 0xDF) {
 					if (yych <= 0xDD) {
-						goto yy54
+						goto yy52
 					}
 					if (yych <= 0xDE) {
-						goto yy55
+						goto yy53
 					}
-					goto yy56
+					goto yy54
 				} else {
 					if (yych <= 0xE0) {
-						goto yy57
+						goto yy55
 					}
 					if (yych <= 0xE1) {
-						goto yy58
+						goto yy56
 					}
-					goto yy59
+					goto yy57
 				}
 			}
 		} else {
 			if (yych <= 0xEC) {
 				if (yych <= 0xE8) {
 					if (yych <= 0xE3) {
-						goto yy60
+						goto yy58
 					}
 					if (yych <= 0xE4) {
-						goto yy61
+						goto yy59
 					}
-					goto yy62
+					goto yy60
 				} else {
 					if (yych <= 0xE9) {
-						goto yy63
+						goto yy61
 					}
 					if (yych <= 0xEA) {
-						goto yy64
+						goto yy62
 					}
-					goto yy62
+					goto yy60
 				}
 			} else {
 				if (yych <= 0xEF) {
 					if (yych <= 0xED) {
-						goto yy65
+						goto yy63
 					}
 					if (yych >= 0xEF) {
-						goto yy66
+						goto yy64
 					}
 				} else {
 					if (yych <= 0xF0) {
-						goto yy67
+						goto yy65
 					}
 					if (yych == 0xF3) {
-						goto yy68
+						goto yy66
 					}
 				}
 			}
 		}
 	}
-yy6:
+yy4:
 	{ return 0 }
-yy7:
+yy5:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB4) {
 		if (yych == 0xAA) {
-			goto yy4
+			goto yy3
 		}
-		goto yy3
+		goto yy2
 	} else {
 		if (yych <= 0xB5) {
-			goto yy4
+			goto yy3
 		}
 		if (yych == 0xBA) {
-			goto yy4
+			goto yy3
 		}
-		goto yy3
+		goto yy2
 	}
-yy8:
+yy6:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x7F) {
-			goto yy3
+			goto yy2
 		}
 		if (yych <= 0x96) {
-			goto yy4
-		}
-		goto yy3
-	} else {
-		if (yych == 0xB7) {
 			goto yy3
 		}
-		if (yych <= 0xBF) {
-			goto yy4
+		goto yy2
+	} else {
+		if (yych == 0xB7) {
+			goto yy2
 		}
-		goto yy3
+		if (yych <= 0xBF) {
+			goto yy3
+		}
+		goto yy2
 	}
-yy9:
+yy7:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy3
-yy10:
+	goto yy2
+yy8:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x81) {
 			if (yych <= 0x7F) {
-				goto yy3
-			}
-			goto yy4
-		} else {
-			if (yych <= 0x85) {
-				goto yy3
-			}
-			if (yych <= 0x91) {
-				goto yy4
+				goto yy2
 			}
 			goto yy3
+		} else {
+			if (yych <= 0x85) {
+				goto yy2
+			}
+			if (yych <= 0x91) {
+				goto yy3
+			}
+			goto yy2
 		}
 	} else {
 		if (yych <= 0xAC) {
 			if (yych <= 0xA4) {
-				goto yy4
-			}
-			if (yych <= 0xAB) {
 				goto yy3
 			}
-			goto yy4
-		} else {
-			if (yych == 0xAE) {
-				goto yy4
+			if (yych <= 0xAB) {
+				goto yy2
 			}
 			goto yy3
+		} else {
+			if (yych == 0xAE) {
+				goto yy3
+			}
+			goto yy2
 		}
 	}
-yy11:
+yy9:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -406,344 +406,344 @@ yy11:
 	case 0xBA,0xBB,0xBC,0xBD:
 		fallthrough
 	case 0xBF:
-		goto yy4
-	default:
 		goto yy3
+	default:
+		goto yy2
 	}
-yy12:
+yy10:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8B) {
 		if (yych <= 0x86) {
 			if (yych <= 0x85) {
-				goto yy3
-			}
-			goto yy4
-		} else {
-			if (yych <= 0x87) {
-				goto yy3
-			}
-			if (yych <= 0x8A) {
-				goto yy4
+				goto yy2
 			}
 			goto yy3
+		} else {
+			if (yych <= 0x87) {
+				goto yy2
+			}
+			if (yych <= 0x8A) {
+				goto yy3
+			}
+			goto yy2
 		}
 	} else {
 		if (yych <= 0xA1) {
 			if (yych == 0x8D) {
-				goto yy3
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xA2) {
-				goto yy3
-			}
-			if (yych <= 0xBF) {
-				goto yy4
+				goto yy2
 			}
 			goto yy3
+		} else {
+			if (yych <= 0xA2) {
+				goto yy2
+			}
+			if (yych <= 0xBF) {
+				goto yy3
+			}
+			goto yy2
 		}
 	}
+yy11:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy2
+	}
+	if (yych == 0xB6) {
+		goto yy2
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy2
+yy12:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy2
+	}
+	if (yych <= 0x81) {
+		goto yy3
+	}
+	if (yych <= 0x89) {
+		goto yy2
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy2
 yy13:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy3
-	}
-	if (yych == 0xB6) {
-		goto yy3
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy3
-yy14:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy3
-	}
-	if (yych <= 0x81) {
-		goto yy4
-	}
-	if (yych <= 0x89) {
-		goto yy3
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy3
-yy15:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy3
+		goto yy2
 	}
 	if (yych == 0xB0) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy3
-yy16:
+	goto yy2
+yy14:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x98) {
 		if (yych <= 0x7F) {
-			goto yy3
+			goto yy2
 		}
 		if (yych <= 0x96) {
-			goto yy4
-		}
-		goto yy3
-	} else {
-		if (yych <= 0x99) {
-			goto yy4
-		}
-		if (yych <= 0xA0) {
 			goto yy3
 		}
-		if (yych <= 0xBF) {
-			goto yy4
+		goto yy2
+	} else {
+		if (yych <= 0x99) {
+			goto yy3
 		}
-		goto yy3
+		if (yych <= 0xA0) {
+			goto yy2
+		}
+		if (yych <= 0xBF) {
+			goto yy3
+		}
+		goto yy2
 	}
-yy17:
+yy15:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0x87) {
-		goto yy4
+		goto yy3
 	}
-	goto yy3
-yy18:
+	goto yy2
+yy16:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0xAA) {
-		goto yy4
-	}
-	if (yych <= 0xAF) {
 		goto yy3
 	}
-	if (yych <= 0xB2) {
-		goto yy4
+	if (yych <= 0xAF) {
+		goto yy2
 	}
-	goto yy3
-yy19:
+	if (yych <= 0xB2) {
+		goto yy3
+	}
+	goto yy2
+yy17:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy3
-yy20:
+	goto yy2
+yy18:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAD) {
 		if (yych <= 0x7F) {
-			goto yy3
+			goto yy2
 		}
 		if (yych <= 0x8A) {
-			goto yy4
-		}
-		goto yy3
-	} else {
-		if (yych == 0xB0) {
 			goto yy3
 		}
-		if (yych <= 0xBF) {
-			goto yy4
+		goto yy2
+	} else {
+		if (yych == 0xB0) {
+			goto yy2
 		}
-		goto yy3
+		if (yych <= 0xBF) {
+			goto yy3
+		}
+		goto yy2
 	}
-yy21:
+yy19:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA6) {
 		if (yych <= 0x94) {
 			if (yych <= 0x7F) {
-				goto yy3
+				goto yy2
 			}
 			if (yych <= 0x93) {
-				goto yy4
-			}
-			goto yy3
-		} else {
-			if (yych <= 0x95) {
-				goto yy4
-			}
-			if (yych <= 0xA4) {
 				goto yy3
 			}
-			goto yy4
+			goto yy2
+		} else {
+			if (yych <= 0x95) {
+				goto yy3
+			}
+			if (yych <= 0xA4) {
+				goto yy2
+			}
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xB9) {
 			if (yych <= 0xAD) {
-				goto yy3
+				goto yy2
 			}
 			if (yych <= 0xAF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy3
+			goto yy2
 		} else {
 			if (yych <= 0xBC) {
-				goto yy4
+				goto yy3
 			}
 			if (yych == 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy3
+			goto yy2
 		}
 	}
-yy22:
+yy20:
 	cursor += 1
 	yych = str[cursor]
 	if (yych == 0x90) {
-		goto yy4
-	}
-	if (yych <= 0x91) {
 		goto yy3
 	}
-	if (yych <= 0xAF) {
-		goto yy4
+	if (yych <= 0x91) {
+		goto yy2
 	}
-	goto yy3
-yy23:
+	if (yych <= 0xAF) {
+		goto yy3
+	}
+	goto yy2
+yy21:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8C) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy3
-yy24:
+	goto yy2
+yy22:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0xA5) {
-		goto yy4
+		goto yy3
 	}
 	if (yych == 0xB1) {
-		goto yy4
+		goto yy3
 	}
-	goto yy3
-yy25:
+	goto yy2
+yy23:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB3) {
 		if (yych <= 0x89) {
-			goto yy3
+			goto yy2
 		}
 		if (yych <= 0xAA) {
-			goto yy4
+			goto yy3
 		}
-		goto yy3
+		goto yy2
 	} else {
 		if (yych <= 0xB5) {
-			goto yy4
+			goto yy3
 		}
 		if (yych == 0xBA) {
-			goto yy4
+			goto yy3
 		}
-		goto yy3
+		goto yy2
 	}
-yy26:
+yy24:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 0xA0:
-		goto yy69
+		goto yy67
 	case 0xA1:
-		goto yy70
+		goto yy68
 	case 0xA2:
-		goto yy71
+		goto yy69
 	case 0xA4:
-		goto yy72
+		goto yy70
 	case 0xA5:
-		goto yy73
+		goto yy71
 	case 0xA6:
-		goto yy74
+		goto yy72
 	case 0xA7:
-		goto yy75
+		goto yy73
 	case 0xA8:
-		goto yy76
+		goto yy74
 	case 0xA9:
-		goto yy77
+		goto yy75
 	case 0xAA:
-		goto yy78
+		goto yy76
 	case 0xAB:
-		goto yy79
+		goto yy77
 	case 0xAC:
-		goto yy80
+		goto yy78
 	case 0xAD:
-		goto yy81
+		goto yy79
 	case 0xAE:
-		goto yy82
+		goto yy80
 	case 0xAF:
-		goto yy83
+		goto yy81
 	case 0xB0:
-		goto yy84
+		goto yy82
 	case 0xB1:
-		goto yy85
+		goto yy83
 	case 0xB2:
-		goto yy86
+		goto yy84
 	case 0xB3:
-		goto yy87
+		goto yy85
 	case 0xB4:
-		goto yy88
+		goto yy86
 	case 0xB5:
-		goto yy89
+		goto yy87
 	case 0xB6:
-		goto yy90
+		goto yy88
 	case 0xB7:
 		fallthrough
 	case 0xB9:
-		goto yy91
+		goto yy89
 	case 0xB8:
-		goto yy92
+		goto yy90
 	case 0xBA:
-		goto yy93
+		goto yy91
 	case 0xBB:
-		goto yy94
+		goto yy92
 	case 0xBC:
-		goto yy95
+		goto yy93
 	case 0xBD:
-		goto yy96
+		goto yy94
 	case 0xBE:
-		goto yy97
+		goto yy95
 	default:
-		goto yy3
+		goto yy2
 	}
-yy27:
+yy25:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 0x80:
-		goto yy98
+		goto yy96
 	case 0x81:
-		goto yy99
+		goto yy97
 	case 0x82:
-		goto yy100
+		goto yy98
 	case 0x83:
-		goto yy101
+		goto yy99
 	case 0x84,0x85,0x86,0x87,0x88:
 		fallthrough
 	case 0x91,0x92,0x93,0x94,0x95,0x96,0x97,0x98:
@@ -751,85 +751,85 @@ yy27:
 	case 0xB4,0xB5,0xB6:
 		fallthrough
 	case 0xB8,0xB9,0xBA,0xBB:
-		goto yy40
+		goto yy38
 	case 0x89:
-		goto yy102
+		goto yy100
 	case 0x8A:
-		goto yy103
+		goto yy101
 	case 0x8B:
-		goto yy104
+		goto yy102
 	case 0x8C:
-		goto yy105
+		goto yy103
 	case 0x8D:
-		goto yy106
+		goto yy104
 	case 0x8E:
-		goto yy107
+		goto yy105
 	case 0x8F:
-		goto yy108
+		goto yy106
 	case 0x90:
-		goto yy109
+		goto yy107
 	case 0x99:
-		goto yy110
+		goto yy108
 	case 0x9A:
-		goto yy111
+		goto yy109
 	case 0x9B:
-		goto yy112
+		goto yy110
 	case 0x9C:
-		goto yy113
+		goto yy111
 	case 0x9D:
-		goto yy114
+		goto yy112
 	case 0x9E:
-		goto yy115
+		goto yy113
 	case 0x9F:
-		goto yy116
+		goto yy114
 	case 0xA0:
-		goto yy117
+		goto yy115
 	case 0xA1:
-		goto yy118
+		goto yy116
 	case 0xA2:
-		goto yy119
+		goto yy117
 	case 0xA3:
-		goto yy120
+		goto yy118
 	case 0xA4:
-		goto yy121
+		goto yy119
 	case 0xA5:
-		goto yy122
+		goto yy120
 	case 0xA6:
-		goto yy123
+		goto yy121
 	case 0xA7:
-		goto yy124
+		goto yy122
 	case 0xA8:
-		goto yy125
+		goto yy123
 	case 0xA9:
-		goto yy126
+		goto yy124
 	case 0xAA:
-		goto yy127
+		goto yy125
 	case 0xAC:
-		goto yy128
+		goto yy126
 	case 0xAD:
-		goto yy129
+		goto yy127
 	case 0xAE:
-		goto yy130
+		goto yy128
 	case 0xAF:
-		goto yy131
+		goto yy129
 	case 0xB0:
-		goto yy132
+		goto yy130
 	case 0xB1:
-		goto yy133
+		goto yy131
 	case 0xB3:
-		goto yy134
+		goto yy132
 	case 0xBC:
-		goto yy135
+		goto yy133
 	case 0xBD:
-		goto yy136
+		goto yy134
 	case 0xBE:
-		goto yy137
+		goto yy135
 	case 0xBF:
-		goto yy138
+		goto yy136
 	default:
-		goto yy3
+		goto yy2
 	}
-yy28:
+yy26:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
@@ -837,61 +837,61 @@ yy28:
 	if (yych <= 0xB0) {
 		if (yych <= 0x83) {
 			if (yych <= 0x80) {
-				goto yy3
+				goto yy2
 			}
 			if (yych <= 0x81) {
-				goto yy139
+				goto yy137
 			}
 			if (yych <= 0x82) {
-				goto yy140
+				goto yy138
 			}
-			goto yy3
+			goto yy2
 		} else {
 			if (yych <= 0x85) {
 				if (yych <= 0x84) {
-					goto yy141
+					goto yy139
 				}
-				goto yy142
+				goto yy140
 			} else {
 				if (yych <= 0x86) {
-					goto yy143
+					goto yy141
 				}
 				if (yych <= 0xAF) {
-					goto yy3
+					goto yy2
 				}
-				goto yy144
+				goto yy142
 			}
 		}
 	} else {
 		if (yych <= 0xB4) {
 			if (yych <= 0xB1) {
-				goto yy145
+				goto yy143
 			}
 			if (yych <= 0xB2) {
-				goto yy40
+				goto yy38
 			}
 			if (yych <= 0xB3) {
-				goto yy146
+				goto yy144
 			}
-			goto yy147
+			goto yy145
 		} else {
 			if (yych <= 0xB6) {
 				if (yych <= 0xB5) {
-					goto yy148
+					goto yy146
 				}
-				goto yy149
+				goto yy147
 			} else {
 				if (yych <= 0xB7) {
-					goto yy150
+					goto yy148
 				}
 				if (yych <= 0xB8) {
-					goto yy151
+					goto yy149
 				}
-				goto yy3
+				goto yy2
 			}
 		}
 	}
-yy29:
+yy27:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
@@ -899,90 +899,90 @@ yy29:
 	if (yych <= 0x84) {
 		if (yych <= 0x81) {
 			if (yych <= 0x7F) {
-				goto yy3
+				goto yy2
 			}
 			if (yych <= 0x80) {
-				goto yy152
+				goto yy150
 			}
-			goto yy109
+			goto yy107
 		} else {
 			if (yych <= 0x82) {
-				goto yy153
+				goto yy151
 			}
 			if (yych <= 0x83) {
-				goto yy154
+				goto yy152
 			}
-			goto yy155
+			goto yy153
 		}
 	} else {
 		if (yych <= 0x87) {
 			if (yych <= 0x85) {
-				goto yy40
+				goto yy38
 			}
 			if (yych <= 0x86) {
-				goto yy156
+				goto yy154
 			}
-			goto yy157
+			goto yy155
 		} else {
 			if (yych <= 0x8F) {
-				goto yy3
+				goto yy2
 			}
 			if (yych <= 0xBF) {
-				goto yy40
+				goto yy38
 			}
-			goto yy3
+			goto yy2
 		}
 	}
-yy30:
+yy28:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych <= 0xB6) {
 		if (yych <= 0x7F) {
-			goto yy3
+			goto yy2
 		}
 		if (yych <= 0xB5) {
-			goto yy40
+			goto yy38
 		}
-		goto yy120
+		goto yy118
 	} else {
 		if (yych <= 0xB7) {
-			goto yy3
+			goto yy2
 		}
 		if (yych <= 0xBF) {
-			goto yy40
+			goto yy38
 		}
-		goto yy3
+		goto yy2
 	}
-yy31:
+yy29:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0xBF) {
-		goto yy40
+		goto yy38
 	}
-	goto yy3
-yy32:
+	goto yy2
+yy30:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0xBE) {
-		goto yy40
+		goto yy38
 	}
 	if (yych <= 0xBF) {
-		goto yy158
+		goto yy156
 	}
-	goto yy3
-yy33:
+	goto yy2
+yy31:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
@@ -995,77 +995,77 @@ yy33:
 	case 0x9D:
 		fallthrough
 	case 0xB0,0xB1,0xB2,0xB3,0xB4,0xB5,0xB6,0xB7,0xB8,0xB9,0xBA,0xBB,0xBC,0xBD,0xBE,0xBF:
-		goto yy40
+		goto yy38
 	case 0x92:
-		goto yy158
+		goto yy156
 	case 0x93:
-		goto yy159
+		goto yy157
 	case 0x98:
-		goto yy160
+		goto yy158
 	case 0x99:
-		goto yy161
+		goto yy159
 	case 0x9A:
-		goto yy162
+		goto yy160
 	case 0x9B:
-		goto yy163
+		goto yy161
 	case 0x9C:
-		goto yy164
+		goto yy162
 	case 0x9E:
-		goto yy165
+		goto yy163
 	case 0x9F:
-		goto yy166
+		goto yy164
 	case 0xA0:
-		goto yy167
+		goto yy165
 	case 0xA1:
-		goto yy115
+		goto yy113
 	case 0xA2:
-		goto yy168
+		goto yy166
 	case 0xA3:
-		goto yy169
+		goto yy167
 	case 0xA4:
-		goto yy170
+		goto yy168
 	case 0xA5:
-		goto yy171
+		goto yy169
 	case 0xA6:
-		goto yy172
+		goto yy170
 	case 0xA7:
-		goto yy173
+		goto yy171
 	case 0xA8:
-		goto yy174
+		goto yy172
 	case 0xA9:
-		goto yy175
+		goto yy173
 	case 0xAA:
-		goto yy176
+		goto yy174
 	case 0xAB:
-		goto yy177
+		goto yy175
 	case 0xAC:
-		goto yy178
+		goto yy176
 	case 0xAD:
-		goto yy179
+		goto yy177
 	case 0xAF:
-		goto yy180
+		goto yy178
 	default:
-		goto yy3
+		goto yy2
 	}
-yy34:
+yy32:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy3
+		goto yy2
 	}
 	if (yych <= 0x9D) {
-		goto yy40
+		goto yy38
 	}
 	if (yych <= 0x9E) {
-		goto yy181
+		goto yy179
 	}
 	if (yych <= 0x9F) {
-		goto yy182
+		goto yy180
 	}
-	goto yy3
-yy35:
+	goto yy2
+yy33:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
@@ -1078,532 +1078,532 @@ yy35:
 	case 0xB0,0xB1,0xB2,0xB3:
 		fallthrough
 	case 0xBA:
-		goto yy40
+		goto yy38
 	case 0xA9:
-		goto yy183
+		goto yy181
 	case 0xAB:
-		goto yy184
+		goto yy182
 	case 0xAC:
-		goto yy185
+		goto yy183
 	case 0xAD:
-		goto yy186
+		goto yy184
 	case 0xAE:
-		goto yy55
-	case 0xAF:
-		goto yy187
-	case 0xB4:
-		goto yy188
-	case 0xB5:
 		goto yy53
+	case 0xAF:
+		goto yy185
+	case 0xB4:
+		goto yy186
+	case 0xB5:
+		goto yy51
 	case 0xB6:
-		goto yy189
+		goto yy187
 	case 0xB7:
-		goto yy190
+		goto yy188
 	case 0xB9:
-		goto yy191
+		goto yy189
 	case 0xBB:
-		goto yy192
+		goto yy190
 	case 0xBC:
-		goto yy193
+		goto yy191
 	case 0xBD:
-		goto yy194
+		goto yy192
 	case 0xBE:
-		goto yy195
+		goto yy193
 	case 0xBF:
-		goto yy196
+		goto yy194
 	default:
-		goto yy3
+		goto yy2
 	}
-yy36:
+yy34:
 	yyaccept = 1
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	switch (yych) {
 	case 0x90:
-		goto yy197
+		goto yy195
 	case 0x91:
-		goto yy198
+		goto yy196
 	case 0x92:
-		goto yy199
+		goto yy197
 	case 0x93:
-		goto yy200
+		goto yy198
 	case 0x96:
-		goto yy201
+		goto yy199
 	case 0x9B:
-		goto yy202
+		goto yy200
 	case 0x9D:
-		goto yy203
+		goto yy201
 	case 0x9E:
-		goto yy204
+		goto yy202
 	case 0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9:
-		goto yy62
+		goto yy60
 	case 0xAA:
-		goto yy205
+		goto yy203
 	case 0xAB:
-		goto yy206
+		goto yy204
 	case 0xAF:
-		goto yy207
+		goto yy205
 	default:
-		goto yy3
+		goto yy2
 	}
-yy37:
+yy35:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB4) {
 		if (yych == 0xAA) {
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xB5) {
-			goto yy4
+			goto yy3
 		}
 		if (yych == 0xBA) {
-			goto yy4
+			goto yy3
 		}
 	}
-yy38:
+yy36:
 	cursor = marker
 	if (yyaccept == 0) {
-		goto yy6
+		goto yy4
 	} else {
-		goto yy3
+		goto yy2
 	}
-yy39:
+yy37:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x96) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0xB7) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy40:
+yy38:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy41:
+	goto yy36
+yy39:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x81) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x85) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x91) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xAC) {
 			if (yych <= 0xA4) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xAB) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xAE) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy42:
+yy40:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB7) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych == 0xB5) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xBD) {
 			if (yych <= 0xB9) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy43:
+yy41:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8B) {
 		if (yych <= 0x86) {
 			if (yych <= 0x85) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x87) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x8A) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xA1) {
 			if (yych == 0x8D) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xA2) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
+	}
+yy42:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych == 0xB6) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
+yy43:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x82) {
+		if (yych <= 0x7F) {
+			goto yy36
+		}
+		if (yych <= 0x81) {
+			goto yy3
+		}
+		goto yy36
+	} else {
+		if (yych <= 0x87) {
+			goto yy3
+		}
+		if (yych <= 0x89) {
+			goto yy36
+		}
+		if (yych <= 0xBF) {
+			goto yy3
+		}
+		goto yy36
 	}
 yy44:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych == 0xB6) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy45:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x82) {
-		if (yych <= 0x7F) {
-			goto yy38
-		}
-		if (yych <= 0x81) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych <= 0x87) {
-			goto yy4
-		}
-		if (yych <= 0x89) {
-			goto yy38
-		}
-		if (yych <= 0xBF) {
-			goto yy4
-		}
-		goto yy38
-	}
-yy46:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0xB0) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy47:
+	goto yy36
+yy45:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x98) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x96) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x99) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xA0) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy48:
+yy46:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x90) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x87) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0xBE) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy49:
+yy47:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x86) {
 		if (yych <= 0x82) {
 			if (yych <= 0x80) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x83) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x85) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xAA) {
 			if (yych <= 0x87) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x8F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xAF) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB3) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy50:
+yy48:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x9A) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy51:
+	goto yy36
+yy49:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA9) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0xAD) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy52:
+	goto yy36
+yy50:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9E) {
 		if (yych <= 0x93) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x94) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x9C) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xBC) {
 			if (yych == 0xA9) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy53:
+yy51:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
+yy52:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x8A) {
+		goto yy3
+	}
+	if (yych <= 0x8C) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
+yy53:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xB1) {
+		goto yy3
+	}
+	goto yy36
 yy54:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x8A) {
-		goto yy4
-	}
-	if (yych <= 0x8C) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy55:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xB1) {
-		goto yy4
-	}
-	goto yy38
-yy56:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB5) {
-		goto yy4
+		goto yy3
 	}
 	if (yych == 0xBA) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy57:
+	goto yy36
+yy55:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0xA0:
-		goto yy208
+		goto yy206
 	case 0xA1:
-		goto yy209
+		goto yy207
 	case 0xA2:
-		goto yy71
+		goto yy69
 	case 0xA3:
-		goto yy210
+		goto yy208
 	case 0xA4:
-		goto yy40
-	case 0xA5:
-		goto yy211
-	case 0xA6:
-		goto yy212
-	case 0xA7:
-		goto yy213
-	case 0xA8:
-		goto yy214
-	case 0xA9:
-		goto yy215
-	case 0xAA:
-		goto yy216
-	case 0xAB:
-		goto yy217
-	case 0xAC:
-		goto yy218
-	case 0xAD:
-		goto yy219
-	case 0xAE:
-		goto yy220
-	case 0xAF:
-		goto yy221
-	case 0xB0:
-		goto yy222
-	case 0xB1:
-		goto yy223
-	case 0xB2:
-		goto yy224
-	case 0xB3:
-		goto yy225
-	case 0xB4:
-		goto yy226
-	case 0xB5:
-		goto yy227
-	case 0xB6:
-		goto yy228
-	case 0xB7:
-		goto yy229
-	case 0xB8:
-		goto yy230
-	case 0xB9:
-		goto yy231
-	case 0xBA:
-		goto yy232
-	case 0xBB:
-		goto yy233
-	case 0xBC:
-		goto yy234
-	case 0xBD:
-		goto yy235
-	case 0xBE:
-		goto yy236
-	case 0xBF:
-		goto yy237
-	default:
 		goto yy38
+	case 0xA5:
+		goto yy209
+	case 0xA6:
+		goto yy210
+	case 0xA7:
+		goto yy211
+	case 0xA8:
+		goto yy212
+	case 0xA9:
+		goto yy213
+	case 0xAA:
+		goto yy214
+	case 0xAB:
+		goto yy215
+	case 0xAC:
+		goto yy216
+	case 0xAD:
+		goto yy217
+	case 0xAE:
+		goto yy218
+	case 0xAF:
+		goto yy219
+	case 0xB0:
+		goto yy220
+	case 0xB1:
+		goto yy221
+	case 0xB2:
+		goto yy222
+	case 0xB3:
+		goto yy223
+	case 0xB4:
+		goto yy224
+	case 0xB5:
+		goto yy225
+	case 0xB6:
+		goto yy226
+	case 0xB7:
+		goto yy227
+	case 0xB8:
+		goto yy228
+	case 0xB9:
+		goto yy229
+	case 0xBA:
+		goto yy230
+	case 0xBB:
+		goto yy231
+	case 0xBC:
+		goto yy232
+	case 0xBD:
+		goto yy233
+	case 0xBE:
+		goto yy234
+	case 0xBF:
+		goto yy235
+	default:
+		goto yy36
 	}
-yy58:
+yy56:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -1622,234 +1622,234 @@ yy58:
 	case 0xB4,0xB5,0xB6:
 		fallthrough
 	case 0xB8,0xB9,0xBA,0xBB:
-		goto yy40
+		goto yy38
 	case 0x81:
-		goto yy238
+		goto yy236
 	case 0x82:
-		goto yy162
+		goto yy160
 	case 0x83:
-		goto yy101
+		goto yy99
 	case 0x89:
-		goto yy102
+		goto yy100
 	case 0x8A:
-		goto yy103
+		goto yy101
 	case 0x8B:
-		goto yy104
+		goto yy102
 	case 0x8C:
-		goto yy105
+		goto yy103
 	case 0x8D:
-		goto yy239
+		goto yy237
 	case 0x8E:
-		goto yy107
+		goto yy105
 	case 0x8F:
-		goto yy108
+		goto yy106
 	case 0x90:
-		goto yy109
+		goto yy107
 	case 0x99:
-		goto yy110
+		goto yy108
 	case 0x9A:
-		goto yy111
+		goto yy109
 	case 0x9B:
-		goto yy112
+		goto yy110
 	case 0x9C:
-		goto yy240
+		goto yy238
 	case 0x9D:
-		goto yy241
+		goto yy239
 	case 0x9F:
-		goto yy242
+		goto yy240
 	case 0xA0:
-		goto yy243
+		goto yy241
 	case 0xA1:
 		fallthrough
 	case 0xB0:
-		goto yy118
+		goto yy116
 	case 0xA2:
-		goto yy244
+		goto yy242
 	case 0xA3:
-		goto yy120
+		goto yy118
 	case 0xA4:
-		goto yy245
+		goto yy243
 	case 0xA5:
-		goto yy246
+		goto yy244
 	case 0xA6:
-		goto yy247
+		goto yy245
 	case 0xA7:
-		goto yy248
+		goto yy246
 	case 0xA8:
-		goto yy249
+		goto yy247
 	case 0xA9:
-		goto yy250
+		goto yy248
 	case 0xAA:
-		goto yy251
+		goto yy249
 	case 0xAD:
-		goto yy252
+		goto yy250
 	case 0xAF:
-		goto yy115
+		goto yy113
 	case 0xB1:
-		goto yy253
+		goto yy251
 	case 0xB3:
-		goto yy254
+		goto yy252
 	case 0xB7:
-		goto yy255
+		goto yy253
 	case 0xBC:
-		goto yy135
+		goto yy133
 	case 0xBD:
-		goto yy136
+		goto yy134
 	case 0xBE:
-		goto yy137
+		goto yy135
 	case 0xBF:
-		goto yy138
+		goto yy136
 	default:
-		goto yy38
+		goto yy36
 	}
-yy59:
+yy57:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAF) {
 		if (yych <= 0x82) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x80) {
-				goto yy256
+				goto yy254
 			}
 			if (yych <= 0x81) {
-				goto yy257
+				goto yy255
 			}
-			goto yy140
+			goto yy138
 		} else {
 			if (yych <= 0x84) {
 				if (yych <= 0x83) {
-					goto yy258
+					goto yy256
 				}
-				goto yy141
+				goto yy139
 			} else {
 				if (yych <= 0x85) {
-					goto yy142
+					goto yy140
 				}
 				if (yych <= 0x86) {
-					goto yy143
+					goto yy141
 				}
-				goto yy38
+				goto yy36
 			}
 		}
 	} else {
 		if (yych <= 0xB4) {
 			if (yych <= 0xB1) {
 				if (yych <= 0xB0) {
-					goto yy144
+					goto yy142
 				}
-				goto yy145
+				goto yy143
 			} else {
 				if (yych <= 0xB2) {
-					goto yy40
+					goto yy38
 				}
 				if (yych <= 0xB3) {
-					goto yy259
+					goto yy257
 				}
-				goto yy147
+				goto yy145
 			}
 		} else {
 			if (yych <= 0xB6) {
 				if (yych <= 0xB5) {
-					goto yy260
+					goto yy258
 				}
-				goto yy149
+				goto yy147
 			} else {
 				if (yych <= 0xB7) {
-					goto yy261
+					goto yy259
 				}
 				if (yych <= 0xB8) {
-					goto yy151
+					goto yy149
 				}
-				goto yy38
+				goto yy36
 			}
 		}
 	}
-yy60:
+yy58:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x84) {
 		if (yych <= 0x81) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x80) {
-				goto yy262
+				goto yy260
 			}
-			goto yy109
+			goto yy107
 		} else {
 			if (yych <= 0x82) {
-				goto yy263
+				goto yy261
 			}
 			if (yych <= 0x83) {
-				goto yy154
+				goto yy152
 			}
-			goto yy155
+			goto yy153
 		}
 	} else {
 		if (yych <= 0x87) {
 			if (yych <= 0x85) {
-				goto yy40
-			}
-			if (yych <= 0x86) {
-				goto yy156
-			}
-			goto yy157
-		} else {
-			if (yych <= 0x8F) {
 				goto yy38
 			}
-			if (yych <= 0xBF) {
-				goto yy40
+			if (yych <= 0x86) {
+				goto yy154
 			}
-			goto yy38
+			goto yy155
+		} else {
+			if (yych <= 0x8F) {
+				goto yy36
+			}
+			if (yych <= 0xBF) {
+				goto yy38
+			}
+			goto yy36
 		}
 	}
-yy61:
+yy59:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB6) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB5) {
-			goto yy40
-		}
-		goto yy120
-	} else {
-		if (yych <= 0xB7) {
 			goto yy38
 		}
-		if (yych <= 0xBF) {
-			goto yy40
+		goto yy118
+	} else {
+		if (yych <= 0xB7) {
+			goto yy36
 		}
-		goto yy38
+		if (yych <= 0xBF) {
+			goto yy38
+		}
+		goto yy36
 	}
-yy62:
+yy60:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy40
+		goto yy38
 	}
-	goto yy38
-yy63:
+	goto yy36
+yy61:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBE) {
-		goto yy40
+		goto yy38
 	}
 	if (yych <= 0xBF) {
-		goto yy158
+		goto yy156
 	}
-	goto yy38
-yy64:
+	goto yy36
+yy62:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -1866,69 +1866,69 @@ yy64:
 	case 0xAA:
 		fallthrough
 	case 0xB0,0xB1,0xB2,0xB3,0xB4,0xB5,0xB6,0xB7,0xB8,0xB9,0xBA,0xBB,0xBC,0xBD,0xBE,0xBF:
-		goto yy40
-	case 0x92:
-		goto yy158
-	case 0x93:
-		goto yy159
-	case 0x98:
-		goto yy264
-	case 0x99:
-		goto yy265
-	case 0x9A:
-		goto yy266
-	case 0x9B:
-		goto yy55
-	case 0x9C:
-		goto yy164
-	case 0x9E:
-		goto yy165
-	case 0x9F:
-		goto yy166
-	case 0xA0:
-		goto yy267
-	case 0xA1:
-		goto yy115
-	case 0xA3:
-		goto yy268
-	case 0xA4:
-		goto yy183
-	case 0xA5:
-		goto yy269
-	case 0xA7:
-		goto yy270
-	case 0xA8:
-		goto yy271
-	case 0xA9:
-		goto yy272
-	case 0xAB:
-		goto yy273
-	case 0xAC:
-		goto yy178
-	case 0xAD:
-		goto yy179
-	case 0xAF:
-		goto yy274
-	default:
 		goto yy38
+	case 0x92:
+		goto yy156
+	case 0x93:
+		goto yy157
+	case 0x98:
+		goto yy262
+	case 0x99:
+		goto yy263
+	case 0x9A:
+		goto yy264
+	case 0x9B:
+		goto yy53
+	case 0x9C:
+		goto yy162
+	case 0x9E:
+		goto yy163
+	case 0x9F:
+		goto yy164
+	case 0xA0:
+		goto yy265
+	case 0xA1:
+		goto yy113
+	case 0xA3:
+		goto yy266
+	case 0xA4:
+		goto yy181
+	case 0xA5:
+		goto yy267
+	case 0xA7:
+		goto yy268
+	case 0xA8:
+		goto yy269
+	case 0xA9:
+		goto yy270
+	case 0xAB:
+		goto yy271
+	case 0xAC:
+		goto yy176
+	case 0xAD:
+		goto yy177
+	case 0xAF:
+		goto yy272
+	default:
+		goto yy36
 	}
-yy65:
+yy63:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x9D) {
-		goto yy40
+		goto yy38
 	}
 	if (yych <= 0x9E) {
-		goto yy181
+		goto yy179
 	}
 	if (yych <= 0x9F) {
-		goto yy182
+		goto yy180
 	}
-	goto yy38
-yy66:
+	goto yy36
+yy64:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -1939,235 +1939,301 @@ yy66:
 	case 0xB0,0xB1,0xB2,0xB3:
 		fallthrough
 	case 0xBA:
-		goto yy40
-	case 0xA9:
-		goto yy183
-	case 0xAB:
-		goto yy184
-	case 0xAC:
-		goto yy275
-	case 0xAD:
-		goto yy186
-	case 0xAE:
-		goto yy55
-	case 0xAF:
-		goto yy187
-	case 0xB4:
-		goto yy188
-	case 0xB5:
-		goto yy53
-	case 0xB6:
-		goto yy189
-	case 0xB7:
-		goto yy190
-	case 0xB8:
-		goto yy276
-	case 0xB9:
-		goto yy277
-	case 0xBB:
-		goto yy192
-	case 0xBC:
-		goto yy278
-	case 0xBD:
-		goto yy194
-	case 0xBE:
-		goto yy195
-	case 0xBF:
-		goto yy196
-	default:
 		goto yy38
+	case 0xA9:
+		goto yy181
+	case 0xAB:
+		goto yy182
+	case 0xAC:
+		goto yy273
+	case 0xAD:
+		goto yy184
+	case 0xAE:
+		goto yy53
+	case 0xAF:
+		goto yy185
+	case 0xB4:
+		goto yy186
+	case 0xB5:
+		goto yy51
+	case 0xB6:
+		goto yy187
+	case 0xB7:
+		goto yy188
+	case 0xB8:
+		goto yy274
+	case 0xB9:
+		goto yy275
+	case 0xBB:
+		goto yy190
+	case 0xBC:
+		goto yy276
+	case 0xBD:
+		goto yy192
+	case 0xBE:
+		goto yy193
+	case 0xBF:
+		goto yy194
+	default:
+		goto yy36
 	}
-yy67:
+yy65:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x90:
-		goto yy279
+		goto yy277
 	case 0x91:
-		goto yy280
+		goto yy278
 	case 0x92:
-		goto yy199
+		goto yy197
 	case 0x93:
-		goto yy200
+		goto yy198
 	case 0x96:
-		goto yy281
+		goto yy279
 	case 0x9B:
-		goto yy282
+		goto yy280
 	case 0x9D:
-		goto yy283
+		goto yy281
 	case 0x9E:
-		goto yy284
+		goto yy282
 	case 0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9:
-		goto yy62
+		goto yy60
 	case 0xAA:
-		goto yy205
+		goto yy203
 	case 0xAB:
-		goto yy206
+		goto yy204
 	case 0xAF:
-		goto yy207
+		goto yy205
 	default:
-		goto yy38
+		goto yy36
 	}
-yy68:
+yy66:
 	cursor += 1
 	yych = str[cursor]
 	if (yych == 0xA0) {
-		goto yy285
+		goto yy283
 	}
-	goto yy38
-yy69:
+	goto yy36
+yy67:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9A) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x95) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x99) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xA4) {
 			if (yych <= 0xA3) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xA8) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy70:
+yy68:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x98) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy71:
+	goto yy36
+yy69:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB2) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy72:
+	goto yy36
+yy70:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x83) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB9) {
-		goto yy4
+		goto yy3
 	}
 	if (yych == 0xBD) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy73:
+	goto yy36
+yy71:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x97) {
 		if (yych == 0x90) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xA1) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xB0) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy74:
+yy72:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x8C) {
 			if (yych == 0x80) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x84) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x8E) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x90) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x92) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xB2) {
 			if (yych <= 0xA9) {
-				goto yy38
+				goto yy36
 			}
 			if (yych == 0xB1) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB9) {
 				if (yych <= 0xB5) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych == 0xBD) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			}
+		}
+	}
+yy73:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x9D) {
+		if (yych == 0x8E) {
+			goto yy3
+		}
+		if (yych <= 0x9B) {
+			goto yy36
+		}
+		goto yy3
+	} else {
+		if (yych <= 0xA1) {
+			if (yych <= 0x9E) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xAF) {
+				goto yy36
+			}
+			if (yych <= 0xB1) {
+				goto yy3
+			}
+			goto yy36
+		}
+	}
+yy74:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0xA9) {
+		if (yych <= 0x8E) {
+			if (yych <= 0x84) {
+				goto yy36
+			}
+			if (yych <= 0x8A) {
+				goto yy3
+			}
+			goto yy36
+		} else {
+			if (yych <= 0x90) {
+				goto yy3
+			}
+			if (yych <= 0x92) {
+				goto yy36
+			}
+			if (yych <= 0xA8) {
+				goto yy3
+			}
+			goto yy36
+		}
+	} else {
+		if (yych <= 0xB4) {
+			if (yych == 0xB1) {
+				goto yy36
+			}
+			if (yych <= 0xB3) {
+				goto yy3
+			}
+			goto yy36
+		} else {
+			if (yych == 0xB7) {
+				goto yy36
+			}
+			if (yych <= 0xB9) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy75:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9D) {
-		if (yych == 0x8E) {
-			goto yy4
+		if (yych <= 0x98) {
+			goto yy36
 		}
-		if (yych <= 0x9B) {
-			goto yy38
+		if (yych <= 0x9C) {
+			goto yy3
 		}
-		goto yy4
+		goto yy36
 	} else {
-		if (yych <= 0xA1) {
-			if (yych <= 0x9E) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xAF) {
-				goto yy38
-			}
-			if (yych <= 0xB1) {
-				goto yy4
-			}
-			goto yy38
+		if (yych <= 0x9E) {
+			goto yy3
 		}
+		if (yych <= 0xB1) {
+			goto yy36
+		}
+		if (yych <= 0xB4) {
+			goto yy3
+		}
+		goto yy36
 	}
 yy76:
 	cursor += 1
@@ -2175,183 +2241,117 @@ yy76:
 	if (yych <= 0xA9) {
 		if (yych <= 0x8E) {
 			if (yych <= 0x84) {
-				goto yy38
+				goto yy36
 			}
-			if (yych <= 0x8A) {
-				goto yy4
+			if (yych <= 0x8D) {
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
-			if (yych <= 0x90) {
-				goto yy4
-			}
-			if (yych <= 0x92) {
-				goto yy38
+			if (yych == 0x92) {
+				goto yy36
 			}
 			if (yych <= 0xA8) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xB4) {
 			if (yych == 0xB1) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB3) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
-			if (yych == 0xB7) {
-				goto yy38
-			}
 			if (yych <= 0xB9) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			if (yych == 0xBD) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy77:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x9D) {
-		if (yych <= 0x98) {
-			goto yy38
-		}
-		if (yych <= 0x9C) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych <= 0x9E) {
-			goto yy4
-		}
-		if (yych <= 0xB1) {
-			goto yy38
-		}
-		if (yych <= 0xB4) {
-			goto yy4
-		}
-		goto yy38
+	if (yych == 0x90) {
+		goto yy3
 	}
+	if (yych <= 0x9F) {
+		goto yy36
+	}
+	if (yych <= 0xA1) {
+		goto yy3
+	}
+	goto yy36
 yy78:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA9) {
 		if (yych <= 0x8E) {
 			if (yych <= 0x84) {
-				goto yy38
+				goto yy36
 			}
-			if (yych <= 0x8D) {
-				goto yy4
+			if (yych <= 0x8C) {
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
-			if (yych == 0x92) {
-				goto yy38
+			if (yych <= 0x90) {
+				goto yy3
+			}
+			if (yych <= 0x92) {
+				goto yy36
 			}
 			if (yych <= 0xA8) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xB4) {
 			if (yych == 0xB1) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB3) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xB9) {
-				goto yy4
+				goto yy3
 			}
 			if (yych == 0xBD) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
 yy79:
 	cursor += 1
 	yych = str[cursor]
-	if (yych == 0x90) {
-		goto yy4
-	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xA1) {
-		goto yy4
-	}
-	goto yy38
-yy80:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0xA9) {
-		if (yych <= 0x8E) {
-			if (yych <= 0x84) {
-				goto yy38
-			}
-			if (yych <= 0x8C) {
-				goto yy4
-			}
-			goto yy38
-		} else {
-			if (yych <= 0x90) {
-				goto yy4
-			}
-			if (yych <= 0x92) {
-				goto yy38
-			}
-			if (yych <= 0xA8) {
-				goto yy4
-			}
-			goto yy38
-		}
-	} else {
-		if (yych <= 0xB4) {
-			if (yych == 0xB1) {
-				goto yy38
-			}
-			if (yych <= 0xB3) {
-				goto yy4
-			}
-			goto yy38
-		} else {
-			if (yych <= 0xB9) {
-				goto yy4
-			}
-			if (yych == 0xBD) {
-				goto yy4
-			}
-			goto yy38
-		}
-	}
-yy81:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x9E) {
 		if (yych <= 0x9B) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x9D) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xA1) {
-			goto yy4
+			goto yy3
 		}
 		if (yych == 0xB1) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy82:
+yy80:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -2374,216 +2374,216 @@ yy82:
 	case 0xA8,0xA9,0xAA:
 		fallthrough
 	case 0xAE,0xAF,0xB0,0xB1,0xB2,0xB3,0xB4,0xB5,0xB6,0xB7,0xB8,0xB9:
-		goto yy4
+		goto yy3
 	default:
-		goto yy38
+		goto yy36
 	}
-yy83:
+yy81:
 	cursor += 1
 	yych = str[cursor]
 	if (yych == 0x90) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy84:
+	goto yy36
+yy82:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x8C) {
 			if (yych <= 0x84) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x8D) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x90) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xB9) {
 			if (yych == 0xA9) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xBD) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy85:
+yy83:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x97) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x99) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA1) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy86:
+	goto yy36
+yy84:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x8D) {
 			if (yych <= 0x84) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x8C) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0x91) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xB4) {
 			if (yych <= 0xA9) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB3) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xB9) {
-				goto yy4
+				goto yy3
 			}
 			if (yych == 0xBD) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
+		}
+	}
+yy85:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x9F) {
+		if (yych == 0x9E) {
+			goto yy3
+		}
+		goto yy36
+	} else {
+		if (yych <= 0xA1) {
+			goto yy3
+		}
+		if (yych <= 0xB0) {
+			goto yy36
+		}
+		if (yych <= 0xB2) {
+			goto yy3
+		}
+		goto yy36
+	}
+yy86:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x90) {
+		if (yych <= 0x84) {
+			goto yy36
+		}
+		if (yych == 0x8D) {
+			goto yy36
+		}
+		goto yy3
+	} else {
+		if (yych <= 0xBA) {
+			if (yych <= 0x91) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych == 0xBD) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy87:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
-		if (yych == 0x9E) {
-			goto yy4
+		if (yych == 0x8E) {
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xA1) {
-			goto yy4
+			goto yy3
 		}
-		if (yych <= 0xB0) {
-			goto yy38
+		if (yych <= 0xB9) {
+			goto yy36
 		}
-		if (yych <= 0xB2) {
-			goto yy4
+		if (yych <= 0xBF) {
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
 yy88:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x90) {
+	if (yych <= 0xB1) {
 		if (yych <= 0x84) {
-			goto yy38
+			goto yy36
 		}
-		if (yych == 0x8D) {
-			goto yy38
+		if (yych <= 0x96) {
+			goto yy3
 		}
-		goto yy4
+		if (yych <= 0x99) {
+			goto yy36
+		}
+		goto yy3
 	} else {
-		if (yych <= 0xBA) {
-			if (yych <= 0x91) {
-				goto yy38
+		if (yych <= 0xBB) {
+			if (yych <= 0xB2) {
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xBD) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
 yy89:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x9F) {
-		if (yych == 0x8E) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych <= 0xA1) {
-			goto yy4
-		}
-		if (yych <= 0xB9) {
-			goto yy38
-		}
-		if (yych <= 0xBF) {
-			goto yy4
-		}
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
+	if (yych <= 0x86) {
+		goto yy3
+	}
+	goto yy36
 yy90:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0xB1) {
-		if (yych <= 0x84) {
-			goto yy38
-		}
-		if (yych <= 0x96) {
-			goto yy4
-		}
-		if (yych <= 0x99) {
-			goto yy38
-		}
-		goto yy4
-	} else {
-		if (yych <= 0xBB) {
-			if (yych <= 0xB2) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych == 0xBD) {
-				goto yy4
-			}
-			goto yy38
-		}
-	}
-yy91:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x86) {
-		goto yy4
-	}
-	goto yy38
-yy92:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x80) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0xB1) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB3) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy93:
+	goto yy36
+yy91:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -2614,844 +2614,844 @@ yy93:
 	case 0xB2,0xB3:
 		fallthrough
 	case 0xBD:
-		goto yy4
+		goto yy3
 	default:
-		goto yy38
+		goto yy36
 	}
-yy94:
+yy92:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x85) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x84) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x86) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9B) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x9F) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy95:
+yy93:
 	cursor += 1
 	yych = str[cursor]
 	if (yych == 0x80) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
+yy94:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych == 0x88) {
+		goto yy36
+	}
+	if (yych <= 0xAC) {
+		goto yy3
+	}
+	goto yy36
+yy95:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x87) {
+		goto yy36
+	}
+	if (yych <= 0x8C) {
+		goto yy3
+	}
+	goto yy36
 yy96:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych == 0x88) {
-		goto yy38
-	}
-	if (yych <= 0xAC) {
-		goto yy4
-	}
-	goto yy38
-yy97:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x87) {
-		goto yy38
-	}
-	if (yych <= 0x8C) {
-		goto yy4
-	}
-	goto yy38
-yy98:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xAA) {
-		goto yy4
+		goto yy3
 	}
 	if (yych == 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy99:
+	goto yy36
+yy97:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA1) {
 		if (yych <= 0x99) {
 			if (yych <= 0x8F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x95) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x9D) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xA0) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xAD) {
 			if (yych <= 0xA4) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xA6) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xB0) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xB4) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
+		}
+	}
+yy98:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x8D) {
+		if (yych <= 0x7F) {
+			goto yy36
+		}
+		if (yych <= 0x81) {
+			goto yy3
+		}
+		goto yy36
+	} else {
+		if (yych <= 0x8E) {
+			goto yy3
+		}
+		if (yych <= 0x9F) {
+			goto yy36
+		}
+		if (yych <= 0xBF) {
+			goto yy3
+		}
+		goto yy36
+	}
+yy99:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x8C) {
+		if (yych <= 0x85) {
+			if (yych <= 0x7F) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych == 0x87) {
+				goto yy3
+			}
+			goto yy36
+		}
+	} else {
+		if (yych <= 0xBA) {
+			if (yych <= 0x8D) {
+				goto yy3
+			}
+			if (yych <= 0x8F) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xBB) {
+				goto yy36
+			}
+			if (yych <= 0xBF) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy100:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x8D) {
-		if (yych <= 0x7F) {
-			goto yy38
-		}
-		if (yych <= 0x81) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych <= 0x8E) {
-			goto yy4
-		}
-		if (yych <= 0x9F) {
-			goto yy38
-		}
-		if (yych <= 0xBF) {
-			goto yy4
-		}
-		goto yy38
-	}
-yy101:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x8C) {
-		if (yych <= 0x85) {
-			if (yych <= 0x7F) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych == 0x87) {
-				goto yy4
-			}
-			goto yy38
-		}
-	} else {
-		if (yych <= 0xBA) {
-			if (yych <= 0x8D) {
-				goto yy4
-			}
-			if (yych <= 0x8F) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xBB) {
-				goto yy38
-			}
-			if (yych <= 0xBF) {
-				goto yy4
-			}
-			goto yy38
-		}
-	}
-yy102:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x96) {
 		if (yych <= 0x89) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x88) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x8D) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x8F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0x99) {
 			if (yych == 0x98) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x9D) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy103:
+yy101:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x88) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x89) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x8D) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xB5) {
 			if (yych == 0xB1) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB7) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBE) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy104:
+yy102:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x85) {
 		if (yych == 0x80) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x81) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0x96) {
 			if (yych <= 0x87) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x97) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy105:
+yy103:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x90) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x95) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x97) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
+yy104:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x9A) {
+		goto yy3
+	}
+	goto yy36
+yy105:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x8F) {
+		goto yy3
+	}
+	if (yych <= 0x9F) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy106:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x9A) {
-		goto yy4
+	if (yych <= 0xB4) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy107:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x8F) {
-		goto yy4
-	}
-	if (yych <= 0x9F) {
-		goto yy38
+	if (yych <= 0x80) {
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy108:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xB4) {
-		goto yy4
+	if (yych <= 0xAC) {
+		goto yy3
 	}
-	goto yy38
+	if (yych <= 0xAE) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy109:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x80) {
-		goto yy38
+		goto yy36
+	}
+	if (yych <= 0x9A) {
+		goto yy3
+	}
+	if (yych <= 0x9F) {
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy110:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xAC) {
-		goto yy4
-	}
-	if (yych <= 0xAE) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy111:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x80) {
-		goto yy38
-	}
-	if (yych <= 0x9A) {
-		goto yy4
-	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy112:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xAA) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0xAD) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB8) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy113:
+	goto yy36
+yy111:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x8C) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x91) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB1) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy114:
+yy112:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x91) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0xAD) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB0) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy115:
+yy113:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB3) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy116:
+	goto yy36
+yy114:
 	cursor += 1
 	yych = str[cursor]
 	if (yych == 0x97) {
-		goto yy4
+		goto yy3
 	}
 	if (yych == 0x9C) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy117:
+	goto yy36
+yy115:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy118:
+	goto yy36
+yy116:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB7) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy119:
+	goto yy36
+yy117:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA9) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xA8) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xAA) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xAF) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy120:
+yy118:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB5) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
+yy119:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x9E) {
+		goto yy3
+	}
+	goto yy36
+yy120:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x8F) {
+		goto yy36
+	}
+	if (yych <= 0xAD) {
+		goto yy3
+	}
+	if (yych <= 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xB4) {
+		goto yy3
+	}
+	goto yy36
 yy121:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x9E) {
-		goto yy4
+	if (yych <= 0xAB) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy122:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x8F) {
-		goto yy38
+	if (yych <= 0x80) {
+		goto yy36
 	}
-	if (yych <= 0xAD) {
-		goto yy4
+	if (yych <= 0x87) {
+		goto yy3
 	}
-	if (yych <= 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xB4) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy123:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xAB) {
-		goto yy4
+	if (yych <= 0x96) {
+		goto yy3
 	}
-	goto yy38
+	if (yych <= 0x9F) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy124:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x80) {
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
-	if (yych <= 0x87) {
-		goto yy4
+	if (yych <= 0x94) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy125:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+	if (yych == 0xA7) {
+		goto yy3
 	}
-	if (yych <= 0x96) {
-		goto yy4
-	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy126:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+	if (yych <= 0x84) {
+		goto yy36
 	}
-	if (yych <= 0x94) {
-		goto yy4
+	if (yych <= 0xB3) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy127:
 	cursor += 1
 	yych = str[cursor]
-	if (yych == 0xA7) {
-		goto yy4
-	}
-	goto yy38
-yy128:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x84) {
-		goto yy38
-	}
-	if (yych <= 0xB3) {
-		goto yy4
-	}
-	goto yy38
-yy129:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x84) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x8B) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy130:
+	goto yy36
+yy128:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAD) {
 		if (yych <= 0x82) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xA0) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xAF) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xB9) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
+yy129:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xA5) {
+		goto yy3
+	}
+	goto yy36
+yy130:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xA3) {
+		goto yy3
+	}
+	goto yy36
 yy131:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xA5) {
-		goto yy4
-	}
-	goto yy38
-yy132:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xA3) {
-		goto yy4
-	}
-	goto yy38
-yy133:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x8C) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x8F) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x99) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBD) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy134:
+	goto yy36
+yy132:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAD) {
 		if (yych <= 0xA8) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xAC) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xB1) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xB4) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB6) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy135:
+yy133:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x95) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x9D) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy136:
+yy134:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x98) {
 		if (yych <= 0x87) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x85) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x8D) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x8F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x97) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0x9C) {
 			if (yych == 0x9A) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x9B) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0x9E) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBD) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy137:
+yy135:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB5) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB4) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0xBD) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBE) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy138:
+yy136:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x95) {
 		if (yych <= 0x85) {
 			if (yych <= 0x81) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x84) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x8C) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x8F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x93) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xB1) {
 			if (yych <= 0x9B) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xAC) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0xB5) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBC) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy139:
+yy137:
 	cursor += 1
 	yych = str[cursor]
 	if (yych == 0xB1) {
-		goto yy4
+		goto yy3
 	}
 	if (yych == 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy140:
+	goto yy36
+yy138:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x9C) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy141:
+	goto yy36
+yy139:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -3476,1010 +3476,1010 @@ yy141:
 	case 0xAF,0xB0,0xB1,0xB2,0xB3,0xB4,0xB5,0xB6,0xB7,0xB8,0xB9:
 		fallthrough
 	case 0xBC,0xBD,0xBE,0xBF:
-		goto yy4
+		goto yy3
 	default:
-		goto yy38
+		goto yy36
 	}
-yy142:
+yy140:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x84) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x89) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x8E) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
+yy141:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x88) {
+		goto yy3
+	}
+	goto yy36
+yy142:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych == 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy143:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x88) {
-		goto yy4
-	}
-	goto yy38
-yy144:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych == 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy145:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy146:
+	goto yy36
+yy144:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAA) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xA4) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xAE) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xB1) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB3) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy147:
+yy145:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA7) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych == 0xA6) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xAD) {
 			if (yych <= 0xAC) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xAF) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
+		}
+	}
+yy146:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xA7) {
+		goto yy3
+	}
+	if (yych == 0xAF) {
+		goto yy3
+	}
+	goto yy36
+yy147:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0xA7) {
+		if (yych <= 0x96) {
+			if (yych <= 0x7F) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0x9F) {
+				goto yy36
+			}
+			if (yych <= 0xA6) {
+				goto yy3
+			}
+			goto yy36
+		}
+	} else {
+		if (yych <= 0xB6) {
+			if (yych == 0xAF) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xB7) {
+				goto yy36
+			}
+			if (yych <= 0xBE) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy148:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xA7) {
-		goto yy4
-	}
-	if (yych == 0xAF) {
-		goto yy4
-	}
-	goto yy38
-yy149:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0xA7) {
-		if (yych <= 0x96) {
-			if (yych <= 0x7F) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0x9F) {
-				goto yy38
-			}
-			if (yych <= 0xA6) {
-				goto yy4
-			}
-			goto yy38
-		}
-	} else {
-		if (yych <= 0xB6) {
-			if (yych == 0xAF) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xB7) {
-				goto yy38
-			}
-			if (yych <= 0xBE) {
-				goto yy4
-			}
-			goto yy38
-		}
-	}
-yy150:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x8E) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych == 0x87) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0x96) {
 			if (yych <= 0x8F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x97) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x9E) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
+		}
+	}
+yy149:
+	cursor += 1
+	yych = str[cursor]
+	if (yych == 0xAF) {
+		goto yy3
+	}
+	goto yy36
+yy150:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0xA9) {
+		if (yych <= 0x84) {
+			goto yy36
+		}
+		if (yych <= 0x87) {
+			goto yy3
+		}
+		if (yych <= 0xA0) {
+			goto yy36
+		}
+		goto yy3
+	} else {
+		if (yych <= 0xB5) {
+			if (yych <= 0xB0) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xB7) {
+				goto yy36
+			}
+			if (yych <= 0xBC) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy151:
 	cursor += 1
 	yych = str[cursor]
-	if (yych == 0xAF) {
-		goto yy4
+	if (yych <= 0x9C) {
+		if (yych <= 0x7F) {
+			goto yy36
+		}
+		if (yych <= 0x96) {
+			goto yy3
+		}
+		goto yy36
+	} else {
+		if (yych == 0xA0) {
+			goto yy36
+		}
+		if (yych <= 0xBF) {
+			goto yy3
+		}
+		goto yy36
 	}
-	goto yy38
 yy152:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0xA9) {
-		if (yych <= 0x84) {
-			goto yy38
-		}
-		if (yych <= 0x87) {
-			goto yy4
-		}
-		if (yych <= 0xA0) {
-			goto yy38
-		}
-		goto yy4
-	} else {
-		if (yych <= 0xB5) {
-			if (yych <= 0xB0) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xB7) {
-				goto yy38
-			}
-			if (yych <= 0xBC) {
-				goto yy4
-			}
-			goto yy38
-		}
+	if (yych <= 0x7F) {
+		goto yy36
 	}
+	if (yych == 0xBB) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy153:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x9C) {
-		if (yych <= 0x7F) {
-			goto yy38
-		}
-		if (yych <= 0x96) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych == 0xA0) {
-			goto yy38
-		}
-		if (yych <= 0xBF) {
-			goto yy4
-		}
-		goto yy38
+	if (yych <= 0x84) {
+		goto yy36
 	}
+	if (yych <= 0xAD) {
+		goto yy3
+	}
+	if (yych <= 0xB0) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy154:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych == 0xBB) {
-		goto yy38
+	if (yych <= 0x8E) {
+		goto yy3
 	}
-	if (yych <= 0xBF) {
-		goto yy4
+	if (yych <= 0x9F) {
+		goto yy36
 	}
-	goto yy38
+	if (yych <= 0xBA) {
+		goto yy3
+	}
+	goto yy36
 yy155:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x84) {
-		goto yy38
-	}
-	if (yych <= 0xAD) {
-		goto yy4
-	}
-	if (yych <= 0xB0) {
-		goto yy38
+	if (yych <= 0xAF) {
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy156:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x8E) {
-		goto yy4
+	if (yych <= 0x8C) {
+		goto yy3
 	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xBA) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy157:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy158:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x8C) {
-		goto yy4
-	}
-	goto yy38
-yy159:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBD) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy160:
+	goto yy36
+yy158:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x8C) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x9F) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xA9) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xAB) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
+yy159:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xAE) {
+		goto yy3
+	}
+	if (yych == 0xBF) {
+		goto yy3
+	}
+	goto yy36
+yy160:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x9D) {
+		goto yy3
+	}
+	if (yych <= 0x9F) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy161:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xAE) {
-		goto yy4
+	if (yych <= 0xAF) {
+		goto yy3
 	}
-	if (yych == 0xBF) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy162:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x9D) {
-		goto yy4
-	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy163:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xAF) {
-		goto yy4
-	}
-	goto yy38
-yy164:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x96) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x9F) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0xA1) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy165:
+	goto yy36
+yy163:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8E) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x88) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x8A) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xAD) {
 			if (yych <= 0x8F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xAF) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB1) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
+		}
+	}
+yy164:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0xB6) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
+yy165:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x85) {
+		if (yych <= 0x7F) {
+			goto yy36
+		}
+		if (yych == 0x82) {
+			goto yy36
+		}
+		goto yy3
+	} else {
+		if (yych <= 0x8A) {
+			if (yych <= 0x86) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0x8B) {
+				goto yy36
+			}
+			if (yych <= 0xA2) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy166:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0xB6) {
-		goto yy38
+	if (yych <= 0x81) {
+		goto yy36
 	}
-	if (yych <= 0xBF) {
-		goto yy4
+	if (yych <= 0xB3) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy167:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x85) {
-		if (yych <= 0x7F) {
-			goto yy38
-		}
-		if (yych == 0x82) {
-			goto yy38
-		}
-		goto yy4
-	} else {
-		if (yych <= 0x8A) {
-			if (yych <= 0x86) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0x8B) {
-				goto yy38
-			}
-			if (yych <= 0xA2) {
-				goto yy4
-			}
-			goto yy38
-		}
+	if (yych <= 0xB1) {
+		goto yy36
 	}
+	if (yych <= 0xB7) {
+		goto yy3
+	}
+	if (yych == 0xBB) {
+		goto yy3
+	}
+	goto yy36
 yy168:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x81) {
-		goto yy38
+	if (yych <= 0x89) {
+		goto yy36
 	}
-	if (yych <= 0xB3) {
-		goto yy4
+	if (yych <= 0xA5) {
+		goto yy3
 	}
-	goto yy38
+	if (yych <= 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy169:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0xB1) {
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
-	if (yych <= 0xB7) {
-		goto yy4
+	if (yych <= 0x86) {
+		goto yy3
 	}
-	if (yych == 0xBB) {
-		goto yy4
+	if (yych <= 0x9F) {
+		goto yy36
 	}
-	goto yy38
+	if (yych <= 0xBC) {
+		goto yy3
+	}
+	goto yy36
 yy170:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x89) {
-		goto yy38
-	}
-	if (yych <= 0xA5) {
-		goto yy4
-	}
-	if (yych <= 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy171:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x86) {
-		goto yy4
-	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xBC) {
-		goto yy4
-	}
-	goto yy38
-yy172:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x83) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB2) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy173:
+	goto yy36
+yy171:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA4) {
 		if (yych == 0x8F) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9F) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xAF) {
 			if (yych <= 0xA5) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB9) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBE) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy174:
+yy172:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA8) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy175:
+	goto yy36
+yy173:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x82) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x83) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x8B) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xBA) {
 			if (yych <= 0xB6) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xB9) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xBD) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy176:
+yy174:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB1) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych == 0xB0) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xB6) {
 			if (yych <= 0xB4) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB8) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBD) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy177:
+yy175:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9A) {
 		if (yych <= 0x80) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0x82) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xAA) {
 			if (yych <= 0x9D) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB1) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB4) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy178:
+yy176:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x96) {
 		if (yych <= 0x88) {
 			if (yych <= 0x80) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x86) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x8E) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x90) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xA7) {
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xA6) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0xAF) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy179:
+yy177:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9B) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x9A) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x9F) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xA3) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xA5) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
+yy178:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xA2) {
+		goto yy3
+	}
+	goto yy36
+yy179:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xA3) {
+		goto yy3
+	}
+	if (yych <= 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy180:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xA2) {
-		goto yy4
+	if (yych <= 0x86) {
+		goto yy3
 	}
-	goto yy38
+	if (yych <= 0x8A) {
+		goto yy36
+	}
+	if (yych <= 0xBB) {
+		goto yy3
+	}
+	goto yy36
 yy181:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xA3) {
-		goto yy4
+	if (yych <= 0xAD) {
+		goto yy3
 	}
 	if (yych <= 0xAF) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy182:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x86) {
-		goto yy4
-	}
-	if (yych <= 0x8A) {
-		goto yy38
-	}
-	if (yych <= 0xBB) {
-		goto yy4
-	}
-	goto yy38
-yy183:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xAD) {
-		goto yy4
-	}
-	if (yych <= 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy184:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x99) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy185:
+	goto yy36
+yy183:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9E) {
 		if (yych <= 0x92) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x86) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x97) {
-				goto yy4
+				goto yy3
 			}
 			if (yych == 0x9D) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xB7) {
 			if (yych == 0xA9) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB6) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0xBD) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBE) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy186:
+yy184:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x82) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x81) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0x85) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy187:
+yy185:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x92) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
+yy186:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xBD) {
+		goto yy3
+	}
+	goto yy36
+yy187:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x8F) {
+		goto yy3
+	}
+	if (yych <= 0x91) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy188:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xBD) {
-		goto yy4
+	if (yych <= 0x87) {
+		goto yy3
 	}
-	goto yy38
+	if (yych <= 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xBB) {
+		goto yy3
+	}
+	goto yy36
 yy189:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+	if (yych <= 0xAF) {
+		goto yy36
 	}
-	if (yych <= 0x8F) {
-		goto yy4
-	}
-	if (yych <= 0x91) {
-		goto yy38
+	if (yych == 0xB5) {
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy190:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x87) {
-		goto yy4
+	if (yych <= 0xBC) {
+		goto yy3
 	}
-	if (yych <= 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xBB) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy191:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0xAF) {
-		goto yy38
+	if (yych <= 0xA0) {
+		goto yy36
 	}
-	if (yych == 0xB5) {
-		goto yy38
+	if (yych <= 0xBA) {
+		goto yy3
 	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy192:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+	if (yych <= 0x80) {
+		goto yy36
 	}
-	if (yych <= 0xBC) {
-		goto yy4
+	if (yych <= 0x9A) {
+		goto yy3
 	}
-	goto yy38
+	if (yych <= 0xA5) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy193:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0xA0) {
-		goto yy38
-	}
-	if (yych <= 0xBA) {
-		goto yy4
-	}
-	goto yy38
-yy194:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x80) {
-		goto yy38
-	}
-	if (yych <= 0x9A) {
-		goto yy4
-	}
-	if (yych <= 0xA5) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy195:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBE) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy196:
+	goto yy36
+yy194:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x81) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x87) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x89) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0x97) {
 			if (yych <= 0x91) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x99) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x9C) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy197:
+yy195:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x80:
-		goto yy286
+		goto yy284
 	case 0x81:
-		goto yy287
+		goto yy285
 	case 0x82:
 		fallthrough
 	case 0x90,0x91:
@@ -4487,750 +4487,750 @@ yy197:
 	case 0x98,0x99,0x9A,0x9B:
 		fallthrough
 	case 0xB0:
-		goto yy40
-	case 0x83:
-		goto yy288
-	case 0x85:
-		goto yy108
-	case 0x8A:
-		goto yy289
-	case 0x8B:
-		goto yy290
-	case 0x8C:
-		goto yy291
-	case 0x8D:
-		goto yy292
-	case 0x8E:
-		goto yy162
-	case 0x8F:
-		goto yy293
-	case 0x92:
-		goto yy294
-	case 0x94:
-		goto yy295
-	case 0x95:
-		goto yy132
-	case 0x9C:
-		goto yy271
-	case 0x9D:
-		goto yy296
-	case 0xA0:
-		goto yy297
-	case 0xA1:
-		goto yy298
-	case 0xA2:
-		goto yy121
-	case 0xA4:
-		goto yy299
-	case 0xA6:
-		goto yy300
-	case 0xA8:
-		goto yy301
-	case 0xA9:
-		goto yy302
-	case 0xAA:
-		goto yy303
-	case 0xAB:
-		goto yy304
-	case 0xAC:
-		goto yy120
-	case 0xAD:
-		goto yy305
-	case 0xAE:
-		goto yy306
-	case 0xB1:
-		goto yy143
-	default:
 		goto yy38
+	case 0x83:
+		goto yy286
+	case 0x85:
+		goto yy106
+	case 0x8A:
+		goto yy287
+	case 0x8B:
+		goto yy288
+	case 0x8C:
+		goto yy289
+	case 0x8D:
+		goto yy290
+	case 0x8E:
+		goto yy160
+	case 0x8F:
+		goto yy291
+	case 0x92:
+		goto yy292
+	case 0x94:
+		goto yy293
+	case 0x95:
+		goto yy130
+	case 0x9C:
+		goto yy269
+	case 0x9D:
+		goto yy294
+	case 0xA0:
+		goto yy295
+	case 0xA1:
+		goto yy296
+	case 0xA2:
+		goto yy119
+	case 0xA4:
+		goto yy297
+	case 0xA6:
+		goto yy298
+	case 0xA8:
+		goto yy299
+	case 0xA9:
+		goto yy300
+	case 0xAA:
+		goto yy301
+	case 0xAB:
+		goto yy302
+	case 0xAC:
+		goto yy118
+	case 0xAD:
+		goto yy303
+	case 0xAE:
+		goto yy304
+	case 0xB1:
+		goto yy141
+	default:
+		goto yy36
 	}
-yy198:
+yy196:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x80:
-		goto yy307
+		goto yy305
 	case 0x82:
-		goto yy308
+		goto yy306
 	case 0x83:
-		goto yy309
+		goto yy307
 	case 0x84:
-		goto yy310
+		goto yy308
 	case 0x85:
-		goto yy311
+		goto yy309
 	case 0x86:
-		goto yy312
+		goto yy310
 	case 0x87:
-		goto yy313
+		goto yy311
 	case 0x88:
-		goto yy314
+		goto yy312
 	case 0x8A:
-		goto yy157
+		goto yy155
 	case 0x8B:
-		goto yy121
+		goto yy119
 	case 0x8C:
-		goto yy80
+		goto yy78
 	case 0x8D:
-		goto yy315
+		goto yy313
 	case 0x92:
 		fallthrough
 	case 0x98:
-		goto yy163
+		goto yy161
 	case 0x93:
-		goto yy316
+		goto yy314
 	case 0x96:
-		goto yy317
+		goto yy315
 	case 0x99:
-		goto yy318
+		goto yy316
 	case 0x9A:
-		goto yy319
+		goto yy317
 	case 0xA2:
-		goto yy117
+		goto yy115
 	case 0xA3:
-		goto yy320
+		goto yy318
 	case 0xAB:
-		goto yy321
+		goto yy319
 	default:
-		goto yy38
+		goto yy36
 	}
-yy199:
+yy197:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8E) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x8D) {
-			goto yy40
-		}
-		goto yy70
-	} else {
-		if (yych <= 0x8F) {
 			goto yy38
 		}
+		goto yy68
+	} else {
+		if (yych <= 0x8F) {
+			goto yy36
+		}
 		if (yych <= 0x90) {
-			goto yy40
+			goto yy38
 		}
 		if (yych <= 0x91) {
-			goto yy317
+			goto yy315
 		}
-		goto yy38
+		goto yy36
 	}
-yy200:
+yy198:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x8F) {
-		goto yy40
+		goto yy38
 	}
 	if (yych <= 0x90) {
-		goto yy317
+		goto yy315
 	}
-	goto yy38
-yy201:
+	goto yy36
+yy199:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7:
 		fallthrough
 	case 0xBC:
-		goto yy40
-	case 0xA8:
-		goto yy321
-	case 0xA9:
-		goto yy121
-	case 0xAB:
-		goto yy322
-	case 0xAC:
-		goto yy163
-	case 0xAD:
-		goto yy323
-	case 0xAE:
-		goto yy324
-	case 0xBD:
-		goto yy325
-	case 0xBE:
-		goto yy326
-	default:
 		goto yy38
+	case 0xA8:
+		goto yy319
+	case 0xA9:
+		goto yy119
+	case 0xAB:
+		goto yy320
+	case 0xAC:
+		goto yy161
+	case 0xAD:
+		goto yy321
+	case 0xAE:
+		goto yy322
+	case 0xBD:
+		goto yy323
+	case 0xBE:
+		goto yy324
+	default:
+		goto yy36
 	}
-yy202:
+yy200:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAF) {
 		if (yych == 0x80) {
-			goto yy327
+			goto yy325
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xB0) {
-			goto yy40
+			goto yy38
 		}
 		if (yych <= 0xB1) {
-			goto yy328
+			goto yy326
 		}
 		if (yych <= 0xB2) {
-			goto yy329
+			goto yy327
 		}
-		goto yy38
+		goto yy36
 	}
-yy203:
+yy201:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x90:
 		fallthrough
 	case 0x96,0x97,0x98,0x99:
-		goto yy40
-	case 0x91:
-		goto yy330
-	case 0x92:
-		goto yy331
-	case 0x93:
-		goto yy332
-	case 0x94:
-		goto yy333
-	case 0x95:
-		goto yy334
-	case 0x9A:
-		goto yy335
-	case 0x9B:
-		goto yy336
-	case 0x9C:
-		goto yy337
-	case 0x9D:
-		goto yy338
-	case 0x9E:
-		goto yy339
-	case 0x9F:
-		goto yy340
-	default:
 		goto yy38
+	case 0x91:
+		goto yy328
+	case 0x92:
+		goto yy329
+	case 0x93:
+		goto yy330
+	case 0x94:
+		goto yy331
+	case 0x95:
+		goto yy332
+	case 0x9A:
+		goto yy333
+	case 0x9B:
+		goto yy334
+	case 0x9C:
+		goto yy335
+	case 0x9D:
+		goto yy336
+	case 0x9E:
+		goto yy337
+	case 0x9F:
+		goto yy338
+	default:
+		goto yy36
 	}
-yy204:
+yy202:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB7) {
 		if (yych <= 0x9F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xA2) {
-			goto yy40
+			goto yy38
 		}
 		if (yych <= 0xA3) {
-			goto yy341
+			goto yy339
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xB8) {
-			goto yy342
+			goto yy340
 		}
 		if (yych <= 0xB9) {
-			goto yy343
+			goto yy341
 		}
 		if (yych <= 0xBA) {
-			goto yy344
+			goto yy342
 		}
-		goto yy38
+		goto yy36
 	}
-yy205:
+yy203:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0x9B) {
-		goto yy345
+		goto yy343
 	}
 	if (yych <= 0xBF) {
-		goto yy40
+		goto yy38
 	}
-	goto yy38
-yy206:
+	goto yy36
+yy204:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9C) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x9B) {
-			goto yy40
+			goto yy38
 		}
-		goto yy108
+		goto yy106
 	} else {
 		if (yych <= 0x9F) {
-			goto yy40
+			goto yy38
 		}
 		if (yych <= 0xA0) {
-			goto yy294
+			goto yy292
 		}
-		goto yy38
+		goto yy36
 	}
-yy207:
+yy205:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA7) {
-		goto yy40
+		goto yy38
 	}
 	if (yych <= 0xA8) {
-		goto yy294
+		goto yy292
 	}
-	goto yy38
+	goto yy36
+yy206:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xAD) {
+		goto yy3
+	}
+	goto yy36
+yy207:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x9B) {
+		goto yy3
+	}
+	goto yy36
 yy208:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xAD) {
-		goto yy4
-	}
-	goto yy38
-yy209:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x9B) {
-		goto yy4
-	}
-	goto yy38
-yy210:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0xA3) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy211:
+	goto yy36
+yy209:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA5) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xA3) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0xB0) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy212:
+yy210:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x8C) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych == 0x84) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x8E) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x90) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x92) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xB2) {
 			if (yych <= 0xA9) {
-				goto yy38
+				goto yy36
 			}
 			if (yych == 0xB1) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB9) {
 				if (yych <= 0xB5) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych <= 0xBB) {
-					goto yy38
+					goto yy36
 				}
 				if (yych <= 0xBF) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			}
 		}
 	}
-yy213:
+yy211:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x96) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x84) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x88) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x8A) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x8E) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0x9E) {
 			if (yych <= 0x97) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x9B) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x9D) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xA3) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xA5) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB1) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy214:
+yy212:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB0) {
 		if (yych <= 0x8E) {
 			if (yych <= 0x83) {
 				if (yych <= 0x80) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych <= 0x84) {
-					goto yy38
+					goto yy36
 				}
 				if (yych <= 0x8A) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			}
 		} else {
 			if (yych <= 0x92) {
 				if (yych <= 0x90) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			} else {
 				if (yych == 0xA9) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			}
 		}
 	} else {
 		if (yych <= 0xB7) {
 			if (yych <= 0xB3) {
 				if (yych <= 0xB1) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych <= 0xB4) {
-					goto yy38
+					goto yy36
 				}
 				if (yych <= 0xB6) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			}
 		} else {
 			if (yych <= 0xBC) {
 				if (yych <= 0xB9) {
-					goto yy4
+					goto yy3
 				}
 				if (yych <= 0xBB) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych <= 0xBD) {
-					goto yy38
+					goto yy36
 				}
 				if (yych <= 0xBF) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
+			}
+		}
+	}
+yy213:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x90) {
+		if (yych <= 0x86) {
+			if (yych <= 0x7F) {
+				goto yy36
+			}
+			if (yych <= 0x82) {
+				goto yy3
+			}
+			goto yy36
+		} else {
+			if (yych <= 0x88) {
+				goto yy3
+			}
+			if (yych <= 0x8A) {
+				goto yy36
+			}
+			if (yych <= 0x8D) {
+				goto yy3
+			}
+			goto yy36
+		}
+	} else {
+		if (yych <= 0x9D) {
+			if (yych <= 0x91) {
+				goto yy3
+			}
+			if (yych <= 0x98) {
+				goto yy36
+			}
+			if (yych <= 0x9C) {
+				goto yy3
+			}
+			goto yy36
+		} else {
+			if (yych <= 0x9E) {
+				goto yy3
+			}
+			if (yych <= 0xA5) {
+				goto yy36
+			}
+			if (yych <= 0xB5) {
+				goto yy3
+			}
+			goto yy36
+		}
+	}
+yy214:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0xA8) {
+		if (yych <= 0x8D) {
+			if (yych <= 0x80) {
+				goto yy36
+			}
+			if (yych == 0x84) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0x8E) {
+				goto yy36
+			}
+			if (yych == 0x92) {
+				goto yy36
+			}
+			goto yy3
+		}
+	} else {
+		if (yych <= 0xB3) {
+			if (yych <= 0xA9) {
+				goto yy36
+			}
+			if (yych == 0xB1) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xB9) {
+				if (yych <= 0xB4) {
+					goto yy36
+				}
+				goto yy3
+			} else {
+				if (yych <= 0xBB) {
+					goto yy36
+				}
+				if (yych <= 0xBF) {
+					goto yy3
+				}
+				goto yy36
 			}
 		}
 	}
 yy215:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x90) {
+	if (yych <= 0x8D) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			if (yych <= 0x82) {
-				goto yy4
+			if (yych <= 0x85) {
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
-			if (yych <= 0x88) {
-				goto yy4
+			if (yych == 0x8A) {
+				goto yy36
 			}
-			if (yych <= 0x8A) {
-				goto yy38
-			}
-			if (yych <= 0x8D) {
-				goto yy4
-			}
-			goto yy38
+			goto yy3
 		}
 	} else {
-		if (yych <= 0x9D) {
-			if (yych <= 0x91) {
-				goto yy4
+		if (yych <= 0x9F) {
+			if (yych == 0x90) {
+				goto yy3
 			}
-			if (yych <= 0x98) {
-				goto yy38
-			}
-			if (yych <= 0x9C) {
-				goto yy4
-			}
-			goto yy38
+			goto yy36
 		} else {
-			if (yych <= 0x9E) {
-				goto yy4
+			if (yych <= 0xA3) {
+				goto yy3
 			}
 			if (yych <= 0xA5) {
-				goto yy38
+				goto yy36
 			}
-			if (yych <= 0xB5) {
-				goto yy4
+			if (yych <= 0xAF) {
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
 yy216:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA8) {
-		if (yych <= 0x8D) {
+		if (yych <= 0x8C) {
 			if (yych <= 0x80) {
-				goto yy38
+				goto yy36
 			}
 			if (yych == 0x84) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x8E) {
-				goto yy38
+				goto yy36
 			}
-			if (yych == 0x92) {
-				goto yy38
+			if (yych <= 0x90) {
+				goto yy3
 			}
-			goto yy4
+			if (yych <= 0x92) {
+				goto yy36
+			}
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xB3) {
 			if (yych <= 0xA9) {
-				goto yy38
+				goto yy36
 			}
 			if (yych == 0xB1) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB9) {
 				if (yych <= 0xB4) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych <= 0xBB) {
-					goto yy38
+					goto yy36
 				}
 				if (yych <= 0xBF) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			}
 		}
 	}
 yy217:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x8D) {
-		if (yych <= 0x86) {
-			if (yych <= 0x7F) {
-				goto yy38
-			}
-			if (yych <= 0x85) {
-				goto yy4
-			}
-			goto yy38
-		} else {
-			if (yych == 0x8A) {
-				goto yy38
-			}
-			goto yy4
-		}
-	} else {
-		if (yych <= 0x9F) {
-			if (yych == 0x90) {
-				goto yy4
-			}
-			goto yy38
-		} else {
-			if (yych <= 0xA3) {
-				goto yy4
-			}
-			if (yych <= 0xA5) {
-				goto yy38
-			}
-			if (yych <= 0xAF) {
-				goto yy4
-			}
-			goto yy38
-		}
-	}
-yy218:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0xA8) {
-		if (yych <= 0x8C) {
-			if (yych <= 0x80) {
-				goto yy38
-			}
-			if (yych == 0x84) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0x8E) {
-				goto yy38
-			}
-			if (yych <= 0x90) {
-				goto yy4
-			}
-			if (yych <= 0x92) {
-				goto yy38
-			}
-			goto yy4
-		}
-	} else {
-		if (yych <= 0xB3) {
-			if (yych <= 0xA9) {
-				goto yy38
-			}
-			if (yych == 0xB1) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xB9) {
-				if (yych <= 0xB4) {
-					goto yy38
-				}
-				goto yy4
-			} else {
-				if (yych <= 0xBB) {
-					goto yy38
-				}
-				if (yych <= 0xBF) {
-					goto yy4
-				}
-				goto yy38
-			}
-		}
-	}
-yy219:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x88) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x84) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x86) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x8A) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x8D) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x95) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xA3) {
 			if (yych <= 0x9B) {
-				goto yy38
+				goto yy36
 			}
 			if (yych == 0x9E) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xAF) {
 				if (yych <= 0xA5) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych == 0xB1) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			}
 		}
 	}
-yy220:
+yy218:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -5255,404 +5255,404 @@ yy220:
 	case 0xAE,0xAF,0xB0,0xB1,0xB2,0xB3,0xB4,0xB5,0xB6,0xB7,0xB8,0xB9:
 		fallthrough
 	case 0xBE,0xBF:
-		goto yy4
+		goto yy3
 	default:
-		goto yy38
+		goto yy36
 	}
-yy221:
+yy219:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x85) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x82) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0x89) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0x96) {
 			if (yych == 0x90) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x97) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xA5) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xAF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy222:
+yy220:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x90) {
 		if (yych <= 0x84) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x83) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0x8D) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xA9) {
 			if (yych <= 0x91) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xA8) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xB9) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xBC) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy223:
+yy221:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x94) {
 		if (yych <= 0x85) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x84) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0x89) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x8D) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0x9F) {
 			if (yych == 0x97) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x99) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xA3) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xA5) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xAF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy224:
+yy222:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x84) {
 			if (yych <= 0x80) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x83) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0x8D) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x90) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xB4) {
 			if (yych == 0xA9) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB3) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xB9) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xBB) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
+		}
+	}
+yy223:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x96) {
+		if (yych <= 0x88) {
+			if (yych <= 0x7F) {
+				goto yy36
+			}
+			if (yych == 0x85) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0x89) {
+				goto yy36
+			}
+			if (yych <= 0x8D) {
+				goto yy3
+			}
+			if (yych <= 0x94) {
+				goto yy36
+			}
+			goto yy3
+		}
+	} else {
+		if (yych <= 0xA3) {
+			if (yych == 0x9E) {
+				goto yy3
+			}
+			if (yych <= 0x9F) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xAF) {
+				if (yych <= 0xA5) {
+					goto yy36
+				}
+				goto yy3
+			} else {
+				if (yych <= 0xB0) {
+					goto yy36
+				}
+				if (yych <= 0xB2) {
+					goto yy3
+				}
+				goto yy36
+			}
+		}
+	}
+yy224:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x8D) {
+		if (yych <= 0x83) {
+			if (yych <= 0x80) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0x84) {
+				goto yy36
+			}
+			if (yych <= 0x8C) {
+				goto yy3
+			}
+			goto yy36
+		}
+	} else {
+		if (yych <= 0xBA) {
+			if (yych == 0x91) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xBC) {
+				goto yy36
+			}
+			if (yych <= 0xBF) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy225:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x96) {
-		if (yych <= 0x88) {
+		if (yych <= 0x85) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			if (yych == 0x85) {
-				goto yy38
+			if (yych <= 0x84) {
+				goto yy3
 			}
-			goto yy4
+			goto yy36
 		} else {
-			if (yych <= 0x89) {
-				goto yy38
+			if (yych == 0x89) {
+				goto yy36
 			}
-			if (yych <= 0x8D) {
-				goto yy4
+			if (yych <= 0x8E) {
+				goto yy3
 			}
-			if (yych <= 0x94) {
-				goto yy38
-			}
-			goto yy4
+			goto yy36
 		}
 	} else {
-		if (yych <= 0xA3) {
-			if (yych == 0x9E) {
-				goto yy4
+		if (yych <= 0xA5) {
+			if (yych <= 0x97) {
+				goto yy3
 			}
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			if (yych <= 0xA3) {
+				goto yy3
+			}
+			goto yy36
 		} else {
 			if (yych <= 0xAF) {
-				if (yych <= 0xA5) {
-					goto yy38
-				}
-				goto yy4
-			} else {
-				if (yych <= 0xB0) {
-					goto yy38
-				}
-				if (yych <= 0xB2) {
-					goto yy4
-				}
-				goto yy38
+				goto yy3
 			}
+			if (yych <= 0xB9) {
+				goto yy36
+			}
+			if (yych <= 0xBF) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy226:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x8D) {
+	if (yych <= 0x99) {
 		if (yych <= 0x83) {
-			if (yych <= 0x80) {
-				goto yy38
+			if (yych <= 0x81) {
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x84) {
-				goto yy38
+				goto yy36
 			}
-			if (yych <= 0x8C) {
-				goto yy4
+			if (yych <= 0x96) {
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
-		if (yych <= 0xBA) {
-			if (yych == 0x91) {
-				goto yy38
+		if (yych <= 0xBB) {
+			if (yych == 0xB2) {
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
-			if (yych <= 0xBC) {
-				goto yy38
+			if (yych == 0xBD) {
+				goto yy3
 			}
-			if (yych <= 0xBF) {
-				goto yy4
-			}
-			goto yy38
+			goto yy36
 		}
 	}
 yy227:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x96) {
-		if (yych <= 0x85) {
+	if (yych <= 0x95) {
+		if (yych <= 0x89) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			if (yych <= 0x84) {
-				goto yy4
+			if (yych <= 0x86) {
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
-			if (yych == 0x89) {
-				goto yy38
+			if (yych <= 0x8A) {
+				goto yy3
 			}
 			if (yych <= 0x8E) {
-				goto yy4
+				goto yy36
 			}
-			goto yy38
+			if (yych <= 0x94) {
+				goto yy3
+			}
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xA5) {
-			if (yych <= 0x97) {
-				goto yy4
+			if (yych == 0x97) {
+				goto yy36
 			}
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy3
 			}
-			if (yych <= 0xA3) {
-				goto yy4
-			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xAF) {
-				goto yy4
+				goto yy3
 			}
-			if (yych <= 0xB9) {
-				goto yy38
+			if (yych <= 0xB1) {
+				goto yy36
 			}
-			if (yych <= 0xBF) {
-				goto yy4
+			if (yych <= 0xB3) {
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
 yy228:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x99) {
-		if (yych <= 0x83) {
-			if (yych <= 0x81) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0x84) {
-				goto yy38
-			}
-			if (yych <= 0x96) {
-				goto yy4
-			}
-			goto yy38
-		}
-	} else {
-		if (yych <= 0xBB) {
-			if (yych == 0xB2) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych == 0xBD) {
-				goto yy4
-			}
-			goto yy38
-		}
+	if (yych <= 0x80) {
+		goto yy36
 	}
+	if (yych <= 0xBA) {
+		goto yy3
+	}
+	goto yy36
 yy229:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x95) {
-		if (yych <= 0x89) {
-			if (yych <= 0x7F) {
-				goto yy38
-			}
-			if (yych <= 0x86) {
-				goto yy4
-			}
-			goto yy38
-		} else {
-			if (yych <= 0x8A) {
-				goto yy4
-			}
-			if (yych <= 0x8E) {
-				goto yy38
-			}
-			if (yych <= 0x94) {
-				goto yy4
-			}
-			goto yy38
-		}
-	} else {
-		if (yych <= 0xA5) {
-			if (yych == 0x97) {
-				goto yy38
-			}
-			if (yych <= 0x9F) {
-				goto yy4
-			}
-			goto yy38
-		} else {
-			if (yych <= 0xAF) {
-				goto yy4
-			}
-			if (yych <= 0xB1) {
-				goto yy38
-			}
-			if (yych <= 0xB3) {
-				goto yy4
-			}
-			goto yy38
-		}
-	}
-yy230:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x80) {
-		goto yy38
-	}
-	if (yych <= 0xBA) {
-		goto yy4
-	}
-	goto yy38
-yy231:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x99) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy232:
+	goto yy36
+yy230:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -5681,1016 +5681,1016 @@ yy232:
 	case 0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,0xB3,0xB4,0xB5,0xB6,0xB7,0xB8,0xB9:
 		fallthrough
 	case 0xBB,0xBC,0xBD:
-		goto yy4
+		goto yy3
 	default:
-		goto yy38
+		goto yy36
 	}
-yy233:
+yy231:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x87) {
 		if (yych <= 0x84) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0x86) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0x99) {
 			if (yych <= 0x8D) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x8F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x9B) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x9F) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy234:
+yy232:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB4) {
 		if (yych <= 0x97) {
 			if (yych == 0x80) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x99) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xA9) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xB8) {
 			if (yych == 0xB6) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB7) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xB9) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xBD) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy235:
+yy233:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x88) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x87) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xAC) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xB0) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy236:
+yy234:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x85) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x84) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0x98) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBC) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy237:
+yy235:
 	cursor += 1
 	yych = str[cursor]
 	if (yych == 0x86) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy238:
+	goto yy36
+yy236:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x89) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy239:
+	goto yy36
+yy237:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x9A) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x9C) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x9F) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy240:
+	goto yy36
+yy238:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x8C) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x94) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB4) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy241:
+yy239:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAC) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x93) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9F) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xB0) {
 			if (yych <= 0xAD) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB1) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB3) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy242:
+yy240:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x93) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x96) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0x9D) {
 			if (yych <= 0x9B) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xA9) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy243:
+yy241:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x8A) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x8D) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x99) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
+	}
+yy242:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xAA) {
+		goto yy3
+	}
+	if (yych <= 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
+yy243:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x9F) {
+		if (yych <= 0x7F) {
+			goto yy36
+		}
+		if (yych <= 0x9E) {
+			goto yy3
+		}
+		goto yy36
+	} else {
+		if (yych <= 0xAB) {
+			goto yy3
+		}
+		if (yych <= 0xAF) {
+			goto yy36
+		}
+		if (yych <= 0xBB) {
+			goto yy3
+		}
+		goto yy36
 	}
 yy244:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+	if (yych <= 0x85) {
+		goto yy36
 	}
-	if (yych <= 0xAA) {
-		goto yy4
+	if (yych <= 0xAD) {
+		goto yy3
 	}
 	if (yych <= 0xAF) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xBF) {
-		goto yy4
+	if (yych <= 0xB4) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy245:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x9F) {
-		if (yych <= 0x7F) {
-			goto yy38
-		}
-		if (yych <= 0x9E) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych <= 0xAB) {
-			goto yy4
-		}
-		if (yych <= 0xAF) {
-			goto yy38
-		}
-		if (yych <= 0xBB) {
-			goto yy4
-		}
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
+	if (yych <= 0xAB) {
+		goto yy3
+	}
+	if (yych <= 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy246:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x85) {
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
-	if (yych <= 0xAD) {
-		goto yy4
+	if (yych <= 0x89) {
+		goto yy3
 	}
-	if (yych <= 0xAF) {
-		goto yy38
+	if (yych <= 0x8F) {
+		goto yy36
 	}
-	if (yych <= 0xB4) {
-		goto yy4
+	if (yych <= 0x99) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy247:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xAB) {
-		goto yy4
-	}
-	if (yych <= 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy248:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x89) {
-		goto yy4
-	}
-	if (yych <= 0x8F) {
-		goto yy38
-	}
-	if (yych <= 0x99) {
-		goto yy4
-	}
-	goto yy38
-yy249:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x9B) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy250:
+	goto yy36
+yy248:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x9E) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xBC) {
-			goto yy4
+			goto yy3
 		}
 		if (yych == 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
+	}
+yy249:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x99) {
+		if (yych <= 0x7F) {
+			goto yy36
+		}
+		if (yych <= 0x89) {
+			goto yy3
+		}
+		if (yych <= 0x8F) {
+			goto yy36
+		}
+		goto yy3
+	} else {
+		if (yych <= 0xA7) {
+			if (yych <= 0xA6) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xAF) {
+				goto yy36
+			}
+			if (yych <= 0xBD) {
+				goto yy3
+			}
+			goto yy36
+		}
+	}
+yy250:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x8F) {
+		if (yych <= 0x7F) {
+			goto yy36
+		}
+		if (yych <= 0x8B) {
+			goto yy3
+		}
+		goto yy36
+	} else {
+		if (yych <= 0x99) {
+			goto yy3
+		}
+		if (yych <= 0xAA) {
+			goto yy36
+		}
+		if (yych <= 0xB3) {
+			goto yy3
+		}
+		goto yy36
 	}
 yy251:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x99) {
-		if (yych <= 0x7F) {
-			goto yy38
-		}
-		if (yych <= 0x89) {
-			goto yy4
-		}
-		if (yych <= 0x8F) {
-			goto yy38
-		}
-		goto yy4
-	} else {
-		if (yych <= 0xA7) {
-			if (yych <= 0xA6) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xAF) {
-				goto yy38
-			}
-			if (yych <= 0xBD) {
-				goto yy4
-			}
-			goto yy38
-		}
+	if (yych <= 0x7F) {
+		goto yy36
 	}
+	if (yych <= 0x89) {
+		goto yy3
+	}
+	if (yych <= 0x8C) {
+		goto yy36
+	}
+	if (yych <= 0xBD) {
+		goto yy3
+	}
+	goto yy36
 yy252:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x8F) {
-		if (yych <= 0x7F) {
-			goto yy38
+	if (yych <= 0x93) {
+		if (yych <= 0x8F) {
+			goto yy36
 		}
-		if (yych <= 0x8B) {
-			goto yy4
+		if (yych <= 0x92) {
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
-		if (yych <= 0x99) {
-			goto yy4
+		if (yych == 0xB7) {
+			goto yy36
 		}
-		if (yych <= 0xAA) {
-			goto yy38
+		if (yych <= 0xB9) {
+			goto yy3
 		}
-		if (yych <= 0xB3) {
-			goto yy4
-		}
-		goto yy38
+		goto yy36
 	}
 yy253:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x89) {
-		goto yy4
+	if (yych <= 0xB5) {
+		goto yy3
 	}
-	if (yych <= 0x8C) {
-		goto yy38
+	if (yych <= 0xBB) {
+		goto yy36
 	}
-	if (yych <= 0xBD) {
-		goto yy4
+	if (yych <= 0xBF) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy254:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x93) {
-		if (yych <= 0x8F) {
-			goto yy38
-		}
-		if (yych <= 0x92) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych == 0xB7) {
-			goto yy38
-		}
-		if (yych <= 0xB9) {
-			goto yy4
-		}
-		goto yy38
-	}
-yy255:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xB5) {
-		goto yy4
-	}
-	if (yych <= 0xBB) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy256:
-	cursor += 1
-	yych = str[cursor]
 	if (yych == 0x8D) {
-		goto yy4
+		goto yy3
 	}
 	if (yych == 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy257:
+	goto yy36
+yy255:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x94) {
 		if (yych == 0x80) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x93) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xB1) {
 			if (yych <= 0xB0) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy258:
+yy256:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA0) {
 		if (yych <= 0x8F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x9C) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xA1) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xA4) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB0) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy259:
+yy257:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA4) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0xAA) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB3) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy260:
+	goto yy36
+yy258:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAE) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xA7) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xAF) {
-			goto yy4
+			goto yy3
 		}
 		if (yych == 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy261:
+yy259:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x87) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x8E) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0x9E) {
 			if (yych == 0x97) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
+		}
+	}
+yy260:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0xAF) {
+		if (yych <= 0x84) {
+			goto yy36
+		}
+		if (yych <= 0x87) {
+			goto yy3
+		}
+		if (yych <= 0xA0) {
+			goto yy36
+		}
+		goto yy3
+	} else {
+		if (yych <= 0xB5) {
+			if (yych <= 0xB0) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xB7) {
+				goto yy36
+			}
+			if (yych <= 0xBC) {
+				goto yy3
+			}
+			goto yy36
+		}
+	}
+yy261:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x9A) {
+		if (yych <= 0x7F) {
+			goto yy36
+		}
+		if (yych <= 0x96) {
+			goto yy3
+		}
+		if (yych <= 0x98) {
+			goto yy36
+		}
+		goto yy3
+	} else {
+		if (yych <= 0x9F) {
+			if (yych <= 0x9C) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xA0) {
+				goto yy36
+			}
+			if (yych <= 0xBF) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy262:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0xAF) {
-		if (yych <= 0x84) {
-			goto yy38
-		}
-		if (yych <= 0x87) {
-			goto yy4
-		}
-		if (yych <= 0xA0) {
-			goto yy38
-		}
-		goto yy4
-	} else {
-		if (yych <= 0xB5) {
-			if (yych <= 0xB0) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xB7) {
-				goto yy38
-			}
-			if (yych <= 0xBC) {
-				goto yy4
-			}
-			goto yy38
-		}
+	if (yych <= 0x7F) {
+		goto yy36
 	}
+	if (yych <= 0x8C) {
+		goto yy3
+	}
+	if (yych <= 0x8F) {
+		goto yy36
+	}
+	if (yych <= 0xAB) {
+		goto yy3
+	}
+	goto yy36
 yy263:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x9A) {
+	if (yych <= 0xB3) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
-		if (yych <= 0x96) {
-			goto yy4
+		if (yych <= 0xAF) {
+			goto yy3
 		}
-		if (yych <= 0x98) {
-			goto yy38
-		}
-		goto yy4
+		goto yy36
 	} else {
-		if (yych <= 0x9F) {
-			if (yych <= 0x9C) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xA0) {
-				goto yy38
-			}
-			if (yych <= 0xBF) {
-				goto yy4
-			}
-			goto yy38
+		if (yych == 0xBE) {
+			goto yy36
 		}
+		if (yych <= 0xBF) {
+			goto yy3
+		}
+		goto yy36
 	}
 yy264:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x8C) {
-		goto yy4
+	if (yych == 0x9E) {
+		goto yy36
 	}
-	if (yych <= 0x8F) {
-		goto yy38
+	if (yych <= 0xBF) {
+		goto yy3
 	}
-	if (yych <= 0xAB) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy265:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0xB3) {
-		if (yych <= 0x7F) {
-			goto yy38
-		}
-		if (yych <= 0xAF) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych == 0xBE) {
-			goto yy38
-		}
-		if (yych <= 0xBF) {
-			goto yy4
-		}
-		goto yy38
-	}
-yy266:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych == 0x9E) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy267:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA7) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy268:
+	goto yy36
+yy266:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x99) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x84) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x8F) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xB7) {
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xBB) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
+	}
+yy267:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x93) {
+		goto yy3
+	}
+	if (yych <= 0x9F) {
+		goto yy36
+	}
+	if (yych <= 0xBC) {
+		goto yy3
+	}
+	goto yy36
+yy268:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x8E) {
+		if (yych == 0x80) {
+			goto yy3
+		}
+		goto yy36
+	} else {
+		if (yych <= 0x99) {
+			goto yy3
+		}
+		if (yych <= 0x9F) {
+			goto yy36
+		}
+		if (yych <= 0xBE) {
+			goto yy3
+		}
+		goto yy36
 	}
 yy269:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x93) {
-		goto yy4
-	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xBC) {
-		goto yy4
-	}
-	goto yy38
-yy270:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x8E) {
-		if (yych == 0x80) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych <= 0x99) {
-			goto yy4
-		}
-		if (yych <= 0x9F) {
-			goto yy38
-		}
-		if (yych <= 0xBE) {
-			goto yy4
-		}
-		goto yy38
-	}
-yy271:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB6) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy272:
+	goto yy36
+yy270:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x99) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x8D) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x8F) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xB6) {
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB9) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy273:
+yy271:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9D) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x82) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9A) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xAF) {
 			if (yych <= 0x9F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xB1) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB6) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy274:
+yy272:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAB) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xAA) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xAD) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xAF) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB9) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy275:
+yy273:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x92) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x86) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x97) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x9C) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xB7) {
 			if (yych <= 0xA9) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB6) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0xBD) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBE) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy276:
+yy274:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x8F) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xAD) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xB2) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xB4) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy277:
+yy275:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAF) {
 		if (yych <= 0x8C) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x8F) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0xB5) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy278:
+yy276:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA0) {
 		if (yych <= 0x8F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x99) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xBA) {
-			goto yy4
+			goto yy3
 		}
 		if (yych == 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy279:
+yy277:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x80:
-		goto yy286
+		goto yy284
 	case 0x81:
-		goto yy287
+		goto yy285
 	case 0x82:
 		fallthrough
 	case 0x90,0x91:
@@ -6698,65 +6698,65 @@ yy279:
 	case 0x98,0x99,0x9A,0x9B:
 		fallthrough
 	case 0xB0:
-		goto yy40
-	case 0x83:
-		goto yy288
-	case 0x85:
-		goto yy108
-	case 0x87:
-		goto yy346
-	case 0x8A:
-		goto yy289
-	case 0x8B:
-		goto yy347
-	case 0x8C:
-		goto yy291
-	case 0x8D:
-		goto yy348
-	case 0x8E:
-		goto yy162
-	case 0x8F:
-		goto yy293
-	case 0x92:
-		goto yy349
-	case 0x94:
-		goto yy295
-	case 0x95:
-		goto yy132
-	case 0x9C:
-		goto yy271
-	case 0x9D:
-		goto yy296
-	case 0xA0:
-		goto yy297
-	case 0xA1:
-		goto yy298
-	case 0xA2:
-		goto yy121
-	case 0xA4:
-		goto yy299
-	case 0xA6:
-		goto yy300
-	case 0xA8:
-		goto yy350
-	case 0xA9:
-		goto yy302
-	case 0xAA:
-		goto yy303
-	case 0xAB:
-		goto yy351
-	case 0xAC:
-		goto yy120
-	case 0xAD:
-		goto yy305
-	case 0xAE:
-		goto yy306
-	case 0xB1:
-		goto yy143
-	default:
 		goto yy38
+	case 0x83:
+		goto yy286
+	case 0x85:
+		goto yy106
+	case 0x87:
+		goto yy344
+	case 0x8A:
+		goto yy287
+	case 0x8B:
+		goto yy345
+	case 0x8C:
+		goto yy289
+	case 0x8D:
+		goto yy346
+	case 0x8E:
+		goto yy160
+	case 0x8F:
+		goto yy291
+	case 0x92:
+		goto yy347
+	case 0x94:
+		goto yy293
+	case 0x95:
+		goto yy130
+	case 0x9C:
+		goto yy269
+	case 0x9D:
+		goto yy294
+	case 0xA0:
+		goto yy295
+	case 0xA1:
+		goto yy296
+	case 0xA2:
+		goto yy119
+	case 0xA4:
+		goto yy297
+	case 0xA6:
+		goto yy298
+	case 0xA8:
+		goto yy348
+	case 0xA9:
+		goto yy300
+	case 0xAA:
+		goto yy301
+	case 0xAB:
+		goto yy349
+	case 0xAC:
+		goto yy118
+	case 0xAD:
+		goto yy303
+	case 0xAE:
+		goto yy304
+	case 0xB1:
+		goto yy141
+	default:
+		goto yy36
 	}
-yy280:
+yy278:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -6767,1112 +6767,1112 @@ yy280:
 	case 0x92:
 		fallthrough
 	case 0x98:
-		goto yy40
-	case 0x81:
-		goto yy352
-	case 0x82:
-		goto yy288
-	case 0x83:
-		goto yy353
-	case 0x84:
-		goto yy354
-	case 0x85:
-		goto yy355
-	case 0x87:
-		goto yy356
-	case 0x88:
-		goto yy357
-	case 0x8A:
-		goto yy157
-	case 0x8B:
-		goto yy358
-	case 0x8C:
-		goto yy218
-	case 0x8D:
-		goto yy359
-	case 0x93:
-		goto yy360
-	case 0x96:
-		goto yy361
-	case 0x97:
-		goto yy95
-	case 0x99:
-		goto yy362
-	case 0x9A:
-		goto yy118
-	case 0x9B:
-		goto yy363
-	case 0xA2:
-		goto yy117
-	case 0xA3:
-		goto yy364
-	case 0xAB:
-		goto yy321
-	default:
 		goto yy38
+	case 0x81:
+		goto yy350
+	case 0x82:
+		goto yy286
+	case 0x83:
+		goto yy351
+	case 0x84:
+		goto yy352
+	case 0x85:
+		goto yy353
+	case 0x87:
+		goto yy354
+	case 0x88:
+		goto yy355
+	case 0x8A:
+		goto yy155
+	case 0x8B:
+		goto yy356
+	case 0x8C:
+		goto yy216
+	case 0x8D:
+		goto yy357
+	case 0x93:
+		goto yy358
+	case 0x96:
+		goto yy359
+	case 0x97:
+		goto yy93
+	case 0x99:
+		goto yy360
+	case 0x9A:
+		goto yy116
+	case 0x9B:
+		goto yy361
+	case 0xA2:
+		goto yy115
+	case 0xA3:
+		goto yy362
+	case 0xAB:
+		goto yy319
+	default:
+		goto yy36
 	}
-yy281:
+yy279:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7:
 		fallthrough
 	case 0xBC:
-		goto yy40
-	case 0xA8:
-		goto yy321
-	case 0xA9:
-		goto yy365
-	case 0xAB:
-		goto yy122
-	case 0xAC:
-		goto yy271
-	case 0xAD:
-		goto yy366
-	case 0xAE:
-		goto yy324
-	case 0xBD:
-		goto yy367
-	case 0xBE:
-		goto yy368
-	default:
 		goto yy38
+	case 0xA8:
+		goto yy319
+	case 0xA9:
+		goto yy363
+	case 0xAB:
+		goto yy120
+	case 0xAC:
+		goto yy269
+	case 0xAD:
+		goto yy364
+	case 0xAE:
+		goto yy322
+	case 0xBD:
+		goto yy365
+	case 0xBE:
+		goto yy366
+	default:
+		goto yy36
 	}
-yy282:
+yy280:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAF) {
 		if (yych == 0x80) {
-			goto yy327
+			goto yy325
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xB0) {
-			goto yy40
+			goto yy38
 		}
 		if (yych <= 0xB1) {
-			goto yy328
+			goto yy326
 		}
 		if (yych <= 0xB2) {
-			goto yy369
+			goto yy367
 		}
-		goto yy38
+		goto yy36
 	}
-yy283:
+yy281:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
 	case 0x85:
-		goto yy370
+		goto yy368
 	case 0x86:
-		goto yy371
+		goto yy369
 	case 0x89:
-		goto yy372
+		goto yy370
 	case 0x90:
 		fallthrough
 	case 0x96,0x97,0x98,0x99:
-		goto yy40
-	case 0x91:
-		goto yy330
-	case 0x92:
-		goto yy331
-	case 0x93:
-		goto yy332
-	case 0x94:
-		goto yy333
-	case 0x95:
-		goto yy334
-	case 0x9A:
-		goto yy335
-	case 0x9B:
-		goto yy336
-	case 0x9C:
-		goto yy337
-	case 0x9D:
-		goto yy338
-	case 0x9E:
-		goto yy339
-	case 0x9F:
-		goto yy373
-	default:
 		goto yy38
+	case 0x91:
+		goto yy328
+	case 0x92:
+		goto yy329
+	case 0x93:
+		goto yy330
+	case 0x94:
+		goto yy331
+	case 0x95:
+		goto yy332
+	case 0x9A:
+		goto yy333
+	case 0x9B:
+		goto yy334
+	case 0x9C:
+		goto yy335
+	case 0x9D:
+		goto yy336
+	case 0x9E:
+		goto yy337
+	case 0x9F:
+		goto yy371
+	default:
+		goto yy36
 	}
-yy284:
+yy282:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB7) {
 		if (yych <= 0x9F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xA2) {
-			goto yy40
+			goto yy38
 		}
 		if (yych <= 0xA3) {
-			goto yy374
+			goto yy372
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xB8) {
-			goto yy342
+			goto yy340
 		}
 		if (yych <= 0xB9) {
-			goto yy343
+			goto yy341
 		}
 		if (yych <= 0xBA) {
-			goto yy344
+			goto yy342
 		}
-		goto yy38
+		goto yy36
 	}
-yy285:
+yy283:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x83) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x86) {
-		goto yy40
+		goto yy38
 	}
 	if (yych <= 0x87) {
-		goto yy163
+		goto yy161
 	}
-	goto yy38
-yy286:
+	goto yy36
+yy284:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA7) {
 		if (yych <= 0x8B) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x8C) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xA6) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xBD) {
 			if (yych == 0xBB) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
+yy285:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x8D) {
+		goto yy3
+	}
+	if (yych <= 0x8F) {
+		goto yy36
+	}
+	if (yych <= 0x9D) {
+		goto yy3
+	}
+	goto yy36
+yy286:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xBA) {
+		goto yy3
+	}
+	goto yy36
 yy287:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x8D) {
-		goto yy4
+	if (yych <= 0x9C) {
+		goto yy3
 	}
-	if (yych <= 0x8F) {
-		goto yy38
+	if (yych <= 0x9F) {
+		goto yy36
 	}
-	if (yych <= 0x9D) {
-		goto yy4
+	if (yych <= 0xBF) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy288:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xBA) {
-		goto yy4
+	if (yych <= 0x90) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy289:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x9C) {
-		goto yy4
+		goto yy36
 	}
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy3
+	}
+	if (yych <= 0xAF) {
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy290:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x90) {
-		goto yy4
-	}
-	goto yy38
-yy291:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x9F) {
-		goto yy4
-	}
-	if (yych <= 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy292:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x8A) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB5) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy293:
+	goto yy36
+yy291:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x87) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x83) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0x90) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x95) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
+yy292:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x9D) {
+		goto yy3
+	}
+	goto yy36
+yy293:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xA7) {
+		goto yy3
+	}
+	if (yych <= 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy294:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x9D) {
-		goto yy4
-	}
-	goto yy38
-yy295:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xA7) {
-		goto yy4
-	}
-	if (yych <= 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy296:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x95) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA7) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy297:
+	goto yy36
+yy295:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xB5) {
 		if (yych <= 0x87) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x85) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0x89) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xBB) {
 			if (yych <= 0xB6) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB8) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xBC) {
-				goto yy4
+				goto yy3
 			}
 			if (yych == 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
+yy296:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x95) {
+		goto yy3
+	}
+	if (yych <= 0x9F) {
+		goto yy36
+	}
+	if (yych <= 0xB6) {
+		goto yy3
+	}
+	goto yy36
+yy297:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x95) {
+		goto yy3
+	}
+	if (yych <= 0x9F) {
+		goto yy36
+	}
+	if (yych <= 0xB9) {
+		goto yy3
+	}
+	goto yy36
 yy298:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x95) {
-		goto yy4
-	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xB6) {
-		goto yy4
-	}
-	goto yy38
-yy299:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x95) {
-		goto yy4
-	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xB9) {
-		goto yy4
-	}
-	goto yy38
-yy300:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB7) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0xBD) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy301:
+	goto yy36
+yy299:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x93) {
 		if (yych == 0x80) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x8F) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0x97) {
 			if (yych <= 0x94) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x98) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB3) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy302:
+yy300:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBC) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
+yy301:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x9C) {
+		goto yy3
+	}
+	goto yy36
+yy302:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych == 0x88) {
+		goto yy36
+	}
+	if (yych <= 0xA4) {
+		goto yy3
+	}
+	goto yy36
 yy303:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x9C) {
-		goto yy4
+	if (yych <= 0x95) {
+		goto yy3
 	}
-	goto yy38
+	if (yych <= 0x9F) {
+		goto yy36
+	}
+	if (yych <= 0xB2) {
+		goto yy3
+	}
+	goto yy36
 yy304:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych == 0x88) {
-		goto yy38
+	if (yych <= 0x91) {
+		goto yy3
 	}
-	if (yych <= 0xA4) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy305:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+	if (yych <= 0x82) {
+		goto yy36
 	}
-	if (yych <= 0x95) {
-		goto yy4
+	if (yych <= 0xB7) {
+		goto yy3
 	}
-	if (yych <= 0x9F) {
-		goto yy38
-	}
-	if (yych <= 0xB2) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy306:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+	if (yych <= 0x82) {
+		goto yy36
 	}
-	if (yych <= 0x91) {
-		goto yy4
+	if (yych <= 0xAF) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy307:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x82) {
-		goto yy38
+	if (yych <= 0x8F) {
+		goto yy36
 	}
-	if (yych <= 0xB7) {
-		goto yy4
+	if (yych <= 0xA8) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy308:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x82) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xAF) {
-		goto yy4
+	if (yych <= 0xA6) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy309:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xA8) {
-		goto yy4
+	if (yych <= 0xB2) {
+		goto yy3
 	}
-	goto yy38
+	if (yych == 0xB6) {
+		goto yy3
+	}
+	goto yy36
 yy310:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x82) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xA6) {
-		goto yy4
+	if (yych <= 0xB2) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy311:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x8F) {
-		goto yy38
+	if (yych <= 0x80) {
+		goto yy36
 	}
-	if (yych <= 0xB2) {
-		goto yy4
+	if (yych <= 0x84) {
+		goto yy3
 	}
-	if (yych == 0xB6) {
-		goto yy4
+	if (yych == 0x9A) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy312:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x82) {
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
-	if (yych <= 0xB2) {
-		goto yy4
+	if (yych == 0x92) {
+		goto yy36
 	}
-	goto yy38
+	if (yych <= 0xAB) {
+		goto yy3
+	}
+	goto yy36
 yy313:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x80) {
-		goto yy38
+	if (yych <= 0x9C) {
+		goto yy36
 	}
-	if (yych <= 0x84) {
-		goto yy4
+	if (yych <= 0xA1) {
+		goto yy3
 	}
-	if (yych == 0x9A) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy314:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+	if (yych <= 0x83) {
+		goto yy36
 	}
-	if (yych == 0x92) {
-		goto yy38
+	if (yych == 0x86) {
+		goto yy36
 	}
-	if (yych <= 0xAB) {
-		goto yy4
+	if (yych <= 0x87) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy315:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x9C) {
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
-	if (yych <= 0xA1) {
-		goto yy4
+	if (yych <= 0xAE) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy316:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x83) {
-		goto yy38
+	if (yych == 0x84) {
+		goto yy3
 	}
-	if (yych == 0x86) {
-		goto yy38
-	}
-	if (yych <= 0x87) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy317:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xAE) {
-		goto yy4
+	if (yych <= 0xAA) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy318:
 	cursor += 1
 	yych = str[cursor]
-	if (yych == 0x84) {
-		goto yy4
+	if (yych <= 0x7F) {
+		goto yy36
 	}
-	goto yy38
+	if (yych <= 0x9F) {
+		goto yy3
+	}
+	if (yych == 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy319:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xAA) {
-		goto yy4
+	if (yych <= 0xB8) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy320:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x9F) {
-		goto yy4
-	}
-	if (yych == 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy321:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xB8) {
-		goto yy4
-	}
-	goto yy38
-yy322:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xAD) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy323:
+	goto yy36
+yy321:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA2) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x83) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xB7) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xBC) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy324:
+yy322:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x8F) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
+yy323:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x84) {
+		goto yy3
+	}
+	if (yych == 0x90) {
+		goto yy3
+	}
+	goto yy36
+yy324:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x92) {
+		goto yy36
+	}
+	if (yych <= 0x9F) {
+		goto yy3
+	}
+	goto yy36
 yy325:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x84) {
-		goto yy4
+	if (yych <= 0x81) {
+		goto yy3
 	}
-	if (yych == 0x90) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy326:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x92) {
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
-	if (yych <= 0x9F) {
-		goto yy4
+	if (yych <= 0xAA) {
+		goto yy3
 	}
-	goto yy38
+	if (yych <= 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xBC) {
+		goto yy3
+	}
+	goto yy36
 yy327:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x81) {
-		goto yy4
+	if (yych <= 0x88) {
+		goto yy3
 	}
-	goto yy38
+	if (yych <= 0x8F) {
+		goto yy36
+	}
+	if (yych <= 0x99) {
+		goto yy3
+	}
+	goto yy36
 yy328:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xAA) {
-		goto yy4
-	}
-	if (yych <= 0xAF) {
-		goto yy38
-	}
-	if (yych <= 0xBC) {
-		goto yy4
-	}
-	goto yy38
-yy329:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x88) {
-		goto yy4
-	}
-	if (yych <= 0x8F) {
-		goto yy38
-	}
-	if (yych <= 0x99) {
-		goto yy4
-	}
-	goto yy38
-yy330:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0x95) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy331:
+	goto yy36
+yy329:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA6) {
 		if (yych <= 0x9F) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych == 0x9D) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych == 0xA2) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xA4) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0xB9) {
 			if (yych <= 0xA8) {
-				goto yy38
+				goto yy36
 			}
 			if (yych == 0xAD) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xBB) {
 				if (yych <= 0xBA) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych <= 0xBC) {
-					goto yy38
+					goto yy36
 				}
 				if (yych <= 0xBF) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			}
 		}
 	}
-yy332:
+yy330:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0x84) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBF) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy333:
+	goto yy36
+yy331:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x94) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x85) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x8A) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x8C) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		}
 	} else {
 		if (yych <= 0x9D) {
 			if (yych <= 0x95) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x9C) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych == 0xBA) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBE) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy334:
+yy332:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x86) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych == 0x85) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0x90) {
 			if (yych <= 0x89) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x91) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
+		}
+	}
+yy333:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xA5) {
+		goto yy3
+	}
+	if (yych <= 0xA7) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
+yy334:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x9A) {
+		if (yych == 0x80) {
+			goto yy3
+		}
+		if (yych <= 0x81) {
+			goto yy36
+		}
+		goto yy3
+	} else {
+		if (yych <= 0xBA) {
+			if (yych <= 0x9B) {
+				goto yy36
+			}
+			goto yy3
+		} else {
+			if (yych <= 0xBB) {
+				goto yy36
+			}
+			if (yych <= 0xBF) {
+				goto yy3
+			}
+			goto yy36
 		}
 	}
 yy335:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xA5) {
-		goto yy4
-	}
-	if (yych <= 0xA7) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy336:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x9A) {
-		if (yych == 0x80) {
-			goto yy4
-		}
-		if (yych <= 0x81) {
-			goto yy38
-		}
-		goto yy4
-	} else {
-		if (yych <= 0xBA) {
-			if (yych <= 0x9B) {
-				goto yy38
-			}
-			goto yy4
-		} else {
-			if (yych <= 0xBB) {
-				goto yy38
-			}
-			if (yych <= 0xBF) {
-				goto yy4
-			}
-			goto yy38
-		}
-	}
-yy337:
-	cursor += 1
-	yych = str[cursor]
 	if (yych <= 0x95) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x94) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0xB5) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy338:
+yy336:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x8E) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0xAF) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy339:
+yy337:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x89) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x88) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych == 0xA9) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy340:
+yy338:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0x83) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x8B) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy341:
+	goto yy36
+yy339:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x84) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy342:
+	goto yy36
+yy340:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA6) {
 		if (yych <= 0x9F) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych == 0x84) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xA2) {
 				if (yych <= 0xA0) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych == 0xA4) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			}
 		}
 	} else {
 		if (yych <= 0xB7) {
 			if (yych <= 0xA8) {
 				if (yych <= 0xA7) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			} else {
 				if (yych == 0xB3) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			}
 		} else {
 			if (yych <= 0xB9) {
 				if (yych <= 0xB8) {
-					goto yy38
+					goto yy36
 				}
-				goto yy4
+				goto yy3
 			} else {
 				if (yych == 0xBB) {
-					goto yy4
+					goto yy3
 				}
-				goto yy38
+				goto yy36
 			}
 		}
 	}
-yy343:
+yy341:
 	cursor += 1
 	yych = str[cursor]
 	switch (yych) {
@@ -7913,587 +7913,587 @@ yy343:
 	case 0xB9,0xBA,0xBB,0xBC:
 		fallthrough
 	case 0xBE:
-		goto yy4
+		goto yy3
 	default:
-		goto yy38
+		goto yy36
 	}
-yy344:
+yy342:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA0) {
 		if (yych <= 0x89) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0x8A) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x9B) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xA9) {
 			if (yych == 0xA4) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xAA) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBB) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
+yy343:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0x96) {
+		goto yy3
+	}
+	goto yy36
+yy344:
+	cursor += 1
+	yych = str[cursor]
+	if (yych == 0xBD) {
+		goto yy3
+	}
+	goto yy36
 yy345:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0x96) {
-		goto yy4
+	if (yych <= 0x90) {
+		goto yy3
 	}
-	goto yy38
+	if (yych == 0xA0) {
+		goto yy3
+	}
+	goto yy36
 yy346:
 	cursor += 1
 	yych = str[cursor]
-	if (yych == 0xBD) {
-		goto yy4
+	if (yych <= 0x7F) {
+		goto yy36
 	}
-	goto yy38
+	if (yych <= 0x8A) {
+		goto yy3
+	}
+	if (yych <= 0x8F) {
+		goto yy36
+	}
+	if (yych <= 0xBA) {
+		goto yy3
+	}
+	goto yy36
 yy347:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x90) {
-		goto yy4
-	}
-	if (yych == 0xA0) {
-		goto yy4
-	}
-	goto yy38
-yy348:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x8A) {
-		goto yy4
-	}
-	if (yych <= 0x8F) {
-		goto yy38
-	}
-	if (yych <= 0xBA) {
-		goto yy4
-	}
-	goto yy38
-yy349:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x9D) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA9) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy350:
+	goto yy36
+yy348:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x94) {
 		if (yych <= 0x84) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x83) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x86) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x8B) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x93) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xB7) {
 			if (yych == 0x98) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB3) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xBA) {
-				goto yy4
+				goto yy3
 			}
 			if (yych == 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy351:
+yy349:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0x88) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA6) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy352:
+	goto yy36
+yy350:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xA5) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x86) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xAF) {
-			goto yy4
+			goto yy3
 		}
 		if (yych == 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
+yy351:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x8F) {
+		goto yy36
+	}
+	if (yych <= 0xA8) {
+		goto yy3
+	}
+	if (yych <= 0xAF) {
+		goto yy36
+	}
+	if (yych <= 0xB9) {
+		goto yy3
+	}
+	goto yy36
+yy352:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych == 0xB5) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy353:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xA8) {
-		goto yy4
+	if (yych <= 0xB3) {
+		goto yy3
 	}
-	if (yych <= 0xAF) {
-		goto yy38
+	if (yych == 0xB6) {
+		goto yy3
 	}
-	if (yych <= 0xB9) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy354:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych == 0xB5) {
-		goto yy38
+	if (yych <= 0x84) {
+		goto yy3
 	}
-	if (yych <= 0xBF) {
-		goto yy4
+	if (yych <= 0x8F) {
+		goto yy36
 	}
-	goto yy38
+	if (yych <= 0x9A) {
+		goto yy3
+	}
+	goto yy36
 yy355:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x8F) {
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
-	if (yych <= 0xB3) {
-		goto yy4
+	if (yych == 0x92) {
+		goto yy36
 	}
-	if (yych == 0xB6) {
-		goto yy4
+	if (yych <= 0xB7) {
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 yy356:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x84) {
-		goto yy4
-	}
-	if (yych <= 0x8F) {
-		goto yy38
-	}
-	if (yych <= 0x9A) {
-		goto yy4
-	}
-	goto yy38
-yy357:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych == 0x92) {
-		goto yy38
-	}
-	if (yych <= 0xB7) {
-		goto yy4
-	}
-	goto yy38
-yy358:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xAA) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0xAF) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xB9) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy359:
+	goto yy36
+yy357:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x96) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x84) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0x88) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x8A) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0x8D) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	} else {
 		if (yych <= 0xA5) {
 			if (yych <= 0x97) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0x9C) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xA3) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		} else {
 			if (yych <= 0xAC) {
-				goto yy4
+				goto yy3
 			}
 			if (yych <= 0xAF) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xB4) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy360:
+yy358:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x86) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x85) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x87) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x8F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x99) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
+	}
+yy359:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x7F) {
+		goto yy36
+	}
+	if (yych <= 0xB5) {
+		goto yy3
+	}
+	if (yych <= 0xB7) {
+		goto yy36
+	}
+	if (yych <= 0xBF) {
+		goto yy3
+	}
+	goto yy36
+yy360:
+	cursor += 1
+	yych = str[cursor]
+	if (yych <= 0x83) {
+		if (yych == 0x80) {
+			goto yy3
+		}
+		goto yy36
+	} else {
+		if (yych <= 0x84) {
+			goto yy3
+		}
+		if (yych <= 0x8F) {
+			goto yy36
+		}
+		if (yych <= 0x99) {
+			goto yy3
+		}
+		goto yy36
 	}
 yy361:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
-	if (yych <= 0xB5) {
-		goto yy4
+	if (yych <= 0x89) {
+		goto yy3
 	}
-	if (yych <= 0xB7) {
-		goto yy38
-	}
-	if (yych <= 0xBF) {
-		goto yy4
-	}
-	goto yy38
+	goto yy36
 yy362:
 	cursor += 1
 	yych = str[cursor]
-	if (yych <= 0x83) {
-		if (yych == 0x80) {
-			goto yy4
-		}
-		goto yy38
-	} else {
-		if (yych <= 0x84) {
-			goto yy4
-		}
-		if (yych <= 0x8F) {
-			goto yy38
-		}
-		if (yych <= 0x99) {
-			goto yy4
-		}
-		goto yy38
+	if (yych <= 0x7F) {
+		goto yy36
 	}
+	if (yych <= 0xA9) {
+		goto yy3
+	}
+	if (yych == 0xBF) {
+		goto yy3
+	}
+	goto yy36
 yy363:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0x89) {
-		goto yy4
-	}
-	goto yy38
-yy364:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
-	}
-	if (yych <= 0xA9) {
-		goto yy4
-	}
-	if (yych == 0xBF) {
-		goto yy4
-	}
-	goto yy38
-yy365:
-	cursor += 1
-	yych = str[cursor]
-	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych == 0x9F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xA9) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy366:
+	goto yy36
+yy364:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x99) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x83) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x8F) {
-			goto yy38
+			goto yy36
 		}
-		goto yy4
+		goto yy3
 	} else {
 		if (yych <= 0xB7) {
 			if (yych <= 0xA2) {
-				goto yy38
+				goto yy36
 			}
-			goto yy4
+			goto yy3
 		} else {
 			if (yych <= 0xBC) {
-				goto yy38
+				goto yy36
 			}
 			if (yych <= 0xBF) {
-				goto yy4
+				goto yy3
 			}
-			goto yy38
+			goto yy36
 		}
 	}
-yy367:
+yy365:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x84) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0xBE) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy368:
+	goto yy36
+yy366:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8E) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x9F) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy369:
+	goto yy36
+yy367:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x88) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x99) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x9C) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x9E) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy370:
+yy368:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0xAC) {
 		if (yych <= 0xA4) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xA9) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0xB2) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xBA) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy371:
+yy369:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x84) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x82) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x8B) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0xA9) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xAD) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy372:
+yy370:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x81) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x84) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
-yy373:
+	goto yy36
+yy371:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x83) {
 		if (yych <= 0x7F) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0x82) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	} else {
 		if (yych <= 0x8B) {
-			goto yy4
+			goto yy3
 		}
 		if (yych <= 0x8D) {
-			goto yy38
+			goto yy36
 		}
 		if (yych <= 0xBF) {
-			goto yy4
+			goto yy3
 		}
-		goto yy38
+		goto yy36
 	}
-yy374:
+yy372:
 	cursor += 1
 	yych = str[cursor]
 	if (yych <= 0x7F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x84) {
-		goto yy4
+		goto yy3
 	}
 	if (yych <= 0x8F) {
-		goto yy38
+		goto yy36
 	}
 	if (yych <= 0x96) {
-		goto yy4
+		goto yy3
 	}
-	goto yy38
+	goto yy36
 }
 
 }

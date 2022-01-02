@@ -40,10 +40,10 @@ int scan(char *s, int l)
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			switch (yych) {
-				case 0x00: goto yy2;
-				case '+': goto yy6;
-				case '-': goto yy8;
-				case '0': goto yy10;
+				case 0x00: goto yy1;
+				case '+': goto yy3;
+				case '-': goto yy4;
+				case '0': goto yy5;
 				case '1':
 				case '2':
 				case '3':
@@ -52,30 +52,30 @@ int scan(char *s, int l)
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy12;
-				default: goto yy4;
+				case '9': goto yy7;
+				default: goto yy2;
 			}
-yy2:
+yy1:
 			++YYCURSOR;
 #line 61 "calc_004.re"
 			{ printf("EOF\n");	return 0; }
 #line 63 "calc_004.c"
-yy4:
+yy2:
 			++YYCURSOR;
 #line 62 "calc_004.re"
 			{ printf("ERR\n");	return 1; }
 #line 68 "calc_004.c"
-yy6:
+yy3:
 			++YYCURSOR;
 #line 59 "calc_004.re"
 			{ printf("+\n");	continue; }
 #line 73 "calc_004.c"
-yy8:
+yy4:
 			++YYCURSOR;
 #line 60 "calc_004.re"
 			{ printf("+\n");	continue; }
 #line 78 "calc_004.c"
-yy10:
+yy5:
 			yych = *++YYCURSOR;
 			switch (yych) {
 				case '0':
@@ -87,14 +87,14 @@ yy10:
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy14;
-				default: goto yy11;
+				case '9': goto yy8;
+				default: goto yy6;
 			}
-yy11:
+yy6:
 #line 58 "calc_004.re"
 			{ t = tokendup(t, p); printf("Num: %s\n", t); free(t); continue; }
 #line 97 "calc_004.c"
-yy12:
+yy7:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -108,10 +108,10 @@ yy12:
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy12;
-				default: goto yy11;
+				case '9': goto yy7;
+				default: goto yy6;
 			}
-yy14:
+yy8:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -125,10 +125,10 @@ yy14:
 				case '6':
 				case '7':
 				case '8':
-				case '9': goto yy14;
-				default: goto yy16;
+				case '9': goto yy8;
+				default: goto yy9;
 			}
-yy16:
+yy9:
 #line 57 "calc_004.re"
 			{ t = tokendup(t, p); printf("Oct: %s\n", t); free(t); continue; }
 #line 135 "calc_004.c"

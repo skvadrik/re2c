@@ -20,15 +20,15 @@
 		case 'd':
 		case 'e':
 		case 'f':
-		case 'g': goto yy4;
-		default: goto yy2;
+		case 'g': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 11 "input10.re"
 	{ return -1; }
 #line 31 "input10.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 9 "input10.re"
 	{ return 1; }

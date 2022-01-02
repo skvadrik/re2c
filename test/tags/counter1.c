@@ -9,89 +9,89 @@
 		case 'd':
 			yyt1 = NULL;
 			yyt2 = YYCURSOR;
-			goto yy4;
-		default: goto yy2;
+			goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 	{}
-yy4:
+yy3:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 		case 'd':
 			yyt3 = YYCURSOR;
-			goto yy5;
-		default: goto yy3;
+			goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'd':
 			yyt4 = YYCURSOR;
-			goto yy7;
-		default: goto yy6;
+			goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	YYCURSOR = YYMARKER;
-	goto yy3;
-yy7:
+	goto yy2;
+yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'd':
 			yyt5 = YYCURSOR;
+			goto yy7;
+		default: goto yy5;
+	}
+yy7:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'd':
+			yyt6 = YYCURSOR;
 			goto yy8;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'd':
-			yyt6 = YYCURSOR;
+			yyt7 = YYCURSOR;
 			goto yy9;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'd':
-			yyt7 = YYCURSOR;
+			yyt8 = YYCURSOR;
 			goto yy10;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'd':
-			yyt8 = YYCURSOR;
+			yyt9 = YYCURSOR;
 			goto yy11;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'd':
-			yyt9 = YYCURSOR;
+			yyt10 = YYCURSOR;
 			goto yy12;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'd':
-			yyt10 = YYCURSOR;
+			yyt11 = YYCURSOR;
 			goto yy13;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy13:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'd':
-			yyt11 = YYCURSOR;
-			goto yy14;
-		default: goto yy6;
-	}
-yy14:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -108,10 +108,10 @@ yy14:
 			yyt9 = yyt10;
 			yyt10 = yyt11;
 			yyt11 = YYCURSOR;
-			goto yy14;
-		default: goto yy16;
+			goto yy13;
+		default: goto yy14;
 	}
-yy16:
+yy14:
 	z = yyt1;
 	{}
 }

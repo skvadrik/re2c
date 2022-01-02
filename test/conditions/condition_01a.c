@@ -14,17 +14,17 @@ yyc_a:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy3;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
+yy1:
 yy2:
-yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy4;
-		default: goto yy2;
+		case 'b': goto yy3;
+		default: goto yy1;
 	}
-yy4:
+yy3:
 	++YYCURSOR;
 #line 4 "conditions/condition_01a.re"
 	{ }
@@ -34,17 +34,17 @@ yyc_b:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy9;
-		default: goto yy8;
+		case 'a': goto yy6;
+		default: goto yy5;
 	}
-yy8:
-yy9:
+yy5:
+yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy10;
-		default: goto yy8;
+		case 'b': goto yy7;
+		default: goto yy5;
 	}
-yy10:
+yy7:
 	++YYCURSOR;
 #line 4 "conditions/condition_01a.re"
 	{ }

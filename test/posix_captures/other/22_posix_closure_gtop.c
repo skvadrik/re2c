@@ -8,41 +8,41 @@
 	switch (yych) {
 		case 'y':
 			yyt1 = yyt2 = yyt3 = YYCURSOR;
-			goto yy3;
-		default: goto yy2;
+			goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'y':
 			yyt3 = yyt4 = YYCURSOR;
-			goto yy5;
-		default: goto yy4;
+			goto yy4;
+		default: goto yy3;
 	}
-yy4:
+yy3:
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
 	yypmatch[3] = yyt3;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'y':
 			yyt3 = YYCURSOR;
-			goto yy6;
-		default: goto yy4;
+			goto yy5;
+		default: goto yy3;
 	}
-yy6:
+yy5:
 	++YYCURSOR;
 	yyt2 = yyt4;
-	goto yy4;
+	goto yy3;
 }
 
 posix_captures/other/22_posix_closure_gtop.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]

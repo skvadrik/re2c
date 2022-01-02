@@ -6,38 +6,38 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-		case 'a': goto yy3;
-		default: goto yy2;
+		case 'a': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'b':
-		case 'c': goto yy5;
-		case 'd': goto yy6;
-		default: goto yy4;
+		case 'c': goto yy4;
+		case 'd': goto yy5;
+		default: goto yy3;
 	}
-yy4:
+yy3:
 	YYCURSOR = YYMARKER;
-	goto yy2;
-yy5:
+	goto yy1;
+yy4:
 	yych = *++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
 	switch (yych) {
 		case 'b':
-		case 'c': goto yy8;
-		case 'd': goto yy10;
-		default: goto yy4;
+		case 'c': goto yy7;
+		case 'd': goto yy8;
+		default: goto yy3;
 	}
-yy6:
+yy5:
 	++YYCURSOR;
 	yyt1 = yyt2 = YYCURSOR - 1;
-yy7:
+yy6:
 	yynmatch = 3;
 	yypmatch[2] = yyt1;
 	yypmatch[4] = yyt2;
@@ -46,20 +46,20 @@ yy7:
 	yypmatch[3] = yyt2;
 	yypmatch[5] = YYCURSOR;
 	{}
-yy8:
+yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'b':
-		case 'c': goto yy8;
-		case 'd': goto yy10;
-		default: goto yy4;
+		case 'c': goto yy7;
+		case 'd': goto yy8;
+		default: goto yy3;
 	}
-yy10:
+yy8:
 	++YYCURSOR;
 	yyt2 = YYCURSOR - 1;
-	goto yy7;
+	goto yy6;
 }
 
 posix_captures/basic/49_stadfa.re:7:7: warning: rule matches empty string [-Wmatch-empty-string]

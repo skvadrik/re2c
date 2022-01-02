@@ -8,11 +8,11 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xE0: goto yy3;
-		default: goto yy2;
+		case 0xE0: goto yy2;
+		default: goto yy1;
 	}
+yy1:
 yy2:
-yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA0:
@@ -46,10 +46,10 @@ yy3:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy4;
-		default: goto yy2;
+		case 0xBF: goto yy3;
+		default: goto yy1;
 	}
-yy4:
+yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -115,10 +115,10 @@ yy4:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy5;
-		default: goto yy2;
+		case 0xBF: goto yy4;
+		default: goto yy1;
 	}
-yy5:
+yy4:
 	++YYCURSOR;
 #line 3 "encodings/utf8-range_0x800_0xfff.re"
 	{ return 0; }

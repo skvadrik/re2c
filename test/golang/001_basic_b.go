@@ -46,47 +46,47 @@ func Lex(str string) int {
 	}
 	yych = str[cursor]
 	if (yych <= '/') {
-		goto yy2
+		goto yy1
 	}
 	if (yych <= '9') {
-		goto yy4
+		goto yy3
 	}
-yy2:
+yy1:
 	cursor += 1
-yy3:
+yy2:
 //line "golang/001_basic_b.re":17
 	{
 		return -1
 	}
 //line "golang/001_basic_b.go":62
-yy4:
+yy3:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
 	if (yybm[0+yych] & 128 != 0) {
-		goto yy7
+		goto yy5
 	}
 	if (yych >= 0x01) {
-		goto yy3
+		goto yy2
 	}
-yy5:
+yy4:
 	cursor += 1
 //line "golang/001_basic_b.re":21
 	{
 		return 1
 	}
 //line "golang/001_basic_b.go":79
-yy7:
+yy5:
 	cursor += 1
 	yych = str[cursor]
 	if (yybm[0+yych] & 128 != 0) {
-		goto yy7
-	}
-	if (yych <= 0x00) {
 		goto yy5
 	}
+	if (yych <= 0x00) {
+		goto yy4
+	}
 	cursor = marker
-	goto yy3
+	goto yy2
 }
 //line "golang/001_basic_b.re":24
 

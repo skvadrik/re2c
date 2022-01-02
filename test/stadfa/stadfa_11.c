@@ -6,60 +6,60 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-		case 'a': goto yy5;
-		case 'c': goto yy6;
-		default: goto yy3;
+		case 'a': goto yy4;
+		case 'c': goto yy5;
+		default: goto yy2;
 	}
-yy2:
+yy1:
 	x = yyt1;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	yyt1 = YYCURSOR - 1;
 	switch (yych) {
-		case 'a': goto yy4;
-		case 'b': goto yy8;
-		default: goto yy7;
+		case 'a': goto yy3;
+		case 'b': goto yy7;
+		default: goto yy6;
 	}
-yy4:
+yy3:
 	YYCURSOR = YYMARKER;
 	yyt1 = YYCURSOR;
-	goto yy2;
-yy5:
+	goto yy1;
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy4;
-		default: goto yy7;
+		case 'a': goto yy3;
+		default: goto yy6;
+	}
+yy5:
+	yych = *++YYCURSOR;
+	yyt1 = YYCURSOR - 1;
+	switch (yych) {
+		case 'b': goto yy9;
+		default: goto yy3;
 	}
 yy6:
 	yych = *++YYCURSOR;
-	yyt1 = YYCURSOR - 1;
+	yyt1 = NULL;
 	switch (yych) {
-		case 'b': goto yy10;
-		default: goto yy4;
+		case 'b': goto yy9;
+		default: goto yy3;
 	}
 yy7:
 	yych = *++YYCURSOR;
+	yyt2 = yyt1;
 	yyt1 = NULL;
 	switch (yych) {
-		case 'b': goto yy10;
-		default: goto yy4;
+		case 'b': goto yy9;
+		default: goto yy8;
 	}
 yy8:
-	yych = *++YYCURSOR;
-	yyt2 = yyt1;
-	yyt1 = NULL;
-	switch (yych) {
-		case 'b': goto yy10;
-		default: goto yy9;
-	}
-yy9:
 	y = yyt2;
 	{}
-yy10:
+yy9:
 	++YYCURSOR;
 	yyt2 = yyt1;
-	goto yy9;
+	goto yy8;
 }
 
 stadfa/stadfa_11.re:3:9: warning: rule matches empty string [-Wmatch-empty-string]

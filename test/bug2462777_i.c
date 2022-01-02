@@ -11,9 +11,9 @@ yy0:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy1;
-		default: goto yy3;
+		default: goto yy2;
 	}
-yy3:
+yy2:
 	{x;}
 }
 

@@ -12,101 +12,101 @@ static void lex(const char *YYCURSOR)
 	char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '0': goto yy4;
-		default: goto yy2;
+		case '0': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 	{ printf("error\n"); return; }
-yy4:
+yy3:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case '1': goto yy5;
-		default: goto yy3;
+		case '1': goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case '1': goto yy7;
-		default: goto yy6;
+		case '1': goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	YYCURSOR = YYMARKER;
-	goto yy3;
+	goto yy2;
+yy6:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case '2': goto yy7;
+		default: goto yy5;
+	}
 yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '2': goto yy8;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '2': goto yy9;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case '2': goto yy10;
-		default: goto yy6;
+		case '3': goto yy10;
+		default: goto yy5;
 	}
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '3': goto yy11;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '3': goto yy12;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '3': goto yy13;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case '3': goto yy14;
-		default: goto yy6;
+		case '4': goto yy14;
+		default: goto yy5;
 	}
 yy14:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '4': goto yy15;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '4': goto yy16;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy16:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '4': goto yy17;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy17:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case '4': goto yy18;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy18:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case '4': goto yy19;
-		default: goto yy6;
-	}
-yy19:
 	++YYCURSOR;
 	p0 = YYCURSOR - 15;
 	p1 = YYCURSOR - 14;

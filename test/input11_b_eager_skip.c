@@ -9,125 +9,125 @@
 	yych = *YYCURSOR++;
 	if (yych <= '@') {
 		if (yych <= '/') {
-			if (yych == '-') goto yy4;
+			if (yych == '-') goto yy2;
 		} else {
-			if (yych <= '0') goto yy5;
-			if (yych <= '9') goto yy7;
+			if (yych <= '0') goto yy3;
+			if (yych <= '9') goto yy5;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= 'Z') goto yy9;
-			if (yych >= 'a') goto yy9;
+			if (yych <= 'Z') goto yy6;
+			if (yych >= 'a') goto yy6;
 		} else {
-			if (yych <= 'r') goto yy12;
-			if (yych <= 'z') goto yy9;
+			if (yych <= 'r') goto yy9;
+			if (yych <= 'z') goto yy6;
 		}
 	}
-yy3:
+yy1:
 #line 16 "input11_b_eager_skip.re"
 	{ return -1; }
 #line 30 "input11_b_eager_skip.c"
-yy4:
+yy2:
 	yych = *YYCURSOR;
-	if (yych <= '0') goto yy3;
+	if (yych <= '0') goto yy1;
 	if (yych <= '9') {
 		++YYCURSOR;
-		goto yy7;
+		goto yy5;
 	}
-	goto yy3;
-yy5:
-yy6:
+	goto yy1;
+yy3:
+yy4:
 #line 14 "input11_b_eager_skip.re"
 	{ return 2; }
 #line 43 "input11_b_eager_skip.c"
-yy7:
+yy5:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '/') goto yy6;
+	if (yych <= '/') goto yy4;
 	if (yych <= '9') {
 		++YYCURSOR;
-		goto yy7;
+		goto yy5;
 	}
-	goto yy6;
-yy9:
+	goto yy4;
+yy6:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy10:
+yy7:
 	if (yych <= '@') {
-		if (yych <= '/') goto yy11;
+		if (yych <= '/') goto yy8;
 		if (yych <= '9') {
 			++YYCURSOR;
-			goto yy9;
+			goto yy6;
 		}
 	} else {
 		if (yych <= 'Z') {
 			++YYCURSOR;
-			goto yy9;
+			goto yy6;
 		}
-		if (yych <= '`') goto yy11;
+		if (yych <= '`') goto yy8;
 		if (yych <= 'z') {
 			++YYCURSOR;
-			goto yy9;
+			goto yy6;
 		}
 	}
-yy11:
+yy8:
 #line 13 "input11_b_eager_skip.re"
 	{ return 1; }
 #line 77 "input11_b_eager_skip.c"
-yy12:
+yy9:
 	yych = *YYCURSOR;
-	if (yych != 'e') goto yy10;
+	if (yych != 'e') goto yy7;
 	yych = *++YYCURSOR;
-	if (yych != '2') goto yy10;
+	if (yych != '2') goto yy7;
 	yych = *++YYCURSOR;
-	if (yych != 'c') goto yy10;
+	if (yych != 'c') goto yy7;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych != ':') goto yy10;
+	if (yych != ':') goto yy7;
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
-		if (yych <= '@') goto yy17;
+		if (yych <= '@') goto yy10;
 		if (yych <= 'Z') {
 			++YYCURSOR;
-			goto yy18;
+			goto yy11;
 		}
 	} else {
-		if (yych == '`') goto yy17;
+		if (yych == '`') goto yy10;
 		if (yych <= 'z') {
 			++YYCURSOR;
-			goto yy18;
+			goto yy11;
 		}
 	}
-yy17:
+yy10:
 	YYCURSOR = YYMARKER;
-	goto yy11;
-yy18:
+	goto yy8;
+yy11:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'Z') {
-		if (yych <= '/') goto yy20;
+		if (yych <= '/') goto yy12;
 		if (yych <= ':') {
 			++YYCURSOR;
-			goto yy18;
+			goto yy11;
 		}
 		if (yych >= 'A') {
 			++YYCURSOR;
-			goto yy18;
+			goto yy11;
 		}
 	} else {
 		if (yych <= '_') {
 			if (yych >= '_') {
 				++YYCURSOR;
-				goto yy18;
+				goto yy11;
 			}
 		} else {
-			if (yych <= '`') goto yy20;
+			if (yych <= '`') goto yy12;
 			if (yych <= 'z') {
 				++YYCURSOR;
-				goto yy18;
+				goto yy11;
 			}
 		}
 	}
-yy20:
+yy12:
 #line 12 "input11_b_eager_skip.re"
 	{ return 0; }
 #line 134 "input11_b_eager_skip.c"

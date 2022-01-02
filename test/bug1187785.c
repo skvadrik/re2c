@@ -27,16 +27,16 @@ cont:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '"': goto yy4;
-		default: goto yy2;
+		case '"': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 24 "bug1187785.re"
 	{ goto cont; }
 #line 39 "bug1187785.c"
-yy4:
+yy3:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 		case 0x00:
@@ -292,10 +292,10 @@ yy4:
 		case 0xFB:
 		case 0xFC:
 		case 0xFD:
-		case 0xFE: goto yy5;
-		default: goto yy3;
+		case 0xFE: goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -553,14 +553,14 @@ yy5:
 		case 0xFB:
 		case 0xFC:
 		case 0xFD:
-		case 0xFE: goto yy5;
-		case '"': goto yy8;
-		default: goto yy7;
+		case 0xFE: goto yy4;
+		case '"': goto yy6;
+		default: goto yy5;
 	}
-yy7:
+yy5:
 	YYCURSOR = YYMARKER;
-	goto yy3;
-yy8:
+	goto yy2;
+yy6:
 	++YYCURSOR;
 #line 23 "bug1187785.re"
 	{ RET(1); }

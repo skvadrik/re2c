@@ -15,31 +15,31 @@ Cs:
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xEF: goto yy4;
-		default: goto yy2;
+		case 0xEF: goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "encodings/unicode_group_Cs_8_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }
 #line 27 "encodings/unicode_group_Cs_8_encoding_policy_substitute.c"
-yy4:
+yy3:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xBF: goto yy5;
-		default: goto yy3;
+		case 0xBF: goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBD: goto yy7;
-		default: goto yy6;
+		case 0xBD: goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	YYCURSOR = YYMARKER;
-	goto yy3;
-yy7:
+	goto yy2;
+yy6:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Cs_8_encoding_policy_substitute.re"
 	{ goto Cs; }

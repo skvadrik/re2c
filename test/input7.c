@@ -8,15 +8,15 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '\n': goto yy4;
-		default: goto yy2;
+		case '\n': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 6 "input7.re"
 	{ return 0; }
 #line 19 "input7.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 7 "input7.re"
 	{ return 1; }

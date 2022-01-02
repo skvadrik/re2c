@@ -10,24 +10,24 @@
 		case 'b':
 		case 'c':
 		case 'd':
-		case 'e': goto yy3;
-		default: goto yy2;
+		case 'e': goto yy2;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 1;
 	yypmatch[0] = YYCURSOR;
 	yypmatch[1] = YYCURSOR;
 	{}
-yy3:
+yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'f': goto yy5;
-		default: goto yy4;
+		case 'f': goto yy4;
+		default: goto yy3;
 	}
-yy4:
+yy3:
 	YYCURSOR = YYMARKER;
-	goto yy2;
-yy5:
+	goto yy1;
+yy4:
 	++YYCURSOR;
 	yynmatch = 2;
 	yypmatch[0] = YYCURSOR - 2;

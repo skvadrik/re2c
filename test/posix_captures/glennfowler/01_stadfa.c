@@ -6,13 +6,13 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy3;
+		case 'a': goto yy2;
 		default:
 			yyt3 = NULL;
 			yyt1 = yyt2 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy2:
+yy1:
 	yynmatch = 4;
 	yypmatch[2] = yyt1;
 	yypmatch[4] = yyt2;
@@ -24,34 +24,34 @@ yy2:
 	yypmatch[6] = yyt3;
 	if (yyt3 != NULL) yypmatch[6] -= 2;
 	{}
-yy3:
+yy2:
 	yych = *(YYMARKER = ++YYCURSOR);
 	yyt1 = yyt2 = yyt3 = YYCURSOR - 1;
 	switch (yych) {
-		case 'a': goto yy4;
-		case 'b': goto yy6;
+		case 'a': goto yy3;
+		case 'b': goto yy5;
 		default:
 			yyt3 = NULL;
 			yyt2 = YYCURSOR;
-			goto yy2;
+			goto yy1;
 	}
-yy4:
+yy3:
 	yych = *++YYCURSOR;
 	yyt2 = YYCURSOR - 1;
 	switch (yych) {
-		case 'b': goto yy6;
-		default: goto yy5;
+		case 'b': goto yy5;
+		default: goto yy4;
 	}
-yy5:
+yy4:
 	YYCURSOR = YYMARKER;
 	yyt3 = NULL;
 	yyt2 = YYCURSOR;
-	goto yy2;
-yy6:
+	goto yy1;
+yy5:
 	++YYCURSOR;
 	yyt1 = yyt3;
 	yyt3 = YYCURSOR;
-	goto yy2;
+	goto yy1;
 }
 
 posix_captures/glennfowler/01_stadfa.re:6:4: warning: rule matches empty string [-Wmatch-empty-string]

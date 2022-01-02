@@ -5,17 +5,17 @@
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if (yych <= 0xD7FF) goto yy2;
-	if (yych <= 0xDBFF) goto yy4;
-yy2:
-	++YYCURSOR;
-yy3:
-	{}
-yy4:
-	yych = *++YYCURSOR;
+	if (yych <= 0xD7FF) goto yy1;
 	if (yych <= 0xDBFF) goto yy3;
-	if (yych <= 0xDFFF) goto yy2;
-	goto yy3;
+yy1:
+	++YYCURSOR;
+yy2:
+	{}
+yy3:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy2;
+	if (yych <= 0xDFFF) goto yy1;
+	goto yy2;
 }
 
 
@@ -24,17 +24,17 @@ yy4:
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if (yych <= 0xD7FF) goto yy7;
-	if (yych <= 0xDBFF) goto yy9;
-yy7:
+	if (yych <= 0xD7FF) goto yy5;
+	if (yych <= 0xDBFF) goto yy7;
+yy5:
 	++YYCURSOR;
-yy8:
+yy6:
 	{}
-yy9:
+yy7:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy8;
-	if (yych <= 0xDFFF) goto yy7;
-	goto yy8;
+	if (yych <= 0xDBFF) goto yy6;
+	if (yych <= 0xDFFF) goto yy5;
+	goto yy6;
 }
 
 

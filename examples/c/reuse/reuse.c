@@ -20,67 +20,67 @@ static int lex_utf8(const uint8_t *YYCURSOR) {
 	uint8_t yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xE2: goto yy4;
-		default: goto yy2;
+		case 0xE2: goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++YYCURSOR;
-yy3:
+yy2:
 #line 14 "c/reuse/reuse.re"
 	{ return 1; }
 #line 32 "c/reuse/reuse.c"
-yy4:
+yy3:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x88: goto yy5;
-		default: goto yy3;
+		case 0x88: goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80: goto yy7;
-		default: goto yy6;
+		case 0x80: goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	YYCURSOR = YYMARKER;
-	goto yy3;
+	goto yy2;
+yy6:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'x': goto yy7;
+		default: goto yy5;
+	}
 yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'x': goto yy8;
-		default: goto yy6;
+		case ' ': goto yy8;
+		default: goto yy5;
 	}
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case ' ': goto yy9;
-		default: goto yy6;
+		case 0xE2: goto yy9;
+		default: goto yy5;
 	}
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xE2: goto yy10;
-		default: goto yy6;
+		case 0x88: goto yy10;
+		default: goto yy5;
 	}
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x88: goto yy11;
-		default: goto yy6;
+		case 0x83: goto yy11;
+		default: goto yy5;
 	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x83: goto yy12;
-		default: goto yy6;
+		case 'y': goto yy12;
+		default: goto yy5;
 	}
 yy12:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'y': goto yy13;
-		default: goto yy6;
-	}
-yy13:
 	++YYCURSOR;
 #line 13 "c/reuse/reuse.re"
 	{ return 0; }
@@ -97,25 +97,25 @@ static int lex_utf32(const uint32_t *YYCURSOR) {
 {
 	uint32_t yych;
 	yych = *YYCURSOR;
-	if (yych == 0x00002200) goto yy19;
+	if (yych == 0x00002200) goto yy15;
 	++YYCURSOR;
-yy18:
+yy14:
 #line 14 "c/reuse/reuse.re"
 	{ return 1; }
 #line 106 "c/reuse/reuse.c"
-yy19:
+yy15:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych != 'x') goto yy18;
+	if (yych != 'x') goto yy14;
 	yych = *++YYCURSOR;
-	if (yych == ' ') goto yy22;
-yy21:
+	if (yych == ' ') goto yy17;
+yy16:
 	YYCURSOR = YYMARKER;
-	goto yy18;
-yy22:
+	goto yy14;
+yy17:
 	yych = *++YYCURSOR;
-	if (yych != 0x00002203) goto yy21;
+	if (yych != 0x00002203) goto yy16;
 	yych = *++YYCURSOR;
-	if (yych != 'y') goto yy21;
+	if (yych != 'y') goto yy16;
 	++YYCURSOR;
 #line 13 "c/reuse/reuse.re"
 	{ return 0; }

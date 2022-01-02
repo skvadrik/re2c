@@ -11,82 +11,82 @@ int lex(LexerState *st) {
 	char yych;
 	yych = *st->cur;
 	switch (yych) {
-		case 'x': goto yy4;
-		default: goto yy2;
+		case 'x': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	++st->cur;
-yy3:
+yy2:
 	{ return 1; }
-yy4:
+yy3:
 	yych = *(st->mar = ++st->cur);
 	switch (yych) {
 		case 'x':
 			st->yyt1 = st->cur;
-			goto yy5;
-		default: goto yy3;
+			goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	yych = *++st->cur;
 	switch (yych) {
 		case 'x':
 			st->yyt2 = st->cur;
-			goto yy7;
-		default: goto yy6;
+			goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	st->cur = st->mar;
-	goto yy3;
-yy7:
+	goto yy2;
+yy6:
 	yych = *++st->cur;
 	switch (yych) {
 		case 'x':
 			st->yyt3 = st->cur;
-			goto yy8;
-		default: goto yy6;
+			goto yy7;
+		default: goto yy5;
 	}
-yy8:
+yy7:
 	yych = *++st->cur;
 	switch (yych) {
 		case 'x':
 			st->yyt1 = st->cur;
-			goto yy10;
-		default: goto yy9;
+			goto yy9;
+		default: goto yy8;
 	}
-yy9:
+yy8:
 	st->cur = st->yyt1;
 	{ return 0; }
+yy9:
+	yych = *++st->cur;
+	switch (yych) {
+		case 'x': goto yy10;
+		default:
+			st->yyt1 = st->yyt2;
+			goto yy8;
+	}
 yy10:
 	yych = *++st->cur;
 	switch (yych) {
 		case 'x': goto yy11;
 		default:
-			st->yyt1 = st->yyt2;
-			goto yy9;
+			st->yyt1 = st->yyt3;
+			goto yy8;
 	}
 yy11:
 	yych = *++st->cur;
 	switch (yych) {
 		case 'x': goto yy12;
-		default:
-			st->yyt1 = st->yyt3;
-			goto yy9;
+		default: goto yy8;
 	}
 yy12:
 	yych = *++st->cur;
 	switch (yych) {
 		case 'x': goto yy13;
-		default: goto yy9;
+		default: goto yy8;
 	}
 yy13:
-	yych = *++st->cur;
-	switch (yych) {
-		case 'x': goto yy14;
-		default: goto yy9;
-	}
-yy14:
 	++st->cur;
-	goto yy9;
+	goto yy8;
 }
 
 }

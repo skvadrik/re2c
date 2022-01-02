@@ -25,36 +25,36 @@ yy0:
 		case 'a': goto yy1;
 		case 'b':
 			tags.yyt1 = YYCURSOR;
-			goto yy4;
+			goto yy3;
 		case 'c':
 			tags.yyt1 = tags.yyt2 = YYCURSOR;
-			goto yy6;
+			goto yy4;
 		default:
 			tags.yyt1 = tags.yyt2 = YYCURSOR;
-			goto yy3;
+			goto yy2;
 	}
-yy3:
+yy2:
 	x = tags.yyt1;
 	y = tags.yyt2;
 #line 23 "header/header_02.re"
 	{ return; }
 #line 42 "header/header_02.c"
+yy3:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'b': goto yy3;
+		case 'c':
+			tags.yyt2 = YYCURSOR;
+			goto yy4;
+		default:
+			tags.yyt2 = YYCURSOR;
+			goto yy2;
+	}
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'b': goto yy4;
-		case 'c':
-			tags.yyt2 = YYCURSOR;
-			goto yy6;
-		default:
-			tags.yyt2 = YYCURSOR;
-			goto yy3;
-	}
-yy6:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'c': goto yy6;
-		default: goto yy3;
+		case 'c': goto yy4;
+		default: goto yy2;
 	}
 }
 #line 24 "header/header_02.re"

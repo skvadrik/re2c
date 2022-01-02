@@ -73,70 +73,70 @@ int scan(char *s)
 			yych = *YYCURSOR;
 			if (yych <= '*') {
 				if (yych <= '\t') {
-					if (yych <= 0x00) goto yy2;
-					if (yych <= 0x08) goto yy4;
-					goto yy6;
+					if (yych <= 0x00) goto yy1;
+					if (yych <= 0x08) goto yy2;
+					goto yy3;
 				} else {
-					if (yych == ' ') goto yy6;
-					goto yy4;
+					if (yych == ' ') goto yy3;
+					goto yy2;
 				}
 			} else {
 				if (yych <= '-') {
-					if (yych <= '+') goto yy9;
-					if (yych <= ',') goto yy4;
-					goto yy11;
+					if (yych <= '+') goto yy4;
+					if (yych <= ',') goto yy2;
+					goto yy5;
 				} else {
-					if (yych <= '/') goto yy4;
-					if (yych <= '0') goto yy13;
-					if (yych <= '9') goto yy15;
-					goto yy4;
+					if (yych <= '/') goto yy2;
+					if (yych <= '0') goto yy6;
+					if (yych <= '9') goto yy8;
+					goto yy2;
 				}
 			}
-yy2:
+yy1:
 			++YYCURSOR;
 #line 113 "calc_006.re"
 			{ res = depth == 1 ? 0 : 2;	break; }
 #line 100 "calc_006.c"
-yy4:
+yy2:
 			++YYCURSOR;
 #line 114 "calc_006.re"
 			{ res = 1; 					continue; }
 #line 105 "calc_006.c"
-yy6:
+yy3:
 			yych = *++YYCURSOR;
-			if (yych == '\t') goto yy6;
-			if (yych == ' ') goto yy6;
+			if (yych == '\t') goto yy3;
+			if (yych == ' ') goto yy3;
 #line 108 "calc_006.re"
 			{ continue; }
 #line 112 "calc_006.c"
-yy9:
+yy4:
 			++YYCURSOR;
 #line 111 "calc_006.re"
 			{ res = stack_add();		continue; }
 #line 117 "calc_006.c"
-yy11:
+yy5:
 			++YYCURSOR;
 #line 112 "calc_006.re"
 			{ res = stack_sub();		continue; }
 #line 122 "calc_006.c"
-yy13:
+yy6:
 			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy14;
-			if (yych <= '9') goto yy17;
-yy14:
+			if (yych <= '/') goto yy7;
+			if (yych <= '9') goto yy9;
+yy7:
 #line 110 "calc_006.re"
 			{ res = push_num(t, p, 10); continue; }
 #line 130 "calc_006.c"
-yy15:
+yy8:
 			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy14;
-			if (yych <= '9') goto yy15;
-			goto yy14;
-yy17:
+			if (yych <= '/') goto yy7;
+			if (yych <= '9') goto yy8;
+			goto yy7;
+yy9:
 			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy19;
-			if (yych <= '9') goto yy17;
-yy19:
+			if (yych <= '/') goto yy10;
+			if (yych <= '9') goto yy9;
+yy10:
 #line 109 "calc_006.re"
 			{ res = push_num(t, p, 8);	continue; }
 #line 143 "calc_006.c"

@@ -17,59 +17,59 @@ Cf:
 	if (yych <= 0x0000205F) {
 		if (yych <= 0x000006DD) {
 			if (yych <= 0x00000605) {
-				if (yych == 0x000000AD) goto yy4;
-				if (yych >= 0x00000600) goto yy4;
+				if (yych == 0x000000AD) goto yy2;
+				if (yych >= 0x00000600) goto yy2;
 			} else {
-				if (yych == 0x0000061C) goto yy4;
-				if (yych >= 0x000006DD) goto yy4;
+				if (yych == 0x0000061C) goto yy2;
+				if (yych >= 0x000006DD) goto yy2;
 			}
 		} else {
 			if (yych <= 0x0000180E) {
-				if (yych == 0x0000070F) goto yy4;
-				if (yych >= 0x0000180E) goto yy4;
+				if (yych == 0x0000070F) goto yy2;
+				if (yych >= 0x0000180E) goto yy2;
 			} else {
 				if (yych <= 0x0000200F) {
-					if (yych >= 0x0000200B) goto yy4;
+					if (yych >= 0x0000200B) goto yy2;
 				} else {
-					if (yych <= 0x00002029) goto yy2;
-					if (yych <= 0x0000202E) goto yy4;
+					if (yych <= 0x00002029) goto yy1;
+					if (yych <= 0x0000202E) goto yy2;
 				}
 			}
 		}
 	} else {
 		if (yych <= 0x000110BD) {
 			if (yych <= 0x0000FEFE) {
-				if (yych == 0x00002065) goto yy2;
-				if (yych <= 0x0000206F) goto yy4;
+				if (yych == 0x00002065) goto yy1;
+				if (yych <= 0x0000206F) goto yy2;
 			} else {
 				if (yych <= 0x0000FFF8) {
-					if (yych <= 0x0000FEFF) goto yy4;
+					if (yych <= 0x0000FEFF) goto yy2;
 				} else {
-					if (yych <= 0x0000FFFB) goto yy4;
-					if (yych >= 0x000110BD) goto yy4;
+					if (yych <= 0x0000FFFB) goto yy2;
+					if (yych >= 0x000110BD) goto yy2;
 				}
 			}
 		} else {
 			if (yych <= 0x0001D17A) {
-				if (yych <= 0x0001BC9F) goto yy2;
-				if (yych <= 0x0001BCA3) goto yy4;
-				if (yych >= 0x0001D173) goto yy4;
+				if (yych <= 0x0001BC9F) goto yy1;
+				if (yych <= 0x0001BCA3) goto yy2;
+				if (yych >= 0x0001D173) goto yy2;
 			} else {
 				if (yych <= 0x000E0001) {
-					if (yych >= 0x000E0001) goto yy4;
+					if (yych >= 0x000E0001) goto yy2;
 				} else {
-					if (yych <= 0x000E001F) goto yy2;
-					if (yych <= 0x000E007F) goto yy4;
+					if (yych <= 0x000E001F) goto yy1;
+					if (yych <= 0x000E007F) goto yy2;
 				}
 			}
 		}
 	}
-yy2:
+yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Cf_u_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }
 #line 72 "encodings/unicode_group_Cf_u_encoding_policy_substitute.c"
-yy4:
+yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Cf_u_encoding_policy_substitute.re"
 	{ goto Cf; }

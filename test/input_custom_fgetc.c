@@ -30,99 +30,99 @@ bool lex (FILE * f, const long limit)
 	if (YYLESSTHAN(13)) YYFILL(13);
 	yych = YYPEEK();
 	switch (yych) {
-		case 'i': goto yy4;
-		default: goto yy2;
+		case 'i': goto yy3;
+		default: goto yy1;
 	}
-yy2:
+yy1:
 	YYSKIP();
-yy3:
+yy2:
 #line 26 "input_custom_fgetc.re"
 	{ return false; }
 #line 42 "input_custom_fgetc.c"
-yy4:
+yy3:
 	YYSKIP();
 	YYBACKUP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'n': goto yy5;
-		default: goto yy3;
+		case 'n': goto yy4;
+		default: goto yy2;
 	}
-yy5:
+yy4:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 't': goto yy7;
-		default: goto yy6;
+		case 't': goto yy6;
+		default: goto yy5;
 	}
-yy6:
+yy5:
 	YYRESTORE();
-	goto yy3;
+	goto yy2;
+yy6:
+	YYSKIP();
+	yych = YYPEEK();
+	switch (yych) {
+		case ' ': goto yy7;
+		default: goto yy5;
+	}
 yy7:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case ' ': goto yy8;
-		default: goto yy6;
+		case 'b': goto yy8;
+		default: goto yy5;
 	}
 yy8:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'b': goto yy9;
-		default: goto yy6;
+		case 'u': goto yy9;
+		default: goto yy5;
 	}
 yy9:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'u': goto yy10;
-		default: goto yy6;
+		case 'f': goto yy10;
+		default: goto yy5;
 	}
 yy10:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
 		case 'f': goto yy11;
-		default: goto yy6;
+		default: goto yy5;
 	}
 yy11:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'f': goto yy12;
-		default: goto yy6;
+		case 'e': goto yy12;
+		default: goto yy5;
 	}
 yy12:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'e': goto yy13;
-		default: goto yy6;
+		case 'r': goto yy13;
+		default: goto yy5;
 	}
 yy13:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case 'r': goto yy14;
-		default: goto yy6;
+		case ' ': goto yy14;
+		default: goto yy5;
 	}
 yy14:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
-		case ' ': goto yy15;
-		default: goto yy6;
-	}
-yy15:
-	YYSKIP();
-	yych = YYPEEK();
-	switch (yych) {
 		case '[':
 			YYBACKUPCTX();
-			goto yy16;
-		default: goto yy6;
+			goto yy15;
+		default: goto yy5;
 	}
-yy16:
+yy15:
 	YYSKIP();
 	yych = YYPEEK();
 	switch (yych) {
@@ -135,10 +135,10 @@ yy16:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy17;
-		default: goto yy6;
+		case '9': goto yy16;
+		default: goto yy5;
 	}
-yy17:
+yy16:
 	YYSKIP();
 	if (YYLESSTHAN(1)) YYFILL(1);
 	yych = YYPEEK();
@@ -152,11 +152,11 @@ yy17:
 		case '6':
 		case '7':
 		case '8':
-		case '9': goto yy17;
-		case ']': goto yy19;
-		default: goto yy6;
+		case '9': goto yy16;
+		case ']': goto yy17;
+		default: goto yy5;
 	}
-yy19:
+yy17:
 	YYSKIP();
 	YYRESTORECTX();
 #line 25 "input_custom_fgetc.re"

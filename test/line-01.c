@@ -10,43 +10,43 @@ const char* scan(unsigned char* in)
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case '\n': goto yy2;
-		case 'a': goto yy5;
-		case 'b': goto yy7;
-		case 'c': goto yy9;
-		case 'd': goto yy11;
-		default: goto yy3;
+		case '\n': goto yy1;
+		case 'a': goto yy3;
+		case 'b': goto yy4;
+		case 'c': goto yy5;
+		case 'd': goto yy6;
+		default: goto yy2;
 	}
+yy1:
 yy2:
-yy3:
 	++YYCURSOR;
 #line 6 "d"
 	{
 		return ".";
 	}
 #line 28 "line-01.c"
-yy5:
+yy3:
 	++YYCURSOR;
 #line 1 "a"
 	{
 		return "a";
 	}
 #line 35 "line-01.c"
-yy7:
+yy4:
 	++YYCURSOR;
 #line 2 "b"
 	{
 		return "b";
 	}
 #line 42 "line-01.c"
-yy9:
+yy5:
 	++YYCURSOR;
 #line 5 "b"
 	{
 		return "c";
 	}
 #line 49 "line-01.c"
-yy11:
+yy6:
 	++YYCURSOR;
 #line 2 "d"
 	{
