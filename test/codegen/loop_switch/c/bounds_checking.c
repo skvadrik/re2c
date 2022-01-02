@@ -75,7 +75,6 @@ loop:
 				{ ++count; goto loop; }
 			case 7:
 				if (YYLIMIT <= YYCURSOR) return -1;
-				yych = *YYCURSOR;
 				++YYCURSOR;
 				yystate = 5;
 				continue;

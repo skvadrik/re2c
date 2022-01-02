@@ -111,7 +111,6 @@ loop:
 				{ ++count; goto loop; }
 			case 7:
 				if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
-				yych = *in->cur;
 				++in->cur;
 				yystate = 5;
 				continue;

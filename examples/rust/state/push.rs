@@ -47,7 +47,7 @@ fn fill(st: &mut State) -> Status {
 }
 
 fn lex(st: &mut State, recv: &mut usize) -> Status {
-    let mut yych: u8 = 0;
+    let mut yych;
     'lex: loop {
         st.tok = st.cur;
     

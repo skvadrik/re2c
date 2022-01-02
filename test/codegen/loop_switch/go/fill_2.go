@@ -149,7 +149,6 @@ loop:
 			if (in.limit-in.cursor < 1) {
 				if r := fill(in, 1); r != 0 { return r }
 			}
-			yych = in.data[in.cursor]
 			in.cursor += 1
 			yystate = 5
 			continue

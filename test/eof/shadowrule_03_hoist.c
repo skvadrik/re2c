@@ -7,8 +7,7 @@
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR++;
-	yych = *YYCURSOR;
+	++YYCURSOR;
 	yyt1 = YYCURSOR;
 yy1:
 	++YYCURSOR;

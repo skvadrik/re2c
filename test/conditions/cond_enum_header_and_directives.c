@@ -30,7 +30,7 @@ enum YYCONDTYPE {
 /* *********************************** */
 yyc_a1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	{}
 }
 
@@ -44,7 +44,7 @@ yyc_a1:
 /* *********************************** */
 yyc_a2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	{}
 }
 
@@ -92,7 +92,7 @@ enum YYCONDTYPE {
 /* *********************************** */
 yyc_b1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	{}
 }
 
@@ -106,7 +106,7 @@ yyc_b1:
 /* *********************************** */
 yyc_b2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	{}
 }
 

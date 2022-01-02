@@ -8,7 +8,7 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 5 "layout/flex_braces.re"
 	{ return "%{ * {} %}"; }
 #line 15 "layout/flex_braces.c"
@@ -22,7 +22,7 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 10 "layout/flex_braces.re"
 	return "%{ * {} %}"; /* %{ %} */ // %{ %}
 #line 29 "layout/flex_braces.c"
@@ -40,7 +40,7 @@ const char *s = "begin...\
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 18 "layout/flex_braces.re"
 	{}
 #line 47 "layout/flex_braces.c"
@@ -58,7 +58,7 @@ const char *s = "begin...\
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 26 "layout/flex_braces.re"
 	{}
 #line 65 "layout/flex_braces.c"
@@ -77,7 +77,7 @@ const char *s = "begin...\
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 35 "layout/flex_braces.re"
 	{}
 #line 84 "layout/flex_braces.c"

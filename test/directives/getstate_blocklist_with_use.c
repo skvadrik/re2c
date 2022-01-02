@@ -41,7 +41,7 @@ yy0:
 	YYSETSTATE(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel0:
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ w }
 
@@ -52,7 +52,7 @@ yyFillLabel0:
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
 
@@ -68,7 +68,7 @@ yy4:
 	YYSETSTATE(2);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel2:
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ w }
 
@@ -80,7 +80,7 @@ yy6:
 	YYSETSTATE(3);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel3:
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ y }
 
@@ -92,7 +92,7 @@ yy8:
 	YYSETSTATE(4);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel4:
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ z }
 

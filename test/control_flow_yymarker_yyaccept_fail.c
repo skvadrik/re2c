@@ -7,22 +7,21 @@
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
-	yych = *YYCURSOR++;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy3;
 		default: goto yy1;
 	}
 yy1:
 	yyaccept = 0;
-	yych = *(YYMARKER = ++YYCURSOR);
+	YYMARKER = ++YYCURSOR;
 	goto yy4;
 yy2:
 #line 6 "control_flow_yymarker_yyaccept_fail.re"
 	{ action3 }
-#line 24 "control_flow_yymarker_yyaccept_fail.c"
+#line 23 "control_flow_yymarker_yyaccept_fail.c"
 yy3:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -30,16 +29,16 @@ yy4:
 		default: goto yy5;
 	}
 yy5:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy8;
 yy6:
 	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
+	YYMARKER = ++YYCURSOR;
 	goto yy8;
 yy7:
 #line 5 "control_flow_yymarker_yyaccept_fail.re"
 	{ action2 }
-#line 43 "control_flow_yymarker_yyaccept_fail.c"
+#line 42 "control_flow_yymarker_yyaccept_fail.c"
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -57,7 +56,7 @@ yy10:
 	++YYCURSOR;
 #line 4 "control_flow_yymarker_yyaccept_fail.re"
 	{ action1 }
-#line 61 "control_flow_yymarker_yyaccept_fail.c"
+#line 60 "control_flow_yymarker_yyaccept_fail.c"
 }
 #line 8 "control_flow_yymarker_yyaccept_fail.re"
 

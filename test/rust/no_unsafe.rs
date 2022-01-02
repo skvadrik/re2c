@@ -15,8 +15,19 @@
 				}
 				yych = YYPEEK;
 				YYSKIP
-				{}
+				match yych {
+					0x61 => {
+						yystate = 2;
+						continue;
+					}
+					_ => {
+						yystate = 1;
+						continue;
+					}
+				}
 			}
+			1 => {}
+			2 => {}
 			_ => {
 				panic!("internal lexer error")
 			}
@@ -39,8 +50,19 @@
 				}
 				yych = unsafe {YYPEEK};
 				YYSKIP
-				{}
+				match yych {
+					0x61 => {
+						yystate = 2;
+						continue;
+					}
+					_ => {
+						yystate = 1;
+						continue;
+					}
+				}
 			}
+			1 => {}
+			2 => {}
 			_ => {
 				panic!("internal lexer error")
 			}
@@ -63,8 +85,19 @@
 				}
 				yych = YYPEEK;
 				YYSKIP
-				{}
+				match yych {
+					0x61 => {
+						yystate = 2;
+						continue;
+					}
+					_ => {
+						yystate = 1;
+						continue;
+					}
+				}
 			}
+			1 => {}
+			2 => {}
 			_ => {
 				panic!("internal lexer error")
 			}

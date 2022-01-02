@@ -72,7 +72,6 @@ yy6:
 yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) goto fail;
-	yych = *YYCURSOR;
 	goto yy5;
 }
 #line 28 "c/eof/02_bounds_checking.re"

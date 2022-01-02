@@ -7912,7 +7912,7 @@ yy623:
 yyc_ST_END_HEREDOC:
 	YYDEBUG(624, *YYCURSOR);
 	YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	zend_heredoc_label *heredoc_label = zend_ptr_stack_pop(&SCNG(heredoc_label_stack));
@@ -7930,7 +7930,7 @@ yyc_ST_END_HEREDOC:
 yyc_ST_NOWDOC:
 	YYDEBUG(625, *YYCURSOR);
 	YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	int newline = 0;

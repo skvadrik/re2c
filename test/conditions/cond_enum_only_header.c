@@ -9,7 +9,7 @@
 /* *********************************** */
 yyc_a:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	{}
 }
 

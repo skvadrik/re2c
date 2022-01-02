@@ -95,7 +95,6 @@ fn lex(s: &[u8]) -> isize {
 				if cursor + 1 > limit {
 					return -1;
 				}
-				yych = unsafe {*buf.get_unchecked(cursor)};
 				cursor += 1;
 				yystate = 5;
 				continue;

@@ -19,7 +19,7 @@ yy2:
 	{}
 yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	yyt1 = yyt2;
 	yyt2 = YYCURSOR;
 	goto yy1;

@@ -30,7 +30,6 @@ static void emit_accept(Output &output, CodeList *stmts, const DFA &dfa,
 static void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx);
 static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa,
     const Rule &rule);
-static bool endstate(const State *s);
 
 static const char *gen_fill_label(Output &output, uint32_t index)
 {
@@ -38,6 +37,24 @@ static const char *gen_fill_label(Output &output, uint32_t index)
     Scratchbuf &o = output.scratchbuf;
     DASSERT(o.empty());
     return o.str(opts->yyfilllabel).u32(index).flush();
+}
+
+static bool endstate(const State *s) {
+    // An 'end' state is a state which has no outgoing transitions on symbols.
+    // Usually 'end' states are final states (not all final states are 'end' states),
+    // but sometimes it be initial non-accepting state, e.g. in case of rule '[]'.
+    DASSERT(s->go.nspans > 0);
+    const Action::type_t &a = s->go.span[0].to->action.type;
+    return s->go.nspans == 1 && (a == Action::RULE || a == Action::ACCEPT);
+}
+
+static void gen_peek(code_alc_t &alc, const State *s, CodeList *stmts) {
+    // Do not generate YYPEEK statement in case `yych` is overwritten before it is used.
+    // This may happen if there is a single transition which does not require matching on
+    // `yych` (one exception is a transition to a move state, which doesn't have its own
+    // YYPEEK and relies on the previous value of `yych`).
+    bool omit_peek = s->go.nspans == 1 && s->go.span[0].to->action.type != Action::MOVE;
+    if (!omit_peek) append(stmts, code_peek(alc));
 }
 
 void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts)
@@ -53,9 +70,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
             append(stmts, code_skip(alc));
         }
         gen_fill_and_label(output, stmts, dfa, s);
-        if (!endstate(s)) {
-            append(stmts, code_peek(alc));
-        }
+        gen_peek(alc, s, stmts);
         break;
     case Action::INITIAL: {
         const size_t save = s->action.info.save;
@@ -75,9 +90,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
         if (backup) {
             append(stmts, code_backup(alc));
         }
-        if (!endstate(s)) {
-            append(stmts, code_peek(alc));
-        }
+        gen_peek(alc, s, stmts);
         break;
     }
     case Action::SAVE:
@@ -90,7 +103,7 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
         }
         append(stmts, code_backup(alc));
         gen_fill_and_label(output, stmts, dfa, s);
-        append(stmts, code_peek(alc));
+        gen_peek(alc, s, stmts);
         break;
     case Action::MOVE:
         break;
@@ -841,17 +854,6 @@ void expand_fintags(const Tag &tag, std::vector<std::string> &fintags)
             fintags.push_back("yypmatch[" + to_string(i) + "]");
         }
     }
-}
-
-bool endstate(const State *s)
-{
-    // 'end' state is a state which has no outgoing transitions on symbols
-    // usually 'end' states are final states (not all final states are 'end'
-    // states), but sometimes 'end' state happens to be initial non-accepting
-    // state, e.g. in case of rule '[]'
-    DASSERT(s->go.nspans > 0);
-    const Action::type_t &a = s->go.span[0].to->action.type;
-    return s->go.nspans == 1 && (a == Action::RULE || a == Action::ACCEPT);
 }
 
 const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)

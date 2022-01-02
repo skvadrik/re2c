@@ -11,17 +11,17 @@
 /* *********************************** */
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	{ return DEFAULT-1; }
 /* *********************************** */
 yyc_c2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	{ return DEFAULT-2; }
 /* *********************************** */
 yyc_c3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 	{ return DEFAULT-*; }
 }
 

@@ -90,7 +90,6 @@ yy7:
 	if (limit - cursor < 1) {
 		return -1
 	}
-	yych = buf[cursor]
 	goto yy5
 }
 //line "go/eof/02_bounds_checking.re":31

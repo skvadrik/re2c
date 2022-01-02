@@ -6,7 +6,7 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 5 "input6.re"
 	{ return 1; }
 #line 13 "input6.c"

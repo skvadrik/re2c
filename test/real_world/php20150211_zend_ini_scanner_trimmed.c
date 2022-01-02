@@ -734,7 +734,6 @@ yy56:
 yy57:
 		++YYCURSOR;
 		YYFILL(1);
-		yych = *YYCURSOR;
 		goto yy43;
 yy58:
 		++YYCURSOR;
@@ -1058,7 +1057,6 @@ yy80:
 yy81:
 		++YYCURSOR;
 		YYFILL(1);
-		yych = *YYCURSOR;
 		goto yy67;
 yy82:
 		++YYCURSOR;

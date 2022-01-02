@@ -6,7 +6,7 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 3 "encodings/default_x.re"
 	{ return DEFAULT; }
 #line 13 "encodings/default_x.c"

@@ -125,7 +125,6 @@ yy7:
 	if (in.limit-in.cursor < 1) {
 		if r := fill(in, 1); r != 0 { return r }
 	}
-	yych = in.data[in.cursor]
 	goto yy5
 }
 //line "go/fill/02_fill.re":66

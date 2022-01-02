@@ -98,7 +98,6 @@ loop:
 			if (limit - cursor < 1) {
 				return -1
 			}
-			yych = str[cursor]
 			cursor += 1
 			yystate = 5
 			continue

@@ -105,7 +105,6 @@ yy6:
 yy7:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
-	yych = *in->cur;
 	goto yy5;
 }
 #line 63 "c/fill/02_fill.re"

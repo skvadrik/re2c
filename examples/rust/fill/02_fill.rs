@@ -138,7 +138,6 @@ fn lex(st: &mut State) -> isize {
 				if st.lim - st.cur < 1 {
 					if fill(st, 1) != Fill::Ok { return -1; }
 				}
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
 				st.cur += 1;
 				yystate = 5;
 				continue;

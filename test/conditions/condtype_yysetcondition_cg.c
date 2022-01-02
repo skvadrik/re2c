@@ -31,7 +31,7 @@ int main ()
 	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */
 yyc_b:
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 25 "conditions/condtype_yysetcondition_cg.re"
 	{ printf ("b\n"); break; }
 #line 38 "conditions/condtype_yysetcondition_cg.c"

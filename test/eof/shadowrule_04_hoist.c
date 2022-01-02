@@ -6,7 +6,6 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
 	yyt1 = YYCURSOR;
 yy1:
 	++YYCURSOR;

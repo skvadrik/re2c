@@ -6,7 +6,7 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 3 "encodings/range_full_u.re"
 	{return 0;}
 #line 13 "encodings/range_full_u.c"

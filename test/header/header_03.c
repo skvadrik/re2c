@@ -15,7 +15,7 @@ void lex(const YYCTYPE *YYCURSOR)
 #line 16 "header/header_03.c"
 {
 	YYCTYPE yych;
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 15 "header/header_03.re"
 	{ return; }
 #line 22 "header/header_03.c"

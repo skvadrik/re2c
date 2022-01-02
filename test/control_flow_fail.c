@@ -6,8 +6,7 @@
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
-	yych = *YYCURSOR++;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy3;
 		default: goto yy1;
@@ -21,7 +20,7 @@ yy1:
 yy2:
 #line 5 "control_flow_fail.re"
 	{ action2 }
-#line 25 "control_flow_fail.c"
+#line 24 "control_flow_fail.c"
 yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -33,7 +32,7 @@ yy5:
 	++YYCURSOR;
 #line 4 "control_flow_fail.re"
 	{ action1 }
-#line 37 "control_flow_fail.c"
+#line 36 "control_flow_fail.c"
 }
 #line 7 "control_flow_fail.re"
 

@@ -6,21 +6,20 @@
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *YYCURSOR++;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy3;
 		default: goto yy1;
 	}
 yy1:
-	yych = *(YYMARKER = ++YYCURSOR);
+	YYMARKER = ++YYCURSOR;
 	goto yy4;
 yy2:
 #line 5 "control_flow_yymarker_fail.re"
 	{ action2 }
-#line 22 "control_flow_yymarker_fail.c"
+#line 21 "control_flow_yymarker_fail.c"
 yy3:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -34,7 +33,7 @@ yy6:
 	++YYCURSOR;
 #line 4 "control_flow_yymarker_fail.re"
 	{ action1 }
-#line 38 "control_flow_yymarker_fail.c"
+#line 37 "control_flow_yymarker_fail.c"
 }
 #line 7 "control_flow_yymarker_fail.re"
 

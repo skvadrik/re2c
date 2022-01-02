@@ -332,7 +332,6 @@ yy23:
 yy24:
 	++in.cur;
 	if (in.lim <= in.cur) if (!in.fill(1)) return false;
-	yych = *in.cur;
 	goto yy6;
 yy25:
 	++in.cur;
@@ -340,7 +339,6 @@ yy25:
 yy26:
 	++in.cur;
 	if (in.lim <= in.cur) if (!in.fill(1)) return false;
-	yych = *in.cur;
 	goto yy7;
 yy27:
 	yych = *++in.cur;

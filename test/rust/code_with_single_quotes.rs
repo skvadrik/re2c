@@ -13,7 +13,6 @@
 				if YYLESSTHAN {
 					YYFILL
 				}
-				yych = unsafe {YYPEEK};
 				YYSKIP
 				{
         let c0 = '\'';

@@ -31,7 +31,7 @@ int main ()
 	}
 /* *********************************** */
 yyc_b:
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 25 "conditions/condtype_yysetcondition.re"
 	{ printf ("b\n"); break; }
 #line 38 "conditions/condtype_yysetcondition.c"

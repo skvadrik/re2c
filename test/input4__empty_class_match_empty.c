@@ -6,7 +6,7 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR++;
+	++YYCURSOR;
 #line 5 "input4__empty_class_match_empty.re"
 	{ return 1; }
 #line 13 "input4__empty_class_match_empty.c"

@@ -7,15 +7,14 @@
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
-	yych = *YYCURSOR++;
-	yych = *YYCURSOR;
+	++YYCURSOR;
 	yyaccept = 0;
-	yych = *(YYMARKER = ++YYCURSOR);
+	YYMARKER = ++YYCURSOR;
 	goto yy2;
 yy1:
 #line 6 "control_flow_yymarker_yyaccept_ok.re"
 	{ action3 }
-#line 19 "control_flow_yymarker_yyaccept_ok.c"
+#line 18 "control_flow_yymarker_yyaccept_ok.c"
 yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -23,16 +22,16 @@ yy2:
 		default: goto yy3;
 	}
 yy3:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy6;
 yy4:
 	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
+	YYMARKER = ++YYCURSOR;
 	goto yy6;
 yy5:
 #line 5 "control_flow_yymarker_yyaccept_ok.re"
 	{ action2 }
-#line 36 "control_flow_yymarker_yyaccept_ok.c"
+#line 35 "control_flow_yymarker_yyaccept_ok.c"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -50,7 +49,7 @@ yy8:
 	++YYCURSOR;
 #line 4 "control_flow_yymarker_yyaccept_ok.re"
 	{ action1 }
-#line 54 "control_flow_yymarker_yyaccept_ok.c"
+#line 53 "control_flow_yymarker_yyaccept_ok.c"
 }
 #line 8 "control_flow_yymarker_yyaccept_ok.re"
 

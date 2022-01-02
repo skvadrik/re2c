@@ -6,14 +6,13 @@
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *YYCURSOR++;
-	yych = *YYCURSOR++;
-	yych = *(YYMARKER = YYCURSOR);
+	++YYCURSOR;
+	YYMARKER = ++YYCURSOR;
 	goto yy2;
 yy1:
 #line 5 "control_flow_yymarker_ok.re"
 	{ action2 }
-#line 17 "control_flow_yymarker_ok.c"
+#line 16 "control_flow_yymarker_ok.c"
 yy2:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -27,7 +26,7 @@ yy4:
 	++YYCURSOR;
 #line 4 "control_flow_yymarker_ok.re"
 	{ action1 }
-#line 31 "control_flow_yymarker_ok.c"
+#line 30 "control_flow_yymarker_ok.c"
 }
 #line 7 "control_flow_yymarker_ok.re"
 
