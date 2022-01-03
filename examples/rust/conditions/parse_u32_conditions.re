@@ -2,47 +2,49 @@
 
 /*!types:re2c*/
 
-const ERROR: u64 = std::u32::MAX as u64 + 1;
+const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow
 
-fn add(num: u64, dgt: u8, base: u64) -> u64 {
-    return std::cmp::min(num * base + dgt as u64, ERROR)
+// Add digit with the given base, checking for overflow.
+fn add_digit(num: &mut u64, str: &[u8], cur: usize, offs: u8, base: u64) {
+    let digit = unsafe { str.get_unchecked(cur - 1) } - offs;
+    *num = std::cmp::min(*num * base + digit as u64, ERROR);
 }
 
-fn parse_u32(s: &[u8]) -> Option<u32> {
+fn parse_u32(str: &[u8]) -> Option<u32> {
     let mut cur = 0;
     let mut mar = 0;
     let mut cond = YYC_INIT;
-    let mut num = 0u64;
+    let mut num = 0u64; // Store number in u64 to simplify overflow checks.
 
-    'lex : loop {/*!re2c
+    'lex: loop { /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYPEEK = "*s.get_unchecked(cur)";
-        re2c:define:YYSKIP = "cur += 1;";
-        re2c:define:YYBACKUP = "mar = cur;";
+        re2c:define:YYCTYPE   = u8;
+        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
+        re2c:define:YYSKIP    = "cur += 1;";
+        re2c:define:YYBACKUP  = "mar = cur;";
         re2c:define:YYRESTORE = "cur = mar;";
-        re2c:define:YYSHIFT = "cur = (cur as isize + @@) as usize;";
+        re2c:define:YYSHIFT   = "cur = (cur as isize + @@) as usize;";
         re2c:define:YYGETCONDITION = "cond";
         re2c:define:YYSETCONDITION = "cond = @@;";
-
-        <*> * { return None; }
 
         <INIT> '0b' / [01]        :=> BIN
         <INIT> "0"                :=> OCT
         <INIT> "" / [1-9]         :=> DEC
         <INIT> '0x' / [0-9a-fA-F] :=> HEX
+        <INIT> * { return None; }
 
-        <BIN, OCT, DEC, HEX> "\x00" {
+        <BIN> [01]  { add_digit(&mut num, str, cur, 48, 2);  continue 'lex; }
+        <OCT> [0-7] { add_digit(&mut num, str, cur, 48, 8);  continue 'lex; }
+        <DEC> [0-9] { add_digit(&mut num, str, cur, 48, 10); continue 'lex; }
+        <HEX> [0-9] { add_digit(&mut num, str, cur, 48, 16); continue 'lex; }
+        <HEX> [a-f] { add_digit(&mut num, str, cur, 87, 16); continue 'lex; }
+        <HEX> [A-F] { add_digit(&mut num, str, cur, 55, 16); continue 'lex; }
+
+        <BIN, OCT, DEC, HEX> * {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-
-        <BIN> [01]  { num = add(num, s[cur-1] - 48, 2);  continue 'lex; }
-        <OCT> [0-7] { num = add(num, s[cur-1] - 48, 8);  continue 'lex; }
-        <DEC> [0-9] { num = add(num, s[cur-1] - 48, 10); continue 'lex; }
-        <HEX> [0-9] { num = add(num, s[cur-1] - 48, 16); continue 'lex; }
-        <HEX> [a-f] { num = add(num, s[cur-1] - 87, 16); continue 'lex; }
-        <HEX> [A-F] { num = add(num, s[cur-1] - 55, 16); continue 'lex; }
-    */}
+    */
+    }
 }
 
 fn main() {
