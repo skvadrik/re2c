@@ -13,7 +13,7 @@ fn lex(s: &[u8]) -> isize {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
@@ -21,27 +21,27 @@ fn lex(s: &[u8]) -> isize {
 					0x20 => {
 						cursor += 1;
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					0x27 => {
 						cursor += 1;
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if cursor >= limit {
 							yystate = 10;
-							continue;
+							continue 'yyl;
 						}
 						cursor += 1;
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
 			1 => {
 				yystate = 2;
-				continue;
+				continue 'yyl;
 			}
 			2 => { return -1; }
 			3 => {
@@ -50,11 +50,11 @@ fn lex(s: &[u8]) -> isize {
 					0x20 => {
 						cursor += 1;
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -64,41 +64,41 @@ fn lex(s: &[u8]) -> isize {
 				yych = unsafe {*s.get_unchecked(cursor)};
 				if yych >= 0x01 {
 					yystate = 7;
-					continue;
+					continue 'yyl;
 				}
 				if cursor >= limit {
 					yystate = 2;
-					continue;
+					continue 'yyl;
 				}
 				cursor += 1;
 				yystate = 6;
-				continue;
+				continue 'yyl;
 			}
 			6 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
 				yystate = 7;
-				continue;
+				continue 'yyl;
 			}
 			7 => {
 				match yych {
 					0x27 => {
 						cursor += 1;
 						yystate = 8;
-						continue;
+						continue 'yyl;
 					}
 					0x5C => {
 						cursor += 1;
 						yystate = 9;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if cursor >= limit {
 							yystate = 11;
-							continue;
+							continue 'yyl;
 						}
 						cursor += 1;
 						yystate = 6;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -108,21 +108,21 @@ fn lex(s: &[u8]) -> isize {
 				if yych <= 0x00 {
 					if cursor >= limit {
 						yystate = 11;
-						continue;
+						continue 'yyl;
 					}
 					cursor += 1;
 					yystate = 6;
-					continue;
+					continue 'yyl;
 				}
 				cursor += 1;
 				yystate = 6;
-				continue;
+				continue 'yyl;
 			}
 			10 => { return count; }
 			11 => {
 				cursor = marker;
 				yystate = 2;
-				continue;
+				continue 'yyl;
 			}
 			_ => {
 				panic!("internal lexer error")

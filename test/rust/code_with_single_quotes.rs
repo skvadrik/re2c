@@ -7,7 +7,7 @@
 	#[allow(unused_assignments)]
 	let mut yych : YYCTYPE = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				if YYLESSTHAN {

@@ -12,7 +12,7 @@ fn lex(s: &[u8]) -> isize {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				yych = unsafe {if cursor < limit { *s.get_unchecked(cursor) } else { 0 }};
@@ -20,19 +20,19 @@ fn lex(s: &[u8]) -> isize {
 				match yych {
 					0x00 => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 					0x20 => {
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					0x61 ..= 0x7A => {
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -44,11 +44,11 @@ fn lex(s: &[u8]) -> isize {
 					0x20 => {
 						cursor += 1;
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -59,11 +59,11 @@ fn lex(s: &[u8]) -> isize {
 					0x61 ..= 0x7A => {
 						cursor += 1;
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 6;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}

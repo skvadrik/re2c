@@ -53,7 +53,7 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
     
 
 	let mut yystate : isize = st.state;
-	loop {
+	'yyl: loop {
 		match yystate {
 			-1 ..= 0 => {
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
@@ -61,7 +61,7 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 					0x61 ..= 0x7A => {
 						st.cur += 1;
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -70,13 +70,13 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 						}
 						st.cur += 1;
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
 			1 => {
 				yystate = 2;
-				continue;
+				continue 'yyl;
 			}
 			2 => {
 				st.state = -1;
@@ -89,12 +89,12 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 					0x3B => {
 						st.cur += 1;
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 					0x61 ..= 0x7A => {
 						st.cur += 1;
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -102,7 +102,7 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 							return Status::Waiting;
 						}
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -116,12 +116,12 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 					0x3B => {
 						st.cur += 1;
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 					0x61 ..= 0x7A => {
 						st.cur += 1;
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -129,14 +129,14 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 							return Status::Waiting;
 						}
 						yystate = 6;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
 			6 => {
 				st.cur = st.mar;
 				yystate = 2;
-				continue;
+				continue 'yyl;
 			}
 			7 => {
 				st.state = -1;
@@ -145,26 +145,26 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 			8 => {
 				if st.cur >= st.lim {
 					yystate = 7;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 0;
-				continue;
+				continue 'yyl;
 			}
 			9 => {
 				if st.cur >= st.lim {
 					yystate = 2;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 3;
-				continue;
+				continue 'yyl;
 			}
 			10 => {
 				if st.cur >= st.lim {
 					yystate = 6;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 5;
-				continue;
+				continue 'yyl;
 			}
 			_ => {
 				panic!("internal lexer error")

@@ -447,8 +447,7 @@ static void render_func(RenderContext &rctx, const CodeFunc *func)
     ++rctx.line;
 }
 
-static void render_loop(RenderContext &rctx, const CodeList *loop)
-{
+static void render_loop(RenderContext &rctx, const CodeList *loop) {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
 
@@ -461,6 +460,7 @@ static void render_loop(RenderContext &rctx, const CodeList *loop)
         os << "for";
         break;
     case LANG_RUST:
+        if (!opts->yyloop.empty()) os << opts->yyloop << ": ";
         os << "loop";
         break;
     }

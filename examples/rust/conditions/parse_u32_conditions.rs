@@ -29,7 +29,7 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = cond;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				yych = unsafe {*str.get_unchecked(cur)};
@@ -37,15 +37,15 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 				match yych {
 					0x30 => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					0x31 ..= 0x39 => {
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -58,30 +58,30 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 					0x62 => {
 						cur += 1;
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 					0x58 |
 					0x78 => {
 						cur += 1;
 						yystate = 7;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
 			3 => {
 				cond = YYC_OCT;
 				yystate = YYC_OCT;
-				continue;
+				continue 'yyl;
 			}
 			4 => {
 				cur = (cur as isize + -1) as usize;
 				cond = YYC_DEC;
 				yystate = YYC_DEC;
-				continue;
+				continue 'yyl;
 			}
 			5 => {
 				yych = unsafe {*str.get_unchecked(cur)};
@@ -89,18 +89,18 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 					0x30 ..= 0x31 => {
 						cur += 1;
 						yystate = 8;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 6;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
 			6 => {
 				cur = mar;
 				yystate = 3;
-				continue;
+				continue 'yyl;
 			}
 			7 => {
 				yych = unsafe {*str.get_unchecked(cur)};
@@ -110,11 +110,11 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 					0x61 ..= 0x66 => {
 						cur += 1;
 						yystate = 9;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 6;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -122,13 +122,13 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 				cur = (cur as isize + -1) as usize;
 				cond = YYC_BIN;
 				yystate = YYC_BIN;
-				continue;
+				continue 'yyl;
 			}
 			9 => {
 				cur = (cur as isize + -1) as usize;
 				cond = YYC_HEX;
 				yystate = YYC_HEX;
-				continue;
+				continue 'yyl;
 			}
 			10 => {
 				yych = unsafe {*str.get_unchecked(cur)};
@@ -136,11 +136,11 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 				match yych {
 					0x30 ..= 0x31 => {
 						yystate = 12;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 11;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -154,11 +154,11 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 				match yych {
 					0x30 ..= 0x37 => {
 						yystate = 15;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 14;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -172,11 +172,11 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 				match yych {
 					0x30 ..= 0x39 => {
 						yystate = 18;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 17;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -190,19 +190,19 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 				match yych {
 					0x30 ..= 0x39 => {
 						yystate = 21;
-						continue;
+						continue 'yyl;
 					}
 					0x41 ..= 0x46 => {
 						yystate = 22;
-						continue;
+						continue 'yyl;
 					}
 					0x61 ..= 0x66 => {
 						yystate = 23;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 20;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}

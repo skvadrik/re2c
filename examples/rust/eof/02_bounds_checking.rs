@@ -19,7 +19,7 @@ fn lex(s: &[u8]) -> isize {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				if cursor + 1 > limit {
@@ -30,19 +30,19 @@ fn lex(s: &[u8]) -> isize {
 				match yych {
 					0x00 => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 					0x20 => {
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					0x27 => {
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -60,11 +60,11 @@ fn lex(s: &[u8]) -> isize {
 					0x20 => {
 						cursor += 1;
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -78,15 +78,15 @@ fn lex(s: &[u8]) -> isize {
 				match yych {
 					0x27 => {
 						yystate = 6;
-						continue;
+						continue 'yyl;
 					}
 					0x5C => {
 						yystate = 7;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -97,7 +97,7 @@ fn lex(s: &[u8]) -> isize {
 				}
 				cursor += 1;
 				yystate = 5;
-				continue;
+				continue 'yyl;
 			}
 			_ => {
 				panic!("internal lexer error")

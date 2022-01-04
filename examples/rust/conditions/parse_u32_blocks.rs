@@ -30,7 +30,7 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				yych = unsafe {*st.str.get_unchecked(st.cur)};
@@ -38,15 +38,15 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 				match yych {
 					0x30 => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					0x31 ..= 0x39 => {
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -59,17 +59,17 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 					0x62 => {
 						st.cur += 1;
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 					0x58 |
 					0x78 => {
 						st.cur += 1;
 						yystate = 7;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -84,18 +84,18 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 					0x30 ..= 0x31 => {
 						st.cur += 1;
 						yystate = 8;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 6;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
 			6 => {
 				st.cur = st.mar;
 				yystate = 3;
-				continue;
+				continue 'yyl;
 			}
 			7 => {
 				yych = unsafe {*st.str.get_unchecked(st.cur)};
@@ -105,11 +105,11 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 					0x61 ..= 0x66 => {
 						st.cur += 1;
 						yystate = 9;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 6;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -136,7 +136,7 @@ fn parse_bin(st: &mut State) -> Option<u32> {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				yych = unsafe {*st.str.get_unchecked(st.cur)};
@@ -144,11 +144,11 @@ fn parse_bin(st: &mut State) -> Option<u32> {
 				match yych {
 					0x30 ..= 0x31 => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -169,7 +169,7 @@ fn parse_oct(st: &mut State) -> Option<u32> {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				yych = unsafe {*st.str.get_unchecked(st.cur)};
@@ -177,11 +177,11 @@ fn parse_oct(st: &mut State) -> Option<u32> {
 				match yych {
 					0x30 ..= 0x37 => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -202,7 +202,7 @@ fn parse_dec(st: &mut State) -> Option<u32> {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				yych = unsafe {*st.str.get_unchecked(st.cur)};
@@ -210,11 +210,11 @@ fn parse_dec(st: &mut State) -> Option<u32> {
 				match yych {
 					0x30 ..= 0x39 => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -235,7 +235,7 @@ fn parse_hex(st: &mut State) -> Option<u32> {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				yych = unsafe {*st.str.get_unchecked(st.cur)};
@@ -243,19 +243,19 @@ fn parse_hex(st: &mut State) -> Option<u32> {
 				match yych {
 					0x30 ..= 0x39 => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					0x41 ..= 0x46 => {
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					0x61 ..= 0x66 => {
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}

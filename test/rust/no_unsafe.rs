@@ -7,7 +7,7 @@
 	#[allow(unused_assignments)]
 	let mut yych : YYCTYPE = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				if YYLESSTHAN {
@@ -18,11 +18,11 @@
 				match yych {
 					0x61 => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -42,7 +42,7 @@
 	#[allow(unused_assignments)]
 	let mut yych : YYCTYPE = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				if YYLESSTHAN {
@@ -53,11 +53,11 @@
 				match yych {
 					0x61 => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -77,7 +77,7 @@
 	#[allow(unused_assignments)]
 	let mut yych : YYCTYPE = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				if YYLESSTHAN {
@@ -88,11 +88,11 @@
 				match yych {
 					0x61 => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}

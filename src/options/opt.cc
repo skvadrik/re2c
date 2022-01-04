@@ -128,6 +128,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         real.yych = defaults.yych;
         real.bEmitYYCh = defaults.bEmitYYCh;
         real.yychConversion = defaults.yychConversion;
+        real.yyloop = defaults.yyloop;
         real.yystate = defaults.yystate;
         real.fill = defaults.fill;
         real.fill_use = defaults.fill_use;
@@ -270,6 +271,8 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (glob.lang == LANG_RUST) {
         // In Rust constants should be uppercase.
         if (is_default.condEnumPrefix) real.condEnumPrefix = "YYC_";
+        // In Rust loops can have labels, use it to avoid ambiguous `continue`.
+        if (is_default.yyloop) real.yyloop = "'yyl";
     }
 
     // errors

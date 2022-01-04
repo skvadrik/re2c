@@ -62,7 +62,7 @@ fn lex(st: &mut State) -> isize {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				if st.lim - st.cur < 1 {
@@ -73,19 +73,19 @@ fn lex(st: &mut State) -> isize {
 				match yych {
 					0x00 => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 					0x20 => {
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					0x27 => {
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -103,11 +103,11 @@ fn lex(st: &mut State) -> isize {
 					0x20 => {
 						st.cur += 1;
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -121,15 +121,15 @@ fn lex(st: &mut State) -> isize {
 				match yych {
 					0x27 => {
 						yystate = 6;
-						continue;
+						continue 'yyl;
 					}
 					0x5C => {
 						yystate = 7;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 5;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -140,7 +140,7 @@ fn lex(st: &mut State) -> isize {
 				}
 				st.cur += 1;
 				yystate = 5;
-				continue;
+				continue 'yyl;
 			}
 			_ => {
 				panic!("internal lexer error")

@@ -8,7 +8,7 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
 	let mut yystate : usize = 0;
-	loop {
+	'yyl: loop {
 		match yystate {
 			0 => {
 				yych = unsafe {*s.get_unchecked(cursor)};
@@ -17,11 +17,11 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 					0x41 ..= 0x5A |
 					0x61 ..= 0x7A => {
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -34,11 +34,11 @@ fn lex(s: &[u8]) -> bool {                            // Rust code
 					0x61 ..= 0x7A => {
 						cursor += 1;
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}

@@ -67,7 +67,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
     
 
 	let mut yystate : isize = st.state;
-	loop {
+	'yyl: loop {
 		match yystate {
 			-1 ..= 0 => {
 				yych = st.buf[st.cur];
@@ -76,17 +76,17 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 					0x20 => {
 						st.cur += 1;
 						yystate = 2;
-						continue;
+						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
 						st.cur += 1;
 						yystate = 3;
-						continue;
+						continue 'yyl;
 					}
 					0x61 ..= 0x7A => {
 						st.cur += 1;
 						yystate = 4;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -95,7 +95,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 						}
 						st.cur += 1;
 						yystate = 1;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -107,19 +107,19 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				st.cur = (st.cur as isize + -1) as usize;
 				st.state = YYC_SPACES;
 				yystate = YYC_SPACES;
-				continue;
+				continue 'yyl;
 			}
 			3 => {
 				st.cur = (st.cur as isize + -1) as usize;
 				st.state = YYC_NUMBER;
 				yystate = YYC_NUMBER;
-				continue;
+				continue 'yyl;
 			}
 			4 => {
 				st.cur = (st.cur as isize + -1) as usize;
 				st.state = YYC_WORD;
 				yystate = YYC_WORD;
-				continue;
+				continue 'yyl;
 			}
 			5 => {
 				st.state = YYC_INIT;
@@ -132,7 +132,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 					0x20 => {
 						st.cur += 1;
 						yystate = 8;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -141,7 +141,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 						}
 						st.cur += 1;
 						yystate = 7;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -156,7 +156,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 					0x20 => {
 						st.cur += 1;
 						yystate = 8;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -164,7 +164,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 							return Status::Waiting;
 						}
 						yystate = 9;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -182,7 +182,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 					0x30 ..= 0x39 => {
 						st.cur += 1;
 						yystate = 13;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -191,7 +191,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 						}
 						st.cur += 1;
 						yystate = 12;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -205,7 +205,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 					0x30 ..= 0x39 => {
 						st.cur += 1;
 						yystate = 13;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -213,7 +213,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 							return Status::Waiting;
 						}
 						yystate = 14;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -231,7 +231,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 					0x61 ..= 0x7A => {
 						st.cur += 1;
 						yystate = 18;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -240,7 +240,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 						}
 						st.cur += 1;
 						yystate = 17;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -254,7 +254,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 					0x61 ..= 0x7A => {
 						st.cur += 1;
 						yystate = 18;
-						continue;
+						continue 'yyl;
 					}
 					_ => {
 						if st.cur >= st.lim {
@@ -262,7 +262,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 							return Status::Waiting;
 						}
 						yystate = 19;
-						continue;
+						continue 'yyl;
 					}
 				}
 			}
@@ -277,58 +277,58 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 			21 => {
 				if st.cur >= st.lim {
 					yystate = 5;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 0;
-				continue;
+				continue 'yyl;
 			}
 			22 => {
 				if st.cur >= st.lim {
 					yystate = 10;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 6;
-				continue;
+				continue 'yyl;
 			}
 			23 => {
 				if st.cur >= st.lim {
 					yystate = 9;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 8;
-				continue;
+				continue 'yyl;
 			}
 			24 => {
 				if st.cur >= st.lim {
 					yystate = 15;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 11;
-				continue;
+				continue 'yyl;
 			}
 			25 => {
 				if st.cur >= st.lim {
 					yystate = 14;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 13;
-				continue;
+				continue 'yyl;
 			}
 			26 => {
 				if st.cur >= st.lim {
 					yystate = 20;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 16;
-				continue;
+				continue 'yyl;
 			}
 			27 => {
 				if st.cur >= st.lim {
 					yystate = 19;
-					continue;
+					continue 'yyl;
 				}
 				yystate = 18;
-				continue;
+				continue 'yyl;
 			}
 			_ => {
 				panic!("internal lexer error")
