@@ -147,6 +147,7 @@
     re2c:labelprefix = "";
     re2c:label:yyfill = "";
     re2c:label:yyFillLabel = "";
+    re2c:label:yyloop = "";
     re2c:label:yyNext = "";
     re2c:label:start = 0;
     re2c:startlabel = "";

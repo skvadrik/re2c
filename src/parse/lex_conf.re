@@ -167,6 +167,7 @@ void Scanner::lex_conf(Opt &opts) {
 
     "label:prefix" | "labelprefix"                    { RET_CONF_STR(labelPrefix); }
     "label:yyfill" | "label:yyFillLabel"              { RET_CONF_STR(yyfilllabel); }
+    "label:yyloop"                                    { RET_CONF_STR(yyloop); }
     "label:yyNext"                                    { RET_CONF_STR(yynext); }
     "label:start" | "startlabel" / conf_assign number { RET_CONF_BOOL(startlabel_force); }
     "label:start" | "startlabel"                      { RET_CONF_STR(startlabel); }
