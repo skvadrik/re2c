@@ -4,5 +4,5 @@ package lexer
 
 type State struct {
 	Data string
-	Cur, Mar, Tag1, Tag2, Tag3 int
+	Cur, Mar, Tag1 int
 }

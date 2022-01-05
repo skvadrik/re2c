@@ -3,6 +3,6 @@
 
 typedef struct {
     const char *str, *cur, *mar;
-    const char *yyt1; const char *yyt2; const char *yyt3; 
+    const char *yyt1;
 } LexerState;
 

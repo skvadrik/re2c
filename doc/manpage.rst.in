@@ -136,7 +136,7 @@ Input file
 
 Header file
 -----------
-.. include:: @top_srcdir@/examples/RE2C_LANG/headers/src/lexer/lexer.RE2C_HEADER_EXT
+.. include:: @top_srcdir@/examples/RE2C_LANG/headers/lexer/state.RE2C_HEADER_EXT
     :literal:
     :code: RE2C_LANG
 

@@ -3,8 +3,5 @@
 pub struct State<'a> {
     pub str: &'a [u8],
     pub cur: usize,
-    pub mar: usize,
-    
-pub yyt1: usize, pub yyt2: usize, pub yyt3: usize, 
-
+    pub yyt1: usize,
 }

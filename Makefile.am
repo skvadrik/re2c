@@ -261,7 +261,7 @@ re2c_SRC_DOC_EXT = \
 	examples/c/fill/01_fill.re \
 	examples/c/fill/02_fill.re \
 	examples/c/headers/header.re \
-	examples/c/headers/src/lexer/lexer.h \
+	examples/c/headers/lexer/state.h \
 	examples/c/includes/include.re \
 	examples/c/includes/definitions.h \
 	examples/c/reuse/reuse.re \
@@ -281,7 +281,7 @@ re2c_SRC_DOC_EXT = \
 	examples/go/fill/01_fill.re \
 	examples/go/fill/02_fill.re \
 	examples/go/headers/header.re \
-	examples/go/headers/src/lexer/lexer.go \
+	examples/go/headers/lexer/state.go \
 	examples/go/includes/include.re \
 	examples/go/includes/definitions.go \
 	examples/go/reuse/reuse.re \
