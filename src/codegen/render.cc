@@ -48,8 +48,7 @@ static void render_line_info(std::ostream &o, uint32_t line, const std::string &
         o << "#line " << line << " \"" << fname << "\"\n";
         break;
     case LANG_RUST:
-        // For Rust line directives should be removed by now, as they confuse rendering
-        // functions into formating a block as multiline even it fits on a single line.
+        // For Rust line directives should be removed by `remove_empty` pass.
         DASSERT(false);
         break;
     }

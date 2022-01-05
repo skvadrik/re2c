@@ -18,6 +18,8 @@ static void fix_conopt(conopt_t &glob)
 
     if (glob.lang == LANG_RUST) {
         glob.loop_switch = true;
+        // No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862
+        glob.iFlag = true;
     }
 
     // append directory separator '/' to all paths that do not have it

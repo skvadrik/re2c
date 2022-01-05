@@ -691,7 +691,10 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             break;
         case CODE_LINE_INFO_INPUT:
         case CODE_LINE_INFO_OUTPUT:
-            // No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862
+            // Although line directives are disabled for Rust, stubs confuse
+            // codegen into rendering oneline semantic actions as multiline,
+            // which triggers rustc warnings about redundant braces. We replace
+            // stubs with empty statements and rely on `remove_empty` pass.
             if (opts->lang == LANG_RUST) code->kind = CODE_EMPTY;
             break;
         case CODE_EMPTY:
