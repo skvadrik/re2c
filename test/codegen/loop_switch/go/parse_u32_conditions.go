@@ -40,6 +40,7 @@ loop:
 {
 	var yych byte
 	yystate := cond
+yyl:
 	for {
 		switch (yystate) {
 		case 0:
@@ -48,13 +49,13 @@ loop:
 			switch (yych) {
 			case '0':
 				yystate = 2
-				continue
+				continue yyl
 			case '1','2','3','4','5','6','7','8','9':
 				yystate = 4
-				continue
+				continue yyl
 			default:
 				yystate = 1
-				continue
+				continue yyl
 			}
 		case 1:
 			{ return 0, eSyntax }
@@ -67,41 +68,41 @@ loop:
 			case 'b':
 				cursor += 1
 				yystate = 5
-				continue
+				continue yyl
 			case 'X':
 				fallthrough
 			case 'x':
 				cursor += 1
 				yystate = 7
-				continue
+				continue yyl
 			default:
 				yystate = 3
-				continue
+				continue yyl
 			}
 		case 3:
 			cond = yycoct
 			yystate = yycoct
-			continue
+			continue yyl
 		case 4:
 			cursor += -1
 			cond = yycdec
 			yystate = yycdec
-			continue
+			continue yyl
 		case 5:
 			yych = str[cursor]
 			switch (yych) {
 			case '0','1':
 				cursor += 1
 				yystate = 8
-				continue
+				continue yyl
 			default:
 				yystate = 6
-				continue
+				continue yyl
 			}
 		case 6:
 			cursor = marker
 			yystate = 3
-			continue
+			continue yyl
 		case 7:
 			yych = str[cursor]
 			switch (yych) {
@@ -112,34 +113,34 @@ loop:
 			case 'a','b','c','d','e','f':
 				cursor += 1
 				yystate = 9
-				continue
+				continue yyl
 			default:
 				yystate = 6
-				continue
+				continue yyl
 			}
 		case 8:
 			cursor += -1
 			cond = yycbin
 			yystate = yycbin
-			continue
+			continue yyl
 		case 9:
 			cursor += -1
 			cond = yychex
 			yystate = yychex
-			continue
+			continue yyl
 		case 10:
 			yych = str[cursor]
 			cursor += 1
 			switch (yych) {
 			case 0x00:
 				yystate = 11
-				continue
+				continue yyl
 			case '0','1':
 				yystate = 13
-				continue
+				continue yyl
 			default:
 				yystate = 12
-				continue
+				continue yyl
 			}
 		case 11:
 			{
@@ -159,13 +160,13 @@ loop:
 			switch (yych) {
 			case 0x00:
 				yystate = 15
-				continue
+				continue yyl
 			case '0','1','2','3','4','5','6','7','8','9':
 				yystate = 17
-				continue
+				continue yyl
 			default:
 				yystate = 16
-				continue
+				continue yyl
 			}
 		case 15:
 			{
@@ -185,19 +186,19 @@ loop:
 			switch (yych) {
 			case 0x00:
 				yystate = 19
-				continue
+				continue yyl
 			case '0','1','2','3','4','5','6','7','8','9':
 				yystate = 21
-				continue
+				continue yyl
 			case 'A','B','C','D','E','F':
 				yystate = 22
-				continue
+				continue yyl
 			case 'a','b','c','d','e','f':
 				yystate = 23
-				continue
+				continue yyl
 			default:
 				yystate = 20
-				continue
+				continue yyl
 			}
 		case 19:
 			{
@@ -221,13 +222,13 @@ loop:
 			switch (yych) {
 			case 0x00:
 				yystate = 25
-				continue
+				continue yyl
 			case '0','1','2','3','4','5','6','7':
 				yystate = 27
-				continue
+				continue yyl
 			default:
 				yystate = 26
-				continue
+				continue yyl
 			}
 		case 25:
 			{

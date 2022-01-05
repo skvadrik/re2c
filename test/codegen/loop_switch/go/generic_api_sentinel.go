@@ -23,6 +23,7 @@ loop:
 {
 	var yych byte
 	yystate := 0
+yyl:
 	for {
 		switch (yystate) {
 		case 0:
@@ -31,16 +32,16 @@ loop:
 			switch (yych) {
 			case 0x00:
 				yystate = 1
-				continue
+				continue yyl
 			case ' ':
 				yystate = 3
-				continue
+				continue yyl
 			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 				yystate = 5
-				continue
+				continue yyl
 			default:
 				yystate = 2
-				continue
+				continue yyl
 			}
 		case 1:
 			{ return count }
@@ -52,10 +53,10 @@ loop:
 			case ' ':
 				cursor += 1
 				yystate = 3
-				continue
+				continue yyl
 			default:
 				yystate = 4
-				continue
+				continue yyl
 			}
 		case 4:
 			{ goto loop }
@@ -65,10 +66,10 @@ loop:
 			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 				cursor += 1
 				yystate = 5
-				continue
+				continue yyl
 			default:
 				yystate = 6
-				continue
+				continue yyl
 			}
 		case 6:
 			{ count += 1; goto loop }

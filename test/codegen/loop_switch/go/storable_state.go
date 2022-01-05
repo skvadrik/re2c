@@ -60,6 +60,7 @@ loop:
 	
 
 	yystate := in.state
+yyl:
 	for {
 		switch (yystate) {
 		case -1,0:
@@ -68,7 +69,7 @@ loop:
 			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 				in.cursor += 1
 				yystate = 3
-				continue
+				continue yyl
 			default:
 				if (in.limit <= in.cursor) {
 					in.state = 8
@@ -76,11 +77,11 @@ loop:
 				}
 				in.cursor += 1
 				yystate = 1
-				continue
+				continue yyl
 			}
 		case 1:
 			yystate = 2
-			continue
+			continue yyl
 		case 2:
 			in.state = -1
 			{ return lexPacketBroken }
@@ -91,18 +92,18 @@ loop:
 			case ';':
 				in.cursor += 1
 				yystate = 4
-				continue
+				continue yyl
 			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 				in.cursor += 1
 				yystate = 5
-				continue
+				continue yyl
 			default:
 				if (in.limit <= in.cursor) {
 					in.state = 9
 					return lexWaitingForInput
 				}
 				yystate = 2
-				continue
+				continue yyl
 			}
 		case 4:
 			in.state = -1
@@ -113,47 +114,47 @@ loop:
 			case ';':
 				in.cursor += 1
 				yystate = 4
-				continue
+				continue yyl
 			case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 				in.cursor += 1
 				yystate = 5
-				continue
+				continue yyl
 			default:
 				if (in.limit <= in.cursor) {
 					in.state = 10
 					return lexWaitingForInput
 				}
 				yystate = 6
-				continue
+				continue yyl
 			}
 		case 6:
 			in.cursor = in.marker
 			yystate = 2
-			continue
+			continue yyl
 		case 7:
 			in.state = -1
 			{ return lexEnd }
 		case 8:
 			if (in.limit <= in.cursor) {
 				yystate = 7
-				continue
+				continue yyl
 			}
 			yystate = 0
-			continue
+			continue yyl
 		case 9:
 			if (in.limit <= in.cursor) {
 				yystate = 2
-				continue
+				continue yyl
 			}
 			yystate = 3
-			continue
+			continue yyl
 		case 10:
 			if (in.limit <= in.cursor) {
 				yystate = 6
-				continue
+				continue yyl
 			}
 			yystate = 5
-			continue
+			continue yyl
 		default:
 			panic("internal lexer error")
 		}

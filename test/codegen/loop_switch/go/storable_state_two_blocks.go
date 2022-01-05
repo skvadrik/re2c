@@ -4,6 +4,7 @@
 
 
 	yystate := YYGETSTATE
+yyl:
 	for {
 		switch (yystate) {
 		case -1,0:
@@ -16,10 +17,10 @@
 			switch (yych) {
 			case 'a':
 				yystate = 2
-				continue
+				continue yyl
 			default:
 				yystate = 1
-				continue
+				continue yyl
 			}
 		case 1:
 			YYSETSTATE
@@ -29,7 +30,7 @@
 			{ a }
 		case 3:
 			yystate = 0
-			continue
+			continue yyl
 		default:
 			panic("internal lexer error")
 		}
@@ -39,6 +40,7 @@
 
 
 	yystate := YYGETSTATE
+yyl:
 	for {
 		switch (yystate) {
 		case -1,0:
@@ -47,7 +49,7 @@
 			case 'b':
 				YYSKIP
 				yystate = 2
-				continue
+				continue yyl
 			default:
 				if (YYLESSTHAN) {
 					YYSETSTATE
@@ -55,7 +57,7 @@
 				}
 				YYSKIP
 				yystate = 1
-				continue
+				continue yyl
 			}
 		case 1:
 			YYSETSTATE
@@ -69,10 +71,10 @@
 		case 4:
 			if (YYLESSTHAN) {
 				yystate = 3
-				continue
+				continue yyl
 			}
 			yystate = 0
-			continue
+			continue yyl
 		default:
 			panic("internal lexer error")
 		}

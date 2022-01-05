@@ -10,6 +10,7 @@ func lex(str string) {                    // Go code
 {
 	var yych byte
 	yystate := 0
+yyl:
 	for {
 		switch (yystate) {
 		case 0:
@@ -17,29 +18,29 @@ func lex(str string) {                    // Go code
 			cursor += 1
 			if (yych <= '0') {
 				yystate = 1
-				continue
+				continue yyl
 			}
 			if (yych <= '9') {
 				yystate = 2
-				continue
+				continue yyl
 			}
 			yystate = 1
-			continue
+			continue yyl
 		case 1:
 			{ panic("error!"); }
 		case 2:
 			yych = str[cursor]
 			if (yych <= '/') {
 				yystate = 3
-				continue
+				continue yyl
 			}
 			if (yych <= '9') {
 				cursor += 1
 				yystate = 2
-				continue
+				continue yyl
 			}
 			yystate = 3
-			continue
+			continue yyl
 		case 3:
 			{ return }
 		default:

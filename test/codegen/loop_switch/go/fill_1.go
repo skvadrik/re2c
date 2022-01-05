@@ -64,6 +64,7 @@ loop:
 {
 	var yych byte
 	yystate := 0
+yyl:
 	for {
 		switch (yystate) {
 		case 0:
@@ -72,27 +73,27 @@ loop:
 			case ' ':
 				in.cursor += 1
 				yystate = 3
-				continue
+				continue yyl
 			case '\'':
 				in.cursor += 1
 				yystate = 5
-				continue
+				continue yyl
 			default:
 				if (in.limit <= in.cursor) {
 					if (fill(in) == 0) {
 						yystate = 0
-						continue
+						continue yyl
 					}
 					yystate = 10
-					continue
+					continue yyl
 				}
 				in.cursor += 1
 				yystate = 1
-				continue
+				continue yyl
 			}
 		case 1:
 			yystate = 2
-			continue
+			continue yyl
 		case 2:
 			{ return -1 }
 		case 3:
@@ -101,16 +102,16 @@ loop:
 			case ' ':
 				in.cursor += 1
 				yystate = 3
-				continue
+				continue yyl
 			default:
 				if (in.limit <= in.cursor) {
 					if (fill(in) == 0) {
 						yystate = 3
-						continue
+						continue yyl
 					}
 				}
 				yystate = 4
-				continue
+				continue yyl
 			}
 		case 4:
 			{ goto loop }
@@ -119,45 +120,45 @@ loop:
 			yych = in.data[in.cursor]
 			if (yych >= 0x01) {
 				yystate = 7
-				continue
+				continue yyl
 			}
 			if (in.limit <= in.cursor) {
 				if (fill(in) == 0) {
 					yystate = 5
-					continue
+					continue yyl
 				}
 				yystate = 2
-				continue
+				continue yyl
 			}
 			in.cursor += 1
 			yystate = 6
-			continue
+			continue yyl
 		case 6:
 			yych = in.data[in.cursor]
 			yystate = 7
-			continue
+			continue yyl
 		case 7:
 			switch (yych) {
 			case '\'':
 				in.cursor += 1
 				yystate = 8
-				continue
+				continue yyl
 			case '\\':
 				in.cursor += 1
 				yystate = 9
-				continue
+				continue yyl
 			default:
 				if (in.limit <= in.cursor) {
 					if (fill(in) == 0) {
 						yystate = 6
-						continue
+						continue yyl
 					}
 					yystate = 11
-					continue
+					continue yyl
 				}
 				in.cursor += 1
 				yystate = 6
-				continue
+				continue yyl
 			}
 		case 8:
 			{ count += 1; goto loop }
@@ -167,24 +168,24 @@ loop:
 				if (in.limit <= in.cursor) {
 					if (fill(in) == 0) {
 						yystate = 9
-						continue
+						continue yyl
 					}
 					yystate = 11
-					continue
+					continue yyl
 				}
 				in.cursor += 1
 				yystate = 6
-				continue
+				continue yyl
 			}
 			in.cursor += 1
 			yystate = 6
-			continue
+			continue yyl
 		case 10:
 			{ return count }
 		case 11:
 			in.cursor = in.marker
 			yystate = 2
-			continue
+			continue yyl
 		default:
 			panic("internal lexer error")
 		}

@@ -25,47 +25,51 @@ func parse_u32(str string) (uint32, error) {
 	}
 
 	/*!re2c
-	re2c:yyfill:enable = 0;
-	re2c:define:YYCTYPE   = byte;
-	re2c:define:YYPEEK    = "str[cursor]";
-	re2c:define:YYSKIP    = "cursor += 1";
-	re2c:define:YYSHIFT   = "cursor += @@{shift}";
-	re2c:define:YYBACKUP  = "marker = cursor";
-	re2c:define:YYRESTORE = "cursor = marker";
+		re2c:yyfill:enable = 0;
+		re2c:define:YYCTYPE   = byte;
+		re2c:define:YYPEEK    = "str[cursor]";
+		re2c:define:YYSKIP    = "cursor += 1";
+		re2c:define:YYSHIFT   = "cursor += @@{shift}";
+		re2c:define:YYBACKUP  = "marker = cursor";
+		re2c:define:YYRESTORE = "cursor = marker";
 
-	end = "\x00";
+		end = "\x00";
 
-	'0b' / [01]        { goto bin }
-	"0"                { goto oct }
-	""   / [1-9]       { goto dec }
-	'0x' / [0-9a-fA-F] { goto hex }
-	*                  { goto err }
+		'0b' / [01]        { goto bin }
+		"0"                { goto oct }
+		""   / [1-9]       { goto dec }
+		'0x' / [0-9a-fA-F] { goto hex }
+		*                  { goto err }
 	*/
 bin:
 	/*!re2c
-	end   { goto end }
-	[01]  { add_digit(2, '0'); goto bin }
-	*     { goto err }
+		re2c:label:yyloop = "yybin";
+		end   { goto end }
+		[01]  { add_digit(2, '0'); goto bin }
+		*     { goto err }
 	*/
 oct:
 	/*!re2c
-	end   { goto end }
-	[0-7] { add_digit(8, '0'); goto oct }
-	*     { goto err }
+		re2c:label:yyloop = "yyoct";
+		end   { goto end }
+		[0-7] { add_digit(8, '0'); goto oct }
+		*     { goto err }
 	*/
 dec:
 	/*!re2c
-	end   { goto end }
-	[0-9] { add_digit(10, '0'); goto dec }
-	*     { goto err }
+		re2c:label:yyloop = "yydec";
+		end   { goto end }
+		[0-9] { add_digit(10, '0'); goto dec }
+		*     { goto err }
 	*/
 hex:
 	/*!re2c
-	end   { goto end }
-	[0-9] { add_digit(16, '0');    goto hex }
-	[a-f] { add_digit(16, 'a'-10); goto hex }
-	[A-F] { add_digit(16, 'A'-10); goto hex }
-	*     { goto err }
+		re2c:label:yyloop = "yyhex";
+		end   { goto end }
+		[0-9] { add_digit(16, '0');    goto hex }
+		[a-f] { add_digit(16, 'a'-10); goto hex }
+		[A-F] { add_digit(16, 'A'-10); goto hex }
+		*     { goto err }
 	*/
 end:
 	if result < u32Limit {

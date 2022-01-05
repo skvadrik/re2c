@@ -451,15 +451,21 @@ static void render_loop(RenderContext &rctx, const CodeList *loop) {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
 
-    os << indent(rctx.ind, opts->indString);
     switch (opts->lang) {
     case LANG_C:
-        os << "for (;;)";
+        os << indent(rctx.ind, opts->indString) << "for (;;)";
         break;
     case LANG_GO:
-        os << "for";
+        // In Go label is on a separate line with zero indent.
+        if (!opts->yyloop.empty()) {
+            os << opts->yyloop << ":" << std::endl;
+            ++rctx.line;
+        }
+        os << indent(rctx.ind, opts->indString) << "for";
         break;
     case LANG_RUST:
+        os << indent(rctx.ind, opts->indString);
+        // In Rust label is on the same line, preceding the `loop` keyword.
         if (!opts->yyloop.empty()) os << opts->yyloop << ": ";
         os << "loop";
         break;

@@ -271,8 +271,11 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (glob.lang == LANG_RUST) {
         // In Rust constants should be uppercase.
         if (is_default.condEnumPrefix) real.condEnumPrefix = "YYC_";
-        // In Rust loops can have labels, use it to avoid ambiguous `continue`.
+        // In Rust `continue` statements have labels, use it to avoid ambiguity.
         if (is_default.yyloop) real.yyloop = "'yyl";
+    } else if (glob.lang == LANG_GO) {
+        // In Go `continue` statements have labels, use it to avoid ambiguity.
+        if (is_default.yyloop) real.yyloop = "yyl";
     }
 
     // errors

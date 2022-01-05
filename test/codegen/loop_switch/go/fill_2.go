@@ -71,6 +71,7 @@ loop:
 {
 	var yych byte
 	yystate := 0
+yyl:
 	for {
 		switch (yystate) {
 		case 0:
@@ -82,16 +83,16 @@ loop:
 			switch (yych) {
 			case 0x00:
 				yystate = 1
-				continue
+				continue yyl
 			case ' ':
 				yystate = 3
-				continue
+				continue yyl
 			case '\'':
 				yystate = 5
-				continue
+				continue yyl
 			default:
 				yystate = 2
-				continue
+				continue yyl
 			}
 		case 1:
 			{
@@ -114,10 +115,10 @@ loop:
 			case ' ':
 				in.cursor += 1
 				yystate = 3
-				continue
+				continue yyl
 			default:
 				yystate = 4
-				continue
+				continue yyl
 			}
 		case 4:
 			{
@@ -132,13 +133,13 @@ loop:
 			switch (yych) {
 			case '\'':
 				yystate = 6
-				continue
+				continue yyl
 			case '\\':
 				yystate = 7
-				continue
+				continue yyl
 			default:
 				yystate = 5
-				continue
+				continue yyl
 			}
 		case 6:
 			{
@@ -151,7 +152,7 @@ loop:
 			}
 			in.cursor += 1
 			yystate = 5
-			continue
+			continue yyl
 		default:
 			panic("internal lexer error")
 		}
