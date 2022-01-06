@@ -262,7 +262,7 @@ yy26:
 }
 
 func main() {
-	if lex("salmon") != Fish || lex("what?") != Dunno {
-		panic("error")
-	}
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex("salmon"), Fish);
+	assert_eq(lex("what?"), Dunno);
 }

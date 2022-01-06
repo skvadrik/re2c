@@ -36,12 +36,12 @@ func lex(str string) int {
 
 		!use:fish;
 		!use:colors;
-		* { return Dunno }
+		* { return Dunno }  // overrides inherited '*' rules
 	*/
 }
 
 func main() {
-	if lex("salmon") != Fish || lex("what?") != Dunno {
-		panic("error")
-	}
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex("salmon"), Fish);
+	assert_eq(lex("what?"), Dunno);
 }

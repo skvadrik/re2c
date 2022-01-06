@@ -28,7 +28,7 @@ static What lex(const char *YYCURSOR) {
 
         !use:fish;
         !use:colors;
-        * { return DUNNO; }
+        * { return DUNNO; }  // overrides inherited '*' rules
     */
 }
 
