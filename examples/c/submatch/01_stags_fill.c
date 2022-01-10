@@ -9,7 +9,7 @@
 
 #define BUFSIZE 4095
 
-typedef struct {
+struct Input {
     FILE *file;
     char buf[BUFSIZE + 1], *lim, *cur, *mar, *tok;
     // Tag variables must be part of the lexer state passed to YYFILL.
@@ -20,7 +20,7 @@ const char *yyt1;const char *yyt2;const char *yyt3;
 #line 15 "c/submatch/01_stags_fill.re"
 
     bool eof;
-} Input;
+};
 
 struct SemVer { int major, minor, patch; };
 

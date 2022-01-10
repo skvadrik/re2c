@@ -4,45 +4,45 @@
 package main
 
 // Returns "fake" terminating null if cursor has reached limit.
-func peek(str string, cursor int, limit int) byte {
-	if cursor >= limit {
+func peek(str string, cur int, lim int) byte {
+	if cur >= lim {
 		return 0 // fake null
 	} else {
-		return str[cursor]
+		return str[cur]
 	}
 }
 
 // Expects a string without terminating null.
 func lex(str string) int {
-	var cursor, marker int
-	limit := len(str)
+	var cur, mar int
+	lim := len(str)
 	count := 0
 
-	for {
+	for { 
 //line "go/eof/05_generic_api_eof_rule.go":23
 {
 	var yych byte
-	yych = peek(str, cursor, limit)
+	yych = peek(str, cur, lim)
 	switch (yych) {
 	case ' ':
 		goto yy3
 	case '\'':
 		goto yy5
 	default:
-		if (cursor >= limit) {
+		if (cur >= lim) {
 			goto yy10
 		}
 		goto yy1
 	}
 yy1:
-	cursor += 1
+	cur += 1
 yy2:
-//line "go/eof/05_generic_api_eof_rule.re":29
+//line "go/eof/05_generic_api_eof_rule.re":31
 	{ return -1 }
 //line "go/eof/05_generic_api_eof_rule.go":43
 yy3:
-	cursor += 1
-	yych = peek(str, cursor, limit)
+	cur += 1
+	yych = peek(str, cur, lim)
 	switch (yych) {
 	case ' ':
 		goto yy3
@@ -50,22 +50,22 @@ yy3:
 		goto yy4
 	}
 yy4:
-//line "go/eof/05_generic_api_eof_rule.re":32
+//line "go/eof/05_generic_api_eof_rule.re":34
 	{ continue }
 //line "go/eof/05_generic_api_eof_rule.go":56
 yy5:
-	cursor += 1
-	marker = cursor
-	yych = peek(str, cursor, limit)
+	cur += 1
+	mar = cur
+	yych = peek(str, cur, lim)
 	if (yych >= 0x01) {
 		goto yy7
 	}
-	if (cursor >= limit) {
+	if (cur >= lim) {
 		goto yy2
 	}
 yy6:
-	cursor += 1
-	yych = peek(str, cursor, limit)
+	cur += 1
+	yych = peek(str, cur, lim)
 yy7:
 	switch (yych) {
 	case '\'':
@@ -73,36 +73,37 @@ yy7:
 	case '\\':
 		goto yy9
 	default:
-		if (cursor >= limit) {
+		if (cur >= lim) {
 			goto yy11
 		}
 		goto yy6
 	}
 yy8:
-	cursor += 1
-//line "go/eof/05_generic_api_eof_rule.re":31
+	cur += 1
+//line "go/eof/05_generic_api_eof_rule.re":33
 	{ count += 1; continue }
 //line "go/eof/05_generic_api_eof_rule.go":86
 yy9:
-	cursor += 1
-	yych = peek(str, cursor, limit)
+	cur += 1
+	yych = peek(str, cur, lim)
 	if (yych <= 0x00) {
-		if (cursor >= limit) {
+		if (cur >= lim) {
 			goto yy11
 		}
 		goto yy6
 	}
 	goto yy6
 yy10:
-//line "go/eof/05_generic_api_eof_rule.re":30
+//line "go/eof/05_generic_api_eof_rule.re":32
 	{ return count }
 //line "go/eof/05_generic_api_eof_rule.go":100
 yy11:
-	cursor = marker
+	cur = mar
 	goto yy2
 }
-//line "go/eof/05_generic_api_eof_rule.re":33
-}
+//line "go/eof/05_generic_api_eof_rule.re":35
+
+	}
 }
 
 func main() {

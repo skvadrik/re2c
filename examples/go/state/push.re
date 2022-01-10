@@ -6,16 +6,18 @@ import (
 	"os"
 )
 
-const BUFSIZE int = 10 // small for the sake of example
+// Use a small buffer to cover the case when a lexeme doesn't fit.
+// In real world use a larger buffer.
+const BUFSIZE int = 10
 
 type State struct {
-	file   *os.File
-	data   []byte
-	cursor int
-	marker int
-	token  int
-	limit  int
-	state  int
+	file  *os.File
+	buf   []byte
+	cur   int
+	mar   int
+	tok   int
+	lim   int
+	state int
 }
 
 const (
@@ -27,24 +29,24 @@ const (
 )
 
 func fill(st *State) int {
-	shift := st.token
-	used := st.limit - st.token
+	shift := st.tok
+	used := st.lim - st.tok
 	free := BUFSIZE - used
 
 	// Error: no space. In real life can reallocate a larger buffer.
 	if free < 1 { return lexPacketTooBig }
 
 	// Shift buffer contents (discard already processed data).
-	copy(st.data[0:], st.data[shift:shift+used])
-	st.cursor -= shift
-	st.marker -= shift
-	st.limit -= shift
-	st.token -= shift
+	copy(st.buf[0:], st.buf[shift:shift+used])
+	st.cur -= shift
+	st.mar -= shift
+	st.lim -= shift
+	st.tok -= shift
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.data[st.limit:BUFSIZE])
-	st.limit += n
-	st.data[st.limit] = 0 // append sentinel symbol
+	n, _ := st.file.Read(st.buf[st.lim:BUFSIZE])
+	st.lim += n
+	st.buf[st.lim] = 0 // append sentinel symbol
 
 	return lexReady
 }
@@ -53,14 +55,14 @@ func lex(st *State, recv *int) int {
 	var yych byte
 	/*!getstate:re2c*/
 loop:
-	st.token = st.cursor
+	st.tok = st.cur
 	/*!re2c
 		re2c:eof = 0;
-		re2c:define:YYPEEK     = "st.data[st.cursor]";
-		re2c:define:YYSKIP     = "st.cursor += 1";
-		re2c:define:YYBACKUP   = "st.marker = st.cursor";
-		re2c:define:YYRESTORE  = "st.cursor = st.marker";
-		re2c:define:YYLESSTHAN = "st.limit <= st.cursor";
+		re2c:define:YYPEEK     = "st.buf[st.cur]";
+		re2c:define:YYSKIP     = "st.cur += 1";
+		re2c:define:YYBACKUP   = "st.mar = st.cur";
+		re2c:define:YYRESTORE  = "st.cur = st.mar";
+		re2c:define:YYLESSTHAN = "st.lim <= st.cur";
 		re2c:define:YYFILL     = "return lexWaitingForInput";
 		re2c:define:YYGETSTATE = "st.state";
 		re2c:define:YYSETSTATE = "st.state = @@{state}";
@@ -82,13 +84,13 @@ func test(expect int, packets []string) {
 	// Initialize lexer state: `state` value is -1, all offsets are at the end
 	// of buffer, the character at `lim` offset is the sentinel (null).
 	st := &State{
-		file:   fr,
-		data:   make([]byte, BUFSIZE+1),
-		cursor: BUFSIZE,
-		marker: BUFSIZE,
-		token:  BUFSIZE,
-		limit:  BUFSIZE,
-		state:  -1,
+		file:  fr,
+		buf:   make([]byte, BUFSIZE+1),
+		cur:   BUFSIZE,
+		mar:   BUFSIZE,
+		tok:   BUFSIZE,
+		lim:   BUFSIZE,
+		state: -1,
 	}
 	// data is zero-initialized, no need to write sentinel
 

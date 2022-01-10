@@ -5,35 +5,35 @@ package main
 
 // Expects a null-terminated string.
 func lex(str string) int {
-	var cursor, marker int
-	limit := len(str) - 1 // limit points at the terminating null
+	var cur, mar int
+	lim := len(str) - 1 // lim points at the terminating null
 	count := 0
 
-	for {
+	for { 
 //line "go/eof/03_eof_rule.go":14
 {
 	var yych byte
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case ' ':
 		goto yy3
 	case '\'':
 		goto yy5
 	default:
-		if (limit <= cursor) {
+		if (lim <= cur) {
 			goto yy10
 		}
 		goto yy1
 	}
 yy1:
-	cursor += 1
+	cur += 1
 yy2:
-//line "go/eof/03_eof_rule.re":20
+//line "go/eof/03_eof_rule.re":22
 	{ return -1 }
 //line "go/eof/03_eof_rule.go":34
 yy3:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case ' ':
 		goto yy3
@@ -41,22 +41,22 @@ yy3:
 		goto yy4
 	}
 yy4:
-//line "go/eof/03_eof_rule.re":23
+//line "go/eof/03_eof_rule.re":25
 	{ continue }
 //line "go/eof/03_eof_rule.go":47
 yy5:
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
+	cur += 1
+	mar = cur
+	yych = str[cur]
 	if (yych >= 0x01) {
 		goto yy7
 	}
-	if (limit <= cursor) {
+	if (lim <= cur) {
 		goto yy2
 	}
 yy6:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 yy7:
 	switch (yych) {
 	case '\'':
@@ -64,36 +64,37 @@ yy7:
 	case '\\':
 		goto yy9
 	default:
-		if (limit <= cursor) {
+		if (lim <= cur) {
 			goto yy11
 		}
 		goto yy6
 	}
 yy8:
-	cursor += 1
-//line "go/eof/03_eof_rule.re":22
+	cur += 1
+//line "go/eof/03_eof_rule.re":24
 	{ count += 1; continue }
 //line "go/eof/03_eof_rule.go":77
 yy9:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	if (yych <= 0x00) {
-		if (limit <= cursor) {
+		if (lim <= cur) {
 			goto yy11
 		}
 		goto yy6
 	}
 	goto yy6
 yy10:
-//line "go/eof/03_eof_rule.re":21
+//line "go/eof/03_eof_rule.re":23
 	{ return count }
 //line "go/eof/03_eof_rule.go":91
 yy11:
-	cursor = marker
+	cur = mar
 	goto yy2
 }
-//line "go/eof/03_eof_rule.re":24
-}
+//line "go/eof/03_eof_rule.re":26
+
+	}
 }
 
 func main() {

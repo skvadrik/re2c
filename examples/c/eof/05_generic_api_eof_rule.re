@@ -11,7 +11,8 @@ static int lex(const char *str, unsigned int len) {
     const char *cur = buf, *lim = buf + len, *mar;
     int count = 0;
 
-    for (;;) {/*!re2c
+    for (;;) {
+    /*!re2c
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
         re2c:api = custom;
@@ -23,11 +24,14 @@ static int lex(const char *str, unsigned int len) {
         re2c:define:YYBACKUP = "mar = cur;";
         re2c:define:YYRESTORE = "cur = mar;";
 
-        *                           { count = -1; break; }
-        $                           { break;; }
-        ['] ([^'\\] | [\\][^])* ['] { ++count; continue; }
-        [ ]+                        { continue; }
-    */}
+        str = ['] ([^'\\] | [\\][^])* ['];
+
+        *    { count = -1; break; }
+        $    { break;; }
+        str  { ++count; continue; }
+        [ ]+ { continue; }
+    */
+    }
 
     free(buf);
     return count;

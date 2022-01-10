@@ -50,7 +50,6 @@ fn lex(st: &mut State) -> isize {
     'lex: loop {
         st.tok = st.cur;
     /*!re2c
-        re2c:eof = 0;
         re2c:define:YYCTYPE    = u8;
         re2c:define:YYPEEK     = "*st.buf.get_unchecked(st.cur)";
         re2c:define:YYSKIP     = "st.cur += 1;";
@@ -58,11 +57,14 @@ fn lex(st: &mut State) -> isize {
         re2c:define:YYRESTORE  = "st.cur = st.mar;";
         re2c:define:YYLESSTHAN = "st.cur >= st.lim";
         re2c:define:YYFILL     = "fill(st) == Fill::Ok";
+        re2c:eof = 0;
 
-        *                           { return -1; }
-        $                           { return count; }
-        ['] ([^'\\] | [\\][^])* ['] { count += 1; continue 'lex; }
-        [ ]+                        { continue 'lex; }
+        str = ['] ([^'\\] | [\\][^])* ['];
+
+        *    { return -1; }
+        $    { return count; }
+        str  { count += 1; continue 'lex; }
+        [ ]+ { continue 'lex; }
     */}
 }
 

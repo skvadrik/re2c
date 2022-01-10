@@ -4,21 +4,21 @@
 #include <limits.h>
 #include <assert.h>
 
-static const uint64_t ERROR = ~0lu;
+static const uint64_t ERROR = UINT64_MAX;
 
-template<int BASE> static void adddgt(uint64_t &u, unsigned int d) {
+template<int BASE> static void add(uint64_t &u, char d) {
     u = u * BASE + d;
     if (u > UINT32_MAX) u = ERROR;
 }
 
 static uint64_t parse_u32(const char *s) {
-    const char *YYMARKER;
+    const char *YYCURSOR = s, *YYMARKER;
     uint64_t u = 0;
 
     
 {
 	char yych;
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
 		case '0': goto yy2;
 		case '1':
@@ -33,10 +33,10 @@ static uint64_t parse_u32(const char *s) {
 		default: goto yy1;
 	}
 yy1:
-	++s;
+	++YYCURSOR;
 	{ return ERROR; }
 yy2:
-	yych = *(YYMARKER = ++s);
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 		case 'B':
 		case 'b': goto yy5;
@@ -47,21 +47,21 @@ yy2:
 yy3:
 	{ goto oct; }
 yy4:
-	++s;
-	s -= 1;
+	++YYCURSOR;
+	YYCURSOR -= 1;
 	{ goto dec; }
 yy5:
-	yych = *++s;
+	yych = *++YYCURSOR;
 	switch (yych) {
 		case '0':
 		case '1': goto yy8;
 		default: goto yy6;
 	}
 yy6:
-	s = YYMARKER;
+	YYCURSOR = YYMARKER;
 	goto yy3;
 yy7:
-	yych = *++s;
+	yych = *++YYCURSOR;
 	switch (yych) {
 		case '0':
 		case '1':
@@ -88,12 +88,12 @@ yy7:
 		default: goto yy6;
 	}
 yy8:
-	++s;
-	s -= 1;
+	++YYCURSOR;
+	YYCURSOR -= 1;
 	{ goto bin; }
 yy9:
-	++s;
-	s -= 1;
+	++YYCURSOR;
+	YYCURSOR -= 1;
 	{ goto hex; }
 }
 
@@ -101,7 +101,7 @@ bin:
     
 {
 	char yych;
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy11;
 		case '0':
@@ -109,21 +109,21 @@ bin:
 		default: goto yy12;
 	}
 yy11:
-	++s;
+	++YYCURSOR;
 	{ return u; }
 yy12:
-	++s;
+	++YYCURSOR;
 	{ return ERROR; }
 yy13:
-	++s;
-	{ adddgt<2>(u, s[-1] - '0'); goto bin; }
+	++YYCURSOR;
+	{ add<2>(u, YYCURSOR[-1] - '0'); goto bin; }
 }
 
 oct:
     
 {
 	char yych;
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy15;
 		case '0':
@@ -137,21 +137,21 @@ oct:
 		default: goto yy16;
 	}
 yy15:
-	++s;
+	++YYCURSOR;
 	{ return u; }
 yy16:
-	++s;
+	++YYCURSOR;
 	{ return ERROR; }
 yy17:
-	++s;
-	{ adddgt<8>(u, s[-1] - '0'); goto oct; }
+	++YYCURSOR;
+	{ add<8>(u, YYCURSOR[-1] - '0'); goto oct; }
 }
 
 dec:
     
 {
 	char yych;
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy19;
 		case '0':
@@ -167,21 +167,21 @@ dec:
 		default: goto yy20;
 	}
 yy19:
-	++s;
+	++YYCURSOR;
 	{ return u; }
 yy20:
-	++s;
+	++YYCURSOR;
 	{ return ERROR; }
 yy21:
-	++s;
-	{ adddgt<10>(u, s[-1] - '0'); goto dec; }
+	++YYCURSOR;
+	{ add<10>(u, YYCURSOR[-1] - '0'); goto dec; }
 }
 
 hex:
     
 {
 	char yych;
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy23;
 		case '0':
@@ -209,30 +209,30 @@ hex:
 		default: goto yy24;
 	}
 yy23:
-	++s;
+	++YYCURSOR;
 	{ return u; }
 yy24:
-	++s;
+	++YYCURSOR;
 	{ return ERROR; }
 yy25:
-	++s;
-	{ adddgt<16>(u, s[-1] - '0');      goto hex; }
+	++YYCURSOR;
+	{ add<16>(u, YYCURSOR[-1] - '0');      goto hex; }
 yy26:
-	++s;
-	{ adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
+	++YYCURSOR;
+	{ add<16>(u, YYCURSOR[-1] - 'A' + 10); goto hex; }
 yy27:
-	++s;
-	{ adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
+	++YYCURSOR;
+	{ add<16>(u, YYCURSOR[-1] - 'a' + 10); goto hex; }
 }
 
 }
 
 int main() {
+    assert(parse_u32("") == ERROR);
     assert(parse_u32("1234567890") == 1234567890);
     assert(parse_u32("0b1101") == 13);
     assert(parse_u32("0x7Fe") == 2046);
     assert(parse_u32("0644") == 420);
     assert(parse_u32("9999999999") == ERROR);
-    assert(parse_u32("") == ERROR);
     return 0;
 }

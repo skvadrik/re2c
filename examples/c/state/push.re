@@ -3,64 +3,68 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DEBUG    0
+#define DEBUG 0
 #define LOG(...) if (DEBUG) fprintf(stderr, __VA_ARGS__);
-#define BUFSIZE  10 // small for the sake of example
 
-typedef struct {
+// Use a small buffer to cover the case when a lexeme doesn't fit.
+// In real world use a larger buffer.
+#define BUFSIZE 10
+
+struct State {
     FILE *file;
     char buf[BUFSIZE + 1], *lim, *cur, *mar, *tok;
     int state;
-} State;
+};
 
 typedef enum {END, READY, WAITING, BAD_PACKET, BIG_PACKET} Status;
 
-static Status fill(State *st) {
-    const size_t shift = st->tok - st->buf;
-    const size_t used = st->lim - st->tok;
+static Status fill(State &st) {
+    const size_t shift = st.tok - st.buf;
+    const size_t used = st.lim - st.tok;
     const size_t free = BUFSIZE - used;
 
     // Error: no space. In real life can reallocate a larger buffer.
     if (free < 1) return BIG_PACKET;
 
     // Shift buffer contents (discard already processed data).
-    memmove(st->buf, st->tok, used);
-    st->lim -= shift;
-    st->cur -= shift;
-    st->mar -= shift;
-    st->tok -= shift;
+    memmove(st.buf, st.tok, used);
+    st.lim -= shift;
+    st.cur -= shift;
+    st.mar -= shift;
+    st.tok -= shift;
 
     // Fill free space at the end of buffer with new data.
-    const size_t read = fread(st->lim, 1, free, st->file);
-    st->lim += read;
-    st->lim[0] = 0; // append sentinel symbol
+    const size_t read = fread(st.lim, 1, free, st.file);
+    st.lim += read;
+    st.lim[0] = 0; // append sentinel symbol
 
     return READY;
 }
 
-static Status lex(State *st, unsigned int *recv) {
+static Status lex(State &st, unsigned int *recv) {
     char yych;
     /*!getstate:re2c*/
 
     for (;;) {
-        st->tok = st->cur;
+        st.tok = st.cur;
     /*!re2c
-        re2c:eof = 0;
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = "char";
-        re2c:define:YYCURSOR = "st->cur";
-        re2c:define:YYMARKER = "st->mar";
-        re2c:define:YYLIMIT = "st->lim";
-        re2c:define:YYGETSTATE = "st->state";
-        re2c:define:YYSETSTATE = "st->state = @@;";
-        re2c:define:YYFILL = "return WAITING;";
+        re2c:define:YYCTYPE    = "char";
+        re2c:define:YYCURSOR   = "st.cur";
+        re2c:define:YYMARKER   = "st.mar";
+        re2c:define:YYLIMIT    = "st.lim";
+        re2c:define:YYGETSTATE = "st.state";
+        re2c:define:YYSETSTATE = "st.state = @@;";
+        re2c:define:YYFILL     = "return WAITING;";
+        re2c:eof = 0;
 
         packet = [a-z]+[;];
 
         *      { return BAD_PACKET; }
         $      { return END; }
         packet { *recv = *recv + 1; continue; }
-    */}
+    */
+    }
 }
 
 void test(const char **packets, Status expect) {
@@ -85,7 +89,7 @@ void test(const char **packets, Status expect) {
     Status status;
     unsigned int send = 0, recv = 0;
     for (;;) {
-        status = lex(&st, &recv);
+        status = lex(st, &recv);
         if (status == END) {
             LOG("done: got %u packets\n", recv);
             break;
@@ -96,7 +100,7 @@ void test(const char **packets, Status expect) {
                 fprintf(fw, "%s", *packets++);
                 ++send;
             }
-            status = fill(&st);
+            status = fill(st);
             LOG("queue: '%s'\n", st.buf);
             if (status == BIG_PACKET) {
                 LOG("error: packet too big\n");
@@ -124,7 +128,7 @@ int main() {
     const char *packets1[] = {0};
     const char *packets2[] = {"zero;", "one;", "two;", "three;", "four;", 0};
     const char *packets3[] = {"zer0;", 0};
-    const char *packets4[] = {"goooooooooogle;", 0};
+    const char *packets4[] = {"looooooooooong;", 0};
 
     test(packets1, END);
     test(packets2, END);

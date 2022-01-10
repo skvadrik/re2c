@@ -6,16 +6,20 @@ static int lex(const char *str, unsigned int len) {
     const char *YYCURSOR = str, *YYLIMIT = str + len, *YYMARKER;
     int count = 0;
 
-    for (;;) {/*!re2c
+    for (;;) {
+    /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 
-        *                           { return -1; }
-        $                           { return count; }
-        ['] ([^'\\] | [\\][^])* ['] { ++count; continue; }
-        [ ]+                        { continue; }
-    */}
+        str = ['] ([^'\\] | [\\][^])* ['];
+
+        *    { return -1; }
+        $    { return count; }
+        str  { ++count; continue; }
+        [ ]+ { continue; }
+    */
+    }
 }
 
 #define TEST(s, r) assert(lex(s, sizeof(s) - 1) == r)

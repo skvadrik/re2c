@@ -6,10 +6,15 @@ use std::io::{Read, Write};
 
 const DEBUG: bool = false;
 macro_rules! log {
-    ($($fmt:expr)? $(, $args:expr)*) => { if DEBUG { println!($($fmt)? $(, $args)*) } }
+    ($($fmt:expr)? $(, $args:expr)*) => {
+        if DEBUG { println!($($fmt)? $(, $args)*) }
+    }
 }
 
-const BUFSIZE: usize = 10; // small for the sake of example
+// Use a small buffer to cover the case when a lexeme doesn't fit.
+// In real world use a larger buffer.
+const BUFSIZE: usize = 10;
+
 struct State {
     file: File,
     buf: [u8; BUFSIZE],

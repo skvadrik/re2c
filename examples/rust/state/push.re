@@ -5,10 +5,15 @@ use std::io::{Read, Write};
 
 const DEBUG: bool = false;
 macro_rules! log {
-    ($($fmt:expr)? $(, $args:expr)*) => { if DEBUG { println!($($fmt)? $(, $args)*) } }
+    ($($fmt:expr)? $(, $args:expr)*) => {
+        if DEBUG { println!($($fmt)? $(, $args)*) }
+    }
 }
 
-const BUFSIZE: usize = 10; // small for the sake of example
+// Use a small buffer to cover the case when a lexeme doesn't fit.
+// In real world use a larger buffer.
+const BUFSIZE: usize = 10;
+
 struct State {
     file: File,
     buf: [u8; BUFSIZE],
@@ -51,15 +56,15 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
         st.tok = st.cur;
     /*!re2c
         re2c:eof = 0;
-        re2c:define:YYCTYPE = "u8";
-        re2c:define:YYPEEK = "*st.buf.get_unchecked(st.cur)";
-        re2c:define:YYSKIP = "st.cur += 1;";
-        re2c:define:YYBACKUP = "st.mar = st.cur;";
-        re2c:define:YYRESTORE = "st.cur = st.mar;";
+        re2c:define:YYCTYPE    = "u8";
+        re2c:define:YYPEEK     = "*st.buf.get_unchecked(st.cur)";
+        re2c:define:YYSKIP     = "st.cur += 1;";
+        re2c:define:YYBACKUP   = "st.mar = st.cur;";
+        re2c:define:YYRESTORE  = "st.cur = st.mar;";
         re2c:define:YYLESSTHAN = "st.cur >= st.lim";
         re2c:define:YYGETSTATE = "st.state";
         re2c:define:YYSETSTATE = "st.state = @@;";
-        re2c:define:YYFILL = "return Status::Waiting;";
+        re2c:define:YYFILL     = "return Status::Waiting;";
 
         packet = [a-z]+[;];
 

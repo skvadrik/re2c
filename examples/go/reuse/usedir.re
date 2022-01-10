@@ -1,12 +1,11 @@
 //go:generate re2go $INPUT -o $OUTPUT
+package main
 
 // This example shows how to combine reusable re2c blocks: two blocks
 // ('colors' and 'fish') are merged into one. The 'salmon' rule occurs
 // in both blocks; the 'fish' block takes priority because it is used
 // earlier. Default rule * occurs in all three blocks; the local (not
 // inherited) definition takes priority.
-
-package main
 
 const (
 	Color = iota
@@ -25,14 +24,14 @@ const (
 */
 
 func lex(str string) int {
-	var cursor, marker int
+	var cur, mar int
 	/*!re2c
 		re2c:yyfill:enable = 0;
 		re2c:define:YYCTYPE   = byte;
-		re2c:define:YYPEEK    = "str[cursor]";
-		re2c:define:YYSKIP    = "cursor += 1";
-		re2c:define:YYBACKUP  = "marker = cursor";
-		re2c:define:YYRESTORE = "cursor = marker";
+		re2c:define:YYPEEK    = "str[cur]";
+		re2c:define:YYSKIP    = "cur += 1";
+		re2c:define:YYBACKUP  = "mar = cur";
+		re2c:define:YYRESTORE = "cur = mar";
 
 		!use:fish;
 		!use:colors;

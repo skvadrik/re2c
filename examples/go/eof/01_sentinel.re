@@ -3,20 +3,21 @@ package main
 
 // Expect a null-terminated string.
 func lex(str string) int {
-	var cursor int
+	var cur int
 	count := 0
 
-	for {/*!re2c
+	for { /*!re2c
 		re2c:yyfill:enable = 0;
 		re2c:define:YYCTYPE = byte;
-		re2c:define:YYPEEK = "str[cursor]";
-		re2c:define:YYSKIP = "cursor += 1";
+		re2c:define:YYPEEK  = "str[cur]";
+		re2c:define:YYSKIP  = "cur += 1";
 
 		*      { return -1 }
 		[\x00] { return count }
 		[a-z]+ { count += 1; continue }
 		[ ]+   { continue }
-	*/}
+	*/
+	}
 }
 
 func main() {

@@ -13,18 +13,17 @@ const YYC_HEX: usize = 19;
 const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow
 
 // Add digit with the given base, checking for overflow.
-fn add_digit(num: &mut u64, str: &[u8], cur: usize, offs: u8, base: u64) {
+fn add(num: &mut u64, str: &[u8], cur: usize, offs: u8, base: u64) {
     let digit = unsafe { str.get_unchecked(cur - 1) } - offs;
     *num = std::cmp::min(*num * base + digit as u64, ERROR);
 }
 
 fn parse_u32(str: &[u8]) -> Option<u32> {
-    let mut cur = 0;
-    let mut mar = 0;
+    let (mut cur, mut mar) = (0, 0);
     let mut cond = YYC_INIT;
     let mut num = 0u64; // Store number in u64 to simplify overflow checks.
 
-    'lex: loop { 
+    'lex: loop {
 {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
@@ -147,7 +146,7 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			11 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			12 => { add_digit(&mut num, str, cur, 48, 2);  continue 'lex; }
+			12 => { add(&mut num, str, cur, 48, 2);  continue 'lex; }
 			13 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				cur += 1;
@@ -165,7 +164,7 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			14 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			15 => { add_digit(&mut num, str, cur, 48, 8);  continue 'lex; }
+			15 => { add(&mut num, str, cur, 48, 8);  continue 'lex; }
 			16 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				cur += 1;
@@ -183,7 +182,7 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			17 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			18 => { add_digit(&mut num, str, cur, 48, 10); continue 'lex; }
+			18 => { add(&mut num, str, cur, 48, 10); continue 'lex; }
 			19 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				cur += 1;
@@ -209,24 +208,23 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			20 => {
             return if num < ERROR { Some(num as u32) } else { None };
         }
-			21 => { add_digit(&mut num, str, cur, 48, 16); continue 'lex; }
-			22 => { add_digit(&mut num, str, cur, 55, 16); continue 'lex; }
-			23 => { add_digit(&mut num, str, cur, 87, 16); continue 'lex; }
+			21 => { add(&mut num, str, cur, 48, 16); continue 'lex; }
+			22 => { add(&mut num, str, cur, 55, 16); continue 'lex; }
+			23 => { add(&mut num, str, cur, 87, 16); continue 'lex; }
 			_ => {
 				panic!("internal lexer error")
 			}
 		}
 	}
 }
-
-    }
+}
 }
 
 fn main() {
+    assert_eq!(parse_u32(b"\0"), None);
     assert_eq!(parse_u32(b"1234567890\0"), Some(1234567890));
     assert_eq!(parse_u32(b"0b1101\0"), Some(13));
     assert_eq!(parse_u32(b"0x7Fe\0"), Some(2046));
     assert_eq!(parse_u32(b"0644\0"), Some(420));
     assert_eq!(parse_u32(b"9999999999\0"), None);
-    assert_eq!(parse_u32(b"\0"), None);
 }

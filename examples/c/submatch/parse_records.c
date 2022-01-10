@@ -1192,7 +1192,8 @@ yy53:
 		default: goto yy9;
 	}
 }
-}
+
+    }
 }
 
 int main() {

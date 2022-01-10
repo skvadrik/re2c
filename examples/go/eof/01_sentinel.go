@@ -5,14 +5,14 @@ package main
 
 // Expect a null-terminated string.
 func lex(str string) int {
-	var cursor int
+	var cur int
 	count := 0
 
-	for {
+	for { 
 //line "go/eof/01_sentinel.go":13
 {
 	var yych byte
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy1
@@ -24,18 +24,18 @@ func lex(str string) int {
 		goto yy2
 	}
 yy1:
-	cursor += 1
+	cur += 1
 //line "go/eof/01_sentinel.re":16
 	{ return count }
 //line "go/eof/01_sentinel.go":31
 yy2:
-	cursor += 1
+	cur += 1
 //line "go/eof/01_sentinel.re":15
 	{ return -1 }
 //line "go/eof/01_sentinel.go":36
 yy3:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case ' ':
 		goto yy3
@@ -47,8 +47,8 @@ yy4:
 	{ continue }
 //line "go/eof/01_sentinel.go":49
 yy5:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy5
@@ -61,7 +61,8 @@ yy6:
 //line "go/eof/01_sentinel.go":62
 }
 //line "go/eof/01_sentinel.re":19
-}
+
+	}
 }
 
 func main() {

@@ -11,12 +11,12 @@ const (
 
 
 func lex(str string) int {
-	var cursor, marker int
+	var cur, mar int
 	
 {
 	var yych byte
 	yyaccept := 0
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case '.':
 		goto yy3
@@ -28,12 +28,12 @@ func lex(str string) int {
 		goto yy1
 	}
 yy1:
-	cursor += 1
+	cur += 1
 yy2:
 	{ return ResultFail }
 yy3:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy7
@@ -42,9 +42,9 @@ yy3:
 	}
 yy4:
 	yyaccept = 0
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
+	cur += 1
+	mar = cur
+	yych = str[cur]
 	switch (yych) {
 	case '.':
 		goto yy7
@@ -59,9 +59,9 @@ yy4:
 	}
 yy5:
 	yyaccept = 1
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
+	cur += 1
+	mar = cur
+	yych = str[cur]
 	switch (yych) {
 	case '.':
 		goto yy7
@@ -78,9 +78,9 @@ yy6:
 	{ return ResultOk }
 yy7:
 	yyaccept = 2
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
+	cur += 1
+	mar = cur
+	yych = str[cur]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy7
@@ -94,8 +94,8 @@ yy7:
 yy8:
 	{ return ResultOk }
 yy9:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case '.':
 		goto yy7
@@ -109,7 +109,7 @@ yy9:
 		goto yy10
 	}
 yy10:
-	cursor = marker
+	cur = mar
 	switch (yyaccept) {
 	case 0:
 		goto yy2
@@ -119,8 +119,8 @@ yy10:
 		goto yy8
 	}
 yy11:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case '+':
 		fallthrough
@@ -132,8 +132,8 @@ yy11:
 		goto yy10
 	}
 yy12:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy13
@@ -141,8 +141,8 @@ yy12:
 		goto yy10
 	}
 yy13:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy13

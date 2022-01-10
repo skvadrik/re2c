@@ -9,7 +9,8 @@
 static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
     std::streampos mar;
     for (;;) {
-#line 13 "c/generic_api/ifstream.c"
+    
+#line 14 "c/generic_api/ifstream.c"
 {
 	char yych;
 	yych = in.peek();
@@ -20,9 +21,9 @@ static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
 yy1:
 	{ in.ignore(); if (in.eof()) return; }
 yy2:
-#line 19 "c/generic_api/ifstream.re"
+#line 20 "c/generic_api/ifstream.re"
 	{ out.put(yych); continue; }
-#line 26 "c/generic_api/ifstream.c"
+#line 27 "c/generic_api/ifstream.c"
 yy3:
 	{ in.ignore(); if (in.eof()) return; }
 	yych = in.peek();
@@ -32,12 +33,13 @@ yy3:
 	}
 yy4:
 	{ in.ignore(); if (in.eof()) return; }
-#line 20 "c/generic_api/ifstream.re"
-	{ out.put('\n'); continue; }
-#line 38 "c/generic_api/ifstream.c"
-}
 #line 21 "c/generic_api/ifstream.re"
+	{ out.put('\n'); continue; }
+#line 39 "c/generic_api/ifstream.c"
 }
+#line 22 "c/generic_api/ifstream.re"
+
+    }
 }
 
 int main() {

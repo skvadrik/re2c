@@ -9,7 +9,8 @@ static int lex(const char *str, unsigned int len) {
     int count = 0;
 
     for (;;) {
-#line 13 "c/eof/03_eof_rule.c"
+    
+#line 14 "c/eof/03_eof_rule.c"
 {
 	char yych;
 	yych = *YYCURSOR;
@@ -23,9 +24,9 @@ static int lex(const char *str, unsigned int len) {
 yy1:
 	++YYCURSOR;
 yy2:
-#line 14 "c/eof/03_eof_rule.re"
+#line 17 "c/eof/03_eof_rule.re"
 	{ return -1; }
-#line 29 "c/eof/03_eof_rule.c"
+#line 30 "c/eof/03_eof_rule.c"
 yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -33,9 +34,9 @@ yy3:
 		default: goto yy4;
 	}
 yy4:
-#line 17 "c/eof/03_eof_rule.re"
+#line 20 "c/eof/03_eof_rule.re"
 	{ continue; }
-#line 39 "c/eof/03_eof_rule.c"
+#line 40 "c/eof/03_eof_rule.c"
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych >= 0x01) goto yy7;
@@ -52,9 +53,9 @@ yy7:
 	}
 yy8:
 	++YYCURSOR;
-#line 16 "c/eof/03_eof_rule.re"
+#line 19 "c/eof/03_eof_rule.re"
 	{ ++count; continue; }
-#line 58 "c/eof/03_eof_rule.c"
+#line 59 "c/eof/03_eof_rule.c"
 yy9:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
@@ -63,15 +64,16 @@ yy9:
 	}
 	goto yy6;
 yy10:
-#line 15 "c/eof/03_eof_rule.re"
+#line 18 "c/eof/03_eof_rule.re"
 	{ return count; }
-#line 69 "c/eof/03_eof_rule.c"
+#line 70 "c/eof/03_eof_rule.c"
 yy11:
 	YYCURSOR = YYMARKER;
 	goto yy2;
 }
-#line 18 "c/eof/03_eof_rule.re"
-}
+#line 21 "c/eof/03_eof_rule.re"
+
+    }
 }
 
 #define TEST(s, r) assert(lex(s, sizeof(s) - 1) == r)

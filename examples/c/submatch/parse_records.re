@@ -69,7 +69,8 @@ static int lex(const char *YYCURSOR) {
             print_channels(tp, h1, h2);
             continue;
         }
-    */}
+    */
+    }
 }
 
 int main() {

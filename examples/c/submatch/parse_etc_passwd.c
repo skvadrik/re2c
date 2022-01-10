@@ -12,6 +12,7 @@ static int lex(const char *YYCURSOR) {
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;const char *yyt6;const char *yyt7;
 
     for (;;) {
+    
 {
 	char yych;
 	yych = *YYCURSOR;
@@ -209,7 +210,8 @@ yy20:
             continue;
         }
 }
-}
+
+    }
 }
 
 int main() {

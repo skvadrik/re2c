@@ -6,7 +6,6 @@
 // blocks add only encoding-specific configurations.
 
 
-
 fn lex_utf8(str: &[u8]) -> Option<usize> {
     let (mut cur, mut mar) = (0, 0);
     

@@ -10,24 +10,30 @@ static int lex(const char *str, unsigned int len) {
     char *buf = (char*) malloc(len + YYMAXFILL);
     memcpy(buf, str, len);
     memset(buf + len, 0, YYMAXFILL);
+
     const char *YYCURSOR = buf, *YYLIMIT = buf + len + YYMAXFILL;
     int count = 0;
+
 loop:
     /*!re2c
         re2c:api:style = free-form;
         re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL = "goto fail;";
+        re2c:define:YYFILL  = "goto fail;";
+
+        str = ['] ([^'\\] | [\\][^])* ['];
 
         [\x00] {
             // Check that it is the sentinel, not some unexpected null.
             if (YYCURSOR - 1 == buf + len) goto exit; else goto fail;
         }
-        ['] ([^'\\] | [\\][^])* ['] { ++count; goto loop; }
-        [ ]+                        { goto loop; }
-        *                           { goto fail; }
+        str  { ++count; goto loop; }
+        [ ]+ { goto loop; }
+        *    { goto fail; }
     */
+
 fail:
     count = -1;
+
 exit:
     free(buf);
     return count;

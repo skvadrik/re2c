@@ -14,7 +14,8 @@ static int lex(const char *str, unsigned int len) {
     int count = 0;
 
     for (;;) {
-#line 18 "c/eof/04_generic_api_sentinel.c"
+    
+#line 19 "c/eof/04_generic_api_sentinel.c"
 {
 	char yych;
 	yych = cur < lim ? *cur : 0;
@@ -51,14 +52,14 @@ static int lex(const char *str, unsigned int len) {
 	}
 yy1:
 	++cur;
-#line 23 "c/eof/04_generic_api_sentinel.re"
+#line 24 "c/eof/04_generic_api_sentinel.re"
 	{ break;; }
-#line 57 "c/eof/04_generic_api_sentinel.c"
+#line 58 "c/eof/04_generic_api_sentinel.c"
 yy2:
 	++cur;
-#line 22 "c/eof/04_generic_api_sentinel.re"
+#line 23 "c/eof/04_generic_api_sentinel.re"
 	{ count = -1; break; }
-#line 62 "c/eof/04_generic_api_sentinel.c"
+#line 63 "c/eof/04_generic_api_sentinel.c"
 yy3:
 	++cur;
 	yych = cur < lim ? *cur : 0;
@@ -67,9 +68,9 @@ yy3:
 		default: goto yy4;
 	}
 yy4:
-#line 25 "c/eof/04_generic_api_sentinel.re"
+#line 26 "c/eof/04_generic_api_sentinel.re"
 	{ continue; }
-#line 73 "c/eof/04_generic_api_sentinel.c"
+#line 74 "c/eof/04_generic_api_sentinel.c"
 yy5:
 	++cur;
 	yych = cur < lim ? *cur : 0;
@@ -103,12 +104,13 @@ yy5:
 		default: goto yy6;
 	}
 yy6:
-#line 24 "c/eof/04_generic_api_sentinel.re"
+#line 25 "c/eof/04_generic_api_sentinel.re"
 	{ ++count; continue;; }
-#line 109 "c/eof/04_generic_api_sentinel.c"
+#line 110 "c/eof/04_generic_api_sentinel.c"
 }
-#line 26 "c/eof/04_generic_api_sentinel.re"
-}
+#line 27 "c/eof/04_generic_api_sentinel.re"
+
+    }
 
     free(buf);
     return count;

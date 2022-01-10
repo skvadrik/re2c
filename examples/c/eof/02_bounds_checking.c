@@ -15,11 +15,13 @@ static int lex(const char *str, unsigned int len) {
     char *buf = (char*) malloc(len + YYMAXFILL);
     memcpy(buf, str, len);
     memset(buf + len, 0, YYMAXFILL);
+
     const char *YYCURSOR = buf, *YYLIMIT = buf + len + YYMAXFILL;
     int count = 0;
+
 loop:
     
-#line 23 "c/eof/02_bounds_checking.c"
+#line 25 "c/eof/02_bounds_checking.c"
 {
 	char yych;
 	if (YYLIMIT <= YYCURSOR) goto fail;
@@ -32,17 +34,17 @@ loop:
 	}
 yy1:
 	++YYCURSOR;
-#line 21 "c/eof/02_bounds_checking.re"
+#line 25 "c/eof/02_bounds_checking.re"
 	{
             // Check that it is the sentinel, not some unexpected null.
             if (YYCURSOR - 1 == buf + len) goto exit; else goto fail;
         }
-#line 41 "c/eof/02_bounds_checking.c"
+#line 43 "c/eof/02_bounds_checking.c"
 yy2:
 	++YYCURSOR;
-#line 27 "c/eof/02_bounds_checking.re"
+#line 31 "c/eof/02_bounds_checking.re"
 	{ goto fail; }
-#line 46 "c/eof/02_bounds_checking.c"
+#line 48 "c/eof/02_bounds_checking.c"
 yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) goto fail;
@@ -52,9 +54,9 @@ yy3:
 		default: goto yy4;
 	}
 yy4:
-#line 26 "c/eof/02_bounds_checking.re"
+#line 30 "c/eof/02_bounds_checking.re"
 	{ goto loop; }
-#line 58 "c/eof/02_bounds_checking.c"
+#line 60 "c/eof/02_bounds_checking.c"
 yy5:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) goto fail;
@@ -66,18 +68,20 @@ yy5:
 	}
 yy6:
 	++YYCURSOR;
-#line 25 "c/eof/02_bounds_checking.re"
+#line 29 "c/eof/02_bounds_checking.re"
 	{ ++count; goto loop; }
-#line 72 "c/eof/02_bounds_checking.c"
+#line 74 "c/eof/02_bounds_checking.c"
 yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) goto fail;
 	goto yy5;
 }
-#line 28 "c/eof/02_bounds_checking.re"
+#line 32 "c/eof/02_bounds_checking.re"
+
 
 fail:
     count = -1;
+
 exit:
     free(buf);
     return count;

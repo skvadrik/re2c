@@ -1,12 +1,11 @@
 // re2c $INPUT -o $OUTPUT
+#include <assert.h>
 
 // This example shows how to combine reusable re2c blocks: two blocks
 // ('colors' and 'fish') are merged into one. The 'salmon' rule occurs
 // in both blocks; the 'fish' block takes priority because it is used
 // earlier. Default rule * occurs in all three blocks; the local (not
 // inherited) definition takes priority.
-
-#include <assert.h>
 
 enum What { COLOR, FISH, DUNNO };
 
@@ -20,8 +19,8 @@ enum What { COLOR, FISH, DUNNO };
     "haddock" | "salmon" | "eel" { return FISH; }
 */
 
-static What lex(const char *YYCURSOR) {
-    const char *YYMARKER;
+static What lex(const char *s) {
+    const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE = char;

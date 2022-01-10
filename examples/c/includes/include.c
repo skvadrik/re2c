@@ -6,8 +6,8 @@ typedef enum { OK, FAIL } Result;
 
 
 
-Result lex(const char *YYCURSOR) {
-    const char *YYMARKER;
+Result lex(const char *s) {
+    const char *YYCURSOR = s, *YYMARKER;
     
 {
 	char yych;

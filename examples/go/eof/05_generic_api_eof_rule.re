@@ -2,35 +2,38 @@
 package main
 
 // Returns "fake" terminating null if cursor has reached limit.
-func peek(str string, cursor int, limit int) byte {
-	if cursor >= limit {
+func peek(str string, cur int, lim int) byte {
+	if cur >= lim {
 		return 0 // fake null
 	} else {
-		return str[cursor]
+		return str[cur]
 	}
 }
 
 // Expects a string without terminating null.
 func lex(str string) int {
-	var cursor, marker int
-	limit := len(str)
+	var cur, mar int
+	lim := len(str)
 	count := 0
 
-	for {/*!re2c
-		re2c:yyfill:enable = 0;
+	for { /*!re2c
 		re2c:eof = 0;
 		re2c:define:YYCTYPE    = byte;
-		re2c:define:YYLESSTHAN = "cursor >= limit";
-		re2c:define:YYPEEK     = "peek(str, cursor, limit)";
-		re2c:define:YYSKIP     = "cursor += 1";
-		re2c:define:YYBACKUP   = "marker = cursor";
-		re2c:define:YYRESTORE  = "cursor = marker";
+		re2c:define:YYLESSTHAN = "cur >= lim";
+		re2c:define:YYPEEK     = "peek(str, cur, lim)";
+		re2c:define:YYSKIP     = "cur += 1";
+		re2c:define:YYBACKUP   = "mar = cur";
+		re2c:define:YYRESTORE  = "cur = mar";
+		re2c:yyfill:enable = 0;
 
-		*                           { return -1 }
-		$                           { return count }
-		['] ([^'\\] | [\\][^])* ['] { count += 1; continue }
-		[ ]+                        { continue }
-	*/}
+		str = ['] ([^'\\] | [\\][^])* ['];
+
+		*    { return -1 }
+		$    { return count }
+		str  { count += 1; continue }
+		[ ]+ { continue }
+	*/
+	}
 }
 
 func main() {

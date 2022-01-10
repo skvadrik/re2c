@@ -4,8 +4,8 @@
 // Expect a string without terminating null.
 fn lex(s: &[u8]) -> isize {
     let mut count = 0;
-    let mut cursor = 0;
-    let limit = s.len();
+    let mut cur = 0;
+    let lim = s.len();
 
     'lex: loop {
 {
@@ -15,8 +15,8 @@ fn lex(s: &[u8]) -> isize {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {if cursor < limit { *s.get_unchecked(cursor) } else { 0 }};
-				cursor += 1;
+				yych = unsafe {if cur < lim {*s.get_unchecked(cur)} else {0}};
+				cur += 1;
 				match yych {
 					0x00 => {
 						yystate = 1;
@@ -39,10 +39,10 @@ fn lex(s: &[u8]) -> isize {
 			1 => { return count; }
 			2 => { return -1; }
 			3 => {
-				yych = unsafe {if cursor < limit { *s.get_unchecked(cursor) } else { 0 }};
+				yych = unsafe {if cur < lim {*s.get_unchecked(cur)} else {0}};
 				match yych {
 					0x20 => {
-						cursor += 1;
+						cur += 1;
 						yystate = 3;
 						continue 'yyl;
 					}
@@ -54,10 +54,10 @@ fn lex(s: &[u8]) -> isize {
 			}
 			4 => { continue 'lex; }
 			5 => {
-				yych = unsafe {if cursor < limit { *s.get_unchecked(cursor) } else { 0 }};
+				yych = unsafe {if cur < lim {*s.get_unchecked(cur)} else {0}};
 				match yych {
 					0x61 ..= 0x7A => {
-						cursor += 1;
+						cur += 1;
 						yystate = 5;
 						continue 'yyl;
 					}

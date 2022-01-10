@@ -64,13 +64,15 @@ fn lex(st: &mut State) -> isize {
         re2c:define:YYLESSTHAN = "st.lim - st.cur < @@";
         re2c:define:YYFILL     = "if fill(st, @@) != Fill::Ok { return -1; }";
 
+        str = ['] ([^'\\] | [\\][^])* ['];
+
         [\x00] {
             // Check that it is the sentinel, not some unexpected null.
             return if st.tok == st.lim - YYMAXFILL { count } else { -1 }
         }
-        ['] ([^'\\] | [\\][^])* ['] { count += 1; continue 'lex; }
-        [ ]+                        { continue 'lex; }
-        *                           { return -1; }
+        str  { count += 1; continue 'lex; }
+        [ ]+ { continue 'lex; }
+        *    { return -1; }
     */}
 }
 

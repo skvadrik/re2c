@@ -11,7 +11,8 @@ static int lex(const char *str, unsigned int len) {
     const char *cur = buf, *lim = buf + len;
     int count = 0;
 
-    for (;;) {/*!re2c
+    for (;;) {
+    /*!re2c
         re2c:yyfill:enable = 0;
         re2c:api = custom;
         re2c:api:style = free-form;
@@ -23,7 +24,8 @@ static int lex(const char *str, unsigned int len) {
         [\x00] { break;; }
         [a-z]+ { ++count; continue;; }
         [ ]+   { continue; }
-    */}
+    */
+    }
 
     free(buf);
     return count;

@@ -14,7 +14,8 @@ static int lex(const char *str, unsigned int len) {
     int count = 0;
 
     for (;;) {
-#line 18 "c/eof/05_generic_api_eof_rule.c"
+    
+#line 19 "c/eof/05_generic_api_eof_rule.c"
 {
 	char yych;
 	yych = cur < lim ? *cur : 0;
@@ -28,9 +29,9 @@ static int lex(const char *str, unsigned int len) {
 yy1:
 	++cur;
 yy2:
-#line 26 "c/eof/05_generic_api_eof_rule.re"
+#line 29 "c/eof/05_generic_api_eof_rule.re"
 	{ count = -1; break; }
-#line 34 "c/eof/05_generic_api_eof_rule.c"
+#line 35 "c/eof/05_generic_api_eof_rule.c"
 yy3:
 	++cur;
 	yych = cur < lim ? *cur : 0;
@@ -39,9 +40,9 @@ yy3:
 		default: goto yy4;
 	}
 yy4:
-#line 29 "c/eof/05_generic_api_eof_rule.re"
+#line 32 "c/eof/05_generic_api_eof_rule.re"
 	{ continue; }
-#line 45 "c/eof/05_generic_api_eof_rule.c"
+#line 46 "c/eof/05_generic_api_eof_rule.c"
 yy5:
 	++cur;
 	mar = cur;
@@ -61,9 +62,9 @@ yy7:
 	}
 yy8:
 	++cur;
-#line 28 "c/eof/05_generic_api_eof_rule.re"
+#line 31 "c/eof/05_generic_api_eof_rule.re"
 	{ ++count; continue; }
-#line 67 "c/eof/05_generic_api_eof_rule.c"
+#line 68 "c/eof/05_generic_api_eof_rule.c"
 yy9:
 	++cur;
 	yych = cur < lim ? *cur : 0;
@@ -73,15 +74,16 @@ yy9:
 	}
 	goto yy6;
 yy10:
-#line 27 "c/eof/05_generic_api_eof_rule.re"
+#line 30 "c/eof/05_generic_api_eof_rule.re"
 	{ break;; }
-#line 79 "c/eof/05_generic_api_eof_rule.c"
+#line 80 "c/eof/05_generic_api_eof_rule.c"
 yy11:
 	cur = mar;
 	goto yy2;
 }
-#line 30 "c/eof/05_generic_api_eof_rule.re"
-}
+#line 33 "c/eof/05_generic_api_eof_rule.re"
+
+    }
 
     free(buf);
     return count;

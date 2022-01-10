@@ -11,11 +11,11 @@ var (
 )
 
 func parse_u32(str string) (uint32, error) {
-	var cursor, marker int
+	var cur, mar int
 	result := uint64(0)
 
-	add_digit := func(base uint64, offset byte) {
-		result = result * base + uint64(str[cursor-1] - offset)
+	add := func(base uint64, offset byte) {
+		result = result * base + uint64(str[cur-1] - offset)
 		if result >= u32Limit {
 			result = u32Limit
 		}
@@ -24,7 +24,7 @@ func parse_u32(str string) (uint32, error) {
 	
 {
 	var yych byte
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case '0':
 		goto yy2
@@ -34,12 +34,12 @@ func parse_u32(str string) (uint32, error) {
 		goto yy1
 	}
 yy1:
-	cursor += 1
+	cur += 1
 	{ goto err }
 yy2:
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
+	cur += 1
+	mar = cur
+	yych = str[cur]
 	switch (yych) {
 	case 'B':
 		fallthrough
@@ -55,12 +55,12 @@ yy2:
 yy3:
 	{ goto oct }
 yy4:
-	cursor += 1
-	cursor += -1
+	cur += 1
+	cur += -1
 	{ goto dec }
 yy5:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case '0','1':
 		goto yy8
@@ -68,11 +68,11 @@ yy5:
 		goto yy6
 	}
 yy6:
-	cursor = marker
+	cur = mar
 	goto yy3
 yy7:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		fallthrough
@@ -84,12 +84,12 @@ yy7:
 		goto yy6
 	}
 yy8:
-	cursor += 1
-	cursor += -1
+	cur += 1
+	cur += -1
 	{ goto bin }
 yy9:
-	cursor += 1
-	cursor += -1
+	cur += 1
+	cur += -1
 	{ goto hex }
 }
 
@@ -97,7 +97,7 @@ bin:
 	
 {
 	var yych byte
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy11
@@ -107,21 +107,21 @@ bin:
 		goto yy12
 	}
 yy11:
-	cursor += 1
+	cur += 1
 	{ goto end }
 yy12:
-	cursor += 1
+	cur += 1
 	{ goto err }
 yy13:
-	cursor += 1
-	{ add_digit(2, '0'); goto bin }
+	cur += 1
+	{ add(2, '0'); goto bin }
 }
 
 oct:
 	
 {
 	var yych byte
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy15
@@ -131,21 +131,21 @@ oct:
 		goto yy16
 	}
 yy15:
-	cursor += 1
+	cur += 1
 	{ goto end }
 yy16:
-	cursor += 1
+	cur += 1
 	{ goto err }
 yy17:
-	cursor += 1
-	{ add_digit(8, '0'); goto oct }
+	cur += 1
+	{ add(8, '0'); goto oct }
 }
 
 dec:
 	
 {
 	var yych byte
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy19
@@ -155,21 +155,21 @@ dec:
 		goto yy20
 	}
 yy19:
-	cursor += 1
+	cur += 1
 	{ goto end }
 yy20:
-	cursor += 1
+	cur += 1
 	{ goto err }
 yy21:
-	cursor += 1
-	{ add_digit(10, '0'); goto dec }
+	cur += 1
+	{ add(10, '0'); goto dec }
 }
 
 hex:
 	
 {
 	var yych byte
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy23
@@ -183,20 +183,20 @@ hex:
 		goto yy24
 	}
 yy23:
-	cursor += 1
+	cur += 1
 	{ goto end }
 yy24:
-	cursor += 1
+	cur += 1
 	{ goto err }
 yy25:
-	cursor += 1
-	{ add_digit(16, '0');    goto hex }
+	cur += 1
+	{ add(16, '0');    goto hex }
 yy26:
-	cursor += 1
-	{ add_digit(16, 'A'-10); goto hex }
+	cur += 1
+	{ add(16, 'A'-10); goto hex }
 yy27:
-	cursor += 1
-	{ add_digit(16, 'a'-10); goto hex }
+	cur += 1
+	{ add(16, 'a'-10); goto hex }
 }
 
 end:

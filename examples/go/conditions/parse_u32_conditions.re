@@ -13,12 +13,12 @@ var (
 const u32Limit uint64 = 1<<32
 
 func parse_u32(str string) (uint32, error) {
-	var cursor, marker int
+	var cur, mar int
 	result := uint64(0)
 	cond := yycinit
 
-	add_digit := func(base uint64, offset byte) {
-		result = result * base + uint64(str[cursor-1] - offset)
+	add := func(base uint64, offset byte) {
+		result = result * base + uint64(str[cur-1] - offset)
 		if result >= u32Limit {
 			result = u32Limit
 		}
@@ -27,11 +27,11 @@ func parse_u32(str string) (uint32, error) {
 	/*!re2c
 		re2c:yyfill:enable = 0;
 		re2c:define:YYCTYPE        = byte;
-		re2c:define:YYPEEK         = "str[cursor]";
-		re2c:define:YYSKIP         = "cursor += 1";
-		re2c:define:YYSHIFT        = "cursor += @@{shift}";
-		re2c:define:YYBACKUP       = "marker = cursor";
-		re2c:define:YYRESTORE      = "cursor = marker";
+		re2c:define:YYPEEK         = "str[cur]";
+		re2c:define:YYSKIP         = "cur += 1";
+		re2c:define:YYSHIFT        = "cur += @@{shift}";
+		re2c:define:YYBACKUP       = "mar = cur";
+		re2c:define:YYRESTORE      = "cur = mar";
 		re2c:define:YYGETCONDITION = "cond";
 		re2c:define:YYSETCONDITION = "cond = @@";
 
@@ -50,12 +50,12 @@ func parse_u32(str string) (uint32, error) {
 			}
 		}
 
-		<bin> [01]  { add_digit(2, '0');     goto yyc_bin }
-		<oct> [0-7] { add_digit(8, '0');     goto yyc_oct }
-		<dec> [0-9] { add_digit(10, '0');    goto yyc_dec }
-		<hex> [0-9] { add_digit(16, '0');    goto yyc_hex }
-		<hex> [a-f] { add_digit(16, 'a'-10); goto yyc_hex }
-		<hex> [A-F] { add_digit(16, 'A'-10); goto yyc_hex }
+		<bin> [01]  { add(2, '0');     goto yyc_bin }
+		<oct> [0-7] { add(8, '0');     goto yyc_oct }
+		<dec> [0-9] { add(10, '0');    goto yyc_dec }
+		<hex> [0-9] { add(16, '0');    goto yyc_hex }
+		<hex> [a-f] { add(16, 'a'-10); goto yyc_hex }
+		<hex> [A-F] { add(16, 'A'-10); goto yyc_hex }
 	*/
 }
 

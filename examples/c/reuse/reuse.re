@@ -1,12 +1,10 @@
 // re2c $INPUT -o $OUTPUT --input-encoding utf8
+#include <assert.h>
+#include <stdint.h>
 
 // This example supports multiple input encodings: UTF-8 and UTF-32.
 // Both lexers are generated from the same rules block, and the use
 // blocks add only encoding-specific configurations.
-
-#include <assert.h>
-#include <stdint.h>
-
 /*!rules:re2c
     re2c:yyfill:enable = 0;
 
@@ -14,16 +12,16 @@
     *       { return 1; }
 */
 
-static int lex_utf8(const uint8_t *YYCURSOR) {
-    const uint8_t *YYMARKER;
+static int lex_utf8(const uint8_t *s) {
+    const uint8_t *YYCURSOR = s, *YYMARKER;
     /*!use:re2c
         re2c:define:YYCTYPE = uint8_t;
         re2c:encoding:utf8 = 1;
     */
 }
 
-static int lex_utf32(const uint32_t *YYCURSOR) {
-    const uint32_t *YYMARKER;
+static int lex_utf32(const uint32_t *s) {
+    const uint32_t *YYCURSOR = s, *YYMARKER;
     /*!use:re2c
         re2c:define:YYCTYPE = uint32_t;
         re2c:encoding:utf32 = 1;

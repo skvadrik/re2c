@@ -4,24 +4,24 @@
 package main
 
 // Returns "fake" terminating null if cursor has reached limit.
-func peek(str string, cursor int) byte {
-	if cursor >= len(str) {
+func peek(str string, cur int) byte {
+	if cur >= len(str) {
 		return 0 // fake null
 	} else {
-		return str[cursor]
+		return str[cur]
 	}
 }
 
 // Expects a string without terminating null.
 func lex(str string) int {
-	var cursor int
+	var cur int
 	count := 0
 
-	for {
+	for { 
 //line "go/eof/04_generic_api_sentinel.go":22
 {
 	var yych byte
-	yych = peek(str, cursor)
+	yych = peek(str, cur)
 	switch (yych) {
 	case 0x00:
 		goto yy1
@@ -33,18 +33,18 @@ func lex(str string) int {
 		goto yy2
 	}
 yy1:
-	cursor += 1
+	cur += 1
 //line "go/eof/04_generic_api_sentinel.re":25
 	{ return count }
 //line "go/eof/04_generic_api_sentinel.go":40
 yy2:
-	cursor += 1
+	cur += 1
 //line "go/eof/04_generic_api_sentinel.re":24
 	{ return -1 }
 //line "go/eof/04_generic_api_sentinel.go":45
 yy3:
-	cursor += 1
-	yych = peek(str, cursor)
+	cur += 1
+	yych = peek(str, cur)
 	switch (yych) {
 	case ' ':
 		goto yy3
@@ -56,8 +56,8 @@ yy4:
 	{ continue }
 //line "go/eof/04_generic_api_sentinel.go":58
 yy5:
-	cursor += 1
-	yych = peek(str, cursor)
+	cur += 1
+	yych = peek(str, cur)
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy5
@@ -70,7 +70,8 @@ yy6:
 //line "go/eof/04_generic_api_sentinel.go":71
 }
 //line "go/eof/04_generic_api_sentinel.re":28
-}
+
+	}
 }
 
 func main() {

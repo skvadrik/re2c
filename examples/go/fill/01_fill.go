@@ -11,35 +11,35 @@ import (
 const BUFSIZE int = 4096
 
 type Input struct {
-	file   *os.File
-	data   []byte
-	cursor int
-	marker int
-	token  int
-	limit  int
-	eof    bool
+	file *os.File
+	buf  []byte
+	cur  int
+	mar  int
+	tok  int
+	lim  int
+	eof  bool
 }
 
 func fill(in *Input) int {
 	if in.eof { return -1 } // unexpected EOF
 
 	// Error: lexeme too long. In real life can reallocate a larger buffer.
-	if in.token < 1 { return -2 }
+	if in.tok < 1 { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.data[0:], in.data[in.token:in.limit])
-	in.cursor -= in.token
-	in.marker -= in.token
-	in.limit -= in.token
-	in.token = 0
+	copy(in.buf[0:], in.buf[in.tok:in.lim])
+	in.cur -= in.tok
+	in.mar -= in.tok
+	in.lim -= in.tok
+	in.tok = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.data[in.limit:BUFSIZE])
-	in.limit += n
-	in.data[in.limit] = 0
+	n, _ := in.file.Read(in.buf[in.lim:BUFSIZE])
+	in.lim += n
+	in.buf[in.lim] = 0
 
 	// If read less than expected, this is the end of input.
-	in.eof = in.limit < BUFSIZE
+	in.eof = in.lim < BUFSIZE
 
 	return 0
 }
@@ -47,20 +47,20 @@ func fill(in *Input) int {
 func lex(in *Input) int {
 	count := 0
 	for {
-		in.token = in.cursor
+		in.tok = in.cur
 	
 //line "go/fill/01_fill.go":53
 {
 	var yych byte
 yyFillLabel0:
-	yych = in.data[in.cursor]
+	yych = in.buf[in.cur]
 	switch (yych) {
 	case ' ':
 		goto yy3
 	case '\'':
 		goto yy5
 	default:
-		if (in.limit <= in.cursor) {
+		if (in.lim <= in.cur) {
 			if (fill(in) == 0) {
 				goto yyFillLabel0
 			}
@@ -69,20 +69,20 @@ yyFillLabel0:
 		goto yy1
 	}
 yy1:
-	in.cursor += 1
+	in.cur += 1
 yy2:
-//line "go/fill/01_fill.re":59
+//line "go/fill/01_fill.re":61
 	{ return -1 }
 //line "go/fill/01_fill.go":77
 yy3:
-	in.cursor += 1
+	in.cur += 1
 yyFillLabel1:
-	yych = in.data[in.cursor]
+	yych = in.buf[in.cur]
 	switch (yych) {
 	case ' ':
 		goto yy3
 	default:
-		if (in.limit <= in.cursor) {
+		if (in.lim <= in.cur) {
 			if (fill(in) == 0) {
 				goto yyFillLabel1
 			}
@@ -90,27 +90,27 @@ yyFillLabel1:
 		goto yy4
 	}
 yy4:
-//line "go/fill/01_fill.re":62
+//line "go/fill/01_fill.re":64
 	{ continue }
 //line "go/fill/01_fill.go":96
 yy5:
-	in.cursor += 1
-	in.marker = in.cursor
+	in.cur += 1
+	in.mar = in.cur
 yyFillLabel2:
-	yych = in.data[in.cursor]
+	yych = in.buf[in.cur]
 	if (yych >= 0x01) {
 		goto yy7
 	}
-	if (in.limit <= in.cursor) {
+	if (in.lim <= in.cur) {
 		if (fill(in) == 0) {
 			goto yyFillLabel2
 		}
 		goto yy2
 	}
 yy6:
-	in.cursor += 1
+	in.cur += 1
 yyFillLabel3:
-	yych = in.data[in.cursor]
+	yych = in.buf[in.cur]
 yy7:
 	switch (yych) {
 	case '\'':
@@ -118,7 +118,7 @@ yy7:
 	case '\\':
 		goto yy9
 	default:
-		if (in.limit <= in.cursor) {
+		if (in.lim <= in.cur) {
 			if (fill(in) == 0) {
 				goto yyFillLabel3
 			}
@@ -127,16 +127,16 @@ yy7:
 		goto yy6
 	}
 yy8:
-	in.cursor += 1
-//line "go/fill/01_fill.re":61
+	in.cur += 1
+//line "go/fill/01_fill.re":63
 	{ count += 1; continue }
 //line "go/fill/01_fill.go":134
 yy9:
-	in.cursor += 1
+	in.cur += 1
 yyFillLabel4:
-	yych = in.data[in.cursor]
+	yych = in.buf[in.cur]
 	if (yych <= 0x00) {
-		if (in.limit <= in.cursor) {
+		if (in.lim <= in.cur) {
 			if (fill(in) == 0) {
 				goto yyFillLabel4
 			}
@@ -146,15 +146,16 @@ yyFillLabel4:
 	}
 	goto yy6
 yy10:
-//line "go/fill/01_fill.re":60
+//line "go/fill/01_fill.re":62
 	{ return count }
 //line "go/fill/01_fill.go":152
 yy11:
-	in.cursor = in.marker
+	in.cur = in.mar
 	goto yy2
 }
-//line "go/fill/01_fill.re":63
-}
+//line "go/fill/01_fill.re":65
+
+	}
 }
 
 func main() () {
@@ -170,13 +171,13 @@ func main() () {
 
 	// Prepare lexer state (sentinel is set to zero by `make`).
 	in := &Input{
-		file:   f,
-		data:   make([]byte, BUFSIZE+1),
-		cursor: BUFSIZE,
-		marker: BUFSIZE,
-		token:  BUFSIZE,
-		limit:  BUFSIZE,
-		eof:    false,
+		file: f,
+		buf:  make([]byte, BUFSIZE+1),
+		cur:  BUFSIZE,
+		mar:  BUFSIZE,
+		tok:  BUFSIZE,
+		lim:  BUFSIZE,
+		eof:  false,
 	}
 
 	// Run the lexer.

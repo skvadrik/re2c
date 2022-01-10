@@ -21,12 +21,12 @@ const (
 const u32Limit uint64 = 1<<32
 
 func parse_u32(str string) (uint32, error) {
-	var cursor, marker int
+	var cur, mar int
 	result := uint64(0)
 	cond := yycinit
 
-	add_digit := func(base uint64, offset byte) {
-		result = result * base + uint64(str[cursor-1] - offset)
+	add := func(base uint64, offset byte) {
+		result = result * base + uint64(str[cur-1] - offset)
 		if result >= u32Limit {
 			result = u32Limit
 		}
@@ -49,7 +49,7 @@ func parse_u32(str string) (uint32, error) {
 	}
 /* *********************************** */
 yyc_init:
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case '0':
 		goto yy2
@@ -59,12 +59,12 @@ yyc_init:
 		goto yy1
 	}
 yy1:
-	cursor += 1
+	cur += 1
 	{ return 0, eSyntax }
 yy2:
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
+	cur += 1
+	mar = cur
+	yych = str[cur]
 	switch (yych) {
 	case 'B':
 		fallthrough
@@ -81,13 +81,13 @@ yy3:
 	cond = yycoct
 	goto yyc_oct
 yy4:
-	cursor += 1
-	cursor += -1
+	cur += 1
+	cur += -1
 	cond = yycdec
 	goto yyc_dec
 yy5:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case '0','1':
 		goto yy8
@@ -95,11 +95,11 @@ yy5:
 		goto yy6
 	}
 yy6:
-	cursor = marker
+	cur = mar
 	goto yy3
 yy7:
-	cursor += 1
-	yych = str[cursor]
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		fallthrough
@@ -111,18 +111,18 @@ yy7:
 		goto yy6
 	}
 yy8:
-	cursor += 1
-	cursor += -1
+	cur += 1
+	cur += -1
 	cond = yycbin
 	goto yyc_bin
 yy9:
-	cursor += 1
-	cursor += -1
+	cur += 1
+	cur += -1
 	cond = yychex
 	goto yyc_hex
 /* *********************************** */
 yyc_bin:
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy11
@@ -132,7 +132,7 @@ yyc_bin:
 		goto yy12
 	}
 yy11:
-	cursor += 1
+	cur += 1
 	{
 			if result < u32Limit {
 				return uint32(result), nil
@@ -141,14 +141,14 @@ yy11:
 			}
 		}
 yy12:
-	cursor += 1
+	cur += 1
 	{ return 0, eSyntax }
 yy13:
-	cursor += 1
-	{ add_digit(2, '0');     goto yyc_bin }
+	cur += 1
+	{ add(2, '0');     goto yyc_bin }
 /* *********************************** */
 yyc_dec:
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy15
@@ -158,7 +158,7 @@ yyc_dec:
 		goto yy16
 	}
 yy15:
-	cursor += 1
+	cur += 1
 	{
 			if result < u32Limit {
 				return uint32(result), nil
@@ -167,14 +167,14 @@ yy15:
 			}
 		}
 yy16:
-	cursor += 1
+	cur += 1
 	{ return 0, eSyntax }
 yy17:
-	cursor += 1
-	{ add_digit(10, '0');    goto yyc_dec }
+	cur += 1
+	{ add(10, '0');    goto yyc_dec }
 /* *********************************** */
 yyc_hex:
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy19
@@ -188,7 +188,7 @@ yyc_hex:
 		goto yy20
 	}
 yy19:
-	cursor += 1
+	cur += 1
 	{
 			if result < u32Limit {
 				return uint32(result), nil
@@ -197,20 +197,20 @@ yy19:
 			}
 		}
 yy20:
-	cursor += 1
+	cur += 1
 	{ return 0, eSyntax }
 yy21:
-	cursor += 1
-	{ add_digit(16, '0');    goto yyc_hex }
+	cur += 1
+	{ add(16, '0');    goto yyc_hex }
 yy22:
-	cursor += 1
-	{ add_digit(16, 'A'-10); goto yyc_hex }
+	cur += 1
+	{ add(16, 'A'-10); goto yyc_hex }
 yy23:
-	cursor += 1
-	{ add_digit(16, 'a'-10); goto yyc_hex }
+	cur += 1
+	{ add(16, 'a'-10); goto yyc_hex }
 /* *********************************** */
 yyc_oct:
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy25
@@ -220,7 +220,7 @@ yyc_oct:
 		goto yy26
 	}
 yy25:
-	cursor += 1
+	cur += 1
 	{
 			if result < u32Limit {
 				return uint32(result), nil
@@ -229,11 +229,11 @@ yy25:
 			}
 		}
 yy26:
-	cursor += 1
+	cur += 1
 	{ return 0, eSyntax }
 yy27:
-	cursor += 1
-	{ add_digit(8, '0');     goto yyc_oct }
+	cur += 1
+	{ add(8, '0');     goto yyc_oct }
 }
 
 }

@@ -15,18 +15,18 @@ func lex(str string) int {
 	// Pad string with YYMAXFILL zeroes at the end.
 	buf := str + strings.Repeat("\000", YYMAXFILL)
 
-	var cursor int
-	limit := len(buf)
+	var cur int
+	lim := len(buf)
 	count := 0
 
-	for{
+	for { 
 //line "go/eof/02_bounds_checking.go":24
 {
 	var yych byte
-	if (limit - cursor < 1) {
+	if (lim - cur < 1) {
 		return -1
 	}
-	yych = buf[cursor]
+	yych = buf[cur]
 	switch (yych) {
 	case 0x00:
 		goto yy1
@@ -38,24 +38,24 @@ func lex(str string) int {
 		goto yy2
 	}
 yy1:
-	cursor += 1
-//line "go/eof/02_bounds_checking.re":24
+	cur += 1
+//line "go/eof/02_bounds_checking.re":26
 	{
 			// Check that it is the sentinel, not some unexpected null.
-			if cursor - 1 == len(str) { return count } else { return -1 }
+			if cur - 1 == len(str) { return count } else { return -1 }
 		}
 //line "go/eof/02_bounds_checking.go":48
 yy2:
-	cursor += 1
-//line "go/eof/02_bounds_checking.re":30
+	cur += 1
+//line "go/eof/02_bounds_checking.re":32
 	{ return -1 }
 //line "go/eof/02_bounds_checking.go":53
 yy3:
-	cursor += 1
-	if (limit - cursor < 1) {
+	cur += 1
+	if (lim - cur < 1) {
 		return -1
 	}
-	yych = buf[cursor]
+	yych = buf[cur]
 	switch (yych) {
 	case ' ':
 		goto yy3
@@ -63,15 +63,15 @@ yy3:
 		goto yy4
 	}
 yy4:
-//line "go/eof/02_bounds_checking.re":29
+//line "go/eof/02_bounds_checking.re":31
 	{ continue }
 //line "go/eof/02_bounds_checking.go":69
 yy5:
-	cursor += 1
-	if (limit - cursor < 1) {
+	cur += 1
+	if (lim - cur < 1) {
 		return -1
 	}
-	yych = buf[cursor]
+	yych = buf[cur]
 	switch (yych) {
 	case '\'':
 		goto yy6
@@ -81,19 +81,20 @@ yy5:
 		goto yy5
 	}
 yy6:
-	cursor += 1
-//line "go/eof/02_bounds_checking.re":28
+	cur += 1
+//line "go/eof/02_bounds_checking.re":30
 	{ count += 1; continue }
 //line "go/eof/02_bounds_checking.go":88
 yy7:
-	cursor += 1
-	if (limit - cursor < 1) {
+	cur += 1
+	if (lim - cur < 1) {
 		return -1
 	}
 	goto yy5
 }
-//line "go/eof/02_bounds_checking.re":31
-}
+//line "go/eof/02_bounds_checking.re":33
+
+	}
 }
 
 func main() {

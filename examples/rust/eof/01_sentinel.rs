@@ -3,10 +3,10 @@
 
 // Expect a null-terminated string.
 fn lex(s: &[u8]) -> isize {
-    let mut cursor = 0;
+    let mut cur = 0;
     let mut count = 0;
 
-    'lex: loop { 
+    'lex: loop {
 {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
@@ -14,8 +14,8 @@ fn lex(s: &[u8]) -> isize {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
-				cursor += 1;
+				yych = unsafe {*s.get_unchecked(cur)};
+				cur += 1;
 				match yych {
 					0x00 => {
 						yystate = 1;
@@ -38,10 +38,10 @@ fn lex(s: &[u8]) -> isize {
 			1 => { return count; }
 			2 => { return -1; }
 			3 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
+				yych = unsafe {*s.get_unchecked(cur)};
 				match yych {
 					0x20 => {
-						cursor += 1;
+						cur += 1;
 						yystate = 3;
 						continue 'yyl;
 					}
@@ -53,10 +53,10 @@ fn lex(s: &[u8]) -> isize {
 			}
 			4 => { continue 'lex; }
 			5 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
+				yych = unsafe {*s.get_unchecked(cur)};
 				match yych {
 					0x61 ..= 0x7A => {
-						cursor += 1;
+						cur += 1;
 						yystate = 5;
 						continue 'yyl;
 					}
@@ -73,7 +73,7 @@ fn lex(s: &[u8]) -> isize {
 		}
 	}
 }
- }
+}
 }
 
 fn main() {

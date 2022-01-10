@@ -9,35 +9,35 @@ import (
 const BUFSIZE int = 4096
 
 type Input struct {
-	file   *os.File
-	data   []byte
-	cursor int
-	marker int
-	token  int
-	limit  int
-	eof    bool
+	file *os.File
+	buf  []byte
+	cur  int
+	mar  int
+	tok  int
+	lim  int
+	eof  bool
 }
 
 func fill(in *Input) int {
 	if in.eof { return -1 } // unexpected EOF
 
 	// Error: lexeme too long. In real life can reallocate a larger buffer.
-	if in.token < 1 { return -2 }
+	if in.tok < 1 { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.data[0:], in.data[in.token:in.limit])
-	in.cursor -= in.token
-	in.marker -= in.token
-	in.limit -= in.token
-	in.token = 0
+	copy(in.buf[0:], in.buf[in.tok:in.lim])
+	in.cur -= in.tok
+	in.mar -= in.tok
+	in.lim -= in.tok
+	in.tok = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.data[in.limit:BUFSIZE])
-	in.limit += n
-	in.data[in.limit] = 0
+	n, _ := in.file.Read(in.buf[in.lim:BUFSIZE])
+	in.lim += n
+	in.buf[in.lim] = 0
 
 	// If read less than expected, this is the end of input.
-	in.eof = in.limit < BUFSIZE
+	in.eof = in.lim < BUFSIZE
 
 	return 0
 }
@@ -45,22 +45,25 @@ func fill(in *Input) int {
 func lex(in *Input) int {
 	count := 0
 	for {
-		in.token = in.cursor
+		in.tok = in.cur
 	/*!re2c
 		re2c:eof = 0;
 		re2c:define:YYCTYPE    = byte;
-		re2c:define:YYPEEK     = "in.data[in.cursor]";
-		re2c:define:YYSKIP     = "in.cursor += 1";
-		re2c:define:YYBACKUP   = "in.marker = in.cursor";
-		re2c:define:YYRESTORE  = "in.cursor = in.marker";
-		re2c:define:YYLESSTHAN = "in.limit <= in.cursor";
+		re2c:define:YYPEEK     = "in.buf[in.cur]";
+		re2c:define:YYSKIP     = "in.cur += 1";
+		re2c:define:YYBACKUP   = "in.mar = in.cur";
+		re2c:define:YYRESTORE  = "in.cur = in.mar";
+		re2c:define:YYLESSTHAN = "in.lim <= in.cur";
 		re2c:define:YYFILL     = "fill(in) == 0";
 
-		*                           { return -1 }
-		$                           { return count }
-		['] ([^'\\] | [\\][^])* ['] { count += 1; continue }
-		[ ]+                        { continue }
-	*/}
+		str = ['] ([^'\\] | [\\][^])* ['];
+
+		*    { return -1 }
+		$    { return count }
+		str  { count += 1; continue }
+		[ ]+ { continue }
+	*/
+	}
 }
 
 func main() () {
@@ -76,13 +79,13 @@ func main() () {
 
 	// Prepare lexer state (sentinel is set to zero by `make`).
 	in := &Input{
-		file:   f,
-		data:   make([]byte, BUFSIZE+1),
-		cursor: BUFSIZE,
-		marker: BUFSIZE,
-		token:  BUFSIZE,
-		limit:  BUFSIZE,
-		eof:    false,
+		file: f,
+		buf:  make([]byte, BUFSIZE+1),
+		cur:  BUFSIZE,
+		mar:  BUFSIZE,
+		tok:  BUFSIZE,
+		lim:  BUFSIZE,
+		eof:  false,
 	}
 
 	// Run the lexer.

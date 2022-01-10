@@ -40,7 +40,8 @@ static int lex(const char *s) {
     const char *m, *k, *v;
     /*!stags:re2c format = 'const char *@@;'; */
 
-    for (;;) {/*!re2c
+    for (;;) {
+    /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:define:YYCURSOR = s;
         re2c:define:YYMARKER = m;
@@ -80,7 +81,8 @@ static int lex(const char *s) {
             u.push_back(std::make_pair(std::string(k, v), std::string(v, s)));
             continue;
         }
-    */}
+    */
+    }
 }
 
 int main() {

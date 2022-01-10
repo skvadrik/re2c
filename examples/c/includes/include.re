@@ -2,15 +2,15 @@
 #include <assert.h>
 /*!include:re2c "definitions.h" */
 
-Result lex(const char *YYCURSOR) {
-    const char *YYMARKER;
+Result lex(const char *s) {
+    const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
 
+        *      { return FAIL; }
         number { return OK; }
         !include "extra_rules.re.inc";
-        * { return FAIL; }
     */
 }
 

@@ -42,6 +42,7 @@ static int lex(const char *s) {
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;
 
     for (;;) {
+    
 {
 	char yych;
 	unsigned int yyaccept = 0;
@@ -1605,7 +1606,8 @@ yy105:
 		default: goto yy50;
 	}
 }
-}
+
+    }
 }
 
 int main() {
@@ -1613,6 +1615,6 @@ int main() {
         "--format=\"%s\" --limit -f=3 --verbos --d\"19th May\"") == 0);
     return 0;
 }
-c/submatch/parse_options.re:67:12: warning: rule matches empty string [-Wmatch-empty-string]
-c/submatch/parse_options.re:79:35: warning: tag 'k' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/parse_options.re:79:35: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_options.re:68:12: warning: rule matches empty string [-Wmatch-empty-string]
+c/submatch/parse_options.re:80:35: warning: tag 'k' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_options.re:80:35: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

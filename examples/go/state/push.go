@@ -8,16 +8,18 @@ import (
 	"os"
 )
 
-const BUFSIZE int = 10 // small for the sake of example
+// Use a small buffer to cover the case when a lexeme doesn't fit.
+// In real world use a larger buffer.
+const BUFSIZE int = 10
 
 type State struct {
-	file   *os.File
-	data   []byte
-	cursor int
-	marker int
-	token  int
-	limit  int
-	state  int
+	file  *os.File
+	buf   []byte
+	cur   int
+	mar   int
+	tok   int
+	lim   int
+	state int
 }
 
 const (
@@ -29,24 +31,24 @@ const (
 )
 
 func fill(st *State) int {
-	shift := st.token
-	used := st.limit - st.token
+	shift := st.tok
+	used := st.lim - st.tok
 	free := BUFSIZE - used
 
 	// Error: no space. In real life can reallocate a larger buffer.
 	if free < 1 { return lexPacketTooBig }
 
 	// Shift buffer contents (discard already processed data).
-	copy(st.data[0:], st.data[shift:shift+used])
-	st.cursor -= shift
-	st.marker -= shift
-	st.limit -= shift
-	st.token -= shift
+	copy(st.buf[0:], st.buf[shift:shift+used])
+	st.cur -= shift
+	st.mar -= shift
+	st.lim -= shift
+	st.tok -= shift
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.data[st.limit:BUFSIZE])
-	st.limit += n
-	st.data[st.limit] = 0 // append sentinel symbol
+	n, _ := st.file.Read(st.buf[st.lim:BUFSIZE])
+	st.lim += n
+	st.buf[st.lim] = 0 // append sentinel symbol
 
 	return lexReady
 }
@@ -54,101 +56,101 @@ func fill(st *State) int {
 func lex(st *State, recv *int) int {
 	var yych byte
 	
-//line "go/state/push.go":58
+//line "go/state/push.go":60
 switch (st.state) {
 default:
 	goto yy0
 case 0:
-	if (st.limit <= st.cursor) {
+	if (st.lim <= st.cur) {
 		goto yy8
 	}
 	goto yyFillLabel0
 case 1:
-	if (st.limit <= st.cursor) {
+	if (st.lim <= st.cur) {
 		goto yy3
 	}
 	goto yyFillLabel1
 case 2:
-	if (st.limit <= st.cursor) {
+	if (st.lim <= st.cur) {
 		goto yy7
 	}
 	goto yyFillLabel2
 }
-//line "go/state/push.re":54
+//line "go/state/push.re":56
 
 loop:
-	st.token = st.cursor
+	st.tok = st.cur
 	
-//line "go/state/push.go":83
+//line "go/state/push.go":85
 
 yy0:
 yyFillLabel0:
-	yych = st.data[st.cursor]
+	yych = st.buf[st.cur]
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy4
 	default:
-		if (st.limit <= st.cursor) {
+		if (st.lim <= st.cur) {
 			st.state = 0
 			return lexWaitingForInput
 		}
 		goto yy2
 	}
 yy2:
-	st.cursor += 1
+	st.cur += 1
 yy3:
 	st.state = -1
-//line "go/state/push.re":70
+//line "go/state/push.re":72
 	{ return lexPacketBroken }
-//line "go/state/push.go":104
+//line "go/state/push.go":106
 yy4:
-	st.cursor += 1
-	st.marker = st.cursor
+	st.cur += 1
+	st.mar = st.cur
 yyFillLabel1:
-	yych = st.data[st.cursor]
+	yych = st.buf[st.cur]
 	switch (yych) {
 	case ';':
 		goto yy5
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy6
 	default:
-		if (st.limit <= st.cursor) {
+		if (st.lim <= st.cur) {
 			st.state = 1
 			return lexWaitingForInput
 		}
 		goto yy3
 	}
 yy5:
-	st.cursor += 1
+	st.cur += 1
 	st.state = -1
-//line "go/state/push.re":72
+//line "go/state/push.re":74
 	{ *recv = *recv + 1; goto loop }
-//line "go/state/push.go":127
+//line "go/state/push.go":129
 yy6:
-	st.cursor += 1
+	st.cur += 1
 yyFillLabel2:
-	yych = st.data[st.cursor]
+	yych = st.buf[st.cur]
 	switch (yych) {
 	case ';':
 		goto yy5
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy6
 	default:
-		if (st.limit <= st.cursor) {
+		if (st.lim <= st.cur) {
 			st.state = 2
 			return lexWaitingForInput
 		}
 		goto yy7
 	}
 yy7:
-	st.cursor = st.marker
+	st.cur = st.mar
 	goto yy3
 yy8:
 	st.state = -1
-//line "go/state/push.re":71
-	{ return lexEnd }
-//line "go/state/push.go":151
 //line "go/state/push.re":73
+	{ return lexEnd }
+//line "go/state/push.go":153
+//line "go/state/push.re":75
 
 }
 
@@ -161,13 +163,13 @@ func test(expect int, packets []string) {
 	// Initialize lexer state: `state` value is -1, all offsets are at the end
 	// of buffer, the character at `lim` offset is the sentinel (null).
 	st := &State{
-		file:   fr,
-		data:   make([]byte, BUFSIZE+1),
-		cursor: BUFSIZE,
-		marker: BUFSIZE,
-		token:  BUFSIZE,
-		limit:  BUFSIZE,
-		state:  -1,
+		file:  fr,
+		buf:   make([]byte, BUFSIZE+1),
+		cur:   BUFSIZE,
+		mar:   BUFSIZE,
+		tok:   BUFSIZE,
+		lim:   BUFSIZE,
+		state: -1,
 	}
 	// data is zero-initialized, no need to write sentinel
 

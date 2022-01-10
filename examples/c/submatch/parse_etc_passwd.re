@@ -9,7 +9,8 @@ static int lex(const char *YYCURSOR) {
     const char *YYMARKER, *n, *p, *u, *g, *f, *h, *c;
     /*!stags:re2c format = 'const char *@@;'; */
 
-    for (;;) {/*!re2c
+    for (;;) {
+    /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
@@ -46,7 +47,8 @@ static int lex(const char *YYCURSOR) {
             fprintf(stderr, "\n");
             continue;
         }
-    */}
+    */
+    }
 }
 
 int main() {

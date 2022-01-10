@@ -1,58 +1,60 @@
 // re2c $INPUT -o $OUTPUT
-
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
-#define BUFSIZE 4096
+#define BUFSIZE 4095
 
-typedef struct {
+struct Input {
     FILE *file;
     char buf[BUFSIZE + 1], *lim, *cur, *mar, *tok; // +1 for sentinel
-    int eof;
-} Input;
+    bool eof;
+};
 
-static int fill(Input *in) {
-    if (in->eof) return 1;
+static int fill(Input &in) {
+    if (in.eof) return 1;
 
-    const size_t shift = in->tok - in->buf;
-    const size_t used = in->lim - in->tok;
+    const size_t shift = in.tok - in.buf;
+    const size_t used = in.lim - in.tok;
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
     if (shift < 1) return 2;
 
     // Shift buffer contents (discard everything up to the current token).
-    memmove(in->buf, in->tok, used);
-    in->lim -= shift;
-    in->cur -= shift;
-    in->mar -= shift;
-    in->tok -= shift;
+    memmove(in.buf, in.tok, used);
+    in.lim -= shift;
+    in.cur -= shift;
+    in.mar -= shift;
+    in.tok -= shift;
 
     // Fill free space at the end of buffer with new data from file.
-    in->lim += fread(in->lim, 1, BUFSIZE - used, in->file);
-    in->lim[0] = 0;
-    in->eof = in->lim < in->buf + BUFSIZE;
+    in.lim += fread(in.lim, 1, BUFSIZE - used, in.file);
+    in.lim[0] = 0;
+    in.eof = in.lim < in.buf + BUFSIZE;
     return 0;
 }
 
-static int lex(Input *in) {
+static int lex(Input &in) {
     int count = 0;
     for (;;) {
-        in->tok = in->cur;
+        in.tok = in.cur;
     /*!re2c
-        re2c:eof = 0;
         re2c:api:style = free-form;
         re2c:define:YYCTYPE  = char;
-        re2c:define:YYCURSOR = in->cur;
-        re2c:define:YYMARKER = in->mar;
-        re2c:define:YYLIMIT  = in->lim;
+        re2c:define:YYCURSOR = in.cur;
+        re2c:define:YYMARKER = in.mar;
+        re2c:define:YYLIMIT  = in.lim;
         re2c:define:YYFILL   = "fill(in) == 0";
+        re2c:eof = 0;
 
-        *                           { return -1; }
-        $                           { return count; }
-        ['] ([^'\\] | [\\][^])* ['] { ++count; continue; }
-        [ ]+                        { continue; }
-    */}
+        str = ['] ([^'\\] | [\\][^])* ['];
+
+        *    { return -1; }
+        $    { return count; }
+        str  { ++count; continue; }
+        [ ]+ { continue; }
+    */
+    }
 }
 
 int main() {
@@ -73,10 +75,10 @@ int main() {
     in.file = fopen(fname, "r");
     in.cur = in.mar = in.tok = in.lim = in.buf + BUFSIZE;
     in.eof = 0;
-    fill(&in);
+    fill(in);
 
     // Run the lexer.
-    assert(lex(&in) == count);
+    assert(lex(in) == count);
 
     // Cleanup: remove input file.
     fclose(in.file);

@@ -18,14 +18,14 @@ macro_rules! maybe { // Convert the number from u64 to optional u32.
 }
 
 // Add digit with the given base, checking for overflow.
-fn add_digit(st: &mut State, offs: u8, base: u64) {
+fn add(st: &mut State, offs: u8, base: u64) {
     let digit = unsafe { st.str.get_unchecked(st.cur - 1) } - offs;
     st.num = std::cmp::min(st.num * base + digit as u64, ERROR);
 }
 
 fn parse_u32(s: & [u8]) -> Option<u32> {
     let mut st = State {str: s, cur: 0, mar: 0, num: 0};
-    
+
 {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
@@ -131,7 +131,7 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 }
 
 fn parse_bin(st: &mut State) -> Option<u32> {
-    'bin: loop { 
+    'bin: loop {
 {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
@@ -153,18 +153,18 @@ fn parse_bin(st: &mut State) -> Option<u32> {
 				}
 			}
 			1 => { return maybe!(st.num); }
-			2 => { add_digit(st, 48, 2); continue 'bin; }
+			2 => { add(st, 48, 2); continue 'bin; }
 			_ => {
 				panic!("internal lexer error")
 			}
 		}
 	}
 }
- }
+}
 }
 
 fn parse_oct(st: &mut State) -> Option<u32> {
-    'oct: loop { 
+    'oct: loop {
 {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
@@ -186,18 +186,18 @@ fn parse_oct(st: &mut State) -> Option<u32> {
 				}
 			}
 			1 => { return maybe!(st.num); }
-			2 => { add_digit(st, 48, 8); continue 'oct; }
+			2 => { add(st, 48, 8); continue 'oct; }
 			_ => {
 				panic!("internal lexer error")
 			}
 		}
 	}
 }
- }
+}
 }
 
 fn parse_dec(st: &mut State) -> Option<u32> {
-    'dec: loop { 
+    'dec: loop {
 {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
@@ -219,18 +219,18 @@ fn parse_dec(st: &mut State) -> Option<u32> {
 				}
 			}
 			1 => { return maybe!(st.num); }
-			2 => { add_digit(st, 48, 10); continue 'dec; }
+			2 => { add(st, 48, 10); continue 'dec; }
 			_ => {
 				panic!("internal lexer error")
 			}
 		}
 	}
 }
- }
+}
 }
 
 fn parse_hex(st: &mut State) -> Option<u32> {
-    'hex: loop { 
+    'hex: loop {
 {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
@@ -260,23 +260,23 @@ fn parse_hex(st: &mut State) -> Option<u32> {
 				}
 			}
 			1 => { return maybe!(st.num); }
-			2 => { add_digit(st, 48, 16); continue 'hex; }
-			3 => { add_digit(st, 55, 16); continue 'hex; }
-			4 => { add_digit(st, 87, 16); continue 'hex; }
+			2 => { add(st, 48, 16); continue 'hex; }
+			3 => { add(st, 55, 16); continue 'hex; }
+			4 => { add(st, 87, 16); continue 'hex; }
 			_ => {
 				panic!("internal lexer error")
 			}
 		}
 	}
 }
- }
+}
 }
 
 fn main() {
+    assert_eq!(parse_u32(b"\0"), None);
     assert_eq!(parse_u32(b"1234567890\0"), Some(1234567890));
     assert_eq!(parse_u32(b"0b1101\0"), Some(13));
     assert_eq!(parse_u32(b"0x7Fe\0"), Some(2046));
     assert_eq!(parse_u32(b"0644\0"), Some(420));
     assert_eq!(parse_u32(b"9999999999\0"), None);
-    assert_eq!(parse_u32(b"\0"), None);
 }

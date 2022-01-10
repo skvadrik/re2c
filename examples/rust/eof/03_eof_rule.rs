@@ -3,10 +3,9 @@
 
 // Expect a null-terminated string.
 fn lex(s: &[u8]) -> isize {
+    let (mut cur, mut mar) = (0, 0);
+    let lim = s.len() - 1; // null-terminator not included
     let mut count = 0;
-    let mut cursor = 0;
-    let mut marker = 0;
-    let limit = s.len() - 1; // null-terminator not included
 
     'lex: loop {
 {
@@ -16,24 +15,24 @@ fn lex(s: &[u8]) -> isize {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
+				yych = unsafe {*s.get_unchecked(cur)};
 				match yych {
 					0x20 => {
-						cursor += 1;
+						cur += 1;
 						yystate = 3;
 						continue 'yyl;
 					}
 					0x27 => {
-						cursor += 1;
+						cur += 1;
 						yystate = 5;
 						continue 'yyl;
 					}
 					_ => {
-						if cursor >= limit {
+						if cur >= lim {
 							yystate = 10;
 							continue 'yyl;
 						}
-						cursor += 1;
+						cur += 1;
 						yystate = 1;
 						continue 'yyl;
 					}
@@ -45,10 +44,10 @@ fn lex(s: &[u8]) -> isize {
 			}
 			2 => { return -1; }
 			3 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
+				yych = unsafe {*s.get_unchecked(cur)};
 				match yych {
 					0x20 => {
-						cursor += 1;
+						cur += 1;
 						yystate = 3;
 						continue 'yyl;
 					}
@@ -60,43 +59,43 @@ fn lex(s: &[u8]) -> isize {
 			}
 			4 => { continue 'lex; }
 			5 => {
-				marker = cursor;
-				yych = unsafe {*s.get_unchecked(cursor)};
+				mar = cur;
+				yych = unsafe {*s.get_unchecked(cur)};
 				if yych >= 0x01 {
 					yystate = 7;
 					continue 'yyl;
 				}
-				if cursor >= limit {
+				if cur >= lim {
 					yystate = 2;
 					continue 'yyl;
 				}
-				cursor += 1;
+				cur += 1;
 				yystate = 6;
 				continue 'yyl;
 			}
 			6 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
+				yych = unsafe {*s.get_unchecked(cur)};
 				yystate = 7;
 				continue 'yyl;
 			}
 			7 => {
 				match yych {
 					0x27 => {
-						cursor += 1;
+						cur += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
 					0x5C => {
-						cursor += 1;
+						cur += 1;
 						yystate = 9;
 						continue 'yyl;
 					}
 					_ => {
-						if cursor >= limit {
+						if cur >= lim {
 							yystate = 11;
 							continue 'yyl;
 						}
-						cursor += 1;
+						cur += 1;
 						yystate = 6;
 						continue 'yyl;
 					}
@@ -104,23 +103,23 @@ fn lex(s: &[u8]) -> isize {
 			}
 			8 => { count += 1; continue 'lex; }
 			9 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
+				yych = unsafe {*s.get_unchecked(cur)};
 				if yych <= 0x00 {
-					if cursor >= limit {
+					if cur >= lim {
 						yystate = 11;
 						continue 'yyl;
 					}
-					cursor += 1;
+					cur += 1;
 					yystate = 6;
 					continue 'yyl;
 				}
-				cursor += 1;
+				cur += 1;
 				yystate = 6;
 				continue 'yyl;
 			}
 			10 => { return count; }
 			11 => {
-				cursor = marker;
+				cur = mar;
 				yystate = 2;
 				continue 'yyl;
 			}
