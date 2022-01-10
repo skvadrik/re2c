@@ -1,2 +1,2 @@
-Here is an example of using m-tags to parse a semicolon-separated sequence of
-words (C++). Tag variables are stored in a tree that is packed in a vector.
+Here is an example of using m-tags to parse a version with a variable number of
+components. Tag variables are stored in a trie.

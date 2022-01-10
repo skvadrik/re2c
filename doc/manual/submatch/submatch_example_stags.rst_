@@ -1,2 +1,3 @@
-Here is a simple example of using s-tags to parse an IPv4 address
-(see below for a more complex example that uses ``YYFILL``).
+Here is a simple example of using s-tags to parse semantic versions consisting
+of three numeric components: major, minor, patch (the latter is optional).
+See below for a more complex example that uses ``YYFILL``.
