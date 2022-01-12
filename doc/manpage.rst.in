@@ -40,7 +40,6 @@ The generated code looks like this:
 Options
 =======
 
-Command-line interface consists of options and warnings.
 Some of the options have corresponding `configurations`_,
 others are global and cannot be changed after re2c starts reading the input file.
 Debug options generally require building re2c in debug configuration.

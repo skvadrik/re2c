@@ -1,14 +1,7 @@
 
-``-D --emit-dot``
-    Instead of normal output generate lexer graph in .dot format.
-    The output can be converted to an image with the help of Graphviz
-    (e.g. something like ``dot -Tpng -odfa.png dfa.dot``).
-
-``-d --debug-output``
-    Emit ``YYDEBUG`` in the generated code.
-    ``YYDEBUG`` should be defined by the user in the form of a void function
-    with two parameters: ``state`` (lexer state or -1) and ``symbol`` (current
-    input symbol of type ``YYCTYPE``).
+``--debug-output -d``
+    Emit ``YYDEBUG`` invocations in the generated code. This is useful to trace
+    lexer execution.
 
 ``--dump-adfa``
     Debug option: output DFA after tunneling (in .dot format).
@@ -43,3 +36,7 @@
 ``--dump-nfa``
     Debug option: output NFA (in .dot format).
 
+``--emit-dot -D``
+    Instead of normal output generate lexer graph in .dot format.
+    The output can be converted to an image with the help of Graphviz
+    (e.g. something like ``dot -Tpng -odfa.png dfa.dot``).

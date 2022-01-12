@@ -343,31 +343,23 @@ int main() {                          // C/C++ code
 .UNINDENT
 .SH OPTIONS
 .sp
-Command\-line interface consists of options and warnings.
 Some of the options have corresponding \fI\%configurations\fP,
 others are global and cannot be changed after re2c starts reading the input file.
 Debug options generally require building re2c in debug configuration.
 Internal options are useful for experimenting with the algorithms used in re2c.
 .INDENT 0.0
 .TP
-.B \fB\-? \-h \-\-help\fP
+.B \fB\-? \-\-help \-h\fP
 Show help message.
 .TP
-.B \fB\-1 \-\-single\-pass\fP
-Deprecated. Does nothing (single pass is the default now).
+.B \fB\-\-api \-\-input <default | custom>\fP
+Specify the API used by the generated code to interface with used\-defined
+code: \fBdefault\fP is the API based on pointer arithmetic (the default for
+C), and \fBcustom\fP is the generic API (the default for Go and Rust).
 .TP
-.B \fB\-8 \-\-utf\-8\fP
-Generate a lexer that reads input in UTF\-8 encoding.
-re2c assumes that character range is 0 \-\- 0x10FFFF and character size is
-1 byte.
-.TP
-.B \fB\-b \-\-bit\-vectors\fP
-Optimize conditional jumps using bit masks. Implies \fB\-s\fP\&.
-.TP
-.B \fB\-c \-\-conditions \-\-start\-conditions\fP
-Enable support of Flex\-like "conditions": multiple interrelated lexers
-within one block. Option \fB\-\-start\-conditions\fP is a legacy alias; use
-\fB\-\-conditions\fP instead.
+.B \fB\-\-bit\-vectors \-b\fP
+Optimize conditional jumps using bit masks.
+This option implies \fB\-\-nested\-ifs\fP\&.
 .TP
 .B \fB\-\-case\-insensitive\fP
 Treat single\-quoted and double\-quoted strings as case\-insensitive.
@@ -379,22 +371,34 @@ as case\-insensitive.
 .TP
 .B \fB\-\-case\-ranges\fP
 Collapse consecutive cases in a switch statements into a range of the form
-\fBcase low ... high:\fP\&. This syntax is an extension of the C/C++ language,
+\fBlow ... high\fP\&. This syntax is a C/C++ language extension that is
 supported by compilers like GCC, Clang and Tcc. The main advantage over
-using single cases is smaller generated C code and faster generation time,
+using single cases is smaller generated code and faster generation time,
 although for some compilers like Tcc it also results in smaller binary size.
-This option doesn\(aqt work for the Go backend.
+This option is supported only for C.
+.TP
+.B \fB\-\-computed\-gotos \-g\fP
+Optimize conditional jumps using non\-standard "computed goto" extension
+(which must be supported by the compiler). re2c generates jump tables
+only in complex cases with a lot of conditional branches. Complexity
+threshold can be configured with \fBcgoto:threshold\fP configuration. This
+option implies \fB\-\-bit\-vectors\fP\&. It is supported only for C.
+.TP
+.B \fB\-\-conditions \-\-start\-conditions \-c\fP
+Enable support of Flex\-like "conditions": multiple interrelated lexers
+within one block. This is an alternative to manually specifying different
+re2c blocks connected with \fBgoto\fP or function calls.
 .TP
 .B \fB\-\-depfile FILE\fP
 Write dependency information to \fBFILE\fP in the form of a Makefile rule
-\fB<output\-file> : <input\-file> [include\-file ...]\fP\&. This allows to track
-build dependencies in the presence of \fB/*!include:re2c*/\fP directives, so
-that updating include files triggers regeneration of the output file.
-This option requires that \fB\-o \-\-output\fP option is specified.
+\fB<output\-file> : <input\-file> [include\-file ...]\fP\&. This allows one to
+track build dependencies in the presence of \fBinclude:re2c\fP directives,
+so that updating include files triggers regeneration of the output file.
+This option depends on the \fB\-\-output\fP option.
 .TP
-.B \fB\-e \-\-ecb\fP
-Generate a lexer that reads input in EBCDIC encoding.
-re2c assumes that character range is 0 \-\- 0xFF an character size is 1 byte.
+.B \fB\-\-ebcdic \-\-ecb \-e\fP
+Generate a lexer that reads input in EBCDIC encoding. re2c assumes that the
+character range is 0 \-\- 0xFF and character size is 1 byte.
 .TP
 .B \fB\-\-empty\-class <match\-empty | match\-none | error>\fP
 Define the way re2c treats empty character classes. With \fBmatch\-empty\fP
@@ -410,43 +414,23 @@ point 0xFFFD. With \fBignore\fP (the default) re2c treats surrogates as
 normal code points. The Unicode standard says that standalone surrogates
 are invalid, but real\-world libraries and programs behave in different ways.
 .TP
-.B \fB\-f \-\-storable\-state\fP
-Generate a lexer which can store its inner state.
-This is useful in push\-model lexers which are stopped by an outer program
-when there is not enough input, and then resumed when more input becomes
-available. In this mode users should additionally define \fBYYGETSTATE()\fP
-and \fBYYSETSTATE(state)\fP macros and variables \fByych\fP, \fByyaccept\fP
-and \fBstate\fP as part of the lexer state.
-.TP
-.B \fB\-F \-\-flex\-syntax\fP
+.B \fB\-\-flex\-syntax \-F\fP
 Partial support for Flex syntax: in this mode named definitions don\(aqt need
 the equal sign and the terminating semicolon, and when used they must be
-surrounded by curly braces. Names without curly braces are treated as
+surrounded with curly braces. Names without curly braces are treated as
 double\-quoted strings.
 .TP
-.B \fB\-g \-\-computed\-gotos\fP
-Optimize conditional jumps using non\-standard "computed goto" extension
-(which must be supported by the compiler). re2c generates jump tables
-only in complex cases with a lot of conditional branches. Complexity
-threshold can be configured with \fBcgoto:threshold\fP configuration. This
-option implies \fB\-b\fP\&. This option doesn\(aqt work for the Go backend.
+.B \fB\-\-header \-\-type\-header \-t HEADER\fP
+Generate a \fBHEADER\fP file. The contents of the file can be specified with
+directives \fBheader:re2c:on\fP and \fBheader:re2c:off\fP\&.
+If conditions are used the header will have a condition enum automatically
+appended to it (unless there is an explicit \fBconditions:re2c\fP directive).
 .TP
 .B \fB\-I PATH\fP
 Add \fBPATH\fP to the list of locations which are used when searching for
-include files. This option is useful in combination with
-\fB/*!include:re2c ... */\fP directive. Re2c looks for \fBFILE\fP in the
-directory of including file and in the list of include paths specified by
-\fB\-I\fP option.
-.TP
-.B \fB\-i \-\-no\-debug\-info\fP
-Do not output \fB#line\fP information. This is useful when the generated code
-is tracked by some version control system or IDE.
-.TP
-.B \fB\-\-input <default | custom>\fP
-Specify the API used by the generated code to interface with used\-defined
-code. Option \fBdefault\fP is the C API based on pointer arithmetic (it is
-the default for the C backend). Option \fBcustom\fP is the generic API (it is
-the default for the Go backend).
+include files. This option is useful in combination with \fBinclude:re2c\fP
+directive. re2c looks for \fBFILE\fP in the directory of the parent file and
+in the include locations specified with \fB\-I\fP option.
 .TP
 .B \fB\-\-input\-encoding <ascii | utf8>\fP
 Specify the way re2c parses regular expressions.
@@ -455,15 +439,34 @@ sequence of code units is a sequence of standalone 1\-byte characters.
 With \fButf8\fP re2c handles input as UTF8\-encoded and recognizes multibyte
 characters.
 .TP
-.B \fB\-\-lang <c | go>\fP
-Specify the output language. Supported languages are C and Go (the default
-is C).
+.B \fB\-\-lang <c | go | rust>\fP
+Specify the output language. Supported languages are C, Go and Rust.
+The default is C for re2c, Go for re2go and Rust for re2rust.
 .TP
 .B \fB\-\-location\-format <gnu | msvc>\fP
 Specify location format in messages.
 With \fBgnu\fP locations are printed as \(aqfilename:line:column: ...\(aq.
 With \fBmsvc\fP locations are printed as \(aqfilename(line,column) ...\(aq.
-Default is \fBgnu\fP\&.
+The default is \fBgnu\fP\&.
+.TP
+.B \fB\-\-loop\-switch\fP
+Encode DFA in a form of a loop over a switch statement. Individual states
+are switch cases. The current state is stored in a variable \fByystate\fP\&.
+Transitions between states update \fByystate\fP to the case label of the
+destination state and \fBcontinue\fP to the head of the loop. This option is
+always enabled for Rust, as it has no \fBgoto\fP statement and cannot use the
+goto/label approach which is the default for C and Go backends.
+.TP
+.B \fB\-\-nested\-ifs \-s\fP
+Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional
+jumps. This usually results in more efficient code with non\-optimizing
+compilers.
+.TP
+.B \fB\-\-no\-debug\-info \-i\fP
+Do not output line directives. This may be useful when the generated code is
+stored in a version control system (to avoid huge autogenerated diffs on
+small changes). This option is on by default for Rust, as it does not have
+line directives.
 .TP
 .B \fB\-\-no\-generation\-date\fP
 Suppress date output in the generated file.
@@ -471,72 +474,77 @@ Suppress date output in the generated file.
 .B \fB\-\-no\-version\fP
 Suppress version output in the generated file.
 .TP
-.B \fB\-o OUTPUT \-\-output=OUTPUT\fP
+.B \fB\-\-no\-unsafe\fP
+Do not generate \fBunsafe\fP wrapper over \fBYYPEEK\fP (this option is specific
+to Rust). For performance reasons \fBYYPEEK\fP should avoid bounds\-checking,
+as the lexer already performs end\-of\-input checks in a more efficient way.
+The user may choose to provide a safe \fBYYPEEK\fP definition, or a definition
+that is unsafe only in release builds, in which case the \fB\-\-no\-unsafe\fP
+option helps to avoid warnings about redundant \fBunsafe\fP blocks.
+.TP
+.B \fB\-\-output \-o OUTPUT\fP
 Specify the \fBOUTPUT\fP file.
 .TP
-.B \fB\-P \-\-posix\-captures\fP
+.B \fB\-\-posix\-captures \-P\fP
 Enable submatch extraction with POSIX\-style capturing groups.
 .TP
-.B \fB\-r \-\-reusable\fP
-Deprecated since re2c version 2.2 (reusable blocks are allowed by default
-now).
+.B \fB\-\-reusable \-r\fP
+Deprecated since version 2.2 (reusable blocks are allowed by default now).
 .TP
-.B \fB\-S \-\-skeleton\fP
+.B \fB\-\-skeleton \-S\fP
 Ignore user\-defined interface code and generate a self\-contained "skeleton"
 program. Additionally, generate input files with strings derived from the
 regular grammar and compressed match results that are used to verify
 "skeleton" behavior on all inputs. This option is useful for finding bugs
-in optimizations and code generation. This option doesn\(aqt work for the Go
-backend.
+in optimizations and code generation. This option is supported only for C.
 .TP
-.B \fB\-s \-\-nested\-ifs\fP
-Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional
-jumps. This usually results in more efficient code with non\-optimizing
-compilers.
+.B \fB\-\-storable\-state \-f\fP
+Generate a lexer which can store its inner state.
+This is useful in push\-model lexers which are stopped by an outer program
+when there is not enough input, and then resumed when more input becomes
+available. In this mode users should additionally define \fBYYGETSTATE\fP
+and \fBYYSETSTATE\fP primitives, and variables \fByych\fP, \fByyaccept\fP and
+\fBstate\fP should be part of the stored lexer state.
 .TP
-.B \fB\-T \-\-tags\fP
+.B \fB\-\-tags \-T\fP
 Enable submatch extraction with tags.
 .TP
-.B \fB\-t HEADER \-\-type\-header=HEADER\fP
-Generate a \fBHEADER\fP file that contains enum with condition names.
-Requires \fB\-c\fP option.
+.B \fB\-\-ucs2 \-\-wide\-chars \-w\fP
+Generate a lexer that reads UCS2\-encoded input. re2c assumes that the
+character range is 0 \-\- 0xFFFF and character size is 2 bytes.
+This option implies \fB\-\-nested\-ifs\fP\&.
 .TP
-.B \fB\-u \-\-unicode\fP
-Generate a lexer that reads UTF32\-encoded input. Re2c assumes that character
-range is 0 \-\- 0x10FFFF and character size is 4 bytes. This option implies
-\fB\-s\fP\&.
+.B \fB\-\-utf8 \-\-utf\-8 \-8\fP
+Generate a lexer that reads input in UTF\-8 encoding. re2c assumes that the
+character range is 0 \-\- 0x10FFFF and character size is 1 byte.
 .TP
-.B \fB\-V \-\-vernum\fP
-Show version information in \fBMMmmpp\fP format (major, minor, patch).
+.B \fB\-\-utf16 \-\-utf\-16 \-x\fP
+Generate a lexer that reads UTF16\-encoded input. re2c assumes that the
+character range is 0 \-\- 0x10FFFF and character size is 2 bytes.
+This option implies \fB\-\-nested\-ifs\fP\&.
+.TP
+.B \fB\-\-utf32 \-\-unicode \-u\fP
+Generate a lexer that reads UTF32\-encoded input. re2c assumes that the
+character range is 0 \-\- 0x10FFFF and character size is 4 bytes.
+This option implies \fB\-\-nested\-ifs\fP\&.
 .TP
 .B \fB\-\-verbose\fP
 Output a short message in case of success.
 .TP
-.B \fB\-v \-\-version\fP
+.B \fB\-\-vernum \-V\fP
+Show version information in \fBMMmmpp\fP format (major, minor, patch).
+.TP
+.B \fB\-\-version \-v\fP
 Show version information.
 .TP
-.B \fB\-w \-\-wide\-chars\fP
-Generate a lexer that reads UCS2\-encoded input. Re2c assumes that character
-range is 0 \-\- 0xFFFF and character size is 2 bytes. This option implies
-\fB\-s\fP\&.
-.TP
-.B \fB\-x \-\-utf\-16\fP
-Generate a lexer that reads UTF16\-encoded input. Re2c assumes that character
-range is 0 \-\- 0x10FFFF and character size is 2 bytes. This option implies
-\fB\-s\fP\&.
+.B \fB\-\-single\-pass \-1\fP
+Deprecated. Does nothing (single pass is the default now).
 .UNINDENT
 .INDENT 0.0
 .TP
-.B \fB\-D \-\-emit\-dot\fP
-Instead of normal output generate lexer graph in .dot format.
-The output can be converted to an image with the help of Graphviz
-(e.g. something like \fBdot \-Tpng \-odfa.png dfa.dot\fP).
-.TP
-.B \fB\-d \-\-debug\-output\fP
-Emit \fBYYDEBUG\fP in the generated code.
-\fBYYDEBUG\fP should be defined by the user in the form of a void function
-with two parameters: \fBstate\fP (lexer state or \-1) and \fBsymbol\fP (current
-input symbol of type \fBYYCTYPE\fP).
+.B \fB\-\-debug\-output \-d\fP
+Emit \fBYYDEBUG\fP invocations in the generated code. This is useful to trace
+lexer execution.
 .TP
 .B \fB\-\-dump\-adfa\fP
 Debug option: output DFA after tunneling (in .dot format).
@@ -570,6 +578,11 @@ variables.
 .TP
 .B \fB\-\-dump\-nfa\fP
 Debug option: output NFA (in .dot format).
+.TP
+.B \fB\-\-emit\-dot \-D\fP
+Instead of normal output generate lexer graph in .dot format.
+The output can be converted to an image with the help of Graphviz
+(e.g. something like \fBdot \-Tpng \-odfa.png dfa.dot\fP).
 .UNINDENT
 .INDENT 0.0
 .TP
@@ -591,7 +604,7 @@ Internal option: use TDFA(0) instead of TDFA(1).
 This option has effect only with \fB\-\-tags\fP or \fB\-\-posix\-captures\fP options.
 .TP
 .B \fB\-\-no\-optimize\-tags\fP
-Internal optionL: suppress optimization of tag variables (useful for
+Internal option: suppress optimization of tag variables (useful for
 debugging).
 .TP
 .B \fB\-\-posix\-closure <gor1 | gtop>\fP
@@ -619,7 +632,7 @@ specify whether the fixed\-tag optimization should be applied to all tags
 (\fBall\fP), none of them (\fBnone\fP), or only those in toplevel concatenation
 (\fBtoplevel\fP). The default is \fBall\fP\&.
 "Fixed" tags are those that are located within a fixed distance to some
-other tag (called "base"). In such cases only tha base tag needs to be
+other tag (called "base"). In such cases only the base tag needs to be
 tracked, and the value of the fixed tag can be computed as the value of the
 base tag plus a static offset. For tags that are under alternative or
 repetition it is also necessary to check if the base tag has a no\-match
@@ -656,44 +669,44 @@ the warning itself.
 .INDENT 0.0
 .TP
 .B \fB\-Wcondition\-order\fP
-Warn if the generated program makes implicit
-assumptions about condition numbering. One should use either the \fB\-t, \-\-type\-header\fP option or
-the \fB/*!types:re2c*/\fP directive to generate a mapping of condition names to numbers and then use
-the autogenerated condition names.
+Warn if the generated program makes implicit assumptions about condition
+numbering. One should use either the \fB\-\-\-header\fP option or the
+\fBconditions:re2c\fP directive to generate a mapping of condition names to
+numbers and then use the autogenerated condition names.
 .TP
 .B \fB\-Wempty\-character\-class\fP
-Warn if a regular expression contains an empty
-character class. Trying to match an empty character class makes no sense: it should always fail.
-However, for backwards compatibility reasons \fBre2c\fP allows empty character classes and
-treats them as empty strings. Use the \fB\-\-empty\-class\fP option to change the default
-behavior.
+Warn if a regular expression contains an empty character class. Trying to
+match an empty character class makes no sense: it should always fail.
+However, for backwards compatibility reasons re2c permits empty character
+classes and treats them as empty strings. Use the \fB\-\-empty\-class\fP option
+to change the default behavior.
 .TP
 .B \fB\-Wmatch\-empty\-string\fP
 Warn if a rule is nullable (matches an empty string).
-If the lexer runs in a loop and the empty match is unintentional,
-the lexer may unexpectedly hang in an infinite loop.
+If the lexer runs in a loop and the empty match is unintentional, the lexer
+may unexpectedly hang in an infinite loop.
 .TP
 .B \fB\-Wswapped\-range\fP
-Warn if the lower bound of a range is greater than its upper
-bound. The default behavior is to silently swap the range bounds.
+Warn if the lower bound of a range is greater than its upper bound. The
+default behavior is to silently swap the range bounds.
 .TP
 .B \fB\-Wundefined\-control\-flow\fP
-Warn if some input strings cause undefined
-control flow in the lexer (the faulty patterns are reported). This is the
-most dangerous and most common mistake. It can be easily fixed by adding
-the default rule \fB*\fP which has the lowest priority, matches any code unit, and consumes
-exactly one code unit.
+Warn if some input strings cause undefined control flow in the lexer (the
+faulty patterns are reported). This is a dangerous and common mistake. It
+can be easily fixed by adding the default rule \fB*\fP which has the lowest
+priority, matches any code unit, and always consumes a single code unit.
 .TP
 .B \fB\-Wunreachable\-rules\fP
 Warn about rules that are shadowed by other rules and will never match.
 .TP
 .B \fB\-Wuseless\-escape\fP
 Warn if a symbol is escaped when it shouldn\(aqt be.
-By default, re2c silently ignores such escapes, but this may as well indicate a
-typo or an error in the escape sequence.
+By default, re2c silently ignores such escapes, but this may as well
+indicate a typo or an error in the escape sequence.
 .TP
 .B \fB\-Wnondeterministic\-tags\fP
-Warn if a tag has \fBn\fP\-th degree of nondeterminism, where \fBn\fP is greater than 1.
+Warn if a tag has \fBn\fP\-th degree of nondeterminism, where \fBn\fP is greater
+than 1.
 .TP
 .B \fB\-Wsentinel\-in\-midrule\fP
 Warn if the sentinel symbol occurs in the middle of a rule \-\-\- this may

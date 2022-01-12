@@ -431,7 +431,7 @@ $(DOC_RUST): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN)
 		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_RUST) \
 		&& rm $(top_builddir)/$(re2c_SRC_DOC).rust
 # generate help
-$(re2c_GEN_HELP): $(re2c_CUSTOM_HELP) $(GENHELP)
+$(re2c_GEN_HELP): $(re2c_CUSTOM_HELP) $(re2c_SRC_DOC_EXT) $(GENHELP)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)$(RST2MAN) $(top_builddir)/$(re2c_CUSTOM_HELP) > $@.1 \
 		&& $(GENHELP) $@.1 $@ \
