@@ -2,20 +2,18 @@
 re2c
 ++++
 
-================================================
-generate fast lexical analyzers for C/C++ and Go
-================================================
+======================================================
+generate fast lexical analyzers for C/C++, Go and Rust
+======================================================
 
 :Manual section: 1
 
 SYNOPSIS
 ========
 
-``re2c  [OPTIONS] INPUT [-o OUTPUT]``
-
-``re2go [OPTIONS] INPUT [-o OUTPUT]``
-
 RE2C_DISCLAIMER
+
+.. include:: @top_srcdir@/doc/manual/synopsis.rst_
 
 Introduction
 ============
@@ -35,22 +33,28 @@ Here is a simple re2c program:
 
 The generated code looks like this:
 
-.. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.RE2C_LANG
+.. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.RE2C_SOURCE_EXT
     :literal:
     :code: RE2C_LANG
 
-Command-line options
-====================
+Options
+=======
+
 Command-line interface consists of options and warnings.
 Some of the options have corresponding `configurations`_,
 others are global and cannot be changed after re2c starts reading the input file.
 Debug options generally require building re2c in debug configuration.
 Internal options are useful for experimenting with the algorithms used in re2c.
-Warnings can be invividually enabled, disabled and turned into an error.
 
 .. include:: @top_srcdir@/doc/manual/options/options.rst_
 .. include:: @top_srcdir@/doc/manual/options/debug.rst_
 .. include:: @top_srcdir@/doc/manual/options/internal.rst_
+
+Warnings
+========
+
+Warnings can be invividually enabled, disabled and turned into an error.
+
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst_
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_list.rst_
 

@@ -1,0 +1,7 @@
+.. code-block::
+
+    re2c    [ OPTIONS ] [ WARNINGS ] INPUT
+    re2go   [ OPTIONS ] [ WARNINGS ] INPUT
+    re2rust [ OPTIONS ] [ WARNINGS ] INPUT
+
+Input can be either a file or ``-`` for stdin.

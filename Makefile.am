@@ -189,10 +189,12 @@ re2c_BOOT_PARSER = bootstrap/src/parse/parser.cc
 re2c_BOOT_PARSER_HDR = bootstrap/src/parse/parser.h
 re2c_BOOT_DOC_C = bootstrap/doc/re2c.1
 re2c_BOOT_DOC_GO = bootstrap/doc/re2go.1
+re2c_BOOT_DOC_RUST = bootstrap/doc/re2rust.1
 re2c_BOOT_HELP = bootstrap/src/msg/help.cc
 re2c_BOOT = \
 	$(re2c_BOOT_DOC_C) \
 	$(re2c_BOOT_DOC_GO) \
+	$(re2c_BOOT_DOC_RUST) \
 	$(re2c_BOOT_HELP) \
 	$(re2c_BOOT_PARSER) \
 	$(re2c_BOOT_PARSER_HDR) \
@@ -241,17 +243,21 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/state/state.rst_ \
 	doc/manual/submatch/submatch_example_mtags.rst_ \
 	doc/manual/submatch/submatch_example_posix.rst_ \
-	doc/manual/submatch/submatch_example_stags.rst_ \
 	doc/manual/submatch/submatch_example_stags_fill.rst_ \
+	doc/manual/submatch/submatch_example_stags.rst_ \
 	doc/manual/submatch/submatch.rst_ \
-	doc/manual/syntax/syntax.rst_ \
+	doc/manual/synopsis.rst_ \
 	doc/manual/syntax/api1.rst_ \
 	doc/manual/syntax/api2_c.rst_ \
 	doc/manual/syntax/api2_go.rst_ \
+	doc/manual/syntax/api2_rust.rst_ \
 	doc/manual/syntax/api3.rst_ \
+	doc/manual/syntax/syntax.rst_ \
 	doc/manual/warnings/warnings_general.rst_ \
 	doc/manual/warnings/warnings_list.rst_ \
 	examples/c/01_basic.re \
+	examples/c/01_basic.c \
+	examples/c/conditions/parse_u32_blocks.re \
 	examples/c/conditions/parse_u32_conditions.re \
 	examples/c/encodings/unicode_identifier.re \
 	examples/c/eof/01_sentinel.re \
@@ -267,11 +273,13 @@ re2c_SRC_DOC_EXT = \
 	examples/c/reuse/reuse.re \
 	examples/c/reuse/usedir.re \
 	examples/c/state/push.re \
-	examples/c/submatch/01_stags.re \
 	examples/c/submatch/01_stags_fill.re \
+	examples/c/submatch/01_stags.re \
 	examples/c/submatch/02_mtags.re \
 	examples/c/submatch/03_posix.re \
 	examples/go/01_basic.re \
+	examples/go/01_basic.go \
+	examples/go/conditions/parse_u32_blocks.re \
 	examples/go/conditions/parse_u32_conditions.re \
 	examples/go/encodings/unicode_identifier.re \
 	examples/go/eof/01_sentinel.re \
@@ -287,17 +295,46 @@ re2c_SRC_DOC_EXT = \
 	examples/go/reuse/reuse.re \
 	examples/go/reuse/usedir.re \
 	examples/go/state/push.re \
+	examples/go/submatch/01_stags_fill.re \
 	examples/go/submatch/01_stags.re \
 	examples/go/submatch/02_mtags.re \
-	examples/go/submatch/03_posix.re
+	examples/go/submatch/03_posix.re \
+	examples/rust/01_basic.re \
+	examples/rust/01_basic.rs \
+	examples/rust/conditions/parse_u32_blocks.re \
+	examples/rust/conditions/parse_u32_conditions.re \
+	examples/rust/encodings/unicode_identifier.re \
+	examples/rust/eof/01_sentinel.re \
+	examples/rust/eof/02_bounds_checking.re \
+	examples/rust/eof/03_eof_rule.re \
+	examples/rust/eof/05_generic_api_eof_rule.re \
+	examples/rust/fill/01_fill.re \
+	examples/rust/fill/02_fill.re \
+	examples/rust/headers/header.re \
+	examples/rust/headers/lexer/state.rs \
+	examples/rust/includes/include.re \
+	examples/rust/includes/definitions.rs \
+	examples/rust/reuse/reuse.re \
+	examples/rust/reuse/usedir.re \
+	examples/rust/state/push.re \
+	examples/rust/submatch/01_stags_fill.re \
+	examples/rust/submatch/01_stags.re \
+	examples/rust/submatch/02_mtags.re \
+	examples/rust/submatch/03_posix.re
 
 DOC_C = doc/re2c.1
 DOCS = $(DOC_C)
+
 if WITH_GOLANG
 DOC_GO = doc/re2go.1
 DOCS += $(DOC_GO)
 endif
-# TODO: add docs for Rust.
+
+if WITH_RUST
+DOC_RUST = doc/re2rust.1
+DOCS += $(DOC_RUST)
+endif
+
 man_MANS = $(DOCS)
 
 # include files (stdlib)
@@ -386,6 +423,13 @@ $(DOC_GO): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN)
 		&& $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).go > $@ \
 		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_GO) \
 		&& rm $(top_builddir)/$(re2c_SRC_DOC).go
+# generate manpage for Rust
+$(DOC_RUST): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN)
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)$(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).rust rust \
+		&& $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).rust > $@ \
+		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_RUST) \
+		&& rm $(top_builddir)/$(re2c_SRC_DOC).rust
 # generate help
 $(re2c_GEN_HELP): $(re2c_CUSTOM_HELP) $(GENHELP)
 	$(AM_V_at)$(MKDIR_P) $(@D)
@@ -404,6 +448,10 @@ $(DOC_C): $(re2c_BOOT_DOC_C)
 $(DOC_GO): $(re2c_BOOT_DOC_GO)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC_GO) $@
+# copy bootstrap manpage for Rust
+$(DOC_RUST): $(re2c_BOOT_DOC_RUST)
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC_RUST) $@
 # copy bootstrap help
 $(re2c_GEN_HELP): $(re2c_BOOT_HELP)
 	$(AM_V_at)$(MKDIR_P) $(@D)
@@ -474,7 +522,7 @@ re2go_SOURCES = $(re2c_SOURCES)
 nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
 endif
 
-# re2go
+# re2rust
 if WITH_RUST
 bin_PROGRAMS += re2rust
 re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=LANG_RUST

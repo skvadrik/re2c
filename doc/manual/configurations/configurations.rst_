@@ -1,10 +1,10 @@
 ``re2c:flags:t``, ``re2c:flags:type-header``
     Specify the name of the generated header file relative to the directory of
-    the output file. (Same as ``-t``, ``--type-header`` command-line option
-    except that the filepath is relative.)
+    the output file. (Same as ``-t``, ``--type-header`` option except that the
+    filepath is relative.)
 
 ``re2c:flags:input``
-    Same as ``--input`` command-line option.
+    Same as ``--input`` option.
 
 ``re2c:api:style``
     Allows one to specify the style of generic API. Possible values are ``functions``
@@ -140,10 +140,10 @@
     Defines generic API primitive ``YYMTAGP`` (see the user interface section).
 
 ``re2c:flags:T``, ``re2c:flags:tags``
-    Same as ``-T --tags`` command-line option.
+    Same as ``-T --tags`` option.
 
 ``re2c:flags:P``, ``re2c:flags:posix-captures``
-    Same as ``-P --posix-captures`` command-line option.
+    Same as ``-P --posix-captures`` option.
 
 ``re2c:tags:expression``
     Allows one to customize the way re2c addresses tag variables.
@@ -159,10 +159,10 @@
     Allows one to override the prefix of tag variables (defaults to ``yyt``).
 
 ``re2c:flags:lookahead``
-    Same as inverted ``--no-lookahead`` command-line option.
+    Same as inverted ``--no-lookahead`` option.
 
 ``re2c:flags:optimize-tags``
-    Same as inverted ``--no-optimize-tags`` command-line option.
+    Same as inverted ``--no-optimize-tags`` option.
 
 ``re2c:define:YYCONDTYPE``
     Defines ``YYCONDTYPE`` (see the user interface section).
@@ -261,10 +261,10 @@
     for the next block).
 
 ``re2c:flags:s``, ``re2c:flags:nested-ifs``
-    Same as ``-s --nested-ifs`` command-line option.
+    Same as ``-s --nested-ifs`` option.
 
 ``re2c:flags:b``, ``re2c:flags:bit-vectors``
-    Same as ``-b --bit-vectors`` command-line option.
+    Same as ``-b --bit-vectors`` option.
 
 ``re2c:variable:yybm``
     Overrides the name of the ``yybm`` variable.
@@ -274,7 +274,7 @@
     a hexadecimal table is generated.
 
 ``re2c:flags:g``, ``re2c:flags:computed-gotos``
-    Same as ``-g --computed-gotos`` command-line option.
+    Same as ``-g --computed-gotos`` option.
 
 ``re2c:cgoto:threshold``
     With ``-g`` ``--computed-gotos`` option this value specifies
@@ -282,34 +282,34 @@
     of nested ``if`` statements and bitmaps. The default value is ``9``.
 
 ``re2c:flags:case-ranges``
-    Same as ``--case-ranges`` command-line option.
+    Same as ``--case-ranges`` option.
 
 ``re2c:flags:e``, ``re2c:flags:ecb``
-    Same as ``-e --ecb`` command-line option.
+    Same as ``-e --ecb`` option.
 
 ``re2c:flags:8``, ``re2c:flags:utf-8``
-    Same as ``-8 --utf-8`` command-line option.
+    Same as ``-8 --utf-8`` option.
 
 ``re2c:flags:w``, ``re2c:flags:wide-chars``
-    Same as ``-w --wide-chars`` command-line option.
+    Same as ``-w --wide-chars`` option.
 
 ``re2c:flags:x``, ``re2c:flags:utf-16``
-    Same as ``-x --utf-16`` command-line option.
+    Same as ``-x --utf-16`` option.
 
 ``re2c:flags:u``, ``re2c:flags:unicode``
-    Same as ``-u --unicode`` command-line option.
+    Same as ``-u --unicode`` option.
 
 ``re2c:flags:encoding-policy``
-    Same as ``--encoding-policy`` command-line option.
+    Same as ``--encoding-policy`` option.
 
 ``re2c:flags:empty-class``
-    Same as ``--empty-class`` command-line option.
+    Same as ``--empty-class`` option.
 
 ``re2c:flags:case-insensitive``
-    Same as ``--case-insensitive`` command-line option.
+    Same as ``--case-insensitive`` option.
 
 ``re2c:flags:case-inverted``
-    Same as ``--case-inverted`` command-line option.
+    Same as ``--case-inverted`` option.
 
 ``re2c:indent:string``
     Specifies the string to use for indentation.
@@ -356,10 +356,10 @@
     Defines ``YYDEBUG`` (see the user interface section).
 
 ``re2c:flags:d``, ``re2c:flags:debug-output``
-    Same as ``-d --debug-output`` command-line option.
+    Same as ``-d --debug-output`` option.
 
 ``re2c:flags:dfa-minimization``
-    Same as ``--dfa-minimization`` command-line option.
+    Same as ``--dfa-minimization`` option.
 
 ``re2c:flags:eager-skip``
-    Same as ``--eager-skip`` command-line option.
+    Same as ``--eager-skip`` option.

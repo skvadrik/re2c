@@ -29,14 +29,24 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 ..
 .TH "RE2C" 1 "" "" ""
 .SH NAME
-re2c \- generate fast lexical analyzers for C/C++ and Go
+re2c \- generate fast lexical analyzers for C/C++, Go and Rust
 .SH SYNOPSIS
 .sp
-\fBre2c  [OPTIONS] INPUT [\-o OUTPUT]\fP
+Note: This manual is for Go, but it refers to re2c as the general program.
+.INDENT 0.0
+.INDENT 3.5
 .sp
-\fBre2go [OPTIONS] INPUT [\-o OUTPUT]\fP
+.nf
+.ft C
+re2c    [ OPTIONS ] [ WARNINGS ] INPUT
+re2go   [ OPTIONS ] [ WARNINGS ] INPUT
+re2rust [ OPTIONS ] [ WARNINGS ] INPUT
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
 .sp
-Note: This manual includes examples for Go, but it refers to re2c (rather than re2go) as the name of the program in general.
+Input can be either a file or \fB\-\fP for stdin.
 .SH INTRODUCTION
 .sp
 Re2c works as a preprocessor. It reads the input file (which is usually a
@@ -59,7 +69,7 @@ finite automaton, encodes it in the form of conditional jumps and replaces
 the block with the generated code. Names and configurations defined
 in the block are added to the global scope and become visible to subsequent
 blocks (at the start of the program global scope is initialized with the
-\fI\%command\-line options\fP).
+\fI\%options\fP).
 The \fB:<name>\fP part is optional: if specified, the name can be used to
 refer to the block in another part of the program.
 .TP
@@ -132,7 +142,7 @@ correctly and efficiently. The manual provides examples for the most popular
 use cases. For the full list of primitives see the \fI\%interface primitives\fP
 section.
 .sp
-There are two \fIAPI flavours\fP that define the set of primitives used by re2c:
+There are two kinds of API that define the set of primitives used by re2c:
 .INDENT 0.0
 .INDENT 3.5
 .INDENT 0.0
@@ -175,39 +185,40 @@ by the generated code.
 .UNINDENT
 .UNINDENT
 .sp
-There are two \fIAPI styles\fP determine the form in which the primitives should be
-defined:
+There are two API styles that determine the form in which the primitives should
+be defined:
 .INDENT 0.0
 .INDENT 3.5
+\fBFree\-form\fP
 .INDENT 0.0
-.TP
-.B \fBFree\-form\fP
-This style is enabled with \fBre2c:api:style = free\-form;\fP configuration,
-and it is the default for the Go backend. Interface primitives should be
-defined as free\-form pieces of code with interpolated variables of the form
-\fB@@{name}\fP or optionally just \fB@@\fP if there is only one variable. The
-\fB@@\fP text can be customized with the \fBre2c:api:sigil\fP configuration.
-In Go free\-form style generic API can be defined in terms of integer
-variables \fBcursor\fP, \fBlimit\fP, \fBmarker\fP, \fBctxmarker\fP and a string (or
-a byte slice) \fBdata\fP as follows:
-.INDENT 7.0
+.INDENT 3.5
+This style is enabled with configuration \fBre2c:api:style = free\-form;\fP\&.
+It is the default for the Go backend.
+In this style interface primitives should be defined as free\-form pieces of
+code with interpolated variables of the form \fB@@{var}\fP or optionally just
+\fB@@\fP if there is a single variable.
+The set of variables is specific to each primitive.
+Free\-form style generic API can be defined in terms of integer variables
+\fBcursor\fP, \fBlimit\fP, \fBmarker\fP, \fBctxmarker\fP and a string (or a byte
+slice) \fBdata\fP as follows:
+.INDENT 0.0
 .INDENT 3.5
 .sp
 .nf
 .ft C
 /*!re2c
-re2c:define:YYPEEK       = "data[cursor]";
-re2c:define:YYSKIP       = "cursor++";
-re2c:define:YYBACKUP     = "marker = cursor";
-re2c:define:YYRESTORE    = "cursor = marker";
-re2c:define:YYBACKUPCTX  = "ctxmarker = cursor";
-re2c:define:YYRESTORECTX = "cursor = ctxmarker";
-re2c:define:YYRESTORETAG = "cursor = ${tag}";
-re2c:define:YYLESSTHAN   = "limit \- cursor < @@{len}";
-re2c:define:YYSTAGP      = "@@{tag} = cursor";
-re2c:define:YYSTAGN      = "@@{tag} = \-1";
-re2c:define:YYSHIFT      = "cursor += @@{shift}";
-re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift}";
+  re2c:define:YYPEEK       = "data[cursor]";
+  re2c:define:YYSKIP       = "cursor++";
+  re2c:define:YYBACKUP     = "marker = cursor";
+  re2c:define:YYRESTORE    = "cursor = marker";
+  re2c:define:YYBACKUPCTX  = "ctxmarker = cursor";
+  re2c:define:YYRESTORECTX = "cursor = ctxmarker";
+  re2c:define:YYRESTORETAG = "cursor = ${tag}";
+  re2c:define:YYLESSTHAN   = "limit \- cursor < @@{len}";
+  re2c:define:YYSTAGP      = "@@{tag} = cursor";
+  re2c:define:YYSTAGN      = "@@{tag} = \-1";
+  re2c:define:YYSHIFT      = "cursor += @@{shift}";
+  re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift}";
 */
 .ft P
 .fi
@@ -217,16 +228,20 @@ re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift}";
 
 .fi
 .sp
-.TP
-.B \fBFunction\-like\fP
-This style is enabled with \fBre2c:api:style = functions;\fP configuration.
-Primitives should be defined as functions with parentheses, accepting the
-necessary number of arguments. This style can be used with the Go backend,
+.UNINDENT
+.UNINDENT
+.sp
+\fBFunction\-like\fP
+.INDENT 0.0
+.INDENT 3.5
+This style is enabled with configuration \fBre2c:api:style = functions;\fP\&.
+Primitives are expected to be callable: they are emitted with parentheses,
+and some of them accept arguments. This style can be used with Go,
 but it is more restrictive than the free\-form style and some primitives are
 problematic to define. Most of the primitives can be defined as closures in
 terms of integer variables \fBcursor\fP, \fBlimit\fP, \fBmarker\fP, \fBctxmarker\fP
 and a string (or a byte slice) \fBdata\fP:
-.INDENT 7.0
+.INDENT 0.0
 .INDENT 3.5
 .sp
 .nf
@@ -241,6 +256,7 @@ YYLESSTHAN := func(n int) bool { return limit\-cursor < n }
 YYSHIFT := func(n int) { cursor += n }
 .ft P
 .fi
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -333,14 +349,13 @@ func main() {                             // Go code
 .fi
 .UNINDENT
 .UNINDENT
-.SH COMMAND-LINE OPTIONS
+.SH OPTIONS
 .sp
 Command\-line interface consists of options and warnings.
 Some of the options have corresponding \fI\%configurations\fP,
 others are global and cannot be changed after re2c starts reading the input file.
 Debug options generally require building re2c in debug configuration.
 Internal options are useful for experimenting with the algorithms used in re2c.
-Warnings can be invividually enabled, disabled and turned into an error.
 .INDENT 0.0
 .TP
 .B \fB\-? \-h \-\-help\fP
@@ -620,6 +635,9 @@ value (in that case fixed tag should also be set to no\-match, disregarding
 the offset). For tags in top\-level concatenation the check is not needed,
 because they always match.
 .UNINDENT
+.SH WARNINGS
+.sp
+Warnings can be invividually enabled, disabled and turned into an error.
 .INDENT 0.0
 .TP
 .B \fB\-W\fP
@@ -1072,11 +1090,11 @@ Used only with \fB\-P\fP \fB\-\-posix\-captures\fP option.
 .TP
 .B \fBre2c:flags:t\fP, \fBre2c:flags:type\-header\fP
 Specify the name of the generated header file relative to the directory of
-the output file. (Same as \fB\-t\fP, \fB\-\-type\-header\fP command\-line option
-except that the filepath is relative.)
+the output file. (Same as \fB\-t\fP, \fB\-\-type\-header\fP option except that the
+filepath is relative.)
 .TP
 .B \fBre2c:flags:input\fP
-Same as \fB\-\-input\fP command\-line option.
+Same as \fB\-\-input\fP option.
 .TP
 .B \fBre2c:api:style\fP
 Allows one to specify the style of generic API. Possible values are \fBfunctions\fP
@@ -1212,10 +1230,10 @@ Defines generic API primitive \fBYYMTAGN\fP (see the user interface section).
 Defines generic API primitive \fBYYMTAGP\fP (see the user interface section).
 .TP
 .B \fBre2c:flags:T\fP, \fBre2c:flags:tags\fP
-Same as \fB\-T \-\-tags\fP command\-line option.
+Same as \fB\-T \-\-tags\fP option.
 .TP
 .B \fBre2c:flags:P\fP, \fBre2c:flags:posix\-captures\fP
-Same as \fB\-P \-\-posix\-captures\fP command\-line option.
+Same as \fB\-P \-\-posix\-captures\fP option.
 .TP
 .B \fBre2c:tags:expression\fP
 Allows one to customize the way re2c addresses tag variables.
@@ -1231,10 +1249,10 @@ expressions of the form \fBp\->yyt<N>\fP in the generated code.
 Allows one to override the prefix of tag variables (defaults to \fByyt\fP).
 .TP
 .B \fBre2c:flags:lookahead\fP
-Same as inverted \fB\-\-no\-lookahead\fP command\-line option.
+Same as inverted \fB\-\-no\-lookahead\fP option.
 .TP
 .B \fBre2c:flags:optimize\-tags\fP
-Same as inverted \fB\-\-no\-optimize\-tags\fP command\-line option.
+Same as inverted \fB\-\-no\-optimize\-tags\fP option.
 .TP
 .B \fBre2c:define:YYCONDTYPE\fP
 Defines \fBYYCONDTYPE\fP (see the user interface section).
@@ -1333,10 +1351,10 @@ This configuration applies only to the current block (it is reset to default
 for the next block).
 .TP
 .B \fBre2c:flags:s\fP, \fBre2c:flags:nested\-ifs\fP
-Same as \fB\-s \-\-nested\-ifs\fP command\-line option.
+Same as \fB\-s \-\-nested\-ifs\fP option.
 .TP
 .B \fBre2c:flags:b\fP, \fBre2c:flags:bit\-vectors\fP
-Same as \fB\-b \-\-bit\-vectors\fP command\-line option.
+Same as \fB\-b \-\-bit\-vectors\fP option.
 .TP
 .B \fBre2c:variable:yybm\fP
 Overrides the name of the \fByybm\fP variable.
@@ -1346,7 +1364,7 @@ Defaults to zero (a decimal bitmap table is generated). If set to nonzero,
 a hexadecimal table is generated.
 .TP
 .B \fBre2c:flags:g\fP, \fBre2c:flags:computed\-gotos\fP
-Same as \fB\-g \-\-computed\-gotos\fP command\-line option.
+Same as \fB\-g \-\-computed\-gotos\fP option.
 .TP
 .B \fBre2c:cgoto:threshold\fP
 With \fB\-g\fP \fB\-\-computed\-gotos\fP option this value specifies
@@ -1354,34 +1372,34 @@ the complexity threshold that triggers the generation of jump tables instead
 of nested \fBif\fP statements and bitmaps. The default value is \fB9\fP\&.
 .TP
 .B \fBre2c:flags:case\-ranges\fP
-Same as \fB\-\-case\-ranges\fP command\-line option.
+Same as \fB\-\-case\-ranges\fP option.
 .TP
 .B \fBre2c:flags:e\fP, \fBre2c:flags:ecb\fP
-Same as \fB\-e \-\-ecb\fP command\-line option.
+Same as \fB\-e \-\-ecb\fP option.
 .TP
 .B \fBre2c:flags:8\fP, \fBre2c:flags:utf\-8\fP
-Same as \fB\-8 \-\-utf\-8\fP command\-line option.
+Same as \fB\-8 \-\-utf\-8\fP option.
 .TP
 .B \fBre2c:flags:w\fP, \fBre2c:flags:wide\-chars\fP
-Same as \fB\-w \-\-wide\-chars\fP command\-line option.
+Same as \fB\-w \-\-wide\-chars\fP option.
 .TP
 .B \fBre2c:flags:x\fP, \fBre2c:flags:utf\-16\fP
-Same as \fB\-x \-\-utf\-16\fP command\-line option.
+Same as \fB\-x \-\-utf\-16\fP option.
 .TP
 .B \fBre2c:flags:u\fP, \fBre2c:flags:unicode\fP
-Same as \fB\-u \-\-unicode\fP command\-line option.
+Same as \fB\-u \-\-unicode\fP option.
 .TP
 .B \fBre2c:flags:encoding\-policy\fP
-Same as \fB\-\-encoding\-policy\fP command\-line option.
+Same as \fB\-\-encoding\-policy\fP option.
 .TP
 .B \fBre2c:flags:empty\-class\fP
-Same as \fB\-\-empty\-class\fP command\-line option.
+Same as \fB\-\-empty\-class\fP option.
 .TP
 .B \fBre2c:flags:case\-insensitive\fP
-Same as \fB\-\-case\-insensitive\fP command\-line option.
+Same as \fB\-\-case\-insensitive\fP option.
 .TP
 .B \fBre2c:flags:case\-inverted\fP
-Same as \fB\-\-case\-inverted\fP command\-line option.
+Same as \fB\-\-case\-inverted\fP option.
 .TP
 .B \fBre2c:indent:string\fP
 Specifies the string to use for indentation.
@@ -1428,13 +1446,13 @@ for \fBYYGETCONDITION\fP\&.
 Defines \fBYYDEBUG\fP (see the user interface section).
 .TP
 .B \fBre2c:flags:d\fP, \fBre2c:flags:debug\-output\fP
-Same as \fB\-d \-\-debug\-output\fP command\-line option.
+Same as \fB\-d \-\-debug\-output\fP option.
 .TP
 .B \fBre2c:flags:dfa\-minimization\fP
-Same as \fB\-\-dfa\-minimization\fP command\-line option.
+Same as \fB\-\-dfa\-minimization\fP option.
 .TP
 .B \fBre2c:flags:eager\-skip\fP
-Same as \fB\-\-eager\-skip\fP command\-line option.
+Same as \fB\-\-eager\-skip\fP option.
 .UNINDENT
 .SH REGULAR EXPRESSIONS
 .sp

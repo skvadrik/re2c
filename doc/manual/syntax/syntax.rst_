@@ -15,7 +15,7 @@ kinds are the following:
     the block with the generated code. Names and configurations defined
     in the block are added to the global scope and become visible to subsequent
     blocks (at the start of the program global scope is initialized with the
-    `command-line options`_).
+    `options`_).
     The ``:<name>`` part is optional: if specified, the name can be used to
     refer to the block in another part of the program.
 

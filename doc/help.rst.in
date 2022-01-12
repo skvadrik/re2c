@@ -1,18 +1,16 @@
 Usage
 =====
 
-``re2c  [OPTION...] INPUT [-o OUTPUT]``
+.. include:: @top_srcdir@/doc/manual/synopsis.rst_
 
-``re2go [OPTION...] INPUT [-o OUTPUT]``
-
-Options
+OPTIONS
 =======
 
 .. include:: @top_srcdir@/doc/manual/options/options.rst_
 .. include:: @top_srcdir@/doc/manual/options/debug.rst_
 .. include:: @top_srcdir@/doc/manual/options/internal.rst_
 
-Warnings
+WARNINGS
 ========
 
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst_

@@ -11,7 +11,7 @@ section.
 
 .. _generic_api:
 
-There are two *API flavours* that define the set of primitives used by re2c:
+There are two kinds of API that define the set of primitives used by re2c:
 
   **Pointer API**
     This API is also called *default API*, since it was historically the first,
@@ -48,6 +48,6 @@ There are two *API flavours* that define the set of primitives used by re2c:
     redefining the input model and the semantics of different actions performed
     by the generated code.
 
-There are two *API styles* determine the form in which the primitives should be
-defined:
+There are two API styles that determine the form in which the primitives should
+be defined:
 

@@ -8,15 +8,26 @@ output="$2"
 lang="$3"
 
 case $lang in
-    c)  ext=h
+    c)
+        src_ext=c
+        hdr_ext=h
         lang_name=C
         disclaimer=
         ;;
-    go) ext=go
+    go)
+        src_ext=go
+        hdr_ext=go
         lang_name=Go
-        disclaimer="Note: This manual includes examples for Go, but it refers to re2c (rather than re2go) as the name of the program in general."
+        disclaimer="Note: This manual is for Go, but it refers to re2c as the general program."
         ;;
-    *)  echo "*** $0: unknown lang: $lang"
+    rust)
+        src_ext=rs
+        hdr_ext=rs
+        lang_name=Rust
+        disclaimer="Note: This manual is for Rust, but it refers to re2c as the general program."
+        ;;
+    *)
+        echo "*** $0: unknown lang: $lang"
         exit 1
         ;;
 esac
@@ -24,6 +35,7 @@ esac
 LANG=C sed \
     -e "s/RE2C_LANG_NAME/$lang_name/g" \
     -e "s/RE2C_LANG/$lang/g" \
-    -e "s/RE2C_HEADER_EXT/$ext/g" \
+    -e "s/RE2C_SOURCE_EXT/$src_ext/g" \
+    -e "s/RE2C_HEADER_EXT/$hdr_ext/g" \
     -e "s/RE2C_DISCLAIMER/$disclaimer/g" \
     "$input" > "$output"
