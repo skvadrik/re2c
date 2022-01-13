@@ -61,8 +61,8 @@ Blocks and directives
 =====================
 .. include:: @top_srcdir@/doc/manual/directives/directives.rst_
 
-Interface primitives
-====================
+API primitives
+==============
 .. include:: @top_srcdir@/doc/manual/api/interface.rst_
 
 Configurations

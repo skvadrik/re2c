@@ -6,8 +6,7 @@ The primitives should be defined by the user. This approach gives the user
 freedom and flexibility in customizing the lexer, but it also requires some
 understanding of how the lexer works in order to implement the primitives
 correctly and efficiently. The manual provides examples for the most popular
-use cases. For the full list of primitives see the `interface primitives`_
-section.
+use cases. For the full list of primitives see the `API primitives`_ section.
 
 .. _generic_api:
 
