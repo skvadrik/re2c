@@ -17,25 +17,34 @@ RE2C_DISCLAIMER
 
 Introduction
 ============
-.. include:: @top_srcdir@/doc/manual/syntax/syntax.rst_
-.. include:: @top_srcdir@/doc/manual/syntax/api1.rst_
-.. include:: @top_srcdir@/doc/manual/syntax/api2_RE2C_LANG.rst_
-.. include:: @top_srcdir@/doc/manual/syntax/api3.rst_
 
-Example
-=======
+.. include:: @top_srcdir@/doc/manual/syntax/intro.rst_
 
-Here is a simple re2c program:
+Here is an example of a small program that checks if a given string contains a
+decimal number:
 
 .. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.re
     :literal:
     :code: RE2C_LANG
 
-The generated code looks like this:
+In the output everything between ``/*!re2c`` and ``*/`` has been replaced with
+the generated code:
 
 .. include:: @top_srcdir@/examples/RE2C_LANG/01_basic.RE2C_SOURCE_EXT
     :literal:
     :code: RE2C_LANG
+
+Syntax
+======
+
+.. include:: @top_srcdir@/doc/manual/syntax/syntax.rst_
+
+Program interface
+=================
+
+.. include:: @top_srcdir@/doc/manual/syntax/api1.rst_
+.. include:: @top_srcdir@/doc/manual/syntax/api2_RE2C_LANG.rst_
+.. include:: @top_srcdir@/doc/manual/syntax/api3.rst_
 
 Options
 =======

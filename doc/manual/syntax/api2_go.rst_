@@ -1,6 +1,7 @@
+There are two API styles that determine the form in which the primitives should
+be defined:
 
   **Free-form**
-
     Free-form style is enabled with configuration
     ``re2c:api:style = free-form;``. It is the default for Go.
     In this style interface primitives should be defined as free-form pieces of
@@ -31,7 +32,6 @@
     |
 
   **Function-like**
-
     Function-like style is enabled with configuration
     ``re2c:api:style = functions;``. In this style primitives should be defined
     as functions or macros with parentheses, accepting the necessary arguments.

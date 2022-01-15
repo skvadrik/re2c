@@ -1,0 +1,6 @@
+re2c works as a preprocessor. It reads the input file (which is usually a
+program in the target language, but can be anything) and looks for blocks of
+code enclosed in special-form comments. The text outside of these blocks is
+copied verbatim into the output file. The contents of the blocks are processed
+by re2c. It translates them to code in the target language and outputs the
+generated code in place of the block.

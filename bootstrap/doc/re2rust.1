@@ -49,229 +49,15 @@ re2rust [ OPTIONS ] [ WARNINGS ] INPUT
 Input can be either a file or \fB\-\fP for stdin.
 .SH INTRODUCTION
 .sp
-Re2c works as a preprocessor. It reads the input file (which is usually a
+re2c works as a preprocessor. It reads the input file (which is usually a
 program in the target language, but can be anything) and looks for blocks of
 code enclosed in special\-form comments. The text outside of these blocks is
 copied verbatim into the output file. The contents of the blocks are processed
 by re2c. It translates them to code in the target language and outputs the
-generated code in place of the block. There are different kinds of blocks;
-see the \fI\%blocks and directives\fP section for a full list of them. The main block
-kinds are the following:
-.INDENT 0.0
-.INDENT 3.5
-.INDENT 0.0
-.TP
-.B \fB/*!re2c[:<name>] ... */\fP
-A \fIglobal block\fP that contains a mixture of named definitions,
-configurations, directives and rules (regular expressions with associated
-semantic actions). Re2c compiles regular expressions to a deterministic
-finite automaton, encodes it in the form of conditional jumps and replaces
-the block with the generated code. Names and configurations defined
-in the block are added to the global scope and become visible to subsequent
-blocks (at the start of the program global scope is initialized with the
-\fI\%options\fP).
-The \fB:<name>\fP part is optional: if specified, the name can be used to
-refer to the block in another part of the program.
-.TP
-.B \fB/*!local:re2c[:<name>] ... */\fP
-A \fIlocal block\fP is like a global block, but the names and configurations
-defined in it have local scope (they do not affect other blocks).
-.TP
-.B \fB/*!rules:re2c[:<name>] ... */\fP
-A \fIrules block\fP is like a local block, but it does not generate any code and
-is meant to be reused in other blocks. This is a way of sharing code
-(more details in the \fI\%reusable blocks\fP section).
-.UNINDENT
-.UNINDENT
-.UNINDENT
+generated code in place of the block.
 .sp
-A block may contain the following kinds of statements:
-.INDENT 0.0
-.INDENT 3.5
-.INDENT 0.0
-.TP
-.B \fB<name> = <regular expression>;\fP
-A \fInamed definition\fP binds a name to a regular expression. Names may contain
-alphanumeric characters and underscore. The \fI\%regular expressions\fP section
-gives an overview of re2c syntax for regular expressions. Once defined, the
-name can be used in other regular expressions and in rules. Recursion in
-named definitions is not allowed, and each name should be defined before it
-is used. A block inherits named definitions from the global scope.
-Redefining a name that exists in the current scope is an error.
-.TP
-.B \fB<configuration> = <value>;\fP
-A \fIconfiguration\fP allows one to change re2c behavior and customize the
-generated code. For a full list of configurations supported by re2c see the
-\fI\%configurations\fP section. Depending on a particular configuration, the
-value can be a keyword, a non\-negative integer number or a one\-line string
-which should be enclosed in double or single quotes unless it consists of
-alphanumeric characters. A block inherits configurations from the global
-scope and may redefine them or add new ones. Configurations defined inside
-of a block affect the whole block, even if they appear at the end of it.
-.TP
-.B \fB<regular expression> { <code> }\fP
-A \fIrule\fP binds a regular expression to a semantic action (a block of code in
-the target language). If the regular expression matches, the associated
-semantic action is executed. If multiple rules match, the longest match
-takes precedence. If multiple rules match the same string, the earliest one
-takes precedence. There are two special rules: the default rule \fB*\fP and
-the end of input rule \fB$\fP\&. The default rule should always be defined, it
-has the lowest priority regardless of its place in the block, and it matches
-any code unit (not necessarily a valid character, see the
-\fI\%encoding support\fP section). The end of input rule should be defined if the
-corresponding method for \fI\%handling the end of input\fP is used. If
-\fI\%start conditions\fP are used, rules have more complex syntax.
-.TP
-.B \fB!<directive>;\fP
-A \fIdirective\fP is one of the special predefined statements. Each directive
-has a unique purpose. For example, the \fB!use\fP directive merges a rules
-block into the current one (see the \fI\%reusable blocks\fP section), and the
-\fB!include\fP directive allows one to include an outer file (see the
-\fI\%include files\fP section).
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.sp
-The generated code interfaces with the outer program with the help of
-\fIprimitives\fP \-\- symbolic names that can be defined as variables, functions or
-macros in the target language (collectively referred to as the API).
-The primitives should be defined by the user. This approach gives the user
-freedom and flexibility in customizing the lexer, but it also requires some
-understanding of how the lexer works in order to implement the primitives
-correctly and efficiently. The manual provides examples for the most popular
-use cases. For the full list of primitives see the \fI\%API primitives\fP section.
-.sp
-There are two kinds of API that define the set of primitives used by re2c:
-.INDENT 0.0
-.INDENT 3.5
-.INDENT 0.0
-.TP
-.B \fBPointer API\fP
-This API is also called \fIdefault API\fP, since it was historically the first,
-and for a long time the only one. This is a more restrictive API based on C
-pointer arithmetic. It consists of pointer\-like primitives \fBYYCURSOR\fP,
-\fBYYMARKER\fP, \fBYYCTXMARKER\fP, \fBYYLIMIT\fP (which are normally defined as
-pointers of type \fBYYCTYPE*\fP) and \fBYYFILL\fP\&. Pointer API is enabled by
-default for the C backend, and it cannot be used with backends that do not
-support pointer arithmetic.
-.TP
-.B \fBGeneric API\fP
-This is a more flexible API that does not assume pointer semantics. It
-consists of primitives
-\fBYYPEEK\fP,
-\fBYYSKIP\fP,
-\fBYYBACKUP\fP,
-\fBYYBACKUPCTX\fP,
-\fBYYSTAGP\fP,
-\fBYYSTAGN\fP,
-\fBYYMTAGP\fP,
-\fBYYMTAGN\fP,
-\fBYYRESTORE\fP,
-\fBYYRESTORECTX\fP,
-\fBYYRESTORETAG\fP,
-\fBYYSHIFT\fP,
-\fBYYSHIFTSTAG\fP,
-\fBYYSHIFTMTAG\fP,
-\fBYYLESSTHAN\fP
-and \fBYYFILL\fP\&.
-For the C backend generic API is enabled with \fB\-\-input custom\fP option or
-\fBre2c:flags:input = custom;\fP configuration; for the Go backend it is
-enabled by default. Generic API was added in version 0.14. It is
-intentionally designed to give the user as much freedom as possible in
-redefining the input model and the semantics of different actions performed
-by the generated code.
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.sp
-There are two API styles that determine the form in which the primitives should
-be defined:
-.INDENT 0.0
-.INDENT 3.5
-\fBFree\-form\fP
-.INDENT 0.0
-.INDENT 3.5
-Free\-form style is enabled with configuration
-\fBre2c:api:style = free\-form;\fP\&. It is the default for Rust.
-In this style interface primitives should be defined as free\-form pieces of
-code with interpolated variables of the form \fB@@{var}\fP or optionally just
-\fB@@\fP if there is a single variable.
-The set of variables is specific to each primitive.
-For example, if the input is a byte slice \fBbuffer: &[u8]\fP,
-variables \fBcursor\fP, \fBlimit\fP, \fBmarker\fP and \fBctxmarker\fP
-of type \fBusize\fP represent input positions,
-and a constant \fBNONE\fP represents invalid position,
-then the API can be defined as follows:
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-/*!re2c
-  re2c:define:YYPEEK       = "*buffer.get_unchecked(cursor)";
-  re2c:define:YYSKIP       = "cursor += 1;";
-  re2c:define:YYBACKUP     = "marker = cursor;";
-  re2c:define:YYRESTORE    = "cursor = marker;";
-  re2c:define:YYBACKUPCTX  = "ctxmarker = cursor;";
-  re2c:define:YYRESTORECTX = "cursor = ctxmarker;";
-  re2c:define:YYRESTORETAG = "cursor = @@{tag};";
-  re2c:define:YYLESSTHAN   = "limit \- cursor < @@{len}";
-  re2c:define:YYSTAGP      = "@@{tag} = cursor;";
-  re2c:define:YYSTAGN      = "@@{tag} = NONE;";
-  re2c:define:YYSHIFT      = "cursor = (cursor as isize + @@{shift}) as usize;";
-  re2c:define:YYSHIFTSTAG  = "@@{tag} = (@@{tag} as isize + @@{shift}) as usize;";
-*/
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.nf
-
-.fi
-.sp
-.UNINDENT
-.UNINDENT
-.sp
-\fBFunction\-like\fP
-.INDENT 0.0
-.INDENT 3.5
-Function\-like style is enabled with configuration
-\fBre2c:api:style = functions;\fP\&. In this style primitives should be defined
-as functions or macros with parentheses, accepting the necessary arguments.
-This is well\-suited for C macros or Go closures, but it cannot be used with
-hygienic macros or functions in Rust, as the primitives need to access lexer
-context that is not passed as an argument. It is possible to use closures,
-but the borrow\-checker restrictions make it hard. Generally it is better to
-use free\-form style.
-.sp
-The difficulty with closures and borrow\-checker is that different primitives
-must read and modify the same parts of lexer context in a series of
-interleaved invocations. As a workaround, one can use Rust \fBCell\fP type.
-For example, if the input is a byte slice \fBbuffer: &[u8]\fP and
-\fBcur: Cell::<usize>\fP is the current input position, then \fBYYPEEK\fP and
-\fBYYSKIP\fP can be defined as follows:
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-let YYPEEK = || unsafe { *buffer\&.get_unchecked(cur\&.get()) };
-let YYSKIP = || { cur\&.set(cur\&.get() + 1); };
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.UNINDENT
-.sp
-For \fBYYFILL\fP definition and instructions how to customize or disable
-end\-of\-input checks see the \fI\%handling the end of input\fP and
-\fI\%buffer refilling\fP sections.
-.SH EXAMPLE
-.sp
-Here is a simple re2c program:
+Here is an example of a small program that checks if a given string contains a
+decimal number:
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -303,7 +89,8 @@ fn main() {
 .UNINDENT
 .UNINDENT
 .sp
-The generated code looks like this:
+In the output everything between \fB/*!re2c\fP and \fB*/\fP has been replaced with
+the generated code:
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -368,6 +155,218 @@ fn main() {
 .fi
 .UNINDENT
 .UNINDENT
+.SH SYNTAX
+.sp
+A re2c program consists of a sequence of \fIblocks\fP intermixed with code in the
+target language. There are three main kinds of blocks:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fB/*!re2c[:<name>] ... */\fP
+A \fIglobal block\fP contains definitions, configurations, directives and rules.
+re2c compiles regular expressions associated with each rule into a
+deterministic finite automaton, encodes it in the form of conditional jumps
+in the target language and replaces the block with the generated code. Names
+and configurations defined in a global block are added to the global scope
+and become visible to subsequent blocks. At the start of the program the
+global scope is initialized with command\-line \fI\%options\fP\&.
+The \fB:<name>\fP part is optional: if specified, the name can be used to
+refer to the block in another part of the program.
+.TP
+.B \fB/*!local:re2c[:<name>] ... */\fP
+A \fIlocal block\fP is like a global block, but the names and configurations in
+it have local scope (they do not affect other blocks).
+.TP
+.B \fB/*!rules:re2c[:<name>] ... */\fP
+A \fIrules block\fP is like a local block, but it does not generate any code and
+is meant to be reused in other blocks. This is a way of sharing code
+(more details in the \fI\%reusable blocks\fP section).
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+There are also many auxiliary blocks; see section \fI\%blocks and directives\fP for a
+full list of them. A block may contain the following kinds of statements:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fB<name> = <regular expression>;\fP
+A \fIdefinition\fP binds a name to a regular expression. Names may contain
+alphanumeric characters and underscore. The \fI\%regular expressions\fP section
+gives an overview of re2c syntax for regular expressions. Once defined, the
+name can be used in other regular expressions and in rules. Recursion in
+named definitions is not allowed, and each name should be defined before it
+is used. A block inherits named definitions from the global scope.
+Redefining a name that exists in the current scope is an error.
+.TP
+.B \fB<configuration> = <value>;\fP
+A \fIconfiguration\fP allows one to change re2c behavior and customize the
+generated code. For a full list of configurations supported by re2c see the
+\fI\%configurations\fP section. Depending on a particular configuration, the
+value can be a keyword, a nonnegative integer number or a one\-line string
+which should be enclosed in double or single quotes unless it consists of
+alphanumeric characters. A block inherits configurations from the global
+scope and may redefine them or add new ones. Configurations defined inside
+of a block affect the whole block, even if they appear at the end of it.
+.TP
+.B \fB<regular expression> { <code> }\fP
+A \fIrule\fP binds a regular expression to a semantic action (a block of code in
+the target language). If the regular expression matches, the associated
+semantic action is executed. If multiple rules match, the longest match
+takes precedence. If multiple rules match the same string, the earliest one
+takes precedence. There are two special rules: the default rule \fB*\fP and
+the end of input rule \fB$\fP\&. The default rule should always be defined, it
+has the lowest priority regardless of its place in the block, and it matches
+any code unit (not necessarily a valid character, see the
+\fI\%encoding support\fP section). The end of input rule should be defined if the
+corresponding method for \fI\%handling the end of input\fP is used. If
+\fI\%start conditions\fP are used, rules have more complex syntax.
+.TP
+.B \fB!<directive>;\fP
+A \fIdirective\fP is one of the special predefined statements. Each directive
+has a unique purpose. For example, the \fB!use\fP directive merges a rules
+block into the current one (see the \fI\%reusable blocks\fP section), and the
+\fB!include\fP directive allows one to include an outer file (see the
+\fI\%include files\fP section).
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH PROGRAM INTERFACE
+.sp
+The generated code interfaces with the outer program with the help of
+\fIprimitives\fP \-\- symbolic names that can be defined as variables, functions or
+macros in the target language (collectively referred to as the API).
+The primitives should be defined by the user. This approach gives the user
+freedom and flexibility in customizing the lexer, but it also requires some
+understanding of how the lexer works in order to implement the primitives
+correctly and efficiently. The manual provides examples for the most popular
+use cases. For the full list of primitives see the \fI\%API primitives\fP section.
+.sp
+There are two kinds of API that define the set of primitives used by re2c:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBPointer API\fP
+This API is also called \fIdefault API\fP, since it was historically the first,
+and for a long time the only one. This is a more restrictive API based on C
+pointer arithmetic. It consists of pointer\-like primitives \fBYYCURSOR\fP,
+\fBYYMARKER\fP, \fBYYCTXMARKER\fP, \fBYYLIMIT\fP (which are normally defined as
+pointers of type \fBYYCTYPE*\fP) and \fBYYFILL\fP\&. Pointer API is enabled by
+default for the C backend, and it cannot be used with backends that do not
+support pointer arithmetic.
+.TP
+.B \fBGeneric API\fP
+This is a more flexible API that does not assume pointer semantics. It
+consists of primitives
+\fBYYPEEK\fP,
+\fBYYSKIP\fP,
+\fBYYBACKUP\fP,
+\fBYYBACKUPCTX\fP,
+\fBYYSTAGP\fP,
+\fBYYSTAGN\fP,
+\fBYYMTAGP\fP,
+\fBYYMTAGN\fP,
+\fBYYRESTORE\fP,
+\fBYYRESTORECTX\fP,
+\fBYYRESTORETAG\fP,
+\fBYYSHIFT\fP,
+\fBYYSHIFTSTAG\fP,
+\fBYYSHIFTMTAG\fP,
+\fBYYLESSTHAN\fP
+and \fBYYFILL\fP\&.
+For the C backend generic API is enabled with \fB\-\-input custom\fP option or
+\fBre2c:flags:input = custom;\fP configuration; for the Go backend it is
+enabled by default. Generic API was added in version 0.14. It is
+intentionally designed to give the user as much freedom as possible in
+redefining the input model and the semantics of different actions performed
+by the generated code.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+There are two API styles that determine the form in which the primitives should
+be defined:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBFree\-form\fP
+Free\-form style is enabled with configuration
+\fBre2c:api:style = free\-form;\fP\&. It is the default for Rust.
+In this style interface primitives should be defined as free\-form pieces of
+code with interpolated variables of the form \fB@@{var}\fP or optionally just
+\fB@@\fP if there is a single variable.
+The set of variables is specific to each primitive.
+For example, if the input is a byte slice \fBbuffer: &[u8]\fP,
+variables \fBcursor\fP, \fBlimit\fP, \fBmarker\fP and \fBctxmarker\fP
+of type \fBusize\fP represent input positions,
+and a constant \fBNONE\fP represents invalid position,
+then the API can be defined as follows:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+/*!re2c
+  re2c:define:YYPEEK       = "*buffer.get_unchecked(cursor)";
+  re2c:define:YYSKIP       = "cursor += 1;";
+  re2c:define:YYBACKUP     = "marker = cursor;";
+  re2c:define:YYRESTORE    = "cursor = marker;";
+  re2c:define:YYBACKUPCTX  = "ctxmarker = cursor;";
+  re2c:define:YYRESTORECTX = "cursor = ctxmarker;";
+  re2c:define:YYRESTORETAG = "cursor = @@{tag};";
+  re2c:define:YYLESSTHAN   = "limit \- cursor < @@{len}";
+  re2c:define:YYSTAGP      = "@@{tag} = cursor;";
+  re2c:define:YYSTAGN      = "@@{tag} = NONE;";
+  re2c:define:YYSHIFT      = "cursor = (cursor as isize + @@{shift}) as usize;";
+  re2c:define:YYSHIFTSTAG  = "@@{tag} = (@@{tag} as isize + @@{shift}) as usize;";
+*/
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.nf
+
+.fi
+.sp
+.TP
+.B \fBFunction\-like\fP
+Function\-like style is enabled with configuration
+\fBre2c:api:style = functions;\fP\&. In this style primitives should be defined
+as functions or macros with parentheses, accepting the necessary arguments.
+This is well\-suited for C macros or Go closures, but it cannot be used with
+hygienic macros or functions in Rust, as the primitives need to access lexer
+context that is not passed as an argument. It is possible to use closures,
+but the borrow\-checker restrictions make it hard. Generally it is better to
+use free\-form style.
+.sp
+The difficulty with closures and borrow\-checker is that different primitives
+must read and modify the same parts of lexer context in a series of
+interleaved invocations. As a workaround, one can use Rust \fBCell\fP type.
+For example, if the input is a byte slice \fBbuffer: &[u8]\fP and
+\fBcur: Cell::<usize>\fP is the current input position, then \fBYYPEEK\fP and
+\fBYYSKIP\fP can be defined as follows:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+let YYPEEK = || unsafe { *buffer\&.get_unchecked(cur\&.get()) };
+let YYSKIP = || { cur\&.set(cur\&.get() + 1); };
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+For \fBYYFILL\fP definition and instructions how to customize or disable
+end\-of\-input checks see the \fI\%handling the end of input\fP and
+\fI\%buffer refilling\fP sections.
 .SH OPTIONS
 .sp
 Some of the options have corresponding \fI\%configurations\fP,

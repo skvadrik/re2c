@@ -1,37 +1,31 @@
-Re2c works as a preprocessor. It reads the input file (which is usually a
-program in the target language, but can be anything) and looks for blocks of
-code enclosed in special-form comments. The text outside of these blocks is
-copied verbatim into the output file. The contents of the blocks are processed
-by re2c. It translates them to code in the target language and outputs the
-generated code in place of the block. There are different kinds of blocks;
-see the `blocks and directives`_ section for a full list of them. The main block
-kinds are the following:
+A re2c program consists of a sequence of *blocks* intermixed with code in the
+target language. There are three main kinds of blocks:
 
   ``/*!re2c[:<name>] ... */``
-    A *global block* that contains a mixture of named definitions,
-    configurations, directives and rules (regular expressions with associated
-    semantic actions). Re2c compiles regular expressions to a deterministic
-    finite automaton, encodes it in the form of conditional jumps and replaces
-    the block with the generated code. Names and configurations defined
-    in the block are added to the global scope and become visible to subsequent
-    blocks (at the start of the program global scope is initialized with the
-    `options`_).
+    A *global block* contains definitions, configurations, directives and rules.
+    re2c compiles regular expressions associated with each rule into a
+    deterministic finite automaton, encodes it in the form of conditional jumps
+    in the target language and replaces the block with the generated code. Names
+    and configurations defined in a global block are added to the global scope
+    and become visible to subsequent blocks. At the start of the program the
+    global scope is initialized with command-line `options`_.
     The ``:<name>`` part is optional: if specified, the name can be used to
     refer to the block in another part of the program.
 
   ``/*!local:re2c[:<name>] ... */``
-    A *local block* is like a global block, but the names and configurations
-    defined in it have local scope (they do not affect other blocks).
+    A *local block* is like a global block, but the names and configurations in
+    it have local scope (they do not affect other blocks).
 
   ``/*!rules:re2c[:<name>] ... */``
     A *rules block* is like a local block, but it does not generate any code and
     is meant to be reused in other blocks. This is a way of sharing code
     (more details in the `reusable blocks`_ section).
 
-A block may contain the following kinds of statements:
+There are also many auxiliary blocks; see section `blocks and directives`_ for a
+full list of them. A block may contain the following kinds of statements:
 
   ``<name> = <regular expression>;``
-    A *named definition* binds a name to a regular expression. Names may contain
+    A *definition* binds a name to a regular expression. Names may contain
     alphanumeric characters and underscore. The `regular expressions`_ section
     gives an overview of re2c syntax for regular expressions. Once defined, the
     name can be used in other regular expressions and in rules. Recursion in
@@ -43,7 +37,7 @@ A block may contain the following kinds of statements:
     A *configuration* allows one to change re2c behavior and customize the
     generated code. For a full list of configurations supported by re2c see the
     `configurations`_ section. Depending on a particular configuration, the
-    value can be a keyword, a non-negative integer number or a one-line string
+    value can be a keyword, a nonnegative integer number or a one-line string
     which should be enclosed in double or single quotes unless it consists of
     alphanumeric characters. A block inherits configurations from the global
     scope and may redefine them or add new ones. Configurations defined inside

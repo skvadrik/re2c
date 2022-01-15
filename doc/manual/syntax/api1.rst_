@@ -47,6 +47,3 @@ There are two kinds of API that define the set of primitives used by re2c:
     redefining the input model and the semantics of different actions performed
     by the generated code.
 
-There are two API styles that determine the form in which the primitives should
-be defined:
-

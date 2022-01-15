@@ -274,6 +274,7 @@ set(re2c_docs_sources
     "doc/manual/syntax/api2_go.rst_"
     "doc/manual/syntax/api2_rust.rst_"
     "doc/manual/syntax/api3.rst_"
+    "doc/manual/syntax/intro.rst_"
     "doc/manual/syntax/syntax.rst_"
     "doc/manual/warnings/warnings_general.rst_"
     "doc/manual/warnings/warnings_list.rst_"
