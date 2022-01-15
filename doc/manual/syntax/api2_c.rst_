@@ -1,13 +1,14 @@
 
   **Free-form**
 
-    This style is enabled with configuration ``re2c:api:style = free-form;``.
+    Free-form style is enabled with configuration
+    ``re2c:api:style = free-form;``.
     In this style interface primitives should be defined as free-form pieces of
     code with interpolated variables of the form ``@@{var}`` or optionally just
     ``@@`` if there is a single variable.
     The set of variables is specific to each primitive.
-    Free-form style generic API can be defined in terms of pointers
-    ``cursor``, ``limit``, ``marker`` and ``ctxmarker`` as follows:
+    Generic API can be defined in terms of pointers ``cursor``, ``limit``,
+    ``marker`` and ``ctxmarker`` as follows:
 
     .. code-block:: c
 
@@ -30,12 +31,12 @@
 
   **Function-like**
 
-    This style is enabled with configuration ``re2c:api:style = functions;``.
-    Primitives should be defined as functions or macros with parentheses,
-    accepting the necessary number of arguments. For historical reasons this
-    API style is the default for C/C++ backend.
-    Function-like style generic API can be defined in terms of pointers
-    ``cursor``, ``limit``, ``marker`` and ``ctxmarker`` as follows:
+    Function-like style is enabled with configuration
+    ``re2c:api:style = functions;``. In this style primitives should be defined
+    as functions or macros with parentheses, accepting the necessary arguments.
+    For historical reasons this API style is the default for C/C++ backend.
+    Generic API can be defined in terms of pointers ``cursor``, ``limit``,
+    ``marker`` and ``ctxmarker`` as follows:
 
     .. code-block:: c
 

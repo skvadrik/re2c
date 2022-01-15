@@ -43,7 +43,7 @@ A block may contain the following kinds of statements:
     A *configuration* allows one to change re2c behavior and customize the
     generated code. For a full list of configurations supported by re2c see the
     `configurations`_ section. Depending on a particular configuration, the
-    value can be a keyword, a nonnegative integer number or a one-line string
+    value can be a keyword, a non-negative integer number or a one-line string
     which should be enclosed in double or single quotes unless it consists of
     alphanumeric characters. A block inherits configurations from the global
     scope and may redefine them or add new ones. Configurations defined inside

@@ -15,11 +15,11 @@ There are two kinds of API that define the set of primitives used by re2c:
   **Pointer API**
     This API is also called *default API*, since it was historically the first,
     and for a long time the only one. This is a more restrictive API based on C
-    pointer arithmetics. It consists of pointer-like primitives ``YYCURSOR``,
+    pointer arithmetic. It consists of pointer-like primitives ``YYCURSOR``,
     ``YYMARKER``, ``YYCTXMARKER``, ``YYLIMIT`` (which are normally defined as
     pointers of type ``YYCTYPE*``) and ``YYFILL``. Pointer API is enabled by
     default for the C backend, and it cannot be used with backends that do not
-    support pointer arithmetics.
+    support pointer arithmetic.
 
   **Generic API**
     This is a more flexible API that does not assume pointer semantics. It

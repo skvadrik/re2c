@@ -1,19 +1,19 @@
 
   **Free-form**
 
-    This style is enabled with configuration ``re2c:api:style = free-form;``.
-    It is the default for the Rust backend.
+    Free-form style is enabled with configuration
+    ``re2c:api:style = free-form;``. It is the default for Rust.
     In this style interface primitives should be defined as free-form pieces of
     code with interpolated variables of the form ``@@{var}`` or optionally just
     ``@@`` if there is a single variable.
     The set of variables is specific to each primitive.
-    Assuming that the input is a byte slice ``buffer`` of type ``&[u8]``,
+    For example, if the input is a byte slice ``buffer: &[u8]``,
     variables ``cursor``, ``limit``, ``marker`` and ``ctxmarker``
     of type ``usize`` represent input positions,
     and a constant ``NONE`` represents invalid position,
-    free-form style generic API can be defined as follows:
+    then the API can be defined as follows:
 
-    .. code-block:: go
+    .. code-block:: rust
 
         /*!re2c
           re2c:define:YYPEEK       = "*buffer.get_unchecked(cursor)";
@@ -34,10 +34,23 @@
 
   **Function-like**
 
-    This style is enabled with configuration ``re2c:api:style = functions;``.
-    Primitives are expected to be callable: they are emitted with parentheses,
-    and some of them accept arguments. This style works well with C/C++ macros
-    or Go closures, but it is problematic in Rust. Primitives cannot be defined
-    as top-level functions or hygienic macros (they do not accept all necessary
-    arguments), nor can they be defined as closures (due to borrow-checker
-    issues). Use free-form style instead.
+    Function-like style is enabled with configuration
+    ``re2c:api:style = functions;``. In this style primitives should be defined
+    as functions or macros with parentheses, accepting the necessary arguments.
+    This is well-suited for C macros or Go closures, but it cannot be used with
+    hygienic macros or functions in Rust, as the primitives need to access lexer
+    context that is not passed as an argument. It is possible to use closures,
+    but the borrow-checker restrictions make it hard. Generally it is better to
+    use free-form style.
+
+    The difficulty with closures and borrow-checker is that different primitives
+    must read and modify the same parts of lexer context in a series of
+    interleaved invocations. As a workaround, one can use Rust ``Cell`` type.
+    For example, if the input is a byte slice ``buffer: &[u8]`` and
+    ``cur: Cell::<usize>`` is the current input position, then ``YYPEEK`` and
+    ``YYSKIP`` can be defined as follows:
+
+    .. code-block:: rust
+
+        let YYPEEK = || unsafe { *buffer.get_unchecked(cur.get()) };
+        let YYSKIP = || { cur.set(cur.get() + 1); };

@@ -103,7 +103,7 @@ Redefining a name that exists in the current scope is an error.
 A \fIconfiguration\fP allows one to change re2c behavior and customize the
 generated code. For a full list of configurations supported by re2c see the
 \fI\%configurations\fP section. Depending on a particular configuration, the
-value can be a keyword, a nonnegative integer number or a one\-line string
+value can be a keyword, a non\-negative integer number or a one\-line string
 which should be enclosed in double or single quotes unless it consists of
 alphanumeric characters. A block inherits configurations from the global
 scope and may redefine them or add new ones. Configurations defined inside
@@ -149,11 +149,11 @@ There are two kinds of API that define the set of primitives used by re2c:
 .B \fBPointer API\fP
 This API is also called \fIdefault API\fP, since it was historically the first,
 and for a long time the only one. This is a more restrictive API based on C
-pointer arithmetics. It consists of pointer\-like primitives \fBYYCURSOR\fP,
+pointer arithmetic. It consists of pointer\-like primitives \fBYYCURSOR\fP,
 \fBYYMARKER\fP, \fBYYCTXMARKER\fP, \fBYYLIMIT\fP (which are normally defined as
 pointers of type \fBYYCTYPE*\fP) and \fBYYFILL\fP\&. Pointer API is enabled by
 default for the C backend, and it cannot be used with backends that do not
-support pointer arithmetics.
+support pointer arithmetic.
 .TP
 .B \fBGeneric API\fP
 This is a more flexible API that does not assume pointer semantics. It
@@ -191,17 +191,17 @@ be defined:
 \fBFree\-form\fP
 .INDENT 0.0
 .INDENT 3.5
-This style is enabled with configuration \fBre2c:api:style = free\-form;\fP\&.
-It is the default for the Rust backend.
+Free\-form style is enabled with configuration
+\fBre2c:api:style = free\-form;\fP\&. It is the default for Rust.
 In this style interface primitives should be defined as free\-form pieces of
 code with interpolated variables of the form \fB@@{var}\fP or optionally just
 \fB@@\fP if there is a single variable.
 The set of variables is specific to each primitive.
-Assuming that the input is a byte slice \fBbuffer\fP of type \fB&[u8]\fP,
+For example, if the input is a byte slice \fBbuffer: &[u8]\fP,
 variables \fBcursor\fP, \fBlimit\fP, \fBmarker\fP and \fBctxmarker\fP
 of type \fBusize\fP represent input positions,
 and a constant \fBNONE\fP represents invalid position,
-free\-form style generic API can be defined as follows:
+then the API can be defined as follows:
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -235,13 +235,32 @@ free\-form style generic API can be defined as follows:
 \fBFunction\-like\fP
 .INDENT 0.0
 .INDENT 3.5
-This style is enabled with configuration \fBre2c:api:style = functions;\fP\&.
-Primitives are expected to be callable: they are emitted with parentheses,
-and some of them accept arguments. This style works well with C/C++ macros
-or Go closures, but it is problematic in Rust. Primitives cannot be defined
-as top\-level functions or hygienic macros (they do not accept all necessary
-arguments), nor can they be defined as closures (due to borrow\-checker
-issues). Use free\-form style instead.
+Function\-like style is enabled with configuration
+\fBre2c:api:style = functions;\fP\&. In this style primitives should be defined
+as functions or macros with parentheses, accepting the necessary arguments.
+This is well\-suited for C macros or Go closures, but it cannot be used with
+hygienic macros or functions in Rust, as the primitives need to access lexer
+context that is not passed as an argument. It is possible to use closures,
+but the borrow\-checker restrictions make it hard. Generally it is better to
+use free\-form style.
+.sp
+The difficulty with closures and borrow\-checker is that different primitives
+must read and modify the same parts of lexer context in a series of
+interleaved invocations. As a workaround, one can use Rust \fBCell\fP type.
+For example, if the input is a byte slice \fBbuffer: &[u8]\fP and
+\fBcur: Cell::<usize>\fP is the current input position, then \fBYYPEEK\fP and
+\fBYYSKIP\fP can be defined as follows:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+let YYPEEK = || unsafe { *buffer\&.get_unchecked(cur\&.get()) };
+let YYSKIP = || { cur\&.set(cur\&.get() + 1); };
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -260,25 +279,24 @@ Here is a simple re2c program:
 .ft C
 // re2rust $INPUT \-o $OUTPUT
 
-fn lex(s: &[u8]) \-> bool {                            // Rust code
-    let mut cursor = 0;                               //
-/*!re2c
-    re2c:define:YYCTYPE = u8;                         //
-    re2c:define:YYPEEK = "*s.get_unchecked(cursor)";  // configurations
-    re2c:define:YYSKIP = "cursor += 1;";              //
-    re2c:yyfill:enable = 0;                           //
+fn lex(s: &[u8]) \-> bool {
+    let mut cursor = 0;
+    /*!re2c
+        re2c:define:YYCTYPE = u8;
+        re2c:define:YYPEEK = "*s.get_unchecked(cursor)";
+        re2c:define:YYSKIP = "cursor += 1;";
+        re2c:yyfill:enable = 0;
 
-    alpha = [a\-zA\-Z];                                 // named definitions
-    ident = alpha (alpha | [0\-9])*;                   //
+        number = [1\-9][0\-9]*;
 
-    ident  { return true; }                           // rules
-    *      { return false; }                          //
-*/
-}                                                     //
-                                                      //
-fn main() {                                           // Rust code
-    assert!(lex(b"qwerty42\e0"));                      //
-}                                                     //
+        number { return true; }
+        *      { return false; }
+    */
+}
+
+fn main() {
+    assert!(lex(b"1234\e0"));
+}
 
 .ft P
 .fi
@@ -294,9 +312,9 @@ The generated code looks like this:
 /* Generated by re2c */
 // re2rust $INPUT \-o $OUTPUT
 
-fn lex(s: &[u8]) \-> bool {                            // Rust code
-    let mut cursor = 0;                               //
-
+fn lex(s: &[u8]) \-> bool {
+    let mut cursor = 0;
+    
 {
     #[allow(unused_assignments)]
     let mut yych : u8 = 0;
@@ -307,8 +325,7 @@ fn lex(s: &[u8]) \-> bool {                            // Rust code
                 yych = unsafe {*s.get_unchecked(cursor)};
                 cursor += 1;
                 match yych {
-                    0x41 ..= 0x5A |
-                    0x61 ..= 0x7A => {
+                    0x31 ..= 0x39 => {
                         yystate = 2;
                         continue \(aqyyl;
                     }
@@ -322,9 +339,7 @@ fn lex(s: &[u8]) \-> bool {                            // Rust code
             2 => {
                 yych = unsafe {*s.get_unchecked(cursor)};
                 match yych {
-                    0x30 ..= 0x39 |
-                    0x41 ..= 0x5A |
-                    0x61 ..= 0x7A => {
+                    0x30 ..= 0x39 => {
                         cursor += 1;
                         yystate = 2;
                         continue \(aqyyl;
@@ -343,11 +358,11 @@ fn lex(s: &[u8]) \-> bool {                            // Rust code
     }
 }
 
-}                                                     //
-                                                      //
-fn main() {                                           // Rust code
-    assert!(lex(b"qwerty42\e0"));                      //
-}                                                     //
+}
+
+fn main() {
+    assert!(lex(b"1234\e0"));
+}
 
 .ft P
 .fi
@@ -2044,10 +2059,11 @@ fn main() {
         Ok(file) => file,
     };
 
-    // Prepare lexer state and fill buffer.
+    // Initialize lexer state: all offsets are at the end of buffer.
     let lim = BUFSIZE \- 1;
     let mut st = State {
         file: file,
+        // Sentinel (at \(galim\(ga offset) is set to null, which triggers YYFILL.
         buf: [0; BUFSIZE],
         lim: lim,
         cur: lim,
@@ -2055,7 +2071,6 @@ fn main() {
         tok: lim,
         eof: false,
     };
-    fill(&mut st);
 
     // Run the lexer.
     assert_eq!(lex(&mut st), count as isize);
@@ -2218,7 +2233,8 @@ fn main() {
         Ok(file) => file,
     };
 
-    // Prepare lexer state and fill buffer.
+    // Initialize lexer state: all offsets are at the end of buffer.
+    // This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
     let lim = BUFSIZE \- YYMAXFILL;
     let mut st = State {
         file: file,
@@ -2229,7 +2245,6 @@ fn main() {
         tok: lim,
         eof: false,
     };
-    fill(&mut st, YYMAXFILL);
 
     // Run the lexer.
     assert_eq!(lex(&mut st), count as isize);
@@ -2700,7 +2715,7 @@ fn main() {
     let lim = BUFSIZE \- 1;
     let mut st = State {
         file: file,
-        buf: [0; BUFSIZE], // this sets sentinel to zero, which triggers YYFILL
+        buf: [0; BUFSIZE], // sentinel is set to zero, which triggers YYFILL
         lim: lim,
         cur: lim,
         mar: lim,
@@ -3052,7 +3067,8 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
     let lim = BUFSIZE \- 1;
     let mut state = State {
         file: fr,
-        buf: [0; BUFSIZE], // sentinel (at \(galim\(ga offset) is set to null
+        // Sentinel (at \(galim\(ga offset) is set to null, which triggers YYFILL.
+        buf: [0; BUFSIZE],
         cur: lim,
         mar: lim,
         tok: lim,

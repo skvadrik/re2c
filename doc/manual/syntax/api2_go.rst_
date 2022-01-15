@@ -1,8 +1,8 @@
 
   **Free-form**
 
-    This style is enabled with configuration ``re2c:api:style = free-form;``.
-    It is the default for the Go backend.
+    Free-form style is enabled with configuration
+    ``re2c:api:style = free-form;``. It is the default for Go.
     In this style interface primitives should be defined as free-form pieces of
     code with interpolated variables of the form ``@@{var}`` or optionally just
     ``@@`` if there is a single variable.
@@ -32,13 +32,14 @@
 
   **Function-like**
 
-    This style is enabled with configuration ``re2c:api:style = functions;``.
-    Primitives are expected to be callable: they are emitted with parentheses,
-    and some of them accept arguments. This style can be used with Go,
-    but it is more restrictive than the free-form style and some primitives are
-    problematic to define. Most of the primitives can be defined as closures in
-    terms of integer variables ``cursor``, ``limit``, ``marker``, ``ctxmarker``
-    and a string (or a byte slice) ``data``:
+    Function-like style is enabled with configuration
+    ``re2c:api:style = functions;``. In this style primitives should be defined
+    as functions or macros with parentheses, accepting the necessary arguments.
+    This style is more restrictive than the free-form style, but it can be used
+    with Go closures.
+    For example, if the input is a string (or a byte slice) ``data``, and
+    integer variables ``cursor``, ``limit``, ``marker`` and ``ctxmarker``
+    represent input positions, then the primitives can be defined as follows:
 
     .. code-block:: go
 
