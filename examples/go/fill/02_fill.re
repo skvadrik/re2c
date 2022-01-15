@@ -80,7 +80,8 @@ func main() () {
 	f.Seek(0, 0)
 	count := 3 * BUFSIZE // number of quoted strings written to file
 
-	// Prepare lexer state and fill buffer.
+	// Prepare lexer state: all offsets are at the end of buffer.
+	// This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
 	in := &Input{
 		file: f,
 		buf:  make([]byte, BUFSIZE+YYMAXFILL),
@@ -89,7 +90,6 @@ func main() () {
 		lim:  BUFSIZE,
 		eof:  false,
 	}
-	fill(in, 1)
 
 	// Run the lexer.
 	if lex(in) != count { panic("error"); }

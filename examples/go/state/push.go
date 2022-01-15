@@ -161,9 +161,10 @@ func test(expect int, packets []string) {
 	fr, _ := os.Open(fname)
 
 	// Initialize lexer state: `state` value is -1, all offsets are at the end
-	// of buffer, the character at `lim` offset is the sentinel (null).
+	// of buffer.
 	st := &State{
 		file:  fr,
+		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
 		buf:   make([]byte, BUFSIZE+1),
 		cur:   BUFSIZE,
 		mar:   BUFSIZE,
@@ -171,7 +172,6 @@ func test(expect int, packets []string) {
 		lim:   BUFSIZE,
 		state: -1,
 	}
-	// data is zero-initialized, no need to write sentinel
 
 	// Main loop. The buffer contains incomplete data which appears packet by
 	// packet. When the lexer needs more input it saves its internal state and

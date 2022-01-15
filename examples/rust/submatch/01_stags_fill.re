@@ -127,7 +127,7 @@ fn main() {
     let lim = BUFSIZE - 1;
     let mut st = State {
         file: file,
-        buf: [0; BUFSIZE], // this sets sentinel to zero, which triggers YYFILL
+        buf: [0; BUFSIZE], // sentinel is set to zero, which triggers YYFILL
         lim: lim,
         cur: lim,
         mar: lim,

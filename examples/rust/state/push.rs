@@ -196,7 +196,8 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
     let lim = BUFSIZE - 1;
     let mut state = State {
         file: fr,
-        buf: [0; BUFSIZE], // sentinel (at `lim` offset) is set to null
+        // Sentinel (at `lim` offset) is set to null, which triggers YYFILL.
+        buf: [0; BUFSIZE],
         cur: lim,
         mar: lim,
         tok: lim,

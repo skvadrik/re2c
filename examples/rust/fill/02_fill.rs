@@ -172,7 +172,8 @@ fn main() {
         Ok(file) => file,
     };
 
-    // Prepare lexer state and fill buffer.
+    // Initialize lexer state: all offsets are at the end of buffer.
+    // This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
     let lim = BUFSIZE - YYMAXFILL;
     let mut st = State {
         file: file,
@@ -183,7 +184,6 @@ fn main() {
         tok: lim,
         eof: false,
     };
-    fill(&mut st, YYMAXFILL);
 
     // Run the lexer.
     assert_eq!(lex(&mut st), count as isize);

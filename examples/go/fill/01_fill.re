@@ -77,9 +77,10 @@ func main() () {
 	f.Seek(0, 0)
 	count := 3 * BUFSIZE // number of quoted strings written to file
 
-	// Prepare lexer state (sentinel is set to zero by `make`).
+	// Prepare lexer state: all offsets are at the end of buffer.
 	in := &Input{
 		file: f,
+		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
 		buf:  make([]byte, BUFSIZE+1),
 		cur:  BUFSIZE,
 		mar:  BUFSIZE,

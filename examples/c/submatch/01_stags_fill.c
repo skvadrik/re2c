@@ -285,7 +285,7 @@ int main() {
     // Reopen input file for reading.
     f = fopen(fname, "r");
 
-    // Initialize lexer state.
+    // Initialize lexer state: all pointers are at the end of buffer.
     Input in;
     in.file = f;
     in.cur = in.mar = in.tok = in.lim = in.buf + BUFSIZE;
@@ -297,7 +297,8 @@ in.yyt3 = in.lim;
 #line 107 "c/submatch/01_stags_fill.re"
 
     in.eof = false;
-    *in.lim = 0; // set sentinel to zero to trigger YYFILL
+    // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
+    *in.lim = 0;
   
     // Run the lexer and check results.
     assert(lex(in, actual) && expect == actual);

@@ -78,12 +78,12 @@ int main() {
     fclose(f);
     int count = 3 * BUFSIZE; // number of quoted strings written to file
 
-    // Prepare lexer state and fill buffer.
+    // Initialize lexer state: all pointers are at the end of buffer.
+    // This immediately triggers YYFILL, as the check `in.cur < in.lim` fails.
     Input in;
     in.file = fopen(fname, "r");
     in.cur = in.tok = in.lim = in.buf + BUFSIZE;
     in.eof = 0;
-    fill(in, 1);
 
     // Run the lexer.
     assert(lex(in) == count);

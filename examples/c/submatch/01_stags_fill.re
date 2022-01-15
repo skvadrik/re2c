@@ -100,13 +100,14 @@ int main() {
     // Reopen input file for reading.
     f = fopen(fname, "r");
 
-    // Initialize lexer state.
+    // Initialize lexer state: all pointers are at the end of buffer.
     Input in;
     in.file = f;
     in.cur = in.mar = in.tok = in.lim = in.buf + BUFSIZE;
     /*!stags:re2c format = "in.@@ = in.lim;\n"; */
     in.eof = false;
-    *in.lim = 0; // set sentinel to zero to trigger YYFILL
+    // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
+    *in.lim = 0;
   
     // Run the lexer and check results.
     assert(lex(in, actual) && expect == actual);

@@ -109,10 +109,10 @@ func main() () {
 	f.WriteString(strings.Repeat(content, BUFSIZE))
 	f.Seek(0, 0)
 
-	// Initialize lexer state.
+	// Initialize lexer state: all offsets are at the end of buffer.
 	in := &Input{
 		file: f,
-		// Default initialize sentinel to zero, which triggers YYFILL.
+		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
 		buf:  make([]byte, BUFSIZE+1),
 		cur:  BUFSIZE,
 		mar:  BUFSIZE,

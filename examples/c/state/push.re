@@ -76,10 +76,11 @@ void test(const char **packets, Status expect) {
     setvbuf(fr, NULL, _IONBF, 0);
 
     // Initialize lexer state: `state` value is -1, all pointers are at the end
-    // of buffer, the character at YYLIMIT is the sentinel (null).
+    // of buffer.
     State st;
     st.file = fr;
     st.cur = st.mar = st.tok = st.lim = st.buf + BUFSIZE;
+    // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
     st.lim[0] = 0;
     st.state = -1;
 

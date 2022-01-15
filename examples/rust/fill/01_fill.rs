@@ -218,10 +218,11 @@ fn main() {
         Ok(file) => file,
     };
 
-    // Prepare lexer state and fill buffer.
+    // Initialize lexer state: all offsets are at the end of buffer.
     let lim = BUFSIZE - 1;
     let mut st = State {
         file: file,
+        // Sentinel (at `lim` offset) is set to null, which triggers YYFILL.
         buf: [0; BUFSIZE],
         lim: lim,
         cur: lim,
@@ -229,7 +230,6 @@ fn main() {
         tok: lim,
         eof: false,
     };
-    fill(&mut st);
 
     // Run the lexer.
     assert_eq!(lex(&mut st), count as isize);
