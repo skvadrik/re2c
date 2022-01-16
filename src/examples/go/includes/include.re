@@ -1,30 +1,26 @@
-//go:generate re2go -c $INPUT -o $OUTPUT -i
+//go:generate re2go $INPUT -o $OUTPUT -i
 package main
 
-import "testing"
 /*!include:re2c "definitions.go" */
 
 func lex(str string) int {
-	var cursor, marker int
+	var cur, mar int
 	/*!re2c
-	re2c:define:YYCTYPE   = byte;
-	re2c:define:YYPEEK    = "str[cursor]";
-	re2c:define:YYSKIP    = "cursor += 1";
-	re2c:define:YYBACKUP  = "marker = cursor";
-	re2c:define:YYRESTORE = "cursor = marker";
-	re2c:yyfill:enable    = 0;
+		re2c:define:YYCTYPE   = byte;
+		re2c:define:YYPEEK    = "str[cur]";
+		re2c:define:YYSKIP    = "cur += 1";
+		re2c:define:YYBACKUP  = "mar = cur";
+		re2c:define:YYRESTORE = "cur = mar";
+		re2c:yyfill:enable    = 0;
 
-	number { return ResultOk }
-	!include "extra_rules.re.inc";
-	* { return ResultFail }
+		*      { return ResultFail }
+		number { return ResultOk }
+		!include "extra_rules.re.inc";
 	*/
 }
 
-func TestLex(t *testing.T) {
-	if lex("123\000") != ResultOk {
-		t.Errorf("error")
-	}
-	if lex("123.4567\000") != ResultOk {
-		t.Errorf("error")
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex("123\000"), ResultOk)
+	assert_eq(lex("123.4567\000"), ResultOk)
 }

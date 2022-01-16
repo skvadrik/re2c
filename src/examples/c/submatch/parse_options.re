@@ -6,8 +6,7 @@
 
 typedef std::vector<std::pair<std::string, std::string> > unknown_t;
 
-struct options_t
-{
+struct options_t {
     std::string date;
     std::string path;
     std::string format;
@@ -15,8 +14,7 @@ struct options_t
     bool verbose;
 };
 
-static void show(const options_t &o, const unknown_t &u)
-{
+static void show(const options_t &o, const unknown_t &u) {
     fprintf(stderr, "\noptions:\n");
     fprintf(stderr, "  date:    %s\n", o.date.c_str());
     fprintf(stderr, "  path:    %s\n", o.path.c_str());
@@ -31,25 +29,24 @@ static void show(const options_t &o, const unknown_t &u)
     }
 }
 
-static void bad_arg(const char *k, const char *v, const char *e)
-{
+static void bad_arg(const char *k, const char *v, const char *e) {
     fprintf(stderr, "bad argument '%.*s' to option %.*s\n",
         (int) (e - v), v, (int) (v - k), k);
 }
 
-static int lex(const char *s)
-{
+static int lex(const char *s) {
     options_t o;
     unknown_t u;
     const char *m, *k, *v;
     /*!stags:re2c format = 'const char *@@;'; */
-loop:
+
+    for (;;) {
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:define:YYCURSOR = s;
         re2c:define:YYMARKER = m;
         re2c:yyfill:enable = 0;
-        re2c:flags:tags = 1;
+        re2c:tags = 1;
 
         end    = "\x00";
         sp     = [ \t\n\r];
@@ -68,27 +65,27 @@ loop:
 
         *   { fprintf(stderr, "error: %s\n", s); return 1; }
         end { show(o, u); return 0; }
-        wsp { goto loop; }
+        wsp { continue; }
 
-        "-v" | "--verbose"              { o.verbose = true; goto loop; }
-        ("-l" | "--limit"  eq) @v limit { o.limit  = std::string(v, s); goto loop; }
-        ("-f" | "--format" eq) @v str   { o.format = std::string(v, s); goto loop; }
-        ("-d" | "--date"   eq) @v date  { o.date   = std::string(v, s); goto loop; }
-        ("-p" | "--path"   eq) @v path  { o.path   = std::string(v, s); goto loop; }
+        "-v" | "--verbose"              { o.verbose = true; continue; }
+        ("-l" | "--limit"  eq) @v limit { o.limit  = std::string(v, s); continue; }
+        ("-f" | "--format" eq) @v str   { o.format = std::string(v, s); continue; }
+        ("-d" | "--date"   eq) @v date  { o.date   = std::string(v, s); continue; }
+        ("-p" | "--path"   eq) @v path  { o.path   = std::string(v, s); continue; }
 
         @k ("--" ("limit" | "format" | "date" | "path") | "-" [lfdp]) @v eq? arg {
             bad_arg(k, v, s);
-            goto loop;
+            continue;
         }
         [-]{1,2} @k opt @v eq? arg {
             u.push_back(std::make_pair(std::string(k, v), std::string(v, s)));
-            goto loop;
+            continue;
         }
     */
+    }
 }
 
-int main()
-{
+int main() {
     assert(lex("-v --limit=8K -d08/08/1985 -p/usr/src/linux "
         "--format=\"%s\" --limit -f=3 --verbos --d\"19th May\"") == 0);
     return 0;

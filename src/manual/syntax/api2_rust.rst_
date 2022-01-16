@@ -1,0 +1,53 @@
+There are two API styles that determine the form in which the primitives should
+be defined:
+
+  **Free-form**
+    Free-form style is enabled with configuration
+    ``re2c:api:style = free-form;``. It is the default for Rust.
+    In this style interface primitives should be defined as free-form pieces of
+    code with interpolated variables of the form ``@@{var}`` or optionally just
+    ``@@`` if there is a single variable.
+    The set of variables is specific to each primitive.
+    For example, if the input is a byte slice ``buffer: &[u8]``,
+    variables ``cursor``, ``limit``, ``marker`` and ``ctxmarker``
+    of type ``usize`` represent input positions,
+    and a constant ``NONE`` represents invalid position,
+    then the API can be defined as follows:
+
+    .. code-block:: rust
+
+        /*!re2c
+          re2c:define:YYPEEK       = "*buffer.get_unchecked(cursor)";
+          re2c:define:YYSKIP       = "cursor += 1;";
+          re2c:define:YYBACKUP     = "marker = cursor;";
+          re2c:define:YYRESTORE    = "cursor = marker;";
+          re2c:define:YYBACKUPCTX  = "ctxmarker = cursor;";
+          re2c:define:YYRESTORECTX = "cursor = ctxmarker;";
+          re2c:define:YYRESTORETAG = "cursor = @@{tag};";
+          re2c:define:YYLESSTHAN   = "limit - cursor < @@{len}";
+          re2c:define:YYSTAGP      = "@@{tag} = cursor;";
+          re2c:define:YYSTAGN      = "@@{tag} = NONE;";
+          re2c:define:YYSHIFT      = "cursor = (cursor as isize + @@{shift}) as usize;";
+          re2c:define:YYSHIFTSTAG  = "@@{tag} = (@@{tag} as isize + @@{shift}) as usize;";
+        */
+
+    |
+
+  **Function-like**
+    Function-like style is enabled with configuration
+    ``re2c:api:style = functions;``. In this style primitives should be defined
+    as functions or macros with parentheses, accepting the necessary arguments.
+    This is well-suited for C macros or Go closures, but it cannot be used with
+    hygienic macros or functions in Rust as the primitives need to access lexer
+    context that is not passed as an argument. It is possible to use closures,
+    but the borrow-checker makes it hard because different primitives read and
+    modify the same parts of lexer context in a series of interleaved
+    invocations. As a workaround, one can use Rust ``Cell`` type.
+    For example, if the input is a byte slice ``buffer: &[u8]`` and
+    ``cursor: Cell::<usize>`` is the current input position, then ``YYPEEK`` and
+    ``YYSKIP`` can be defined as follows:
+
+    .. code-block:: rust
+
+        let YYPEEK = || unsafe { *buffer.get_unchecked(cursor.get()) };
+        let YYSKIP = || { cursor.set(cur.get() + 1); };

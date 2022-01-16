@@ -6,21 +6,20 @@ package main
 import (
 	"fmt"
 	"os"
-	"testing"
 )
 
-// Intentionally small to trigger buffer refill.
-const SIZE int = 16
+// Use a small buffer to cover the case when a lexeme doesn't fit.
+// In real world use a larger buffer.
+const BUFSIZE int = 10
 
-type Input struct {
-	file     *os.File
-	data     []byte
-	cursor   int
-	marker   int
-	token    int
-	limit    int
-	state    int
-	yyaccept int
+type State struct {
+	file  *os.File
+	buf   []byte
+	cur   int
+	mar   int
+	tok   int
+	lim   int
+	state int
 }
 
 const (
@@ -29,347 +28,189 @@ const (
 	lexWaitingForInput
 	lexPacketBroken
 	lexPacketTooBig
-	lexCountMismatch
 )
 
-func fill(in *Input) int {
-	if in.token == 0 {
-		// Error: no space can be freed.
-		// In real life can reallocate a larger buffer.
-		return lexPacketTooBig
-	}
+func fill(st *State) int {
+	shift := st.tok
+	used := st.lim - st.tok
+	free := BUFSIZE - used
 
-	// Discard everything up to the start of the current lexeme,
-	// shift buffer contents and adjust offsets.
-	copy(in.data[0:], in.data[in.token:in.limit])
-	in.cursor -= in.token
-	in.marker -= in.token
-	in.limit -= in.token
-	in.token = 0
+	// Error: no space. In real life can reallocate a larger buffer.
+	if free < 1 { return lexPacketTooBig }
 
-	// Read new data (as much as possible to fill the buffer).
-	n, _ := in.file.Read(in.data[in.limit:SIZE])
-	in.limit += n
-	in.data[in.limit] = 0 // append sentinel symbol
+	// Shift buffer contents (discard already processed data).
+	copy(st.buf[0:], st.buf[shift:shift+used])
+	st.cur -= shift
+	st.mar -= shift
+	st.lim -= shift
+	st.tok -= shift
+
+	// Fill free space at the end of buffer with new data.
+	n, _ := st.file.Read(st.buf[st.lim:BUFSIZE])
+	st.lim += n
+	st.buf[st.lim] = 0 // append sentinel symbol
 
 	return lexReady
 }
 
-func lex(in *Input, recv *int) int {
+func lex(st *State, recv *int) int {
 	var yych byte
 	
-//line "go/state/push.go":62
-switch (in.state) {
+//line "go/state/push.go":60
+switch (st.state) {
 default:
 	goto yy0
 case 0:
-	if (in.limit <= in.cursor) {
-		goto yy11
+	if (st.lim <= st.cur) {
+		goto yy8
 	}
 	goto yyFillLabel0
 case 1:
-	if (in.limit <= in.cursor) {
-		goto yy4
+	if (st.lim <= st.cur) {
+		goto yy3
 	}
 	goto yyFillLabel1
 case 2:
-	if (in.limit <= in.cursor) {
-		goto yy10
+	if (st.lim <= st.cur) {
+		goto yy7
 	}
 	goto yyFillLabel2
 }
-//line "go/state/push.re":58
+//line "go/state/push.re":56
 
 loop:
-	in.token = in.cursor
+	st.tok = st.cur
 	
-//line "go/state/push.go":87
+//line "go/state/push.go":85
 
 yy0:
 yyFillLabel0:
-	yych = in.data[in.cursor]
+	yych = st.buf[st.cur]
 	switch (yych) {
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
-		goto yy5
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
+		goto yy4
 	default:
-		if (in.limit <= in.cursor) {
-			in.state = 0
+		if (st.lim <= st.cur) {
+			st.state = 0
+			return lexWaitingForInput
+		}
+		goto yy2
+	}
+yy2:
+	st.cur += 1
+yy3:
+	st.state = -1
+//line "go/state/push.re":72
+	{ return lexPacketBroken }
+//line "go/state/push.go":106
+yy4:
+	st.cur += 1
+	st.mar = st.cur
+yyFillLabel1:
+	yych = st.buf[st.cur]
+	switch (yych) {
+	case ';':
+		goto yy5
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
+		goto yy6
+	default:
+		if (st.lim <= st.cur) {
+			st.state = 1
 			return lexWaitingForInput
 		}
 		goto yy3
 	}
-yy3:
-	in.cursor += 1
-yy4:
-//line "go/state/push.re":74
-	{ return lexPacketBroken }
-//line "go/state/push.go":157
 yy5:
-	in.cursor += 1
-	in.marker = in.cursor
-yyFillLabel1:
-	yych = in.data[in.cursor]
-	switch (yych) {
-	case ';':
-		goto yy6
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
-		goto yy8
-	default:
-		if (in.limit <= in.cursor) {
-			in.state = 1
-			return lexWaitingForInput
-		}
-		goto yy4
-	}
-yy6:
-	in.cursor += 1
-//line "go/state/push.re":76
+	st.cur += 1
+	st.state = -1
+//line "go/state/push.re":74
 	{ *recv = *recv + 1; goto loop }
-//line "go/state/push.go":229
-yy8:
-	in.cursor += 1
+//line "go/state/push.go":129
+yy6:
+	st.cur += 1
 yyFillLabel2:
-	yych = in.data[in.cursor]
+	yych = st.buf[st.cur]
 	switch (yych) {
 	case ';':
+		goto yy5
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy6
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
-		goto yy8
 	default:
-		if (in.limit <= in.cursor) {
-			in.state = 2
+		if (st.lim <= st.cur) {
+			st.state = 2
 			return lexWaitingForInput
 		}
-		goto yy10
+		goto yy7
 	}
-yy10:
-	in.cursor = in.marker
-	goto yy4
-yy11:
-//line "go/state/push.re":75
+yy7:
+	st.cur = st.mar
+	goto yy3
+yy8:
+	st.state = -1
+//line "go/state/push.re":73
 	{ return lexEnd }
-//line "go/state/push.go":302
-//line "go/state/push.re":77
+//line "go/state/push.go":153
+//line "go/state/push.re":75
 
 }
 
-func test(packets []string) int {
+func test(expect int, packets []string) {
+	// Create a "socket" (open the same file for reading and writing).
 	fname := "pipe"
-	fw, _ := os.Create(fname);
-	fr, _ := os.Open(fname);
+	fw, _ := os.Create(fname)
+	fr, _ := os.Open(fname)
 
-	in := &Input{
-		file:   fr,
-		data:   make([]byte, SIZE+1),
-		cursor: SIZE,
-		marker: SIZE,
-		token:  SIZE,
-		limit:  SIZE,
-		state:  -1,
+	// Initialize lexer state: `state` value is -1, all offsets are at the end
+	// of buffer.
+	st := &State{
+		file:  fr,
+		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
+		buf:   make([]byte, BUFSIZE+1),
+		cur:   BUFSIZE,
+		mar:   BUFSIZE,
+		tok:   BUFSIZE,
+		lim:   BUFSIZE,
+		state: -1,
 	}
-	// data is zero-initialized, no need to write sentinel
 
+	// Main loop. The buffer contains incomplete data which appears packet by
+	// packet. When the lexer needs more input it saves its internal state and
+	// returns to the caller which should provide more input and resume lexing.
 	var status int
 	send := 0
 	recv := 0
-loop:
 	for {
-		status = lex(in, &recv)
+		status = lex(st, &recv)
 		if status == lexEnd {
-			if send != recv {
-				status = lexCountMismatch
-			}
-			break loop
+			break
 		} else if status == lexWaitingForInput {
 			if send < len(packets) {
 				fw.WriteString(packets[send])
 				send += 1
 			}
-			status = fill(in)
+			status = fill(st)
 			if status != lexReady {
-				break loop
+				break
 			}
 		} else if status == lexPacketBroken {
-			break loop
-		} else {
-			panic("unexpected status")
+			break
 		}
 	}
 
+	// Check results.
+	if status != expect || (status == lexEnd && recv != send) {
+		panic(fmt.Sprintf("got %d, want %d", status, expect))
+	}
+
+	// Cleanup: remove input file.
 	fr.Close()
 	fw.Close()
 	os.Remove(fname)
-
-	return status
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		status  int
-		packets []string
-	}{
-		{lexEnd, []string{}},
-		{lexEnd, []string{"zero;", "one;", "two;", "three;", "four;"}},
-		{lexPacketBroken, []string{"??;"}},
-		{lexPacketTooBig, []string{"looooooooooooong;"}},
-	}
-
-	for i, x := range tests {
-		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
-			status := test(x.packets)
-			if status != x.status {
-				t.Errorf("got %d, want %d", status, x.status)
-			}
-		})
-	}
+func main() {
+	test(lexEnd, []string{})
+	test(lexEnd, []string{"zero;", "one;", "two;", "three;", "four;"})
+	test(lexPacketBroken, []string{"??;"})
+	test(lexPacketTooBig, []string{"looooooooooooong;"})
 }

@@ -3,126 +3,112 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import "testing"
-
 // Returns "fake" terminating null if cursor has reached limit.
-func peek(str string, cursor int, limit int) byte {
-	if cursor >= limit {
+func peek(str string, cur int, lim int) byte {
+	if cur >= lim {
 		return 0 // fake null
 	} else {
-		return str[cursor]
+		return str[cur]
 	}
 }
 
 // Expects a string without terminating null.
 func lex(str string) int {
-	var cursor, marker int
-	limit := len(str)
+	var cur, mar int
+	lim := len(str)
 	count := 0
-loop:
-	
-//line "go/eof/05_generic_api_eof_rule.go":25
+
+	for { 
+//line "go/eof/05_generic_api_eof_rule.go":23
 {
 	var yych byte
-	yych = peek(str, cursor, limit)
+	yych = peek(str, cur, lim)
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy3
 	case '\'':
-		goto yy7
+		goto yy5
 	default:
-		if (cursor >= limit) {
-			goto yy13
+		if (cur >= lim) {
+			goto yy10
 		}
-		goto yy2
+		goto yy1
 	}
+yy1:
+	cur += 1
 yy2:
-	cursor += 1
-yy3:
 //line "go/eof/05_generic_api_eof_rule.re":31
 	{ return -1 }
-//line "go/eof/05_generic_api_eof_rule.go":45
-yy4:
-	cursor += 1
-	yych = peek(str, cursor, limit)
+//line "go/eof/05_generic_api_eof_rule.go":43
+yy3:
+	cur += 1
+	yych = peek(str, cur, lim)
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy3
 	default:
-		goto yy6
+		goto yy4
+	}
+yy4:
+//line "go/eof/05_generic_api_eof_rule.re":34
+	{ continue }
+//line "go/eof/05_generic_api_eof_rule.go":56
+yy5:
+	cur += 1
+	mar = cur
+	yych = peek(str, cur, lim)
+	if (yych >= 0x01) {
+		goto yy7
+	}
+	if (cur >= lim) {
+		goto yy2
 	}
 yy6:
-//line "go/eof/05_generic_api_eof_rule.re":34
-	{ goto loop }
-//line "go/eof/05_generic_api_eof_rule.go":58
+	cur += 1
+	yych = peek(str, cur, lim)
 yy7:
-	cursor += 1
-	marker = cursor
-	yych = peek(str, cursor, limit)
-	if (yych >= 0x01) {
-		goto yy9
-	}
-	if (cursor >= limit) {
-		goto yy3
-	}
-yy8:
-	cursor += 1
-	yych = peek(str, cursor, limit)
-yy9:
 	switch (yych) {
 	case '\'':
-		goto yy10
+		goto yy8
 	case '\\':
-		goto yy12
+		goto yy9
 	default:
-		if (cursor >= limit) {
-			goto yy14
+		if (cur >= lim) {
+			goto yy11
 		}
-		goto yy8
+		goto yy6
 	}
-yy10:
-	cursor += 1
+yy8:
+	cur += 1
 //line "go/eof/05_generic_api_eof_rule.re":33
-	{ count += 1; goto loop }
-//line "go/eof/05_generic_api_eof_rule.go":88
-yy12:
-	cursor += 1
-	yych = peek(str, cursor, limit)
+	{ count += 1; continue }
+//line "go/eof/05_generic_api_eof_rule.go":86
+yy9:
+	cur += 1
+	yych = peek(str, cur, lim)
 	if (yych <= 0x00) {
-		if (cursor >= limit) {
-			goto yy14
+		if (cur >= lim) {
+			goto yy11
 		}
-		goto yy8
+		goto yy6
 	}
-	goto yy8
-yy13:
+	goto yy6
+yy10:
 //line "go/eof/05_generic_api_eof_rule.re":32
 	{ return count }
-//line "go/eof/05_generic_api_eof_rule.go":102
-yy14:
-	cursor = marker
-	goto yy3
+//line "go/eof/05_generic_api_eof_rule.go":100
+yy11:
+	cur = mar
+	goto yy2
 }
 //line "go/eof/05_generic_api_eof_rule.re":35
 
+	}
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, ""},
-		{3, "'qu\000tes' 'are' 'fine: \\'' "},
-		{-1, "'unterminated\\'"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := lex(x.str)
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex(""), 0)
+	assert_eq(lex("'qu\000tes' 'are' 'fine: \\'' "), 3)
+	assert_eq(lex("'unterminated\\'"), -1)
 }

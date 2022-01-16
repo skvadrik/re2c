@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for lang in {c,go}; do
+for lang in {c,go,rust}; do
     build/split_man.sh src/manual/manual.rst.in src/manual/manual_$lang.rst $lang
 done
 

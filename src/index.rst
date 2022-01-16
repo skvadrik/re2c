@@ -5,12 +5,13 @@ re2c
 .. toctree::
     :hidden:
 
-    Release notes    </releases/release_notes>
-    How to build     </build/build>
-    User manual (C)  </manual/manual_c>
-    User manual (Go) </manual/manual_go>
-    Benchmarks       </benchmarks/benchmarks>
-    Changelog        </releases/changelog/changelog>
+    Release notes       </releases/release_notes>
+    How to build        </build/build>
+    User manual (C)     </manual/manual_c>
+    User manual (Go)    </manual/manual_go>
+    User manual (Rust)  </manual/manual_rust>
+    Benchmarks          </benchmarks/benchmarks>
+    Changelog           </releases/changelog/changelog>
 
 Re2c is a free and open-source lexer generator for C, C++ and Go with a focus on generating fast code.
 It compiles regular expression specifications to deterministic finite automata

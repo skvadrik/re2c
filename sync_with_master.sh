@@ -15,7 +15,7 @@ remote=$(git config branch.master.remote) \
         && mv src/build/BUILD.md src/build/build.md; } \
     && { git archive --remote=. remotes/$remote/master doc/manual \
         | tar -C src/ --strip-components=1 -xpf -; } \
-    && { git archive --remote=. remotes/$remote/master examples/**/*.{re,c,h,go,txt,inc} \
+    && { git archive --remote=. remotes/$remote/master examples/**/*.{re,c,h,go,rs,txt,inc} \
         | tar -C src/ -xpf -; } \
     && { git archive --remote=. remotes/$remote/master \
             benchmarks/submatch_{dfa_aot,dfa_jit,nfa}/results \
@@ -51,7 +51,7 @@ gen_bar_charts_for_benchmark() {
     ( cd "src/benchmarks/$benchmark" \
         && echo "Generating SVG for $benchmark benchmark..." \
         && pick_latest_result \
-        && ../../../build/json2pgfplot.py $j2pp_args --font comicneue \
+        && python3 ../../../build/json2pgfplot.py $j2pp_args --font comicneue \
             results.json results.tex \
         && pdflatex results.tex < /dev/null > results.log \
         && for page in $(seq 1 $pagecount); do \

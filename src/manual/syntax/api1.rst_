@@ -6,21 +6,20 @@ The primitives should be defined by the user. This approach gives the user
 freedom and flexibility in customizing the lexer, but it also requires some
 understanding of how the lexer works in order to implement the primitives
 correctly and efficiently. The manual provides examples for the most popular
-use cases. For the full list of primitives see the `interface primitives`_
-section.
+use cases. For the full list of primitives see the `API primitives`_ section.
 
 .. _generic_api:
 
-There are two *API flavours* that define the set of primitives used by re2c:
+There are two kinds of API that define the set of primitives used by re2c:
 
   **Pointer API**
     This API is also called *default API*, since it was historically the first,
     and for a long time the only one. This is a more restrictive API based on C
-    pointer arithmetics. It consists of pointer-like primitives ``YYCURSOR``,
+    pointer arithmetic. It consists of pointer-like primitives ``YYCURSOR``,
     ``YYMARKER``, ``YYCTXMARKER``, ``YYLIMIT`` (which are normally defined as
     pointers of type ``YYCTYPE*``) and ``YYFILL``. Pointer API is enabled by
     default for the C backend, and it cannot be used with backends that do not
-    support pointer arithmetics.
+    support pointer arithmetic.
 
   **Generic API**
     This is a more flexible API that does not assume pointer semantics. It
@@ -47,7 +46,4 @@ There are two *API flavours* that define the set of primitives used by re2c:
     intentionally designed to give the user as much freedom as possible in
     redefining the input model and the semantics of different actions performed
     by the generated code.
-
-There are two *API styles* determine the form in which the primitives should be
-defined:
 

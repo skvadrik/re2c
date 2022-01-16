@@ -3,185 +3,71 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import "testing"
-
-// expect a null-terminated string
+// Expect a null-terminated string.
 func lex(str string) int {
-	var cursor int
+	var cur int
 	count := 0
-loop:
-	
-//line "go/eof/01_sentinel.go":15
+
+	for { 
+//line "go/eof/01_sentinel.go":13
 {
 	var yych byte
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case 0x00:
-		goto yy2
+		goto yy1
 	case ' ':
-		goto yy6
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
-		goto yy9
+		goto yy3
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
+		goto yy5
+	default:
+		goto yy2
+	}
+yy1:
+	cur += 1
+//line "go/eof/01_sentinel.re":16
+	{ return count }
+//line "go/eof/01_sentinel.go":31
+yy2:
+	cur += 1
+//line "go/eof/01_sentinel.re":15
+	{ return -1 }
+//line "go/eof/01_sentinel.go":36
+yy3:
+	cur += 1
+	yych = str[cur]
+	switch (yych) {
+	case ' ':
+		goto yy3
 	default:
 		goto yy4
 	}
-yy2:
-	cursor += 1
-//line "go/eof/01_sentinel.re":18
-	{ return count }
-//line "go/eof/01_sentinel.go":83
 yy4:
-	cursor += 1
-//line "go/eof/01_sentinel.re":17
-	{ return -1 }
-//line "go/eof/01_sentinel.go":88
-yy6:
-	cursor += 1
-	yych = str[cursor]
+//line "go/eof/01_sentinel.re":18
+	{ continue }
+//line "go/eof/01_sentinel.go":49
+yy5:
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
-	case ' ':
+	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
+		goto yy5
+	default:
 		goto yy6
-	default:
-		goto yy8
 	}
-yy8:
-//line "go/eof/01_sentinel.re":20
-	{ goto loop }
-//line "go/eof/01_sentinel.go":101
-yy9:
-	cursor += 1
-	yych = str[cursor]
-	switch (yych) {
-	case 'a':
-		fallthrough
-	case 'b':
-		fallthrough
-	case 'c':
-		fallthrough
-	case 'd':
-		fallthrough
-	case 'e':
-		fallthrough
-	case 'f':
-		fallthrough
-	case 'g':
-		fallthrough
-	case 'h':
-		fallthrough
-	case 'i':
-		fallthrough
-	case 'j':
-		fallthrough
-	case 'k':
-		fallthrough
-	case 'l':
-		fallthrough
-	case 'm':
-		fallthrough
-	case 'n':
-		fallthrough
-	case 'o':
-		fallthrough
-	case 'p':
-		fallthrough
-	case 'q':
-		fallthrough
-	case 'r':
-		fallthrough
-	case 's':
-		fallthrough
-	case 't':
-		fallthrough
-	case 'u':
-		fallthrough
-	case 'v':
-		fallthrough
-	case 'w':
-		fallthrough
-	case 'x':
-		fallthrough
-	case 'y':
-		fallthrough
-	case 'z':
-		goto yy9
-	default:
-		goto yy11
-	}
-yy11:
+yy6:
+//line "go/eof/01_sentinel.re":17
+	{ count += 1; continue }
+//line "go/eof/01_sentinel.go":62
+}
 //line "go/eof/01_sentinel.re":19
-	{ count += 1; goto loop }
-//line "go/eof/01_sentinel.go":164
-}
-//line "go/eof/01_sentinel.re":21
 
+	}
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, "\000"},
-		{3, "one two three\000"},
-		{-1, "f0ur\000"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := lex(x.str)
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex("\000"), 0)
+	assert_eq(lex("one two three\000"), 3)
+	assert_eq(lex("f0ur\000"), -1)
 }

@@ -1,18 +1,18 @@
-// re2c $INPUT -o $OUTPUT --case-ranges -i
+// re2c $INPUT -o $OUTPUT -i --case-ranges
 
-int lex(const char *YYCURSOR) {       // C/C++ code
-/*!re2c
-    re2c:define:YYCTYPE = char;       // configurations
-    re2c:yyfill:enable  = 0;          //
-                                      //
-    alpha = [a-zA-Z];                 // named definitions
-    ident = alpha (alpha | [0-9])*;   //
-                                      //
-    ident { return 0; }               // rules
-    *     { return 1; }               //
-*/
-}                                     //
-                                      //
-int main() {                          // C/C++ code
-    return lex("qwerty42");           //
-}                                     //
+int lex(const char *s) {
+    const char *YYCURSOR = s;
+    /*!re2c
+        re2c:yyfill:enable = 0;
+        re2c:define:YYCTYPE = char;
+
+        number = [1-9][0-9]*;
+
+        number { return 0; }
+        *      { return 1; }
+    */
+}
+
+int main() {
+    return lex("1234");
+}

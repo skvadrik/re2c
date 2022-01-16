@@ -16,36 +16,49 @@ User manual (C)
 
 Introduction
 ============
-.. include:: /manual/syntax/syntax.rst_
-.. include:: /manual/syntax/api1.rst_
-.. include:: /manual/syntax/api2_c.rst_
-.. include:: /manual/syntax/api3.rst_
+.. include:: /manual/syntax/intro.rst_
 
-Example
--------
+Here is an example of a small program that checks if a given string contains a
+decimal number:
 
 .. literalinclude:: ../examples/c/01_basic.re
     :language: c
 
-The output looks like this (everything between ``/*!re2c`` and ``*/`` has been
-replaced with the generated code):
+In the output everything between ``/*!re2c`` and ``*/`` has been replaced with
+the generated code:
 
 .. literalinclude:: ../examples/c/01_basic.c
     :language: c
 
-Command-line options
-====================
-Command-line interface consists of options and warnings. Some of the options
-have corresponding `configurations`_, others are global and cannot be changed
-after re2c starts reading the input file. Debug options generally require
-building re2c in debug configuration. Internal options are useful for
-experimenting with the algorithms used in re2c. Warnings can be invividually
-enabled, disabled and turned into an error. For each warning there is a
-`detailed description with examples <warnings/warnings.html>`_.
+Syntax
+======
+
+.. include:: /manual/syntax/syntax.rst_
+
+Program interface
+=================
+
+.. include:: /manual/syntax/api1.rst_
+.. include:: /manual/syntax/api2_c.rst_
+.. include:: /manual/syntax/api3.rst_
+
+Options
+=======
+
+Some of the options have corresponding `configurations`_,
+others are global and cannot be changed after re2c starts reading the input file.
+Debug options generally require building re2c in debug configuration.
+Internal options are useful for experimenting with the algorithms used in re2c.
 
 .. include:: /manual/options/options.rst_
 .. include:: /manual/options/debug.rst_
 .. include:: /manual/options/internal.rst_
+
+Warnings
+========
+
+Warnings can be invividually enabled, disabled and turned into an error.
+
 .. include:: /manual/warnings/warnings_general.rst_
 .. include:: /manual/warnings/warnings_list.rst_
 
@@ -53,8 +66,8 @@ Blocks and directives
 =====================
 .. include:: /manual/directives/directives.rst_
 
-Interface primitives
-====================
+API primitives
+==============
 .. include:: /manual/api/interface.rst_
 
 Configurations
@@ -118,7 +131,7 @@ Header files
 
 The generated header file:
 
-.. literalinclude:: ../examples/c/headers/src/lexer/lexer.h
+.. literalinclude:: ../examples/c/headers/lexer/state.h
     :language: c
 
 Submatch extraction

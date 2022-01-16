@@ -32,7 +32,7 @@ sys.path.insert(0, os.path.abspath('./src/manual/fill/'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.imgmath',
+#    'sphinx.ext.imgmath',
     'sphinx.ext.autosectionlabel',
     'myst_parser'
 ]

@@ -4,7 +4,7 @@
 #include <limits.h>
 #include <assert.h>
 
-static const uint64_t ERROR = ~0lu;
+static const uint64_t ERROR = UINT64_MAX;
 enum YYCONDTYPE {
 	yycinit,
 	yycbin,
@@ -14,15 +14,13 @@ enum YYCONDTYPE {
 };
 
 
-template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
-{
+template<int BASE> static void add(uint64_t &u, char d) {
     u = u * BASE + d;
     if (u > UINT32_MAX) u = ERROR;
 }
 
-static uint64_t parse_u32(const char *s)
-{
-    const char *YYMARKER;
+static uint64_t parse_u32(const char *s) {
+    const char *YYCURSOR = s, *YYMARKER;
     int c = yycinit;
     uint64_t u = 0;
 
@@ -30,223 +28,217 @@ static uint64_t parse_u32(const char *s)
 {
 	char yych;
 	switch (c) {
-	case yycinit:
-		goto yyc_init;
-	case yycbin:
-		goto yyc_bin;
-	case yycdec:
-		goto yyc_dec;
-	case yychex:
-		goto yyc_hex;
-	case yycoct:
-		goto yyc_oct;
+		case yycinit: goto yyc_init;
+		case yycbin: goto yyc_bin;
+		case yycdec: goto yyc_dec;
+		case yychex: goto yyc_hex;
+		case yycoct: goto yyc_oct;
 	}
 /* *********************************** */
 yyc_init:
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':	goto yy4;
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy6;
-	default:	goto yy2;
+		case '0': goto yy2;
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy4;
+		default: goto yy1;
 	}
-yy2:
-	++s;
+yy1:
+	++YYCURSOR;
 	{ return ERROR; }
-yy4:
-	yych = *(YYMARKER = ++s);
+yy2:
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 'B':
-	case 'b':	goto yy8;
-	case 'X':
-	case 'x':	goto yy10;
-	default:	goto yy5;
+		case 'B':
+		case 'b': goto yy5;
+		case 'X':
+		case 'x': goto yy7;
+		default: goto yy3;
 	}
-yy5:
+yy3:
 	c = yycoct;
 	goto yyc_oct;
-yy6:
-	++s;
-	s -= 1;
+yy4:
+	++YYCURSOR;
+	YYCURSOR -= 1;
 	c = yycdec;
 	goto yyc_dec;
+yy5:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case '0':
+		case '1': goto yy8;
+		default: goto yy6;
+	}
+yy6:
+	YYCURSOR = YYMARKER;
+	goto yy3;
+yy7:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f': goto yy9;
+		default: goto yy6;
+	}
 yy8:
-	yych = *++s;
-	switch (yych) {
-	case '0':
-	case '1':	goto yy11;
-	default:	goto yy9;
-	}
-yy9:
-	s = YYMARKER;
-	goto yy5;
-yy10:
-	yych = *++s;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy13;
-	default:	goto yy9;
-	}
-yy11:
-	++s;
-	s -= 1;
+	++YYCURSOR;
+	YYCURSOR -= 1;
 	c = yycbin;
 	goto yyc_bin;
-yy13:
-	++s;
-	s -= 1;
+yy9:
+	++YYCURSOR;
+	YYCURSOR -= 1;
 	c = yychex;
 	goto yyc_hex;
 /* *********************************** */
 yyc_bin:
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy17;
-	case '0':
-	case '1':	goto yy21;
-	default:	goto yy19;
+		case 0x00: goto yy11;
+		case '0':
+		case '1': goto yy13;
+		default: goto yy12;
 	}
-yy17:
-	++s;
+yy11:
+	++YYCURSOR;
 	{ return u; }
-yy19:
-	++s;
+yy12:
+	++YYCURSOR;
 	{ return ERROR; }
-yy21:
-	++s;
-	{ adddgt<2> (u, s[-1] - '0');      goto yyc_bin; }
+yy13:
+	++YYCURSOR;
+	{ add<2>(u,  YYCURSOR[-1] - '0');      goto yyc_bin; }
 /* *********************************** */
 yyc_dec:
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy25;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy29;
-	default:	goto yy27;
+		case 0x00: goto yy15;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy17;
+		default: goto yy16;
 	}
-yy25:
-	++s;
+yy15:
+	++YYCURSOR;
 	{ return u; }
-yy27:
-	++s;
+yy16:
+	++YYCURSOR;
 	{ return ERROR; }
-yy29:
-	++s;
-	{ adddgt<10>(u, s[-1] - '0');      goto yyc_dec; }
+yy17:
+	++YYCURSOR;
+	{ add<10>(u, YYCURSOR[-1] - '0');      goto yyc_dec; }
 /* *********************************** */
 yyc_hex:
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy33;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy37;
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':	goto yy39;
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy41;
-	default:	goto yy35;
+		case 0x00: goto yy19;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy21;
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F': goto yy22;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f': goto yy23;
+		default: goto yy20;
 	}
-yy33:
-	++s;
+yy19:
+	++YYCURSOR;
 	{ return u; }
-yy35:
-	++s;
+yy20:
+	++YYCURSOR;
 	{ return ERROR; }
-yy37:
-	++s;
-	{ adddgt<16>(u, s[-1] - '0');      goto yyc_hex; }
-yy39:
-	++s;
-	{ adddgt<16>(u, s[-1] - 'A' + 10); goto yyc_hex; }
-yy41:
-	++s;
-	{ adddgt<16>(u, s[-1] - 'a' + 10); goto yyc_hex; }
+yy21:
+	++YYCURSOR;
+	{ add<16>(u, YYCURSOR[-1] - '0');      goto yyc_hex; }
+yy22:
+	++YYCURSOR;
+	{ add<16>(u, YYCURSOR[-1] - 'A' + 10); goto yyc_hex; }
+yy23:
+	++YYCURSOR;
+	{ add<16>(u, YYCURSOR[-1] - 'a' + 10); goto yyc_hex; }
 /* *********************************** */
 yyc_oct:
-	yych = *s;
+	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy45;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':	goto yy49;
-	default:	goto yy47;
+		case 0x00: goto yy25;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7': goto yy27;
+		default: goto yy26;
 	}
-yy45:
-	++s;
+yy25:
+	++YYCURSOR;
 	{ return u; }
-yy47:
-	++s;
+yy26:
+	++YYCURSOR;
 	{ return ERROR; }
-yy49:
-	++s;
-	{ adddgt<8> (u, s[-1] - '0');      goto yyc_oct; }
+yy27:
+	++YYCURSOR;
+	{ add<8>(u,  YYCURSOR[-1] - '0');      goto yyc_oct; }
 }
 
 }
 
-int main()
-{
+int main() {
+    assert(parse_u32("") == ERROR);
     assert(parse_u32("1234567890") == 1234567890);
     assert(parse_u32("0b1101") == 13);
     assert(parse_u32("0x7Fe") == 2046);
     assert(parse_u32("0644") == 420);
     assert(parse_u32("9999999999") == ERROR);
-    assert(parse_u32("") == ERROR);
     return 0;
 }

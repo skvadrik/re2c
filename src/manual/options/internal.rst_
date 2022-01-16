@@ -17,7 +17,7 @@
     This option has effect only with ``--tags`` or ``--posix-captures`` options.
 
 ``--no-optimize-tags``
-    Internal optionL: suppress optimization of tag variables (useful for
+    Internal option: suppress optimization of tag variables (useful for
     debugging).
 
 ``--posix-closure <gor1 | gtop>``
@@ -45,7 +45,7 @@
     (``all``), none of them (``none``), or only those in toplevel concatenation
     (``toplevel``). The default is ``all``.
     "Fixed" tags are those that are located within a fixed distance to some
-    other tag (called "base"). In such cases only tha base tag needs to be
+    other tag (called "base"). In such cases only the base tag needs to be
     tracked, and the value of the fixed tag can be computed as the value of the
     base tag plus a static offset. For tags that are under alternative or
     repetition it is also necessary to check if the base tag has a no-match

@@ -12,15 +12,13 @@ struct mtag_t
 
 typedef std::vector<mtag_t> mtagpool_t;
 
-static void mtag(int *pt, const char *t, mtagpool_t *tp)
-{
+static void mtag(int *pt, const char *t, mtagpool_t *tp) {
     mtag_t l = {*pt, t};
     *pt = (int) tp->size();
     tp->push_back(l);
 }
 
-static void print_channels(const mtagpool_t &tp, int x, int y)
-{
+static void print_channels(const mtagpool_t &tp, int x, int y) {
     if (x == -1) return;
     print_channels(tp, tp[x].pred, tp[y].pred);
     const char *px = tp[x].tag, *py = tp[y].tag;
@@ -30,20 +28,20 @@ static void print_channels(const mtagpool_t &tp, int x, int y)
 #define YYMTAGP(t) mtag(&t, YYCURSOR, &tp)
 #define YYMTAGN(t) mtag(&t, NULL,     &tp)
 
-static int lex(const char *YYCURSOR)
-{
+static int lex(const char *YYCURSOR) {
     const char *YYMARKER, *n1, *n2, *a1, *a2, *c1, *c2;
     mtagpool_t tp;
     int h1, h2;
     /*!stags:re2c format = "const char *@@;"; */
     /*!mtags:re2c format = "int @@;"; */
-loop:
-    tp.clear();
+
+    for (;;) {
+        tp.clear();
     /*!mtags:re2c format = "@@ = -1;"; */
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
-        re2c:flags:tags = 1;
+        re2c:tags = 1;
 
         end     = "\x00";
         eol     = "\n";
@@ -57,7 +55,7 @@ loop:
 
         *         { fprintf(stderr, "error: %s\n", YYCURSOR); return 1; }
         end       { return 0; }
-        wsp | eol { goto loop; }
+        wsp | eol { continue; }
 
         @n1 nick @n2 wsp "{" wsp eol
             wsp "name"     eq @a1 names   @a2 wsp eol
@@ -69,13 +67,13 @@ loop:
             fprintf(stderr, "  country:  %.*s\n", (int) (c2 - c1), c1);
             fprintf(stderr, "  channels:\n");
             print_channels(tp, h1, h2);
-            goto loop;
+            continue;
         }
     */
+    }
 }
 
-int main()
-{
+int main() {
     const char *fname = "etc_passwd";
     FILE *f;
 

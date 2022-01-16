@@ -3,117 +3,103 @@
 //go:generate re2go $INPUT -o $OUTPUT
 package main
 
-import "testing"
-
 // Expects a null-terminated string.
 func lex(str string) int {
-	var cursor, marker int
-	limit := len(str) - 1 // limit points at the terminating null
+	var cur, mar int
+	lim := len(str) - 1 // lim points at the terminating null
 	count := 0
-loop:
-	
-//line "go/eof/03_eof_rule.go":16
+
+	for { 
+//line "go/eof/03_eof_rule.go":14
 {
 	var yych byte
-	yych = str[cursor]
+	yych = str[cur]
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy3
 	case '\'':
-		goto yy7
+		goto yy5
 	default:
-		if (limit <= cursor) {
-			goto yy13
+		if (lim <= cur) {
+			goto yy10
 		}
-		goto yy2
+		goto yy1
 	}
+yy1:
+	cur += 1
 yy2:
-	cursor += 1
-yy3:
 //line "go/eof/03_eof_rule.re":22
 	{ return -1 }
-//line "go/eof/03_eof_rule.go":36
-yy4:
-	cursor += 1
-	yych = str[cursor]
+//line "go/eof/03_eof_rule.go":34
+yy3:
+	cur += 1
+	yych = str[cur]
 	switch (yych) {
 	case ' ':
-		goto yy4
+		goto yy3
 	default:
-		goto yy6
+		goto yy4
+	}
+yy4:
+//line "go/eof/03_eof_rule.re":25
+	{ continue }
+//line "go/eof/03_eof_rule.go":47
+yy5:
+	cur += 1
+	mar = cur
+	yych = str[cur]
+	if (yych >= 0x01) {
+		goto yy7
+	}
+	if (lim <= cur) {
+		goto yy2
 	}
 yy6:
-//line "go/eof/03_eof_rule.re":25
-	{ goto loop }
-//line "go/eof/03_eof_rule.go":49
+	cur += 1
+	yych = str[cur]
 yy7:
-	cursor += 1
-	marker = cursor
-	yych = str[cursor]
-	if (yych >= 0x01) {
-		goto yy9
-	}
-	if (limit <= cursor) {
-		goto yy3
-	}
-yy8:
-	cursor += 1
-	yych = str[cursor]
-yy9:
 	switch (yych) {
 	case '\'':
-		goto yy10
+		goto yy8
 	case '\\':
-		goto yy12
+		goto yy9
 	default:
-		if (limit <= cursor) {
-			goto yy14
+		if (lim <= cur) {
+			goto yy11
 		}
-		goto yy8
+		goto yy6
 	}
-yy10:
-	cursor += 1
+yy8:
+	cur += 1
 //line "go/eof/03_eof_rule.re":24
-	{ count += 1; goto loop }
-//line "go/eof/03_eof_rule.go":79
-yy12:
-	cursor += 1
-	yych = str[cursor]
+	{ count += 1; continue }
+//line "go/eof/03_eof_rule.go":77
+yy9:
+	cur += 1
+	yych = str[cur]
 	if (yych <= 0x00) {
-		if (limit <= cursor) {
-			goto yy14
+		if (lim <= cur) {
+			goto yy11
 		}
-		goto yy8
+		goto yy6
 	}
-	goto yy8
-yy13:
+	goto yy6
+yy10:
 //line "go/eof/03_eof_rule.re":23
 	{ return count }
-//line "go/eof/03_eof_rule.go":93
-yy14:
-	cursor = marker
-	goto yy3
+//line "go/eof/03_eof_rule.go":91
+yy11:
+	cur = mar
+	goto yy2
 }
 //line "go/eof/03_eof_rule.re":26
 
+	}
 }
 
-func TestLex(t *testing.T) {
-	var tests = []struct {
-		res int
-		str string
-	}{
-		{0, "\000"},
-		{3, "'qu\000tes' 'are' 'fine: \\'' \000"},
-		{-1, "'unterminated\\'\000"},
-	}
-
-	for _, x := range tests {
-		t.Run(x.str, func(t *testing.T) {
-			res := lex(x.str)
-			if res != x.res {
-				t.Errorf("got %d, want %d", res, x.res)
-			}
-		})
-	}
+func main() {
+	assert_eq := func(x, y int) { if x != y { panic("error") } }
+	assert_eq(lex("\000"), 0)
+	assert_eq(lex("'qu\000tes' 'are' 'fine: \\'' \000"), 3)
+	assert_eq(lex("'unterminated\\'\000"), -1)
 }

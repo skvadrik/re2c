@@ -5,264 +5,272 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DEBUG    0
+#define DEBUG 0
 #define LOG(...) if (DEBUG) fprintf(stderr, __VA_ARGS__);
-#define BUFSIZE  10
 
-typedef struct {
+// Use a small buffer to cover the case when a lexeme doesn't fit.
+// In real world use a larger buffer.
+#define BUFSIZE 10
+
+struct State {
     FILE *file;
     char buf[BUFSIZE + 1], *lim, *cur, *mar, *tok;
-    unsigned yyaccept;
     int state;
-} Input;
-
-static void init(Input *in, FILE *f)
-{
-    in->file = f;
-    in->cur = in->mar = in->tok = in->lim = in->buf + BUFSIZE;
-    in->lim[0] = 0; // append sentinel symbol
-    in->yyaccept = 0;
-    in->state = -1;
-}
+};
 
 typedef enum {END, READY, WAITING, BAD_PACKET, BIG_PACKET} Status;
 
-static Status fill(Input *in)
-{
-    const size_t shift = in->tok - in->buf;
-    const size_t free = BUFSIZE - (in->lim - in->tok);
+static Status fill(State &st) {
+    const size_t shift = st.tok - st.buf;
+    const size_t used = st.lim - st.tok;
+    const size_t free = BUFSIZE - used;
 
+    // Error: no space. In real life can reallocate a larger buffer.
     if (free < 1) return BIG_PACKET;
 
-    memmove(in->buf, in->tok, BUFSIZE - shift);
-    in->lim -= shift;
-    in->cur -= shift;
-    in->mar -= shift;
-    in->tok -= shift;
+    // Shift buffer contents (discard already processed data).
+    memmove(st.buf, st.tok, used);
+    st.lim -= shift;
+    st.cur -= shift;
+    st.mar -= shift;
+    st.tok -= shift;
 
-    const size_t read = fread(in->lim, 1, free, in->file);
-    in->lim += read;
-    in->lim[0] = 0; // append sentinel symbol
+    // Fill free space at the end of buffer with new data.
+    const size_t read = fread(st.lim, 1, free, st.file);
+    st.lim += read;
+    st.lim[0] = 0; // append sentinel symbol
 
     return READY;
 }
 
-static Status lex(Input *in, unsigned int *recv)
-{
+static Status lex(State &st, unsigned int *recv) {
     char yych;
     
-#line 55 "c/state/push.c"
-switch (in->state) {
-default:
-	goto yy0;
-case 0:
-	if (in->lim <= in->cur) goto yy11;
-	goto yyFillLabel0;
-case 1:
-	if (in->lim <= in->cur) goto yy4;
-	goto yyFillLabel1;
-case 2:
-	if (in->lim <= in->cur) goto yy10;
-	goto yyFillLabel2;
+#line 50 "c/state/push.c"
+switch (st.state) {
+	default: goto yy0;
+	case 0:
+		if (st.lim <= st.cur) goto yy8;
+		goto yyFillLabel0;
+	case 1:
+		if (st.lim <= st.cur) goto yy3;
+		goto yyFillLabel1;
+	case 2:
+		if (st.lim <= st.cur) goto yy7;
+		goto yyFillLabel2;
 }
-#line 51 "c/state/push.re"
+#line 46 "c/state/push.re"
 
-loop:
-    in->tok = in->cur;
+
+    for (;;) {
+        st.tok = st.cur;
     
-#line 74 "c/state/push.c"
+#line 69 "c/state/push.c"
 
 yy0:
 yyFillLabel0:
-	yych = *in->cur;
+	yych = *st.cur;
 	switch (yych) {
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy5;
-	default:
-		if (in->lim <= in->cur) {
-			in->state = 0;
-			return WAITING;
-		}
-		goto yy3;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z': goto yy4;
+		default:
+			if (st.lim <= st.cur) {
+				st.state = 0;
+				return WAITING;
+			}
+			goto yy2;
 	}
+yy2:
+	++st.cur;
 yy3:
-	++in->cur;
-yy4:
-#line 67 "c/state/push.re"
+	st.state = -1;
+#line 63 "c/state/push.re"
 	{ return BAD_PACKET; }
-#line 118 "c/state/push.c"
-yy5:
-	in->mar = ++in->cur;
+#line 114 "c/state/push.c"
+yy4:
+	st.mar = ++st.cur;
 yyFillLabel1:
-	yych = *in->cur;
+	yych = *st.cur;
 	switch (yych) {
-	case ';':	goto yy6;
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy8;
-	default:
-		if (in->lim <= in->cur) {
-			in->state = 1;
-			return WAITING;
-		}
-		goto yy4;
+		case ';': goto yy5;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z': goto yy6;
+		default:
+			if (st.lim <= st.cur) {
+				st.state = 1;
+				return WAITING;
+			}
+			goto yy3;
 	}
+yy5:
+	++st.cur;
+	st.state = -1;
+#line 65 "c/state/push.re"
+	{ *recv = *recv + 1; continue; }
+#line 159 "c/state/push.c"
 yy6:
-	++in->cur;
-#line 69 "c/state/push.re"
-	{ *recv = *recv + 1; goto loop; }
-#line 162 "c/state/push.c"
-yy8:
-	++in->cur;
+	++st.cur;
 yyFillLabel2:
-	yych = *in->cur;
+	yych = *st.cur;
 	switch (yych) {
-	case ';':	goto yy6;
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy8;
-	default:
-		if (in->lim <= in->cur) {
-			in->state = 2;
-			return WAITING;
-		}
-		goto yy10;
+		case ';': goto yy5;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z': goto yy6;
+		default:
+			if (st.lim <= st.cur) {
+				st.state = 2;
+				return WAITING;
+			}
+			goto yy7;
 	}
-yy10:
-	in->cur = in->mar;
-	goto yy4;
-yy11:
-#line 68 "c/state/push.re"
+yy7:
+	st.cur = st.mar;
+	goto yy3;
+yy8:
+	st.state = -1;
+#line 64 "c/state/push.re"
 	{ return END; }
-#line 208 "c/state/push.c"
-#line 70 "c/state/push.re"
+#line 206 "c/state/push.c"
+#line 66 "c/state/push.re"
 
+    }
 }
 
-void test(const char **packets, Status status)
-{
+void test(const char **packets, Status expect) {
+    // Create a "socket" (open the same file for reading and writing).
     const char *fname = "pipe";
     FILE *fw = fopen(fname, "w");
     FILE *fr = fopen(fname, "r");
     setvbuf(fw, NULL, _IONBF, 0);
     setvbuf(fr, NULL, _IONBF, 0);
 
-    Input in;
-    init(&in, fr);
-    Status st;
-    unsigned int send = 0, recv = 0;
+    // Initialize lexer state: `state` value is -1, all pointers are at the end
+    // of buffer.
+    State st;
+    st.file = fr;
+    st.cur = st.mar = st.tok = st.lim = st.buf + BUFSIZE;
+    // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
+    st.lim[0] = 0;
+    st.state = -1;
 
+    // Main loop. The buffer contains incomplete data which appears packet by
+    // packet. When the lexer needs more input it saves its internal state and
+    // returns to the caller which should provide more input and resume lexing.
+    Status status;
+    unsigned int send = 0, recv = 0;
     for (;;) {
-        st = lex(&in, &recv);
-        if (st == END) {
+        status = lex(st, &recv);
+        if (status == END) {
             LOG("done: got %u packets\n", recv);
             break;
-        } else if (st == WAITING) {
+        } else if (status == WAITING) {
             LOG("waiting...\n");
             if (*packets) {
                 LOG("sent packet %u\n", send);
                 fprintf(fw, "%s", *packets++);
                 ++send;
             }
-            st = fill(&in);
-            LOG("queue: '%s'\n", in.buf);
-            if (st == BIG_PACKET) {
+            status = fill(st);
+            LOG("queue: '%s'\n", st.buf);
+            if (status == BIG_PACKET) {
                 LOG("error: packet too big\n");
                 break;
             }
-            assert(st == READY);
+            assert(status == READY);
         } else {
-            assert(st == BAD_PACKET);
+            assert(status == BAD_PACKET);
             LOG("error: ill-formed packet\n");
             break;
         }
     }
 
-    LOG("\n");
-    assert(st == status);
-    if (st == END) assert(recv == send);
+    // Check results.
+    assert(status == expect);
+    if (status == END) assert(recv == send);
 
+    // Cleanup: remove input file.
     fclose(fw);
     fclose(fr);
     remove(fname);
 }
 
-int main()
-{
+int main() {
     const char *packets1[] = {0};
     const char *packets2[] = {"zero;", "one;", "two;", "three;", "four;", 0};
     const char *packets3[] = {"zer0;", 0};
-    const char *packets4[] = {"goooooooooogle;", 0};
+    const char *packets4[] = {"looooooooooong;", 0};
 
     test(packets1, END);
     test(packets2, END);
