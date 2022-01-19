@@ -12,7 +12,7 @@ case $lang in
         src_ext=c
         hdr_ext=h
         lang_name=C
-        disclaimer=
+        disclaimer="Note: examples are in C++ (but can be easily adapted to C)."
         ;;
     go)
         src_ext=go

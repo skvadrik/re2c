@@ -1,27 +1,21 @@
-Sentinel character with bounds checks
--------------------------------------
+Sentinel with bounds checks
+---------------------------
 
-In this example the lexer uses sentinel character with bounds checks to handle the end of input
-(this method was added in version 1.2).
-The program counts single-quoted strings separated with spaces.
-The sentinel character is null, which is specified with ``re2c:eof = 0;`` configuration.
-Null is the last character of each input string --- this is essential to detect the end of input.
-Null, as well as any other character, is allowed in the middle of a rule
-(for example, ``'aaa\0aa'\0`` is valid input, but ``'aaa\0`` is a syntax error).
-Bounds checks are generated in each state that has a switch on an input character,
-in the conditional branch that corresponds to null
-(that branch may also cover other characters ---
-re2c does not split out a separate branch for sentinel,
-because increasing the number of branches degrades performance more than bounds checks do).
-Bounds checks are of the form ``YYLIMIT <= YYCURSOR`` or ``YYLESSTHAN(1)`` with generic API.
-If a bounds check succeeds, the lexer will continue matching.
-If a bounds check fails, the lexer has reached the end of input, and it should stop.
-In this example ``YYFILL`` is disabled with ``re2c:yyfill:enable = 0;``
-and the lexer does not attempt to get more input
-(see another example that uses ``YYFILL`` in the `YYFILL with sentinel character`_ section).
-When the end of input has been reached, there are three possibilities:
-if the lexer is in the initial state, it will match the end of input rule ``$``,
-otherwise it will either fallback to a previously matched rule (including default rule ``*``)
-or go to a default state, causing
+This example uses sentinel with bounds checks to handle the end of input (this
+method was added in version 1.2). The program counts space-separated
+single-quoted strings. The sentinel character is null, which is specified with
+``re2c:eof = 0;`` configuration. As in the `sentinel`_ method, null is the last
+character of each input string, but it is allowed in the middle of a rule (for
+example, ``'aaa\0aa'\0`` is valid input, but ``'aaa\0`` is a syntax error).
+Bounds checks are generated in each state that matches an input character, but
+they are scoped to the branch that handles null. Bounds checks are of the form
+``YYLIMIT <= YYCURSOR`` or ``YYLESSTHAN(1)`` with generic API. If the check
+condition is true, lexer has reached the end of input and should stop
+(``YYFILL`` is disabled with ``re2c:yyfill:enable = 0;`` as the input fits into
+one buffer, see the `YYFILL with sentinel`_ section for an example that uses
+``YYFILL``). Reaching the end of input opens three possibilities: if the lexer
+is in the initial state it will match the end-of-input rule ``$``, otherwise it
+may fallback to a previously matched rule (including default rule ``*``) or go
+to a default state, causing
 `-Wundefined-control-flow <https://re2c.org/manual/warnings/warnings.html#wundefined-control-flow>`_.
 

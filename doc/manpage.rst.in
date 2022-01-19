@@ -114,6 +114,70 @@ Buffer refilling
     :literal:
     :code: RE2C_LANG
 
+Multiple blocks
+===============
+.. include:: @top_srcdir@/doc/manual/conditions/blocks.rst_
+.. include:: @top_srcdir@/examples/RE2C_LANG/conditions/parse_u32_blocks.re
+    :literal:
+    :code: RE2C_LANG
+
+Start conditions
+================
+.. include:: @top_srcdir@/doc/manual/conditions/conditions.rst_
+.. include:: @top_srcdir@/examples/RE2C_LANG/conditions/parse_u32_conditions.re
+    :literal:
+    :code: RE2C_LANG
+
+Storable state
+==============
+.. include:: @top_srcdir@/doc/manual/state/state.rst_
+.. include:: @top_srcdir@/examples/RE2C_LANG/state/push.re
+    :literal:
+    :code: RE2C_LANG
+
+Reusable blocks
+===============
+.. include:: @top_srcdir@/doc/manual/reuse/reuse.rst_
+
+Example of a ``!use`` directive
+-------------------------------
+.. include:: @top_srcdir@/examples/RE2C_LANG/reuse/usedir.re
+    :literal:
+    :code: RE2C_LANG
+
+Example of a ``/*!use:re2c ... */`` block
+-----------------------------------------
+.. include:: @top_srcdir@/examples/RE2C_LANG/reuse/reuse.re
+    :literal:
+    :code: RE2C_LANG
+
+Submatch extraction
+===================
+.. include:: @top_srcdir@/doc/manual/submatch/submatch.rst_
+.. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags.rst_
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags.re
+    :literal:
+    :code: RE2C_LANG
+.. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags_fill.rst_
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags_fill.re
+    :literal:
+    :code: RE2C_LANG
+.. include:: @top_srcdir@/doc/manual/submatch/submatch_example_posix.rst_
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/03_posix.re
+    :literal:
+    :code: RE2C_LANG
+.. include:: @top_srcdir@/doc/manual/submatch/submatch_example_mtags.rst_
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/02_mtags.re
+    :literal:
+    :code: RE2C_LANG
+
+Encoding support
+================
+.. include:: @top_srcdir@/doc/manual/encodings/encodings.rst_
+.. include:: @top_srcdir@/examples/RE2C_LANG/encodings/unicode_identifier.re
+    :literal:
+    :code: RE2C_LANG
+
 Include files
 =============
 .. include:: @top_srcdir@/doc/manual/includes/includes.rst_
@@ -152,69 +216,6 @@ Header file
     :literal:
     :code: RE2C_LANG
 
-Submatch extraction
-===================
-.. include:: @top_srcdir@/doc/manual/submatch/submatch.rst_
-.. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags.re
-    :literal:
-    :code: RE2C_LANG
-.. include:: @top_srcdir@/doc/manual/submatch/submatch_example_stags_fill.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/01_stags_fill.re
-    :literal:
-    :code: RE2C_LANG
-.. include:: @top_srcdir@/doc/manual/submatch/submatch_example_posix.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/03_posix.re
-    :literal:
-    :code: RE2C_LANG
-.. include:: @top_srcdir@/doc/manual/submatch/submatch_example_mtags.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/02_mtags.re
-    :literal:
-    :code: RE2C_LANG
-
-Storable state
-==============
-.. include:: @top_srcdir@/doc/manual/state/state.rst_
-Example
--------
-.. include:: @top_srcdir@/examples/RE2C_LANG/state/push.re
-    :literal:
-    :code: RE2C_LANG
-
-Reusable blocks
-===============
-.. include:: @top_srcdir@/doc/manual/reuse/reuse.rst_
-
-Example of a ``!use`` directive
--------------------------------
-.. include:: @top_srcdir@/examples/RE2C_LANG/reuse/usedir.re
-    :literal:
-    :code: RE2C_LANG
-
-Example of a ``/*!use:re2c ... */`` block
------------------------------------------
-.. include:: @top_srcdir@/examples/RE2C_LANG/reuse/reuse.re
-    :literal:
-    :code: RE2C_LANG
-
-Encoding support
-================
-.. include:: @top_srcdir@/doc/manual/encodings/encodings.rst_
-Example
--------
-.. include:: @top_srcdir@/examples/RE2C_LANG/encodings/unicode_identifier.re
-    :literal:
-    :code: RE2C_LANG
-
-Start conditions
-================
-.. include:: @top_srcdir@/doc/manual/conditions/conditions.rst_
-Example
--------
-.. include:: @top_srcdir@/examples/RE2C_LANG/conditions/parse_u32_conditions.re
-    :literal:
-    :code: RE2C_LANG
-
 Skeleton programs
 =================
 .. include:: @top_srcdir@/doc/manual/skeleton/skeleton.rst_
@@ -230,6 +231,6 @@ Similar programs are flex(1), lex(1), quex(http://quex.sourceforge.net).
 
 AUTHORS
 =======
-Re2c was originaly written by Peter Bumbulis in 1993.
+re2c was originaly written by Peter Bumbulis in 1993.
 Since then it has been developed and maintained by multiple volunteers;
 mots notably, Brain Young, Marcus Boerger, Dan Nuffer and Ulya Trofimovich.

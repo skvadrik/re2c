@@ -237,30 +237,29 @@ block into the current one (see the \fI\%reusable blocks\fP section), and the
 .sp
 The generated code interfaces with the outer program with the help of
 \fIprimitives\fP \-\- symbolic names that can be defined as variables, functions or
-macros in the target language (collectively referred to as the API).
-The primitives should be defined by the user. This approach gives the user
-freedom and flexibility in customizing the lexer, but it also requires some
-understanding of how the lexer works in order to implement the primitives
-correctly and efficiently. The manual provides examples for the most popular
-use cases. For the full list of primitives see the \fI\%API primitives\fP section.
+macros in the target language (collectively referred to as the \fBAPI\fP).
+The definition of primitives is left for the user: this gives them both
+freedom in customizing the lexer and responsibility to understand how it works.
+Not all primitives have to be defined \-\-\- only those used by a given program.
+The manual provides definitions for the most popular use cases. For a full list
+of primitives and their meaning see the \fI\%API primitives\fP section.
 .sp
-There are two kinds of API that define the set of primitives used by re2c:
+There are two API flavors that define the set of primitives used by re2c:
 .INDENT 0.0
 .INDENT 3.5
 .INDENT 0.0
 .TP
 .B \fBPointer API\fP
-This API is also called \fIdefault API\fP, since it was historically the first,
-and for a long time the only one. This is a more restrictive API based on C
-pointer arithmetic. It consists of pointer\-like primitives \fBYYCURSOR\fP,
-\fBYYMARKER\fP, \fBYYCTXMARKER\fP, \fBYYLIMIT\fP (which are normally defined as
-pointers of type \fBYYCTYPE*\fP) and \fBYYFILL\fP\&. Pointer API is enabled by
-default for the C backend, and it cannot be used with backends that do not
-support pointer arithmetic.
+This API is based on C pointer arithmetic. It was historically the first,
+and for a long time the only one. It consists of pointer\-like primitives
+\fBYYCURSOR\fP, \fBYYMARKER\fP, \fBYYCTXMARKER\fP, \fBYYLIMIT\fP (which are normally
+defined as pointers of type \fBYYCTYPE*\fP) and \fBYYFILL\fP\&. This API is
+enabled by default for C, and it cannot be used with other backends that do
+not support pointer arithmetic.
 .TP
 .B \fBGeneric API\fP
-This is a more flexible API that does not assume pointer semantics. It
-consists of primitives
+This API is more flexible. It consists generic operations and does not
+assume any particular implementation. The primitives are
 \fBYYPEEK\fP,
 \fBYYSKIP\fP,
 \fBYYBACKUP\fP,
@@ -277,12 +276,9 @@ consists of primitives
 \fBYYSHIFTMTAG\fP,
 \fBYYLESSTHAN\fP
 and \fBYYFILL\fP\&.
-For the C backend generic API is enabled with \fB\-\-input custom\fP option or
-\fBre2c:flags:input = custom;\fP configuration; for the Go backend it is
-enabled by default. Generic API was added in version 0.14. It is
-intentionally designed to give the user as much freedom as possible in
-redefining the input model and the semantics of different actions performed
-by the generated code.
+For the C backend generic API is enabled with \fB\-\-api custom\fP option or
+\fBre2c:api = custom;\fP configuration; for Go and Rust it is enabled by
+default. Generic API was added in version 0.14.
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -338,24 +334,21 @@ Function\-like style is enabled with configuration
 \fBre2c:api:style = functions;\fP\&. In this style primitives should be defined
 as functions or macros with parentheses, accepting the necessary arguments.
 This is well\-suited for C macros or Go closures, but it cannot be used with
-hygienic macros or functions in Rust, as the primitives need to access lexer
+hygienic macros or functions in Rust as the primitives need to access lexer
 context that is not passed as an argument. It is possible to use closures,
-but the borrow\-checker restrictions make it hard. Generally it is better to
-use free\-form style.
-.sp
-The difficulty with closures and borrow\-checker is that different primitives
-must read and modify the same parts of lexer context in a series of
-interleaved invocations. As a workaround, one can use Rust \fBCell\fP type.
+but the borrow\-checker makes it hard because different primitives read and
+modify the same parts of lexer context in a series of interleaved
+invocations. As a workaround, one can use Rust \fBCell\fP type.
 For example, if the input is a byte slice \fBbuffer: &[u8]\fP and
-\fBcur: Cell::<usize>\fP is the current input position, then \fBYYPEEK\fP and
+\fBcursor: Cell::<usize>\fP is the current input position, then \fBYYPEEK\fP and
 \fBYYSKIP\fP can be defined as follows:
 .INDENT 7.0
 .INDENT 3.5
 .sp
 .nf
 .ft C
-let YYPEEK = || unsafe { *buffer\&.get_unchecked(cur\&.get()) };
-let YYSKIP = || { cur\&.set(cur\&.get() + 1); };
+let YYPEEK = || unsafe { *buffer\&.get_unchecked(cursor\&.get()) };
+let YYSKIP = || { cursor\&.set(cur\&.get() + 1); };
 .ft P
 .fi
 .UNINDENT
@@ -828,16 +821,19 @@ generated \fBformat\fP pieces for different tag variables.
 .TP
 .B \fB/*!getstate:re2c[:<name1>[:<name2>...]] ... */\fP
 A directive that generates conditional dispatch on the lexer state (it
-requires \fB\-f \-\-storable\-state\fP option).
+requires \fB\-\-storable\-state\fP option).
 An optional list of block names specifies which blocks should be included in
 the state dispatch. The default transition goes to the start label of the
 first block on the list. If the list is empty, all blocks are included, and
 the default transition goes to the first block in the file that has a start
 label.
+This directive is incompatible with the \fB\-\-loop\-switch\fP option and Rust,
+as it requires cross\-block transitions that are unsupported without the
+\fBgoto\fP statement.
 .TP
-.B \fB/*!types:re2c[:<name1>[:<name2>...]] ... */\fP
+.B \fB/*!conditions:re2c[:<name1>[:<name2>...]] ... */\fP, \fB/*!types:re2c... */\fP
 A directive that generates condition enumeration (it requires
-\fB\-c \-\-conditions\fP option).
+\fB\-\-conditions\fP option).
 An optional list of block names specifies which blocks should be included
 when computing the set of conditions (if the list is empty, all blocks are
 included).
@@ -873,7 +869,7 @@ This directive marks the end of header file started with
 A block which contents are ignored and removed from the output file.
 .TP
 .B \fB%{ ... %}\fP
-A global re2c block in \fB\-F \-\-flex\-support\fP mode. This is deprecated and
+A global re2c block in the \fB\-\-flex\-support\fP mode. This is deprecated and
 exists for backward compatibility.
 .UNINDENT
 .SH API PRIMITIVES
@@ -886,7 +882,7 @@ buffering, the use of various features and so on.
 All the necessary primitives should be defined by the user in the form
 of macros, functions, variables, free\-form pieces of code, or any other
 suitable form.
-Re2c does not (and cannot) check the definitions, so if anything is
+re2c does not (and cannot) check the definitions, so if anything is
 missing or defined incorrectly the generated code will not compile.
 .INDENT 0.0
 .TP
@@ -901,7 +897,7 @@ A pointer\-like l\-value that stores the current input position (usually a
 pointer of type \fBYYCTYPE*\fP). Initially \fBYYCURSOR\fP should point to the
 first input character. It is advanced by the generated code.
 When a rule matches, \fBYYCURSOR\fP points to the position after the
-last matched character. It is used only in the default C API.
+last matched character. It is used only in C pointer API.
 .TP
 .B \fBYYLIMIT\fP
 A pointer\-like r\-value that stores the end of input position (usually a
@@ -909,38 +905,34 @@ pointer of type \fBYYCTYPE*\fP). Initially \fBYYLIMIT\fP should point to the
 position after the last available input character. It is not changed by the
 generated code. The lexer compares \fBYYCURSOR\fP to \fBYYLIMIT\fP
 in order to determine if there are enough input characters left.
-\fBYYLIMIT\fP is used only in the default C API.
+\fBYYLIMIT\fP is used only in C pointer API.
 .TP
 .B \fBYYMARKER\fP
 A pointer\-like l\-value (usually a pointer of type \fBYYCTYPE*\fP)
 that stores the position of the latest matched rule. It is used to
 restore the \fBYYCURSOR\fP position if the longer match fails and
 the lexer needs to rollback. Initialization is not
-needed. \fBYYMARKER\fP is used only in the default C API.
+needed. \fBYYMARKER\fP is used only in C pointer API.
 .TP
 .B \fBYYCTXMARKER\fP
 A pointer\-like l\-value that stores the position of the trailing context
 (usually a pointer of type \fBYYCTYPE*\fP). No initialization is needed.
-It is used only in the default C API, and only with the lookahead operator
+It is used only in C pointer API, and only with the lookahead operator
 \fB/\fP\&.
 .TP
 .B \fBYYFILL\fP
-A generic API primitive with one argument \fBlen\fP\&. \fBYYFILL\fP requests
-that the program provide at least \fBlen\fP more input characters or
-fail.
-If an EOF rule is used, \fBYYFILL\fP should always return to the
-calling function; the return value should be zero on success and
-non\-zero on failure.
-If an EOF rule is not used, the \fBYYFILL\fP return value is ignored
-and it should not return on failure.
-The maximal value of \fBlen\fP is \fBYYMAXFILL\fP, which can be
-generated with the \fB/*!max:re2c*/\fP directive. The definition of
-\fBYYFILL\fP can be either function\-like or free\-form depending on
-the API style (see \fBre2c:api:style\fP and
+A generic API primitive with one argument \fBlen\fP\&.
+\fBYYFILL\fP should provide at least \fBlen\fP more input characters or fail.
+If \fBre2c:eof\fP is used, then \fBlen\fP is always \fB1\fP and  \fBYYFILL\fP should
+always return to the calling function; zero return value indicates success.
+If \fBre2c:eof\fP is not used, then \fBYYFILL\fP return value is ignored and it
+should not return on failure. The maximum value of \fBlen\fP is \fBYYMAXFILL\fP\&.
+The definition of \fBYYFILL\fP can be either function\-like or free\-form
+depending on the API style (see \fBre2c:api:style\fP and
 \fBre2c:define:YYFILL:naked\fP).
 .TP
 .B \fBYYMAXFILL\fP
-An integral constant equal to the maximal value of the argument to
+An integral constant equal to the maximum value of the argument to
 \fBYYFILL\fP\&.  It can be generated with \fB/*!max:re2c*/\fP directive.
 .TP
 .B \fBYYLESSTHAN\fP
@@ -954,8 +946,8 @@ API style (see \fBre2c:api:style\fP).
 A generic API primitive with no arguments.
 It should be defined as an r\-value of type \fBYYCTYPE\fP that is equal to the
 character at the current input position. The definition can be either
-function\-like or free\-form depending on the API style
-(see \fBre2c:api:style\fP).
+function\-like or free\-form depending on the API style (see
+\fBre2c:api:style\fP).
 .TP
 .B \fBYYSKIP\fP
 A generic API primitive with no arguments.
@@ -1000,35 +992,32 @@ The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYSTAGP\fP
-A generic API primitive with one argument \fBtag\fP\&.
-(\fBtag\fP should represent a pointer or an offset, see the section
-on submatch extraction for details.)
-\fBYYSTAGP\fP should set the \fBtag\fP value to the current input
-position.
+A generic API primitive with one argument \fBtag\fP, where \fBtag\fP can be a
+pointer or an offset (see submatch extraction section for details).
+\fBYYSTAGP\fP should set \fBtag\fP to the current input position.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYSTAGN\fP
-A generic API primitive with one argument \fBtag\fP\&.
-(\fBtag\fP should represent a pointer or an offset, see the section
-on submatch extraction for details.)
-\fBYYSTAGN\fP should to set the \fBtag\fP value to null (or
-some default value).
+A generic API primitive with one argument \fBtag\fP, where \fBtag\fP can be a
+pointer or an offset (see submatch extraction section for details).
+\fBYYSTAGN\fP should to set \fBtag\fP to a value that represents non\-existent
+input position.
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYMTAGP\fP
 A generic API primitive with one argument \fBtag\fP\&.
-\fBYYMTAGP\fP should append the current position to the history
-of \fBtag\fP\&. (See the section on submatch extraction for details.)
+\fBYYMTAGP\fP should append the current position to the submatch history of
+\fBtag\fP (see the submatch extraction section for details.)
 The definition should be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
 .B \fBYYMTAGN\fP
 A generic API primitive with one argument \fBtag\fP\&.
-\fBYYMTAGN\fP should append null (or some other default) value
-to the history of \fBtag\fP\&.
-(See the section on submatch extraction for details.)
+\fBYYMTAGN\fP should append a value that represents non\-existent input
+position position to the submatch history of \fBtag\fP (see the submatch
+extraction section for details.)
 The definition can be either function\-like or free\-form depending on the
 API style (see \fBre2c:api:style\fP).
 .TP
@@ -1560,98 +1549,103 @@ One of the main problems for the lexer is to know when to stop.
 There are a few terminating conditions:
 .INDENT 0.0
 .IP \(bu 2
-the lexer may match some rule (including default rule \fB*\fP) and come to a final state
+the lexer may match some rule (including default rule \fB*\fP) and come to a
+final state
 .IP \(bu 2
 the lexer may fail to match any rule and come to a default state
 .IP \(bu 2
 the lexer may reach the end of input
 .UNINDENT
 .sp
-The first two conditions terminate the lexer in a "natural" way:
-it comes to a state with no outgoing transitions, and the matching automatically stops.
-The third condition, end of input, is different: it may happen in any state, and the lexer should be able to handle it.
-Checking for the end of input interrupts the normal lexer workflow
-and adds conditional branches to the generated program, therefore it is necessary to minimize the number of such checks.
-re2c supports a few different methods for end of input handling.
-Which one to use depends on the complexity of regular expressions, the need for buffering, performance considerations and other factors.
-Here is a list of all methods:
+The first two conditions terminate the lexer in a "natural" way: it comes to a
+state with no outgoing transitions, and the matching automatically stops. The
+third condition, end of input, is different: it may happen in any state, and the
+lexer should be able to handle it. Checking for the end of input interrupts the
+normal lexer workflow and adds conditional branches to the generated program,
+therefore it is necessary to minimize the number of such checks. re2c supports a
+few different methods for handling the end of input. Which one to use depends on
+the complexity of regular expressions, the need for buffering, performance
+considerations and other factors. Here is a list of methods:
 .INDENT 0.0
 .IP \(bu 2
-\fBSentinel character.\fP
-This method eliminates the need for the end of input checks altogether.
-It is simple and efficient, but limited to the case when there is a natural "sentinel" character that can never occur in valid input.
-This character may still occur in invalid input, but it is not allowed by the regular expressions, except perhaps as the last character of a rule.
-The sentinel character is appended at the end of input and serves as a stop signal:
-when the lexer reads it, it must be either the end of input, or a syntax error.
-In both cases the lexer stops.
-This method is used if \fBYYFILL\fP is disabled with \fBre2c:yyfill:enable = 0;\fP and \fBre2c:eof\fP has the default value \-1.
+\fBSentinel.\fP
+This method eliminates the need for the end of input checks altogether. It is
+simple and efficient, but limited to the case when there is a natural
+"sentinel" character that can never occur in valid input. This character may
+still occur in invalid input, but it should not be allowed by the regular
+expressions, except perhaps as the last character of a rule. The sentinel is
+appended at the end of input and serves as a stop signal: when the lexer reads
+this character, it is either a syntax error or the end of input. In both
+cases the lexer should stop. This method is used if \fBYYFILL\fP is disabled
+with \fBre2c:yyfill:enable = 0;\fP and \fBre2c:eof\fP has the default value
+\fB\-1\fP\&.
 .nf
 
 .fi
 .sp
 .IP \(bu 2
-\fBSentinel character with bounds checks.\fP
-This method is generic: it allows to handle any input without restrictions on the regular expressions.
-The idea is to reduce the number of end of input checks by performing them only on certain characters.
-Similar to the "sentinel character" method, one of the characters is chosen as a "sentinel" and appended at the end of input.
-However, there is no restriction on where the sentinel character may occur (in fact, any character can be chosen for a sentinel).
+\fBSentinel with bounds checks.\fP
+This method is generic: it allows to handle any input without restrictions on
+the regular expressions. The idea is to reduce the number of end of input
+checks by performing them only on certain characters. Similar to the
+"sentinel" method, one of the characters is chosen as a "sentinel" and
+appended at the end of input. However, there is no restriction on where the
+sentinel may occur (in fact, any character can be chosen for a sentinel).
 When the lexer reads this character, it additionally performs a bounds check.
-If the current position is within bounds, the lexer will resume matching and handle the sentinel character as a regular one.
-Otherwise it will try to get more input with \fBYYFILL\fP (unless \fBYYFILL\fP is disabled).
-If more input is available, the lexer will rematch the last character and continue as if the sentinel never occurred.
-Otherwise it is the real end of input, and the lexer will stop.
-This method is used if \fBre2c:eof\fP has non\-negative value (it should be set to the ordinal of the sentinel character).
-\fBYYFILL\fP must be either defined or disabled with \fBre2c:yyfill:enable = 0;\fP\&.
+If the current position is within bounds, the lexer resumes matching and
+handles the sentinel as a regular character. Otherwise it invokes \fBYYFILL\fP
+(unless it is disabled). If more input is supplied, the lexer will rematch the
+last character and continue as if the sentinel wasn\(aqt there. Otherwise it must
+be the real end of input, and the lexer stops. This method is used when
+\fBre2c:eof\fP has non\-negative value (it should be set to the numeric value of
+the sentinel). \fBYYFILL\fP is optional.
 .nf
 
 .fi
 .sp
 .IP \(bu 2
 \fBBounds checks with padding.\fP
-This method is the default one.
-It is generic, and it is usually faster than the "sentinel character with bounds checks" method, but also more complex to use.
-The idea is to partition the underlying finite\-state automaton into strongly connected components (SCCs),
-and generate only one bounds check per SCC, but make it check for multiple characters at once
-(enough to cover the longest non\-looping path in the SCC).
-This way the checks are less frequent, which makes the lexer run much faster.
-If a check shows that there is not enough input, the lexer will invoke \fBYYFILL\fP,
-which may either supply enough input or else it should not return (in the latter case the lexer will stop).
-This approach has a problem with matching short lexemes at the end of input,
-because the multi\-character check requires enough characters to cover the longest possible lexeme.
-To fix this problem, it is necessary to append a few fake characters at the end of input.
-The padding should not form a valid lexeme suffix to avoid fooling the lexer into matching it as part of the input.
-The minimum sufficient length of padding is \fBYYMAXFILL\fP and it is autogenerated by re2c with \fB/*!max:re2c*/\fP\&.
-This method is used if \fBre2c:yyfill:enable\fP has the default nonzero value, and \fBre2c:eof\fP has the default value \-1.
-\fBYYFILL\fP must be defined.
+This method is generic, and it may be faster than the "sentinel with bounds
+checks" method, but it is also more complex. The idea is to partition DFA
+states into strongly connected components (SCCs) and generate a single check
+per SCC for enough characters to cover the longest non\-looping path in this
+SCC. This reduces the number of checks, but there is a problem with short
+lexemes at the end of input, as the check requires enough characters to cover
+the longest lexeme. This can be fixed by padding the input with a few fake
+characters that do not form a valid lexeme suffix (so that the lexer cannot
+match them). The length of padding should be \fBYYMAXFILL\fP, generated with
+\fB/*!max:re2c*/\fP\&. If there is not enough input, the lexer invokes \fBYYFILL\fP
+which should supply at least the required number of characters or not return.
+This method is used if \fBYYFILL\fP is enabled and \fBre2c:eof\fP is \fB\-1\fP
+(this is the default configuration).
 .nf
 
 .fi
 .sp
 .IP \(bu 2
-\fBCustom methods with generic API.\fP
+\fBCustom checks.\fP
 Generic API allows to override basic operations like reading a character,
-which makes it possible to include the end of input checks as part of them.
-Such methods are error\-prone and should be used with caution, only if other methods cannot be used.
-These methods are used if generic API is enabled with \fB\-\-input custom\fP or \fBre2c:flags:input = custom;\fP
-and default bounds checks are disabled with \fBre2c:yyfill:enable = 0;\fP\&.
-Note that the use of generic API does not imply the use of custom methods, it merely allows it.
+which makes it possible to include the end\-of\-input checks as part of them.
+This approach is error\-prone and should be used with caution. To use a custom
+method, enable generic API with \fB\-\-api custom\fP or \fBre2c:api = custom;\fP and
+disable default bounds checks with \fBre2c:yyfill:enable = 0;\fP or
+\fBre2c:yyfill:check = 0;\fP\&.
 .UNINDENT
 .sp
 The following subsections contain an example of each method.
-.SS Sentinel character
+.SS Sentinel
 .sp
-In this example the lexer uses a sentinel character to handle the end of input.
-The program counts space\-separated words in a null\-terminated string.
-Configuration \fBre2c:yyfill:enable = 0;\fP suppresses the generation of bounds checks and \fBYYFILL\fP invocations.
-The sentinel character is null.
-It is the last character of each input string,
-and it is not allowed in the middle of a lexeme by any of the rules
-(in particular, it is not included in the character ranges, where it is easy to overlook).
-If a null occurs in the middle of a string, it is a syntax error and the lexer will match default rule \fB*\fP, but it won\(aqt read past the end of input or crash.
+This example uses a sentinel character to handle the end of input. The program
+counts space\-separated words in a null\-terminated string. The sentinel is null:
+it is the last character of each input string, and it is not allowed in the
+middle of a lexeme by any of the rules (in particular, it is not included in
+character ranges where it is easy to overlook). If a null occurs in the middle
+of a string, it is a syntax error and the lexer will match default rule \fB*\fP,
+but it won\(aqt read past the end of input or crash (use
 \fI\%\-Wsentinel\-in\-midrule\fP
-warning verifies that the rules do not allow sentinel in the middle
-(it is possible to tell re2c which character is used as a sentinel with \fBre2c:sentinel\fP configuration \-\-\-
-the default assumption is null, since this is the most common case).
+warning and \fBre2c:sentinel\fP configuration to verify this). Configuration
+\fBre2c:yyfill:enable = 0;\fP suppresses the generation of bounds checks and
+\fBYYFILL\fP invocations.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -1687,30 +1681,24 @@ fn main() {
 .fi
 .UNINDENT
 .UNINDENT
-.SS Sentinel character with bounds checks
+.SS Sentinel with bounds checks
 .sp
-In this example the lexer uses sentinel character with bounds checks to handle the end of input
-(this method was added in version 1.2).
-The program counts single\-quoted strings separated with spaces.
-The sentinel character is null, which is specified with \fBre2c:eof = 0;\fP configuration.
-Null is the last character of each input string \-\-\- this is essential to detect the end of input.
-Null, as well as any other character, is allowed in the middle of a rule
-(for example, \fB\(aqaaa\e0aa\(aq\e0\fP is valid input, but \fB\(aqaaa\e0\fP is a syntax error).
-Bounds checks are generated in each state that has a switch on an input character,
-in the conditional branch that corresponds to null
-(that branch may also cover other characters \-\-\-
-re2c does not split out a separate branch for sentinel,
-because increasing the number of branches degrades performance more than bounds checks do).
-Bounds checks are of the form \fBYYLIMIT <= YYCURSOR\fP or \fBYYLESSTHAN(1)\fP with generic API.
-If a bounds check succeeds, the lexer will continue matching.
-If a bounds check fails, the lexer has reached the end of input, and it should stop.
-In this example \fBYYFILL\fP is disabled with \fBre2c:yyfill:enable = 0;\fP
-and the lexer does not attempt to get more input
-(see another example that uses \fBYYFILL\fP in the \fI\%YYFILL with sentinel character\fP section).
-When the end of input has been reached, there are three possibilities:
-if the lexer is in the initial state, it will match the end of input rule \fB$\fP,
-otherwise it will either fallback to a previously matched rule (including default rule \fB*\fP)
-or go to a default state, causing
+This example uses sentinel with bounds checks to handle the end of input (this
+method was added in version 1.2). The program counts space\-separated
+single\-quoted strings. The sentinel character is null, which is specified with
+\fBre2c:eof = 0;\fP configuration. As in the \fI\%sentinel\fP method, null is the last
+character of each input string, but it is allowed in the middle of a rule (for
+example, \fB\(aqaaa\e0aa\(aq\e0\fP is valid input, but \fB\(aqaaa\e0\fP is a syntax error).
+Bounds checks are generated in each state that matches an input character, but
+they are scoped to the branch that handles null. Bounds checks are of the form
+\fBYYLIMIT <= YYCURSOR\fP or \fBYYLESSTHAN(1)\fP with generic API. If the check
+condition is true, lexer has reached the end of input and should stop
+(\fBYYFILL\fP is disabled with \fBre2c:yyfill:enable = 0;\fP as the input fits into
+one buffer, see the \fI\%YYFILL with sentinel\fP section for an example that uses
+\fBYYFILL\fP). Reaching the end of input opens three possibilities: if the lexer
+is in the initial state it will match the end\-of\-input rule \fB$\fP, otherwise it
+may fallback to a previously matched rule (including default rule \fB*\fP) or go
+to a default state, causing
 \fI\%\-Wundefined\-control\-flow\fP\&.
 .INDENT 0.0
 .INDENT 3.5
@@ -1756,25 +1744,26 @@ fn main() {
 .UNINDENT
 .SS Bounds checks with padding
 .sp
-In this example the lexer uses bounds checking with padding to handle the end of input (it is the default method).
-The program counts single\-quoted strings separated with spaces.
-There is a padding of \fBYYMAXFILL\fP null characters appended at the end of input,
-where \fBYYMAXFILL\fP value is autogenerated with \fB/*!max:re2c*/\fP directive.
-It is not necessary to use null for padding \-\-\- any characters can be used, as long as they do not form a valid lexeme suffix
-(in this example padding should not contain single quotes, as they may be mistaken for a suffix of a single\-quoted string).
-There is a "stop" rule that matches the first padding character (null) and terminates the lexer
-(it returns success only if it has matched at the beginning of padding, otherwise a stray null is syntax error).
-Bounds checks are generated only in some states that depend on the strongly connected components of the underlying automaton.
-They are of the form \fB(YYLIMIT \- YYCURSOR) < n\fP or \fBYYLESSTHAN(n)\fP with generic API,
-where \fBn\fP is the minimum number of characters that are needed for the lexer to proceed
-(it also means that the next bounds check will occur in at most \fBn\fP characters).
-If a bounds check succeeds, the lexer will continue matching.
-If a bounds check fails, the lexer has reached the end of input and will invoke \fBYYFILL(n)\fP,
-which should either supply at least \fBn\fP input characters, or it should not return.
-In this example \fBYYFILL\fP always fails and terminates the lexer with an error.
-This is fine, because in this example \fBYYFILL\fP can only be called when the lexer has advanced into the padding,
-which means that is has encountered an unterminated string and should return a syntax error.
-See the \fI\%YYFILL with padding\fP section for an example that refills the input buffer with \fBYYFILL\fP\&.
+This example uses bounds checks with padding to handle the end of input (this
+method is enabled by default). The program counts space\-separated single\-quoted
+strings. There is a padding of \fBYYMAXFILL\fP null characters appended at the end
+of input, where \fBYYMAXFILL\fP value is autogenerated with \fB/*!max:re2c*/\fP\&. It
+is not necessary to use null for padding \-\-\- any characters can be used as long
+as they do not form a valid lexeme suffix (in this example padding should not
+contain single quotes, as they may be mistaken for a suffix of a single\-quoted
+string). There is a "stop" rule that matches the first padding character (null)
+and terminates the lexer (note that it checks if null is at the beginning of
+padding, otherwise it is a syntax error). Bounds checks are generated only in
+some states that are determined by the strongly connected components of the
+underlying automaton. Checks have the form \fB(YYLIMIT \- YYCURSOR) < n\fP or
+\fBYYLESSTHAN(n)\fP with generic API, where \fBn\fP is the minimum number of
+characters that are needed for the lexer to proceed (it also means that the next
+bounds check will occur in at most \fBn\fP characters). If the check condition is
+true, the lexer has reached the end of input and will invoke \fBYYFILL(n)\fP that
+should either supply at least \fBn\fP input characters or not return. In this
+example \fBYYFILL\fP always fails and terminates the lexer with an error (which is
+fine because the input fits into one buffer). See the \fI\%YYFILL with padding\fP
+section for an example that refills the input buffer with \fBYYFILL\fP\&.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -1824,18 +1813,17 @@ fn main() {
 .fi
 .UNINDENT
 .UNINDENT
-.SS Custom methods with generic API
+.SS Custom checks
 .sp
-In this example the lexer uses a custom end of input handling method based on generic API.
-The program counts single\-quoted strings separated with spaces.
-It is the same as the \fI\%sentinel character with bounds checks\fP example,
-except that the input is not null\-terminated
-(so this method can be used if it\(aqs not possible to have any padding at all, not even a single sentinel character).
-To cover up for the absence of sentinel character at the end of input,
-\fBYYPEEK\fP is redefined to perform a bounds check before it reads the next input character.
-This is inefficient, because checks are done very often.
-If the check succeeds, \fBYYPEEK\fP returns the real character,
-otherwise it returns a fake sentinel character.
+This example uses a custom end\-of\-input handling method based on generic API.
+The program counts space\-separated single\-quoted strings. It is the same as the
+\fI\%sentinel with bounds checks\fP example, except that the input is not
+null\-terminated (this method can be used if padding is not an option, not even a
+single character). To cover up for the absence of sentinel character at the end
+of input, \fBYYPEEK\fP is redefined to perform a bounds check before it reads the
+next input character. This is inefficient because checks are done very often. If
+the check condition fails, \fBYYPEEK\fP returns the real character, otherwise it
+returns a fake sentinel character.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -1886,14 +1874,14 @@ from a socket). The usual technique in such cases is to allocate a fixed\-sized
 memory buffer and process input in chunks that fit into the buffer. When the
 current chunk is processed, it is moved out and new data is moved in. In
 practice it is somewhat more complex, because lexer state consists not of a
-single input position, but a set of interrelated posiitons:
+single input position, but a set of interrelated positions:
 .INDENT 0.0
 .IP \(bu 2
-cursor: the next input character to be read (\fBYYCURSOR\fP in default API or
+cursor: the next input character to be read (\fBYYCURSOR\fP in C pointer API or
 \fBYYSKIP\fP/\fBYYPEEK\fP in generic API)
 .IP \(bu 2
 limit: the position after the last available input character (\fBYYLIMIT\fP in
-default API, implicitly handled by \fBYYLESSTHAN\fP in generic API)
+C pointer API, implicitly handled by \fBYYLESSTHAN\fP in generic API)
 .IP \(bu 2
 marker: the position of the most recent match, if any (\fBYYMARKER\fP in default
 API or \fBYYBACKUP\fP/\fBYYRESTORE\fP in generic API)
@@ -1903,7 +1891,7 @@ needed for the normal lexer operation and can be defined and updated by the
 user)
 .IP \(bu 2
 context marker: the position of the trailing context (\fBYYCTXMARKER\fP in
-default API or \fBYYBACKUPCTX\fP/\fBYYRESTORECTX\fP in generic API)
+C pointer API or \fBYYBACKUPCTX\fP/\fBYYRESTORECTX\fP in generic API)
 .IP \(bu 2
 tag variables: submatch positions (defined with \fB/*!stags:re2c*/\fP and
 \fB/*!mtags:re2c*/\fP directives and
@@ -1921,12 +1909,12 @@ lexer). The details of \fBYYFILL\fP implementation are slightly different
 depending on which EOF handling method is used: the case of EOF rule is somewhat
 simpler than the case of bounds\-checking with padding. Also note that if
 \fB\-f \-\-storable\-state\fP option is used, \fBYYFILL\fP has slightly different
-semantics (desrbed in the section about storable state).
-.SS YYFILL with sentinel character
+semantics (described in the section about storable state).
+.SS YYFILL with sentinel
 .sp
 If EOF rule is used, \fBYYFILL\fP is a function\-like primitive that accepts
 no arguments and returns a value which is checked against zero. \fBYYFILL\fP
-invocation is triggered by condition \fBYYLIMIT <= YYCURSOR\fP in default API and
+invocation is triggered by condition \fBYYLIMIT <= YYCURSOR\fP in C pointer API and
 \fBYYLESSTHAN()\fP in generic API. A non\-zero return value means that \fBYYFILL\fP
 has failed. A successful \fBYYFILL\fP call must supply at least one character and
 adjust input positions accordingly. Limit must always be set to one after the
@@ -2090,7 +2078,7 @@ fn main() {
 In the default case (when EOF rule is not used) \fBYYFILL\fP is a function\-like
 primitive that accepts a single argument and does not return any value.
 \fBYYFILL\fP invocation is triggered by condition \fB(YYLIMIT \- YYCURSOR) < n\fP in
-default API and \fBYYLESSTHAN(n)\fP in generic API. The argument passed to
+C pointer API and \fBYYLESSTHAN(n)\fP in generic API. The argument passed to
 \fBYYFILL\fP is the minimal number of characters that must be supplied. If it
 fails to do so, \fBYYFILL\fP must not return to the lexer (for that reason it is
 best implemented as a macro that returns from the calling function on failure).
@@ -2259,58 +2247,26 @@ fn main() {
 .fi
 .UNINDENT
 .UNINDENT
-.SH INCLUDE FILES
+.SH MULTIPLE BLOCKS
 .sp
-re2c allows one to include other files using directive \fB/*!include:re2c FILE */\fP
-or \fB!include FILE ;\fP, where \fBFILE\fP is a path to the file to be included.
-The first form should be used outside of re2c blocks, and the second form allows
-one to include a file in the middle of a re2c block. re2c looks for included
-files in the directory of the including file and in include locations, which
-can be specified with \fB\-I\fP option.
-Include directives in re2c work in the same way as C/C++ \fB#include\fP: the contents
-of \fBFILE\fP are copy\-pasted verbatim in place of the directive. Include files
-may have further includes of their own. Use \fB\-\-depfile\fP option to track build
-dependencies of the output file on include files.
-re2c provides some predefined include files that can be found in the
-\fBinclude/\fP subdirectory of the project. These files contain definitions that
-can be useful to other projects (such as Unicode categories) and form something
-like a standard library for re2c.
-Below is an example of using include directive.
-.SS Include file 1 (definitions.rs)
-.INDENT 0.0
-.INDENT 3.5
+Sometimes it is necessary to have multiple interrelated lexers (for example, if
+there is a high\-level state machine that transitions between lexer modes). This
+can be implemented using multiple connected re2c blocks. Another option is to
+use \fI\%start conditions\fP\&.
 .sp
-.nf
-.ft C
-#[derive(Debug, PartialEq)]
-enum Num { Int, Float, NaN }
-
-/*!re2c
-    number = [1\-9][0\-9]*;
-*/
-
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.SS Include file 2 (extra_rules.re.inc)
-.INDENT 0.0
-.INDENT 3.5
+The implementation of connections between blocks depends on the target language.
+In languages that have \fBgoto\fP statement (such as C/C++ and Go) one can have
+all blocks in one function, each of them prefixed with a label. Transition from
+one block to another is a simple \fBgoto\fP\&.
+In languages that do not have \fBgoto\fP (such as Rust) it is necessary to use a
+loop with a switch on a state variable, similar to the \fByystate\fP loop/switch
+generated by re2c, or else wrap each block in a function and use function calls.
 .sp
-.nf
-.ft C
-// floating\-point numbers
-frac  = [0\-9]* "." [0\-9]+ | [0\-9]+ ".";
-exp   = \(aqe\(aq [+\-]? [0\-9]+;
-float = frac exp? | [0\-9]+ exp;
-
-float { return Num::Float; }
-
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.SS Input file
+The example below uses multiple blocks to parse binary, octal, decimal and
+hexadecimal numbers. Each base has its own block. The initial block determines
+base and dispatches to other blocks. Common configurations are defined in a
+separate block at the beginning of the program; they are inherited by the other
+blocks.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -2318,11 +2274,507 @@ float { return Num::Float; }
 .ft C
 // re2rust $INPUT \-o $OUTPUT
 
-/*!include:re2c "definitions.rs" */
+// Store u32 number in u64 during parsing to simplify overflow hadling.
+struct State<\(aqa> {
+    str: &\(aqa [u8],
+    cur: usize,
+    mar: usize,
+    num: u64,
+}
 
-fn lex(str: &[u8]) \-> Num {
-    let mut cur = 0;
-    let mut mar = 0;
+/*!re2c // Common re2c definitions shared between all functions.
+    re2c:yyfill:enable = 0;
+    re2c:define:YYCTYPE   = u8;
+    re2c:define:YYPEEK    = "*st.str.get_unchecked(st.cur)";
+    re2c:define:YYSKIP    = "st.cur += 1;";
+    re2c:define:YYBACKUP  = "st.mar = st.cur;";
+    re2c:define:YYRESTORE = "st.cur = st.mar;";
+    re2c:define:YYSHIFT   = "st.cur = (st.cur as isize + @@) as usize;";
+*/
+
+const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow
+
+macro_rules! maybe { // Convert the number from u64 to optional u32.
+    ($n:expr) => { if $n < ERROR { Some($n as u32) } else { None } }
+}
+
+// Add digit with the given base, checking for overflow.
+fn add(st: &mut State, offs: u8, base: u64) {
+    let digit = unsafe { st.str.get_unchecked(st.cur \- 1) } \- offs;
+    st.num = std::cmp::min(st.num * base + digit as u64, ERROR);
+}
+
+fn parse_u32(s: & [u8]) \-> Option<u32> {
+    let mut st = State {str: s, cur: 0, mar: 0, num: 0};
+/*!re2c
+    \(aq0b\(aq / [01]        { return parse_bin(&mut st); }
+    "0"                { return parse_oct(&mut st); }
+    "" / [1\-9]         { return parse_dec(&mut st); }
+    \(aq0x\(aq / [0\-9a\-fA\-F] { return parse_hex(&mut st); }
+    *                  { return None; }
+*/
+}
+
+fn parse_bin(st: &mut State) \-> Option<u32> {
+    \(aqbin: loop {/*!re2c
+        [01] { add(st, 48, 2); continue \(aqbin; }
+        *    { return maybe!(st.num); }
+    */}
+}
+
+fn parse_oct(st: &mut State) \-> Option<u32> {
+    \(aqoct: loop {/*!re2c
+        [0\-7] { add(st, 48, 8); continue \(aqoct; }
+        *     { return maybe!(st.num); }
+    */}
+}
+
+fn parse_dec(st: &mut State) \-> Option<u32> {
+    \(aqdec: loop {/*!re2c
+        [0\-9] { add(st, 48, 10); continue \(aqdec; }
+        *     { return maybe!(st.num); }
+    */}
+}
+
+fn parse_hex(st: &mut State) \-> Option<u32> {
+    \(aqhex: loop {/*!re2c
+        [0\-9] { add(st, 48, 16); continue \(aqhex; }
+        [a\-f] { add(st, 87, 16); continue \(aqhex; }
+        [A\-F] { add(st, 55, 16); continue \(aqhex; }
+        *     { return maybe!(st.num); }
+    */}
+}
+
+fn main() {
+    assert_eq!(parse_u32(b"\e0"), None);
+    assert_eq!(parse_u32(b"1234567890\e0"), Some(1234567890));
+    assert_eq!(parse_u32(b"0b1101\e0"), Some(13));
+    assert_eq!(parse_u32(b"0x7Fe\e0"), Some(2046));
+    assert_eq!(parse_u32(b"0644\e0"), Some(420));
+    assert_eq!(parse_u32(b"9999999999\e0"), None);
+}
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH START CONDITIONS
+.sp
+Start conditions are enabled with \fB\-\-start\-conditions\fP option. They provide a
+way to encode multiple interrelated automata within the same re2c block.
+.sp
+Each condition corresponds to a single automaton and has a unique name specified
+by the user and a unique internal number defined by re2c. The numbers are used
+to switch between conditions: the generated code uses \fBYYGETCONDITION\fP and
+\fBYYSETCONDITION\fP primitives to get the current condition or set it to the
+given number. Use \fB/*!conditions:re2c*/\fP directive or the \fB\-\-header\fP option
+to generate numeric condition identifiers. Configuration
+\fBre2c:cond:enumprefix\fP specifies the generated identifier prefix.
+.sp
+In condition mode every rule must be prefixed with a list of comma\-separated
+condition names in angle brackets, or a wildcard \fB<*>\fP to denote all
+conditions. The rule syntax is extended as follows:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fB< cond\-list > regexp action\fP
+A rule that is merged to every condition on the \fBcond\-list\fP\&.
+It matches \fBregexp\fP and executes the associated \fBaction\fP\&.
+.TP
+.B \fB< cond\-list > regexp => cond action\fP
+A rule that is merged to every condition on the \fBcond\-list\fP\&.
+It matches \fBregexp\fP, sets the current condition to \fBcond\fP and
+executes the associated \fBaction\fP\&.
+.TP
+.B \fB< cond\-list > regexp :=> cond\fP
+A rule that is merged to every condition on the \fBcond\-list\fP\&.
+It matches \fBregexp\fP and immediately transitions to \fBcond\fP (there is
+no semantic action).
+.TP
+.B \fB<! cond\-list > action\fP
+The \fBaction\fP is prepended to semantic actions of all rules for every
+condition on the \fBcond\-list\fP\&. This may be used to deduplicate common
+code.
+.TP
+.B \fB< > action\fP
+A rule that is merged to a special entry condition with number zero
+and name \fB"0"\fP\&. It matches empty string and executes the \fBaction\fP\&.
+.TP
+.B \fB< > => cond action\fP
+A rule that is merged to a special entry condition with number zero
+and name \fB"0"\fP\&. It matches empty string, sets the current condition to
+\fBcond\fP and executes the \fBaction\fP\&.
+.TP
+.B \fB< > :=> cond\fP
+A rule that is merged to a special entry condition with number zero
+and name \fB"0"\fP\&. It matches empty string and immediately transitions to
+\fBcond\fP\&.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+The code re2c generates for conditions depends on whether re2c uses goto/label
+approach or loop/switch approach to encode the automata.
+.sp
+In languages that have \fBgoto\fP statement (such as C/C++ and Go) conditions are
+naturally implemented as blocks of code prefixed with labels of the form
+\fByyc_<cond>\fP, where \fBcond\fP is a condition name (label prefix can be changed
+with \fBre2c:cond:prefix\fP). Transitions between conditions are implemented using
+\fBgoto\fP and condition labels. Before all conditions re2c generates an initial
+switch on \fBYYGETSTATE\fP that jumps to the start state of the current condition.
+The shortcut rules \fB:=>\fP bypass the initial switch and jump directly to the
+specified condition (\fBre2c:cond:goto\fP can be used to change the default
+behavior). The rules with semantic actions do not automatically jump to the next
+condition; this should be done by the user\-defined action code.
+.sp
+In languages that do not have \fBgoto\fP (such as Rust) re2c reuses the
+\fByystate\fP variable to store condition numbers. Each condition gets a numeric
+identifier equal to the number of its start state, and a switch between
+conditions is no different than a switch between DFA states of a single
+condition. There is no need for a separate initial condition switch.
+(Since the same approach is used to implement storable states,
+\fBYYGETCONDITION\fP/\fBYYSETCONDITION\fP are redundant if both storable states and
+conditions are used).
+.sp
+The program below uses start conditions to parse binary, octal, decimal and
+hexadecimal numbers. There is a single block where each base has its own
+condition, and the initial condition is connected to all of them. User\-defined
+variable \fBcond\fP stores the current condition number; it is initialized to the
+number of the initial condition generated with \fB/*!conditions:re2c*/\fP\&.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+// re2rust $INPUT \-o $OUTPUT \-c
+
+/*!conditions:re2c*/
+
+const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow
+
+// Add digit with the given base, checking for overflow.
+fn add(num: &mut u64, str: &[u8], cur: usize, offs: u8, base: u64) {
+    let digit = unsafe { str.get_unchecked(cur \- 1) } \- offs;
+    *num = std::cmp::min(*num * base + digit as u64, ERROR);
+}
+
+fn parse_u32(str: &[u8]) \-> Option<u32> {
+    let (mut cur, mut mar) = (0, 0);
+    let mut cond = YYC_INIT;
+    let mut num = 0u64; // Store number in u64 to simplify overflow checks.
+
+    \(aqlex: loop {/*!re2c
+        re2c:define:YYCTYPE   = u8;
+        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
+        re2c:define:YYSKIP    = "cur += 1;";
+        re2c:define:YYBACKUP  = "mar = cur;";
+        re2c:define:YYRESTORE = "cur = mar;";
+        re2c:define:YYSHIFT   = "cur = (cur as isize + @@) as usize;";
+        re2c:define:YYGETCONDITION = "cond";
+        re2c:define:YYSETCONDITION = "cond = @@;";
+        re2c:yyfill:enable = 0;
+
+        <INIT> \(aq0b\(aq / [01]        :=> BIN
+        <INIT> "0"                :=> OCT
+        <INIT> "" / [1\-9]         :=> DEC
+        <INIT> \(aq0x\(aq / [0\-9a\-fA\-F] :=> HEX
+        <INIT> * { return None; }
+
+        <BIN> [01]  { add(&mut num, str, cur, 48, 2);  continue \(aqlex; }
+        <OCT> [0\-7] { add(&mut num, str, cur, 48, 8);  continue \(aqlex; }
+        <DEC> [0\-9] { add(&mut num, str, cur, 48, 10); continue \(aqlex; }
+        <HEX> [0\-9] { add(&mut num, str, cur, 48, 16); continue \(aqlex; }
+        <HEX> [a\-f] { add(&mut num, str, cur, 87, 16); continue \(aqlex; }
+        <HEX> [A\-F] { add(&mut num, str, cur, 55, 16); continue \(aqlex; }
+
+        <BIN, OCT, DEC, HEX> * {
+            return if num < ERROR { Some(num as u32) } else { None };
+        }
+    */}
+}
+
+fn main() {
+    assert_eq!(parse_u32(b"\e0"), None);
+    assert_eq!(parse_u32(b"1234567890\e0"), Some(1234567890));
+    assert_eq!(parse_u32(b"0b1101\e0"), Some(13));
+    assert_eq!(parse_u32(b"0x7Fe\e0"), Some(2046));
+    assert_eq!(parse_u32(b"0644\e0"), Some(420));
+    assert_eq!(parse_u32(b"9999999999\e0"), None);
+}
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH STORABLE STATE
+.sp
+With \fB\-\-storable\-state\fP option re2c generates a lexer that can store
+its current state, return to the caller, and later resume operations exactly
+where it left off. The default mode of operation in re2c is a "pull" model,
+in which the lexer "pulls" more input whenever it needs it. This may be
+unacceptable in cases when the input becomes available piece by piece (for
+example, if the lexer is invoked by the parser, or if the lexer program
+communicates via a socket protocol with some other program that must wait for a
+reply from the lexer before it transmits the next message). Storable state
+feature is intended exactly for such cases: it allows one to generate lexers that
+work in a "push" model. When the lexer needs more input, it stores its state and
+returns to the caller. Later, when more input becomes available, the caller
+resumes the lexer exactly where it stopped. There are a few changes necessary
+compared to the "pull" model:
+.INDENT 0.0
+.IP \(bu 2
+Define \fBYYSETSTATE()\fP and \fBYYGETSTATE(state)\fP primitives.
+.IP \(bu 2
+Define \fByych\fP, \fByyaccept\fP (if used) and \fBstate\fP variables as a part of
+persistent lexer state. The \fBstate\fP variable should be initialized to \fB\-1\fP\&.
+.IP \(bu 2
+\fBYYFILL\fP should return to the outer program instead of trying to supply more
+input. Return code should indicate that lexer needs more input.
+.IP \(bu 2
+The outer program should recognize situations when lexer needs more input and
+respond appropriately.
+.IP \(bu 2
+Optionally use \fBgetstate:re2c\fP to generate \fBYYGETSTATE\fP switch detached
+from the main lexer. This only works for languages that have \fBgoto\fP (not in
+\fB\-\-loop\-switch\fP mode).
+.IP \(bu 2
+Use \fBre2c:eof\fP and the \fI\%sentinel with bounds checks\fP method to handle the
+end of input. Padding\-based method may not work because it is unclear when to
+append padding: the current end of input may not be the ultimate end of input,
+and appending padding too early may cut off a partially read greedy lexeme.
+Furthermore, due to high\-level program logic getting more input may depend on
+processing the lexeme at the end of buffer (which already is blocked due to
+the end\-of\-input condition).
+.UNINDENT
+.sp
+Here is an example of a "push" model lexer that simulates reading packets from a
+socket. The lexer loops until it encounters the end of input and returns to the
+calling function. The calling function provides more input by "sending" the next
+packet and resumes lexing. This process stops when all the packets have been
+sent, or when there is an error.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+// re2rust $INPUT \-o $OUTPUT \-f
+
+use std::fs::File;
+use std::io::{Read, Write};
+
+const DEBUG: bool = false;
+macro_rules! log {
+    ($($fmt:expr)? $(, $args:expr)*) => {
+        if DEBUG { println!($($fmt)? $(, $args)*) }
+    }
+}
+
+// Use a small buffer to cover the case when a lexeme doesn\(aqt fit.
+// In real world use a larger buffer.
+const BUFSIZE: usize = 10;
+
+struct State {
+    file: File,
+    buf: [u8; BUFSIZE],
+    lim: usize,
+    cur: usize,
+    mar: usize,
+    tok: usize,
+    state: isize,
+}
+
+#[derive(Debug, PartialEq)]
+enum Status {End, Ready, Waiting, BadPacket, BigPacket}
+
+fn fill(st: &mut State) \-> Status {
+    // Error: lexeme too long. In real life can reallocate a larger buffer.
+    if st.tok < 1 { return Status::BigPacket; }
+
+    // Shift buffer contents (discard everything up to the current lexeme).
+    st.buf.copy_within(st.tok..st.lim, 0);
+    st.lim \-= st.tok;
+    st.cur \-= st.tok;
+    st.mar = st.mar.overflowing_sub(st.tok).0; // underflows if marker is unused
+    st.tok = 0;
+
+    // Fill free space at the end of buffer with new data.
+    match st.file.read(&mut st.buf[st.lim..BUFSIZE \- 1]) { // \-1 for sentinel
+        Ok(n) => {
+            st.lim += n;
+            st.buf[st.lim] = 0; // append sentinel symbol
+        },
+        Err(why) => panic!("cannot read from file: {}", why)
+    }
+
+    return Status::Ready;
+}
+
+fn lex(st: &mut State, recv: &mut usize) \-> Status {
+    let mut yych;
+    \(aqlex: loop {
+        st.tok = st.cur;
+    /*!re2c
+        re2c:eof = 0;
+        re2c:define:YYCTYPE    = "u8";
+        re2c:define:YYPEEK     = "*st.buf.get_unchecked(st.cur)";
+        re2c:define:YYSKIP     = "st.cur += 1;";
+        re2c:define:YYBACKUP   = "st.mar = st.cur;";
+        re2c:define:YYRESTORE  = "st.cur = st.mar;";
+        re2c:define:YYLESSTHAN = "st.cur >= st.lim";
+        re2c:define:YYGETSTATE = "st.state";
+        re2c:define:YYSETSTATE = "st.state = @@;";
+        re2c:define:YYFILL     = "return Status::Waiting;";
+
+        packet = [a\-z]+[;];
+
+        *      { return Status::BadPacket; }
+        $      { return Status::End; }
+        packet { *recv += 1; continue \(aqlex; }
+    */}
+}
+
+fn test(packets: Vec<&[u8]>, expect: Status) {
+    // Create a "socket" (open the same file for reading and writing).
+    let fname = "pipe";
+    let mut fw: File = match File::create(fname) {
+        Err(why) => panic!("cannot open {}: {}", fname, why),
+        Ok(file) => file,
+    };
+    let fr: File = match File::open(fname) {
+        Err(why) => panic!("cannot read file {}: {}", fname, why),
+        Ok(file) => file,
+    };
+
+    // Initialize lexer state: \(gastate\(ga value is \-1, all offsets are at the end
+    // of buffer, the character at \(galim\(ga offset is the sentinel (null).
+    let lim = BUFSIZE \- 1;
+    let mut state = State {
+        file: fr,
+        // Sentinel (at \(galim\(ga offset) is set to null, which triggers YYFILL.
+        buf: [0; BUFSIZE],
+        cur: lim,
+        mar: lim,
+        tok: lim,
+        lim: lim,
+        state: \-1,
+    };
+
+    // Main loop. The buffer contains incomplete data which appears packet by
+    // packet. When the lexer needs more input it saves its internal state and
+    // returns to the caller which should provide more input and resume lexing.
+    let mut status;
+    let mut send = 0;
+    let mut recv = 0;
+    loop {
+        status = lex(&mut state, &mut recv);
+        if status == Status::End {
+            log!("done: got {} packets", recv);
+            break;
+        } else if status == Status::Waiting {
+            log!("waiting...");
+            if send < packets.len() {
+                log!("sent packet {}", send);
+                match fw.write_all(packets[send]) {
+                    Err(why) => panic!("cannot write to {}: {}", fname, why),
+                    Ok(_) => send += 1,
+                }
+            }
+            status = fill(&mut state);
+            log!("queue: \(aq{}\(aq", String::from_utf8_lossy(&state.buf));
+            if status == Status::BigPacket {
+                log!("error: packet too big");
+                break;
+            }
+            assert_eq!(status, Status::Ready);
+        } else {
+            assert_eq!(status, Status::BadPacket);
+            log!("error: ill\-formed packet");
+            break;
+        }
+    }
+
+    // Check results.
+    assert_eq!(status, expect);
+    if status == Status::End { assert_eq!(recv, send); }
+
+    // Cleanup: remove input file.
+    match std::fs::remove_file(fname) {
+        Err(why) => panic!("cannot remove {}: {}", fname, why),
+        Ok(_) => {}
+    }
+}
+
+fn main() {
+    test(vec![], Status::End);
+    test(vec![b"zero;", b"one;", b"two;", b"three;", b"four;"], Status::End);
+    test(vec![b"zer0;"], Status::BadPacket);
+    test(vec![b"goooooooooogle;"], Status::BigPacket);
+}
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH REUSABLE BLOCKS
+.sp
+Reusable blocks are re2c blocks that can be reused any number of times and
+combined with other re2c blocks. They are defined with
+\fB/*!rules:re2c[:<name>] ... */\fP (the \fB<name>\fP is optional). A rules block
+can be used in two contexts: either in a use block, or in a use directive inside
+of another block. The code for a rules block is generated at every point of use.
+.sp
+Use blocks are defined with \fB/*!use:re2c[:<name>] ... */\fP\&. The \fB<name>\fP
+is optional; if not specified, the associated rules block is the most recent one
+(whether named or unnamed). A use block can add named definitions,
+configurations and rules of its own.
+An important use case for use blocks is a lexer that supports multiple input
+encodings: the same rules block is reused multiple times with encoding\-specific
+configurations (see the example below).
+.sp
+In\-block use directive \fB!use:<name>;\fP can be used from inside of a re2c
+block. It merges the referenced block \fB<name>\fP into the current one. If some
+of the merged rules and configurations overlap with the previously defined ones,
+conflicts are resolved in the usual way: the earliest rule takes priority, and
+latest configuration overrides preceding ones. One exception are the special
+rules \fB*\fP, \fB$\fP and (in condition mode) \fB<!>\fP, for which a block\-local
+definition overrides any inherited ones. Use directive allows one to combine
+different re2c blocks together in one block (see the example below).
+.sp
+Named blocks and in\-block use directive were added in re2c version 2.2.
+Since that version reusable blocks are allowed by default (no special option
+is needed). Before version 2.2 reuse mode was enabled with \fB\-r \-\-reusable\fP
+option. Before version 1.2 reusable blocks could not be mixed with normal
+blocks.
+.SS Example of a \fB!use\fP directive
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+// re2rust $INPUT \-o $OUTPUT
+
+// This example shows how to combine reusable re2c blocks: two blocks
+// (\(aqcolors\(aq and \(aqfish\(aq) are merged into one. The \(aqsalmon\(aq rule occurs
+// in both blocks; the \(aqfish\(aq block takes priority because it is used
+// earlier. Default rule * occurs in all three blocks; the local (not
+// inherited) definition takes priority.
+
+#[derive(Debug, PartialEq)]
+enum Ans { Color, Fish, Dunno }
+
+/*!rules:re2c:colors
+    *                            { panic!("ah"); }
+    "red" | "salmon" | "magenta" { return Ans::Color; }
+*/
+
+/*!rules:re2c:fish
+    *                            { panic!("oh"); }
+    "haddock" | "salmon" | "eel" { return Ans::Fish; }
+*/
+
+fn lex(str: &[u8]) \-> Ans {
+    let (mut cur, mut mar) = (0, 0);
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE   = u8;
@@ -2331,96 +2783,65 @@ fn lex(str: &[u8]) \-> Num {
         re2c:define:YYBACKUP  = "mar = cur;";
         re2c:define:YYRESTORE = "cur = mar;";
 
-        *      { return Num::NaN; }
-        number { return Num::Int; }
-        !include "extra_rules.re.inc";
+        !use:fish;
+        !use:colors;
+        * { return Ans::Dunno; }  // overrides inherited \(aq*\(aq rules
     */
 }
 
 fn main() {
-    assert_eq!(lex(b"123\e0"), Num::Int);
-    assert_eq!(lex(b"123.4567\e0"), Num::Float);
+    assert_eq!(lex(b"salmon"), Ans::Fish);
+    assert_eq!(lex(b"what?"), Ans::Dunno);
 }
 
 .ft P
 .fi
 .UNINDENT
 .UNINDENT
-.SH HEADER FILES
-.sp
-Re2c allows one to generate header file from the input \fB\&.re\fP file using option
-\fB\-t\fP, \fB\-\-type\-header\fP or configuration \fBre2c:flags:type\-header\fP and
-directives \fB/*!header:re2c:on*/\fP and \fB/*!header:re2c:off*/\fP\&. The first directive
-marks the beginning of header file, and the second directive marks the end of
-it. Everything between these directives is processed by re2c, and the generated
-code is written to the file specified by the \fB\-t \-\-type\-header\fP option (or
-\fBstdout\fP if this option was not used). Autogenerated header file may be needed
-in cases when re2c is used to generate definitions of constants, variables and
-structs that must be visible from other translation units.
-.sp
-Here is an example of generating a header file that contains definition of the
-lexer state with tag variables (the number variables depends on the regular
-grammar and is unknown to the programmer).
-.SS Input file
+.SS Example of a \fB/*!use:re2c ... */\fP block
 .INDENT 0.0
 .INDENT 3.5
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT \-\-header lexer/state.rs
+// re2rust $INPUT \-o $OUTPUT \-\-input\-encoding utf8
 
-mod lexer;
-use lexer::state::State; // the module is generated by re2c
+// This example supports multiple input encodings: UTF\-8 and UTF\-32.
+// Both lexers are generated from the same rules block, and the use
+// blocks add only encoding\-specific configurations.
+/*!rules:re2c
+    re2c:yyfill:enable = 0;
+    re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
+    re2c:define:YYSKIP    = "cur += 1;";
+    re2c:define:YYBACKUP  = "mar = cur;";
+    re2c:define:YYRESTORE = "cur = mar;";
 
-/*!header:re2c:on*/
-pub struct State<\(aqa> {
-    pub str: &\(aqa [u8],
-    pub cur: usize,
-    /*!stags:re2c format = "pub @@: usize,"; */
+    "∀x ∃y" { return Some(cur); }
+    *       { return None; }
+*/
+
+fn lex_utf8(str: &[u8]) \-> Option<usize> {
+    let (mut cur, mut mar) = (0, 0);
+    /*!use:re2c
+        re2c:encoding:utf8 = 1;
+        re2c:define:YYCTYPE = u8;
+    */
 }
-/*!header:re2c:off*/
 
-fn lex(st: &mut State) \-> usize {
-    let t: usize;
-    /*!re2c
-        re2c:header = "lexer/state.rs";
-        re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = "u8";
-        re2c:define:YYPEEK  = "*st.str.get_unchecked(st.cur)";
-        re2c:define:YYSKIP  = "st.cur += 1;";
-        re2c:define:YYSTAGP = "@@ = st.cur;";
-        re2c:tags = 1;
-        re2c:tags:expression = "st.@@";
-
-        [a]* @t [b]* { return t; }
+fn lex_utf32(str: &[u32]) \-> Option<usize> {
+    let (mut cur, mut mar) = (0, 0);
+    /*!use:re2c
+        re2c:encoding:utf32 = 1;
+        re2c:define:YYCTYPE = u32;
     */
 }
 
 fn main() {
-    let mut st = State {
-        str: b"ab\e0",
-        cur: 0,
-        /*!stags:re2c format = "@@: 0,"; */
-    };
-    assert_eq!(lex(&mut st), 1);
-}
+    let s8 = vec![0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79];
+    assert_eq!(lex_utf8(&s8), Some(s8.len()));
 
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.SS Header file
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-/* Generated by re2c */
-
-pub struct State<\(aqa> {
-    pub str: &\(aqa [u8],
-    pub cur: usize,
-    pub yyt1: usize,
+    let s32 = vec![0x2200, 0x78, 0x20, 0x2203, 0x79];
+    assert_eq!(lex_utf32(&s32), Some(s32.len()));
 }
 
 .ft P
@@ -2429,7 +2850,7 @@ pub struct State<\(aqa> {
 .UNINDENT
 .SH SUBMATCH EXTRACTION
 .sp
-Re2c has two options for submatch extraction.
+re2c has two options for submatch extraction.
 .sp
 The first option is \fB\-T \-\-tags\fP\&. With this option one can use standalone tags
 of the form \fB@stag\fP and \fB#mtag\fP, where \fBstag\fP and \fBmtag\fP are arbitrary
@@ -2449,7 +2870,7 @@ beginning and the end of capturing groups; the whole regular expression is group
 number zero. The number of groups for the matching rule is stored in a variable
 \fByynmatch\fP, and submatch results are stored in \fByypmatch\fP array. Both
 \fByynmatch\fP and \fByypmatch\fP should be defined by the user, and \fByypmatch\fP
-size must be at least \fB[yynmatch * 2]\fP\&. Re2c provides a directive
+size must be at least \fB[yynmatch * 2]\fP\&. re2c provides a directive
 \fB/*!maxnmatch:re2c*/\fP that defines \fBYYMAXNMATCH\fP: a constant  equal to the
 maximal value of \fByynmatch\fP among all rules. Note that re2c implements
 POSIX\-compliant disambiguation: each subexpression matches as long as possible,
@@ -2481,10 +2902,10 @@ tag variables).
 S\-tags support the following operations:
 .INDENT 0.0
 .IP \(bu 2
-save input position to an s\-tag: \fBt = YYCURSOR\fP with default API or a
+save input position to an s\-tag: \fBt = YYCURSOR\fP with C pointer API or a
 user\-defined operation \fBYYSTAGP(t)\fP with generic API
 .IP \(bu 2
-save default value to an s\-tag: \fBt = NULL\fP with default API or a
+save default value to an s\-tag: \fBt = NULL\fP with C pointer API or a
 user\-defined operation \fBYYSTAGN(t)\fP with generic API
 .IP \(bu 2
 copy one s\-tag to another: \fBt1 = t2\fP
@@ -2914,405 +3335,61 @@ fn main() {
 .fi
 .UNINDENT
 .UNINDENT
-.SH STORABLE STATE
-.sp
-With \fB\-f\fP \fB\-\-storable\-state\fP option re2c generates a lexer that can store
-its current state, return to the caller, and later resume operations exactly
-where it left off. The default mode of operation in re2c is a "pull" model,
-in which the lexer "pulls" more input whenever it needs it. This may be
-unacceptable in cases when the input becomes available piece by piece (for
-example, if the lexer is invoked by the parser, or if the lexer program
-communicates via a socket protocol with some other program that must wait for a
-reply from the lexer before it transmits the next message). Storable state
-feature is intended exactly for such cases: it allows one to generate lexers that
-work in a "push" model. When the lexer needs more input, it stores its state and
-returns to the caller. Later, when more input becomes available, the caller
-resumes the lexer exactly where it stopped. There are a few changes necessary
-compared to the "pull" model:
-.INDENT 0.0
-.IP \(bu 2
-Define \fBYYSETSTATE()\fP and \fBYYGETSTATE(state)\fP promitives.
-.IP \(bu 2
-Define \fByych\fP, \fByyaccept\fP and \fBstate\fP variables as a part of persistent
-lexer state. The \fBstate\fP variable should be initialized to \fB\-1\fP\&.
-.IP \(bu 2
-\fBYYFILL\fP should return to the outer program instead of trying to supply more
-input. Return code should indicate that lexer needs more input.
-.IP \(bu 2
-The outer program should recognize situations when lexer needs more input and
-respond appropriately.
-.IP \(bu 2
-Use \fB/*!getstate:re2c*/\fP directive if it is necessary to execute any code
-before entering the lexer.
-.IP \(bu 2
-Use configurations \fBstate:abort\fP and \fBstate:nextlabel\fP to further tweak
-the generated code.
-.UNINDENT
-.sp
-Here is an example of a "push"\-model lexer that reads input from \fBstdin\fP and
-expects a sequence of words separated by spaces and newlines. The lexer loops
-forever, waiting for more input. It can be terminated by sending a special EOF
-token \-\-\- a word "stop", in which case the lexer terminates successfully and
-prints the number of words it has seen. Abnormal termination happens in case of
-a syntax error, premature end of input (without the "stop" word) or in case the
-buffer is too small to hold a lexeme (for example, if one of the words exceeds
-buffer size). Premature end of input happens in case the lexer fails to read any
-input while being in the initial state \-\-\- this is the only case when EOF rule
-matches. Note that the lexer may call \fBYYFILL\fP twice before terminating (and
-thus require hitting \fBCtrl+D\fP a few times). First time \fBYYFILL\fP is called
-when the lexer expects continuation of the current greedy lexeme (either a word
-or a whitespace sequence). If \fBYYFILL\fP fails, the lexer knows that it has
-reached the end of the current lexeme and executes the corresponding semantic
-action. The action jumps to the beginning of the loop, the lexer enters the
-initial state and calls \fBYYFILL\fP once more. If it fails, the lexer matches EOF
-rule. (Alternatively EOF rule can be used for termination instead of a special
-EOF lexeme.)
-.SS Example
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-// re2rust $INPUT \-o $OUTPUT \-f
-
-use std::fs::File;
-use std::io::{Read, Write};
-
-const DEBUG: bool = false;
-macro_rules! log {
-    ($($fmt:expr)? $(, $args:expr)*) => {
-        if DEBUG { println!($($fmt)? $(, $args)*) }
-    }
-}
-
-// Use a small buffer to cover the case when a lexeme doesn\(aqt fit.
-// In real world use a larger buffer.
-const BUFSIZE: usize = 10;
-
-struct State {
-    file: File,
-    buf: [u8; BUFSIZE],
-    lim: usize,
-    cur: usize,
-    mar: usize,
-    tok: usize,
-    state: isize,
-}
-
-#[derive(Debug, PartialEq)]
-enum Status {End, Ready, Waiting, BadPacket, BigPacket}
-
-fn fill(st: &mut State) \-> Status {
-    // Error: lexeme too long. In real life can reallocate a larger buffer.
-    if st.tok < 1 { return Status::BigPacket; }
-
-    // Shift buffer contents (discard everything up to the current lexeme).
-    st.buf.copy_within(st.tok..st.lim, 0);
-    st.lim \-= st.tok;
-    st.cur \-= st.tok;
-    st.mar = st.mar.overflowing_sub(st.tok).0; // underflows if marker is unused
-    st.tok = 0;
-
-    // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.buf[st.lim..BUFSIZE \- 1]) { // \-1 for sentinel
-        Ok(n) => {
-            st.lim += n;
-            st.buf[st.lim] = 0; // append sentinel symbol
-        },
-        Err(why) => panic!("cannot read from file: {}", why)
-    }
-
-    return Status::Ready;
-}
-
-fn lex(st: &mut State, recv: &mut usize) \-> Status {
-    let mut yych;
-    \(aqlex: loop {
-        st.tok = st.cur;
-    /*!re2c
-        re2c:eof = 0;
-        re2c:define:YYCTYPE    = "u8";
-        re2c:define:YYPEEK     = "*st.buf.get_unchecked(st.cur)";
-        re2c:define:YYSKIP     = "st.cur += 1;";
-        re2c:define:YYBACKUP   = "st.mar = st.cur;";
-        re2c:define:YYRESTORE  = "st.cur = st.mar;";
-        re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-        re2c:define:YYGETSTATE = "st.state";
-        re2c:define:YYSETSTATE = "st.state = @@;";
-        re2c:define:YYFILL     = "return Status::Waiting;";
-
-        packet = [a\-z]+[;];
-
-        *      { return Status::BadPacket; }
-        $      { return Status::End; }
-        packet { *recv += 1; continue \(aqlex; }
-    */}
-}
-
-fn test(packets: Vec<&[u8]>, expect: Status) {
-    // Create a "socket" (open the same file for reading and writing).
-    let fname = "pipe";
-    let mut fw: File = match File::create(fname) {
-        Err(why) => panic!("cannot open {}: {}", fname, why),
-        Ok(file) => file,
-    };
-    let fr: File = match File::open(fname) {
-        Err(why) => panic!("cannot read file {}: {}", fname, why),
-        Ok(file) => file,
-    };
-
-    // Initialize lexer state: \(gastate\(ga value is \-1, all offsets are at the end
-    // of buffer, the character at \(galim\(ga offset is the sentinel (null).
-    let lim = BUFSIZE \- 1;
-    let mut state = State {
-        file: fr,
-        // Sentinel (at \(galim\(ga offset) is set to null, which triggers YYFILL.
-        buf: [0; BUFSIZE],
-        cur: lim,
-        mar: lim,
-        tok: lim,
-        lim: lim,
-        state: \-1,
-    };
-
-    // Main loop. The buffer contains incomplete data which appears packet by
-    // packet. When the lexer needs more input it saves its internal state and
-    // returns to the caller which should provide more input and resume lexing.
-    let mut status;
-    let mut send = 0;
-    let mut recv = 0;
-    loop {
-        status = lex(&mut state, &mut recv);
-        if status == Status::End {
-            log!("done: got {} packets", recv);
-            break;
-        } else if status == Status::Waiting {
-            log!("waiting...");
-            if send < packets.len() {
-                log!("sent packet {}", send);
-                match fw.write_all(packets[send]) {
-                    Err(why) => panic!("cannot write to {}: {}", fname, why),
-                    Ok(_) => send += 1,
-                }
-            }
-            status = fill(&mut state);
-            log!("queue: \(aq{}\(aq", String::from_utf8_lossy(&state.buf));
-            if status == Status::BigPacket {
-                log!("error: packet too big");
-                break;
-            }
-            assert_eq!(status, Status::Ready);
-        } else {
-            assert_eq!(status, Status::BadPacket);
-            log!("error: ill\-formed packet");
-            break;
-        }
-    }
-
-    // Check results.
-    assert_eq!(status, expect);
-    if status == Status::End { assert_eq!(recv, send); }
-
-    // Cleanup: remove input file.
-    match std::fs::remove_file(fname) {
-        Err(why) => panic!("cannot remove {}: {}", fname, why),
-        Ok(_) => {}
-    }
-}
-
-fn main() {
-    test(vec![], Status::End);
-    test(vec![b"zero;", b"one;", b"two;", b"three;", b"four;"], Status::End);
-    test(vec![b"zer0;"], Status::BadPacket);
-    test(vec![b"goooooooooogle;"], Status::BigPacket);
-}
-
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.SH REUSABLE BLOCKS
-.sp
-Reusable blocks are re2c blocks that can be reused any number of times and
-combined with other re2c blocks. They are defined with
-\fB/*!rules:re2c[:<name>] ... */\fP (the \fB<name>\fP is optional). A rules block
-can be used in two contexts: either in a use block, or in a use directive inside
-of another block. The code for a rules block is generated at every point of use.
-.sp
-Use blocks are defined with \fB/*!use:re2c[:<name>] ... */\fP\&. The \fB<name>\fP
-is optional; if not specified, the associated rules block is the most recent one
-(whether named or unnamed). A use block can add named definitions,
-configurations and rules of its own.
-An important use case for use blocks is a lexer that supports multiple input
-encodings: the same rules block is reused multiple times with encoding\-specific
-configurations (see the example below).
-.sp
-In\-block use directive \fB!use:<name>;\fP can be used from inside of a re2c
-block. It merges the referenced block \fB<name>\fP into the current one. If some
-of the merged rules and configurations overlap with the previously defined ones,
-conflicts are resolved in the usual way: the earliest rule takes priority, and
-latest configuration overrides preceding ones. One exception are the special
-rules \fB*\fP, \fB$\fP and (in condition mode) \fB<!>\fP, for which a block\-local
-definition overrides any inherited ones. Use directive allows one to combine
-different re2c blocks together in one block (see the example below).
-.sp
-Named blocks and in\-block use directive were added in re2c version 2.2.
-Since that version reusable blocks are allowed by default (no special option
-is needed). Before version 2.2 reuse mode was enabled with \fB\-r \-\-reusable\fP
-option. Before version 1.2 reusable blocks could not be mixed with normal
-blocks.
-.SS Example of a \fB!use\fP directive
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-// re2rust $INPUT \-o $OUTPUT
-
-// This example shows how to combine reusable re2c blocks: two blocks
-// (\(aqcolors\(aq and \(aqfish\(aq) are merged into one. The \(aqsalmon\(aq rule occurs
-// in both blocks; the \(aqfish\(aq block takes priority because it is used
-// earlier. Default rule * occurs in all three blocks; the local (not
-// inherited) definition takes priority.
-
-#[derive(Debug, PartialEq)]
-enum Ans { Color, Fish, Dunno }
-
-/*!rules:re2c:colors
-    *                            { panic!("ah"); }
-    "red" | "salmon" | "magenta" { return Ans::Color; }
-*/
-
-/*!rules:re2c:fish
-    *                            { panic!("oh"); }
-    "haddock" | "salmon" | "eel" { return Ans::Fish; }
-*/
-
-fn lex(str: &[u8]) \-> Ans {
-    let (mut cur, mut mar) = (0, 0);
-    /*!re2c
-        re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP    = "cur += 1;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
-
-        !use:fish;
-        !use:colors;
-        * { return Ans::Dunno; }  // overrides inherited \(aq*\(aq rules
-    */
-}
-
-fn main() {
-    assert_eq!(lex(b"salmon"), Ans::Fish);
-    assert_eq!(lex(b"what?"), Ans::Dunno);
-}
-
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.SS Example of a \fB/*!use:re2c ... */\fP block
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-// re2rust $INPUT \-o $OUTPUT \-\-input\-encoding utf8
-
-// This example supports multiple input encodings: UTF\-8 and UTF\-32.
-// Both lexers are generated from the same rules block, and the use
-// blocks add only encoding\-specific configurations.
-/*!rules:re2c
-    re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-    re2c:define:YYSKIP    = "cur += 1;";
-    re2c:define:YYBACKUP  = "mar = cur;";
-    re2c:define:YYRESTORE = "cur = mar;";
-
-    "∀x ∃y" { return Some(cur); }
-    *       { return None; }
-*/
-
-fn lex_utf8(str: &[u8]) \-> Option<usize> {
-    let (mut cur, mut mar) = (0, 0);
-    /*!use:re2c
-        re2c:encoding:utf8 = 1;
-        re2c:define:YYCTYPE = u8;
-    */
-}
-
-fn lex_utf32(str: &[u32]) \-> Option<usize> {
-    let (mut cur, mut mar) = (0, 0);
-    /*!use:re2c
-        re2c:encoding:utf32 = 1;
-        re2c:define:YYCTYPE = u32;
-    */
-}
-
-fn main() {
-    let s8 = vec![0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79];
-    assert_eq!(lex_utf8(&s8), Some(s8.len()));
-
-    let s32 = vec![0x2200, 0x78, 0x20, 0x2203, 0x79];
-    assert_eq!(lex_utf32(&s32), Some(s32.len()));
-}
-
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
 .SH ENCODING SUPPORT
 .sp
-Speaking of encodings, it is necessary to understand the difference between code points and code units.
-Code point is an abstract symbol.
-Code unit is the smallest atomic unit of storage in the encoded text.
-A single code point may be represented with one or more code units.
-In a fixed\-length encoding all code points are represented with the same number of code units.
-In a variable\-length encoding code points may be represented with a different number of code units.
-Note that the "any" rule \fB[^]\fP matches any code point, but not necessarily any code unit.
-The only way to match any code unit regardless of the encoding it the default rule \fB*\fP\&.
-\fBYYCTYPE\fP size should be equal to the size of code unit.
-.sp
-Re2c supports the following encodings: ASCII, EBCDIC, UCS2, UTF8, UTF16 and UTF32.
+It is necessary to understand the difference between \fBcode points\fP and
+\fBcode units\fP\&. A code point is a numeric identifier of a symbol. A code unit is
+the smallest unit of storage in the encoded text. A single code point may be
+represented with one or more code units. In a fixed\-length encoding all code
+points are represented with the same number of code units. In a variable\-length
+encoding code points may be represented with a different number of code units.
+Note that the "any" rule \fB[^]\fP matches any code point, but not necessarily
+any code unit (the only way to match any code unit regardless of the encoding
+is the default rule \fB*\fP).
+The generated lexer works with a stream of code units: \fByych\fP stores a code
+unit, and \fBYYCTYPE\fP is the code unit type. Regular expressions, on the other
+hand, are specified in terms of code points. When re2c compiles regular
+expressions to automata it translates code points to code units. This is
+generally not a simple mapping: in variable\-length encodings a single code point
+range may get translated to a complex code unit graph.
+The following encodings are supported:
 .INDENT 0.0
 .IP \(bu 2
-ASCII is enabled by default.
-It is a fixed\-length encoding with code space [0\-255] and 1\-byte code points
+\fBASCII\fP (enabled by default). It is a fixed\-length encoding with code space
+\fB[0\-255]\fP and 1\-byte code points and code units.
+.IP \(bu 2
+\fBEBCDIC\fP (enabled with \fB\-\-ebcdic\fP or \fBre2c:encoding:ebcdic\fP). It is a
+fixed\-length encoding with code space \fB[0\-255]\fP and 1\-byte code points and
+code units.
+.IP \(bu 2
+\fBUCS2\fP (enabled with \fB\-\-ucs2\fP or \fBre2c:encoding:ucs2\fP). It is a
+fixed\-length encoding with code space \fB[0\-0xFFFF]\fP and 2\-byte code points
 and code units.
 .IP \(bu 2
-EBCDIC is enabled with \fB\-e, \-\-ecb\fP option.
-It a fixed\-length encoding with code space [0\-255] and 1\-byte code points
-and code units.
+\fBUTF8\fP (enabled with \fB\-\-utf8\fP or \fBre2c:encoding:utf8\fP). It is a
+variable\-length Unicode encoding. Code unit size is 1 byte. Code points are
+represented with 1 \-\- 4 code units.
 .IP \(bu 2
-UCS2 is enabled with \fB\-w, \-\-wide\-chars\fP option.
-It is a fixed\-length encoding with code space [0\-0xFFFF] and 2\-byte code
+\fBUTF16\fP (enabled with \fB\-\-utf16\fP or \fBre2c:encoding:utf16\fP). It is a
+variable\-length Unicode encoding. Code unit size is 2 bytes. Code points are
+represented with 1 \-\- 2 code units.
+.IP \(bu 2
+\fBUTF32\fP (enabled with \fB\-\-utf32\fP or \fBre2c:encoding:utf32\fP). It is a
+fixed\-length Unicode encoding with code space \fB[0\-0x10FFFF]\fP and 4\-byte code
 points and code units.
-.IP \(bu 2
-UTF8 is enabled with \fB\-8, \-\-utf\-8\fP option.
-It is a variable\-length Unicode encoding with code space [0\-0x10FFFF].
-Code points are represented with one, two, three or four 1\-byte code units.
-.IP \(bu 2
-UTF16 is enabled with \fB\-x, \-\-utf\-16\fP option.
-It is a variable\-length Unicode encoding with code space [0\-0x10FFFF].
-Code points are represented with one or two 2\-byte code units.
-.IP \(bu 2
-UTF32 is enabled with \fB\-u, \-\-unicode\fP option.
-It is a fixed\-length Unicode encoding with code space [0\-0x10FFFF] and 4\-byte
-code points and code units.
 .UNINDENT
 .sp
-Encodings can also be set or unset using \fBre2c:flags\fP configuration,
-for example \fBre2c:flags:8 = 1;\fP enables UTF8.
+Include file \fBinclude/unicode_categories.re\fP provides re2c definitions for the
+standard Unicode categories.
 .sp
-Include file \fBinclude/unicode_categories.re\fP provides re2c definitions for the standard Unicode categories.
+Option \fB\-\-input\-encoding\fP specifies source file encoding, which can be used to
+enable Unicode literals in regular expressions. For example
+\fB\-\-input\-encoding utf8\fP tells re2c that the source file is in UTF8 (it differs
+from \fB\-\-utf8\fP which sets input text encoding). Option \fB\-\-encoding\-policy\fP
+specifies the way re2c handles Unicode surrogates (code points in range
+\fB[0xD800\-0xDFFF]\fP).
 .sp
-Option \fB\-\-input\-encoding utf8\fP enables Unicode literals in regular expressions.
-.sp
-Option \fB\-\-encoding\-policy <fail | substitute | ignore>\fP
-specifies the way re2c handles Unicode surrogates: code points in the range [0xD800\-0xDFFF].
-.SS Example
+Below is an example of a lexer for UTF8 encoded Unicode identifiers.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -3351,125 +3428,168 @@ fn main() {
 .fi
 .UNINDENT
 .UNINDENT
-.SH START CONDITIONS
+.SH INCLUDE FILES
 .sp
-Conditions are enabled with \fB\-c\fP \fB\-\-conditions\fP\&.
-This option allows one to encode multiple interrelated lexers within the same re2c block.
-.sp
-Each lexer corresponds to a single condition.
-It starts with a label of the form \fByyc_name\fP,
-where \fBname\fP is condition name
-and \fByyc\fP prefix can be adjusted with configuration \fBre2c:condprefix\fP\&.
-Different lexers are separated with a comment \fB/* *********************************** */\fP
-which can be adjusted with configuration \fBre2c:cond:divider\fP\&.
-.sp
-Furthermore, each condition has a unique identifier of the form \fByycname\fP,
-where \fBname\fP is condition name
-and \fByyc\fP prefix can be adjusted with configuration \fBre2c:condenumprefix\fP\&.
-Identifiers have the type \fBYYCONDTYPE\fP and should be generated with \fB/*!types:re2c*/\fP directive or \fB\-t\fP \fB\-\-type\-header\fP option.
-Users shouldn\(aqt define these identifiers manually, as the order of conditions is not specified.
-.sp
-Before all conditions re2c generates entry code that checks the current condition identifier
-and transfers control flow to the start label of the active condition.
-After matching some rule of this condition,
-lexer may either transfer control flow back to the entry code (after executing the associated action and optionally setting another condition with \fB=>\fP),
-or use \fB:=>\fP shortcut and transition directly to the start label of another condition (skipping the action and the entry code).
-Configuration \fBre2c:cond:goto\fP allows one to change the default behavior.
-.sp
-Syntactically each rule must be preceded with a list of comma\-separated condition names or a wildcard \fB*\fP
-enclosed in angle brackets \fB<\fP and \fB>\fP\&.
-Wildcard means "any condition" and is semantically equivalent to listing all condition names.
-Here \fBregexp\fP is a regular expression, \fBdefault\fP refers to the default rule \fB*\fP,
-and \fBaction\fP is a block of code.
-.INDENT 0.0
-.IP \(bu 2
-\fB<conditions\-or\-wildcard>  regexp\-or\-default                 action\fP
-.IP \(bu 2
-\fB<conditions\-or\-wildcard>  regexp\-or\-default  =>  condition  action\fP
-.IP \(bu 2
-\fB<conditions\-or\-wildcard>  regexp\-or\-default  :=> condition\fP
-.UNINDENT
-.sp
-Rules with an exclamation mark \fB!\fP in front of condition list have a special meaning:
-they have no regular expression,
-and the associated action is merged as an entry code to actions of normal rules.
-This might be a convenient place to peform a routine task that is common to all rules.
-.INDENT 0.0
-.IP \(bu 2
-\fB<!conditions\-or\-wildcard>  action\fP
-.UNINDENT
-.sp
-Another special form of rules with an empty condition list \fB<>\fP and no regular expression
-allows one to specify an "entry condition" that can be used to execute code before entering the lexer.
-It is semantically equivalent to a condition with number zero, name \fB0\fP and an empty regular expression.
-.INDENT 0.0
-.IP \(bu 2
-\fB<>                 action\fP
-.IP \(bu 2
-\fB<>  =>  condition  action\fP
-.IP \(bu 2
-\fB<>  :=> condition\fP
-.UNINDENT
-.SS Example
+re2c allows one to include other files using directive \fB/*!include:re2c FILE */\fP
+or \fB!include FILE ;\fP, where \fBFILE\fP is a path to the file to be included.
+The first form should be used outside of re2c blocks, and the second form allows
+one to include a file in the middle of a re2c block. re2c looks for included
+files in the directory of the including file and in include locations, which
+can be specified with \fB\-I\fP option.
+Include directives in re2c work in the same way as C/C++ \fB#include\fP: the contents
+of \fBFILE\fP are copy\-pasted verbatim in place of the directive. Include files
+may have further includes of their own. Use \fB\-\-depfile\fP option to track build
+dependencies of the output file on include files.
+re2c provides some predefined include files that can be found in the
+\fBinclude/\fP subdirectory of the project. These files contain definitions that
+can be useful to other projects (such as Unicode categories) and form something
+like a standard library for re2c.
+Below is an example of using include directive.
+.SS Include file 1 (definitions.rs)
 .INDENT 0.0
 .INDENT 3.5
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT \-c
+#[derive(Debug, PartialEq)]
+enum Num { Int, Float, NaN }
 
-/*!types:re2c*/
+/*!re2c
+    number = [1\-9][0\-9]*;
+*/
 
-const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Include file 2 (extra_rules.re.inc)
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+// floating\-point numbers
+frac  = [0\-9]* "." [0\-9]+ | [0\-9]+ ".";
+exp   = \(aqe\(aq [+\-]? [0\-9]+;
+float = frac exp? | [0\-9]+ exp;
 
-// Add digit with the given base, checking for overflow.
-fn add(num: &mut u64, str: &[u8], cur: usize, offs: u8, base: u64) {
-    let digit = unsafe { str.get_unchecked(cur \- 1) } \- offs;
-    *num = std::cmp::min(*num * base + digit as u64, ERROR);
-}
+float { return Num::Float; }
 
-fn parse_u32(str: &[u8]) \-> Option<u32> {
-    let (mut cur, mut mar) = (0, 0);
-    let mut cond = YYC_INIT;
-    let mut num = 0u64; // Store number in u64 to simplify overflow checks.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Input file
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+// re2rust $INPUT \-o $OUTPUT
 
-    \(aqlex: loop {/*!re2c
+/*!include:re2c "definitions.rs" */
+
+fn lex(str: &[u8]) \-> Num {
+    let mut cur = 0;
+    let mut mar = 0;
+    /*!re2c
+        re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE   = u8;
         re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
         re2c:define:YYSKIP    = "cur += 1;";
         re2c:define:YYBACKUP  = "mar = cur;";
         re2c:define:YYRESTORE = "cur = mar;";
-        re2c:define:YYSHIFT   = "cur = (cur as isize + @@) as usize;";
-        re2c:define:YYGETCONDITION = "cond";
-        re2c:define:YYSETCONDITION = "cond = @@;";
-        re2c:yyfill:enable = 0;
 
-        <INIT> \(aq0b\(aq / [01]        :=> BIN
-        <INIT> "0"                :=> OCT
-        <INIT> "" / [1\-9]         :=> DEC
-        <INIT> \(aq0x\(aq / [0\-9a\-fA\-F] :=> HEX
-        <INIT> * { return None; }
-
-        <BIN> [01]  { add(&mut num, str, cur, 48, 2);  continue \(aqlex; }
-        <OCT> [0\-7] { add(&mut num, str, cur, 48, 8);  continue \(aqlex; }
-        <DEC> [0\-9] { add(&mut num, str, cur, 48, 10); continue \(aqlex; }
-        <HEX> [0\-9] { add(&mut num, str, cur, 48, 16); continue \(aqlex; }
-        <HEX> [a\-f] { add(&mut num, str, cur, 87, 16); continue \(aqlex; }
-        <HEX> [A\-F] { add(&mut num, str, cur, 55, 16); continue \(aqlex; }
-
-        <BIN, OCT, DEC, HEX> * {
-            return if num < ERROR { Some(num as u32) } else { None };
-        }
-    */}
+        *      { return Num::NaN; }
+        number { return Num::Int; }
+        !include "extra_rules.re.inc";
+    */
 }
 
 fn main() {
-    assert_eq!(parse_u32(b"\e0"), None);
-    assert_eq!(parse_u32(b"1234567890\e0"), Some(1234567890));
-    assert_eq!(parse_u32(b"0b1101\e0"), Some(13));
-    assert_eq!(parse_u32(b"0x7Fe\e0"), Some(2046));
-    assert_eq!(parse_u32(b"0644\e0"), Some(420));
-    assert_eq!(parse_u32(b"9999999999\e0"), None);
+    assert_eq!(lex(b"123\e0"), Num::Int);
+    assert_eq!(lex(b"123.4567\e0"), Num::Float);
+}
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH HEADER FILES
+.sp
+re2c allows one to generate header file from the input \fB\&.re\fP file using option
+\fB\-t\fP, \fB\-\-type\-header\fP or configuration \fBre2c:flags:type\-header\fP and
+directives \fB/*!header:re2c:on*/\fP and \fB/*!header:re2c:off*/\fP\&. The first directive
+marks the beginning of header file, and the second directive marks the end of
+it. Everything between these directives is processed by re2c, and the generated
+code is written to the file specified by the \fB\-t \-\-type\-header\fP option (or
+\fBstdout\fP if this option was not used). Autogenerated header file may be needed
+in cases when re2c is used to generate definitions of constants, variables and
+structs that must be visible from other translation units.
+.sp
+Here is an example of generating a header file that contains definition of the
+lexer state with tag variables (the number variables depends on the regular
+grammar and is unknown to the programmer).
+.SS Input file
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+// re2rust $INPUT \-o $OUTPUT \-\-header lexer/state.rs
+
+mod lexer;
+use lexer::state::State; // the module is generated by re2c
+
+/*!header:re2c:on*/
+pub struct State<\(aqa> {
+    pub str: &\(aqa [u8],
+    pub cur: usize,
+    /*!stags:re2c format = "pub @@: usize,"; */
+}
+/*!header:re2c:off*/
+
+fn lex(st: &mut State) \-> usize {
+    let t: usize;
+    /*!re2c
+        re2c:header = "lexer/state.rs";
+        re2c:yyfill:enable = 0;
+        re2c:define:YYCTYPE = "u8";
+        re2c:define:YYPEEK  = "*st.str.get_unchecked(st.cur)";
+        re2c:define:YYSKIP  = "st.cur += 1;";
+        re2c:define:YYSTAGP = "@@ = st.cur;";
+        re2c:tags = 1;
+        re2c:tags:expression = "st.@@";
+
+        [a]* @t [b]* { return t; }
+    */
+}
+
+fn main() {
+    let mut st = State {
+        str: b"ab\e0",
+        cur: 0,
+        /*!stags:re2c format = "@@: 0,"; */
+    };
+    assert_eq!(lex(&mut st), 1);
+}
+
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Header file
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+/* Generated by re2c */
+
+pub struct State<\(aqa> {
+    pub str: &\(aqa [u8],
+    pub cur: usize,
+    pub yyt1: usize,
 }
 
 .ft P
@@ -3501,7 +3621,7 @@ cases (the original code may be large or have a lot of dependencies).
 .sp
 The difficulty with generating input data is that for all but the most trivial
 cases the number of possible input strings is too large (even if the string
-length is limited). Re2c solves this difficulty by generating sufficiently
+length is limited). re2c solves this difficulty by generating sufficiently
 many strings to cover almost all DFA transitions. It uses the following
 algorithm. First, it constructs a skeleton of the DFA. For encodings with 1\-byte
 code unit size (such as ASCII, UTF\-8 and EBCDIC) skeleton is just an exact copy
@@ -3528,7 +3648,7 @@ You can find more information about re2c at the official website: \fI\%http://re
 Similar programs are flex(1), lex(1), quex(\fI\%http://quex.sourceforge.net\fP).
 .SH AUTHORS
 .sp
-Re2c was originaly written by Peter Bumbulis in 1993.
+re2c was originaly written by Peter Bumbulis in 1993.
 Since then it has been developed and maintained by multiple volunteers;
 mots notably, Brain Young, Marcus Boerger, Dan Nuffer and Ulya Trofimovich.
 .\" Generated by docutils manpage writer.

@@ -1,4 +1,4 @@
-Re2c allows one to generate header file from the input ``.re`` file using option
+re2c allows one to generate header file from the input ``.re`` file using option
 ``-t``, ``--type-header`` or configuration ``re2c:flags:type-header`` and
 directives ``/*!header:re2c:on*/`` and ``/*!header:re2c:off*/``. The first directive
 marks the beginning of header file, and the second directive marks the end of

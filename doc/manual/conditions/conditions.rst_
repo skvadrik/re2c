@@ -1,52 +1,77 @@
-Conditions are enabled with ``-c`` ``--conditions``.
-This option allows one to encode multiple interrelated lexers within the same re2c block.
+Start conditions are enabled with ``--start-conditions`` option. They provide a
+way to encode multiple interrelated automata within the same re2c block.
 
-Each lexer corresponds to a single condition.
-It starts with a label of the form ``yyc_name``,
-where ``name`` is condition name
-and ``yyc`` prefix can be adjusted with configuration ``re2c:condprefix``.
-Different lexers are separated with a comment ``/* *********************************** */``
-which can be adjusted with configuration ``re2c:cond:divider``.
+Each condition corresponds to a single automaton and has a unique name specified
+by the user and a unique internal number defined by re2c. The numbers are used
+to switch between conditions: the generated code uses ``YYGETCONDITION`` and
+``YYSETCONDITION`` primitives to get the current condition or set it to the
+given number. Use ``/*!conditions:re2c*/`` directive or the ``--header`` option
+to generate numeric condition identifiers. Configuration
+``re2c:cond:enumprefix`` specifies the generated identifier prefix.
 
-Furthermore, each condition has a unique identifier of the form ``yycname``,
-where ``name`` is condition name
-and ``yyc`` prefix can be adjusted with configuration ``re2c:condenumprefix``.
-Identifiers have the type ``YYCONDTYPE`` and should be generated with ``/*!types:re2c*/`` directive or ``-t`` ``--type-header`` option.
-Users shouldn't define these identifiers manually, as the order of conditions is not specified.
+In condition mode every rule must be prefixed with a list of comma-separated
+condition names in angle brackets, or a wildcard ``<*>`` to denote all
+conditions. The rule syntax is extended as follows:
 
-Before all conditions re2c generates entry code that checks the current condition identifier
-and transfers control flow to the start label of the active condition.
-After matching some rule of this condition,
-lexer may either transfer control flow back to the entry code (after executing the associated action and optionally setting another condition with ``=>``),
-or use ``:=>`` shortcut and transition directly to the start label of another condition (skipping the action and the entry code).
-Configuration ``re2c:cond:goto`` allows one to change the default behavior.
+    ``< cond-list > regexp action``
+        A rule that is merged to every condition on the ``cond-list``.
+        It matches ``regexp`` and executes the associated ``action``.
 
-Syntactically each rule must be preceded with a list of comma-separated condition names or a wildcard ``*``
-enclosed in angle brackets ``<`` and ``>``.
-Wildcard means "any condition" and is semantically equivalent to listing all condition names.
-Here ``regexp`` is a regular expression, ``default`` refers to the default rule ``*``,
-and ``action`` is a block of code.
+    ``< cond-list > regexp => cond action``
+        A rule that is merged to every condition on the ``cond-list``.
+        It matches ``regexp``, sets the current condition to ``cond`` and
+        executes the associated ``action``.
 
-*    ``<conditions-or-wildcard>  regexp-or-default                 action``
+    ``< cond-list > regexp :=> cond``
+        A rule that is merged to every condition on the ``cond-list``.
+        It matches ``regexp`` and immediately transitions to ``cond`` (there is
+        no semantic action).
 
-*    ``<conditions-or-wildcard>  regexp-or-default  =>  condition  action``
+    ``<! cond-list > action``
+        The ``action`` is prepended to semantic actions of all rules for every
+        condition on the ``cond-list``. This may be used to deduplicate common
+        code.
 
-*    ``<conditions-or-wildcard>  regexp-or-default  :=> condition``
+    ``< > action``
+        A rule that is merged to a special entry condition with number zero
+        and name ``"0"``. It matches empty string and executes the ``action``.
 
-Rules with an exclamation mark ``!`` in front of condition list have a special meaning:
-they have no regular expression,
-and the associated action is merged as an entry code to actions of normal rules.
-This might be a convenient place to peform a routine task that is common to all rules.
+    ``< > => cond action``
+        A rule that is merged to a special entry condition with number zero
+        and name ``"0"``. It matches empty string, sets the current condition to
+        ``cond`` and executes the ``action``.
 
-*    ``<!conditions-or-wildcard>  action``
+    ``< > :=> cond``
+        A rule that is merged to a special entry condition with number zero
+        and name ``"0"``. It matches empty string and immediately transitions to
+        ``cond``.
 
-Another special form of rules with an empty condition list ``<>`` and no regular expression
-allows one to specify an "entry condition" that can be used to execute code before entering the lexer.
-It is semantically equivalent to a condition with number zero, name ``0`` and an empty regular expression.
 
-*    ``<>                 action``
+The code re2c generates for conditions depends on whether re2c uses goto/label
+approach or loop/switch approach to encode the automata.
 
-*    ``<>  =>  condition  action``
+In languages that have ``goto`` statement (such as C/C++ and Go) conditions are
+naturally implemented as blocks of code prefixed with labels of the form
+``yyc_<cond>``, where ``cond`` is a condition name (label prefix can be changed
+with ``re2c:cond:prefix``). Transitions between conditions are implemented using
+``goto`` and condition labels. Before all conditions re2c generates an initial
+switch on ``YYGETSTATE`` that jumps to the start state of the current condition.
+The shortcut rules ``:=>`` bypass the initial switch and jump directly to the
+specified condition (``re2c:cond:goto`` can be used to change the default
+behavior). The rules with semantic actions do not automatically jump to the next
+condition; this should be done by the user-defined action code.
 
-*    ``<>  :=> condition``
+In languages that do not have ``goto`` (such as Rust) re2c reuses the
+``yystate`` variable to store condition numbers. Each condition gets a numeric
+identifier equal to the number of its start state, and a switch between
+conditions is no different than a switch between DFA states of a single
+condition. There is no need for a separate initial condition switch.
+(Since the same approach is used to implement storable states,
+``YYGETCONDITION``/``YYSETCONDITION`` are redundant if both storable states and
+conditions are used).
 
+The program below uses start conditions to parse binary, octal, decimal and
+hexadecimal numbers. There is a single block where each base has its own
+condition, and the initial condition is connected to all of them. User-defined
+variable ``cond`` stores the current condition number; it is initialized to the
+number of the initial condition generated with ``/*!conditions:re2c*/``.

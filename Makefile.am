@@ -219,6 +219,7 @@ re2c_CUSTOM = \
 re2c_SRC_DOC = doc/manpage.rst
 re2c_SRC_DOC_EXT = \
 	doc/manual/api/interface.rst_ \
+	doc/manual/conditions/blocks.rst_ \
 	doc/manual/conditions/conditions.rst_ \
 	doc/manual/configurations/configurations.rst_ \
 	doc/manual/directives/directives.rst_ \

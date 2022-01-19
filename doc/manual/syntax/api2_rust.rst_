@@ -38,19 +38,16 @@ be defined:
     ``re2c:api:style = functions;``. In this style primitives should be defined
     as functions or macros with parentheses, accepting the necessary arguments.
     This is well-suited for C macros or Go closures, but it cannot be used with
-    hygienic macros or functions in Rust, as the primitives need to access lexer
+    hygienic macros or functions in Rust as the primitives need to access lexer
     context that is not passed as an argument. It is possible to use closures,
-    but the borrow-checker restrictions make it hard. Generally it is better to
-    use free-form style.
-
-    The difficulty with closures and borrow-checker is that different primitives
-    must read and modify the same parts of lexer context in a series of
-    interleaved invocations. As a workaround, one can use Rust ``Cell`` type.
+    but the borrow-checker makes it hard because different primitives read and
+    modify the same parts of lexer context in a series of interleaved
+    invocations. As a workaround, one can use Rust ``Cell`` type.
     For example, if the input is a byte slice ``buffer: &[u8]`` and
-    ``cur: Cell::<usize>`` is the current input position, then ``YYPEEK`` and
+    ``cursor: Cell::<usize>`` is the current input position, then ``YYPEEK`` and
     ``YYSKIP`` can be defined as follows:
 
     .. code-block:: rust
 
-        let YYPEEK = || unsafe { *buffer.get_unchecked(cur.get()) };
-        let YYSKIP = || { cur.set(cur.get() + 1); };
+        let YYPEEK = || unsafe { *buffer.get_unchecked(cursor.get()) };
+        let YYSKIP = || { cursor.set(cur.get() + 1); };

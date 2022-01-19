@@ -6,7 +6,7 @@ buffering, the use of various features and so on.
 All the necessary primitives should be defined by the user in the form
 of macros, functions, variables, free-form pieces of code, or any other
 suitable form.
-Re2c does not (and cannot) check the definitions, so if anything is
+re2c does not (and cannot) check the definitions, so if anything is
 missing or defined incorrectly the generated code will not compile.
 
 ``YYCTYPE``
@@ -20,7 +20,7 @@ missing or defined incorrectly the generated code will not compile.
     pointer of type ``YYCTYPE*``). Initially ``YYCURSOR`` should point to the
     first input character. It is advanced by the generated code.
     When a rule matches, ``YYCURSOR`` points to the position after the
-    last matched character. It is used only in the default C API.
+    last matched character. It is used only in C pointer API.
 
 ``YYLIMIT``
     A pointer-like r-value that stores the end of input position (usually a
@@ -28,38 +28,34 @@ missing or defined incorrectly the generated code will not compile.
     position after the last available input character. It is not changed by the
     generated code. The lexer compares ``YYCURSOR`` to ``YYLIMIT``
     in order to determine if there are enough input characters left.
-    ``YYLIMIT`` is used only in the default C API.
+    ``YYLIMIT`` is used only in C pointer API.
 
 ``YYMARKER``
     A pointer-like l-value (usually a pointer of type ``YYCTYPE*``)
     that stores the position of the latest matched rule. It is used to
     restore the ``YYCURSOR`` position if the longer match fails and
     the lexer needs to rollback. Initialization is not
-    needed. ``YYMARKER`` is used only in the default C API.
+    needed. ``YYMARKER`` is used only in C pointer API.
 
 ``YYCTXMARKER``
     A pointer-like l-value that stores the position of the trailing context
     (usually a pointer of type ``YYCTYPE*``). No initialization is needed.
-    It is used only in the default C API, and only with the lookahead operator
+    It is used only in C pointer API, and only with the lookahead operator
     ``/``.
 
 ``YYFILL``
-    A generic API primitive with one argument ``len``. ``YYFILL`` requests
-    that the program provide at least ``len`` more input characters or
-    fail.
-    If an EOF rule is used, ``YYFILL`` should always return to the
-    calling function; the return value should be zero on success and
-    non-zero on failure.
-    If an EOF rule is not used, the ``YYFILL`` return value is ignored
-    and it should not return on failure.
-    The maximal value of ``len`` is ``YYMAXFILL``, which can be
-    generated with the ``/*!max:re2c*/`` directive. The definition of
-    ``YYFILL`` can be either function-like or free-form depending on
-    the API style (see ``re2c:api:style`` and
+    A generic API primitive with one argument ``len``.
+    ``YYFILL`` should provide at least ``len`` more input characters or fail.
+    If ``re2c:eof`` is used, then ``len`` is always ``1`` and  ``YYFILL`` should
+    always return to the calling function; zero return value indicates success.
+    If ``re2c:eof`` is not used, then ``YYFILL`` return value is ignored and it
+    should not return on failure. The maximum value of ``len`` is ``YYMAXFILL``.
+    The definition of ``YYFILL`` can be either function-like or free-form
+    depending on the API style (see ``re2c:api:style`` and
     ``re2c:define:YYFILL:naked``).
 
 ``YYMAXFILL``
-    An integral constant equal to the maximal value of the argument to
+    An integral constant equal to the maximum value of the argument to
     ``YYFILL``.  It can be generated with ``/*!max:re2c*/`` directive.
 
 ``YYLESSTHAN``
@@ -73,8 +69,8 @@ missing or defined incorrectly the generated code will not compile.
     A generic API primitive with no arguments.
     It should be defined as an r-value of type ``YYCTYPE`` that is equal to the
     character at the current input position. The definition can be either
-    function-like or free-form depending on the API style
-    (see ``re2c:api:style``).
+    function-like or free-form depending on the API style (see
+    ``re2c:api:style``).
 
 ``YYSKIP``
     A generic API primitive with no arguments.
@@ -119,35 +115,32 @@ missing or defined incorrectly the generated code will not compile.
     API style (see ``re2c:api:style``).
 
 ``YYSTAGP``
-    A generic API primitive with one argument ``tag``.
-    (``tag`` should represent a pointer or an offset, see the section
-    on submatch extraction for details.)
-    ``YYSTAGP`` should set the ``tag`` value to the current input
-    position.
+    A generic API primitive with one argument ``tag``, where ``tag`` can be a
+    pointer or an offset (see submatch extraction section for details).
+    ``YYSTAGP`` should set ``tag`` to the current input position.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYSTAGN``
-    A generic API primitive with one argument ``tag``.
-    (``tag`` should represent a pointer or an offset, see the section
-    on submatch extraction for details.)
-    ``YYSTAGN`` should to set the ``tag`` value to null (or
-    some default value).
+    A generic API primitive with one argument ``tag``, where ``tag`` can be a
+    pointer or an offset (see submatch extraction section for details).
+    ``YYSTAGN`` should to set ``tag`` to a value that represents non-existent
+    input position.
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYMTAGP``
     A generic API primitive with one argument ``tag``.
-    ``YYMTAGP`` should append the current position to the history
-    of ``tag``. (See the section on submatch extraction for details.)
+    ``YYMTAGP`` should append the current position to the submatch history of
+    ``tag`` (see the submatch extraction section for details.)
     The definition should be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 
 ``YYMTAGN``
     A generic API primitive with one argument ``tag``.
-    ``YYMTAGN`` should append null (or some other default) value
-    to the history of ``tag``.
-    (See the section on submatch extraction for details.)
+    ``YYMTAGN`` should append a value that represents non-existent input
+    position position to the submatch history of ``tag`` (see the submatch
+    extraction section for details.)
     The definition can be either function-like or free-form depending on the
     API style (see ``re2c:api:style``).
 

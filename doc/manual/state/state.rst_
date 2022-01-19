@@ -1,4 +1,4 @@
-With ``-f`` ``--storable-state`` option re2c generates a lexer that can store
+With ``--storable-state`` option re2c generates a lexer that can store
 its current state, return to the caller, and later resume operations exactly
 where it left off. The default mode of operation in re2c is a "pull" model,
 in which the lexer "pulls" more input whenever it needs it. This may be
@@ -12,10 +12,10 @@ returns to the caller. Later, when more input becomes available, the caller
 resumes the lexer exactly where it stopped. There are a few changes necessary
 compared to the "pull" model:
 
-* Define ``YYSETSTATE()`` and ``YYGETSTATE(state)`` promitives.
+* Define ``YYSETSTATE()`` and ``YYGETSTATE(state)`` primitives.
 
-* Define ``yych``, ``yyaccept`` and ``state`` variables as a part of persistent
-  lexer state. The ``state`` variable should be initialized to ``-1``.
+* Define ``yych``, ``yyaccept`` (if used) and ``state`` variables as a part of
+  persistent lexer state. The ``state`` variable should be initialized to ``-1``.
 
 * ``YYFILL`` should return to the outer program instead of trying to supply more
   input. Return code should indicate that lexer needs more input.
@@ -23,27 +23,20 @@ compared to the "pull" model:
 * The outer program should recognize situations when lexer needs more input and
   respond appropriately.
 
-* Use ``/*!getstate:re2c*/`` directive if it is necessary to execute any code
-  before entering the lexer.
+* Optionally use ``getstate:re2c`` to generate ``YYGETSTATE`` switch detached
+  from the main lexer. This only works for languages that have ``goto`` (not in
+  ``--loop-switch`` mode).
 
-* Use configurations ``state:abort`` and ``state:nextlabel`` to further tweak
-  the generated code.
+* Use ``re2c:eof`` and the `sentinel with bounds checks`_ method to handle the
+  end of input. Padding-based method may not work because it is unclear when to
+  append padding: the current end of input may not be the ultimate end of input,
+  and appending padding too early may cut off a partially read greedy lexeme.
+  Furthermore, due to high-level program logic getting more input may depend on
+  processing the lexeme at the end of buffer (which already is blocked due to
+  the end-of-input condition).
 
-Here is an example of a "push"-model lexer that reads input from ``stdin`` and
-expects a sequence of words separated by spaces and newlines. The lexer loops
-forever, waiting for more input. It can be terminated by sending a special EOF
-token --- a word "stop", in which case the lexer terminates successfully and
-prints the number of words it has seen. Abnormal termination happens in case of
-a syntax error, premature end of input (without the "stop" word) or in case the
-buffer is too small to hold a lexeme (for example, if one of the words exceeds
-buffer size). Premature end of input happens in case the lexer fails to read any
-input while being in the initial state --- this is the only case when EOF rule
-matches. Note that the lexer may call ``YYFILL`` twice before terminating (and
-thus require hitting ``Ctrl+D`` a few times). First time ``YYFILL`` is called
-when the lexer expects continuation of the current greedy lexeme (either a word
-or a whitespace sequence). If ``YYFILL`` fails, the lexer knows that it has
-reached the end of the current lexeme and executes the corresponding semantic
-action. The action jumps to the beginning of the loop, the lexer enters the
-initial state and calls ``YYFILL`` once more. If it fails, the lexer matches EOF
-rule. (Alternatively EOF rule can be used for termination instead of a special
-EOF lexeme.)
+Here is an example of a "push" model lexer that simulates reading packets from a
+socket. The lexer loops until it encounters the end of input and returns to the
+calling function. The calling function provides more input by "sending" the next
+packet and resumes lexing. This process stops when all the packets have been
+sent, or when there is an error.

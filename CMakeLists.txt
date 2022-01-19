@@ -241,6 +241,7 @@ re2c_bootstrap_parser("src/parse/parser.ypp" "src/parse/parser.cc" "src/parse/pa
 set(re2c_docs_sources
     "${re2c_manpage_source}"
     "doc/manual/api/interface.rst_"
+    "doc/manual/conditions/blocks.rst_"
     "doc/manual/conditions/conditions.rst_"
     "doc/manual/configurations/configurations.rst_"
     "doc/manual/directives/directives.rst_"

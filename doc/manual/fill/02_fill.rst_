@@ -4,7 +4,7 @@ YYFILL with padding
 In the default case (when EOF rule is not used) ``YYFILL`` is a function-like
 primitive that accepts a single argument and does not return any value.
 ``YYFILL`` invocation is triggered by condition ``(YYLIMIT - YYCURSOR) < n`` in
-default API and ``YYLESSTHAN(n)`` in generic API. The argument passed to
+C pointer API and ``YYLESSTHAN(n)`` in generic API. The argument passed to
 ``YYFILL`` is the minimal number of characters that must be supplied. If it
 fails to do so, ``YYFILL`` must not return to the lexer (for that reason it is
 best implemented as a macro that returns from the calling function on failure).

@@ -1,29 +1,28 @@
 
 The generated code interfaces with the outer program with the help of
 *primitives* -- symbolic names that can be defined as variables, functions or
-macros in the target language (collectively referred to as the API).
-The primitives should be defined by the user. This approach gives the user
-freedom and flexibility in customizing the lexer, but it also requires some
-understanding of how the lexer works in order to implement the primitives
-correctly and efficiently. The manual provides examples for the most popular
-use cases. For the full list of primitives see the `API primitives`_ section.
+macros in the target language (collectively referred to as the **API**).
+The definition of primitives is left for the user: this gives them both
+freedom in customizing the lexer and responsibility to understand how it works.
+Not all primitives have to be defined --- only those used by a given program.
+The manual provides definitions for the most popular use cases. For a full list
+of primitives and their meaning see the `API primitives`_ section.
 
 .. _generic_api:
 
-There are two kinds of API that define the set of primitives used by re2c:
+There are two API flavors that define the set of primitives used by re2c:
 
   **Pointer API**
-    This API is also called *default API*, since it was historically the first,
-    and for a long time the only one. This is a more restrictive API based on C
-    pointer arithmetic. It consists of pointer-like primitives ``YYCURSOR``,
-    ``YYMARKER``, ``YYCTXMARKER``, ``YYLIMIT`` (which are normally defined as
-    pointers of type ``YYCTYPE*``) and ``YYFILL``. Pointer API is enabled by
-    default for the C backend, and it cannot be used with backends that do not
-    support pointer arithmetic.
+    This API is based on C pointer arithmetic. It was historically the first,
+    and for a long time the only one. It consists of pointer-like primitives
+    ``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER``, ``YYLIMIT`` (which are normally
+    defined as pointers of type ``YYCTYPE*``) and ``YYFILL``. This API is
+    enabled by default for C, and it cannot be used with other backends that do
+    not support pointer arithmetic.
 
   **Generic API**
-    This is a more flexible API that does not assume pointer semantics. It
-    consists of primitives
+    This API is more flexible. It consists generic operations and does not
+    assume any particular implementation. The primitives are
     ``YYPEEK``,
     ``YYSKIP``,
     ``YYBACKUP``,
@@ -40,10 +39,7 @@ There are two kinds of API that define the set of primitives used by re2c:
     ``YYSHIFTMTAG``,
     ``YYLESSTHAN``
     and ``YYFILL``.
-    For the C backend generic API is enabled with ``--input custom`` option or
-    ``re2c:flags:input = custom;`` configuration; for the Go backend it is
-    enabled by default. Generic API was added in version 0.14. It is
-    intentionally designed to give the user as much freedom as possible in
-    redefining the input model and the semantics of different actions performed
-    by the generated code.
+    For the C backend generic API is enabled with ``--api custom`` option or
+    ``re2c:api = custom;`` configuration; for Go and Rust it is enabled by
+    default. Generic API was added in version 0.14.
 
