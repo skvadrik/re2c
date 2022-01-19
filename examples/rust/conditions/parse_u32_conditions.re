@@ -1,6 +1,6 @@
 // re2rust $INPUT -o $OUTPUT -c
 
-/*!types:re2c*/
+/*!conditions:re2c*/
 
 const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow
 
