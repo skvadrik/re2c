@@ -19,7 +19,7 @@ Skeleton programs are very useful for a number of reasons:
 
 The difficulty with generating input data is that for all but the most trivial
 cases the number of possible input strings is too large (even if the string
-length is limited). Re2c solves this difficulty by generating sufficiently
+length is limited). re2c solves this difficulty by generating sufficiently
 many strings to cover almost all DFA transitions. It uses the following
 algorithm. First, it constructs a skeleton of the DFA. For encodings with 1-byte
 code unit size (such as ASCII, UTF-8 and EBCDIC) skeleton is just an exact copy

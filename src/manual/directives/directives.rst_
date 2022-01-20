@@ -82,16 +82,19 @@ sections.
 
 ``/*!getstate:re2c[:<name1>[:<name2>...]] ... */``
     A directive that generates conditional dispatch on the lexer state (it
-    requires ``-f --storable-state`` option).
+    requires ``--storable-state`` option).
     An optional list of block names specifies which blocks should be included in
     the state dispatch. The default transition goes to the start label of the
     first block on the list. If the list is empty, all blocks are included, and
     the default transition goes to the first block in the file that has a start
     label.
+    This directive is incompatible with the ``--loop-switch`` option and Rust,
+    as it requires cross-block transitions that are unsupported without the
+    ``goto`` statement.
 
-``/*!types:re2c[:<name1>[:<name2>...]] ... */``
+``/*!conditions:re2c[:<name1>[:<name2>...]] ... */``, ``/*!types:re2c... */``
     A directive that generates condition enumeration (it requires
-    ``-c --conditions`` option).
+    ``--conditions`` option).
     An optional list of block names specifies which blocks should be included
     when computing the set of conditions (if the list is empty, all blocks are
     included).
@@ -127,5 +130,5 @@ sections.
     A block which contents are ignored and removed from the output file.
 
 ``%{ ... %}``
-    A global re2c block in ``-F --flex-support`` mode. This is deprecated and
+    A global re2c block in the ``--flex-support`` mode. This is deprecated and
     exists for backward compatibility.

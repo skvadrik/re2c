@@ -1,13 +1,12 @@
-Custom methods with generic API
--------------------------------
+Custom checks
+-------------
 
-In this example the lexer uses a custom end of input handling method based on generic API.
-The program counts single-quoted strings separated with spaces.
-It is the same as the `sentinel character with bounds checks`_ example,
-except that the input is not null-terminated
-(so this method can be used if it's not possible to have any padding at all, not even a single sentinel character).
-To cover up for the absence of sentinel character at the end of input,
-``YYPEEK`` is redefined to perform a bounds check before it reads the next input character.
-This is inefficient, because checks are done very often.
-If the check succeeds, ``YYPEEK`` returns the real character,
-otherwise it returns a fake sentinel character.
+This example uses a custom end-of-input handling method based on generic API.
+The program counts space-separated single-quoted strings. It is the same as the
+`sentinel with bounds checks`_ example, except that the input is not
+null-terminated (this method can be used if padding is not an option, not even a
+single character). To cover up for the absence of sentinel character at the end
+of input, ``YYPEEK`` is redefined to perform a bounds check before it reads the
+next input character. This is inefficient because checks are done very often. If
+the check condition fails, ``YYPEEK`` returns the real character, otherwise it
+returns a fake sentinel character.

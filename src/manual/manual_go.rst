@@ -104,6 +104,60 @@ Buffer refilling
 .. literalinclude:: ../examples/go/fill/02_fill.re
     :language: go
 
+Multiple blocks
+===============
+.. include:: /manual/conditions/blocks.rst_
+.. literalinclude:: ../examples/go/conditions/parse_u32_blocks.re
+    :language: go
+
+Start conditions
+================
+.. include:: /manual/conditions/conditions.rst_
+.. literalinclude:: ../examples/go/conditions/parse_u32_conditions.re
+    :language: go
+
+Storable state
+==============
+.. include:: /manual/state/state.rst_
+.. literalinclude:: ../examples/go/state/push.re
+    :language: go
+
+Reusable blocks
+===============
+.. include:: /manual/reuse/reuse.rst_
+
+Example of a ``!use`` directive:
+
+.. literalinclude:: ../examples/go/reuse/usedir.re
+    :language: go
+
+Example of a ``/*!use:re2c ... */`` block:
+
+.. literalinclude:: ../examples/go/reuse/reuse.re
+    :language: go
+
+Submatch extraction
+===================
+.. include:: /manual/submatch/submatch.rst_
+.. include:: /manual/submatch/submatch_example_stags.rst_
+.. literalinclude:: ../examples/go/submatch/01_stags.re
+    :language: go
+.. include:: /manual/submatch/submatch_example_stags_fill.rst_
+.. literalinclude:: ../examples/go/submatch/01_stags_fill.re
+    :language: go
+.. include:: /manual/submatch/submatch_example_posix.rst_
+.. literalinclude:: ../examples/go/submatch/03_posix.re
+    :language: go
+.. include:: /manual/submatch/submatch_example_mtags.rst_
+.. literalinclude:: ../examples/go/submatch/02_mtags.re
+    :language: go
+
+Encoding support
+================
+.. include:: /manual/encodings/encodings.rst_
+.. literalinclude:: ../examples/go/encodings/unicode_identifier.re
+    :language: go
+
 Include files
 =============
 .. include:: /manual/includes/includes.rst_
@@ -132,60 +186,6 @@ Header files
 The generated header file:
 
 .. literalinclude:: ../examples/go/headers/lexer/state.go
-    :language: go
-
-Submatch extraction
-===================
-.. include:: /manual/submatch/submatch.rst_
-.. include:: /manual/submatch/submatch_example_stags.rst_
-.. literalinclude:: ../examples/go/submatch/01_stags.re
-    :language: go
-.. include:: /manual/submatch/submatch_example_stags_fill.rst_
-.. literalinclude:: ../examples/go/submatch/01_stags_fill.re
-    :language: go
-.. include:: /manual/submatch/submatch_example_posix.rst_
-.. literalinclude:: ../examples/go/submatch/03_posix.re
-    :language: go
-.. include:: /manual/submatch/submatch_example_mtags.rst_
-.. literalinclude:: ../examples/go/submatch/02_mtags.re
-    :language: go
-
-Storable state
-==============
-.. include:: /manual/state/state.rst_
-.. literalinclude:: ../examples/go/state/push.re
-    :language: go
-
-Reusable blocks
-===============
-.. include:: /manual/reuse/reuse.rst_
-
-Example of a ``!use`` directive:
-
-.. literalinclude:: ../examples/go/reuse/usedir.re
-    :language: go
-
-Example of a ``/*!use:re2c ... */`` block:
-
-.. literalinclude:: ../examples/go/reuse/reuse.re
-    :language: go
-
-Encoding support
-================
-.. include:: /manual/encodings/encodings.rst_
-
-Here is an example of a lexer for Unicode identifiers encoded in UTF8.
-
-.. literalinclude:: ../examples/go/encodings/unicode_identifier.re
-    :language: go
-
-Start conditions
-================
-.. include:: /manual/conditions/conditions.rst_
-
-Here is an example program that uses start conditions to parse integer numbers in binary, octal, decimal and hexadecimal format:
-
-.. literalinclude:: ../examples/go/conditions/parse_u32_conditions.re
     :language: go
 
 Skeleton programs

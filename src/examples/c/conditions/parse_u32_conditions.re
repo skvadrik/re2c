@@ -4,7 +4,7 @@
 #include <assert.h>
 
 static const uint64_t ERROR = UINT64_MAX;
-/*!types:re2c*/
+/*!conditions:re2c*/
 
 template<int BASE> static void add(uint64_t &u, char d) {
     u = u * BASE + d;

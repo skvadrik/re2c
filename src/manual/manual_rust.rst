@@ -104,6 +104,60 @@ Buffer refilling
 .. literalinclude:: ../examples/rust/fill/02_fill.re
     :language: rust
 
+Multiple blocks
+===============
+.. include:: /manual/conditions/blocks.rst_
+.. literalinclude:: ../examples/rust/conditions/parse_u32_blocks.re
+    :language: rust
+
+Start conditions
+================
+.. include:: /manual/conditions/conditions.rst_
+.. literalinclude:: ../examples/rust/conditions/parse_u32_conditions.re
+    :language: rust
+
+Storable state
+==============
+.. include:: /manual/state/state.rst_
+.. literalinclude:: ../examples/rust/state/push.re
+    :language: rust
+
+Reusable blocks
+===============
+.. include:: /manual/reuse/reuse.rst_
+
+Example of a ``!use`` directive:
+
+.. literalinclude:: ../examples/rust/reuse/usedir.re
+    :language: rust
+
+Example of a ``/*!use:re2c ... */`` block:
+
+.. literalinclude:: ../examples/rust/reuse/reuse.re
+    :language: rust
+
+Submatch extraction
+===================
+.. include:: /manual/submatch/submatch.rst_
+.. include:: /manual/submatch/submatch_example_stags.rst_
+.. literalinclude:: ../examples/rust/submatch/01_stags.re
+    :language: rust
+.. include:: /manual/submatch/submatch_example_stags_fill.rst_
+.. literalinclude:: ../examples/rust/submatch/01_stags_fill.re
+    :language: rust
+.. include:: /manual/submatch/submatch_example_posix.rst_
+.. literalinclude:: ../examples/rust/submatch/03_posix.re
+    :language: rust
+.. include:: /manual/submatch/submatch_example_mtags.rst_
+.. literalinclude:: ../examples/rust/submatch/02_mtags.re
+    :language: rust
+
+Encoding support
+================
+.. include:: /manual/encodings/encodings.rst_
+.. literalinclude:: ../examples/rust/encodings/unicode_identifier.re
+    :language: rust
+
 Include files
 =============
 .. include:: /manual/includes/includes.rst_
@@ -132,60 +186,6 @@ Header files
 The generated header file:
 
 .. literalinclude:: ../examples/rust/headers/lexer/state.rs
-    :language: rust
-
-Submatch extraction
-===================
-.. include:: /manual/submatch/submatch.rst_
-.. include:: /manual/submatch/submatch_example_stags.rst_
-.. literalinclude:: ../examples/rust/submatch/01_stags.re
-    :language: rust
-.. include:: /manual/submatch/submatch_example_stags_fill.rst_
-.. literalinclude:: ../examples/rust/submatch/01_stags_fill.re
-    :language: rust
-.. include:: /manual/submatch/submatch_example_posix.rst_
-.. literalinclude:: ../examples/rust/submatch/03_posix.re
-    :language: rust
-.. include:: /manual/submatch/submatch_example_mtags.rst_
-.. literalinclude:: ../examples/rust/submatch/02_mtags.re
-    :language: rust
-
-Storable state
-==============
-.. include:: /manual/state/state.rst_
-.. literalinclude:: ../examples/rust/state/push.re
-    :language: rust
-
-Reusable blocks
-===============
-.. include:: /manual/reuse/reuse.rst_
-
-Example of a ``!use`` directive:
-
-.. literalinclude:: ../examples/rust/reuse/usedir.re
-    :language: rust
-
-Example of a ``/*!use:re2c ... */`` block:
-
-.. literalinclude:: ../examples/rust/reuse/reuse.re
-    :language: rust
-
-Encoding support
-================
-.. include:: /manual/encodings/encodings.rst_
-
-Here is an example of a lexer for Unicode identifiers encoded in UTF8.
-
-.. literalinclude:: ../examples/rust/encodings/unicode_identifier.re
-    :language: rust
-
-Start conditions
-================
-.. include:: /manual/conditions/conditions.rst_
-
-Here is an example program that uses start conditions to parse integer numbers in binary, octal, decimal and hexadecimal format:
-
-.. literalinclude:: ../examples/rust/conditions/parse_u32_conditions.re
     :language: rust
 
 Skeleton programs

@@ -1,6 +1,7 @@
 // re2c $INPUT -o $OUTPUT -i --case-ranges
+#include <assert.h>
 
-int lex(const char *s) {
+bool lex(const char *s) {
     const char *YYCURSOR = s;
     /*!re2c
         re2c:yyfill:enable = 0;
@@ -8,11 +9,12 @@ int lex(const char *s) {
 
         number = [1-9][0-9]*;
 
-        number { return 0; }
-        *      { return 1; }
+        number { return true; }
+        *      { return false; }
     */
 }
 
 int main() {
-    return lex("1234");
+    assert(lex("1234"));
+    return 0;
 }

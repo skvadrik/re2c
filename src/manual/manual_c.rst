@@ -12,7 +12,7 @@ User manual (C)
 
 .. raw:: html
 
-    <p style="color:gray";><i></i></p>
+    <p style="color:gray";><i>Note: examples are in C++ (but can be easily adapted to C).</i></p>
 
 Introduction
 ============
@@ -104,6 +104,60 @@ Buffer refilling
 .. literalinclude:: ../examples/c/fill/02_fill.re
     :language: c
 
+Multiple blocks
+===============
+.. include:: /manual/conditions/blocks.rst_
+.. literalinclude:: ../examples/c/conditions/parse_u32_blocks.re
+    :language: c
+
+Start conditions
+================
+.. include:: /manual/conditions/conditions.rst_
+.. literalinclude:: ../examples/c/conditions/parse_u32_conditions.re
+    :language: c
+
+Storable state
+==============
+.. include:: /manual/state/state.rst_
+.. literalinclude:: ../examples/c/state/push.re
+    :language: c
+
+Reusable blocks
+===============
+.. include:: /manual/reuse/reuse.rst_
+
+Example of a ``!use`` directive:
+
+.. literalinclude:: ../examples/c/reuse/usedir.re
+    :language: c
+
+Example of a ``/*!use:re2c ... */`` block:
+
+.. literalinclude:: ../examples/c/reuse/reuse.re
+    :language: c
+
+Submatch extraction
+===================
+.. include:: /manual/submatch/submatch.rst_
+.. include:: /manual/submatch/submatch_example_stags.rst_
+.. literalinclude:: ../examples/c/submatch/01_stags.re
+    :language: c
+.. include:: /manual/submatch/submatch_example_stags_fill.rst_
+.. literalinclude:: ../examples/c/submatch/01_stags_fill.re
+    :language: c
+.. include:: /manual/submatch/submatch_example_posix.rst_
+.. literalinclude:: ../examples/c/submatch/03_posix.re
+    :language: c
+.. include:: /manual/submatch/submatch_example_mtags.rst_
+.. literalinclude:: ../examples/c/submatch/02_mtags.re
+    :language: c
+
+Encoding support
+================
+.. include:: /manual/encodings/encodings.rst_
+.. literalinclude:: ../examples/c/encodings/unicode_identifier.re
+    :language: c
+
 Include files
 =============
 .. include:: /manual/includes/includes.rst_
@@ -132,60 +186,6 @@ Header files
 The generated header file:
 
 .. literalinclude:: ../examples/c/headers/lexer/state.h
-    :language: c
-
-Submatch extraction
-===================
-.. include:: /manual/submatch/submatch.rst_
-.. include:: /manual/submatch/submatch_example_stags.rst_
-.. literalinclude:: ../examples/c/submatch/01_stags.re
-    :language: c
-.. include:: /manual/submatch/submatch_example_stags_fill.rst_
-.. literalinclude:: ../examples/c/submatch/01_stags_fill.re
-    :language: c
-.. include:: /manual/submatch/submatch_example_posix.rst_
-.. literalinclude:: ../examples/c/submatch/03_posix.re
-    :language: c
-.. include:: /manual/submatch/submatch_example_mtags.rst_
-.. literalinclude:: ../examples/c/submatch/02_mtags.re
-    :language: c
-
-Storable state
-==============
-.. include:: /manual/state/state.rst_
-.. literalinclude:: ../examples/c/state/push.re
-    :language: c
-
-Reusable blocks
-===============
-.. include:: /manual/reuse/reuse.rst_
-
-Example of a ``!use`` directive:
-
-.. literalinclude:: ../examples/c/reuse/usedir.re
-    :language: c
-
-Example of a ``/*!use:re2c ... */`` block:
-
-.. literalinclude:: ../examples/c/reuse/reuse.re
-    :language: c
-
-Encoding support
-================
-.. include:: /manual/encodings/encodings.rst_
-
-Here is an example of a lexer for Unicode identifiers encoded in UTF8.
-
-.. literalinclude:: ../examples/c/encodings/unicode_identifier.re
-    :language: c
-
-Start conditions
-================
-.. include:: /manual/conditions/conditions.rst_
-
-Here is an example program that uses start conditions to parse integer numbers in binary, octal, decimal and hexadecimal format:
-
-.. literalinclude:: ../examples/c/conditions/parse_u32_conditions.re
     :language: c
 
 Skeleton programs

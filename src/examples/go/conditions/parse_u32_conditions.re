@@ -8,7 +8,7 @@ var (
 	eOverflow = errors.New("overflow error")
 )
 
-/*!types:re2c*/
+/*!conditions:re2c*/
 
 const u32Limit uint64 = 1<<32
 
