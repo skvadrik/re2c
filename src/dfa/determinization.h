@@ -156,6 +156,7 @@ struct determ_context_t
     tagver_table_t            dc_tagvertbl;
     history_t                 history;         // prefix trie of tag histories
     kernels_t                 dc_kernels;      // TDFA states under construction
+    size_t                    kernels_total;   // sum total of all kernel sizes
     kernel_buffers_t          dc_buffers;
     hc_caches_t               dc_hc_caches;    // per-tag cache of history comparisons
     newvers_t                 dc_newvers;      // map of triples (tag, version, history) to new version

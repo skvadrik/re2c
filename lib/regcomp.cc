@@ -57,10 +57,13 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     RESpec re(arv, opt, msg, *preg->rmgr);
 
     find_fixed_tags(re);
-
     insert_default_tags(re);
 
-    nfa_t *nfa = new nfa_t(re);
+    size_t nfa_size, nfa_depth;
+    compute_size_and_depth(re.res, &nfa_size, &nfa_depth);
+    if (nfa_depth > MAX_NFA_DEPTH || nfa_size > MAX_NFA_STATES) return 1;
+
+    nfa_t *nfa = new nfa_t(re, nfa_size);
 
     nfa_t *nfa0 = NULL;
     if (cflags & REG_BACKWARD) {
@@ -69,7 +72,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
         Opt opts0(globopts0, msg);
         const opt_t *opt0 = opts0.snapshot();
         RESpec re0(arv, opt0, msg, *preg->rmgr);
-        nfa0 = new nfa_t(re0);
+        nfa0 = new nfa_t(re0, nfa_size);
         delete opt0;
     }
 

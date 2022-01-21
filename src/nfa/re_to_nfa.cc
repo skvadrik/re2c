@@ -180,8 +180,8 @@ static uint32_t stats(nfa_state_t *root)
     return ncores;
 }
 
-nfa_t::nfa_t(const RESpec &spec)
-    : max_size(estimate_size(spec.res))
+nfa_t::nfa_t(const RESpec &spec, size_t max_size)
+    : max_size(max_size)
     , size(0)
     , states(new nfa_state_t[max_size])
     , charset(spec.charset)

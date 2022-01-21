@@ -77,9 +77,9 @@ void determinization(ctx_t &ctx)
     tagged_epsilon_closure(ctx);
     find_state(ctx);
 
-    // iterate while new kernels are added: for each alphabet symbol,
-    // build tagged epsilon-closure of all reachable NFA states,
-    // then find identical or mappable DFA state or add a new one
+    // Iterate while new kernels are added: for each alphabet symbol, build tagged
+    // epsilon-closure of all reachable NFA states, then find identical or mappable DFA
+    // state or add a new one.
     for (uint32_t i = 0; i < ctx.dc_kernels.size(); ++i) {
         ctx.dc_origin = i;
         clear_caches(ctx);
@@ -88,6 +88,16 @@ void determinization(ctx_t &ctx)
             reach_on_symbol(ctx, c);
             tagged_epsilon_closure(ctx);
             find_state(ctx);
+
+            // Abort if DFA grows too fast (either in the number of states, or in the
+            // total size of all state kernels which may have many NFA substates).
+            if (ctx.dc_kernels.size() > MAX_DFA_STATES) {
+                error("DFA has too many states");
+                exit(1);
+            } else if (ctx.kernels_total > MAX_DFA_SIZE) {
+                error("DFA is too large");
+                exit(1);
+            }
         }
     }
 
@@ -252,6 +262,7 @@ determ_context_t<history_t>::determ_context_t(const opt_t *opts, Msg &msg
     , dc_tagvertbl(nfa.tags.size())
     , history()
     , dc_kernels()
+    , kernels_total(0)
     , dc_buffers()
     , dc_hc_caches()
     , dc_newvers(newver_cmp_t<history_t>(history, dc_hc_caches))

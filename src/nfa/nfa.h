@@ -102,7 +102,7 @@ struct nfa_t
     nfa_state_t *root;
     uint32_t ncores;
 
-    explicit nfa_t(const RESpec &spec);
+    nfa_t(const RESpec &spec, size_t max_size);
     ~nfa_t();
 
     FORBID_COPY(nfa_t);
@@ -110,7 +110,7 @@ struct nfa_t
 
 static const uint32_t NONCORE = ~0u;
 
-size_t estimate_size(const std::vector<RE*> &res);
+void compute_size_and_depth(const std::vector<RE*> &res, size_t *psize, size_t *pdepth);
 
 } // namespace re2c
 

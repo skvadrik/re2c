@@ -72,7 +72,17 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     insert_default_tags(re);
     warn_nullable(re, cond);
 
-    nfa_t nfa(re);
+    size_t nfa_size, nfa_depth;
+    compute_size_and_depth(re.res, &nfa_size, &nfa_depth);
+    if (nfa_depth > MAX_NFA_DEPTH) {
+        error("NFA depth exceeds limits");
+        exit(1);
+    } else if (nfa_size > MAX_NFA_STATES) {
+        error("NFA has too many states");
+        exit(1);
+    }
+
+    nfa_t nfa(re, nfa_size);
     DDUMP_NFA(opts, nfa);
 
     dfa_t dfa(nfa, spec.def_rule, spec.eof_rule);

@@ -221,6 +221,7 @@ bool do_find_state(ctx_t &ctx)
     // otherwise add new kernel
     kernel_t *kcopy = make_kernel_copy<stadfa>(k, ctx.dc_allocator);
     ctx.dc_target = kernels.push(hash, kcopy);
+    ctx.kernels_total += k->size;
     return true;
 }
 
