@@ -208,7 +208,7 @@ yy28:
 #line 209 "repeater2.c"
 {
 	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy31;
@@ -216,25 +216,21 @@ yy28:
 	}
 yy30:
 yy31:
-	++YYCURSOR;
-#line 39 "repeater2.re"
-	{}
-#line 223 "repeater2.c"
-}
-#line 40 "repeater2.re"
-
-
-
-#line 229 "repeater2.c"
-{
-	YYCTYPE yych;
-	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy32;
+		default: goto yy30;
+	}
+yy32:
+	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy34;
 		default: goto yy33;
 	}
 yy33:
+#line 39 "repeater2.re"
+	{}
+#line 234 "repeater2.c"
 yy34:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -244,118 +240,58 @@ yy34:
 yy35:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy37;
-		default: goto yy36;
+		case 'a': goto yy36;
+		default: goto yy33;
 	}
 yy36:
-#line 43 "repeater2.re"
-	{}
-#line 254 "repeater2.c"
-yy37:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy38;
-		default: goto yy36;
-	}
-yy38:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy39;
-		default: goto yy36;
-	}
-yy39:
 	++YYCURSOR;
-	goto yy36;
+	goto yy33;
 }
-#line 44 "repeater2.re"
+#line 40 "repeater2.re"
 
 
 
-#line 275 "repeater2.c"
+#line 255 "repeater2.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy42;
-		default: goto yy41;
+		case 'a': goto yy39;
+		default: goto yy38;
+	}
+yy38:
+yy39:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy40;
+		default: goto yy38;
+	}
+yy40:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy41;
+		default: goto yy38;
 	}
 yy41:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy42;
+		default: goto yy38;
+	}
 yy42:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy43;
-		default: goto yy41;
+		default: goto yy38;
 	}
 yy43:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy44;
-		default: goto yy41;
-	}
-yy44:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy45;
-		default: goto yy41;
-	}
-yy45:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy46;
-		default: goto yy41;
-	}
-yy46:
 	++YYCURSOR;
-#line 47 "repeater2.re"
+#line 43 "repeater2.re"
 	{}
-#line 313 "repeater2.c"
+#line 293 "repeater2.c"
 }
-#line 48 "repeater2.re"
-
-
-
-#line 319 "repeater2.c"
-{
-	YYCTYPE yych;
-	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy49;
-		default: goto yy48;
-	}
-yy48:
-yy49:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy50;
-		default: goto yy48;
-	}
-yy50:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy51;
-		default: goto yy48;
-	}
-yy51:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy52;
-		default: goto yy48;
-	}
-yy52:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 'a': goto yy53;
-		default: goto yy48;
-	}
-yy53:
-	++YYCURSOR;
-#line 51 "repeater2.re"
-	{}
-#line 357 "repeater2.c"
-}
-#line 52 "repeater2.re"
+#line 44 "repeater2.re"
 
 repeater2.re:6:0: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
 repeater2.re:10:0: warning: control flow is undefined for strings that match 
@@ -372,19 +308,11 @@ repeater2.re:22:0: warning: control flow is undefined for strings that match
 , use default rule '*' [-Wundefined-control-flow]
 repeater2.re:31:10: warning: rule matches empty string [-Wmatch-empty-string]
 repeater2.re:34:0: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
-repeater2.re:38:0: warning: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+repeater2.re:38:0: warning: control flow is undefined for strings that match 
+	'[\x0-\x60\x62-\xFF]'
+	'\x61 [\x0-\x60\x62-\xFF]'
+, use default rule '*' [-Wundefined-control-flow]
 repeater2.re:42:0: warning: control flow is undefined for strings that match 
-	'[\x0-\x60\x62-\xFF]'
-	'\x61 [\x0-\x60\x62-\xFF]'
-, use default rule '*' [-Wundefined-control-flow]
-repeater2.re:46:0: warning: control flow is undefined for strings that match 
-	'[\x0-\x60\x62-\xFF]'
-	'\x61 [\x0-\x60\x62-\xFF]'
-	'\x61 \x61 [\x0-\x60\x62-\xFF]'
-	'\x61 \x61 \x61 [\x0-\x60\x62-\xFF]'
-	'\x61 \x61 \x61 \x61 [\x0-\x60\x62-\xFF]'
-, use default rule '*' [-Wundefined-control-flow]
-repeater2.re:50:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x60\x62-\xFF]'
 	'\x61 \x61 [\x0-\x60\x62-\xFF]'

@@ -1,5 +1,6 @@
 #include <limits>
 
+#include "src/debug/debug.h"
 #include "src/parse/ast.h"
 #include "src/util/free_list.h"
 
@@ -83,6 +84,7 @@ const AST *ast_cat(const AST *a1, const AST *a2)
 
 const AST *ast_iter(const AST *a, uint32_t n, uint32_t m)
 {
+    DASSERT(n <= m);
     AST *ast = new AST(a->loc, AST::ITER);
     ast->iter.ast = a;
     ast->iter.min = n;

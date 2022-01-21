@@ -461,12 +461,14 @@ scan:
     }
 
     "{" [0-9]+ @p "," [0-9]+ "}" {
-        if (!s_to_u32_unsafe (tok + 1, p, yylval.bounds.min)) {
+        if (!s_to_u32_unsafe(tok + 1, p, yylval.bounds.min)) {
             msg.error(tok_loc(), "repetition lower bound overflow");
             exit(1);
-        }
-        if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.bounds.max)) {
+        } else if (!s_to_u32_unsafe(p + 1, cur - 1, yylval.bounds.max)) {
             msg.error(tok_loc(), "repetition upper bound overflow");
+            exit(1);
+        } else if (yylval.bounds.min > yylval.bounds.max) {
+            msg.error(tok_loc(), "repetition lower bound exceeds upper bound");
             exit(1);
         }
         return TOKEN_CLOSESIZE;

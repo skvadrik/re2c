@@ -35,6 +35,7 @@ template<typename ctx_t>
 
 #include <assert.h>
 #include "src/util/c99_stdint.h"
+#include <stddef.h>
 #include <map>
 #include <set>
 #include <vector>
