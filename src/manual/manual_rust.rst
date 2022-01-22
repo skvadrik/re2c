@@ -198,6 +198,4 @@ Visualization and debug
 .. include:: /manual/dot/dot.rst_
 .. include:: /manual/dot/example.rst
 
-More examples
-=============
-.. include:: /examples/examples.rst
+.. include:: /examples/examples_rust.rst

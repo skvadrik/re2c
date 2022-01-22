@@ -1,4 +1,5 @@
-The following examples are for the C backend:
+More examples
+=============
 
 .. toctree::
     :maxdepth: 1
