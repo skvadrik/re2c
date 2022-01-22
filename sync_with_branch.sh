@@ -2,29 +2,38 @@
 
 set -e
 
+[ $# -ne 1 ] && { echo "usage: $0 <branch>"; exit 1; }
+
+branch="$1"
+remote=$(git config branch.master.remote)
+
+git branch -a --remote | egrep -q "^  $remote/$branch\$" || {
+    echo "branch $branch not found in remote $remote"
+    exit 1
+}
+
 # Clean up some folders to remove stale files.
 rm -rf src/benchmarks/submatch_*/*
 
-# Sync with master (pull manpage files, benchmark results, etc.).
+# Sync with branch (pull manpage files, benchmark results, etc.).
 # Most of the synced files are treated as source code and committed to Git,
 # except for a few helper scripts.
-remote=$(git config branch.master.remote) \
-    && git fetch $remote \
-    && { git archive --remote=. remotes/$remote/master BUILD.md \
+git fetch $remote \
+    && { git archive --remote=. remotes/$remote/$branch BUILD.md \
         | tar -C src/build -xpf - \
         && mv src/build/BUILD.md src/build/build.md; } \
-    && { git archive --remote=. remotes/$remote/master doc/manual \
+    && { git archive --remote=. remotes/$remote/$branch doc/manual \
         | tar -C src/ --strip-components=1 -xpf -; } \
-    && { git archive --remote=. remotes/$remote/master examples/**/*.{re,c,h,go,rs,txt,inc} \
+    && { git archive --remote=. remotes/$remote/$branch examples/**/*.{re,c,h,go,rs,txt,inc} \
         | tar -C src/ -xpf -; } \
-    && { git archive --remote=. remotes/$remote/master \
+    && { git archive --remote=. remotes/$remote/$branch \
             benchmarks/submatch_{dfa_aot,dfa_jit,nfa}/results \
         | tar -C src/ -xpf -; } \
-    && { git archive --remote=. remotes/$remote/master benchmarks/json2pgfplot.py \
+    && { git archive --remote=. remotes/$remote/$branch benchmarks/json2pgfplot.py \
         | tar -C build/ --strip-components=1 -xpf -; } \
-    && { git archive --remote=. remotes/$remote/master build/split_man.sh \
+    && { git archive --remote=. remotes/$remote/$branch build/split_man.sh \
         | tar -xpf -; } \
-    && { git archive --remote=. remotes/$remote/master CHANGELOG \
+    && { git archive --remote=. remotes/$remote/$branch CHANGELOG \
         | tar -C src/releases/changelog/ -xpf -; } \
     && mv src/releases/changelog/CHANGELOG src/releases/changelog/changelog.rst
 
