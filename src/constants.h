@@ -1,6 +1,7 @@
 #ifndef _RE2C_CONSTANTS_
 #define _RE2C_CONSTANTS_
 
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 
 
