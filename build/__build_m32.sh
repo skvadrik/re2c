@@ -4,11 +4,13 @@ builddir=__build_m32
 rm -rf $builddir
 mkdir $builddir
 
+toolchain="i686-unknown-linux-gnu"
+
 cd $builddir
 ../configure \
     --enable-debug \
     --enable-libs \
-    CXXFLAGS="-m32" \
-    LDFLAGS="-m32" \
+    CXX="${toolchain}-g++" \
+    LD="${toolchain}-ld" \
     && make -j$(nproc)
 cd ..
