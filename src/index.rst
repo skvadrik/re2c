@@ -13,22 +13,24 @@ re2c
     Benchmarks          </benchmarks/benchmarks>
     Changelog           </releases/changelog/changelog>
 
-Re2c is a free and open-source lexer generator for C, C++ and Go with a focus on generating fast code.
-It compiles regular expression specifications to deterministic finite automata
-and encodes them in the form of conditional jumps in the target language.
-This approach is generally faster than table-based lexers, and the generated code is easier to debug and understand.
-A flexible user interface allows one to adapt the generated lexer to a particular environment and input model,
-avoiding the overhead on unnecessary checks and buffers.
-Re2c is based on the
+re2c is a free and open-source lexer generator for C/C++, Go and Rust with a
+focus on generating fast code. It compiles regular expression specifications to
+deterministic finite automata and encodes them in the form of conditional jumps
+in the target language. This approach is generally faster than table-based
+lexers, and the generated code is easier to debug and understand. A flexible
+user interface allows one to adapt the generated lexer to a particular
+environment and input model, avoiding the overhead on unnecessary checks and
+buffers. re2c is based on the
 `lookahead TDFA <2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf>`_
 algorithm that allows it to perform fast and lightweight submatch extraction.
-The tool is used in projects such as
+It is used in other open-source projects such as
 `php <http://php.net/>`_,
 `ninja <https://ninja-build.org/>`_,
 `yasm <http://yasm.tortall.net/>`_,
 `spamassassin <https://spamassassin.apache.org/>`_,
 `BRL-CAD <http://brlcad.org/>`_,
-`wake <https://github.com/sifive/wake>`_, etc.
+`wake <https://github.com/sifive/wake>`_,
+etc.
 
 .. |feed| image:: feed/feed/feed.png
     :target: feed/atom.xml
@@ -36,8 +38,9 @@ The tool is used in projects such as
     :width:  2em
 
 |feed| `Subscribe <feed/atom.xml>`_ to receive the latest news and updates.
-See the user manuals (`C/C++ <manual/manual_c.html>`_, `Go <manual/manual_go.html>`_) for a complete overview with
-examples.
+See the user manuals (`C/C++ <manual/manual_c.html>`_,
+`Go <manual/manual_go.html>`_, `Rust <manual/manual_rust.html>`_) for a complete
+overview with examples.
 
 Download
 --------
@@ -45,12 +48,11 @@ Download
 You can get the
 `latest release <https://github.com/skvadrik/re2c/releases/latest>`_ on GitHub,
 as well as the `older releases <https://github.com/skvadrik/re2c/releases>`_.
-Many Linux distributions and other systems provide their own packages.
-The source code is hosted on both GitHub
-(`<https://github.com/skvadrik/re2c>`_) and SourceForge
-(`<https://sourceforge.net/p/re2c>`_).
-GitHub serves as the main repository, bugtracker and tarball hosting.
-SourceForge is used as a backup repository and email hosting.
+Many Linux distributions and other systems provide their own packages. The
+source code is hosted on both GitHub (`<https://github.com/skvadrik/re2c>`_) and
+SourceForge (`<https://sourceforge.net/p/re2c>`_). GitHub serves as the main
+repository, bugtracker and tarball hosting. SourceForge is used as a backup
+repository and email hosting.
 
 Bugs & patches
 --------------
@@ -59,15 +61,13 @@ Please send bugs reports, patches and other feedback to `GitHub issue tracker
 <https://github.com/skvadrik/re2c>`_ or email them to
 `re2c-devel@lists.sourceforge.net <re2c-devel@lists.sourceforge.net>`_ and
 `re2c-general@lists.sourceforge.net <re2c-general@lists.sourceforge.net>`_
-mailing lists.
-There is an IRC channel ``#re2c`` on `irc.libera.chat <https://libera.chat>`_
-and `irc.oftc.net <https://www.oftc.net/>`_.
-Questions and contributions are welcome!
+mailing lists. There is an IRC channel ``#re2c`` on
+`irc.libera.chat <https://libera.chat>`_ and
+`irc.oftc.net <https://www.oftc.net/>`_. Questions and contributions are
+welcome!
 
-Papers, articles
-----------------
-
-Papers:
+Papers
+------
 
 - `RE2C: a more versatile scanner generator
   <1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps>`_
@@ -93,8 +93,6 @@ Papers:
   Volume 6, November 2020, 100027,
   `DOI:10.1016/j.simpa.2020.100027 <https://doi.org/10.1016/j.simpa.2020.100027>`_.
 
-Presentations:
-
 - Lookahead TDFA in pictures:
   `RE2C: A lexer generator based on lookahead-TDFA (slides)
   <2021_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa_(slides).pdf>`_, 2021.
@@ -102,9 +100,9 @@ Presentations:
 Authors
 -------
 
-Re2c was originally written by Peter Bumbulis (peter@csg.uwaterloo.ca) in 1993.
-Since then it has been maintained and developed by multiple volunteers,
-most notably,
+re2c was originally written by Peter Bumbulis (peter@csg.uwaterloo.ca) in 1993.
+Since then it has been maintained and developed by multiple volunteers, most
+notably,
 Brian Young (bayoung@acm.org),
 Markus Boerger (helly@users.sourceforge.net),
 Dan Nuffer (nuffer@users.sourceforge.net)
@@ -118,17 +116,16 @@ Many thanks to all other contributors!
 License
 -------
 
-Re2c is in the public domain. The data structures and algorithms used
-in re2c are all either taken from documents available to the general
-public or are inventions of the author. Programs generated by re2c may
-be distributed freely. Re2c itself may be distributed freely, in source
-or binary, unchanged or modified. Distributors may charge whatever fees
-they can obtain for re2c. If you do make use of re2c, or incorporate it into a larger project an
-acknowledgment somewhere (documentation, research report, etc.) would
-be appreciated.
-Re2c is distributed with no warranty whatsoever.
-The code is certain to contain errors.
-Neither the author nor any contributor takes responsibility for any consequences of its use.
+re2c is in the public domain. The data structures and algorithms used in re2c
+are all either taken from documents available to the general public or are
+inventions of the author. Programs generated by re2c may be distributed freely.
+re2c itself may be distributed freely, in source or binary, unchanged or
+modified. Distributors may charge whatever fees they can obtain for re2c. If you
+do make use of re2c, or incorporate it into a larger project an acknowledgment
+somewhere (documentation, research report, etc.) would be appreciated.
+re2c is distributed with no warranty whatsoever. The code is certain to contain
+errors. Neither the author nor any contributor takes responsibility for any
+consequences of its use.
 
 Version
 -------

@@ -2,27 +2,23 @@ How to build
 ============
 
 
-
 Dependencies
 ------------
 
 To build re2c from a release tarball one needs only a C++ compiler and
 optionally Python 3 to run the tests.
 
-To develop re2c one also needs CMake or Autotools. Re2c can be built with either
-of the two build systems, and they are both maintained and tested on CI. Other
-build dependencies include Bison (to rebuild parsers), rst2man (to rebuild
-documentation), Sphinx (to rebuild the website), and optionally Mingw and Wine
-(to run Windows tests on Linux). A few helper scripts are written in Haskell,
-but they are not essential for re2c development.
+To develop re2c one also needs CMake or Autotools (both build systems are
+maintained). Other dependencies include Bison (to rebuild parsers), rst2man (to
+rebuild documentation) and Sphinx (to rebuild the website). Benchmarks also use
+google-benchmark, re2 and Java. A few helper scripts are written in Haskell, but
+they are not essential for re2c development.
 
-Re2c is a self-hosting lexer generator, meaning that parts of its source code
+re2c is a self-hosting lexer generator, meaning that parts of its source code
 are written in re2c (namely, all the source files that have a *.re* extension).
-By default re2c builds from pregenerated bootstrap files. To regenerate these
-files it is necessary to configure re2c in a special way and provide a path to
-an existing re2c binary (see the details below). Normally this is not necessary,
-and the pregenerated files can be used as long as the *.re* files are unchanged.
-
+By default re2c builds from pre-generated bootstrap files. To build from source
+*.re* files, it is necessary to reconfigure the build and provide a path to an
+existing re2c binary that will be used for bootstrap (see the details below).
 
 
 Build (Autotools)
@@ -51,6 +47,9 @@ The configure script has many options (to see them all, run
   * `--enable-golang`
     Build re2go (identical to `re2c --lang go`). This is on by default.
 
+  * `--enable-rust`
+    Build re2rust (identical to `re2c --lang rust`). This is on by default.
+
   * `--enable-lexers`
     Enable regeneration of *.re* files (as opposed to using bootstrap files).
     This requires setting `RE2C_FOR_BUILD` to an existing re2c executable
@@ -64,7 +63,7 @@ The configure script has many options (to see them all, run
 
   * `--enable-benchmarks-regenerate`
     Regenerate C code for Ragel and Kleenex benchmarks (this will download and
-    build Ragel and Kleenex). Re2c benchmarks are always regenerated.
+    build Ragel and Kleenex). re2c benchmarks are always regenerated.
 
   * `--enable-libs`
     Build the experimental libre2c library that provides POSIX
@@ -80,7 +79,6 @@ Cross-compile re2c for Windows (for some Mingw versions you might have to use
 
 There is a bunch of build scripts for specialized builds with Asan, Ubsan,
 GLIBCXX_DEBUG, etc. in the ``build`` subdirectory.
-
 
 
 Build (CMake)
@@ -130,6 +128,10 @@ specific to re2c:
   * `-DRE2C_BUILD_RE2GO=yes`
     Build re2go executable (an alias to `re2c --lang go`). Enabled by default.
 
+  * `-DRE2C_BUILD_RE2RUST=yes`
+    Build re2rust executable (an alias to `re2c --lang rust`). Enabled by
+    default.
+
   * `-DRE2C_REBUILD_LEXERS=yes`
     Enable regeneration of *.re* files (as opposed to using bootstrap files).
     This requires setting `-DRE2C_FOR_BUILD` to an existing re2c executable
@@ -143,7 +145,7 @@ specific to re2c:
 
   * `-DRE2C_REGEN_BENCHMARKS=yes`
     Regenerate C code for Ragel and Kleenex benchmarks (this will download and
-    build Ragel and Kleenex). Re2c benchmarks are always regenerated.
+    build Ragel and Kleenex). re2c benchmarks are always regenerated.
 
   * `-DRE2C_BUILD_LIBS=yes`
     Build the experimental libre2c library that provides POSIX
@@ -161,11 +163,10 @@ There is a bunch of build scripts for specialized builds with Asan, Ubsan,
 GLIBCXX_DEBUG, etc. in the ``build`` subdirectory.
 
 
-
 Test
 ----
 
-Re2c has a main test suite and a number of unit tests. Run them all:
+re2c has a main test suite and a number of unit tests. Run them all:
   ```
   $ make check
   ```
@@ -190,9 +191,9 @@ Check the distribution (works with Autotools):
   $ make distcheck
   ```
 
-Re2c provides a helper script `build/__alltest.sh` that builds and tests
-various re2c build flavours with Asan, Ubsan, GLIBCXX_DEBUG, etc. There is a
-couple of fuzz-testing Haskell scripts in the *fuzz* subdirectory; they are
-based on the QuickCheck library and can be easily modified to fuzz-test various
-aspects of re2c by comparing current re2c version against older versions or
-against other regular expression libraries.
+re2c provides a helper script `build/__alltest.sh` that builds and tests various
+re2c build flavours with Asan, Ubsan, GLIBCXX_DEBUG, etc. There is a couple of
+fuzz-testing Haskell scripts in the *fuzz* subdirectory; they are based on the
+QuickCheck library and can be easily modified to fuzz-test various aspects of
+re2c by comparing current re2c version against older versions or against other
+regular expression libraries.
