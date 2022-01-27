@@ -7,6 +7,7 @@ Release notes
 
     /releases/changelog/changelog
 
+.. include:: /releases/release_notes/3_0.rst
 .. include:: /releases/release_notes/2_2.rst
 .. include:: /releases/release_notes/2_1_1.rst
 .. include:: /releases/release_notes/2_1.rst

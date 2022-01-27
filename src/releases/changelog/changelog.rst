@@ -1,6 +1,118 @@
 Changelog
 =========
 
+
+----
+3.0x
+----
+
+3.0 (2022-01-27)
+~~~~~~~~~~~~~~~~
+
+- Added code generation backend for Rust:
+
+  + Enabled with ``--lang rust`` option.
+  + A new ``re2rust`` binary (built by default, or configured with
+    ``--enable-rust`` Autoconf option and ``RE2C_BUILD_RE2RUST`` CMake option).
+
+- Added options:
+
+  + ``--loop-switch``
+  + ``--no-unsafe``
+
+- Added configurations;
+
+  + ``re2c:label:yyloop``
+  + ``re2c:unsafe``
+
+- Renamed options to use common naming scheme. The old names are supported as
+  aliases, so the change does not break existing code. Documentation has been
+  updated to use new names.
+
+  + ``--api`` is a new alias for ``--input``
+  + ``--ebcdic`` is a new alias for ``--ecb``
+  + ``--ucs2`` is a new alias for ``--wide-chars``
+  + ``--utf32`` is a new alias for ``--unicode``
+  + ``--utf16`` is a new alias for ``--utf-16``
+  + ``--utf8`` is a new alias for ``--utf-8``
+  + ``--header`` is a new alias for ``--type-header``
+
+- Renamed configurations to use common naming scheme and support proper scoping
+  under subcategories such as ``:define``, ``:label``, ``:variable``, etc. The
+  old names are supported as aliases, so the change does not break existing
+  code. Documentation has been updated to use new names.
+
+  + ``re2c:api`` is a new alias for ``re2c:flags:input``
+  + ``re2c:bit-vectors`` is a new alias for ``re2c:flags:bit-vectors``
+  + ``re2c:case-insensitive`` is a new alias for ``re2c:flags:case-insensitive``
+  + ``re2c:case-inverted`` is a new alias for ``re2c:flags:case-inverted``
+  + ``re2c:case-ranges`` is a new alias for ``re2c:flags:case-ranges``
+  + ``re2c:cond:prefix`` is a new alias for ``re2c:condprefix``
+  + ``re2c:cond:enumprefix`` is a new alias for ``re2c:condenumprefix``
+  + ``re2c:computed-gotos`` is a new alias for ``re2c:flags:computed-gotos``
+  + ``re2c:computed-gotos:threshold`` is a new alias for ``re2c:cgoto:threshold``
+  + ``re2c:debug-output`` is a new alias for ``re2c:flags:debug-output``
+  + ``re2c:encoding:ebcdic`` is a new alias for ``re2c:flags:ecb``
+  + ``re2c:encoding:utf32`` is a new alias for ``re2c:flags:unicode``
+  + ``re2c:encoding:ucs2`` is a new alias for ``re2c:flags:wide-chars``
+  + ``re2c:encoding:utf16`` is a new alias for ``re2c:flags:utf-16``
+  + ``re2c:encoding:utf8`` is a new alias for ``re2c:flags:utf-8``
+  + ``re2c:encoding-policy`` is a new alias for ``re2c:flags:encoding-policy``
+  + ``re2c:empty-class`` is a new alias for ``re2c:flags:empty-class``
+  + ``re2c:header`` is a new alias for ``re2c:flags:type-header``
+  + ``re2c:label:prefix`` is a new alias for ``re2c:labelprefix``
+  + ``re2c:label:yyfill`` is a new alias for ``re2c:label:yyFillLabel``
+  + ``re2c:label:start`` is a new alias for ``re2c:startlabel``
+  + ``re2c:nested-ifs`` is a new alias for ``re2c:flags:nested-ifs``
+  + ``re2c:posix-captures`` is a new alias for ``re2c:flags:posix-captures``
+  + ``re2c:tags`` is a new alias for ``re2c:flags:tags``
+  + ``re2c:variable:yych:conversion`` is a new alias for ``re2c:yych:conversion``
+  + ``re2c:variable:yych:emit`` is a new alias for ``re2c:yych:emit``
+  + ``re2c:variable:yybm:hex`` is a new alias for ``re2c:yybm:hex``
+  + ``re2c:unsafe`` is a new alias for ``re2c:flags:unsafe``
+
+- Added directive alias ``conditions:re2c`` for ``types:re2c``.
+
+- Multiple small changes in code generation, including some formatting changes
+  that result in large diffs in the generated code:
+
+  + Do not allocate indices for unused state labels (this results in a change in
+    state enumeration), commits
+    `919570c4 <https://github.com/skvadrik/re2c/commit/919570c4>`_ and
+    `82b704f6 <https://github.com/skvadrik/re2c/commit/82b704f6>`_.
+  + Do not generate redundant ``YYPEEK`` statements, commit
+    `cca31d22 <https://github.com/skvadrik/re2c/commit/cca31d22>`_.
+  + Do not generate ``YYDEBUG`` statements for unused states labels, commit
+    `a46f01e6 <https://github.com/skvadrik/re2c/commit/a46f01e6>`_.
+  + C backend: change formatting of switch statements, commit
+    `ed88e12e <https://github.com/skvadrik/re2c/commit/ed88e12e>`_.
+  + Go backend: render continuous character ranges in compact form, commit
+    `09161b14 <https://github.com/skvadrik/re2c/commit/09161b14>`_.
+  + Mark start and end of included .re files with line directives, commit
+    `48e83fca <https://github.com/skvadrik/re2c/commit/48e83fca>`_.
+
+- A fix to limit maximum allowed NFA and DFA size (to avoid out of memory
+  crashes and stack overflows), commit
+  `a3473fd7 <https://github.com/skvadrik/re2c/commit/a3473fd7>`_.
+
+- A fix to correctly compute fixed tags in trailing context, commit
+  `68e1ab71 <https://github.com/skvadrik/re2c/commit/68e1ab71>`_.
+
+- A fix to generate non-overlapping names for s-tag and m-tag variables, commit
+  `7c6b5c95 <https://github.com/skvadrik/re2c/commit/7c6b5c95>`_.
+
+- Infrastructural: added support for CMake presets.
+
+- Updated documentation.
+
+- Backwards-incompatible changes that are unlikely to affect any users:
+
+  + Restrict lexical contexts where ``%{`` is recognized as a block start,
+    commit `dba7d055 <https://github.com/skvadrik/re2c/commit/dba7d055>`_.
+  + Emit an error when repetition lower bound exceeds upper bound, commit
+    `039c1894 <https://github.com/skvadrik/re2c/commit/039c1894>`_.
+
+
 ----
 2.2x
 ----

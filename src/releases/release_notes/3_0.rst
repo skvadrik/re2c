@@ -1,0 +1,79 @@
+Release 3.0
+===========
+
+This release adds Rust support,
+a uniform naming scheme for options and configurations,
+small improvements in code generation
+and a few bug fixes.
+
+**Rust backend.**
+It has been on the wish-list for quite a while, but the real work has started on
+`#372 <https://github.com/skvadrik/re2c/issues/372>`_ with
+`raekye <https://github.com/raekye/>`_ doing the initial implementation and
+`pmetzger <https://github.com/pmetzger/>`_ porting the first examples.
+After a few weeks of brainstorming on `irc.oftc.net <https://www.oftc.net/>`_
+(``#re2c``), followed by a few months of work, now the Rust backend is fully
+implemented and ready to use.
+See the :ref:`re2rust manual <manual/manual_rust:introduction>` with examples.
+
+The main difficulty with Rust is that it has no ``goto`` statement, which makes
+the usual code generation approach impossible. Normally re2c uses *goto-label*
+approach: DFA states are blocks of code with labels, and transitions are
+``goto`` statements. For Rust a different approach is needed: a DFA is
+represented with a switch on a numeric state variable, where each state is a
+separate case. Transitions set state variable to the target state index and loop
+to the start of the switch. The *loop-switch* approach can be used for other
+languages as well, therefore it has been added as an option ``--loop-switch``
+(available for all backends and mandatory for Rust).
+The new approach is different enough to require multiple changes in code
+generation. In loop-switch mode it is impossible to jump into the middle of a
+state bypassing the skip statement, so the ``--eager-skip`` option is enforced,
+which moves skip statements to transitions. With conditions it is impossible to
+jump between different blocks, so DFAs for all conditions are merged into one
+switch, and condition numbers are the indices of the initial DFA states. In
+storable state mode it is impossible to jump from the ``YYGETSTATE`` switch to a
+DFA state, therefore a separate ``getstate:re2c`` detached from the lexer block
+is not supported. Most of these implementation details are hidden from the user.
+
+:ref:`Generic API <manual/manual_rust:program interface>` is set by default for
+Rust, as the use of pointer arithmetic is unsafe and generally discouraged.
+The ``YYPEEK`` operation is automatically wrapped in ``unsafe`` because it should
+avoid bounds checks, which are done by the lexer in a
+:ref:`more efficient way <manual/manual_rust:handling the end of input>`.
+To get rid of the automatic ``unsafe`` wrappers use option ``--no-unsafe`` or
+configuration ``re2c:unsafe`` on a per-block basis (this can help to verify
+lexer behavior in debug mode, for example).
+
+Initialization of ``yych`` in the generated code is prefixed with
+``#[allow(unused_assignments)]``. In fact initialization is not needed (``yych``
+is always set before it is used), but the Rust compiler cannot figure it out in
+cases with complex control flow and emits errors if initialization is missing.
+
+Rust backend and the new ``re2rust`` binary are enabled by default, but the
+build can be configured with ``--enable-rust``, ``--disable-rust`` Autoconf
+options or ``-DRE2C_BUILD_RE2RUST`` CMake option.
+
+**New aliases.**
+Some configurations that have been added over the years are at odds with the
+general naming scheme. For example, most of condition-related configurations
+have ``re2c:cond:`` prefix, as in ``re2c:cond:goto`` or ``re2c:cond:divider``,
+but for some reason ``re2c:condprefix`` has no column after ``cond``. It is
+illogical, and it would be better to have ``re2c:cond:prefix`` instead. This
+release adds a bunch of such aliases. Of course, the old names still work, and
+there is no plan to remove them (the change does not break existing code).
+Likewise some options have new aliases. For a full list see the
+:ref:`changelog <releases/changelog/changelog:3.0 (2022-01-27)>`.
+
+**Code generation.**
+The changes in code generation are minor. The main difference is in the state
+enumeration: states without incoming transitions do not have numbers anymore.
+This was required for the loop-switch approach, so that switch cases can have
+consecutive labels. Other code generation changes include removal of unused
+``YYPEEK`` statements and slightly different formatting.
+
+For a full list of changes and bug fixes see the changelog
+:ref:`releases/changelog/changelog:3.0 (2022-01-27)`.
+Huge thanks to all contributors, especially
+`raekye <https://github.com/raekye/>`_  and
+`pmetzger <https://github.com/pmetzger/>`_!
+
