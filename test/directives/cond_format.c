@@ -10,7 +10,7 @@
 enum YYCONDTYPE {
 	yycC1,
 	yycC2,
-	yycC3,
+	yycC3
 };
 #line 6 "directives/cond_format.re"
 

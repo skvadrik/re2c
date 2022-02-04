@@ -4,7 +4,7 @@
 
 enum YYCONDTYPE {
 	yycinit,
-	yycC2,
+	yycC2
 };
 
 

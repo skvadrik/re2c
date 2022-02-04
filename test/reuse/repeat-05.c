@@ -3,7 +3,7 @@
 // multiple scanners, error
 
 enum YYCONDTYPE {
-	yycc1,
+	yycc1
 };
 
 

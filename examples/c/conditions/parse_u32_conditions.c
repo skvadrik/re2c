@@ -10,7 +10,7 @@ enum YYCONDTYPE {
 	yycbin,
 	yycdec,
 	yychex,
-	yycoct,
+	yycoct
 };
 
 

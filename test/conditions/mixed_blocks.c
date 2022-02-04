@@ -4,7 +4,7 @@ enum YYCONDTYPE {
 	yycb,
 	yycc,
 	yycd,
-	yycf,
+	yycf
 };
 
 

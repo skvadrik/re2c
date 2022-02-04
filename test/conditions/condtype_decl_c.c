@@ -4,7 +4,7 @@
 #line 5 "conditions/condtype_decl_c.c"
 enum YYCONDTYPE {
 	yyca,
-	yycb,
+	yycb
 };
 #line 2 "conditions/condtype_decl_c.re"
 

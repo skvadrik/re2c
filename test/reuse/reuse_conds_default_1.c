@@ -2,7 +2,7 @@
 // re2c $INPUT -o $OUTPUT -cgi
 enum YYCONDTYPE {
 	yycr1,
-	yycr2,
+	yycr2
 };
 
 

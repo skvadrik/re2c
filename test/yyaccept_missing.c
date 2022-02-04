@@ -18,7 +18,7 @@ static enum YYCONDTYPE yy_state;
 
 enum YYCONDTYPE {
 	yycINITIAL,
-	yycST_VALUE,
+	yycST_VALUE
 };
 
 

@@ -7,7 +7,7 @@
 
 enum YYCONDTYPE {
 	yycmedia_type = 0,
-	yycheader = 22,
+	yycheader = 22
 };
 
 

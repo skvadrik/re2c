@@ -148,5 +148,5 @@ int main(int argc, char **argv)
 
 enum YYCONDTYPE {
 	yycnormal,
-	yyccomment,
+	yyccomment
 };

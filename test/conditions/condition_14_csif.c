@@ -10,7 +10,7 @@ enum ScanContition {
 	EStateNormal,
 	EStateComment,
 	EStateSkiptoeol,
-	EStateString,
+	EStateString
 };
 
 

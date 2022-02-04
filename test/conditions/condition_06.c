@@ -59,7 +59,7 @@ enum YYCONDTYPE {
 	EStateNormal,
 	EStateComment,
 	EStateSkiptoeol,
-	EStateString,
+	EStateString
 };
 #line 55 "conditions/condition_06.re"
 

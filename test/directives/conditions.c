@@ -9,21 +9,21 @@ enum YYCONDTYPE {
 	yycC2,
 	yycC3,
 	YC1,
-	YC2,
+	YC2
 };
 
 
 // types:re2c:x (expect yycC1, yycC3)
 enum YYCONDTYPE {
 	yycC1,
-	yycC3,
+	yycC3
 };
 
 
 // types:re2c:y (expect YC1, YC2)
 enum YYCONDTYPE {
 	YC1,
-	YC2,
+	YC2
 };
 
 
@@ -32,7 +32,7 @@ enum YYCONDTYPE {
 	YC1,
 	YC2,
 	yycC1,
-	yycC3,
+	yycC3
 };
 
 

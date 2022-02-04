@@ -150,7 +150,10 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
                 if (opts->loop_switch) {
                     buf.cstr(" = ").u32(conds[i].number);
                 }
-                append(block, code_text(alc, buf.cstr(",").flush()));
+                if (i + 1 < conds.size()) { // do not append comma after the last one
+                    buf.cstr(",");
+                }
+                append(block, code_text(alc, buf.flush()));
             }
         } else if (opts->lang == LANG_GO) {
             start = buf.cstr("const (").flush();

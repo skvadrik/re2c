@@ -8,7 +8,7 @@ enum YYCONDTYPE {
 	yycc,
 	yycd,
 	yyce,
-	yycw,
+	yycw
 };
 
 
