@@ -22,8 +22,6 @@ static const uint32_t NOCONF = std::numeric_limits<uint32_t>::max();
 struct rldfa_backlink_t {
     // Index of configuration in the origin TDFA state.
     uint32_t conf;
-    // Index of tag history corresponding to the origin configuration.
-    hidx_t hidx;
     // T-string fragment corresponding to tagged path from the origin configuration.
     tchar_t *tfrag;
     // Length of t-string fragment.
@@ -162,7 +160,6 @@ static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa
                 const typename ctx_t::conf_t &x = ctx.state[j];
                 rldfa_backlink_t &l = links[j];
                 l.conf = x.origin;
-                l.hidx = x.ttran;
                 get_tstring_fragment(ctx, x.ttran, tfrag, l, tstring);
             }
             rldfa.states[ctx.dc_origin]->arcs[c].backlinks = links;
@@ -182,12 +179,11 @@ static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> 
     if (is_new) {
         // Check if the new TDFA state is final.
         // See note [at most one final item per closure].
-        rldfa_backlink_t finlink = {NOCONF, HROOT, NULL, 0};
+        rldfa_backlink_t finlink = {NOCONF, NULL, 0};
         for (uint32_t i = 0; i < ctx.state.size(); ++i) {
             const typename ctx_t::conf_t &x = ctx.state[i];
             if (x.state->type == nfa_state_t::FIN) {
                 finlink.conf = i;
-                finlink.hidx = x.thist;
                 get_tstring_fragment(ctx, x.thist, tfrag, finlink, tstring);
                 break;
             }
@@ -211,7 +207,6 @@ inline rldfa_state_t::rldfa_state_t(size_t nchars, const rldfa_backlink_t &link)
     , finlink()
 {
     finlink.conf = link.conf;
-    finlink.hidx = link.hidx;
     finlink.tfrag = link.tfrag;
     finlink.tfrag_size = link.tfrag_size;
 }

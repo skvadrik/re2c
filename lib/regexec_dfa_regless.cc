@@ -27,7 +27,7 @@ static rldfa_backlink_t forward_pass(const regex_t *preg, const char *string,
     std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
 
     const char *strptr = string, *finstrptr = strptr;
-    rldfa_backlink_t finlink = {NOCONF, HROOT, NULL, 0};
+    rldfa_backlink_t finlink = {NOCONF, NULL, 0};
 
     log.clear();
     for (size_t stidx = 0;;) {
