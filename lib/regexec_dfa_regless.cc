@@ -89,8 +89,7 @@ int regexec_dfa_regless(const regex_t *preg, const char *string, size_t nmatch,
     if (finlink.conf == NOCONF) return REG_NOMATCH;
 
     const rldfa_t *rldfa = preg->rldfa;
-    ctx_t &ctx = *static_cast<ctx_t*>(rldfa->ctx);
-    const std::vector<Tag> &tags = ctx.dfa.tags;
+    const std::vector<Tag> &tags = rldfa->tags;
     const size_t ntags = tags.size();
 
     // It is necessary to initialize tag offsets to prevent overwriting the
@@ -165,8 +164,7 @@ subhistory_t *regparse_dfa_regless(const regex_t *preg, const char *string, size
     if (finlink.conf == NOCONF) return NULL;
 
     const rldfa_t *rldfa = preg->rldfa;
-    ctx_t &ctx = *static_cast<ctx_t*>(rldfa->ctx);
-    const std::vector<Tag> &tags = ctx.dfa.tags;
+    const std::vector<Tag> &tags = rldfa->tags;
     const size_t ntags = tags.size();
     regoff_trie_t *regtrie = preg->regtrie;
 

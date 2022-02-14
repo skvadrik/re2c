@@ -59,11 +59,6 @@ void regfree(regex_t *preg)
         delete preg->dfa;
 
         if (preg->flags & REG_REGLESS) {
-            if (preg->flags & REG_LEFTMOST) {
-                delete static_cast<ldetctx_t*>(preg->rldfa->ctx);
-            } else {
-                delete static_cast<pdetctx_t*>(preg->rldfa->ctx);
-            }
             delete preg->rldfa->opts;
             delete[] preg->rldfa->result;
             delete preg->rldfa;

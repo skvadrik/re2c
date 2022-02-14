@@ -53,11 +53,9 @@ struct rldfa_state_t {
 struct rldfa_t {
     const opt_t *opts;
     const int flags;
+    const std::vector<Tag>& tags;
 
-    // Determinization context, specialized either for leftmost greedy policy or
-    // for POSIX policy. Context lifetime should cover regexec, as it needs some
-    // of the data stored in it (TDFA, tag history, etc.).
-    void *ctx;
+    allocator_t alc;
 
     // RLDFA own states with backlinks in them.
     std::vector<rldfa_state_t*> states;
@@ -92,12 +90,12 @@ static inline tchar_t encode_tag(size_t tag)
 }
 
 template<typename history_t>
-static inline void get_tstring_fragment(determ_context_t<history_t> &ctx,
+static inline void get_tstring_fragment(history_t &history, allocator_t &alc,
     hidx_t hidx, std::vector<tchar_t> &tfrag, rldfa_backlink_t &link, bool tstring)
 {
     tfrag.clear();
     for (int32_t i = hidx; i != HROOT; ) {
-        const typename history_t::node_t &n = ctx.history.node(i);
+        const typename history_t::node_t &n = history.node(i);
         const size_t t = n.info.idx;
         const bool negative = n.info.neg;
         i = n.pred;
@@ -120,7 +118,7 @@ static inline void get_tstring_fragment(determ_context_t<history_t> &ctx,
     std::reverse(tfrag.begin(), tfrag.end());
 
     link.tfrag_size = tfrag.size();
-    link.tfrag = ctx.dc_allocator.template alloct<tchar_t>(tfrag.size());
+    link.tfrag = alc.template alloct<tchar_t>(tfrag.size());
     memcpy(link.tfrag, tfrag.data(), tfrag.size() * sizeof(tchar_t));
 }
 
@@ -130,9 +128,8 @@ static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa
     Msg msg;
     // Determinization context lifetime must cover regexec, as some of the data
     // stored in the context is used during matching.
-    ctx_t &ctx = *new ctx_t(rldfa.opts, msg, "", nfa, dfa);
-    rldfa.ctx = &ctx;
-    allocator_t &alc = ctx.dc_allocator;
+    ctx_t ctx(rldfa.opts, msg, "", nfa, dfa);
+    allocator_t &alc = rldfa.alc;
     const bool tstring = rldfa.flags & REG_TSTRING;
     std::vector<tchar_t> tfrag;
 
@@ -160,7 +157,7 @@ static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa
                 const typename ctx_t::conf_t &x = ctx.state[j];
                 rldfa_backlink_t &l = links[j];
                 l.conf = x.origin;
-                get_tstring_fragment(ctx, x.ttran, tfrag, l, tstring);
+                get_tstring_fragment(ctx.history, alc, x.ttran, tfrag, l, tstring);
             }
             rldfa.states[ctx.dc_origin]->arcs[c].backlinks = links;
         }
@@ -184,7 +181,8 @@ static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> 
             const typename ctx_t::conf_t &x = ctx.state[i];
             if (x.state->type == nfa_state_t::FIN) {
                 finlink.conf = i;
-                get_tstring_fragment(ctx, x.thist, tfrag, finlink, tstring);
+                get_tstring_fragment(
+                    ctx.history, rldfa.alc, x.thist, tfrag, finlink, tstring);
                 break;
             }
         }
@@ -219,7 +217,8 @@ inline rldfa_state_t::~rldfa_state_t()
 inline rldfa_t::rldfa_t(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts, int flags)
     : opts(opts)
     , flags(flags)
-    , ctx(NULL)
+    , tags(nfa.tags)
+    , alc()
     , states()
     , result(new regoff_t[nfa.tags.size()])
     , log()
