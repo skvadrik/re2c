@@ -123,22 +123,45 @@ static inline void get_tstring_fragment(history_t &history, allocator_t &alc,
 }
 
 template<typename ctx_t>
-static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa)
-{
+static rldfa_backlink_t *construct_backlinks(const ctx_t &ctx, rldfa_t &rldfa,
+    std::vector<tchar_t> &tfrag, const std::vector<std::vector<uint32_t> > &uniq_orig) {
+    if (ctx.dc_target == dfa_t::NIL) return NULL;
+
+    const bool tstring = rldfa.flags & REG_TSTRING;
+    const std::vector<uint32_t> &uo = uniq_orig[ctx.dc_target];
+    uint32_t nbacklinks = *std::max_element(uo.begin(), uo.end()) + 1;
+    rldfa_backlink_t *links = rldfa.alc.alloct<rldfa_backlink_t>(nbacklinks);
+
+    for (size_t j = 0, k; j < nbacklinks; ++j) {
+        for (k = 0; k < ctx.state.size() && uo[k] != j; ++k);
+        const typename ctx_t::conf_t &x = ctx.state[k];
+        rldfa_backlink_t &l = links[j];
+        l.conf = uniq_orig[ctx.dc_origin][x.origin];
+        get_tstring_fragment(ctx.history, rldfa.alc, x.ttran, tfrag, l, tstring);
+    }
+
+    return links;
+}
+
+template<typename ctx_t>
+static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa) {
     Msg msg;
     // Determinization context lifetime must cover regexec, as some of the data
     // stored in the context is used during matching.
     ctx_t ctx(rldfa.opts, msg, "", nfa, dfa);
-    allocator_t &alc = rldfa.alc;
-    const bool tstring = rldfa.flags & REG_TSTRING;
     std::vector<tchar_t> tfrag;
+    // Per-state array of mappings from configuration index to a unique origin index.
+    // This is needed to compress identical backlinks into one. Note that configurations
+    // with identical origin also have identical transition tags (because those are the
+    // lookahead tags in the origin configuration).
+    std::vector<std::vector<uint32_t> > uniq_orig;
 
     // Construct initial TDFA state.
     const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
     const clos_t c0(ctx.nfa.root, 0, INITIAL_TAGS, HROOT, HROOT);
     ctx.reach.push_back(c0);
     closure(ctx);
-    find_state_regless(ctx, rldfa, tfrag);
+    find_state_regless(ctx, rldfa, tfrag, uniq_orig);
 
     // Iterate while new states are added: for each alphabet symbol build tagged
     // epsilon-closure of all reachable NFA states, then find identical or
@@ -149,24 +172,18 @@ static void determinization_regless(const nfa_t &nfa, dfa_t &dfa, rldfa_t &rldfa
         for (uint32_t c = 0; c < ctx.dfa.nchars; ++c) {
             reach_on_symbol(ctx, c);
             closure(ctx);
-            find_state_regless(ctx, rldfa, tfrag);
+            find_state_regless(ctx, rldfa, tfrag, uniq_orig);
 
-            // Unlike TDFA, RLDFA stores backlinks instead of tag actions.
-            rldfa_backlink_t *links = alc.alloct<rldfa_backlink_t>(ctx.state.size());
-            for (size_t j = 0; j < ctx.state.size(); ++j) {
-                const typename ctx_t::conf_t &x = ctx.state[j];
-                rldfa_backlink_t &l = links[j];
-                l.conf = x.origin;
-                get_tstring_fragment(ctx.history, alc, x.ttran, tfrag, l, tstring);
-            }
-            rldfa.states[ctx.dc_origin]->arcs[c].backlinks = links;
+            // Multi-pass TDFA stores backlinks instead of tag actions.
+            rldfa.states[ctx.dc_origin]->arcs[c].backlinks = construct_backlinks(
+                ctx, rldfa, tfrag, uniq_orig);
         }
     }
 }
 
 template<typename ctx_t>
-static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> &tfrag)
-{
+static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> &tfrag,
+    std::vector<std::vector<uint32_t> > &uniq_orig) {
     const bool tstring = rldfa.flags & REG_TSTRING;
     dfa_t &dfa = ctx.dfa;
 
@@ -174,15 +191,30 @@ static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> 
     const bool is_new = do_find_state<ctx_t, false, true>(ctx);
 
     if (is_new) {
+        const typename ctx_t::confset_t &state = ctx.state;
+
+        // Map configuration index to a unique origin index.
+        uniq_orig.push_back(std::vector<uint32_t>(state.size(), UINT32_MAX));
+        std::vector<uint32_t> &uo = uniq_orig.back();
+        for (uint32_t i = 0, j = 0; j < state.size(); ++j) {
+            if (uo[j] != UINT32_MAX) continue;
+            for (size_t k = j + 1; k < state.size(); ++k) {
+                if (state[j].origin == state[k].origin) {
+                    DASSERT(state[j].ttran == state[k].ttran); // TDFA(1) property
+                    uo[k] = i;
+                }
+            }
+            uo[j] = i++;
+        }
+
         // Check if the new TDFA state is final.
         // See note [at most one final item per closure].
         rldfa_backlink_t finlink = {NOCONF, NULL, 0};
-        for (uint32_t i = 0; i < ctx.state.size(); ++i) {
-            const typename ctx_t::conf_t &x = ctx.state[i];
-            if (x.state->type == nfa_state_t::FIN) {
-                finlink.conf = i;
+        for (uint32_t i = 0; i < state.size(); ++i) {
+            if (state[i].state->type == nfa_state_t::FIN) {
+                finlink.conf = uo[i];
                 get_tstring_fragment(
-                    ctx.history, rldfa.alc, x.thist, tfrag, finlink, tstring);
+                    ctx.history, rldfa.alc, state[i].thist, tfrag, finlink, tstring);
                 break;
             }
         }
