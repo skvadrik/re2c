@@ -55,6 +55,7 @@ class Context:
     # Flags
     skeleton: bool = False
     keep_temp_files: bool = False
+    verbose: bool = False
 
     # Include paths
     incpaths: list = None
@@ -109,6 +110,13 @@ def parser_add_options(parser):
         dest='valgrind',
         action='store_true',
         help=f'Run .{os.path.sep}re2c under valgrind'
+    )
+
+    ogroup.add_argument(
+        '--verbose',
+        dest='verbose',
+        action='store_true',
+        help='Report successful test passes.'
     )
 
     ogroup.add_argument(
@@ -458,7 +466,8 @@ def run_test(test):
                 process.wait()
                 status = 'FAIL' if process.returncode != 0 else 'OK'
 
-        print('{:<10s} {:s}'.format(status, outx))
+        if status != 'OK' or _ctx.verbose:
+            print('{:<10s} {:s}'.format(status, outx))
         ran_tests += 1
 
         # cleanup
@@ -527,7 +536,8 @@ def run_test(test):
         }
 
         msg = status_map.get(status, 'FAIL (unknown error)')
-        print('{:<25s} {:s}'.format(msg, outx))
+        if status not in [0, 1] or _ctx.verbose:
+            print('{:<25s} {:s}'.format(msg, outx))
 
         if status in [0, 1] and not _ctx.keep_temp_files:
             files = [outx] + [str(f) for f in Path('.').glob(f'{outy}*')]
@@ -549,7 +559,7 @@ def run_test(test):
 
 
 def init_context(base_path, skeleton=False, keep_temp_files=False,
-                 valgrind=False, wine=False):
+                 valgrind=False, verbose=False, wine=False):
     """Call when new processes start.
 
     This function is used as an initializer on a per-process basis due
@@ -558,6 +568,7 @@ def init_context(base_path, skeleton=False, keep_temp_files=False,
     _ctx.base_path = abshere(base_path)
     _ctx.skeleton = skeleton
     _ctx.keep_temp_files = keep_temp_files
+    _ctx.verbose = verbose
 
     # Find 're2c.exe' on Windows or 're2c' for Linux/UNIX in TOP_BUILDIR
     # (shutil.which cannot find re2c.exe when running tests on Wine).
@@ -631,8 +642,13 @@ def main():
     if os.name == 'posix':
         subprocess.call(['chmod', '-R', 'u+w', test_blddir])
 
-    init_context(test_blddir, args.skeleton, args.keep_temp_files,
-        args.valgrind, args.wine)
+    init_context(
+        test_blddir,
+        skeleton=args.skeleton,
+        keep_temp_files=args.keep_temp_files,
+        valgrind=args.valgrind,
+        verbose=args.verbose,
+        wine=args.wine)
 
     clean_test_tree(test_blddir)
     tests = filter_tests(test_blddir)
@@ -647,7 +663,7 @@ def main():
             initializer=init_context,
             # Note: the arguments order is important here
             initargs=(test_blddir, args.skeleton, args.keep_temp_files,
-                      args.valgrind, args.wine,)
+                      args.valgrind, args.verbose, args.wine,)
     ) as pool:
         for (ran, soft_err, hard_err) in pool.imap_unordered(run_test, tests):
             total_ran_tests += ran
