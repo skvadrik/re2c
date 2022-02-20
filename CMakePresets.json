@@ -217,7 +217,7 @@
     {
       "name": "windows-config-base",
       "hidden": true,
-      "generator": "Visual Studio 16 2019",
+      "generator": "Visual Studio 17 2022",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
