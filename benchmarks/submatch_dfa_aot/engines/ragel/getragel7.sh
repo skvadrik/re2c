@@ -1,4 +1,4 @@
-set -e
+set -ex
 
 if [ -e ragel7 ] ; then
     echo "ragel7 is already installed, quitting"
@@ -10,7 +10,10 @@ RAGEL_DIR=ragel-7.0.4
 
 wget http://www.colm.net/files/colm/"$COLM_DIR".tar.gz -O - | tar zx \
     && cd "$COLM_DIR" \
-    && ./configure --prefix=$(pwd)/install \
+    && sed -i 's|^#!/bin/bash|#!/usr/bin/env bash|' src/colm-wrap.sh \
+    && ./configure \
+        --prefix=$(pwd)/install \
+        --disable-manual \
     && make -j$(nproc) \
     && make install \
     && cd ..
