@@ -392,9 +392,7 @@ endif
 		cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D); \
 	else \
 		$(BISON) --output=$@ --defines=$(@:cc=h) $< && \
-		if test -x $(top_builddir)/re2c$(EXEEXT); then \
-			cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D); \
-		fi; \
+		cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D); \
 	fi
 
 # lexer depends on bison-generated header
