@@ -27,25 +27,20 @@ int main(int argc, char** argv)
         {"uri-rfc3986",    URI,           uri_strings,  0},
         {"uri-simple",     URI2,          uri_strings,  0},
         {"ipv6",           IPV6,          ipv6_strings, 0},
-        {"ipv6-simple",    IPV62,         ipv6_strings, 0},
         {"ipv4",           IPV4,          ipv4_strings, 0},
-        {"ipv4-simple",    IPV42,         ipv4_strings, 0},
         {"date",           DATE,          date_strings, 0},
-        {"date-simple",    DATE2,         date_strings, 0},
         {"package",        PACKAGE_ATOM,  atom_strings, 0},
-        {"package-simple", PACKAGE_ATOM2, atom_strings, 0},
 
-        {NULL, "(a)*a{1}",    aaa_strings, 0},
         {NULL, "(a)*a{10}",   aaa_strings, 0},
         {NULL, "(a)*a{100}",  aaa_strings, 0},
         {NULL, "(a)*a{1000}", aaa_strings, 0},
     };
 
     const std::vector<alg_t> algs {
-        {"regs-last-offset",   ENGINE_RE2C, 0},
-        {"noregs-last-offset", ENGINE_RE2C, REG_REGLESS},
-        {"regs-all-offsets",   ENGINE_RE2C, REG_SUBHIST},
-        {"noregs-all-offsets", ENGINE_RE2C, REG_SUBHIST | REG_REGLESS},
+        {"last-offset",           ENGINE_RE2C, 0},
+        {"multipass-last-offset", ENGINE_RE2C, REG_REGLESS},
+        {"all-offsets",           ENGINE_RE2C, REG_SUBHIST},
+        {"multipass-all-offsets", ENGINE_RE2C, REG_SUBHIST | REG_REGLESS},
     };
 
     benchmark::Initialize(&argc, argv);
