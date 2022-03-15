@@ -15016,10 +15016,6 @@ for (int a = 0; a < reTest.length; a++){
             tex.printf("\\usepackage{amsmath, amssymb, amsfonts}\n");
             tex.printf("\\usepackage{tikz, pgfplots, pgfplotstable}\n");
             tex.printf("\n");
-            tex.printf("\\usepackage{comicneue}\n");
-            tex.printf("\\usepackage[T1]{fontenc}\n");
-            tex.printf("\\renewcommand{\\familydefault}{\\sfdefault}\n");
-            tex.printf("\n");
             tex.printf("\\begin{document}\n");
             tex.printf("\n");
             tex.printf("\\pgfplotstableread {\n");
@@ -15044,12 +15040,13 @@ for (int a = 0; a < reTest.length; a++){
             tex.printf("  legend cell align = left,\n");
             tex.printf("  legend style = {thick, draw = none},\n");
             tex.printf("  xlabel = regular expression size (characters),\n");
-            tex.printf("  ylabel = parse speed (characters per second)\n");
+            tex.printf("  ylabel = parse speed (characters per second),\n");
+            tex.printf("  width = 5in\n");
             tex.printf("]\n");
             String[] row0 = plot.get(0);
             for (int i = 1; i < row0.length; i++){
                 String name = algolabels[i-1].split("\\|")[0];
-                tex.printf("\\addplot [color=%s] table [x index=0, y index=%s] from \\datatable;\n",
+                tex.printf("\\addplot [line width=0.7pt, color=%s] table [x index=0, y index=%s] from \\datatable;\n",
                     tex_colors[i - 1], i);
                 tex.printf("\\addlegendentry{%s}\n", name);
             }
@@ -16314,41 +16311,41 @@ this.finreg = false;
         };
 
         ReTdfa[] rearrDPO = new ReTdfa[]{
-            new ReTdfa("DPOR",      "negtags,posix,transtable,lookahead,okui,altbin,offsets,lastval"),
-            new ReTdfa("DPOL",      "negtags,posix,transtable,lookahead,okui,altbin,offsets,lastval,tagless"),
-            new ReTdfa("DPOR-re2c", "re2c"),
-            new ReTdfa("DPOL-re2c", "re2c,re2c_regless"),
+            new ReTdfa("last-offset-java",           "negtags,posix,transtable,lookahead,okui,altbin,offsets,lastval"),
+            new ReTdfa("last-offset-multipass-java", "negtags,posix,transtable,lookahead,okui,altbin,offsets,lastval,tagless"),
+            new ReTdfa("last-offset-re2c",           "re2c"),
+            new ReTdfa("last-offset-multipass-re2c", "re2c,re2c_regless"),
         };
 
         ReTdfa[] rearrDPH = new ReTdfa[]{
-            new ReTdfa("DPHR",      "negtags,posix,transtable,lookahead,okui,altbin,finreg"),
-            new ReTdfa("DPHL",      "negtags,posix,transtable,lookahead,okui,altbin,finreg,tagless"),
-            new ReTdfa("DPHR-re2c", "re2c,re2c_subhist"),
-            new ReTdfa("DPHL-re2c", "re2c,re2c_subhist,re2c_regless"),
+            new ReTdfa("all-offsets-java",           "negtags,posix,transtable,lookahead,okui,altbin,finreg"),
+            new ReTdfa("all-offsets-multipass-java", "negtags,posix,transtable,lookahead,okui,altbin,finreg,tagless"),
+            new ReTdfa("all-offsets-re2c",           "re2c,re2c_subhist"),
+            new ReTdfa("all-offsets-multipass-re2c", "re2c,re2c_subhist,re2c_regless"),
         };
 
         ReTdfa[] rearrDPT = new ReTdfa[]{
-            new ReTdfa("DPTL",      "negtags,posix,transtable,lookahead,okui,altbin,matchTstring,tagless"),
-            new ReTdfa("DPTL-re2c", "re2c,re2c_tstring,re2c_regless"),
+            new ReTdfa("tagged-string-multipass-java", "negtags,posix,transtable,lookahead,okui,altbin,matchTstring,tagless"),
+            new ReTdfa("tagged-string-multipass-re2c", "re2c,re2c_tstring,re2c_regless"),
         };
 
         ReTdfa[] rearrDFO = new ReTdfa[]{
-            new ReTdfa("DFOR",      "negtags,posix,transtable,lookahead,okui,altbin,autotags,offsets,lastval"),
-            new ReTdfa("DFOL",      "negtags,posix,transtable,lookahead,okui,altbin,autotags,offsets,lastval,tagless"),
-            new ReTdfa("DFOR-re2c", "re2c,re2c_autotags"),
-            new ReTdfa("DFOL-re2c", "re2c,re2c_autotags,re2c_regless"),
+            new ReTdfa("last-offset-java",           "negtags,posix,transtable,lookahead,okui,altbin,autotags,offsets,lastval"),
+            new ReTdfa("last-offset-multipass-java", "negtags,posix,transtable,lookahead,okui,altbin,autotags,offsets,lastval,tagless"),
+            new ReTdfa("last-offset-re2c",           "re2c,re2c_autotags"),
+            new ReTdfa("last-offset-multipass-re2c", "re2c,re2c_autotags,re2c_regless"),
         };
 
         ReTdfa[] rearrDFH = new ReTdfa[]{
-            new ReTdfa("DFHR",      "negtags,posix,transtable,lookahead,okui,altbin,autotags,finreg"),
-            new ReTdfa("DFHL",      "negtags,posix,transtable,lookahead,okui,altbin,autotags,finreg,tagless"),
-            new ReTdfa("DFHR-re2c", "re2c,re2c_autotags,re2c_subhist"),
-            new ReTdfa("DFHL-re2c", "re2c,re2c_autotags,re2c_subhist,re2c_regless"),
+            new ReTdfa("all-offsets-java",           "negtags,posix,transtable,lookahead,okui,altbin,autotags,finreg"),
+            new ReTdfa("all-offsets-multipass-java", "negtags,posix,transtable,lookahead,okui,altbin,autotags,finreg,tagless"),
+            new ReTdfa("all-offsets-re2c",           "re2c,re2c_autotags,re2c_subhist"),
+            new ReTdfa("all-offsets-multipass-re2c", "re2c,re2c_autotags,re2c_subhist,re2c_regless"),
         };
 
         ReTdfa[] rearrDFT = new ReTdfa[]{
-            new ReTdfa("DFTL",      "negtags,posix,transtable,lookahead,okui,autotags,altbin,matchTstring,tagless"),
-            new ReTdfa("DFTL-re2c", "re2c,re2c_autotags,re2c_tstring,re2c_regless"),
+            new ReTdfa("tagged-string-multipass-java", "negtags,posix,transtable,lookahead,okui,autotags,altbin,matchTstring,tagless"),
+            new ReTdfa("tagged-string-multipass-re2c", "re2c,re2c_autotags,re2c_tstring,re2c_regless"),
         };
 
         ReTdfa[] rearrDP = concatArrays(rearrDPO, concatArrays(rearrDPH, rearrDPT));
@@ -16361,8 +16358,8 @@ this.finreg = false;
         //bench(rearrDFO, "measure_DFO.ser", "chart_DFO.html");
         //bench(rearrDFH, "measure_DFH.ser", "chart_DFH.html");
         //bench(rearrDFT, "measure_DFT.ser", "chart_DFT.html");
-        bench(rearrDP,  "measure_DP.ser",  "chart_DP.html");
-        bench(rearrDF,  "measure_DF.ser",  "chart_DF.html");
+        bench(rearrDP,  "measure_sparse.ser", "chart_sparse.html");
+        bench(rearrDF,  "measure_dense.ser",  "chart_dense.html");
 
         if (testErrors > 0){
             System.out.printf("end test %s tests failed\n",testErrors);
