@@ -71,6 +71,16 @@ jobs:
             ${{ runner.os }}-chocolatey-${{ matrix.os }}-
             ${{ runner.os }}-chocolatey-
 
+      - name: Setup apt cache (Linux)
+        if: startsWith(runner.os, 'Linux')
+        uses: actions/cache@v2
+        with:
+          path: /var/cache/apt
+          key: ${{ runner.os }}-apt-cache-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-apt-cache-${{ matrix.os }}-
+            ${{ runner.os }}-apt-cache-
+
       - name: Setup Common Prerequisites
         run: |
           case ${{ runner.os }} in
