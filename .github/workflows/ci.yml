@@ -85,6 +85,7 @@ jobs:
         run: |
           case ${{ runner.os }} in
             Linux*)
+              sudo apt update
               sudo apt install gcc-multilib g++-multilib  # for -m32
               ;;
             macOS*)
