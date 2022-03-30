@@ -52,6 +52,7 @@ jobs:
             Linux*)
               echo "CC=gcc" >> $GITHUB_ENV
               echo "CXX=g++" >> $GITHUB_ENV
+              sudo apt update
               sudo apt install libre2-dev libbenchmark-dev
               ;;
             macOS*)
