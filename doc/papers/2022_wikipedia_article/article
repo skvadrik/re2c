@@ -1,0 +1,397 @@
+In the [[automata theory]], a '''tagged deterministic finite automaton''' ('''TDFA''') is an extension of [[deterministic finite automaton]] ([[deterministic finite automaton|DFA]]) that is capable of submatch extraction and [[parsing]] [[regular language|regular languages]]. Canonical DFA solve the recognition problem: given a [[regular expression]], one can construct an equivalent DFA, execute it on a string and find out if the string belongs to the language defined by the regular expression or not. In addition to that, TDFA can extract substrings that match specific subexpressions. More generally, TDFA can identify positions in the input string that match tagged positions in a regular expression. '''Tags''' are meta-symbols that can be placed anywhere in a regular expression, similar to capturing parentheses (but without the pairing requirement).
+
+TDFA have the same basic structure as ordinary DFA: a finite set of states linked by transitions. In addition to that, TDFA have a fixed set of '''registers''' that hold tag values, and '''register operations''' on transitions that set or copy register values.
+The values are typically scalar offsets in the input string, or offset lists (for tags that match repeatedly). Offset lists can be represented efficiently with scalar values using a [[trie]] structure. There is no one-to-one mapping between tags in a regular expression and registers in a TDFA: a single tag may need many registers, and the same register may hold values of different tags.
+
+Canonical DFA solve the recognition problem in linear time.
+The same holds for TDFA, since the number of registers and register operations is fixed and depends only on the regular expression, but not on the length of input.
+The overhead on submatch extraction depends on tag density in a regular expression
+and '''nondeterminism degree''' of each tag (the maximum number of registers needed to track all possible values of the tag in a single TDFA state).
+On one extreme, if there are no tags, a TDFA is identical to a canonical DFA.
+On the other extreme, if every subexpression is tagged, a TDFA effectively performs full parsing and has many operations on every transition.
+In practice for real-world regular expressions with a few submatch groups the overhead is negligible compared to matching with canonical DFA.
+<ref name="BorTra22"/> <ref name="Tra17"/>
+
+== History ==
+
+TDFA were first described by Ville Laurikari in 2000.
+<ref name="Lau00"> {{cite journal
+  |last1= Laurikari
+  |first1= Ville.
+  |title= NFAs with Tagged Transitions, their Conversion to Deterministic Automata and Application to Regular Expressions.
+  |journal= SPIRE 2000
+  |pages= 181-187
+  |year= 2000
+  |url=https://laurikari.net/ville/spire2000-tnfa.pdf
+}}</ref>
+At that time it was unknown whether it is possible at all to perform submatch extraction in one pass on a deterministic finite-state automaton,
+so this paper was an important breakthrough.
+Laurikari described TDFA construction and gave a proof that determinization terminates,
+however his algorithm did not handle disambiguation correctly.
+
+In 2007 Chris Kuklewicz implemented TDFA in a [[Haskell_(programming_language)|Haskell]] library Regex-TDFA with POSIX longest-match disambiguation.
+<ref name="regex-tdfa"> {{cite web
+  |title= Regex-TDFA source code
+  |url=https://github.com/ChrisKuklewicz/regex-tdfa
+}}</ref>
+He gave only an informal description,
+<ref name="Kuk07"> {{cite web
+  |last1= Kuklewicz
+  |first1= Chris.
+  |title= Regular expressions/bounded space proposal.
+  |year= 2007
+  |url=http://wiki.haskell.org/index.php?title=Regular_expressions/Bounded_space_proposal&oldid=11475
+}}</ref>
+but this answered the principal question whether TDFA are capable of POSIX longest-match disambiguation,
+which was doubted by other researchers.
+<ref name="ltu-kuklewicz"> {{cite web
+  |title= Lambda The Ultimate (discussion)
+  |url=http://lambda-the-ultimate.org/node/2064#comment-25471
+  |year=2007
+}}</ref>
+
+In 2017 Ulya Trafimovich described TDFA with one-symbol lookahead.
+<ref name="Tra17"> {{cite journal
+  |last1= Trafimovich
+  |first1= Ulya.
+  |title= Tagged Deterministic Finite Automata with Lookahead.
+  |journal= arXiv
+  |year= 2017
+  |url=https://arxiv.org/abs/1907.08837
+}}</ref>
+The use of lookahead symbol reduces the number of registers and operations in TDFA,
+which makes them faster and often smaller than Laurikari TDFA.
+Trafimovich called TDFA variants with and without lookahead TDFA(1) and TDFA(0), by analogy with [[LR_parser|LR parsers]] LR(1) and LR(0).
+She implemented TDFA(1) in the open-source [[lexer generator]] [[re2c|RE2C]]
+<ref name="re2c.org"> {{cite web
+  |title= RE2C official website
+  |url=https://re2c.org
+}}</ref>
+<ref name="re2c"> {{cite web
+  |title= RE2C source code
+  |url=https://github.com/skvadrik/re2c
+}}</ref>
+and formalized Kuklewicz disambiguation algorithm.
+
+In 2018 Angelo Borsotti worked on an experimental Java implementation of TDFA;
+it was published later in 2021.
+<ref name="tdfa-java"> {{cite web
+  |title= Experimental Java library for TDFA.
+  |url= https://github.com/skvadrik/re2c/tree/master/benchmarks/submatch_java
+}}</ref>
+In 2019 Borsotti and Trafimovich joined efforts:
+they adapted POSIX disambiguation algorithm by Okui and Suzuki to TDFA,
+gave a formal proof of correctness,
+implemented it in RE2C
+and showed the new algorithm to be faster than Kuklewicz disambiguation in practice.
+<ref name="BorTra19"> {{cite journal
+  |last1= Borsotti
+  |first1= Angelo
+  |last2= Trafimovich
+  |first2= Ulya.
+  |title= Efficient POSIX submatch extraction on nondeterministic finite automata.
+  |journal= Practice and Experience
+  |volume= 51
+  |number= 2
+  |pages= 159–192
+  |year= 2019
+  |doi=10.1002/spe.2881
+  |url=https://www.researchgate.net/publication/344781678_Efficient_POSIX_submatch_extraction_on_nondeterministic_finite_automata
+}}</ref>
+
+In 2020 Trafimovich published an article about TDFA implementation in RE2C.
+<ref name="Tra20"> {{cite journal
+  |last1= Trafimovich
+  |first1= Ulya.
+  |title= RE2C: A lexer generator based on lookahead-TDFA.
+  |journal= Software Impacts
+  |volume=6
+  |number=100027
+  |year= 2020
+  |doi=10.1016/j.simpa.2020.100027
+}}</ref>
+
+In 2022 Borsotti and Trafimovich published a paper with a detailed description of TDFA construction.
+<ref name="BorTra22"> {{cite journal
+  |last1= Borsotti
+  |first1= Angelo
+  |last2= Trafimovich
+  |first2= Ulya.
+  |title= A closer look at TDFA.
+  |journal= arXiv
+  |year= 2022
+  |url=https://arxiv.org/abs/2206.01398
+}}</ref>
+The paper incorporated their past research and presented multi-pass TDFA that are better suited to just-in-time determinization.
+They also compared TDFA against other algorithms and provided benchmarks.
+<ref name="re2c.org-benchmarks"> {{cite web
+  |title= RE2C official website (benchmarks)
+  |url=https://re2c.org/benchmarks/benchmarks.html#submatch-lexer-generators
+}}</ref>
+
+== Formal definition ==
+
+[[File:Tdfa example.svg|thumb|upright=2.3|right|Figure 0: example of a TDFA for regular expression <math>(1 a 2)^* 3 (a|4 b) 5 b^*</math>.]]
+
+The following definition is according to Trafimovich and Borsotti. <ref name="BorTra22"/> The original definition by Laurikari is slightly different. <ref name="Lau00"/>
+
+A tagged deterministic finite automaton <math>F</math> is a [[n-tuple|tuple]]
+<math>(\Sigma, T, S, S_f, s_0, R, R_f, \delta, \varphi)</math>, where:
+
+* <math>\Sigma</math> is a finite set of symbols ([[alphabet]])
+* <math>T</math> is a finite set of tags
+* <math>S</math> is a finite set of [[State (computer science)|states]] with [[Finite-state machine#Start state|initial state]] <math>s_0</math> and a subset of [[Finite-state machine#Accept .28or final.29 states|final states]] <math>S_f \subseteq S</math>
+* <math>R</math> is a finite set of registers with a subset of final registers <math>R_f</math> (one per tag)
+* <math>\delta: S \times \Sigma \rightarrow S \times O^*</math> is a transition function
+* <math>\varphi: S_f \rightarrow O^*</math> is a final function, where <math>O</math> is a set of register operations of the following types:
+** set register <math>i</math> to nil or to the current position: <math>i \leftarrow v</math>, where <math>v \in \{\mathbf{n},\mathbf{p}\}</math>
+** copy register <math>j</math> to register <math>i</math>: <math>i \leftarrow j</math>
+** copy register <math>j</math> to register <math>i</math> and append history: <math>i \leftarrow j \cdot h</math>, where <math>h</math> is a string over <math>\{\mathbf{n},\mathbf{p}\}</math> 
+
+=== Example ===
+
+[[:File:TDFA example.svg|Figure 0]] shows an example of a TDFA for regular expression <math>(1 a 2)^* 3 (a|4 b) 5 b^*</math>
+with an alphabet <math>\Sigma=\{a,b\}</math> and a set of tags <math>T=\{1,2,3,4,5\}</math>
+that matches strings of the form <math>a \dots a b \dots b</math> with at least one symbol.
+TDFA has four states <math>S=\{0,1,2,3\}</math> three of which are final <math>S_f=\{1,2,3\}</math>.
+The set of registers is <math>R=\{r_1,r_2,r_3,r_4,r_5\}</math>
+with a subset of final registers <math>R_f=\{r_1,r_2,r_3,r_4,r_5\}</math>
+where register <math>r_i</math> corresponds to <math>i</math>-th tag.
+Transitions have operations defined by the <math>\delta</math> function,
+and final states have operations defined by the <math>\varphi</math> function (marked with wide-tipped arrow).
+For example, to match string <math>aab</math>,
+one starts in state 0,
+matches the first <math>a</math> and moves to state 1 (setting registers <math>r_1, r_2</math> to undefined and <math>r_3</math> to the current position 0),
+matches the second <math>a</math> and loops to state 1 (register values are now <math>r_1=0, r_2=r_3=1</math>),
+matches <math>b</math> and moves to state 2 (register values are now <math>r_1=1, r_2=r_3=r_4=2</math>),
+executes the final operations in state 2 (register values are now <math>r_1=1, r_2=r_3=r_4=2, r_5=3</math>)
+and finally exits TDFA.
+
+== TDFA construction ==
+
+TDFA construction is performed in a few steps.
+First, a regular expression is converted to a '''tagged nondeterministic finite automaton''' ('''TNFA''').
+Second, a TNFA is converted to a TDFA using a '''determinization''' procedure;
+this step also includes '''disambiguation''' that resolves conflicts between ambiguous TNFA paths.
+After that, a TDFA can optionally go through a number of '''optimizations''' that reduce the number of registers and operations,
+including '''minimization''' that reduces the number of states.
+Algorithms for all steps of TDFA construction with pseudocode are given in the paper by Borsotti and Trafimovich <ref name="BorTra22"/>.
+
+This section explains TDFA construction on the example of a regular expression <math>a^* t b^* | ab</math>,
+where <math>t</math> is a tag and <math>\{a,b\}</math> are alphabet symbols.
+
+=== Tagged NFA ===
+
+TNFA is a [[nondeterministic finite automaton]] with tagged ε-transitions.
+It was first described by Laurikari <ref name="Lau00"/>,
+although similar constructions were known much earlier as [[Mealy machine|Mealy machines]] and nondeterministic [[Finite-state_transducer|finite-state transducers]].
+TNFA construction is very similar to [[Thompson's construction]]:
+it mirrors the structure of a regular expression. <ref name="BorTra22"/>
+Importantly, TNFA preserves ambiguity in a regular expression:
+if it is possible to match a string in two different ways,
+then TNFA for this regular expression has two different accepting paths for this string.
+TNFA definition by Borsotti and Trafimovich <ref name="BorTra22"/> differs from the original one by Laurikari
+in that TNFA can have '''negative tags''' on transitions:
+they are needed to make the absence of match explicit in cases when there is a bypass for a tagged transition.
+
+[[File:TNFA.svg|thumb|upright=2|right|Figure 1: TNFA for regular expression <math>a^* t b^* | ab</math>.]]
+
+[[:File:TDFA construction (TNFA).svg|Figure 1]] shows TNFA for the example regular expression.
+It has three kinds of transitions:
+transitions on alphabet symbols <math>\{a, b\}</math> (dark blue),
+tagged ε-transitions (the one from state 4 to state 12 with tag <math>t</math> and the one from state 10 to state 11 with negative tag <math>-t</math>, bright green), and 
+untagged ε-transitions (light blue).
+TNFA has a single start state 0 and a single final state 11.
+
+In order to understand TNFA determinization, it helps to understand TNFA simulation first.
+Recall the canonical ε-NFA simulation: it constructs a subset of active states as an ε-closure of the start state,
+and then in a loop repeatedly steps on the next input symbol and constructs ε-closure of the active state set.
+Eventually the loop terminates: either the active set becomes empty (which means a failure),
+or all input symbols get consumed (which means a success if the active set contains a final state, otherwise a failure).
+TNFA simulation is similar, but it additionally tracks tag values.
+Every time simulation encounters a tagged transition, it updates tag value to the current offset.
+Since the simulation tracks multiple nondeterministic paths simultaneously, tag values along these paths may differ and should be tracked separately.
+Another difficulty is the need for disambiguation:
+unlike canonical NFA simulation, TNFA simulation needs to distinguish ambiguous paths,
+as they may have different tag values.
+
+[[File:TDFA construction (TNFA simulation).svg|thumb|upright=2.25|right|Figure 2: TNFA for regular expression <math>a^* t b^* | ab</math> simulated on a string <math>ab</math>.]]
+
+[[:File:TDFA construction (TNFA simulation).svg|Figure 2]] shows an example of TNFA simulation on a string <math>ab</math>:
+
+{{Bulleted list|
+| Initially the active set contains start state 0 with tag value ? (unknown).
+| ε-Closure of the active set gives the new active set containing states 2, 5, 8, 11 with tag values ?, 0, ?, 0 respectively.
+| Stepping on symbol <math>a</math> gives the new active set containing states 3, 9 with tag values ?, ? respectively.
+| ε-Closure of the active set gives the new active set containing states 2, 5, 9, 11 with tag values ?, 1, ?, 1 respectively.
+| Stepping on symbol <math>b</math> gives the new active set containing states 6, 10 with tag values 1, ? respectively.
+| ε-Closure of the active set gives the new active set containing states 5, 11 with tag values 1, 1 respectively. Reflecting ambiguity in the regular expression, there are two conflicting paths that reach state 11: the one from state 5 corresponds to the left alternative <math>a^* t b^*</math> with tag value 1, and the one from state 9 corresponds to the right alternative <math>ab</math> with tag value <math>\varnothing</math> (which differs from the unknown value). The first path takes priority.
+| Simulation terminates, as there are no more input symbols. The active set contains final state 11, so the match is successful and <math>t=1</math>.
+}}
+
+=== Disambiguation ===
+
+[[Ambiguous_grammar|Ambiguity]] means the existence of multiple different parse trees for the same input.
+It is a property of a regular expression;
+ambiguity is preserved by TNFA construction
+and gets resolved during TNFA simulation or determinization.
+One way to resolve ambiguity is use a '''disambiguation policy''', the most notable examples being the '''leftmost-greedy'''
+and the '''longest-match (POSIX)''' policies.
+The leftmost-greedy policy is defined in terms of regular expression structure;
+it admits a simple and efficient implementation.
+The POSIX policy, on the other hand, is defined in terms of the structure of parse results;
+it is more difficult to implement and computationally more complex than the leftmost-greedy policy. <ref name="BorTra19"/>
+TDFA can work with both policies, and there is no runtime overhead
+on disambiguation, since it happens during determinization and gets built into TDFA structure.
+For TNFA simulation, on the other hand, the time spent on disambiguation is included in the runtime.
+
+Our example regular expression <math>a^* t b^* | ab</math> is deliberately ambiguous, as
+it allows one to parse <math>ab</math> in two different ways:
+either as the left alternative <math>a^* t b^*</math>, or the right one <math>ab</math>.
+Depending on which alternative is preferred, tag <math>t</math> should either have value
+<math>1</math> (the offset at the position between symbols <math>a</math> and <math>b</math>),
+or <math>\varnothing</math> (undefined).
+Both POSIX and leftmost greedy disambiguation policies agree that the first alternative is preferable in this case.
+
+=== Determinization ===
+
+TNFA determinization is based on the canonical [[powerset construction]] algorithm that converts an [[nondeterministic finite automaton|NFA]] to a [[deterministic finite automaton|DFA]].
+The algorithm simulates NFA on all possible strings. At each step of the simulation, the active set of NFA states forms a new DFA state. If the new state is identical to an existing DFA state, it is discarded and replaced with the existing one, and the current branch of simulation terminates. Otherwise the new state is added to the growing set of DFA states and simulation from this state continues. Eventually determinization terminates: although the set of all possible strings is infinite, the set of different DFA states is finite, and at some point all new states become identical to existing ones.
+
+In the case of TDFA naive powerset construction faces a problem:
+TDFA states contain tag information, which changes at every step of the simulation (as the offsets increase).
+This prevents TDFA states from mapping: a pair of states that contain identical TNFA states but different tag offsets are not identical and cannot be mapped.
+As a result, simulation continues indefinitely, the set of TDFA states grows, and determinization does not terminate.
+To solve this problem, Laurikari applied the idea of [[indirection]] <ref name="Lau00"/>:
+instead of storing immediate tag values in TDFA states, he suggested storing them indirectly in '''registers'''.
+Tag values in registers may be different, but it doesn't matter as long as the registers are identical.
+This solves the termination problem:
+even if TDFA states have different registers, they can be made identical ('''mapped''' to each other)
+by adding operations that copy the corresponding register values.
+Indirection is not free: it requires adding runtime '''register operations''' on transitions that update register values.
+To reduce the runtime overhead, Trafimovich used the [[lookahead]] optimization. <ref name="Tra17"/>
+The idea is to move register operations from the incoming transition into a TDFA state
+to the outgoing transitions from this state.
+This way the operations get split on the lookahead symbol,
+which reduces the overlap between register lifetimes and results in a faster TDFA. <ref name="re2c.org-benchmarks"/>
+To use this optimization, it is necessary to track '''lookahead tags''' in each TDFA state under construction
+and take them into account when mapping TDFA states.
+
+[[File:Determinization.svg|thumb|upright=3|right|Figure 3: Determinization of TNFA for regular expression <math>a^* t b^* | ab</math>.]]
+
+[[File:Tdfa unoptimized.svg|thumb|upright=1.7|right|Figure 4: TDFA for regular expression <math>a^* t b^* | ab</math> without optimizations.]]
+
+[[:File:Determinization.svg|Figure 3]] shows the determinization process for the running example.
+
+{{Bulleted list|
+| <p> The first TDFA state <math>s_0</math> is formed by the ε-closure of the initial TNFA state and contains states 2, 5, 8, 11. All states have the same register version <math>r_0</math>. ε-Paths from state 0 to states 5 and 11 pass through a tagged transition, therefore these states have a lookahead tag <math>t</math>, while states 2 and 8 have empty lookahead tags. Since <math>s_0</math> contains state 11, it is final, and the lookahead tag <math>t</math> for 11 results in a register operation <math>r_1 \leftarrow \mathbf{p}</math>. </p>
+| <p> Stepping from <math>s_0</math> on symbol <math>a</math> and constructing ε-closure of states 3 and 9 results in <math>s_1</math> with states 2, 5, 9, 11. Since the ε-closure originates from states 2 and 8 in <math>s_0</math> that have empty lookahead tags, transition from <math>s_0</math> to <math>s_1</math> has no register operations, and the register version <math>r_0</math> is unchanged. <math>s_1</math> is also final with a register operation <math>r_1 \leftarrow \mathbf{p}</math>. </p>
+| <p> Stepping from <math>s_1</math> on symbol <math>a</math> and constructing ε-closure of state 3 results in <math>s_2</math> with states 2, 5, 11. Since the origin state 2 in <math>s_1</math> has empty lookahead tags, transition from <math>s_1</math> to <math>s_2</math> has no operations, and <math>r_0</math> is unchanged. <math>s_2</math> is also final with a register operation <math>r_1 \leftarrow \mathbf{p}</math>. </p>
+| <p> Stepping from <math>s_2</math> on symbol <math>a</math> and constructing ε-closure of state 3 results in a TDFA state identical to <math>s_2</math>, so no new state is added, but a looping transition from <math>s_2</math> to <math>s_2</math>. </p>
+| <p> Stepping from <math>s_0</math> on symbol <math>b</math> and constructing ε-closure of state 6 results in <math>s_3</math> with states 5, 11. Since the origin state 5 in <math>s_0</math> has a lookahead tag <math>t</math>, transition from <math>s_0</math> to <math>s_3</math> has a register operation <math>r_r \leftarrow \mathbf{p}</math>, and the register version in <math>s_3</math> is changed to <math>r_1</math>. State <math>s_3</math> is final, but it has no final register operations, as 11 has no lookahead tag. </p>
+| <p> Stepping from <math>s_1</math> on symbol <math>b</math> and constructing ε-closure of states 6 and 10 requires disambiguation, as both paths from states 6 and 10 reach state 11. The path from state 6 is preferred (both by POSIX and by leftmost greedy policies). The new state is very similar to <math>s_3</math>, except that the new register is <math>r_2</math> not <math>r_1</math>. In this case <math>r_1</math> could be reused as well, making the new state completely identical to <math>s_3</math>. But in the general case it is unclear which registers to reuse. Also, it makes optimizations harder, as complex register lifetimes have more overlap with each other. Although the new state is not identical to <math>s_3</math>, it can be mapped to <math>s_3</math> by adding a copy operation <math>r_1 \leftarrow r_2</math>. The two operations <math>r_2 \leftarrow \mathbf{p}</math> and <math>r_1 \leftarrow r_2</math> get fused into <math>r_1 \leftarrow \mathbf{p}</math> on transition from <math>s_1</math> to <math>s_3</math>. </p>
+| <p> Stepping from <math>s_2</math> on symbol <math>b</math> is the same as the previous case, except that the new register version is <math>r_3</math>. </p>
+| <p> Stepping from <math>s_3</math> on symbol <math>b</math> results in a state identical to <math>s_3</math>, therefore a looping transition from <math>s_3</math> to <math>s_3</math> is added to TDFA. </p>
+| <p> There are no more states and symbols to explore, so the determinization process terminates. </p>
+}}
+
+[[:File:Tdfa unoptimized.svg|Figure 4]] shows the resulting TDFA. 
+
+=== Optimizations ===
+
+The goal of optimizations is to reduce TDFA size and number of registers and operations on transitions.
+This section describes a few optimizations that are used in a practical TDFA implementation. <ref name="BorTra22"/> <ref name="re2c"/>
+None of these optimizations is particularly complex or vital for TDFA operation, but applied
+together and in the correct order they can make TDFA considerably faster and smaller.
+
+'''Fixed-tags optimization''' is applied at the regular expression level (before TNFA construction).
+The idea is, if a pair of tags happens to be within fixed distance from each other, there
+is no need to track both of them: the value of one tag can be computed from the value of the other tag one by adding a fixed offset. 
+For example, in the regular expression <math>t_1 (a|b) \, t_2</math>
+tags <math>t_1</math> and <math>t_2</math> are within one symbol distance from each other,
+so <math>t_1</math> can be computed as <math>t_2 - 1</math>.
+This optimization can reduce both TDFA construction time (as fixed tags are excluded from TNFA construction and determinization)
+and matching time (as there are fewer register operations).
+
+[[File:Tdfa optimized.svg|thumb|upright=1|right|Figure 5: Optimized TDFA for regular expression <math>a^* t b^* | ab</math>.]]
+
+'''Register optimizations''' are applied after TDFA construction.
+A TDFA induces a [[control flow graph]] ([[control flow graph|CFG]]) on registers:
+operations on transitions form basic blocks,
+and there is an arc between two blocks if one of them is reachable from the other one by TDFA transitions, without passing through other register operations.
+CFG represents a program on registers as variables, so the usual compiler optimizations can be applied to it
+(such as [[liveness analysis]], [[dead code elimination]] and [[register allocation]]).
+
+TDFA '''minimization''' is very similar to [[DFA minimization]], except for one additional restriction:
+register actions on TDFA transitions must be taken into account.
+So, TDFA states that are identical, but have different register actions on incoming transitions on the same symbol, cannot be merged.
+All the usual algorithms for [[DFA minimization]] can be adapted to TDFA minimization,
+for example [[DFA_minimization#Moore's_algorithm|Moore's algorithm]] is used in the RE2C lexer generator.<ref name="re2c"/>
+
+[[:File:Tdfa optimized.svg|Figure 5]] shows an optimized TDFA for regular expression <math>a^* t b^* | ab</math>.
+Note that it is in fact the same as a TDFA for a semantically equivalent regular expression <math>a^* t b^*</math>,
+where ambiguity has been removed.
+Ambiguity is resolved during determinization, and the unoptimized TDFA on [[:File:Tdfa unoptimized.svg|Figure 4]] is unambiguous,
+but it has some built-in redundancy that can be removed by optimizations.
+
+== Multi-pass TDFA ==
+
+[[File:Tdfa example multipass.svg|upright=2.7|thumb|right|Figure 6: Multi-pass TDFA for regular expression <math>(1 a 2)^* 3 (a|4 b)5b^*</math> matching on a string <math>aab</math>.]]
+
+TDFA with registers are well suited for [[ahead-of-time]] determinization, when the time spent on TDFA construction is not included in the runtime (e.g. in [[lexer generator|lexer generators]]).
+But for [[Just-in-time_compilation|just-in-time]] determinization (e.g. in regular expression libraries) it is desirable to reduce TDFA construction time.
+Another concern is tag density in a regular expression:
+TDFA with registers are efficient if the number of tags is relatively small.
+But for heavily tagged regular expressions TDFA with registers are suboptimal: transitions get cluttered with operations, making TDFA execution slow.
+Register optimizations also become problematic due to the size of liveness and interference information.
+
+'''Multi-pass TDFA''' <ref name="BorTra22"/> address both issues: they reduce TDFA construction time,
+and they are better suited to dense submatch extraction.
+The main difference with canonical TDFA is that multi-pass TDFA have no register operations.
+Instead they have multiple passes: a '''forward pass''' that matches the input
+string and records a sequence of TDFA states, and one or more '''backward passes''' that iterate through the recorded
+states and collect submatch information.
+A single backward pass is sufficient, but an extra pass may be used e.g. to estimate the necessary amount of memory for submatch results.
+In order to trace back the matching TNFA path from a sequence of TDFA states,
+multi-pass TDFA use '''backlinks''' on transitions and in final states.
+A backlink is a pair, where the first component is an index in backlink arrays on preceding transitions,
+and the second component is a sequence of tags for a fragment of TNFA path between TDFA states.
+
+[[:File:Multipass TDFA.png|Figure 6]] shows an example of a multi-pass TDFA for regular expression <math>(1 a 2)^* 3 (a|4 b)5b^*</math> matching on a string <math>aab</math>
+(compare it to [[:File:TDFA example.svg|Figure 0]] that shows TDFA with registers for the same regular expression):
+
+# The forward pass collects a sequence of states 0, 1, 1, 2.
+# The backward pass traces backlinks from state 2 to state 0 and concatenates tag sequences and input symbols. It starts with backlink <math>(0,t_5)</math>. Tagged string is <math>t_5</math>. Index 0 selects backlink <math>(0,t_2 t_3 t_4)</math> on preceding transition from state 1 to state 2 (the only one on this transition). Tagged string becomes <math>t_2 t_3 t_4 b \, t_5</math>. Index 0 selects backlink <math>(0,t_2 t_1)</math> on preceding looping transition from state 1 to state 1. Tagged string becomes <math>t_2 t_1 a \, t_2 t_3 t_4 b \, t_5</math>. Index 0 selects backlink <math>(0,t_1)</math> on preceding transition from state 0 to state 1. The resulting tagged string is <math>t_1 a \, t_2 t_1 a \, t_2 t_3 t_4 b \, t_5</math>. It contains all the necessary information to reconstruct last offsets or offset lists for each tag.
+
+== Related automata ==
+
+'''StaDFA''' described by Mohammad Imran Chowdhury
+<ref name="Cho18"> {{cite journal
+  |last1= Chowdhury
+  |first1= Mohammad Imran.
+  |title= staDFA: An Efficient Subexpression Matching Method.
+  |journal= Florida State University
+  |year= 2018
+}}</ref>
+are very similar to TDFA, except that they have register operations in states, not on transitions.
+
+'''DSSTs''' (Deterministic Streaming String Transducers) described by Grathwohl
+<ref name="Gra15"> {{cite journal
+  |last1= Grathwohl
+  |first1= Niels Bjørn Bugge.
+  |title= Parsing with Regular Expressions & Extensions to Kleene Algebra.
+  |journal= DIKU, University of Copenhagen
+  |year= 2015
+}}</ref>
+are more distant relatives to TDFA, better suited to full parsing than submatch extraction.
+DSST states contain path trees constructed by the ε-closure,
+while TDFA states contain similar information in a decomposed form (register versions and lookahead tags).
+
+== References ==
+
+{{Reflist}}
+
+{{Formal languages and grammars|state=collapsed}}
+
+{{DEFAULTSORT:Deterministic Finite-State Machine}}
+[[Category:Finite automata]]
