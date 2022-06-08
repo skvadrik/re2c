@@ -108,12 +108,13 @@ Since then it has been maintained and developed by multiple volunteers, most
 notably,
 Brian Young (bayoung@acm.org),
 Markus Boerger (helly@users.sourceforge.net),
-Dan Nuffer (nuffer@users.sourceforge.net)
+Dan Nuffer (nuffer@users.sourceforge.net),
 `Ulya Trofimovich <https://github.com/skvadrik>`_ (skvadrik@gmail.com),
 `Serghei Iakovlev <https://github.com/sergeyklay>`_,
 `Sergei Trofimovich <https://github.com/trofi>`_,
-`Petr Skocik <https://github.com/pskocik>`_
-and `ligfx <https://github.com/ligfx>`_.
+`Petr Skocik <https://github.com/pskocik>`_,
+`ligfx <https://github.com/ligfx>`_
+and `raekye <https://github.com/raekye>`_.
 Many thanks to all other contributors!
 
 License
