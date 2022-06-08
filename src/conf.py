@@ -195,7 +195,8 @@ html_extra_path = [
     'papers/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf',
     'papers/2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf',
     'papers/2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf',
-    'papers/2021_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa_(slides).pdf'
+    'papers/2021_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa_(slides).pdf',
+    'papers/2022_borsotti_trofimovich_a_closer_look_at_tdfa.pdf'
 ]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,

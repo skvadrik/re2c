@@ -21,7 +21,7 @@ lexers, and the generated code is easier to debug and understand. A flexible
 user interface allows one to adapt the generated lexer to a particular
 environment and input model, avoiding the overhead on unnecessary checks and
 buffers. re2c is based on the
-`lookahead TDFA <2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf>`_
+`lookahead TDFA <2022_borsotti_trofimovich_a_closer_look_at_tdfa.pdf>`_
 algorithm that allows it to perform fast and lightweight submatch extraction.
 It is used in other open-source projects such as
 `php <http://php.net/>`_,
@@ -69,33 +69,36 @@ welcome!
 Papers
 ------
 
-- `RE2C: a more versatile scanner generator
-  <1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps>`_
-  by Peter Bumbulis and  Donald D. Cowan,
-  ACM Letters on Programming Languages and Systems (LOPLAS),
-  1994
+- 2022
+  `A closer look at TDFA <https://arxiv.org/abs/2206.01398>`_
+  by Angelo Borsotti and Ulya Trofimovich.
+  arXiv:2206.01398
+  `[pdf 2022] <2022_borsotti_trofimovich_a_closer_look_at_tdfa.pdf>`_
 
-- `Tagged Deterministic Finite Automata with Lookahead
-  <2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_
-  by Ulya Trofimovich,
+- 2020
+  `RE2C: A lexer generator based on lookahead-TDFA
+  <https://doi.org/10.1016/j.simpa.2020.100027>`_
+  by Ulya Trofimovich.
+  Software Impacts 6 (2020) 100027,
+  `[pdf 2021] <2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf>`_
+
+- 2019
+  `Efficient POSIX submatch extraction on NFA <https://doi.org/10.1002/spe.2881>`_
+  by Angelo Borsotti and Ulya Trofimovich.
+  Software: Practice and Experience 51, 2, pp. 159–192
+  `[pdf 2019] <2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf>`_
+
+- 2017
+  `Tagged Deterministic Finite Automata with Lookahead <https://arxiv.org/abs/1907.08837>`_
+  by Ulya Trofimovich.
   arXiv:1907.08837,
-  2017
+  `[pdf 2017] <2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_
 
-- `Efficient POSIX submatch extraction on NFA
-  <2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf>`_
-  by Angelo Borsotti and Ulya Trofimovich,
-  2019
-
-- `RE2C: A lexer generator based on lookahead-TDFA
-  <2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf>`_
-  by Ulya Trofimovich,
-  Software Impacts,
-  Volume 6, November 2020, 100027,
-  `DOI:10.1016/j.simpa.2020.100027 <https://doi.org/10.1016/j.simpa.2020.100027>`_.
-
-- Lookahead TDFA in pictures:
-  `RE2C: A lexer generator based on lookahead-TDFA (slides)
-  <2021_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa_(slides).pdf>`_, 2021.
+- 1994
+  `RE2C: a more versatile scanner generator <https://dl.acm.org/doi/abs/10.1145/176454.176487>`_
+  by Peter Bumbulis and  Donald D. Cowan.
+  ACM Letters on Programming Languages and Systems (LOPLAS)
+  `[ps 1994] <1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps>`_
 
 Authors
 -------
