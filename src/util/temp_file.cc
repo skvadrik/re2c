@@ -54,7 +54,7 @@
 
 namespace re2c {
 
-// In C++11, all this could be substituted with fopen(..., "x")
+// In C++17, all this could be substituted with fopen(..., "x")
 FILE *temp_file(std::string &fname)
 {
     // append "random enough" suffix to filename
