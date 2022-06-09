@@ -56,7 +56,7 @@ if(Python3_VERSION VERSION_LESS 3.7)
 endif()
 
 # checks for C++ compiler flags
-set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON) # make sure object libraries work with shared libraries
 
