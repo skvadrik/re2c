@@ -214,10 +214,10 @@ class Params:
         self.plotwidth = 1.5
         self.xshift = 2 * self.plotwidth
         self.header = """
-            \\node (x0) at (0.5in,0) {\\scriptsize$\\mathbf{gcc \; (time)}$};
-            \\node (x1) at (2.0in,0) {\\scriptsize$\\mathbf{gcc \; (size)}$};
-            \\node (x2) at (3.5in,0) {\\scriptsize$\\mathbf{clang \; (time)}$};
-            \\node (x3) at (5.0in,0) {\\scriptsize$\\mathbf{clang \; (size)}$};
+            \\node[anchor=west] (x0) at (0.15in,0) {\\small\\bf{gcc (time)}};
+            \\node[anchor=west] (x1) at (1.65in,0) {\\small\\bf{gcc (size)}};
+            \\node[anchor=west] (x2) at (3.15in,0) {\\small\\bf{clang (time)}};
+            \\node[anchor=west] (x3) at (4.65in,0) {\\small\\bf{clang (size)}};
         """
         self.title_suffix = True
         self.relative_to = None
@@ -229,8 +229,8 @@ class Params:
         self.plotwidth = 2.7
         self.xshift = self.plotwidth
         self.header = """
-            \\node (x0) at (0.6in,0) {\\scriptsize$\\mathbf{regcomp \; (time)}$};
-            \\node (x1) at (3.3in,0) {\\scriptsize$\\mathbf{regexec \; (time)}$};
+            \\node[anchor=west] (x0) at (0.15in,0) {\\small\\bf{regcomp (time)}};
+            \\node[anchor=west] (x1) at (2.85in,0) {\\small\\bf{regexec (time)}};
         """
         self.title_suffix = True
         self.relative_to = ''
