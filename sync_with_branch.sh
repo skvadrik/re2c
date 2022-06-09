@@ -43,7 +43,7 @@ pick_latest_result() {
     latest=$(ls "results/results_"*".json" \
         | sed -E 's/.*results_([0-9]+)\.json/\1/' \
         | sort -n \
-        | head -n 1)
+        | tail -n 1)
     cp "results/results_$latest.json" "results.json"
     cp "results/env_$latest.rst" "env.rst"
     echo "**The results may be out of date!**" >> "env.rst"
@@ -55,20 +55,21 @@ pick_latest_result() {
 # (lexer generator benchmarks have file size charts in addition to time charts).
 gen_bar_charts_for_benchmark() {
     benchmark="$1"
-    pagecount="$2"
-    j2pp_args="$3"
-    ( cd "src/benchmarks/$benchmark" \
+    j2pp_args="$2"
+    ( cd "src/benchmarks/submatch_$benchmark" \
         && echo "Generating SVG for $benchmark benchmark..." \
         && pick_latest_result \
-        && python3 ../../../build/json2pgfplot.py $j2pp_args --font comicneue \
+        && python3 ../../../build/json2pgfplot.py \
+            --variant $benchmark \
+            --font comicneue \
+            $j2pp_args \
             results.json results.tex \
         && pdflatex results.tex < /dev/null > results.log \
-        && for page in $(seq 1 $pagecount); do \
-            pdf2svg results.pdf results_$page.svg $page; done \
+        && pdf2svg results.pdf results_1.svg 1 \
         && rm results.{aux,log,pdf,tex} \
     )
 }
 
-gen_bar_charts_for_benchmark submatch_dfa_aot 2 ""
-gen_bar_charts_for_benchmark submatch_dfa_jit 1 "--relative-to ''"
-gen_bar_charts_for_benchmark submatch_nfa     1 "--relative-to LG"
+gen_bar_charts_for_benchmark dfa_aot ""
+gen_bar_charts_for_benchmark dfa_jit "--relative-to ''"
+gen_bar_charts_for_benchmark nfa     "--relative-to LG"

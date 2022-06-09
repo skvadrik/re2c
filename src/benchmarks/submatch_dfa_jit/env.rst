@@ -5,5 +5,5 @@ The measurements have been taken on an Intel(R) Core(TM) i7-8750H CPU with
 9216 KiB L3 Unified cache,
 32 GiB RAM.
 Software versions:
-re2c built from Git at commit `b55ab37 <https://github.com/skvadrik/re2c/commit/b55ab37a220f5f2950b9ebc323bc0d010a715220>`_.
+re2c built from Git at commit `814d38f <https://github.com/skvadrik/re2c/commit/814d38f7eb19130a926f8d06172a00088967779f>`_.
 **The results may be out of date!**

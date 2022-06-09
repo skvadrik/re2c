@@ -41,7 +41,7 @@ converted to SVG, etc.
 
 .. code-block:: bash
 
-    $ ${SOURCE_DIR}/benchmarks/json2pgfplot.py results.json results.tex
+    $ ${SOURCE_DIR}/benchmarks/json2pgfplot.py --variant <dfa_aot | dfa_jit | nfa> results.json results.tex
     $ pdflatex results.tex </dev/null >results.log
     $ pdf2svg results.pdf results.svg
 
@@ -110,16 +110,9 @@ ambiguous regular expressions, both in speed and in the automaton size.
 
 .. include:: submatch_dfa_aot/env.rst
 
-Run time (ms on 100MB text)
----------------------------
+Time is measured in ms (on 100MB of text), binary size is measured in KB (binaries are stripped).
 
 .. figure:: submatch_dfa_aot/results_1.svg
-    :class: benchmark
-
-Binary size (KB, stripped)
---------------------------
-
-.. figure:: submatch_dfa_aot/results_2.svg
     :class: benchmark
 
 
@@ -147,8 +140,7 @@ arbitrary many tag variables. Regless-TDFA(1) does not have tag variables.
 
 .. include:: submatch_dfa_jit/env.rst
 
-Compile / run time (rel. to 1st)
---------------------------------
+Compile time and run time is shown relative to the first row.
 
 .. figure:: submatch_dfa_jit/results_1.svg
     :class: benchmark
@@ -178,8 +170,7 @@ algorithms are much slower on large real-world regular expressions.
 
 .. include:: submatch_nfa/env.rst
 
-Simulation time (rel. to 1st)
------------------------------
+Simulation time is shown relative to the first row.
 
 .. figure:: submatch_nfa/results_1.svg
     :class: benchmark
