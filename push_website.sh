@@ -1,4 +1,6 @@
-#!/bin/bash -x
+#!/usr/bin/env bash
+
+set -x
 
 cd re2c.org \
 && rm -rf .git \
