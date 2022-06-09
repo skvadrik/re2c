@@ -1,7 +1,7 @@
 #ifndef _RE2C_MSG_LOCATION_
 #define _RE2C_MSG_LOCATION_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 
 namespace re2c {

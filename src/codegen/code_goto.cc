@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"

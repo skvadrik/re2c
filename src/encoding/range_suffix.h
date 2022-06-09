@@ -2,7 +2,7 @@
 #define _RE2C_RE_ENCODING_RANGE_SUFFIX_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"

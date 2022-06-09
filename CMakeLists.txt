@@ -60,8 +60,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON) # make sure object libraries work with shared libraries
 
-# use system stdint.h if present, otherwise fallback to src/c99_stdint.h
-ac_check_headers("stdint.h")
 # needed for POSIX file API
 ac_check_headers("sys/types.h")
 ac_check_headers("sys/stat.h")
@@ -69,19 +67,6 @@ ac_check_headers("fcntl.h")
 ac_check_headers("unistd.h")
 # windows POSIX-like API
 ac_check_headers("io.h")
-
-# list of possible types to use in typedefs
-ac_check_sizeof("char")
-ac_check_sizeof("short")
-ac_check_sizeof("int")
-ac_check_sizeof("long")
-ac_check_sizeof("long long")
-ac_check_sizeof("__int64")
-ac_check_sizeof("void *")
-# 64-bit integer constant suffix
-ac_check_sizeof("0l")
-ac_check_sizeof("0ll")
-ac_check_sizeof("0i8")
 
 # docs (manpages and help)
 set(re2c_manpage_source       "${CMAKE_CURRENT_BINARY_DIR}/doc/manpage.rst")

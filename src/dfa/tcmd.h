@@ -2,7 +2,7 @@
 #define _RE2C_DFA_TCMD_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/dfa/tag_history.h"
 #include "src/regexp/tag.h"

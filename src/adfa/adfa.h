@@ -2,7 +2,7 @@
 #define _RE2C_ADFA_ADFA_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <set>
 #include <string>
 #include <valarray>

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/encoding/enc.h"
 #include "src/msg/msg.h"

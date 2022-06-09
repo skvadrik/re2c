@@ -1,7 +1,7 @@
 #ifndef _RE2C_AST_UNESCAPE_
 #define _RE2C_AST_UNESCAPE_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 
 namespace re2c {

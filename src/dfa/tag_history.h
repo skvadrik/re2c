@@ -2,7 +2,7 @@
 #define _RE2C_DFA_TAG_HISTORY_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <sys/types.h>
 #include <map>
 #include <vector>

@@ -4,7 +4,7 @@
 #include <valarray>
 
 #include "src/regexp/tag.h"
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include "src/util/forbid_copy.h"
 #include "src/util/range.h"
 #include "src/util/slab_allocator.h"

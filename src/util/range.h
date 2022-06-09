@@ -2,7 +2,7 @@
 #define _RE2C_UTIL_RANGE_
 
 #include <stddef.h> // NULL
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/test/range/test.h"
 #include "src/util/fixed_allocator.h"

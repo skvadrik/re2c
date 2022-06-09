@@ -1,7 +1,7 @@
 #ifndef _RE2C_UTIL_LOOKUP_
 #define _RE2C_UTIL_LOOKUP_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <limits>
 #include <map>
 #include <vector>

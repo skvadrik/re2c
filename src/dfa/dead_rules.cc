@@ -1,4 +1,4 @@
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <string.h>
 #include <set>
 #include <string>

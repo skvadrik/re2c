@@ -2,7 +2,7 @@
 #define _RE2C_AST_SCANNER_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <set>
 #include <string>
 #include <vector>

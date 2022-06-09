@@ -1,7 +1,7 @@
 #ifndef _RE2C_UTIL_U32LIM_
 #define _RE2C_UTIL_U32LIM_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 
 namespace re2c {

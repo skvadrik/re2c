@@ -1,7 +1,7 @@
 #ifndef _RE2C_SKELETON_SKELETON_
 #define _RE2C_SKELETON_SKELETON_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <algorithm>
 #include <limits>

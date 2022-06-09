@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/cfg/cfg.h"
 #include "src/dfa/dfa.h"

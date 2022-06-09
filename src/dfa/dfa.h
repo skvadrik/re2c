@@ -1,7 +1,7 @@
 #ifndef _RE2C_DFA_DFA_
 #define _RE2C_DFA_DFA_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <valarray>
 #include <vector>
 #include <set>

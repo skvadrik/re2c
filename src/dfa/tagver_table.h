@@ -2,7 +2,7 @@
 #define _RE2C_DFA_TAGVER_TABLE_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"

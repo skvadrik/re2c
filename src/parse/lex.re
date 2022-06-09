@@ -1,5 +1,5 @@
 #include <ctype.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <limits>
 #include <string>
 #include <utility>

@@ -2,7 +2,7 @@
 #define _RE2C_UTIL_FIXED_ALLOCATOR_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <vector> // slab queue
 
 #include "src/util/forbid_copy.h"

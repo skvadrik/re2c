@@ -2,7 +2,7 @@
 #define _RE2C_CONSTANTS_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 
 namespace re2c {

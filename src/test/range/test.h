@@ -1,7 +1,7 @@
 #ifndef _RE2C_TEST_RANGE_TEST_
 #define _RE2C_TEST_RANGE_TEST_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 
 namespace re2c {

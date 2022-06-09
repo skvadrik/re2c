@@ -1,7 +1,7 @@
 #ifndef _RE2C_UTIL_S_TO_N32_UNSAFE_
 #define _RE2C_UTIL_S_TO_N32_UNSAFE_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/util/attribute.h"
 

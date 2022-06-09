@@ -1,6 +1,6 @@
 #ifdef RE2C_DEBUG
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <stdio.h>
 
 #include "src/debug/debug.h"

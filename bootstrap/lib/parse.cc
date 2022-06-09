@@ -75,7 +75,7 @@
 
 #include "src/parse/ast.h"
 #include "src/util/attribute.h"
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include "lib/lex.h"
 
 // disable certain GCC and/or Clang warnings,  as we have no control over

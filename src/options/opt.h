@@ -2,7 +2,7 @@
 #define _RE2C_CONF_OPT_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <string>
 #include <vector>
 

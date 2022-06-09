@@ -1,7 +1,7 @@
 #ifndef _RE2C_SKELETON_MTAG_TRIE_
 #define _RE2C_SKELETON_MTAG_TRIE_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>

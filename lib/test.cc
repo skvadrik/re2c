@@ -8,7 +8,7 @@
 
 #include "lib/regex.h"
 #include "lib/test_helper.h"
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 
 static int test(int flags, const char *pattern, const char *string,

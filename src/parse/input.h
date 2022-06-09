@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include "src/util/forbid_copy.h"
 
 

@@ -1,7 +1,7 @@
 #ifndef _RE2C_UTIL_SLAB_ALLOCATOR_
 #define _RE2C_UTIL_SLAB_ALLOCATOR_
 
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <algorithm> // std::for_each
 #include <stdlib.h> // malloc, free
 #include <vector> // slab queue

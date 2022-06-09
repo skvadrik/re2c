@@ -2,7 +2,7 @@
 #define _RE2C_RE_TAG_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include "src/util/static_assert.h"
 #include <limits>
 #include <string>

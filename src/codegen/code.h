@@ -3,7 +3,7 @@
 
 #include <assert.h>
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <string.h>
 #include <fstream>
 #include <set>

@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/encoding/ebcdic/ebcdic.h"
 #include "src/encoding/ebcdic/ebcdic_regexp.h"

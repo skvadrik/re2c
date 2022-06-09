@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 
 #include "src/encoding/range_suffix.h"
 #include "src/encoding/utf16/utf16.h"

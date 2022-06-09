@@ -2,7 +2,7 @@
 #define _RE2C_NFA_NFA_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <valarray>
 #include <vector>
 

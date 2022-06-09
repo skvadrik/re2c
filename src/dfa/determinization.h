@@ -2,7 +2,7 @@
 #define _RE2C_DFA_DETERMINIZATION_
 
 #include <stddef.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <algorithm>
 #include <map>
 #include <string>

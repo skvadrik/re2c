@@ -34,7 +34,7 @@ template<typename ctx_t>
 #else // RE2C_DEBUG
 
 #include <assert.h>
-#include "src/util/c99_stdint.h"
+#include <stdint.h>
 #include <stddef.h>
 #include <map>
 #include <set>
