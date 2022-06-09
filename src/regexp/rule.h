@@ -39,7 +39,7 @@ struct Rule
     size_t ttag; // trailing context
     size_t ncap; // number of POSIX captures
 
-    Rule(): semact(NULL), shadow(), ltag(0), htag(0), ttag(0), ncap(0) {}
+    Rule(): semact(nullptr), shadow(), ltag(0), htag(0), ttag(0), ncap(0) {}
 
     // copy ctor and assignment are required for containers on macOS
     Rule(const Rule &r)

@@ -58,9 +58,9 @@ static bool oneline_if(const CodeIfTE *code, const opt_t *opts) {
     const Code *first = code->if_code->head;
     return opts->lang == LANG_C // Go and Rust require braces
         && code->oneline
-        && code->else_code == NULL
+        && code->else_code == nullptr
         && first
-        && first->next == NULL
+        && first->next == nullptr
         && (first->kind == CODE_STMT || first->kind == CODE_TEXT);
 }
 
@@ -138,7 +138,7 @@ static const char *var_type_c(VarType type, const opt_t *opts)
     case VAR_TYPE_INT:     return "int";
     case VAR_TYPE_UINT:    return "unsigned int";
     case VAR_TYPE_YYCTYPE: return opts->yyctype.c_str();
-    default:               return NULL;
+    default:               return nullptr;
     }
 }
 
@@ -148,7 +148,7 @@ static const char *var_type_go(VarType type, const opt_t *opts)
     case VAR_TYPE_INT:     return "int";
     case VAR_TYPE_UINT:    return "uint";
     case VAR_TYPE_YYCTYPE: return opts->yyctype.c_str();
-    default:               return NULL;
+    default:               return nullptr;
     }
 }
 
@@ -158,7 +158,7 @@ static const char *var_type_rust(VarType type, const opt_t *opts)
     case VAR_TYPE_INT:     return "isize";
     case VAR_TYPE_UINT:    return "usize";
     case VAR_TYPE_YYCTYPE: return opts->yyctype.c_str();
-    default:               return NULL;
+    default:               return nullptr;
     }
 }
 
@@ -203,7 +203,7 @@ static bool case_on_same_line(const CodeCase *code, const opt_t *opts)
 {
     const Code *first = code->body->head;
     return first
-        && first->next == NULL
+        && first->next == nullptr
         && (first->kind == CODE_STMT || first->kind == CODE_TEXT)
         && opts->lang != LANG_GO; // gofmt prefers cases on a new line
 }

@@ -33,9 +33,9 @@ struct dfa_state_t
 
     explicit dfa_state_t(size_t nchars)
         : arcs(new size_t[nchars])
-        , tcmd(NULL)
-        , tcid(NULL)
-        , stacmd(NULL)
+        , tcmd(nullptr)
+        , tcid(nullptr)
+        , stacmd(nullptr)
         , stacid(TCID0)
         , rule(Rule::NONE)
         , fallthru(false)

@@ -45,10 +45,10 @@ DFA::DFA
     , lbChar(0)
     , ubChar(dfa.charset.back())
     , nStates(0)
-    , head(NULL)
-    , defstate(NULL)
-    , eof_state(NULL)
-    , finstates(dfa.rules.size(), NULL)
+    , head(nullptr)
+    , defstate(nullptr)
+    , eof_state(nullptr)
+    , finstates(dfa.rules.size(), nullptr)
     , tags0(dfa.tcid0)
     , charset(dfa.charset)
     , rules(dfa.rules)
@@ -69,11 +69,11 @@ DFA::DFA
     , def_rule(dfa.def_rule)
     , eof_rule(dfa.eof_rule)
     , key_size (key)
-    , bitmap(NULL)
+    , bitmap(nullptr)
     , setup(su)
     , msg(msg)
-    , start_label(NULL)
-    , initial_label(NULL)
+    , start_label(nullptr)
+    , initial_label(nullptr)
 {
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;
@@ -117,13 +117,13 @@ DFA::DFA
                 && t->tcid[c] == tc
                 && (end || is_eof(opts, charset[c]) == ie)
                 ;);
-            s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
+            s->go.span[j].to = to == dfa_t::NIL ? nullptr : i2s[to];
             s->go.span[j].ub = charset[c];
             s->go.span[j].tags = tc;
         }
         s->go.nspans = j;
     }
-    *p = NULL;
+    *p = nullptr;
 
     delete[] i2s;
 }
@@ -192,7 +192,7 @@ void DFA::reorder()
 
     DASSERT(nStates == ord.size());
 
-    ord.push_back(NULL);
+    ord.push_back(nullptr);
     for(uint32_t i = 0; i < nStates; ++i)
     {
         ord[i]->next = ord[i + 1];
@@ -371,7 +371,7 @@ void DFA::prepare(const opt_t *opts)
     }
 
     // create default state (if needed)
-    State *default_state = NULL;
+    State *default_state = nullptr;
     for (State *s = head; s; s = s->next) {
         for (uint32_t i = 0; i < s->go.nspans; ++i) {
             if (!s->go.span[i].to) {

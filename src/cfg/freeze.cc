@@ -27,7 +27,7 @@ void freeze_tags(dfa_t &dfa)
         nsym = dfa.nchars;
 
     dfa.tcid0 = pool.insert(dfa.tcmd0);
-    dfa.tcmd0 = NULL;
+    dfa.tcmd0 = nullptr;
 
     for (size_t i = 0; i < nstate; ++i) {
         dfa_state_t *s = dfa.states[i];
@@ -50,8 +50,8 @@ void freeze_tags(dfa_t &dfa)
         s->stacid = pool.insert(s->stacmd);
 
         delete[] s->tcmd;
-        s->tcmd = NULL;
-        s->stacmd = NULL;
+        s->tcmd = nullptr;
+        s->stacmd = nullptr;
     }
 }
 

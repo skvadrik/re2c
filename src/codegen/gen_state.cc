@@ -134,7 +134,7 @@ static CodeList *emit_accept_binary(Output &output, const DFA &dfa, const accept
     }
     else {
         const CodeJump jump = {acc[l].first, acc[l].second, false, false, false};
-        gen_goto(output, dfa, stmts, NULL, jump);
+        gen_goto(output, dfa, stmts, nullptr, jump);
     }
     return stmts;
 }
@@ -175,7 +175,7 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
         const CodeJump jump = {acc[0].first, acc[0].second, false, false, false};
-        gen_goto(output, dfa, stmts, NULL, jump);
+        gen_goto(output, dfa, stmts, nullptr, jump);
         return;
     }
 
@@ -222,7 +222,7 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
     for (uint32_t i = 0; i < nacc; ++i) {
         CodeList *case_body = code_list(alc);
         const CodeJump jump = {acc[i].first, acc[i].second, false, false, false};
-        gen_goto(output, dfa, case_body, NULL, jump);
+        gen_goto(output, dfa, case_body, nullptr, jump);
         if (i == nacc - 1) {
             append(cases, code_case_default(alc, case_body));
         }
@@ -428,7 +428,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
             // EOF rule without storable state: check YYFILL return value. If it
             // succeeds (returns zero) then go to YYFILL label and rematch.
             if (!opts->fill_naked) o.cstr(" == 0");
-            append(fill, code_if_then_else(alc, o.flush(), goto_fill, NULL));
+            append(fill, code_if_then_else(alc, o.flush(), goto_fill, nullptr));
         }
         else {
             // Otherwise don't check YYFILL return value: assume that it does
@@ -448,7 +448,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
             // Fallback transition is inlined in the state dispatch (as opposed to
             // jumping to the corresponding DFA transition) because Go backend does
             // not support jumping in the middle of a nested block.
-            prepend(goto_fill, code_if_then_else(alc, lessthan, fallback, NULL));
+            prepend(goto_fill, code_if_then_else(alc, lessthan, fallback, nullptr));
         }
         else {
             append(fill, fallback);
@@ -460,7 +460,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
 
     if (opts->fill_check && fill->head) {
         CodeList *check_fill = code_list(alc);
-        append(check_fill, code_if_then_else(alc, lessthan, fill, NULL));
+        append(check_fill, code_if_then_else(alc, lessthan, fill, nullptr));
         fill = check_fill;
     }
 
@@ -482,7 +482,7 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
     }
 
     if (need_fill_in_state) {
-        gen_fill(output, stmts, dfa, s, NULL);
+        gen_fill(output, stmts, dfa, s, nullptr);
     }
 
     if (opts->eof != NOEOF) {
@@ -805,7 +805,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                         const char *cond = o.str(first).cstr(" != ").str(negtag).flush();
                         CodeList *then = code_list(alc);
                         gen_shift(output, then, -dist, first, false);
-                        append(fixpostops, code_if_then_else(alc, cond, then, NULL));
+                        append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
                     }
                 } else {
                     if (dist == 0) {
@@ -821,7 +821,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                         CodeList *then = code_list(alc);
                         append(then, code_stmt(alc,
                             o.str(first).cstr(" -= ").i32(dist).flush()));
-                        append(fixops, code_if_then_else(alc, cond, then, NULL));
+                        append(fixops, code_if_then_else(alc, cond, then, nullptr));
                         gen_assign_many_to_first(output, fixops, fintags);
                     }
                 }

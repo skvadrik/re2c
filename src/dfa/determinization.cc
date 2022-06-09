@@ -32,10 +32,10 @@ dfa_t::dfa_t(const nfa_t &nfa, size_t def_rule, size_t eof_rule)
     , rules(nfa.rules)
     , tags(nfa.tags)
     , mtagvers(*new std::set<tagver_t>)
-    , finvers(NULL)
+    , finvers(nullptr)
     , tcpool(*new tcpool_t)
     , maxtagver(0)
-    , tcmd0(NULL)
+    , tcmd0(nullptr)
     , tcid0(TCID0)
     , def_rule(def_rule)
     , eof_rule(eof_rule)
@@ -143,14 +143,14 @@ void reach_on_symbol(ctx_t &ctx, uint32_t sym)
 nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
 {
     if (state->type != nfa_state_t::RAN) {
-        return NULL;
+        return nullptr;
     }
     for (const Range *r = state->ran.ran; r; r = r->next()) {
         if ((r->lower() <= symbol) && (symbol < r->upper())) {
             return state->ran.out;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 template<typename ctx_t>
@@ -257,7 +257,7 @@ determ_context_t<history_t>::determ_context_t(const opt_t *opts, Msg &msg
     , dc_origin(dfa_t::NIL)
     , dc_target(dfa_t::NIL)
     , dc_symbol(0)
-    , dc_actions(NULL)
+    , dc_actions(nullptr)
     , dc_tagvertbl(nfa.tags.size())
     , history()
     , dc_kernels()
@@ -269,7 +269,7 @@ determ_context_t<history_t>::determ_context_t(const opt_t *opts, Msg &msg
     , dc_path2()
     , dc_path3()
     , dc_tagcount()
-    , stadfa_actions(NULL)
+    , stadfa_actions(nullptr)
     , stadfa_tagvers()
     , reach()
     , state()
@@ -278,10 +278,10 @@ determ_context_t<history_t>::determ_context_t(const opt_t *opts, Msg &msg
     , gtop_buffer()
     , gtop_cmp()
     , gtop_heap(gtop_cmp, gtop_buffer)
-    , newprectbl(NULL)
-    , oldprectbl(NULL)
+    , newprectbl(nullptr)
+    , oldprectbl(nullptr)
     , oldprecdim(0)
-    , histlevel(NULL)
+    , histlevel(nullptr)
     , sortcores()
     , fincount()
     , worklist()

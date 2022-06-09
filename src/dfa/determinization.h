@@ -40,7 +40,7 @@ struct clos_t
     hidx_t thist; // history of lookahead tags
 
     inline clos_t()
-        : state(NULL), origin(0), tvers(0), ttran(0), thist(HROOT) {}
+        : state(nullptr), origin(0), tvers(0), ttran(0), thist(HROOT) {}
     inline clos_t(nfa_state_t *s, uint32_t o, uint32_t v, hidx_t t, hidx_t h)
         : state(s), origin(o), tvers(v), ttran(t), thist(h) {}
     inline clos_t(const clos_t &c, nfa_state_t *s)

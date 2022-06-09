@@ -37,7 +37,7 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
     regoff_t *regs = preg->regs;
     size_t i = 0;
     const char *p = string, *q = p;
-    const dfa_state_t *s, *x = NULL;
+    const dfa_state_t *s, *x = nullptr;
 
     if (!stadfa) apply_regops(regs, dfa->tcmd0, 0);
 
@@ -59,7 +59,7 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
         if (!stadfa) apply_regops(regs, s->tcmd[j], p - string - 1);
     }
 
-    if (s->rule == Rule::NONE && x != NULL) {
+    if (s->rule == Rule::NONE && x != nullptr) {
         s = x;
         p = q;
 
@@ -109,7 +109,7 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
     const dfa_t *dfa = preg->dfa;
     size_t i = 0;
     const char *p = string, *q = p;
-    const dfa_state_t *s, *x = NULL;
+    const dfa_state_t *s, *x = nullptr;
     regoff_trie_t *regtrie = preg->regtrie;
 
     regtrie->clear();
@@ -139,7 +139,7 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
         mlen = p - string - 1;
         apply_regops_with_history(regtrie, s->tcmd[dfa->nchars], mlen);
 
-    } else if (x != NULL) {
+    } else if (x != nullptr) {
         // rollback to a final state, apply fallback tags
         s = x;
         p = q;
@@ -148,7 +148,7 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
 
     } else {
         // no final state on the way => no match
-        return NULL;
+        return nullptr;
     }
 
     const std::vector<Tag> &tags = dfa->tags;

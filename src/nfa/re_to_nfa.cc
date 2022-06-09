@@ -42,7 +42,7 @@ static nfa_state_t *re_to_nfa(rtn_ctx_t &ctx, const RE *re, nfa_state_t *t)
 {
     nfa_t &nfa = ctx.nfa;
     const size_t nrule = ctx.nrule;
-    nfa_state_t *s = NULL;
+    nfa_state_t *s = nullptr;
 
     switch (re->type) {
         case RE::NIL:
@@ -187,7 +187,7 @@ nfa_t::nfa_t(const RESpec &spec, size_t max_size)
     , charset(spec.charset)
     , rules(spec.rules)
     , tags(spec.tags)
-    , root(NULL)
+    , root(nullptr)
     , ncores(0)
 {
     const size_t nre = spec.res.size();

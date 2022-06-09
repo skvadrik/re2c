@@ -70,7 +70,7 @@ Code *emit_skeleton_prolog(Output &output)
     append(block, code_stmt(alc, "FILE *f = fopen(fname, \"rb\")"));
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "goto error"));
-    append(block, code_if_then_else(alc, "f == NULL", if_code, NULL, false));
+    append(block, code_if_then_else(alc, "f == NULL", if_code, nullptr, false));
 
     append(block, code_newline(alc));
 
@@ -85,7 +85,7 @@ Code *emit_skeleton_prolog(Output &output)
     append(block, code_stmt(alc, "buffer = malloc(unit * (fsize + padding))"));
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "goto error"));
-    append(block, code_if_then_else(alc, "buffer == NULL", if_code, NULL, false));
+    append(block, code_if_then_else(alc, "buffer == NULL", if_code, nullptr, false));
 
     append(block, code_newline(alc));
 
@@ -93,7 +93,7 @@ Code *emit_skeleton_prolog(Output &output)
     if_cond = "fread(buffer, unit, fsize, f) != fsize";
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "goto error"));
-    append(block, code_if_then_else(alc, if_cond, if_code, NULL, false));
+    append(block, code_if_then_else(alc, if_cond, if_code, nullptr, false));
 
     append(block, code_newline(alc));
 
@@ -109,7 +109,7 @@ Code *emit_skeleton_prolog(Output &output)
     append(block, code_stmt(alc, "free(buffer)"));
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "fclose(f)"));
-    append(block, code_if_then_else(alc, "f != NULL", if_code, NULL, false));
+    append(block, code_if_then_else(alc, "f != NULL", if_code, nullptr, false));
     append(block, code_stmt(alc, "return NULL"));
 
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
@@ -195,7 +195,7 @@ static void emit_skeleton_function_action(Output &output, CodeList *code, const 
     append(args, code_arg(alc, text));
     append(args, code_arg(alc, "pos"));
     append(if_code, code_fcall(alc, "fprintf", args, ";"));
-    append(body, code_if_then_else(alc, if_cond, if_code, NULL));
+    append(body, code_if_then_else(alc, if_cond, if_code, nullptr));
 
     if_cond = "len_act == len_exp && rule_act == rule_exp";
     if_code = code_list(alc);
@@ -259,7 +259,7 @@ static void emit_skeleton_stags(Output &output, CodeList *code, const DFA &dfa)
     if_cond = "exp == act || (exp == NIL && tag == NULL)";
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "return 0"));
-    append(body, code_if_then_else(alc, if_cond, if_code, NULL));
+    append(body, code_if_then_else(alc, if_cond, if_code, nullptr));
 
     append(body, code_newline(alc));
 
@@ -357,7 +357,7 @@ static void emit_skeleton_mtag_defs(Output &output, CodeList *code)
     append(if_code, code_stmt(alc, "tp->head = head"));
     append(if_code, code_stmt(alc, "tp->next = head + size"));
     append(if_code, code_stmt(alc, "tp->last = head + size * 2"));
-    append(block, code_if_then_else(alc, if_cond, if_code, NULL));
+    append(block, code_if_then_else(alc, if_cond, if_code, nullptr));
     append(block, code_stmt(alc, "return tp->next++"));
     append(code, code_block(alc, block, CodeBlock::WRAPPED));
 
@@ -429,7 +429,7 @@ static void emit_skeleton_mtags(Output &output, CodeList *code, const DFA &dfa)
     append(args, code_arg(alc, "name"));
     append(if_code, code_fcall(alc, "fprintf", args, ";"));
     append(if_code, code_stmt(alc, "return 1"));
-    append(block, code_if_then_else(alc, "mtag == -1", if_code, NULL));
+    append(block, code_if_then_else(alc, "mtag == -1", if_code, nullptr));
 
     append(block, code_stmt(alc, "const YYCTYPE *tag = (tp->head + mtag)->elem"));
     append(block, code_stmt(alc, "mtag = (tp->head + mtag)->pred"));
@@ -452,7 +452,7 @@ static void emit_skeleton_mtags(Output &output, CodeList *code, const DFA &dfa)
     append(args, code_arg(alc, "act"));
     append(if_code, code_fcall(alc, "fprintf", args, ";"));
     append(if_code, code_stmt(alc, "return 1"));
-    append(block, code_if_then_else(alc, if_cond, if_code, NULL));
+    append(block, code_if_then_else(alc, if_cond, if_code, nullptr));
 
     append(body, code_block(alc, block, CodeBlock::INDENTED));
     append(body, code_text(alc, "}")); // end of for loop
@@ -469,7 +469,7 @@ static void emit_skeleton_mtags(Output &output, CodeList *code, const DFA &dfa)
     append(args, code_arg(alc, "name"));
     append(if_code, code_fcall(alc, "fprintf", args, ";"));
     append(if_code, code_stmt(alc, "return 1"));
-    append(body, code_if_then_else(alc, "mtag != -1", if_code, NULL));
+    append(body, code_if_then_else(alc, "mtag != -1", if_code, nullptr));
     append(body, code_text(alc, "return 0;"));
 
     append(code, code_block(alc, body, CodeBlock::WRAPPED));
@@ -496,7 +496,7 @@ static void emit_skeleton_function_check_key_count(Output &output, CodeList *cod
     if_cond = "used + need <= have";
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "return 0"));
-    append(block, code_if_then_else(alc, if_cond, if_code, NULL));
+    append(block, code_if_then_else(alc, if_cond, if_code, nullptr));
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name).cstr(": not enough keys\\n\"").flush();
@@ -566,7 +566,7 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "status = 1"));
     append(if_code, code_stmt(alc, "goto end"));
-    append(block, code_if_then_else(alc, "input == NULL", if_code, NULL));
+    append(block, code_if_then_else(alc, "input == NULL", if_code, nullptr));
 
     append(block, code_newline(alc));
 
@@ -590,7 +590,7 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "status = 1"));
     append(if_code, code_stmt(alc, "goto end"));
-    append(block, code_if_then_else(alc, "keys == NULL", if_code, NULL));
+    append(block, code_if_then_else(alc, "keys == NULL", if_code, nullptr));
 
     append(block, code_textraw(alc, ""));
 
@@ -619,7 +619,7 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
     block2 = code_list(alc);
     append(block2, code_stmt(alc, "goto loop_end"));
     append(block, code_if_then_else(alc,
-        "!(status == 0 && cursor < eof && i < keys_count)", block2, NULL));
+        "!(status == 0 && cursor < eof && i < keys_count)", block2, nullptr));
 
     block2 = code_list(alc);
     append(block2, code_stmt(alc, "token = cursor"));
@@ -640,7 +640,7 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
     if (!dfa.stagnames.empty()) {
         text = o.cstr("\n").str(indent(2, opts->indString))
             .cstr("const YYCTYPE *@@ = NULL;").flush();
-        Code *stags = code_fmt(alc, CODE_STAGS, NULL, text, NULL);
+        Code *stags = code_fmt(alc, CODE_STAGS, nullptr, text, nullptr);
         gen_tags(o, opts, stags, dfa.stagnames);
         append(block2, stags);
         append(block2, code_textraw(alc, ""));
@@ -664,7 +664,7 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
 
         text = o.cstr("\n").str(indent(2, opts->indString))
             .cstr("ptrdiff_t @@ = -1;").flush();
-        Code *mtags = code_fmt(alc, CODE_MTAGS, NULL, text, NULL);
+        Code *mtags = code_fmt(alc, CODE_MTAGS, nullptr, text, nullptr);
         gen_tags(o, opts, mtags, dfa.mtagnames);
         append(block2, mtags);
         append(block2, code_textraw(alc, ""));
@@ -711,16 +711,16 @@ static void emit_skeleton_function_lex(Output &output, CodeList *code, DFA &dfa)
     text = o.cstr("fprintf(stderr, \"error: lex_").str(dfa.name)
         .cstr(": unused input strings left at position %ld\\n\", pos)").flush();
     append(if1_code, code_stmt(alc, text));
-    append(if_code, code_if_then_else(alc, "cursor != eof", if1_code, NULL, false));
+    append(if_code, code_if_then_else(alc, "cursor != eof", if1_code, nullptr, false));
 
     if1_code = code_list(alc);
     append(if1_code, code_stmt(alc, "status = 1"));
     text = o.cstr("fprintf(stderr, \"error: lex_").str(dfa.name)
         .cstr(": unused keys left after %u keys\\n\", i)").flush();
     append(if1_code, code_stmt(alc, text));
-    append(if_code, code_if_then_else(alc, "i != keys_count", if1_code, NULL, false));
+    append(if_code, code_if_then_else(alc, "i != keys_count", if1_code, nullptr, false));
 
-    append(block, code_if_then_else(alc, "status == 0", if_code, NULL, false));
+    append(block, code_if_then_else(alc, "status == 0", if_code, nullptr, false));
 
     append(block, code_textraw(alc, ""));
     append(block, code_slabel(alc, "end"));
@@ -784,7 +784,7 @@ Code *emit_skeleton_epilog(Output &output)
         const char *if_cond = o.cstr("lex_").str(*i).cstr("() != 0").flush();
         CodeList *if_code = code_list(alc);
         append(if_code, code_stmt(alc, "return 1"));
-        append(stmts, code_if_then_else(alc, if_cond, if_code, NULL, false));
+        append(stmts, code_if_then_else(alc, if_cond, if_code, nullptr, false));
     }
     append(stmts, code_stmt(alc, "return 0"));
 

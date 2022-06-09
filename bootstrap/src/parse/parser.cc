@@ -1310,7 +1310,7 @@ yyreduce:
 #line 157 "../src/parse/parser.ypp"
                 {
     (yyval.regexp) = ast_cat(ast_cap((yyvsp[-2].regexp)),
-        ast_cat(ast_tag(context.input.tok_loc(), NULL, false), (yyvsp[0].regexp)));
+        ast_cat(ast_tag(context.input.tok_loc(), nullptr, false), (yyvsp[0].regexp)));
 }
 #line 1316 "src/parse/parser.cc"
     break;

@@ -14,7 +14,7 @@ namespace re2c {
 // and target staDFA states.
 tcmd_t *cfg_t::dce_for_bblock(tcmd_t *cmd, bool *live)
 {
-    if (!cmd) return NULL;
+    if (!cmd) return nullptr;
 
     cmd->next = dce_for_bblock(cmd->next, live);
 

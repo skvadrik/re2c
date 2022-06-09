@@ -133,21 +133,21 @@ static CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *
     CodeGoIfL *x = alc.alloct<CodeGoIfL>(1);
     x->nbranches = 0;
     x->branches = alc.alloct<CodeGoIfL::Branch>(n);
-    x->def = eof == NOEOF ? NULL : next;
+    x->def = eof == NOEOF ? nullptr : next;
 
     for (;;) {
         if (n == 1 && s[0].to == next) {
-            add_branch(x, NULL, NULL, next, s[0], skip, eof, opts);
+            add_branch(x, nullptr, nullptr, next, s[0], skip, eof, opts);
             break;
         }
         else if (n == 1) {
-            add_branch(x, NULL, s[0].to, next, s[0], skip, eof, opts);
+            add_branch(x, nullptr, s[0].to, next, s[0], skip, eof, opts);
             break;
         }
         else if (n == 2 && s[0].to == next) {
             CodeCmp *cmp = code_cmp(alc, ">=", s[0].ub);
             add_branch(x, cmp, s[1].to, next, s[1], skip, eof, opts);
-            add_branch(x, NULL, NULL, next, s[0], skip, eof, opts);
+            add_branch(x, nullptr, nullptr, next, s[0], skip, eof, opts);
             break;
         }
         else if (n == 3
@@ -157,7 +157,7 @@ static CodeGoIfL *code_goifl(code_alc_t &alc, const Span *s, uint32_t n, State *
                 && s[2].tags == s[0].tags) {
             CodeCmp *cmp = code_cmp(alc, "!=", s[0].ub);
             add_branch(x, cmp, s[0].to, next, s[0], skip, eof, opts);
-            add_branch(x, NULL, NULL, next, s[1], skip, eof, opts);
+            add_branch(x, nullptr, nullptr, next, s[1], skip, eof, opts);
             break;
         }
         else if (n >= 3
@@ -248,17 +248,17 @@ static CodeGoBm *code_gobm(code_alc_t &alc, const Span *span, uint32_t nSpans,
 {
     CodeGoBm *x = alc.alloct<CodeGoBm>(1);
     x->bitmap = bm;
-    x->hgo = NULL;
-    x->lgo = NULL;
+    x->hgo = nullptr;
+    x->lgo = nullptr;
 
     Span *bspan = allocate<Span>(nSpans); // temporary
     uint32_t bSpans = unmap (bspan, span, nSpans, bm->state);
-    x->lgo = bSpans == 0 ? NULL
+    x->lgo = bSpans == 0 ? nullptr
         : code_goswif(alc, bspan, bSpans, next, false, eof, opts);
     // if there are any low spans, then next state for high spans
     // must be NULL to trigger explicit goto generation in linear 'if'
-    x->hgo = hSpans == 0 ? NULL
-        : code_goswif(alc, hspan, hSpans, x->lgo ? NULL : next, false, eof, opts);
+    x->hgo = hSpans == 0 ? nullptr
+        : code_goswif(alc, hspan, hSpans, x->lgo ? nullptr : next, false, eof, opts);
     x->bitmap->state->label->used = true;
     operator delete(bspan);
 
@@ -288,7 +288,7 @@ static CodeGoCp *code_gocp(code_alc_t &alc, const Span *span, uint32_t nSpans,
     const Span *hspan, uint32_t hSpans, State *next, uint32_t eof, const opt_t *opts)
 {
     CodeGoCp *x = alc.alloct<CodeGoCp>(1);
-    x->hgo = hSpans == 0 ? NULL
+    x->hgo = hSpans == 0 ? nullptr
         : code_goswif(alc, hspan, hSpans, next, false, eof, opts);
     x->table = code_gocp_table(alc, span, nSpans);
     return x;
@@ -298,7 +298,7 @@ State *fallback_state_with_eof_rule(
         const DFA &dfa, const opt_t *opts, const State *state, tcid_t *ptags) {
     assert(opts->eof != NOEOF);
 
-    State *fallback = NULL;
+    State *fallback = nullptr;
     tcid_t falltags = TCID0;
 
     if (state->action.type == Action::INITIAL) {
@@ -335,7 +335,7 @@ void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from) {
 
     // With EOF rule, mark states that are targets of fallback transitions as used.
     if (opts->eof != NOEOF && !(go->nspans == 1 && from->next == span[0].to)) {
-        State *f = fallback_state_with_eof_rule(dfa, opts, from, NULL);
+        State *f = fallback_state_with_eof_rule(dfa, opts, from, nullptr);
         if (f) f->label->used = true;
     }
 
@@ -349,7 +349,7 @@ void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from) {
 
     // initialize high (wide) spans
     uint32_t hSpans = 0;
-    const Span *hspan = NULL;
+    const Span *hspan = nullptr;
     for (uint32_t i = 0; i < go->nspans; ++i) {
         if (span[i].ub > 0x100) {
             hspan = &go->span[i];
@@ -368,7 +368,7 @@ void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from) {
 
     // initialize bitmaps
     uint32_t nBitmaps = 0;
-    const CodeBmState *bm = NULL;
+    const CodeBmState *bm = nullptr;
     if (opts->bFlag) {
         for (uint32_t i = 0; i < go->nspans; ++i) {
             State *s = go->span[i].to;
@@ -376,7 +376,7 @@ void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from) {
 
             const CodeBmState *b = find_bitmap(dfa.bitmap, go, s);
             if (b) {
-                if (bm == NULL) {
+                if (bm == nullptr) {
                     bm = b;
                 }
                 ++nBitmaps;
@@ -416,7 +416,7 @@ void init_go(CodeGo *go)
 {
     go->kind   = CodeGo::EMPTY;
     go->nspans = 0;
-    go->span   = NULL;
+    go->span   = nullptr;
     go->tags   = TCID0;
     go->skip   = false;
 }

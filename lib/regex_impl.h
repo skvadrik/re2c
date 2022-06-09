@@ -24,7 +24,7 @@ struct conf_t
     uint32_t origin;
     int32_t thist;
 
-    inline conf_t(): state(NULL), origin(0), thist(HROOT) {}
+    inline conf_t(): state(nullptr), origin(0), thist(HROOT) {}
     inline conf_t(nfa_state_t *s, uint32_t o, int32_t h)
         : state(s), origin(o), thist(h) {}
     inline conf_t(const conf_t &c, nfa_state_t *s)
@@ -196,16 +196,16 @@ simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsu
     , hidx(HROOT)
     , step(0)
     , rule(Rule::NONE)
-    , cursor(NULL)
-    , marker(NULL)
-    , offsets1(NULL)
-    , offsets2(NULL)
-    , offsets3(NULL)
-    , done(NULL)
-    , newprectbl(NULL)
-    , oldprectbl(NULL)
+    , cursor(nullptr)
+    , marker(nullptr)
+    , offsets1(nullptr)
+    , offsets2(nullptr)
+    , offsets3(nullptr)
+    , done(nullptr)
+    , newprectbl(nullptr)
+    , oldprectbl(nullptr)
     , oldprecdim(0)
-    , histlevel(NULL)
+    , histlevel(nullptr)
     , sortcores()
     , fincount()
     , worklist()

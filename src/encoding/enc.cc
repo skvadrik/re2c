@@ -74,14 +74,14 @@ uint32_t Enc::decodeUnsafe(uint32_t c) const
  * Since range borders are specified by user, it is assumed that the user
  * considers all code points from this range to be valid. re2c must check.
  *
- * Returns NULL if range contains code points that exceed maximum or are
+ * Returns nullptr if range contains code points that exceed maximum or are
  * forbidden by current policy, otherwise returns newly constructed range.
  */
 Range * Enc::validateRange(RangeMgr &rm, uint32_t l, uint32_t h) const
 {
-    if (l >= nCodePoints () || h >= nCodePoints ()) return NULL;
+    if (l >= nCodePoints () || h >= nCodePoints ()) return nullptr;
 
-    Range * r = NULL;
+    Range * r = nullptr;
     switch (type_) {
         case ASCII:
         case EBCDIC:
@@ -95,7 +95,7 @@ Range * Enc::validateRange(RangeMgr &rm, uint32_t l, uint32_t h) const
             if (l <= SURR_MAX && h >= SURR_MIN) {
                 switch (policy_) {
                     case POLICY_FAIL:
-                        r = NULL;
+                        r = nullptr;
                         break;
                     case POLICY_SUBSTITUTE:
                         // exclude surrogates, add error code point

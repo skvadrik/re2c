@@ -121,7 +121,7 @@ bool Scanner::include(const std::string &filename, char *at)
 
     // refill buffer (discard everything up to cursor, clear EOF)
     lim = cur = mar = ctx = tok = ptr = pos = bot + BSIZE;
-    eof = NULL;
+    eof = nullptr;
     return fill(BSIZE);
 }
 
@@ -220,7 +220,7 @@ bool Scanner::gen_dep_file() const
     if (fname.empty()) return true;
 
     FILE *file = fopen(fname.c_str(), "w");
-    if (file == NULL) {
+    if (file == nullptr) {
         error("cannot open dep file %s", fname.c_str());
         return false;
     }

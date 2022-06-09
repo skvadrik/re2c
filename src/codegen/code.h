@@ -340,7 +340,7 @@ template<typename T>
 inline code_list_t<T> *new_code_list(code_alc_t &alc)
 {
     code_list_t<T> *x = alc.alloct<code_list_t<T> >(1);
-    x->head = NULL;
+    x->head = nullptr;
     x->ptail = &x->head;
     return x;
 }
@@ -377,7 +377,7 @@ inline Code *new_code(code_alc_t &alc, CodeKind kind)
 {
     Code *x = alc.alloct<Code>(1);
     x->kind = kind;
-    x->next = NULL;
+    x->next = nullptr;
     return x;
 }
 
@@ -527,7 +527,7 @@ inline Code *code_if_then_else(code_alc_t &alc, const char *if_cond, CodeList *i
 {
     Code *x = new_code(alc, CODE_IF_THEN_ELSE);
     x->ifte.if_cond   = if_cond;
-    x->ifte.else_cond = NULL;
+    x->ifte.else_cond = nullptr;
     x->ifte.if_code   = if_code;
     x->ifte.else_code = else_code;
     x->ifte.oneline   = oneline;
@@ -547,7 +547,7 @@ inline CodeCase *code_case(code_alc_t &alc, CodeList *body, CodeCase::Kind kind)
     CodeCase *x = alc.alloct<CodeCase>(1);
     x->kind = kind;
     x->body = body;
-    x->next = NULL;
+    x->next = nullptr;
     return x;
 }
 
@@ -595,7 +595,7 @@ inline CodeArg *code_arg(code_alc_t &alc, const char *arg)
 {
     CodeArg *x = alc.alloct<CodeArg>(1);
     x->arg = arg;
-    x->next = NULL;
+    x->next = nullptr;
     return x;
 }
 
@@ -645,7 +645,7 @@ inline CodeBmState *code_bmstate(code_alc_t &alc, const CodeGo *go, const State 
     x->state  = s;
     x->offset = 0;
     x->mask   = 0;
-    x->next   = NULL;
+    x->next   = nullptr;
     return x;
 }
 

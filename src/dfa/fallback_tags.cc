@@ -69,7 +69,7 @@ static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r, bool stad
     if (stadfa) {
         tcmd_t **p = &s->stacmd;
         for (; *p; p = &(*p)->next);
-        *p = dfa.tcpool.make_copy(NULL, l, r);
+        *p = dfa.tcpool.make_copy(nullptr, l, r);
     }
     else {
         for (size_t c = 0; c < dfa.nchars; ++c) {
@@ -105,7 +105,7 @@ void insert_fallback_tags(const opt_t *opts, dfa_t &dfa)
         find_overwritten_tags(dfa, i, been, owrt);
 
         tcmd_t *p = s->tcmd[nsym],
-            *save = NULL, **ps = &save,
+            *save = nullptr, **ps = &save,
             **pc = &s->tcmd[nsym + 1];
         for (; p; p = p->next) {
             const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
@@ -113,7 +113,7 @@ void insert_fallback_tags(const opt_t *opts, dfa_t &dfa)
             // 'copy' commands
             if (tcmd_t::iscopy(p)) {
                 if (!owrt[r]) {
-                    *pc = pool.make_copy(NULL, l, r);
+                    *pc = pool.make_copy(nullptr, l, r);
                     pc = &(*pc)->next;
                 } else {
                     backup(dfa, s, l, r, opts->stadfa);
@@ -127,9 +127,9 @@ void insert_fallback_tags(const opt_t *opts, dfa_t &dfa)
             // 'save with history' commands
             } else {
                 if (!owrt[r]) {
-                    *ps = pool.copy_add(NULL, l, r, h);
+                    *ps = pool.copy_add(nullptr, l, r, h);
                 } else {
-                    *ps = pool.copy_add(NULL, l, l, h);
+                    *ps = pool.copy_add(nullptr, l, l, h);
                     backup(dfa, s, l, r, opts->stadfa);
                 }
                 ps = &(*ps)->next;

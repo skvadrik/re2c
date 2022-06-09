@@ -170,7 +170,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         specs_t specs;
         if (kind == INPUT_USE) {
             const RulesBlock *rb = rblocks.find(block_name);
-            if (rb == NULL) exit(1);
+            if (rb == nullptr) exit(1);
             specs = rb->specs;
             opts.restore(rb->opts);
             output.state_goto = false;

@@ -196,7 +196,7 @@ void dump_dfa(const dfa_t &dfa)
     fprintf(stderr,
         "  n [shape=point]"
         "  n -> n0 [style=dotted label=\"");
-    dump_tcmd_or_tcid(dfa.tcmd0 ? &dfa.tcmd0 : NULL, &dfa.tcid0, 0, dfa.tcpool);
+    dump_tcmd_or_tcid(dfa.tcmd0 ? &dfa.tcmd0 : nullptr, &dfa.tcid0, 0, dfa.tcpool);
     fprintf(stderr, "\"]\n");
 
     for (uint32_t i = 0; i < nstate; ++i) {
@@ -204,7 +204,7 @@ void dump_dfa(const dfa_t &dfa)
 
         // state
         fprintf(stderr, "  n%u [height=0.2 width=0.2 label=\"%u", i, i);
-        dump_tcmd_or_tcid(s->stacmd ? &s->stacmd : NULL, &s->stacid, 0, dfa.tcpool);
+        dump_tcmd_or_tcid(s->stacmd ? &s->stacmd : nullptr, &s->stacid, 0, dfa.tcpool);
         fprintf(stderr, "\"]\n");
 
         // finalizer

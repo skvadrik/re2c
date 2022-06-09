@@ -7,7 +7,7 @@
 namespace re2c {
 
 Input::Input(size_t fidx)
-    : file(NULL)
+    : file(nullptr)
     , name()
     , path()
     , escaped_name()
@@ -59,7 +59,7 @@ bool Input::open(const std::string &filename, const std::string *parent
 
 Input::~Input()
 {
-    if (file != NULL && file != stdin) {
+    if (file != nullptr && file != stdin) {
         fclose (file);
     }
 }

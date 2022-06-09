@@ -96,7 +96,7 @@ tcmd_t **tcmd_t::topsort(tcmd_t **phead, tcmd_t *end, uint32_t *indeg)
 
     // return the first non-trivial cycle on x-list (if any), or nil
     for (tcmd_t *x; (x = *ptail) != end && x->lhs == x->rhs; ptail = &x->next);
-    return *ptail == end ? NULL : ptail;
+    return *ptail == end ? nullptr : ptail;
 }
 
 tcpool_t::tcpool_t()
@@ -104,8 +104,8 @@ tcpool_t::tcpool_t()
     , index()
 {
     // empty command must have static number zero
-    insert(NULL);
-    DASSERT(TCID0 == insert(NULL));
+    insert(nullptr);
+    DASSERT(TCID0 == insert(nullptr));
 }
 
 tcmd_t *tcpool_t::make_copy(tcmd_t *next, tagver_t lhs, tagver_t rhs)

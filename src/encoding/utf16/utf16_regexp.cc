@@ -25,15 +25,15 @@ static void UTF16splitByRuneLength(RangeSuffix *&, utf16::rune, utf16::rune);
 RE *UTF16Range(RESpec &spec, const Range *r)
 {
     // empty range
-    if (!r) return NULL;
+    if (!r) return nullptr;
 
     // one-symbol range
     if (!r->next() && r->lower() == r->upper() - 1) {
         return UTF16Symbol(spec, r->lower());
     }
 
-    RangeSuffix * root = NULL;
-    for (; r != NULL; r = r->next ())
+    RangeSuffix * root = nullptr;
+    for (; r != nullptr; r = r->next ())
         UTF16splitByRuneLength(root, r->lower (), r->upper () - 1);
     return to_regexp(spec, root);
 }
@@ -139,7 +139,7 @@ void UTF16addContinuous1(RangeSuffix * & root, uint32_t l, uint32_t h)
     RangeSuffix ** p = &root;
     for (;;)
     {
-        if (*p == NULL)
+        if (*p == nullptr)
         {
             *p = new RangeSuffix(l, h);
             break;
@@ -162,7 +162,7 @@ void UTF16addContinuous2(RangeSuffix * & root, uint32_t l_ld, uint32_t h_ld, uin
     RangeSuffix ** p = &root;
     for (;;)
     {
-        if (*p == NULL)
+        if (*p == nullptr)
         {
             *p = new RangeSuffix(l_tr, h_tr);
             p = &(*p)->child;
@@ -178,7 +178,7 @@ void UTF16addContinuous2(RangeSuffix * & root, uint32_t l_ld, uint32_t h_ld, uin
     }
     for (;;)
     {
-        if (*p == NULL)
+        if (*p == nullptr)
         {
             *p = new RangeSuffix(l_ld, h_ld);
             break;

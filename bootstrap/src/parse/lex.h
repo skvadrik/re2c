@@ -38,7 +38,7 @@ char *yyt1;char *yyt2;char *yyt3;
         , tok(lim)
         , ptr(lim)
         , pos(lim)
-        , eof(NULL)
+        , eof(nullptr)
         
 #line 44 "src/parse/lex.h"
 , yyt1(lim), yyt2(lim), yyt3(lim)

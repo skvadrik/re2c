@@ -199,7 +199,7 @@ void generate_versions(ctx_t &ctx)
 
     clositer_t b = clos.begin(), e = clos.end(), c;
     typename ctx_t::newvers_t newacts(newver_cmp_t<typename ctx_t::history_t>(thist, ctx.dc_hc_caches));
-    tcmd_t *cmd = NULL;
+    tcmd_t *cmd = nullptr;
 
     // for each tag, if there is at least one tagged transition,
     // allocate new version (negative for bottom and positive for
@@ -313,7 +313,7 @@ void generate_stadfa_actions(ctx_t &ctx)
     allocator_t &alc = ctx.dc_allocator;
     clositer_t b = ctx.state.begin(), e = ctx.state.end(), c;
 
-    stacmd_t *cmd = NULL;
+    stacmd_t *cmd = nullptr;
 
     // store and transfer actions
     if (ctx.dc_origin == dfa_t::NIL) {

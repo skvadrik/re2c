@@ -198,8 +198,8 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
         trail = r.ttag;
     }
 
-    const Node::range_t **arcs = NULL;
-    size_t *chars = NULL;
+    const Node::range_t **arcs = nullptr;
+    size_t *chars = nullptr;
     uint32_t *tags = skel.tagvals;
     mtag_trie_t &tagtrie = skel.tagtrie;
 
@@ -427,7 +427,7 @@ template <typename cunit_t, typename key_t> static void gencover(Skeleton &skel,
         Node::arcs_t::const_iterator
             arc = node.arcs.begin(),
             end = node.arcs.end();
-        const suffix_t *min_sfx = NULL;
+        const suffix_t *min_sfx = nullptr;
         size_t min_idx = 0;
 
         // pick the shortest suffix to minimize cover size
@@ -446,7 +446,7 @@ template <typename cunit_t, typename key_t> static void gencover(Skeleton &skel,
             }
         }
 
-        if (min_sfx == NULL) {
+        if (min_sfx == nullptr) {
             // all outgoing paths loop back into this node
             // this can happen in cases like [^]*
         }
@@ -462,7 +462,7 @@ template<typename cunit_t, typename key_t>
 {
     gencover<cunit_t, key_t>(skel, cover, 0);
     if (cover.size.overflow()) {
-        skel.msg.warning(NULL, skel.loc, false,
+        skel.msg.warning(nullptr, skel.loc, false,
             "DFA %sis too large: can only generate partial path cover",
             incond(skel.cond).c_str());
     }

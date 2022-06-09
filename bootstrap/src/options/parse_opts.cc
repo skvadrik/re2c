@@ -18,7 +18,7 @@ namespace re2c {
 static inline bool next (char * & arg, char ** & argv)
 {
     arg = *++argv;
-    return arg != NULL;
+    return arg != nullptr;
 }
 
 static inline bool set_source_file(conopt_t &globopts, const char *source)

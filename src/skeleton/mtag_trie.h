@@ -40,7 +40,7 @@ inline void mtag_trie_init(mtag_trie_t &trie)
 inline void mtag_trie_free(mtag_trie_t &trie)
 {
     delete[] trie.head;
-    trie.head = NULL;
+    trie.head = nullptr;
     trie.size = 0;
 }
 

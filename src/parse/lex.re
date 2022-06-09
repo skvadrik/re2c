@@ -95,7 +95,7 @@ struct ScannerState
         , tok(lim)
         , ptr(lim)
         , pos(lim)
-        , eof(NULL)
+        , eof(nullptr)
         /*!stags:re2c format = ", @@(lim)"; */
     {
         memset(lim, 0, YYMAXFILL);
@@ -324,14 +324,14 @@ loop:
     }
 
     "" / ws_or_eoc {
-        *ptail = NULL;
+        *ptail = nullptr;
         return true;
     }
 
     ":" name {
         BlockNameList *l = alc.alloct<BlockNameList>(1);
         l->name = newcstr(tok + 1, cur, alc);
-        l->next = NULL;
+        l->next = nullptr;
         *ptail = l;
         ptail = &l->next;
 
@@ -371,7 +371,7 @@ loop:
 bool Scanner::lex_block(Output &out, CodeKind kind, uint32_t indent, uint32_t mask)
 {
     code_alc_t &alc = out.allocator;
-    const char *fmt = NULL, *sep = NULL;
+    const char *fmt = nullptr, *sep = nullptr;
     BlockNameList *blocks;
 
     out.wraw(tok, ptr, !globopts->iFlag);

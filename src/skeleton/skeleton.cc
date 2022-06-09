@@ -14,8 +14,8 @@ struct tcmd_t;
 Node::Node()
     : arcs()
     , rule(Rule::NONE)
-    , cmd(NULL)
-    , stacmd(NULL)
+    , cmd(nullptr)
+    , stacmd(nullptr)
 {}
 
 void Node::init(const dfa_state_t *s, const std::vector<uint32_t> &charset,
@@ -39,7 +39,7 @@ void Node::init(const dfa_state_t *s, const std::vector<uint32_t> &charset,
         r->cmd = t;
 
         // insert range at the end of a circular list
-        if (arcs[j] == NULL) {
+        if (arcs[j] == nullptr) {
             arcs[j] = r->next = r;
         } else {
             range_t *p0 = arcs[j], *p = p0;

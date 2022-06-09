@@ -25,8 +25,8 @@ struct RangeSuffix
     RangeSuffix (uint32_t lo, uint32_t hi)
         : l     (lo)
         , h     (hi)
-        , next  (NULL)
-        , child (NULL)
+        , next  (nullptr)
+        , child (nullptr)
     {
         freeList.insert(this);
     }

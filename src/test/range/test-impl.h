@@ -18,7 +18,7 @@ re2c::Range *range(re2c::RangeMgr &rm, uint32_t n)
 {
     RE2C_STATIC_ASSERT (BITS <= 31);
 
-    re2c::Range * r = NULL;
+    re2c::Range * r = nullptr;
     re2c::Range ** p = &r;
     for (uint32_t i = 0; i < BITS; ++i)
     {

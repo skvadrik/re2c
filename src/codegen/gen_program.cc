@@ -54,10 +54,10 @@ OutputBlock::OutputBlock(InputBlockKind kind, const std::string &name,
     , conds()
     , stags()
     , mtags()
-    , opts(NULL)
+    , opts(nullptr)
     , max_fill(1)
     , max_nmatch(1)
-    , start_label(NULL)
+    , start_label(nullptr)
     , fill_index(0)
     , fill_state(0)
     , fill_goto()
@@ -84,7 +84,7 @@ Output::Output(Msg &msg)
     , allocator()
     , scratchbuf(allocator)
     , total_fill_index(0)
-    , total_opts(NULL)
+    , total_opts(nullptr)
 {}
 
 Output::~Output ()
@@ -199,7 +199,7 @@ static void fix_first_block_opts(const blocks_t &blocks)
 
 bool Output::emit_blocks(const std::string &fname, const CodegenCtxGlobal &globalctx)
 {
-    FILE *file = NULL, *temp = NULL;
+    FILE *file = nullptr, *temp = nullptr;
     std::string filename = fname, tempname = fname;
 
     if (filename.empty()) {
@@ -286,7 +286,7 @@ bool Output::emit()
         , total_opts
         , cblocks
         , hblocks
-        , /*pblocks*/ NULL
+        , /*pblocks*/ nullptr
         , /*tmpblocks*/ blocks_t()
         , warn_condition_order
         };
@@ -301,7 +301,7 @@ bool Output::emit()
             // Old-style -t, --type-headers usage implies condition enum.
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
-            wdelay_stmt(0, code_fmt(allocator, CODE_COND_ENUM, NULL, NULL, NULL));
+            wdelay_stmt(0, code_fmt(allocator, CODE_COND_ENUM, nullptr, nullptr, nullptr));
             header_mode(false);
         }
         ctx.pblocks = &hblocks;
@@ -323,7 +323,7 @@ void output_version_time(std::ostream &os, const opt_t *opts)
     }
     if (!opts->bNoGenerationDate) {
         os << " on ";
-        time_t now = time(NULL);
+        time_t now = time(nullptr);
         os.write(ctime(&now), 24);
     }
     os << (opts->lang == LANG_GO ? ", DO NOT EDIT." : " */");

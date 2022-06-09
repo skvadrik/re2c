@@ -35,7 +35,7 @@ static CodeList *gen_gosw(Output &output, const DFA &dfa, const CodeGoSw *go,
     const char *expr = o.str(opts->yych).flush();
 
     CodeCases *cases = code_cases(alc);
-    CodeCase *defcase = NULL;
+    CodeCase *defcase = nullptr;
     for (const CodeGoCase *c = go->cases, *e = c + go->ncases; c < e; ++c) {
         CodeList *body = code_list(alc);
         gen_goto(output, dfa, body, from, c->jump);
@@ -75,7 +75,7 @@ static CodeList *gen_goifl(
             const char *if_cond = gen_cond(output, cond);
             CodeList *if_then = code_list(alc);
             gen_goto(output, dfa, if_then, from, b.jump);
-            append(stmts, code_if_then_else(alc, if_cond, if_then, NULL));
+            append(stmts, code_if_then_else(alc, if_cond, if_then, nullptr));
         } else {
             gen_goto(output, dfa, stmts, from, b.jump);
         }
@@ -117,15 +117,15 @@ static CodeList *gen_gobm(Output &output, const DFA &dfa, const CodeGoBm *go,
     gen_goto(output, dfa, if_else, from, jump);
 
     CodeList *stmts = code_list(alc);
-    if (go->hgo != NULL) {
+    if (go->hgo != nullptr) {
         const char *if_cond = o.str(opts->yych).cstr(" & ~0xFF").cstr(nonzero).flush();
         CodeList *if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
     }
     else {
-        append(stmts, code_if_then_else(alc, elif_cond, if_else, NULL, false));
+        append(stmts, code_if_then_else(alc, elif_cond, if_else, nullptr, false));
     }
-    if (go->lgo != NULL) {
+    if (go->lgo != nullptr) {
         append(stmts, gen_goswif(output, dfa, go->lgo, from));
     }
 
@@ -197,7 +197,7 @@ static CodeList *gen_gocp(Output &output, const DFA &dfa, const CodeGoCp *go,
         .flush();
     append(if_else, code_stmt(alc, text));
 
-    if (go->hgo != NULL) {
+    if (go->hgo != nullptr) {
         text = o.str(opts->yych).cstr(" & ~0xFF").flush();
         CodeList *if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_else(alc, text, if_then, if_else, false));

@@ -26,7 +26,7 @@ Tag::Tag(const std::string *nm, bool hi, int32_t ht)
 
 
 Tag::Tag(size_t lsub, size_t hsub, bool history, bool orbit, int32_t height)
-    : name(NULL)
+    : name(nullptr)
     , lsub(lsub)
     , hsub(hsub)
     , base(Tag::RIGHTMOST)

@@ -188,9 +188,9 @@ inline void Action::set_rule(size_t rule)
 }
 
 inline State::State()
-    : next (0)
-    , prev (0)
-    , label(NULL)
+    : next(nullptr)
+    , prev(nullptr)
+    , label(nullptr)
     , fill (0)
     , fallback (false)
     , rule (Rule::NONE)

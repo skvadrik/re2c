@@ -132,7 +132,7 @@ void Warn::nondeterministic_tags(const loc_t &loc, const std::string &cond
         error_accuml |= e;
 
         msg.warning_start(loc, e);
-        if (tagname == NULL) {
+        if (tagname == nullptr) {
             fprintf(stderr, "trailing context");
         }
         else {

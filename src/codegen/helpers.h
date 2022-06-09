@@ -22,7 +22,7 @@ void argsubst(std::ostringstream &os, const std::string &stub, const char *arg,
     bool allow_unnamed, T val)
 {
     assert(!stub.empty());
-    DASSERT(arg != NULL);
+    DASSERT(arg != nullptr);
 
     const std::string str = os.str();
     os.str("");
@@ -34,7 +34,7 @@ void argsubst(std::ostringstream &os, const std::string &stub, const char *arg,
         os.write(s, p - s);
         s = p;
         p += stub.length();
-        q = *p == '{' ? strchr(p + 1, '}') : NULL;
+        q = *p == '{' ? strchr(p + 1, '}') : nullptr;
 
         if (q && l == (size_t)(q - p - 1) && memcmp(p + 1, arg, l) == 0) {
             // named substitution of the form @@{arg}

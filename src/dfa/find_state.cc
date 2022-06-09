@@ -191,7 +191,7 @@ bool do_find_state(ctx_t &ctx)
     // empty closure corresponds to default state
     if (closure.size() == 0) {
         ctx.dc_target = dfa_t::NIL;
-        ctx.dc_actions = NULL;
+        ctx.dc_actions = nullptr;
         return false;
     }
 
@@ -234,7 +234,7 @@ tcmd_t *final_actions(ctx_t &ctx, const clos_t &fin)
     const hidx_t look = fin.thist;
     const typename ctx_t::history_t &thist = ctx.history;
     tcpool_t &tcpool = dfa.tcpool;
-    tcmd_t *copy = NULL, *save = NULL, **p;
+    tcmd_t *copy = nullptr, *save = nullptr, **p;
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
 
@@ -266,7 +266,7 @@ void stadfa_to_tdfa_actions(ctx_t &ctx, tcmd_t **state_cmd, tcmd_t **final_cmd)
 
     // Convert staDFA store/transfer/accept actions to tag commands:
     // map each (tag, index) pair to a unique tag version.
-    tcmd_t *s = NULL, *f = NULL;
+    tcmd_t *s = nullptr, *f = nullptr;
     tagver_t l, r;
     for (const stacmd_t *p = ctx.stadfa_actions; p; p = p->next) {
         switch (p->kind) {
@@ -317,7 +317,7 @@ void stadfa_to_tdfa_actions(ctx_t &ctx, tcmd_t **state_cmd, tcmd_t **final_cmd)
     // There can be multiple cycles, therefore the process is repeated until
     // topsort finds no more cycles.
     reserve_buffers<ctx_t, true>(ctx);
-    tcmd_t **cycle = tcmd_t::topsort(state_cmd, NULL, ctx.dc_buffers.indegree);
+    tcmd_t **cycle = tcmd_t::topsort(state_cmd, nullptr, ctx.dc_buffers.indegree);
     for (; cycle; ) {
         tcmd_t *c0 = *cycle;
         DASSERT(c0);
@@ -337,7 +337,7 @@ void stadfa_to_tdfa_actions(ctx_t &ctx, tcmd_t **state_cmd, tcmd_t **final_cmd)
         }
 
         reserve_buffers<ctx_t, true>(ctx);
-        cycle = tcmd_t::topsort(&c0->next, NULL, ctx.dc_buffers.indegree);
+        cycle = tcmd_t::topsort(&c0->next, nullptr, ctx.dc_buffers.indegree);
     }
 }
 
@@ -365,15 +365,15 @@ tagver_t map_stadfa_ver(ctx_t &ctx, size_t tag, int32_t ver)
 
 kernel_buffers_t::kernel_buffers_t()
     : maxsize(0)
-    , kernel(NULL)
+    , kernel(nullptr)
     , cap(0)
     , max(0)
-    , memory(NULL)
-    , x2y(NULL)
-    , y2x(NULL)
-    , x2t(NULL)
-    , indegree(NULL)
-    , backup_actions(NULL)
+    , memory(nullptr)
+    , x2y(nullptr)
+    , y2x(nullptr)
+    , x2t(nullptr)
+    , indegree(nullptr)
+    , backup_actions(nullptr)
 {}
 
 template<bool stadfa>
@@ -383,12 +383,12 @@ kernel_t *make_new_kernel(size_t size, allocator_t &alc)
     k->size = size;
     k->state = alc.alloct<nfa_state_t*>(size);
     k->thist = alc.alloct<hidx_t>(size);
-    k->prectbl = NULL;
+    k->prectbl = nullptr;
     if (!stadfa) {
         k->tvers = alc.alloct<uint32_t>(size);
     }
     else {
-        k->stacmd = NULL;
+        k->stacmd = nullptr;
     }
     return k;
 }
@@ -403,7 +403,7 @@ kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
     memcpy(k->state, kernel->state, n * sizeof(void*));
     memcpy(k->thist, kernel->thist, n * sizeof(hidx_t));
 
-    prectable_t *ptbl = NULL;
+    prectable_t *ptbl = nullptr;
     if (kernel->prectbl) {
         ptbl = alc.alloct<prectable_t>(n * n);
         memcpy(ptbl, kernel->prectbl, n * n * sizeof(prectable_t));
@@ -675,7 +675,7 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t *x, const kernel_t 
     if (regless) return true;
 
     // we have bijective mapping; now try to create list of commands
-    tcmd_t **pacts = &ctx.dc_actions, *a, **pa, *copy = NULL;
+    tcmd_t **pacts = &ctx.dc_actions, *a, **pa, *copy = nullptr;
     tcmd_t *b1 = bufs.backup_actions, *b2 = b1;
 
     // backup 'save' commands: if topsort finds cycles, this mapping
@@ -707,7 +707,7 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t *x, const kernel_t 
     *pacts = copy;
 
     // see note [topological ordering of copy commands]
-    tcmd_t **cycle = tcmd_t::topsort(pacts, NULL, bufs.indegree);
+    tcmd_t **cycle = tcmd_t::topsort(pacts, nullptr, bufs.indegree);
 
     // in case of cycles restore 'save' commands and fail
     if (cycle) {
@@ -716,7 +716,7 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t *x, const kernel_t 
         }
     }
 
-    return cycle == NULL;
+    return cycle == nullptr;
 }
 
 } // namespace re2c

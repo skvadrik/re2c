@@ -141,7 +141,8 @@ TRY_CXXFLAG([-Weverything], m4_join([ ],
     [-Wno-nested-anon-types],
     [-Wno-global-constructors] dnl initialization of global constants with std::numeric_limits<...> (mostly for size_t)
     [-Wno-shadow-field-in-constructor] dnl using same names in ctor seems more like a feature
-    [-Wno-undefined-func-template])) dnl explicit specialization to reduce build dependencies
+    [-Wno-undefined-func-template] dnl explicit specialization to reduce build dependencies
+    [-Wno-c++98-compat])) dnl allow using C++11 features like `nullptr`
 
 
 # needed for POSIX file API

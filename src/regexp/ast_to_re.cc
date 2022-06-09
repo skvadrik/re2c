@@ -196,7 +196,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height, bool i
         }
 
         case AST::ALT: {
-            RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
+            RE *t1 = nullptr, *t2 = nullptr, *t3 = nullptr, *t4 = nullptr, *x, *y;
 
             if (ast->alt.ast1->type != AST::CAP) {
                 add_structural_tags(spec, &ast, ncap, height, &t1, &t2, false, in_iter);
@@ -214,7 +214,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height, bool i
         }
 
         case AST::CAT: {
-            RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
+            RE *t1 = nullptr, *t2 = nullptr, *t3 = nullptr, *t4 = nullptr, *x, *y;
 
             if (ast->cat.ast1->type != AST::CAP) {
                 add_structural_tags(spec, &ast, ncap, height, &t1, &t2, false, in_iter);
@@ -252,7 +252,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height, bool i
                 return ast_to_re(spec, ast->cap, ncap, height, in_iter);
             }
             else {
-                RE *y = NULL, *t1 = NULL, *t2 = NULL;
+                RE *y = nullptr, *t1 = nullptr, *t2 = nullptr;
                 add_capture_tags(spec, &ast, ncap, height, &t1, &t2, false, in_iter);
                 y = ast_to_re(spec, ast, ncap, height, in_iter);
                 return re_cat(spec, t1, re_cat(spec, y, t2));
@@ -266,7 +266,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height, bool i
             const uint32_t n = ast->iter.min;
             const uint32_t n1 = std::max(n, 1u);
             const uint32_t m = std::max(n, ast->iter.max);
-            RE *y = NULL, *t1 = NULL, *t2 = NULL;
+            RE *y = nullptr, *t1 = nullptr, *t2 = nullptr;
 
             ast = ast->iter.ast;
 
@@ -293,7 +293,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height, bool i
         }
     }
 
-    return NULL; /* unreachable */
+    return nullptr; /* unreachable */
 }
 
 Range *char_to_range(RESpec &spec, const ASTChar &chr, bool icase)
@@ -319,7 +319,7 @@ Range *cls_to_range(RESpec &spec, const AST *ast)
     std::vector<ASTRange>::const_iterator
         i = ast->cls.ranges->begin(),
         e = ast->cls.ranges->end();
-    Range *r = NULL;
+    Range *r = nullptr;
 
     for (; i != e; ++i) {
         Range *s = spec.opts->encoding.validateRange(rm, i->lower, i->upper);
@@ -356,7 +356,7 @@ Range *diff_to_range(RESpec &spec, const AST *ast)
     DASSERT(ast->type == AST::DIFF);
     Range *l = ast_to_range(spec, ast->diff.ast1);
     Range *r = ast_to_range(spec, ast->diff.ast2);
-    return l && r ? spec.rangemgr.sub(l, r) : NULL;
+    return l && r ? spec.rangemgr.sub(l, r) : nullptr;
 }
 
 Range *ast_to_range(RESpec &spec, const AST *ast)
@@ -398,7 +398,7 @@ RE *re_string(RESpec &spec, const AST *ast)
 {
     DASSERT(ast->type == AST::STR);
 
-    RE *x = NULL;
+    RE *x = nullptr;
     std::vector<ASTChar>::const_iterator
         i = ast->str.chars->begin(),
         e = ast->str.chars->end();
@@ -442,7 +442,7 @@ RE *re_class(RESpec &spec, const loc_t &loc, const Range *r)
             return re_sym(spec, r);
     }
 
-    return NULL; /* unreachable */
+    return nullptr; /* unreachable */
 }
 
 void check_misuse_of_named_def(RESpec &spec, const AST *ast)
@@ -462,7 +462,7 @@ void assert_tags_used_once(RESpec &spec, const Rule &rule
     , const std::vector<Tag> &tags)
 {
     std::set<std::string> names;
-    const std::string *name = NULL;
+    const std::string *name = nullptr;
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         name = tags[t].name;

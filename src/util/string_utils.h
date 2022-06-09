@@ -45,7 +45,7 @@ inline std::string *newstr(const char *s, const char *e)
 template<typename allocator_t>
 inline const char *newcstr(const char *s, const char *e, allocator_t &alc)
 {
-    if (s == NULL) return NULL;
+    if (s == nullptr) return nullptr;
     const size_t n = static_cast<size_t>(e - s);
     char *p = alc.template alloct<char>(n + 1);
     memcpy(p, s, n);

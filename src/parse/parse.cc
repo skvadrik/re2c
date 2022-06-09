@@ -85,12 +85,12 @@ const RulesBlock *RulesBlocks::find(const std::string &name) const
         }
         error("cannot find `/*!rules:re2c:%s ... */` block", name.c_str());
     }
-    return NULL;
+    return nullptr;
 }
 
 const opt_t *RulesBlocks::last_opts() const
 {
-    return blocks.empty() ? NULL : blocks.back()->opts;
+    return blocks.empty() ? nullptr : blocks.back()->opts;
 }
 
 spec_t &find_or_add_spec(specs_t &specs, const std::string &name)
@@ -111,7 +111,7 @@ static inline void append(std::vector<T> &x, const std::vector<T> &y)
 void use_block(context_t &context, const std::string &name, const loc_t &loc)
 {
     const RulesBlock *rb = context.rblocks.find(name);
-    if (rb == NULL) exit(1);
+    if (rb == nullptr) exit(1);
 
     for (specs_t::const_iterator i = rb->specs.begin(); i != rb->specs.end(); ++i) {
         spec_t &spec = find_or_add_spec(context.specs, i->name);

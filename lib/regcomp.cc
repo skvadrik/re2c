@@ -65,7 +65,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 
     nfa_t *nfa = new nfa_t(re, nfa_size);
 
-    nfa_t *nfa0 = NULL;
+    nfa_t *nfa0 = nullptr;
     if (cflags & REG_BACKWARD) {
         conopt_t globopts0;
         globopts0.FFlag = true;
@@ -76,8 +76,8 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
         delete opt0;
     }
 
-    dfa_t *dfa = NULL;
-    rldfa_t *rldfa = NULL;
+    dfa_t *dfa = nullptr;
+    rldfa_t *rldfa = nullptr;
 
     if (cflags & REG_NFA) {
         if ((cflags & REG_TRIE) && (cflags & REG_LEFTMOST)) {
@@ -104,7 +104,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
         if (cflags & REG_REGLESS) {
             DASSERT((cflags & REG_STADFA) == 0);
             rldfa = new rldfa_t(*nfa, *dfa, opt, cflags);
-            opt = NULL; // transfer options ownership to RLDFA
+            opt = nullptr; // transfer options ownership to RLDFA
         } else {
             determinization(*nfa, *dfa, opt, msg, "");
             cutoff_dead_rules(*dfa, opt, "", msg);

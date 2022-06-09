@@ -58,13 +58,13 @@ namespace re2c {
 FILE *temp_file(std::string &fname)
 {
     // append "random enough" suffix to filename
-    const time_t t = time(NULL);
+    const time_t t = time(nullptr);
     char buffer[20];
     strftime(buffer, sizeof(buffer), ".tmp.%Y%m%d%H%M%S", localtime(&t));
     fname += buffer;
 
     // open file for writing, unless it exists already
-    FILE *f = NULL;
+    FILE *f = nullptr;
     int fd = OPEN(fname.c_str());
     if (fd != -1) {
         f = FDOPEN(fd);
@@ -86,7 +86,7 @@ bool overwrite_file(const char *srcname, const char *dstname)
     if (rename(srcname, dstname) == 0) return true;
 
     // rename failed: try write
-    FILE *src = NULL, *dst = NULL;
+    FILE *src = nullptr, *dst = nullptr;
     static const size_t BLK = 4096;
     char buf[BLK];
     bool ok = false;

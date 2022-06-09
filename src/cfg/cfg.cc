@@ -28,8 +28,8 @@ cfg_context_t::cfg_context_t(dfa_t &dfa)
     , trans_mark(state_mark + nstate)
     , final_mark(trans_mark + nstate * nsym)
     , mark(0)
-    , succb(NULL)
-    , succe(NULL)
+    , succb(nullptr)
+    , succe(nullptr)
     , worklist()
 {
     memset(state_mark, 0, nstate * (nsym + 2) * sizeof(uint32_t));
@@ -48,7 +48,7 @@ static void fallback(cfg_context_t &ctx, size_t x);
 
 cfg_t::cfg_t(dfa_t &a)
     : dfa(a)
-    , bblocks(NULL)
+    , bblocks(nullptr)
     , nbbarc(0)
     , nbbfin(0)
     , nbbfall(0)
@@ -65,7 +65,7 @@ void cfg_t::map_actions_to_bblocks(cfg_context_t &ctx)
 
     // bblocks for tagged states
     for (size_t i = 0; i < ctx.nstate; ++i) {
-        ctx.state2bb[i] = dfa.states[i]->stacmd == NULL ? 0 : nbb++;
+        ctx.state2bb[i] = dfa.states[i]->stacmd == nullptr ? 0 : nbb++;
     }
 
     // bblocks for tagged transitions
@@ -73,7 +73,7 @@ void cfg_t::map_actions_to_bblocks(cfg_context_t &ctx)
         cfg_ix_t *trans2bb = &ctx.trans2bb[i * ctx.nsym];
         tcmd_t **cmd = dfa.states[i]->tcmd;
         for (size_t c = 0; c < ctx.nsym; ++c) {
-            trans2bb[c] = cmd[c] == NULL ? 0 : nbb++;
+            trans2bb[c] = cmd[c] == nullptr ? 0 : nbb++;
         }
     }
     nbbarc = nbb;
@@ -102,14 +102,14 @@ void cfg_t::create_bblocks(cfg_context_t &ctx)
 
     // root bblock
     successors(ctx, 0, true /*self*/);
-    new(b++) cfg_bb_t(ctx.succb, ctx.succe, dfa.tcmd0, NULL);
+    new(b++) cfg_bb_t(ctx.succb, ctx.succe, dfa.tcmd0, nullptr);
 
     // state bblocks
     for (size_t i = 0; i < ctx.nstate; ++i) {
         dfa_state_t *s = dfa.states[i];
         if (ctx.state2bb[i]) {
             successors(ctx, i, false /*self*/);
-            new(b++) cfg_bb_t(ctx.succb, ctx.succe, s->stacmd, NULL);
+            new(b++) cfg_bb_t(ctx.succb, ctx.succe, s->stacmd, nullptr);
         }
     }
 
@@ -120,7 +120,7 @@ void cfg_t::create_bblocks(cfg_context_t &ctx)
         for (size_t c = 0; c < ctx.nsym; ++c) {
             if (trans2bb[c]) {
                 successors(ctx, s->arcs[c], true /*self*/);
-                new(b++) cfg_bb_t(ctx.succb, ctx.succe, s->tcmd[c], NULL);
+                new(b++) cfg_bb_t(ctx.succb, ctx.succe, s->tcmd[c], nullptr);
             }
         }
     }
@@ -129,7 +129,7 @@ void cfg_t::create_bblocks(cfg_context_t &ctx)
     for (size_t i = 0; i < ctx.nstate; ++i) {
         if (ctx.final2bb[i]) {
             const dfa_state_t *s = dfa.states[i];
-            new(b++) cfg_bb_t(NULL, NULL, s->tcmd[ctx.nsym],
+            new(b++) cfg_bb_t(nullptr, nullptr, s->tcmd[ctx.nsym],
                 &dfa.rules[s->rule]);
         }
     }
@@ -147,8 +147,8 @@ void cfg_t::create_bblocks(cfg_context_t &ctx)
 
 cfg_bb_t::cfg_bb_t(const cfg_ix_t *sb, const cfg_ix_t *se,
     tcmd_t *&c, const Rule *r)
-    : succb(NULL)
-    , succe(NULL)
+    : succb(nullptr)
+    , succe(nullptr)
     , cmd(c)
     , rule(r)
 {

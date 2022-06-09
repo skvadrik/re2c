@@ -98,9 +98,9 @@ static void prtoff(psimctx_t &ctx, uint32_t x, bool newer);
 static inline void prtoff4(psimctx_t &ctx, uint32_t x);
 static inline void prtoff5(psimctx_t &ctx, uint32_t x);
 
-static regoff_t *offsets4 = NULL;
-static regoff_t *offsets5 = NULL;
-static regoff_t *offsets6 = NULL;
+static regoff_t *offsets4 = nullptr;
+static regoff_t *offsets5 = nullptr;
+static regoff_t *offsets6 = nullptr;
 
 int regexec_nfa_posix_backward(const regex_t *preg, const char *string
     , size_t nmatch, regmatch_t pmatch[], int /* eflags */)

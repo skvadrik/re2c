@@ -27,7 +27,7 @@ static rldfa_backlink_t forward_pass(const regex_t *preg, const char *string,
     std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;
 
     const char *strptr = string, *finstrptr = strptr;
-    rldfa_backlink_t finlink = {NOCONF, NULL, 0};
+    rldfa_backlink_t finlink = {NOCONF, nullptr, 0};
 
     log.clear();
     for (size_t stidx = 0;;) {
@@ -161,7 +161,7 @@ subhistory_t *regparse_dfa_regless(const regex_t *preg, const char *string, size
     rldfa_backlink_t finlink = forward_pass(preg, string, &matchlen);
 
     // No final state has been encountered on the way; return no-match.
-    if (finlink.conf == NOCONF) return NULL;
+    if (finlink.conf == NOCONF) return nullptr;
 
     const rldfa_t *rldfa = preg->rldfa;
     const std::vector<Tag> &tags = rldfa->tags;
@@ -244,7 +244,7 @@ const tstring_t *regtstring_dfa_regless(const regex_t *preg, const char *string)
     rldfa_backlink_t finlink = forward_pass(preg, string, &matchlen);
 
     // No final state has been encountered on the way; return no-match.
-    if (finlink.conf == NOCONF) return NULL;
+    if (finlink.conf == NOCONF) return nullptr;
 
     const rldfa_t *rldfa = preg->rldfa;
     std::vector<const rldfa_backlink_t* const*> &log = rldfa->log;

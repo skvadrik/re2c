@@ -281,7 +281,7 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew)
     // save TNFA origins for this TDFA state
     origins_t &origins = origmap[std::make_pair(origin, ctx.dc_symbol)];
     for (c = b; c != e; ++c) {
-        const nfa_state_t *o = origin == dfa_t::NIL ? NULL
+        const nfa_state_t *o = origin == dfa_t::NIL ? nullptr
             : ctx.dc_kernels[origin]->state[c->origin];
         origins.push_back(o);
     }

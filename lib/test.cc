@@ -12,7 +12,7 @@
 
 
 static int test(int flags, const char *pattern, const char *string,
-    const char *expected = NULL)
+    const char *expected = nullptr)
 {
     std::vector<std::vector<regoff_t> > submatch;
     if (!parse_submatch(expected, submatch)) {
@@ -27,8 +27,8 @@ static int test(int flags, const char *pattern, const char *string,
     const char *prefix = flags & REG_NFA ? "NFA" : "DFA";
     bool with_hist = flags & REG_SUBHIST;
     regex_t re;
-    regmatch_t *pmatch = with_hist ? NULL : new regmatch_t[nmatch];
-    subhistory_t *psubhist = NULL;
+    regmatch_t *pmatch = with_hist ? nullptr : new regmatch_t[nmatch];
+    subhistory_t *psubhist = nullptr;
     int result;
 
     result = regcomp(&re, pattern, flags);
@@ -151,7 +151,7 @@ static int test_tstring(const char *pattern, const char *string, const char *exp
     static const uint32_t NRUNS = 2;
     for (uint32_t i = 0; i < NRUNS; ++i) {
         tstr = regtstring(&re, string);
-        if (tstr == NULL) {
+        if (tstr == nullptr) {
             result = 1;
             fprintf(stderr, "regtstring() failed for RE %s and string %s\n",
                 pattern, string);

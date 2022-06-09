@@ -35,7 +35,7 @@ template<typename T>
 void free_membuf(membuf_t<T> &buf)
 {
     operator delete(buf.ptr);
-    buf.ptr = 0;
+    buf.ptr = nullptr;
     buf.size = 0;
 }
 

@@ -1,7 +1,7 @@
 #ifndef _RE2C_UTIL_RANGE_
 #define _RE2C_UTIL_RANGE_
 
-#include <stddef.h> // NULL
+#include <stddef.h>
 #include <stdint.h>
 
 #include "src/test/range/test.h"
@@ -64,12 +64,12 @@ inline Range *RangeMgr::make(Range *n, uint32_t l, uint32_t u)
 
 inline Range *RangeMgr::sym(uint32_t c)
 {
-    return make(NULL, c, c + 1);
+    return make(nullptr, c, c + 1);
 }
 
 inline Range *RangeMgr::ran(uint32_t l, uint32_t u)
 {
-    return make(NULL, l, u);
+    return make(nullptr, l, u);
 }
 
 } // namespace re2c

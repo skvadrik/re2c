@@ -1360,7 +1360,7 @@ yy191:
 	cur = yyt1;
 #line 326 "../src/parse/lex.re"
 	{
-        *ptail = NULL;
+        *ptail = nullptr;
         return true;
     }
 #line 1367 "src/parse/lex.cc"
@@ -1390,7 +1390,7 @@ yy195:
 	{
         BlockNameList *l = alc.alloct<BlockNameList>(1);
         l->name = newcstr(tok + 1, cur, alc);
-        l->next = NULL;
+        l->next = nullptr;
         *ptail = l;
         ptail = &l->next;
 
@@ -1512,7 +1512,7 @@ yy202:
 bool Scanner::lex_block(Output &out, CodeKind kind, uint32_t indent, uint32_t mask)
 {
     code_alc_t &alc = out.allocator;
-    const char *fmt = NULL, *sep = NULL;
+    const char *fmt = nullptr, *sep = nullptr;
     BlockNameList *blocks;
 
     out.wraw(tok, ptr, !globopts->iFlag);

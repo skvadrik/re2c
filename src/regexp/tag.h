@@ -71,7 +71,7 @@ inline bool orbit(const Tag &tag)
 
 inline bool trailing(const Tag &tag)
 {
-    return !capture(tag) && tag.name == NULL;
+    return !capture(tag) && tag.name == nullptr;
 }
 
 inline bool history(const Tag &tag)

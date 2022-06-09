@@ -156,7 +156,7 @@ trailexpr
 : expr { $$ = ast_cap($1); }
 | expr '/' expr {
     $$ = ast_cat(ast_cap($1),
-        ast_cat(ast_tag(context.input.tok_loc(), NULL, false), $3));
+        ast_cat(ast_tag(context.input.tok_loc(), nullptr, false), $3));
 };
 
 expr

@@ -14,7 +14,7 @@ namespace {
 
 static RE *negative_tags(RESpec &spec, const size_t *stidx, const size_t *etidx)
 {
-    RE *x = NULL;
+    RE *x = nullptr;
 
     // Add transitions for all negative tags (including nested ones). It allows
     // to avoid tag initialization and fixup at the end of match, at the cost of
@@ -83,7 +83,7 @@ void insert_default_tags(RESpec &spec)
 
     std::vector<RE*>::reverse_iterator i_re;
     for (i_re = spec.res.rbegin(); i_re != spec.res.rend(); ++i_re) {
-        StackItem i = {*i_re, NULL, NULL};
+        StackItem i = {*i_re, nullptr, nullptr};
         stack.push_back(i);
     }
 
@@ -93,18 +93,18 @@ void insert_default_tags(RESpec &spec)
         RE *re = i.re;
 
         if (re->type == RE::ALT) {
-            if (i.ltag == NULL) {
+            if (i.ltag == nullptr) {
                 // collect tags from the left sub-RE and return to this RE
-                StackItem k = {re, tag, NULL};
+                StackItem k = {re, tag, nullptr};
                 stack.push_back(k);
-                StackItem j = {re->alt.re1, NULL, NULL};
+                StackItem j = {re->alt.re1, nullptr, nullptr};
                 stack.push_back(j);
             }
-            else if (i.rtag == NULL) {
+            else if (i.rtag == nullptr) {
                 // collect tags from the right sub-RE and return to this RE
                 StackItem k = {re, i.ltag, tag};
                 stack.push_back(k);
-                StackItem j = {re->alt.re2, NULL, NULL};
+                StackItem j = {re->alt.re2, nullptr, nullptr};
                 stack.push_back(j);
             }
             else {
@@ -123,13 +123,13 @@ void insert_default_tags(RESpec &spec)
             }
         }
         else if (re->type == RE::CAT) {
-            StackItem j2 = {re->cat.re2, NULL, NULL};
+            StackItem j2 = {re->cat.re2, nullptr, nullptr};
             stack.push_back(j2);
-            StackItem j1 = {re->cat.re1, NULL, NULL};
+            StackItem j1 = {re->cat.re1, nullptr, nullptr};
             stack.push_back(j1);
         }
         else if (re->type == RE::ITER) {
-            StackItem j = {re->iter.re, NULL, NULL};
+            StackItem j = {re->iter.re, nullptr, nullptr};
             stack.push_back(j);
         }
         else if (re->type == RE::TAG) {

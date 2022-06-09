@@ -97,7 +97,7 @@ struct rdfa_t
         // init states
         for (size_t i = 0; i < nstates; ++i) {
             state_t &s = states[i];
-            s.arcs = NULL;
+            s.arcs = nullptr;
             const size_t r = dfa.states[i]->rule;
             s.rule = r == Rule::NONE ? nrules : r;
             s.fallthru = false;
@@ -256,7 +256,7 @@ static void remove_dead_final_states(dfa_t &dfa, const bool *fallthru)
 
         if (shadowed) {
             s->rule = Rule::NONE;
-            s->tcmd[nsym] = NULL;
+            s->tcmd[nsym] = nullptr;
         }
     }
 }

@@ -66,7 +66,7 @@ inline void OutBuf::init(size_t selector)
         default: DASSERT(false);
     }
     size = 0;
-    file = NULL;
+    file = nullptr;
 }
 
 inline void OutBuf::free(size_t selector)

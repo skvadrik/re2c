@@ -19,7 +19,7 @@ static OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx, const char *name)
     for (size_t i = 0; i < hblocks.size(); ++i) {
         if (hblocks[i]->name.compare(name) == 0) return hblocks[i];
     }
-    return NULL;
+    return nullptr;
 }
 
 static void find_blocks(CodegenCtxPass1 &ctx, const BlockNameList *names,
@@ -99,7 +99,7 @@ static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
     bool multival = (code->kind == CODE_MTAGS);
 
     tagnames_t tags;
-    if (code->fmt.block_names == NULL) {
+    if (code->fmt.block_names == nullptr) {
         // Gather tags from all blocks in the output and header files.
         add_tags_from_blocks(ctx.global->cblocks, tags, multival);
         add_tags_from_blocks(ctx.global->hblocks, tags, multival);
@@ -138,7 +138,7 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
         code->raw.data = buf.flush();
 
     } else {
-        const char *start = NULL, *end = NULL;
+        const char *start = nullptr, *end = nullptr;
         CodeList *stmts = code_list(alc);
         CodeList *block = code_list(alc);
 
@@ -248,7 +248,7 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
     }
 
     StartConds conds;
-    if (code->fmt.block_names == NULL) {
+    if (code->fmt.block_names == nullptr) {
         // Gather conditions from all blocks in the output and header files.
         add_conditions_from_blocks(ctx.global->cblocks, conds);
         add_conditions_from_blocks(ctx.global->hblocks, conds);
@@ -316,10 +316,10 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     //    includes all blocks except `use:re2c` (if a block generates no code it
     //    does not contribute any cases to the state switch).
     //
-    bool global = (code->fmt.block_names == NULL);
+    bool global = (code->fmt.block_names == nullptr);
 
     CodeCases *cases = code_cases(alc);
-    const OutputBlock *bstart = NULL;
+    const OutputBlock *bstart = nullptr;
 
     if (global) {
         // No block names are specified: generate a global switch. It includes
@@ -398,7 +398,7 @@ static void gen_yych_decl(const opt_t *opts, Code *code)
         code->kind = CODE_VAR;
         code->var.type = VAR_TYPE_YYCTYPE;
         code->var.name = opts->yych.c_str();
-        code->var.init = NULL;
+        code->var.init = nullptr;
     } else {
         code->kind = CODE_EMPTY;
     }
@@ -470,7 +470,7 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
     const char *varname = kind == CODE_MAXFILL ? "YYMAXFILL" : "YYMAXNMATCH";
 
     size_t max = 1;
-    if (code->fmt.block_names == NULL) {
+    if (code->fmt.block_names == nullptr) {
         // Gather max value from all blocks in the output and header files.
         max = max_among_blocks(ctx.global->cblocks, max, kind);
         max = max_among_blocks(ctx.global->hblocks, max, kind);

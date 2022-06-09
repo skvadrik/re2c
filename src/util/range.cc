@@ -20,7 +20,7 @@ void RangeMgr::append_overlapping(Range *&head, Range *&tail, const Range *r)
 
 Range * RangeMgr::add(const Range *r1, const Range *r2)
 {
-    Range *head = NULL, *tail = NULL;
+    Range *head = nullptr, *tail = nullptr;
     for (; r1 && r2; ) {
         if (r1->lb < r2->lb) {
             append_overlapping(head, tail, r1);
@@ -49,7 +49,7 @@ void RangeMgr::append(Range **&ptail, uint32_t l, uint32_t u)
 
 Range * RangeMgr::sub(const Range *r1, const Range *r2)
 {
-    Range *head = NULL, ** ptail = &head;
+    Range *head = nullptr, ** ptail = &head;
     while (r1) {
         if (!r2 || r2->lb >= r1->ub) {
             append(ptail, r1->lb, r1->ub);

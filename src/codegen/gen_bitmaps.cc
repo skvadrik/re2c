@@ -57,12 +57,12 @@ CodeBmState *find_bitmap(const CodeBitmap *bitmap, const CodeGo *go, const State
     for (CodeBmState *b = bitmap->states->head; b; b = b->next) {
         if (b->state == s && matches(b->go, b->state, go, s)) return b;
     }
-    return NULL;
+    return nullptr;
 }
 
 CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap)
 {
-    if (!bitmap->states->head || !bitmap->used) return NULL;
+    if (!bitmap->states->head || !bitmap->used) return nullptr;
 
     uint32_t nmaps = 0;
     for (CodeBmState *b = bitmap->states->head; b; b = b->next) ++nmaps;

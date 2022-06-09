@@ -125,7 +125,7 @@ static inline void get_tstring_fragment(history_t &history, allocator_t &alc,
 template<typename ctx_t>
 static rldfa_backlink_t *construct_backlinks(const ctx_t &ctx, rldfa_t &rldfa,
     std::vector<tchar_t> &tfrag, const std::vector<std::vector<uint32_t> > &uniq_orig) {
-    if (ctx.dc_target == dfa_t::NIL) return NULL;
+    if (ctx.dc_target == dfa_t::NIL) return nullptr;
 
     const bool tstring = rldfa.flags & REG_TSTRING;
     const std::vector<uint32_t> &uo = uniq_orig[ctx.dc_target];
@@ -209,7 +209,7 @@ static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> 
 
         // Check if the new TDFA state is final.
         // See note [at most one final item per closure].
-        rldfa_backlink_t finlink = {NOCONF, NULL, 0};
+        rldfa_backlink_t finlink = {NOCONF, nullptr, 0};
         for (uint32_t i = 0; i < state.size(); ++i) {
             if (state[i].state->type == nfa_state_t::FIN) {
                 finlink.conf = uo[i];

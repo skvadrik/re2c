@@ -24,15 +24,15 @@ static void UTF8splitByRuneLength(RangeSuffix *&, utf8::rune, utf8::rune);
 RE *UTF8Range(RESpec &spec, const Range *r)
 {
     // empty range
-    if (!r) return NULL;
+    if (!r) return nullptr;
 
     // one-symbol range
     if (!r->next() && r->lower() == r->upper() - 1) {
         return UTF8Symbol(spec, r->lower());
     }
 
-    RangeSuffix *root = NULL;
-    for (; r != NULL; r = r->next()) {
+    RangeSuffix *root = nullptr;
+    for (; r != nullptr; r = r->next()) {
         UTF8splitByRuneLength(root, r->lower(), r->upper() - 1);
     }
     return to_regexp(spec, root);
@@ -140,7 +140,7 @@ void UTF8addContinuous(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint32_
         const uint32_t hc = hcs[n - i];
         for (;;)
         {
-            if (*p == NULL)
+            if (*p == nullptr)
             {
                 *p = new RangeSuffix(lc, hc);
                 p = &(*p)->child;

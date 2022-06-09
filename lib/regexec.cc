@@ -78,7 +78,7 @@ subhistory_t *regparse(const regex_t *re, const char *string, size_t nmatch)
     } else {
         // NFA-based algorithms (not implemented yet).
         assert(false);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -98,12 +98,12 @@ const tstring_t *regtstring(const regex_t *re, const char *string)
         } else {
             // TDFA with registers is not suited to tstring construction.
             assert(false);
-            return NULL;
+            return nullptr;
         }
     } else {
         // NFA-based algorithms (not implemented yet).
         assert(false);
-        return NULL;
+        return nullptr;
     }
 }
 
