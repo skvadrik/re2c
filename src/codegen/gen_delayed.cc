@@ -49,7 +49,7 @@ static std::string output_state_get(const opt_t *opts)
 
 void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &tags)
 {
-    DASSERT(code->kind == CODE_STAGS || code->kind == CODE_MTAGS);
+    DASSERT(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
 
     const char *fmt = code->fmt.format;
     const char *sep = code->fmt.separator;
@@ -70,7 +70,7 @@ void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &
         if (!s.empty() && *s.rbegin() != '\n') buf.cstr("\n");
     }
 
-    code->kind = CODE_RAW;
+    code->kind = CodeKind::RAW;
     code->raw.size = buf.stream().str().length();
     code->raw.data = buf.flush();
 }
@@ -89,14 +89,14 @@ static void add_tags_from_blocks(const blocks_t &blocks, tagnames_t &tags, bool 
 
 static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
 {
-    DASSERT(code->kind == CODE_STAGS || code->kind == CODE_MTAGS);
+    DASSERT(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
     if (ctx.global->opts->target != Target::CODE) {
-        code->kind = CODE_EMPTY;
+        code->kind = CodeKind::EMPTY;
         return;
     }
 
     Scratchbuf &buf = ctx.global->scratchbuf;
-    bool multival = (code->kind == CODE_MTAGS);
+    bool multival = (code->kind == CodeKind::MTAGS);
 
     tagnames_t tags;
     if (code->fmt.block_names == nullptr) {
@@ -133,7 +133,7 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
         }
         buf.cstr("\n");
 
-        code->kind = CODE_RAW;
+        code->kind = CodeKind::RAW;
         code->raw.size = buf.stream().str().length();
         code->raw.data = buf.flush();
 
@@ -189,7 +189,7 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
             opts->lang == Lang::RUST ? CodeBlock::RAW : CodeBlock::INDENTED));
         append(stmts, code_text(alc, end));
 
-        code->kind = CODE_BLOCK;
+        code->kind = CodeKind::BLOCK;
         code->block.stmts = stmts;
         code->block.fmt = CodeBlock::RAW;
     }
@@ -243,7 +243,7 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
     const opt_t *globopts = ctx.global->opts;
 
     if (globopts->target != Target::CODE) {
-        code->kind = CODE_EMPTY;
+        code->kind = CodeKind::EMPTY;
         return;
     }
 
@@ -261,7 +261,7 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
     // Do not generate empty condition enum. Some compilers or language standards
     // allow it, but generally it's more likely to indicate an error in user code.
     if (conds.empty()) {
-        code->kind = CODE_EMPTY;
+        code->kind = CodeKind::EMPTY;
         return;
     }
 
@@ -289,7 +289,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
         ? ctx.block->opts : ctx.global->opts;
 
     if (globopts->target != Target::CODE) {
-        code->kind = CODE_EMPTY;
+        code->kind = CodeKind::EMPTY;
         return;
     }
 
@@ -387,7 +387,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
         append(stmts, code_textraw(alc, text));
     }
 
-    code->kind = CODE_BLOCK;
+    code->kind = CodeKind::BLOCK;
     code->block.stmts = stmts;
     code->block.fmt = CodeBlock::RAW;
 }
@@ -395,24 +395,24 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
 static void gen_yych_decl(const opt_t *opts, Code *code)
 {
     if (opts->bEmitYYCh) {
-        code->kind = CODE_VAR;
+        code->kind = CodeKind::VAR;
         code->var.type = VAR_TYPE_YYCTYPE;
         code->var.name = opts->yych.c_str();
         code->var.init = nullptr;
     } else {
-        code->kind = CODE_EMPTY;
+        code->kind = CodeKind::EMPTY;
     }
 }
 
 static void gen_yyaccept_def(const opt_t *opts, Code *code, bool used_yyaccept)
 {
     if (used_yyaccept) {
-        code->kind = CODE_VAR;
+        code->kind = CodeKind::VAR;
         code->var.type = VAR_TYPE_UINT;
         code->var.name = opts->yyaccept.c_str();
         code->var.init = "0";
     } else {
-        code->kind = CODE_EMPTY;
+        code->kind = CodeKind::EMPTY;
     }
 }
 
@@ -422,7 +422,7 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
     Scratchbuf &o = ctx.global->scratchbuf;
 
     if (opts->loop_switch) {
-        code->kind = CODE_VAR;
+        code->kind = CodeKind::VAR;
         code->var.name = o.str(opts->yystate).flush();
         if (opts->fFlag) {
             // With storable state `yystate` should be initialized to YYGETSTATE.
@@ -442,7 +442,7 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
             code->var.init = "0";
         }
     } else {
-        code->kind = CODE_EMPTY;
+        code->kind = CodeKind::EMPTY;
     }
 }
 
@@ -450,7 +450,7 @@ static size_t max_among_blocks(const blocks_t &blocks, size_t max, CodeKind kind
 {
     for (size_t i = 0; i < blocks.size(); ++i) {
         const OutputBlock &block = *blocks[i];
-        max = std::max(max, kind == CODE_MAXFILL ? block.max_fill : block.max_nmatch);
+        max = std::max(max, kind == CodeKind::MAXFILL ? block.max_fill : block.max_nmatch);
     }
     return max;
 }
@@ -461,13 +461,13 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
     Scratchbuf &o = ctx.global->scratchbuf;
 
     if (opts->target != Target::CODE) {
-        code->kind = CODE_EMPTY;
+        code->kind = CodeKind::EMPTY;
         return;
     }
 
     CodeKind kind = code->kind;
-    const char *dirname = kind == CODE_MAXFILL ? "max:re2c" : "maxnmatch:re2c";
-    const char *varname = kind == CODE_MAXFILL ? "YYMAXFILL" : "YYMAXNMATCH";
+    const char *dirname = kind == CodeKind::MAXFILL ? "max:re2c" : "maxnmatch:re2c";
+    const char *varname = kind == CodeKind::MAXFILL ? "YYMAXFILL" : "YYMAXNMATCH";
 
     size_t max = 1;
     if (code->fmt.block_names == nullptr) {
@@ -498,7 +498,7 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
             break;
         }
     }
-    code->kind = (opts->lang == Lang::C) ? CODE_TEXT : CODE_STMT;
+    code->kind = (opts->lang == Lang::C) ? CodeKind::TEXT : CodeKind::STMT;
 }
 
 /*
@@ -599,7 +599,7 @@ static void gen_cond_goto(CodegenCtxPass1 &ctx, Code *code)
         }
     }
 
-    code->kind = CODE_BLOCK;
+    code->kind = CodeKind::BLOCK;
     code->block.stmts = stmts;
     code->block.fmt = CodeBlock::RAW;
 }
@@ -626,7 +626,7 @@ static void gen_cond_table(CodegenCtxPass1 &ctx, Code *code)
 
     append(stmts, code_stmt(alc, "}"));
 
-    code->kind = CODE_BLOCK;
+    code->kind = CodeKind::BLOCK;
     code->block.stmts = stmts;
     code->block.fmt = CodeBlock::RAW;
 }
@@ -643,99 +643,99 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
 {
     const opt_t *opts = ctx.block->opts;
     switch (code->kind) {
-        case CODE_BLOCK:
+        case CodeKind::BLOCK:
             expand_pass_1_list(ctx, code->block.stmts);
             break;
-        case CODE_IF_THEN_ELSE:
+        case CodeKind::IF_THEN_ELSE:
             expand_pass_1_list(ctx, code->ifte.if_code);
             expand_pass_1_list(ctx, code->ifte.else_code);
             break;
-        case CODE_SWITCH:
+        case CodeKind::SWITCH:
             for (CodeCase *x = code->swch.cases->head; x; x = x->next) {
                 expand_pass_1_list(ctx, x->body);
             }
             break;
-        case CODE_LOOP:
+        case CodeKind::LOOP:
             expand_pass_1_list(ctx, code->loop);
             break;
-        case CODE_STAGS:
-        case CODE_MTAGS:
+        case CodeKind::STAGS:
+        case CodeKind::MTAGS:
             expand_tags_directive(ctx, code);
             break;
-        case CODE_MAXFILL:
-        case CODE_MAXNMATCH:
+        case CodeKind::MAXFILL:
+        case CodeKind::MAXNMATCH:
             gen_yymax(ctx, code);
             break;
-        case CODE_YYCH:
+        case CodeKind::YYCH:
             gen_yych_decl(opts, code);
             break;
-        case CODE_YYACCEPT:
+        case CodeKind::YYACCEPT:
             gen_yyaccept_def(opts, code, ctx.block->used_yyaccept);
             break;
-        case CODE_YYSTATE:
+        case CodeKind::YYSTATE:
             gen_yystate_def(ctx, code);
             break;
-        case CODE_COND_ENUM:
+        case CodeKind::COND_ENUM:
             expand_cond_enum(ctx, code);
             break;
-        case CODE_COND_GOTO:
+        case CodeKind::COND_GOTO:
             gen_cond_goto(ctx, code);
             break;
-        case CODE_COND_TABLE:
+        case CodeKind::COND_TABLE:
             gen_cond_table(ctx, code);
             break;
-        case CODE_STATE_GOTO:
+        case CodeKind::STATE_GOTO:
             gen_state_goto(ctx, code);
             break;
-        case CODE_LABEL:
+        case CodeKind::LABEL:
             // Do nothing on the first pass (use information is not available
             // yet, as the rest of the first pass may generate some additional
             // label uses, e.g. for a block start label in `getstate:re2c`).
             break;
-        case CODE_LINE_INFO_INPUT:
-        case CODE_LINE_INFO_OUTPUT:
+        case CodeKind::LINE_INFO_INPUT:
+        case CodeKind::LINE_INFO_OUTPUT:
             // Although line directives are disabled for Rust, stubs confuse
             // codegen into rendering oneline semantic actions as multiline,
             // which triggers rustc warnings about redundant braces. We replace
             // stubs with empty statements and rely on `remove_empty` pass.
-            if (opts->lang == Lang::RUST) code->kind = CODE_EMPTY;
+            if (opts->lang == Lang::RUST) code->kind = CodeKind::EMPTY;
             break;
-        case CODE_EMPTY:
-        case CODE_FUNC:
-        case CODE_STMT:
-        case CODE_TEXT:
-        case CODE_RAW:
-        case CODE_TEXT_RAW:
-        case CODE_SKIP:
-        case CODE_PEEK:
-        case CODE_BACKUP:
-        case CODE_PEEK_SKIP:
-        case CODE_SKIP_PEEK:
-        case CODE_SKIP_BACKUP:
-        case CODE_BACKUP_SKIP:
-        case CODE_BACKUP_PEEK:
-        case CODE_BACKUP_PEEK_SKIP:
-        case CODE_SKIP_BACKUP_PEEK:
-        case CODE_VAR:
-        case CODE_ABORT:
+        case CodeKind::EMPTY:
+        case CodeKind::FUNC:
+        case CodeKind::STMT:
+        case CodeKind::TEXT:
+        case CodeKind::RAW:
+        case CodeKind::TEXT_RAW:
+        case CodeKind::SKIP:
+        case CodeKind::PEEK:
+        case CodeKind::BACKUP:
+        case CodeKind::PEEK_SKIP:
+        case CodeKind::SKIP_PEEK:
+        case CodeKind::SKIP_BACKUP:
+        case CodeKind::BACKUP_SKIP:
+        case CodeKind::BACKUP_PEEK:
+        case CodeKind::BACKUP_PEEK_SKIP:
+        case CodeKind::SKIP_BACKUP_PEEK:
+        case CodeKind::VAR:
+        case CodeKind::ABORT:
             break;
     }
 }
 
 static void gen_label(Scratchbuf &o, const opt_t *opts, Code *code)
 {
-    DASSERT(code->kind == CODE_LABEL);
+    DASSERT(code->kind == CodeKind::LABEL);
     CodeLabel *label = &code->label;
 
     if (label->kind == CodeLabel::SLABEL) {
-        code->kind = CODE_TEXT_RAW;
+        code->kind = CodeKind::TEXT_RAW;
         code->text = o.cstr(label->slabel).cstr(":").flush();
     } else if (label->nlabel->used) {
         DASSERT(label->nlabel->index != Label::NONE);
-        code->kind = CODE_TEXT_RAW;
+        code->kind = CodeKind::TEXT_RAW;
         code->text = o.str(opts->labelPrefix).u32(label->nlabel->index).cstr(":").flush();
     } else {
-        code->kind = CODE_EMPTY;
+        code->kind = CodeKind::EMPTY;
     }
 }
 
@@ -750,22 +750,22 @@ static void expand_pass_2_list(CodegenCtxPass2 &ctx, CodeList *stmts)
 void expand_pass_2(CodegenCtxPass2 &ctx, Code *code)
 {
     switch (code->kind) {
-        case CODE_BLOCK:
+        case CodeKind::BLOCK:
             expand_pass_2_list(ctx, code->block.stmts);
             break;
-        case CODE_IF_THEN_ELSE:
+        case CodeKind::IF_THEN_ELSE:
             expand_pass_2_list(ctx, code->ifte.if_code);
             expand_pass_2_list(ctx, code->ifte.else_code);
             break;
-        case CODE_SWITCH:
+        case CodeKind::SWITCH:
             for (CodeCase *x = code->swch.cases->head; x; x = x->next) {
                 expand_pass_2_list(ctx, x->body);
             }
             break;
-        case CODE_LOOP:
+        case CodeKind::LOOP:
             expand_pass_2_list(ctx, code->loop);
             break;
-        case CODE_LABEL:
+        case CodeKind::LABEL:
             gen_label(ctx.scratchbuf, ctx.opts, code);
             break;
         default:

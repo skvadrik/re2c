@@ -301,7 +301,7 @@ bool Output::emit()
             // Old-style -t, --type-headers usage implies condition enum.
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
-            wdelay_stmt(0, code_fmt(allocator, CODE_COND_ENUM, nullptr, nullptr, nullptr));
+            wdelay_stmt(0, code_fmt(allocator, CodeKind::COND_ENUM, nullptr, nullptr, nullptr));
             header_mode(false);
         }
         ctx.pblocks = &hblocks;

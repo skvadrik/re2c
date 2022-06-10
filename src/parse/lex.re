@@ -178,24 +178,24 @@ loop:
     }
 
     "/*!max:re2c" {
-        if (!lex_block(out, CODE_MAXFILL, 0, DCONF_FORMAT)) return InputBlock::ERROR;
+        if (!lex_block(out, CodeKind::MAXFILL, 0, DCONF_FORMAT)) return InputBlock::ERROR;
         goto next;
     }
 
     "/*!maxnmatch:re2c" {
-        if (!lex_block(out, CODE_MAXNMATCH, 0, DCONF_FORMAT)) return InputBlock::ERROR;
+        if (!lex_block(out, CodeKind::MAXNMATCH, 0, DCONF_FORMAT)) return InputBlock::ERROR;
         goto next;
     }
 
     "/*!stags:re2c" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        if (!lex_block(out, CODE_STAGS, 0, allow)) return InputBlock::ERROR;
+        if (!lex_block(out, CodeKind::STAGS, 0, allow)) return InputBlock::ERROR;
         goto next;
     }
 
     "/*!mtags:re2c" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        if (!lex_block(out, CODE_MTAGS, 0, allow)) return InputBlock::ERROR;
+        if (!lex_block(out, CodeKind::MTAGS, 0, allow)) return InputBlock::ERROR;
         goto next;
     }
 
@@ -203,7 +203,7 @@ loop:
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        if (!lex_block(out, CODE_COND_ENUM, opts->topIndent, allow)) return InputBlock::ERROR;
+        if (!lex_block(out, CodeKind::COND_ENUM, opts->topIndent, allow)) return InputBlock::ERROR;
         goto next;
     }
 
@@ -219,7 +219,7 @@ loop:
                 "without the `goto` statement");
             return InputBlock::ERROR;
         }
-        if (!lex_block(out, CODE_STATE_GOTO, opts->topIndent, 0)) return InputBlock::ERROR;
+        if (!lex_block(out, CodeKind::STATE_GOTO, opts->topIndent, 0)) return InputBlock::ERROR;
         goto next;
     }
 

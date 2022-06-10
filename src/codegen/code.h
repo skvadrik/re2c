@@ -383,28 +383,28 @@ inline Code *new_code(code_alc_t &alc, CodeKind kind)
 
 inline Code *code_stmt(code_alc_t &alc, const char *text)
 {
-    Code *x = new_code(alc, CODE_STMT);
+    Code *x = new_code(alc, CodeKind::STMT);
     x->text = text;
     return x;
 }
 
 inline Code *code_loop(code_alc_t &alc, CodeList *loop)
 {
-    Code *x = new_code(alc, CODE_LOOP);
+    Code *x = new_code(alc, CodeKind::LOOP);
     x->loop = loop;
     return x;
 }
 
 inline Code *code_text(code_alc_t &alc, const char *text)
 {
-    Code *x = new_code(alc, CODE_TEXT);
+    Code *x = new_code(alc, CodeKind::TEXT);
     x->text = text;
     return x;
 }
 
 inline Code *code_raw(code_alc_t &alc, const char *data, size_t size)
 {
-    Code *x = new_code(alc, CODE_RAW);
+    Code *x = new_code(alc, CodeKind::RAW);
     char *copy = alc.alloct<char>(size);
     memcpy(copy, data, size);
     x->raw.size = size;
@@ -414,14 +414,14 @@ inline Code *code_raw(code_alc_t &alc, const char *data, size_t size)
 
 inline Code *code_textraw(code_alc_t &alc, const char *text)
 {
-    Code *x = new_code(alc, CODE_TEXT_RAW);
+    Code *x = new_code(alc, CodeKind::TEXT_RAW);
     x->text = text;
     return x;
 }
 
 inline Code *code_abort(code_alc_t &alc)
 {
-    return new_code(alc, CODE_ABORT);
+    return new_code(alc, CodeKind::ABORT);
 }
 
 inline Code *code_newline(code_alc_t &alc)
@@ -431,7 +431,7 @@ inline Code *code_newline(code_alc_t &alc)
 
 inline Code *code_nlabel(code_alc_t &alc, Label *label)
 {
-    Code *x = new_code(alc, CODE_LABEL);
+    Code *x = new_code(alc, CodeKind::LABEL);
     x->label.kind = CodeLabel::NLABEL;
     x->label.nlabel = label;
     return x;
@@ -439,7 +439,7 @@ inline Code *code_nlabel(code_alc_t &alc, Label *label)
 
 inline Code *code_slabel(code_alc_t &alc, const char *label)
 {
-    Code *x = new_code(alc, CODE_LABEL);
+    Code *x = new_code(alc, CodeKind::LABEL);
     x->label.kind = CodeLabel::SLABEL;
     x->label.slabel = label;
     return x;
@@ -457,66 +457,66 @@ inline Code *code_fmt(code_alc_t &alc, CodeKind kind, BlockNameList *blocks,
 
 inline Code *code_cond_table(code_alc_t &alc)
 {
-    return new_code(alc, CODE_COND_TABLE);
+    return new_code(alc, CodeKind::COND_TABLE);
 }
 
 inline Code *code_cond_goto(code_alc_t &alc)
 {
-    return new_code(alc, CODE_COND_GOTO);
+    return new_code(alc, CodeKind::COND_GOTO);
 }
 
 inline Code *code_state_goto(code_alc_t &alc, BlockNameList *blocks)
 {
-    Code *x = new_code(alc, CODE_STATE_GOTO);
+    Code *x = new_code(alc, CodeKind::STATE_GOTO);
     x->block_names = blocks;
     return x;
 }
 
 inline Code *code_line_info_input(code_alc_t &alc, const loc_t &loc)
 {
-    Code *x = new_code(alc, CODE_LINE_INFO_INPUT);
+    Code *x = new_code(alc, CodeKind::LINE_INFO_INPUT);
     x->loc = loc;
     return x;
 }
 
 inline Code *code_yych_decl(code_alc_t &alc)
 {
-    return new_code(alc, CODE_YYCH);
+    return new_code(alc, CodeKind::YYCH);
 }
 
 inline Code *code_yyaccept_def(code_alc_t &alc)
 {
-    return new_code(alc, CODE_YYACCEPT);
+    return new_code(alc, CodeKind::YYACCEPT);
 }
 
 inline Code *code_yystate_def(code_alc_t &alc)
 {
-    return new_code(alc, CODE_YYSTATE);
+    return new_code(alc, CodeKind::YYSTATE);
 }
 
 inline Code *code_line_info_output(code_alc_t &alc)
 {
-    return new_code(alc, CODE_LINE_INFO_OUTPUT);
+    return new_code(alc, CodeKind::LINE_INFO_OUTPUT);
 }
 
 inline Code *code_skip(code_alc_t &alc)
 {
-    return new_code(alc, CODE_SKIP);
+    return new_code(alc, CodeKind::SKIP);
 }
 
 inline Code *code_peek(code_alc_t &alc)
 {
-    return new_code(alc, CODE_PEEK);
+    return new_code(alc, CodeKind::PEEK);
 }
 
 inline Code *code_backup(code_alc_t &alc)
 {
-    return new_code(alc, CODE_BACKUP);
+    return new_code(alc, CodeKind::BACKUP);
 }
 
 inline Code *code_block(code_alc_t &alc, CodeList *stmts, CodeBlock::Fmt fmt)
 {
-    Code *x = new_code(alc, CODE_BLOCK);
+    Code *x = new_code(alc, CodeKind::BLOCK);
     x->block.stmts = stmts;
     x->block.fmt   = fmt;
     return x;
@@ -525,7 +525,7 @@ inline Code *code_block(code_alc_t &alc, CodeList *stmts, CodeBlock::Fmt fmt)
 inline Code *code_if_then_else(code_alc_t &alc, const char *if_cond, CodeList *if_code,
     CodeList *else_code, bool oneline = true)
 {
-    Code *x = new_code(alc, CODE_IF_THEN_ELSE);
+    Code *x = new_code(alc, CodeKind::IF_THEN_ELSE);
     x->ifte.if_cond   = if_cond;
     x->ifte.else_cond = nullptr;
     x->ifte.if_code   = if_code;
@@ -607,7 +607,7 @@ inline CodeArgs *code_args(code_alc_t &alc)
 inline Code *code_func(code_alc_t &alc, const char *name, CodeArgs *args,
     const char *semi)
 {
-    Code *x = new_code(alc, CODE_FUNC);
+    Code *x = new_code(alc, CodeKind::FUNC);
     x->func.args = args;
     x->func.name = name;
     x->func.semi = semi;
@@ -627,7 +627,7 @@ inline Code *code_fcall(code_alc_t &alc, const char *name, CodeArgs *args,
 
 inline Code *code_switch(code_alc_t &alc, const char *expr, CodeCases *cases)
 {
-    Code *x = new_code(alc, CODE_SWITCH);
+    Code *x = new_code(alc, CodeKind::SWITCH);
     x->swch.expr   = expr;
     x->swch.cases  = cases;
     return x;

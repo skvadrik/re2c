@@ -61,7 +61,7 @@ static bool oneline_if(const CodeIfTE *code, const opt_t *opts) {
         && code->else_code == nullptr
         && first
         && first->next == nullptr
-        && (first->kind == CODE_STMT || first->kind == CODE_TEXT);
+        && (first->kind == CodeKind::STMT || first->kind == CodeKind::TEXT);
 }
 
 static void render_if_nonl(RenderContext &rctx, const char *cond, const Code *then,
@@ -79,7 +79,7 @@ static void render_if_nonl(RenderContext &rctx, const char *cond, const Code *th
     if (oneline) {
         DASSERT(count_lines_text(then->text) == 0);
         os << then->text;
-        if (then->kind == CODE_STMT) os << ";";
+        if (then->kind == CodeKind::STMT) os << ";";
     } else {
         os << "{" << std::endl;
         ++rctx.line;
@@ -204,7 +204,7 @@ static bool case_on_same_line(const CodeCase *code, const opt_t *opts)
     const Code *first = code->body->head;
     return first
         && first->next == nullptr
-        && (first->kind == CODE_STMT || first->kind == CODE_TEXT)
+        && (first->kind == CodeKind::STMT || first->kind == CodeKind::TEXT)
         && opts->lang != Lang::GO; // gofmt prefers cases on a new line
 }
 
@@ -333,7 +333,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code)
     if (case_on_same_line(code, opts)) {
         os << " " << first->text;
         rctx.line += count_lines_text(first->text);
-        render_stmt_end(rctx, first->kind == CODE_STMT);
+        render_stmt_end(rctx, first->kind == CodeKind::STMT);
     } else {
         // For Rust wrap multi-line cases in braces.
         if (opts->lang == Lang::RUST) os << " {";
@@ -665,99 +665,99 @@ void render(RenderContext &rctx, const Code *code)
     uint32_t &line = rctx.line;
 
     switch (code->kind) {
-        case CODE_EMPTY:
+        case CodeKind::EMPTY:
             break;
-        case CODE_IF_THEN_ELSE:
+        case CodeKind::IF_THEN_ELSE:
             render_if_then_else(rctx, &code->ifte);
             break;
-        case CODE_SWITCH:
+        case CodeKind::SWITCH:
             render_switch(rctx, &code->swch);
             break;
-        case CODE_BLOCK:
+        case CodeKind::BLOCK:
             render_block(rctx, &code->block);
             break;
-        case CODE_FUNC:
+        case CodeKind::FUNC:
             render_func(rctx, &code->func);
             break;
-        case CODE_LOOP:
+        case CodeKind::LOOP:
             render_loop(rctx, code->loop);
             break;
-        case CODE_TEXT_RAW:
+        case CodeKind::TEXT_RAW:
             os << code->text << std::endl;
             line += count_lines_text(code->text) + 1;
             break;
-        case CODE_STMT:
+        case CodeKind::STMT:
             os << indent(ind, opts->indString) << code->text;
             line += count_lines_text(code->text);
             render_stmt_end(rctx, true);
             break;
-        case CODE_TEXT:
+        case CodeKind::TEXT:
             os << indent(ind, opts->indString) << code->text << std::endl;
             line += count_lines_text(code->text) + 1;
             break;
-        case CODE_RAW:
+        case CodeKind::RAW:
             os.write(code->raw.data, static_cast<std::streamsize>(code->raw.size));
             for (size_t i = 0; i < code->raw.size; ++i) {
                 if (code->raw.data[i] == '\n') ++line;
             }
             break;
-        case CODE_ABORT:
+        case CodeKind::ABORT:
             render_abort(rctx);
             break;
-        case CODE_SKIP:
+        case CodeKind::SKIP:
             render_skip(rctx);
             break;
-        case CODE_PEEK:
+        case CodeKind::PEEK:
             render_peek(rctx);
             break;
-        case CODE_BACKUP:
+        case CodeKind::BACKUP:
             render_backup(rctx);
             break;
-        case CODE_PEEK_SKIP:
+        case CodeKind::PEEK_SKIP:
             render_peek_skip(rctx);
             break;
-        case CODE_SKIP_PEEK:
+        case CodeKind::SKIP_PEEK:
             render_skip_peek(rctx);
             break;
-        case CODE_SKIP_BACKUP:
+        case CodeKind::SKIP_BACKUP:
             render_skip_backup(rctx);
             break;
-        case CODE_BACKUP_SKIP:
+        case CodeKind::BACKUP_SKIP:
             render_backup_skip(rctx);
             break;
-        case CODE_BACKUP_PEEK:
+        case CodeKind::BACKUP_PEEK:
             render_backup_peek(rctx);
             break;
-        case CODE_BACKUP_PEEK_SKIP:
+        case CodeKind::BACKUP_PEEK_SKIP:
             render_backup_peek_skip(rctx);
             break;
-        case CODE_SKIP_BACKUP_PEEK:
+        case CodeKind::SKIP_BACKUP_PEEK:
             render_skip_backup_peek(rctx);
             break;
-        case CODE_LINE_INFO_INPUT:
+        case CodeKind::LINE_INFO_INPUT:
             render_line_info(os, code->loc.line,
                 rctx.msg.filenames[code->loc.file], opts);
             ++line;
             break;
-        case CODE_LINE_INFO_OUTPUT:
+        case CodeKind::LINE_INFO_OUTPUT:
             render_line_info(os, rctx.line + 1, rctx.file, opts);
             ++line;
             break;
-        case CODE_VAR:
+        case CodeKind::VAR:
             render_var(rctx, &code->var);
             break;
-        case CODE_STAGS:
-        case CODE_MTAGS:
-        case CODE_MAXFILL:
-        case CODE_MAXNMATCH:
-        case CODE_YYCH:
-        case CODE_YYACCEPT:
-        case CODE_YYSTATE:
-        case CODE_COND_ENUM:
-        case CODE_COND_GOTO:
-        case CODE_COND_TABLE:
-        case CODE_STATE_GOTO:
-        case CODE_LABEL:
+        case CodeKind::STAGS:
+        case CodeKind::MTAGS:
+        case CodeKind::MAXFILL:
+        case CodeKind::MAXNMATCH:
+        case CodeKind::YYCH:
+        case CodeKind::YYACCEPT:
+        case CodeKind::YYSTATE:
+        case CodeKind::COND_ENUM:
+        case CodeKind::COND_GOTO:
+        case CodeKind::COND_TABLE:
+        case CodeKind::STATE_GOTO:
+        case CodeKind::LABEL:
             assert(false); // must have been expanded before
             break;
     }
