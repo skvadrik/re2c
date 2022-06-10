@@ -30,23 +30,23 @@ static inline bool set_source_file(conopt_t &globopts, const char *source)
     }
 }
 
-parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
+ParseOpts parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
 {
 #define YYCTYPE unsigned char
 
 #define NEXT_ARG(option, label) do { \
     if (next (YYCURSOR, argv)) goto label; \
-    else { error_arg(option); return EXIT_FAIL; } \
+    else { error_arg(option); return ParseOpts::EXIT_FAIL; } \
 } while(0)
 
 #define ERROR(msg, arg) do { \
     error(msg, arg); \
-    return EXIT_FAIL; \
+    return ParseOpts::EXIT_FAIL; \
 } while(0)
 
 #define ERRARG(opt, exp, arg) do { \
     error("bad argument '%s' to option %s (expected <%s>)", arg, opt, exp); \
-    return EXIT_FAIL; \
+    return ParseOpts::EXIT_FAIL; \
 } while(0)
 
     char *YYCURSOR, *YYMARKER;
@@ -69,13 +69,13 @@ opt:
         // remaining args are non-options, so they must be input files
         // re2c expects exactly one input file
         for (char *f; next(f, argv); ) {
-            if (!set_source_file(globopts, f)) return EXIT_FAIL;
+            if (!set_source_file(globopts, f)) return ParseOpts::EXIT_FAIL;
         }
         goto end;
     }
 
-    "-"      end { if (!set_source_file(globopts, "<stdin>")) return EXIT_FAIL; goto opt; }
-    filename end { if (!set_source_file(globopts, *argv))     return EXIT_FAIL; goto opt; }
+    "-"      end { if (!set_source_file(globopts, "<stdin>")) return ParseOpts::EXIT_FAIL; goto opt; }
+    filename end { if (!set_source_file(globopts, *argv))     return ParseOpts::EXIT_FAIL; goto opt; }
 
     "-"  { goto opt_short; }
     "--" { goto opt_long; }
@@ -108,9 +108,9 @@ opt_short:
     * { ERROR("bad short option: %s", *argv); }
 
     end { goto opt; }
-    [?h] { usage ();   return EXIT_OK; }
-    "v"  { version (); return EXIT_OK; }
-    "V"  { vernum ();  return EXIT_OK; }
+    [?h] { usage ();   return ParseOpts::EXIT_OK; }
+    "v"  { version (); return ParseOpts::EXIT_OK; }
+    "V"  { vernum ();  return ParseOpts::EXIT_OK; }
 
     "c" { globopts.cFlag = true;              goto opt_short; }
     "D" { globopts.target = Target::DOT;      goto opt_short; }
@@ -155,9 +155,9 @@ opt_long:
 /*!local:re2c
     * { ERROR("bad long option: %s", *argv); }
 
-    "help"                  end { usage ();   return EXIT_OK; }
-    "version"               end { version (); return EXIT_OK; }
-    "vernum"                end { vernum ();  return EXIT_OK; }
+    "help"                  end { usage ();   return ParseOpts::EXIT_OK; }
+    "version"               end { version (); return ParseOpts::EXIT_OK; }
+    "vernum"                end { vernum ();  return ParseOpts::EXIT_OK; }
 
     "start-"? "conditions"  end { globopts.cFlag = true;              goto opt; }
     "emit-dot"              end { globopts.target = Target::DOT;      goto opt; }
@@ -330,11 +330,11 @@ opt_fixed_tags:
 end:
     if (globopts.source_file.empty()) {
         error("no source file");
-        return EXIT_FAIL;
+        return ParseOpts::EXIT_FAIL;
     }
     opts.fix_global_and_defaults();
 
-    return OK;
+    return ParseOpts::OK;
 
 #undef NEXT_ARG
 #undef ERROR

@@ -18,9 +18,9 @@ int main(int, char *argv[])
     Opt opts(globopts, msg);
 
     switch (parse_opts(argv, globopts, opts, msg)) {
-        case OK:        break;
-        case EXIT_OK:   return 0;
-        case EXIT_FAIL: return 1;
+        case ParseOpts::OK:        break;
+        case ParseOpts::EXIT_OK:   return 0;
+        case ParseOpts::EXIT_FAIL: return 1;
     }
 
     Scanner scanner(&globopts, msg);

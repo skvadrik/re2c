@@ -374,7 +374,7 @@ private:
     FORBID_COPY (Opt);
 };
 
-parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg);
+ParseOpts parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg);
 
 } // namespace re2c
 

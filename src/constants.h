@@ -35,7 +35,7 @@ enum class FixedTags: uint32_t {
     ALL
 };
 
-enum parse_opts_t {
+enum class ParseOpts: uint32_t {
     OK,
     EXIT_OK,
     EXIT_FAIL
