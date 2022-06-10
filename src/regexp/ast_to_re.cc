@@ -417,13 +417,13 @@ RE *re_class(RESpec &spec, const loc_t &loc, const Range *r)
 {
     if (!r) {
         switch (spec.opts->empty_class_policy) {
-            case EMPTY_CLASS_MATCH_EMPTY:
+            case EmptyClassPolicy::MATCH_EMPTY:
                 spec.msg.warn.empty_class(loc);
                 return re_nil(spec);
-            case EMPTY_CLASS_MATCH_NONE:
+            case EmptyClassPolicy::MATCH_NONE:
                 spec.msg.warn.empty_class(loc);
                 break;
-            case EMPTY_CLASS_ERROR:
+            case EmptyClassPolicy::ERROR:
                 spec.msg.error(loc, "empty character class");
                 exit(1);
         }

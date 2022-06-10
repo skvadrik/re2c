@@ -96,7 +96,7 @@ class Msg;
     MUTOPT (Enc, encoding, Enc ()) \
     MUTOPT (bool, bCaseInsensitive, false) \
     MUTOPT (bool, bCaseInverted, false) \
-    MUTOPT (empty_class_policy_t, empty_class_policy, EMPTY_CLASS_MATCH_EMPTY) \
+    MUTOPT (EmptyClassPolicy, empty_class_policy, EmptyClassPolicy::MATCH_EMPTY) \
     /* conditions */ \
     MUTOPT (std::string, yycondtype, "YYCONDTYPE") \
     MUTOPT (std::string, cond_get, "YYGETCONDITION") \

@@ -221,9 +221,9 @@ void Scanner::lex_conf_empty_class(Opt &opts)
             "bad configuration value (expected: 'match-empty', 'match-none', 'error')");
         exit(1);
     }
-    "match-empty" { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_EMPTY); goto end; }
-    "match-none"  { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_NONE);  goto end; }
-    "error"       { opts.set_empty_class_policy(EMPTY_CLASS_ERROR);       goto end; }
+    "match-empty" { opts.set_empty_class_policy(EmptyClassPolicy::MATCH_EMPTY); goto end; }
+    "match-none"  { opts.set_empty_class_policy(EmptyClassPolicy::MATCH_NONE);  goto end; }
+    "error"       { opts.set_empty_class_policy(EmptyClassPolicy::ERROR);       goto end; }
 */
 end:
     lex_conf_semicolon();

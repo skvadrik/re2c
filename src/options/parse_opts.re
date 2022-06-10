@@ -279,9 +279,9 @@ opt_input:
 opt_empty_class:
 /*!local:re2c
     * { ERRARG("--empty-class", "match-empty | match-none | error", *argv); }
-    "match-empty" end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_EMPTY); goto opt; }
-    "match-none"  end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_NONE);  goto opt; }
-    "error"       end { opts.set_empty_class_policy (EMPTY_CLASS_ERROR);       goto opt; }
+    "match-empty" end { opts.set_empty_class_policy (EmptyClassPolicy::MATCH_EMPTY); goto opt; }
+    "match-none"  end { opts.set_empty_class_policy (EmptyClassPolicy::MATCH_NONE);  goto opt; }
+    "error"       end { opts.set_empty_class_policy (EmptyClassPolicy::ERROR);       goto opt; }
 */
 
 opt_location_format:

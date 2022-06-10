@@ -50,10 +50,10 @@ enum class InputBlock: uint32_t {
     ERROR
 };
 
-enum empty_class_policy_t {
-    EMPTY_CLASS_MATCH_EMPTY, // match on empty input
-    EMPTY_CLASS_MATCH_NONE,  // fail to match on any input
-    EMPTY_CLASS_ERROR        // compilation error
+enum class EmptyClassPolicy: uint32_t {
+    MATCH_EMPTY, // match on empty input
+    MATCH_NONE,  // fail to match on any input
+    ERROR        // compilation error
 };
 
 enum dfa_minimization_t {
