@@ -24,9 +24,9 @@ enum class Api: uint32_t {
     CUSTOM
 };
 
-enum api_style_t {
-    API_FUNCTIONS,
-    API_FREEFORM
+enum class ApiStyle: uint32_t {
+    FUNCTIONS,
+    FREEFORM
 };
 
 enum fixed_tags_t {

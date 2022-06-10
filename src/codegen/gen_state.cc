@@ -150,7 +150,7 @@ static void gen_restore(Output &output, CodeList *stmts)
         text = o.str(opts->yycursor).cstr(" = ").str(opts->yymarker).flush();
         append(stmts, code_stmt(alc, text));
     }
-    else if (opts->api_style == API_FUNCTIONS) {
+    else if (opts->api_style == ApiStyle::FUNCTIONS) {
         text = o.str(opts->yyrestore).cstr("()").flush();
         append(stmts, code_stmt(alc, text));
     }
@@ -548,7 +548,7 @@ static void gen_shift(Output &output, CodeList *stmts, int32_t shift,
 
     o.str(notag ? opts->yyshift
         : history ? opts->yyshiftmtag : opts->yyshiftstag);
-    if (opts->api_style == API_FUNCTIONS) {
+    if (opts->api_style == ApiStyle::FUNCTIONS) {
         o.cstr("(");
         if (!notag) o.str(tag).cstr(", ");
         o.i32(shift).cstr(")");
@@ -575,7 +575,7 @@ static void gen_settag(Output &output, CodeList *stmts, const std::string &tag,
         ? (negative ? opts->yymtagn : opts->yymtagp)
         : (negative ? opts->yystagn : opts->yystagp);
     o.str(s);
-    if (opts->api_style == API_FUNCTIONS) {
+    if (opts->api_style == ApiStyle::FUNCTIONS) {
         o.cstr("(").str(tag).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
     } else {
@@ -624,7 +624,7 @@ static void gen_restorectx(Output &output, CodeList *stmts, const std::string &t
     const bool notag = tag.empty();
 
     o.str(notag ? opts->yyrestorectx : opts->yyrestoretag);
-    if (opts->api_style == API_FUNCTIONS) {
+    if (opts->api_style == ApiStyle::FUNCTIONS) {
         o.cstr("(").str(tag).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
     } else {
@@ -649,7 +649,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
         DASSERT(!opts->stadfa);
         if (generic) {
             o.str(opts->yybackupctx);
-            if (opts->api_style == API_FUNCTIONS) {
+            if (opts->api_style == ApiStyle::FUNCTIONS) {
                 o.cstr("()");
                 append(tag_actions, code_stmt(alc, o.flush()));
             } else {
@@ -865,7 +865,7 @@ const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)
 {
     if (opts->input_api == Api::CUSTOM) {
         o.str(opts->yylessthan);
-        if (opts->api_style == API_FUNCTIONS) {
+        if (opts->api_style == ApiStyle::FUNCTIONS) {
             o.cstr("(").u64(n).cstr(")");
         } else {
             argsubst(o.stream(), opts->api_sigil, "len", true, n);

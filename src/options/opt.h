@@ -168,7 +168,7 @@ class Msg;
     MUTOPT (std::string, yyshift, "YYSHIFT") \
     MUTOPT (std::string, yyshiftstag, "YYSHIFTSTAG") \
     MUTOPT (std::string, yyshiftmtag, "YYSHIFTMTAG") \
-    MUTOPT (api_style_t, api_style, API_FUNCTIONS) \
+    MUTOPT (ApiStyle, api_style, ApiStyle::FUNCTIONS) \
     MUTOPT (std::string, api_sigil, RE2C_SIGIL) \
     /* debug */ \
     MUTOPT (bool, dFlag, false) \

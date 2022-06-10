@@ -495,11 +495,11 @@ void gen_peek_expr(std::ostream &os, const opt_t *opts)
     } else if (opts->lang == Lang::RUST) {
         if (opts->unsafe) os << "unsafe {";
         os << opts->yypeek;
-        if (opts->api_style == API_FUNCTIONS) os << "()";
+        if (opts->api_style == ApiStyle::FUNCTIONS) os << "()";
         if (opts->unsafe) os << "}";
     } else {
         os << opts->yypeek;
-        if (opts->api_style == API_FUNCTIONS) os << "()";
+        if (opts->api_style == ApiStyle::FUNCTIONS) os << "()";
     }
 }
 
@@ -521,7 +521,7 @@ static void render_skip(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString);
     if (opts->input_api == Api::CUSTOM) {
         os << opts->yyskip;
-        if (opts->api_style == API_FUNCTIONS) {
+        if (opts->api_style == ApiStyle::FUNCTIONS) {
             os << "()";
             render_stmt_end(rctx, true);
         } else {
@@ -542,7 +542,7 @@ static void render_backup(RenderContext &rctx)
     os << indent(rctx.ind, opts->indString);
     if (opts->input_api == Api::CUSTOM) {
         os << opts->yybackup;
-        if (opts->api_style == API_FUNCTIONS) {
+        if (opts->api_style == ApiStyle::FUNCTIONS) {
             os << "()";
             render_stmt_end(rctx, true);
         } else {

@@ -238,8 +238,8 @@ void Scanner::lex_conf_api_style(Opt &opts)
             "bad configuration value (expected: 'functions', 'free-form')");
         exit(1);
     }
-    "functions" { opts.set_api_style(API_FUNCTIONS); goto end; }
-    "free-form" { opts.set_api_style(API_FREEFORM);  goto end; }
+    "functions" { opts.set_api_style(ApiStyle::FUNCTIONS); goto end; }
+    "free-form" { opts.set_api_style(ApiStyle::FREEFORM);  goto end; }
 */
 end:
     lex_conf_semicolon();

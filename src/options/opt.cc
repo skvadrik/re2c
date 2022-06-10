@@ -54,7 +54,7 @@ static void fix_mutopt_defaults(const conopt_t &glob, mutopt_t &defaults)
     // restrictive.
     if (glob.lang != Lang::C) {
         defaults.input_api = Api::CUSTOM;
-        defaults.api_style = API_FREEFORM;
+        defaults.api_style = ApiStyle::FREEFORM;
     }
 }
 
@@ -239,11 +239,11 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         real.bCaseInverted = defaults.bCaseInverted;
     }
     // individual "naked" options, unless explicitly set, inherit "api:style"
-    if (is_default.fill_naked)      real.fill_naked      = real.api_style == API_FREEFORM;
-    if (is_default.cond_get_naked)  real.cond_get_naked  = real.api_style == API_FREEFORM;
-    if (is_default.cond_set_naked)  real.cond_set_naked  = real.api_style == API_FREEFORM;
-    if (is_default.state_get_naked) real.state_get_naked = real.api_style == API_FREEFORM;
-    if (is_default.state_set_naked) real.state_set_naked = real.api_style == API_FREEFORM;
+    if (is_default.fill_naked)      real.fill_naked      = real.api_style == ApiStyle::FREEFORM;
+    if (is_default.cond_get_naked)  real.cond_get_naked  = real.api_style == ApiStyle::FREEFORM;
+    if (is_default.cond_set_naked)  real.cond_set_naked  = real.api_style == ApiStyle::FREEFORM;
+    if (is_default.state_get_naked) real.state_get_naked = real.api_style == ApiStyle::FREEFORM;
+    if (is_default.state_set_naked) real.state_set_naked = real.api_style == ApiStyle::FREEFORM;
     // individual template options, unless explicitly set, inherit "api:sigil"
     if (is_default.fill_arg)         real.fill_arg         = real.api_sigil;
     if (is_default.cond_set_arg)     real.cond_set_arg     = real.api_sigil;
