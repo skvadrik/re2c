@@ -10,6 +10,9 @@ namespace re2c {
 
 std::string ver_to_vernum(const char *ver)
 {
+// Disable warnings on NULL constant in the re2c-generated code (for tags).
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #define YYCTYPE char
     const char *YYCURSOR = ver, *YYMARKER,
         *p1, *p2, *p3, *e1, *e2, *e3;
@@ -51,6 +54,7 @@ std::string ver_to_vernum(const char *ver)
     * { return std::string(); }
 */
 #undef YYCTYPE
+#pragma GCC diagnostic pop
 }
 
 } // namespace re2c
