@@ -52,8 +52,7 @@ static std::string make_name(Output &output, const std::string &cond, const loc_
     return name;
 }
 
-static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
-{
+static std::unique_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output) {
     OutputBlock &block = output.block();
     const opt_t *opts = block.opts;
     const loc_t &loc = block.loc;
@@ -117,8 +116,8 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     fillpoints(dfa, fill);
 
     // ADFA stands for 'DFA with actions'
-    DFA *adfa = new DFA(dfa, fill, skeleton.sizeof_key, loc, name, cond,
-        setup, opts, msg);
+    std::unique_ptr<DFA> adfa(
+        new DFA(dfa, fill, skeleton.sizeof_key, loc, name, cond, setup, opts, msg));
 
     // see note [reordering DFA states]
     adfa->reorder();
@@ -133,7 +132,7 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     block.max_nmatch = std::max(block.max_nmatch, adfa->max_nmatch);
     block.used_yyaccept = block.used_yyaccept || adfa->need_accept;
 
-    return make_smart_ptr(adfa);
+    return adfa;
 }
 
 void compile(Scanner &input, Output &output, Opt &opts)

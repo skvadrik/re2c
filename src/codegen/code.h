@@ -11,6 +11,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "src/constants.h"
 #include "src/dfa/tcmd.h"
@@ -18,7 +19,6 @@
 #include "src/msg/location.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/slab_allocator.h"
-#include "src/util/smart_ptr.h"
 #include "src/util/string_utils.h"
 
 
@@ -35,7 +35,7 @@ struct Output;
 struct OutputBlock;
 struct State;
 struct DFA;
-typedef std::vector<smart_ptr<DFA> > dfas_t;
+typedef std::vector<std::unique_ptr<DFA>> dfas_t;
 template <typename value_t> class uniq_vector_t;
 
 // need 8-byte alignment to allocate structs with pointers and 64-bit integers
