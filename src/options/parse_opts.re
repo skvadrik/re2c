@@ -315,8 +315,8 @@ opt_posix_closure:
 opt_posix_prectable:
 /*!local:re2c
     * { ERRARG("--posix-prectable", "naive | complex", *argv); }
-    "naive"   end { globopts.posix_prectable = POSIX_PRECTABLE_NAIVE;   goto opt; }
-    "complex" end { globopts.posix_prectable = POSIX_PRECTABLE_COMPLEX; goto opt; }
+    "naive"   end { globopts.posix_prectable = PosixPrecedenceTable::NAIVE;   goto opt; }
+    "complex" end { globopts.posix_prectable = PosixPrecedenceTable::COMPLEX; goto opt; }
 */
 
 opt_fixed_tags:

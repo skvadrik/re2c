@@ -67,7 +67,7 @@ class Msg;
     /* internals */ \
     CONSTOPT (Minimization, dfa_minimization, Minimization::MOORE) \
     CONSTOPT (PosixClosure, posix_closure, PosixClosure::GOR1) \
-    CONSTOPT (posix_prectable_alg_t, posix_prectable, POSIX_PRECTABLE_COMPLEX) \
+    CONSTOPT (PosixPrecedenceTable, posix_prectable, PosixPrecedenceTable::COMPLEX) \
     CONSTOPT (FixedTags, fixed_tags, FixedTags::ALL) \
     CONSTOPT (bool, lookahead, true) \
     CONSTOPT (bool, optimize_tags, true) \

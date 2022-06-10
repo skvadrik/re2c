@@ -123,8 +123,8 @@ template<typename ctx_t>
 void compute_prectable(ctx_t &ctx)
 {
     switch (ctx.dc_opts->posix_prectable) {
-    case POSIX_PRECTABLE_COMPLEX: compute_prectable_complex(ctx); break;
-    case POSIX_PRECTABLE_NAIVE:   compute_prectable_naive(ctx);   break;
+    case PosixPrecedenceTable::COMPLEX: compute_prectable_complex(ctx); break;
+    case PosixPrecedenceTable::NAIVE:   compute_prectable_naive(ctx);   break;
     }
 }
 

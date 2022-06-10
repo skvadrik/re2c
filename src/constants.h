@@ -67,9 +67,11 @@ enum class PosixClosure: uint32_t {
     GTOP  // global topological order
 };
 
-enum posix_prectable_alg_t {
-    POSIX_PRECTABLE_NAIVE,
-    POSIX_PRECTABLE_COMPLEX
+// Algorithm for construction of POSIX precedence table for disambiguation.
+// Complexity estimates are in terms of TNFA size (m) and the number of tags (t).
+enum class PosixPrecedenceTable: uint32_t {
+    NAIVE,  // O(m^2 * t)
+    COMPLEX // O(m^2)
 };
 
 enum CodeKind {
