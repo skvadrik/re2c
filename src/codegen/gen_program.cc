@@ -110,7 +110,7 @@ OutputBlock& Output::block()
 
 void Output::wraw(const char *s, const char *e, bool newline)
 {
-    if (s != e && block().opts->target == TARGET_CODE) {
+    if (s != e && block().opts->target == Target::CODE) {
         // scan for non-whitespace characters
         bool &code = block().have_user_code;
         for (const char *p = s; !code && p < e; ++p) {

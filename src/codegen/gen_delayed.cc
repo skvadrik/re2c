@@ -90,7 +90,7 @@ static void add_tags_from_blocks(const blocks_t &blocks, tagnames_t &tags, bool 
 static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
 {
     DASSERT(code->kind == CODE_STAGS || code->kind == CODE_MTAGS);
-    if (ctx.global->opts->target != TARGET_CODE) {
+    if (ctx.global->opts->target != Target::CODE) {
         code->kind = CODE_EMPTY;
         return;
     }
@@ -115,7 +115,7 @@ static void expand_tags_directive(CodegenCtxPass1 &ctx, Code *code)
 static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const opt_t *opts,
     const StartConds &conds)
 {
-    DASSERT(opts->target == TARGET_CODE);
+    DASSERT(opts->target == Target::CODE);
 
     if (code->fmt.format) {
         const char *fmt = code->fmt.format;
@@ -242,7 +242,7 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
     // block's options it should inherit.
     const opt_t *globopts = ctx.global->opts;
 
-    if (globopts->target != TARGET_CODE) {
+    if (globopts->target != Target::CODE) {
         code->kind = CODE_EMPTY;
         return;
     }
@@ -288,7 +288,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     const opt_t *globopts = (ctx.block->kind == INPUT_USE)
         ? ctx.block->opts : ctx.global->opts;
 
-    if (globopts->target != TARGET_CODE) {
+    if (globopts->target != Target::CODE) {
         code->kind = CODE_EMPTY;
         return;
     }
@@ -460,7 +460,7 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
     const opt_t *opts = ctx.block->opts;
     Scratchbuf &o = ctx.global->scratchbuf;
 
-    if (opts->target != TARGET_CODE) {
+    if (opts->target != Target::CODE) {
         code->kind = CODE_EMPTY;
         return;
     }
@@ -559,7 +559,7 @@ static void gen_cond_goto(CodegenCtxPass1 &ctx, Code *code)
     CodeList *stmts = code_list(alc);
     const char *text;
 
-    if (opts->target == TARGET_DOT) {
+    if (opts->target == Target::DOT) {
         for (size_t i = 0; i < ncond; ++i) {
             const std::string &cond = conds[i].name;
             text = o.cstr("0 -> ").str(cond).cstr(" [label=\"state=").str(cond)

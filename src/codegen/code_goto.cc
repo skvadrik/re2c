@@ -340,7 +340,7 @@ void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from) {
     }
 
     // In .dot format every node in the graph (a.k.a. DFA state) should be generated.
-    if (opts->target == TARGET_DOT) from->label->used = true;
+    if (opts->target == Target::DOT) from->label->used = true;
 
     if (opts->stadfa) {
         DASSERT(go->tags == TCID0);
@@ -390,7 +390,7 @@ void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from) {
     const uint32_t dSpans = go->nspans - hSpans - nBitmaps;
     const bool part_skip = opts->eager_skip && !go->skip;
 
-    if (opts->target == TARGET_DOT) {
+    if (opts->target == Target::DOT) {
         go->kind = CodeGo::DOT;
         go->godot = code_gosw(alc, go->span, go->nspans, false, eof);
     } else if (opts->gFlag

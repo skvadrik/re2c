@@ -46,7 +46,7 @@ class Msg;
 #endif
 
 #define RE2C_CONSTOPTS \
-    CONSTOPT1 (target_t, target, TARGET_CODE) \
+    CONSTOPT1 (Target, target, Target::CODE) \
     CONSTOPT (lang_t, lang, RE2C_LANG) \
     CONSTOPT (bool, bNoGenerationDate, false) \
     CONSTOPT (bool, version, true) \

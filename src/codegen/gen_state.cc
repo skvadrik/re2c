@@ -288,7 +288,7 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
 
     gen_fintags(output, stmts, dfa, rule);
 
-    if (opts->target == TARGET_SKELETON) {
+    if (opts->target == Target::SKELETON) {
         emit_skeleton_action(output, stmts, dfa, rule_idx);
         return;
     }

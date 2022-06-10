@@ -21,7 +21,7 @@ static const char *gen_cond(Output &output, const CodeCmp *cond) {
     buf.str(opts->yych).cstr(" ").str(cond->cmp).cstr(" ");
     prtChOrHex(buf.stream(), cond->val, opts->encoding.szCodeUnit(),
         opts->lang == LANG_RUST || opts->encoding.type() == Enc::EBCDIC,
-        opts->target == TARGET_DOT);
+        opts->target == Target::DOT);
     return buf.flush();
 }
 

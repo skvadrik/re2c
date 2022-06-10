@@ -9,9 +9,9 @@ namespace re2c {
 // This function should only change global options.
 static void fix_conopt(conopt_t &glob)
 {
-    if (glob.target == TARGET_DOT) {
+    if (glob.target == Target::DOT) {
         glob.iFlag = true;
-    } else if (glob.target == TARGET_SKELETON) {
+    } else if (glob.target == Target::SKELETON) {
         glob.fFlag = false;
         glob.iFlag = true;
     }
@@ -68,7 +68,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     // For skeleton target interface options must have default values (because
     // skeleton programs assume certain interface). For DOT target most of the
     // options are unused.
-    if (glob.target != TARGET_CODE) {
+    if (glob.target != Target::CODE) {
         // output files
         real.header_file = "";
         // default environment-sensitive formatting
@@ -223,7 +223,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     }
 
     // set implied options
-    if (glob.target == TARGET_SKELETON) {
+    if (glob.target == Target::SKELETON) {
         real.input_api = INPUT_CUSTOM;
         real.indString = "    ";
         real.topIndent = 2;
@@ -282,7 +282,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
 
     // errors
     if (glob.lang != LANG_C) {
-        if (glob.target == TARGET_SKELETON) {
+        if (glob.target == Target::SKELETON) {
             error("skeleton is not supported for non-C backends");
             exit(1);
         }

@@ -259,7 +259,7 @@ void gen_code(Output &output, dfas_t &dfas)
             // With loop/switch there are no labels, and each block has its own state
             // switch where all conditions are joined. Restart state counter from zero so
             // that cases start from zero. With skeleton conditions are separate.
-            if (first || opts->target == TARGET_SKELETON) output.label_counter = 0;
+            if (first || opts->target == Target::SKELETON) output.label_counter = 0;
         }
 
         // Generate DFA transitions and perform used label analysis: for every transition
@@ -292,7 +292,7 @@ void gen_code(Output &output, dfas_t &dfas)
     CodeList *program = code_list(alc);
     uint32_t ind = 0;
 
-    if (opts->target == TARGET_DOT) {
+    if (opts->target == Target::DOT) {
         append(program, code_text(alc, "digraph re2c {"));
         append(program, code_cond_goto(alc));
         for (i = b; i != e; ++i) {
@@ -300,7 +300,7 @@ void gen_code(Output &output, dfas_t &dfas)
         }
         append(program, code_text(alc, "}"));
     }
-    else if (opts->target == TARGET_SKELETON) {
+    else if (opts->target == Target::SKELETON) {
         for (i = b; i != e; ++i) {
             DFA &dfa = *(*i);
             if (output.skeletons.insert(dfa.name).second) {

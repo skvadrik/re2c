@@ -112,12 +112,12 @@ opt_short:
     "v"  { version (); return EXIT_OK; }
     "V"  { vernum ();  return EXIT_OK; }
 
-    "c" { globopts.cFlag = true;             goto opt_short; }
-    "D" { globopts.target = TARGET_DOT;      goto opt_short; }
-    "f" { globopts.fFlag = true;             goto opt_short; }
-    "F" { globopts.FFlag = true;             goto opt_short; }
-    "i" { globopts.iFlag = true;             goto opt_short; }
-    "S" { globopts.target = TARGET_SKELETON; goto opt_short; }
+    "c" { globopts.cFlag = true;              goto opt_short; }
+    "D" { globopts.target = Target::DOT;      goto opt_short; }
+    "f" { globopts.fFlag = true;              goto opt_short; }
+    "F" { globopts.FFlag = true;              goto opt_short; }
+    "i" { globopts.iFlag = true;              goto opt_short; }
+    "S" { globopts.target = Target::SKELETON; goto opt_short; }
 
     "b" { opts.set_bFlag(true);           goto opt_short; }
     "d" { opts.set_dFlag(true);           goto opt_short; }
@@ -159,17 +159,17 @@ opt_long:
     "version"               end { version (); return EXIT_OK; }
     "vernum"                end { vernum ();  return EXIT_OK; }
 
-    "start-"? "conditions"  end { globopts.cFlag = true;             goto opt; }
-    "emit-dot"              end { globopts.target = TARGET_DOT;      goto opt; }
-    "storable-state"        end { globopts.fFlag = true;             goto opt; }
-    "flex-syntax"           end { globopts.FFlag = true;             goto opt; }
-    "verbose"               end { globopts.verbose = true;           goto opt; }
-    "no-debug-info"         end { globopts.iFlag = true;             goto opt; }
-    "no-generation-date"    end { globopts.bNoGenerationDate = true; goto opt; }
-    "no-version"            end { globopts.version = false;          goto opt; }
-    "skeleton"              end { globopts.target = TARGET_SKELETON; goto opt; }
-    "eager-skip"            end { globopts.eager_skip = true;        goto opt; }
-    "loop-switch"           end { globopts.loop_switch = true;       goto opt; }
+    "start-"? "conditions"  end { globopts.cFlag = true;              goto opt; }
+    "emit-dot"              end { globopts.target = Target::DOT;      goto opt; }
+    "storable-state"        end { globopts.fFlag = true;              goto opt; }
+    "flex-syntax"           end { globopts.FFlag = true;              goto opt; }
+    "verbose"               end { globopts.verbose = true;            goto opt; }
+    "no-debug-info"         end { globopts.iFlag = true;              goto opt; }
+    "no-generation-date"    end { globopts.bNoGenerationDate = true;  goto opt; }
+    "no-version"            end { globopts.version = false;           goto opt; }
+    "skeleton"              end { globopts.target = Target::SKELETON; goto opt; }
+    "eager-skip"            end { globopts.eager_skip = true;         goto opt; }
+    "loop-switch"           end { globopts.loop_switch = true;        goto opt; }
 
     "bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
     "debug-output"          end { opts.set_dFlag (true);             goto opt; }

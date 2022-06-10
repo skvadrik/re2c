@@ -7,10 +7,10 @@
 
 namespace re2c {
 
-enum target_t {
-    TARGET_CODE,
-    TARGET_DOT,
-    TARGET_SKELETON
+enum class Target: uint32_t {
+    CODE,
+    DOT,
+    SKELETON
 };
 
 enum lang_t {

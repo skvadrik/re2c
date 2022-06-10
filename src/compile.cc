@@ -94,7 +94,7 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output) {
     // but prior to any other DFA transformations
     Skeleton skeleton(dfa, opts, name, cond, loc, msg);
     warn_undefined_control_flow(skeleton);
-    if (opts->target == TARGET_SKELETON) {
+    if (opts->target == Target::SKELETON) {
         emit_data(skeleton);
     }
 
@@ -153,7 +153,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     output.wversion_time();
     output.wdelay_stmt(0, code_line_info_input(alc, loc0));
 
-    if (globopts->target == TARGET_SKELETON) {
+    if (globopts->target == Target::SKELETON) {
         output.wdelay_stmt(0, emit_skeleton_prolog(output));
     }
 
@@ -214,14 +214,14 @@ void compile(Scanner &input, Output &output, Opt &opts)
     output.total_opts = accum_opts ? accum_opts : rblocks.last_opts();
 
     // For special targets (skeleton and .dot) merge header into the output file.
-    if (globopts->target != TARGET_CODE && output.need_header) {
+    if (globopts->target != Target::CODE && output.need_header) {
         output.need_header = false;
         blocks_t &cblocks = output.cblocks, &hblocks = output.hblocks;
         cblocks.insert(cblocks.end(), hblocks.begin(), hblocks.end());
         hblocks.clear();
     }
 
-    if (globopts->target == TARGET_SKELETON) {
+    if (globopts->target == Target::SKELETON) {
         output.wdelay_stmt(0, emit_skeleton_epilog(output));
     }
 
