@@ -111,7 +111,7 @@ void make_one_step(ksimctx_t &ctx, uint32_t sym)
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GOR_NOPASS && s->active == 0);
+        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
@@ -148,7 +148,7 @@ void make_final_step(ksimctx_t &ctx)
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GOR_NOPASS && s->active == 0);
+        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::FIN) {
             update_offsets(ctx, *i, NONCORE);

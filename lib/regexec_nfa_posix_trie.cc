@@ -101,7 +101,7 @@ void make_step(pzsimctx_t &ctx, uint32_t sym)
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GOR_NOPASS && s->active == 0);
+        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::RAN) {
             for (const Range *r = s->ran.ran; r; r = r->next()) {
@@ -129,7 +129,7 @@ void make_final_step(pzsimctx_t &ctx)
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GOR_NOPASS && s->active == 0);
+        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::FIN) {
             ctx.marker = ctx.cursor;

@@ -16,8 +16,12 @@ namespace re2c {
 
 struct clos_t;
 
-// Goldberg-Radzik 'shortest path' algorithm
-enum gor_status_t {GOR_NOPASS = 0u, GOR_TOPSORT = 1u, GOR_LINEAR = 2u};
+// Passes of Goldberg-Radzik shortest path algorithm.
+enum class GorPass: uint32_t {
+    NOPASS = 0u,
+    TOPSORT = 1u,
+    LINEAR = 2u
+};
 
 static const uint32_t NOCLOS = ~0u;
 
@@ -46,17 +50,17 @@ struct nfa_state_t
 
     // stuff needed for closure algorithms (GOR1 and GTOP)
     uint32_t clos;
-    gor_status_t status : 2;  // values 0, 1, 2
-    uint32_t arcidx     : 2;  // maximum out-dergee is 2
-    uint32_t active     : 1;  // boolean
-    uint32_t indeg      : 27; // the rest; we are unlikely to have more than 2^27 states
+    GorPass status  : 2;  // values 0, 1, 2
+    uint32_t arcidx : 2;  // maximum out-dergee is 2
+    uint32_t active : 1;  // boolean
+    uint32_t indeg  : 27; // the rest; we are unlikely to have more than 2^27 states
     uint32_t topord; // state index in fake topological ordering
 
     void init(size_t r)
     {
         rule = r;
         clos = NOCLOS;
-        status = GOR_NOPASS;
+        status = GorPass::NOPASS;
         arcidx = 0;
         active = 0;
         indeg = 0;
