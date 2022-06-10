@@ -13,10 +13,10 @@ enum class Target: uint32_t {
     SKELETON
 };
 
-enum lang_t {
-    LANG_C,
-    LANG_GO,
-    LANG_RUST
+enum class Lang: uint32_t {
+    C,
+    GO,
+    RUST
 };
 
 enum input_api_t {

@@ -517,7 +517,7 @@ endif
 # re2go
 if WITH_GOLANG
 bin_PROGRAMS += re2go
-re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=LANG_GO
+re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::GO
 re2go_SOURCES = $(re2c_SOURCES)
 nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
 endif
@@ -525,7 +525,7 @@ endif
 # re2rust
 if WITH_RUST
 bin_PROGRAMS += re2rust
-re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=LANG_RUST
+re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::RUST
 re2rust_SOURCES = $(re2c_SOURCES)
 nodist_re2rust_SOURCES = $(nodist_re2c_SOURCES)
 endif

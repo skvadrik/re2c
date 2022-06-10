@@ -232,9 +232,9 @@ opt_long:
 opt_lang:
 /*!local:re2c
     * { ERRARG("--lang", "c | go | rust", *argv); }
-    "c"    end { globopts.lang = LANG_C;    goto opt; }
-    "go"   end { globopts.lang = LANG_GO;   goto opt; }
-    "rust" end { globopts.lang = LANG_RUST; goto opt; }
+    "c"    end { globopts.lang = Lang::C;    goto opt; }
+    "go"   end { globopts.lang = Lang::GO;   goto opt; }
+    "rust" end { globopts.lang = Lang::RUST; goto opt; }
 */
 
 opt_output:

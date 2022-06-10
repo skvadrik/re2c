@@ -142,7 +142,7 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
         CodeList *stmts = code_list(alc);
         CodeList *block = code_list(alc);
 
-        if (opts->lang == LANG_C) {
+        if (opts->lang == Lang::C) {
             start = buf.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
             end = "};";
             for (size_t i = 0; i < conds.size(); ++i) {
@@ -155,7 +155,7 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
                 }
                 append(block, code_text(alc, buf.flush()));
             }
-        } else if (opts->lang == LANG_GO) {
+        } else if (opts->lang == Lang::GO) {
             start = buf.cstr("const (").flush();
             end = ")";
             for (size_t i = 0; i < conds.size(); ++i) {
@@ -167,7 +167,7 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
                 }
                 append(block, code_text(alc, buf.flush()));
             }
-        } else if (opts->lang == LANG_RUST) {
+        } else if (opts->lang == Lang::RUST) {
             // For Rust generate standalone constants instead of enum to avoid casting to
             // `yystate` type on each operation. With the loop/switch approach conditions
             // are handled as regular states anyway, so the enum doesn't make much sense.
@@ -186,7 +186,7 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
 
         append(stmts, code_text(alc, start));
         append(stmts, code_block(alc, block,
-            opts->lang == LANG_RUST ? CodeBlock::RAW : CodeBlock::INDENTED));
+            opts->lang == Lang::RUST ? CodeBlock::RAW : CodeBlock::INDENTED));
         append(stmts, code_text(alc, end));
 
         code->kind = CODE_BLOCK;
@@ -486,19 +486,19 @@ static void gen_yymax(CodegenCtxPass1 &ctx, Code *code)
         code->text = o.str(os.str()).flush();
     } else {
         switch (opts->lang) {
-        case LANG_C:
+        case Lang::C:
             code->text = o.cstr("#define ").cstr(varname).cstr(" ").u64(max).flush();
             break;
-        case LANG_GO:
+        case Lang::GO:
             code->text = o.cstr("var ").cstr(varname).cstr(" int = ").u64(max).flush();
             break;
-        case LANG_RUST:
+        case Lang::RUST:
             code->text = o.cstr("const ").cstr(varname).cstr(": usize = ").u64(max)
                 .flush();
             break;
         }
     }
-    code->kind = (opts->lang == LANG_C) ? CODE_TEXT : CODE_STMT;
+    code->kind = (opts->lang == Lang::C) ? CODE_TEXT : CODE_STMT;
 }
 
 /*
@@ -698,7 +698,7 @@ void expand_pass_1(CodegenCtxPass1 &ctx, Code *code)
             // codegen into rendering oneline semantic actions as multiline,
             // which triggers rustc warnings about redundant braces. We replace
             // stubs with empty statements and rely on `remove_empty` pass.
-            if (opts->lang == LANG_RUST) code->kind = CODE_EMPTY;
+            if (opts->lang == Lang::RUST) code->kind = CODE_EMPTY;
             break;
         case CODE_EMPTY:
         case CODE_FUNC:

@@ -42,12 +42,12 @@ class Msg;
 
 // default backend is C
 #ifndef RE2C_LANG
-#define RE2C_LANG LANG_C
+#define RE2C_LANG Lang::C
 #endif
 
 #define RE2C_CONSTOPTS \
     CONSTOPT1 (Target, target, Target::CODE) \
-    CONSTOPT (lang_t, lang, RE2C_LANG) \
+    CONSTOPT (Lang, lang, RE2C_LANG) \
     CONSTOPT (bool, bNoGenerationDate, false) \
     CONSTOPT (bool, version, true) \
     CONSTOPT (bool, cFlag, false) \

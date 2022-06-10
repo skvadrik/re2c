@@ -78,7 +78,7 @@ CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap)
 
     CodeList *stmts = code_list(alc);
 
-    text = opts->lang == LANG_C
+    text = opts->lang == Lang::C
         ? o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {").flush()
         : o.str(opts->yybm).cstr(" := []byte{").flush();
     append(stmts, code_text(alc, text));

@@ -317,7 +317,7 @@ bool Output::emit()
 
 void output_version_time(std::ostream &os, const opt_t *opts)
 {
-    os << (opts->lang == LANG_GO ? "// Code generated" : "/* Generated") << " by re2c";
+    os << (opts->lang == Lang::GO ? "// Code generated" : "/* Generated") << " by re2c";
     if (opts->version) {
         os << " " << PACKAGE_VERSION;
     }
@@ -326,7 +326,7 @@ void output_version_time(std::ostream &os, const opt_t *opts)
         time_t now = time(nullptr);
         os.write(ctime(&now), 24);
     }
-    os << (opts->lang == LANG_GO ? ", DO NOT EDIT." : " */");
+    os << (opts->lang == Lang::GO ? ", DO NOT EDIT." : " */");
 }
 
 Scratchbuf& Scratchbuf::yybm_char(uint32_t u, const opt_t *opts, int width)

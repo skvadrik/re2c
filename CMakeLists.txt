@@ -211,13 +211,13 @@ add_executable(re2c ${re2c_sources})
 # re2go
 if (RE2C_BUILD_RE2GO)
     add_executable(re2go ${re2c_sources})
-    target_compile_definitions(re2go PUBLIC "RE2C_LANG=LANG_GO")
+    target_compile_definitions(re2go PUBLIC "RE2C_LANG=Lang::GO")
 endif()
 
 # re2rust
 if (RE2C_BUILD_RE2RUST)
     add_executable(re2rust ${re2c_sources})
-    target_compile_definitions(re2rust PUBLIC "RE2C_LANG=LANG_RUST")
+    target_compile_definitions(re2rust PUBLIC "RE2C_LANG=Lang::RUST")
 endif()
 
 re2c_bootstrap_lexer("src/parse/lex.re" "src/parse/lex.cc" "src/parse/lex.h")

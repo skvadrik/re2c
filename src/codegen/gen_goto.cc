@@ -20,7 +20,7 @@ static const char *gen_cond(Output &output, const CodeCmp *cond) {
     Scratchbuf &buf = output.scratchbuf;
     buf.str(opts->yych).cstr(" ").str(cond->cmp).cstr(" ");
     prtChOrHex(buf.stream(), cond->val, opts->encoding.szCodeUnit(),
-        opts->lang == LANG_RUST || opts->encoding.type() == Enc::EBCDIC,
+        opts->lang == Lang::RUST || opts->encoding.type() == Enc::EBCDIC,
         opts->target == Target::DOT);
     return buf.flush();
 }
@@ -106,7 +106,7 @@ static CodeList *gen_gobm(Output &output, const DFA &dfa, const CodeGoBm *go,
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
-    const char *nonzero = opts->lang == LANG_C ? "" : " != 0";
+    const char *nonzero = opts->lang == Lang::C ? "" : " != 0";
 
     const char *elif_cond = o.str(opts->yybm)
         .cstr("[").u32(go->bitmap->offset).cstr("+").str(opts->yych).cstr("]")

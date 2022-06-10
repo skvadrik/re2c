@@ -21,7 +21,7 @@ static uint32_t count_lines_text(const char *text)
 
 static inline void render_stmt_end(RenderContext &rctx, bool semi)
 {
-    if (semi && rctx.opts->lang != LANG_GO) rctx.os << ";";
+    if (semi && rctx.opts->lang != Lang::GO) rctx.os << ";";
     rctx.os << std::endl;
     ++rctx.line;
 }
@@ -39,15 +39,15 @@ static void render_line_info(std::ostream &o, uint32_t line, const std::string &
     if (opts->iFlag) return;
 
     switch (opts->lang) {
-    case LANG_GO:
+    case Lang::GO:
         // Go: //line <filename>:<line-number>
         o << "//line \"" << fname << "\":" << line << "\n";
         break;
-    case LANG_C:
+    case Lang::C:
         // C/C++: #line <line-number> <filename>
         o << "#line " << line << " \"" << fname << "\"\n";
         break;
-    case LANG_RUST:
+    case Lang::RUST:
         // For Rust line directives should be removed by `remove_empty` pass.
         DASSERT(false);
         break;
@@ -56,7 +56,7 @@ static void render_line_info(std::ostream &o, uint32_t line, const std::string &
 
 static bool oneline_if(const CodeIfTE *code, const opt_t *opts) {
     const Code *first = code->if_code->head;
-    return opts->lang == LANG_C // Go and Rust require braces
+    return opts->lang == Lang::C // Go and Rust require braces
         && code->oneline
         && code->else_code == nullptr
         && first
@@ -72,7 +72,7 @@ static void render_if_nonl(RenderContext &rctx, const char *cond, const Code *th
 
     if (cond) {
         DASSERT(count_lines_text(cond) == 0);
-        bool wrap = opts->lang != LANG_RUST;
+        bool wrap = opts->lang != Lang::RUST;
         os << "if " << (wrap ? "(" : "") << cond << (wrap ? ")" : "")  << " ";
     }
 
@@ -169,14 +169,14 @@ static void render_var(RenderContext &rctx, const CodeVar *var)
 
     const std::string &ind = indent(rctx.ind, opts->indString);
     switch (opts->lang) {
-    case LANG_C:
+    case Lang::C:
         os << ind << var_type_c(var->type, opts) << " " << var->name;
         if (var->init) os << " = " << var->init;
         os << ";" << std::endl;
         ++rctx.line;
         break;
 
-    case LANG_GO:
+    case Lang::GO:
         os << ind;
         if (var->init) {
             os << var->name << " := " << var->init;
@@ -187,7 +187,7 @@ static void render_var(RenderContext &rctx, const CodeVar *var)
         ++rctx.line;
         break;
 
-    case LANG_RUST:
+    case Lang::RUST:
         // In Rust uninitialized variable is an error, but if the compiler is able to see
         // that all paths overwrite the initial value, it warns about unused assignments.
         if (!var->init) os << ind << "#[allow(unused_assignments)]" << std::endl;
@@ -205,14 +205,14 @@ static bool case_on_same_line(const CodeCase *code, const opt_t *opts)
     return first
         && first->next == nullptr
         && (first->kind == CODE_STMT || first->kind == CODE_TEXT)
-        && opts->lang != LANG_GO; // gofmt prefers cases on a new line
+        && opts->lang != Lang::GO; // gofmt prefers cases on a new line
 }
 
 static void render_number(RenderContext &rctx, int64_t num, VarType type) {
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
     const Enc &enc = opts->encoding;
-    bool hex = opts->lang == LANG_RUST || enc.type() == Enc::EBCDIC;
+    bool hex = opts->lang == Lang::RUST || enc.type() == Enc::EBCDIC;
 
     switch (type) {
     case VAR_TYPE_UINT:
@@ -238,7 +238,7 @@ static void render_case_range(RenderContext &rctx, int64_t low, int64_t upp, boo
     os << indent(rctx.ind, opts->indString);
 
     switch (opts->lang) {
-    case LANG_C:
+    case Lang::C:
         os << "case ";
         render_number(rctx, low, type);
         if (low != upp) {
@@ -255,7 +255,7 @@ static void render_case_range(RenderContext &rctx, int64_t low, int64_t upp, boo
         }
         break;
 
-    case LANG_GO:
+    case Lang::GO:
         os << "case ";
         render_number(rctx, low, type);
         for (int64_t c = low + 1; c <= upp; ++c) {
@@ -270,7 +270,7 @@ static void render_case_range(RenderContext &rctx, int64_t low, int64_t upp, boo
         }
         break;
 
-    case LANG_RUST:
+    case Lang::RUST:
         render_number(rctx, low, type);
         if (low != upp) {
             os << " ..= ";
@@ -294,7 +294,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code)
     const Code *first = code->body->head;
 
     const char *s_case, *s_then, *s_default;
-    if (opts->lang == LANG_RUST) {
+    if (opts->lang == Lang::RUST) {
         s_case = "";
         s_then = " =>";
         s_default = "_";
@@ -320,7 +320,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code)
             const int64_t low = ranges[2*i], upp = ranges[2*i + 1];
             DASSERT(low < upp);
 
-            if (opts->lang != LANG_C || opts->case_ranges) {
+            if (opts->lang != Lang::C || opts->case_ranges) {
                 render_case_range(rctx, low, upp - 1, last, type);
             } else {
                 for (int64_t c = low; c < upp; ++c) {
@@ -336,7 +336,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code)
         render_stmt_end(rctx, first->kind == CODE_STMT);
     } else {
         // For Rust wrap multi-line cases in braces.
-        if (opts->lang == LANG_RUST) os << " {";
+        if (opts->lang == Lang::RUST) os << " {";
         os << std::endl;
         ++rctx.line;
         for (const Code *s = first; s; s = s->next) {
@@ -344,7 +344,7 @@ static void render_case(RenderContext &rctx, const CodeCase *code)
             render(rctx, s);
             --rctx.ind;
         }
-        if (opts->lang == LANG_RUST) {
+        if (opts->lang == Lang::RUST) {
             os << indent(rctx.ind, opts->indString) << "}" << std::endl;
             ++rctx.line;
         }
@@ -358,7 +358,7 @@ static void render_switch(RenderContext &rctx, const CodeSwitch *code)
     const uint32_t ind = rctx.ind;
 
     os << indent(ind, opts->indString);
-    if (opts->lang == LANG_RUST) {
+    if (opts->lang == Lang::RUST) {
         os << "match " << code->expr;
     } else {
         os << "switch (" << code->expr << ")";
@@ -367,11 +367,11 @@ static void render_switch(RenderContext &rctx, const CodeSwitch *code)
     ++rctx.line;
 
     // Do not indent switch cases for Go, as gofmt prefers them unindented.
-    if (opts->lang != LANG_GO) ++rctx.ind;
+    if (opts->lang != Lang::GO) ++rctx.ind;
     for (const CodeCase *c = code->cases->head; c; c = c->next) {
         render_case(rctx, c);
     }
-    if (opts->lang != LANG_GO) --rctx.ind;
+    if (opts->lang != Lang::GO) --rctx.ind;
 
     os << indent(ind, opts->indString) << "}\n";
     ++rctx.line;
@@ -451,10 +451,10 @@ static void render_loop(RenderContext &rctx, const CodeList *loop) {
     const opt_t *opts = rctx.opts;
 
     switch (opts->lang) {
-    case LANG_C:
+    case Lang::C:
         os << indent(rctx.ind, opts->indString) << "for (;;)";
         break;
-    case LANG_GO:
+    case Lang::GO:
         // In Go label is on a separate line with zero indent.
         if (!opts->yyloop.empty()) {
             os << opts->yyloop << ":" << std::endl;
@@ -462,7 +462,7 @@ static void render_loop(RenderContext &rctx, const CodeList *loop) {
         }
         os << indent(rctx.ind, opts->indString) << "for";
         break;
-    case LANG_RUST:
+    case Lang::RUST:
         os << indent(rctx.ind, opts->indString);
         // In Rust label is on the same line, preceding the `loop` keyword.
         if (!opts->yyloop.empty()) os << opts->yyloop << ": ";
@@ -492,7 +492,7 @@ void gen_peek_expr(std::ostream &os, const opt_t *opts)
     yych_conv(os, opts);
     if (opts->input_api == INPUT_DEFAULT) {
         os << "*" << opts->yycursor;
-    } else if (opts->lang == LANG_RUST) {
+    } else if (opts->lang == Lang::RUST) {
         if (opts->unsafe) os << "unsafe {";
         os << opts->yypeek;
         if (opts->api_style == API_FUNCTIONS) os << "()";
@@ -642,14 +642,14 @@ static void render_abort(RenderContext &rctx)
 
     os << indent(rctx.ind, opts->indString);
     switch (opts->lang) {
-    case LANG_C:
+    case Lang::C:
         DASSERT(opts->bUseStateAbort);
         os << "abort();";
         break;
-    case LANG_GO:
+    case Lang::GO:
         os << "panic(\"internal lexer error\")";
         break;
-    case LANG_RUST:
+    case Lang::RUST:
         os << "panic!(\"internal lexer error\")";
         break;
     }

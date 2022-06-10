@@ -685,7 +685,7 @@ void Scanner::try_lex_string_in_code(char quote)
     // quote (if any) and result in either a spurios parse error, or incorrect generated
     // code. Therefore in Rust we try to lex a char literal, or else consume the quote.
 
-    if (globopts->lang != LANG_RUST || quote != '\'') {
+    if (globopts->lang != Lang::RUST || quote != '\'') {
         lex_string(quote);
         return;
     }

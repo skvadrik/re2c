@@ -16,7 +16,7 @@ static void fix_conopt(conopt_t &glob)
         glob.iFlag = true;
     }
 
-    if (glob.lang == LANG_RUST) {
+    if (glob.lang == Lang::RUST) {
         glob.loop_switch = true;
         // No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862
         glob.iFlag = true;
@@ -52,7 +52,7 @@ static void fix_mutopt_defaults(const conopt_t &glob, mutopt_t &defaults)
     // API with pointers doesn't work (there is no pointer arithmetics in Go, and in Rust
     // it is different enough from C). Use freeform generic API by default to make it less
     // restrictive.
-    if (glob.lang != LANG_C) {
+    if (glob.lang != Lang::C) {
         defaults.input_api = INPUT_CUSTOM;
         defaults.api_style = API_FREEFORM;
     }
@@ -252,7 +252,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (is_default.state_set_arg)    real.state_set_arg    = real.api_sigil;
     if (is_default.tags_expression)  real.tags_expression  = real.api_sigil;
     if (is_default.condGoto) {
-        real.condGoto = "goto " + real.condGotoParam + (glob.lang == LANG_C ? ";" : "");
+        real.condGoto = "goto " + real.condGotoParam + (glob.lang == Lang::C ? ";" : "");
     }
     // "startlabel" configuration exists in two variants: string and boolean,
     // and the string one overrides the boolean one
@@ -270,18 +270,18 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         real.condGoto = defaults.condGoto;
         real.condGotoParam = defaults.condGotoParam;
     }
-    if (glob.lang == LANG_RUST) {
+    if (glob.lang == Lang::RUST) {
         // In Rust constants should be uppercase.
         if (is_default.condEnumPrefix) real.condEnumPrefix = "YYC_";
         // In Rust `continue` statements have labels, use it to avoid ambiguity.
         if (is_default.yyloop) real.yyloop = "'yyl";
-    } else if (glob.lang == LANG_GO) {
+    } else if (glob.lang == Lang::GO) {
         // In Go `continue` statements have labels, use it to avoid ambiguity.
         if (is_default.yyloop) real.yyloop = "yyl";
     }
 
     // errors
-    if (glob.lang != LANG_C) {
+    if (glob.lang != Lang::C) {
         if (glob.target == Target::SKELETON) {
             error("skeleton is not supported for non-C backends");
             exit(1);
