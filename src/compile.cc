@@ -145,11 +145,11 @@ void compile(Scanner &input, Output &output, Opt &opts)
     loc_t block_loc;
 
     output.header_mode(1);
-    output.new_block(opts, INPUT_GLOBAL, block_name, loc0);
+    output.new_block(opts, InputBlock::GLOBAL, block_name, loc0);
     output.wversion_time();
 
     output.header_mode(0);
-    output.new_block(opts, INPUT_GLOBAL, block_name, loc0);
+    output.new_block(opts, InputBlock::GLOBAL, block_name, loc0);
     output.wversion_time();
     output.wdelay_stmt(0, code_line_info_input(alc, loc0));
 
@@ -161,13 +161,13 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
     for (;;) {
         // parse everything up to the next re2c block
-        InputBlockKind kind = input.echo(output, block_name);
-        if (kind == INPUT_ERROR) exit(1);
-        if (kind == INPUT_END) break;
+        InputBlock kind = input.echo(output, block_name);
+        if (kind == InputBlock::ERROR) exit(1);
+        if (kind == InputBlock::END) break;
 
         // parse the next re2c block
         specs_t specs;
-        if (kind == INPUT_USE) {
+        if (kind == InputBlock::USE) {
             const RulesBlock *rb = rblocks.find(block_name);
             if (rb == nullptr) exit(1);
             specs = rb->specs;
@@ -181,7 +181,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         // start new output block with accumulated options
         output.new_block(opts, kind, block_name, block_loc);
 
-        if (kind == INPUT_RULES) {
+        if (kind == InputBlock::RULES) {
             // save AST and options for future use
             rblocks.add(block_name, output.block().opts, specs);
         } else {
@@ -204,7 +204,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         // Do not accumulate whole-program options for rules/reuse/local blocks.
         // Global blocks add their named definitions and configurations to the
         // global scope, local blocks don't. Historically global is the default.
-        if (kind == INPUT_GLOBAL) {
+        if (kind == InputBlock::GLOBAL) {
             accum_opts = output.block().opts;
         } else {
             opts.restore(accum_opts);

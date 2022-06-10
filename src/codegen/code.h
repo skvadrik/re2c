@@ -708,7 +708,7 @@ typedef std::vector<StartCond> StartConds;
 typedef std::map<uint32_t, CodeList*> storable_states_t;
 
 struct OutputBlock {
-    InputBlockKind kind;
+    InputBlock kind;
     std::string name;
     const loc_t loc;
     std::vector<OutputFragment> fragments;
@@ -728,7 +728,7 @@ struct OutputBlock {
     uint32_t fill_state; // index of the most recent YYFILL state
     storable_states_t fill_goto; // transitions to YYFILL states
 
-    OutputBlock(InputBlockKind kind, const std::string &name, const loc_t &loc);
+    OutputBlock(InputBlock kind, const std::string &name, const loc_t &loc);
     ~OutputBlock();
     FORBID_COPY(OutputBlock);
 };
@@ -759,7 +759,7 @@ struct Output {
     ~Output();
     OutputBlock &block();
     bool open ();
-    void new_block(Opt &opts, InputBlockKind kind, const std::string &name,
+    void new_block(Opt &opts, InputBlock kind, const std::string &name,
         const loc_t &loc);
     void gather_info_from_block();
     void header_mode(bool on);

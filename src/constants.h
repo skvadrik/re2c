@@ -41,13 +41,13 @@ enum class ParseOpts: uint32_t {
     EXIT_FAIL
 };
 
-enum InputBlockKind {
-    INPUT_END,
-    INPUT_GLOBAL,
-    INPUT_LOCAL,
-    INPUT_USE,
-    INPUT_RULES,
-    INPUT_ERROR
+enum class InputBlock: uint32_t {
+    END,
+    GLOBAL,
+    LOCAL,
+    USE,
+    RULES,
+    ERROR
 };
 
 enum empty_class_policy_t {

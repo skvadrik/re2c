@@ -285,7 +285,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     // accumulated across the whole file, as the state switch may include states
     // from a few different blocks and it is not clear which options it should
     // inherit.
-    const opt_t *globopts = (ctx.block->kind == INPUT_USE)
+    const opt_t *globopts = (ctx.block->kind == InputBlock::USE)
         ? ctx.block->opts : ctx.global->opts;
 
     if (globopts->target != Target::CODE) {
@@ -327,7 +327,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
         const blocks_t &blocks = *ctx.global->pblocks;
         for (size_t i = 0; i < blocks.size(); ++i) {
             const OutputBlock *b = blocks[i];
-            if (b->kind != INPUT_USE) {
+            if (b->kind != InputBlock::USE) {
                 gen_state_goto_cases(ctx, cases, b);
 
                 // Use start label of the first non-use block that generates code.

@@ -122,13 +122,13 @@ struct ScannerState
 #endif // _RE2C_PARSE_LEX_
 /*!header:re2c:off*/
 
-InputBlockKind Scanner::echo(Output &out, std::string &block_name)
+InputBlock Scanner::echo(Output &out, std::string &block_name)
 {
     const opt_t *opts = out.block().opts;
     code_alc_t &alc = out.allocator;
     const char *x, *y;
 
-    if (is_eof()) return INPUT_END;
+    if (is_eof()) return InputBlock::END;
 
 next:
     tok = cur;
@@ -146,56 +146,56 @@ loop:
         }
         out.wraw(tok, ptr);
         block_name.clear();
-        return INPUT_GLOBAL;
+        return InputBlock::GLOBAL;
     }
 
     "/*!re2c" {
         out.wraw(tok, ptr);
-        if (!lex_opt_name(block_name)) return INPUT_ERROR;
+        if (!lex_opt_name(block_name)) return InputBlock::ERROR;
         if (block_name == "local") {
             msg.error(cur_loc(), "ill-formed local block, expected `local:re2c`");
-            return INPUT_ERROR;
+            return InputBlock::ERROR;
         }
-        return INPUT_GLOBAL;
+        return InputBlock::GLOBAL;
     }
 
     "/*!local:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_opt_name(block_name)) return INPUT_ERROR;
-        return INPUT_LOCAL;
+        if (!lex_opt_name(block_name)) return InputBlock::ERROR;
+        return InputBlock::LOCAL;
     }
 
     "/*!rules:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_opt_name(block_name)) return INPUT_ERROR;
-        return INPUT_RULES;
+        if (!lex_opt_name(block_name)) return InputBlock::ERROR;
+        return InputBlock::RULES;
     }
 
     "/*!use:re2c" {
         out.wraw(tok, ptr);
-        if (!lex_opt_name(block_name)) return INPUT_ERROR;
-        return INPUT_USE;
+        if (!lex_opt_name(block_name)) return InputBlock::ERROR;
+        return InputBlock::USE;
     }
 
     "/*!max:re2c" {
-        if (!lex_block(out, CODE_MAXFILL, 0, DCONF_FORMAT)) return INPUT_ERROR;
+        if (!lex_block(out, CODE_MAXFILL, 0, DCONF_FORMAT)) return InputBlock::ERROR;
         goto next;
     }
 
     "/*!maxnmatch:re2c" {
-        if (!lex_block(out, CODE_MAXNMATCH, 0, DCONF_FORMAT)) return INPUT_ERROR;
+        if (!lex_block(out, CODE_MAXNMATCH, 0, DCONF_FORMAT)) return InputBlock::ERROR;
         goto next;
     }
 
     "/*!stags:re2c" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        if (!lex_block(out, CODE_STAGS, 0, allow)) return INPUT_ERROR;
+        if (!lex_block(out, CODE_STAGS, 0, allow)) return InputBlock::ERROR;
         goto next;
     }
 
     "/*!mtags:re2c" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        if (!lex_block(out, CODE_MTAGS, 0, allow)) return INPUT_ERROR;
+        if (!lex_block(out, CODE_MTAGS, 0, allow)) return InputBlock::ERROR;
         goto next;
     }
 
@@ -203,7 +203,7 @@ loop:
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        if (!lex_block(out, CODE_COND_ENUM, opts->topIndent, allow)) return INPUT_ERROR;
+        if (!lex_block(out, CODE_COND_ENUM, opts->topIndent, allow)) return InputBlock::ERROR;
         goto next;
     }
 
@@ -211,15 +211,15 @@ loop:
         out.state_goto = true;
         if (!opts->fFlag) {
             msg.error(cur_loc(), "`getstate:re2c` without `-f --storable-state` option");
-            return INPUT_ERROR;
+            return InputBlock::ERROR;
         }
         if (opts->loop_switch) {
             msg.error(cur_loc(), "`getstate:re2c` is incompatible with the --loop-switch "
                 "option, as it requires cross-block transitions that are unsupported "
                 "without the `goto` statement");
-            return INPUT_ERROR;
+            return InputBlock::ERROR;
         }
-        if (!lex_block(out, CODE_STATE_GOTO, opts->topIndent, 0)) return INPUT_ERROR;
+        if (!lex_block(out, CODE_STATE_GOTO, opts->topIndent, 0)) return InputBlock::ERROR;
         goto next;
     }
 
@@ -227,7 +227,7 @@ loop:
         out.wraw(tok, ptr);
         out.header_mode(true);
         out.need_header = true;
-        if (!lex_block_end(out)) return INPUT_ERROR;
+        if (!lex_block_end(out)) return InputBlock::ERROR;
         goto next;
     }
 
@@ -235,19 +235,19 @@ loop:
         out.wraw(tok, ptr);
         out.header_mode(false);
         out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
-        if (!lex_block_end(out)) return INPUT_ERROR;
+        if (!lex_block_end(out)) return InputBlock::ERROR;
         goto next;
     }
     "/*!header:re2c" {
         msg.error(cur_loc(), "ill-formed header directive: expected"
             " `/*!header:re2c:<on|off>` followed by a space, a newline or the"
             " end of block `*" "/`");
-        return INPUT_ERROR;
+        return InputBlock::ERROR;
     }
 
     "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
         out.wraw(tok, ptr);
-        if (!lex_block_end(out)) return INPUT_ERROR;
+        if (!lex_block_end(out)) return InputBlock::ERROR;
         include(getstr(x + 1, y - 1), ptr);
         out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
         goto next;
@@ -255,25 +255,25 @@ loop:
     "/*!include:re2c" {
         msg.error(cur_loc(), "ill-formed include directive: expected"
             " `/*!include:re2c \"<file>\" *" "/`");
-        return INPUT_ERROR;
+        return InputBlock::ERROR;
     }
 
     "/*!ignore:re2c" / ws_or_eoc {
         out.wraw(tok, ptr);
         // allows arbitrary garbage before the end of the comment
-        if (!lex_block_end(out, true)) return INPUT_ERROR;
+        if (!lex_block_end(out, true)) return InputBlock::ERROR;
         goto next;
     }
     "/*!ignore:re2c" {
         msg.error(cur_loc(), "ill-formed start of `ignore:re2c` block: expected"
             " a space, a newline, or the end of block `*" "/`");
-        return INPUT_ERROR;
+        return InputBlock::ERROR;
     }
 
     eof {
         if (is_eof()) {
             out.wraw(tok, ptr);
-            return INPUT_END;
+            return InputBlock::END;
         }
         goto loop;
     }
