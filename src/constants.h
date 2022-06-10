@@ -114,10 +114,11 @@ enum class CodeKind: uint32_t {
     ABORT
 };
 
-enum VarType {
-    VAR_TYPE_INT,
-    VAR_TYPE_UINT,
-    VAR_TYPE_YYCTYPE
+// Types of variables in codegen (independent of the language language).
+enum class VarType: uint32_t {
+    INT,
+    UINT,
+    YYCTYPE
 };
 
 // Bit flags for configurations used in directives.

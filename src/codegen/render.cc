@@ -135,9 +135,9 @@ static void render_block(RenderContext &rctx, const CodeBlock *code)
 static const char *var_type_c(VarType type, const opt_t *opts)
 {
     switch (type) {
-    case VAR_TYPE_INT:     return "int";
-    case VAR_TYPE_UINT:    return "unsigned int";
-    case VAR_TYPE_YYCTYPE: return opts->yyctype.c_str();
+    case VarType::INT:     return "int";
+    case VarType::UINT:    return "unsigned int";
+    case VarType::YYCTYPE: return opts->yyctype.c_str();
     default:               return nullptr;
     }
 }
@@ -145,9 +145,9 @@ static const char *var_type_c(VarType type, const opt_t *opts)
 static const char *var_type_go(VarType type, const opt_t *opts)
 {
     switch (type) {
-    case VAR_TYPE_INT:     return "int";
-    case VAR_TYPE_UINT:    return "uint";
-    case VAR_TYPE_YYCTYPE: return opts->yyctype.c_str();
+    case VarType::INT:     return "int";
+    case VarType::UINT:    return "uint";
+    case VarType::YYCTYPE: return opts->yyctype.c_str();
     default:               return nullptr;
     }
 }
@@ -155,9 +155,9 @@ static const char *var_type_go(VarType type, const opt_t *opts)
 static const char *var_type_rust(VarType type, const opt_t *opts)
 {
     switch (type) {
-    case VAR_TYPE_INT:     return "isize";
-    case VAR_TYPE_UINT:    return "usize";
-    case VAR_TYPE_YYCTYPE: return opts->yyctype.c_str();
+    case VarType::INT:     return "isize";
+    case VarType::UINT:    return "usize";
+    case VarType::YYCTYPE: return opts->yyctype.c_str();
     default:               return nullptr;
     }
 }
@@ -215,14 +215,14 @@ static void render_number(RenderContext &rctx, int64_t num, VarType type) {
     bool hex = opts->lang == Lang::RUST || enc.type() == Enc::EBCDIC;
 
     switch (type) {
-    case VAR_TYPE_UINT:
+    case VarType::UINT:
         DASSERT(num >= 0);
         os << static_cast<uint32_t>(num);
         break;
-    case VAR_TYPE_INT:
+    case VarType::INT:
         os << num;
         break;
-    case VAR_TYPE_YYCTYPE:
+    case VarType::YYCTYPE:
         DASSERT(num >= 0);
         prtChOrHex(os, static_cast<uint32_t>(num), enc.szCodeUnit(), hex, /*dot*/ false);
         break;
@@ -244,7 +244,7 @@ static void render_case_range(RenderContext &rctx, int64_t low, int64_t upp, boo
         if (low != upp) {
             os << " ... ";
             render_number(rctx, upp, type);
-        } else if (opts->dFlag && type == VAR_TYPE_YYCTYPE && enc.type() == Enc::EBCDIC) {
+        } else if (opts->dFlag && type == VarType::YYCTYPE && enc.type() == Enc::EBCDIC) {
             uint32_t c = enc.decodeUnsafe(static_cast<uint32_t>(low));
             if (is_print(c)) os << " /* " << static_cast<char>(c) << " */";
         }

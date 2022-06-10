@@ -396,7 +396,7 @@ static void gen_yych_decl(const opt_t *opts, Code *code)
 {
     if (opts->bEmitYYCh) {
         code->kind = CodeKind::VAR;
-        code->var.type = VAR_TYPE_YYCTYPE;
+        code->var.type = VarType::YYCTYPE;
         code->var.name = opts->yych.c_str();
         code->var.init = nullptr;
     } else {
@@ -408,7 +408,7 @@ static void gen_yyaccept_def(const opt_t *opts, Code *code, bool used_yyaccept)
 {
     if (used_yyaccept) {
         code->kind = CodeKind::VAR;
-        code->var.type = VAR_TYPE_UINT;
+        code->var.type = VarType::UINT;
         code->var.name = opts->yyaccept.c_str();
         code->var.init = "0";
     } else {
@@ -430,15 +430,15 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
             // If conditions are also used, YYGETSTATE takes priority over YYGETCONDITION,
             // because the lexer may be reentered after an YYFILL invocation. In that case
             // we use YYSETSTATE instead of YYSETCONDITION in the final states.
-            code->var.type = VAR_TYPE_INT;
+            code->var.type = VarType::INT;
             code->var.init = o.str(output_state_get(opts)).flush();
         } else if (opts->cFlag) {
             // Else with start conditions yystate should be initialized to YYGETCONDITION.
-            code->var.type = VAR_TYPE_UINT;
+            code->var.type = VarType::UINT;
             code->var.init = o.str(output_cond_get(opts)).flush();
         } else {
             // Else it should be the start DFA state (always case 0 with --loop-switch).
-            code->var.type = VAR_TYPE_UINT;
+            code->var.type = VarType::UINT;
             code->var.init = "0";
         }
     } else {

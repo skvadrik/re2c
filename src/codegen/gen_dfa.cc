@@ -73,7 +73,7 @@ static void gen_storable_state_cases(Output &output, CodeCases *cases)
     CodeCase *first = cases->head;
     DASSERT(first->kind == CodeCase::NUMBER && first->number == 0);
     first->kind = CodeCase::RANGES;
-    first->ranges = code_ranges(alc, VAR_TYPE_INT, ranges, ranges_end);
+    first->ranges = code_ranges(alc, VarType::INT, ranges, ranges_end);
 }
 
 void gen_dfa_as_blocks_with_labels(Output &output, const DFA &dfa, CodeList *stmts)

@@ -62,7 +62,7 @@ static CodeGoSw *code_gosw(code_alc_t &alc, const Span *spans, uint32_t nspans,
                 }
                 ub = s->ub;
             }
-            c->ranges = code_ranges(alc, VAR_TYPE_YYCTYPE, ranges_start, ranges_end);
+            c->ranges = code_ranges(alc, VarType::YYCTYPE, ranges_start, ranges_end);
         }
         else {
             // found a case that already contains this range
