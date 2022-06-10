@@ -147,13 +147,13 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 tag.base = tag.dist = 0;
             } else if (history(tag)) {
                 // fixed tags do not apply to m-tags
-            } else if (spec.opts->fixed_tags == FIXTAG_NONE) {
+            } else if (spec.opts->fixed_tags == FixedTags::NONE) {
                 // fixed tag optimization is globally disabled
             } else if (spec.opts->subhistories) {
                 // Fixed tags with subhistories are possible in principle, but it
                 // ends up being too slow (handling special case adds overhead).
             } else if (l.tag != Tag::NONE && l.dist_to_tag != VARDIST
-                    && (spec.opts->fixed_tags == FIXTAG_ALL || toplevel)) {
+                    && (spec.opts->fixed_tags == FixedTags::ALL || toplevel)) {
                 // this tag can be fixed
                 tag.base = l.tag;
                 tag.dist = l.dist_to_tag;

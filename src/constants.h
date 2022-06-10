@@ -29,10 +29,10 @@ enum class ApiStyle: uint32_t {
     FREEFORM
 };
 
-enum fixed_tags_t {
-    FIXTAG_NONE,
-    FIXTAG_TOPLEVEL,
-    FIXTAG_ALL
+enum class FixedTags: uint32_t {
+    NONE,
+    TOPLEVEL,
+    ALL
 };
 
 enum parse_opts_t {

@@ -322,9 +322,9 @@ opt_posix_prectable:
 opt_fixed_tags:
 /*!local:re2c
     * { ERRARG("--fixed-tags", "none | toplevel | all", *argv); }
-    "none"     end { globopts.fixed_tags = FIXTAG_NONE;     goto opt; }
-    "toplevel" end { globopts.fixed_tags = FIXTAG_TOPLEVEL; goto opt; }
-    "all"      end { globopts.fixed_tags = FIXTAG_ALL;      goto opt; }
+    "none"     end { globopts.fixed_tags = FixedTags::NONE;     goto opt; }
+    "toplevel" end { globopts.fixed_tags = FixedTags::TOPLEVEL; goto opt; }
+    "all"      end { globopts.fixed_tags = FixedTags::ALL;      goto opt; }
 */
 
 end:
