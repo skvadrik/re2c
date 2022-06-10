@@ -19,9 +19,9 @@ enum class Lang: uint32_t {
     RUST
 };
 
-enum input_api_t {
-    INPUT_DEFAULT,
-    INPUT_CUSTOM
+enum class Api: uint32_t {
+    DEFAULT,
+    CUSTOM
 };
 
 enum api_style_t {

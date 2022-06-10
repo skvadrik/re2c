@@ -490,7 +490,7 @@ static inline void yych_conv(std::ostream &os, const opt_t *opts)
 void gen_peek_expr(std::ostream &os, const opt_t *opts)
 {
     yych_conv(os, opts);
-    if (opts->input_api == INPUT_DEFAULT) {
+    if (opts->input_api == Api::DEFAULT) {
         os << "*" << opts->yycursor;
     } else if (opts->lang == Lang::RUST) {
         if (opts->unsafe) os << "unsafe {";
@@ -519,7 +519,7 @@ static void render_skip(RenderContext &rctx)
     const opt_t *opts = rctx.opts;
 
     os << indent(rctx.ind, opts->indString);
-    if (opts->input_api == INPUT_CUSTOM) {
+    if (opts->input_api == Api::CUSTOM) {
         os << opts->yyskip;
         if (opts->api_style == API_FUNCTIONS) {
             os << "()";
@@ -540,7 +540,7 @@ static void render_backup(RenderContext &rctx)
     const opt_t *opts = rctx.opts;
 
     os << indent(rctx.ind, opts->indString);
-    if (opts->input_api == INPUT_CUSTOM) {
+    if (opts->input_api == Api::CUSTOM) {
         os << opts->yybackup;
         if (opts->api_style == API_FUNCTIONS) {
             os << "()";
@@ -560,7 +560,7 @@ static void render_skip_peek(RenderContext &rctx)
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
 
-    DASSERT(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*++" << opts->yycursor;
@@ -572,7 +572,7 @@ static void render_peek_skip(RenderContext &rctx)
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
 
-    DASSERT(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*" << opts->yycursor << "++";
@@ -583,7 +583,7 @@ static void render_skip_backup(RenderContext &rctx)
 {
     const opt_t *opts = rctx.opts;
 
-    DASSERT(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == Api::DEFAULT);
     rctx.os << indent(rctx.ind, opts->indString) << opts->yymarker << " = ++"
         << opts->yycursor;
     render_stmt_end(rctx, true);
@@ -593,7 +593,7 @@ static void render_backup_skip(RenderContext &rctx)
 {
     const opt_t *opts = rctx.opts;
 
-    DASSERT(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == Api::DEFAULT);
     rctx.os << indent(rctx.ind, opts->indString) << opts->yymarker << " = "
         << opts->yycursor << "++";
     render_stmt_end(rctx, true);
@@ -604,7 +604,7 @@ static void render_backup_peek(RenderContext &rctx)
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
 
-    DASSERT(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*(" << opts->yymarker << " = " << opts->yycursor << ")";
@@ -616,7 +616,7 @@ static void render_skip_backup_peek(RenderContext &rctx)
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
 
-    DASSERT(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*(" << opts->yymarker << " = ++" << opts->yycursor << ")";
@@ -628,7 +628,7 @@ static void render_backup_peek_skip(RenderContext &rctx)
     std::ostringstream &os = rctx.os;
     const opt_t *opts = rctx.opts;
 
-    DASSERT(opts->input_api == INPUT_DEFAULT);
+    DASSERT(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*(" << opts->yymarker << " = " << opts->yycursor << "++)";

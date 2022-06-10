@@ -77,7 +77,7 @@ void combine_code(CodegenCtxPass2 &ctx, Code *code)
 void combine(CodegenCtxPass2 &ctx, Code *code)
 {
     // folding skip/peek/backup expressions is only possible with default input API
-    if (ctx.opts->input_api != INPUT_DEFAULT) return;
+    if (ctx.opts->input_api != Api::DEFAULT) return;
 
     combine_code(ctx, code);
 }

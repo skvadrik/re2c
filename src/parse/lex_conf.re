@@ -205,8 +205,8 @@ void Scanner::lex_conf_input(Opt &opts)
             "bad configuration value (expected: 'default', 'custom')");
         exit(1);
     }
-    "default" { opts.set_input_api(INPUT_DEFAULT); goto end; }
-    "custom"  { opts.set_input_api(INPUT_CUSTOM);  goto end; }
+    "default" { opts.set_input_api(Api::DEFAULT); goto end; }
+    "custom"  { opts.set_input_api(Api::CUSTOM);  goto end; }
 */
 end:
     lex_conf_semicolon();

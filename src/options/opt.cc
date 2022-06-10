@@ -53,7 +53,7 @@ static void fix_mutopt_defaults(const conopt_t &glob, mutopt_t &defaults)
     // it is different enough from C). Use freeform generic API by default to make it less
     // restrictive.
     if (glob.lang != Lang::C) {
-        defaults.input_api = INPUT_CUSTOM;
+        defaults.input_api = Api::CUSTOM;
         defaults.api_style = API_FREEFORM;
     }
 }
@@ -191,13 +191,13 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         real.cGotoThreshold = defaults.cGotoThreshold;
         real.yytarget = defaults.yytarget;
     }
-    if (real.input_api != INPUT_DEFAULT) {
+    if (real.input_api != Api::DEFAULT) {
         real.yycursor = defaults.yycursor;
         real.yymarker = defaults.yymarker;
         real.yyctxmarker = defaults.yyctxmarker;
         real.yylimit = defaults.yylimit;
     }
-    if (real.input_api != INPUT_CUSTOM) {
+    if (real.input_api != Api::CUSTOM) {
         real.yypeek = defaults.yypeek;
         real.yyskip = defaults.yyskip;
         real.yybackup = defaults.yybackup;
@@ -224,7 +224,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
 
     // set implied options
     if (glob.target == Target::SKELETON) {
-        real.input_api = INPUT_CUSTOM;
+        real.input_api = Api::CUSTOM;
         real.indString = "    ";
         real.topIndent = 2;
     }
@@ -286,7 +286,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
             error("skeleton is not supported for non-C backends");
             exit(1);
         }
-        if (real.input_api == INPUT_DEFAULT) {
+        if (real.input_api == Api::DEFAULT) {
             error("pointer API is not supported for non-C backends");
             exit(1);
         }

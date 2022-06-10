@@ -148,7 +148,7 @@ class Msg;
     MUTOPT (uint32_t, topIndent, 0) \
     MUTOPT (std::string, indString, "\t") \
     /* input API */ \
-    MUTOPT (input_api_t, input_api, INPUT_DEFAULT) \
+    MUTOPT (Api, input_api, Api::DEFAULT) \
     MUTOPT (std::string, yycursor, "YYCURSOR") \
     MUTOPT (std::string, yymarker, "YYMARKER") \
     MUTOPT (std::string, yyctxmarker, "YYCTXMARKER") \

@@ -146,7 +146,7 @@ static void gen_restore(Output &output, CodeList *stmts)
     Scratchbuf &o = output.scratchbuf;
     const char *text;
 
-    if (opts->input_api == INPUT_DEFAULT) {
+    if (opts->input_api == Api::DEFAULT) {
         text = o.str(opts->yycursor).cstr(" = ").str(opts->yymarker).flush();
         append(stmts, code_stmt(alc, text));
     }
@@ -641,7 +641,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
-    const bool generic = opts->input_api == INPUT_CUSTOM;
+    const bool generic = opts->input_api == Api::CUSTOM;
     const tcmd_t *cmd = dfa.tcpool[tcid];
 
     // single tag, backwards compatibility, use context marker
@@ -714,7 +714,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
 void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &rule)
 {
     const opt_t *opts = output.block().opts;
-    const bool generic = opts->input_api == INPUT_CUSTOM;
+    const bool generic = opts->input_api == Api::CUSTOM;
     const std::vector<Tag> &tags = dfa.tags;
     const tagver_t *fins = dfa.finvers;
     code_alc_t &alc = output.allocator;
@@ -838,7 +838,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
     if (!negtag.empty()) {
         // With generic API there is no explicit negative NULL value, so it is
         // necessary to materialize no-match value in a tag.
-        DASSERT(opts->input_api == INPUT_CUSTOM);
+        DASSERT(opts->input_api == Api::CUSTOM);
         append(stmts, code_text(alc, o.cstr("/* materialize no-match value */").flush()));
         gen_settag(output, stmts, negtag, true, false);
         append(stmts, fixpostops);
@@ -863,7 +863,7 @@ void expand_fintags(const Tag &tag, std::vector<std::string> &fintags)
 
 const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)
 {
-    if (opts->input_api == INPUT_CUSTOM) {
+    if (opts->input_api == Api::CUSTOM) {
         o.str(opts->yylessthan);
         if (opts->api_style == API_FUNCTIONS) {
             o.cstr("(").u64(n).cstr(")");

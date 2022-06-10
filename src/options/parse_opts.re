@@ -272,8 +272,8 @@ opt_encoding_policy:
 opt_input:
 /*!local:re2c
     * { ERRARG("--api, --input", "default | custom", *argv); }
-    "default" end { opts.set_input_api(INPUT_DEFAULT); goto opt; }
-    "custom"  end { opts.set_input_api(INPUT_CUSTOM);  goto opt; }
+    "default" end { opts.set_input_api(Api::DEFAULT); goto opt; }
+    "custom"  end { opts.set_input_api(Api::CUSTOM);  goto opt; }
 */
 
 opt_empty_class:
