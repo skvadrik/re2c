@@ -122,7 +122,7 @@ enum class VarType: uint32_t {
 };
 
 // Bit flags for configurations used in directives.
-enum DirConf {
+enum DirConf: uint32_t {
     DCONF_FORMAT    = 1u,
     DCONF_SEPARATOR = 2u
 };
