@@ -222,12 +222,10 @@ static void add_condition_from_block(const OutputBlock &block, StartConds &conds
     conds.push_back(sc);
 }
 
-static void add_conditions_from_blocks(const blocks_t &blocks, StartConds &conds)
-{
-    for (size_t i = 0; i < blocks.size(); ++i) {
-        const OutputBlock &block = *blocks[i];
-        for (size_t i = 0; i < block.conds.size(); ++i) {
-            add_condition_from_block(block, conds, block.conds[i]);
+static void add_conditions_from_blocks(const blocks_t &blocks, StartConds &conds) {
+    for (const OutputBlock *block : blocks) {
+        for (const StartCond &cond : block->conds) {
+            add_condition_from_block(*block, conds, cond);
         }
     }
 }

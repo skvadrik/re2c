@@ -192,8 +192,8 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
 
         // Submatch groups corresponding to this tag pair: there may be more
         // than one capturing parenthesis per tag in regexp like (...(e)...).
-        for (size_t s = tag.lsub; s <= tag.hsub && h < lasth; s += 2, ++h) {
-            DASSERT(h - 1 == &h0[s / 2]);
+        for (size_t k = tag.lsub; k <= tag.hsub && h < lasth; k += 2, ++h) {
+            DASSERT(h - 1 == &h0[k / 2]);
 
             h->size = sz_so;
             h->offs = rm;
