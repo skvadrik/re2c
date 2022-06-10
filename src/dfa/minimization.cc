@@ -62,15 +62,15 @@ static void minimization_table(size_t *, const std::vector<dfa_state_t*> &, size
 static void minimization_moore(size_t *, const std::vector<dfa_state_t*> &, size_t);
 
 
-void minimization(dfa_t &dfa, dfa_minimization_t type)
+void minimization(dfa_t &dfa, Minimization type)
 {
     const size_t count = dfa.states.size();
     size_t *part = new size_t[count];
 
     switch (type) {
-    case DFA_MINIMIZATION_TABLE:
+    case Minimization::TABLE:
         minimization_table(part, dfa.states, dfa.nchars); break;
-    case DFA_MINIMIZATION_MOORE:
+    case Minimization::MOORE:
         minimization_moore(part, dfa.states, dfa.nchars); break;
     }
 

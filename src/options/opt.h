@@ -65,7 +65,7 @@ class Msg;
     /* #line directives */ \
     CONSTOPT (bool, iFlag, false) \
     /* internals */ \
-    CONSTOPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
+    CONSTOPT (Minimization, dfa_minimization, Minimization::MOORE) \
     CONSTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1) \
     CONSTOPT (posix_prectable_alg_t, posix_prectable, POSIX_PRECTABLE_COMPLEX) \
     CONSTOPT (FixedTags, fixed_tags, FixedTags::ALL) \

@@ -301,8 +301,8 @@ opt_input_encoding:
 opt_dfa_minimization:
 /*!local:re2c
     * { ERRARG("--dfa-minimization", "table | moore", *argv); }
-    "table" end { globopts.dfa_minimization = DFA_MINIMIZATION_TABLE; goto opt; }
-    "moore" end { globopts.dfa_minimization = DFA_MINIMIZATION_MOORE; goto opt; }
+    "table" end { globopts.dfa_minimization = Minimization::TABLE; goto opt; }
+    "moore" end { globopts.dfa_minimization = Minimization::MOORE; goto opt; }
 */
 
 opt_posix_closure:

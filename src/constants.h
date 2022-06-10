@@ -56,9 +56,9 @@ enum class EmptyClassPolicy: uint32_t {
     ERROR        // compilation error
 };
 
-enum dfa_minimization_t {
-    DFA_MINIMIZATION_TABLE,
-    DFA_MINIMIZATION_MOORE
+enum class Minimization: uint32_t {
+    TABLE,
+    MOORE
 };
 
 enum posix_closure_t {
