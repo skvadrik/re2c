@@ -308,8 +308,8 @@ opt_dfa_minimization:
 opt_posix_closure:
 /*!local:re2c
     * { ERRARG("--posix-closure", "gor1 | gtop", *argv); }
-    "gor1" end { globopts.posix_closure = POSIX_CLOSURE_GOR1; goto opt; }
-    "gtop" end { globopts.posix_closure = POSIX_CLOSURE_GTOP; goto opt; }
+    "gor1" end { globopts.posix_closure = PosixClosure::GOR1; goto opt; }
+    "gtop" end { globopts.posix_closure = PosixClosure::GTOP; goto opt; }
 */
 
 opt_posix_prectable:

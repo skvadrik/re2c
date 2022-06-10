@@ -310,7 +310,7 @@ determ_context_t<history_t>::determ_context_t(const opt_t *opts, Msg &msg
         worklist.reserve(nstates);
     }
 
-    if (opts->posix_closure == POSIX_CLOSURE_GTOP) {
+    if (opts->posix_closure == PosixClosure::GTOP) {
         gtop_buffer.reserve(nstates);
     }
     else {

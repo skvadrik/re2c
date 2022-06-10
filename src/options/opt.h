@@ -66,7 +66,7 @@ class Msg;
     CONSTOPT (bool, iFlag, false) \
     /* internals */ \
     CONSTOPT (Minimization, dfa_minimization, Minimization::MOORE) \
-    CONSTOPT (posix_closure_t, posix_closure, POSIX_CLOSURE_GOR1) \
+    CONSTOPT (PosixClosure, posix_closure, PosixClosure::GOR1) \
     CONSTOPT (posix_prectable_alg_t, posix_prectable, POSIX_PRECTABLE_COMPLEX) \
     CONSTOPT (FixedTags, fixed_tags, FixedTags::ALL) \
     CONSTOPT (bool, lookahead, true) \

@@ -61,9 +61,10 @@ enum class Minimization: uint32_t {
     MOORE
 };
 
-enum posix_closure_t {
-    POSIX_CLOSURE_GOR1,
-    POSIX_CLOSURE_GTOP
+// Shortest path algorithm used in construction of POSIX epsilon-closure.
+enum class PosixClosure: uint32_t {
+    GOR1, // Goldberg-Radzik
+    GTOP  // global topological order
 };
 
 enum posix_prectable_alg_t {

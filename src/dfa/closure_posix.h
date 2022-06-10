@@ -35,8 +35,8 @@ inline void closure_posix(pdetctx_t &ctx)
     ctx.history.detach();
 
     switch (ctx.dc_opts->posix_closure) {
-        case POSIX_CLOSURE_GOR1: closure_posix_gor1(ctx); break;
-        case POSIX_CLOSURE_GTOP: closure_posix_gtop(ctx); break;
+        case PosixClosure::GOR1: closure_posix_gor1(ctx); break;
+        case PosixClosure::GTOP: closure_posix_gtop(ctx); break;
     }
 
     DDUMP_CLSTATS(ctx);
