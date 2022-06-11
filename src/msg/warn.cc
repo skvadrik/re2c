@@ -156,9 +156,8 @@ void Warn::swapped_range(const loc_t &loc, uint32_t l, uint32_t u)
     }
 }
 
-void Warn::undefined_control_flow(const Skeleton &skel
-    , std::vector<path_t> &paths, bool overflow)
-{
+void Warn::undefined_control_flow(
+    const Skeleton &skel, std::vector<path_t> &paths, bool overflow) {
     if (mask[UNDEFINED_CONTROL_FLOW] & WARNING) {
         const bool e = mask[UNDEFINED_CONTROL_FLOW] & ERROR;
         error_accuml |= e;
@@ -169,14 +168,12 @@ void Warn::undefined_control_flow(const Skeleton &skel
         msg.warning_start(skel.loc, e);
         fprintf(stderr, "control flow %sis undefined for strings that match "
             , incond(skel.cond).c_str());
-        const size_t count = paths.size();
-        if (count == 1) {
-            fprint_default_path(stderr, skel, paths[0]);
-        }
-        else {
-            for (size_t i = 0; i < count; ++i) {
+        if (paths.size() == 1) {
+            fprint_default_path(stderr, skel, paths.front());
+        } else {
+            for (const path_t &path : paths) {
                 fprintf(stderr, "\n\t");
-                fprint_default_path(stderr, skel, paths[i]);
+                fprint_default_path(stderr, skel, path);
             }
             fprintf (stderr, "\n");
         }

@@ -17,16 +17,14 @@ Input::Input(size_t fidx)
     , fidx(static_cast<uint32_t>(fidx))
 {}
 
-bool Input::open(const std::string &filename, const std::string *parent
-    , const std::vector<std::string> &incpaths)
-{
+bool Input::open(const std::string &filename, const std::string *parent,
+    const std::vector<std::string> &incpaths) {
     name = filename;
 
     if (!parent) {
         path = name;
         file = name == "<stdin>" ? stdin : fopen(name.c_str(), "rb");
-    }
-    else {
+    } else {
         // first, search relative to the directory of including file
         path = *parent;
         get_dir(path);
@@ -34,8 +32,9 @@ bool Input::open(const std::string &filename, const std::string *parent
         file = fopen(path.c_str(), "rb");
 
         // otherwise search in all include paths
-        for (size_t i = 0; !file && i < incpaths.size(); ++i) {
-            path = incpaths[i] + name;
+        for (const std::string &incpath : incpaths) {
+            if (file != nullptr) break;
+            path = incpath + name;
             file = fopen(path.c_str(), "rb");
         }
 

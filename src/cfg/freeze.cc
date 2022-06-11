@@ -19,18 +19,14 @@ namespace re2c {
  * They also become immutable, because different commands may
  * share representation in memory.
  */
-void freeze_tags(dfa_t &dfa)
-{
+void freeze_tags(dfa_t &dfa) {
     tcpool_t &pool = dfa.tcpool;
-    const size_t
-        nstate = dfa.states.size(),
-        nsym = dfa.nchars;
+    const size_t nsym = dfa.nchars;
 
     dfa.tcid0 = pool.insert(dfa.tcmd0);
     dfa.tcmd0 = nullptr;
 
-    for (size_t i = 0; i < nstate; ++i) {
-        dfa_state_t *s = dfa.states[i];
+    for (dfa_state_t *s : dfa.states) {
         tcmd_t **cmd = s->tcmd,
             **const fin = cmd + nsym,
             **const fall = fin + 1;

@@ -179,8 +179,8 @@ void compute_prectable_complex(ctx_t &ctx)
     // array of boundaries in the sorted configuration array.
     uint32_t maxfin = 0;
     sortcores.resize(newdim);
-    for (typename ctx_t::cconfiter_t c = state.begin(), e = state.end(); c != e; ++c) {
-        typename ctx_t::history_t::node_t &n = history.node(c->thist);
+    for (const typename ctx_t::conf_t &conf : state) {
+        typename ctx_t::history_t::node_t &n = history.node(conf.thist);
         if (n.finidx >= USED) {
             n.finidx = maxfin++;
             fcount[n.finidx] = 0;

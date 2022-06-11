@@ -48,8 +48,8 @@ static inline uint32_t hash4(uint32_t h, uint32_t k)
 static inline uint32_t hash_path(const std::vector<uint32_t> &path)
 {
     uint32_t h = 0;
-    for (size_t i = 0; i < path.size(); ++i) {
-        h = hash4(h, path[i]);
+    for (uint32_t i : path) {
+        h = hash4(h, i);
     }
     return h;
 }
@@ -117,12 +117,11 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t> &path,
             ? static_cast<hidx_t>(histsize) : 0;
 
         // pretty nodes for TNFA states
-        for (std::set<const nfa_state_t*>::const_iterator i = active.begin();
-                i != active.end(); ++i) {
+        for (const nfa_state_t *s : active) {
             fprintf(stderr,
                 "  nx%u_%u_%u"
                 " [label=\"s%u\" style=\"rounded,filled\" bgcolor=lightgray]\n",
-                targetx, k, index(nfa, *i), index(nfa, *i));
+                targetx, k, index(nfa, s), index(nfa, s));
         }
 
         used.clear();
@@ -229,7 +228,6 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew)
     if (!ctx.dc_opts->dump_dfa_tree) return;
 
     const nfa_t &nfa = ctx.nfa;
-    cclositer_t b = ctx.state.begin(), e = ctx.state.end(), c;
     const uint32_t origin = ctx.dc_origin;
     const uint32_t target = ctx.dc_target;
     const uint32_t targetx = isnew ? target : ++uniqidx;
@@ -253,26 +251,25 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew)
     fprintf(stderr,
         "   subgraph {\n"
         "    rank=same\n");
-    for (c = b; c != e; ++c) {
+    for (const clos_t &c : ctx.state) {
         fprintf(stderr,
             "    n%u_%u [label=\"s%u\" style=\"rounded,filled\" bgcolor=lightgray]\n",
-            targetx, index(nfa, c->state), index(nfa, c->state));
+            targetx, index(nfa, c.state), index(nfa, c.state));
     }
     fprintf(stderr, "   }\n");
     fprintf(stderr, "   style=\"rounded%s\"\n", isnew ? "" : ",dotted");
 
     // transitions constituiting the tag history tree
-    for (c = b; c != e; ++c) {
+    for (const clos_t &c : ctx.state) {
         if (origin == dfa_t::NIL) {
             fprintf(stderr, "   void");
-        }
-        else {
+        } else {
             fprintf(stderr, "   n%u_%u",
-                origin, index(nfa, ctx.dc_kernels[origin]->state[c->origin]));
+                origin, index(nfa, ctx.dc_kernels[origin]->state[c.origin]));
         }
-        dump_history1(ctx.history, used_nodes, c->thist);
+        dump_history1(ctx.history, used_nodes, c.thist);
         fprintf(stderr, "->n%u_%u%s\n",
-            targetx, index(nfa, c->state), isnew ? "" : " [style=dotted]");
+            targetx, index(nfa, c.state), isnew ? "" : " [style=dotted]");
     }
 
     // end cluster for the current tag history tree
@@ -280,9 +277,9 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew)
 
     // save TNFA origins for this TDFA state
     origins_t &origins = origmap[std::make_pair(origin, ctx.dc_symbol)];
-    for (c = b; c != e; ++c) {
+    for (const clos_t &c : ctx.state) {
         const nfa_state_t *o = origin == dfa_t::NIL ? nullptr
-            : ctx.dc_kernels[origin]->state[c->origin];
+            : ctx.dc_kernels[origin]->state[c.origin];
         origins.push_back(o);
     }
 }

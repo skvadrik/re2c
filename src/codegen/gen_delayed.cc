@@ -9,15 +9,12 @@
 
 namespace re2c {
 
-static OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx, const char *name)
-{
-    const blocks_t &cblocks = ctx.global->cblocks;
-    for (size_t i = 0; i < cblocks.size(); ++i) {
-        if (cblocks[i]->name.compare(name) == 0) return cblocks[i];
+static OutputBlock *find_block_with_name(CodegenCtxPass1 &ctx, const char *name) {
+    for (OutputBlock *b : ctx.global->cblocks) {
+        if (b->name.compare(name) == 0) return b;
     }
-    const blocks_t &hblocks = ctx.global->hblocks;
-    for (size_t i = 0; i < hblocks.size(); ++i) {
-        if (hblocks[i]->name.compare(name) == 0) return hblocks[i];
+    for (OutputBlock *b : ctx.global->hblocks) {
+        if (b->name.compare(name) == 0) return b;
     }
     return nullptr;
 }
@@ -47,21 +44,21 @@ static std::string output_state_get(const opt_t *opts)
     return opts->state_get + (opts->state_get_naked ? "" : "()");
 }
 
-void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &tags)
-{
+void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &tags) {
     DASSERT(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
 
     const char *fmt = code->fmt.format;
     const char *sep = code->fmt.separator;
-
-    tagnames_t::const_iterator ib = tags.begin(), ie = tags.end(), it;
-    for (it = ib; it != ie; ++it) {
-        if (sep && it != ib) {
+    bool first = true;
+    for (const std::string &tag : tags) {
+        if (first) {
+            first = false;
+        } else if (sep != nullptr) {
             buf.cstr(sep);
         }
-        if (fmt) {
+        if (fmt != nullptr) {
             std::ostringstream s(fmt);
-            argsubst(s, opts->api_sigil, "tag", true, *it);
+            argsubst(s, opts->api_sigil, "tag", true, tag);
             buf.str(s.str());
         }
     }
@@ -75,14 +72,12 @@ void gen_tags(Scratchbuf &buf, const opt_t *opts, Code *code, const tagnames_t &
     code->raw.data = buf.flush();
 }
 
-static void add_tags_from_blocks(const blocks_t &blocks, tagnames_t &tags, bool multival)
-{
-    for (size_t i = 0; i < blocks.size(); ++i) {
-        const OutputBlock &block = *blocks[i];
+static void add_tags_from_blocks(const blocks_t &blocks, tagnames_t &tags, bool multival) {
+    for (OutputBlock *b : blocks) {
         if (multival) {
-            tags.insert(block.mtags.begin(), block.mtags.end());
+            tags.insert(b->mtags.begin(), b->mtags.end());
         } else {
-            tags.insert(block.stags.begin(), block.stags.end());
+            tags.insert(b->stags.begin(), b->stags.end());
         }
     }
 }
@@ -117,26 +112,32 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
 {
     DASSERT(opts->target == Target::CODE);
 
+    if (conds.empty()) return;
+    const StartCond *first_cond = &conds.front();
+    const StartCond *last_cond = &conds.back();
+
     if (code->fmt.format) {
         const char *fmt = code->fmt.format;
         const char *sep = code->fmt.separator;
-
-        for (size_t i = 0; i < conds.size(); ++i) {
-            if (i > 0 && sep) buf.cstr(sep);
+        uint32_t cond_number = 0;
+        for (const StartCond &cond : conds) {
+            if (sep != nullptr && &cond != first_cond) {
+                buf.cstr(sep);
+            }
             std::ostringstream s(fmt);
             // The main substitution (the one allowing unnamed sigil) must go last, or
             // else it will erroneously substitute all the named ones.
-            size_t cid = opts->loop_switch ? conds[i].number : i;
+            size_t cid = opts->loop_switch ? cond.number : cond_number;
             argsubst(s, opts->api_sigil, "num", false, cid);
-            argsubst(s, opts->api_sigil, "cond", true, conds[i].name);
+            argsubst(s, opts->api_sigil, "cond", true, cond.name);
             buf.str(s.str());
+            ++cond_number;
         }
         buf.cstr("\n");
 
         code->kind = CodeKind::RAW;
         code->raw.size = buf.stream().str().length();
         code->raw.data = buf.flush();
-
     } else {
         const char *start = nullptr, *end = nullptr;
         CodeList *stmts = code_list(alc);
@@ -145,12 +146,12 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
         if (opts->lang == Lang::C) {
             start = buf.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
             end = "};";
-            for (size_t i = 0; i < conds.size(); ++i) {
-                buf.str(conds[i].name);
+            for (const StartCond &cond : conds) {
+                buf.str(cond.name);
                 if (opts->loop_switch) {
-                    buf.cstr(" = ").u32(conds[i].number);
+                    buf.cstr(" = ").u32(cond.number);
                 }
-                if (i + 1 < conds.size()) { // do not append comma after the last one
+                if (&cond != last_cond) { // do not append comma after the last one
                     buf.cstr(",");
                 }
                 append(block, code_text(alc, buf.flush()));
@@ -158,11 +159,11 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
         } else if (opts->lang == Lang::GO) {
             start = buf.cstr("const (").flush();
             end = ")";
-            for (size_t i = 0; i < conds.size(); ++i) {
-                buf.str(conds[i].name);
+            for (const StartCond &cond : conds) {
+                buf.str(cond.name);
                 if (opts->loop_switch) {
-                    buf.cstr(" = ").u32(conds[i].number);
-                } else if (i == 0) {
+                    buf.cstr(" = ").u32(cond.number);
+                } else if (&cond == first_cond) {
                     buf.cstr(" = iota");
                 }
                 append(block, code_text(alc, buf.flush()));
@@ -174,10 +175,9 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
             start = "";
             end = "";
             DASSERT(opts->loop_switch);
-            for (size_t i = 0; i < conds.size(); ++i) {
-                const StartCond &c = conds[i];
-                buf.cstr("const ").str(c.name).cstr(": ")
-                    .cstr(opts->fFlag ? "isize" : "usize").cstr(" = ").u32(c.number);
+            for (const StartCond &cond : conds) {
+                buf.cstr("const ").str(cond.name).cstr(": ")
+                    .cstr(opts->fFlag ? "isize" : "usize").cstr(" = ").u32(cond.number);
                 append(block, code_stmt(alc, buf.flush()));
             }
         } else {
@@ -195,18 +195,17 @@ static void gen_cond_enum(Scratchbuf &buf, code_alc_t &alc, Code *code, const op
     }
 }
 
-static void add_condition_from_block(const OutputBlock &block, StartConds &conds,
-    const StartCond &cond)
-{
+static void add_condition_from_block(
+    const OutputBlock &block, StartConds &conds, const StartCond &cond) {
     // Condition prefix is specific to the block that defines it. If a few blocks define
     // conditions with the same name, but a different prefix, they should have different
     // enum entries.
     StartCond sc = cond;
     sc.name = block.opts->condEnumPrefix + sc.name;
 
-    for (size_t i = 0; i < conds.size(); ++i) {
-        if (conds[i].name == sc.name) {
-            if (conds[i].number == sc.number) {
+    for (const StartCond &cond : conds) {
+        if (cond.name == sc.name) {
+            if (cond.number == sc.number) {
                 // A duplicate condition, it's not an error but don't add it.
                 return;
             } else {
@@ -266,13 +265,11 @@ static void expand_cond_enum(CodegenCtxPass1 &ctx, Code *code)
     gen_cond_enum(buf, alc, code, globopts, conds);
 }
 
-static void gen_state_goto_cases(CodegenCtxPass1 &ctx, CodeCases *cases,
-    const OutputBlock *block)
-{
+static void gen_state_goto_cases(
+    CodegenCtxPass1 &ctx, CodeCases *cases, const OutputBlock *block) {
     code_alc_t &alc = ctx.global->allocator;
-    for (storable_states_t::const_iterator i = block->fill_goto.begin();
-            i != block->fill_goto.end(); ++i) {
-        append(cases, code_case_number(alc, i->second, static_cast<int32_t>(i->first)));
+    for (const auto &i : block->fill_goto) {
+        append(cases, code_case_number(alc, i.second, static_cast<int32_t>(i.first)));
     }
 }
 
@@ -322,9 +319,7 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
     if (global) {
         // No block names are specified: generate a global switch. It includes
         // all blocks except for the `re2c:use` ones which have a local switch.
-        const blocks_t &blocks = *ctx.global->pblocks;
-        for (size_t i = 0; i < blocks.size(); ++i) {
-            const OutputBlock *b = blocks[i];
+        for (const OutputBlock *b : *ctx.global->pblocks) {
             if (b->kind != InputBlock::USE) {
                 gen_state_goto_cases(ctx, cases, b);
 
@@ -340,10 +335,8 @@ static void gen_state_goto(CodegenCtxPass1 &ctx, Code *code)
         }
     } else {
         // Generate a switch for all specified named blocks.
-        blocks_t &blocks = ctx.global->tmpblocks;
-        find_blocks(ctx, code->fmt.block_names, blocks, "getstate:re2c");
-        for (size_t i = 0; i < blocks.size(); ++i) {
-            const OutputBlock *b = blocks[i];
+        find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, "getstate:re2c");
+        for (const OutputBlock *b : ctx.global->tmpblocks) {
             if (!b->start_label) {
                 error("block '%s' does not generate code, so it should not be"
                     " listed in `getstate:re2c` directive", b->name.c_str());
@@ -444,11 +437,9 @@ static void gen_yystate_def(CodegenCtxPass1 &ctx, Code *code)
     }
 }
 
-static size_t max_among_blocks(const blocks_t &blocks, size_t max, CodeKind kind)
-{
-    for (size_t i = 0; i < blocks.size(); ++i) {
-        const OutputBlock &block = *blocks[i];
-        max = std::max(max, kind == CodeKind::MAXFILL ? block.max_fill : block.max_nmatch);
+static size_t max_among_blocks(const blocks_t &blocks, size_t max, CodeKind kind) {
+    for (const OutputBlock *b : blocks) {
+        max = std::max(max, kind == CodeKind::MAXFILL ? b->max_fill : b->max_nmatch);
     }
     return max;
 }
@@ -558,9 +549,8 @@ static void gen_cond_goto(CodegenCtxPass1 &ctx, Code *code)
     const char *text;
 
     if (opts->target == Target::DOT) {
-        for (size_t i = 0; i < ncond; ++i) {
-            const std::string &cond = conds[i].name;
-            text = o.cstr("0 -> ").str(cond).cstr(" [label=\"state=").str(cond)
+        for (const StartCond &cond : conds) {
+            text = o.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name)
                 .cstr("\"]").flush();
             append(stmts, code_text(alc, text));
         }
@@ -576,14 +566,12 @@ static void gen_cond_goto(CodegenCtxPass1 &ctx, Code *code)
             warn_cond_ord = false;
 
             CodeCases *ccases = code_cases(alc);
-            for (size_t i = 0; i < ncond; ++i) {
-                const std::string &cond = conds[i].name;
-
+            for (const StartCond &cond : conds) {
                 CodeList *body = code_list(alc);
-                text = o.cstr("goto ").str(opts->condPrefix).str(cond).flush();
+                text = o.cstr("goto ").str(opts->condPrefix).str(cond.name).flush();
                 append(body, code_stmt(alc, text));
 
-                text = o.str(opts->condEnumPrefix).str(cond).flush();
+                text = o.str(opts->condEnumPrefix).str(cond.name).flush();
                 append(ccases, code_case_string(alc, body, text));
             }
             text = o.str(output_cond_get(opts)).flush();
@@ -602,22 +590,20 @@ static void gen_cond_goto(CodegenCtxPass1 &ctx, Code *code)
     code->block.fmt = CodeBlock::RAW;
 }
 
-static void gen_cond_table(CodegenCtxPass1 &ctx, Code *code)
-{
+static void gen_cond_table(CodegenCtxPass1 &ctx, Code *code) {
     const opt_t *opts = ctx.block->opts;
     code_alc_t &alc = ctx.global->allocator;
-    Scratchbuf &o = ctx.global->scratchbuf;
     const StartConds &conds = ctx.block->conds;
-    const size_t ncond = conds.size();
+    Scratchbuf &o = ctx.global->scratchbuf;
 
     CodeList *stmts = code_list(alc);
 
-    o.cstr("static void *").str(opts->yyctable).cstr("[").u64(ncond).cstr("] = {");
+    o.cstr("static void *").str(opts->yyctable).cstr("[").u64(conds.size()).cstr("] = {");
     append(stmts, code_text(alc, o.flush()));
 
     CodeList *block = code_list(alc);
-    for (size_t i = 0; i < ncond; ++i) {
-        o.cstr("&&").str(opts->condPrefix).str(conds[i].name).cstr(",");
+    for (const StartCond &cond : conds) {
+        o.cstr("&&").str(opts->condPrefix).str(cond.name).cstr(",");
         append(block, code_text(alc, o.flush()));
     }
     append(stmts, code_block(alc, block, CodeBlock::INDENTED));

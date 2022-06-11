@@ -44,10 +44,9 @@ void add_named_def(symtab_t &symtab, const std::string &name, const AST *ast,
     }
 }
 
-void merge_symtab(symtab_t &symtab, const symtab_t &other, const loc_t &loc, Msg &msg)
-{
-    for (symtab_t::const_iterator i = other.begin(); i != other.end(); ++i) {
-        add_named_def(symtab, i->first, i->second, loc, msg);
+void merge_symtab(symtab_t &symtab, const symtab_t &other, const loc_t &loc, Msg &msg) {
+    for (const auto &i : other) {
+        add_named_def(symtab, i.first, i.second, loc, msg);
     }
 }
 

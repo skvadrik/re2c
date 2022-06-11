@@ -1229,8 +1229,8 @@ yyreduce:
   case 17: /* rule: TOKEN_CLIST trailexpr ccode  */
 #line 112 "../src/parse/parser.ypp"
                               {
-    for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-        find_or_add_spec(context.specs, *i).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
+    for (const std::string &cond : *(yyvsp[-2].clist)) {
+        find_or_add_spec(context.specs, cond).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
     }
     delete (yyvsp[-2].clist);
 }
@@ -1240,8 +1240,8 @@ yyreduce:
   case 18: /* rule: TOKEN_CLIST '*' ccode  */
 #line 118 "../src/parse/parser.ypp"
                         {
-    for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-        find_or_add_spec(context.specs, *i).defs.push_back((yyvsp[0].semact));
+    for (const std::string &cond : *(yyvsp[-2].clist)) {
+        find_or_add_spec(context.specs, cond).defs.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-2].clist);
 }
@@ -1251,8 +1251,8 @@ yyreduce:
   case 19: /* rule: TOKEN_CLIST '$' ccode  */
 #line 124 "../src/parse/parser.ypp"
                         {
-    for(CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-        find_or_add_spec(context.specs, *i).eofs.push_back((yyvsp[0].semact));
+    for (const std::string &cond : *(yyvsp[-2].clist)) {
+        find_or_add_spec(context.specs, cond).eofs.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-2].clist);
 }
@@ -1262,8 +1262,8 @@ yyreduce:
   case 20: /* rule: TOKEN_CSETUP TOKEN_CODE  */
 #line 130 "../src/parse/parser.ypp"
                           {
-    for (CondList::const_iterator i = (yyvsp[-1].clist)->begin(); i != (yyvsp[-1].clist)->end(); ++i) {
-        find_or_add_spec(context.specs, *i).setup.push_back((yyvsp[0].semact));
+    for (const std::string &cond : *(yyvsp[-1].clist)) {
+        find_or_add_spec(context.specs, cond).setup.push_back((yyvsp[0].semact));
     }
     delete (yyvsp[-1].clist);
 }

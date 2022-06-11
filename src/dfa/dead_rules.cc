@@ -235,12 +235,9 @@ static void warn_sentinel_in_midrule(const dfa_t &dfa, const opt_t *opts
 
 static void remove_dead_final_states(dfa_t &dfa, const bool *fallthru)
 {
-    const size_t
-        nstates = dfa.states.size(),
-        nsym = dfa.nchars;
+    const size_t nsym = dfa.nchars;
 
-    for (size_t i = 0; i < nstates; ++i) {
-        dfa_state_t *s = dfa.states[i];
+    for (dfa_state_t *s : dfa.states) {
         if (s->rule == Rule::NONE) continue;
 
         // final state is useful iff there is at least one
@@ -285,11 +282,9 @@ static void find_fallback_states(dfa_t &dfa, const bool *fallthru)
 
 static void find_fallback_states_with_eof_rule(dfa_t &dfa)
 {
-    const size_t nstate = dfa.states.size();
     const size_t nsym = dfa.nchars;
 
-    for (size_t i = 0; i < nstate; ++i) {
-        dfa_state_t *s = dfa.states[i];
+    for (dfa_state_t *s : dfa.states) {
         if (s->rule == Rule::NONE || s->rule == dfa.eof_rule) continue;
 
         // With EOF rule, a final state is a fallback state if it has outgoing

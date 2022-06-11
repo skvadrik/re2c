@@ -18,15 +18,14 @@ namespace re2c {
  * Don't forget to include zero and upper bound, even if they
  * do not explicitely apper in ranges.
  */
-void split_charset(RESpec &spec)
-{
+void split_charset(RESpec &spec) {
     std::set<uint32_t> cs;
     std::stack<const RE*> todo;
 
-    std::vector<RE*>::const_iterator
-        i = spec.res.begin(),
-        e = spec.res.end();
-    for (; i != e; ++i) todo.push(*i);
+    for (const RE *re : spec.res) {
+        todo.push(re);
+    }
+
     while (!todo.empty()) {
         const RE *re = todo.top();
         todo.pop();

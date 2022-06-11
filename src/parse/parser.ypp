@@ -110,26 +110,26 @@ rule
     find_or_add_spec(context.specs, "").eofs.push_back($2);
 }
 | TOKEN_CLIST trailexpr ccode {
-    for(CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
-        find_or_add_spec(context.specs, *i).rules.push_back(ASTRule($2, $3));
+    for (const std::string &cond : *$1) {
+        find_or_add_spec(context.specs, cond).rules.push_back(ASTRule($2, $3));
     }
     delete $1;
 }
 | TOKEN_CLIST '*' ccode {
-    for(CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
-        find_or_add_spec(context.specs, *i).defs.push_back($3);
+    for (const std::string &cond : *$1) {
+        find_or_add_spec(context.specs, cond).defs.push_back($3);
     }
     delete $1;
 }
 | TOKEN_CLIST '$' ccode {
-    for(CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
-        find_or_add_spec(context.specs, *i).eofs.push_back($3);
+    for (const std::string &cond : *$1) {
+        find_or_add_spec(context.specs, cond).eofs.push_back($3);
     }
     delete $1;
 }
 | TOKEN_CSETUP TOKEN_CODE {
-    for (CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
-        find_or_add_spec(context.specs, *i).setup.push_back($2);
+    for (const std::string &cond : *$1) {
+        find_or_add_spec(context.specs, cond).setup.push_back($2);
     }
     delete $1;
 }

@@ -100,13 +100,12 @@ static void compute_re_size_and_depth(
 void compute_size_and_depth(const std::vector<RE*> &res, size_t *psize, size_t *pdepth) {
     std::vector<StackItem> stack;
 
-    const size_t nre = res.size();
-    DASSERT(nre > 0);
-    *psize = nre - 1;
+    DASSERT(!res.empty());
+    *psize = res.size() - 1;
     *pdepth = 0;
 
-    for (size_t i = 0; i < nre; ++i) {
-        compute_re_size_and_depth(res[i], stack, psize, pdepth);
+    for (const RE *re : res) {
+        compute_re_size_and_depth(re, stack, psize, pdepth);
     }
 }
 

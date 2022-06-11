@@ -596,8 +596,8 @@ static void gen_assign_many(Output &output, CodeList *stmts,
     const std::vector<std::string> &many, const std::string &rhs)
 {
     Scratchbuf &o = output.scratchbuf;
-    for (size_t i = 0; i < many.size(); ++i) {
-        o.str(many[i]).cstr(" = ");
+    for (const std::string &s : many) {
+        o.str(s).cstr(" = ");
     }
     o.str(rhs);
     append(stmts, code_stmt(output.allocator, o.flush()));

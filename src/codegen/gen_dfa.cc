@@ -59,9 +59,8 @@ static void gen_storable_state_cases(Output &output, CodeCases *cases)
 
     // TODO: If `re2c:eof` is not used, some of these cases are redundant (they contain a
     // single transition to the DFA state that has the corresponding YYFILL invocation).
-    for (storable_states_t::const_iterator i = block.fill_goto.begin();
-            i != block.fill_goto.end(); ++i) {
-        append(cases, code_case_number(alc, i->second, static_cast<int32_t>(i->first)));
+    for (const auto &i : block.fill_goto) {
+        append(cases, code_case_number(alc, i.second, static_cast<int32_t>(i.first)));
     }
 
     // Prepare a single range [-1, 1) covering cases `yystate = -1` and `yystate = 0`.
@@ -203,36 +202,34 @@ static inline BlockNameList *block_list_for_implicit_state_goto(code_alc_t &alc,
     return p;
 }
 
-void gen_code(Output &output, dfas_t &dfas)
-{
+void gen_code(Output &output, dfas_t &dfas) {
     OutputBlock &oblock = output.block();
     const opt_t *opts = oblock.opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
-    dfas_t::const_iterator i, b = dfas.begin(), e = dfas.end();
-    if (b == e) return;
+    if (dfas.empty()) return;
+    const std::unique_ptr<DFA> &first_dfa = *dfas.begin();
 
     // All conditions are named, so it suffices to check the first DFA.
-    const bool is_cond_block = !(*b)->cond.empty();
+    const bool is_cond_block = !first_dfa->cond.empty();
 
-    for (i = b; i != e; ++i) {
-        const bool first = i == b;
-        DFA &dfa = *(*i);
+    for (const std::unique_ptr<DFA> &dfa : dfas) {
+        const bool first = (dfa == first_dfa);
 
         if (opts->bFlag) {
-            dfa.bitmap = code_bitmap(alc, std::min(dfa.ubChar, 256u));
-            for (State *s = dfa.head; s; s = s->next) {
+            dfa->bitmap = code_bitmap(alc, std::min(dfa->ubChar, 256u));
+            for (State *s = dfa->head; s; s = s->next) {
                 if (s->isBase) {
                     DASSERT(s->next);
-                    insert_bitmap(alc, dfa.bitmap, &s->next->go, s);
+                    insert_bitmap(alc, dfa->bitmap, &s->next->go, s);
                 }
             }
         }
 
         // Allocate labels for DFA states, but do not assign indices yet: they will be
         // assigned after the used label analysis only to the labels that are used.
-        for (State *s = dfa.head; s; s = s->next) {
+        for (State *s = dfa->head; s; s = s->next) {
             s->label = new_label(alc, Label::NONE);
         }
 
@@ -240,22 +237,22 @@ void gen_code(Output &output, dfas_t &dfas)
             if (first) {
                 if (opts->startlabel_force) {
                     // User-enforced start label.
-                    dfa.start_label = new_label(alc, output.label_counter++);
-                    dfa.start_label->used = true;
+                    dfa->start_label = new_label(alc, output.label_counter++);
+                    dfa->start_label->used = true;
                 } else if (opts->fFlag) {
                     // Start label is needed in `-f` mode: it points to state 0 (the
                     // beginning of block, before condition dispatch in `-c` mode).
-                    dfa.start_label = new_label(alc, output.label_counter++);
+                    dfa->start_label = new_label(alc, output.label_counter++);
                 }
-                oblock.start_label = dfa.start_label;
+                oblock.start_label = dfa->start_label;
             }
             // Initial label points to the beginning of the DFA (after condition
             // dispatch in `-c` mode).
-            dfa.initial_label = new_label(alc, output.label_counter++);
-            dfa.head->action.set_initial();
+            dfa->initial_label = new_label(alc, output.label_counter++);
+            dfa->head->action.set_initial();
         } else {
             // In loop/switch mode the label of the first state is always used.
-            dfa.head->label->used = true;
+            dfa->head->label->used = true;
             // With loop/switch there are no labels, and each block has its own state
             // switch where all conditions are joined. Restart state counter from zero so
             // that cases start from zero. With skeleton conditions are separate.
@@ -264,12 +261,12 @@ void gen_code(Output &output, dfas_t &dfas)
 
         // Generate DFA transitions and perform used label analysis: for every transition
         // mark its destination state label as used.
-        for (State *s = dfa.head; s; s = s->next) {
-            code_go(alc, dfa, opts, s);
+        for (State *s = dfa->head; s; s = s->next) {
+            code_go(alc, *dfa, opts, s);
         }
 
         // Assign label indices (only to the labels that are used).
-        for (State *s = dfa.head; s; s = s->next) {
+        for (State *s = dfa->head; s; s = s->next) {
             if (s->label->used) s->label->index = output.label_counter++;
         }
 
@@ -280,11 +277,11 @@ void gen_code(Output &output, dfas_t &dfas)
             oblock.fill_index = output.label_counter;
         }
 
-        if (!dfa.cond.empty()) {
+        if (!dfa->cond.empty()) {
             // If loop/switch is used, condition numbers are the numeric indices of their
             // initial DFA state. Otherwise we do not assign explicit numbers, and
             // conditions are implicitly assigned consecutive numbers starting from zero.
-            StartCond sc = {dfa.cond, opts->loop_switch ? dfa.head->label->index : 0};
+            StartCond sc = {dfa->cond, opts->loop_switch ? dfa->head->label->index : 0};
             oblock.conds.push_back(sc);
         }
     }
@@ -295,31 +292,27 @@ void gen_code(Output &output, dfas_t &dfas)
     if (opts->target == Target::DOT) {
         append(program, code_text(alc, "digraph re2c {"));
         append(program, code_cond_goto(alc));
-        for (i = b; i != e; ++i) {
-            (*i)->emit_dot(output, program);
+        for (const std::unique_ptr<DFA> &dfa : dfas) {
+            dfa->emit_dot(output, program);
         }
         append(program, code_text(alc, "}"));
-    }
-    else if (opts->target == Target::SKELETON) {
-        for (i = b; i != e; ++i) {
-            DFA &dfa = *(*i);
-            if (output.skeletons.insert(dfa.name).second) {
-                emit_skeleton(output, program, dfa);
+    } else if (opts->target == Target::SKELETON) {
+        for (const std::unique_ptr<DFA> &dfa : dfas) {
+            if (output.skeletons.insert(dfa->name).second) {
+                emit_skeleton(output, program, *dfa);
             }
         }
-    }
-    else {
+    } else {
         ind = output.block().opts->topIndent;
         bool have_bitmaps = false;
 
         const char *text;
         CodeList *program1 = code_list(alc);
         CodeCases *cases = code_cases(alc);
-        for (i = b; i != e; ++i) {
-            const bool first = i == b;
-            DFA &dfa = *(*i);
+        for (std::unique_ptr<DFA> &dfa : dfas) {
+            const bool first = (dfa == first_dfa);
 
-            CodeList *bms = opts->bFlag ? gen_bitmap(output, dfa.bitmap) : nullptr;
+            CodeList *bms = opts->bFlag ? gen_bitmap(output, dfa->bitmap) : nullptr;
             have_bitmaps |= bms != nullptr;
 
             if (first && opts->fFlag) {
@@ -349,8 +342,8 @@ void gen_code(Output &output, dfas_t &dfas)
             }
 
             // start label
-            if (dfa.start_label) {
-                append(program1, code_nlabel(alc, dfa.start_label));
+            if (dfa->start_label) {
+                append(program1, code_nlabel(alc, dfa->start_label));
             }
 
             // user-defined start label
@@ -366,10 +359,10 @@ void gen_code(Output &output, dfas_t &dfas)
                 }
                 if (opts->condDivider.length()) {
                     o.str(opts->condDivider);
-                    argsubst(o.stream(), opts->condDividerParam, "cond", true, dfa.cond);
+                    argsubst(o.stream(), opts->condDividerParam, "cond", true, dfa->cond);
                     append(program1, code_textraw(alc, o.flush()));
                 }
-                text = o.str(opts->condPrefix).str(dfa.cond).flush();
+                text = o.str(opts->condPrefix).str(dfa->cond).flush();
                 append(program1, code_slabel(alc, text));
             }
 
@@ -377,7 +370,7 @@ void gen_code(Output &output, dfas_t &dfas)
                 // In the goto/label mode, generate DFA states as blocks of code preceded
                 // with labels, and `goto` transitions between states.
                 CodeList *body = code_list(alc);
-                gen_dfa_as_blocks_with_labels(output, dfa, body);
+                gen_dfa_as_blocks_with_labels(output, *dfa, body);
                 if (is_cond_block && bms) {
                     CodeList *block = code_list(alc);
                     append(block, bms);
@@ -390,7 +383,7 @@ void gen_code(Output &output, dfas_t &dfas)
                 // In the loop/switch mode append all DFA states as cases of the `yystate`
                 // switch. Merge DFAs for different conditions together in one switch.
                 DASSERT(!bms);
-                gen_dfa_as_switch_cases(output, dfa, cases);
+                gen_dfa_as_switch_cases(output, *dfa, cases);
             }
         }
         if (opts->loop_switch) {

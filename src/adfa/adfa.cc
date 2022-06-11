@@ -458,9 +458,8 @@ void DFA::calc_stats(OutputBlock &out)
 
     // calculate 'YYMAXNMATCH'
     max_nmatch = 0;
-    const size_t nrule = rules.size();
-    for (size_t i = 0; i < nrule; ++i) {
-        max_nmatch = std::max(max_nmatch, rules[i].ncap);
+    for (const Rule &rule : rules) {
+        max_nmatch = std::max(max_nmatch, rule.ncap);
     }
 
     // determine if 'YYMARKER' or 'YYBACKUP'/'YYRESTORE' pair is used
@@ -489,12 +488,10 @@ void DFA::calc_stats(OutputBlock &out)
     }
 
     if (!oldstyle_ctxmarker) {
-        for (size_t i = 0; i < tags.size(); ++i) {
-            const Tag &tag = tags[i];
+        for (const Tag &tag : tags) {
             if (history(tag)) {
                 mtagvars.insert(*tag.name);
-            }
-            else if (tag.name) {
+            } else if (tag.name) {
                 stagvars.insert(*tag.name);
             }
         }

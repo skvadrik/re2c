@@ -174,12 +174,11 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
 
 } // anonymous namespace
 
-void find_fixed_tags(RESpec &spec)
-{
+void find_fixed_tags(RESpec &spec) {
     std::vector<StackItem> stack;
     std::vector<Level> levels;
-    for (std::vector<RE*>::iterator i = spec.res.begin(); i != spec.res.end(); ++i) {
-        find_fixed_tags(spec, stack, levels, *i);
+    for (RE *re : spec.res) {
+        find_fixed_tags(spec, stack, levels, re);
     }
 }
 

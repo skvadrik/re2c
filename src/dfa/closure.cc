@@ -141,33 +141,32 @@ void prune(ctx_t &ctx)
     // the lowest rule. See note [at most one final item per closure].
 
     closure_t &closure = ctx.state, &buffer = ctx.reach;
-    clositer_t b = closure.begin(), e = closure.end(), i, f = e;
+    const clos_t *f = nullptr;
     buffer.clear();
 
-    for (i = b; i != e; ++i) {
-        nfa_state_t *s = i->state;
+    for (const clos_t &c : closure) {
+        nfa_state_t *s = c.state;
 
         closure_cleanup<ctx_t>(s);
 
         if (s->type == nfa_state_t::RAN) {
-            buffer.push_back(*i);
-        }
-        else if (s->type == nfa_state_t::FIN
-            && (f == e || s->rule < f->state->rule)) {
-            f = i;
+            buffer.push_back(c);
+        } else if (s->type == nfa_state_t::FIN
+            && (f == nullptr || s->rule < f->state->rule)) {
+            f = &c;
         }
     }
 
-    if (f != e) {
+    if (f != nullptr) {
         buffer.push_back(*f);
 
         // mark dropped rules as shadowed
         if (ctx.dc_msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
             std::valarray<Rule> &rules = ctx.nfa.rules;
             const uint32_t l = rules[f->state->rule].semact->loc.line;
-            for (i = b; i != e; ++i) {
-                if (i != f && i->state->type == nfa_state_t::FIN) {
-                    rules[i->state->rule].shadow.insert(l);
+            for (const clos_t &c : closure) {
+                if (&c != f && c.state->type == nfa_state_t::FIN) {
+                    rules[c.state->rule].shadow.insert(l);
                 }
             }
         }
@@ -178,9 +177,9 @@ void prune(ctx_t &ctx)
 
 void lower_lookahead_to_transition(closure_t &closure)
 {
-    for (clositer_t c = closure.begin(); c != closure.end(); ++c) {
-        c->ttran = c->thist;
-        c->thist = HROOT;
+    for (clos_t &c : closure) {
+        c.ttran = c.thist;
+        c.thist = HROOT;
     }
 }
 
@@ -197,7 +196,6 @@ void generate_versions(ctx_t &ctx)
     typename ctx_t::history_t &thist = ctx.history;
     typename ctx_t::newvers_t &newvers = ctx.dc_newvers;
 
-    clositer_t b = clos.begin(), e = clos.end(), c;
     typename ctx_t::newvers_t newacts(newver_cmp_t<typename ctx_t::history_t>(thist, ctx.dc_hc_caches));
     tcmd_t *cmd = nullptr;
 
@@ -205,11 +203,11 @@ void generate_versions(ctx_t &ctx)
     // allocate new version (negative for bottom and positive for
     // normal transition, however absolute value should be unique
     // among all versions of all tags)
-    for (c = b; c != e; ++c) {
-        const hidx_t l = c->thist, h = c->ttran;
+    for (clos_t &c : clos) {
+        const hidx_t l = c.thist, h = c.ttran;
         if (h == HROOT) continue;
 
-        const tagver_t *vs = tvtbl[c->tvers];
+        const tagver_t *vs = tvtbl[c.tvers];
         for (size_t t = 0; t < ntag; ++t) {
             const Tag &tag = tags[t];
 
@@ -230,10 +228,10 @@ void generate_versions(ctx_t &ctx)
     }
 
     // actions
-    for (typename ctx_t::newvers_t::iterator i = newacts.begin(); i != newacts.end(); ++i) {
-        const tagver_t m = i->second, v = i->first.base;
-        const hidx_t h = i->first.history;
-        const size_t t = i->first.tag;
+    for (const auto &i : newacts) {
+        const tagver_t m = i.second, v = i.first.base;
+        const hidx_t h = i.first.history;
+        const size_t t = i.first.tag;
         if (history(tags[t])) {
             cmd = dfa.tcpool.make_add(cmd, abs(m), abs(v), thist, h, t);
         } else {
@@ -242,18 +240,18 @@ void generate_versions(ctx_t &ctx)
     }
 
     // mark tags with history
-    for (typename ctx_t::newvers_t::iterator j = newvers.begin(); j != newvers.end(); ++j) {
-        if (history(tags[j->first.tag])) {
-            dfa.mtagvers.insert(abs(j->second));
+    for (const auto &j : newvers) {
+        if (history(tags[j.first.tag])) {
+            dfa.mtagvers.insert(abs(j.second));
         }
     }
 
     // update tag versions in closure
-    for (c = b; c != e; ++c) {
-        const hidx_t h = c->ttran;
+    for (clos_t &c : clos) {
+        const hidx_t h = c.ttran;
         if (h == HROOT) continue;
 
-        const tagver_t *vs = tvtbl[c->tvers];
+        const tagver_t *vs = tvtbl[c.tvers];
         for (size_t t = 0; t < ntag; ++t) {
             const tagver_t
                 v0 = vs[t],
@@ -266,7 +264,7 @@ void generate_versions(ctx_t &ctx)
                 vers[t] = newvers[x];
             }
         }
-        c->tvers = tvtbl.insert(vers);
+        c.tvers = tvtbl.insert(vers);
     }
 
     ctx.dc_actions = cmd;
@@ -311,18 +309,16 @@ void generate_stadfa_actions(ctx_t &ctx)
 {
     const size_t ntag = ctx.dfa.tags.size();
     allocator_t &alc = ctx.dc_allocator;
-    clositer_t b = ctx.state.begin(), e = ctx.state.end(), c;
 
     stacmd_t *cmd = nullptr;
 
     // store and transfer actions
     if (ctx.dc_origin == dfa_t::NIL) {
-        for (c = b; c != e; ++c) {
-            const int32_t i = static_cast<int32_t>(c->state - ctx.nfa.states);
+        for (const clos_t &c : ctx.state) {
+            const int32_t i = static_cast<int32_t>(c.state - ctx.nfa.states);
             for (size_t t = 0; t < ntag; ++t) {
                 if (!fixed(ctx.dfa.tags[t])) {
-                    cmd = make_stacmd(alc, stacmd_t::TRANSFER, cmd, t, i, -1,
-                        HROOT);
+                    cmd = make_stacmd(alc, stacmd_t::TRANSFER, cmd, t, i, -1, HROOT);
                 }
             }
         }
@@ -330,17 +326,14 @@ void generate_stadfa_actions(ctx_t &ctx)
     else {
         const kernel_t *kernel = ctx.dc_kernels[ctx.dc_origin];
 
-        for (c = b; c != e; ++c) {
-            const int32_t i = static_cast<int32_t>(c->state - ctx.nfa.states);
-            const int32_t j = static_cast<int32_t>(kernel->state[c->origin]
-                - ctx.nfa.states);
+        for (const clos_t &c : ctx.state) {
+            const int32_t i = static_cast<int32_t>(c.state - ctx.nfa.states);
+            const int32_t j = static_cast<int32_t>(kernel->state[c.origin] - ctx.nfa.states);
 
             // delayed store actions for transition tags
             for (size_t t = 0; t < ntag; ++t) {
-                if (!fixed(ctx.dfa.tags[t])
-                        && last(ctx.history, c->ttran, t) != TAGVER_ZERO) {
-                    cmd = make_stacmd(alc, stacmd_t::STORE, cmd, t, i, j,
-                        c->ttran);
+                if (!fixed(ctx.dfa.tags[t]) && last(ctx.history, c.ttran, t) != TAGVER_ZERO) {
+                    cmd = make_stacmd(alc, stacmd_t::STORE, cmd, t, i, j, c.ttran);
                 }
             }
 
@@ -364,8 +357,8 @@ void generate_stadfa_actions(ctx_t &ctx)
     }
 
     // accept actions (if there is a final TNFA substate, it must be unique)
-    for (c = b; c != e && c->state->type != nfa_state_t::FIN; ++c);
-    if (c != e) {
+    cclositer_t c = std::find_if(ctx.state.begin(), ctx.state.end(), clos_t::fin);
+    if (c != ctx.state.end()) {
         const int32_t i = static_cast<int32_t>(c->state - ctx.nfa.states);
 
         // save the head of store/transfer list before adding accept actions

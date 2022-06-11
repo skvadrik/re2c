@@ -23,8 +23,7 @@ static void fix_conopt(conopt_t &glob)
     }
 
     // append directory separator '/' to all paths that do not have it
-    for (size_t i = 0; i < glob.incpaths.size(); ++i) {
-        std::string &p = glob.incpaths[i];
+    for (std::string &p : glob.incpaths) {
         const char c = p.empty() ? 0 : *p.rbegin();
         if (c != '/' && c != '\\') {
             p.push_back('/');

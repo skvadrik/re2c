@@ -237,8 +237,8 @@ void closure_posix_gtop(ctx_t &ctx)
     gtop_heap_t &heap = ctx.gtop_heap;
 
     state.clear();
-    for (typename ctx_t::cconfiter_t c = reach.begin(); c != reach.end(); ++c) {
-        relax_gtop(ctx, *c);
+    for (const typename ctx_t::conf_t &conf : reach) {
+        relax_gtop(ctx, conf);
     }
 
     for (; !heap.empty(); ) {

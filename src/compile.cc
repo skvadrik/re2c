@@ -189,8 +189,8 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
             // compile AST to DFA
             dfas_t dfas;
-            for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
-                dfas.push_back(ast_to_dfa(*i, output));
+            for (const spec_t &spec : specs) {
+                dfas.push_back(ast_to_dfa(spec, output));
             }
 
             // compile DFA to code

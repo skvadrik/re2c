@@ -779,9 +779,8 @@ Code *emit_skeleton_epilog(Output &output)
     Scratchbuf &o = output.scratchbuf;
 
     CodeList *stmts = code_list(alc);
-    const std::set<std::string> &xs = output.skeletons;
-    for (std::set<std::string>::const_iterator i = xs.begin(); i != xs.end(); ++i) {
-        const char *if_cond = o.cstr("lex_").str(*i).cstr("() != 0").flush();
+    for (const std::string &s : output.skeletons) {
+        const char *if_cond = o.cstr("lex_").str(s).cstr("() != 0").flush();
         CodeList *if_code = code_list(alc);
         append(if_code, code_stmt(alc, "return 1"));
         append(stmts, code_if_then_else(alc, if_cond, if_code, nullptr, false));

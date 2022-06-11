@@ -16,10 +16,9 @@ namespace re2c {
 
 const char *const Scanner::ENDPOS = (const char*) std::numeric_limits<uint64_t>::max();
 
-Scanner::~Scanner()
-{
-    for (size_t i = files.size(); i --> 0; ) {
-        delete files[i];
+Scanner::~Scanner() {
+    for (Input *in: files) {
+        delete in;
     }
 }
 
@@ -96,19 +95,16 @@ bool Scanner::include(const std::string &filename, char *at)
     // are at the top). We want to break from the unreading cycle early, therefore we go
     // in reverse order of file offsets in buffer and break as soon as the end offset is
     // less than cursor (current position). `at` points at the start of include directive.
-    for (size_t i = 0; i < files.size(); ++i) {
-        Input *in = files[i];
+    for (Input *in : files) {
         if (in->so >= at) {
             // unread whole fragment
             fseek(in->file, in->so - in->eo, SEEK_CUR);
             in->so = in->eo = ENDPOS;
-        }
-        else if (in->eo >= at) {
+        } else if (in->eo >= at) {
             // fragment on the boundary, unread partially
             fseek(in->file, at - in->eo, SEEK_CUR);
             in->eo = cur - 1;
-        }
-        else {
+        } else {
             // the rest has been consumed already
             break;
         }
@@ -226,9 +222,8 @@ bool Scanner::gen_dep_file() const
     }
 
     fprintf(file, "%s:", escape_backslashes(globopts->output_file).c_str());
-    for (std::set<std::string>::const_iterator i = filedeps.begin();
-        i != filedeps.end(); ++i) {
-        fprintf(file, " %s", i->c_str());
+    for (const std::string &fdep : filedeps) {
+        fprintf(file, " %s", fdep.c_str());
     }
     fprintf(file, "\n");
 

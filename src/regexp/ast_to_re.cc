@@ -311,21 +311,16 @@ Range *char_to_range(RESpec &spec, const ASTChar &chr, bool icase)
         : rm.sym(c);
 }
 
-Range *cls_to_range(RESpec &spec, const AST *ast)
-{
+Range *cls_to_range(RESpec &spec, const AST *ast) {
     DASSERT(ast->type == AST::CLS);
 
     RangeMgr &rm = spec.rangemgr;
-    std::vector<ASTRange>::const_iterator
-        i = ast->cls.ranges->begin(),
-        e = ast->cls.ranges->end();
     Range *r = nullptr;
 
-    for (; i != e; ++i) {
-        Range *s = spec.opts->encoding.validateRange(rm, i->lower, i->upper);
+    for (const ASTRange &a : *ast->cls.ranges) {
+        Range *s = spec.opts->encoding.validateRange(rm, a.lower, a.upper);
         if (!s) {
-            spec.msg.error(i->loc, "bad code point range: '0x%X - 0x%X'"
-                , i->lower, i->upper);
+            spec.msg.error(a.loc, "bad code point range: '0x%X - 0x%X'", a.lower, a.upper);
             exit(1);
         }
         r = rm.add(r, s);
@@ -394,18 +389,14 @@ Range *ast_to_range(RESpec &spec, const AST *ast)
     exit(1);
 }
 
-RE *re_string(RESpec &spec, const AST *ast)
-{
+RE *re_string(RESpec &spec, const AST *ast) {
     DASSERT(ast->type == AST::STR);
 
     RE *x = nullptr;
-    std::vector<ASTChar>::const_iterator
-        i = ast->str.chars->begin(),
-        e = ast->str.chars->end();
-
     bool icase = is_icase(spec.opts, ast->str.icase);
-    for (; i != e; ++i) {
-        Range *r = char_to_range(spec, *i, icase);
+
+    for (const ASTChar &a : *ast->str.chars) {
+        Range *r = char_to_range(spec, a, icase);
         RE *y = re_class(spec, ast->loc, r);
         x = re_cat(spec, x, y);
     }

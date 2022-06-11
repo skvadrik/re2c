@@ -54,10 +54,9 @@ RulesBlock::RulesBlock(const std::string &name, const opt_t *opts,
 
 RulesBlocks::RulesBlocks(): blocks() {}
 
-RulesBlocks::~RulesBlocks()
-{
-    for (size_t i = 0; i < blocks.size(); ++i) {
-        delete blocks[i];
+RulesBlocks::~RulesBlocks() {
+    for (RulesBlock *b : blocks) {
+        delete b;
     }
 }
 
@@ -77,8 +76,7 @@ const RulesBlock *RulesBlocks::find(const std::string &name) const
         }
         error("cannot find `/*!rules:re2c ... */` block");
     } else {
-        for (size_t i = 0; i < blocks.size(); ++i) {
-            const RulesBlock *b = blocks[i];
+        for (const RulesBlock *b : blocks) {
             if (b->name == name) {
                 return b;
             }
@@ -93,10 +91,9 @@ const opt_t *RulesBlocks::last_opts() const
     return blocks.empty() ? nullptr : blocks.back()->opts;
 }
 
-spec_t &find_or_add_spec(specs_t &specs, const std::string &name)
-{
-    for (specs_t::iterator i = specs.begin(); i != specs.end(); ++i) {
-        if (i->name == name) return *i;
+spec_t &find_or_add_spec(specs_t &specs, const std::string &name) {
+    for (spec_t &spec : specs) {
+        if (spec.name == name) return spec;
     }
     specs.push_back(spec_t(name));
     return specs.back();
@@ -113,18 +110,18 @@ void use_block(context_t &context, const std::string &name, const loc_t &loc)
     const RulesBlock *rb = context.rblocks.find(name);
     if (rb == nullptr) exit(1);
 
-    for (specs_t::const_iterator i = rb->specs.begin(); i != rb->specs.end(); ++i) {
-        spec_t &spec = find_or_add_spec(context.specs, i->name);
+    for (const spec_t &s : rb->specs) {
+        spec_t &spec = find_or_add_spec(context.specs, s.name);
 
         // Merge rules. Inherited special rules *, $ and <!> are kept separate
         // from those defined in the current block, because they are handled
         // differently: they have lower priority and it is allowed to override
         // them with local rules (while within one block redefinition of a
         // special rule is an error).
-        append(spec.rules, i->rules);
-        append(spec.inherited_defs, i->defs);
-        append(spec.inherited_eofs, i->eofs);
-        append(spec.inherited_setup, i->setup);
+        append(spec.rules, s.rules);
+        append(spec.inherited_defs, s.defs);
+        append(spec.inherited_eofs, s.eofs);
+        append(spec.inherited_setup, s.setup);
     }
 
     // Merge configurations and symtab.
@@ -136,72 +133,73 @@ void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg)
     if (specs.empty()) return;
     specs_t::iterator i, j, e;
 
-    for (i = specs.begin(), e = specs.end(); i != e; ++i) {
-        if (i->defs.size() > 1) {
-            msg.error(i->defs[1]->loc,
+    for (const spec_t &s : specs) {
+        if (s.defs.size() > 1) {
+            msg.error(s.defs[1]->loc,
                 "code to default rule %sis already defined at line %u",
-                incond(i->name).c_str(), i->defs[0]->loc.line);
+                incond(s.name).c_str(), s.defs[0]->loc.line);
             exit(1);
         }
-        if (i->eofs.size() > 1) {
-            msg.error(i->eofs[1]->loc,
+        if (s.eofs.size() > 1) {
+            msg.error(s.eofs[1]->loc,
                 "EOF rule %sis already defined at line %u",
-                incond(i->name).c_str(), i->eofs[0]->loc.line);
+                incond(s.name).c_str(), s.eofs[0]->loc.line);
             exit(1);
-        }
-        else if (i->rules.empty() && i->defs.empty() && !i->eofs.empty()) {
-            msg.error(i->eofs[0]->loc,
+        } else if (s.rules.empty() && s.defs.empty() && !s.eofs.empty()) {
+            msg.error(s.eofs[0]->loc,
                 "EOF rule %swithout other rules doesn't make sense",
-                incond(i->name).c_str());
+                incond(s.name).c_str());
             exit(1);
         }
     }
 
     if (!opts->cFlag) {
         // normal mode: there must be no named specs corresponding to conditions
-        for (i = specs.begin(), e = specs.end(); i != e && i->name.empty(); ++i);
-        if (i != e) { // found named spec
-            const loc_t &l = !i->rules.empty() ? i->rules[0].semact->loc
-                : !i->defs.empty() ? i->defs[0]->loc : NOWHERE;
-            msg.error(l, "conditions are only allowed with '-c', '--conditions' option");
-            exit(1);
+        for (const spec_t &s : specs) {
+            if (!s.name.empty()) { // found named spec
+                const loc_t &l = !s.rules.empty() ? s.rules[0].semact->loc
+                    : !s.defs.empty() ? s.defs[0]->loc : NOWHERE;
+                msg.error(l, "conditions are only allowed with '-c', '--conditions' option");
+                exit(1);
+            }
         }
     } else if (specs.size() == 1 && specs[0].name.empty()) {
         // condition mode, a single unnamed spec => ok, normal blocks are allowed
     } else {
         // condition mode, at least one named spec => this is a block with conditions
 
-        for (i = specs.begin(), e = specs.end(); i != e && !i->name.empty(); ++i);
-        if (i != e) { // found unnamed spec
-            const loc_t &l = !i->rules.empty() ? i->rules[0].semact->loc
-                : !i->defs.empty() ? i->defs[0]->loc : NOWHERE;
-            msg.error(l, "cannot mix conditions with normal rules");
-            exit(1);
+        for (const spec_t &s : specs) {
+            if (s.name.empty()) { // found unnamed spec
+                const loc_t &l = !s.rules.empty() ? s.rules[0].semact->loc
+                    : !s.defs.empty() ? s.defs[0]->loc : NOWHERE;
+                msg.error(l, "cannot mix conditions with normal rules");
+                exit(1);
+            }
         }
 
-        for (i = specs.begin(), e = specs.end(); i != e; ++i) {
-            if (i->setup.size() > 1) {
-                msg.error(i->setup[1]->loc,
+        for (const spec_t &s : specs) {
+            if (s.setup.size() > 1) {
+                msg.error(s.setup[1]->loc,
                     "code to setup rule '%s' is already defined at line %u",
-                    i->name.c_str(), i->setup[0]->loc.line);
+                    s.name.c_str(), s.setup[0]->loc.line);
                 exit(1);
             }
         }
 
-        for (i = specs.begin(), e = specs.end(); i != e; ++i) {
-            if (i->name != "*" && !i->setup.empty() && i->rules.empty()) {
-                msg.error(i->setup[0]->loc,
-                    "setup for non existing condition '%s' found",
-                    i->name.c_str());
+        for (const spec_t &s : specs) {
+            if (s.name != "*" && !s.setup.empty() && s.rules.empty()) {
+                msg.error(s.setup[0]->loc,
+                    "setup for non existing condition '%s' found", s.name.c_str());
                 exit(1);
             }
         }
 
-        for (i = specs.begin(), e = specs.end(); i != e && !i->setup.empty(); ++i);
-        if (i == e) {
-            for (i = specs.begin(), e = specs.end(); i != e; ++i) {
-                if (i->name == "*") {
-                    msg.error(i->setup[0]->loc,
+        auto no_setup = std::find_if(
+            specs.begin(), specs.end(), [](const spec_t &s){ return s.setup.empty(); });
+        if (no_setup == specs.end()) { // all specs have setup
+            for (const spec_t &s : specs) {
+                if (s.name == "*") {
+                    msg.error(s.setup[0]->loc,
                         "setup for all conditions '<!*>' is illegal "
                         "if setup for each condition is defined explicitly");
                     exit(1);
@@ -209,73 +207,72 @@ void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg)
             }
         }
 
-        for (i = specs.begin(), e = specs.end(); i != e; ++i) {
-            if (i->name == "0" && i->rules.size() > 1) {
-                msg.error(i->rules[1].semact->loc,
-                    "startup code is already defined at line %u",
-                    i->rules[0].semact->loc.line);
+        for (const spec_t &s : specs) {
+            if (s.name == "0" && s.rules.size() > 1) {
+                msg.error(s.rules[1].semact->loc,
+                    "startup code is already defined at line %u", s.rules[0].semact->loc.line);
                 exit(1);
             }
         }
     }
 
     // Inherit special rules from other blocks (unless a local one is defined).
-    for (i = specs.begin(), e = specs.end(); i != e; ++i) {
-        append(i->defs, i->inherited_defs);
-        append(i->eofs, i->inherited_eofs);
-        append(i->setup, i->inherited_setup);
+    for (spec_t &s : specs) {
+        append(s.defs, s.inherited_defs);
+        append(s.eofs, s.inherited_eofs);
+        append(s.setup, s.inherited_setup);
     }
 
     // Merge <*> rules and <!*> setup to all conditions except "0". Star rules
-    // must have lower priority than normal rules
-    for (i = specs.begin(), e = specs.end(); i != e && i->name != "*"; ++i);
-    if (i != e) {
-        for (j = specs.begin(); j != e; ++j) {
-            if (j == i || j->name == "0") continue;
-
-            append(j->rules, i->rules);
-            append(j->defs, i->defs);
-            append(j->eofs, i->eofs);
-            append(j->setup, i->setup);
+    // must have lower priority than normal rules.
+    auto star = std::find_if(
+        specs.begin(), specs.end(),[](const spec_t &s){ return s.name == "*"; });
+    if (star != specs.end()) {
+        for (spec_t &s : specs) {
+            if (s.name != "*" && s.name != "0") {
+                append(s.rules, star->rules);
+                append(s.defs, star->defs);
+                append(s.eofs, star->eofs);
+                append(s.setup, star->setup);
+            }
         }
-        specs.erase(i);
+        specs.erase(star);
     }
 
     // Merge end of input rule $ and default rule * with the lowest priority.
-    for (i = specs.begin(), e = specs.end(); i != e; ++i) {
+    for (spec_t &s : specs) {
         // See note [EOF rule handling].
-        if (!i->eofs.empty()) {
-            i->eof_rule = i->rules.size();
-            const SemAct *a = i->eofs[0];
-            i->rules.push_back(ASTRule(ast_nil(a->loc), a));
+        if (!s.eofs.empty()) {
+            s.eof_rule = s.rules.size();
+            const SemAct *a = s.eofs[0];
+            s.rules.push_back(ASTRule(ast_nil(a->loc), a));
         }
-        if (!i->defs.empty()) {
-            i->def_rule = i->rules.size();
-            const SemAct *a = i->defs[0];
-            i->rules.push_back(ASTRule(ast_default(a->loc), a));
+        if (!s.defs.empty()) {
+            s.def_rule = s.rules.size();
+            const SemAct *a = s.defs[0];
+            s.rules.push_back(ASTRule(ast_default(a->loc), a));
         }
     }
 
     // "0" condition must be the first one.
-    for (i = specs.begin(), e = specs.end(); i != e && i->name != "0"; ++i);
-    if (i != specs.end() && i != specs.begin()) {
-        const spec_t zero = *i;
-        specs.erase(i);
-        specs.insert(specs.begin(), zero);
+    auto zero = std::find_if(
+        specs.begin(), specs.end(),[](const spec_t &s){ return s.name == "0"; });
+    if (zero != specs.end() && zero != specs.begin()) {
+        spec_t zero_copy(*zero);
+        specs.erase(zero);
+        specs.insert(specs.begin(), zero_copy);
     }
 
     // Check that 're2c:eof' configuration and the $ rule are used together.
     // This must be done after merging rules inherited from other blocks and <*>
     // condition (because they might add $ rule).
-    for (i = specs.begin(), e = specs.end(); i != e; ++i) {
-        if (!i->eofs.empty() && opts->eof == NOEOF) {
-            msg.error(i->eofs[0]->loc,
-                "%s$ rule found, but 're2c:eof' configuration is not set",
-                incond(i->name).c_str());
+    for (const spec_t &s : specs) {
+        if (!s.eofs.empty() && opts->eof == NOEOF) {
+            msg.error(s.eofs[0]->loc,
+                "%s$ rule found, but 're2c:eof' configuration is not set", incond(s.name).c_str());
             exit(1);
-        } else if (i->eofs.empty() && opts->eof != NOEOF) {
-            error("%s're2c:eof' configuration is set, but no $ rule found",
-                incond(i->name).c_str());
+        } else if (s.eofs.empty() && opts->eof != NOEOF) {
+            error("%s're2c:eof' configuration is set, but no $ rule found", incond(s.name).c_str());
             exit(1);
         }
     }

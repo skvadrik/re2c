@@ -54,14 +54,9 @@ void determinization(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts, Msg &msg,
     }
 }
 
-dfa_t::~dfa_t()
-{
-    std::vector<dfa_state_t*>::iterator
-        i = states.begin(),
-        e = states.end();
-    for (; i != e; ++i)
-    {
-        delete *i;
+dfa_t::~dfa_t() {
+    for (dfa_state_t *s : states) {
+        delete s;
     }
 }
 
@@ -204,10 +199,8 @@ void warn_nondeterministic_tags(const ctx_t &ctx)
     const std::vector<Tag> &tags = ctx.dfa.tags;
     const std::valarray<Rule> &rules = ctx.dfa.rules;
 
-    const size_t
-        ntag = tags.size(),
-        nkrn = kernels.size(),
-        nrule = rules.size();
+    const size_t ntag = tags.size();
+    const size_t nkrn = kernels.size();
     std::vector<size_t> maxv(ntag, 0);
     std::set<tagver_t> uniq;
 
@@ -233,13 +226,11 @@ void warn_nondeterministic_tags(const ctx_t &ctx)
         }
     }
 
-    for (uint32_t r = 0; r < nrule; ++r) {
-        const Rule &rule = rules[r];
+    for (const Rule &rule : rules) {
         for (size_t t = rule.ltag; t < rule.htag; ++t) {
             const size_t m = maxv[t];
             if (m > 1) {
-                warn.nondeterministic_tags(rule.semact->loc, ctx.dc_condname,
-                    tags[t].name, m);
+                warn.nondeterministic_tags(rule.semact->loc, ctx.dc_condname, tags[t].name, m);
             }
         }
     }
