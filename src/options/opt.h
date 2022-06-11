@@ -261,10 +261,10 @@ struct opt_t {
 #undef MUTOPT1
 #undef MUTOPT
 
-    const symtab_t symtab;
+    symtab_t symtab;
 
     opt_t(const conopt_t &con, const mutopt_t &mut, const mutdef_t &def,
-        const symtab_t symtab)
+        const symtab_t &symtab)
 #define CONSTOPT1(type, name, value) : name(con.name)
 #define CONSTOPT(type, name, value)  , name(con.name)
         RE2C_CONSTOPTS
@@ -282,41 +282,8 @@ struct opt_t {
         , symtab(symtab)
     {}
 
-    opt_t(const opt_t &opt)
-#define CONSTOPT1(type, name, value) : name(opt.name)
-#define CONSTOPT(type, name, value)  , name(opt.name)
-        RE2C_CONSTOPTS
-#undef CONSTOPT1
-#undef CONSTOPT
-#define MUTOPT1 MUTOPT
-#define MUTOPT(type, name, value) , name(opt.name)
-        RE2C_MUTOPTS
-#undef MUTOPT
-#define MUTOPT(type, name, value) , is_default_##name(opt.is_default_##name)
-        RE2C_MUTOPTS
-#undef MUTOPT1
-#undef MUTOPT
-        , symtab(opt.symtab)
-    {}
-
-    opt_t& operator=(const opt_t &opt)
-    {
-#define CONSTOPT1 CONSTOPT
-#define CONSTOPT(type, name, value) name = opt.name;
-        RE2C_CONSTOPTS
-#undef CONSTOPT1
-#undef CONSTOPT
-#define MUTOPT1 MUTOPT
-#define MUTOPT(type, name, value) name = opt.name;
-        RE2C_MUTOPTS
-#undef MUTOPT
-#define MUTOPT(type, name, value) is_default_##name = opt.is_default_##name;
-        RE2C_MUTOPTS
-#undef MUTOPT1
-#undef MUTOPT
-        const_cast<symtab_t&>(symtab) = opt.symtab;
-        return *this;
-    }
+    opt_t(const opt_t &opt) = default;
+    opt_t& operator=(const opt_t &opt) = default;
 };
 
 // Options management.

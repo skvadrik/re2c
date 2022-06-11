@@ -42,24 +42,8 @@ struct Rule
     Rule(): semact(nullptr), shadow(), ltag(0), htag(0), ttag(0), ncap(0) {}
 
     // copy ctor and assignment are required for containers on macOS
-    Rule(const Rule &r)
-        : semact(r.semact)
-        , shadow(r.shadow)
-        , ltag(r.ltag)
-        , htag(r.htag)
-        , ttag(r.ttag)
-        , ncap(r.ncap)
-    {}
-    Rule& operator= (const Rule &r)
-    {
-        semact = r.semact;
-        shadow = r.shadow;
-        ltag = r.ltag;
-        htag = r.htag;
-        ttag = r.ttag;
-        ncap = r.ncap;
-        return *this;
-    }
+    Rule(const Rule &r) = default;
+    Rule& operator= (const Rule &r) = default;
 };
 
 } // namespace re2c
