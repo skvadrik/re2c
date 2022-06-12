@@ -28,8 +28,7 @@ struct SemAct {
     ~SemAct() { flist.erase(this); }
 };
 
-struct Rule
-{
+struct Rule {
     static const size_t NONE;
 
     const SemAct *semact;
@@ -40,10 +39,11 @@ struct Rule
     size_t ncap; // number of POSIX captures
 
     Rule(): semact(nullptr), shadow(), ltag(0), htag(0), ttag(0), ncap(0) {}
-
-    // copy ctor and assignment are required for containers on macOS
+    ~Rule() {}
     Rule(const Rule &r) = default;
-    Rule& operator= (const Rule &r) = default;
+    Rule& operator=(const Rule &r) = default;
+    Rule(Rule &&r) = default;
+    Rule& operator=(Rule &&r) = default;
 };
 
 } // namespace re2c
