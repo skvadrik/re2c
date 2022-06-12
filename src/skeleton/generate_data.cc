@@ -229,9 +229,6 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
             apply(skel, skel.cmd0, 0);
 
             for (uint32_t i = 0; i < f; ++i) {
-                // tags commands in state (staDFA), -1 because of "delayed store"
-                apply(skel, path.node(skel, i).stacmd, i - 1);
-
                 // tag commands on transitions (TDFA(0), TDFA(1))
                 const Node::range_t *a = arcs[i];
                 apply(skel, a->cmd, i + offby);
@@ -246,9 +243,6 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
 
             // tag commands in final states
             const tcmd_t *fcmd = path.node(skel, f).cmd;
-
-            // staDFA, -1 because of "delayed store"
-            apply(skel, path.node(skel, f).stacmd, static_cast<uint32_t>(f) - 1);
 
             // TDFA(1)
             apply(skel, fcmd, static_cast<uint32_t>(f));

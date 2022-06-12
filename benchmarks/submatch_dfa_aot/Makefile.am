@@ -7,6 +7,7 @@ DAT_DIR = data
 CFLAGS = -O3 -I $(SRC_DIR)
 RAGEL = $(ENG_DIR)/ragel/ragel7
 KLEENEX = $(ENG_DIR)/kleenex/kexc
+RE2C3 = $(ENG_DIR)/re2c/re2c3
 RE2C = $(top_builddir)/re2c
 RE2C_FLAGS_COMMON = --reusable --tags --no-generation-date --no-version
 RE2C_FLAGS     = $(RE2C_FLAGS_COMMON) -I $(SRC_DIR)/re2c/include
@@ -60,21 +61,23 @@ BIN_RAGEL = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_RAGEL))
 
 COMMON_RAGEL = $(COMMON_SRC) $(SRC_DIR)/ragel/common.c
 
-GEN_RE2C_TDFA1      = $(patsubst %, $(GEN_DIR)/re2c/%-tdfa1.c,      $(BENCHMARKS))
-GEN_RE2C_TDFA0      = $(patsubst %, $(GEN_DIR)/re2c/%-tdfa0.c,      $(BENCHMARKS))
-GEN_RE2C_STADFA     = $(patsubst %, $(GEN_DIR)/re2c/%-stadfa.c,     $(BENCHMARKS))
-GEN_RE2C_EOF_TDFA1  = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa1.c,  $(BENCHMARKS))
-GEN_RE2C_EOF_TDFA0  = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa0.c,  $(BENCHMARKS))
-GEN_RE2C_EOF_STADFA = $(patsubst %, $(GEN_DIR)/re2c/%-eof-stadfa.c, $(BENCHMARKS))
+GEN_RE2C_TDFA1     = $(patsubst %, $(GEN_DIR)/re2c/%-tdfa1.c,     $(BENCHMARKS))
+GEN_RE2C_TDFA0     = $(patsubst %, $(GEN_DIR)/re2c/%-tdfa0.c,     $(BENCHMARKS))
+GEN_RE2C_EOF_TDFA1 = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa1.c, $(BENCHMARKS))
+GEN_RE2C_EOF_TDFA0 = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa0.c, $(BENCHMARKS))
 GEN_RE2C = \
     $(GEN_RE2C_TDFA1) \
     $(GEN_RE2C_TDFA0) \
-    $(GEN_RE2C_STADFA) \
     $(GEN_RE2C_EOF_TDFA1) \
-    $(GEN_RE2C_EOF_TDFA0) \
-    $(GEN_RE2C_EOF_STADFA)
+    $(GEN_RE2C_EOF_TDFA0)
 
-BIN_RE2C = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_RE2C))
+GEN_RE2C3_STADFA     = $(patsubst %, $(GEN_DIR)/re2c/%-stadfa.c,     $(BENCHMARKS))
+GEN_RE2C3_EOF_STADFA = $(patsubst %, $(GEN_DIR)/re2c/%-eof-stadfa.c, $(BENCHMARKS))
+GEN_RE2C3 = \
+    $(GEN_RE2C3_STADFA) \
+    $(GEN_RE2C3_EOF_STADFA)
+
+BIN_RE2C = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_RE2C) $(GEN_RE2C3))
 
 COMMON_RE2C = \
     $(COMMON_SRC) \
@@ -97,7 +100,7 @@ GEN_KLEENEX = $(patsubst %, $(GEN_DIR)/kleenex/%.c, \
 
 BIN_KLEENEX = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_KLEENEX))
 
-GEN = $(GEN_RAGEL) $(GEN_RE2C) $(GEN_KLEENEX)
+GEN = $(GEN_RAGEL) $(GEN_RE2C) $(GEN_RE2C3) $(GEN_KLEENEX)
 
 BIN_ = $(BIN_RAGEL) $(BIN_RE2C) $(BIN_KLEENEX)
 BIN_GCC   = $(patsubst %, %-gcc, $(BIN_))
@@ -113,7 +116,7 @@ DAT = $(patsubst %, $(DAT_DIR)/%/big, \
 
 all-local: $(BIN) $(DAT)
 
-# always regenerate re2c benchmarks
+# always regenerate re2c benchmarks (except for deprecated algorithms)
 
 $(GEN_RE2C_TDFA1): $(GEN_DIR)/%-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
 	$(AM_V_at)mkdir -p $(@D)
@@ -135,18 +138,20 @@ $(GEN_RE2C_EOF_TDFA0): $(GEN_DIR)/%-eof-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) 
 	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_EOF) --no-lookahead $< -o $@
 	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
-$(GEN_RE2C_STADFA): $(GEN_DIR)/%-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	$(AM_V_at)mkdir -p $(@D)
-	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS) --stadfa $< -o $@
-	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+# optionally regenerate ragel, kleenex and re2c-3.0 benchmarks
+# (staDFA algorithm was removed in re2c versions after 3.0)
 
-$(GEN_RE2C_EOF_STADFA): $(GEN_DIR)/%-eof-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	$(AM_V_at)mkdir -p $(@D)
-	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_EOF) --stadfa $< -o $@
-	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
-
-# optionally regenerate ragel and kleenex benchmarks
 if REGEN_BENCHMARKS
+
+$(GEN_RE2C3_STADFA): $(GEN_DIR)/%-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C3)
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C3) $(RE2C_FLAGS) --stadfa $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+
+$(GEN_RE2C3_EOF_STADFA): $(GEN_DIR)/%-eof-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C3)
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C3) $(RE2C_FLAGS_EOF) --stadfa $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 $(GEN_RAGEL): $(GEN_DIR)/%.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
 	$(AM_V_at)mkdir -p $(@D)
@@ -160,7 +165,7 @@ $(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex $(KLEENEX)
 
 else
 
-$(GEN_RAGEL) $(GEN_KLEENEX): $(GEN_DIR)/%: $(PREGEN_DIR)/%
+$(GEN_RAGEL) $(GEN_RE2C3) $(GEN_KLEENEX): $(GEN_DIR)/%: $(PREGEN_DIR)/%
 	$(AM_V_at)mkdir -p $(@D)
 	$(AM_V_GEN)cp -f $< $@
 
@@ -187,6 +192,10 @@ $(KLEENEX):
 $(RAGEL):
 	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/engines/ragel/getragel7.sh $(@D)
 	$(AM_V_GEN)( cd $(@D) && ./getragel7.sh )
+
+$(RE2C3):
+	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/engines/re2c/getre2c3.sh $(@D)
+	$(AM_V_GEN)( cd $(@D) && ./getre2c3.sh )
 
 clean-local:
 	$(AM_V_at)rm -f $(GEN) $(OBJ) $(BIN) $(DAT)

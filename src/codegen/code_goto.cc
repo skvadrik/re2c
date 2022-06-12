@@ -342,11 +342,6 @@ void code_go(code_alc_t &alc, const DFA &dfa, const opt_t *opts, State *from) {
     // In .dot format every node in the graph (a.k.a. DFA state) should be generated.
     if (opts->target == Target::DOT) from->label->used = true;
 
-    if (opts->stadfa) {
-        DASSERT(go->tags == TCID0);
-        go->tags = from->stadfa_tags;
-    }
-
     // initialize high (wide) spans
     uint32_t hSpans = 0;
     const Span *hspan = nullptr;

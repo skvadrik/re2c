@@ -14,9 +14,9 @@ outside of lab (to the best of author's knowledge, that is):
   Libtool; remove a few internal options and a bunch of explicit template
   instantiations in TDFA construction code that exist only for libre2c.
 
-- Sta-DFA, TDFA(0): removing these algorithms would clean up the code and make
-  the difficult parts around TDFA construction easier to understand. These
-  algorithms are slower than TDFA(1) and were added for experimental purposes.
+- TDFA(0): removing this algorithm would clean up the code and make the
+  difficult parts around TDFA construction easier to understand. This algorithm
+  is slower than TDFA(1) and was added for experimental purposes.
 
 - One of the build systems: Autotools or CMake, whichever you like less. Someone
   will get unhappy in both cases (Windows is supported only by CMake, but distro

@@ -252,9 +252,7 @@ static void gen_godot(Output &output, const DFA &dfa, const CodeGoSw *go,
     }
 }
 
-void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
-    CodeList *stmts)
-{
+void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from, CodeList *stmts) {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
 
@@ -273,7 +271,7 @@ void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
         // before YYFILL label. Without $ rule the are no strict requirements,
         // but generating them here (after YYFILL label) allows to fuse skip and
         // peek into one statement.
-        gen_settags(output, stmts, dfa, go->tags, opts->stadfa /* delayed */);
+        gen_settags(output, stmts, dfa, go->tags);
     }
 
     if (go->skip && opts->lookahead) {

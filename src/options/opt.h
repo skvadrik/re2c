@@ -72,7 +72,6 @@ class Msg;
     CONSTOPT (bool, lookahead, true) \
     CONSTOPT (bool, optimize_tags, true) \
     CONSTOPT (bool, backward, false) \
-    CONSTOPT (bool, stadfa, false) \
     CONSTOPT (bool, nested_negative_tags, true) \
     CONSTOPT (bool, eager_skip, false) \
     CONSTOPT (bool, loop_switch, false) \

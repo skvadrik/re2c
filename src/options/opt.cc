@@ -324,10 +324,6 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
             exit(1);
         }
     }
-    if (!glob.lookahead && glob.stadfa) {
-        error("cannot combine TDFA(0) and staDFA");
-        exit(1);
-    }
     if (glob.fFlag && !real.fill_use) {
         // -f, --storable-state option should not be used if YYFILL is disabled,
         // because without YYFILL the interrupt points do not necessarily

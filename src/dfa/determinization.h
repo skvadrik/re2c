@@ -13,7 +13,6 @@
 #include "src/debug/debug.h"
 #include "src/dfa/tagver_table.h"
 #include "src/dfa/tag_history.h"
-#include "src/dfa/stacmd.h"
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
@@ -83,10 +82,7 @@ struct kernel_t
     nfa_state_t **state;        // TNFA state for each item
     hidx_t *thist;              // lookahead tag history for each item
     const prectable_t *prectbl; // POSIX precedence table, if applicable
-    union {
-        uint32_t *tvers;        // TDFA: tag versions for each item
-        stacmd_t *stacmd;       // staDFA: store/transfer/accept actions
-    };
+    uint32_t *tvers;            // TDFA: tag versions for each item
 
     FORBID_COPY(kernel_t);
 };
@@ -123,8 +119,6 @@ struct histleaf_t
 typedef lookup_t<const kernel_t*> kernels_t;
 typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>
     , cmp_gtop_t> gtop_heap_t;
-
-typedef std::map<std::pair<size_t, int32_t>, int32_t> stadfa_tagvers_t;
 
 template<typename history_type_t>
 struct determ_context_t
@@ -165,10 +159,6 @@ struct determ_context_t
     tag_path_t                dc_path3;        // buffer 3 for tag history
     std::vector<uint32_t>     dc_tagcount;     // buffer for counting sort on tag history
 
-    // staDFA-specific
-    stacmd_t         *stadfa_actions; // staDFA actions for the current transition
-    stadfa_tagvers_t  stadfa_tagvers; // mapping of (tag, index) pairs to tag versions
-
     // tagged epsilon-closure
     confset_t reach;
     confset_t state;
@@ -203,7 +193,7 @@ typedef determ_context_t<lhistory_t> ldetctx_t;
 template<typename ctx_t> void tagged_epsilon_closure(ctx_t &ctx);
 template<typename ctx_t> void closure(ctx_t &ctx);
 template<typename ctx_t> void find_state(ctx_t &ctx);
-template<typename ctx_t, bool stadfa, bool b> bool do_find_state(ctx_t &ctx);
+template<typename ctx_t, bool b> bool do_find_state(ctx_t &ctx);
 template<typename ctx_t> void reach_on_symbol(ctx_t &ctx, uint32_t sym);
 template<typename ctx_t> uint32_t init_tag_versions(ctx_t &ctx);
 nfa_state_t *transition(nfa_state_t *, uint32_t);

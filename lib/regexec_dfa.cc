@@ -29,17 +29,15 @@ static void apply_regops(regoff_t *regs, const tcmd_t *cmd, regoff_t pos)
     }
 }
 
-template<bool stadfa>
-int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
-    regmatch_t pmatch[], int /* eflags */)
-{
+int regexec_dfa(
+    const regex_t *preg, const char *string, size_t nmatch,regmatch_t pmatch[], int /*eflags*/) {
     const dfa_t *dfa = preg->dfa;
     regoff_t *regs = preg->regs;
     size_t i = 0;
     const char *p = string, *q = p;
     const dfa_state_t *s, *x = nullptr;
 
-    if (!stadfa) apply_regops(regs, dfa->tcmd0, 0);
+    apply_regops(regs, dfa->tcmd0, 0);
 
     for (;;) {
         s = dfa->states[i];
@@ -52,11 +50,9 @@ int regexec_dfa(const regex_t *preg, const char *string, size_t nmatch,
             x = s;
         }
 
-        if (stadfa) apply_regops(regs, s->stacmd, p - string - 2);
-
         if (i == dfa_t::NIL || c == 0) break;
 
-        if (!stadfa) apply_regops(regs, s->tcmd[j], p - string - 1);
+        apply_regops(regs, s->tcmd[j], p - string - 1);
     }
 
     if (s->rule == Rule::NONE && x != nullptr) {
@@ -103,9 +99,7 @@ static void apply_regops_with_history(regoff_trie_t *regtrie, const tcmd_t *cmd,
     }
 }
 
-template<bool stadfa>
-subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatch)
-{
+subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatch) {
     const dfa_t *dfa = preg->dfa;
     size_t i = 0;
     const char *p = string, *q = p;
@@ -113,7 +107,7 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
     regoff_trie_t *regtrie = preg->regtrie;
 
     regtrie->clear();
-    if (!stadfa) apply_regops_with_history(regtrie, dfa->tcmd0, 0);
+    apply_regops_with_history(regtrie, dfa->tcmd0, 0);
 
     for (;;) {
         s = dfa->states[i];
@@ -126,11 +120,9 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
             x = s;
         }
 
-        if (stadfa) apply_regops_with_history(regtrie, s->stacmd, p - string - 2);
-
         if (i == dfa_t::NIL || c == 0) break;
 
-        if (!stadfa) apply_regops_with_history(regtrie, s->tcmd[j], p - string - 1);
+        apply_regops_with_history(regtrie, s->tcmd[j], p - string - 1);
     }
 
     regoff_t mlen;
@@ -211,12 +203,6 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
 
     return h0;
 }
-
-// explicit instantiation for automaton type
-template int regexec_dfa<true>(const regex_t *, const char *, size_t, regmatch_t[], int);
-template int regexec_dfa<false>(const regex_t *, const char *, size_t, regmatch_t[], int);
-template subhistory_t *regparse_dfa<true>(const regex_t *, const char *, size_t);
-template subhistory_t *regparse_dfa<false>(const regex_t *, const char *, size_t);
 
 } // namespace libre2c
 } // namespace re2c

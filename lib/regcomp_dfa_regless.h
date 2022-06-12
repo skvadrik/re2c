@@ -188,7 +188,7 @@ static void find_state_regless(ctx_t &ctx, rldfa_t &rldfa, std::vector<tchar_t> 
     dfa_t &dfa = ctx.dfa;
 
     // Find or add the new state in the existing set of states.
-    const bool is_new = do_find_state<ctx_t, false, true>(ctx);
+    const bool is_new = do_find_state<ctx_t, true>(ctx);
 
     if (is_new) {
         const typename ctx_t::confset_t &state = ctx.state;

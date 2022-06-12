@@ -121,7 +121,6 @@ struct Node
     arcs_t arcs;
     size_t rule;
     const tcmd_t *cmd;
-    const tcmd_t *stacmd;
 
     Node();
     void init(const dfa_state_t *s, const std::vector<uint32_t> &charset,

@@ -27,17 +27,14 @@ template<typename cmd_t> void normalize(cmd_t *cmd);
  * within each subsequence duplicate commands are removed. Additionally, "set"
  * subsequences are sorted lexicographically (the relative order of "set"
  * commands doesn't matter), and "copy" subsequences are first sorted
- * lexicographically and then topologically (except for the case of staDFA,
- * which allows loops in "copy" commands that cannot be topsorted and are
- * resolved by using local temporary variables).
+ * lexicographically and then topologically.
  */
 
 static void sort(tcmd_t *head, tcmd_t *end);
 static void uniq(tcmd_t *head, tcmd_t *end);
 static void dedup(tcmd_t *head, tcmd_t *end);
 
-void cfg_t::normalization(cfg_t &cfg, const opt_t *opts)
-{
+void cfg_t::normalization(cfg_t &cfg) {
     const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
     uint32_t *indeg = new uint32_t[nver];
 
@@ -47,24 +44,16 @@ void cfg_t::normalization(cfg_t &cfg, const opt_t *opts)
 
             if (tcmd_t::iscopy(x)) {
                 for (; x && tcmd_t::iscopy(x); x = x->next);
-                if (!opts->stadfa) {
-                    // sort, remove adjacent duplicates, topsort
-                    sort(*px, x);
-                    uniq(*px, x);
-                    tcmd_t::topsort(px, x, indeg);
-                }
-                else {
-                    // remove duplicates
-                    dedup(*px, x);
-                }
-            }
-            else if (tcmd_t::isset(x)) {
+                // sort, remove adjacent duplicates, topsort
+                sort(*px, x);
+                uniq(*px, x);
+                tcmd_t::topsort(px, x, indeg);
+            } else if (tcmd_t::isset(x)) {
                 // sort, remove adjacent duplicates
                 for (; x && tcmd_t::isset(x); x = x->next);
                 sort(*px, x);
                 uniq(*px, x);
-            }
-            else {
+            } else {
                 // remove duplicates
                 for (; x && tcmd_t::isadd(x); x = x->next);
                 dedup(*px, x);

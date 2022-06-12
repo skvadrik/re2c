@@ -352,10 +352,7 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
     tcid_t falltags;
     const State *fallback = fallback_state_with_eof_rule(dfa, opts, from, &falltags);
 
-    if (opts->stadfa) {
-        DASSERT(from->go.tags == from->stadfa_tags);
-
-    } else if (from->go.tags != TCID0) {
+    if (from->go.tags != TCID0) {
         // Tags have been hoisted out of transitions into state (this means that
         // tags on all transitions coincide, including the fallback transition).
         // Do not add duplicate tags to fallback transition.
@@ -366,7 +363,7 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
     CodeList *fallback_trans = code_list(alc);
     if (fallback != to || opts->fFlag) {
         // tag actions on the fallback transition
-        gen_settags(output, fallback_trans, dfa, falltags, false /* delayed */);
+        gen_settags(output, fallback_trans, dfa, falltags);
 
         // go to fallback state
         if (!opts->loop_switch) {
@@ -491,7 +488,7 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
         // before the label to avoid applying them multiple times in the above
         // scenario (re-application may produce incorrect results in case of
         // non-idempotent operations).
-        gen_settags(output, stmts, dfa, s->go.tags, opts->stadfa /* delayed */);
+        gen_settags(output, stmts, dfa, s->go.tags);
     }
 
     if (need_fill_label && !opts->loop_switch) {
@@ -515,7 +512,7 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
         append(stmts, code_skip(alc));
     }
 
-    gen_settags(output, stmts, dfa, jump.tags, false /* delayed */);
+    gen_settags(output, stmts, dfa, jump.tags);
 
     if (jump.skip && opts->lookahead) {
         append(stmts, code_skip(alc));
@@ -635,9 +632,7 @@ static void gen_restorectx(Output &output, CodeList *stmts, const std::string &t
     }
 }
 
-void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t tcid,
-    bool delayed)
-{
+void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t tcid) {
     const opt_t *opts = output.block().opts;
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
@@ -646,7 +641,6 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
 
     // single tag, backwards compatibility, use context marker
     if (cmd && dfa.oldstyle_ctxmarker) {
-        DASSERT(!opts->stadfa);
         if (generic) {
             o.str(opts->yybackupctx);
             if (opts->api_style == ApiStyle::FUNCTIONS) {
@@ -680,18 +674,12 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
             for (; h --> h0; ) {
                 const bool negative = *h == TAGVER_BOTTOM;
                 gen_settag(output, tag_actions, le, negative, true);
-                if (delayed && !negative) {
-                    gen_shift(output, tag_actions, -1, le, true);
-                }
             }
         } else {
             // "save" command
             if (generic) {
                 const bool negative = *h == TAGVER_BOTTOM;
                 gen_settag(output, tag_actions, le, negative, false);
-                if (delayed && !negative) {
-                    gen_shift(output, tag_actions, -1, le, false);
-                }
             } else {
                 Scratchbuf o2(alc);
                 for (const tcmd_t *q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
@@ -703,7 +691,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
                     append(tag_actions, code_stmt(alc, o.flush()));
                 }
                 if (!o2.empty()) {
-                    o2.str(opts->yycursor).cstr(delayed ? " - 1" : "");
+                    o2.str(opts->yycursor);
                     append(tag_actions, code_stmt(alc, o2.flush()));
                 }
             }

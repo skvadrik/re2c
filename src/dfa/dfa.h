@@ -20,13 +20,10 @@ namespace re2c {
 struct nfa_t;
 struct opt_t;
 
-struct dfa_state_t
-{
+struct dfa_state_t {
     size_t *arcs;
     tcmd_t **tcmd;
     tcid_t *tcid;
-    tcmd_t *stacmd;
-    tcid_t stacid;
     size_t rule;
     bool fallthru;
     bool fallback;
@@ -35,8 +32,6 @@ struct dfa_state_t
         : arcs(new size_t[nchars])
         , tcmd(nullptr)
         , tcid(nullptr)
-        , stacmd(nullptr)
-        , stacid(TCID0)
         , rule(Rule::NONE)
         , fallthru(false)
         , fallback(false)
@@ -83,7 +78,7 @@ void determinization(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts, Msg &msg,
 void minimization(dfa_t &dfa, Minimization type);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 void cutoff_dead_rules(dfa_t &dfa, const opt_t *opts, const std::string &cond, Msg &msg);
-void insert_fallback_tags(const opt_t *opts, dfa_t &dfa);
+void insert_fallback_tags(dfa_t &dfa);
 void compact_and_optimize_tags(const opt_t *opts, dfa_t &dfa);
 void freeze_tags(dfa_t &dfa);
 

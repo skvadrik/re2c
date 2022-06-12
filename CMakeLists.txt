@@ -165,7 +165,6 @@ set(re2c_sources
     src/dfa/fillpoints.cc
     src/dfa/find_state.cc
     src/dfa/minimization.cc
-    src/dfa/stacmd.cc
     src/dfa/tagver_table.cc
     src/dfa/tcmd.cc
     src/encoding/ebcdic/ebcdic_regexp.cc
@@ -473,7 +472,6 @@ if (RE2C_BUILD_LIBS)
         src/dfa/fillpoints.cc
         src/dfa/find_state.cc
         src/dfa/minimization.cc
-        src/dfa/stacmd.cc
         src/dfa/tagver_table.cc
         src/dfa/tcmd.cc
         src/nfa/estimate_size.cc

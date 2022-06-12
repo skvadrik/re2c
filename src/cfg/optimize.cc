@@ -42,7 +42,7 @@ void compact_and_optimize_tags(const opt_t *opts, dfa_t &dfa)
 
                 cfg_t::renaming(cfg, ver2new, maxver);
 
-                cfg_t::normalization(cfg, opts);
+                cfg_t::normalization(cfg);
             }
 
             delete[] live;

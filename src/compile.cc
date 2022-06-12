@@ -100,7 +100,7 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output) {
 
     cutoff_dead_rules(dfa, opts, cond, msg);
 
-    insert_fallback_tags(opts, dfa);
+    insert_fallback_tags(dfa);
 
     // try to minimize the number of tag variables
     compact_and_optimize_tags(opts, dfa);

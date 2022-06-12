@@ -39,8 +39,8 @@ ParseOpts parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
     else { error_arg(option); return ParseOpts::EXIT_FAIL; } \
 } while(0)
 
-#define ERROR(msg, arg) do { \
-    error(msg, arg); \
+#define ERROR(...) do { \
+    error(__VA_ARGS__); \
     return ParseOpts::EXIT_FAIL; \
 } while(0)
 
@@ -214,7 +214,9 @@ opt_long:
     "fixed-tags"            end { NEXT_ARG("--fixed-tags",       opt_fixed_tags); }
     "no-lookahead"          end { globopts.lookahead = false;     goto opt; }
     "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
-    "stadfa"                end { globopts.stadfa = true;         goto opt; }
+
+    // removed
+    "stadfa"                end { ERROR("staDFA algorithm was deprecated and removed"); }
 
     // debug options
     "dump-nfa"              end { globopts.dump_nfa = true;           goto opt; }

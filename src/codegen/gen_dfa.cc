@@ -81,7 +81,7 @@ void gen_dfa_as_blocks_with_labels(Output &output, const DFA &dfa, CodeList *stm
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
-    gen_settags(output, stmts, dfa, dfa.tags0, /*delayed*/ false);
+    gen_settags(output, stmts, dfa, dfa.tags0);
 
     // If DFA has transitions into the initial state and --eager-skip option is not used,
     // then the initial state must have a YYSKIP statement that must be bypassed when

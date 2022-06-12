@@ -3,8 +3,6 @@ add_executable(bench_submatch_nfa
     "${CMAKE_SOURCE_DIR}/benchmarks/common/common.cc"
 )
 
-set_property(TARGET bench_submatch_nfa PROPERTY CXX_STANDARD 11)
-
 target_link_libraries(bench_submatch_nfa libre2c)
 
 find_package(benchmark REQUIRED)

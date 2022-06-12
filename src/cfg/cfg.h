@@ -37,7 +37,7 @@ struct cfg_context_t {
     const size_t nstate;
     const size_t nsym;
 
-    cfg_ix_t *state2bb, *trans2bb;
+    cfg_ix_t *trans2bb;
     cfg_ix_t *final2bb;
     cfg_ix_t *fback2bb;
 
@@ -75,7 +75,7 @@ struct cfg_t
     static void interference(const cfg_t &cfg, const bool *live, bool *interf);
     static tagver_t variable_allocation(const cfg_t &cfg, const bool *interf, tagver_t *ver2new);
     static void renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver);
-    static void normalization(cfg_t &cfg, const opt_t *opts);
+    static void normalization(cfg_t &cfg);
 
 private:
     void map_actions_to_bblocks(cfg_context_t &ctx);

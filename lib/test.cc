@@ -1327,14 +1327,10 @@ static int test_all_leftmost(int f)
     e |= test(f, "(ab|a)(bcd|c)(d|.*)", "abcd", "(0,4),(0,2),(2,3),(3,4)");
 
     // other
-    if (!(f & REG_STADFA)) {
-        // TODO: Find out why this test takes a long time on staDFA.
+    std::string s = "(0,4),(0,4),(0,1)(1,2)(2,3)(3,4)";
+    for (size_t i = 0; i < 1000 - 4; ++i) s += "(4,4)";
 
-        std::string s = "(0,4),(0,4),(0,1)(1,2)(2,3)(3,4)";
-        for (size_t i = 0; i < 1000 - 4; ++i) s += "(4,4)";
-
-        e |= test(f, "((a?){1,1000})*", "aaaa", s.c_str());
-    }
+    e |= test(f, "((a?){1,1000})*", "aaaa", s.c_str());
 
     return e;
 }
@@ -1365,13 +1361,11 @@ int main()
     int e = 0;
 
     e |= test_all_posix(0);
-    e |= test_all_posix(REG_STADFA);
     e |= test_all_posix(REG_REGLESS);
     e |= test_all_posix(REG_SUBHIST);
     e |= test_all_posix(REG_SUBHIST | REG_REGLESS);
 
     e |= test_all_leftmost(REG_LEFTMOST);
-    e |= test_all_leftmost(REG_LEFTMOST | REG_STADFA);
     e |= test_all_leftmost(REG_LEFTMOST | REG_REGLESS);
     e |= test_all_leftmost(REG_LEFTMOST | REG_SUBHIST);
     e |= test_all_leftmost(REG_LEFTMOST | REG_SUBHIST | REG_REGLESS);

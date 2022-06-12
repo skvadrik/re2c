@@ -20,8 +20,7 @@ cfg_context_t::cfg_context_t(dfa_t &dfa)
     : dfa(dfa)
     , nstate(dfa.states.size())
     , nsym(dfa.nchars)
-    , state2bb(new cfg_ix_t[nstate * (nsym + 3)])
-    , trans2bb(state2bb + nstate)
+    , trans2bb(new cfg_ix_t[nstate * (nsym + 2)])
     , final2bb(trans2bb + nstate * nsym)
     , fback2bb(final2bb + nstate)
     , state_mark(new uint32_t[nstate * (nsym + 2)])
@@ -38,7 +37,7 @@ cfg_context_t::cfg_context_t(dfa_t &dfa)
 
 cfg_context_t::~cfg_context_t()
 {
-    delete[] state2bb;
+    delete[] trans2bb;
     delete[] state_mark;
     delete[] succb;
 }
@@ -62,11 +61,6 @@ void cfg_t::map_actions_to_bblocks(cfg_context_t &ctx)
 {
     // root bblock for initial tagged epsilon-transition
     cfg_ix_t nbb = 1;
-
-    // bblocks for tagged states
-    for (size_t i = 0; i < ctx.nstate; ++i) {
-        ctx.state2bb[i] = dfa.states[i]->stacmd == nullptr ? 0 : nbb++;
-    }
 
     // bblocks for tagged transitions
     for (size_t i = 0; i < ctx.nstate; ++i) {
@@ -103,15 +97,6 @@ void cfg_t::create_bblocks(cfg_context_t &ctx)
     // root bblock
     successors(ctx, 0, true /*self*/);
     new(b++) cfg_bb_t(ctx.succb, ctx.succe, dfa.tcmd0, nullptr);
-
-    // state bblocks
-    for (size_t i = 0; i < ctx.nstate; ++i) {
-        dfa_state_t *s = dfa.states[i];
-        if (ctx.state2bb[i]) {
-            successors(ctx, i, false /*self*/);
-            new(b++) cfg_bb_t(ctx.succb, ctx.succe, s->stacmd, nullptr);
-        }
-    }
 
     // transition bblocks
     for (size_t i = 0; i < ctx.nstate; ++i) {
@@ -169,12 +154,6 @@ void successors(cfg_context_t &ctx, size_t x0, bool self)
     // if we start from an incoming transition, process the state itself
     if (self) {
         ctx.state_mark[x0] = ctx.mark;
-
-        // this state is tagged, record and stop
-        if (ctx.state2bb[x0]) {
-            *ctx.succe++ = ctx.state2bb[x0];
-            return;
-        }
     }
 
     ctx.worklist.push_back(x0);
@@ -208,12 +187,6 @@ void successors(cfg_context_t &ctx, size_t x0, bool self)
                 continue;
             }
             ctx.state_mark[y] = ctx.mark;
-
-            // if reached a tagged to-state, record and stop
-            if (ctx.state2bb[y]) {
-                *ctx.succe++ = ctx.state2bb[y];
-                continue;
-            }
 
             // else continue search for successors
             ctx.worklist.push_back(y);
@@ -274,11 +247,6 @@ void fallback(cfg_context_t &ctx, size_t x0)
                 continue;
             }
             ctx.state_mark[y] = ctx.mark;
-
-            // if reached a tagged to-state, record
-            if (ctx.state2bb[y]) {
-                *ctx.succe++ = ctx.state2bb[y];
-            }
 
             // continue propagating fallback states
             ctx.worklist.push_back(y);

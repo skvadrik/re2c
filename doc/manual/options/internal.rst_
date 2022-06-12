@@ -35,9 +35,10 @@
     ``complex`` and may be slightly faster in non-pathological cases.
 
 ``--stadfa``
-    Internal option:
-    use staDFA algorithm for submatch extraction. The main difference with TDFA
-    is that tag operations in staDFA are placed in states, not on transitions.
+    Internal option, deprecated since version 3.1.
+    It used to enable staDFA algorithm, which differs from TDFA in that register
+    operations are placed in states rather than on transitions. Benchmarks
+    showed that staDFA are less efficient than TDFA (slower and larger).
 
 ``--fixed-tags <none | toplevel | all>``
     Internal option:

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 test $# -ne 1 && { echo "usage: ./__run.sh <path-to-re2c>"; exit 1; }
 re2c="$1"
@@ -40,7 +40,6 @@ for f in ../.dat/*.dat; do
         printf "\r%3d / %-3d" $i $n
         run "$regexp" "$string" "$match"
         run "$regexp" "$string" "$match" "--no-lookahead"
-        run "$regexp" "$string" "$match" "--stadfa"
 
     done < $f
     printf "\n"

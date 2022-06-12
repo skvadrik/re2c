@@ -37,7 +37,6 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_REGLESS));
     globopts.FFlag = true;
     globopts.backward = cflags & REG_BACKWARD;
-    globopts.stadfa = cflags & REG_STADFA;
     Msg msg;
     Opt opts(globopts, msg);
     opts.set_subhistories((cflags & REG_SUBHIST) != 0);
@@ -102,13 +101,12 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
 
         dfa = new dfa_t(*nfa, Rule::NONE, Rule::NONE);
         if (cflags & REG_REGLESS) {
-            DASSERT((cflags & REG_STADFA) == 0);
             rldfa = new rldfa_t(*nfa, *dfa, opt, cflags);
             opt = nullptr; // transfer options ownership to RLDFA
         } else {
             determinization(*nfa, *dfa, opt, msg, "");
             cutoff_dead_rules(*dfa, opt, "", msg);
-            insert_fallback_tags(opt, *dfa);
+            insert_fallback_tags(*dfa);
             compact_and_optimize_tags(opt, *dfa);
         }
 

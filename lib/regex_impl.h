@@ -168,7 +168,7 @@ typedef simctx_t<khistory_t> ksimctx_t;
 
 // regexec functions
 typedef int (regexec_t)(const regex_t*, const char*, size_t, regmatch_t[], int);
-template<bool stadfa> regexec_t regexec_dfa;
+regexec_t regexec_dfa;
 template<typename ctx_t> regexec_t regexec_dfa_regless;
 regexec_t regexec_nfa_posix;
 regexec_t regexec_nfa_posix_trie;
@@ -179,7 +179,7 @@ regexec_t regexec_nfa_leftmost_trie;
 
 // regparse functions (non-standard)
 typedef subhistory_t*(regparse_t)(const regex_t*, const char*, size_t);
-template<bool stadfa> regparse_t regparse_dfa;
+regparse_t regparse_dfa;
 template<typename ctx_t> regparse_t regparse_dfa_regless;
 
 // regtstring function (non-standard)

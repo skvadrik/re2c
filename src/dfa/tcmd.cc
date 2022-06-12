@@ -20,7 +20,7 @@ namespace re2c {
  * the history of some tag); such cases are not problematic because they do not
  * require a temporary variable. Non-trivial cycles need a temporary variable
  * (local to the basic block), which complicates liveness analysis. TDFA simply
- * rejects mappings with cycles, however, they may occur in staDFA.
+ * rejects mappings with cycles.
  *
  * For the purpose of topsort, we treat commands as arcs of directed acyclic
  * graph: command 'x = y' yields arc X -> Y. Topsort works by iteratively

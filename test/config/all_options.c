@@ -1,1 +1,1 @@
-re2c: error: cannot combine TDFA(0) and staDFA
+re2c: error: cannot combine loop switch and computed gotos

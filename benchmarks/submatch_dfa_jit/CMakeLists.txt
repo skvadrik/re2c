@@ -3,8 +3,6 @@ add_executable(bench_submatch_dfa_jit
     "${CMAKE_SOURCE_DIR}/benchmarks/common/common.cc"
 )
 
-set_property(TARGET bench_submatch_dfa_jit PROPERTY CXX_STANDARD 11)
-
 target_link_libraries(bench_submatch_dfa_jit libre2c)
 
 find_package(benchmark REQUIRED)

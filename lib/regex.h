@@ -69,11 +69,10 @@ static const int REG_GTOP      = 1u << 9;
 static const int REG_SLOWPREC  = 1u << 10;
 static const int REG_BACKWARD  = 1u << 11;
 static const int REG_KUKLEWICZ = 1u << 12;
-static const int REG_STADFA    = 1u << 13;
-static const int REG_REGLESS   = 1u << 14;
-static const int REG_SUBHIST   = 1u << 15;
-static const int REG_TSTRING   = 1u << 16;
-static const int REG_AUTOTAGS  = 1u << 17;
+static const int REG_REGLESS   = 1u << 13;
+static const int REG_SUBHIST   = 1u << 14;
+static const int REG_TSTRING   = 1u << 15;
+static const int REG_AUTOTAGS  = 1u << 16;
 
 struct regex_t {
     size_t re_nsub;

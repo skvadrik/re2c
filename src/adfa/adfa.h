@@ -65,7 +65,6 @@ struct State {
     bool fallback;
 
     size_t rule;
-    tcid_t stadfa_tags;
     tcid_t rule_tags;
     tcid_t fall_tags;
     bool isBase;
@@ -194,7 +193,6 @@ inline State::State()
     , fill (0)
     , fallback (false)
     , rule (Rule::NONE)
-    , stadfa_tags (TCID0)
     , rule_tags (TCID0)
     , fall_tags (TCID0)
     , isBase (false)

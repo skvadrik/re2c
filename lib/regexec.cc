@@ -24,11 +24,7 @@ int regexec(const regex_t *re, const char *string, size_t nmatch,
             }
         } else {
             // TDFA with registers and register operations on transitions.
-            if (cflags & REG_STADFA) {
-                return regexec_dfa<true>(re, string, nmatch, pmatch, eflags);
-            } else {
-                return regexec_dfa<false>(re, string, nmatch, pmatch, eflags);
-            }
+            return regexec_dfa(re, string, nmatch, pmatch, eflags);
         }
     } else {
         // NFA-based algorithms
@@ -69,11 +65,7 @@ subhistory_t *regparse(const regex_t *re, const char *string, size_t nmatch)
             }
         } else {
             // TDFA with registers and register operations on transitions.
-            if (cflags & REG_STADFA) {
-                return regparse_dfa<true>(re, string, nmatch);
-            } else {
-                return regparse_dfa<false>(re, string, nmatch);
-            }
+            return regparse_dfa(re, string, nmatch);
         }
     } else {
         // NFA-based algorithms (not implemented yet).

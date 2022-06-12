@@ -25,7 +25,6 @@ template<typename ctx_t> static void dump_history(const dfa_t &, const typename 
 template<typename ctx_t> static void dump_tags(const tagver_table_t &, const typename ctx_t::history_t &, hidx_t, uint32_t);
 static void dump_tcmd_or_tcid(tcmd_t *const *, const tcid_t *, size_t, const tcpool_t &);
 static const char *tagname(const Tag &);
-template <typename ctx_t> static void dump_stacmd(const ctx_t &, const stacmd_t *);
 
 // explicit instantiation for context types
 template void dump_dfa_t::state<pdetctx_t>(const pdetctx_t &ctx, bool isnew);
@@ -98,11 +97,6 @@ void dump_dfa_t::state(const ctx_t &ctx, bool isnew)
 
         fprintf(stderr, "</TD></TR>");
         ++i;
-    }
-    if (ctx.dc_opts->stadfa) {
-        fprintf(stderr, "<TR><TD>");
-        dump_stacmd(ctx, ctx.stadfa_actions);
-        fprintf(stderr, "</TD></TR>");
     }
     fprintf(stderr, "</TABLE>>]\n");
 
@@ -206,7 +200,6 @@ void dump_dfa(const dfa_t &dfa)
 
         // state
         fprintf(stderr, "  n%u [height=0.2 width=0.2 label=\"%u", i, i);
-        dump_tcmd_or_tcid(s->stacmd ? &s->stacmd : nullptr, &s->stacid, 0, dfa.tcpool);
         fprintf(stderr, "\"]\n");
 
         // finalizer
@@ -273,37 +266,6 @@ void dump_tcmd(const tcmd_t *p)
             }
             fprintf(stderr, " ");
         }
-    }
-}
-
-template <typename ctx_t>
-void dump_stacmd(const ctx_t &ctx, const stacmd_t *p)
-{
-    for (; p; p = p->next) {
-        const tagver_t v = last(ctx.history, p->hist, p->tag);
-        const uint32_t t = static_cast<uint32_t>(p->tag);
-
-        switch (p->kind) {
-        case stacmd_t::STORE:
-            fprintf(stderr, "S(%u,%d,%d,%s)", t, p->lhs, p->rhs,
-                v == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
-            break;
-        case stacmd_t::TRANSFER:
-            fprintf(stderr, "T(%u,%d,%d)", t, p->lhs, p->rhs);
-            break;
-        case stacmd_t::ACCEPT:
-            if (v == TAGVER_CURSOR) {
-                fprintf(stderr, "A(%u,%d,&uarr;)", t, p->rhs);
-            }
-            else if (v == TAGVER_BOTTOM) {
-                fprintf(stderr, "A(%u,%d,&darr;)", t, p->rhs);
-            }
-            else {
-                fprintf(stderr, "A(%u,%d)", t, p->rhs);
-            }
-            break;
-        }
-        if (p->next) fprintf(stderr, "<BR/>");
     }
 }
 

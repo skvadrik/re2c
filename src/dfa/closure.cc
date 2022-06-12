@@ -79,7 +79,6 @@ namespace re2c {
  */
 
 template<typename ctx_t> static void generate_versions(ctx_t &);
-template<typename ctx_t> static void generate_stadfa_actions(ctx_t &);
 template<typename ctx_t> void prune(ctx_t &ctx);
 static void lower_lookahead_to_transition(closure_t &);
 static bool cmpby_rule_state(const clos_t &, const clos_t &);
@@ -99,12 +98,7 @@ void tagged_epsilon_closure(ctx_t &ctx)
         lower_lookahead_to_transition(ctx.state);
     }
 
-    if (!ctx.dc_opts->stadfa) {
-        generate_versions(ctx);
-    }
-    else {
-        generate_stadfa_actions(ctx);
-    }
+    generate_versions(ctx);
 }
 
 template<> void closure<pdetctx_t>(pdetctx_t &ctx)
@@ -302,100 +296,6 @@ bool newver_cmp_t<history_t>::operator()(const newver_t &x, const newver_t &y) c
 
     if (invert) cmp = -cmp;
     return cmp < 0;
-}
-
-template<typename ctx_t>
-void generate_stadfa_actions(ctx_t &ctx)
-{
-    const size_t ntag = ctx.dfa.tags.size();
-    allocator_t &alc = ctx.dc_allocator;
-
-    stacmd_t *cmd = nullptr;
-
-    // store and transfer actions
-    if (ctx.dc_origin == dfa_t::NIL) {
-        for (const clos_t &c : ctx.state) {
-            const int32_t i = static_cast<int32_t>(c.state - ctx.nfa.states);
-            for (size_t t = 0; t < ntag; ++t) {
-                if (!fixed(ctx.dfa.tags[t])) {
-                    cmd = make_stacmd(alc, stacmd_t::TRANSFER, cmd, t, i, -1, HROOT);
-                }
-            }
-        }
-    }
-    else {
-        const kernel_t *kernel = ctx.dc_kernels[ctx.dc_origin];
-
-        for (const clos_t &c : ctx.state) {
-            const int32_t i = static_cast<int32_t>(c.state - ctx.nfa.states);
-            const int32_t j = static_cast<int32_t>(kernel->state[c.origin] - ctx.nfa.states);
-
-            // delayed store actions for transition tags
-            for (size_t t = 0; t < ntag; ++t) {
-                if (!fixed(ctx.dfa.tags[t]) && last(ctx.history, c.ttran, t) != TAGVER_ZERO) {
-                    cmd = make_stacmd(alc, stacmd_t::STORE, cmd, t, i, j, c.ttran);
-                }
-            }
-
-            // transfer actions for store/transfer actions in the origin state
-            for (const stacmd_t *p = kernel->stacmd; p; p = p->next) {
-                if (p->lhs != j || p->kind == stacmd_t::ACCEPT) continue;
-                const size_t t = p->tag;
-
-                // if there already exists action for the same tag and index,
-                // it must be a store, and it takes precedence over transfer
-                const stacmd_t *q = cmd;
-                for (; q && !(q->tag == t && q->lhs == i); q = q->next);
-                if (q) {
-                    DASSERT(q->kind == stacmd_t::STORE);
-                    continue;
-                }
-
-                cmd = make_stacmd(alc, stacmd_t::TRANSFER, cmd, t, i, j, HROOT);
-            }
-        }
-    }
-
-    // accept actions (if there is a final TNFA substate, it must be unique)
-    cclositer_t c = std::find_if(ctx.state.begin(), ctx.state.end(), clos_t::fin);
-    if (c != ctx.state.end()) {
-        const int32_t i = static_cast<int32_t>(c->state - ctx.nfa.states);
-
-        // save the head of store/transfer list before adding accept actions
-        const stacmd_t *const st_cmd = cmd;
-
-        // accept actions for lookahead tags
-        for (size_t t = 0; t < ntag; ++t) {
-            if (!fixed(ctx.dfa.tags[t])
-                    && last(ctx.history, c->thist, t) != TAGVER_ZERO) {
-                // there must be a store/transfer action for the final sub-state
-                cmd = make_stacmd(alc, stacmd_t::ACCEPT, cmd, t, -1, i,
-                    c->thist);
-            }
-        }
-
-        // accept actions for store/transfer actions in the current state
-        for (const stacmd_t *p = st_cmd; p; p = p->next) {
-            if (p->lhs != i) continue;
-            const size_t t = p->tag;
-
-            // if there already exists accept action for the same tag and index,
-            // it must come from lookahead tags, and therefore takes precedence
-            const stacmd_t *q = cmd;
-            for (; q != st_cmd && q->tag != t; q = q->next);
-            if (q != st_cmd) {
-                DASSERT(q->hist != HROOT);
-                continue;
-            }
-
-            cmd = make_stacmd(alc, stacmd_t::ACCEPT, cmd, t, -1, i, HROOT);
-        }
-    }
-
-    // staDFA actions must be sorted before searching for identical state
-    sort_stacmd(cmd);
-
-    ctx.stadfa_actions = cmd;
 }
 
 } // namespace re2c

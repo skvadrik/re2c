@@ -51,8 +51,6 @@ namespace re2c {
 struct moore_key_t {
     size_t rule;
     tcid_t fincmd;
-    tcid_t stacmd;
-
 };
 
 typedef std::map<moore_key_t, size_t> moore_init_t;
@@ -120,9 +118,7 @@ void minimization_table(size_t *part, const std::vector<dfa_state_t*> &states,
         dfa_state_t *s1 = states[i];
         for (size_t j = 0; j < i; ++j) {
             dfa_state_t *s2 = states[j];
-            tbl[i][j] = s1->rule != s2->rule
-                || s1->tcid[nchars] != s2->tcid[nchars]
-                || s1->stacid != s2->stacid;
+            tbl[i][j] = s1->rule != s2->rule || s1->tcid[nchars] != s2->tcid[nchars];
         }
     }
 
@@ -189,7 +185,7 @@ void minimization_moore(size_t *part, const std::vector<dfa_state_t*> &states,
     moore_init_t init;
     for (size_t i = 0; i < count; ++i) {
         dfa_state_t *s = states[i];
-        const moore_key_t k = {s->rule, s->tcid[nchars], s->stacid};
+        const moore_key_t k = {s->rule, s->tcid[nchars]};
         std::pair<moore_init_t::iterator, bool> p = init.insert(std::make_pair(k, i));
         if (p.second) {
             part[i] = i;
@@ -258,13 +254,10 @@ void minimization_moore(size_t *part, const std::vector<dfa_state_t*> &states,
     delete[] next;
 }
 
-bool operator <(const moore_key_t &x, const moore_key_t &y)
-{
+bool operator<(const moore_key_t &x, const moore_key_t &y) {
     if (x.rule < y.rule) return true;
     if (x.rule > y.rule) return false;
-    if (x.fincmd < y.fincmd) return true;
-    if (x.fincmd > y.fincmd) return false;
-    return x.stacmd < y.stacmd;
+    return x.fincmd < y.fincmd;
 }
 
 } // namespace re2c

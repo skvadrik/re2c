@@ -15,7 +15,6 @@ Node::Node()
     : arcs()
     , rule(Rule::NONE)
     , cmd(nullptr)
-    , stacmd(nullptr)
 {}
 
 void Node::init(const dfa_state_t *s, const std::vector<uint32_t> &charset,
@@ -53,7 +52,6 @@ void Node::init(const dfa_state_t *s, const std::vector<uint32_t> &charset,
 
     rule = s->rule;
     cmd = s->tcmd[nc];
-    stacmd = s->stacmd;
 }
 
 bool Node::end() const
