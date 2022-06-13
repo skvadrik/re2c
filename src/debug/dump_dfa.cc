@@ -191,9 +191,7 @@ void dump_dfa(const dfa_t &dfa)
     // initializer
     fprintf(stderr,
         "  n [shape=point]"
-        "  n -> n0 [style=dotted label=\"");
-    dump_tcmd_or_tcid(dfa.tcmd0 ? &dfa.tcmd0 : nullptr, &dfa.tcid0, 0, dfa.tcpool);
-    fprintf(stderr, "\"]\n");
+        "  n -> n0 [style=dotted label=\"\"]\n");
 
     for (uint32_t i = 0; i < nstate; ++i) {
         const dfa_state_t *s = dfa.states[i];

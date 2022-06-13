@@ -596,11 +596,14 @@ as a reference implementation.
 Internal option: make the generated lexer advance the input position
 eagerly \-\- immediately after reading the input symbol. This changes the
 default behavior when the input position is advanced lazily \-\- after
-transition to the next state. This option is implied by \fB\-\-no\-lookahead\fP\&.
+transition to the next state.
 .TP
 .B \fB\-\-no\-lookahead\fP
-Internal option: use TDFA(0) instead of TDFA(1).
-This option has effect only with \fB\-\-tags\fP or \fB\-\-posix\-captures\fP options.
+Internal option, deprecated.
+It used to enable TDFA(0) algorithm. Unlike TDFA(1), TDFA(0) algorithm does
+not use one\-symbol lookahead. It applies register operations to the incoming
+transitions rather than the outgoing ones. Benchmarks showed that TDFA(0)
+algorithm is less efficient than TDFA(1).
 .TP
 .B \fB\-\-no\-optimize\-tags\fP
 Internal option: suppress optimization of tag variables (useful for
@@ -621,9 +624,10 @@ complexity in the number of TNFA states, but it is much simpler than
 \fBcomplex\fP and may be slightly faster in non\-pathological cases.
 .TP
 .B \fB\-\-stadfa\fP
-Internal option:
-use staDFA algorithm for submatch extraction. The main difference with TDFA
-is that tag operations in staDFA are placed in states, not on transitions.
+Internal option, deprecated.
+It used to enable staDFA algorithm, which differs from TDFA in that register
+operations are placed in states rather than on transitions. Benchmarks
+showed that staDFA algorithm is less efficient than TDFA.
 .TP
 .B \fB\-\-fixed\-tags <none | toplevel | all>\fP
 Internal option:
@@ -1364,8 +1368,7 @@ in storable state mode (enabled with \fBre2c:state:nextlabel\fP). The default
 is \fByyNext\fP\&.
 .TP
 .B \fBre2c:lookahead\fP, \fBre2c:flags:lookahead\fP
-Same as inverted \fB\-\-no\-lookahead\fP option, but can be configured on
-per\-block basis.
+Deprecated (see the deprecated \fB\-\-no\-lookahead\fP option).
 .TP
 .B \fBre2c:nested\-ifs\fP, \fBre2c:flags:nested\-ifs\fP, \fBre2c:flags:s\fP
 Same as the \fB\-\-nested\-ifs\fP option, but can be configured on per\-block

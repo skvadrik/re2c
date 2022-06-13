@@ -45,4 +45,4 @@ yy7:
 	{}
 }
 
-tags/skip_tags_disorder3.re:4:5: warning: rule matches empty string [-Wmatch-empty-string]
+tags/skip_tags_disorder.re:4:5: warning: rule matches empty string [-Wmatch-empty-string]

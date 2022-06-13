@@ -212,10 +212,10 @@ opt_long:
     "posix-closure"         end { NEXT_ARG("--posix-closure",    opt_posix_closure); }
     "posix-prectable"       end { NEXT_ARG("--posix-prectable",  opt_posix_prectable); }
     "fixed-tags"            end { NEXT_ARG("--fixed-tags",       opt_fixed_tags); }
-    "no-lookahead"          end { globopts.lookahead = false;     goto opt; }
     "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
 
     // removed
+    "no-lookahead"          end { ERROR("TDFA(0) algorithm was deprecated and removed"); }
     "stadfa"                end { ERROR("staDFA algorithm was deprecated and removed"); }
 
     // debug options

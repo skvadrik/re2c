@@ -41,9 +41,7 @@ void dump_adfa(const DFA &dfa)
 
     fprintf(stderr,
         "  n [shape=point]"
-        "  n -> n%u [style=dotted label=\"", st2idx[dfa.head]);
-    dump_tcmd(dfa.tcpool[dfa.tags0]);
-    fprintf(stderr, "\"]\n");
+        "  n -> n%u [style=dotted label=\"\"]\n", st2idx[dfa.head]);
 
     for (const State *s = dfa.head; s; s = s->next) {
         const char *attr;

@@ -508,13 +508,9 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
         gen_fill(output, stmts, dfa, from, jump.to);
     }
 
-    if (jump.skip && !opts->lookahead) {
-        append(stmts, code_skip(alc));
-    }
-
     gen_settags(output, stmts, dfa, jump.tags);
 
-    if (jump.skip && opts->lookahead) {
+    if (jump.skip) {
         append(stmts, code_skip(alc));
     }
 

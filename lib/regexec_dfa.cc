@@ -37,8 +37,6 @@ int regexec_dfa(
     const char *p = string, *q = p;
     const dfa_state_t *s, *x = nullptr;
 
-    apply_regops(regs, dfa->tcmd0, 0);
-
     for (;;) {
         s = dfa->states[i];
         const int32_t c = *p++;
@@ -107,7 +105,6 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
     regoff_trie_t *regtrie = preg->regtrie;
 
     regtrie->clear();
-    apply_regops_with_history(regtrie, dfa->tcmd0, 0);
 
     for (;;) {
         s = dfa->states[i];

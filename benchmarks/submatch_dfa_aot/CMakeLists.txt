@@ -143,7 +143,7 @@ set(COMMON_RE2C
     "${SRC_DIR}/re2c/include-eof/fill_email.re"
 )
 # deprecated algorithms were removed after re2c-3.0
-set(DEPRECATED_ALGS "stadfa")
+set(DEPRECATED_ALGS "tdfa0" "stadfa")
 foreach(bench ${BENCHMARKS})
 foreach(eof "" "-eof")
 foreach(alg "tdfa1" "tdfa0" "stadfa")

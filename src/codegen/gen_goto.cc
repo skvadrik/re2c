@@ -261,10 +261,6 @@ void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
         return;
     }
 
-    if (go->skip && !opts->lookahead) {
-        append(stmts, code_skip(alc));
-    }
-
     DASSERT(consume(from) || go->tags == TCID0);
     if (opts->eof == NOEOF) {
         // With the end-of-input rule $ tag operations *must* be generated
@@ -274,7 +270,7 @@ void gen_go(Output &output, const DFA &dfa, const CodeGo *go, const State *from,
         gen_settags(output, stmts, dfa, go->tags);
     }
 
-    if (go->skip && opts->lookahead) {
+    if (go->skip) {
         append(stmts, code_skip(alc));
     }
 

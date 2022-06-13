@@ -71,7 +71,6 @@ Skeleton::Skeleton(const dfa_t &dfa, const opt_t *opts, const std::string &name,
     , range_allocator()
     , nodes_count(dfa.states.size() + 1) // +1 for default state
     , nodes(new Node[nodes_count])
-    , cmd0(dfa.tcmd0)
     , sizeof_key(8)
     , def_rule(dfa.def_rule)
     , eof_rule(dfa.eof_rule)

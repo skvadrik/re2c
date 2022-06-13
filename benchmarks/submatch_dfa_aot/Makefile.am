@@ -62,18 +62,18 @@ BIN_RAGEL = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_RAGEL))
 COMMON_RAGEL = $(COMMON_SRC) $(SRC_DIR)/ragel/common.c
 
 GEN_RE2C_TDFA1     = $(patsubst %, $(GEN_DIR)/re2c/%-tdfa1.c,     $(BENCHMARKS))
-GEN_RE2C_TDFA0     = $(patsubst %, $(GEN_DIR)/re2c/%-tdfa0.c,     $(BENCHMARKS))
 GEN_RE2C_EOF_TDFA1 = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa1.c, $(BENCHMARKS))
-GEN_RE2C_EOF_TDFA0 = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa0.c, $(BENCHMARKS))
 GEN_RE2C = \
     $(GEN_RE2C_TDFA1) \
-    $(GEN_RE2C_TDFA0) \
-    $(GEN_RE2C_EOF_TDFA1) \
-    $(GEN_RE2C_EOF_TDFA0)
+    $(GEN_RE2C_EOF_TDFA1)
 
+GEN_RE2C3_TDFA0      = $(patsubst %, $(GEN_DIR)/re2c/%-tdfa0.c,      $(BENCHMARKS))
+GEN_RE2C3_EOF_TDFA0  = $(patsubst %, $(GEN_DIR)/re2c/%-eof-tdfa0.c,  $(BENCHMARKS))
 GEN_RE2C3_STADFA     = $(patsubst %, $(GEN_DIR)/re2c/%-stadfa.c,     $(BENCHMARKS))
 GEN_RE2C3_EOF_STADFA = $(patsubst %, $(GEN_DIR)/re2c/%-eof-stadfa.c, $(BENCHMARKS))
 GEN_RE2C3 = \
+    $(GEN_RE2C_TDFA0) \
+    $(GEN_RE2C_EOF_TDFA0)  \
     $(GEN_RE2C3_STADFA) \
     $(GEN_RE2C3_EOF_STADFA)
 
@@ -128,20 +128,20 @@ $(GEN_RE2C_EOF_TDFA1): $(GEN_DIR)/%-eof-tdfa1.c: $(SRC_DIR)/%.re $(COMMON_RE2C) 
 	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_EOF) $< -o $@
 	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
-$(GEN_RE2C_TDFA0): $(GEN_DIR)/%-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	$(AM_V_at)mkdir -p $(@D)
-	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS) --no-lookahead $< -o $@
-	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
-
-$(GEN_RE2C_EOF_TDFA0): $(GEN_DIR)/%-eof-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
-	$(AM_V_at)mkdir -p $(@D)
-	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS_EOF) --no-lookahead $< -o $@
-	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
-
 # optionally regenerate ragel, kleenex and re2c-3.0 benchmarks
-# (staDFA algorithm was removed in re2c versions after 3.0)
+# (TDFA(0) and staDFA algorithms were removed in re2c versions after 3.0)
 
 if REGEN_BENCHMARKS
+
+$(GEN_RE2C3_TDFA0): $(GEN_DIR)/%-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C3)
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C3) $(RE2C_FLAGS) --no-lookahead $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+
+$(GEN_RE2C3_EOF_TDFA0): $(GEN_DIR)/%-eof-tdfa0.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C3)
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C3) $(RE2C_FLAGS_EOF) --no-lookahead $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 $(GEN_RE2C3_STADFA): $(GEN_DIR)/%-stadfa.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C3)
 	$(AM_V_at)mkdir -p $(@D)

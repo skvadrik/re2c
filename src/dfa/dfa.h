@@ -62,8 +62,6 @@ struct dfa_t
     tagver_t *finvers;
     tcpool_t &tcpool;
     tagver_t maxtagver;
-    tcmd_t *tcmd0;
-    tcid_t tcid0;
     size_t def_rule;
     size_t eof_rule;
 

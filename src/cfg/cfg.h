@@ -22,7 +22,7 @@ struct cfg_bb_t
 {
     cfg_ix_t *succb;
     cfg_ix_t *succe;
-    tcmd_t *&cmd;
+    tcmd_t *&cmd; // non-constant, as optimizations need to change operations
     const Rule *rule;
 
     cfg_bb_t(const cfg_ix_t *sb, const cfg_ix_t *se, tcmd_t *&c, const Rule *r);
@@ -64,6 +64,9 @@ struct cfg_t
     cfg_ix_t nbbarc;
     cfg_ix_t nbbfin;
     cfg_ix_t nbbfall;
+
+    // mock operations for the root state, as TDFA(1) has no initializer operations
+    tcmd_t *tcmd0;
 
     explicit cfg_t(dfa_t &a);
     ~cfg_t();

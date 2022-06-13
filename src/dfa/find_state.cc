@@ -131,10 +131,7 @@ void find_state(ctx_t &ctx) {
         }
     }
 
-    if (ctx.dc_origin == dfa_t::NIL) {
-        // initial state
-        dfa.tcmd0 = ctx.dc_actions;
-    } else {
+    if (ctx.dc_origin != dfa_t::NIL) {
         dfa_state_t *s = dfa.states[ctx.dc_origin];
         s->arcs[ctx.dc_symbol] = ctx.dc_target;
         s->tcmd[ctx.dc_symbol] = ctx.dc_actions;

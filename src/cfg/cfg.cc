@@ -51,6 +51,7 @@ cfg_t::cfg_t(dfa_t &a)
     , nbbarc(0)
     , nbbfin(0)
     , nbbfall(0)
+    , tcmd0(nullptr)
 {
     cfg_context_t ctx(dfa);
     map_actions_to_bblocks(ctx);
@@ -96,7 +97,7 @@ void cfg_t::create_bblocks(cfg_context_t &ctx)
 
     // root bblock
     successors(ctx, 0, true /*self*/);
-    new(b++) cfg_bb_t(ctx.succb, ctx.succe, dfa.tcmd0, nullptr);
+    new(b++) cfg_bb_t(ctx.succb, ctx.succe, tcmd0, nullptr);
 
     // transition bblocks
     for (size_t i = 0; i < ctx.nstate; ++i) {

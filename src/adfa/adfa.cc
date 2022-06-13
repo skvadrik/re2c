@@ -49,7 +49,6 @@ DFA::DFA
     , defstate(nullptr)
     , eof_state(nullptr)
     , finstates(dfa.rules.size(), nullptr)
-    , tags0(dfa.tcid0)
     , charset(dfa.charset)
     , rules(dfa.rules)
     , tags(dfa.tags)
@@ -311,13 +310,6 @@ void DFA::findBaseState(const opt_t *opts)
  * state. Different transitions may disagree: some of them go to consuming
  * states, others don't. If they agree, skip can be hoisted (just like tags).
  *
- * '--eager-skip' makes tag hoisting more complicated, because now we have
- * to care about the type of automaton: lookahead TDFAs must skip after
- * writing tags, while non-lookahead TDFAs must skip before writing tags.
- * Therefore skip hoising cannot be done without tag hoisting in lookahead
- * TDFAs, and vice versa with non-lookahead TDFAs.
- * (Note that '--eager-skip' is implied by '--no-lookahead').
- *
  * Tunneling splits base states in two parts: head and body. Body has all
  * the conditional branches (transitions on symbols), while head has just
  * one unconditional jump to body.
@@ -573,27 +565,15 @@ void DFA::hoist_tags_and_skip(const opt_t *opts)
         const size_t nspan = s->go.nspans;
         if (nspan == 0) continue;
 
-        // check if it is possible to hoist tags and/or skip
-        bool hoist_tags = can_hoist_tags(s, opts);
-        bool hoist_skip = can_hoist_skip(s, opts);
-        if (opts->lookahead) {
-            // skip must go after tags
-            hoist_skip &= hoist_tags;
-        } else {
-            // skip must go before tags
-            hoist_tags &= hoist_skip;
-        }
-
         // hoist tags if possible
-        if (hoist_tags) {
+        if (can_hoist_tags(s, opts)) {
             s->go.tags = span[0].tags;
             for (uint32_t i = 0; i < nspan; ++i) {
                 span[i].tags = TCID0;
             }
+            // hoist skip if possible (it cannot be done without hoisting tags)
+            s->go.skip = can_hoist_skip(s, opts);
         }
-
-        // hoist skip if possible
-        s->go.skip = hoist_skip;
     }
 }
 

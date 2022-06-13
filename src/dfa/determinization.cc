@@ -35,8 +35,6 @@ dfa_t::dfa_t(const nfa_t &nfa, size_t def_rule, size_t eof_rule)
     , finvers(nullptr)
     , tcpool(*new tcpool_t)
     , maxtagver(0)
-    , tcmd0(nullptr)
-    , tcid0(TCID0)
     , def_rule(def_rule)
     , eof_rule(eof_rule)
 {}

@@ -144,7 +144,6 @@ struct Skeleton
 
     const size_t nodes_count;
     Node *nodes;
-    const tcmd_t *cmd0;
 
     size_t sizeof_key;
     size_t def_rule;

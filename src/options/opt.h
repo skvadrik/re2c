@@ -69,7 +69,6 @@ class Msg;
     CONSTOPT (PosixClosure, posix_closure, PosixClosure::GOR1) \
     CONSTOPT (PosixPrecedenceTable, posix_prectable, PosixPrecedenceTable::COMPLEX) \
     CONSTOPT (FixedTags, fixed_tags, FixedTags::ALL) \
-    CONSTOPT (bool, lookahead, true) \
     CONSTOPT (bool, optimize_tags, true) \
     CONSTOPT (bool, backward, false) \
     CONSTOPT (bool, nested_negative_tags, true) \

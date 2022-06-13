@@ -181,10 +181,7 @@ static void write_input(const path_t &path, Skeleton &skel, size_t width)
 }
 
 template<typename key_t>
-static void write_keys(const path_t &path, Skeleton &skel, size_t width)
-{
-    const uint32_t offby = skel.opts->lookahead ? 0 : 1;
-
+static void write_keys(const path_t &path, Skeleton &skel, size_t width) {
     // find last accepting node
     size_t f;
     for (f = path.len(); f > 0 && path.node(skel, f).rule == Rule::NONE; --f);
@@ -225,13 +222,10 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
             std::fill(tags, tags + skel.ntagver, MTAG_TRIE_ROOT);
             mtag_trie_clear(tagtrie);
 
-            // initial tags (TDFA(0))
-            apply(skel, skel.cmd0, 0);
-
             for (uint32_t i = 0; i < f; ++i) {
-                // tag commands on transitions (TDFA(0), TDFA(1))
+                // tag commands on transitions
                 const Node::range_t *a = arcs[i];
-                apply(skel, a->cmd, i + offby);
+                apply(skel, a->cmd, i);
 
                 // advance character iterator
                 // if it's the last one, then switch to the next arc
@@ -243,8 +237,6 @@ static void write_keys(const path_t &path, Skeleton &skel, size_t width)
 
             // tag commands in final states
             const tcmd_t *fcmd = path.node(skel, f).cmd;
-
-            // TDFA(1)
             apply(skel, fcmd, static_cast<uint32_t>(f));
         }
 

@@ -23,9 +23,6 @@ void freeze_tags(dfa_t &dfa) {
     tcpool_t &pool = dfa.tcpool;
     const size_t nsym = dfa.nchars;
 
-    dfa.tcid0 = pool.insert(dfa.tcmd0);
-    dfa.tcmd0 = nullptr;
-
     for (dfa_state_t *s : dfa.states) {
         tcmd_t **cmd = s->tcmd,
             **const fin = cmd + nsym,

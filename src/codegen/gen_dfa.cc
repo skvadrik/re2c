@@ -81,8 +81,6 @@ void gen_dfa_as_blocks_with_labels(Output &output, const DFA &dfa, CodeList *stm
     code_alc_t &alc = output.allocator;
     Scratchbuf &o = output.scratchbuf;
 
-    gen_settags(output, stmts, dfa, dfa.tags0);
-
     // If DFA has transitions into the initial state and --eager-skip option is not used,
     // then the initial state must have a YYSKIP statement that must be bypassed when
     // first entering the DFA. With --loop-switch that would be impossible, because there
@@ -105,7 +103,6 @@ void gen_dfa_as_switch_cases(Output &output, DFA &dfa, CodeCases *cases) {
     code_alc_t &alc = output.allocator;
 
     DASSERT(output.block().opts->loop_switch);
-    DASSERT(dfa.tags0 == TCID0);
 
     for (State *s = dfa.head; s; s = s->next) {
         CodeList *body = code_list(alc);

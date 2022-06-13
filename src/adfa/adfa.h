@@ -88,7 +88,6 @@ struct DFA {
     State *defstate;
     State *eof_state;
     std::vector<State*> finstates;
-    const tcid_t tags0;
     std::vector<uint32_t> &charset;
     std::valarray<Rule> &rules;
     std::vector<Tag> &tags;

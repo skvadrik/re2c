@@ -59,45 +59,18 @@ namespace re2c {
  * with the highest priority (see note [closure items are sorted by rule]).
  */
 
-/* note [the difference between TDFA(0) and TDFA(1)]
- *
- * TDFA(0) performs epsilon-closure after transition on symbol,
- * while TDFA(1) performs it before the transition and uses the lookahead
- * symbol to filter the closure.
- *
- * TDFA(0) is one step ahead of TDFA(1): it consumes a symol, then builds
- * epsilon-closure, eagerly applies all tags reachable by it and goes to
- * the next state.
- *
- * TDFA(1) is more lazy: it builds epsilon-closure, then filters it with
- * respect to the current symbol (uses only those states which have outgoing
- * transitions on this symbol), then applies corresponding tags (probably
- * not all tags applied by TDFA(0)) and then consumes the symbol and goes
- * to the next state.
- *
- * Thus in general TDFA(1) raises less conflicts than TDFA(0).
- */
-
 template<typename ctx_t> static void generate_versions(ctx_t &);
 template<typename ctx_t> void prune(ctx_t &ctx);
-static void lower_lookahead_to_transition(closure_t &);
 static bool cmpby_rule_state(const clos_t &, const clos_t &);
 
 // explicit instantiation for context types
 template void tagged_epsilon_closure<pdetctx_t>(pdetctx_t &ctx);
 template void tagged_epsilon_closure<ldetctx_t>(ldetctx_t &ctx);
 
+// Build tagged epsilon-closure of the given set of NFA states.
 template<typename ctx_t>
-void tagged_epsilon_closure(ctx_t &ctx)
-{
-    // build tagged epsilon-closure of the given set of NFA states
+void tagged_epsilon_closure(ctx_t &ctx) {
     closure(ctx);
-
-    // see note [the difference between TDFA(0) and TDFA(1)]
-    if (!ctx.dc_opts->lookahead) {
-        lower_lookahead_to_transition(ctx.state);
-    }
-
     generate_versions(ctx);
 }
 
@@ -167,14 +140,6 @@ void prune(ctx_t &ctx)
     }
 
     closure.swap(buffer);
-}
-
-void lower_lookahead_to_transition(closure_t &closure)
-{
-    for (clos_t &c : closure) {
-        c.ttran = c.thist;
-        c.thist = HROOT;
-    }
 }
 
 template<typename ctx_t>

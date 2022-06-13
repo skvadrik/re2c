@@ -30,7 +30,7 @@ static void fix_conopt(conopt_t &glob)
         }
     }
 
-    if (!glob.lookahead || glob.loop_switch) {
+    if (glob.loop_switch) {
         // for loop-switch enable eager-skip always (not only in cases when
         // YYFILL labels are used) to avoid special handling of initial state
         // when there are transitions into it.
@@ -341,14 +341,6 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         if (real.bFlag) {
             // TODO: generate bitmaps before the joined loop/switch for all conditions.
             error("bitmaps with loop switch are not supported");
-            exit(1);
-        }
-        if (!glob.lookahead) {
-            // The problem here is that TDFA(0) may have initial register operations that
-            // should be executed on DFA entry. With loop/switch these operations would
-            // need to go in a special initial state (they can't go before the `yystate`
-            // loop because that would not work with start conditions).
-            error("TDFA(0) with loop switch is not supported");
             exit(1);
         }
     }
