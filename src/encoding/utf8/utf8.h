@@ -9,43 +9,44 @@ class utf8 {
   public:
     typedef uint32_t rune;
 
-    // maximum characters per rune
-    // enum instead of static const member because of [-Wvla]
-    enum { MAX_RUNE_LENGTH = 4u };
+    // Maximum characters per code point (rune).
+    static constexpr uint32_t MAX_RUNE_LENGTH = 4u;
 
-    // decoding error
-    static const uint32_t ERROR;
+    // Decoding error.
+    static constexpr uint32_t ERROR = 0xFFFDu;
 
-    // maximal runes for each rune length
-    static const rune MAX_1BYTE_RUNE;
-    static const rune MAX_2BYTE_RUNE;
-    static const rune MAX_3BYTE_RUNE;
-    static const rune MAX_4BYTE_RUNE;
-    static const rune MAX_RUNE;
+    // Maximum values for UTF8 code points of length 1-4 bytes.
+    static constexpr rune MAX_1BYTE_RUNE = 0x7Fu;     // 0000 0000  0000 0000  0111 1111
+    static constexpr rune MAX_2BYTE_RUNE = 0x7FFu;    // 0000 0000  0000 0111  1111 1111
+    static constexpr rune MAX_3BYTE_RUNE = 0xFFFFu;   // 0000 0000  1111 1111  1111 1111
+    static constexpr rune MAX_4BYTE_RUNE = 0x1FFFFFu; // 0001 1111  1111 1111  1111 1111
 
-    static const uint32_t PREFIX_1BYTE;
-    static const uint32_t INFIX;
-    static const uint32_t PREFIX_2BYTE;
-    static const uint32_t PREFIX_3BYTE;
-    static const uint32_t PREFIX_4BYTE;
-    static const uint32_t PREFIX_5BYTE;
+    // Maximum Unicode code point is U+10FFFF (it is less than the maximum 4-byte UTF8 code point).
+    static constexpr rune MAX_RUNE = 0x10FFFFu;
 
-    static const uint32_t SHIFT;
-    static const uint32_t MASK;
+    static constexpr uint32_t PREFIX_1BYTE = 0u;    // 0000 0000
+    static constexpr uint32_t INFIX        = 0x80u; // 1000 0000
+    static constexpr uint32_t PREFIX_2BYTE = 0xC0u; // 1100 0000
+    static constexpr uint32_t PREFIX_3BYTE = 0xE0u; // 1110 0000
+    static constexpr uint32_t PREFIX_4BYTE = 0xF0u; // 1111 0000
+    static constexpr uint32_t PREFIX_5BYTE = 0xF8u; // 1111 1000
 
-    // UTF-8 bytestring for given Unicode rune
+    static constexpr uint32_t SHIFT = 6u;
+    static constexpr uint32_t MASK = 0x3Fu; // 0011 1111
+
+    // UTF-8 bytestring for given Unicode code point.
     static uint32_t rune_to_bytes(uint32_t* s, rune r);
 
-    // read Unicode rune for the given (pre-validated) UTF-8 bytestring
+    // Read Unicode code point for the given (pre-validated) UTF-8 bytestring.
     static uint32_t decode_unsafe(const char* str);
 
-    // length of UTF-8 bytestring for given Unicode rune
+    // Length of a UTF-8 bytestring for a given Unicode code point.
     static uint32_t rune_length(rune r);
 
-    // maximal Unicode rune with given length of UTF-8 bytestring
+    // Maximum Unicode code point with a given length of UTF-8 bytestring.
     static rune max_rune(uint32_t i);
 };
 
-}  // namespace re2c
+} // namespace re2c
 
 #endif // _RE2C_RE_ENCODING_UTF8_UTF8_
