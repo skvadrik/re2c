@@ -10,53 +10,53 @@ free_list<AST*> AST::flist;
 
 const uint32_t AST::MANY = std::numeric_limits<uint32_t>::max();
 
-AST::AST(const loc_t& l, type_t t): type(t), loc(l) {
+AST::AST(const loc_t& l, Kind k): kind(k), loc(l) {
     flist.insert(this);
 }
 
 AST::~AST() {
     flist.erase(this);
-    if (type == TAG) {
+    if (kind == Kind::TAG) {
         delete tag.name;
-    } else if (type == REF) {
+    } else if (kind == Kind::REF) {
         delete ref.name;
-    } else if (type == STR) {
+    } else if (kind == Kind::STR) {
         delete str.chars;
-    } else if (type == CLS) {
+    } else if (kind == Kind::CLS) {
         delete cls.ranges;
     }
 }
 
 const AST* ast_nil(const loc_t& loc) {
-    return new AST(loc, AST::NIL);
+    return new AST(loc, AST::Kind::NIL);
 }
 
 const AST* ast_str(const loc_t& loc, std::vector<ASTChar>* chars, bool icase) {
-    AST* ast = new AST(loc, AST::STR);
+    AST* ast = new AST(loc, AST::Kind::STR);
     ast->str.chars = chars;
     ast->str.icase = icase;
     return ast;
 }
 
 const AST* ast_cls(const loc_t& loc, std::vector<ASTRange>* ranges, bool negated) {
-    AST* ast = new AST(loc, AST::CLS);
+    AST* ast = new AST(loc, AST::Kind::CLS);
     ast->cls.ranges = ranges;
     ast->cls.negated = negated;
     return ast;
 }
 
 const AST* ast_dot(const loc_t& loc) {
-    return new AST(loc, AST::DOT);
+    return new AST(loc, AST::Kind::DOT);
 }
 
 const AST* ast_default(const loc_t& loc) {
-    return new AST(loc, AST::DEFAULT);
+    return new AST(loc, AST::Kind::DEFAULT);
 }
 
 const AST* ast_alt(const AST* a1, const AST* a2) {
     if (!a1) return a2;
     if (!a2) return a1;
-    AST* ast = new AST(a1->loc, AST::ALT);
+    AST* ast = new AST(a1->loc, AST::Kind::ALT);
     ast->alt.ast1 = a1;
     ast->alt.ast2 = a2;
     return ast;
@@ -65,7 +65,7 @@ const AST* ast_alt(const AST* a1, const AST* a2) {
 const AST* ast_cat(const AST* a1, const AST* a2) {
     if (!a1) return a2;
     if (!a2) return a1;
-    AST* ast = new AST(a1->loc, AST::CAT);
+    AST* ast = new AST(a1->loc, AST::Kind::CAT);
     ast->cat.ast1 = a1;
     ast->cat.ast2 = a2;
     return ast;
@@ -73,7 +73,7 @@ const AST* ast_cat(const AST* a1, const AST* a2) {
 
 const AST* ast_iter(const AST* a, uint32_t n, uint32_t m) {
     DASSERT(n <= m);
-    AST* ast = new AST(a->loc, AST::ITER);
+    AST* ast = new AST(a->loc, AST::Kind::ITER);
     ast->iter.ast = a;
     ast->iter.min = n;
     ast->iter.max = m;
@@ -81,47 +81,47 @@ const AST* ast_iter(const AST* a, uint32_t n, uint32_t m) {
 }
 
 const AST* ast_diff(const AST* a1, const AST* a2) {
-    AST* ast = new AST(a1->loc, AST::DIFF);
+    AST* ast = new AST(a1->loc, AST::Kind::DIFF);
     ast->cat.ast1 = a1;
     ast->cat.ast2 = a2;
     return ast;
 }
 
 const AST* ast_tag(const loc_t& loc, const std::string* n, bool h) {
-    AST* ast = new AST(loc, AST::TAG);
+    AST* ast = new AST(loc, AST::Kind::TAG);
     ast->tag.name = n;
     ast->tag.history = h;
     return ast;
 }
 
 const AST* ast_cap(const AST* a) {
-    AST* ast = new AST(a->loc, AST::CAP);
+    AST* ast = new AST(a->loc, AST::Kind::CAP);
     ast->cap = a;
     return ast;
 }
 
 const AST* ast_ref(const AST* a, const std::string& n) {
-    AST* ast = new AST(a->loc, AST::REF);
+    AST* ast = new AST(a->loc, AST::Kind::REF);
     ast->ref.ast = a;
     ast->ref.name = new std::string(n);
     return ast;
 }
 
 bool ast_need_wrap(const AST* a) {
-    switch (a->type) {
-    case AST::ITER:
-    case AST::NIL:
-    case AST::STR:
-    case AST::CLS:
-    case AST::DOT:
-    case AST::DEFAULT:
-    case AST::TAG:
-    case AST::CAP:
+    switch (a->kind) {
+    case AST::Kind::ITER:
+    case AST::Kind::NIL:
+    case AST::Kind::STR:
+    case AST::Kind::CLS:
+    case AST::Kind::DOT:
+    case AST::Kind::DEFAULT:
+    case AST::Kind::TAG:
+    case AST::Kind::CAP:
         return false;
-    case AST::ALT:
-    case AST::CAT:
-    case AST::DIFF:
-    case AST::REF:
+    case AST::Kind::ALT:
+    case AST::Kind::CAT:
+    case AST::Kind::DIFF:
+    case AST::Kind::REF:
         return true;
     }
     return false; // unreachable

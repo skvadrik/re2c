@@ -76,24 +76,24 @@ RESpec::RESpec(const std::vector<ASTRule>& ast, const opt_t* o, Msg& msg, RangeM
 }
 
 bool has_tags(const AST* ast) {
-    switch (ast->type) {
-    case AST::NIL:
-    case AST::STR:
-    case AST::CLS:
-    case AST::DOT:
-    case AST::DEFAULT:
-    case AST::DIFF:
+    switch (ast->kind) {
+    case AST::Kind::NIL:
+    case AST::Kind::STR:
+    case AST::Kind::CLS:
+    case AST::Kind::DOT:
+    case AST::Kind::DEFAULT:
+    case AST::Kind::DIFF:
         return false;
-    case AST::TAG:
-    case AST::CAP:
+    case AST::Kind::TAG:
+    case AST::Kind::CAP:
         return true;
-    case AST::ALT:
+    case AST::Kind::ALT:
         return has_tags(ast->alt.ast1) || has_tags(ast->alt.ast2);
-    case AST::CAT:
+    case AST::Kind::CAT:
         return has_tags(ast->cat.ast1) || has_tags(ast->cat.ast2);
-    case AST::REF:
+    case AST::Kind::REF:
         return has_tags(ast->ref.ast);
-    case AST::ITER:
+    case AST::Kind::ITER:
         return has_tags(ast->iter.ast);
     }
     return false; // unreachable
@@ -123,13 +123,13 @@ static void add_capture_tags(RESpec& spec,
     const size_t lcap = ncap;
 
     const AST* ast = *past;
-    if (ast->type == AST::CAP) {
+    if (ast->kind == AST::Kind::CAP) {
         // save the range of repeated captures and collapse them: (...(R)...) -> (R)
-        for (ast = ast->cap; ast && ast->type == AST::CAP; ast = ast->cap) {
+        for (ast = ast->cap; ast && ast->kind == AST::Kind::CAP; ast = ast->cap) {
             ++ncap;
         }
         // dereference to avoid future check for non-parenthesized rerefences
-        if (ast->type == AST::REF) {
+        if (ast->kind == AST::Kind::REF) {
             ast = ast->ref.ast;
         }
         *past = ast;
@@ -170,46 +170,46 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
     std::vector<Tag>& tags = spec.tags;
     const opt_t* opts = spec.opts;
 
-    if (ast->type != AST::CAP && ast->type != AST::REF) ++height;
+    if (ast->kind != AST::Kind::CAP && ast->kind != AST::Kind::REF) ++height;
 
-    switch (ast->type) {
-    case AST::NIL:
+    switch (ast->kind) {
+    case AST::Kind::NIL:
         return re_nil(spec);
 
-    case AST::STR:
+    case AST::Kind::STR:
         return re_string(spec, ast);
 
-    case AST::CLS: {
+    case AST::Kind::CLS: {
         Range* r = cls_to_range(spec, ast);
         return re_class(spec, ast->loc, r);
     }
 
-    case AST::DOT: {
+    case AST::Kind::DOT: {
         Range* r = dot_to_range(spec, ast);
         return re_class(spec, ast->loc, r);
     }
 
-    case AST::DEFAULT: {
+    case AST::Kind::DEFAULT: {
         // see note [default regexp]
         Range* r = spec.rangemgr.ran(0, opts->encoding.nCodeUnits());
         return re_sym(spec, r);
     }
 
-    case AST::DIFF: {
+    case AST::Kind::DIFF: {
         Range* r = diff_to_range(spec, ast);
         return re_class(spec, ast->loc, r);
     }
 
-    case AST::ALT: {
+    case AST::Kind::ALT: {
         RE* t1 = nullptr, *t2 = nullptr, *t3 = nullptr, *t4 = nullptr, *x, *y;
 
-        if (ast->alt.ast1->type != AST::CAP) {
+        if (ast->alt.ast1->kind != AST::Kind::CAP) {
             add_structural_tags(spec, &ast, ncap, height, &t1, &t2, false, in_iter);
         }
         x = ast_to_re(spec, ast->alt.ast1, ncap, height, in_iter);
         x = re_cat(spec, t1, re_cat(spec, x, t2));
 
-        if (ast->alt.ast2->type != AST::CAP) {
+        if (ast->alt.ast2->kind != AST::Kind::CAP) {
             add_structural_tags(spec, &ast, ncap, height, &t3, &t4, false, in_iter);
         }
         y = ast_to_re(spec, ast->alt.ast2, ncap, height, in_iter);
@@ -218,16 +218,16 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
         return re_alt(spec, x, y);
     }
 
-    case AST::CAT: {
+    case AST::Kind::CAT: {
         RE* t1 = nullptr, *t2 = nullptr, *t3 = nullptr, *t4 = nullptr, *x, *y;
 
-        if (ast->cat.ast1->type != AST::CAP) {
+        if (ast->cat.ast1->kind != AST::Kind::CAP) {
             add_structural_tags(spec, &ast, ncap, height, &t1, &t2, false, in_iter);
         }
         x = ast_to_re(spec, ast->cat.ast1, ncap, height, in_iter);
         x = re_cat(spec, t1, re_cat(spec, x, t2));
 
-        if (ast->cat.ast2->type != AST::CAP) {
+        if (ast->cat.ast2->kind != AST::Kind::CAP) {
             add_structural_tags(spec, &ast, ncap, height, &t3, &t4, false, in_iter);
         }
         y = ast_to_re(spec, ast->cat.ast2, ncap, height, in_iter);
@@ -236,7 +236,7 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
         return re_cat(spec, x, y);
     }
 
-    case AST::TAG: {
+    case AST::Kind::TAG: {
         if (ast->tag.name && !opts->tags) {
             spec.msg.error(ast->loc, "tags are only allowed with '-T, --tags' option");
             exit(1);
@@ -250,7 +250,7 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
         return t;
     }
 
-    case AST::CAP:
+    case AST::Kind::CAP:
         if (!opts->posix_syntax) {
             return ast_to_re(spec, ast->cap, ncap, height, in_iter);
         } else {
@@ -260,11 +260,11 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
             return re_cat(spec, t1, re_cat(spec, y, t2));
         }
 
-    case AST::REF:
+    case AST::Kind::REF:
         check_misuse_of_named_def(spec, ast);
         return ast_to_re(spec, ast->ref.ast, ncap, height, in_iter);
 
-    case AST::ITER: {
+    case AST::Kind::ITER: {
         const uint32_t n = ast->iter.min;
         const uint32_t n1 = std::max(n, 1u);
         const uint32_t m = std::max(n, ast->iter.max);
@@ -272,7 +272,7 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
 
         ast = ast->iter.ast;
 
-        if ((opts->posix_semantics && ast->type == AST::CAP) || opts->autotags) {
+        if ((opts->posix_semantics && ast->kind == AST::Kind::CAP) || opts->autotags) {
             add_capture_tags(spec, &ast, ncap, height, &t1, &t2, m > 1, in_iter);
         }
 
@@ -312,7 +312,7 @@ Range* char_to_range(RESpec& spec, const ASTChar& chr, bool icase) {
 }
 
 Range* cls_to_range(RESpec& spec, const AST* ast) {
-    DASSERT(ast->type == AST::CLS);
+    DASSERT(ast->kind == AST::Kind::CLS);
 
     RangeMgr& rm = spec.rangemgr;
     Range* r = nullptr;
@@ -334,7 +334,7 @@ Range* cls_to_range(RESpec& spec, const AST* ast) {
 }
 
 Range* dot_to_range(RESpec& spec, const AST* ast) {
-    DASSERT(ast->type == AST::DOT);
+    DASSERT(ast->kind == AST::Kind::DOT);
 
     RangeMgr& rm = spec.rangemgr;
     uint32_t c = '\n';
@@ -346,37 +346,37 @@ Range* dot_to_range(RESpec& spec, const AST* ast) {
 }
 
 Range* diff_to_range(RESpec& spec, const AST* ast) {
-    DASSERT(ast->type == AST::DIFF);
+    DASSERT(ast->kind == AST::Kind::DIFF);
     Range* l = ast_to_range(spec, ast->diff.ast1);
     Range* r = ast_to_range(spec, ast->diff.ast2);
     return l && r ? spec.rangemgr.sub(l, r) : nullptr;
 }
 
 Range* ast_to_range(RESpec& spec, const AST* ast) {
-    switch (ast->type) {
-    case AST::NIL:
-    case AST::DEFAULT:
-    case AST::TAG:
-    case AST::CAT:
-    case AST::ITER:
+    switch (ast->kind) {
+    case AST::Kind::NIL:
+    case AST::Kind::DEFAULT:
+    case AST::Kind::TAG:
+    case AST::Kind::CAT:
+    case AST::Kind::ITER:
         break;
-    case AST::CAP:
+    case AST::Kind::CAP:
         if (spec.opts->posix_syntax) break;
         return ast_to_range(spec, ast->cap);
-    case AST::REF:
+    case AST::Kind::REF:
         check_misuse_of_named_def(spec, ast);
         return ast_to_range(spec, ast->ref.ast);
-    case AST::CLS:
+    case AST::Kind::CLS:
         return cls_to_range(spec, ast);
-    case AST::DOT:
+    case AST::Kind::DOT:
         return dot_to_range(spec, ast);
-    case AST::STR:
+    case AST::Kind::STR:
         if (ast->str.chars->size() != 1) break;
         return char_to_range(spec, ast->str.chars->front()
                              , is_icase(spec.opts, ast->str.icase));
-    case AST::DIFF:
+    case AST::Kind::DIFF:
         return diff_to_range(spec, ast);
-    case AST::ALT: {
+    case AST::Kind::ALT: {
         Range* x = ast_to_range(spec, ast->diff.ast1);
         Range* y = ast_to_range(spec, ast->diff.ast2);
         return spec.rangemgr.add(x, y);
@@ -386,7 +386,7 @@ Range* ast_to_range(RESpec& spec, const AST* ast) {
 }
 
 RE* re_string(RESpec& spec, const AST* ast) {
-    DASSERT(ast->type == AST::STR);
+    DASSERT(ast->kind == AST::Kind::STR);
 
     RE* x = nullptr;
     bool icase = is_icase(spec.opts, ast->str.icase);
@@ -432,7 +432,7 @@ RE* re_class(RESpec& spec, const loc_t& loc, const Range* r) {
 }
 
 void check_misuse_of_named_def(RESpec& spec, const AST* ast) {
-    DASSERT(ast->type == AST::REF);
+    DASSERT(ast->kind == AST::Kind::REF);
 
     if (spec.opts->posix_syntax) {
         spec.msg.error(ast->loc,

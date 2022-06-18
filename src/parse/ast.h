@@ -28,12 +28,28 @@ struct ASTRange {
         : lower(low), upper(upp), loc(loc) {}
 };
 
-// AST must be immutable and independent of options.
+// Abstract Syntax Tree.
+// It must be immutable (as it is shared by different rules) and independent  of options.
 struct AST {
     static free_list<AST*> flist;
     static const uint32_t MANY;
 
-    enum type_t {NIL, STR, CLS, DOT, DEFAULT, ALT, CAT, ITER, DIFF, TAG, CAP, REF} type;
+    // Kinds of AST nodes.
+    enum class Kind: uint32_t {
+        NIL,     // empty (nil) node
+        STR,     // character string, like "abc" or 'abc'
+        CLS,     // character class, like [a-z] or [^a-z]
+        DOT,     // any character except newline
+        DEFAULT, // default rule *, matches any code unit, see note [default regexp]
+        ALT,     // alternative of two nodes: x | y
+        CAT,     // concatenation of two nodes: x y
+        ITER,    // generalized repetition of two nodes: x{n,m} or x{n,} or x{n} or x* or x+
+        DIFF,    // difference of two node (only applies to character classes)
+        TAG,     // a tag, like @t (s-tag, single-valued tag) or #t (m-tag. multi-valued tag)
+        CAP,     // capturing group (submatch group)
+        REF      // non-capturing group
+    } kind;
+
     union {
         struct {
             const std::vector<ASTChar>* chars;
@@ -72,7 +88,7 @@ struct AST {
     };
     loc_t loc;
 
-    AST(const loc_t& loc, type_t t);
+    AST(const loc_t& loc, Kind k);
     ~AST();
 };
 
