@@ -33,7 +33,6 @@ typedef slab_allocator_t<1024 * 1024, 8> code_alc_t;
 
 class Scanner: private ScannerState {
   public:
-    enum ParseMode {Stop, Global, Local, Reuse, Rules, Error};
     static const char* const ENDPOS;
 
     Msg& msg;
