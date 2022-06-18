@@ -319,7 +319,7 @@ State* fallback_state_with_eof_rule(
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
 
-    if (state->action.type == Action::INITIAL) {
+    if (state->action.kind == Action::Kind::INITIAL) {
         // End-of-input rule $ in the initial state takes priority over any other rule.
         fallback = dfa.eof_state;
         falltags = TCID0;
@@ -339,7 +339,7 @@ State* fallback_state_with_eof_rule(
 
 void code_go(code_alc_t& alc, const DFA& dfa, const opt_t* opts, State* from) {
     // Mark all states that are targets of `yyaccept` switch to as used.
-    if (from->action.type == Action::ACCEPT) {
+    if (from->action.kind == Action::Kind::ACCEPT) {
         const accept_t& acc = *from->action.info.accepts;
         for (size_t i = 0; i < acc.size(); ++i) {
             acc[i].first->label->used = true;
@@ -430,14 +430,14 @@ void init_go(CodeGo* go) {
 }
 
 bool consume(const State* s) {
-    switch (s->action.type) {
-    case Action::RULE:
-    case Action::MOVE:
-    case Action::ACCEPT:
+    switch (s->action.kind) {
+    case Action::Kind::RULE:
+    case Action::Kind::MOVE:
+    case Action::Kind::ACCEPT:
         return false;
-    case Action::MATCH:
-    case Action::INITIAL:
-    case Action::SAVE:
+    case Action::Kind::MATCH:
+    case Action::Kind::INITIAL:
+    case Action::Kind::SAVE:
         return true;
     }
     // unreachable

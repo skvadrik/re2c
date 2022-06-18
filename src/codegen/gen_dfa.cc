@@ -43,7 +43,7 @@ static void emit_state(Output& output, const State* state, CodeList* stmts) {
     if (!output.block().opts->loop_switch) {
         append(stmts, code_nlabel(output.allocator, state->label));
     }
-    if (state->action.type != Action::INITIAL) {
+    if (state->action.kind != Action::Kind::INITIAL) {
         gen_yydebug(output, state->label, stmts);
     }
 }
@@ -154,14 +154,14 @@ void DFA::emit_dot(Output& output, CodeList* program) const {
     }
 
     for (State* s = head; s; s = s->next) {
-        if (s->action.type == Action::ACCEPT) {
+        if (s->action.kind == Action::Kind::ACCEPT) {
             const accept_t& accs = *s->action.info.accepts;
             for (uint32_t i = 0; i < accs.size(); ++i) {
                 text = o.label(*s->label).cstr(" -> ").label(*accs[i].first->label)
                         .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]").flush();
                 append(program, code_text(alc, text));
             }
-        } else if (s->action.type == Action::RULE) {
+        } else if (s->action.kind == Action::Kind::RULE) {
             const SemAct* semact = rules[s->action.info.rule].semact;
             if (!semact->autogen) {
                 text = o.label(*s->label).cstr(" [label=\"").str(msg.filenames[semact->loc.file])

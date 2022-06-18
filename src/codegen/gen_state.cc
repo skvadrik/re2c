@@ -39,8 +39,8 @@ static bool endstate(const State* s) {
     // are final states (not all final states are 'end' states), but sometimes it be initial
     // non-accepting state, e.g. in case of rule '[]'.
     DASSERT(s->go.nspans > 0);
-    const Action::type_t& a = s->go.span[0].to->action.type;
-    return s->go.nspans == 1 && (a == Action::RULE || a == Action::ACCEPT);
+    Action::Kind a = s->go.span[0].to->action.kind;
+    return s->go.nspans == 1 && (a == Action::Kind::RULE || a == Action::Kind::ACCEPT);
 }
 
 static void gen_peek(code_alc_t& alc, const State* s, CodeList* stmts) {
@@ -48,7 +48,7 @@ static void gen_peek(code_alc_t& alc, const State* s, CodeList* stmts) {
     // happen if there is a single transition which does not require matching on `yych` (one
     // exception is a transition to a move state, which doesn't have its own YYPEEK and relies on
     // the previous value of `yych`).
-    bool omit_peek = s->go.nspans == 1 && s->go.span[0].to->action.type != Action::MOVE;
+    bool omit_peek = s->go.nspans == 1 && s->go.span[0].to->action.kind != Action::Kind::MOVE;
     if (!omit_peek) append(stmts, code_peek(alc));
 }
 
@@ -58,15 +58,15 @@ void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts
     Scratchbuf& o = output.scratchbuf;
     const char* text;
 
-    switch (s->action.type) {
-    case Action::MATCH:
+    switch (s->action.kind) {
+    case Action::Kind::MATCH:
         if (!opts->eager_skip) {
             append(stmts, code_skip(alc));
         }
         gen_fill_and_label(output, stmts, dfa, s);
         gen_peek(alc, s, stmts);
         break;
-    case Action::INITIAL: {
+    case Action::Kind::INITIAL: {
         const size_t save = s->action.info.save;
         const bool backup = save != NOSAVE;
         const bool ul1 = s->label->used;
@@ -87,7 +87,7 @@ void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts
         gen_peek(alc, s, stmts);
         break;
     }
-    case Action::SAVE:
+    case Action::Kind::SAVE:
         if (dfa.accepts.size() > 1) {
             text = o.str(opts->yyaccept).cstr(" = ").u64(s->action.info.save).flush();
             append(stmts, code_stmt(alc, text));
@@ -99,12 +99,12 @@ void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts
         gen_fill_and_label(output, stmts, dfa, s);
         gen_peek(alc, s, stmts);
         break;
-    case Action::MOVE:
+    case Action::Kind::MOVE:
         break;
-    case Action::ACCEPT:
+    case Action::Kind::ACCEPT:
         emit_accept(output, stmts, dfa, *s->action.info.accepts);
         break;
-    case Action::RULE:
+    case Action::Kind::RULE:
         emit_rule(output, stmts, dfa, s->action.info.rule);
         break;
     }

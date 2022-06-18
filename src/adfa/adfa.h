@@ -32,14 +32,7 @@ typedef uniq_vector_t<std::pair<State*, tcid_t> > accept_t;
 
 class Action {
   public:
-    enum type_t {
-        MATCH,
-        INITIAL,
-        SAVE,
-        MOVE,
-        ACCEPT,
-        RULE
-    } type;
+    enum class Kind: uint32_t { MATCH, INITIAL, SAVE, MOVE, ACCEPT, RULE } kind;
 
     union {
         size_t save;
@@ -48,7 +41,7 @@ class Action {
     } info;
 
   public:
-    Action();
+    Action(): kind(Kind::MATCH), info() {}
     void set_initial();
     void set_save(size_t save);
     void set_move();
@@ -138,17 +131,15 @@ struct DFA {
     FORBID_COPY (DFA);
 };
 
-inline Action::Action(): type(MATCH), info() {}
-
 inline void Action::set_initial() {
-    if (type == MATCH) {
+    if (kind == Kind::MATCH) {
         // ordinary state with no special action
-        type = INITIAL;
+        kind = Kind::INITIAL;
         info.save = NOSAVE;
-    } else if (type == SAVE) {
+    } else if (kind == Kind::SAVE) {
         // fallback state: do not loose 'yyaccept'
-        type = INITIAL;
-    } else if (type == INITIAL) {
+        kind = Kind::INITIAL;
+    } else if (kind == Kind::INITIAL) {
         // already marked as initial, probably reuse mode
     } else {
         DASSERT(false);
@@ -156,25 +147,25 @@ inline void Action::set_initial() {
 }
 
 inline void Action::set_save(size_t save) {
-    DASSERT(type == MATCH);
-    type = SAVE;
+    DASSERT(kind == Kind::MATCH);
+    kind = Kind::SAVE;
     info.save = save;
 }
 
 inline void Action::set_move() {
-    DASSERT(type == MATCH);
-    type = MOVE;
+    DASSERT(kind == Kind::MATCH);
+    kind = Kind::MOVE;
 }
 
 inline void Action::set_accept(const accept_t* accepts) {
-    DASSERT(type == MATCH);
-    type = ACCEPT;
+    DASSERT(kind == Kind::MATCH);
+    kind = Kind::ACCEPT;
     info.accepts = accepts;
 }
 
 inline void Action::set_rule(size_t rule) {
-    DASSERT(type == MATCH);
-    type = RULE;
+    DASSERT(kind == Kind::MATCH);
+    kind = Kind::RULE;
     info.rule = rule;
 }
 

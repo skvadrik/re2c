@@ -42,20 +42,20 @@ void dump_adfa(const DFA& dfa) {
 
     for (const State* s = dfa.head; s; s = s->next) {
         const char* attr;
-        Action::type_t action = s->action.type;
+        Action::Kind action = s->action.kind;
 
-        if (action == Action::ACCEPT) {
+        if (action == Action::Kind::ACCEPT) {
             attr = "style=filled fillcolor=gray";
-        } else if (action == Action::RULE) {
+        } else if (action == Action::Kind::RULE) {
             attr = "style=filled fillcolor=lightgray";
         } else {
             attr = "";
         }
         fprintf(stderr, "  n%u [height=0.2 width=0.2 label=\"", st2idx[s]);
-        if (s->fill && action != Action::MOVE) {
+        if (s->fill && action != Action::Kind::MOVE) {
             fprintf(stderr, "F(%u) ", (uint32_t)s->fill);
         }
-        if (action == Action::RULE) {
+        if (action == Action::Kind::RULE) {
             const Rule& r = dfa.rules[s->action.info.rule];
             for (size_t t = r.ltag; t < r.htag; ++t) {
                 if (t > r.ltag) fprintf(stderr, " ");
@@ -66,7 +66,7 @@ void dump_adfa(const DFA& dfa) {
         dump_tcmd(dfa.tcpool[s->go.tags]);
         fprintf(stderr, "\" %s]\n", attr);
 
-        if (action == Action::ACCEPT) {
+        if (action == Action::Kind::ACCEPT) {
             const accept_t& accept = *s->action.info.accepts;
             for (uint32_t i = 0; i < accept.size(); ++i) {
                 fprintf(stderr, "  n%u -> n%u [label=\"", st2idx[s], st2idx[accept[i].first]);
@@ -80,8 +80,8 @@ void dump_adfa(const DFA& dfa) {
             if (!x->to) continue;
 
             bool eat = true;
-            const Action::type_t act = x->to->action.type;
-            if (act == Action::MOVE || act == Action::RULE) {
+            const Action::Kind act = x->to->action.kind;
+            if (act == Action::Kind::MOVE || act == Action::Kind::RULE) {
                 attr = "style=dotted";
                 eat = false;
             } else {
