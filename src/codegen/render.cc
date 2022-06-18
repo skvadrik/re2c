@@ -102,8 +102,8 @@ static void render_if_then_else(RenderContext& rctx, const CodeIfTE* code) {
 }
 
 static void render_block(RenderContext& rctx, const CodeBlock* code) {
-    switch (code->fmt) {
-    case CodeBlock::WRAPPED:
+    switch (code->kind) {
+    case CodeBlock::Kind::WRAPPED:
         rctx.os << indent(rctx.ind, rctx.opts->indString) << "{" << std::endl;
         ++rctx.line;
         ++rctx.ind;
@@ -112,12 +112,12 @@ static void render_block(RenderContext& rctx, const CodeBlock* code) {
         rctx.os << indent(rctx.ind, rctx.opts->indString) << "}" << std::endl;
         ++rctx.line;
         break;
-    case CodeBlock::INDENTED:
+    case CodeBlock::Kind::INDENTED:
         ++rctx.ind;
         render_list(rctx, code->stmts);
         --rctx.ind;
         break;
-    case CodeBlock::RAW:
+    case CodeBlock::Kind::RAW:
         render_list(rctx, code->stmts);
         break;
     }
@@ -301,16 +301,16 @@ static void render_case(RenderContext& rctx, const CodeCase* code) {
     }
 
     switch (code->kind) {
-    case CodeCase::DEFAULT:
+    case CodeCase::Kind::DEFAULT:
         os << indent(ind, opts->indString) << s_default << s_then;
         break;
-    case CodeCase::NUMBER:
+    case CodeCase::Kind::NUMBER:
         os << indent(ind, opts->indString) << s_case << code->number << s_then;
         break;
-    case CodeCase::STRING:
+    case CodeCase::Kind::STRING:
         os << indent(ind, opts->indString) << s_case << code->string << s_then;
         break;
-    case CodeCase::RANGES: {
+    case CodeCase::Kind::RANGES: {
         const size_t nranges = code->ranges->size;
         const int64_t* ranges = code->ranges->elems;
         const VarType type = code->ranges->type;

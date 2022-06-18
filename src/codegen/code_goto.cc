@@ -104,8 +104,8 @@ static CodeGoIfB* code_goifb(code_alc_t& alc,
                              const opt_t* opts) {
     const uint32_t l = n / 2;
     const uint32_t h = n - l;
-    CodeGoIf::Kind tkind = l > 4 ? CodeGoIf::BINARY : CodeGoIf::LINEAR;
-    CodeGoIf::Kind ekind = h > 4 ? CodeGoIf::BINARY : CodeGoIf::LINEAR;
+    CodeGoIf::Kind tkind = l > 4 ? CodeGoIf::Kind::BINARY : CodeGoIf::Kind::LINEAR;
+    CodeGoIf::Kind ekind = h > 4 ? CodeGoIf::Kind::BINARY : CodeGoIf::Kind::LINEAR;
 
     CodeGoIfB* x = alc.alloct<CodeGoIfB>(1);
     x->cond = code_cmp(alc, "<=", s[l - 1].ub - 1);
@@ -198,7 +198,7 @@ static CodeGoIf* code_goif(code_alc_t& alc,
                            const opt_t* opts) {
     CodeGoIf* x = alc.alloct<CodeGoIf>(1);
     x->kind = kind;
-    if (kind == CodeGoIf::BINARY) {
+    if (kind == CodeGoIf::Kind::BINARY) {
         x->goifb = code_goifb(alc, sp, nsp, next, skip, eof, opts);
     } else {
         x->goifl = code_goifl(alc, sp, nsp, next, skip, eof, opts);
@@ -216,14 +216,14 @@ static CodeGoSwIf* code_goswif(code_alc_t& alc,
     CodeGoSwIf* x = alc.alloct<CodeGoSwIf>(1);
     if ((!opts->sFlag && nsp > 2)
             || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2)))) {
-        x->kind = CodeGoSwIf::SWITCH;
+        x->kind = CodeGoSwIf::Kind::SWITCH;
         x->gosw = code_gosw(alc, sp, nsp, skip, eof);
     } else if (nsp > 5) {
-        x->kind = CodeGoSwIf::IF;
-        x->goif = code_goif(alc, CodeGoIf::BINARY, sp, nsp, next, skip, eof, opts);
+        x->kind = CodeGoSwIf::Kind::IF;
+        x->goif = code_goif(alc, CodeGoIf::Kind::BINARY, sp, nsp, next, skip, eof, opts);
     } else {
-        x->kind = CodeGoSwIf::IF;
-        x->goif = code_goif(alc, CodeGoIf::LINEAR, sp, nsp, next, skip, eof, opts);
+        x->kind = CodeGoSwIf::Kind::IF;
+        x->goif = code_goif(alc, CodeGoIf::Kind::LINEAR, sp, nsp, next, skip, eof, opts);
     }
     return x;
 }
@@ -403,26 +403,26 @@ void code_go(code_alc_t& alc, const DFA& dfa, const opt_t* opts, State* from) {
     const bool part_skip = opts->eager_skip && !go->skip;
 
     if (opts->target == Target::DOT) {
-        go->kind = CodeGo::DOT;
+        go->kind = CodeGo::Kind::DOT;
         go->godot = code_gosw(alc, go->span, go->nspans, false, eof);
     } else if (opts->gFlag
                && !part_skip
                && dSpans >= opts->cGotoThreshold
                && !low_spans_have_tags) {
-        go->kind = CodeGo::CPGOTO;
+        go->kind = CodeGo::Kind::CPGOTO;
         go->gocp = code_gocp(alc, go->span, go->nspans, hspan, hSpans, from->next, eof, opts);
     } else if (opts->bFlag && !part_skip && nBitmaps > 0) {
-        go->kind = CodeGo::BITMAP;
+        go->kind = CodeGo::Kind::BITMAP;
         go->gobm = code_gobm(alc, go->span, go->nspans, hspan, hSpans, bm, from->next, eof, opts);
         dfa.bitmap->used = true;
     } else {
-        go->kind = CodeGo::SWITCH_IF;
+        go->kind = CodeGo::Kind::SWITCH_IF;
         go->goswif = code_goswif(alc, go->span, go->nspans, from->next, part_skip, eof, opts);
     }
 }
 
 void init_go(CodeGo* go) {
-    go->kind = CodeGo::EMPTY;
+    go->kind = CodeGo::Kind::EMPTY;
     go->nspans = 0;
     go->span = nullptr;
     go->tags = TCID0;

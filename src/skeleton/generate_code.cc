@@ -108,9 +108,9 @@ Code* emit_skeleton_prolog(Output& output) {
     append(block, code_if_then_else(alc, "f != NULL", if_code, nullptr, false));
     append(block, code_stmt(alc, "return NULL"));
 
-    append(code, code_block(alc, block, CodeBlock::WRAPPED));
+    append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 
-    return code_block(alc, code, CodeBlock::RAW);
+    return code_block(alc, code, CodeBlock::Kind::RAW);
 }
 
 static void emit_skeleton_defines(Output& output, CodeList* code, const DFA& dfa) {
@@ -212,7 +212,7 @@ static void emit_skeleton_function_action(Output& output, CodeList* code, const 
     append(else_code, code_text(alc, "return 1;"));
     append(body, code_if_then_else(alc, if_cond, if_code, else_code));
 
-    append(code, code_block(alc, body, CodeBlock::WRAPPED));
+    append(code, code_block(alc, body, CodeBlock::Kind::WRAPPED));
 }
 
 static void emit_skeleton_stags(Output& output, CodeList* code, const DFA& dfa) {
@@ -267,7 +267,7 @@ static void emit_skeleton_stags(Output& output, CodeList* code, const DFA& dfa) 
     append(body, code_fcall(alc, "fprintf", args, ";"));
     append(body, code_stmt(alc, "return 1"));
 
-    append(code, code_block(alc, body, CodeBlock::WRAPPED));
+    append(code, code_block(alc, body, CodeBlock::Kind::WRAPPED));
 }
 
 static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
@@ -285,7 +285,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     block = code_list(alc);
     append(block, code_text(alc, "ptrdiff_t pred;"));
     append(block, code_text(alc, "const void *elem;"));
-    append(code, code_block(alc, block, CodeBlock::INDENTED));
+    append(code, code_block(alc, block, CodeBlock::Kind::INDENTED));
     append(code, code_text(alc, "} yymtag_t;"));
 
     append(code, code_newline(alc));
@@ -295,7 +295,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(block, code_text(alc, "yymtag_t *head;"));
     append(block, code_text(alc, "yymtag_t *next;"));
     append(block, code_text(alc, "yymtag_t *last;"));
-    append(code, code_block(alc, block, CodeBlock::INDENTED));
+    append(code, code_block(alc, block, CodeBlock::Kind::INDENTED));
     append(code, code_text(alc, "} yymtagpool_t;"));
 
     append(code, code_newline(alc));
@@ -305,7 +305,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(code, code_fdecl(alc, "static void yymtagpool_clear", args));
     block = code_list(alc);
     append(block, code_stmt(alc, "tp->next = tp->head"));
-    append(code, code_block(alc, block, CodeBlock::WRAPPED));
+    append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 
     append(code, code_newline(alc));
 
@@ -317,7 +317,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(block, code_stmt(alc, "tp->head = (yymtag_t*)malloc(size * sizeof(yymtag_t))"));
     append(block, code_stmt(alc, "tp->next = tp->head"));
     append(block, code_stmt(alc, "tp->last = tp->head + size"));
-    append(code, code_block(alc, block, CodeBlock::WRAPPED));
+    append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 
     append(code, code_newline(alc));
 
@@ -327,7 +327,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     block = code_list(alc);
     append(block, code_stmt(alc, "free(tp->head)"));
     append(block, code_stmt(alc, "tp->head = tp->next = tp->last = NULL"));
-    append(code, code_block(alc, block, CodeBlock::WRAPPED));
+    append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 
     append(code, code_newline(alc));
 
@@ -347,7 +347,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(if_code, code_stmt(alc, "tp->last = head + size * 2"));
     append(block, code_if_then_else(alc, if_cond, if_code, nullptr));
     append(block, code_stmt(alc, "return tp->next++"));
-    append(code, code_block(alc, block, CodeBlock::WRAPPED));
+    append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 
     append(code, code_newline(alc));
 
@@ -361,7 +361,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(block, code_stmt(alc, "n->pred = *pt"));
     append(block, code_stmt(alc, "n->elem = t"));
     append(block, code_stmt(alc, "*pt = n - tp->head"));
-    append(code, code_block(alc, block, CodeBlock::WRAPPED));
+    append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 
     append(code, code_newline(alc));
 }
@@ -439,7 +439,7 @@ static void emit_skeleton_mtags(Output& output, CodeList* code, const DFA& dfa) 
     append(if_code, code_stmt(alc, "return 1"));
     append(block, code_if_then_else(alc, if_cond, if_code, nullptr));
 
-    append(body, code_block(alc, block, CodeBlock::INDENTED));
+    append(body, code_block(alc, block, CodeBlock::Kind::INDENTED));
     append(body, code_text(alc, "}")); // end of for loop
 
     if_code = code_list(alc);
@@ -456,7 +456,7 @@ static void emit_skeleton_mtags(Output& output, CodeList* code, const DFA& dfa) 
     append(body, code_if_then_else(alc, "mtag != -1", if_code, nullptr));
     append(body, code_text(alc, "return 0;"));
 
-    append(code, code_block(alc, body, CodeBlock::WRAPPED));
+    append(code, code_block(alc, body, CodeBlock::Kind::WRAPPED));
 }
 
 static void emit_skeleton_function_check_key_count(Output& output, CodeList* code, DFA& dfa) {
@@ -485,7 +485,7 @@ static void emit_skeleton_function_check_key_count(Output& output, CodeList* cod
     append(args, code_arg(alc, text));
     append(block, code_fcall(alc, "fprintf", args, ";"));
     append(block, code_stmt(alc, "return 1"));
-    append(code, code_block(alc, block, CodeBlock::WRAPPED));
+    append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 }
 
 static void emit_skeleton_function_lex(Output& output, CodeList* code, DFA& dfa) {
@@ -554,7 +554,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, DFA& dfa)
         append(block, code_text(alc, text));
         block2 = code_list(alc);
         from_le(output, block2, "input[i]", opts->encoding.szCodeUnit());
-        append(block, code_block(alc, block2, CodeBlock::INDENTED));
+        append(block, code_block(alc, block2, CodeBlock::Kind::INDENTED));
         append(block, code_text(alc, "}"));
         append(block, code_newline(alc));
     }
@@ -578,7 +578,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, DFA& dfa)
         append(block, code_text(alc, text));
         block2 = code_list(alc);
         from_le(output, block2, "keys[i]", dfa.key_size);
-        append(block, code_block(alc, block2, CodeBlock::INDENTED));
+        append(block, code_block(alc, block2, CodeBlock::Kind::INDENTED));
         append(block, code_text(alc, "}"));
         append(block, code_textraw(alc, ""));
     }
@@ -678,7 +678,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, DFA& dfa)
     }
     append(block2, code_textraw(alc, ""));
 
-    append(block, code_block(alc, block2, CodeBlock::WRAPPED));
+    append(block, code_block(alc, block2, CodeBlock::Kind::WRAPPED));
     append(block, code_slabel(alc, "loop_end"));
 
     if_code = code_list(alc);
@@ -710,7 +710,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, DFA& dfa)
     append(block, code_textraw(alc, ""));
     append(block, code_stmt(alc, "return status"));
 
-    append(code, code_block(alc, block, CodeBlock::WRAPPED));
+    append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 }
 
 static void emit_skeleton_undefs(Output& output, CodeList* code, DFA& dfa) {
@@ -765,9 +765,9 @@ Code* emit_skeleton_epilog(Output& output) {
     CodeList* main = code_list(alc);
     append(main, code_text(alc, ""));
     append(main, code_text(alc, "int main()"));
-    append(main, code_block(alc, stmts, CodeBlock::WRAPPED));
+    append(main, code_block(alc, stmts, CodeBlock::Kind::WRAPPED));
 
-    return code_block(alc, main, CodeBlock::RAW);
+    return code_block(alc, main, CodeBlock::Kind::RAW);
 }
 
 void emit_skeleton_action(Output& output, CodeList* code, const DFA& dfa, size_t rid) {
@@ -829,7 +829,7 @@ void emit_skeleton_action(Output& output, CodeList* code, const DFA& dfa, size_t
         append(hangafter, code_fcall(alc, text, args, ntag > 3 ? "" : ";"));
     }
 
-    append(code, code_block(alc, hangafter, CodeBlock::INDENTED));
+    append(code, code_block(alc, hangafter, CodeBlock::Kind::INDENTED));
 
     append(code, code_stmt(alc, "goto loop"));
 }

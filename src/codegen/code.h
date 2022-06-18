@@ -160,7 +160,7 @@ struct CodeGoIfL {
 };
 
 struct CodeGoIf {
-    enum Kind {
+    enum class Kind: uint32_t {
         BINARY,
         LINEAR
     };
@@ -173,7 +173,7 @@ struct CodeGoIf {
 };
 
 struct CodeGoSwIf {
-    enum Kind {
+    enum class Kind: uint32_t {
         SWITCH,
         IF
     };
@@ -203,7 +203,7 @@ struct CodeGoCp {
 };
 
 struct CodeGo {
-    enum Kind {
+    enum class Kind: uint32_t {
         EMPTY,
         SWITCH_IF,
         BITMAP,
@@ -233,7 +233,7 @@ struct CodeIfTE {
 };
 
 struct CodeCase {
-    enum Kind {
+    enum class Kind: uint32_t {
         RANGES,
         NUMBER,
         STRING,
@@ -257,14 +257,14 @@ struct CodeSwitch {
 };
 
 struct CodeBlock {
-    enum Fmt {
+    enum class Kind: uint32_t {
         WRAPPED,
         INDENTED,
         RAW
     };
 
+    Kind kind;
     CodeList* stmts;
-    Fmt fmt;
 };
 
 struct CodeVar {
@@ -303,7 +303,7 @@ struct CodeFunc {
 };
 
 struct CodeLabel {
-    enum Kind {
+    enum class Kind: uint32_t {
         NLABEL,
         SLABEL
     } kind;
@@ -417,14 +417,14 @@ inline Code* code_newline(code_alc_t& alc) {
 
 inline Code* code_nlabel(code_alc_t& alc, Label* label) {
     Code* x = new_code(alc, CodeKind::LABEL);
-    x->label.kind = CodeLabel::NLABEL;
+    x->label.kind = CodeLabel::Kind::NLABEL;
     x->label.nlabel = label;
     return x;
 }
 
 inline Code* code_slabel(code_alc_t& alc, const char* label) {
     Code* x = new_code(alc, CodeKind::LABEL);
-    x->label.kind = CodeLabel::SLABEL;
+    x->label.kind = CodeLabel::Kind::SLABEL;
     x->label.slabel = label;
     return x;
 }
@@ -489,10 +489,10 @@ inline Code* code_backup(code_alc_t& alc) {
     return new_code(alc, CodeKind::BACKUP);
 }
 
-inline Code* code_block(code_alc_t& alc, CodeList* stmts, CodeBlock::Fmt fmt) {
+inline Code* code_block(code_alc_t& alc, CodeList* stmts, CodeBlock::Kind kind) {
     Code* x = new_code(alc, CodeKind::BLOCK);
+    x->block.kind = kind;
     x->block.stmts = stmts;
-    x->block.fmt = fmt;
     return x;
 }
 
@@ -529,24 +529,24 @@ inline CodeCase* code_case(code_alc_t& alc, CodeList* body, CodeCase::Kind kind)
 }
 
 inline CodeCase* code_case_default(code_alc_t& alc, CodeList* body) {
-    return code_case(alc, body, CodeCase::DEFAULT);
+    return code_case(alc, body, CodeCase::Kind::DEFAULT);
 }
 
 inline CodeCase* code_case_number(code_alc_t& alc, CodeList* body, int32_t number) {
-    CodeCase* x = code_case(alc, body, CodeCase::NUMBER);
+    CodeCase* x = code_case(alc, body, CodeCase::Kind::NUMBER);
     x->number = number;
     return x;
 }
 
 inline CodeCase* code_case_string(code_alc_t& alc, CodeList* body, const char* string) {
-    CodeCase* x = code_case(alc, body, CodeCase::STRING);
+    CodeCase* x = code_case(alc, body, CodeCase::Kind::STRING);
     x->string = string;
     return x;
 }
 
 inline CodeCase* code_case_ranges(
     code_alc_t& alc, CodeList* body, const CodeRanges* ranges) {
-    CodeCase* x = code_case(alc, body, CodeCase::RANGES);
+    CodeCase* x = code_case(alc, body, CodeCase::Kind::RANGES);
     x->ranges = ranges;
     return x;
 }

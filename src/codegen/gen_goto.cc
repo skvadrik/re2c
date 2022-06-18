@@ -80,14 +80,14 @@ static CodeList* gen_goifl(Output& output, const DFA& dfa, const CodeGoIfL* go, 
 }
 
 static CodeList* gen_goif(Output& output, const DFA& dfa, const CodeGoIf* go, const State* from) {
-    return go->kind == CodeGoIf::BINARY
+    return go->kind == CodeGoIf::Kind::BINARY
            ? gen_goifb(output, dfa, go->goifb, from)
            : gen_goifl(output, dfa, go->goifl, from);
 }
 
 static CodeList* gen_goswif(
         Output& output, const DFA& dfa, const CodeGoSwIf* go, const State* from) {
-    return go->kind == CodeGoSwIf::SWITCH
+    return go->kind == CodeGoSwIf::Kind::SWITCH
            ? gen_gosw(output, dfa, go->gosw, from)
            : gen_goif(output, dfa, go->goif, from);
 }
@@ -162,7 +162,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
         text = o.flush();
         append(block, code_text(alc, text));
     }
-    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
+    append(stmts, code_block(alc, block, CodeBlock::Kind::INDENTED));
 
     append(stmts, code_stmt(alc, "}"));
 
@@ -186,7 +186,7 @@ static CodeList* gen_gocp(Output& output, const DFA& dfa, const CodeGoCp* go, co
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_else(alc, text, if_then, if_else, false));
     } else {
-        append(stmts, code_block(alc, if_else, CodeBlock::WRAPPED));
+        append(stmts, code_block(alc, if_else, CodeBlock::Kind::WRAPPED));
     }
 
     return stmts;
@@ -238,7 +238,7 @@ void gen_go(Output& output, const DFA& dfa, const CodeGo* go, const State* from,
     const opt_t* opts = output.block().opts;
     code_alc_t& alc = output.allocator;
 
-    if (go->kind == CodeGo::DOT) {
+    if (go->kind == CodeGo::Kind::DOT) {
         gen_godot(output, dfa, go->godot, from, stmts);
         return;
     }
@@ -255,11 +255,11 @@ void gen_go(Output& output, const DFA& dfa, const CodeGo* go, const State* from,
         append(stmts, code_skip(alc));
     }
 
-    if (go->kind == CodeGo::SWITCH_IF) {
+    if (go->kind == CodeGo::Kind::SWITCH_IF) {
         append(stmts, gen_goswif(output, dfa, go->goswif, from));
-    } else if (go->kind == CodeGo::BITMAP) {
+    } else if (go->kind == CodeGo::Kind::BITMAP) {
         append(stmts, gen_gobm(output, dfa, go->gobm, from));
-    } else if (go->kind == CodeGo::CPGOTO) {
+    } else if (go->kind == CodeGo::Kind::CPGOTO) {
         append(stmts, gen_gocp(output, dfa, go->gocp, from));
     }
 }

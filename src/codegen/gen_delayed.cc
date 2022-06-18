@@ -184,13 +184,13 @@ static void gen_cond_enum(Scratchbuf& buf,
         }
 
         append(stmts, code_text(alc, start));
-        append(stmts, code_block(
-                alc, block, opts->lang == Lang::RUST ? CodeBlock::RAW : CodeBlock::INDENTED));
+        append(stmts, code_block(alc, block, opts->lang == Lang::RUST
+                ? CodeBlock::Kind::RAW : CodeBlock::Kind::INDENTED));
         append(stmts, code_text(alc, end));
 
         code->kind = CodeKind::BLOCK;
+        code->block.kind = CodeBlock::Kind::RAW;
         code->block.stmts = stmts;
-        code->block.fmt = CodeBlock::RAW;
     }
 }
 
@@ -370,8 +370,8 @@ static void gen_state_goto(CodegenCtxPass1& ctx, Code* code) {
     }
 
     code->kind = CodeKind::BLOCK;
+    code->block.kind = CodeBlock::Kind::RAW;
     code->block.stmts = stmts;
-    code->block.fmt = CodeBlock::RAW;
 }
 
 static void gen_yych_decl(const opt_t* opts, Code* code) {
@@ -565,8 +565,8 @@ static void gen_cond_goto(CodegenCtxPass1& ctx, Code* code) {
     }
 
     code->kind = CodeKind::BLOCK;
+    code->block.kind = CodeBlock::Kind::RAW;
     code->block.stmts = stmts;
-    code->block.fmt = CodeBlock::RAW;
 }
 
 static void gen_cond_table(CodegenCtxPass1& ctx, Code* code) {
@@ -585,13 +585,13 @@ static void gen_cond_table(CodegenCtxPass1& ctx, Code* code) {
         o.cstr("&&").str(opts->condPrefix).str(cond.name).cstr(",");
         append(block, code_text(alc, o.flush()));
     }
-    append(stmts, code_block(alc, block, CodeBlock::INDENTED));
+    append(stmts, code_block(alc, block, CodeBlock::Kind::INDENTED));
 
     append(stmts, code_stmt(alc, "}"));
 
     code->kind = CodeKind::BLOCK;
+    code->block.kind = CodeBlock::Kind::RAW;
     code->block.stmts = stmts;
-    code->block.fmt = CodeBlock::RAW;
 }
 
 static void expand_pass_1_list(CodegenCtxPass1& ctx, CodeList* stmts) {
@@ -686,7 +686,7 @@ static void gen_label(Scratchbuf& o, const opt_t* opts, Code* code) {
     DASSERT(code->kind == CodeKind::LABEL);
     CodeLabel* label = &code->label;
 
-    if (label->kind == CodeLabel::SLABEL) {
+    if (label->kind == CodeLabel::Kind::SLABEL) {
         code->kind = CodeKind::TEXT_RAW;
         code->text = o.cstr(label->slabel).cstr(":").flush();
     } else if (label->nlabel->used) {

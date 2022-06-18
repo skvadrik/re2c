@@ -188,13 +188,13 @@ void emit_accept(Output& output, CodeList* stmts, const DFA& dfa, const accept_t
             text = o.cstr("&&").str(opts->labelPrefix).label(*l).cstr(",").flush();
             append(table, code_text(alc, text));
         }
-        append(block, code_block(alc, table, CodeBlock::INDENTED));
+        append(block, code_block(alc, table, CodeBlock::Kind::INDENTED));
         append(block, code_stmt(alc, "}"));
 
         text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yyaccept).cstr("]").flush();
         append(block, code_stmt(alc, text));
 
-        append(stmts, code_block(alc, block, CodeBlock::WRAPPED));
+        append(stmts, code_block(alc, block, CodeBlock::Kind::WRAPPED));
         return;
     }
 

@@ -68,8 +68,8 @@ static void gen_storable_state_cases(Output& output, CodeCases* cases) {
 
     // Replace the first case 0 with a case that covers both -1 and 0.
     CodeCase* first = cases->head;
-    DASSERT(first->kind == CodeCase::NUMBER && first->number == 0);
-    first->kind = CodeCase::RANGES;
+    DASSERT(first->kind == CodeCase::Kind::NUMBER && first->number == 0);
+    first->kind = CodeCase::Kind::RANGES;
     first->ranges = code_ranges(alc, VarType::INT, ranges, ranges_end);
 }
 
@@ -363,7 +363,7 @@ void gen_code(Output& output, dfas_t& dfas) {
                     CodeList* block = code_list(alc);
                     append(block, bms);
                     append(block, body);
-                    append(program1, code_block(alc, block, CodeBlock::WRAPPED));
+                    append(program1, code_block(alc, block, CodeBlock::Kind::WRAPPED));
                 } else {
                     append(program1, body);
                 }
@@ -385,14 +385,14 @@ void gen_code(Output& output, dfas_t& dfas) {
                 || (!opts->fFlag && (oblock.used_yyaccept || opts->bEmitYYCh))
                 || (!is_cond_block && have_bitmaps)
                 || (is_cond_block && opts->gFlag)) {
-            append(program, code_block(alc, program1, CodeBlock::WRAPPED));
+            append(program, code_block(alc, program1, CodeBlock::Kind::WRAPPED));
         } else {
             ind = std::max(ind, 1u);
             append(program, program1);
         }
     }
 
-    output.wdelay_stmt(ind, code_block(alc, program, CodeBlock::RAW));
+    output.wdelay_stmt(ind, code_block(alc, program, CodeBlock::Kind::RAW));
 }
 
 std::string vartag_name(
