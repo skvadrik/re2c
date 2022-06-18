@@ -75,15 +75,15 @@ namespace re2c {
 /*!max:re2c*/
 
 struct ScannerState {
-    enum lexer_state_t {LEX_NORMAL, LEX_FLEX_NAME};
-    lexer_state_t lexer_state;
+    enum class LexMode: uint32_t { NORMAL, FLEX_NAME };
 
+    LexMode mode;
     size_t BSIZE;
     char* bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
     /*!stags:re2c format = "char *@@;"; */
 
     inline ScannerState()
-        : lexer_state (LEX_NORMAL),
+        : mode(LexMode::NORMAL),
           BSIZE(8192),
           bot(new char[BSIZE + YYMAXFILL]),
           lim(bot + BSIZE),
@@ -499,7 +499,7 @@ scan:
             return TOKEN_ID;
         } else if (lex_namedef_context_flex()) {
             yylval.str = newstr(tok, cur);
-            lexer_state = LEX_FLEX_NAME;
+            mode = LexMode::FLEX_NAME;
             return TOKEN_FID;
         } else {
             // consume one character, otherwise we risk breaking operator precedence in cases like
@@ -552,8 +552,8 @@ scan:
 
     eol {
         next_line();
-        if (lexer_state == LEX_FLEX_NAME) {
-            lexer_state = LEX_NORMAL;
+        if (mode == LexMode::FLEX_NAME) {
+            mode = LexMode::NORMAL;
             return TOKEN_FID_END;
         } else {
             goto scan;
