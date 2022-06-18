@@ -7,28 +7,29 @@
 #include <limits>
 #include <string>
 
-
 namespace re2c {
 
 typedef int32_t tagver_t;
 
-static const tagver_t TAGVER_BOTTOM = std::numeric_limits<tagver_t>::min(); // default value, lowest priority
-static const tagver_t TAGVER_ZERO = 0; // absense of tag
-static const tagver_t TAGVER_CURSOR = std::numeric_limits<tagver_t>::max(); // current position, highest priority
+// default value, lowest priority
+static const tagver_t TAGVER_BOTTOM = std::numeric_limits<tagver_t>::min();
+// the absense of tag
+static const tagver_t TAGVER_ZERO = 0;
+// current position, highest priority
+static const tagver_t TAGVER_CURSOR = std::numeric_limits<tagver_t>::max();
 
 struct tag_info_t {
     uint32_t idx; // tag index (starting from zero)
     uint32_t neg; // tag sign (1 for negative, 0 for positive)
 };
 
-struct Tag
-{
+struct Tag {
     static const size_t RIGHTMOST;
     static const uint32_t VARDIST;
     static const size_t FICTIVE;
     static const size_t NONE;
 
-    const std::string *name;
+    const std::string* name;
     size_t lsub;
     size_t hsub;
     size_t base;
@@ -40,42 +41,35 @@ struct Tag
     bool toplevel;
     int32_t height;
 
-    Tag(const std::string *nm, bool hi, int32_t ht);
+    Tag(const std::string* nm, bool hi, int32_t ht);
     Tag(size_t lsub, size_t hsub, bool history, bool orbit, int32_t height);
 };
 
-inline bool operator == (const tag_info_t &x, const tag_info_t &y)
-{
+inline bool operator == (const tag_info_t& x, const tag_info_t& y) {
     return x.idx == y.idx && x.neg == y.neg;
 }
 
-inline bool fixed(const Tag &tag)
-{
+inline bool fixed(const Tag& tag) {
     return tag.dist != Tag::VARDIST;
 }
 
-inline bool fictive(const Tag &tag)
-{
+inline bool fictive(const Tag& tag) {
     return tag.lsub == Tag::FICTIVE;
 }
 
-inline bool capture(const Tag &tag)
-{
+inline bool capture(const Tag& tag) {
     return tag.lsub != Tag::RIGHTMOST;
 }
 
-inline bool orbit(const Tag &tag)
-{
+inline bool orbit(const Tag& tag) {
     return tag.orbit;
 }
 
-inline bool trailing(const Tag &tag)
-{
+inline bool trailing(const Tag& tag) {
     return !capture(tag) && tag.name == nullptr;
 }
 
-inline bool history(const Tag &tag)
-{
+inline bool history(const Tag& tag) {
     return tag.history;
 }
 

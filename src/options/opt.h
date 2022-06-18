@@ -11,30 +11,24 @@
 #include "src/options/symtab.h"
 #include "src/util/forbid_copy.h"
 
-
 namespace re2c {
 
-/* note [constant and mutable options]
- *
- * Some options are immutable (target, output files; global switches like
- * conditions, reuse mode, storable states; support of flex syntax, etc.).
- * These options are passed as command-line arguments and never change.
- * It is safe to read them from any program point after parsing command-line
- * arguments.
- *
- * Other options are configurable; they have block scope (may be specified
- * anywhere inside of the block and still affect the whole block).
- * Reading mutable options of yet unparsed block is not allowed because
- * they may affect the way RE2C parses current block (RE2C would be tempted
- * to base decisions on the latest option value, which may not be the final
- * one).
- *
- * RE2C allows to set configurations anywhere inside of a block (in the
- * beginning, intermixed with rules, in the end): they will affect the whole
- * block anyway. Therefore it is not allowed to read configurations until the
- * whole block has been parsed. Immutable options, on the other hand, are
- * accessible for reading all the time (the parser itself depends on them).
- */
+// note [constant and mutable options]
+//
+// Some options are immutable (target, output files; global switches like conditions, reuse mode,
+// storable states; support of flex syntax, etc.). These options are passed as command-line
+// arguments and never change. It is safe to read them from any program point after parsing
+// command-line arguments.
+//
+// Other options are configurable; they have block scope (may be specified anywhere inside of a
+// block and still affect the whole block). Reading mutable options of yet unparsed block is not
+// allowed because they may affect the way RE2C parses current block (RE2C would be tempted to base
+// decisions on the latest option value, which may not be the final one).
+//
+// RE2C allows to set configurations anywhere inside of a block (in the beginning, intermixed with
+// rules, in the end): they will affect the whole block anyway. Therefore it is not allowed to read
+// configurations until the whole block has been parsed. Immutable options, on the other hand, are
+// accessible for reading all the time (the parser itself depends on them).
 
 class Msg;
 
@@ -200,7 +194,7 @@ struct conopt_t {
     conopt_t()
 #define CONSTOPT1(type, name, value) : name(value)
 #define CONSTOPT(type, name, value)  , name(value)
-        RE2C_CONSTOPTS
+    RE2C_CONSTOPTS
 #undef CONSTOPT1
 #undef CONSTOPT
     {}
@@ -218,7 +212,7 @@ struct mutopt_t {
     mutopt_t()
 #define MUTOPT1(type, name, value) : name(value)
 #define MUTOPT(type, name, value)  , name(value)
-        RE2C_MUTOPTS
+    RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
     {}
@@ -236,7 +230,7 @@ struct mutdef_t {
     mutdef_t()
 #define MUTOPT1(type, name, value) : name(true)
 #define MUTOPT(type, name, value)  , name(true)
-        RE2C_MUTOPTS
+    RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
     {}
@@ -261,69 +255,68 @@ struct opt_t {
 
     symtab_t symtab;
 
-    opt_t(const conopt_t &con, const mutopt_t &mut, const mutdef_t &def,
-        const symtab_t &symtab)
+    opt_t(const conopt_t& con, const mutopt_t& mut, const mutdef_t& def,
+          const symtab_t& symtab)
 #define CONSTOPT1(type, name, value) : name(con.name)
 #define CONSTOPT(type, name, value)  , name(con.name)
-        RE2C_CONSTOPTS
+    RE2C_CONSTOPTS
 #undef CONSTOPT1
 #undef CONSTOPT
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) , name(mut.name)
-        RE2C_MUTOPTS
+    RE2C_MUTOPTS
 #undef MUTOPT
 #define MUTOPT(type, name, value) , is_default_##name(def.name)
-        RE2C_MUTOPTS
+    RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
-        , symtab(symtab)
+    , symtab(symtab)
     {}
 
     ~opt_t() {}
-    opt_t(const opt_t &opt) = default;
-    opt_t& operator=(const opt_t &opt) = default;
-    opt_t(opt_t &&opt) = default;
-    opt_t& operator=(opt_t &&opt) = default;
+    opt_t(const opt_t& opt) = default;
+    opt_t& operator=(const opt_t& opt) = default;
+    opt_t(opt_t&& opt) = default;
+    opt_t& operator=(opt_t&& opt) = default;
 };
 
 // Options management.
 struct Opt {
-public:
-    const conopt_t &glob;
+  public:
+    const conopt_t& glob;
     symtab_t symtab;
-    Msg &msg;
+    Msg& msg;
 
-private:
-    // Default mutable options. They depend on the global options, such as the
-    // language backend, and are fixed after parsing the global options.
+  private:
+    // Default mutable options. They depend on the global options, such as the language backend, and
+    // are fixed after parsing the global options.
     const mutopt_t defaults;
 
-    // Boolean flags indicating if a mutable option has been set by the user.
-    // These are needed to distingush default values from user-set values that
-    // coincide with default ones. Constant and mutable options passed on the
-    // command line may be intermixed (there is no ordering requirement), so
-    // mutable options may be applied before all constant options are known and
-    // default values for mutable options are determined. Such user-set mutable
-    // options should not be altered by fixing default options.
+    // Boolean flags indicating if a mutable option has been set by the user. These are needed to
+    // distingush default values from user-set values that coincide with default ones. Constant and
+    // mutable options passed on the command line may be intermixed (there is no ordering
+    // requirement), so mutable options may be applied before all constant options are known and
+    // default values for mutable options are determined. Such user-set mutable options should not
+    // be altered by fixing default options.
     mutdef_t is_default;
 
     // User-set mutable options.
     mutopt_t user;
 
-    // Real mutable options ("fixed" user-set options with various filters and
-    // implications that make options consistent).
+    // Real mutable options ("fixed" user-set options with various filters and implications that
+    // make options consistent).
     mutopt_t real;
 
     // If user-set options have diverged from the real ones and need syncing.
     bool diverge;
 
-public:
-    Opt(const conopt_t &globopts, Msg &msg);
-    const opt_t *snapshot();
+  public:
+    Opt(const conopt_t& globopts, Msg& msg);
+    const opt_t* snapshot();
     void fix_global_and_defaults();
-    void restore(const opt_t *opts);
-    void merge(const opt_t *opts, const loc_t &loc);
+    void restore(const opt_t* opts);
+    void merge(const opt_t* opts, const loc_t& loc);
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
@@ -337,12 +330,12 @@ public:
 
     void reset_group_startlabel();
 
-private:
+  private:
     void sync();
     FORBID_COPY (Opt);
 };
 
-ParseOpts parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg);
+ParseOpts parse_opts(char** argv, conopt_t& globopts, Opt& opts, Msg& msg);
 
 } // namespace re2c
 

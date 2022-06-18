@@ -7,9 +7,9 @@
 
 namespace re2c {
 
-int lex(const char *&pattern);
-const AST *parse(const char *pattern);
-extern const AST *regexp;
+int lex(const char*& pattern);
+const AST* parse(const char* pattern);
+extern const AST* regexp;
 
 } // namespace re2c
 

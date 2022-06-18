@@ -3,12 +3,10 @@
 
 #include <stdint.h>
 
-
 namespace re2c {
 
-class utf8
-{
-public:
+class utf8 {
+  public:
     typedef uint32_t rune;
 
     // maximum characters per rune
@@ -36,10 +34,10 @@ public:
     static const uint32_t MASK;
 
     // UTF-8 bytestring for given Unicode rune
-    static uint32_t rune_to_bytes(uint32_t * s, rune r);
+    static uint32_t rune_to_bytes(uint32_t* s, rune r);
 
     // read Unicode rune for the given (pre-validated) UTF-8 bytestring
-    static uint32_t decode_unsafe(const char *str);
+    static uint32_t decode_unsafe(const char* str);
 
     // length of UTF-8 bytestring for given Unicode rune
     static uint32_t rune_length(rune r);

@@ -20,49 +20,43 @@
 #include "src/skeleton/skeleton.h"
 #include "src/util/string_utils.h"
 
-
 namespace re2c {
 
-static void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa,
-    const State *s);
-static void emit_accept(Output &output, CodeList *stmts, const DFA &dfa,
-    const accept_t &acc);
-static void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx);
-static void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa,
-    const Rule &rule);
+static void gen_fill_and_label(Output& output, CodeList* stmts, const DFA& dfa, const State* s);
+static void emit_accept(Output& output, CodeList* stmts, const DFA& dfa, const accept_t& acc);
+static void emit_rule(Output& output, CodeList* stmts, const DFA& dfa, size_t rule_idx);
+static void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& rule);
 
-static const char *gen_fill_label(Output &output, uint32_t index)
-{
-    const opt_t *opts = output.block().opts;
-    Scratchbuf &o = output.scratchbuf;
+static const char* gen_fill_label(Output& output, uint32_t index) {
+    const opt_t* opts = output.block().opts;
+    Scratchbuf& o = output.scratchbuf;
     DASSERT(o.empty());
     return o.str(opts->yyfilllabel).u32(index).flush();
 }
 
-static bool endstate(const State *s) {
-    // An 'end' state is a state which has no outgoing transitions on symbols.
-    // Usually 'end' states are final states (not all final states are 'end' states),
-    // but sometimes it be initial non-accepting state, e.g. in case of rule '[]'.
+static bool endstate(const State* s) {
+    // An 'end' state is a state which has no outgoing transitions on symbols. Usually 'end' states
+    // are final states (not all final states are 'end' states), but sometimes it be initial
+    // non-accepting state, e.g. in case of rule '[]'.
     DASSERT(s->go.nspans > 0);
-    const Action::type_t &a = s->go.span[0].to->action.type;
+    const Action::type_t& a = s->go.span[0].to->action.type;
     return s->go.nspans == 1 && (a == Action::RULE || a == Action::ACCEPT);
 }
 
-static void gen_peek(code_alc_t &alc, const State *s, CodeList *stmts) {
-    // Do not generate YYPEEK statement in case `yych` is overwritten before it is used.
-    // This may happen if there is a single transition which does not require matching on
-    // `yych` (one exception is a transition to a move state, which doesn't have its own
-    // YYPEEK and relies on the previous value of `yych`).
+static void gen_peek(code_alc_t& alc, const State* s, CodeList* stmts) {
+    // Do not generate YYPEEK statement in case `yych` is overwritten before it is used. This may
+    // happen if there is a single transition which does not require matching on `yych` (one
+    // exception is a transition to a move state, which doesn't have its own YYPEEK and relies on
+    // the previous value of `yych`).
     bool omit_peek = s->go.nspans == 1 && s->go.span[0].to->action.type != Action::MOVE;
     if (!omit_peek) append(stmts, code_peek(alc));
 }
 
-void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    const char *text;
+void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
+    const char* text;
 
     switch (s->action.type) {
     case Action::MATCH:
@@ -116,57 +110,51 @@ void emit_action(Output &output, const DFA &dfa, const State *s, CodeList *stmts
     }
 }
 
-static CodeList *emit_accept_binary(Output &output, const DFA &dfa, const accept_t &acc,
-    size_t l, size_t r)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+static CodeList* emit_accept_binary(
+        Output& output, const DFA& dfa, const accept_t& acc, size_t l, size_t r) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
 
-    CodeList *stmts = code_list(alc);
+    CodeList* stmts = code_list(alc);
     if (l < r) {
         const size_t m = (l + r) >> 1;
-        const char *if_cond = o.str(opts->yyaccept).cstr(r == l + 1 ? " == " : " <= ")
-            .u64(m).flush();
-        CodeList *if_then = emit_accept_binary(output, dfa, acc, l, m);
-        CodeList *if_else = emit_accept_binary(output, dfa, acc, m + 1, r);
+        const char* if_cond = o.str(opts->yyaccept).cstr(r == l + 1 ? " == " : " <= ").u64(m)
+                .flush();
+        CodeList* if_then = emit_accept_binary(output, dfa, acc, l, m);
+        CodeList* if_else = emit_accept_binary(output, dfa, acc, m + 1, r);
         append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
-    }
-    else {
+    } else {
         const CodeJump jump = {acc[l].first, acc[l].second, false, false, false};
         gen_goto(output, dfa, stmts, nullptr, jump);
     }
     return stmts;
 }
 
-static void gen_restore(Output &output, CodeList *stmts)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    const char *text;
+static void gen_restore(Output& output, CodeList* stmts) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
+    const char* text;
 
     if (opts->input_api == Api::DEFAULT) {
         text = o.str(opts->yycursor).cstr(" = ").str(opts->yymarker).flush();
         append(stmts, code_stmt(alc, text));
-    }
-    else if (opts->api_style == ApiStyle::FUNCTIONS) {
+    } else if (opts->api_style == ApiStyle::FUNCTIONS) {
         text = o.str(opts->yyrestore).cstr("()").flush();
         append(stmts, code_stmt(alc, text));
-    }
-    else {
+    } else {
         text = o.str(opts->yyrestore).flush();
         append(stmts, code_text(alc, text));
     }
 }
 
-void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t &acc)
-{
-    const opt_t *opts = output.block().opts;
+void emit_accept(Output& output, CodeList* stmts, const DFA& dfa, const accept_t& acc) {
+    const opt_t* opts = output.block().opts;
     const size_t nacc = acc.size();
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    const char *text;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
+    const char* text;
 
     if (nacc == 0) return;
 
@@ -189,22 +177,21 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
 
     // jump table
     if (opts->gFlag && nacc >= opts->cGotoThreshold && !have_tags) {
-        CodeList *block = code_list(alc);
+        CodeList* block = code_list(alc);
 
-        CodeList *table = code_list(alc);
-        text = o.cstr("static void *").str(opts->yytarget).cstr("[").u64(nacc)
-            .cstr("] = {").flush();
+        CodeList* table = code_list(alc);
+        text = o.cstr("static void *").str(opts->yytarget).cstr("[").u64(nacc).cstr("] = {")
+                .flush();
         append(block, code_text(alc, text));
         for (uint32_t i = 0; i < nacc; ++i) {
-            Label *l = acc[i].first->label;
+            Label* l = acc[i].first->label;
             text = o.cstr("&&").str(opts->labelPrefix).label(*l).cstr(",").flush();
             append(table, code_text(alc, text));
         }
         append(block, code_block(alc, table, CodeBlock::INDENTED));
         append(block, code_stmt(alc, "}"));
 
-        text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yyaccept)
-            .cstr("]").flush();
+        text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yyaccept).cstr("]").flush();
         append(block, code_stmt(alc, text));
 
         append(stmts, code_block(alc, block, CodeBlock::WRAPPED));
@@ -218,15 +205,14 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
     }
 
     // switch
-    CodeCases *cases = code_cases(alc);
+    CodeCases* cases = code_cases(alc);
     for (uint32_t i = 0; i < nacc; ++i) {
-        CodeList *case_body = code_list(alc);
+        CodeList* case_body = code_list(alc);
         const CodeJump jump = {acc[i].first, acc[i].second, false, false, false};
         gen_goto(output, dfa, case_body, nullptr, jump);
         if (i == nacc - 1) {
             append(cases, code_case_default(alc, case_body));
-        }
-        else {
+        } else {
             append(cases, code_case_number(alc, case_body, static_cast<int32_t>(i)));
         }
     }
@@ -234,11 +220,10 @@ void emit_accept(Output &output, CodeList *stmts, const DFA &dfa, const accept_t
     append(stmts, code_switch(alc, text, cases));
 }
 
-static void gen_setstate(Output &output, CodeList *stmts, const char *fillidx)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+static void gen_setstate(Output& output, CodeList* stmts, const char* fillidx) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
 
     o.str(opts->state_set);
     argsubst(o.stream(), opts->state_set_arg, "state", true, fillidx);
@@ -250,11 +235,10 @@ static void gen_setstate(Output &output, CodeList *stmts, const char *fillidx)
     }
 }
 
-static void gen_setcondition(Output &output, CodeList *stmts, const char *cond)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+static void gen_setcondition(Output& output, CodeList* stmts, const char* cond) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
 
     o.str(opts->cond_set);
     argsubst(o.stream(), opts->cond_set_arg, "cond", true, cond);
@@ -266,10 +250,10 @@ static void gen_setcondition(Output &output, CodeList *stmts, const char *cond)
     }
 }
 
-static void gen_continue_yyloop(Output &output, CodeList *stmts, const char *next) {
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &buf = output.scratchbuf;
+static void gen_continue_yyloop(Output& output, CodeList* stmts, const char* next) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
 
     buf.str(opts->yystate).cstr(" = ").cstr(next);
     append(stmts, code_stmt(alc, buf.flush()));
@@ -279,12 +263,12 @@ static void gen_continue_yyloop(Output &output, CodeList *stmts, const char *nex
     append(stmts, code_stmt(alc, buf.flush()));
 }
 
-void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx) {
-    const opt_t *opts = output.block().opts;
-    const Rule &rule = dfa.rules[rule_idx];
-    const SemAct *semact = rule.semact;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+void emit_rule(Output& output, CodeList* stmts, const DFA& dfa, size_t rule_idx) {
+    const opt_t* opts = output.block().opts;
+    const Rule& rule = dfa.rules[rule_idx];
+    const SemAct* semact = rule.semact;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
 
     gen_fintags(output, stmts, dfa, rule);
 
@@ -294,30 +278,30 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
     }
 
     // Condition in the semantic action is the one set with => or :=> rule.
-    const std::string &cond = semact->cond.empty() ? dfa.cond : semact->cond;
+    const std::string& cond = semact->cond.empty() ? dfa.cond : semact->cond;
     // Next condition is either the one specified in semantic action, or the current one.
-    const char *next_cond = o.str(opts->condEnumPrefix).str(cond).flush();
-    // Next state is normally -1 (the initial storable state corresponding to no YYFILL
-    // invocation), but in the loop/switch mode conditions and storable states are both
-    // implemented via `yystate`, so the next state is the next condition.
-    const char *next_state = (!dfa.cond.empty() && opts->loop_switch) ? next_cond : "-1";
+    const char* next_cond = o.str(opts->condEnumPrefix).str(cond).flush();
+    // Next state is normally -1 (the initial storable state corresponding to no YYFILL invocation),
+    // but in the loop/switch mode conditions and storable states are both implemented via
+    // `yystate`, so the next state is the next condition.
+    const char* next_state = (!dfa.cond.empty() && opts->loop_switch) ? next_cond : "-1";
 
     if (opts->fFlag) {
-        // Generate YYSETSTATE in the final state. This is needed because the user may
-        // enclose the lexer in an outer loop that goes via YYGETSTATE switch (it may
-        // happen if `getstate:re2c` is not used, which is the case in the loop/switch
-        // mode). The user would expect the next iteration of the loop to start in the
-        // initial DFA state, so YYGETSTATE should return the corresponding value.
+        // Generate YYSETSTATE in the final state. This is needed because the user may enclose the
+        // lexer in an outer loop that goes via YYGETSTATE switch (it may happen if `getstate:re2c`
+        // is not used, which is the case in the loop/switch mode). The user would expect the next
+        // iteration of the loop to start in the initial DFA state, so YYGETSTATE should return the
+        // corresponding value.
         gen_setstate(output, stmts, next_state);
     }
 
     if (cond != dfa.cond && !(opts->loop_switch && opts->fFlag)) {
-        // Omit YYSETCONDITION if the current condition is the same as the new one.
-        // Also omit it if both storable state and conditions are used with loop/switch:
-        // only one of YYGETSTATE and YYGETCONDITION can be used to initialize `yystate`,
-        // and it must be YYGETSTATE because the lexer may be reentered after an YYFILL
-        // invocation. Therefore we use YYSETSTATE instead of YYSETCONDITION in the final
-        // states in order to match YYGETSTATE in `yystate` initialization.
+        // Omit YYSETCONDITION if the current condition is the same as the new one. Also omit it if
+        // both storable state and conditions are used with loop/switch: only one of YYGETSTATE and
+        // YYGETCONDITION can be used to initialize `yystate`, and it must be YYGETSTATE because the
+        // lexer may be reentered after an YYFILL invocation. Therefore we use YYSETSTATE instead of
+        // YYSETCONDITION in the final states in order to match YYGETSTATE in `yystate`
+        // initialization.
         gen_setcondition(output, stmts, next_cond);
     }
 
@@ -328,39 +312,38 @@ void emit_rule(Output &output, CodeList *stmts, const DFA &dfa, size_t rule_idx)
         append(stmts, code_text(alc, o.str(semact->text).flush()));
         append(stmts, code_line_info_output(alc));
     } else if (opts->loop_switch) {
-        // Autogenerated action for the :=> rule, loop/switch mode: set `yystate` to the
-        // initial state of the next condition and continue to the head of the loop.
+        // Autogenerated action for the :=> rule, loop/switch mode: set `yystate` to the initial
+        // state of the next condition and continue to the head of the loop.
         gen_continue_yyloop(output, stmts, next_cond);
     } else {
-        // Autogenerated action for the :=> rule, goto/label mode: emit `cond:goto`
-        // configuration with `cond:goto@cond` replaced by the next condition label.
+        // Autogenerated action for the :=> rule, goto/label mode: emit `cond:goto` configuration
+        // with `cond:goto@cond` replaced by the next condition label.
         o.str(opts->condGoto);
         argsubst(o.stream(), opts->condGotoParam, "cond", true, opts->condPrefix + cond);
         append(stmts, code_text(alc, o.flush()));
     }
 }
 
-static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
-    const State *from, const State *to)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &buf = output.scratchbuf;
+static CodeList* gen_fill_falllback(
+        Output& output, const DFA& dfa, const State* from, const State* to) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
 
     DASSERT(opts->eof != NOEOF);
 
     tcid_t falltags;
-    const State *fallback = fallback_state_with_eof_rule(dfa, opts, from, &falltags);
+    const State* fallback = fallback_state_with_eof_rule(dfa, opts, from, &falltags);
 
     if (from->go.tags != TCID0) {
-        // Tags have been hoisted out of transitions into state (this means that
-        // tags on all transitions coincide, including the fallback transition).
-        // Do not add duplicate tags to fallback transition.
+        // Tags have been hoisted out of transitions into state (this means that tags on all
+        // transitions coincide, including the fallback transition). Do not add duplicate tags to
+        // fallback transition.
         DASSERT(from->go.tags == falltags);
         falltags = TCID0;
     }
 
-    CodeList *fallback_trans = code_list(alc);
+    CodeList* fallback_trans = code_list(alc);
     if (fallback != to || opts->fFlag) {
         // tag actions on the fallback transition
         gen_settags(output, fallback_trans, dfa, falltags);
@@ -370,48 +353,47 @@ static CodeList *gen_fill_falllback(Output &output, const DFA &dfa,
             buf.cstr("goto ").str(opts->labelPrefix).label(*fallback->label);
             append(fallback_trans, code_stmt(alc, buf.flush()));
         } else {
-            const char *next = buf.label(*fallback->label).flush();
+            const char* next = buf.label(*fallback->label).flush();
             gen_continue_yyloop(output, fallback_trans, next);
         }
     } else {
-        // Transition can be elided, because control flow "falls through" to an
-        // identical transition. Tags and skip (if present) are elided as well,
-        // because the next transition covers them.
+        // Transition can be elided, because control flow "falls through" to an identical
+        // transition. Tags and skip (if present) are elided as well, because the next transition
+        // covers them.
     }
     return fallback_trans;
 }
 
-static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
-    const State *from, const State *to)
-{
-    const opt_t *opts = output.block().opts;
+static void gen_fill(
+        Output& output, CodeList* stmts, const DFA& dfa, const State* from, const State* to) {
+    const opt_t* opts = output.block().opts;
     const bool eof_rule = opts->eof != NOEOF;
     const uint32_t fillidx = output.block().fill_index - 1;
     const size_t need = eof_rule ? 1 : from->fill;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
 
     // YYLESSTHAN
-    const char *lessthan = gen_lessthan(o, opts, need);
+    const char* lessthan = gen_lessthan(o, opts, need);
 
     // Transition to YYFILL label from the initial state dispatch.
-    CodeList *goto_fill = code_list(alc);
+    CodeList* goto_fill = code_list(alc);
     if (!opts->loop_switch) {
-        const char *flabel = gen_fill_label(output, fillidx);
+        const char* flabel = gen_fill_label(output, fillidx);
         append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
     } else {
-        const char *next = o.u32(output.block().fill_state).flush();
+        const char* next = o.u32(output.block().fill_state).flush();
         gen_continue_yyloop(output, goto_fill, next);
     }
 
-    CodeList *fill = code_list(alc);
+    CodeList* fill = code_list(alc);
 
     if (opts->fFlag) {
         gen_setstate(output, eof_rule ? fill : stmts, o.u32(fillidx).flush());
     }
 
     if (opts->fill_use) {
-        // With EOF rule there is no YYFILL argument and no parameter to replace.
+        // With end-of-input rule $ there is no YYFILL argument and no parameter to replace.
         o.str(opts->fill);
         if (!eof_rule) {
             argsubst(o.stream(), opts->fill_arg, "len", true, need);
@@ -422,32 +404,27 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
             o.cstr(")");
         }
         if (eof_rule && !opts->fFlag) {
-            // EOF rule without storable state: check YYFILL return value. If it
+            // End-of-input rule $ without a storable state: check YYFILL return value. If it
             // succeeds (returns zero) then go to YYFILL label and rematch.
             if (!opts->fill_naked) o.cstr(" == 0");
             append(fill, code_if_then_else(alc, o.flush(), goto_fill, nullptr));
-        }
-        else {
-            // Otherwise don't check YYFILL return value: assume that it does
-            // not return on failure.
-            append(fill, opts->fill_naked
-                ? code_text(alc, o.flush())
-                : code_stmt(alc, o.flush()));
+        } else {
+            // Otherwise don't check YYFILL return value: assume that it does not return on failure.
+            append(fill, opts->fill_naked ? code_text(alc, o.flush()) : code_stmt(alc, o.flush()));
         }
     }
 
     if (eof_rule) {
-        CodeList *fallback = gen_fill_falllback(output, dfa, from, to);
+        CodeList* fallback = gen_fill_falllback(output, dfa, from, to);
         if (opts->fFlag) {
-            // With storable state and EOF rule the initial state dispatch needs to
-            // handle YYFILL failure: if there is still not enough input, it must
-            // follow the fallback transition for the state that triggered YYFILL.
-            // Fallback transition is inlined in the state dispatch (as opposed to
-            // jumping to the corresponding DFA transition) because Go backend does
-            // not support jumping in the middle of a nested block.
+            // With storable state and end-of-input rule $ the initial state dispatch needs to
+            // handle YYFILL failure: if there is still not enough input, it must follow the
+            // fallback transition for the state that triggered YYFILL. Fallback transition is
+            // inlined in the state dispatch (as opposed to jumping to the corresponding DFA
+            // transition) because Go backend does not support jumping in the middle of a nested
+            // block.
             prepend(goto_fill, code_if_then_else(alc, lessthan, fallback, nullptr));
-        }
-        else {
+        } else {
             append(fill, fallback);
         }
     }
@@ -456,7 +433,7 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
     }
 
     if (opts->fill_check && fill->head) {
-        CodeList *check_fill = code_list(alc);
+        CodeList* check_fill = code_list(alc);
         append(check_fill, code_if_then_else(alc, lessthan, fill, nullptr));
         fill = check_fill;
     }
@@ -464,9 +441,8 @@ static void gen_fill(Output &output, CodeList *stmts, const DFA &dfa,
     append(stmts, fill);
 }
 
-void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const State *s)
-{
-    const opt_t *opts = output.block().opts;
+void gen_fill_and_label(Output& output, CodeList* stmts, const DFA& dfa, const State* s) {
+    const opt_t* opts = output.block().opts;
 
     const bool need_fill = opts->fill_use && !endstate(s);
     const bool need_fill_on_trans = need_fill && opts->eof != NOEOF;
@@ -483,26 +459,24 @@ void gen_fill_and_label(Output &output, CodeList *stmts, const DFA &dfa, const S
     }
 
     if (opts->eof != NOEOF) {
-        // If the end-of-input rule $ is used, the lexer may jump to the YYFILL
-        // label to rescan the current input character. Generate tag operations
-        // before the label to avoid applying them multiple times in the above
-        // scenario (re-application may produce incorrect results in case of
-        // non-idempotent operations).
+        // If the end-of-input rule $ is used, the lexer may jump to the YYFILL label to rescan the
+        // current input character. Generate tag operations before the label to avoid applying them
+        // multiple times in the above scenario (re-application may produce incorrect results in
+        // case of non-idempotent operations).
         gen_settags(output, stmts, dfa, s->go.tags);
     }
 
     if (need_fill_label && !opts->loop_switch) {
-        const char *flabel = gen_fill_label(output, output.block().fill_index - 1);
+        const char* flabel = gen_fill_label(output, output.block().fill_index - 1);
         append(stmts, code_slabel(output.allocator, flabel));
     }
 }
 
-void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from,
-    const CodeJump &jump)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+void gen_goto(
+        Output& output, const DFA& dfa, CodeList* stmts, const State* from, const CodeJump& jump) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
 
     if (jump.eof) {
         gen_fill(output, stmts, dfa, from, jump.to);
@@ -519,36 +493,33 @@ void gen_goto(Output &output, const DFA &dfa, CodeList *stmts, const State *from
             o.cstr("goto ").str(opts->labelPrefix).label(*jump.to->label);
             append(stmts, code_stmt(alc, o.flush()));
         } else if (jump.to->label->used) {
-            const char *next = o.label(*jump.to->label).flush();
+            const char* next = o.label(*jump.to->label).flush();
             gen_continue_yyloop(output, stmts, next);
         }
     } else {
-        // Goto can be elided, because control flow "falls through" to the
-        // correct DFA state. This usually happens for the last statement in a
-        // sequence of "linear if" statements.
+        // Goto can be elided, because control flow "falls through" to the correct DFA state. This
+        // usually happens for the last statement in a sequence of "linear if" statements.
     }
 }
 
-static void gen_shift(Output &output, CodeList *stmts, int32_t shift,
-    const std::string &tag, bool history)
-{
+static void gen_shift(
+        Output& output, CodeList* stmts, int32_t shift, const std::string& tag, bool history) {
     if (shift == 0) return;
 
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
     const bool notag = tag.empty();
 
-    o.str(notag ? opts->yyshift
-        : history ? opts->yyshiftmtag : opts->yyshiftstag);
+    o.str(notag ? opts->yyshift : (history ? opts->yyshiftmtag : opts->yyshiftstag));
     if (opts->api_style == ApiStyle::FUNCTIONS) {
         o.cstr("(");
         if (!notag) o.str(tag).cstr(", ");
         o.i32(shift).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
     } else {
-        // Single-argument YYSHIFT allows short-form unnamed substitution,
-        // multi-argument YYSHIFTSTAG / YYSHIFTMTAG require named placeholders.
+        // Single-argument YYSHIFT allows short-form unnamed substitution, multi-argument
+        // YYSHIFTSTAG / YYSHIFTMTAG require named placeholders.
         if (!notag) {
             argsubst(o.stream(), opts->api_sigil, "tag", false, tag);
         }
@@ -557,16 +528,15 @@ static void gen_shift(Output &output, CodeList *stmts, int32_t shift,
     }
 }
 
-static void gen_settag(Output &output, CodeList *stmts, const std::string &tag,
-    bool negative, bool history)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+static void gen_settag(
+        Output& output, CodeList* stmts, const std::string& tag, bool negative, bool history) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
 
-    const std::string &s = history
-        ? (negative ? opts->yymtagn : opts->yymtagp)
-        : (negative ? opts->yystagn : opts->yystagp);
+    const std::string& s = history
+            ? (negative ? opts->yymtagn : opts->yymtagp)
+            : (negative ? opts->yystagn : opts->yystagp);
     o.str(s);
     if (opts->api_style == ApiStyle::FUNCTIONS) {
         o.cstr("(").str(tag).cstr(")");
@@ -577,31 +547,30 @@ static void gen_settag(Output &output, CodeList *stmts, const std::string &tag,
     }
 }
 
-static void gen_assign(Output &output, CodeList *stmts, const std::string &lhs,
-    const std::string &rhs)
-{
-    Scratchbuf &o = output.scratchbuf;
+static void gen_assign(
+        Output& output, CodeList* stmts, const std::string& lhs, const std::string& rhs) {
+    Scratchbuf& o = output.scratchbuf;
     o.str(lhs).cstr(" = ").str(rhs);
     append(stmts, code_stmt(output.allocator, o.flush()));
 }
 
-static void gen_assign_many(Output &output, CodeList *stmts,
-    const std::vector<std::string> &many, const std::string &rhs)
-{
-    Scratchbuf &o = output.scratchbuf;
-    for (const std::string &s : many) {
+static void gen_assign_many(Output& output,
+                            CodeList* stmts,
+                            const std::vector<std::string>& many,
+                            const std::string& rhs) {
+    Scratchbuf& o = output.scratchbuf;
+    for (const std::string& s : many) {
         o.str(s).cstr(" = ");
     }
     o.str(rhs);
     append(stmts, code_stmt(output.allocator, o.flush()));
 }
 
-static void gen_assign_many_to_first(Output &output, CodeList *stmts,
-    const std::vector<std::string> &many)
-{
+static void gen_assign_many_to_first(
+        Output& output, CodeList* stmts, const std::vector<std::string>& many) {
     if (many.size() <= 1) return;
 
-    Scratchbuf &o = output.scratchbuf;
+    Scratchbuf& o = output.scratchbuf;
     for (size_t i = 1; i < many.size(); ++i) {
         o.str(many[i]).cstr(" = ");
     }
@@ -609,11 +578,10 @@ static void gen_assign_many_to_first(Output &output, CodeList *stmts,
     append(stmts, code_stmt(output.allocator, o.flush()));
 }
 
-static void gen_restorectx(Output &output, CodeList *stmts, const std::string &tag)
-{
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+static void gen_restorectx(Output& output, CodeList* stmts, const std::string& tag) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
     const bool notag = tag.empty();
 
     o.str(notag ? opts->yyrestorectx : opts->yyrestoretag);
@@ -628,12 +596,12 @@ static void gen_restorectx(Output &output, CodeList *stmts, const std::string &t
     }
 }
 
-void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t tcid) {
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+void gen_settags(Output& output, CodeList* tag_actions, const DFA& dfa, tcid_t tcid) {
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
     const bool generic = opts->input_api == Api::CUSTOM;
-    const tcmd_t *cmd = dfa.tcpool[tcid];
+    const tcmd_t* cmd = dfa.tcpool[tcid];
 
     // single tag, backwards compatibility, use context marker
     if (cmd && dfa.oldstyle_ctxmarker) {
@@ -651,7 +619,7 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
         return;
     }
 
-    for (const tcmd_t *p = cmd; p; p = p->next) {
+    for (const tcmd_t* p = cmd; p; p = p->next) {
         const tagver_t l = p->lhs, r = p->rhs, *h = p->history, *h0;
         const std::string le = vartag_expr(l, opts, dfa.mtagvers);
         const std::string re = vartag_expr(r, opts, dfa.mtagvers);
@@ -678,8 +646,8 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
                 gen_settag(output, tag_actions, le, negative, false);
             } else {
                 Scratchbuf o2(alc);
-                for (const tcmd_t *q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
-                    Scratchbuf &x = q->history[0] == TAGVER_BOTTOM ? o : o2;
+                for (const tcmd_t* q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
+                    Scratchbuf& x = q->history[0] == TAGVER_BOTTOM ? o : o2;
                     x.str(vartag_expr(q->lhs, opts, dfa.mtagvers)).cstr(" = ");
                 }
                 if (!o.empty()) {
@@ -695,14 +663,13 @@ void gen_settags(Output &output, CodeList *tag_actions, const DFA &dfa, tcid_t t
     }
 }
 
-void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &rule)
-{
-    const opt_t *opts = output.block().opts;
+void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& rule) {
+    const opt_t* opts = output.block().opts;
     const bool generic = opts->input_api == Api::CUSTOM;
-    const std::vector<Tag> &tags = dfa.tags;
-    const tagver_t *fins = dfa.finvers;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
+    const std::vector<Tag>& tags = dfa.tags;
+    const tagver_t* fins = dfa.finvers;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
     std::vector<std::string> fintags;
 
     if (rule.ncap > 0) {
@@ -710,14 +677,14 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         append(stmts, code_stmt(alc, o.flush()));
     }
 
-    CodeList *varops = code_list(alc);
-    CodeList *fixops = code_list(alc);
-    CodeList *trailops = code_list(alc);
-    CodeList *fixpostops = code_list(alc);
+    CodeList* varops = code_list(alc);
+    CodeList* fixops = code_list(alc);
+    CodeList* trailops = code_list(alc);
+    CodeList* fixpostops = code_list(alc);
     std::string negtag;
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
-        const Tag &tag = tags[t];
+        const Tag& tag = tags[t];
 
         // structural tag that is only needed for disambiguation
         if (fictive(tag)) continue;
@@ -732,8 +699,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 if (generic) {
                     gen_restorectx(output, trailops, notag ? "" : expr);
                 } else {
-                    gen_assign(output, trailops, opts->yycursor,
-                        notag ? opts->yyctxmarker : expr);
+                    gen_assign(output, trailops, opts->yycursor, notag ? opts->yyctxmarker : expr);
                 }
             } else {
                 gen_assign_many(output, varops, fintags, expr);
@@ -745,7 +711,8 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
             const int32_t dist = static_cast<int32_t>(tag.dist);
             const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
             const std::string base = fixed_on_cursor
-                ? opts->yycursor : vartag_expr(fins[tag.base], opts, dfa.mtagvers);
+                    ? opts->yycursor
+                    : vartag_expr(fins[tag.base], opts, dfa.mtagvers);
 
             if (trailing(tag)) {
                 DASSERT(tag.toplevel);
@@ -765,7 +732,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                 }
             } else {
                 DASSERT(!fintags.empty());
-                const std::string &first = fintags[0];
+                const std::string& first = fintags[0];
 
                 if (generic) {
                     if (fixed_on_cursor) {
@@ -779,15 +746,14 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                         gen_shift(output, fixops, -dist, first, false);
                         gen_assign_many_to_first(output, fixops, fintags);
                     } else {
-                        // Split operations in two parts. First, set all fixed tags to
-                        // their base tag. Second, choose one of the base tags to store
-                        // negative value (with generic API there is no NULL constant)
-                        // and compare fixed tags against it before shifting. This must
-                        // be done after all uses of that base tag.
+                        // Split operations in two parts. First, set all fixed tags to their base
+                        // tag. Second, choose one of the base tags to store negative value (with
+                        // generic API there is no NULL constant) and compare fixed tags against it
+                        // before shifting. This must be done after all uses of that base tag.
                         if (negtag.empty()) negtag = base;
                         gen_assign(output, fixops, first, base);
-                        const char *cond = o.str(first).cstr(" != ").str(negtag).flush();
-                        CodeList *then = code_list(alc);
+                        const char* cond = o.str(first).cstr(" != ").str(negtag).flush();
+                        CodeList* then = code_list(alc);
                         gen_shift(output, then, -dist, first, false);
                         append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
                     }
@@ -795,16 +761,15 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
                     if (dist == 0) {
                         gen_assign_many(output, fixops, fintags, base);
                     } else if (tag.toplevel) {
-                        gen_assign_many(output, fixops, fintags,
-                            o.str(base).cstr(" - ").i32(dist).flush());
+                        gen_assign_many(
+                                output, fixops, fintags, o.str(base).cstr(" - ").i32(dist).flush());
                     } else {
-                        // If base tag is NULL, fixed tag is also NULL, otherwise it
-                        // equals the value of the base tag plus offset.
+                        // If base tag is NULL, fixed tag is also NULL, otherwise it equals the
+                        // value of the base tag plus offset.
                         gen_assign(output, fixops, first, base);
-                        const char *cond = o.str(base).cstr(" != NULL").flush();
-                        CodeList *then = code_list(alc);
-                        append(then, code_stmt(alc,
-                            o.str(first).cstr(" -= ").i32(dist).flush()));
+                        const char* cond = o.str(base).cstr(" != NULL").flush();
+                        CodeList* then = code_list(alc);
+                        append(then, code_stmt(alc, o.str(first).cstr(" -= ").i32(dist).flush()));
                         append(fixops, code_if_then_else(alc, cond, then, nullptr));
                         gen_assign_many_to_first(output, fixops, fintags);
                     }
@@ -813,15 +778,15 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
         }
     }
 
-    // Variable tags must be set before fixed tags which depend on them. Trailing context
-    // is updated after all tags, because fixed tags may depend on the rightmost position.
+    // Variable tags must be set before fixed tags which depend on them. Trailing context is updated
+    // after all tags, because fixed tags may depend on the rightmost position.
     append(stmts, varops);
     append(stmts, fixops);
     append(stmts, trailops);
 
     if (!negtag.empty()) {
-        // With generic API there is no explicit negative NULL value, so it is
-        // necessary to materialize no-match value in a tag.
+        // With generic API there is no explicit negative NULL value, so it is necessary to
+        // materialize no-match value in a tag.
         DASSERT(opts->input_api == Api::CUSTOM);
         append(stmts, code_text(alc, o.cstr("/* materialize no-match value */").flush()));
         gen_settag(output, stmts, negtag, true, false);
@@ -829,8 +794,7 @@ void gen_fintags(Output &output, CodeList *stmts, const DFA &dfa, const Rule &ru
     }
 }
 
-void expand_fintags(const Tag &tag, std::vector<std::string> &fintags)
-{
+void expand_fintags(const Tag& tag, std::vector<std::string>& fintags) {
     fintags.clear();
     if (trailing(tag)) {
         // empty list
@@ -845,8 +809,7 @@ void expand_fintags(const Tag &tag, std::vector<std::string> &fintags)
     }
 }
 
-const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)
-{
+const char* gen_lessthan(Scratchbuf& o, const opt_t* opts, size_t n) {
     if (opts->input_api == Api::CUSTOM) {
         o.str(opts->yylessthan);
         if (opts->api_style == ApiStyle::FUNCTIONS) {
@@ -854,13 +817,10 @@ const char *gen_lessthan(Scratchbuf &o, const opt_t *opts, size_t n)
         } else {
             argsubst(o.stream(), opts->api_sigil, "len", true, n);
         }
-    }
-    else if (n == 1) {
+    } else if (n == 1) {
         o.str(opts->yylimit).cstr(" <= ").str(opts->yycursor);
-    }
-    else {
-        o.cstr("(").str(opts->yylimit).cstr(" - ").str(opts->yycursor)
-            .cstr(") < ").u64(n);
+    } else {
+        o.cstr("(").str(opts->yylimit).cstr(" - ").str(opts->yycursor).cstr(") < ").u64(n);
     }
     return o.flush();
 }

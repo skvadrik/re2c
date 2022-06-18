@@ -16,51 +16,46 @@
 #include "src/regexp/tag.h"
 #include "src/util/range.h"
 
-
 namespace re2c {
 
-template<typename ctx_t> static void determinization(ctx_t &ctx);
-template<typename ctx_t> static void clear_caches(ctx_t &ctx);
-template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t &ctx);
+template<typename ctx_t> static void determinization(ctx_t& ctx);
+template<typename ctx_t> static void clear_caches(ctx_t& ctx);
+template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t& ctx);
 
 const uint32_t dfa_t::NIL = ~0u;
 
-dfa_t::dfa_t(const nfa_t &nfa, size_t def_rule, size_t eof_rule)
-    : states()
-    , nchars(nfa.charset.size() - 1) // (n + 1) bounds for n ranges
-    , charset(nfa.charset)
-    , rules(nfa.rules)
-    , tags(nfa.tags)
-    , mtagvers(*new std::set<tagver_t>)
-    , finvers(nullptr)
-    , tcpool(*new tcpool_t)
-    , maxtagver(0)
-    , def_rule(def_rule)
-    , eof_rule(eof_rule)
-{}
+dfa_t::dfa_t(const nfa_t& nfa, size_t def_rule, size_t eof_rule)
+    : states(),
+      nchars(nfa.charset.size() - 1), // (n + 1) bounds for n ranges
+      charset(nfa.charset),
+      rules(nfa.rules),
+      tags(nfa.tags),
+      mtagvers(*new std::set<tagver_t>),
+      finvers(nullptr),
+      tcpool(*new tcpool_t),
+      maxtagver(0),
+      def_rule(def_rule),
+      eof_rule(eof_rule) {}
 
-void determinization(const nfa_t &nfa, dfa_t &dfa, const opt_t *opts, Msg &msg,
-    const std::string &cond)
-{
+void determinization(
+        const nfa_t& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {
     if (opts->posix_semantics) {
         pdetctx_t ctx(opts, msg, cond, nfa, dfa);
         determinization(ctx);
-    }
-    else {
+    } else {
         ldetctx_t ctx(opts, msg, cond, nfa, dfa);
         determinization(ctx);
     }
 }
 
 dfa_t::~dfa_t() {
-    for (dfa_state_t *s : states) {
+    for (dfa_state_t* s : states) {
         delete s;
     }
 }
 
 template<typename ctx_t>
-void determinization(ctx_t &ctx)
-{
+void determinization(ctx_t& ctx) {
     const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
 
     // initial state
@@ -69,9 +64,8 @@ void determinization(ctx_t &ctx)
     tagged_epsilon_closure(ctx);
     find_state(ctx);
 
-    // Iterate while new kernels are added: for each alphabet symbol, build tagged
-    // epsilon-closure of all reachable NFA states, then find identical or mappable DFA
-    // state or add a new one.
+    // Iterate while new kernels are added: for each alphabet symbol, build tagged epsilon-closure
+    // of all reachable TNFA states, then find identical or mappable TDFA state or add a new one.
     for (uint32_t i = 0; i < ctx.dc_kernels.size(); ++i) {
         ctx.dc_origin = i;
         clear_caches(ctx);
@@ -81,8 +75,8 @@ void determinization(ctx_t &ctx)
             tagged_epsilon_closure(ctx);
             find_state(ctx);
 
-            // Abort if DFA grows too fast (either in the number of states, or in the
-            // total size of all state kernels which may have many NFA substates).
+            // Abort if TDFA grows too fast (either in the number of states, or in the total size of
+            // all state kernels which may have many TNFA substates).
             if (ctx.dc_kernels.size() > MAX_DFA_STATES) {
                 error("DFA has too many states");
                 exit(1);
@@ -97,8 +91,7 @@ void determinization(ctx_t &ctx)
 }
 
 template<typename ctx_t>
-void clear_caches(ctx_t &ctx)
-{
+void clear_caches(ctx_t& ctx) {
     ctx.dc_newvers.clear();
 
     const size_t ntags = ctx.nfa.tags.size();
@@ -108,23 +101,22 @@ void clear_caches(ctx_t &ctx)
 }
 
 template<typename ctx_t>
-void reach_on_symbol(ctx_t &ctx, uint32_t sym)
-{
+void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     ctx.dc_symbol = sym;
     const uint32_t symbol = ctx.dfa.charset[sym];
 
-    const kernel_t *kernel = ctx.dc_kernels[ctx.dc_origin];
+    const kernel_t* kernel = ctx.dc_kernels[ctx.dc_origin];
     ctx.oldprectbl = kernel->prectbl;
     ctx.oldprecdim = kernel->size;
 
-    closure_t &reach = ctx.reach;
+    closure_t& reach = ctx.reach;
     reach.clear();
 
-    // Add configurations in reverse order: leftmost greedy closure uses
-    // the resulting array as stack, and POSIX closure doesn't care (GOR1
-    // pre-sorts configurations, and GTOP uses priority queue).
+    // Add configurations in reverse order: leftmost greedy closure uses the resulting array as a
+    // stack, and POSIX closure doesn't care (GOR1 pre-sorts configurations, and GTOP uses a
+    // priority queue).
     for (uint32_t i = static_cast<uint32_t>(kernel->size); i --> 0; ) {
-        nfa_state_t *s = transition(kernel->state[i], symbol);
+        nfa_state_t* s = transition(kernel->state[i], symbol);
         if (s) {
             const clos_t c(s, i, kernel->tvers[i], kernel->thist[i], HROOT);
             reach.push_back(c);
@@ -132,12 +124,11 @@ void reach_on_symbol(ctx_t &ctx, uint32_t sym)
     }
 }
 
-nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
-{
+nfa_state_t* transition(nfa_state_t* state, uint32_t symbol) {
     if (state->type != nfa_state_t::RAN) {
         return nullptr;
     }
-    for (const Range *r = state->ran.ran; r; r = r->next()) {
+    for (const Range* r = state->ran.ran; r; r = r->next()) {
         if ((r->lower() <= symbol) && (symbol < r->upper())) {
             return state->ran.out;
         }
@@ -146,9 +137,8 @@ nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
 }
 
 template<typename ctx_t>
-uint32_t init_tag_versions(ctx_t &ctx)
-{
-    dfa_t &dfa = ctx.dfa;
+uint32_t init_tag_versions(ctx_t& ctx) {
+    dfa_t& dfa = ctx.dfa;
     const size_t ntags = dfa.tags.size();
 
     // all-zero tag configuration must have static number zero
@@ -181,18 +171,17 @@ uint32_t init_tag_versions(ctx_t &ctx)
     return INITIAL_TAGS;
 }
 
-// For each tag, find maximal number of parallel versions of this tag
-// used in each kernel (degree of non-determinism) and warn about tags with
-// maximum degree two or more.
-// WARNING: this function assumes that kernel items are grouped by rule
+// For each tag, find maximal number of parallel versions of this tag used in each kernel (the
+// degree of non-determinism) and warn about tags with maximum degree two or more.
+// WARNING: This function assumes that kernel items are grouped by rule.
 template<typename ctx_t>
-void warn_nondeterministic_tags(const ctx_t &ctx) {
+void warn_nondeterministic_tags(const ctx_t& ctx) {
     if (ctx.dc_opts->posix_syntax) return;
 
-    Warn &warn = ctx.dc_msg.warn;
-    const kernels_t &kernels = ctx.dc_kernels;
-    const std::vector<Tag> &tags = ctx.dfa.tags;
-    const std::valarray<Rule> &rules = ctx.dfa.rules;
+    Warn& warn = ctx.dc_msg.warn;
+    const kernels_t& kernels = ctx.dc_kernels;
+    const std::vector<Tag>& tags = ctx.dfa.tags;
+    const std::valarray<Rule>& rules = ctx.dfa.rules;
 
     const size_t ntag = tags.size();
     const size_t nkrn = kernels.size();
@@ -200,14 +189,14 @@ void warn_nondeterministic_tags(const ctx_t &ctx) {
     std::set<tagver_t> uniq;
 
     for (uint32_t i = 0; i < nkrn; ++i) {
-        const kernel_t *k = kernels[i];
-        nfa_state_t **s = k->state;
+        const kernel_t* k = kernels[i];
+        nfa_state_t** s = k->state;
         const size_t n = k->size;
-        const uint32_t *v = k->tvers;
+        const uint32_t* v = k->tvers;
 
         for (size_t u = 0; u < n;) {
             const size_t r = s[u]->rule;
-            const Rule &rule = rules[r];
+            const Rule& rule = rules[r];
 
             const size_t l = u;
             for (; ++u < n && s[u]->rule == r;);
@@ -221,7 +210,7 @@ void warn_nondeterministic_tags(const ctx_t &ctx) {
         }
     }
 
-    for (const Rule &rule : rules) {
+    for (const Rule& rule : rules) {
         for (size_t t = rule.ltag; t < rule.htag; ++t) {
             const size_t m = maxv[t];
             if (m > 1) {
@@ -233,46 +222,45 @@ void warn_nondeterministic_tags(const ctx_t &ctx) {
 
 template<typename history_t>
 determ_context_t<history_t>::determ_context_t(
-    const opt_t *opts, Msg &msg, const std::string &condname, const nfa_t &nfa, dfa_t &dfa)
-    : dc_opts(opts)
-    , dc_msg(msg)
-    , dc_condname(condname)
-    , nfa(nfa)
-    , dfa(dfa)
-    , dc_allocator()
-    , dc_origin(dfa_t::NIL)
-    , dc_target(dfa_t::NIL)
-    , dc_symbol(0)
-    , dc_actions(nullptr)
-    , dc_tagvertbl(nfa.tags.size())
-    , history()
-    , dc_kernels()
-    , kernels_total(0)
-    , dc_buffers()
-    , dc_hc_caches()
-    , dc_newvers(newver_cmp_t<history_t>(history, dc_hc_caches))
-    , dc_path1()
-    , dc_path2()
-    , dc_path3()
-    , dc_tagcount()
-    , reach()
-    , state()
-    , gor1_topsort()
-    , gor1_linear()
-    , gtop_buffer()
-    , gtop_cmp()
-    , gtop_heap(gtop_cmp, gtop_buffer)
-    , newprectbl(nullptr)
-    , oldprectbl(nullptr)
-    , oldprecdim(0)
-    , histlevel(nullptr)
-    , sortcores()
-    , fincount()
-    , worklist()
-    , dump_dfa_tree(*this)
-    , dc_dump(opts)
-    , dc_clstats()
-{
+    const opt_t* opts, Msg& msg, const std::string& condname, const nfa_t& nfa, dfa_t& dfa)
+    : dc_opts(opts),
+      dc_msg(msg),
+      dc_condname(condname),
+      nfa(nfa),
+      dfa(dfa),
+      dc_allocator(),
+      dc_origin(dfa_t::NIL),
+      dc_target(dfa_t::NIL),
+      dc_symbol(0),
+      dc_actions(nullptr),
+      dc_tagvertbl(nfa.tags.size()),
+      history(),
+      dc_kernels(),
+      kernels_total(0),
+      dc_buffers(),
+      dc_hc_caches(),
+      dc_newvers(newver_cmp_t<history_t>(history, dc_hc_caches)),
+      dc_path1(),
+      dc_path2(),
+      dc_path3(),
+      dc_tagcount(),
+      reach(),
+      state(),
+      gor1_topsort(),
+      gor1_linear(),
+      gtop_buffer(),
+      gtop_cmp(),
+      gtop_heap(gtop_cmp, gtop_buffer),
+      newprectbl(nullptr),
+      oldprectbl(nullptr),
+      oldprecdim(0),
+      histlevel(nullptr),
+      sortcores(),
+      fincount(),
+      worklist(),
+      dump_dfa_tree(*this),
+      dc_dump(opts),
+      dc_clstats() {
     const size_t nstates = nfa.size;
     const size_t ncores = nfa.ncores;
     const size_t ntags = nfa.tags.size();
@@ -296,31 +284,29 @@ determ_context_t<history_t>::determ_context_t(
 
     if (opts->posix_closure == PosixClosure::GTOP) {
         gtop_buffer.reserve(nstates);
-    }
-    else {
+    } else {
         gor1_topsort.reserve(nstates);
         gor1_linear.reserve(nstates);
     }
 }
 
 template<typename history_t>
-determ_context_t<history_t>::~determ_context_t()
-{
+determ_context_t<history_t>::~determ_context_t() {
     delete[] newprectbl;
     delete[] histlevel;
 }
 
 // explicit instantiation for context types
-template void reach_on_symbol<ldetctx_t>(ldetctx_t &ctx, uint32_t sym);
-template void reach_on_symbol<pdetctx_t>(pdetctx_t &ctx, uint32_t sym);
-template uint32_t init_tag_versions<ldetctx_t>(ldetctx_t &ctx);
-template uint32_t init_tag_versions<pdetctx_t>(pdetctx_t &ctx);
+template void reach_on_symbol<ldetctx_t>(ldetctx_t& ctx, uint32_t sym);
+template void reach_on_symbol<pdetctx_t>(pdetctx_t& ctx, uint32_t sym);
+template uint32_t init_tag_versions<ldetctx_t>(ldetctx_t& ctx);
+template uint32_t init_tag_versions<pdetctx_t>(pdetctx_t& ctx);
 template determ_context_t<lhistory_t>::~determ_context_t();
 template determ_context_t<phistory_t>::~determ_context_t();
-template determ_context_t<lhistory_t>::determ_context_t(const opt_t*, Msg&,
-    const std::string&, const nfa_t&, dfa_t&);
-template determ_context_t<phistory_t>::determ_context_t(const opt_t*, Msg&,
-    const std::string&, const nfa_t&, dfa_t&);
+template determ_context_t<lhistory_t>::determ_context_t(
+        const opt_t*, Msg&, const std::string&, const nfa_t&, dfa_t&);
+template determ_context_t<phistory_t>::determ_context_t(
+        const opt_t*, Msg&, const std::string&, const nfa_t&, dfa_t&);
 
 } // namespace re2c
 

@@ -13,57 +13,59 @@
 #include "src/regexp/tag.h"
 #include "src/util/range.h"
 
-
-/* note [POSIX orbit tags]
- *
- * POSIX disambiguation rules demand that earlier subexpressions match
- * the longest possible prefix of the input string (without violating the
- * whole match). To accommodate these rules, we resolve conflicts on orbit
- * tags by comparison of tag subhistories on conflicting NFA paths.
- *
- * If one subhistory is a proper prefix of another subhistory, it is less;
- * otherwise for the first pair of different offsets, if one offset is greater
- * than the other, then the corresponding subhistory is less.
- *
- * It is possible to pre-compare two NFA paths corresponding to the same
- * input string prefix and ending in the same NFA state; if paths are not
- * equal, the result of this comparison will hold for any common suffix.
- *
- * It is also possible to pre-compare NFA paths that correspond to the same
- * input prefix, but end in different NFA states. Such comparison is incorrect
- * unless subhistories start at the same offset; but if it is incorrect, we
- * will never use its result (tags with higher priority will also disagree).
- *
- * Therefore instead of keeping the whole history of offsets we calculate
- * the relative order of any pair of subhistories on each step.
- *
- * This part of the algorithm was invented by Christopher Kuklewicz.
- */
+// note [POSIX orbit tags]
+//
+// POSIX disambiguation rules demand that earlier subexpressions match the longest possible prefix
+// of the input string (without violating the whole match). To accommodate these rules, we resolve
+// conflicts on orbit tags by comparison of tag subhistories on conflicting TNFA paths.
+//
+// If one subhistory is a proper prefix of another subhistory, it is less; otherwise for the first
+// pair of different offsets, if one offset is greater than the other, then the corresponding
+// subhistory is less.
+//
+// It is possible to pre-compare two TNFA paths corresponding to the same input string prefix and
+// ending in the same NFA state; if paths are not equal, the result of this comparison will hold
+// for any common suffix.
+//
+// It is also possible to pre-compare TNFA paths that correspond to the same input prefix, but end
+// in different TNFA states. Such comparison is incorrect unless subhistories start at the same
+// offset; but if it is incorrect, we will never use its result (tags with higher priority will also
+// disagree).
+//
+// Therefore instead of keeping the whole history of offsets we calculate the relative order of any
+// pair of subhistories on each step.
+//
+// This part of the algorithm was invented by Christopher Kuklewicz.
 
 namespace re2c {
 
 // specialization that doesn't sort initial closure like Okui-Suzuki
-template<> void init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t &ctx);
+template<> void init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t& ctx);
 
 namespace libre2c {
 
 static const int32_t DELIM = 0x7fffFFFF;
 
-static void make_one_step(ksimctx_t &, uint32_t);
-static void make_final_step(ksimctx_t &);
-static void compute_orders(ksimctx_t &ctx);
+static void make_one_step(ksimctx_t&, uint32_t);
+static void make_final_step(ksimctx_t&);
+static void compute_orders(ksimctx_t& ctx);
 
 // we *do* want these to be inlined
-static inline void closure_posix(ksimctx_t &ctx);
+static inline void closure_posix(ksimctx_t& ctx);
 static inline size_t boundary_tag(size_t tag);
-static inline int32_t subhistory_list(const khistory_t &history, std::vector<int32_t> &path, hidx_t idx, size_t tag);
-static inline void last_subhistory(const khistory_t &history, std::vector<tagver_t> &path, hidx_t idx, size_t tag);
-static inline int32_t compare_last_subhistories(khistory_t &history, hidx_t x, hidx_t y, int32_t ox, int32_t oy, size_t t);
+static inline int32_t subhistory_list(
+        const khistory_t& history, std::vector<int32_t>& path, hidx_t idx, size_t tag);
+static inline void last_subhistory(
+        const khistory_t& history, std::vector<tagver_t>& path, hidx_t idx, size_t tag);
+static inline int32_t compare_last_subhistories(
+        khistory_t& history, hidx_t x, hidx_t y, int32_t ox, int32_t oy, size_t t);
 
-int regexec_nfa_posix_kuklewicz(const regex_t *preg, const char *string
-    , size_t nmatch, regmatch_t pmatch[], int /* eflags */)
-{
-    ksimctx_t &ctx = *static_cast<ksimctx_t*>(preg->simctx);
+int regexec_nfa_posix_kuklewicz(const regex_t* preg,
+                                const char* string,
+                                size_t nmatch,
+                                regmatch_t pmatch[],
+                                int /*eflags*/) {
+    ksimctx_t& ctx = *static_cast<ksimctx_t*>(preg->simctx);
     init(ctx, string);
     if (ctx.nfa.tags.size() > 0) {
         ctx.oldprectbl[0] = 0;
@@ -90,31 +92,28 @@ int regexec_nfa_posix_kuklewicz(const regex_t *preg, const char *string
     return 0;
 }
 
-void closure_posix(ksimctx_t &ctx)
-{
+void closure_posix(ksimctx_t& ctx) {
     if (ctx.flags & REG_GTOP) {
         closure_posix_gtop(ctx);
-    }
-    else {
+    } else {
         closure_posix_gor1(ctx);
     }
 }
 
-void make_one_step(ksimctx_t &ctx, uint32_t sym)
-{
-    confset_t &state = ctx.state, &reach = ctx.reach;
+void make_one_step(ksimctx_t& ctx, uint32_t sym) {
+    confset_t& state = ctx.state, &reach = ctx.reach;
     uint32_t j = 0;
     reach.clear();
 
     for (cconfiter_t i = state.begin(), e = state.end(); i != e; ++i) {
-        nfa_state_t *s = i->state;
+        nfa_state_t* s = i->state;
 
         s->clos = NOCLOS;
         s->arcidx = 0;
         DASSERT(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->type == nfa_state_t::RAN) {
-            for (const Range *r = s->ran.ran; r; r = r->next()) {
+            for (const Range* r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     const conf_t c(s->ran.out, j, HROOT);
                     reach.push_back(c);
@@ -124,8 +123,7 @@ void make_one_step(ksimctx_t &ctx, uint32_t sym)
                     break;
                 }
             }
-        }
-        else if (s->type == nfa_state_t::FIN) {
+        } else if (s->type == nfa_state_t::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
     }
@@ -141,10 +139,9 @@ void make_one_step(ksimctx_t &ctx, uint32_t sym)
     ++ctx.step;
 }
 
-void make_final_step(ksimctx_t &ctx)
-{
+void make_final_step(ksimctx_t& ctx) {
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
-        nfa_state_t *s = i->state;
+        nfa_state_t* s = i->state;
 
         s->clos = NOCLOS;
         s->arcidx = 0;
@@ -156,28 +153,24 @@ void make_final_step(ksimctx_t &ctx)
     }
 }
 
-struct cmp_posix_t
-{
-    ksimctx_t &ctx;
+struct cmp_posix_t {
+    ksimctx_t& ctx;
     size_t tag;
-    inline bool operator()(cconfiter_t x, cconfiter_t y) const
-    {
+    inline bool operator()(cconfiter_t x, cconfiter_t y) const {
         const int32_t
-            ox = ctx.oldprectbl[tag * ctx.oldprecdim + x->origin],
-            oy = ctx.oldprectbl[tag * ctx.oldprecdim + y->origin];
+        ox = ctx.oldprectbl[tag * ctx.oldprecdim + x->origin],
+        oy = ctx.oldprectbl[tag * ctx.oldprecdim + y->origin];
         // comparison result is inverted, because orders are used as offsets
-        return compare_last_subhistories(ctx.history
-            , x->thist, y->thist, ox, oy, tag) > 0;
+        return compare_last_subhistories(ctx.history, x->thist, y->thist, ox, oy, tag) > 0;
     }
 };
 
-void compute_orders(ksimctx_t &ctx)
-{
-    const confset_t &state = ctx.state;
+void compute_orders(ksimctx_t& ctx) {
+    const confset_t& state = ctx.state;
     const size_t ntags = ctx.nfa.tags.size();
     const size_t newdim = state.size();
     cconfiter_t b = state.begin(), e = state.end(), c;
-    std::vector<cconfiter_t> &iters = ctx.stateiters;
+    std::vector<cconfiter_t>& iters = ctx.stateiters;
 
     if (newdim == 0) return;
 
@@ -201,21 +194,20 @@ void compute_orders(ksimctx_t &ctx)
     }
 }
 
-int32_t compare_last_subhistories(khistory_t &history
-    , hidx_t x, hidx_t y, int32_t ox, int32_t oy, size_t t)
-{
+int32_t compare_last_subhistories(
+        khistory_t& history, hidx_t x, hidx_t y, int32_t ox, int32_t oy, size_t t) {
     if (ox > oy) return -1;
     if (ox < oy) return 1;
     if (x == y) return 0;
 
-    std::vector<int32_t> &p1 = history.path1, &p2 = history.path2;
+    std::vector<int32_t>& p1 = history.path1, &p2 = history.path2;
 
     last_subhistory(history, p1, x, t);
     last_subhistory(history, p2, y, t);
 
     std::vector<int32_t>::const_reverse_iterator
-        i1 = p1.rbegin(), e1 = p1.rend(),
-        i2 = p2.rbegin(), e2 = p2.rend();
+    i1 = p1.rbegin(), e1 = p1.rend(),
+    i2 = p2.rbegin(), e2 = p2.rend();
     for (;;) {
         if (i1 == e1 && i2 == e2) break;
         if (i1 == e1) return -1;
@@ -228,9 +220,8 @@ int32_t compare_last_subhistories(khistory_t &history
     return 0;
 }
 
-void last_subhistory(const khistory_t &history
-    , std::vector<tagver_t> &path, hidx_t idx, size_t tag)
-{
+void last_subhistory(
+        const khistory_t& history, std::vector<tagver_t>& path, hidx_t idx, size_t tag) {
     path.clear();
     hidx_t i = idx;
     const size_t bound = boundary_tag(tag);
@@ -242,35 +233,35 @@ void last_subhistory(const khistory_t &history
 }
 
 template<typename ctx_t>
-int32_t khistory_t::precedence(ctx_t &ctx
-    , const typename ctx_t::conf_t &x, const typename ctx_t::conf_t &y
-    , int32_t &/*prec1*/, int32_t &/*prec2*/)
-{
-    // History consists of multiple subhistories (each containing either a
-    // single negative tag, or one or more positive tags (exactly one for
-    // non-orbit subhistories). Because of the shortest-path algorithm earlier
-    // subhistories do not necessarily coincide, so comparing only the last
-    // pair of subhistories is not enough. See note [POSIX orbit tags].
+int32_t khistory_t::precedence(ctx_t& ctx,
+                               const typename ctx_t::conf_t& x,
+                               const typename ctx_t::conf_t& y,
+                               int32_t& /*prec1*/,
+                               int32_t& /*prec2*/) {
+    // History consists of multiple subhistories (each containing either a single negative tag, or
+    // one or more positive tags (exactly one for non-orbit subhistories). Because of the
+    // shortest-path algorithm earlier subhistories do not necessarily coincide, so comparing only
+    // the last pair of subhistories is not enough. See note [POSIX orbit tags].
 
     const size_t ntags = ctx.nfa.tags.size();
     for (size_t t = 1; t < ntags; t += 2) {
         const int32_t
-            ox = ctx.oldprectbl[t * ctx.oldprecdim + x.origin],
-            oy = ctx.oldprectbl[t * ctx.oldprecdim + y.origin];
+        ox = ctx.oldprectbl[t * ctx.oldprecdim + x.origin],
+        oy = ctx.oldprectbl[t * ctx.oldprecdim + y.origin];
 
         if (ox > oy) return -1;
         if (ox < oy) return 1;
         if (x.thist == y.thist) continue;
 
-        std::vector<int32_t> &p1 = ctx.history.path1, &p2 = ctx.history.path2;
+        std::vector<int32_t>& p1 = ctx.history.path1, &p2 = ctx.history.path2;
         int32_t n1, n2;
         (void)(n1 = subhistory_list(ctx.history, p1, x.thist, t));
         (void)(n2 = subhistory_list(ctx.history, p2, y.thist, t));
         DASSERT(n1 == n2);
 
         std::vector<int32_t>::const_reverse_iterator
-            i1 = p1.rbegin(), e1 = p1.rend(),
-            i2 = p2.rbegin(), e2 = p2.rend();
+        i1 = p1.rbegin(), e1 = p1.rend(),
+        i2 = p2.rbegin(), e2 = p2.rend();
         for (;;) {
             if (i1 == e1 && i2 == e2) break;
             DASSERT(i1 != e1 && i2 != e2);
@@ -285,11 +276,10 @@ int32_t khistory_t::precedence(ctx_t &ctx
     return 0;
 }
 
-// returns all subhistories of the given tag as one sequence
-// (individual subhistories are separated by delimiter)
-int32_t subhistory_list(const khistory_t &history,
-    std::vector<int32_t> &path, hidx_t idx, size_t tag)
-{
+// returns all subhistories of the given tag as one sequence (individual subhistories are separated
+// by delimiter)
+int32_t subhistory_list(
+        const khistory_t& history, std::vector<int32_t>& path, hidx_t idx, size_t tag) {
     path.clear();
     int32_t nsub = 0;
     hidx_t i = idx;
@@ -311,17 +301,15 @@ int32_t subhistory_list(const khistory_t &history,
     return nsub;
 }
 
-size_t boundary_tag(size_t tag)
-{
-    // for start tags, return itself; for end tags, return start tag
-    // (start tags have even numbers, end tags have odd numbers)
+size_t boundary_tag(size_t tag) {
+    // for start tags, return itself; for end tags, return start tag (start tags have even numbers,
+    // end tags have odd numbers)
     return tag & ~1u;
 }
 
 } // namespace libre2c
 
-template<> void init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t &ctx)
-{
+template<> void init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t& ctx) {
     ctx.state.clear();
     libre2c::ksimctx_t::cconfiter_t c = ctx.reach.begin(), e = ctx.reach.end();
     for (; c != e; ++c) {
@@ -330,4 +318,3 @@ template<> void init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t &ctx)
 }
 
 } // namespace re2c
-

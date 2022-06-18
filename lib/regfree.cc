@@ -17,12 +17,10 @@
 #include "src/util/free_list.h"
 #include "src/util/range.h"
 
-
 using namespace re2c;
 using namespace re2c::libre2c;
 
-void regfree(regex_t *preg)
-{
+void regfree(regex_t* preg) {
     delete preg->rmgr;
 
     delete &preg->nfa->charset;
@@ -76,7 +74,6 @@ void regfree(regex_t *preg)
     RangeSuffix::freeList.clear();
 }
 
-void regfreesub(subhistory_t *history)
-{
+void regfreesub(subhistory_t* history) {
     free(history);
 }

@@ -3,22 +3,21 @@
 #include "src/parse/scanner.h"
 #include "src/util/file_utils.h"
 
-
 namespace re2c {
 
 Input::Input(size_t fidx)
-    : file(nullptr)
-    , name()
-    , path()
-    , escaped_name()
-    , so(Scanner::ENDPOS)
-    , eo(Scanner::ENDPOS)
-    , line(1)
-    , fidx(static_cast<uint32_t>(fidx))
-{}
+    : file(nullptr),
+      name(),
+      path(),
+      escaped_name(),
+      so(Scanner::ENDPOS),
+      eo(Scanner::ENDPOS),
+      line(1),
+      fidx(static_cast<uint32_t>(fidx)) {}
 
-bool Input::open(const std::string &filename, const std::string *parent,
-    const std::vector<std::string> &incpaths) {
+bool Input::open(const std::string& filename,
+                 const std::string* parent,
+                 const std::vector<std::string>& incpaths) {
     name = filename;
 
     if (!parent) {
@@ -32,7 +31,7 @@ bool Input::open(const std::string &filename, const std::string *parent,
         file = fopen(path.c_str(), "rb");
 
         // otherwise search in all include paths
-        for (const std::string &incpath : incpaths) {
+        for (const std::string& incpath : incpaths) {
             if (file != nullptr) break;
             path = incpath + name;
             file = fopen(path.c_str(), "rb");
@@ -56,8 +55,7 @@ bool Input::open(const std::string &filename, const std::string *parent,
     return true;
 }
 
-Input::~Input()
-{
+Input::~Input() {
     if (file != nullptr && file != stdin) {
         fclose (file);
     }

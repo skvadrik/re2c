@@ -4,7 +4,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-
 namespace re2c {
 
 enum class Target: uint32_t {

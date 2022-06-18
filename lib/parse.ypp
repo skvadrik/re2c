@@ -22,21 +22,19 @@
 using namespace re2c;
 
 extern "C" {
-
-int yylex(const char *&pattern);
-void yyerror(const char *pattern, const char*) RE2C_ATTR((noreturn));
-
-} // extern "C"
+    int yylex(const char*& pattern);
+    void yyerror(const char* pattern, const char*) RE2C_ATTR((noreturn));
+}
 
 %}
 
-%lex-param   {const char *&pattern}
-%parse-param {const char *&pattern}
+%lex-param {const char*& pattern}
+%parse-param {const char*& pattern}
 
 %start regexp
 
 %union {
-    const re2c::AST *regexp;
+    const re2c::AST* regexp;
     re2c::ASTBounds bounds;
 };
 
@@ -80,24 +78,19 @@ primary
 #pragma GCC diagnostic pop
 
 extern "C" {
+    void yyerror(const char* pattern, const char* msg) {
+        fprintf(stderr, "%s (on RE %s)", msg, pattern);
+        exit(1);
+    }
 
-void yyerror(const char *pattern, const char *msg)
-{
-    fprintf(stderr, "%s (on RE %s)", msg, pattern);
-    exit(1);
+    int yylex(const char*& pattern) {
+        return lex(pattern);
+    }
 }
-
-int yylex(const char *&pattern)
-{
-    return lex(pattern);
-}
-
-} // extern "C"
 
 namespace re2c {
 
-const AST *parse(const char *pattern)
-{
+const AST* parse(const char* pattern) {
     yyparse(pattern);
     return regexp;
 }

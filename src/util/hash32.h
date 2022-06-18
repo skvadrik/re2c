@@ -4,17 +4,14 @@
 #include <stddef.h>
 #include <stdint.h>
 
-
 namespace re2c {
 
-static inline uint32_t hash4(uint32_t h, uint32_t k)
-{
+static inline uint32_t hash4(uint32_t h, uint32_t k) {
     return h ^ ((h << 5) + (h >> 2) + k);
 }
 
 // hash in 4-byte chunks for speed
-inline uint32_t hash32(uint32_t h, const void *data, size_t size)
-{
+inline uint32_t hash32(uint32_t h, const void* data, size_t size) {
     static const uintptr_t ALIGN = sizeof(uint32_t);
     static const uintptr_t MASK = ~(ALIGN - 1);
 

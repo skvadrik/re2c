@@ -7,25 +7,23 @@
 #include "src/options/opt.h"
 #include "src/regexp/tag.h"
 
-
 namespace re2c {
 
-void compact_and_optimize_tags(const opt_t *opts, dfa_t &dfa)
-{
+void compact_and_optimize_tags(const opt_t* opts, dfa_t& dfa) {
     tagver_t maxver = dfa.maxtagver;
     if (maxver > 0) {
         cfg_t cfg(dfa);
 
         size_t nver = static_cast<size_t>(maxver) + 1;
-        tagver_t *ver2new = new tagver_t[nver];
+        tagver_t* ver2new = new tagver_t[nver];
 
         maxver = cfg_t::compact(cfg, ver2new);
         cfg_t::renaming(cfg, ver2new, maxver);
 
         if (opts->optimize_tags && maxver > 0) {
             nver = static_cast<size_t>(maxver) + 1;
-            bool *live = new bool[cfg.nbbfall * nver];
-            bool *interf = new bool[nver * nver];
+            bool* live = new bool[cfg.nbbfall * nver];
+            bool* interf = new bool[nver * nver];
 
             static const uint32_t NPASS = 2;
             for (uint32_t n = 0; n < NPASS; ++n) {

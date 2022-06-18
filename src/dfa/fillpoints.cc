@@ -5,30 +5,25 @@
 
 #include "src/dfa/dfa.h"
 
-
-/*
- * note [finding strongly connected components of DFA]
- *
- * A slight modification of Tarjan's algorithm.
- *
- * The algorithm traverses the DFA in depth-first order. It maintains a stack
- * of states that have already been visited but haven't been assigned to an SCC
- * yet. For each state the algorithm calculates 'lowlink': index of the highest
- * ancestor state reachable in one step from a descendant of this state.
- * Lowlink is used to determine when a set of states should be popped off stack
- * into a new SCC.
- *
- * We use lowlink to hold different kinds of information:
- *   - values in range [0 .. stack size] mean that the state is on stack (a
- *     link to a state with the smallest index reachable from this one)
- *   - SCC_UND means that this state has not been visited yet
- *   - SCC_INF means that this state has already been popped off stack
- *
- * We use stack size (rather than topological sort index) as a unique index of
- * the state on stack. This is safe because the indices of states on stack are
- * unique and less than the indices of states that have been popped off stack
- * (SCC_INF).
- */
+// note [finding strongly connected components of DFA]
+//
+// A slight modification of Tarjan's algorithm.
+//
+// The algorithm traverses the TDFA in depth-first order. It maintains a stack of states that have
+// already been visited but haven't been assigned to an SCC yet. For each state the algorithm
+// calculates 'lowlink': index of the highest ancestor state reachable in one step from a descendant
+// of this state. Lowlink is used to determine when a set of states should be popped off stack into
+// a new SCC.
+//
+// We use lowlink to hold different kinds of information:
+//   - values in range [0 .. stack size] mean that the state is on stack (a link to a state with the
+//     smallest index reachable from this one)
+//   - SCC_UND means that this state has not been visited yet
+//   - SCC_INF means that this state has already been popped off stack
+//
+// We use stack size (rather than topological sort index) as a unique index of the state on stack.
+// This is safe because the indices of states on stack are unique and less than the indices of
+// states that have been popped off stack (SCC_INF).
 
 namespace re2c {
 namespace {
@@ -36,8 +31,7 @@ namespace {
 static const size_t SCC_INF = std::numeric_limits<size_t>::max();
 static const size_t SCC_UND = SCC_INF - 1;
 
-static bool loopback(size_t state, size_t narcs, const size_t *arcs)
-{
+static bool loopback(size_t state, size_t narcs, const size_t* arcs) {
     for (size_t i = 0; i < narcs; ++i) {
         if (arcs[i] == state) return true;
     }
@@ -51,9 +45,7 @@ struct StackItem {
 };
 
 // Tarjan's algorithm
-static void scc(const dfa_t &dfa, std::vector<bool> &trivial,
-    std::vector<StackItem> &stack_dfs)
-{
+static void scc(const dfa_t& dfa, std::vector<bool>& trivial, std::vector<StackItem>& stack_dfs) {
     std::vector<size_t> lowlink(dfa.states.size(), SCC_UND);
     std::stack<size_t> stack;
 
@@ -66,15 +58,14 @@ static void scc(const dfa_t &dfa, std::vector<bool> &trivial,
         size_t link = stack_dfs.back().link;
         stack_dfs.pop_back();
 
-        const size_t *arcs = dfa.states[i]->arcs;
+        const size_t* arcs = dfa.states[i]->arcs;
 
         if (c == 0) {
             // DFS recursive enter
             DASSERT(lowlink[i] == SCC_UND);
             link = lowlink[i] = stack.size();
             stack.push(i);
-        }
-        else {
+        } else {
             // DFS recursive return (from one of successor states)
             const size_t j = arcs[c - 1];
             DASSERT(lowlink[j] != SCC_UND);
@@ -98,11 +89,9 @@ static void scc(const dfa_t &dfa, std::vector<bool> &trivial,
             stack_dfs.push_back(x1);
             StackItem x2 = {arcs[c], 0, SCC_UND};
             stack_dfs.push_back(x2);
-        }
-        else if (lowlink[i] == link) {
-            // all successors have been visited
-            // SCC is non-trivial (has loops) if either:
-            //   - it contains multiple interconnected states
+        } else if (lowlink[i] == link) {
+            // All successors have been visited. An SCC is non-trivial (it has loops) if either:
+            //   - it contains multiple interconnected states, or
             //   - it contains a single self-looping state
             trivial[i] = i == stack.top() && !loopback(i, dfa.nchars, arcs);
 
@@ -116,9 +105,10 @@ static void scc(const dfa_t &dfa, std::vector<bool> &trivial,
     }
 }
 
-static void calc_fill(const dfa_t &dfa, const std::vector<bool> &trivial,
-    std::vector<StackItem> &stack_dfs, std::vector<size_t> &fill)
-{
+static void calc_fill(const dfa_t& dfa,
+                      const std::vector<bool>& trivial,
+                      std::vector<StackItem>& stack_dfs,
+                      std::vector<size_t>& fill) {
     const size_t nstates = dfa.states.size();
     fill.resize(nstates, SCC_UND);
 
@@ -130,14 +120,13 @@ static void calc_fill(const dfa_t &dfa, const std::vector<bool> &trivial,
         size_t c = stack_dfs.back().symbol;
         stack_dfs.pop_back();
 
-        const size_t *arcs = dfa.states[i]->arcs;
+        const size_t* arcs = dfa.states[i]->arcs;
 
         if (c == 0) {
             // DFS recursive enter
             if (fill[i] != SCC_UND) continue;
             fill[i] = 0;
-        }
-        else {
+        } else {
             // DFS recursive return (from one of successor states)
             const size_t j = arcs[c - 1];
             DASSERT(fill[i] != SCC_UND && fill[j] != SCC_UND);
@@ -172,18 +161,16 @@ static void calc_fill(const dfa_t &dfa, const std::vector<bool> &trivial,
 
 } // anonymous namespace
 
-void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill)
-{
+void fillpoints(const dfa_t& dfa, std::vector<size_t>& fill) {
     const size_t nstates = dfa.states.size();
     std::vector<bool> trivial(nstates, false);
     std::vector<StackItem> stack_dfs;
     stack_dfs.reserve(nstates);
 
-    // find DFA states that belong to non-trivial SCC
+    // Find TDFA states that belong to non-trivial SCCs.
     scc(dfa, trivial, stack_dfs);
 
-    // for each DFA state, calculate YYFILL argument:
-    // maximal path length to the next YYFILL state
+    // For each state, calculate YYFILL argument (the maximum path length to the next YYFILL state).
     calc_fill(dfa, trivial, stack_dfs, fill);
 }
 

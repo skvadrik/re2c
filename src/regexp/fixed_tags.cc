@@ -6,41 +6,36 @@
 #include "src/regexp/re.h"
 #include "src/regexp/tag.h"
 
-
 namespace re2c {
 namespace {
 
-/* note [fixed and variable tags]
- *
- * If the distance between two tags is constant, then the lexer only needs to
- * track one of the two tags: the value of the other tag equals the value of the
- * first tag plus a static offset. For tags that are under alternative or
- * repetition it is also necessary to check if the base tag has a no-match value
- * (in that case fixed tag should also be set to no-match). For tags in
- * top-level concatenation the check is not needed, because they always match.
- *
- * This optimization does not apply to m-tags (a.k.a. tags with history).
- *
- * A special case is fictive tags (structural POSIX tags that exist only for
- * disambiguation purposes). Such tags are treated as fixed in order to suppress
- * code generation.
- */
+// note [fixed and variable tags]
+//
+// If the distance between two tags is constant, then the lexer only needs to track one of the two
+// tags: the value of the other tag equals the value of the first tag plus a static offset. For tags
+// that are under alternative or repetition it is also necessary to check if the base tag has a
+// no-match value (in that case fixed tag should also be set to no-match). For tags in top-level
+// concatenation the check is not needed, because they always match.
+//
+// This optimization does not apply to m-tags (a.k.a. tags with history).
+//
+// A special case is fictive tags (structural POSIX tags that exist only for disambiguation
+// purposes). Such tags are treated as fixed in order to suppress code generation.
 
 struct StackItem {
-    RE      *re;   // current sub-RE
-    uint8_t  succ; // index of the next successor to be visited
+    RE* re;       // current sub-RE
+    uint8_t succ; // index of the next successor to be visited
 };
 
 // level is increased when descending into alternative or repetition
 struct Level {
-    size_t   tag;         // current base tag
+    size_t tag;           // current base tag
     uint32_t dist_to_tag; // distance to base tag
     uint32_t dist_to_end; // full level distance
 };
 
-static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
-    std::vector<Level> &levels, RE *re0)
-{
+static void find_fixed_tags(
+        RESpec& spec, std::vector<StackItem>& stack, std::vector<Level>& levels, RE* re0) {
     static const uint32_t VARDIST = Tag::VARDIST;
 
     // initial base tag at the topmost level is the fake "rightmost tag" (cursor)
@@ -54,10 +49,10 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
     while (!stack.empty()) {
         const StackItem i = stack.back();
         stack.pop_back();
-        RE *re = i.re;
+        RE* re = i.re;
 
         if (re->type == RE::SYM) {
-            Level &l = levels.back();
+            Level& l = levels.back();
             if (l.dist_to_tag != VARDIST) ++l.dist_to_tag;
             if (l.dist_to_end != VARDIST) ++l.dist_to_end;
 
@@ -80,27 +75,26 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 StackItem j = {re->alt.re2, 0};
                 stack.push_back(j);
 
-                // increase level when descending into the right sub-RE
-                // keep the left sub-RE level on stack, it will be needed to
-                // compare left and right distance
+                // increase level when descending into the right sub-RE (keep the left sub-RE level
+                // on stack, it will be needed to compare left and right distance)
                 Level l = {Tag::NONE, 0, 0};
                 levels.push_back(l);
 
             } else {
-                // both sub-RE visited, pop both levels from stack and compare
-                // their distances: if not equal, then set variable distance
+                // both sub-RE visited, pop both levels from stack and compare their distances: if
+                // not equal, then set variable distance
                 uint32_t rdist = levels.back().dist_to_end;
                 levels.pop_back();
                 uint32_t ldist = levels.back().dist_to_end;
                 levels.pop_back();
 
-                Level &l = levels.back();
+                Level& l = levels.back();
                 uint32_t dist = ldist == rdist ? ldist : VARDIST;
 
                 l.dist_to_end = l.dist_to_end == VARDIST || dist == VARDIST
-                    ? VARDIST : l.dist_to_end + dist;
+                        ? VARDIST : l.dist_to_end + dist;
                 l.dist_to_tag = l.dist_to_tag == VARDIST || dist == VARDIST
-                    ? VARDIST : l.dist_to_tag + dist;
+                        ? VARDIST : l.dist_to_tag + dist;
             }
         } else if (re->type == RE::ITER) {
             if (i.succ == 0) {
@@ -114,31 +108,31 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 Level l = {Tag::NONE, 0, 0};
                 levels.push_back(l);
             } else {
-                // sub-RE visited, pop level from stack: if it has fixed distance
-                // and repetition count is constant, resulting distance is fixed
+                // sub-RE visited, pop level from stack: if it has fixed distance and repetition
+                // count is constant, resulting distance is fixed
                 uint32_t dist = levels.back().dist_to_end;
                 levels.pop_back();
 
-                Level &l = levels.back();
+                Level& l = levels.back();
                 dist = dist == VARDIST || re->iter.max != re->iter.min
-                    ? VARDIST : dist * re->iter.max;
+                        ? VARDIST : dist * re->iter.max;
 
                 l.dist_to_end = l.dist_to_end == VARDIST || dist == VARDIST
-                    ? VARDIST : l.dist_to_end + dist;
+                        ? VARDIST : l.dist_to_end + dist;
                 l.dist_to_tag = l.dist_to_tag == VARDIST || dist == VARDIST
-                    ? VARDIST : l.dist_to_tag + dist;
+                        ? VARDIST : l.dist_to_tag + dist;
             }
         } else if (re->type == RE::CAT) {
-            // the right sub-RE is pushed on stack after the left sub-RE and
-            // visited earlier (because distance is computed from right to left)
+            // the right sub-RE is pushed on stack after the left sub-RE and visited earlier
+            // (because distance is computed from right to left)
             StackItem j1 = {re->cat.re1, 0};
             stack.push_back(j1);
             StackItem j2 = {re->cat.re2, 0};
             stack.push_back(j2);
 
         } else if (re->type == RE::TAG) {
-            Tag &tag = spec.tags[re->tag.idx];
-            Level &l = levels.back();
+            Tag& tag = spec.tags[re->tag.idx];
+            Level& l = levels.back();
             bool toplevel = levels.size() == 1;
 
             // Don't check for orbit tags, as they will have VARDIST automatically.
@@ -150,8 +144,8 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
             } else if (spec.opts->fixed_tags == FixedTags::NONE) {
                 // fixed tag optimization is globally disabled
             } else if (spec.opts->subhistories) {
-                // Fixed tags with subhistories are possible in principle, but it
-                // ends up being too slow (handling special case adds overhead).
+                // Fixed tags with subhistories are possible in principle, but it ends up being too
+                // slow (handling special case adds overhead).
             } else if (l.tag != Tag::NONE && l.dist_to_tag != VARDIST
                     && (spec.opts->fixed_tags == FixedTags::ALL || toplevel)) {
                 // this tag can be fixed
@@ -163,8 +157,8 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
                 l.tag = re->tag.idx;
                 l.dist_to_tag = 0;
             }
-            // Trailing context is not special: tags are fixed on the rightmost cursor
-            // position, and trailing context is just another tag.
+            // Trailing context is not special: tags are fixed on the rightmost cursor position, and
+            // trailing context is just another tag.
         }
     }
 
@@ -174,10 +168,10 @@ static void find_fixed_tags(RESpec &spec, std::vector<StackItem> &stack,
 
 } // anonymous namespace
 
-void find_fixed_tags(RESpec &spec) {
+void find_fixed_tags(RESpec& spec) {
     std::vector<StackItem> stack;
     std::vector<Level> levels;
-    for (RE *re : spec.res) {
+    for (RE* re : spec.res) {
         find_fixed_tags(spec, stack, levels, re);
     }
 }

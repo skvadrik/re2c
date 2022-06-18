@@ -65,9 +65,9 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 38 "../lib/parse.ypp"
+#line 36 "../lib/parse.ypp"
 
-    const re2c::AST *regexp;
+    const re2c::AST* regexp;
     re2c::ASTBounds bounds;
 
 #line 74 "lib/parse.h"
@@ -82,7 +82,7 @@ typedef union YYSTYPE YYSTYPE;
 extern YYSTYPE yylval;
 
 
-int yyparse (const char *&pattern);
+int yyparse (const char*& pattern);
 
 
 #endif /* !YY_YY_LIB_PARSE_H_INCLUDED  */

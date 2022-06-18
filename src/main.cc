@@ -8,19 +8,20 @@
 #include "src/parse/input.h"
 #include "src/parse/scanner.h"
 
-
 using namespace re2c;
 
-int main(int, char *argv[])
-{
+int main(int, char* argv[]) {
     conopt_t globopts;
     Msg msg;
     Opt opts(globopts, msg);
 
     switch (parse_opts(argv, globopts, opts, msg)) {
-        case ParseOpts::OK:        break;
-        case ParseOpts::EXIT_OK:   return 0;
-        case ParseOpts::EXIT_FAIL: return 1;
+    case ParseOpts::OK:
+        break;
+    case ParseOpts::EXIT_OK:
+        return 0;
+    case ParseOpts::EXIT_FAIL:
+        return 1;
     }
 
     Scanner scanner(&globopts, msg);

@@ -4,11 +4,10 @@
 #include <stdio.h>
 #include <string>
 
-
 namespace re2c {
 
-FILE *temp_file(std::string &fname);
-bool overwrite_file(const char *srcname, const char *dstname);
+FILE* temp_file(std::string& fname);
+bool overwrite_file(const char* srcname, const char* dstname);
 
 } // namespace re2c
 

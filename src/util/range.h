@@ -8,67 +8,61 @@
 #include "src/util/fixed_allocator.h"
 #include "src/util/forbid_copy.h"
 
-
 namespace re2c {
 
-class Range
-{
-private:
-    Range * nx;
+class Range {
+  private:
+    Range* nx;
     // [lb,ub)
     uint32_t lb;
     uint32_t ub;
 
-public:
-    Range * next() const { return nx; }
+  public:
+    Range* next() const { return nx; }
     uint32_t lower() const { return lb; }
     uint32_t upper() const { return ub; }
 
-private:
+  private:
     friend class RangeMgr;
 
-    // not default- or copy-constructible
+    // not default-cconstructible or copy-constructible
     Range();
     FORBID_COPY(Range);
 };
 
-class RangeMgr
-{
-private:
+class RangeMgr {
+  private:
     fixed_allocator_t<Range> alc;
 
-public:
+  public:
     RangeMgr(): alc() {}
     void clear() { alc.clear(); }
-    Range *sym(uint32_t c);
-    Range *ran(uint32_t l, uint32_t u);
-    Range *add(const Range *r1, const Range *r2);
-    Range *sub(const Range *r1, const Range *r2);
+    Range* sym(uint32_t c);
+    Range* ran(uint32_t l, uint32_t u);
+    Range* add(const Range* r1, const Range* r2);
+    Range* sub(const Range* r1, const Range* r2);
 
-private:
-    Range *make(Range *n, uint32_t l, uint32_t u);
-    void append_overlapping(Range *&head, Range *&tail, const Range *r);
-    void append(Range **&ptail, uint32_t l, uint32_t u);
+  private:
+    Range* make(Range* n, uint32_t l, uint32_t u);
+    void append_overlapping(Range*& head, Range*& tail, const Range* r);
+    void append(Range**& ptail, uint32_t l, uint32_t u);
 
-    template<uint8_t> friend Range *re2c_test::range(RangeMgr &rm, uint32_t n);
+    template<uint8_t> friend Range* re2c_test::range(RangeMgr& rm, uint32_t n);
 };
 
-inline Range *RangeMgr::make(Range *n, uint32_t l, uint32_t u)
-{
-    Range *r = alc.alloc();
+inline Range* RangeMgr::make(Range* n, uint32_t l, uint32_t u) {
+    Range* r = alc.alloc();
     r->nx = n;
     r->lb = l;
     r->ub = u;
     return r;
 }
 
-inline Range *RangeMgr::sym(uint32_t c)
-{
+inline Range* RangeMgr::sym(uint32_t c) {
     return make(nullptr, c, c + 1);
 }
 
-inline Range *RangeMgr::ran(uint32_t l, uint32_t u)
-{
+inline Range* RangeMgr::ran(uint32_t l, uint32_t u) {
     return make(nullptr, l, u);
 }
 

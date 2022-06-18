@@ -2,11 +2,9 @@
 
 #include "src/util/file_utils.h"
 
-
 namespace re2c {
 
-void get_dir(std::string &path)
-{
+void get_dir(std::string& path) {
     // scan the path backwards until the first slash (if any) and clip
     size_t i = path.length();
     for (; i > 0; --i) {
@@ -16,8 +14,7 @@ void get_dir(std::string &path)
     path.resize(i);
 }
 
-std::string escape_backslashes(const std::string &str)
-{
+std::string escape_backslashes(const std::string& str) {
     const size_t len = str.length();
     std::string escaped;
     escaped.reserve(len * 2);

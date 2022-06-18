@@ -10,17 +10,14 @@
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
 
-
 namespace re2c {
 
-static inline bool next (char * & arg, char ** & argv)
-{
+static inline bool next (char*& arg, char**& argv) {
     arg = *++argv;
     return arg != nullptr;
 }
 
-static inline bool set_source_file(conopt_t &globopts, const char *source)
-{
+static inline bool set_source_file(conopt_t& globopts, const char* source) {
     if (!globopts.source_file.empty()) {
         error("multiple source files: %s, %s", globopts.source_file.c_str(), source);
         return false;
@@ -30,8 +27,6 @@ static inline bool set_source_file(conopt_t &globopts, const char *source)
     }
 }
 
-ParseOpts parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
-{
 #define YYCTYPE unsigned char
 
 #define NEXT_ARG(option, label) do { \
@@ -49,7 +44,8 @@ ParseOpts parse_opts(char **argv, conopt_t &globopts, Opt &opts, Msg &msg)
     return ParseOpts::EXIT_FAIL; \
 } while(0)
 
-    char *YYCURSOR, *YYMARKER;
+ParseOpts parse_opts(char** argv, conopt_t& globopts, Opt& opts, Msg& msg) {
+    char* YYCURSOR, *YYMARKER;
     Warn::option_t option;
 
 /*!re2c
@@ -66,16 +62,16 @@ opt:
     * { ERROR("bad option: %s", *argv); }
 
     "--" end {
-        // remaining args are non-options, so they must be input files
-        // re2c expects exactly one input file
+        // the remaining args are non-options, so they must be input files (re2c expects exactly
+        // one input file)
         for (char *f; next(f, argv); ) {
             if (!set_source_file(globopts, f)) return ParseOpts::EXIT_FAIL;
         }
         goto end;
     }
 
-    "-"      end { if (!set_source_file(globopts, "<stdin>")) return ParseOpts::EXIT_FAIL; goto opt; }
-    filename end { if (!set_source_file(globopts, *argv))     return ParseOpts::EXIT_FAIL; goto opt; }
+    "-" end { if (!set_source_file(globopts, "<stdin>")) return ParseOpts::EXIT_FAIL; goto opt; }
+    filename end { if (!set_source_file(globopts, *argv)) return ParseOpts::EXIT_FAIL; goto opt; }
 
     "-"  { goto opt_short; }
     "--" { goto opt_long; }
@@ -88,23 +84,21 @@ opt:
     "-Wno-error-" { option = Warn::WNOERROR; goto opt_warn; }
 */
 
-opt_warn:
-/*!local:re2c
+opt_warn: /*!local:re2c
     * { ERROR("bad warning: %s", *argv); }
 
-    "condition-order"          end { msg.warn.set (Warn::CONDITION_ORDER,        option); goto opt; }
-    "empty-character-class"    end { msg.warn.set (Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
-    "match-empty-string"       end { msg.warn.set (Warn::MATCH_EMPTY_STRING,     option); goto opt; }
-    "nondeterministic-tags"    end { msg.warn.set (Warn::NONDETERMINISTIC_TAGS,  option); goto opt; }
-    "swapped-range"            end { msg.warn.set (Warn::SWAPPED_RANGE,          option); goto opt; }
-    "undefined-control-flow"   end { msg.warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
-    "unreachable-rules"        end { msg.warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
-    "useless-escape"           end { msg.warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
-    "sentinel-in-midrule"      end { msg.warn.set (Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
+    "condition-order"        end { msg.warn.set (Warn::CONDITION_ORDER,        option); goto opt; }
+    "empty-character-class"  end { msg.warn.set (Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
+    "match-empty-string"     end { msg.warn.set (Warn::MATCH_EMPTY_STRING,     option); goto opt; }
+    "nondeterministic-tags"  end { msg.warn.set (Warn::NONDETERMINISTIC_TAGS,  option); goto opt; }
+    "swapped-range"          end { msg.warn.set (Warn::SWAPPED_RANGE,          option); goto opt; }
+    "undefined-control-flow" end { msg.warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
+    "unreachable-rules"      end { msg.warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
+    "useless-escape"         end { msg.warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
+    "sentinel-in-midrule"    end { msg.warn.set (Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
 */
 
-opt_short:
-/*!local:re2c
+opt_short: /*!local:re2c
     * { ERROR("bad short option: %s", *argv); }
 
     end { goto opt; }
@@ -151,8 +145,7 @@ opt_short:
     "r" { goto opt_short; }
 */
 
-opt_long:
-/*!local:re2c
+opt_long: /*!local:re2c
     * { ERROR("bad long option: %s", *argv); }
 
     "help"                  end { usage ();   return ParseOpts::EXIT_OK; }
@@ -231,98 +224,84 @@ opt_long:
     "dump-closure-stats"    end { globopts.dump_closure_stats = true; goto opt; }
 */
 
-opt_lang:
-/*!local:re2c
+opt_lang: /*!local:re2c
     * { ERRARG("--lang", "c | go | rust", *argv); }
     "c"    end { globopts.lang = Lang::C;    goto opt; }
     "go"   end { globopts.lang = Lang::GO;   goto opt; }
     "rust" end { globopts.lang = Lang::RUST; goto opt; }
 */
 
-opt_output:
-/*!local:re2c
+opt_output: /*!local:re2c
     * { ERRARG("-o, --output", "filename", *argv); }
     filename end { globopts.output_file = *argv; goto opt; }
 */
 
-opt_header:
-/*!local:re2c
+opt_header: /*!local:re2c
     * { ERRARG("-t, --header, --type-header", "filename", *argv); }
-    filename end { opts.set_header_file (*argv); goto opt; }
+    filename end { opts.set_header_file(*argv); goto opt; }
 */
 
-opt_depfile:
-/*!local:re2c
+opt_depfile: /*!local:re2c
     * { ERRARG("--depfile", "filename", *argv); }
     filename end { globopts.dep_file = *argv; goto opt; }
 */
 
-opt_incpath:
-/*!local:re2c
+opt_incpath: /*!local:re2c
     * { ERRARG("-I", "filename", *argv); }
     filename end { globopts.incpaths.push_back(*argv); goto opt; }
 */
 
-opt_encoding_policy:
-/*!local:re2c
+opt_encoding_policy: /*!local:re2c
     * { ERRARG("--encoding-policy", "ignore | substitute | fail", *argv); }
-    "ignore"     end { opts.set_encoding_policy (Enc::POLICY_IGNORE);     goto opt; }
-    "substitute" end { opts.set_encoding_policy (Enc::POLICY_SUBSTITUTE); goto opt; }
-    "fail"       end { opts.set_encoding_policy (Enc::POLICY_FAIL);       goto opt; }
+    "ignore"     end { opts.set_encoding_policy(Enc::POLICY_IGNORE);     goto opt; }
+    "substitute" end { opts.set_encoding_policy(Enc::POLICY_SUBSTITUTE); goto opt; }
+    "fail"       end { opts.set_encoding_policy(Enc::POLICY_FAIL);       goto opt; }
 */
 
-opt_input:
-/*!local:re2c
+opt_input: /*!local:re2c
     * { ERRARG("--api, --input", "default | custom", *argv); }
     "default" end { opts.set_input_api(Api::DEFAULT); goto opt; }
     "custom"  end { opts.set_input_api(Api::CUSTOM);  goto opt; }
 */
 
-opt_empty_class:
-/*!local:re2c
+opt_empty_class: /*!local:re2c
     * { ERRARG("--empty-class", "match-empty | match-none | error", *argv); }
-    "match-empty" end { opts.set_empty_class_policy (EmptyClassPolicy::MATCH_EMPTY); goto opt; }
-    "match-none"  end { opts.set_empty_class_policy (EmptyClassPolicy::MATCH_NONE);  goto opt; }
-    "error"       end { opts.set_empty_class_policy (EmptyClassPolicy::ERROR);       goto opt; }
+    "match-empty" end { opts.set_empty_class_policy(EmptyClassPolicy::MATCH_EMPTY); goto opt; }
+    "match-none"  end { opts.set_empty_class_policy(EmptyClassPolicy::MATCH_NONE);  goto opt; }
+    "error"       end { opts.set_empty_class_policy(EmptyClassPolicy::ERROR);       goto opt; }
 */
 
-opt_location_format:
-/*!local:re2c
+opt_location_format: /*!local:re2c
     * { ERRARG("--location-format", "gnu | msvc", *argv); }
     "gnu"  end { msg.locfmt = LOCFMT_GNU;  goto opt; }
     "msvc" end { msg.locfmt = LOCFMT_MSVC; goto opt; }
 */
 
-opt_input_encoding:
-/*!local:re2c
+opt_input_encoding: /*!local:re2c
     * { ERRARG("--input-encoding", "ascii | utf8 ", *argv); }
     "ascii" end { globopts.input_encoding = Enc::ASCII; goto opt; }
     "utf8"  end { globopts.input_encoding = Enc::UTF8;  goto opt; }
 */
 
-opt_dfa_minimization:
-/*!local:re2c
+opt_dfa_minimization: /*!local:re2c
     * { ERRARG("--dfa-minimization", "table | moore", *argv); }
     "table" end { globopts.dfa_minimization = Minimization::TABLE; goto opt; }
     "moore" end { globopts.dfa_minimization = Minimization::MOORE; goto opt; }
 */
 
-opt_posix_closure:
-/*!local:re2c
+opt_posix_closure: /*!local:re2c
     * { ERRARG("--posix-closure", "gor1 | gtop", *argv); }
     "gor1" end { globopts.posix_closure = PosixClosure::GOR1; goto opt; }
     "gtop" end { globopts.posix_closure = PosixClosure::GTOP; goto opt; }
 */
 
-opt_posix_prectable:
-/*!local:re2c
+opt_posix_prectable: /*!local:re2c
     * { ERRARG("--posix-prectable", "naive | complex", *argv); }
     "naive"   end { globopts.posix_prectable = PosixPrecedenceTable::NAIVE;   goto opt; }
     "complex" end { globopts.posix_prectable = PosixPrecedenceTable::COMPLEX; goto opt; }
 */
 
-opt_fixed_tags:
-/*!local:re2c
+opt_fixed_tags: /*!local:re2c
     * { ERRARG("--fixed-tags", "none | toplevel | all", *argv); }
     "none"     end { globopts.fixed_tags = FixedTags::NONE;     goto opt; }
     "toplevel" end { globopts.fixed_tags = FixedTags::TOPLEVEL; goto opt; }
@@ -337,11 +316,11 @@ end:
     opts.fix_global_and_defaults();
 
     return ParseOpts::OK;
+}
 
 #undef NEXT_ARG
 #undef ERROR
 #undef ERRARG
 #undef YYCTYPE
-}
 
 } // namespace re2c

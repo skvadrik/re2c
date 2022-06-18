@@ -12,30 +12,27 @@
 #include "src/dfa/determinization.h"
 #include "src/nfa/nfa.h"
 
-
 namespace re2c {
 namespace libre2c {
 
 typedef std::vector<tag_info_t> tag_path_t;
 
-struct conf_t
-{
-    nfa_state_t *state;
+struct conf_t {
+    nfa_state_t* state;
     uint32_t origin;
     int32_t thist;
 
     inline conf_t(): state(nullptr), origin(0), thist(HROOT) {}
-    inline conf_t(nfa_state_t *s, uint32_t o, int32_t h)
+    inline conf_t(nfa_state_t* s, uint32_t o, int32_t h)
         : state(s), origin(o), thist(h) {}
-    inline conf_t(const conf_t &c, nfa_state_t *s)
+    inline conf_t(const conf_t& c, nfa_state_t* s)
         : state(s), origin(c.origin), thist(c.thist) {}
-    inline conf_t(const conf_t &c, nfa_state_t *s, int32_t h)
+    inline conf_t(const conf_t& c, nfa_state_t* s, int32_t h)
         : state(s), origin(c.origin), thist(h) {}
 };
 
-struct ran_or_fin_t
-{
-    inline bool operator()(const conf_t &c);
+struct ran_or_fin_t {
+    inline bool operator()(const conf_t& c);
 };
 
 typedef std::vector<conf_t> confset_t;
@@ -44,8 +41,7 @@ typedef confset_t::const_iterator cconfiter_t;
 typedef confset_t::const_reverse_iterator rcconfiter_t;
 
 template<typename history_type_t>
-struct simctx_t
-{
+struct simctx_t {
     typedef libre2c::conf_t conf_t;
     typedef std::vector<conf_t> confset_t;
     typedef confset_t::iterator confiter_t;
@@ -54,8 +50,8 @@ struct simctx_t
     typedef confset_t::const_reverse_iterator rcconfiter_t;
     typedef history_type_t history_t;
 
-    const nfa_t &nfa;
-    const nfa_t *nfa0;
+    const nfa_t& nfa;
+    const nfa_t* nfa0;
     const size_t nsub;
     const int flags;
 
@@ -66,18 +62,18 @@ struct simctx_t
 
     size_t rule;
 
-    const char *cursor;
-    const char *marker;
+    const char* cursor;
+    const char* marker;
 
-    regoff_t *offsets1;
-    regoff_t *offsets2;
-    regoff_t *offsets3;
-    bool *done;
+    regoff_t* offsets1;
+    regoff_t* offsets2;
+    regoff_t* offsets3;
+    bool* done;
 
-    int32_t *newprectbl;
-    int32_t *oldprectbl;
+    int32_t* newprectbl;
+    int32_t* oldprectbl;
     size_t oldprecdim;
-    histleaf_t *histlevel;
+    histleaf_t* histlevel;
     std::vector<uint32_t> sortcores;
     std::vector<uint32_t> fincount;
     std::vector<int32_t> worklist;
@@ -92,14 +88,13 @@ struct simctx_t
     gtop_heap_t gtop_heap;
     closure_stats_t dc_clstats;
 
-    simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsub, int flags);
+    simctx_t(const nfa_t& nfa, const nfa_t* nfa0, size_t re_nsub, int flags);
     ~simctx_t();
     FORBID_COPY(simctx_t);
 };
 
 // tag history for lazy disambiguation (both POSIX and leftmost greedy)
-struct zhistory_t
-{
+struct zhistory_t {
     struct node_t {
         tag_info_t info;
         hidx_t pred;
@@ -110,8 +105,7 @@ struct zhistory_t
             : info(info), pred(pred), orig(orig), step(step) {}
     };
 
-    struct cache_entry_t
-    {
+    struct cache_entry_t {
         int32_t prec1;
         int32_t prec2;
         int32_t prec;
@@ -123,19 +117,20 @@ struct zhistory_t
 
     inline zhistory_t(): nodes(), cache() { init(); }
     inline void init();
-    inline node_t &node(hidx_t i) { return nodes[static_cast<uint32_t>(i)]; }
-    inline const node_t &node(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
-    template<typename ctx_t> inline hidx_t link(ctx_t &ctx
-        , const typename ctx_t::conf_t &conf);
-    template<typename ctx_t> static int32_t precedence(ctx_t &ctx
-        , const typename ctx_t::conf_t &x, const typename ctx_t::conf_t &y
-        , int32_t &prec1, int32_t &prec2);
+    inline node_t& node(hidx_t i) { return nodes[static_cast<uint32_t>(i)]; }
+    inline const node_t& node(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
+
+    template<typename ctx_t> inline hidx_t link(ctx_t& ctx, const typename ctx_t::conf_t& conf);
+    template<typename ctx_t> static int32_t precedence(ctx_t& ctx,
+                                                       const typename ctx_t::conf_t& x,
+                                                       const typename ctx_t::conf_t& y,
+                                                       int32_t& prec1,
+                                                       int32_t& prec2);
     FORBID_COPY(zhistory_t);
 };
 
 // tag history for Kuklewicz disambiguation (POSIX semantics)
-struct khistory_t
-{
+struct khistory_t {
     struct node_t {
         tag_info_t info;
         hidx_t pred;
@@ -150,13 +145,15 @@ struct khistory_t
 
     inline khistory_t(): nodes(), path1(), path2() { init(); }
     inline void init();
-    inline node_t &node(hidx_t i) { return nodes[static_cast<uint32_t>(i)]; }
-    inline const node_t &node(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
-    template<typename ctx_t> inline hidx_t link(ctx_t &ctx
-        , const typename ctx_t::conf_t &conf);
-    template<typename ctx_t> static int32_t precedence(ctx_t &ctx
-        , const typename ctx_t::conf_t &x, const typename ctx_t::conf_t &y
-        , int32_t &prec1, int32_t &prec2);
+    inline node_t& node(hidx_t i) { return nodes[static_cast<uint32_t>(i)]; }
+    inline const node_t& node(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
+
+    template<typename ctx_t> inline hidx_t link(ctx_t& ctx, const typename ctx_t::conf_t& conf);
+    template<typename ctx_t> static int32_t precedence(ctx_t& ctx,
+                                                       const typename ctx_t::conf_t& x,
+                                                       const typename ctx_t::conf_t& y,
+                                                       int32_t& prec1,
+                                                       int32_t& prec2);
     FORBID_COPY(khistory_t);
 };
 
@@ -178,51 +175,50 @@ regexec_t regexec_nfa_leftmost;
 regexec_t regexec_nfa_leftmost_trie;
 
 // regparse functions (non-standard)
-typedef subhistory_t*(regparse_t)(const regex_t*, const char*, size_t);
+typedef subhistory_t* (regparse_t)(const regex_t*, const char*, size_t);
 regparse_t regparse_dfa;
 template<typename ctx_t> regparse_t regparse_dfa_regless;
 
 // regtstring function (non-standard)
 template<typename ctx_t>
-const tstring_t *regtstring_dfa_regless(const regex_t*, const char*);
+const tstring_t* regtstring_dfa_regless(const regex_t*, const char*);
 
 template<typename history_t>
-simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsub, int flags)
-    : nfa(nfa)
-    , nfa0(nfa0)
-    , nsub(2 * (re_nsub - 1))
-    , flags(flags)
-    , history()
-    , hidx(HROOT)
-    , step(0)
-    , rule(Rule::NONE)
-    , cursor(nullptr)
-    , marker(nullptr)
-    , offsets1(nullptr)
-    , offsets2(nullptr)
-    , offsets3(nullptr)
-    , done(nullptr)
-    , newprectbl(nullptr)
-    , oldprectbl(nullptr)
-    , oldprecdim(0)
-    , histlevel(nullptr)
-    , sortcores()
-    , fincount()
-    , worklist()
-    , stateiters()
-    , reach()
-    , state()
-    , gor1_topsort()
-    , gor1_linear()
-    , gtop_heap_storage()
-    , gtop_cmp()
-    , gtop_heap(gtop_cmp, gtop_heap_storage)
-    , dc_clstats()
-{
+simctx_t<history_t>::simctx_t(const nfa_t& nfa, const nfa_t* nfa0, size_t re_nsub, int flags)
+    : nfa(nfa),
+      nfa0(nfa0),
+      nsub(2 * (re_nsub - 1)),
+      flags(flags),
+      history(),
+      hidx(HROOT),
+      step(0),
+      rule(Rule::NONE),
+      cursor(nullptr),
+      marker(nullptr),
+      offsets1(nullptr),
+      offsets2(nullptr),
+      offsets3(nullptr),
+      done(nullptr),
+      newprectbl(nullptr),
+      oldprectbl(nullptr),
+      oldprecdim(0),
+      histlevel(nullptr),
+      sortcores(),
+      fincount(),
+      worklist(),
+      stateiters(),
+      reach(),
+      state(),
+      gor1_topsort(),
+      gor1_linear(),
+      gtop_heap_storage(),
+      gtop_cmp(),
+      gtop_heap(gtop_cmp, gtop_heap_storage),
+      dc_clstats() {
     const size_t
-        ntags = nfa.tags.size(),
-        nstates = nfa.size,
-        ncores = nfa.ncores;
+    ntags = nfa.tags.size(),
+    nstates = nfa.size,
+    ncores = nfa.ncores;
 
     state.reserve(nstates);
     reach.reserve(nstates);
@@ -249,16 +245,14 @@ simctx_t<history_t>::simctx_t(const nfa_t &nfa, const nfa_t *nfa0, size_t re_nsu
 
     if (flags & REG_GTOP) {
         gtop_heap_storage.reserve(nstates);
-    }
-    else {
+    } else {
         gor1_topsort.reserve(nstates);
         gor1_linear.reserve(nstates);
     }
 }
 
 template<typename history_t>
-simctx_t<history_t>::~simctx_t()
-{
+simctx_t<history_t>::~simctx_t() {
     delete[] done;
     delete[] offsets3;
     if (!(flags & REG_TRIE)) {
@@ -279,8 +273,7 @@ simctx_t<history_t>::~simctx_t()
 }
 
 template<typename history_t>
-void init(simctx_t<history_t> &ctx, const char *string)
-{
+void init(simctx_t<history_t>& ctx, const char* string) {
     ctx.reach.clear();
     ctx.state.clear();
     ctx.history.init();
@@ -295,27 +288,25 @@ void init(simctx_t<history_t> &ctx, const char *string)
     DASSERT(ctx.gtop_heap.empty());
 }
 
-static inline regoff_t *offs_addr(regmatch_t pmatch[], size_t t)
-{
-    regmatch_t *m = &pmatch[t / 2 + 1];
+static inline regoff_t* offs_addr(regmatch_t pmatch[], size_t t) {
+    regmatch_t* m = &pmatch[t / 2 + 1];
     return t % 2 == 0 ? &m->rm_so : &m->rm_eo;
 }
 
-struct getoff_nfa_t
-{
-    const regoff_t *offsets;
-    inline regoff_t operator()(size_t idx) const { return offsets[idx]; }
+struct getoff_nfa_t {
+    const regoff_t* offsets;
+    inline regoff_t operator()(size_t idx) const {
+        return offsets[idx];
+    }
 };
 
-struct getoff_dfa_t
-{
-    const dfa_t *dfa;
-    const regoff_t *regs;
+struct getoff_dfa_t {
+    const dfa_t* dfa;
+    const regoff_t* regs;
     const regoff_t len;
 
-    regoff_t operator()(size_t idx) const
-    {
-        const Tag &tag = dfa->tags[idx];
+    regoff_t operator()(size_t idx) const {
+        const Tag& tag = dfa->tags[idx];
         regoff_t off;
         if (!fixed(tag)) {
             off = regs[dfa->finvers[idx]];
@@ -330,18 +321,20 @@ struct getoff_dfa_t
 };
 
 template<typename getoff_t>
-void tags_to_submatch(const std::vector<Tag> &tags, size_t nmatch,
-    regmatch_t pmatch[], regoff_t len, const getoff_t &getoff)
-{
+void tags_to_submatch(const std::vector<Tag>& tags,
+                      size_t nmatch,
+                      regmatch_t pmatch[],
+                      regoff_t len,
+                      const getoff_t& getoff) {
     const size_t ntags = tags.size();
-    regmatch_t *m = pmatch, *e = pmatch + nmatch;
+    regmatch_t* m = pmatch, *e = pmatch + nmatch;
 
     m->rm_so = 0;
     m->rm_eo = len;
     ++m;
 
     for (size_t t = 0; t < ntags && m < e; t += 2) {
-        const Tag &tag = tags[t];
+        const Tag& tag = tags[t];
         if (!fictive(tag)) {
             const regoff_t so = getoff(t);
             const regoff_t eo = getoff(t + 1);
@@ -356,36 +349,35 @@ void tags_to_submatch(const std::vector<Tag> &tags, size_t nmatch,
 }
 
 template<typename history_t>
-int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
-    regmatch_t pmatch[])
-{
+int finalize(const simctx_t<history_t>& ctx,
+             const char* string,
+             size_t nmatch,
+             regmatch_t pmatch[]) {
     if (ctx.rule == Rule::NONE) {
         return REG_NOMATCH;
     }
 
-    const std::vector<Tag> &tags = ctx.nfa.tags;
+    const std::vector<Tag>& tags = ctx.nfa.tags;
     const size_t ntags = tags.size();
-    bool *done = ctx.done;
+    bool* done = ctx.done;
 
     memset(done, 0, ntags * sizeof(bool));
 
     for (int32_t i = ctx.hidx; i != HROOT; ) {
-        const typename history_t::node_t &n = ctx.history.node(i);
+        const typename history_t::node_t& n = ctx.history.node(i);
         i = n.pred;
         const size_t t = n.info.idx;
 
         // If already updated, skip.
         if (done[t]) continue;
 
-        // Update positive tag.
         if (!n.info.neg) {
+            // Update positive tag.
             done[t] = true;
             ctx.offsets3[t] = static_cast<regoff_t>(n.step);
-        }
-
-        // Update negative tag together with its sibling and nested tags (if any).
-        else {
-            const Tag &tag = tags[t];
+        } else {
+            // Update negative tag together with its sibling and nested tags (if any).
+            const Tag& tag = tags[t];
             for (size_t l = tag.lnest; l < tag.hnest; ++l) {
                 if (!done[l]) {
                     done[l] = true;
@@ -402,20 +394,18 @@ int finalize(const simctx_t<history_t> &ctx, const char *string, size_t nmatch,
 }
 
 template<typename history_t>
-void update_offsets(simctx_t<history_t> &ctx, const conf_t &c, uint32_t id)
-{
-    regoff_t *o;
-    const std::vector<Tag> &tags = ctx.nfa.tags;
+void update_offsets(simctx_t<history_t>& ctx, const conf_t& c, uint32_t id) {
+    regoff_t* o;
+    const std::vector<Tag>& tags = ctx.nfa.tags;
     const size_t ntags = tags.size();
-    nfa_state_t *s = c.state;
-    bool *done = ctx.done;
+    nfa_state_t* s = c.state;
+    bool* done = ctx.done;
 
     if (s->type == nfa_state_t::FIN) {
         ctx.marker = ctx.cursor;
         ctx.rule = 0;
         o = ctx.offsets3;
-    }
-    else {
+    } else {
         o = ctx.offsets1 + id * ntags;
     }
 
@@ -423,22 +413,20 @@ void update_offsets(simctx_t<history_t> &ctx, const conf_t &c, uint32_t id)
     memset(done, 0, ntags * sizeof(bool));
 
     for (int32_t i = c.thist; i != HROOT; ) {
-        const typename history_t::node_t &n = ctx.history.node(i);
+        const typename history_t::node_t& n = ctx.history.node(i);
         i = n.pred;
         const size_t t = n.info.idx;
 
         // If already updated, skip.
         if (done[t]) continue;
 
-        // Update positive tag.
         if (!n.info.neg) {
+            // Update positive tag.
             done[t] = true;
             o[t] = static_cast<regoff_t>(ctx.step);
-        }
-
-        // Update negative tag together with its sibling and nested tags (if any).
-        else {
-            const Tag &tag = tags[t];
+        } else {
+            // Update negative tag together with its sibling and nested tags (if any).
+            const Tag& tag = tags[t];
             for (size_t l = tag.lnest; l < tag.hnest; ++l) {
                 if (!done[l]) {
                     done[l] = true;
@@ -449,36 +437,30 @@ void update_offsets(simctx_t<history_t> &ctx, const conf_t &c, uint32_t id)
     }
 }
 
-bool ran_or_fin_t::operator()(const conf_t &c)
-{
-    return c.state->type == nfa_state_t::RAN
-        || c.state->type == nfa_state_t::FIN;
+bool ran_or_fin_t::operator()(const conf_t& c) {
+    return c.state->type == nfa_state_t::RAN || c.state->type == nfa_state_t::FIN;
 }
 
-void zhistory_t::init()
-{
+void zhistory_t::init() {
     nodes.clear();
     nodes.push_back(node_t(NOINFO, -1, 0, 0));
     cache.clear();
 }
 
-void khistory_t::init()
-{
+void khistory_t::init() {
     nodes.clear();
     nodes.push_back(node_t(NOINFO, -1));
 }
 
 template<typename ctx_t>
-hidx_t zhistory_t::link(ctx_t &ctx, const typename ctx_t::conf_t &conf)
-{
+hidx_t zhistory_t::link(ctx_t& ctx, const typename ctx_t::conf_t& conf) {
     const int32_t i = static_cast<int32_t>(nodes.size());
     nodes.push_back(node_t(conf.state->tag.info, conf.thist, conf.origin, ctx.step));
     return i;
 }
 
 template<typename ctx_t>
-hidx_t khistory_t::link(ctx_t &/* ctx */, const typename ctx_t::conf_t &conf)
-{
+hidx_t khistory_t::link(ctx_t& /* ctx */, const typename ctx_t::conf_t& conf) {
     const int32_t i = static_cast<int32_t>(nodes.size());
     nodes.push_back(node_t(conf.state->tag.info, conf.thist));
     return i;

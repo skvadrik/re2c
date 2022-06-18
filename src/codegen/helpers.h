@@ -8,26 +8,26 @@
 
 #include "src/debug/debug.h"
 
-
 namespace re2c {
 
 bool is_print(uint32_t c);
-void prtHex(std::ostream &o, uint32_t c, uint32_t szcunit);
-void prtChOrHex(std::ostream &o, uint32_t c, uint32_t szcunit, bool hex, bool dot);
-void printSpan(std::ostream &o, uint32_t l, uint32_t u, uint32_t szcunit, bool ebcdic,
-    bool dot);
+void prtHex(std::ostream& o, uint32_t c, uint32_t szcunit);
+void prtChOrHex(std::ostream& o, uint32_t c, uint32_t szcunit, bool hex, bool dot);
+void printSpan(std::ostream& o, uint32_t l, uint32_t u, uint32_t szcunit, bool ebcdic, bool dot);
 
 template<typename T>
-void argsubst(std::ostringstream &os, const std::string &stub, const char *arg,
-    bool allow_unnamed, T val)
-{
+void argsubst(std::ostringstream& os,
+              const std::string& stub,
+              const char* arg,
+              bool allow_unnamed,
+              T val) {
     assert(!stub.empty());
     DASSERT(arg != nullptr);
 
     const std::string str = os.str();
     os.str("");
 
-    const char *s = str.c_str(), *e = s + str.length(), *p, *q;
+    const char* s = str.c_str(), *e = s + str.length(), *p, *q;
     const size_t l = strlen(arg);
 
     while ((p = strstr(s, stub.c_str()))) {
@@ -54,8 +54,7 @@ void argsubst(std::ostringstream &os, const std::string &stub, const char *arg,
     os.write(s, e - s);
 }
 
-inline std::string indent(uint32_t n, const std::string &s)
-{
+inline std::string indent(uint32_t n, const std::string& s) {
     std::string ind;
     for (; n --> 0; ind += s);
     return ind;

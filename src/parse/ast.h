@@ -9,7 +9,6 @@
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
 
-
 namespace re2c {
 
 struct SemAct;
@@ -25,65 +24,63 @@ struct ASTRange {
     uint32_t upper;
     loc_t loc;
 
-    ASTRange(uint32_t low, uint32_t upp, const loc_t &loc)
+    ASTRange(uint32_t low, uint32_t upp, const loc_t& loc)
         : lower(low), upper(upp), loc(loc) {}
 };
 
-/* AST must be immutable and independent of options */
+// AST must be immutable and independent of options.
 struct AST {
     static free_list<AST*> flist;
     static const uint32_t MANY;
 
-    enum type_t
-        { NIL, STR,  CLS,  DOT,  DEFAULT, ALT
-        , CAT, ITER, DIFF, TAG,  CAP,     REF } type;
+    enum type_t {NIL, STR, CLS, DOT, DEFAULT, ALT, CAT, ITER, DIFF, TAG, CAP, REF} type;
     union {
         struct {
-            const std::vector<ASTChar> *chars;
+            const std::vector<ASTChar>* chars;
             bool icase;
         } str;
         struct {
-            const std::vector<ASTRange> *ranges;
+            const std::vector<ASTRange>* ranges;
             bool negated;
         } cls;
         struct {
-            const AST *ast1;
-            const AST *ast2;
+            const AST* ast1;
+            const AST* ast2;
         } alt;
         struct {
-            const AST *ast1;
-            const AST *ast2;
+            const AST* ast1;
+            const AST* ast2;
         } cat;
         struct {
-            const AST *ast;
+            const AST* ast;
             uint32_t min;
             uint32_t max;
         } iter;
         struct {
-            const AST *ast1;
-            const AST *ast2;
+            const AST* ast1;
+            const AST* ast2;
         } diff;
         struct {
-            const std::string *name;
+            const std::string* name;
             bool history;
         } tag;
-        const AST *cap;
+        const AST* cap;
         struct {
-            const AST *ast;
-            const std::string *name;
+            const AST* ast;
+            const std::string* name;
         } ref;
     };
     loc_t loc;
 
-    AST(const loc_t &loc, type_t t);
+    AST(const loc_t& loc, type_t t);
     ~AST();
 };
 
 struct ASTRule {
-    const AST    *ast;
-    const SemAct *semact;
+    const AST* ast;
+    const SemAct* semact;
 
-    ASTRule(const AST *r, const SemAct *a): ast(r), semact(a) {}
+    ASTRule(const AST* r, const SemAct* a): ast(r), semact(a) {}
 };
 
 struct ASTBounds {
@@ -91,19 +88,19 @@ struct ASTBounds {
     uint32_t max;
 };
 
-const AST *ast_nil(const loc_t &loc);
-const AST *ast_str(const loc_t &loc, std::vector<ASTChar> *chars, bool icase);
-const AST *ast_cls(const loc_t &loc, std::vector<ASTRange> *ranges, bool negated);
-const AST *ast_dot(const loc_t &loc);
-const AST *ast_default(const loc_t &loc);
-const AST *ast_alt(const AST *a1, const AST *a2);
-const AST *ast_cat(const AST *a1, const AST *a2);
-const AST *ast_iter(const AST *a, uint32_t n, uint32_t m);
-const AST *ast_diff(const AST *a1, const AST *a2);
-const AST *ast_tag(const loc_t &loc, const std::string *n, bool h);
-const AST *ast_cap(const AST *a);
-const AST *ast_ref(const AST *a, const std::string &n);
-bool ast_need_wrap(const AST *a);
+const AST* ast_nil(const loc_t& loc);
+const AST* ast_str(const loc_t& loc, std::vector<ASTChar>* chars, bool icase);
+const AST* ast_cls(const loc_t& loc, std::vector<ASTRange>* ranges, bool negated);
+const AST* ast_dot(const loc_t& loc);
+const AST* ast_default(const loc_t& loc);
+const AST* ast_alt(const AST* a1, const AST* a2);
+const AST* ast_cat(const AST* a1, const AST* a2);
+const AST* ast_iter(const AST* a, uint32_t n, uint32_t m);
+const AST* ast_diff(const AST* a1, const AST* a2);
+const AST* ast_tag(const loc_t& loc, const std::string* n, bool h);
+const AST* ast_cap(const AST* a);
+const AST* ast_ref(const AST* a, const std::string& n);
+bool ast_need_wrap(const AST* a);
 
 } // namespace re2c
 

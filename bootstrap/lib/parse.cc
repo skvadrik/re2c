@@ -92,14 +92,12 @@
 using namespace re2c;
 
 extern "C" {
-
-int yylex(const char *&pattern);
-void yyerror(const char *pattern, const char*) RE2C_ATTR((noreturn));
-
-} // extern "C"
+    int yylex(const char*& pattern);
+    void yyerror(const char* pattern, const char*) RE2C_ATTR((noreturn));
+}
 
 
-#line 103 "lib/parse.cc"
+#line 101 "lib/parse.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -531,8 +529,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    52,    52,    55,    56,    60,    61,    65,    66,    67,
-      68,    69,    73,    74,    75
+       0,    50,    50,    53,    54,    58,    59,    63,    64,    65,
+      66,    67,    71,    72,    73
 };
 #endif
 
@@ -707,7 +705,7 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const char *&pattern)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const char*& pattern)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
@@ -726,7 +724,7 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const char *&pattern)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const char*& pattern)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
@@ -765,7 +763,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule, const char *&pattern)
+                 int yyrule, const char*& pattern)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -827,7 +825,7 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, const char *&pattern)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, const char*& pattern)
 {
   YY_USE (yyvaluep);
   YY_USE (pattern);
@@ -857,7 +855,7 @@ int yynerrs;
 `----------*/
 
 int
-yyparse (const char *&pattern)
+yyparse (const char*& pattern)
 {
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
@@ -1099,61 +1097,61 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* regexp: expr  */
-#line 52 "../lib/parse.ypp"
+#line 50 "../lib/parse.ypp"
              { regexp = (yyval.regexp); }
-#line 1105 "lib/parse.cc"
+#line 1103 "lib/parse.cc"
     break;
 
   case 4: /* expr: expr '|' term  */
-#line 56 "../lib/parse.ypp"
+#line 54 "../lib/parse.ypp"
                 { (yyval.regexp) = ast_alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1111 "lib/parse.cc"
+#line 1109 "lib/parse.cc"
     break;
 
   case 6: /* term: factor term  */
-#line 61 "../lib/parse.ypp"
+#line 59 "../lib/parse.ypp"
               { (yyval.regexp) = ast_cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
-#line 1117 "lib/parse.cc"
+#line 1115 "lib/parse.cc"
     break;
 
   case 8: /* factor: primary '*'  */
-#line 66 "../lib/parse.ypp"
+#line 64 "../lib/parse.ypp"
                       { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, AST::MANY); }
-#line 1123 "lib/parse.cc"
+#line 1121 "lib/parse.cc"
     break;
 
   case 9: /* factor: primary '+'  */
-#line 67 "../lib/parse.ypp"
+#line 65 "../lib/parse.ypp"
                       { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 1, AST::MANY); }
-#line 1129 "lib/parse.cc"
+#line 1127 "lib/parse.cc"
     break;
 
   case 10: /* factor: primary '?'  */
-#line 68 "../lib/parse.ypp"
+#line 66 "../lib/parse.ypp"
                       { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, 1); }
-#line 1135 "lib/parse.cc"
+#line 1133 "lib/parse.cc"
     break;
 
   case 11: /* factor: primary TOKEN_COUNT  */
-#line 69 "../lib/parse.ypp"
+#line 67 "../lib/parse.ypp"
                       { (yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max); }
-#line 1141 "lib/parse.cc"
+#line 1139 "lib/parse.cc"
     break;
 
   case 13: /* primary: '(' ')'  */
-#line 74 "../lib/parse.ypp"
+#line 72 "../lib/parse.ypp"
                { (yyval.regexp) = ast_cap(ast_nil(NOWHERE)); }
-#line 1147 "lib/parse.cc"
+#line 1145 "lib/parse.cc"
     break;
 
   case 14: /* primary: '(' expr ')'  */
-#line 75 "../lib/parse.ypp"
+#line 73 "../lib/parse.ypp"
                { (yyval.regexp) = ast_cap((yyvsp[-1].regexp)); }
-#line 1153 "lib/parse.cc"
+#line 1151 "lib/parse.cc"
     break;
 
 
-#line 1157 "lib/parse.cc"
+#line 1155 "lib/parse.cc"
 
       default: break;
     }
@@ -1346,30 +1344,25 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 78 "../lib/parse.ypp"
+#line 76 "../lib/parse.ypp"
 
 
 #pragma GCC diagnostic pop
 
 extern "C" {
+    void yyerror(const char* pattern, const char* msg) {
+        fprintf(stderr, "%s (on RE %s)", msg, pattern);
+        exit(1);
+    }
 
-void yyerror(const char *pattern, const char *msg)
-{
-    fprintf(stderr, "%s (on RE %s)", msg, pattern);
-    exit(1);
+    int yylex(const char*& pattern) {
+        return lex(pattern);
+    }
 }
-
-int yylex(const char *&pattern)
-{
-    return lex(pattern);
-}
-
-} // extern "C"
 
 namespace re2c {
 
-const AST *parse(const char *pattern)
-{
+const AST* parse(const char* pattern) {
     yyparse(pattern);
     return regexp;
 }

@@ -8,30 +8,27 @@
 #include "src/regexp/re.h"
 #include "src/regexp/tag.h"
 
-
 namespace re2c {
 namespace {
 
-static RE *negative_tags(RESpec &spec, const size_t *stidx, const size_t *etidx)
-{
-    RE *x = nullptr;
+static RE* negative_tags(RESpec& spec, const size_t* stidx, const size_t* etidx) {
+    RE* x = nullptr;
 
-    // Add transitions for all negative tags (including nested ones). It allows
-    // to avoid tag initialization and fixup at the end of match, at the cost of
-    // adding more tag actions.
+    // Add transitions for all negative tags (including nested ones). It allows to avoid tag
+    // initialization and fixup at the end of match, at the cost of adding more tag actions.
     if (spec.opts->nested_negative_tags) {
         for (; stidx < etidx; ++stidx) {
             x = re_cat(spec, x, re_tag(spec, *stidx, true));
         }
     }
 
-    // Add transition only for one top-level negative tag, and save the full
-    // range of negative tags in this tag's metadata. This reduces the amount of
-    // tag actions at the cost of post-processing. (This option is essential for
-    // NFA simulation and causes significant speedup on tests with many tags.)
+    // Add transition only for one top-level negative tag, and save the full range of negative tags
+    // in this tag's metadata. This reduces the amount of tag actions at the cost of
+    // post-processing. (This option is essential for TNFA simulation and causes significant speedup
+    // on tests with many tags.)
     else if (stidx < etidx) {
-        // POSIX syntax means that tags are defined by capturing parentheses
-        // NFA with raw tags is possible, but we do not have any use cases yet
+        // POSIX syntax means that tags are defined by capturing parentheses. TNFA with raw tags is
+        // possible, but we do not have any use cases yet.
         DASSERT(spec.opts->posix_syntax);
         // With POSIX syntax we must have at least two tags: opening and closing
         DASSERT(etidx - stidx > 1);
@@ -40,8 +37,7 @@ static RE *negative_tags(RESpec &spec, const size_t *stidx, const size_t *etidx)
         if (!spec.opts->backward) {
             DASSERT(first % 2 == 0); // forward matching, 1st tag is opening
             stag = first;
-        }
-        else {
+        } else {
             DASSERT(first % 2 == 1); // backward matching, 1st tag is closing
             stag = first - 1;
         }
@@ -49,7 +45,7 @@ static RE *negative_tags(RESpec &spec, const size_t *stidx, const size_t *etidx)
 
         // the range of nested tags is contiguous, find its upper bound
         size_t last = first;
-        for (const size_t *i = stidx; ++i < etidx;) {
+        for (const size_t* i = stidx; ++i < etidx;) {
             last = std::max(last, *i);
         }
 
@@ -63,22 +59,20 @@ static RE *negative_tags(RESpec &spec, const size_t *stidx, const size_t *etidx)
 
 struct StackItem {
     // current RE
-    RE *re;
+    RE* re;
 
-    // Start of the subsequence of tags for the left/right sub-RE (null if
-    // the sub-RE has not been traversed yet, ot if RE is not an alternative).
-    size_t *ltag, *rtag;
+    // Start of the subsequence of tags for the left/right sub-RE (null if the sub-RE has not been
+    // traversed yet, ot if RE is not an alternative).
+    size_t* ltag, *rtag;
 };
 
 } // anonymous namespace
 
-// Fictive tags do not really need default counterparts:
-// maximization can work without them based on version numbers.
-// For now it does not seem like a useful optimization, but some day
-// in future it might change.
-void insert_default_tags(RESpec &spec)
-{
-    size_t *tags = new size_t[spec.tags.size()], *tag = tags;
+// Fictive tags do not really need default counterparts: maximization can work without them based on
+// version numbers. For now it does not seem like a useful optimization, but some day in the future
+// it might change.
+void insert_default_tags(RESpec& spec) {
+    size_t* tags = new size_t[spec.tags.size()], *tag = tags;
     std::vector<StackItem> stack;
 
     std::vector<RE*>::reverse_iterator i_re;
@@ -90,7 +84,7 @@ void insert_default_tags(RESpec &spec)
     while (!stack.empty()) {
         StackItem i = stack.back();
         stack.pop_back();
-        RE *re = i.re;
+        RE* re = i.re;
 
         if (re->type == RE::ALT) {
             if (i.ltag == nullptr) {
@@ -99,40 +93,35 @@ void insert_default_tags(RESpec &spec)
                 stack.push_back(k);
                 StackItem j = {re->alt.re1, nullptr, nullptr};
                 stack.push_back(j);
-            }
-            else if (i.rtag == nullptr) {
+            } else if (i.rtag == nullptr) {
                 // collect tags from the right sub-RE and return to this RE
                 StackItem k = {re, i.ltag, tag};
                 stack.push_back(k);
                 StackItem j = {re->alt.re2, nullptr, nullptr};
                 stack.push_back(j);
-            }
-            else {
+            } else {
                 // both sub-RE traversed, add negative tags
-                RE *x = negative_tags(spec, i.ltag, i.rtag);
-                RE *y = negative_tags(spec, i.rtag, tag);
+                RE* x = negative_tags(spec, i.ltag, i.rtag);
+                RE* y = negative_tags(spec, i.rtag, tag);
 
-                // Decision to place negative tags before/after could be based
-                // on POSIX semantics, not syntax. But strangely on some tests
-                // placing before results in better performance. More benchmarks
-                // are needed to understand this (with AOT/JIT, TNFA/TDFA).
+                // Decision to place negative tags before/after could be based on POSIX semantics,
+                // not syntax. But strangely on some tests placing before results in better
+                // performance. More benchmarks are needed to understand this (with AOT/JIT,
+                // TNFA/TDFA).
                 re->alt.re1 = re_cat(spec, re->alt.re1, y);
                 re->alt.re2 = spec.opts->posix_syntax
-                    ? re_cat(spec, x, re->alt.re2)
-                    : re_cat(spec, re->alt.re2, x);
+                              ? re_cat(spec, x, re->alt.re2)
+                              : re_cat(spec, re->alt.re2, x);
             }
-        }
-        else if (re->type == RE::CAT) {
+        } else if (re->type == RE::CAT) {
             StackItem j2 = {re->cat.re2, nullptr, nullptr};
             stack.push_back(j2);
             StackItem j1 = {re->cat.re1, nullptr, nullptr};
             stack.push_back(j1);
-        }
-        else if (re->type == RE::ITER) {
+        } else if (re->type == RE::ITER) {
             StackItem j = {re->iter.re, nullptr, nullptr};
             stack.push_back(j);
-        }
-        else if (re->type == RE::TAG) {
+        } else if (re->type == RE::TAG) {
             *tag++ = re->tag.idx;
         }
     }

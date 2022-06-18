@@ -6,14 +6,12 @@
 #include "src/regexp/re.h"
 #include "src/util/range.h"
 
-
 namespace re2c {
 
-RE *EBCDICRange(RESpec &spec, const Range *r)
-{
-    RangeMgr &rm = spec.rangemgr;
+RE* EBCDICRange(RESpec& spec, const Range* r) {
+    RangeMgr& rm = spec.rangemgr;
 
-    Range *s = nullptr;
+    Range* s = nullptr;
     for (; r; r = r->next()) {
         const uint32_t l = r->lower(), u = r->upper();
         for (uint32_t c = l; c < u; ++c) {

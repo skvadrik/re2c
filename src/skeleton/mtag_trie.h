@@ -8,7 +8,6 @@
 
 #include "src/debug/debug.h"
 
-
 namespace re2c {
 
 static const uint32_t MTAG_TRIE_ROOT = ~0u;
@@ -19,36 +18,32 @@ struct mtag_t {
 };
 
 struct mtag_trie_t {
-    mtag_t *head;
+    mtag_t* head;
     uint32_t size;
     uint32_t next;
 };
 
-inline void mtag_trie_clear(mtag_trie_t &trie)
-{
+inline void mtag_trie_clear(mtag_trie_t& trie) {
     trie.next = 0;
 }
 
-inline void mtag_trie_init(mtag_trie_t &trie)
-{
+inline void mtag_trie_init(mtag_trie_t& trie) {
     static const uint32_t SIZE = 1024;
     trie.head = new mtag_t[SIZE];
     trie.size = SIZE;
     trie.next = 0;
 }
 
-inline void mtag_trie_free(mtag_trie_t &trie)
-{
+inline void mtag_trie_free(mtag_trie_t& trie) {
     delete[] trie.head;
     trie.head = nullptr;
     trie.size = 0;
 }
 
-inline uint32_t mtag_trie_next(mtag_trie_t &trie)
-{
+inline uint32_t mtag_trie_next(mtag_trie_t& trie) {
     DASSERT(trie.next <= trie.size);
     if (trie.next == trie.size) {
-        mtag_t *head = new mtag_t[2 * trie.size];
+        mtag_t* head = new mtag_t[2 * trie.size];
         memcpy(head, trie.head, trie.size * sizeof(mtag_t));
         free(trie.head);
         trie.head = head;
@@ -59,17 +54,15 @@ inline uint32_t mtag_trie_next(mtag_trie_t &trie)
     return trie.next++;
 }
 
-inline uint32_t mtag(mtag_trie_t &trie, uint32_t pred, uint32_t dist)
-{
+inline uint32_t mtag(mtag_trie_t& trie, uint32_t pred, uint32_t dist) {
     uint32_t next = mtag_trie_next(trie);
-    mtag_t &t = trie.head[next];
+    mtag_t& t = trie.head[next];
     t.pred = pred;
     t.dist = dist;
     return next;
 }
 
-inline uint32_t mtag_length(mtag_trie_t &trie, uint32_t mtag)
-{
+inline uint32_t mtag_length(mtag_trie_t& trie, uint32_t mtag) {
     uint32_t len = 0;
     for (; mtag != MTAG_TRIE_ROOT; ) {
         ++len;

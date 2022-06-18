@@ -3,11 +3,10 @@
 
 #include <stdint.h>
 
-
 namespace re2c {
 
-uint32_t unesc_hex (const char * s, const char * s_end);
-uint32_t unesc_oct (const char * s, const char * s_end);
+uint32_t unesc_hex (const char* s, const char* s_end);
+uint32_t unesc_oct (const char* s, const char* s_end);
 
 } // namespace re2c
 

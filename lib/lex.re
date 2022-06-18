@@ -11,12 +11,11 @@
 #include "parse.h"
 #include "lib/lex.h"
 
-
 extern YYSTYPE yylval;
 
 namespace re2c {
 
-static int32_t lex_cls_chr(const char *&, uint32_t &);
+static int32_t lex_cls_chr(const char*&, uint32_t&);
 
 /*!re2c
     re2c:flags:tags = 1;
@@ -29,10 +28,9 @@ static int32_t lex_cls_chr(const char *&, uint32_t &);
     num = [0-9]+;
 */
 
-int lex(const char *&cur)
-{
+int lex(const char*& cur) {
     /*!stags:re2c format = "const char *@@;"; */
-    const char *mar, *x, *y;
+    const char* mar, *x, *y;
     std::vector<ASTRange> cls;
     bool neg = false;
     uint32_t l, u;
@@ -112,9 +110,8 @@ err_cnt:
     return TOKEN_ERROR;
 }
 
-int32_t lex_cls_chr(const char *&cur, uint32_t &c)
-{
-    const char *mar, *p = cur;
+int32_t lex_cls_chr(const char*& cur, uint32_t& c) {
+    const char* mar, *p = cur;
 /*!local:re2c
     *    { return 1; }
     "[." { error("collating characters not supported"); return 1; }

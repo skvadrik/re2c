@@ -7,19 +7,22 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/tag.h"
 
-
 namespace re2c {
 
 typedef std::vector<tagver_t> vals_t;
-static void interfere(const tcmd_t *cmd, const bool *live, bool *interf, bool *buf, vals_t *vals, size_t nver);
+static void interfere(const tcmd_t* cmd,
+                      const bool* live,
+                      bool* interf,
+                      bool* buf,
+                      vals_t* vals,
+                      size_t nver);
 
-void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
-{
+void cfg_t::interference(const cfg_t& cfg, const bool* live, bool* interf) {
     const tagver_t maxver = cfg.dfa.maxtagver + 1;
     const size_t nver = static_cast<size_t>(maxver);
-    bool *buf = new bool[nver];
-    vals_t *vals = new vals_t[nver]();
-    const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
+    bool* buf = new bool[nver];
+    vals_t* vals = new vals_t[nver]();
+    const cfg_bb_t* b = cfg.bblocks, *e = b + cfg.nbbfall;
 
     memset(interf, 0, nver * nver * sizeof(bool));
     for (; b < e; ++b, live += nver) {
@@ -27,7 +30,7 @@ void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
     }
 
     // versions of tags with/without history interfere
-    const std::set<tagver_t> &mt = cfg.dfa.mtagvers;
+    const std::set<tagver_t>& mt = cfg.dfa.mtagvers;
     for (tagver_t ver : mt) {
         for (tagver_t u = ver, v = 0; v < maxver; ++v) {
             if (mt.find(v) == mt.end()) {
@@ -42,11 +45,14 @@ void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
     delete[] vals;
 }
 
-void interfere(const tcmd_t *cmd, const bool *live, bool *interf,
-    bool *buf, vals_t *vals, size_t nver)
-{
+void interfere(const tcmd_t* cmd,
+               const bool* live,
+               bool* interf,
+               bool* buf,
+               vals_t* vals,
+               size_t nver) {
     // initialize value of RHS for all commands in this basic block
-    for (const tcmd_t *p = cmd; p; p = p->next) {
+    for (const tcmd_t* p = cmd; p; p = p->next) {
         const tagver_t r = p->rhs;
         if (r != TAGVER_ZERO) {
             vals[r].clear();
@@ -55,9 +61,9 @@ void interfere(const tcmd_t *cmd, const bool *live, bool *interf,
     }
 
     // find interference list for LHS of each command
-    for (const tcmd_t *p = cmd; p; p = p->next) {
+    for (const tcmd_t* p = cmd; p; p = p->next) {
         const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
-        vals_t &vl = vals[l], &vr = vals[r];
+        vals_t& vl = vals[l], &vr = vals[r];
 
         // alive after this command
         memcpy(buf, live, nver * sizeof(bool));
@@ -82,14 +88,12 @@ void interfere(const tcmd_t *cmd, const bool *live, bool *interf,
                 vl.push_back(*h);
             }
         }
-        // Exclude from interference list all LHS from preceding commands
-        // which value is equal to current LHS value. Subsequent commands
-        // are ignored: if subsequent command that sets LHS to the same value
-        // precedes any use of it, liveness propagation through basic block
-        // would mark this LHS as dead and not interfering anyway; otherwise
-        // (if use precedes setting to the same value), then it indeed
-        // interferes with current LHS.
-        for (const tcmd_t *q = cmd; q != p; q = q->next) {
+        // Exclude from interference list all LHS from preceding commands which value is equal to
+        // the current LHS value. Subsequent commands are ignored: if subsequent command that sets
+        // LHS to the same value precedes any use of it, liveness propagation through basic block
+        // would mark this LHS as dead and not interfering anyway; otherwise (if use precedes
+        // setting to the same value), then it indeed interferes with current LHS.
+        for (const tcmd_t* q = cmd; q != p; q = q->next) {
             if (vals[q->lhs] == vl) {
                 buf[q->lhs] = false;
             }

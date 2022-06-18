@@ -41,9 +41,8 @@ namespace re2c {
     re2c:define:YYMARKER    = mar;
     re2c:define:YYCTXMARKER = ctx;
 
-    // source code is in ASCII: pointers have type 'char *'
-    // but re2c makes an implicit assumption that YYCTYPE is unsigned
-    // when it generates comparisons
+    // Source code is in ASCII: pointers have type `char*`,  but re2c makes an implicit assumption
+    // that YYCTYPE is unsigned when it generates comparisons.
     re2c:yych:conversion = 1;
 
     space       = [ \t];
@@ -53,7 +52,7 @@ namespace re2c {
     number      = "0" | ("-"? [1-9] [0-9]*);
 */
 
-void Scanner::lex_conf(Opt &opts) {
+void Scanner::lex_conf(Opt& opts) {
     tok = cur;
 /*!local:re2c
     "api" | "flags:input" { lex_conf_input(opts); return; }
@@ -179,13 +178,11 @@ void Scanner::lex_conf(Opt &opts) {
 */
 }
 
-void Scanner::lex_conf_encoding_policy(Opt &opts)
-{
+void Scanner::lex_conf_encoding_policy(Opt& opts) {
     lex_conf_assign ();
 /*!local:re2c
     * {
-        msg.error(cur_loc(),
-            "bad configuration value (expected: 'ignore', 'substitute', 'fail')");
+        msg.error(cur_loc(), "bad configuration value (expected: 'ignore', 'substitute', 'fail')");
         exit(1);
     }
     "ignore"     { opts.set_encoding_policy(Enc::POLICY_IGNORE);     goto end; }
@@ -196,13 +193,11 @@ end:
     lex_conf_semicolon();
 }
 
-void Scanner::lex_conf_input(Opt &opts)
-{
+void Scanner::lex_conf_input(Opt& opts) {
     lex_conf_assign ();
 /*!local:re2c
     * {
-        msg.error(cur_loc(),
-            "bad configuration value (expected: 'default', 'custom')");
+        msg.error(cur_loc(), "bad configuration value (expected: 'default', 'custom')");
         exit(1);
     }
     "default" { opts.set_input_api(Api::DEFAULT); goto end; }
@@ -212,13 +207,12 @@ end:
     lex_conf_semicolon();
 }
 
-void Scanner::lex_conf_empty_class(Opt &opts)
-{
+void Scanner::lex_conf_empty_class(Opt& opts) {
     lex_conf_assign ();
 /*!local:re2c
     * {
         msg.error(cur_loc(),
-            "bad configuration value (expected: 'match-empty', 'match-none', 'error')");
+                  "bad configuration value (expected: 'match-empty', 'match-none', 'error')");
         exit(1);
     }
     "match-empty" { opts.set_empty_class_policy(EmptyClassPolicy::MATCH_EMPTY); goto end; }
@@ -229,13 +223,11 @@ end:
     lex_conf_semicolon();
 }
 
-void Scanner::lex_conf_api_style(Opt &opts)
-{
+void Scanner::lex_conf_api_style(Opt& opts) {
     lex_conf_assign ();
 /*!local:re2c
     * {
-        msg.error(cur_loc(),
-            "bad configuration value (expected: 'functions', 'free-form')");
+        msg.error(cur_loc(), "bad configuration value (expected: 'functions', 'free-form')");
         exit(1);
     }
     "functions" { opts.set_api_style(ApiStyle::FUNCTIONS); goto end; }
@@ -245,8 +237,7 @@ end:
     lex_conf_semicolon();
 }
 
-void Scanner::lex_conf_assign ()
-{
+void Scanner::lex_conf_assign () {
 /*!local:re2c
     * {
         msg.error(cur_loc(), "missing '=' in configuration");
@@ -256,8 +247,7 @@ void Scanner::lex_conf_assign ()
 */
 }
 
-void Scanner::lex_conf_semicolon ()
-{
+void Scanner::lex_conf_semicolon () {
 /*!local:re2c
     * {
         msg.error(cur_loc(), "missing ending ';' in configuration");
@@ -267,8 +257,7 @@ void Scanner::lex_conf_semicolon ()
 */
 }
 
-int32_t Scanner::lex_conf_number ()
-{
+int32_t Scanner::lex_conf_number () {
     lex_conf_assign ();
     tok = cur;
 /*!local:re2c
@@ -288,8 +277,7 @@ int32_t Scanner::lex_conf_number ()
 */
 }
 
-std::string Scanner::lex_conf_string ()
-{
+std::string Scanner::lex_conf_string () {
     lex_conf_assign ();
     std::string s;
     tok = cur;
@@ -298,24 +286,17 @@ std::string Scanner::lex_conf_string ()
         const char quote = tok[0];
         for (;;) {
             ASTChar c;
-            if (!lex_str_chr(quote, c)) {
-                goto end;
-            }
+            if (!lex_str_chr(quote, c)) goto end;
             if (c.chr > 0xFF) {
-                msg.error(c.loc
-                    , "multibyte character in configuration string: 0x%X"
-                    , c.chr);
+                msg.error(c.loc, "multibyte character in configuration string: 0x%X", c.chr);
                 exit(1);
             } else {
                 s += static_cast<char>(c.chr);
             }
         }
     }
-    naked {
-        s = getstr(tok, cur);
-        goto end;
-    }
-    "" { goto end; }
+    naked { s = getstr(tok, cur); goto end; }
+    ""    { goto end; }
 */
 end:
     lex_conf_semicolon ();

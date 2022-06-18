@@ -17,7 +17,6 @@
 #include "src/util/forbid_copy.h"
 #include "src/util/uniq_vector.h"
 
-
 namespace re2c {
 
 class Msg;
@@ -32,7 +31,7 @@ static const size_t NOSAVE = std::numeric_limits<size_t>::max();
 typedef uniq_vector_t<std::pair<State*, tcid_t> > accept_t;
 
 class Action {
-public:
+  public:
     enum type_t {
         MATCH,
         INITIAL,
@@ -44,23 +43,23 @@ public:
 
     union {
         size_t save;
-        const accept_t * accepts;
+        const accept_t* accepts;
         size_t rule;
     } info;
 
-public:
+  public:
     Action();
     void set_initial();
     void set_save(size_t save);
     void set_move();
-    void set_accept(const accept_t * accepts);
+    void set_accept(const accept_t* accepts);
     void set_rule(size_t rule);
 };
 
 struct State {
-    State * next;
-    State * prev;
-    Label *label; // labels are allocated in codegen as they live longer
+    State* next;
+    State* prev;
+    Label* label; // labels are allocated in codegen as they live longer
     size_t fill;
     bool fallback;
 
@@ -73,7 +72,7 @@ struct State {
 
     State();
     ~State();
-    FORBID_COPY (State);
+    FORBID_COPY(State);
 };
 
 struct DFA {
@@ -84,20 +83,20 @@ struct DFA {
     uint32_t lbChar;
     uint32_t ubChar;
     uint32_t nStates;
-    State *head;
-    State *defstate;
-    State *eof_state;
+    State* head;
+    State* defstate;
+    State* eof_state;
     std::vector<State*> finstates;
-    std::vector<uint32_t> &charset;
-    std::valarray<Rule> &rules;
-    std::vector<Tag> &tags;
-    std::set<tagver_t> &mtagvers;
+    std::vector<uint32_t>& charset;
+    std::valarray<Rule>& rules;
+    std::vector<Tag>& tags;
+    std::set<tagver_t>& mtagvers;
     std::set<std::string> stagnames;
     std::set<std::string> stagvars;
     std::set<std::string> mtagnames;
     std::set<std::string> mtagvars;
-    const tagver_t *finvers;
-    tcpool_t &tcpool;
+    const tagver_t* finvers;
+    tcpool_t& tcpool;
     size_t max_fill;
     size_t max_nmatch;
     bool need_backup;
@@ -107,43 +106,41 @@ struct DFA {
     const size_t def_rule;
     const size_t eof_rule;
     const size_t key_size;
-    CodeBitmap *bitmap;
+    CodeBitmap* bitmap;
     std::string setup;
-    Msg &msg;
+    Msg& msg;
 
-    Label *start_label;
-    Label *initial_label;
+    Label* start_label;
+    Label* initial_label;
 
-    DFA ( const dfa_t &dfa
-        , const std::vector<size_t> &fill
-        , size_t key
-        , const loc_t &loc
-        , const std::string &nm
-        , const std::string &cn
-        , const std::string &su
-        , const opt_t *opts
-        , Msg &msg
-        );
+    DFA(const dfa_t& dfa,
+        const std::vector<size_t>& fill,
+        size_t key,
+        const loc_t& loc,
+        const std::string& nm,
+        const std::string& cn,
+        const std::string& su,
+        const opt_t* opts,
+        Msg& msg);
     ~DFA ();
     void reorder();
-    void prepare(const opt_t *opts);
-    void calc_stats(OutputBlock &out);
-    void emit_dot(Output &output, CodeList *program) const;
+    void prepare(const opt_t* opts);
+    void calc_stats(OutputBlock& out);
+    void emit_dot(Output& output, CodeList* program) const;
 
-private:
-    void addState(State*, State *);
-    void split (State *);
-    void findBaseState(const opt_t *opts);
-    void hoist_tags(const opt_t *opts);
-    void hoist_tags_and_skip(const opt_t *opts);
+  private:
+    void addState(State*, State*);
+    void split(State*);
+    void findBaseState(const opt_t* opts);
+    void hoist_tags(const opt_t* opts);
+    void hoist_tags_and_skip(const opt_t* opts);
 
     FORBID_COPY (DFA);
 };
 
 inline Action::Action(): type(MATCH), info() {}
 
-inline void Action::set_initial()
-{
+inline void Action::set_initial() {
     if (type == MATCH) {
         // ordinary state with no special action
         type = INITIAL;
@@ -158,52 +155,46 @@ inline void Action::set_initial()
     }
 }
 
-inline void Action::set_save(size_t save)
-{
+inline void Action::set_save(size_t save) {
     DASSERT(type == MATCH);
     type = SAVE;
     info.save = save;
 }
 
-inline void Action::set_move()
-{
+inline void Action::set_move() {
     DASSERT(type == MATCH);
     type = MOVE;
 }
 
-inline void Action::set_accept(const accept_t * accepts)
-{
+inline void Action::set_accept(const accept_t* accepts) {
     DASSERT(type == MATCH);
     type = ACCEPT;
     info.accepts = accepts;
 }
 
-inline void Action::set_rule(size_t rule)
-{
+inline void Action::set_rule(size_t rule) {
     DASSERT(type == MATCH);
     type = RULE;
     info.rule = rule;
 }
 
 inline State::State()
-    : next(nullptr)
-    , prev(nullptr)
-    , label(nullptr)
-    , fill (0)
-    , fallback (false)
-    , rule (Rule::NONE)
-    , rule_tags (TCID0)
-    , fall_tags (TCID0)
-    , isBase (false)
-    , go()
-    , action ()
-{
+    : next(nullptr),
+      prev(nullptr),
+      label(nullptr),
+      fill(0),
+      fallback(false),
+      rule(Rule::NONE),
+      rule_tags(TCID0),
+      fall_tags(TCID0),
+      isBase(false),
+      go(),
+      action() {
     init_go(&go);
 }
 
-inline State::~State()
-{
-    operator delete (go.span);
+inline State::~State() {
+    operator delete(go.span);
 }
 
 } // namespace re2c

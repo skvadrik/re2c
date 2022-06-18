@@ -20,19 +20,17 @@
 #include "src/regexp/rule.h"
 #include "src/util/range.h"
 
-
 namespace re2c {
 
-int lex(const char *pattern);
-const AST *regexp;
+int lex(const char* pattern);
+const AST* regexp;
 
 } // namespace re2c
 
 using namespace re2c;
 using namespace re2c::libre2c;
 
-int regcomp(regex_t *preg, const char *pattern, int cflags)
-{
+int regcomp(regex_t* preg, const char* pattern, int cflags) {
     conopt_t globopts;
     globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_REGLESS));
     globopts.FFlag = true;
@@ -43,10 +41,10 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     opts.set_autotags((cflags & REG_AUTOTAGS) != 0);
     opts.set_posix_syntax(true);
     opts.set_posix_semantics((cflags & REG_LEFTMOST) == 0);
-    const opt_t *opt = opts.snapshot();
+    const opt_t* opt = opts.snapshot();
     preg->flags = cflags;
 
-    const AST *a = parse(pattern);
+    const AST* a = parse(pattern);
 
     preg->rmgr = new RangeMgr;
 
@@ -62,21 +60,21 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     compute_size_and_depth(re.res, &nfa_size, &nfa_depth);
     if (nfa_depth > MAX_NFA_DEPTH || nfa_size > MAX_NFA_STATES) return 1;
 
-    nfa_t *nfa = new nfa_t(re, nfa_size);
+    nfa_t* nfa = new nfa_t(re, nfa_size);
 
-    nfa_t *nfa0 = nullptr;
+    nfa_t* nfa0 = nullptr;
     if (cflags & REG_BACKWARD) {
         conopt_t globopts0;
         globopts0.FFlag = true;
         Opt opts0(globopts0, msg);
-        const opt_t *opt0 = opts0.snapshot();
+        const opt_t* opt0 = opts0.snapshot();
         RESpec re0(arv, opt0, msg, *preg->rmgr);
         nfa0 = new nfa_t(re0, nfa_size);
         delete opt0;
     }
 
-    dfa_t *dfa = nullptr;
-    rldfa_t *rldfa = nullptr;
+    dfa_t* dfa = nullptr;
+    rldfa_t* rldfa = nullptr;
 
     if (cflags & REG_NFA) {
         if ((cflags & REG_TRIE) && (cflags & REG_LEFTMOST)) {
@@ -114,7 +112,7 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
             // T-string does not need intermediate storage for tag values.
         } else if (cflags & REG_SUBHIST) {
             const size_t nlists = (cflags & REG_REGLESS)
-                ? dfa->tags.size() : static_cast<size_t>(dfa->maxtagver + 1);
+                    ? dfa->tags.size() : static_cast<size_t>(dfa->maxtagver + 1);
             preg->regtrie = new regoff_trie_t(nlists);
         } else {
             preg->regs = new regoff_t[dfa->maxtagver + 1];
@@ -130,9 +128,9 @@ int regcomp(regex_t *preg, const char *pattern, int cflags)
     preg->re_ntag = nfa->tags.size();
 
     if (cflags & REG_TSTRING) {
-        // T-string is stored in RE (reallocated on each regtstring() call if
-        // needed), and the user gets an immutable view of it (const ref).
-        tstring_t &ts = preg->tstring;
+        // T-string is stored in RE (reallocated on each regtstring() call if needed), and the user
+        // gets an immutable view of it (const ref).
+        tstring_t& ts = preg->tstring;
         ts.capacity = 256;
         ts.string = new tchar_t[ts.capacity];
         ts.length = 0;

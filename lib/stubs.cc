@@ -1,2 +1,2 @@
-extern const char *help;
-const char *help = "";
+extern const char* help;
+const char* help = "";

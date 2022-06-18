@@ -14,37 +14,34 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 
-
 namespace re2c {
 
-static void dump_adfa_range(uint32_t lower, uint32_t upper)
-{
+static void dump_adfa_range(uint32_t lower, uint32_t upper) {
     fprintf(stderr, "%u", lower);
     if (--upper > lower) {
         fprintf(stderr, "-%u", upper);
     }
 }
 
-void dump_adfa(const DFA &dfa)
-{
+void dump_adfa(const DFA& dfa) {
     std::map<const State*, uint32_t> st2idx;
     uint32_t idx = 0;
-    for (const State *s = dfa.head; s; s = s->next) {
+    for (const State* s = dfa.head; s; s = s->next) {
         st2idx[s] = idx++;
     }
 
     fprintf(stderr,
-        "digraph DFA {\n"
-        "  rankdir=LR\n"
-        "  node[shape=Mrecord fontname=fixed]\n"
-        "  edge[arrowhead=vee fontname=fixed]\n\n");
+            "digraph DFA {\n"
+            "  rankdir=LR\n"
+            "  node[shape=Mrecord fontname=fixed]\n"
+            "  edge[arrowhead=vee fontname=fixed]\n\n");
 
     fprintf(stderr,
-        "  n [shape=point]"
-        "  n -> n%u [style=dotted label=\"\"]\n", st2idx[dfa.head]);
+            "  n [shape=point]"
+            "  n -> n%u [style=dotted label=\"\"]\n", st2idx[dfa.head]);
 
-    for (const State *s = dfa.head; s; s = s->next) {
-        const char *attr;
+    for (const State* s = dfa.head; s; s = s->next) {
+        const char* attr;
         Action::type_t action = s->action.type;
 
         if (action == Action::ACCEPT) {
@@ -59,28 +56,26 @@ void dump_adfa(const DFA &dfa)
             fprintf(stderr, "F(%u) ", (uint32_t)s->fill);
         }
         if (action == Action::RULE) {
-            const Rule &r = dfa.rules[s->action.info.rule];
+            const Rule& r = dfa.rules[s->action.info.rule];
             for (size_t t = r.ltag; t < r.htag; ++t) {
                 if (t > r.ltag) fprintf(stderr, " ");
-                const std::string *name = dfa.tags[t].name;
-                fprintf(stderr, "%s(%d)",
-                    name ? name->c_str() : "/", dfa.finvers[t]);
+                const std::string* name = dfa.tags[t].name;
+                fprintf(stderr, "%s(%d)", name ? name->c_str() : "/", dfa.finvers[t]);
             }
         }
         dump_tcmd(dfa.tcpool[s->go.tags]);
         fprintf(stderr, "\" %s]\n", attr);
 
         if (action == Action::ACCEPT) {
-            const accept_t &accept = *s->action.info.accepts;
+            const accept_t& accept = *s->action.info.accepts;
             for (uint32_t i = 0; i < accept.size(); ++i) {
-                fprintf(stderr, "  n%u -> n%u [label=\"", st2idx[s],
-                    st2idx[accept[i].first]);
+                fprintf(stderr, "  n%u -> n%u [label=\"", st2idx[s], st2idx[accept[i].first]);
                 dump_tcmd(dfa.tcpool[accept[i].second]);
                 fprintf(stderr, "\" style=dotted]\n");
             }
         }
 
-        const Span *x = s->go.span, *e = x + s->go.nspans;
+        const Span* x = s->go.span, *e = x + s->go.nspans;
         for (uint32_t lb = 0; x < e; lb = x->ub, ++x) {
             if (!x->to) continue;
 

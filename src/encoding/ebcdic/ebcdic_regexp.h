@@ -3,14 +3,13 @@
 
 #include <stdint.h>
 
-
 namespace re2c {
 
 class Range;
 struct RE;
 struct RESpec;
 
-RE *EBCDICRange(RESpec &spec, const Range *r);
+RE* EBCDICRange(RESpec& spec, const Range* r);
 
 } // namespace re2c
 

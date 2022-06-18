@@ -3,12 +3,10 @@
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 
-
 namespace re2c {
 
 // This function should only change global options.
-static void fix_conopt(conopt_t &glob)
-{
+static void fix_conopt(conopt_t& glob) {
     if (glob.target == Target::DOT) {
         glob.iFlag = true;
     } else if (glob.target == Target::SKELETON) {
@@ -23,7 +21,7 @@ static void fix_conopt(conopt_t &glob)
     }
 
     // append directory separator '/' to all paths that do not have it
-    for (std::string &p : glob.incpaths) {
+    for (std::string& p : glob.incpaths) {
         const char c = p.empty() ? 0 : *p.rbegin();
         if (c != '/' && c != '\\') {
             p.push_back('/');
@@ -31,9 +29,8 @@ static void fix_conopt(conopt_t &glob)
     }
 
     if (glob.loop_switch) {
-        // for loop-switch enable eager-skip always (not only in cases when
-        // YYFILL labels are used) to avoid special handling of initial state
-        // when there are transitions into it.
+        // for loop-switch enable eager-skip always (not only in cases when YYFILL labels are used)
+        // to avoid special handling of initial state when there are transitions into it.
         glob.eager_skip = true;
     }
 
@@ -43,30 +40,26 @@ static void fix_conopt(conopt_t &glob)
     }
 }
 
-// This function should only change mutable option defaults (based on the global
-// options).
-static void fix_mutopt_defaults(const conopt_t &glob, mutopt_t &defaults)
-{
-    // For the Go and Rust backends generic API is set by default, because the default C
-    // API with pointers doesn't work (there is no pointer arithmetics in Go, and in Rust
-    // it is different enough from C). Use freeform generic API by default to make it less
-    // restrictive.
+// This function should only change mutable option defaults (based on the global options).
+static void fix_mutopt_defaults(const conopt_t& glob, mutopt_t& defaults) {
+    // For the Go and Rust backends generic API is set by default, because the default C API with
+    // pointers doesn't work (there is no pointer arithmetics in Go, and in Rust it is different
+    // enough from C). Use freeform generic API by default to make it less restrictive.
     if (glob.lang != Lang::C) {
         defaults.input_api = Api::CUSTOM;
         defaults.api_style = ApiStyle::FREEFORM;
     }
 }
 
-// This function should only change real mutable options (based on the global
-// options, default mutable options and default flags). User-defined options are
-// intentionally not passed to prevent accidental change, and default flags are
-// passed as read-only.
-static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
-    const mutdef_t &is_default, mutopt_t &real)
-{
-    // For skeleton target interface options must have default values (because
-    // skeleton programs assume certain interface). For DOT target most of the
-    // options are unused.
+// This function should only change real mutable options (based on the global options, default
+// mutable options and default flags). User-defined options are intentionally not passed to prevent
+// accidental change, and default flags are passed as read-only.
+static void fix_mutopt(const conopt_t& glob,
+                       const mutopt_t& defaults,
+                       const mutdef_t& is_default,
+                       mutopt_t& real) {
+    // For skeleton target interface options must have default values (because skeleton programs
+    // assume certain interface). For DOT target most of the options are unused.
     if (glob.target != Target::CODE) {
         // output files
         real.header_file = "";
@@ -253,8 +246,8 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (is_default.condGoto) {
         real.condGoto = "goto " + real.condGotoParam + (glob.lang == Lang::C ? ";" : "");
     }
-    // "startlabel" configuration exists in two variants: string and boolean,
-    // and the string one overrides the boolean one
+    // "startlabel" configuration exists in two variants: string and boolean, and the string one
+    // overrides the boolean one
     if (!is_default.startlabel) {
         real.startlabel_force = defaults.startlabel_force;
     }
@@ -301,7 +294,7 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     if (real.eof != NOEOF) {
         if (real.bFlag || real.gFlag) {
             error("configuration 're2c:eof' cannot be used with options "
-                "-b, --bit-vectors and -g, --computed gotos");
+                  "-b, --bit-vectors and -g, --computed gotos");
             exit(1);
         }
         if (real.eof >= real.encoding.nCodeUnits()) {
@@ -320,16 +313,15 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
         }
         if (real.fill_use || real.eof != NOEOF) {
             error("re2c:sentinel configuration is not needed"
-                " in the presence of bounds checking or EOF rule");
+                  " in the presence of bounds checking or EOF rule");
             exit(1);
         }
     }
     if (glob.fFlag && !real.fill_use) {
-        // -f, --storable-state option should not be used if YYFILL is disabled,
-        // because without YYFILL the interrupt points do not necessarily
-        // correspond to storable state labels (with generic API interrupts can
-        // happen on any API invocation). This may cause subtle bugs when the
-        // lexer is resumed from the wrong program point.
+        // -f, --storable-state option should not be used if YYFILL is disabled, because without
+        // YYFILL the interrupt points do not necessarily correspond to storable state labels (with
+        // generic API interrupts can happen on any API invocation). This may cause subtle bugs when
+        // the lexer is resumed from the wrong program point.
         error("storable state requires YYFILL to be enabled");
         exit(1);
     }
@@ -346,28 +338,25 @@ static void fix_mutopt(const conopt_t &glob, const mutopt_t &defaults,
     }
 }
 
-Opt::Opt(const conopt_t &globopts, Msg &msg)
-    : glob(globopts)
-    , symtab()
-    , msg(msg)
-    , defaults()
-    , is_default()
-    , user()
-    , real()
-    , diverge(true)
-{}
+Opt::Opt(const conopt_t& globopts, Msg& msg)
+    : glob(globopts),
+      symtab(),
+      msg(msg),
+      defaults(),
+      is_default(),
+      user(),
+      real(),
+      diverge(true) {}
 
-void Opt::fix_global_and_defaults()
-{
+void Opt::fix_global_and_defaults() {
     // Allow to modify only the global options.
     fix_conopt(const_cast<conopt_t&>(glob));
 
-    // Allow to modify only the mutable option defaults (based on the global
-    // options).
+    // Allow to modify only the mutable option defaults (based on the global options).
     fix_mutopt_defaults(glob, const_cast<mutopt_t&>(defaults));
 
-    // Apply new defaults to all mutable options except those that have been
-    // explicitly defined by the user.
+    // Apply new defaults to all mutable options except those that have been explicitly defined by
+    // the user.
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     if (is_default.name) user.name = defaults.name;
@@ -377,8 +366,7 @@ void Opt::fix_global_and_defaults()
     diverge = true;
 }
 
-void Opt::sync()
-{
+void Opt::sync() {
     if (!diverge) return;
 
     // Copy user-defined options to real options.
@@ -389,22 +377,19 @@ void Opt::sync()
 #undef MUTOPT1
 #undef MUTOPT
 
-    // Fix the real mutable options (based on the global options, mutable option
-    // defaults and default flags), but do not change user-defined options or
-    // default flags.
+    // Fix the real mutable options (based on the global options, mutable option defaults and
+    // default flags), but do not change user-defined options or default flags.
     fix_mutopt(glob, defaults, is_default, real);
 
     diverge = false;
 }
 
-const opt_t *Opt::snapshot()
-{
+const opt_t* Opt::snapshot() {
     sync();
     return new opt_t(glob, real, is_default, symtab);
 }
 
-void Opt::restore(const opt_t *opts)
-{
+void Opt::restore(const opt_t* opts) {
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     user.name = opts->name; \
@@ -419,8 +404,7 @@ void Opt::restore(const opt_t *opts)
     sync();
 }
 
-void Opt::merge(const opt_t *opts, const loc_t &loc)
-{
+void Opt::merge(const opt_t* opts, const loc_t& loc) {
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     if (!opts->is_default_##name) { \
@@ -465,15 +449,13 @@ void Opt::set_encoding(Enc::type_t type, bool on) {
     diverge = true;
 }
 
-void Opt::set_encoding_policy(Enc::policy_t p)
-{
+void Opt::set_encoding_policy(Enc::policy_t p) {
     user.encoding.setPolicy(p);
     is_default.encoding = false;
     diverge = true;
 }
 
-void Opt::reset_group_startlabel()
-{
+void Opt::reset_group_startlabel() {
     reset_startlabel();
     reset_startlabel_force();
     diverge = true;

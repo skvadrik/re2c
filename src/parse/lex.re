@@ -23,7 +23,6 @@
 #include "src/util/string_utils.h"
 #include "parser.h"
 
-
 extern YYSTYPE yylval;
 
 namespace re2c {
@@ -75,36 +74,35 @@ namespace re2c {
 
 /*!max:re2c*/
 
-struct ScannerState
-{
+struct ScannerState {
     enum lexer_state_t {LEX_NORMAL, LEX_FLEX_NAME};
     lexer_state_t lexer_state;
 
     size_t BSIZE;
-    char *bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
+    char* bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
     /*!stags:re2c format = "char *@@;"; */
 
     inline ScannerState()
-        : lexer_state (LEX_NORMAL)
-        , BSIZE(8192)
-        , bot(new char[BSIZE + YYMAXFILL])
-        , lim(bot + BSIZE)
-        , cur(lim)
-        , mar(lim)
-        , ctx(lim)
-        , tok(lim)
-        , ptr(lim)
-        , pos(lim)
-        , eof(nullptr)
-        /*!stags:re2c format = ", @@(lim)"; */
-    {
+        : lexer_state (LEX_NORMAL),
+          BSIZE(8192),
+          bot(new char[BSIZE + YYMAXFILL]),
+          lim(bot + BSIZE),
+          cur(lim),
+          mar(lim),
+          ctx(lim),
+          tok(lim),
+          ptr(lim),
+          pos(lim),
+          eof(nullptr)
+          /*!stags:re2c format = ", @@(lim)"; */ {
         memset(lim, 0, YYMAXFILL);
     }
 
-    inline ~ScannerState() { delete[] bot; }
+    inline ~ScannerState() {
+        delete[] bot;
+    }
 
-    inline void shift_ptrs(ptrdiff_t offs)
-    {
+    inline void shift_ptrs(ptrdiff_t offs) {
         lim += offs;
         cur += offs;
         mar += offs;
@@ -117,16 +115,16 @@ struct ScannerState
 
     FORBID_COPY(ScannerState);
 };
+
 } // namespace re2c
 
 #endif // _RE2C_PARSE_LEX_
 /*!header:re2c:off*/
 
-InputBlock Scanner::echo(Output &out, std::string &block_name)
-{
-    const opt_t *opts = out.block().opts;
-    code_alc_t &alc = out.allocator;
-    const char *x, *y;
+InputBlock Scanner::echo(Output& out, std::string& block_name) {
+    const opt_t* opts = out.block().opts;
+    code_alc_t& alc = out.allocator;
+    const char* x, *y;
 
     if (is_eof()) return InputBlock::END;
 
@@ -138,10 +136,9 @@ loop:
 /*!local:re2c
     space* "%{" {
         if (pos != ptr) {
-            // re2c does not parse user-defined code outside of re2c blocks, therefore it
-            // can confuse `%{` in the middle of a string or a comment with a block start.
-            // To avoid this recognize `%{` as a block start only on a new line, possibly
-            // preceded by whitespaces.
+            // re2c does not parse user-defined code outside of re2c blocks, therefore it can
+            // confuse `%{` in the middle of a string or a comment with a block start. To avoid this
+            // recognize `%{` as a block start only on a new line, possibly preceded by whitespaces.
             goto loop;
         }
         out.wraw(tok, ptr);
@@ -214,9 +211,10 @@ loop:
             return InputBlock::ERROR;
         }
         if (opts->loop_switch) {
-            msg.error(cur_loc(), "`getstate:re2c` is incompatible with the --loop-switch "
-                "option, as it requires cross-block transitions that are unsupported "
-                "without the `goto` statement");
+            msg.error(cur_loc(),
+                      "`getstate:re2c` is incompatible with the --loop-switch option, as it "
+                      "requires cross-block transitions that are unsupported without the `goto` "
+                      "statement");
             return InputBlock::ERROR;
         }
         if (!lex_block(out, CodeKind::STATE_GOTO, opts->topIndent, 0)) return InputBlock::ERROR;
@@ -239,9 +237,9 @@ loop:
         goto next;
     }
     "/*!header:re2c" {
-        msg.error(cur_loc(), "ill-formed header directive: expected"
-            " `/*!header:re2c:<on|off>` followed by a space, a newline or the"
-            " end of block `*" "/`");
+        msg.error(cur_loc(),
+            "ill-formed header directive: expected `/*!header:re2c:<on|off>` followed by a space, "
+            "a newline or the end of block `*" "/`");
         return InputBlock::ERROR;
     }
 
@@ -253,8 +251,8 @@ loop:
         goto next;
     }
     "/*!include:re2c" {
-        msg.error(cur_loc(), "ill-formed include directive: expected"
-            " `/*!include:re2c \"<file>\" *" "/`");
+        msg.error(cur_loc(),
+                  "ill-formed include directive: expected `/*!include:re2c \"<file>\" *" "/`");
         return InputBlock::ERROR;
     }
 
@@ -265,8 +263,9 @@ loop:
         goto next;
     }
     "/*!ignore:re2c" {
-        msg.error(cur_loc(), "ill-formed start of `ignore:re2c` block: expected"
-            " a space, a newline, or the end of block `*" "/`");
+        msg.error(cur_loc(),
+                  "ill-formed start of `ignore:re2c` block: expected a space, a newline, or the "
+                  "end of block `*" "/`");
         return InputBlock::ERROR;
     }
 
@@ -294,14 +293,13 @@ loop:
 */
 }
 
-bool Scanner::lex_opt_name(std::string &name)
-{
+bool Scanner::lex_opt_name(std::string& name) {
     tok = cur;
 /*!local:re2c
     "" {
-        msg.error(cur_loc(), "ill-formed start of a block: expected a space, a"
-            " newline, a colon followed by a block name, or the end of block `*"
-            "/`");
+        msg.error(cur_loc(),
+                  "ill-formed start of a block: expected a space, a newline, a colon followed by a "
+                  "block name, or the end of block `*" "/`");
         return false;
     }
 
@@ -310,16 +308,15 @@ bool Scanner::lex_opt_name(std::string &name)
 */
 }
 
-bool Scanner::lex_name_list(code_alc_t &alc, BlockNameList **ptail)
-{
-    BlockNameList **phead = ptail;
+bool Scanner::lex_name_list(code_alc_t& alc, BlockNameList** ptail) {
+    BlockNameList** phead = ptail;
 loop:
     tok = cur;
 /*!local:re2c
     "" {
-        msg.error(cur_loc(), "ill-formed start of a block: expected a space, a"
-            " newline, a colon followed by a list of colon-separated block"
-            " names, or the end of block `*" "/`");
+        msg.error(cur_loc(),
+                  "ill-formed start of a block: expected a space, a newline, a colon followed by a "
+                  "list of colon-separated block names, or the end of block `*" "/`");
         return false;
     }
 
@@ -348,15 +345,13 @@ loop:
 */
 }
 
-bool Scanner::lex_block_end(Output &out, bool allow_garbage)
-{
+bool Scanner::lex_block_end(Output& out, bool allow_garbage) {
     bool multiline = false;
-loop:
-/*!local:re2c
+loop: /*!local:re2c
     * {
         if (allow_garbage && !is_eof()) goto loop;
-        msg.error(cur_loc(), "ill-formed end of block: expected optional"
-            " whitespaces followed by `*" "/`");
+        msg.error(cur_loc(),
+                  "ill-formed end of block: expected optional whitespaces followed by `*" "/`");
         return false;
     }
     eoc {
@@ -368,20 +363,19 @@ loop:
 */
 }
 
-bool Scanner::lex_block(Output &out, CodeKind kind, uint32_t indent, uint32_t mask)
-{
-    code_alc_t &alc = out.allocator;
-    const char *fmt = nullptr, *sep = nullptr;
-    BlockNameList *blocks;
+bool Scanner::lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) {
+    code_alc_t& alc = out.allocator;
+    const char* fmt = nullptr, *sep = nullptr;
+    BlockNameList* blocks;
 
     out.wraw(tok, ptr, !globopts->iFlag);
     if (!lex_name_list(alc, &blocks)) return false;
 
-loop:
-/*!local:re2c
+loop: /*!local:re2c
     * {
-        msg.error(cur_loc(), "ill-formed directive: expected optional "
-            "configurations followed by the end of block `*" "/`");
+        msg.error(cur_loc(),
+                  "ill-formed directive: expected optional configurations followed by the end of "
+                  "block `*" "/`");
         return false;
     }
 
@@ -416,9 +410,8 @@ loop:
 */
 }
 
-int Scanner::scan()
-{
-    const char *p, *x, *y;
+int Scanner::scan() {
+    const char* p, *x, *y;
 scan:
     tok = cur;
     location = cur_loc();
@@ -484,8 +477,8 @@ scan:
     }
 
     "{" [0-9]* "," {
-        msg.error(tok_loc(), "illegal closure form, use '{n}', '{n,}', '{n,m}' "
-            "where n and m are numbers");
+        msg.error(tok_loc(),
+                  "illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers");
         exit(1);
     }
 
@@ -504,15 +497,13 @@ scan:
         if (!globopts->FFlag || lex_namedef_context_re2c()) {
             yylval.str = newstr(tok, cur);
             return TOKEN_ID;
-        }
-        else if (lex_namedef_context_flex()) {
+        } else if (lex_namedef_context_flex()) {
             yylval.str = newstr(tok, cur);
             lexer_state = LEX_FLEX_NAME;
             return TOKEN_FID;
-        }
-        else {
-            // consume one character, otherwise we risk breaking operator
-            // precedence in cases like ab*: it should be a(b)*, not (ab)*
+        } else {
+            // consume one character, otherwise we risk breaking operator precedence in cases like
+            // `ab*`: it should be `a(b)*`, not `(ab)*`
             cur = tok + 1;
 
             ASTChar c = {static_cast<uint8_t>(tok[0]), tok_loc()};
@@ -528,9 +519,10 @@ scan:
         goto scan;
     }
     "!include" {
-        msg.error(tok_loc(), "ill-formed include directive: expected `!include`"
-            " followed by spaces, a double-quoted file path, optional spaces, a"
-            " semicolon, and finally a space, a newline, or the end of block");
+        msg.error(tok_loc(),
+                  "ill-formed include directive: expected `!include` followed by spaces, a "
+                  "double-quoted file path, optional spaces, a semicolon, and finally a space, a "
+                  "newline, or the end of block");
         exit(1);
     }
 
@@ -539,9 +531,10 @@ scan:
         return TOKEN_BLOCK;
     }
     "!use" {
-        msg.error(tok_loc(), "ill-formed use directive: expected `!use`"
-            " followed by a colon, a block name, optional spaces, a semicolon,"
-            " and finally a space, a newline, or the end of block");
+        msg.error(tok_loc(),
+                  "ill-formed use directive: expected `!use` followed by a colon, a block name, "
+                  "optional spaces, a semicolon, and finally a space, a newline, or the end of "
+                  "block");
         exit(1);
     }
 
@@ -562,8 +555,7 @@ scan:
         if (lexer_state == LEX_FLEX_NAME) {
             lexer_state = LEX_NORMAL;
             return TOKEN_FID_END;
-        }
-        else {
+        } else {
             goto scan;
         }
     }
@@ -575,16 +567,14 @@ scan:
 */
 }
 
-bool Scanner::lex_namedef_context_re2c()
-{
+bool Scanner::lex_namedef_context_re2c() {
 /*!re2c
     "" / space* "=" [^>] { return true; }
     ""                   { return false; }
 */
 }
 
-bool Scanner::lex_namedef_context_flex()
-{
+bool Scanner::lex_namedef_context_flex() {
 /*!re2c
     "" / space+ [=:{] { return false; } // exclude lookahead ("=" | "=>" | ":=>" | ":=" | "{")
     "" / space+       { return true; }
@@ -592,10 +582,9 @@ bool Scanner::lex_namedef_context_flex()
 */
 }
 
-int Scanner::lex_clist()
-{
+int Scanner::lex_clist() {
     int kind = TOKEN_CLIST;
-    CondList *cl = new CondList;
+    CondList* cl = new CondList;
 /*!re2c
     space* "!" space* { kind = TOKEN_CSETUP; goto cond; }
     space* ">"        { kind = TOKEN_CZERO; goto end; }
@@ -608,8 +597,7 @@ cond:
     "*"  { if (!cl->empty()) goto error; cl->insert("*"); goto next; }
     *    { goto error; }
 */
-next:
-/*!re2c
+next: /*!re2c
     space* "," space* { goto cond; }
     space* ">"        { goto end; }
     *                 { goto error; }
@@ -624,10 +612,9 @@ error:
 }
 
 void Scanner::lex_code_indented() {
-    const loc_t &loc = tok_loc();
+    const loc_t& loc = tok_loc();
     tok = cur;
-code:
-/*!re2c
+code: /*!re2c
     eof  { fail_if_eof(); goto code; }
     eol  { next_line(); goto indent; }
     "//" { lex_cpp_comment(); goto indent; }
@@ -636,8 +623,7 @@ code:
     [{}] { msg.error(cur_loc(), "Curly braces are not allowed after ':='"); exit(1); }
     *    { goto code; }
 */
-indent:
-/*!re2c
+indent: /*!re2c
     "" / ws { goto code; } // indent after newline => still in semantic action
     "" {
         while (isspace(tok[0])) ++tok;
@@ -649,12 +635,10 @@ indent:
 */
 }
 
-void Scanner::lex_code_in_braces()
-{
-    const loc_t &loc = tok_loc();
+void Scanner::lex_code_in_braces() {
+    const loc_t& loc = tok_loc();
     uint32_t depth = 1;
-code:
-/*!re2c
+code: /*!re2c
     "}" {
         if (--depth == 0) {
             yylval.semact = new SemAct(loc, getstr(tok, cur));
@@ -674,16 +658,15 @@ code:
 */
 }
 
-void Scanner::try_lex_string_in_code(char quote)
-{
-    // We need to lex string literals in code blocks because they may contain closing
-    // brace symbol that would otherwise be erroneously lexed as a real closing brace.
+void Scanner::try_lex_string_in_code(char quote) {
+    // We need to lex string literals in code blocks because they may contain closing brace symbol
+    // that would otherwise be erroneously lexed as a real closing brace.
     //
-    // However, single quote in Rust may be either the beginning of a char literal as in
-    // '\u{1F600}', or a standalone one as in 'label. In the latter case trying to lex a
-    // generic string literal will consume a fragment of the file until the next single
-    // quote (if any) and result in either a spurios parse error, or incorrect generated
-    // code. Therefore in Rust we try to lex a char literal, or else consume the quote.
+    // However, single quote in Rust may be either the beginning of a char literal as in `\u{1F600}`
+    // or a standalone one as in `'label`. In the latter case trying to lex a generic string literal
+    // will consume a fragment of the file until the next single quote (if any) and result in either
+    // a spurios parse error, or incorrect generated code. Therefore in Rust we try to lex a char
+    // literal, or else consume the quote.
 
     if (globopts->lang != Lang::RUST || quote != '\'') {
         lex_string(quote);
@@ -703,10 +686,8 @@ void Scanner::try_lex_string_in_code(char quote)
 */
 }
 
-void Scanner::lex_string(char delim)
-{
-loop:
-/*!re2c
+void Scanner::lex_string(char delim) {
+loop: /*!re2c
     ["']       { if (cur[-1] == delim) return; else goto loop; }
     esc [\\"'] { goto loop; }
     eol        { next_line(); goto loop; }
@@ -715,10 +696,8 @@ loop:
 */
 }
 
-void Scanner::lex_c_comment()
-{
-loop:
-/*!re2c
+void Scanner::lex_c_comment() {
+loop: /*!re2c
     eoc { return; }
     eol { next_line(); goto loop; }
     eof { fail_if_eof(); goto loop; }
@@ -726,21 +705,18 @@ loop:
 */
 }
 
-void Scanner::lex_cpp_comment()
-{
-loop:
-/*!re2c
+void Scanner::lex_cpp_comment() {
+loop: /*!re2c
     eol { next_line(); return; }
     eof { fail_if_eof(); goto loop; }
     *   { goto loop; }
 */
 }
 
-const AST *Scanner::lex_cls(bool neg)
-{
-    std::vector<ASTRange> *cls = new std::vector<ASTRange>;
+const AST* Scanner::lex_cls(bool neg) {
+    std::vector<ASTRange>* cls = new std::vector<ASTRange>;
     uint32_t u, l;
-    const loc_t &loc0 = tok_loc();
+    const loc_t& loc0 = tok_loc();
     loc_t loc = cur_loc();
 fst:
     tok = cur;
@@ -748,8 +724,7 @@ fst:
     "]" { return ast_cls(loc0, cls, neg); }
     ""  { l = lex_cls_chr(); goto snd; }
 */
-snd:
-/*!re2c
+snd: /*!re2c
     ""          { u = l; goto add; }
     "-" / [^\]] {
         u = lex_cls_chr();
@@ -766,89 +741,82 @@ add:
     goto fst;
 }
 
-uint32_t Scanner::lex_cls_chr()
-{
+uint32_t Scanner::lex_cls_chr() {
     tok = cur;
-    const loc_t &loc = cur_loc();
-    /*!rules:re2c:cls_chr
+    const loc_t& loc = cur_loc();
+/*!rules:re2c:cls_chr
+    esc? eol    { msg.error(loc, "newline in character class"); exit(1); }
+    esc [xXuU]  { msg.error(loc, "syntax error in hexadecimal escape sequence"); exit(1); }
+    esc [0-7]   { msg.error(loc, "syntax error in octal escape sequence"); exit(1); }
+    esc         { msg.error(loc, "syntax error in escape sequence"); exit(1); }
+    *           { msg.error(loc, "syntax error"); exit(1); }
 
-    esc? eol   { msg.error(loc, "newline in character class"); exit(1); }
-    esc [xXuU] { msg.error(loc, "syntax error in hexadecimal escape sequence"); exit(1); }
-    esc [0-7]  { msg.error(loc, "syntax error in octal escape sequence"); exit(1); }
-    esc        { msg.error(loc, "syntax error in escape sequence"); exit(1); }
-    *          { msg.error(loc, "syntax error"); exit(1); }
+    eof         { fail_if_eof(); return 0; }
 
-    eof        { fail_if_eof(); return 0; }
-
-    . \ esc    { return decode(tok); }
-    esc_hex    { return unesc_hex(tok, cur); }
-    esc_oct    { return unesc_oct(tok, cur); }
-    esc "a"    { return static_cast<uint8_t>('\a'); }
-    esc "b"    { return static_cast<uint8_t>('\b'); }
-    esc "f"    { return static_cast<uint8_t>('\f'); }
-    esc "n"    { return static_cast<uint8_t>('\n'); }
-    esc "r"    { return static_cast<uint8_t>('\r'); }
-    esc "t"    { return static_cast<uint8_t>('\t'); }
-    esc "v"    { return static_cast<uint8_t>('\v'); }
-    esc "\\"   { return static_cast<uint8_t>('\\'); }
-    esc "-"    { return static_cast<uint8_t>('-'); }
-    esc "]"    { return static_cast<uint8_t>(']'); }
-    esc (.\eof){
+    . \ esc     { return decode(tok); }
+    esc_hex     { return unesc_hex(tok, cur); }
+    esc_oct     { return unesc_oct(tok, cur); }
+    esc "a"     { return static_cast<uint8_t>('\a'); }
+    esc "b"     { return static_cast<uint8_t>('\b'); }
+    esc "f"     { return static_cast<uint8_t>('\f'); }
+    esc "n"     { return static_cast<uint8_t>('\n'); }
+    esc "r"     { return static_cast<uint8_t>('\r'); }
+    esc "t"     { return static_cast<uint8_t>('\t'); }
+    esc "v"     { return static_cast<uint8_t>('\v'); }
+    esc "\\"    { return static_cast<uint8_t>('\\'); }
+    esc "-"     { return static_cast<uint8_t>('-'); }
+    esc "]"     { return static_cast<uint8_t>(']'); }
+    esc (.\eof) {
         msg.warn.useless_escape(loc, tok, cur);
         return decode(tok + 1);
     }
-    */
+*/
     if (globopts->input_encoding == Enc::ASCII) {
         /*!local:re2c !use:cls_chr; */
-    }
-    else {
+    } else {
         /*!local:re2c !use:cls_chr; re2c:flags:8 = 1; */
     }
 }
 
-bool Scanner::lex_str_chr(char quote, ASTChar &ast)
-{
+bool Scanner::lex_str_chr(char quote, ASTChar& ast) {
     tok = cur;
     ast.loc = cur_loc();
-    /*!rules:re2c:str_chr
+/*!rules:re2c:str_chr
+    esc? eol    { msg.error(ast.loc, "newline in character string"); exit(1); }
+    esc [xXuU]  { msg.error(ast.loc, "syntax error in hexadecimal escape sequence"); exit(1); }
+    esc [0-7]   { msg.error(ast.loc, "syntax error in octal escape sequence"); exit(1); }
+    esc         { msg.error(ast.loc, "syntax error in escape sequence"); exit(1); }
+    *           { msg.error(ast.loc, "syntax error"); exit(1); }
 
-    esc? eol   { msg.error(ast.loc, "newline in character string"); exit(1); }
-    esc [xXuU] { msg.error(ast.loc, "syntax error in hexadecimal escape sequence"); exit(1); }
-    esc [0-7]  { msg.error(ast.loc, "syntax error in octal escape sequence"); exit(1); }
-    esc        { msg.error(ast.loc, "syntax error in escape sequence"); exit(1); }
-    *          { msg.error(ast.loc, "syntax error"); exit(1); }
+    eof         { fail_if_eof(); ast.chr = 0; return true; }
 
-    eof        { fail_if_eof(); ast.chr = 0; return true; }
-
-    . \ esc    { ast.chr = decode(tok); return tok[0] != quote; }
-    esc_hex    { ast.chr = unesc_hex(tok, cur); return true; }
-    esc_oct    { ast.chr = unesc_oct(tok, cur); return true; }
-    esc "a"    { ast.chr = static_cast<uint8_t>('\a'); return true; }
-    esc "b"    { ast.chr = static_cast<uint8_t>('\b'); return true; }
-    esc "f"    { ast.chr = static_cast<uint8_t>('\f'); return true; }
-    esc "n"    { ast.chr = static_cast<uint8_t>('\n'); return true; }
-    esc "r"    { ast.chr = static_cast<uint8_t>('\r'); return true; }
-    esc "t"    { ast.chr = static_cast<uint8_t>('\t'); return true; }
-    esc "v"    { ast.chr = static_cast<uint8_t>('\v'); return true; }
-    esc "\\"   { ast.chr = static_cast<uint8_t>('\\'); return true; }
-    esc (.\eof){
+    . \ esc     { ast.chr = decode(tok); return tok[0] != quote; }
+    esc_hex     { ast.chr = unesc_hex(tok, cur); return true; }
+    esc_oct     { ast.chr = unesc_oct(tok, cur); return true; }
+    esc "a"     { ast.chr = static_cast<uint8_t>('\a'); return true; }
+    esc "b"     { ast.chr = static_cast<uint8_t>('\b'); return true; }
+    esc "f"     { ast.chr = static_cast<uint8_t>('\f'); return true; }
+    esc "n"     { ast.chr = static_cast<uint8_t>('\n'); return true; }
+    esc "r"     { ast.chr = static_cast<uint8_t>('\r'); return true; }
+    esc "t"     { ast.chr = static_cast<uint8_t>('\t'); return true; }
+    esc "v"     { ast.chr = static_cast<uint8_t>('\v'); return true; }
+    esc "\\"    { ast.chr = static_cast<uint8_t>('\\'); return true; }
+    esc (.\eof) {
         ast.chr = decode(tok + 1);
         if (tok[1] != quote) msg.warn.useless_escape(ast.loc, tok, cur);
         return true;
     }
-    */
+*/
     if (globopts->input_encoding == Enc::ASCII) {
         /*!local:re2c !use:str_chr; */
-    }
-    else {
+    } else {
         /*!local:re2c !use:str_chr; re2c:flags:8 = 1; */
     }
 }
 
-const AST *Scanner::lex_str(char quote)
-{
-    const loc_t &loc = tok_loc();
-    std::vector<ASTChar> *str = new std::vector<ASTChar>;
+const AST* Scanner::lex_str(char quote) {
+    const loc_t& loc = tok_loc();
+    std::vector<ASTChar>* str = new std::vector<ASTChar>;
     ASTChar c;
     for (;;) {
         if (!lex_str_chr(quote, c)) {
@@ -858,8 +826,7 @@ const AST *Scanner::lex_str(char quote)
     }
 }
 
-void Scanner::set_sourceline ()
-{
+void Scanner::set_sourceline () {
 sourceline:
     tok = cur;
 /*!local:re2c
@@ -888,8 +855,7 @@ sourceline:
 */
 }
 
-void Scanner::fail_if_eof() const
-{
+void Scanner::fail_if_eof() const {
     if (is_eof()) {
         msg.error(cur_loc(), "unexpected end of input");
         exit(1);

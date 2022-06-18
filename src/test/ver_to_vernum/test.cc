@@ -3,16 +3,14 @@
 
 #include "src/msg/ver_to_vernum.h"
 
-
 namespace re2c_test {
 
 struct examples_t {
-    const char *in;
-    const char *expected;
+    const char* in;
+    const char* expected;
 };
 
-static const examples_t EXAMPLES[] =
-{
+static const examples_t EXAMPLES[] = {
     { "",            "", },
     { "1",           "010000", },
     { "1.1",         "010100", },
@@ -108,29 +106,22 @@ static const examples_t EXAMPLES[] =
     { "0.9.1",    "000901" }
 };
 
-static int test()
-{
+static int test() {
     int failures = 0;
 
     for (size_t i = 0; i < sizeof(EXAMPLES) / sizeof(EXAMPLES[0]); ++i) {
-        const examples_t & e = EXAMPLES[i];
+        const examples_t& e = EXAMPLES[i];
 
         const std::string got = re2c::ver_to_vernum(e.in);
         if (got == e.expected) {
-            fprintf(stderr, "PASS: re2c::ver_to_vernum('%s') = '%s'\n"
-                , e.in, got.c_str());
-        }
-        else {
+            fprintf(stderr, "PASS: re2c::ver_to_vernum('%s') = '%s'\n", e.in, got.c_str());
+        } else {
             ++failures;
             if (got.empty()) {
-                fprintf(stderr
-                    , "FAIL: re2c::ver_to_vernum('%s') returned error\n"
-                    , e.in);
-            }
-            else {
-                fprintf(stderr
-                    , "FAIL: re2c::ver_to_vernum('%s') = '%s', expected '%s'\n"
-                    , e.in, got.c_str(), e.expected);
+                fprintf(stderr, "FAIL: re2c::ver_to_vernum('%s') returned error\n", e.in);
+            } else {
+                fprintf(stderr, "FAIL: re2c::ver_to_vernum('%s') = '%s', expected '%s'\n", e.in,
+                        got.c_str(), e.expected);
             }
         }
     }
@@ -140,7 +131,6 @@ static int test()
 
 } // namespace re2c_test
 
-int main()
-{
+int main() {
     return re2c_test::test();
 }

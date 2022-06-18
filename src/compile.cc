@@ -24,13 +24,11 @@
 #include "src/util/free_list.h"
 #include "src/util/range.h"
 
-
 namespace re2c {
 
 class Msg;
 
-static std::string make_name(Output &output, const std::string &cond, const loc_t &loc)
-{
+static std::string make_name(Output& output, const std::string& cond, const loc_t& loc) {
     std::string name;
 
     // if the block is included from another file, prepend filename for disambiguation
@@ -52,16 +50,15 @@ static std::string make_name(Output &output, const std::string &cond, const loc_
     return name;
 }
 
-static std::unique_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output) {
-    OutputBlock &block = output.block();
-    const opt_t *opts = block.opts;
-    const loc_t &loc = block.loc;
-    Msg &msg = output.msg;
-    const std::vector<ASTRule> &rules = spec.rules;
-    const std::string
-        &cond = spec.name,
-        name = make_name(output, cond, loc),
-        &setup = spec.setup.empty() ? "" : spec.setup[0]->text;
+static std::unique_ptr<DFA> ast_to_dfa(const spec_t& spec, Output& output) {
+    OutputBlock& block = output.block();
+    const opt_t* opts = block.opts;
+    const loc_t& loc = block.loc;
+    Msg& msg = output.msg;
+    const std::vector<ASTRule>& rules = spec.rules;
+    const std::string&cond = spec.name;
+    const std::string name = make_name(output, cond, loc);
+    const std::string& setup = spec.setup.empty() ? "" : spec.setup[0]->text;
 
     RangeMgr rangemgr;
 
@@ -90,8 +87,8 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output) {
 
     rangemgr.clear();
 
-    // skeleton must be constructed after DFA construction
-    // but prior to any other DFA transformations
+    // Skeleton must be constructed after TDFA construction, but prior to any other TDFA
+    // transformations.
     Skeleton skeleton(dfa, opts, name, cond, loc, msg);
     warn_undefined_control_flow(skeleton);
     if (opts->target == Target::SKELETON) {
@@ -135,12 +132,11 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output) {
     return adfa;
 }
 
-void compile(Scanner &input, Output &output, Opt &opts)
-{
+void compile(Scanner& input, Output& output, Opt& opts) {
     RulesBlocks rblocks;
-    const conopt_t *globopts = &opts.glob;
-    code_alc_t &alc = output.allocator;
-    const loc_t &loc0 = input.tok_loc();
+    const conopt_t* globopts = &opts.glob;
+    code_alc_t& alc = output.allocator;
+    const loc_t& loc0 = input.tok_loc();
     std::string block_name;
     loc_t block_loc;
 
@@ -157,7 +153,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         output.wdelay_stmt(0, emit_skeleton_prolog(output));
     }
 
-    const opt_t *accum_opts = output.block().opts;
+    const opt_t* accum_opts = output.block().opts;
 
     for (;;) {
         // parse everything up to the next re2c block
@@ -168,7 +164,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
         // parse the next re2c block
         specs_t specs;
         if (kind == InputBlock::USE) {
-            const RulesBlock *rb = rblocks.find(block_name);
+            const RulesBlock* rb = rblocks.find(block_name);
             if (rb == nullptr) exit(1);
             specs = rb->specs;
             opts.restore(rb->opts);
@@ -189,7 +185,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
             // compile AST to DFA
             dfas_t dfas;
-            for (const spec_t &spec : specs) {
+            for (const spec_t& spec : specs) {
                 dfas.push_back(ast_to_dfa(spec, output));
             }
 
@@ -216,7 +212,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
     // For special targets (skeleton and .dot) merge header into the output file.
     if (globopts->target != Target::CODE && output.need_header) {
         output.need_header = false;
-        blocks_t &cblocks = output.cblocks, &hblocks = output.hblocks;
+        blocks_t& cblocks = output.cblocks, &hblocks = output.hblocks;
         cblocks.insert(cblocks.end(), hblocks.begin(), hblocks.end());
         hblocks.clear();
     }

@@ -5,13 +5,10 @@
 #include "lib/regex_impl.h"
 #include "src/msg/location.h"
 
-
 using namespace re2c;
 using namespace re2c::libre2c;
 
-int regexec(const regex_t *re, const char *string, size_t nmatch,
-    regmatch_t pmatch[], int eflags)
-{
+int regexec(const regex_t* re, const char* string, size_t nmatch, regmatch_t pmatch[], int eflags) {
     const int cflags = re->flags;
     if (!(cflags & REG_NFA)) {
         // DFA-based algorithms
@@ -50,8 +47,7 @@ int regexec(const regex_t *re, const char *string, size_t nmatch,
     }
 }
 
-subhistory_t *regparse(const regex_t *re, const char *string, size_t nmatch)
-{
+subhistory_t* regparse(const regex_t* re, const char* string, size_t nmatch) {
     const int cflags = re->flags;
     assert(cflags & REG_SUBHIST);
     if (!(cflags & REG_NFA)) {
@@ -74,8 +70,7 @@ subhistory_t *regparse(const regex_t *re, const char *string, size_t nmatch)
     }
 }
 
-const tstring_t *regtstring(const regex_t *re, const char *string)
-{
+const tstring_t* regtstring(const regex_t* re, const char* string) {
     const int cflags = re->flags;
     assert(cflags & REG_TSTRING);
     if (!(cflags & REG_NFA)) {
@@ -98,4 +93,3 @@ const tstring_t *regtstring(const regex_t *re, const char *string)
         return nullptr;
     }
 }
-

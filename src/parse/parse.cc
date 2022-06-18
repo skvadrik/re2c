@@ -2,97 +2,87 @@
 #include "src/options/opt.h"
 #include "src/parse/parse.h"
 
-
-/* note [EOF rule handling]
- *
- * EOF rule is special and different from other rules, because it matches
- * something other than input characters: namely, the end of input.
- *
- * Technically it can be implemented as a check on lexer entry, before matching
- * any characters. However, this is not very efficient, as the check would be
- * done unconditionally and it would not take advantage of the sentinel symbol
- * that allows to scope the check to only one branch that matches the sentinel.
- *
- * Therefore is is better to match EOF rule in the same way as normal rules, by
- * matching the sentinel symbol in the initial state and then performing the
- * end-of-input check. It can be done by implementing EOF rule as a rule that
- * matches empty string "", but this approach has a few difficulties:
- *
- *  - The initial state must not be merged with any other states (this may
- *    happen in case of a nullable loop), therefore EOF rule must be present as
- *    an NFA state (to prevent determinization from mapping other states to the
- *    initial DFA state), and the initial DFA state must be marked as accepting
- *    (to prevent minimization from merging it with other states).
- *
- *  - There might be another rule that matches empty string. In the case of EOF
- *    in the initial state EOF rule should take priority, but otherwise the
- *    other empty rule may still match if all longer rules fail and fallback.
- *    Technically there can be only one rule per DFA state, so if EOF rule
- *    collides with a normal rule, the normal rule wins and EOF rule is removed
- *    from the DFA state, but the code generation subsystem has a special case
- *    for the initial state which reinstates EOF rule and gives it priority over
- *    the normal rule.
- *
- *  - Unlike other rules, EOF rule should not be considered a fallback point in
- *    case longer rules fail to match. It is not possible to fallback to it
- *    because it can only match on EOF, and in that case lexer should not try to
- *    match any longer rules (or it will be reading past the end of input).
- *
- *  - EOF rule should not be considered accepting by undefined control flow
- *    analysis in the skeleton, as it may fail to match even if the lexer is in
- *    accepting DFA state.
- *
- *  - EOF rule should not raise -Wmatch-empty-string warning.
- *
- *  - EOF rule should not be reported as shadowed by other rules.
- */
-
+// note [end-of-input rule]
+//
+// The end-of-input rule $ is special and different from other rules, because it matches something
+// other than input characters: namely, the end of input.
+//
+// Technically it can be implemented as a check on lexer entry, before matching any characters.
+// However, this is not very efficient, as the check would be done unconditionally and it would not
+// take advantage of the sentinel symbol that allows to scope the check to only one branch that
+// matches the sentinel.
+//
+// Therefore is is better to match the end-of-input rule in the same way as normal rules, by
+// matching the sentinel symbol in the initial state and then performing the end-of-input check. It
+// could be implemented as a rule that matches the empty string "", but this approach has a few
+// difficulties:
+//
+//  - The initial state must not be merged with any other states (this may happen in case of a
+//    nullable loop), therefore the end-of-input rule must be present as a TNFA state (to prevent
+//    determinization from mapping other states to the initial TDFA state), and the initial TDFA
+//    state must be final (to prevent minimization from merging it with other states).
+//
+//  - There might be another rule that matches the empty string. If the end-of-input rule is in the
+//    initial state, it should take priority, but otherwise the other empty rule may still match if
+//    the longer rules fail and fallback. Technically there can be only one rule per TDFA state, so
+//    if the end-of-input rule collides with a normal rule, the normal one wins and the end-of-input
+//    rule is removed from a TDFA state (codegen has a special case for the initial state which
+//    reinstates the end-of-input rule and gives it priority over normal rules).
+//
+//  - Unlike other rules, end-of-input rule should not be considered a fallback point in case longer
+//    rules fail to match. It is not possible to fallback to it because it can only match at the end
+//    of input, and in that case the lexer should not try to match any longer rules (or it will be
+//    reading past the end of input).
+//
+//  - The end-of-input rule should not be considered accepting by undefined control flow analysis in
+//    the skeleton, as it may fail to match even if the lexer is in a final TDFA state.
+//
+//  - The end-of-input rule should not raise -Wmatch-empty-string warning.
+//
+//  - The end-of-input rule should not be reported as shadowed by other rules.
+//
 namespace re2c {
 
-RulesBlock::RulesBlock(const std::string &name, const opt_t *opts,
-    const specs_t &specs): name(name), opts(opts), specs(specs) {}
+RulesBlock::RulesBlock(const std::string& name, const opt_t* opts, const specs_t& specs)
+    : name(name), opts(opts), specs(specs) {}
 
 RulesBlocks::RulesBlocks(): blocks() {}
 
 RulesBlocks::~RulesBlocks() {
-    for (RulesBlock *b : blocks) {
+    for (RulesBlock* b : blocks) {
         delete b;
     }
 }
 
-bool RulesBlocks::empty() const { return blocks.empty(); }
+bool RulesBlocks::empty() const {
+    return blocks.empty();
+}
 
-void RulesBlocks::add(const std::string &name, const opt_t *opts,
-    const specs_t &specs)
-{
+void RulesBlocks::add(const std::string& name, const opt_t* opts, const specs_t& specs) {
     blocks.push_back(new RulesBlock(name, opts, specs));
 }
 
-const RulesBlock *RulesBlocks::find(const std::string &name) const
-{
+const RulesBlock* RulesBlocks::find(const std::string& name) const {
     if (name.empty()) {
         if (!blocks.empty()) {
             return blocks.back();
         }
         error("cannot find `/*!rules:re2c ... */` block");
     } else {
-        for (const RulesBlock *b : blocks) {
-            if (b->name == name) {
-                return b;
-            }
+        for (const RulesBlock* b : blocks) {
+            if (b->name == name) return b;
         }
         error("cannot find `/*!rules:re2c:%s ... */` block", name.c_str());
     }
     return nullptr;
 }
 
-const opt_t *RulesBlocks::last_opts() const
-{
+const opt_t* RulesBlocks::last_opts() const {
     return blocks.empty() ? nullptr : blocks.back()->opts;
 }
 
-spec_t &find_or_add_spec(specs_t &specs, const std::string &name) {
-    for (spec_t &spec : specs) {
+spec_t& find_or_add_spec(specs_t& specs, const std::string& name) {
+    for (spec_t& spec : specs) {
         if (spec.name == name) return spec;
     }
     specs.push_back(spec_t(name));
@@ -100,23 +90,20 @@ spec_t &find_or_add_spec(specs_t &specs, const std::string &name) {
 }
 
 template<typename T>
-static inline void append(std::vector<T> &x, const std::vector<T> &y)
-{
+static inline void append(std::vector<T>& x, const std::vector<T>& y) {
     x.insert(x.end(), y.begin(), y.end());
 }
 
-void use_block(context_t &context, const std::string &name, const loc_t &loc)
-{
-    const RulesBlock *rb = context.rblocks.find(name);
+void use_block(context_t& context, const std::string& name, const loc_t& loc) {
+    const RulesBlock* rb = context.rblocks.find(name);
     if (rb == nullptr) exit(1);
 
-    for (const spec_t &s : rb->specs) {
-        spec_t &spec = find_or_add_spec(context.specs, s.name);
+    for (const spec_t& s : rb->specs) {
+        spec_t& spec = find_or_add_spec(context.specs, s.name);
 
-        // Merge rules. Inherited special rules *, $ and <!> are kept separate
-        // from those defined in the current block, because they are handled
-        // differently: they have lower priority and it is allowed to override
-        // them with local rules (while within one block redefinition of a
+        // Merge rules. Inherited special rules *, $ and <!> are kept separate from those defined in
+        // the current block, because they are handled differently: they have lower priority and it
+        // is allowed to override them with local rules (while within one block redefinition of a
         // special rule is an error).
         append(spec.rules, s.rules);
         append(spec.inherited_defs, s.defs);
@@ -128,37 +115,36 @@ void use_block(context_t &context, const std::string &name, const loc_t &loc)
     context.opts.merge(rb->opts, loc);
 }
 
-void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg)
-{
+void check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg) {
     if (specs.empty()) return;
     specs_t::iterator i, j, e;
 
-    for (const spec_t &s : specs) {
+    for (const spec_t& s : specs) {
         if (s.defs.size() > 1) {
             msg.error(s.defs[1]->loc,
-                "code to default rule %sis already defined at line %u",
-                incond(s.name).c_str(), s.defs[0]->loc.line);
+                      "code to default rule %sis already defined at line %u",
+                      incond(s.name).c_str(), s.defs[0]->loc.line);
             exit(1);
         }
         if (s.eofs.size() > 1) {
             msg.error(s.eofs[1]->loc,
-                "EOF rule %sis already defined at line %u",
-                incond(s.name).c_str(), s.eofs[0]->loc.line);
+                      "EOF rule %sis already defined at line %u",
+                      incond(s.name).c_str(), s.eofs[0]->loc.line);
             exit(1);
         } else if (s.rules.empty() && s.defs.empty() && !s.eofs.empty()) {
             msg.error(s.eofs[0]->loc,
-                "EOF rule %swithout other rules doesn't make sense",
-                incond(s.name).c_str());
+                      "EOF rule %swithout other rules doesn't make sense",
+                      incond(s.name).c_str());
             exit(1);
         }
     }
 
     if (!opts->cFlag) {
         // normal mode: there must be no named specs corresponding to conditions
-        for (const spec_t &s : specs) {
+        for (const spec_t& s : specs) {
             if (!s.name.empty()) { // found named spec
-                const loc_t &l = !s.rules.empty() ? s.rules[0].semact->loc
-                    : !s.defs.empty() ? s.defs[0]->loc : NOWHERE;
+                const loc_t& l = !s.rules.empty() ? s.rules[0].semact->loc
+                        : !s.defs.empty() ? s.defs[0]->loc : NOWHERE;
                 msg.error(l, "conditions are only allowed with '-c', '--conditions' option");
                 exit(1);
             }
@@ -168,67 +154,68 @@ void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg)
     } else {
         // condition mode, at least one named spec => this is a block with conditions
 
-        for (const spec_t &s : specs) {
+        for (const spec_t& s : specs) {
             if (s.name.empty()) { // found unnamed spec
-                const loc_t &l = !s.rules.empty() ? s.rules[0].semact->loc
-                    : !s.defs.empty() ? s.defs[0]->loc : NOWHERE;
+                const loc_t& l = !s.rules.empty() ? s.rules[0].semact->loc
+                        : !s.defs.empty() ? s.defs[0]->loc : NOWHERE;
                 msg.error(l, "cannot mix conditions with normal rules");
                 exit(1);
             }
         }
 
-        for (const spec_t &s : specs) {
+        for (const spec_t& s : specs) {
             if (s.setup.size() > 1) {
                 msg.error(s.setup[1]->loc,
-                    "code to setup rule '%s' is already defined at line %u",
-                    s.name.c_str(), s.setup[0]->loc.line);
+                          "code to setup rule '%s' is already defined at line %u",
+                          s.name.c_str(), s.setup[0]->loc.line);
                 exit(1);
             }
         }
 
-        for (const spec_t &s : specs) {
+        for (const spec_t& s : specs) {
             if (s.name != "*" && !s.setup.empty() && s.rules.empty()) {
                 msg.error(s.setup[0]->loc,
-                    "setup for non existing condition '%s' found", s.name.c_str());
+                          "setup for non existing condition '%s' found", s.name.c_str());
                 exit(1);
             }
         }
 
         auto no_setup = std::find_if(
-            specs.begin(), specs.end(), [](const spec_t &s){ return s.setup.empty(); });
+                specs.begin(), specs.end(), [](const spec_t& s) { return s.setup.empty(); });
         if (no_setup == specs.end()) { // all specs have setup
-            for (const spec_t &s : specs) {
+            for (const spec_t& s : specs) {
                 if (s.name == "*") {
                     msg.error(s.setup[0]->loc,
-                        "setup for all conditions '<!*>' is illegal "
-                        "if setup for each condition is defined explicitly");
+                              "setup for all conditions '<!*>' is illegal if setup for each "
+                              "condition is defined explicitly");
                     exit(1);
                 }
             }
         }
 
-        for (const spec_t &s : specs) {
+        for (const spec_t& s : specs) {
             if (s.name == "0" && s.rules.size() > 1) {
                 msg.error(s.rules[1].semact->loc,
-                    "startup code is already defined at line %u", s.rules[0].semact->loc.line);
+                          "startup code is already defined at line %u",
+                          s.rules[0].semact->loc.line);
                 exit(1);
             }
         }
     }
 
     // Inherit special rules from other blocks (unless a local one is defined).
-    for (spec_t &s : specs) {
+    for (spec_t& s : specs) {
         append(s.defs, s.inherited_defs);
         append(s.eofs, s.inherited_eofs);
         append(s.setup, s.inherited_setup);
     }
 
-    // Merge <*> rules and <!*> setup to all conditions except "0". Star rules
-    // must have lower priority than normal rules.
+    // Merge <*> rules and <!*> setup to all conditions except "0". Star rules must have lower
+    // priority than normal rules.
     auto star = std::find_if(
-        specs.begin(), specs.end(),[](const spec_t &s){ return s.name == "*"; });
+            specs.begin(), specs.end(), [](const spec_t& s) { return s.name == "*"; });
     if (star != specs.end()) {
-        for (spec_t &s : specs) {
+        for (spec_t& s : specs) {
             if (s.name != "*" && s.name != "0") {
                 append(s.rules, star->rules);
                 append(s.defs, star->defs);
@@ -240,36 +227,36 @@ void check_and_merge_special_rules(specs_t &specs, const opt_t *opts, Msg &msg)
     }
 
     // Merge end of input rule $ and default rule * with the lowest priority.
-    for (spec_t &s : specs) {
+    for (spec_t& s : specs) {
         // See note [EOF rule handling].
         if (!s.eofs.empty()) {
             s.eof_rule = s.rules.size();
-            const SemAct *a = s.eofs[0];
+            const SemAct* a = s.eofs[0];
             s.rules.push_back(ASTRule(ast_nil(a->loc), a));
         }
         if (!s.defs.empty()) {
             s.def_rule = s.rules.size();
-            const SemAct *a = s.defs[0];
+            const SemAct* a = s.defs[0];
             s.rules.push_back(ASTRule(ast_default(a->loc), a));
         }
     }
 
     // "0" condition must be the first one.
     auto zero = std::find_if(
-        specs.begin(), specs.end(),[](const spec_t &s){ return s.name == "0"; });
+            specs.begin(), specs.end(), [](const spec_t& s) { return s.name == "0"; });
     if (zero != specs.end() && zero != specs.begin()) {
         spec_t zero_copy(*zero);
         specs.erase(zero);
         specs.insert(specs.begin(), zero_copy);
     }
 
-    // Check that 're2c:eof' configuration and the $ rule are used together.
-    // This must be done after merging rules inherited from other blocks and <*>
-    // condition (because they might add $ rule).
-    for (const spec_t &s : specs) {
+    // Check that 're2c:eof' configuration and the $ rule are used together. This must be done after
+    // merging rules inherited from other blocks and <*> condition (because they might add $ rule).
+    for (const spec_t& s : specs) {
         if (!s.eofs.empty() && opts->eof == NOEOF) {
             msg.error(s.eofs[0]->loc,
-                "%s$ rule found, but 're2c:eof' configuration is not set", incond(s.name).c_str());
+                      "%s$ rule found, but 're2c:eof' configuration is not set",
+                      incond(s.name).c_str());
             exit(1);
         } else if (s.eofs.empty() && opts->eof != NOEOF) {
             error("%s're2c:eof' configuration is set, but no $ rule found", incond(s.name).c_str());

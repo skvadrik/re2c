@@ -13,7 +13,6 @@
 #include <time.h>
 #include "src/util/temp_file.h"
 
-
 #if !defined(_MSC_VER) \
     && defined(HAVE_FCNTL_H) \
     && defined(HAVE_SYS_STAT_H) \
@@ -55,8 +54,7 @@
 namespace re2c {
 
 // In C++17, all this could be substituted with fopen(..., "x")
-FILE *temp_file(std::string &fname)
-{
+FILE* temp_file(std::string& fname) {
     // append "random enough" suffix to filename
     const time_t t = time(nullptr);
     char buffer[20];
@@ -64,7 +62,7 @@ FILE *temp_file(std::string &fname)
     fname += buffer;
 
     // open file for writing, unless it exists already
-    FILE *f = nullptr;
+    FILE* f = nullptr;
     int fd = OPEN(fname.c_str());
     if (fd != -1) {
         f = FDOPEN(fd);
@@ -77,8 +75,7 @@ FILE *temp_file(std::string &fname)
     return f;
 }
 
-bool overwrite_file(const char *srcname, const char *dstname)
-{
+bool overwrite_file(const char* srcname, const char* dstname) {
     // remove destination file no matter what
     UNLINK(dstname);
 
@@ -86,7 +83,7 @@ bool overwrite_file(const char *srcname, const char *dstname)
     if (rename(srcname, dstname) == 0) return true;
 
     // rename failed: try write
-    FILE *src = nullptr, *dst = nullptr;
+    FILE* src = nullptr, *dst = nullptr;
     static const size_t BLK = 4096;
     char buf[BLK];
     bool ok = false;

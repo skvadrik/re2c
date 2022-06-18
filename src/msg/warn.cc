@@ -10,7 +10,6 @@
 #include "src/skeleton/skeleton.h"
 #include "src/skeleton/path.h"
 
-
 namespace re2c {
 
 struct loc_t;
@@ -19,114 +18,94 @@ const uint32_t Warn::SILENT  = 0;
 const uint32_t Warn::WARNING = 1u << 0;
 const uint32_t Warn::ERROR   = 1u << 1;
 
-const char * Warn::names [TYPES] =
-{
+const char* Warn::names [TYPES] = {
 #define W(x, y) y
     RE2C_WARNING_TYPES
 #undef W
 };
 
-Warn::Warn (Msg &msg)
-    : mask ()
-    , error_accuml (false)
-    , msg (msg)
-{
-    for (uint32_t i = 0; i < TYPES; ++i)
-    {
+Warn::Warn(Msg& msg): mask(), error_accuml(false), msg(msg) {
+    for (uint32_t i = 0; i < TYPES; ++i) {
         mask[i] = SILENT;
     }
 }
 
-bool Warn::error () const
-{
+bool Warn::error() const {
     return error_accuml;
 }
 
-void Warn::set (type_t t, option_t o)
-{
-    switch (o)
-    {
-        case W:
-            mask[t] |= WARNING;
-            break;
-        case WNO:
-            mask[t] &= ~WARNING;
-            break;
-        case WERROR:
-            // unlike -Werror, -Werror-<warning> implies -W<warning>
-            mask[t] |= (WARNING | ERROR);
-            break;
-        case WNOERROR:
-            mask[t] &= ~ERROR;
-            break;
+void Warn::set(type_t t, option_t o) {
+    switch (o) {
+    case W:
+        mask[t] |= WARNING;
+        break;
+    case WNO:
+        mask[t] &= ~WARNING;
+        break;
+    case WERROR:
+        // unlike -Werror, -Werror-<warning> implies -W<warning>
+        mask[t] |= (WARNING | ERROR);
+        break;
+    case WNOERROR:
+        mask[t] &= ~ERROR;
+        break;
     }
 }
 
-void Warn::set_all ()
-{
-    for (uint32_t i = 0; i < TYPES; ++i)
-    {
+void Warn::set_all() {
+    for (uint32_t i = 0; i < TYPES; ++i) {
         mask[i] |= WARNING;
     }
 }
 
-// -Werror doesn't set any warnings: it only guarantees that if a warning
-// has been set by now or will be set later then it will result into error.
-void Warn::set_all_error ()
-{
-    for (uint32_t i = 0; i < TYPES; ++i)
-    {
+// -Werror doesn't set any warnings: it only guarantees that if a warning has been set by now or
+// will be set later then it will result into error.
+void Warn::set_all_error() {
+    for (uint32_t i = 0; i < TYPES; ++i) {
         mask[i] |= ERROR;
     }
 }
 
-bool Warn::is_set(type_t t) const
-{
+bool Warn::is_set(type_t t) const {
     return mask[t] > 0;
 }
 
-void Warn::fail(type_t t, const loc_t &loc, const char *s) const
-{
+void Warn::fail(type_t t, const loc_t& loc, const char* s) const {
     if (mask[t] & WARNING) {
         // -Werror has no effect
         msg.warning(names[t], loc, false, "%s", s);
     }
 }
 
-void Warn::condition_order(const loc_t &loc)
-{
+void Warn::condition_order(const loc_t& loc) {
     if (mask[CONDITION_ORDER] & WARNING) {
         const bool e = mask[CONDITION_ORDER] & ERROR;
         error_accuml |= e;
         msg.warning (names[CONDITION_ORDER], loc, e,
-            "condition numbers may change, use '/*!conditions:re2c*/' directive "
-            "to generate reliable condition identifiers");
+                     "condition numbers may change, use '/*!conditions:re2c*/' directive to "
+                     "generate reliable condition identifiers");
     }
 }
 
-void Warn::empty_class(const loc_t &loc)
-{
+void Warn::empty_class(const loc_t& loc) {
     if (mask[EMPTY_CHARACTER_CLASS] & WARNING) {
         const bool e = mask[EMPTY_CHARACTER_CLASS] & ERROR;
         error_accuml |= e;
-        msg.warning (names[EMPTY_CHARACTER_CLASS], loc, e
-            , "empty character class");
+        msg.warning (names[EMPTY_CHARACTER_CLASS], loc, e, "empty character class");
     }
 }
 
-void Warn::match_empty_string(const loc_t &loc, const std::string &cond)
-{
+void Warn::match_empty_string(const loc_t& loc, const std::string& cond) {
     if (mask[MATCH_EMPTY_STRING] & WARNING) {
         const bool e = mask[MATCH_EMPTY_STRING] & ERROR;
         error_accuml |= e;
-        msg.warning (names[MATCH_EMPTY_STRING], loc, e,
-            "rule %smatches empty string", incond(cond).c_str());
+        msg.warning(names[MATCH_EMPTY_STRING], loc, e, "rule %smatches empty string",
+                incond(cond).c_str());
     }
 }
 
-void Warn::nondeterministic_tags(const loc_t &loc, const std::string &cond
-    , const std::string *tagname, size_t nver)
-{
+void Warn::nondeterministic_tags(
+        const loc_t& loc, const std::string& cond, const std::string* tagname, size_t nver) {
     if (mask[NONDETERMINISTIC_TAGS] & WARNING) {
         bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
         error_accuml |= e;
@@ -134,30 +113,26 @@ void Warn::nondeterministic_tags(const loc_t &loc, const std::string &cond
         msg.warning_start(loc, e);
         if (tagname == nullptr) {
             fprintf(stderr, "trailing context");
-        }
-        else {
+        } else {
             fprintf(stderr, "tag '%s'", tagname->c_str());
         }
-        fprintf(stderr,
-            " %shas %u%s degree of nondeterminism",
-            incond(cond).c_str(), static_cast<uint32_t>(nver),
-            nver == 2 ? "nd" : nver == 3 ? "rd" : "th");
+        fprintf(stderr, " %shas %u%s degree of nondeterminism", incond(cond).c_str(),
+                static_cast<uint32_t>(nver), nver == 2 ? "nd" : nver == 3 ? "rd" : "th");
         msg.warning_end(names[NONDETERMINISTIC_TAGS], e);
     }
 }
 
-void Warn::swapped_range(const loc_t &loc, uint32_t l, uint32_t u)
-{
+void Warn::swapped_range(const loc_t& loc, uint32_t l, uint32_t u) {
     if (mask[SWAPPED_RANGE] & WARNING) {
         const bool e = mask[SWAPPED_RANGE] & ERROR;
         error_accuml |= e;
-        msg.warning(names[SWAPPED_RANGE], loc, e
-            , "range lower bound (0x%X) is greater than upper bound (0x%X), swapping", l, u);
+        msg.warning(names[SWAPPED_RANGE], loc, e,
+                "range lower bound (0x%X) is greater than upper bound (0x%X), swapping", l, u);
     }
 }
 
 void Warn::undefined_control_flow(
-    const Skeleton &skel, std::vector<path_t> &paths, bool overflow) {
+    const Skeleton& skel, std::vector<path_t>& paths, bool overflow) {
     if (mask[UNDEFINED_CONTROL_FLOW] & WARNING) {
         const bool e = mask[UNDEFINED_CONTROL_FLOW] & ERROR;
         error_accuml |= e;
@@ -166,12 +141,12 @@ void Warn::undefined_control_flow(
         std::sort(paths.begin(), paths.end());
 
         msg.warning_start(skel.loc, e);
-        fprintf(stderr, "control flow %sis undefined for strings that match "
-            , incond(skel.cond).c_str());
+        fprintf(stderr, "control flow %sis undefined for strings that match ",
+                incond(skel.cond).c_str());
         if (paths.size() == 1) {
             fprint_default_path(stderr, skel, paths.front());
         } else {
-            for (const path_t &path : paths) {
+            for (const path_t& path : paths) {
                 fprintf(stderr, "\n\t");
                 fprint_default_path(stderr, skel, path);
             }
@@ -185,8 +160,7 @@ void Warn::undefined_control_flow(
     }
 }
 
-void Warn::unreachable_rule(const std::string &cond, const Rule &rule)
-{
+void Warn::unreachable_rule(const std::string& cond, const Rule& rule) {
     if (mask[UNREACHABLE_RULES] & WARNING) {
         const bool e = mask[UNREACHABLE_RULES] & ERROR;
         error_accuml |= e;
@@ -195,9 +169,7 @@ void Warn::unreachable_rule(const std::string &cond, const Rule &rule)
         fprintf(stderr, "unreachable rule %s", incond(cond).c_str());
         const size_t shadows = rule.shadow.size();
         if (shadows > 0) {
-            const char * pl = shadows > 1
-                ? "s"
-                : "";
+            const char* pl = shadows > 1 ? "s" : "";
             std::set<uint32_t>::const_iterator i = rule.shadow.begin();
             fprintf (stderr, "(shadowed by rule%s at line%s %u", pl, pl, *i);
             for (++i; i != rule.shadow.end(); ++i) {
@@ -209,30 +181,26 @@ void Warn::unreachable_rule(const std::string &cond, const Rule &rule)
     }
 }
 
-void Warn::useless_escape(const loc_t &loc, const char *str, const char *end)
-{
+void Warn::useless_escape(const loc_t& loc, const char* str, const char* end) {
     if (mask[USELESS_ESCAPE] & WARNING) {
         const bool e = mask[USELESS_ESCAPE] & ERROR;
         error_accuml |= e;
-        msg.warning(names[USELESS_ESCAPE], loc, e
-            , "escape has no effect: '%.*s'", (int)(end - str), str);
+        msg.warning(names[USELESS_ESCAPE], loc, e, "escape has no effect: '%.*s'", (int)(end - str),
+                str);
     }
 }
 
-void Warn::sentinel_in_midrule(const loc_t &loc, const std::string &cond
-    , uint32_t sentinel)
-{
+void Warn::sentinel_in_midrule(const loc_t& loc, const std::string& cond, uint32_t sentinel) {
     if (mask[SENTINEL_IN_MIDRULE] & WARNING) {
         const bool defined = sentinel != NOEOF;
         const bool e = defined || (mask[SENTINEL_IN_MIDRULE] & ERROR);
         error_accuml |= e;
-        msg.warning(names[SENTINEL_IN_MIDRULE], loc, e
-            , "%ssentinel symbol %u occurs in the middle of the rule%s"
-            , incond(cond).c_str()
-            , defined ? sentinel : 0
-            , defined ? "" :
-                " (note: if a different sentinel symbol is used,"
-                " specify it with 're2c:sentinel' configuration)");
+        msg.warning(names[SENTINEL_IN_MIDRULE], loc, e,
+                    "%ssentinel symbol %u occurs in the middle of the rule%s",
+                    incond(cond).c_str(),
+                    defined ? sentinel : 0,
+                    defined ? "" : " (note: if a different sentinel symbol is used,"
+                    " specify it with 're2c:sentinel' configuration)");
     }
 }
 

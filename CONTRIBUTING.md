@@ -11,14 +11,25 @@ convenient).
 
 ## Language guidelines
 
-re2c is written in C++. The project uses a conservative language subset (for
-portability reasons the currently used standard is C++98). The code should stay
-simple and avoid complex object hierarchies and excessive use of template
-metaprogramming. It should allow the reader to concentrate on the underlying
-algorithms, without the language getting in the way.
+re2c is written in C++ (the current standard is C++11). The algorithms and
+mathematical concepts used in the code are quite complex, so the code itself
+should stay simple and let the developer focus on the underlying logic, without
+the language getting in the way. For example, try to avoid complex object
+hierarchies and excessive use of template metaprogramming.
 
-The line length limit is 90 characters, indentation is 4 spaces, and the
-indentation style is more or less K&R (egyptian braces).
+The line length limit is 100 characters, indentation is 4 spaces, and the
+indentation style is egyptian (the opening brace is on the same line). This is
+the approximate `astyle` command to auto-format re2c source code (it requires
+manual tweaking for argument/initializer lists and multiline comments):
+
+    $ # run in source directory
+    $ astyle --style=google \
+             --max-code-length=100 \
+             --align-pointer=type \
+             --align-reference=type \
+             --keep-one-line-statements \
+             --suffix=none \
+             --recursive '*'
 
 ## Updating bootstrap files
 

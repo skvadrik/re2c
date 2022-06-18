@@ -1,20 +1,17 @@
-#include <string.h> // memset
-#include <algorithm> // min
+#include <string.h>
+#include <algorithm>
 
 #include "src/codegen/code.h"
 #include "src/options/opt.h"
 #include "src/dfa/tcmd.h"
 
-
 namespace re2c {
 
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
-static bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2,
-    const State *s2)
-{
+static bool matches(const CodeGo* go1, const State* s1, const CodeGo* go2, const State* s2) {
     const Span
-        *b1 = go1->span, *e1 = &b1[go1->nspans],
-        *b2 = go2->span, *e2 = &b2[go2->nspans];
+    *b1 = go1->span, *e1 = &b1[go1->nspans],
+     *b2 = go2->span, *e2 = &b2[go2->nspans];
     uint32_t lb1 = 0, lb2 = 0;
 
     for (;;) {
@@ -30,8 +27,8 @@ static bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2,
         if (b2 == e2) {
             return false;
         }
-        // tags are forbidden: transitions on different symbols
-        // might go to the same state, but have different tag sets
+        // Еags are forbidden: transitions on different symbols might go to the same state, but
+        // they may have different tag sets.
         if (lb1 != lb2
                 || b1->ub != b2->ub
                 || b1->tags != TCID0
@@ -43,65 +40,62 @@ static bool matches(const CodeGo *go1, const State *s1, const CodeGo *go2,
     }
 }
 
-void insert_bitmap(code_alc_t &alc, CodeBitmap *bitmap, const CodeGo *go, const State *s)
-{
-    for (CodeBmState *b = bitmap->states->head; b; b = b->next) {
+void insert_bitmap(code_alc_t& alc, CodeBitmap* bitmap, const CodeGo* go, const State* s) {
+    for (CodeBmState* b = bitmap->states->head; b; b = b->next) {
         if (matches(b->go, b->state, go, s)) return;
     }
     // bitmap list is constructed in reverse
     prepend(bitmap->states, code_bmstate(alc, go, s));
 }
 
-CodeBmState *find_bitmap(const CodeBitmap *bitmap, const CodeGo *go, const State *s)
-{
-    for (CodeBmState *b = bitmap->states->head; b; b = b->next) {
+CodeBmState* find_bitmap(const CodeBitmap* bitmap, const CodeGo* go, const State* s) {
+    for (CodeBmState* b = bitmap->states->head; b; b = b->next) {
         if (b->state == s && matches(b->go, b->state, go, s)) return b;
     }
     return nullptr;
 }
 
-CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap)
-{
+CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap) {
     if (!bitmap->states->head || !bitmap->used) return nullptr;
 
     uint32_t nmaps = 0;
-    for (CodeBmState *b = bitmap->states->head; b; b = b->next) ++nmaps;
+    for (CodeBmState* b = bitmap->states->head; b; b = b->next) ++nmaps;
 
     static const uint32_t WIDTH = 8;
     const bool annotate = nmaps > WIDTH;
     const uint32_t nchars = bitmap->nchars;
 
-    const opt_t *opts = output.block().opts;
-    code_alc_t &alc = output.allocator;
-    Scratchbuf &o = output.scratchbuf;
-    const char *text;
+    const opt_t* opts = output.block().opts;
+    code_alc_t& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
+    const char* text;
 
-    CodeList *stmts = code_list(alc);
+    CodeList* stmts = code_list(alc);
 
     text = opts->lang == Lang::C
-        ? o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {").flush()
-        : o.str(opts->yybm).cstr(" := []byte{").flush();
+           ? o.cstr("static const unsigned char ").str(opts->yybm).cstr("[] = {").flush()
+           : o.str(opts->yybm).cstr(" := []byte{").flush();
     append(stmts, code_text(alc, text));
 
-    CodeList *block = code_list(alc);
+    CodeList* block = code_list(alc);
 
-    uint32_t *buffer = new uint32_t[nchars];
+    uint32_t* buffer = new uint32_t[nchars];
     uint32_t bmidx = 0;
 
     // Iterate while there are states that may use bitmaps.
-    for (CodeBmState *b = bitmap->states->head; b; ++bmidx) {
+    for (CodeBmState* b = bitmap->states->head; b; ++bmidx) {
         const uint32_t offset = bmidx * nchars;
 
-        // For each state generate a table with one bit per character, denoting
-        // if there is a transition on this charater to the destination state.
-        // Tables for up to 8 states are overlayed and compressed in one bitmap.
+        // For each state generate a table with one bit per character, denoting if there is a
+        // transition on this charater to the destination state. Tables for up to 8 states are
+        // overlayed and compressed in one bitmap.
         memset(buffer, 0, nchars * sizeof(uint32_t));
         for (uint32_t mask = 0x80; mask && b; mask >>= 1, b = b->next) {
             b->offset = offset;
             b->mask = mask;
 
             uint32_t c = 0;
-            const Span *span = b->go->span, *last = span + b->go->nspans;
+            const Span* span = b->go->span, *last = span + b->go->nspans;
             for (; span < last; ++span) {
                 if (span->to == b->state) {
                     for (uint32_t u = std::min(span->ub, nchars); c < u; ++c) {
@@ -116,8 +110,8 @@ CodeList *gen_bitmap(Output &output, const CodeBitmap *bitmap)
         if (annotate) {
             const uint32_t lowidx = bmidx * WIDTH + 1;
             const uint32_t uppidx = std::min(nmaps, lowidx + 7);
-            text = o.cstr("/* table ").u32(lowidx).cstr(" .. ").u32(uppidx)
-                .cstr(": ").u32(offset).cstr(" */").flush();
+            text = o.cstr("/* table ").u32(lowidx).cstr(" .. ").u32(uppidx).cstr(": ").u32(offset)
+                    .cstr(" */").flush();
             append(block, code_text(alc, text));
         }
 

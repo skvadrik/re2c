@@ -9,7 +9,6 @@
 #include "src/msg/location.h"
 #include "src/util/free_list.h"
 
-
 namespace re2c {
 
 // semantic action (user-defined code for rule)
@@ -21,17 +20,23 @@ struct SemAct {
     const std::string text;
     std::string cond;
 
-    explicit SemAct(const loc_t &loc)
-        : loc(loc), autogen(true), text(""), cond("") { flist.insert(this); }
-    SemAct(const loc_t &loc, const std::string &t)
-        : loc(loc), autogen(false), text(t), cond("") { flist.insert(this); }
-    ~SemAct() { flist.erase(this); }
+    explicit SemAct(const loc_t& loc)
+            : loc(loc), autogen(true), text(""), cond("") {
+        flist.insert(this);
+    }
+    SemAct(const loc_t& loc, const std::string& t)
+            : loc(loc), autogen(false), text(t), cond("") {
+        flist.insert(this);
+    }
+    ~SemAct() {
+        flist.erase(this);
+    }
 };
 
 struct Rule {
     static const size_t NONE;
 
-    const SemAct *semact;
+    const SemAct* semact;
     std::set<uint32_t> shadow;
     size_t ltag; // first tag
     size_t htag; // next to last tag
@@ -40,10 +45,10 @@ struct Rule {
 
     Rule(): semact(nullptr), shadow(), ltag(0), htag(0), ttag(0), ncap(0) {}
     ~Rule() {}
-    Rule(const Rule &r) = default;
-    Rule& operator=(const Rule &r) = default;
-    Rule(Rule &&r) = default;
-    Rule& operator=(Rule &&r) = default;
+    Rule(const Rule& r) = default;
+    Rule& operator=(const Rule& r) = default;
+    Rule(Rule&& r) = default;
+    Rule& operator=(Rule&& r) = default;
 };
 
 } // namespace re2c

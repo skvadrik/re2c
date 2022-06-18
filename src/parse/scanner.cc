@@ -11,34 +11,31 @@
 #include "src/debug/debug.h"
 #include "src/util/file_utils.h"
 
-
 namespace re2c {
 
-const char *const Scanner::ENDPOS = (const char*) std::numeric_limits<uint64_t>::max();
+const char* const Scanner::ENDPOS = (const char*) std::numeric_limits<uint64_t>::max();
 
 Scanner::~Scanner() {
-    for (Input *in: files) {
+    for (Input* in: files) {
         delete in;
     }
 }
 
-size_t Scanner::get_input_index() const
-{
-    // Find index of the current input file: the one corresponding to
-    // buffer fragment that contains cursor.
+size_t Scanner::get_input_index() const {
+    // Find index of the current input file: the one corresponding to the buffer fragment that
+    // contains the cursor.
     size_t i = files.size();
     DASSERT(i > 0);
     for (;;) {
         --i;
-        Input *in = files[i];
+        Input* in = files[i];
         if (i == 0 || (cur >= in->so && cur <= in->eo)) break;
     }
     return i;
 }
 
-bool Scanner::open(const std::string &filename, const std::string *parent)
-{
-    Input *in = new Input(msg.filenames.size());
+bool Scanner::open(const std::string& filename, const std::string* parent) {
+    Input* in = new Input(msg.filenames.size());
     files.push_back(in);
     if (!in->open(filename, parent, globopts->incpaths)) {
         return false;
@@ -48,29 +45,26 @@ bool Scanner::open(const std::string &filename, const std::string *parent)
     return true;
 }
 
-bool Scanner::include(const std::string &filename, char *at)
-{
-    // This function is called twice for each include file: first time when opening the
-    // file, and second time when it has been fully read. The second time is needed to
-    // generate a line directive marking the end of the include file and the continuation
-    // of the parent file. In order to make the lexer stop at the boundary between files
-    // and do the second call, we "unread" the directive on the first call (push it back
-    // to the parent file before filling the buffer with the contents of include file),
-    // and let the lexer scan the directive twice.
+bool Scanner::include(const std::string& filename, char* at) {
+    // This function is called twice for each include file: first time when opening the file, and
+    // second time when it has been fully read. The second time is needed to generate a line
+    // directive marking the end of the include file and the continuation of the parent file. In
+    // order to make the lexer stop at the boundary between files and do the second call, we
+    // "unread" the directive on the first call (push it back to the parent file before filling the
+    // buffer with the contents of include file), and let the lexer scan the directive twice.
     //
-    // To avoid infinite recursion we need to differentiate the two calls. We do this by
-    // inspecting the files on stack. First, we pop all finished files: there may be
-    // sibling includes before this one in the parent file. They must be finished by now,
-    // meaning that the token pointer has moved past their end pointer (even if another
-    // directive immediately precedes this one, "unreading" the directive has the effect
-    // of inserting an artificial boundary between include files). However if the current
-    // include file is already on stack, then `at` must point exactly at the end of it
-    // (not past the end), so we will not pop it.
+    // To avoid infinite recursion we need to differentiate the two calls. We do this by inspecting
+    // the files on stack. First, we pop all finished files: there may be sibling includes before
+    // this one in the parent file. They must be finished by now, meaning that the token pointer has
+    // moved past their end pointer (even if another directive immediately precedes this one,
+    // "unreading" the directive has the effect of inserting an artificial boundary between include
+    // files). However if the current include file is already on stack, then `at` must point exactly
+    // at the end of it (not past the end), so we will not pop it.
     //
     // After popping finished files we have two alternatives:
     //  - Parent file is on top (then it is the first call).
-    //  - There is exactly one file on top of the parent file (then it is the second call,
-    //    and the file on top is the current include file).
+    //  - There is exactly one file on top of the parent file (then it is the second call, and the
+    //    file on top is the current include file).
 
     assert(tok <= at); // ensure that we won't pop the include file itself
     pop_finished_files();
@@ -82,20 +76,20 @@ bool Scanner::include(const std::string &filename, char *at)
     } else {
         // This is the second call, quit.
         assert(fidx + 1 == last
-            && files[last]->name == filename
-            && files[last]->eo == at);
+               && files[last]->name == filename
+               && files[last]->eo == at);
         return true;
     }
 
     // get name of the current file (before unreading)
-    const std::string &parent = files[fidx]->escaped_name;
+    const std::string& parent = files[fidx]->escaped_name;
 
-    // Unread buffer tail: we'll return to it later. In the buffer nested files go before
-    // outer files. In the file stack, however, outer files go before nested files (nested
-    // are at the top). We want to break from the unreading cycle early, therefore we go
-    // in reverse order of file offsets in buffer and break as soon as the end offset is
-    // less than cursor (current position). `at` points at the start of include directive.
-    for (Input *in : files) {
+    // Unread buffer tail: we'll return to it later. In the buffer nested files go before outer
+    // files. In the file stack, however, outer files go before nested files (nested are at the
+    // top). We want to break from the unreading cycle early, therefore we go in reverse order of
+    // file offsets in buffer and break as soon as the end offset is less than cursor (current
+    // position). `at` points at the start of include directive.
+    for (Input* in : files) {
         if (in->so >= at) {
             // unread whole fragment
             fseek(in->file, in->so - in->eo, SEEK_CUR);
@@ -121,11 +115,10 @@ bool Scanner::include(const std::string &filename, char *at)
     return fill(BSIZE);
 }
 
-bool Scanner::read(size_t want)
-{
+bool Scanner::read(size_t want) {
     DASSERT(!files.empty());
     for (size_t i = files.size(); i --> 0; ) {
-        Input *in = files[i];
+        Input* in = files[i];
         const size_t have = fread(lim, 1, want, in->file);
         in->so = lim;
         lim += have;
@@ -138,14 +131,13 @@ bool Scanner::read(size_t want)
     return false;
 }
 
-void Scanner::shift_ptrs_and_fpos(ptrdiff_t offs)
-{
+void Scanner::shift_ptrs_and_fpos(ptrdiff_t offs) {
     // shift buffer pointers
     shift_ptrs(offs);
 
     // shift file pointers
     for (size_t i = files.size(); i --> 0; ) {
-        Input *in = files[i];
+        Input* in = files[i];
         if (in->so == ENDPOS && in->eo == ENDPOS) break;
         DASSERT(in->so != ENDPOS && in->eo != ENDPOS);
         in->so += offs;
@@ -153,16 +145,15 @@ void Scanner::shift_ptrs_and_fpos(ptrdiff_t offs)
     }
 }
 
-void Scanner::pop_finished_files()
-{
-    // Pop all files that have been fully processed (file upper bound in buffer points
-    // before the first character of current lexeme), except for the first (main) file
-    // which must always remain at the bottom of the stack.
+void Scanner::pop_finished_files() {
+    // Pop all files that have been fully processed (file upper bound in buffer points before the
+    // first character of current lexeme), except for the first (main) file which must always remain
+    // at the bottom of the stack.
     size_t i = files.size();
     DASSERT(i > 0);
     for (;;) {
         --i;
-        Input *in = files[i];
+        Input* in = files[i];
         // Keep the file if the end equals token. It is crucial for the include files.
         if (i == 0 || in->eo >= tok) break;
         files.pop_back();
@@ -170,8 +161,7 @@ void Scanner::pop_finished_files()
     }
 }
 
-bool Scanner::fill(size_t need)
-{
+bool Scanner::fill(size_t need) {
     if (eof) return false;
 
     pop_finished_files();
@@ -183,10 +173,9 @@ bool Scanner::fill(size_t need)
     if (free >= need) {
         memmove(bot, tok, copy);
         shift_ptrs_and_fpos(-static_cast<ptrdiff_t>(free));
-    }
-    else {
+    } else {
         BSIZE += std::max(BSIZE, need);
-        char * buf = new char[BSIZE + YYMAXFILL];
+        char* buf = new char[BSIZE + YYMAXFILL];
         if (!buf) {
             error("out of memory");
             exit(1);
@@ -210,19 +199,18 @@ bool Scanner::fill(size_t need)
     return true;
 }
 
-bool Scanner::gen_dep_file() const
-{
-    const std::string &fname = globopts->dep_file;
+bool Scanner::gen_dep_file() const {
+    const std::string& fname = globopts->dep_file;
     if (fname.empty()) return true;
 
-    FILE *file = fopen(fname.c_str(), "w");
+    FILE* file = fopen(fname.c_str(), "w");
     if (file == nullptr) {
         error("cannot open dep file %s", fname.c_str());
         return false;
     }
 
     fprintf(file, "%s:", escape_backslashes(globopts->output_file).c_str());
-    for (const std::string &fdep : filedeps) {
+    for (const std::string& fdep : filedeps) {
         fprintf(file, " %s", fdep.c_str());
     }
     fprintf(file, "\n");
@@ -231,11 +219,9 @@ bool Scanner::gen_dep_file() const
     return true;
 }
 
-uint32_t Scanner::decode(const char *str) const
-{
+uint32_t Scanner::decode(const char* str) const {
     return globopts->input_encoding == Enc::ASCII
-        ? static_cast<uint8_t>(str[0])
-        : utf8::decode_unsafe(str);
+           ? static_cast<uint8_t>(str[0]) : utf8::decode_unsafe(str);
 }
 
 } // namespace re2c

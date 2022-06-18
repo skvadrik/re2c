@@ -16,13 +16,11 @@
 namespace re2c {
 namespace libre2c {
 
-static void apply_regops(regoff_t *regs, const tcmd_t *cmd, regoff_t pos)
-{
-    for (const tcmd_t *p = cmd; p; p = p->next) {
+static void apply_regops(regoff_t* regs, const tcmd_t* cmd, regoff_t pos) {
+    for (const tcmd_t* p = cmd; p; p = p->next) {
         if (tcmd_t::iscopy(p)) {
             regs[p->lhs] = regs[p->rhs];
-        }
-        else {
+        } else {
             DASSERT (tcmd_t::isset(p));
             regs[p->lhs] = *p->history == TAGVER_BOTTOM ? -1 : pos;
         }
@@ -30,12 +28,12 @@ static void apply_regops(regoff_t *regs, const tcmd_t *cmd, regoff_t pos)
 }
 
 int regexec_dfa(
-    const regex_t *preg, const char *string, size_t nmatch,regmatch_t pmatch[], int /*eflags*/) {
-    const dfa_t *dfa = preg->dfa;
-    regoff_t *regs = preg->regs;
+    const regex_t* preg, const char* string, size_t nmatch,regmatch_t pmatch[], int /*eflags*/) {
+    const dfa_t* dfa = preg->dfa;
+    regoff_t* regs = preg->regs;
     size_t i = 0;
-    const char *p = string, *q = p;
-    const dfa_state_t *s, *x = nullptr;
+    const char* p = string, *q = p;
+    const dfa_state_t* s, *x = nullptr;
 
     for (;;) {
         s = dfa->states[i];
@@ -72,10 +70,8 @@ int regexec_dfa(
     return 0;
 }
 
-static void apply_regops_with_history(regoff_trie_t *regtrie, const tcmd_t *cmd,
-    regoff_t pos)
-{
-    for (const tcmd_t *p = cmd; p; p = p->next) {
+static void apply_regops_with_history(regoff_trie_t* regtrie, const tcmd_t* cmd, regoff_t pos) {
+    for (const tcmd_t* p = cmd; p; p = p->next) {
         const size_t lhs = static_cast<size_t>(p->lhs);
         const size_t rhs = static_cast<size_t>(p->rhs);
 
@@ -86,7 +82,7 @@ static void apply_regops_with_history(regoff_trie_t *regtrie, const tcmd_t *cmd,
             regtrie->set(lhs, *p->history == TAGVER_BOTTOM ? -1 : pos);
 
         } else {
-            const tagver_t *h = p->history, *h0;
+            const tagver_t* h = p->history, *h0;
             for (h0 = h; *h != TAGVER_ZERO; ++h);
 
             if (lhs != rhs) regtrie->copy(lhs, rhs);
@@ -97,12 +93,12 @@ static void apply_regops_with_history(regoff_trie_t *regtrie, const tcmd_t *cmd,
     }
 }
 
-subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatch) {
-    const dfa_t *dfa = preg->dfa;
+subhistory_t* regparse_dfa(const regex_t* preg, const char* string, size_t nmatch) {
+    const dfa_t* dfa = preg->dfa;
     size_t i = 0;
-    const char *p = string, *q = p;
-    const dfa_state_t *s, *x = nullptr;
-    regoff_trie_t *regtrie = preg->regtrie;
+    const char* p = string, *q = p;
+    const dfa_state_t* s, *x = nullptr;
+    regoff_trie_t* regtrie = preg->regtrie;
 
     regtrie->clear();
 
@@ -127,31 +123,29 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
         // already in final state, apply final tags
         mlen = p - string - 1;
         apply_regops_with_history(regtrie, s->tcmd[dfa->nchars], mlen);
-
     } else if (x != nullptr) {
         // rollback to a final state, apply fallback tags
         s = x;
         p = q;
         mlen = p - string - 1;
         apply_regops_with_history(regtrie, s->tcmd[dfa->nchars + 1], mlen);
-
     } else {
         // no final state on the way => no match
         return nullptr;
     }
 
-    const std::vector<Tag> &tags = dfa->tags;
+    const std::vector<Tag>& tags = dfa->tags;
     const size_t ntags = tags.size();
-    const tagver_t *finvers = dfa->finvers;
+    const tagver_t* finvers = dfa->finvers;
 
-    const regoff_trie_t::node_t *storage = regtrie->storage;
-    const size_t *count = regtrie->count;
-    const size_t *lists = regtrie->lists;
+    const regoff_trie_t::node_t* storage = regtrie->storage;
+    const size_t* count = regtrie->count;
+    const size_t* lists = regtrie->lists;
 
     // Find the total number of slots needed for all submatch elements.
     size_t rm_count = 1;
     for (size_t t = 0; t < ntags; t += 2) {
-        const Tag &tag = tags[t];
+        const Tag& tag = tags[t];
         if (!fictive(tag)) {
             rm_count += count[finvers[t]] * (1 + (tag.hsub - tag.lsub) / 2);
         }
@@ -159,8 +153,8 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
     // The amount of memory (in bytes) needed to store submatch information.
     size_t memsize = nmatch * sizeof(subhistory_t) + rm_count * sizeof(regmatch_t);
 
-    subhistory_t *h0 = (subhistory_t*) malloc(memsize), *h = h0, *lasth = h + nmatch;
-    regmatch_t *rm0 = (regmatch_t *)(h0 + nmatch), *rm = rm0;
+    subhistory_t* h0 = (subhistory_t*) malloc(memsize), *h = h0, *lasth = h + nmatch;
+    regmatch_t* rm0 = (regmatch_t*)(h0 + nmatch), *rm = rm0;
 
     h->size = 1;
     h->offs = rm;
@@ -170,7 +164,7 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
     ++h;
 
     for (size_t t = 0; t < ntags && h < lasth; t += 2) {
-        const Tag &tag = tags[t];
+        const Tag& tag = tags[t];
         if (fictive(tag)) continue;
         DASSERT(!fixed(tag));
 
@@ -189,7 +183,7 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
             rm += sz_so;
 
             for (size_t j = sz_so, so = so0, eo = eo0; j --> 0; ) {
-                const regoff_trie_t::node_t &n_so = storage[so], &n_eo = storage[eo];
+                const regoff_trie_t::node_t& n_so = storage[so], &n_eo = storage[eo];
                 const regmatch_t m = {n_so.off, n_eo.off};
                 h->offs[j] = m;
                 so = n_so.pred;
@@ -203,4 +197,3 @@ subhistory_t *regparse_dfa(const regex_t *preg, const char *string, size_t nmatc
 
 } // namespace libre2c
 } // namespace re2c
-

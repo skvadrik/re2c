@@ -17,7 +17,6 @@
 #include "src/util/forbid_copy.h"
 #include "src/util/slab_allocator.h"
 
-
 namespace re2c {
 
 class Msg;
@@ -32,33 +31,32 @@ struct Opt;
 // Must be defined exacly as in codegen.
 typedef slab_allocator_t<1024 * 1024, 8> code_alc_t;
 
-class Scanner: private ScannerState
-{
-public:
+class Scanner: private ScannerState {
+  public:
     enum ParseMode {Stop, Global, Local, Reuse, Rules, Error};
-    static const char *const ENDPOS;
+    static const char* const ENDPOS;
 
-    Msg &msg;
+    Msg& msg;
 
-private:
+  private:
     std::vector<Input*> files;
     std::set<std::string> filedeps;
-    const conopt_t *globopts;
+    const conopt_t* globopts;
     loc_t location;
 
-public:
-    Scanner(const conopt_t *o, Msg &m);
+  public:
+    Scanner(const conopt_t* o, Msg& m);
     ~Scanner();
-    bool open(const std::string &filename, const std::string *parent);
-    bool include(const std::string &filename, char *at);
+    bool open(const std::string& filename, const std::string* parent);
+    bool include(const std::string& filename, char* at);
     bool gen_dep_file() const;
-    const loc_t &tok_loc() const;
+    const loc_t& tok_loc() const;
     loc_t cur_loc() const;
-    InputBlock echo(Output &out, std::string &block_name);
+    InputBlock echo(Output& out, std::string& block_name);
     int scan();
-    void lex_conf(Opt &opts);
+    void lex_conf(Opt& opts);
 
-private:
+  private:
     bool read(size_t want);
     bool fill(size_t need);
     void shift_ptrs_and_fpos(ptrdiff_t offs);
@@ -69,10 +67,10 @@ private:
     inline void set_line(uint32_t l);
     inline void next_line();
     void set_sourceline ();
-    bool lex_opt_name(std::string &name);
-    bool lex_name_list(code_alc_t &alc, BlockNameList **ptail);
-    bool lex_block(Output &out, CodeKind kind, uint32_t indent, uint32_t mask);
-    bool lex_block_end(Output &out, bool allow_garbage = false);
+    bool lex_opt_name(std::string& name);
+    bool lex_name_list(code_alc_t& alc, BlockNameList** ptail);
+    bool lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask);
+    bool lex_block_end(Output& out, bool allow_garbage = false);
     void lex_code_indented();
     void lex_code_in_braces();
     void try_lex_string_in_code(char quote);
@@ -83,13 +81,13 @@ private:
     int lex_clist();
     void lex_string(char delim);
     uint32_t lex_cls_chr();
-    bool lex_str_chr(char quote, ASTChar &ast);
-    const AST *lex_cls(bool neg);
-    const AST *lex_str(char quote);
-    void lex_conf_encoding_policy(Opt &opts);
-    void lex_conf_input(Opt &opts);
-    void lex_conf_empty_class(Opt &opts);
-    void lex_conf_api_style(Opt &opts);
+    bool lex_str_chr(char quote, ASTChar& ast);
+    const AST* lex_cls(bool neg);
+    const AST* lex_str(char quote);
+    void lex_conf_encoding_policy(Opt& opts);
+    void lex_conf_input(Opt& opts);
+    void lex_conf_empty_class(Opt& opts);
+    void lex_conf_api_style(Opt& opts);
     void lex_conf_assign();
     void lex_conf_semicolon();
     int32_t lex_conf_number();
@@ -98,60 +96,52 @@ private:
     std::string lex_conf_string();
     bool is_eof() const;
     void fail_if_eof() const;
-    uint32_t decode(const char *str) const;
+    uint32_t decode(const char* str) const;
 
     FORBID_COPY (Scanner);
 };
 
-inline Scanner::Scanner(const conopt_t *o, Msg &m)
-    : ScannerState()
-    , msg(m)
-    , files()
-    , filedeps()
-    , globopts(o)
-    , location(ATSTART)
-{}
+inline Scanner::Scanner(const conopt_t* o, Msg& m)
+    : ScannerState(),
+      msg(m),
+      files(),
+      filedeps(),
+      globopts(o),
+      location(ATSTART) {}
 
-inline loc_t Scanner::cur_loc() const
-{
-    const Input &in = get_cinput();
+inline loc_t Scanner::cur_loc() const {
+    const Input& in = get_cinput();
     uint32_t c = static_cast<uint32_t>(cur - pos);
     if (is_eof()) {
-         DASSERT(c > 0);
-         --c;
+        DASSERT(c > 0);
+        --c;
     }
     const loc_t loc = {in.line, c, in.fidx};
     return loc;
 }
 
-inline const loc_t &Scanner::tok_loc() const
-{
+inline const loc_t& Scanner::tok_loc() const {
     return location;
 }
 
-inline void Scanner::set_line(uint32_t l)
-{
+inline void Scanner::set_line(uint32_t l) {
     get_input().line = l;
 }
 
-inline void Scanner::next_line()
-{
+inline void Scanner::next_line() {
     pos = cur;
     ++get_input().line;
 }
 
-inline bool Scanner::is_eof() const
-{
+inline bool Scanner::is_eof() const {
     return eof && cur > eof;
 }
 
-inline Input& Scanner::get_input()
-{
+inline Input& Scanner::get_input() {
     return *files[get_input_index()];
 }
 
-inline const Input& Scanner::get_cinput() const
-{
+inline const Input& Scanner::get_cinput() const {
     return *files[get_input_index()];
 }
 
@@ -164,6 +154,6 @@ inline uint32_t Scanner::lex_conf_eof() {
     return n < 0 ? NOEOF : static_cast<uint32_t>(n);
 }
 
-} // end namespace re2c
+} // namespace re2c
 
 #endif // _RE2C_AST_SCANNER_

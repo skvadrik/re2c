@@ -1,7 +1,6 @@
 #ifndef _RE2C_DEBUG_DEBUG_
 #define _RE2C_DEBUG_DEBUG_
 
-
 #ifndef RE2C_DEBUG
 
 namespace re2c {
@@ -9,9 +8,15 @@ namespace re2c {
 struct opt_t;
 
 struct closure_stats_t {};
-struct dump_dfa_t { dump_dfa_t(const opt_t *) {} };
+
+struct dump_dfa_t {
+    dump_dfa_t(const opt_t*) {}
+};
+
 template<typename ctx_t>
-  struct dump_dfa_tree_t { dump_dfa_tree_t(const ctx_t&) {} };
+struct dump_dfa_tree_t {
+    dump_dfa_tree_t(const ctx_t&) {}
+};
 
 #define DASSERT(x)
 #define DDUMP_NFA(opts, nfa)
@@ -51,27 +56,24 @@ struct opt_t;
 struct tcmd_t;
 struct Tag;
 
-struct closure_stats_t
-{
+struct closure_stats_t {
     uint32_t nscans; // number of configuration scans
     uint32_t nprec;  // number of POSIX comparisons of configurations
     size_t length;   // total length of compared histories
 };
 
-struct dump_dfa_t
-{
+struct dump_dfa_t {
     const bool debug;
     uint32_t uniqidx;
 
-    explicit dump_dfa_t(const opt_t *);
+    explicit dump_dfa_t(const opt_t*);
     ~dump_dfa_t();
-    template<typename ctx_t> void state(const ctx_t &, bool);
+    template<typename ctx_t> void state(const ctx_t&, bool);
 };
 
 template<typename ctx_t>
-struct dump_dfa_tree_t
-{
-    const ctx_t &ctx;
+struct dump_dfa_tree_t {
+    const ctx_t& ctx;
 
     typedef std::vector<const nfa_state_t*> origins_t;
     typedef std::map<std::pair<uint32_t, uint32_t>, origins_t> origmap_t;
@@ -80,11 +82,10 @@ struct dump_dfa_tree_t
     uint32_t uniqidx;
     std::set<int32_t> used_nodes;
 
-    explicit dump_dfa_tree_t(const ctx_t &);
+    explicit dump_dfa_tree_t(const ctx_t&);
     ~dump_dfa_tree_t();
     void state(bool);
-    void path_tree(const std::vector<uint32_t> &, const std::vector<uint32_t> &,
-        bool);
+    void path_tree(const std::vector<uint32_t>&, const std::vector<uint32_t>&, bool);
 };
 
 #define DASSERT(x)                   assert(x)
@@ -103,16 +104,16 @@ struct dump_dfa_tree_t
 #define DINCCOUNT_CLLENGTH(ctx, len) ctx.dc_clstats.length += len
 #define DRESET_CLSTATS(ctx)          reset_clstats(ctx)
 
-void dump_nfa(const nfa_t &);
-void dump_dfa(const dfa_t &);
-void dump_adfa(const DFA &);
-void dump_cfg(const cfg_t &, const bool *);
-void dump_interf(const cfg_t &, const bool *);
-void dump_tcmd(const tcmd_t *);
-void dump_tag(const Tag &tag, bool negative);
-template<typename ctx_t> void dump_clstats(const ctx_t &);
-template<typename ctx_t> void reset_clstats(ctx_t &);
-uint32_t index(const nfa_t &nfa, const nfa_state_t *s);
+void dump_nfa(const nfa_t&);
+void dump_dfa(const dfa_t&);
+void dump_adfa(const DFA&);
+void dump_cfg(const cfg_t&, const bool*);
+void dump_interf(const cfg_t&, const bool*);
+void dump_tcmd(const tcmd_t*);
+void dump_tag(const Tag& tag, bool negative);
+template<typename ctx_t> void dump_clstats(const ctx_t&);
+template<typename ctx_t> void reset_clstats(ctx_t&);
+uint32_t index(const nfa_t& nfa, const nfa_state_t* s);
 
 } // namespace re2c
 

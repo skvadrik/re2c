@@ -15,30 +15,27 @@
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 
-
 using namespace re2c;
 
 extern "C" {
-
-int yylex(context_t &context);
-void yyerror(context_t &context, const char*) RE2C_ATTR((noreturn));
-
-} // extern "C"
+    int yylex(context_t& context);
+    void yyerror(context_t& context, const char*) RE2C_ATTR((noreturn));
+}
 
 %}
 
 %start spec
 
-%lex-param   {re2c::context_t &context}
-%parse-param {re2c::context_t &context}
+%lex-param {re2c::context_t& context}
+%parse-param {re2c::context_t& context}
 
 %union {
-    const re2c::AST *regexp;
-    re2c::SemAct    *semact;
-    char             op;
-    re2c::ASTBounds  bounds;
-    std::string     *str;
-    re2c::CondList  *clist;
+    const re2c::AST* regexp;
+    re2c::SemAct* semact;
+    char op;
+    re2c::ASTBounds bounds;
+    std::string* str;
+    re2c::CondList* clist;
 };
 
 %token TOKEN_CJUMP
@@ -81,14 +78,13 @@ spec
 
 def
 : name expr enddef {
-    add_named_def(context.opts.symtab, *$1, $2, context.input.tok_loc(),
-        context.input.msg);
+    add_named_def(context.opts.symtab, *$1, $2, context.input.tok_loc(), context.input.msg);
     delete $1;
 }
 /* errors */
 | name expr '/' {
-    context.input.msg.error(context.input.tok_loc()
-        , "trailing contexts are not allowed in named definitions");
+    context.input.msg.error(context.input.tok_loc(),
+                            "trailing contexts are not allowed in named definitions");
     exit(1);
 };
 
@@ -110,31 +106,31 @@ rule
     find_or_add_spec(context.specs, "").eofs.push_back($2);
 }
 | TOKEN_CLIST trailexpr ccode {
-    for (const std::string &cond : *$1) {
+    for (const std::string& cond : *$1) {
         find_or_add_spec(context.specs, cond).rules.push_back(ASTRule($2, $3));
     }
     delete $1;
 }
 | TOKEN_CLIST '*' ccode {
-    for (const std::string &cond : *$1) {
+    for (const std::string& cond : *$1) {
         find_or_add_spec(context.specs, cond).defs.push_back($3);
     }
     delete $1;
 }
 | TOKEN_CLIST '$' ccode {
-    for (const std::string &cond : *$1) {
+    for (const std::string& cond : *$1) {
         find_or_add_spec(context.specs, cond).eofs.push_back($3);
     }
     delete $1;
 }
 | TOKEN_CSETUP TOKEN_CODE {
-    for (const std::string &cond : *$1) {
+    for (const std::string& cond : *$1) {
         find_or_add_spec(context.specs, cond).setup.push_back($2);
     }
     delete $1;
 }
 | TOKEN_CZERO ccode {
-    const AST *r = ast_nil(context.input.tok_loc());
+    const AST* r = ast_nil(context.input.tok_loc());
     find_or_add_spec(context.specs, "0").rules.push_back(ASTRule(r, $2));
     delete $1;
 };
@@ -155,8 +151,7 @@ ccode
 trailexpr
 : expr { $$ = ast_cap($1); }
 | expr '/' expr {
-    $$ = ast_cat(ast_cap($1),
-        ast_cat(ast_tag(context.input.tok_loc(), nullptr, false), $3));
+    $$ = ast_cat(ast_cap($1), ast_cat(ast_tag(context.input.tok_loc(), nullptr, false), $3));
 };
 
 expr
@@ -179,9 +174,15 @@ factor
 : primary
 | primary closes {
     switch($2) {
-        case '*': $$ = ast_iter($1, 0, AST::MANY); break;
-        case '+': $$ = ast_iter($1, 1, AST::MANY); break;
-        case '?': $$ = ast_iter($1, 0, 1); break;
+    case '*':
+        $$ = ast_iter($1, 0, AST::MANY);
+        break;
+    case '+':
+        $$ = ast_iter($1, 1, AST::MANY);
+        break;
+    case '?':
+        $$ = ast_iter($1, 0, 1);
+        break;
     }
 }
 | primary TOKEN_CLOSESIZE {
@@ -217,24 +218,19 @@ primary
 #pragma GCC diagnostic pop
 
 extern "C" {
+    void yyerror(context_t& context, const char* s) {
+        context.input.msg.error(context.input.tok_loc(), "%s", s);
+        exit(1);
+    }
 
-void yyerror(context_t &context, const char* s)
-{
-    context.input.msg.error(context.input.tok_loc(), "%s", s);
-    exit(1);
+    int yylex(context_t& context) {
+        return context.input.scan();
+    }
 }
-
-int yylex(context_t &context)
-{
-    return context.input.scan();
-}
-
-} // extern "C"
 
 namespace re2c {
 
-void parse(Scanner &input, specs_t &specs, Opt &opts, const RulesBlocks &rblocks)
-{
+void parse(Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks) {
     context_t context = {input, specs, opts, rblocks};
     yyparse(context);
 }
