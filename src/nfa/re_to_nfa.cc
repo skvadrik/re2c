@@ -37,15 +37,15 @@ static nfa_state_t* re_to_nfa(rtn_ctx_t& ctx, const RE* re, nfa_state_t* t) {
     const size_t nrule = ctx.nrule;
     nfa_state_t* s = nullptr;
 
-    switch (re->type) {
-    case RE::NIL:
+    switch (re->kind) {
+    case RE::Kind::NIL:
         s = t;
         break;
-    case RE::SYM:
+    case RE::Kind::SYM:
         s = &nfa.states[nfa.size++];
         s->make_ran(nrule, t, re->sym);
         break;
-    case RE::ALT: {
+    case RE::Kind::ALT: {
         nfa_state_t
         *s1 = re_to_nfa(ctx, re->alt.re1, t),
          *s2 = re_to_nfa(ctx, re->alt.re2, t);
@@ -53,11 +53,11 @@ static nfa_state_t* re_to_nfa(rtn_ctx_t& ctx, const RE* re, nfa_state_t* t) {
         s->make_alt(nrule, s1, s2);
         break;
     }
-    case RE::CAT:
+    case RE::Kind::CAT:
         s = re_to_nfa(ctx, re->cat.re2, t);
         s = re_to_nfa(ctx, re->cat.re1, s);
         break;
-    case RE::ITER: {
+    case RE::Kind::ITER: {
         const uint32_t
         min = re->iter.min,
         max = re->iter.max;
@@ -87,7 +87,7 @@ static nfa_state_t* re_to_nfa(rtn_ctx_t& ctx, const RE* re, nfa_state_t* t) {
         }
         break;
     }
-    case RE::TAG: {
+    case RE::Kind::TAG: {
         const Tag& tag = nfa.tags[re->tag.idx];
         if (fixed(tag) && !capture(tag)) {
             s = t;

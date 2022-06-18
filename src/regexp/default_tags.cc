@@ -86,7 +86,7 @@ void insert_default_tags(RESpec& spec) {
         stack.pop_back();
         RE* re = i.re;
 
-        if (re->type == RE::ALT) {
+        if (re->kind == RE::Kind::ALT) {
             if (i.ltag == nullptr) {
                 // collect tags from the left sub-RE and return to this RE
                 StackItem k = {re, tag, nullptr};
@@ -113,15 +113,15 @@ void insert_default_tags(RESpec& spec) {
                               ? re_cat(spec, x, re->alt.re2)
                               : re_cat(spec, re->alt.re2, x);
             }
-        } else if (re->type == RE::CAT) {
+        } else if (re->kind == RE::Kind::CAT) {
             StackItem j2 = {re->cat.re2, nullptr, nullptr};
             stack.push_back(j2);
             StackItem j1 = {re->cat.re1, nullptr, nullptr};
             stack.push_back(j1);
-        } else if (re->type == RE::ITER) {
+        } else if (re->kind == RE::Kind::ITER) {
             StackItem j = {re->iter.re, nullptr, nullptr};
             stack.push_back(j);
-        } else if (re->type == RE::TAG) {
+        } else if (re->kind == RE::Kind::TAG) {
             *tag++ = re->tag.idx;
         }
     }

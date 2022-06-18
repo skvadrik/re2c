@@ -30,11 +30,11 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
         stack.pop_back();
 
         const RE* re = i.re;
-        if (re->type == RE::NIL) {
+        if (re->kind == RE::Kind::NIL) {
             null = true;
-        } else if (re->type == RE::SYM) {
+        } else if (re->kind == RE::Kind::SYM) {
             null = false;
-        } else if (re->type == RE::TAG) {
+        } else if (re->kind == RE::Kind::TAG) {
             null = true;
 
             // Trailing context is always in top-level concatenation, and sub-RE are visited from
@@ -42,11 +42,11 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
             // nullable (otherwise we would not recurse into the right sub-RE), therefore the whole
             // RE is nullable.
             if (trailing(spec.tags[re->tag.idx])) {
-                DASSERT(stack.size() == 1 && stack.back().re->type == RE::CAT);
+                DASSERT(stack.size() == 1 && stack.back().re->kind == RE::Kind::CAT);
                 stack.pop_back();
                 break;
             }
-        } else if (re->type == RE::ALT) {
+        } else if (re->kind == RE::Kind::ALT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE
                 StackItem k = {re, 1};
@@ -59,7 +59,7 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
                 StackItem j = {re->alt.re2, 0};
                 stack.push_back(j);
             }
-        } else if (re->type == RE::CAT) {
+        } else if (re->kind == RE::Kind::CAT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE
                 StackItem k = {re, 1};
@@ -72,7 +72,7 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
                 StackItem j = {re->cat.re2, 0};
                 stack.push_back(j);
             }
-        } else if (re->type == RE::ITER) {
+        } else if (re->kind == RE::Kind::ITER) {
             // iteration is nullable if the sub-RE is nullable (zero repetitions is represented with
             // alternative)
             StackItem j = {re->iter.re, 0};
@@ -86,13 +86,13 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
 
 static bool trivially_nullable(const RESpec& spec, const RE* re) {
     // "" { ... }
-    if (re->type == RE::NIL) return true;
+    if (re->kind == RE::Kind::NIL) return true;
 
     // "" / ... { ... }
-    if (re->type == RE::CAT
-            && re->cat.re1->type == RE::NIL
-            && re->cat.re2->type == RE::CAT
-            && re->cat.re2->cat.re1->type == RE::TAG
+    if (re->kind == RE::Kind::CAT
+            && re->cat.re1->kind == RE::Kind::NIL
+            && re->cat.re2->kind == RE::Kind::CAT
+            && re->cat.re2->cat.re1->kind == RE::Kind::TAG
             && trailing(spec.tags[re->cat.re2->cat.re1->tag.idx])) return true;
 
     return false;

@@ -26,24 +26,24 @@ void split_charset(RESpec& spec) {
     while (!todo.empty()) {
         const RE* re = todo.top();
         todo.pop();
-        switch (re->type) {
-        case RE::NIL: break;
-        case RE::TAG: break;
-        case RE::SYM:
+        switch (re->kind) {
+        case RE::Kind::NIL: break;
+        case RE::Kind::TAG: break;
+        case RE::Kind::SYM:
             for (const Range* r = re->sym; r; r = r->next()) {
                 cs.insert(r->lower());
                 cs.insert(r->upper());
             }
             break;
-        case RE::ALT:
+        case RE::Kind::ALT:
             todo.push(re->alt.re2);
             todo.push(re->alt.re1);
             break;
-        case RE::CAT:
+        case RE::Kind::CAT:
             todo.push(re->cat.re2);
             todo.push(re->cat.re1);
             break;
-        case RE::ITER:
+        case RE::Kind::ITER:
             todo.push(re->iter.re);
             break;
         }

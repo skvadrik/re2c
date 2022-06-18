@@ -30,11 +30,11 @@ static void compute_re_size_and_depth(
         stack.pop_back();
 
         const RE* re = i.re;
-        if (re->type == RE::NIL) {
+        if (re->kind == RE::Kind::NIL) {
             size = depth = 0;
-        } else if (re->type == RE::SYM || re->type == RE::TAG) {
+        } else if (re->kind == RE::Kind::SYM || re->kind == RE::Kind::TAG) {
             size = depth = 1;
-        } else if (re->type == RE::ALT) {
+        } else if (re->kind == RE::Kind::ALT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE
                 StackItem k = {re, 0, 0, 1};
@@ -53,7 +53,7 @@ static void compute_re_size_and_depth(
                 size = 1 + i.size + size;
                 depth = 1 + std::max(i.depth, depth);
             }
-        } else if (re->type == RE::CAT) {
+        } else if (re->kind == RE::Kind::CAT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE
                 StackItem k = {re, 0, 0, 1};
@@ -72,7 +72,7 @@ static void compute_re_size_and_depth(
                 size = i.size + size;
                 depth = i.depth + depth;
             }
-        } else if (re->type == RE::ITER) {
+        } else if (re->kind == RE::Kind::ITER) {
             if (i.succ == 0) {
                 // recurse into the sub-RE
                 StackItem k = {re, 0, 0, 1};

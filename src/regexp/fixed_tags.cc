@@ -51,12 +51,12 @@ static void find_fixed_tags(
         stack.pop_back();
         RE* re = i.re;
 
-        if (re->type == RE::SYM) {
+        if (re->kind == RE::Kind::SYM) {
             Level& l = levels.back();
             if (l.dist_to_tag != VARDIST) ++l.dist_to_tag;
             if (l.dist_to_end != VARDIST) ++l.dist_to_end;
 
-        } else if (re->type == RE::ALT) {
+        } else if (re->kind == RE::Kind::ALT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE (leave the current RE on stack)
                 StackItem k = {re, 1};
@@ -96,7 +96,7 @@ static void find_fixed_tags(
                 l.dist_to_tag = l.dist_to_tag == VARDIST || dist == VARDIST
                         ? VARDIST : l.dist_to_tag + dist;
             }
-        } else if (re->type == RE::ITER) {
+        } else if (re->kind == RE::Kind::ITER) {
             if (i.succ == 0) {
                 // recurse into sub-RE (leave the current RE on stack)
                 StackItem k = {re, 1};
@@ -122,7 +122,7 @@ static void find_fixed_tags(
                 l.dist_to_tag = l.dist_to_tag == VARDIST || dist == VARDIST
                         ? VARDIST : l.dist_to_tag + dist;
             }
-        } else if (re->type == RE::CAT) {
+        } else if (re->kind == RE::Kind::CAT) {
             // the right sub-RE is pushed on stack after the left sub-RE and visited earlier
             // (because distance is computed from right to left)
             StackItem j1 = {re->cat.re1, 0};
@@ -130,7 +130,7 @@ static void find_fixed_tags(
             StackItem j2 = {re->cat.re2, 0};
             stack.push_back(j2);
 
-        } else if (re->type == RE::TAG) {
+        } else if (re->kind == RE::Kind::TAG) {
             Tag& tag = spec.tags[re->tag.idx];
             Level& l = levels.back();
             bool toplevel = levels.size() == 1;

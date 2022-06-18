@@ -19,7 +19,7 @@ struct opt_t;
 
 struct RE {
     typedef slab_allocator_t<4096, sizeof(void*)> alc_t;
-    enum type_t {NIL, SYM, ALT, CAT, ITER, TAG} type;
+    enum class Kind: uint32_t {NIL, SYM, ALT, CAT, ITER, TAG} kind;
     union {
         const Range* sym;
         struct {
