@@ -253,9 +253,9 @@ opt_incpath: /*!local:re2c
 
 opt_encoding_policy: /*!local:re2c
     * { ERRARG("--encoding-policy", "ignore | substitute | fail", *argv); }
-    "ignore"     end { opts.set_encoding_policy(Enc::POLICY_IGNORE);     goto opt; }
-    "substitute" end { opts.set_encoding_policy(Enc::POLICY_SUBSTITUTE); goto opt; }
-    "fail"       end { opts.set_encoding_policy(Enc::POLICY_FAIL);       goto opt; }
+    "ignore"     end { opts.set_encoding_policy(Enc::Policy::IGNORE);     goto opt; }
+    "substitute" end { opts.set_encoding_policy(Enc::Policy::SUBSTITUTE); goto opt; }
+    "fail"       end { opts.set_encoding_policy(Enc::Policy::FAIL);       goto opt; }
 */
 
 opt_input: /*!local:re2c

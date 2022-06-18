@@ -449,8 +449,8 @@ void Opt::set_encoding(Enc::Type type, bool on) {
     diverge = true;
 }
 
-void Opt::set_encoding_policy(Enc::policy_t p) {
-    user.encoding.setPolicy(p);
+void Opt::set_encoding_policy(Enc::Policy p) {
+    user.encoding.set_policy(p);
     is_default.encoding = false;
     diverge = true;
 }

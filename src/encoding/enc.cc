@@ -29,12 +29,12 @@ bool Enc::validateChar(uint32_t& c) const {
         if (c < SURR_MIN || c > SURR_MAX)
             return true;
         switch (policy_) {
-        case POLICY_FAIL:
+        case Policy::FAIL:
             return false;
-        case POLICY_SUBSTITUTE:
+        case Policy::SUBSTITUTE:
             c = UNICODE_ERROR;
             return true;
-        case POLICY_IGNORE:
+        case Policy::IGNORE:
             return true;
         }
     }
@@ -79,15 +79,15 @@ Range* Enc::validateRange(RangeMgr& rm, uint32_t l, uint32_t h) const {
         r = rm.ran(l, h + 1);
         if (l <= SURR_MAX && h >= SURR_MIN) {
             switch (policy_) {
-            case POLICY_FAIL:
+            case Policy::FAIL:
                 r = nullptr;
                 break;
-            case POLICY_SUBSTITUTE:
+            case Policy::SUBSTITUTE:
                 // exclude surrogates, add error code point
                 r = rm.sub(r, rm.ran(SURR_MIN, SURR_MAX + 1));
                 r = rm.add(r, rm.sym(UNICODE_ERROR));
                 break;
-            case POLICY_IGNORE:
+            case Policy::IGNORE:
                 break;
             }
         }
@@ -98,7 +98,7 @@ Range* Enc::validateRange(RangeMgr& rm, uint32_t l, uint32_t h) const {
 
 Range* Enc::fullRange(RangeMgr& rm) const {
     Range* r = rm.ran(0, nCodePoints());
-    if (policy_ != POLICY_IGNORE) {
+    if (policy_ != Policy::IGNORE) {
         // exclude surrogates
         r = rm.sub(r, rm.ran (SURR_MIN, SURR_MAX + 1));
     }

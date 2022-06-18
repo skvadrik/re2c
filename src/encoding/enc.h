@@ -37,11 +37,11 @@ class Enc {
         UTF8    //  [0 - 0x10FFFF]     variable, 1-4 bytes   [0 - 0xFF]        1 byte
     };
 
-    // What to do with invalid code points
-    enum policy_t {
-        POLICY_FAIL,
-        POLICY_SUBSTITUTE,
-        POLICY_IGNORE
+    // What to do with invalid code points:
+    enum class Policy: uint32_t {
+        FAIL,       // abort with an error
+        SUBSTITUTE, // silently replace with an invalid code point
+        IGNORE      // do nothing, as if they were valid
     };
 
   private:
@@ -50,15 +50,15 @@ class Enc {
     static const uint32_t UNICODE_ERROR;
 
     Type type_;
-    policy_t policy_;
+    Policy policy_;
 
   public:
-    Enc(): type_(Type::ASCII), policy_(POLICY_IGNORE) {}
+    Enc(): type_(Type::ASCII), policy_(Policy::IGNORE) {}
     bool operator!=(const Enc& e) const { return type_ != e.type_; }
     inline void set(Type t) { type_ = t; }
     inline void unset(Type t) { if (type_ == t) type_ = Type::ASCII; }
     inline Type type() const { return type_; }
-    inline void setPolicy(policy_t t) { policy_ = t; }
+    inline void set_policy(Policy p) { policy_ = p; }
 
     static const char* name(Type t);
 

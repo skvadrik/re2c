@@ -326,7 +326,7 @@ struct Opt {
 #undef MUTOPT1
 #undef MUTOPT
     void set_encoding(Enc::Type type, bool on);
-    void set_encoding_policy(Enc::policy_t p);
+    void set_encoding_policy(Enc::Policy p);
 
     void reset_group_startlabel();
 

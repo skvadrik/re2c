@@ -185,9 +185,9 @@ void Scanner::lex_conf_encoding_policy(Opt& opts) {
         msg.error(cur_loc(), "bad configuration value (expected: 'ignore', 'substitute', 'fail')");
         exit(1);
     }
-    "ignore"     { opts.set_encoding_policy(Enc::POLICY_IGNORE);     goto end; }
-    "substitute" { opts.set_encoding_policy(Enc::POLICY_SUBSTITUTE); goto end; }
-    "fail"       { opts.set_encoding_policy(Enc::POLICY_FAIL);       goto end; }
+    "ignore"     { opts.set_encoding_policy(Enc::Policy::IGNORE);     goto end; }
+    "substitute" { opts.set_encoding_policy(Enc::Policy::SUBSTITUTE); goto end; }
+    "fail"       { opts.set_encoding_policy(Enc::Policy::FAIL);       goto end; }
 */
 end:
     lex_conf_semicolon();
