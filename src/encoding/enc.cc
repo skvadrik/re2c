@@ -19,13 +19,13 @@ bool Enc::validateChar(uint32_t& c) const {
     if (c >= nCodePoints()) return false;
 
     switch (type_) {
-    case ASCII:
-    case EBCDIC:
+    case Type::ASCII:
+    case Type::EBCDIC:
         return true;
-    case UCS2:
-    case UTF16:
-    case UTF32:
-    case UTF8:
+    case Type::UCS2:
+    case Type::UTF16:
+    case Type::UTF32:
+    case Type::UTF8:
         if (c < SURR_MIN || c > SURR_MAX)
             return true;
         switch (policy_) {
@@ -45,14 +45,14 @@ bool Enc::validateChar(uint32_t& c) const {
 // Returns the  original representation of code point; assumes that the code point is valid.
 uint32_t Enc::decodeUnsafe(uint32_t c) const {
     switch (type_) {
-    case EBCDIC:
+    case Type::EBCDIC:
         c = ebc2asc[c & 0xFF];
         break;
-    case ASCII:
-    case UCS2:
-    case UTF16:
-    case UTF32:
-    case UTF8:
+    case Type::ASCII:
+    case Type::UCS2:
+    case Type::UTF16:
+    case Type::UTF32:
+    case Type::UTF8:
         break;
     }
     return c;
@@ -68,14 +68,14 @@ Range* Enc::validateRange(RangeMgr& rm, uint32_t l, uint32_t h) const {
 
     Range* r = nullptr;
     switch (type_) {
-    case ASCII:
-    case EBCDIC:
+    case Type::ASCII:
+    case Type::EBCDIC:
         r = rm.ran(l, h + 1);
         break;
-    case UCS2:
-    case UTF16:
-    case UTF32:
-    case UTF8:
+    case Type::UCS2:
+    case Type::UTF16:
+    case Type::UTF32:
+    case Type::UTF8:
         r = rm.ran(l, h + 1);
         if (l <= SURR_MAX && h >= SURR_MIN) {
             switch (policy_) {

@@ -22,28 +22,19 @@ class RangeMgr;
 //    either are represented with equal number of code units (fixed-length
 //    encodings), or with variable number of code units (variable-length
 //    encodings).
-//
-// +----------+------------------+-----------------------+-----------------+----------------+
-// | encoding | code point range | code point size       | code unit range | code unit size |
-// +----------+------------------+-----------------------+-----------------+----------------+
-// | ASCII    | 0 - 0xFF         | fixed,        1 byte  | 0 - 0xFF        | 1 byte         |
-// | EBCDIC   | 0 - 0xFF         | fixed,        1 byte  | 0 - 0xFF        | 1 byte         |
-// | UCS2     | 0 - 0xFFFF       | fixed,        2 bytes | 0 - 0xFFFF      | 2 bytes        |
-// | UTF16    | 0 - 0x10FFFF     | variable, 2 - 4 bytes | 0 - 0xFFFF      | 2 bytes        |
-// | UTF32    | 0 - 0x10FFFF     | fixed,        4 bytes | 0 - 0x10FFFF    | 4 bytes        |
-// | UTF8     | 0 - 0x10FFFF     | variable, 1 - 4 bytes | 0 - 0xFF        | 1 byte         |
-// +----------+------------------+-----------------------+-----------------+----------------+
 
 class Enc {
   public:
     // Supported encodings.
-    enum type_t {
-        ASCII,
-        EBCDIC,
-        UCS2,
-        UTF16,
-        UTF32,
-        UTF8
+    enum class Type: uint32_t {
+        //         code point range   code point size       code unit range   code unit size
+        // ----------------------------------------------------------------------------------
+        ASCII,  //  [0 - 0xFF]         fixed, 1 byte         [0 - 0xFF]        1 byte
+        EBCDIC, //  [0 - 0xFF]         fixed, 1 byte         [0 - 0xFF]        1 byte
+        UCS2,   //  [0 - 0xFFFF]       fixed, 2 bytes        [0 - 0xFFFF]      2 bytes
+        UTF16,  //  [0 - 0x10FFFF]     variable, 2-4 bytes   [0 - 0xFFFF]      2 bytes
+        UTF32,  //  [0 - 0x10FFFF]     fixed, 4 bytes        [0 - 0x10FFFF]    4 bytes
+        UTF8    //  [0 - 0x10FFFF]     variable, 1-4 bytes   [0 - 0xFF]        1 byte
     };
 
     // What to do with invalid code points
@@ -58,18 +49,18 @@ class Enc {
     static const uint32_t SURR_MAX;
     static const uint32_t UNICODE_ERROR;
 
-    type_t type_;
+    Type type_;
     policy_t policy_;
 
   public:
-    Enc(): type_ (ASCII), policy_ (POLICY_IGNORE) {}
-    bool operator != (const Enc& e) const { return type_ != e.type_; }
-    inline void set(type_t t) { type_ = t; }
-    inline void unset(type_t t) { if (type_ == t) type_ = ASCII; }
-    inline type_t type() const { return type_; }
+    Enc(): type_(Type::ASCII), policy_(POLICY_IGNORE) {}
+    bool operator!=(const Enc& e) const { return type_ != e.type_; }
+    inline void set(Type t) { type_ = t; }
+    inline void unset(Type t) { if (type_ == t) type_ = Type::ASCII; }
+    inline Type type() const { return type_; }
     inline void setPolicy(policy_t t) { policy_ = t; }
 
-    static const char* name (type_t t);
+    static const char* name(Type t);
 
     inline uint32_t nCodePoints() const;
     inline uint32_t nCodeUnits() const;
@@ -83,19 +74,19 @@ class Enc {
     Range* fullRange(RangeMgr& rm) const;
 };
 
-inline const char* Enc::name (type_t t) {
+inline const char* Enc::name(Type t) {
     switch (t) {
-    case ASCII:
+    case Type::ASCII:
         return "ASCII";
-    case EBCDIC:
+    case Type::EBCDIC:
         return "EBCDIC";
-    case UTF8:
+    case Type::UTF8:
         return "UTF8";
-    case UCS2:
+    case Type::UCS2:
         return "USC2";
-    case UTF16:
+    case Type::UTF16:
         return "UTF16";
-    case UTF32:
+    case Type::UTF32:
         return "UTF32";
     }
     return "<bad encoding>";
@@ -103,14 +94,14 @@ inline const char* Enc::name (type_t t) {
 
 inline uint32_t Enc::nCodePoints() const {
     switch (type_) {
-    case ASCII:
-    case EBCDIC:
+    case Type::ASCII:
+    case Type::EBCDIC:
         return 0x100;
-    case UCS2:
+    case Type::UCS2:
         return 0x10000;
-    case UTF16:
-    case UTF32:
-    case UTF8:
+    case Type::UTF16:
+    case Type::UTF32:
+    case Type::UTF8:
         return 0x110000;
     }
     return 0;
@@ -118,14 +109,14 @@ inline uint32_t Enc::nCodePoints() const {
 
 inline uint32_t Enc::nCodeUnits() const {
     switch (type_) {
-    case ASCII:
-    case EBCDIC:
-    case UTF8:
+    case Type::ASCII:
+    case Type::EBCDIC:
+    case Type::UTF8:
         return 0x100;
-    case UCS2:
-    case UTF16:
+    case Type::UCS2:
+    case Type::UTF16:
         return 0x10000;
-    case UTF32:
+    case Type::UTF32:
         return 0x110000;
     }
     return 0;
@@ -134,14 +125,14 @@ inline uint32_t Enc::nCodeUnits() const {
 // returns *maximal* code point size for encoding
 inline uint32_t Enc::szCodePoint() const {
     switch (type_) {
-    case ASCII:
-    case EBCDIC:
+    case Type::ASCII:
+    case Type::EBCDIC:
         return 1;
-    case UCS2:
+    case Type::UCS2:
         return 2;
-    case UTF16:
-    case UTF32:
-    case UTF8:
+    case Type::UTF16:
+    case Type::UTF32:
+    case Type::UTF8:
         return 4;
     }
     return 0;
@@ -149,14 +140,14 @@ inline uint32_t Enc::szCodePoint() const {
 
 inline uint32_t Enc::szCodeUnit() const {
     switch (type_) {
-    case ASCII:
-    case EBCDIC:
-    case UTF8:
+    case Type::ASCII:
+    case Type::EBCDIC:
+    case Type::UTF8:
         return 1;
-    case UCS2:
-    case UTF16:
+    case Type::UCS2:
+    case Type::UTF16:
         return 2;
-    case UTF32:
+    case Type::UTF32:
         return 4;
     }
     return 0;
@@ -164,13 +155,13 @@ inline uint32_t Enc::szCodeUnit() const {
 
 inline bool Enc::multibyte_cunit() const {
     switch (type_) {
-    case Enc::UCS2:
-    case Enc::UTF16:
-    case Enc::UTF32:
+    case Type::UCS2:
+    case Type::UTF16:
+    case Type::UTF32:
         return true;
-    case Enc::ASCII:
-    case Enc::EBCDIC:
-    case Enc::UTF8:
+    case Type::ASCII:
+    case Type::EBCDIC:
+    case Type::UTF8:
         break;
     }
     return false;

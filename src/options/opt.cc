@@ -439,7 +439,7 @@ RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
 
-void Opt::set_encoding(Enc::type_t type, bool on) {
+void Opt::set_encoding(Enc::Type type, bool on) {
     if (on) {
         user.encoding.set(type);
     } else {

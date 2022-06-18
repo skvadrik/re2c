@@ -220,7 +220,7 @@ bool Scanner::gen_dep_file() const {
 }
 
 uint32_t Scanner::decode(const char* str) const {
-    return globopts->input_encoding == Enc::ASCII
+    return globopts->input_encoding == Enc::Type::ASCII
            ? static_cast<uint8_t>(str[0]) : utf8::decode_unsafe(str);
 }
 

@@ -416,15 +416,15 @@ RE* re_class(RESpec& spec, const loc_t& loc, const Range* r) {
     }
 
     switch (spec.opts->encoding.type()) {
-    case Enc::UTF16:
+    case Enc::Type::UTF16:
         return UTF16Range(spec, r);
-    case Enc::UTF8:
+    case Enc::Type::UTF8:
         return UTF8Range(spec, r);
-    case Enc::EBCDIC:
+    case Enc::Type::EBCDIC:
         return EBCDICRange(spec, r);
-    case Enc::ASCII:
-    case Enc::UTF32:
-    case Enc::UCS2:
+    case Enc::Type::ASCII:
+    case Enc::Type::UTF32:
+    case Enc::Type::UCS2:
         return re_sym(spec, r);
     }
 

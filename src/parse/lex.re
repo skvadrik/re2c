@@ -771,7 +771,7 @@ uint32_t Scanner::lex_cls_chr() {
         return decode(tok + 1);
     }
 */
-    if (globopts->input_encoding == Enc::ASCII) {
+    if (globopts->input_encoding == Enc::Type::ASCII) {
         /*!local:re2c !use:cls_chr; */
     } else {
         /*!local:re2c !use:cls_chr; re2c:flags:8 = 1; */
@@ -807,7 +807,7 @@ bool Scanner::lex_str_chr(char quote, ASTChar& ast) {
         return true;
     }
 */
-    if (globopts->input_encoding == Enc::ASCII) {
+    if (globopts->input_encoding == Enc::Type::ASCII) {
         /*!local:re2c !use:str_chr; */
     } else {
         /*!local:re2c !use:str_chr; re2c:flags:8 = 1; */

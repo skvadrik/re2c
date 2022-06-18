@@ -119,11 +119,11 @@ opt_short: /*!local:re2c
     "s" { opts.set_sFlag(true);           goto opt_short; }
     "T" { opts.set_tags(true);            goto opt_short; }
 
-    "e" { opts.set_encoding(Enc::EBCDIC, true); goto opt_short; }
-    "u" { opts.set_encoding(Enc::UTF32, true);  goto opt_short; }
-    "w" { opts.set_encoding(Enc::UCS2, true);   goto opt_short; }
-    "x" { opts.set_encoding(Enc::UTF16, true);  goto opt_short; }
-    "8" { opts.set_encoding(Enc::UTF8, true);   goto opt_short; }
+    "e" { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt_short; }
+    "u" { opts.set_encoding(Enc::Type::UTF32, true);  goto opt_short; }
+    "w" { opts.set_encoding(Enc::Type::UCS2, true);   goto opt_short; }
+    "x" { opts.set_encoding(Enc::Type::UTF16, true);  goto opt_short; }
+    "8" { opts.set_encoding(Enc::Type::UTF8, true);   goto opt_short; }
 
     "P" {
         opts.set_posix_syntax(true);
@@ -174,11 +174,11 @@ opt_long: /*!local:re2c
     "tags"                  end { opts.set_tags (true);              goto opt; }
     "no-unsafe"             end { opts.set_unsafe(false);            goto opt; }
 
-    "ebcdic" | "ecb"        end { opts.set_encoding(Enc::EBCDIC, true); goto opt; }
-    "utf32"  | "unicode"    end { opts.set_encoding(Enc::UTF32, true);  goto opt; }
-    "ucs2"   | "wide-chars" end { opts.set_encoding(Enc::UCS2, true);   goto opt; }
-    "utf16"  | "utf-16"     end { opts.set_encoding(Enc::UTF16, true);  goto opt; }
-    "utf8"   | "utf-8"      end { opts.set_encoding(Enc::UTF8, true);   goto opt; }
+    "ebcdic" | "ecb"        end { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt; }
+    "utf32"  | "unicode"    end { opts.set_encoding(Enc::Type::UTF32, true);  goto opt; }
+    "ucs2"   | "wide-chars" end { opts.set_encoding(Enc::Type::UCS2, true);   goto opt; }
+    "utf16"  | "utf-16"     end { opts.set_encoding(Enc::Type::UTF16, true);  goto opt; }
+    "utf8"   | "utf-8"      end { opts.set_encoding(Enc::Type::UTF8, true);   goto opt; }
 
     "posix-captures" end {
         opts.set_posix_syntax(true);
@@ -279,8 +279,8 @@ opt_location_format: /*!local:re2c
 
 opt_input_encoding: /*!local:re2c
     * { ERRARG("--input-encoding", "ascii | utf8 ", *argv); }
-    "ascii" end { globopts.input_encoding = Enc::ASCII; goto opt; }
-    "utf8"  end { globopts.input_encoding = Enc::UTF8;  goto opt; }
+    "ascii" end { globopts.input_encoding = Enc::Type::ASCII; goto opt; }
+    "utf8"  end { globopts.input_encoding = Enc::Type::UTF8;  goto opt; }
 */
 
 opt_dfa_minimization: /*!local:re2c

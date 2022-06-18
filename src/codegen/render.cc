@@ -209,7 +209,7 @@ static void render_number(RenderContext& rctx, int64_t num, VarType type) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
     const Enc& enc = opts->encoding;
-    bool hex = opts->lang == Lang::RUST || enc.type() == Enc::EBCDIC;
+    bool hex = opts->lang == Lang::RUST || enc.type() == Enc::Type::EBCDIC;
 
     switch (type) {
     case VarType::UINT:
@@ -241,7 +241,7 @@ static void render_case_range(
         if (low != upp) {
             os << " ... ";
             render_number(rctx, upp, type);
-        } else if (opts->dFlag && type == VarType::YYCTYPE && enc.type() == Enc::EBCDIC) {
+        } else if (opts->dFlag && type == VarType::YYCTYPE && enc.type() == Enc::Type::EBCDIC) {
             uint32_t c = enc.decodeUnsafe(static_cast<uint32_t>(low));
             if (is_print(c)) os << " /* " << static_cast<char>(c) << " */";
         }

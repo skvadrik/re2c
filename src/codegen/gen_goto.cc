@@ -20,7 +20,7 @@ static const char* gen_cond(Output& output, const CodeCmp* cond) {
     prtChOrHex(buf.stream(),
                cond->val,
                opts->encoding.szCodeUnit(),
-               opts->lang == Lang::RUST || opts->encoding.type() == Enc::EBCDIC,
+               opts->lang == Lang::RUST || opts->encoding.type() == Enc::Type::EBCDIC,
                opts->target == Target::DOT);
     return buf.flush();
 }
@@ -215,7 +215,7 @@ static void gen_godot(
                           static_cast<uint32_t>(ranges[2 * i]),
                           static_cast<uint32_t>(ranges[2 * i + 1]),
                           enc.szCodeUnit(),
-                          enc.type() == Enc::EBCDIC,
+                          enc.type() == Enc::Type::EBCDIC,
                           true);
             }
 

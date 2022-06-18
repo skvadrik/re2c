@@ -152,11 +152,11 @@ void Scanner::lex_conf(Opt& opts) {
     "flags:"? "case-ranges"                   { RET_CONF_BOOL(case_ranges); }
     "flags:"? "unsafe"                        { RET_CONF_BOOL(unsafe); }
 
-    "encoding:ebcdic" | "flags:ecb"        | "flags:e" { RET_CONF_ENC(Enc::EBCDIC); }
-    "encoding:utf32"  | "flags:unicode"    | "flags:u" { RET_CONF_ENC(Enc::UTF32); }
-    "encoding:ucs2"   | "flags:wide-chars" | "flags:w" { RET_CONF_ENC(Enc::UCS2); }
-    "encoding:utf16"  | "flags:utf-16"     | "flags:x" { RET_CONF_ENC(Enc::UTF16); }
-    "encoding:utf8"   | "flags:utf-8"      | "flags:8" { RET_CONF_ENC(Enc::UTF8); }
+    "encoding:ebcdic" | "flags:ecb"        | "flags:e" { RET_CONF_ENC(Enc::Type::EBCDIC); }
+    "encoding:utf32"  | "flags:unicode"    | "flags:u" { RET_CONF_ENC(Enc::Type::UTF32); }
+    "encoding:ucs2"   | "flags:wide-chars" | "flags:w" { RET_CONF_ENC(Enc::Type::UCS2); }
+    "encoding:utf16"  | "flags:utf-16"     | "flags:x" { RET_CONF_ENC(Enc::Type::UTF16); }
+    "encoding:utf8"   | "flags:utf-8"      | "flags:8" { RET_CONF_ENC(Enc::Type::UTF8); }
 
     "flags:"? "encoding-policy" { lex_conf_encoding_policy(opts); return; }
     "flags:"? "empty-class"     { lex_conf_empty_class(opts); return; }
