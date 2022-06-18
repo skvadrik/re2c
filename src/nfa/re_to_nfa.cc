@@ -132,8 +132,8 @@ static uint32_t stats(nfa_state_t* root) {
             }
         }
 
-        switch (state->type) {
-        case nfa_state_t::ALT:
+        switch (state->kind) {
+        case nfa_state_t::Kind::ALT:
             if (next == 0) {
                 DfsNfaStats i = {state->alt.out1, 0};
                 stack.push_back(i);
@@ -142,20 +142,20 @@ static uint32_t stats(nfa_state_t* root) {
                 stack.push_back(i);
             }
             break;
-        case nfa_state_t::TAG:
+        case nfa_state_t::Kind::TAG:
             if (next == 0) {
                 DfsNfaStats i = {state->tag.out, 0};
                 stack.push_back(i);
             }
             break;
-        case nfa_state_t::RAN:
+        case nfa_state_t::Kind::RAN:
             if (next == 0) {
                 ++ncores;
                 DfsNfaStats i = {state->tag.out, 0};
                 stack.push_back(i);
             }
             break;
-        case nfa_state_t::FIN:
+        case nfa_state_t::Kind::FIN:
             ++ncores;
             break;
         }

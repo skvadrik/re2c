@@ -111,7 +111,7 @@ int regexec_nfa_posix_backward(const regex_t* preg,
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
         nfa_state_t* s = i->state;
         s->clos = NOCLOS;
-        if (s->type == nfa_state_t::FIN) {
+        if (s->kind == nfa_state_t::Kind::FIN) {
             ctx.marker = ctx.cursor;
             ctx.rule = 0;
         }
@@ -179,16 +179,16 @@ void closure_simple(psimctx_t& ctx) {
         n->clos = static_cast<uint32_t>(state.size());
         state.push_back(x);
 
-        switch (n->type) {
-        case nfa_state_t::ALT:
+        switch (n->kind) {
+        case nfa_state_t::Kind::ALT:
             stack.push_back(psimctx_t::conf_t(x, n->alt.out2));
             stack.push_back(psimctx_t::conf_t(x, n->alt.out1));
             break;
-        case nfa_state_t::TAG:
+        case nfa_state_t::Kind::TAG:
             stack.push_back(psimctx_t::conf_t(x, n->tag.out, 0));
             break;
-        case nfa_state_t::RAN:
-        case nfa_state_t::FIN:
+        case nfa_state_t::Kind::RAN:
+        case nfa_state_t::Kind::FIN:
             break;
         }
     }
@@ -203,7 +203,7 @@ void make_one_step_simple(psimctx_t& ctx, uint32_t sym) {
         nfa_state_t* s = i->state;
         s->clos = NOCLOS;
 
-        if (s->type == nfa_state_t::RAN) {
+        if (s->kind == nfa_state_t::Kind::RAN) {
             for (const Range* r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     conf_t c(s->ran.out, 0, 0);
@@ -211,7 +211,7 @@ void make_one_step_simple(psimctx_t& ctx, uint32_t sym) {
                     break;
                 }
             }
-        } else if (s->type == nfa_state_t::FIN) {
+        } else if (s->kind == nfa_state_t::Kind::FIN) {
             ctx.marker = ctx.cursor;
             ctx.rule = 0;
         }
@@ -319,8 +319,8 @@ bool scan(psimctx_t& ctx, nfa_state_t* q, bool all) {
     typedef psimctx_t::conf_t conf_t;
     const conf_t x = ctx.state[q->clos];
 
-    switch (q->type) {
-    case nfa_state_t::ALT:
+    switch (q->kind) {
+    case nfa_state_t::Kind::ALT:
         if (q->arcidx == 0) {
             copy_offs(ctx, q, q->alt.out1, NOINFO);
             any |= relax_gor1(ctx, conf_t(x, q->alt.out1));
@@ -332,15 +332,15 @@ bool scan(psimctx_t& ctx, nfa_state_t* q, bool all) {
             ++q->arcidx;
         }
         break;
-    case nfa_state_t::TAG:
+    case nfa_state_t::Kind::TAG:
         if (q->arcidx == 0) {
             copy_offs(ctx, q, q->tag.out, q->tag.info);
             any |= relax_gor1(ctx, conf_t(x, q->tag.out, 0));
             ++q->arcidx;
         }
         break;
-    case nfa_state_t::RAN:
-    case nfa_state_t::FIN:
+    case nfa_state_t::Kind::RAN:
+    case nfa_state_t::Kind::FIN:
         break;
     }
 
@@ -407,19 +407,19 @@ void closure_posix_gtop(psimctx_t& ctx) {
         typedef psimctx_t::conf_t conf_t;
         const conf_t x = ctx.state[q->clos];
 
-        switch (q->type) {
-        case nfa_state_t::ALT:
+        switch (q->kind) {
+        case nfa_state_t::Kind::ALT:
             copy_offs(ctx, q, q->alt.out1, NOINFO);
             relax_gtop(ctx, conf_t(x, q->alt.out1));
             copy_offs(ctx, q, q->alt.out2, NOINFO);
             relax_gtop(ctx, conf_t(x, q->alt.out2));
             break;
-        case nfa_state_t::TAG:
+        case nfa_state_t::Kind::TAG:
             copy_offs(ctx, q, q->tag.out, q->tag.info);
             relax_gtop(ctx, conf_t(x, q->tag.out, 0));
             break;
-        case nfa_state_t::RAN:
-        case nfa_state_t::FIN:
+        case nfa_state_t::Kind::RAN:
+        case nfa_state_t::Kind::FIN:
             break;
         }
     }
@@ -460,7 +460,7 @@ void make_one_step(psimctx_t& ctx, uint32_t sym) {
         s->arcidx = 0;
         DASSERT(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->type == nfa_state_t::RAN) {
+        if (s->kind == nfa_state_t::Kind::RAN) {
             for (const Range* r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     const conf_t c(s->ran.out, index(s, ctx.nfa), HROOT);
@@ -468,7 +468,7 @@ void make_one_step(psimctx_t& ctx, uint32_t sym) {
                     break;
                 }
             }
-        } else if (s->type == nfa_state_t::FIN) {
+        } else if (s->kind == nfa_state_t::Kind::FIN) {
             update_final_offsets(ctx, *i);
         }
     }
@@ -482,7 +482,7 @@ void make_final_step(psimctx_t& ctx) {
         s->arcidx = 0;
         DASSERT(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->type == nfa_state_t::FIN) {
+        if (s->kind == nfa_state_t::Kind::FIN) {
             update_final_offsets(ctx, *i);
         }
     }
@@ -490,7 +490,7 @@ void make_final_step(psimctx_t& ctx) {
 
 void update_final_offsets(psimctx_t& ctx, const conf_t& c) {
     nfa_state_t* s = c.state;
-    DASSERT(s->type == nfa_state_t::FIN);
+    DASSERT(s->kind == nfa_state_t::Kind::FIN);
 
     const std::vector<Tag>& tags = ctx.nfa.tags;
     const size_t ntags = tags.size();

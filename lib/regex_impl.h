@@ -401,7 +401,7 @@ void update_offsets(simctx_t<history_t>& ctx, const conf_t& c, uint32_t id) {
     nfa_state_t* s = c.state;
     bool* done = ctx.done;
 
-    if (s->type == nfa_state_t::FIN) {
+    if (s->kind == nfa_state_t::Kind::FIN) {
         ctx.marker = ctx.cursor;
         ctx.rule = 0;
         o = ctx.offsets3;
@@ -438,7 +438,8 @@ void update_offsets(simctx_t<history_t>& ctx, const conf_t& c, uint32_t id) {
 }
 
 bool ran_or_fin_t::operator()(const conf_t& c) {
-    return c.state->type == nfa_state_t::RAN || c.state->type == nfa_state_t::FIN;
+    return c.state->kind == nfa_state_t::Kind::RAN
+        || c.state->kind == nfa_state_t::Kind::FIN;
 }
 
 void zhistory_t::init() {

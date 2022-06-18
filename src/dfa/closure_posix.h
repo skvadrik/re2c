@@ -132,8 +132,8 @@ bool scan(ctx_t& ctx, nfa_state_t* q, bool all) {
     typedef typename ctx_t::conf_t conf_t;
     const conf_t x = ctx.state[q->clos];
 
-    switch (q->type) {
-    case nfa_state_t::ALT:
+    switch (q->kind) {
+    case nfa_state_t::Kind::ALT:
         if (q->arcidx == 0) {
             any |= relax_gor1(ctx, conf_t(x, q->alt.out1));
             ++q->arcidx;
@@ -143,14 +143,14 @@ bool scan(ctx_t& ctx, nfa_state_t* q, bool all) {
             ++q->arcidx;
         }
         break;
-    case nfa_state_t::TAG:
+    case nfa_state_t::Kind::TAG:
         if (q->arcidx == 0) {
             any |= relax_gor1(ctx, conf_t(x, q->tag.out, ctx.history.link(ctx, x)));
             ++q->arcidx;
         }
         break;
-    case nfa_state_t::RAN:
-    case nfa_state_t::FIN:
+    case nfa_state_t::Kind::RAN:
+    case nfa_state_t::Kind::FIN:
         break;
     }
 
@@ -224,16 +224,16 @@ void closure_posix_gtop(ctx_t& ctx) {
         typedef typename ctx_t::conf_t conf_t;
         const conf_t x = ctx.state[q->clos];
 
-        switch (q->type) {
-        case nfa_state_t::ALT:
+        switch (q->kind) {
+        case nfa_state_t::Kind::ALT:
             relax_gtop(ctx, conf_t(x, q->alt.out1));
             relax_gtop(ctx, conf_t(x, q->alt.out2));
             break;
-        case nfa_state_t::TAG:
+        case nfa_state_t::Kind::TAG:
             relax_gtop(ctx, conf_t(x, q->tag.out, ctx.history.link(ctx, x)));
             break;
-        case nfa_state_t::RAN:
-        case nfa_state_t::FIN:
+        case nfa_state_t::Kind::RAN:
+        case nfa_state_t::Kind::FIN:
             break;
         }
     }

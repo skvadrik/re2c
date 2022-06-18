@@ -74,7 +74,7 @@ void make_one_step(psimctx_t& ctx, uint32_t sym) {
         s->arcidx = 0;
         DASSERT(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->type == nfa_state_t::RAN) {
+        if (s->kind == nfa_state_t::Kind::RAN) {
             for (const Range* r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     const conf_t c(s->ran.out, j, HROOT);
@@ -85,7 +85,7 @@ void make_one_step(psimctx_t& ctx, uint32_t sym) {
                     break;
                 }
             }
-        } else if (s->type == nfa_state_t::FIN) {
+        } else if (s->kind == nfa_state_t::Kind::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
     }
@@ -113,7 +113,7 @@ void make_final_step(psimctx_t& ctx) {
         s->arcidx = 0;
         DASSERT(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->type == nfa_state_t::FIN) {
+        if (s->kind == nfa_state_t::Kind::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
     }

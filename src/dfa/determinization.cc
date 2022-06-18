@@ -125,7 +125,7 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
 }
 
 nfa_state_t* transition(nfa_state_t* state, uint32_t symbol) {
-    if (state->type != nfa_state_t::RAN) {
+    if (state->kind != nfa_state_t::Kind::RAN) {
         return nullptr;
     }
     for (const Range* r = state->ran.ran; r; r = r->next()) {

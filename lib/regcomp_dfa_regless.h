@@ -211,7 +211,7 @@ static void find_state_regless(ctx_t& ctx,
         // Check if the new TDFA state is final. See note [at most one final item per closure].
         rldfa_backlink_t finlink = {NOCONF, nullptr, 0};
         for (uint32_t i = 0; i < state.size(); ++i) {
-            if (state[i].state->type == nfa_state_t::FIN) {
+            if (state[i].state->kind == nfa_state_t::Kind::FIN) {
                 finlink.conf = uo[i];
                 get_tstring_fragment(
                         ctx.history, rldfa.alc, state[i].thist, tfrag, finlink, tstring);

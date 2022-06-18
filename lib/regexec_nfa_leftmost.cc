@@ -36,7 +36,7 @@ int regexec_nfa_leftmost(
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
         nfa_state_t* s = i->state;
         s->clos = NOCLOS;
-        if (s->type == nfa_state_t::FIN) {
+        if (s->kind == nfa_state_t::Kind::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
     }
@@ -62,7 +62,7 @@ void reach_on_symbol(lsimctx_t& ctx, uint32_t sym) {
         nfa_state_t* s = i->state;
         s->clos = NOCLOS;
 
-        if (s->type == nfa_state_t::RAN) {
+        if (s->kind == nfa_state_t::Kind::RAN) {
             for (const Range* r = s->ran.ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     conf_t c(s->ran.out, j, HROOT);
@@ -72,7 +72,7 @@ void reach_on_symbol(lsimctx_t& ctx, uint32_t sym) {
                     break;
                 }
             }
-        } else if (s->type == nfa_state_t::FIN) {
+        } else if (s->kind == nfa_state_t::Kind::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
     }

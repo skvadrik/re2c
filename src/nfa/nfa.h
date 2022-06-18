@@ -25,7 +25,7 @@ enum class GorPass: uint32_t {
 static const uint32_t NOCLOS = ~0u;
 
 struct nfa_state_t {
-    enum type_t {ALT, RAN, TAG, FIN} type;
+    enum class Kind: uint32_t {ALT, RAN, TAG, FIN} kind;
     union {
         struct {
             nfa_state_t* out1;
@@ -61,28 +61,28 @@ struct nfa_state_t {
     }
 
     void make_alt(size_t r, nfa_state_t* s1, nfa_state_t* s2) {
-        type = ALT;
+        kind = Kind::ALT;
         alt.out1 = s1;
         alt.out2 = s2;
         init(r);
     }
 
     void make_ran(size_t r, nfa_state_t* s, const Range* p) {
-        type = RAN;
+        kind = Kind::RAN;
         ran.out = s;
         ran.ran = p;
         init(r);
     }
 
     void make_tag(size_t r, nfa_state_t* s, tag_info_t info) {
-        type = TAG;
+        kind = Kind::TAG;
         tag.out = s;
         tag.info = info;
         init(r);
     }
 
     void make_fin(size_t r) {
-        type = FIN;
+        kind = Kind::FIN;
         init(r);
     }
 };

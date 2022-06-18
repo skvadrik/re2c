@@ -104,9 +104,10 @@ void prune(ctx_t& ctx) {
 
         closure_cleanup<ctx_t>(s);
 
-        if (s->type == nfa_state_t::RAN) {
+        if (s->kind == nfa_state_t::Kind::RAN) {
             buffer.push_back(c);
-        } else if (s->type == nfa_state_t::FIN && (f == nullptr || s->rule < f->state->rule)) {
+        } else if (s->kind == nfa_state_t::Kind::FIN
+                && (f == nullptr || s->rule < f->state->rule)) {
             f = &c;
         }
     }
@@ -119,7 +120,7 @@ void prune(ctx_t& ctx) {
             std::valarray<Rule>& rules = ctx.nfa.rules;
             const uint32_t l = rules[f->state->rule].semact->loc.line;
             for (const clos_t& c : closure) {
-                if (&c != f && c.state->type == nfa_state_t::FIN) {
+                if (&c != f && c.state->kind == nfa_state_t::Kind::FIN) {
                     rules[c.state->rule].shadow.insert(l);
                 }
             }

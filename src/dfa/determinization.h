@@ -42,8 +42,8 @@ struct clos_t {
         : state(s), origin(c.origin), tvers(c.tvers), ttran(c.ttran), thist(c.thist) {}
     inline clos_t(const clos_t& c, nfa_state_t* s, hidx_t h)
         : state(s), origin(c.origin), tvers(c.tvers), ttran(c.ttran), thist(h) {}
-    static inline bool fin(const clos_t& c) { return c.state->type == nfa_state_t::FIN; }
-    static inline bool ran(const clos_t& c) { return c.state->type == nfa_state_t::RAN; }
+    static inline bool fin(const clos_t& c) { return c.state->kind == nfa_state_t::Kind::FIN; }
+    static inline bool ran(const clos_t& c) { return c.state->kind == nfa_state_t::Kind::RAN; }
 };
 
 typedef std::vector<clos_t> closure_t;

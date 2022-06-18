@@ -28,17 +28,17 @@ void dump_nfa(const nfa_t& nfa) {
         const nfa_state_t* n = &nfa.states[i];
 
         fprintf(stderr, "  n%u [label=\"%u\"]", i, i);
-        if (n->type == nfa_state_t::FIN) {
+        if (n->kind == nfa_state_t::Kind::FIN) {
             fprintf(stderr, " [fillcolor=gray]");
         }
         fprintf(stderr, "\n");
 
-        switch (n->type) {
-        case nfa_state_t::ALT:
+        switch (n->kind) {
+        case nfa_state_t::Kind::ALT:
             fprintf(stderr, "  n%u -> n%u\n", i, index(nfa, n->alt.out1));
             fprintf(stderr, "  n%u -> n%u [color=lightgray]\n", i, index(nfa, n->alt.out2));
             break;
-        case nfa_state_t::RAN: {
+        case nfa_state_t::Kind::RAN: {
             fprintf(stderr, "  n%u -> n%u [label=\"", i, index(nfa, n->ran.out));
             for (const Range* r = n->ran.ran; r; r = r->next()) {
                 const uint32_t
@@ -51,7 +51,7 @@ void dump_nfa(const nfa_t& nfa) {
             fprintf(stderr, "\"]\n");
             break;
         }
-        case nfa_state_t::TAG: {
+        case nfa_state_t::Kind::TAG: {
             const Tag& tag = nfa.tags[n->tag.info.idx];
             fprintf(stderr, "  n%u -> n%u [label=\"/", i, index(nfa, n->tag.out));
             dump_tag(tag, n->tag.info.neg);
@@ -59,7 +59,7 @@ void dump_nfa(const nfa_t& nfa) {
             fprintf(stderr, "\"]\n");
             break;
         }
-        case nfa_state_t::FIN:
+        case nfa_state_t::Kind::FIN:
             break;
         }
     }

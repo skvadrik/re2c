@@ -30,16 +30,16 @@ void closure_leftmost_dfs(ctx_t& ctx) {
         n->clos = static_cast<uint32_t>(state.size());
         state.push_back(x);
 
-        switch (n->type) {
-        case nfa_state_t::ALT:
+        switch (n->kind) {
+        case nfa_state_t::Kind::ALT:
             stack.push_back(conf_t(x, n->alt.out2));
             stack.push_back(conf_t(x, n->alt.out1));
             break;
-        case nfa_state_t::TAG:
+        case nfa_state_t::Kind::TAG:
             stack.push_back(conf_t(x, n->tag.out, ctx.history.link(ctx, x)));
             break;
-        case nfa_state_t::RAN:
-        case nfa_state_t::FIN:
+        case nfa_state_t::Kind::RAN:
+        case nfa_state_t::Kind::FIN:
             break;
         }
     }
