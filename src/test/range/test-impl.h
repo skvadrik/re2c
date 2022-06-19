@@ -3,7 +3,6 @@
 
 #include "src/test/range/test.h"
 #include "src/util/range.h"
-#include "src/util/static_assert.h"
 
 namespace re2c_test {
 
@@ -11,9 +10,9 @@ static inline bool bit_set (uint32_t n, uint32_t bit) {
     return n & (1u << bit);
 }
 
-template <uint8_t BITS>
+template<uint8_t BITS>
 re2c::Range* range(re2c::RangeMgr& rm, uint32_t n) {
-    RE2C_STATIC_ASSERT (BITS <= 31);
+    static_assert(BITS <= 31, "expected BITS <= 31");
 
     re2c::Range* r = nullptr;
     re2c::Range** p = &r;

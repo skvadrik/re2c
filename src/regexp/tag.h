@@ -3,7 +3,6 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include "src/util/static_assert.h"
 #include <limits>
 #include <string>
 

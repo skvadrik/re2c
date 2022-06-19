@@ -384,7 +384,6 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         src/test/range/test.h
         src/util/range.cc
         src/util/range.h
-        src/util/static_assert.h
     )
     add_executable(re2c_test_s_to_n32_unsafe
         src/test/s_to_n32_unsafe/test.cc

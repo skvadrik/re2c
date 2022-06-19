@@ -74,7 +74,6 @@ re2c_HDR = \
 	src/util/s_to_n32_unsafe.h \
 	src/util/slab_allocator.h \
 	src/util/smart_ptr.h \
-	src/util/static_assert.h \
 	src/util/string_utils.h \
 	src/util/temp_file.h \
 	src/util/u32lim.h \
@@ -472,9 +471,8 @@ re2c_test_range_SOURCES = \
 	src/test/range/test-impl.h \
 	src/test/range/test.cc \
 	src/test/range/test.h \
-	src/util/range.cc\
-	src/util/range.h \
-	src/util/static_assert.h
+	src/util/range.cc \
+	src/util/range.h
 
 re2c_test_s_to_n32_unsafe_SOURCES = \
 	src/test/s_to_n32_unsafe/test.cc \
