@@ -41,10 +41,12 @@ class Warn {
     };
 
   private:
-    static const uint32_t SILENT;
-    static const uint32_t WARNING;
-    static const uint32_t ERROR;
-    static const char* names [TYPES];
+    static constexpr uint32_t SILENT  = 0;
+    static constexpr uint32_t WARNING = 1u << 0;
+    static constexpr uint32_t ERROR   = 1u << 1;
+
+    static const char* names[TYPES];
+
     uint32_t mask[TYPES];
     bool error_accuml;
     Msg& msg;

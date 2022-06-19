@@ -53,27 +53,27 @@ struct tstring_t {
 };
 
 // Tags use the upper half of the t-string charater value range.
-static const tchar_t TAG_BASE = 1 << (8 * sizeof(tchar_t) - 1);
+static constexpr tchar_t TAG_BASE = 1 << (8 * sizeof(tchar_t) - 1);
 
 // standard flags
-static const int REG_EXTENDED  = 1u << 0;
-static const int REG_ICASE     = 1u << 1;
-static const int REG_NOSUB     = 1u << 2;
-static const int REG_NEWLINE   = 1u << 3;
-static const int REG_NOTBOL    = 1u << 4;
-static const int REG_NOTEOL    = 1u << 5;
+static constexpr int REG_EXTENDED  = 1u << 0;
+static constexpr int REG_ICASE     = 1u << 1;
+static constexpr int REG_NOSUB     = 1u << 2;
+static constexpr int REG_NEWLINE   = 1u << 3;
+static constexpr int REG_NOTBOL    = 1u << 4;
+static constexpr int REG_NOTEOL    = 1u << 5;
 // extensions
-static const int REG_NFA       = 1u << 6;
-static const int REG_LEFTMOST  = 1u << 7;
-static const int REG_TRIE      = 1u << 8;
-static const int REG_GTOP      = 1u << 9;
-static const int REG_SLOWPREC  = 1u << 10;
-static const int REG_BACKWARD  = 1u << 11;
-static const int REG_KUKLEWICZ = 1u << 12;
-static const int REG_REGLESS   = 1u << 13;
-static const int REG_SUBHIST   = 1u << 14;
-static const int REG_TSTRING   = 1u << 15;
-static const int REG_AUTOTAGS  = 1u << 16;
+static constexpr int REG_NFA       = 1u << 6;
+static constexpr int REG_LEFTMOST  = 1u << 7;
+static constexpr int REG_TRIE      = 1u << 8;
+static constexpr int REG_GTOP      = 1u << 9;
+static constexpr int REG_SLOWPREC  = 1u << 10;
+static constexpr int REG_BACKWARD  = 1u << 11;
+static constexpr int REG_KUKLEWICZ = 1u << 12;
+static constexpr int REG_REGLESS   = 1u << 13;
+static constexpr int REG_SUBHIST   = 1u << 14;
+static constexpr int REG_TSTRING   = 1u << 15;
+static constexpr int REG_AUTOTAGS  = 1u << 16;
 
 struct regex_t {
     size_t re_nsub;
@@ -97,7 +97,7 @@ struct regex_t {
     };
 };
 
-static const int REG_NOMATCH = INT_MAX;
+static constexpr int REG_NOMATCH = INT_MAX;
 
 // standard functions
 int regcomp(regex_t* preg, const char* pattern, int cflags);

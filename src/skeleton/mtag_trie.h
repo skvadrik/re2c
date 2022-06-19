@@ -10,7 +10,7 @@
 
 namespace re2c {
 
-static const uint32_t MTAG_TRIE_ROOT = ~0u;
+static constexpr uint32_t MTAG_TRIE_ROOT = ~0u;
 
 struct mtag_t {
     uint32_t pred;
@@ -28,7 +28,7 @@ inline void mtag_trie_clear(mtag_trie_t& trie) {
 }
 
 inline void mtag_trie_init(mtag_trie_t& trie) {
-    static const uint32_t SIZE = 1024;
+    static constexpr uint32_t SIZE = 1024;
     trie.head = new mtag_t[SIZE];
     trie.size = SIZE;
     trie.next = 0;

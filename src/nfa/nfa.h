@@ -22,7 +22,7 @@ enum class GorPass: uint32_t {
     LINEAR = 2u
 };
 
-static const uint32_t NOCLOS = ~0u;
+static constexpr uint32_t NOCLOS = ~0u;
 
 struct nfa_state_t {
     enum class Kind: uint32_t {ALT, RAN, TAG, FIN} kind;
@@ -103,7 +103,7 @@ struct nfa_t {
     FORBID_COPY(nfa_t);
 };
 
-static const uint32_t NONCORE = ~0u;
+static constexpr uint32_t NONCORE = ~0u;
 
 void compute_size_and_depth(const std::vector<RE*>& res, size_t* psize, size_t* pdepth);
 

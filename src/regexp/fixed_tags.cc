@@ -36,7 +36,7 @@ struct Level {
 
 static void find_fixed_tags(
         RESpec& spec, std::vector<StackItem>& stack, std::vector<Level>& levels, RE* re0) {
-    static const uint32_t VARDIST = Tag::VARDIST;
+    static constexpr uint32_t VARDIST = Tag::VARDIST;
 
     // initial base tag at the topmost level is the fake "rightmost tag" (cursor)
     const Level l0 = {Tag::RIGHTMOST, 0, 0};

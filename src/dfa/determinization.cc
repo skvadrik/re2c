@@ -22,8 +22,6 @@ template<typename ctx_t> static void determinization(ctx_t& ctx);
 template<typename ctx_t> static void clear_caches(ctx_t& ctx);
 template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t& ctx);
 
-const uint32_t dfa_t::NIL = ~0u;
-
 dfa_t::dfa_t(const nfa_t& nfa, size_t def_rule, size_t eof_rule)
     : states(),
       nchars(nfa.charset.size() - 1), // (n + 1) bounds for n ranges

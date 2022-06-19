@@ -12,8 +12,8 @@
 namespace re2c {
 namespace libre2c {
 
-static const regoff_t NORESULT = std::numeric_limits<regoff_t>::max();
-static const uint32_t NOCONF = std::numeric_limits<uint32_t>::max();
+static constexpr regoff_t NORESULT = std::numeric_limits<regoff_t>::max();
+static constexpr uint32_t NOCONF = std::numeric_limits<uint32_t>::max();
 
 // A backlink connects target and origin states of a TDFA transition at the level of TNFA
 // configurations. This allows one to follow TNFA path backwards from the final state to the initial

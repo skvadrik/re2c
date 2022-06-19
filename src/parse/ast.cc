@@ -8,8 +8,6 @@ namespace re2c {
 
 free_list<AST*> AST::flist;
 
-const uint32_t AST::MANY = std::numeric_limits<uint32_t>::max();
-
 AST::AST(const loc_t& l, Kind k): kind(k), loc(l) {
     flist.insert(this);
 }

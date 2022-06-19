@@ -26,7 +26,7 @@ std::string ver_to_vernum(const char* ver) {
     sfx = [a-z]+;
 
     @p1 num @e1 (dot @p2 num @e2 (dot @p3 num @e3 (dot num)*)? )? (dot sfx)? end {
-        static const uint32_t PARTS = 3, WIDTH = 2, SIZE = PARTS * WIDTH;
+        static constexpr uint32_t PARTS = 3, WIDTH = 2, SIZE = PARTS * WIDTH;
         char buffer[SIZE], *q, *q0;
         const char * bounds[] = {p1, e1, p2, e2, p3, e3}, *p, *p0;
 

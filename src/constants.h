@@ -126,12 +126,12 @@ enum DirConf: uint32_t {
     DCONF_SEPARATOR = 2u
 };
 
-static const uint32_t NOEOF = ~0u - 1;
+static constexpr uint32_t NOEOF = ~0u - 1;
 
-static const size_t MAX_NFA_DEPTH  = 1000 * 1000;
-static const size_t MAX_NFA_STATES = 1000 * 1000 * 100;
-static const size_t MAX_DFA_STATES = 1000 * 100;
-static const size_t MAX_DFA_SIZE   = 1000 * 1000 * 50;
+static constexpr size_t MAX_NFA_DEPTH  = 1000 * 1000;
+static constexpr size_t MAX_NFA_STATES = 1000 * 1000 * 100;
+static constexpr size_t MAX_DFA_STATES = 1000 * 100;
+static constexpr size_t MAX_DFA_SIZE   = 1000 * 1000 * 50;
 
 } // namespace re2c
 

@@ -280,8 +280,6 @@ static CodeGoBm* code_gobm(code_alc_t& alc,
     return x;
 }
 
-const uint32_t CodeGoCpTable::TABLE_SIZE = 0x100;
-
 static CodeGoCpTable* code_gocp_table(code_alc_t& alc, const Span* span, uint32_t nSpans) {
     CodeGoCpTable* x = alc.alloct<CodeGoCpTable>(1);
     x->table = alc.alloct<State*>(CodeGoCpTable::TABLE_SIZE);

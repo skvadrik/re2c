@@ -9,25 +9,21 @@ class utf16 {
   public:
     typedef uint32_t rune;
 
-    static const uint32_t MAX_1WORD_RUNE;
-    static const uint32_t MIN_LEAD_SURR;
-    static const uint32_t MIN_TRAIL_SURR;
-    static const uint32_t MAX_TRAIL_SURR;
+    static constexpr uint32_t MAX_1WORD_RUNE = 0xFFFFu;
+    static constexpr uint32_t MIN_LEAD_SURR = 0xD800u;
+    static constexpr uint32_t MIN_TRAIL_SURR = 0xDC00u;
+    static constexpr uint32_t MAX_TRAIL_SURR = 0xDFFFu;
 
     // leading surrogate of UTF-16 symbol
-    static inline uint32_t lead_surr(rune r);
+    static inline constexpr uint32_t lead_surr(rune r) {
+        return ((r - 0x10000u) / 0x400u) + MIN_LEAD_SURR;
+    }
 
     // trailing surrogate of UTF-16 symbol
-    static inline uint32_t trail_surr(rune r);
+    static inline constexpr uint32_t trail_surr(rune r) {
+        return ((r - 0x10000u) % 0x400u) + MIN_TRAIL_SURR;
+    }
 };
-
-inline uint32_t utf16::lead_surr(rune r) {
-    return ((r - 0x10000u) / 0x400u) + MIN_LEAD_SURR;
-}
-
-inline uint32_t utf16::trail_surr(rune r) {
-    return ((r - 0x10000u) % 0x400u) + MIN_TRAIL_SURR;
-}
 
 } // namespace re2c
 

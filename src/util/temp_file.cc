@@ -84,7 +84,7 @@ bool overwrite_file(const char* srcname, const char* dstname) {
 
     // rename failed: try write
     FILE* src = nullptr, *dst = nullptr;
-    static const size_t BLK = 4096;
+    static constexpr size_t BLK = 4096;
     char buf[BLK];
     bool ok = false;
     size_t n;

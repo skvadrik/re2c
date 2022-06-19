@@ -173,7 +173,6 @@ set(re2c_sources
     src/encoding/utf8/utf8_regexp.cc
     src/encoding/utf8/utf8.cc
     src/encoding/utf16/utf16_regexp.cc
-    src/encoding/utf16/utf16.cc
     src/msg/msg.cc
     src/msg/warn.cc
     src/regexp/ast_to_re.cc
@@ -183,7 +182,6 @@ set(re2c_sources
     src/regexp/re.cc
     src/regexp/rule.cc
     src/regexp/split_charset.cc
-    src/regexp/tag.cc
     src/compile.cc
     src/skeleton/control_flow.cc
     src/skeleton/generate_code.cc
@@ -479,7 +477,6 @@ if (RE2C_BUILD_LIBS)
         src/encoding/enc.cc
         src/encoding/range_suffix.cc
         src/encoding/ebcdic/ebcdic_regexp.cc
-        src/encoding/utf16/utf16.cc
         src/encoding/utf16/utf16_regexp.cc
         src/encoding/utf8/utf8.cc
         src/encoding/utf8/utf8_regexp.cc
@@ -492,7 +489,6 @@ if (RE2C_BUILD_LIBS)
         src/regexp/re.cc
         src/regexp/rule.cc
         src/regexp/split_charset.cc
-        src/regexp/tag.cc
         src/skeleton/control_flow.cc
         src/skeleton/maxpath.cc
         src/skeleton/skeleton.cc

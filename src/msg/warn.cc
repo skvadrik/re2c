@@ -14,10 +14,6 @@ namespace re2c {
 
 struct loc_t;
 
-const uint32_t Warn::SILENT  = 0;
-const uint32_t Warn::WARNING = 1u << 0;
-const uint32_t Warn::ERROR   = 1u << 1;
-
 const char* Warn::names [TYPES] = {
 #define W(x, y) y
     RE2C_WARNING_TYPES

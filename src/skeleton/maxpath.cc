@@ -15,8 +15,8 @@ namespace re2c {
 namespace {
 
 // 0 < DIST_MAX < DIST_ERROR <= std::numeric_limits<uint32_t>::max()
-static const uint32_t DIST_ERROR = std::numeric_limits<uint32_t>::max();
-static const uint32_t DIST_MAX = DIST_ERROR - 1;
+static constexpr uint32_t DIST_ERROR = std::numeric_limits<uint32_t>::max();
+static constexpr uint32_t DIST_MAX = DIST_ERROR - 1;
 
 struct StackItem {
     uint32_t node;

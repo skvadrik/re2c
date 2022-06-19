@@ -41,7 +41,7 @@ template <typename value_t> class uniq_vector_t;
 typedef slab_allocator_t<1024 * 1024, 8> code_alc_t;
 
 struct Label {
-    static const uint32_t NONE = ~0u;
+    static constexpr uint32_t NONE = ~0u;
 
     uint32_t index;
     bool used;
@@ -192,7 +192,7 @@ struct CodeGoBm {
 };
 
 struct CodeGoCpTable {
-    static const uint32_t TABLE_SIZE;
+    static constexpr uint32_t TABLE_SIZE = 0x100;
 
     State** table;
 };

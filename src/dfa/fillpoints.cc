@@ -28,8 +28,8 @@
 namespace re2c {
 namespace {
 
-static const size_t SCC_INF = std::numeric_limits<size_t>::max();
-static const size_t SCC_UND = SCC_INF - 1;
+static constexpr size_t SCC_INF = std::numeric_limits<size_t>::max();
+static constexpr size_t SCC_UND = SCC_INF - 1;
 
 static bool loopback(size_t state, size_t narcs, const size_t* arcs) {
     for (size_t i = 0; i < narcs; ++i) {

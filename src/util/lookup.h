@@ -16,7 +16,7 @@ namespace re2c {
 //
 template<typename data_t, typename hash_t = uint32_t>
 struct lookup_t {
-    static const uint32_t NIL;
+    static constexpr uint32_t NIL = ~0u;
 
   private:
     struct elem_t {
@@ -43,9 +43,6 @@ struct lookup_t {
     uint32_t head(hash_t) const;
     template<typename pred_t> uint32_t find(uint32_t next, const data_t& data, pred_t& pred) const;
 };
-
-template<typename data_t, typename hash_t>
-const uint32_t lookup_t<data_t, hash_t>::NIL = ~0u;
 
 template<typename data_t, typename hash_t>
 uint32_t lookup_t<data_t, hash_t>::size() const {

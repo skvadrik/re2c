@@ -29,7 +29,7 @@ struct cfg_bb_t {
 
 // helper structure used in control flow graph construction
 struct cfg_context_t {
-    static const uint32_t MAX_MARK;
+    static constexpr uint32_t MAX_MARK = ~0u;
 
     dfa_t& dfa;
     const size_t nstate;

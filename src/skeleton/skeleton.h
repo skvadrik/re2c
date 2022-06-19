@@ -55,7 +55,7 @@ template<> inline membuf_t<uint32_t>& OutBuf::select() { return buf32; }
 template<> inline membuf_t<uint64_t>& OutBuf::select() { return buf64; }
 
 inline void OutBuf::init(size_t selector) {
-    static const size_t KB = 1024 * 1024;
+    static constexpr size_t KB = 1024 * 1024;
     switch (selector) {
     case 1: init_membuf(buf8, KB);  break;
     case 2: init_membuf(buf16, KB); break;
@@ -129,7 +129,7 @@ struct Node {
 };
 
 struct Skeleton {
-    static const uint32_t DEFTAG;
+    static constexpr uint32_t DEFTAG = std::numeric_limits<uint32_t>::max();
 
     const opt_t* opts;
     const std::string name;

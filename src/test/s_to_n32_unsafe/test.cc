@@ -5,7 +5,7 @@
 
 namespace re2c_test {
 
-static const uint32_t DIGITS = 256;
+static constexpr uint32_t DIGITS = 256;
 
 // Write string backwards, return a pointer to the start. No terminating NULL, as we don't need it.
 static char* u64_to_s_fastest_ever(uint64_t u, char* s) {
@@ -52,20 +52,20 @@ static int32_t test_i(int64_t i) {
 static int32_t test() {
     int32_t ok = 0;
 
-    static const uint64_t UDELTA = 0xFFFF;
+    static constexpr uint64_t UDELTA = 0xFFFF;
     // zero neighbourhood
     for (uint64_t i = 0; i <= UDELTA; ++i) {
         ok |= test_u(i);
     }
     // u32_max neighbourhood
-    static const uint64_t u32_max = std::numeric_limits<uint32_t>::max();
+    static constexpr uint64_t u32_max = std::numeric_limits<uint32_t>::max();
     for (uint64_t i = u32_max - UDELTA; i <= u32_max + UDELTA; ++i) {
         ok |= test_u(i);
     }
 
-    static const int64_t IDELTA = 0xFFFF;
+    static constexpr int64_t IDELTA = 0xFFFF;
     // i32_min neighbourhood
-    static const int64_t i32_min = std::numeric_limits<int32_t>::min();
+    static constexpr int64_t i32_min = std::numeric_limits<int32_t>::min();
     for (int64_t i = i32_min - IDELTA; i <= i32_min + IDELTA; ++i) {
         ok |= test_i(i);
     }
@@ -74,7 +74,7 @@ static int32_t test() {
         ok |= test_i(i);
     }
     // i32_max neighbourhood
-    static const int64_t i32_max = std::numeric_limits<int32_t>::max();
+    static constexpr int64_t i32_max = std::numeric_limits<int32_t>::max();
     for (int64_t i = i32_max - IDELTA; i <= i32_max + IDELTA; ++i) {
         ok |= test_i(i);
     }

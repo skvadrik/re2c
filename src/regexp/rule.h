@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <limits>
 #include <set>
 #include <string>
 
@@ -34,7 +35,7 @@ struct SemAct {
 };
 
 struct Rule {
-    static const size_t NONE;
+    static constexpr size_t NONE = std::numeric_limits<size_t>::max();
 
     const SemAct* semact;
     std::set<uint32_t> shadow;

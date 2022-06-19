@@ -44,7 +44,7 @@ template<> void init_gor1<libre2c::ksimctx_t>(libre2c::ksimctx_t& ctx);
 
 namespace libre2c {
 
-static const int32_t DELIM = 0x7fffFFFF;
+static constexpr int32_t DELIM = 0x7fffFFFF;
 
 static void make_one_step(ksimctx_t&, uint32_t);
 static void make_final_step(ksimctx_t&);

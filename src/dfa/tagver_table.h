@@ -10,7 +10,7 @@
 
 namespace re2c {
 
-static const size_t ZERO_TAGS = 0;
+static constexpr size_t ZERO_TAGS = 0;
 
 struct tagver_table_t {
   private:

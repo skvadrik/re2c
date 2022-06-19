@@ -12,11 +12,11 @@ namespace re2c {
 typedef int32_t tagver_t;
 
 // default value, lowest priority
-static const tagver_t TAGVER_BOTTOM = std::numeric_limits<tagver_t>::min();
+static constexpr tagver_t TAGVER_BOTTOM = std::numeric_limits<tagver_t>::min();
 // the absense of tag
-static const tagver_t TAGVER_ZERO = 0;
+static constexpr tagver_t TAGVER_ZERO = 0;
 // current position, highest priority
-static const tagver_t TAGVER_CURSOR = std::numeric_limits<tagver_t>::max();
+static constexpr tagver_t TAGVER_CURSOR = std::numeric_limits<tagver_t>::max();
 
 struct tag_info_t {
     uint32_t idx; // tag index (starting from zero)
@@ -24,10 +24,10 @@ struct tag_info_t {
 };
 
 struct Tag {
-    static const size_t RIGHTMOST;
-    static const uint32_t VARDIST;
-    static const size_t FICTIVE;
-    static const size_t NONE;
+    static constexpr size_t RIGHTMOST = std::numeric_limits<size_t>::max();
+    static constexpr size_t FICTIVE   = std::numeric_limits<size_t>::max() - 1;
+    static constexpr size_t NONE      = std::numeric_limits<size_t>::max() - 2;
+    static constexpr uint32_t VARDIST = std::numeric_limits<uint32_t>::max();
 
     const std::string* name;
     size_t lsub;
@@ -41,8 +41,31 @@ struct Tag {
     bool toplevel;
     int32_t height;
 
-    Tag(const std::string* nm, bool hi, int32_t ht);
-    Tag(size_t lsub, size_t hsub, bool history, bool orbit, int32_t height);
+    Tag(const std::string* nm, bool hi, int32_t ht)
+        : name(nm),
+          lsub(RIGHTMOST),
+          hsub(RIGHTMOST),
+          base(RIGHTMOST),
+          dist(VARDIST),
+          lnest(RIGHTMOST),
+          hnest(RIGHTMOST),
+          history(hi),
+          orbit(false),
+          toplevel(false),
+          height(ht) {}
+
+    Tag(size_t lsub, size_t hsub, bool history, bool orbit, int32_t height)
+        : name(nullptr),
+          lsub(lsub),
+          hsub(hsub),
+          base(RIGHTMOST),
+          dist(VARDIST),
+          lnest(RIGHTMOST),
+          hnest(RIGHTMOST),
+          history(history),
+          orbit(orbit),
+          toplevel(false),
+          height(height) {}
 };
 
 inline bool operator == (const tag_info_t& x, const tag_info_t& y) {

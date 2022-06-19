@@ -45,9 +45,9 @@ class Enc {
     };
 
   private:
-    static const uint32_t SURR_MIN;
-    static const uint32_t SURR_MAX;
-    static const uint32_t UNICODE_ERROR;
+    static constexpr uint32_t SURR_MIN = 0xD800;
+    static constexpr uint32_t SURR_MAX = 0xDFFF;
+    static constexpr uint32_t UNICODE_ERROR = 0xFFFD;
 
     Type type_;
     Policy policy_;

@@ -32,7 +32,7 @@ struct ASTRange {
 // It must be immutable (as it is shared by different rules) and independent  of options.
 struct AST {
     static free_list<AST*> flist;
-    static const uint32_t MANY;
+    static constexpr uint32_t MANY = std::numeric_limits<uint32_t>::max();
 
     // Kinds of AST nodes.
     enum class Kind: uint32_t {

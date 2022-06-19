@@ -27,7 +27,7 @@ struct tcmd_t {
 
 typedef uint32_t tcid_t;
 
-static const tcid_t TCID0 = 0;
+static constexpr tcid_t TCID0 = 0;
 
 class tcpool_t {
     typedef slab_allocator_t<4096, sizeof(void*)> alc_t;

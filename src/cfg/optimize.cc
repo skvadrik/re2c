@@ -25,7 +25,7 @@ void compact_and_optimize_tags(const opt_t* opts, dfa_t& dfa) {
             bool* live = new bool[cfg.nbbfall * nver];
             bool* interf = new bool[nver * nver];
 
-            static const uint32_t NPASS = 2;
+            static constexpr uint32_t NPASS = 2;
             for (uint32_t n = 0; n < NPASS; ++n) {
 
                 cfg_t::liveness_analysis(cfg, live);

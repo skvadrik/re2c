@@ -12,8 +12,8 @@ static inline uint32_t hash4(uint32_t h, uint32_t k) {
 
 // hash in 4-byte chunks for speed
 inline uint32_t hash32(uint32_t h, const void* data, size_t size) {
-    static const uintptr_t ALIGN = sizeof(uint32_t);
-    static const uintptr_t MASK = ~(ALIGN - 1);
+    static constexpr uintptr_t ALIGN = sizeof(uint32_t);
+    static constexpr uintptr_t MASK = ~(ALIGN - 1);
 
     uintptr_t p = reinterpret_cast<uintptr_t>(data);
     const uintptr_t e = p + size;

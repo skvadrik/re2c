@@ -54,8 +54,6 @@ bool Node::end() const {
     return arcs.size() == 0;
 }
 
-const uint32_t Skeleton::DEFTAG = std::numeric_limits<uint32_t>::max();
-
 Skeleton::Skeleton(const dfa_t& dfa,
                    const opt_t* opts,
                    const std::string& name,

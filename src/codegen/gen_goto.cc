@@ -129,7 +129,7 @@ static uint32_t label_width(uint32_t label) {
 }
 
 static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
-    static const size_t TABLE_WIDTH = 8;
+    static constexpr size_t TABLE_WIDTH = 8;
     const opt_t* opts = output.block().opts;
     code_alc_t& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;

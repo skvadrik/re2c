@@ -117,7 +117,6 @@ libre2c_la_SRC = \
 	src/encoding/enc.cc \
 	src/encoding/range_suffix.cc \
 	src/encoding/ebcdic/ebcdic_regexp.cc \
-	src/encoding/utf16/utf16.cc \
 	src/encoding/utf16/utf16_regexp.cc \
 	src/encoding/utf8/utf8.cc \
 	src/encoding/utf8/utf8_regexp.cc \
@@ -130,7 +129,6 @@ libre2c_la_SRC = \
 	src/regexp/re.cc \
 	src/regexp/rule.cc \
 	src/regexp/split_charset.cc \
-	src/regexp/tag.cc \
 	src/skeleton/control_flow.cc \
 	src/skeleton/maxpath.cc \
 	src/skeleton/skeleton.cc \

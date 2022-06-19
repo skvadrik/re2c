@@ -61,7 +61,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap) {
     uint32_t nmaps = 0;
     for (CodeBmState* b = bitmap->states->head; b; b = b->next) ++nmaps;
 
-    static const uint32_t WIDTH = 8;
+    static constexpr uint32_t WIDTH = 8;
     const bool annotate = nmaps > WIDTH;
     const uint32_t nchars = bitmap->nchars;
 

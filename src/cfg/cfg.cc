@@ -13,8 +13,6 @@ namespace re2c {
 
 struct tcmd_t;
 
-const uint32_t cfg_context_t::MAX_MARK = ~0u;
-
 cfg_context_t::cfg_context_t(dfa_t& dfa)
     : dfa(dfa),
       nstate(dfa.states.size()),

@@ -10,7 +10,7 @@ struct examples_t {
     const char* expected;
 };
 
-static const examples_t EXAMPLES[] = {
+static constexpr examples_t EXAMPLES[] = {
     { "",            "", },
     { "1",           "010000", },
     { "1.1",         "010100", },

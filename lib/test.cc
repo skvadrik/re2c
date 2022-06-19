@@ -38,7 +38,7 @@ static int test(int flags,
     }
 
     // run multiple times to ensure everything gets cleaned up properly
-    static const uint32_t NRUNS = 2;
+    static constexpr uint32_t NRUNS = 2;
     for (uint32_t i = 0; i < NRUNS; ++i) {
         if (with_hist) {
             // With subhistories every regexec() call may allocate offsets. Clean them up at the
@@ -151,7 +151,7 @@ static int test_tstring(const char* pattern, const char* string, const char* exp
     }
 
     // run multiple times to ensure everything gets cleaned up properly
-    static const uint32_t NRUNS = 2;
+    static constexpr uint32_t NRUNS = 2;
     for (uint32_t i = 0; i < NRUNS; ++i) {
         tstr = regtstring(&re, string);
         if (tstr == nullptr) {

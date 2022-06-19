@@ -6,10 +6,6 @@
 
 namespace re2c {
 
-const uint32_t Enc::SURR_MIN = 0xD800;
-const uint32_t Enc::SURR_MAX = 0xDFFF;
-const uint32_t Enc::UNICODE_ERROR = 0xFFFD;
-
 // Returns code point representation with regard to the current policy (overwrites the argument code
 // point). The code point is specified by the user; re2c validates it. A code point is invalid if it
 // exceeds maximum allowed value, or if it falls into the surrogates range. In the latter case the

@@ -10,7 +10,7 @@
 namespace re2c {
 
 // maximum 29-bit (we have 30 bits, but highest must be non-negative)
-static const int32_t MAX_RHO = 0x1fffFFFF;
+static constexpr int32_t MAX_RHO = 0x1fffFFFF;
 
 template<typename ctx_t> static void compute_prectable_naive(ctx_t& ctx) RE2C_ATTR((used));
 template<typename ctx_t> static void compute_prectable_complex(ctx_t& ctx) RE2C_ATTR((used));

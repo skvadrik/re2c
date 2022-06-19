@@ -54,8 +54,8 @@ static int32_t test () {
     int32_t ok = 0;
     re2c::RangeMgr rm;
 
-    static const uint32_t BITS = 8;
-    static const uint32_t N = 1u << BITS;
+    static constexpr uint32_t BITS = 8;
+    static constexpr uint32_t N = 1u << BITS;
     for (uint32_t i = 0; i <= N; ++i) {
         for (uint32_t j = 0; j <= N; ++j) {
             re2c::Range* r1 = range<BITS>(rm, i);
