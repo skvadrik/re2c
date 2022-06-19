@@ -101,7 +101,7 @@ template<typename T> inline T* OutBuf::alloc(size_t n) {
     return ptr;
 }
 
-typedef local_increment_t<uint8_t> local_inc;
+using local_inc = local_increment_t<uint8_t>;
 
 struct Node {
     struct range_t {
@@ -111,8 +111,8 @@ struct Node {
         range_t* next;
     };
 
-    typedef std::map<size_t, range_t*> arcs_t;
-    typedef fixed_allocator_t<Node::range_t> range_allocator_t;
+    using arcs_t = std::map<size_t, range_t*>;
+    using range_allocator_t = fixed_allocator_t<Node::range_t>;
 
     arcs_t arcs;
     size_t rule;

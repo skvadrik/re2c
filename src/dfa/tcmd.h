@@ -25,13 +25,13 @@ struct tcmd_t {
     static tcmd_t** topsort(tcmd_t** phead, tcmd_t* end, uint32_t* indeg);
 };
 
-typedef uint32_t tcid_t;
+using tcid_t = uint32_t;
 
 static constexpr tcid_t TCID0 = 0;
 
 class tcpool_t {
-    typedef slab_allocator_t<4096, sizeof(void*)> alc_t;
-    typedef lookup_t<const tcmd_t*> index_t;
+    using alc_t = slab_allocator_t<4096, sizeof(void*)>;
+    using index_t = lookup_t<const tcmd_t*>;
 
     alc_t alc;
     index_t index;

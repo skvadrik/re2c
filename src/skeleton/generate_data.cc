@@ -43,7 +43,7 @@ namespace re2c {
 // Type for calculating the size of path cover. Paths are dumped to file as soon as generated and
 // don't eat heap space. The total size of path cover (measured in edges) is O(N^2) where N is the
 // number of edges in skeleton.
-typedef u32lim_t<1024 * 1024 * 1024> cover_size_t; // ~1Gb
+using cover_size_t = u32lim_t<1024 * 1024 * 1024>; // ~1Gb
 
 struct cover_t {
     std::vector<uint8_t> loops;

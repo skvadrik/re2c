@@ -28,7 +28,7 @@ struct State;
 
 static constexpr size_t NOSAVE = std::numeric_limits<size_t>::max();
 
-typedef uniq_vector_t<std::pair<State*, tcid_t> > accept_t;
+using accept_t = uniq_vector_t<std::pair<State*, tcid_t> >;
 
 class Action {
   public:

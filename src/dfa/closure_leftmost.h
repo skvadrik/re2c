@@ -20,7 +20,7 @@ void closure_leftmost_dfs(ctx_t& ctx) {
 
     // DFS; linear complexity
     for (; !stack.empty(); ) {
-        typedef typename ctx_t::conf_t conf_t;
+        using conf_t = typename ctx_t::conf_t;
         const conf_t x = stack.back();
         stack.pop_back();
         nfa_state_t* n = x.state;

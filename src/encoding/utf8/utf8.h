@@ -7,7 +7,7 @@ namespace re2c {
 
 class utf8 {
   public:
-    typedef uint32_t rune;
+    using rune = uint32_t;
 
     // Maximum characters per code point (rune).
     static constexpr uint32_t MAX_RUNE_LENGTH = 4u;

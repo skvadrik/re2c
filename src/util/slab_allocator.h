@@ -17,7 +17,7 @@ namespace re2c {
 //
 template<uint32_t SLAB_SIZE = 1024 * 1024, size_t ALIGN = 1>
 class slab_allocator_t {
-    typedef std::vector<char*> slabs_t;
+    using slabs_t = std::vector<char*>;
 
     slabs_t slabs_; // quasilist of allocated slabs of `SLAB_SIZE` bytes
     char* current_slab_;

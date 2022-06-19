@@ -9,7 +9,7 @@
 
 namespace re2c {
 
-typedef std::vector<tagver_t> vals_t;
+using vals_t = std::vector<tagver_t>;
 static void interfere(const tcmd_t* cmd,
                       const bool* live,
                       bool* interf,

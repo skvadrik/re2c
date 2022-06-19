@@ -129,7 +129,7 @@ template<typename ctx_t>
 bool scan(ctx_t& ctx, nfa_state_t* q, bool all) {
     bool any = false;
 
-    typedef typename ctx_t::conf_t conf_t;
+    using conf_t = typename ctx_t::conf_t;
     const conf_t x = ctx.state[q->clos];
 
     switch (q->kind) {
@@ -221,7 +221,7 @@ void closure_posix_gtop(ctx_t& ctx) {
         q->active = 0;
         DINCCOUNT_CLSCANS(ctx);
 
-        typedef typename ctx_t::conf_t conf_t;
+        using conf_t = typename ctx_t::conf_t;
         const conf_t x = ctx.state[q->clos];
 
         switch (q->kind) {

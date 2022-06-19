@@ -14,7 +14,7 @@ struct dfa_t;
 struct tcmd_t;
 struct opt_t;
 
-typedef uint32_t cfg_ix_t;
+using cfg_ix_t = uint32_t;
 
 // basic block
 struct cfg_bb_t {

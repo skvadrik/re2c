@@ -10,7 +10,7 @@ struct AST;
 struct loc_t;
 class Msg;
 
-typedef std::map<std::string, const AST*> symtab_t;
+using symtab_t = std::map<std::string, const AST*>;
 
 const AST* find_def(const symtab_t& symtab, const std::string& name, const loc_t& loc, Msg& msg);
 void add_named_def(

@@ -14,7 +14,7 @@ static constexpr size_t ZERO_TAGS = 0;
 
 struct tagver_table_t {
   private:
-    typedef lookup_t<const tagver_t*> taglookup_t;
+    using taglookup_t = lookup_t<const tagver_t*>;
     taglookup_t lookup;
 
   public:

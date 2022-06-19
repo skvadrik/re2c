@@ -316,7 +316,7 @@ void closure_posix_gor1(psimctx_t& ctx) {
 bool scan(psimctx_t& ctx, nfa_state_t* q, bool all) {
     bool any = false;
 
-    typedef psimctx_t::conf_t conf_t;
+    using conf_t = psimctx_t::conf_t;
     const conf_t x = ctx.state[q->clos];
 
     switch (q->kind) {
@@ -404,7 +404,7 @@ void closure_posix_gtop(psimctx_t& ctx) {
         if (D) fprintf(stderr, "> %u ", index(q, ctx.nfa));
         prtoff4(ctx, index(q, ctx.nfa));
 
-        typedef psimctx_t::conf_t conf_t;
+        using conf_t = psimctx_t::conf_t;
         const conf_t x = ctx.state[q->clos];
 
         switch (q->kind) {

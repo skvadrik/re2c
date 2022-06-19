@@ -22,7 +22,7 @@ struct regoff_trie_t;
 } // namespace libre2c
 } // namespace re2c
 
-typedef ptrdiff_t regoff_t;
+using regoff_t = ptrdiff_t;
 
 // regmatch_t stores an offset pair representing a capturing group. No match is represented with
 // (-1,-1).
@@ -40,7 +40,7 @@ struct subhistory_t {
 };
 
 // T-string chars are 16 bits. This is aligned with the Java implementation by Angelo Borsotti.
-typedef uint16_t tchar_t;
+using tchar_t = uint16_t;
 
 // A t-string is a flattened representation a parse tree where characters of the input string are
 // interleaved with tags. Input characters occupy the lower byte of the 16-bit value, leaving the

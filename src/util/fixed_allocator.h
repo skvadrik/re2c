@@ -9,7 +9,7 @@
 
 template<typename T, uint32_t SLAB_SIZE = 4096>
 class fixed_allocator_t {
-    typedef std::vector<T*> slabs_t;
+    using slabs_t = std::vector<T*>;
 
     slabs_t slabs;
     size_t index;

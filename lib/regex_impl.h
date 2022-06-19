@@ -15,7 +15,7 @@
 namespace re2c {
 namespace libre2c {
 
-typedef std::vector<tag_info_t> tag_path_t;
+using tag_path_t = std::vector<tag_info_t>;
 
 struct conf_t {
     nfa_state_t* state;
@@ -35,20 +35,20 @@ struct ran_or_fin_t {
     inline bool operator()(const conf_t& c);
 };
 
-typedef std::vector<conf_t> confset_t;
-typedef confset_t::iterator confiter_t;
-typedef confset_t::const_iterator cconfiter_t;
-typedef confset_t::const_reverse_iterator rcconfiter_t;
+using confset_t = std::vector<conf_t>;
+using confiter_t = confset_t::iterator;
+using cconfiter_t = confset_t::const_iterator;
+using rcconfiter_t = confset_t::const_reverse_iterator;
 
 template<typename history_type_t>
 struct simctx_t {
-    typedef libre2c::conf_t conf_t;
-    typedef std::vector<conf_t> confset_t;
-    typedef confset_t::iterator confiter_t;
-    typedef confset_t::const_iterator cconfiter_t;
-    typedef confset_t::reverse_iterator rconfiter_t;
-    typedef confset_t::const_reverse_iterator rcconfiter_t;
-    typedef history_type_t history_t;
+    using conf_t = libre2c::conf_t;
+    using confset_t = std::vector<conf_t>;
+    using confiter_t = confset_t::iterator;
+    using cconfiter_t = confset_t::const_iterator;
+    using rconfiter_t = confset_t::reverse_iterator;
+    using rcconfiter_t = confset_t::const_reverse_iterator;
+    using history_t = history_type_t;
 
     const nfa_t& nfa;
     const nfa_t* nfa0;
@@ -110,7 +110,7 @@ struct zhistory_t {
         int32_t prec2;
         int32_t prec;
     };
-    typedef std::map<uint64_t, cache_entry_t> cache_t;
+    using cache_t = std::map<uint64_t, cache_entry_t>;
 
     std::vector<node_t> nodes;
     cache_t cache;
@@ -157,14 +157,14 @@ struct khistory_t {
     FORBID_COPY(khistory_t);
 };
 
-typedef simctx_t<phistory_t> psimctx_t;
-typedef simctx_t<lhistory_t> lsimctx_t;
-typedef simctx_t<zhistory_t> pzsimctx_t;
-typedef simctx_t<zhistory_t> lzsimctx_t;
-typedef simctx_t<khistory_t> ksimctx_t;
+using psimctx_t = simctx_t<phistory_t>;
+using lsimctx_t = simctx_t<lhistory_t>;
+using pzsimctx_t = simctx_t<zhistory_t>;
+using lzsimctx_t = simctx_t<zhistory_t>;
+using ksimctx_t = simctx_t<khistory_t>;
 
 // regexec functions
-typedef int (regexec_t)(const regex_t*, const char*, size_t, regmatch_t[], int);
+using regexec_t = int (const regex_t*, const char*, size_t, regmatch_t[], int);
 regexec_t regexec_dfa;
 template<typename ctx_t> regexec_t regexec_dfa_regless;
 regexec_t regexec_nfa_posix;
@@ -175,7 +175,7 @@ regexec_t regexec_nfa_leftmost;
 regexec_t regexec_nfa_leftmost_trie;
 
 // regparse functions (non-standard)
-typedef subhistory_t* (regparse_t)(const regex_t*, const char*, size_t);
+using regparse_t = subhistory_t* (const regex_t*, const char*, size_t);
 regparse_t regparse_dfa;
 template<typename ctx_t> regparse_t regparse_dfa_regless;
 

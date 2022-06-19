@@ -12,7 +12,7 @@ namespace re2c {
 //
 template <typename value_t>
 class uniq_vector_t {
-    typedef std::vector<value_t> elems_t;
+    using elems_t = std::vector<value_t>;
     elems_t elems;
 
   public:

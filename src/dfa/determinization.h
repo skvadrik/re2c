@@ -25,8 +25,8 @@ struct dfa_t;
 struct tcmd_t;
 class Msg;
 
-typedef slab_allocator_t<1024 * 1024, sizeof(void*)> allocator_t;
-typedef int32_t prectable_t;
+using allocator_t = slab_allocator_t<1024 * 1024, sizeof(void*)>;
+using prectable_t = int32_t;
 
 struct clos_t {
     nfa_state_t* state;
@@ -46,11 +46,11 @@ struct clos_t {
     static inline bool ran(const clos_t& c) { return c.state->kind == nfa_state_t::Kind::RAN; }
 };
 
-typedef std::vector<clos_t> closure_t;
-typedef closure_t::iterator clositer_t;
-typedef closure_t::const_iterator cclositer_t;
-typedef closure_t::reverse_iterator rclositer_t;
-typedef closure_t::const_reverse_iterator rcclositer_t;
+using closure_t = std::vector<clos_t>;
+using clositer_t = closure_t::iterator;
+using cclositer_t = closure_t::const_iterator;
+using rclositer_t = closure_t::reverse_iterator;
+using rcclositer_t = closure_t::const_reverse_iterator;
 
 struct newver_t {
     size_t tag;
@@ -58,8 +58,8 @@ struct newver_t {
     hidx_t history;
 };
 
-typedef std::map<uint64_t, int32_t> hc_cache_t; // 'hc' for history comparison
-typedef std::vector<hc_cache_t> hc_caches_t;
+using hc_cache_t = std::map<uint64_t, int32_t>; // 'hc' for history comparison
+using hc_caches_t = std::vector<hc_cache_t>;
 
 template<typename history_t>
 struct newver_cmp_t {
@@ -106,19 +106,19 @@ struct histleaf_t {
     int32_t height;
 };
 
-typedef lookup_t<const kernel_t*> kernels_t;
-typedef std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>, cmp_gtop_t> gtop_heap_t;
+using kernels_t = lookup_t<const kernel_t*>;
+using gtop_heap_t = std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>, cmp_gtop_t>;
 
 template<typename history_type_t>
 struct determ_context_t {
-    typedef clos_t conf_t;
-    typedef std::vector<conf_t> confset_t;
-    typedef confset_t::iterator confiter_t;
-    typedef confset_t::const_iterator cconfiter_t;
-    typedef confset_t::reverse_iterator rconfiter_t;
-    typedef confset_t::const_reverse_iterator rcconfiter_t;
-    typedef history_type_t history_t;
-    typedef std::map<newver_t, tagver_t, newver_cmp_t<history_t> > newvers_t;
+    using conf_t = clos_t;
+    using confset_t = std::vector<conf_t>;
+    using confiter_t = confset_t::iterator;
+    using cconfiter_t = confset_t::const_iterator;
+    using rconfiter_t = confset_t::reverse_iterator;
+    using rcconfiter_t = confset_t::const_reverse_iterator;
+    using history_t = history_type_t;
+    using newvers_t = std::map<newver_t, tagver_t, newver_cmp_t<history_t>>;
 
     // determinization input
     const opt_t* dc_opts;           // options
@@ -175,8 +175,8 @@ struct determ_context_t {
     FORBID_COPY(determ_context_t);
 };
 
-typedef determ_context_t<phistory_t> pdetctx_t;
-typedef determ_context_t<lhistory_t> ldetctx_t;
+using pdetctx_t = determ_context_t<phistory_t>;
+using ldetctx_t = determ_context_t<lhistory_t>;
 
 template<typename ctx_t> void tagged_epsilon_closure(ctx_t& ctx);
 template<typename ctx_t> void closure(ctx_t& ctx);

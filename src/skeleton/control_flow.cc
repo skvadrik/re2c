@@ -22,7 +22,7 @@ namespace {
 // See note [counting skeleton edges].
 // A type for counting total size of default paths. Most real-world cases have only a few short
 // paths. We don't need all paths anyway, just some examples.
-typedef u32lim_t<1024> paths_size_t; // ~1Kb
+using paths_size_t = u32lim_t<1024>; // ~1Kb
 
 struct StackItem {
     uint32_t node;

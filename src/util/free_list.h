@@ -8,9 +8,9 @@ namespace re2c {
 template<class Ty>
 class free_list: protected std::set<Ty> {
   public:
-    typedef typename std::set<Ty>::iterator iterator;
-    typedef typename std::set<Ty>::size_type size_type;
-    typedef typename std::set<Ty>::key_type key_type;
+    using iterator = typename std::set<Ty>::iterator;
+    using size_type = typename std::set<Ty>::size_type;
+    using key_type = typename std::set<Ty>::key_type;
 
     free_list(): in_clear(false) {}
 

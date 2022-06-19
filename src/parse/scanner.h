@@ -29,7 +29,7 @@ struct opt_t;
 struct Opt;
 
 // Must be defined exacly as in codegen.
-typedef slab_allocator_t<1024 * 1024, 8> code_alc_t;
+using code_alc_t = slab_allocator_t<1024 * 1024, 8>;
 
 class Scanner: private ScannerState {
   public:

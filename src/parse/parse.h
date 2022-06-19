@@ -13,7 +13,7 @@ namespace re2c {
 class Scanner;
 struct Opt;
 
-typedef std::set<std::string> CondList;
+using CondList = std::set<std::string>;
 
 struct spec_t {
     std::string name;
@@ -47,7 +47,7 @@ struct spec_t {
           eof_rule(Rule::NONE) {}
 };
 
-typedef std::vector<spec_t> specs_t;
+using specs_t = std::vector<spec_t>;
 
 struct RulesBlock {
     std::string name;

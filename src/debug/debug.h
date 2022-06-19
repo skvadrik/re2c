@@ -75,8 +75,8 @@ template<typename ctx_t>
 struct dump_dfa_tree_t {
     const ctx_t& ctx;
 
-    typedef std::vector<const nfa_state_t*> origins_t;
-    typedef std::map<std::pair<uint32_t, uint32_t>, origins_t> origmap_t;
+    using origins_t = std::vector<const nfa_state_t*>;
+    using origmap_t = std::map<std::pair<uint32_t, uint32_t>, origins_t>;
     origmap_t origmap;
 
     uint32_t uniqidx;

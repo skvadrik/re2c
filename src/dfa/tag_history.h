@@ -12,8 +12,8 @@
 
 namespace re2c {
 
-typedef int32_t hidx_t;
-typedef std::vector<tag_info_t> tag_path_t;
+using hidx_t = int32_t;
+using tag_path_t = std::vector<tag_info_t>;
 
 static constexpr hidx_t HROOT = 0;
 const tag_info_t NOINFO = {~0u, 0};

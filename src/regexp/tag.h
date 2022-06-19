@@ -8,7 +8,7 @@
 
 namespace re2c {
 
-typedef int32_t tagver_t;
+using tagver_t = int32_t;
 
 // default value, lowest priority
 static constexpr tagver_t TAGVER_BOTTOM = std::numeric_limits<tagver_t>::min();

@@ -7,7 +7,7 @@ namespace re2c {
 
 class utf16 {
   public:
-    typedef uint32_t rune;
+    using rune = uint32_t;
 
     static constexpr uint32_t MAX_1WORD_RUNE = 0xFFFFu;
     static constexpr uint32_t MIN_LEAD_SURR = 0xD800u;

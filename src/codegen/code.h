@@ -34,11 +34,11 @@ struct Output;
 struct OutputBlock;
 struct State;
 struct DFA;
-typedef std::vector<std::unique_ptr<DFA>> dfas_t;
+using dfas_t = std::vector<std::unique_ptr<DFA>>;
 template <typename value_t> class uniq_vector_t;
 
 // need 8-byte alignment to allocate structs with pointers and 64-bit integers
-typedef slab_allocator_t<1024 * 1024, 8> code_alc_t;
+using code_alc_t = slab_allocator_t<1024 * 1024, 8>;
 
 struct Label {
     static constexpr uint32_t NONE = ~0u;
@@ -86,7 +86,7 @@ struct code_list_t {
     T** ptail;
 };
 
-typedef code_list_t<Code> CodeList;
+using CodeList = code_list_t<Code>;
 
 struct CodeJump {
     const State* to;
@@ -104,7 +104,7 @@ struct CodeBmState {
     CodeBmState* next;
 };
 
-typedef code_list_t<CodeBmState> CodeBmStates;
+using CodeBmStates = code_list_t<CodeBmState>;
 
 struct CodeBitmap {
     CodeBmStates* states;
@@ -249,7 +249,7 @@ struct CodeCase {
     CodeCase* next;
 };
 
-typedef code_list_t<CodeCase> CodeCases;
+using CodeCases = code_list_t<CodeCase>;
 
 struct CodeSwitch {
     const char* expr;
@@ -294,7 +294,7 @@ struct CodeArg {
     CodeArg* next;
 };
 
-typedef code_list_t<CodeArg> CodeArgs;
+using CodeArgs = code_list_t<CodeArg>;
 
 struct CodeFunc {
     CodeArgs* args;
@@ -620,9 +620,9 @@ inline CodeBitmap* code_bitmap(code_alc_t& alc, uint32_t nchars) {
     return x;
 }
 
-typedef std::vector<OutputBlock*> blocks_t;
-typedef blocks_t::const_iterator blocks_citer_t;
-typedef std::set<std::string> tagnames_t;
+using blocks_t = std::vector<OutputBlock*>;
+using blocks_citer_t = blocks_t::const_iterator;
+using tagnames_t = std::set<std::string>;
 
 struct CodegenCtxGlobal {
     code_alc_t& allocator;
@@ -665,9 +665,9 @@ struct StartCond {
     std::string name;
     uint32_t number;
 };
-typedef std::vector<StartCond> StartConds;
+using StartConds = std::vector<StartCond>;
 
-typedef std::map<uint32_t, CodeList*> storable_states_t;
+using storable_states_t = std::map<uint32_t, CodeList*>;
 
 struct OutputBlock {
     InputBlock kind;
