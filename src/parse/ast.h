@@ -2,121 +2,140 @@
 #define _RE2C_AST_AST_
 
 #include <stdint.h>
-#include <map>
-#include <string>
 #include <vector>
 
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
+#include "src/util/slab_allocator.h"
+#include "src/util/containers.h"
 
 namespace re2c {
 
-struct SemAct;
-template <class Ty> class free_list;
+// AST node kinds.
+enum class AstKind: uint32_t {
+    NIL,  // empty (nil) node
+    STR,  // character string, like "abc" or 'abc'
+    CLS,  // character class, like [a-z] or [^a-z]
+    DOT,  // any character except newline
+    DEF,  // default rule *, matches any code unit, see note [default regexp]
+    ALT,  // alternative of two nodes: x | y
+    CAT,  // concatenation of two nodes: x y
+    ITER, // generalized repetition of two nodes: x{n,m} or x{n,} or x{n} or x* or x+
+    DIFF, // difference of two node (only applies to character classes)
+    TAG,  // a tag, like @t (s-tag, single-valued tag) or #t (m-tag. multi-valued tag)
+    CAP,  // capturing group (submatch group)
+    REF   // non-capturing group
+};
 
-struct ASTChar {
+struct AstChar {
     uint32_t chr;
     loc_t loc;
 };
 
-struct ASTRange {
+struct AstRange {
     uint32_t lower;
     uint32_t upper;
     loc_t loc;
 
-    ASTRange(uint32_t low, uint32_t upp, const loc_t& loc)
+    AstRange(uint32_t low, uint32_t upp, const loc_t& loc)
         : lower(low), upper(upp), loc(loc) {}
 };
 
-// Abstract Syntax Tree.
-// It must be immutable (as it is shared by different rules) and independent  of options.
-struct AST {
-    static free_list<AST*> flist;
-    static constexpr uint32_t MANY = std::numeric_limits<uint32_t>::max();
-
-    // Kinds of AST nodes.
-    enum class Kind: uint32_t {
-        NIL,     // empty (nil) node
-        STR,     // character string, like "abc" or 'abc'
-        CLS,     // character class, like [a-z] or [^a-z]
-        DOT,     // any character except newline
-        DEFAULT, // default rule *, matches any code unit, see note [default regexp]
-        ALT,     // alternative of two nodes: x | y
-        CAT,     // concatenation of two nodes: x y
-        ITER,    // generalized repetition of two nodes: x{n,m} or x{n,} or x{n} or x* or x+
-        DIFF,    // difference of two node (only applies to character classes)
-        TAG,     // a tag, like @t (s-tag, single-valued tag) or #t (m-tag. multi-valued tag)
-        CAP,     // capturing group (submatch group)
-        REF      // non-capturing group
-    } kind;
-
-    union {
-        struct {
-            const std::vector<ASTChar>* chars;
-            bool icase;
-        } str;
-        struct {
-            const std::vector<ASTRange>* ranges;
-            bool negated;
-        } cls;
-        struct {
-            const AST* ast1;
-            const AST* ast2;
-        } alt;
-        struct {
-            const AST* ast1;
-            const AST* ast2;
-        } cat;
-        struct {
-            const AST* ast;
-            uint32_t min;
-            uint32_t max;
-        } iter;
-        struct {
-            const AST* ast1;
-            const AST* ast2;
-        } diff;
-        struct {
-            const std::string* name;
-            bool history;
-        } tag;
-        const AST* cap;
-        struct {
-            const AST* ast;
-            const std::string* name;
-        } ref;
-    };
-    loc_t loc;
-
-    AST(const loc_t& loc, Kind k);
-    ~AST();
-};
-
-struct ASTRule {
-    const AST* ast;
-    const SemAct* semact;
-
-    ASTRule(const AST* r, const SemAct* a): ast(r), semact(a) {}
-};
-
-struct ASTBounds {
+struct AstBounds {
     uint32_t min;
     uint32_t max;
 };
 
-const AST* ast_nil(const loc_t& loc);
-const AST* ast_str(const loc_t& loc, std::vector<ASTChar>* chars, bool icase);
-const AST* ast_cls(const loc_t& loc, std::vector<ASTRange>* ranges, bool negated);
-const AST* ast_dot(const loc_t& loc);
-const AST* ast_default(const loc_t& loc);
-const AST* ast_alt(const AST* a1, const AST* a2);
-const AST* ast_cat(const AST* a1, const AST* a2);
-const AST* ast_iter(const AST* a, uint32_t n, uint32_t m);
-const AST* ast_diff(const AST* a1, const AST* a2);
-const AST* ast_tag(const loc_t& loc, const std::string* n, bool h);
-const AST* ast_cap(const AST* a);
-const AST* ast_ref(const AST* a, const std::string& n);
-bool ast_need_wrap(const AST* a);
+// AST nodes must be immutable and independent of block options, as they may be shared by different
+// rules in blocks with different options.
+struct AstNode {
+    AstKind kind;
+    union {
+        struct {
+            array_t<AstChar> chars;
+            bool icase;
+        } str;
+        struct {
+            array_t<AstRange> ranges;
+            bool negated;
+        } cls;
+        struct {
+            const AstNode* ast1;
+            const AstNode* ast2;
+        } alt;
+        struct {
+            const AstNode* ast1;
+            const AstNode* ast2;
+        } cat;
+        struct {
+            const AstNode* ast;
+            uint32_t min;
+            uint32_t max;
+        } iter;
+        struct {
+            const AstNode* ast1;
+            const AstNode* ast2;
+        } diff;
+        struct {
+            const char* name;
+            bool history;
+        } tag;
+        const AstNode* cap;
+        struct {
+            const AstNode* ast;
+            const char* name;
+        } ref;
+    };
+    loc_t loc;
+};
+
+struct AstRule {
+    const AstNode* ast;
+    const SemAct* semact;
+
+    AstRule(const AstNode* a, const SemAct* s): ast(a), semact(s) {}
+};
+
+// Abstract Syntax Tree.
+class Ast {
+  private:
+    // Allocator used for allocating AST nodes. All memory is freed when the allocator is destroyed
+    // (which happens after parsing and processing the whole translation unit, but before codegen).
+    using alc_t = slab_allocator_t</*SLAB_SIZE*/ 1024 * 1024, /*ALIGN*/ 8>;
+    alc_t allocator;
+
+    AstNode* make(const loc_t& loc, AstKind lind);
+
+  public:
+    // Temporary buffers for constructing character strings and classes.
+    std::vector<AstChar> temp_chars;
+    std::vector<AstRange> temp_ranges;
+
+    // Used to denote unbounded repetition (iteration, Kleene star).
+    static constexpr uint32_t MANY = std::numeric_limits<uint32_t>::max();
+
+    Ast(): allocator(), temp_chars(), temp_ranges() {}
+
+    // Methods for constructing individual AST nodes.
+    const AstNode* nil(const loc_t& loc);
+    const AstNode* str(const loc_t& loc, bool icase);
+    const AstNode* cls(const loc_t& loc, bool negated);
+    const AstNode* dot(const loc_t& loc);
+    const AstNode* def(const loc_t& loc);
+    const AstNode* alt(const AstNode* a1, const AstNode* a2);
+    const AstNode* cat(const AstNode* a1, const AstNode* a2);
+    const AstNode* iter(const AstNode* a, uint32_t n, uint32_t m);
+    const AstNode* diff(const AstNode* a1, const AstNode* a2);
+    const AstNode* tag(const loc_t& loc, const std::string* n, bool h);
+    const AstNode* cap(const AstNode* a);
+    const AstNode* ref(const AstNode* a, const std::string& n);
+
+    // Whether this AST node must be wrapped in implicit parentheses to ensure correct operator
+    // precedence. This happens with named definitions, for example `x = "a"|"aa"` used in `x "b"`
+    // is parsed as `("a"|"aa")"b"`, not `"a"|"aab"`. However, such implicit groups do no exist in
+    // POSIX regular expressions, so re2c warns if the user accidentally creates one.
+    static bool needs_wrap(const AstNode* a);
+};
 
 } // namespace re2c
 

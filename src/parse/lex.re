@@ -410,7 +410,7 @@ loop: /*!local:re2c
 */
 }
 
-int Scanner::scan() {
+int Scanner::scan(Ast& ast) {
     const char* p, *x, *y;
 scan:
     tok = cur;
@@ -432,13 +432,13 @@ scan:
 
     "%}" | "*""/" { tok = cur; return 0; }
 
-    "'"  { yylval.regexp = lex_str('\''); return TOKEN_REGEXP; }
-    "\"" { yylval.regexp = lex_str('"'); return TOKEN_REGEXP; }
-    "["  { yylval.regexp = lex_cls(false); return TOKEN_REGEXP; }
-    "[^" { yylval.regexp = lex_cls(true);  return TOKEN_REGEXP; }
+    "'"  { yylval.regexp = lex_str(ast, '\''); return TOKEN_REGEXP; }
+    "\"" { yylval.regexp = lex_str(ast, '"'); return TOKEN_REGEXP; }
+    "["  { yylval.regexp = lex_cls(ast, false); return TOKEN_REGEXP; }
+    "[^" { yylval.regexp = lex_cls(ast, true);  return TOKEN_REGEXP; }
 
     [@#] name {
-        yylval.regexp = ast_tag(tok_loc(), newstr(tok + 1, cur), tok[0] == '#');
+        yylval.regexp = ast.tag(tok_loc(), newstr(tok + 1, cur), tok[0] == '#');
         return TOKEN_REGEXP;
     }
 
@@ -505,11 +505,8 @@ scan:
             // consume one character, otherwise we risk breaking operator precedence in cases like
             // `ab*`: it should be `a(b)*`, not `(ab)*`
             cur = tok + 1;
-
-            ASTChar c = {static_cast<uint8_t>(tok[0]), tok_loc()};
-            std::vector<ASTChar> *str = new std::vector<ASTChar>;
-            str->push_back(c);
-            yylval.regexp = ast_str(tok_loc(), str, false);
+            ast.temp_chars.push_back({static_cast<uint8_t>(tok[0]), tok_loc()});
+            yylval.regexp = ast.str(tok_loc(), false);
             return TOKEN_REGEXP;
         }
     }
@@ -539,7 +536,7 @@ scan:
     }
 
     "." {
-        yylval.regexp = ast_dot(tok_loc());
+        yylval.regexp = ast.dot(tok_loc());
         return TOKEN_REGEXP;
     }
 
@@ -713,15 +710,14 @@ loop: /*!re2c
 */
 }
 
-const AST* Scanner::lex_cls(bool neg) {
-    std::vector<ASTRange>* cls = new std::vector<ASTRange>;
+const AstNode* Scanner::lex_cls(Ast& ast, bool neg) {
     uint32_t u, l;
     const loc_t& loc0 = tok_loc();
     loc_t loc = cur_loc();
 fst:
     tok = cur;
 /*!re2c
-    "]" { return ast_cls(loc0, cls, neg); }
+    "]" { return ast.cls(loc0, neg); }
     ""  { l = lex_cls_chr(); goto snd; }
 */
 snd: /*!re2c
@@ -736,7 +732,7 @@ snd: /*!re2c
     }
 */
 add:
-    cls->push_back(ASTRange(l, u, loc));
+    ast.temp_ranges.push_back(AstRange(l, u, loc));
     loc = cur_loc();
     goto fst;
 }
@@ -778,7 +774,7 @@ uint32_t Scanner::lex_cls_chr() {
     }
 }
 
-bool Scanner::lex_str_chr(char quote, ASTChar& ast) {
+bool Scanner::lex_str_chr(char quote, AstChar& ast) {
     tok = cur;
     ast.loc = cur_loc();
 /*!rules:re2c:str_chr
@@ -814,15 +810,14 @@ bool Scanner::lex_str_chr(char quote, ASTChar& ast) {
     }
 }
 
-const AST* Scanner::lex_str(char quote) {
+const AstNode* Scanner::lex_str(Ast& ast, char quote) {
     const loc_t& loc = tok_loc();
-    std::vector<ASTChar>* str = new std::vector<ASTChar>;
-    ASTChar c;
+    AstChar c;
     for (;;) {
         if (!lex_str_chr(quote, c)) {
-            return ast_str(loc, str, quote == '\'');
+            return ast.str(loc, quote == '\'');
         }
-        str->push_back(c);
+        ast.temp_chars.push_back(c);
     }
 }
 

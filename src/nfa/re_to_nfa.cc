@@ -63,7 +63,7 @@ static nfa_state_t* re_to_nfa(rtn_ctx_t& ctx, const RE* re, nfa_state_t* t) {
         max = re->iter.max;
         const RE* iter = re->iter.re;
         // see note [counted repetition and iteration expansion]
-        if (max == AST::MANY) {
+        if (max == Ast::MANY) {
             nfa_state_t* q = &nfa.states[nfa.size++];
             s = re_to_nfa(ctx, iter, q);
             q->make_alt(nrule, s, t);

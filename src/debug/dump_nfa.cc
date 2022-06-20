@@ -74,7 +74,7 @@ void dump_tag(const Tag& tag, bool negative) {
         }
         fprintf(stderr, "%u", (uint32_t)tag.hsub);
     } else if (!trailing(tag)) {
-        fprintf(stderr, "%s", tag.name->c_str());
+        fprintf(stderr, "%s", tag.name);
     }
     fprintf(stderr, "%s", negative ? "&darr;" : "&uarr;");
 }

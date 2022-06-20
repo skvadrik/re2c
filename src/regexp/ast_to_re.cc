@@ -45,21 +45,21 @@ struct loc_t;
 // concatenation (unless it is a capture). Of course, this insertion only applies to subexpressions
 // that have nested captures.
 
-static bool has_tags(const AST*);
-static RE* ast_to_re(RESpec&, const AST*, size_t&, int32_t, bool);
-static RE* re_string(RESpec&, const AST*);
+static bool has_tags(const AstNode*);
+static RE* ast_to_re(RESpec&, const AstNode*, size_t&, int32_t, bool);
+static RE* re_string(RESpec&, const AstNode*);
 static RE* re_class(RESpec&, const loc_t&, const Range*);
-static Range* ast_to_range(RESpec&, const AST*);
-static Range* char_to_range(RESpec&, const ASTChar&, bool);
-static Range* diff_to_range(RESpec&, const AST*);
-static Range* dot_to_range(RESpec&, const AST*);
-static Range* cls_to_range(RESpec&, const AST*);
-static void check_misuse_of_named_def(RESpec&, const AST*);
+static Range* ast_to_range(RESpec&, const AstNode*);
+static Range* char_to_range(RESpec&, const AstChar&, bool);
+static Range* diff_to_range(RESpec&, const AstNode*);
+static Range* dot_to_range(RESpec&, const AstNode*);
+static Range* cls_to_range(RESpec&, const AstNode*);
+static void check_misuse_of_named_def(RESpec&, const AstNode*);
 static void assert_tags_used_once(RESpec&, const Rule&, const std::vector<Tag>&);
 static void init_rule(RESpec&, Rule&, const SemAct*, const std::vector<Tag>&, size_t, size_t);
 static bool is_icase(const opt_t*, bool);
 
-RESpec::RESpec(const std::vector<ASTRule>& ast, const opt_t* o, Msg& msg, RangeMgr& rm)
+RESpec::RESpec(const std::vector<AstRule>& ast, const opt_t* o, Msg& msg, RangeMgr& rm)
     : alc(),
       rangemgr(rm),
       res(),
@@ -75,25 +75,25 @@ RESpec::RESpec(const std::vector<ASTRule>& ast, const opt_t* o, Msg& msg, RangeM
     }
 }
 
-bool has_tags(const AST* ast) {
+bool has_tags(const AstNode* ast) {
     switch (ast->kind) {
-    case AST::Kind::NIL:
-    case AST::Kind::STR:
-    case AST::Kind::CLS:
-    case AST::Kind::DOT:
-    case AST::Kind::DEFAULT:
-    case AST::Kind::DIFF:
+    case AstKind::NIL:
+    case AstKind::STR:
+    case AstKind::CLS:
+    case AstKind::DOT:
+    case AstKind::DEF:
+    case AstKind::DIFF:
         return false;
-    case AST::Kind::TAG:
-    case AST::Kind::CAP:
+    case AstKind::TAG:
+    case AstKind::CAP:
         return true;
-    case AST::Kind::ALT:
+    case AstKind::ALT:
         return has_tags(ast->alt.ast1) || has_tags(ast->alt.ast2);
-    case AST::Kind::CAT:
+    case AstKind::CAT:
         return has_tags(ast->cat.ast1) || has_tags(ast->cat.ast2);
-    case AST::Kind::REF:
+    case AstKind::REF:
         return has_tags(ast->ref.ast);
-    case AST::Kind::ITER:
+    case AstKind::ITER:
         return has_tags(ast->iter.ast);
     }
     return false; // unreachable
@@ -112,7 +112,7 @@ static void add_fictive_tags(RESpec& spec, int32_t height, RE** ptag1, RE** ptag
 }
 
 static void add_capture_tags(RESpec& spec,
-                             const AST** past,
+                             const AstNode** past,
                              size_t& ncap,
                              int32_t height,
                              RE** ptag1,
@@ -122,14 +122,14 @@ static void add_capture_tags(RESpec& spec,
     std::vector<Tag>& tags = spec.tags;
     const size_t lcap = ncap;
 
-    const AST* ast = *past;
-    if (ast->kind == AST::Kind::CAP) {
+    const AstNode* ast = *past;
+    if (ast->kind == AstKind::CAP) {
         // save the range of repeated captures and collapse them: (...(R)...) -> (R)
-        for (ast = ast->cap; ast && ast->kind == AST::Kind::CAP; ast = ast->cap) {
+        for (ast = ast->cap; ast && ast->kind == AstKind::CAP; ast = ast->cap) {
             ++ncap;
         }
         // dereference to avoid future check for non-parenthesized rerefences
-        if (ast->kind == AST::Kind::REF) {
+        if (ast->kind == AstKind::REF) {
             ast = ast->ref.ast;
         }
         *past = ast;
@@ -149,7 +149,7 @@ static void add_capture_tags(RESpec& spec,
 }
 
 static inline void add_structural_tags(RESpec& spec,
-                                       const AST** past,
+                                       const AstNode** past,
                                        size_t& ncap,
                                        int32_t height,
                                        RE** ptag1,
@@ -166,50 +166,50 @@ static inline void add_structural_tags(RESpec& spec,
     }
 }
 
-RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool in_iter) {
+RE* ast_to_re(RESpec& spec, const AstNode* ast, size_t& ncap, int32_t height, bool in_iter) {
     std::vector<Tag>& tags = spec.tags;
     const opt_t* opts = spec.opts;
 
-    if (ast->kind != AST::Kind::CAP && ast->kind != AST::Kind::REF) ++height;
+    if (ast->kind != AstKind::CAP && ast->kind != AstKind::REF) ++height;
 
     switch (ast->kind) {
-    case AST::Kind::NIL:
+    case AstKind::NIL:
         return re_nil(spec);
 
-    case AST::Kind::STR:
+    case AstKind::STR:
         return re_string(spec, ast);
 
-    case AST::Kind::CLS: {
+    case AstKind::CLS: {
         Range* r = cls_to_range(spec, ast);
         return re_class(spec, ast->loc, r);
     }
 
-    case AST::Kind::DOT: {
+    case AstKind::DOT: {
         Range* r = dot_to_range(spec, ast);
         return re_class(spec, ast->loc, r);
     }
 
-    case AST::Kind::DEFAULT: {
+    case AstKind::DEF: {
         // see note [default regexp]
         Range* r = spec.rangemgr.ran(0, opts->encoding.nCodeUnits());
         return re_sym(spec, r);
     }
 
-    case AST::Kind::DIFF: {
+    case AstKind::DIFF: {
         Range* r = diff_to_range(spec, ast);
         return re_class(spec, ast->loc, r);
     }
 
-    case AST::Kind::ALT: {
+    case AstKind::ALT: {
         RE* t1 = nullptr, *t2 = nullptr, *t3 = nullptr, *t4 = nullptr, *x, *y;
 
-        if (ast->alt.ast1->kind != AST::Kind::CAP) {
+        if (ast->alt.ast1->kind != AstKind::CAP) {
             add_structural_tags(spec, &ast, ncap, height, &t1, &t2, false, in_iter);
         }
         x = ast_to_re(spec, ast->alt.ast1, ncap, height, in_iter);
         x = re_cat(spec, t1, re_cat(spec, x, t2));
 
-        if (ast->alt.ast2->kind != AST::Kind::CAP) {
+        if (ast->alt.ast2->kind != AstKind::CAP) {
             add_structural_tags(spec, &ast, ncap, height, &t3, &t4, false, in_iter);
         }
         y = ast_to_re(spec, ast->alt.ast2, ncap, height, in_iter);
@@ -218,16 +218,16 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
         return re_alt(spec, x, y);
     }
 
-    case AST::Kind::CAT: {
+    case AstKind::CAT: {
         RE* t1 = nullptr, *t2 = nullptr, *t3 = nullptr, *t4 = nullptr, *x, *y;
 
-        if (ast->cat.ast1->kind != AST::Kind::CAP) {
+        if (ast->cat.ast1->kind != AstKind::CAP) {
             add_structural_tags(spec, &ast, ncap, height, &t1, &t2, false, in_iter);
         }
         x = ast_to_re(spec, ast->cat.ast1, ncap, height, in_iter);
         x = re_cat(spec, t1, re_cat(spec, x, t2));
 
-        if (ast->cat.ast2->kind != AST::Kind::CAP) {
+        if (ast->cat.ast2->kind != AstKind::CAP) {
             add_structural_tags(spec, &ast, ncap, height, &t3, &t4, false, in_iter);
         }
         y = ast_to_re(spec, ast->cat.ast2, ncap, height, in_iter);
@@ -236,7 +236,7 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
         return re_cat(spec, x, y);
     }
 
-    case AST::Kind::TAG: {
+    case AstKind::TAG: {
         if (ast->tag.name && !opts->tags) {
             spec.msg.error(ast->loc, "tags are only allowed with '-T, --tags' option");
             exit(1);
@@ -250,7 +250,7 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
         return t;
     }
 
-    case AST::Kind::CAP:
+    case AstKind::CAP:
         if (!opts->posix_syntax) {
             return ast_to_re(spec, ast->cap, ncap, height, in_iter);
         } else {
@@ -260,11 +260,11 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
             return re_cat(spec, t1, re_cat(spec, y, t2));
         }
 
-    case AST::Kind::REF:
+    case AstKind::REF:
         check_misuse_of_named_def(spec, ast);
         return ast_to_re(spec, ast->ref.ast, ncap, height, in_iter);
 
-    case AST::Kind::ITER: {
+    case AstKind::ITER: {
         const uint32_t n = ast->iter.min;
         const uint32_t n1 = std::max(n, 1u);
         const uint32_t m = std::max(n, ast->iter.max);
@@ -272,7 +272,7 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
 
         ast = ast->iter.ast;
 
-        if ((opts->posix_semantics && ast->kind == AST::Kind::CAP) || opts->autotags) {
+        if ((opts->posix_semantics && ast->kind == AstKind::CAP) || opts->autotags) {
             add_capture_tags(spec, &ast, ncap, height, &t1, &t2, m > 1, in_iter);
         }
 
@@ -297,7 +297,7 @@ RE* ast_to_re(RESpec& spec, const AST* ast, size_t& ncap, int32_t height, bool i
     return nullptr; // unreachable
 }
 
-Range* char_to_range(RESpec& spec, const ASTChar& chr, bool icase) {
+Range* char_to_range(RESpec& spec, const AstChar& chr, bool icase) {
     RangeMgr& rm = spec.rangemgr;
     uint32_t c = chr.chr;
 
@@ -311,13 +311,13 @@ Range* char_to_range(RESpec& spec, const ASTChar& chr, bool icase) {
            : rm.sym(c);
 }
 
-Range* cls_to_range(RESpec& spec, const AST* ast) {
-    DASSERT(ast->kind == AST::Kind::CLS);
+Range* cls_to_range(RESpec& spec, const AstNode* ast) {
+    DASSERT(ast->kind == AstKind::CLS);
 
     RangeMgr& rm = spec.rangemgr;
     Range* r = nullptr;
 
-    for (const ASTRange& a : *ast->cls.ranges) {
+    for (const AstRange& a : ast->cls.ranges) {
         Range* s = spec.opts->encoding.validateRange(rm, a.lower, a.upper);
         if (!s) {
             spec.msg.error(a.loc, "bad code point range: '0x%X - 0x%X'", a.lower, a.upper);
@@ -333,8 +333,8 @@ Range* cls_to_range(RESpec& spec, const AST* ast) {
     return r;
 }
 
-Range* dot_to_range(RESpec& spec, const AST* ast) {
-    DASSERT(ast->kind == AST::Kind::DOT);
+Range* dot_to_range(RESpec& spec, const AstNode* ast) {
+    DASSERT(ast->kind == AstKind::DOT);
 
     RangeMgr& rm = spec.rangemgr;
     uint32_t c = '\n';
@@ -345,38 +345,37 @@ Range* dot_to_range(RESpec& spec, const AST* ast) {
     return rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
 }
 
-Range* diff_to_range(RESpec& spec, const AST* ast) {
-    DASSERT(ast->kind == AST::Kind::DIFF);
+Range* diff_to_range(RESpec& spec, const AstNode* ast) {
+    DASSERT(ast->kind == AstKind::DIFF);
     Range* l = ast_to_range(spec, ast->diff.ast1);
     Range* r = ast_to_range(spec, ast->diff.ast2);
     return l && r ? spec.rangemgr.sub(l, r) : nullptr;
 }
 
-Range* ast_to_range(RESpec& spec, const AST* ast) {
+Range* ast_to_range(RESpec& spec, const AstNode* ast) {
     switch (ast->kind) {
-    case AST::Kind::NIL:
-    case AST::Kind::DEFAULT:
-    case AST::Kind::TAG:
-    case AST::Kind::CAT:
-    case AST::Kind::ITER:
+    case AstKind::NIL:
+    case AstKind::DEF:
+    case AstKind::TAG:
+    case AstKind::CAT:
+    case AstKind::ITER:
         break;
-    case AST::Kind::CAP:
+    case AstKind::CAP:
         if (spec.opts->posix_syntax) break;
         return ast_to_range(spec, ast->cap);
-    case AST::Kind::REF:
+    case AstKind::REF:
         check_misuse_of_named_def(spec, ast);
         return ast_to_range(spec, ast->ref.ast);
-    case AST::Kind::CLS:
+    case AstKind::CLS:
         return cls_to_range(spec, ast);
-    case AST::Kind::DOT:
+    case AstKind::DOT:
         return dot_to_range(spec, ast);
-    case AST::Kind::STR:
-        if (ast->str.chars->size() != 1) break;
-        return char_to_range(spec, ast->str.chars->front()
-                             , is_icase(spec.opts, ast->str.icase));
-    case AST::Kind::DIFF:
+    case AstKind::STR:
+        if (ast->str.chars.size() != 1) break;
+        return char_to_range(spec, ast->str.chars.front(), is_icase(spec.opts, ast->str.icase));
+    case AstKind::DIFF:
         return diff_to_range(spec, ast);
-    case AST::Kind::ALT: {
+    case AstKind::ALT: {
         Range* x = ast_to_range(spec, ast->diff.ast1);
         Range* y = ast_to_range(spec, ast->diff.ast2);
         return spec.rangemgr.add(x, y);
@@ -385,13 +384,13 @@ Range* ast_to_range(RESpec& spec, const AST* ast) {
     exit(1);
 }
 
-RE* re_string(RESpec& spec, const AST* ast) {
-    DASSERT(ast->kind == AST::Kind::STR);
+RE* re_string(RESpec& spec, const AstNode* ast) {
+    DASSERT(ast->kind == AstKind::STR);
 
     RE* x = nullptr;
     bool icase = is_icase(spec.opts, ast->str.icase);
 
-    for (const ASTChar& a : *ast->str.chars) {
+    for (const AstChar& a : ast->str.chars) {
         Range* r = char_to_range(spec, a, icase);
         RE* y = re_class(spec, ast->loc, r);
         x = re_cat(spec, x, y);
@@ -431,28 +430,27 @@ RE* re_class(RESpec& spec, const loc_t& loc, const Range* r) {
     return nullptr; // unreachable
 }
 
-void check_misuse_of_named_def(RESpec& spec, const AST* ast) {
-    DASSERT(ast->kind == AST::Kind::REF);
+void check_misuse_of_named_def(RESpec& spec, const AstNode* ast) {
+    DASSERT(ast->kind == AstKind::REF);
 
     if (spec.opts->posix_syntax) {
         spec.msg.error(ast->loc,
                        "implicit grouping is forbidden with '--posix-captures' option, please wrap "
-                       "'%s' in capturing parenthesis"
-                       , ast->ref.name->c_str());
+                       "'%s' in capturing parenthesis",
+                       ast->ref.name);
         exit(1);
     }
 }
 
 void assert_tags_used_once(RESpec& spec, const Rule& rule, const std::vector<Tag>& tags) {
     std::set<std::string> names;
-    const std::string* name = nullptr;
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
-        name = tags[t].name;
-        if (name && !names.insert(*name).second) {
-            spec.msg.error(rule.semact->loc
-                           , "tag '%s' is used multiple times in the same rule"
-                           , name->c_str());
+        const char* name = tags[t].name;
+        if (name && !names.insert(name).second) {
+            spec.msg.error(rule.semact->loc,
+                           "tag '%s' is used multiple times in the same rule",
+                           name);
             exit(1);
         }
     }

@@ -14,7 +14,6 @@
 #include "src/parse/ast.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
-#include "src/util/free_list.h"
 #include "src/util/range.h"
 
 using namespace re2c;
@@ -70,7 +69,6 @@ void regfree(regex_t* preg) {
         }
     }
 
-    AST::flist.clear();
     RangeSuffix::freeList.clear();
 }
 

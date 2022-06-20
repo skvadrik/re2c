@@ -800,7 +800,7 @@ void expand_fintags(const Tag& tag, std::vector<std::string>& fintags) {
         // empty list
     } else if (!capture(tag)) {
         // named tag
-        fintags.push_back(*tag.name);
+        fintags.push_back(tag.name);
     } else {
         // capture tag, maps to a range of parentheses
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {

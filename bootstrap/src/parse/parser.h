@@ -76,12 +76,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 32 "../src/parse/parser.ypp"
+#line 34 "../src/parse/parser.ypp"
 
-    const re2c::AST* regexp;
+    const re2c::AstNode* regexp;
     re2c::SemAct* semact;
     char op;
-    re2c::ASTBounds bounds;
+    re2c::AstBounds bounds;
     std::string* str;
     re2c::CondList* clist;
 
@@ -97,7 +97,7 @@ typedef union YYSTYPE YYSTYPE;
 extern YYSTYPE yylval;
 
 
-int yyparse (re2c::context_t& context);
+int yyparse (re2c::context_t& context, re2c::Ast& ast);
 
 
 #endif /* !YY_YY_SRC_PARSE_PARSER_H_INCLUDED  */

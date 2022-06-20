@@ -6,7 +6,8 @@
 
 namespace re2c {
 
-const AST* find_def(const symtab_t& symtab, const std::string& name, const loc_t& loc, Msg& msg) {
+const AstNode* find_def(
+        const symtab_t& symtab, const std::string& name, const loc_t& loc, Msg& msg) {
     symtab_t::const_iterator i = symtab.find(name);
     if (i == symtab.end()) {
         msg.error(loc, "undefined symbol '%s'", name.c_str());
@@ -16,7 +17,7 @@ const AST* find_def(const symtab_t& symtab, const std::string& name, const loc_t
 }
 
 void add_named_def(
-        symtab_t& symtab, const std::string& name, const AST* ast, const loc_t& loc, Msg& msg) {
+        symtab_t& symtab, const std::string& name, const AstNode* ast, const loc_t& loc, Msg& msg) {
     symtab_t::iterator i = symtab.lower_bound(name);
     if (i == symtab.end() || name != i->first) {
         // Ok, a new named definition, add it.

@@ -28,10 +28,9 @@ static int32_t lex_cls_chr(const char*&, uint32_t&);
     num = [0-9]+;
 */
 
-int lex(const char*& cur) {
+int lex(const char*& cur, Ast& ast) {
     /*!stags:re2c format = "const char *@@;"; */
     const char* mar, *x, *y;
-    std::vector<ASTRange> cls;
     bool neg = false;
     uint32_t l, u;
 
@@ -64,20 +63,18 @@ int lex(const char*& cur) {
 
     "{" @x num ",}" {
         if (!s_to_u32_unsafe(x, cur - 2, yylval.bounds.min)) goto err_cnt;
-        yylval.bounds.max = AST::MANY;
+        yylval.bounds.max = Ast::MANY;
         return TOKEN_COUNT;
     }
 
     "." {
-        yylval.regexp = ast_dot(NOWHERE);
+        yylval.regexp = ast.dot(NOWHERE);
         return TOKEN_REGEXP;
     }
 
     [^] \ nil {
-        ASTChar c = {static_cast<uint32_t>(cur[-1]), NOWHERE};
-        std::vector<ASTChar> *str = new std::vector<ASTChar>;
-        str->push_back(c);
-        yylval.regexp = ast_str(NOWHERE, str, false);
+        ast.temp_chars.push_back({static_cast<uint32_t>(cur[-1]), NOWHERE});
+        yylval.regexp = ast.str(NOWHERE, false);
         return TOKEN_REGEXP;
     }
 */
@@ -90,13 +87,11 @@ cls:
 */
 add:
     if (l > u) goto err;
-    cls.push_back(ASTRange(l, u, NOWHERE));
+    ast.temp_ranges.push_back(AstRange(l, u, NOWHERE));
 /*!local:re2c
     ""  { goto cls; }
     "]" {
-        std::vector<ASTRange> *p = new std::vector<ASTRange>;
-        p->swap(cls);
-        yylval.regexp = ast_cls(NOWHERE, p, neg);
+        yylval.regexp = ast.cls(NOWHERE, neg);
         return TOKEN_REGEXP;
     }
 */

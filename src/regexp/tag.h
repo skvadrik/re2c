@@ -28,7 +28,7 @@ struct Tag {
     static constexpr size_t NONE      = std::numeric_limits<size_t>::max() - 2;
     static constexpr uint32_t VARDIST = std::numeric_limits<uint32_t>::max();
 
-    const std::string* name;
+    const char* name;
     size_t lsub;
     size_t hsub;
     size_t base;
@@ -40,7 +40,7 @@ struct Tag {
     bool toplevel;
     int32_t height;
 
-    Tag(const std::string* nm, bool hi, int32_t ht)
+    Tag(const char* nm, bool hi, int32_t ht)
         : name(nm),
           lsub(RIGHTMOST),
           hsub(RIGHTMOST),

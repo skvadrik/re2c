@@ -64,7 +64,7 @@ class Warn {
     void empty_class(const loc_t& loc);
     void match_empty_string(const loc_t& loc, const std::string& cond);
     void nondeterministic_tags(
-            const loc_t& loc, const std::string& cond, const std::string* tagname, size_t nver);
+            const loc_t& loc, const std::string& cond, const char* tagname, size_t nver);
     void swapped_range(const loc_t& loc, uint32_t l, uint32_t u);
     void undefined_control_flow(const Skeleton& skel, std::vector<path_t>& paths, bool overflow);
     void unreachable_rule(const std::string& cond, const Rule& rule);

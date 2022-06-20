@@ -23,7 +23,7 @@
 namespace re2c {
 
 int lex(const char* pattern);
-const AST* regexp;
+const AstNode* regexp;
 
 } // namespace re2c
 
@@ -44,12 +44,13 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     const opt_t* opt = opts.snapshot();
     preg->flags = cflags;
 
-    const AST* a = parse(pattern);
+    Ast ast;
+    const AstNode* a = parse(pattern, ast);
 
     preg->rmgr = new RangeMgr;
 
-    ASTRule ar(a, new SemAct(NOWHERE));
-    std::vector<ASTRule> arv;
+    AstRule ar(a, new SemAct(NOWHERE));
+    std::vector<AstRule> arv;
     arv.push_back(ar);
     RESpec re(arv, opt, msg, *preg->rmgr);
 

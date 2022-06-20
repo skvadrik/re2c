@@ -19,7 +19,7 @@ struct spec_t {
     std::string name;
 
     // Normal rules specified in this block or inherited from other blocks.
-    std::vector<ASTRule> rules;
+    std::vector<AstRule> rules;
 
     // Special rules *, $ and <!> specified in this block.
     std::vector<const SemAct*> defs;
@@ -79,8 +79,8 @@ struct context_t {
 
 spec_t& find_or_add_spec(specs_t& specs, const std::string& name);
 void use_block(context_t& context, const std::string& name, const loc_t& loc);
-void parse(Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks);
-void check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg);
+void check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, Ast& ast);
+void parse(Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks, Ast& ast);
 
 } // namespace re2c
 

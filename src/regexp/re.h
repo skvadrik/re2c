@@ -11,8 +11,8 @@
 
 namespace re2c {
 
-struct AST;
-struct ASTRule;
+struct AstNode;
+struct AstRule;
 class Msg;
 struct Rule;
 struct opt_t;
@@ -49,7 +49,7 @@ struct RESpec {
     const opt_t* opts;
     Msg& msg;
 
-    RESpec(const std::vector<ASTRule>& ast, const opt_t* o, Msg& msg, RangeMgr& rm);
+    RESpec(const std::vector<AstRule>& ast, const opt_t* o, Msg& msg, RangeMgr& rm);
     FORBID_COPY(RESpec);
 };
 

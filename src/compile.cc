@@ -55,7 +55,7 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t& spec, Output& output) {
     const opt_t* opts = block.opts;
     const loc_t& loc = block.loc;
     Msg& msg = output.msg;
-    const std::vector<ASTRule>& rules = spec.rules;
+    const std::vector<AstRule>& rules = spec.rules;
     const std::string&cond = spec.name;
     const std::string name = make_name(output, cond, loc);
     const std::string& setup = spec.setup.empty() ? "" : spec.setup[0]->text;
@@ -133,6 +133,7 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t& spec, Output& output) {
 }
 
 void compile(Scanner& input, Output& output, Opt& opts) {
+    Ast ast;
     RulesBlocks rblocks;
     const conopt_t* globopts = &opts.glob;
     code_alc_t& alc = output.allocator;
@@ -172,7 +173,7 @@ void compile(Scanner& input, Output& output, Opt& opts) {
         }
         output.cond_goto = false;
         block_loc = input.tok_loc();
-        parse(input, specs, opts, rblocks);
+        parse(input, specs, opts, rblocks, ast);
 
         // start new output block with accumulated options
         output.new_block(opts, kind, block_name, block_loc);
@@ -181,7 +182,7 @@ void compile(Scanner& input, Output& output, Opt& opts) {
             // save AST and options for future use
             rblocks.add(block_name, output.block().opts, specs);
         } else {
-            check_and_merge_special_rules(specs, output.block().opts, output.msg);
+            check_and_merge_special_rules(specs, output.block().opts, output.msg, ast);
 
             // compile AST to DFA
             dfas_t dfas;
@@ -197,9 +198,9 @@ void compile(Scanner& input, Output& output, Opt& opts) {
         // accumulate whole-program information from this block
         output.gather_info_from_block();
 
-        // Do not accumulate whole-program options for rules/reuse/local blocks.
-        // Global blocks add their named definitions and configurations to the
-        // global scope, local blocks don't. Historically global is the default.
+        // Do not accumulate whole-program options for rules/reuse/local blocks. Global blocks add
+        // their named definitions and configurations to the global scope, local blocks don't.
+        // Historically global is the default.
         if (kind == InputBlock::GLOBAL) {
             accum_opts = output.block().opts;
         } else {
@@ -221,7 +222,6 @@ void compile(Scanner& input, Output& output, Opt& opts) {
         output.wdelay_stmt(0, emit_skeleton_epilog(output));
     }
 
-    AST::flist.clear();
     SemAct::flist.clear();
     RangeSuffix::freeList.clear();
 }

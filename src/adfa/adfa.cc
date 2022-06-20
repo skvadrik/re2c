@@ -442,9 +442,9 @@ void DFA::calc_stats(OutputBlock& out) {
     if (!oldstyle_ctxmarker) {
         for (const Tag& tag : tags) {
             if (history(tag)) {
-                mtagvars.insert(*tag.name);
+                mtagvars.insert(tag.name);
             } else if (tag.name) {
-                stagvars.insert(*tag.name);
+                stagvars.insert(tag.name);
             }
         }
         for (tagver_t v = 1; v <= maxtagver; ++v) {

@@ -83,8 +83,8 @@ static void compute_re_size_and_depth(
                 // sub-RE visited, recursive return
                 // formula is the same for size and depth (it reflects NFA construction)
                 const uint32_t min = re->iter.min, max = re->iter.max;
-                size = max == AST::MANY ? size * min + 1 : size * max + (max - min);
-                depth = max == AST::MANY ? depth * min + 1 : depth * max + (max - min);
+                size = max == Ast::MANY ? size * min + 1 : size * max + (max - min);
+                depth = max == Ast::MANY ? depth * min + 1 : depth * max + (max - min);
             }
         }
     }

@@ -285,7 +285,7 @@ std::string Scanner::lex_conf_string () {
     ['"] {
         const char quote = tok[0];
         for (;;) {
-            ASTChar c;
+            AstChar c;
             if (!lex_str_chr(quote, c)) goto end;
             if (c.chr > 0xFF) {
                 msg.error(c.loc, "multibyte character in configuration string: 0x%X", c.chr);

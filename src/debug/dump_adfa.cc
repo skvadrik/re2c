@@ -59,8 +59,8 @@ void dump_adfa(const DFA& dfa) {
             const Rule& r = dfa.rules[s->action.info.rule];
             for (size_t t = r.ltag; t < r.htag; ++t) {
                 if (t > r.ltag) fprintf(stderr, " ");
-                const std::string* name = dfa.tags[t].name;
-                fprintf(stderr, "%s(%d)", name ? name->c_str() : "/", dfa.finvers[t]);
+                const char* name = dfa.tags[t].name;
+                fprintf(stderr, "%s(%d)", name ? name : "/", dfa.finvers[t]);
             }
         }
         dump_tcmd(dfa.tcpool[s->go.tags]);

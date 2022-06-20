@@ -22,20 +22,22 @@
 using namespace re2c;
 
 extern "C" {
-    int yylex(const char*& pattern);
-    void yyerror(const char* pattern, const char*) RE2C_ATTR((noreturn));
+    int yylex(const char*& pattern, Ast& ast);
+    void yyerror(const char* pattern, Ast&, const char* msg) RE2C_ATTR((noreturn));
 }
 
 %}
 
 %lex-param {const char*& pattern}
+%lex-param {re2c::Ast& ast}
 %parse-param {const char*& pattern}
+%parse-param {re2c::Ast& ast}
 
 %start regexp
 
 %union {
-    const re2c::AST* regexp;
-    re2c::ASTBounds bounds;
+    const re2c::AstNode* regexp;
+    re2c::AstBounds bounds;
 };
 
 %token TOKEN_COUNT
@@ -51,26 +53,26 @@ regexp: expr { regexp = $$; };
 
 expr
 : term
-| expr '|' term { $$ = ast_alt($1, $3); }
+| expr '|' term { $$ = ast.alt($1, $3); }
 ;
 
 term
 : factor
-| factor term { $$ = ast_cat($1, $2); } // in POSIX concatenation is right-associative
+| factor term { $$ = ast.cat($1, $2); } // in POSIX concatenation is right-associative
 ;
 
 factor
 : primary
-| primary '*'         { $$ = ast_iter($1, 0, AST::MANY); }
-| primary '+'         { $$ = ast_iter($1, 1, AST::MANY); }
-| primary '?'         { $$ = ast_iter($1, 0, 1); }
-| primary TOKEN_COUNT { $$ = ast_iter($1, $2.min, $2.max); }
+| primary '*'         { $$ = ast.iter($1, 0, Ast::MANY); }
+| primary '+'         { $$ = ast.iter($1, 1, Ast::MANY); }
+| primary '?'         { $$ = ast.iter($1, 0, 1); }
+| primary TOKEN_COUNT { $$ = ast.iter($1, $2.min, $2.max); }
 ;
 
 primary
 : TOKEN_REGEXP
-| '(' ')'      { $$ = ast_cap(ast_nil(NOWHERE)); }
-| '(' expr ')' { $$ = ast_cap($2); }
+| '(' ')'      { $$ = ast.cap(ast.nil(NOWHERE)); }
+| '(' expr ')' { $$ = ast.cap($2); }
 ;
 
 %%
@@ -78,20 +80,20 @@ primary
 #pragma GCC diagnostic pop
 
 extern "C" {
-    void yyerror(const char* pattern, const char* msg) {
+    void yyerror(const char* pattern, Ast&, const char* msg) {
         fprintf(stderr, "%s (on RE %s)", msg, pattern);
         exit(1);
     }
 
-    int yylex(const char*& pattern) {
-        return lex(pattern);
+    int yylex(const char*& pattern, Ast& ast) {
+        return lex(pattern, ast);
     }
 }
 
 namespace re2c {
 
-const AST* parse(const char* pattern) {
-    yyparse(pattern);
+const AstNode* parse(const char* pattern, Ast& ast) {
+    yyparse(pattern, ast);
     return regexp;
 }
 

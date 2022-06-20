@@ -19,10 +19,11 @@
 
 namespace re2c {
 
+class Ast;
 class Msg;
 struct Output;
-struct AST;
-struct ASTChar;
+struct AstNode;
+struct AstChar;
 struct BlockNameList;
 struct conopt_t;
 struct opt_t;
@@ -52,7 +53,7 @@ class Scanner: private ScannerState {
     const loc_t& tok_loc() const;
     loc_t cur_loc() const;
     InputBlock echo(Output& out, std::string& block_name);
-    int scan();
+    int scan(Ast& ast);
     void lex_conf(Opt& opts);
 
   private:
@@ -80,9 +81,9 @@ class Scanner: private ScannerState {
     int lex_clist();
     void lex_string(char delim);
     uint32_t lex_cls_chr();
-    bool lex_str_chr(char quote, ASTChar& ast);
-    const AST* lex_cls(bool neg);
-    const AST* lex_str(char quote);
+    bool lex_str_chr(char quote, AstChar& ast);
+    const AstNode* lex_cls(Ast& ast, bool neg);
+    const AstNode* lex_str(Ast& ast, char quote);
     void lex_conf_encoding_policy(Opt& opts);
     void lex_conf_input(Opt& opts);
     void lex_conf_empty_class(Opt& opts);

@@ -115,7 +115,7 @@ void use_block(context_t& context, const std::string& name, const loc_t& loc) {
     context.opts.merge(rb->opts, loc);
 }
 
-void check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg) {
+void check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, Ast& ast) {
     if (specs.empty()) return;
     specs_t::iterator i, j, e;
 
@@ -232,12 +232,12 @@ void check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg) 
         if (!s.eofs.empty()) {
             s.eof_rule = s.rules.size();
             const SemAct* a = s.eofs[0];
-            s.rules.push_back(ASTRule(ast_nil(a->loc), a));
+            s.rules.push_back(AstRule(ast.nil(a->loc), a));
         }
         if (!s.defs.empty()) {
             s.def_rule = s.rules.size();
             const SemAct* a = s.defs[0];
-            s.rules.push_back(ASTRule(ast_default(a->loc), a));
+            s.rules.push_back(AstRule(ast.def(a->loc), a));
         }
     }
 

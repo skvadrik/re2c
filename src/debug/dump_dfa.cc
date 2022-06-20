@@ -255,7 +255,7 @@ void dump_tcmd(const tcmd_t* p) {
 }
 
 const char* tagname(const Tag& t) {
-    return t.name ? t.name->c_str() : "";
+    return t.name ? t.name : "";
 }
 
 template<typename ctx_t>

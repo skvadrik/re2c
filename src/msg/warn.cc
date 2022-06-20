@@ -101,7 +101,7 @@ void Warn::match_empty_string(const loc_t& loc, const std::string& cond) {
 }
 
 void Warn::nondeterministic_tags(
-        const loc_t& loc, const std::string& cond, const std::string* tagname, size_t nver) {
+        const loc_t& loc, const std::string& cond, const char* tagname, size_t nver) {
     if (mask[NONDETERMINISTIC_TAGS] & WARNING) {
         bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
         error_accuml |= e;
@@ -110,7 +110,7 @@ void Warn::nondeterministic_tags(
         if (tagname == nullptr) {
             fprintf(stderr, "trailing context");
         } else {
-            fprintf(stderr, "tag '%s'", tagname->c_str());
+            fprintf(stderr, "tag '%s'", tagname);
         }
         fprintf(stderr, " %shas %u%s degree of nondeterminism", incond(cond).c_str(),
                 static_cast<uint32_t>(nver), nver == 2 ? "nd" : nver == 3 ? "rd" : "th");

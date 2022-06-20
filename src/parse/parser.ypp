@@ -18,8 +18,8 @@
 using namespace re2c;
 
 extern "C" {
-    int yylex(context_t& context);
-    void yyerror(context_t& context, const char*) RE2C_ATTR((noreturn));
+    int yylex(context_t& context, Ast& ast);
+    void yyerror(context_t& context, Ast& ast, const char*) RE2C_ATTR((noreturn));
 }
 
 %}
@@ -27,13 +27,15 @@ extern "C" {
 %start spec
 
 %lex-param {re2c::context_t& context}
+%lex-param {re2c::Ast& ast}
 %parse-param {re2c::context_t& context}
+%parse-param {re2c::Ast& ast}
 
 %union {
-    const re2c::AST* regexp;
+    const re2c::AstNode* regexp;
     re2c::SemAct* semact;
     char op;
-    re2c::ASTBounds bounds;
+    re2c::AstBounds bounds;
     std::string* str;
     re2c::CondList* clist;
 };
@@ -97,7 +99,7 @@ enddef: ';' | TOKEN_FID_END;
 
 rule
 : trailexpr TOKEN_CODE {
-    find_or_add_spec(context.specs, "").rules.push_back(ASTRule($1, $2));
+    find_or_add_spec(context.specs, "").rules.push_back(AstRule($1, $2));
 }
 | '*' TOKEN_CODE {
     find_or_add_spec(context.specs, "").defs.push_back($2);
@@ -107,7 +109,7 @@ rule
 }
 | TOKEN_CLIST trailexpr ccode {
     for (const std::string& cond : *$1) {
-        find_or_add_spec(context.specs, cond).rules.push_back(ASTRule($2, $3));
+        find_or_add_spec(context.specs, cond).rules.push_back(AstRule($2, $3));
     }
     delete $1;
 }
@@ -130,8 +132,8 @@ rule
     delete $1;
 }
 | TOKEN_CZERO ccode {
-    const AST* r = ast_nil(context.input.tok_loc());
-    find_or_add_spec(context.specs, "0").rules.push_back(ASTRule(r, $2));
+    const AstNode* r = ast.nil(context.input.tok_loc());
+    find_or_add_spec(context.specs, "0").rules.push_back(AstRule(r, $2));
     delete $1;
 };
 
@@ -149,25 +151,25 @@ ccode
 };
 
 trailexpr
-: expr { $$ = ast_cap($1); }
+: expr { $$ = ast.cap($1); }
 | expr '/' expr {
-    $$ = ast_cat(ast_cap($1), ast_cat(ast_tag(context.input.tok_loc(), nullptr, false), $3));
+    $$ = ast.cat(ast.cap($1), ast.cat(ast.tag(context.input.tok_loc(), nullptr, false), $3));
 };
 
 expr
 : diff
-| expr '|' diff { $$ = ast_alt($1, $3); }
+| expr '|' diff { $$ = ast.alt($1, $3); }
 ;
 
 diff
 : term
-| diff '\\' term { $$ = ast_diff($1, $3); }
+| diff '\\' term { $$ = ast.diff($1, $3); }
 ;
 
 term
 : factor
 // in POSIX concatenation is right-associative
-| factor term { $$ = ast_cat($1, $2); }
+| factor term { $$ = ast.cat($1, $2); }
 ;
 
 factor
@@ -175,18 +177,18 @@ factor
 | primary closes {
     switch($2) {
     case '*':
-        $$ = ast_iter($1, 0, AST::MANY);
+        $$ = ast.iter($1, 0, Ast::MANY);
         break;
     case '+':
-        $$ = ast_iter($1, 1, AST::MANY);
+        $$ = ast.iter($1, 1, Ast::MANY);
         break;
     case '?':
-        $$ = ast_iter($1, 0, 1);
+        $$ = ast.iter($1, 0, 1);
         break;
     }
 }
 | primary TOKEN_CLOSESIZE {
-    $$ = ast_iter($1, $2.min, $2.max);
+    $$ = ast.iter($1, $2.min, $2.max);
 }
 ;
 
@@ -205,12 +207,12 @@ primary
 : TOKEN_REGEXP
 | TOKEN_ID {
     $$ = find_def(context.opts.symtab, *$1, context.input.tok_loc(), context.input.msg);
-    if (ast_need_wrap($$)) {
-        $$ = ast_ref($$, *$1);
+    if (Ast::needs_wrap($$)) {
+        $$ = ast.ref($$, *$1);
     }
     delete $1;
 }
-| '(' expr ')' { $$ = ast_cap($2); }
+| '(' expr ')' { $$ = ast.cap($2); }
 ;
 
 %%
@@ -218,21 +220,21 @@ primary
 #pragma GCC diagnostic pop
 
 extern "C" {
-    void yyerror(context_t& context, const char* s) {
+    void yyerror(context_t& context, Ast&, const char* s) {
         context.input.msg.error(context.input.tok_loc(), "%s", s);
         exit(1);
     }
 
-    int yylex(context_t& context) {
-        return context.input.scan();
+    int yylex(context_t& context, Ast& ast) {
+        return context.input.scan(ast);
     }
 }
 
 namespace re2c {
 
-void parse(Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks) {
+void parse(Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks, Ast& ast) {
     context_t context = {input, specs, opts, rblocks};
-    yyparse(context);
+    yyparse(context, ast);
 }
 
 } // namespace re2c
