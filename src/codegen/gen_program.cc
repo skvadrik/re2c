@@ -118,8 +118,7 @@ void Output::wversion_time() {
 }
 
 void Output::wdelay_stmt(uint32_t ind, Code* stmt) {
-    OutputFragment f = {stmt, ind};
-    block().fragments.push_back(f);
+    block().fragments.push_back({stmt, ind});
 }
 
 void Output::new_block(Opt& opts, InputBlock kind, const std::string& name, const loc_t& loc) {

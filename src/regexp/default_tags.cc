@@ -77,8 +77,7 @@ void insert_default_tags(RESpec& spec) {
 
     std::vector<RE*>::reverse_iterator i_re;
     for (i_re = spec.res.rbegin(); i_re != spec.res.rend(); ++i_re) {
-        StackItem i = {*i_re, nullptr, nullptr};
-        stack.push_back(i);
+        stack.push_back({*i_re, nullptr, nullptr});
     }
 
     while (!stack.empty()) {
@@ -89,16 +88,12 @@ void insert_default_tags(RESpec& spec) {
         if (re->kind == RE::Kind::ALT) {
             if (i.ltag == nullptr) {
                 // collect tags from the left sub-RE and return to this RE
-                StackItem k = {re, tag, nullptr};
-                stack.push_back(k);
-                StackItem j = {re->alt.re1, nullptr, nullptr};
-                stack.push_back(j);
+                stack.push_back({re, tag, nullptr});
+                stack.push_back({re->alt.re1, nullptr, nullptr});
             } else if (i.rtag == nullptr) {
                 // collect tags from the right sub-RE and return to this RE
-                StackItem k = {re, i.ltag, tag};
-                stack.push_back(k);
-                StackItem j = {re->alt.re2, nullptr, nullptr};
-                stack.push_back(j);
+                stack.push_back({re, i.ltag, tag});
+                stack.push_back({re->alt.re2, nullptr, nullptr});
             } else {
                 // both sub-RE traversed, add negative tags
                 RE* x = negative_tags(spec, i.ltag, i.rtag);
@@ -114,13 +109,10 @@ void insert_default_tags(RESpec& spec) {
                               : re_cat(spec, re->alt.re2, x);
             }
         } else if (re->kind == RE::Kind::CAT) {
-            StackItem j2 = {re->cat.re2, nullptr, nullptr};
-            stack.push_back(j2);
-            StackItem j1 = {re->cat.re1, nullptr, nullptr};
-            stack.push_back(j1);
+            stack.push_back({re->cat.re2, nullptr, nullptr});
+            stack.push_back({re->cat.re1, nullptr, nullptr});
         } else if (re->kind == RE::Kind::ITER) {
-            StackItem j = {re->iter.re, nullptr, nullptr};
-            stack.push_back(j);
+            stack.push_back({re->iter.re, nullptr, nullptr});
         } else if (re->kind == RE::Kind::TAG) {
             *tag++ = re->tag.idx;
         }

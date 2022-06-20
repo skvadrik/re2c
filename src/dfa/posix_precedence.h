@@ -229,8 +229,7 @@ void compute_prectable_complex(ctx_t& ctx) {
             // this node has leaf configurations, add them to level
             for (uint32_t k = fcount[fidx], e = fcount[fidx + 1]; k < e; ++k) {
                 const uint32_t j = sortcores[k];
-                const histleaf_t l = {j, state[j].origin, HROOT, h};
-                *level++ = l;
+                *level++ = {j, state[j].origin, HROOT, h};
             }
 
             // compute precedence for newly added configurations

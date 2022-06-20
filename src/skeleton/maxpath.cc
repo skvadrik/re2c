@@ -38,8 +38,7 @@ uint32_t maxpath(const Skeleton& skel) {
     // DFS "return value"
     uint32_t dist = 0;
 
-    const StackItem i0 = {0, 0, skel.nodes[0].arcs.begin()};
-    stack.push_back(i0);
+    stack.push_back({0, 0, skel.nodes[0].arcs.begin()});
 
     while (!stack.empty()) {
         StackItem i = stack.back();
@@ -61,12 +60,10 @@ uint32_t maxpath(const Skeleton& skel) {
                 const uint32_t succ = static_cast<uint32_t>(i.arc->first);
 
                 // reschedule this node with the next successor
-                StackItem k = {i.node, 0, ++i.arc};
-                stack.push_back(k);
+                stack.push_back({i.node, 0, ++i.arc});
 
                 // schedule the first successor node
-                StackItem j = {succ, 0, skel.nodes[succ].arcs.begin()};
-                stack.push_back(j);
+                stack.push_back({succ, 0, skel.nodes[succ].arcs.begin()});
             }
             dist = dists[i.node];
         } else if (i.arc == node.arcs.end()) {
@@ -89,12 +86,10 @@ uint32_t maxpath(const Skeleton& skel) {
             const uint32_t succ = static_cast<uint32_t>(i.arc->first);
 
             // reschedule this node with the next successor and updated distance
-            StackItem k = {i.node, dist, ++i.arc};
-            stack.push_back(k);
+            stack.push_back({i.node, dist, ++i.arc});
 
             // schedule the current successor node
-            StackItem j = {succ, 0, skel.nodes[succ].arcs.begin()};
-            stack.push_back(j);
+            stack.push_back({succ, 0, skel.nodes[succ].arcs.begin()});
         }
     }
 

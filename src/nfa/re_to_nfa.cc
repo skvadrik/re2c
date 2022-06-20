@@ -112,8 +112,7 @@ static uint32_t stats(nfa_state_t* root) {
     uint32_t topord = 0;
     uint32_t ncores = 0;
 
-    DfsNfaStats i0 = {root, 0};
-    stack.push_back(i0);
+    stack.push_back({root, 0});
 
     while (!stack.empty()) {
         // Don't store references to stack as it may grow and get reallocated.
@@ -135,24 +134,20 @@ static uint32_t stats(nfa_state_t* root) {
         switch (state->kind) {
         case nfa_state_t::Kind::ALT:
             if (next == 0) {
-                DfsNfaStats i = {state->alt.out1, 0};
-                stack.push_back(i);
+                stack.push_back({state->alt.out1, 0});
             } else if (next == 1) {
-                DfsNfaStats i = {state->alt.out2, 0};
-                stack.push_back(i);
+                stack.push_back({state->alt.out2, 0});
             }
             break;
         case nfa_state_t::Kind::TAG:
             if (next == 0) {
-                DfsNfaStats i = {state->tag.out, 0};
-                stack.push_back(i);
+                stack.push_back({state->tag.out, 0});
             }
             break;
         case nfa_state_t::Kind::RAN:
             if (next == 0) {
                 ++ncores;
-                DfsNfaStats i = {state->tag.out, 0};
-                stack.push_back(i);
+                stack.push_back({state->tag.out, 0});
             }
             break;
         case nfa_state_t::Kind::FIN:

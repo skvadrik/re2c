@@ -269,8 +269,7 @@ void gen_code(Output& output, dfas_t& dfas) {
             // If loop/switch is used, condition numbers are the numeric indices of their initial
             // DFA state. Otherwise we do not assign explicit numbers, and conditions are implicitly
             // assigned consecutive numbers starting from zero.
-            StartCond sc = {dfa->cond, opts->loop_switch ? dfa->head->label->index : 0};
-            oblock.conds.push_back(sc);
+            oblock.conds.push_back({dfa->cond, opts->loop_switch ? dfa->head->label->index : 0});
         }
     }
 

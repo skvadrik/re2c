@@ -22,8 +22,7 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
     // the "nullable" status of the last sub-RE visited by DFS
     bool null = false;
 
-    const StackItem i0 = {re0, 0};
-    stack.push_back(i0);
+    stack.push_back({re0, 0});
 
     while (!stack.empty()) {
         const StackItem i = stack.back();
@@ -36,7 +35,6 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
             null = false;
         } else if (re->kind == RE::Kind::TAG) {
             null = true;
-
             // Trailing context is always in top-level concatenation, and sub-RE are visited from
             // left to right. Since we are here, sub-RE to the left of the trailing context is
             // nullable (otherwise we would not recurse into the right sub-RE), therefore the whole
@@ -49,34 +47,27 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
         } else if (re->kind == RE::Kind::ALT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE
-                StackItem k = {re, 1};
-                stack.push_back(k);
-                StackItem j = {re->alt.re1, 0};
-                stack.push_back(j);
+                stack.push_back({re, 1});
+                stack.push_back({re->alt.re1, 0});
             } else if (!null) {
                 // if the left sub-RE is nullable, so is alternative, so stop recursion; otherwise
                 // recurse into the right sub-RE
-                StackItem j = {re->alt.re2, 0};
-                stack.push_back(j);
+                stack.push_back({re->alt.re2, 0});
             }
         } else if (re->kind == RE::Kind::CAT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE
-                StackItem k = {re, 1};
-                stack.push_back(k);
-                StackItem j = {re->cat.re1, 0};
-                stack.push_back(j);
+                stack.push_back({re, 1});
+                stack.push_back({re->cat.re1, 0});
             } else if (null) {
                 // if the left sub-RE is not nullable, neither is concatenation, so stop recursion;
                 // otherwise recurse into the right sub-RE
-                StackItem j = {re->cat.re2, 0};
-                stack.push_back(j);
+                stack.push_back({re->cat.re2, 0});
             }
         } else if (re->kind == RE::Kind::ITER) {
             // iteration is nullable if the sub-RE is nullable (zero repetitions is represented with
             // alternative)
-            StackItem j = {re->iter.re, 0};
-            stack.push_back(j);
+            stack.push_back({re->iter.re, 0});
         }
     }
 

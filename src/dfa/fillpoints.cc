@@ -49,8 +49,7 @@ static void scc(const dfa_t& dfa, std::vector<bool>& trivial, std::vector<StackI
     std::vector<size_t> lowlink(dfa.states.size(), SCC_UND);
     std::stack<size_t> stack;
 
-    StackItem x0 = {0, 0, 0};
-    stack_dfs.push_back(x0);
+    stack_dfs.push_back({0, 0, 0});
 
     while (!stack_dfs.empty()) {
         const size_t i = stack_dfs.back().state;
@@ -85,10 +84,8 @@ static void scc(const dfa_t& dfa, std::vector<bool>& trivial, std::vector<StackI
 
         if (c < dfa.nchars) {
             // recurse into the next successor state
-            StackItem x1 = {i, c + 1, link};
-            stack_dfs.push_back(x1);
-            StackItem x2 = {arcs[c], 0, SCC_UND};
-            stack_dfs.push_back(x2);
+            stack_dfs.push_back({i, c + 1, link});
+            stack_dfs.push_back({arcs[c], 0, SCC_UND});
         } else if (lowlink[i] == link) {
             // All successors have been visited. An SCC is non-trivial (it has loops) if either:
             //   - it contains multiple interconnected states, or
@@ -112,8 +109,7 @@ static void calc_fill(const dfa_t& dfa,
     const size_t nstates = dfa.states.size();
     fill.resize(nstates, SCC_UND);
 
-    StackItem x0 = {0, 0, SCC_INF};
-    stack_dfs.push_back(x0);
+    stack_dfs.push_back({0, 0, SCC_INF});
 
     while (!stack_dfs.empty()) {
         const size_t i = stack_dfs.back().state;
@@ -141,10 +137,8 @@ static void calc_fill(const dfa_t& dfa,
 
         if (c < dfa.nchars) {
             // recurse into the next successor state
-            StackItem x1 = {i, c + 1, SCC_INF};
-            stack_dfs.push_back(x1);
-            StackItem x2 = {arcs[c], 0, SCC_INF};
-            stack_dfs.push_back(x2);
+            stack_dfs.push_back({i, c + 1, SCC_INF});
+            stack_dfs.push_back({arcs[c], 0, SCC_INF});
         }
     }
 

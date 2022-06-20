@@ -116,8 +116,7 @@ inline loc_t Scanner::cur_loc() const {
         DASSERT(c > 0);
         --c;
     }
-    const loc_t loc = {in.line, c, in.fidx};
-    return loc;
+    return {in.line, c, in.fidx};
 }
 
 inline const loc_t& Scanner::tok_loc() const {

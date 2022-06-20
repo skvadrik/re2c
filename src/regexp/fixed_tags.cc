@@ -39,12 +39,10 @@ static void find_fixed_tags(
     static constexpr uint32_t VARDIST = Tag::VARDIST;
 
     // initial base tag at the topmost level is the fake "rightmost tag" (cursor)
-    const Level l0 = {Tag::RIGHTMOST, 0, 0};
     DASSERT(levels.empty());
-    levels.push_back(l0);
+    levels.push_back({Tag::RIGHTMOST, 0, 0});
 
-    const StackItem i0 = {re0, 0};
-    stack.push_back(i0);
+    stack.push_back({re0, 0});
 
     while (!stack.empty()) {
         const StackItem i = stack.back();
@@ -59,26 +57,20 @@ static void find_fixed_tags(
         } else if (re->kind == RE::Kind::ALT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE (leave the current RE on stack)
-                StackItem k = {re, 1};
-                stack.push_back(k);
-                StackItem j = {re->alt.re1, 0};
-                stack.push_back(j);
+                stack.push_back({re, 1});
+                stack.push_back({re->alt.re1, 0});
 
                 // increase level when descending into the left sub-RE
-                Level l = {Tag::NONE, 0, 0};
-                levels.push_back(l);
+                levels.push_back({Tag::NONE, 0, 0});
 
             } else if (i.succ == 1) {
                 // recurse into the right sub-RE (leave the current RE on stack)
-                StackItem k = {re, 2};
-                stack.push_back(k);
-                StackItem j = {re->alt.re2, 0};
-                stack.push_back(j);
+                stack.push_back({re, 2});
+                stack.push_back({re->alt.re2, 0});
 
                 // increase level when descending into the right sub-RE (keep the left sub-RE level
                 // on stack, it will be needed to compare left and right distance)
-                Level l = {Tag::NONE, 0, 0};
-                levels.push_back(l);
+                levels.push_back({Tag::NONE, 0, 0});
 
             } else {
                 // both sub-RE visited, pop both levels from stack and compare their distances: if
@@ -99,14 +91,11 @@ static void find_fixed_tags(
         } else if (re->kind == RE::Kind::ITER) {
             if (i.succ == 0) {
                 // recurse into sub-RE (leave the current RE on stack)
-                StackItem k = {re, 1};
-                stack.push_back(k);
-                StackItem j = {re->iter.re, 0};
-                stack.push_back(j);
+                stack.push_back({re, 1});
+                stack.push_back({re->iter.re, 0});
 
                 // increase level when descending into sub-RE
-                Level l = {Tag::NONE, 0, 0};
-                levels.push_back(l);
+                levels.push_back({Tag::NONE, 0, 0});
             } else {
                 // sub-RE visited, pop level from stack: if it has fixed distance and repetition
                 // count is constant, resulting distance is fixed
@@ -125,10 +114,8 @@ static void find_fixed_tags(
         } else if (re->kind == RE::Kind::CAT) {
             // the right sub-RE is pushed on stack after the left sub-RE and visited earlier
             // (because distance is computed from right to left)
-            StackItem j1 = {re->cat.re1, 0};
-            stack.push_back(j1);
-            StackItem j2 = {re->cat.re2, 0};
-            stack.push_back(j2);
+            stack.push_back({re->cat.re1, 0});
+            stack.push_back({re->cat.re2, 0});
 
         } else if (re->kind == RE::Kind::TAG) {
             Tag& tag = spec.tags[re->tag.idx];

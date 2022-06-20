@@ -67,8 +67,7 @@ void warn_undefined_control_flow(const Skeleton& skel) {
     std::vector<StackItem> stack;
     path_t path(0);
 
-    StackItem i0 = {0, skel.nodes[0].arcs.begin()};
-    stack.push_back(i0);
+    stack.push_back({0, skel.nodes[0].arcs.begin()});
 
     while (!stack.empty()) {
         StackItem i = stack.back();
@@ -91,12 +90,10 @@ void warn_undefined_control_flow(const Skeleton& skel) {
                 const uint32_t succ = static_cast<uint32_t>(i.arc->first);
 
                 // reschedule this node with the next successor
-                StackItem k = {i.node, ++i.arc};
-                stack.push_back(k);
+                stack.push_back({i.node, ++i.arc});
 
                 // schedule the first successor node
-                StackItem j = {succ, skel.nodes[succ].arcs.begin()};
-                stack.push_back(j);
+                stack.push_back({succ, skel.nodes[succ].arcs.begin()});
             }
         } else if (i.arc == node.arcs.end()) {
             // DFS recursive return
@@ -105,12 +102,10 @@ void warn_undefined_control_flow(const Skeleton& skel) {
             const uint32_t succ = static_cast<uint32_t>(i.arc->first);
 
             // reschedule this node with the next successor and updated distance
-            StackItem k = {i.node, ++i.arc};
-            stack.push_back(k);
+            stack.push_back({i.node, ++i.arc});
 
             // schedule the current successor node
-            StackItem j = {succ, skel.nodes[succ].arcs.begin()};
-            stack.push_back(j);
+            stack.push_back({succ, skel.nodes[succ].arcs.begin()});
         }
     }
 

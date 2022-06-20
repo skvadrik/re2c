@@ -22,8 +22,7 @@ static void compute_re_size_and_depth(
     // the estimated size and depth of the last sub-RE visited by DFS
     uint32_t size = 0, depth = 0;
 
-    const StackItem i0 = {re0, 0, 0, 0};
-    stack.push_back(i0);
+    stack.push_back({re0, 0, 0, 0});
 
     while (!stack.empty()) {
         const StackItem i = stack.back();
@@ -37,16 +36,12 @@ static void compute_re_size_and_depth(
         } else if (re->kind == RE::Kind::ALT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE
-                StackItem k = {re, 0, 0, 1};
-                stack.push_back(k);
-                StackItem j = {re->alt.re1, 0, 0, 0};
-                stack.push_back(j);
+                stack.push_back({re, 0, 0, 1});
+                stack.push_back({re->alt.re1, 0, 0, 0});
             } else if (i.succ == 1) {
                 // recurse into the right sub-RE
-                StackItem k = {re, size, depth, 2};
-                stack.push_back(k);
-                StackItem j = {re->alt.re2, 0, 0, 0};
-                stack.push_back(j);
+                stack.push_back({re, size, depth, 2});
+                stack.push_back({re->alt.re2, 0, 0, 0});
             } else {
                 // both sub-RE visited, recursive return
                 // (left one is on stack, right one was just visited by DFS)
@@ -56,16 +51,12 @@ static void compute_re_size_and_depth(
         } else if (re->kind == RE::Kind::CAT) {
             if (i.succ == 0) {
                 // recurse into the left sub-RE
-                StackItem k = {re, 0, 0, 1};
-                stack.push_back(k);
-                StackItem j = {re->cat.re1, 0, 0, 0};
-                stack.push_back(j);
+                stack.push_back({re, 0, 0, 1});
+                stack.push_back({re->cat.re1, 0, 0, 0});
             } else if (i.succ == 1) {
                 // recurse into the right sub-RE
-                StackItem k = {re, size, depth, 2};
-                stack.push_back(k);
-                StackItem j = {re->cat.re2, 0, 0, 0};
-                stack.push_back(j);
+                stack.push_back({re, size, depth, 2});
+                stack.push_back({re->cat.re2, 0, 0, 0});
             } else {
                 // both sub-RE visited, recursive return
                 // (left one is on stack, right one was just visited by DFS)
@@ -75,10 +66,8 @@ static void compute_re_size_and_depth(
         } else if (re->kind == RE::Kind::ITER) {
             if (i.succ == 0) {
                 // recurse into the sub-RE
-                StackItem k = {re, 0, 0, 1};
-                stack.push_back(k);
-                StackItem j = {re->iter.re, 0, 0, 0};
-                stack.push_back(j);
+                stack.push_back({re, 0, 0, 1});
+                stack.push_back({re->iter.re, 0, 0, 0});
             } else {
                 // sub-RE visited, recursive return
                 // formula is the same for size and depth (it reflects NFA construction)

@@ -184,8 +184,7 @@ subhistory_t* regparse_dfa(const regex_t* preg, const char* string, size_t nmatc
 
             for (size_t j = sz_so, so = so0, eo = eo0; j --> 0; ) {
                 const regoff_trie_t::node_t& n_so = storage[so], &n_eo = storage[eo];
-                const regmatch_t m = {n_so.off, n_eo.off};
-                h->offs[j] = m;
+                h->offs[j] = {n_so.off, n_eo.off};
                 so = n_so.pred;
                 eo = n_eo.pred;
             }
