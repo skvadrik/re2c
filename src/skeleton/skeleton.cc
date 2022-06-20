@@ -102,8 +102,8 @@ Skeleton::Skeleton(const dfa_t& dfa,
     }
 
     mtag_trie_init(tagtrie);
-    init_membuf(arc_iters, 256);
-    init_membuf(char_iters, 256);
+    arc_iters.init(256);
+    char_iters.init(256);
     buf_data.init(opts->encoding.szCodeUnit());
     buf_keys.init(sizeof_key);
 }
@@ -112,8 +112,8 @@ Skeleton::~Skeleton() {
     delete[] nodes;
     delete[] tagvals;
     mtag_trie_free(tagtrie);
-    free_membuf(arc_iters);
-    free_membuf(char_iters);
+    arc_iters.free();
+    char_iters.free();
     buf_data.free(opts->encoding.szCodeUnit());
     buf_keys.free(sizeof_key);
 }

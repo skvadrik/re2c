@@ -7,7 +7,7 @@
 #include "src/options/opt.h"
 #include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
-#include "src/util/allocate.h"
+#include "src/util/containers.h"
 
 namespace re2c {
 

@@ -60,7 +60,6 @@ re2c_HDR = \
 	src/parse/scanner.h \
 	src/parse/unescape.h \
 	src/debug/debug.h \
-	src/util/allocate.h \
 	src/util/attribute.h \
 	src/util/containers.h \
 	src/util/file_utils.h \

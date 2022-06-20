@@ -125,10 +125,10 @@ static void write_input(const path_t& path, Skeleton& skel, size_t width) {
     const size_t len = path.len();
     const size_t size = len * width;
 
-    grow_membuf(skel.arc_iters, len);
-    grow_membuf(skel.char_iters, len);
-    const Node::range_t** arcs = skel.arc_iters.ptr;
-    size_t* chars = skel.char_iters.ptr;
+    skel.arc_iters.grow(len);
+    skel.char_iters.grow(len);
+    const Node::range_t** arcs = skel.arc_iters.ptr_;
+    size_t* chars = skel.char_iters.ptr_;
     for (size_t i = 0; i < len; ++i) {
         const Node::range_t* a = path.arc(skel, i);
         arcs[i] = a;
@@ -185,10 +185,10 @@ static void write_keys(const path_t& path, Skeleton& skel, size_t width) {
 
     if (ltag < htag) {
         // init arc iterators and character iterators within each arc
-        grow_membuf(skel.arc_iters, f);
-        grow_membuf(skel.char_iters, f);
-        arcs = skel.arc_iters.ptr;
-        chars = skel.char_iters.ptr;
+        skel.arc_iters.grow(f);
+        skel.char_iters.grow(f);
+        arcs = skel.arc_iters.ptr_;
+        chars = skel.char_iters.ptr_;
         for (size_t i = 0; i < f; ++i) {
             const Node::range_t* a = path.arc(skel, i);
             arcs[i] = a;

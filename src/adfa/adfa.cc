@@ -15,7 +15,7 @@
 #include "src/dfa/tcmd.h"
 #include "src/options/opt.h"
 #include "src/regexp/rule.h"
-#include "src/util/allocate.h"
+#include "src/util/containers.h"
 
 namespace re2c {
 

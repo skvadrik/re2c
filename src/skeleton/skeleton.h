@@ -16,7 +16,7 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/mtag_trie.h"
-#include "src/util/allocate.h"
+#include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
 #include "src/util/fixed_allocator.h"
@@ -57,10 +57,10 @@ template<> inline membuf_t<uint64_t>& OutBuf::select() { return buf64; }
 inline void OutBuf::init(size_t selector) {
     static constexpr size_t KB = 1024 * 1024;
     switch (selector) {
-    case 1: init_membuf(buf8, KB);  break;
-    case 2: init_membuf(buf16, KB); break;
-    case 4: init_membuf(buf32, KB); break;
-    case 8: init_membuf(buf64, KB); break;
+    case 1: buf8.init(KB);  break;
+    case 2: buf16.init(KB); break;
+    case 4: buf32.init(KB); break;
+    case 8: buf64.init(KB); break;
     default:
         DASSERT(false);
     }
@@ -70,10 +70,10 @@ inline void OutBuf::init(size_t selector) {
 
 inline void OutBuf::free(size_t selector) {
     switch (selector) {
-    case 1: free_membuf(buf8);  break;
-    case 2: free_membuf(buf16); break;
-    case 4: free_membuf(buf32); break;
-    case 8: free_membuf(buf64); break;
+    case 1: buf8.free();  break;
+    case 2: buf16.free(); break;
+    case 4: buf32.free(); break;
+    case 8: buf64.free(); break;
     default:
         DASSERT(false);
     }
@@ -82,20 +82,20 @@ inline void OutBuf::free(size_t selector) {
 
 template<typename T> inline void OutBuf::flush() {
     membuf_t<T>& buf = select<T>();
-    fwrite(buf.ptr, sizeof(T), size, file);
+    fwrite(buf.ptr_, sizeof(T), size, file);
     size = 0;
 }
 
 template<typename T> inline T* OutBuf::alloc(size_t n) {
     membuf_t<T>& buf = select<T>();
 
-    if (size + n >= buf.size) {
+    if (size + n >= buf.size_) {
         flush<T>();
-        grow_membuf(buf, n);
+        buf.grow(n);
         size = 0;
     }
 
-    T* ptr = buf.ptr + size;
+    T* ptr = buf.ptr_ + size;
     size += n;
 
     return ptr;

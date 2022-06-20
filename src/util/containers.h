@@ -42,6 +42,40 @@ class array_t {
     const T& back() const { return data_[size_ - 1]; }
 };
 
+// Useful for allocation of arrays of POD objects without invoking a constructor (`new []` invokes
+// default constructor for each object, and this can be unacceptable for performance reasons).
+template<typename T>
+T* allocate(size_t n) {
+    void* p = operator new(n * sizeof(T));
+    return static_cast<T*>(p);
+}
+
+// Simple memory buffer with size. Suitable for allocating (and growing) uninitialized storage.
+template<typename T>
+struct membuf_t {
+    T* ptr_;
+    size_t size_;
+
+    void init(size_t size) {
+        ptr_ = allocate<T>(size);
+        size_ = size;
+    }
+
+    void free() {
+        operator delete(ptr_);
+        ptr_ = nullptr;
+        size_ = 0;
+    }
+
+    void grow(size_t size) {
+        if (size > size_) {
+            size_ = size * 2;
+            operator delete(ptr_);
+            ptr_ = allocate<T>(size_);
+        }
+    }
+};
+
 } // namespace re2c
 
 #endif // _RE2C_UTIL_CONTAINERS_

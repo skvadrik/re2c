@@ -7,7 +7,7 @@
 #include "src/cfg/cfg.h"
 #include "src/dfa/dfa.h"
 #include "src/regexp/rule.h"
-#include "src/util/allocate.h"
+#include "src/util/containers.h"
 
 namespace re2c {
 
