@@ -167,12 +167,11 @@ set(re2c_sources
     src/dfa/minimization.cc
     src/dfa/tagver_table.cc
     src/dfa/tcmd.cc
-    src/encoding/ebcdic/ebcdic_regexp.cc
+    src/encoding/ebcdic.cc
     src/encoding/enc.cc
     src/encoding/range_suffix.cc
-    src/encoding/utf8/utf8_regexp.cc
-    src/encoding/utf8/utf8.cc
-    src/encoding/utf16/utf16_regexp.cc
+    src/encoding/utf8.cc
+    src/encoding/utf16.cc
     src/msg/msg.cc
     src/msg/warn.cc
     src/regexp/ast_to_re.cc
@@ -475,10 +474,9 @@ if (RE2C_BUILD_LIBS)
         src/nfa/re_to_nfa.cc
         src/encoding/enc.cc
         src/encoding/range_suffix.cc
-        src/encoding/ebcdic/ebcdic_regexp.cc
-        src/encoding/utf16/utf16_regexp.cc
-        src/encoding/utf8/utf8.cc
-        src/encoding/utf8/utf8_regexp.cc
+        src/encoding/ebcdic.cc
+        src/encoding/utf16.cc
+        src/encoding/utf8.cc
         src/msg/msg.cc
         src/msg/warn.cc
         src/regexp/ast_to_re.cc

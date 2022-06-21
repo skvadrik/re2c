@@ -13,7 +13,7 @@
 #include "src/parse/input.h"
 #include "src/parse/lex.h"
 #include "src/encoding/enc.h"
-#include "src/encoding/utf8/utf8.h"
+#include "src/encoding/utf8.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/slab_allocator.h"
 

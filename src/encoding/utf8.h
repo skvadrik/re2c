@@ -1,9 +1,13 @@
-#ifndef _RE2C_RE_ENCODING_UTF8_UTF8_
-#define _RE2C_RE_ENCODING_UTF8_UTF8_
+#ifndef _RE2C_RE_ENCODING_UTF8_
+#define _RE2C_RE_ENCODING_UTF8_
 
 #include <stdint.h>
 
 namespace re2c {
+
+class Range;
+struct RE;
+struct RESpec;
 
 class utf8 {
   public:
@@ -47,6 +51,8 @@ class utf8 {
     static rune max_rune(uint32_t i);
 };
 
+RE* utf8_range(RESpec& spec, const Range* r);
+
 } // namespace re2c
 
-#endif // _RE2C_RE_ENCODING_UTF8_UTF8_
+#endif // _RE2C_RE_ENCODING_UTF8_

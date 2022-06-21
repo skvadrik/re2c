@@ -35,14 +35,11 @@ re2c_HDR = \
 	src/dfa/tcmd.h \
 	src/nfa/nfa.h \
 	src/encoding/case.h \
-	src/encoding/ebcdic/ebcdic.h \
-	src/encoding/ebcdic/ebcdic_regexp.h \
+	src/encoding/ebcdic.h \
 	src/encoding/enc.h \
 	src/encoding/range_suffix.h \
-	src/encoding/utf8/utf8.h \
-	src/encoding/utf8/utf8_regexp.h \
-	src/encoding/utf16/utf16_regexp.h \
-	src/encoding/utf16/utf16.h \
+	src/encoding/utf8.h \
+	src/encoding/utf16.h \
 	src/msg/location.h \
 	src/msg/msg.h \
 	src/msg/ver_to_vernum.h \
@@ -118,12 +115,11 @@ re2c_SRC = \
 	src/dfa/minimization.cc \
 	src/dfa/tagver_table.cc \
 	src/dfa/tcmd.cc \
-	src/encoding/ebcdic/ebcdic_regexp.cc \
+	src/encoding/ebcdic.cc \
 	src/encoding/enc.cc \
 	src/encoding/range_suffix.cc \
-	src/encoding/utf8/utf8_regexp.cc \
-	src/encoding/utf8/utf8.cc \
-	src/encoding/utf16/utf16_regexp.cc \
+	src/encoding/utf8.cc \
+	src/encoding/utf16.cc \
 	src/msg/msg.cc \
 	src/msg/warn.cc \
 	src/regexp/ast_to_re.cc \

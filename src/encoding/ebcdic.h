@@ -1,9 +1,13 @@
-#ifndef _RE2C_RE_ENCODING_EBCDIC_EBCDIC_
-#define _RE2C_RE_ENCODING_EBCDIC_EBCDIC_
+#ifndef _RE2C_RE_ENCODING_EBCDIC_
+#define _RE2C_RE_ENCODING_EBCDIC_
 
 #include <stdint.h>
 
 namespace re2c {
+
+class Range;
+struct RE;
+struct RESpec;
 
 // Based on ISO 8859/1 and Code Page 37.
 const uint32_t asc2ebc[256] = {
@@ -45,6 +49,8 @@ const uint32_t ebc2asc[256] = {
     0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0xb3, 0xdb, 0xdc, 0xd9, 0xda, 0x9f
 };
 
+RE* EBCDICRange(RESpec& spec, const Range* r);
+
 } // namespace re2c
 
-#endif // _RE2C_RE_ENCODING_EBCDIC_EBCDIC_
+#endif // _RE2C_RE_ENCODING_EBCDIC_

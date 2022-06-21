@@ -1,8 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "src/encoding/ebcdic/ebcdic.h"
-#include "src/encoding/ebcdic/ebcdic_regexp.h"
+#include "src/encoding/ebcdic.h"
 #include "src/regexp/re.h"
 #include "src/util/range.h"
 

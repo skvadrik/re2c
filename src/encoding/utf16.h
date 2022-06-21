@@ -1,9 +1,13 @@
-#ifndef _RE2C_RE_ENCODING_UTF16_UTF16_
-#define _RE2C_RE_ENCODING_UTF16_UTF16_
+#ifndef _RE2C_RE_ENCODING_UTF16_
+#define _RE2C_RE_ENCODING_UTF16_
 
 #include <stdint.h>
 
 namespace re2c {
+
+class Range;
+struct RE;
+struct RESpec;
 
 class utf16 {
   public:
@@ -25,6 +29,8 @@ class utf16 {
     }
 };
 
+RE* utf16_range(RESpec& spec, const Range* r);
+
 } // namespace re2c
 
-#endif // _RE2C_RE_ENCODING_UTF16_UTF16_
+#endif // _RE2C_RE_ENCODING_UTF16_

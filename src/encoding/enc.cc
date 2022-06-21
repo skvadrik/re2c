@@ -1,6 +1,6 @@
 #include <stddef.h>
 
-#include "src/encoding/ebcdic/ebcdic.h"
+#include "src/encoding/ebcdic.h"
 #include "src/encoding/enc.h"
 #include "src/util/range.h"
 
