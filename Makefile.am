@@ -68,7 +68,6 @@ re2c_HDR = \
 	src/util/free_list.h \
 	src/util/hash32.h \
 	src/util/local_increment.h \
-	src/util/lookup.h \
 	src/util/range.h \
 	src/util/s_to_n32_unsafe.h \
 	src/util/slab_allocator.h \

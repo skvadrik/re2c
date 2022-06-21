@@ -5,8 +5,8 @@
 #include <stdint.h>
 
 #include "src/regexp/tag.h"
+#include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
-#include "src/util/lookup.h"
 
 namespace re2c {
 

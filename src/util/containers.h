@@ -2,7 +2,14 @@
 #define _RE2C_UTIL_CONTAINERS_
 
 #include <assert.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <string.h>
+#include <limits>
+#include <map>
+#include <vector>
+
+#include "src/debug/debug.h"
 
 namespace re2c {
 
@@ -73,6 +80,76 @@ struct membuf_t {
             operator delete(ptr_);
             ptr_ = allocate<T>(size_);
         }
+    }
+};
+
+// Lookup table with O(1) random access and  O(log(n)) insertion (a vector paired with a map).
+template<typename data_t, typename hash_t = uint32_t>
+struct lookup_t {
+    static constexpr uint32_t NIL = ~0u;
+
+  private:
+    struct elem_t {
+        uint32_t next;
+        data_t data;
+
+        elem_t(uint32_t n, const data_t& d): next(n), data(d) {}
+    };
+
+    std::vector<elem_t> elems;
+    std::map<hash_t, uint32_t> lookup;
+
+  public:
+    lookup_t(): elems(), lookup() {}
+
+    uint32_t size() const {
+        return static_cast<uint32_t>(elems.size());
+    }
+
+    data_t& operator[](uint32_t idx) {
+        DASSERT(idx < elems.size());
+        return elems[idx].data;
+    }
+
+    const data_t& operator[](uint32_t idx) const {
+        DASSERT(idx < elems.size());
+        return elems[idx].data;
+    }
+
+    uint32_t push(hash_t hash, const data_t& data) {
+        DASSERT(elems.size() < NIL);
+        const uint32_t idx = static_cast<uint32_t>(elems.size());
+        elems.push_back(elem_t(head(hash), data));
+        lookup[hash] = idx;
+        return idx;
+    }
+
+    template<typename pred_t>
+    uint32_t find_with(hash_t hash, const data_t& data, pred_t& pred) const {
+        return find(head(hash), data, pred);
+    }
+
+    template<typename pred_t>
+    uint32_t find_next_with(uint32_t prev, const data_t& data, pred_t& pred) const {
+        return find(elems[prev].next, data, pred);
+    }
+
+  private:
+    uint32_t head(hash_t h) const {
+        typename std::map<hash_t, uint32_t>::const_iterator x = lookup.find(h);
+        return x == lookup.end() ? NIL : x->second;
+    }
+
+    template<typename pred_t>
+    uint32_t find(uint32_t next, const data_t& data, pred_t& pred) const  {
+        for (uint32_t i = next; i != NIL;) {
+            const elem_t& e = elems[i];
+            if (pred(e.data, data)) {
+                return i;
+            }
+            i = e.next;
+        }
+        return NIL;
     }
 };
 
