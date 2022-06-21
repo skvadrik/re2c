@@ -223,7 +223,6 @@ void compile(Scanner& input, Output& output, Opt& opts) {
     }
 
     SemAct::flist.clear();
-    RangeSuffix::freeList.clear();
 }
 
 } // namespace re2c

@@ -6,8 +6,6 @@ namespace re2c {
 
 static RE* emit(RESpec& spec, RangeSuffix* p, RE* re);
 
-free_list<RangeSuffix*> RangeSuffix::freeList;
-
 RE* to_regexp(RESpec& spec, RangeSuffix* p) {
     return p ? emit(spec, p, nullptr) : re_sym(spec, nullptr);
 }

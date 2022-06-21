@@ -5,7 +5,6 @@
 #include <stdint.h>
 
 #include "src/util/forbid_copy.h"
-#include "src/util/free_list.h"
 
 namespace re2c {
 
@@ -13,19 +12,23 @@ struct RE;
 struct RESpec;
 
 struct RangeSuffix {
-    static free_list<RangeSuffix*> freeList;
-
     uint32_t l;
     uint32_t h;
     RangeSuffix* next;
     RangeSuffix* child;
 
-    RangeSuffix (uint32_t lo, uint32_t hi) : l(lo), h(hi), next(nullptr), child (nullptr) {
-        freeList.insert(this);
-    }
-
     FORBID_COPY (RangeSuffix);
 };
+
+template<typename Allocator>
+RangeSuffix* make_range_suffix(Allocator& alc, uint32_t lo, uint32_t hi) {
+    RangeSuffix* p = alc.template alloct<RangeSuffix>(1);
+    p->l = lo;
+    p->h = hi;
+    p->next = nullptr;
+    p->child = nullptr;
+    return p;
+}
 
 RE* to_regexp(RESpec& spec, RangeSuffix* p);
 

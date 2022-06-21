@@ -68,8 +68,6 @@ void regfree(regex_t* preg) {
             delete[] preg->regs;
         }
     }
-
-    RangeSuffix::freeList.clear();
 }
 
 void regfreesub(subhistory_t* history) {

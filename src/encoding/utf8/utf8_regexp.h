@@ -7,7 +7,7 @@ class Range;
 struct RE;
 struct RESpec;
 
-RE* UTF8Range(RESpec& spec, const Range* r);
+RE* utf8_range(RESpec& spec, const Range* r);
 
 } // namespace re2c
 
