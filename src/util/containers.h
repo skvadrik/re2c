@@ -153,6 +153,30 @@ struct lookup_t {
     }
 };
 
+// A vector where all elements are unique (a replacement for a set). O(n) lookup, O(n) insertion.
+template <typename value_t>
+class uniq_vector_t {
+    using elems_t = std::vector<value_t>;
+    elems_t elems;
+
+  public:
+    uniq_vector_t(): elems () {}
+    inline bool empty() const { return elems.empty(); }
+    inline size_t size() const { return elems.size(); }
+    inline const value_t& operator[](size_t i) const { return elems[i]; }
+
+    size_t find_or_add(const value_t& v) {
+        const size_t size = elems.size ();
+        for (size_t i = 0; i < size; ++i) {
+            if (elems[i] == v) {
+                return i;
+            }
+        }
+        elems.push_back (v);
+        return size;
+    }
+};
+
 } // namespace re2c
 
 #endif // _RE2C_UTIL_CONTAINERS_

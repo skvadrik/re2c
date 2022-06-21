@@ -14,8 +14,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
-#include "src/util/uniq_vector.h"
 
 namespace re2c {
 
