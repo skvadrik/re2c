@@ -155,11 +155,12 @@ void DFA::emit_dot(Output& output, CodeList* program) const {
 
     for (State* s = head; s; s = s->next) {
         if (s->action.kind == Action::Kind::ACCEPT) {
-            const accept_t& accs = *s->action.info.accepts;
-            for (uint32_t i = 0; i < accs.size(); ++i) {
-                text = o.label(*s->label).cstr(" -> ").label(*accs[i].first->label)
+            uint32_t i = 0;
+            for (const AcceptTrans& a: *s->action.info.accepts) {
+                text = o.label(*s->label).cstr(" -> ").label(*a.state->label)
                         .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]").flush();
                 append(program, code_text(alc, text));
+                ++i;
             }
         } else if (s->action.kind == Action::Kind::RULE) {
             const SemAct* semact = rules[s->action.info.rule].semact;

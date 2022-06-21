@@ -363,8 +363,7 @@ void DFA::prepare(const opt_t* opts) {
         for (State* s = head; s; s = s->next) {
             if (s->fallback) {
                 DASSERT(s->rule != eof_rule); // see note [end-of-input rule]
-                const std::pair<State*, tcid_t> acc(finstates[s->rule], s->fall_tags);
-                s->action.set_save(accepts.find_or_add(acc));
+                s->action.set_save(accepts.find_or_add({finstates[s->rule], s->fall_tags}));
             }
         }
         defstate->action.set_accept(&accepts);

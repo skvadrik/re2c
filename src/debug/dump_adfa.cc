@@ -67,10 +67,9 @@ void dump_adfa(const DFA& dfa) {
         fprintf(stderr, "\" %s]\n", attr);
 
         if (action == Action::Kind::ACCEPT) {
-            const accept_t& accept = *s->action.info.accepts;
-            for (uint32_t i = 0; i < accept.size(); ++i) {
-                fprintf(stderr, "  n%u -> n%u [label=\"", st2idx[s], st2idx[accept[i].first]);
-                dump_tcmd(dfa.tcpool[accept[i].second]);
+            for (const AcceptTrans& a: *s->action.info.accepts) {
+                fprintf(stderr, "  n%u -> n%u [label=\"", st2idx[s], st2idx[a.state]);
+                dump_tcmd(dfa.tcpool[a.tags]);
                 fprintf(stderr, "\" style=dotted]\n");
             }
         }

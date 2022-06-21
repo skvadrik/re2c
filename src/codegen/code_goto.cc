@@ -338,9 +338,8 @@ State* fallback_state_with_eof_rule(
 void code_go(code_alc_t& alc, const DFA& dfa, const opt_t* opts, State* from) {
     // Mark all states that are targets of `yyaccept` switch to as used.
     if (from->action.kind == Action::Kind::ACCEPT) {
-        const accept_t& acc = *from->action.info.accepts;
-        for (size_t i = 0; i < acc.size(); ++i) {
-            acc[i].first->label->used = true;
+        for (const AcceptTrans& a : *from->action.info.accepts) {
+            a.state->label->used = true;
         }
     }
 

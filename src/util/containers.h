@@ -153,26 +153,25 @@ struct lookup_t {
     }
 };
 
-// A vector where all elements are unique (a replacement for a set). O(n) lookup, O(n) insertion.
-template <typename value_t>
-class uniq_vector_t {
-    using elems_t = std::vector<value_t>;
-    elems_t elems;
+// A wrapper over std::vector where all elements are unique (a simplistic replacement for a set).
+// Insertion is O(n), as it loops over all elements to ensure they are different.
+template<typename T>
+class uniq_vector_t : public std::vector<T> {
+    using base_t = std::vector<T>;
+
+    void push_back(const T& v) = delete;
+    template<class... Args> void emplace_back(Args&&... args) = delete;
+    // Should also hide all `insert` methods...
 
   public:
-    uniq_vector_t(): elems () {}
-    inline bool empty() const { return elems.empty(); }
-    inline size_t size() const { return elems.size(); }
-    inline const value_t& operator[](size_t i) const { return elems[i]; }
-
-    size_t find_or_add(const value_t& v) {
-        const size_t size = elems.size ();
+    size_t find_or_add(const T& v) {
+        const size_t size = base_t::size();
         for (size_t i = 0; i < size; ++i) {
-            if (elems[i] == v) {
+            if (base_t::operator[](i) == v) {
                 return i;
             }
         }
-        elems.push_back (v);
+        base_t::push_back(v);
         return size;
     }
 };

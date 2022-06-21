@@ -23,7 +23,8 @@
 namespace re2c {
 
 static void gen_fill_and_label(Output& output, CodeList* stmts, const DFA& dfa, const State* s);
-static void emit_accept(Output& output, CodeList* stmts, const DFA& dfa, const accept_t& acc);
+static void emit_accept(
+        Output& output, CodeList* stmts, const DFA& dfa, const uniq_vector_t<AcceptTrans>& acc);
 static void emit_rule(Output& output, CodeList* stmts, const DFA& dfa, size_t rule_idx);
 static void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& rule);
 
@@ -111,7 +112,7 @@ void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts
 }
 
 static CodeList* emit_accept_binary(
-        Output& output, const DFA& dfa, const accept_t& acc, size_t l, size_t r) {
+        Output& output, const DFA& dfa, const uniq_vector_t<AcceptTrans>& acc, size_t l, size_t r) {
     const opt_t* opts = output.block().opts;
     code_alc_t& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -125,7 +126,7 @@ static CodeList* emit_accept_binary(
         CodeList* if_else = emit_accept_binary(output, dfa, acc, m + 1, r);
         append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
     } else {
-        const CodeJump jump = {acc[l].first, acc[l].second, false, false, false};
+        const CodeJump jump = {acc[l].state, acc[l].tags, false, false, false};
         gen_goto(output, dfa, stmts, nullptr, jump);
     }
     return stmts;
@@ -149,7 +150,8 @@ static void gen_restore(Output& output, CodeList* stmts) {
     }
 }
 
-void emit_accept(Output& output, CodeList* stmts, const DFA& dfa, const accept_t& acc) {
+void emit_accept(
+        Output& output, CodeList* stmts, const DFA& dfa, const uniq_vector_t<AcceptTrans>& acc) {
     const opt_t* opts = output.block().opts;
     const size_t nacc = acc.size();
     code_alc_t& alc = output.allocator;
@@ -162,18 +164,13 @@ void emit_accept(Output& output, CodeList* stmts, const DFA& dfa, const accept_t
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
-        const CodeJump jump = {acc[0].first, acc[0].second, false, false, false};
+        const CodeJump jump = {acc[0].state, acc[0].tags, false, false, false};
         gen_goto(output, dfa, stmts, nullptr, jump);
         return;
     }
 
-    bool have_tags = false;
-    for (size_t i = 0; i < nacc; ++i) {
-        if (acc[i].second != TCID0) {
-            have_tags = true;
-            break;
-        }
-    }
+    bool have_tags = acc.end() != std::find_if(
+            acc.begin(), acc.end(), [](const AcceptTrans& a) { return a.tags != TCID0; });
 
     // jump table
     if (opts->gFlag && nacc >= opts->cGotoThreshold && !have_tags) {
@@ -183,9 +180,8 @@ void emit_accept(Output& output, CodeList* stmts, const DFA& dfa, const accept_t
         text = o.cstr("static void *").str(opts->yytarget).cstr("[").u64(nacc).cstr("] = {")
                 .flush();
         append(block, code_text(alc, text));
-        for (uint32_t i = 0; i < nacc; ++i) {
-            Label* l = acc[i].first->label;
-            text = o.cstr("&&").str(opts->labelPrefix).label(*l).cstr(",").flush();
+        for (const AcceptTrans& a : acc) {
+            text = o.cstr("&&").str(opts->labelPrefix).label(*a.state->label).cstr(",").flush();
             append(table, code_text(alc, text));
         }
         append(block, code_block(alc, table, CodeBlock::Kind::INDENTED));
@@ -208,7 +204,7 @@ void emit_accept(Output& output, CodeList* stmts, const DFA& dfa, const accept_t
     CodeCases* cases = code_cases(alc);
     for (uint32_t i = 0; i < nacc; ++i) {
         CodeList* case_body = code_list(alc);
-        const CodeJump jump = {acc[i].first, acc[i].second, false, false, false};
+        const CodeJump jump = {acc[i].state, acc[i].tags, false, false, false};
         gen_goto(output, dfa, case_body, nullptr, jump);
         if (i == nacc - 1) {
             append(cases, code_case_default(alc, case_body));

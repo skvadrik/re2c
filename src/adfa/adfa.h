@@ -28,15 +28,21 @@ struct State;
 
 static constexpr size_t NOSAVE = std::numeric_limits<size_t>::max();
 
-using accept_t = uniq_vector_t<std::pair<State*, tcid_t> >;
+struct AcceptTrans {
+    State* state;
+    tcid_t tags;
+
+    bool operator==(const AcceptTrans& a) const {
+        return state == a.state && tags == a.tags;
+    }
+};
 
 class Action {
   public:
     enum class Kind: uint32_t { MATCH, INITIAL, SAVE, MOVE, ACCEPT, RULE } kind;
-
     union {
+        const uniq_vector_t<AcceptTrans>* accepts;
         size_t save;
-        const accept_t* accepts;
         size_t rule;
     } info;
 
@@ -45,7 +51,7 @@ class Action {
     void set_initial();
     void set_save(size_t save);
     void set_move();
-    void set_accept(const accept_t* accepts);
+    void set_accept(const uniq_vector_t<AcceptTrans>* accepts);
     void set_rule(size_t rule);
 };
 
@@ -69,7 +75,7 @@ struct State {
 };
 
 struct DFA {
-    accept_t accepts;
+    uniq_vector_t<AcceptTrans> accepts;
     const loc_t loc;
     const std::string name;
     const std::string cond;
@@ -157,7 +163,7 @@ inline void Action::set_move() {
     kind = Kind::MOVE;
 }
 
-inline void Action::set_accept(const accept_t* accepts) {
+inline void Action::set_accept(const uniq_vector_t<AcceptTrans>* accepts) {
     DASSERT(kind == Kind::MATCH);
     kind = Kind::ACCEPT;
     info.accepts = accepts;
