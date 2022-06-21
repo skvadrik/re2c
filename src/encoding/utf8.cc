@@ -7,16 +7,15 @@
 #include "src/util/range.h"
 
 namespace re2c {
-namespace utf8_impl {
+namespace utf8 {
 
 // Now that we have catenation of byte ranges [l1-h1]...[lN-hN], we want to add it to existing
 // range, merging suffixes on the fly.
-static void add_continuous(
-        RangeSuffix*& root, RE::alc_t& alc, utf8::rune l, utf8::rune h, uint32_t n) {
-    uint32_t lcs[utf8::MAX_RUNE_LENGTH];
-    uint32_t hcs[utf8::MAX_RUNE_LENGTH];
-    utf8::rune_to_bytes(lcs, l);
-    utf8::rune_to_bytes(hcs, h);
+static void add_continuous( RangeSuffix*& root, RE::alc_t& alc, rune l, rune h, uint32_t n) {
+    uint32_t lcs[MAX_RUNE_LENGTH];
+    uint32_t hcs[MAX_RUNE_LENGTH];
+    rune_to_bytes(lcs, l);
+    rune_to_bytes(hcs, h);
 
     RangeSuffix** p = &root;
     for (uint32_t i = 1; i <= n; ++i) {
@@ -56,8 +55,7 @@ static void add_continuous(
 // This function finds all such 'points of discontinuity' and represents original range as
 // alternation of continuous sub-ranges.
 //
-static void split_by_continuity(
-        RangeSuffix*& root, RE::alc_t& alc, utf8::rune l, utf8::rune h, uint32_t n) {
+static void split_by_continuity(RangeSuffix*& root, RE::alc_t& alc, rune l, rune h, uint32_t n) {
     for (uint32_t i = 1; i < n; ++i) {
         uint32_t m = (1u << (6u * i)) - 1u; // last i bytes of a UTF-8 sequence
         if ((l & ~m) != (h & ~m)) {
@@ -83,21 +81,21 @@ static void split_by_continuity(
 //     [0x800 - 0xFFFF]     (3-byte UTF-8 sequences)
 //     [0x10000 - 0x10FFFF] (4-byte UTF-8 sequences)
 //
-static void split_by_rune_length(RangeSuffix*& root, RE::alc_t& alc, utf8::rune l, utf8::rune h) {
-    const uint32_t nh = utf8::rune_length(h);
-    for (uint32_t nl = utf8::rune_length(l); nl < nh; ++nl) {
-        utf8::rune r = utf8::max_rune(nl);
+static void split_by_rune_length(RangeSuffix*& root, RE::alc_t& alc, rune l, rune h) {
+    const uint32_t nh = rune_length(h);
+    for (uint32_t nl = rune_length(l); nl < nh; ++nl) {
+        rune r = max_rune(nl);
         split_by_continuity(root, alc, l, r, nl);
         l = r + 1;
     }
     split_by_continuity(root, alc, l, h, nh);
 }
 
-static RE* symbol(RESpec& spec, utf8::rune r) {
+static RE* symbol(RESpec& spec, rune r) {
     RangeMgr& rm = spec.rangemgr;
 
-    uint32_t chars[utf8::MAX_RUNE_LENGTH];
-    const uint32_t chars_count = utf8::rune_to_bytes(chars, r);
+    uint32_t chars[MAX_RUNE_LENGTH];
+    const uint32_t chars_count = rune_to_bytes(chars, r);
     RE* re = re_sym(spec, rm.sym(chars[0]));
     for (uint32_t i = 1; i < chars_count; ++i) {
         re = re_cat(spec, re, re_sym(spec, rm.sym(chars[i])));
@@ -105,29 +103,27 @@ static RE* symbol(RESpec& spec, utf8::rune r) {
     return re;
 }
 
-} // namespace utf8_impl
-
 // Split Unicode character class {[l1, h1), ..., [lN, hN)} into ranges [l1, h1-1], ..., [lN, hN-1]
 // and return an alternation of them. We store partially built range in suffix tree, which allows us
 // to eliminate common suffixes while building.
 //
-RE* utf8_range(RESpec& spec, const Range* r) {
+RE* range(RESpec& spec, const Range* r) {
     // empty range
     if (!r) return nullptr;
 
     // one-symbol range
     if (!r->next() && r->lower() == r->upper() - 1) {
-        return utf8_impl::symbol(spec, r->lower());
+        return symbol(spec, r->lower());
     }
 
     RangeSuffix* root = nullptr;
     for (; r != nullptr; r = r->next()) {
-        utf8_impl::split_by_rune_length(root, spec.alc, r->lower(), r->upper() - 1);
+        split_by_rune_length(root, spec.alc, r->lower(), r->upper() - 1);
     }
     return to_regexp(spec, root);
 }
 
-uint32_t utf8::rune_to_bytes(uint32_t* str, rune c) {
+uint32_t rune_to_bytes(uint32_t* str, rune c) {
     // one byte sequence: 0-0x7F => 0xxxxxxx
     if (c <= MAX_1BYTE_RUNE) {
         str[0] = PREFIX_1BYTE | c;
@@ -165,7 +161,7 @@ uint32_t utf8::rune_to_bytes(uint32_t* str, rune c) {
 }
 
 // this function assumes that the input has been validated
-uint32_t utf8::decode_unsafe(const char* str) {
+uint32_t decode_unsafe(const char* str) {
     // 1-unit sequence: 0-0x7F => 0xxxxxxx
     const uint32_t c = (uint8_t)str[0];
     if (c < INFIX) {
@@ -193,7 +189,7 @@ uint32_t utf8::decode_unsafe(const char* str) {
     return ERROR;
 }
 
-uint32_t utf8::rune_length(rune r) {
+uint32_t rune_length(rune r) {
     if (r <= MAX_2BYTE_RUNE) {
         return r <= MAX_1BYTE_RUNE ? 1 : 2;
     } else {
@@ -201,7 +197,7 @@ uint32_t utf8::rune_length(rune r) {
     }
 }
 
-utf8::rune utf8::max_rune(uint32_t i) {
+rune max_rune(uint32_t i) {
     switch (i) {
     case 1:
         return MAX_1BYTE_RUNE;
@@ -216,4 +212,5 @@ utf8::rune utf8::max_rune(uint32_t i) {
     }
 }
 
+} // namespace utf8
 } // namespace re2c

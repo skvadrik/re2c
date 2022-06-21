@@ -42,7 +42,7 @@ bool Enc::validateChar(uint32_t& c) const {
 uint32_t Enc::decodeUnsafe(uint32_t c) const {
     switch (type_) {
     case Type::EBCDIC:
-        c = ebc2asc[c & 0xFF];
+        c = ebcdic::ebc2asc[c & 0xFF];
         break;
     case Type::ASCII:
     case Type::UCS2:

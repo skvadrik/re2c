@@ -7,7 +7,7 @@
 #include "src/util/range.h"
 
 namespace re2c {
-namespace utf16_impl {
+namespace utf16 {
 
 // Add word range [w1-w2].
 static void add_continuous1(RangeSuffix*& root, RE::alc_t& alc, uint32_t l, uint32_t h) {
@@ -83,14 +83,14 @@ static void split_by_continuity(RangeSuffix*& root,
                                 uint32_t l_tr,
                                 uint32_t h_tr) {
     if (l_ld != h_ld) {
-        if (l_tr > utf16::MIN_TRAIL_SURR) {
-            split_by_continuity(root, alc, l_ld, l_ld, l_tr, utf16::MAX_TRAIL_SURR);
-            split_by_continuity(root, alc, l_ld + 1, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
+        if (l_tr > MIN_TRAIL_SURR) {
+            split_by_continuity(root, alc, l_ld, l_ld, l_tr, MAX_TRAIL_SURR);
+            split_by_continuity(root, alc, l_ld + 1, h_ld, MIN_TRAIL_SURR, h_tr);
             return;
         }
-        if (h_tr < utf16::MAX_TRAIL_SURR) {
-            split_by_continuity(root, alc, l_ld, h_ld - 1, l_tr, utf16::MAX_TRAIL_SURR);
-            split_by_continuity(root, alc, h_ld, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
+        if (h_tr < MAX_TRAIL_SURR) {
+            split_by_continuity(root, alc, l_ld, h_ld - 1, l_tr, MAX_TRAIL_SURR);
+            split_by_continuity(root, alc, h_ld, h_ld, MIN_TRAIL_SURR, h_tr);
             return;
         }
     }
@@ -102,56 +102,55 @@ static void split_by_continuity(RangeSuffix*& root,
 //    [0 - 0xFFFF]         (2-byte UTF-16 sequences)
 //    [0x10000 - 0x10FFFF] (4-byte UTF-16 sequences)
 //
-static void split_by_rune_length(RangeSuffix*& root, RE::alc_t& alc, utf16::rune l, utf16::rune h) {
-    if (l <= utf16::MAX_1WORD_RUNE) {
-        if (h <= utf16::MAX_1WORD_RUNE) {
+static void split_by_rune_length(RangeSuffix*& root, RE::alc_t& alc, rune l, rune h) {
+    if (l <= MAX_1WORD_RUNE) {
+        if (h <= MAX_1WORD_RUNE) {
             add_continuous1(root, alc, l, h);
         } else {
-            add_continuous1(root, alc, l, utf16::MAX_1WORD_RUNE);
-            const uint32_t h_ld = utf16::lead_surr(h);
-            const uint32_t h_tr = utf16::trail_surr(h);
-            split_by_continuity(root, alc, utf16::MIN_LEAD_SURR, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
+            add_continuous1(root, alc, l, MAX_1WORD_RUNE);
+            const uint32_t h_ld = lead_surr(h);
+            const uint32_t h_tr = trail_surr(h);
+            split_by_continuity(root, alc, MIN_LEAD_SURR, h_ld, MIN_TRAIL_SURR, h_tr);
         }
     } else {
-        const uint32_t l_ld = utf16::lead_surr(l);
-        const uint32_t l_tr = utf16::trail_surr(l);
-        const uint32_t h_ld = utf16::lead_surr(h);
-        const uint32_t h_tr = utf16::trail_surr(h);
+        const uint32_t l_ld = lead_surr(l);
+        const uint32_t l_tr = trail_surr(l);
+        const uint32_t h_ld = lead_surr(h);
+        const uint32_t h_tr = trail_surr(h);
         split_by_continuity(root, alc, l_ld, h_ld, l_tr, h_tr);
     }
 }
 
-static RE* symbol(RESpec& spec, utf16::rune r) {
+static RE* symbol(RESpec& spec, rune r) {
     RangeMgr& rm = spec.rangemgr;
-    if (r <= utf16::MAX_1WORD_RUNE) {
+    if (r <= MAX_1WORD_RUNE) {
         return re_sym(spec, rm.sym(r));
     } else {
         return re_cat(spec,
-                      re_sym(spec, rm.sym(utf16::lead_surr(r))),
-                      re_sym(spec, rm.sym(utf16::trail_surr(r))));
+                      re_sym(spec, rm.sym(lead_surr(r))),
+                      re_sym(spec, rm.sym(trail_surr(r))));
     }
 }
-
-} // namespace uif16_range
 
 // Split Unicode character class {[l1, h1), ..., [lN, hN)} into ranges [l1, h1-1], ..., [lN, hN-1]
 // and return an alternation of them. We store partially built range in suffix tree, which allows us
 // to eliminate common suffixes while building.
 //
-RE* utf16_range(RESpec& spec, const Range* r) {
+RE* range(RESpec& spec, const Range* r) {
     // empty range
     if (!r) return nullptr;
 
     // one-symbol range
     if (!r->next() && r->lower() == r->upper() - 1) {
-        return utf16_impl::symbol(spec, r->lower());
+        return symbol(spec, r->lower());
     }
 
     RangeSuffix* root = nullptr;
     for (; r != nullptr; r = r->next()) {
-        utf16_impl::split_by_rune_length(root, spec.alc, r->lower(), r->upper() - 1);
+        split_by_rune_length(root, spec.alc, r->lower(), r->upper() - 1);
     }
     return to_regexp(spec, root);
 }
 
+} // namespace utf16
 } // namespace re2c

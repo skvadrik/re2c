@@ -6,8 +6,9 @@
 #include "src/util/range.h"
 
 namespace re2c {
+namespace ebcdic {
 
-RE* EBCDICRange(RESpec& spec, const Range* r) {
+RE* range(RESpec& spec, const Range* r) {
     RangeMgr& rm = spec.rangemgr;
 
     Range* s = nullptr;
@@ -20,4 +21,5 @@ RE* EBCDICRange(RESpec& spec, const Range* r) {
     return re_sym(spec, s);
 }
 
+} // namespace ebcdic
 } // namespace re2c

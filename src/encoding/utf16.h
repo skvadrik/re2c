@@ -9,28 +9,28 @@ class Range;
 struct RE;
 struct RESpec;
 
-class utf16 {
-  public:
-    using rune = uint32_t;
+namespace utf16 {
 
-    static constexpr uint32_t MAX_1WORD_RUNE = 0xFFFFu;
-    static constexpr uint32_t MIN_LEAD_SURR = 0xD800u;
-    static constexpr uint32_t MIN_TRAIL_SURR = 0xDC00u;
-    static constexpr uint32_t MAX_TRAIL_SURR = 0xDFFFu;
+using rune = uint32_t;
 
-    // leading surrogate of UTF-16 symbol
-    static inline constexpr uint32_t lead_surr(rune r) {
-        return ((r - 0x10000u) / 0x400u) + MIN_LEAD_SURR;
-    }
+static constexpr uint32_t MAX_1WORD_RUNE = 0xFFFFu;
+static constexpr uint32_t MIN_LEAD_SURR = 0xD800u;
+static constexpr uint32_t MIN_TRAIL_SURR = 0xDC00u;
+static constexpr uint32_t MAX_TRAIL_SURR = 0xDFFFu;
 
-    // trailing surrogate of UTF-16 symbol
-    static inline constexpr uint32_t trail_surr(rune r) {
-        return ((r - 0x10000u) % 0x400u) + MIN_TRAIL_SURR;
-    }
-};
+// leading surrogate of UTF-16 symbol
+inline constexpr uint32_t lead_surr(rune r) {
+    return ((r - 0x10000u) / 0x400u) + MIN_LEAD_SURR;
+}
 
-RE* utf16_range(RESpec& spec, const Range* r);
+// trailing surrogate of UTF-16 symbol
+inline constexpr uint32_t trail_surr(rune r) {
+    return ((r - 0x10000u) % 0x400u) + MIN_TRAIL_SURR;
+}
 
+RE* range(RESpec& spec, const Range* r);
+
+} // namespace utf16
 } // namespace re2c
 
 #endif // _RE2C_RE_ENCODING_UTF16_

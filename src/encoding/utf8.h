@@ -9,50 +9,50 @@ class Range;
 struct RE;
 struct RESpec;
 
-class utf8 {
-  public:
-    using rune = uint32_t;
+namespace utf8 {
 
-    // Maximum characters per code point (rune).
-    static constexpr uint32_t MAX_RUNE_LENGTH = 4u;
+using rune = uint32_t;
 
-    // Decoding error.
-    static constexpr uint32_t ERROR = 0xFFFDu;
+// Maximum characters per code point (rune).
+static constexpr uint32_t MAX_RUNE_LENGTH = 4u;
 
-    // Maximum values for UTF8 code points of length 1-4 bytes.
-    static constexpr rune MAX_1BYTE_RUNE = 0x7Fu;     // 0000 0000  0000 0000  0111 1111
-    static constexpr rune MAX_2BYTE_RUNE = 0x7FFu;    // 0000 0000  0000 0111  1111 1111
-    static constexpr rune MAX_3BYTE_RUNE = 0xFFFFu;   // 0000 0000  1111 1111  1111 1111
-    static constexpr rune MAX_4BYTE_RUNE = 0x1FFFFFu; // 0001 1111  1111 1111  1111 1111
+// Decoding error.
+static constexpr uint32_t ERROR = 0xFFFDu;
 
-    // Maximum Unicode code point is U+10FFFF (it is less than the maximum 4-byte UTF8 code point).
-    static constexpr rune MAX_RUNE = 0x10FFFFu;
+// Maximum values for UTF8 code points of length 1-4 bytes.
+static constexpr rune MAX_1BYTE_RUNE = 0x7Fu;     // 0000 0000  0000 0000  0111 1111
+static constexpr rune MAX_2BYTE_RUNE = 0x7FFu;    // 0000 0000  0000 0111  1111 1111
+static constexpr rune MAX_3BYTE_RUNE = 0xFFFFu;   // 0000 0000  1111 1111  1111 1111
+static constexpr rune MAX_4BYTE_RUNE = 0x1FFFFFu; // 0001 1111  1111 1111  1111 1111
 
-    static constexpr uint32_t PREFIX_1BYTE = 0u;    // 0000 0000
-    static constexpr uint32_t INFIX        = 0x80u; // 1000 0000
-    static constexpr uint32_t PREFIX_2BYTE = 0xC0u; // 1100 0000
-    static constexpr uint32_t PREFIX_3BYTE = 0xE0u; // 1110 0000
-    static constexpr uint32_t PREFIX_4BYTE = 0xF0u; // 1111 0000
-    static constexpr uint32_t PREFIX_5BYTE = 0xF8u; // 1111 1000
+// Maximum Unicode code point is U+10FFFF (it is less than the maximum 4-byte UTF8 code point).
+static constexpr rune MAX_RUNE = 0x10FFFFu;
 
-    static constexpr uint32_t SHIFT = 6u;
-    static constexpr uint32_t MASK = 0x3Fu; // 0011 1111
+static constexpr uint32_t PREFIX_1BYTE = 0u;    // 0000 0000
+static constexpr uint32_t INFIX        = 0x80u; // 1000 0000
+static constexpr uint32_t PREFIX_2BYTE = 0xC0u; // 1100 0000
+static constexpr uint32_t PREFIX_3BYTE = 0xE0u; // 1110 0000
+static constexpr uint32_t PREFIX_4BYTE = 0xF0u; // 1111 0000
+static constexpr uint32_t PREFIX_5BYTE = 0xF8u; // 1111 1000
 
-    // UTF-8 bytestring for given Unicode code point.
-    static uint32_t rune_to_bytes(uint32_t* s, rune r);
+static constexpr uint32_t SHIFT = 6u;
+static constexpr uint32_t MASK = 0x3Fu; // 0011 1111
 
-    // Read Unicode code point for the given (pre-validated) UTF-8 bytestring.
-    static uint32_t decode_unsafe(const char* str);
+// UTF-8 bytestring for given Unicode code point.
+uint32_t rune_to_bytes(uint32_t* s, rune r);
 
-    // Length of a UTF-8 bytestring for a given Unicode code point.
-    static uint32_t rune_length(rune r);
+// Read Unicode code point for the given (pre-validated) UTF-8 bytestring.
+uint32_t decode_unsafe(const char* str);
 
-    // Maximum Unicode code point with a given length of UTF-8 bytestring.
-    static rune max_rune(uint32_t i);
-};
+// Length of a UTF-8 bytestring for a given Unicode code point.
+uint32_t rune_length(rune r);
 
-RE* utf8_range(RESpec& spec, const Range* r);
+// Maximum Unicode code point with a given length of UTF-8 bytestring.
+rune max_rune(uint32_t i);
 
+RE* range(RESpec& spec, const Range* r);
+
+} // namespace utf8
 } // namespace re2c
 
 #endif // _RE2C_RE_ENCODING_UTF8_

@@ -416,11 +416,11 @@ RE* re_class(RESpec& spec, const loc_t& loc, const Range* r) {
 
     switch (spec.opts->encoding.type()) {
     case Enc::Type::UTF16:
-        return utf16_range(spec, r);
+        return utf16::range(spec, r);
     case Enc::Type::UTF8:
-        return utf8_range(spec, r);
+        return utf8::range(spec, r);
     case Enc::Type::EBCDIC:
-        return EBCDICRange(spec, r);
+        return ebcdic::range(spec, r);
     case Enc::Type::ASCII:
     case Enc::Type::UTF32:
     case Enc::Type::UCS2:
