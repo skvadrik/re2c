@@ -33,9 +33,10 @@ extern "C" {
 
 %union {
     const re2c::AstNode* regexp;
-    re2c::SemAct* semact;
+    const re2c::SemAct* semact;
     char op;
     re2c::AstBounds bounds;
+    const char* cstr;
     std::string* str;
     re2c::CondList* clist;
 };
@@ -59,7 +60,8 @@ extern "C" {
 %type <bounds>  TOKEN_CLOSESIZE
 %type <semact>  TOKEN_CODE ccode
 %type <regexp>  TOKEN_REGEXP trailexpr rule expr diff term factor primary
-%type <str>     TOKEN_CNEXT TOKEN_CJUMP TOKEN_ID TOKEN_FID TOKEN_BLOCK name
+%type <cstr>    TOKEN_CNEXT TOKEN_CJUMP
+%type <str>     TOKEN_ID TOKEN_FID TOKEN_BLOCK name
 %type <clist>   TOKEN_CLIST TOKEN_CSETUP TOKEN_CZERO
 
 %%
@@ -141,13 +143,11 @@ ccode
 : TOKEN_CODE
 | TOKEN_CNEXT TOKEN_CODE {
     $$ = $2;
-    $$->cond = *$1;
-    delete $1;
+    // parser needs to to update condition, but for the rest of the code actions are immutable
+    const_cast<SemAct*>($$)->cond = $1; 
 }
 | TOKEN_CJUMP {
-    $$ = new SemAct(context.input.tok_loc());
-    $$->cond = *$1;
-    delete $1;
+    $$ = ast.sem_act(context.input.tok_loc(), nullptr, $1, true);
 };
 
 trailexpr

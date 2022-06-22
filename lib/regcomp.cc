@@ -49,7 +49,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
 
     preg->rmgr = new RangeMgr;
 
-    AstRule ar(a, new SemAct(NOWHERE));
+    AstRule ar(a, ast.sem_act(NOWHERE, nullptr, nullptr, false));
     std::vector<AstRule> arv;
     arv.push_back(ar);
     RESpec re(arv, opt, msg, *preg->rmgr);

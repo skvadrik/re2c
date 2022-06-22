@@ -100,6 +100,15 @@ const AstNode* Ast::ref(const AstNode* a, const std::string& n) {
     return ast;
 }
 
+const SemAct* Ast::sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen) {
+    SemAct* a = allocator.alloct<SemAct>(1);
+    a->loc = loc;
+    a->text = text;
+    a->cond = cond;
+    a->autogen = autogen;
+    return a;
+}
+
 bool Ast::needs_wrap(const AstNode* a) {
     switch (a->kind) {
     case AstKind::ITER:

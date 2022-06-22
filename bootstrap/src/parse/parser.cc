@@ -551,9 +551,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    68,    68,    69,    73,    76,    77,    78,    82,    87,
-      94,    95,    98,    98,   101,   104,   107,   110,   116,   122,
-     128,   134,   141,   142,   147,   154,   155,   160,   161,   165,
+       0,    70,    70,    71,    75,    78,    79,    80,    84,    89,
+      96,    97,   100,   100,   103,   106,   109,   112,   118,   124,
+     130,   136,   143,   144,   149,   154,   155,   160,   161,   165,
      166,   170,   172,   176,   177,   190,   196,   197,   201,   202,
      203,   207,   208,   215
 };
@@ -1159,7 +1159,7 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* spec: spec TOKEN_BLOCK  */
-#line 69 "../src/parse/parser.ypp"
+#line 71 "../src/parse/parser.ypp"
                    {
     use_block(context, *(yyvsp[0].str), context.input.tok_loc());
     delete (yyvsp[0].str);
@@ -1168,7 +1168,7 @@ yyreduce:
     break;
 
   case 4: /* spec: spec TOKEN_CONF  */
-#line 73 "../src/parse/parser.ypp"
+#line 75 "../src/parse/parser.ypp"
                   {
     context.input.lex_conf(context.opts);
 }
@@ -1176,7 +1176,7 @@ yyreduce:
     break;
 
   case 8: /* def: name expr enddef  */
-#line 82 "../src/parse/parser.ypp"
+#line 84 "../src/parse/parser.ypp"
                    {
     add_named_def(context.opts.symtab, *(yyvsp[-2].str), (yyvsp[-1].regexp), context.input.tok_loc(), context.input.msg);
     delete (yyvsp[-2].str);
@@ -1185,7 +1185,7 @@ yyreduce:
     break;
 
   case 9: /* def: name expr '/'  */
-#line 87 "../src/parse/parser.ypp"
+#line 89 "../src/parse/parser.ypp"
                 {
     context.input.msg.error(context.input.tok_loc(),
                             "trailing contexts are not allowed in named definitions");
@@ -1195,13 +1195,13 @@ yyreduce:
     break;
 
   case 10: /* name: TOKEN_ID '='  */
-#line 94 "../src/parse/parser.ypp"
+#line 96 "../src/parse/parser.ypp"
                { (yyval.str) = (yyvsp[-1].str); }
 #line 1201 "src/parse/parser.cc"
     break;
 
   case 14: /* rule: trailexpr TOKEN_CODE  */
-#line 101 "../src/parse/parser.ypp"
+#line 103 "../src/parse/parser.ypp"
                        {
     find_or_add_spec(context.specs, "").rules.push_back(AstRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
 }
@@ -1209,7 +1209,7 @@ yyreduce:
     break;
 
   case 15: /* rule: '*' TOKEN_CODE  */
-#line 104 "../src/parse/parser.ypp"
+#line 106 "../src/parse/parser.ypp"
                  {
     find_or_add_spec(context.specs, "").defs.push_back((yyvsp[0].semact));
 }
@@ -1217,7 +1217,7 @@ yyreduce:
     break;
 
   case 16: /* rule: '$' TOKEN_CODE  */
-#line 107 "../src/parse/parser.ypp"
+#line 109 "../src/parse/parser.ypp"
                  {
     find_or_add_spec(context.specs, "").eofs.push_back((yyvsp[0].semact));
 }
@@ -1225,7 +1225,7 @@ yyreduce:
     break;
 
   case 17: /* rule: TOKEN_CLIST trailexpr ccode  */
-#line 110 "../src/parse/parser.ypp"
+#line 112 "../src/parse/parser.ypp"
                               {
     for (const std::string& cond : *(yyvsp[-2].clist)) {
         find_or_add_spec(context.specs, cond).rules.push_back(AstRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
@@ -1236,7 +1236,7 @@ yyreduce:
     break;
 
   case 18: /* rule: TOKEN_CLIST '*' ccode  */
-#line 116 "../src/parse/parser.ypp"
+#line 118 "../src/parse/parser.ypp"
                         {
     for (const std::string& cond : *(yyvsp[-2].clist)) {
         find_or_add_spec(context.specs, cond).defs.push_back((yyvsp[0].semact));
@@ -1247,7 +1247,7 @@ yyreduce:
     break;
 
   case 19: /* rule: TOKEN_CLIST '$' ccode  */
-#line 122 "../src/parse/parser.ypp"
+#line 124 "../src/parse/parser.ypp"
                         {
     for (const std::string& cond : *(yyvsp[-2].clist)) {
         find_or_add_spec(context.specs, cond).eofs.push_back((yyvsp[0].semact));
@@ -1258,7 +1258,7 @@ yyreduce:
     break;
 
   case 20: /* rule: TOKEN_CSETUP TOKEN_CODE  */
-#line 128 "../src/parse/parser.ypp"
+#line 130 "../src/parse/parser.ypp"
                           {
     for (const std::string& cond : *(yyvsp[-1].clist)) {
         find_or_add_spec(context.specs, cond).setup.push_back((yyvsp[0].semact));
@@ -1269,7 +1269,7 @@ yyreduce:
     break;
 
   case 21: /* rule: TOKEN_CZERO ccode  */
-#line 134 "../src/parse/parser.ypp"
+#line 136 "../src/parse/parser.ypp"
                     {
     const AstNode* r = ast.nil(context.input.tok_loc());
     find_or_add_spec(context.specs, "0").rules.push_back(AstRule(r, (yyvsp[0].semact)));
@@ -1279,29 +1279,27 @@ yyreduce:
     break;
 
   case 23: /* ccode: TOKEN_CNEXT TOKEN_CODE  */
-#line 142 "../src/parse/parser.ypp"
+#line 144 "../src/parse/parser.ypp"
                          {
     (yyval.semact) = (yyvsp[0].semact);
-    (yyval.semact)->cond = *(yyvsp[-1].str);
-    delete (yyvsp[-1].str);
+    // parser needs to to update condition, but for the rest of the code actions are immutable
+    const_cast<SemAct*>((yyval.semact))->cond = (yyvsp[-1].cstr); 
 }
 #line 1289 "src/parse/parser.cc"
     break;
 
   case 24: /* ccode: TOKEN_CJUMP  */
-#line 147 "../src/parse/parser.ypp"
+#line 149 "../src/parse/parser.ypp"
               {
-    (yyval.semact) = new SemAct(context.input.tok_loc());
-    (yyval.semact)->cond = *(yyvsp[0].str);
-    delete (yyvsp[0].str);
+    (yyval.semact) = ast.sem_act(context.input.tok_loc(), nullptr, (yyvsp[0].cstr), true);
 }
-#line 1299 "src/parse/parser.cc"
+#line 1297 "src/parse/parser.cc"
     break;
 
   case 25: /* trailexpr: expr  */
 #line 154 "../src/parse/parser.ypp"
        { (yyval.regexp) = ast.cap((yyvsp[0].regexp)); }
-#line 1305 "src/parse/parser.cc"
+#line 1303 "src/parse/parser.cc"
     break;
 
   case 26: /* trailexpr: expr '/' expr  */
@@ -1309,25 +1307,25 @@ yyreduce:
                 {
     (yyval.regexp) = ast.cat(ast.cap((yyvsp[-2].regexp)), ast.cat(ast.tag(context.input.tok_loc(), nullptr, false), (yyvsp[0].regexp)));
 }
-#line 1313 "src/parse/parser.cc"
+#line 1311 "src/parse/parser.cc"
     break;
 
   case 28: /* expr: expr '|' diff  */
 #line 161 "../src/parse/parser.ypp"
                 { (yyval.regexp) = ast.alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1319 "src/parse/parser.cc"
+#line 1317 "src/parse/parser.cc"
     break;
 
   case 30: /* diff: diff '\\' term  */
 #line 166 "../src/parse/parser.ypp"
                  { (yyval.regexp) = ast.diff((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1325 "src/parse/parser.cc"
+#line 1323 "src/parse/parser.cc"
     break;
 
   case 32: /* term: factor term  */
 #line 172 "../src/parse/parser.ypp"
               { (yyval.regexp) = ast.cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
-#line 1331 "src/parse/parser.cc"
+#line 1329 "src/parse/parser.cc"
     break;
 
   case 34: /* factor: primary closes  */
@@ -1345,7 +1343,7 @@ yyreduce:
         break;
     }
 }
-#line 1349 "src/parse/parser.cc"
+#line 1347 "src/parse/parser.cc"
     break;
 
   case 35: /* factor: primary TOKEN_CLOSESIZE  */
@@ -1353,31 +1351,31 @@ yyreduce:
                           {
     (yyval.regexp) = ast.iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max);
 }
-#line 1357 "src/parse/parser.cc"
+#line 1355 "src/parse/parser.cc"
     break;
 
   case 37: /* closes: closes close  */
 #line 197 "../src/parse/parser.ypp"
                { (yyval.op) = ((yyvsp[-1].op) == (yyvsp[0].op)) ? (yyvsp[-1].op) : '*'; }
-#line 1363 "src/parse/parser.cc"
+#line 1361 "src/parse/parser.cc"
     break;
 
   case 38: /* close: '*'  */
 #line 201 "../src/parse/parser.ypp"
       { (yyval.op) = '*'; }
-#line 1369 "src/parse/parser.cc"
+#line 1367 "src/parse/parser.cc"
     break;
 
   case 39: /* close: '+'  */
 #line 202 "../src/parse/parser.ypp"
       { (yyval.op) = '+'; }
-#line 1375 "src/parse/parser.cc"
+#line 1373 "src/parse/parser.cc"
     break;
 
   case 40: /* close: '?'  */
 #line 203 "../src/parse/parser.ypp"
       { (yyval.op) = '?'; }
-#line 1381 "src/parse/parser.cc"
+#line 1379 "src/parse/parser.cc"
     break;
 
   case 42: /* primary: TOKEN_ID  */
@@ -1389,17 +1387,17 @@ yyreduce:
     }
     delete (yyvsp[0].str);
 }
-#line 1393 "src/parse/parser.cc"
+#line 1391 "src/parse/parser.cc"
     break;
 
   case 43: /* primary: '(' expr ')'  */
 #line 215 "../src/parse/parser.ypp"
                { (yyval.regexp) = ast.cap((yyvsp[-1].regexp)); }
-#line 1399 "src/parse/parser.cc"
+#line 1397 "src/parse/parser.cc"
     break;
 
 
-#line 1403 "src/parse/parser.cc"
+#line 1401 "src/parse/parser.cc"
 
       default: break;
     }

@@ -21,7 +21,6 @@
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/skeleton/skeleton.h"
-#include "src/util/free_list.h"
 #include "src/util/range.h"
 
 namespace re2c {
@@ -221,8 +220,6 @@ void compile(Scanner& input, Output& output, Opt& opts) {
     if (globopts->target == Target::SKELETON) {
         output.wdelay_stmt(0, emit_skeleton_epilog(output));
     }
-
-    SemAct::flist.clear();
 }
 
 } // namespace re2c

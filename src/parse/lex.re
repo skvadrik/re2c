@@ -417,11 +417,11 @@ scan:
     location = cur_loc();
 /*!local:re2c
 
-    "{"  { lex_code_in_braces(); return TOKEN_CODE; }
-    ":=" { lex_code_indented(); return TOKEN_CODE; }
+    "{"  { lex_code_in_braces(ast); return TOKEN_CODE; }
+    ":=" { lex_code_indented(ast); return TOKEN_CODE; }
 
     ":"? "=>" space* @p name {
-        yylval.str = newstr(p, cur);
+        yylval.cstr = newcstr(p, cur, ast.allocator);
         return tok[0] == ':' ? TOKEN_CJUMP : TOKEN_CNEXT;
     }
 
@@ -608,7 +608,7 @@ error:
     exit(1);
 }
 
-void Scanner::lex_code_indented() {
+void Scanner::lex_code_indented(Ast& ast) {
     const loc_t& loc = tok_loc();
     tok = cur;
 code: /*!re2c
@@ -626,19 +626,19 @@ indent: /*!re2c
         while (isspace(tok[0])) ++tok;
         char *p = cur;
         while (p > tok && isspace(p[-1])) --p;
-        yylval.semact = new SemAct(loc, getstr(tok, p));
+        yylval.semact = ast.sem_act(loc, newcstr(tok, p, ast.allocator), nullptr, false);
         return;
     }
 */
 }
 
-void Scanner::lex_code_in_braces() {
+void Scanner::lex_code_in_braces(Ast& ast) {
     const loc_t& loc = tok_loc();
     uint32_t depth = 1;
 code: /*!re2c
     "}" {
         if (--depth == 0) {
-            yylval.semact = new SemAct(loc, getstr(tok, cur));
+            yylval.semact = ast.sem_act(loc, newcstr(tok, cur, ast.allocator), nullptr, false);
             return;
         }
         goto code;

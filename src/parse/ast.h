@@ -99,14 +99,14 @@ struct AstRule {
 // Abstract Syntax Tree.
 class Ast {
   private:
+    AstNode* make(const loc_t& loc, AstKind lind);
+
+  public:
     // Allocator used for allocating AST nodes. All memory is freed when the allocator is destroyed
     // (which happens after parsing and processing the whole translation unit, but before codegen).
     using alc_t = slab_allocator_t</*SLAB_SIZE*/ 1024 * 1024, /*ALIGN*/ sizeof(void*)>;
     alc_t allocator;
 
-    AstNode* make(const loc_t& loc, AstKind lind);
-
-  public:
     // Temporary buffers for constructing character strings and classes.
     std::vector<AstChar> temp_chars;
     std::vector<AstRange> temp_ranges;
@@ -129,6 +129,7 @@ class Ast {
     const AstNode* tag(const loc_t& loc, const std::string* n, bool h);
     const AstNode* cap(const AstNode* a);
     const AstNode* ref(const AstNode* a, const std::string& n);
+    const SemAct* sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen);
 
     // Whether this AST node must be wrapped in implicit parentheses to ensure correct operator
     // precedence. This happens with named definitions, for example `x = "a"|"aa"` used in `x "b"`

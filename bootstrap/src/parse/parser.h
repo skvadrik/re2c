@@ -79,13 +79,14 @@ union YYSTYPE
 #line 34 "../src/parse/parser.ypp"
 
     const re2c::AstNode* regexp;
-    re2c::SemAct* semact;
+    const re2c::SemAct* semact;
     char op;
     re2c::AstBounds bounds;
+    const char* cstr;
     std::string* str;
     re2c::CondList* clist;
 
-#line 89 "src/parse/parser.h"
+#line 90 "src/parse/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

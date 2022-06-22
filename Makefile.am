@@ -62,7 +62,6 @@ re2c_HDR = \
 	src/util/file_utils.h \
 	src/util/fixed_allocator.h \
 	src/util/forbid_copy.h \
-	src/util/free_list.h \
 	src/util/hash32.h \
 	src/util/local_increment.h \
 	src/util/range.h \
@@ -127,7 +126,6 @@ re2c_SRC = \
 	src/regexp/fixed_tags.cc \
 	src/regexp/nullable.cc \
 	src/regexp/re.cc \
-	src/regexp/rule.cc \
 	src/regexp/split_charset.cc \
 	src/compile.cc \
 	src/skeleton/control_flow.cc \

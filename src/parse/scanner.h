@@ -71,8 +71,8 @@ class Scanner: private ScannerState {
     bool lex_name_list(code_alc_t& alc, BlockNameList** ptail);
     bool lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask);
     bool lex_block_end(Output& out, bool allow_garbage = false);
-    void lex_code_indented();
-    void lex_code_in_braces();
+    void lex_code_indented(Ast& ast);
+    void lex_code_in_braces(Ast& ast);
     void try_lex_string_in_code(char quote);
     void lex_c_comment();
     void lex_cpp_comment();
