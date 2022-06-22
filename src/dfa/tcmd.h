@@ -6,8 +6,8 @@
 
 #include "src/dfa/tag_history.h"
 #include "src/regexp/tag.h"
+#include "src/util/allocator.h"
 #include "src/util/containers.h"
-#include "src/util/slab_allocator.h"
 
 namespace re2c {
 

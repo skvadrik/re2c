@@ -16,10 +16,10 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/mtag_trie.h"
+#include "src/util/allocator.h"
 #include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
-#include "src/util/fixed_allocator.h"
 
 namespace re2c {
 

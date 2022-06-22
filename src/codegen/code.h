@@ -17,8 +17,8 @@
 #include "src/dfa/tcmd.h"
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
+#include "src/util/allocator.h"
 #include "src/util/forbid_copy.h"
-#include "src/util/slab_allocator.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {

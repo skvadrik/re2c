@@ -1,7 +1,7 @@
 #include <limits>
 #include <stdio.h>
 
-#include "src/util/s_to_n32_unsafe.h"
+#include "src/util/string_utils.h"
 
 namespace re2c_test {
 

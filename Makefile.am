@@ -55,21 +55,16 @@ re2c_HDR = \
 	src/parse/input.h \
 	src/parse/parse.h \
 	src/parse/scanner.h \
-	src/parse/unescape.h \
 	src/debug/debug.h \
+	src/util/allocator.h \
 	src/util/attribute.h \
 	src/util/containers.h \
 	src/util/file_utils.h \
-	src/util/fixed_allocator.h \
 	src/util/forbid_copy.h \
 	src/util/hash32.h \
 	src/util/local_increment.h \
 	src/util/range.h \
-	src/util/s_to_n32_unsafe.h \
-	src/util/slab_allocator.h \
-	src/util/smart_ptr.h \
 	src/util/string_utils.h \
-	src/util/temp_file.h \
 	src/util/u32lim.h
 
 re2c_SRC = \
@@ -137,10 +132,8 @@ re2c_SRC = \
 	src/parse/input.cc \
 	src/parse/parse.cc \
 	src/parse/scanner.cc \
-	src/parse/unescape.cc \
 	src/util/file_utils.cc \
-	src/util/s_to_n32_unsafe.cc \
-	src/util/temp_file.cc \
+	src/util/string_utils.cc \
 	src/util/range.cc
 re2c_SOURCES = \
 	src/main.cc \
@@ -468,7 +461,7 @@ re2c_test_range_SOURCES = \
 
 re2c_test_s_to_n32_unsafe_SOURCES = \
 	src/test/s_to_n32_unsafe/test.cc \
-	src/util/s_to_n32_unsafe.cc
+	src/util/string_utils.cc
 
 re2c_test_ver_to_vernum_SOURCES = \
 	src/test/ver_to_vernum/test.cc \

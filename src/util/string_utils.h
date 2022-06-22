@@ -1,11 +1,22 @@
 #ifndef _RE2C_UTIL_STRING_UTILS_
 #define _RE2C_UTIL_STRING_UTILS_
 
+#include <stdint.h>
 #include <string.h>
 #include <sstream>
 #include <string>
 
+#include "src/util/attribute.h"
+
 namespace re2c {
+
+uint32_t unesc_hex(const char* s, const char* s_end);
+uint32_t unesc_oct(const char* s, const char* s_end);
+std::string escape_backslashes(const std::string& str);
+bool s_to_u32_unsafe(const char* s, const char* s_end, uint32_t& number)
+        RE2C_ATTR((warn_unused_result));
+bool s_to_i32_unsafe(const char* s, const char* s_end, int32_t& number)
+        RE2C_ATTR((warn_unused_result));
 
 template<typename type_t>
 void strrreplace(std::string& s, const std::string& s1, const type_t& v) {

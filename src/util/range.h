@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #include "src/test/range/test.h"
-#include "src/util/fixed_allocator.h"
+#include "src/util/allocator.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {

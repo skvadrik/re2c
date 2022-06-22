@@ -13,7 +13,6 @@
 #include "src/encoding/enc.h"
 #include "src/util/file_utils.h"
 #include "src/util/string_utils.h"
-#include "src/util/temp_file.h"
 
 namespace re2c {
 

@@ -190,10 +190,8 @@ set(re2c_sources
     src/parse/input.cc
     src/parse/parse.cc
     src/parse/scanner.cc
-    src/parse/unescape.cc
     src/util/file_utils.cc
-    src/util/s_to_n32_unsafe.cc
-    src/util/temp_file.cc
+    src/util/string_utils.cc
     src/util/range.cc
     src/main.cc
     $<TARGET_OBJECTS:re2c_objects_autogen>
@@ -385,7 +383,7 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     )
     add_executable(re2c_test_s_to_n32_unsafe
         src/test/s_to_n32_unsafe/test.cc
-        src/util/s_to_n32_unsafe.cc
+        src/util/string_utils.cc
     )
     add_executable(re2c_test_ver_to_vernum
         src/test/ver_to_vernum/test.cc
@@ -441,7 +439,6 @@ if (RE2C_BUILD_LIBS)
         lib/regfree.cc
         lib/stubs.cc
         src/parse/ast.cc
-        src/parse/unescape.cc
         src/options/opt.cc
         src/options/symtab.cc
         src/cfg/cfg.cc
@@ -488,7 +485,7 @@ if (RE2C_BUILD_LIBS)
         src/skeleton/maxpath.cc
         src/skeleton/skeleton.cc
         src/util/range.cc
-        src/util/s_to_n32_unsafe.cc
+        src/util/string_utils.cc
     )
     set(libre2c_sources
         $<TARGET_OBJECTS:libre2c_objects>

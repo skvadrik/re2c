@@ -14,8 +14,8 @@
 #include "src/parse/lex.h"
 #include "src/encoding/enc.h"
 #include "src/encoding/utf8.h"
+#include "src/util/allocator.h"
 #include "src/util/forbid_copy.h"
-#include "src/util/slab_allocator.h"
 
 namespace re2c {
 

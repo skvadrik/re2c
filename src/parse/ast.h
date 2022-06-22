@@ -6,7 +6,7 @@
 
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
-#include "src/util/slab_allocator.h"
+#include "src/util/allocator.h"
 #include "src/util/containers.h"
 
 namespace re2c {

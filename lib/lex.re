@@ -1,13 +1,11 @@
-#include <stdio.h>
-
 #include <stdint.h>
+#include <stdio.h>
 
 #include "src/encoding/enc.h"
 #include "src/msg/msg.h"
 #include "src/parse/ast.h"
-#include "src/parse/unescape.h"
 #include "src/util/range.h"
-#include "src/util/s_to_n32_unsafe.h"
+#include "src/util/string_utils.h"
 #include "parse.h"
 #include "lib/lex.h"
 

@@ -16,10 +16,8 @@
 #include "src/parse/lex.h"
 #include "src/parse/scanner.h"
 #include "src/parse/parse.h" // needed by "parser.h"
-#include "src/parse/unescape.h"
 #include "src/regexp/rule.h"
 #include "src/util/file_utils.h"
-#include "src/util/s_to_n32_unsafe.h"
 #include "src/util/string_utils.h"
 #include "parser.h"
 

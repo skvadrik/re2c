@@ -6,8 +6,8 @@
 #include "src/regexp/tag.h"
 #include <stdint.h>
 #include "src/util/forbid_copy.h"
+#include "src/util/allocator.h"
 #include "src/util/range.h"
-#include "src/util/slab_allocator.h"
 
 namespace re2c {
 

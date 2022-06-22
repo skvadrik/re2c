@@ -10,6 +10,7 @@
 #include "src/parse/scanner.h"
 #include "src/debug/debug.h"
 #include "src/util/file_utils.h"
+#include "src/util/string_utils.h"
 
 namespace re2c {
 
