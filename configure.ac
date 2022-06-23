@@ -46,6 +46,17 @@ AM_COND_IF([REBUILD_LEXERS], [
 ])
 
 
+# --enable-parsers
+AC_PATH_PROG(BISON, bison, no)
+AC_ARG_ENABLE([parsers], [AS_HELP_STRING([--enable-parsers], [regenerate parsers with Bison])])
+AM_CONDITIONAL([REBUILD_PARSERS], [test "x$enable_parsers" = "xyes"])
+AM_COND_IF([REBUILD_PARSERS], [
+    AS_IF([test "$BISON" = "no" ], [
+        AC_MSG_ERROR([need Bison for --enable-parsers])
+    ])
+])
+
+
 # --enable-libs
 AC_ARG_ENABLE([libs], [AS_HELP_STRING([--enable-libs], [build libraries])])
 AM_CONDITIONAL([WITH_LIBS], [test "x$enable_libs" = "xyes"])
@@ -89,7 +100,6 @@ AM_CONDITIONAL([REGEN_BENCHMARKS],
 
 
 # checks for programs
-AC_PATH_PROG(BISON, bison, no)
 AM_PATH_PYTHON([3.7])
 AC_PROG_CC # used in skeleton tests
 AC_PROG_CXX

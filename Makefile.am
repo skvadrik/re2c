@@ -348,13 +348,8 @@ if REBUILD_LEXERS
 # generate lexer and update bootstrap files
 .re.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)if test -x $(RE2C_FOR_BUILD); \
-	then \
-		$(RE2C_FOR_BUILD) $(RE2CFLAGS) -o $@ $< && \
-		cp $(@:cc=[ch]*) $(top_srcdir)/bootstrap/$(@D); \
-	else \
-		echo "RE2C is not an executable file" && exit 1 ; \
-	fi
+	$(AM_V_GEN)$(RE2C_FOR_BUILD) $(RE2CFLAGS) -o $@ $<
+	$(AM_V_GEN)cp $(@:cc=[ch]*) $(top_srcdir)/bootstrap/$(@D);
 else
 # copy bootstrap files
 .re.cc:
@@ -363,17 +358,19 @@ else
 	$(AM_V_at)echo "Reconfigure with --enable-lexers to regenerate $@"
 endif
 
-# cannot update bootstrap with distcheck (it makes srcdir readonly),
-# so we update bootstrap only on incremental build (if re2c binary exists)
+if REBUILD_PARSERS
+# generate lexer and update bootstrap files
 .ypp.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)if test $(BISON) = "no"; \
-	then \
-		cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D); \
-	else \
-		$(BISON) --output=$@ --defines=$(@:cc=h) $< && \
-		cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D); \
-	fi
+	$(AM_V_GEN)$(BISON) --output=$@ --defines=$(@:cc=h) $<
+	$(AM_V_GEN)cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D);
+else
+# copy bootstrap files
+.ypp.cc:
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D);
+	$(AM_V_at)echo "Reconfigure with --enable-parsers to regenerate $@"
+endif
 
 # lexer depends on bison-generated header
 $(re2c_GEN_LEX): $(re2c_GEN_PARSER)
