@@ -19,7 +19,6 @@
 #include "src/util/allocator.h"
 #include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
-#include "src/util/local_increment.h"
 
 namespace re2c {
 
@@ -100,8 +99,6 @@ template<typename T> inline T* OutBuf::alloc(size_t n) {
 
     return ptr;
 }
-
-using local_inc = local_increment_t<uint8_t>;
 
 struct Node {
     struct range_t {

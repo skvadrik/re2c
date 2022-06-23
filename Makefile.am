@@ -62,7 +62,6 @@ re2c_HDR = \
 	src/util/file_utils.h \
 	src/util/forbid_copy.h \
 	src/util/hash32.h \
-	src/util/local_increment.h \
 	src/util/range.h \
 	src/util/string_utils.h \
 	src/util/u32lim.h

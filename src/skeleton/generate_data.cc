@@ -365,17 +365,12 @@ static void gencover(Skeleton& skel, cover_t& cover, size_t i) {
 
     if (node.end()) {
         suffix.init = true;
-    }
-
-    if (suffix.init) {
+    } if (suffix.init) {
         prefix.push_sfx(suffix);
         size = size + cover_one<cunit_t, key_t>(skel, cover);
         prefix.pop_sfx(suffix);
-    }
-
-    // unroll one iteration of the loop
-    else if (loop < 2) {
-        local_inc _(loop);
+    } else if (loop < 2) { // unroll one iteration of the loop
+        ++loop;
 
         Node::arcs_t::const_iterator
         arc = node.arcs.begin(),
@@ -405,6 +400,8 @@ static void gencover(Skeleton& skel, cover_t& cover, size_t i) {
             suffix = *min_sfx;
             suffix.push(min_idx);
         }
+
+        --loop;
     }
 }
 
