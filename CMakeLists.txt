@@ -17,6 +17,11 @@ if(RE2C_REBUILD_LEXERS AND NOT RE2C_FOR_BUILD)
     message(FATAL_ERROR "option RE2C_FOR_BUILD is required for RE2C_REBUILD_LEXERS")
 endif()
 
+option(RE2C_REBUILD_PARSERS "Regenerate parsers with Bison" OFF)
+if(RE2C_REBUILD_PARSERS AND NOT RE2C_FOR_BUILD)
+    find_package(BISON REQUIRED)
+endif()
+
 option(RE2C_REBUILD_DOCS "Regenerate manpage" OFF)
 if(RE2C_REBUILD_DOCS)
     find_program(RST2MAN NAMES rst2man rst2man.py)
@@ -48,7 +53,6 @@ option(RE2C_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
 
 # checks for programs
-find_package(BISON)
 find_package(Python3 COMPONENTS Interpreter)
 # starting from cmake 3.19 find_package can do version check, but we are on 3.12
 if(Python3_VERSION VERSION_LESS 3.7)
