@@ -84,9 +84,8 @@ union YYSTYPE
     re2c::AstBounds bounds;
     const char* cstr;
     std::string* str;
-    re2c::CondList* clist;
 
-#line 90 "src/parse/parser.h"
+#line 89 "src/parse/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

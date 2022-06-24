@@ -75,12 +75,9 @@ const AstNode* Ast::diff(const AstNode* a1, const AstNode* a2) {
     return ast;
 }
 
-const AstNode* Ast::tag(const loc_t& loc, const std::string* n, bool h) {
+const AstNode* Ast::tag(const loc_t& loc, const char* n, bool h) {
     AstNode* ast = make(loc, AstKind::TAG);
-
-    ast->tag.name = n == nullptr ? nullptr : copystr(*n, allocator);
-    delete n;
-
+    ast->tag.name = n;
     ast->tag.history = h;
     return ast;
 }
@@ -91,12 +88,10 @@ const AstNode* Ast::cap(const AstNode* a) {
     return ast;
 }
 
-const AstNode* Ast::ref(const AstNode* a, const std::string& n) {
+const AstNode* Ast::ref(const AstNode* a, const char* n) {
     AstNode* ast = make(a->loc, AstKind::REF);
     ast->ref.ast = a;
-
-    ast->ref.name = copystr(n, allocator);
-
+    ast->ref.name = n;
     return ast;
 }
 
@@ -107,6 +102,10 @@ const SemAct* Ast::sem_act(const loc_t& loc, const char* text, const char* cond,
     a->cond = cond;
     a->autogen = autogen;
     return a;
+}
+
+const char* Ast::cstr(const char* s, const char* e) {
+    return newcstr(s, e, allocator);
 }
 
 bool Ast::needs_wrap(const AstNode* a) {

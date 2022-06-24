@@ -38,7 +38,6 @@ extern "C" {
     re2c::AstBounds bounds;
     const char* cstr;
     std::string* str;
-    re2c::CondList* clist;
 };
 
 %token TOKEN_CJUMP
@@ -60,17 +59,15 @@ extern "C" {
 %type <bounds>  TOKEN_CLOSESIZE
 %type <semact>  TOKEN_CODE ccode
 %type <regexp>  TOKEN_REGEXP trailexpr rule expr diff term factor primary
-%type <cstr>    TOKEN_CNEXT TOKEN_CJUMP
-%type <str>     TOKEN_ID TOKEN_FID TOKEN_BLOCK name
-%type <clist>   TOKEN_CLIST TOKEN_CSETUP TOKEN_CZERO
+%type <cstr>    TOKEN_ID TOKEN_FID TOKEN_CNEXT TOKEN_CJUMP name
 
 %%
 
 spec
 : /* empty */
 | spec TOKEN_BLOCK {
-    use_block(context, *$2, context.input.tok_loc());
-    delete $2;
+    use_block(context, ast.temp_blockname, context.input.tok_loc());
+    ast.temp_blockname.clear();
 }
 | spec TOKEN_CONF {
     context.input.lex_conf(context.opts);
@@ -82,8 +79,7 @@ spec
 
 def
 : name expr enddef {
-    add_named_def(context.opts.symtab, *$1, $2, context.input.tok_loc(), context.input.msg);
-    delete $1;
+    add_named_def(context.opts.symtab, $1, $2, context.input.tok_loc(), context.input.msg);
 }
 /* errors */
 | name expr '/' {
@@ -110,33 +106,33 @@ rule
     find_or_add_spec(context.specs, "").eofs.push_back($2);
 }
 | TOKEN_CLIST trailexpr ccode {
-    for (const std::string& cond : *$1) {
+    for (const std::string& cond : ast.temp_condlist) {
         find_or_add_spec(context.specs, cond).rules.push_back(AstRule($2, $3));
     }
-    delete $1;
+    ast.temp_condlist.clear();
 }
 | TOKEN_CLIST '*' ccode {
-    for (const std::string& cond : *$1) {
+    for (const std::string& cond : ast.temp_condlist) {
         find_or_add_spec(context.specs, cond).defs.push_back($3);
     }
-    delete $1;
+    ast.temp_condlist.clear();
 }
 | TOKEN_CLIST '$' ccode {
-    for (const std::string& cond : *$1) {
+    for (const std::string& cond : ast.temp_condlist) {
         find_or_add_spec(context.specs, cond).eofs.push_back($3);
     }
-    delete $1;
+    ast.temp_condlist.clear();
 }
 | TOKEN_CSETUP TOKEN_CODE {
-    for (const std::string& cond : *$1) {
+    for (const std::string& cond : ast.temp_condlist) {
         find_or_add_spec(context.specs, cond).setup.push_back($2);
     }
-    delete $1;
+    ast.temp_condlist.clear();
 }
 | TOKEN_CZERO ccode {
     const AstNode* r = ast.nil(context.input.tok_loc());
     find_or_add_spec(context.specs, "0").rules.push_back(AstRule(r, $2));
-    delete $1;
+    ast.temp_condlist.clear();
 };
 
 ccode
@@ -206,11 +202,10 @@ close
 primary
 : TOKEN_REGEXP
 | TOKEN_ID {
-    $$ = find_def(context.opts.symtab, *$1, context.input.tok_loc(), context.input.msg);
+    $$ = find_def(context.opts.symtab, $1, context.input.tok_loc(), context.input.msg);
     if (Ast::needs_wrap($$)) {
-        $$ = ast.ref($$, *$1);
+        $$ = ast.ref($$, $1);
     }
-    delete $1;
 }
 | '(' expr ')' { $$ = ast.cap($2); }
 ;

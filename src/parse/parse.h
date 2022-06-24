@@ -1,7 +1,6 @@
 #ifndef _RE2C_AST_PARSE_
 #define _RE2C_AST_PARSE_
 
-#include <set>
 #include <string>
 #include <vector>
 
@@ -12,8 +11,6 @@ namespace re2c {
 
 class Scanner;
 struct Opt;
-
-using CondList = std::set<std::string>;
 
 struct spec_t {
     std::string name;

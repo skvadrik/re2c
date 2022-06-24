@@ -419,11 +419,11 @@ scan:
     ":=" { lex_code_indented(ast); return TOKEN_CODE; }
 
     ":"? "=>" space* @p name {
-        yylval.cstr = newcstr(p, cur, ast.allocator);
+        yylval.cstr = ast.cstr(p, cur);
         return tok[0] == ':' ? TOKEN_CJUMP : TOKEN_CNEXT;
     }
 
-    "<" { return lex_clist(); }
+    "<" { return lex_clist(ast); }
 
     "//" { lex_cpp_comment(); goto scan; }
     "/*" { lex_c_comment(); goto scan; }
@@ -436,7 +436,7 @@ scan:
     "[^" { yylval.regexp = lex_cls(ast, true);  return TOKEN_REGEXP; }
 
     [@#] name {
-        yylval.regexp = ast.tag(tok_loc(), newstr(tok + 1, cur), tok[0] == '#');
+        yylval.regexp = ast.tag(tok_loc(), ast.cstr(tok + 1, cur), tok[0] == '#');
         return TOKEN_REGEXP;
     }
 
@@ -485,7 +485,7 @@ scan:
             msg.error(tok_loc(), "curly braces for names only allowed with -F switch");
             exit(1);
         }
-        yylval.str = newstr(tok + 1, cur - 1);
+        yylval.cstr = ast.cstr(tok + 1, cur - 1);
         return TOKEN_ID;
     }
 
@@ -493,10 +493,10 @@ scan:
 
     name {
         if (!globopts->FFlag || lex_namedef_context_re2c()) {
-            yylval.str = newstr(tok, cur);
+            yylval.cstr = ast.cstr(tok, cur);
             return TOKEN_ID;
         } else if (lex_namedef_context_flex()) {
-            yylval.str = newstr(tok, cur);
+            yylval.cstr = ast.cstr(tok, cur);
             mode = LexMode::FLEX_NAME;
             return TOKEN_FID;
         } else {
@@ -522,7 +522,9 @@ scan:
     }
 
     "!use:" @x name @y space* ";" / ws_or_eoc {
-        yylval.str = newstr(x, y); // save the name of the used block
+        // Save the name of the used block in a temporary buffer (ensure it is empty).
+        assert(ast.temp_blockname.empty());
+        ast.temp_blockname.assign(x, y);
         return TOKEN_BLOCK;
     }
     "!use" {
@@ -577,9 +579,11 @@ bool Scanner::lex_namedef_context_flex() {
 */
 }
 
-int Scanner::lex_clist() {
+int Scanner::lex_clist(Ast& ast) {
     int kind = TOKEN_CLIST;
-    CondList* cl = new CondList;
+    std::set<std::string>& cl = ast.temp_condlist;
+    // Due to the re2c grammar parser must reduce each condition list before shifing a new one.
+    assert(cl.empty());
 /*!re2c
     space* "!" space* { kind = TOKEN_CSETUP; goto cond; }
     space* ">"        { kind = TOKEN_CZERO; goto end; }
@@ -588,8 +592,8 @@ int Scanner::lex_clist() {
 cond:
     tok = cur;
 /*!re2c
-    name { cl->insert(getstr(tok, cur)); goto next; }
-    "*"  { if (!cl->empty()) goto error; cl->insert("*"); goto next; }
+    name { cl.insert(getstr(tok, cur)); goto next; }
+    "*"  { if (!cl.empty()) goto error; cl.insert("*"); goto next; }
     *    { goto error; }
 */
 next: /*!re2c
@@ -598,10 +602,9 @@ next: /*!re2c
     *                 { goto error; }
 */
 end:
-    yylval.clist = cl;
-    return kind;
+    return kind; // semantic value `yylval` is implicitly passed in temporary condition list
 error:
-    delete cl;
+    cl.clear();
     msg.error(cur_loc(), "syntax error in condition list");
     exit(1);
 }
@@ -624,7 +627,7 @@ indent: /*!re2c
         while (isspace(tok[0])) ++tok;
         char *p = cur;
         while (p > tok && isspace(p[-1])) --p;
-        yylval.semact = ast.sem_act(loc, newcstr(tok, p, ast.allocator), nullptr, false);
+        yylval.semact = ast.sem_act(loc, ast.cstr(tok, p), nullptr, false);
         return;
     }
 */
@@ -636,7 +639,7 @@ void Scanner::lex_code_in_braces(Ast& ast) {
 code: /*!re2c
     "}" {
         if (--depth == 0) {
-            yylval.semact = ast.sem_act(loc, newcstr(tok, cur, ast.allocator), nullptr, false);
+            yylval.semact = ast.sem_act(loc, ast.cstr(tok, cur), nullptr, false);
             return;
         }
         goto code;

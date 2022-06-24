@@ -2,6 +2,7 @@
 #define _RE2C_AST_AST_
 
 #include <stdint.h>
+#include <set>
 #include <vector>
 
 #include "src/msg/location.h"
@@ -99,22 +100,27 @@ struct AstRule {
 // Abstract Syntax Tree.
 class Ast {
   private:
-    AstNode* make(const loc_t& loc, AstKind lind);
-
-  public:
     // Allocator used for allocating AST nodes. All memory is freed when the allocator is destroyed
     // (which happens after parsing and processing the whole translation unit, but before codegen).
     using alc_t = slab_allocator_t</*SLAB_SIZE*/ 1024 * 1024, /*ALIGN*/ sizeof(void*)>;
     alc_t allocator;
 
-    // Temporary buffers for constructing character strings and classes.
+    AstNode* make(const loc_t& loc, AstKind lind);
+
+  public:
+    // Temporary buffers for constructing character strings and classes in lexer/parser. Generally
+    // LALR(1) parser requires a stack of nonterminals (a single value is insufficient) but these
+    // nonterminals cannot occur twice on the parser stack before a reduction happens (which we
+    // ensure by checking that a buffer is empty before using it).
     std::vector<AstChar> temp_chars;
     std::vector<AstRange> temp_ranges;
+    std::set<std::string> temp_condlist; // must be ordered, as condition order matters
+    std::string temp_blockname;
 
     // Used to denote unbounded repetition (iteration, Kleene star).
     static constexpr uint32_t MANY = std::numeric_limits<uint32_t>::max();
 
-    Ast(): allocator(), temp_chars(), temp_ranges() {}
+    Ast(): allocator(), temp_chars(), temp_ranges(), temp_condlist(), temp_blockname() {}
 
     // Methods for constructing individual AST nodes.
     const AstNode* nil(const loc_t& loc);
@@ -126,10 +132,11 @@ class Ast {
     const AstNode* cat(const AstNode* a1, const AstNode* a2);
     const AstNode* iter(const AstNode* a, uint32_t n, uint32_t m);
     const AstNode* diff(const AstNode* a1, const AstNode* a2);
-    const AstNode* tag(const loc_t& loc, const std::string* n, bool h);
+    const AstNode* tag(const loc_t& loc, const char* n, bool h);
     const AstNode* cap(const AstNode* a);
-    const AstNode* ref(const AstNode* a, const std::string& n);
+    const AstNode* ref(const AstNode* a, const char* n);
     const SemAct* sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen);
+    const char* cstr(const char* s, const char* e);
 
     // Whether this AST node must be wrapped in implicit parentheses to ensure correct operator
     // precedence. This happens with named definitions, for example `x = "a"|"aa"` used in `x "b"`

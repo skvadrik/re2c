@@ -78,7 +78,7 @@ class Scanner: private ScannerState {
     void lex_cpp_comment();
     bool lex_namedef_context_re2c();
     bool lex_namedef_context_flex();
-    int lex_clist();
+    int lex_clist(Ast& ast);
     void lex_string(char delim);
     uint32_t lex_cls_chr();
     bool lex_str_chr(char quote, AstChar& ast);

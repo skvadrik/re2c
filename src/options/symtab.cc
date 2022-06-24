@@ -6,22 +6,21 @@
 
 namespace re2c {
 
-const AstNode* find_def(
-        const symtab_t& symtab, const std::string& name, const loc_t& loc, Msg& msg) {
+const AstNode* find_def(const symtab_t& symtab, const char* name, const loc_t& loc, Msg& msg) {
     symtab_t::const_iterator i = symtab.find(name);
     if (i == symtab.end()) {
-        msg.error(loc, "undefined symbol '%s'", name.c_str());
+        msg.error(loc, "undefined symbol '%s'", name);
         exit(1);
     }
     return i->second;
 }
 
 void add_named_def(
-        symtab_t& symtab, const std::string& name, const AstNode* ast, const loc_t& loc, Msg& msg) {
-    symtab_t::iterator i = symtab.lower_bound(name);
-    if (i == symtab.end() || name != i->first) {
+        symtab_t& symtab, const char* name, const AstNode* ast, const loc_t& loc, Msg& msg) {
+    symtab_t::iterator i = symtab.find(name);
+    if (i == symtab.end()) {
         // Ok, a new named definition, add it.
-        symtab.insert(i, symtab_t::value_type(name, ast));
+        symtab.insert(i, {name, ast});
     } else if (ast == i->second) {
         // Ok, an existing name with the same definition (note that we compare for pointer equality
         // of the AST, meaning that it is the same AST as before, not and identical one). Just skip
@@ -34,7 +33,7 @@ void add_named_def(
     } else {
         // Fail, as the same name is redefined to a different AST (don't bother checking if the ASTs
         // are identical, as there is no known valid use case for that).
-        msg.error(loc, "name '%s' is already defined", name.c_str());
+        msg.error(loc, "name '%s' is already defined", name);
         exit(1);
     }
 }
