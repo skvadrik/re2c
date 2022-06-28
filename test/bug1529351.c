@@ -1,1 +1,1 @@
-bug1529351.re:6:0: error: unexpected end of input
+re2c: error: unexpected end of input

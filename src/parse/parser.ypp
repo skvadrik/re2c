@@ -19,7 +19,7 @@ using namespace re2c;
 
 extern "C" {
     int yylex(context_t& context, Ast& ast);
-    void yyerror(context_t& context, Ast& ast, const char*) RE2C_ATTR((noreturn));
+    void yyerror(context_t& context, Ast& ast, const char*);
 }
 
 %}
@@ -54,6 +54,7 @@ extern "C" {
 %token TOKEN_LINE_INFO
 %token TOKEN_REGEXP
 %token TOKEN_BLOCK
+%token TOKEN_ERROR
 
 %type <op>      close closes
 %type <bounds>  TOKEN_CLOSESIZE
@@ -66,11 +67,12 @@ extern "C" {
 spec
 : /* empty */
 | spec TOKEN_BLOCK {
-    use_block(context, ast.temp_blockname, context.input.tok_loc());
+    if (use_block(context, ast.temp_blockname) != Ret::OK) YYABORT;
     ast.temp_blockname.clear();
 }
 | spec TOKEN_CONF {
-    context.input.lex_conf(context.opts);
+    // Handled here, as the main lexer should not get access to opts under construction.
+    if (context.input.lex_conf(context.opts) != Ret::OK) YYABORT;
 }
 | spec def
 | spec rule
@@ -79,13 +81,12 @@ spec
 
 def
 : name expr enddef {
-    add_named_def(context.opts.symtab, $1, $2, context.input.tok_loc(), context.input.msg);
+    if (add_named_def(context.opts.symtab, $1, $2, context.input) != Ret::OK) YYABORT;
 }
-/* errors */
 | name expr '/' {
     context.input.msg.error(context.input.tok_loc(),
                             "trailing contexts are not allowed in named definitions");
-    exit(1);
+    YYABORT;
 };
 
 name
@@ -202,8 +203,11 @@ close
 primary
 : TOKEN_REGEXP
 | TOKEN_ID {
-    $$ = find_def(context.opts.symtab, $1, context.input.tok_loc(), context.input.msg);
-    if (Ast::needs_wrap($$)) {
+    $$ = find_def(context.opts.symtab, $1);
+    if ($$ == nullptr) {
+        context.input.msg.error(context.input.tok_loc(), "undefined symbol '%s'", $1);
+        YYABORT;
+    } else if (Ast::needs_wrap($$)) {
         $$ = ast.ref($$, $1);
     }
 }
@@ -216,20 +220,26 @@ primary
 
 extern "C" {
     void yyerror(context_t& context, Ast&, const char* s) {
-        context.input.msg.error(context.input.tok_loc(), "%s", s);
-        exit(1);
+        if (!context.lexer_error) { // lexer error has already been reported
+            context.input.msg.error(context.input.tok_loc(), "%s", s);
+        }
     }
 
     int yylex(context_t& context, Ast& ast) {
-        return context.input.scan(ast);
+        int token;
+        if (context.input.scan(ast, token) != Ret::OK) {
+            context.lexer_error = true;
+            return TOKEN_ERROR;
+        }
+        return token;
     }
 }
 
 namespace re2c {
 
-void parse(Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks, Ast& ast) {
-    context_t context = {input, specs, opts, rblocks};
-    yyparse(context, ast);
+Ret parse(Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks, Ast& ast) {
+    context_t context = {input, specs, opts, rblocks, false};
+    return yyparse(context, ast) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c

@@ -4,8 +4,10 @@
 #include <string>
 #include <vector>
 
+#include "src/constants.h"
 #include "src/parse/ast.h"
 #include "src/parse/scanner.h"
+#include "src/util/attribute.h"
 
 namespace re2c {
 
@@ -72,12 +74,14 @@ struct context_t {
     specs_t& specs;
     Opt& opts;
     const RulesBlocks& rblocks;
+    bool lexer_error;
 };
 
 spec_t& find_or_add_spec(specs_t& specs, const std::string& name);
-void use_block(context_t& context, const std::string& name, const loc_t& loc);
-void check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, Ast& ast);
-void parse(Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks, Ast& ast);
+Ret use_block(context_t& context, const std::string& name) NODISCARD;
+Ret check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, Ast& ast) NODISCARD;
+Ret parse(
+        Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks, Ast& ast) NODISCARD;
 
 } // namespace re2c
 

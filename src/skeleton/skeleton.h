@@ -11,12 +11,14 @@
 #include <valarray>
 #include <vector>
 
+#include "src/constants.h"
 #include "src/codegen/code.h"
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/mtag_trie.h"
 #include "src/util/allocator.h"
+#include "src/util/attribute.h"
 #include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
 
@@ -163,6 +165,8 @@ struct Skeleton {
              const loc_t& loc,
              Msg& msg);
     ~Skeleton ();
+    Ret init(const dfa_t& dfa) NODISCARD;
+
     FORBID_COPY(Skeleton);
 };
 
@@ -178,10 +182,10 @@ template<typename key_t> key_t rule2key(size_t r, size_t def) {
 }
 
 uint64_t rule2key(size_t rule, size_t key, size_t def);
-uint32_t maxpath(const Skeleton& skel);
+Ret maxpath(const Skeleton& skel, uint32_t& dist) NODISCARD;
 void warn_undefined_control_flow(const Skeleton& skel);
 void fprint_default_path(FILE* f, const Skeleton& skel, const path_t& p);
-void emit_data(Skeleton& skel);
+Ret emit_data(Skeleton& skel) NODISCARD;
 Code* emit_skeleton_prolog(Output& output);
 Code* emit_skeleton_epilog(Output& output);
 void emit_skeleton(Output& output, CodeList* code, DFA& dfa);

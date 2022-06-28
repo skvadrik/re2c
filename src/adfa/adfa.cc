@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <string.h>
 #include <algorithm>
-#include <limits>
 #include <queue>
 #include <set>
 #include <utility>
@@ -399,7 +398,7 @@ void DFA::prepare(const opt_t* opts) {
     }
 }
 
-void DFA::calc_stats(OutputBlock& out) {
+Ret DFA::calc_stats(OutputBlock& out) {
     const opt_t* opts = out.opts;
 
     // calculate `YYMAXFILL`
@@ -432,10 +431,9 @@ void DFA::calc_stats(OutputBlock& out) {
 
     // error if tags are not enabled, but we need them
     if (!opts->tags && maxtagver > 1) {
-        msg.error(loc,
-                  "overlapping trailing contexts need multiple context markers, use '-t, --tags' "
-                  "option and '/*!stags:re2c ... */' directive");
-        exit(1);
+        RET_FAIL(msg.error(loc,
+                           "overlapping trailing contexts need multiple context markers, use "
+                           "'-t, --tags' option and '/*!stags:re2c ... */' directive"));
     }
 
     if (!oldstyle_ctxmarker) {
@@ -457,6 +455,8 @@ void DFA::calc_stats(OutputBlock& out) {
         out.stags.insert(stagnames.begin(), stagnames.end());
         out.mtags.insert(mtagnames.begin(), mtagnames.end());
     }
+
+    return Ret::OK;
 }
 
 static bool can_hoist_tags(const State* s, const opt_t* opts) {

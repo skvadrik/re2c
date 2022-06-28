@@ -30,6 +30,10 @@ const AstNode* regexp;
 using namespace re2c;
 using namespace re2c::libre2c;
 
+// redefine CHECK_RET, as it needs to return `int` rather than `Ret`
+#undef CHECK_RET
+#define CHECK_RET(x) do { if (x != Ret::OK) return 1; } while(0)
+
 int regcomp(regex_t* preg, const char* pattern, int cflags) {
     conopt_t globopts;
     globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_REGLESS));
@@ -41,7 +45,8 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     opts.set_autotags((cflags & REG_AUTOTAGS) != 0);
     opts.set_posix_syntax(true);
     opts.set_posix_semantics((cflags & REG_LEFTMOST) == 0);
-    const opt_t* opt = opts.snapshot();
+    const opt_t* opt;
+    CHECK_RET(opts.snapshot(opt));
     preg->flags = cflags;
 
     Ast ast;
@@ -53,6 +58,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     std::vector<AstRule> arv;
     arv.push_back(ar);
     RESpec re(arv, opt, msg, *preg->rmgr);
+    CHECK_RET(re.init(arv));
 
     find_fixed_tags(re);
     insert_default_tags(re);
@@ -68,8 +74,10 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         conopt_t globopts0;
         globopts0.FFlag = true;
         Opt opts0(globopts0, msg);
-        const opt_t* opt0 = opts0.snapshot();
+        const opt_t* opt0;
+        CHECK_RET(opts0.snapshot(opt0));
         RESpec re0(arv, opt0, msg, *preg->rmgr);
+        CHECK_RET(re0.init(arv));
         nfa0 = new nfa_t(re0, nfa_size);
         delete opt0;
     }
@@ -103,7 +111,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
             rldfa = new rldfa_t(*nfa, *dfa, opt, cflags);
             opt = nullptr; // transfer options ownership to RLDFA
         } else {
-            determinization(*nfa, *dfa, opt, msg, "");
+            CHECK_RET(determinization(*nfa, *dfa, opt, msg, ""));
             cutoff_dead_rules(*dfa, opt, "", msg);
             insert_fallback_tags(*dfa);
             compact_and_optimize_tags(opt, *dfa);
@@ -144,3 +152,6 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     delete opt;
     return 0;
 }
+
+#undef CHECK_RET
+

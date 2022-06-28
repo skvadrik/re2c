@@ -449,7 +449,7 @@ static void generate_paths(Skeleton& skel, cover_t& cover) {
     }
 }
 
-void emit_data(Skeleton& skel) {
+Ret emit_data(Skeleton& skel) {
     std::string fname = skel.opts->output_file;
     if (fname.empty()) {
         fname = "<stdout>";
@@ -467,13 +467,11 @@ void emit_data(Skeleton& skel) {
 
     FILE* input = fopen(input_name.c_str(), "wb");
     if (!input) {
-        error("cannot open file: %s", input_name.c_str());
-        exit(1);
+        RET_FAIL(error("cannot open file: %s", input_name.c_str()));
     }
     FILE* keys = fopen (keys_name.c_str(), "wb");
     if (!keys) {
-        error("cannot open file: %s", keys_name.c_str());
-        exit(1);
+        RET_FAIL(error("cannot open file: %s", keys_name.c_str()));
     }
 
     skel.buf_data.file = input;
@@ -484,6 +482,7 @@ void emit_data(Skeleton& skel) {
 
     fclose(input);
     fclose(keys);
+    return Ret::OK;
 }
 
 } // namespace re2c

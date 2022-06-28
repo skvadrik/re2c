@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+#include "src/constants.h"
+#include "src/util/attribute.h"
+
 namespace re2c {
 
 struct loc_t;
@@ -53,7 +56,7 @@ class Warn {
 
   public:
     explicit Warn(Msg& msg);
-    bool error() const;
+    Ret check() const NODISCARD;
     void set(type_t t, option_t o);
     void set_all();
     void set_all_error();

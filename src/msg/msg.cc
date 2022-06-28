@@ -1,6 +1,5 @@
 #include <stdarg.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <memory>
 #include <string>
 
@@ -76,25 +75,27 @@ void Msg::warning(const char* type, const loc_t& loc, bool error, const char* fm
     warning_end(type, error);
 }
 
-void usage() {
+Ret usage() {
     fprintf(stdout, "%s", help);
+    return Ret::EXIT;
 }
 
-void vernum() {
+Ret vernum() {
     const std::string vn = ver_to_vernum(PACKAGE_VERSION);
     if (vn.empty()) {
-        error("failed to convert version to vernum");
-        exit(1);
+        RET_FAIL(error("failed to convert version to vernum"));
     }
-    printf ("%s\n", vn.c_str ());
+    printf("%s\n", vn.c_str());
+    return Ret::EXIT;
 }
 
-void version() {
+Ret version() {
 #ifdef RE2C_DEBUG
     printf("re2c %s (debug)\n", PACKAGE_VERSION);
 #else
     printf("re2c %s\n", PACKAGE_VERSION);
 #endif
+    return Ret::EXIT;
 }
 
 std::string incond(const std::string& cond) {

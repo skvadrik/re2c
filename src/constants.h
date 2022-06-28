@@ -34,19 +34,12 @@ enum class FixedTags: uint32_t {
     ALL
 };
 
-enum class ParseOpts: uint32_t {
-    OK,
-    EXIT_OK,
-    EXIT_FAIL
-};
-
 enum class InputBlock: uint32_t {
     END,
     GLOBAL,
     LOCAL,
     USE,
-    RULES,
-    ERROR
+    RULES
 };
 
 enum class EmptyClassPolicy: uint32_t {
@@ -132,6 +125,15 @@ static constexpr size_t MAX_NFA_DEPTH  = 1000 * 1000;
 static constexpr size_t MAX_NFA_STATES = 1000 * 1000 * 100;
 static constexpr size_t MAX_DFA_STATES = 1000 * 100;
 static constexpr size_t MAX_DFA_SIZE   = 1000 * 1000 * 50;
+
+enum class Ret: uint32_t {
+    OK,   // all good
+    EXIT, // all good, but exit immediately (used for options like help or version)
+    FAIL  // failure
+};
+
+#define CHECK_RET(x) do { Ret ret = x; if (ret != Ret::OK) return ret; } while(0)
+#define RET_FAIL(x)  do { x; return Ret::FAIL; } while(0)
 
 } // namespace re2c
 

@@ -3,17 +3,20 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <limits>
 #include <set>
 #include <string>
 #include <valarray>
 #include <vector>
 
+#include "src/constants.h"
 #include "src/codegen/code.h"
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/attribute.h"
 #include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
 
@@ -124,7 +127,7 @@ struct DFA {
     ~DFA ();
     void reorder();
     void prepare(const opt_t* opts);
-    void calc_stats(OutputBlock& out);
+    Ret calc_stats(OutputBlock& out) NODISCARD;
     void emit_dot(Output& output, CodeList* program) const;
 
   private:

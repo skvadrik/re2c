@@ -49,7 +49,7 @@ static std::string make_name(Output& output, const std::string& cond, const loc_
     return name;
 }
 
-static std::unique_ptr<DFA> ast_to_dfa(const spec_t& spec, Output& output) {
+LOCAL_NODISCARD(Ret ast_to_dfa(const spec_t& spec, Output& output, DFA*& adfa)) {
     OutputBlock& block = output.block();
     const opt_t* opts = block.opts;
     const loc_t& loc = block.loc;
@@ -62,6 +62,7 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t& spec, Output& output) {
     RangeMgr rangemgr;
 
     RESpec re(rules, opts, msg, rangemgr);
+    CHECK_RET(re.init(rules));
     split_charset(re);
     find_fixed_tags(re);
     insert_default_tags(re);
@@ -70,18 +71,16 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t& spec, Output& output) {
     size_t nfa_size, nfa_depth;
     compute_size_and_depth(re.res, &nfa_size, &nfa_depth);
     if (nfa_depth > MAX_NFA_DEPTH) {
-        error("NFA depth exceeds limits");
-        exit(1);
+        RET_FAIL(error("NFA depth exceeds limits"));
     } else if (nfa_size > MAX_NFA_STATES) {
-        error("NFA has too many states");
-        exit(1);
+        RET_FAIL(error("NFA has too many states"));
     }
 
     nfa_t nfa(re, nfa_size);
     DDUMP_NFA(opts, nfa);
 
     dfa_t dfa(nfa, spec.def_rule, spec.eof_rule);
-    determinization(nfa, dfa, opts, msg, cond);
+    CHECK_RET(determinization(nfa, dfa, opts, msg, cond));
     DDUMP_DFA_DET(opts, dfa);
 
     rangemgr.clear();
@@ -89,9 +88,10 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t& spec, Output& output) {
     // Skeleton must be constructed after TDFA construction, but prior to any other TDFA
     // transformations.
     Skeleton skeleton(dfa, opts, name, cond, loc, msg);
+    CHECK_RET(skeleton.init(dfa));
     warn_undefined_control_flow(skeleton);
     if (opts->target == Target::SKELETON) {
-        emit_data(skeleton);
+        CHECK_RET(emit_data(skeleton));
     }
 
     cutoff_dead_rules(dfa, opts, cond, msg);
@@ -112,8 +112,7 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t& spec, Output& output) {
     fillpoints(dfa, fill);
 
     // ADFA stands for 'DFA with actions'
-    std::unique_ptr<DFA> adfa(
-        new DFA(dfa, fill, skeleton.sizeof_key, loc, name, cond, setup, opts, msg));
+    adfa = new DFA(dfa, fill, skeleton.sizeof_key, loc, name, cond, setup, opts, msg);
 
     // see note [reordering DFA states]
     adfa->reorder();
@@ -123,15 +122,15 @@ static std::unique_ptr<DFA> ast_to_dfa(const spec_t& spec, Output& output) {
     DDUMP_ADFA(opts, *adfa);
 
     // gather overall DFA statistics and add it to the output block
-    adfa->calc_stats(block);
+    CHECK_RET(adfa->calc_stats(block));
     block.max_fill = std::max(block.max_fill, adfa->max_fill);
     block.max_nmatch = std::max(block.max_nmatch, adfa->max_nmatch);
     block.used_yyaccept = block.used_yyaccept || adfa->need_accept;
 
-    return adfa;
+    return Ret::OK;
 }
 
-void compile(Scanner& input, Output& output, Opt& opts) {
+Ret compile(Scanner& input, Output& output, Opt& opts) {
     Ast ast;
     RulesBlocks rblocks;
     const conopt_t* globopts = &opts.glob;
@@ -141,11 +140,11 @@ void compile(Scanner& input, Output& output, Opt& opts) {
     loc_t block_loc;
 
     output.header_mode(1);
-    output.new_block(opts, InputBlock::GLOBAL, block_name, loc0);
+    CHECK_RET(output.new_block(opts, InputBlock::GLOBAL, block_name, loc0));
     output.wversion_time();
 
     output.header_mode(0);
-    output.new_block(opts, InputBlock::GLOBAL, block_name, loc0);
+    CHECK_RET(output.new_block(opts, InputBlock::GLOBAL, block_name, loc0));
     output.wversion_time();
     output.wdelay_stmt(0, code_line_info_input(alc, loc0));
 
@@ -157,36 +156,38 @@ void compile(Scanner& input, Output& output, Opt& opts) {
 
     for (;;) {
         // parse everything up to the next re2c block
-        InputBlock kind = input.echo(output, block_name);
-        if (kind == InputBlock::ERROR) exit(1);
+        InputBlock kind;
+        CHECK_RET(input.echo(output, block_name, kind));
         if (kind == InputBlock::END) break;
 
         // parse the next re2c block
         specs_t specs;
         if (kind == InputBlock::USE) {
             const RulesBlock* rb = rblocks.find(block_name);
-            if (rb == nullptr) exit(1);
+            if (rb == nullptr) return Ret::FAIL;
             specs = rb->specs;
-            opts.restore(rb->opts);
+            CHECK_RET(opts.restore(rb->opts));
             output.state_goto = false;
         }
         output.cond_goto = false;
         block_loc = input.tok_loc();
-        parse(input, specs, opts, rblocks, ast);
+        CHECK_RET(parse(input, specs, opts, rblocks, ast));
 
         // start new output block with accumulated options
-        output.new_block(opts, kind, block_name, block_loc);
+        CHECK_RET(output.new_block(opts, kind, block_name, block_loc));
 
         if (kind == InputBlock::RULES) {
             // save AST and options for future use
             rblocks.add(block_name, output.block().opts, specs);
         } else {
-            check_and_merge_special_rules(specs, output.block().opts, output.msg, ast);
+            CHECK_RET(check_and_merge_special_rules(specs, output.block().opts, output.msg, ast));
 
             // compile AST to DFA
             dfas_t dfas;
             for (const spec_t& spec : specs) {
-                dfas.push_back(ast_to_dfa(spec, output));
+                DFA* dfa;
+                CHECK_RET(ast_to_dfa(spec, output, dfa));
+                dfas.push_back(std::unique_ptr<DFA>(dfa));
             }
 
             // compile DFA to code
@@ -203,7 +204,7 @@ void compile(Scanner& input, Output& output, Opt& opts) {
         if (kind == InputBlock::GLOBAL) {
             accum_opts = output.block().opts;
         } else {
-            opts.restore(accum_opts);
+            CHECK_RET(opts.restore(accum_opts));
         }
     }
 
@@ -220,6 +221,8 @@ void compile(Scanner& input, Output& output, Opt& opts) {
     if (globopts->target == Target::SKELETON) {
         output.wdelay_stmt(0, emit_skeleton_epilog(output));
     }
+
+    return Ret::OK;
 }
 
 } // namespace re2c

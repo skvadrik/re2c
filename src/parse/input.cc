@@ -16,9 +16,9 @@ Input::Input(size_t fidx)
       line(1),
       fidx(static_cast<uint32_t>(fidx)) {}
 
-bool Input::open(const std::string& filename,
-                 const std::string* parent,
-                 const std::vector<std::string>& incpaths) {
+Ret Input::open(const std::string& filename,
+                const std::string* parent,
+                const std::vector<std::string>& incpaths) {
     name = filename;
 
     if (!parent) {
@@ -45,20 +45,17 @@ bool Input::open(const std::string& filename,
         }
     }
 
-    if (!file) {
-        error("cannot open file: %s", name.c_str());
-        exit(1);
-    }
+    if (!file) RET_FAIL(error("cannot open file: %s", name.c_str()));
 
     // name displayed in #line directives is the resolved name
     escaped_name = escape_backslashes(path);
 
-    return true;
+    return Ret::OK;
 }
 
 Input::~Input() {
     if (file != nullptr && file != stdin) {
-        fclose (file);
+        fclose(file);
     }
 }
 

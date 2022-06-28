@@ -18,7 +18,7 @@
 
 namespace re2c {
 
-template<typename ctx_t> static void determinization(ctx_t& ctx);
+template<typename ctx_t> static Ret determinization(ctx_t& ctx) NODISCARD;
 template<typename ctx_t> static void clear_caches(ctx_t& ctx);
 template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t& ctx);
 
@@ -35,14 +35,14 @@ dfa_t::dfa_t(const nfa_t& nfa, size_t def_rule, size_t eof_rule)
       def_rule(def_rule),
       eof_rule(eof_rule) {}
 
-void determinization(
+Ret determinization(
         const nfa_t& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {
     if (opts->posix_semantics) {
         pdetctx_t ctx(opts, msg, cond, nfa, dfa);
-        determinization(ctx);
+        return determinization(ctx);
     } else {
         ldetctx_t ctx(opts, msg, cond, nfa, dfa);
-        determinization(ctx);
+        return determinization(ctx);
     }
 }
 
@@ -53,7 +53,7 @@ dfa_t::~dfa_t() {
 }
 
 template<typename ctx_t>
-void determinization(ctx_t& ctx) {
+Ret determinization(ctx_t& ctx) {
     const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
 
     // initial state
@@ -76,16 +76,16 @@ void determinization(ctx_t& ctx) {
             // Abort if TDFA grows too fast (either in the number of states, or in the total size of
             // all state kernels which may have many TNFA substates).
             if (ctx.dc_kernels.size() > MAX_DFA_STATES) {
-                error("DFA has too many states");
-                exit(1);
+                RET_FAIL(error("DFA has too many states"));
             } else if (ctx.kernels_total > MAX_DFA_SIZE) {
-                error("DFA is too large");
-                exit(1);
+                RET_FAIL(error("DFA is too large"));
             }
         }
     }
 
     warn_nondeterministic_tags(ctx);
+
+    return Ret::OK;
 }
 
 template<typename ctx_t>

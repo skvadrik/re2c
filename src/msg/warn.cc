@@ -26,8 +26,8 @@ Warn::Warn(Msg& msg): mask(), error_accuml(false), msg(msg) {
     }
 }
 
-bool Warn::error() const {
-    return error_accuml;
+Ret Warn::check() const {
+    return error_accuml ? Ret::FAIL : Ret::OK;
 }
 
 void Warn::set(type_t t, option_t o) {

@@ -1,12 +1,11 @@
-#include <stdlib.h>
-
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
+#include "src/parse/scanner.h"
 
 namespace re2c {
 
 // This function should only change global options.
-static void fix_conopt(conopt_t& glob) {
+LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     if (glob.target == Target::DOT) {
         glob.iFlag = true;
     } else if (glob.target == Target::SKELETON) {
@@ -35,9 +34,10 @@ static void fix_conopt(conopt_t& glob) {
     }
 
     if (!glob.dep_file.empty() && glob.output_file.empty()) {
-        error("cannot generate dep file, output file not specified");
-        exit(1);
+        RET_FAIL(error("cannot generate dep file, output file not specified"));
     }
+
+    return Ret::OK;
 }
 
 // This function should only change mutable option defaults (based on the global options).
@@ -54,10 +54,10 @@ static void fix_mutopt_defaults(const conopt_t& glob, mutopt_t& defaults) {
 // This function should only change real mutable options (based on the global options, default
 // mutable options and default flags). User-defined options are intentionally not passed to prevent
 // accidental change, and default flags are passed as read-only.
-static void fix_mutopt(const conopt_t& glob,
-                       const mutopt_t& defaults,
-                       const mutdef_t& is_default,
-                       mutopt_t& real) {
+LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
+                               const mutopt_t& defaults,
+                               const mutdef_t& is_default,
+                               mutopt_t& real)) {
     // For skeleton target interface options must have default values (because skeleton programs
     // assume certain interface). For DOT target most of the options are unused.
     if (glob.target != Target::CODE) {
@@ -275,46 +275,37 @@ static void fix_mutopt(const conopt_t& glob,
     // errors
     if (glob.lang != Lang::C) {
         if (glob.target == Target::SKELETON) {
-            error("skeleton is not supported for non-C backends");
-            exit(1);
+            RET_FAIL(error("skeleton is not supported for non-C backends"));
         }
         if (real.input_api == Api::DEFAULT) {
-            error("pointer API is not supported for non-C backends");
-            exit(1);
+            RET_FAIL(error("pointer API is not supported for non-C backends"));
         }
         if (real.gFlag) {
-            error("-g, --computed-gotos option is not supported for non-C backends");
-            exit(1);
+            RET_FAIL(error("-g, --computed-gotos option is not supported for non-C backends"));
         }
         if (real.case_ranges) {
-            error("--case-ranges option is not supported for non-C backends");
-            exit(1);
+            RET_FAIL(error("--case-ranges option is not supported for non-C backends"));
         }
     }
     if (real.eof != NOEOF) {
         if (real.bFlag || real.gFlag) {
-            error("configuration 're2c:eof' cannot be used with options "
-                  "-b, --bit-vectors and -g, --computed gotos");
-            exit(1);
+            RET_FAIL(error("configuration 're2c:eof' cannot be used with options -b, --bit-vectors "
+                           "and -g, --computed gotos"));
         }
         if (real.eof >= real.encoding.nCodeUnits()) {
-            error("EOF exceeds maximum code unit value for given encoding");
-            exit(1);
+            RET_FAIL(error("EOF exceeds maximum code unit value for given encoding"));
         }
         if (!real.fill_check) {
-            error("YYFILL check is necessary if EOF rule is used");
-            exit(1);
+            RET_FAIL(error("YYFILL check is necessary if EOF rule is used"));
         }
     }
     if (real.sentinel != NOEOF) {
         if (real.sentinel >= real.encoding.nCodeUnits()) {
-            error("sentinel exceeds maximum code unit value for given encoding");
-            exit(1);
+            RET_FAIL(error("sentinel exceeds maximum code unit value for given encoding"));
         }
         if (real.fill_use || real.eof != NOEOF) {
-            error("re2c:sentinel configuration is not needed"
-                  " in the presence of bounds checking or EOF rule");
-            exit(1);
+            RET_FAIL(error("re2c:sentinel configuration is not needed in the presence of bounds "
+                           "checking or EOF rule"));
         }
     }
     if (glob.fFlag && !real.fill_use) {
@@ -322,20 +313,19 @@ static void fix_mutopt(const conopt_t& glob,
         // YYFILL the interrupt points do not necessarily correspond to storable state labels (with
         // generic API interrupts can happen on any API invocation). This may cause subtle bugs when
         // the lexer is resumed from the wrong program point.
-        error("storable state requires YYFILL to be enabled");
-        exit(1);
+        RET_FAIL(error("storable state requires YYFILL to be enabled"));
     }
     if (glob.loop_switch) {
         if (real.gFlag) {
-            error("cannot combine loop switch and computed gotos");
-            exit(1);
+            RET_FAIL(error("cannot combine loop switch and computed gotos"));
         }
         if (real.bFlag) {
             // TODO: generate bitmaps before the joined loop/switch for all conditions.
-            error("bitmaps with loop switch are not supported");
-            exit(1);
+            RET_FAIL(error("bitmaps with loop switch are not supported"));
         }
     }
+
+    return Ret::OK;
 }
 
 Opt::Opt(const conopt_t& globopts, Msg& msg)
@@ -348,9 +338,9 @@ Opt::Opt(const conopt_t& globopts, Msg& msg)
       real(),
       diverge(true) {}
 
-void Opt::fix_global_and_defaults() {
+Ret Opt::fix_global_and_defaults() {
     // Allow to modify only the global options.
-    fix_conopt(const_cast<conopt_t&>(glob));
+    CHECK_RET(fix_conopt(const_cast<conopt_t&>(glob)));
 
     // Allow to modify only the mutable option defaults (based on the global options).
     fix_mutopt_defaults(glob, const_cast<mutopt_t&>(defaults));
@@ -364,10 +354,12 @@ void Opt::fix_global_and_defaults() {
 #undef MUTOPT1
 #undef MUTOPT
     diverge = true;
+
+    return Ret::OK;
 }
 
-void Opt::sync() {
-    if (!diverge) return;
+Ret Opt::sync() {
+    if (!diverge) return Ret::OK;
 
     // Copy user-defined options to real options.
 #define MUTOPT1 MUTOPT
@@ -379,17 +371,20 @@ void Opt::sync() {
 
     // Fix the real mutable options (based on the global options, mutable option defaults and
     // default flags), but do not change user-defined options or default flags.
-    fix_mutopt(glob, defaults, is_default, real);
+    CHECK_RET(fix_mutopt(glob, defaults, is_default, real));
 
     diverge = false;
+
+    return Ret::OK;
 }
 
-const opt_t* Opt::snapshot() {
-    sync();
-    return new opt_t(glob, real, is_default, symtab);
+Ret Opt::snapshot(const opt_t*& p) {
+    CHECK_RET(sync());
+    p = new opt_t(glob, real, is_default, symtab);
+    return Ret::OK;
 }
 
-void Opt::restore(const opt_t* opts) {
+Ret Opt::restore(const opt_t* opts) {
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     user.name = opts->name; \
@@ -401,10 +396,10 @@ void Opt::restore(const opt_t* opts) {
     symtab = opts->symtab;
 
     diverge = true;
-    sync();
+    return sync();
 }
 
-void Opt::merge(const opt_t* opts, const loc_t& loc) {
+Ret Opt::merge(const opt_t* opts, Scanner& lexer) {
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     if (!opts->is_default_##name) { \
@@ -415,10 +410,10 @@ void Opt::merge(const opt_t* opts, const loc_t& loc) {
 #undef MUTOPT1
 #undef MUTOPT
 
-    merge_symtab(symtab, opts->symtab, loc, msg);
+    CHECK_RET(merge_symtab(symtab, opts->symtab, lexer));
 
     diverge = true;
-    sync();
+    return sync();
 }
 
 #define MUTOPT1 MUTOPT

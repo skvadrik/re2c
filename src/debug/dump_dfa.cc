@@ -1,7 +1,6 @@
 #ifdef RE2C_DEBUG
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <algorithm>
 #include <string>
 #include <valarray>

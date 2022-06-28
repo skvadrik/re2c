@@ -9,6 +9,7 @@
 #include "src/constants.h"
 #include "src/encoding/enc.h"
 #include "src/options/symtab.h"
+#include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -31,6 +32,7 @@ namespace re2c {
 // accessible for reading all the time (the parser itself depends on them).
 
 class Msg;
+class Scanner;
 
 #define RE2C_SIGIL "@@"
 
@@ -313,10 +315,10 @@ struct Opt {
 
   public:
     Opt(const conopt_t& globopts, Msg& msg);
-    const opt_t* snapshot();
-    void fix_global_and_defaults();
-    void restore(const opt_t* opts);
-    void merge(const opt_t* opts, const loc_t& loc);
+    Ret snapshot(const opt_t*& p) NODISCARD;
+    Ret fix_global_and_defaults() NODISCARD;
+    Ret restore(const opt_t* opts) NODISCARD;
+    Ret merge(const opt_t* opts, Scanner& lexer) NODISCARD;
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
@@ -331,11 +333,11 @@ struct Opt {
     void reset_group_startlabel();
 
   private:
-    void sync();
-    FORBID_COPY (Opt);
+    Ret sync() NODISCARD;
+    FORBID_COPY(Opt);
 };
 
-ParseOpts parse_opts(char** argv, conopt_t& globopts, Opt& opts, Msg& msg);
+Ret parse_opts(char** argv, conopt_t& globopts, Opt& opts, Msg& msg) NODISCARD;
 
 } // namespace re2c
 

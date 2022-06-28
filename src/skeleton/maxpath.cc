@@ -29,14 +29,14 @@ struct StackItem {
 // Calculate maximal path length (check overflow). Maximal distance to end node (assuming one
 // iteration per loop) is different from YYMAXFILL calculation in the way it handles loops and
 // empty regexp.
-uint32_t maxpath(const Skeleton& skel) {
+Ret maxpath(const Skeleton& skel, uint32_t& dist) {
     std::vector<uint8_t> loops(skel.nodes_count);
     std::vector<uint32_t> dists(skel.nodes_count, DIST_ERROR);
     std::vector<StackItem> stack;
     stack.reserve(skel.nodes_count);
 
     // DFS "return value"
-    uint32_t dist = 0;
+    dist = 0;
 
     stack.push_back({0, 0, skel.nodes[0].arcs.begin()});
 
@@ -94,10 +94,9 @@ uint32_t maxpath(const Skeleton& skel) {
     }
 
     if (dist == DIST_MAX) {
-        error("DFA path %sis too long", incond(skel.cond).c_str());
-        exit(1);
+        RET_FAIL(error("DFA path %sis too long", incond(skel.cond).c_str()));
     }
-    return dist;
+    return Ret::OK;
 }
 
 } // namespace re2c

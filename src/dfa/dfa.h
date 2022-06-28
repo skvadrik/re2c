@@ -12,6 +12,7 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -69,8 +70,12 @@ struct dfa_t {
     FORBID_COPY(dfa_t);
 };
 
-void determinization(
-        const nfa_t& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
+Ret determinization(const nfa_t& nfa,
+                    dfa_t& dfa,
+                    const opt_t* opts,
+                    Msg& msg,
+                    const std::string& cond) NODISCARD;
+
 void minimization(dfa_t& dfa, Minimization type);
 void fillpoints(const dfa_t& dfa, std::vector<size_t>& fill);
 void cutoff_dead_rules(dfa_t& dfa, const opt_t* opts, const std::string& cond, Msg& msg);

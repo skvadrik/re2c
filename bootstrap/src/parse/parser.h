@@ -67,7 +67,8 @@ extern int yydebug;
     TOKEN_FID_END = 268,           /* TOKEN_FID_END  */
     TOKEN_LINE_INFO = 269,         /* TOKEN_LINE_INFO  */
     TOKEN_REGEXP = 270,            /* TOKEN_REGEXP  */
-    TOKEN_BLOCK = 271              /* TOKEN_BLOCK  */
+    TOKEN_BLOCK = 271,             /* TOKEN_BLOCK  */
+    TOKEN_ERROR = 272              /* TOKEN_ERROR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -85,7 +86,7 @@ union YYSTYPE
     const char* cstr;
     std::string* str;
 
-#line 89 "src/parse/parser.h"
+#line 90 "src/parse/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -15,6 +15,7 @@
 #include "src/encoding/enc.h"
 #include "src/encoding/utf8.h"
 #include "src/util/allocator.h"
+#include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -47,18 +48,18 @@ class Scanner: private ScannerState {
   public:
     Scanner(const conopt_t* o, Msg& m);
     ~Scanner();
-    bool open(const std::string& filename, const std::string* parent);
-    bool include(const std::string& filename, char* at);
-    bool gen_dep_file() const;
     const loc_t& tok_loc() const;
     loc_t cur_loc() const;
-    InputBlock echo(Output& out, std::string& block_name);
-    int scan(Ast& ast);
-    void lex_conf(Opt& opts);
+    Ret open(const std::string& filename, const std::string* parent) NODISCARD;
+    Ret include(const std::string& filename, char* at) NODISCARD;
+    Ret gen_dep_file() const NODISCARD;
+    Ret echo(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
+    Ret scan(Ast& ast, int& token) NODISCARD;
+    Ret lex_conf(Opt& opts) NODISCARD;
 
   private:
-    bool read(size_t want);
-    bool fill(size_t need);
+    bool read(size_t want) NODISCARD;
+    bool fill(size_t need) NODISCARD;
     void shift_ptrs_and_fpos(ptrdiff_t offs);
     void pop_finished_files();
     size_t get_input_index() const;
@@ -66,36 +67,38 @@ class Scanner: private ScannerState {
     const Input& get_cinput() const;
     inline void set_line(uint32_t l);
     inline void next_line();
-    void set_sourceline ();
-    bool lex_opt_name(std::string& name);
-    bool lex_name_list(code_alc_t& alc, BlockNameList** ptail);
-    bool lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask);
-    bool lex_block_end(Output& out, bool allow_garbage = false);
-    void lex_code_indented(Ast& ast);
-    void lex_code_in_braces(Ast& ast);
-    void try_lex_string_in_code(char quote);
-    void lex_c_comment();
-    void lex_cpp_comment();
-    bool lex_namedef_context_re2c();
-    bool lex_namedef_context_flex();
-    int lex_clist(Ast& ast);
-    void lex_string(char delim);
-    uint32_t lex_cls_chr();
-    bool lex_str_chr(char quote, AstChar& ast);
-    const AstNode* lex_cls(Ast& ast, bool neg);
-    const AstNode* lex_str(Ast& ast, char quote);
-    void lex_conf_encoding_policy(Opt& opts);
-    void lex_conf_input(Opt& opts);
-    void lex_conf_empty_class(Opt& opts);
-    void lex_conf_api_style(Opt& opts);
-    void lex_conf_assign();
-    void lex_conf_semicolon();
-    int32_t lex_conf_number();
-    bool lex_conf_bool();
-    uint32_t lex_conf_eof();
-    std::string lex_conf_string();
+
     bool is_eof() const;
-    void fail_if_eof() const;
+    Ret set_sourceline() NODISCARD;
+    Ret lex_opt_name(std::string& name) NODISCARD;
+    Ret lex_name_list(code_alc_t& alc, BlockNameList** ptail) NODISCARD;
+    Ret lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) NODISCARD;
+    Ret lex_block_end(Output& out, bool allow_garbage = false) NODISCARD;
+    Ret lex_code_indented(Ast& ast) NODISCARD;
+    Ret lex_code_in_braces(Ast& ast) NODISCARD;
+    Ret try_lex_string_in_code(char quote) NODISCARD;
+    Ret lex_c_comment() NODISCARD;
+    Ret lex_cpp_comment() NODISCARD;
+    Ret lex_namedef_context_re2c(bool& yes) NODISCARD;
+    Ret lex_namedef_context_flex(bool& yes) NODISCARD;
+    Ret lex_clist(Ast& ast, int& token) NODISCARD;
+    Ret lex_string(char delim) NODISCARD;
+    Ret lex_cls_chr(uint32_t& c) NODISCARD;
+    Ret lex_str_chr(char quote, AstChar& ast, bool& stop) NODISCARD;
+    Ret lex_cls(Ast& ast, bool neg, const AstNode*&) NODISCARD;
+    Ret lex_str(Ast& ast, char quote, const AstNode*&) NODISCARD;
+
+    Ret lex_conf_encoding_policy(Opt& opts) NODISCARD;
+    Ret lex_conf_input(Opt& opts) NODISCARD;
+    Ret lex_conf_empty_class(Opt& opts) NODISCARD;
+    Ret lex_conf_api_style(Opt& opts) NODISCARD;
+    Ret lex_conf_assign() NODISCARD;
+    Ret lex_conf_semicolon() NODISCARD;
+    Ret lex_conf_number(int32_t& n) NODISCARD;
+    Ret lex_conf_bool(bool& b) NODISCARD;
+    Ret lex_conf_eof(uint32_t& u) NODISCARD;
+    Ret lex_conf_string(std::string& s) NODISCARD;
+
     uint32_t decode(const char* str) const;
 
     FORBID_COPY (Scanner);
@@ -142,15 +145,6 @@ inline Input& Scanner::get_input() {
 
 inline const Input& Scanner::get_cinput() const {
     return *files[get_input_index()];
-}
-
-inline bool Scanner::lex_conf_bool() {
-    return lex_conf_number() != 0;
-}
-
-inline uint32_t Scanner::lex_conf_eof() {
-    const int32_t n = lex_conf_number();
-    return n < 0 ? NOEOF : static_cast<uint32_t>(n);
 }
 
 } // namespace re2c

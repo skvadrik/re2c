@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 #include <stdint.h>
+
+#include "src/constants.h"
+#include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -21,9 +24,9 @@ struct Input {
 
     explicit Input(size_t fidx);
     ~Input();
-    bool open(const std::string& filename,
-              const std::string* parent,
-              const std::vector<std::string>& incpaths);
+    Ret open(const std::string& filename,
+             const std::string* parent,
+             const std::vector<std::string>& incpaths) NODISCARD;
 
     FORBID_COPY(Input);
 };

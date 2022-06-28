@@ -4,6 +4,7 @@
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
+#include "src/util/attribute.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {
@@ -18,20 +19,20 @@ static OutputBlock* find_block_with_name(CodegenCtxPass1& ctx, const char* name)
     return nullptr;
 }
 
-static void find_blocks(CodegenCtxPass1& ctx,
-                        const BlockNameList* names,
-                        blocks_t& blocks,
-                        const char* directive) {
+LOCAL_NODISCARD(Ret find_blocks(CodegenCtxPass1& ctx,
+                                const BlockNameList*
+                                names,blocks_t& blocks,
+                                const char* directive)) {
     blocks.clear();
     for (const BlockNameList* p = names; p; p = p->next) {
         OutputBlock* b = find_block_with_name(ctx, p->name);
         if (b) {
             blocks.push_back(b);
         } else {
-            error("cannot find block '%s' listed in `%s` directive", p->name, directive);
-            exit(1);
+            RET_FAIL(error("cannot find block '%s' listed in `%s` directive", p->name, directive));
         }
     }
+    return Ret::OK;
 }
 
 static std::string output_cond_get(const opt_t* opts) {
@@ -80,11 +81,11 @@ static void add_tags_from_blocks(const blocks_t& blocks, tagnames_t& tags, bool 
     }
 }
 
-static void expand_tags_directive(CodegenCtxPass1& ctx, Code* code) {
+LOCAL_NODISCARD(Ret expand_tags_directive(CodegenCtxPass1& ctx, Code* code)) {
     DASSERT(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
     if (ctx.global->opts->target != Target::CODE) {
         code->kind = CodeKind::EMPTY;
-        return;
+        return Ret::OK;
     }
 
     Scratchbuf& buf = ctx.global->scratchbuf;
@@ -98,10 +99,11 @@ static void expand_tags_directive(CodegenCtxPass1& ctx, Code* code) {
     } else {
         // Gather tags from the blocks on the list.
         const char* directive = multival ? "mtags:re2c" : "stags:re2c";
-        find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, directive);
+        CHECK_RET(find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, directive));
         add_tags_from_blocks(ctx.global->tmpblocks, tags, multival);
     }
     gen_tags(buf, ctx.block->opts, code, tags);
+    return Ret::OK;
 }
 
 static void gen_cond_enum(Scratchbuf& buf,
@@ -194,8 +196,8 @@ static void gen_cond_enum(Scratchbuf& buf,
     }
 }
 
-static void add_condition_from_block(
-    const OutputBlock& block, StartConds& conds, const StartCond& cond) {
+LOCAL_NODISCARD(Ret add_condition_from_block(
+        const OutputBlock& block, StartConds& conds, const StartCond& cond)) {
     // Condition prefix is specific to the block that defines it. If a few blocks define conditions
     // with the same name, but a different prefix, they should have different enum entries.
     StartCond sc = cond;
@@ -205,30 +207,31 @@ static void add_condition_from_block(
         if (cond.name == sc.name) {
             if (cond.number == sc.number) {
                 // A duplicate condition, it's not an error but don't add it.
-                return;
+                return Ret::OK;
             } else {
                 // An error: conditions with idetical names but different numbers.
-                error("cannot generate condition enumeration: conditon '%s' has different numbers "
-                      "in different blocks (use `re2c:condenumprefix` configuration to set "
-                      "per-block prefix)",
-                      sc.name.c_str());
-                exit(1);
+                RET_FAIL(error("cannot generate condition enumeration: conditon '%s' has "
+                               "different numbers in different blocks (use `re2c:condenumprefix` "
+                               "configuration to set per-block prefix)",
+                               sc.name.c_str()));
             }
         }
     }
 
     conds.push_back(sc);
+    return Ret::OK;
 }
 
-static void add_conditions_from_blocks(const blocks_t& blocks, StartConds& conds) {
+LOCAL_NODISCARD(Ret add_conditions_from_blocks(const blocks_t& blocks, StartConds& conds)) {
     for (const OutputBlock* block : blocks) {
         for (const StartCond& cond : block->conds) {
-            add_condition_from_block(*block, conds, cond);
+            CHECK_RET(add_condition_from_block(*block, conds, cond));
         }
     }
+    return Ret::OK;
 }
 
-static void expand_cond_enum(CodegenCtxPass1& ctx, Code* code) {
+LOCAL_NODISCARD(Ret expand_cond_enum(CodegenCtxPass1& ctx, Code* code)) {
     Scratchbuf& buf = ctx.global->scratchbuf;
     code_alc_t& alc = ctx.global->allocator;
 
@@ -238,28 +241,29 @@ static void expand_cond_enum(CodegenCtxPass1& ctx, Code* code) {
 
     if (globopts->target != Target::CODE) {
         code->kind = CodeKind::EMPTY;
-        return;
+        return Ret::OK;
     }
 
     StartConds conds;
     if (code->fmt.block_names == nullptr) {
         // Gather conditions from all blocks in the output and header files.
-        add_conditions_from_blocks(ctx.global->cblocks, conds);
-        add_conditions_from_blocks(ctx.global->hblocks, conds);
+        CHECK_RET(add_conditions_from_blocks(ctx.global->cblocks, conds));
+        CHECK_RET(add_conditions_from_blocks(ctx.global->hblocks, conds));
     } else {
         // Gather conditions from the blocks on the list.
-        find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, "types:re2c");
-        add_conditions_from_blocks(ctx.global->tmpblocks, conds);
+        CHECK_RET(find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, "types:re2c"));
+        CHECK_RET(add_conditions_from_blocks(ctx.global->tmpblocks, conds));
     }
 
     // Do not generate empty condition enum. Some compilers or language standards allow it, but
     // generally it's more likely to indicate an error in user code.
     if (conds.empty()) {
         code->kind = CodeKind::EMPTY;
-        return;
+        return Ret::OK;
     }
 
     gen_cond_enum(buf, alc, code, globopts, conds);
+    return Ret::OK;
 }
 
 static void gen_state_goto_cases(CodegenCtxPass1& ctx, CodeCases* cases, const OutputBlock* block) {
@@ -269,7 +273,7 @@ static void gen_state_goto_cases(CodegenCtxPass1& ctx, CodeCases* cases, const O
     }
 }
 
-static void gen_state_goto(CodegenCtxPass1& ctx, Code* code) {
+LOCAL_NODISCARD(Ret gen_state_goto(CodegenCtxPass1& ctx, Code* code)) {
     // If this is a `use:re2c` block, this must be an autogenerated block-local state switch, so use
     // block-local options. Otherwise use global options accumulated across the whole file, as the
     // state switch may include states from a few different blocks and it is not clear which options
@@ -278,7 +282,7 @@ static void gen_state_goto(CodegenCtxPass1& ctx, Code* code) {
 
     if (globopts->target != Target::CODE) {
         code->kind = CodeKind::EMPTY;
-        return;
+        return Ret::OK;
     }
 
     // Loop/switch approach is handled differently (by appending special cases to the state switch).
@@ -320,18 +324,16 @@ static void gen_state_goto(CodegenCtxPass1& ctx, Code* code) {
         if (!bstart || !bstart->start_label) {
             // This must be a user-defined directive: the automatic state switch is generated only
             // when processing the first block that has code.
-            error("none of the blocks in `getstate:re2c` generate any code");
-            exit(1);
+            RET_FAIL(error("none of the blocks in `getstate:re2c` generate any code"));
         }
     } else {
         // Generate a switch for all specified named blocks.
-        find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, "getstate:re2c");
+        CHECK_RET(find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, "getstate:re2c"));
         for (const OutputBlock* b : ctx.global->tmpblocks) {
             if (!b->start_label) {
-                error("block '%s' does not generate code, so it should not be listed in "
-                      "`getstate:re2c` directive",
-                      b->name.c_str());
-                exit(1);
+                RET_FAIL(error("block '%s' does not generate code, so it should not be listed in "
+                               "`getstate:re2c` directive",
+                               b->name.c_str()));
             }
             // Use start label of the first block on the list.
             if (!bstart) bstart = b;
@@ -372,6 +374,7 @@ static void gen_state_goto(CodegenCtxPass1& ctx, Code* code) {
     code->kind = CodeKind::BLOCK;
     code->block.kind = CodeBlock::Kind::RAW;
     code->block.stmts = stmts;
+    return Ret::OK;
 }
 
 static void gen_yych_decl(const opt_t* opts, Code* code) {
@@ -432,13 +435,13 @@ static size_t max_among_blocks(const blocks_t& blocks, size_t max, CodeKind kind
     return max;
 }
 
-static void gen_yymax(CodegenCtxPass1& ctx, Code* code) {
+LOCAL_NODISCARD(Ret gen_yymax(CodegenCtxPass1& ctx, Code* code)) {
     const opt_t* opts = ctx.block->opts;
     Scratchbuf& o = ctx.global->scratchbuf;
 
     if (opts->target != Target::CODE) {
         code->kind = CodeKind::EMPTY;
-        return;
+        return Ret::OK;
     }
 
     CodeKind kind = code->kind;
@@ -452,7 +455,7 @@ static void gen_yymax(CodegenCtxPass1& ctx, Code* code) {
         max = max_among_blocks(ctx.global->hblocks, max, kind);
     } else {
         // Maximum among the blocks listed in the directive.
-        find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, dirname);
+        CHECK_RET(find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, dirname));
         max = max_among_blocks(ctx.global->tmpblocks, max, kind);
     }
 
@@ -474,6 +477,7 @@ static void gen_yymax(CodegenCtxPass1& ctx, Code* code) {
         }
     }
     code->kind = (opts->lang == Lang::C) ? CodeKind::TEXT : CodeKind::STMT;
+    return Ret::OK;
 }
 
 // note [condition order]
@@ -594,39 +598,37 @@ static void gen_cond_table(CodegenCtxPass1& ctx, Code* code) {
     code->block.stmts = stmts;
 }
 
-static void expand_pass_1_list(CodegenCtxPass1& ctx, CodeList* stmts) {
-    if (!stmts) return;
-    for (Code* x = stmts->head; x; x = x->next) {
-        expand_pass_1(ctx, x);
+LOCAL_NODISCARD(Ret expand_pass_1_list(CodegenCtxPass1& ctx, CodeList* stmts)) {
+    if (stmts) {
+        for (Code* x = stmts->head; x; x = x->next) {
+            CHECK_RET(expand_pass_1(ctx, x));
+        }
     }
+    return Ret::OK;
 }
 
-void expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
+Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
     const opt_t* opts = ctx.block->opts;
     switch (code->kind) {
     case CodeKind::BLOCK:
-        expand_pass_1_list(ctx, code->block.stmts);
-        break;
+        return expand_pass_1_list(ctx, code->block.stmts);
     case CodeKind::IF_THEN_ELSE:
-        expand_pass_1_list(ctx, code->ifte.if_code);
-        expand_pass_1_list(ctx, code->ifte.else_code);
+        CHECK_RET(expand_pass_1_list(ctx, code->ifte.if_code));
+        CHECK_RET(expand_pass_1_list(ctx, code->ifte.else_code));
         break;
     case CodeKind::SWITCH:
         for (CodeCase* x = code->swch.cases->head; x; x = x->next) {
-            expand_pass_1_list(ctx, x->body);
+            CHECK_RET(expand_pass_1_list(ctx, x->body));
         }
         break;
     case CodeKind::LOOP:
-        expand_pass_1_list(ctx, code->loop);
-        break;
+        return expand_pass_1_list(ctx, code->loop);
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
-        expand_tags_directive(ctx, code);
-        break;
+        return expand_tags_directive(ctx, code);
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
-        gen_yymax(ctx, code);
-        break;
+        return gen_yymax(ctx, code);
     case CodeKind::YYCH:
         gen_yych_decl(opts, code);
         break;
@@ -637,8 +639,7 @@ void expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
         gen_yystate_def(ctx, code);
         break;
     case CodeKind::COND_ENUM:
-        expand_cond_enum(ctx, code);
-        break;
+        return expand_cond_enum(ctx, code);
     case CodeKind::COND_GOTO:
         gen_cond_goto(ctx, code);
         break;
@@ -646,8 +647,7 @@ void expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
         gen_cond_table(ctx, code);
         break;
     case CodeKind::STATE_GOTO:
-        gen_state_goto(ctx, code);
-        break;
+        return gen_state_goto(ctx, code);
     case CodeKind::LABEL:
         // Do nothing on the first pass (use information is not available yet, as the rest of the
         // first pass may generate some additional label uses, e.g. for a block start label in
@@ -680,6 +680,7 @@ void expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
     case CodeKind::ABORT:
         break;
     }
+    return Ret::OK;
 }
 
 static void gen_label(Scratchbuf& o, const opt_t* opts, Code* code) {

@@ -8,45 +8,32 @@
 #include "src/parse/input.h"
 #include "src/parse/scanner.h"
 
-using namespace re2c;
+namespace re2c {
 
-int main(int, char* argv[]) {
-    conopt_t globopts;
+static Ret main(int, char* argv[]) {
     Msg msg;
+    conopt_t globopts;
     Opt opts(globopts, msg);
-
-    switch (parse_opts(argv, globopts, opts, msg)) {
-    case ParseOpts::OK:
-        break;
-    case ParseOpts::EXIT_OK:
-        return 0;
-    case ParseOpts::EXIT_FAIL:
-        return 1;
-    }
+    CHECK_RET(parse_opts(argv, globopts, opts, msg));
 
     Scanner scanner(&globopts, msg);
-    if (!scanner.open(globopts.source_file, nullptr)) {
-        return 1;
-    }
+    CHECK_RET(scanner.open(globopts.source_file, nullptr));
 
     Output output(msg);
+    CHECK_RET(compile(scanner, output, opts));
 
-    compile(scanner, output, opts);
+    CHECK_RET(output.emit());
 
-    if (!output.emit()) {
-        return 1;
-    }
+    CHECK_RET(msg.warn.check());
 
-    if (msg.warn.error()) {
-        return 1;
-    }
+    CHECK_RET(scanner.gen_dep_file());
 
-    if (!scanner.gen_dep_file()) {
-        return 1;
-    }
+    if (globopts.verbose) fprintf(stderr, "re2c: success\n");
+    return Ret::OK;
+}
 
-    if (globopts.verbose) {
-        fprintf(stderr, "re2c: success\n");
-    }
-    return 0;
+} // namespace re2c
+
+int main(int argc, char* argv[]) {
+    return re2c::main(argc, argv) == re2c::Ret::FAIL ? 1 : 0;
 }

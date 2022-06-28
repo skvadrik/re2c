@@ -35,18 +35,16 @@ size_t Scanner::get_input_index() const {
     return i;
 }
 
-bool Scanner::open(const std::string& filename, const std::string* parent) {
+Ret Scanner::open(const std::string& filename, const std::string* parent) {
     Input* in = new Input(msg.filenames.size());
     files.push_back(in);
-    if (!in->open(filename, parent, globopts->incpaths)) {
-        return false;
-    }
+    CHECK_RET(in->open(filename, parent, globopts->incpaths));
     filedeps.insert(in->escaped_name);
     msg.filenames.push_back(in->escaped_name);
-    return true;
+    return Ret::OK;
 }
 
-bool Scanner::include(const std::string& filename, char* at) {
+Ret Scanner::include(const std::string& filename, char* at) {
     // This function is called twice for each include file: first time when opening the file, and
     // second time when it has been fully read. The second time is needed to generate a line
     // directive marking the end of the include file and the continuation of the parent file. In
@@ -79,7 +77,7 @@ bool Scanner::include(const std::string& filename, char* at) {
         assert(fidx + 1 == last
                && files[last]->name == filename
                && files[last]->eo == at);
-        return true;
+        return Ret::OK;
     }
 
     // get name of the current file (before unreading)
@@ -106,14 +104,12 @@ bool Scanner::include(const std::string& filename, char* at) {
     }
 
     // open new file and place place at the top of stack
-    if (!open(filename, &parent)) {
-        return false;
-    }
+    CHECK_RET(open(filename, &parent));
 
     // refill buffer (discard everything up to cursor, clear EOF)
     lim = cur = mar = ctx = tok = ptr = pos = bot + BSIZE;
     eof = nullptr;
-    return fill(BSIZE);
+    return fill(BSIZE) ? Ret::OK : Ret::FAIL;
 }
 
 bool Scanner::read(size_t want) {
@@ -177,9 +173,9 @@ bool Scanner::fill(size_t need) {
     } else {
         BSIZE += std::max(BSIZE, need);
         char* buf = new char[BSIZE + YYMAXFILL];
-        if (!buf) {
+        if (buf == nullptr) {
             error("out of memory");
-            exit(1);
+            return false;
         }
 
         memmove(buf, tok, copy);
@@ -200,15 +196,12 @@ bool Scanner::fill(size_t need) {
     return true;
 }
 
-bool Scanner::gen_dep_file() const {
+Ret Scanner::gen_dep_file() const {
     const std::string& fname = globopts->dep_file;
-    if (fname.empty()) return true;
+    if (fname.empty()) return Ret::OK;
 
     FILE* file = fopen(fname.c_str(), "w");
-    if (file == nullptr) {
-        error("cannot open dep file %s", fname.c_str());
-        return false;
-    }
+    if (file == nullptr) RET_FAIL(error("cannot open dep file %s", fname.c_str()));
 
     fprintf(file, "%s:", escape_backslashes(globopts->output_file).c_str());
     for (const std::string& fdep : filedeps) {
@@ -217,7 +210,7 @@ bool Scanner::gen_dep_file() const {
     fprintf(file, "\n");
 
     fclose(file);
-    return true;
+    return Ret::OK;
 }
 
 uint32_t Scanner::decode(const char* str) const {

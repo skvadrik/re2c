@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "src/constants.h"
 #include "src/msg/location.h"
 #include "src/msg/warn.h"
 #include "src/util/attribute.h"
@@ -36,10 +37,10 @@ class Msg {
 
 void error(const char* fmt, ...) RE2C_ATTR((format (printf, 1, 2)));
 void error_arg(const char* option);
-void usage ();
-void vernum ();
-void version ();
-std::string incond (const std::string& cond);
+Ret usage() NODISCARD;
+Ret vernum() NODISCARD;
+Ret version() NODISCARD;
+std::string incond(const std::string& cond);
 
 } // namespace re2c
 

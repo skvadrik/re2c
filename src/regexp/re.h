@@ -1,19 +1,21 @@
 #ifndef _RE2C_RE_RE_
 #define _RE2C_RE_RE_
 
+#include <stdint.h>
 #include <valarray>
 
+#include "src/constants.h"
 #include "src/regexp/tag.h"
-#include <stdint.h>
-#include "src/util/forbid_copy.h"
 #include "src/util/allocator.h"
+#include "src/util/attribute.h"
+#include "src/util/forbid_copy.h"
 #include "src/util/range.h"
 
 namespace re2c {
 
+class Msg;
 struct AstNode;
 struct AstRule;
-class Msg;
 struct Rule;
 struct opt_t;
 
@@ -50,6 +52,7 @@ struct RESpec {
     Msg& msg;
 
     RESpec(const std::vector<AstRule>& ast, const opt_t* o, Msg& msg, RangeMgr& rm);
+    Ret init(const std::vector<AstRule>& ast) NODISCARD;
     FORBID_COPY(RESpec);
 };
 

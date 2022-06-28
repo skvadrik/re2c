@@ -82,7 +82,9 @@ Skeleton::Skeleton(const dfa_t& dfa,
       arc_iters(),
       char_iters(),
       buf_data(),
-      buf_keys() {
+      buf_keys() {}
+
+Ret Skeleton::init(const dfa_t& dfa) {
     // initialize nodes
     const size_t nil = nodes_count - 1;
     for (size_t i = 0; i < nil; ++i) {
@@ -90,9 +92,10 @@ Skeleton::Skeleton(const dfa_t& dfa,
     }
 
     // initialize size of key
-    const size_t maxlen = maxpath(*this);
-    const size_t maxrule = dfa.rules.size() + 1; // +1 for none-rule
-    const size_t max = std::max(maxlen, maxrule);
+    uint32_t maxlen;
+    CHECK_RET(maxpath(*this, maxlen));
+    uint32_t maxrule = static_cast<uint32_t>(dfa.rules.size()) + 1; // +1 for none-rule
+    uint32_t max = std::max(maxlen, maxrule);
     if (max <= std::numeric_limits<uint8_t>::max()) {
         sizeof_key = 1;
     } else if (max <= std::numeric_limits<uint16_t>::max()) {
@@ -106,6 +109,8 @@ Skeleton::Skeleton(const dfa_t& dfa,
     char_iters.init(256);
     buf_data.init(opts->encoding.szCodeUnit());
     buf_keys.init(sizeof_key);
+
+    return Ret::OK;
 }
 
 Skeleton::~Skeleton() {

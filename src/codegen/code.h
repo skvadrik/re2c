@@ -18,6 +18,7 @@
 #include "src/debug/debug.h"
 #include "src/msg/location.h"
 #include "src/util/allocator.h"
+#include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/string_utils.h"
 
@@ -721,15 +722,15 @@ struct Output {
     ~Output();
     OutputBlock& block();
     bool open ();
-    void new_block(Opt& opts, InputBlock kind, const std::string& name, const loc_t& loc);
+    Ret new_block(Opt& opts, InputBlock kind, std::string name, const loc_t& loc) NODISCARD;
     void gather_info_from_block();
     void header_mode(bool on);
     bool in_header() const;
     void wraw(const char* s, const char* e, bool newline = false);
     void wversion_time ();
     void wdelay_stmt(uint32_t ind, Code* code);
-    bool emit();
-    bool emit_blocks(const std::string& fname, const CodegenCtxGlobal& globalctx);
+    Ret emit() NODISCARD;
+    Ret emit_blocks(const std::string& fname, const CodegenCtxGlobal& globalctx) NODISCARD;
     FORBID_COPY (Output);
 };
 
@@ -753,7 +754,7 @@ void gen_dfa_as_blocks_with_labels(Output& output, const DFA& dfa, CodeList* stm
 void gen_dfa_as_switch_cases(Output& output, DFA& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
 
-void expand_pass_1(CodegenCtxPass1& ctx, Code* code);
+Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) NODISCARD;
 void expand_pass_2(CodegenCtxPass2& ctx, Code* code);
 void remove_empty(CodegenCtxPass2& ctx, Code* code);
 void combine(CodegenCtxPass2& ctx, Code* code);
