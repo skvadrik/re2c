@@ -429,7 +429,7 @@ if (RE2C_BUILD_LIBS)
     )
     re2c_bootstrap_lexer("lib/test_helper.re" "lib/test_helper.cc")
 
-    add_library(libre2c_objects OBJECT
+    set(libre2c_sources
         lib/regcomp.cc
         lib/regexec.cc
         lib/regexec_dfa.cc
@@ -490,9 +490,6 @@ if (RE2C_BUILD_LIBS)
         src/skeleton/skeleton.cc
         src/util/range.cc
         src/util/string_utils.cc
-    )
-    set(libre2c_sources
-        $<TARGET_OBJECTS:libre2c_objects>
         $<TARGET_OBJECTS:libre2c_objects_autogen>
         $<TARGET_OBJECTS:re2c_objects_autogen_ver_to_vernum>
     )
