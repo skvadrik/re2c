@@ -1,7 +1,6 @@
 #include <string.h>
 #include <algorithm>
 #include <memory>
-#include <valarray>
 #include <vector>
 
 #include "src/debug/debug.h"

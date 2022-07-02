@@ -1,7 +1,6 @@
 #include <string.h>
 #include <algorithm>
 #include <new>
-#include <valarray>
 #include <vector>
 
 #include "src/cfg/cfg.h"

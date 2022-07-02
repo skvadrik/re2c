@@ -6,7 +6,6 @@
 #include <limits>
 #include <set>
 #include <string>
-#include <valarray>
 #include <vector>
 
 #include "src/constants.h"
@@ -90,7 +89,7 @@ struct DFA {
     State* eof_state;
     std::vector<State*> finstates;
     std::vector<uint32_t>& charset;
-    std::valarray<Rule>& rules;
+    std::vector<Rule>& rules;
     std::vector<Tag>& tags;
     std::set<tagver_t>& mtagvers;
     std::set<std::string> stagnames;

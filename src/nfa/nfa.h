@@ -3,7 +3,6 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <valarray>
 #include <vector>
 
 #include "src/regexp/re.h"
@@ -92,7 +91,7 @@ struct nfa_t {
     size_t size;
     nfa_state_t* states;
     std::vector<uint32_t>& charset;
-    std::valarray<Rule>& rules;
+    std::vector<Rule>& rules;
     std::vector<Tag>& tags;
     nfa_state_t* root;
     uint32_t ncores;

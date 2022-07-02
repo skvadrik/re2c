@@ -2,7 +2,6 @@
 #define _RE2C_DFA_DFA_
 
 #include <stdint.h>
-#include <valarray>
 #include <vector>
 #include <set>
 #include <string.h>
@@ -55,7 +54,7 @@ struct dfa_t {
     std::vector<dfa_state_t*> states;
     const size_t nchars;
     std::vector<uint32_t>& charset;
-    std::valarray<Rule>& rules;
+    std::vector<Rule>& rules;
     std::vector<Tag>& tags;
     std::set<tagver_t>& mtagvers;
     tagver_t* finvers;

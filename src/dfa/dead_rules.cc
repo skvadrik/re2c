@@ -2,7 +2,6 @@
 #include <string.h>
 #include <set>
 #include <string>
-#include <valarray>
 #include <vector>
 
 #include "src/dfa/dfa.h"

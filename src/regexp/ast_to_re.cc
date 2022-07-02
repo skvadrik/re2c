@@ -5,7 +5,6 @@
 #include <set>
 #include <string>
 #include <utility>
-#include <valarray>
 #include <vector>
 
 #include "src/debug/debug.h"
@@ -468,7 +467,7 @@ RESpec::RESpec(const std::vector<AstRule>& ast, const opt_t* o, Msg& msg, RangeM
       res(),
       charset(*new std::vector<uint32_t>),
       tags(*new std::vector<Tag>),
-      rules(*new std::valarray<Rule>(ast.size())),
+      rules(*new std::vector<Rule>(ast.size())),
       opts(o),
       msg(msg) {}
 

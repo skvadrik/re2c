@@ -2,7 +2,7 @@
 #define _RE2C_RE_RE_
 
 #include <stdint.h>
-#include <valarray>
+#include <vector>
 
 #include "src/constants.h"
 #include "src/regexp/tag.h"
@@ -47,7 +47,7 @@ struct RESpec {
     std::vector<RE*> res;
     std::vector<uint32_t>& charset;
     std::vector<Tag>& tags;
-    std::valarray<Rule>& rules;
+    std::vector<Rule>& rules;
     const opt_t* opts;
     Msg& msg;
 

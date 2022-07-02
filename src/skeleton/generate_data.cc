@@ -5,7 +5,6 @@
 #include <map>
 #include <string>
 #include <utility>
-#include <valarray>
 #include <vector>
 
 #include "src/options/opt.h"

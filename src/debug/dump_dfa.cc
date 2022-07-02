@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <algorithm>
 #include <string>
-#include <valarray>
 #include <vector>
 
 #include "src/options/opt.h"

@@ -4,7 +4,6 @@
 #include <queue>
 #include <set>
 #include <utility>
-#include <valarray>
 #include <vector>
 
 #include "src/adfa/adfa.h"

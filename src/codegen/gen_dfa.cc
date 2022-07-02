@@ -5,7 +5,6 @@
 #include <set>
 #include <string>
 #include <utility>
-#include <valarray>
 #include <vector>
 
 #include "src/adfa/adfa.h"

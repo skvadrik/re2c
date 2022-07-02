@@ -2,7 +2,6 @@
 #include <memory>
 #include <set>
 #include <string>
-#include <valarray>
 #include <vector>
 
 #include "src/options/opt.h"
@@ -179,7 +178,7 @@ void warn_nondeterministic_tags(const ctx_t& ctx) {
     Warn& warn = ctx.dc_msg.warn;
     const kernels_t& kernels = ctx.dc_kernels;
     const std::vector<Tag>& tags = ctx.dfa.tags;
-    const std::valarray<Rule>& rules = ctx.dfa.rules;
+    const std::vector<Rule>& rules = ctx.dfa.rules;
 
     const size_t ntag = tags.size();
     const size_t nkrn = kernels.size();

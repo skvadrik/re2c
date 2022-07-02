@@ -8,7 +8,6 @@
 #include <map>
 #include <set>
 #include <string>
-#include <valarray>
 #include <vector>
 
 #include "src/constants.h"
@@ -146,7 +145,7 @@ struct Skeleton {
     size_t eof_rule;
     size_t ntagver;
     const std::vector<uint32_t>& charset;
-    const std::valarray<Rule>& rules;
+    const std::vector<Rule>& rules;
     const std::vector<Tag>& tags;
     const tagver_t* finvers;
 

@@ -1,6 +1,5 @@
 #include <stddef.h>
 #include <string>
-#include <valarray>
 #include <vector>
 
 #include "src/debug/debug.h"

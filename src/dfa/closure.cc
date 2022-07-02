@@ -3,7 +3,6 @@
 #include <map>
 #include <set>
 #include <utility>
-#include <valarray>
 #include <vector>
 
 #include "src/dfa/determinization.h"
@@ -116,7 +115,7 @@ void prune(ctx_t& ctx) {
 
         // mark dropped rules as shadowed
         if (ctx.dc_msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
-            std::valarray<Rule>& rules = ctx.nfa.rules;
+            std::vector<Rule>& rules = ctx.nfa.rules;
             const uint32_t l = rules[f->state->rule].semact->loc.line;
             for (const clos_t& c : closure) {
                 if (&c != f && c.state->kind == nfa_state_t::Kind::FIN) {
