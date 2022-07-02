@@ -28,6 +28,9 @@ jobs:
           - name: linux-gcc-asan-ootree
             os: ubuntu-latest
 
+          - name: linux-gcc-valgrind-ootree
+            os: ubuntu-latest
+
           - name: linux-gcc-debug-ootree-skeleton
             os: ubuntu-latest
 
@@ -87,6 +90,7 @@ jobs:
             Linux*)
               sudo apt update
               sudo apt install gcc-multilib g++-multilib  # for -m32
+              sudo apt install valgrind
               ;;
             macOS*)
               sudo xcode-select -switch /Applications/Xcode.app
@@ -151,9 +155,13 @@ jobs:
 
       - name: Run Skeleton Tests
         if: "contains(matrix.name, 'skeleton')"
-        # Remove the following line after fix Windows tests
         working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
         run: python run_tests.py --skeleton
+
+      - name: Run Valgrind Tests
+        if: "contains(matrix.name, 'valgrind')"
+        working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
+        run: python run_tests.py --valgrind
 
       - name: Archive test artifacts
         # Run this step only if tests failed (otherwise there is nothing to upload).

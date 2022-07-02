@@ -137,6 +137,16 @@
       "displayName": "Linux x86_64: GCC / Release / Skeleton / Out of tree (full)",
       "inherits": ["default-full-configuration", "linux-gcc-release-ootree-skeleton-fast"]
     },
+    {
+      "name": "linux-gcc-valgrind-ootree-fast",
+      "displayName": "Linux x86_64: GCC / Valgrind / Out of tree (fast)",
+      "inherits": ["linux-gcc-release-ootree-skeleton-fast"]
+    },
+    {
+      "name": "linux-gcc-valgrind-ootree-full",
+      "displayName": "Linux x86_64: GCC / Valgrind / Out of tree (full)",
+      "inherits": ["linux-gcc-release-ootree-skeleton-full"]
+    },
 
 
     {
@@ -370,6 +380,20 @@
       "name": "linux-gcc-release-ootree-skeleton-full",
       "displayName": "Linux x86_64: GCC / Release / Skeleton / Out of tree (full)",
       "configurePreset": "linux-gcc-release-ootree-skeleton-full",
+      "inherits": "linux-build-base",
+      "configuration": "Release"
+    },
+    {
+      "name": "linux-gcc-valgrind-ootree-fast",
+      "displayName": "Linux x86_64: GCC / Valgrind / Out of tree (fast)",
+      "configurePreset": "linux-gcc-valgrind-ootree-fast",
+      "inherits": "linux-build-base",
+      "configuration": "Release"
+    },
+    {
+      "name": "linux-gcc-valgrind-ootree-full",
+      "displayName": "Linux x86_64: GCC / Valgrind / Out of tree (full)",
+      "configurePreset": "linux-gcc-valgrind-ootree-full",
       "inherits": "linux-build-base",
       "configuration": "Release"
     },
