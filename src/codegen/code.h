@@ -74,10 +74,14 @@ class Scratchbuf {
     Scratchbuf& exact_uint(size_t width);
     const char* flush();
 
-    Scratchbuf& label(const Label& l, bool check_used = true) {
-        assert((l.used || !check_used) && l.index != Label::NONE);
+    Scratchbuf& unchecked_label(const Label& l) {
+        assert(l.index != Label::NONE);
         os << l.index;
         return *this;
+    }
+    Scratchbuf& label(const Label& l) {
+        assert(l.used);
+        return unchecked_label(l);
     }
 };
 

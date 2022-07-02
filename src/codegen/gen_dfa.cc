@@ -28,7 +28,7 @@ void gen_yydebug(Output& output, const Label* label, CodeList* stmts) {
 
     // The label may be unused but still have a valid index (one such example is the initial label
     // in goto/label mode). It still needs an YYDEBUG statement.
-    buf.str(opts->yydebug).cstr("(").label(*label, /*check_used*/ false).cstr(", ");
+    buf.str(opts->yydebug).cstr("(").unchecked_label(*label).cstr(", ");
     gen_peek_expr(buf.stream(), opts);
     buf.cstr(")");
     append(stmts, code_stmt(output.allocator, buf.flush()));
