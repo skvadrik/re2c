@@ -54,20 +54,28 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
 
     preg->rmgr = new RangeMgr;
 
-    AstRule ar(a, ast.sem_act(NOWHERE, nullptr, nullptr, false));
-    std::vector<AstRule> arv;
-    arv.push_back(ar);
-    RESpec re(arv, opt, msg, *preg->rmgr);
+    std::vector<AstRule> arv{AstRule{a, ast.sem_act(NOWHERE, nullptr, nullptr, false)}};
+    RESpec re(opt, msg, *preg->rmgr);
     CHECK_RET(re.init(arv));
 
     find_fixed_tags(re);
     insert_default_tags(re);
 
+    if ((cflags & REG_NFA) == 0) {
+        preg->char2class = new size_t[256];
+        split_charset(re);
+        for (uint32_t i = 1, j = 0; i < re.charset.size(); ++i) {
+            for (; j < re.charset[i]; ++j) {
+                preg->char2class[j] = i - 1;
+            }
+        }
+    }
+
     size_t nfa_size, nfa_depth;
     compute_size_and_depth(re.res, &nfa_size, &nfa_depth);
     if (nfa_depth > MAX_NFA_DEPTH || nfa_size > MAX_NFA_STATES) return 1;
 
-    nfa_t* nfa = new nfa_t(re, nfa_size);
+    nfa_t* nfa = new nfa_t(std::move(re), nfa_size);
 
     nfa_t* nfa0 = nullptr;
     if (cflags & REG_BACKWARD) {
@@ -76,16 +84,18 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         Opt opts0(globopts0, msg);
         const opt_t* opt0;
         CHECK_RET(opts0.snapshot(opt0));
-        RESpec re0(arv, opt0, msg, *preg->rmgr);
+        RESpec re0(opt0, msg, *preg->rmgr);
         CHECK_RET(re0.init(arv));
-        nfa0 = new nfa_t(re0, nfa_size);
+        nfa0 = new nfa_t(std::move(re0), nfa_size);
         delete opt0;
     }
 
-    dfa_t* dfa = nullptr;
-    rldfa_t* rldfa = nullptr;
+    DASSERT(nfa->rules.size() == 1);
+    preg->re_nsub = nfa->rules[0].ncap + 1;
+    preg->re_ntag = nfa->tags.size();
 
     if (cflags & REG_NFA) {
+        preg->nfa = nfa;
         if ((cflags & REG_TRIE) && (cflags & REG_LEFTMOST)) {
             preg->simctx = new lzsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         } else if (cflags & REG_TRIE) {
@@ -97,44 +107,32 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         } else {
             preg->simctx = new psimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         }
-    } else {
-        preg->char2class = new size_t[256];
-        split_charset(re);
-        for (uint32_t i = 1, j = 0; i < re.charset.size(); ++i) {
-            for (; j < re.charset[i]; ++j) {
-                preg->char2class[j] = i - 1;
-            }
-        }
+    } else if (cflags & REG_REGLESS) {
+        preg->rldfa = new rldfa_t(std::move(*nfa), opt, cflags);
+        delete nfa;
+        opt = nullptr; // transfer options ownership to RLDFA
 
-        dfa = new dfa_t(*nfa, Rule::NONE, Rule::NONE);
-        if (cflags & REG_REGLESS) {
-            rldfa = new rldfa_t(*nfa, *dfa, opt, cflags);
-            opt = nullptr; // transfer options ownership to RLDFA
-        } else {
-            CHECK_RET(determinization(*nfa, *dfa, opt, msg, ""));
-            cutoff_dead_rules(*dfa, opt, "", msg);
-            insert_fallback_tags(*dfa);
-            compact_and_optimize_tags(opt, *dfa);
+        if (cflags & REG_SUBHIST) {
+            preg->regtrie = new regoff_trie_t(preg->rldfa->tags.size());
         }
+    } else {
+        dfa_t* dfa = new dfa_t(nfa->charset.size(), Rule::NONE, Rule::NONE);
+        CHECK_RET(determinization(std::move(*nfa), *dfa, opt, msg, ""));
+        preg->dfa = dfa;
+        delete nfa;
+
+        cutoff_dead_rules(*dfa, opt, "", msg);
+        insert_fallback_tags(*dfa);
+        compact_and_optimize_tags(opt, *dfa);
 
         if (cflags & REG_TSTRING) {
             // T-string does not need intermediate storage for tag values.
         } else if (cflags & REG_SUBHIST) {
-            const size_t nlists = (cflags & REG_REGLESS)
-                    ? dfa->tags.size() : static_cast<size_t>(dfa->maxtagver + 1);
-            preg->regtrie = new regoff_trie_t(nlists);
+            preg->regtrie = new regoff_trie_t(static_cast<size_t>(dfa->maxtagver + 1));
         } else {
             preg->regs = new regoff_t[dfa->maxtagver + 1];
         }
     }
-
-    preg->nfa = nfa;
-    preg->dfa = dfa;
-    preg->rldfa = rldfa;
-
-    DASSERT(nfa->rules.size() == 1);
-    preg->re_nsub = nfa->rules[0].ncap + 1;
-    preg->re_ntag = nfa->tags.size();
 
     if (cflags & REG_TSTRING) {
         // T-string is stored in RE (reallocated on each regtstring() call if needed), and the user

@@ -21,26 +21,26 @@ template<typename ctx_t> static Ret determinization(ctx_t& ctx) NODISCARD;
 template<typename ctx_t> static void clear_caches(ctx_t& ctx);
 template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t& ctx);
 
-dfa_t::dfa_t(const nfa_t& nfa, size_t def_rule, size_t eof_rule)
-    : states(),
-      nchars(nfa.charset.size() - 1), // (n + 1) bounds for n ranges
-      charset(nfa.charset),
-      rules(nfa.rules),
-      tags(nfa.tags),
-      mtagvers(*new std::set<tagver_t>),
+dfa_t::dfa_t(size_t charset_bounds, size_t def_rule, size_t eof_rule)
+    : allocator(),
+      states(),
+      nchars(charset_bounds - 1), // (n + 1) bounds for n ranges
+      charset(),
+      rules(),
+      tags(),
+      mtagvers(),
       finvers(nullptr),
-      tcpool(*new tcpool_t),
+      tcpool(allocator),
       maxtagver(0),
       def_rule(def_rule),
       eof_rule(eof_rule) {}
 
-Ret determinization(
-        const nfa_t& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {
+Ret determinization(nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {
     if (opts->posix_semantics) {
-        pdetctx_t ctx(opts, msg, cond, nfa, dfa);
+        pdetctx_t ctx(std::move(nfa), dfa, opts, msg, cond);
         return determinization(ctx);
     } else {
-        ldetctx_t ctx(opts, msg, cond, nfa, dfa);
+        ldetctx_t ctx(std::move(nfa), dfa, opts, msg, cond);
         return determinization(ctx);
     }
 }
@@ -56,7 +56,7 @@ Ret determinization(ctx_t& ctx) {
     const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
 
     // initial state
-    const clos_t c0(ctx.nfa.root, 0, INITIAL_TAGS, HROOT, HROOT);
+    const clos_t c0(ctx.nfa_root, 0, INITIAL_TAGS, HROOT, HROOT);
     ctx.reach.push_back(c0);
     tagged_epsilon_closure(ctx);
     find_state(ctx);
@@ -84,6 +84,10 @@ Ret determinization(ctx_t& ctx) {
 
     warn_nondeterministic_tags(ctx);
 
+    // Move ownership of common data from determinization context to TDFA.
+    ctx.dfa.charset = std::move(ctx.charset);
+    ctx.dfa.rules = std::move(ctx.rules);
+    ctx.dfa.tags = std::move(ctx.tags);
     return Ret::OK;
 }
 
@@ -91,7 +95,7 @@ template<typename ctx_t>
 void clear_caches(ctx_t& ctx) {
     ctx.dc_newvers.clear();
 
-    const size_t ntags = ctx.nfa.tags.size();
+    const size_t ntags = ctx.tags.size();
     for (size_t t = 0; t < ntags; ++t) {
         ctx.dc_hc_caches[t].clear();
     }
@@ -100,7 +104,7 @@ void clear_caches(ctx_t& ctx) {
 template<typename ctx_t>
 void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     ctx.dc_symbol = sym;
-    const uint32_t symbol = ctx.dfa.charset[sym];
+    const uint32_t symbol = ctx.charset[sym];
 
     const kernel_t* kernel = ctx.dc_kernels[ctx.dc_origin];
     ctx.oldprectbl = kernel->prectbl;
@@ -136,7 +140,7 @@ nfa_state_t* transition(nfa_state_t* state, uint32_t symbol) {
 template<typename ctx_t>
 uint32_t init_tag_versions(ctx_t& ctx) {
     dfa_t& dfa = ctx.dfa;
-    const size_t ntags = dfa.tags.size();
+    const size_t ntags = ctx.tags.size();
 
     // all-zero tag configuration must have static number zero
     ctx.dc_tagvertbl.insert_const(TAGVER_ZERO);
@@ -149,14 +153,14 @@ uint32_t init_tag_versions(ctx_t& ctx) {
     dfa.maxtagver = static_cast<tagver_t>(ntags);
 
     // final/fallback versions will be assigned on the go
-    dfa.finvers = new tagver_t[ntags];
+    dfa.finvers = dfa.allocator.alloct<tagver_t>(ntags);
     for (size_t i = 0; i < ntags; ++i) {
-        dfa.finvers[i] = fixed(dfa.tags[i]) ? TAGVER_ZERO : ++dfa.maxtagver;
+        dfa.finvers[i] = fixed(ctx.tags[i]) ? TAGVER_ZERO : ++dfa.maxtagver;
     }
 
     // mark tags with history (initial and final)
     for (size_t i = 0; i < ntags; ++i) {
-        if (history(dfa.tags[i])) {
+        if (history(ctx.tags[i])) {
             tagver_t v = static_cast<tagver_t>(i) + 1, f = dfa.finvers[i];
             if (f != TAGVER_ZERO) {
                 dfa.mtagvers.insert(f);
@@ -177,8 +181,8 @@ void warn_nondeterministic_tags(const ctx_t& ctx) {
 
     Warn& warn = ctx.dc_msg.warn;
     const kernels_t& kernels = ctx.dc_kernels;
-    const std::vector<Tag>& tags = ctx.dfa.tags;
-    const std::vector<Rule>& rules = ctx.dfa.rules;
+    const std::vector<Tag>& tags = ctx.tags;
+    const std::vector<Rule>& rules = ctx.rules;
 
     const size_t ntag = tags.size();
     const size_t nkrn = kernels.size();
@@ -219,18 +223,26 @@ void warn_nondeterministic_tags(const ctx_t& ctx) {
 
 template<typename history_t>
 determ_context_t<history_t>::determ_context_t(
-    const opt_t* opts, Msg& msg, const std::string& condname, const nfa_t& nfa, dfa_t& dfa)
+        nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond)
     : dc_opts(opts),
       dc_msg(msg),
-      dc_condname(condname),
-      nfa(nfa),
+      dc_condname(cond),
+
+      // Move ownership of common data from TNFA to determinization context.
+      nfa_states(nfa.states),
+      nfa_root(nfa.root),
+      charset(std::move(nfa.charset)),
+      rules(std::move(nfa.rules)),
+      tags(std::move(nfa.tags)),
+
       dfa(dfa),
+
       dc_allocator(),
       dc_origin(dfa_t::NIL),
       dc_target(dfa_t::NIL),
       dc_symbol(0),
       dc_actions(nullptr),
-      dc_tagvertbl(nfa.tags.size()),
+      dc_tagvertbl(tags.size()),
       history(),
       dc_kernels(),
       kernels_total(0),
@@ -258,9 +270,10 @@ determ_context_t<history_t>::determ_context_t(
       dump_dfa_tree(*this),
       dc_dump(opts),
       dc_clstats() {
+    nfa.states = nullptr; // move ownership to determinization context
     const size_t nstates = nfa.size;
     const size_t ncores = nfa.ncores;
-    const size_t ntags = nfa.tags.size();
+    const size_t ntags = tags.size();
 
     reach.reserve(nstates);
     state.reserve(nstates);
@@ -289,6 +302,7 @@ determ_context_t<history_t>::determ_context_t(
 
 template<typename history_t>
 determ_context_t<history_t>::~determ_context_t() {
+    delete[] nfa_states;
     delete[] newprectbl;
     delete[] histlevel;
 }
@@ -301,9 +315,9 @@ template uint32_t init_tag_versions<pdetctx_t>(pdetctx_t& ctx);
 template determ_context_t<lhistory_t>::~determ_context_t();
 template determ_context_t<phistory_t>::~determ_context_t();
 template determ_context_t<lhistory_t>::determ_context_t(
-        const opt_t*, Msg&, const std::string&, const nfa_t&, dfa_t&);
+        nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
 template determ_context_t<phistory_t>::determ_context_t(
-        const opt_t*, Msg&, const std::string&, const nfa_t&, dfa_t&);
+        nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
 
 } // namespace re2c
 

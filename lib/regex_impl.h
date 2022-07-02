@@ -55,6 +55,8 @@ struct simctx_t {
     const size_t nsub;
     const int flags;
 
+    const std::vector<Tag>& tags;
+
     history_t history;
     int32_t hidx;
 
@@ -189,6 +191,7 @@ simctx_t<history_t>::simctx_t(const nfa_t& nfa, const nfa_t* nfa0, size_t re_nsu
       nfa0(nfa0),
       nsub(2 * (re_nsub - 1)),
       flags(flags),
+      tags(nfa.tags),
       history(),
       hidx(HROOT),
       step(0),
@@ -265,9 +268,6 @@ simctx_t<history_t>::~simctx_t() {
         delete[] histlevel;
     }
     if (flags & REG_BACKWARD) {
-        delete &nfa0->charset;
-        delete &nfa0->rules;
-        delete &nfa0->tags;
         delete nfa0;
     }
 }

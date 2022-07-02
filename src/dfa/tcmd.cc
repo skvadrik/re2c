@@ -97,7 +97,7 @@ tcmd_t** tcmd_t::topsort(tcmd_t** phead, tcmd_t* end, uint32_t* indeg) {
     return *ptail == end ? nullptr : ptail;
 }
 
-tcpool_t::tcpool_t(): alc(), index() {
+tcpool_t::tcpool_t(Allocator& alc): alc(alc), index() {
     // empty command must have static number zero
     insert(nullptr);
     DASSERT(TCID0 == insert(nullptr));

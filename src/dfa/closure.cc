@@ -115,7 +115,7 @@ void prune(ctx_t& ctx) {
 
         // mark dropped rules as shadowed
         if (ctx.dc_msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
-            std::vector<Rule>& rules = ctx.nfa.rules;
+            std::vector<Rule>& rules = ctx.rules;
             const uint32_t l = rules[f->state->rule].semact->loc.line;
             for (const clos_t& c : closure) {
                 if (&c != f && c.state->kind == nfa_state_t::Kind::FIN) {
@@ -131,7 +131,7 @@ void prune(ctx_t& ctx) {
 template<typename ctx_t>
 void generate_versions(ctx_t& ctx) {
     dfa_t& dfa = ctx.dfa;
-    const std::vector<Tag>& tags = dfa.tags;
+    const std::vector<Tag>& tags = ctx.tags;
     const size_t ntag = tags.size();
     tagver_t& maxver = dfa.maxtagver;
     tagver_table_t& tvtbl = ctx.dc_tagvertbl;

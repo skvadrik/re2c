@@ -64,8 +64,13 @@ class slab_allocator_t {
         return static_cast<data_t*>(alloc(n * sizeof(data_t)));
     }
 
+    slab_allocator_t(slab_allocator_t&&) = default;
+    slab_allocator_t& operator=(slab_allocator_t&&) = default;
     FORBID_COPY(slab_allocator_t);
 };
+
+// default allocator type uses maximum alignment
+using Allocator = slab_allocator_t<16 * 4096, sizeof(void*)>;
 
 template<typename T, uint32_t SLAB_SIZE = 4096>
 class fixed_allocator_t {

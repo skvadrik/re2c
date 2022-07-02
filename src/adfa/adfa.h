@@ -77,10 +77,22 @@ struct State {
 };
 
 struct DFA {
-    uniq_vector_t<AcceptTrans> accepts;
+    Allocator allocator;
+    std::vector<uint32_t> charset;
+    std::vector<Rule> rules;
+    std::vector<Tag> tags;
+    std::set<tagver_t> mtagvers;
+    tcpool_t tcpool;
+    const tagver_t* finvers;
+    tagver_t maxtagver;
+
     const loc_t loc;
     const std::string name;
     const std::string cond;
+    Msg& msg;
+
+    uniq_vector_t<AcceptTrans> accepts;
+
     uint32_t lbChar;
     uint32_t ubChar;
     uint32_t nStates;
@@ -88,33 +100,29 @@ struct DFA {
     State* defstate;
     State* eof_state;
     std::vector<State*> finstates;
-    std::vector<uint32_t>& charset;
-    std::vector<Rule>& rules;
-    std::vector<Tag>& tags;
-    std::set<tagver_t>& mtagvers;
+
     std::set<std::string> stagnames;
     std::set<std::string> stagvars;
     std::set<std::string> mtagnames;
     std::set<std::string> mtagvars;
-    const tagver_t* finvers;
-    tcpool_t& tcpool;
-    size_t max_fill;
-    size_t max_nmatch;
-    bool need_backup;
-    bool need_accept;
-    bool oldstyle_ctxmarker;
-    tagver_t maxtagver;
+
     const size_t def_rule;
     const size_t eof_rule;
     const size_t key_size;
+    size_t max_fill;
+    size_t max_nmatch;
+
+    bool need_backup;
+    bool need_accept;
+    bool oldstyle_ctxmarker;
+
     CodeBitmap* bitmap;
     std::string setup;
-    Msg& msg;
 
     Label* start_label;
     Label* initial_label;
 
-    DFA(const dfa_t& dfa,
+    DFA(dfa_t&& dfa,
         const std::vector<size_t>& fill,
         size_t key,
         const loc_t& loc,
@@ -123,6 +131,7 @@ struct DFA {
         const std::string& su,
         const opt_t* opts,
         Msg& msg);
+
     ~DFA ();
     void reorder();
     void prepare(const opt_t* opts);

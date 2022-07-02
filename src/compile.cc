@@ -49,25 +49,27 @@ static std::string make_name(Output& output, const std::string& cond, const loc_
     return name;
 }
 
-LOCAL_NODISCARD(Ret ast_to_dfa(const spec_t& spec, Output& output, DFA*& adfa)) {
+LOCAL_NODISCARD(Ret ast_to_dfa(const spec_t& spec, Output& output, dfas_t& dfas)) {
     OutputBlock& block = output.block();
     const opt_t* opts = block.opts;
     const loc_t& loc = block.loc;
     Msg& msg = output.msg;
-    const std::vector<AstRule>& rules = spec.rules;
+    const std::vector<AstRule>& ast = spec.rules;
     const std::string&cond = spec.name;
     const std::string name = make_name(output, cond, loc);
     const std::string& setup = spec.setup.empty() ? "" : spec.setup[0]->text;
 
     RangeMgr rangemgr;
 
-    RESpec re(rules, opts, msg, rangemgr);
-    CHECK_RET(re.init(rules));
+    // Build a mutable tree representation of a regexp from an immutable AST.
+    RESpec re(opts, msg, rangemgr);
+    CHECK_RET(re.init(ast));
     split_charset(re);
     find_fixed_tags(re);
     insert_default_tags(re);
     warn_nullable(re, cond);
 
+    // Transform regexp to TNFA.
     size_t nfa_size, nfa_depth;
     compute_size_and_depth(re.res, &nfa_size, &nfa_depth);
     if (nfa_depth > MAX_NFA_DEPTH) {
@@ -75,12 +77,12 @@ LOCAL_NODISCARD(Ret ast_to_dfa(const spec_t& spec, Output& output, DFA*& adfa)) 
     } else if (nfa_size > MAX_NFA_STATES) {
         RET_FAIL(error("NFA has too many states"));
     }
-
-    nfa_t nfa(re, nfa_size);
+    nfa_t nfa(std::move(re), nfa_size);
     DDUMP_NFA(opts, nfa);
 
-    dfa_t dfa(nfa, spec.def_rule, spec.eof_rule);
-    CHECK_RET(determinization(nfa, dfa, opts, msg, cond));
+    // Transmorm TNFA to TDFA.
+    dfa_t dfa(nfa.charset.size(), spec.def_rule, spec.eof_rule);
+    CHECK_RET(determinization(std::move(nfa), dfa, opts, msg, cond));
     DDUMP_DFA_DET(opts, dfa);
 
     rangemgr.clear();
@@ -111,8 +113,10 @@ LOCAL_NODISCARD(Ret ast_to_dfa(const spec_t& spec, Output& output, DFA*& adfa)) 
     std::vector<size_t> fill;
     fillpoints(dfa, fill);
 
-    // ADFA stands for 'DFA with actions'
-    adfa = new DFA(dfa, fill, skeleton.sizeof_key, loc, name, cond, setup, opts, msg);
+    // Transform TDFA to ADFA (DFA with actions, tunnel automaton).
+    DFA* adfa = new DFA(
+            std::move(dfa), fill, skeleton.sizeof_key, loc, name, cond, setup, opts, msg);
+    dfas.push_back(std::unique_ptr<DFA>(adfa));
 
     // see note [reordering DFA states]
     adfa->reorder();
@@ -185,9 +189,7 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
             // compile AST to DFA
             dfas_t dfas;
             for (const spec_t& spec : specs) {
-                DFA* dfa;
-                CHECK_RET(ast_to_dfa(spec, output, dfa));
-                dfas.push_back(std::unique_ptr<DFA>(dfa));
+                CHECK_RET(ast_to_dfa(spec, output, dfas));
             }
 
             // compile DFA to code

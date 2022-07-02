@@ -23,7 +23,7 @@ static bool is_eof(const opt_t* opts, uint32_t ub) {
     return opts->eof != NOEOF && static_cast<uint32_t>(opts->eof) == ub;
 }
 
-DFA::DFA(const dfa_t& dfa,
+DFA::DFA(dfa_t&& dfa,
          const std::vector<size_t>& fill,
          size_t key,
          const loc_t& loc,
@@ -32,41 +32,52 @@ DFA::DFA(const dfa_t& dfa,
          const std::string& su,
          const opt_t* opts,
          Msg& msg)
-    : accepts(),
+    : // Move ownership from TDFA to ADFA.
+      allocator(std::move(dfa.allocator)),
+      charset(std::move(dfa.charset)),
+      rules(std::move(dfa.rules)),
+      tags(std::move(dfa.tags)),
+      mtagvers(std::move(dfa.mtagvers)),
+      tcpool(std::move(dfa.tcpool)),
+      finvers(dfa.finvers),
+      maxtagver(dfa.maxtagver),
+
       loc(loc),
       name(nm),
       cond(cn),
+      msg(msg),
+
+      accepts(),
+
       lbChar(0),
-      ubChar(dfa.charset.back()),
+      ubChar(charset.back()),
       nStates(0),
       head(nullptr),
       defstate(nullptr),
       eof_state(nullptr),
-      finstates(dfa.rules.size(), nullptr),
-      charset(dfa.charset),
-      rules(dfa.rules),
-      tags(dfa.tags),
-      mtagvers(dfa.mtagvers),
+      finstates(rules.size(), nullptr),
+
       stagnames(),
       stagvars(),
       mtagnames(),
       mtagvars(),
-      finvers(dfa.finvers),
-      tcpool(dfa.tcpool),
-      max_fill(0),
-      max_nmatch(0),
-      need_backup(false),
-      need_accept(false),
-      oldstyle_ctxmarker(false),
-      maxtagver(dfa.maxtagver),
+
       def_rule(dfa.def_rule),
       eof_rule(dfa.eof_rule),
       key_size(key),
+      max_fill(0),
+      max_nmatch(0),
+
+      need_backup(false),
+      need_accept(false),
+      oldstyle_ctxmarker(false),
+
       bitmap(nullptr),
       setup(su),
-      msg(msg),
+
       start_label(nullptr),
       initial_label(nullptr) {
+
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;
 
@@ -124,13 +135,6 @@ DFA::~DFA() {
         head = s->next;
         delete s;
     }
-
-    delete &charset;
-    delete &rules;
-    delete &tags;
-    delete &mtagvers;
-    delete[] finvers;
-    delete &tcpool;
 }
 
 // note [reordering DFA states]

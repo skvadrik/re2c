@@ -45,14 +45,15 @@ struct RESpec {
     RE::alc_t alc;
     RangeMgr& rangemgr;
     std::vector<RE*> res;
-    std::vector<uint32_t>& charset;
-    std::vector<Tag>& tags;
-    std::vector<Rule>& rules;
+    std::vector<uint32_t> charset;
+    std::vector<Tag> tags;
+    std::vector<Rule> rules;
     const opt_t* opts;
     Msg& msg;
 
-    RESpec(const std::vector<AstRule>& ast, const opt_t* o, Msg& msg, RangeMgr& rm);
+    RESpec(const opt_t* opts, Msg& msg, RangeMgr& rangemgr);
     Ret init(const std::vector<AstRule>& ast) NODISCARD;
+
     FORBID_COPY(RESpec);
 };
 

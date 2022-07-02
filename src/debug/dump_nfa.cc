@@ -13,8 +13,8 @@
 
 namespace re2c {
 
-uint32_t index(const nfa_t& nfa, const nfa_state_t* s) {
-    return static_cast<uint32_t>(s - nfa.states);
+uint32_t dist(const nfa_state_t* s0, const nfa_state_t* s) {
+    return static_cast<uint32_t>(s - s0);
 }
 
 void dump_nfa(const nfa_t& nfa) {
@@ -35,11 +35,11 @@ void dump_nfa(const nfa_t& nfa) {
 
         switch (n->kind) {
         case nfa_state_t::Kind::ALT:
-            fprintf(stderr, "  n%u -> n%u\n", i, index(nfa, n->alt.out1));
-            fprintf(stderr, "  n%u -> n%u [color=lightgray]\n", i, index(nfa, n->alt.out2));
+            fprintf(stderr, "  n%u -> n%u\n", i, dist(nfa.states, n->alt.out1));
+            fprintf(stderr, "  n%u -> n%u [color=lightgray]\n", i, dist(nfa.states, n->alt.out2));
             break;
         case nfa_state_t::Kind::RAN: {
-            fprintf(stderr, "  n%u -> n%u [label=\"", i, index(nfa, n->ran.out));
+            fprintf(stderr, "  n%u -> n%u [label=\"", i, dist(nfa.states, n->ran.out));
             for (const Range* r = n->ran.ran; r; r = r->next()) {
                 const uint32_t
                 l = r->lower(),
@@ -53,7 +53,7 @@ void dump_nfa(const nfa_t& nfa) {
         }
         case nfa_state_t::Kind::TAG: {
             const Tag& tag = nfa.tags[n->tag.info.idx];
-            fprintf(stderr, "  n%u -> n%u [label=\"/", i, index(nfa, n->tag.out));
+            fprintf(stderr, "  n%u -> n%u [label=\"/", i, dist(nfa.states, n->tag.out));
             dump_tag(tag, n->tag.info.neg);
             fprintf(stderr, "(%d)", tag.height);
             fprintf(stderr, "\"]\n");

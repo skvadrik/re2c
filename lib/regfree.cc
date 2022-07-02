@@ -22,11 +22,6 @@ using namespace re2c::libre2c;
 void regfree(regex_t* preg) {
     delete preg->rmgr;
 
-    delete &preg->nfa->charset;
-    delete &preg->nfa->rules;
-    delete &preg->nfa->tags;
-    delete preg->nfa;
-
     if (preg->flags & REG_TSTRING) {
         delete[] preg->tstring.string;
     } else if (preg->flags & REG_SUBHIST) {
@@ -36,6 +31,7 @@ void regfree(regex_t* preg) {
     }
 
     if (preg->flags & REG_NFA) {
+        delete preg->nfa;
         if ((preg->flags & REG_TRIE) && (preg->flags & REG_LEFTMOST)) {
             delete static_cast<lzsimctx_t*>(preg->simctx);
         } else if (preg->flags & REG_TRIE) {
@@ -48,25 +44,24 @@ void regfree(regex_t* preg) {
             delete static_cast<psimctx_t*>(preg->simctx);
         }
     } else {
-        delete[] preg->char2class;
-        delete[] preg->dfa->finvers;
-
-        delete &preg->dfa->mtagvers;
-        delete &preg->dfa->tcpool;
-        delete preg->dfa;
-
         if (preg->flags & REG_REGLESS) {
             delete preg->rldfa->opts;
             delete[] preg->rldfa->result;
             delete preg->rldfa;
-        }
-        if (preg->flags & REG_TSTRING) {
-            // t-string construction does not use this
-        } else if (preg->flags & REG_SUBHIST) {
-            delete preg->regtrie;
+            if (preg->flags & REG_SUBHIST) {
+                delete preg->regtrie;
+            }
         } else {
-            delete[] preg->regs;
+            delete preg->dfa;
+            if (preg->flags & REG_TSTRING) {
+                // t-string construction does not use this
+            } else if (preg->flags & REG_SUBHIST) {
+                delete preg->regtrie;
+            } else {
+                delete[] preg->regs;
+            }
         }
+        delete[] preg->char2class;
     }
 }
 

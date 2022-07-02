@@ -120,14 +120,21 @@ struct determ_context_t {
     using history_t = history_type_t;
     using newvers_t = std::map<newver_t, tagver_t, newver_cmp_t<history_t>>;
 
-    // determinization input
     const opt_t* dc_opts;           // options
     Msg& dc_msg;                    // error messages and warnings
     const std::string& dc_condname; // the name of current condition (with -c)
-    const nfa_t& nfa;               // TNFA
 
-    // determinization output
-    dfa_t& dfa; // the resulting TDFA
+    // determinization input: TNFA
+    nfa_state_t* nfa_states;
+    nfa_state_t* nfa_root;
+
+    // common data shared by all representations 
+    std::vector<uint32_t> charset;
+    std::vector<Rule> rules;
+    std::vector<Tag> tags;
+
+    // determinization output: TDFA
+    dfa_t& dfa;
 
     // temporary structures used by determinization
     allocator_t dc_allocator;
@@ -170,7 +177,7 @@ struct determ_context_t {
     dump_dfa_t dc_dump;
     closure_stats_t dc_clstats;
 
-    determ_context_t(const opt_t*, Msg&, const std::string&, const nfa_t&, dfa_t&);
+    determ_context_t(nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg&, const std::string& cond);
     ~determ_context_t();
     FORBID_COPY(determ_context_t);
 };

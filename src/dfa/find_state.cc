@@ -163,20 +163,19 @@ bool do_find_state(ctx_t& ctx) {
 
 template<typename ctx_t>
 tcmd_t* final_actions(ctx_t& ctx, const clos_t& fin) {
-    dfa_t& dfa = ctx.dfa;
-    const Rule& rule = dfa.rules[fin.state->rule];
+    const Rule& rule = ctx.rules[fin.state->rule];
     const tagver_t* vers = ctx.dc_tagvertbl[fin.tvers];
     const hidx_t look = fin.thist;
     const typename ctx_t::history_t& thist = ctx.history;
-    tcpool_t& tcpool = dfa.tcpool;
+    tcpool_t& tcpool = ctx.dfa.tcpool;
     tcmd_t* copy = nullptr, *save = nullptr, **p;
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
-        const Tag& tag = dfa.tags[t];
+        const Tag& tag = ctx.tags[t];
         if (fixed(tag)) continue;
 
         const tagver_t v = abs(vers[t]), l = last(thist, look, t);
-        tagver_t& f = dfa.finvers[t];
+        tagver_t& f = ctx.dfa.finvers[t];
         if (l == TAGVER_ZERO) {
             copy = tcpool.make_copy(copy, f, v);
         } else if (history(tag)) {
@@ -394,7 +393,7 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t* x, const kernel_t*
 
     if (!compatible) return false;
 
-    const std::vector<Tag>& tags = ctx.dfa.tags;
+    const std::vector<Tag>& tags = ctx.tags;
     const size_t ntag = tags.size();
     kernel_buffers_t& bufs = ctx.dc_buffers;
     tagver_t* x2y = bufs.x2y, *y2x = bufs.y2x, max = bufs.max;

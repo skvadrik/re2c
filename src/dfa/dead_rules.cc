@@ -135,7 +135,7 @@ static void liveness_analyses(const rdfa_t& rdfa, bool* live) {
     }
 }
 
-static void warn_dead_rules(const dfa_t& dfa, const std::string& cond, const bool* live, Msg& msg) {
+static void warn_dead_rules(dfa_t& dfa, const std::string& cond, const bool* live, Msg& msg) {
     const size_t nstates = dfa.states.size();
     const size_t nrules = dfa.rules.size();
 

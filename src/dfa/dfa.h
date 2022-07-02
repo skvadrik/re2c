@@ -11,6 +11,7 @@
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/allocator.h"
 #include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
@@ -51,30 +52,27 @@ struct dfa_state_t {
 struct dfa_t {
     static constexpr uint32_t NIL = ~0u;
 
+    Allocator allocator;
     std::vector<dfa_state_t*> states;
     const size_t nchars;
-    std::vector<uint32_t>& charset;
-    std::vector<Rule>& rules;
-    std::vector<Tag>& tags;
-    std::set<tagver_t>& mtagvers;
+    std::vector<uint32_t> charset;
+    std::vector<Rule> rules;
+    std::vector<Tag> tags;
+    std::set<tagver_t> mtagvers;
     tagver_t* finvers;
-    tcpool_t& tcpool;
+    tcpool_t tcpool;
     tagver_t maxtagver;
     size_t def_rule;
     size_t eof_rule;
 
-    dfa_t(const nfa_t& nfa, size_t def_rule, size_t eof_rule);
+    dfa_t(size_t charset_bounds, size_t def_rule, size_t eof_rule);
     ~dfa_t();
 
     FORBID_COPY(dfa_t);
 };
 
-Ret determinization(const nfa_t& nfa,
-                    dfa_t& dfa,
-                    const opt_t* opts,
-                    Msg& msg,
-                    const std::string& cond) NODISCARD;
-
+Ret determinization(
+        nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond) NODISCARD;
 void minimization(dfa_t& dfa, Minimization type);
 void fillpoints(const dfa_t& dfa, std::vector<size_t>& fill);
 void cutoff_dead_rules(dfa_t& dfa, const opt_t* opts, const std::string& cond, Msg& msg);

@@ -30,14 +30,13 @@ using tcid_t = uint32_t;
 static constexpr tcid_t TCID0 = 0;
 
 class tcpool_t {
-    using alc_t = slab_allocator_t<4096, sizeof(void*)>;
     using index_t = lookup_t<const tcmd_t*>;
 
-    alc_t alc;
+    Allocator& alc;
     index_t index;
 
   public:
-    tcpool_t();
+    explicit tcpool_t(Allocator& alc);
     tcmd_t* make_copy(tcmd_t* next, tagver_t lhs, tagver_t rhs);
     tcmd_t* make_set(tcmd_t* next, tagver_t lhs, tagver_t set);
     template<typename history_t> tcmd_t* make_add(tcmd_t* next,

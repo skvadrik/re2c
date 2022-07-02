@@ -76,7 +76,7 @@ template<typename ctx_t>
 void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t>& path,
                                        const std::vector<uint32_t>& syms,
                                        bool loop) {
-    const nfa_t& nfa = ctx.nfa;
+    const nfa_state_t* s0 = ctx.nfa_states;
     const typename ctx_t::history_t& history = ctx.history;
     const kernels_t& kernels = ctx.dc_kernels;
     std::set<const nfa_state_t*> active, active2;
@@ -116,7 +116,7 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t>& path,
             fprintf(stderr,
                     "  nx%u_%u_%u"
                     " [label=\"s%u\" style=\"rounded,filled\" bgcolor=lightgray]\n",
-                    targetx, k, index(nfa, s), index(nfa, s));
+                    targetx, k, dist(s0, s), dist(s0, s));
         }
 
         used.clear();
@@ -132,10 +132,10 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t>& path,
                 const origmap_t::key_type key = std::make_pair(origin, symbol);
                 const nfa_state_t* y = origmap[key].at(i);
                 active2.insert(y);
-                fprintf(stderr, "  nx%u_%u_%u", targetx, k - 1, index(nfa, y));
+                fprintf(stderr, "  nx%u_%u_%u", targetx, k - 1, dist(s0, y));
             }
             dump_history2(history, used, kernel->thist[i], targetx, hidxbase);
-            fprintf(stderr, "->nx%u_%u_%u\n", targetx, k, index(nfa, x));
+            fprintf(stderr, "->nx%u_%u_%u\n", targetx, k, dist(s0, x));
         }
 
         active.swap(active2);
@@ -217,7 +217,7 @@ template<typename ctx_t>
 void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
     if (!ctx.dc_opts->dump_dfa_tree) return;
 
-    const nfa_t& nfa = ctx.nfa;
+    const nfa_state_t* s0 = ctx.nfa_states;
     const uint32_t origin = ctx.dc_origin;
     const uint32_t target = ctx.dc_target;
     const uint32_t targetx = isnew ? target : ++uniqidx;
@@ -244,7 +244,7 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
     for (const clos_t& c : ctx.state) {
         fprintf(stderr,
                 "    n%u_%u [label=\"s%u\" style=\"rounded,filled\" bgcolor=lightgray]\n",
-                targetx, index(nfa, c.state), index(nfa, c.state));
+                targetx, dist(s0, c.state), dist(s0, c.state));
     }
     fprintf(stderr, "   }\n");
     fprintf(stderr, "   style=\"rounded%s\"\n", isnew ? "" : ",dotted");
@@ -254,14 +254,10 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
         if (origin == dfa_t::NIL) {
             fprintf(stderr, "   void");
         } else {
-            fprintf(stderr,
-                    "   n%u_%u",
-                    origin, index(nfa, ctx.dc_kernels[origin]->state[c.origin]));
+            fprintf(stderr, "   n%u_%u", origin, dist(s0, ctx.dc_kernels[origin]->state[c.origin]));
         }
         dump_history1(ctx.history, used_nodes, c.thist);
-        fprintf(stderr,
-                "->n%u_%u%s\n",
-                targetx, index(nfa, c.state), isnew ? "" : " [style=dotted]");
+        fprintf(stderr, "->n%u_%u%s\n", targetx, dist(s0, c.state), isnew ? "" : " [style=dotted]");
     }
 
     // end cluster for the current tag history tree

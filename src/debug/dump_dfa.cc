@@ -19,7 +19,7 @@
 namespace re2c {
 
 template<typename ctx_t>
-static void dump_history(const dfa_t&, const typename ctx_t::history_t&, hidx_t);
+static void dump_history(const std::vector<Tag>&, const typename ctx_t::history_t&, hidx_t);
 template<typename ctx_t>
 static void dump_tags(const tagver_table_t&, const typename ctx_t::history_t&, hidx_t, uint32_t);
 static void dump_tcmd_or_tcid(tcmd_t* const*, const tcid_t*, size_t, const tcpool_t&);
@@ -73,18 +73,18 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     for (const clos_t& c : ctx.state) {
         fprintf(stderr,
                 "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u",
-                i, style, static_cast<uint32_t>(c.state - ctx.nfa.states));
+                i, style, dist(ctx.nfa_states, c.state));
 
         if (c.tvers != ZERO_TAGS) {
             const tagver_t* vers = tvtbl[c.tvers];
-            const size_t ntag = dfa.tags.size();
+            const size_t ntag = ctx.tags.size();
 
             for (size_t t = 0; t < ntag; ++t) {
-                fprintf(stderr, " %s%d", tagname(dfa.tags[t]), abs(vers[t]));
+                fprintf(stderr, " %s%d", tagname(ctx.tags[t]), abs(vers[t]));
             }
 
             if (c.thist != HROOT) {
-                dump_history<ctx_t>(dfa, thist, c.thist);
+                dump_history<ctx_t>(ctx.tags, thist, c.thist);
             }
         }
 
@@ -132,7 +132,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     // if final state, dump finalizer
     const dfa_state_t* t = dfa.states[target];
     if (t->rule != Rule::NONE) {
-        const Rule& r = dfa.rules[t->rule];
+        const Rule& r = ctx.rules[t->rule];
         const tcmd_t* cmd = t->tcmd[dfa.nchars];
 
         // see note [at most one final item per closure]
@@ -142,7 +142,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
         fprintf(stderr, "  r%u [shape=none label=\"(", state);
         for (size_t j = r.ltag; j < r.htag; ++j) {
             if (j > r.ltag) fprintf(stderr, " ");
-            fprintf(stderr, "%s%d", tagname(dfa.tags[j]), abs(dfa.finvers[j]));
+            fprintf(stderr, "%s%d", tagname(ctx.tags[j]), abs(dfa.finvers[j]));
         }
         fprintf(stderr, ")\"]\n");
 
@@ -155,15 +155,15 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
 }
 
 template<typename ctx_t>
-void dump_history(const dfa_t& dfa, const typename ctx_t::history_t& h, hidx_t i) {
+void dump_history(const std::vector<Tag>& tags, const typename ctx_t::history_t& h, hidx_t i) {
     if (i == HROOT) {
         fprintf(stderr, " /");
         return;
     }
 
     const typename ctx_t::history_t::node_t& n = h.node(i);
-    dump_history<ctx_t>(dfa, h, n.pred);
-    dump_tag(dfa.tags[n.info.idx], n.info.neg);
+    dump_history<ctx_t>(tags, h, n.pred);
+    dump_tag(tags[n.info.idx], n.info.neg);
     fprintf(stderr, " ");
 }
 

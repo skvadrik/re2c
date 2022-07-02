@@ -37,7 +37,7 @@ int32_t phistory_t::precedence(ctx_t& ctx,
         return 0;
     }
 
-    const std::vector<Tag>& tags = ctx.nfa.tags;
+    const std::vector<Tag>& tags = ctx.tags;
     typename ctx_t::history_t& hist = ctx.history;
 
     const bool fork_frame = orig1 == orig2;
@@ -153,7 +153,7 @@ void compute_prectable_naive(ctx_t& ctx) {
 template<typename ctx_t>
 void compute_prectable_complex(ctx_t& ctx) {
     const typename ctx_t::confset_t& state = ctx.state;
-    const std::vector<Tag>& tags = ctx.nfa.tags;
+    const std::vector<Tag>& tags = ctx.tags;
     typename ctx_t::history_t& history = ctx.history;
 
     const prectable_t* oldtbl = ctx.oldprectbl;

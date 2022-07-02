@@ -52,7 +52,7 @@ struct rldfa_state_t {
 struct rldfa_t {
     const opt_t* opts;
     const int flags;
-    const std::vector<Tag>& tags;
+    std::vector<Tag> tags;
 
     allocator_t alc;
 
@@ -67,7 +67,7 @@ struct rldfa_t {
     // forward, and it is unknown until the final state which of them will match.
     mutable std::vector<const rldfa_backlink_t* const*> log;
 
-    rldfa_t(const nfa_t& nfa, dfa_t& dfa, const opt_t* opts, int flags);
+    rldfa_t(nfa_t&& nfa, const opt_t* opts, int flags);
     ~rldfa_t();
     FORBID_COPY(rldfa_t);
 };
@@ -144,11 +144,13 @@ static rldfa_backlink_t* construct_backlinks(const ctx_t& ctx,
 }
 
 template<typename ctx_t>
-static void determinization_regless(const nfa_t& nfa, dfa_t& dfa, rldfa_t& rldfa) {
+static void determinization_regless(nfa_t&& nfa, rldfa_t& rldfa) {
     Msg msg;
     // Determinization context lifetime must cover regexec, as some of the data stored in the
     // context is used during matching.
-    ctx_t ctx(rldfa.opts, msg, "", nfa, dfa);
+    dfa_t dfa(nfa.charset.size(), Rule::NONE, Rule::NONE);
+    ctx_t ctx(std::move(nfa), dfa, rldfa.opts, msg, "");
+
     std::vector<tchar_t> tfrag;
     // Per-state array of mappings from configuration index to a unique origin index. This is needed
     // to compress identical backlinks into one. Note that configurations with identical origin also
@@ -158,7 +160,7 @@ static void determinization_regless(const nfa_t& nfa, dfa_t& dfa, rldfa_t& rldfa
 
     // Construct initial TDFA state.
     const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
-    const clos_t c0(ctx.nfa.root, 0, INITIAL_TAGS, HROOT, HROOT);
+    const clos_t c0(ctx.nfa_root, 0, INITIAL_TAGS, HROOT, HROOT);
     ctx.reach.push_back(c0);
     closure(ctx);
     find_state_regless(ctx, rldfa, tfrag, uniq_orig);
@@ -168,7 +170,7 @@ static void determinization_regless(const nfa_t& nfa, dfa_t& dfa, rldfa_t& rldfa
     for (uint32_t i = 0; i < ctx.dc_kernels.size(); ++i) {
         ctx.dc_origin = i;
 
-        for (uint32_t c = 0; c < ctx.dfa.nchars; ++c) {
+        for (uint32_t c = 0; c < dfa.nchars; ++c) {
             reach_on_symbol(ctx, c);
             closure(ctx);
             find_state_regless(ctx, rldfa, tfrag, uniq_orig);
@@ -178,6 +180,8 @@ static void determinization_regless(const nfa_t& nfa, dfa_t& dfa, rldfa_t& rldfa
                     construct_backlinks(ctx, rldfa, tfrag, uniq_orig);
         }
     }
+
+    rldfa.tags = std::move(ctx.tags);
 }
 
 template<typename ctx_t>
@@ -186,7 +190,6 @@ static void find_state_regless(ctx_t& ctx,
                                std::vector<tchar_t>& tfrag,
                                std::vector<std::vector<uint32_t>>& uniq_orig) {
     const bool tstring = rldfa.flags & REG_TSTRING;
-    dfa_t& dfa = ctx.dfa;
 
     // Find or add the new state in the existing set of states.
     const bool is_new = do_find_state<ctx_t, true>(ctx);
@@ -220,7 +223,7 @@ static void find_state_regless(ctx_t& ctx,
         }
 
         // Create a new regless-DFA state.
-        rldfa_state_t* s = new rldfa_state_t(dfa.nchars, finlink);
+        rldfa_state_t* s = new rldfa_state_t(ctx.dfa.nchars, finlink);
         rldfa.states.push_back(s);
     }
 
@@ -243,18 +246,18 @@ inline rldfa_state_t::~rldfa_state_t() {
     delete[] arcs;
 }
 
-inline rldfa_t::rldfa_t(const nfa_t& nfa, dfa_t& dfa, const opt_t* opts, int flags)
+inline rldfa_t::rldfa_t(nfa_t&& nfa, const opt_t* opts, int flags)
     : opts(opts),
       flags(flags),
-      tags(nfa.tags),
+      tags(),
       alc(),
       states(),
       result(new regoff_t[nfa.tags.size()]),
       log() {
     if (opts->posix_semantics) {
-        determinization_regless<pdetctx_t>(nfa, dfa, *this);
+        determinization_regless<pdetctx_t>(std::move(nfa), *this);
     } else {
-        determinization_regless<ldetctx_t>(nfa, dfa, *this);
+        determinization_regless<ldetctx_t>(std::move(nfa), *this);
     }
 }
 

@@ -89,14 +89,16 @@ struct nfa_state_t {
 struct nfa_t {
     size_t max_size;
     size_t size;
-    nfa_state_t* states;
-    std::vector<uint32_t>& charset;
-    std::vector<Rule>& rules;
-    std::vector<Tag>& tags;
-    nfa_state_t* root;
     uint32_t ncores;
 
-    nfa_t(const RESpec& spec, size_t max_size);
+    nfa_state_t* states;
+    nfa_state_t* root;
+
+    std::vector<uint32_t> charset;
+    std::vector<Rule> rules;
+    std::vector<Tag> tags;
+
+    nfa_t(RESpec&& spec, size_t max_size);
     ~nfa_t();
 
     FORBID_COPY(nfa_t);

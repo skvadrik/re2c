@@ -166,15 +166,19 @@ static uint32_t stats(nfa_state_t* root) {
     return ncores;
 }
 
-nfa_t::nfa_t(const RESpec& spec, size_t max_size)
+nfa_t::nfa_t(RESpec&& spec, size_t max_size)
     : max_size(max_size),
       size(0),
+      ncores(0),
+
       states(new nfa_state_t[max_size]),
-      charset(spec.charset),
-      rules(spec.rules),
-      tags(spec.tags),
       root(nullptr),
-      ncores(0) {
+
+      // Move ownership from regexp to TNFA.
+      charset(std::move(spec.charset)),
+      rules(std::move(spec.rules)),
+      tags(std::move(spec.tags)) {
+
     const size_t nre = spec.res.size();
 
     if (nre == 0) return;
