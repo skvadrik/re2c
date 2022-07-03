@@ -231,7 +231,6 @@ void closure_posix(psimctx_t& ctx) {
 static int32_t precedence(psimctx_t& ctx, const conf_t& x, const conf_t& y) {
     DCHECK(x.state == y.state); (void)y;
     const uint32_t idx = index(x.state, ctx.nfa);
-
     const size_t ntags = ctx.nfa.tags.size();
     const regoff_t* ox = offsets5 + ntags * idx * 2;
     const regoff_t* oy = offsets4 + ntags * idx * 2;
@@ -263,9 +262,8 @@ static int32_t precedence(psimctx_t& ctx, const conf_t& x, const conf_t& y) {
 
 void closure_posix_gor1(psimctx_t& ctx) {
     psimctx_t::confset_t& state = ctx.state, &reach = ctx.reach;
-    std::vector<nfa_state_t*>
-    & topsort = ctx.gor1_topsort,
-      &linear = ctx.gor1_linear;
+    std::vector<nfa_state_t*>& topsort = ctx.gor1_topsort;
+    std::vector<nfa_state_t*>& linear = ctx.gor1_linear;
     const size_t ntags = ctx.nfa.tags.size();
 
     state.clear();
@@ -513,9 +511,8 @@ void update_final_offsets(psimctx_t& ctx, const conf_t& c) {
 static void copy_offs(psimctx_t& ctx, const nfa_state_t* y, const nfa_state_t* x, tag_info_t info) {
     const std::vector<Tag>& tags = ctx.nfa.tags;
     const size_t ntags = tags.size();
-    const uint32_t
-    xidx = index(x, ctx.nfa),
-    yidx = index(y, ctx.nfa);
+    const uint32_t xidx = index(x, ctx.nfa);
+    const uint32_t yidx = index(y, ctx.nfa);
 
     if (D) fprintf(stderr, "copying offsets %u to %u ", yidx, xidx);
     prtoff4(ctx, yidx);
@@ -544,7 +541,7 @@ static void copy_offs(psimctx_t& ctx, const nfa_state_t* y, const nfa_state_t* x
             }
         }
 
-        if (D) fprintf(stderr, "setting offset %u[%u] to %ld\n", xidx, t, (long)ox[2 * t]);
+        if (D) fprintf(stderr, "setting offset %u[%u] to %td\n", xidx, t, ox[2 * t]);
     }
 }
 
@@ -566,10 +563,9 @@ static void prtoff(psimctx_t& ctx, uint32_t x, bool newer) {
     const size_t ntags = ctx.nfa.tags.size();
     const regoff_t* ox = (newer ? offsets5 : offsets4) + ntags * x * 2;
     for (size_t t = 0; t < ntags; t += 2) {
-        fprintf(stderr,
-                "(%ld,%ld)(%ld,%ld)",
-                (long)ox[2 * t],     (long)ox[2 * (t + 1)],
-                (long)ox[2 * t + 1], (long)ox[2 * (t + 1) + 1]);
+        fprintf(stderr, "(%td,%td)(%td,%td)",
+                ox[2 * t],     ox[2 * (t + 1)],
+                ox[2 * t + 1], ox[2 * (t + 1) + 1]);
     }
     fprintf(stderr, "\n");
 }

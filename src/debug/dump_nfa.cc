@@ -70,9 +70,9 @@ void dump_nfa(const nfa_t& nfa) {
 void dump_tag(const Tag& tag, bool negative) {
     if (capture(tag)) {
         for (size_t i = tag.lsub; i < tag.hsub; i += 2) {
-            fprintf(stderr, "%u,", (uint32_t)i);
+            fprintf(stderr, "%zu,", i);
         }
-        fprintf(stderr, "%u", (uint32_t)tag.hsub);
+        fprintf(stderr, "%zu", tag.hsub);
     } else if (!trailing(tag)) {
         fprintf(stderr, "%s", tag.name);
     }

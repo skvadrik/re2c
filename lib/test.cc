@@ -84,11 +84,12 @@ static int test(int flags,
             if (expect_so != actual.rm_so || expect_eo != actual.rm_eo) {
                 result = 1;
                 fprintf(stderr,
-                        "%s: incorrect submatch for RE %s and string %s:\n\tpmatch[%u].rm_so = %ld "
-                        "(expected %ld)\n\tpmatch[%u].rm_eo = %ld (expected %ld)\n",
+                        "%s: incorrect submatch for RE %s and string %s:\n"
+                        "\tpmatch[%u].rm_so = %td (expected %td)\n"
+                        "\tpmatch[%u].rm_eo = %td (expected %td)\n",
                         prefix, pattern, string,
-                        i, (long)actual.rm_so, (long)expect_so,
-                        i, (long)actual.rm_eo, (long)expect_eo);
+                        i, actual.rm_so, expect_so,
+                        i, actual.rm_eo, expect_eo);
                 goto end;
             }
         } else {
@@ -98,7 +99,7 @@ static int test(int flags,
                 result = 1;
                 fprintf(stderr,
                         "%s: wrong subhistory-%u length for RE %s and string %s: "
-                        "expected %lu, have %lu\n",
+                        "expected %zd, have %zd\n",
                         prefix, i, pattern, string, expect_size, actual_history.size);
                 goto end;
             }
@@ -110,11 +111,11 @@ static int test(int flags,
                     result = 1;
                     fprintf(stderr,
                             "%s: incorrect submatch for RE %s and string %s:\n"
-                            "\tpmatch[%u][%u].rm_so = %ld (expected %ld)\n"
-                            "\tpmatch[%u][%u].rm_eo = %ld (expected %ld)\n",
+                            "\tpmatch[%u][%u].rm_so = %td (expected %td)\n"
+                            "\tpmatch[%u][%u].rm_eo = %td (expected %td)\n",
                             prefix, pattern, string,
-                            i, j, (long)actual.rm_so, (long)expect_so,
-                            i, j, (long)actual.rm_eo, (long)expect_eo);
+                            i, j, actual.rm_so, expect_so,
+                            i, j, actual.rm_eo, expect_eo);
                     goto end;
                 }
             }

@@ -113,8 +113,8 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
             const dfa_state_t* o = dfa.states[origin];
             fprintf(stderr,
                     "  i%u [style=dotted]\n"
-                    "  i%u:s -> %u:s [style=dotted label=\"",
-                    state, state, static_cast<uint32_t>(o->arcs[symbol]));
+                    "  i%u:s -> %zu:s [style=dotted label=\"",
+                    state, state, o->arcs[symbol]);
             dump_tcmd(o->tcmd[symbol]);
             fprintf(stderr, "\"]\n");
         }
@@ -147,9 +147,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
         }
         fprintf(stderr, ")\"]\n");
 
-        fprintf(stderr,
-                "  %u:%u:e -> r%u [style=dotted label=\"",
-                state, static_cast<uint32_t>(c - b), state);
+        fprintf(stderr, "  %u:%td:e -> r%u [style=dotted label=\"", state, c - b, state);
         dump_tcmd(cmd);
         fprintf(stderr, "\"]\n");
     }
@@ -216,7 +214,7 @@ void dump_dfa(const dfa_t& dfa) {
         for (uint32_t c = 0; c < nsym; ++c) {
             const size_t j = s->arcs[c];
             if (j != dfa_t::NIL) {
-                fprintf(stderr, "  n%u -> n%u [label=\"%u", i, static_cast<uint32_t>(j), c);
+                fprintf(stderr, "  n%u -> n%zu [label=\"%u", i, j, c);
                 dump_tcmd_or_tcid(s->tcmd, s->tcid, c, dfa.tcpool);
                 fprintf(stderr, "\"]\n");
             }
@@ -297,8 +295,8 @@ void dump_clstats(const ctx_t& ctx) {
     const closure_stats_t& cs = ctx.dc_clstats;
     if (ctx.dc_opts->dump_closure_stats) {
         fprintf(stderr,
-                "scans: %-10u prec: %-10u length: %-10lu\n",
-                cs.nscans, cs.nprec, (unsigned long)cs.length);
+                "scans: %-10u prec: %-10u length: %-10zu\n",
+                cs.nscans, cs.nprec, cs.length);
     }
 }
 

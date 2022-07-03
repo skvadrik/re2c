@@ -36,7 +36,7 @@ static void dump_history2(const history_t& history,
     if (idx == HROOT) return;
     used.insert(idx);
     dump_history2(history, used, history.node(idx).pred, target, base);
-    fprintf(stderr, "->hx%u_%d", static_cast<uint32_t>(target), idx + base);
+    fprintf(stderr, "->hx%zu_%d", target, idx + base);
 }
 
 static inline uint32_t hash4(uint32_t h, uint32_t k) {

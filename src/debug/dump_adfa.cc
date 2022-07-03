@@ -52,7 +52,7 @@ void dump_adfa(const DFA& dfa) {
         }
         fprintf(stderr, "  n%u [height=0.2 width=0.2 label=\"", st2idx[s]);
         if (s->fill && action != Action::Kind::MOVE) {
-            fprintf(stderr, "F(%u) ", (uint32_t)s->fill);
+            fprintf(stderr, "F(%zu) ", s->fill);
         }
         if (action == Action::Kind::RULE) {
             const Rule& r = dfa.rules[s->action.info.rule];
