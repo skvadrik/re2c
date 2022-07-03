@@ -35,7 +35,38 @@ void remove_empty(CodegenCtxPass2& ctx, Code* code) {
     case CodeKind::LOOP:
         remove_empty_list(ctx, code->loop);
         break;
-    default:
+    case CodeKind::LABEL:
+    case CodeKind::STAGS:
+    case CodeKind::MTAGS:
+    case CodeKind::MAXFILL:
+    case CodeKind::MAXNMATCH:
+    case CodeKind::YYCH:
+    case CodeKind::YYACCEPT:
+    case CodeKind::YYSTATE:
+    case CodeKind::COND_ENUM:
+    case CodeKind::COND_GOTO:
+    case CodeKind::COND_TABLE:
+    case CodeKind::STATE_GOTO:
+    case CodeKind::LINE_INFO_INPUT:
+    case CodeKind::LINE_INFO_OUTPUT:
+    case CodeKind::EMPTY:
+    case CodeKind::FUNC:
+    case CodeKind::STMT:
+    case CodeKind::TEXT:
+    case CodeKind::RAW:
+    case CodeKind::TEXT_RAW:
+    case CodeKind::SKIP:
+    case CodeKind::PEEK:
+    case CodeKind::BACKUP:
+    case CodeKind::PEEK_SKIP:
+    case CodeKind::SKIP_PEEK:
+    case CodeKind::SKIP_BACKUP:
+    case CodeKind::BACKUP_SKIP:
+    case CodeKind::BACKUP_PEEK:
+    case CodeKind::BACKUP_PEEK_SKIP:
+    case CodeKind::SKIP_BACKUP_PEEK:
+    case CodeKind::VAR:
+    case CodeKind::ABORT:
         break;
     }
 }
