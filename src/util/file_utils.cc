@@ -1,3 +1,6 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-macros"
+
 // See https://github.com/skvadrik/re2c/pull/376
 // _POSIX_SOURCE is needed for fdopen on Cygwin.
 #ifndef _POSIX_SOURCE
@@ -8,6 +11,8 @@
 #ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 200112L
 #endif
+
+#pragma GCC diagnostic pop
 
 #include "config.h"
 #include <time.h>
