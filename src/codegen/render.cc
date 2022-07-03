@@ -129,9 +129,8 @@ static const char* var_type_c(VarType type, const opt_t* opts) {
         return "unsigned int";
     case VarType::YYCTYPE:
         return opts->yyctype.c_str();
-    default:
-         return nullptr;
     }
+    return nullptr;
 }
 
 static const char* var_type_go(VarType type, const opt_t* opts) {
@@ -142,9 +141,8 @@ static const char* var_type_go(VarType type, const opt_t* opts) {
         return "uint";
     case VarType::YYCTYPE:
         return opts->yyctype.c_str();
-    default:
-        return nullptr;
     }
+    return nullptr;
 }
 
 static const char* var_type_rust(VarType type, const opt_t* opts) {
@@ -155,9 +153,8 @@ static const char* var_type_rust(VarType type, const opt_t* opts) {
         return "usize";
     case VarType::YYCTYPE:
         return opts->yyctype.c_str();
-    default:
-        return nullptr;
     }
+    return nullptr;
 }
 
 static void render_var(RenderContext& rctx, const CodeVar* var) {
