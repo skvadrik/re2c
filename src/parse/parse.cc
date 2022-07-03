@@ -117,7 +117,6 @@ Ret use_block(context_t& context, const std::string& name) {
 
 Ret check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, Ast& ast) {
     if (specs.empty()) return Ret::OK;
-    specs_t::iterator i, j, e;
 
     for (const spec_t& s : specs) {
         if (s.defs.size() > 1) {
