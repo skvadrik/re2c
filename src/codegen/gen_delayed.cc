@@ -198,15 +198,14 @@ static void gen_cond_enum(Scratchbuf& buf,
 }
 
 LOCAL_NODISCARD(Ret add_condition_from_block(
-        const OutputBlock& block, StartConds& conds, const StartCond& cond)) {
+        const OutputBlock& block, StartConds& conds, StartCond cond)) {
     // Condition prefix is specific to the block that defines it. If a few blocks define conditions
     // with the same name, but a different prefix, they should have different enum entries.
-    StartCond sc = cond;
-    sc.name = block.opts->condEnumPrefix + sc.name;
+    cond.name = block.opts->condEnumPrefix + cond.name;
 
-    for (const StartCond& cond : conds) {
-        if (cond.name == sc.name) {
-            if (cond.number == sc.number) {
+    for (const StartCond& c : conds) {
+        if (c.name == cond.name) {
+            if (c.number == cond.number) {
                 // A duplicate condition, it's not an error but don't add it.
                 return Ret::OK;
             } else {
@@ -214,12 +213,12 @@ LOCAL_NODISCARD(Ret add_condition_from_block(
                 RET_FAIL(error("cannot generate condition enumeration: conditon '%s' has "
                                "different numbers in different blocks (use `re2c:condenumprefix` "
                                "configuration to set per-block prefix)",
-                               sc.name.c_str()));
+                               cond.name.c_str()));
             }
         }
     }
 
-    conds.push_back(sc);
+    conds.push_back(cond);
     return Ret::OK;
 }
 
