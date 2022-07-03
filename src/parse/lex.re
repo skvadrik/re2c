@@ -17,7 +17,7 @@
 #include "src/parse/scanner.h"
 #include "src/parse/parse.h" // needed by "parser.h"
 #include "src/regexp/rule.h"
-#include "src/util/file_utils.h"
+#include "src/util/check.h"
 #include "src/util/string_utils.h"
 #include "parser.h"
 
@@ -516,7 +516,7 @@ scan:
 
     "!use:" @x name @y space* ";" / ws_or_eoc {
         // Save the name of the used block in a temporary buffer (ensure it is empty).
-        assert(ast.temp_blockname.empty());
+        CHECK(ast.temp_blockname.empty());
         ast.temp_blockname.assign(x, y);
         RET_TOK(TOKEN_BLOCK);
     }
@@ -567,7 +567,7 @@ Ret Scanner::lex_clist(Ast& ast, int& token) {
     token = TOKEN_CLIST;
     std::set<std::string>& cl = ast.temp_condlist;
     // Due to the re2c grammar parser must reduce each condition list before shifing a new one.
-    assert(cl.empty());
+    CHECK(cl.empty());
 /*!re2c
     space* "!" space* { token = TOKEN_CSETUP; goto cond; }
     space* ">"        { token = TOKEN_CZERO;  goto end; }

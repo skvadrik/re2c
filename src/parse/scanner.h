@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "src/constants.h"
-#include "src/debug/debug.h"
 #include "src/msg/location.h"
 #include "src/parse/input.h"
 #include "src/parse/lex.h"
@@ -16,6 +15,7 @@
 #include "src/encoding/utf8.h"
 #include "src/util/allocator.h"
 #include "src/util/attribute.h"
+#include "src/util/check.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -116,7 +116,7 @@ inline loc_t Scanner::cur_loc() const {
     const Input& in = get_cinput();
     uint32_t c = static_cast<uint32_t>(cur - pos);
     if (is_eof()) {
-        DASSERT(c > 0);
+        DCHECK(c > 0);
         --c;
     }
     return {in.line, c, in.fidx};

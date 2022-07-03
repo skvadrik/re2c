@@ -2,12 +2,12 @@
 #include <string>
 #include <vector>
 
-#include "src/debug/debug.h"
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 
 namespace re2c {
 namespace {
@@ -39,7 +39,7 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
             // nullable (otherwise we would not recurse into the right sub-RE), therefore the whole
             // RE is nullable.
             if (trailing(spec.tags[re->tag.idx])) {
-                DASSERT(stack.size() == 1 && stack.back().re->kind == RE::Kind::CAT);
+                DCHECK(stack.size() == 1 && stack.back().re->kind == RE::Kind::CAT);
                 stack.pop_back();
                 break;
             }
@@ -70,7 +70,7 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const RE
         }
     }
 
-    DASSERT(stack.empty());
+    DCHECK(stack.empty());
     return null;
 }
 

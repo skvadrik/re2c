@@ -1,12 +1,12 @@
 #include <string.h>
 #include <vector>
 
-#include "src/debug/debug.h"
 #include "src/cfg/cfg.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -83,7 +83,7 @@ void cfg_t::liveness_analysis(const cfg_t& cfg, bool* live) {
         bool* l = &live[i * nver];
 
         // all final bblocks have USE tags, but no successors
-        DASSERT(r && b->succb == b->succe);
+        DCHECK(r && b->succb == b->succe);
 
         for (size_t t = r->ltag; t < r->htag; ++t) {
             l[fins[t]] = !fixed(tags[t]);
@@ -103,7 +103,7 @@ void cfg_t::liveness_analysis(const cfg_t& cfg, bool* live) {
             bool* old = &live[i * nver];
 
             // transition bblocks have no USE tags
-            DASSERT(!b->rule);
+            DCHECK(!b->rule);
 
             memcpy(buf1, old, nver * sizeof(bool));
             for (cfg_ix_t* j = b->succb; j < b->succe; ++j) {
@@ -131,7 +131,7 @@ void cfg_t::liveness_analysis(const cfg_t& cfg, bool* live) {
         bool* l = &live[i * nver];
 
         // all fallback bblocks have USE tags
-        DASSERT(r);
+        DCHECK(r);
 
         for (size_t t = r->ltag; t < r->htag; ++t) {
             l[fins[t]] = !fixed(tags[t]);

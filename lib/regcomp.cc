@@ -9,7 +9,6 @@
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
 #include "lib/regoff_trie.h"
-#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
@@ -18,6 +17,7 @@
 #include "src/parse/ast.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
+#include "src/util/check.h"
 #include "src/util/range.h"
 
 namespace re2c {
@@ -90,7 +90,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         delete opt0;
     }
 
-    DASSERT(nfa->rules.size() == 1);
+    DCHECK(nfa->rules.size() == 1);
     preg->re_nsub = nfa->rules[0].ncap + 1;
     preg->re_ntag = nfa->tags.size();
 

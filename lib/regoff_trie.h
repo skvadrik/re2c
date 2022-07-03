@@ -2,12 +2,12 @@
 #define _RE2C_LIB_REGOFF_TRIE_
 
 #include <algorithm>
-#include "regex.h"
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "src/debug/debug.h"
+#include "regex.h"
+#include "src/util/check.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -50,7 +50,7 @@ struct regoff_trie_t {
     }
 
     inline void grow(size_t new_capacity) {
-        DASSERT(new_capacity > capacity);
+        DCHECK(new_capacity > capacity);
         node_t* new_storage = new node_t[new_capacity];
         memcpy(new_storage, storage, capacity * sizeof(node_t));
         delete[] storage;

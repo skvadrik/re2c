@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "src/options/opt.h"
-#include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
 #include "src/encoding/enc.h"
 #include "src/msg/msg.h"
@@ -16,6 +15,7 @@
 #include "src/regexp/tag.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/check.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/u32lim.h"
 
@@ -239,7 +239,7 @@ static void write_keys(const path_t& path, Skeleton& skel, size_t width) {
                     matched = f - tag.dist;
                 }
             }
-            DASSERT(matched != Skeleton::DEFTAG);
+            DCHECK(matched != Skeleton::DEFTAG);
         }
 
         // count keys
@@ -268,7 +268,7 @@ static void write_keys(const path_t& path, Skeleton& skel, size_t width) {
             if (t == trail || fictive(tag)) continue;
 
             if (history(tag)) {
-                DASSERT(!fixed(tag));
+                DCHECK(!fixed(tag));
                 // variable-length tag
                 const size_t tver = static_cast<size_t>(skel.finvers[t]);
                 uint32_t tval = tags[tver];
@@ -281,7 +281,7 @@ static void write_keys(const path_t& path, Skeleton& skel, size_t width) {
                 // TODO: Ideally we should use different encoding for the keys (structs with 2 or 4
                 // byte fields for history length and proper serialization/deserialization instead
                 // of flat arrays).
-                DASSERT(len < std::numeric_limits<key_t>::max());
+                DCHECK(len < std::numeric_limits<key_t>::max());
 
                 // unfold m-tag history from the tag trie (from tail to head)
                 std::vector<uint32_t>& history = skel.mtagval;

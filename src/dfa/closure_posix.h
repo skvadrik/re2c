@@ -3,9 +3,11 @@
 
 #include <queue>
 
+#include "src/debug/debug.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/posix_precedence.h"
 #include "src/nfa/nfa.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -265,7 +267,7 @@ template<>
 inline void closure_cleanup<pdetctx_t>(nfa_state_t* q) {
     q->clos = NOCLOS;
     q->arcidx = 0;
-    DASSERT(q->status == GorPass::NOPASS && q->active == 0);
+    DCHECK(q->status == GorPass::NOPASS && q->active == 0);
 }
 
 } // namespace re2c

@@ -10,6 +10,7 @@
 #include "src/msg/warn.h"
 #include "src/regexp/rule.h"
 #include "src/options/opt.h"
+#include "src/util/check.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -173,10 +174,10 @@ static void warn_sentinel_in_midrule(
     // find character class that contains sentinel symbol
     const uint32_t sentsym = opts->sentinel == NOEOF ? 0 : opts->sentinel;
     uint32_t sentcls = 0;
-    DASSERT(dfa.charset.size() == nsym + 1);
+    DCHECK(dfa.charset.size() == nsym + 1);
     for (; sentcls < nsym && sentsym >= dfa.charset[sentcls + 1]; ++sentcls)
         ;
-    DASSERT(sentcls < nsym);
+    DCHECK(sentcls < nsym);
 
     // Check that every transition on sentinel symbol goes to an end state that has no further
     // transitions; otherwise, give a warning or an error if `re2c:sentinel` configuration is used.
@@ -274,7 +275,7 @@ static void remove_dead_final_states_with_eof_rule(dfa_t& dfa) {
     // matches empty string and the initial state is not a fallback state (i.e. all outgoing paths
     // are accepting), then this rule will never match (if the end of input happens in the initial
     // state, then the $ rule takes priority, otherwise one of the longer rules will match).
-    DASSERT(!dfa.states.empty());
+    DCHECK(!dfa.states.empty());
     dfa_state_t* s0 = dfa.states[0];
     if (s0->rule != Rule::NONE && s0->rule != dfa.eof_rule && !s0->fallback) {
         s0->rule = dfa.eof_rule;

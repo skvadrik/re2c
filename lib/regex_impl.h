@@ -11,6 +11,7 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/nfa/nfa.h"
+#include "src/util/check.h"
 
 namespace re2c {
 namespace libre2c {
@@ -282,10 +283,10 @@ void init(simctx_t<history_t>& ctx, const char* string) {
     ctx.rule = Rule::NONE;
     ctx.cursor = ctx.marker = string;
     ctx.sortcores.clear();
-    DASSERT(ctx.worklist.empty());
-    DASSERT(ctx.gor1_topsort.empty());
-    DASSERT(ctx.gor1_linear.empty());
-    DASSERT(ctx.gtop_heap.empty());
+    DCHECK(ctx.worklist.empty());
+    DCHECK(ctx.gor1_topsort.empty());
+    DCHECK(ctx.gor1_linear.empty());
+    DCHECK(ctx.gtop_heap.empty());
 }
 
 static inline regoff_t* offs_addr(regmatch_t pmatch[], size_t t) {
@@ -340,7 +341,7 @@ void tags_to_submatch(const std::vector<Tag>& tags,
             const regoff_t eo = getoff(t + 1);
 
             for (size_t j = tag.lsub; j <= tag.hsub && m < e; j += 2, ++m) {
-                DASSERT(m - 1 == &pmatch[j / 2]);
+                DCHECK(m - 1 == &pmatch[j / 2]);
                 m->rm_so = so;
                 m->rm_eo = eo;
             }

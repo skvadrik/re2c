@@ -5,12 +5,12 @@
 
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/debug/debug.h"
 #include "src/dfa/closure_posix.h"
 #include "src/dfa/tag_history.h"
 #include "src/nfa/nfa.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 #include "src/util/range.h"
 
 // note [POSIX orbit tags]
@@ -110,7 +110,7 @@ void make_one_step(ksimctx_t& ctx, uint32_t sym) {
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
+        DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->kind == nfa_state_t::Kind::RAN) {
             for (const Range* r = s->ran.ran; r; r = r->next()) {
@@ -145,7 +145,7 @@ void make_final_step(ksimctx_t& ctx) {
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
+        DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->kind == nfa_state_t::Kind::FIN) {
             update_offsets(ctx, *i, NONCORE);
@@ -257,14 +257,14 @@ int32_t khistory_t::precedence(ctx_t& ctx,
         int32_t n1, n2;
         (void)(n1 = subhistory_list(ctx.history, p1, x.thist, t));
         (void)(n2 = subhistory_list(ctx.history, p2, y.thist, t));
-        DASSERT(n1 == n2);
+        DCHECK(n1 == n2);
 
         std::vector<int32_t>::const_reverse_iterator
         i1 = p1.rbegin(), e1 = p1.rend(),
         i2 = p2.rbegin(), e2 = p2.rend();
         for (;;) {
             if (i1 == e1 && i2 == e2) break;
-            DASSERT(i1 != e1 && i2 != e2);
+            DCHECK(i1 != e1 && i2 != e2);
             const int32_t v1 = *i1++, v2 = *i2++;
             if (v1 == DELIM && v2 == DELIM) continue;
             if (v1 == DELIM) return -1;

@@ -18,6 +18,7 @@
 #include "src/skeleton/mtag_trie.h"
 #include "src/util/allocator.h"
 #include "src/util/attribute.h"
+#include "src/util/check.h"
 #include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
 
@@ -62,7 +63,7 @@ inline void OutBuf::init(size_t selector) {
     case 4: buf32.init(KB); break;
     case 8: buf64.init(KB); break;
     default:
-        DASSERT(false);
+        UNREACHABLE();
     }
     size = 0;
     file = nullptr;
@@ -75,7 +76,7 @@ inline void OutBuf::free(size_t selector) {
     case 4: buf32.free(); break;
     case 8: buf64.free(); break;
     default:
-        DASSERT(false);
+        UNREACHABLE();
     }
     size = 0;
 }

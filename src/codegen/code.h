@@ -1,7 +1,6 @@
 #ifndef _RE2C_CODEGEN_CODE_
 #define _RE2C_CODEGEN_CODE_
 
-#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
@@ -15,10 +14,10 @@
 
 #include "src/constants.h"
 #include "src/dfa/tcmd.h"
-#include "src/debug/debug.h"
 #include "src/msg/location.h"
 #include "src/util/allocator.h"
 #include "src/util/attribute.h"
+#include "src/util/check.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/string_utils.h"
 
@@ -75,12 +74,12 @@ class Scratchbuf {
     const char* flush();
 
     Scratchbuf& unchecked_label(const Label& l) {
-        assert(l.index != Label::NONE);
+        CHECK(l.index != Label::NONE);
         os << l.index;
         return *this;
     }
     Scratchbuf& label(const Label& l) {
-        assert(l.used);
+        CHECK(l.used);
         return unchecked_label(l);
     }
 };
@@ -349,14 +348,14 @@ inline code_list_t<T>* new_code_list(code_alc_t& alc) {
 
 template<typename T>
 inline void append(code_list_t<T>* list, T* elem) {
-    DASSERT(elem);
+    DCHECK(elem);
     *list->ptail = elem;
     list->ptail = &elem->next;
 }
 
 template<typename T>
 inline void prepend(code_list_t<T>* list, T* elem) {
-    DASSERT(elem);
+    DCHECK(elem);
     if (!list->head) {
         list->ptail = &elem->next;
     }

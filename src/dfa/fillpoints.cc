@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "src/dfa/dfa.h"
+#include "src/util/check.h"
 
 // note [finding strongly connected components of DFA]
 //
@@ -61,13 +62,13 @@ static void scc(const dfa_t& dfa, std::vector<bool>& trivial, std::vector<StackI
 
         if (c == 0) {
             // DFS recursive enter
-            DASSERT(lowlink[i] == SCC_UND);
+            DCHECK(lowlink[i] == SCC_UND);
             link = lowlink[i] = stack.size();
             stack.push(i);
         } else {
             // DFS recursive return (from one of successor states)
             const size_t j = arcs[c - 1];
-            DASSERT(lowlink[j] != SCC_UND);
+            DCHECK(lowlink[j] != SCC_UND);
             lowlink[i] = std::min(lowlink[i], lowlink[j]);
         }
 
@@ -125,7 +126,7 @@ static void calc_fill(const dfa_t& dfa,
         } else {
             // DFS recursive return (from one of successor states)
             const size_t j = arcs[c - 1];
-            DASSERT(fill[i] != SCC_UND && fill[j] != SCC_UND);
+            DCHECK(fill[i] != SCC_UND && fill[j] != SCC_UND);
             fill[i] = std::max(fill[i], 1 + (trivial[j] ? fill[j] : 0));
         }
 

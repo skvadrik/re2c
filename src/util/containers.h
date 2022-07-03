@@ -1,7 +1,6 @@
 #ifndef _RE2C_UTIL_CONTAINERS_
 #define _RE2C_UTIL_CONTAINERS_
 
-#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
@@ -9,7 +8,7 @@
 #include <map>
 #include <vector>
 
-#include "src/debug/debug.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -22,7 +21,7 @@ class array_t {
     template<typename Allocator>
     void init(const T* data, size_t size, Allocator& alc) {
         if (size > 0) {
-            assert(size < UINT32_MAX);
+            CHECK(size < UINT32_MAX);
             size_ = static_cast<uint32_t>(size);
             data_ = alc.template alloct<T>(size);
             memcpy(data_, data, size * sizeof(T));
@@ -107,17 +106,17 @@ struct lookup_t {
     }
 
     data_t& operator[](uint32_t idx) {
-        DASSERT(idx < elems.size());
+        DCHECK(idx < elems.size());
         return elems[idx].data;
     }
 
     const data_t& operator[](uint32_t idx) const {
-        DASSERT(idx < elems.size());
+        DCHECK(idx < elems.size());
         return elems[idx].data;
     }
 
     uint32_t push(hash_t hash, const data_t& data) {
-        DASSERT(elems.size() < NIL);
+        DCHECK(elems.size() < NIL);
         const uint32_t idx = static_cast<uint32_t>(elems.size());
         elems.push_back(elem_t(head(hash), data));
         lookup[hash] = idx;

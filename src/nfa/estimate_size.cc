@@ -1,10 +1,10 @@
 #include <stddef.h>
 #include <vector>
 
-#include "src/debug/debug.h"
 #include "src/nfa/nfa.h"
 #include "src/parse/ast.h"
 #include "src/regexp/re.h"
+#include "src/util/check.h"
 
 namespace re2c {
 namespace {
@@ -77,7 +77,7 @@ static void compute_re_size_and_depth(
             }
         }
     }
-    DASSERT(stack.empty());
+    DCHECK(stack.empty());
 
     *psize = *psize + size + 1;
     *pdepth = std::max(*pdepth, static_cast<size_t>(depth));
@@ -88,7 +88,7 @@ static void compute_re_size_and_depth(
 void compute_size_and_depth(const std::vector<RE*>& res, size_t* psize, size_t* pdepth) {
     std::vector<StackItem> stack;
 
-    DASSERT(!res.empty());
+    DCHECK(!res.empty());
     *psize = res.size() - 1;
     *pdepth = 0;
 

@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <vector>
 
-#include "src/debug/debug.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -40,7 +40,7 @@ class path_t {
         return skel.nodes[arcs[i]].arcs.find(arcs[i + 1])->second;
     }
     void clear() {
-        DASSERT(!arcs.empty());
+        DCHECK(!arcs.empty());
         arcs.resize(1);
     }
     void push(size_t n) {

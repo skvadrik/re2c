@@ -6,6 +6,7 @@
 #include "src/cfg/cfg.h"
 #include "src/dfa/dfa.h"
 #include "src/regexp/rule.h"
+#include "src/util/check.h"
 #include "src/util/containers.h"
 
 namespace re2c {
@@ -133,8 +134,8 @@ cfg_bb_t::cfg_bb_t(const cfg_ix_t* sb, const cfg_ix_t* se, tcmd_t*& c, const Rul
 
 // find immediate successors of the given bblock
 void successors(cfg_context_t& ctx, size_t x0, bool self) {
-    DASSERT(x0 != dfa_t::NIL);
-    DASSERT(ctx.mark < cfg_context_t::MAX_MARK);
+    DCHECK(x0 != dfa_t::NIL);
+    DCHECK(ctx.mark < cfg_context_t::MAX_MARK);
     ++ctx.mark;
     ctx.succe = ctx.succb;
 
@@ -193,8 +194,8 @@ void successors(cfg_context_t& ctx, size_t x0, bool self) {
 // find all bblocks reachable from this one by following non-accepting DFA
 // paths: this is the set of bblocks affected by liveness of fallback tags
 void fallback(cfg_context_t& ctx, size_t x0) {
-    DASSERT(x0 != dfa_t::NIL);
-    DASSERT(ctx.mark < cfg_context_t::MAX_MARK);
+    DCHECK(x0 != dfa_t::NIL);
+    DCHECK(ctx.mark < cfg_context_t::MAX_MARK);
     ++ctx.mark;
     ctx.succe = ctx.succb;
 

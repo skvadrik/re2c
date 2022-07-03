@@ -18,7 +18,6 @@ struct dump_dfa_tree_t {
     dump_dfa_tree_t(const ctx_t&) {}
 };
 
-#define DASSERT(x)
 #define DDUMP_NFA(opts, nfa)
 #define DDUMP_DFA_TREE(isnew)
 #define DDUMP_DFA_RAW(ctx, isnew)
@@ -38,7 +37,6 @@ struct dump_dfa_tree_t {
 
 #else // RE2C_DEBUG
 
-#include <assert.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <map>
@@ -88,7 +86,6 @@ struct dump_dfa_tree_t {
     void path_tree(const std::vector<uint32_t>&, const std::vector<uint32_t>&, bool);
 };
 
-#define DASSERT(x)                   assert(x)
 #define DDUMP_NFA(opts, nfa)         if (opts->dump_nfa) dump_nfa(nfa)
 #define DDUMP_DFA_TREE(isnew)        do { ctx.dump_dfa_tree.state(is_new); } while(0)
 #define DDUMP_DFA_RAW(ctx, isnew)    do { ctx.dc_dump.state(ctx, is_new); } while(0)

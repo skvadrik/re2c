@@ -16,6 +16,7 @@
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/check.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {
@@ -67,7 +68,7 @@ static void gen_storable_state_cases(Output& output, CodeCases* cases) {
 
     // Replace the first case 0 with a case that covers both -1 and 0.
     CodeCase* first = cases->head;
-    DASSERT(first->kind == CodeCase::Kind::NUMBER && first->number == 0);
+    DCHECK(first->kind == CodeCase::Kind::NUMBER && first->number == 0);
     first->kind = CodeCase::Kind::RANGES;
     first->ranges = code_ranges(alc, VarType::INT, ranges, ranges_end);
 }
@@ -81,7 +82,7 @@ void gen_dfa_as_blocks_with_labels(Output& output, const DFA& dfa, CodeList* stm
     // initial state must have a YYSKIP statement that must be bypassed when first entering the DFA.
     // With --loop-switch that would be impossible, because there can be no transitions in the
     // middle of a state.
-    DASSERT(!opts->loop_switch);
+    DCHECK(!opts->loop_switch);
     if (dfa.head->label->used && !opts->eager_skip) {
         dfa.initial_label->used = true;
         o.cstr("goto ").str(opts->labelPrefix).label(*dfa.initial_label);
@@ -98,7 +99,7 @@ void gen_dfa_as_blocks_with_labels(Output& output, const DFA& dfa, CodeList* stm
 void gen_dfa_as_switch_cases(Output& output, DFA& dfa, CodeCases* cases) {
     code_alc_t& alc = output.allocator;
 
-    DASSERT(output.block().opts->loop_switch);
+    DCHECK(output.block().opts->loop_switch);
 
     for (State* s = dfa.head; s; s = s->next) {
         CodeList* body = code_list(alc);
@@ -108,7 +109,7 @@ void gen_dfa_as_switch_cases(Output& output, DFA& dfa, CodeCases* cases) {
         emit_action(output, dfa, s, body);
         gen_go(output, dfa, &s->go, s, body);
         uint32_t label = s->label->index;
-        DASSERT(label != Label::NONE);
+        DCHECK(label != Label::NONE);
 
         // As long as the following state has no incoming transitions (its label is unused),
         // generate it as a continuation of the current state. This avoids looping through the
@@ -128,7 +129,7 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
     const opt_t* opts = output.block().opts;
     code_alc_t& alc = output.allocator;
 
-    DASSERT(opts->loop_switch);
+    DCHECK(opts->loop_switch);
 
     CodeList* loop = code_list(alc);
     gen_storable_state_cases(output, cases);
@@ -209,7 +210,7 @@ void gen_code(Output& output, dfas_t& dfas) {
             dfa->bitmap = code_bitmap(alc, std::min(dfa->ubChar, 256u));
             for (State* s = dfa->head; s; s = s->next) {
                 if (s->isBase) {
-                    DASSERT(s->next);
+                    DCHECK(s->next);
                     insert_bitmap(alc, dfa->bitmap, &s->next->go, s);
                 }
             }
@@ -369,7 +370,7 @@ void gen_code(Output& output, dfas_t& dfas) {
             } else {
                 // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
                 // Merge DFAs for different conditions together in one switch.
-                DASSERT(!bms);
+                DCHECK(!bms);
                 gen_dfa_as_switch_cases(output, *dfa, cases);
             }
         }

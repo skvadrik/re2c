@@ -5,6 +5,7 @@
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
 #include "src/util/attribute.h"
+#include "src/util/check.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {
@@ -44,7 +45,7 @@ static std::string output_state_get(const opt_t* opts) {
 }
 
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags) {
-    DASSERT(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
+    DCHECK(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
 
     const char* fmt = code->fmt.format;
     const char* sep = code->fmt.separator;
@@ -82,7 +83,7 @@ static void add_tags_from_blocks(const blocks_t& blocks, tagnames_t& tags, bool 
 }
 
 LOCAL_NODISCARD(Ret expand_tags_directive(CodegenCtxPass1& ctx, Code* code)) {
-    DASSERT(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
+    DCHECK(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
     if (ctx.global->opts->target != Target::CODE) {
         code->kind = CodeKind::EMPTY;
         return Ret::OK;
@@ -111,7 +112,7 @@ static void gen_cond_enum(Scratchbuf& buf,
                           Code* code,
                           const opt_t* opts,
                           const StartConds& conds) {
-    DASSERT(opts->target == Target::CODE);
+    DCHECK(opts->target == Target::CODE);
 
     if (conds.empty()) return;
     const StartCond* first_cond = &conds.front();
@@ -175,14 +176,14 @@ static void gen_cond_enum(Scratchbuf& buf,
             // regular states anyway, so the enum doesn't make much sense.
             start = "";
             end = "";
-            DASSERT(opts->loop_switch);
+            DCHECK(opts->loop_switch);
             for (const StartCond& cond : conds) {
                 buf.cstr("const ").str(cond.name).cstr(": ").cstr(opts->fFlag ? "isize" : "usize")
                         .cstr(" = ").u32(cond.number);
                 append(block, code_stmt(alc, buf.flush()));
             }
         } else {
-            DASSERT(false); // no such language
+            UNREACHABLE(); // no such language
         }
 
         append(stmts, code_text(alc, start));
@@ -286,7 +287,7 @@ LOCAL_NODISCARD(Ret gen_state_goto(CodegenCtxPass1& ctx, Code* code)) {
     }
 
     // Loop/switch approach is handled differently (by appending special cases to the state switch).
-    DASSERT(!globopts->loop_switch);
+    DCHECK(!globopts->loop_switch);
 
     Scratchbuf& o = ctx.global->scratchbuf;
     code_alc_t& alc = ctx.global->allocator;
@@ -525,7 +526,7 @@ static void gen_cond_goto(CodegenCtxPass1& ctx, Code* code) {
     const StartConds& conds = ctx.block->conds;
     bool warn_cond_ord = ctx.global->warn_cond_ord;
 
-    DASSERT(!opts->loop_switch);
+    DCHECK(!opts->loop_switch);
 
     const size_t ncond = conds.size();
     CodeList* stmts = code_list(alc);
@@ -684,14 +685,14 @@ Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
 }
 
 static void gen_label(Scratchbuf& o, const opt_t* opts, Code* code) {
-    DASSERT(code->kind == CodeKind::LABEL);
+    DCHECK(code->kind == CodeKind::LABEL);
     CodeLabel* label = &code->label;
 
     if (label->kind == CodeLabel::Kind::SLABEL) {
         code->kind = CodeKind::TEXT_RAW;
         code->text = o.cstr(label->slabel).cstr(":").flush();
     } else if (label->nlabel->used) {
-        DASSERT(label->nlabel->index != Label::NONE);
+        DCHECK(label->nlabel->index != Label::NONE);
         code->kind = CodeKind::TEXT_RAW;
         code->text = o.str(opts->labelPrefix).u32(label->nlabel->index).cstr(":").flush();
     } else {

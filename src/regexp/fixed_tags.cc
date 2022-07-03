@@ -1,10 +1,10 @@
 #include <stddef.h>
 #include <vector>
 
-#include "src/debug/debug.h"
 #include "src/options/opt.h"
 #include "src/regexp/re.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 
 namespace re2c {
 namespace {
@@ -39,7 +39,7 @@ static void find_fixed_tags(
     static constexpr uint32_t VARDIST = Tag::VARDIST;
 
     // initial base tag at the topmost level is the fake "rightmost tag" (cursor)
-    DASSERT(levels.empty());
+    DCHECK(levels.empty());
     levels.push_back({Tag::RIGHTMOST, 0, 0});
 
     stack.push_back({re0, 0});
@@ -149,7 +149,7 @@ static void find_fixed_tags(
         }
     }
 
-    DASSERT(levels.size() == 1);
+    DCHECK(levels.size() == 1);
     levels.pop_back();
 }
 

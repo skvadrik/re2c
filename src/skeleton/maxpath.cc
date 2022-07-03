@@ -7,9 +7,9 @@
 #include <utility>
 #include <vector>
 
-#include "src/debug/debug.h"
 #include "src/msg/msg.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/check.h"
 
 namespace re2c {
 namespace {
@@ -55,7 +55,7 @@ Ret maxpath(const Skeleton& skel, uint32_t& dist) {
                 dists[i.node] = 0;
             } else {
                 ++loops[i.node];
-                DASSERT(i.dist == 0);
+                DCHECK(i.dist == 0);
 
                 const uint32_t succ = static_cast<uint32_t>(i.arc->first);
 
@@ -71,16 +71,16 @@ Ret maxpath(const Skeleton& skel, uint32_t& dist) {
             --loops[i.node];
 
             // use last successor's distance
-            DASSERT(dist != DIST_ERROR);
+            DCHECK(dist != DIST_ERROR);
             dist = std::max(i.dist, dist);
 
             // all successors traversed, set this node's distance
-            DASSERT(dist < DIST_MAX);
+            DCHECK(dist < DIST_MAX);
             dist = dists[i.node] = dist + 1;
             if (dist == DIST_MAX) break;
         } else {
             // use he previous successor's distance
-            DASSERT(dist != DIST_ERROR);
+            DCHECK(dist != DIST_ERROR);
             dist = std::max(i.dist, dist);
 
             const uint32_t succ = static_cast<uint32_t>(i.arc->first);

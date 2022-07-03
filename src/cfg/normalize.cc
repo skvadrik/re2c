@@ -2,12 +2,12 @@
 #include <string.h>
 #include <utility>
 
-#include "src/debug/debug.h"
 #include "src/cfg/cfg.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/options/opt.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -65,14 +65,14 @@ void cfg_t::normalization(cfg_t& cfg) {
 }
 
 static void swap(tcmd_t& x, tcmd_t& y) {
-    DASSERT(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
+    DCHECK(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
     std::swap(x.lhs, y.lhs);
     std::swap(x.rhs, y.rhs);
     std::swap(x.history[0], y.history[0]);
 }
 
 static bool less(const tcmd_t& x, const tcmd_t& y) {
-    DASSERT(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
+    DCHECK(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
     tagver_t u, v;
 
     u = x.lhs; v = y.lhs;

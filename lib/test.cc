@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,7 @@
 
 #include "lib/regex.h"
 #include "lib/test_helper.h"
-#include <stdint.h>
+#include "src/util/check.h"
 
 static int test(int flags,
                 const char* pattern,
@@ -70,7 +70,7 @@ static int test(int flags,
         }
     }
 
-    assert(nmatch == 0 || nmatch == re.re_nsub);
+    CHECK(nmatch == 0 || nmatch == re.re_nsub);
 
     for (uint32_t i = 0; i < nmatch; ++i) {
         const std::vector<regoff_t>& expect_history = submatch[i];
@@ -165,7 +165,7 @@ static int test_tstring(const char* pattern, const char* string, const char* exp
     for (size_t i = 0; i < tstr->length; ++i) {
         const tchar_t c = tstr->string[i];
         if (c < TAG_BASE) {
-            assert(c < 0xff); // expect 1-byte characters
+            CHECK(c < 0xff); // expect 1-byte characters
             s << static_cast<char>(c);
         } else {
             s << c - TAG_BASE;

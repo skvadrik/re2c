@@ -4,10 +4,10 @@
 
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/debug/debug.h"
 #include "src/dfa/closure_leftmost.h"
 #include "src/dfa/tag_history.h"
 #include "src/nfa/nfa.h"
+#include "src/util/check.h"
 #include "src/util/range.h"
 
 namespace re2c {
@@ -41,7 +41,7 @@ void make_step(lzsimctx_t& ctx, uint32_t sym) {
 
     // in reverse, so that future closure DFS has states in stack order
     rcconfiter_t b = state.rbegin(), e = state.rend(), i;
-    DASSERT(reach.empty());
+    DCHECK(reach.empty());
 
     for (i = b; i != e; ++i) {
         nfa_state_t* s = i->state;
@@ -72,7 +72,7 @@ void make_final_step(lzsimctx_t& ctx) {
         nfa_state_t* s = i->state;
 
         s->clos = NOCLOS;
-        DASSERT(s->active == 0);
+        DCHECK(s->active == 0);
 
         if (s->kind == nfa_state_t::Kind::FIN) {
             ctx.marker = ctx.cursor;

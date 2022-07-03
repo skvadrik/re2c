@@ -12,11 +12,11 @@
 #include "src/codegen/code.h"
 #include "src/codegen/helpers.h"
 #include "src/options/opt.h"
-#include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/check.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {
@@ -30,7 +30,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const R
 static const char* gen_fill_label(Output& output, uint32_t index) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& o = output.scratchbuf;
-    DASSERT(o.empty());
+    DCHECK(o.empty());
     return o.str(opts->yyfilllabel).u32(index).flush();
 }
 
@@ -38,7 +38,7 @@ static bool endstate(const State* s) {
     // An 'end' state is a state which has no outgoing transitions on symbols. Usually 'end' states
     // are final states (not all final states are 'end' states), but sometimes it be initial
     // non-accepting state, e.g. in case of rule '[]'.
-    DASSERT(s->go.nspans > 0);
+    DCHECK(s->go.nspans > 0);
     Action::Kind a = s->go.span[0].to->action.kind;
     return s->go.nspans == 1 && (a == Action::Kind::RULE || a == Action::Kind::ACCEPT);
 }
@@ -325,7 +325,7 @@ static CodeList* gen_fill_falllback(
     code_alc_t& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    DASSERT(opts->eof != NOEOF);
+    DCHECK(opts->eof != NOEOF);
 
     tcid_t falltags;
     const State* fallback = fallback_state_with_eof_rule(dfa, opts, from, &falltags);
@@ -334,7 +334,7 @@ static CodeList* gen_fill_falllback(
         // Tags have been hoisted out of transitions into state (this means that tags on all
         // transitions coincide, including the fallback transition). Do not add duplicate tags to
         // fallback transition.
-        DASSERT(from->go.tags == falltags);
+        DCHECK(from->go.tags == falltags);
         falltags = TCID0;
     }
 
@@ -700,7 +700,7 @@ void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& ru
                 gen_assign_many(output, varops, fintags, expr);
             }
         } else {
-            DASSERT(!history(tag));
+            DCHECK(!history(tag));
 
             // fixed tag that is based on either variable tag or cursor
             const int32_t dist = static_cast<int32_t>(tag.dist);
@@ -710,7 +710,7 @@ void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& ru
                     : vartag_expr(fins[tag.base], opts, dfa.mtagvers);
 
             if (trailing(tag)) {
-                DASSERT(tag.toplevel);
+                DCHECK(tag.toplevel);
                 if (generic) {
                     if (!fixed_on_cursor) {
                         gen_restorectx(output, trailops, base);
@@ -726,7 +726,7 @@ void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& ru
                     append(trailops, code_stmt(alc, o.flush()));
                 }
             } else {
-                DASSERT(!fintags.empty());
+                DCHECK(!fintags.empty());
                 const std::string& first = fintags[0];
 
                 if (generic) {
@@ -782,7 +782,7 @@ void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& ru
     if (!negtag.empty()) {
         // With generic API there is no explicit negative NULL value, so it is necessary to
         // materialize no-match value in a tag.
-        DASSERT(opts->input_api == Api::CUSTOM);
+        DCHECK(opts->input_api == Api::CUSTOM);
         append(stmts, code_text(alc, o.cstr("/* materialize no-match value */").flush()));
         gen_settag(output, stmts, negtag, true, false);
         append(stmts, fixpostops);

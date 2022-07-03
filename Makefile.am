@@ -59,6 +59,7 @@ re2c_HDR = \
 	src/util/allocator.h \
 	src/util/attribute.h \
 	src/util/containers.h \
+	src/util/check.h \
 	src/util/file_utils.h \
 	src/util/forbid_copy.h \
 	src/util/hash32.h \

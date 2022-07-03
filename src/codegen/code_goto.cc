@@ -1,12 +1,11 @@
-#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
 #include "src/options/opt.h"
-#include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
+#include "src/util/check.h"
 #include "src/util/containers.h"
 
 namespace re2c {
@@ -72,11 +71,11 @@ static CodeGoSw* code_gosw(
         }
     }
 
-    DASSERT(static_cast<uint32_t>(ranges_end - ranges) == 2 * nspans);
+    DCHECK(static_cast<uint32_t>(ranges_end - ranges) == 2 * nspans);
     go->ncases = static_cast<uint32_t>(cases - go->cases);
 
     // find default case
-    DASSERT(nspans > 0);
+    DCHECK(nspans > 0);
     State* defstate = (endspan - 1)->to;
     for (c = go->cases; c < cases; ++c) {
         if (c->jump.to == defstate) {
@@ -312,7 +311,7 @@ static CodeGoCp* code_gocp(code_alc_t& alc,
 
 State* fallback_state_with_eof_rule(
         const DFA& dfa, const opt_t* opts, const State* state, tcid_t* ptags) {
-    assert(opts->eof != NOEOF);
+    CHECK(opts->eof != NOEOF);
 
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
@@ -437,8 +436,7 @@ bool consume(const State* s) {
     case Action::Kind::SAVE:
         return true;
     }
-    // unreachable
-    DASSERT(false);
+    UNREACHABLE();
     return true;
 }
 

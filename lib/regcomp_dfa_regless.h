@@ -8,6 +8,7 @@
 #include "src/dfa/determinization.h"
 #include "src/nfa/nfa.h"
 #include "src/options/opt.h"
+#include "src/util/check.h"
 
 namespace re2c {
 namespace libre2c {
@@ -204,7 +205,7 @@ static void find_state_regless(ctx_t& ctx,
             if (uo[j] != UINT32_MAX) continue;
             for (size_t k = j + 1; k < state.size(); ++k) {
                 if (state[j].origin == state[k].origin) {
-                    DASSERT(state[j].ttran == state[k].ttran); // TDFA(1) property
+                    DCHECK(state[j].ttran == state[k].ttran); // TDFA(1) property
                     uo[k] = i;
                 }
             }
@@ -230,9 +231,6 @@ static void find_state_regless(ctx_t& ctx,
     if (ctx.dc_origin != dfa_t::NIL) {
         rldfa.states[ctx.dc_origin]->arcs[ctx.dc_symbol].state = ctx.dc_target;
     }
-
-    DDUMP_DFA_RAW(ctx, is_new);
-    DDUMP_DFA_TREE(is_new);
 }
 
 inline rldfa_state_t::rldfa_state_t(size_t nchars, const rldfa_backlink_t& link)

@@ -2,8 +2,8 @@
 #include <stdint.h>
 
 #include "src/cfg/cfg.h"
-#include "src/dfa/dfa.h"
 #include "src/debug/debug.h"
+#include "src/dfa/dfa.h"
 #include "src/options/opt.h"
 #include "src/regexp/tag.h"
 

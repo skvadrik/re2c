@@ -3,10 +3,10 @@
 #include <memory>
 #include <vector>
 
-#include "src/debug/debug.h"
 #include "src/options/opt.h"
 #include "src/regexp/re.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 
 namespace re2c {
 namespace {
@@ -29,16 +29,16 @@ static RE* negative_tags(RESpec& spec, const size_t* stidx, const size_t* etidx)
     else if (stidx < etidx) {
         // POSIX syntax means that tags are defined by capturing parentheses. TNFA with raw tags is
         // possible, but we do not have any use cases yet.
-        DASSERT(spec.opts->posix_syntax);
+        DCHECK(spec.opts->posix_syntax);
         // With POSIX syntax we must have at least two tags: opening and closing
-        DASSERT(etidx - stidx > 1);
+        DCHECK(etidx - stidx > 1);
 
         size_t first = *stidx, stag, etag;
         if (!spec.opts->backward) {
-            DASSERT(first % 2 == 0); // forward matching, 1st tag is opening
+            DCHECK(first % 2 == 0); // forward matching, 1st tag is opening
             stag = first;
         } else {
-            DASSERT(first % 2 == 1); // backward matching, 1st tag is closing
+            DCHECK(first % 2 == 1); // backward matching, 1st tag is closing
             stag = first - 1;
         }
         etag = stag + 1;

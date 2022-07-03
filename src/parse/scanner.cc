@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdio.h>
 #include <algorithm>
 #include <stdint.h>
@@ -8,7 +7,7 @@
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/parse/scanner.h"
-#include "src/debug/debug.h"
+#include "src/util/check.h"
 #include "src/util/file_utils.h"
 #include "src/util/string_utils.h"
 
@@ -26,7 +25,7 @@ size_t Scanner::get_input_index() const {
     // Find index of the current input file: the one corresponding to the buffer fragment that
     // contains the cursor.
     size_t i = files.size();
-    DASSERT(i > 0);
+    DCHECK(i > 0);
     for (;;) {
         --i;
         Input* in = files[i];
@@ -65,7 +64,7 @@ Ret Scanner::include(const std::string& filename, char* at) {
     //  - There is exactly one file on top of the parent file (then it is the second call, and the
     //    file on top is the current include file).
 
-    assert(tok <= at); // ensure that we won't pop the include file itself
+    CHECK(tok <= at); // ensure that we won't pop the include file itself
     pop_finished_files();
 
     const size_t fidx = get_input_index(); // index of the parent file with the directive
@@ -74,7 +73,7 @@ Ret Scanner::include(const std::string& filename, char* at) {
         // This is the first call, go on.
     } else {
         // This is the second call, quit.
-        assert(fidx + 1 == last
+        CHECK(fidx + 1 == last
                && files[last]->name == filename
                && files[last]->eo == at);
         return Ret::OK;
@@ -113,7 +112,7 @@ Ret Scanner::include(const std::string& filename, char* at) {
 }
 
 bool Scanner::read(size_t want) {
-    DASSERT(!files.empty());
+    CHECK(!files.empty());
     for (size_t i = files.size(); i --> 0; ) {
         Input* in = files[i];
         const size_t have = fread(lim, 1, want, in->file);
@@ -136,7 +135,7 @@ void Scanner::shift_ptrs_and_fpos(ptrdiff_t offs) {
     for (size_t i = files.size(); i --> 0; ) {
         Input* in = files[i];
         if (in->so == ENDPOS && in->eo == ENDPOS) break;
-        DASSERT(in->so != ENDPOS && in->eo != ENDPOS);
+        CHECK(in->so != ENDPOS && in->eo != ENDPOS);
         in->so += offs;
         in->eo += offs;
     }
@@ -147,7 +146,7 @@ void Scanner::pop_finished_files() {
     // first character of current lexeme), except for the first (main) file which must always remain
     // at the bottom of the stack.
     size_t i = files.size();
-    DASSERT(i > 0);
+    CHECK(i > 0);
     for (;;) {
         --i;
         Input* in = files[i];
@@ -163,7 +162,7 @@ bool Scanner::fill(size_t need) {
 
     pop_finished_files();
 
-    DASSERT(bot <= tok && tok <= lim);
+    CHECK(bot <= tok && tok <= lim);
     size_t free = static_cast<size_t>(tok - bot);
     size_t copy = static_cast<size_t>(lim - tok);
 
@@ -186,7 +185,7 @@ bool Scanner::fill(size_t need) {
         free = BSIZE - copy;
     }
 
-    DASSERT(lim + free <= bot + BSIZE);
+    CHECK(lim + free <= bot + BSIZE);
     if (!read(free)) {
         eof = lim;
         memset(lim, 0, YYMAXFILL);

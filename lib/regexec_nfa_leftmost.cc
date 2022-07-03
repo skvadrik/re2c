@@ -5,11 +5,11 @@
 
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/debug/debug.h"
 #include "src/dfa/closure_leftmost.h"
 #include "src/dfa/tag_history.h"
 #include "src/nfa/nfa.h"
 #include "src/regexp/rule.h"
+#include "src/util/check.h"
 #include "src/util/range.h"
 
 namespace re2c {
@@ -54,7 +54,7 @@ int regexec_nfa_leftmost(
 void reach_on_symbol(lsimctx_t& ctx, uint32_t sym) {
     const confset_t& state = ctx.state;
     confset_t& reach = ctx.reach;
-    DASSERT(reach.empty());
+    DCHECK(reach.empty());
 
     // in reverse, so that future closure DFS has states in stack order
     uint32_t j = 0;

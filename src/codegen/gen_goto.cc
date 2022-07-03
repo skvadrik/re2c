@@ -8,6 +8,7 @@
 #include "src/options/opt.h"
 #include "src/dfa/tcmd.h"
 #include "src/encoding/enc.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -243,7 +244,7 @@ void gen_go(Output& output, const DFA& dfa, const CodeGo* go, const State* from,
         return;
     }
 
-    DASSERT(consume(from) || go->tags == TCID0);
+    DCHECK(consume(from) || go->tags == TCID0);
     if (opts->eof == NOEOF) {
         // With the end-of-input rule $ tag operations *must* be generated before YYFILL label.
         // Without the $ rule the are no strict requirements, but generating them here (after YYFILL

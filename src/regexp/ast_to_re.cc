@@ -7,7 +7,6 @@
 #include <utility>
 #include <vector>
 
-#include "src/debug/debug.h"
 #include "src/encoding/case.h"
 #include "src/encoding/enc.h"
 #include "src/encoding/ebcdic.h"
@@ -20,6 +19,7 @@
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 #include "src/util/range.h"
 
 namespace re2c {
@@ -294,7 +294,7 @@ Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, Range*& r) {
 }
 
 Ret cls_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
-    DASSERT(ast->kind == AstKind::CLS);
+    DCHECK(ast->kind == AstKind::CLS);
     RangeMgr& rm = spec.rangemgr;
     r = nullptr;
 
@@ -315,7 +315,7 @@ Ret cls_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
 }
 
 Ret dot_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
-    DASSERT(ast->kind == AstKind::DOT);
+    DCHECK(ast->kind == AstKind::DOT);
     RangeMgr& rm = spec.rangemgr;
     uint32_t c = '\n';
 
@@ -328,7 +328,7 @@ Ret dot_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
 }
 
 Ret diff_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
-    DASSERT(ast->kind == AstKind::DIFF);
+    DCHECK(ast->kind == AstKind::DIFF);
 
     Range* x, *y;
     CHECK_RET(ast_to_range(spec, ast->diff.ast1, x));
@@ -381,7 +381,7 @@ Ret ast_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
 }
 
 Ret re_string(RESpec& spec, const AstNode* ast, RE*& x) {
-    DASSERT(ast->kind == AstKind::STR);
+    DCHECK(ast->kind == AstKind::STR);
 
     x = nullptr;
     bool icase = is_icase(spec.opts, ast->str.icase);
@@ -434,7 +434,7 @@ Ret re_class(RESpec& spec, const loc_t& loc, const Range* r, RE*& re) {
 }
 
 Ret check_misuse_of_named_def(RESpec& spec, const AstNode* ast) {
-    DASSERT(ast->kind == AstKind::REF);
+    DCHECK(ast->kind == AstKind::REF);
     if (spec.opts->posix_syntax) {
         RET_FAIL(spec.msg.error(ast->loc,
                                 "implicit grouping is forbidden with '--posix-captures' option, "

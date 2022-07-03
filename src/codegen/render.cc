@@ -1,15 +1,14 @@
-#include <assert.h>
-
 #include "config.h"
 #include "src/codegen/code.h"
 #include "src/codegen/helpers.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
 static uint32_t count_lines_text(const char* text) {
-    DASSERT(text);
+    DCHECK(text);
     uint32_t lc = 0;
     for (const char* s = text; *s; ++s) {
         if (*s == '\n') ++lc;
@@ -44,8 +43,7 @@ static void render_line_info(
         break;
     case Lang::RUST:
         // For Rust line directives should be removed by `remove_empty` pass.
-        DASSERT(false);
-        break;
+        UNREACHABLE();
     }
 }
 
@@ -64,13 +62,13 @@ static void render_if_nonl(RenderContext& rctx, const char* cond, const Code* th
     const opt_t* opts = rctx.opts;
 
     if (cond) {
-        DASSERT(count_lines_text(cond) == 0);
+        DCHECK(count_lines_text(cond) == 0);
         bool wrap = opts->lang != Lang::RUST;
         os << "if " << (wrap ? "(" : "") << cond << (wrap ? ")" : "")  << " ";
     }
 
     if (oneline) {
-        DASSERT(count_lines_text(then->text) == 0);
+        DCHECK(count_lines_text(then->text) == 0);
         os << then->text;
         if (then->kind == CodeKind::STMT) os << ";";
     } else {
@@ -213,14 +211,14 @@ static void render_number(RenderContext& rctx, int64_t num, VarType type) {
 
     switch (type) {
     case VarType::UINT:
-        DASSERT(num >= 0);
+        DCHECK(num >= 0);
         os << static_cast<uint32_t>(num);
         break;
     case VarType::INT:
         os << num;
         break;
     case VarType::YYCTYPE:
-        DASSERT(num >= 0);
+        DCHECK(num >= 0);
         prtChOrHex(os, static_cast<uint32_t>(num), enc.szCodeUnit(), hex, /*dot*/ false);
         break;
     }
@@ -318,7 +316,7 @@ static void render_case(RenderContext& rctx, const CodeCase* code) {
         for (uint32_t i = 0; i < nranges; ++i) {
             const bool last = i == nranges - 1;
             const int64_t low = ranges[2*i], upp = ranges[2*i + 1];
-            DASSERT(low < upp);
+            DCHECK(low < upp);
 
             if (opts->lang != Lang::C || opts->case_ranges) {
                 render_case_range(rctx, low, upp - 1, last, type);
@@ -547,7 +545,7 @@ static void render_skip_peek(RenderContext& rctx) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
 
-    DASSERT(opts->input_api == Api::DEFAULT);
+    DCHECK(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*++" << opts->yycursor;
@@ -558,7 +556,7 @@ static void render_peek_skip(RenderContext& rctx) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
 
-    DASSERT(opts->input_api == Api::DEFAULT);
+    DCHECK(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*" << opts->yycursor << "++";
@@ -568,7 +566,7 @@ static void render_peek_skip(RenderContext& rctx) {
 static void render_skip_backup(RenderContext& rctx) {
     const opt_t* opts = rctx.opts;
 
-    DASSERT(opts->input_api == Api::DEFAULT);
+    DCHECK(opts->input_api == Api::DEFAULT);
     rctx.os << indent(rctx.ind, opts->indString) << opts->yymarker << " = ++" << opts->yycursor;
     render_stmt_end(rctx, true);
 }
@@ -576,7 +574,7 @@ static void render_skip_backup(RenderContext& rctx) {
 static void render_backup_skip(RenderContext& rctx) {
     const opt_t* opts = rctx.opts;
 
-    DASSERT(opts->input_api == Api::DEFAULT);
+    DCHECK(opts->input_api == Api::DEFAULT);
     rctx.os << indent(rctx.ind, opts->indString) << opts->yymarker << " = " << opts->yycursor
             << "++";
     render_stmt_end(rctx, true);
@@ -586,7 +584,7 @@ static void render_backup_peek(RenderContext& rctx) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
 
-    DASSERT(opts->input_api == Api::DEFAULT);
+    DCHECK(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*(" << opts->yymarker << " = " << opts->yycursor << ")";
@@ -597,7 +595,7 @@ static void render_skip_backup_peek(RenderContext& rctx) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
 
-    DASSERT(opts->input_api == Api::DEFAULT);
+    DCHECK(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*(" << opts->yymarker << " = ++" << opts->yycursor << ")";
@@ -608,7 +606,7 @@ static void render_backup_peek_skip(RenderContext& rctx) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
 
-    DASSERT(opts->input_api == Api::DEFAULT);
+    DCHECK(opts->input_api == Api::DEFAULT);
     os << indent(rctx.ind, opts->indString) << opts->yych << " = ";
     yych_conv(os, opts);
     os << "*(" << opts->yymarker << " = " << opts->yycursor << "++)";
@@ -622,7 +620,7 @@ static void render_abort(RenderContext& rctx) {
     os << indent(rctx.ind, opts->indString);
     switch (opts->lang) {
     case Lang::C:
-        DASSERT(opts->bUseStateAbort);
+        DCHECK(opts->bUseStateAbort);
         os << "abort();";
         break;
     case Lang::GO:
@@ -735,8 +733,7 @@ void render(RenderContext& rctx, const Code* code) {
     case CodeKind::COND_TABLE:
     case CodeKind::STATE_GOTO:
     case CodeKind::LABEL:
-        assert(false); // must have been expanded before
-        break;
+        UNREACHABLE(); // must have been expanded before
     }
 }
 

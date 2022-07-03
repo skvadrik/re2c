@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include "src/debug/debug.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -40,7 +40,7 @@ inline void mtag_trie_free(mtag_trie_t& trie) {
 }
 
 inline uint32_t mtag_trie_next(mtag_trie_t& trie) {
-    DASSERT(trie.next <= trie.size);
+    DCHECK(trie.next <= trie.size);
     if (trie.next == trie.size) {
         mtag_t* head = new mtag_t[2 * trie.size];
         memcpy(head, trie.head, trie.size * sizeof(mtag_t));

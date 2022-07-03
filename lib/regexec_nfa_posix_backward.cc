@@ -5,12 +5,12 @@
 
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/debug/debug.h"
 #include "src/dfa/closure_posix.h"
 #include "src/dfa/tag_history.h"
 #include "src/nfa/nfa.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 #include "src/util/range.h"
 
 namespace re2c {
@@ -197,7 +197,7 @@ void closure_simple(psimctx_t& ctx) {
 void make_one_step_simple(psimctx_t& ctx, uint32_t sym) {
     const confset_t& state = ctx.state;
     confset_t& reach = ctx.reach;
-    DASSERT(reach.empty());
+    DCHECK(reach.empty());
 
     for (rcconfiter_t i = state.rbegin(), e = state.rend(); i != e; ++i) {
         nfa_state_t* s = i->state;
@@ -229,7 +229,7 @@ void closure_posix(psimctx_t& ctx) {
 }
 
 static int32_t precedence(psimctx_t& ctx, const conf_t& x, const conf_t& y) {
-    DASSERT(x.state == y.state); (void)y;
+    DCHECK(x.state == y.state); (void)y;
     const uint32_t idx = index(x.state, ctx.nfa);
 
     const size_t ntags = ctx.nfa.tags.size();
@@ -458,7 +458,7 @@ void make_one_step(psimctx_t& ctx, uint32_t sym) {
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
+        DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->kind == nfa_state_t::Kind::RAN) {
             for (const Range* r = s->ran.ran; r; r = r->next()) {
@@ -480,7 +480,7 @@ void make_final_step(psimctx_t& ctx) {
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
+        DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->kind == nfa_state_t::Kind::FIN) {
             update_final_offsets(ctx, *i);
@@ -490,7 +490,7 @@ void make_final_step(psimctx_t& ctx) {
 
 void update_final_offsets(psimctx_t& ctx, const conf_t& c) {
     nfa_state_t* s = c.state;
-    DASSERT(s->kind == nfa_state_t::Kind::FIN);
+    DCHECK(s->kind == nfa_state_t::Kind::FIN);
 
     const std::vector<Tag>& tags = ctx.nfa.tags;
     const size_t ntags = tags.size();

@@ -5,6 +5,7 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -30,7 +31,7 @@ tagver_t cfg_t::variable_allocation(const cfg_t& cfg, const bool* interf, tagver
     for (; b < e; ++b) {
         for (const tcmd_t* p = b->cmd; p; p = p->next) {
 
-            DASSERT(p->lhs >= 0 && p->rhs >= 0);
+            DCHECK(p->lhs >= 0 && p->rhs >= 0);
             x = static_cast<size_t>(p->lhs);
             y = static_cast<size_t>(p->rhs);
 

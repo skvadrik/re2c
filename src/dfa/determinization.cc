@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "src/options/opt.h"
-#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/tcmd.h"
@@ -13,6 +12,7 @@
 #include "src/nfa/nfa.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 #include "src/util/range.h"
 
 namespace re2c {
@@ -144,7 +144,7 @@ uint32_t init_tag_versions(ctx_t& ctx) {
 
     // all-zero tag configuration must have static number zero
     ctx.dc_tagvertbl.insert_const(TAGVER_ZERO);
-    DASSERT(ZERO_TAGS == ctx.dc_tagvertbl.insert_const(TAGVER_ZERO));
+    DCHECK(ZERO_TAGS == ctx.dc_tagvertbl.insert_const(TAGVER_ZERO));
 
     // initial tag versions: [1 .. N]
     const tcid_t INITIAL_TAGS = ctx.dc_tagvertbl.insert_succ(1);

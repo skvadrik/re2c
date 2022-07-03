@@ -1,7 +1,7 @@
 #include <limits>
 
-#include "src/debug/debug.h"
 #include "src/parse/ast.h"
+#include "src/util/check.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {
@@ -60,7 +60,7 @@ const AstNode* Ast::cat(const AstNode* a1, const AstNode* a2) {
 }
 
 const AstNode* Ast::iter(const AstNode* a, uint32_t n, uint32_t m) {
-    DASSERT(n <= m);
+    DCHECK(n <= m);
     AstNode* ast = make(a->loc, AstKind::ITER);
     ast->iter.ast = a;
     ast->iter.min = n;

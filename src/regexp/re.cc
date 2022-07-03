@@ -1,8 +1,8 @@
 #include "src/parse/ast.h"
 #include "src/options/opt.h"
-#include "src/debug/debug.h"
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -59,7 +59,7 @@ RE* re_tag(RESpec& spec, size_t idx, bool neg) {
     RE* x = spec.alc.alloct<RE>(1);
     x->kind = RE::Kind::TAG;
     x->tag.idx = idx & 0x7FFFffff;
-    DASSERT(idx == x->tag.idx);
+    DCHECK(idx == x->tag.idx);
     x->tag.neg = neg;
     return x;
 }

@@ -1,9 +1,9 @@
 #include <algorithm>
 
-#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/options/opt.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -134,8 +134,7 @@ uint64_t rule2key(size_t rule, size_t key, size_t def) {
     case 1:
         return rule2key<uint8_t>(rule, def);
     }
-    DASSERT(false); // unreachable
-    return 0;
+    UNREACHABLE();
 }
 
 } // namespace re2c

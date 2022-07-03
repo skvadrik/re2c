@@ -1,7 +1,7 @@
 #include <string.h>
 
-#include "src/debug/debug.h"
 #include "src/dfa/tcmd.h"
+#include "src/util/check.h"
 #include "src/util/hash32.h"
 
 namespace re2c {
@@ -100,7 +100,7 @@ tcmd_t** tcmd_t::topsort(tcmd_t** phead, tcmd_t* end, uint32_t* indeg) {
 tcpool_t::tcpool_t(Allocator& alc): alc(alc), index() {
     // empty command must have static number zero
     insert(nullptr);
-    DASSERT(TCID0 == insert(nullptr));
+    CHECK(TCID0 == insert(nullptr));
 }
 
 tcmd_t* tcpool_t::make_copy(tcmd_t* next, tagver_t lhs, tagver_t rhs) {

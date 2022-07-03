@@ -12,6 +12,7 @@
 #include "src/options/opt.h"
 #include "src/regexp/tag.h"
 #include "src/regexp/rule.h"
+#include "src/util/check.h"
 #include "src/util/hash32.h"
 
 namespace re2c {
@@ -292,7 +293,7 @@ void reserve_buffers(ctx_t& ctx) {
 
 template<typename ctx_t>
 bool equal_lookahead_tags(ctx_t& ctx, const kernel_t* x, const kernel_t* y) {
-    DASSERT(x->size == y->size);
+    DCHECK(x->size == y->size);
 
     if (memcmp(x->thist, y->thist, x->size * sizeof(hidx_t)) == 0) {
         return true;
@@ -448,7 +449,7 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t* x, const kernel_t*
     for (tagver_t xv = 0; xv < max; ++xv) {
         const tagver_t yv = x2y[xv], axv = abs(xv), ayv = abs(yv);
         if (yv != TAGVER_ZERO && xv != yv && !fixed(tags[x2t[xv]])) {
-            DASSERT(axv != ayv);
+            DCHECK(axv != ayv);
             copy = ctx.dfa.tcpool.make_copy(copy, axv, ayv);
         }
     }

@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stddef.h>
 
 #include "lib/regex.h"
@@ -49,7 +48,7 @@ int regexec(const regex_t* re, const char* string, size_t nmatch, regmatch_t pma
 
 subhistory_t* regparse(const regex_t* re, const char* string, size_t nmatch) {
     const int cflags = re->flags;
-    assert(cflags & REG_SUBHIST);
+    CHECK(cflags & REG_SUBHIST);
     if (!(cflags & REG_NFA)) {
         // DFA-based algorithms
         if (cflags & REG_REGLESS) {
@@ -65,14 +64,14 @@ subhistory_t* regparse(const regex_t* re, const char* string, size_t nmatch) {
         }
     } else {
         // NFA-based algorithms (not implemented yet).
-        assert(false);
+        UNREACHABLE();
         return nullptr;
     }
 }
 
 const tstring_t* regtstring(const regex_t* re, const char* string) {
     const int cflags = re->flags;
-    assert(cflags & REG_TSTRING);
+    CHECK(cflags & REG_TSTRING);
     if (!(cflags & REG_NFA)) {
         // DFA-based algorithms
         if (cflags & REG_REGLESS) {
@@ -84,12 +83,12 @@ const tstring_t* regtstring(const regex_t* re, const char* string) {
             }
         } else {
             // TDFA with registers is not suited to tstring construction.
-            assert(false);
+            UNREACHABLE();
             return nullptr;
         }
     } else {
         // NFA-based algorithms (not implemented yet).
-        assert(false);
+        UNREACHABLE();
         return nullptr;
     }
 }

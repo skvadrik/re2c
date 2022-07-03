@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stddef.h>
 #include <valarray>
 #include <vector>
@@ -6,12 +5,11 @@
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
 #include "lib/regoff_trie.h"
-#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
-
+#include "src/util/check.h"
 
 namespace re2c {
 namespace libre2c {
@@ -21,7 +19,7 @@ static void apply_regops(regoff_t* regs, const tcmd_t* cmd, regoff_t pos) {
         if (tcmd_t::iscopy(p)) {
             regs[p->lhs] = regs[p->rhs];
         } else {
-            DASSERT (tcmd_t::isset(p));
+            DCHECK(tcmd_t::isset(p));
             regs[p->lhs] = *p->history == TAGVER_BOTTOM ? -1 : pos;
         }
     }
@@ -166,17 +164,17 @@ subhistory_t* regparse_dfa(const regex_t* preg, const char* string, size_t nmatc
     for (size_t t = 0; t < ntags && h < lasth; t += 2) {
         const Tag& tag = tags[t];
         if (fictive(tag)) continue;
-        DASSERT(!fixed(tag));
+        DCHECK(!fixed(tag));
 
         const tagver_t f1 = finvers[t], f2 = finvers[t + 1];
         const size_t so0 = lists[f1], sz_so = count[f1];
         const size_t eo0 = lists[f2];
-        assert(sz_so == count[f2]);
+        CHECK(sz_so == count[f2]);
 
         // Submatch groups corresponding to this tag pair: there may be more
         // than one capturing parenthesis per tag in regexp like (...(e)...).
         for (size_t k = tag.lsub; k <= tag.hsub && h < lasth; k += 2, ++h) {
-            DASSERT(h - 1 == &h0[k / 2]);
+            DCHECK(h - 1 == &h0[k / 2]);
 
             h->size = sz_so;
             h->offs = rm;

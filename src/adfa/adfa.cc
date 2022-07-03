@@ -8,11 +8,11 @@
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/code.h"
-#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/options/opt.h"
 #include "src/regexp/rule.h"
+#include "src/util/check.h"
 #include "src/util/containers.h"
 
 namespace re2c {
@@ -173,7 +173,7 @@ void DFA::reorder() {
         }
     }
 
-    DASSERT(nStates == ord.size());
+    DCHECK(nStates == ord.size());
 
     ord.push_back(nullptr);
     for (uint32_t i = 0; i < nStates; ++i) {
@@ -364,7 +364,7 @@ void DFA::prepare(const opt_t* opts) {
     if (default_state) {
         for (State* s = head; s; s = s->next) {
             if (s->fallback) {
-                DASSERT(s->rule != eof_rule); // see note [end-of-input rule]
+                DCHECK(s->rule != eof_rule); // see note [end-of-input rule]
                 s->action.set_save(accepts.find_or_add({finstates[s->rule], s->fall_tags}));
             }
         }
@@ -465,7 +465,7 @@ Ret DFA::calc_stats(OutputBlock& out) {
 static bool can_hoist_tags(const State* s, const opt_t* opts) {
     Span* span = s->go.span;
     const size_t nspan = s->go.nspans;
-    DASSERT(nspan != 0);
+    DCHECK(nspan != 0);
 
     if (nspan == 1 && s->rule != Rule::NONE) return false;
 
@@ -522,7 +522,7 @@ void DFA::hoist_tags(const opt_t* opts) {
 }
 
 void DFA::hoist_tags_and_skip(const opt_t* opts) {
-    DASSERT(opts->eager_skip);
+    DCHECK(opts->eager_skip);
 
     for (State* s = head; s; s = s->next) {
         Span* span = s->go.span;

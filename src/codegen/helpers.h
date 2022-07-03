@@ -1,12 +1,11 @@
 #ifndef _RE2C_CODEGEN_HELPERS_
 #define _RE2C_CODEGEN_HELPERS_
 
-#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 #include <sstream>
 
-#include "src/debug/debug.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -21,8 +20,8 @@ void argsubst(std::ostringstream& os,
               const char* arg,
               bool allow_unnamed,
               T val) {
-    assert(!stub.empty());
-    DASSERT(arg != nullptr);
+    CHECK(!stub.empty());
+    DCHECK(arg != nullptr);
 
     const std::string str = os.str();
     os.str("");

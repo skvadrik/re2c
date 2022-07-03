@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <time.h>
@@ -11,6 +10,7 @@
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
+#include "src/util/check.h"
 #include "src/util/file_utils.h"
 #include "src/util/string_utils.h"
 
@@ -160,7 +160,7 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
 }
 
 void Output::gather_info_from_block() {
-    DASSERT(!pblocks->empty());
+    DCHECK(!pblocks->empty());
     const OutputBlock* b = pblocks->back();
     total_fill_index = b->fill_index;
 }

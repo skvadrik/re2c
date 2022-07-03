@@ -6,6 +6,7 @@
 
 #include "src/dfa/tag_history.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 #include "src/util/allocator.h"
 #include "src/util/containers.h"
 
@@ -56,7 +57,7 @@ inline bool tcmd_t::iscopy(const tcmd_t* x) {
 
 inline bool tcmd_t::isset(const tcmd_t* x) {
     if (x->rhs == TAGVER_ZERO) {
-        DASSERT(x->history[0] != TAGVER_ZERO);
+        DCHECK(x->history[0] != TAGVER_ZERO);
         return true;
     }
     return false;

@@ -10,12 +10,12 @@
 
 #include "src/constants.h"
 #include "src/codegen/code.h"
-#include "src/debug/debug.h"
 #include "src/msg/location.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/attribute.h"
+#include "src/util/check.h"
 #include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
 
@@ -159,29 +159,29 @@ inline void Action::set_initial() {
     } else if (kind == Kind::INITIAL) {
         // already marked as initial, probably reuse mode
     } else {
-        DASSERT(false);
+        UNREACHABLE();
     }
 }
 
 inline void Action::set_save(size_t save) {
-    DASSERT(kind == Kind::MATCH);
+    DCHECK(kind == Kind::MATCH);
     kind = Kind::SAVE;
     info.save = save;
 }
 
 inline void Action::set_move() {
-    DASSERT(kind == Kind::MATCH);
+    DCHECK(kind == Kind::MATCH);
     kind = Kind::MOVE;
 }
 
 inline void Action::set_accept(const uniq_vector_t<AcceptTrans>* accepts) {
-    DASSERT(kind == Kind::MATCH);
+    DCHECK(kind == Kind::MATCH);
     kind = Kind::ACCEPT;
     info.accepts = accepts;
 }
 
 inline void Action::set_rule(size_t rule) {
-    DASSERT(kind == Kind::MATCH);
+    DCHECK(kind == Kind::MATCH);
     kind = Kind::RULE;
     info.rule = rule;
 }

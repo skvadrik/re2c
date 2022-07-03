@@ -15,6 +15,7 @@
 #include "src/nfa/nfa.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -137,7 +138,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
 
         // see note [at most one final item per closure]
         cclositer_t b = ctx.state.begin(), e = ctx.state.end(), c = std::find_if(b, e, clos_t::fin);
-        DASSERT(c != e);
+        DCHECK(c != e);
 
         fprintf(stderr, "  r%u [shape=none label=\"(", state);
         for (size_t j = r.ltag; j < r.htag; ++j) {

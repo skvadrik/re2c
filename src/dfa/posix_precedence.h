@@ -3,9 +3,9 @@
 
 #include "src/dfa/determinization.h"
 #include "src/dfa/tag_history.h"
-#include "src/debug/debug.h"
 #include "src/options/opt.h"
 #include "src/util/attribute.h"
+#include "src/util/check.h"
 
 namespace re2c {
 
@@ -64,7 +64,7 @@ int32_t phistory_t::precedence(ctx_t& ctx,
         DINCCOUNT_CLLENGTH(ctx, 1);
     }
     if (i1 != HROOT) {
-        DASSERT(fork_frame);
+        DCHECK(fork_frame);
         const int32_t h = tags[hist.node(i1).info.idx].height;
         prec1 = std::min(prec1, h);
         prec2 = std::min(prec2, h);
@@ -91,14 +91,14 @@ int32_t leftprec(tag_info_t info1, tag_info_t info2, bool last1, bool last2) {
     const bool neg1 = info1.neg, neg2 = info2.neg;
 
     // can't be both negative
-    DASSERT(!(neg1 && neg2));
+    DCHECK(!(neg1 && neg2));
 
     // positive vs negative: positive wins
     if (neg1) return  1;
     if (neg2) return -1;
 
     // can't be both closing
-    DASSERT(!(tag1 % 2 == 1 && tag2 % 2 == 1));
+    DCHECK(!(tag1 % 2 == 1 && tag2 % 2 == 1));
 
     // closing vs opening: closing wins
     if (tag1 % 2 == 1) return -1;
@@ -109,8 +109,7 @@ int32_t leftprec(tag_info_t info1, tag_info_t info2, bool last1, bool last2) {
     if (tag1 < tag2) return -1;
     if (tag1 > tag2) return  1;
 
-    DASSERT(false);
-    return 0;
+    UNREACHABLE();
 }
 
 template<typename ctx_t>
@@ -329,7 +328,7 @@ int32_t pack(int32_t longest, int32_t leftmost) {
     uint32_t u_packed = (u_longest & 0x3fffFFFF) | (u_leftmost << 30u);
     int32_t packed = static_cast<int32_t>(u_packed);
 
-    DASSERT(unpack_longest(packed) == longest && unpack_leftmost(packed) == leftmost);
+    DCHECK(unpack_longest(packed) == longest && unpack_leftmost(packed) == leftmost);
 
     return packed;
 }

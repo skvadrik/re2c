@@ -4,10 +4,10 @@
 
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
-#include "src/debug/debug.h"
 #include "src/dfa/closure_posix.h"
 #include "src/dfa/tag_history.h"
 #include "src/nfa/nfa.h"
+#include "src/util/check.h"
 #include "src/util/range.h"
 
 namespace re2c {
@@ -91,7 +91,7 @@ void make_step(pzsimctx_t& ctx, uint32_t sym) {
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
+        DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->kind == nfa_state_t::Kind::RAN) {
             for (const Range* r = s->ran.ran; r; r = r->next()) {
@@ -117,7 +117,7 @@ void make_final_step(pzsimctx_t& ctx) {
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DASSERT(s->status == GorPass::NOPASS && s->active == 0);
+        DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->kind == nfa_state_t::Kind::FIN) {
             ctx.marker = ctx.cursor;

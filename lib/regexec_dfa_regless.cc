@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stddef.h>
 #include <valarray>
 #include <vector>
@@ -7,12 +6,11 @@
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
 #include "lib/regoff_trie.h"
-#include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
-
+#include "src/util/check.h"
 
 namespace re2c {
 namespace libre2c {
@@ -126,7 +124,7 @@ int regexec_dfa_regless(const regex_t* preg,
         // Submatch groups corresponding to this tag pair: there may be more than one capturing
         // parenthesis per tag in regexp like (...(e)...).
         for (size_t s = tag.lsub; s <= tag.hsub && match < lastmatch; s += 2, ++match) {
-            DASSERT(match - 1 == &pmatch[s / 2]);
+            DCHECK(match - 1 == &pmatch[s / 2]);
             match->rm_so = so;
             match->rm_eo = eo;
         }
@@ -215,12 +213,12 @@ subhistory_t* regparse_dfa_regless(const regex_t* preg, const char* string, size
 
         const size_t so0 = lists[t], sz_so = count[t];
         const size_t eo0 = lists[t + 1];
-        assert(sz_so == count[t + 1]);
+        CHECK(sz_so == count[t + 1]);
 
         // Submatch groups corresponding to this tag pair: there may be more than one capturing
         // parenthesis per tag in regexp like (...(e)...).
         for (size_t s = tag.lsub; s <= tag.hsub && h < lasth; s += 2, ++h) {
-            DASSERT(h - 1 == &h0[s / 2]);
+            DCHECK(h - 1 == &h0[s / 2]);
 
             h->size = sz_so;
             h->offs = rm;
