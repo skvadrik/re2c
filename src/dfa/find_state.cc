@@ -73,13 +73,10 @@ struct kernel_map_t {
     bool operator()(const kernel_t* x, const kernel_t* y);
 };
 
-template<typename ctx_t> static void find_state_specialized(ctx_t&);
 template<typename ctx_t> static tcmd_t* final_actions(ctx_t&, const clos_t&);
 template<typename ctx_t> static void reserve_buffers(ctx_t&);
 template<typename ctx_t> static bool equal_lookahead_tags(ctx_t&, const kernel_t*, const kernel_t*);
 template<typename ctx_t> static void unwind(const typename ctx_t::history_t&, tag_path_t&, hidx_t);
-template<typename ctx_t> static void unwind_tag(
-        const typename ctx_t::history_t&, tag_path_t&, hidx_t, size_t);
 static kernel_t* make_new_kernel(size_t, allocator_t&);
 static kernel_t* make_kernel_copy(const kernel_t*, allocator_t&);
 static void copy_to_buffer(const closure_t&, const prectable_t*, kernel_t*);
@@ -354,18 +351,6 @@ void unwind(const typename ctx_t::history_t& hist, tag_path_t& path, hidx_t idx)
     for (; idx != HROOT; ) {
         const typename ctx_t::history_t::node_t& n = hist.node(idx);
         path.push_back(n.info);
-        idx = n.pred;
-    }
-}
-
-template<typename ctx_t>
-void unwind_tag(const typename ctx_t::history_t& hist, tag_path_t& path, hidx_t idx, size_t tag) {
-    path.clear();
-    for (; idx != HROOT; ) {
-        const typename ctx_t::history_t::node_t& n = hist.node(idx);
-        if (n.info.idx == tag) {
-            path.push_back(n.info);
-        }
         idx = n.pred;
     }
 }
