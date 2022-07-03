@@ -77,7 +77,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 34 "../src/parse/parser.ypp"
+#line 26 "../src/parse/parser.ypp"
 
     const re2c::AstNode* regexp;
     const re2c::SemAct* semact;

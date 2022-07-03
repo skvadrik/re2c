@@ -65,7 +65,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 38 "../lib/parse.ypp"
+#line 30 "../lib/parse.ypp"
 
     const re2c::AstNode* regexp;
     re2c::AstBounds bounds;
