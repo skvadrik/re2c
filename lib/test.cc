@@ -141,7 +141,7 @@ end:
 
 static int test_tstring(const char* pattern, const char* string, const char* expected) {
     regex_t re;
-    const tstring_t* tstr;
+    const tstring_t* tstr = nullptr;
     std::ostringstream s;
     int result;
 
