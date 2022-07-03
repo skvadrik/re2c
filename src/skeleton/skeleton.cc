@@ -100,7 +100,7 @@ Ret Skeleton::init(const dfa_t& dfa) {
         sizeof_key = 1;
     } else if (max <= std::numeric_limits<uint16_t>::max()) {
         sizeof_key = 2;
-    } else if (max <= std::numeric_limits<uint32_t>::max()) {
+    } else {
         sizeof_key = 4;
     }
 
