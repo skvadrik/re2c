@@ -52,6 +52,8 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
       "-Wno-shadow-field-in-constructor"
       # explicit specialization to reduce build dependencies
       "-Wno-undefined-func-template"
+      # re2c uses C++11, not C++98
+      "-Wno-c++98-compat"
       )
     try_cxxflag("-fdiagnostics-color=always")
 
