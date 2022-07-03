@@ -31,12 +31,6 @@ namespace re2c {
     return Ret::OK; \
 } while(0)
 
-#define RET_CONF_NUM(conf) do { \
-    CHECK_RET(lex_conf_number(n)); \
-    opts.set_##conf(n); \
-    return Ret::OK; \
-} while(0)
-
 #define RET_CONF_NUM_NONNEG(conf) do { \
     CHECK_RET(lex_conf_number(n)); \
     if (n < 0) RET_FAIL(msg.error(cur_loc(), "expected nonnegative value in configuration")); \
