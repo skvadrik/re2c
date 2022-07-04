@@ -163,14 +163,14 @@ AC_CHECK_HEADERS([unistd.h],    [], [], [[]])
 AC_CHECK_HEADERS([io.h],        [], [], [[]]) # windows POSIX-like API
 
 
-AC_CONFIG_FILES([\
-    Makefile \
-    benchmarks/submatch_nfa/Makefile \
-    benchmarks/submatch_dfa_aot/Makefile \
-    benchmarks/submatch_dfa_jit/Makefile \
-    benchmarks/submatch_java/Makefile \
-    doc/manpage.rst \
-    doc/help.rst \
+AC_CONFIG_FILES([
+    Makefile
+    benchmarks/submatch_nfa/Makefile
+    benchmarks/submatch_dfa_aot/Makefile
+    benchmarks/submatch_dfa_jit/Makefile
+    benchmarks/submatch_java/Makefile
+    doc/manpage.rst
+    doc/help.rst
 ])
 AC_CONFIG_FILES([run_tests.py],
     [chmod +x run_tests.py])
