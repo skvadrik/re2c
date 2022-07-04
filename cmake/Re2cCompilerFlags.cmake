@@ -38,30 +38,34 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     try_cxxflag("-Wsign-conversion")
     try_cxxflag("-Werror=return-type")
     try_cxxflag("-Weverything"
-      # CLANG eats some GCC options only to warn they are unknown
-      "-Wno-unknown-warning-option"
-      # to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
-      "-Wno-reserved-id-macro"
-      "-Wno-padded"
-      # RE2C-generated lexer has lots of C-style casts because of 're2c:yych:conversion = 1;'
-      "-Wno-old-style-cast"
-      "-Wno-nested-anon-types"
-      # initialization of global constants with std::numeric_limits<...> (mostly for size_t)
-      "-Wno-global-constructors"
-      # using same names in ctor seems more like a feature
-      "-Wno-shadow-field-in-constructor"
-      # explicit specialization to reduce build dependencies
-      "-Wno-undefined-func-template"
-      # re2c uses C++11, not C++98
-      "-Wno-c++98-compat"
-      )
+        # CLANG eats some GCC options only to warn they are unknown
+        "-Wno-unknown-warning-option"
+        # to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
+        "-Wno-reserved-id-macro"
+        "-Wno-padded"
+        # RE2C-generated lexer has lots of C-style casts because of 're2c:yych:conversion = 1;'
+        "-Wno-old-style-cast"
+        "-Wno-nested-anon-types"
+        # initialization of global constants with std::numeric_limits<...> (mostly for size_t)
+        "-Wno-global-constructors"
+        # using same names in ctor seems more like a feature
+        "-Wno-shadow-field-in-constructor"
+        # explicit specialization to reduce build dependencies
+        "-Wno-undefined-func-template"
+        # re2c uses C++11, not C++98
+        "-Wno-c++98-compat"
+    )
     try_cxxflag("-fdiagnostics-color=always")
 
     # Prepend to avoid overriding user-defined options set with -DCMAKE_CXX_FLAGS.
     set(CMAKE_CXX_FLAGS "${re2c_cxx_flags} ${CMAKE_CXX_FLAGS}")
 else()
-    # /Wall enables /W4 plus some more warnings.
-    try_cxxflag("/Wall")
+    # /W3 enables levels 1 - 3 (severe, significant and production quality warnings).
+    # /W4 (informational warnings) and /Wall (/W4 plus off-by-default warnings) emit too much noise.
+    try_cxxflag("/W3"
+        "/wd4068" # disable C4068 warning about unused pragmas (we use some for GCC and Clang)
+        "-D_CRT_SECURE_NO_WARNINGS" # disable C4996 that complains about functions like `fopen`.
+    )
     # Standard C++ stack unwinding (s), assume extern "C" functions never throw (c).
     try_cxxflag("/EHsc")
 
