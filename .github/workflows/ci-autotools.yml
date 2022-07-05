@@ -1,4 +1,4 @@
-name: CI CMake
+name: CI autotools
 
 on:
   push:
@@ -21,58 +21,22 @@ jobs:
       matrix:
 
         include:
-          # Linux
-          - name: linux-gcc-ubsan-ootree
+          - name: linux-gcc-intree
             os: ubuntu-latest
 
-          - name: linux-gcc-asan-ootree
-            os: ubuntu-latest
-
-          - name: linux-gcc-valgrind-ootree
-            os: ubuntu-latest
-
-          - name: linux-gcc-debug-ootree-skeleton
-            os: ubuntu-latest
-
-          - name: linux-gcc-debug-intree-m32-skeleton
-            os: ubuntu-latest
-
-          - name: linux-gcc-release-ootree-skeleton
+          - name: linux-gcc-ootree
             os: ubuntu-latest
 
           # macOS
-          - name: macos-clang-debug-ootree-skeleton
+          - name: macos-clang-intree
             os: macos-latest
 
-          - name: macos-clang-debug-intree-skeleton
+          - name: macos-clang-ootree
             os: macos-latest
-
-          - name: macos-clang-release-ootree-skeleton
-            os: macos-latest
-
-          # Windows
-          - name: windows-msvc-debug-ootree
-            os: windows-latest
-
-          - name: windows-msvc-debug-intree
-            os: windows-latest
-
-          - name: windows-msvc-release-ootree
-            os: windows-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
-      - name: Setup chocolatey Cache (Windows)
-        if: startsWith(runner.os, 'Windows')
-        uses: actions/cache@v2
-        with:
-          path: C:\Users\runneradmin\AppData\Local\Temp\chocolatey
-          key: ${{ runner.os }}-chocolatey-${{ matrix.os }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-chocolatey-${{ matrix.os }}-
-            ${{ runner.os }}-chocolatey-
 
       - name: Setup apt cache (Linux)
         if: startsWith(runner.os, 'Linux')
@@ -89,16 +53,14 @@ jobs:
           case ${{ runner.os }} in
             Linux*)
               sudo apt update
-              sudo apt install gcc-multilib g++-multilib  # for -m32
-              sudo apt install valgrind
+              sudo apt install autoconf automake libtool bison
               ;;
             macOS*)
               sudo xcode-select -switch /Applications/Xcode.app
               echo "SDKROOT=$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_ENV
               echo "$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_PATH
-              ;;
-            Windows*)
-              choco install --no-progress -y winflexbison3
+
+              brew install autoconf automake libtool bison
               ;;
           esac
 
@@ -109,24 +71,28 @@ jobs:
           architecture: x64
 
       - name: Install Python Dependencies
-        # Disabled until this https://github.com/skvadrik/re2c/issues/327
-        # will be implemented
-        if: startsWith(runner.os, 'Windows') == false
         run: |
           python -m pip install --upgrade pip
           python -m pip install docutils pygments
 
-      - name: Check Available Configure Presets
-        run: cmake --list-presets
+      - name: Generate ./configure
+        run: ./autogen.sh
 
       - name: Fast Configure
-        run: cmake --preset=${{ matrix.name }}-fast
+        run: |
+          ./configure \
+              --disable-golang \
+              --disable-rust \
+              --prefix=$PWD/install
 
       - name: Fast Build
-        run: cmake --build --preset=${{ matrix.name }}-fast
+        run: make -j$(nproc)
 
-      - name: Install
-        run: cmake --build --preset=${{ matrix.name }}-fast --target install
+      - name: Fast Install
+        run: make -j$(nproc) install
+
+      - name: Fast Clean
+        run: make -j$(nproc) distclean
 
       - name: Minimal Install Test
         working-directory: ./install/bin
@@ -137,31 +103,41 @@ jobs:
         run: |
           if echo "${{ matrix.name }}" | grep -q "ootree"; then
             BUILD_DIR="$(pwd)/.build/${{ matrix.name }}-full"
+            mkdir -p "$BUILD_DIR"
           else
             BUILD_DIR="$(pwd)"
           fi
           echo "::set-output name=BUILD_DIR::$BUILD_DIR"
 
       - name: Full Configure
-        run: cmake --preset=${{ matrix.name }}-full
+        working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
+        run: |
+          $GITHUB_WORKSPACE/configure \
+              --prefix=$PWD/full-install \
+              --enable-libs \
+              --enable-parsers \
+              --enable-lexers \
+              --enable-docs \
+              --enable-debug \
+              RE2C_FOR_BUILD=$GITHUB_WORKSPACE/install/bin/re2c
 
       - name: Full Build
+        working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
         run: |
-          find src -name '*.re' | xargs touch
-          cmake --build --preset=${{ matrix.name }}-full
+          find $GITHUB_WORKSPACE/src -name '*.re' | xargs touch
+          make -j$(nproc)
 
       - name: Run Main Test Suite
-        run: cmake --build --preset=${{ matrix.name }}-full --target tests
+        working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
+        run: make check -j$(nproc)
 
       - name: Run Skeleton Tests
-        if: "contains(matrix.name, 'skeleton')"
         working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
         run: python run_tests.py --skeleton
 
-      - name: Run Valgrind Tests
-        if: "contains(matrix.name, 'valgrind')"
+      - name: Full Install
         working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
-        run: python run_tests.py --valgrind
+        run: make -j$(nproc) install
 
       - name: Archive test artifacts
         # Run this step only if tests failed (otherwise there is nothing to upload).
