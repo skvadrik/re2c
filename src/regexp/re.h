@@ -20,7 +20,6 @@ struct Rule;
 struct opt_t;
 
 struct RE {
-    using alc_t = slab_allocator_t<4096, sizeof(void*)>;
     enum class Kind: uint32_t {NIL, SYM, ALT, CAT, ITER, TAG} kind;
     union {
         const Range* sym;
@@ -42,8 +41,8 @@ struct RE {
 };
 
 struct RESpec {
-    RE::alc_t alc;
-    RangeMgr& rangemgr;
+    IrAllocator ir_alc;
+    RangeMgr rangemgr;
     std::vector<RE*> res;
     std::vector<uint32_t> charset;
     std::vector<Tag> tags;
@@ -51,7 +50,7 @@ struct RESpec {
     const opt_t* opts;
     Msg& msg;
 
-    RESpec(const opt_t* opts, Msg& msg, RangeMgr& rangemgr);
+    RESpec(const opt_t* opts, Msg& msg);
     Ret init(const std::vector<AstRule>& ast) NODISCARD;
 
     FORBID_COPY(RESpec);

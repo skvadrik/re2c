@@ -28,7 +28,7 @@ static const char* gen_cond(Output& output, const CodeCmp* cond) {
 
 static CodeList* gen_gosw(Output& output, const DFA& dfa, const CodeGoSw* go, const State* from) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     const char* expr = o.str(opts->yych).flush();
@@ -53,7 +53,7 @@ static CodeList* gen_gosw(Output& output, const DFA& dfa, const CodeGoSw* go, co
 }
 
 static CodeList* gen_goifb(Output& output, const DFA& dfa, const CodeGoIfB* go, const State* from) {
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     CodeList* stmts = code_list(alc);
     const char* if_cond = gen_cond(output, go->cond);
     CodeList* if_then = gen_goif(output, dfa, go->gothen, from);
@@ -63,7 +63,7 @@ static CodeList* gen_goifb(Output& output, const DFA& dfa, const CodeGoIfB* go, 
 }
 
 static CodeList* gen_goifl(Output& output, const DFA& dfa, const CodeGoIfL* go, const State* from) {
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     CodeList* stmts = code_list(alc);
     for (uint32_t i = 0; i < go->nbranches; ++i) {
         const CodeGoIfL::Branch& b = go->branches[i];
@@ -95,7 +95,7 @@ static CodeList* gen_goswif(
 
 static CodeList* gen_gobm(Output& output, const DFA& dfa, const CodeGoBm* go, const State* from) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     const char* nonzero = opts->lang == Lang::C ? "" : " != 0";
@@ -132,7 +132,7 @@ static uint32_t label_width(uint32_t label) {
 static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
     static constexpr size_t TABLE_WIDTH = 8;
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const char* text;
 
@@ -172,7 +172,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
 
 static CodeList* gen_gocp(Output& output, const DFA& dfa, const CodeGoCp* go, const State* from) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const char* text;
 
@@ -196,7 +196,7 @@ static CodeList* gen_gocp(Output& output, const DFA& dfa, const CodeGoCp* go, co
 static void gen_godot(
         Output& output, const DFA& dfa, const CodeGoSw* go, const State* from, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const std::string& prefix = opts->tags_prefix;
     const uint32_t n = go->ncases;
@@ -237,7 +237,7 @@ static void gen_godot(
 
 void gen_go(Output& output, const DFA& dfa, const CodeGo* go, const State* from, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
 
     if (go->kind == CodeGo::Kind::DOT) {
         gen_godot(output, dfa, go->godot, from, stmts);

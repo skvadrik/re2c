@@ -75,7 +75,7 @@ void warn_undefined_control_flow(const Skeleton& skel) {
 
         if (i.arc == node.arcs.begin()) {
             // DFS recursive enter
-            if (node.rule != Rule::NONE && node.rule != skel.eof_rule) {
+            if (node.rule != Rule::NONE && node.rule != skel.dfa.eof_rule) {
                 // accepting path, terminate recursion
             } else if (node.end() || (use_eof_rule && node.rule == Rule::NONE)) {
                 // found path to default state

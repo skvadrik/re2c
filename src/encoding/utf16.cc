@@ -10,7 +10,7 @@ namespace re2c {
 namespace utf16 {
 
 // Add word range [w1-w2].
-static void add_continuous1(RangeSuffix*& root, RE::alc_t& alc, uint32_t l, uint32_t h) {
+static void add_continuous1(RangeSuffix*& root, IrAllocator& alc, uint32_t l, uint32_t h) {
     RangeSuffix** p = &root;
     for (;;) {
         if (*p == nullptr) {
@@ -27,7 +27,7 @@ static void add_continuous1(RangeSuffix*& root, RE::alc_t& alc, uint32_t l, uint
 // Now that we have catenation of word ranges [l1-h1],[l2-h2], we want to add it to existing range,
 // merging suffixes on the fly.
 static void add_continuous2(RangeSuffix*& root,
-                            RE::alc_t& alc,
+                            IrAllocator& alc,
                             uint32_t l_ld,
                             uint32_t h_ld,
                             uint32_t l_tr,
@@ -77,7 +77,7 @@ static void add_continuous2(RangeSuffix*& root,
 // alternation of continuous sub-ranges.
 //
 static void split_by_continuity(RangeSuffix*& root,
-                                RE::alc_t& alc,
+                                IrAllocator& alc,
                                 uint32_t l_ld,
                                 uint32_t h_ld,
                                 uint32_t l_tr,
@@ -102,7 +102,7 @@ static void split_by_continuity(RangeSuffix*& root,
 //    [0 - 0xFFFF]         (2-byte UTF-16 sequences)
 //    [0x10000 - 0x10FFFF] (4-byte UTF-16 sequences)
 //
-static void split_by_rune_length(RangeSuffix*& root, RE::alc_t& alc, rune l, rune h) {
+static void split_by_rune_length(RangeSuffix*& root, IrAllocator& alc, rune l, rune h) {
     if (l <= MAX_1WORD_RUNE) {
         if (h <= MAX_1WORD_RUNE) {
             add_continuous1(root, alc, l, h);
@@ -147,7 +147,7 @@ RE* range(RESpec& spec, const Range* r) {
 
     RangeSuffix* root = nullptr;
     for (; r != nullptr; r = r->next()) {
-        split_by_rune_length(root, spec.alc, r->lower(), r->upper() - 1);
+        split_by_rune_length(root, spec.ir_alc, r->lower(), r->upper() - 1);
     }
     return to_regexp(spec, root);
 }

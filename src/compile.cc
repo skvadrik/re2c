@@ -49,7 +49,8 @@ static std::string make_name(Output& output, const std::string& cond, const loc_
     return name;
 }
 
-LOCAL_NODISCARD(Ret ast_to_dfa(const spec_t& spec, Output& output, dfas_t& dfas)) {
+LOCAL_NODISCARD(Ret ast_to_dfa(
+        const spec_t& spec, Output& output, dfas_t& dfas, DfaAllocator& dfa_alc)) {
     OutputBlock& block = output.block();
     const opt_t* opts = block.opts;
     const loc_t& loc = block.loc;
@@ -59,10 +60,8 @@ LOCAL_NODISCARD(Ret ast_to_dfa(const spec_t& spec, Output& output, dfas_t& dfas)
     const std::string name = make_name(output, cond, loc);
     const std::string& setup = spec.setup.empty() ? "" : spec.setup[0]->text;
 
-    RangeMgr rangemgr;
-
     // Build a mutable tree representation of a regexp from an immutable AST.
-    RESpec re(opts, msg, rangemgr);
+    RESpec re(opts, msg);
     CHECK_RET(re.init(ast));
     split_charset(re);
     find_fixed_tags(re);
@@ -81,16 +80,14 @@ LOCAL_NODISCARD(Ret ast_to_dfa(const spec_t& spec, Output& output, dfas_t& dfas)
     DDUMP_NFA(opts, nfa);
 
     // Transmorm TNFA to TDFA.
-    dfa_t dfa(nfa.charset.size(), spec.def_rule, spec.eof_rule);
+    dfa_t dfa(dfa_alc, nfa.charset.size(), spec.def_rule, spec.eof_rule);
     CHECK_RET(determinization(std::move(nfa), dfa, opts, msg, cond));
     DDUMP_DFA_DET(opts, dfa);
-
-    rangemgr.clear();
 
     // Skeleton must be constructed after TDFA construction, but prior to any other TDFA
     // transformations.
     Skeleton skeleton(dfa, opts, name, cond, loc, msg);
-    CHECK_RET(skeleton.init(dfa));
+    CHECK_RET(skeleton.init());
     warn_undefined_control_flow(skeleton);
     if (opts->target == Target::SKELETON) {
         CHECK_RET(emit_data(skeleton));
@@ -138,7 +135,7 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
     Ast ast;
     RulesBlocks rblocks;
     const conopt_t* globopts = &opts.glob;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& out_alc = output.allocator;
     const loc_t& loc0 = input.tok_loc();
     std::string block_name;
     loc_t block_loc;
@@ -150,7 +147,7 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
     output.header_mode(0);
     CHECK_RET(output.new_block(opts, InputBlock::GLOBAL, block_name, loc0));
     output.wversion_time();
-    output.wdelay_stmt(0, code_line_info_input(alc, loc0));
+    output.wdelay_stmt(0, code_line_info_input(out_alc, loc0));
 
     if (globopts->target == Target::SKELETON) {
         output.wdelay_stmt(0, emit_skeleton_prolog(output));
@@ -187,15 +184,16 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
             CHECK_RET(check_and_merge_special_rules(specs, output.block().opts, output.msg, ast));
 
             // compile AST to DFA
+            DfaAllocator dfa_alc;
             dfas_t dfas;
             for (const spec_t& spec : specs) {
-                CHECK_RET(ast_to_dfa(spec, output, dfas));
+                CHECK_RET(ast_to_dfa(spec, output, dfas, dfa_alc));
             }
 
             // compile DFA to code
             gen_code(output, dfas);
         }
-        output.wdelay_stmt(0, code_line_info_input(alc, input.cur_loc()));
+        output.wdelay_stmt(0, code_line_info_input(out_alc, input.cur_loc()));
 
         // accumulate whole-program information from this block
         output.gather_info_from_block();

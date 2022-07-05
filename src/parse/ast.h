@@ -102,7 +102,7 @@ class Ast {
   private:
     // Allocator used for allocating AST nodes. All memory is freed when the allocator is destroyed
     // (which happens after parsing and processing the whole translation unit, but before codegen).
-    Allocator allocator;
+    AstAllocator allocator;
 
     AstNode* make(const loc_t& loc, AstKind lind);
 

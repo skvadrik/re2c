@@ -94,6 +94,7 @@ struct nfa_t {
     nfa_state_t* states;
     nfa_state_t* root;
 
+    IrAllocator ir_alc;
     std::vector<uint32_t> charset;
     std::vector<Rule> rules;
     std::vector<Tag> tags;

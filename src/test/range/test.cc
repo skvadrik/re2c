@@ -2,6 +2,7 @@
 
 #include "src/test/range/test.h"
 #include "src/test/range/test-impl.h"
+#include "src/util/allocator.h"
 
 namespace re2c_test {
 
@@ -52,7 +53,8 @@ static int32_t diff(const re2c::Range* r1,
 
 static int32_t test () {
     int32_t ok = 0;
-    re2c::RangeMgr rm;
+    re2c::IrAllocator alc;
+    re2c::RangeMgr rm(alc);
 
     static constexpr uint32_t BITS = 8;
     static constexpr uint32_t N = 1u << BITS;
@@ -62,7 +64,7 @@ static int32_t test () {
             re2c::Range* r2 = range<BITS>(rm, j);
             ok |= diff (r1, r2, add<BITS>(rm, i, j), rm.add(r1, r2), "U");
             ok |= diff (r1, r2, sub<BITS>(rm, i, j), rm.sub(r1, r2), "D");
-            rm.clear();
+            alc.clear();
         }
     }
 

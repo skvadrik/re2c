@@ -77,7 +77,6 @@ struct State {
 };
 
 struct DFA {
-    Allocator allocator;
     std::vector<uint32_t> charset;
     std::vector<Rule> rules;
     std::vector<Tag> tags;

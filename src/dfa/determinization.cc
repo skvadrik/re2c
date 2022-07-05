@@ -21,16 +21,17 @@ template<typename ctx_t> static Ret determinization(ctx_t& ctx) NODISCARD;
 template<typename ctx_t> static void clear_caches(ctx_t& ctx);
 template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t& ctx);
 
-dfa_t::dfa_t(size_t charset_bounds, size_t def_rule, size_t eof_rule)
-    : allocator(),
-      states(),
-      nchars(charset_bounds - 1), // (n + 1) bounds for n ranges
+dfa_t::dfa_t(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule)
+    : dfa_alc(dfa_alc),
+      ir_alc(),
       charset(),
       rules(),
       tags(),
+      states(),
+      nchars(charset_bounds - 1), // (n + 1) bounds for n ranges
       mtagvers(),
       finvers(nullptr),
-      tcpool(allocator),
+      tcpool(dfa_alc),
       maxtagver(0),
       def_rule(def_rule),
       eof_rule(eof_rule) {}
@@ -85,6 +86,7 @@ Ret determinization(ctx_t& ctx) {
     warn_nondeterministic_tags(ctx);
 
     // Move ownership of common data from determinization context to TDFA.
+    ctx.dfa.ir_alc = std::move(ctx.ir_alc);
     ctx.dfa.charset = std::move(ctx.charset);
     ctx.dfa.rules = std::move(ctx.rules);
     ctx.dfa.tags = std::move(ctx.tags);
@@ -153,7 +155,7 @@ uint32_t init_tag_versions(ctx_t& ctx) {
     dfa.maxtagver = static_cast<tagver_t>(ntags);
 
     // final/fallback versions will be assigned on the go
-    dfa.finvers = dfa.allocator.alloct<tagver_t>(ntags);
+    dfa.finvers = ctx.dfa.dfa_alc.template alloct<tagver_t>(ntags);
     for (size_t i = 0; i < ntags; ++i) {
         dfa.finvers[i] = fixed(ctx.tags[i]) ? TAGVER_ZERO : ++dfa.maxtagver;
     }
@@ -222,8 +224,11 @@ void warn_nondeterministic_tags(const ctx_t& ctx) {
 }
 
 template<typename history_t>
-determ_context_t<history_t>::determ_context_t(
-        nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond)
+determ_context_t<history_t>::determ_context_t(nfa_t&& nfa,
+                                              dfa_t& dfa,
+                                              const opt_t* opts,
+                                              Msg& msg,
+                                              const std::string& cond)
     : dc_opts(opts),
       dc_msg(msg),
       dc_condname(cond),
@@ -231,13 +236,13 @@ determ_context_t<history_t>::determ_context_t(
       // Move ownership of common data from TNFA to determinization context.
       nfa_states(nfa.states),
       nfa_root(nfa.root),
+      ir_alc(std::move(nfa.ir_alc)),
       charset(std::move(nfa.charset)),
       rules(std::move(nfa.rules)),
       tags(std::move(nfa.tags)),
 
       dfa(dfa),
 
-      dc_allocator(),
       dc_origin(dfa_t::NIL),
       dc_target(dfa_t::NIL),
       dc_symbol(0),

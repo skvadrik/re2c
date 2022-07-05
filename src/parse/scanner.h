@@ -30,9 +30,6 @@ struct conopt_t;
 struct opt_t;
 struct Opt;
 
-// Must be defined exacly as in codegen.
-using code_alc_t = slab_allocator_t<1024 * 1024, 8>;
-
 class Scanner: private ScannerState {
   public:
     static const char* const ENDPOS;
@@ -71,7 +68,7 @@ class Scanner: private ScannerState {
     bool is_eof() const;
     Ret set_sourceline() NODISCARD;
     Ret lex_opt_name(std::string& name) NODISCARD;
-    Ret lex_name_list(code_alc_t& alc, BlockNameList** ptail) NODISCARD;
+    Ret lex_name_list(OutAllocator& alc, BlockNameList** ptail) NODISCARD;
     Ret lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) NODISCARD;
     Ret lex_block_end(Output& out, bool allow_garbage = false) NODISCARD;
     Ret lex_code_indented(Ast& ast) NODISCARD;

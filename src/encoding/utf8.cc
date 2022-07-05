@@ -11,7 +11,7 @@ namespace utf8 {
 
 // Now that we have catenation of byte ranges [l1-h1]...[lN-hN], we want to add it to existing
 // range, merging suffixes on the fly.
-static void add_continuous( RangeSuffix*& root, RE::alc_t& alc, rune l, rune h, uint32_t n) {
+static void add_continuous( RangeSuffix*& root, IrAllocator& alc, rune l, rune h, uint32_t n) {
     uint32_t lcs[MAX_RUNE_LENGTH];
     uint32_t hcs[MAX_RUNE_LENGTH];
     rune_to_bytes(lcs, l);
@@ -55,7 +55,7 @@ static void add_continuous( RangeSuffix*& root, RE::alc_t& alc, rune l, rune h, 
 // This function finds all such 'points of discontinuity' and represents original range as
 // alternation of continuous sub-ranges.
 //
-static void split_by_continuity(RangeSuffix*& root, RE::alc_t& alc, rune l, rune h, uint32_t n) {
+static void split_by_continuity(RangeSuffix*& root, IrAllocator& alc, rune l, rune h, uint32_t n) {
     for (uint32_t i = 1; i < n; ++i) {
         uint32_t m = (1u << (6u * i)) - 1u; // last i bytes of a UTF-8 sequence
         if ((l & ~m) != (h & ~m)) {
@@ -81,7 +81,7 @@ static void split_by_continuity(RangeSuffix*& root, RE::alc_t& alc, rune l, rune
 //     [0x800 - 0xFFFF]     (3-byte UTF-8 sequences)
 //     [0x10000 - 0x10FFFF] (4-byte UTF-8 sequences)
 //
-static void split_by_rune_length(RangeSuffix*& root, RE::alc_t& alc, rune l, rune h) {
+static void split_by_rune_length(RangeSuffix*& root, IrAllocator& alc, rune l, rune h) {
     const uint32_t nh = rune_length(h);
     for (uint32_t nl = rune_length(l); nl < nh; ++nl) {
         rune r = max_rune(nl);
@@ -118,7 +118,7 @@ RE* range(RESpec& spec, const Range* r) {
 
     RangeSuffix* root = nullptr;
     for (; r != nullptr; r = r->next()) {
-        split_by_rune_length(root, spec.alc, r->lower(), r->upper() - 1);
+        split_by_rune_length(root, spec.ir_alc, r->lower(), r->upper() - 1);
     }
     return to_regexp(spec, root);
 }

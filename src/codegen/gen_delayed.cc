@@ -108,7 +108,7 @@ LOCAL_NODISCARD(Ret expand_tags_directive(CodegenCtxPass1& ctx, Code* code)) {
 }
 
 static void gen_cond_enum(Scratchbuf& buf,
-                          code_alc_t& alc,
+                          OutAllocator& alc,
                           Code* code,
                           const opt_t* opts,
                           const StartConds& conds) {
@@ -233,7 +233,7 @@ LOCAL_NODISCARD(Ret add_conditions_from_blocks(const blocks_t& blocks, StartCond
 
 LOCAL_NODISCARD(Ret expand_cond_enum(CodegenCtxPass1& ctx, Code* code)) {
     Scratchbuf& buf = ctx.global->scratchbuf;
-    code_alc_t& alc = ctx.global->allocator;
+    OutAllocator& alc = ctx.global->allocator;
 
     // Use global options accumulated across the whole file, as `types:re2c` may include conditions
     // from a few different blocks, and it is not clear which block's options it should inherit.
@@ -267,7 +267,7 @@ LOCAL_NODISCARD(Ret expand_cond_enum(CodegenCtxPass1& ctx, Code* code)) {
 }
 
 static void gen_state_goto_cases(CodegenCtxPass1& ctx, CodeCases* cases, const OutputBlock* block) {
-    code_alc_t& alc = ctx.global->allocator;
+    OutAllocator& alc = ctx.global->allocator;
     for (const auto& i : block->fill_goto) {
         append(cases, code_case_number(alc, i.second, static_cast<int32_t>(i.first)));
     }
@@ -289,7 +289,7 @@ LOCAL_NODISCARD(Ret gen_state_goto(CodegenCtxPass1& ctx, Code* code)) {
     DCHECK(!globopts->loop_switch);
 
     Scratchbuf& o = ctx.global->scratchbuf;
-    code_alc_t& alc = ctx.global->allocator;
+    OutAllocator& alc = ctx.global->allocator;
     const char* text;
 
     // There are two possibilities:
@@ -501,7 +501,7 @@ LOCAL_NODISCARD(Ret gen_yymax(CodegenCtxPass1& ctx, Code* code)) {
 
 static CodeList* gen_cond_goto_binary(CodegenCtxPass1& ctx, size_t lower, size_t upper) {
     const opt_t* opts = ctx.block->opts;
-    code_alc_t& alc = ctx.global->allocator;
+    OutAllocator& alc = ctx.global->allocator;
     Scratchbuf& o = ctx.global->scratchbuf;
 
     CodeList* stmts = code_list(alc);
@@ -520,7 +520,7 @@ static CodeList* gen_cond_goto_binary(CodegenCtxPass1& ctx, size_t lower, size_t
 
 static void gen_cond_goto(CodegenCtxPass1& ctx, Code* code) {
     const opt_t* opts = ctx.block->opts;
-    code_alc_t& alc = ctx.global->allocator;
+    OutAllocator& alc = ctx.global->allocator;
     Scratchbuf& o = ctx.global->scratchbuf;
     const StartConds& conds = ctx.block->conds;
     bool warn_cond_ord = ctx.global->warn_cond_ord;
@@ -575,7 +575,7 @@ static void gen_cond_goto(CodegenCtxPass1& ctx, Code* code) {
 
 static void gen_cond_table(CodegenCtxPass1& ctx, Code* code) {
     const opt_t* opts = ctx.block->opts;
-    code_alc_t& alc = ctx.global->allocator;
+    OutAllocator& alc = ctx.global->allocator;
     const StartConds& conds = ctx.block->conds;
     Scratchbuf& o = ctx.global->scratchbuf;
 

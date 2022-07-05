@@ -55,7 +55,7 @@ struct rldfa_t {
     const int flags;
     std::vector<Tag> tags;
 
-    allocator_t alc;
+    DfaAllocator alc;
 
     // RLDFA own states with backlinks in them.
     std::vector<rldfa_state_t*> states;
@@ -88,7 +88,7 @@ static inline tchar_t encode_tag(size_t tag) {
 
 template<typename history_t>
 static inline void get_tstring_fragment(history_t& history,
-                                        allocator_t& alc,
+                                        DfaAllocator& alc,
                                         hidx_t hidx,
                                         std::vector<tchar_t>& tfrag,
                                         rldfa_backlink_t& link,
@@ -149,7 +149,7 @@ static void determinization_regless(nfa_t&& nfa, rldfa_t& rldfa) {
     Msg msg;
     // Determinization context lifetime must cover regexec, as some of the data stored in the
     // context is used during matching.
-    dfa_t dfa(nfa.charset.size(), Rule::NONE, Rule::NONE);
+    dfa_t dfa(rldfa.alc, nfa.charset.size(), Rule::NONE, Rule::NONE);
     ctx_t ctx(std::move(nfa), dfa, rldfa.opts, msg, "");
 
     std::vector<tchar_t> tfrag;

@@ -12,6 +12,7 @@
 
 #include "src/constants.h"
 #include "src/codegen/code.h"
+#include "src/dfa/dfa.h"
 #include "src/msg/location.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
@@ -28,8 +29,6 @@ class bitmaps_t;
 class Msg;
 class path_t;
 struct DFA;
-struct dfa_state_t;
-struct dfa_t;
 struct opt_t;
 struct tcmd_t;
 
@@ -111,7 +110,6 @@ struct Node {
     };
 
     using arcs_t = std::map<size_t, range_t*>;
-    using range_allocator_t = fixed_allocator_t<Node::range_t>;
 
     arcs_t arcs;
     size_t rule;
@@ -121,7 +119,7 @@ struct Node {
     void init(const dfa_state_t* s,
               const std::vector<uint32_t>& charset,
               size_t nil,
-              range_allocator_t& allocator);
+              IrAllocator& ir_alc);
     bool end() const;
 
     FORBID_COPY(Node);
@@ -130,26 +128,18 @@ struct Node {
 struct Skeleton {
     static constexpr uint32_t DEFTAG = std::numeric_limits<uint32_t>::max();
 
+    dfa_t& dfa;
+
     const opt_t* opts;
     const std::string name;
     const std::string cond;
     const loc_t loc;
     Msg& msg;
 
-    Node::range_allocator_t range_allocator;
-
     const size_t nodes_count;
     Node* nodes;
-
     size_t sizeof_key;
-    size_t def_rule;
-    size_t eof_rule;
     size_t ntagver;
-    const std::vector<uint32_t>& charset;
-    const std::vector<Rule>& rules;
-    const std::vector<Tag>& tags;
-    const tagver_t* finvers;
-
     uint32_t* tagvals;
     mtag_trie_t tagtrie;
     std::vector<uint32_t> mtagval;
@@ -158,14 +148,14 @@ struct Skeleton {
     OutBuf buf_data;
     OutBuf buf_keys;
 
-    Skeleton(const dfa_t& dfa,
+    Skeleton(dfa_t& dfa,
              const opt_t* opts,
              const std::string& name,
              const std::string& cond,
              const loc_t& loc,
              Msg& msg);
     ~Skeleton ();
-    Ret init(const dfa_t& dfa) NODISCARD;
+    Ret init() NODISCARD;
 
     FORBID_COPY(Skeleton);
 };

@@ -52,10 +52,8 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     Ast ast;
     const AstNode* a = parse(pattern, ast);
 
-    preg->rmgr = new RangeMgr;
-
     std::vector<AstRule> arv{AstRule{a, ast.sem_act(NOWHERE, nullptr, nullptr, false)}};
-    RESpec re(opt, msg, *preg->rmgr);
+    RESpec re(opt, msg);
     CHECK_RET(re.init(arv));
 
     find_fixed_tags(re);
@@ -84,7 +82,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         Opt opts0(globopts0, msg);
         const opt_t* opt0;
         CHECK_RET(opts0.snapshot(opt0));
-        RESpec re0(opt0, msg, *preg->rmgr);
+        RESpec re0(opt0, msg);
         CHECK_RET(re0.init(arv));
         nfa0 = new nfa_t(std::move(re0), nfa_size);
         delete opt0;
@@ -116,7 +114,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
             preg->regtrie = new regoff_trie_t(preg->rldfa->tags.size());
         }
     } else {
-        dfa_t* dfa = new dfa_t(nfa->charset.size(), Rule::NONE, Rule::NONE);
+        dfa_t* dfa = new dfa_t(*new DfaAllocator(), nfa->charset.size(), Rule::NONE, Rule::NONE);
         CHECK_RET(determinization(std::move(*nfa), *dfa, opt, msg, ""));
         preg->dfa = dfa;
         delete nfa;

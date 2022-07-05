@@ -33,11 +33,11 @@ static constexpr tcid_t TCID0 = 0;
 class tcpool_t {
     using index_t = lookup_t<const tcmd_t*>;
 
-    Allocator& alc;
+    DfaAllocator& alc;
     index_t index;
 
   public:
-    explicit tcpool_t(Allocator& alc);
+    explicit tcpool_t(DfaAllocator& alc);
     tcmd_t* make_copy(tcmd_t* next, tagver_t lhs, tagver_t rhs);
     tcmd_t* make_set(tcmd_t* next, tagver_t lhs, tagver_t set);
     template<typename history_t> tcmd_t* make_add(tcmd_t* next,

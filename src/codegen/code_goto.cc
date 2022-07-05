@@ -10,7 +10,7 @@
 
 namespace re2c {
 
-static CodeGoIf* code_goif(code_alc_t& alc,
+static CodeGoIf* code_goif(OutAllocator& alc,
                            CodeGoIf::Kind kind,
                            const Span* sp,
                            uint32_t nsp,
@@ -24,7 +24,7 @@ static bool is_eof(uint32_t eof, uint32_t ub) {
 }
 
 static CodeGoSw* code_gosw(
-        code_alc_t& alc, const Span* spans, uint32_t nspans, bool skip, uint32_t eof) {
+        OutAllocator& alc, const Span* spans, uint32_t nspans, bool skip, uint32_t eof) {
     CodeGoSw* go = alc.alloct<CodeGoSw>(1);
     go->cases = alc.alloct<CodeGoCase>(nspans);
 
@@ -87,14 +87,14 @@ static CodeGoSw* code_gosw(
     return go;
 }
 
-static CodeCmp* code_cmp(code_alc_t& alc, const char* cmp, uint32_t val) {
+static CodeCmp* code_cmp(OutAllocator& alc, const char* cmp, uint32_t val) {
     CodeCmp* x = alc.alloct<CodeCmp>(1);
     x->cmp = cmp;
     x->val = val;
     return x;
 }
 
-static CodeGoIfB* code_goifb(code_alc_t& alc,
+static CodeGoIfB* code_goifb(OutAllocator& alc,
                              const Span* s,
                              uint32_t n,
                              State* next,
@@ -135,7 +135,7 @@ static void add_branch(CodeGoIfL* go,
     b.jump.elide = !opts->loop_switch && !to;
 }
 
-static CodeGoIfL* code_goifl(code_alc_t& alc,
+static CodeGoIfL* code_goifl(OutAllocator& alc,
                              const Span* s,
                              uint32_t n,
                              State* next,
@@ -187,7 +187,7 @@ static CodeGoIfL* code_goifl(code_alc_t& alc,
     return x;
 }
 
-static CodeGoIf* code_goif(code_alc_t& alc,
+static CodeGoIf* code_goif(OutAllocator& alc,
                            CodeGoIf::Kind kind,
                            const Span* sp,
                            uint32_t nsp,
@@ -205,7 +205,7 @@ static CodeGoIf* code_goif(code_alc_t& alc,
     return x;
 }
 
-static CodeGoSwIf* code_goswif(code_alc_t& alc, 
+static CodeGoSwIf* code_goswif(OutAllocator& alc, 
                                const Span* sp,
                                uint32_t nsp,
                                State* next,
@@ -252,7 +252,7 @@ static uint32_t unmap(Span* new_span, const Span* old_span, uint32_t old_nspans,
     return new_nspans;
 }
 
-static CodeGoBm* code_gobm(code_alc_t& alc,
+static CodeGoBm* code_gobm(OutAllocator& alc,
                            const Span* span,
                            uint32_t nSpans,
                            const Span* hspan,
@@ -279,7 +279,7 @@ static CodeGoBm* code_gobm(code_alc_t& alc,
     return x;
 }
 
-static CodeGoCpTable* code_gocp_table(code_alc_t& alc, const Span* span, uint32_t nSpans) {
+static CodeGoCpTable* code_gocp_table(OutAllocator& alc, const Span* span, uint32_t nSpans) {
     CodeGoCpTable* x = alc.alloct<CodeGoCpTable>(1);
     x->table = alc.alloct<State*>(CodeGoCpTable::TABLE_SIZE);
 
@@ -295,7 +295,7 @@ static CodeGoCpTable* code_gocp_table(code_alc_t& alc, const Span* span, uint32_
     return x;
 }
 
-static CodeGoCp* code_gocp(code_alc_t& alc,
+static CodeGoCp* code_gocp(OutAllocator& alc,
                            const Span* span,
                            uint32_t nSpans,
                            const Span* hspan,
@@ -334,7 +334,7 @@ State* fallback_state_with_eof_rule(
     return fallback;
 }
 
-void code_go(code_alc_t& alc, const DFA& dfa, const opt_t* opts, State* from) {
+void code_go(OutAllocator& alc, const DFA& dfa, const opt_t* opts, State* from) {
     // Mark all states that are targets of `yyaccept` switch to as used.
     if (from->action.kind == Action::Kind::ACCEPT) {
         for (const AcceptTrans& a : *from->action.info.accepts) {

@@ -18,7 +18,7 @@
 namespace re2c {
 
 static void from_le(Output& output, CodeList* code, const char* expr, size_t size) {
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const char* text;
 
@@ -34,7 +34,7 @@ static void from_le(Output& output, CodeList* code, const char* expr, size_t siz
 }
 
 Code* emit_skeleton_prolog(Output& output) {
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     const char* if_cond;
     CodeList* code, *block, *if_code;
     CodeArgs* args;
@@ -114,7 +114,7 @@ Code* emit_skeleton_prolog(Output& output) {
 
 static void emit_skeleton_defines(Output& output, CodeList* code, const DFA& dfa) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const size_t sizeof_cunit = opts->encoding.szCodeUnit();
     const char* text;
@@ -152,7 +152,7 @@ static void emit_skeleton_defines(Output& output, CodeList* code, const DFA& dfa
 }
 
 static void emit_skeleton_function_action(Output& output, CodeList* code, const DFA& dfa) {
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const uint64_t norule = rule2key(Rule::NONE, dfa.key_size, dfa.def_rule);
     CodeArgs* args;
@@ -218,7 +218,7 @@ static void emit_skeleton_stags(Output& output, CodeList* code, const DFA& dfa) 
     const opt_t* opts = output.block().opts;
     if (dfa.stagvars.empty() && !opts->posix_syntax) return;
 
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     CodeArgs* args;
     CodeList* if_code, *body;
@@ -270,7 +270,7 @@ static void emit_skeleton_stags(Output& output, CodeList* code, const DFA& dfa) 
 }
 
 static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     CodeArgs* args;
     CodeList* if_code, *block;
     const char* if_cond;
@@ -368,7 +368,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
 static void emit_skeleton_mtags(Output& output, CodeList* code, const DFA& dfa) {
     if (dfa.mtagvars.empty()) return;
 
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     CodeArgs* args;
     CodeList* if_code, *block, *body;
@@ -459,7 +459,7 @@ static void emit_skeleton_mtags(Output& output, CodeList* code, const DFA& dfa) 
 }
 
 static void emit_skeleton_function_check_key_count(Output& output, CodeList* code, DFA& dfa) {
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     CodeArgs* args;
     CodeList* block, *if_code;
@@ -489,7 +489,7 @@ static void emit_skeleton_function_check_key_count(Output& output, CodeList* cod
 
 static void emit_skeleton_function_lex(Output& output, CodeList* code, DFA& dfa) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const size_t sizeof_cunit = opts->encoding.szCodeUnit();
     std::set<std::string>::const_iterator var1, var2;
@@ -714,7 +714,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, DFA& dfa)
 
 static void emit_skeleton_undefs(Output& output, CodeList* code, DFA& dfa) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
 
     append(code, code_textraw(alc, ""));
     append(code, code_textraw(alc, "#undef YYCTYPE"));
@@ -749,7 +749,7 @@ void emit_skeleton(Output& output, CodeList* code, DFA& dfa) {
 }
 
 Code* emit_skeleton_epilog(Output& output) {
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     CodeList* stmts = code_list(alc);
@@ -770,7 +770,7 @@ Code* emit_skeleton_epilog(Output& output) {
 }
 
 void emit_skeleton_action(Output& output, CodeList* code, const DFA& dfa, size_t rid) {
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const std::string& name = dfa.name;
     const Rule& r = dfa.rules[rid];

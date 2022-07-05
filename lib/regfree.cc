@@ -20,8 +20,6 @@ using namespace re2c;
 using namespace re2c::libre2c;
 
 void regfree(regex_t* preg) {
-    delete preg->rmgr;
-
     if (preg->flags & REG_TSTRING) {
         delete[] preg->tstring.string;
     } else if (preg->flags & REG_SUBHIST) {
@@ -52,6 +50,7 @@ void regfree(regex_t* preg) {
                 delete preg->regtrie;
             }
         } else {
+            delete &preg->dfa->dfa_alc;
             delete preg->dfa;
             if (preg->flags & REG_TSTRING) {
                 // t-string construction does not use this

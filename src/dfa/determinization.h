@@ -25,7 +25,6 @@ struct dfa_t;
 struct tcmd_t;
 class Msg;
 
-using allocator_t = slab_allocator_t<1024 * 1024, sizeof(void*)>;
 using prectable_t = int32_t;
 
 struct clos_t {
@@ -129,6 +128,7 @@ struct determ_context_t {
     nfa_state_t* nfa_root;
 
     // common data shared by all representations 
+    IrAllocator ir_alc;
     std::vector<uint32_t> charset;
     std::vector<Rule> rules;
     std::vector<Tag> tags;
@@ -137,7 +137,6 @@ struct determ_context_t {
     dfa_t& dfa;
 
     // temporary structures used by determinization
-    allocator_t dc_allocator;
     uint32_t dc_origin;                // from-state of the current transition
     uint32_t dc_target;                // to-state of the current transition
     uint32_t dc_symbol;                // alphabet symbol of the current transition
@@ -177,7 +176,11 @@ struct determ_context_t {
     dump_dfa_t dc_dump;
     closure_stats_t dc_clstats;
 
-    determ_context_t(nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg&, const std::string& cond);
+    determ_context_t(nfa_t&& nfa,
+                     dfa_t& dfa,
+                     const opt_t* opts,
+                     Msg& msg,
+                     const std::string& cond);
     ~determ_context_t();
     FORBID_COPY(determ_context_t);
 };

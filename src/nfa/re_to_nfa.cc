@@ -175,6 +175,7 @@ nfa_t::nfa_t(RESpec&& spec, size_t max_size)
       root(nullptr),
 
       // Move ownership from regexp to TNFA.
+      ir_alc(std::move(spec.ir_alc)),
       charset(std::move(spec.charset)),
       rules(std::move(spec.rules)),
       tags(std::move(spec.tags)) {

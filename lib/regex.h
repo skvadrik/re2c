@@ -78,7 +78,6 @@ static constexpr int REG_AUTOTAGS  = 1u << 16;
 struct regex_t {
     size_t re_nsub;
     size_t re_ntag;
-    re2c::RangeMgr* rmgr;
     const re2c::nfa_t* nfa;
     const re2c::dfa_t* dfa;
     const re2c::libre2c::rldfa_t* rldfa;

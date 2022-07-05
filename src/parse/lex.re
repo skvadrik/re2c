@@ -123,7 +123,7 @@ struct ScannerState {
 
 Ret Scanner::echo(Output& out, std::string& block_name, InputBlock& kind) {
     const opt_t* opts = out.block().opts;
-    code_alc_t& alc = out.allocator;
+    OutAllocator& alc = out.allocator;
     const char* x, *y;
 
     if (is_eof()) RET_BLOCK(InputBlock::END);
@@ -303,7 +303,7 @@ Ret Scanner::lex_opt_name(std::string& name) {
 */
 }
 
-Ret Scanner::lex_name_list(code_alc_t& alc, BlockNameList** ptail) {
+Ret Scanner::lex_name_list(OutAllocator& alc, BlockNameList** ptail) {
     BlockNameList** phead = ptail;
 loop:
     tok = cur;
@@ -357,7 +357,7 @@ loop: /*!local:re2c
 }
 
 Ret Scanner::lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) {
-    code_alc_t& alc = out.allocator;
+    OutAllocator& alc = out.allocator;
     const char* fmt = nullptr, *sep = nullptr;
     BlockNameList* blocks;
     std::string s;

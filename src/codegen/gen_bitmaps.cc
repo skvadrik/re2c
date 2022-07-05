@@ -40,7 +40,7 @@ static bool matches(const CodeGo* go1, const State* s1, const CodeGo* go2, const
     }
 }
 
-void insert_bitmap(code_alc_t& alc, CodeBitmap* bitmap, const CodeGo* go, const State* s) {
+void insert_bitmap(OutAllocator& alc, CodeBitmap* bitmap, const CodeGo* go, const State* s) {
     for (CodeBmState* b = bitmap->states->head; b; b = b->next) {
         if (matches(b->go, b->state, go, s)) return;
     }
@@ -66,7 +66,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap) {
     const uint32_t nchars = bitmap->nchars;
 
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const char* text;
 

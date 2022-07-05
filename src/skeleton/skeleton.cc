@@ -1,6 +1,5 @@
 #include <algorithm>
 
-#include "src/dfa/dfa.h"
 #include "src/options/opt.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/check.h"
@@ -15,7 +14,7 @@ Node::Node(): arcs(), rule(Rule::NONE), cmd(nullptr) {}
 void Node::init(const dfa_state_t* s,
                 const std::vector<uint32_t>& charset,
                 size_t nil,
-                range_allocator_t& allocator) {
+                IrAllocator& ir_alc) {
     const size_t nc = charset.size() - 1;
     for (uint32_t c = 0, l = 0; c < nc;) {
 
@@ -28,7 +27,7 @@ void Node::init(const dfa_state_t* s,
         if (l == 0 && c == nc && j == nil) break;
 
         const uint32_t u = charset[c];
-        Node::range_t* r = allocator.alloc();
+        Node::range_t* r = ir_alc.alloct<Node::range_t>(1);
         r->lower = l;
         r->upper = u - 1;
         r->cmd = t;
@@ -54,28 +53,22 @@ bool Node::end() const {
     return arcs.size() == 0;
 }
 
-Skeleton::Skeleton(const dfa_t& dfa,
+Skeleton::Skeleton(dfa_t& dfa,
                    const opt_t* opts,
                    const std::string& name,
                    const std::string& cond,
                    const loc_t& loc,
                    Msg& msg)
-    : opts(opts),
+    : dfa(dfa),
+      opts(opts),
       name(name),
       cond(cond),
       loc(loc),
       msg(msg),
-      range_allocator(),
       nodes_count(dfa.states.size() + 1), // +1 for default state
       nodes(new Node[nodes_count]),
       sizeof_key(8),
-      def_rule(dfa.def_rule),
-      eof_rule(dfa.eof_rule),
       ntagver(static_cast<size_t>(dfa.maxtagver) + 1),
-      charset(dfa.charset),
-      rules(dfa.rules),
-      tags(dfa.tags),
-      finvers(dfa.finvers),
       tagvals(new uint32_t[ntagver]),
       tagtrie(),
       mtagval(),
@@ -84,11 +77,11 @@ Skeleton::Skeleton(const dfa_t& dfa,
       buf_data(),
       buf_keys() {}
 
-Ret Skeleton::init(const dfa_t& dfa) {
+Ret Skeleton::init() {
     // initialize nodes
     const size_t nil = nodes_count - 1;
     for (size_t i = 0; i < nil; ++i) {
-        nodes[i].init(dfa.states[i], charset, nil, range_allocator);
+        nodes[i].init(dfa.states[i], dfa.charset, nil, dfa.ir_alc);
     }
 
     // initialize size of key

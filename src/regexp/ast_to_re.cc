@@ -461,8 +461,8 @@ bool is_icase(const opt_t* opts, bool icase) {
     return opts->bCaseInsensitive || icase != opts->bCaseInverted;
 }
 
-RESpec::RESpec(const opt_t* opts, Msg& msg, RangeMgr& rangemgr)
-    : alc(), rangemgr(rangemgr), res(), charset(), tags(), rules(), opts(opts), msg(msg) {}
+RESpec::RESpec(const opt_t* opts, Msg& msg)
+    : ir_alc(), rangemgr(ir_alc), res(), charset(), tags(), rules(), opts(opts), msg(msg) {}
 
 Ret RESpec::init(const std::vector<AstRule>& ast) {
     rules.resize(ast.size());

@@ -32,11 +32,10 @@ class Range {
 
 class RangeMgr {
   private:
-    fixed_allocator_t<Range> alc;
+    IrAllocator& alc;
 
   public:
-    RangeMgr(): alc() {}
-    void clear() { alc.clear(); }
+    explicit RangeMgr(IrAllocator& alc): alc(alc) {}
     Range* sym(uint32_t c);
     Range* ran(uint32_t l, uint32_t u);
     Range* add(const Range* r1, const Range* r2);
@@ -51,7 +50,7 @@ class RangeMgr {
 };
 
 inline Range* RangeMgr::make(Range* n, uint32_t l, uint32_t u) {
-    Range* r = alc.alloc();
+    Range* r = alc.alloct<Range>(1);
     r->nx = n;
     r->lb = l;
     r->ub = u;

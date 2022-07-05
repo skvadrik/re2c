@@ -77,8 +77,8 @@ template<typename ctx_t> static tcmd_t* final_actions(ctx_t&, const clos_t&);
 template<typename ctx_t> static void reserve_buffers(ctx_t&);
 template<typename ctx_t> static bool equal_lookahead_tags(ctx_t&, const kernel_t*, const kernel_t*);
 template<typename ctx_t> static void unwind(const typename ctx_t::history_t&, tag_path_t&, hidx_t);
-static kernel_t* make_new_kernel(size_t, allocator_t&);
-static kernel_t* make_kernel_copy(const kernel_t*, allocator_t&);
+static kernel_t* make_new_kernel(size_t, IrAllocator&);
+static kernel_t* make_kernel_copy(const kernel_t*, IrAllocator&);
 static void copy_to_buffer(const closure_t&, const prectable_t*, kernel_t*);
 static void group_by_tag(tag_path_t&, tag_path_t&, std::vector<uint32_t>&);
 static uint32_t hash_kernel(const kernel_t*);
@@ -153,7 +153,7 @@ bool do_find_state(ctx_t& ctx) {
     if (ctx.dc_target != kernels_t::NIL) return false;
 
     // otherwise add new kernel
-    kernel_t* kcopy = make_kernel_copy(k, ctx.dc_allocator);
+    kernel_t* kcopy = make_kernel_copy(k, ctx.ir_alc);
     ctx.dc_target = kernels.push(hash, kcopy);
     ctx.kernels_total += k->size;
     return true;
@@ -202,7 +202,7 @@ kernel_buffers_t::kernel_buffers_t()
       indegree(nullptr),
       backup_actions(nullptr) {}
 
-kernel_t* make_new_kernel(size_t size, allocator_t& alc) {
+kernel_t* make_new_kernel(size_t size, IrAllocator& alc) {
     kernel_t* k = alc.alloct<kernel_t>(1);
     k->size = size;
     k->state = alc.alloct<nfa_state_t*>(size);
@@ -212,7 +212,7 @@ kernel_t* make_new_kernel(size_t size, allocator_t& alc) {
     return k;
 }
 
-kernel_t* make_kernel_copy(const kernel_t* kernel, allocator_t& alc) {
+kernel_t* make_kernel_copy(const kernel_t* kernel, IrAllocator& alc) {
     const size_t n = kernel->size;
 
     kernel_t* k = make_new_kernel(n, alc);
@@ -264,7 +264,7 @@ void copy_to_buffer(const closure_t& closure, const prectable_t* prectbl, kernel
 template<typename ctx_t>
 void reserve_buffers(ctx_t& ctx) {
     kernel_buffers_t& kbufs = ctx.dc_buffers;
-    allocator_t& alc = ctx.dc_allocator;
+    IrAllocator& alc = ctx.ir_alc;
     const tagver_t maxver = ctx.dfa.maxtagver;
     const size_t nkern = ctx.state.size();
 

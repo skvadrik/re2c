@@ -52,12 +52,15 @@ struct dfa_state_t {
 struct dfa_t {
     static constexpr uint32_t NIL = ~0u;
 
-    Allocator allocator;
-    std::vector<dfa_state_t*> states;
-    const size_t nchars;
+    DfaAllocator& dfa_alc;
+
+    IrAllocator ir_alc;
     std::vector<uint32_t> charset;
     std::vector<Rule> rules;
     std::vector<Tag> tags;
+
+    std::vector<dfa_state_t*> states;
+    const size_t nchars;
     std::set<tagver_t> mtagvers;
     tagver_t* finvers;
     tcpool_t tcpool;
@@ -65,7 +68,7 @@ struct dfa_t {
     size_t def_rule;
     size_t eof_rule;
 
-    dfa_t(size_t charset_bounds, size_t def_rule, size_t eof_rule);
+    dfa_t(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule);
     ~dfa_t();
 
     FORBID_COPY(dfa_t);

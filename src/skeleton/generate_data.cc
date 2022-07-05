@@ -171,7 +171,7 @@ static void write_keys(const path_t& path, Skeleton& skel, size_t width) {
 
     size_t ltag = 0, htag = 0, trail = 0;
     if (rule != Rule::NONE) {
-        const Rule& r = skel.rules[rule];
+        const Rule& r = skel.dfa.rules[rule];
         ltag = r.ltag;
         htag = r.htag;
         trail = r.ttag;
@@ -227,13 +227,13 @@ static void write_keys(const path_t& path, Skeleton& skel, size_t width) {
                 matched = f;
             } else {
                 // trailing context must be an s-tag, not an m-tag
-                const Tag& tag = skel.tags[trail];
+                const Tag& tag = skel.dfa.tags[trail];
                 if (!fixed(tag)) {
                     // variable-length trailing context
-                    matched = tags[skel.finvers[trail]];
+                    matched = tags[skel.dfa.finvers[trail]];
                 } else if (tag.base != Tag::RIGHTMOST) {
                     // fixed-length trailing context based on tag
-                    matched = tags[skel.finvers[tag.base]] - tag.dist;
+                    matched = tags[skel.dfa.finvers[tag.base]] - tag.dist;
                 } else {
                     // fixed-length trailing context based on cursor
                     matched = f - tag.dist;
@@ -245,11 +245,11 @@ static void write_keys(const path_t& path, Skeleton& skel, size_t width) {
         // count keys
         size_t nkey = 3;
         for (size_t t = ltag; t < htag; ++t) {
-            const Tag& tag = skel.tags[t];
+            const Tag& tag = skel.dfa.tags[t];
             if (t == trail || fictive(tag)) continue;
             const size_t
             base = fixed(tag) ? tag.base : t,
-            bver = static_cast<size_t>(skel.finvers[base]);
+            bver = static_cast<size_t>(skel.dfa.finvers[base]);
             if (history(tag)) {
                 nkey += mtag_length(tagtrie, tags[bver]);
             }
@@ -261,16 +261,16 @@ static void write_keys(const path_t& path, Skeleton& skel, size_t width) {
         // keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
         *k++ = to_le(static_cast<key_t>(path.len()));
         *k++ = to_le(static_cast<key_t>(matched));
-        *k++ = to_le(rule2key<key_t>(rule, skel.def_rule));
+        *k++ = to_le(rule2key<key_t>(rule, skel.dfa.def_rule));
 
         for (size_t t = ltag; t < htag; ++t) {
-            const Tag& tag = skel.tags[t];
+            const Tag& tag = skel.dfa.tags[t];
             if (t == trail || fictive(tag)) continue;
 
             if (history(tag)) {
                 DCHECK(!fixed(tag));
                 // variable-length tag
-                const size_t tver = static_cast<size_t>(skel.finvers[t]);
+                const size_t tver = static_cast<size_t>(skel.dfa.finvers[t]);
                 uint32_t tval = tags[tver];
                 const uint32_t len = mtag_length(tagtrie, tval);
 
@@ -300,11 +300,11 @@ static void write_keys(const path_t& path, Skeleton& skel, size_t width) {
                 size_t tval;
                 if (!fixed(tag)) {
                     // variable-length tag
-                    const size_t tver = static_cast<size_t>(skel.finvers[t]);
+                    const size_t tver = static_cast<size_t>(skel.dfa.finvers[t]);
                     tval = tags[tver];
                 } else if (tag.base != Tag::RIGHTMOST) {
                     // fixed-length tag based on another tag
-                    const size_t tver = static_cast<size_t>(skel.finvers[tag.base]);
+                    const size_t tver = static_cast<size_t>(skel.dfa.finvers[tag.base]);
                     tval = tags[tver];
                     if (tval != Skeleton::DEFTAG) tval -= tag.dist;
                 } else {

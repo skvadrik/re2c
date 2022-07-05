@@ -33,7 +33,6 @@ DFA::DFA(dfa_t&& dfa,
          const opt_t* opts,
          Msg& msg)
     : // Move ownership from TDFA to ADFA.
-      allocator(std::move(dfa.allocator)),
       charset(std::move(dfa.charset)),
       rules(std::move(dfa.rules)),
       tags(std::move(dfa.tags)),

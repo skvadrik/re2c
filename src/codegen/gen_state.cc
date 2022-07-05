@@ -43,7 +43,7 @@ static bool endstate(const State* s) {
     return s->go.nspans == 1 && (a == Action::Kind::RULE || a == Action::Kind::ACCEPT);
 }
 
-static void gen_peek(code_alc_t& alc, const State* s, CodeList* stmts) {
+static void gen_peek(OutAllocator& alc, const State* s, CodeList* stmts) {
     // Do not generate YYPEEK statement in case `yych` is overwritten before it is used. This may
     // happen if there is a single transition which does not require matching on `yych` (one
     // exception is a transition to a move state, which doesn't have its own YYPEEK and relies on
@@ -54,7 +54,7 @@ static void gen_peek(code_alc_t& alc, const State* s, CodeList* stmts) {
 
 void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const char* text;
 
@@ -113,7 +113,7 @@ void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts
 static CodeList* emit_accept_binary(
         Output& output, const DFA& dfa, const uniq_vector_t<AcceptTrans>& acc, size_t l, size_t r) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     CodeList* stmts = code_list(alc);
@@ -133,7 +133,7 @@ static CodeList* emit_accept_binary(
 
 static void gen_restore(Output& output, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const char* text;
 
@@ -153,7 +153,7 @@ void emit_accept(
         Output& output, CodeList* stmts, const DFA& dfa, const uniq_vector_t<AcceptTrans>& acc) {
     const opt_t* opts = output.block().opts;
     const size_t nacc = acc.size();
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const char* text;
 
@@ -217,7 +217,7 @@ void emit_accept(
 
 static void gen_setstate(Output& output, CodeList* stmts, const char* fillidx) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     o.str(opts->state_set);
@@ -232,7 +232,7 @@ static void gen_setstate(Output& output, CodeList* stmts, const char* fillidx) {
 
 static void gen_setcondition(Output& output, CodeList* stmts, const char* cond) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     o.str(opts->cond_set);
@@ -247,7 +247,7 @@ static void gen_setcondition(Output& output, CodeList* stmts, const char* cond) 
 
 static void gen_continue_yyloop(Output& output, CodeList* stmts, const char* next) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
     buf.str(opts->yystate).cstr(" = ").cstr(next);
@@ -262,7 +262,7 @@ void emit_rule(Output& output, CodeList* stmts, const DFA& dfa, size_t rule_idx)
     const opt_t* opts = output.block().opts;
     const Rule& rule = dfa.rules[rule_idx];
     const SemAct* semact = rule.semact;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     gen_fintags(output, stmts, dfa, rule);
@@ -322,7 +322,7 @@ void emit_rule(Output& output, CodeList* stmts, const DFA& dfa, size_t rule_idx)
 static CodeList* gen_fill_falllback(
         Output& output, const DFA& dfa, const State* from, const State* to) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
     DCHECK(opts->eof != NOEOF);
@@ -365,7 +365,7 @@ static void gen_fill(
     const bool eof_rule = opts->eof != NOEOF;
     const uint32_t fillidx = output.block().fill_index - 1;
     const size_t need = eof_rule ? 1 : from->fill;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     // YYLESSTHAN
@@ -470,7 +470,7 @@ void gen_fill_and_label(Output& output, CodeList* stmts, const DFA& dfa, const S
 void gen_goto(
         Output& output, const DFA& dfa, CodeList* stmts, const State* from, const CodeJump& jump) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     if (jump.eof) {
@@ -502,7 +502,7 @@ static void gen_shift(
     if (shift == 0) return;
 
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const bool notag = tag.empty();
 
@@ -526,7 +526,7 @@ static void gen_shift(
 static void gen_settag(
         Output& output, CodeList* stmts, const std::string& tag, bool negative, bool history) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     const std::string& s = history
@@ -575,7 +575,7 @@ static void gen_assign_many_to_first(
 
 static void gen_restorectx(Output& output, CodeList* stmts, const std::string& tag) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const bool notag = tag.empty();
 
@@ -593,7 +593,7 @@ static void gen_restorectx(Output& output, CodeList* stmts, const std::string& t
 
 void gen_settags(Output& output, CodeList* tag_actions, const DFA& dfa, tcid_t tcid) {
     const opt_t* opts = output.block().opts;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const bool generic = opts->input_api == Api::CUSTOM;
     const tcmd_t* cmd = dfa.tcpool[tcid];
@@ -663,7 +663,7 @@ void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& ru
     const bool generic = opts->input_api == Api::CUSTOM;
     const std::vector<Tag>& tags = dfa.tags;
     const tagver_t* fins = dfa.finvers;
-    code_alc_t& alc = output.allocator;
+    OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     std::vector<std::string> fintags;
 
