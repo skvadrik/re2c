@@ -7,7 +7,7 @@
 
 namespace re2c {
 
-int lex(const char*& pattern, Ast& ast);
+int lex(const uint8_t*& pattern, Ast& ast);
 const AstNode* parse(const char* pattern, Ast& ast);
 extern const AstNode* regexp;
 

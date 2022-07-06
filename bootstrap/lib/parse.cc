@@ -84,8 +84,8 @@
 using namespace re2c;
 
 extern "C" {
-    int yylex(const char*& pattern, Ast& ast);
-    void yyerror(const char* pattern, Ast&, const char* msg) RE2C_ATTR((noreturn));
+    int yylex(const uint8_t*& pattern, Ast& ast);
+    void yyerror(const uint8_t* pattern, Ast&, const char* msg) RE2C_ATTR((noreturn));
 }
 
 
@@ -697,7 +697,7 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const char*& pattern, re2c::Ast& ast)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const uint8_t*& pattern, re2c::Ast& ast)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
@@ -717,7 +717,7 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const char*& pattern, re2c::Ast& ast)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const uint8_t*& pattern, re2c::Ast& ast)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
@@ -756,7 +756,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule, const char*& pattern, re2c::Ast& ast)
+                 int yyrule, const uint8_t*& pattern, re2c::Ast& ast)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -818,7 +818,7 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, const char*& pattern, re2c::Ast& ast)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, const uint8_t*& pattern, re2c::Ast& ast)
 {
   YY_USE (yyvaluep);
   YY_USE (pattern);
@@ -849,7 +849,7 @@ int yynerrs;
 `----------*/
 
 int
-yyparse (const char*& pattern, re2c::Ast& ast)
+yyparse (const uint8_t*& pattern, re2c::Ast& ast)
 {
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
@@ -1344,12 +1344,12 @@ yyreturnlab:
 #pragma GCC diagnostic pop
 
 extern "C" {
-    void yyerror(const char* pattern, Ast&, const char* msg) {
+    void yyerror(const uint8_t* pattern, Ast&, const char* msg) {
         fprintf(stderr, "%s (on RE %s)", msg, pattern);
         exit(1);
     }
 
-    int yylex(const char*& pattern, Ast& ast) {
+    int yylex(const uint8_t*& pattern, Ast& ast) {
         return lex(pattern, ast);
     }
 }
@@ -1357,7 +1357,8 @@ extern "C" {
 namespace re2c {
 
 const AstNode* parse(const char* pattern, Ast& ast) {
-    yyparse(pattern, ast);
+    const uint8_t *p = reinterpret_cast<const uint8_t*>(pattern);
+    yyparse(p, ast);
     return regexp;
 }
 

@@ -35,7 +35,7 @@ void argsubst(std::ostringstream& os,
         p += stub.length();
         q = *p == '{' ? strchr(p + 1, '}') : nullptr;
 
-        if (q && l == (size_t)(q - p - 1) && memcmp(p + 1, arg, l) == 0) {
+        if (q && l == static_cast<size_t>(q - p - 1) && memcmp(p + 1, arg, l) == 0) {
             // named substitution of the form @@{arg}
             os << val;
             s = q + 1;

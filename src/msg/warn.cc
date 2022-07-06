@@ -177,12 +177,12 @@ void Warn::unreachable_rule(const std::string& cond, const Rule& rule) {
     }
 }
 
-void Warn::useless_escape(const loc_t& loc, const char* str, const char* end) {
+void Warn::useless_escape(const loc_t& loc, const uint8_t* str, const uint8_t* end) {
     if (mask[USELESS_ESCAPE] & WARNING) {
         const bool e = mask[USELESS_ESCAPE] & ERROR;
         error_accuml |= e;
-        msg.warning(names[USELESS_ESCAPE], loc, e, "escape has no effect: '%.*s'", (int)(end - str),
-                str);
+        msg.warning(names[USELESS_ESCAPE], loc, e, "escape has no effect: '%.*s'",
+                static_cast<int>(end - str), str);
     }
 }
 

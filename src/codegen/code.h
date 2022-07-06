@@ -393,7 +393,7 @@ inline Code* code_text(OutAllocator& alc, const char* text) {
     return x;
 }
 
-inline Code* code_raw(OutAllocator& alc, const char* data, size_t size) {
+inline Code* code_raw(OutAllocator& alc, const uint8_t* data, size_t size) {
     Code* x = new_code(alc, CodeKind::RAW);
     char* copy = alc.alloct<char>(size);
     memcpy(copy, data, size);
@@ -726,7 +726,7 @@ struct Output {
     void gather_info_from_block();
     void header_mode(bool on);
     bool in_header() const;
-    void wraw(const char* s, const char* e, bool newline = false);
+    void wraw(const uint8_t* s, const uint8_t* e, bool newline = false);
     void wversion_time ();
     void wdelay_stmt(uint32_t ind, Code* code);
     Ret emit() NODISCARD;

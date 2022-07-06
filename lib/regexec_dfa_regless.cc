@@ -197,8 +197,8 @@ subhistory_t* regparse_dfa_regless(const regex_t* preg, const char* string, size
     // The amount of memory (in bytes) needed to store submatch information.
     size_t memsize = nmatch * sizeof(subhistory_t) + rm_count * sizeof(regmatch_t);
 
-    subhistory_t* h0 = (subhistory_t*) malloc(memsize), *h = h0, *lasth = h + nmatch;
-    regmatch_t* rm0 = (regmatch_t*)(h0 + nmatch), *rm = rm0;
+    subhistory_t* h0 = static_cast<subhistory_t*>(malloc(memsize)), *h = h0, *lasth = h + nmatch;
+    regmatch_t* rm0 = reinterpret_cast<regmatch_t*>(lasth), *rm = rm0;
 
     h->size = 1;
     h->offs = rm;

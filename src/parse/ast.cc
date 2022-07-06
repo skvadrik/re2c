@@ -104,7 +104,7 @@ const SemAct* Ast::sem_act(const loc_t& loc, const char* text, const char* cond,
     return a;
 }
 
-const char* Ast::cstr(const char* s, const char* e) {
+const char* Ast::cstr(const uint8_t* s, const uint8_t* e) {
     return newcstr(s, e, allocator);
 }
 

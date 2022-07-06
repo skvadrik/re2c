@@ -9,13 +9,12 @@ namespace re2c_test {
 static constexpr uint32_t DIGITS = 256;
 
 // Write string backwards, return a pointer to the start. No terminating NULL, as we don't need it.
-static char* u64_to_s_fastest_ever(uint64_t u, char* s) {
+static uint8_t* u64_to_s_fastest_ever(uint64_t u, uint8_t* s) {
     if (u == 0) {
         *--s = '0';
     } else {
         while (u > 0) {
-            const uint64_t d = u % 10 + '0';
-            *--s = static_cast<char> (d);
+            *--s = static_cast<uint8_t>(u % 10 + '0');
             u /= 10;
         }
     }
@@ -23,11 +22,11 @@ static char* u64_to_s_fastest_ever(uint64_t u, char* s) {
 }
 
 static int32_t test_u(uint64_t i) {
-    char s [DIGITS];
-    char* const s_end = s + DIGITS;
-    char* const s_start = u64_to_s_fastest_ever (i, s_end);
+    uint8_t s[DIGITS];
+    uint8_t* const s_end = s + DIGITS;
+    uint8_t* const s_start = u64_to_s_fastest_ever(i, s_end);
     uint32_t u = i == 0; // not equal to i
-    if (re2c::s_to_u32_unsafe (s_start, s_end, u) && u != i) {
+    if (re2c::s_to_u32_unsafe(s_start, s_end, u) && u != i) {
         fprintf(stderr, "unsigned: expected: %" PRIu64 ", got: %u\n", i, u);
         return 1;
     }
@@ -35,10 +34,10 @@ static int32_t test_u(uint64_t i) {
 }
 
 static int32_t test_i(int64_t i) {
-    char s [DIGITS];
-    char* const s_end = s + DIGITS;
+    uint8_t s[DIGITS];
+    uint8_t* const s_end = s + DIGITS;
     const uint64_t i_abs = static_cast<uint64_t>(i < 0 ? -i : i);
-    char* s_start = u64_to_s_fastest_ever(i_abs, s_end);
+    uint8_t* s_start = u64_to_s_fastest_ever(i_abs, s_end);
     if (i < 0) {
         *--s_start = '-';
     }

@@ -82,7 +82,7 @@ typedef union YYSTYPE YYSTYPE;
 extern YYSTYPE yylval;
 
 
-int yyparse (const char*& pattern, re2c::Ast& ast);
+int yyparse (const uint8_t*& pattern, re2c::Ast& ast);
 
 
 #endif /* !YY_YY_LIB_PARSE_H_INCLUDED  */

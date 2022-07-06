@@ -13,7 +13,7 @@
 
 namespace re2c {
 
-const char* const Scanner::ENDPOS = (const char*) std::numeric_limits<uint64_t>::max();
+const uint8_t* const Scanner::ENDPOS = reinterpret_cast<const uint8_t*>(UINT64_MAX);
 
 Scanner::~Scanner() {
     for (Input* in: files) {
@@ -43,7 +43,7 @@ Ret Scanner::open(const std::string& filename, const std::string* parent) {
     return Ret::OK;
 }
 
-Ret Scanner::include(const std::string& filename, char* at) {
+Ret Scanner::include(const std::string& filename, uint8_t* at) {
     // This function is called twice for each include file: first time when opening the file, and
     // second time when it has been fully read. The second time is needed to generate a line
     // directive marking the end of the include file and the continuation of the parent file. In
@@ -171,7 +171,7 @@ bool Scanner::fill(size_t need) {
         shift_ptrs_and_fpos(-static_cast<ptrdiff_t>(free));
     } else {
         BSIZE += std::max(BSIZE, need);
-        char* buf = new char[BSIZE + YYMAXFILL];
+        uint8_t* buf = new uint8_t[BSIZE + YYMAXFILL];
         if (buf == nullptr) {
             error("out of memory");
             return false;
@@ -212,9 +212,8 @@ Ret Scanner::gen_dep_file() const {
     return Ret::OK;
 }
 
-uint32_t Scanner::decode(const char* str) const {
-    return globopts->input_encoding == Enc::Type::ASCII
-           ? static_cast<uint8_t>(str[0]) : utf8::decode_unsafe(str);
+uint32_t Scanner::decode(const uint8_t* str) const {
+    return globopts->input_encoding == Enc::Type::ASCII ? str[0] : utf8::decode_unsafe(str);
 }
 
 } // namespace re2c

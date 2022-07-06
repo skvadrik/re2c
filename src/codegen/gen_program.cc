@@ -96,11 +96,11 @@ OutputBlock& Output::block() {
     return *pblocks->back();
 }
 
-void Output::wraw(const char* s, const char* e, bool newline) {
+void Output::wraw(const uint8_t* s, const uint8_t* e, bool newline) {
     if (s != e && block().opts->target == Target::CODE) {
         // scan for non-whitespace characters
         bool& code = block().have_user_code;
-        for (const char* p = s; !code && p < e; ++p) {
+        for (const uint8_t* p = s; !code && p < e; ++p) {
             code = !isspace(*p);
         }
         wdelay_stmt(0, code_raw(allocator, s, static_cast<size_t>(e - s)));

@@ -32,7 +32,7 @@ struct Opt;
 
 class Scanner: private ScannerState {
   public:
-    static const char* const ENDPOS;
+    static const uint8_t* const ENDPOS;
 
     Msg& msg;
 
@@ -48,7 +48,7 @@ class Scanner: private ScannerState {
     const loc_t& tok_loc() const;
     loc_t cur_loc() const;
     Ret open(const std::string& filename, const std::string* parent) NODISCARD;
-    Ret include(const std::string& filename, char* at) NODISCARD;
+    Ret include(const std::string& filename, uint8_t* at) NODISCARD;
     Ret gen_dep_file() const NODISCARD;
     Ret echo(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
     Ret scan(Ast& ast, int& token) NODISCARD;
@@ -73,17 +73,17 @@ class Scanner: private ScannerState {
     Ret lex_block_end(Output& out, bool allow_garbage = false) NODISCARD;
     Ret lex_code_indented(Ast& ast) NODISCARD;
     Ret lex_code_in_braces(Ast& ast) NODISCARD;
-    Ret try_lex_string_in_code(char quote) NODISCARD;
+    Ret try_lex_string_in_code(uint8_t quote) NODISCARD;
     Ret lex_c_comment() NODISCARD;
     Ret lex_cpp_comment() NODISCARD;
     Ret lex_namedef_context_re2c(bool& yes) NODISCARD;
     Ret lex_namedef_context_flex(bool& yes) NODISCARD;
     Ret lex_clist(Ast& ast, int& token) NODISCARD;
-    Ret lex_string(char delim) NODISCARD;
+    Ret lex_string(uint8_t delim) NODISCARD;
     Ret lex_cls_chr(uint32_t& c) NODISCARD;
-    Ret lex_str_chr(char quote, AstChar& ast, bool& stop) NODISCARD;
+    Ret lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) NODISCARD;
     Ret lex_cls(Ast& ast, bool neg, const AstNode*&) NODISCARD;
-    Ret lex_str(Ast& ast, char quote, const AstNode*&) NODISCARD;
+    Ret lex_str(Ast& ast, uint8_t quote, const AstNode*&) NODISCARD;
 
     Ret lex_conf_encoding_policy(Opt& opts) NODISCARD;
     Ret lex_conf_input(Opt& opts) NODISCARD;
@@ -96,7 +96,7 @@ class Scanner: private ScannerState {
     Ret lex_conf_eof(uint32_t& u) NODISCARD;
     Ret lex_conf_string(std::string& s) NODISCARD;
 
-    uint32_t decode(const char* str) const;
+    uint32_t decode(const uint8_t* str) const;
 
     FORBID_COPY (Scanner);
 };

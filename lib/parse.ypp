@@ -14,15 +14,15 @@
 using namespace re2c;
 
 extern "C" {
-    int yylex(const char*& pattern, Ast& ast);
-    void yyerror(const char* pattern, Ast&, const char* msg) RE2C_ATTR((noreturn));
+    int yylex(const uint8_t*& pattern, Ast& ast);
+    void yyerror(const uint8_t* pattern, Ast&, const char* msg) RE2C_ATTR((noreturn));
 }
 
 %}
 
-%lex-param {const char*& pattern}
+%lex-param {const uint8_t*& pattern}
 %lex-param {re2c::Ast& ast}
-%parse-param {const char*& pattern}
+%parse-param {const uint8_t*& pattern}
 %parse-param {re2c::Ast& ast}
 
 %start regexp
@@ -72,12 +72,12 @@ primary
 #pragma GCC diagnostic pop
 
 extern "C" {
-    void yyerror(const char* pattern, Ast&, const char* msg) {
+    void yyerror(const uint8_t* pattern, Ast&, const char* msg) {
         fprintf(stderr, "%s (on RE %s)", msg, pattern);
         exit(1);
     }
 
-    int yylex(const char*& pattern, Ast& ast) {
+    int yylex(const uint8_t*& pattern, Ast& ast) {
         return lex(pattern, ast);
     }
 }
@@ -85,7 +85,8 @@ extern "C" {
 namespace re2c {
 
 const AstNode* parse(const char* pattern, Ast& ast) {
-    yyparse(pattern, ast);
+    const uint8_t *p = reinterpret_cast<const uint8_t*>(pattern);
+    yyparse(p, ast);
     return regexp;
 }
 

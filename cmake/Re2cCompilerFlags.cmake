@@ -43,9 +43,9 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         # to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
         "-Wno-reserved-id-macro"
         "-Wno-padded"
-        # RE2C-generated lexer has lots of C-style casts because of 're2c:yych:conversion = 1;'
-        "-Wno-old-style-cast"
         "-Wno-nested-anon-types"
+        # user-defined literals like `_u8` must start with underscore
+        "-Wno-reserved-identifier"
         # using same names in ctor seems more like a feature
         "-Wno-shadow-field-in-constructor"
         # explicit specialization to reduce build dependencies

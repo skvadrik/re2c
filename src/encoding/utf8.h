@@ -42,7 +42,7 @@ static constexpr uint32_t MASK = 0x3Fu; // 0011 1111
 uint32_t rune_to_bytes(uint32_t* s, rune r);
 
 // Read Unicode code point for the given (pre-validated) UTF-8 bytestring.
-uint32_t decode_unsafe(const char* str);
+uint32_t decode_unsafe(const uint8_t* str);
 
 // Length of a UTF-8 bytestring for a given Unicode code point.
 uint32_t rune_length(rune r);

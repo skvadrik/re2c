@@ -135,7 +135,7 @@ class Ast {
     const AstNode* cap(const AstNode* a);
     const AstNode* ref(const AstNode* a, const char* n);
     const SemAct* sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen);
-    const char* cstr(const char* s, const char* e);
+    const char* cstr(const uint8_t* s, const uint8_t* e);
 
     // Whether this AST node must be wrapped in implicit parentheses to ensure correct operator
     // precedence. This happens with named definitions, for example `x = "a"|"aa"` used in `x "b"`

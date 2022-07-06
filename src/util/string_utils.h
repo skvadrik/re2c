@@ -10,13 +10,11 @@
 
 namespace re2c {
 
-uint32_t unesc_hex(const char* s, const char* s_end);
-uint32_t unesc_oct(const char* s, const char* s_end);
+uint32_t unesc_hex(const uint8_t* s, const uint8_t* s_end);
+uint32_t unesc_oct(const uint8_t* s, const uint8_t* s_end);
 std::string escape_backslashes(const std::string& str);
-bool s_to_u32_unsafe(const char* s, const char* s_end, uint32_t& number)
-        RE2C_ATTR((warn_unused_result));
-bool s_to_i32_unsafe(const char* s, const char* s_end, int32_t& number)
-        RE2C_ATTR((warn_unused_result));
+bool s_to_u32_unsafe(const uint8_t* s, const uint8_t* s_end, uint32_t& number) NODISCARD;
+bool s_to_i32_unsafe(const uint8_t* s, const uint8_t* s_end, int32_t& number) NODISCARD;
 
 template<typename type_t>
 void strrreplace(std::string& s, const std::string& s1, const type_t& v) {
@@ -40,16 +38,16 @@ std::string to_string(const T& v) {
     return s.str();
 }
 
-inline std::string getstr(const char* s, const char* e) {
-    return std::string(s, static_cast<size_t>(e - s));
+inline std::string getstr(const uint8_t* s, const uint8_t* e) {
+    return std::string(reinterpret_cast<const char*>(s), static_cast<size_t>(e - s));
 }
 
-inline std::string* newstr(const char* s, const char* e) {
-    return new std::string(s, static_cast<size_t>(e - s));
+inline std::string* newstr(const uint8_t* s, const uint8_t* e) {
+    return new std::string(reinterpret_cast<const char*>(s), static_cast<size_t>(e - s));
 }
 
 template<typename allocator_t>
-inline const char* newcstr(const char* s, const char* e, allocator_t& alc) {
+inline const char* newcstr(const uint8_t* s, const uint8_t* e, allocator_t& alc) {
     const size_t n = static_cast<size_t>(e - s);
     char* p = alc.template alloct<char>(n + 1);
     memcpy(p, s, n);
@@ -63,6 +61,11 @@ inline const char* copystr(const std::string& s, allocator_t& alc) {
     char* p = alc.template alloct<char>(n);
     memcpy(p, s.data(), n);
     return p;
+}
+
+inline constexpr uint8_t operator "" _u8(char c) noexcept
+{
+    return static_cast<uint8_t>(c);
 }
 
 } // namespace re2c

@@ -17,8 +17,8 @@ struct Input {
     std::string name;
     std::string path;
     std::string escaped_name;
-    const char* so; // start offset in buffer
-    const char* eo; // end offset in buffer
+    const uint8_t* so; // start offset in buffer
+    const uint8_t* eo; // end offset in buffer
     uint32_t line;
     uint32_t fidx;
 

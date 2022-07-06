@@ -161,27 +161,27 @@ uint32_t rune_to_bytes(uint32_t* str, rune c) {
 }
 
 // this function assumes that the input has been validated
-uint32_t decode_unsafe(const char* str) {
+uint32_t decode_unsafe(const uint8_t* str) {
     // 1-unit sequence: 0-0x7F => 0xxxxxxx
-    const uint32_t c = (uint8_t)str[0];
+    const uint32_t c = str[0];
     if (c < INFIX) {
         return c;
     }
 
     // 2-unit sequence: 0x80-0x7FF => 110xxxxx 10xxxxxx
-    const uint32_t c1 = (uint8_t)str[1] ^ INFIX;
+    const uint32_t c1 = str[1] ^ INFIX;
     if (c < PREFIX_3BYTE) {
         return ((c << SHIFT) | c1) & MAX_2BYTE_RUNE;
     }
 
     // 3-unit sequence: 0x800 - 0xFFFF => 1110xxxx 10xxxxxx 10xxxxxx
-    const uint32_t c2 = (uint8_t)str[2] ^ INFIX;
+    const uint32_t c2 = str[2] ^ INFIX;
     if (c < PREFIX_4BYTE) {
         return ((((c << SHIFT) | c1) << SHIFT) | c2) & MAX_3BYTE_RUNE;
     }
 
     // 4-unit sequence (21-bit value): 0x10000 - 0x1FFFFF => 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-    const uint32_t c3 = (uint8_t)str[3] ^ INFIX;
+    const uint32_t c3 = str[3] ^ INFIX;
     if (c < PREFIX_5BYTE) {
         return ((((((c << SHIFT) | c1) << SHIFT) | c2) << SHIFT) | c3) & MAX_4BYTE_RUNE;
     }

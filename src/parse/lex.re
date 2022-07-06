@@ -28,12 +28,11 @@ namespace re2c {
 // Global re2c configurations and definitions.
 /*!re2c
     // source code is in ASCII, but re2c assumes unsigned chars
-    re2c:yych:conversion = 1;
     re2c:flags:type-header = "lex.h";
     re2c:flags:tags = 1;
     re2c:api:style = free-form;
 
-    re2c:define:YYCTYPE  = "unsigned char";
+    re2c:define:YYCTYPE  = "uint8_t";
     re2c:define:YYCURSOR = "cur";
     re2c:define:YYLIMIT  = "lim";
     re2c:define:YYMARKER = "mar";
@@ -77,13 +76,13 @@ struct ScannerState {
 
     LexMode mode;
     size_t BSIZE;
-    char* bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
-    /*!stags:re2c format = "char *@@;"; */
+    uint8_t* bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
+    /*!stags:re2c format = "uint8_t* @@;"; */
 
     inline ScannerState()
         : mode(LexMode::NORMAL),
           BSIZE(8192),
-          bot(new char[BSIZE + YYMAXFILL]),
+          bot(new uint8_t[BSIZE + YYMAXFILL]),
           lim(bot + BSIZE),
           cur(lim),
           mar(lim),
@@ -124,7 +123,7 @@ struct ScannerState {
 Ret Scanner::echo(Output& out, std::string& block_name, InputBlock& kind) {
     const opt_t* opts = out.block().opts;
     OutAllocator& alc = out.allocator;
-    const char* x, *y;
+    const uint8_t* x, *y;
 
     if (is_eof()) RET_BLOCK(InputBlock::END);
 
@@ -406,7 +405,7 @@ loop: /*!local:re2c
 #define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
 
 Ret Scanner::scan(Ast& ast, int& token) {
-    const char* p, *x, *y;
+    const uint8_t* p, *x, *y;
 scan:
     tok = cur;
     location = cur_loc();
@@ -498,7 +497,7 @@ scan:
         // consume one character, otherwise we risk breaking operator precedence in cases like
         // `ab*`: it should be `a(b)*`, not `(ab)*`
         cur = tok + 1;
-        ast.temp_chars.push_back({static_cast<uint8_t>(tok[0]), tok_loc()});
+        ast.temp_chars.push_back({tok[0], tok_loc()});
         yylval.regexp = ast.str(tok_loc(), false);
         RET_TOK(TOKEN_REGEXP);
     }
@@ -608,7 +607,7 @@ indent: /*!re2c
     "" / ws { goto code; } // indent after newline => still in semantic action
     "" {
         while (isspace(tok[0])) ++tok;
-        char *p = cur;
+        uint8_t* p = cur;
         while (p > tok && isspace(p[-1])) --p;
         yylval.semact = ast.sem_act(loc, ast.cstr(tok, p), nullptr, false);
         return Ret::OK;
@@ -638,7 +637,7 @@ code: /*!re2c
 */
 }
 
-Ret Scanner::try_lex_string_in_code(char quote) {
+Ret Scanner::try_lex_string_in_code(uint8_t quote) {
     // We need to lex string literals in code blocks because they may contain closing brace symbol
     // that would otherwise be erroneously lexed as a real closing brace.
     //
@@ -665,7 +664,7 @@ Ret Scanner::try_lex_string_in_code(char quote) {
 */
 }
 
-Ret Scanner::lex_string(char delim) {
+Ret Scanner::lex_string(uint8_t delim) {
 loop: /*!re2c
     ["']       { if (cur[-1] == delim) return Ret::OK; else goto loop; }
     esc [\\"'] { goto loop; }
@@ -729,16 +728,16 @@ Ret Scanner::lex_cls_chr(uint32_t& c) {
     . \ esc     { c = decode(tok); return Ret::OK; }
     esc_hex     { c = unesc_hex(tok, cur); return Ret::OK; }
     esc_oct     { c = unesc_oct(tok, cur); return Ret::OK; }
-    esc "a"     { c = static_cast<uint8_t>('\a'); return Ret::OK; }
-    esc "b"     { c = static_cast<uint8_t>('\b'); return Ret::OK; }
-    esc "f"     { c = static_cast<uint8_t>('\f'); return Ret::OK; }
-    esc "n"     { c = static_cast<uint8_t>('\n'); return Ret::OK; }
-    esc "r"     { c = static_cast<uint8_t>('\r'); return Ret::OK; }
-    esc "t"     { c = static_cast<uint8_t>('\t'); return Ret::OK; }
-    esc "v"     { c = static_cast<uint8_t>('\v'); return Ret::OK; }
-    esc "\\"    { c = static_cast<uint8_t>('\\'); return Ret::OK; }
-    esc "-"     { c = static_cast<uint8_t>('-'); return Ret::OK; }
-    esc "]"     { c = static_cast<uint8_t>(']'); return Ret::OK; }
+    esc "a"     { c = '\a'_u8; return Ret::OK; }
+    esc "b"     { c = '\b'_u8; return Ret::OK; }
+    esc "f"     { c = '\f'_u8; return Ret::OK; }
+    esc "n"     { c = '\n'_u8; return Ret::OK; }
+    esc "r"     { c = '\r'_u8; return Ret::OK; }
+    esc "t"     { c = '\t'_u8; return Ret::OK; }
+    esc "v"     { c = '\v'_u8; return Ret::OK; }
+    esc "\\"    { c = '\\'_u8; return Ret::OK; }
+    esc "-"     { c = '-'_u8; return Ret::OK; }
+    esc "]"     { c = ']'_u8; return Ret::OK; }
     esc (.\eof) {
         msg.warn.useless_escape(loc, tok, cur);
         c = decode(tok + 1);
@@ -752,7 +751,7 @@ Ret Scanner::lex_cls_chr(uint32_t& c) {
     }
 }
 
-Ret Scanner::lex_str_chr(char quote, AstChar& ast, bool& stop) {
+Ret Scanner::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
     tok = cur;
     stop = false;
     ast.loc = cur_loc();
@@ -766,14 +765,14 @@ Ret Scanner::lex_str_chr(char quote, AstChar& ast, bool& stop) {
     . \ esc     { ast.chr = decode(tok); stop = (tok[0] == quote); return Ret::OK; }
     esc_hex     { ast.chr = unesc_hex(tok, cur); return Ret::OK; }
     esc_oct     { ast.chr = unesc_oct(tok, cur); return Ret::OK; }
-    esc "a"     { ast.chr = static_cast<uint8_t>('\a'); return Ret::OK; }
-    esc "b"     { ast.chr = static_cast<uint8_t>('\b'); return Ret::OK; }
-    esc "f"     { ast.chr = static_cast<uint8_t>('\f'); return Ret::OK; }
-    esc "n"     { ast.chr = static_cast<uint8_t>('\n'); return Ret::OK; }
-    esc "r"     { ast.chr = static_cast<uint8_t>('\r'); return Ret::OK; }
-    esc "t"     { ast.chr = static_cast<uint8_t>('\t'); return Ret::OK; }
-    esc "v"     { ast.chr = static_cast<uint8_t>('\v'); return Ret::OK; }
-    esc "\\"    { ast.chr = static_cast<uint8_t>('\\'); return Ret::OK; }
+    esc "a"     { ast.chr = '\a'_u8; return Ret::OK; }
+    esc "b"     { ast.chr = '\b'_u8; return Ret::OK; }
+    esc "f"     { ast.chr = '\f'_u8; return Ret::OK; }
+    esc "n"     { ast.chr = '\n'_u8; return Ret::OK; }
+    esc "r"     { ast.chr = '\r'_u8; return Ret::OK; }
+    esc "t"     { ast.chr = '\t'_u8; return Ret::OK; }
+    esc "v"     { ast.chr = '\v'_u8; return Ret::OK; }
+    esc "\\"    { ast.chr = '\\'_u8; return Ret::OK; }
     esc (.\eof) {
         ast.chr = decode(tok + 1);
         if (tok[1] != quote) msg.warn.useless_escape(ast.loc, tok, cur);
@@ -787,7 +786,7 @@ Ret Scanner::lex_str_chr(char quote, AstChar& ast, bool& stop) {
     }
 }
 
-Ret Scanner::lex_str(Ast& ast, char quote, const AstNode*& a) {
+Ret Scanner::lex_str(Ast& ast, uint8_t quote, const AstNode*& a) {
     const loc_t& loc = tok_loc();
     AstChar c;
     bool stop;

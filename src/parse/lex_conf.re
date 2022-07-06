@@ -39,15 +39,11 @@ namespace re2c {
 } while(0)
 
 /*!re2c
-    re2c:define:YYCTYPE     = "unsigned char";
+    re2c:define:YYCTYPE     = uint8_t;
     re2c:define:YYCURSOR    = cur;
     re2c:define:YYLIMIT     = lim;
     re2c:define:YYMARKER    = mar;
     re2c:define:YYCTXMARKER = ctx;
-
-    // Source code is in ASCII: pointers have type `char*`,  but re2c makes an implicit assumption
-    // that YYCTYPE is unsigned when it generates comparisons.
-    re2c:yych:conversion = 1;
 
     space       = [ \t];
     conf_assign = space* "=" space*;
@@ -181,7 +177,8 @@ Ret Scanner::lex_conf(Opt& opts) {
     "label:start" | "startlabel"                      { RET_CONF_STR(startlabel); }
 
     [a-zA-Z0-9_:-]* {
-        RET_FAIL(msg.error(tok_loc(), "unrecognized configuration '%.*s'", (int)(cur - tok), tok));
+        RET_FAIL(msg.error(
+                tok_loc(), "unrecognized configuration '%.*s'", static_cast<int>(cur - tok), tok));
     }
 */
 }
@@ -286,7 +283,7 @@ Ret Scanner::lex_conf_string(std::string& s) {
     tok = cur;
 /*!local:re2c
     ['"] {
-        const char quote = tok[0];
+        const uint8_t quote = tok[0];
         AstChar c;
         bool stop;
         for (;;) {
@@ -319,5 +316,6 @@ Ret Scanner::lex_conf_eof(uint32_t& u) {
 #undef RET_CONF_BOOL
 #undef RET_CONF_STR
 #undef RET_CONF_ENC
+#undef RET_CONF_NUM_NONNEG
 
 } // end namespace re2c

@@ -25,8 +25,6 @@ LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& globopts, const char* sourc
     return Ret::OK;
 }
 
-#define YYCTYPE unsigned char
-
 #define NEXT_ARG(option, label) \
     do { if (!next(YYCURSOR, argv)) RET_FAIL(error_arg(option)); goto label; } while(0)
 
@@ -39,7 +37,7 @@ Ret parse_opts(char** argv, conopt_t& globopts, Opt& opts, Msg& msg) {
 
 /*!re2c
     re2c:yyfill:enable = 0;
-    re2c:yych:conversion = 1;
+    re2c:define:YYCTYPE = char;
 
     end = "\x00";
     filename = [^\x00-] [^\x00]*;
@@ -306,6 +304,5 @@ end:
 
 #undef NEXT_ARG
 #undef ERRARG
-#undef YYCTYPE
 
 } // namespace re2c

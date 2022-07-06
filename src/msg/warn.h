@@ -71,7 +71,7 @@ class Warn {
     void swapped_range(const loc_t& loc, uint32_t l, uint32_t u);
     void undefined_control_flow(const Skeleton& skel, std::vector<path_t>& paths, bool overflow);
     void unreachable_rule(const std::string& cond, const Rule& rule);
-    void useless_escape(const loc_t& loc, const char* str, const char* end);
+    void useless_escape(const loc_t& loc, const uint8_t* str, const uint8_t* end);
     void sentinel_in_midrule(const loc_t& loc, const std::string& cond, uint32_t sentinel);
 };
 
