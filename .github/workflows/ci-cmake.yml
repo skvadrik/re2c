@@ -96,9 +96,11 @@ jobs:
               sudo xcode-select -switch /Applications/Xcode.app
               echo "SDKROOT=$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_ENV
               echo "$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_PATH
+              brew install coreutils  # for `nproc`
               ;;
             Windows*)
               choco install --no-progress -y winflexbison3
+              choco install gnuwin32-coreutils.install  # for `nproc`
               ;;
           esac
 
@@ -123,7 +125,7 @@ jobs:
         run: cmake --preset=${{ matrix.name }}-fast
 
       - name: Fast Build
-        run: cmake --build --preset=${{ matrix.name }}-fast
+        run: cmake --build --preset=${{ matrix.name }}-fast -j$(nproc)
 
       - name: Install
         run: cmake --build --preset=${{ matrix.name }}-fast --target install
@@ -148,10 +150,10 @@ jobs:
       - name: Full Build
         run: |
           find src -name '*.re' | xargs touch
-          cmake --build --preset=${{ matrix.name }}-full
+          cmake --build --preset=${{ matrix.name }}-full -j$(nproc)
 
       - name: Run Main Test Suite
-        run: cmake --build --preset=${{ matrix.name }}-full --target tests
+        run: cmake --build --preset=${{ matrix.name }}-full --target tests -j$(nproc)
 
       - name: Run Skeleton Tests
         if: "contains(matrix.name, 'skeleton')"
