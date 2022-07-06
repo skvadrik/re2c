@@ -90,11 +90,11 @@ Ret Scanner::include(const std::string& filename, char* at) {
     for (Input* in : files) {
         if (in->so >= at) {
             // unread whole fragment
-            fseek(in->file, in->so - in->eo, SEEK_CUR);
+            fseek(in->file, static_cast<long>(in->so - in->eo), SEEK_CUR);
             in->so = in->eo = ENDPOS;
         } else if (in->eo >= at) {
             // fragment on the boundary, unread partially
-            fseek(in->file, at - in->eo, SEEK_CUR);
+            fseek(in->file, static_cast<long>(at - in->eo), SEEK_CUR);
             in->eo = cur - 1;
         } else {
             // the rest has been consumed already
