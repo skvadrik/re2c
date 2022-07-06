@@ -60,7 +60,7 @@ jobs:
               echo "SDKROOT=$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_ENV
               echo "$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_PATH
 
-              brew install autoconf automake libtool bison
+              brew install autoconf automake libtool bison coreutils
               ;;
           esac
 
