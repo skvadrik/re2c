@@ -46,8 +46,6 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         # RE2C-generated lexer has lots of C-style casts because of 're2c:yych:conversion = 1;'
         "-Wno-old-style-cast"
         "-Wno-nested-anon-types"
-        # initialization of global constants with std::numeric_limits<...> (mostly for size_t)
-        "-Wno-global-constructors"
         # using same names in ctor seems more like a feature
         "-Wno-shadow-field-in-constructor"
         # explicit specialization to reduce build dependencies
