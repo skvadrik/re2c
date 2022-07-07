@@ -52,6 +52,7 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         "-Wno-undefined-func-template"
         # re2c uses C++11, not C++98
         "-Wno-c++98-compat"
+        "-Wno-c++98-compat-pedantic"
     )
     try_cxxflag("-fdiagnostics-color=always")
 

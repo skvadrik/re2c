@@ -151,7 +151,8 @@ TRY_CXXFLAG([-Weverything], m4_join([ ],
     [-Wno-nested-anon-types],
     [-Wno-shadow-field-in-constructor] dnl using same names in ctor seems more like a feature
     [-Wno-undefined-func-template] dnl explicit specialization to reduce build dependencies
-    [-Wno-c++98-compat])) dnl allow using C++11 features like `nullptr`
+    [-Wno-c++98-compat], dnl allow using C++11 features like `nullptr`
+    [-Wno-c++98-compat-pedantic]))
 
 
 # needed for POSIX file API
