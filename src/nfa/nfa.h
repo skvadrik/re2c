@@ -48,66 +48,67 @@ struct nfa_state_t {
     uint32_t active : 1;  // boolean
     uint32_t indeg  : 27; // the rest; we are unlikely to have more than 2^27 states
     uint32_t topord;      // state index in fake topological ordering
-
-    void init(size_t r) {
-        rule = r;
-        clos = NOCLOS;
-        status = GorPass::NOPASS;
-        arcidx = 0;
-        active = 0;
-        indeg = 0;
-        topord = 0;
-    }
-
-    void make_alt(size_t r, nfa_state_t* s1, nfa_state_t* s2) {
-        kind = Kind::ALT;
-        alt.out1 = s1;
-        alt.out2 = s2;
-        init(r);
-    }
-
-    void make_ran(size_t r, nfa_state_t* s, const Range* p) {
-        kind = Kind::RAN;
-        ran.out = s;
-        ran.ran = p;
-        init(r);
-    }
-
-    void make_tag(size_t r, nfa_state_t* s, tag_info_t info) {
-        kind = Kind::TAG;
-        tag.out = s;
-        tag.info = info;
-        init(r);
-    }
-
-    void make_fin(size_t r) {
-        kind = Kind::FIN;
-        init(r);
-    }
 };
 
 struct nfa_t {
-    size_t max_size;
-    size_t size;
-    uint32_t ncores;
-
     nfa_state_t* states;
     nfa_state_t* root;
+
+    uint32_t nstates;
+    uint32_t ncores;
 
     IrAllocator ir_alc;
     std::vector<uint32_t> charset;
     std::vector<Rule> rules;
     std::vector<Tag> tags;
 
-    nfa_t(RESpec&& spec, size_t max_size);
-    ~nfa_t();
+    nfa_t();
+
+    nfa_state_t* make_alt(size_t rule, nfa_state_t* s1, nfa_state_t* s2) {
+        nfa_state_t* s = make(nfa_state_t::Kind::ALT, rule);
+        s->alt.out1 = s1;
+        s->alt.out2 = s2;
+        return s;
+    }
+
+    nfa_state_t* make_ran(size_t rule, nfa_state_t* t, const Range* range) {
+        nfa_state_t* s = make(nfa_state_t::Kind::RAN, rule);
+        s->ran.out = t;
+        s->ran.ran = range;
+        return s;
+    }
+
+    nfa_state_t* make_tag(size_t rule, nfa_state_t* t, tag_info_t info) {
+        nfa_state_t* s = make(nfa_state_t::Kind::TAG, rule);
+        s->tag.out = t;
+        s->tag.info = info;
+        return s;
+    }
+
+    nfa_state_t* make_fin(size_t rule) {
+        return make(nfa_state_t::Kind::FIN, rule);
+    }
+
+  private:
+    nfa_state_t* make(nfa_state_t::Kind kind, size_t rule) {
+        nfa_state_t* s = &states[nstates++];
+        s->kind = kind;
+        s->rule = rule;
+        s->clos = NOCLOS;
+        s->status = GorPass::NOPASS;
+        s->arcidx = 0;
+        s->active = 0;
+        s->indeg = 0;
+        s->topord = 0;
+        return s;
+    }
 
     FORBID_COPY(nfa_t);
 };
 
-static constexpr uint32_t NONCORE = ~0u;
+Ret re_to_nfa(nfa_t& nfa, RESpec&& spec) NODISCARD;
 
-void compute_size_and_depth(const std::vector<RE*>& res, size_t* psize, size_t* pdepth);
+static constexpr uint32_t NONCORE = ~0u;
 
 } // namespace re2c
 

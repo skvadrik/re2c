@@ -69,14 +69,8 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     warn_nullable(re, cond);
 
     // Transform regexp to TNFA.
-    size_t nfa_size, nfa_depth;
-    compute_size_and_depth(re.res, &nfa_size, &nfa_depth);
-    if (nfa_depth > MAX_NFA_DEPTH) {
-        RET_FAIL(error("NFA depth exceeds limits"));
-    } else if (nfa_size > MAX_NFA_STATES) {
-        RET_FAIL(error("NFA has too many states"));
-    }
-    nfa_t nfa(std::move(re), nfa_size);
+    nfa_t nfa;
+    CHECK_RET(re_to_nfa(nfa, std::move(re)));
     DDUMP_NFA(opts, nfa);
 
     // Transmorm TNFA to TDFA.

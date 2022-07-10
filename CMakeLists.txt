@@ -143,7 +143,6 @@ set(re2c_sources
     src/codegen/render.cc
     src/options/opt.cc
     src/options/symtab.cc
-    src/nfa/estimate_size.cc
     src/nfa/re_to_nfa.cc
     src/adfa/adfa.cc
     src/debug/dump_adfa.cc
@@ -470,7 +469,6 @@ if (RE2C_BUILD_LIBS)
         src/dfa/minimization.cc
         src/dfa/tagver_table.cc
         src/dfa/tcmd.cc
-        src/nfa/estimate_size.cc
         src/nfa/re_to_nfa.cc
         src/encoding/enc.cc
         src/encoding/range_suffix.cc

@@ -110,7 +110,6 @@ void dump_tcmd(const tcmd_t*);
 void dump_tag(const Tag& tag, bool negative);
 template<typename ctx_t> void dump_clstats(const ctx_t&);
 template<typename ctx_t> void reset_clstats(ctx_t&);
-uint32_t dist(const nfa_state_t* s0, const nfa_state_t* s);
 
 } // namespace re2c
 

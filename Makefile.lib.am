@@ -100,7 +100,6 @@ libre2c_la_SRC = \
 	src/dfa/minimization.cc \
 	src/dfa/tagver_table.cc \
 	src/dfa/tcmd.cc \
-	src/nfa/estimate_size.cc \
 	src/nfa/re_to_nfa.cc \
 	src/encoding/enc.cc \
 	src/encoding/range_suffix.cc \

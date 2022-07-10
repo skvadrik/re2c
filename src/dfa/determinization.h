@@ -124,7 +124,6 @@ struct determ_context_t {
     const std::string& dc_condname; // the name of current condition (with -c)
 
     // determinization input: TNFA
-    nfa_state_t* nfa_states;
     nfa_state_t* nfa_root;
 
     // common data shared by all representations 
