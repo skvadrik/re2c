@@ -234,7 +234,6 @@ determ_context_t<history_t>::determ_context_t(nfa_t&& nfa,
       dc_condname(cond),
 
       // Move ownership of common data from TNFA to determinization context.
-      nfa_states(nfa.states),
       nfa_root(nfa.root),
       ir_alc(std::move(nfa.ir_alc)),
       charset(std::move(nfa.charset)),
@@ -275,8 +274,7 @@ determ_context_t<history_t>::determ_context_t(nfa_t&& nfa,
       dump_dfa_tree(*this),
       dc_dump(opts),
       dc_clstats() {
-    nfa.states = nullptr; // move ownership to determinization context
-    const size_t nstates = nfa.size;
+    const size_t nstates = nfa.nstates;
     const size_t ncores = nfa.ncores;
     const size_t ntags = tags.size();
 
@@ -307,7 +305,6 @@ determ_context_t<history_t>::determ_context_t(nfa_t&& nfa,
 
 template<typename history_t>
 determ_context_t<history_t>::~determ_context_t() {
-    delete[] nfa_states;
     delete[] newprectbl;
     delete[] histlevel;
 }

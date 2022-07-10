@@ -13,10 +13,6 @@
 
 namespace re2c {
 
-uint32_t dist(const nfa_state_t* s0, const nfa_state_t* s) {
-    return static_cast<uint32_t>(s - s0);
-}
-
 void dump_nfa(const nfa_t& nfa) {
     fprintf(stderr,
             "digraph NFA {\n"
@@ -24,22 +20,25 @@ void dump_nfa(const nfa_t& nfa) {
             "  node[shape=Mrecord fontname=Courier height=0.2 width=0.2]\n"
             "  edge[arrowhead=vee fontname=Courier label=\" \"]\n\n");
 
-    for (uint32_t i = static_cast<uint32_t>(nfa.size); i --> 0;) {
-        const nfa_state_t* n = &nfa.states[i];
+    std::vector<bool> visited(nfa.nstates);
+    std::vector<nfa_state_t*> stack{nfa.root};
 
-        fprintf(stderr, "  n%u [label=\"%u\"]", i, i);
-        if (n->kind == nfa_state_t::Kind::FIN) {
-            fprintf(stderr, " [fillcolor=gray]");
-        }
-        fprintf(stderr, "\n");
+    while (!stack.empty()) {
+        const nfa_state_t* n = stack.back();
+        stack.pop_back();
+
+        if (visited[n->topord]) continue;
+        visited[n->topord] = true;
 
         switch (n->kind) {
         case nfa_state_t::Kind::ALT:
-            fprintf(stderr, "  n%u -> n%u\n", i, dist(nfa.states, n->alt.out1));
-            fprintf(stderr, "  n%u -> n%u [color=lightgray]\n", i, dist(nfa.states, n->alt.out2));
+            fprintf(stderr, "  %u -> %u\n", n->topord, n->alt.out1->topord);
+            fprintf(stderr, "  %u -> %u [color=lightgray]\n", n->topord, n->alt.out2->topord);
+            stack.push_back(n->alt.out2);
+            stack.push_back(n->alt.out1);
             break;
         case nfa_state_t::Kind::RAN: {
-            fprintf(stderr, "  n%u -> n%u [label=\"", i, dist(nfa.states, n->ran.out));
+            fprintf(stderr, "  %u -> %u [label=\"", n->topord, n->ran.out->topord);
             for (const Range* r = n->ran.ran; r; r = r->next()) {
                 const uint32_t
                 l = r->lower(),
@@ -49,17 +48,20 @@ void dump_nfa(const nfa_t& nfa) {
                 if (r->next()) fprintf(stderr, ",");
             }
             fprintf(stderr, "\"]\n");
+            stack.push_back(n->ran.out);
             break;
         }
         case nfa_state_t::Kind::TAG: {
             const Tag& tag = nfa.tags[n->tag.info.idx];
-            fprintf(stderr, "  n%u -> n%u [label=\"/", i, dist(nfa.states, n->tag.out));
+            fprintf(stderr, "  %u -> %u [label=\"/", n->topord, n->tag.out->topord);
             dump_tag(tag, n->tag.info.neg);
             fprintf(stderr, "(%d)", tag.height);
             fprintf(stderr, "\"]\n");
+            stack.push_back(n->tag.out);
             break;
         }
         case nfa_state_t::Kind::FIN:
+            fprintf(stderr, "  %u [fillcolor=gray]\n", n->topord);
             break;
         }
     }

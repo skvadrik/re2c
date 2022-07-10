@@ -41,25 +41,16 @@ digraph NFA {
   node[shape=Mrecord fontname=Courier height=0.2 width=0.2]
   edge[arrowhead=vee fontname=Courier label=" "]
 
-  n9 [label="9"]
-  n9 -> n8 [label="/0&uarr;(1)"]
-  n8 [label="8"]
-  n8 -> n5
-  n8 -> n7 [color=lightgray]
-  n7 [label="7"]
-  n7 -> n6 [label="/2&darr;(2)"]
-  n6 [label="6"]
-  n6 -> n1 [label="/3&darr;(1)"]
-  n5 [label="5"]
-  n5 -> n4 [label="/2&uarr;(2)"]
-  n4 [label="4"]
-  n4 -> n3 [label="97"]
-  n3 [label="3"]
-  n3 -> n2 [label="/3&uarr;(1)"]
-  n2 [label="2"]
-  n2 -> n5
-  n2 -> n1 [color=lightgray]
-  n1 [label="1"]
-  n1 -> n0 [label="/1&uarr;(0)"]
-  n0 [label="0"] [fillcolor=gray]
+  9 -> 8 [label="/0&uarr;(1)"]
+  8 -> 5
+  8 -> 7 [color=lightgray]
+  5 -> 4 [label="/2&uarr;(2)"]
+  4 -> 3 [label="97"]
+  3 -> 2 [label="/3&uarr;(1)"]
+  2 -> 5
+  2 -> 1 [color=lightgray]
+  1 -> 0 [label="/1&uarr;(0)"]
+  0 [fillcolor=gray]
+  7 -> 6 [label="/2&darr;(2)"]
+  6 -> 1 [label="/3&darr;(1)"]
 }

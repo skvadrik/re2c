@@ -129,7 +129,7 @@ int regexec_nfa_posix_backward(const regex_t* preg,
     ctx.cursor = ctx.marker = string + len;
 
     const std::vector<Tag>& tags = ctx.nfa.tags;
-    const size_t sz = tags.size() * ctx.nfa.size * 2;
+    const size_t sz = tags.size() * ctx.nfa.nstates * 2;
     offsets4 = new regoff_t[sz];
     offsets5 = new regoff_t[sz];
     offsets6 = new regoff_t[sz];
@@ -267,7 +267,7 @@ void closure_posix_gor1(psimctx_t& ctx) {
     const size_t ntags = ctx.nfa.tags.size();
 
     state.clear();
-    memcpy(offsets6, offsets4, ctx.nfa.size * ntags * sizeof(regoff_t) * 2);
+    memcpy(offsets6, offsets4, ctx.nfa.nstates * ntags * sizeof(regoff_t) * 2);
 
     // Reverse order happens to result in less test errors, but both orders do not yield a correct
     // algorithm (paths are still compared after their join point sometimes).
@@ -382,7 +382,7 @@ void closure_posix_gtop(psimctx_t& ctx) {
     const size_t ntags = ctx.nfa.tags.size();
 
     state.clear();
-    memcpy(offsets6, offsets4, ctx.nfa.size * ntags * sizeof(regoff_t) * 2);
+    memcpy(offsets6, offsets4, ctx.nfa.nstates * ntags * sizeof(regoff_t) * 2);
     for (psimctx_t::cconfiter_t c = reach.begin(); c != reach.end(); ++c) {
         regoff_t*       ox = offsets5 + ntags * index(c->state, ctx.nfa) * 2;
         const regoff_t* oy = offsets6 + ntags * c->origin * 2;

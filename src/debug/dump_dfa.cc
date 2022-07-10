@@ -72,9 +72,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     fprintf(stderr, "  %s%u [label=<<TABLE BORDER=\"0\" CELLBORDER=\"1\">", prefix, state);
     i = 0;
     for (const clos_t& c : ctx.state) {
-        fprintf(stderr,
-                "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u",
-                i, style, dist(ctx.nfa_states, c.state));
+        fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u", i, style, c.state->topord);
 
         if (c.tvers != ZERO_TAGS) {
             const tagver_t* vers = tvtbl[c.tvers];

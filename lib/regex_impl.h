@@ -221,7 +221,7 @@ simctx_t<history_t>::simctx_t(const nfa_t& nfa, const nfa_t* nfa0, size_t re_nsu
       dc_clstats() {
     const size_t
     ntags = nfa.tags.size(),
-    nstates = nfa.size,
+    nstates = nfa.nstates,
     ncores = nfa.ncores;
 
     state.reserve(nstates);

@@ -82,7 +82,6 @@ re2c_SRC = \
 	src/codegen/render.cc \
 	src/options/opt.cc \
 	src/options/symtab.cc \
-	src/nfa/estimate_size.cc \
 	src/nfa/re_to_nfa.cc \
 	src/adfa/adfa.cc \
 	src/debug/dump_adfa.cc \

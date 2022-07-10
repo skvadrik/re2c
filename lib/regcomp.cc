@@ -69,11 +69,8 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         }
     }
 
-    size_t nfa_size, nfa_depth;
-    compute_size_and_depth(re.res, &nfa_size, &nfa_depth);
-    if (nfa_depth > MAX_NFA_DEPTH || nfa_size > MAX_NFA_STATES) return 1;
-
-    nfa_t* nfa = new nfa_t(std::move(re), nfa_size);
+    nfa_t* nfa = new nfa_t;
+    CHECK_RET(re_to_nfa(*nfa, std::move(re)));
 
     nfa_t* nfa0 = nullptr;
     if (cflags & REG_BACKWARD) {
@@ -84,7 +81,8 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         CHECK_RET(opts0.snapshot(opt0));
         RESpec re0(opt0, msg);
         CHECK_RET(re0.init(arv));
-        nfa0 = new nfa_t(std::move(re0), nfa_size);
+        nfa0 = new nfa_t;
+        CHECK_RET(re_to_nfa(*nfa0, std::move(re0)));
         delete opt0;
     }
 
