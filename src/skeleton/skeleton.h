@@ -116,7 +116,7 @@ struct Node {
     const tcmd_t* cmd;
 
     Node();
-    void init(const dfa_state_t* s,
+    void init(const TdfaState* s,
               const std::vector<uint32_t>& charset,
               size_t nil,
               IrAllocator& ir_alc);
@@ -128,7 +128,7 @@ struct Node {
 struct Skeleton {
     static constexpr uint32_t DEFTAG = std::numeric_limits<uint32_t>::max();
 
-    dfa_t& dfa;
+    Tdfa& dfa;
 
     const opt_t* opts;
     const std::string name;
@@ -148,7 +148,7 @@ struct Skeleton {
     OutBuf buf_data;
     OutBuf buf_keys;
 
-    Skeleton(dfa_t& dfa,
+    Skeleton(Tdfa& dfa,
              const opt_t* opts,
              const std::string& name,
              const std::string& cond,

@@ -27,11 +27,11 @@ static void apply_regops(regoff_t* regs, const tcmd_t* cmd, regoff_t pos) {
 
 int regexec_dfa(
     const regex_t* preg, const char* string, size_t nmatch,regmatch_t pmatch[], int /*eflags*/) {
-    const dfa_t* dfa = preg->dfa;
+    const Tdfa* dfa = preg->dfa;
     regoff_t* regs = preg->regs;
     size_t i = 0;
     const char* p = string, *q = p;
-    const dfa_state_t* s, *x = nullptr;
+    const TdfaState* s, *x = nullptr;
 
     for (;;) {
         s = dfa->states[i];
@@ -44,7 +44,7 @@ int regexec_dfa(
             x = s;
         }
 
-        if (i == dfa_t::NIL || c == 0) break;
+        if (i == Tdfa::NIL || c == 0) break;
 
         apply_regops(regs, s->tcmd[j], p - string - 1);
     }
@@ -92,10 +92,10 @@ static void apply_regops_with_history(regoff_trie_t* regtrie, const tcmd_t* cmd,
 }
 
 subhistory_t* regparse_dfa(const regex_t* preg, const char* string, size_t nmatch) {
-    const dfa_t* dfa = preg->dfa;
+    const Tdfa* dfa = preg->dfa;
     size_t i = 0;
     const char* p = string, *q = p;
-    const dfa_state_t* s, *x = nullptr;
+    const TdfaState* s, *x = nullptr;
     regoff_trie_t* regtrie = preg->regtrie;
 
     regtrie->clear();
@@ -111,7 +111,7 @@ subhistory_t* regparse_dfa(const regex_t* preg, const char* string, size_t nmatc
             x = s;
         }
 
-        if (i == dfa_t::NIL || c == 0) break;
+        if (i == Tdfa::NIL || c == 0) break;
 
         apply_regops_with_history(regtrie, s->tcmd[j], p - string - 1);
     }

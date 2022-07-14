@@ -30,7 +30,7 @@ namespace re2c {
 namespace {
 
 // On-stack information for computing approximate NFA size and depth.
-struct DfsNfaParams {
+struct DfsTnfaParams {
     const RE* re;   // current sub-RE
     uint32_t size;  // sub-NFA size (only for alternative and concatenation)
     uint32_t depth; // sub-NFA depth (only for alternative and concatenation)
@@ -38,7 +38,7 @@ struct DfsNfaParams {
 };
 
 static void estimate_nfa_params(
-    const RE* re0, std::vector<DfsNfaParams>& stack, size_t* psize, size_t* pdepth) {
+    const RE* re0, std::vector<DfsTnfaParams>& stack, size_t* psize, size_t* pdepth) {
 
     // the estimated size and depth of the last sub-RE visited by DFS
     uint32_t size = 0, depth = 0;
@@ -46,7 +46,7 @@ static void estimate_nfa_params(
     stack.push_back({re0, 0, 0, 0});
 
     while (!stack.empty()) {
-        const DfsNfaParams i = stack.back();
+        const DfsTnfaParams i = stack.back();
         stack.pop_back();
 
         const RE* re = i.re;
@@ -105,13 +105,13 @@ static void estimate_nfa_params(
 }
 
 // On-stack information for iterative DFS that computes NFA statistics.
-struct DfsNfaStats {
-    nfa_state_t* state; // current NFA state
-    uint32_t next;      // index of the next state to be visited
+struct DfsTnfaStats {
+    TnfaState* state; // current NFA state
+    uint32_t next;    // index of the next state to be visited
 };
 
-static uint32_t nfa_stats(nfa_state_t* root) {
-    std::vector<DfsNfaStats> stack;
+static uint32_t nfa_stats(TnfaState* root) {
+    std::vector<DfsTnfaStats> stack;
     uint32_t topord = 0;
     uint32_t ncores = 0;
 
@@ -119,7 +119,7 @@ static uint32_t nfa_stats(nfa_state_t* root) {
 
     while (!stack.empty()) {
         // Don't store references to stack as it may grow and get reallocated.
-        nfa_state_t* state = stack.back().state;
+        TnfaState* state = stack.back().state;
         const uint32_t next = stack.back().next++;
         const size_t stack_size = stack.size();
 
@@ -135,25 +135,25 @@ static uint32_t nfa_stats(nfa_state_t* root) {
         }
 
         switch (state->kind) {
-        case nfa_state_t::Kind::ALT:
+        case TnfaState::Kind::ALT:
             if (next == 0) {
                 stack.push_back({state->out1, 0});
             } else if (next == 1) {
                 stack.push_back({state->out2, 0});
             }
             break;
-        case nfa_state_t::Kind::TAG:
+        case TnfaState::Kind::TAG:
             if (next == 0) {
                 stack.push_back({state->out1, 0});
             }
             break;
-        case nfa_state_t::Kind::RAN:
+        case TnfaState::Kind::RAN:
             if (next == 0) {
                 ++ncores;
                 stack.push_back({state->out1, 0});
             }
             break;
-        case nfa_state_t::Kind::FIN:
+        case TnfaState::Kind::FIN:
             ++ncores;
             break;
         }
@@ -170,25 +170,25 @@ static uint32_t nfa_stats(nfa_state_t* root) {
 }
 
 // On-stack information for converting RE to NFA.
-struct DfsReToNfa {
+struct DfsReToTnfa {
     // Current sub-RE is stored by value, as it is modified by the algorithm (e.g. repetition
     // counters are decreased as the repetition sub-RE is unfolded).
     RE re;
     // Start state of the current sub-NFA under construction. It is needed for complex sub-RE like
     // alternative and repetition that are visited multiple times on stack, as sub-NFA for their
     // parts are constructed.
-    nfa_state_t* start;
+    TnfaState* start;
     // End state of the current sub-NFA. It is passed top-down, which is necessary, because it gets
     // recorded in multiple NFA fragments (patching the end states when connecting the fragments
     // would require keeping a list of states to patch for each fragment).
-    nfa_state_t* end;
+    TnfaState* end;
 };
 
 static void one_re_to_nfa(
-        nfa_t& nfa, const RESpec& spec, uint32_t rule, std::vector<DfsReToNfa>& stack) {
+        Tnfa& nfa, const RESpec& spec, uint32_t rule, std::vector<DfsReToTnfa>& stack) {
     // Start state of the last constructed sub-NFA (available after the stack item for it has been
     // popped off stack and the preceding stack item is being processed).
-    nfa_state_t* start = nullptr;
+    TnfaState* start = nullptr;
 
     DCHECK(stack.empty());
     stack.push_back({*spec.res[rule], nullptr, nfa.make_fin(rule)});
@@ -196,7 +196,7 @@ static void one_re_to_nfa(
     while (!stack.empty()) {
         // Refs to top of stack are invalidated after popping or pushing anything (backing storage
         // for the stack may get reallocated).
-        DfsReToNfa& x = stack.back();
+        DfsReToTnfa& x = stack.back();
         RE& re = x.re;
 
         DCHECK(x.end != nullptr);
@@ -293,7 +293,7 @@ static void one_re_to_nfa(
 
 } // anonymous namespace
 
-Ret re_to_nfa(nfa_t& nfa, RESpec&& spec) {
+Ret re_to_nfa(Tnfa& nfa, RESpec&& spec) {
     // Move ownership from regexp to TNFA.
     nfa.ir_alc = std::move(spec.ir_alc);
     nfa.charset = std::move(spec.charset);
@@ -304,7 +304,7 @@ Ret re_to_nfa(nfa_t& nfa, RESpec&& spec) {
 
     // Estimate NFA size (the number of states) and depth (maximum length of a simple path). Do this
     // before the actual NFA construction to abort quickly if the limits are exceeded.
-    std::vector<DfsNfaParams> stack_nfa_params;
+    std::vector<DfsTnfaParams> stack_nfa_params;
     size_t size = spec.res.size() - 1;
     size_t depth = 0;
     for (const RE* re : spec.res) {
@@ -317,9 +317,9 @@ Ret re_to_nfa(nfa_t& nfa, RESpec&& spec) {
     }
 
     nfa.nstates = 0;
-    nfa.states = nfa.ir_alc.alloct<nfa_state_t>(size);
+    nfa.states = nfa.ir_alc.alloct<TnfaState>(size);
 
-    std::vector<DfsReToNfa> stack_re_to_nfa;
+    std::vector<DfsReToTnfa> stack_re_to_nfa;
     for (size_t rule = 0; rule < spec.res.size(); ++rule) {
         one_re_to_nfa(nfa, spec, static_cast<uint32_t>(rule), stack_re_to_nfa);
     }
@@ -332,7 +332,7 @@ Ret re_to_nfa(nfa_t& nfa, RESpec&& spec) {
     return Ret::OK;
 }
 
-nfa_t::nfa_t()
+Tnfa::Tnfa()
     : states(nullptr),
       root(nullptr),
       nstates(0),

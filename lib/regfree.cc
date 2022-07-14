@@ -42,10 +42,10 @@ void regfree(regex_t* preg) {
             delete static_cast<psimctx_t*>(preg->simctx);
         }
     } else {
-        if (preg->flags & REG_REGLESS) {
-            delete preg->rldfa->opts;
-            delete[] preg->rldfa->result;
-            delete preg->rldfa;
+        if (preg->flags & REG_MULTIPASS) {
+            delete preg->mptdfa->opts;
+            delete[] preg->mptdfa->result;
+            delete preg->mptdfa;
             if (preg->flags & REG_SUBHIST) {
                 delete preg->regtrie;
             }

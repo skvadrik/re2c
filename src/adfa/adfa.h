@@ -23,7 +23,7 @@ namespace re2c {
 
 class Msg;
 struct Output;
-struct dfa_t;
+struct Tdfa;
 struct opt_t;
 struct Label;
 struct State;
@@ -121,7 +121,7 @@ struct DFA {
     Label* start_label;
     Label* initial_label;
 
-    DFA(dfa_t&& dfa,
+    DFA(Tdfa&& dfa,
         const std::vector<size_t>& fill,
         size_t key,
         const loc_t& loc,

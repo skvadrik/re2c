@@ -6,7 +6,7 @@
 
 namespace re2c {
 
-template<typename ctx_t> void closure_cleanup(nfa_state_t* q);
+template<typename ctx_t> void closure_cleanup(TnfaState* q);
 template<typename ctx_t> static void closure_leftmost_dfs(ctx_t& ctx);
 
 inline void closure_leftmost(ldetctx_t& ctx) {
@@ -23,7 +23,7 @@ void closure_leftmost_dfs(ctx_t& ctx) {
         using conf_t = typename ctx_t::conf_t;
         const conf_t x = stack.back();
         stack.pop_back();
-        nfa_state_t* n = x.state;
+        TnfaState* n = x.state;
 
         if (n->clos != NOCLOS) continue;
 
@@ -31,22 +31,22 @@ void closure_leftmost_dfs(ctx_t& ctx) {
         state.push_back(x);
 
         switch (n->kind) {
-        case nfa_state_t::Kind::ALT:
+        case TnfaState::Kind::ALT:
             stack.push_back(conf_t(x, n->out2));
             stack.push_back(conf_t(x, n->out1));
             break;
-        case nfa_state_t::Kind::TAG:
+        case TnfaState::Kind::TAG:
             stack.push_back(conf_t(x, n->out1, ctx.history.link(ctx, x)));
             break;
-        case nfa_state_t::Kind::RAN:
-        case nfa_state_t::Kind::FIN:
+        case TnfaState::Kind::RAN:
+        case TnfaState::Kind::FIN:
             break;
         }
     }
 }
 
 template<>
-inline void closure_cleanup<ldetctx_t>(nfa_state_t* q) {
+inline void closure_cleanup<ldetctx_t>(TnfaState* q) {
     q->clos = NOCLOS;
 }
 

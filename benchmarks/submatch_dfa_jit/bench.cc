@@ -38,9 +38,9 @@ int main(int argc, char** argv)
 
     const std::vector<alg_t> algs {
         {"last-offset",           ENGINE_RE2C, 0},
-        {"multipass-last-offset", ENGINE_RE2C, REG_REGLESS},
+        {"multipass-last-offset", ENGINE_RE2C, REG_MULTIPASS},
         {"all-offsets",           ENGINE_RE2C, REG_SUBHIST},
-        {"multipass-all-offsets", ENGINE_RE2C, REG_SUBHIST | REG_REGLESS},
+        {"multipass-all-offsets", ENGINE_RE2C, REG_SUBHIST | REG_MULTIPASS},
     };
 
     benchmark::Initialize(&argc, argv);

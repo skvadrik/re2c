@@ -46,7 +46,7 @@ struct StackItem {
 };
 
 // Tarjan's algorithm
-static void scc(const dfa_t& dfa, std::vector<bool>& trivial, std::vector<StackItem>& stack_dfs) {
+static void scc(const Tdfa& dfa, std::vector<bool>& trivial, std::vector<StackItem>& stack_dfs) {
     std::vector<size_t> lowlink(dfa.states.size(), SCC_UND);
     std::stack<size_t> stack;
 
@@ -75,7 +75,7 @@ static void scc(const dfa_t& dfa, std::vector<bool>& trivial, std::vector<StackI
         // find the next successor state that hasn't been visited yet
         for (; c < dfa.nchars; ++c) {
             const size_t j = arcs[c];
-            if (j != dfa_t::NIL) {
+            if (j != Tdfa::NIL) {
                 if (lowlink[j] == SCC_UND) {
                     break;
                 }
@@ -103,7 +103,7 @@ static void scc(const dfa_t& dfa, std::vector<bool>& trivial, std::vector<StackI
     }
 }
 
-static void calc_fill(const dfa_t& dfa,
+static void calc_fill(const Tdfa& dfa,
                       const std::vector<bool>& trivial,
                       std::vector<StackItem>& stack_dfs,
                       std::vector<size_t>& fill) {
@@ -133,7 +133,7 @@ static void calc_fill(const dfa_t& dfa,
         // find the next successor state that hasn't been visited yet
         for (; c < dfa.nchars; ++c) {
             const size_t j = arcs[c];
-            if (j != dfa_t::NIL) break;
+            if (j != Tdfa::NIL) break;
         }
 
         if (c < dfa.nchars) {
@@ -156,7 +156,7 @@ static void calc_fill(const dfa_t& dfa,
 
 } // anonymous namespace
 
-void fillpoints(const dfa_t& dfa, std::vector<size_t>& fill) {
+void fillpoints(const Tdfa& dfa, std::vector<size_t>& fill) {
     const size_t nstates = dfa.states.size();
     std::vector<bool> trivial(nstates, false);
     std::vector<StackItem> stack_dfs;

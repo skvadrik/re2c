@@ -53,7 +53,7 @@ struct tcmd_t;
 // for future use.
 
 // reversed DFA
-struct rdfa_t {
+struct RevDfa {
     struct arc_t {
         size_t dest;
         arc_t* next;
@@ -70,7 +70,7 @@ struct rdfa_t {
     state_t* states;
     arc_t* arcs;
 
-    explicit rdfa_t(const dfa_t& dfa)
+    explicit RevDfa(const Tdfa& dfa)
         : nstates(dfa.states.size()),
           nrules(dfa.rules.size()),
           states(new state_t[nstates]()),
@@ -86,10 +86,10 @@ struct rdfa_t {
         // init arcs
         arc_t* a = arcs;
         for (size_t i = 0; i < nstates; ++i) {
-            dfa_state_t* s = dfa.states[i];
+            TdfaState* s = dfa.states[i];
             for (size_t c = 0; c < dfa.nchars; ++c) {
                 const size_t j = s->arcs[c];
-                if (j != dfa_t::NIL) {
+                if (j != Tdfa::NIL) {
                     a->dest = i;
                     a->next = states[j].arcs;
                     states[j].arcs = a++;
@@ -100,17 +100,17 @@ struct rdfa_t {
         }
     }
 
-    ~rdfa_t() {
+    ~RevDfa() {
         delete[] states;
         delete[] arcs;
     }
 
-    FORBID_COPY(rdfa_t);
+    FORBID_COPY(RevDfa);
 };
 
-static void backprop(const rdfa_t& rdfa, bool* live, size_t rule, size_t state) {
+static void backprop(const RevDfa& rdfa, bool* live, size_t rule, size_t state) {
     // "none-rule" is unreachable from final states: be careful to mask it before propagating
-    const rdfa_t::state_t& s = rdfa.states[state];
+    const RevDfa::state_t& s = rdfa.states[state];
     if (rule == rdfa.nrules) {
         rule = s.rule;
     }
@@ -122,21 +122,21 @@ static void backprop(const rdfa_t& rdfa, bool* live, size_t rule, size_t state) 
     if (l) return;
     l = true;
 
-    for (const rdfa_t::arc_t* a = s.arcs; a; a = a->next) {
+    for (const RevDfa::arc_t* a = s.arcs; a; a = a->next) {
         backprop(rdfa, live, rule, a->dest);
     }
 }
 
-static void liveness_analyses(const rdfa_t& rdfa, bool* live) {
+static void liveness_analyses(const RevDfa& rdfa, bool* live) {
     for (size_t i = 0; i < rdfa.nstates; ++i) {
-        const rdfa_t::state_t& s = rdfa.states[i];
+        const RevDfa::state_t& s = rdfa.states[i];
         if (s.fallthru) {
             backprop(rdfa, live, s.rule, i);
         }
     }
 }
 
-static void warn_dead_rules(dfa_t& dfa, const std::string& cond, const bool* live, Msg& msg) {
+static void warn_dead_rules(Tdfa& dfa, const std::string& cond, const bool* live, Msg& msg) {
     const size_t nstates = dfa.states.size();
     const size_t nrules = dfa.rules.size();
 
@@ -161,7 +161,7 @@ static void warn_dead_rules(dfa_t& dfa, const std::string& cond, const bool* liv
 }
 
 static void warn_sentinel_in_midrule(
-        const dfa_t& dfa, const opt_t* opts, const std::string& cond, const bool* live, Msg& msg) {
+        const Tdfa& dfa, const opt_t* opts, const std::string& cond, const bool* live, Msg& msg) {
     // perform check only in case sentinel method is used
     if (opts->fill_use || opts->eof != NOEOF) return;
 
@@ -183,12 +183,12 @@ static void warn_sentinel_in_midrule(
     // transitions; otherwise, give a warning or an error if `re2c:sentinel` configuration is used.
     for (size_t i = 0; i < nstates; ++i) {
         const size_t j = dfa.states[i]->arcs[sentcls];
-        if (j == dfa_t::NIL) continue;
+        if (j == Tdfa::NIL) continue;
 
         const size_t* arcs = dfa.states[j]->arcs;
         for (size_t c = 0; c < nsym; ++c) {
             const size_t k = arcs[c];
-            if (k == dfa_t::NIL) continue;
+            if (k == Tdfa::NIL) continue;
 
             for (size_t r = 0; r < nrules; ++r) {
                 bad[r] |= live[r * nstates + k];
@@ -205,17 +205,17 @@ static void warn_sentinel_in_midrule(
     delete[] bad;
 }
 
-static void remove_dead_final_states(dfa_t& dfa, const bool* fallthru) {
+static void remove_dead_final_states(Tdfa& dfa, const bool* fallthru) {
     const size_t nsym = dfa.nchars;
 
-    for (dfa_state_t* s : dfa.states) {
+    for (TdfaState* s : dfa.states) {
         if (s->rule == Rule::NONE) continue;
 
         // final state is useful iff there is at least one non-accepting path from this state
         bool shadowed = true;
         for (size_t c = 0; c < nsym; ++c) {
             const size_t j = s->arcs[c];
-            if (j == dfa_t::NIL || fallthru[j]) {
+            if (j == Tdfa::NIL || fallthru[j]) {
                 shadowed = false;
                 break;
             }
@@ -228,12 +228,12 @@ static void remove_dead_final_states(dfa_t& dfa, const bool* fallthru) {
     }
 }
 
-static void find_fallback_states(dfa_t& dfa, const bool* fallthru) {
+static void find_fallback_states(Tdfa& dfa, const bool* fallthru) {
     const size_t nstate = dfa.states.size();
     const size_t nsym = dfa.nchars;
 
     for (size_t i = 0; i < nstate; ++i) {
-        dfa_state_t* s = dfa.states[i];
+        TdfaState* s = dfa.states[i];
         s->fallthru = fallthru[i];
         if (s->rule == Rule::NONE) continue;
 
@@ -241,7 +241,7 @@ static void find_fallback_states(dfa_t& dfa, const bool* fallthru) {
         // that end with a transition to default state).
         for (size_t c = 0; c < nsym; ++c) {
             const size_t j = s->arcs[c];
-            if (j != dfa_t::NIL && fallthru[j]) {
+            if (j != Tdfa::NIL && fallthru[j]) {
                 s->fallback = true;
                 break;
             }
@@ -249,10 +249,10 @@ static void find_fallback_states(dfa_t& dfa, const bool* fallthru) {
     }
 }
 
-static void find_fallback_states_with_eof_rule(dfa_t& dfa) {
+static void find_fallback_states_with_eof_rule(Tdfa& dfa) {
     const size_t nsym = dfa.nchars;
 
-    for (dfa_state_t* s : dfa.states) {
+    for (TdfaState* s : dfa.states) {
         if (s->rule == Rule::NONE || s->rule == dfa.eof_rule) continue;
 
         // With the end-of-input rule $ a final state is a fallback state if it has outgoing
@@ -261,7 +261,7 @@ static void find_fallback_states_with_eof_rule(dfa_t& dfa) {
         // default quasi-transition).
         for (size_t c = 0; c < nsym; ++c) {
             const size_t j = s->arcs[c];
-            if (j != dfa_t::NIL && dfa.states[j]->rule == Rule::NONE) {
+            if (j != Tdfa::NIL && dfa.states[j]->rule == Rule::NONE) {
                 s->fallback = true;
                 break;
             }
@@ -269,26 +269,26 @@ static void find_fallback_states_with_eof_rule(dfa_t& dfa) {
     }
 }
 
-static void remove_dead_final_states_with_eof_rule(dfa_t& dfa) {
+static void remove_dead_final_states_with_eof_rule(Tdfa& dfa) {
     // The end-of-input rule $ is like a special symbol that is not covered by any of the rules.
     // Therefore rules cannot be completely shadowed by other rules, with one exception: if a rule
     // matches empty string and the initial state is not a fallback state (i.e. all outgoing paths
     // are accepting), then this rule will never match (if the end of input happens in the initial
     // state, then the $ rule takes priority, otherwise one of the longer rules will match).
     DCHECK(!dfa.states.empty());
-    dfa_state_t* s0 = dfa.states[0];
+    TdfaState* s0 = dfa.states[0];
     if (s0->rule != Rule::NONE && s0->rule != dfa.eof_rule && !s0->fallback) {
         s0->rule = dfa.eof_rule;
     }
 }
 
-void cutoff_dead_rules(dfa_t& dfa, const opt_t* opts, const std::string& cond, Msg& msg) {
+void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Msg& msg) {
     if (opts->eof != NOEOF) {
         // See note [end-of-input rule].
         find_fallback_states_with_eof_rule(dfa);
         remove_dead_final_states_with_eof_rule(dfa);
     } else {
-        const rdfa_t rdfa(dfa);
+        const RevDfa rdfa(dfa);
         const size_t ns = rdfa.nstates;
         const size_t nl = (rdfa.nrules + 1) * ns;
         bool* live = new bool[nl];

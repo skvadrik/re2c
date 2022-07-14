@@ -78,7 +78,7 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t>& path,
                                        bool loop) {
     const typename ctx_t::history_t& history = ctx.history;
     const kernels_t& kernels = ctx.dc_kernels;
-    std::set<const nfa_state_t*> active, active2;
+    std::set<const TnfaState*> active, active2;
     std::set<int32_t> used;
     const uint32_t pathlen = static_cast<uint32_t>(path.size());
     const size_t histsize = history.nodes.size();
@@ -111,7 +111,7 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t>& path,
         const hidx_t hidxbase = loop && k == pathlen - 1 ? static_cast<hidx_t>(histsize) : 0;
 
         // pretty nodes for TNFA states
-        for (const nfa_state_t* s : active) {
+        for (const TnfaState* s : active) {
             fprintf(stderr,
                     "  nx%u_%u_%u"
                     " [label=\"s%u\" style=\"rounded,filled\" bgcolor=lightgray]\n",
@@ -121,7 +121,7 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t>& path,
         used.clear();
 
         for (uint32_t i = 0; i < kernel->size; ++i) {
-            const nfa_state_t* x = kernel->state[i];
+            const TnfaState* x = kernel->state[i];
             if (active.find(x) == active.end()) continue;
 
             if (k == 0) {
@@ -129,7 +129,7 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t>& path,
             } else {
                 const uint32_t origin = path[k - 1], symbol = syms[k - 1];
                 const origmap_t::key_type key = std::make_pair(origin, symbol);
-                const nfa_state_t* y = origmap[key].at(i);
+                const TnfaState* y = origmap[key].at(i);
                 active2.insert(y);
                 fprintf(stderr, "  nx%u_%u_%u", targetx, k - 1, y->topord);
             }
@@ -183,7 +183,7 @@ dump_dfa_tree_t<ctx_t>::~dump_dfa_tree_t() {
         const bool loop = been[i] > 1;
 
         uint32_t c = sym[i];
-        for (; c < nsym && ctx.dfa.states[i]->arcs[c] == dfa_t::NIL; ++c);
+        for (; c < nsym && ctx.dfa.states[i]->arcs[c] == Tdfa::NIL; ++c);
 
         if (c < nsym || loop) {
             syms.push_back(c);
@@ -220,10 +220,10 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
     const uint32_t target = ctx.dc_target;
     const uint32_t targetx = isnew ? target : ++uniqidx;
 
-    if (target == dfa_t::NIL) return;
+    if (target == Tdfa::NIL) return;
 
     // initial "void" node
-    if (origin == dfa_t::NIL) {
+    if (origin == Tdfa::NIL) {
         fprintf(stderr,
                 "  subgraph cluster_void {\n"
                 "   void[label=\" \" style=\"rounded,filled\"  bgcolor=lightgray]\n"
@@ -249,7 +249,7 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
 
     // transitions constituiting the tag history tree
     for (const clos_t& c : ctx.state) {
-        if (origin == dfa_t::NIL) {
+        if (origin == Tdfa::NIL) {
             fprintf(stderr, "   void");
         } else {
             fprintf(stderr, "   n%u_%u", origin, ctx.dc_kernels[origin]->state[c.origin]->topord);
@@ -264,7 +264,7 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
     // save TNFA origins for this TDFA state
     origins_t& origins = origmap[std::make_pair(origin, ctx.dc_symbol)];
     for (const clos_t& c : ctx.state) {
-        const nfa_state_t* o = origin == dfa_t::NIL
+        const TnfaState* o = origin == Tdfa::NIL
                 ? nullptr : ctx.dc_kernels[origin]->state[c.origin];
         origins.push_back(o);
     }

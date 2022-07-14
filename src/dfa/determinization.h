@@ -21,28 +21,28 @@
 namespace re2c {
 
 struct opt_t;
-struct dfa_t;
+struct Tdfa;
 struct tcmd_t;
 class Msg;
 
 using prectable_t = int32_t;
 
 struct clos_t {
-    nfa_state_t* state;
+    TnfaState* state;
     uint32_t origin;
     uint32_t tvers; // vector of tag versions (including lookahead tags)
     hidx_t ttran; // history of transition tags
     hidx_t thist; // history of lookahead tags
 
     inline clos_t(): state(nullptr), origin(0), tvers(0), ttran(0), thist(HROOT) {}
-    inline clos_t(nfa_state_t* s, uint32_t o, uint32_t v, hidx_t t, hidx_t h)
+    inline clos_t(TnfaState* s, uint32_t o, uint32_t v, hidx_t t, hidx_t h)
         : state(s), origin(o), tvers(v), ttran(t), thist(h) {}
-    inline clos_t(const clos_t& c, nfa_state_t* s)
+    inline clos_t(const clos_t& c, TnfaState* s)
         : state(s), origin(c.origin), tvers(c.tvers), ttran(c.ttran), thist(c.thist) {}
-    inline clos_t(const clos_t& c, nfa_state_t* s, hidx_t h)
+    inline clos_t(const clos_t& c, TnfaState* s, hidx_t h)
         : state(s), origin(c.origin), tvers(c.tvers), ttran(c.ttran), thist(h) {}
-    static inline bool fin(const clos_t& c) { return c.state->kind == nfa_state_t::Kind::FIN; }
-    static inline bool ran(const clos_t& c) { return c.state->kind == nfa_state_t::Kind::RAN; }
+    static inline bool fin(const clos_t& c) { return c.state->kind == TnfaState::Kind::FIN; }
+    static inline bool ran(const clos_t& c) { return c.state->kind == TnfaState::Kind::RAN; }
 };
 
 using closure_t = std::vector<clos_t>;
@@ -71,7 +71,7 @@ struct newver_cmp_t {
 
 struct kernel_t {
     size_t size;                // the number of items in the kernel
-    nfa_state_t** state;        // TNFA state for each item
+    TnfaState** state;          // TNFA state for each item
     hidx_t* thist;              // lookahead tag history for each item
     const prectable_t* prectbl; // POSIX precedence table, if applicable
     uint32_t* tvers;            // TDFA: tag versions for each item
@@ -95,7 +95,7 @@ struct kernel_buffers_t {
 };
 
 struct cmp_gtop_t {
-    inline bool operator() (const nfa_state_t* x, const nfa_state_t* y) const;
+    inline bool operator() (const TnfaState* x, const TnfaState* y) const;
 };
 
 struct histleaf_t {
@@ -106,7 +106,7 @@ struct histleaf_t {
 };
 
 using kernels_t = lookup_t<const kernel_t*>;
-using gtop_heap_t = std::priority_queue<nfa_state_t*, std::vector<nfa_state_t*>, cmp_gtop_t>;
+using gtop_heap_t = std::priority_queue<TnfaState*, std::vector<TnfaState*>, cmp_gtop_t>;
 
 template<typename history_type_t>
 struct determ_context_t {
@@ -124,7 +124,7 @@ struct determ_context_t {
     const std::string& dc_condname; // the name of current condition (with -c)
 
     // determinization input: TNFA
-    nfa_state_t* nfa_root;
+    TnfaState* nfa_root;
 
     // common data shared by all representations 
     IrAllocator ir_alc;
@@ -133,7 +133,7 @@ struct determ_context_t {
     std::vector<Tag> tags;
 
     // determinization output: TDFA
-    dfa_t& dfa;
+    Tdfa& dfa;
 
     // temporary structures used by determinization
     uint32_t dc_origin;                // from-state of the current transition
@@ -155,11 +155,11 @@ struct determ_context_t {
     // tagged epsilon-closure
     confset_t reach;
     confset_t state;
-    std::vector<nfa_state_t*> gor1_topsort; // stack used in GOR1 (POSIX closure)
-    std::vector<nfa_state_t*> gor1_linear;  // stack used in GOR1 (POSIX closure)
-    std::vector<nfa_state_t*> gtop_buffer;  // buffer used for heap in GTOP (POSIX closure)
-    cmp_gtop_t gtop_cmp;                    // heap comparator used in GTOP (POSIX closure)
-    gtop_heap_t gtop_heap;                  // heap used in GTOP (POSIX closure)
+    std::vector<TnfaState*> gor1_topsort; // stack used in GOR1 (POSIX closure)
+    std::vector<TnfaState*> gor1_linear;  // stack used in GOR1 (POSIX closure)
+    std::vector<TnfaState*> gtop_buffer;  // buffer used for heap in GTOP (POSIX closure)
+    cmp_gtop_t gtop_cmp;                  // heap comparator used in GTOP (POSIX closure)
+    gtop_heap_t gtop_heap;                // heap used in GTOP (POSIX closure)
 
     // precedence table and auxilary data for POSIX disambiguation
     int32_t* newprectbl;
@@ -175,11 +175,7 @@ struct determ_context_t {
     dump_dfa_t dc_dump;
     closure_stats_t dc_clstats;
 
-    determ_context_t(nfa_t&& nfa,
-                     dfa_t& dfa,
-                     const opt_t* opts,
-                     Msg& msg,
-                     const std::string& cond);
+    determ_context_t(Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
     ~determ_context_t();
     FORBID_COPY(determ_context_t);
 };
@@ -193,9 +189,9 @@ template<typename ctx_t> void find_state(ctx_t& ctx);
 template<typename ctx_t, bool b> bool do_find_state(ctx_t& ctx);
 template<typename ctx_t> void reach_on_symbol(ctx_t& ctx, uint32_t sym);
 template<typename ctx_t> uint32_t init_tag_versions(ctx_t& ctx);
-nfa_state_t* transition(nfa_state_t*, uint32_t);
+TnfaState* transition(TnfaState*, uint32_t);
 
-inline bool cmp_gtop_t::operator() (const nfa_state_t* x, const nfa_state_t* y) const {
+inline bool cmp_gtop_t::operator() (const TnfaState* x, const TnfaState* y) const {
     return x->topord < y->topord;
 }
 

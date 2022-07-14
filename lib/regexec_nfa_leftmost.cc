@@ -34,9 +34,9 @@ int regexec_nfa_leftmost(
     }
 
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
         s->clos = NOCLOS;
-        if (s->kind == nfa_state_t::Kind::FIN) {
+        if (s->kind == TnfaState::Kind::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
     }
@@ -59,10 +59,10 @@ void reach_on_symbol(lsimctx_t& ctx, uint32_t sym) {
     // in reverse, so that future closure DFS has states in stack order
     uint32_t j = 0;
     for (rcconfiter_t i = state.rbegin(), e = state.rend(); i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
         s->clos = NOCLOS;
 
-        if (s->kind == nfa_state_t::Kind::RAN) {
+        if (s->kind == TnfaState::Kind::RAN) {
             for (const Range* r = s->ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     conf_t c(s->out1, j, HROOT);
@@ -72,7 +72,7 @@ void reach_on_symbol(lsimctx_t& ctx, uint32_t sym) {
                     break;
                 }
             }
-        } else if (s->kind == nfa_state_t::Kind::FIN) {
+        } else if (s->kind == TnfaState::Kind::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
     }

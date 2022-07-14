@@ -87,13 +87,13 @@ void make_step(pzsimctx_t& ctx, uint32_t sym) {
     reach.clear();
     uint32_t j = 0;
     for (i = b; i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
 
         s->clos = NOCLOS;
         s->arcidx = 0;
         DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->kind == nfa_state_t::Kind::RAN) {
+        if (s->kind == TnfaState::Kind::RAN) {
             for (const Range* r = s->ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     const conf_t c(s->out1, j++, i->thist);
@@ -101,7 +101,7 @@ void make_step(pzsimctx_t& ctx, uint32_t sym) {
                     break;
                 }
             }
-        } else if (s->kind == nfa_state_t::Kind::FIN) {
+        } else if (s->kind == TnfaState::Kind::FIN) {
             ctx.marker = ctx.cursor;
             ctx.hidx = i->thist;
             ctx.rule = 0;
@@ -113,13 +113,13 @@ void make_step(pzsimctx_t& ctx, uint32_t sym) {
 
 void make_final_step(pzsimctx_t& ctx) {
     for (confiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
 
         s->clos = NOCLOS;
         s->arcidx = 0;
         DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->kind == nfa_state_t::Kind::FIN) {
+        if (s->kind == TnfaState::Kind::FIN) {
             ctx.marker = ctx.cursor;
             ctx.hidx = i->thist;
             ctx.rule = 0;

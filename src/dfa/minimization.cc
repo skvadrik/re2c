@@ -56,11 +56,11 @@ struct moore_key_t {
 using moore_init_t = std::map<moore_key_t, size_t>;
 
 static bool operator <(const moore_key_t&, const moore_key_t&);
-static void minimization_table(size_t*, const std::vector<dfa_state_t*>&, size_t);
-static void minimization_moore(size_t*, const std::vector<dfa_state_t*>&, size_t);
+static void minimization_table(size_t*, const std::vector<TdfaState*>&, size_t);
+static void minimization_moore(size_t*, const std::vector<TdfaState*>&, size_t);
 
 
-void minimization(dfa_t& dfa, Minimization type) {
+void minimization(Tdfa& dfa, Minimization type) {
     const size_t count = dfa.states.size();
     size_t* part = new size_t[count];
 
@@ -80,12 +80,12 @@ void minimization(dfa_t& dfa, Minimization type) {
 
     size_t new_count = 0;
     for (size_t i = 0; i < count; ++i) {
-        dfa_state_t* s = dfa.states[i];
+        TdfaState* s = dfa.states[i];
 
         if (i == part[i]) {
             size_t* arcs = s->arcs;
             for (size_t c = 0; c < dfa.nchars; ++c) {
-                if (arcs[c] != dfa_t::NIL) {
+                if (arcs[c] != Tdfa::NIL) {
                     arcs[c] = compact[part[arcs[c]]];
                 }
             }
@@ -100,8 +100,7 @@ void minimization(dfa_t& dfa, Minimization type) {
     delete[] part;
 }
 
-void minimization_table(size_t* part, const std::vector<dfa_state_t*>& states,
-                        size_t nchars) {
+void minimization_table(size_t* part, const std::vector<TdfaState*>& states, size_t nchars) {
     const size_t count = states.size();
 
     bool** tbl = new bool*[count];
@@ -112,9 +111,9 @@ void minimization_table(size_t* part, const std::vector<dfa_state_t*>& states,
 
     // see note [distinguish states by tags]
     for (size_t i = 0; i < count; ++i) {
-        dfa_state_t* s1 = states[i];
+        TdfaState* s1 = states[i];
         for (size_t j = 0; j < i; ++j) {
-            dfa_state_t* s2 = states[j];
+            TdfaState* s2 = states[j];
             tbl[i][j] = s1->rule != s2->rule || s1->tcid[nchars] != s2->tcid[nchars];
         }
     }
@@ -132,8 +131,8 @@ void minimization_table(size_t* part, const std::vector<dfa_state_t*>& states,
                         }
                         if (states[i]->tcid[k] != states[j]->tcid[k]
                                 || (oi != oj
-                                    && (oi == dfa_t::NIL
-                                        || oj == dfa_t::NIL
+                                    && (oi == Tdfa::NIL
+                                        || oj == Tdfa::NIL
                                         || tbl[oi][oj]))) {
                             tbl[i][j] = true;
                             loop = true;
@@ -172,20 +171,19 @@ void minimization_table(size_t* part, const std::vector<dfa_state_t*>& states,
     delete[] tbl;
 }
 
-void minimization_moore(size_t* part, const std::vector<dfa_state_t*>& states,
-                        size_t nchars) {
+void minimization_moore(size_t* part, const std::vector<TdfaState*>& states, size_t nchars) {
     const size_t count = states.size();
     size_t* next = new size_t[count];
 
     // see note [distinguish states by tags]
     moore_init_t init;
     for (size_t i = 0; i < count; ++i) {
-        dfa_state_t* s = states[i];
+        TdfaState* s = states[i];
         const moore_key_t k = {s->rule, s->tcid[nchars]};
         std::pair<moore_init_t::iterator, bool> p = init.insert(std::make_pair(k, i));
         if (p.second) {
             part[i] = i;
-            next[i] = dfa_t::NIL;
+            next[i] = Tdfa::NIL;
         } else {
             const size_t j = p.first->second;
             part[i] = j;
@@ -201,19 +199,19 @@ void minimization_moore(size_t* part, const std::vector<dfa_state_t*>& states,
         loop = false;
 
         for (size_t i = 0; i < count; ++i) {
-            if (i != part[i] || next[i] == dfa_t::NIL) continue;
+            if (i != part[i] || next[i] == Tdfa::NIL) continue;
 
-            for (size_t j = i; j != dfa_t::NIL; j = next[j]) {
+            for (size_t j = i; j != Tdfa::NIL; j = next[j]) {
                 size_t* o = &out[j * nchars];
                 size_t* a = states[j]->arcs;
 
                 for (size_t c = 0; c < nchars; ++c) {
-                    o[c] = a[c] == dfa_t::NIL ? dfa_t::NIL : part[a[c]];
+                    o[c] = a[c] == Tdfa::NIL ? Tdfa::NIL : part[a[c]];
                 }
             }
 
             size_t diff_count = 0;
-            for (size_t j = i; j != dfa_t::NIL;) {
+            for (size_t j = i; j != Tdfa::NIL;) {
                 const size_t j_next = next[j];
                 size_t n = 0;
 
@@ -233,7 +231,7 @@ void minimization_moore(size_t* part, const std::vector<dfa_state_t*>& states,
                 if (n == diff_count) {
                     diff[diff_count++] = j;
                     part[j] = j;
-                    next[j] = dfa_t::NIL;
+                    next[j] = Tdfa::NIL;
                 }
 
                 j = j_next;

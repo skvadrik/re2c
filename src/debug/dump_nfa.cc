@@ -13,7 +13,7 @@
 
 namespace re2c {
 
-void dump_nfa(const nfa_t& nfa) {
+void dump_nfa(const Tnfa& nfa) {
     fprintf(stderr,
             "digraph NFA {\n"
             "  rankdir=LR\n"
@@ -21,23 +21,23 @@ void dump_nfa(const nfa_t& nfa) {
             "  edge[arrowhead=vee fontname=Courier label=\" \"]\n\n");
 
     std::vector<bool> visited(nfa.nstates);
-    std::vector<nfa_state_t*> stack{nfa.root};
+    std::vector<TnfaState*> stack{nfa.root};
 
     while (!stack.empty()) {
-        const nfa_state_t* n = stack.back();
+        const TnfaState* n = stack.back();
         stack.pop_back();
 
         if (visited[n->topord]) continue;
         visited[n->topord] = true;
 
         switch (n->kind) {
-        case nfa_state_t::Kind::ALT:
+        case TnfaState::Kind::ALT:
             fprintf(stderr, "  %u -> %u\n", n->topord, n->out1->topord);
             fprintf(stderr, "  %u -> %u [color=lightgray]\n", n->topord, n->out2->topord);
             stack.push_back(n->out2);
             stack.push_back(n->out1);
             break;
-        case nfa_state_t::Kind::RAN: {
+        case TnfaState::Kind::RAN: {
             fprintf(stderr, "  %u -> %u [label=\"", n->topord, n->out1->topord);
             for (const Range* r = n->ran; r; r = r->next()) {
                 const uint32_t
@@ -51,7 +51,7 @@ void dump_nfa(const nfa_t& nfa) {
             stack.push_back(n->out1);
             break;
         }
-        case nfa_state_t::Kind::TAG: {
+        case TnfaState::Kind::TAG: {
             const Tag& tag = nfa.tags[n->tag.idx];
             fprintf(stderr, "  %u -> %u [label=\"/", n->topord, n->out1->topord);
             dump_tag(tag, n->tag.neg);
@@ -60,7 +60,7 @@ void dump_nfa(const nfa_t& nfa) {
             stack.push_back(n->out1);
             break;
         }
-        case nfa_state_t::Kind::FIN:
+        case TnfaState::Kind::FIN:
             fprintf(stderr, "  %u [fillcolor=gray]\n", n->topord);
             break;
         }

@@ -7,8 +7,8 @@
 
 namespace re2c {
 
-struct nfa_t;
-struct dfa_t;
+struct Tnfa;
+struct Tdfa;
 class RangeMgr;
 
 } // namespace re2c
@@ -16,7 +16,7 @@ class RangeMgr;
 namespace re2c {
 namespace libre2c {
 
-struct rldfa_t;
+struct MpTdfa;
 struct regoff_trie_t;
 
 } // namespace libre2c
@@ -70,17 +70,20 @@ static constexpr int REG_GTOP      = 1u << 9;
 static constexpr int REG_SLOWPREC  = 1u << 10;
 static constexpr int REG_BACKWARD  = 1u << 11;
 static constexpr int REG_KUKLEWICZ = 1u << 12;
-static constexpr int REG_REGLESS   = 1u << 13;
+static constexpr int REG_MULTIPASS = 1u << 13;
 static constexpr int REG_SUBHIST   = 1u << 14;
 static constexpr int REG_TSTRING   = 1u << 15;
 static constexpr int REG_AUTOTAGS  = 1u << 16;
 
+// Old name for REG_MULTIPASS, keep it for bcakward compatibility.
+static constexpr int REG_REGLESS = REG_MULTIPASS;
+
 struct regex_t {
     size_t re_nsub;
     size_t re_ntag;
-    const re2c::nfa_t* nfa;
-    const re2c::dfa_t* dfa;
-    const re2c::libre2c::rldfa_t* rldfa;
+    const re2c::Tnfa* nfa;
+    const re2c::Tdfa* dfa;
+    const re2c::libre2c::MpTdfa* mptdfa;
     void* simctx;
     size_t* char2class;
     int flags;

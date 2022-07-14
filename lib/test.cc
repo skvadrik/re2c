@@ -145,7 +145,7 @@ static int test_tstring(const char* pattern, const char* string, const char* exp
     std::ostringstream s;
     int result;
 
-    result = regcomp(&re, pattern, REG_REGLESS | REG_TSTRING);
+    result = regcomp(&re, pattern, REG_MULTIPASS | REG_TSTRING);
     if (result != 0) {
         fprintf(stderr, "[t-string] regcomp() failed for RE %s\n", pattern);
         goto end;
@@ -1323,14 +1323,14 @@ int main() {
     int e = 0;
 
     e |= test_all_posix(0);
-    e |= test_all_posix(REG_REGLESS);
+    e |= test_all_posix(REG_MULTIPASS);
     e |= test_all_posix(REG_SUBHIST);
-    e |= test_all_posix(REG_SUBHIST | REG_REGLESS);
+    e |= test_all_posix(REG_SUBHIST | REG_MULTIPASS);
 
     e |= test_all_leftmost(REG_LEFTMOST);
-    e |= test_all_leftmost(REG_LEFTMOST | REG_REGLESS);
+    e |= test_all_leftmost(REG_LEFTMOST | REG_MULTIPASS);
     e |= test_all_leftmost(REG_LEFTMOST | REG_SUBHIST);
-    e |= test_all_leftmost(REG_LEFTMOST | REG_SUBHIST | REG_REGLESS);
+    e |= test_all_leftmost(REG_LEFTMOST | REG_SUBHIST | REG_MULTIPASS);
 
     e |= test_all_posix(REG_NFA);
     e |= test_all_posix(REG_NFA | REG_GTOP);

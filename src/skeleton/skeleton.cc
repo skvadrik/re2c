@@ -11,7 +11,7 @@ struct tcmd_t;
 
 Node::Node(): arcs(), rule(Rule::NONE), cmd(nullptr) {}
 
-void Node::init(const dfa_state_t* s,
+void Node::init(const TdfaState* s,
                 const std::vector<uint32_t>& charset,
                 size_t nil,
                 IrAllocator& ir_alc) {
@@ -21,7 +21,7 @@ void Node::init(const dfa_state_t* s,
         size_t j = s->arcs[c];
         const tcmd_t* t = s->tcmd[c];
         for (; ++c < nc && s->arcs[c] == j && s->tcmd[c] == t;);
-        if (j == dfa_t::NIL) j = nil;
+        if (j == Tdfa::NIL) j = nil;
 
         // all arcs go to default node => this node is final
         if (l == 0 && c == nc && j == nil) break;
@@ -53,7 +53,7 @@ bool Node::end() const {
     return arcs.size() == 0;
 }
 
-Skeleton::Skeleton(dfa_t& dfa,
+Skeleton::Skeleton(Tdfa& dfa,
                    const opt_t* opts,
                    const std::string& name,
                    const std::string& cond,

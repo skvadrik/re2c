@@ -69,12 +69,12 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     warn_nullable(re, cond);
 
     // Transform regexp to TNFA.
-    nfa_t nfa;
+    Tnfa nfa;
     CHECK_RET(re_to_nfa(nfa, std::move(re)));
     DDUMP_NFA(opts, nfa);
 
     // Transmorm TNFA to TDFA.
-    dfa_t dfa(dfa_alc, nfa.charset.size(), spec.def_rule, spec.eof_rule);
+    Tdfa dfa(dfa_alc, nfa.charset.size(), spec.def_rule, spec.eof_rule);
     CHECK_RET(determinization(std::move(nfa), dfa, opts, msg, cond));
     DDUMP_DFA_DET(opts, dfa);
 

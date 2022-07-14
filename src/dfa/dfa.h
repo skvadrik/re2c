@@ -17,10 +17,10 @@
 
 namespace re2c {
 
-struct nfa_t;
+struct Tnfa;
 struct opt_t;
 
-struct dfa_state_t {
+struct TdfaState {
     size_t* arcs;
     tcmd_t** tcmd;
     tcid_t* tcid;
@@ -28,7 +28,7 @@ struct dfa_state_t {
     bool fallthru;
     bool fallback;
 
-    explicit dfa_state_t(size_t nchars)
+    explicit TdfaState(size_t nchars)
         : arcs(new size_t[nchars]),
           tcmd(nullptr),
           tcid(nullptr),
@@ -40,16 +40,16 @@ struct dfa_state_t {
         memset(tcmd, 0, sizeof (tcmd_t*) * sz);
     }
 
-    ~dfa_state_t() {
+    ~TdfaState() {
         delete[] arcs;
         delete[] tcmd;
         delete[] tcid;
     }
 
-    FORBID_COPY(dfa_state_t);
+    FORBID_COPY(TdfaState);
 };
 
-struct dfa_t {
+struct Tdfa {
     static constexpr uint32_t NIL = ~0u;
 
     DfaAllocator& dfa_alc;
@@ -59,7 +59,7 @@ struct dfa_t {
     std::vector<Rule> rules;
     std::vector<Tag> tags;
 
-    std::vector<dfa_state_t*> states;
+    std::vector<TdfaState*> states;
     const size_t nchars;
     std::set<tagver_t> mtagvers;
     tagver_t* finvers;
@@ -68,20 +68,20 @@ struct dfa_t {
     size_t def_rule;
     size_t eof_rule;
 
-    dfa_t(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule);
-    ~dfa_t();
+    Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule);
+    ~Tdfa();
 
-    FORBID_COPY(dfa_t);
+    FORBID_COPY(Tdfa);
 };
 
 Ret determinization(
-        nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond) NODISCARD;
-void minimization(dfa_t& dfa, Minimization type);
-void fillpoints(const dfa_t& dfa, std::vector<size_t>& fill);
-void cutoff_dead_rules(dfa_t& dfa, const opt_t* opts, const std::string& cond, Msg& msg);
-void insert_fallback_tags(dfa_t& dfa);
-void compact_and_optimize_tags(const opt_t* opts, dfa_t& dfa);
-void freeze_tags(dfa_t& dfa);
+        Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond) NODISCARD;
+void minimization(Tdfa& dfa, Minimization type);
+void fillpoints(const Tdfa& dfa, std::vector<size_t>& fill);
+void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Msg& msg);
+void insert_fallback_tags(Tdfa& dfa);
+void compact_and_optimize_tags(const opt_t* opts, Tdfa& dfa);
+void freeze_tags(Tdfa& dfa);
 
 } // namespace re2c
 

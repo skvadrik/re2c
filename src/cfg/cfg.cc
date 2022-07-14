@@ -13,7 +13,7 @@ namespace re2c {
 
 struct tcmd_t;
 
-cfg_context_t::cfg_context_t(dfa_t& dfa)
+cfg_context_t::cfg_context_t(Tdfa& dfa)
     : dfa(dfa),
       nstate(dfa.states.size()),
       nsym(dfa.nchars),
@@ -40,7 +40,7 @@ cfg_context_t::~cfg_context_t() {
 static void successors(cfg_context_t& ctx, size_t x, bool self);
 static void fallback(cfg_context_t& ctx, size_t x);
 
-cfg_t::cfg_t(dfa_t& a)
+cfg_t::cfg_t(Tdfa& a)
     : dfa(a),
       bblocks(nullptr),
       nbbarc(0),
@@ -68,14 +68,14 @@ void cfg_t::map_actions_to_bblocks(cfg_context_t& ctx) {
 
     // bblock for final tagged epsilon-transition
     for (size_t i = 0; i < ctx.nstate; ++i) {
-        dfa_state_t* s = dfa.states[i];
+        TdfaState* s = dfa.states[i];
         ctx.final2bb[i] = (s->rule != Rule::NONE && s->tcmd[ctx.nsym]) ? nbb++ : 0;
     }
     nbbfin = nbb;
 
     // bblock for fallback tagged epsilon-transition
     for (size_t i = 0; i < ctx.nstate; ++i) {
-        const dfa_state_t* s = dfa.states[i];
+        const TdfaState* s = dfa.states[i];
         // (check final tags: fallback tags may be empty)
         ctx.fback2bb[i] = s->fallback && s->tcmd[ctx.nsym] ? nbb++ : 0;
     }
@@ -93,7 +93,7 @@ void cfg_t::create_bblocks(cfg_context_t& ctx) {
 
     // transition bblocks
     for (size_t i = 0; i < ctx.nstate; ++i) {
-        const dfa_state_t* s = dfa.states[i];
+        const TdfaState* s = dfa.states[i];
         const cfg_ix_t* trans2bb = &ctx.trans2bb[i * ctx.nsym];
         for (size_t c = 0; c < ctx.nsym; ++c) {
             if (trans2bb[c]) {
@@ -106,7 +106,7 @@ void cfg_t::create_bblocks(cfg_context_t& ctx) {
     // final bblocks
     for (size_t i = 0; i < ctx.nstate; ++i) {
         if (ctx.final2bb[i]) {
-            const dfa_state_t* s = dfa.states[i];
+            const TdfaState* s = dfa.states[i];
             new(b++) cfg_bb_t(nullptr, nullptr, s->tcmd[ctx.nsym], &dfa.rules[s->rule]);
         }
     }
@@ -115,7 +115,7 @@ void cfg_t::create_bblocks(cfg_context_t& ctx) {
     for (size_t i = 0; i < ctx.nstate; ++i) {
         if (ctx.fback2bb[i]) {
             fallback(ctx, i);
-            const dfa_state_t* s = dfa.states[i];
+            const TdfaState* s = dfa.states[i];
             new(b++) cfg_bb_t(ctx.succb, ctx.succe, s->tcmd[ctx.nsym + 1], &dfa.rules[s->rule]);
         }
     }
@@ -134,7 +134,7 @@ cfg_bb_t::cfg_bb_t(const cfg_ix_t* sb, const cfg_ix_t* se, tcmd_t*& c, const Rul
 
 // find immediate successors of the given bblock
 void successors(cfg_context_t& ctx, size_t x0, bool self) {
-    DCHECK(x0 != dfa_t::NIL);
+    DCHECK(x0 != Tdfa::NIL);
     DCHECK(ctx.mark < cfg_context_t::MAX_MARK);
     ++ctx.mark;
     ctx.succe = ctx.succb;
@@ -171,7 +171,7 @@ void successors(cfg_context_t& ctx, size_t x0, bool self) {
             }
 
             // if already visited the to-state, stop
-            if (y == dfa_t::NIL || ctx.state_mark[y] >= ctx.mark) {
+            if (y == Tdfa::NIL || ctx.state_mark[y] >= ctx.mark) {
                 continue;
             }
             ctx.state_mark[y] = ctx.mark;
@@ -194,7 +194,7 @@ void successors(cfg_context_t& ctx, size_t x0, bool self) {
 // find all bblocks reachable from this one by following non-accepting DFA
 // paths: this is the set of bblocks affected by liveness of fallback tags
 void fallback(cfg_context_t& ctx, size_t x0) {
-    DCHECK(x0 != dfa_t::NIL);
+    DCHECK(x0 != Tdfa::NIL);
     DCHECK(ctx.mark < cfg_context_t::MAX_MARK);
     ++ctx.mark;
     ctx.succe = ctx.succb;
@@ -214,7 +214,7 @@ void fallback(cfg_context_t& ctx, size_t x0) {
             const size_t y = a[c];
 
             // if the next state is not fallthrough, stop
-            if (y == dfa_t::NIL || !ctx.dfa.states[y]->fallthru) {
+            if (y == Tdfa::NIL || !ctx.dfa.states[y]->fallthru) {
                 continue;
             }
 
