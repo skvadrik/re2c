@@ -32,11 +32,11 @@ void closure_leftmost_dfs(ctx_t& ctx) {
 
         switch (n->kind) {
         case nfa_state_t::Kind::ALT:
-            stack.push_back(conf_t(x, n->alt.out2));
-            stack.push_back(conf_t(x, n->alt.out1));
+            stack.push_back(conf_t(x, n->out2));
+            stack.push_back(conf_t(x, n->out1));
             break;
         case nfa_state_t::Kind::TAG:
-            stack.push_back(conf_t(x, n->tag.out, ctx.history.link(ctx, x)));
+            stack.push_back(conf_t(x, n->out1, ctx.history.link(ctx, x)));
             break;
         case nfa_state_t::Kind::RAN:
         case nfa_state_t::Kind::FIN:

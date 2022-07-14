@@ -50,9 +50,9 @@ void make_step(lzsimctx_t& ctx, uint32_t sym) {
         s->clos = NOCLOS;
 
         if (s->kind == nfa_state_t::Kind::RAN) {
-            for (const Range* r = s->ran.ran; r; r = r->next()) {
+            for (const Range* r = s->ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    const conf_t c(s->ran.out, 0/* unused */, i->thist);
+                    const conf_t c(s->out1, 0/* unused */, i->thist);
                     reach.push_back(c);
                     break;
                 }

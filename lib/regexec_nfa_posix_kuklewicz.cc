@@ -113,9 +113,9 @@ void make_one_step(ksimctx_t& ctx, uint32_t sym) {
         DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->kind == nfa_state_t::Kind::RAN) {
-            for (const Range* r = s->ran.ran; r; r = r->next()) {
+            for (const Range* r = s->ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    const conf_t c(s->ran.out, j, HROOT);
+                    const conf_t c(s->out1, j, HROOT);
                     reach.push_back(c);
                     state[j] = *i;
                     update_offsets(ctx, *i, j);
