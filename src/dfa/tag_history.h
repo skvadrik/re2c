@@ -116,14 +116,14 @@ hidx_t phistory_t::link(ctx_t& /*ctx*/, const typename ctx_t::conf_t& conf) {
         }
         n.last = a;
     }
-    nodes.push_back(node_t(conf.state->tag.info, idx, -1, -1));
+    nodes.push_back(node_t(conf.state->tag, idx, -1, -1));
     return i;
 }
 
 template<typename ctx_t>
 hidx_t lhistory_t::link(ctx_t& /*ctx*/, const typename ctx_t::conf_t& conf) {
     const int32_t i = static_cast<int32_t>(nodes.size());
-    nodes.push_back(node_t(conf.state->tag.info, conf.thist));
+    nodes.push_back(node_t(conf.state->tag, conf.thist));
     return i;
 }
 

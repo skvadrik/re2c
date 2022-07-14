@@ -457,14 +457,14 @@ void khistory_t::init() {
 template<typename ctx_t>
 hidx_t zhistory_t::link(ctx_t& ctx, const typename ctx_t::conf_t& conf) {
     const int32_t i = static_cast<int32_t>(nodes.size());
-    nodes.push_back(node_t(conf.state->tag.info, conf.thist, conf.origin, ctx.step));
+    nodes.push_back(node_t(conf.state->tag, conf.thist, conf.origin, ctx.step));
     return i;
 }
 
 template<typename ctx_t>
 hidx_t khistory_t::link(ctx_t& /* ctx */, const typename ctx_t::conf_t& conf) {
     const int32_t i = static_cast<int32_t>(nodes.size());
-    nodes.push_back(node_t(conf.state->tag.info, conf.thist));
+    nodes.push_back(node_t(conf.state->tag, conf.thist));
     return i;
 }
 

@@ -137,20 +137,20 @@ static uint32_t nfa_stats(nfa_state_t* root) {
         switch (state->kind) {
         case nfa_state_t::Kind::ALT:
             if (next == 0) {
-                stack.push_back({state->alt.out1, 0});
+                stack.push_back({state->out1, 0});
             } else if (next == 1) {
-                stack.push_back({state->alt.out2, 0});
+                stack.push_back({state->out2, 0});
             }
             break;
         case nfa_state_t::Kind::TAG:
             if (next == 0) {
-                stack.push_back({state->tag.out, 0});
+                stack.push_back({state->out1, 0});
             }
             break;
         case nfa_state_t::Kind::RAN:
             if (next == 0) {
                 ++ncores;
-                stack.push_back({state->tag.out, 0});
+                stack.push_back({state->out1, 0});
             }
             break;
         case nfa_state_t::Kind::FIN:
@@ -185,7 +185,7 @@ struct DfsReToNfa {
 };
 
 static void one_re_to_nfa(
-        nfa_t& nfa, const RESpec& spec, size_t rule, std::vector<DfsReToNfa>& stack) {
+        nfa_t& nfa, const RESpec& spec, uint32_t rule, std::vector<DfsReToNfa>& stack) {
     // Start state of the last constructed sub-NFA (available after the stack item for it has been
     // popped off stack and the preceding stack item is being processed).
     nfa_state_t* start = nullptr;
@@ -223,11 +223,11 @@ static void one_re_to_nfa(
             if (x.start == nullptr) {
                 x.start = nfa.make_alt(rule, nullptr, nullptr);
                 stack.push_back({*re.alt.re1, nullptr, x.end});
-            } else if (x.start->alt.out1 == nullptr) {
-                x.start->alt.out1 = start;
+            } else if (x.start->out1 == nullptr) {
+                x.start->out1 = start;
                 stack.push_back({*re.alt.re2, nullptr, x.end});
             } else {
-                x.start->alt.out2 = start;
+                x.start->out2 = start;
                 start = x.start;
                 stack.pop_back();
             }
@@ -252,7 +252,7 @@ static void one_re_to_nfa(
                     stack.push_back({*re.iter.re, nullptr, x.start});
                 } else {
                     re.iter.max = re.iter.min -= 1;
-                    x.start->alt.out1 = start;
+                    x.start->out1 = start;
                 }
             } else if (re.iter.min < re.iter.max) {
                 // Bounded repetition `r{n,m}`, unfold as `r{n-1} r{1,m}` and further unfold
@@ -261,13 +261,13 @@ static void one_re_to_nfa(
                     start = x.end;
                 } else {
                     --re.iter.max;
-                    x.start->alt.out1 = start;
+                    x.start->out1 = start;
                     start = x.start;
 
                     // POSIX: empty alternative first (speed up GOR1 by first exploring paths w/o
                     // optional empty repetitions). Leftmost greedy: non-empty alternative first.
                     if (spec.opts->posix_semantics) {
-                        std::swap(x.start->alt.out1, x.start->alt.out2);
+                        std::swap(x.start->out1, x.start->out2);
                     }
                 }
                 if (re.iter.max != re.iter.min) {
@@ -321,7 +321,7 @@ Ret re_to_nfa(nfa_t& nfa, RESpec&& spec) {
 
     std::vector<DfsReToNfa> stack_re_to_nfa;
     for (size_t rule = 0; rule < spec.res.size(); ++rule) {
-        one_re_to_nfa(nfa, spec, rule, stack_re_to_nfa);
+        one_re_to_nfa(nfa, spec, static_cast<uint32_t>(rule), stack_re_to_nfa);
     }
     DCHECK(nfa.nstates <= size);
 

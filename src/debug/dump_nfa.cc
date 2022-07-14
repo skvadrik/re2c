@@ -32,14 +32,14 @@ void dump_nfa(const nfa_t& nfa) {
 
         switch (n->kind) {
         case nfa_state_t::Kind::ALT:
-            fprintf(stderr, "  %u -> %u\n", n->topord, n->alt.out1->topord);
-            fprintf(stderr, "  %u -> %u [color=lightgray]\n", n->topord, n->alt.out2->topord);
-            stack.push_back(n->alt.out2);
-            stack.push_back(n->alt.out1);
+            fprintf(stderr, "  %u -> %u\n", n->topord, n->out1->topord);
+            fprintf(stderr, "  %u -> %u [color=lightgray]\n", n->topord, n->out2->topord);
+            stack.push_back(n->out2);
+            stack.push_back(n->out1);
             break;
         case nfa_state_t::Kind::RAN: {
-            fprintf(stderr, "  %u -> %u [label=\"", n->topord, n->ran.out->topord);
-            for (const Range* r = n->ran.ran; r; r = r->next()) {
+            fprintf(stderr, "  %u -> %u [label=\"", n->topord, n->out1->topord);
+            for (const Range* r = n->ran; r; r = r->next()) {
                 const uint32_t
                 l = r->lower(),
                 u = r->upper() - 1;
@@ -48,16 +48,16 @@ void dump_nfa(const nfa_t& nfa) {
                 if (r->next()) fprintf(stderr, ",");
             }
             fprintf(stderr, "\"]\n");
-            stack.push_back(n->ran.out);
+            stack.push_back(n->out1);
             break;
         }
         case nfa_state_t::Kind::TAG: {
-            const Tag& tag = nfa.tags[n->tag.info.idx];
-            fprintf(stderr, "  %u -> %u [label=\"/", n->topord, n->tag.out->topord);
-            dump_tag(tag, n->tag.info.neg);
+            const Tag& tag = nfa.tags[n->tag.idx];
+            fprintf(stderr, "  %u -> %u [label=\"/", n->topord, n->out1->topord);
+            dump_tag(tag, n->tag.neg);
             fprintf(stderr, "(%d)", tag.height);
             fprintf(stderr, "\"]\n");
-            stack.push_back(n->tag.out);
+            stack.push_back(n->out1);
             break;
         }
         case nfa_state_t::Kind::FIN:

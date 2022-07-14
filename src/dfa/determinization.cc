@@ -131,9 +131,9 @@ nfa_state_t* transition(nfa_state_t* state, uint32_t symbol) {
     if (state->kind != nfa_state_t::Kind::RAN) {
         return nullptr;
     }
-    for (const Range* r = state->ran.ran; r; r = r->next()) {
+    for (const Range* r = state->ran; r; r = r->next()) {
         if ((r->lower() <= symbol) && (symbol < r->upper())) {
-            return state->ran.out;
+            return state->out1;
         }
     }
     return nullptr;

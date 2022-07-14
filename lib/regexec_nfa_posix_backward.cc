@@ -181,11 +181,11 @@ void closure_simple(psimctx_t& ctx) {
 
         switch (n->kind) {
         case nfa_state_t::Kind::ALT:
-            stack.push_back(psimctx_t::conf_t(x, n->alt.out2));
-            stack.push_back(psimctx_t::conf_t(x, n->alt.out1));
+            stack.push_back(psimctx_t::conf_t(x, n->out2));
+            stack.push_back(psimctx_t::conf_t(x, n->out1));
             break;
         case nfa_state_t::Kind::TAG:
-            stack.push_back(psimctx_t::conf_t(x, n->tag.out, 0));
+            stack.push_back(psimctx_t::conf_t(x, n->out1, 0));
             break;
         case nfa_state_t::Kind::RAN:
         case nfa_state_t::Kind::FIN:
@@ -204,9 +204,9 @@ void make_one_step_simple(psimctx_t& ctx, uint32_t sym) {
         s->clos = NOCLOS;
 
         if (s->kind == nfa_state_t::Kind::RAN) {
-            for (const Range* r = s->ran.ran; r; r = r->next()) {
+            for (const Range* r = s->ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    conf_t c(s->ran.out, 0, 0);
+                    conf_t c(s->out1, 0, 0);
                     reach.push_back(c);
                     break;
                 }
@@ -320,20 +320,20 @@ bool scan(psimctx_t& ctx, nfa_state_t* q, bool all) {
     switch (q->kind) {
     case nfa_state_t::Kind::ALT:
         if (q->arcidx == 0) {
-            copy_offs(ctx, q, q->alt.out1, NOINFO);
-            any |= relax_gor1(ctx, conf_t(x, q->alt.out1));
+            copy_offs(ctx, q, q->out1, NOINFO);
+            any |= relax_gor1(ctx, conf_t(x, q->out1));
             ++q->arcidx;
         }
         if (q->arcidx == 1 && (!any || all)) {
-            copy_offs(ctx, q, q->alt.out2, NOINFO);
-            any |= relax_gor1(ctx, conf_t(x, q->alt.out2));
+            copy_offs(ctx, q, q->out2, NOINFO);
+            any |= relax_gor1(ctx, conf_t(x, q->out2));
             ++q->arcidx;
         }
         break;
     case nfa_state_t::Kind::TAG:
         if (q->arcidx == 0) {
-            copy_offs(ctx, q, q->tag.out, q->tag.info);
-            any |= relax_gor1(ctx, conf_t(x, q->tag.out, 0));
+            copy_offs(ctx, q, q->out1, q->tag);
+            any |= relax_gor1(ctx, conf_t(x, q->out1, 0));
             ++q->arcidx;
         }
         break;
@@ -407,14 +407,14 @@ void closure_posix_gtop(psimctx_t& ctx) {
 
         switch (q->kind) {
         case nfa_state_t::Kind::ALT:
-            copy_offs(ctx, q, q->alt.out1, NOINFO);
-            relax_gtop(ctx, conf_t(x, q->alt.out1));
-            copy_offs(ctx, q, q->alt.out2, NOINFO);
-            relax_gtop(ctx, conf_t(x, q->alt.out2));
+            copy_offs(ctx, q, q->out1, NOINFO);
+            relax_gtop(ctx, conf_t(x, q->out1));
+            copy_offs(ctx, q, q->out2, NOINFO);
+            relax_gtop(ctx, conf_t(x, q->out2));
             break;
         case nfa_state_t::Kind::TAG:
-            copy_offs(ctx, q, q->tag.out, q->tag.info);
-            relax_gtop(ctx, conf_t(x, q->tag.out, 0));
+            copy_offs(ctx, q, q->out1, q->tag);
+            relax_gtop(ctx, conf_t(x, q->out1, 0));
             break;
         case nfa_state_t::Kind::RAN:
         case nfa_state_t::Kind::FIN:
@@ -459,9 +459,9 @@ void make_one_step(psimctx_t& ctx, uint32_t sym) {
         DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
         if (s->kind == nfa_state_t::Kind::RAN) {
-            for (const Range* r = s->ran.ran; r; r = r->next()) {
+            for (const Range* r = s->ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
-                    const conf_t c(s->ran.out, index(s, ctx.nfa), HROOT);
+                    const conf_t c(s->out1, index(s, ctx.nfa), HROOT);
                     reach.push_back(c);
                     break;
                 }

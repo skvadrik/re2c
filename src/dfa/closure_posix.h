@@ -137,17 +137,17 @@ bool scan(ctx_t& ctx, nfa_state_t* q, bool all) {
     switch (q->kind) {
     case nfa_state_t::Kind::ALT:
         if (q->arcidx == 0) {
-            any |= relax_gor1(ctx, conf_t(x, q->alt.out1));
+            any |= relax_gor1(ctx, conf_t(x, q->out1));
             ++q->arcidx;
         }
         if (q->arcidx == 1 && (!any || all)) {
-            any |= relax_gor1(ctx, conf_t(x, q->alt.out2));
+            any |= relax_gor1(ctx, conf_t(x, q->out2));
             ++q->arcidx;
         }
         break;
     case nfa_state_t::Kind::TAG:
         if (q->arcidx == 0) {
-            any |= relax_gor1(ctx, conf_t(x, q->tag.out, ctx.history.link(ctx, x)));
+            any |= relax_gor1(ctx, conf_t(x, q->out1, ctx.history.link(ctx, x)));
             ++q->arcidx;
         }
         break;
@@ -228,11 +228,11 @@ void closure_posix_gtop(ctx_t& ctx) {
 
         switch (q->kind) {
         case nfa_state_t::Kind::ALT:
-            relax_gtop(ctx, conf_t(x, q->alt.out1));
-            relax_gtop(ctx, conf_t(x, q->alt.out2));
+            relax_gtop(ctx, conf_t(x, q->out1));
+            relax_gtop(ctx, conf_t(x, q->out2));
             break;
         case nfa_state_t::Kind::TAG:
-            relax_gtop(ctx, conf_t(x, q->tag.out, ctx.history.link(ctx, x)));
+            relax_gtop(ctx, conf_t(x, q->out1, ctx.history.link(ctx, x)));
             break;
         case nfa_state_t::Kind::RAN:
         case nfa_state_t::Kind::FIN:
