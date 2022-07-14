@@ -7,7 +7,7 @@ libre2c_la_LDFLAGS = -module -no-undefined
 
 libre2c_la_HDR = \
 	lib/lex.h \
-	lib/regcomp_dfa_regless.h \
+	lib/regcomp_dfa_multipass.h \
 	lib/regex.h \
 	lib/regex_impl.h \
 	lib/regoff_trie.h \
@@ -63,7 +63,7 @@ libre2c_la_SRC = \
 	lib/regcomp.cc \
 	lib/regexec.cc \
 	lib/regexec_dfa.cc \
-	lib/regexec_dfa_regless.cc \
+	lib/regexec_dfa_multipass.cc \
 	lib/regexec_nfa_leftmost.cc \
 	lib/regexec_nfa_leftmost_trie.cc \
 	lib/regexec_nfa_posix.cc \
