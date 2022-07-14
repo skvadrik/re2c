@@ -47,9 +47,9 @@ namespace re2c {
 
 struct DFA;
 struct cfg_t;
-struct dfa_t;
-struct nfa_t;
-struct nfa_state_t;
+struct Tdfa;
+struct Tnfa;
+struct TnfaState;
 struct opt_t;
 struct tcmd_t;
 struct Tag;
@@ -73,7 +73,7 @@ template<typename ctx_t>
 struct dump_dfa_tree_t {
     const ctx_t& ctx;
 
-    using origins_t = std::vector<const nfa_state_t*>;
+    using origins_t = std::vector<const TnfaState*>;
     using origmap_t = std::map<std::pair<uint32_t, uint32_t>, origins_t>;
     origmap_t origmap;
 
@@ -101,8 +101,8 @@ struct dump_dfa_tree_t {
 #define DINCCOUNT_CLLENGTH(ctx, len) ctx.dc_clstats.length += len
 #define DRESET_CLSTATS(ctx)          reset_clstats(ctx)
 
-void dump_nfa(const nfa_t&);
-void dump_dfa(const dfa_t&);
+void dump_nfa(const Tnfa&);
+void dump_dfa(const Tdfa&);
 void dump_adfa(const DFA&);
 void dump_cfg(const cfg_t&, const bool*);
 void dump_interf(const cfg_t&, const bool*);

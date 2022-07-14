@@ -19,16 +19,16 @@ namespace libre2c {
 using tag_path_t = std::vector<tag_info_t>;
 
 struct conf_t {
-    nfa_state_t* state;
+    TnfaState* state;
     uint32_t origin;
     int32_t thist;
 
     inline conf_t(): state(nullptr), origin(0), thist(HROOT) {}
-    inline conf_t(nfa_state_t* s, uint32_t o, int32_t h)
+    inline conf_t(TnfaState* s, uint32_t o, int32_t h)
         : state(s), origin(o), thist(h) {}
-    inline conf_t(const conf_t& c, nfa_state_t* s)
+    inline conf_t(const conf_t& c, TnfaState* s)
         : state(s), origin(c.origin), thist(c.thist) {}
-    inline conf_t(const conf_t& c, nfa_state_t* s, int32_t h)
+    inline conf_t(const conf_t& c, TnfaState* s, int32_t h)
         : state(s), origin(c.origin), thist(h) {}
 };
 
@@ -51,8 +51,8 @@ struct simctx_t {
     using rcconfiter_t = confset_t::const_reverse_iterator;
     using history_t = history_type_t;
 
-    const nfa_t& nfa;
-    const nfa_t* nfa0;
+    const Tnfa& nfa;
+    const Tnfa* nfa0;
     const size_t nsub;
     const int flags;
 
@@ -84,14 +84,14 @@ struct simctx_t {
 
     confset_t reach;
     confset_t state;
-    std::vector<nfa_state_t*> gor1_topsort;
-    std::vector<nfa_state_t*> gor1_linear;
-    std::vector<nfa_state_t*> gtop_heap_storage;
+    std::vector<TnfaState*> gor1_topsort;
+    std::vector<TnfaState*> gor1_linear;
+    std::vector<TnfaState*> gtop_heap_storage;
     cmp_gtop_t gtop_cmp;
     gtop_heap_t gtop_heap;
     closure_stats_t dc_clstats;
 
-    simctx_t(const nfa_t& nfa, const nfa_t* nfa0, size_t re_nsub, int flags);
+    simctx_t(const Tnfa& nfa, const Tnfa* nfa0, size_t re_nsub, int flags);
     ~simctx_t();
     FORBID_COPY(simctx_t);
 };
@@ -169,7 +169,7 @@ using ksimctx_t = simctx_t<khistory_t>;
 // regexec functions
 using regexec_t = int (const regex_t*, const char*, size_t, regmatch_t[], int);
 regexec_t regexec_dfa;
-template<typename ctx_t> regexec_t regexec_dfa_regless;
+template<typename ctx_t> regexec_t regexec_dfa_multipass;
 regexec_t regexec_nfa_posix;
 regexec_t regexec_nfa_posix_trie;
 regexec_t regexec_nfa_posix_backward;
@@ -180,14 +180,14 @@ regexec_t regexec_nfa_leftmost_trie;
 // regparse functions (non-standard)
 using regparse_t = subhistory_t* (const regex_t*, const char*, size_t);
 regparse_t regparse_dfa;
-template<typename ctx_t> regparse_t regparse_dfa_regless;
+template<typename ctx_t> regparse_t regparse_dfa_multipass;
 
 // regtstring function (non-standard)
 template<typename ctx_t>
-const tstring_t* regtstring_dfa_regless(const regex_t*, const char*);
+const tstring_t* regtstring_dfa_multipass(const regex_t*, const char*);
 
 template<typename history_t>
-simctx_t<history_t>::simctx_t(const nfa_t& nfa, const nfa_t* nfa0, size_t re_nsub, int flags)
+simctx_t<history_t>::simctx_t(const Tnfa& nfa, const Tnfa* nfa0, size_t re_nsub, int flags)
     : nfa(nfa),
       nfa0(nfa0),
       nsub(2 * (re_nsub - 1)),
@@ -302,7 +302,7 @@ struct getoff_nfa_t {
 };
 
 struct getoff_dfa_t {
-    const dfa_t* dfa;
+    const Tdfa* dfa;
     const regoff_t* regs;
     const regoff_t len;
 
@@ -399,10 +399,10 @@ void update_offsets(simctx_t<history_t>& ctx, const conf_t& c, uint32_t id) {
     regoff_t* o;
     const std::vector<Tag>& tags = ctx.nfa.tags;
     const size_t ntags = tags.size();
-    nfa_state_t* s = c.state;
+    TnfaState* s = c.state;
     bool* done = ctx.done;
 
-    if (s->kind == nfa_state_t::Kind::FIN) {
+    if (s->kind == TnfaState::Kind::FIN) {
         ctx.marker = ctx.cursor;
         ctx.rule = 0;
         o = ctx.offsets3;
@@ -439,8 +439,8 @@ void update_offsets(simctx_t<history_t>& ctx, const conf_t& c, uint32_t id) {
 }
 
 bool ran_or_fin_t::operator()(const conf_t& c) {
-    return c.state->kind == nfa_state_t::Kind::RAN
-        || c.state->kind == nfa_state_t::Kind::FIN;
+    return c.state->kind == TnfaState::Kind::RAN
+        || c.state->kind == TnfaState::Kind::FIN;
 }
 
 void zhistory_t::init() {

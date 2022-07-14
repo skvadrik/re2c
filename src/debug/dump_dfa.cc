@@ -57,12 +57,12 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     const uint32_t origin = ctx.dc_origin;
     const uint32_t target = ctx.dc_target;
     const uint32_t symbol = ctx.dc_symbol;
-    const dfa_t& dfa = ctx.dfa;
+    const Tdfa& dfa = ctx.dfa;
     const tagver_table_t& tvtbl = ctx.dc_tagvertbl;
     const typename ctx_t::history_t& thist = ctx.history;
     uint32_t i;
 
-    if (target == dfa_t::NIL) return;
+    if (target == Tdfa::NIL) return;
 
     const uint32_t state = isnew ? target : ++uniqidx;
     const char* prefix = isnew ? "" : "i";
@@ -93,7 +93,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     fprintf(stderr, "</TABLE>>]\n");
 
     // transitions (initial state)
-    if (origin == dfa_t::NIL) {
+    if (origin == Tdfa::NIL) {
         fprintf(stderr, "  void [shape=point]\n");
 
         uint32_t j = 0;
@@ -108,7 +108,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     // transitions (other states)
     else {
         if (!isnew) {
-            const dfa_state_t* o = dfa.states[origin];
+            const TdfaState* o = dfa.states[origin];
             fprintf(stderr,
                     "  i%u [style=dotted]\n"
                     "  i%u:s -> %zu:s [style=dotted label=\"",
@@ -129,7 +129,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     }
 
     // if final state, dump finalizer
-    const dfa_state_t* t = dfa.states[target];
+    const TdfaState* t = dfa.states[target];
     if (t->rule != Rule::NONE) {
         const Rule& r = ctx.rules[t->rule];
         const tcmd_t* cmd = t->tcmd[dfa.nchars];
@@ -164,7 +164,7 @@ void dump_history(const std::vector<Tag>& tags, const typename ctx_t::history_t&
     fprintf(stderr, " ");
 }
 
-void dump_dfa(const dfa_t& dfa) {
+void dump_dfa(const Tdfa& dfa) {
     const size_t
     nstate = dfa.states.size(),
     nsym = dfa.nchars;
@@ -181,7 +181,7 @@ void dump_dfa(const dfa_t& dfa) {
             "  n -> n0 [style=dotted label=\"\"]\n");
 
     for (uint32_t i = 0; i < nstate; ++i) {
-        const dfa_state_t* s = dfa.states[i];
+        const TdfaState* s = dfa.states[i];
 
         // state
         fprintf(stderr, "  n%u [height=0.2 width=0.2 label=\"%u", i, i);
@@ -211,7 +211,7 @@ void dump_dfa(const dfa_t& dfa) {
         // transitions
         for (uint32_t c = 0; c < nsym; ++c) {
             const size_t j = s->arcs[c];
-            if (j != dfa_t::NIL) {
+            if (j != Tdfa::NIL) {
                 fprintf(stderr, "  n%u -> n%zu [label=\"%u", i, j, c);
                 dump_tcmd_or_tcid(s->tcmd, s->tcid, c, dfa.tcpool);
                 fprintf(stderr, "\"]\n");

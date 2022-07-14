@@ -21,7 +21,7 @@ template<typename ctx_t> static Ret determinization(ctx_t& ctx) NODISCARD;
 template<typename ctx_t> static void clear_caches(ctx_t& ctx);
 template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t& ctx);
 
-dfa_t::dfa_t(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule)
+Tdfa::Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule)
     : dfa_alc(dfa_alc),
       ir_alc(),
       charset(),
@@ -36,7 +36,7 @@ dfa_t::dfa_t(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size
       def_rule(def_rule),
       eof_rule(eof_rule) {}
 
-Ret determinization(nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {
+Ret determinization(Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {
     if (opts->posix_semantics) {
         pdetctx_t ctx(std::move(nfa), dfa, opts, msg, cond);
         return determinization(ctx);
@@ -46,8 +46,8 @@ Ret determinization(nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const 
     }
 }
 
-dfa_t::~dfa_t() {
-    for (dfa_state_t* s : states) {
+Tdfa::~Tdfa() {
+    for (TdfaState* s : states) {
         delete s;
     }
 }
@@ -119,7 +119,7 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     // stack, and POSIX closure doesn't care (GOR1 pre-sorts configurations, and GTOP uses a
     // priority queue).
     for (uint32_t i = static_cast<uint32_t>(kernel->size); i --> 0; ) {
-        nfa_state_t* s = transition(kernel->state[i], symbol);
+        TnfaState* s = transition(kernel->state[i], symbol);
         if (s) {
             const clos_t c(s, i, kernel->tvers[i], kernel->thist[i], HROOT);
             reach.push_back(c);
@@ -127,8 +127,8 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     }
 }
 
-nfa_state_t* transition(nfa_state_t* state, uint32_t symbol) {
-    if (state->kind != nfa_state_t::Kind::RAN) {
+TnfaState* transition(TnfaState* state, uint32_t symbol) {
+    if (state->kind != TnfaState::Kind::RAN) {
         return nullptr;
     }
     for (const Range* r = state->ran; r; r = r->next()) {
@@ -141,7 +141,7 @@ nfa_state_t* transition(nfa_state_t* state, uint32_t symbol) {
 
 template<typename ctx_t>
 uint32_t init_tag_versions(ctx_t& ctx) {
-    dfa_t& dfa = ctx.dfa;
+    Tdfa& dfa = ctx.dfa;
     const size_t ntags = ctx.tags.size();
 
     // all-zero tag configuration must have static number zero
@@ -193,7 +193,7 @@ void warn_nondeterministic_tags(const ctx_t& ctx) {
 
     for (uint32_t i = 0; i < nkrn; ++i) {
         const kernel_t* k = kernels[i];
-        nfa_state_t** s = k->state;
+        TnfaState** s = k->state;
         const size_t n = k->size;
         const uint32_t* v = k->tvers;
 
@@ -224,8 +224,8 @@ void warn_nondeterministic_tags(const ctx_t& ctx) {
 }
 
 template<typename history_t>
-determ_context_t<history_t>::determ_context_t(nfa_t&& nfa,
-                                              dfa_t& dfa,
+determ_context_t<history_t>::determ_context_t(Tnfa&& nfa,
+                                              Tdfa& dfa,
                                               const opt_t* opts,
                                               Msg& msg,
                                               const std::string& cond)
@@ -242,8 +242,8 @@ determ_context_t<history_t>::determ_context_t(nfa_t&& nfa,
 
       dfa(dfa),
 
-      dc_origin(dfa_t::NIL),
-      dc_target(dfa_t::NIL),
+      dc_origin(Tdfa::NIL),
+      dc_target(Tdfa::NIL),
       dc_symbol(0),
       dc_actions(nullptr),
       dc_tagvertbl(tags.size()),
@@ -317,9 +317,9 @@ template uint32_t init_tag_versions<pdetctx_t>(pdetctx_t& ctx);
 template determ_context_t<lhistory_t>::~determ_context_t();
 template determ_context_t<phistory_t>::~determ_context_t();
 template determ_context_t<lhistory_t>::determ_context_t(
-        nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
+        Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
 template determ_context_t<phistory_t>::determ_context_t(
-        nfa_t&& nfa, dfa_t& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
+        Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
 
 } // namespace re2c
 

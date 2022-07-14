@@ -11,7 +11,7 @@ JNIEXPORT jlong JNICALL Java_re2c_RE2C_regcomp(JNIEnv *env, jclass, jstring patt
     if (c_pattern == NULL) return 1;
 
     const int flags = (nfa ? REG_NFA : 0)
-        | (regless ? REG_REGLESS : 0)
+        | (regless ? REG_MULTIPASS : 0)
         | (subhist ? REG_SUBHIST : 0)
         | (tstring ? REG_TSTRING : 0)
         | (autotags ? REG_AUTOTAGS : 0);

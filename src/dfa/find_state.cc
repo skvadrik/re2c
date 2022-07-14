@@ -92,14 +92,14 @@ template bool do_find_state<ldetctx_t, true>(ldetctx_t&);
 
 template<typename ctx_t>
 void find_state(ctx_t& ctx) {
-    dfa_t& dfa = ctx.dfa;
+    Tdfa& dfa = ctx.dfa;
 
     // find or add the new state in the existing set of states
     const bool is_new = do_find_state<ctx_t, false>(ctx);
 
     if (is_new) {
         // create new DFA state
-        dfa_state_t* t = new dfa_state_t(dfa.nchars);
+        TdfaState* t = new TdfaState(dfa.nchars);
         dfa.states.push_back(t);
 
         // check if the new state is final (see note [at most one final item per closure])
@@ -110,8 +110,8 @@ void find_state(ctx_t& ctx) {
         }
     }
 
-    if (ctx.dc_origin != dfa_t::NIL) {
-        dfa_state_t* s = dfa.states[ctx.dc_origin];
+    if (ctx.dc_origin != Tdfa::NIL) {
+        TdfaState* s = dfa.states[ctx.dc_origin];
         s->arcs[ctx.dc_symbol] = ctx.dc_target;
         s->tcmd[ctx.dc_symbol] = ctx.dc_actions;
     }
@@ -127,7 +127,7 @@ bool do_find_state(ctx_t& ctx) {
 
     // empty closure corresponds to default state
     if (closure.size() == 0) {
-        ctx.dc_target = dfa_t::NIL;
+        ctx.dc_target = Tdfa::NIL;
         ctx.dc_actions = nullptr;
         return false;
     }
@@ -205,7 +205,7 @@ kernel_buffers_t::kernel_buffers_t()
 kernel_t* make_new_kernel(size_t size, IrAllocator& alc) {
     kernel_t* k = alc.alloct<kernel_t>(1);
     k->size = size;
-    k->state = alc.alloct<nfa_state_t*>(size);
+    k->state = alc.alloct<TnfaState*>(size);
     k->thist = alc.alloct<hidx_t>(size);
     k->prectbl = nullptr;
     k->tvers = alc.alloct<uint32_t>(size);

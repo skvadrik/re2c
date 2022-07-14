@@ -106,13 +106,13 @@ void make_one_step(ksimctx_t& ctx, uint32_t sym) {
     reach.clear();
 
     for (cconfiter_t i = state.begin(), e = state.end(); i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
 
         s->clos = NOCLOS;
         s->arcidx = 0;
         DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->kind == nfa_state_t::Kind::RAN) {
+        if (s->kind == TnfaState::Kind::RAN) {
             for (const Range* r = s->ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     const conf_t c(s->out1, j, HROOT);
@@ -123,7 +123,7 @@ void make_one_step(ksimctx_t& ctx, uint32_t sym) {
                     break;
                 }
             }
-        } else if (s->kind == nfa_state_t::Kind::FIN) {
+        } else if (s->kind == TnfaState::Kind::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
     }
@@ -141,13 +141,13 @@ void make_one_step(ksimctx_t& ctx, uint32_t sym) {
 
 void make_final_step(ksimctx_t& ctx) {
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
 
         s->clos = NOCLOS;
         s->arcidx = 0;
         DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->kind == nfa_state_t::Kind::FIN) {
+        if (s->kind == TnfaState::Kind::FIN) {
             update_offsets(ctx, *i, NONCORE);
         }
     }

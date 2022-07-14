@@ -23,7 +23,7 @@ static bool is_eof(const opt_t* opts, uint32_t ub) {
     return opts->eof != NOEOF && static_cast<uint32_t>(opts->eof) == ub;
 }
 
-DFA::DFA(dfa_t&& dfa,
+DFA::DFA(Tdfa&& dfa,
          const std::vector<size_t>& fill,
          size_t key,
          const loc_t& loc,
@@ -87,7 +87,7 @@ DFA::DFA(dfa_t&& dfa,
 
     State** p = &head;
     for (size_t i = 0; i < nstates; ++i) {
-        dfa_state_t* t = dfa.states[i];
+        TdfaState* t = dfa.states[i];
         State* s = i2s[i];
 
         ++nStates;
@@ -102,7 +102,7 @@ DFA::DFA(dfa_t&& dfa,
 
         bool end = true;
         for (uint32_t c = 0; end && c < nchars; ++c) {
-            end &= t->arcs[c] == dfa_t::NIL;
+            end &= t->arcs[c] == Tdfa::NIL;
         }
 
         s->go.span = allocate<Span>(nchars);
@@ -116,7 +116,7 @@ DFA::DFA(dfa_t&& dfa,
                     && t->tcid[c] == tc
                     && (end || is_eof(opts, charset[c]) == ie)
                     ;);
-            s->go.span[j].to = to == dfa_t::NIL ? nullptr : i2s[to];
+            s->go.span[j].to = to == Tdfa::NIL ? nullptr : i2s[to];
             s->go.span[j].ub = charset[c];
             s->go.span[j].tags = tc;
         }

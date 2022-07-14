@@ -77,7 +77,7 @@ template<> void closure<ldetctx_t>(ldetctx_t& ctx) {
 }
 
 bool cmpby_rule_state(const clos_t& x, const clos_t& y) {
-    const nfa_state_t* sx = x.state, *sy = y.state;
+    const TnfaState* sx = x.state, *sy = y.state;
     const size_t rx = sx->rule, ry = sy->rule;
     if (rx < ry) return true;
     if (rx > ry) return false;
@@ -98,13 +98,13 @@ void prune(ctx_t& ctx) {
     buffer.clear();
 
     for (const clos_t& c : closure) {
-        nfa_state_t* s = c.state;
+        TnfaState* s = c.state;
 
         closure_cleanup<ctx_t>(s);
 
-        if (s->kind == nfa_state_t::Kind::RAN) {
+        if (s->kind == TnfaState::Kind::RAN) {
             buffer.push_back(c);
-        } else if (s->kind == nfa_state_t::Kind::FIN
+        } else if (s->kind == TnfaState::Kind::FIN
                 && (f == nullptr || s->rule < f->state->rule)) {
             f = &c;
         }
@@ -118,7 +118,7 @@ void prune(ctx_t& ctx) {
             std::vector<Rule>& rules = ctx.rules;
             const uint32_t l = rules[f->state->rule].semact->loc.line;
             for (const clos_t& c : closure) {
-                if (&c != f && c.state->kind == nfa_state_t::Kind::FIN) {
+                if (&c != f && c.state->kind == TnfaState::Kind::FIN) {
                     rules[c.state->rule].shadow.insert(l);
                 }
             }
@@ -130,7 +130,7 @@ void prune(ctx_t& ctx) {
 
 template<typename ctx_t>
 void generate_versions(ctx_t& ctx) {
-    dfa_t& dfa = ctx.dfa;
+    Tdfa& dfa = ctx.dfa;
     const std::vector<Tag>& tags = ctx.tags;
     const size_t ntag = tags.size();
     tagver_t& maxver = dfa.maxtagver;

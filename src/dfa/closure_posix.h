@@ -16,13 +16,13 @@ namespace re2c {
 // comparison over path concatenation (X < Y => XZ < YZ) we can just propagate the new path up to
 // the next join point.
 
-template<typename ctx_t> void closure_cleanup(nfa_state_t* q);
+template<typename ctx_t> void closure_cleanup(TnfaState* q);
 template<typename ctx_t> static void closure_posix_gor1(ctx_t&);
 template<typename ctx_t> static void closure_posix_gtop(ctx_t&);
 
 // we *do* want these to be inlined
 template<typename ctx_t> static inline void init_gor1(ctx_t& ctx);
-template<typename ctx_t> static inline bool scan(ctx_t& ctx, nfa_state_t* q, bool all);
+template<typename ctx_t> static inline bool scan(ctx_t& ctx, TnfaState* q, bool all);
 template<typename ctx_t> static inline bool relax_gor1(ctx_t&, const typename ctx_t::conf_t&);
 template<typename ctx_t> static inline void relax_gtop(ctx_t&, const typename ctx_t::conf_t&);
 
@@ -68,15 +68,15 @@ struct cmp_gor1_t {
 
 template<typename ctx_t>
 void closure_posix_gor1(ctx_t& ctx) {
-    std::vector<nfa_state_t*>& topsort = ctx.gor1_topsort;
-    std::vector<nfa_state_t*>& linear = ctx.gor1_linear;
+    std::vector<TnfaState*>& topsort = ctx.gor1_topsort;
+    std::vector<TnfaState*>& linear = ctx.gor1_linear;
 
     init_gor1(ctx);
 
     for (; !topsort.empty(); ) {
         // 1st pass: depth-first postorder traversal of admissible subgraph
         for (; !topsort.empty(); ) {
-            nfa_state_t* q = topsort.back();
+            TnfaState* q = topsort.back();
             if (q->status == GorPass::LINEAR) {
                 topsort.pop_back();
             } else {
@@ -92,7 +92,7 @@ void closure_posix_gor1(ctx_t& ctx) {
 
         // 2nd pass: linear scan of topologically ordered states
         for (; !linear.empty(); ) {
-            nfa_state_t* q = linear.back();
+            TnfaState* q = linear.back();
             linear.pop_back();
             if (q->active) {
                 q->active = 0;
@@ -109,14 +109,14 @@ template<typename ctx_t>
 void init_gor1(ctx_t& ctx) {
     typename ctx_t::confset_t& state = ctx.state;
     typename ctx_t::confset_t& reach = ctx.reach;
-    std::vector<nfa_state_t*>& topsort = ctx.gor1_topsort;
+    std::vector<TnfaState*>& topsort = ctx.gor1_topsort;
 
     // init: push configurations ordered by POSIX precedence (highest on top)
     state.clear();
     std::sort(reach.begin(), reach.end(), cmp_gor1_t<ctx_t>(ctx));
     typename ctx_t::rcconfiter_t c = reach.rbegin(), e = reach.rend();
     for (; c != e; ++c) {
-        nfa_state_t* q = c->state;
+        TnfaState* q = c->state;
         if (q->clos == NOCLOS) {
             q->clos = static_cast<uint32_t>(state.size());
             state.push_back(*c);
@@ -128,14 +128,14 @@ void init_gor1(ctx_t& ctx) {
 }
 
 template<typename ctx_t>
-bool scan(ctx_t& ctx, nfa_state_t* q, bool all) {
+bool scan(ctx_t& ctx, TnfaState* q, bool all) {
     bool any = false;
 
     using conf_t = typename ctx_t::conf_t;
     const conf_t x = ctx.state[q->clos];
 
     switch (q->kind) {
-    case nfa_state_t::Kind::ALT:
+    case TnfaState::Kind::ALT:
         if (q->arcidx == 0) {
             any |= relax_gor1(ctx, conf_t(x, q->out1));
             ++q->arcidx;
@@ -145,14 +145,14 @@ bool scan(ctx_t& ctx, nfa_state_t* q, bool all) {
             ++q->arcidx;
         }
         break;
-    case nfa_state_t::Kind::TAG:
+    case TnfaState::Kind::TAG:
         if (q->arcidx == 0) {
             any |= relax_gor1(ctx, conf_t(x, q->out1, ctx.history.link(ctx, x)));
             ++q->arcidx;
         }
         break;
-    case nfa_state_t::Kind::RAN:
-    case nfa_state_t::Kind::FIN:
+    case TnfaState::Kind::RAN:
+    case TnfaState::Kind::FIN:
         break;
     }
 
@@ -162,7 +162,7 @@ bool scan(ctx_t& ctx, nfa_state_t* q, bool all) {
 template<typename ctx_t>
 bool relax_gor1(ctx_t& ctx, const typename ctx_t::conf_t& x) {
     typename ctx_t::confset_t& state = ctx.state;
-    nfa_state_t* q = x.state;
+    TnfaState* q = x.state;
     const uint32_t idx = q->clos;
     int32_t p1, p2;
 
@@ -218,7 +218,7 @@ void closure_posix_gtop(ctx_t& ctx) {
     }
 
     for (; !heap.empty(); ) {
-        nfa_state_t* q = heap.top();
+        TnfaState* q = heap.top();
         heap.pop();
         q->active = 0;
         DINCCOUNT_CLSCANS(ctx);
@@ -227,15 +227,15 @@ void closure_posix_gtop(ctx_t& ctx) {
         const conf_t x = ctx.state[q->clos];
 
         switch (q->kind) {
-        case nfa_state_t::Kind::ALT:
+        case TnfaState::Kind::ALT:
             relax_gtop(ctx, conf_t(x, q->out1));
             relax_gtop(ctx, conf_t(x, q->out2));
             break;
-        case nfa_state_t::Kind::TAG:
+        case TnfaState::Kind::TAG:
             relax_gtop(ctx, conf_t(x, q->out1, ctx.history.link(ctx, x)));
             break;
-        case nfa_state_t::Kind::RAN:
-        case nfa_state_t::Kind::FIN:
+        case TnfaState::Kind::RAN:
+        case TnfaState::Kind::FIN:
             break;
         }
     }
@@ -244,7 +244,7 @@ void closure_posix_gtop(ctx_t& ctx) {
 template<typename ctx_t>
 void relax_gtop(ctx_t& ctx, const typename ctx_t::conf_t& c) {
     typename ctx_t::confset_t& state = ctx.state;
-    nfa_state_t* q = c.state;
+    TnfaState* q = c.state;
     const uint32_t idx = q->clos;
     int32_t p1, p2;
 
@@ -264,7 +264,7 @@ void relax_gtop(ctx_t& ctx, const typename ctx_t::conf_t& c) {
 }
 
 template<>
-inline void closure_cleanup<pdetctx_t>(nfa_state_t* q) {
+inline void closure_cleanup<pdetctx_t>(TnfaState* q) {
     q->clos = NOCLOS;
     q->arcidx = 0;
     DCHECK(q->status == GorPass::NOPASS && q->active == 0);

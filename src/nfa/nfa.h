@@ -23,31 +23,26 @@ enum class GorPass: uint32_t {
 
 static constexpr uint32_t NOCLOS = ~0u;
 
-struct nfa_state_t {
+struct TnfaState {
     enum class Kind: uint32_t {ALT, RAN, TAG, FIN} kind;
-
-    uint32_t rule;         // the number of regexp rule that this state belongs to
-
-    nfa_state_t* out1;     // first outgoing transition (for all states except FIN)
+    uint32_t rule;        // the number of regexp rule that this state belongs to
+    TnfaState* out1;      // first outgoing transition (for all states except FIN)
     union {
-        nfa_state_t* out2; // second outgoing transition (only for ALT states)
-        const Range* ran;  // character range (only for RAN states)
-        tag_info_t tag;    // tag information (number and sign, only for TAG states)
+        TnfaState* out2;  // second outgoing transition (only for ALT states)
+        const Range* ran; // character range (only for RAN states)
+        tag_info_t tag;   // tag information (number and sign, only for TAG states)
     };
-
-    uint32_t clos;         // GOR1/GTOP: closure item for this stack
-
-    GorPass status  : 2;   // GOR1: status (values 0, 1, 2)
-    uint32_t arcidx : 2;   // GOR1: index of the next transtion (maximum out-dergee is 2)
-    uint32_t active : 1;   // GOR1: if the state is on stack (boolean)
-    uint32_t indeg  : 27;  // GOR1: in-degree (we are unlikely to have more than 2^27 states)
-
-    uint32_t topord;       // state index in topological ordering
+    uint32_t clos;        // GOR1/GTOP: closure item for this stack
+    GorPass status  : 2;  // GOR1: status (values 0, 1, 2)
+    uint32_t arcidx : 2;  // GOR1: index of the next transtion (maximum out-dergee is 2)
+    uint32_t active : 1;  // GOR1: if the state is on stack (boolean)
+    uint32_t indeg  : 27; // GOR1: in-degree (we are unlikely to have more than 2^27 states)
+    uint32_t topord;      // state index in topological ordering
 };
 
-struct nfa_t {
-    nfa_state_t* states;
-    nfa_state_t* root;
+struct Tnfa {
+    TnfaState* states;
+    TnfaState* root;
 
     uint32_t nstates;
     uint32_t ncores;
@@ -57,36 +52,36 @@ struct nfa_t {
     std::vector<Rule> rules;
     std::vector<Tag> tags;
 
-    nfa_t();
+    Tnfa();
 
-    nfa_state_t* make_alt(uint32_t rule, nfa_state_t* s1, nfa_state_t* s2) {
-        nfa_state_t* s = make(nfa_state_t::Kind::ALT, rule);
+    TnfaState* make_alt(uint32_t rule, TnfaState* s1, TnfaState* s2) {
+        TnfaState* s = make(TnfaState::Kind::ALT, rule);
         s->out1 = s1;
         s->out2 = s2;
         return s;
     }
 
-    nfa_state_t* make_ran(uint32_t rule, nfa_state_t* t, const Range* range) {
-        nfa_state_t* s = make(nfa_state_t::Kind::RAN, rule);
+    TnfaState* make_ran(uint32_t rule, TnfaState* t, const Range* range) {
+        TnfaState* s = make(TnfaState::Kind::RAN, rule);
         s->out1 = t;
         s->ran = range;
         return s;
     }
 
-    nfa_state_t* make_tag(uint32_t rule, nfa_state_t* t, tag_info_t info) {
-        nfa_state_t* s = make(nfa_state_t::Kind::TAG, rule);
+    TnfaState* make_tag(uint32_t rule, TnfaState* t, tag_info_t info) {
+        TnfaState* s = make(TnfaState::Kind::TAG, rule);
         s->out1 = t;
         s->tag = info;
         return s;
     }
 
-    nfa_state_t* make_fin(uint32_t rule) {
-        return make(nfa_state_t::Kind::FIN, rule);
+    TnfaState* make_fin(uint32_t rule) {
+        return make(TnfaState::Kind::FIN, rule);
     }
 
   private:
-    nfa_state_t* make(nfa_state_t::Kind kind, uint32_t rule) {
-        nfa_state_t* s = &states[nstates++];
+    TnfaState* make(TnfaState::Kind kind, uint32_t rule) {
+        TnfaState* s = &states[nstates++];
         s->kind = kind;
         s->rule = rule;
         s->clos = NOCLOS;
@@ -98,10 +93,10 @@ struct nfa_t {
         return s;
     }
 
-    FORBID_COPY(nfa_t);
+    FORBID_COPY(Tnfa);
 };
 
-Ret re_to_nfa(nfa_t& nfa, RESpec&& spec) NODISCARD;
+Ret re_to_nfa(Tnfa& nfa, RESpec&& spec) NODISCARD;
 
 static constexpr uint32_t NONCORE = ~0u;
 

@@ -10,7 +10,7 @@
 namespace re2c {
 
 struct Rule;
-struct dfa_t;
+struct Tdfa;
 struct tcmd_t;
 struct opt_t;
 
@@ -31,7 +31,7 @@ struct cfg_bb_t {
 struct cfg_context_t {
     static constexpr uint32_t MAX_MARK = ~0u;
 
-    dfa_t& dfa;
+    Tdfa& dfa;
     const size_t nstate;
     const size_t nsym;
 
@@ -49,14 +49,14 @@ struct cfg_context_t {
 
     std::vector<size_t> worklist;
 
-    explicit cfg_context_t(dfa_t& dfa);
+    explicit cfg_context_t(Tdfa& dfa);
     ~cfg_context_t();
     FORBID_COPY(cfg_context_t);
 };
 
 // control flow graph
 struct cfg_t {
-    dfa_t& dfa;
+    Tdfa& dfa;
     cfg_bb_t* bblocks;
     cfg_ix_t nbbarc;
     cfg_ix_t nbbfin;
@@ -65,7 +65,7 @@ struct cfg_t {
     // mock operations for the root state, as TDFA(1) has no initializer operations
     tcmd_t* tcmd0;
 
-    explicit cfg_t(dfa_t& a);
+    explicit cfg_t(Tdfa& a);
     ~cfg_t();
     static tagver_t compact(const cfg_t& cfg, tagver_t* ver2new);
     static void liveness_analysis(const cfg_t& cfg, bool* live);

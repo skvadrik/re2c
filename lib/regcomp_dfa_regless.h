@@ -19,7 +19,7 @@ static constexpr uint32_t NOCONF = std::numeric_limits<uint32_t>::max();
 // A backlink connects target and origin states of a TDFA transition at the level of TNFA
 // configurations. This allows one to follow TNFA path backwards from the final state to the initial
 // one.
-struct rldfa_backlink_t {
+struct MpTdfaBacklink {
     // Index of configuration in the origin TDFA state.
     uint32_t conf;
     // T-string fragment corresponding to tagged path from the origin configuration.
@@ -28,29 +28,29 @@ struct rldfa_backlink_t {
     size_t tfrag_size;
 };
 
-// Registerless TDFA arc (transition). There are no registers and register operations, tag actions
-// are hidden in tag histories (stored in backlinks).
-struct rldfa_arc_t {
+// Multi-pass TDFA arc (transition). There are no registers and register operations, tag actions are
+// hidden in tag histories (stored in backlinks).
+struct MpTdfaArc {
     // Target TDFA state where this arc goes to.
     size_t state;
     // Array of backlinks (one per TNFA path that reaches the target state).
-    rldfa_backlink_t* backlinks;
+    MpTdfaBacklink* backlinks;
 };
 
-// Registerless TDFA state.
-struct rldfa_state_t {
+// Multi-pass TDFA state.
+struct MpTdfaState {
     // Outgoing arcs from this state. Each arc has target state and backlinks.
-    rldfa_arc_t* arcs;
+    MpTdfaArc* arcs;
     // Final link stores final configuration index (if any) and its history.
-    rldfa_backlink_t finlink;
+    MpTdfaBacklink finlink;
 
-    rldfa_state_t(size_t nchars, const rldfa_backlink_t& link);
-    ~rldfa_state_t();
-    FORBID_COPY(rldfa_state_t);
+    MpTdfaState(size_t nchars, const MpTdfaBacklink& link);
+    ~MpTdfaState();
+    FORBID_COPY(MpTdfaState);
 };
 
-// Registerless TDFA.
-struct rldfa_t {
+// Multi-pass TDFA.
+struct MpTdfa {
     const opt_t* opts;
     const int flags;
     std::vector<Tag> tags;
@@ -58,7 +58,7 @@ struct rldfa_t {
     DfaAllocator alc;
 
     // RLDFA own states with backlinks in them.
-    std::vector<rldfa_state_t*> states;
+    std::vector<MpTdfaState*> states;
 
     // Array of submatch values (used during matching).
     mutable regoff_t* result;
@@ -66,11 +66,11 @@ struct rldfa_t {
     // tag history back and get submatch values in the absence of registers. Backlink arrays (rather
     // than single backlinks) are needed because there is a set of active TNFA paths on the way
     // forward, and it is unknown until the final state which of them will match.
-    mutable std::vector<const rldfa_backlink_t* const*> log;
+    mutable std::vector<const MpTdfaBacklink* const*> log;
 
-    rldfa_t(nfa_t&& nfa, const opt_t* opts, int flags);
-    ~rldfa_t();
-    FORBID_COPY(rldfa_t);
+    MpTdfa(Tnfa&& nfa, const opt_t* opts, int flags);
+    ~MpTdfa();
+    FORBID_COPY(MpTdfa);
 };
 
 static inline tchar_t encode_tag(size_t tag) {
@@ -91,7 +91,7 @@ static inline void get_tstring_fragment(history_t& history,
                                         DfaAllocator& alc,
                                         hidx_t hidx,
                                         std::vector<tchar_t>& tfrag,
-                                        rldfa_backlink_t& link,
+                                        MpTdfaBacklink& link,
                                         bool tstring) {
     tfrag.clear();
     for (int32_t i = hidx; i != HROOT; ) {
@@ -122,35 +122,35 @@ static inline void get_tstring_fragment(history_t& history,
 }
 
 template<typename ctx_t>
-static rldfa_backlink_t* construct_backlinks(const ctx_t& ctx,
-                                             rldfa_t& rldfa,
-                                             std::vector<tchar_t>& tfrag,
-                                             const std::vector<std::vector<uint32_t>>& uniq_orig) {
-    if (ctx.dc_target == dfa_t::NIL) return nullptr;
+static MpTdfaBacklink* construct_backlinks(const ctx_t& ctx,
+                                           MpTdfa& mptdfa,
+                                           std::vector<tchar_t>& tfrag,
+                                           const std::vector<std::vector<uint32_t>>& uniq_orig) {
+    if (ctx.dc_target == Tdfa::NIL) return nullptr;
 
-    const bool tstring = rldfa.flags & REG_TSTRING;
+    const bool tstring = mptdfa.flags & REG_TSTRING;
     const std::vector<uint32_t>& uo = uniq_orig[ctx.dc_target];
     uint32_t nbacklinks = *std::max_element(uo.begin(), uo.end()) + 1;
-    rldfa_backlink_t* links = rldfa.alc.alloct<rldfa_backlink_t>(nbacklinks);
+    MpTdfaBacklink* links = mptdfa.alc.alloct<MpTdfaBacklink>(nbacklinks);
 
     for (size_t j = 0, k; j < nbacklinks; ++j) {
         for (k = 0; k < ctx.state.size() && uo[k] != j; ++k);
         const typename ctx_t::conf_t& x = ctx.state[k];
-        rldfa_backlink_t& l = links[j];
+        MpTdfaBacklink& l = links[j];
         l.conf = uniq_orig[ctx.dc_origin][x.origin];
-        get_tstring_fragment(ctx.history, rldfa.alc, x.ttran, tfrag, l, tstring);
+        get_tstring_fragment(ctx.history, mptdfa.alc, x.ttran, tfrag, l, tstring);
     }
 
     return links;
 }
 
 template<typename ctx_t>
-static void determinization_regless(nfa_t&& nfa, rldfa_t& rldfa) {
+static void determinization_multipass(Tnfa&& nfa, MpTdfa& mptdfa) {
     Msg msg;
     // Determinization context lifetime must cover regexec, as some of the data stored in the
     // context is used during matching.
-    dfa_t dfa(rldfa.alc, nfa.charset.size(), Rule::NONE, Rule::NONE);
-    ctx_t ctx(std::move(nfa), dfa, rldfa.opts, msg, "");
+    Tdfa dfa(mptdfa.alc, nfa.charset.size(), Rule::NONE, Rule::NONE);
+    ctx_t ctx(std::move(nfa), dfa, mptdfa.opts, msg, "");
 
     std::vector<tchar_t> tfrag;
     // Per-state array of mappings from configuration index to a unique origin index. This is needed
@@ -164,7 +164,7 @@ static void determinization_regless(nfa_t&& nfa, rldfa_t& rldfa) {
     const clos_t c0(ctx.nfa_root, 0, INITIAL_TAGS, HROOT, HROOT);
     ctx.reach.push_back(c0);
     closure(ctx);
-    find_state_regless(ctx, rldfa, tfrag, uniq_orig);
+    find_state_multipass(ctx, mptdfa, tfrag, uniq_orig);
 
     // Iterate while new states are added: for each alphabet symbol build tagged epsilon-closure of
     // all reachable NFA states, then find identical or mappable TDFA state, or add a new one.
@@ -174,23 +174,23 @@ static void determinization_regless(nfa_t&& nfa, rldfa_t& rldfa) {
         for (uint32_t c = 0; c < dfa.nchars; ++c) {
             reach_on_symbol(ctx, c);
             closure(ctx);
-            find_state_regless(ctx, rldfa, tfrag, uniq_orig);
+            find_state_multipass(ctx, mptdfa, tfrag, uniq_orig);
 
             // Multi-pass TDFA stores backlinks instead of tag actions.
-            rldfa.states[ctx.dc_origin]->arcs[c].backlinks =
-                    construct_backlinks(ctx, rldfa, tfrag, uniq_orig);
+            mptdfa.states[ctx.dc_origin]->arcs[c].backlinks =
+                    construct_backlinks(ctx, mptdfa, tfrag, uniq_orig);
         }
     }
 
-    rldfa.tags = std::move(ctx.tags);
+    mptdfa.tags = std::move(ctx.tags);
 }
 
 template<typename ctx_t>
-static void find_state_regless(ctx_t& ctx,
-                               rldfa_t& rldfa,
-                               std::vector<tchar_t>& tfrag,
-                               std::vector<std::vector<uint32_t>>& uniq_orig) {
-    const bool tstring = rldfa.flags & REG_TSTRING;
+static void find_state_multipass(ctx_t& ctx,
+                                 MpTdfa& mptdfa,
+                                 std::vector<tchar_t>& tfrag,
+                                 std::vector<std::vector<uint32_t>>& uniq_orig) {
+    const bool tstring = mptdfa.flags & REG_TSTRING;
 
     // Find or add the new state in the existing set of states.
     const bool is_new = do_find_state<ctx_t, true>(ctx);
@@ -213,38 +213,38 @@ static void find_state_regless(ctx_t& ctx,
         }
 
         // Check if the new TDFA state is final. See note [at most one final item per closure].
-        rldfa_backlink_t finlink = {NOCONF, nullptr, 0};
+        MpTdfaBacklink finlink = {NOCONF, nullptr, 0};
         for (uint32_t i = 0; i < state.size(); ++i) {
-            if (state[i].state->kind == nfa_state_t::Kind::FIN) {
+            if (state[i].state->kind == TnfaState::Kind::FIN) {
                 finlink.conf = uo[i];
                 get_tstring_fragment(
-                        ctx.history, rldfa.alc, state[i].thist, tfrag, finlink, tstring);
+                        ctx.history, mptdfa.alc, state[i].thist, tfrag, finlink, tstring);
                 break;
             }
         }
 
-        // Create a new regless-DFA state.
-        rldfa_state_t* s = new rldfa_state_t(ctx.dfa.nchars, finlink);
-        rldfa.states.push_back(s);
+        // Create a new multipass-DFA state.
+        MpTdfaState* s = new MpTdfaState(ctx.dfa.nchars, finlink);
+        mptdfa.states.push_back(s);
     }
 
-    if (ctx.dc_origin != dfa_t::NIL) {
-        rldfa.states[ctx.dc_origin]->arcs[ctx.dc_symbol].state = ctx.dc_target;
+    if (ctx.dc_origin != Tdfa::NIL) {
+        mptdfa.states[ctx.dc_origin]->arcs[ctx.dc_symbol].state = ctx.dc_target;
     }
 }
 
-inline rldfa_state_t::rldfa_state_t(size_t nchars, const rldfa_backlink_t& link)
-    : arcs(new rldfa_arc_t[nchars]), finlink() {
+inline MpTdfaState::MpTdfaState(size_t nchars, const MpTdfaBacklink& link)
+    : arcs(new MpTdfaArc[nchars]), finlink() {
     finlink.conf = link.conf;
     finlink.tfrag = link.tfrag;
     finlink.tfrag_size = link.tfrag_size;
 }
 
-inline rldfa_state_t::~rldfa_state_t() {
+inline MpTdfaState::~MpTdfaState() {
     delete[] arcs;
 }
 
-inline rldfa_t::rldfa_t(nfa_t&& nfa, const opt_t* opts, int flags)
+inline MpTdfa::MpTdfa(Tnfa&& nfa, const opt_t* opts, int flags)
     : opts(opts),
       flags(flags),
       tags(),
@@ -253,13 +253,13 @@ inline rldfa_t::rldfa_t(nfa_t&& nfa, const opt_t* opts, int flags)
       result(new regoff_t[nfa.tags.size()]),
       log() {
     if (opts->posix_semantics) {
-        determinization_regless<pdetctx_t>(std::move(nfa), *this);
+        determinization_multipass<pdetctx_t>(std::move(nfa), *this);
     } else {
-        determinization_regless<ldetctx_t>(std::move(nfa), *this);
+        determinization_multipass<ldetctx_t>(std::move(nfa), *this);
     }
 }
 
-inline rldfa_t::~rldfa_t() {
+inline MpTdfa::~MpTdfa() {
     for (size_t i = 0; i < states.size(); ++i) {
         delete states[i];
     }

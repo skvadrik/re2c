@@ -72,13 +72,13 @@ static void update_final_offsets(psimctx_t& ctx, const conf_t& c);
 static void closure_simple(psimctx_t& ctx);
 static void relax_gtop(psimctx_t& ctx, const psimctx_t::conf_t& c);
 static void closure_posix_gtop(psimctx_t& ctx);
-static bool scan(psimctx_t& ctx, nfa_state_t* q, bool all);
+static bool scan(psimctx_t& ctx, TnfaState* q, bool all);
 static bool relax_gor1(psimctx_t& ctx, const psimctx_t::conf_t& c);
 static void closure_posix_gor1(psimctx_t& ctx);
 static inline void closure_posix(psimctx_t& ctx);
-static inline uint32_t index(const nfa_state_t* s, const nfa_t& nfa);
-static void copy_offs(psimctx_t& ctx, const nfa_state_t* y, const nfa_state_t* x, tag_info_t info);
-static inline void accept_offsets(psimctx_t& ctx, const nfa_state_t* s);
+static inline uint32_t index(const TnfaState* s, const Tnfa& nfa);
+static void copy_offs(psimctx_t& ctx, const TnfaState* y, const TnfaState* x, tag_info_t info);
+static inline void accept_offsets(psimctx_t& ctx, const TnfaState* s);
 
 // debug
 static int D = 0;
@@ -109,9 +109,9 @@ int regexec_nfa_posix_backward(const regex_t* preg,
     }
 
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
         s->clos = NOCLOS;
-        if (s->kind == nfa_state_t::Kind::FIN) {
+        if (s->kind == TnfaState::Kind::FIN) {
             ctx.marker = ctx.cursor;
             ctx.rule = 0;
         }
@@ -161,7 +161,7 @@ int regexec_nfa_posix_backward(const regex_t* preg,
     return 0;
 }
 
-static uint32_t index(const nfa_state_t* s, const nfa_t& nfa) {
+static uint32_t index(const TnfaState* s, const Tnfa& nfa) {
     return static_cast<uint32_t>(s - nfa.states);
 }
 
@@ -172,7 +172,7 @@ void closure_simple(psimctx_t& ctx) {
     for (; !stack.empty(); ) {
         const psimctx_t::conf_t x = stack.back();
         stack.pop_back();
-        nfa_state_t* n = x.state;
+        TnfaState* n = x.state;
 
         if (n->clos != NOCLOS) continue;
 
@@ -180,15 +180,15 @@ void closure_simple(psimctx_t& ctx) {
         state.push_back(x);
 
         switch (n->kind) {
-        case nfa_state_t::Kind::ALT:
+        case TnfaState::Kind::ALT:
             stack.push_back(psimctx_t::conf_t(x, n->out2));
             stack.push_back(psimctx_t::conf_t(x, n->out1));
             break;
-        case nfa_state_t::Kind::TAG:
+        case TnfaState::Kind::TAG:
             stack.push_back(psimctx_t::conf_t(x, n->out1, 0));
             break;
-        case nfa_state_t::Kind::RAN:
-        case nfa_state_t::Kind::FIN:
+        case TnfaState::Kind::RAN:
+        case TnfaState::Kind::FIN:
             break;
         }
     }
@@ -200,10 +200,10 @@ void make_one_step_simple(psimctx_t& ctx, uint32_t sym) {
     DCHECK(reach.empty());
 
     for (rcconfiter_t i = state.rbegin(), e = state.rend(); i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
         s->clos = NOCLOS;
 
-        if (s->kind == nfa_state_t::Kind::RAN) {
+        if (s->kind == TnfaState::Kind::RAN) {
             for (const Range* r = s->ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     conf_t c(s->out1, 0, 0);
@@ -211,7 +211,7 @@ void make_one_step_simple(psimctx_t& ctx, uint32_t sym) {
                     break;
                 }
             }
-        } else if (s->kind == nfa_state_t::Kind::FIN) {
+        } else if (s->kind == TnfaState::Kind::FIN) {
             ctx.marker = ctx.cursor;
             ctx.rule = 0;
         }
@@ -262,8 +262,8 @@ static int32_t precedence(psimctx_t& ctx, const conf_t& x, const conf_t& y) {
 
 void closure_posix_gor1(psimctx_t& ctx) {
     psimctx_t::confset_t& state = ctx.state, &reach = ctx.reach;
-    std::vector<nfa_state_t*>& topsort = ctx.gor1_topsort;
-    std::vector<nfa_state_t*>& linear = ctx.gor1_linear;
+    std::vector<TnfaState*>& topsort = ctx.gor1_topsort;
+    std::vector<TnfaState*>& linear = ctx.gor1_linear;
     const size_t ntags = ctx.nfa.tags.size();
 
     state.clear();
@@ -284,7 +284,7 @@ void closure_posix_gor1(psimctx_t& ctx) {
     for (; !topsort.empty(); ) {
         // 1st pass: depth-first postorder traversal of admissible subgraph
         for (; !topsort.empty(); ) {
-            nfa_state_t* q = topsort.back();
+            TnfaState* q = topsort.back();
             if (q->status == GorPass::LINEAR) {
                 topsort.pop_back();
             } else {
@@ -299,7 +299,7 @@ void closure_posix_gor1(psimctx_t& ctx) {
 
         // 2nd pass: linear scan of topologically ordered states
         for (; !linear.empty(); ) {
-            nfa_state_t* q = linear.back();
+            TnfaState* q = linear.back();
             linear.pop_back();
             if (q->active) {
                 q->active = 0;
@@ -311,14 +311,14 @@ void closure_posix_gor1(psimctx_t& ctx) {
     }
 }
 
-bool scan(psimctx_t& ctx, nfa_state_t* q, bool all) {
+bool scan(psimctx_t& ctx, TnfaState* q, bool all) {
     bool any = false;
 
     using conf_t = psimctx_t::conf_t;
     const conf_t x = ctx.state[q->clos];
 
     switch (q->kind) {
-    case nfa_state_t::Kind::ALT:
+    case TnfaState::Kind::ALT:
         if (q->arcidx == 0) {
             copy_offs(ctx, q, q->out1, NOINFO);
             any |= relax_gor1(ctx, conf_t(x, q->out1));
@@ -330,15 +330,15 @@ bool scan(psimctx_t& ctx, nfa_state_t* q, bool all) {
             ++q->arcidx;
         }
         break;
-    case nfa_state_t::Kind::TAG:
+    case TnfaState::Kind::TAG:
         if (q->arcidx == 0) {
             copy_offs(ctx, q, q->out1, q->tag);
             any |= relax_gor1(ctx, conf_t(x, q->out1, 0));
             ++q->arcidx;
         }
         break;
-    case nfa_state_t::Kind::RAN:
-    case nfa_state_t::Kind::FIN:
+    case TnfaState::Kind::RAN:
+    case TnfaState::Kind::FIN:
         break;
     }
 
@@ -347,7 +347,7 @@ bool scan(psimctx_t& ctx, nfa_state_t* q, bool all) {
 
 bool relax_gor1(psimctx_t& ctx, const psimctx_t::conf_t& x) {
     psimctx_t::confset_t& state = ctx.state;
-    nfa_state_t* q = x.state;
+    TnfaState* q = x.state;
     const uint32_t idx = q->clos;
 
     if (q->status == GorPass::TOPSORT) {
@@ -395,7 +395,7 @@ void closure_posix_gtop(psimctx_t& ctx) {
     }
 
     for (; !heap.empty(); ) {
-        nfa_state_t* q = heap.top();
+        TnfaState* q = heap.top();
         heap.pop();
         q->active = 0;
 
@@ -406,18 +406,18 @@ void closure_posix_gtop(psimctx_t& ctx) {
         const conf_t x = ctx.state[q->clos];
 
         switch (q->kind) {
-        case nfa_state_t::Kind::ALT:
+        case TnfaState::Kind::ALT:
             copy_offs(ctx, q, q->out1, NOINFO);
             relax_gtop(ctx, conf_t(x, q->out1));
             copy_offs(ctx, q, q->out2, NOINFO);
             relax_gtop(ctx, conf_t(x, q->out2));
             break;
-        case nfa_state_t::Kind::TAG:
+        case TnfaState::Kind::TAG:
             copy_offs(ctx, q, q->out1, q->tag);
             relax_gtop(ctx, conf_t(x, q->out1, 0));
             break;
-        case nfa_state_t::Kind::RAN:
-        case nfa_state_t::Kind::FIN:
+        case TnfaState::Kind::RAN:
+        case TnfaState::Kind::FIN:
             break;
         }
     }
@@ -425,7 +425,7 @@ void closure_posix_gtop(psimctx_t& ctx) {
 
 void relax_gtop(psimctx_t& ctx, const psimctx_t::conf_t& c) {
     psimctx_t::confset_t& state = ctx.state;
-    nfa_state_t* q = c.state;
+    TnfaState* q = c.state;
     const uint32_t idx = q->clos;
 
     if (idx == NOCLOS) {
@@ -452,13 +452,13 @@ void make_one_step(psimctx_t& ctx, uint32_t sym) {
     if (D) fprintf(stderr, "\n--- step %u (sym %c)\n", ctx.step, sym);
 
     for (cconfiter_t i = state.begin(), e = state.end(); i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
 
         s->clos = NOCLOS;
         s->arcidx = 0;
         DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->kind == nfa_state_t::Kind::RAN) {
+        if (s->kind == TnfaState::Kind::RAN) {
             for (const Range* r = s->ran; r; r = r->next()) {
                 if (r->lower() <= sym && sym < r->upper()) {
                     const conf_t c(s->out1, index(s, ctx.nfa), HROOT);
@@ -466,7 +466,7 @@ void make_one_step(psimctx_t& ctx, uint32_t sym) {
                     break;
                 }
             }
-        } else if (s->kind == nfa_state_t::Kind::FIN) {
+        } else if (s->kind == TnfaState::Kind::FIN) {
             update_final_offsets(ctx, *i);
         }
     }
@@ -474,21 +474,21 @@ void make_one_step(psimctx_t& ctx, uint32_t sym) {
 
 void make_final_step(psimctx_t& ctx) {
     for (cconfiter_t i = ctx.state.begin(), e = ctx.state.end(); i != e; ++i) {
-        nfa_state_t* s = i->state;
+        TnfaState* s = i->state;
 
         s->clos = NOCLOS;
         s->arcidx = 0;
         DCHECK(s->status == GorPass::NOPASS && s->active == 0);
 
-        if (s->kind == nfa_state_t::Kind::FIN) {
+        if (s->kind == TnfaState::Kind::FIN) {
             update_final_offsets(ctx, *i);
         }
     }
 }
 
 void update_final_offsets(psimctx_t& ctx, const conf_t& c) {
-    nfa_state_t* s = c.state;
-    DCHECK(s->kind == nfa_state_t::Kind::FIN);
+    TnfaState* s = c.state;
+    DCHECK(s->kind == TnfaState::Kind::FIN);
 
     const std::vector<Tag>& tags = ctx.nfa.tags;
     const size_t ntags = tags.size();
@@ -508,7 +508,7 @@ void update_final_offsets(psimctx_t& ctx, const conf_t& c) {
     }
 }
 
-static void copy_offs(psimctx_t& ctx, const nfa_state_t* y, const nfa_state_t* x, tag_info_t info) {
+static void copy_offs(psimctx_t& ctx, const TnfaState* y, const TnfaState* x, tag_info_t info) {
     const std::vector<Tag>& tags = ctx.nfa.tags;
     const size_t ntags = tags.size();
     const uint32_t xidx = index(x, ctx.nfa);
@@ -545,7 +545,7 @@ static void copy_offs(psimctx_t& ctx, const nfa_state_t* y, const nfa_state_t* x
     }
 }
 
-void accept_offsets(psimctx_t& ctx, const nfa_state_t* s) {
+void accept_offsets(psimctx_t& ctx, const TnfaState* s) {
     const uint32_t idx = index(s, ctx.nfa);
     const size_t ntags = ctx.nfa.tags.size();
 

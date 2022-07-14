@@ -11,12 +11,12 @@ int regexec(const regex_t* re, const char* string, size_t nmatch, regmatch_t pma
     const int cflags = re->flags;
     if (!(cflags & REG_NFA)) {
         // DFA-based algorithms
-        if (cflags & REG_REGLESS) {
-            // Registerless TDFA.
+        if (cflags & REG_MULTIPASS) {
+            // Multi-pass TDFA.
             if (cflags & REG_LEFTMOST) {
-                return regexec_dfa_regless<ldetctx_t>(re, string, nmatch, pmatch, eflags);
+                return regexec_dfa_multipass<ldetctx_t>(re, string, nmatch, pmatch, eflags);
             } else {
-                return regexec_dfa_regless<pdetctx_t>(re, string, nmatch, pmatch, eflags);
+                return regexec_dfa_multipass<pdetctx_t>(re, string, nmatch, pmatch, eflags);
             }
         } else {
             // TDFA with registers and register operations on transitions.
@@ -51,12 +51,12 @@ subhistory_t* regparse(const regex_t* re, const char* string, size_t nmatch) {
     CHECK(cflags & REG_SUBHIST);
     if (!(cflags & REG_NFA)) {
         // DFA-based algorithms
-        if (cflags & REG_REGLESS) {
-            // Registerless TDFA.
+        if (cflags & REG_MULTIPASS) {
+            // Multi-pass TDFA.
             if (cflags & REG_LEFTMOST) {
-                return regparse_dfa_regless<ldetctx_t>(re, string, nmatch);
+                return regparse_dfa_multipass<ldetctx_t>(re, string, nmatch);
             } else {
-                return regparse_dfa_regless<pdetctx_t>(re, string, nmatch);
+                return regparse_dfa_multipass<pdetctx_t>(re, string, nmatch);
             }
         } else {
             // TDFA with registers and register operations on transitions.
@@ -74,12 +74,12 @@ const tstring_t* regtstring(const regex_t* re, const char* string) {
     CHECK(cflags & REG_TSTRING);
     if (!(cflags & REG_NFA)) {
         // DFA-based algorithms
-        if (cflags & REG_REGLESS) {
-            // Registerless TDFA.
+        if (cflags & REG_MULTIPASS) {
+            // Multi-pass TDFA.
             if (cflags & REG_LEFTMOST) {
-                return regtstring_dfa_regless<ldetctx_t>(re, string);
+                return regtstring_dfa_multipass<ldetctx_t>(re, string);
             } else {
-                return regtstring_dfa_regless<pdetctx_t>(re, string);
+                return regtstring_dfa_multipass<pdetctx_t>(re, string);
             }
         } else {
             // TDFA with registers is not suited to tstring construction.

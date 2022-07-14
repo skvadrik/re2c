@@ -36,7 +36,7 @@ using namespace re2c::libre2c;
 
 int regcomp(regex_t* preg, const char* pattern, int cflags) {
     conopt_t globopts;
-    globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_REGLESS));
+    globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_MULTIPASS));
     globopts.FFlag = true;
     globopts.backward = cflags & REG_BACKWARD;
     Msg msg;
@@ -69,10 +69,10 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         }
     }
 
-    nfa_t* nfa = new nfa_t;
+    Tnfa* nfa = new Tnfa;
     CHECK_RET(re_to_nfa(*nfa, std::move(re)));
 
-    nfa_t* nfa0 = nullptr;
+    Tnfa* nfa0 = nullptr;
     if (cflags & REG_BACKWARD) {
         conopt_t globopts0;
         globopts0.FFlag = true;
@@ -81,7 +81,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         CHECK_RET(opts0.snapshot(opt0));
         RESpec re0(opt0, msg);
         CHECK_RET(re0.init(arv));
-        nfa0 = new nfa_t;
+        nfa0 = new Tnfa;
         CHECK_RET(re_to_nfa(*nfa0, std::move(re0)));
         delete opt0;
     }
@@ -103,16 +103,16 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
         } else {
             preg->simctx = new psimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
         }
-    } else if (cflags & REG_REGLESS) {
-        preg->rldfa = new rldfa_t(std::move(*nfa), opt, cflags);
+    } else if (cflags & REG_MULTIPASS) {
+        preg->mptdfa = new MpTdfa(std::move(*nfa), opt, cflags);
         delete nfa;
         opt = nullptr; // transfer options ownership to RLDFA
 
         if (cflags & REG_SUBHIST) {
-            preg->regtrie = new regoff_trie_t(preg->rldfa->tags.size());
+            preg->regtrie = new regoff_trie_t(preg->mptdfa->tags.size());
         }
     } else {
-        dfa_t* dfa = new dfa_t(*new DfaAllocator(), nfa->charset.size(), Rule::NONE, Rule::NONE);
+        Tdfa* dfa = new Tdfa(*new DfaAllocator(), nfa->charset.size(), Rule::NONE, Rule::NONE);
         CHECK_RET(determinization(std::move(*nfa), *dfa, opt, msg, ""));
         preg->dfa = dfa;
         delete nfa;

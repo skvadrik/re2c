@@ -28,18 +28,18 @@ namespace re2c {
 // join later along the way and they need common tag version). However, redundant backups cause
 // artificial interference, so we only create backup if the origin is overwritten on some path.
 
-static void find_overwritten_tags(const dfa_t& dfa, size_t state, bool* been, bool* owrt) {
+static void find_overwritten_tags(const Tdfa& dfa, size_t state, bool* been, bool* owrt) {
     if (been[state]) return;
     been[state] = true;
 
-    const dfa_state_t* s = dfa.states[state];
+    const TdfaState* s = dfa.states[state];
     for (size_t c = 0; c < dfa.nchars; ++c) {
         for (const tcmd_t* p = s->tcmd[c]; p; p = p->next) {
             owrt[p->lhs] = true;
         }
 
         size_t dest = s->arcs[c];
-        if (dest != dfa_t::NIL && dfa.states[dest]->fallthru) {
+        if (dest != Tdfa::NIL && dfa.states[dest]->fallthru) {
             find_overwritten_tags(dfa, dest, been, owrt);
         }
     }
@@ -48,10 +48,10 @@ static void find_overwritten_tags(const dfa_t& dfa, size_t state, bool* been, bo
 
 // Overwritten tags need 'copy' on all outgoing non-accepting paths ('copy' commands must go first,
 // before potential overwrites).
-static void backup(dfa_t& dfa, dfa_state_t* s, tagver_t l, tagver_t r) {
+static void backup(Tdfa& dfa, TdfaState* s, tagver_t l, tagver_t r) {
     for (size_t c = 0; c < dfa.nchars; ++c) {
         size_t i = s->arcs[c];
-        if (i != dfa_t::NIL && dfa.states[i]->fallthru) {
+        if (i != Tdfa::NIL && dfa.states[i]->fallthru) {
             tcmd_t*& p = s->tcmd[c];
             p = dfa.tcpool.make_copy(p, l, r);
         }
@@ -61,7 +61,7 @@ static void backup(dfa_t& dfa, dfa_state_t* s, tagver_t l, tagver_t r) {
 
 // WARNING: this function assumes that falthrough and fallback attributes of TDFA states have
 // already been calculated, see note [fallback states].
-void insert_fallback_tags(dfa_t& dfa) {
+void insert_fallback_tags(Tdfa& dfa) {
     tcpool_t& pool = dfa.tcpool;
     const size_t
     nstates = dfa.states.size(),
@@ -71,7 +71,7 @@ void insert_fallback_tags(dfa_t& dfa) {
     bool* owrt = new bool[nver];
 
     for (size_t i = 0; i < nstates; ++i) {
-        dfa_state_t* s = dfa.states[i];
+        TdfaState* s = dfa.states[i];
         if (!s->fallback) continue;
 
         std::fill(been, been + nstates, false);

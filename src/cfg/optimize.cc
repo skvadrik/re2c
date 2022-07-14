@@ -9,7 +9,7 @@
 
 namespace re2c {
 
-void compact_and_optimize_tags(const opt_t* opts, dfa_t& dfa) {
+void compact_and_optimize_tags(const opt_t* opts, Tdfa& dfa) {
     tagver_t maxver = dfa.maxtagver;
     if (maxver > 0) {
         cfg_t cfg(dfa);
