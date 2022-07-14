@@ -1,5 +1,5 @@
-#ifndef _RE2C_LIB_REGCOMP_DFA_REGLESS_
-#define _RE2C_LIB_REGCOMP_DFA_REGLESS_
+#ifndef _RE2C_LIB_REGCOMP_DFA_MULTIPASS_
+#define _RE2C_LIB_REGCOMP_DFA_MULTIPASS_
 
 #include <string.h>
 
@@ -268,4 +268,4 @@ inline MpTdfa::~MpTdfa() {
 } // namespace libre2c
 } // namespace re2c
 
-#endif // _RE2C_LIB_REGCOMP_DFA_REGLESS_
+#endif // _RE2C_LIB_REGCOMP_DFA_MULTIPASS_

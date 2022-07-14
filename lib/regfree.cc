@@ -3,7 +3,7 @@
 #include <valarray>
 #include <vector>
 
-#include "lib/regcomp_dfa_regless.h"
+#include "lib/regcomp_dfa_multipass.h"
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
 #include "lib/regoff_trie.h"
