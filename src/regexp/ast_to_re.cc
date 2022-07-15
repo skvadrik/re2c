@@ -19,12 +19,11 @@
 #include "src/regexp/re.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
+#include "src/util/attribute.h"
 #include "src/util/check.h"
 #include "src/util/range.h"
 
 namespace re2c {
-
-struct loc_t;
 
 // note [default regexp]
 //
@@ -44,19 +43,14 @@ struct loc_t;
 // concatenation (unless it is a capture). Of course, this insertion only applies to subexpressions
 // that have nested captures.
 
-static Ret ast_to_re(RESpec&, const AstNode*, size_t&, int32_t, bool, RE*&) NODISCARD;
-static Ret re_string(RESpec&, const AstNode*, RE*&) NODISCARD;
-static Ret re_class(RESpec&, const loc_t&, const Range*, RE*&) NODISCARD;
-static Ret ast_to_range(RESpec&, const AstNode*, Range*&) NODISCARD;
-static Ret char_to_range(RESpec&, const AstChar&, bool, Range*&) NODISCARD;
-static Ret diff_to_range(RESpec&, const AstNode*, Range*&) NODISCARD;
-static Ret dot_to_range(RESpec&, const AstNode*, Range*&) NODISCARD;
-static Ret cls_to_range(RESpec&, const AstNode*, Range*&) NODISCARD;
-static Ret check_misuse_of_named_def(RESpec&, const AstNode*) NODISCARD;
-static Ret check_tags_used_once(RESpec&, const Rule&, const std::vector<Tag>&) NODISCARD;
-static bool is_icase(const opt_t*, bool);
+struct loc_t;
 
-static bool has_tags(const AstNode* ast) {
+namespace {
+
+static Ret ast_to_re(RESpec&, const AstNode*, size_t&, int32_t, bool, RE*&) NODISCARD;
+static Ret ast_to_range(RESpec& spec, const AstNode* ast, Range*& r);
+
+LOCAL_NODISCARD(bool has_tags(const AstNode* ast)) {
     switch (ast->kind) {
     case AstKind::NIL:
     case AstKind::STR:
@@ -145,6 +139,188 @@ static inline void add_structural_tags(RESpec& spec,
         // See note [POSIX subexpression hierarchy].
         add_fictive_tags(spec, height, ptag1, ptag2);
     }
+}
+
+LOCAL_NODISCARD(Ret check_misuse_of_named_def(RESpec& spec, const AstNode* ast)) {
+    DCHECK(ast->kind == AstKind::REF);
+    if (spec.opts->posix_syntax) {
+        RET_FAIL(spec.msg.error(ast->loc,
+                                "implicit grouping is forbidden with '--posix-captures' option, "
+                                "please wrap '%s' in capturing parenthesis",
+                                ast->ref.name));
+    }
+    return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret check_tags_used_once(
+        RESpec& spec, const Rule& rule, const std::vector<Tag>& tags)) {
+    std::set<std::string> names;
+    for (size_t t = rule.ltag; t < rule.htag; ++t) {
+        const char* name = tags[t].name;
+        if (name && !names.insert(name).second) {
+            RET_FAIL(spec.msg.error(rule.semact->loc,
+                                    "tag '%s' is used multiple times in the same rule",
+                                    name));
+        }
+    }
+    return Ret::OK;
+}
+
+bool is_icase(const opt_t* opts, bool icase) {
+    return opts->bCaseInsensitive || icase != opts->bCaseInverted;
+}
+
+LOCAL_NODISCARD(Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, Range*& r)) {
+    RangeMgr& rm = spec.rangemgr;
+    uint32_t c = chr.chr;
+
+    if (!spec.opts->encoding.validateChar(c)) {
+        RET_FAIL(spec.msg.error(chr.loc, "bad code point: '0x%X'", c));
+    }
+
+    r = icase && is_alpha(c)
+           ? rm.add(rm.sym(to_lower_unsafe(c)), rm.sym(to_upper_unsafe(c))) : rm.sym(c);
+    return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret cls_to_range(RESpec& spec, const AstNode* ast, Range*& r)) {
+    DCHECK(ast->kind == AstKind::CLS);
+    RangeMgr& rm = spec.rangemgr;
+    r = nullptr;
+
+    for (const AstRange& a : ast->cls.ranges) {
+        Range* s = spec.opts->encoding.validateRange(rm, a.lower, a.upper);
+        if (!s) {
+            RET_FAIL(spec.msg.error(a.loc,
+                                    "bad code point range: '0x%X - 0x%X'", a.lower, a.upper));
+        }
+        r = rm.add(r, s);
+    }
+
+    if (ast->cls.negated) {
+        r = rm.sub(spec.opts->encoding.fullRange(rm), r);
+    }
+
+    return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret dot_to_range(RESpec& spec, const AstNode* ast, Range*& r)) {
+    DCHECK(ast->kind == AstKind::DOT);
+    RangeMgr& rm = spec.rangemgr;
+    uint32_t c = '\n';
+
+    if (!spec.opts->encoding.validateChar(c)) {
+        RET_FAIL(spec.msg.error(ast->loc, "bad code point: '0x%X'", c));
+    }
+
+    r = rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
+    return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec, const AstNode* ast, Range*& r)) {
+    DCHECK(ast->kind == AstKind::DIFF);
+
+    Range* x, *y;
+    CHECK_RET(ast_to_range(spec, ast->diff.ast1, x));
+    CHECK_RET(ast_to_range(spec, ast->diff.ast2, y));
+    r = x && y ? spec.rangemgr.sub(x, y) : nullptr;
+
+    return Ret::OK;
+}
+
+Ret ast_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
+    switch (ast->kind) {
+    case AstKind::NIL:
+    case AstKind::DEF:
+    case AstKind::TAG:
+    case AstKind::CAT:
+    case AstKind::ITER:
+        break;
+
+    case AstKind::CAP:
+        if (spec.opts->posix_syntax) break;
+        return ast_to_range(spec, ast->cap, r);
+
+    case AstKind::REF:
+        CHECK_RET(check_misuse_of_named_def(spec, ast));
+        return ast_to_range(spec, ast->ref.ast, r);
+
+    case AstKind::CLS:
+        return cls_to_range(spec, ast, r);
+
+    case AstKind::DOT:
+        return dot_to_range(spec, ast, r);
+
+    case AstKind::STR:
+        if (ast->str.chars.size() != 1) break;
+        return char_to_range(spec, ast->str.chars.front(), is_icase(spec.opts, ast->str.icase), r);
+
+    case AstKind::DIFF:
+        return diff_to_range(spec, ast, r);
+
+    case AstKind::ALT: {
+        Range* x, *y;
+        CHECK_RET(ast_to_range(spec, ast->diff.ast1, x));
+        CHECK_RET(ast_to_range(spec, ast->diff.ast2, y));
+        r = x && y ? spec.rangemgr.add(x, y) : nullptr;
+
+        return Ret::OK;
+    }}
+
+    RET_FAIL(spec.msg.error(ast->loc, "can only difference char sets"));
+}
+
+LOCAL_NODISCARD(Ret re_class(RESpec& spec, const loc_t& loc, const Range* r, RE*& re)) {
+    if (!r) {
+        switch (spec.opts->empty_class_policy) {
+        case EmptyClassPolicy::MATCH_EMPTY:
+            spec.msg.warn.empty_class(loc);
+            re = re_nil(spec);
+            return Ret::OK;
+        case EmptyClassPolicy::MATCH_NONE:
+            spec.msg.warn.empty_class(loc);
+            break;
+        case EmptyClassPolicy::ERROR:
+            RET_FAIL(spec.msg.error(loc, "empty character class"));
+        }
+    }
+
+    switch (spec.opts->encoding.type()) {
+    case Enc::Type::UTF16:
+        re = utf16::range(spec, r);
+        break;
+    case Enc::Type::UTF8:
+        re = utf8::range(spec, r);
+        break;
+    case Enc::Type::EBCDIC:
+        re = ebcdic::range(spec, r);
+        break;
+    case Enc::Type::ASCII:
+    case Enc::Type::UTF32:
+    case Enc::Type::UCS2:
+        re = re_sym(spec, r);
+        break;
+    }
+
+    return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret re_string(RESpec& spec, const AstNode* ast, RE*& x)) {
+    DCHECK(ast->kind == AstKind::STR);
+
+    x = nullptr;
+    bool icase = is_icase(spec.opts, ast->str.icase);
+
+    for (const AstChar& a : ast->str.chars) {
+        Range* r;
+        CHECK_RET(char_to_range(spec, a, icase, r));
+        RE* y;
+        CHECK_RET(re_class(spec, ast->loc, r, y));
+        x = re_cat(spec, x, y);
+    }
+
+    x = x ? x : re_nil(spec);
+    return Ret::OK;
 }
 
 Ret ast_to_re(
@@ -280,186 +456,7 @@ Ret ast_to_re(
     return Ret::OK;
 }
 
-Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, Range*& r) {
-    RangeMgr& rm = spec.rangemgr;
-    uint32_t c = chr.chr;
-
-    if (!spec.opts->encoding.validateChar(c)) {
-        RET_FAIL(spec.msg.error(chr.loc, "bad code point: '0x%X'", c));
-    }
-
-    r = icase && is_alpha(c)
-           ? rm.add(rm.sym(to_lower_unsafe(c)), rm.sym(to_upper_unsafe(c))) : rm.sym(c);
-    return Ret::OK;
-}
-
-Ret cls_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
-    DCHECK(ast->kind == AstKind::CLS);
-    RangeMgr& rm = spec.rangemgr;
-    r = nullptr;
-
-    for (const AstRange& a : ast->cls.ranges) {
-        Range* s = spec.opts->encoding.validateRange(rm, a.lower, a.upper);
-        if (!s) {
-            RET_FAIL(spec.msg.error(a.loc,
-                                    "bad code point range: '0x%X - 0x%X'", a.lower, a.upper));
-        }
-        r = rm.add(r, s);
-    }
-
-    if (ast->cls.negated) {
-        r = rm.sub(spec.opts->encoding.fullRange(rm), r);
-    }
-
-    return Ret::OK;
-}
-
-Ret dot_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
-    DCHECK(ast->kind == AstKind::DOT);
-    RangeMgr& rm = spec.rangemgr;
-    uint32_t c = '\n';
-
-    if (!spec.opts->encoding.validateChar(c)) {
-        RET_FAIL(spec.msg.error(ast->loc, "bad code point: '0x%X'", c));
-    }
-
-    r = rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
-    return Ret::OK;
-}
-
-Ret diff_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
-    DCHECK(ast->kind == AstKind::DIFF);
-
-    Range* x, *y;
-    CHECK_RET(ast_to_range(spec, ast->diff.ast1, x));
-    CHECK_RET(ast_to_range(spec, ast->diff.ast2, y));
-    r = x && y ? spec.rangemgr.sub(x, y) : nullptr;
-
-    return Ret::OK;
-}
-
-Ret ast_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
-    switch (ast->kind) {
-    case AstKind::NIL:
-    case AstKind::DEF:
-    case AstKind::TAG:
-    case AstKind::CAT:
-    case AstKind::ITER:
-        break;
-
-    case AstKind::CAP:
-        if (spec.opts->posix_syntax) break;
-        return ast_to_range(spec, ast->cap, r);
-
-    case AstKind::REF:
-        CHECK_RET(check_misuse_of_named_def(spec, ast));
-        return ast_to_range(spec, ast->ref.ast, r);
-
-    case AstKind::CLS:
-        return cls_to_range(spec, ast, r);
-
-    case AstKind::DOT:
-        return dot_to_range(spec, ast, r);
-
-    case AstKind::STR:
-        if (ast->str.chars.size() != 1) break;
-        return char_to_range(spec, ast->str.chars.front(), is_icase(spec.opts, ast->str.icase), r);
-
-    case AstKind::DIFF:
-        return diff_to_range(spec, ast, r);
-
-    case AstKind::ALT: {
-        Range* x, *y;
-        CHECK_RET(ast_to_range(spec, ast->diff.ast1, x));
-        CHECK_RET(ast_to_range(spec, ast->diff.ast2, y));
-        r = x && y ? spec.rangemgr.add(x, y) : nullptr;
-
-        return Ret::OK;
-    }}
-
-    RET_FAIL(spec.msg.error(ast->loc, "can only difference char sets"));
-}
-
-Ret re_string(RESpec& spec, const AstNode* ast, RE*& x) {
-    DCHECK(ast->kind == AstKind::STR);
-
-    x = nullptr;
-    bool icase = is_icase(spec.opts, ast->str.icase);
-
-    for (const AstChar& a : ast->str.chars) {
-        Range* r;
-        CHECK_RET(char_to_range(spec, a, icase, r));
-        RE* y;
-        CHECK_RET(re_class(spec, ast->loc, r, y));
-        x = re_cat(spec, x, y);
-    }
-
-    x = x ? x : re_nil(spec);
-    return Ret::OK;
-}
-
-Ret re_class(RESpec& spec, const loc_t& loc, const Range* r, RE*& re) {
-    if (!r) {
-        switch (spec.opts->empty_class_policy) {
-        case EmptyClassPolicy::MATCH_EMPTY:
-            spec.msg.warn.empty_class(loc);
-            re = re_nil(spec);
-            return Ret::OK;
-        case EmptyClassPolicy::MATCH_NONE:
-            spec.msg.warn.empty_class(loc);
-            break;
-        case EmptyClassPolicy::ERROR:
-            RET_FAIL(spec.msg.error(loc, "empty character class"));
-        }
-    }
-
-    switch (spec.opts->encoding.type()) {
-    case Enc::Type::UTF16:
-        re = utf16::range(spec, r);
-        break;
-    case Enc::Type::UTF8:
-        re = utf8::range(spec, r);
-        break;
-    case Enc::Type::EBCDIC:
-        re = ebcdic::range(spec, r);
-        break;
-    case Enc::Type::ASCII:
-    case Enc::Type::UTF32:
-    case Enc::Type::UCS2:
-        re = re_sym(spec, r);
-        break;
-    }
-
-    return Ret::OK;
-}
-
-Ret check_misuse_of_named_def(RESpec& spec, const AstNode* ast) {
-    DCHECK(ast->kind == AstKind::REF);
-    if (spec.opts->posix_syntax) {
-        RET_FAIL(spec.msg.error(ast->loc,
-                                "implicit grouping is forbidden with '--posix-captures' option, "
-                                "please wrap '%s' in capturing parenthesis",
-                                ast->ref.name));
-    }
-    return Ret::OK;
-}
-
-Ret check_tags_used_once(RESpec& spec, const Rule& rule, const std::vector<Tag>& tags) {
-    std::set<std::string> names;
-    for (size_t t = rule.ltag; t < rule.htag; ++t) {
-        const char* name = tags[t].name;
-        if (name && !names.insert(name).second) {
-            RET_FAIL(spec.msg.error(rule.semact->loc,
-                                    "tag '%s' is used multiple times in the same rule",
-                                    name));
-        }
-    }
-    return Ret::OK;
-}
-
-bool is_icase(const opt_t* opts, bool icase) {
-    return opts->bCaseInsensitive || icase != opts->bCaseInverted;
-}
+} // anonymous namespace
 
 RESpec::RESpec(const opt_t* opts, Msg& msg)
     : ir_alc(), rangemgr(ir_alc), res(), charset(), tags(), rules(), opts(opts), msg(msg) {}
