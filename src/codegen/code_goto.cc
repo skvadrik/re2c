@@ -440,4 +440,8 @@ bool consume(const State* s) {
     return true;
 }
 
+// C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
+constexpr uint32_t Label::NONE;
+constexpr uint32_t CodeGoCpTable::TABLE_SIZE;
+
 } // namespace re2c

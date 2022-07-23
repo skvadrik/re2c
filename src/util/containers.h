@@ -85,7 +85,7 @@ struct membuf_t {
 // Lookup table with O(1) random access and  O(log(n)) insertion (a vector paired with a map).
 template<typename data_t, typename hash_t = uint32_t>
 struct lookup_t {
-    static constexpr uint32_t NIL = ~0u;
+    enum : uint32_t { NIL = ~0u };
 
   private:
     struct elem_t {

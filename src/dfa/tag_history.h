@@ -16,7 +16,7 @@ using hidx_t = int32_t;
 using tag_path_t = std::vector<tag_info_t>;
 
 static constexpr hidx_t HROOT = 0;
-const tag_info_t NOINFO = {~0u, 0};
+static constexpr tag_info_t NOINFO{~0u, 0};
 static constexpr uint32_t NONFIN = ~0u;
 static constexpr uint32_t USED = NONFIN - 1;
 

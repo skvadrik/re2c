@@ -529,4 +529,11 @@ Ret RESpec::init(const std::vector<AstRule>& ast) {
     return Ret::OK;
 }
 
+// C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
+constexpr size_t Tag::RIGHTMOST;
+constexpr size_t Tag::FICTIVE;
+constexpr size_t Tag::NONE;
+constexpr uint32_t Tag::VARDIST;
+constexpr size_t Rule::NONE;
+
 } // namespace re2c

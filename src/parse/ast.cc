@@ -128,4 +128,7 @@ bool Ast::needs_wrap(const AstNode* a) {
     return false; // unreachable
 }
 
+// C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
+constexpr uint32_t Ast::MANY;
+
 } // namespace re2c

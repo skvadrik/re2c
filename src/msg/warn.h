@@ -44,9 +44,11 @@ class Warn {
     };
 
   private:
-    static constexpr uint32_t SILENT  = 0;
-    static constexpr uint32_t WARNING = 1u << 0;
-    static constexpr uint32_t ERROR   = 1u << 1;
+    enum : uint32_t {
+        SILENT  = 0,
+        WARNING = 1u << 0,
+        ERROR   = 1u << 1
+    };
 
     static const char* names[TYPES];
 

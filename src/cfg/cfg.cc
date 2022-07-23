@@ -250,5 +250,8 @@ cfg_t::~cfg_t() {
     operator delete(bblocks);
 }
 
+// C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
+constexpr uint32_t cfg_context_t::MAX_MARK;
+
 } // namespace re2c
 

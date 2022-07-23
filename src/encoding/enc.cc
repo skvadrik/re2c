@@ -101,4 +101,9 @@ Range* Enc::fullRange(RangeMgr& rm) const {
     return r;
 }
 
+// C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
+constexpr uint32_t Enc::SURR_MIN;
+constexpr uint32_t Enc::SURR_MAX;
+constexpr uint32_t Enc::UNICODE_ERROR;
+
 } // namespace re2c

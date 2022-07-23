@@ -130,4 +130,7 @@ uint64_t rule2key(size_t rule, size_t key, size_t def) {
     UNREACHABLE();
 }
 
+// C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
+constexpr uint32_t Skeleton::DEFTAG;
+
 } // namespace re2c
