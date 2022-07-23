@@ -321,5 +321,8 @@ template determ_context_t<lhistory_t>::determ_context_t(
 template determ_context_t<phistory_t>::determ_context_t(
         Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
 
+// C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
+constexpr uint32_t Tdfa::NIL;
+
 } // namespace re2c
 
