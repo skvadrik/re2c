@@ -6,19 +6,20 @@
 
 namespace re2c {
 
-AstNode* Ast::make(const loc_t& loc, AstKind kind) {
+AstNode* Ast::make(const loc_t& loc, AstKind kind, bool has_caps) {
     AstNode* p = allocator.alloct<AstNode>(1);
     p->kind = kind;
     p->loc = loc;
+    p->has_caps = has_caps;
     return p;
 }
 
 const AstNode* Ast::nil(const loc_t& loc) {
-    return make(loc, AstKind::NIL);
+    return make(loc, AstKind::NIL, false);
 }
 
 const AstNode* Ast::str(const loc_t& loc, bool icase) {
-    AstNode* ast = make(loc, AstKind::STR);
+    AstNode* ast = make(loc, AstKind::STR, false);
     ast->str.chars.init(temp_chars.data(), temp_chars.size(), allocator);
     ast->str.icase = icase;
     temp_chars.clear();
@@ -26,7 +27,7 @@ const AstNode* Ast::str(const loc_t& loc, bool icase) {
 }
 
 const AstNode* Ast::cls(const loc_t& loc, bool negated) {
-    AstNode* ast = make(loc, AstKind::CLS);
+    AstNode* ast = make(loc, AstKind::CLS, false);
     ast->cls.ranges.init(temp_ranges.data(), temp_ranges.size(), allocator);
     ast->cls.negated = negated;
     temp_ranges.clear();
@@ -34,17 +35,17 @@ const AstNode* Ast::cls(const loc_t& loc, bool negated) {
 }
 
 const AstNode* Ast::dot(const loc_t& loc) {
-    return make(loc, AstKind::DOT);
+    return make(loc, AstKind::DOT, false);
 }
 
 const AstNode* Ast::def(const loc_t& loc) {
-    return make(loc, AstKind::DEF);
+    return make(loc, AstKind::DEF, false);
 }
 
 const AstNode* Ast::alt(const AstNode* a1, const AstNode* a2) {
     if (!a1) return a2;
     if (!a2) return a1;
-    AstNode* ast = make(a1->loc, AstKind::ALT);
+    AstNode* ast = make(a1->loc, AstKind::ALT, a1->has_caps || a2->has_caps);
     ast->alt.ast1 = a1;
     ast->alt.ast2 = a2;
     return ast;
@@ -53,15 +54,15 @@ const AstNode* Ast::alt(const AstNode* a1, const AstNode* a2) {
 const AstNode* Ast::cat(const AstNode* a1, const AstNode* a2) {
     if (!a1) return a2;
     if (!a2) return a1;
-    AstNode* ast = make(a1->loc, AstKind::CAT);
+    AstNode* ast = make(a1->loc, AstKind::CAT, a1->has_caps || a2->has_caps);
     ast->cat.ast1 = a1;
     ast->cat.ast2 = a2;
     return ast;
 }
 
 const AstNode* Ast::iter(const AstNode* a, uint32_t n, uint32_t m) {
-    DCHECK(n <= m);
-    AstNode* ast = make(a->loc, AstKind::ITER);
+    CHECK(n <= m);
+    AstNode* ast = make(a->loc, AstKind::ITER, a->has_caps);
     ast->iter.ast = a;
     ast->iter.min = n;
     ast->iter.max = m;
@@ -69,27 +70,27 @@ const AstNode* Ast::iter(const AstNode* a, uint32_t n, uint32_t m) {
 }
 
 const AstNode* Ast::diff(const AstNode* a1, const AstNode* a2) {
-    AstNode* ast = make(a1->loc, AstKind::DIFF);
+    AstNode* ast = make(a1->loc, AstKind::DIFF, a1->has_caps || a2->has_caps);
     ast->cat.ast1 = a1;
     ast->cat.ast2 = a2;
     return ast;
 }
 
 const AstNode* Ast::tag(const loc_t& loc, const char* n, bool h) {
-    AstNode* ast = make(loc, AstKind::TAG);
+    AstNode* ast = make(loc, AstKind::TAG, false);
     ast->tag.name = n;
     ast->tag.history = h;
     return ast;
 }
 
 const AstNode* Ast::cap(const AstNode* a) {
-    AstNode* ast = make(a->loc, AstKind::CAP);
+    AstNode* ast = make(a->loc, AstKind::CAP, true);
     ast->cap = a;
     return ast;
 }
 
 const AstNode* Ast::ref(const AstNode* a, const char* n) {
-    AstNode* ast = make(a->loc, AstKind::REF);
+    AstNode* ast = make(a->loc, AstKind::REF, a->has_caps);
     ast->ref.ast = a;
     ast->ref.name = n;
     return ast;

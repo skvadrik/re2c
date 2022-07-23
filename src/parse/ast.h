@@ -88,6 +88,7 @@ struct AstNode {
         } ref;
     };
     loc_t loc;
+    bool has_caps; // whether this AST has nested capturing groups
 };
 
 struct AstRule {
@@ -104,7 +105,7 @@ class Ast {
     // (which happens after parsing and processing the whole translation unit, but before codegen).
     AstAllocator allocator;
 
-    AstNode* make(const loc_t& loc, AstKind lind);
+    AstNode* make(const loc_t& loc, AstKind kind, bool has_caps);
 
   public:
     // Temporary buffers for constructing character strings and classes in lexer/parser. Generally
