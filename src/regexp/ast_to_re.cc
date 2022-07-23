@@ -62,30 +62,6 @@ struct DfsAstToRe {
 
 static Ret ast_to_range(RESpec& spec, const AstNode* ast, Range*& r);
 
-LOCAL_NODISCARD(bool has_tags(const AstNode* ast)) {
-    switch (ast->kind) {
-    case AstKind::NIL:
-    case AstKind::STR:
-    case AstKind::CLS:
-    case AstKind::DOT:
-    case AstKind::DEF:
-    case AstKind::DIFF:
-        return false;
-    case AstKind::TAG:
-    case AstKind::CAP:
-        return true;
-    case AstKind::ALT:
-        return has_tags(ast->alt.ast1) || has_tags(ast->alt.ast2);
-    case AstKind::CAT:
-        return has_tags(ast->cat.ast1) || has_tags(ast->cat.ast2);
-    case AstKind::REF:
-        return has_tags(ast->ref.ast);
-    case AstKind::ITER:
-        return has_tags(ast->iter.ast);
-    }
-    return false; // unreachable
-}
-
 LOCAL_NODISCARD(RE* fictive_tags(RESpec& spec, int32_t height)) {
     std::vector<Tag>& tags = spec.tags;
 
@@ -138,7 +114,7 @@ LOCAL_NODISCARD(RE* structural_tags(
     } else if (spec.opts->autotags) {
         // Full parsing: automatically add tags as if this sub-RE was a capture.
         return capture_tags(spec, x, false, &x.ast, pncap);
-    } else if (spec.opts->posix_semantics && has_tags(x.ast)) {
+    } else if (spec.opts->posix_semantics && x.ast->has_caps) {
         // POSIX submatch extraction: add fictive structural tags.
         // See note [POSIX subexpression hierarchy].
         return fictive_tags(spec, x.height);
