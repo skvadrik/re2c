@@ -53,14 +53,22 @@ struct DfsAstToRe {
     RE *re1;            // first sub-RE under construction
     RE *re2;            // second sub-RE under construction (used for alternative and catenation)
     int32_t height;     // height of the current sub-RE (used in POSIX disambiguation)
-    bool in_iter;       // if this sub-RE is under repetition
     uint8_t succ;       // index of the current successor node in AST
+    bool in_iter;       // if this AST is under repetition
 
     DfsAstToRe(const AstNode* ast, int32_t height, bool in_iter)
-            : ast(ast), re1(nullptr), re2(nullptr), height(height), in_iter(in_iter), succ(0) {}
+        : ast(ast), re1(nullptr), re2(nullptr), height(height), succ(0), in_iter(in_iter) {}
 };
 
-static Ret ast_to_range(RESpec& spec, const AstNode* ast, Range*& r);
+// On-stack information for iterative depth-first conversion of character difference AST to Range.
+struct DfsDiffToRange {
+    const AstNode* ast; // current subtree of the AST
+    Range* range;       // range under construction
+    uint8_t succ;       // index of the current successor node in AST
+
+    DfsDiffToRange(const AstNode* ast)
+        : ast(ast), range(nullptr), succ(0) {}
+};
 
 LOCAL_NODISCARD(RE* fictive_tags(RESpec& spec, int32_t height)) {
     std::vector<Tag>& tags = spec.tags;
@@ -167,7 +175,7 @@ bool is_icase(const opt_t* opts, bool icase) {
     return opts->bCaseInsensitive || icase != opts->bCaseInverted;
 }
 
-LOCAL_NODISCARD(Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, Range*& r)) {
+LOCAL_NODISCARD(Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, Range** prange)) {
     RangeMgr& rm = spec.rangemgr;
     uint32_t c = chr.chr;
 
@@ -175,15 +183,15 @@ LOCAL_NODISCARD(Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, 
         RET_FAIL(spec.msg.error(chr.loc, "bad code point: '0x%X'", c));
     }
 
-    r = icase && is_alpha(c)
+    *prange = icase && is_alpha(c)
            ? rm.add(rm.sym(to_lower_unsafe(c)), rm.sym(to_upper_unsafe(c))) : rm.sym(c);
     return Ret::OK;
 }
 
-LOCAL_NODISCARD(Ret cls_to_range(RESpec& spec, const AstNode* ast, Range*& r)) {
+LOCAL_NODISCARD(Ret cls_to_range(RESpec& spec, const AstNode* ast, Range** prange)) {
     DCHECK(ast->kind == AstKind::CLS);
     RangeMgr& rm = spec.rangemgr;
-    r = nullptr;
+    Range *r = nullptr;
 
     for (const AstRange& a : ast->cls.ranges) {
         Range* s = spec.opts->encoding.validateRange(rm, a.lower, a.upper);
@@ -198,10 +206,11 @@ LOCAL_NODISCARD(Ret cls_to_range(RESpec& spec, const AstNode* ast, Range*& r)) {
         r = rm.sub(spec.opts->encoding.fullRange(rm), r);
     }
 
+    *prange = r;
     return Ret::OK;
 }
 
-LOCAL_NODISCARD(Ret dot_to_range(RESpec& spec, const AstNode* ast, Range*& r)) {
+LOCAL_NODISCARD(Ret dot_to_range(RESpec& spec, const AstNode* ast, Range** prange)) {
     DCHECK(ast->kind == AstKind::DOT);
     RangeMgr& rm = spec.rangemgr;
     uint32_t c = '\n';
@@ -210,69 +219,16 @@ LOCAL_NODISCARD(Ret dot_to_range(RESpec& spec, const AstNode* ast, Range*& r)) {
         RET_FAIL(spec.msg.error(ast->loc, "bad code point: '0x%X'", c));
     }
 
-    r = rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
+    *prange = rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
     return Ret::OK;
 }
 
-LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec, const AstNode* ast, Range*& r)) {
-    DCHECK(ast->kind == AstKind::DIFF);
-
-    Range* x, *y;
-    CHECK_RET(ast_to_range(spec, ast->diff.ast1, x));
-    CHECK_RET(ast_to_range(spec, ast->diff.ast2, y));
-    r = x && y ? spec.rangemgr.sub(x, y) : nullptr;
-
-    return Ret::OK;
-}
-
-Ret ast_to_range(RESpec& spec, const AstNode* ast, Range*& r) {
-    switch (ast->kind) {
-    case AstKind::NIL:
-    case AstKind::DEF:
-    case AstKind::TAG:
-    case AstKind::CAT:
-    case AstKind::ITER:
-        break;
-
-    case AstKind::CAP:
-        if (spec.opts->posix_syntax) break;
-        return ast_to_range(spec, ast->cap, r);
-
-    case AstKind::REF:
-        CHECK_RET(check_misuse_of_named_def(spec, ast));
-        return ast_to_range(spec, ast->ref.ast, r);
-
-    case AstKind::CLS:
-        return cls_to_range(spec, ast, r);
-
-    case AstKind::DOT:
-        return dot_to_range(spec, ast, r);
-
-    case AstKind::STR:
-        if (ast->str.chars.size() != 1) break;
-        return char_to_range(spec, ast->str.chars.front(), is_icase(spec.opts, ast->str.icase), r);
-
-    case AstKind::DIFF:
-        return diff_to_range(spec, ast, r);
-
-    case AstKind::ALT: {
-        Range* x, *y;
-        CHECK_RET(ast_to_range(spec, ast->diff.ast1, x));
-        CHECK_RET(ast_to_range(spec, ast->diff.ast2, y));
-        r = x && y ? spec.rangemgr.add(x, y) : nullptr;
-
-        return Ret::OK;
-    }}
-
-    RET_FAIL(spec.msg.error(ast->loc, "can only difference char sets"));
-}
-
-LOCAL_NODISCARD(Ret re_class(RESpec& spec, const loc_t& loc, const Range* r, RE*& re)) {
-    if (!r) {
+LOCAL_NODISCARD(Ret re_class(RESpec& spec, const loc_t& loc, const Range* range, RE** pre)) {
+    if (!range) {
         switch (spec.opts->empty_class_policy) {
         case EmptyClassPolicy::MATCH_EMPTY:
             spec.msg.warn.empty_class(loc);
-            re = re_nil(spec);
+            *pre = re_nil(spec);
             return Ret::OK;
         case EmptyClassPolicy::MATCH_NONE:
             spec.msg.warn.empty_class(loc);
@@ -284,50 +240,138 @@ LOCAL_NODISCARD(Ret re_class(RESpec& spec, const loc_t& loc, const Range* r, RE*
 
     switch (spec.opts->encoding.type()) {
     case Enc::Type::UTF16:
-        re = utf16::range(spec, r);
+        *pre = utf16::range(spec, range);
         break;
     case Enc::Type::UTF8:
-        re = utf8::range(spec, r);
+        *pre = utf8::range(spec, range);
         break;
     case Enc::Type::EBCDIC:
-        re = ebcdic::range(spec, r);
+        *pre = ebcdic::range(spec, range);
         break;
     case Enc::Type::ASCII:
     case Enc::Type::UTF32:
     case Enc::Type::UCS2:
-        re = re_sym(spec, r);
+        *pre = re_sym(spec, range);
         break;
     }
 
     return Ret::OK;
 }
 
-LOCAL_NODISCARD(Ret re_string(RESpec& spec, const AstNode* ast, RE*& x)) {
+LOCAL_NODISCARD(Ret re_string(RESpec& spec, const AstNode* ast, RE** pre)) {
     DCHECK(ast->kind == AstKind::STR);
 
-    x = nullptr;
+    RE* x = nullptr;
     bool icase = is_icase(spec.opts, ast->str.icase);
 
     for (const AstChar& a : ast->str.chars) {
         Range* r;
-        CHECK_RET(char_to_range(spec, a, icase, r));
+        CHECK_RET(char_to_range(spec, a, icase, &r));
         RE* y;
-        CHECK_RET(re_class(spec, ast->loc, r, y));
+        CHECK_RET(re_class(spec, ast->loc, r, &y));
         x = re_cat(spec, x, y);
     }
 
-    x = x ? x : re_nil(spec);
+    *pre = x ? x : re_nil(spec);
+    return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec,
+                                  std::vector<DfsDiffToRange>& stack,
+                                  const AstNode* ast0,
+                                  Range** prange)) {
+    DCHECK(stack.empty());
+    stack.emplace_back(ast0);
+
+    Range *range = nullptr;
+
+    while (!stack.empty()) {
+        // Ensure that the reference to stack top won't be accidentally invalidated on push.
+        if (stack.size() == stack.capacity()) stack.reserve(stack.size() * 2);
+        DfsDiffToRange& x = stack.back();
+
+        const AstNode* ast = x.ast;
+        switch (ast->kind) {
+        case AstKind::NIL:
+        case AstKind::DEF:
+        case AstKind::TAG:
+        case AstKind::CAT:
+        case AstKind::ITER:
+            goto error;
+
+        case AstKind::CLS:
+            CHECK_RET(cls_to_range(spec, ast, &range));
+            stack.pop_back();
+            break;
+
+        case AstKind::DOT:
+            CHECK_RET(dot_to_range(spec, ast, &range));
+            stack.pop_back();
+            break;
+
+        case AstKind::STR:
+            if (ast->str.chars.size() != 1) goto error;
+            CHECK_RET(char_to_range(
+                    spec, ast->str.chars.front(), is_icase(spec.opts, ast->str.icase), &range));
+            stack.pop_back();
+            break;
+
+        case AstKind::CAP:
+            if (spec.opts->posix_syntax) goto error;
+            x.ast = ast->cap; // replace on stack
+            break;
+
+        case AstKind::REF:
+            CHECK_RET(check_misuse_of_named_def(spec, ast));
+            x.ast = ast->ref.ast; // replace on stack
+            break;
+
+        case AstKind::DIFF:
+            if (x.succ == 0) { // 1st visit: push 1st successor
+                ++x.succ;
+                stack.emplace_back(ast->diff.ast1);
+            } else if (x.succ == 1) { // 2nd visit: push 2nd successor
+                ++x.succ;
+                x.range = range;
+                stack.emplace_back(ast->diff.ast2);
+            } else { // 3rd visit: return
+                range = spec.rangemgr.sub(x.range, range); // can handle nullptr args
+                stack.pop_back();
+            }
+            break;
+
+        case AstKind::ALT:
+            if (x.succ == 0) { // 1st visit: push 1st successor
+                ++x.succ;
+                stack.emplace_back(ast->alt.ast1);
+            } else if (x.succ == 1) { // 2nd visit: push 2nd successor
+                ++x.succ;
+                x.range = range;
+                stack.emplace_back(ast->alt.ast2);
+            } else { // 3rd visit: return
+                range = spec.rangemgr.add(x.range, range); // can handle nullptr args
+                stack.pop_back();
+            }
+            break;
+
+error:
+            RET_FAIL(spec.msg.error(ast->loc, "can only difference char sets"));
+        }
+    }
+
+    *prange = range;
     return Ret::OK;
 }
 
 LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
                               std::vector<DfsAstToRe>& stack,
+                              std::vector<DfsDiffToRange>& stack_diff,
                               const AstNode* ast0,
                               size_t* pncap,
                               RE** presult)) {
     std::vector<Tag>& tags = spec.tags;
     const opt_t* opts = spec.opts;
-    Range* r;
+    Range* range;
     RE* re;
 
     DCHECK(stack.empty());
@@ -349,31 +393,31 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::STR:
-            CHECK_RET(re_string(spec, ast, re));
+            CHECK_RET(re_string(spec, ast, &re));
             stack.pop_back();
             break;
 
         case AstKind::CLS:
-            CHECK_RET(cls_to_range(spec, ast, r));
-            CHECK_RET(re_class(spec, ast->loc, r, re));
+            CHECK_RET(cls_to_range(spec, ast, &range));
+            CHECK_RET(re_class(spec, ast->loc, range, &re));
             stack.pop_back();
             break;
 
         case AstKind::DOT:
-            CHECK_RET(dot_to_range(spec, ast, r));
-            CHECK_RET(re_class(spec, ast->loc, r, re));
+            CHECK_RET(dot_to_range(spec, ast, &range));
+            CHECK_RET(re_class(spec, ast->loc, range, &re));
             stack.pop_back();
             break;
 
         case AstKind::DEF: // see note [default regexp]
-            r = spec.rangemgr.ran(0, opts->encoding.nCodeUnits());
-            re = re_sym(spec, r);
+            range = spec.rangemgr.ran(0, opts->encoding.nCodeUnits());
+            re = re_sym(spec, range);
             stack.pop_back();
             break;
 
         case AstKind::DIFF:
-            CHECK_RET(diff_to_range(spec, ast, r));
-            CHECK_RET(re_class(spec, ast->loc, r, re));
+            CHECK_RET(diff_to_range(spec, stack_diff, ast, &range));
+            CHECK_RET(re_class(spec, ast->loc, range, &re));
             stack.pop_back();
             break;
 
@@ -394,7 +438,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             if (!opts->posix_syntax) { // ordinary group, replace with subexpr on stack
                 x.ast = ast->cap;
             } else { // POSIX capturing group
-                if (x.succ == 0) { // 1st visit: push subexpr
+                if (x.succ == 0) { // 1st visit: push successor
                     ++x.succ;
                     x.re1 = capture_tags(spec, x, false, &ast, pncap);
                     stack.emplace_back(ast,  x.height, x.in_iter);
@@ -411,11 +455,11 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::ALT:
-            if (x.succ == 0) { // 1st visit: push first subexpr
+            if (x.succ == 0) { // 1st visit: push first successor
                 ++x.succ;
                 x.re1 = structural_tags(spec, x, ast->alt.ast1, pncap);
                 stack.emplace_back(ast->alt.ast1, x.height, x.in_iter);
-            } else if (x.succ == 1) { // 2nd visit: push second subexpr
+            } else if (x.succ == 1) { // 2nd visit: push second successor
                 ++x.succ;
                 x.re1 = insert_between_tags(spec, x.re1, re);
                 x.re2 = structural_tags(spec, x, ast->alt.ast2, pncap);
@@ -428,11 +472,11 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::CAT:
-            if (x.succ == 0) { // 1st visit: push first subexpr
+            if (x.succ == 0) { // 1st visit: push first successor
                 ++x.succ;
                 x.re1 = structural_tags(spec, x, ast->cat.ast1, pncap);
                 stack.emplace_back(ast->cat.ast1, x.height, x.in_iter);
-            } else if (x.succ == 1) { // 2nd visit: push second subexpr
+            } else if (x.succ == 1) { // 2nd visit: push second successor
                 ++x.succ;
                 x.re1 = insert_between_tags(spec, x.re1, re);
                 x.re2 = structural_tags(spec, x, ast->cat.ast2, pncap);
@@ -446,7 +490,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
 
         case AstKind::ITER:
             DCHECK(ast->iter.min <= ast->iter.max);
-            if (x.succ == 0) { // 1st visit: push subexpr
+            if (x.succ == 0) { // 1st visit: push successor
                 ++x.succ;
                 const uint32_t m = ast->iter.max;
                 ast = ast->iter.ast;
@@ -487,10 +531,11 @@ RESpec::RESpec(const opt_t* opts, Msg& msg)
 Ret RESpec::init(const std::vector<AstRule>& ast) {
     rules.resize(ast.size());
     std::vector<DfsAstToRe> stack;
+    std::vector<DfsDiffToRange> stack_diff;
     for (size_t i = 0; i < ast.size(); ++i) {
         size_t ltag = tags.size(), ncap = 0;
         RE* re;
-        CHECK_RET(ast_to_re(*this, stack, ast[i].ast, &ncap, &re));
+        CHECK_RET(ast_to_re(*this, stack, stack_diff, ast[i].ast, &ncap, &re));
         res.push_back(re);
 
         // init rule
