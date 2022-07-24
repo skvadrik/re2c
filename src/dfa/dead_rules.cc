@@ -13,10 +13,6 @@
 #include "src/util/check.h"
 #include "src/util/forbid_copy.h"
 
-namespace re2c {
-
-struct tcmd_t;
-
 // note [unreachable rules]
 //
 // TDFA may contain useless final states. Such states may appear as a result of:
@@ -51,6 +47,11 @@ struct tcmd_t;
 // different points in time (both before and after certain transformations on DFA). Fortunately,
 // fallback states are not affected by these transformations, so we can calculate them here and save
 // for future use.
+
+namespace re2c {
+namespace {
+
+struct tcmd_t;
 
 // reversed DFA
 struct RevDfa {
@@ -108,30 +109,49 @@ struct RevDfa {
     FORBID_COPY(RevDfa);
 };
 
-static void backprop(const RevDfa& rdfa, bool* live, size_t rule, size_t state) {
-    // "none-rule" is unreachable from final states: be careful to mask it before propagating
-    const RevDfa::state_t& s = rdfa.states[state];
-    if (rule == rdfa.nrules) {
-        rule = s.rule;
-    }
+struct DfsBackprop {
+    size_t state;
+    size_t rule;
+    const RevDfa::arc_t* arc;
+};
 
-    // If the rule has already been set, than either it's a loop, or another branch of backward
-    // propagation has already been here, in both cases we should stop: there's nothing new to
-    // propagate.
-    bool& l = live[rule * rdfa.nstates + state];
-    if (l) return;
-    l = true;
-
-    for (const RevDfa::arc_t* a = s.arcs; a; a = a->next) {
-        backprop(rdfa, live, rule, a->dest);
-    }
-}
-
-static void liveness_analyses(const RevDfa& rdfa, bool* live) {
+static void liveness_analysis(const RevDfa& rdfa, bool* live) {
+    std::vector<DfsBackprop> stack;
     for (size_t i = 0; i < rdfa.nstates; ++i) {
         const RevDfa::state_t& s = rdfa.states[i];
-        if (s.fallthru) {
-            backprop(rdfa, live, s.rule, i);
+        if (!s.fallthru) continue;
+
+        // Backward-propagate liveness from fallthrough state, following reversed DFA arcs.
+        stack.push_back({i, s.rule, nullptr});
+        while (!stack.empty()) {
+            // Ensure that the reference to stack top won't be accidentally invalidated on push.
+            if (stack.size() == stack.capacity()) stack.reserve(stack.size() * 2);
+            DfsBackprop& x = stack.back();
+
+            const RevDfa::state_t& t = rdfa.states[x.state];
+
+            if (x.arc == nullptr) {
+                // "none-rule" is unreachable from final states: mask it before propagating.
+                if (x.rule == rdfa.nrules) {
+                    x.rule = t.rule;
+                }
+                // If the rule has already been set, than either it's a loop, or another branch of
+                // backward propagation has already been here, in both cases we should stop: there's
+                // nothing new to propagate.
+                bool& l = live[x.rule * rdfa.nstates + x.state];
+                if (!l) {
+                    l = true;
+                    x.arc = t.arcs;
+                }
+            } else {
+                x.arc = x.arc->next;
+            }
+
+            if (x.arc == nullptr) {
+                stack.pop_back(); // all arcs followed, this state is finished
+            } else {
+                stack.push_back({x.arc->dest, x.rule, nullptr}); // follow next arc
+            }
         }
     }
 }
@@ -282,6 +302,8 @@ static void remove_dead_final_states_with_eof_rule(Tdfa& dfa) {
     }
 }
 
+} // anonymous namespace
+
 void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Msg& msg) {
     if (opts->eof != NOEOF) {
         // See note [end-of-input rule].
@@ -295,7 +317,7 @@ void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Ms
         bool* fallthru = live + nl - ns;
         memset(live, 0, nl * sizeof(bool));
 
-        liveness_analyses(rdfa, live);
+        liveness_analysis(rdfa, live);
 
         warn_dead_rules(dfa, cond, live, msg);
         remove_dead_final_states(dfa, fallthru);
