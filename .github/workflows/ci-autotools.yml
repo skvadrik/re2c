@@ -129,7 +129,7 @@ jobs:
 
       - name: Run Main Test Suite
         working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
-        run: make check -j$(nproc)
+        run: bash -c "ulimit -s 256; make check -j$(nproc)"
 
       - name: Run Skeleton Tests
         working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}

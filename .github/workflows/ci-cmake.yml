@@ -153,7 +153,7 @@ jobs:
           cmake --build --preset=${{ matrix.name }}-full -j$(nproc)
 
       - name: Run Main Test Suite
-        run: cmake --build --preset=${{ matrix.name }}-full --target tests -j$(nproc)
+        run: bash -c "ulimit -s 256; cmake --build --preset=${{ matrix.name }}-full --target tests -j$(nproc)"
 
       - name: Run Skeleton Tests
         if: "contains(matrix.name, 'skeleton')"
