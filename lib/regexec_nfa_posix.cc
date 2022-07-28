@@ -53,12 +53,7 @@ int regexec_nfa_posix(const regex_t* preg,
 
 void closure_posix(psimctx_t& ctx) {
     ctx.history.init();
-
-    if (ctx.flags & REG_GTOP) {
-        closure_posix_gtop(ctx);
-    } else {
-        closure_posix_gor1(ctx);
-    }
+    closure_posix_gor1(ctx);
 }
 
 void make_one_step(psimctx_t& ctx, uint32_t sym) {

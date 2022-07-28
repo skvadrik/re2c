@@ -94,10 +94,6 @@ struct kernel_buffers_t {
     kernel_buffers_t();
 };
 
-struct cmp_gtop_t {
-    inline bool operator() (const TnfaState* x, const TnfaState* y) const;
-};
-
 struct histleaf_t {
     uint32_t coreid;
     uint32_t origin;
@@ -106,7 +102,6 @@ struct histleaf_t {
 };
 
 using kernels_t = lookup_t<const kernel_t*>;
-using gtop_heap_t = std::priority_queue<TnfaState*, std::vector<TnfaState*>, cmp_gtop_t>;
 
 template<typename history_type_t>
 struct determ_context_t {
@@ -157,9 +152,6 @@ struct determ_context_t {
     confset_t state;
     std::vector<TnfaState*> gor1_topsort; // stack used in GOR1 (POSIX closure)
     std::vector<TnfaState*> gor1_linear;  // stack used in GOR1 (POSIX closure)
-    std::vector<TnfaState*> gtop_buffer;  // buffer used for heap in GTOP (POSIX closure)
-    cmp_gtop_t gtop_cmp;                  // heap comparator used in GTOP (POSIX closure)
-    gtop_heap_t gtop_heap;                // heap used in GTOP (POSIX closure)
 
     // precedence table and auxilary data for POSIX disambiguation
     int32_t* newprectbl;
@@ -190,10 +182,6 @@ template<typename ctx_t, bool b> bool do_find_state(ctx_t& ctx);
 template<typename ctx_t> void reach_on_symbol(ctx_t& ctx, uint32_t sym);
 template<typename ctx_t> uint32_t init_tag_versions(ctx_t& ctx);
 TnfaState* transition(TnfaState*, uint32_t);
-
-inline bool cmp_gtop_t::operator() (const TnfaState* x, const TnfaState* y) const {
-    return x->topord < y->topord;
-}
 
 } // namespace re2c
 

@@ -78,8 +78,7 @@ int main(int argc, char** argv)
     const std::vector<alg_t> algs = {
         {"LG",        ENGINE_RE2C, REG_NFA | REG_LEFTMOST},
         {"lazy-LG",   ENGINE_RE2C, REG_NFA | REG_LEFTMOST | REG_TRIE},
-        {"OS",        ENGINE_RE2C, REG_NFA | REG_GTOP},
-        {"GTOP-OS",   ENGINE_RE2C, REG_NFA},
+        {"OS",        ENGINE_RE2C, REG_NFA},
         {"simple-OS", ENGINE_RE2C, REG_NFA | REG_SLOWPREC},
         {"lazy-OS",   ENGINE_RE2C, REG_NFA | REG_TRIE},
 #ifdef HAVE_RE2_RE2_H

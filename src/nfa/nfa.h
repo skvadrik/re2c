@@ -32,7 +32,7 @@ struct TnfaState {
         const Range* ran; // character range (only for RAN states)
         tag_info_t tag;   // tag information (number and sign, only for TAG states)
     };
-    uint32_t clos;        // GOR1/GTOP: closure item for this stack
+    uint32_t clos;        // GOR1: closure item for this stack
     GorPass status  : 2;  // GOR1: status (values 0, 1, 2)
     uint32_t arcidx : 2;  // GOR1: index of the next transtion (maximum out-dergee is 2)
     uint32_t active : 1;  // GOR1: if the state is on stack (boolean)

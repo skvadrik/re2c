@@ -18,28 +18,16 @@ namespace re2c {
 
 template<typename ctx_t> void closure_cleanup(TnfaState* q);
 template<typename ctx_t> static void closure_posix_gor1(ctx_t&);
-template<typename ctx_t> static void closure_posix_gtop(ctx_t&);
 
 // we *do* want these to be inlined
 template<typename ctx_t> static inline void init_gor1(ctx_t& ctx);
 template<typename ctx_t> static inline bool scan(ctx_t& ctx, TnfaState* q, bool all);
 template<typename ctx_t> static inline bool relax_gor1(ctx_t&, const typename ctx_t::conf_t&);
-template<typename ctx_t> static inline void relax_gtop(ctx_t&, const typename ctx_t::conf_t&);
 
 inline void closure_posix(pdetctx_t& ctx) {
     DRESET_CLSTATS(ctx);
-
     ctx.history.detach();
-
-    switch (ctx.dc_opts->posix_closure) {
-    case PosixClosure::GOR1:
-        closure_posix_gor1(ctx);
-        break;
-    case PosixClosure::GTOP:
-        closure_posix_gtop(ctx);
-        break;
-    }
-
+    closure_posix_gor1(ctx);
     DDUMP_CLSTATS(ctx);
 }
 
@@ -186,80 +174,6 @@ bool relax_gor1(ctx_t& ctx, const typename ctx_t::conf_t& x) {
     } else {
         q->active = 1;
         return false;
-    }
-}
-
-// note [GTOP SSSP algorithm]
-//
-// Global Topsort Single Source Shortest Path algorithm.
-//
-// It is well known that SSSP can be solved in linear time on DAGs (directed acyclic graphs) by
-// exploring graph nodes in topological order. In our case TNFA is not a DAG (it may have cycles),
-// but it is possible to compute fake topologcal order by ignoring back edges.
-//
-// The algorithm works by having a priority queue of nodes, where priorities are indices of nodes in
-// fake topological ordering. At each step, the node with the minimal priority is popped from queue
-// and explored. All nodes reachable from it on admissible arcs are enqueued, unless they are
-// already in the queue.
-//
-// The resulting algorithm is of course not optimal: it can get stuck on graphs with loops, because
-// it will give priority to some of the loop nodes compared to others for no good reason. However
-// the algorithm is simple and optimal for DAGs, therefore we keep it.
-
-template<typename ctx_t>
-void closure_posix_gtop(ctx_t& ctx) {
-    const typename ctx_t::confset_t& reach = ctx.reach;
-    typename ctx_t::confset_t& state = ctx.state;
-    gtop_heap_t& heap = ctx.gtop_heap;
-
-    state.clear();
-    for (const typename ctx_t::conf_t& conf : reach) {
-        relax_gtop(ctx, conf);
-    }
-
-    for (; !heap.empty(); ) {
-        TnfaState* q = heap.top();
-        heap.pop();
-        q->active = 0;
-        DINCCOUNT_CLSCANS(ctx);
-
-        using conf_t = typename ctx_t::conf_t;
-        const conf_t x = ctx.state[q->clos];
-
-        switch (q->kind) {
-        case TnfaState::Kind::ALT:
-            relax_gtop(ctx, conf_t(x, q->out1));
-            relax_gtop(ctx, conf_t(x, q->out2));
-            break;
-        case TnfaState::Kind::TAG:
-            relax_gtop(ctx, conf_t(x, q->out1, ctx.history.link(ctx, x)));
-            break;
-        case TnfaState::Kind::RAN:
-        case TnfaState::Kind::FIN:
-            break;
-        }
-    }
-}
-
-template<typename ctx_t>
-void relax_gtop(ctx_t& ctx, const typename ctx_t::conf_t& c) {
-    typename ctx_t::confset_t& state = ctx.state;
-    TnfaState* q = c.state;
-    const uint32_t idx = q->clos;
-    int32_t p1, p2;
-
-    if (idx == NOCLOS) {
-        q->clos = static_cast<uint32_t>(state.size());
-        state.push_back(c);
-    } else if (q->indeg < 2 || ctx_t::history_t::precedence(ctx, c, state[idx], p1, p2) < 0) {
-        state[idx] = c;
-    } else {
-        return;
-    }
-
-    if (!q->active) {
-        q->active = 1;
-        ctx.gtop_heap.push(q);
     }
 }
 

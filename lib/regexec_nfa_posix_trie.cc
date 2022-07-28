@@ -72,11 +72,7 @@ int regexec_nfa_posix_trie(
 }
 
 void closure_posix(pzsimctx_t& ctx) {
-    if (ctx.flags & REG_GTOP) {
-        closure_posix_gtop(ctx);
-    } else {
-        closure_posix_gor1(ctx);
-    }
+    closure_posix_gor1(ctx);
 }
 
 void make_step(pzsimctx_t& ctx, uint32_t sym) {

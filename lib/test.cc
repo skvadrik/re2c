@@ -1318,11 +1318,7 @@ int main() {
     e |= test_all_leftmost(REG_LEFTMOST | REG_SUBHIST | REG_MULTIPASS);
 
     e |= test_all_posix(REG_NFA);
-    e |= test_all_posix(REG_NFA | REG_GTOP);
-
     e |= test_all_posix(REG_NFA | REG_TRIE);
-    e |= test_all_posix(REG_NFA | REG_TRIE | REG_GTOP);
-
     e |= test_all_posix(REG_NFA | REG_SLOWPREC);
 
     e |= test_all_leftmost(REG_NFA | REG_LEFTMOST);

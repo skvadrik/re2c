@@ -189,13 +189,13 @@ opt_long: /*!local:re2c
 
     // internals
     "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_dfa_minimization); }
-    "posix-closure"         end { NEXT_ARG("--posix-closure",    opt_posix_closure); }
     "posix-prectable"       end { NEXT_ARG("--posix-prectable",  opt_posix_prectable); }
     "fixed-tags"            end { NEXT_ARG("--fixed-tags",       opt_fixed_tags); }
     "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
 
     // removed
     "no-lookahead"          end { RET_FAIL(error("TDFA(0) algorithm was deprecated and removed")); }
+    "posix-closure"         end { RET_FAIL(error("option --posix-closure was removed")); }
     "stadfa"                end { RET_FAIL(error("staDFA algorithm was deprecated and removed")); }
 
     // debug options
@@ -274,12 +274,6 @@ opt_dfa_minimization: /*!local:re2c
     * { ERRARG("--dfa-minimization", "table | moore", *argv); }
     "table" end { globopts.dfa_minimization = Minimization::TABLE; goto opt; }
     "moore" end { globopts.dfa_minimization = Minimization::MOORE; goto opt; }
-*/
-
-opt_posix_closure: /*!local:re2c
-    * { ERRARG("--posix-closure", "gor1 | gtop", *argv); }
-    "gor1" end { globopts.posix_closure = PosixClosure::GOR1; goto opt; }
-    "gtop" end { globopts.posix_closure = PosixClosure::GTOP; goto opt; }
 */
 
 opt_posix_prectable: /*!local:re2c

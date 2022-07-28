@@ -62,7 +62,6 @@ class Scanner;
     CONSTOPT (bool, iFlag, false) \
     /* internals */ \
     CONSTOPT (Minimization, dfa_minimization, Minimization::MOORE) \
-    CONSTOPT (PosixClosure, posix_closure, PosixClosure::GOR1) \
     CONSTOPT (PosixPrecedenceTable, posix_prectable, PosixPrecedenceTable::COMPLEX) \
     CONSTOPT (FixedTags, fixed_tags, FixedTags::ALL) \
     CONSTOPT (bool, optimize_tags, true) \

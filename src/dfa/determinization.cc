@@ -116,8 +116,7 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     reach.clear();
 
     // Add configurations in reverse order: leftmost greedy closure uses the resulting array as a
-    // stack, and POSIX closure doesn't care (GOR1 pre-sorts configurations, and GTOP uses a
-    // priority queue).
+    // stack, and POSIX closure doesn't care (GOR1 pre-sorts configurations).
     for (uint32_t i = static_cast<uint32_t>(kernel->size); i --> 0; ) {
         TnfaState* s = transition(kernel->state[i], symbol);
         if (s) {
@@ -261,9 +260,6 @@ determ_context_t<history_t>::determ_context_t(Tnfa&& nfa,
       state(),
       gor1_topsort(),
       gor1_linear(),
-      gtop_buffer(),
-      gtop_cmp(),
-      gtop_heap(gtop_cmp, gtop_buffer),
       newprectbl(nullptr),
       oldprectbl(nullptr),
       oldprecdim(0),
@@ -295,12 +291,8 @@ determ_context_t<history_t>::determ_context_t(Tnfa&& nfa,
         worklist.reserve(nstates);
     }
 
-    if (opts->posix_closure == PosixClosure::GTOP) {
-        gtop_buffer.reserve(nstates);
-    } else {
-        gor1_topsort.reserve(nstates);
-        gor1_linear.reserve(nstates);
-    }
+    gor1_topsort.reserve(nstates);
+    gor1_linear.reserve(nstates);
 }
 
 template<typename history_t>

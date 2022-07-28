@@ -85,9 +85,6 @@ struct simctx_t {
     confset_t state;
     std::vector<TnfaState*> gor1_topsort;
     std::vector<TnfaState*> gor1_linear;
-    std::vector<TnfaState*> gtop_heap_storage;
-    cmp_gtop_t gtop_cmp;
-    gtop_heap_t gtop_heap;
     closure_stats_t dc_clstats;
 
     simctx_t(const Tnfa& nfa, size_t re_nsub, int flags);
@@ -182,9 +179,6 @@ simctx_t<history_t>::simctx_t(const Tnfa& nfa, size_t re_nsub, int flags)
       state(),
       gor1_topsort(),
       gor1_linear(),
-      gtop_heap_storage(),
-      gtop_cmp(),
-      gtop_heap(gtop_cmp, gtop_heap_storage),
       dc_clstats() {
     const size_t
     ntags = nfa.tags.size(),
@@ -211,12 +205,8 @@ simctx_t<history_t>::simctx_t(const Tnfa& nfa, size_t re_nsub, int flags)
         worklist.reserve(nstates);
     }
 
-    if (flags & REG_GTOP) {
-        gtop_heap_storage.reserve(nstates);
-    } else {
-        gor1_topsort.reserve(nstates);
-        gor1_linear.reserve(nstates);
-    }
+    gor1_topsort.reserve(nstates);
+    gor1_linear.reserve(nstates);
 }
 
 template<typename history_t>
@@ -247,7 +237,6 @@ void init(simctx_t<history_t>& ctx, const char* string) {
     DCHECK(ctx.worklist.empty());
     DCHECK(ctx.gor1_topsort.empty());
     DCHECK(ctx.gor1_linear.empty());
-    DCHECK(ctx.gtop_heap.empty());
 }
 
 static inline regoff_t* offs_addr(regmatch_t pmatch[], size_t t) {
